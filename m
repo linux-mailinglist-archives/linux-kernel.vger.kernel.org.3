@@ -2,408 +2,324 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D7058D149
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 02:16:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E13858D14E
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 02:19:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244694AbiHIAQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 20:16:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56772 "EHLO
+        id S244710AbiHIATH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 20:19:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244658AbiHIAQq (ORCPT
+        with ESMTP id S244653AbiHIATE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 20:16:46 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2063.outbound.protection.outlook.com [40.107.102.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6DFA459
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 17:16:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Rh8bX6lYf3b+Cpa0EduRNMkkaX+Cj+N8wowiDuwe9/6kMNJsMxOAPsJTJLHGTiY2G+C4LniiJANayweLoYf0V5WHmDvVgjbQ3Jl2xznRWSdGp/8WSFAavd1v7LBDWojYtZxZXNbaA7m86nSptwPSzkfU149uvjW3e6EEh2lBoJB8l3trT/JqKQxK36UtS08QNj5fCVTCxpR9f1eR8CFEUy8Xf71mFlpsG6iEPCkdLc6jbo7tZ8b6jVVYo/HTRWx5mL2RFAxWHZx4qiHDXVyVwEDp2zwgwPyjKhwwAYJshVNcIRlC5czpeqEXulU13PrXl8zGiYO6KKR90PAqpBiJDg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UTwQo9p0DCLnl+bgcvFx7aSteGqz+/r2OVr92otCPdE=;
- b=FgUrjNMUYnkUuY1DDGi7vzo1fS6t9xWWto1fKxa6gHFrcBSymiMxVaN8VC8k3Rh8zGU32EE+rZ4mU0UXm3ciyESvQnVOI8NAQnpcNYE1FyBKDmbygjyLd0pyRv7Ep7aQLG4oW53DyOr4qsACDKW710RGS/7Qk5PyI7NcyH7puR34XRnrnL6feeMKXqiXdW5pBnOnsJFolyL1wGW+3URcBmhKINwu4KUH2f8kUlCyUFozZZOcCG7DG6Ch/qohUQzD+hMY3iOL0+/ShJtsQ1H6KKzh3MrszWBO2t0WNv4op6uL9xxocRgdzmpdaQmWk79lDccNSTJ1lYejkxlz2I7XCg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UTwQo9p0DCLnl+bgcvFx7aSteGqz+/r2OVr92otCPdE=;
- b=AI1ALI0lGcXwJJg8jmLxkTsiGL9B1yODBMjmNlV91TloohGhxlc1BRUNcrO9ILcEEgTUp0lPxmEnV5D5Mn5WwmQqz0bc6gNfT6dxbxRWApy1aIPUC0ntgYL2WdL8Klpld6PAE6eeWESBLkNC5KCYzupY5feSYkhy8CkeGrGat8b5aO3EGs3b15VzJWStmOhrHMSZa42QWe7DsiR1ezsQhv02LaxTg++LMl7exvrSR/+as5XsAJch28zQCMArVtWp1Z/eevSItV68z3GUDIu5k2c57Go7i3AMTJssNLqwbAJYsq226Tey92NsbwiaVNE+vX7fXxZShocUjn5Hj3sfBw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
- by DM6PR12MB2780.namprd12.prod.outlook.com (2603:10b6:5:4e::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.17; Tue, 9 Aug
- 2022 00:16:43 +0000
-Received: from BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::eca6:a4a7:e2b2:27e7]) by BYAPR12MB3176.namprd12.prod.outlook.com
- ([fe80::eca6:a4a7:e2b2:27e7%5]) with mapi id 15.20.5504.020; Tue, 9 Aug 2022
- 00:16:43 +0000
-From:   Alistair Popple <apopple@nvidia.com>
-To:     linux-mm@kvack.org
-Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Ralph Campbell <rcampbell@nvidia.com>,
-        David Hildenbrand <david@redhat.com>,
-        Alistair Popple <apopple@nvidia.com>
-Subject: [PATCH v3 2/2] mm/gup.c: Refactor check_and_migrate_movable_pages()
-Date:   Tue,  9 Aug 2022 10:16:26 +1000
-Message-Id: <9e3761292315c9edb14bd812c9c587e792b32aa4.1660003800.git-series.apopple@nvidia.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <487960bf67c7273ff5606c76f73bb51271bc7b90.1660003800.git-series.apopple@nvidia.com>
-References: <487960bf67c7273ff5606c76f73bb51271bc7b90.1660003800.git-series.apopple@nvidia.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BY3PR05CA0022.namprd05.prod.outlook.com
- (2603:10b6:a03:254::27) To BYAPR12MB3176.namprd12.prod.outlook.com
- (2603:10b6:a03:134::26)
+        Mon, 8 Aug 2022 20:19:04 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BF825F6B;
+        Mon,  8 Aug 2022 17:19:02 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id gb36so19475310ejc.10;
+        Mon, 08 Aug 2022 17:19:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=TlM9leardc/lh2LAQcB7vPGtKrRV8tCxZE6tCV2q/hQ=;
+        b=VsnzieyrIyNJZZwyHN0jtoFOIpZfLyZFOi1lYn8touGkiYf4w+JAgrG1eWHpD+jrdV
+         R07dDJfmhqLjearJ1lyl7LCZ4hvDoJVr7A8Si1D3+OaiMyN5aW86ZJQr9IHkMMFzfsbr
+         rmi+xmz2pgROi8oYv5koHymujX9oIuhcHFdQwMnkTK17Yim9kH33pkjbHAB6R0ELQzKI
+         2Ysm8bKSs9lyCPp53i/WovGrjs+rjovSnVBoD85i54YkRBFtDw7ba0YuILGnLjlfVsO2
+         2wPNEirmmM815pBen/hQC7Gj7RgUYxcNdu1+BP5BLfoSy0nISGaoIUqqnkNt7F2NUzCD
+         6sKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=TlM9leardc/lh2LAQcB7vPGtKrRV8tCxZE6tCV2q/hQ=;
+        b=sJpjlr7gIeU7mmWev09xxt1Ayx93l/aZ5LRY+pFeI+/nvhM29gjt9xbRZkyAj/qlMe
+         ocEEv4TkUw+osnH+7AKBU5CcQFGf8x1LCGMSeP3R+Ob/bbIVtfywBWaz/jrshSfz64Yq
+         1iVxw3vh9EqpmWn6+xNRsiz7Ay8oWQoK+M0pKliEsYsRWHqm+8k1TWDBisSwZHwBBndm
+         Y3I86sRXcVvyq6C9ojA+U7XL/GunrWNRLGqP3BeVKM9NvAcAWyigpOcJldSVBo+f63is
+         LHSY4Lfsu14mvrSSO194VYKk6o72+E/QOCafPWhid00eTgH5PIqz2kvGix6v+QzhybUM
+         bwCA==
+X-Gm-Message-State: ACgBeo1fCiTmO1pgmJLUuEE5BZzJxU4gL0B0RJVxBZS4HrocrUU/JWVG
+        it0ZVwZbModh5T+qzL3xO5QeZtnWuF+N9SFXHJo=
+X-Google-Smtp-Source: AA6agR7jsp2GdBBsJMK1XRlFbL78j6qGRxxcAxXMkQ9l/oLN7j+VD7I75rRoCu4Vib7KufeKo7eWlxIMKbKtTjwoIsA=
+X-Received: by 2002:a17:907:3e08:b0:730:d55c:1b26 with SMTP id
+ hp8-20020a1709073e0800b00730d55c1b26mr15119311ejc.226.1660004340751; Mon, 08
+ Aug 2022 17:19:00 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 275b261e-0d23-4858-03f5-08da799c7003
-X-MS-TrafficTypeDiagnostic: DM6PR12MB2780:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: thBjcw7FfftN6inq/yHG2QHKdCdPuPKl5YpeKLwi46hmBbZQC5FqPRtcNmiqYvinEYssD7u7EkyGaQDeAEhvSA4o9m6GQcAGciBESZE78eaQzDY6yddKsIBR5ZVjifrZv/Vz236HG8x7Tkij1AE5b1Atpyx0S1IISaVVeXAMMscr31jTK4MGB7xyDxgyxeLupfbqVuFXDhxRVDuPN1aVKmbqw9GpteWjJ124za7GVRmYExNFKlE1CkEMzMJushsX2avvjzP0VYU4i+SRPHg8VGke/fYnlCtcrTlx5CRcmo6X64RJ8AbCvKjh9iy6K30n9q2GWDHT48BMDCjdNOYWhiTFG4PK4r0cbWXCzQfbd3vokQMvDjt8JjluE3AW81WRU7y8ZCrgvzcqLD3/GvlrzKrGQ0OiyIgnqJCXN0+suA2PmkaJ2Worf8mXuj5fLaYY++FozVhWL6PGqrUPH37GRWb6tPIQiZ0FUxFovK3xhFvUE4zGZAzy8F7Qn9moYcAjjc6PpvXf/+Q2ZLJwSNgWyMI06EoCTFFv3p5E/6T2VxOBErAT+sLT2EvEqTMnp3R3AaxglxT79WSaNt5XumOPHGOCXkd5bR4Xvb4j38eqkuh3Jx8Eby37/9RnklYRUuRn+D0YguZ4Re2XnfeN8AHL4w/EUyeTN8vGXa+wAB8qNm8n6Iz6/qhSOWX856HseyX33gj7ATYDq+QNbP+kcywY3DPZnBkg4vcKpItqs/N6MCM/MjAAW93Q9AW3aogXekdoy/ERh+aDyl5LInl8pA42gOb0pJZphYl9WtCn1JeNagBF7jajrG7t6NSyILre6AUlaFugCCYJRl8zPquJeqJNfw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(136003)(346002)(366004)(376002)(38100700002)(478600001)(2616005)(86362001)(5660300002)(186003)(6486002)(8936002)(107886003)(8676002)(966005)(83380400001)(7416002)(54906003)(4326008)(66556008)(66476007)(6916009)(36756003)(66946007)(316002)(41300700001)(6666004)(2906002)(6506007)(26005)(6512007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dtYR4k+y/OIhTdnG4Uigq9Kjkgbp/Eik7N7h6+JnEDkwWpuFobzTW8oW/JIg?=
- =?us-ascii?Q?4E7tUgCUSZ1Yo8d0o+UINeAEMPQWNWhTT5uwa5FIB0nAJ1lLNzoV0XXQKlCj?=
- =?us-ascii?Q?6n3t0+80BHKE4U4Vvq1QLeMul0CYvTHFFgDw1calxZEpmxs0hOgoOJvVIGT+?=
- =?us-ascii?Q?+G1IwKnD47Dtn19TRP88pO2vsLmblCbRbiBTbeUClbpx3/s4p0ESr4gX5/Ky?=
- =?us-ascii?Q?R/GrPJu6q3BbbYXLQBkU9nRh0dKgIwmKdBk7KODrgZHKs4DLJAYULh6QUnMU?=
- =?us-ascii?Q?PCSDx7d2TPpyweqolfVcGL2aGu58/zmrK2+sqOtAbRK7b88rhEzn2+9BEc+k?=
- =?us-ascii?Q?l0EzVQSCZgZJ+PoreGEOiSU1jGrUkHfRTz4eJunwL3gCT397ze3XxEoAKwMl?=
- =?us-ascii?Q?iLDpW9lgruEv8HY3ymbLVkg82escjxrMvYqdtWlwuGkswUvN7U7Pf+Ur/GHa?=
- =?us-ascii?Q?cpvcj+g1L/JcWZGSbedFXxSe2IftoDpLtoTHGzJV3akVcDNPZKyyyTdt/IXL?=
- =?us-ascii?Q?l4T0IhZ1XODuMN2erdSDU3XLaZIQclq82bA65vEGmDZricSUiiQoFgzAb9Xi?=
- =?us-ascii?Q?mCXwSAmjDNh39YPf5lvdnjOu73ODF9I3j/W45SmfH2To0gfW0lNW4+BVrQOZ?=
- =?us-ascii?Q?StkiDTRvWLtHfhWvRwXR4ZwNcR1pqOVIEgbL6P6agL1qNwOsO0TGNI70Ab3N?=
- =?us-ascii?Q?QGc/QI9EWh1vnFGua2CNcj+BnKm0/8DkuCW+cV5yuz3mv5iwpEBOGHxDtGqh?=
- =?us-ascii?Q?0ZVNmclHthcxJAYYUh5yfsRvwMsgWffS63NTi+gwK+yL4/qNuNNoPkCLfkK1?=
- =?us-ascii?Q?9YmglF4tRzUy8hneNfdKBGwailDauEZmC5bltMwhnhXZK7OPBLMuWwWcBZyn?=
- =?us-ascii?Q?EOSJ0Jdef8AH5GydgOO69Qf2NVVKGZTWSe6rePeGZc1ddfJSw8E/hz9Xqxps?=
- =?us-ascii?Q?x52HrNiEgM8edjMiCFCIm+ZZv2Zfdxsmv9h6t38+aU2afhhdS+bJ6HQn9lbE?=
- =?us-ascii?Q?sUCqbnbmo+VATLbPTnl3Awb6+T4gua/4Qsaw2mUhDasswtLbZNDFbvoXlfVo?=
- =?us-ascii?Q?hHjqmyLUZK1/aF3T1b8Lg+e9KUKFSOYMK8MSGdBb7azOuMTFYtak7LSiT0dP?=
- =?us-ascii?Q?gYvhT6VicNvD2unHIdZb631CzKOXbXQawyW8gzG/l9AOwKNm4e1Vx/vNcXXm?=
- =?us-ascii?Q?IilKZCzMG1tEL+s0u1XZFXr/NQmzhbCXoNGSmBuZcoDqV1lmQkv2JdIvE0k/?=
- =?us-ascii?Q?TkfIc70SkgaPvSZBq+I0VJOZoG9UyZb9f46xD0bm0P4TbMa1W4JXCWURvXUi?=
- =?us-ascii?Q?6Gc7bJHeHfZ3FHIRl2wgSdQ2pxenLXM2cgP8V4lRU5seC3Xq6TxAf6f2YQQ0?=
- =?us-ascii?Q?tLrKVswJK/D0dMXUDpzDev7EFybwXVq1TiFHQVaRVox0EbWYgM0Mb8iQE2cz?=
- =?us-ascii?Q?oOwkMWM0tsPT0oqVyp1Kst31UFH4w/qn0Z6Qeg49wE46vLeajlKTGEeavUDk?=
- =?us-ascii?Q?RuqMthVgUOXzxOeB6NTd74QZI4xkykUEW+jvg/EI02S+NGBR2lTIOPpr+CX+?=
- =?us-ascii?Q?qPhP0/I3bcbSJJG0SUr6h7eoqRJLYF9IQBj6Eq0f?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 275b261e-0d23-4858-03f5-08da799c7003
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Aug 2022 00:16:42.9168
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IVaxmUh3dhZ8l5X8uNS07rF/GbYCC2HF5mIyz85WTFp5OhhoweKsmFwD7B/7xmJdHQNcWNGF/W9QVzCu2CmR8g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2780
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20220805214821.1058337-1-haoluo@google.com> <20220805214821.1058337-5-haoluo@google.com>
+In-Reply-To: <20220805214821.1058337-5-haoluo@google.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 8 Aug 2022 17:18:49 -0700
+Message-ID: <CAEf4BzZHf89Ds8nQWFCH00fKs9-9GkJ0d+Hrp-LkMCDUP_td0A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v7 4/8] bpf: Introduce cgroup iter
+To:     Hao Luo <haoluo@google.com>
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        cgroups@vger.kernel.org, netdev@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Michal Koutny <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yosry Ahmed <yosryahmed@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When pinning pages with FOLL_LONGTERM check_and_migrate_movable_pages()
-is called to migrate pages out of zones which should not contain any
-longterm pinned pages.
+On Fri, Aug 5, 2022 at 2:49 PM Hao Luo <haoluo@google.com> wrote:
+>
+> Cgroup_iter is a type of bpf_iter. It walks over cgroups in four modes:
+>
+>  - walking a cgroup's descendants in pre-order.
+>  - walking a cgroup's descendants in post-order.
+>  - walking a cgroup's ancestors.
+>  - process only the given cgroup.
+>
+> When attaching cgroup_iter, one can set a cgroup to the iter_link
+> created from attaching. This cgroup is passed as a file descriptor
+> or cgroup id and serves as the starting point of the walk. If no
+> cgroup is specified, the starting point will be the root cgroup v2.
+>
+> For walking descendants, one can specify the order: either pre-order or
+> post-order. For walking ancestors, the walk starts at the specified
+> cgroup and ends at the root.
+>
+> One can also terminate the walk early by returning 1 from the iter
+> program.
+>
+> Note that because walking cgroup hierarchy holds cgroup_mutex, the iter
+> program is called with cgroup_mutex held.
+>
+> Currently only one session is supported, which means, depending on the
+> volume of data bpf program intends to send to user space, the number
+> of cgroups that can be walked is limited. For example, given the current
+> buffer size is 8 * PAGE_SIZE, if the program sends 64B data for each
+> cgroup, assuming PAGE_SIZE is 4kb, the total number of cgroups that can
+> be walked is 512. This is a limitation of cgroup_iter. If the output
+> data is larger than the kernel buffer size, after all data in the
+> kernel buffer is consumed by user space, the subsequent read() syscall
+> will signal EOPNOTSUPP. In order to work around, the user may have to
+> update their program to reduce the volume of data sent to output. For
+> example, skip some uninteresting cgroups. In future, we may extend
+> bpf_iter flags to allow customizing buffer size.
+>
+> Acked-by: Yonghong Song <yhs@fb.com>
+> Acked-by: Tejun Heo <tj@kernel.org>
+> Signed-off-by: Hao Luo <haoluo@google.com>
+> ---
+>  include/linux/bpf.h                           |   8 +
+>  include/uapi/linux/bpf.h                      |  38 +++
+>  kernel/bpf/Makefile                           |   3 +
+>  kernel/bpf/cgroup_iter.c                      | 286 ++++++++++++++++++
+>  tools/include/uapi/linux/bpf.h                |  38 +++
+>  .../selftests/bpf/prog_tests/btf_dump.c       |   4 +-
+>  6 files changed, 375 insertions(+), 2 deletions(-)
+>  create mode 100644 kernel/bpf/cgroup_iter.c
+>
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 20c26aed7896..09b5c2167424 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -48,6 +48,7 @@ struct mem_cgroup;
+>  struct module;
+>  struct bpf_func_state;
+>  struct ftrace_ops;
+> +struct cgroup;
+>
+>  extern struct idr btf_idr;
+>  extern spinlock_t btf_idr_lock;
+> @@ -1730,7 +1731,14 @@ int bpf_obj_get_user(const char __user *pathname, int flags);
+>         int __init bpf_iter_ ## target(args) { return 0; }
+>
+>  struct bpf_iter_aux_info {
+> +       /* for map_elem iter */
+>         struct bpf_map *map;
+> +
+> +       /* for cgroup iter */
+> +       struct {
+> +               struct cgroup *start; /* starting cgroup */
+> +               int order;
+> +       } cgroup;
+>  };
+>
+>  typedef int (*bpf_iter_attach_target_t)(struct bpf_prog *prog,
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 59a217ca2dfd..4d758b2e70d6 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -87,10 +87,37 @@ struct bpf_cgroup_storage_key {
+>         __u32   attach_type;            /* program attach type (enum bpf_attach_type) */
+>  };
+>
+> +enum bpf_iter_order {
+> +       BPF_ITER_ORDER_DEFAULT = 0,     /* default order. */
 
-When migration succeeds all pages will have been unpinned so pinning
-needs to be retried. Migration can also fail, in which case the pages
-will also have been unpinned but the operation should not be retried. If
-all pages are in the correct zone nothing will be unpinned and no retry
-is required.
+why is this default order necessary? It just adds confusion (I had to
+look up source code to know what is default order). I might have
+missed some discussion, so if there is some very good reason, then
+please document this in commit message. But I'd rather not do some
+magical default order instead. We can set 0 to mean invalid and error
+out, or just do SELF as the very first value (and if user forgot to
+specify more fancy mode, they hopefully will quickly discover this in
+their testing).
 
-The logic in check_and_migrate_movable_pages() tracks unnecessary state
-and the return codes for each case are difficult to follow. Refactor the
-code to clean this up. No behaviour change is intended.
+> +       BPF_ITER_SELF,                  /* process only a single object. */
+> +       BPF_ITER_DESCENDANTS_PRE,       /* walk descendants in pre-order. */
+> +       BPF_ITER_DESCENDANTS_POST,      /* walk descendants in post-order. */
+> +       BPF_ITER_ANCESTORS_UP,          /* walk ancestors upward. */
+> +};
+> +
 
-Signed-off-by: Alistair Popple <apopple@nvidia.com>
+This is a somewhat pedantic nit, so feel free to ignore completely,
+but don't DESCENDANTS_{PRE,POST} and ANCESTORS_UP also include "self"?
+As it is right now, BPF_ITER_SELF name might be read as implying that
+DESCENDANTS and ANCESTORS order don't include self. So I don't know,
+maybe BPF_ITER_SELF_ONLY would be a bit clearer?
 
----
 
-Changes for v3:
+>  union bpf_iter_link_info {
+>         struct {
+>                 __u32   map_fd;
+>         } map;
+> +       struct {
+> +               /* Valid values include:
+> +                *  - BPF_ITER_ORDER_DEFAULT
+> +                *  - BPF_ITER_SELF
+> +                *  - BPF_ITER_DESCENDANTS_PRE
+> +                *  - BPF_ITER_DESCENDANTS_POST
+> +                *  - BPF_ITER_ANCESTORS_UP
+> +                * for cgroup_iter, DEFAULT is equivalent to DESCENDANTS_PRE.
+> +                */
+> +               __u32   order;
+> +
+> +               /* At most one of cgroup_fd and cgroup_id can be non-zero. If
+> +                * both are zero, the walk starts from the default cgroup v2
+> +                * root. For walking v1 hierarchy, one should always explicitly
+> +                * specify cgroup_fd.
+> +                */
+> +               __u32   cgroup_fd;
+> +               __u64   cgroup_id;
+> +       } cgroup;
+>  };
+>
+>  /* BPF syscall commands, see bpf(2) man-page for more details. */
+> @@ -6134,11 +6161,22 @@ struct bpf_link_info {
+>                 struct {
+>                         __aligned_u64 target_name; /* in/out: target_name buffer ptr */
+>                         __u32 target_name_len;     /* in/out: target_name buffer len */
+> +
+> +                       /* If the iter specific field is 32 bits, it can be put
+> +                        * in the first or second union. Otherwise it should be
+> +                        * put in the second union.
+> +                        */
+>                         union {
+>                                 struct {
+>                                         __u32 map_id;
+>                                 } map;
+>                         };
+> +                       union {
+> +                               struct {
+> +                                       __u64 cgroup_id;
+> +                                       __u32 order;
+> +                               } cgroup;
+> +                       };
+>                 } iter;
 
- - Improved comments (thanks John).
- - Fix up inconsistent int/long/unsigned long.
- - Rename (migrate|collect)_unpinnable_pages
-   to (migrate|collect)_longterm_unpinnable_pages() as suggested by David.
+But other than above, I like how UAPI looks like, thanks!
 
-Changes for v2:
+[...]
 
- - Split into different functions as suggested by John.
- - Made error handling more conventional as requested by Jason.
+> + *
+> + * For walking descendants, cgroup_iter can walk in either pre-order or
+> + * post-order. For walking ancestors, the iter walks up from a cgroup to
+> + * the root.
+> + *
+> + * The iter program can terminate the walk early by returning 1. Walk
+> + * continues if prog returns 0.
+> + *
+> + * The prog can check (seq->num == 0) to determine whether this is
+> + * the first element. The prog may also be passed a NULL cgroup,
+> + * which means the walk has completed and the prog has a chance to
+> + * do post-processing, such as outputing an epilogue.
 
-Originally posted as "mm/gup.c: Simplify and fix
-check_and_migrate_movable_pages() return codes"[1].
+typo: outputting
 
-Changes from that version:
+> + *
+> + * Note: the iter_prog is called with cgroup_mutex held.
+> + *
+> + * Currently only one session is supported, which means, depending on the
+> + * volume of data bpf program intends to send to user space, the number
+> + * of cgroups that can be walked is limited. For example, given the current
+> + * buffer size is 8 * PAGE_SIZE, if the program sends 64B data for each
+> + * cgroup, assuming PAGE_SIZE is 4kb, the total number of cgroups that can
+> + * be walked is 512. This is a limitation of cgroup_iter. If the output data
+> + * is larger than the kernel buffer size, after all data in the kernel buffer
+> + * is consumed by user space, the subsequent read() syscall will signal
+> + * EOPNOTSUPP. In order to work around, the user may have to update their
+> + * program to reduce the volume of data sent to output. For example, skip
+> + * some uninteresting cgroups.
+> + */
+> +
 
- - Restore the original isolation failure behaviour and don't fail the
-   pup. Instead retry indefinitely.
- - Unpin all pages on retry or failure rather than just failure.
+[...]
 
-[1] https://lore.kernel.org/linux-mm/814dee5d3aadd38c3370eaaf438ba7eee9bf9d2b.1659399696.git-series.apopple@nvidia.com/
----
- mm/gup.c | 166 ++++++++++++++++++++++++++++++++------------------------
- 1 file changed, 97 insertions(+), 69 deletions(-)
+> +
+> +static void bpf_iter_cgroup_show_fdinfo(const struct bpf_iter_aux_info *aux,
+> +                                       struct seq_file *seq)
+> +{
+> +       char *buf;
+> +
+> +       buf = kzalloc(PATH_MAX, GFP_KERNEL);
+> +       if (!buf) {
+> +               seq_puts(seq, "cgroup_path:\t<unknown>\n");
+> +               goto show_order;
+> +       }
+> +
+> +       /* If cgroup_path_ns() fails, buf will be an empty string, cgroup_path
+> +        * will print nothing.
+> +        *
+> +        * Path is in the calling process's cgroup namespace.
+> +        */
+> +       cgroup_path_ns(aux->cgroup.start, buf, PATH_MAX,
+> +                      current->nsproxy->cgroup_ns);
+> +       seq_printf(seq, "cgroup_path:\t%s\n", buf);
+> +       kfree(buf);
+> +
+> +show_order:
+> +       if (aux->cgroup.order == BPF_ITER_DESCENDANTS_PRE)
+> +               seq_puts(seq, "order: pre\n");
+> +       else if (aux->cgroup.order == BPF_ITER_DESCENDANTS_POST)
+> +               seq_puts(seq, "order: post\n");
+> +       else if (aux->cgroup.order == BPF_ITER_ANCESTORS_UP)
+> +               seq_puts(seq, "order: up\n");
+> +       else /* BPF_ITER_SELF */
+> +               seq_puts(seq, "order: self\n");
 
-diff --git a/mm/gup.c b/mm/gup.c
-index a2baa8b..d7ca706 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -1901,19 +1901,16 @@ struct page *get_dump_page(unsigned long addr)
- 
- #ifdef CONFIG_MIGRATION
- /*
-- * Check whether all pages are pinnable, if so return number of pages.  If some
-- * pages are not pinnable, migrate them, and unpin all pages. Return zero if
-- * pages were migrated, or if some pages were not successfully isolated.
-- * Return negative error if migration fails.
-+ * Returns the number of collected pages. Return value is always >= 0.
-  */
--static long check_and_migrate_movable_pages(unsigned long nr_pages,
--					    struct page **pages)
-+static unsigned long collect_longterm_unpinnable_pages(
-+					struct list_head *movable_page_list,
-+					unsigned long nr_pages,
-+					struct page **pages)
- {
--	unsigned long isolation_error_count = 0, i;
-+	unsigned long i, collected = 0;
- 	struct folio *prev_folio = NULL;
--	LIST_HEAD(movable_page_list);
--	bool drain_allow = true, coherent_pages = false;
--	int ret = 0;
-+	bool drain_allow = true;
- 
- 	for (i = 0; i < nr_pages; i++) {
- 		struct folio *folio = page_folio(pages[i]);
-@@ -1922,43 +1919,16 @@ static long check_and_migrate_movable_pages(unsigned long nr_pages,
- 			continue;
- 		prev_folio = folio;
- 
--		/*
--		 * Device coherent pages are managed by a driver and should not
--		 * be pinned indefinitely as it prevents the driver moving the
--		 * page. So when trying to pin with FOLL_LONGTERM instead try
--		 * to migrate the page out of device memory.
--		 */
--		if (folio_is_device_coherent(folio)) {
--			/*
--			 * We always want a new GUP lookup with device coherent
--			 * pages.
--			 */
--			pages[i] = 0;
--			coherent_pages = true;
--
--			/*
--			 * Migration will fail if the page is pinned, so convert
--			 * the pin on the source page to a normal reference.
--			 */
--			get_page(&folio->page);
--			unpin_user_page(&folio->page);
-+		if (folio_is_longterm_pinnable(folio))
-+			continue;
- 
--			ret = migrate_device_coherent_page(&folio->page);
--			if (ret)
--				goto unpin_pages;
-+		collected++;
- 
-+		if (folio_is_device_coherent(folio))
- 			continue;
--		}
- 
--		if (folio_is_longterm_pinnable(folio))
--			continue;
--		/*
--		 * Try to move out any movable page before pinning the range.
--		 */
- 		if (folio_test_hugetlb(folio)) {
--			if (isolate_hugetlb(&folio->page,
--						&movable_page_list))
--				isolation_error_count++;
-+			isolate_hugetlb(&folio->page, movable_page_list);
- 			continue;
- 		}
- 
-@@ -1967,59 +1937,117 @@ static long check_and_migrate_movable_pages(unsigned long nr_pages,
- 			drain_allow = false;
- 		}
- 
--		if (folio_isolate_lru(folio)) {
--			isolation_error_count++;
-+		if (!folio_isolate_lru(folio))
- 			continue;
--		}
--		list_add_tail(&folio->lru, &movable_page_list);
-+
-+		list_add_tail(&folio->lru, movable_page_list);
- 		node_stat_mod_folio(folio,
- 				    NR_ISOLATED_ANON + folio_is_file_lru(folio),
- 				    folio_nr_pages(folio));
- 	}
- 
--	if (!list_empty(&movable_page_list) || isolation_error_count ||
--	    coherent_pages)
--		goto unpin_pages;
-+	return collected;
-+}
- 
--	/*
--	 * If list is empty, and no isolation errors, means that all pages are
--	 * in the correct zone.
--	 */
--	return nr_pages;
-+/*
-+ * Unpins all pages and migrates device coherent pages and movable_page_list.
-+ * Returns zero if all pages were successfully migrated or -errno for failure
-+ * (or partial success).
-+ */
-+static int migrate_longterm_unpinnable_pages(
-+					struct list_head *movable_page_list,
-+					unsigned long nr_pages,
-+					struct page **pages)
-+{
-+	int ret;
-+	unsigned long i;
- 
--unpin_pages:
--	/*
--	 * pages[i] might be NULL if any device coherent pages were found.
--	 */
- 	for (i = 0; i < nr_pages; i++) {
--		if (!pages[i])
-+		struct folio *folio = page_folio(pages[i]);
-+
-+		if (folio_is_device_coherent(folio)) {
-+			/*
-+			 * Migration will fail if the page is pinned, so convert
-+			 * the pin on the source page to a normal reference.
-+			 */
-+			pages[i] = NULL;
-+			get_page(&folio->page);
-+			unpin_user_page(&folio->page);
-+
-+			if (migrate_device_coherent_page(&folio->page)) {
-+				ret = -EBUSY;
-+				goto err;
-+			}
-+
- 			continue;
-+		}
- 
-+		/*
-+		 * We can't migrate pages with unexpected references, so drop
-+		 * the reference obtained by __get_user_pages_locked().
-+		 * Migrating pages have been added to movable_page_list after
-+		 * calling folio_isolate_lru() which takes a reference so the
-+		 * page won't be freed if it's migrating.
-+		 */
- 		unpin_user_page(pages[i]);
-+		pages[i] = NULL;
- 	}
- 
--	if (!list_empty(&movable_page_list)) {
-+	if (!list_empty(movable_page_list)) {
- 		struct migration_target_control mtc = {
- 			.nid = NUMA_NO_NODE,
- 			.gfp_mask = GFP_USER | __GFP_NOWARN,
- 		};
- 
--		ret = migrate_pages(&movable_page_list, alloc_migration_target,
--				    NULL, (unsigned long)&mtc, MIGRATE_SYNC,
--				    MR_LONGTERM_PIN, NULL);
--		if (ret > 0) /* number of pages not migrated */
-+		if (migrate_pages(movable_page_list, alloc_migration_target,
-+				  NULL, (unsigned long)&mtc, MIGRATE_SYNC,
-+				  MR_LONGTERM_PIN, NULL)) {
- 			ret = -ENOMEM;
-+			goto err;
-+		}
- 	}
- 
--	if (ret && !list_empty(&movable_page_list))
--		putback_movable_pages(&movable_page_list);
-+	putback_movable_pages(movable_page_list);
-+
-+	return 0;
-+
-+err:
-+	for (i = 0; i < nr_pages; i++)
-+		if (pages[i])
-+			unpin_user_page(pages[i]);
-+	putback_movable_pages(movable_page_list);
-+
- 	return ret;
- }
-+
-+/*
-+ * Check whether all pages are pinnable. If some pages are not pinnable migrate
-+ * them and unpin all the pages. Returns -EAGAIN if pages were unpinned or zero
-+ * if all pages are pinnable and in the right zone. Other errors indicate
-+ * migration failure.
-+ */
-+static long check_and_migrate_movable_pages(unsigned long nr_pages,
-+					    struct page **pages)
-+{
-+	int ret;
-+	unsigned long collected;
-+	LIST_HEAD(movable_page_list);
-+
-+	collected = collect_longterm_unpinnable_pages(&movable_page_list, nr_pages, pages);
-+	if (!collected)
-+		return 0;
-+
-+	ret = migrate_longterm_unpinnable_pages(&movable_page_list, nr_pages, pages);
-+	if (!ret)
-+		return -EAGAIN;
-+	else
-+		return ret;
-+}
- #else
- static long check_and_migrate_movable_pages(unsigned long nr_pages,
- 					    struct page **pages)
- {
--	return nr_pages;
-+	return 0;
- }
- #endif /* CONFIG_MIGRATION */
- 
-@@ -2051,10 +2079,10 @@ static long __gup_longterm_locked(struct mm_struct *mm,
- 			break;
- 
- 		rc = check_and_migrate_movable_pages(rc, pages);
--	} while (!rc);
-+	} while (rc == -EAGAIN);
- 	memalloc_pin_restore(flags);
- 
--	return rc;
-+	return rc ? rc : nr_pages;
- }
- 
- static bool is_valid_gup_flags(unsigned int gup_flags)
--- 
-git-series 0.9.1
+should we output "descendants_pre", "descendants_post", "ancestors_up"
+and "self" to match enum names more uniformly? We had similar
+discussion when Daniel Mueller was doing some clean up in bpftool and
+public's opinion was that uniform and consistent mapping between
+kernel enum and it's string representation is more valuable than
+shortness of the string.
+
+> +}
+> +
+
+[...]

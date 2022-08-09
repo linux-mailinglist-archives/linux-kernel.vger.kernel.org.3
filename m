@@ -2,119 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90AE258D7C7
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 13:02:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FDF258D7C9
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 13:03:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240241AbiHILCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 07:02:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37524 "EHLO
+        id S236261AbiHILD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 07:03:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231308AbiHILCH (ORCPT
+        with ESMTP id S230178AbiHILD0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 07:02:07 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF7449FCE
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 04:02:05 -0700 (PDT)
-Received: from dggpemm500024.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4M29715yFzzlVqB;
-        Tue,  9 Aug 2022 18:59:09 +0800 (CST)
-Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
- dggpemm500024.china.huawei.com (7.185.36.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 9 Aug 2022 19:02:01 +0800
-Received: from [10.67.111.195] (10.67.111.195) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 9 Aug 2022 19:02:01 +0800
-Subject: Re: [PATCH -next] riscv: lib: uaccess: fix CSR_STATUS SR_SUM bit
-From:   chenlifu <chenlifu@huawei.com>
-To:     <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <akira.tsukamoto@gmail.com>,
-        <jszhang@kernel.org>, <wangkefeng.wang@huawei.com>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <alankao@andestech.com>
-References: <20220615014714.1650349-1-chenlifu@huawei.com>
- <11a0698c-5726-15e8-2448-3529d2d0b098@huawei.com>
- <606b1f5a-ea1e-f756-a00b-6b622238b453@huawei.com>
-Message-ID: <dda3f0c3-a5ee-e648-fac1-d484e475634c@huawei.com>
-Date:   Tue, 9 Aug 2022 19:01:49 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
+        Tue, 9 Aug 2022 07:03:26 -0400
+Received: from ns3.fnarfbargle.com (ns3.fnarfbargle.com [103.4.19.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62E741115E
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 04:03:25 -0700 (PDT)
+Received: from [10.8.0.1] (helo=srv.home)
+        by ns3.fnarfbargle.com with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <lists2009@fnarfbargle.com>)
+        id 1oLN18-0004OF-JB; Tue, 09 Aug 2022 21:03:22 +1000
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=fnarfbargle.com; s=mail; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=wqaaQdZiPnvXjS5kmSznLk7LwW4miaOBU233ObHkdbA=; b=L8gu2OdQtF2ijl2U3HlW12VUVb
+        neVqD7z7ecltnZ+1SLaL8x5/+EPcbcKbth+Kkx5hgFrVVAQzcNIRjeX9D+bYkfzV9l4x2TeRerZup
+        mxP1r+gGUGMrnTkrl05tFcvTygHEo2OYjG9FeEwc6CeGHuuZ/YvWei0Bc6Z/X62F4bQQ=;
+Message-ID: <685b7a6a-d122-b79a-93e7-4227eaa4e4e9@fnarfbargle.com>
+Date:   Tue, 9 Aug 2022 19:03:14 +0800
 MIME-Version: 1.0
-In-Reply-To: <606b1f5a-ea1e-f756-a00b-6b622238b453@huawei.com>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.195]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: Apple Thunderbolt Display chaining
+Content-Language: en-US
+To:     Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org
+References: <87c1a001-ef79-6390-dfe2-06d2850f6e84@fnarfbargle.com>
+ <Yu4Gmkous7asng6h@lahna>
+ <42e81a8e-e393-7a69-7339-a020ebb57935@fnarfbargle.com>
+ <YvDcudE5BRtZAtfM@lahna>
+ <a1db1454-63b6-7c39-bbf6-53e53bbd36e6@fnarfbargle.com>
+ <5474e599-057a-ec0f-b469-560644155907@fnarfbargle.com>
+ <YvEFtPF7SBIwNG/o@lahna>
+ <d234ea9b-9303-6088-0a9b-4de887a77bf4@fnarfbargle.com>
+ <YvI1lQh+C0SJiG73@lahna>
+ <bcebdeb9-4f6a-e931-46f5-b9be899db9a4@fnarfbargle.com>
+ <YvI9Cbin4OKQwZ05@lahna>
+From:   Brad Campbell <lists2009@fnarfbargle.com>
+In-Reply-To: <YvI9Cbin4OKQwZ05@lahna>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-在 2022/7/15 11:47, chenlifu 写道:
->>> Since commit 5d8544e2d007 ("RISC-V: Generic library routines and 
->>> assembly")
->>> and commit ebcbd75e3962 ("riscv: Fix the bug in memory access fixup 
->>> code"),
->>> if __clear_user and __copy_user return from an fixup branch,
->>> CSR_STATUS SR_SUM bit will be set, it is a vulnerability, so that
->>> S-mode memory accesses to pages that are accessible by U-mode will 
->>> success.
->>> Disable S-mode access to U-mode memory should clear SR_SUM bit.
->>>
->>> Fixes: 5d8544e2d007 ("RISC-V: Generic library routines and assembly")
->>> Fixes: ebcbd75e3962 ("riscv: Fix the bug in memory access fixup code")
->>>
->>> Signed-off-by: Chen Lifu <chenlifu@huawei.com>
->>> ---
->>>   arch/riscv/lib/uaccess.S | 4 ++--
->>>   1 file changed, 2 insertions(+), 2 deletions(-)
->>>
->>> diff --git a/arch/riscv/lib/uaccess.S b/arch/riscv/lib/uaccess.S
->>> index 8c475f4da308..ec486e5369d9 100644
->>> --- a/arch/riscv/lib/uaccess.S
->>> +++ b/arch/riscv/lib/uaccess.S
->>> @@ -173,11 +173,11 @@ ENTRY(__asm_copy_from_user)
->>>       ret
->>>       /* Exception fixup code */
->>>   10:
->>>       /* Disable access to user memory */
->>> -    csrs CSR_STATUS, t6
->>> +    csrc CSR_STATUS, t6
->>>       mv a0, t5
->>>       ret
->>>   ENDPROC(__asm_copy_to_user)
->>>   ENDPROC(__asm_copy_from_user)
->>>   EXPORT_SYMBOL(__asm_copy_to_user)
->>> @@ -225,10 +225,10 @@ ENTRY(__clear_user)
->>>       j 3b
->>>       /* Exception fixup code */
->>>   11:
->>>       /* Disable access to user memory */
->>> -    csrs CSR_STATUS, t6
->>> +    csrc CSR_STATUS, t6
->>>       mv a0, a1
->>>       ret
->>>   ENDPROC(__clear_user)
->>>   EXPORT_SYMBOL(__clear_user)
->>>
->>
->> friendly ping ...
->>
-> 
-> friendly ping ...
-> 
->> _______________________________________________
->> linux-riscv mailing list
->> linux-riscv@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-riscv
->> .
-> .
+G'day Mika,
 
-friendly ping ...
+On 9/8/22 18:55, Mika Westerberg wrote:
+> Hi,
+> 
+> On Tue, Aug 09, 2022 at 06:40:54PM +0800, Brad Campbell wrote:
+>> G'day Mika,
+>>
+>>
+>> On 9/8/22 18:23, Mika Westerberg wrote:
+>>> Hi,
+>>>
+>>> On Mon, Aug 08, 2022 at 09:27:24PM +0800, Brad Campbell wrote:
+>>>> If I don't authorize the PCIe tunnels and just leave the DP enabled it
+>>>> works fine also.
+>>>
+>>> But you say that it fails on boot when the driver discovers the tunnels,
+>>> right? So there is really nothing to authorize (they should be already
+>>> "authorized" by the boot firmware).
+>>>
+>>> If I understand correctly this is how it reproduces (the simplest):
+>>>
+>>>   1. Connect a single Apple TB1 display to the system
+>>>   2. Boot it up
+>>>   3. Wait a while and it hangs
+>>>
+>>> If this is the case, then the driver certainly is not creating any
+>>> PCIe tunnels itself unless there is a bug somewhere.
+>>>
+>>> An additional question, does it reproduce with either TB1 display
+>>> connected or just with specific TB1 display?
+>>>
+>>
+>> No, I've not been clear enough, I'm sorry. I've re-read what I've written below and
+>> I'm still not sure I'm clear enough.
+>>
+>> The firmware never sets anything up. 
+>>
+>> When I cold boot the machine (from power on), the thunderbolt displays and tunnels
+>> remain dark until linux initializes the thunderbolt driver the first time. 
+>>  
+>> If I compile the thunderbolt driver into the kernel, or let the initramfs load it
+>> the displays come up, all PCIe tunnels are established and everything works.
+>>
+>> When I reboot the machine (reset button or warm boot), the firmware continues to
+>> do nothing and all the tunnels remain in place. The machine dies when the thunderbolt 
+>> driver is loaded for a second time.
+>>
+>> That might be a reset/warm boot with it compiled in or loaded from iniramfs.
+>> It may also be me loading it from the command line after booting with it as a
+>> module and blacklisted.
+>>
+>> The problem comes about when the thunderbolt module is loaded while the PCIe tunnels
+>> are already established.
+>>
+>> To reproduce in the easiest manner I compile the thunderbolt driver as a module and
+>> blacklist it. This prevents it from auto-loading.
+>>
+>> I cold boot the machine, let it boot completely then modprobe thunderbolt and authorize
+>> the tunnels. I then warm boot which lets the kernel detect and init the DP displays
+>> and detect/configure all the PCIe devices. The thunderbolt driver is not loaded.
+>>
+>> The machine comes up, all tunnels are established and all devices work.
+>>
+>> If I then modprobe the thunderbolt driver, things break.
+>>
+>> This is the hack in my boot script :
+>>
+>> # Spark up thunderbolt
+>> if [ -z "`grep notb /proc/cmdline`" -a -z "`lsusb | grep '05ac:9227'`" ] ; then
+>> 	modprobe thunderbolt
+>> 	sleep 1
+>> 	echo 1 > /sys/bus/thunderbolt/devices/0-3/authorized
+>> 	echo 1 > /sys/bus/thunderbolt/devices/0-303/authorized
+>> 	reboot
+>> fi
+> 
+> Thanks for the clarification! How about on macOS side, does it work (I
+> would expect yes)?
+> 
+
+It did work flawlessly in MacOS, but as the GPU turned up its toes I can't really test it anymore.
+
+The Mac EFI did odd things with the Thunderbolt tunnels, and due to the dying GPU I couldn't
+warm boot it in Linux anyway. Every reboot had to be a power cycle or it'd hang in the EFI.
+
+Regards,
+Brad

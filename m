@@ -2,109 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D21E458E3C1
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 01:32:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B12C658E3C6
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 01:36:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbiHIXcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 19:32:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51206 "EHLO
+        id S229461AbiHIXg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 19:36:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbiHIXcI (ORCPT
+        with ESMTP id S229436AbiHIXgX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 19:32:08 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D065E78207
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 16:32:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660087927; x=1691623927;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GnyjgHSWMN0s1QRaGr/yenGO/uA3yDht7mg4g98kpS4=;
-  b=YjAzeN5uINft2xzwn8sMzcXp8omc3Ct2CBhIdgFDWEJHxyypbnXHejCA
-   9JnOkmjV+AGzpBhofcE6+I0FnEQoP1OdNrYy/Z+LImhXl7lUaXRbBJZqS
-   BfS/qd/zqFJ5vGfpQBBFioFsalXKUTLRNoGfb1fvXqFXF8a/xO/aPhLPa
-   eRfeNiLhAmmWKE8ewtpR+NzDjfq+WqASQNzK/NLWRW5g2YwZ/V3TwV5ie
-   jXHUeAD/0uUgckTqG86Dd3B6mrW9MtEBWNO4s3vKsmDBiT7Z8vp/SkwGH
-   ieBxxQuM0jvHh/hhYR2Okgs9lWelaEJbJVGAzYfLV6gNneR9Wgru0z1DD
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="288522281"
-X-IronPort-AV: E=Sophos;i="5.93,225,1654585200"; 
-   d="scan'208";a="288522281"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 16:32:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,225,1654585200"; 
-   d="scan'208";a="781038055"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 09 Aug 2022 16:32:03 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oLYhe-000NLx-1n;
-        Tue, 09 Aug 2022 23:32:02 +0000
-Date:   Wed, 10 Aug 2022 07:31:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sathvika Vasireddy <sv@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org, jpoimboe@redhat.com,
-        peterz@infradead.org, linux-kernel@vger.kernel.org, aik@ozlabs.ru,
-        mpe@ellerman.id.au, mingo@redhat.com, christophe.leroy@csgroup.eu,
-        rostedt@goodmis.org, mbenes@suse.cz, npiggin@gmail.com,
-        chenzhongjin@huawei.com, linux-arm-kernel@lists.infradead.org,
-        naveen.n.rao@linux.vnet.ibm.com, sv@linux.ibm.com
-Subject: Re: [PATCH 06/16] powerpc: Fix objtool unannotated intra-function
- call warnings on PPC32
-Message-ID: <202208100751.LiiKZjrx-lkp@intel.com>
-References: <20220808114908.240813-7-sv@linux.ibm.com>
+        Tue, 9 Aug 2022 19:36:23 -0400
+Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 267597AC1D
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 16:36:21 -0700 (PDT)
+Received: by mail-ua1-x929.google.com with SMTP id c19so5222382uat.6
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 16:36:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=o4wdgvd9lokOVkmz3///Dw5D/UVYUgUiBJagcPYB94M=;
+        b=bXQyJL88COq3m8pU1jfr6QgcWtKMoygb+O7A5xhSAn6byuBoRKA7YPEgwkvc/hp98n
+         Nmwf/o0VAi7udRT2BEDfLzS/IB0BBkY4f+GsAuesfVq84iHg2T/ylNEdHDoG1pe8h16v
+         IMCwwJ+FqhbWtajm2L10HsNVfk3jlz/iDOVlKtt/Sp5PR2nT79/zCmAK7MEQ3tffWgGy
+         /Jbo5swYJmZxcm1wuNJSH3k08BdXLfRSdOSnRsmZsgfTHNyufGmqCLS1RVo/nDVSfjmT
+         QUw6MI4TF0D8f1Kit9Bf6pKAUzzFDCh2Echh+LztL/1L1ElxK9rzolfDTrxVZ0se/IPn
+         SB+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=o4wdgvd9lokOVkmz3///Dw5D/UVYUgUiBJagcPYB94M=;
+        b=K8BoNGb8jYA/Yk4pl7ec29gpBYCDVFKSRK3K1RQ+WlFofDhWrGuVrOt78XFsfFOcXt
+         TRCjtkPJcLnrDFV51A5rtL+NgUoL+sy05dAgiPV3VtwV7vH9VA0WjJrAHLyAbfmKJ2lf
+         Vu2TBlStxZWTiIxWw1mQ/MIJxrwwcR8JLcIsKC6XBThHK0fDrcKb1fwgMcJMSKTf/6yn
+         5d6tmkZYA8+gBPxUDRczSRhzmtSBXVGByhIM1idLFdRcQBqWV8UvFT8K8wds+D4Fjno7
+         V0vSBXK5ui+ETKmnK1ac/wnkEludRkE3oePPvHO6xXJueBBxFwK9G+2wUVUUnpb7ttwC
+         IsDw==
+X-Gm-Message-State: ACgBeo3c1rAVlbGif+sEFHqOQDLIJ9jpkqYP4Jx+XY8bAq2rkyCqZjMZ
+        BpR0bjHeHobbTYWO4416A7GYHO6WAdLC7B87HSWsUA==
+X-Google-Smtp-Source: AA6agR61c1M90WGtrFaP+Gh5AcPiEcbJHfs9ELby75M3kF5agX2qra8YCIPBx93xFQbktlykLKIWh8EoaYxHRtP78ZQ=
+X-Received: by 2002:ab0:2242:0:b0:38c:7f0d:623e with SMTP id
+ z2-20020ab02242000000b0038c7f0d623emr6415328uan.59.1660088180210; Tue, 09 Aug
+ 2022 16:36:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220808114908.240813-7-sv@linux.ibm.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220805184016.2926168-1-alexlzhu@fb.com> <Yu1mcD6Jp4fCVEMi@casper.infradead.org>
+ <0b16dbac6444bfcdfbeb4df4280354839bfe1a8f.camel@fb.com> <Yu1uabedm+NYnnAj@casper.infradead.org>
+ <CA8C72B6-E509-4FB0-BEAA-C4368EB7A419@fb.com> <CAHbLzkp27aP4JYLPLzv2vtyzVe63bkhuZhw1jnxTF1Buvt4rew@mail.gmail.com>
+ <fc108f58a4616d5d7d092a7c1f150069a92ee40c.camel@fb.com> <CAHbLzkqpn2ExBJuPD8sYJrEDCUU9=FE3GFh8kL3Bmax0KytKPw@mail.gmail.com>
+ <1F8B9D85-A735-4832-AD58-CA4BD474248D@fb.com>
+In-Reply-To: <1F8B9D85-A735-4832-AD58-CA4BD474248D@fb.com>
+From:   Yu Zhao <yuzhao@google.com>
+Date:   Tue, 9 Aug 2022 17:35:44 -0600
+Message-ID: <CAOUHufbGcuvJ8EfBkWrdCgeMCiceP0SxHZzcJnOt1Mw0P2w9kw@mail.gmail.com>
+Subject: Re: [PATCH v3] mm: add thp_utilization metrics to /proc/thp_utilization
+To:     "Alex Zhu (Kernel)" <alexlzhu@fb.com>
+Cc:     Yang Shi <shy828301@gmail.com>, Rik van Riel <riel@fb.com>,
+        Kernel Team <Kernel-team@fb.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        Ning Zhang <ningzhang@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sathvika,
+On Tue, Aug 9, 2022 at 11:16 AM Alex Zhu (Kernel) <alexlzhu@fb.com> wrote:
+>
+>
+> > OK, it is hard to tell what it looks like now. But the THPs on the
+> > deferred split list may be on the "low utilization split" list too?
+> > IIUC the major difference is to replace zero-filled subpage to special
+> > zero page, so you implemented another THP split function to handle it?
+> >
+> > Anyway the code should answer the most questions.
+>
+> They can indeed end up on both lists. This did have to be handled when
+> implementing the shrinker.
+>
+> We free the zero filled subpages, while modifying the existing split_huge_page()
+> function. Will follow up that change in another patch.
 
-I love your patch! Yet something to improve:
+FYI. This series does it:
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.19 next-20220809]
-[cannot apply to powerpc/next powerpc/topic/ppc-kvm masahiroy-kbuild/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+https://lore.kernel.org/r/20210731063938.1391602-1-yuzhao@google.com/
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sathvika-Vasireddy/objtool-Enable-and-implement-mcount-option-on-powerpc/20220808-200702
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 4e23eeebb2e57f5a28b36221aa776b5a1122dde5
-config: powerpc-randconfig-r024-20220808 (https://download.01.org/0day-ci/archive/20220810/202208100751.LiiKZjrx-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install powerpc cross compiling tool for clang build
-        # apt-get install binutils-powerpc-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/bcefd9c9f24358413a1b210aa591c8758f58b3a9
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Sathvika-Vasireddy/objtool-Enable-and-implement-mcount-option-on-powerpc/20220808-200702
-        git checkout bcefd9c9f24358413a1b210aa591c8758f58b3a9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=powerpc SHELL=/bin/bash arch/powerpc/
+And this one:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> <unknown>:0: error: symbol '__kuep_lock' is already defined
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+https://lore.kernel.org/r/1635422215-99394-1-git-send-email-ningzhang@linux.alibaba.com/

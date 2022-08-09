@@ -2,86 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B06C58D62D
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 11:16:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF96858D645
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 11:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236801AbiHIJQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 05:16:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44316 "EHLO
+        id S237461AbiHIJTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 05:19:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239111AbiHIJPu (ORCPT
+        with ESMTP id S234639AbiHIJTe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 05:15:50 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D9521A816
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 02:15:44 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d16so10781815pll.11
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 02:15:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=date:from:to:cc:subject:message-id:references:mime-version
-         :content-disposition:in-reply-to;
-        bh=FSqOfzpZFUwxr8/HeQ2ME9Ryp30O9Pfj1SqUD1sPdrE=;
-        b=cysesuRYHU30L5/uc3M+rJSD7t5hbJ6SmQZQGevM+9EmiBSlfecggbUEkZgRRIMq00
-         9ZLuoH8Faa+Na2fsTSh7Ly83OG47w28c4bg5NYyrkpY/yKc+Ph1v0SNC/O+MIL66B4Je
-         k3oaZzIZ6VNzcBBSeqeRb+UqY+skq7sbqvT30=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:date:from:to:cc:subject:message-id:references
-         :mime-version:content-disposition:in-reply-to;
-        bh=FSqOfzpZFUwxr8/HeQ2ME9Ryp30O9Pfj1SqUD1sPdrE=;
-        b=OdBY/b9g4tPDkO/NsFD0LRlfqz/Ucp0Jrsrt8oAE5drzXCuvPbG7lWlCj/Z5Iu1X+u
-         u0Qbt+G1ZMoxOjFrH/GDSDN0nomEgqsdAxqnkAY4Sj7IAcqEurKYvgVBXy9pLd0s5/gA
-         eNEFTWQQVK9952lyh66WPrsSdARtl3GSbcZ5FdWvxKj/V8eGGHkpbDgZDIZ4S/1SKtnm
-         DlNd6EJ9eLQwOAr0T1+MnYrNXsYQ3R4q+SOT6rsyoodYrO8T/0VP44eDKpxkETwImAXh
-         PhT84gsaFtJtXHtsJd6/YcflfJPW5nGSE4vEPYxBxPRKHdwaVj77Cv5T/3OsmY24WHsH
-         AgzQ==
-X-Gm-Message-State: ACgBeo1JJN/SLHa4zUfdl2ZNVh0KogEEowVH+Ys0JATSvYyCW8ztCvsb
-        3VsYMG0sX82AOgf43p7VciBrwg==
-X-Google-Smtp-Source: AA6agR5KA4bN2UFClOwGt6cKcwaRp/Ex5oIjk0AIN3k2UJ+MpFxP0OjPZfORGUebEqY9naJNf2zoXg==
-X-Received: by 2002:a17:902:d48d:b0:16f:5ce:1d08 with SMTP id c13-20020a170902d48d00b0016f05ce1d08mr22446624plg.49.1660036543139;
-        Tue, 09 Aug 2022 02:15:43 -0700 (PDT)
-Received: from google.com ([240f:75:7537:3187:8d43:c739:457a:5504])
-        by smtp.gmail.com with ESMTPSA id p3-20020a625b03000000b0052d7cca96acsm10053741pfb.110.2022.08.09.02.15.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 02:15:42 -0700 (PDT)
-Date:   Tue, 9 Aug 2022 18:15:37 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Lukas Czerner <lczerner@redhat.com>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        minchan@kernel.org, ngupta@vflare.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Jan Kara <jack@suse.com>, Ted Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Ext4 Developers List <linux-ext4@vger.kernel.org>
-Subject: Re: ext2/zram issue [was: Linux 5.19]
-Message-ID: <YvIluTU6oFDpwQwK@google.com>
-References: <CAHk-=wgrz5BBk=rCz7W28Fj_o02s0Xi0OEQ3H1uQgOdFvHgx0w@mail.gmail.com>
- <702b3187-14bf-b733-263b-20272f53105d@kernel.org>
- <20220809091212.mgreambnhgso5hzw@fedora>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220809091212.mgreambnhgso5hzw@fedora>
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Tue, 9 Aug 2022 05:19:34 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4233183B9
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 02:19:32 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 7B7831FACB;
+        Tue,  9 Aug 2022 09:19:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1660036771; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/mBZEyfbsLHVdSLalS9CVrX3VcZkEHpxib5JJuFRu/w=;
+        b=LgoTbOY9iI+nhnC/DaSWC3W5FcZe3khDnwWxd+j38pUja50iDxBQLAyd2CAgtlKmifS/LM
+        v1oWvrKCKMW/gEwhuzV7ETomyF7GgfzKz5H+YxYPMpfK8TnKt/yJX0S9QJDcvC/i/vMHsu
+        DqeCIqA8U9+TvEB+Ig6JArqLa2B60e0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1660036771;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/mBZEyfbsLHVdSLalS9CVrX3VcZkEHpxib5JJuFRu/w=;
+        b=o+Z+lYDassBQY3ZtIsm6eco0FppVzE+WMwzn+KJ1b9QSLugOqdaJ70xRJ7BnXdwEnWTYsI
+        a7s6HOx375dJEfDg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 52A8813A9D;
+        Tue,  9 Aug 2022 09:19:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id yOBqE6Mm8mKjMgAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 09 Aug 2022 09:19:31 +0000
+Date:   Tue, 09 Aug 2022 11:19:30 +0200
+Message-ID: <875yj1wz8d.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Thomas Zimmermann <tzimmermann@suse.de>
+Cc:     Takashi Iwai <tiwai@suse.de>, Dave Airlie <airlied@redhat.com>,
+        Sean Paul <sean@poorly.run>, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH 3/4] drm/udl: Kill pending URBs at suspend and disconnect
+In-Reply-To: <32d98960-a952-b3ab-c3fb-0d615626a3d1@suse.de>
+References: <20220804075826.27036-1-tiwai@suse.de>
+        <20220804075826.27036-4-tiwai@suse.de>
+        <bebcfa4a-7908-d8ba-3bff-ea7c2ee2d7a9@suse.de>
+        <87h72lx4yw.wl-tiwai@suse.de>
+        <2a307221-62a8-a5f8-354f-d92e90f74f04@suse.de>
+        <87a68dwzzi.wl-tiwai@suse.de>
+        <32d98960-a952-b3ab-c3fb-0d615626a3d1@suse.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/08/09 11:12), Lukas Czerner wrote:
-> Hi Jiri,
+On Tue, 09 Aug 2022 11:13:46 +0200,
+Thomas Zimmermann wrote:
 > 
-> I've tried a quick xfstests run on ext2 on zram and I can't see any
-> issues like this so far. I will run a full test and report back in case
-> there is anything obvious.
+> Hi
+> 
+> Am 09.08.22 um 11:03 schrieb Takashi Iwai:
+> > On Tue, 09 Aug 2022 09:41:19 +0200,
+> > Thomas Zimmermann wrote:
+> >> 
+> >> Hi
+> >> 
+> >> Am 09.08.22 um 09:15 schrieb Takashi Iwai:
+> >>> On Tue, 09 Aug 2022 09:13:16 +0200,
+> >>> Thomas Zimmermann wrote:
+> >>>> 
+> >>>> Hi
+> >>>> 
+> >>>> Am 04.08.22 um 09:58 schrieb Takashi Iwai:
+> >>>>> At both suspend and disconnect, we should rather cancel the pending
+> >>>>> URBs immediately.  For the suspend case, the display will be turned
+> >>>>> off, so it makes no sense to process the rendering.  And for the
+> >>>>> disconnect case, the device may be no longer accessible, hence we
+> >>>>> shouldn't do any submission.
+> >>>>> 
+> >>>>> Tested-by: Thomas Zimmermann <tzimmermann@suse.de>
+> >>>>> Signed-off-by: Takashi Iwai <tiwai@suse.de>
+> >>>>> ---
+> >>>>>     drivers/gpu/drm/udl/udl_drv.h     |  2 ++
+> >>>>>     drivers/gpu/drm/udl/udl_main.c    | 25 ++++++++++++++++++++++---
+> >>>>>     drivers/gpu/drm/udl/udl_modeset.c |  2 ++
+> >>>>>     3 files changed, 26 insertions(+), 3 deletions(-)
+> >>>>> 
+> >>>>> diff --git a/drivers/gpu/drm/udl/udl_drv.h b/drivers/gpu/drm/udl/udl_drv.h
+> >>>>> index f01e50c5b7b7..28aaf75d71cf 100644
+> >>>>> --- a/drivers/gpu/drm/udl/udl_drv.h
+> >>>>> +++ b/drivers/gpu/drm/udl/udl_drv.h
+> >>>>> @@ -39,6 +39,7 @@ struct urb_node {
+> >>>>>       struct urb_list {
+> >>>>>     	struct list_head list;
+> >>>>> +	struct list_head in_flight;
+> >>>>>     	spinlock_t lock;
+> >>>>>     	wait_queue_head_t sleep;
+> >>>>>     	int available;
+> >>>>> @@ -84,6 +85,7 @@ static inline struct urb *udl_get_urb(struct drm_device *dev)
+> >>>>>       int udl_submit_urb(struct drm_device *dev, struct urb *urb,
+> >>>>> size_t len);
+> >>>>>     int udl_sync_pending_urbs(struct drm_device *dev);
+> >>>>> +void udl_kill_pending_urbs(struct drm_device *dev);
+> >>>>>     void udl_urb_completion(struct urb *urb);
+> >>>>>       int udl_init(struct udl_device *udl);
+> >>>>> diff --git a/drivers/gpu/drm/udl/udl_main.c b/drivers/gpu/drm/udl/udl_main.c
+> >>>>> index 93615648414b..47204b7eb10e 100644
+> >>>>> --- a/drivers/gpu/drm/udl/udl_main.c
+> >>>>> +++ b/drivers/gpu/drm/udl/udl_main.c
+> >>>>> @@ -135,7 +135,7 @@ void udl_urb_completion(struct urb *urb)
+> >>>>>     	urb->transfer_buffer_length = udl->urbs.size; /* reset to actual */
+> >>>>>       	spin_lock_irqsave(&udl->urbs.lock, flags);
+> >>>>> -	list_add_tail(&unode->entry, &udl->urbs.list);
+> >>>>> +	list_move(&unode->entry, &udl->urbs.list);
+> >>>>>     	udl->urbs.available++;
+> >>>>>     	spin_unlock_irqrestore(&udl->urbs.lock, flags);
+> >>>>>     @@ -180,6 +180,7 @@ static int udl_alloc_urb_list(struct
+> >>>>> drm_device *dev, int count, size_t size)
+> >>>>>     retry:
+> >>>>>     	udl->urbs.size = size;
+> >>>>>     	INIT_LIST_HEAD(&udl->urbs.list);
+> >>>>> +	INIT_LIST_HEAD(&udl->urbs.in_flight);
+> >>>>>       	init_waitqueue_head(&udl->urbs.sleep);
+> >>>>>     	udl->urbs.count = 0;
+> >>>>> @@ -246,7 +247,7 @@ struct urb *udl_get_urb_timeout(struct drm_device *dev, long timeout)
+> >>>>>     	}
+> >>>>>       	unode = list_first_entry(&udl->urbs.list, struct urb_node,
+> >>>>> entry);
+> >>>>> -	list_del_init(&unode->entry);
+> >>>>> +	list_move(&unode->entry, &udl->urbs.in_flight);
+> >>>>>     	udl->urbs.available--;
+> >>>>>       unlock:
+> >>>>> @@ -279,7 +280,7 @@ int udl_sync_pending_urbs(struct drm_device *dev)
+> >>>>>     	spin_lock_irq(&udl->urbs.lock);
+> >>>>>     	/* 2 seconds as a sane timeout */
+> >>>>>     	if (!wait_event_lock_irq_timeout(udl->urbs.sleep,
+> >>>>> -					 udl->urbs.available == udl->urbs.count,
+> >>>>> +					 list_empty(&udl->urbs.in_flight),
+> >>>>>     					 udl->urbs.lock,
+> >>>>>     					 msecs_to_jiffies(2000)))
+> >>>>>     		ret = -ETIMEDOUT;
+> >>>>> @@ -287,6 +288,23 @@ int udl_sync_pending_urbs(struct drm_device *dev)
+> >>>>>     	return ret;
+> >>>>>     }
+> >>>>>     +/* kill pending URBs */
+> >>>>> +void udl_kill_pending_urbs(struct drm_device *dev)
+> >>>>> +{
+> >>>>> +	struct udl_device *udl = to_udl(dev);
+> >>>>> +	struct urb_node *unode;
+> >>>>> +
+> >>>>> +	spin_lock_irq(&udl->urbs.lock);
+> >>>>> +	while (!list_empty(&udl->urbs.in_flight)) {
+> >>>>> +		unode = list_first_entry(&udl->urbs.in_flight,
+> >>>>> +					 struct urb_node, entry);
+> >>>>> +		spin_unlock_irq(&udl->urbs.lock);
+> >>>>> +		usb_kill_urb(unode->urb);
+> >>>>> +		spin_lock_irq(&udl->urbs.lock);
+> >>>>> +	}
+> >>>>> +	spin_unlock_irq(&udl->urbs.lock);
+> >>>>> +}
+> >>>>> +
+> >>>>>     int udl_init(struct udl_device *udl)
+> >>>>>     {
+> >>>>>     	struct drm_device *dev = &udl->drm;
+> >>>>> @@ -335,6 +353,7 @@ int udl_drop_usb(struct drm_device *dev)
+> >>>>>     {
+> >>>>>     	struct udl_device *udl = to_udl(dev);
+> >>>>>     +	udl_kill_pending_urbs(dev);
+> >>>>>     	udl_free_urb_list(dev);
+> >>>>>     	put_device(udl->dmadev);
+> >>>>>     	udl->dmadev = NULL;
+> >>>>> diff --git a/drivers/gpu/drm/udl/udl_modeset.c b/drivers/gpu/drm/udl/udl_modeset.c
+> >>>>> index 50025606b6ad..169110d8fc2e 100644
+> >>>>> --- a/drivers/gpu/drm/udl/udl_modeset.c
+> >>>>> +++ b/drivers/gpu/drm/udl/udl_modeset.c
+> >>>>> @@ -397,6 +397,8 @@ udl_simple_display_pipe_disable(struct drm_simple_display_pipe *pipe)
+> >>>>>     	struct urb *urb;
+> >>>>>     	char *buf;
+> >>>>>     +	udl_kill_pending_urbs(dev);
+> >>>>> +
+> >>>> 
+> >>>> I already reviewed the patchset, but I have another comment. I think
+> >>>> we should only kill urbs from within the suspend handler. Same for the
+> >>>> call to the URB-sync function in patch 2.
+> >>>> 
+> >>>> This disable function is part of the regular modeset path. It's
+> >>>> probably not appropriate to outright remove pending URBs here. This
+> >>>> can lead to failed modesets, which would have succeeded otherwise.
+> >>> 
+> >>> Well, the device shall be turned off right after that point, so the
+> >>> all pending rendering makes little sense, no?
+> >> 
+> >> udl_simple_display_pipe_disable() only disables the display, but not
+> >> the device. The kill operation here could potentially kill some valid
+> >> modeset operation that was still going on. And who knows what the
+> >> device state is after that.
+> > 
+> > But udl_simple_display_pipe_disable() invokes UDL_BLANK_MODE_POWERDOWN
+> > command right after the place I've put udl_kill_pending_urbs().  So it
+> > shall blank / turn off the power (of the device, as it has a single
+> > output).  And the URB completion doesn't do any error handling but
+> > just re-links URB chain and wakes up the queue.  So killing a pending
+> > URB would nothing but canceling the in-flight URBs, and there should
+> > be no disturbance to the modeset operation itself, as the screen will
+> > be blanked immediately.
+> 
+> The blank mode is essentially DPMS. It's unrelated to the device's
+> display mode.
 
-AFAICT this should be visible only when we are under memory pressure,
-so that direct reclaim from zs_malloc handle allocation call makes a
-difference.
+The function invokes the UDL_BLANK_MODE_POWERDOWN command; that will
+discard the whole rendered picture.  And, the counterpart,
+udl_simple_display_pipe_enable(), re-initializes the mode fully from
+the scratch again.
+So what's the point to continue rendering that is immediately cleared
+(from the screen and from the device state)?  Killing pending URBs
+doesn't influence on the internal (modeset) state of the driver.
+
+
+Takashi

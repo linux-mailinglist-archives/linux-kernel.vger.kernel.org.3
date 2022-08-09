@@ -2,193 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 799D558D36F
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 07:59:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E474E58D36C
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 07:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235666AbiHIF72 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 01:59:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51020 "EHLO
+        id S235464AbiHIF7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 01:59:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235629AbiHIF7T (ORCPT
+        with ESMTP id S235453AbiHIF6z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 01:59:19 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 954441F63D;
-        Mon,  8 Aug 2022 22:59:15 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2795wmT2064811;
-        Tue, 9 Aug 2022 00:58:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1660024729;
-        bh=LUvo/OXGaY+SlJRBebaT+WlLA9ZtximoQEN9c9PwbGE=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=rjCJODQXh1A0uAlqW+uoYJUJ7W2hlUcFdng4Uho9UFe6o2pYJXaRyx/STZ9Yi3myq
-         9hS9XC8ER6DhI3CFThKlURDAseqOtWUsSi7UH1dBAebl6ZBZojjNGw/s8fmtwKHmyj
-         RjquQMadPzpOv913jv8LL8K+0nneE51Vji2MTtr8=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2795wmms018047
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 9 Aug 2022 00:58:48 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Tue, 9
- Aug 2022 00:58:48 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
- Frontend Transport; Tue, 9 Aug 2022 00:58:48 -0500
-Received: from [172.24.157.172] (ileax41-snat.itg.ti.com [10.172.224.153])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2795whnR039818;
-        Tue, 9 Aug 2022 00:58:44 -0500
-Message-ID: <1f9de2d8-7507-bdc2-93c1-470c8e060586@ti.com>
-Date:   Tue, 9 Aug 2022 11:28:43 +0530
+        Tue, 9 Aug 2022 01:58:55 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECCE51D316
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 22:58:53 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id o2so8292530lfb.1
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 22:58:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=ZJBG39fDlqpaA1Zn84O39JgZL/7c6kJ0cMrFhlEKwFI=;
+        b=cF6DYtSQF0stJ1CklN9S6lnCCiKTvVh4l582v8zver+q5dkthBM2hDHFtqqgD3vpzv
+         VyEwIdYW9dFG+9eeHT5hzJXRCrBYr3v5e2c9a0+cXy2rG2ka9vgMgULDh9qqCg6dN8R2
+         vxfc41hPt2SkciLqQSsQjVKjg/dOTmcY0sfiRcJnGS8m++N3+ZjVZcOaof7Eid5qlopc
+         wFWYE2SNNvZkr3lNbHQIRcXnl7if5ziUXzhxctpa0yFcXZaEcvbc9Jq34vSiFPRcACmM
+         lASoM0i3qNBLOirpH47TuLVvU1gibZSdYdJuktGaJNi01R89TjrataCup3qdwaO4gkLf
+         6i6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=ZJBG39fDlqpaA1Zn84O39JgZL/7c6kJ0cMrFhlEKwFI=;
+        b=Di/wzvjIy82/MjXiZzEsLuWCpUf4Se/5/gDS21AqM+wOzUzqtut83x/fid+EDqc+9q
+         3EAybvepPSi+WeoCigutezNI/GKf+TmtrB9J9IOwpTdE74I99rZpkFn5zI+Y73O9y1cN
+         0JdN63TcoGQUrLK0ldTpWgRoVRdwn/aU9BSJEI79iaCfNj+i63oZ6/4SDhCSsOLg1gbl
+         cpi87oiutIB3SOlP8yABAilYPLHXyfzjMkDhZamStM/Yr2YjjfiRjmntxuHw0hWcEdK2
+         WAmzqTd2bW3czbOn9Y9ONmXadMIPt306WmQA2s/AHCK/i9hbJrNJAIaqxAovZMqfPNLj
+         bNJg==
+X-Gm-Message-State: ACgBeo0rwNu7N6Cyzh4V2P0T29Iqdufv7Nf4VtKa1oxfZcVB4GKNVnCe
+        PEqRwh/S1SzE46kW29TCJ4uArA==
+X-Google-Smtp-Source: AA6agR7Y0wTdjv8S/L+wC/7ttd0yMMGYE/ktj9TQq6IRkdGMV2hIRNr5NbmqQ4cTi1fq6XauXxa44g==
+X-Received: by 2002:ac2:5f70:0:b0:48b:ca3:14d2 with SMTP id c16-20020ac25f70000000b0048b0ca314d2mr7189598lfc.41.1660024732351;
+        Mon, 08 Aug 2022 22:58:52 -0700 (PDT)
+Received: from [192.168.1.39] ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id t7-20020a05651c204700b0025e5a65afbbsm1550472ljo.120.2022.08.08.22.58.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Aug 2022 22:58:51 -0700 (PDT)
+Message-ID: <20a349c9-a479-ad5b-fe33-4758a773972e@linaro.org>
+Date:   Tue, 9 Aug 2022 08:58:50 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.0
-Subject: Re: [PATCH 4/8] drm/tidss: Add support for Dual Link LVDS Bus Format
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-CC:     Darren Etheridge <detheridge@ti.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rahul T R <r-ravikumar@ti.com>,
-        Krunal Bhargav <k-bhargav@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        DRI Development List <dri-devel@lists.freedesktop.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Jyri Sarha <jyri.sarha@iki.fi>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-References: <20220719080845.22122-1-a-bhatia1@ti.com>
- <20220719080845.22122-5-a-bhatia1@ti.com>
- <f2909af1-be23-009b-ba71-34206f099473@ideasonboard.com>
- <ec8dce9b-51d6-a566-67bb-b76f6f3458d7@ideasonboard.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] dt-bindings: marvell: Update Armada 37xx platform
+ bindings
 Content-Language: en-US
-From:   Aradhya Bhatia <a-bhatia1@ti.com>
-In-Reply-To: <ec8dce9b-51d6-a566-67bb-b76f6f3458d7@ideasonboard.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220713200123.22612-1-pali@kernel.org>
+ <20220808202352.iimhb2q6yawi35y6@pali>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220808202352.iimhb2q6yawi35y6@pali>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tomi,
-
-On 28-Jul-22 17:15, Tomi Valkeinen wrote:
-> On 28/07/2022 14:03, Tomi Valkeinen wrote:
->> On 19/07/2022 11:08, Aradhya Bhatia wrote:
->>> The 2 OLDI TXes in the AM625 SoC can be synced together to output a 2K
->>> resolution video.
->>>
->>> Add support in the driver for the discovery of such a dual mode
->>> connection on the OLDI video port, using the values of "ti,oldi-mode"
->>> property.
->>>
->>> Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
->>> ---
->>>   drivers/gpu/drm/tidss/tidss_dispc.c | 39 +++++++++++++++++++++--------
->>>   1 file changed, 28 insertions(+), 11 deletions(-)
->>>
->>> diff --git a/drivers/gpu/drm/tidss/tidss_dispc.c 
->>> b/drivers/gpu/drm/tidss/tidss_dispc.c
->>> index add725fa682b..fb1fdecfc83a 100644
->>> --- a/drivers/gpu/drm/tidss/tidss_dispc.c
->>> +++ b/drivers/gpu/drm/tidss/tidss_dispc.c
->>> @@ -853,25 +853,36 @@ void dispc_set_irqenable(struct dispc_device 
->>> *dispc, dispc_irq_t mask)
->>>       }
->>>   }
->>> -enum dispc_oldi_mode_reg_val { SPWG_18 = 0, JEIDA_24 = 1, SPWG_24 = 
->>> 2 };
->>> +enum dispc_oldi_mode_reg_val {
->>> +    SPWG_18        = 0,
->>> +    JEIDA_24    = 1,
->>> +    SPWG_24        = 2,
->>> +    DL_SPWG_18    = 4,
->>> +    DL_JEIDA_24    = 5,
->>> +    DL_SPWG_24    = 6,
->>> +};
->>>   struct dispc_bus_format {
->>>       u32 bus_fmt;
->>>       u32 data_width;
->>>       bool is_oldi_fmt;
->>> +    bool is_dual_link;
->>>       enum dispc_oldi_mode_reg_val oldi_mode_reg_val;
->>>   };
->>>   static const struct dispc_bus_format dispc_bus_formats[] = {
->>> -    { MEDIA_BUS_FMT_RGB444_1X12,        12, false, 0 },
->>> -    { MEDIA_BUS_FMT_RGB565_1X16,        16, false, 0 },
->>> -    { MEDIA_BUS_FMT_RGB666_1X18,        18, false, 0 },
->>> -    { MEDIA_BUS_FMT_RGB888_1X24,        24, false, 0 },
->>> -    { MEDIA_BUS_FMT_RGB101010_1X30,        30, false, 0 },
->>> -    { MEDIA_BUS_FMT_RGB121212_1X36,        36, false, 0 },
->>> -    { MEDIA_BUS_FMT_RGB666_1X7X3_SPWG,    18, true, SPWG_18 },
->>> -    { MEDIA_BUS_FMT_RGB888_1X7X4_SPWG,    24, true, SPWG_24 },
->>> -    { MEDIA_BUS_FMT_RGB888_1X7X4_JEIDA,    24, true, JEIDA_24 },
->>> +    { MEDIA_BUS_FMT_RGB444_1X12,        12, false, false, 0 },
->>> +    { MEDIA_BUS_FMT_RGB565_1X16,        16, false, false, 0 },
->>> +    { MEDIA_BUS_FMT_RGB666_1X18,        18, false, false, 0 },
->>> +    { MEDIA_BUS_FMT_RGB888_1X24,        24, false, false, 0 },
->>> +    { MEDIA_BUS_FMT_RGB101010_1X30,        30, false, false, 0 },
->>> +    { MEDIA_BUS_FMT_RGB121212_1X36,        36, false, false, 0 },
->>> +    { MEDIA_BUS_FMT_RGB666_1X7X3_SPWG,    18, true, false, SPWG_18 },
->>> +    { MEDIA_BUS_FMT_RGB888_1X7X4_SPWG,    24, true, false, SPWG_24 },
->>> +    { MEDIA_BUS_FMT_RGB888_1X7X4_JEIDA,    24, true, false, JEIDA_24 },
->>> +    { MEDIA_BUS_FMT_RGB666_1X7X3_SPWG,    18, true, true, DL_SPWG_18 },
->>> +    { MEDIA_BUS_FMT_RGB888_1X7X4_SPWG,    24, true, true, DL_SPWG_24 },
->>> +    { MEDIA_BUS_FMT_RGB888_1X7X4_JEIDA,    24, true, true, DL_JEIDA_24 },
->>>   };
+On 08/08/2022 23:23, Pali Rohár wrote:
+> PING?
+> 
+> On Wednesday 13 July 2022 22:01:23 Pali Rohár wrote:
+>> Distinguish between Armada 3700 family, Armada 3710 SoC and Armada 3720 SoC.
+>> Armada 3720 DB is name of the board with Armada 3720 SoC, so correctly
+>> indicate SoC in example.
 >>
->> So the dual link sends two pixels per clock, right? Are there panel or 
->> bridge drivers that support this? My initial thought was that it 
->> should be a new bus format.
-> 
-> Looks like we have drm bridges supporting dual link, and they use the 
-> "normal" bus format. Did you have a look at them? They require two port 
-> nodes for dual link, and use the existence of the second one to decide 
-> if dual link is used or not.
-The above edits were not for adding a new bus format for dual link
-connections. I added them in order to be able to write the correct OLDI
-config values in the register.
+>> Signed-off-by: Pali Rohár <pali@kernel.org>
+>> ---
+>>  .../devicetree/bindings/arm/marvell/armada-37xx.txt        | 7 ++++++-
+>>  1 file changed, 6 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/arm/marvell/armada-37xx.txt b/Documentation/devicetree/bindings/arm/marvell/armada-37xx.txt
+>> index f6d6642d81c0..d2ca008de266 100644
+>> --- a/Documentation/devicetree/bindings/arm/marvell/armada-37xx.txt
+>> +++ b/Documentation/devicetree/bindings/arm/marvell/armada-37xx.txt
+>> @@ -4,6 +4,11 @@ Marvell Armada 37xx Platforms Device Tree Bindings
+>>  Boards using a SoC of the Marvell Armada 37xx family must carry the
+>>  following root node property:
+>>  
+>> + - compatible: must contain "marvell,armada3700"
+>> +
+>> +In addition, boards using the Marvell Armada 3710 SoC shall have the
+>> +following property before the previous one:
+>> +
 
-> 
-> There are also lvds helpers in drm_of.c. I didn't look closely, but it 
-> looked to me that the helpers can tell you if the ports are connected to 
-> a dual link bridge. If not, you could fall back to cloning. This way no 
-> extra properties are needed. But you will need to add a port node, which 
-> I think you need to add anyway for cloning.
-I have now seen drm_of.c and examples (renesas' rcar lvds) that use the
-apis that drm_of.c is offering. In those cases, the OLDI TXes are being
-modeled as separate devices, which is not the case with the tidss' OLDI
-TXes. Since the only few OLDI registers are in the DSS address space,
-they were just being configured through the tidss driver.
+The change is an ABI break, which looks reasonable, but still platform
+maintainer should comment on it. Especially on the aspect why the
+marvell,armada3710 fallback was chosen at the first place.
 
-Even in DT, the dss port (for OLDI) connects to the panel port's
-endpoint directly. Even in cases of dual link or cloning, it's only a
-singular remote-to-endpoint connection between the (OLDI) VP and the
-panel port. Hence the requirement of the properties in the earlier
-patches of the series.
+Unfortunately none of Marvel folks were CCed here, so you will need to
+resend it. Otherwise no one will apply it, regardless of our ack.
 
-The use of lvds helper functions does not seem feasible in this case,
-because even they read DT properties to determine the dual link
-connection and those properties need to be a part of a lvds bridge
-device.
-
-I have also been considering the idea of implementing a new device
-driver for the OLDI TXes, not unlike the renesas' one. That way the
-driver could have the properties and the lvds helper functions at their
-disposal. I am just slightly unsure if that would allow space for any
-conflicts because of the shared register space.
-
-Do let me know what you think!
-
-Regards
-Aradhya
+Best regards,
+Krzysztof

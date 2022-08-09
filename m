@@ -2,105 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8712658D568
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 10:32:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E7A8B58D56B
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 10:33:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238996AbiHIIcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 04:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37192 "EHLO
+        id S240615AbiHIIdN convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 9 Aug 2022 04:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236481AbiHIIcr (ORCPT
+        with ESMTP id S240542AbiHIIdK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 04:32:47 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF6F1F619
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 01:32:45 -0700 (PDT)
-Received: from mail-ej1-f43.google.com ([209.85.218.43]) by
- mrelayeu.kundenserver.de (mreue106 [213.165.67.113]) with ESMTPSA (Nemesis)
- id 1MhClw-1nhIp41hvW-00eLLm for <linux-kernel@vger.kernel.org>; Tue, 09 Aug
- 2022 10:32:44 +0200
-Received: by mail-ej1-f43.google.com with SMTP id dc19so20876909ejb.12
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 01:32:44 -0700 (PDT)
-X-Gm-Message-State: ACgBeo0SUdbBO4Dx5cLdbJed7Ph9yRC7icTRVU6HyDFyCXruhFTTwM/U
-        VE6wEbCOkJfvXtHmDoDSGU7HKBjaPAEQZuhhL3Q=
-X-Google-Smtp-Source: AA6agR4TKFxtd5LiYcX73HbGF2u7VeVKCRTYtwOOZ8D2bVS25LcWy9weFOVCptPzjGX0tAq94ORtgLDqHbENdmCFPc8=
-X-Received: by 2002:a17:907:7395:b0:730:b636:2c89 with SMTP id
- er21-20020a170907739500b00730b6362c89mr16431662ejc.547.1660033964094; Tue, 09
- Aug 2022 01:32:44 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAPM=9txSKv_xwZJ6SndtqsdQm6aK1KJVF91dB5Odhc_Xv6Qdrw@mail.gmail.com>
- <CAFCwf10CsLgt+_qT7dT=8DVXsL0a=w=uXN6HC=CpP5EfitvLfQ@mail.gmail.com>
- <YuvctaLwRi+z0Gw4@nvidia.com> <CAFCwf12wD3uEhr+kxwN9ROXApHzGh_n1je5susZV5NgGR9fCcQ@mail.gmail.com>
- <Yuxi1eRHPN36Or+1@nvidia.com> <CAFCwf13QF_JdzNcpw==zzBoEQUYChMXfechotH31qmAfYZUGmg@mail.gmail.com>
- <CAFCwf107tLxHKxkPqSRsOHVVp5s2tDEFOOy2oDZUz_KGmv-rDg@mail.gmail.com>
- <YvCozvgodIY19LSr@kroah.com> <YvFOEPdC9r8QBH11@nvidia.com>
- <YvH9X5puer4jpzMX@kroah.com> <YvIU/wMdqFA1fYc6@infradead.org>
-In-Reply-To: <YvIU/wMdqFA1fYc6@infradead.org>
-From:   Arnd Bergmann <arnd@arndb.de>
-Date:   Tue, 9 Aug 2022 10:32:27 +0200
-X-Gmail-Original-Message-ID: <CAK8P3a3y2=FyzK4S6MRfZdrz=DdLat1ajdT_uPmN533mNYmF9w@mail.gmail.com>
-Message-ID: <CAK8P3a3y2=FyzK4S6MRfZdrz=DdLat1ajdT_uPmN533mNYmF9w@mail.gmail.com>
-Subject: Re: New subsystem for acceleration devices
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Oded Gabbay <oded.gabbay@gmail.com>,
-        Dave Airlie <airlied@gmail.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Jiho Chu <jiho.chu@samsung.com>, Arnd Bergmann <arnd@arndb.de>,
-        "Linux-Kernel@Vger. Kernel. Org" <linux-kernel@vger.kernel.org>
+        Tue, 9 Aug 2022 04:33:10 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30EC5201B2
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 01:33:10 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1oLKfR-0006K1-7S; Tue, 09 Aug 2022 10:32:49 +0200
+Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1oLKfM-002fas-63; Tue, 09 Aug 2022 10:32:46 +0200
+Received: from pza by lupine with local (Exim 4.94.2)
+        (envelope-from <p.zabel@pengutronix.de>)
+        id 1oLKfN-0001Qi-La; Tue, 09 Aug 2022 10:32:45 +0200
+Message-ID: <b18ef07670c09d4a58b70dc3671549a9b7d5b4e2.camel@pengutronix.de>
+Subject: Re: [PATCH 2/3] ASoC: apple: mca: Start new platform driver
+From:   Philipp Zabel <p.zabel@pengutronix.de>
+To:     Martin =?UTF-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     asahi@lists.linux.dev, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 09 Aug 2022 10:32:45 +0200
+In-Reply-To: <20220808224153.3634-3-povik+lin@cutebit.org>
+References: <20220808224153.3634-1-povik+lin@cutebit.org>
+         <20220808224153.3634-3-povik+lin@cutebit.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Provags-ID: V03:K1:5E5bCciRIBKhYs8DONl/B/spZHbKI7r800+vqWgPu43CFVIOFTu
- m2StS3+sqLXuHOo9PcuJi0uizp1xuIpFG6dXqa+rvxrDTcbOG/AEwhAXp88JqQZJjNj9cPJ
- tzkRCQwdinppWbVwxCnUmCDiK+VcoDrrm6IyOYtVkQHW2BS03N5ddpARgSMgyJFJ23G1979
- RT82PSVuQm1sorbhri/4w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:IUbD/5MRfm0=:wORYGYWlIPTD4JBHNA62p+
- 3os6aBT/RUwOOX/Z/Cw4P0+W8uGghbFBflZDNfEPPuUuRNhjKAbmidj85wPGOElfvXYBBSRHP
- cwZ5e2zaX2NiWltTR7fr5VJPXeXfyl2GNZQWmITZIR4yfcF/D4DNyAhRbwRpnbRQkkyEmeWSR
- Na5gpN7JO0SPG+z2gFwLtClkLcKw3CuTWFyKos354aJ2NJ/bdYXh4x0dqkbH56uJm1+13IE7R
- qWKtcuTQzvH7YwXi+9a9QjIKUkE1pCuEgOOaHz8MXeBvLIKFI8Ic+EjTwbSgClD5Zr2FXs16d
- 5Yuib6Ce2gPPGsFWEQDOF03A/6iU9kP2g+2142TUy0HBl+NTH3lD1JMDYZYY61rIrSIydNClV
- wXTwwSiPyoTeyLOEjzBPJz3wlpkwHp8z821FGBPmA0gVvHYG9bcZ0v2vwOSnIzmZ953mnC3Ae
- hoGb44NuJZmQ676y6ZZODnxwj/93555iAsP6aR9/4ovGAAmjfKJb7OaFOLYu6KSpc0Dkbf+nK
- dWGbj5JrxKSimhWh40bHBekG8mIZXAJhe95Raw/J/mdEy45hdntpuBqXlUniOQgk8k5t1T2Ot
- dzqGW+LtbaW9Oq0OjBdZaD8KZCXnPK5UXriiIrnTvfLi8rkN6HcJF6uavJ7Nfbv3+xpsZzjvE
- PIrJ1e+i/5luDUZ2gKXtScXSzQjyQ1tT+rePW4N13p8YN6Q9sVEMNl4SS9LsXj/TRgoddudyr
- wk5SH2HdSM849NVt5Yqd5yOoqBTXdwOVBABr/r6xxn1HuiHYYf9f8/UtfAw/iMmBcybChwLEa
- hrxbkpV80wJZMu+eR84cHFHmBPCFZ9992mAYvsOM6jTE1CBjd83k/qodj1V7mWKLm2X7pgxtt
- CN6Ahd7uQOvptwHNvYtQ==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.38.3-1 
+MIME-Version: 1.0
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 9, 2022 at 10:04 AM Christoph Hellwig <hch@infradead.org> wrote:
-> On Tue, Aug 09, 2022 at 08:23:27AM +0200, Greg Kroah-Hartman wrote:
-> > > This is different from the number of FDs pointing at the struct file.
-> > > Userpsace can open a HW state and point a lot of FDs at it, that is
-> > > userspace's problem. From a kernel view they all share one struct file
-> > > and thus one HW state.
-> >
-> > Yes, that's fine, if that is what is happening here, I have no
-> > objection.
->
-> It would be great if we could actually life that into a common
-> layer (chardev or vfs) given just how common this, and drivers tend
-> to get it wrong, do it suboptimal so often.
+Hi Martin,
 
-Totally agreed.
+On Di, 2022-08-09 at 00:41 +0200, Martin Povišer wrote:
+> +	mca->rstc = devm_reset_control_get_shared(&pdev->dev, NULL);
+> +	if (IS_ERR(mca->rstc)) {
+> +		dev_dbg(&pdev->dev, "couldn't obtain reset control: %pe\n", mca->rstc);
+> +		mca->rstc = NULL;
+> +	}
 
-I think for devices with hardware MMU contexts you actually want to
-bind the context to a 'mm_struct', and then ensure that the context
-is only ever used from a process that shares this mm_struct,
-regardless of who else has access to the same file or inode.
+Please don't ignore errors, this could be -ENOMEM.
 
-We did this in a somewhat hacky way in spufs a long time ago, and
-I would expect this to be solved more cleanly in drivers/gpu/drm, but
-I don't know where to look for that code.
+For optional resets, use devm_reset_control_get_optional_shared(),
+which returns NULL if there is no resets property in the device tree.
 
-        Arnd
+regards
+Philipp

@@ -2,175 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7602E58DD9D
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:02:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BD1A58DED2
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:24:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245676AbiHISCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 14:02:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34318 "EHLO
+        id S1344318AbiHISYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 14:24:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344375AbiHISBx (ORCPT
+        with ESMTP id S1347327AbiHISWU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 14:01:53 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCAFF27158
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 11:01:08 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 15-20020a63020f000000b0041b578f43f9so4712422pgc.11
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 11:01:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc;
-        bh=0naQsNDIr7/tAK4RQoashO+D0OWwjfQP9uh6N2f59FQ=;
-        b=E0OZstROSh47tpxJpKX8HBf3moLKJy6IFfy5NC6Hdzk0TlaJw8ObdAjRoyJkZOub/n
-         65iscEokmC+ZvKgUCnkydveYOtQ6dpB5plLMkvBOr7wP6ZWHsTfCS6f/gQYq9nN2YXVj
-         MBV/LRFKcVeiqThCoaxjac2rfymZGfHhvJTTe/tVwqOQ+ziqt6HWSOii2XsUBNyOd+Ys
-         cgE3EZHeickYunSaJVvj4WRSHSpRssiPMyL2uHKkwkDjzcJshWYOENq1rVPncvwZzWYX
-         VyyfaLgtIxFWEFRG0HEecXYX3KwnuVm21ycKciBHsAQeGwSdiEYeGlJuwzfrV2uUZ0gO
-         4Spg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc;
-        bh=0naQsNDIr7/tAK4RQoashO+D0OWwjfQP9uh6N2f59FQ=;
-        b=R7lcDfJifKTJjZY5as92/LpTyW9BVTSVloUv3zhklBPUiB1vyGQjgowsUEjhNRNHqh
-         wAEo/JK3fo5doK88SiclTIbaO5UrFeonQ9lzAMB3gyNOW4w/HWWZ2ZWFI0B8vNXoqdqz
-         5Br0uTR5V1bIeulU2cKy0kaPzUgBydwd2afRk3M6hV/VwiPqcBV934ScyyGpQPl/Zotx
-         K5fhr7CBBGXUombgp8JLxPKC3X8rFoDHo1Bo/vKoziwGGqT9zFm76FZdu47uprAvmlQT
-         MC7wqHgkMVHInK4PFfyv+kRhvUHRZaawk5B0xRgMRVlmFkylYUJMYk/QYGmJJBusL+i9
-         96Ew==
-X-Gm-Message-State: ACgBeo3Iv2XpHz29MKNd21ZJSpfTYqce75ZFkozz4WBhJZHm9kNbVXOJ
-        tB8YC2zplyKCUTkznOmPY8uM5+jERrh7+34LsrQ=
-X-Google-Smtp-Source: AA6agR48VRt/dvuYwc+vflV/Z+atvVVKkGsHFrM7H1GhF17Pfeyb5NTYc06R9UeQBXtLcDO2b7iYAntU0oxxR0aEKVM=
-X-Received: from wmcvicker.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5ebe])
- (user=willmcvicker job=sendgmr) by 2002:a17:903:234d:b0:16f:3e9:491b with
- SMTP id c13-20020a170903234d00b0016f03e9491bmr24194019plh.89.1660068067582;
- Tue, 09 Aug 2022 11:01:07 -0700 (PDT)
-Date:   Tue,  9 Aug 2022 18:00:50 +0000
-In-Reply-To: <20220809180051.1063653-1-willmcvicker@google.com>
-Message-Id: <20220809180051.1063653-3-willmcvicker@google.com>
-Mime-Version: 1.0
-References: <20220809180051.1063653-1-willmcvicker@google.com>
-X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
-Subject: [PATCH v1 2/2] PCI: dwc: add support for 64-bit MSI target address
-From:   Will McVicker <willmcvicker@google.com>
-To:     Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        "=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?=" <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Will McVicker <willmcvicker@google.com>
-Cc:     kernel-team@android.com, Vidya Sagar <vidyas@nvidia.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.6
+        Tue, 9 Aug 2022 14:22:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9198631DC4;
+        Tue,  9 Aug 2022 11:08:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8D852B8199A;
+        Tue,  9 Aug 2022 18:07:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DAE7AC43470;
+        Tue,  9 Aug 2022 18:07:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660068443;
+        bh=ywVLN2ma4MVkAmTR58UKcULnKrwma1toTjcHNXw3Wbg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=OId86UbL5sY1lR91qK20OFi+3IZ+VZ8TzILrQ9/OWGlIJAg9M+BBV9hREpvMw9/Zl
+         NFCTJceaImhC7xl7i4/qYblNQEcCKTmvbhTDEjkoZD+2bPZCjWdcVIz8ZJ6Nu1mTHr
+         IREZYooR9o3Ipi1ovjWBFalhTgg1TSZfuo0mpKhY=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org,
+        Johannes Thumshirn <johannes.thumshirn@wdc.com>,
+        Naohiro Aota <naohiro.aota@wdc.com>,
+        David Sterba <dsterba@suse.com>
+Subject: [PATCH 5.18 21/35] btrfs: zoned: fix critical section of relocation inode writeback
+Date:   Tue,  9 Aug 2022 20:00:50 +0200
+Message-Id: <20220809175515.832622102@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220809175515.046484486@linuxfoundation.org>
+References: <20220809175515.046484486@linuxfoundation.org>
+User-Agent: quilt/0.66
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since not all devices require a 32-bit MSI address, add support to the
-PCIe host driver to allow setting the DMA mask to 64-bits. This allows
-kernels to disable ZONE_DMA32 and bounce buffering (swiotlb) without
-risking not being able to get a 32-bit address during DMA allocation.
-Basically, in the slim chance that there are no 32-bit allocations
-available, the current PCIe host driver will fail to allocate the
-msi_msg page due to a DMA address overflow (seen in [1]). With this
-patch, the PCIe driver can advertise 64-bit support via it's MSI
-capabilities to hint to the PCIe host driver to set the DMA mask to
-64-bits.
+From: Naohiro Aota <naohiro.aota@wdc.com>
 
-[1] https://lore.kernel.org/all/Yo0soniFborDl7+C@google.com/
+commit 19ab78ca86981e0e1e73036fb73a508731a7c078 upstream.
 
-Signed-off-by: Will McVicker <willmcvicker@google.com>
+We use btrfs_zoned_data_reloc_{lock,unlock} to allow only one process to
+write out to the relocation inode. That critical section must include all
+the IO submission for the inode. However, flush_write_bio() in
+extent_writepages() is out of the critical section, causing an IO
+submission outside of the lock. This leads to an out of the order IO
+submission and fail the relocation process.
+
+Fix it by extending the critical section.
+
+Fixes: 35156d852762 ("btrfs: zoned: only allow one process to add pages to a relocation inode")
+CC: stable@vger.kernel.org # 5.16+
+Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
+Signed-off-by: Naohiro Aota <naohiro.aota@wdc.com>
+Signed-off-by: David Sterba <dsterba@suse.com>
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/pci/controller/dwc/pcie-designware-host.c | 14 ++++++++++++--
- drivers/pci/controller/dwc/pcie-designware.c      |  9 +++++++++
- drivers/pci/controller/dwc/pcie-designware.h      |  6 ++++++
- 3 files changed, 27 insertions(+), 2 deletions(-)
+ fs/btrfs/extent_io.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
-index 0cfc3c098f13..630615719236 100644
---- a/drivers/pci/controller/dwc/pcie-designware-host.c
-+++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-@@ -338,6 +338,8 @@ static int dw_pcie_msi_host_init(struct dw_pcie_rp *pp)
- 	struct platform_device *pdev = to_platform_device(dev);
- 	int ret;
- 	u32 ctrl, num_ctrls;
-+	bool msi_64b = false;
-+	u16 msi_capabilities;
- 
- 	for (ctrl = 0; ctrl < MAX_MSI_CTRLS; ctrl++)
- 		pp->irq_mask[ctrl] = ~0;
-@@ -375,9 +377,17 @@ static int dw_pcie_msi_host_init(struct dw_pcie_rp *pp)
- 						    dw_chained_msi_isr, pp);
+--- a/fs/btrfs/extent_io.c
++++ b/fs/btrfs/extent_io.c
+@@ -5214,13 +5214,14 @@ int extent_writepages(struct address_spa
+ 	 */
+ 	btrfs_zoned_data_reloc_lock(BTRFS_I(inode));
+ 	ret = extent_write_cache_pages(mapping, wbc, &epd);
+-	btrfs_zoned_data_reloc_unlock(BTRFS_I(inode));
+ 	ASSERT(ret <= 0);
+ 	if (ret < 0) {
++		btrfs_zoned_data_reloc_unlock(BTRFS_I(inode));
+ 		end_write_bio(&epd, ret);
+ 		return ret;
  	}
- 
--	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
-+	msi_capabilities = dw_pcie_msi_capabilities(pci);
-+	if (msi_capabilities & PCI_MSI_FLAGS_ENABLE)
-+		msi_64b = msi_capabilities & PCI_MSI_FLAGS_64BIT ? true : false;
-+
-+	dev_dbg(dev, "Setting MSI DMA mask to %s-bit.\n",
-+		msi_64b ? "64" : "32");
-+	ret = dma_set_mask_and_coherent(dev, msi_64b ?
-+					DMA_BIT_MASK(64) : DMA_BIT_MASK(32));
- 	if (ret)
--		dev_warn(dev, "Failed to set DMA mask to 32-bit. Devices with only 32-bit MSI support may not work properly\n");
-+		dev_warn(dev, "Failed to set DMA mask to %s-bit.\n",
-+			 msi_64b ? "64" : "32");
- 
- 	pp->msi_page = dma_alloc_coherent(dev, PAGE_SIZE, &pp->msi_data,
- 					  GFP_KERNEL);
-diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-index c6725c519a47..8ed402307d7f 100644
---- a/drivers/pci/controller/dwc/pcie-designware.c
-+++ b/drivers/pci/controller/dwc/pcie-designware.c
-@@ -82,6 +82,15 @@ u8 dw_pcie_find_capability(struct dw_pcie *pci, u8 cap)
+ 	ret = flush_write_bio(&epd);
++	btrfs_zoned_data_reloc_unlock(BTRFS_I(inode));
+ 	return ret;
  }
- EXPORT_SYMBOL_GPL(dw_pcie_find_capability);
  
-+u16 dw_pcie_msi_capabilities(struct dw_pcie *pci)
-+{
-+	u8 offset;
-+
-+	offset = dw_pcie_find_capability(pci, PCI_CAP_ID_MSI);
-+	return dw_pcie_readw_dbi(pci, offset + PCI_MSI_FLAGS);
-+}
-+EXPORT_SYMBOL_GPL(dw_pcie_msi_capabilities);
-+
- static u16 dw_pcie_find_next_ext_capability(struct dw_pcie *pci, u16 start,
- 					    u8 cap)
- {
-diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
-index 09b887093a84..70a251c8f72b 100644
---- a/drivers/pci/controller/dwc/pcie-designware.h
-+++ b/drivers/pci/controller/dwc/pcie-designware.h
-@@ -432,6 +432,7 @@ void dw_pcie_host_deinit(struct dw_pcie_rp *pp);
- int dw_pcie_allocate_domains(struct dw_pcie_rp *pp);
- void __iomem *dw_pcie_own_conf_map_bus(struct pci_bus *bus, unsigned int devfn,
- 				       int where);
-+u16 dw_pcie_msi_capabilities(struct dw_pcie *pci);
- #else
- static inline irqreturn_t dw_handle_msi_irq(struct dw_pcie_rp *pp)
- {
-@@ -462,6 +463,11 @@ static inline void __iomem *dw_pcie_own_conf_map_bus(struct pci_bus *bus,
- {
- 	return NULL;
- }
-+
-+static inline u16 dw_pcie_msi_capabilities(struct dw_pcie *pci)
-+{
-+	return 0;
-+}
- #endif
- 
- #ifdef CONFIG_PCIE_DW_EP
--- 
-2.37.1.559.g78731f0fdb-goog
+
 

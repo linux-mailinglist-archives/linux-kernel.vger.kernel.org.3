@@ -2,49 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E53B858DCB4
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 19:03:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AA2258DCB5
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 19:03:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245272AbiHIRDG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 13:03:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42738 "EHLO
+        id S245345AbiHIRDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 13:03:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245517AbiHIRCp (ORCPT
+        with ESMTP id S245523AbiHIRCp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 9 Aug 2022 13:02:45 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AEA726F0;
-        Tue,  9 Aug 2022 10:02:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085472BCF;
+        Tue,  9 Aug 2022 10:02:40 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 285D060BBE;
-        Tue,  9 Aug 2022 17:02:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E4D3C433D6;
-        Tue,  9 Aug 2022 17:02:36 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9680E60B31;
+        Tue,  9 Aug 2022 17:02:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 062ABC43470;
+        Tue,  9 Aug 2022 17:02:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660064557;
-        bh=oAX6iFe0Ls7l4dfrf9XPhU+sbEN8AoDTrN65o8ZLhXA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pYl7CXTiECvji7OvuNzdwtxBQvA/rbtg4FzTr/1T4eh49p8ktBvALXptrqJLyW+S1
-         IqwzKS4uSw/360b2a100y/3S8oi5wPsTc6v6WHFSUr/2Lo1wezRsfWs/ddIDtnctw7
-         Ey25cLt9AdUAidQ1DWeGD9hvty0JkQC4dGM9yB8Y/XLhdgXxz+pFwBLJAxdM77ZgRY
-         Us43JollW1wMJki4Z1mWzzcA5ss2AxnYwlCp1rL+Wd7u3zwwuax8R/9wuY/+oS1zjK
-         Ek9d2wt6fgAxMhCjNOEdFhgPRvZWB2fiCxRFINKGSckyKSasxG8P0r9ERWZ1Oqemsz
-         36eGZAU90iWRg==
-Date:   Tue, 9 Aug 2022 19:02:33 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Seth Forshee <sforshee@kernel.org>
-Subject: Re: [GIT PULL] setgid inheritance for v5.20/v6.0
-Message-ID: <20220809170233.sdkawtukkbd2uvj3@wittgenstein>
-References: <20220809103957.1851931-1-brauner@kernel.org>
- <CAHk-=wi5pHi37dk0Ru93yvmJYU-FpcTpJ6tRcOQqO83SDkgMeQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wi5pHi37dk0Ru93yvmJYU-FpcTpJ6tRcOQqO83SDkgMeQ@mail.gmail.com>
+        s=k20201202; t=1660064559;
+        bh=mQDt0npPXNFoZ3KBEh4dScC/zr0s5mbBmqrzC+Hxpr4=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=aJH/ue90JxRWZTJpBScyYjh8lwsX1EBOAb3p3Ene1fOMQI12zHsHvjL0HGwTeCXvK
+         AWiPiklNNuQwblrEQVowSxS0pR+YwiVNAAMTMuP17L9fbARk+SrZS0qfuZPd0p/eQi
+         NHjRiFPcLj5YknIHF6MQP3Z4Ph5c2CuEl0NEUfW0fh5vwF/7mDb+YrD5iJnqn1DSjb
+         MMVplSawq8VSBRJk3hpvfTvooWtDDWza+5hEv+mcjwoXcbVRDQPYp/d2hbSz6MFSAR
+         E3qlHipZP1/7NlC38G3DO8O6gzp9PCsqT3/+4/7i0vejHIBk1QiQGePtXedJeFfJlo
+         v2W3TPzrgyiFg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E9B41C43142;
+        Tue,  9 Aug 2022 17:02:38 +0000 (UTC)
+Subject: Re: [git pull] m68knommu changes for v5.20
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <c42ca36d-3535-bd31-e965-2b86840a03f7@linux-m68k.org>
+References: <c42ca36d-3535-bd31-e965-2b86840a03f7@linux-m68k.org>
+X-PR-Tracked-List-Id: <linux-m68k.vger.kernel.org>
+X-PR-Tracked-Message-Id: <c42ca36d-3535-bd31-e965-2b86840a03f7@linux-m68k.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gerg/m68knommu.git tags/m68knommu-for-v5.20
+X-PR-Tracked-Commit-Id: 472e68df4a5eacdbe4fd07cffef1b5ffdd95516b
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 15886321a426c7f4f1a0ff788f5b48e49230c0f3
+Message-Id: <166006455895.27167.16373185895979067980.pr-tracker-bot@kernel.org>
+Date:   Tue, 09 Aug 2022 17:02:38 +0000
+To:     Greg Ungerer <gerg@linux-m68k.org>
+Cc:     torvalds@linux-foundation.org,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Linux/m68k <linux-m68k@vger.kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>, gerg@kernel.org
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,22 +63,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 09, 2022 at 09:58:56AM -0700, Linus Torvalds wrote:
-> On Tue, Aug 9, 2022 at 3:40 AM Christian Brauner <brauner@kernel.org> wrote:
-> >
-> > Finally a note on __regression potential__. I want to be very clear and open
-> > that this carries a non-zero regression risk which is also why I defered the
-> > pull request for this until this week because I was out to get married last
-> > week and wouldn't have been around to deal with potential fallout:
-> 
-> .. excuses, excuses.
+The pull request you sent on Tue, 9 Aug 2022 10:33:27 +1000:
 
-I had to choose whether I'll be physically slapped for working or
-virtually slapped for sending in the PR late. This time I took the
-virtual beating. ;)
+> git://git.kernel.org/pub/scm/linux/kernel/git/gerg/m68knommu.git tags/m68knommu-for-v5.20
 
-> 
-> Congratulations.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/15886321a426c7f4f1a0ff788f5b48e49230c0f3
 
 Thank you!
-Christian
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html

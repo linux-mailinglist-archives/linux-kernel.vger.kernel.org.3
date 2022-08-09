@@ -2,71 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C50E158D17A
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 02:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86FE958D17E
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 02:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244757AbiHIAt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 20:49:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44780 "EHLO
+        id S244773AbiHIAxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 20:53:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244457AbiHIAt1 (ORCPT
+        with ESMTP id S238516AbiHIAxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 20:49:27 -0400
-Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A433C25F7;
-        Mon,  8 Aug 2022 17:49:25 -0700 (PDT)
-Received: by mail-il1-x144.google.com with SMTP id g18so5794265ilk.4;
-        Mon, 08 Aug 2022 17:49:25 -0700 (PDT)
+        Mon, 8 Aug 2022 20:53:32 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 999FC186D2;
+        Mon,  8 Aug 2022 17:53:30 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id e13so13247398edj.12;
+        Mon, 08 Aug 2022 17:53:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=RxAt0vmII6A8aZUqkoL3eMGfHTRmNL+sO4A/bXssgaI=;
-        b=f7izXbNbbMPcRpY/Rm0j5riq5OjXFnpyFZNSF9U/jaN1nyuuY3FySKBoivXnZyvtTS
-         usTnNcvFi5hW5sg70MzT8CWelhQS451hgUiOh+olYak4sKmdqMLI0YYcWfKNKf23ZoB/
-         UGZHqTuzpT35xm50sSai1PPOmAEGw8oA+Yw+kCYlrf+edcqFIAPwI81W18TEUwC+85VY
-         drgDm5tvswMULunlbrIi/cFS3sJKyY/CY30SYoTFSBopTj23LYZrBD0rss6gwa/URJ9e
-         NQIPMcXYT+beYYK1MXcKjWAWQjA1r7UjxQZQigCGuqoTGe1F2oWXgV9icsQfFBhrw/kE
-         ReUQ==
+        h=content-transfer-encoding:in-reply-to:from:content-language:subject
+         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc;
+        bh=XvyFwW8Ho60oSZew5uOeBihtI9BfP1sOrcezBlDDeak=;
+        b=FHz67+toURTh0Yb7HzDZsHG/8r/QpytqYb81DRGPQ2LKOapSzVsx3mOi+drwD0xM1n
+         lKouoiEbLATMokRYfoIGu7hq0NKsdEmQ+6mSyXoq5z16lkjs1z1K/edLL195z6TkPeL/
+         Y4BAxcClmkrnzTa9GKaJ2AfFOpeowPDaOVsQsXXj0S/XhXMO50kveGTaCXB1sdLlYXFt
+         5+qrxMcEgkYmy7XwpuzBsp/EMIe42FoyMs0OnTS+9vb9AhwwI4ILUVX/O2rB/1wUlhfl
+         Tg67MdR6zN7sXKe3CsRefnMkWhVNTSpb1yibneiIkE8G9KLN4OSFVNfJMOAUvJCtB433
+         ccpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=RxAt0vmII6A8aZUqkoL3eMGfHTRmNL+sO4A/bXssgaI=;
-        b=ZaJBcbt5U9PtQnorBu7mD1AIt8ZScqff9mNfqMIiqrzBR0k83YsdNhTU97wfZMXEFK
-         UN9QDHfk64EDHfXO9ef0WudWWEWER1zR9y0Ss6BKyzv1S2YZ/w1Zmx9UCmHnW7d9R8Te
-         r8pqTASyOORMZKiN3FMRTH/urEN48gXMeHpdRkbasob6rCk8J0rKbPtYGfOq0Au37tFg
-         PEn5MIk8u56JpoGoBM8AIzeDLED6zecQKUqszrAtplUES2owxJOo0Tx0EH6Pv5UnjXdi
-         wEpYbmeaoO/frHUxjj6GmYWJ4R/c5Ppgbw0GJt9ByMUWVyW/mXOOtgzshNK2e10fTKbN
-         k6YQ==
-X-Gm-Message-State: ACgBeo2IRDxRvVq20dQs67YY7hV/+BsfrZacRaqkFkNDCtrAFb/jqWpQ
-        zMJZBXGAcNA32NQwJova1noxr6Ivg8VWVMalvUQ=
-X-Google-Smtp-Source: AA6agR6WuV2IbgbYW7USKqWLiyaAEOChp5xCeJvLHUDADLdy2EZVfhR5qO5VLks29mbWTdapX2MkOOG7+KOQTA0XYF0=
-X-Received: by 2002:a05:6e02:198c:b0:2e0:ac33:d22 with SMTP id
- g12-20020a056e02198c00b002e0ac330d22mr5261136ilf.219.1660006165003; Mon, 08
- Aug 2022 17:49:25 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:content-language:subject
+         :references:cc:to:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=XvyFwW8Ho60oSZew5uOeBihtI9BfP1sOrcezBlDDeak=;
+        b=diriGKsqVzvVucM4x5L8FdySVoXAQxXSgG8nRxbz9bM/dC+MjaO2BDyEtArzw3YtNS
+         Nt518oa/FcYR4La8LdGWAlOSj/09mH9x1D/fWlkqz2vNGwtq4efgewp3f0bf0kR7ZwNY
+         AEaebH0yiZiQuOUyccJyNDxFWePtIp7H4C/ifPAM+NMZ+T5P9KIC1KkIJamYK3xJmDF4
+         n8okrP4VHeZQxOe/2/UgCFW9jc0ehVDiGahLolthaqtdwo0P+Pj6rJAkE4VQ81TH3Q3q
+         qQiCZbhaDcC3Ne7NKdIQ1tZWdOVtnGJEHGTLd1ZPSlcqW6hnTxF0xtF/jziU9Hb0MJ0W
+         8mMw==
+X-Gm-Message-State: ACgBeo0FabPObJs1J6QvO7fTQR/ofp55B2n66g6sMho/HkXf7U7Uqp29
+        /9zm0sHJ1OihWd1qWXn0c6A=
+X-Google-Smtp-Source: AA6agR6zpoOnCSipuQNy365yK44T2T67w/iZRbUIxiPeDhazTpbtt/k1Hg/MPlnC8AgmV2cIgFRStg==
+X-Received: by 2002:a05:6402:40ce:b0:43d:f8a0:9c4f with SMTP id z14-20020a05640240ce00b0043df8a09c4fmr19970504edb.95.1660006409086;
+        Mon, 08 Aug 2022 17:53:29 -0700 (PDT)
+Received: from [10.21.0.9] ([37.120.217.82])
+        by smtp.gmail.com with ESMTPSA id d23-20020a05640208d700b0043a7134b381sm5176218edz.11.2022.08.08.17.53.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Aug 2022 17:53:28 -0700 (PDT)
+Message-ID: <86b63b7b-afda-d7f4-7bfa-175085d5a8ef@gmail.com>
+Date:   Tue, 9 Aug 2022 02:53:26 +0200
 MIME-Version: 1.0
-References: <20220808094623.387348-1-asavkov@redhat.com> <20220808094623.387348-2-asavkov@redhat.com>
- <CAP01T76dELOx8p_iky_Py_VcqDbQtaL-4d=zrFiCbFhMdVEmNA@mail.gmail.com>
- <YvEEXsdo/fCnoEFY@samus.usersys.redhat.com> <CAP01T74kqdAeZbmnVA2uDRiB-8tjuWtdw-q_2V5fL6wQ==rTEA@mail.gmail.com>
- <CAEf4BzaGmBZ7aXuX2ty1eB2jddurHyranxPs2cfKkkPB_hoX9A@mail.gmail.com>
-In-Reply-To: <CAEf4BzaGmBZ7aXuX2ty1eB2jddurHyranxPs2cfKkkPB_hoX9A@mail.gmail.com>
-From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date:   Tue, 9 Aug 2022 02:48:49 +0200
-Message-ID: <CAP01T75iAq+e023w9vPijnnvMJvTS-XeVwEE6xq0ct+Fc9CeHQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/3] bpf: add destructive kfunc flag
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Daniel Vacek <dvacek@redhat.com>,
-        Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>,
-        Daniel Xu <dxu@dxuuu.xyz>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+To:     jaschultzms@gmail.com
+Cc:     benjamin.tissoires@redhat.com, biju.das.jz@bp.renesas.com,
+        bjorn.andersson@linaro.org, catalin.marinas@arm.com,
+        corbet@lwn.net, devicetree@vger.kernel.org, dmanti@microsoft.com,
+        dmitry.baryshkov@linaro.org, dmitry.torokhov@gmail.com,
+        geert+renesas@glider.be, jaschultz@microsoft.com, jikos@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        marcel.ziswiler@toradex.com, robh+dt@kernel.org,
+        shawnguo@kernel.org, vkoul@kernel.org, will@kernel.org
+References: <20220707165902.3184-1-jaschultzMS@gmail.com>
+Subject: Re: [PATCH v5 0/6] Add spi-hid, transport for HID over SPI bus
+Content-Language: en-US
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+In-Reply-To: <20220707165902.3184-1-jaschultzMS@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,94 +82,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 9 Aug 2022 at 02:37, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
->
-> On Mon, Aug 8, 2022 at 6:33 AM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
-> >
-> > On Mon, 8 Aug 2022 at 14:41, Artem Savkov <asavkov@redhat.com> wrote:
-> > >
-> > > On Mon, Aug 08, 2022 at 02:14:33PM +0200, Kumar Kartikeya Dwivedi wrote:
-> > > > On Mon, 8 Aug 2022 at 11:48, Artem Savkov <asavkov@redhat.com> wrote:
-> > > > >
-> > > > > Add KF_DESTRUCTIVE flag for destructive functions. Functions with this
-> > > > > flag set will require CAP_SYS_BOOT capabilities.
-> > > > >
-> > > > > Signed-off-by: Artem Savkov <asavkov@redhat.com>
-> > > > > ---
-> > > > >  include/linux/btf.h   | 1 +
-> > > > >  kernel/bpf/verifier.c | 5 +++++
-> > > > >  2 files changed, 6 insertions(+)
-> > > > >
-> > > > > diff --git a/include/linux/btf.h b/include/linux/btf.h
-> > > > > index cdb376d53238..51a0961c84e3 100644
-> > > > > --- a/include/linux/btf.h
-> > > > > +++ b/include/linux/btf.h
-> > > > > @@ -49,6 +49,7 @@
-> > > > >   * for this case.
-> > > > >   */
-> > > > >  #define KF_TRUSTED_ARGS (1 << 4) /* kfunc only takes trusted pointer arguments */
-> > > > > +#define KF_DESTRUCTIVE  (1 << 5) /* kfunc performs destructive actions */
-> > > > >
-> > > >
-> > > > Please also document this flag in Documentation/bpf/kfuncs.rst.
-> > >
-> > > Ok, will do.
-> > >
-> > > > And maybe instead of KF_DESTRUCTIVE, it might be more apt to call this
-> > > > KF_CAP_SYS_BOOT. While it is true you had a destructive flag for
-> > > > programs being loaded earlier, so there was a mapping between the two
-> > > > UAPI and kfunc flags, what it has boiled down to is that this flag
-> > > > just requires CAP_SYS_BOOT (in addition to other capabilities) during
-> > > > load. So that name might express the intent a bit better. We might
-> > > > soon have similar flags encoding requirements of other capabilities on
-> > > > load.
-> > > >
-> > > > The flag rename is just a suggestion, up to you.
-> > >
-> > > This makes sense right now, but if going forward we'll add stricter
-> > > signing requirements or other prerequisites we'll either have to rename
-> > > the flag back, or add those as separate flags. I guess the decision here
-> >
-> > IMO we should do that when the time comes, for now it should reflect
-> > the current state.
->
-> But names should be also semantically meaningful, so KF_DESTRUCTIVE
-> explains that kfunc can do destructive operations, which is better
-> than just declaring that kfunc needs CAP_SYS_BOOT, as the latter is
-> current implementation detail which has no bearing on kfunc definition
-> itself.
->
-> Unless we anticipate we'll have another "destructive" kfunc not using
-> KF_DESTRUCTIVE and instead we'll add some other
-> KF_CAP_SYS_WHATEVERELSE?
->
+On 8/7/22 09:58, Jarrett Schultz <jaschultzms@gmail.com> wrote:
+> Surface Duo devices use a touch digitizer that communicates to the main
+> SoC via SPI and presents itself as a HID device. This patch's goal is to
+> add the spi-hid transport driver to drivers/hid. The driver follows the
+> publically available HID Over SPI Protocol Specification version 1.0.
 
-I just found it a bit odd that KF_DESTRUCTIVE would require
-CAP_SYS_BOOT. When thinking about what one would write in the docs:
-just that KF_DESTRUCTIVE kfuncs can do destructive operations? That
-doesn't really capture what the flag ends up doing to the kfunc (it
-limits use to those who have a certain cap on program load). There can
-be several destructive operations (e.g. a frequently mentioned socket
-kill helper that may be considered equally destructive for some
-workload) but would probably require CAP_NET_ADMIN instead.
+As far as I can tell based on the downstream code you provide in [1],
+your proposed driver (and v1.0 spec) is incompatible with the version
+used on current Surface devices (Surface Duo 1 and 2, Surface Pro X, and
+I assume some AMD/x86 based devices on which you also use spi-hid for the
+digitizer). On those, SPI_HID_SUPPORTED_VERSION is 0x0100 whereas it is
+0x0300 for the driver proposed here, along with at least some protocol
+struct changes.
 
-But anyway, I didn't really want to bikeshed over this :), we can give
-it a better name next time something like this is added, and just go
-with KF_DESTRUCTIVE for now.
+Do you have any plans on supporting those devices (i.e. protocol version
+0x0100) at some point?
 
-> > To me this helper requiring cap_sys_boot is just like how some
-> > existing stable helpers are gated behind bpf_capable or
-> > perfmon_capable.
-> > When it requires that the program calling it be signed, we can revisit this.
-> >
-> > > depends on whether some of non-destructive bpf programs might ever require
-> > > CAP_SYS_BOOT capabilities or not.
-> >
-> > These are just internal kernel flags, so refactoring/renaming is not a
-> > big deal when it is needed. E.g. we've changed just how kfuncs are
-> > registered twice since the support was added not long ago :).
-> >
-> > >
-> > > --
-> > >  Artem
-> > >
+Regards,
+Max
+
+[1]: https://github.com/microsoft/surface-duo-oss-kernel.msm-5..4/tree/surfaceduo2/11/2022.108.8/drivers/hid/spi-hid

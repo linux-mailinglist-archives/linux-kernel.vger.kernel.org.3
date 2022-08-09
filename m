@@ -2,192 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 888A258D609
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 11:12:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FCCE58D60E
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 11:13:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232029AbiHIJMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 05:12:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40982 "EHLO
+        id S233770AbiHIJNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 05:13:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbiHIJMW (ORCPT
+        with ESMTP id S230089AbiHIJNu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 05:12:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 83D8A21E04
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 02:12:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660036340;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SMQ1Ei+/hDQmBKvfwsybng+Ctmf5UFfgmb880HNlduc=;
-        b=M/fEgCuzV+ujxM/rGzRgEeD0MRW2fl5L0vu4uh8r0utS8fvQWtm8GMRRQUt4Jq8JnJZvPF
-        up2Bu3wNinw12lIbTCnXSDqAXpaIuNvb8xFwXQtxReQPndT1Q4ClQX2wFWcRsi+wMOZebP
-        1RGdqcmKo6xtZpNChDtgNWGE1LfUDTU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-634-s1taKWlRM5qHasf1P95U_A-1; Tue, 09 Aug 2022 05:12:17 -0400
-X-MC-Unique: s1taKWlRM5qHasf1P95U_A-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 9 Aug 2022 05:13:50 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0EE21E1D
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 02:13:48 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8686F8117B0;
-        Tue,  9 Aug 2022 09:12:16 +0000 (UTC)
-Received: from fedora (unknown [10.40.192.146])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id C55834010E36;
-        Tue,  9 Aug 2022 09:12:14 +0000 (UTC)
-Date:   Tue, 9 Aug 2022 11:12:12 +0200
-From:   Lukas Czerner <lczerner@redhat.com>
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        minchan@kernel.org, ngupta@vflare.org,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Jan Kara <jack@suse.com>, Ted Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Ext4 Developers List <linux-ext4@vger.kernel.org>
-Subject: Re: ext2/zram issue [was: Linux 5.19]
-Message-ID: <20220809091212.mgreambnhgso5hzw@fedora>
-References: <CAHk-=wgrz5BBk=rCz7W28Fj_o02s0Xi0OEQ3H1uQgOdFvHgx0w@mail.gmail.com>
- <702b3187-14bf-b733-263b-20272f53105d@kernel.org>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1888834F65;
+        Tue,  9 Aug 2022 09:13:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1660036427; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=SJSHuew8vf+9wFLb4p8A2bkQsHP8Yvi29fzkqBpe3U8=;
+        b=V5ivWgRclZaQaNA+PxsaqCK9xvReibPwNtTBL6Nc3qY6yBojztzyhiTTebc2RcwgPtQuXM
+        vZwh070RQh04HJ84TopDe7MkWbBB9y8pOEYs3cFvcE/tlnPbM96pxu3ANTeTSgJk2cA1K8
+        LZLFPpaMZDo8z0z5LhslbfccGxbx7LI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1660036427;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=SJSHuew8vf+9wFLb4p8A2bkQsHP8Yvi29fzkqBpe3U8=;
+        b=7Wat+FVtsFh39sqwJ0Q1R4S5fzYO2y8JETXN1JzdxxIVs2oHHymC0VRPkGFTutOsniOpkZ
+        wIX2fFO/EAkGT4Dg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C64C513A9D;
+        Tue,  9 Aug 2022 09:13:46 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id kiJeL0ol8mLPLwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Tue, 09 Aug 2022 09:13:46 +0000
+Message-ID: <32d98960-a952-b3ab-c3fb-0d615626a3d1@suse.de>
+Date:   Tue, 9 Aug 2022 11:13:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <702b3187-14bf-b733-263b-20272f53105d@kernel.org>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+Subject: Re: [PATCH 3/4] drm/udl: Kill pending URBs at suspend and disconnect
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     Dave Airlie <airlied@redhat.com>, Sean Paul <sean@poorly.run>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20220804075826.27036-1-tiwai@suse.de>
+ <20220804075826.27036-4-tiwai@suse.de>
+ <bebcfa4a-7908-d8ba-3bff-ea7c2ee2d7a9@suse.de> <87h72lx4yw.wl-tiwai@suse.de>
+ <2a307221-62a8-a5f8-354f-d92e90f74f04@suse.de> <87a68dwzzi.wl-tiwai@suse.de>
+Content-Language: en-US
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <87a68dwzzi.wl-tiwai@suse.de>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------gg2fgYIg0QzANPFhSFtWSkmf"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 09, 2022 at 08:03:11AM +0200, Jiri Slaby wrote:
-> Hi,
-> 
-> On 31. 07. 22, 23:43, Linus Torvalds wrote:
-> > So here we are, one week late, and 5.19 is tagged and pushed out.
-> > 
-> > The full shortlog (just from rc8, obviously not all of 5.19) is below,
-> > but I can happily report that there is nothing really interesting in
-> > there. A lot of random small stuff.
-> 
-> Note: I originally reported this downstream for tracking at:
-> https://bugzilla.suse.com/show_bug.cgi?id=1202203
-> 
-> 5.19 behaves pretty weird in openSUSE's openQA (opposing to 5.18, or
-> 5.18.15). It's all qemu-kvm "HW"¹⁾:
-> https://openqa.opensuse.org/tests/2502148
-> loop2: detected capacity change from 0 to 72264
-> EXT4-fs warning (device zram0): ext4_end_bio:343: I/O error 10 writing to
-> inode 57375 starting block 137216)
-> Buffer I/O error on device zram0, logical block 137216
-> Buffer I/O error on device zram0, logical block 137217
-> ...
-> SQUASHFS error: xz decompression failed, data probably corrupt
-> SQUASHFS error: Failed to read block 0x2e41680: -5
-> SQUASHFS error: xz decompression failed, data probably corrupt
-> SQUASHFS error: Failed to read block 0x2e41680: -5
-> Bus error
-> 
-> 
-> 
-> https://openqa.opensuse.org/tests/2502145
-> FS-Cache: Loaded
-> begin 644 ldconfig.core.pid_2094.sig_7.time_1659859442
-> 
-> 
-> 
-> https://openqa.opensuse.org/tests/2502146
-> FS-Cache: Loaded
-> begin 644 Xorg.bin.core.pid_3733.sig_6.time_1659858784
-> 
-> 
-> 
-> https://openqa.opensuse.org/tests/2502148
-> EXT4-fs warning (device zram0): ext4_end_bio:343: I/O error 10 writing to
-> inode 57375 starting block 137216)
-> Buffer I/O error on device zram0, logical block 137216
-> Buffer I/O error on device zram0, logical block 137217
-> 
-> 
-> 
-> https://openqa.opensuse.org/tests/2502154
-> [   13.158090][  T634] FS-Cache: Loaded
-> ...
-> [  525.627024][    C0] sysrq: Show State
-> 
-> 
-> 
-> Those are various failures -- crashes of ldconfig, Xorg; I/O failures on
-> zram; the last one is a lockup likely, something invoked sysrq after 500s
-> stall.
-> 
-> Interestingly, I've also hit this twice locally:
-> > init[1]: segfault at 18 ip 00007fb6154b4c81 sp 00007ffc243ed600 error 6 in
-> libc.so.6[7fb61543f000+185000]
-> > Code: 41 5f c3 66 0f 1f 44 00 00 42 f6 44 10 08 01 0f 84 04 01 00 00 48 83
-> e1 fe 48 89 48 08 49 8b 47 70 49 89 5f 70 66 48 0f 6e c0 <48> 89 58 18 0f 16
-> 44 24 08 48 81 fd ff 03 00 00 76 08 66 0f ef c9
-> > ***  signal 11 ***
-> > malloc(): unsorted double linked list corrupted
-> > traps: init[1] general protection fault ip:7fb61543f8b9 sp:7ffc243ebf40
-> error:0 in libc.so.6[7fb61543f000+185000]
-> > Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b
-> > CPU: 0 PID: 1 Comm: init Not tainted 5.19.0-1-default #1 openSUSE
-> Tumbleweed e1df13166a33f423514290c702e43cfbb2b5b575
-> 
-> KASAN is not helpful either, so it's unlikely a memory corruption (unless it
-> is "HW" related; should I try to turn on IOMMU in qemu?):
-> > kasan: KernelAddressSanitizer initialized
-> > ...
-> > zram: module verification failed: signature and/or required key missing - tainting kernel
-> > zram: Added device: zram0
-> > zram0: detected capacity change from 0 to 2097152
-> > EXT4-fs (zram0): mounting ext2 file system using the ext4 subsystem
-> > EXT4-fs (zram0): mounted filesystem without journal. Quota mode: none.
-> > EXT4-fs warning (device zram0): ext4_end_bio:343: I/O error 10 writing to inode 16386 starting block 159744)
-> > Buffer I/O error on device zram0, logical block 159744
-> > Buffer I/O error on device zram0, logical block 159745
-> 
-> 
-> 
-> They all occur to me like a zram failure. The installer apparently creates
-> an ext2 FS and after it mounts it using ext4 module, the issue starts
-> occurring.
-> 
-> Any tests I/you could run on 5.19 to exercise zram and ext2? Otherwise I am
-> unable to reproduce easily, except using the openSUSE installer :/.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------gg2fgYIg0QzANPFhSFtWSkmf
+Content-Type: multipart/mixed; boundary="------------BcjxvGw1N20JEjYGU9WD2euq";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Takashi Iwai <tiwai@suse.de>
+Cc: Dave Airlie <airlied@redhat.com>, Sean Paul <sean@poorly.run>,
+ linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Message-ID: <32d98960-a952-b3ab-c3fb-0d615626a3d1@suse.de>
+Subject: Re: [PATCH 3/4] drm/udl: Kill pending URBs at suspend and disconnect
+References: <20220804075826.27036-1-tiwai@suse.de>
+ <20220804075826.27036-4-tiwai@suse.de>
+ <bebcfa4a-7908-d8ba-3bff-ea7c2ee2d7a9@suse.de> <87h72lx4yw.wl-tiwai@suse.de>
+ <2a307221-62a8-a5f8-354f-d92e90f74f04@suse.de> <87a68dwzzi.wl-tiwai@suse.de>
+In-Reply-To: <87a68dwzzi.wl-tiwai@suse.de>
 
-Hi Jiri,
+--------------BcjxvGw1N20JEjYGU9WD2euq
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-I've tried a quick xfstests run on ext2 on zram and I can't see any
-issues like this so far. I will run a full test and report back in case
-there is anything obvious.
+SGkNCg0KQW0gMDkuMDguMjIgdW0gMTE6MDMgc2NocmllYiBUYWthc2hpIEl3YWk6DQo+IE9u
+IFR1ZSwgMDkgQXVnIDIwMjIgMDk6NDE6MTkgKzAyMDAsDQo+IFRob21hcyBaaW1tZXJtYW5u
+IHdyb3RlOg0KPj4NCj4+IEhpDQo+Pg0KPj4gQW0gMDkuMDguMjIgdW0gMDk6MTUgc2Nocmll
+YiBUYWthc2hpIEl3YWk6DQo+Pj4gT24gVHVlLCAwOSBBdWcgMjAyMiAwOToxMzoxNiArMDIw
+MCwNCj4+PiBUaG9tYXMgWmltbWVybWFubiB3cm90ZToNCj4+Pj4NCj4+Pj4gSGkNCj4+Pj4N
+Cj4+Pj4gQW0gMDQuMDguMjIgdW0gMDk6NTggc2NocmllYiBUYWthc2hpIEl3YWk6DQo+Pj4+
+PiBBdCBib3RoIHN1c3BlbmQgYW5kIGRpc2Nvbm5lY3QsIHdlIHNob3VsZCByYXRoZXIgY2Fu
+Y2VsIHRoZSBwZW5kaW5nDQo+Pj4+PiBVUkJzIGltbWVkaWF0ZWx5LiAgRm9yIHRoZSBzdXNw
+ZW5kIGNhc2UsIHRoZSBkaXNwbGF5IHdpbGwgYmUgdHVybmVkDQo+Pj4+PiBvZmYsIHNvIGl0
+IG1ha2VzIG5vIHNlbnNlIHRvIHByb2Nlc3MgdGhlIHJlbmRlcmluZy4gIEFuZCBmb3IgdGhl
+DQo+Pj4+PiBkaXNjb25uZWN0IGNhc2UsIHRoZSBkZXZpY2UgbWF5IGJlIG5vIGxvbmdlciBh
+Y2Nlc3NpYmxlLCBoZW5jZSB3ZQ0KPj4+Pj4gc2hvdWxkbid0IGRvIGFueSBzdWJtaXNzaW9u
+Lg0KPj4+Pj4NCj4+Pj4+IFRlc3RlZC1ieTogVGhvbWFzIFppbW1lcm1hbm4gPHR6aW1tZXJt
+YW5uQHN1c2UuZGU+DQo+Pj4+PiBTaWduZWQtb2ZmLWJ5OiBUYWthc2hpIEl3YWkgPHRpd2Fp
+QHN1c2UuZGU+DQo+Pj4+PiAtLS0NCj4+Pj4+ICAgICBkcml2ZXJzL2dwdS9kcm0vdWRsL3Vk
+bF9kcnYuaCAgICAgfCAgMiArKw0KPj4+Pj4gICAgIGRyaXZlcnMvZ3B1L2RybS91ZGwvdWRs
+X21haW4uYyAgICB8IDI1ICsrKysrKysrKysrKysrKysrKysrKystLS0NCj4+Pj4+ICAgICBk
+cml2ZXJzL2dwdS9kcm0vdWRsL3VkbF9tb2Rlc2V0LmMgfCAgMiArKw0KPj4+Pj4gICAgIDMg
+ZmlsZXMgY2hhbmdlZCwgMjYgaW5zZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkNCj4+Pj4+
+DQo+Pj4+PiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9ncHUvZHJtL3VkbC91ZGxfZHJ2LmggYi9k
+cml2ZXJzL2dwdS9kcm0vdWRsL3VkbF9kcnYuaA0KPj4+Pj4gaW5kZXggZjAxZTUwYzViN2I3
+Li4yOGFhZjc1ZDcxY2YgMTAwNjQ0DQo+Pj4+PiAtLS0gYS9kcml2ZXJzL2dwdS9kcm0vdWRs
+L3VkbF9kcnYuaA0KPj4+Pj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL3VkbC91ZGxfZHJ2LmgN
+Cj4+Pj4+IEBAIC0zOSw2ICszOSw3IEBAIHN0cnVjdCB1cmJfbm9kZSB7DQo+Pj4+PiAgICAg
+ICBzdHJ1Y3QgdXJiX2xpc3Qgew0KPj4+Pj4gICAgIAlzdHJ1Y3QgbGlzdF9oZWFkIGxpc3Q7
+DQo+Pj4+PiArCXN0cnVjdCBsaXN0X2hlYWQgaW5fZmxpZ2h0Ow0KPj4+Pj4gICAgIAlzcGlu
+bG9ja190IGxvY2s7DQo+Pj4+PiAgICAgCXdhaXRfcXVldWVfaGVhZF90IHNsZWVwOw0KPj4+
+Pj4gICAgIAlpbnQgYXZhaWxhYmxlOw0KPj4+Pj4gQEAgLTg0LDYgKzg1LDcgQEAgc3RhdGlj
+IGlubGluZSBzdHJ1Y3QgdXJiICp1ZGxfZ2V0X3VyYihzdHJ1Y3QgZHJtX2RldmljZSAqZGV2
+KQ0KPj4+Pj4gICAgICAgaW50IHVkbF9zdWJtaXRfdXJiKHN0cnVjdCBkcm1fZGV2aWNlICpk
+ZXYsIHN0cnVjdCB1cmIgKnVyYiwNCj4+Pj4+IHNpemVfdCBsZW4pOw0KPj4+Pj4gICAgIGlu
+dCB1ZGxfc3luY19wZW5kaW5nX3VyYnMoc3RydWN0IGRybV9kZXZpY2UgKmRldik7DQo+Pj4+
+PiArdm9pZCB1ZGxfa2lsbF9wZW5kaW5nX3VyYnMoc3RydWN0IGRybV9kZXZpY2UgKmRldik7
+DQo+Pj4+PiAgICAgdm9pZCB1ZGxfdXJiX2NvbXBsZXRpb24oc3RydWN0IHVyYiAqdXJiKTsN
+Cj4+Pj4+ICAgICAgIGludCB1ZGxfaW5pdChzdHJ1Y3QgdWRsX2RldmljZSAqdWRsKTsNCj4+
+Pj4+IGRpZmYgLS1naXQgYS9kcml2ZXJzL2dwdS9kcm0vdWRsL3VkbF9tYWluLmMgYi9kcml2
+ZXJzL2dwdS9kcm0vdWRsL3VkbF9tYWluLmMNCj4+Pj4+IGluZGV4IDkzNjE1NjQ4NDE0Yi4u
+NDcyMDRiN2ViMTBlIDEwMDY0NA0KPj4+Pj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL3VkbC91
+ZGxfbWFpbi5jDQo+Pj4+PiArKysgYi9kcml2ZXJzL2dwdS9kcm0vdWRsL3VkbF9tYWluLmMN
+Cj4+Pj4+IEBAIC0xMzUsNyArMTM1LDcgQEAgdm9pZCB1ZGxfdXJiX2NvbXBsZXRpb24oc3Ry
+dWN0IHVyYiAqdXJiKQ0KPj4+Pj4gICAgIAl1cmItPnRyYW5zZmVyX2J1ZmZlcl9sZW5ndGgg
+PSB1ZGwtPnVyYnMuc2l6ZTsgLyogcmVzZXQgdG8gYWN0dWFsICovDQo+Pj4+PiAgICAgICAJ
+c3Bpbl9sb2NrX2lycXNhdmUoJnVkbC0+dXJicy5sb2NrLCBmbGFncyk7DQo+Pj4+PiAtCWxp
+c3RfYWRkX3RhaWwoJnVub2RlLT5lbnRyeSwgJnVkbC0+dXJicy5saXN0KTsNCj4+Pj4+ICsJ
+bGlzdF9tb3ZlKCZ1bm9kZS0+ZW50cnksICZ1ZGwtPnVyYnMubGlzdCk7DQo+Pj4+PiAgICAg
+CXVkbC0+dXJicy5hdmFpbGFibGUrKzsNCj4+Pj4+ICAgICAJc3Bpbl91bmxvY2tfaXJxcmVz
+dG9yZSgmdWRsLT51cmJzLmxvY2ssIGZsYWdzKTsNCj4+Pj4+ICAgICBAQCAtMTgwLDYgKzE4
+MCw3IEBAIHN0YXRpYyBpbnQgdWRsX2FsbG9jX3VyYl9saXN0KHN0cnVjdA0KPj4+Pj4gZHJt
+X2RldmljZSAqZGV2LCBpbnQgY291bnQsIHNpemVfdCBzaXplKQ0KPj4+Pj4gICAgIHJldHJ5
+Og0KPj4+Pj4gICAgIAl1ZGwtPnVyYnMuc2l6ZSA9IHNpemU7DQo+Pj4+PiAgICAgCUlOSVRf
+TElTVF9IRUFEKCZ1ZGwtPnVyYnMubGlzdCk7DQo+Pj4+PiArCUlOSVRfTElTVF9IRUFEKCZ1
+ZGwtPnVyYnMuaW5fZmxpZ2h0KTsNCj4+Pj4+ICAgICAgIAlpbml0X3dhaXRxdWV1ZV9oZWFk
+KCZ1ZGwtPnVyYnMuc2xlZXApOw0KPj4+Pj4gICAgIAl1ZGwtPnVyYnMuY291bnQgPSAwOw0K
+Pj4+Pj4gQEAgLTI0Niw3ICsyNDcsNyBAQCBzdHJ1Y3QgdXJiICp1ZGxfZ2V0X3VyYl90aW1l
+b3V0KHN0cnVjdCBkcm1fZGV2aWNlICpkZXYsIGxvbmcgdGltZW91dCkNCj4+Pj4+ICAgICAJ
+fQ0KPj4+Pj4gICAgICAgCXVub2RlID0gbGlzdF9maXJzdF9lbnRyeSgmdWRsLT51cmJzLmxp
+c3QsIHN0cnVjdCB1cmJfbm9kZSwNCj4+Pj4+IGVudHJ5KTsNCj4+Pj4+IC0JbGlzdF9kZWxf
+aW5pdCgmdW5vZGUtPmVudHJ5KTsNCj4+Pj4+ICsJbGlzdF9tb3ZlKCZ1bm9kZS0+ZW50cnks
+ICZ1ZGwtPnVyYnMuaW5fZmxpZ2h0KTsNCj4+Pj4+ICAgICAJdWRsLT51cmJzLmF2YWlsYWJs
+ZS0tOw0KPj4+Pj4gICAgICAgdW5sb2NrOg0KPj4+Pj4gQEAgLTI3OSw3ICsyODAsNyBAQCBp
+bnQgdWRsX3N5bmNfcGVuZGluZ191cmJzKHN0cnVjdCBkcm1fZGV2aWNlICpkZXYpDQo+Pj4+
+PiAgICAgCXNwaW5fbG9ja19pcnEoJnVkbC0+dXJicy5sb2NrKTsNCj4+Pj4+ICAgICAJLyog
+MiBzZWNvbmRzIGFzIGEgc2FuZSB0aW1lb3V0ICovDQo+Pj4+PiAgICAgCWlmICghd2FpdF9l
+dmVudF9sb2NrX2lycV90aW1lb3V0KHVkbC0+dXJicy5zbGVlcCwNCj4+Pj4+IC0JCQkJCSB1
+ZGwtPnVyYnMuYXZhaWxhYmxlID09IHVkbC0+dXJicy5jb3VudCwNCj4+Pj4+ICsJCQkJCSBs
+aXN0X2VtcHR5KCZ1ZGwtPnVyYnMuaW5fZmxpZ2h0KSwNCj4+Pj4+ICAgICAJCQkJCSB1ZGwt
+PnVyYnMubG9jaywNCj4+Pj4+ICAgICAJCQkJCSBtc2Vjc190b19qaWZmaWVzKDIwMDApKSkN
+Cj4+Pj4+ICAgICAJCXJldCA9IC1FVElNRURPVVQ7DQo+Pj4+PiBAQCAtMjg3LDYgKzI4OCwy
+MyBAQCBpbnQgdWRsX3N5bmNfcGVuZGluZ191cmJzKHN0cnVjdCBkcm1fZGV2aWNlICpkZXYp
+DQo+Pj4+PiAgICAgCXJldHVybiByZXQ7DQo+Pj4+PiAgICAgfQ0KPj4+Pj4gICAgICsvKiBr
+aWxsIHBlbmRpbmcgVVJCcyAqLw0KPj4+Pj4gK3ZvaWQgdWRsX2tpbGxfcGVuZGluZ191cmJz
+KHN0cnVjdCBkcm1fZGV2aWNlICpkZXYpDQo+Pj4+PiArew0KPj4+Pj4gKwlzdHJ1Y3QgdWRs
+X2RldmljZSAqdWRsID0gdG9fdWRsKGRldik7DQo+Pj4+PiArCXN0cnVjdCB1cmJfbm9kZSAq
+dW5vZGU7DQo+Pj4+PiArDQo+Pj4+PiArCXNwaW5fbG9ja19pcnEoJnVkbC0+dXJicy5sb2Nr
+KTsNCj4+Pj4+ICsJd2hpbGUgKCFsaXN0X2VtcHR5KCZ1ZGwtPnVyYnMuaW5fZmxpZ2h0KSkg
+ew0KPj4+Pj4gKwkJdW5vZGUgPSBsaXN0X2ZpcnN0X2VudHJ5KCZ1ZGwtPnVyYnMuaW5fZmxp
+Z2h0LA0KPj4+Pj4gKwkJCQkJIHN0cnVjdCB1cmJfbm9kZSwgZW50cnkpOw0KPj4+Pj4gKwkJ
+c3Bpbl91bmxvY2tfaXJxKCZ1ZGwtPnVyYnMubG9jayk7DQo+Pj4+PiArCQl1c2Jfa2lsbF91
+cmIodW5vZGUtPnVyYik7DQo+Pj4+PiArCQlzcGluX2xvY2tfaXJxKCZ1ZGwtPnVyYnMubG9j
+ayk7DQo+Pj4+PiArCX0NCj4+Pj4+ICsJc3Bpbl91bmxvY2tfaXJxKCZ1ZGwtPnVyYnMubG9j
+ayk7DQo+Pj4+PiArfQ0KPj4+Pj4gKw0KPj4+Pj4gICAgIGludCB1ZGxfaW5pdChzdHJ1Y3Qg
+dWRsX2RldmljZSAqdWRsKQ0KPj4+Pj4gICAgIHsNCj4+Pj4+ICAgICAJc3RydWN0IGRybV9k
+ZXZpY2UgKmRldiA9ICZ1ZGwtPmRybTsNCj4+Pj4+IEBAIC0zMzUsNiArMzUzLDcgQEAgaW50
+IHVkbF9kcm9wX3VzYihzdHJ1Y3QgZHJtX2RldmljZSAqZGV2KQ0KPj4+Pj4gICAgIHsNCj4+
+Pj4+ICAgICAJc3RydWN0IHVkbF9kZXZpY2UgKnVkbCA9IHRvX3VkbChkZXYpOw0KPj4+Pj4g
+ICAgICsJdWRsX2tpbGxfcGVuZGluZ191cmJzKGRldik7DQo+Pj4+PiAgICAgCXVkbF9mcmVl
+X3VyYl9saXN0KGRldik7DQo+Pj4+PiAgICAgCXB1dF9kZXZpY2UodWRsLT5kbWFkZXYpOw0K
+Pj4+Pj4gICAgIAl1ZGwtPmRtYWRldiA9IE5VTEw7DQo+Pj4+PiBkaWZmIC0tZ2l0IGEvZHJp
+dmVycy9ncHUvZHJtL3VkbC91ZGxfbW9kZXNldC5jIGIvZHJpdmVycy9ncHUvZHJtL3VkbC91
+ZGxfbW9kZXNldC5jDQo+Pj4+PiBpbmRleCA1MDAyNTYwNmI2YWQuLjE2OTExMGQ4ZmMyZSAx
+MDA2NDQNCj4+Pj4+IC0tLSBhL2RyaXZlcnMvZ3B1L2RybS91ZGwvdWRsX21vZGVzZXQuYw0K
+Pj4+Pj4gKysrIGIvZHJpdmVycy9ncHUvZHJtL3VkbC91ZGxfbW9kZXNldC5jDQo+Pj4+PiBA
+QCAtMzk3LDYgKzM5Nyw4IEBAIHVkbF9zaW1wbGVfZGlzcGxheV9waXBlX2Rpc2FibGUoc3Ry
+dWN0IGRybV9zaW1wbGVfZGlzcGxheV9waXBlICpwaXBlKQ0KPj4+Pj4gICAgIAlzdHJ1Y3Qg
+dXJiICp1cmI7DQo+Pj4+PiAgICAgCWNoYXIgKmJ1ZjsNCj4+Pj4+ICAgICArCXVkbF9raWxs
+X3BlbmRpbmdfdXJicyhkZXYpOw0KPj4+Pj4gKw0KPj4+Pg0KPj4+PiBJIGFscmVhZHkgcmV2
+aWV3ZWQgdGhlIHBhdGNoc2V0LCBidXQgSSBoYXZlIGFub3RoZXIgY29tbWVudC4gSSB0aGlu
+aw0KPj4+PiB3ZSBzaG91bGQgb25seSBraWxsIHVyYnMgZnJvbSB3aXRoaW4gdGhlIHN1c3Bl
+bmQgaGFuZGxlci4gU2FtZSBmb3IgdGhlDQo+Pj4+IGNhbGwgdG8gdGhlIFVSQi1zeW5jIGZ1
+bmN0aW9uIGluIHBhdGNoIDIuDQo+Pj4+DQo+Pj4+IFRoaXMgZGlzYWJsZSBmdW5jdGlvbiBp
+cyBwYXJ0IG9mIHRoZSByZWd1bGFyIG1vZGVzZXQgcGF0aC4gSXQncw0KPj4+PiBwcm9iYWJs
+eSBub3QgYXBwcm9wcmlhdGUgdG8gb3V0cmlnaHQgcmVtb3ZlIHBlbmRpbmcgVVJCcyBoZXJl
+LiBUaGlzDQo+Pj4+IGNhbiBsZWFkIHRvIGZhaWxlZCBtb2Rlc2V0cywgd2hpY2ggd291bGQg
+aGF2ZSBzdWNjZWVkZWQgb3RoZXJ3aXNlLg0KPj4+DQo+Pj4gV2VsbCwgdGhlIGRldmljZSBz
+aGFsbCBiZSB0dXJuZWQgb2ZmIHJpZ2h0IGFmdGVyIHRoYXQgcG9pbnQsIHNvIHRoZQ0KPj4+
+IGFsbCBwZW5kaW5nIHJlbmRlcmluZyBtYWtlcyBsaXR0bGUgc2Vuc2UsIG5vPw0KPj4NCj4+
+IHVkbF9zaW1wbGVfZGlzcGxheV9waXBlX2Rpc2FibGUoKSBvbmx5IGRpc2FibGVzIHRoZSBk
+aXNwbGF5LCBidXQgbm90DQo+PiB0aGUgZGV2aWNlLiBUaGUga2lsbCBvcGVyYXRpb24gaGVy
+ZSBjb3VsZCBwb3RlbnRpYWxseSBraWxsIHNvbWUgdmFsaWQNCj4+IG1vZGVzZXQgb3BlcmF0
+aW9uIHRoYXQgd2FzIHN0aWxsIGdvaW5nIG9uLiBBbmQgd2hvIGtub3dzIHdoYXQgdGhlDQo+
+PiBkZXZpY2Ugc3RhdGUgaXMgYWZ0ZXIgdGhhdC4NCj4gDQo+IEJ1dCB1ZGxfc2ltcGxlX2Rp
+c3BsYXlfcGlwZV9kaXNhYmxlKCkgaW52b2tlcyBVRExfQkxBTktfTU9ERV9QT1dFUkRPV04N
+Cj4gY29tbWFuZCByaWdodCBhZnRlciB0aGUgcGxhY2UgSSd2ZSBwdXQgdWRsX2tpbGxfcGVu
+ZGluZ191cmJzKCkuICBTbyBpdA0KPiBzaGFsbCBibGFuayAvIHR1cm4gb2ZmIHRoZSBwb3dl
+ciAob2YgdGhlIGRldmljZSwgYXMgaXQgaGFzIGEgc2luZ2xlDQo+IG91dHB1dCkuICBBbmQg
+dGhlIFVSQiBjb21wbGV0aW9uIGRvZXNuJ3QgZG8gYW55IGVycm9yIGhhbmRsaW5nIGJ1dA0K
+PiBqdXN0IHJlLWxpbmtzIFVSQiBjaGFpbiBhbmQgd2FrZXMgdXAgdGhlIHF1ZXVlLiAgU28g
+a2lsbGluZyBhIHBlbmRpbmcNCj4gVVJCIHdvdWxkIG5vdGhpbmcgYnV0IGNhbmNlbGluZyB0
+aGUgaW4tZmxpZ2h0IFVSQnMsIGFuZCB0aGVyZSBzaG91bGQNCj4gYmUgbm8gZGlzdHVyYmFu
+Y2UgdG8gdGhlIG1vZGVzZXQgb3BlcmF0aW9uIGl0c2VsZiwgYXMgdGhlIHNjcmVlbiB3aWxs
+DQo+IGJlIGJsYW5rZWQgaW1tZWRpYXRlbHkuDQoNClRoZSBibGFuayBtb2RlIGlzIGVzc2Vu
+dGlhbGx5IERQTVMuIEl0J3MgdW5yZWxhdGVkIHRvIHRoZSBkZXZpY2UncyANCmRpc3BsYXkg
+bW9kZS4NCg0KQmVzdCByZWdhcmRzDQpUaG9tYXMNCg0KPiANCj4gT2YgY291cnNlLCBpdCdz
+IGFsbCB0aGVvcnksIGFuZCBpZiB0aGlzIGJyZWFrcyBhbnl0aGluZywgaXQgc2hvdWxkIGJl
+DQo+IGNvcnJlY3RlZCA6KQ0KPiANCj4gDQo+IHRoYW5rcywNCj4gDQo+IFRha2FzaGkNCg0K
+LS0gDQpUaG9tYXMgWmltbWVybWFubg0KR3JhcGhpY3MgRHJpdmVyIERldmVsb3Blcg0KU1VT
+RSBTb2Z0d2FyZSBTb2x1dGlvbnMgR2VybWFueSBHbWJIDQpNYXhmZWxkc3RyLiA1LCA5MDQw
+OSBOw7xybmJlcmcsIEdlcm1hbnkNCihIUkIgMzY4MDksIEFHIE7DvHJuYmVyZykNCkdlc2No
+w6RmdHNmw7xocmVyOiBJdm8gVG90ZXYNCg==
 
--Lukas
+--------------BcjxvGw1N20JEjYGU9WD2euq--
 
-> 
-> Any other ideas? Or is this known already?
-> 
-> ¹⁾ main are uefi boot and virtio-blk (it likely happens with virtio-scsi
-> too). The cmdline _I_ use: qemu-kvm -device intel-hda -device hda-duplex
-> -drive file=/tmp/pokus.qcow2,if=none,id=hd -device virtio-blk-pci,drive=hd
-> -drive if=pflash,format=raw,unit=0,readonly=on,file=/usr/share/qemu/ovmf-x86_64-opensuse-code.bin
-> -drive if=pflash,format=raw,unit=1,file=/tmp/vars.bin -cdrom /tmp/cd1.iso
-> -m 1G -smp 1 -net user -net nic,model=virtio -serial pty -device
-> virtio-rng-pci -device qemu-xhci,p2=4,p3=4 -usbdevice tablet
-> 
-> 
-> thanks,
-> -- 
-> js
-> suse labs
-> 
+--------------gg2fgYIg0QzANPFhSFtWSkmf
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
+-----BEGIN PGP SIGNATURE-----
+
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmLyJUoFAwAAAAAACgkQlh/E3EQov+CT
+vBAAs6xCaIxDH9RvMbwwSURPxxbIL14zaT5nz2vTay/oOGisJGR+GowYT9jv6jK2a5d1mO3yhXVr
+gTlYVqIj9YZBMy5H0y05Xlf5wYlavn7Hn/go9ioQNeWaGUdur3saNhVJqwAJBEKEa3skvbTTiAss
+9g4Vkacm3Ya3gzVLF45dh3dPVCla3rPHsGR8pcSPfGjiqpXy+WTFSB6kEqlow66tHgWFCvgKX86I
+SXHQDGXchUEnqPZ3JJmeDaFS8bLgi2oHsDsixdhDvx0rZGH8PqU9La/KgeT9otwfML6dfzJLq1ZM
+ay0IQxiUiYakATfTbhURUGZEX8HT6cG4pQHsN+9m2+Jf+yTVQKawIO88rrW05AdCgYtHMsDf658M
+zlpbgDdY+TxYeaC2eTBcaDarw49CURh00Asujlr9asegzbnHJWGkNwutpThd1Sr+zlk1wVBeM4My
+8HWvpcGu+Z5KIn3s9OlQDv75HgPqs09abBtNmbXKJRLL74YZZyxjMzvD4hwnNQ3yRwS4nxZf9gua
+agE8oYUga2jjgQoDlzF2ZD2/7FcTShxpI3Z06ISRRiM3sJrw3NVdQ7JF4gw+hjlHphppqqFIgnzd
+OZUBckj8iHEHnOBVAyBigdCBVyYMVMYIqiB0Mfxg5NPV9GDkCzraLMmV7dv9pt+nciplJImktkmK
+YWg=
+=hSq/
+-----END PGP SIGNATURE-----
+
+--------------gg2fgYIg0QzANPFhSFtWSkmf--

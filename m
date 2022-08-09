@@ -2,111 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C9BE58D1D5
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 03:55:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2237558D1D9
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 03:58:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230049AbiHIBzf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 21:55:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49010 "EHLO
+        id S230033AbiHIB6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 21:58:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiHIBzc (ORCPT
+        with ESMTP id S229520AbiHIB6V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 21:55:32 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3ED765D;
-        Mon,  8 Aug 2022 18:55:29 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id t22-20020a17090a449600b001f617f2bf3eso509420pjg.0;
-        Mon, 08 Aug 2022 18:55:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=XZt5zgEjQCwFFuOlDwZAbpzV5OLOdCK3uQF6Y61LXQU=;
-        b=mORk0+lScHx5LoFJxnabREFeM1OncRpeoqzqpHpmCi2jMtnp5Fpv9duwsbfOUOsLc4
-         WFtCKbAaiO714ZTxKcHrptTYBJUiPST5+/A9CIBKzleMhlWt15tCct852B08ImG8BnMB
-         FECgxK3IVguJ8Ngx4aJRcreasWDwUF7Gl82EfLnLeSJ3Qn/q3yUpM/1l9FdODARQBLJd
-         gwh8+MXaDuZHti9TweZesSifLvyNgnYWEniW1DUEnggrl29sPXHp6lwulD9Mfqx2LKOW
-         qNgGzExeiA1P0aHyTqm3E6G3GVRJ7vg8ZCh/HnwvexvSICRDxquX7oO4HyGeT5131ZVg
-         9BbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=XZt5zgEjQCwFFuOlDwZAbpzV5OLOdCK3uQF6Y61LXQU=;
-        b=e7VHhWxoXVlO9fgbgMuMAgm9/t6SF/6aiKCUBDZG0cOoq1/jWpxLi5sW66sa+3UWlB
-         ioFCKmVkdvgYu4O8dB//gwYyU/fS93N3mIOgglq9DWq9BJPfYpEG8jTFC9UTpK9Z3wTQ
-         T0d4/LRpbJ7OHaybXeC++nDGB4ELh0ON4hhTB+mVM6FCtmwE9TlH8OlC05ceeN6+xpOY
-         6FgtkHdt60lnhKYmfOBZv29fpKv/LMpkQS2vQJkZkKC5XQnUT7uYcm9FqfS64uQw+vMW
-         DiVsEWMepbK4YZ13OGnFd5SEQXlghGZOvspFrmEEvw9AubYxY8/Z4wTtAcyTdfFTj3aU
-         XU1g==
-X-Gm-Message-State: ACgBeo19alDUgeod8X16t7+/cRJlfqZGwn5TjGNqLIU82mAnhadvhOkf
-        BwUsQTIlppGCs/cLhcFt7ws=
-X-Google-Smtp-Source: AA6agR4R8AIa8xyGVkW3RczizbTCuHAgfcbqCZW2jGUXtY09/uGntFbunovSoLWd4NQ2QYW/7K+afw==
-X-Received: by 2002:a17:90b:1bc7:b0:1f5:37a6:e473 with SMTP id oa7-20020a17090b1bc700b001f537a6e473mr23144551pjb.87.1660010129214;
-        Mon, 08 Aug 2022 18:55:29 -0700 (PDT)
-Received: from [192.168.43.80] (subs03-180-214-233-20.three.co.id. [180.214.233.20])
-        by smtp.gmail.com with ESMTPSA id b13-20020a170903228d00b00162529828aesm9489770plh.109.2022.08.08.18.55.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Aug 2022 18:55:28 -0700 (PDT)
-Message-ID: <b5aa9682-48c3-ac1b-7d8f-f16d268f235d@gmail.com>
-Date:   Tue, 9 Aug 2022 08:55:22 +0700
+        Mon, 8 Aug 2022 21:58:21 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283CA1D0CF
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 18:58:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660010301; x=1691546301;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/kgqxvayGmYr7WeQzjjxmxGhkWnKjNCZ9r00wywtC6I=;
+  b=mzwkJuqhazQ2FOrechchajscPLSVkK54WV5ZAcDvCluWvd6QOYgbtl+p
+   fPMNUfENPYqK0fGcoBZPw/2fVVlUoDHTXHL4PzIRR5I7fBhWpND9RZY5W
+   MBVpQ7IR59k5W8y+5xLQNnzwug31W2E6L9VybB3H/Upj3sUEK6fZjbUFW
+   coG4GKdMY0bQ+CT02UP47nvvRfX+Xpk4SkgUW3+D7+5Oyhg/Y1R2qjz3j
+   SY9ibfiLrQFe+AneBtGXoJBiVmOB6jWW6g8l82xeS1roEiF6XR1jnJkk9
+   xyW6F4v+gdStbugMhaNsXfa1w63IipISqnCDxLxZxLqOsNJXMwmH7D4Tr
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="291519129"
+X-IronPort-AV: E=Sophos;i="5.93,223,1654585200"; 
+   d="scan'208";a="291519129"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 18:58:20 -0700
+X-IronPort-AV: E=Sophos;i="5.93,223,1654585200"; 
+   d="scan'208";a="664225312"
+Received: from rongch2-desk.sh.intel.com (HELO localhost) ([10.239.159.175])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 18:58:18 -0700
+Date:   Tue, 9 Aug 2022 09:58:16 +0800
+From:   kernel test robot <rong.a.chen@intel.com>
+To:     Konrad Dybcio <konrad.dybcio@somainline.org>
+Cc:     Paul Gazzillo <paul@pgazz.com>,
+        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>
+Subject: kismet: WARNING: unmet direct dependencies detected for
+ PM_GENERIC_DOMAINS_OF when selected by QCOM_RPMPD
+Message-ID: <YvG/OO+Go7YQwsrc@rongch2-desk2>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 4/9] docs: i2c: smbus-protocol: improve DataLow/DataHigh
- definition
-Content-Language: en-US
-To:     luca.ceresoli@bootlin.com, linux-doc@vger.kernel.org,
-        linux-i2c@vger.kernel.org
-Cc:     Wolfram Sang <wsa@kernel.org>, Peter Rosin <peda@axentia.se>,
-        linux-kernel@vger.kernel.org
-References: <20220808141708.1021103-1-luca.ceresoli@bootlin.com>
- <20220808141708.1021103-5-luca.ceresoli@bootlin.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20220808141708.1021103-5-luca.ceresoli@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/8/22 21:17, luca.ceresoli@bootlin.com wrote:
-> From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> 
-> Use a more professional wording.
-> 
-> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> ---
->  Documentation/i2c/smbus-protocol.rst | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/i2c/smbus-protocol.rst b/Documentation/i2c/smbus-protocol.rst
-> index 55e209c7e520..4942c4cad4ad 100644
-> --- a/Documentation/i2c/smbus-protocol.rst
-> +++ b/Documentation/i2c/smbus-protocol.rst
-> @@ -45,8 +45,8 @@ Addr  (7 bits)  I2C 7 bit address. Note that this can be expanded to
->                  get a 10 bit I2C address.
->  Comm  (8 bits)  Command byte, a data byte which often selects a register on
->                  the device.
-> -Data  (8 bits)  A plain data byte. Sometimes, I write DataLow, DataHigh
-> -                for 16 bit data.
-> +Data  (8 bits)  A plain data byte. DataLow and DataHigh represent the low and
-> +                high byte of a 16 bit word.
->  Count (8 bits)  A data byte containing the length of a block operation.
->  
->  [..]            Data sent by I2C device, as opposed to data sent by the host
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   74cae210a335d159f2eb822e261adee905b6951a
+commit: 7d0221fb59125181a31ef3a561306c70fb238bc7 soc/qcom: Make QCOM_RPMPD select PM_GENERIC_DOMAINS/_OF
+config: x86_64-kismet-CONFIG_PM_GENERIC_DOMAINS_OF-CONFIG_QCOM_RPMPD-0-0 (https://download.01.org/0day-ci/archive/20220806/202208060923.DrywHbPW-lkp@intel.com/config)
+reproduce:
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7d0221fb59125181a31ef3a561306c70fb238bc7
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 7d0221fb59125181a31ef3a561306c70fb238bc7
+        # 1. reproduce by kismet
+           # install kmax per https://github.com/paulgazz/kmax/blob/master/README.md
+           kismet --linux-ksrc=linux --selectees CONFIG_PM_GENERIC_DOMAINS_OF --selectors CONFIG_QCOM_RPMPD -a=x86_64
+        # 2. reproduce by make
+           # save the config file to linux source tree
+           cd linux
+           make ARCH=x86_64 olddefconfig
 
-Looks better, thanks.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+kismet warnings: (new ones prefixed by >>)
+>> kismet: WARNING: unmet direct dependencies detected for PM_GENERIC_DOMAINS_OF when selected by QCOM_RPMPD
+   
+   WARNING: unmet direct dependencies detected for PM_GENERIC_DOMAINS
+     Depends on [n]: PM [=n]
+     Selected by [y]:
+     - QCOM_RPMPD [=y] && QCOM_SMD_RPM [=y]
+   
+   WARNING: unmet direct dependencies detected for PM_GENERIC_DOMAINS_OF
+     Depends on [n]: PM_GENERIC_DOMAINS [=y] && OF [=n]
+     Selected by [y]:
+     - QCOM_RPMPD [=y] && QCOM_SMD_RPM [=y]
 
 -- 
-An old man doll... just what I always wanted! - Clara
+0-DAY CI Kernel Test Service
+https://01.org/lkp

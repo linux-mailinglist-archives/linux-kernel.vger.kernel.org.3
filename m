@@ -2,155 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7089258E006
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:19:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E57958E010
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:19:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345645AbiHITS4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 15:18:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48900 "EHLO
+        id S1345902AbiHITSn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 15:18:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345779AbiHITPZ (ORCPT
+        with ESMTP id S1345645AbiHITPU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 15:15:25 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A19B327FD9
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 12:08:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660072139; x=1691608139;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=RteONVSFleu/+l1n/v6eMn2kRB83sVqvdZc3a4R7JhQ=;
-  b=S9M2PllwAWB288SZQ7iavzBQpldzi5UCHVaSrO2TceEzRXPN+z6OrHTD
-   yujM/hC9CJ6KVu8NUhmjjrJPC7km47XVBaZ7bjHaJMMzFjwkw26mEcjh/
-   Te8cQHGidzdjTuXSBSkkx7Vu/49ZWvymkTKkP4BoaGc3J8usSX9tzT79i
-   nSsbShFgsFFc/Lro3quBS3XBGkJiWr9/uDFB9N0ytW8lY6HOgpmEx7NKE
-   lxYipboaLbovt3QDKj0qmFTCIEu8Q74RQRuixLQjRvToEYESXkIAMDcTy
-   e4mZiNgnnY2q7aWDk82G7QcsSJmIThZ/nYJDlHeErO8gvJJEGddvHy0YI
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="271297922"
-X-IronPort-AV: E=Sophos;i="5.93,225,1654585200"; 
-   d="scan'208";a="271297922"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 12:08:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,225,1654585200"; 
-   d="scan'208";a="580921000"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 09 Aug 2022 12:08:57 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oLUb3-000NCX-0c;
-        Tue, 09 Aug 2022 19:08:57 +0000
-Date:   Wed, 10 Aug 2022 03:08:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Isaku Yamahata <isaku.yamahata@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [intel-tdx:kvm-upstream-workaround 627/846]
- arch/x86/kvm/mmu/mmu.c:6775:30: error: 'KVM_MEM_ATTR_PRIVATE' undeclared
-Message-ID: <202208100315.2ORxWmgi-lkp@intel.com>
+        Tue, 9 Aug 2022 15:15:20 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DD0D27CCB;
+        Tue,  9 Aug 2022 12:08:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=CE9ribd82Wfwyf4qIpdyVQVcb49dja2n3iMdmx/FOf8=;
+        t=1660072120; x=1661281720; b=orlBgeBkwMRUzTnxtTciRUQbmcMW6MHm86LHtYuejp9uPbL
+        DiwtSch/R7WEVGoOHWVTElvfA+lfFbVL07XaY2BSVKMbFSL+ItaT76YZZ4f+7Zhn8zHKHbRgxAKfc
+        z6OWvbimmsAtePUSWgfzcT1SIchqCp7P/tILa/YzEJSbxOOpIZtPE+/0jLr6fxDcHbOdSHXg/5MEW
+        eJNVwj9ttTPMxu54ZRTF11uqP2V6fa4E4DAnNZvXSg5Fu8vNi3qJSe6LdFS+z1Xm6/+OG2b9/2SFi
+        xESy6kkAKWoZgAspEEFjsknjBYA5mA2h2LnbSf5UTuaIIvRbWtCMQygm47/3Hvwg==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1oLUac-003Ii0-22;
+        Tue, 09 Aug 2022 21:08:30 +0200
+Message-ID: <f366b3d50aa8b713b0a921e4507bae4779a7cd02.camel@sipsolutions.net>
+Subject: Re: [PATCH v2 06/13] um: Improve panic notifiers consistency and
+ ordering
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        kexec@lists.infradead.org, linux-um@lists.infradead.org
+Cc:     pmladek@suse.com, bhe@redhat.com, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        netdev@vger.kernel.org, x86@kernel.org, kernel-dev@igalia.com,
+        kernel@gpiccoli.net, halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Richard Weinberger <richard@nod.at>
+Date:   Tue, 09 Aug 2022 21:08:28 +0200
+In-Reply-To: <15188cf2-a510-2725-0c6e-3c4b264714c5@igalia.com>
+References: <20220719195325.402745-1-gpiccoli@igalia.com>
+         <20220719195325.402745-7-gpiccoli@igalia.com>
+         <5bbc4296-4858-d01c-0c76-09d942377ddf@igalia.com>
+         <54cd8c11428db4c419edf2267db00ca10da7a178.camel@sipsolutions.net>
+         <15188cf2-a510-2725-0c6e-3c4b264714c5@igalia.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/tdx.git kvm-upstream-workaround
-head:   6e62680f6e4094d3986229a4145ebd54390dc110
-commit: 18114293527217d8d0ccbe394b003089166a35c5 [627/846] KVM: x86/tdp_mmu: implement MapGPA hypercall for TDX
-config: i386-randconfig-a001-20220808 (https://download.01.org/0day-ci/archive/20220810/202208100315.2ORxWmgi-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel/tdx/commit/18114293527217d8d0ccbe394b003089166a35c5
-        git remote add intel-tdx https://github.com/intel/tdx.git
-        git fetch --no-tags intel-tdx kvm-upstream-workaround
-        git checkout 18114293527217d8d0ccbe394b003089166a35c5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/ virt/
+On Tue, 2022-08-09 at 16:03 -0300, Guilherme G. Piccoli wrote:
+> On 09/08/2022 15:09, Johannes Berg wrote:
+> > [...]
+> > > > V2:
+> > > > - Kept the notifier header to avoid implicit usage - thanks
+> > > > Johannes for the suggestion!
+> > > >=20
+> > > >  arch/um/drivers/mconsole_kern.c | 7 +++----
+> > > >  arch/um/kernel/um_arch.c        | 8 ++++----
+> > > >  2 files changed, 7 insertions(+), 8 deletions(-)
+> > > > [...]
+> > >=20
+> > > Hi Johannes, do you feel this one is good now, after your last review=
+?
+> > > Thanks in advance,
+> > >=20
+> >=20
+> > Yeah, no objections, my previous comment was just a minor almost style
+> > issue anyway.
+> >=20
+> > johannes
+>=20
+> Perfect, thank you! Let me take the opportunity to ask you something I'm
+> asking all the maintainers involved here - do you prefer taking the
+> patch through your tree, or to get it landed with the whole series, at
+> once, from some maintainer?
+>=20
+Hm. I don't think we'd really care, but so far I was thinking - since
+it's a series - it'd go through some appropriate tree all together. If
+you think it should be applied separately, let us know.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-Note: the intel-tdx/kvm-upstream-workaround HEAD 6e62680f6e4094d3986229a4145ebd54390dc110 builds fine.
-      It only hurts bisectability.
-
-All errors (new ones prefixed by >>):
-
-   arch/x86/kvm/mmu/mmu.c: In function 'kvm_mmu_zap_collapsible_spte':
-   arch/x86/kvm/mmu/mmu.c:6603:19: warning: variable 'pfn' set but not used [-Wunused-but-set-variable]
-    6603 |         kvm_pfn_t pfn;
-         |                   ^~~
-   arch/x86/kvm/mmu/mmu.c: In function 'kvm_mmu_map_gpa':
->> arch/x86/kvm/mmu/mmu.c:6775:30: error: 'KVM_MEM_ATTR_PRIVATE' undeclared (first use in this function)
-    6775 |         attr = map_private ? KVM_MEM_ATTR_PRIVATE : KVM_MEM_ATTR_SHARED;
-         |                              ^~~~~~~~~~~~~~~~~~~~
-   arch/x86/kvm/mmu/mmu.c:6775:30: note: each undeclared identifier is reported only once for each function it appears in
->> arch/x86/kvm/mmu/mmu.c:6775:53: error: 'KVM_MEM_ATTR_SHARED' undeclared (first use in this function)
-    6775 |         attr = map_private ? KVM_MEM_ATTR_PRIVATE : KVM_MEM_ATTR_SHARED;
-         |                                                     ^~~~~~~~~~~~~~~~~~~
-
-
-vim +/KVM_MEM_ATTR_PRIVATE +6775 arch/x86/kvm/mmu/mmu.c
-
-  6762	
-  6763	int kvm_mmu_map_gpa(struct kvm_vcpu *vcpu, gfn_t *startp, gfn_t end,
-  6764			    bool map_private)
-  6765	{
-  6766		struct kvm *kvm = vcpu->kvm;
-  6767		gfn_t start = *startp;
-  6768		int attr;
-  6769		int ret;
-  6770	
-  6771	
-  6772		if (!kvm_gfn_shared_mask(kvm))
-  6773			return -EOPNOTSUPP;
-  6774	
-> 6775		attr = map_private ? KVM_MEM_ATTR_PRIVATE : KVM_MEM_ATTR_SHARED;
-  6776		start = start & ~kvm_gfn_shared_mask(kvm);
-  6777		end = end & ~kvm_gfn_shared_mask(kvm);
-  6778	
-  6779		/*
-  6780		 * To make the following kvm_vm_set_mem_attr() success within spinlock
-  6781		 * without memory allocation.
-  6782		 */
-  6783		ret = kvm_vm_reserve_mem_attr(kvm, start, end);
-  6784		if (ret)
-  6785			return ret;
-  6786	
-  6787		write_lock(&kvm->mmu_lock);
-  6788		if (is_tdp_mmu_enabled(kvm)) {
-  6789			gfn_t s = start;
-  6790	
-  6791			ret = kvm_tdp_mmu_map_gpa(vcpu, &s, end, map_private);
-  6792			if (!ret) {
-  6793				WARN_ON(kvm_vm_set_mem_attr(kvm, attr, start, end));
-  6794			} else if (ret == -EAGAIN) {
-  6795				WARN_ON(kvm_vm_set_mem_attr(kvm, attr, start, s));
-  6796				start = s;
-  6797			}
-  6798		} else {
-  6799			ret = -EOPNOTSUPP;
-  6800		}
-  6801		write_unlock(&kvm->mmu_lock);
-  6802	
-  6803		if (ret == -EAGAIN) {
-  6804			if (map_private)
-  6805				*startp = kvm_gfn_private(kvm, start);
-  6806			else
-  6807				*startp = kvm_gfn_shared(kvm, start);
-  6808		}
-  6809		return ret;
-  6810	}
-  6811	EXPORT_SYMBOL_GPL(kvm_mmu_map_gpa);
-  6812	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+johannes

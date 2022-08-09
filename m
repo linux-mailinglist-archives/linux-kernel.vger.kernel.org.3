@@ -2,145 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EED4758D848
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 13:37:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3447B58D84A
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 13:37:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241948AbiHILhW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 07:37:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55188 "EHLO
+        id S242777AbiHILhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 07:37:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242370AbiHILhC (ORCPT
+        with ESMTP id S240472AbiHILhk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 07:37:02 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB01224958
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 04:37:01 -0700 (PDT)
+        Tue, 9 Aug 2022 07:37:40 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B07D9C59;
+        Tue,  9 Aug 2022 04:37:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660045021; x=1691581021;
+  t=1660045059; x=1691581059;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=X/dHIiLosgMB7zWLY1AkVGmw+kNUfgf9G3XdNu373VA=;
-  b=GxvSs66eRYT/PsORsxo+9KFeJykHTTsy7gdfRn6CebpeZ5Uzy4UOvujY
-   uvy2+2cQJymrPa1zitLPS48lOSE3W9FLIqTeaN0G/RJ9jHrajRdqUxh+l
-   2chGSqQnkW1XpCthinYlW8Kw60Rc1uyFraFpfBI93GtmdLPh5kUU7wNVp
-   gmAZMRNT0KnOrA70woMZmWO55Xcx9TPL4RZgfrDEi9JAiXUhF/dUa3foP
-   lcyFmGnRUOSq+6+oeJiDbucUqmOTQVVmE3l3Tt1KZWgj1kOPVp8tm0ix1
-   j4x+OEb8yXxVQflEulaGLMsiIbdoMuYMqm9hqVUu37JeOLPRXtrlcxU01
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="352543447"
+  bh=kIiAO74hYt1dzWOtgOZtkirGU+z075hBgRLKvW2Haj4=;
+  b=L8CWcFh3ADeOklVQDoqlVrtKDUniqT/sPU5lhwBC42wLXa1WleY1SO+c
+   LsmmLl0V1yy5E9Gf+NH39Il2+Sq2R+77JVjBgzOV/+9IGvKpUI0y+Mpec
+   /3wTYULMWDP+sFDYHJXbVQdI0Ct95+EIhmBIdBEBn2y3s6qZQbqay/hEM
+   eoVuSpLoW+eDpXU2QnDxkUlRCnPgjTubqeyS7bsQgi9bRp420AIrOQqdo
+   F7w+Vg8/SKgQiEJSAPyOO40kmXnZ7yuW3+KDMMwC6l+IyO4ZEECP6FtAM
+   uHu533LuX4vjWjqb+T5Hj9nYp6cWXkbocjhoU1PGub6b0BoKzKOOntGkN
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="377104079"
 X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
-   d="scan'208";a="352543447"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 04:37:01 -0700
+   d="scan'208";a="377104079"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 04:37:39 -0700
 X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
-   d="scan'208";a="747008545"
-Received: from mram-mobl1.amr.corp.intel.com (HELO [10.213.184.71]) ([10.213.184.71])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 04:36:59 -0700
-Message-ID: <db9f787e-c3e4-d353-da57-80cb7a135d86@linux.intel.com>
-Date:   Tue, 9 Aug 2022 12:36:50 +0100
+   d="scan'208";a="932449395"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.48.82])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 04:37:37 -0700
+Message-ID: <1ab5d302-afef-1f31-7e26-a0b7c522aadb@intel.com>
+Date:   Tue, 9 Aug 2022 14:37:32 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v5] drm/i915: stop using swiotlb
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH 04/35] perf tools: Export
+ perf_event__process_finished_round()
 Content-Language: en-US
-To:     "Hellstrom, Thomas" <thomas.hellstrom@intel.com>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "joonas.lahtinen@linux.intel.com" <joonas.lahtinen@linux.intel.com>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        "bob.beckett@collabora.com" <bob.beckett@collabora.com>,
-        "jani.nikula@linux.intel.com" <jani.nikula@linux.intel.com>,
-        "airlied@linux.ie" <airlied@linux.ie>
-Cc:     "hch@lst.de" <hch@lst.de>,
-        "Ursulin, Tvrtko" <tvrtko.ursulin@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "kernel@collabora.com" <kernel@collabora.com>,
-        "Auld, Matthew" <matthew.auld@intel.com>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>
-References: <20220726153935.2272777-1-bob.beckett@collabora.com>
- <1160a7c31084ab2259088e4bfe88b41ad61c2bcc.camel@intel.com>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <1160a7c31084ab2259088e4bfe88b41ad61c2bcc.camel@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+To:     Ian Rogers <irogers@google.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
+References: <20220711093218.10967-1-adrian.hunter@intel.com>
+ <20220711093218.10967-5-adrian.hunter@intel.com>
+ <CAP-5=fVbfiVJXAHcZV+3bqc-bV3XfbpxKVVtZtH+jJauzh9NQQ@mail.gmail.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <CAP-5=fVbfiVJXAHcZV+3bqc-bV3XfbpxKVVtZtH+jJauzh9NQQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 08/08/2022 16:48, Hellstrom, Thomas wrote:
-> Hi, [back from vacation]
+On 19/07/22 20:04, Ian Rogers wrote:
+> On Mon, Jul 11, 2022 at 2:32 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>>
+>> Export perf_event__process_finished_round() so it can be used elsewhere.
+>>
+>> This is needed in perf inject to obey finished-round ordering.
+>>
+>> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+>> ---
+>>  tools/perf/util/session.c | 12 ++++--------
+>>  tools/perf/util/session.h |  4 ++++
+>>  2 files changed, 8 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/tools/perf/util/session.c b/tools/perf/util/session.c
+>> index 37f833c3c81b..4c9513bc6d89 100644
+>> --- a/tools/perf/util/session.c
+>> +++ b/tools/perf/util/session.c
+>> @@ -374,10 +374,6 @@ static int process_finished_round_stub(struct perf_tool *tool __maybe_unused,
+>>         return 0;
+>>  }
+>>
+>> -static int process_finished_round(struct perf_tool *tool,
+>> -                                 union perf_event *event,
+>> -                                 struct ordered_events *oe);
+>> -
+>>  static int skipn(int fd, off_t n)
+>>  {
+>>         char buf[4096];
+>> @@ -534,7 +530,7 @@ void perf_tool__fill_defaults(struct perf_tool *tool)
+>>                 tool->build_id = process_event_op2_stub;
+>>         if (tool->finished_round == NULL) {
+>>                 if (tool->ordered_events)
+>> -                       tool->finished_round = process_finished_round;
+>> +                       tool->finished_round = perf_event__process_finished_round;
+>>                 else
+>>                         tool->finished_round = process_finished_round_stub;
+>>         }
+>> @@ -1069,9 +1065,9 @@ static perf_event__swap_op perf_event__swap_ops[] = {
+>>   *      Flush every events below timestamp 7
+>>   *      etc...
+>>   */
+>> -static int process_finished_round(struct perf_tool *tool __maybe_unused,
+>> -                                 union perf_event *event __maybe_unused,
+>> -                                 struct ordered_events *oe)
+>> +int perf_event__process_finished_round(struct perf_tool *tool __maybe_unused,
+>> +                                      union perf_event *event __maybe_unused,
+>> +                                      struct ordered_events *oe)
+>>  {
+>>         if (dump_trace)
+>>                 fprintf(stdout, "\n");
+>> diff --git a/tools/perf/util/session.h b/tools/perf/util/session.h
+>> index 34500a3da735..be5871ea558f 100644
+>> --- a/tools/perf/util/session.h
+>> +++ b/tools/perf/util/session.h
+>> @@ -155,4 +155,8 @@ int perf_session__deliver_synth_event(struct perf_session *session,
+>>  int perf_event__process_id_index(struct perf_session *session,
+>>                                  union perf_event *event);
+>>
+>> +int perf_event__process_finished_round(struct perf_tool *tool,
+>> +                                      union perf_event *event,
+>> +                                      struct ordered_events *oe);
+>> +
 > 
-> On Tue, 2022-07-26 at 16:39 +0100, Robert Beckett wrote:
->> Calling swiotlb functions directly is nowadays considered harmful.
->> See
->> https://lore.kernel.org/intel-gfx/20220711082614.GA29487@lst.de/
->>
->> Replace swiotlb_max_segment() calls with dma_max_mapping_size().
->> In i915_gem_object_get_pages_internal() no longer consider
->> max_segment
->> only if CONFIG_SWIOTLB is enabled. There can be other (iommu related)
->> causes of specific max segment sizes.
->>
->> Cc: Christoph Hellwig <hch@lst.de>
->> Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
->> Cc: Thomas Hellstrom <thomas.hellstrom@intel.com>
->> Cc: Matthew Auld <matthew.auld@intel.com>
->>
->> v2: - restore UINT_MAX clamp in i915_sg_segment_size()
->>      - drop PAGE_SIZE check as it will always be >= PAGE_SIZE
->> v3: - actually clamp to UINT_MAX in i915_sg_segment_size()
->> v4: - round down max segment size to PAGE_SIZE
->> v5: - fix checkpatch whitespace issue
->>
->> Reviewed-by: Christoph Hellwig <hch@lst.de>
->> Reviewed-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
->> Signed-off-by: Robert Beckett <bob.beckett@collabora.com>
+> Sorry to be naive, why is this  perf_event__ and not perf_session__ ..
+
+No idea, but it is fairly consistent for tool callback functions.
+
+> well I guess it is at least passed an event even though it doesn't use
+> it. Would be nice if there were comments, but this change is just
+> shifting things around. Anyway..
 > 
-> Hmm,
+> Acked-by: Ian Rogers <irogers@google.com>
 > 
-> This whole thing looks a bit strange to me since with SWIOTLB actually
-> used for i915, the driver should malfunction anyway as it doesn't do
-> any dma_sync_sg_for_cpu() or dma_sync_sg_for_device(), and the driver
-> assumes all coherent dma. Is that SWIOTLB=force kernel option still
-> available?
+> Thanks,
+> Ian
+> 
+>>  #endif /* __PERF_SESSION_H */
+>> --
+>> 2.25.1
+>>
 
-Don't know about these - but pretty sure in the past we had i915 break 
-if we did not respect swiotlb_max_segment.
-
-Digging through git history at least running as Xen dom0 looks to have 
-been impacted, but commits such as abb0deacb5a6 ("drm/i915: Fallback to 
-single PAGE_SIZE segments for DMA remapping") are older and suggest 
-problem was generic. 1625e7e549c5 ("drm/i915: make compact dma scatter 
-lists creation work with SWIOTLB backend.") as well. So it looks it did 
-work behind swiotlb despite those missing calls you highlighted.
-
-> Also, correct me if I'm wrong, but the original driver segment size
-> appears to mean "the largest contiguous area that can be handled either
-> by the device or the dma mapping layer" rather than the total space
-> available for dma mappings? Not completely sure what
-> dma_max_mapping_size() is returning, though?
-
-AFAIU looks to be compatible on paper at least.:
-
-dma_max_mapping_size -> "Returns the maximum size of a mapping for the 
-device."
-
-So an individual mapping.
-
-But then in case of swiotlb is implemented in swiotlb_max_mapping_size, 
-and not the same code as swiotlb_max_segment. I agree, ideally if 
-someone could clarify they are returning the same thing or there is a 
-miss somewhere.
-
-Regards,
-
-Tvrtko

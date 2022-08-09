@@ -2,60 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFEE858D7CF
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 13:08:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71B9658D7D6
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 13:09:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240642AbiHILIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 07:08:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40826 "EHLO
+        id S241137AbiHILJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 07:09:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231717AbiHILIx (ORCPT
+        with ESMTP id S238977AbiHILJi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 07:08:53 -0400
-Received: from ns3.fnarfbargle.com (ns3.fnarfbargle.com [103.4.19.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 654EB11C18
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 04:08:52 -0700 (PDT)
-Received: from [10.8.0.1] (helo=srv.home)
-        by ns3.fnarfbargle.com with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <lists2009@fnarfbargle.com>)
-        id 1oLN6Q-0004ON-V5; Tue, 09 Aug 2022 21:08:50 +1000
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=fnarfbargle.com; s=mail; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=B4+92h9bcpkDDgAcJ3CHRFPoFp0LcxuJgNNoznaNPqE=; b=pIrPj/b/aMUIYHvG92SocqAsxe
-        CnkwsKJZpMmxlIrd93nk1MtNB6J4ltPni4L9cv6OXTKvoCnQyWyS620RU+134B6ZuB4if+qJmOOXS
-        37bQMQDDx/lUQcYI+q/UXKMIjHMD7j2uvHu49Zkzhg79rYGJMjR3C3yozLCbwJc0d8v4=;
-Message-ID: <86bec398-7a5b-6d4e-bc02-5941fe6c2e73@fnarfbargle.com>
-Date:   Tue, 9 Aug 2022 19:08:42 +0800
+        Tue, 9 Aug 2022 07:09:38 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EBC421E2A
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 04:09:36 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id v2so7875904lfi.6
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 04:09:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=z1wW53E/Qxsr2vSx6nmGwn4G947AWzNAxHfLf2Udui8=;
+        b=K9697b0hWypNC5Y7Ukm33jvCxg3rEpcsrx7eZBN6AYRJiXg0G8mkGWLE2nm72MEsYO
+         eES5KUVP43qIjmaNnFi4bZlCpKZYbcKikxJJl7SiPL1XL7TjWp3u4U69SJtJfWtAJ2BP
+         J76tCLlrU6Wo5cp056gQWv3J/Xn2KrgcjtxSB7r9/s8iQxvfP69+PJdUPxtXDQm15WdS
+         eLMR26SCrZSrfFGUF1Z/lCXo85fBVHcphyDkVbrWVeuVjwdWkiawNLtYmpdZBm8QnStD
+         LGrqaRtMq2+cb3AoTh3bWcGXhWq+8mpnY1CVH7cNuMwZuv+AB3zDb6UzDsEzRadk2sRL
+         5MGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=z1wW53E/Qxsr2vSx6nmGwn4G947AWzNAxHfLf2Udui8=;
+        b=SHNBFfufi0R0ntCUSQ6wRqv+4aVrTDNU7mUDL3WdqOGjdhCvELJYO8vNKTPkQ8mwug
+         KKbRL61M3c5Shmmvr0OseDq3zx0RrbK1Q3MQhyfR9zbWyRFuZ5w/vAHw+7FVz16e/Kh8
+         cmE0fBT8wXqOCn0XBl0ppZquuf59EzA3rhZrUC2v9aZi1A4o8jpiSH43mKPrrScLbA6u
+         y0zGgfK1S4HGR+SlxXxjayUIc68Q2WpYJLQS3N9eR12LTfuS39RlydLInI0aPhuy0/RN
+         WbUiO3N0ZzaczKQcZLEA83i7A0e9gtrhCs/8RFG9vvmSmBXAvuJTu1X+EemIfMu2Guy1
+         WoiQ==
+X-Gm-Message-State: ACgBeo3PZXkiVQnUo7i2UFnLyr83DgDDlgkhx2J/1X3wSCWcH677aiq5
+        KMDz9T9pw2HPO9+EvUvlIQZtgcj/7xRyUwdAS3/uWQ==
+X-Google-Smtp-Source: AA6agR6e6kdezHVuMYN+QNjKKaV87TyigC/jpShlv85dEwOIG5MateIIbdr+mhaKDyg1qz9Fo8IOHcbNVw0tnBG6Kv0=
+X-Received: by 2002:a05:6512:2306:b0:48b:26f3:91b1 with SMTP id
+ o6-20020a056512230600b0048b26f391b1mr7755169lfu.11.1660043374613; Tue, 09 Aug
+ 2022 04:09:34 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: Apple Thunderbolt Display chaining
-Content-Language: en-US
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org
-References: <87c1a001-ef79-6390-dfe2-06d2850f6e84@fnarfbargle.com>
- <Yu4Gmkous7asng6h@lahna>
- <42e81a8e-e393-7a69-7339-a020ebb57935@fnarfbargle.com>
- <YvDcudE5BRtZAtfM@lahna>
- <a1db1454-63b6-7c39-bbf6-53e53bbd36e6@fnarfbargle.com>
- <5474e599-057a-ec0f-b469-560644155907@fnarfbargle.com>
- <YvEFtPF7SBIwNG/o@lahna>
- <d234ea9b-9303-6088-0a9b-4de887a77bf4@fnarfbargle.com>
- <YvI1lQh+C0SJiG73@lahna>
- <bcebdeb9-4f6a-e931-46f5-b9be899db9a4@fnarfbargle.com>
- <YvI9Cbin4OKQwZ05@lahna>
-From:   Brad Campbell <lists2009@fnarfbargle.com>
-In-Reply-To: <YvI9Cbin4OKQwZ05@lahna>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220808181555.10333-1-semen.protsenko@linaro.org> <94f31377-f2f0-7d1e-c191-ee55dd204fc5@linaro.org>
+In-Reply-To: <94f31377-f2f0-7d1e-c191-ee55dd204fc5@linaro.org>
+From:   Sam Protsenko <semen.protsenko@linaro.org>
+Date:   Tue, 9 Aug 2022 14:09:23 +0300
+Message-ID: <CAPLW+4mC5of9v7AHUbxYDamQ4SNpK46oT7_A6R6t2uuBJ1gSpA@mail.gmail.com>
+Subject: Re: [PATCH 0/7] clk: samsung: exynos850: Add CMUs needed for SysMMU
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,85 +75,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 9 Aug 2022 at 10:09, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 08/08/2022 21:15, Sam Protsenko wrote:
+> > This patch series implements some missing Exynos850 clock domains. Right
+> > now those are mainly required for SysMMU clocks, although of course
+> > there is a lot of other clocks generated by those CMUs.
+> >
+> > Exynos850 has next SysMMU instances:
+> >   - SYSMMU_AUD
+> >   - SYSMMU_DPU
+> >   - SYSMMU_IS0
+> >   - SYSMMU_IS1
+> >   - SYSMMU_MFCMSCL
+> >
+> > As CMU_DPU is already implemented, that leaves CMU_AUD, CMU_IS and
+> > CMU_MFCMSCL to be implemented, which is done in this series:
+> >   - CMU_AUD: audio clocks
+> >   - CMU_IS: camera clocks (Image Signal Processing)
+> >   - CMU_MFCMSCL: multi-format codec and scaler clocks
+>
+> Please send a v2:
+> 1. Using proper output from get_maintainers.pl
+> 2. Using standard git send-email or any other equivalent method, so your
+> patchset is properly threaded. It's not possible to apply it otherwise.
+> See also:
+> https://lore.kernel.org/all/20220808181600.10491-1-semen.protsenko@linaro.org/#t
+>
 
+Thanks, will do. Just wanted to avoid cluttering the "device tree"
+mailing list with actual driver changes. But obviously it's not a
+proper way.
 
-On 9/8/22 18:55, Mika Westerberg wrote:
-> Hi,
-> 
-> On Tue, Aug 09, 2022 at 06:40:54PM +0800, Brad Campbell wrote:
->> G'day Mika,
->>
->>
->> On 9/8/22 18:23, Mika Westerberg wrote:
->>> Hi,
->>>
->>> On Mon, Aug 08, 2022 at 09:27:24PM +0800, Brad Campbell wrote:
->>>> If I don't authorize the PCIe tunnels and just leave the DP enabled it
->>>> works fine also.
->>>
->>> But you say that it fails on boot when the driver discovers the tunnels,
->>> right? So there is really nothing to authorize (they should be already
->>> "authorized" by the boot firmware).
->>>
->>> If I understand correctly this is how it reproduces (the simplest):
->>>
->>>   1. Connect a single Apple TB1 display to the system
->>>   2. Boot it up
->>>   3. Wait a while and it hangs
->>>
->>> If this is the case, then the driver certainly is not creating any
->>> PCIe tunnels itself unless there is a bug somewhere.
->>>
->>> An additional question, does it reproduce with either TB1 display
->>> connected or just with specific TB1 display?
->>>
->>
->> No, I've not been clear enough, I'm sorry. I've re-read what I've written below and
->> I'm still not sure I'm clear enough.
->>
->> The firmware never sets anything up. 
->>
->> When I cold boot the machine (from power on), the thunderbolt displays and tunnels
->> remain dark until linux initializes the thunderbolt driver the first time. 
->>  
->> If I compile the thunderbolt driver into the kernel, or let the initramfs load it
->> the displays come up, all PCIe tunnels are established and everything works.
->>
->> When I reboot the machine (reset button or warm boot), the firmware continues to
->> do nothing and all the tunnels remain in place. The machine dies when the thunderbolt 
->> driver is loaded for a second time.
->>
->> That might be a reset/warm boot with it compiled in or loaded from iniramfs.
->> It may also be me loading it from the command line after booting with it as a
->> module and blacklisted.
->>
->> The problem comes about when the thunderbolt module is loaded while the PCIe tunnels
->> are already established.
->>
->> To reproduce in the easiest manner I compile the thunderbolt driver as a module and
->> blacklist it. This prevents it from auto-loading.
->>
->> I cold boot the machine, let it boot completely then modprobe thunderbolt and authorize
->> the tunnels. I then warm boot which lets the kernel detect and init the DP displays
->> and detect/configure all the PCIe devices. The thunderbolt driver is not loaded.
->>
->> The machine comes up, all tunnels are established and all devices work.
->>
->> If I then modprobe the thunderbolt driver, things break.
->>
->> This is the hack in my boot script :
->>
->> # Spark up thunderbolt
->> if [ -z "`grep notb /proc/cmdline`" -a -z "`lsusb | grep '05ac:9227'`" ] ; then
->> 	modprobe thunderbolt
->> 	sleep 1
->> 	echo 1 > /sys/bus/thunderbolt/devices/0-3/authorized
->> 	echo 1 > /sys/bus/thunderbolt/devices/0-303/authorized
->> 	reboot
->> fi
-> 
-> Thanks for the clarification! How about on macOS side, does it work (I
-> would expect yes)?
-> 
-
-Ahh, forgot about the laptop I'm typing this on. Yes, works fine in MacOS.
+>
+> Best regards,
+> Krzysztof

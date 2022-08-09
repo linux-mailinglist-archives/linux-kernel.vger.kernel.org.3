@@ -2,258 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6F3E58E31B
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 00:19:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11F5858E31F
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 00:19:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230079AbiHIWTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 18:19:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41006 "EHLO
+        id S230080AbiHIWTt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 18:19:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbiHIWSz (ORCPT
+        with ESMTP id S230140AbiHIWTg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 18:18:55 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28E4457218
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 15:18:49 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id k19so5536630qkj.7
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 15:18:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dubeyko-com.20210112.gappssmtp.com; s=20210112;
-        h=mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=BbdhUu1iQIdNypXcUPyn1a+IYyT/io0kAeHgkl3TXu8=;
-        b=Umh7VA4rNT6XgSjvM8GnX25ofE7X+NKJMMyfYC/JH0nNKGQaHBg8q7gRB0Ru5dfRsf
-         wBzeHYFcW7TPwtBP9MjPOPystYVZ9cwOW90IV9otBaDzeh2CipPOiJJvgKSNnUxYqk4p
-         Xa1FX31QTVjncLWdjVTXnfmWxjhBSmYN6MWHHKXZ6TlqNi7O1EpRAe41vpr4tmrPsfTL
-         5+n2wJsfda2GjDlxyQPObc1/nYO4mzgz+g3236ZEy+YB/aptJo5B9dss6SuyOhDUcZ12
-         frc5JCj4Ir3meVdnpb7IJbJKGB4CbnT/nky+4Wia05sz0fsnMCBntXySYRUiJXPOYFxK
-         eBvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:mime-version:subject:from:in-reply-to:date:cc
-         :content-transfer-encoding:message-id:references:to;
-        bh=BbdhUu1iQIdNypXcUPyn1a+IYyT/io0kAeHgkl3TXu8=;
-        b=T85gumFXA3bUxkYY0+EFXBSNBxgegPkJh95y9o05C2oJZ6q47ADrBtdAh7tCR5iEwz
-         +dY3NEos/JGwyKx99/LANPwO9ZEb9EF5sgaKcyFCe/u44JWQpXBqbPB51MlBsDclvRlT
-         xD/P6cB1ciBN/DwhjKoTDFgmCknyVJSgqiYVokFc2jIMT9q1CGrcmwtsfHozqGiZ+oUM
-         tFW7+NpymMFS5h0Ks47UtdlAfVe3YsTQKXTGFQkR3iHVlQBEGtlYtaECHGx1pTn8Kvmo
-         sI0iUhs04cbGUVpc2OhoodPVqMg3yFji7Mf5xIT71MNem1ctW/l4seu5suoR6vj1TOzY
-         gqPA==
-X-Gm-Message-State: ACgBeo14tybrMY+cnuLlPEKBU4QZALXY4nWxIZPEKPdIXj2qh/W4F7hd
-        45J9o9dAqdP8KZvRWl71OVSbJg==
-X-Google-Smtp-Source: AA6agR7kWR9IyYz0H9pUs9FL5gMv3QEMSuIQIAQjXrDUHYB3l7yzmudEAB2y4KC3Mkw2JMVmZP2qOQ==
-X-Received: by 2002:a05:620a:24d0:b0:6b9:1117:20c0 with SMTP id m16-20020a05620a24d000b006b9111720c0mr17343048qkn.271.1660083528211;
-        Tue, 09 Aug 2022 15:18:48 -0700 (PDT)
-Received: from smtpclient.apple ([2600:1700:42f0:6600:b19b:cbb5:a678:767c])
-        by smtp.gmail.com with ESMTPSA id o4-20020ac841c4000000b00342fd6d6dd3sm3791677qtm.42.2022.08.09.15.18.44
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 09 Aug 2022 15:18:46 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH 4/4] hfsplus: Convert kmap() to kmap_local_page() in
- btree.c
-From:   Viacheslav Dubeyko <slava@dubeyko.com>
-In-Reply-To: <20220809203105.26183-5-fmdefrancesco@gmail.com>
-Date:   Tue, 9 Aug 2022 15:18:37 -0700
-Cc:     "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        Ira Weiny <ira.weiny@intel.com>, Jens Axboe <axboe@kernel.dk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Kees Cook <keescook@chromium.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Linux FS Devel <linux-fsdevel@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <4C85926A-2FB5-418B-8F76-3055FA213D6C@dubeyko.com>
-References: <20220809203105.26183-1-fmdefrancesco@gmail.com>
- <20220809203105.26183-5-fmdefrancesco@gmail.com>
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Tue, 9 Aug 2022 18:19:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1C827168;
+        Tue,  9 Aug 2022 15:19:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 72087B81A06;
+        Tue,  9 Aug 2022 22:19:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D133C433D6;
+        Tue,  9 Aug 2022 22:19:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660083572;
+        bh=wHVLGurtpig3wRrDEX8sCmkmlxVZ2CjSsnikZT1umF0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=t6wis/JyOLC1KdpDSETpCBf9M6HWsIb+juzYY2kVV6uYNj9bCPbgIv+KYaR9C0aKr
+         9tKzsCTQ/BxO91vz0LNiDH5GblE9TEWhWofwbeLZPnv+ULvlgUA09cGc5F5HlKF+v7
+         O1kCf0tEJe8TltO93/RQEZ0Ntre8LUUptexmQn+l0q77N+uk/x9s8TNhcMnAuV0w1D
+         dM9WCGJrgb2cJRPunJhE4gTJstIOXznZnwWkB8wuc20bDPMFGVabZ3ixn5543P8c3B
+         8L7IQK9HoTBk0SfhfHWHKs7kaP+N2LxJ9uQOIrdT/+MN4oB1o7D18XJ+u/8/hYyok9
+         FcRLkg7jlGRVw==
+Date:   Tue, 9 Aug 2022 15:19:31 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Zhang Boyang <zhangboyang.id@gmail.com>
+Cc:     Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
+        linux-block@vger.kernel.org,
+        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
+        Jan Kara <jack@suse.cz>, Ming Lei <ming.lei@redhat.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2 1/1] loop: introduce LO_FLAGS_NO_DEALLOC
+Message-ID: <YvLdc8GtbZ968qF6@magnolia>
+References: <20220806153022.83748-1-zhangboyang.id@gmail.com>
+ <20220806153022.83748-2-zhangboyang.id@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220806153022.83748-2-zhangboyang.id@gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Aug 06, 2022 at 11:30:22PM +0800, Zhang Boyang wrote:
+> Previously, for file-backed loop devices, REQ_OP_DISCARD and
+> REQ_OP_WRITE_ZEROES (without REQ_NOUNMAP) are implemented using
+> fallocate(FALLOC_FL_PUNCH_HOLE), which will cause the underlying file to
+> be sparse and disk space freed. The users have no choice to prevent this
+> this from happening.
+> 
+> This patch introduces LO_FLAGS_NO_DEALLOC. With this flag set,
+> REQ_OP_DISCARD and REQ_OP_WRITE_ZEROES are forced to use
+> fallocate(FALLOC_FL_ZERO_RANGE). The disk space of underlying file is
+> kept allocated. This is useful if users, for example, want to use a
+> preallocated file as the backing file.
 
+Considering that discard isn't required to do anything, why not
+echo 0 | sudo tee /sys/block/loopX/queue/discard_max_bytes ?
 
-> On Aug 9, 2022, at 1:31 PM, Fabio M. De Francesco =
-<fmdefrancesco@gmail.com> wrote:
->=20
-> kmap() is being deprecated in favor of kmap_local_page().
->=20
-> There are two main problems with kmap(): (1) It comes with an overhead =
-as
-> mapping space is restricted and protected by a global lock for
-> synchronization and (2) it also requires global TLB invalidation when =
-the
-> kmap=E2=80=99s pool wraps and it might block when the mapping space is =
-fully
-> utilized until a slot becomes available.
->=20
-> With kmap_local_page() the mappings are per thread, CPU local, can =
-take
-> page faults, and can be called from any context (including =
-interrupts).
-> It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
-> the tasks can be preempted and, when they are scheduled to run again, =
-the
-> kernel virtual addresses are restored and are still valid.
->=20
-> Since its use in btree.c is safe everywhere, it should be preferred.
->=20
-> Therefore, replace kmap() with kmap_local_page() in btree.c.
->=20
-> Tested in a QEMU/KVM x86_32 VM, 6GB RAM, booting a kernel with
-> HIGHMEM64GB enabled.
->=20
-> Cc: Viacheslav Dubeyko <slava@dubeyko.com>
-> Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+--D
+
+> Signed-off-by: Zhang Boyang <zhangboyang.id@gmail.com>
 > ---
-
-
-Looks good.
-
-Reviewed-by: Viacheslav Dubeyko <slava@dubeyko.com>
-
-Thanks,
-Slava.
-
-
-> fs/hfsplus/btree.c | 28 ++++++++++++++--------------
-> 1 file changed, 14 insertions(+), 14 deletions(-)
->=20
-> diff --git a/fs/hfsplus/btree.c b/fs/hfsplus/btree.c
-> index 3a917a9a4edd..9e1732a2b92a 100644
-> --- a/fs/hfsplus/btree.c
-> +++ b/fs/hfsplus/btree.c
-> @@ -163,7 +163,7 @@ struct hfs_btree *hfs_btree_open(struct =
-super_block *sb, u32 id)
-> 		goto free_inode;
->=20
-> 	/* Load the header */
-> -	head =3D (struct hfs_btree_header_rec *)(kmap(page) +
-> +	head =3D (struct hfs_btree_header_rec *)(kmap_local_page(page) +
-> 		sizeof(struct hfs_bnode_desc));
-> 	tree->root =3D be32_to_cpu(head->root);
-> 	tree->leaf_count =3D be32_to_cpu(head->leaf_count);
-> @@ -240,12 +240,12 @@ struct hfs_btree *hfs_btree_open(struct =
-super_block *sb, u32 id)
-> 		(tree->node_size + PAGE_SIZE - 1) >>
-> 		PAGE_SHIFT;
->=20
-> -	kunmap(page);
-> +	kunmap_local(head);
-> 	put_page(page);
-> 	return tree;
->=20
->  fail_page:
-> -	kunmap(page);
-> +	kunmap_local(head);
-> 	put_page(page);
->  free_inode:
-> 	tree->inode->i_mapping->a_ops =3D &hfsplus_aops;
-> @@ -292,7 +292,7 @@ int hfs_btree_write(struct hfs_btree *tree)
-> 		return -EIO;
-> 	/* Load the header */
-> 	page =3D node->page[0];
-> -	head =3D (struct hfs_btree_header_rec *)(kmap(page) +
-> +	head =3D (struct hfs_btree_header_rec *)(kmap_local_page(page) +
-> 		sizeof(struct hfs_bnode_desc));
->=20
-> 	head->root =3D cpu_to_be32(tree->root);
-> @@ -304,7 +304,7 @@ int hfs_btree_write(struct hfs_btree *tree)
-> 	head->attributes =3D cpu_to_be32(tree->attributes);
-> 	head->depth =3D cpu_to_be16(tree->depth);
->=20
-> -	kunmap(page);
-> +	kunmap_local(head);
-> 	set_page_dirty(page);
-> 	hfs_bnode_put(node);
-> 	return 0;
-> @@ -395,7 +395,7 @@ struct hfs_bnode *hfs_bmap_alloc(struct hfs_btree =
-*tree)
->=20
-> 	off +=3D node->page_offset;
-> 	pagep =3D node->page + (off >> PAGE_SHIFT);
-> -	data =3D kmap(*pagep);
-> +	data =3D kmap_local_page(*pagep);
-> 	off &=3D ~PAGE_MASK;
-> 	idx =3D 0;
->=20
-> @@ -408,7 +408,7 @@ struct hfs_bnode *hfs_bmap_alloc(struct hfs_btree =
-*tree)
-> 						idx +=3D i;
-> 						data[off] |=3D m;
-> 						set_page_dirty(*pagep);
-> -						kunmap(*pagep);
-> +						kunmap_local(data);
-> 						tree->free_nodes--;
-> 						=
-mark_inode_dirty(tree->inode);
-> 						hfs_bnode_put(node);
-> @@ -418,14 +418,14 @@ struct hfs_bnode *hfs_bmap_alloc(struct =
-hfs_btree *tree)
-> 				}
-> 			}
-> 			if (++off >=3D PAGE_SIZE) {
-> -				kunmap(*pagep);
-> -				data =3D kmap(*++pagep);
-> +				kunmap_local(data);
-> +				data =3D kmap_local_page(*++pagep);
-> 				off =3D 0;
-> 			}
-> 			idx +=3D 8;
-> 			len--;
-> 		}
-> -		kunmap(*pagep);
-> +		kunmap_local(data);
-> 		nidx =3D node->next;
-> 		if (!nidx) {
-> 			hfs_dbg(BNODE_MOD, "create new bmap node\n");
-> @@ -441,7 +441,7 @@ struct hfs_bnode *hfs_bmap_alloc(struct hfs_btree =
-*tree)
-> 		off =3D off16;
-> 		off +=3D node->page_offset;
-> 		pagep =3D node->page + (off >> PAGE_SHIFT);
-> -		data =3D kmap(*pagep);
-> +		data =3D kmap_local_page(*pagep);
-> 		off &=3D ~PAGE_MASK;
-> 	}
-> }
-> @@ -491,7 +491,7 @@ void hfs_bmap_free(struct hfs_bnode *node)
-> 	}
-> 	off +=3D node->page_offset + nidx / 8;
-> 	page =3D node->page[off >> PAGE_SHIFT];
-> -	data =3D kmap(page);
-> +	data =3D kmap_local_page(page);
-> 	off &=3D ~PAGE_MASK;
-> 	m =3D 1 << (~nidx & 7);
-> 	byte =3D data[off];
-> @@ -499,13 +499,13 @@ void hfs_bmap_free(struct hfs_bnode *node)
-> 		pr_crit("trying to free free bnode "
-> 				"%u(%d)\n",
-> 			node->this, node->type);
-> -		kunmap(page);
-> +		kunmap_local(data);
-> 		hfs_bnode_put(node);
-> 		return;
-> 	}
-> 	data[off] =3D byte & ~m;
-> 	set_page_dirty(page);
-> -	kunmap(page);
-> +	kunmap_local(data);
-> 	hfs_bnode_put(node);
-> 	tree->free_nodes++;
-> 	mark_inode_dirty(tree->inode);
-> --=20
-> 2.37.1
->=20
-
+>  drivers/block/loop.c      | 17 +++++++++++++++--
+>  include/uapi/linux/loop.h | 15 +++++++++++----
+>  2 files changed, 26 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/block/loop.c b/drivers/block/loop.c
+> index 084f9b8a0ba3..36bd9906a154 100644
+> --- a/drivers/block/loop.c
+> +++ b/drivers/block/loop.c
+> @@ -483,11 +483,15 @@ static int do_req_filebacked(struct loop_device *lo, struct request *rq)
+>  		 * write zeroes the range.  Otherwise, punch them out.
+>  		 */
+>  		return lo_fallocate(lo, rq, pos,
+> -			(rq->cmd_flags & REQ_NOUNMAP) ?
+> +			((rq->cmd_flags & REQ_NOUNMAP) ||
+> +			 (lo->lo_flags & LO_FLAGS_NO_DEALLOC)) ?
+>  				FALLOC_FL_ZERO_RANGE :
+>  				FALLOC_FL_PUNCH_HOLE);
+>  	case REQ_OP_DISCARD:
+> -		return lo_fallocate(lo, rq, pos, FALLOC_FL_PUNCH_HOLE);
+> +		return lo_fallocate(lo, rq, pos,
+> +			(lo->lo_flags & LO_FLAGS_NO_DEALLOC) ?
+> +				FALLOC_FL_ZERO_RANGE :
+> +				FALLOC_FL_PUNCH_HOLE);
+>  	case REQ_OP_WRITE:
+>  		if (cmd->use_aio)
+>  			return lo_rw_aio(lo, cmd, pos, WRITE);
+> @@ -719,12 +723,20 @@ static ssize_t loop_attr_dio_show(struct loop_device *lo, char *buf)
+>  	return sysfs_emit(buf, "%s\n", dio ? "1" : "0");
+>  }
+>  
+> +static ssize_t loop_attr_no_dealloc_show(struct loop_device *lo, char *buf)
+> +{
+> +	int no_dealloc = (lo->lo_flags & LO_FLAGS_NO_DEALLOC);
+> +
+> +	return sysfs_emit(buf, "%s\n", no_dealloc ? "1" : "0");
+> +}
+> +
+>  LOOP_ATTR_RO(backing_file);
+>  LOOP_ATTR_RO(offset);
+>  LOOP_ATTR_RO(sizelimit);
+>  LOOP_ATTR_RO(autoclear);
+>  LOOP_ATTR_RO(partscan);
+>  LOOP_ATTR_RO(dio);
+> +LOOP_ATTR_RO(no_dealloc);
+>  
+>  static struct attribute *loop_attrs[] = {
+>  	&loop_attr_backing_file.attr,
+> @@ -733,6 +745,7 @@ static struct attribute *loop_attrs[] = {
+>  	&loop_attr_autoclear.attr,
+>  	&loop_attr_partscan.attr,
+>  	&loop_attr_dio.attr,
+> +	&loop_attr_no_dealloc.attr,
+>  	NULL,
+>  };
+>  
+> diff --git a/include/uapi/linux/loop.h b/include/uapi/linux/loop.h
+> index 6f63527dd2ed..91a0a8b1f298 100644
+> --- a/include/uapi/linux/loop.h
+> +++ b/include/uapi/linux/loop.h
+> @@ -18,17 +18,24 @@ enum {
+>  	LO_FLAGS_AUTOCLEAR	= 4,
+>  	LO_FLAGS_PARTSCAN	= 8,
+>  	LO_FLAGS_DIRECT_IO	= 16,
+> +	LO_FLAGS_NO_DEALLOC	= 32,
+>  };
+>  
+>  /* LO_FLAGS that can be set using LOOP_SET_STATUS(64) */
+> -#define LOOP_SET_STATUS_SETTABLE_FLAGS (LO_FLAGS_AUTOCLEAR | LO_FLAGS_PARTSCAN)
+> +#define LOOP_SET_STATUS_SETTABLE_FLAGS (LO_FLAGS_AUTOCLEAR		\
+> +					| LO_FLAGS_PARTSCAN		\
+> +					| LO_FLAGS_NO_DEALLOC)
+>  
+>  /* LO_FLAGS that can be cleared using LOOP_SET_STATUS(64) */
+> -#define LOOP_SET_STATUS_CLEARABLE_FLAGS (LO_FLAGS_AUTOCLEAR)
+> +#define LOOP_SET_STATUS_CLEARABLE_FLAGS (LO_FLAGS_AUTOCLEAR		\
+> +					 | LO_FLAGS_NO_DEALLOC)
+>  
+>  /* LO_FLAGS that can be set using LOOP_CONFIGURE */
+> -#define LOOP_CONFIGURE_SETTABLE_FLAGS (LO_FLAGS_READ_ONLY | LO_FLAGS_AUTOCLEAR \
+> -				       | LO_FLAGS_PARTSCAN | LO_FLAGS_DIRECT_IO)
+> +#define LOOP_CONFIGURE_SETTABLE_FLAGS (LO_FLAGS_READ_ONLY		\
+> +				       | LO_FLAGS_AUTOCLEAR		\
+> +				       | LO_FLAGS_PARTSCAN		\
+> +				       | LO_FLAGS_DIRECT_IO		\
+> +				       | LO_FLAGS_NO_DEALLOC)
+>  
+>  #include <asm/posix_types.h>	/* for __kernel_old_dev_t */
+>  #include <linux/types.h>	/* for __u64 */
+> -- 
+> 2.30.2
+> 

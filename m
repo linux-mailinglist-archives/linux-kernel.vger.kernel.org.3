@@ -2,167 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A86C58DC93
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 18:56:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 955C558DC95
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 18:56:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245154AbiHIQ4C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 12:56:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37372 "EHLO
+        id S245177AbiHIQ4d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 12:56:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245147AbiHIQzy (ORCPT
+        with ESMTP id S245162AbiHIQ43 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 12:55:54 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 080F7219C;
-        Tue,  9 Aug 2022 09:55:52 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b9800329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:9800:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 846E71EC04DA;
-        Tue,  9 Aug 2022 18:55:47 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1660064147;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=i7kJIpddtAemUYbgwpjR+4WVlcQgX2AjGxouk8jTwJY=;
-        b=blu9wbGO3QfuTP67zh1c5NXyUm2UZXKneyuQAV4DlBW+3FkBSt5IQS+Wsj9rXAky4XiOeq
-        PddJJlBMbTiPpLXr3YFUe18BbIi8o3W2ISdjJoFT1eyE/B449QmkPRcoLI2WIAsad/DRrv
-        igZVfxy8u8RHoHuNCxklMtQTvkICyCA=
-Date:   Tue, 9 Aug 2022 18:55:43 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Ashish Kalra <Ashish.Kalra@amd.com>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-coco@lists.linux.dev, linux-mm@kvack.org,
-        linux-crypto@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        jroedel@suse.de, thomas.lendacky@amd.com, hpa@zytor.com,
-        ardb@kernel.org, pbonzini@redhat.com, seanjc@google.com,
-        vkuznets@redhat.com, jmattson@google.com, luto@kernel.org,
-        dave.hansen@linux.intel.com, slp@redhat.com, pgonda@google.com,
-        peterz@infradead.org, srinivas.pandruvada@linux.intel.com,
-        rientjes@google.com, dovmurik@linux.ibm.com, tobin@ibm.com,
-        michael.roth@amd.com, vbabka@suse.cz, kirill@shutemov.name,
-        ak@linux.intel.com, tony.luck@intel.com, marcorr@google.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, alpergun@google.com,
-        dgilbert@redhat.com, jarkko@kernel.org
-Subject: Re: [PATCH Part2 v6 09/49] x86/fault: Add support to handle the RMP
- fault for user address
-Message-ID: <YvKRjxgipxLSNCLe@zn.tnic>
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <0ecb0a4781be933fcadeb56a85070818ef3566e7.1655761627.git.ashish.kalra@amd.com>
+        Tue, 9 Aug 2022 12:56:29 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EAD1637D;
+        Tue,  9 Aug 2022 09:56:28 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id j15so15003955wrr.2;
+        Tue, 09 Aug 2022 09:56:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=trF1Dnl/B4bmI0Jk6roxYxlXVoEJE4owCmdIB31PL+E=;
+        b=O2mS2dqkqbMKlXPy/EAZEuhFeIOCzGJo8weuij0/bAzS9ZFRzhDDZcnR7jwZuTQAq+
+         mdpFDpLmj+2ttPS/4TBVQJQANNgkZnkaJt5aOjPZgYHdIpHu/wSylhB6FeCHezO2iL9o
+         3y0nJBpYOvhIRu8gGVhXISfXVj5tJMa8bTTMokNm/lkj+GHaH5/+YCuZiifOl+J4Wroe
+         +pWN/dD1G7H1tYDn0MzWXqNhPr+JmO2pGf7eoXjZnJI7C7cqp35tdK6CbI10BQ/+NMud
+         iQbvnszrhe8T0p6piiWg9PVOYmafDS6btza5ejCAp/oy+MCyGRN7u9gMOzcy2dHtHEYU
+         qo5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=trF1Dnl/B4bmI0Jk6roxYxlXVoEJE4owCmdIB31PL+E=;
+        b=qdWOFOgrK2RnXnWDk1u+9EtQzKoadbOmgklfwldAh7FIYLrvZUHiFZbIOfh08YIURJ
+         LaMyn3G69LiuFoKBo09JwvKdyBRkVDMYETe7sPLseoXj/RXV+e5UnzXRhPtZM12J4yW3
+         YosyanmvRQkeZSvDOATwwUk3b3px1kNl0ZfxRLnh8QFSMwpVU5Zgz9tfJBnKnmM7HE8C
+         /d1WO4A+7zIorUX8sPbCedbcZVXCAmm7e5ecWzUJe0O2Cb8f0R/+D6A85R09bbHrtF7B
+         m0Ij6EVJYKrZGsfjPI84VK8EIT2XenHDrSXUuHU9ARHOXDq0A9ptnVHIOpnr2bEo+/6j
+         HwNg==
+X-Gm-Message-State: ACgBeo2vmF0Z+HHt30cZa/GPauHK3EPvqElZ33HSDOTatC5o9bf17ix+
+        V0Q9KYtQNxiLaB0MfWChID4O6b458YBPyA==
+X-Google-Smtp-Source: AA6agR5Nz1sE/9VlQRDfDjrl3cMmnbOu/eagJ74tZByUddQH/G/DtvACPP2g2RkLT2uf5hDzoe1kTg==
+X-Received: by 2002:adf:de0f:0:b0:21e:ead4:23f5 with SMTP id b15-20020adfde0f000000b0021eead423f5mr14622172wrm.641.1660064186432;
+        Tue, 09 Aug 2022 09:56:26 -0700 (PDT)
+Received: from localhost.localdomain ([46.248.82.114])
+        by smtp.gmail.com with ESMTPSA id o41-20020a05600c512900b003a2e1883a27sm26346290wms.18.2022.08.09.09.56.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Aug 2022 09:56:26 -0700 (PDT)
+From:   Uros Bizjak <ubizjak@gmail.com>
+To:     linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Uros Bizjak <ubizjak@gmail.com>,
+        "Darrick J. Wong" <djwong@kernel.org>
+Subject: [PATCH] fs/xfs: Use atomic64_try_cmpxchg in xlog_grant_{add,sub}_space
+Date:   Tue,  9 Aug 2022 18:56:15 +0200
+Message-Id: <20220809165615.9694-1-ubizjak@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <0ecb0a4781be933fcadeb56a85070818ef3566e7.1655761627.git.ashish.kalra@amd.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 20, 2022 at 11:03:43PM +0000, Ashish Kalra wrote:
-> From: Brijesh Singh <brijesh.singh@amd.com>
-> 
-> When SEV-SNP is enabled globally, a write from the host goes through the
+Use `!atomic64_try_cmpxchg(ptr, &old, new)` instead of
+`atomic64_cmpxchg(ptr, old, new) != old` in xlog_grant_{add,sub}_space.
+This has two benefits:
 
-globally?
+- The x86 cmpxchg instruction returns success in the ZF flag, so this
+  change saves a compare after cmpxchg, as well as a related move
+  instruction in the front of cmpxchg.
 
-Can SNP be even enabled any other way?
+- atomic64_try_cmpxchg implicitly assigns the *ptr value to &old when
+  cmpxchg fails, enabling further code simplifications.
 
-I see the APM talks about it being enabled globally, I guess this means
-the RMP represents *all* system memory?
+This patch has no functional change.
 
-> @@ -1209,6 +1210,60 @@ do_kern_addr_fault(struct pt_regs *regs, unsigned long hw_error_code,
->  }
->  NOKPROBE_SYMBOL(do_kern_addr_fault);
->  
-> +static inline size_t pages_per_hpage(int level)
-> +{
-> +	return page_level_size(level) / PAGE_SIZE;
-> +}
-> +
-> +/*
-> + * Return 1 if the caller need to retry, 0 if it the address need to be split
-> + * in order to resolve the fault.
-> + */
+Cc: "Darrick J. Wong" <djwong@kernel.org>
+Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
+---
+ fs/xfs/xfs_log.c | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
-Magic numbers.
-
-Pls do instead:
-
-enum rmp_pf_ret {
-	RMP_PF_SPLIT	= 0,
-	RMP_PF_RETRY	= 1,
-};
-
-and use those instead.
-
-> +static int handle_user_rmp_page_fault(struct pt_regs *regs, unsigned long error_code,
-> +				      unsigned long address)
-> +{
-> +	int rmp_level, level;
-> +	pte_t *pte;
-> +	u64 pfn;
-> +
-> +	pte = lookup_address_in_mm(current->mm, address, &level);
-> +
-> +	/*
-> +	 * It can happen if there was a race between an unmap event and
-> +	 * the RMP fault delivery.
-> +	 */
-
-You need to elaborate more here: a RMP fault can happen and then the
-page can get unmapped? What is the exact scenario here?
-
-> +	if (!pte || !pte_present(*pte))
-> +		return 1;
-> +
-> +	pfn = pte_pfn(*pte);
-> +
-> +	/* If its large page then calculte the fault pfn */
-> +	if (level > PG_LEVEL_4K) {
-> +		unsigned long mask;
-> +
-> +		mask = pages_per_hpage(level) - pages_per_hpage(level - 1);
-> +		pfn |= (address >> PAGE_SHIFT) & mask;
-
-Oh boy, this is unnecessarily complicated. Isn't this
-
-	pfn |= pud_index(address);
-
-or
-	pfn |= pmd_index(address);
-
-depending on the level?
-
-I think it is but it needs more explaining.
-
-In any case, those are two static masks exactly and they don't need to
-be computed for each #PF.
-
-> diff --git a/mm/memory.c b/mm/memory.c
-> index 7274f2b52bca..c2187ffcbb8e 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -4945,6 +4945,15 @@ static vm_fault_t handle_pte_fault(struct vm_fault *vmf)
->  	return 0;
->  }
->  
-> +static int handle_split_page_fault(struct vm_fault *vmf)
-> +{
-> +	if (!IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT))
-> +		return VM_FAULT_SIGBUS;
-
-Yah, this looks weird: generic code implies that page splitting after a
-#PF makes sense only when SEV is present and none otherwise.
-
-Why?
-
+diff --git a/fs/xfs/xfs_log.c b/fs/xfs/xfs_log.c
+index 4b1c0a9c6368..92e39873d09e 100644
+--- a/fs/xfs/xfs_log.c
++++ b/fs/xfs/xfs_log.c
+@@ -148,7 +148,7 @@ xlog_grant_sub_space(
+ 	int			bytes)
+ {
+ 	int64_t	head_val = atomic64_read(head);
+-	int64_t new, old;
++	int64_t new;
+ 
+ 	do {
+ 		int	cycle, space;
+@@ -161,10 +161,9 @@ xlog_grant_sub_space(
+ 			cycle--;
+ 		}
+ 
+-		old = head_val;
+ 		new = xlog_assign_grant_head_val(cycle, space);
+-		head_val = atomic64_cmpxchg(head, old, new);
+-	} while (head_val != old);
++
++	} while (!atomic64_try_cmpxchg(head, &head_val, new));
+ }
+ 
+ static void
+@@ -174,7 +173,7 @@ xlog_grant_add_space(
+ 	int			bytes)
+ {
+ 	int64_t	head_val = atomic64_read(head);
+-	int64_t new, old;
++	int64_t new;
+ 
+ 	do {
+ 		int		tmp;
+@@ -190,10 +189,9 @@ xlog_grant_add_space(
+ 			cycle++;
+ 		}
+ 
+-		old = head_val;
+ 		new = xlog_assign_grant_head_val(cycle, space);
+-		head_val = atomic64_cmpxchg(head, old, new);
+-	} while (head_val != old);
++
++	} while (!atomic64_try_cmpxchg(head, &head_val, new));
+ }
+ 
+ STATIC void
 -- 
-Regards/Gruss,
-    Boris.
+2.37.1
 
-https://people.kernel.org/tglx/notes-about-netiquette

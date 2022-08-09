@@ -2,84 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F90658DF06
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:29:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEA2558DF00
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:29:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344118AbiHIS3s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 14:29:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38616 "EHLO
+        id S245573AbiHIS30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 14:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347180AbiHIS06 (ORCPT
+        with ESMTP id S1346700AbiHIS0g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 14:26:58 -0400
-Received: from polaris.svanheule.net (polaris.svanheule.net [84.16.241.116])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 989363337F
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 11:09:45 -0700 (PDT)
-Received: from terra.. (unknown [IPv6:2a02:a03f:eaf9:8401:aa9f:5d01:1b2a:e3cd])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id B542A308D14;
-        Tue,  9 Aug 2022 20:09:17 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1660068557;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=GlwIJOS1mMHl8Ark2H9mL6uLPeWSFOOW6h0gHl0P9GY=;
-        b=dSdXX+ZiUXZ6ggjmBj/1G0NSkCYhE0H7NnYxr1fneLYOZfgbHDq/cMtheCREng4fEqSQ00
-        J66ZjZA6Z8sT2TxQm/b+kz3kUUd+io46yrYuAAcrz4fB+iIavhtDqz8GUafhezhAX0qYKk
-        lb9KLHRjuUeqNXy5RVT1zkzxoJ+G8D0qniCC5bH4H9YpoQkdhCu4KdAld03zZXRJ8pURCx
-        0qon4/By6qlYgNZRsjJqpUPR64+34FnV/RNwxbW4fogEsaeKHGyHfcQR0/buvweAfvWoML
-        mHf6ER0RjD9GgqY4ujpNSDkrTO6/KgAR3wh48Q9bHhobbxPpHAlA3B3ADqXU/w==
-From:   Sander Vanheule <sander@svanheule.net>
-To:     Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
-        David Gow <davidgow@google.com>,
-        Sander Vanheule <sander@svanheule.net>
-Subject: [PATCH v1 5/5] lib/cpumask_kunit: add tests file to MAINTAINERS
-Date:   Tue,  9 Aug 2022 20:08:55 +0200
-Message-Id: <7de8103cab9ef218e0216a66ab002a84ab66f9cc.1660068429.git.sander@svanheule.net>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <cover.1660068429.git.sander@svanheule.net>
-References: <cover.1660068429.git.sander@svanheule.net>
+        Tue, 9 Aug 2022 14:26:36 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12B2832ED8;
+        Tue,  9 Aug 2022 11:09:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=DWkpz8+ByW7L5elLg9cMcWybBCw50VP7bckI/LSep/o=;
+        t=1660068575; x=1661278175; b=Z/PpNygG5+d4mRAsefuVgd2vfzodFgFfYEZenommRdVVtjU
+        VdXWo2Nf2rewOLeKRGMpYiM2LQ7t6kFbCssOBQy/gH4UBPuyB1ia3YmSy06LWY4n7P8mhotr1bgmf
+        kYJeVxizJFVk9LBik1bbbzlO1XhmCftqXQhKcfoVPy2fdSJuoxMoATecjswM9FWJsfrWz62jkFu/s
+        ULc8dGrxR7IIcCKbJVhDmlIfaPHL8Olr6rXHObVXb9ozV/NyoVa34lISe1f39LnDiLOfkyHXo7wYf
+        swVgcoO03FDpPNCoZIoeWxy3q2TU+oijt8e0fb3xAfSp4C98Y4IOWnfuLheFkWTg==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1oLTfR-003HXy-0m;
+        Tue, 09 Aug 2022 20:09:25 +0200
+Message-ID: <54cd8c11428db4c419edf2267db00ca10da7a178.camel@sipsolutions.net>
+Subject: Re: [PATCH v2 06/13] um: Improve panic notifiers consistency and
+ ordering
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        kexec@lists.infradead.org, linux-um@lists.infradead.org
+Cc:     pmladek@suse.com, bhe@redhat.com, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        netdev@vger.kernel.org, x86@kernel.org, kernel-dev@igalia.com,
+        kernel@gpiccoli.net, halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com, andriy.shevchenko@linux.intel.com,
+        arnd@arndb.de, bp@alien8.de, corbet@lwn.net,
+        d.hatayama@jp.fujitsu.com, dave.hansen@linux.intel.com,
+        dyoung@redhat.com, feng.tang@intel.com, gregkh@linuxfoundation.org,
+        mikelley@microsoft.com, hidehiro.kawai.ez@hitachi.com,
+        jgross@suse.com, john.ogness@linutronix.de, keescook@chromium.org,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, stern@rowland.harvard.edu,
+        tglx@linutronix.de, vgoyal@redhat.com, vkuznets@redhat.com,
+        will@kernel.org, Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Richard Weinberger <richard@nod.at>
+Date:   Tue, 09 Aug 2022 20:09:23 +0200
+In-Reply-To: <5bbc4296-4858-d01c-0c76-09d942377ddf@igalia.com>
+References: <20220719195325.402745-1-gpiccoli@igalia.com>
+         <20220719195325.402745-7-gpiccoli@igalia.com>
+         <5bbc4296-4858-d01c-0c76-09d942377ddf@igalia.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cpumask related files are listed under the BITMAP API section, so file
-with the tests for cpumask should be added to that list.
+On Sun, 2022-08-07 at 12:40 -0300, Guilherme G. Piccoli wrote:
+> On 19/07/2022 16:53, Guilherme G. Piccoli wrote:
+> > Currently the panic notifiers from user mode linux don't follow
+> > the convention for most of the other notifiers present in the
+> > kernel (indentation, priority setting, numeric return).
+> > More important, the priorities could be improved, since it's a
+> > special case (userspace), hence we could run the notifiers earlier;
+> > user mode linux shouldn't care much with other panic notifiers but
+> > the ordering among the mconsole and arch notifier is important,
+> > given that the arch one effectively triggers a core dump.
+> >=20
+> > Fix that by running the mconsole notifier as the first panic
+> > notifier, followed by the architecture one (that coredumps).
+> >=20
+> > Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+> > Cc: Johannes Berg <johannes@sipsolutions.net>
+> > Cc: Richard Weinberger <richard@nod.at>
+> > Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> >=20
+> > ---
+> >=20
+> > V2:
+> > - Kept the notifier header to avoid implicit usage - thanks
+> > Johannes for the suggestion!
+> >=20
+> >  arch/um/drivers/mconsole_kern.c | 7 +++----
+> >  arch/um/kernel/um_arch.c        | 8 ++++----
+> >  2 files changed, 7 insertions(+), 8 deletions(-)
+> > [...]
+>=20
+> Hi Johannes, do you feel this one is good now, after your last review?
+> Thanks in advance,
+>=20
 
-Signed-off-by: Sander Vanheule <sander@svanheule.net>
----
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
+Yeah, no objections, my previous comment was just a minor almost style
+issue anyway.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 868bbf31603d..21ff272c2c10 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -3601,6 +3601,7 @@ F:	include/linux/find.h
- F:	include/linux/nodemask.h
- F:	lib/bitmap.c
- F:	lib/cpumask.c
-+F:	lib/cpumask_kunit.c
- F:	lib/find_bit.c
- F:	lib/find_bit_benchmark.c
- F:	lib/test_bitmap.c
--- 
-2.37.1
-
+johannes

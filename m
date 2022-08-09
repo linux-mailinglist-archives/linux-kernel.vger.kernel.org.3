@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D563858DE79
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:18:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26E2D58DE54
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:13:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343791AbiHISSt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 14:18:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40828 "EHLO
+        id S1343678AbiHISNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 14:13:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345817AbiHISPm (ORCPT
+        with ESMTP id S1345528AbiHISLO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 14:15:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8786A2C671;
-        Tue,  9 Aug 2022 11:05:47 -0700 (PDT)
+        Tue, 9 Aug 2022 14:11:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E57C2A96F;
+        Tue,  9 Aug 2022 11:04:29 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 13E6161070;
-        Tue,  9 Aug 2022 18:05:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FC7EC433B5;
-        Tue,  9 Aug 2022 18:05:44 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BD17B6113A;
+        Tue,  9 Aug 2022 18:04:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3948EC4347C;
+        Tue,  9 Aug 2022 18:04:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660068344;
-        bh=tgQRxVvf3DgTp6QivUr5kqVoMh/0T6Ohp9Fs32BqAng=;
+        s=korg; t=1660068269;
+        bh=VHvmkThlg35jBCPjoeRwMSnizj75A86It0QZQylbq2k=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VOQM/TDPT+hqGDpcHPKxE19nWMI5BpiGLBSy9TYIYtCKG3tOrBH+pb8gM+uzDLgcy
-         6bjI7H89uvUXL+U+1XPWlgk5s25oD3E6JJCK31qhiQnuCiYufJsWZb77c2gne0jMM2
-         d0rFtKQV4qSLBHQEyrBQbXTDvsg5tZMZt9LQFjEY=
+        b=vVTiaCVKGM9M3CJ6Mkp61Y7ZHR9lAtT3CcdpSlnX/OkN4C5p/6kOxKzYc/6rmwHeb
+         UbdLOV11Iu1hHjWDYJw1x/2fi1foQAZCNCo8AhDXZvnR7YiaFzmIrfe+4V5PBME8wz
+         RHbgMmuwQtBKjVAaDzY2S6y1M3nzqABOO02kYSxQ=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Werner Sembach <wse@tuxedocomputers.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH 5.15 06/30] ACPI: video: Force backlight native for some TongFang devices
-Date:   Tue,  9 Aug 2022 20:00:31 +0200
-Message-Id: <20220809175514.514352256@linuxfoundation.org>
+        stable@vger.kernel.org, Hakan Jansson <hakan.jansson@infineon.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
+Subject: [PATCH 5.10 14/23] Bluetooth: hci_bcm: Add DT compatible for CYW55572
+Date:   Tue,  9 Aug 2022 20:00:32 +0200
+Message-Id: <20220809175513.367997567@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220809175514.276643253@linuxfoundation.org>
-References: <20220809175514.276643253@linuxfoundation.org>
+In-Reply-To: <20220809175512.853274191@linuxfoundation.org>
+References: <20220809175512.853274191@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,90 +55,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Werner Sembach <wse@tuxedocomputers.com>
+From: Hakan Jansson <hakan.jansson@infineon.com>
 
-commit c752089f7cf5b5800c6ace4cdd1a8351ee78a598 upstream.
+commit f8cad62002a7699fd05a23b558b980b5a77defe0 upstream.
 
-The TongFang PF5PU1G, PF4NU1F, PF5NU1G, and PF5LUXG/TUXEDO BA15 Gen10,
-Pulse 14/15 Gen1, and Pulse 15 Gen2 have the same problem as the Clevo
-NL5xRU and NL5xNU/TUXEDO Aura 15 Gen1 and Gen2:
-They have a working native and video interface. However the default
-detection mechanism first registers the video interface before
-unregistering it again and switching to the native interface during boot.
-This results in a dangling SBIOS request for backlight change for some
-reason, causing the backlight to switch to ~2% once per boot on the first
-power cord connect or disconnect event. Setting the native interface
-explicitly circumvents this buggy behaviour by avoiding the unregistering
-process.
+CYW55572 is a Wi-Fi + Bluetooth combo device from Infineon.
 
-Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
-Cc: All applicable <stable@vger.kernel.org>
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Signed-off-by: Hakan Jansson <hakan.jansson@infineon.com>
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Luiz Augusto von Dentz <luiz.von.dentz@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/acpi/video_detect.c |   51 +++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 50 insertions(+), 1 deletion(-)
+ drivers/bluetooth/hci_bcm.c |    1 +
+ 1 file changed, 1 insertion(+)
 
---- a/drivers/acpi/video_detect.c
-+++ b/drivers/acpi/video_detect.c
-@@ -484,7 +484,56 @@ static const struct dmi_system_id video_
- 		DMI_MATCH(DMI_BOARD_NAME, "NL5xNU"),
- 		},
- 	},
--
-+	/*
-+	 * The TongFang PF5PU1G, PF4NU1F, PF5NU1G, and PF5LUXG/TUXEDO BA15 Gen10,
-+	 * Pulse 14/15 Gen1, and Pulse 15 Gen2 have the same problem as the Clevo
-+	 * NL5xRU and NL5xNU/TUXEDO Aura 15 Gen1 and Gen2. See the description
-+	 * above.
-+	 */
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "TongFang PF5PU1G",
-+	.matches = {
-+		DMI_MATCH(DMI_BOARD_NAME, "PF5PU1G"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "TongFang PF4NU1F",
-+	.matches = {
-+		DMI_MATCH(DMI_BOARD_NAME, "PF4NU1F"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "TongFang PF4NU1F",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
-+		DMI_MATCH(DMI_BOARD_NAME, "PULSE1401"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "TongFang PF5NU1G",
-+	.matches = {
-+		DMI_MATCH(DMI_BOARD_NAME, "PF5NU1G"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "TongFang PF5NU1G",
-+	.matches = {
-+		DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
-+		DMI_MATCH(DMI_BOARD_NAME, "PULSE1501"),
-+		},
-+	},
-+	{
-+	.callback = video_detect_force_native,
-+	.ident = "TongFang PF5LUXG",
-+	.matches = {
-+		DMI_MATCH(DMI_BOARD_NAME, "PF5LUXG"),
-+		},
-+	},
- 	/*
- 	 * Desktops which falsely report a backlight and which our heuristics
- 	 * for this do not catch.
+--- a/drivers/bluetooth/hci_bcm.c
++++ b/drivers/bluetooth/hci_bcm.c
+@@ -1492,6 +1492,7 @@ static const struct of_device_id bcm_blu
+ 	{ .compatible = "brcm,bcm4349-bt", .data = &bcm43438_device_data },
+ 	{ .compatible = "brcm,bcm43540-bt", .data = &bcm4354_device_data },
+ 	{ .compatible = "brcm,bcm4335a0" },
++	{ .compatible = "infineon,cyw55572-bt" },
+ 	{ },
+ };
+ MODULE_DEVICE_TABLE(of, bcm_bluetooth_of_match);
 
 

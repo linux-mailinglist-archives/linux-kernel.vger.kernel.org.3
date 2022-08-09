@@ -2,70 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6F8858D9FF
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 15:58:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2197D58DA05
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 16:01:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244703AbiHIN6j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 09:58:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36138 "EHLO
+        id S244709AbiHIOBU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 10:01:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230380AbiHIN6e (ORCPT
+        with ESMTP id S230380AbiHIOBT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 09:58:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 72A3DBD7
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 06:58:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660053512;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:to:
-         cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=+iBX2CUEKV5L8oNC+j4le4zVCb3jpztFMMY/uHRCYck=;
-        b=eO3T1nIJWJywdOPVobAFElXTEH3pc+bOQB2KDw0gJN9RTgKvQKhoa7e5L7T80J/MzE8wA4
-        +P5BfB4YuAf+rf1BIu74H8AIf1oUra78eAPOpS3UdSQwz7vghyePG8J+cCK5tM2hLv6Y6l
-        3NWPfzicIvrZ7n9yGQ70z93amw/Q8RQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-45-l1jlXfT-M9eGcztM8uR2LQ-1; Tue, 09 Aug 2022 09:58:28 -0400
-X-MC-Unique: l1jlXfT-M9eGcztM8uR2LQ-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 9 Aug 2022 10:01:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4838F271A;
+        Tue,  9 Aug 2022 07:01:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 417818039A6;
-        Tue,  9 Aug 2022 13:58:28 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.14])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 7CB95492C3B;
-        Tue,  9 Aug 2022 13:58:27 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <431242.1660051645@warthog.procyon.org.uk>
-References: <431242.1660051645@warthog.procyon.org.uk>
-Cc:     dhowells@redhat.com, torvalds@linux-foundation.org,
-        jlayton@kernel.org, linux-cachefs@redhat.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [GIT PULL] fscache: Invalidation fix and new tracepoint
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9602DB8111F;
+        Tue,  9 Aug 2022 14:01:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D94DC433C1;
+        Tue,  9 Aug 2022 14:01:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660053672;
+        bh=u+a4xxI8QuroONub9HjlQCWDta7sG4zKmZv7pm4e4YQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BqCEXUMORsYoPmP0TX81BzFZY+JxVRuIDNIJDwJyMmP1ljzVK0zj3ajutrpW6JxP3
+         v9AcpNw3Jd+XSv3AcYY5JxJ3WjdLf8tylmnTHCMzBAJmuoWWNQ1wSz4uh8G+BcR7H7
+         qzp31MJLYX9n2DH5YKN3sMJDHK9WTvgZSceadpRZwuCsxLYct7IQX4R9GIMTt4h0iz
+         2Cmm0vkMz+q23/7NHrWRw9dtTkAY+pHpPQr/5h78SGZFNOdRetRdf5bA8m0gL5czd6
+         layPBfn/2nP/+JtU/3GNMs7icW9SY8QkXZO3IbCrXv5UdOOGZF0uXBSw38UVPIjojv
+         Kzn2k3i4UllqA==
+Date:   Tue, 9 Aug 2022 10:01:10 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Will Deacon <will@kernel.org>, catalin.marinas@arm.com,
+        bp@suse.de, Jason@zx2c4.com, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH AUTOSEL 5.19 05/58] arm64: kernel: drop unnecessary PoC
+ cache clean+invalidate
+Message-ID: <YvJopiTwMaahZGIy@sashalap>
+References: <20220808013118.313965-1-sashal@kernel.org>
+ <20220808013118.313965-5-sashal@kernel.org>
+ <CAMj1kXGaOeDtFKCXwKo5Dt9DJneyS5fjnmoZZBmYeDZfYG6GiA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <433855.1660053506.1@warthog.procyon.org.uk>
-Date:   Tue, 09 Aug 2022 14:58:26 +0100
-Message-ID: <433856.1660053506@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <CAMj1kXGaOeDtFKCXwKo5Dt9DJneyS5fjnmoZZBmYeDZfYG6GiA@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bah...  I forgot to set the subject line.
+On Mon, Aug 08, 2022 at 11:05:29AM +0200, Ard Biesheuvel wrote:
+>On Mon, 8 Aug 2022 at 03:31, Sasha Levin <sashal@kernel.org> wrote:
+>>
+>> From: Ard Biesheuvel <ardb@kernel.org>
+>>
+>> [ Upstream commit 2e945851e26836c0f2d34be3763ddf55870e49fe ]
+>>
+>> Some early boot code runs before the virtual placement of the kernel is
+>> finalized, and we used to go back to the very start and recreate the ID
+>> map along with the page tables describing the virtual kernel mapping,
+>> and this involved setting some global variables with the caches off.
+>>
+>> In order to ensure that global state created by the KASLR code is not
+>> corrupted by the cache invalidation that occurs in that case, we needed
+>> to clean those global variables to the PoC explicitly.
+>>
+>> This is no longer needed now that the ID map is created only once (and
+>> the associated global variable updates are no longer repeated). So drop
+>> the cache maintenance that is no longer necessary.
+>>
+>> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+>> Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
+>> Link: https://lore.kernel.org/r/20220624150651.1358849-9-ardb@kernel.org
+>> Signed-off-by: Will Deacon <will@kernel.org>
+>> Signed-off-by: Sasha Levin <sashal@kernel.org>
+>
+>NAK
+>
+>This patch *must* *not* be backported. It will break the boot.
 
-David
+Appologies for this one, this was a technical issue on my end and I owe
+a beer for yourself and few other folks that should have been filtered
+out.
 
+I'll drop all your patches from the AUTOSEL queue.
+
+-- 
+Thanks,
+Sasha

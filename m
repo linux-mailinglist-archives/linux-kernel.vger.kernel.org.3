@@ -2,70 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9670E58DD94
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:00:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E85B458DD95
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:01:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245526AbiHISAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 14:00:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34706 "EHLO
+        id S1344251AbiHISBB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 14:01:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344129AbiHISAV (ORCPT
+        with ESMTP id S1344166AbiHISAf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 14:00:21 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6C826549;
-        Tue,  9 Aug 2022 10:59:59 -0700 (PDT)
-Received: from letrec.thunk.org (c-24-1-67-28.hsd1.il.comcast.net [24.1.67.28])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 279HxVIU026650
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 9 Aug 2022 13:59:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1660067974; bh=BlpAqfIrf60T5Vg7k7izN/j7RQ2zSURc/Kjg71nTSn4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=XuRJsKZHZvmvKXj+ONsAXiDqG9Hxh75O5AyHlvxHL+FCKlnpOGhMqPiiIlCxZK99Z
-         LA/B2uBupuKBJhkjloEBRtGM96diUX2T1Y2qhJXLEPrILbwG9JUeHt8Y6YRFMMSko8
-         u0qtmFjof1upAQl7LG6dRuc2voI6SdjGewBRgwxgytvO+LFcA6vQAGixbgURCQSzcq
-         rrZIX2Ygh4njDC6Yjw3r04Q9unnZBjjDWFvYaru2CbN4laHRfeGfj1o0SJbhpBz2Lu
-         izdJN+k3K4S1ythKzyYaT8VAvQu/NVaCZOdW7Zloqe5cOJWj934WquPVZaRddLqOQf
-         d6d8HOCakVazA==
-Received: by letrec.thunk.org (Postfix, from userid 15806)
-        id D51E78C2DF2; Tue,  9 Aug 2022 13:59:30 -0400 (EDT)
-Date:   Tue, 9 Aug 2022 13:59:30 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>, linux-doc@vger.kernel.org,
-        stable@kernel.org, Andreas Dilger <adilger.kernel@dilger.ca>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Wang Jianjian <wangjianjian3@huawei.com>,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5.19] Documentation: ext4: fix cell spacing of table
- heading on blockmap table
-Message-ID: <YvKggkBKw/jUb+SP@mit.edu>
-References: <20220809080827.108363-1-bagasdotme@gmail.com>
- <YvJ3JPFQfzbhph89@magnolia>
+        Tue, 9 Aug 2022 14:00:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7B0A26579
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 11:00:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660068008;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=AfxVZADNWEfFzXttPFva+96zrEVI5cpqVt6HGbyuOxU=;
+        b=LBaRH6pForMmmAdW0Rq49ynui/h++Es6JJKIVdfi3Nv3BJrepPL48g82GSIMuaVWnVznqd
+        ewu07Kb9dmq9ifh2zHrfFm26kzaGaGkqJaJXSDRqRpyQmmdP+2MAlmucQhFK3Q34I4ZkBS
+        aPj8t+0btprXEXywYB0ToawnjxxAR/M=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-463-XVfCQf9WPzqnMT-QHTKHjA-1; Tue, 09 Aug 2022 13:59:52 -0400
+X-MC-Unique: XVfCQf9WPzqnMT-QHTKHjA-1
+Received: by mail-qt1-f198.google.com with SMTP id a8-20020a05622a064800b00342240a9fccso9502227qtb.18
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 10:59:51 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=AfxVZADNWEfFzXttPFva+96zrEVI5cpqVt6HGbyuOxU=;
+        b=Mo4dTf0SbrlzfBcn7wJU3aA1EqCUAV4y9nQ0aHcev//7+7bDkwB77M/VTLyT/xrSK9
+         CNwWElg9D3uya+MJ42AXg76mEqCQW4gRVmgb2ofSbC5BS0vDa/EnkqX40ziw9PQ6PT80
+         fC2UpzN5PwwaXHBK41rv5ien1QS+JvRvrU+IEO3Q5WVHTnaLyc2Koz63fipXbt2g2yg4
+         Pg4zXCTDkyRabYQoGtf/03yndZPxWQ8cgZuVT4HX85veiRXSWS0pwS1m9Remy4RTLcyH
+         +6LzaxvW//6EhxadxRp3Jtv/VxhMy6PqCkLxKwrbvnX77qBtueCm1ekQ01Vs1tYA0LGz
+         yIuQ==
+X-Gm-Message-State: ACgBeo2A+qdBu/WWM4X0NHvn5/95M/J1x246+lR8hjpsY29etl+WvyzT
+        hG3SSKPoAKZIEuRbwOntdm1CiQT6HWOQrUMfqXJYOX0IsNa2V/mx5vxZyamX/jC4mr7g0XXGMlM
+        YAy7exmIekOvbO29YFoT5sDOK
+X-Received: by 2002:a05:620a:244f:b0:6b9:1f0b:7f37 with SMTP id h15-20020a05620a244f00b006b91f0b7f37mr13570488qkn.174.1660067990809;
+        Tue, 09 Aug 2022 10:59:50 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7LwD134opYI7m4cSVZp75ssZ8YAyGKFdgxTK2aDmMMrRhnIQSaR9RNq/3fS5K5eZbh8MiPpw==
+X-Received: by 2002:a05:620a:244f:b0:6b9:1f0b:7f37 with SMTP id h15-20020a05620a244f00b006b91f0b7f37mr13570480qkn.174.1660067990568;
+        Tue, 09 Aug 2022 10:59:50 -0700 (PDT)
+Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
+        by smtp.gmail.com with ESMTPSA id q15-20020ac8450f000000b0034303785596sm2723182qtn.34.2022.08.09.10.59.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Aug 2022 10:59:50 -0700 (PDT)
+Date:   Tue, 9 Aug 2022 13:59:48 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Hugh Dickins <hughd@google.com>,
+        Andi Kleen <andi.kleen@intel.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>
+Subject: Re: [PATCH v2 2/2] mm: Remember young/dirty bit for page migrations
+Message-ID: <YvKglA2LQkYeznZ9@xz-m1.local>
+References: <20220804203952.53665-1-peterx@redhat.com>
+ <20220804203952.53665-3-peterx@redhat.com>
+ <877d3hhksz.fsf@yhuang6-desk2.ccr.corp.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <YvJ3JPFQfzbhph89@magnolia>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <877d3hhksz.fsf@yhuang6-desk2.ccr.corp.intel.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Begas,
+On Tue, Aug 09, 2022 at 04:40:12PM +0800, Huang, Ying wrote:
+> > @@ -2160,6 +2167,12 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
+> >  				entry = pte_wrprotect(entry);
+> >  			if (!young)
+> >  				entry = pte_mkold(entry);
+> > +			if (dirty)
+> > +				/*
+> > +				 * NOTE: this may contains setting soft
+> > +				 * dirty too on some archs like x86.
+> > +				 */
+> 
+> Personally, I prefer to put comments above "if (dirty)".  But you can
+> choose your favorite way unless it violates coding style.
 
-You sent me a patch to address this and it's fixed upstream, landing
-in Linus's tree after 5.19 release during the current merge window.
-It's cc'ed to stable@kernel.org, so it's not necessary for you to send
-it to stable@ as a separate patch.
+Sure.
 
-This upstream commit is 442ec1e5bb7c ("Documentation: ext4: fix cell
-spacing of table heading on blockmap table").
+> 
+> > +				entry = pte_mkdirty(entry);
+> 
+> We don't track dirty flag even for normal PTE before.  So I think we
+> should separate the dirty flag tracking for normal PTE in a separate
+> patch.
 
-					- Ted
+It's kinda convenient to touch that up, but for sure I can split that into
+a tiny but separate patch too.
+
+[...]
+
+> I don't find pte_dirty() is synced to PageDirty() as in
+> try_to_migrate_one().  Is it a issue in the original code?
+
+I think it has?  There is:
+
+		/* Set the dirty flag on the folio now the pte is gone. */
+		if (pte_dirty(pteval))
+			folio_mark_dirty(folio);
+
+?
+
+Thanks,
+
+-- 
+Peter Xu
+

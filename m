@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89ABF58DE78
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:18:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20DBC58DED1
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:24:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343805AbiHISSx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 14:18:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40628 "EHLO
+        id S1343991AbiHISYS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 14:24:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345994AbiHISPz (ORCPT
+        with ESMTP id S1347248AbiHISWG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 14:15:55 -0400
+        Tue, 9 Aug 2022 14:22:06 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09B72CCBA;
-        Tue,  9 Aug 2022 11:05:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49BE13190F;
+        Tue,  9 Aug 2022 11:08:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E2106B817B1;
-        Tue,  9 Aug 2022 18:05:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AC1AC433C1;
-        Tue,  9 Aug 2022 18:05:47 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 16BFCB8198C;
+        Tue,  9 Aug 2022 18:07:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34567C43470;
+        Tue,  9 Aug 2022 18:07:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660068347;
-        bh=BoVv/aVBVvIsOinTiS6R4bKZ6njXwZWFdpMy9zaAtxI=;
+        s=korg; t=1660068437;
+        bh=Du+LfgidnyUZQYmLnNKvCIdplUELRrxtwIDyhwydf1w=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=V2e9797yMNN72OG3khgw0SYLn0JThtDpTe85LGWoaAFMxpwNx7NjGoD9aFZBOUJH3
-         iNJ8q6TNuSchqCZ2EqzlSrNfBUDUvomWCBSQXH9csPRRS+l/QqxNA9fZxUOOo965fa
-         P5O7pBY6FTL8e4Fp2904LOOjtxn+JLzAy8c2XSMY=
+        b=zur7zKxtD12ZouyIjmHgS6iqi7LqByyMG7O9tQ1HSLE8j+t7KnrLPM4MgodQjLWdK
+         +fJPbP7MFjCzl2U0U0sEalqEib7W/hwFeq58F/aIKHcMTxCm7NXpC7vNya1+71x8HN
+         2WrdlYway/M+/TFnMdfs7HpCANYyCJI3kwHP5GiE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Aaron Ma <aaron.ma@canonical.com>,
-        Marcel Holtmann <marcel@holtmann.org>
-Subject: [PATCH 5.15 22/30] Bluetooth: btusb: Add support of IMC Networks PID 0x3568
-Date:   Tue,  9 Aug 2022 20:00:47 +0200
-Message-Id: <20220809175515.115982262@linuxfoundation.org>
+        stable@vger.kernel.org, Peter Collingbourne <pcc@google.com>,
+        Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Subject: [PATCH 5.18 19/35] arm64: set UXN on swapper page tables
+Date:   Tue,  9 Aug 2022 20:00:48 +0200
+Message-Id: <20220809175515.739951080@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220809175514.276643253@linuxfoundation.org>
-References: <20220809175514.276643253@linuxfoundation.org>
+In-Reply-To: <20220809175515.046484486@linuxfoundation.org>
+References: <20220809175515.046484486@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,48 +56,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Aaron Ma <aaron.ma@canonical.com>
+From: Peter Collingbourne <pcc@google.com>
 
-commit c69ecb0ea4c96b8b191cbaa0b420222a37867655 upstream.
+[ This issue was fixed upstream by accident in c3cee924bd85 ("arm64:
+  head: cover entire kernel image in initial ID map") as part of a
+  large refactoring of the arm64 boot flow. This simple fix is therefore
+  preferred for -stable backporting ]
 
-It is 13d3:3568 for MediaTek MT7922 USB Bluetooth chip.
+On a system that implements FEAT_EPAN, read/write access to the idmap
+is denied because UXN is not set on the swapper PTEs. As a result,
+idmap_kpti_install_ng_mappings panics the kernel when accessing
+__idmap_kpti_flag. Fix it by setting UXN on these PTEs.
 
-T:  Bus=03 Lev=01 Prnt=01 Port=02 Cnt=01 Dev#=  2 Spd=480 MxCh= 0
-D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=13d3 ProdID=3568 Rev=01.00
-S:  Manufacturer=MediaTek Inc.
-S:  Product=Wireless_Device
-S:  SerialNumber=...
-C:  #Ifs= 3 Cfg#= 1 Atr=e0 MxPwr=100mA
-I:  If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=125us
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:  If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=03(O) Atr=01(Isoc) MxPS=   0 Ivl=1ms
-E:  Ad=83(I) Atr=01(Isoc) MxPS=   0 Ivl=1ms
-I:  If#= 2 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=(none)
-E:  Ad=0a(O) Atr=03(Int.) MxPS=  64 Ivl=125us
-E:  Ad=8a(I) Atr=03(Int.) MxPS=  64 Ivl=125us
-
-Signed-off-by: Aaron Ma <aaron.ma@canonical.com>
-Signed-off-by: Marcel Holtmann <marcel@holtmann.org>
+Fixes: 18107f8a2df6 ("arm64: Support execute-only permissions with Enhanced PAN")
+Cc: <stable@vger.kernel.org> # 5.15
+Link: https://linux-review.googlesource.com/id/Ic452fa4b4f74753e54f71e61027e7222a0fae1b1
+Signed-off-by: Peter Collingbourne <pcc@google.com>
+Acked-by: Will Deacon <will@kernel.org>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Link: https://lore.kernel.org/r/20220719234909.1398992-1-pcc@google.com
+Signed-off-by: Will Deacon <will@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/bluetooth/btusb.c |    3 +++
- 1 file changed, 3 insertions(+)
+ arch/arm64/include/asm/kernel-pgtable.h |    4 ++--
+ arch/arm64/kernel/head.S                |    2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
---- a/drivers/bluetooth/btusb.c
-+++ b/drivers/bluetooth/btusb.c
-@@ -459,6 +459,9 @@ static const struct usb_device_id blackl
- 	{ USB_DEVICE(0x0489, 0xe0d9), .driver_info = BTUSB_MEDIATEK |
- 						     BTUSB_WIDEBAND_SPEECH |
- 						     BTUSB_VALID_LE_STATES },
-+	{ USB_DEVICE(0x13d3, 0x3568), .driver_info = BTUSB_MEDIATEK |
-+						     BTUSB_WIDEBAND_SPEECH |
-+						     BTUSB_VALID_LE_STATES },
+--- a/arch/arm64/include/asm/kernel-pgtable.h
++++ b/arch/arm64/include/asm/kernel-pgtable.h
+@@ -103,8 +103,8 @@
+ /*
+  * Initial memory map attributes.
+  */
+-#define SWAPPER_PTE_FLAGS	(PTE_TYPE_PAGE | PTE_AF | PTE_SHARED)
+-#define SWAPPER_PMD_FLAGS	(PMD_TYPE_SECT | PMD_SECT_AF | PMD_SECT_S)
++#define SWAPPER_PTE_FLAGS	(PTE_TYPE_PAGE | PTE_AF | PTE_SHARED | PTE_UXN)
++#define SWAPPER_PMD_FLAGS	(PMD_TYPE_SECT | PMD_SECT_AF | PMD_SECT_S | PMD_SECT_UXN)
  
- 	/* Additional Realtek 8723AE Bluetooth devices */
- 	{ USB_DEVICE(0x0930, 0x021d), .driver_info = BTUSB_REALTEK },
+ #if ARM64_KERNEL_USES_PMD_MAPS
+ #define SWAPPER_MM_MMUFLAGS	(PMD_ATTRINDX(MT_NORMAL) | SWAPPER_PMD_FLAGS)
+--- a/arch/arm64/kernel/head.S
++++ b/arch/arm64/kernel/head.S
+@@ -285,7 +285,7 @@ SYM_FUNC_START_LOCAL(__create_page_table
+ 	subs	x1, x1, #64
+ 	b.ne	1b
+ 
+-	mov	x7, SWAPPER_MM_MMUFLAGS
++	mov_q	x7, SWAPPER_MM_MMUFLAGS
+ 
+ 	/*
+ 	 * Create the identity mapping.
 
 

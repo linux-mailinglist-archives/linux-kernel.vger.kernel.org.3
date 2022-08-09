@@ -2,68 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEAF958D795
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 12:50:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7DC158D79E
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 12:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233344AbiHIKt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 06:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56734 "EHLO
+        id S242710AbiHIKum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 06:50:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231802AbiHIKty (ORCPT
+        with ESMTP id S235826AbiHIKuh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 06:49:54 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D06120A3
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 03:49:52 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id bb16so13330458oib.11
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 03:49:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wc4pc4XjzEcCEnj/rsl5k2xYOk9EdSwkRXBZHUsSZMk=;
-        b=cNv9ey+nvgOoNPDu3fYAV530sBBW3pHAx4VkhkoMEqb4HXlxJJhwrYW2fhuoGEabOq
-         GwEcSrUH8Ssfa8En8W/sqL4jkAziGYFUMu3Yw2lI2ohYSQLlk3XHeKcFDHqsmLfTOUT/
-         MH+Xe1J4clCsuVxQnnKV9K1h8Tkqo9fsIuazgNSZWzSg2dgNzDpGt92vAOxeuWDRKwnA
-         wUyMfb0rBy59VQx2S519n5z1HVIA+2+XlJyLAsM69t+G4iqI5j6o+SEM91l9SNcJEBcG
-         6R70Z2EaXlFGVWFJrhsEKuHagQ8lmBHYM7LgfmSictkfHCyM3CGVM67k7qTcgRDM3qEe
-         eP+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:mime-version
-         :content-transfer-encoding;
-        bh=wc4pc4XjzEcCEnj/rsl5k2xYOk9EdSwkRXBZHUsSZMk=;
-        b=DffQGGn/vPm94zu+G9ufj1HFPa0DE4f3px5vUXBldVuvC9jsAMpr48ur4xqXyhltdy
-         KBv74HCEKwzFVAUloDml3MI8xfgRumbHfOmFXxeK5O41D0+AB+9bifAhAgTBKvOCqXqN
-         JNEt/uVuqOuC+yhfoMK9OrgB+zWfoTVvQ6d+ASQb6SkULXzP5aTF7nb6LUE8UKKm4AFY
-         Gm+F59jtJbYurTqs6jtE2hXyIFvkpRoFcvFUN/abkUTAsdoaewG0BPFk/HEZDCaf6FFA
-         QySYeb60BCOlkuWv1rE8TzHIqjtMIkALsGt6bcV3yGcIHq0gb+rpUzga7Cy3UgSF36da
-         +xzg==
-X-Gm-Message-State: ACgBeo0dbU5MhVmOEJ1TE5R/MRKMWmBgMwfkdgTIK49qawYNfLJf8Y9v
-        yX70/YpTOnr3sauab6Nw8KzA1/7WiP/KbwwK
-X-Google-Smtp-Source: AA6agR4PYo3SWTvvtd2qU1lQNNRTyI1XAdbmd19eqOVySGmVsFyA0jsDNS8hDoQ6wKTbK/2nUV0IEA==
-X-Received: by 2002:a17:90b:4b4d:b0:1f5:164f:f7c4 with SMTP id mi13-20020a17090b4b4d00b001f5164ff7c4mr34144617pjb.131.1660042181117;
-        Tue, 09 Aug 2022 03:49:41 -0700 (PDT)
-Received: from C02DV8HUMD6R.bytedance.net ([139.177.225.254])
-        by smtp.gmail.com with ESMTPSA id b11-20020a62a10b000000b0052def2e20dasm10270377pff.167.2022.08.09.03.49.37
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 09 Aug 2022 03:49:40 -0700 (PDT)
-From:   Abel Wu <wuyun.abel@bytedance.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Muchun Song <songmuchun@bytedance.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Abel Wu <wuyun.abel@bytedance.com>
-Subject: [PATCH] mm/mempolicy: fix lock contention on mems_allowed
-Date:   Tue,  9 Aug 2022 18:49:27 +0800
-Message-Id: <20220809104927.44366-1-wuyun.abel@bytedance.com>
-X-Mailer: git-send-email 2.31.1
+        Tue, 9 Aug 2022 06:50:37 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48F555A7;
+        Tue,  9 Aug 2022 03:50:33 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 1171E1C0003; Tue,  9 Aug 2022 12:50:32 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1660042232;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=l+Hf7cwYZmOHCWYW6DFUKgfT6ABZ0nMhFyBlOZTV3ak=;
+        b=eBBbAb588ByY6uJI+nodeBT2GzrlesNObPpp0S/AIkfvEVO0WlKz63YEma66+Nb5XP8D9Q
+        l1RAIlcrlqjPJiNUgSeVyFCuCgLeloPmEXX6xKU9fQd/Xzu1wRcjHG3dqoLcrSE1nYQEoL
+        3Wb9TPgV6l+xR+tBKnK3hVG8Z27H1vA=
+Date:   Tue, 9 Aug 2022 12:50:31 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     "Luke D. Jones" <luke@ljones.dev>
+Cc:     hdegoede@redhat.com, andy.shevchenko@gmail.com,
+        pobrn@protonmail.com, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/6] asus-wmi: Implement TUF laptop keyboard RGB
+ control
+Message-ID: <20220809105031.GA4971@duo.ucw.cz>
+References: <20220809025054.1626339-1-luke@ljones.dev>
+ <20220809025054.1626339-2-luke@ljones.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: multipart/signed; micalg=pgp-sha1;
+        protocol="application/pgp-signature"; boundary="dDRMvlgZJXvWKvBx"
+Content-Disposition: inline
+In-Reply-To: <20220809025054.1626339-2-luke@ljones.dev>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,46 +52,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The mems_allowed field can be modified by other tasks, so it
-isn't safe to access it with alloc_lock unlocked even in the
-current process context.
 
-Fixes: 78b132e9bae9 ("mm/mempolicy: remove or narrow the lock on current")
-Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
----
- mm/mempolicy.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+--dDRMvlgZJXvWKvBx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-index d39b01fd52fe..ae422e44affb 100644
---- a/mm/mempolicy.c
-+++ b/mm/mempolicy.c
-@@ -855,12 +855,14 @@ static long do_set_mempolicy(unsigned short mode, unsigned short flags,
- 		goto out;
- 	}
- 
-+	task_lock(current);
- 	ret = mpol_set_nodemask(new, nodes, scratch);
- 	if (ret) {
-+		task_unlock(current);
- 		mpol_put(new);
- 		goto out;
- 	}
--	task_lock(current);
-+
- 	old = current->mempolicy;
- 	current->mempolicy = new;
- 	if (new && new->mode == MPOL_INTERLEAVE)
-@@ -1295,7 +1297,9 @@ static long do_mbind(unsigned long start, unsigned long len,
- 		NODEMASK_SCRATCH(scratch);
- 		if (scratch) {
- 			mmap_write_lock(mm);
-+			task_lock(current);
- 			err = mpol_set_nodemask(new, nmask, scratch);
-+			task_unlock(current);
- 			if (err)
- 				mmap_write_unlock(mm);
- 		} else
--- 
-2.31.1
+Hi!
 
+> Adds support for TUF laptop RGB control via the multicolor LED API.
+>=20
+> As this is the bas for adjusting only the RGB values, it sets the
+> default mode of the keyboard to static since there is no way to read
+> any existing settings from the device. These defaults overwrite the
+> booted state of the keyboard when the module is loaded.
+
+> +	if (asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_TUF_RGB_MODE)) {
+> +		struct mc_subled *mc_led_info =3D asus->keyboard_rgb_mode.subled_info;
+> +		struct led_classdev_mc *mc_cdev =3D &asus->keyboard_rgb_mode.dev;
+> +		struct device *dev =3D &asus->platform_device->dev;
+> +		u8 led_brightness =3D 255;
+> +
+> +		/*
+> +		 * asus::kbd_backlight still controls a base 3-level backlight and when
+> +		 * it is on 0, the RGB is not visible at all. RGB should be treated as
+> +		 * an additional step.
+> +		 */
+
+Ouch. Lets not do that? If rgb interface is available, hide the 3
+level one, or something.
+
+> +		mc_cdev->led_cdev.name =3D   "asus::multicolour::kbd_backlight";
+
+Make this "rgb:kbd_backlight" or "inputX:rgb:kbd_backligh" and
+document it in Documentation/leds/well-known-leds.txt.
+
+Thanks and best regards,
+										Pavel
+--=20
+People of Russia, stop Putin before his war on Ukraine escalates.
+
+--dDRMvlgZJXvWKvBx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCYvI79wAKCRAw5/Bqldv6
+8sdWAJ4rC+HTcJctMx3yKybeVCUyLk+l9gCfdFRsmnQksDv9b7aEeWafABCmqts=
+=/0qH
+-----END PGP SIGNATURE-----
+
+--dDRMvlgZJXvWKvBx--

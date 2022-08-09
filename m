@@ -2,74 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 883CD58D71D
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 12:06:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD3CD58D71C
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 12:05:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241253AbiHIKF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 06:05:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55626 "EHLO
+        id S241131AbiHIKFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 06:05:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240524AbiHIKFu (ORCPT
+        with ESMTP id S241412AbiHIKFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 06:05:50 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38F7A1EAC9;
-        Tue,  9 Aug 2022 03:05:50 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id h4so1526352qtj.11;
-        Tue, 09 Aug 2022 03:05:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=HpV0EZlE6e2eMaIDjSXTXeDXEgMdjAMNL8wCEK+p54E=;
-        b=mvMw6HWzHYGqJL1YzvSDBuaEdia2JKkV0rDdQ5umIkSddHt3+PpIwToiaGCieH/W2X
-         +NadBjIyiPUd0dEJjmjmEYQIgu/+VARH9C5jOxS0+FvXBVxSquQY5qf921j73td5q/ZS
-         2RqbWhE9XAOSDThaTP6m8jAtmAHJAESdpwO3GYujg0Sg9GkdCF5oLJIz+9Hzy5VIm/g0
-         mDUsNt2epRrD3yJwzBqiMiP1Icu6c+w0fLTq/nNUDRKh8T72nZYtriPQdi7b7o4WrvUp
-         ZpbeOV9l1ul7xbiIoERIiSa8n+8xBiqaAEclpdWWjsiimQ3brrXczqbf+H8Rg5hLO8Qs
-         fmMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=HpV0EZlE6e2eMaIDjSXTXeDXEgMdjAMNL8wCEK+p54E=;
-        b=r5JTgwGeIDL5N5K/EZ+o0vTUKwEmM8hHw/16qg6usehRV+E51r/0+bY3xe1Gur5HTD
-         +3cgL0icutmNBK1tb/DFTegp1p8i6Y+4+CHTMnqY0/uZrAfG8U8krdxdd91MFTG8LkaY
-         JC1SMCdjKgPeohBaL6jhEygCDXD4tAU6nX9bBjMorJSRYR50ToN9uqf+hB6Zt08GCGRa
-         KmRC3XcLP+P8kvg2pvlmqgaCvZXPAWoYhrDOAxBSj+pFc0r5eOJgrz+qfdxz2kGGm4Qe
-         5xaVd+3cJgLxcHNX9SN7qb3+7JF8EVtmSbDk1Pe38XhgL91JRlSxisvgs+2mzRDRRteF
-         FXgw==
-X-Gm-Message-State: ACgBeo2pKTIfOMNJ7t/drKa4omeOgMBmoHtAtqYMr7J0574qmjoUCM4o
-        9CKb/ZHzjtX81sWzLJryY6/1HUVCWQnwbDavDp0=
-X-Google-Smtp-Source: AA6agR4MsNhXIU3cv2AEBAfhtZglFFnZ4N4k6S92h6seiRzhEB7hemu1tcOyGGvXMKc7cToH6wPh2DSMAYzKS5e9t6o=
-X-Received: by 2002:a05:622a:14cf:b0:343:5b6:68ca with SMTP id
- u15-20020a05622a14cf00b0034305b668camr2654179qtx.195.1660039549237; Tue, 09
- Aug 2022 03:05:49 -0700 (PDT)
+        Tue, 9 Aug 2022 06:05:46 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8266B1EACC
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 03:05:45 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0D63523A;
+        Tue,  9 Aug 2022 03:05:46 -0700 (PDT)
+Received: from [10.57.74.141] (unknown [10.57.74.141])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 164653F67D;
+        Tue,  9 Aug 2022 03:05:43 -0700 (PDT)
+Message-ID: <f2ccc321-c892-0e35-3760-1d0ed5b5dbf3@arm.com>
+Date:   Tue, 9 Aug 2022 11:05:39 +0100
 MIME-Version: 1.0
-References: <20220803131132.19630-1-ddrokosov@sberdevices.ru>
- <20220803131132.19630-3-ddrokosov@sberdevices.ru> <CAHp75VcVuC6yVoB1kycCOfqMa=JfCtbe3WYSK5qndtYcJy3vpg@mail.gmail.com>
- <20220803191621.tzrmndkygfe7nlpx@CAB-WSD-L081021.sigma.sbrf.ru>
- <20220806155523.37c3e587@jic23-huawei> <20220809095251.vpp6arac3pkntdlo@CAB-WSD-L081021.sigma.sbrf.ru>
-In-Reply-To: <20220809095251.vpp6arac3pkntdlo@CAB-WSD-L081021.sigma.sbrf.ru>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 9 Aug 2022 12:05:12 +0200
-Message-ID: <CAHp75Vc9LGX-=Y2smOrKuAgSRrhA0AgGuBE-0=_-q78FpSB6ag@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] iio: add MEMSensing MSA311 3-axis accelerometer driver
-To:     Dmitry Rokosov <DDRokosov@sberdevices.ru>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "stano.jakubek@gmail.com" <stano.jakubek@gmail.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "stephan@gerhold.net" <stephan@gerhold.net>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 1/1] perf/arm-cmn: Add more bits to child node address
+ offset field
+Content-Language: en-GB
+To:     Ilkka Koskinen <ilkka@os.amperecomputing.com>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        patches@amperecomputing.com
+References: <20220808195455.79277-1-ilkka@os.amperecomputing.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20220808195455.79277-1-ilkka@os.amperecomputing.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,35 +48,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 9, 2022 at 11:52 AM Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
-> On Sat, Aug 06, 2022 at 03:55:23PM +0100, Jonathan Cameron wrote:
-> > > > > +       indio_dev->modes = 0; /* setup buffered mode later */
-> > > >
-> > > > Why explicit assignment to 0? Doesn't kzalloc() do it for you?
-> > >
-> > > kzalloc() will do it for me, of course. Previously, I initialized modes to
-> > > INDIO_DIRECT_MODE to just provide default value for that. Jonathan
-> > > suggested to replace it with 0.
-> >
-> > I did?  I wonder what I was smoking that day.
-> > Should be set to INDIO_DIRECT_MODE as you had it previously.
-> >
-> > (From what I recall it will work either way but we have in the past had
-> > core code that checked this and may do again in the future so drivers should
-> > still be setting it to specify they provide sysfs interfaces to directly read
-> > the channels).
->
-> Jonathan, really sorry I referred to you. I'm confused. This comment was
-> from Andy in the v3 discussion:
->
-> https://lore.kernel.org/linux-iio/CAHp75Vc0+ckNnm2tzLMPrjeFRjwoj3zy0C4koNShFRG3kP8b6w@mail.gmail.com/
+On 2022-08-08 20:54, Ilkka Koskinen wrote:
+> CMN-600 uses bits [27:0] for child node address offset while bits [30:28]
+> are required to be zero.
+> 
+> For CMN-650, the child node address offset field has been increased
+> to include bits [29:0] while leaving only bit 30 set to zero.
+> 
+> Let's include the missing two bits and assume older implementations
+> comply with the spec and set bits [29:28] to 0.
 
-Indeed. I was confused by the comment. My understanding at that time
-was that the triggered mode is inevitable and hence assigning to
-something which _will_ be reassigned later makes a little sense. So,
-does it mean that triggered mode is optional and might not be set? In
-such a case the comment is misleading.
+Ah, I don't think it ever even crossed my mind to look for changes here, 
+but of course if the node regions have grown from 16KB to 64KB then it's 
+only natural that offsets grow to match. I expect the CMN-700 config 
+that we tested on internally would have been small enough for this not 
+to make a difference. Thanks for the catch!
 
--- 
-With Best Regards,
-Andy Shevchenko
+Reviewed-by: Robin Murphy <robin.murphy@arm.com>
+
+> Signed-off-by: Ilkka Koskinen <ilkka@os.amperecomputing.com>
+> ---
+> 
+> I have tested this patch on CMN-600 and CMN-650.
+> 
+> drivers/perf/arm-cmn.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/perf/arm-cmn.c b/drivers/perf/arm-cmn.c
+> index 80d8309652a4..b80a9b74662b 100644
+> --- a/drivers/perf/arm-cmn.c
+> +++ b/drivers/perf/arm-cmn.c
+> @@ -36,7 +36,7 @@
+>   #define CMN_CI_CHILD_COUNT		GENMASK_ULL(15, 0)
+>   #define CMN_CI_CHILD_PTR_OFFSET		GENMASK_ULL(31, 16)
+>   
+> -#define CMN_CHILD_NODE_ADDR		GENMASK(27, 0)
+> +#define CMN_CHILD_NODE_ADDR		GENMASK(29, 0)
+>   #define CMN_CHILD_NODE_EXTERNAL		BIT(31)
+>   
+>   #define CMN_MAX_DIMENSION		12

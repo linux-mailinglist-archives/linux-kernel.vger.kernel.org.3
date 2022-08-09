@@ -2,115 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A4AF58D884
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 13:58:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA2B258D898
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 14:06:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243055AbiHIL6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 07:58:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43994 "EHLO
+        id S242947AbiHIMG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 08:06:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240188AbiHIL6V (ORCPT
+        with ESMTP id S236541AbiHIMGY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 07:58:21 -0400
-Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4C4BCE24
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 04:58:20 -0700 (PDT)
-Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 279BVgED012666;
-        Tue, 9 Aug 2022 07:58:13 -0400
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3hudyckh6n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 09 Aug 2022 07:58:13 -0400
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 279BwCQP033823
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 9 Aug 2022 07:58:12 -0400
-Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
- ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Tue, 9 Aug 2022 07:58:11 -0400
-Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
- ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Tue, 9 Aug 2022 07:58:11 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
- (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Tue, 9 Aug 2022 07:58:11 -0400
-Received: from amiclaus-VirtualBox.ad.analog.com (AMICLAUS-L02.ad.analog.com [10.48.65.134])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 279Bvw5I024498;
-        Tue, 9 Aug 2022 07:58:04 -0400
-From:   Antoniu Miclaus <antoniu.miclaus@analog.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     <jic23@kernel.org>, <nuno.sa@analog.com>,
-        <cosmin.tanislav@analog.com>,
-        Antoniu Miclaus <antoniu.miclaus@analog.com>
-Subject: [PATCH] MAINTAINERS: fix Analog Devices forum links
-Date:   Tue, 9 Aug 2022 14:57:47 +0300
-Message-ID: <20220809115747.11303-1-antoniu.miclaus@analog.com>
-X-Mailer: git-send-email 2.37.1
+        Tue, 9 Aug 2022 08:06:24 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF90A13D3C
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 05:06:22 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M2BXs1pVjzjXn6;
+        Tue,  9 Aug 2022 20:03:09 +0800 (CST)
+Received: from huawei.com (10.67.175.78) by dggpemm500022.china.huawei.com
+ (7.185.36.162) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Tue, 9 Aug
+ 2022 20:06:19 +0800
+From:   Zhao Wenhui <zhaowenhui8@huawei.com>
+To:     <mingo@redhat.com>, <peterz@infradead.org>,
+        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
+        <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
+        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
+        <vschneid@redhat.com>, <shanpeic@linux.alibaba.com>,
+        <changhuaixin@linux.alibaba.com>, <tj@kernel.org>,
+        <dtcccc@linux.alibaba.com>, <linux-kernel@vger.kernel.org>
+CC:     <zhaowenhui8@huawei.com>, <zhaogongyi@huawei.com>
+Subject: [PATCH] sched/fair: limit burst to zero when cfs bandwidth is toggled off
+Date:   Tue, 9 Aug 2022 20:03:20 +0800
+Message-ID: <20220809120320.19496-1-zhaowenhui8@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-ORIG-GUID: yaBeWKavo-smfpchArCw2wutbg5WRm4q
-X-Proofpoint-GUID: yaBeWKavo-smfpchArCw2wutbg5WRm4q
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-09_03,2022-08-09_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxlogscore=999
- priorityscore=1501 bulkscore=0 spamscore=0 lowpriorityscore=0
- clxscore=1011 phishscore=0 mlxscore=0 malwarescore=0 impostorscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2206140000 definitions=main-2208090052
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.78]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500022.china.huawei.com (7.185.36.162)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the links to redirect to the correct forum subsection for the latest
-Analog Devices drivers added.
+When the quota value in CFS bandwidth is set to -1, that imples the
+cfs bandwidth is toggled off. So the burst feature is supposed to
+be disable as well.
 
-Signed-off-by: Antoniu Miclaus <antoniu.miclaus@analog.com>
+Currently, when quota is -1, burst will not be check, so that it can be
+set to almost arbitery value. Examples:
+        mkdir /sys/fs/cgroup/cpu/test
+        echo -1 > /sys/fs/cgroup/cpu/test/cpu.cfs_quota_us
+        echo 10000000000000000 > /sys/fs/cgroup/cpu/test/cpu.cfs_burst_us
+
+Moreover, after the burst modified by this way, quota can't be set
+to any value:
+        echo 100000 > cpu.cfs_quota_us
+        -bash: echo: write error: Invalid argument
+
+This patch can ensure the burst value being zero and unalterable,
+when quota is set to -1.
+
+Fixes: f4183717b370 ("sched/fair: Introduce the burstable CFS controller")
+Reported-by: Zhao Gongyi <zhaogongyi@huawei.com>
+Signed-off-by: Zhao Wenhui <zhaowenhui8@huawei.com>
 ---
- MAINTAINERS | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ kernel/sched/core.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index b7221f4143cb..2c440f3d90e3 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -615,7 +615,7 @@ ADXL367 THREE-AXIS DIGITAL ACCELEROMETER DRIVER
- M:	Cosmin Tanislav <cosmin.tanislav@analog.com>
- L:	linux-iio@vger.kernel.org
- S:	Supported
--W:	http://ez.analog.com/community/linux-device-drivers
-+W:	https://ez.analog.com/linux-software-drivers
- F:	Documentation/devicetree/bindings/iio/accel/adi,adxl367.yaml
- F:	drivers/iio/accel/adxl367*
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index ee28253c9ac0..4c1fc01d8c68 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -10584,6 +10584,12 @@ static int tg_set_cfs_bandwidth(struct task_group *tg, u64 period, u64 quota,
+ 				     burst + quota > max_cfs_runtime))
+ 		return -EINVAL;
  
-@@ -1147,7 +1147,7 @@ ANALOG DEVICES INC AD74413R DRIVER
- M:	Cosmin Tanislav <cosmin.tanislav@analog.com>
- L:	linux-iio@vger.kernel.org
- S:	Supported
--W:	http://ez.analog.com/community/linux-device-drivers
-+W:	https://ez.analog.com/linux-software-drivers
- F:	Documentation/devicetree/bindings/iio/addac/adi,ad74413r.yaml
- F:	drivers/iio/addac/ad74413r.c
- F:	include/dt-bindings/iio/addac/adi,ad74413r.h
-@@ -11913,7 +11913,7 @@ LTC2688 IIO DAC DRIVER
- M:	Nuno Sá <nuno.sa@analog.com>
- L:	linux-iio@vger.kernel.org
- S:	Supported
--W:	http://ez.analog.com/community/linux-device-drivers
-+W:	https://ez.analog.com/linux-software-drivers
- F:	Documentation/ABI/testing/sysfs-bus-iio-dac-ltc2688
- F:	Documentation/devicetree/bindings/iio/dac/adi,ltc2688.yaml
- F:	drivers/iio/dac/ltc2688.c
++	/*
++	 * Ensure burst equals to zero when quota is -1.
++	 */
++	if (quota == RUNTIME_INF && burst)
++		return -EINVAL;
++
+ 	/*
+ 	 * Prevent race between setting of cfs_rq->runtime_enabled and
+ 	 * unthrottle_offline_cfs_rqs().
+@@ -10643,8 +10649,10 @@ static int tg_set_cfs_quota(struct task_group *tg, long cfs_quota_us)
+ 
+ 	period = ktime_to_ns(tg->cfs_bandwidth.period);
+ 	burst = tg->cfs_bandwidth.burst;
+-	if (cfs_quota_us < 0)
++	if (cfs_quota_us < 0) {
+ 		quota = RUNTIME_INF;
++		burst = 0;
++	}
+ 	else if ((u64)cfs_quota_us <= U64_MAX / NSEC_PER_USEC)
+ 		quota = (u64)cfs_quota_us * NSEC_PER_USEC;
+ 	else
 -- 
-2.37.1
+2.17.1
 

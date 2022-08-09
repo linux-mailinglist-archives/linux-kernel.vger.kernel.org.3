@@ -2,203 +2,283 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF74258DA94
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 16:53:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76A6558DA98
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 16:56:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244595AbiHIOw4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 10:52:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38842 "EHLO
+        id S244485AbiHIO4E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 10:56:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243692AbiHIOwy (ORCPT
+        with ESMTP id S232389AbiHIOz7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 10:52:54 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A02A710FC5;
-        Tue,  9 Aug 2022 07:52:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
-        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=y3kzhnfq6jlkEV9r/gVCrnAcAmbOkI+xyI8m6i9i3qo=; b=If2m8w/WCNLRgr7RYkyWBWGnmF
-        mdx597Er/YTw+IoKXaWcg37yypdIjz8fXwe0BLkonD2ws4jkV38s9MA3Ng/BdgFfDL8UHG5fito2x
-        5Iy5CaGaux+kixHHFDPnRLserr29lbtv/Lu7Um/jgV5+D4wYmk6C3A2tZ/sPIBCCqBwMOlO70DzmB
-        j7dh3vDKkU5/YkkOqXHQQUvCmf71Pf+YUilnJyz5j9ku8x21xA/1w5Z/Z6ATNXjsCOG2+FbPtyXw6
-        QiFITu09jdK4f65KbAmFJtkTYx5lnYOb/e+QgNwN6n/EGtX6f8IWH/LUBoB7CPv4W1NT4O76JcJ+O
-        2ASSiWQA==;
-Received: from [2001:8b0:10b:1:4a2a:e3ff:fe14:8625] (helo=u3832b3a9db3152.ant.amazon.com)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oLQb9-00FUcM-LG; Tue, 09 Aug 2022 14:52:47 +0000
-Message-ID: <be988b27c3c43222f2c7ec18572abff727c5f355.camel@infradead.org>
-Subject: Re: [PATCH v3 2/2] KVM: x86/xen: Stop Xen timer before changing IRQ
-From:   David Woodhouse <dwmw2@infradead.org>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Coleman Dietsch <dietschc@csp.edu>, kvm@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        skhan@linuxfoundation.org, Pavel Skripkin <paskripkin@gmail.com>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        stable@vger.kernel.org,
-        syzbot+e54f930ed78eb0f85281@syzkaller.appspotmail.com,
-        metikaya <metikaya@amazon.co.uk>
-Date:   Tue, 09 Aug 2022 15:52:46 +0100
-In-Reply-To: <YvJx3Dje4zS/c+H0@google.com>
-References: <20220808190607.323899-2-dietschc@csp.edu>
-         <20220808190607.323899-3-dietschc@csp.edu>
-         <c648744c096588d30771a22efa6d65c31fffd06c.camel@infradead.org>
-         <43e258cc-71ac-bde4-d1f8-9eb9519928d3@redhat.com>
-         <4fc1371b83001b4eed1617c37bec6b9d007e45c2.camel@infradead.org>
-         <YvJqIsQsg+ThMg/C@google.com>
-         <0b5dcab333906f166fcdbc296373cc5e08bec79f.camel@infradead.org>
-         <953d2e99-ed1a-384d-6d3a-0f656a243f82@redhat.com>
-         <YvJx3Dje4zS/c+H0@google.com>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-        boundary="=-q1ARj/9cg3Q0PXJvq1PT"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Tue, 9 Aug 2022 10:55:59 -0400
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8942813DF5
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 07:55:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1660056957; x=1691592957;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=/y03tk8Vi+r4ivUpOIzB1qW/+LcKMkgnnn79oUwijQA=;
+  b=QtbS3kKkh2dAbPysjIzeNA4+RGWi6azojfPPJ7ejgj5M91545ChOS9bp
+   /grPL94DoBHl3E2nq0sGbGID6LLOADsIQIzy5lAVx+Vaw0yWRcpGAuaXA
+   c64lt6liyLrXr4+P9bWiwlafddrVgzKwTvIcrJP82SQeyg29U+iEPQmEE
+   2Q3zQo3Ar3NTl6rlsJ4UTvzxCTforkcZhOiGqEC09eZg87pQGGp7v/O7X
+   0ndyDdxeqVw71PWytfUFbuO96glmmLelre4ag+j806FI/Xuodo+1IsqSe
+   10YpOjKT8uYJD2tCNAI3Nkeeb+DHCSSEwBul8ZX/T4twK07gPEmL5dB+S
+   g==;
+X-IronPort-AV: E=Sophos;i="5.93,224,1654531200"; 
+   d="scan'208";a="206746658"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 09 Aug 2022 22:55:56 +0800
+IronPort-SDR: 2OUhayqqtK/Cz4/xnzcUD0ubAFXOhQzfFvvwwrie6S+davANR2REAZAy4WGyhB3hS806k9ufp/
+ JgvxLBJtWOPFAeeguoqKLSflEZ64OBykOrtf6YA/WscaSxaRUtVENkI/v7JvUWoj+NDTQZZGBl
+ elA3YKlEfnbQsIcA/8rOInyxG9xrazToXYQDC+AMUvRd7uq6AEgb6R7+9wjDzJ94M/GRQi8jyG
+ RcxsoG56LJRu1BRxzyupyhHUd8/OpuWHzhhwSMCWXU18E0TdD1kElMhJnwniAv2l06v+KVGB8W
+ EObvXCB4IJ+bZVnO4np3+zaQ
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 09 Aug 2022 07:11:36 -0700
+IronPort-SDR: k3PinRxT9HQAEpSSoUeDi2FprGWEE2wzULUq2YR97wEosztTO2ERW1u8ldg5gMOzCGP6siJ+nL
+ 4sSrIFlDRwLJF7MElkfKs3q4PLXf2unyghB++xXkvUN1Zro5p1lD6EpY9rSavKTzKPmOcqKvfG
+ bAydt7Nk11mkSf15m4KErDu0cWtfU0aApmyWJSOJQLmmQOA0HOdABQxJgj0p1+0DKmrQKJUgVG
+ 5IluccMGq5JdpExzHZZMBRVDpTUsyElbcTFb+bSdpaIz84zSbOGbkVHqyuPgYlFiWw2BH4qoE+
+ ORA=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 09 Aug 2022 07:55:58 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4M2GND0nJcz1Rw4L
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 07:55:56 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1660056954; x=1662648955; bh=/y03tk8Vi+r4ivUpOIzB1qW/+LcKMkgnnn7
+        9oUwijQA=; b=YNEtop4DprzBm70dwiE9MmTa4GQNcwnbxPG71WIfihcSK1PM3+b
+        TAD4DKNN5x12SFJeUKZuQpYh9X1OSo+OWYqSxhD7oFdIUjlGU13CchNadVF6Pesi
+        vqXjsvbL+dFANoTuNegdW+eLcJ10jPxb9xbod0GJ1W9gtgLUqnqAIgMs8YCaTTMJ
+        pjxH/aRKEbycQXRxr551JPdzF41eSfa6f8pLAsJTZVG0Gq5DhuXolct0pK8Ss9B5
+        SRo8uhFdyQzwrvk9B0cZXtF2ZQI1MawhbVsuk9+HaIXpQjlXLNQH+27yNlJ19ppx
+        eIf7DOMoZ8X0r/H03JNTkjaLFjEtpZIyMPw==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id OEwpR28uqAhI for <linux-kernel@vger.kernel.org>;
+        Tue,  9 Aug 2022 07:55:54 -0700 (PDT)
+Received: from [10.111.68.99] (c02drav6md6t.sdcorp.global.sandisk.com [10.111.68.99])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4M2GN94KBrz1RtVk;
+        Tue,  9 Aug 2022 07:55:53 -0700 (PDT)
+Message-ID: <e4106ffa-3842-45c0-9756-5226cfcfa17d@opensource.wdc.com>
+Date:   Tue, 9 Aug 2022 07:55:53 -0700
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [ata] 0568e61225: stress-ng.copy-file.ops_per_sec -15.0%
+ regression
+Content-Language: en-US
+To:     John Garry <john.garry@huawei.com>,
+        kernel test robot <oliver.sang@intel.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-ide@vger.kernel.org, lkp@lists.01.org, lkp@intel.com,
+        ying.huang@intel.com, feng.tang@intel.com,
+        zhengjun.xing@linux.intel.com, fengwei.yin@intel.com
+References: <YuzPMMnnY739Tnit@xsang-OptiPlex-9020>
+ <1f498d4a-f93f-ceb4-b713-753196e5e08d@opensource.wdc.com>
+ <3451fa5a-6229-073f-ae18-0c232cd48ed5@huawei.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <3451fa5a-6229-073f-ae18-0c232cd48ed5@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/08/09 2:58, John Garry wrote:
+> On 08/08/2022 15:52, Damien Le Moal wrote:
+>> On 2022/08/05 1:05, kernel test robot wrote:
+>>>
+>>>
+>>> Greeting,
+>>>
+>>> FYI, we noticed a -15.0% regression of stress-ng.copy-file.ops_per_se=
+c due to commit:
+>>>
+>>>
+>>> commit: 0568e6122574dcc1aded2979cd0245038efe22b6 ("ata: libata-scsi: =
+cap ata_device->max_sectors according to shost->max_sectors")
+>>> https://git.kernel.org/cgit/linux/kernel/git/next/linux-next.git mast=
+er
+>>>
+>>> in testcase: stress-ng
+>>> on test machine: 96 threads 2 sockets Ice Lake with 256G memory
+>>> with following parameters:
+>>>
+>>> 	nr_threads: 10%
+>>> 	disk: 1HDD
+>>> 	testtime: 60s
+>>> 	fs: f2fs
+>>> 	class: filesystem
+>>> 	test: copy-file
+>>> 	cpufreq_governor: performance
+>>> 	ucode: 0xb000280
+>>
+>> Without knowing what the device adapter is, hard to say where the prob=
+lem is. I
+>> suspect that with the patch applied, we may be ending up with a small =
+default
+>> max_sectors value, causing overhead due to more commands than necessar=
+y.
+>>
+>> Will check what I see with my test rig.
+>=20
+> As far as I can see, this patch should not make a difference unless the=
+=20
+> ATA shost driver is setting the max_sectors value unnecessarily low.
 
---=-q1ARj/9cg3Q0PXJvq1PT
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+That is my hunch too, hence my question about which host driver is being =
+used
+for this test... That is not apparent from the problem report.
 
-On Tue, 2022-08-09 at 14:40 +0000, Sean Christopherson wrote:
-> I wanted to separate the "init" from the "stop+start", e.g. if there were=
- a more
-> appropriate place for invoking kvm_xen_init_timer() I would have suggeste=
-d moving
-> the call outside of KVM_XEN_VCPU_ATTR_TYPE_TIMER entirely.
+>=20
+>>
+>>>
+>>>
+>>>
+>>>
+>>> If you fix the issue, kindly add following tag
+>>> Reported-by: kernel test robot <oliver.sang@intel.com>
+>>>
+>>>
+>>> Details are as below:
+>>> ---------------------------------------------------------------------=
+----------------------------->
+>>>
+>>>
+>>> To reproduce:
+>>>
+>>>          git clone https://github.com/intel/lkp-tests.git
+>>>          cd lkp-tests
+>>>          sudo bin/lkp install job.yaml           # job file is attach=
+ed in this email
+>>>          bin/lkp split-job --compatible job.yaml # generate the yaml =
+file for lkp run
+>>>          sudo bin/lkp run generated-yaml-file
+>>>
+>>>          # if come across any failure that blocks the test,
+>>>          # please remove ~/.lkp and /lkp dir to run from a clean stat=
+e.
+>>>
+>>> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>>> class/compiler/cpufreq_governor/disk/fs/kconfig/nr_threads/rootfs/tbo=
+x_group/test/testcase/testtime/ucode:
+>>>    filesystem/gcc-11/performance/1HDD/f2fs/x86_64-rhel-8.3/10%/debian=
+-11.1-x86_64-20220510.cgz/lkp-icl-2sp1/copy-file/stress-ng/60s/0xb000280
+>>>
+>>> commit:
+>>>    4cbfca5f77 ("scsi: scsi_transport_sas: cap shost opt_sectors accor=
+ding to DMA optimal limit")
+>>>    0568e61225 ("ata: libata-scsi: cap ata_device->max_sectors accordi=
+ng to shost->max_sectors")
+>>>
+>>> 4cbfca5f7750520f 0568e6122574dcc1aded2979cd0
+>>> ---------------- ---------------------------
+>>>           %stddev     %change         %stddev
+>>>               \          |                \
+>>>        1627           -14.9%       1385        stress-ng.copy-file.op=
+s
+>>>       27.01           -15.0%      22.96        stress-ng.copy-file.op=
+s_per_sec
+>>>     8935079           -11.9%    7870629        stress-ng.time.file_sy=
+stem_outputs
+>>>       14.88 =C2=B1  5%     -31.8%      10.14 =C2=B1  3%  stress-ng.ti=
+me.percent_of_cpu_this_job_got
+>>>       50912           -14.7%      43413        vmstat.io.bo
+>>>       93.78            +1.4%      95.10        iostat.cpu.idle
+>>>        3.89           -31.6%       2.66        iostat.cpu.iowait
+>>>        4.01            -1.3        2.74        mpstat.cpu.all.iowait%
+>>>        0.23 =C2=B1  9%      -0.1        0.17 =C2=B1 11%  mpstat.cpu.a=
+ll.sys%
+>>>        1.66 =C2=B1 37%      -1.2        0.51 =C2=B1 55%  perf-profile=
+.calltrace.cycles-pp.f2fs_write_end.generic_perform_write.f2fs_buffered_w=
+rite_iter.f2fs_file_write_iter.do_iter_readv_writev
+>>>        1.66 =C2=B1 37%      -1.1        0.59 =C2=B1 25%  perf-profile=
+.children.cycles-pp.f2fs_write_end
+>>>        1.51 =C2=B1 40%      -1.1        0.45 =C2=B1 26%  perf-profile=
+.children.cycles-pp.f2fs_dirty_data_folio
+>>>        1.21 =C2=B1 49%      -1.0        0.23 =C2=B1 33%  perf-profile=
+.children.cycles-pp.f2fs_update_dirty_folio
+>>>        0.88 =C2=B1 56%      -0.8        0.04 =C2=B1111%  perf-profile=
+.children.cycles-pp.native_queued_spin_lock_slowpath
+>>>        0.14 =C2=B1 26%      +0.1        0.25 =C2=B1 28%  perf-profile=
+.children.cycles-pp.page_cache_ra_unbounded
+>>>        0.88 =C2=B1 56%      -0.8        0.04 =C2=B1112%  perf-profile=
+.self.cycles-pp.native_queued_spin_lock_slowpath
+>>>     3164876 =C2=B1  9%     -20.2%    2524713 =C2=B1  7%  perf-stat.i.=
+cache-misses
+>>>   4.087e+08            -4.6%  3.899e+08        perf-stat.i.dTLB-loads
+>>>      313050 =C2=B1 10%     -18.4%     255410 =C2=B1  6%  perf-stat.i.=
+node-loads
+>>>      972573 =C2=B1  9%     -16.4%     812873 =C2=B1  6%  perf-stat.i.=
+node-stores
+>>>     3114748 =C2=B1  9%     -20.2%    2484807 =C2=B1  7%  perf-stat.ps=
+.cache-misses
+>>>   4.022e+08            -4.6%  3.837e+08        perf-stat.ps.dTLB-load=
+s
+>>>      308178 =C2=B1 10%     -18.4%     251418 =C2=B1  6%  perf-stat.ps=
+.node-loads
+>>>      956996 =C2=B1  9%     -16.4%     799948 =C2=B1  6%  perf-stat.ps=
+.node-stores
+>>>      358486            -8.3%     328694        proc-vmstat.nr_active_=
+file
+>>>     1121620           -11.9%     987816        proc-vmstat.nr_dirtied
+>>>      179906            -6.7%     167912        proc-vmstat.nr_dirty
+>>>     1151201            -1.7%    1131322        proc-vmstat.nr_file_pa=
+ges
+>>>      100181            +9.9%     110078 =C2=B1  2%  proc-vmstat.nr_in=
+active_file
+>>>      846362           -14.6%     722471        proc-vmstat.nr_written
+>>>      358486            -8.3%     328694        proc-vmstat.nr_zone_ac=
+tive_file
+>>>      100181            +9.9%     110078 =C2=B1  2%  proc-vmstat.nr_zo=
+ne_inactive_file
+>>>      180668            -6.8%     168456        proc-vmstat.nr_zone_wr=
+ite_pending
+>>>      556469            -3.5%     536985        proc-vmstat.pgactivate
+>>>     3385454           -14.6%    2889953        proc-vmstat.pgpgout
+>>>
+>>>
+>>>
+>>>
+>>> Disclaimer:
+>>> Results have been estimated based on internal Intel analysis and are =
+provided
+>>> for informational purposes only. Any difference in system hardware or=
+ software
+>>> design or configuration may affect actual performance.
+>>>
+>>>
+>>
+>>
+>=20
 
-Yeah, there's nowhere sensible that would apply to only Xen guests. I
-looked at kvm_xen_init_vcpu() but that's unconditional.
 
-I do note that we're now calling kvm_xen_init_timer() even when an
-*unset* timer is being restored after live update/live migration. But I
-think that's OK.
-
---=-q1ARj/9cg3Q0PXJvq1PT
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
-
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
-ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
-EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
-FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
-aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
-EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
-VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
-aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
-AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
-ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
-QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
-rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
-ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
-U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
-DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
-BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
-dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
-BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
-QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
-CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
-xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
-IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
-kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
-eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
-KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
-1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
-OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
-x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
-5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
-DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
-VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
-UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
-MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
-ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
-oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
-SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
-xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
-RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
-bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
-NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
-KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
-5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
-C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
-gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
-VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
-MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
-by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
-b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
-BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
-QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
-c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
-AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
-qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
-v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
-Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
-tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
-Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
-YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
-ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
-IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
-ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
-GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
-h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
-9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
-P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
-2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
-BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
-7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
-lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
-lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
-AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
-Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
-FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
-BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
-cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
-aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
-LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
-BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
-cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
-Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
-lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
-WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
-hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
-IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
-dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
-NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
-xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMjIwODA5MTQ1MjQ2WjAvBgkqhkiG9w0BCQQxIgQgIo/99SBO
-e5DnYAKQkMlDMMx3McSwiOEDmthIfM8tNsUwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
-BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
-A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
-dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
-DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
-MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
-Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
-lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgACqmP67znUVG4bvnccDTM5hITxTWMwAlzZ
-rAe25Ueb9G0i3oC9Qjg3yzFFVuQKRDpurdQL0h7urvkQqqGZ57NSpUFtL3TY1/MBuh3ZZ0ya9Ipl
-CZGS6vqSoM8C7qjnp+2pg7Av/9QIzChB/Efkw+tfAyfbcNFMnGCs+t1azgKDYLwzZjGz3spf4Ms5
-dyt381xNYSJXVda7PuAIUpI4kyk7PtDy3v93OKyPNT/UvAeINm7S+bA9H7+1hK8hx1ZnTHrdyDUi
-87LDJUdZoNyHtvvwjA1vLFu9KnTi7I1IjaML+eYf3n7+wtj2IemcQMpKJAmCP5fydkIvg43n82fq
-qUjITtk5JQjv0NUitDBHkc+0UpL6ZRGN7l1m1JIsRB4Kyzuck16usibqnS1uF9MhvRzqI0BS6yTD
-K3m1M0h6SWCd0kPYQXZQAGs4MFuFaDqBZ2IR/oHr2YVF2NW1UEeEOvPMWcFcJV2jrUWbN33CPDbc
-UuobEiC8FSYzuA+mqvs9ODPBlweZv5olIHQa9FUAiI/NP92UBgK0mPGoI5YgVptjuAZzfIjSzLVk
-wOq0TzbSYahjTV0g+Ckiylcq1WXT+lz84lhYQmMF9ZTuTAVj/AZ+fLTqzZ72SuD1CHGxaxTVhTgH
-2Pl4JJLh6rXgBPk42LSABmzWG52urFdmZNCS9tq68wAAAAAAAA==
-
-
---=-q1ARj/9cg3Q0PXJvq1PT--
-
+--=20
+Damien Le Moal
+Western Digital Research

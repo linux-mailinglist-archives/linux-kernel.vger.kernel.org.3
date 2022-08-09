@@ -2,123 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93BB358D348
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 07:40:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B36358D34C
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 07:41:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234847AbiHIFkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 01:40:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40880 "EHLO
+        id S234940AbiHIFlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 01:41:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233673AbiHIFk3 (ORCPT
+        with ESMTP id S233673AbiHIFln (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 01:40:29 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8CE32195
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 22:40:28 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id f5-20020a056e020b4500b002df180f0997so8045575ilu.21
-        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 22:40:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=ABAMHtybv8t+r8522rVxoNASvHh59EpYpnl9sqx+2lQ=;
-        b=FFy5DlWEBgJDEdW8r7sdejvX8AqV4TbHDpEhDN0Pd7N1mLastP53yYsAoAfg8ysmNr
-         2SVE2neKfHi4kZyBSHEzF8hP/bC+uBGBATT6nKbTFjwF4VTlf6GtFR23OKt/nI5glRz1
-         OKR5/lvRSPHGuHroUiqWVbaM5Tk2CxMnVSwOQONmtgwJXurhvd/CEOuhMcK4Zh547oV8
-         J9AaaGeF6lsa6/k0FiTKKf5oWdGpvhIosp+2gELSfJDl59S82/tzhwVdoCjEmVkH/lVF
-         d+7L+u7SMESSRYTs5fefk++Y8CIu0F+TMFaStoPDtfb0fNfXh2OSWfBiH2/IeYTm/Wy2
-         GGtA==
-X-Gm-Message-State: ACgBeo3Cp54g9kEK2Kf4nErElB1ZuUMwdKCsRxsyQD/dYT0ZIjErljXc
-        bvtHZxuDtuxSBz08+JSshcBBqEXhTl9d9YHtF9b/hexXRU/p
-X-Google-Smtp-Source: AA6agR5kbqmeoL+lIxIE43HizhcXuvyP5zF6CoEaWLqWbufIZ6GEjecndswPAdubX0Y13UuhrJ1l2Pfxl3cE9ZZZq01bEYF22cL/
+        Tue, 9 Aug 2022 01:41:43 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F21125DB
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 22:41:42 -0700 (PDT)
+Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2794obfn036061;
+        Tue, 9 Aug 2022 05:41:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=WkIbFEOkPmK9UE8789KKdSs/NYWfyLh4YmkPmJENNzk=;
+ b=myF+xfhHDnSqitw7HdwxaCypTL0ZtH/I7zVOcsP+Aihhi7Ba+GDxpNrur1p6nHaXEIVK
+ cSQoJrvQa71IitIdI+vnx150Sn3R/3iCeaFnP4UCUYdehOdLa3EXgxiSJYcW91tggXtP
+ B2z/LexF2wrgBDXrgkx8e/ZZAiDJI88XsFF37BMw462NcjgasnVR59oZJlJNiQ1gzG/R
+ 0ELQsCz31PTeX3jNpuTiZSs5certKz8KJ+gS6tMQCwQNgfEBXS2HHglofBbKC5eYfF+5
+ L0XvMneoDSvzfVF6KyCO0i2z6dYvIk82BrCGHYGs6fSNXd3WUQyNR9gurMydXbt4r9nE 0A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hugwph7kt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 09 Aug 2022 05:41:26 +0000
+Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2794tlRF009940;
+        Tue, 9 Aug 2022 05:41:25 GMT
+Received: from ppma06ams.nl.ibm.com (66.31.33a9.ip4.static.sl-reverse.com [169.51.49.102])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hugwph7k3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 09 Aug 2022 05:41:25 +0000
+Received: from pps.filterd (ppma06ams.nl.ibm.com [127.0.0.1])
+        by ppma06ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2795b8tm029421;
+        Tue, 9 Aug 2022 05:41:23 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma06ams.nl.ibm.com with ESMTP id 3hu4rp8n0a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 09 Aug 2022 05:41:23 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2795fK9j26149144
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 9 Aug 2022 05:41:20 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A1F4CAE04D;
+        Tue,  9 Aug 2022 05:41:20 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D978EAE045;
+        Tue,  9 Aug 2022 05:41:16 +0000 (GMT)
+Received: from [9.109.205.170] (unknown [9.109.205.170])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Tue,  9 Aug 2022 05:41:16 +0000 (GMT)
+Message-ID: <f3590060-3b7b-e576-0742-bd0dae8c760d@linux.ibm.com>
+Date:   Tue, 9 Aug 2022 11:11:15 +0530
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:dcb:b0:342:b6d6:16b6 with SMTP id
- m11-20020a0566380dcb00b00342b6d616b6mr8561261jaj.125.1660023628066; Mon, 08
- Aug 2022 22:40:28 -0700 (PDT)
-Date:   Mon, 08 Aug 2022 22:40:28 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ab752605e5c85e9a@google.com>
-Subject: [syzbot] WARNING in blk_mq_release
-From:   syzbot <syzbot+31c9594f6e43b9289b25@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v13 6/9] mm/demotion: Add pg_data_t member to track node
+ memory tier details
+Content-Language: en-US
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com
+References: <20220808062601.836025-1-aneesh.kumar@linux.ibm.com>
+ <20220808062601.836025-7-aneesh.kumar@linux.ibm.com>
+ <87bksugfex.fsf@yhuang6-desk2.ccr.corp.intel.com>
+From:   Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+In-Reply-To: <87bksugfex.fsf@yhuang6-desk2.ccr.corp.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: uUA-OyQIaDlI8_E4PCctLJX_yhkN7Kca
+X-Proofpoint-GUID: yYCoDjjhtkS2ON-eZC172paZ_oNBD07e
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-08_14,2022-08-09_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 mlxscore=0
+ malwarescore=0 bulkscore=0 mlxlogscore=999 lowpriorityscore=0
+ impostorscore=0 phishscore=0 suspectscore=0 priorityscore=1501 spamscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2206140000 definitions=main-2208090023
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 8/9/22 10:51 AM, Huang, Ying wrote:
+> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
+> 
+>> Also update different helpes to use NODE_DATA()->memtier. Since
+>> node specific memtier can change based on the reassignment of
+>> NUMA node to a different memory tiers, accessing NODE_DATA()->memtier
+>> needs to happen under an rcu read lock or memory_tier_lock.
+>>
+>> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
+>> ---
+>>  include/linux/mmzone.h |  3 +++
+>>  mm/memory-tiers.c      | 38 ++++++++++++++++++++++++++++++++------
+>>  2 files changed, 35 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+>> index aab70355d64f..353812495a70 100644
+>> --- a/include/linux/mmzone.h
+>> +++ b/include/linux/mmzone.h
+>> @@ -928,6 +928,9 @@ typedef struct pglist_data {
+>>  	/* Per-node vmstats */
+>>  	struct per_cpu_nodestat __percpu *per_cpu_nodestats;
+>>  	atomic_long_t		vm_stat[NR_VM_NODE_STAT_ITEMS];
+>> +#ifdef CONFIG_NUMA
+>> +	struct memory_tier __rcu *memtier;
+>> +#endif
+>>  } pg_data_t;
+>>  
+>>  #define node_present_pages(nid)	(NODE_DATA(nid)->node_present_pages)
+>> diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
+>> index 02e514e87d5c..3778ac6a44a1 100644
+>> --- a/mm/memory-tiers.c
+>> +++ b/mm/memory-tiers.c
+>> @@ -5,6 +5,7 @@
+>>  #include <linux/kobject.h>
+>>  #include <linux/memory.h>
+>>  #include <linux/random.h>
+>> +#include <linux/mmzone.h>
+>>  #include <linux/memory-tiers.h>
+>>  
+>>  #include "internal.h"
+>> @@ -137,12 +138,18 @@ static struct memory_tier *find_create_memory_tier(struct memory_dev_type *memty
+>>  
+>>  static struct memory_tier *__node_get_memory_tier(int node)
+>>  {
+>> -	struct memory_dev_type *memtype;
+>> +	pg_data_t *pgdat;
+>>  
+>> -	memtype = node_memory_types[node];
+>> -	if (memtype && node_isset(node, memtype->nodes))
+>> -		return memtype->memtier;
+>> -	return NULL;
+> 
+> After adding pgdat->memtier, it appears there's unnecessary to keep
+> memtype->memtier?
+> 
 
-syzbot found the following issue on:
-
-HEAD commit:    200e340f2196 Merge tag 'pull-work.dcache' of git://git.ker..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1634c29e080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1b664fba5e66c4bf
-dashboard link: https://syzkaller.appspot.com/bug?extid=31c9594f6e43b9289b25
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=131893fe080000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+31c9594f6e43b9289b25@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 3818 at block/blk-mq.c:3881 blk_mq_release+0x115/0x2d0
-Modules linked in:
-CPU: 1 PID: 3818 Comm: syz-executor.0 Not tainted 5.19.0-syzkaller-02972-g200e340f2196 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-RIP: 0010:blk_mq_release+0x115/0x2d0 block/blk-mq.c:3881
-Code: 89 ef 4c 89 e6 48 c7 c2 ff ff ff ff b9 08 00 00 00 e8 ef bd 50 00 48 85 c0 74 13 48 89 c3 e8 12 05 71 fd eb b0 e8 0b 05 71 fd <0f> 0b eb d1 e8 02 05 71 fd eb 05 e8 fb 04 71 fd 48 8b 44 24 10 4c
-RSP: 0018:ffffc90003affbc0 EFLAGS: 00010293
-RAX: ffffffff84171ba5 RBX: ffff888078c482a8 RCX: ffff8880743b8000
-RDX: 0000000000000000 RSI: ffffffff8a8d4160 RDI: ffffffff8ae9a7c0
-RBP: ffffc90003affc90 R08: dffffc0000000000 R09: fffffbfff1c07946
-R10: fffffbfff1c07946 R11: 1ffffffff1c07945 R12: ffffc90003affc20
-R13: ffff888020751718 R14: dffffc0000000000 R15: ffff888020751868
-FS:  00007f0eea256700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f101f96d058 CR3: 000000001df33000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- blk_release_queue+0x13d/0x210 block/blk-sysfs.c:780
- kobject_cleanup+0x235/0x470 lib/kobject.c:673
- __alloc_disk_node+0x359/0x540 block/genhd.c:1388
- __blk_mq_alloc_disk+0x11b/0x1e0 block/blk-mq.c:3961
- loop_add+0x325/0x9b0 drivers/block/loop.c:1978
- loop_control_get_free drivers/block/loop.c:2139 [inline]
- loop_control_ioctl+0x39a/0x770 drivers/block/loop.c:2154
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f0ee9089279
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f0eea256168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f0ee919c050 RCX: 00007f0ee9089279
-RDX: 0000000000000000 RSI: 0000000000004c82 RDI: 0000000000000004
-RBP: 00007f0eea2561d0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000002
-R13: 00007ffe6368d72f R14: 00007f0eea256300 R15: 0000000000022000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+It do simplify find_create_memory_tier() where I use if (memtype->memtier) 
+to check whether the memtype is already added to a memory tier. I could switch
+that to list_empty(memtype->tier_sibiling). But I felt the current one is much
+cleaner
+.
+-aneesh

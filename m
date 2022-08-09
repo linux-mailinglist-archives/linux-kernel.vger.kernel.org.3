@@ -2,105 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E05858E11B
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 22:31:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C2AB58E11D
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 22:31:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245537AbiHIUaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 16:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51866 "EHLO
+        id S236805AbiHIUbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 16:31:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234339AbiHIUaS (ORCPT
+        with ESMTP id S1343850AbiHIUaw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 16:30:18 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D3622C;
-        Tue,  9 Aug 2022 13:30:17 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id d8so5026389qkk.1;
-        Tue, 09 Aug 2022 13:30:17 -0700 (PDT)
+        Tue, 9 Aug 2022 16:30:52 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480BB22C
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 13:30:51 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id k26so24240876ejx.5
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 13:30:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=VABtMJN7tisUIXWgC/PrkMNOK/rCOhhAphpCFIG94Cs=;
-        b=EmPL3Vo0aKY1TK0UBdgSf7hyYfbmUg+UasqeVtvbmaJGrt2TzYVvTq+YqCpUF+PuKy
-         3rXxeP2TpHcS+GECuPW0j156eTgCLcjcVIPQEux4fOwvRcaInPAVrv3x/XHl4oMqLXwN
-         Ah6muH43XcPcNqgK1Qv/mwhdZDw9DOvCVrW+NVPP6sd4fhm8fjqzJoT0g3bM72Lqs9tk
-         XLh28r7WStf/KcXWL7DHa5YVIEELMFaGlhiyDRf6CO1Es0uNrXU3oqfvaJhgDLu5rGnE
-         UD+ZY64p5DhAbxHTvz2C1G7wH06lbB2HizgNY/dmBvSbjUSfKuV+VGBcQp1WX9UXfikF
-         Imtw==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=SGeHWpS8KXCNe1fs123Ae1bZ4jHY7XPArBiSK195qHo=;
+        b=diZ72ruOeFCCt/uKAyC4hFEGjST0bkVVYN2Yxf3d0zX/HotIMYgB0uLJgA4xp6aHl1
+         b/YZNcRaInm3BeLB5q6B+tIq7+Cr7Jg7X2XQ5MJ95vhSXGcwq90tjIn+warmeDgCniS1
+         CMV4iqB9gpLMcU5qcvguZuHFhANUGStypzYYQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=VABtMJN7tisUIXWgC/PrkMNOK/rCOhhAphpCFIG94Cs=;
-        b=F44CC0nM2cNIR8nEVKjKZVtYSUHPAXMfvNcQ3v0U6N5d9TOUmNOsjNs+zSLN/y7K+f
-         41FsaTPtjOCNia0Wuk5Dyv8NOB0Uu6CfkQ9mzTeTaliXulA61sfIN1caDIjqLt2VA129
-         hNKXY0TDbQSg676NRZWYmvUIoAoXxV8ziUDhnR3+GIpWYIbM3w4WvL7GNIVe6fEdHYkf
-         am5uyRQcbDVepgd2oQts9+Zk0DQjJOfCYx3c6wFCaSzSdLXD0a1IFNJO2Fw5kS5f/Jx/
-         KZy1YKqOTTxMnI4RC1S3p2rZbjqUM49ibEbPz002tju8G/E5zuIi9mdTpBrUYgLSqFIM
-         eBxw==
-X-Gm-Message-State: ACgBeo39rYAiWmIPr+IHHjUOj/XVVio6Yzt982l2UfDNqibNQDVreWhS
-        tP7fYC19vERI17tzNRjjuXoP5JKotyY=
-X-Google-Smtp-Source: AA6agR47oABw8dxC8+WkaAm4tivxaQFKotFxYDpTU3o0+VEhwOaXzUcATq9uXuEF8fIeUTBs1CjXMA==
-X-Received: by 2002:a37:5481:0:b0:6b9:573e:a813 with SMTP id i123-20020a375481000000b006b9573ea813mr7740798qkb.197.1660077016435;
-        Tue, 09 Aug 2022 13:30:16 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id k19-20020ae9f113000000b006b5e50057basm11800784qkg.95.2022.08.09.13.30.12
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=SGeHWpS8KXCNe1fs123Ae1bZ4jHY7XPArBiSK195qHo=;
+        b=PyN9x6dRQYb7Uxkv8xd/pZcvNlGrYyvkSodKKgfAZAap3CprwuCkBEFwlbvJ7mF5cE
+         EGhnkQu28HouZBbbG7D8zTo9LUDHkPz0TDcU5iDQjhIAcG+yQjlR/PW5xtqhiGZY8QOV
+         Sn/8df/R6k22wD8LzgAWp+XskS1B1ndLrx778H9G9uv959LtyXgBH0F0CKl57Q5OHClp
+         mW/2q+e3K3pQm2H7TJSlykm1YD8lhTo0fW6Md1TQtP6nZnV1YGb7l7rE6EoznVVnhgyS
+         Zrv/ExQCvc6Zjp6RR9GvcBEcRbl1y17+QaSWE04dU5K6a+j9O7WxQ+FCKJfAR1mgKFLS
+         qPqQ==
+X-Gm-Message-State: ACgBeo3bDZOToxvCrNLOwwHUjBgEk7WbmRFEbtgjzGrXpF+97iE4BTHP
+        kskwCvwG52p0B0mb+NL3Kvo1Nc9fqdPx9D3t/oE=
+X-Google-Smtp-Source: AA6agR7f+sXxmcjov0hOurO6Wf/3fGVJK8fTqTxyrHeEtiAsDmZ03vijwnstVm8jMX2GJnTEOzwEyA==
+X-Received: by 2002:a17:907:7349:b0:730:61c8:d80d with SMTP id dq9-20020a170907734900b0073061c8d80dmr17060387ejc.699.1660077049545;
+        Tue, 09 Aug 2022 13:30:49 -0700 (PDT)
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com. [209.85.128.46])
+        by smtp.gmail.com with ESMTPSA id kv21-20020a17090778d500b0072b33e91f96sm1485479ejc.190.2022.08.09.13.30.45
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Aug 2022 13:30:15 -0700 (PDT)
-Message-ID: <3f550fcc-4dc6-f0fa-d9be-d5e88f37edc8@gmail.com>
-Date:   Tue, 9 Aug 2022 13:30:10 -0700
+        Tue, 09 Aug 2022 13:30:46 -0700 (PDT)
+Received: by mail-wm1-f46.google.com with SMTP id a11so6830031wmq.3
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 13:30:45 -0700 (PDT)
+X-Received: by 2002:a05:600c:4ed0:b0:3a3:3ef3:c8d1 with SMTP id
+ g16-20020a05600c4ed000b003a33ef3c8d1mr130608wmq.154.1660077044845; Tue, 09
+ Aug 2022 13:30:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 5.10 00/23] 5.10.136-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-References: <20220809175512.853274191@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20220809175512.853274191@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+References: <20220808073232.8808-1-david@redhat.com> <CAHk-=wgsDOz5MfYYS9mE7PvFn4kLhTFdBwXvN6HCEsw1kvJnRQ@mail.gmail.com>
+ <91e18a2f-c93d-00b8-7c1b-6d8493c3b2d5@redhat.com> <CAHk-=whg0ddey-LqFAPfZJDXHMjaHJNojAV3q17yvjc6W8QRvQ@mail.gmail.com>
+ <c096cc82-60b4-9e75-06ad-156461292941@redhat.com>
+In-Reply-To: <c096cc82-60b4-9e75-06ad-156461292941@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 9 Aug 2022 13:30:28 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wh1q7ZSWhDWOyqmVawqjq55sUVkn8ASjE_b2VOcE1vFaA@mail.gmail.com>
+Message-ID: <CAHk-=wh1q7ZSWhDWOyqmVawqjq55sUVkn8ASjE_b2VOcE1vFaA@mail.gmail.com>
+Subject: Re: [PATCH v1] mm/gup: fix FOLL_FORCE COW security issue and remove FOLL_COW
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Peter Xu <peterx@redhat.com>, Hugh Dickins <hughd@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/9/22 11:00, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.136 release.
-> There are 23 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Thu, 11 Aug 2022 17:55:02 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.136-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Tue, Aug 9, 2022 at 1:20 PM David Hildenbrand <david@redhat.com> wrote:
+>
+> IIUC VM_MAYSHARE is always set in a MAP_SHARED mapping, but for file
+> mappings we only set VM_SHARED if the file allows for writes
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels and build tested 
-with BMIPS_GENERIC:
+Heh.
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+This is a horrific hack, and probably should go away.
+
+Yeah, we have that
+
+                        if (!(file->f_mode & FMODE_WRITE))
+                                vm_flags &= ~(VM_MAYWRITE | VM_SHARED);
+
+
+but I think that's _entirely_ historical.
+
+Long long ago, in a galaxy far away, we didn't handle shared mmap()
+very well. In fact, we used to not handle it at all.
+
+But nntpd would use write() to update the spool file, adn them read it
+through a shared mmap.
+
+And since our mmap() *was* coherent with people doing write() system
+calls, but didn't handle actual dirty shared mmap, what Linux used to
+do was to just say "Oh, you want a read-only shared file mmap? I can
+do that - I'll just downgrade it to a read-only _private_ mapping, and
+it actually ends up with the same semantics".
+
+And here we are, 30 years later, and it still does that, but it leaves
+the VM_MAYSHARE flag so that /proc/<pid>/maps can show that it's a
+shared mapping.
+
+                 Linus

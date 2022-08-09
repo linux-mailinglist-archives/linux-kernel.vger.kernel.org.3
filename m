@@ -2,116 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AD3F58D230
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 04:58:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 870F658D234
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 05:01:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbiHIC6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 22:58:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50784 "EHLO
+        id S231237AbiHIDBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 23:01:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbiHIC63 (ORCPT
+        with ESMTP id S231866AbiHIDAj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 22:58:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D3DC615D;
-        Mon,  8 Aug 2022 19:58:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D8A0FB81148;
-        Tue,  9 Aug 2022 02:58:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92357C4347C;
-        Tue,  9 Aug 2022 02:58:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660013906;
-        bh=vY5ylUkzROKwy6ry3674cLxiF3l1xgYFwsMymQ3/CTQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=R8BvOq/2UB9nvzN0NTUl0Ua9w1FdnAGpPjzhHZajA4xbD3NrKkwByj3aeAQ37TVrX
-         stsuOdxBc6zfiTAVYLi+5we5azJSs55v0zRZALYRKQttF5/P44aEBZvT1NpykBDCcT
-         OCDcFnx3hFLOHtZwNokPc84wgz1lhYH1rTMXlYpbe0v25AfC589E/2LqB/eLEAp5IC
-         o66iwu2s++KkUVIpL47K+iX/WyMJ2+GZPfJlYwTUmVfS0HsPeSrn8zKqi7VLWJhwzd
-         Kq4LDTOvA08REc/NqzmcRGcxaL+S4DWwJaEDExZZlukJNb4ZHwSfEHqYJpT854i3x2
-         qK0DFeZlO8ouw==
-Received: by mail-ot1-f43.google.com with SMTP id a14-20020a0568300b8e00b0061c4e3eb52aso7729782otv.3;
-        Mon, 08 Aug 2022 19:58:26 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2+4nnoJmtGJ1KsNqwZ3j9jIPIiAT7AtkQgWJWf3JZb7eWU37bc
-        tjQTCB/DP79cSaATE1sZgxBzAYo6rR9i6YD25no=
-X-Google-Smtp-Source: AA6agR5lND1hBBqkzDW8S6KaZCUwopF2Nn6/QDh4BK6hrBv+XTSLq99vu0sFJBLe9j6l/fXE+mioK2Jp5R7Gv07KeoQ=
-X-Received: by 2002:a9d:b95:0:b0:637:9c9:864a with SMTP id 21-20020a9d0b95000000b0063709c9864amr606716oth.140.1660013905660;
- Mon, 08 Aug 2022 19:58:25 -0700 (PDT)
+        Mon, 8 Aug 2022 23:00:39 -0400
+Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 72080318;
+        Mon,  8 Aug 2022 20:00:36 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.12.77.33])
+        by mail-app4 (Coremail) with SMTP id cS_KCgBHSMyuzfFizMKFAg--.41560S4;
+        Tue, 09 Aug 2022 10:59:59 +0800 (CST)
+From:   Lin Ma <linma@zju.edu.cn>
+To:     jesse.brandeburg@intel.com, anthony.l.nguyen@intel.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
+        hawk@kernel.org, john.fastabend@gmail.com,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+Cc:     Lin Ma <linma@zju.edu.cn>
+Subject: [PATCH v1] idb: Add lock to avoid data race
+Date:   Tue,  9 Aug 2022 10:59:53 +0800
+Message-Id: <20220809025953.2311-1-linma@zju.edu.cn>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220808080600.3346843-1-guoren@kernel.org> <20220808080600.3346843-2-guoren@kernel.org>
- <alpine.DEB.2.22.394.2208081119230.411952@gentwo.de>
-In-Reply-To: <alpine.DEB.2.22.394.2208081119230.411952@gentwo.de>
-From:   Guo Ren <guoren@kernel.org>
-Date:   Tue, 9 Aug 2022 10:58:13 +0800
-X-Gmail-Original-Message-ID: <CAJF2gTQhLYCtuLwjXREPG5ibL+biGEgFQaE6x+9MXRG_8F_+WA@mail.gmail.com>
-Message-ID: <CAJF2gTQhLYCtuLwjXREPG5ibL+biGEgFQaE6x+9MXRG_8F_+WA@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/4] vmstat: percpu: Rename HAVE_CMPXCHG_LOCAL to HAVE_CMPXCHG_PERCPU_BYTE
-To:     Christoph Lameter <cl@gentwo.de>
-Cc:     tj@kernel.org, palmer@dabbelt.com, will@kernel.org,
-        catalin.marinas@arm.com, peterz@infradead.org, arnd@arndb.de,
-        linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Guo Ren <guoren@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: cS_KCgBHSMyuzfFizMKFAg--.41560S4
+X-Coremail-Antispam: 1UD129KBjvJXoWxur4xCr13XF48ZrykuF17ZFb_yoWrCFW7pF
+        4DX342yr10qF12qa9rXw48Ary3K3yrtrWfK3W5uw4F93Z8JryvqrWFyryYvFyrC393u3ZI
+        yryDuw4fZF1DAFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUvm1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJr0_GcWl84ACjcxK6I8E
+        87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c
+        8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_
+        Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwI
+        xGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IY
+        c2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8uw4UJr1UMxC20s026xCaFVCjc4AY6r1j6r
+        4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF
+        67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2I
+        x0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2
+        z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnU
+        UI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: qtrwiiyqvtljo62m3hxhgxhubq/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 8, 2022 at 5:31 PM Christoph Lameter <cl@gentwo.de> wrote:
->
-> On Mon, 8 Aug 2022, guoren@kernel.org wrote:
->
-> > The name HAVE_CMPXCHG_LOCAL is confused with using cmpxchg_local, but
-> > vmstat needs this_cpu_cmpxchg_1. Rename would clarify the meaning, and
-> > maybe we could remove cmpxchg(64)_local API (Only drivers/iommu/intel
-> > used) in the future.
->
-> HAVE_CMPXCHG_LOCAL indicates that cmpxchg_local() is available.
->
-> The term LOCAL is important because that has traditionally signified an
-> operation that has an atomic nature that only works on the local core.
->
-> cmpxchg local is used in slub too in the form of this_cpu_cmpxchg_double.
-1. raw_cpu_generic_cmpxchg_double don't use cmpxchg(64)_local.
-2. x86 and s390 implement this_cpu_cmpxchg_double with direct asm
-code, no relationship to cmpxchg local.
-3. Only arm64 using cmpxchg_double_local internal, but we could remove
-the relationship from generic cmpxchg_double_local. It's a fake usage.
-So maybe it's time to remove cmpxchg(64)_local in Linux and replace
-them by this_cpu_cmpxchg & cmpxchg_relaxed.
+The commit c23d92b80e0b ("igb: Teardown SR-IOV before
+unregister_netdev()") places the unregister_netdev() call after the
+igb_disable_sriov() call to avoid functionality issue.
 
->
-> But there is the other naming using this_cpu.....
->
-> Maybe rename to
->
->         HAVE_THIS_CPU_CMPXCHG ?
-I think we should keep 1/BYTE as a suffix because riscv only
-implements 4bytes & 8bytes size cmpxchg. But vmstat needs 1Byte.
+However, it introduces several race conditions when detaching a device.
+For example, when .remove() is called, the below interleaving leads to
+use-after-free.
 
->
-> and clean up all the other mentions of "local" in the source too?
-Good point, I would try. How we deal with drivers/iommu/intel/iommu.c:
-tmp = cmpxchg64_local(&pte->val, 0ULL, pteval);
+ (FREE from device detaching)      |   (USE from netdev core)
+igb_remove                         |  igb_ndo_get_vf_config
+ igb_disable_sriov                 |  vf >= adapter->vfs_allocated_count?
+  kfree(adapter->vf_data)          |
+  adapter->vfs_allocated_count = 0 |
+                                   |    memcpy(... adapter->vf_data[vf]
 
-Change "cmpxchg64_local -> cmpxchg64_relaxed" would make them happy? I
-think they are cmpxchg_local & cmpxchg_sync users.
+Moreover, just as commit 1e53834ce541 ("ixgbe: Add locking to
+prevent panic when setting sriov_numvfs to zero") shows. The
+igb_disable_sriov function also need to watch out the requests from VF
+driver.
 
+To this end, this commit first eliminates the data races from netdev
+core by using rtnl_lock (similar to commit 719479230893 ("dpaa2-eth: add
+MAC/PHY support through phylink")). And then adds a spinlock just as
+1d53834ce541 did.
 
->
-> There is also a local.h header around somewhere
-Yes, thx for mentioning, I missed that. The alpha, loongarch, MIPS,
-PowerPC and x86 make local_cmpxchg -> cmpxchg_local. Most of them are
-copy-paste guys, not real users.
+Fixes: c23d92b80e0b ("igb: Teardown SR-IOV before unregister_netdev()")
+Signed-off-by: Lin Ma <linma@zju.edu.cn>
+---
+V0 -> V1:  change title from "Add rtnl_lock" to "Add lock"
+           add additional spinlock as suggested by Jakub, according to
+           1e53834ce541 ("ixgbe: Add locking to prevent panic when setting
+           sriov_numvfs to zero")
 
+ drivers/net/ethernet/intel/igb/igb.h      |  2 ++
+ drivers/net/ethernet/intel/igb/igb_main.c | 12 +++++++++++-
+ 2 files changed, 13 insertions(+), 1 deletion(-)
 
---
-Best Regards
- Guo Ren
+diff --git a/drivers/net/ethernet/intel/igb/igb.h b/drivers/net/ethernet/intel/igb/igb.h
+index 2d3daf022651..015b78144114 100644
+--- a/drivers/net/ethernet/intel/igb/igb.h
++++ b/drivers/net/ethernet/intel/igb/igb.h
+@@ -664,6 +664,8 @@ struct igb_adapter {
+ 	struct igb_mac_addr *mac_table;
+ 	struct vf_mac_filter vf_macs;
+ 	struct vf_mac_filter *vf_mac_list;
++	/* lock for VF resources */
++	spinlock_t vfs_lock;
+ };
+ 
+ /* flags controlling PTP/1588 function */
+diff --git a/drivers/net/ethernet/intel/igb/igb_main.c b/drivers/net/ethernet/intel/igb/igb_main.c
+index d8b836a85cc3..2796e81d2726 100644
+--- a/drivers/net/ethernet/intel/igb/igb_main.c
++++ b/drivers/net/ethernet/intel/igb/igb_main.c
+@@ -3637,6 +3637,7 @@ static int igb_disable_sriov(struct pci_dev *pdev)
+ 	struct net_device *netdev = pci_get_drvdata(pdev);
+ 	struct igb_adapter *adapter = netdev_priv(netdev);
+ 	struct e1000_hw *hw = &adapter->hw;
++	unsigned long flags;
+ 
+ 	/* reclaim resources allocated to VFs */
+ 	if (adapter->vf_data) {
+@@ -3649,12 +3650,13 @@ static int igb_disable_sriov(struct pci_dev *pdev)
+ 			pci_disable_sriov(pdev);
+ 			msleep(500);
+ 		}
+-
++		spin_lock_irqsave(&adapter->vfs_lock, flags);
+ 		kfree(adapter->vf_mac_list);
+ 		adapter->vf_mac_list = NULL;
+ 		kfree(adapter->vf_data);
+ 		adapter->vf_data = NULL;
+ 		adapter->vfs_allocated_count = 0;
++		spin_unlock_irqrestore(&adapter->vfs_lock, flags);
+ 		wr32(E1000_IOVCTL, E1000_IOVCTL_REUSE_VFQ);
+ 		wrfl();
+ 		msleep(100);
+@@ -3814,7 +3816,9 @@ static void igb_remove(struct pci_dev *pdev)
+ 	igb_release_hw_control(adapter);
+ 
+ #ifdef CONFIG_PCI_IOV
++	rtnl_lock();
+ 	igb_disable_sriov(pdev);
++	rtnl_unlock();
+ #endif
+ 
+ 	unregister_netdev(netdev);
+@@ -3974,6 +3978,9 @@ static int igb_sw_init(struct igb_adapter *adapter)
+ 
+ 	spin_lock_init(&adapter->nfc_lock);
+ 	spin_lock_init(&adapter->stats64_lock);
++
++	/* init spinlock to avoid concurrency of VF resources */
++	spin_lock_init(&adapter->vfs_lock);
+ #ifdef CONFIG_PCI_IOV
+ 	switch (hw->mac.type) {
+ 	case e1000_82576:
+@@ -7958,8 +7965,10 @@ static void igb_rcv_msg_from_vf(struct igb_adapter *adapter, u32 vf)
+ static void igb_msg_task(struct igb_adapter *adapter)
+ {
+ 	struct e1000_hw *hw = &adapter->hw;
++	unsigned long flags;
+ 	u32 vf;
+ 
++	spin_lock_irqsave(&adapter->vfs_lock, flags);
+ 	for (vf = 0; vf < adapter->vfs_allocated_count; vf++) {
+ 		/* process any reset requests */
+ 		if (!igb_check_for_rst(hw, vf))
+@@ -7973,6 +7982,7 @@ static void igb_msg_task(struct igb_adapter *adapter)
+ 		if (!igb_check_for_ack(hw, vf))
+ 			igb_rcv_ack_from_vf(adapter, vf);
+ 	}
++	spin_unlock_irqrestore(&adapter->vfs_lock, flags);
+ }
+ 
+ /**
+-- 
+2.36.1
+

@@ -2,169 +2,338 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E257858D5BF
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 10:53:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FB4D58D5C6
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 10:54:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241170AbiHIIxj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 04:53:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54104 "EHLO
+        id S241158AbiHIIyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 04:54:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241174AbiHIIx3 (ORCPT
+        with ESMTP id S241174AbiHIIyb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 04:53:29 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B2842250A
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 01:53:27 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id b21-20020a05600c4e1500b003a32bc8612fso5620340wmq.3
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 01:53:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=qG0cMVDpsw3lX4Bn87g1WU9OQnuZ1JiWfH6lXAs1oTo=;
-        b=It5aifXBux/SXZQo7kIXTKsrClPnKo4DMK+1FQ+dEW2NQ7mBlQLj8BzfOo0hIKXFkh
-         eyaoGE7t0882xNqlruvy03WAT/8RKsccfeoi4O7KGQBtrE/qGe9vT3wvLAM2iGCiBF0G
-         18b2/s4Yll+jtdywo11uUbu6CWSiDsauyZ35IUgZy2l6pcqvSEruV68RC43EsMCKR/IQ
-         OSJaYUDjqx5+rHJX7jdPt2BKPGCw2vLwiSOhXJ2Ux+lKc2wZfS3zLvcznnVaCJYWqtsd
-         pQ5CM4RzhDtX5A7IB68dcsgKDZV7Ze3bLVnrewRh4B/s8R3TFjkLUXJJyyIpMurvgpiU
-         oT6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=qG0cMVDpsw3lX4Bn87g1WU9OQnuZ1JiWfH6lXAs1oTo=;
-        b=7guwVmGTW1gOf2zhgj7IIcGjPAAuLZF/aLDr5mkfldpZLJxtqm4ATVeY7iMAU+9JKm
-         faiCsLv6q2+08PMp1N8J8sOVV9Cbkqj2cUMcpXBawktyItnk0EgAeMFd7zWbDHFqE00u
-         YyTwUwUvQgqzo8JMzEu5HVCauz2K7KSB/j0wlA15Rd1ec3mL8T2HLva4z/fIh09+yiei
-         im24wtIwmgbAiis6sMx6oHe0jEAtDUafaYYwfOgs7Af2+f0UvhntX57qLvFA5HvBgjD5
-         ciWBoHJ+cpw6DAao9VMZiH9X/i6w4l0z16gT6S6aUKOHZ94ZoTPfbIAyG41EKN6mKSAv
-         j1AA==
-X-Gm-Message-State: ACgBeo3RiizNdAZxY5/JHag09hOS9GEghEdFNxmt+S7Eyh4wdNewuHxH
-        kKmGUNF0H4veqsOv6GKiAZlMmg==
-X-Google-Smtp-Source: AA6agR4aU2oT1B0lZOEedWdpfgdQY9s7hYm2Mi9wy+kVRDKtJ7UuWhTFm37jQlnjey0/+bRmcUsfNg==
-X-Received: by 2002:a05:600c:2650:b0:3a5:4402:bc2a with SMTP id 16-20020a05600c265000b003a54402bc2amr4476133wmy.108.1660035205589;
-        Tue, 09 Aug 2022 01:53:25 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id w8-20020a5d6088000000b002185631adf0sm13011623wrt.23.2022.08.09.01.53.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Aug 2022 01:53:25 -0700 (PDT)
-Message-ID: <829788a5-3da4-8638-a587-9e80e2fd3fea@linaro.org>
-Date:   Tue, 9 Aug 2022 10:53:22 +0200
+        Tue, 9 Aug 2022 04:54:31 -0400
+Received: from mail-m11885.qiye.163.com (mail-m11885.qiye.163.com [115.236.118.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A72D8222B8;
+        Tue,  9 Aug 2022 01:54:28 -0700 (PDT)
+Received: from [192.168.111.100] (unknown [58.22.7.114])
+        by mail-m11885.qiye.163.com (Hmail) with ESMTPA id 14A394C09F8;
+        Tue,  9 Aug 2022 16:54:26 +0800 (CST)
+Message-ID: <571973c5-02bd-5a18-834b-20c69f82e342@rock-chips.com>
+Date:   Tue, 9 Aug 2022 16:54:24 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v5 00/33] New thermal OF code
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.1
+Subject: Re: [PATCH v2] drm/gem: Fix GEM handle release errors
 Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Michael Walle <michael@walle.cc>
-Cc:     daniel.lezcano@linexp.org, abailon@baylibre.com,
-        anarsoul@gmail.com, baolin.wang7@gmail.com,
-        bjorn.andersson@linaro.org, broonie@kernel.org,
-        damien.lemoal@opensource.wdc.com, digetx@gmail.com,
-        f.fainelli@gmail.com, glaroque@baylibre.com,
-        hayashi.kunihiko@socionext.com, heiko@sntech.de, j-keerthy@ti.com,
-        jonathanh@nvidia.com, khilman@baylibre.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        lukasz.luba@arm.com, matthias.bgg@gmail.com,
-        mcoquelin.stm32@gmail.com, mhiramat@kernel.org,
-        miquel.raynal@bootlin.com, niklas.soderlund@ragnatech.se,
-        rafael@kernel.org, rui.zhang@intel.com, shawnguo@kernel.org,
-        talel@amazon.com, thierry.reding@gmail.com, tiny.windzz@gmail.com
-References: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
- <20220808094216.928018-1-michael@walle.cc>
- <20220808102610.GA1969424@roeck-us.net>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20220808102610.GA1969424@roeck-us.net>
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>
+Cc:     Andy Yan <andy.yan@rock-chips.com>,
+        Jianqun Xu <jay.xu@rock-chips.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org, David Airlie <airlied@linux.ie>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        linux-media@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>
+References: <20220803083237.3701-1-jeffy.chen@rock-chips.com>
+ <c7cb225b-7f21-8d9a-773b-efc655e6332c@amd.com>
+ <7cd16264-fa84-7b50-f3ed-64f7f22dcef2@rock-chips.com>
+ <64bf4e4b-4e22-0ff0-5f92-76f603c04ec0@amd.com>
+ <cd806954-e94e-aec8-2b0c-4047da9a92ec@rock-chips.com>
+ <0e284f57-e03c-f128-f6e7-52a58edbcd54@amd.com>
+From:   Chen Jeffy <jeffy.chen@rock-chips.com>
+In-Reply-To: <0e284f57-e03c-f128-f6e7-52a58edbcd54@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-HM-Spam-Status: e1kfGhgUHx5ZQUtXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFJSktLSjdXWS1ZQUlXWQ8JGhUIEh9ZQVkaGkhOVhpLT0kZGElLHkhJGVUTARMWGhIXJB
+        QOD1lXWRgSC1lBWU5DVUlJVUxVSkpPWVdZFhoPEhUdFFlBWU9LSFVKSktITUpVS1kG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NCo6Lio*Iz0yKy4oNT0INE4T
+        Pz4KCk9VSlVKTU1LS0hOSU1NQklKVTMWGhIXVREeHR0CVRgTHhU7CRQYEFYYExILCFUYFBZFWVdZ
+        EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFKSExMSTcG
+X-HM-Tid: 0a8281cff79a2eb9kusn14a394c09f8
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Guenter,
+Hi Christian,
 
-On 08/08/2022 12:26, Guenter Roeck wrote:
-
-[ ... ]
-
->> But I guess even if that is fixed, the driver will not probe due to the
->> missing trip points? Are they now mandatory? Does it mean we'd need to
->> update our device trees? But that will then mean older devices trees
->> don't work anymore.
+On 8/9 星期二 15:55, Christian König wrote:
+> Am 09.08.22 um 03:28 schrieb Chen Jeffy:
+>> Hi Christian,
+>>
+>> On 8/9 星期二 2:03, Christian König wrote:
+>>> Hi Jeffy,
+>>>
+>>> Am 08.08.22 um 05:51 schrieb Chen Jeffy:
+>>>> Hi Christian,
+>>>>
+>>>> Thanks for your reply, and sorry i didn't make it clear.
+>>>>
+>>>> On 8/8 星期一 0:52, Christian König wrote:
+>>>>> Am 03.08.22 um 10:32 schrieb Jeffy Chen:
+>>>>>> Currently we are assuming a one to one mapping between dmabuf and 
+>>>>>> handle
+>>>>>> when releasing GEM handles.
+>>>>>>
+>>>>>> But that is not always true, since we would create extra handles 
+>>>>>> for the
+>>>>>> GEM obj in cases like gem_open() and getfb{,2}().
+>>>>>>
+>>>>>> A similar issue was reported at:
+>>>>>> https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fall%2F20211105083308.392156-1-jay.xu%40rock-chips.com%2F&amp;data=05%7C01%7Cchristian.koenig%40amd.com%7C52cd6ca16a3a415b92a708da79a67dec%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C637956053232922419%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=hIuH18B10sbVAyS0D4iK6R6WYc%2BZ7mlxGcKdUae%2BW6Y%3D&amp;reserved=0
+>>>>>>
+>>>>>> Another problem is that the drm_gem_remove_prime_handles() now only
+>>>>>> remove handle to the exported dmabuf (gem_obj->dma_buf), so the 
+>>>>>> imported
+>>>>>> ones would leak:
+>>>>>> WARNING: CPU: 2 PID: 236 at drivers/gpu/drm/drm_prime.c:228 
+>>>>>> drm_prime_destroy_file_private+0x18/0x24
+>>>>>>
+>>>>>> Let's fix these by using handle to find the exact map to remove.
+>>>>>
+>>>>> Well we are clearly something missing here. As far as I can see the 
+>>>>> current code is correct.
+>>>>>
+>>>>> Creating multiple GEM handles for the same DMA-buf is possible, but 
+>>>>> illegal. >
+>>>>> In other words when a GEM handle is exported as DMA-buf and 
+>>>>> imported again you should intentionally always get the same handle.
+>>>>
+>>>> These issue are not about having handles for importing an exported 
+>>>> dma-buf case, but for having multiple handles to a GEM object(which 
+>>>> means having multiple handles to a dma-buf).
+>>>>
+>>>> I know the drm-prime is trying to make dma-buf and handle maps one 
+>>>> to one, but the drm-gem is allowing to create extra handles for a 
+>>>> GEM object, for example:
+>>>> drm_gem_open_ioctl -> drm_gem_handle_create_tail
+>>>> drm_mode_getfb2_ioctl -> drm_gem_handle_create
+>>>> drm_mode_getfb -> fb->funcs->create_handle
+>>>
+>>> Yes, so far that's correct.
+>>>
+>>>>
+>>>>
+>>>> So we are allowing GEM object to have multiple handles, and GEM 
+>>>> object could have at most one dma-buf, doesn't that means that 
+>>>> dma-buf could map to multiple handles?
+>>>
+>>> No, at least not for the same GEM file private. That's the reason why 
+>>> the rb is indexed by the dma_buf object and not the handle.
+>>>
+>>> In other words the rb is so that you have exactly one handle for each 
+>>> dma_buf in each file private.
+>>
+>> I don't think so, because if user get multiple handles for the same 
+>> GEM obj and use drm_gem_prime_handle_to_fd() for those handles
 > 
-> It would also mean that all hwmon drivers registering a thermal zone sensor
-> would fail to register unless such a thermal zone actually exists. 
+> Mhm, that works? This is illegal and should have been prevented somehow.
+> 
+> Let me double check the code.
+> 
+> Thanks for pointing that out,
+> Christian.
+> 
 
-Probably missing something but if the thermal zone is not described, the 
-hwmon driver won't initialize. And except if I'm wrong, that was already 
-the case before these changes, no?
+Thanks for checking it, my test case is a preload library which hooks 
+the drmModeSetCrtc(and other APIs) then use drmModeGetFB to extract 
+dmafd from fb_id.
 
-> This
-> would make the whole concept of having the hwmon core register thermal
-> zone sensors impossible.
+> 
+>> , the current code would try to add multiple maps to rb:
+>> drm_prime_add_buf_handle(buf_1, hdl_1)
+>> drm_prime_add_buf_handle(buf_1, hdl_2)
+>> ...
+>> drm_prime_add_buf_handle(buf_1, hdl_n)
+>>
+>>>
+>>>>
+>>>> Or should we rewrite the GEM framework to limit GEM object with uniq 
+>>>> handle?
+>>>
+>>> No, the extra handles are expected because when you call 
+>>> drm_mode_getfb*() and drm_gem_open_ioctl() the caller now owns the 
+>>> returned GEM handle.
+>>>
+>>>>
+>>>> The other issue is that we are leaking dma-buf <-> handle map for 
+>>>> the imported dma-buf, since the drm_gem_remove_prime_handles doesn't 
+>>>> take care of obj->import_attach->dmabuf.
+>>>
+>>> No, that's correct as well. obj->dma_buf is set even for imported 
+>>> DMA-buf objects. See drm_gem_prime_fd_to_handle().
+>>
+>> Well, that obj->dma_buf would be set in 
+>> drm_gem_prime_fd_to_handle(create new handle), and cleared when 
+>> releasing the latest handle(release handle).
+>>
+>> So it doesn't cover other handle creating path.
+>>
+>> For example, a imported dma buf:
+>> drm_gem_prime_fd_to_handle <-- we got a handle and obj->dma_buf and 
+>> obj->import_attach->dmabuf
+>> drm_gem_handle_delete <-- we lost that handle and obj->dma_buf cleared
+>> drm_gem_open_ioctl/or getfb* <-- we got a new handle and 
+>> obj->import_attach->dmabuf
+>> drm_gem_handle_delete <-- we lost that handle and obj->dma_buf is 
+>> null, which means rb leaks.
 
-No, only the way the thermal OF is implemented changed. No functional 
-changes. So AFAICT, you can still create thermal zones with the hwmon.
+Another way to solve this would be set this obj->dma_buf again in 
+drm_gem_prime_handle_to_fd(), which would make sure obj->dma_buf is 
+valid in all current paths lead to drm_prime_add_buf_handle().
 
-> I have no idea how this is expected to work now,
-> but there is an apparent flaw in the logic. That means I withdraw my
-> Acked-by: for the hwmon patches in this series until it is guaranteed
-> that hwmon registration does not fail as above if there is no thermal
-> zone associated with a sensor.
+>>
+>>>
+>>> Regards,
+>>> Christian.
+>>>
+>>>>
+>>>> But of cause this can be fixed in other way:
+>>>> +++ b/drivers/gpu/drm/drm_gem.c
+>>>> @@ -180,6 +180,9 @@ drm_gem_remove_prime_handles(struct 
+>>>> drm_gem_object *obj, struct drm_file *filp)
+>>>> drm_prime_remove_buf_handle_locked(&filp->prime,
+>>>> obj->dma_buf);
+>>>>         }
+>>>> +       if (obj->import_attach)
+>>>> + drm_prime_remove_buf_handle_locked(&filp->prime,
+>>>> + obj->import_attach->dmabuf);
+>>>>         mutex_unlock(&filp->prime.lock);
+>>>>  }
+>>>>
+>>>>
+>>>>> So this is pretty much a clear NAK to this patch since it shouldn't 
+>>>>> be necessary or something is seriously broken somewhere else.
+>>>>>
+>>>>> Regards,
+>>>>> Christian.
+>>>>>
+>>>>>>
+>>>>>> Signed-off-by: Jeffy Chen <jeffy.chen@rock-chips.com>
+>>>>>> ---
+>>>>>>
+>>>>>> Changes in v2:
+>>>>>> Fix a typo of rbtree.
+>>>>>>
+>>>>>>   drivers/gpu/drm/drm_gem.c      | 17 +----------------
+>>>>>>   drivers/gpu/drm/drm_internal.h |  4 ++--
+>>>>>>   drivers/gpu/drm/drm_prime.c    | 20 ++++++++++++--------
+>>>>>>   3 files changed, 15 insertions(+), 26 deletions(-)
+>>>>>>
+>>>>>> diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
+>>>>>> index eb0c2d041f13..ed39da383570 100644
+>>>>>> --- a/drivers/gpu/drm/drm_gem.c
+>>>>>> +++ b/drivers/gpu/drm/drm_gem.c
+>>>>>> @@ -168,21 +168,6 @@ void drm_gem_private_object_init(struct 
+>>>>>> drm_device *dev,
+>>>>>>   }
+>>>>>>   EXPORT_SYMBOL(drm_gem_private_object_init);
+>>>>>> -static void
+>>>>>> -drm_gem_remove_prime_handles(struct drm_gem_object *obj, struct 
+>>>>>> drm_file *filp)
+>>>>>> -{
+>>>>>> -    /*
+>>>>>> -     * Note: obj->dma_buf can't disappear as long as we still hold a
+>>>>>> -     * handle reference in obj->handle_count.
+>>>>>> -     */
+>>>>>> -    mutex_lock(&filp->prime.lock);
+>>>>>> -    if (obj->dma_buf) {
+>>>>>> - drm_prime_remove_buf_handle_locked(&filp->prime,
+>>>>>> -                           obj->dma_buf);
+>>>>>> -    }
+>>>>>> -    mutex_unlock(&filp->prime.lock);
+>>>>>> -}
+>>>>>> -
+>>>>>>   /**
+>>>>>>    * drm_gem_object_handle_free - release resources bound to 
+>>>>>> userspace handles
+>>>>>>    * @obj: GEM object to clean up.
+>>>>>> @@ -253,7 +238,7 @@ drm_gem_object_release_handle(int id, void 
+>>>>>> *ptr, void *data)
+>>>>>>       if (obj->funcs->close)
+>>>>>>           obj->funcs->close(obj, file_priv);
+>>>>>> -    drm_gem_remove_prime_handles(obj, file_priv);
+>>>>>> +    drm_prime_remove_buf_handle(&file_priv->prime, id);
+>>>>>>       drm_vma_node_revoke(&obj->vma_node, file_priv);
+>>>>>>       drm_gem_object_handle_put_unlocked(obj);
+>>>>>> diff --git a/drivers/gpu/drm/drm_internal.h 
+>>>>>> b/drivers/gpu/drm/drm_internal.h
+>>>>>> index 1fbbc19f1ac0..7bb98e6a446d 100644
+>>>>>> --- a/drivers/gpu/drm/drm_internal.h
+>>>>>> +++ b/drivers/gpu/drm/drm_internal.h
+>>>>>> @@ -74,8 +74,8 @@ int drm_prime_fd_to_handle_ioctl(struct 
+>>>>>> drm_device *dev, void *data,
+>>>>>>   void drm_prime_init_file_private(struct drm_prime_file_private 
+>>>>>> *prime_fpriv);
+>>>>>>   void drm_prime_destroy_file_private(struct 
+>>>>>> drm_prime_file_private *prime_fpriv);
+>>>>>> -void drm_prime_remove_buf_handle_locked(struct 
+>>>>>> drm_prime_file_private *prime_fpriv,
+>>>>>> -                    struct dma_buf *dma_buf);
+>>>>>> +void drm_prime_remove_buf_handle(struct drm_prime_file_private 
+>>>>>> *prime_fpriv,
+>>>>>> +                 uint32_t handle);
+>>>>>>   /* drm_drv.c */
+>>>>>>   struct drm_minor *drm_minor_acquire(unsigned int minor_id);
+>>>>>> diff --git a/drivers/gpu/drm/drm_prime.c 
+>>>>>> b/drivers/gpu/drm/drm_prime.c
+>>>>>> index e3f09f18110c..bd5366b16381 100644
+>>>>>> --- a/drivers/gpu/drm/drm_prime.c
+>>>>>> +++ b/drivers/gpu/drm/drm_prime.c
+>>>>>> @@ -190,29 +190,33 @@ static int 
+>>>>>> drm_prime_lookup_buf_handle(struct drm_prime_file_private *prime_fpri
+>>>>>>       return -ENOENT;
+>>>>>>   }
+>>>>>> -void drm_prime_remove_buf_handle_locked(struct 
+>>>>>> drm_prime_file_private *prime_fpriv,
+>>>>>> -                    struct dma_buf *dma_buf)
+>>>>>> +void drm_prime_remove_buf_handle(struct drm_prime_file_private 
+>>>>>> *prime_fpriv,
+>>>>>> +                 uint32_t handle)
+>>>>>>   {
+>>>>>>       struct rb_node *rb;
+>>>>>> -    rb = prime_fpriv->dmabufs.rb_node;
+>>>>>> +    mutex_lock(&prime_fpriv->lock);
+>>>>>> +
+>>>>>> +    rb = prime_fpriv->handles.rb_node;
+>>>>>>       while (rb) {
+>>>>>>           struct drm_prime_member *member;
+>>>>>> -        member = rb_entry(rb, struct drm_prime_member, dmabuf_rb);
+>>>>>> -        if (member->dma_buf == dma_buf) {
+>>>>>> +        member = rb_entry(rb, struct drm_prime_member, handle_rb);
+>>>>>> +        if (member->handle == handle) {
+>>>>>>               rb_erase(&member->handle_rb, &prime_fpriv->handles);
+>>>>>>               rb_erase(&member->dmabuf_rb, &prime_fpriv->dmabufs);
+>>>>>> -            dma_buf_put(dma_buf);
+>>>>>> +            dma_buf_put(member->dma_buf);
+>>>>>>               kfree(member);
+>>>>>> -            return;
+>>>>>> -        } else if (member->dma_buf < dma_buf) {
+>>>>>> +            break;
+>>>>>> +        } else if (member->handle < handle) {
+>>>>>>               rb = rb->rb_right;
+>>>>>>           } else {
+>>>>>>               rb = rb->rb_left;
+>>>>>>           }
+>>>>>>       }
+>>>>>> +
+>>>>>> +    mutex_unlock(&prime_fpriv->lock);
+>>>>>>   }
+>>>>>>   void drm_prime_init_file_private(struct drm_prime_file_private 
+>>>>>> *prime_fpriv)
+>>>>>
+>>>>>
+>>>>
+>>>
+>>>
+>>
+> 
+> 
 
-
-If the thermal zone creation fails with -ENODEV, then it is no 
-considered as an error when creating the hwmon [1]
-
-The function [devm]_thermal_zone_of_sensor_register() checks if there is 
-a thermal zone description, if not it bails out with -ENODEV [2]
-
-Otherwise it checks all the thermal zones if the device passed as 
-parameter matches a sensor in the thermal zone [3][4]
-
-If there is no match, then it returns -ENODEV which is the default error 
-code [5]
-
-My understanding is there is no thermal zone creation if there is no 
-description in the device tree for such a device in the thermal zone.
-
-The issue we had here was the confusing error message when -ENODEV 
-(before was -EINVAL) is returning while before the code was silently 
-continuing without creating the thermal zone.
-
-We are talking here about what is in under CONFIG_THERMAL_OF in the 
-hwmon code path. The rest is untouched.
-
-Am I missing something?
-
-
-
-[1] 
-https://kernel.googlesource.com/pub/scm/linux/kernel/git/torvalds/linux/+/refs/tags/v5.18/drivers/hwmon/hwmon.c#230
-
-[2] 
-https://kernel.googlesource.com/pub/scm/linux/kernel/git/torvalds/linux/+/refs/tags/v5.18/drivers/thermal/thermal_of.c#499
-
-[3] 
-https://kernel.googlesource.com/pub/scm/linux/kernel/git/torvalds/linux/+/refs/tags/v5.18/drivers/thermal/thermal_of.c#510
-
-[4] 
-https://kernel.googlesource.com/pub/scm/linux/kernel/git/torvalds/linux/+/refs/tags/v5.18/drivers/thermal/thermal_of.c#428
-
-[5] 
-https://kernel.googlesource.com/pub/scm/linux/kernel/git/torvalds/linux/+/refs/tags/v5.18/drivers/thermal/thermal_of.c#497
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog

@@ -2,263 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51F0558E032
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:29:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA67A58E035
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:30:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344242AbiHIT3A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 15:29:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33924 "EHLO
+        id S1344681AbiHITaX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 15:30:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344056AbiHIT2z (ORCPT
+        with ESMTP id S1344662AbiHITaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 15:28:55 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98A6518384;
-        Tue,  9 Aug 2022 12:28:52 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id f20so18294450lfc.10;
-        Tue, 09 Aug 2022 12:28:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=UpQrpm/ApIaRZ0s83gslfbMpGpJb7iuWgZQqWYQz1bo=;
-        b=j/wbu5CDa6aI24ATri9dmT+G9srGDf3ToFayz3PQkJXhsOEltEIJC1fGMPe9Gw2OKp
-         exOVVYl6h/VeZjg+V+IfnSNiYudOoIsc6For3s3xtD5h17kHDSmQdk3D4dXYKvnlvT/h
-         iU26xSi3AiOPDPBuzF1rBLDaFZ0leEjzKLx/XopJFBqvs/+wcmTGkekaRZ8rmq8dVb+7
-         XYnGAaAAV5a3UVf3Brzia4mhMAMYFdUSuc4sLOv/g/Fufz4BIZYvKgeMGwsM2chODmK4
-         hUIPWFiLVlpC+S/Az6Msw8U/VZ5QqPeTO3U+RjaolOaG7Ypz9jGirUeu8GNHw1p26OcU
-         2Bwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=UpQrpm/ApIaRZ0s83gslfbMpGpJb7iuWgZQqWYQz1bo=;
-        b=MG8PCuatVECMoDB30A/++JxWP1PVMbhjtrwgUJGkskv14gz5J9QDjBI25PWrmgxpdq
-         kBYlzW1XOQpzOC0cOkHKayjxfmec6N2fNeDslu6rEvlOTIv4GuHS00bk/LvaHGZNwsPR
-         a8NZ/xPwj724GxvKRCzYJ40jmxufrlecSxONOHqXP57OxjpsG3Pd4j+/NtG6BP8abmFu
-         g/4Ttvz0Apqo3lAoYAO9kJaE3vDWHp92so2KcCZrAGZDt82Fq29BPj5pqKWEbsu5q5ii
-         PcSUA0xC9WukcpfSkvqs9Ap6xT7zIB5O5Lz3FpGlM3cbHQZM8gbh60JPLGzRsGYUzclq
-         C9Iw==
-X-Gm-Message-State: ACgBeo3aLDKQ4oDVd67ZiZFebMkZGwZ4HQKOKdejFXI3MVYtwBOUKde+
-        YLXp5GRjO64K9M630qvay1nAtnbqXzaHGQ==
-X-Google-Smtp-Source: AA6agR7WvusrH8G8KEzjm+A0NlFvp6eT0993uhqXFqv9uiEDstp67r6aTLJP4MiBT8975b71Vv8RXg==
-X-Received: by 2002:ac2:5324:0:b0:48b:9643:3838 with SMTP id f4-20020ac25324000000b0048b96433838mr6409291lfh.373.1660073330623;
-        Tue, 09 Aug 2022 12:28:50 -0700 (PDT)
-Received: from mobilestation (ip1.ibrae.ac.ru. [91.238.191.1])
-        by smtp.gmail.com with ESMTPSA id n24-20020a05651203f800b00489da512f5asm72305lfq.86.2022.08.09.12.28.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 12:28:48 -0700 (PDT)
-Date:   Tue, 9 Aug 2022 22:28:46 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Frank Li <Frank.Li@nxp.com>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        PCI <linux-pci@vger.kernel.org>, devicetree@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 12/17] dt-bindings: PCI: dwc: Add Baikal-T1 PCIe Root
- Port bindings
-Message-ID: <20220809192846.ozixf6kgs242dbvl@mobilestation>
-References: <20220728143427.13617-1-Sergey.Semin@baikalelectronics.ru>
- <20220728143427.13617-13-Sergey.Semin@baikalelectronics.ru>
- <20220801181311.GA1266390-robh@kernel.org>
- <20220808160118.m5ka7o7gdhei2yzl@mobilestation>
- <CAL_JsqJSYAsotjzvOUy_f7ZRfsSrfZyuEzq7eRwwKk12FBgxYg@mail.gmail.com>
+        Tue, 9 Aug 2022 15:30:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94FF229E;
+        Tue,  9 Aug 2022 12:30:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D5CD61315;
+        Tue,  9 Aug 2022 19:30:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 96BA4C433C1;
+        Tue,  9 Aug 2022 19:30:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660073414;
+        bh=h/eUzZfM6RhkPY3+kmkITm+5n0WjJrLJwwJSOtXpq5o=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=XADqUvYtj2+DHVCCD/VuhyMtp58QzzbDf146IZ/f1ltZab3TsX8Ff+Aej+qNwHcCZ
+         Q7LsOYNaI0duoDEnvlq3PVKcCpkPeSiqskbJN4LI/YDNPm9dpWsrr7menXq0ThJs5B
+         Kl1dkjsrXHUJuXjhjsASi1HuTq9f46Zz9AbwlWvQN8HyrNAlmv8C6N5upxTjQsO6D3
+         SU8YezNl5X5Lj60OsDEuTOB9IBo6bWonpg0IjT7jV3X+qXworD0dm/8/hRbyzTk5tN
+         b8cPSxhIyE9+rcXp0PdIRPQ8lSMCKDlVe1DcpWIC6Tc3hM24DiCbQ4/qVM9QEPTVmE
+         drqtVHNz0yxdg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 785B8C43141;
+        Tue,  9 Aug 2022 19:30:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAL_JsqJSYAsotjzvOUy_f7ZRfsSrfZyuEzq7eRwwKk12FBgxYg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: bgmac:`Fix a BUG triggered by wrong bytes_compl
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166007341448.32181.552976824939020556.git-patchwork-notify@kernel.org>
+Date:   Tue, 09 Aug 2022 19:30:14 +0000
+References: <20220808173939.193804-1-sbodomerle@gmail.com>
+In-Reply-To: <20220808173939.193804-1-sbodomerle@gmail.com>
+To:     Sandor Bodo-Merle <sbodomerle@gmail.com>
+Cc:     rafal@milecki.pl, bcm-kernel-feedback-list@broadcom.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, nbd@openwrt.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 09, 2022 at 09:12:31AM -0600, Rob Herring wrote:
-> On Mon, Aug 8, 2022 at 10:01 AM Serge Semin <fancer.lancer@gmail.com> wrote:
-> >
-> > On Mon, Aug 01, 2022 at 12:13:11PM -0600, Rob Herring wrote:
-> > > On Thu, Jul 28, 2022 at 05:34:22PM +0300, Serge Semin wrote:
-> > > > Baikal-T1 SoC is equipped with DWC PCIe v4.60a Root Port controller, which
-> > > > link can be trained to work on up to Gen.3 speed over up to x4 lanes. The
-> > > > controller is supposed to be fed up with four clock sources: DBI
-> > > > peripheral clock, AXI application Tx/Rx clocks and external PHY/core
-> > > > reference clock generating the 100MHz signal. In addition to that the
-> > > > platform provide a way to reset each part of the controller:
-> > > > sticky/non-sticky bits, host controller core, PIPE interface, PCS/PHY and
-> > > > Hot/Power reset signal. The Root Port controller is equipped with multiple
-> > > > IRQ lines like MSI, system AER, PME, HP, Bandwidth change, Link
-> > > > equalization request and eDMA ones. The registers space is accessed over
-> > > > the DBI interface. There can be no more than four inbound or outbound iATU
-> > > > windows configured.
-> > > >
-> > > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > > >
-> > > > ---
-> > > >
-> > > > Changelog v2:
-> > > > - Rename 'syscon' property to 'baikal,bt1-syscon'.
-> > > > - Fix the 'compatible' property definition to being more specific about
-> > > >   what strings are supposed to be used. Due to that we had to add the
-> > > >   select property to evaluate the schema against the Baikal-T1 PCIe DT
-> > > >   nodes only.
-> > > > ---
-> > > >  .../bindings/pci/baikal,bt1-pcie.yaml         | 154 ++++++++++++++++++
-> > > >  1 file changed, 154 insertions(+)
-> > > >  create mode 100644 Documentation/devicetree/bindings/pci/baikal,bt1-pcie.yaml
-> > > >
-> > > > diff --git a/Documentation/devicetree/bindings/pci/baikal,bt1-pcie.yaml b/Documentation/devicetree/bindings/pci/baikal,bt1-pcie.yaml
-> > > > new file mode 100644
-> > > > index 000000000000..23bd1d0aa5c5
-> > > > --- /dev/null
-> > > > +++ b/Documentation/devicetree/bindings/pci/baikal,bt1-pcie.yaml
-> > > > @@ -0,0 +1,154 @@
-> > > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > > +%YAML 1.2
-> > > > +---
-> > > > +$id: http://devicetree.org/schemas/pci/baikal,bt1-pcie.yaml#
-> > > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > > +
-> > > > +title: Baikal-T1 PCIe Root Port Controller
-> > > > +
-> > > > +maintainers:
-> > > > +  - Serge Semin <fancer.lancer@gmail.com>
-> > > > +
-> > > > +description:
-> > > > +  Embedded into Baikal-T1 SoC Root Complex controller. It's based on the
-> > > > +  DWC RC PCIe v4.60a IP-core, which is configured to have just a single Root
-> > > > +  Port function and is capable of establishing the link up to Gen.3 speed
-> > > > +  on x4 lanes. It doesn't have embedded clock and reset control module, so
-> > > > +  the proper interface initialization is supposed to be performed by software.
-> > > > +
-> > > > +select:
-> > > > +  properties:
-> > > > +    compatible:
-> > > > +      contains:
-> > > > +        const: baikal,bt1-pcie
-> > > > +
-> > > > +  required:
-> > > > +    - compatible
-> > > > +
-> > > > +allOf:
-> > > > +  - $ref: /schemas/pci/snps,dw-pcie.yaml#
-> > > > +
-> > > > +properties:
-> > > > +  compatible:
-> > > > +    items:
-> > > > +      - const: baikal,bt1-pcie
-> > > > +      - const: snps,dw-pcie-4.60a
-> > > > +      - const: snps,dw-pcie
-> > >
-> >
-> > > Again, these fallbacks simply aren't useful.
-> >
-> > Ok. I give up. You are the boss. I'll drop them =)
-> >
-> > >
-> > > > +
-> > > > +  reg:
-> > > > +    description:
-> > > > +      DBI, DBI2 and at least 4KB outbound iATU-capable region.
-> > >
-> >
-> > > 'iATU-capable region' means config space? That's not very clear.
-> >
-> > No 'iATU-capable region' means the region, which can be used as a
-> > source address for the iATU engine. In general it can be used for any
-> > accesses (IO, MEM, CFG). But the DW PCIe driver will indeed use it for
-> > the config-space accesses.
-> >
-> > IMO the 'config' reg space is kind of virtual. Due to the outbound
-> > iATU capability the driver could use any free outbound iATU region it
-> > found instead.
-> 
-> It is and in hindsight, we maybe should have described the whole
-> address space and let the OS alloc the config space out of it. But
-> then again, original OpenFirmware PCI binding reflects what the
-> firmware discovered AND how it is configured. So specifying where
-> config space is makes sense.
-> 
-> Bottom line is the binding defines putting the config space region in
-> 'reg', not an iATU region.
-> 
-> > > > +    maxItems: 3
-> > > > +
-> > > > +  reg-names:
-> > > > +    minItems: 3
-> > > > +    maxItems: 3
-> > > > +    items:
-> > > > +      enum: [ dbi, dbi2, config ]
-> > >
-> >
-> > > Define the order. Here, and the rest.
-> >
-> > Ok. I will, but please answer to my question, I asked you in the
-> > previous email thread:
-> >
-> > Serge Semin wrote:
-> > > Rob Herring wrote:
-> > > > ...
-> > > > Tell me why you need random order.
-> > >
-> > > Because I don't see a need in constraining the order. If we get to set
-> > > the order requirement, then why do we need to have the "*-names"
-> > > property at all?
-> 
-> Originally, it was for cases where you have a variable number of
-> entries and can't determine what each entry is. IOW, when you have
-> optional entries in the middle of required entries. But then everyone
-> *loves* -names even when not needed or useful such as 'phy-names =
-> "pcie"' (the phy subsys requiring names was part of the problem there,
-> but that's been fixed).
-> 
-> > > IMO having "reg" with max/minItems restriction plus generic
-> > > description and "reg-names" with possible values enumerated seems very
-> > > suitable pattern in this case. Don't you think?
-> 
-> No, I think this is just as concise and defines the order too:
-> 
-> reg-names:
->   items:
->     - const: dbi
->     - const: dbi2
->     - const: config
-> 
-> >
-> > In addition to that what about optional names? How would you suggest
-> > to handle such case without the non-ordered pattern?
-> 
+Hello:
 
-> Sorry, I don't follow.
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-I meant exactly the case you've described as the main goal of the
-named properties. My worry was that by using the pattern:
-
-reg-names:
-  items:
-    - const: name
-    - const: another_name
-    - const: one_more_name
-
-you get to fix the names order, which they were invented to get rid
-from. If you get to use that pattern the only optional names could be
-the names at the tail of the array, which isn't always applicable. In
-that case you'd have no choice but to use the pattern suggested by
-me.
-
--Sergey
-
+On Mon,  8 Aug 2022 19:39:39 +0200 you wrote:
+> On one of our machines we got:
 > 
-> Rob
+> kernel BUG at lib/dynamic_queue_limits.c:27!\r\n
+> Internal error: Oops - BUG: 0 [#1] PREEMPT SMP ARM\r\n
+> CPU: 0 PID: 1166 Comm: irq/41-bgmac Tainted: G        W  O    4.14.275-rt132 #1\r\n
+> Hardware name: BRCM XGS iProc\r\n
+> task: ee3415c0 task.stack: ee32a000\r\n
+> PC is at dql_completed+0x168/0x178\r\n
+> LR is at bgmac_poll+0x18c/0x6d8\r\n
+> pc : [<c03b9430>]    lr : [<c04b5a18>]    psr: 800a0313\r\n
+> sp : ee32be14  ip : 000005ea  fp : 00000bd4\r\n
+> r10: ee558500  r9 : c0116298  r8 : 00000002\r\n
+> r7 : 00000000  r6 : ef128810  r5 : 01993267  r4 : 01993851\r\n
+> r3 : ee558000  r2 : 000070e1  r1 : 00000bd4  r0 : ee52c180\r\n
+> Flags: Nzcv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none\r\n
+> Control: 12c5387d  Table: 8e88c04a  DAC: 00000051\r\n
+> Process irq/41-bgmac (pid: 1166, stack limit = 0xee32a210)\r\n
+> Stack: (0xee32be14 to 0xee32c000)\r\n
+> be00:                                              ee558520 ee52c100 ef128810\r\n
+> be20: 00000000 00000002 c0116298 c04b5a18 00000000 c0a0c8c4 c0951780 00000040\r\n
+> be40: c0701780 ee558500 ee55d520 ef05b340 ef6f9780 ee558520 00000001 00000040\r\n
+> be60: ffffe000 c0a56878 ef6fa040 c0952040 0000012c c0528744 ef6f97b0 fffcfb6a\r\n
+> be80: c0a04104 2eda8000 c0a0c4ec c0a0d368 ee32bf44 c0153534 ee32be98 ee32be98\r\n
+> bea0: ee32bea0 ee32bea0 ee32bea8 ee32bea8 00000000 c01462e4 ffffe000 ef6f22a8\r\n
+> bec0: ffffe000 00000008 ee32bee4 c0147430 ffffe000 c094a2a8 00000003 ffffe000\r\n
+> bee0: c0a54528 00208040 0000000c c0a0c8c4 c0a65980 c0124d3c 00000008 ee558520\r\n
+> bf00: c094a23c c0a02080 00000000 c07a9910 ef136970 ef136970 ee30a440 ef136900\r\n
+> bf20: ee30a440 00000001 ef136900 ee30a440 c016d990 00000000 c0108db0 c012500c\r\n
+> bf40: ef136900 c016da14 ee30a464 ffffe000 00000001 c016dd14 00000000 c016db28\r\n
+> bf60: ffffe000 ee21a080 ee30a400 00000000 ee32a000 ee30a440 c016dbfc ee25fd70\r\n
+> bf80: ee21a09c c013edcc ee32a000 ee30a400 c013ec7c 00000000 00000000 00000000\r\n
+> bfa0: 00000000 00000000 00000000 c0108470 00000000 00000000 00000000 00000000\r\n
+> bfc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000\r\n
+> bfe0: 00000000 00000000 00000000 00000000 00000013 00000000 00000000 00000000\r\n
+> [<c03b9430>] (dql_completed) from [<c04b5a18>] (bgmac_poll+0x18c/0x6d8)\r\n
+> [<c04b5a18>] (bgmac_poll) from [<c0528744>] (net_rx_action+0x1c4/0x494)\r\n
+> [<c0528744>] (net_rx_action) from [<c0124d3c>] (do_current_softirqs+0x1ec/0x43c)\r\n
+> [<c0124d3c>] (do_current_softirqs) from [<c012500c>] (__local_bh_enable+0x80/0x98)\r\n
+> [<c012500c>] (__local_bh_enable) from [<c016da14>] (irq_forced_thread_fn+0x84/0x98)\r\n
+> [<c016da14>] (irq_forced_thread_fn) from [<c016dd14>] (irq_thread+0x118/0x1c0)\r\n
+> [<c016dd14>] (irq_thread) from [<c013edcc>] (kthread+0x150/0x158)\r\n
+> [<c013edcc>] (kthread) from [<c0108470>] (ret_from_fork+0x14/0x24)\r\n
+> Code: a83f15e0 0200001a 0630a0e1 c3ffffea (f201f0e7) \r\n
+> 
+> [...]
+
+Here is the summary with links:
+  - net: bgmac:`Fix a BUG triggered by wrong bytes_compl
+    https://git.kernel.org/netdev/net/c/1b7680c6c1f6
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+

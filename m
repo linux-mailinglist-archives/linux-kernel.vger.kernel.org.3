@@ -2,102 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C221D58E19E
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 23:14:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EFAB58E1A0
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 23:15:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229609AbiHIVOy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 17:14:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41658 "EHLO
+        id S229632AbiHIVO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 17:14:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229584AbiHIVOY (ORCPT
+        with ESMTP id S229613AbiHIVO2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 17:14:24 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DCE961B12
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 14:14:22 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1660079660;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iHxEgVmEh6JR00sxeNhAi+8y/A6SXxBI7puVDuB6aJ8=;
-        b=ak0yiCbdsTBynHZdeYORQKegIa2UyIGI6OUCB3TgNQKPV9Ho42GSJLH3vuzu6/4dAW9cMd
-        s6bVFeZZ+y33hTAGFv9Lvp4aAVf1uC88Ykrj99TP40bppD3C9Ip8gfWdxrz+299BacacYl
-        pQti81UurRaXYUnnvKs4Rf+FQDyq0mc/Ip9v901xTjokpF0jrX+6wSm8IdNyaYyHgWOB9k
-        nFOsnhHy+lK3rWIGhzmGAgopj6g+/E80fGnDBO68iMVESezy5PW5u/xftqfRq8dTV3iqSq
-        Esxk1vuJf2IC39v/hvkRmU25L9c4OBhqVxkyk+VvwknrM/pd+Fx9x1UySMnDmw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1660079660;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iHxEgVmEh6JR00sxeNhAi+8y/A6SXxBI7puVDuB6aJ8=;
-        b=9aFCsYAtz0ZZLUdgN4XFNZQaNXmv6L6JEYVFHkP49xTswpUXVQvtba2CAkxREXoq2+rPy2
-        VDS8ujDJOTlS1/AQ==
-To:     Borislav Petkov <bp@alien8.de>, Ira Weiny <ira.weiny@intel.com>
-Cc:     Rik van Riel <riel@surriel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com
-Subject: Re: [RFC PATCH 2/5] entry: Add calls for save/restore auxiliary
- pt_regs
-In-Reply-To: <YvKsS3QuOu4JVzZU@zn.tnic>
-References: <20220805173009.3128098-1-ira.weiny@intel.com>
- <20220805173009.3128098-3-ira.weiny@intel.com> <YvJNe2rzXfcogFFX@zn.tnic>
- <YvKpi/CVHko50PNQ@iweiny-desk3> <YvKsS3QuOu4JVzZU@zn.tnic>
-Date:   Tue, 09 Aug 2022 23:14:19 +0200
-Message-ID: <87lerxqfv8.ffs@tglx>
+        Tue, 9 Aug 2022 17:14:28 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B7E661D67;
+        Tue,  9 Aug 2022 14:14:23 -0700 (PDT)
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1oLWYP-000Ffb-PU; Tue, 09 Aug 2022 23:14:21 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1oLWYP-000A9a-Hx; Tue, 09 Aug 2022 23:14:21 +0200
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Add connmark read test
+To:     Daniel Xu <dxu@dxuuu.xyz>, bpf@vger.kernel.org, ast@kernel.org,
+        andrii@kernel.org, memxor@gmail.com
+Cc:     linux-kernel@vger.kernel.org
+References: <cover.1660062725.git.dxu@dxuuu.xyz>
+ <6436220efacfa99f343ffc451e3d5dc8b7f31f05.1660062725.git.dxu@dxuuu.xyz>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <37649bee-5eb3-93a2-ac57-56eb375ef8cd@iogearbox.net>
+Date:   Tue, 9 Aug 2022 23:14:21 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <6436220efacfa99f343ffc451e3d5dc8b7f31f05.1660062725.git.dxu@dxuuu.xyz>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.6/26622/Tue Aug  9 09:53:52 2022)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 09 2022 at 20:49, Borislav Petkov wrote:
-> On Tue, Aug 09, 2022 at 11:38:03AM -0700, Ira Weiny wrote:
->> Thomas did a lot of work to make the entry code generic. So I was
->> keeping that work consistent. This also helps to ensure I did not miss
->> any places.
->
-> How about you worry about the other arches when you actually cross that
-> bridge?
+Hi Daniel,
 
-Ira is right. If we want it for everything, then the generic code is the
-right place.
+On 8/9/22 6:34 PM, Daniel Xu wrote:
+> Test that the prog can read from the connection mark. This test is nice
+> because it ensures progs can interact with netfilter subsystem
+> correctly.
+> 
+> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> ---
+>   tools/testing/selftests/bpf/prog_tests/bpf_nf.c | 3 ++-
+>   tools/testing/selftests/bpf/progs/test_bpf_nf.c | 3 +++
+>   2 files changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
+> index 317978cac029..7232f6dcd252 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
+> @@ -44,7 +44,7 @@ static int connect_to_server(int srv_fd)
+>   
+>   static void test_bpf_nf_ct(int mode)
+>   {
+> -	const char *iptables = "iptables -t raw %s PREROUTING -j CT";
+> +	const char *iptables = "iptables -t raw %s PREROUTING -j CONNMARK --set-mark 42/0";
+>   	int srv_fd = -1, client_fd = -1, srv_client_fd = -1;
+>   	struct sockaddr_in peer_addr = {};
+>   	struct test_bpf_nf *skel;
+> @@ -114,6 +114,7 @@ static void test_bpf_nf_ct(int mode)
+>   	/* expected status is IPS_SEEN_REPLY */
+>   	ASSERT_EQ(skel->bss->test_status, 2, "Test for ct status update ");
+>   	ASSERT_EQ(skel->data->test_exist_lookup, 0, "Test existing connection lookup");
+> +	ASSERT_EQ(skel->bss->test_exist_lookup_mark, 43, "Test existing connection lookup ctmark");
+>   end:
+>   	if (srv_client_fd != -1)
+>   		close(srv_client_fd);
+> diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> index 84e0fd479794..2722441850cc 100644
+> --- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> +++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> @@ -28,6 +28,7 @@ __be16 sport = 0;
+>   __be32 daddr = 0;
+>   __be16 dport = 0;
+>   int test_exist_lookup = -ENOENT;
+> +u32 test_exist_lookup_mark = 0;
+>   
+>   struct nf_conn;
+>   
+> @@ -174,6 +175,8 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
+>   		       sizeof(opts_def));
+>   	if (ct) {
+>   		test_exist_lookup = 0;
+> +		if (ct->mark == 42)
+> +			test_exist_lookup_mark = 43;
 
->> I don't believe this is correct because instrumentation is not enabled
->> here.
->
-> Why do you have to run
->
-> 	arch_save_aux_pt_regs()
->
-> with instrumentation enabled?
->
-> Patch 5 does
->
-> +       struct pt_regs_auxiliary *aux_pt_regs = &to_extended_pt_regs(regs)->aux;
-> +
-> +       aux_pt_regs->cpu = raw_smp_processor_id();
->
-> only?
->
-> Why does that need to run with instrumentation enabled?
+Looks like CI failed here:
 
-There is no reason and actually _if_ we go there then this _has_ to
-happen _before_ instrumentation comes into play as instrumentation might
-want to have access to extended pt_regs. Not necessarily the cpu number,
-but the other things which need to go there for a real reason.
+   [...]
+   progs/test_bpf_nf.c:178:11: error: no member named 'mark' in 'struct nf_conn'
+                   if (ct->mark == 42)
+                       ~~  ^
+   1 error generated.
+   make: *** [Makefile:521: /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/test_bpf_nf.o] Error 1
+   make: *** Waiting for unfinished jobs....
+   Error: Process completed with exit code 2.
 
-Thanks,
+Likely due to missing CONFIG_NF_CONNTRACK_MARK for the CI instance.
 
-        tglx
-
+>   		bpf_ct_release(ct);
+>   	} else {
+>   		test_exist_lookup = opts_def.error;
+> 
 

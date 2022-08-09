@@ -2,76 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95B5058D93E
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 15:15:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DECC58D94C
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 15:21:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243834AbiHINPa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 09:15:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35406 "EHLO
+        id S242079AbiHINVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 09:21:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243739AbiHINP0 (ORCPT
+        with ESMTP id S229653AbiHINVE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 09:15:26 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B9D01085;
-        Tue,  9 Aug 2022 06:15:24 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id 258305FD04;
-        Tue,  9 Aug 2022 16:15:23 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1660050923;
-        bh=fdcqua+qoJXqIu4r14phwpmdi3YOAW+/4+VVwDby/VU=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=Z27zt2FLK8Bm4U7uUg3f+O0mDLY5mqKelx+uy3kx2pDTnG1p5CJoJujcaAV0kBBlK
-         GnzbFvGj7XlR4PKFvP2cnjLkEc2L2IrjNxjk47YjwJLTUvE/nSQxszhTx1Td8KFPMf
-         1gHE573HWe8jqqrOLhmH2LrjILy83OnuGZPFVgTSYNi1qmAIBusCGXYA8SIOTuuUsU
-         oEDPeQLnSGiYoXOulgOEvIru3QrSglp9IIK1exCEhOGicbLKYkAmr7WpeSO9Icupjc
-         e/8B2fqVp89vNRhL75+pHCZ5wfDzMH/QtoxQ3F2w0v/PX6B12bxsmvC4esWBmyj6vL
-         1Mdq2m9WcP6pQ==
-Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Tue,  9 Aug 2022 16:15:21 +0300 (MSK)
-From:   Aleksey Romanov <AVRomanov@sberdevices.ru>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-CC:     Dmitry Rokosov <DDRokosov@sberdevices.ru>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "ngupta@vflare.org" <ngupta@vflare.org>,
-        "Jan Kara" <jack@suse.com>, Ted Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Ext4 Developers List <linux-ext4@vger.kernel.org>
-Subject: Re: ext2/zram issue [was: Linux 5.19]
-Thread-Topic: ext2/zram issue [was: Linux 5.19]
-Thread-Index: AQHYq8XjXFXUH/5kskS0o+jO/1ewV62mBcyAgAAIiQCAAAf6gIAAAkUAgAAQzICAABoaAIAAFtEA
-Date:   Tue, 9 Aug 2022 13:15:15 +0000
-Message-ID: <20220809131516.xfezk7kuyu3eelsb@cab-wsm-0029881.sigma.sbrf.ru>
-References: <CAHk-=wgrz5BBk=rCz7W28Fj_o02s0Xi0OEQ3H1uQgOdFvHgx0w@mail.gmail.com>
- <702b3187-14bf-b733-263b-20272f53105d@kernel.org>
- <c7c69f77-4ea2-3375-33f3-322a3d35def5@kernel.org>
- <8710b302-9415-458d-f8a2-b78cc3a96e49@kernel.org>
- <YvIeLHuEb9XDSp6N@google.com> <YvIk3SdC7wP3uItR@google.com>
- <YvImxBsHJcpNzC+i@google.com>
- <20220809102011.pfhfb4k7tdkqvdai@CAB-WSD-L081021.sigma.sbrf.ru>
- <YvJKwCXewHmuWGdh@google.com>
-In-Reply-To: <YvJKwCXewHmuWGdh@google.com>
-Accept-Language: ru-RU, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2A82F33F262AF441B289C8691322C7A0@sberdevices.ru>
-Content-Transfer-Encoding: quoted-printable
+        Tue, 9 Aug 2022 09:21:04 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB433270A;
+        Tue,  9 Aug 2022 06:20:59 -0700 (PDT)
+Received: from localhost.localdomain (unknown [IPv6:2001:861:4a40:8620:d901:c525:a85f:2da3])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: gtucker)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 146FF6601C45;
+        Tue,  9 Aug 2022 14:20:58 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1660051258;
+        bh=IRRAMUEUPxNXQ73JNz6LTxgshzzauiZ5jk1N1jdJQNk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ZbWIrGOcD4FwA0rzsff8Ft3NU2YDbX1+dx6DbnBlSvS+cNPwtaf+EdFYKCTwuwXIS
+         OVuIgBOmgWe194wf0m3BInrxWEFzwZEfAfPeyzgkWz/oZdObqH52DwwcyJgNcb1p/l
+         Fez/zGZrgD2Fae0+vEExqEo/eyN6Iy7MhQzKLbhlWm/qyr+rlJWF1fz99h4RmmW2Ol
+         lJaD2w0vMi3TtU6Y9IIMLeOTJU86KQc0yncP6Mdt5ZMNb4x8sp+a0DhsVkW3cJ+Kd1
+         UPwnwxGsBOgr0Yan6SOiKzKdEoMRygULcHL8AANYB1tIrhfFHFVHMSzYjwXnsnb5U7
+         zJwqxK2v3pTDg==
+From:   Guillaume Tucker <guillaume.tucker@collabora.com>
+To:     Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Mark Brown <broonie@kernel.org>
+Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Subject: [PATCH] selftests: add missing ')' in lib.mk
+Date:   Tue,  9 Aug 2022 15:20:46 +0200
+Message-Id: <7de08f7f11551d6b8195c3e5d801db2fae3f49a9.1660048017.git.guillaume.tucker@collabora.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/08/09 10:46:00 #20084579
-X-KSMG-AntiVirus-Status: Clean, skipped
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -81,19 +54,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sergey,
+Add missing closing ')' in lib.mk in a call to $error().  This only
+affects LLVM / Clang builds.
 
-On Tue, Aug 09, 2022 at 08:53:36PM +0900, Sergey Senozhatsky wrote:
-> > If you make the decision to revert slow path removal patch, I would
-> > prefer to review the original patch with unneeded code removal again
-> > if you don't mind:
-> > https://lore.kernel.org/linux-block/20220422115959.3313-1-avromanov@sbe=
-rdevices.ru/
->=20
-> Sure, we can return to it after the merge window.
+Fixes: 795285ef2425 ("selftests: Fix clang cross compilation")
+Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+---
+ tools/testing/selftests/lib.mk | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-In that case, do I need to send my original patch again?=20
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index 947fc72413e9..a87f60873e5b 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -20,7 +20,7 @@ CLANG_TARGET_FLAGS              := $(CLANG_TARGET_FLAGS_$(ARCH))
+ 
+ ifeq ($(CROSS_COMPILE),)
+ ifeq ($(CLANG_TARGET_FLAGS),)
+-$(error Specify CROSS_COMPILE or add '--target=' option to lib.mk
++$(error Specify CROSS_COMPILE or add '--target=' option to lib.mk)
+ else
+ CLANG_FLAGS     += --target=$(CLANG_TARGET_FLAGS)
+ endif # CLANG_TARGET_FLAGS
+-- 
+2.30.2
 
---=20
-Thank you,
-Alexey=

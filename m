@@ -2,150 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 360C858D701
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 12:02:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4E2D58D702
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 12:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239427AbiHIKCN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 06:02:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51802 "EHLO
+        id S240419AbiHIKCS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 06:02:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234170AbiHIKCJ (ORCPT
+        with ESMTP id S240117AbiHIKCO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 06:02:09 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D2332126D;
-        Tue,  9 Aug 2022 03:02:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660039329; x=1691575329;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=iif03c67MYfvuE7erDhBWJWq4th/c84xKzsA+sWFiw4=;
-  b=nBchGVLQ0BB3eMKFATVLoH4AWbNCgB7pkjaISHJc4wmdplOg5ImagXwk
-   MiaThmsdNVw5BVv4oaGfx+UHWvBm6Eu2UsQn3JOd0m+TktC0ovofELY6i
-   c65PNxLdbIJ2YdqBstgVPZcJojjJubiE+xk1uF8gtUf26JOUyfNXQnkym
-   NNaM05or03dkILnCk/j0eD8x10+36kvPYw6R269ddvEShielMvvup/JiB
-   p1mURJALVwFNfLekYil8gLq30+ApTyEmu9ATlDEc8ZZ/94Gyq3Q7JKmc3
-   VeOzU1eHNEokyC3JORre7ght1CPt9BuqK4MFLHxddFuUJV7wXMfojwbpW
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="352529318"
-X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
-   d="scan'208";a="352529318"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 03:02:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
-   d="scan'208";a="555281176"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga003.jf.intel.com with ESMTP; 09 Aug 2022 03:02:09 -0700
-Received: from orsmsx609.amr.corp.intel.com (10.22.229.22) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Tue, 9 Aug 2022 03:02:08 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX609.amr.corp.intel.com (10.22.229.22) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Tue, 9 Aug 2022 03:02:08 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28 via Frontend Transport; Tue, 9 Aug 2022 03:02:08 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.107)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.28; Tue, 9 Aug 2022 03:02:04 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GItfTD09n2AsouaL8Fc6nYV840LvqC1VI9EATUp+MV0ib3KnCy7kQangON22cZ/M4LaYwjYkmj6LjBL9tuX+JGbDqMJMyOpqGlq/Bon0tMUA6ShTapRn2k+bj1lpvQE7qE9ejPRlmikcpZRqHXKRQv8/iMWGlOPps9wyERvN1kvQjF141TgbpluJT/R7fOZM9FyaHfL1NWpUPBRGXbCRCEdylE3DrTiIdZEMqD2iix+a6GIKJ0QyF3pcTUvlotUi9BaYziF+Li/58Azo1OSsqV4+B3COliVhpf/ukSXroCEQiTMAwcWP0GV//os6DV/emBdKcojCxwAIM8FcDI+KGQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2FRK5FR6XMYGr5tzZ311PYKRulk/kJAxlUKQlE2TyDY=;
- b=bId/UEbpjXwQ5gLjW6JGB9Wf2y2VQp7223pO7VjKyJHy3q+QR7n5VDmd5pal/tBY4vC8mY39i8RodLRjjgeir8HZrhU8yN53e4y/+KptKcHzulp8IpUODUo7TPDSDKspJJ9oka6Rme3TVtcY6FEJdbJA8A95C6vnwaBhR3MgMXDkShFs5xQIuQGcplRcLurK9myRYYRDSWQB932NcaQzH+7ii3i183zjP8RIef3M9Z1iCBkQEHbRaKk1qt1H8joJc871h9lIH4lzrAJqaPBTEFEKNYQ6J++oGKEk7eCi6FEbG3Jznbc8WnHn+KZsU4qu6JrsqeeIDBfyS+OkYNnNCg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN0PR11MB6059.namprd11.prod.outlook.com (2603:10b6:208:377::9)
- by DM6PR11MB3514.namprd11.prod.outlook.com (2603:10b6:5:61::26) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.10; Tue, 9 Aug
- 2022 10:02:03 +0000
-Received: from MN0PR11MB6059.namprd11.prod.outlook.com
- ([fe80::a968:40aa:6163:5c79]) by MN0PR11MB6059.namprd11.prod.outlook.com
- ([fe80::a968:40aa:6163:5c79%6]) with mapi id 15.20.5504.014; Tue, 9 Aug 2022
- 10:01:57 +0000
-Date:   Tue, 9 Aug 2022 06:01:53 -0400
-From:   Rodrigo Vivi <rodrigo.vivi@intel.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-CC:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        David Airlie <airlied@linux.ie>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, Maxime Ripard <mripard@kernel.org>,
-        <intel-gfx@lists.freedesktop.org>
-Subject: Re: [Intel-gfx] [PATCH v2 30/39] docs: gpu: i915.rst: gt: add more
- kernel-doc markups
-Message-ID: <YvIwkaYRbrd5+vtj@intel.com>
-References: <cover.1657699522.git.mchehab@kernel.org>
- <d7d1f6d6516eb3a82041af1d5f40c2f550de40db.1657699522.git.mchehab@kernel.org>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <d7d1f6d6516eb3a82041af1d5f40c2f550de40db.1657699522.git.mchehab@kernel.org>
-X-ClientProxiedBy: BYAPR08CA0061.namprd08.prod.outlook.com
- (2603:10b6:a03:117::38) To MN0PR11MB6059.namprd11.prod.outlook.com
- (2603:10b6:208:377::9)
+        Tue, 9 Aug 2022 06:02:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 838CE21E1E
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 03:02:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660039332;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JQ4rx3p2EcFXQ1V5iVeBvBViEa90MF16sMNOOJrJ4ZY=;
+        b=TDVLhPFUWTPmUAtj4rx8UuRmd7wsibOtfNqIFDa2dFb90rmduo8AwjIBGfwzfqvRVRsyRD
+        FnNxzyAeff9F0H8b0U/Z5h8dBJ66euSe/OxKzIrX9RYCH3+udH/pXVBYew39j7k+P1XMiH
+        AIGM7oRNUiiuMm5MSpElsWtDyUk2GaQ=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-316-L4opxke5M7GWzXJapHC_cw-1; Tue, 09 Aug 2022 06:02:11 -0400
+X-MC-Unique: L4opxke5M7GWzXJapHC_cw-1
+Received: by mail-wm1-f69.google.com with SMTP id b16-20020a05600c4e1000b003a5a47762c3so102009wmq.9
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 03:02:11 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc;
+        bh=JQ4rx3p2EcFXQ1V5iVeBvBViEa90MF16sMNOOJrJ4ZY=;
+        b=Hutdb0CKmQgErR53uXPoh7gIpiQbBWy1HxuUp8YqnTyFLm5bGVsFLyE00etPlfOfjA
+         JIu63fTC4yhACH+arxW6ii9/pW4IdLH021keWGqHtqHnA3bx0/6Ze3icilhNfXZjTo3J
+         CXlOM/bxXbTe9kjbX8t3SA1iCs5kW59N2VOc/6JF29KEVyxSbKN1+Pb/EoL5RLitQ1yC
+         zZmZaYV43zCJAm7yfCS28fV/R6lXnR0SloS24J5qklLkgf2WaYZEdyzxKnQmL18T4Jzt
+         3IzN7QoXsVGap5Or/gSUWREiaqRqx0incMG3ARfnuk/Q4UbzoY/x+oxgGCzx6AadV9T0
+         ZQDQ==
+X-Gm-Message-State: ACgBeo2lPMSzY8O/VX8MlScYe6zGOKPVqvcf/0GOqQWAyg1N3LFFLaJY
+        T6cvPtsadoXMzA5Ys0+1GENd1mQfGkMN/gbpLVA9LpTEq17KAZtI5+ePbnRZc47lIzIEFruNQzN
+        ftNBtz7dLE/QRMH75uI6CQf9ewlpx0yJJmfG1GJnDYCaKRHDvqU0NecRbvRoGpnd8Q+dW3tSKGn
+        P0
+X-Received: by 2002:a05:600c:4e41:b0:3a5:1a0c:c52 with SMTP id e1-20020a05600c4e4100b003a51a0c0c52mr12748590wmq.51.1660039329914;
+        Tue, 09 Aug 2022 03:02:09 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6tm2HzECoaWBmuka51DwVtiBM0cqXZcsf+uzA99fhRZwJPX20Dz1mrLQVRih/G0pCKAWwPSQ==
+X-Received: by 2002:a05:600c:4e41:b0:3a5:1a0c:c52 with SMTP id e1-20020a05600c4e4100b003a51a0c0c52mr12748545wmq.51.1660039329572;
+        Tue, 09 Aug 2022 03:02:09 -0700 (PDT)
+Received: from vschneid.remote.csb ([185.11.37.247])
+        by smtp.gmail.com with ESMTPSA id p19-20020a05600c359300b003a32297598csm21171607wmq.43.2022.08.09.03.02.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Aug 2022 03:02:08 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Tariq Toukan <ttoukan.linux@gmail.com>,
+        Tariq Toukan <tariqt@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>
+Cc:     Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Gal Pressman <gal@nvidia.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next V4 1/3] sched/topology: Add NUMA-based CPUs
+ spread API
+In-Reply-To: <df8b684d-ede6-7412-423d-51d57365e065@gmail.com>
+References: <20220728191203.4055-1-tariqt@nvidia.com>
+ <20220728191203.4055-2-tariqt@nvidia.com>
+ <xhsmhedxvdikz.mognet@vschneid.remote.csb>
+ <df8b684d-ede6-7412-423d-51d57365e065@gmail.com>
+Date:   Tue, 09 Aug 2022 11:02:07 +0100
+Message-ID: <xhsmh35e5d9b4.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 5c756bad-71bf-4918-ffd7-08da79ee31fe
-X-MS-TrafficTypeDiagnostic: DM6PR11MB3514:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: PtoPAtBsI5r/+dSi0psZm6WsrOmK74lGQvxihRw9k+tPQ2Te3nLsV/xTg9FCIhIaiZ/qbU0rI79AJIBVJb7aoLuiRABPrWJcvvoUUevfxlwG/B3NyU9qsLuK7IShDE9oCfPXSHFeIwu76dMIHT5avQJD+GQBR5QNWh5HXVFpVpdUtlA4URZHONJbX/QvruLlmCH8SG3HCO26c6Q2xHjrB9MsI8hUH6wuNPZasKW6SIeTBYb7uS1pVoA4NsmzLpDw3ajuXrKOn232YCtvsyyi4P1GtWdt8cSjU+ZQoa8NacIdYhRj6qjYc0ib6/HEPb1I1AAJDRzoKSpho+HzYIWEyrMLCMubUQjfE9K9BrmZM7DZc/jSI/ookpb9jWT6SFlKUsxhLx3QAMRHJ3wTTwIAmLyU2ZC7CSc/ErhqMl0Zmu9MQX7hyJOqROacTGs/wiRqP0wflXp7YmIoBIrOSKZ/glYTrBz8Oj6WRkRlKmANrowwL/61QxeP+Nsa6mIjYmj7ulRKbcFOHmy3y37+jDtE3+lsJa/WXggJXZxOd+ueMAKbuMOdlCrmPlKvRyRX2XhF89i6p6MPNQ24+tM6IpIkqm0o7B2blcwMtLfhHVvtGE9WDIk97LCnVhCu1SAgRPGVvTbacqEavP8C5weX3U/QSv12MwBnrROJBWYVXGyVfr8fbJc7XR1599UaqWkWy6GpT7RsPBR7psvvH2Kok1XLBjqZwVo4285vGqWdmt+bfwoY5W+DeKkBlyvrSQ2zdPezgSIXY5YnI+V1D7NmrWMZ99jEiqou7BRwv9VqO+E/SKJmJDxdV/xB93oELijcfRiaMcLYffHO9G6iqohOiYJpEw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6059.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(346002)(366004)(136003)(39860400002)(376002)(396003)(186003)(2616005)(54906003)(316002)(6916009)(41300700001)(26005)(6666004)(6506007)(6512007)(86362001)(6486002)(966005)(478600001)(38100700002)(83380400001)(82960400001)(8676002)(4326008)(5660300002)(66476007)(66556008)(66946007)(2906002)(8936002)(44832011)(36756003)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?DQIxFqe1lvu/S5Qk7AYIWYpeoSMZzl7aF8ykaWqQZZfITLVAgoWMHA1cdR4+?=
- =?us-ascii?Q?3k7whFd75L+8+tnaFewOokp1qSTXB32TPn/KoXBbpSxM/4gDEgEjg9jiJf1a?=
- =?us-ascii?Q?Z1H0U3LEMMmiVrDHj2HMyktxxJybe9zdMGKib54lCYKdGog+FOXGmgZWkzTf?=
- =?us-ascii?Q?vFJLYff6K9283rBiiwcN4y0n9cTdZrOASMnNDDqjs4dmtfkkcL+0jSFyuWro?=
- =?us-ascii?Q?LIX7lloTLI5yZluvpajoYwalwUjTaNrvsYKVsMBoi7w/NUj6/KQlaOTuVRaE?=
- =?us-ascii?Q?+iMnLSmjxWRbLQMZRcZvQwJPs9TQuYR+xfluf1c1Z4qa38qMnpdpGjfUev3h?=
- =?us-ascii?Q?HFMC+b2XaM1emm/tK7gDGzz2SovT2LZyusuJg244hN4I4qerpHaE+jsh5mkI?=
- =?us-ascii?Q?rguM8Ku7vtq7a6DlOioSmpQ35xAWoGFUcaTDGFV9gOcRWjbAPfDC26fPbNst?=
- =?us-ascii?Q?YN5Nc4WVTkOnulXYC1fsY6YIaQmiIGjhQMM1H/pNyoowhqPmvv/E2pFw5KzK?=
- =?us-ascii?Q?ARHm3Dwd2zXo0WvOQx/PToz+Aleo4ZEv++78LOmlsbFXtBGH6VsODBWqCkrQ?=
- =?us-ascii?Q?vrQFuU2VyhlwIF7hIZz4bzfUjOWQ2os6OV1BIbc8uFmz47g0QKSChKZ3+/xU?=
- =?us-ascii?Q?jPNM1fS7FwJGK4Opdt6TCvB9q8fhA6V52XfmjbpybJL2yUflazYF5opDbCgC?=
- =?us-ascii?Q?MtCsUgq/YzyHrQU/FSZa/viP+qPVi16u4aNIAn+UYbzMuT8pVPaZW35UxdHB?=
- =?us-ascii?Q?oOoRZzdle9vA6g0wE+cHSSvzLafMCeQh7IWc2lbjpPIEY9Y+j7XNd7WZ1/p9?=
- =?us-ascii?Q?pxvMm1jmLgAc4kvxVosxQU0K0EftAo+z+z5LFMsPiTFiVjSHNgN6SoxXi8tX?=
- =?us-ascii?Q?2sLT04TqqbnwqHHL2ANiUgzBtix4SPyZpGbHTXgVV6GQ9JA+hyfF+xytycTl?=
- =?us-ascii?Q?YP3v3XRXQ074KLFnf/WaUIwxwXp2NAydydYGHDO1mCkhHvDzzu3w6M16GJHw?=
- =?us-ascii?Q?A3WtjrfyBfwpRPH+m1+OcVb767HKmpJ1i0jsJsVMNOKg3uLJKuf8KPoW0EmO?=
- =?us-ascii?Q?PHpZVCuZpSXXemoqUKhy22qOE82MndO6+vauS25E987BvTFj0oSQy4BZyGcW?=
- =?us-ascii?Q?TbIhBYzYPvLZreER5/C7HSJUyXvTW8QSSRvZpXDQuksf1dPeatNBhHLcYLW6?=
- =?us-ascii?Q?/TUM5/6huA3ggSaTYk/sUbY/se7O8oSUzNzSIKOrq5FhP6cLJLujLr77aFiK?=
- =?us-ascii?Q?GougYGBf1IxP8rFRgzQEhXH28f9HYMdD433K5cC3dR6YqsRe9dvWpeShQ/Tf?=
- =?us-ascii?Q?iEGW+kKn1eKKwgbAQ/tRk7Pimr4MT/uqjYl/RgSdkHBrjRxBIRN9f7YtlkWZ?=
- =?us-ascii?Q?5DxYyISbBeLzKfXLELt/TM9nh5/kxCA3qvq8jVKZa4rD2Eby3Q2E0GPdy9+H?=
- =?us-ascii?Q?5577QNIpVSzoQJg+WBtVNS4HOSht36Q5z/EReQBDgyvZSpGOM6yfSAmcuJIy?=
- =?us-ascii?Q?5N5WulZNH2kiqtH/qeDMTh8bUC16m5Msy21HOw7u1GlfIgRFX/LVOMlzr1lv?=
- =?us-ascii?Q?ar80j1zZH3k3Gnxg/+euQ5dYVtmXLcZGqKoD6UeOzAeuTuF6ewcKjx51sUhH?=
- =?us-ascii?Q?Qw=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5c756bad-71bf-4918-ffd7-08da79ee31fe
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6059.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Aug 2022 10:01:57.7612
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SLK57UhZZt75wtSldnT4Acu+hD34pcBoWTyMboeCHhZxAMYcZ1SxnFKucNzVF+E9ublVYpJHETbteymEdh2v6w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB3514
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -154,89 +90,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 13, 2022 at 09:12:18AM +0100, Mauro Carvalho Chehab wrote:
-> There are several documented GT kAPI that aren't currently part
-> of the docs. Add them, as this allows identifying issues with
-> badly-formatted tags.
-> 
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> ---
-> 
-> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
-> See [PATCH v2 00/39] at: https://lore.kernel.org/all/cover.1657699522.git.mchehab@kernel.org/
-> 
->  Documentation/gpu/i915.rst | 43 +++++++++++++++++++++++++++++++++++++-
->  1 file changed, 42 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/gpu/i915.rst b/Documentation/gpu/i915.rst
-> index 2ad7941a79f2..afd8c0e3c689 100644
-> --- a/Documentation/gpu/i915.rst
-> +++ b/Documentation/gpu/i915.rst
-> @@ -149,7 +149,6 @@ Misc display functions
->  
->  .. kernel-doc:: drivers/gpu/drm/i915/display/skl_scaler.c
->  
-> -
->  Plane Configuration
->  -------------------
->  
-> @@ -308,6 +307,48 @@ Multicast/Replicated (MCR) Registers
->  .. kernel-doc:: drivers/gpu/drm/i915/gt/intel_gt_mcr.c
->     :internal:
->  
-> +GT engine
-> +---------
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_engine_types.h
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_engine_cs.c
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_engine_pm.c
-> +
-> +GT context
-> +----------
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_context.h
+On 08/08/22 17:39, Tariq Toukan wrote:
+> On 8/4/2022 8:28 PM, Valentin Schneider wrote:
+>> On 28/07/22 22:12, Tariq Toukan wrote:
+>>> +static bool sched_cpus_spread_by_distance(int node, u16 *cpus, int ncpus)
+>>                                                         ^^^^^^^^^
+>> That should be a struct *cpumask.
+>
+> With cpumask, we'll lose the order.
+>
 
-why does the context deserves a separated section and the
-many others below no?
+Right, I didn't get that from the changelog.
 
-> +
-> +Graphics Translation Tables
-> +---------------------------
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_ggtt.c
-> +
-> +Other GT functionality
-> +----------------------
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_gsc.h
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_gtt.c
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_gtt.h
+>>
+>>> +{
+>>> +	cpumask_var_t cpumask;
+>>> +	int first, i;
+>>> +
+>>> +	if (!zalloc_cpumask_var(&cpumask, GFP_KERNEL))
+>>> +		return false;
+>>> +
+>>> +	cpumask_copy(cpumask, cpu_online_mask);
+>>> +
+>>> +	first = cpumask_first(cpumask_of_node(node));
+>>> +
+>>> +	for (i = 0; i < ncpus; i++) {
+>>> +		int cpu;
+>>> +
+>>> +		cpu = sched_numa_find_closest(cpumask, first);
+>>> +		if (cpu >= nr_cpu_ids) {
+>>> +			free_cpumask_var(cpumask);
+>>> +			return false;
+>>> +		}
+>>> +		cpus[i] = cpu;
+>>> +		__cpumask_clear_cpu(cpu, cpumask);
+>>> +	}
+>>> +
+>>> +	free_cpumask_var(cpumask);
+>>> +	return true;
+>>> +}
+>>
+>> This will fail if ncpus > nr_cpu_ids, which shouldn't be a problem. It
+>> would make more sense to set *up to* ncpus, the calling code can then
+>> decide if getting fewer than requested is OK or not.
+>>
+>> I also don't get the fallback to cpumask_local_spread(), is that if the
+>> NUMA topology hasn't been initialized yet? It feels like most users of this
+>> would invoke it late enough (i.e. anything after early initcalls) to have
+>> the backing data available.
+>
+> I don't expect this to fail, as we invoke it late enough. Fallback is
+> there just in case, to preserve the old behavior instead of getting
+> totally broken.
+>
 
-Why aren't these gtt ones in the above block? why only
-having the global gtt there?
+Then there shouldn't be a fallback method - the main method is expected to
+work.
 
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_migrate.c
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_mocs.h
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_rc6.c
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_reset.c
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_rps_types.h
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_rps.c
-> +
-> +.. kernel-doc:: drivers/gpu/drm/i915/gt/intel_sseu.c
-> +
->  Memory Management and Command Submission
->  ========================================
->  
-> -- 
-> 2.36.1
-> 
+>>
+>> Finally, I think iterating only once per NUMA level would make more sense.
+>
+> Agree, although it's just a setup stage.
+> I'll check if it can work for me, based on the reference code below.
+>
+>>
+>> I've scribbled something together from those thoughts, see below. This has
+>> just the mlx5 bits touched to show what I mean, but that's just compile
+>> tested.
+>
+> My function returns a *sorted* list of the N closest cpus.
+> That is important. In many cases, drivers do not need all N irqs, but
+> only a portion of it, so it wants to use the closest subset of cpus.
+>
+
+Are there cases where we can't figure this out in advance? From what I grok
+out of the two callsites you patched, all vectors will be used unless some
+error happens, so compressing the CPUs in a single cpumask seemed
+sufficient.
+

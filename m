@@ -2,67 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A3A858E071
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:48:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D5FC58E076
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:48:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344335AbiHITrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 15:47:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47056 "EHLO
+        id S245706AbiHITsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 15:48:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346364AbiHITqv (ORCPT
+        with ESMTP id S1344371AbiHITrt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 15:46:51 -0400
-Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F17E5;
-        Tue,  9 Aug 2022 12:46:50 -0700 (PDT)
-Received: by mail-il1-f178.google.com with SMTP id l9so7116566ilq.1;
-        Tue, 09 Aug 2022 12:46:50 -0700 (PDT)
+        Tue, 9 Aug 2022 15:47:49 -0400
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9541517A88;
+        Tue,  9 Aug 2022 12:47:47 -0700 (PDT)
+Received: by mail-io1-f48.google.com with SMTP id h138so10435402iof.12;
+        Tue, 09 Aug 2022 12:47:47 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=FUZurhOVWbSFlq4M53I1Rb6VAfl1vXlk/stu+pqTW7s=;
-        b=Hylv0q5Hcln4BccHcPu+pqqkrbEO+8XKno3ylKBzTBp2I3SEnO9Z5w4LzrTj+G5/8M
-         bzXhbEs+AXONGx4KTt1iQXHSy/fgi2lkqmWo/bJI5nsGegFsVGB5r18O5Lv9OCNkXhzY
-         mMlc92N6x2+YU2AMBPXZA5xoirrTUUvb8gVnPcegvUggDcM1LjSuNpqyrPb3Qo0fK74X
-         kB1qK0zljSzYbMemR8IYnwigY6sXD1Ve1oqJAaAWjPP1lUYp2CDl7GVknfeUGR4mqv2z
-         BefIiwgPSK3su800o4D5BQSCmN9Fwlexh37Dfv0ywSPfXTvoY5J31t5TlbV5PPNjRQk/
-         YROg==
-X-Gm-Message-State: ACgBeo0NeK3Ff9ZdCCRqdJFlQ4TSC1g9LqveZle5aAGMisu//5S/Etfh
-        fu4UWU0126ncTKrTxkwJ8w==
-X-Google-Smtp-Source: AA6agR6tDsZo27ZLWdYBCuktolWxGN7xvWY3iudAMl4Ek0rvZPqnjNE6AERrQZNVv3UbX1qewNYK1w==
-X-Received: by 2002:a05:6e02:1aa7:b0:2de:b9f1:593f with SMTP id l7-20020a056e021aa700b002deb9f1593fmr10779350ilv.243.1660074409570;
-        Tue, 09 Aug 2022 12:46:49 -0700 (PDT)
+        bh=k4UmaRvRZxWq4o+Yspru8OrOEwdOORLs/XhcJE2LcmE=;
+        b=i7uR/89jJpgYHFV6gHO6aJrq7B0Q4L5AEXCwj90d1/03PdaLNOZu9NbqxC1BwTXHmU
+         XDKmoivGwX92m05+wSDg4vy3EbO8WiIZAHSWaaUuc7EP6x5WtMVHFTVy5I6nbviBo4eG
+         fw+zoom+DlHl5xkcWdCqgsT9Fq+g+XlHqBSWK/KXco8RTjEr8Kp9PTVTOBTkjuZe5Pw1
+         jAlCzvGUkBJQ6yiglXffOdPiJW6gU834WIMragRju7txmNjjUDiF447HFqbHvB8f0DEK
+         3uTTCUR+EH9PYcZYKd9F6zvTqTdXd88frGTx5Bo4lKS/UHEItVPkVhkuG/z2WccDJ2lg
+         Abeg==
+X-Gm-Message-State: ACgBeo2STXCGo5kwx6u7a0fqKlVEPuDBfIPCiAzjKIpaxrQ2ZRKTLMZE
+        QuYzOs71KZ4vHqtOpxOIuA==
+X-Google-Smtp-Source: AA6agR7fG1uhYXOmBJYv5wsJOKXjgKp41AG88l0opsqFJjhGJlNG6iL6q3oTW8sl2117x5aUUcG7/A==
+X-Received: by 2002:a05:6638:16cf:b0:341:4543:b354 with SMTP id g15-20020a05663816cf00b003414543b354mr11803265jat.114.1660074466471;
+        Tue, 09 Aug 2022 12:47:46 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id b3-20020a056638388300b00342f67a4789sm3448164jav.164.2022.08.09.12.46.47
+        by smtp.gmail.com with ESMTPSA id h11-20020a92d08b000000b002de7ceafb4esm1386103ilh.20.2022.08.09.12.47.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 12:46:49 -0700 (PDT)
-Received: (nullmailer pid 2272995 invoked by uid 1000);
-        Tue, 09 Aug 2022 19:46:47 -0000
-Date:   Tue, 9 Aug 2022 13:46:47 -0600
+        Tue, 09 Aug 2022 12:47:46 -0700 (PDT)
+Received: (nullmailer pid 2274578 invoked by uid 1000);
+        Tue, 09 Aug 2022 19:47:43 -0000
+Date:   Tue, 9 Aug 2022 13:47:43 -0600
 From:   Rob Herring <robh@kernel.org>
-To:     Bo-Chen Chen <rex-bc.chen@mediatek.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
-        msp@baylibre.com, jitao.shi@mediatek.com, p.zabel@pengutronix.de,
-        tzimmermann@suse.de, matthias.bgg@gmail.com,
-        dri-devel@lists.freedesktop.org, robh+dt@kernel.org,
-        ck.hu@mediatek.com, linux-kernel@vger.kernel.org, deller@gmx.de,
-        wenst@chromium.org, linux-fbdev@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        angelogioacchino.delregno@collabora.com, mripard@kernel.org,
-        granquet@baylibre.com, chunkuang.hu@kernel.org,
-        liangxu.xu@mediatek.com, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, daniel@ffwll.ch,
-        airlied@linux.ie
-Subject: Re: [PATCH v16 1/8] dt-bindings: mediatek,dp: Add Display Port
- binding
-Message-ID: <20220809194647.GA2272961-robh@kernel.org>
-References: <20220805101459.3386-1-rex-bc.chen@mediatek.com>
- <20220805101459.3386-2-rex-bc.chen@mediatek.com>
+To:     Jerome Neanne <jneanne@baylibre.com>
+Cc:     khilman@baylibre.com, lgirdwood@gmail.com,
+        linux-arm-kernel@lists.infradead.org, nm@ti.com,
+        lee.jones@linaro.org, linux-input@vger.kernel.org,
+        msp@baylibre.com, devicetree@vger.kernel.org, j-keerthy@ti.com,
+        broonie@kernel.org, narmstrong@baylibre.com,
+        dmitry.torokhov@gmail.com, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, kristo@kernel.org
+Subject: Re: [PATCH v3 04/10] regulator: dt-bindings: Add TI TPS65219 PMIC
+ bindings
+Message-ID: <20220809194743.GA2274545-robh@kernel.org>
+References: <20220805121852.21254-1-jneanne@baylibre.com>
+ <20220805121852.21254-5-jneanne@baylibre.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220805101459.3386-2-rex-bc.chen@mediatek.com>
+In-Reply-To: <20220805121852.21254-5-jneanne@baylibre.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -74,23 +69,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 05 Aug 2022 18:14:52 +0800, Bo-Chen Chen wrote:
-> From: Markus Schneider-Pargmann <msp@baylibre.com>
+On Fri, 05 Aug 2022 14:18:46 +0200, Jerome Neanne wrote:
+> Add TPS65219 PMIC bindings using json-schema.
 > 
-> This controller is present on several mediatek hardware. Currently
-> mt8195 and mt8395 have this controller without a functional difference,
-> so only one compatible field is added.
+> Describe required properties and regname-supply.
+> regname-supply is required when bypass mode is used for a regulator.
+> Describes regulator topology.
+> Interrupts support.
+> Add a power-button property to configure the EN/PB/VSENSE pin as a
+> powerbutton:
 > 
-> The controller can have two forms, as a normal display port and as an
-> embedded display port.
+> TPS65219 has a multipurpose pin called EN/PB/VSENSE that can be either:
+> - EN in which case it functions as an enable pin.
+> - VSENSE which compares the voltages and triggers an automatic
+> on/off request.
+> - PB in which case it can be configured to trigger an interrupt
+> to the SoC.
+> ti,power-button reflects the last one of those options
+> where the board has a button wired to the pin and triggers
+> an interrupt on pressing it.
 > 
 > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
-> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
-> Signed-off-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> Signed-off-by: Jerome Neanne <jneanne@baylibre.com>
 > ---
->  .../display/mediatek/mediatek,dp.yaml         | 116 ++++++++++++++++++
->  1 file changed, 116 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/display/mediatek/mediatek,dp.yaml
+>  .../bindings/regulator/ti,tps65219.yaml       | 173 ++++++++++++++++++
+>  1 file changed, 173 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/regulator/ti,tps65219.yaml
 > 
 
 Reviewed-by: Rob Herring <robh@kernel.org>

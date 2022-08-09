@@ -2,62 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A5FC58D894
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 14:05:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ADBD58D895
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 14:05:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241395AbiHIMFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 08:05:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46740 "EHLO
+        id S242997AbiHIMFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 08:05:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236564AbiHIMFI (ORCPT
+        with ESMTP id S236541AbiHIMF3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 08:05:08 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C34A51EEC3;
-        Tue,  9 Aug 2022 05:05:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660046704; x=1691582704;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=rIJtg6N3ukhnUG2gqKWmREiUxHfYT175zglEAUmnV9E=;
-  b=AH7ui4fF4hCupigWHipG7d3CSEb5mbTh6SWBddTm2f9W+Tw8uX73YJ4w
-   P4/M8PrJ5guQOcY5iM1u9/UIxx/KkHuVmy0dQ6fi/Jlabq/YuiQv0jDiW
-   aQWPccRK6PN/RriletX0Dmb8D+paUYYSEyGIYNUA4WYG8tcFkl4Za0U5n
-   Dnt2i7j3bv9ezUXhIaGl8PkE6F1pLqGevQO8Oi9iUXYsCK85DkmNeLvNj
-   hMB2b+m8DeewU0MdETmb/3JUDfM8lnzkqSn68VsvLtn+cPkFqPF5RjlU+
-   t8UkUjcyHL3BbZkZwXw6D0KJ+ambputnA1NrCxU4o7F+dp46JmWIuvFmF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="291603911"
-X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
-   d="scan'208";a="291603911"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 05:05:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
-   d="scan'208";a="633300813"
-Received: from mylly.fi.intel.com (HELO [10.237.72.177]) ([10.237.72.177])
-  by orsmga008.jf.intel.com with ESMTP; 09 Aug 2022 05:05:01 -0700
-Message-ID: <d2be49af-71e4-978b-fe00-8b8fca6f80b5@linux.intel.com>
-Date:   Tue, 9 Aug 2022 15:05:01 +0300
+        Tue, 9 Aug 2022 08:05:29 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2EC1B25
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 05:05:26 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b9800329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:9800:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E32821EC0426;
+        Tue,  9 Aug 2022 14:05:20 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1660046721;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=TkrtFJfURyVbLfACCforeqlFlEPRCCTHzagQfiGpr34=;
+        b=DQW+acbHiI+DNWx8RxYLm1KMdzE1ftofn+nT8Wn9pfxe8ICYB90LU0QwnjRDuTzffn6J4I
+        0Ex019K2lajoxalLZ8bpwmEF2bbLZL4F5XTkghGeLrYPfsGNItaoW/y9PcmV09ND4v2tmy
+        Et3kBFW1fMchXcFikdXoXy7owTAH3Eo=
+Date:   Tue, 9 Aug 2022 14:05:15 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     ira.weiny@intel.com
+Cc:     Rik van Riel <riel@surriel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com
+Subject: Re: [RFC PATCH 2/5] entry: Add calls for save/restore auxiliary
+ pt_regs
+Message-ID: <YvJNe2rzXfcogFFX@zn.tnic>
+References: <20220805173009.3128098-1-ira.weiny@intel.com>
+ <20220805173009.3128098-3-ira.weiny@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.10.0
-Subject: Re: [PATCH] i2c: designware: Introduce cooldown timer to AMDPSP
- driver
-Content-Language: en-US
-To:     Jan Dabros <jsd@semihalf.com>, linux-kernel@vger.kernel.org,
-        linux-i2c@vger.kernel.org, andriy.shevchenko@linux.intel.com
-Cc:     mika.westerberg@linux.intel.com, wsa@kernel.org,
-        rrangel@chromium.org, mw@semihalf.com, upstream@semihalf.com
-References: <20220725080240.106619-1-jsd@semihalf.com>
-From:   Jarkko Nikula <jarkko.nikula@linux.intel.com>
-In-Reply-To: <20220725080240.106619-1-jsd@semihalf.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20220805173009.3128098-3-ira.weiny@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,61 +54,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
-
-Sorry the delay, this slipped through my eyes during vacation. Couple 
-minor comments below.
-
-On 7/25/22 11:02, Jan Dabros wrote:
-> In order to optimize performance, limit amount of back and forth
-> transactions between x86 and PSP. This is done by introduction of
-> cooldown period - that is window in which x86 isn't releasing the bus
-> immediately after each I2C transaction.
+On Fri, Aug 05, 2022 at 10:30:06AM -0700, ira.weiny@intel.com wrote:
+> From: Ira Weiny <ira.weiny@intel.com>
 > 
-> In order to protect PSP from being starved while waiting for
-> arbitration, after a programmed time bus is automatically released by a
-> deferred function.
-> 
-> Signed-off-by: Jan Dabros <jsd@semihalf.com>
-> ---
->   drivers/i2c/busses/i2c-designware-amdpsp.c | 68 +++++++++++++++++-----
->   1 file changed, 53 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/busses/i2c-designware-amdpsp.c
-> index b624356c945f..2e1bb5ae72c3 100644
-> --- a/drivers/i2c/busses/i2c-designware-amdpsp.c
-> +++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
-> @@ -6,6 +6,7 @@
->   #include <linux/io-64-nonatomic-lo-hi.h>
->   #include <linux/psp-sev.h>
->   #include <linux/types.h>
-> +#include <linux/workqueue.h>
->   
->   #include <asm/msr.h>
->   
-> @@ -15,6 +16,8 @@
->   #define PSP_MBOX_OFFSET		0x10570
->   #define PSP_CMD_TIMEOUT_US	(500 * USEC_PER_MSEC)
->   
-> +#define PSP_I2C_COOLDOWN_TIME_MS 100
-> +
+> Some architectures have auxiliary pt_regs space available to store
+> information on the stack during exceptions.  This information is easier
+> to obtain and store within C code rather than in arch specific assembly.
 
-"cooldown" distract me thinking thermal management. Would semaphore 
-reservation time/timer fit better?
+There are others?
 
-> +static void release_bus_now(void)
-> +static void psp_release_i2c_bus_deferred(struct work_struct *work)
-> +static DECLARE_DELAYED_WORK(release_queue, psp_release_i2c_bus_deferred);
-> +
+Because I would've done this whole thing in arch/x86/ only...
 
-I'd use the same namespace here. Perhaps _now can be dropped from the 
-name since the release_bus and release_bus_deferred are near to each 
-other and _deferred variant implies it's called after timeout.
+> diff --git a/kernel/entry/common.c b/kernel/entry/common.c
+> index 8c0f334c4b75..a70a0f314aee 100644
+> --- a/kernel/entry/common.c
+> +++ b/kernel/entry/common.c
+> @@ -317,7 +317,7 @@ noinstr irqentry_state_t irqentry_enter(struct pt_regs *regs)
+>  
+>  	if (user_mode(regs)) {
+>  		irqentry_enter_from_user_mode(regs);
+> -		return ret;
+> +		goto aux_save;
 
-> +	/*
-> +	 * Send a release command to PSP if the cooldown timeout elapsed but x86 still
-> +	 * owns the ctrlr.
-> +	 */
+Why do you have to goto and do the instrumentation sandwitch around it
+at the goto label?
 
-Replace "ctrlr" -> "control" here since then it doesn't lead to think 
-is't some technical object like register etc.
+Why not simply do
+
+	if (user_mode(regs)) {
+		irqentry_enter_from_user_mode(regs);
+		arch_save_aux_pt_regs(regs);
+		return ret;
+
+and so on?
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

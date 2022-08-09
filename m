@@ -2,180 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3544858D6F9
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 11:59:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 964CA58D6FC
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 12:00:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239111AbiHIJ7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 05:59:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49594 "EHLO
+        id S232374AbiHIKAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 06:00:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239078AbiHIJ7E (ORCPT
+        with ESMTP id S234902AbiHIJ76 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 05:59:04 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08AE23BC5;
-        Tue,  9 Aug 2022 02:59:02 -0700 (PDT)
-Received: from fraeml710-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M27hR6XZ5z67xh9;
-        Tue,  9 Aug 2022 17:54:31 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml710-chm.china.huawei.com (10.206.15.59) with Microsoft SMTP Server
+        Tue, 9 Aug 2022 05:59:58 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 431F8220CA
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 02:59:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660039197; x=1691575197;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=k93SikZPvxMIlKN6YpyKMEsobZDu1IZszQzH27PhImw=;
+  b=VDSSMPPFWF35THvT+WaJeYqgNbTWXGCck83vK2/xEWL1vgF55VfjpMiy
+   j4NubWl8/Msc/sMtmNVjHuGU/y6dkjQjJWwoFgKQMuRz7GMMEOLXjwMzi
+   4AafFAzdTpfgxthdObG1IaG5duplczHJJP9EQOxLWoFf0jRMCGEGueEet
+   qTqtatICVoPYMgHTbktY0E0RwgnJQnMpHT7Xba7Ao3NZIyl4U4al53D7d
+   bcjxfVA/ivnB7pS+j0F5Z0m51PxpBfd4/bR/8I9n0ifEd1MUHlZkHjtDZ
+   lcPjWFAujSuYgZCts+PZpRZrbYTbRBOmxTG5q9dXx5Oe0OE47t2ENSWqF
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="377089624"
+X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
+   d="scan'208";a="377089624"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 02:59:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,224,1654585200"; 
+   d="scan'208";a="608158960"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by fmsmga007.fm.intel.com with ESMTP; 09 Aug 2022 02:59:56 -0700
+Received: from orsmsx603.amr.corp.intel.com (10.22.229.16) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 9 Aug 2022 11:59:00 +0200
-Received: from [10.195.245.222] (10.195.245.222) by
- lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
+ 15.1.2375.28; Tue, 9 Aug 2022 02:59:56 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Tue, 9 Aug 2022 10:58:59 +0100
-Message-ID: <3451fa5a-6229-073f-ae18-0c232cd48ed5@huawei.com>
-Date:   Tue, 9 Aug 2022 10:58:58 +0100
+ 15.1.2375.28 via Frontend Transport; Tue, 9 Aug 2022 02:59:56 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.177)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.28; Tue, 9 Aug 2022 02:59:56 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=J1jM8VrNPAW1FVqjPzAejbwU8dF7mcFVVBh9dqqyDdOzvGzpoyYfepQx4ReozSMncS09+7/XCEGbEiPQ38+1XNdn/pEtmUoxt0YZDg7ycaQCc4D0noZqaIjFADNhSkNKwqEPyy47OSLtJGBxibYSqsKdx8d+mViCJKruuJ8rkGaAqfsk6dmoDLEYDhF1eTUUycTJ64tjf0LjL1mwyMpUyp92AARA8qgQtLwWf7lAu12FYHe6c6MirQc1PNG4FjLxcY+UQTZdzdPZmK1sliLe1HsjUxtFvNIAtlJkIitMaWeN/ONcwIls/Us3bBEOW1uSXsc+ycYXtdyx1QojCT3ubQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=73rLQfrjDJlDCmL1lgkj0jrX32XtvJiJ7TNBeS3qlKo=;
+ b=bY7SYVhQGWLvm2y5gwroi3WJitmlBAPnJVTN7GTzIg70Jvn3/K/8bqlDGfxyulMjZuY/mdDEmRZVfx1e7XPVVk48FkD/F+Q52kcBF6Nk4bGCm3LC/9VmK9QhuwPKlMp56skBoJXuxg6JjUybgNf48eSYyORl9ShzMPXfKFW3/D9zjgtnX3v4RW/U2+olI5gtZYOrRcVjMWMSpV3SGQIRQAkzA7MD6hLlhv0NXBxu8NlYYtIDGT0g7WtWEvBq2WUEaMnqHH4NPwtcCqDwgoXLAkv+vn2YF0GOZuKc4utJ+0dXQ+QrbGfURQMfUxcPSo9nFaZP+YwUbVcRK5Gp34BXeQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6059.namprd11.prod.outlook.com (2603:10b6:208:377::9)
+ by SJ0PR11MB4958.namprd11.prod.outlook.com (2603:10b6:a03:2ae::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14; Tue, 9 Aug
+ 2022 09:59:49 +0000
+Received: from MN0PR11MB6059.namprd11.prod.outlook.com
+ ([fe80::a968:40aa:6163:5c79]) by MN0PR11MB6059.namprd11.prod.outlook.com
+ ([fe80::a968:40aa:6163:5c79%6]) with mapi id 15.20.5504.014; Tue, 9 Aug 2022
+ 09:59:49 +0000
+Date:   Tue, 9 Aug 2022 05:59:44 -0400
+From:   Rodrigo Vivi <rodrigo.vivi@intel.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+CC:     Thomas =?iso-8859-1?Q?Hellstr=F6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        David Airlie <airlied@linux.ie>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        Matthew Auld <matthew.auld@intel.com>,
+        <intel-gfx@lists.freedesktop.org>
+Subject: Re: [Intel-gfx] [PATCH v2 19/39] drm/i915: i915_gem_region.h: fix
+ i915_gem_apply_to_region_ops doc
+Message-ID: <YvIwEIfinUclVQN+@intel.com>
+References: <cover.1657699522.git.mchehab@kernel.org>
+ <f197e0eccbde017dccbd31e72c892a102543cb90.1657699522.git.mchehab@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <f197e0eccbde017dccbd31e72c892a102543cb90.1657699522.git.mchehab@kernel.org>
+X-ClientProxiedBy: SJ0PR05CA0146.namprd05.prod.outlook.com
+ (2603:10b6:a03:33d::31) To MN0PR11MB6059.namprd11.prod.outlook.com
+ (2603:10b6:208:377::9)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [ata] 0568e61225: stress-ng.copy-file.ops_per_sec -15.0%
- regression
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        kernel test robot <oliver.sang@intel.com>
-CC:     Christoph Hellwig <hch@lst.de>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Linux Memory Management List" <linux-mm@kvack.org>,
-        <linux-ide@vger.kernel.org>, <lkp@lists.01.org>, <lkp@intel.com>,
-        <ying.huang@intel.com>, <feng.tang@intel.com>,
-        <zhengjun.xing@linux.intel.com>, <fengwei.yin@intel.com>
-References: <YuzPMMnnY739Tnit@xsang-OptiPlex-9020>
- <1f498d4a-f93f-ceb4-b713-753196e5e08d@opensource.wdc.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <1f498d4a-f93f-ceb4-b713-753196e5e08d@opensource.wdc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.195.245.222]
-X-ClientProxiedBy: lhrpeml500004.china.huawei.com (7.191.163.9) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 7e32556d-581b-4bcd-79fd-08da79ede571
+X-MS-TrafficTypeDiagnostic: SJ0PR11MB4958:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: aDOAZQSU55NLGflhyrMtxef3SdJN6TJRiLWw6tHEsp+r+EvuAvJ/OsSflc/tKnbK8xnDlntkDJbydETHb+dEqOeqOarUnGmDBOJ+l3tghVjNiL6VV5NeNSJrxOTitKTyrbXvxZmVbGt4zydOBZwsDqyJd22Kv8xhHHEFPGuiW9qvfCDm3xp2mKkP0Bu9y4eXLUN/m0wyr39z4/cxxn5VnIx9eDU1oiwvyeGjNUsoiccXhwwvusWo5vhyaQ9CzV5gCY0unD5yiJIAozJ4HUNt7nCBuMfcwQ8SFPCA91e2cxUFLG/6bho46BLR2BLK8vR9oE0q8XCKx0lsVQwz0q8PdDJMcVjaMg+sNmLoCMEv8A0Wf8dX1namS/LO1yP2DWAlWbDoJEfnjzTlWvwguis06rTTkH4MArzsB7n9CzE4MsOI6wuO7ktHo3QiFzWC8MheZL+BC6rpaW7zGeiC5fkLZY1wU5dFONu5qN6Z6g7z6GsB7ihNPaTSzoHSt9OHYfJK1j0PddAr+jYvsDbUC6gnu6iXbeaPGMt95+wU8wUJZg4lllmZFhyDMXb6FfeEHoKvjYPf9aOkI9LMPvQg+i2vhTquJGvuyZkMtCSor6iVQ9y2idS2t01K161ikab2l5lH4I1JPRXi7JBL5cLARJGvzndAEXOYQa/0X0BgQyRDIjxGmJP3bb8C8fmNa6k0hbFe3Wupxqsl/ffpCZ1HnUUJTK5rX33uOpwnNLlLZbHEr+Qkz25pyF4M/aqPKBJHHHUBFFxmuT9GjB+MBElFbg0gsA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6059.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(396003)(136003)(376002)(366004)(346002)(36756003)(26005)(6512007)(6506007)(41300700001)(38100700002)(6666004)(966005)(6486002)(478600001)(83380400001)(86362001)(186003)(2616005)(82960400001)(8936002)(8676002)(2906002)(4326008)(66476007)(44832011)(66946007)(316002)(5660300002)(66556008)(54906003)(6916009);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kdO5PSsyYtl+cWw+N1uX9v7r05kEFa8fbrpCnfAeGhsIA3YtK3n2LIaPjRc0?=
+ =?us-ascii?Q?ngHjmDm0vtJ56fw1U0G9bLqJOHlvgN8MB3yz0XW6pNQjhHBqVglwfhpau4rQ?=
+ =?us-ascii?Q?ciYWXEwmHfrTDnnvPRLuDGvWVYszEjwz3YB14KWy3ckrqY5qFm3MocQVugLK?=
+ =?us-ascii?Q?3QtIc+8ckvc34glWf16NMY/lFQuM0PGCCPpYIAUNN5yBEiHo9JvT/pdcCgLD?=
+ =?us-ascii?Q?FZ44+0P2L1h9aIGr0FoBIOdIxSsfNvbZE5qDcmmtR571isA/6C77uu6uqz+G?=
+ =?us-ascii?Q?UAgS46S5hrwzGKHG1wj69e3A9dFBCc8CkjeGvnaY+LGm/wEcfSFPjhGny6wT?=
+ =?us-ascii?Q?O2NrwI7cewei+Gi5NL9YLe02lMLOsWf/uWVdHu3KuzDVXKfYIPtznEWJXxw0?=
+ =?us-ascii?Q?Fel3e+2ue4P5bTEweo6jLDt63cqKaRfd/v82EZ0t5XJnNlTIWr8urIqiLNEi?=
+ =?us-ascii?Q?OxGrGCwOUIoVotNs+Q2vi6SvaC8exi4hnTM1ANy0cLKWH/RO9NmHIktUVbxy?=
+ =?us-ascii?Q?OtJmiSvwtM1/iiPreubfyx9DRUJNksy3eC6GMvUsNpe8Z+1a8vu8qk3z0oyb?=
+ =?us-ascii?Q?DOMVwgEWqNLaPyG0O2YrTp/yD+5aHvO1sssCxnqmJUTX75m17RF9ihrG4qNq?=
+ =?us-ascii?Q?/qAGyQNavK8znh7p1yokFDsZuMnarYWiLHCGcxG5tGau6qqiCxEegfzI4spQ?=
+ =?us-ascii?Q?HspeOTA9zZdHbFN3mZtbiBDoC5mEZUTmas2d6RKuJ+O9DJGC4d90ClOV5bJe?=
+ =?us-ascii?Q?Bk2NTUvTtbaHUlUjNULs6mKwsyV47ldxI5ScoNqC/gvkWsQQN9mh62JiwGnD?=
+ =?us-ascii?Q?urMikzKT4SuJp64GXLU8Wht0CXCpEwIQ0JR9FaapzgBlFfnzQQ4XZ6ofucco?=
+ =?us-ascii?Q?iPVGbouH19b0k9GR+MnN/0ejWlBNWZ2KGXz23YXkvklLiFQE3dw3NHmEe7Go?=
+ =?us-ascii?Q?OSLRRKj8faEdaAI7Bzz/VY7usDb+u1aJ86vjM1vvMLfae0w6q/tV2wdPOiyg?=
+ =?us-ascii?Q?kdZyATDkYXPwPubwNMAIn3+w4FCvEtkj4kctd0hskTmgK+vuvJweq8+MYudH?=
+ =?us-ascii?Q?WYwjr4Mk3ZZj6HmK+j5XhBPcsHWyz6q96ggabZYMrz0Q/cY0oPIjJ5+BdGUI?=
+ =?us-ascii?Q?t1qMMKjv1MIksLwDbSOAwnj0916cSE/MY9yvjP5haZOlabshiU3k9NxbNOZM?=
+ =?us-ascii?Q?eNweZ62+3wynZ3P7yG4Oixjg9afcZtWO0OZf/t4P0VqA3DX56XlTUYF5X/67?=
+ =?us-ascii?Q?Rrpw1CtBVGZruRI7NSgyQ5WNPHLfOPxZxkEFIV73Py3TtQFW2iTsTCP9qWTy?=
+ =?us-ascii?Q?WmzwTNlxPDz6ifZitSnI/F0P8e1KgbpbV8vQtpQK8apGsD9S8E+OVtp0yZNf?=
+ =?us-ascii?Q?Bkoa6EHAVaHj0Jv2B6TV1Cj6Ojuidm0goOivW9/ccG/j5+tMBkIkj8+dE4tS?=
+ =?us-ascii?Q?TH5s0+Rk/vblsyoG/jtHPHvg3siqitsYWcd6zPwWuPKsBvrjk7pJNgGSOwfy?=
+ =?us-ascii?Q?hndMBOmvTBg8L3y9brzefL+V4BDeGB/Cv2mszmxi3UYfQyPvN02ezLI32hhJ?=
+ =?us-ascii?Q?AyUmWKsdA3oE0E8PdcrB6JLU1wgjXjbxowgqqFXu2oN7rcbc5gQzE+Be8CWw?=
+ =?us-ascii?Q?Ig=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7e32556d-581b-4bcd-79fd-08da79ede571
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6059.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Aug 2022 09:59:49.2956
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: gSAX1VN/W2WoBcOqKXrnpDcqcGDv+lxUcpRvRMaQmRqd4tbwNCgKcQG4IgY1jiomeio9iI8eTT8+HrdxvL+fdg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR11MB4958
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/08/2022 15:52, Damien Le Moal wrote:
-> On 2022/08/05 1:05, kernel test robot wrote:
->>
->>
->> Greeting,
->>
->> FYI, we noticed a -15.0% regression of stress-ng.copy-file.ops_per_sec due to commit:
->>
->>
->> commit: 0568e6122574dcc1aded2979cd0245038efe22b6 ("ata: libata-scsi: cap ata_device->max_sectors according to shost->max_sectors")
->> https://git.kernel.org/cgit/linux/kernel/git/next/linux-next.git master
->>
->> in testcase: stress-ng
->> on test machine: 96 threads 2 sockets Ice Lake with 256G memory
->> with following parameters:
->>
->> 	nr_threads: 10%
->> 	disk: 1HDD
->> 	testtime: 60s
->> 	fs: f2fs
->> 	class: filesystem
->> 	test: copy-file
->> 	cpufreq_governor: performance
->> 	ucode: 0xb000280
+On Wed, Jul 13, 2022 at 09:12:07AM +0100, Mauro Carvalho Chehab wrote:
+> The kernel-doc markup for i915_gem_apply_to_region_ops() has some
+> issues:
 > 
-> Without knowing what the device adapter is, hard to say where the problem is. I
-> suspect that with the patch applied, we may be ending up with a small default
-> max_sectors value, causing overhead due to more commands than necessary.
+> 1. The field should be marked as @process_obj;
+> 2. The callback parameters aren't document properly, as sphinx
+>    will consider them to be placed at the wrong place.
 > 
-> Will check what I see with my test rig.
+> Fix (1) and change the way the parameters are described, using
+> a list, in order for it to be properly parsed during documentation
+> build time.
+> 
+> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 
-As far as I can see, this patch should not make a difference unless the 
-ATA shost driver is setting the max_sectors value unnecessarily low.
-
+Reviewed-by: Rodrigo Vivi <rodrigo.vivi@intel.com>
+> ---
 > 
->>
->>
->>
->>
->> If you fix the issue, kindly add following tag
->> Reported-by: kernel test robot <oliver.sang@intel.com>
->>
->>
->> Details are as below:
->> -------------------------------------------------------------------------------------------------->
->>
->>
->> To reproduce:
->>
->>          git clone https://github.com/intel/lkp-tests.git
->>          cd lkp-tests
->>          sudo bin/lkp install job.yaml           # job file is attached in this email
->>          bin/lkp split-job --compatible job.yaml # generate the yaml file for lkp run
->>          sudo bin/lkp run generated-yaml-file
->>
->>          # if come across any failure that blocks the test,
->>          # please remove ~/.lkp and /lkp dir to run from a clean state.
->>
->> =========================================================================================
->> class/compiler/cpufreq_governor/disk/fs/kconfig/nr_threads/rootfs/tbox_group/test/testcase/testtime/ucode:
->>    filesystem/gcc-11/performance/1HDD/f2fs/x86_64-rhel-8.3/10%/debian-11.1-x86_64-20220510.cgz/lkp-icl-2sp1/copy-file/stress-ng/60s/0xb000280
->>
->> commit:
->>    4cbfca5f77 ("scsi: scsi_transport_sas: cap shost opt_sectors according to DMA optimal limit")
->>    0568e61225 ("ata: libata-scsi: cap ata_device->max_sectors according to shost->max_sectors")
->>
->> 4cbfca5f7750520f 0568e6122574dcc1aded2979cd0
->> ---------------- ---------------------------
->>           %stddev     %change         %stddev
->>               \          |                \
->>        1627           -14.9%       1385        stress-ng.copy-file.ops
->>       27.01           -15.0%      22.96        stress-ng.copy-file.ops_per_sec
->>     8935079           -11.9%    7870629        stress-ng.time.file_system_outputs
->>       14.88 ±  5%     -31.8%      10.14 ±  3%  stress-ng.time.percent_of_cpu_this_job_got
->>       50912           -14.7%      43413        vmstat.io.bo
->>       93.78            +1.4%      95.10        iostat.cpu.idle
->>        3.89           -31.6%       2.66        iostat.cpu.iowait
->>        4.01            -1.3        2.74        mpstat.cpu.all.iowait%
->>        0.23 ±  9%      -0.1        0.17 ± 11%  mpstat.cpu.all.sys%
->>        1.66 ± 37%      -1.2        0.51 ± 55%  perf-profile.calltrace.cycles-pp.f2fs_write_end.generic_perform_write.f2fs_buffered_write_iter.f2fs_file_write_iter.do_iter_readv_writev
->>        1.66 ± 37%      -1.1        0.59 ± 25%  perf-profile.children.cycles-pp.f2fs_write_end
->>        1.51 ± 40%      -1.1        0.45 ± 26%  perf-profile.children.cycles-pp.f2fs_dirty_data_folio
->>        1.21 ± 49%      -1.0        0.23 ± 33%  perf-profile.children.cycles-pp.f2fs_update_dirty_folio
->>        0.88 ± 56%      -0.8        0.04 ±111%  perf-profile.children.cycles-pp.native_queued_spin_lock_slowpath
->>        0.14 ± 26%      +0.1        0.25 ± 28%  perf-profile.children.cycles-pp.page_cache_ra_unbounded
->>        0.88 ± 56%      -0.8        0.04 ±112%  perf-profile.self.cycles-pp.native_queued_spin_lock_slowpath
->>     3164876 ±  9%     -20.2%    2524713 ±  7%  perf-stat.i.cache-misses
->>   4.087e+08            -4.6%  3.899e+08        perf-stat.i.dTLB-loads
->>      313050 ± 10%     -18.4%     255410 ±  6%  perf-stat.i.node-loads
->>      972573 ±  9%     -16.4%     812873 ±  6%  perf-stat.i.node-stores
->>     3114748 ±  9%     -20.2%    2484807 ±  7%  perf-stat.ps.cache-misses
->>   4.022e+08            -4.6%  3.837e+08        perf-stat.ps.dTLB-loads
->>      308178 ± 10%     -18.4%     251418 ±  6%  perf-stat.ps.node-loads
->>      956996 ±  9%     -16.4%     799948 ±  6%  perf-stat.ps.node-stores
->>      358486            -8.3%     328694        proc-vmstat.nr_active_file
->>     1121620           -11.9%     987816        proc-vmstat.nr_dirtied
->>      179906            -6.7%     167912        proc-vmstat.nr_dirty
->>     1151201            -1.7%    1131322        proc-vmstat.nr_file_pages
->>      100181            +9.9%     110078 ±  2%  proc-vmstat.nr_inactive_file
->>      846362           -14.6%     722471        proc-vmstat.nr_written
->>      358486            -8.3%     328694        proc-vmstat.nr_zone_active_file
->>      100181            +9.9%     110078 ±  2%  proc-vmstat.nr_zone_inactive_file
->>      180668            -6.8%     168456        proc-vmstat.nr_zone_write_pending
->>      556469            -3.5%     536985        proc-vmstat.pgactivate
->>     3385454           -14.6%    2889953        proc-vmstat.pgpgout
->>
->>
->>
->>
->> Disclaimer:
->> Results have been estimated based on internal Intel analysis and are provided
->> for informational purposes only. Any difference in system hardware or software
->> design or configuration may affect actual performance.
->>
->>
+> To avoid mailbombing on a large number of people, only mailing lists were C/C on the cover.
+> See [PATCH v2 00/39] at: https://lore.kernel.org/all/cover.1657699522.git.mchehab@kernel.org/
 > 
+>  drivers/gpu/drm/i915/gem/i915_gem_region.h | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
 > 
-
+> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_region.h b/drivers/gpu/drm/i915/gem/i915_gem_region.h
+> index 2dfcc41c0170..b0134bf4b1b7 100644
+> --- a/drivers/gpu/drm/i915/gem/i915_gem_region.h
+> +++ b/drivers/gpu/drm/i915/gem/i915_gem_region.h
+> @@ -22,9 +22,11 @@ struct i915_gem_apply_to_region;
+>   */
+>  struct i915_gem_apply_to_region_ops {
+>  	/**
+> -	 * process_obj - Process the current object
+> -	 * @apply: Embed this for private data.
+> -	 * @obj: The current object.
+> +	 * @process_obj: Callback function to process the current object
+> +	 * it requires two arguments:
+> +	 *
+> +	 * - @apply: Embed this for private data.
+> +	 * - @obj: The current object.
+>  	 *
+>  	 * Note that if this function is part of a ww transaction, and
+>  	 * if returns -EDEADLK for one of the objects, it may be
+> -- 
+> 2.36.1
+> 

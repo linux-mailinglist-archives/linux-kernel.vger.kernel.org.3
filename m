@@ -2,122 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68D6358D5CF
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 10:55:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EA8558D5D6
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 10:56:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241291AbiHIIzl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 04:55:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56608 "EHLO
+        id S241381AbiHII4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 04:56:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236411AbiHIIzi (ORCPT
+        with ESMTP id S241380AbiHII4T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 04:55:38 -0400
-Received: from hutie.ust.cz (unknown [IPv6:2a03:3b40:fe:f0::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45CED21270;
-        Tue,  9 Aug 2022 01:55:37 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-        t=1660035335; bh=gC4GNArn5L/+qSmbqUbjWxF4hXj6UbOzOdSVGC9cgDE=;
-        h=Subject:From:In-Reply-To:Date:Cc:References:To;
-        b=ZajEXVjp7mPMMG2eOn3wmWnNtyDDnBp6T+mh3Lh7LDgJkT00oLqeXkpQkzqJk4Tdb
-         Q31ajC+zOqJEr6HgWWNNIXqDtjUn5onK4CiWqrqUJ4ukSUOYk6AkOziyznRr5ywn31
-         qQTwzcFLfOLG5AFWJHC4utUEbbWrT1nIUfpjjz58=
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
-Subject: Re: [PATCH 1/3] dt-bindings: sound: Add Apple MCA I2S transceiver
-From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>
-In-Reply-To: <cbe80ae1-3ae8-eccf-89f7-4506e3f44ca7@linaro.org>
-Date:   Tue, 9 Aug 2022 10:55:35 +0200
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>, asahi@lists.linux.dev,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <C55ADB0F-0894-4A3B-BDD2-6A20BB1F4A4F@cutebit.org>
-References: <20220808224153.3634-1-povik+lin@cutebit.org>
- <20220808224153.3634-2-povik+lin@cutebit.org>
- <8ce59940-f559-35cb-5f86-37399da166a1@linaro.org>
- <DCBCB694-F5A3-4E76-9518-89E9A1A4AB55@cutebit.org>
- <cbe80ae1-3ae8-eccf-89f7-4506e3f44ca7@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_FAIL,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Tue, 9 Aug 2022 04:56:19 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF1722516;
+        Tue,  9 Aug 2022 01:56:18 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 247E05C0069;
+        Tue,  9 Aug 2022 04:56:16 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 09 Aug 2022 04:56:16 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1660035376; x=1660121776; bh=xpGxjD2A50
+        fdV198hvsG7pRw/iujbctYhUQwuP/l34c=; b=X0G/RfiURd4O9ADNGjzBA7Oapu
+        V9IzUW+34EDzGgT1MQ1BXpfaXN5tZEtbW1fUW/94zPSC+L70YC5kKzjVfdd8bzRo
+        HIOjnYiO0P+mhmvl0V2F8Q5gf8aP+TJY6CGvi4znPhzDCDHdceHf02aMZuuseNdA
+        5Kq/G/bSUetH4RwPiI9Z3T6Q292dzYQkpHTjAZ+Ag+ud1v4SzKZ+WNvJk6t/ZpM2
+        3l+SxtR3AO3FllQRE/Lm2Fj8wPSQB5ujnQ2lm8lHhO5TzrOLZH6AE/pJIZvPrgND
+        B2EHrwKpziZA7ggOteYqusLzvvLV9BhMocYdZBTsn5vZkAsThuubgaj1Y/QA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660035376; x=1660121776; bh=xpGxjD2A50fdV198hvsG7pRw/iuj
+        bctYhUQwuP/l34c=; b=UyGwNjr97EMolB4dTDz2ap5ZwJLiHUcaoQVZXK0AciJv
+        BwSkiu8UxchaL82nP3WwxSLE9lMkDFLlsJbb6WDVoF1pEO0X1Zjwbt2+haR3U9fD
+        uXVuDNCP00hLqO7BynPspfDdpZMWzqD6vRroRCnazou5AoXtEhdeQArTSpEG8ta6
+        5zG8JRtygApyzL9BSpafIS27vaCfdbSJpMZAqMPkxUHnVzn6XsfJYnrX+3YWAgbM
+        +RrgxxSmw5qDHy6oNw/HvDBLR+AY+rTfJDjCPeLH2nw/+A46dJNsMAsRwBgiHFcz
+        8OgXX/nrGQgS5LBNsTDYFmU7DYSL0TQ9A/8TpWSEiA==
+X-ME-Sender: <xms:LyHyYtEjfdv7TlmkligTpGGebMhTKY3a8VHMvmyKOZMQIbpQjiUPOg>
+    <xme:LyHyYiUiGG1u5GYc3ICYFNoPMNgccCiBRrCeeKyCrw41eS9syuN96wsnARkj9nDdy
+    jRlvkI8fAM_hWKCN14>
+X-ME-Received: <xmr:LyHyYvIfcKmnEHcZx8FFmcuq3rv5AYjrkXXXgVqvuGXIJp2HzaPx-DFvDGWCp8XneWUYaw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegtddgtdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhuffvvefkjghfofggtgesthdtredtredtvdenucfhrhhomhepnfhukhgv
+    ucflohhnvghsuceolhhukhgvsehljhhonhgvshdruggvvheqnecuggftrfgrthhtvghrnh
+    epfffgfeelieeitddtteeivdetueejhfejfeejteehvefhgeefueeftdehjeeukeelnecu
+    ffhomhgrihhnpehuihgtrdgvughunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomheplhhukhgvsehljhhonhgvshdruggvvh
+X-ME-Proxy: <xmx:LyHyYjFybHWcHAvfvYOEg58dlybi-OZkiVS7kRI1VJlgohYoF26Hug>
+    <xmx:LyHyYjVpNG1oirgd9PCRW98K5HC0nEZha8BUjqc5UMyNCV2hct7I_Q>
+    <xmx:LyHyYuMFmQkcDTW3-RUCRyhAeHwv7hI61uSCHth8fzMN9zgq0TV5pw>
+    <xmx:MCHyYuQk2QMupMQY0v5Uw1KeDla5QJYGKnRZOkDF-1wDi1Xwf6ZVOQ>
+Feedback-ID: i5ec1447f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 9 Aug 2022 04:56:11 -0400 (EDT)
+Date:   Tue, 09 Aug 2022 20:55:58 +1200
+From:   Luke Jones <luke@ljones.dev>
+Subject: Re: [PATCH v3 1/6] asus-wmi: Implement TUF laptop keyboard RGB
+ control
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        =?iso-8859-2?q?Barnab=E1s_P=F5cze?= <pobrn@protonmail.com>,
+        Pavel Machek <pavel@ucw.cz>,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Message-Id: <AHBCGR.7I4U7CDRZ3J83@ljones.dev>
+In-Reply-To: <CAHp75VfZeuuQjfM+CY4nxrFJQcfpdHVVzyj6GLjeweT3ycSn5A@mail.gmail.com>
+References: <20220809025054.1626339-1-luke@ljones.dev>
+        <20220809025054.1626339-2-luke@ljones.dev>
+        <CAHp75VfZeuuQjfM+CY4nxrFJQcfpdHVVzyj6GLjeweT3ycSn5A@mail.gmail.com>
+X-Mailer: geary/40.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii; format=flowed
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Andy,
 
-> On 9. 8. 2022, at 10:47, Krzysztof Kozlowski =
-<krzysztof.kozlowski@linaro.org> wrote:
->=20
-> On 09/08/2022 11:40, Martin Povi=C5=A1er wrote:
->>> Describe the items because otherwise you allow any order. The list =
-will
->>> be unfortunately quite long, but still readable enough.
->>=20
->> Well, I would assume the =E2=80=98dmas=E2=80=99 property as described =
-above has an implicit
->> natural order, and the dma-names are tied to it. You order it like =
-the other
->> per-cluster properties, and then within the cluster the order is =
-fixed to
->> 'TXA, RXA, TXB, RXB=E2=80=99 (maybe the word =E2=80=98respectively=E2=80=
-=99 thrown into the description
->> would have made it clearer).
->>=20
->> Anyway that=E2=80=99s just discussing my assumptions. I can roll out =
-the items list
->> for =E2=80=98dma-names=E2=80=99, if that=E2=80=99s what you mean. Or =
-do you mean explicitly describing
->> the items in =E2=80=98dmas=E2=80=99 too?
->=20
-> The text description of 'dmas' does not mean it will be followed by =
-DTS
-> author. In current bindings DTS author can therefore put any order of
-> dmas/dma-names. Unrolling the dma-names forces this order to be fixed
-> and validated by dtschema.
+On Tue, Aug 9 2022 at 10:46:33 +0200, Andy Shevchenko 
+<andy.shevchenko@gmail.com> wrote:
+> On Tue, Aug 9, 2022 at 4:51 AM Luke D. Jones <luke@ljones.dev> wrote:
+>> 
+>>  Adds support for TUF laptop RGB control via the multicolor LED API.
+>> 
+>>  As this is the bas for adjusting only the RGB values, it sets the
+>>  default mode of the keyboard to static since there is no way to read
+>>  any existing settings from the device. These defaults overwrite the
+>>  booted state of the keyboard when the module is loaded.
+> 
+> ...
+> 
+>>  +       err = asus_wmi_evaluate_method3(ASUS_WMI_METHODID_DEVS, 
+>> ASUS_WMI_DEVID_TUF_RGB_MODE,
+>>  +                               rgb->save | (rgb->mode << 8) | (r 
+>> << 16) | (g << 24),
+>>  +                               (b) | (rgb->speed << 8),
+> 
+> Too many parentheses.
 
-OK
+Uh, yeah. I was unable to find concrete info on this. I at one point 
+experienced an issue where the order of operations *without* 
+parentheses ended up as "x | y << (8 | z) << 16". But now I'm not even 
+sure if I remember that correctly. I see the order here 
+https://www.cs.uic.edu/~i109/Notes/COperatorPrecedenceTable.pdf
 
->>=20
->>>> +    description: |
->>>> +      Names for the DMA channels: 'tx'/'rx', then cluster number, =
-then 'a'/'b'
->>>> +      based on the associated SERDES unit.
->>>> +
->>=20
->> (...)
->>=20
->>>> +
->>>> +additionalProperties: false
->>>> +
->>>> +examples:
->>>> +  - |
->>>> +    mca: mca@9b600000 {
->>>=20
->>> You called it I2S transceiver but isn't it also actually I2S =
-controller?
->>> If yes, then the node name should be probably "i2s".
->>=20
->> It=E2=80=99s a peripheral you use to transmit and receive samples =
-over I2S, frankly
->> I don't know the nomenclature.
->=20
-> Looking at other devices, it's i2s.
+I'll do as said and test it to be certain.
 
-OK, thanks.
+> 
+>>  +                               &ret);
+>>  +       if (err)
+>>  +               dev_err(dev, "Unable to set TUF RGB data?\n");
+>>  +
+>>  +       return err;
+> 
+> How ret is being used?
 
-> Best regards,
-> Krzysztof
+Damn.. fixed now.
 
-Best,
-Martin
+> 
+> --
+> With Best Regards,
+> Andy Shevchenko
+
 

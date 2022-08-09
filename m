@@ -2,157 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E15358E39C
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 01:12:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C962A58E3A7
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 01:18:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbiHIXMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 19:12:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60968 "EHLO
+        id S229542AbiHIXSi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 19:18:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbiHIXMH (ORCPT
+        with ESMTP id S229449AbiHIXSe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 19:12:07 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4560665A2
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 16:12:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660086725; x=1691622725;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=hwPgQ+Cq+z2s0uaLH1xuRBq76PiNwSF71DNxJfrgOhs=;
-  b=UMI6KlWTleyzfxKOJnSGZAeTjS50tPa01u9Ell8KL4oMpm/KxLmEwPks
-   qp08+Jx4vE+1dhceQTR1IRhDsBkz0vTfi6xmQHhNvXXVrFRNE0nGye4QE
-   Zq+r0JjCu+OVUopAosk2khKEBwxKzuW++rw4CXX7OqS5nBdwVhs7boqC4
-   1zz9mLM1V4XgttuZhPTg7+gUwFjvqqN9yrxeYu02DnwsKELgFA32sxRpu
-   VieA0hkvtHxYyzPLgkKkgh7TuDyNiXcCn9e1isATImncSgpUoPr1yhYzg
-   WwAK0zqICUdF85ryWlIEXF4GYz0xaINykor0EHBdwga95UVpBdLwz+wr0
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="270728913"
-X-IronPort-AV: E=Sophos;i="5.93,225,1654585200"; 
-   d="scan'208";a="270728913"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 16:12:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,225,1654585200"; 
-   d="scan'208";a="555519672"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 09 Aug 2022 16:12:02 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oLYOI-000NLN-0t;
-        Tue, 09 Aug 2022 23:12:02 +0000
-Date:   Wed, 10 Aug 2022 07:11:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Quinn Tran <qutran@marvell.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Himanshu Madhani <himanshu.madhani@oracle.com>,
-        Nilesh Javali <njavali@marvell.com>
-Subject: drivers/scsi/qla2xxx/qla_init.c:171:17: warning: variable 'bail' set
- but not used
-Message-ID: <202208100749.O5lpvjoS-lkp@intel.com>
+        Tue, 9 Aug 2022 19:18:34 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E939461DBE
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 16:18:33 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1660087111;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=49BR0x796LXoJ0VhQzJr4EQaUub9aq/xCwbr1Uy7JZk=;
+        b=upJCVu7v+BJugzpD9dLKrlHgXZINP3F4S+n0ysjUqHvUEydbmm0eIPKWsP5p0UMnA3TYyH
+        +TFpc35CmLXz7Zg8bPXdY2HNbvHv9V5cG8hlJq810fL5ht2agyxpPQUAvFIz1Urjb+xdns
+        CKIiL30f1q5Yqqfx0BuWx/kq1HtO4dzYhG+is8WFtJd4T/iZNvM37U0aLrYWSyzHFyqbu3
+        ubnIRrHTbmv4USJZcZOrKP+xNMNthjC9I+IAgustXu0ndWmegF2hm0cf3lRQORkohEC/bP
+        60h3nPQznbkW82NmMmu3eft4UnNaRPF3b5nbNgw8rYyprug5eWwbRIM9V+W1Ig==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1660087111;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=49BR0x796LXoJ0VhQzJr4EQaUub9aq/xCwbr1Uy7JZk=;
+        b=bQ8bUaL+l2tqSf1Y2TuxxI63mBSDGryCDh4JjNRVoN/gw99rBKqmksnMfsljxFlPQnp9+R
+        0/q9xr9y5tx3tKAw==
+To:     Borislav Petkov <bp@alien8.de>, ira.weiny@intel.com
+Cc:     Rik van Riel <riel@surriel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>
+Subject: Re: [RFC PATCH 1/5] entry: Pass pt_regs to
+ irqentry_exit_cond_resched()
+In-Reply-To: <YvDnkALyHl77R/Ug@zn.tnic>
+References: <20220805173009.3128098-1-ira.weiny@intel.com>
+ <20220805173009.3128098-2-ira.weiny@intel.com> <YvDnkALyHl77R/Ug@zn.tnic>
+Date:   Wed, 10 Aug 2022 01:18:30 +0200
+Message-ID: <87fsi5qa49.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   15205c2829ca2cbb5ece5ceaafe1171a8470e62b
-commit: 63fa7f2644b4b48e1913af33092c044bf48e9321 scsi: qla2xxx: Fix imbalance vha->vref_count
-date:   3 weeks ago
-config: parisc-buildonly-randconfig-r002-20220810 (https://download.01.org/0day-ci/archive/20220810/202208100749.O5lpvjoS-lkp@intel.com/config)
-compiler: hppa-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=63fa7f2644b4b48e1913af33092c044bf48e9321
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 63fa7f2644b4b48e1913af33092c044bf48e9321
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash drivers/scsi/qla2xxx/
+On Mon, Aug 08 2022 at 12:38, Borislav Petkov wrote:
+> On Fri, Aug 05, 2022 at 10:30:05AM -0700, ira.weiny@intel.com wrote:
+>> ---
+>>  arch/arm64/include/asm/preempt.h |  2 +-
+>>  arch/arm64/kernel/entry-common.c |  4 ++--
+>>  arch/x86/entry/common.c          |  2 +-
+>>  include/linux/entry-common.h     | 17 ++++++++------
+>>  kernel/entry/common.c            | 13 +++++++----
+>>  kernel/sched/core.c              | 40 ++++++++++++++++----------------
+>>  6 files changed, 43 insertions(+), 35 deletions(-)
+>
+> Why all this churn?
+>
+> Why can't you add a parameter to irqentry_exit():
+>
+>   noinstr void irqentry_exit(struct pt_regs *regs, irqentry_state_t state, bool cond_resched);
+>
+> and then have all callers except xen_pv_evtchn_do_upcall() pass in false
+> and this way have all exit paths end up in irqentry_exit()?
+>
+> And, ofc, move the true case which is the body of
+> raw_irqentry_exit_cond_resched() to irqentry_exit() and then get rid of
+> former.
+>
+> xen_pv_evtchn_do_upcall() will, ofc, do:
+>
+>         if (inhcall && !WARN_ON_ONCE(state.exit_rcu)) {
+>                 irqentry_exit(regs, state, true);
+>                 instrumentation_end();
+>                 restore_inhcall(inhcall);
+>         } else {
+>                 instrumentation_end();
+>                 irqentry_exit(regs, state, false);
+>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+How is that less churn? Care to do:
 
-All warnings (new ones prefixed by >>):
+    git grep 'irqentry_exit(' arch/
 
-   drivers/scsi/qla2xxx/qla_init.c: In function 'qla24xx_async_abort_cmd':
->> drivers/scsi/qla2xxx/qla_init.c:171:17: warning: variable 'bail' set but not used [-Wunused-but-set-variable]
-     171 |         uint8_t bail;
-         |                 ^~~~
-   drivers/scsi/qla2xxx/qla_init.c: In function 'qla2x00_async_tm_cmd':
-   drivers/scsi/qla2xxx/qla_init.c:2023:17: warning: variable 'bail' set but not used [-Wunused-but-set-variable]
-    2023 |         uint8_t bail;
-         |                 ^~~~
+The real question is:
 
+    Why is it required that irqentry_exit_cond_resched() handles any of
+    the auxiliary pt regs space?
+    
+That's completely unanswered by the changelog and absolutely irrelevant
+for the problem at hand, i.e. storing the CPU number on irq/exception
+entry.
 
-vim +/bail +171 drivers/scsi/qla2xxx/qla_init.c
+    So why is this patch in this series at all?
 
-   164	
-   165	int qla24xx_async_abort_cmd(srb_t *cmd_sp, bool wait)
-   166	{
-   167		scsi_qla_host_t *vha = cmd_sp->vha;
-   168		struct srb_iocb *abt_iocb;
-   169		srb_t *sp;
-   170		int rval = QLA_FUNCTION_FAILED;
- > 171		uint8_t bail;
-   172	
-   173		/* ref: INIT for ABTS command */
-   174		sp = qla2xxx_get_qpair_sp(cmd_sp->vha, cmd_sp->qpair, cmd_sp->fcport,
-   175					  GFP_ATOMIC);
-   176		if (!sp)
-   177			return QLA_MEMORY_ALLOC_FAILED;
-   178	
-   179		QLA_VHA_MARK_BUSY(vha, bail);
-   180		abt_iocb = &sp->u.iocb_cmd;
-   181		sp->type = SRB_ABT_CMD;
-   182		sp->name = "abort";
-   183		sp->qpair = cmd_sp->qpair;
-   184		sp->cmd_sp = cmd_sp;
-   185		if (wait)
-   186			sp->flags = SRB_WAKEUP_ON_COMP;
-   187	
-   188		init_completion(&abt_iocb->u.abt.comp);
-   189		/* FW can send 2 x ABTS's timeout/20s */
-   190		qla2x00_init_async_sp(sp, 42, qla24xx_abort_sp_done);
-   191		sp->u.iocb_cmd.timeout = qla24xx_abort_iocb_timeout;
-   192	
-   193		abt_iocb->u.abt.cmd_hndl = cmd_sp->handle;
-   194		abt_iocb->u.abt.req_que_no = cpu_to_le16(cmd_sp->qpair->req->id);
-   195	
-   196		ql_dbg(ql_dbg_async, vha, 0x507c,
-   197		       "Abort command issued - hdl=%x, type=%x\n", cmd_sp->handle,
-   198		       cmd_sp->type);
-   199	
-   200		rval = qla2x00_start_sp(sp);
-   201		if (rval != QLA_SUCCESS) {
-   202			/* ref: INIT */
-   203			kref_put(&sp->cmd_kref, qla2x00_sp_release);
-   204			return rval;
-   205		}
-   206	
-   207		if (wait) {
-   208			wait_for_completion(&abt_iocb->u.abt.comp);
-   209			rval = abt_iocb->u.abt.comp_status == CS_COMPLETE ?
-   210				QLA_SUCCESS : QLA_ERR_FROM_FW;
-   211			/* ref: INIT */
-   212			kref_put(&sp->cmd_kref, qla2x00_sp_release);
-   213		}
-   214	
-   215		return rval;
-   216	}
-   217	
+But even for future purposes it is more than questionable. Why?
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Contrary to the claim of the changelog xen_pv_evtchn_do_upcall() is not
+really a bypass of irqentry_exit(). The point is:
+
+The hypercall is issued by the kernel from privcmd_ioctl_hypercall()
+which does:
+
+      xen_preemptible_hcall_begin();
+      hypercall();
+      xen_preemptible_hcall_end();
+
+So any upcall from the hypervisor to the guest will semantically hit
+regular interrupt enabled guest kernel space which means that if that
+code would call irqentry_exit() then it would run through the kernel
+exit code path:
+
+	} else if (!regs_irqs_disabled(regs)) {
+
+		instrumentation_begin();
+		if (IS_ENABLED(CONFIG_PREEMPTION))
+			irqentry_exit_cond_resched();
+
+		/* Covers both tracing and lockdep */
+		trace_hardirqs_on();
+		instrumentation_end();
+       } ....
+
+Which would fail to invoke irqentry_exit_cond_resched() if
+CONFIG_PREEMPTION=n.  But the whole point of this exercise is to allow
+preemption from the upcall even when the kernel has CONFIG_PREEMPTION=n.
+
+Staring at this XENPV code there are two issues:
+
+  1) That code lacks a trace_hardirqs_on() after the call to
+     irqentry_exit_cond_resched(). My bad.
+
+  2) CONFIG_PREEMPT_DYNAMIC broke this mechanism.
+
+     If the static call/key is disabled then the call becomes a NOP.
+
+     Frederic?
+
+Both clearly demonstrate how well tested this XEN_PV muck is which means
+we should just delete it.
+
+Anyway. This wants the fix below.
+
+If there is still a need to do anything about this XEN cond_resched()
+muck for the PREEMPTION=n case for future auxregs usage then this can be
+simply hidden in this new XEN helper and does not need any change to the
+rest of the code.
+
+I doubt that this is required, but if so then there needs to be a very
+concise explanation and not just uncomprehensible hand waving word
+salad.
+
+Thanks,
+
+        tglx
+---
+--- a/arch/x86/entry/common.c
++++ b/arch/x86/entry/common.c
+@@ -283,9 +283,18 @@ static __always_inline void restore_inhc
+ {
+ 	__this_cpu_write(xen_in_preemptible_hcall, inhcall);
+ }
++
++static __always_inline void xenpv_irqentry_exit_cond_resched(void)
++{
++	instrumentation_begin();
++	raw_irqentry_exit_cond_resched();
++	trace_hardirqs_on();
++	instrumentation_end();
++}
+ #else
+ static __always_inline bool get_and_clear_inhcall(void) { return false; }
+ static __always_inline void restore_inhcall(bool inhcall) { }
++static __always_inline void xenpv_irqentry_exit_cond_resched(void) { }
+ #endif
+ 
+ static void __xen_pv_evtchn_do_upcall(struct pt_regs *regs)
+@@ -306,11 +315,11 @@ static void __xen_pv_evtchn_do_upcall(st
+ 
+ 	instrumentation_begin();
+ 	run_sysvec_on_irqstack_cond(__xen_pv_evtchn_do_upcall, regs);
++	instrumentation_end();
+ 
+ 	inhcall = get_and_clear_inhcall();
+ 	if (inhcall && !WARN_ON_ONCE(state.exit_rcu)) {
+-		irqentry_exit_cond_resched();
+-		instrumentation_end();
++		xenpv_irqentry_exit_cond_resched();
+ 		restore_inhcall(inhcall);
+ 	} else {
+ 		instrumentation_end();

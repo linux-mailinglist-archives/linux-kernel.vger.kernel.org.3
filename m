@@ -2,46 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08D0058DE75
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:18:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AB5958DEB4
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:23:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345823AbiHISPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 14:15:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57450 "EHLO
+        id S1346415AbiHISVI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 14:21:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345306AbiHISMc (ORCPT
+        with ESMTP id S1347002AbiHISSN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 14:12:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44AC72C106;
-        Tue,  9 Aug 2022 11:05:31 -0700 (PDT)
+        Tue, 9 Aug 2022 14:18:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54EF32F02E;
+        Tue,  9 Aug 2022 11:07:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C84A06114D;
-        Tue,  9 Aug 2022 18:05:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3CAAC43470;
-        Tue,  9 Aug 2022 18:05:24 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A0C9DB818C2;
+        Tue,  9 Aug 2022 18:06:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA8F9C433C1;
+        Tue,  9 Aug 2022 18:06:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660068325;
-        bh=jDWLxdfLb0UfgoWC21cxL2t9XM8NGIBroBhN1wxTcp4=;
+        s=korg; t=1660068398;
+        bh=aGyKQPkfCYyDbbGaZ0fkMiRh36HetKAwNQbREqd4pEQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=fLEXTaBNEQHMVwgFrAKDYYn6IzEOHI/cv7XqXTuuXQvBs4Djg2UxO2mXbgzMVeCzu
-         pdcHSLX57YegRCJcfJWzZ3hE/JQrnUMwTE70C+jbXRHyvdXhwA4gSOlit8knDYb6sj
-         EtkX3y8CIlrz+UT3GqB6l0bd07JhyDDMxQvWVFHk=
+        b=XAeiId7xSLOZWRBadoyutw8twlV35K4+cBEddEm3wxDUyJQu1O3eDS8pJZtpuBG5Q
+         J/FR7jAk2dM543SeBV/iY548nzWP5Yhhs3WgB1IaMZ8wGebUzjjec10Q5jEkhRiNmO
+         2EksnTNxVBYsIzHOBoHA5YEVhM5K5nbbcPfeKDaE=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, GUO Zihua <guozihua@huawei.com>,
-        Eric Biggers <ebiggers@google.com>,
-        Will Deacon <will@kernel.org>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Subject: [PATCH 5.15 09/30] crypto: arm64/poly1305 - fix a read out-of-bound
+        stable@vger.kernel.org, Werner Sembach <wse@tuxedocomputers.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Subject: [PATCH 5.18 05/35] ACPI: video: Shortening quirk list by identifying Clevo by board_name only
 Date:   Tue,  9 Aug 2022 20:00:34 +0200
-Message-Id: <20220809175514.643060515@linuxfoundation.org>
+Message-Id: <20220809175515.270042778@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220809175514.276643253@linuxfoundation.org>
-References: <20220809175514.276643253@linuxfoundation.org>
+In-Reply-To: <20220809175515.046484486@linuxfoundation.org>
+References: <20220809175515.046484486@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,125 +55,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: GUO Zihua <guozihua@huawei.com>
+From: Werner Sembach <wse@tuxedocomputers.com>
 
-commit 7ae19d422c7da84b5f13bc08b98bd737a08d3a53 upstream.
+commit f0341e67b3782603737f7788e71bd3530012a4f4 upstream.
 
-A kasan error was reported during fuzzing:
+Taking a recent change in the i8042 quirklist to this one: Clevo
+board_names are somewhat unique, and if not: The generic Board_-/Sys_Vendor
+string "Notebook" doesn't help much anyway. So identifying the devices just
+by the board_name helps keeping the list significantly shorter and might
+even hit more devices requiring the fix.
 
-BUG: KASAN: slab-out-of-bounds in neon_poly1305_blocks.constprop.0+0x1b4/0x250 [poly1305_neon]
-Read of size 4 at addr ffff0010e293f010 by task syz-executor.5/1646715
-CPU: 4 PID: 1646715 Comm: syz-executor.5 Kdump: loaded Not tainted 5.10.0.aarch64 #1
-Hardware name: Huawei TaiShan 2280 /BC11SPCD, BIOS 1.59 01/31/2019
-Call trace:
- dump_backtrace+0x0/0x394
- show_stack+0x34/0x4c arch/arm64/kernel/stacktrace.c:196
- __dump_stack lib/dump_stack.c:77 [inline]
- dump_stack+0x158/0x1e4 lib/dump_stack.c:118
- print_address_description.constprop.0+0x68/0x204 mm/kasan/report.c:387
- __kasan_report+0xe0/0x140 mm/kasan/report.c:547
- kasan_report+0x44/0xe0 mm/kasan/report.c:564
- check_memory_region_inline mm/kasan/generic.c:187 [inline]
- __asan_load4+0x94/0xd0 mm/kasan/generic.c:252
- neon_poly1305_blocks.constprop.0+0x1b4/0x250 [poly1305_neon]
- neon_poly1305_do_update+0x6c/0x15c [poly1305_neon]
- neon_poly1305_update+0x9c/0x1c4 [poly1305_neon]
- crypto_shash_update crypto/shash.c:131 [inline]
- shash_finup_unaligned+0x84/0x15c crypto/shash.c:179
- crypto_shash_finup+0x8c/0x140 crypto/shash.c:193
- shash_digest_unaligned+0xb8/0xe4 crypto/shash.c:201
- crypto_shash_digest+0xa4/0xfc crypto/shash.c:217
- crypto_shash_tfm_digest+0xb4/0x150 crypto/shash.c:229
- essiv_skcipher_setkey+0x164/0x200 [essiv]
- crypto_skcipher_setkey+0xb0/0x160 crypto/skcipher.c:612
- skcipher_setkey+0x3c/0x50 crypto/algif_skcipher.c:305
- alg_setkey+0x114/0x2a0 crypto/af_alg.c:220
- alg_setsockopt+0x19c/0x210 crypto/af_alg.c:253
- __sys_setsockopt+0x190/0x2e0 net/socket.c:2123
- __do_sys_setsockopt net/socket.c:2134 [inline]
- __se_sys_setsockopt net/socket.c:2131 [inline]
- __arm64_sys_setsockopt+0x78/0x94 net/socket.c:2131
- __invoke_syscall arch/arm64/kernel/syscall.c:36 [inline]
- invoke_syscall+0x64/0x100 arch/arm64/kernel/syscall.c:48
- el0_svc_common.constprop.0+0x220/0x230 arch/arm64/kernel/syscall.c:155
- do_el0_svc+0xb4/0xd4 arch/arm64/kernel/syscall.c:217
- el0_svc+0x24/0x3c arch/arm64/kernel/entry-common.c:353
- el0_sync_handler+0x160/0x164 arch/arm64/kernel/entry-common.c:369
- el0_sync+0x160/0x180 arch/arm64/kernel/entry.S:683
-
-This error can be reproduced by the following code compiled as ko on a
-system with kasan enabled:
-
-#include <linux/module.h>
-#include <linux/crypto.h>
-#include <crypto/hash.h>
-#include <crypto/poly1305.h>
-
-char test_data[] = "\x00\x01\x02\x03\x04\x05\x06\x07"
-                   "\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f"
-                   "\x10\x11\x12\x13\x14\x15\x16\x17"
-                   "\x18\x19\x1a\x1b\x1c\x1d\x1e";
-
-int init(void)
-{
-        struct crypto_shash *tfm = NULL;
-        char *data = NULL, *out = NULL;
-
-        tfm = crypto_alloc_shash("poly1305", 0, 0);
-        data = kmalloc(POLY1305_KEY_SIZE - 1, GFP_KERNEL);
-        out = kmalloc(POLY1305_DIGEST_SIZE, GFP_KERNEL);
-        memcpy(data, test_data, POLY1305_KEY_SIZE - 1);
-        crypto_shash_tfm_digest(tfm, data, POLY1305_KEY_SIZE - 1, out);
-
-        kfree(data);
-        kfree(out);
-        return 0;
-}
-
-void deinit(void)
-{
-}
-
-module_init(init)
-module_exit(deinit)
-MODULE_LICENSE("GPL");
-
-The root cause of the bug sits in neon_poly1305_blocks. The logic
-neon_poly1305_blocks() performed is that if it was called with both s[]
-and r[] uninitialized, it will first try to initialize them with the
-data from the first "block" that it believed to be 32 bytes in length.
-First 16 bytes are used as the key and the next 16 bytes for s[]. This
-would lead to the aforementioned read out-of-bound. However, after
-calling poly1305_init_arch(), only 16 bytes were deducted from the input
-and s[] is initialized yet again with the following 16 bytes. The second
-initialization of s[] is certainly redundent which indicates that the
-first initialization should be for r[] only.
-
-This patch fixes the issue by calling poly1305_init_arm64() instead of
-poly1305_init_arch(). This is also the implementation for the same
-algorithm on arm platform.
-
-Fixes: f569ca164751 ("crypto: arm64/poly1305 - incorporate OpenSSL/CRYPTOGAMS NEON implementation")
-Cc: stable@vger.kernel.org
-Signed-off-by: GUO Zihua <guozihua@huawei.com>
-Reviewed-by: Eric Biggers <ebiggers@google.com>
-Acked-by: Will Deacon <will@kernel.org>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Signed-off-by: Werner Sembach <wse@tuxedocomputers.com>
+Fixes: c844d22fe0c0 ("ACPI: video: Force backlight native for Clevo NL5xRU and NL5xNU")
+Cc: All applicable <stable@vger.kernel.org>
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- arch/arm64/crypto/poly1305-glue.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/acpi/video_detect.c |   34 ----------------------------------
+ 1 file changed, 34 deletions(-)
 
---- a/arch/arm64/crypto/poly1305-glue.c
-+++ b/arch/arm64/crypto/poly1305-glue.c
-@@ -52,7 +52,7 @@ static void neon_poly1305_blocks(struct
- {
- 	if (unlikely(!dctx->sset)) {
- 		if (!dctx->rset) {
--			poly1305_init_arch(dctx, src);
-+			poly1305_init_arm64(&dctx->h, src);
- 			src += POLY1305_BLOCK_SIZE;
- 			len -= POLY1305_BLOCK_SIZE;
- 			dctx->rset = 1;
+--- a/drivers/acpi/video_detect.c
++++ b/drivers/acpi/video_detect.c
+@@ -430,23 +430,6 @@ static const struct dmi_system_id video_
+ 	.callback = video_detect_force_native,
+ 	.ident = "Clevo NL5xRU",
+ 	.matches = {
+-		DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
+-		DMI_MATCH(DMI_BOARD_NAME, "NL5xRU"),
+-		},
+-	},
+-	{
+-	.callback = video_detect_force_native,
+-	.ident = "Clevo NL5xRU",
+-	.matches = {
+-		DMI_MATCH(DMI_SYS_VENDOR, "SchenkerTechnologiesGmbH"),
+-		DMI_MATCH(DMI_BOARD_NAME, "NL5xRU"),
+-		},
+-	},
+-	{
+-	.callback = video_detect_force_native,
+-	.ident = "Clevo NL5xRU",
+-	.matches = {
+-		DMI_MATCH(DMI_SYS_VENDOR, "Notebook"),
+ 		DMI_MATCH(DMI_BOARD_NAME, "NL5xRU"),
+ 		},
+ 	},
+@@ -470,23 +453,6 @@ static const struct dmi_system_id video_
+ 	.callback = video_detect_force_native,
+ 	.ident = "Clevo NL5xNU",
+ 	.matches = {
+-		DMI_MATCH(DMI_SYS_VENDOR, "TUXEDO"),
+-		DMI_MATCH(DMI_BOARD_NAME, "NL5xNU"),
+-		},
+-	},
+-	{
+-	.callback = video_detect_force_native,
+-	.ident = "Clevo NL5xNU",
+-	.matches = {
+-		DMI_MATCH(DMI_SYS_VENDOR, "SchenkerTechnologiesGmbH"),
+-		DMI_MATCH(DMI_BOARD_NAME, "NL5xNU"),
+-		},
+-	},
+-	{
+-	.callback = video_detect_force_native,
+-	.ident = "Clevo NL5xNU",
+-	.matches = {
+-		DMI_MATCH(DMI_SYS_VENDOR, "Notebook"),
+ 		DMI_MATCH(DMI_BOARD_NAME, "NL5xNU"),
+ 		},
+ 	},
 
 

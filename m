@@ -2,184 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAD0758D1AD
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 03:18:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74B5C58D1B1
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 03:18:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244592AbiHIBS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 21:18:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60520 "EHLO
+        id S244817AbiHIBSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 21:18:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231811AbiHIBSY (ORCPT
+        with ESMTP id S231811AbiHIBSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 21:18:24 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980DCE39
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 18:18:23 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1660007901;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to; bh=8SQSH8TTiuVOugw6acnW6qYCETJqOYR4qoLYJgkrRjI=;
-        b=aW7D/2wUUsGYDV5EWxVgdAOKzyEcuYQGzJd61kIsSWQHwGs68+cn7weco1CZLcFo+yL84m
-        hcsXy7MQPxV+Hag3TjovwPKDaYIkboBn0We1OkNpsxvG+TnFJzpUGFjHiA6xEonDUgC4uF
-        cJ6DsqDe2vr7J3isMb5IwPRDZ00e1COnumj3VWrUKfJVAj19y4ogGY/ThKKCAaLBeyPL/u
-        5/4FHL8dUNTG2xc5HADzi3f+PzhuD3NenEKtxpTAYU8W1O4+xkuqcOZPfSWHwo1guLSzVi
-        FhuB1Ny5TkAXcVcrF5CcFWtUhd3R6ye6Eo7MOJnkM1wnv/SZpzW2MDyNdzBI7g==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1660007901;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to; bh=8SQSH8TTiuVOugw6acnW6qYCETJqOYR4qoLYJgkrRjI=;
-        b=E3AR0NvryMHNCcgBMyYHf0AsU7BZC8w2lpi7W995pyh9lfkpLs4WNrcAJmzOHsPys5nSBu
-        215spmB1rCcdtGAQ==
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Petr Mladek <pmladek@suse.com>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        John Ogness <john.ogness@linutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Jan Kara <jack@suse.cz>, Peter Zijlstra <peterz@infradead.org>,
-        linux-kernel@vger.kernel.org, Clark Williams <williams@redhat.com>,
-        Mel Gorman <mgorman@suse.com>
-Subject: Re: [GIT PULL] printk for 5.20
-In-Reply-To: <CAHk-=wie+VC-R5=Hm=Vrg5PLrJxb1XiV67Efx-9Cr1fBKCWHTQ@mail.gmail.com>
-Date:   Tue, 09 Aug 2022 03:18:20 +0200
-Message-ID: <87r11qp63n.ffs@tglx>
+        Mon, 8 Aug 2022 21:18:45 -0400
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92C375F93
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 18:18:44 -0700 (PDT)
+Received: by mail-qv1-xf31.google.com with SMTP id u8so7610206qvv.1
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 18:18:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=YEeewL7u26t5xnjYAteTsi6uBftnEQWFJtji4zMngLI=;
+        b=QM7K5PRSL41dOjkkhbr12boFvR549hO04dJ6wroBBRID09Qd38NtGUxr6+hJ5liFdh
+         XADmeBQIhVFJtuCVXUkjFuwfdSvnHuxmLN1qDsStbSuWm4xjUEeppWn/O3X1TViF2Jfb
+         vzG4LoMdmvy0fDsZvNLXes7sfmqTrmRozESBVcgJqVQJctpZogvFqk03nnLd9G2FE85j
+         mvgIFtviM/gLC7idiwlUZ2Pm40O2ikuhBVo93f4phvXVe1dd5yEIxb7hUSbrH1BtaAKO
+         6iyDof7WrBiuDe4ojNt5E4BwSCWP9fqef4pqYecQOrw1nt5uU4QtWucqjT597i1qxEwi
+         J1Tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=YEeewL7u26t5xnjYAteTsi6uBftnEQWFJtji4zMngLI=;
+        b=JIycSODYwWd8qoDR6YTKbqw8Xbvd3eqkVlW/GjqDqV7yzUDyggskyGuF1ZjfGoRMj+
+         eWgxf2YQKIHemfwIEj4F2G5wRbeaV4nCA9gzU3U5TMSJ1XCOgP6MN2h1myfFwc0J6xXa
+         4ODhQU7/i/gnhy4Z6fuGGfiek8RckSIcTTHG9KT61JtGACmqHa718zOCTCgi57tM7w/5
+         AQcpmObjNJNZF0WZKIY0VslEZwVfUokbFzXEh6WFMHguFzlyycTxYW9deGOOglM1qNgO
+         6U3SUDqF1folzWiwHuB0ud74LrSsU7Kdj4xakYGB2xP5YJwzxn+zQ6E1VhWsD58IJfLh
+         Tz0w==
+X-Gm-Message-State: ACgBeo25i2j7J6/4Nh9MmDFI2qUg1C+k6Na9hD6ryLPDA4FIpJFx7/Rw
+        SjO4vuSMYPG+Dcz28fTICJZGryqd4gRgT6Rz9F5ZGw==
+X-Google-Smtp-Source: AA6agR6GfNUHY3jjjD2/YbLO6QDE3wjQK3U0O5pNRoIUFkwF92SuJQ7vt+YDB3NGLYzJzR+CWS0iMHLYfxJ/o4LLEfE=
+X-Received: by 2002:a0c:9101:0:b0:473:9b:d92a with SMTP id q1-20020a0c9101000000b00473009bd92amr18310037qvq.17.1660007923619;
+ Mon, 08 Aug 2022 18:18:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220805214821.1058337-1-haoluo@google.com> <20220805214821.1058337-6-haoluo@google.com>
+ <CAEf4BzarAHuR7mOeHToNiNMc03QnR=74cxt_h5LRymf1U6HevQ@mail.gmail.com>
+In-Reply-To: <CAEf4BzarAHuR7mOeHToNiNMc03QnR=74cxt_h5LRymf1U6HevQ@mail.gmail.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Mon, 8 Aug 2022 18:18:33 -0700
+Message-ID: <CA+khW7gJS2pjc2eHXCkHirdHMqcmzZM_a4VPUvw9RAicgH9Q=A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v7 5/8] selftests/bpf: Test cgroup_iter.
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        cgroups@vger.kernel.org, netdev@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Michal Koutny <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yosry Ahmed <yosryahmed@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On Mon, Aug 8, 2022 at 5:20 PM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Fri, Aug 5, 2022 at 2:49 PM Hao Luo <haoluo@google.com> wrote:
+> >
+> > Add a selftest for cgroup_iter. The selftest creates a mini cgroup tree
+> > of the following structure:
+> >
+> >     ROOT (working cgroup)
+> >      |
+> >    PARENT
+> >   /      \
+> > CHILD1  CHILD2
+> >
+> > and tests the following scenarios:
+> >
+> >  - invalid cgroup fd.
+> >  - pre-order walk over descendants from PARENT.
+> >  - post-order walk over descendants from PARENT.
+> >  - walk of ancestors from PARENT.
+> >  - walk from PARENT in the default order, which is pre-order.
+> >  - process only a single object (i.e. PARENT).
+> >  - early termination.
+> >
+> > Acked-by: Yonghong Song <yhs@fb.com>
+> > Signed-off-by: Hao Luo <haoluo@google.com>
+> > ---
+>
+> LGTM.
+>
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+>
 
-On Tue, Aug 02 2022 at 20:19, Linus Torvalds wrote:
-> On Mon, Aug 1, 2022 at 8:08 AM Petr Mladek <pmladek@suse.com> wrote:
->>
->> - Completely disable printing on consoles with CONFIG_RT.
-> And guys, I want to make it really clear how disappointed I am with
-> the printk tree lately. There seems to be some kind of hardline
-> religious fervor having taken over to make these kinds of "this is how
-> it has to be done, screw any sanity or common sense".
-...
-> Put another way: not only am I not pulling this, I'm concerned that I
-> will not be pulling printk patches in the future either because of
-> where these pull requests seem to be trending.
+Thanks!
 
-I really have to stand up for the printk maintainers here.
-
-Especially Petr has done an extraordinary job in the past few years.
-There have been hickups, but with such a semantically ill defined
-mechanism like printk() that's not a surprise at all.
-
-Let me add some historical background here.
-
-In Sept. 2019, i.e. almost 3 years ago, we all - including you - sat
-together at Plumbers in Lisbon and agreed that printk() in it's back
-then form is a nightmare not only for PREEMPT_RT. We also agreed back
-then that seperating out the console writes into individual printk
-threads makes sense because it also gets rid of the fully serializing
-nature of printk() which exists for historical but not for technical
-reasons. Also the magic oops_in_progress heuristics have been declared
-to be just duct tape, as the still existing (after 25+ years of Linux)
-situation with graphics demonstrates on a daily basis. We all agreed
-that a dedicated atomic_write() which also allows to prioritize your
-favourite pet pieve of making laptops more debugable by utilizing
-persistant storage simpler and what's more important more reliable.
-
-It took whopping 2.5 years to get to the point to reach this seperation
-as it required to rewrite the buffers and other infrastructure. This was
-very responsible and cautionosly guided by Petr and the other members of
-the printk() maintainer team. Along with that went quite some
-improvements like realistic timestamping and other details which matter
-for dmesg power users.
-
-The printk threads were added in the 5.19 merge window and unfortunately
-reverted between 5.19-rc3 and 5.19-rc4 for the very wrong reason:
-
-   Some embedded boards failed to boot.
-
-     The root cause is missing locking in the init functions of the
-     related UART drivers.
-
-     This is not a problem of threaded printk(), Those are existing bugs
-     in these drivers which can be triggered on a 5.18 kernel. They are
-     hard to trigger and nobody cared so far because they were neither
-     bisectable nor reliably reproducible. The threaded printk() change
-     made them reproducible and the bisect pointed at the messenger and
-     not at the root cause.
-
-Nevertheless it was decided to throw away valuable work for no real good
-reason. That revert costs me constantly ~2 seconds of boot time on one my
-main development machines. Not much, but ~10% and I know that quite some
-folks in the fastboot camp give a leg for 10%.
-
-The right decision would have been to offer this by boot or config
-parameter and not to throw the baby out with the bathwater.
-
-I know it's my fault because I was AFK that week...
-
-Coming back to the commit in question which made you (rightfully) upset.
-
-I agree that it should never have happened, but OTOH it's a very clear
-message of developer frustration to you:
-
-On one hand you can't get tired of "praising" the RT people about their
-responsible approach to solve fundamental shortcomigs in the kernel, but
-at the same time you're pulling whatever new fancy "technology" which
-comes around the corner and then makes my and your inbox full of
-security issues. That's obviously not a problem, right?
-
-Neither is it a problem that all of these "feature" developers can
-rightfully ignore PREEMPT_RT and offload all the resulting problems to
-the RT people, right?
-
-I might be wrong, but you seem to have a fundamental misunderstanding of
-the scope and importance of PREEEMPT_RT:
-
->  Oh, I agree that it probably is a pretty small community.
-
-Pull the rug under that "pretty small community" and the industrial
-world is comming to a grinding halt. That grinding halt will affect your
-power grid, your water supply and quite some other essential things
-which are listed under Civil Infrastructure. Plus the new fangled edge
-computing, modern cars ....
-
-There is a reason that at least some major industry players have
-invested into the RT project for the last couple of years. All major
-distro players have commercially supported RT offerings for years and
-they are surely not doing this just for fun.
-
-There are freeriders as always. Space*, car*, distro* ,,,,
-
-> And I also think that people who are really into RT are basically
-> always going to have extra patches anyway - I think the bulk of the
-> core stuff has made it upstream, but not *all* has made it.
-
-At the point of this writing the only outstanding issue is printk, which
-prevents PREEMPT_RT from being enabled in your tree on x86[64] and
-ARM[64].
-
-This still does not justify the commit in question, but clearly points
-out that there is an attitude problem.
-
-Which attitude problem?
-
-   The attitude problem that PREEMPT_RT is just a niche, but the larger
-   kernel community is happy to consume the benefits of that allegded
-   niche without giving anything back.
-
-Think about that.
-
-Thanks,
-
-        Thomas
+> >  .../selftests/bpf/prog_tests/cgroup_iter.c    | 237 ++++++++++++++++++
+> >  tools/testing/selftests/bpf/progs/bpf_iter.h  |   7 +
+> >  .../testing/selftests/bpf/progs/cgroup_iter.c |  39 +++
+> >  3 files changed, 283 insertions(+)
+> >  create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_iter.c
+> >  create mode 100644 tools/testing/selftests/bpf/progs/cgroup_iter.c
+> >
+>
+> [...]

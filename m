@@ -2,44 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B951E58DDF8
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:08:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 526BA58DDE4
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 20:07:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343572AbiHISIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 14:08:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43738 "EHLO
+        id S1344890AbiHISHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 14:07:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344847AbiHISHd (ORCPT
+        with ESMTP id S1344757AbiHISGh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 14:07:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD9EF286FD;
-        Tue,  9 Aug 2022 11:03:15 -0700 (PDT)
+        Tue, 9 Aug 2022 14:06:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71AFB20192;
+        Tue,  9 Aug 2022 11:02:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D4240B8171C;
-        Tue,  9 Aug 2022 18:03:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22CC6C433B5;
-        Tue,  9 Aug 2022 18:03:11 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 03BDBB8171A;
+        Tue,  9 Aug 2022 18:02:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67F98C43470;
+        Tue,  9 Aug 2022 18:02:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660068192;
-        bh=aS6kC7/UR/+s4cEQ6IbqOtahiGkvu5P7CX0AzJ/IWIM=;
+        s=korg; t=1660068172;
+        bh=GKZ5PKCQqTqdXrWsuss0Jv7382G5VfbXuBTColpUSUw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=z1rJ4JUnnQU/tn7l9itxmDDqum3h0gn8/ZUB/ARX/biXW9W18qJeniXuKMTilLr7w
-         BpXlk6r3xQD5tBu7hZmE5D5NXkxcKUSRKModiam+Xuvfrb9lznl9VGRveJiRAE3bdh
-         wzz7eZkp7qOMHJB3MhuouNZ54ItfdHMjA4/wuqNw=
+        b=bd2P/pI7IbN64JhdOaUW7w7+6K+L6BOV4AqHZbb1WqD/Kd5q9A3VVIZKRZEDEYpSe
+         dFnDkGphnhi5Z3iTAYEFBPIjDXWs6lcj93qkwi6+UzOE5t1g+bwk/uarWx3mxMUJUy
+         MgZe+B3SD1vf40YFcMVzuqvUAgHbiqeLGyG+LBoc=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Tony Luck <tony.luck@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Subject: [PATCH 5.4 04/15] ACPI: APEI: Better fix to avoid spamming the console with old error logs
-Date:   Tue,  9 Aug 2022 20:00:22 +0200
-Message-Id: <20220809175510.451207033@linuxfoundation.org>
+        stable@vger.kernel.org, Andrew Cooper <andrew.cooper3@citrix.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Borislav Petkov <bp@suse.de>
+Subject: [PATCH 4.19 32/32] x86/speculation: Add LFENCE to RSB fill sequence
+Date:   Tue,  9 Aug 2022 20:00:23 +0200
+Message-Id: <20220809175514.089995381@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220809175510.312431319@linuxfoundation.org>
-References: <20220809175510.312431319@linuxfoundation.org>
+In-Reply-To: <20220809175513.082573955@linuxfoundation.org>
+References: <20220809175513.082573955@linuxfoundation.org>
 User-Agent: quilt/0.66
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -54,105 +55,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tony Luck <tony.luck@intel.com>
+From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 
-commit c3481b6b75b4797657838f44028fd28226ab48e0 upstream.
+commit ba6e31af2be96c4d0536f2152ed6f7b6c11bca47 upstream.
 
-The fix in commit 3f8dec116210 ("ACPI/APEI: Limit printable size of BERT
-table data") does not work as intended on systems where the BIOS has a
-fixed size block of memory for the BERT table, relying on s/w to quit
-when it finds a record with estatus->block_status == 0. On these systems
-all errors are suppressed because the check:
+RSB fill sequence does not have any protection for miss-prediction of
+conditional branch at the end of the sequence. CPU can speculatively
+execute code immediately after the sequence, while RSB filling hasn't
+completed yet.
 
-	if (region_len < ACPI_BERT_PRINT_MAX_LEN)
+  #define __FILL_RETURN_BUFFER(reg, nr, sp)	\
+  	mov	$(nr/2), reg;			\
+  771:						\
+  	call	772f;				\
+  773:	/* speculation trap */			\
+  	pause;					\
+  	lfence;					\
+  	jmp	773b;				\
+  772:						\
+  	call	774f;				\
+  775:	/* speculation trap */			\
+  	pause;					\
+  	lfence;					\
+  	jmp	775b;				\
+  774:						\
+  	dec	reg;				\
+  	jnz	771b;  <----- CPU can miss-predict here.				\
+  	add	$(BITS_PER_LONG/8) * nr, sp;
 
-always fails.
+Before RSB is filled, RETs that come in program order after this macro
+can be executed speculatively, making them vulnerable to RSB-based
+attacks.
 
-New scheme skips individual CPER records that are too large, and also
-limits the total number of records that will be printed to 5.
+Mitigate it by adding an LFENCE after the conditional branch to prevent
+speculation while RSB is being filled.
 
-Fixes: 3f8dec116210 ("ACPI/APEI: Limit printable size of BERT table data")
-Cc: All applicable <stable@vger.kernel.org>
-Signed-off-by: Tony Luck <tony.luck@intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Suggested-by: Andrew Cooper <andrew.cooper3@citrix.com>
+Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/acpi/apei/bert.c |   31 +++++++++++++++++++++++--------
- 1 file changed, 23 insertions(+), 8 deletions(-)
+ arch/x86/include/asm/nospec-branch.h |    4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
---- a/drivers/acpi/apei/bert.c
-+++ b/drivers/acpi/apei/bert.c
-@@ -29,16 +29,26 @@
+--- a/arch/x86/include/asm/nospec-branch.h
++++ b/arch/x86/include/asm/nospec-branch.h
+@@ -52,7 +52,9 @@
+ 774:						\
+ 	dec	reg;				\
+ 	jnz	771b;				\
+-	add	$(BITS_PER_LONG/8) * nr, sp;
++	add	$(BITS_PER_LONG/8) * nr, sp;	\
++	/* barrier for jnz misprediction */	\
++	lfence;
  
- #undef pr_fmt
- #define pr_fmt(fmt) "BERT: " fmt
-+
-+#define ACPI_BERT_PRINT_MAX_RECORDS 5
- #define ACPI_BERT_PRINT_MAX_LEN 1024
- 
- static int bert_disable;
- 
-+/*
-+ * Print "all" the error records in the BERT table, but avoid huge spam to
-+ * the console if the BIOS included oversize records, or too many records.
-+ * Skipping some records here does not lose anything because the full
-+ * data is available to user tools in:
-+ *	/sys/firmware/acpi/tables/data/BERT
-+ */
- static void __init bert_print_all(struct acpi_bert_region *region,
- 				  unsigned int region_len)
- {
- 	struct acpi_hest_generic_status *estatus =
- 		(struct acpi_hest_generic_status *)region;
- 	int remain = region_len;
-+	int printed = 0, skipped = 0;
- 	u32 estatus_len;
- 
- 	while (remain >= sizeof(struct acpi_bert_region)) {
-@@ -46,24 +56,26 @@ static void __init bert_print_all(struct
- 		if (remain < estatus_len) {
- 			pr_err(FW_BUG "Truncated status block (length: %u).\n",
- 			       estatus_len);
--			return;
-+			break;
- 		}
- 
- 		/* No more error records. */
- 		if (!estatus->block_status)
--			return;
-+			break;
- 
- 		if (cper_estatus_check(estatus)) {
- 			pr_err(FW_BUG "Invalid error record.\n");
--			return;
-+			break;
- 		}
- 
--		pr_info_once("Error records from previous boot:\n");
--		if (region_len < ACPI_BERT_PRINT_MAX_LEN)
-+		if (estatus_len < ACPI_BERT_PRINT_MAX_LEN &&
-+		    printed < ACPI_BERT_PRINT_MAX_RECORDS) {
-+			pr_info_once("Error records from previous boot:\n");
- 			cper_estatus_print(KERN_INFO HW_ERR, estatus);
--		else
--			pr_info_once("Max print length exceeded, table data is available at:\n"
--				     "/sys/firmware/acpi/tables/data/BERT");
-+			printed++;
-+		} else {
-+			skipped++;
-+		}
- 
- 		/*
- 		 * Because the boot error source is "one-time polled" type,
-@@ -75,6 +87,9 @@ static void __init bert_print_all(struct
- 		estatus = (void *)estatus + estatus_len;
- 		remain -= estatus_len;
- 	}
-+
-+	if (skipped)
-+		pr_info(HW_ERR "Skipped %d error records\n", skipped);
- }
- 
- static int __init setup_bert_disable(char *str)
+ /* Sequence to mitigate PBRSB on eIBRS CPUs */
+ #define __ISSUE_UNBALANCED_RET_GUARD(sp)	\
 
 

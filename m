@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A84C58D218
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 04:51:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6B0058D21A
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 04:51:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231586AbiHICvS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 8 Aug 2022 22:51:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45760 "EHLO
+        id S231843AbiHICv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 8 Aug 2022 22:51:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231360AbiHICvM (ORCPT
+        with ESMTP id S231603AbiHICvP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 8 Aug 2022 22:51:12 -0400
+        Mon, 8 Aug 2022 22:51:15 -0400
 Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 758D9192BF;
-        Mon,  8 Aug 2022 19:51:11 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id D85965C00AE;
-        Mon,  8 Aug 2022 22:51:10 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7407A1E3DE;
+        Mon,  8 Aug 2022 19:51:14 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id D00A75C0046;
+        Mon,  8 Aug 2022 22:51:13 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Mon, 08 Aug 2022 22:51:10 -0400
+  by compute5.internal (MEProxy); Mon, 08 Aug 2022 22:51:13 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
         :cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1660013470; x=1660099870; bh=b8
-        zBqnbjGfkGFv4egHJI0533lSwO5A03klYpq+LVrGI=; b=kyJMAg7BhnEYXKf5J1
-        qJWQnsF4bOfgAtRiuhwmZFdVUyww6d1dr/3wP/OkF6gH5kV1otg1ak3phk+ITTPO
-        BvIh1FXgEbH9+WwMQ//C6yhWPkv/d2t3urwkwbrl0wUW9/1o1+jN2JBMMG43eqTK
-        cxYIGkVVMZCapU+C1XDLpyovivsaOZa5Rk2SHfptaZ4jE7IDZ1Ik1u6CWk4aZMgW
-        XZLMsCkHJJKPqHIlV7ioItwB0yVJNV9QDsrfngKn1yNqzwhJzl2aQJ6fEJad3s6A
-        1RE+kvanN/DpB0bm0Y5Y5BcBe0hbv4kJHmwUjzlbAtpkLAo1Ss9n1l2ZoHc/pD+a
-        hUoQ==
+        :subject:subject:to:to; s=fm2; t=1660013473; x=1660099873; bh=gE
+        pD7e0phpvDHfZqNwT6fJk1Mqt4jaxDnSrfoJgQ/BY=; b=hwTnS4yC7MPu5vjEUr
+        9BxGBZcbCL4ouUWdy9ENW4zvTWPzmF76IH4nUkq5kTRwYaliCj/txvpVQlTRWgbF
+        Oqf/xMoWGNr9Nt5B9XUgZiiS9cItAz86Cto8TaMpKDRXSSPyS0xpo2GR+alfjAFr
+        8NKbYVSJEzK+Ma9QQQoxlWqQfnG1AoveX2W5cBb/Z6hbS0AsHI8ucHFirWDu999v
+        OCd5j1J+5q2GMOpnKUpkYXcTlenkd6oLGc/GLp4X6PyETrr0MP1GSxBP0mEMtNG/
+        PxvzPH/YVEbK2l4SQyuMhva8znJII6Cjp9P+HMlCwKMpPTM9nIlcmV2E37dJnbQK
+        YfCQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1660013470; x=1660099870; bh=b8zBqnbjGfkGF
-        v4egHJI0533lSwO5A03klYpq+LVrGI=; b=CaMyhMmMf46yNc3FODZkVz5JMQtdM
-        Vf0WXkeo/ESyhch3KqFGFEr6OnUncQBRfc/CT4nCLbE6Vrb3WDc39CL2Hcr7Z7eI
-        V2Oo4xlg2vgqYRx0CCJSLpDTxtJLGsZuMpu+t9ZN4+8X43L7xIDHSFhEl/XinzeA
-        n52nl7JPBxlsQQqVjxwKoEGqmr6FP55B21D7SuZnpYDygQL+YFYum18wdFtU7ehA
-        zXXQ1hNig5JVWzxqdNMK9ZdBLkFteUJFjEJ9kj2kskfWMAqiSARHDeMBNKW2wUjh
-        VxUw/FC0LJ0ce/fP763lcFhbxNTwpFz27EIQS1+j4gRvrSAJTTtUEw92g==
-X-ME-Sender: <xms:nsvxYqeij7dbdd6-oFgURbfUk_CM_USY6bwT63ZFRf1A2goYl-sbDw>
-    <xme:nsvxYkNnNEB0fNyh6ugtcgh6NYGqwZysxOcy-pPtrLJr8FZ8NPQMPgAfDbhzxRMUX
-    gFIBtRDYq_ySijiAvs>
-X-ME-Received: <xmr:nsvxYriBOq5foBkqGcmvhsBMgNfUDnAkRku_3fY9vVkR04d2JHOVccZtiYyv>
+        :x-sasl-enc; s=fm1; t=1660013473; x=1660099873; bh=gEpD7e0phpvDH
+        fZqNwT6fJk1Mqt4jaxDnSrfoJgQ/BY=; b=tYOGkjo+929VmnRVZtExjsc9C/v05
+        M4osAgSfBw2tup/Dqv9U61nFCXYkYdI2f9GJHHxRcdMVO6/o2PYjJiL+9LpQnY1w
+        akIV+8gyGrLqfj2jCYTO7pH8kQVjXKts9gKQKidRrGzS/+i5srZCaATV4n6hBXuT
+        KIyv7+QxeiEYWsDvrWjONEQiidJjYLrOJyHEC2pRfDXqeTNSFSppfRHSeKmfm1W0
+        bnFLU3txhrcKMmMpxPnKKrTPZ+OBDwGGrih+9/OJd3JwnD9JcB0g66N74KQj9z4z
+        j7hk+scVj/xIIaEyUXe3SPmobRqZjry8NJrXtmlb0cvaRJjI8ZnTCDYVw==
+X-ME-Sender: <xms:ocvxYtI8hLbePYM1La_zWLaQLYlLxBWhrFL3I0TAFDeuP6B7FCHxMw>
+    <xme:ocvxYpKtgPqGzVyy41zGi8jduHLL4hnWtOg-QB3AONVyd2U94OLJaIf9-D-uQdVba
+    gwI851qk2cx80v7rdU>
+X-ME-Received: <xmr:ocvxYltrs9q4mGfbLDKR6jjvbI_DGKxY3AAG6e1oNowdx4IHwcgxnnJRGHnW>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdefledgieehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
@@ -54,21 +54,21 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdefledgieehucetufdoteggod
     jhhonhgvshdruggvvheqnecuggftrfgrthhtvghrnhepgfetfedugfetudeuheetjefhue
     fggfelleetvdevtefhueeujeefvdegleevhefgnecuvehluhhsthgvrhfuihiivgeptden
     ucfrrghrrghmpehmrghilhhfrhhomheplhhukhgvsehljhhonhgvshdruggvvh
-X-ME-Proxy: <xmx:nsvxYn_39ynDI6f0d1Msa3xwGrkqvaDXIxLgjrVd8zQSxFbK9oud2w>
-    <xmx:nsvxYms_SC7sS-2WBHSwz-o_uUgJLQ7TBK2AiGdkt_Um40PaWcWTyQ>
-    <xmx:nsvxYuG-R1-7QJjLLPtcFuLt7DE0A8E0uc98x1nlMR8lV3Q50IXNDQ>
-    <xmx:nsvxYoLD2lqCqrU8BLuC75G9Ec07TB_9ZbPhUEDI3wB2wC_tePSSRQ>
+X-ME-Proxy: <xmx:ocvxYubjn3cZbr6NYIgY_Pw4QbuVftas7SppXOfGfXrg4kODMQQSOQ>
+    <xmx:ocvxYkZxIF5l1J9XxYtmWKtKEZeGSrcpMsveHfR51wVu0WqLXBh7KQ>
+    <xmx:ocvxYiC7A9vYnW2KGofQsKWpmIJYl1iLH_aaUiQtVws66mEjXPAB1w>
+    <xmx:ocvxYrXre995scIYInGDkWcJR3zP_JcmKsQuIVOG_BLYuApzPD0S6w>
 Feedback-ID: i5ec1447f:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 8 Aug 2022 22:51:08 -0400 (EDT)
+ 8 Aug 2022 22:51:11 -0400 (EDT)
 From:   "Luke D. Jones" <luke@ljones.dev>
 To:     hdegoede@redhat.com
 Cc:     andy.shevchenko@gmail.com, pobrn@protonmail.com, pavel@ucw.cz,
         platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
         "Luke D. Jones" <luke@ljones.dev>
-Subject: [PATCH v3 1/6] asus-wmi: Implement TUF laptop keyboard RGB control
-Date:   Tue,  9 Aug 2022 14:50:49 +1200
-Message-Id: <20220809025054.1626339-2-luke@ljones.dev>
+Subject: [PATCH v3 2/6] asus-wmi: Implement TUF laptop keyboard LED modes
+Date:   Tue,  9 Aug 2022 14:50:50 +1200
+Message-Id: <20220809025054.1626339-3-luke@ljones.dev>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220809025054.1626339-1-luke@ljones.dev>
 References: <20220809025054.1626339-1-luke@ljones.dev>
@@ -84,165 +84,260 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds support for TUF laptop RGB control via the multicolor LED API.
+Adds support for changing the laptop keyboard LED modes. These
+are visible effects such as static, rainbow, pulsing, colour cycles.
 
-As this is the bas for adjusting only the RGB values, it sets the
-default mode of the keyboard to static since there is no way to read
-any existing settings from the device. These defaults overwrite the
-booted state of the keyboard when the module is loaded.
+These sysfs attributes are added to asus-nb-wmi:
+- keyboard_rgb_save
+- keyboard_rgb_mode
+- keyboard_rgb_speed
 
 Signed-off-by: Luke D. Jones <luke@ljones.dev>
 ---
- drivers/platform/x86/asus-wmi.c            | 80 ++++++++++++++++++++++
- include/linux/platform_data/x86/asus-wmi.h |  3 +
- 2 files changed, 83 insertions(+)
+ .../ABI/testing/sysfs-platform-asus-wmi       |  30 +++++
+ drivers/platform/x86/asus-wmi.c               | 127 ++++++++++++++++--
+ 2 files changed, 149 insertions(+), 8 deletions(-)
 
+diff --git a/Documentation/ABI/testing/sysfs-platform-asus-wmi b/Documentation/ABI/testing/sysfs-platform-asus-wmi
+index 04885738cf15..a9128fa5cc65 100644
+--- a/Documentation/ABI/testing/sysfs-platform-asus-wmi
++++ b/Documentation/ABI/testing/sysfs-platform-asus-wmi
+@@ -57,3 +57,33 @@ Description:
+ 			* 0 - default,
+ 			* 1 - overboost,
+ 			* 2 - silent
++
++What:		/sys/devices/platform/<platform>/keyboard_rgb_save
++Date:		Aug 2022
++KernelVersion:	6.1
++Contact:	"Luke Jones" <luke@ljones.dev>
++Description:
++		Set or save the RGB mode details (write-only):
++			* 0 - set, the settings will be lost on boot
++			* 1 - save, the settings will be retained on boot
++
++What:		/sys/devices/platform/<platform>/keyboard_rgb_mode
++Date:		Aug 2022
++KernelVersion:	6.1
++Contact:	"Luke Jones" <luke@ljones.dev>
++Description:
++		Set the mode of the RGB keyboard, the mode will not apply until the
++		keyboard_rgb_save attribute is set (write-only):
++			* 0 to 12, each is an RGB such as static, rainbow, pulse.
++				Not all keyboards accept every mode.
++
++What:		/sys/devices/platform/<platform>/keyboard_rgb_speed
++Date:		Aug 2022
++KernelVersion:	6.1
++Contact:	"Luke Jones" <luke@ljones.dev>
++Description:
++		Set the speed of the selected RGB effect, the speed will not apply
++		until the keyboard_rgb_save attribute is set (write-only):
++			* 0 - slow
++			* 1 - medium
++			* 2 - fast
+\ No newline at end of file
 diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
-index 0e7fbed8a50d..233e73f4313d 100644
+index 233e73f4313d..fa0cc2895a66 100644
 --- a/drivers/platform/x86/asus-wmi.c
 +++ b/drivers/platform/x86/asus-wmi.c
-@@ -25,6 +25,7 @@
- #include <linux/input/sparse-keymap.h>
- #include <linux/kernel.h>
- #include <linux/leds.h>
-+#include <linux/led-class-multicolor.h>
- #include <linux/module.h>
- #include <linux/pci.h>
- #include <linux/pci_hotplug.h>
-@@ -117,6 +118,9 @@ static const char * const ashs_ids[] = { "ATK4001", "ATK4002", NULL };
- 
- static int throttle_thermal_policy_write(struct asus_wmi *);
- 
-+static int tuf_rgb_brightness_set(struct led_classdev *cdev,
-+							enum led_brightness brightness);
-+
- static bool ashs_present(void)
- {
- 	int i = 0;
-@@ -190,6 +194,14 @@ struct fan_curve_data {
- 	u8 percents[FAN_CURVE_POINTS];
- };
- 
-+struct keyboard_rgb_led {
-+	struct mc_subled subled_info[3]; /* r g b */
-+	struct led_classdev_mc dev;
-+	u8 save;
-+	u8 mode;
-+	u8 speed;
-+};
-+
- struct asus_wmi {
- 	int dsts_id;
- 	int spec;
-@@ -234,6 +246,8 @@ struct asus_wmi {
+@@ -246,7 +246,8 @@ struct asus_wmi {
  	bool dgpu_disable_available;
  	bool dgpu_disable;
  
-+	struct keyboard_rgb_led keyboard_rgb_mode;
-+
+-	struct keyboard_rgb_led keyboard_rgb_mode;
++	bool keyboard_rgb_mode_available;
++	struct keyboard_rgb_led keyboard_rgb_led;
+ 
  	bool throttle_thermal_policy_available;
  	u8 throttle_thermal_policy_mode;
+@@ -748,6 +749,102 @@ static ssize_t egpu_enable_store(struct device *dev,
  
-@@ -1028,12 +1042,40 @@ static enum led_brightness lightbar_led_get(struct led_classdev *led_cdev)
- 	return result & ASUS_WMI_DSTS_LIGHTBAR_MASK;
- }
+ static DEVICE_ATTR_RW(egpu_enable);
  
-+static int tuf_rgb_brightness_set(struct led_classdev *cdev,
-+	enum led_brightness brightness)
++/* TUF Laptop Keyboard RGB Modes **********************************************/
++static int keyboard_rgb_check_present(struct asus_wmi *asus)
 +{
-+	struct led_classdev_mc *mc_cdev = lcdev_to_mccdev(cdev);
-+	struct keyboard_rgb_led *rgb = container_of(mc_cdev, struct keyboard_rgb_led, dev);
-+	struct asus_wmi *asus = container_of(rgb, struct asus_wmi, keyboard_rgb_mode);
-+	struct device *dev = &asus->platform_device->dev;
-+	u8 r, g, b;
++	u32 result;
 +	int err;
-+	u32 ret;
 +
-+	led_mc_calc_color_components(mc_cdev, brightness);
-+	r = mc_cdev->subled_info[0].brightness;
-+	g = mc_cdev->subled_info[1].brightness;
-+	b = mc_cdev->subled_info[2].brightness;
++	asus->keyboard_rgb_mode_available = false;
 +
-+	/* Writing out requires some defaults. This will overwrite boot mode */
-+	err = asus_wmi_evaluate_method3(ASUS_WMI_METHODID_DEVS, ASUS_WMI_DEVID_TUF_RGB_MODE,
-+				rgb->save | (rgb->mode << 8) | (r << 16) | (g << 24),
-+				(b) | (rgb->speed << 8),
-+				&ret);
-+	if (err)
-+		dev_err(dev, "Unable to set TUF RGB data?\n");
++	err = asus_wmi_get_devstate(asus, ASUS_WMI_DEVID_TUF_RGB_MODE, &result);
++	if (err) {
++		if (err == -ENODEV)
++			return 0;
++		return err;
++	}
 +
-+	return err;
++	if (result & ASUS_WMI_DSTS_PRESENCE_BIT)
++		asus->keyboard_rgb_mode_available = true;
++
++	return 0;
 +}
 +
- static void asus_wmi_led_exit(struct asus_wmi *asus)
++static ssize_t keyboard_rgb_save_store(struct device *device,
++				 struct device_attribute *attr,
++				 const char *buf, size_t count)
++{
++	u8 save;
++	int err;
++
++	struct asus_wmi *asus = dev_get_drvdata(device);
++	struct led_classdev *cdev = &asus->keyboard_rgb_led.dev.led_cdev;
++
++	if (sscanf(buf, "%hhd", &save) != 1)
++		return -EINVAL;
++
++	asus->keyboard_rgb_led.save = !!save;
++
++	err = tuf_rgb_brightness_set(cdev, cdev->brightness);
++	if (err)
++		return err;
++
++	return count;
++}
++static DEVICE_ATTR_WO(keyboard_rgb_save);
++
++static ssize_t keyboard_rgb_mode_store(struct device *device,
++				 struct device_attribute *attr,
++				 const char *buf, size_t count)
++{
++	u8 mode;
++
++	struct asus_wmi *asus = dev_get_drvdata(device);
++
++	if (sscanf(buf, "%hhd", &mode) != 1)
++		return -EINVAL;
++
++	/* These are the known usable modes across all TUF/ROG */
++	if (mode >= 12 || mode == 10)
++	  asus->keyboard_rgb_led.mode = 10;
++	else
++	  asus->keyboard_rgb_led.mode = mode;
++
++	return count;
++}
++static DEVICE_ATTR_WO(keyboard_rgb_mode);
++
++
++static ssize_t keyboard_rgb_speed_store(struct device *device,
++				 struct device_attribute *attr,
++				 const char *buf, size_t count)
++{
++	u8 speed;
++
++	struct asus_wmi *asus = dev_get_drvdata(device);
++
++	if (sscanf(buf, "%hhd", &speed) != 1)
++		return -EINVAL;
++
++	switch (speed) {
++	case 0:
++		asus->keyboard_rgb_led.speed = 0xe1;
++		break;
++	case 1:
++		asus->keyboard_rgb_led.speed = 0xeb;
++		break;
++	case 2:
++		asus->keyboard_rgb_led.speed = 0xf5;
++		break;
++	default:
++		asus->keyboard_rgb_led.speed = 0xeb;
++		break;
++	}
++
++	return count;
++}
++static DEVICE_ATTR_WO(keyboard_rgb_speed);
++
+ /* Battery ********************************************************************/
+ 
+ /* The battery maximum charging percentage */
+@@ -1047,7 +1144,7 @@ static int tuf_rgb_brightness_set(struct led_classdev *cdev,
  {
- 	led_classdev_unregister(&asus->kbd_led);
+ 	struct led_classdev_mc *mc_cdev = lcdev_to_mccdev(cdev);
+ 	struct keyboard_rgb_led *rgb = container_of(mc_cdev, struct keyboard_rgb_led, dev);
+-	struct asus_wmi *asus = container_of(rgb, struct asus_wmi, keyboard_rgb_mode);
++	struct asus_wmi *asus = container_of(rgb, struct asus_wmi, keyboard_rgb_led);
+ 	struct device *dev = &asus->platform_device->dev;
+ 	u8 r, g, b;
+ 	int err;
+@@ -1075,7 +1172,7 @@ static void asus_wmi_led_exit(struct asus_wmi *asus)
  	led_classdev_unregister(&asus->tpd_led);
  	led_classdev_unregister(&asus->wlan_led);
  	led_classdev_unregister(&asus->lightbar_led);
-+	led_classdev_multicolor_unregister(&asus->keyboard_rgb_mode.dev);
+-	led_classdev_multicolor_unregister(&asus->keyboard_rgb_mode.dev);
++	led_classdev_multicolor_unregister(&asus->keyboard_rgb_led.dev);
  
  	if (asus->led_workqueue)
  		destroy_workqueue(asus->led_workqueue);
-@@ -1105,6 +1147,44 @@ static int asus_wmi_led_init(struct asus_wmi *asus)
- 					   &asus->lightbar_led);
+@@ -1148,8 +1245,8 @@ static int asus_wmi_led_init(struct asus_wmi *asus)
  	}
  
-+	if (asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_TUF_RGB_MODE)) {
-+		struct mc_subled *mc_led_info = asus->keyboard_rgb_mode.subled_info;
-+		struct led_classdev_mc *mc_cdev = &asus->keyboard_rgb_mode.dev;
-+		struct device *dev = &asus->platform_device->dev;
-+		u8 led_brightness = 255;
-+
-+		/*
-+		 * asus::kbd_backlight still controls a base 3-level backlight and when
-+		 * it is on 0, the RGB is not visible at all. RGB should be treated as
-+		 * an additional step.
-+		 */
-+		mc_cdev->led_cdev.name = "asus::multicolour::kbd_backlight";
-+		mc_cdev->led_cdev.flags = LED_CORE_SUSPENDRESUME | LED_RETAIN_AT_SHUTDOWN;
-+		mc_cdev->led_cdev.brightness_set_blocking = tuf_rgb_brightness_set;
-+		mc_cdev->led_cdev.brightness_get = NULL;
-+
-+		mc_cdev->subled_info = mc_led_info;
-+		mc_led_info[0].intensity = 127;
-+		mc_led_info[0].color_index = LED_COLOR_ID_RED;
-+		mc_led_info[1].color_index = LED_COLOR_ID_GREEN;
-+		mc_led_info[2].color_index = LED_COLOR_ID_BLUE;
-+		mc_cdev->num_colors = 3;
-+
-+		/*
-+		 * It's not possible to get last set data from device so set defaults
-+		 * to make it safe for a user to change either RGB or modes.
-+		 */
-+		asus->keyboard_rgb_mode.save = 1;
-+		asus->keyboard_rgb_mode.mode = 0;
-+		asus->keyboard_rgb_mode.speed = 0xeb;
-+
-+		mc_cdev->led_cdev.brightness = led_brightness;
-+		mc_cdev->led_cdev.max_brightness = led_brightness;
-+		led_mc_calc_color_components(mc_cdev, led_brightness);
-+
-+		rv = led_classdev_multicolor_register(dev, mc_cdev);
-+	}
-+
- error:
- 	if (rv)
- 		asus_wmi_led_exit(asus);
-diff --git a/include/linux/platform_data/x86/asus-wmi.h b/include/linux/platform_data/x86/asus-wmi.h
-index a571b47ff362..d63c9945a17d 100644
---- a/include/linux/platform_data/x86/asus-wmi.h
-+++ b/include/linux/platform_data/x86/asus-wmi.h
-@@ -98,6 +98,9 @@
- /* dgpu on/off */
- #define ASUS_WMI_DEVID_DGPU		0x00090020
+ 	if (asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_TUF_RGB_MODE)) {
+-		struct mc_subled *mc_led_info = asus->keyboard_rgb_mode.subled_info;
+-		struct led_classdev_mc *mc_cdev = &asus->keyboard_rgb_mode.dev;
++		struct mc_subled *mc_led_info = asus->keyboard_rgb_led.subled_info;
++		struct led_classdev_mc *mc_cdev = &asus->keyboard_rgb_led.dev;
+ 		struct device *dev = &asus->platform_device->dev;
+ 		u8 led_brightness = 255;
  
-+/* TUF laptop RGB control */
-+#define ASUS_WMI_DEVID_TUF_RGB_MODE	0x00100056
+@@ -1174,9 +1271,9 @@ static int asus_wmi_led_init(struct asus_wmi *asus)
+ 		 * It's not possible to get last set data from device so set defaults
+ 		 * to make it safe for a user to change either RGB or modes.
+ 		 */
+-		asus->keyboard_rgb_mode.save = 1;
+-		asus->keyboard_rgb_mode.mode = 0;
+-		asus->keyboard_rgb_mode.speed = 0xeb;
++		asus->keyboard_rgb_led.save = 1;
++		asus->keyboard_rgb_led.mode = 0;
++		asus->keyboard_rgb_led.speed = 0xeb;
+ 
+ 		mc_cdev->led_cdev.brightness = led_brightness;
+ 		mc_cdev->led_cdev.max_brightness = led_brightness;
+@@ -3338,6 +3435,9 @@ static struct attribute *platform_attributes[] = {
+ 	&dev_attr_touchpad.attr,
+ 	&dev_attr_egpu_enable.attr,
+ 	&dev_attr_dgpu_disable.attr,
++	&dev_attr_keyboard_rgb_save.attr,
++	&dev_attr_keyboard_rgb_mode.attr,
++	&dev_attr_keyboard_rgb_speed.attr,
+ 	&dev_attr_lid_resume.attr,
+ 	&dev_attr_als_enable.attr,
+ 	&dev_attr_fan_boost_mode.attr,
+@@ -3368,6 +3468,12 @@ static umode_t asus_sysfs_is_visible(struct kobject *kobj,
+ 		ok = asus->egpu_enable_available;
+ 	else if (attr == &dev_attr_dgpu_disable.attr)
+ 		ok = asus->dgpu_disable_available;
++	else if (attr == &dev_attr_keyboard_rgb_save.attr)
++		ok = asus->keyboard_rgb_mode_available;
++	else if (attr == &dev_attr_keyboard_rgb_mode.attr)
++		ok = asus->keyboard_rgb_mode_available;
++	else if (attr == &dev_attr_keyboard_rgb_speed.attr)
++		ok = asus->keyboard_rgb_mode_available;
+ 	else if (attr == &dev_attr_fan_boost_mode.attr)
+ 		ok = asus->fan_boost_mode_available;
+ 	else if (attr == &dev_attr_throttle_thermal_policy.attr)
+@@ -3637,6 +3743,10 @@ static int asus_wmi_add(struct platform_device *pdev)
+ 	if (err)
+ 		goto fail_dgpu_disable;
+ 
++	err = keyboard_rgb_check_present(asus);
++	if (err)
++		goto fail_keyboard_rgb_mode;
 +
- /* DSTS masks */
- #define ASUS_WMI_DSTS_STATUS_BIT	0x00000001
- #define ASUS_WMI_DSTS_UNKNOWN_BIT	0x00000002
+ 	err = fan_boost_mode_check_present(asus);
+ 	if (err)
+ 		goto fail_fan_boost_mode;
+@@ -3751,6 +3861,7 @@ static int asus_wmi_add(struct platform_device *pdev)
+ fail_fan_boost_mode:
+ fail_egpu_enable:
+ fail_dgpu_disable:
++fail_keyboard_rgb_mode:
+ fail_platform:
+ fail_panel_od:
+ 	kfree(asus);
 -- 
 2.37.1
 

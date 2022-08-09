@@ -2,86 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EFD158DC4B
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 18:41:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2952D58DC4F
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 18:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239384AbiHIQlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 12:41:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56662 "EHLO
+        id S244713AbiHIQmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 12:42:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbiHIQlo (ORCPT
+        with ESMTP id S230272AbiHIQmF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 12:41:44 -0400
-Received: from mail-ua1-x932.google.com (mail-ua1-x932.google.com [IPv6:2607:f8b0:4864:20::932])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF22B483
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 09:41:43 -0700 (PDT)
-Received: by mail-ua1-x932.google.com with SMTP id cd25so2376588uab.8
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 09:41:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Kmy485he3uISIluyiVIEsi8lmY91clYY5CTzUMEMN/4=;
-        b=Jb1dsSM012O9PV1T8zszE0zNxuOGIQJww6PHDomMkGVCSIG/0xbjFDx/tKkBbTTf0V
-         rNRB+KPXc3/7NcPXaXw4+cp19IQoq9MBJTzKpIR+tKXBV31Ba5YMEKrY+NrVxGZMa8Q9
-         udfijqxw8BD6Au+D+SIYSaFiEhT+5t6ZR2ByTh7XmLtKQoeZ0d8DnlOhIew3vsmIqvGr
-         QXszl6ZTub/Qo4KtI4PzknQNQZqnuXcz5bSOjvVzHIaqbXpcAej/4O4S96kKv5hwdQyK
-         NlLdWo8r5nYrgQOBdv8Uc0cLlSEUbHTkoUZs/qWmJ4yBYehjZKvQCH4P4eHDahxwZvgu
-         tFSg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Kmy485he3uISIluyiVIEsi8lmY91clYY5CTzUMEMN/4=;
-        b=DAXZT5HJvjS4Ww+wmkfJyw7o/MSps8BACe8HuNYb4KIhRtZd5F5ccRaNNizyI0XpTL
-         f9tggE6zCxNm7EQVmnzWjlpEPq4Y0psWLLNh28oFbzSpUjwoRMHosJA5uv9bjV6V1S/x
-         nzUqrYHQ6b9TGUCuVTcsgxi00vPEld1MKVRRfytMmU8YTFPJeJRM5Lyj+OlNQwbTt/40
-         oLobb2Eimnu9J/ZFr3Q5+0KonaNaFUMeAGEUnspY3i5BEPQziIOTqqY4tc8KXWaw3Zmq
-         v/FtTYUEofN1vHBPLqQbZ3c6NBnZQhWyRFrPxlZ+M8051989pM5wJFekDtMMOCIIV3an
-         6cHQ==
-X-Gm-Message-State: ACgBeo1slGUTEQGR3EfPlu6twBO8njetitVdJ6iv9oaJYVe6dTXsVRas
-        ltoMPCFkzcPsZoie6CmUltob+z8yI8FrZiTifWHhww==
-X-Google-Smtp-Source: AA6agR75qJL3WhFtU6nk1fFYmsc40QN+aW8evUh/W7MmmGQEuE91lJlOgcBE16AcLr8euiDZ/z0aUqfbqoYXlZlP8VY=
-X-Received: by 2002:ab0:67cf:0:b0:341:257f:ce52 with SMTP id
- w15-20020ab067cf000000b00341257fce52mr10294711uar.109.1660063302205; Tue, 09
- Aug 2022 09:41:42 -0700 (PDT)
+        Tue, 9 Aug 2022 12:42:05 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE2FEFD0A;
+        Tue,  9 Aug 2022 09:42:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 786A4B81625;
+        Tue,  9 Aug 2022 16:42:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C7C6C433D6;
+        Tue,  9 Aug 2022 16:42:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660063322;
+        bh=qT8jDmuiFc3HywToOTDU9Y76BLsYGRgW98tqTj1tplQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GVkaWOpXNUoUgOzIow1IXae7WD7ZKP+aZ6ZCwYT9KkpSb7JAd+Yr9XscF8m3Uy6mi
+         d+MfT7LACepLGR7J3t1lDDXiFaTlzBBSFtTinMP50ffWBjSEWxP/46RN+wSvfDsSuC
+         ZiG9OrcUbLtJrdXXNOUdQcHOS0C2UoxczZjumAoslLdsYhXT1LD1nAzf7TY9bWlPAn
+         FbKbSycV7FXFXYT4XCN9HNZbzIH1e9cWC1qEWz0jMFqCZpTwSRbqBrJKvnaC6R4dMN
+         1ISVLvfhhaR3ZcrnImE3xjy854t7+3cenxovO9kgqjNuUvkX93JeUFN+khSV0OgGot
+         I7d65rATiOYaA==
+Date:   Tue, 9 Aug 2022 09:41:59 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Guillaume Tucker <guillaume.tucker@collabora.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Mark Brown <broonie@kernel.org>,
+        kernel@collabora.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] selftests: fix LLVM build for i386 and x86_64
+Message-ID: <YvKOV1L73Mv/Dc6P@dev-arch.thelio-3990X>
+References: <20220809142231.2419274-1-guillaume.tucker@collabora.com>
 MIME-Version: 1.0
-References: <20220805214734.1937451-1-eugenis@google.com> <875yj1x0k0.wl-maz@kernel.org>
-In-Reply-To: <875yj1x0k0.wl-maz@kernel.org>
-From:   Evgenii Stepanov <eugenis@google.com>
-Date:   Tue, 9 Aug 2022 09:41:28 -0700
-Message-ID: <CAFKCwrjVaOdrGktxVHLCDPyJSRjZ0B3FHTGsb3PXMULL=dw9rA@mail.gmail.com>
-Subject: Re: [PATCH] mte: Follow arm64.nomte override in MMU setup.
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220809142231.2419274-1-guillaume.tucker@collabora.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 9, 2022 at 1:50 AM Marc Zyngier <maz@kernel.org> wrote:
-> How comes such memory is being used? How comes it is in the linear
-> map?
->
-> arm64.nomte is affecting the use of MTE feature on the platform. It
-> doesn't guard the use of a MTE carve-out, and doesn't allow it to be
-> used in any shape or form.
->
-> To use this memory, you should remove the MTE configuration
-> altogether, as you cannot infer what the CPU is doing with it.
+On Tue, Aug 09, 2022 at 04:22:31PM +0200, Guillaume Tucker wrote:
+> Add missing cases for the i386 and x86_64 architectures when
+> determining the LLVM target for building kselftest.
+> 
+> Fixes: 795285ef2425 ("selftests: Fix clang cross compilation")
+> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
 
-This can be used to enable MTE in TZ but not in the NS memory.
+Right, I think this is the correct thing to do for the selftests. For
+the main kernel build, we use CLANG_TARGETS_FLAGS_x86 because ARCH=i386
+and ARCH=x86_64 are covered by SUBARCH=x86, which is what we switch on,
+rather than ARCH. I do see a couple of references to SUBARCH in the
+tools directory but I am not sure if that is usable for this part so:
+
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+
+> ---
+>  tools/testing/selftests/lib.mk | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+> index b1c62914366b..cc4c443d5b14 100644
+> --- a/tools/testing/selftests/lib.mk
+> +++ b/tools/testing/selftests/lib.mk
+> @@ -10,12 +10,14 @@ endif
+>  CLANG_TARGET_FLAGS_arm          := arm-linux-gnueabi
+>  CLANG_TARGET_FLAGS_arm64        := aarch64-linux-gnu
+>  CLANG_TARGET_FLAGS_hexagon      := hexagon-linux-musl
+> +CLANG_TARGET_FLAGS_i386         := i386-linux-gnu
+>  CLANG_TARGET_FLAGS_m68k         := m68k-linux-gnu
+>  CLANG_TARGET_FLAGS_mips         := mipsel-linux-gnu
+>  CLANG_TARGET_FLAGS_powerpc      := powerpc64le-linux-gnu
+>  CLANG_TARGET_FLAGS_riscv        := riscv64-linux-gnu
+>  CLANG_TARGET_FLAGS_s390         := s390x-linux-gnu
+>  CLANG_TARGET_FLAGS_x86          := x86_64-linux-gnu
+> +CLANG_TARGET_FLAGS_x86_64       := x86_64-linux-gnu
+>  CLANG_TARGET_FLAGS              := $(CLANG_TARGET_FLAGS_$(ARCH))
+>  
+>  ifeq ($(CROSS_COMPILE),)
+> -- 
+> 2.30.2
+> 

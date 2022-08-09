@@ -2,187 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43AF458DCD2
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 19:08:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 953B158DCCD
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 19:07:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245144AbiHIRIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 13:08:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49702 "EHLO
+        id S245322AbiHIRHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 13:07:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245092AbiHIRIK (ORCPT
+        with ESMTP id S245296AbiHIRHq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 13:08:10 -0400
-Received: from conssluserg-04.nifty.com (conssluserg-04.nifty.com [210.131.2.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66941DA49;
-        Tue,  9 Aug 2022 10:08:07 -0700 (PDT)
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51]) (authenticated)
-        by conssluserg-04.nifty.com with ESMTP id 279H7VxJ019248;
-        Wed, 10 Aug 2022 02:07:32 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-04.nifty.com 279H7VxJ019248
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1660064852;
-        bh=rr3DZMLkaG4oy2qKkuCOhZ3c8Lq3XQ930xsc+I0K9ew=;
-        h=From:Date:Subject:To:Cc:From;
-        b=qJguDYMeNsaC/InxaBEa/ZyKlgMIpwjbDS31AT0tGW6kT2aY0zbgKcOHFvIG4RqIU
-         UxL8DBNAYRB3ANio722tdnab2bSE/CmPD68GVD7haQdMKyIbZ0MqGW+Bp4qdMxU/Zi
-         pTuCGM1MmWbYpJMA7q04e1xN/6sOhexLFzV6bk0RUXF46pi1TzqPz6O+l7FSZo6I4n
-         33D/LsTnJOAY2e2eoKkoVqPH8vb1EXVwfATNUGN2AtzawnRBVoCbZcbd4YF2qzPLD+
-         8lOKp/4btXYs01TaIpr7E9sGDxfRzcOaA63lYapIHw5++d9uRp7XTIhuYIi7lv+ccj
-         sh8GJtmNRM+3A==
-X-Nifty-SrcIP: [209.85.221.51]
-Received: by mail-wr1-f51.google.com with SMTP id p10so14995026wru.8;
-        Tue, 09 Aug 2022 10:07:31 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2iHKPcA9t/j4n7j+UaarYXwQGE7aNTnGBhIuofoQS2rd8/feUv
-        b7l/CS2igPDamg1iqHgBdO6ZWIRx3pqtxw09rkk=
-X-Google-Smtp-Source: AA6agR7bSLbQfQnSdmzzw7nHJvS9NI1lXFc5N5lcXvW3wdR+L0bY5y529wqH9BxszkqPrq5v9OlXUC6v7IFrvJQezOI=
-X-Received: by 2002:a5d:54cb:0:b0:220:6426:6219 with SMTP id
- x11-20020a5d54cb000000b0022064266219mr14357759wrv.461.1660064850247; Tue, 09
- Aug 2022 10:07:30 -0700 (PDT)
+        Tue, 9 Aug 2022 13:07:46 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B83220C7
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 10:07:44 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id z17so15012463wrq.4
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 10:07:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=VJbu0Vi6JsT3Ge0NwSkLjoyGgFVaYGY0641GU+LZJhY=;
+        b=fvzM2GUUaZrmgyVaFSQsiiQM6O8bpQ/PHWn3++zGuNq8x5xtQK6QUVR+M6h/6+eyVl
+         BFh1AMDIrR0975z9iHhMgrOs3gvIryx6m0goQhg4HIxelRl4ejAApEZyZIOCZWZPS+3H
+         mDCMikiOSOjQgNN1pfpNxeG0l0TLzGV/AO4HjsTWeUVbhKLVPT+WNkxahiDHH+ad240E
+         BOfsX+l6T+Ryuijm/PB6KafjYGc37tS4PbGk7elfEA+jENKRYefWU2GdCa80YgS5odqA
+         1okFqqk+BPMfXfqESUGDnOikPzimREsT6/x38FcXY3TMg5pHO+ovKb+hXqYKNs7JLLCS
+         tDVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=VJbu0Vi6JsT3Ge0NwSkLjoyGgFVaYGY0641GU+LZJhY=;
+        b=KNNLKOLBOlSU7elD9OkuNjFRuoDntVRIYGuwd7uDVlzWf6xKKl8HVG1H+AA7V6825S
+         mKqX8OVc/rGqiJLKGdf0hIo2RVBVbLON/jlNalhXWodRJ7UH0aGFmuwvGmqZ3425c7tN
+         CoQY3lawSYbT5cEZDTGNyBMZA+ZrOHClGvgihF9gj/56s+gnMN4nmM0f7gmwI1MtgCTd
+         ohDWu7APELFaycw7yba8tOrYm6OjW5FHS2JoT1tOBy7a8QY+aw25mwbzQKOQlom0+3cQ
+         7d/xtkA7Tf2SVcdDkeB2eRGn39bH/awfHai40e8Ylp4dKg2kW0WwRaWwCwxKNuNIo1Sq
+         +FBA==
+X-Gm-Message-State: ACgBeo1mr0douVrWMqN2tsQ3CL9f5qm6jOkYFCQwxwCySH4WSIeHzZO1
+        Id1WkzNI0YVfIgy56v9fkCc2jB2psgLTtY+UcOP/lvgnqHU=
+X-Google-Smtp-Source: AA6agR6C6pGEJaHlcmIccbzG3l/LXUY9JxyRHbDjX/tgVsupnrZl7Tfk4Mg07ARiaMT3fu1Krv5Y6YtR9iIcV6+0gNU=
+X-Received: by 2002:adf:e28d:0:b0:21e:4c3b:b446 with SMTP id
+ v13-20020adfe28d000000b0021e4c3bb446mr14597055wri.300.1660064863280; Tue, 09
+ Aug 2022 10:07:43 -0700 (PDT)
 MIME-Version: 1.0
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Wed, 10 Aug 2022 02:06:51 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATwE1L4oS6R=7gHfiE6+9Dksvtvu-BGE07N6=JHVQ5hKQ@mail.gmail.com>
-Message-ID: <CAK7LNATwE1L4oS6R=7gHfiE6+9Dksvtvu-BGE07N6=JHVQ5hKQ@mail.gmail.com>
-Subject: [GIT PULL] Kbuild updates for v5.20-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20220711093218.10967-1-adrian.hunter@intel.com>
+ <20220711093218.10967-6-adrian.hunter@intel.com> <CAP-5=fUChJLqfJ__joVhtKwgjLTtBtMm8M0vt9eaOfLMmck85g@mail.gmail.com>
+ <0e415212-b828-34d3-fd1b-ba518149bf89@intel.com>
+In-Reply-To: <0e415212-b828-34d3-fd1b-ba518149bf89@intel.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Tue, 9 Aug 2022 10:07:30 -0700
+Message-ID: <CAP-5=fXNWfn_SX6aBHAQ=RPRHwDpnTmV_QpRoHRWX-J06TZ-BA@mail.gmail.com>
+Subject: Re: [PATCH 05/35] perf tools: Factor out evsel__id_hdr_size()
+To:     Adrian Hunter <adrian.hunter@intel.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Tue, Aug 9, 2022 at 4:50 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+>
+> On 19/07/22 20:09, Ian Rogers wrote:
+> > On Mon, Jul 11, 2022 at 2:32 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+> >>
+> >> Factor out evsel__id_hdr_size() so it can be reused.
+> >>
+> >> This is needed by perf inject. When injecting events from a guest perf.data
+> >> file, there is a possibility that the sample ID numbers conflict. To
+> >> re-write an ID sample, the old one needs to be removed first, which means
+> >> determining how big it is with evsel__id_hdr_size() and then subtracting
+> >> that from the event size.
+> >>
+> >> Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
+> >> ---
+> >>  tools/perf/util/evlist.c | 28 +---------------------------
+> >>  tools/perf/util/evsel.c  | 26 ++++++++++++++++++++++++++
+> >>  tools/perf/util/evsel.h  |  2 ++
+> >>  3 files changed, 29 insertions(+), 27 deletions(-)
+> >>
+> >> diff --git a/tools/perf/util/evlist.c b/tools/perf/util/evlist.c
+> >> index 48af7d379d82..03fbe151b0c4 100644
+> >> --- a/tools/perf/util/evlist.c
+> >> +++ b/tools/perf/util/evlist.c
+> >> @@ -1244,34 +1244,8 @@ bool evlist__valid_read_format(struct evlist *evlist)
+> >>  u16 evlist__id_hdr_size(struct evlist *evlist)
+> >>  {
+> >>         struct evsel *first = evlist__first(evlist);
+> >> -       struct perf_sample *data;
+> >> -       u64 sample_type;
+> >> -       u16 size = 0;
+> >>
+> >> -       if (!first->core.attr.sample_id_all)
+> >> -               goto out;
+> >> -
+> >> -       sample_type = first->core.attr.sample_type;
+> >> -
+> >> -       if (sample_type & PERF_SAMPLE_TID)
+> >> -               size += sizeof(data->tid) * 2;
+> >> -
+> >> -       if (sample_type & PERF_SAMPLE_TIME)
+> >> -               size += sizeof(data->time);
+> >> -
+> >> -       if (sample_type & PERF_SAMPLE_ID)
+> >> -               size += sizeof(data->id);
+> >> -
+> >> -       if (sample_type & PERF_SAMPLE_STREAM_ID)
+> >> -               size += sizeof(data->stream_id);
+> >> -
+> >> -       if (sample_type & PERF_SAMPLE_CPU)
+> >> -               size += sizeof(data->cpu) * 2;
+> >> -
+> >> -       if (sample_type & PERF_SAMPLE_IDENTIFIER)
+> >> -               size += sizeof(data->id);
+> >> -out:
+> >> -       return size;
+> >> +       return first->core.attr.sample_id_all ? evsel__id_hdr_size(first) : 0;
+> >>  }
+> >>
+> >>  bool evlist__valid_sample_id_all(struct evlist *evlist)
+> >> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+> >> index a67cc3f2fa74..9a30ccb7b104 100644
+> >> --- a/tools/perf/util/evsel.c
+> >> +++ b/tools/perf/util/evsel.c
+> >> @@ -2724,6 +2724,32 @@ int evsel__parse_sample_timestamp(struct evsel *evsel, union perf_event *event,
+> >>         return 0;
+> >>  }
+> >>
+> >> +u16 evsel__id_hdr_size(struct evsel *evsel)
+> >> +{
+> >> +       u64 sample_type = evsel->core.attr.sample_type;
+> >
+> > As this just uses core, would it be more appropriate to put it in libperf?
+>
+> AFAIK we move to libperf only as needed.
 
-Please pull Kbuild updates for v5.20-rc1.
-Thank you.
+I don't think there is an expectation yet that libperf is stable - I
+hope not as I need to nuke the CPU map empty function. So, the cost of
+putting something there rather than perf is minimal, and perf can be
+just a consumer of libperf as any other tool - which builds confidence
+the API in libperf is complete. Jiri has posted patches in the past
+migrating parse-events, there's no "need" for that but the point is to
+improve the library API. I think this is the same case and minimal
+cost given only core is being used. Given we're actively migrating
+util APIs to libperf I think it is better to introduce simple APIs
+like this in libperf rather than creating something that someone will
+later have to migrate.
 
+> >
+> >> +       u16 size = 0;
+> >
+> > Perhaps size_t or int? u16 seems odd.
+>
+> Event header size member is 16-bit
 
+sizeof is generally considered size_t so the code as-is has implicit
+truncation - again I'll stand by it looking odd.
 
+Thanks,
+Ian
 
-The following changes since commit 32346491ddf24599decca06190ebca03ff9de7f8:
-
-  Linux 5.19-rc6 (2022-07-10 14:40:51 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild.git
-tags/kbuild-v5.20
-
-for you to fetch changes up to 672fb6740cbfde34f4d367ffa3c939b608a927e1:
-
-  modpost: remove .symbol_white_list field entirely (2022-08-04 20:32:13 +0900)
-
-----------------------------------------------------------------
-Kbuild updates for v5.20
-
- - Remove the support for -O3 (CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3)
-
- - Fix error of rpm-pkg cross-builds
-
- - Support riscv for checkstack tool
-
- - Re-enable -Wformwat warnings for Clang
-
- - Clean up modpost, Makefiles, and misc scripts
-
-----------------------------------------------------------------
-Baruch Siach (2):
-      init/Kconfig: update KALLSYMS_ALL help text
-      docs: kbuild: fix typo
-
-Justin Stitt (1):
-      Makefile.extrawarn: re-enable -Wformat for clang
-
-Masahiro Yamada (22):
-      certs: move scripts/check-blacklist-hashes.awk to certs/
-      certs: unify blacklist_hashes.c and blacklist_nohashes.c
-      kbuild: remove sed command from cmd_ar_builtin
-      Revert "scripts/mod/modpost.c: permit '.cranges' secton for sh64
-architecture."
-      kbuild: rpm-pkg: fix build error when _arch is undefined
-      kbuild: rpm-pkg: pass 'linux' to --target option of rpmbuild
-      kbuild: error out if $(KBUILD_EXTMOD) contains % or :
-      kbuild: error out if $(INSTALL_MOD_PATH) contains % or :
-      kconfig: shorten the temporary directory name for cc-option
-      modpost: drop executable ELF support
-      modpost: use sym_get_data() to get module device_table data
-      kbuild: add dtbs_prepare target
-      modpost: remove unused Elf_Sword macro
-      kbuild: set EXIT trap before creating temporary directory
-      modpost: refactor get_secindex()
-      modpost: add array range check to sec_name()
-      modpost: use more reliable way to get fromsec in section_rel(a)()
-      Revert "Kbuild, lto, workaround: Don't warn for
-initcall_reference in modpost"
-      modpost: shorten warning messages in report_sec_mismatch()
-      modpost: add PATTERNS() helper macro
-      modpost: remove unneeded .symbol_white_list initializers
-      modpost: remove .symbol_white_list field entirely
-
-Nick Desaulniers (1):
-      kbuild: drop support for CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE_O3
-
-Nicolas Schier (1):
-      scripts: headers_install.sh: Update config leak ignore entries
-
-Ondrej Mosnacek (1):
-      kbuild: dummy-tools: avoid tmpdir leak in dummy gcc
-
-Randy Dunlap (1):
-      kconfig: Qt5: tell the user which packages are required
-
-Wadim Mueller (1):
-      checkstack: add riscv support for scripts/checkstack.pl
-
- Documentation/kbuild/kconfig-language.rst                     |   2 +-
- MAINTAINERS                                                   |   1 -
- Makefile                                                      |  18 ++-
- arch/arc/configs/axs101_defconfig                             |   1 -
- arch/arc/configs/axs103_defconfig                             |   1 -
- arch/arc/configs/axs103_smp_defconfig                         |   1 -
- arch/arc/configs/haps_hs_defconfig                            |   1 -
- arch/arc/configs/haps_hs_smp_defconfig                        |   1 -
- arch/arc/configs/hsdk_defconfig                               |   1 -
- arch/arc/configs/nsim_700_defconfig                           |   1 -
- arch/arc/configs/nsimosci_defconfig                           |   1 -
- arch/arc/configs/nsimosci_hs_defconfig                        |   1 -
- arch/arc/configs/nsimosci_hs_smp_defconfig                    |   1 -
- arch/arc/configs/tb10x_defconfig                              |   1 -
- arch/arc/configs/vdk_hs38_defconfig                           |   1 -
- arch/arc/configs/vdk_hs38_smp_defconfig                       |   1 -
- certs/Makefile                                                |  14 +-
- certs/blacklist_hashes.c                                      |   1 -
- certs/blacklist_nohashes.c                                    |   6 -
- {scripts => certs}/check-blacklist-hashes.awk                 |   0
- init/Kconfig                                                  |  16 +-
- scripts/Kconfig.include                                       |   2 +-
- scripts/Makefile.build                                        |   5 +-
- scripts/Makefile.compiler                                     |   2 +-
- scripts/Makefile.extrawarn                                    |   1 -
- scripts/Makefile.modinst                                      |   3 +
- scripts/Makefile.package                                      |   4 +-
- scripts/checkstack.pl                                         |   4 +
- scripts/dummy-tools/dummy-plugin-dir/include/plugin-version.h |   0
- scripts/dummy-tools/gcc                                       |   8 +-
- scripts/headers_install.sh                                    |   2 -
- scripts/kconfig/qconf-cfg.sh                                  |   1 +
- scripts/mod/file2alias.c                                      |   4 +-
- scripts/mod/modpost.c                                         | 281
-++++++-----------------------------
- scripts/mod/modpost.h                                         |  33 ++--
- scripts/package/mkspec                                        |   3 +
- 36 files changed, 111 insertions(+), 313 deletions(-)
- delete mode 100644 certs/blacklist_nohashes.c
- rename {scripts => certs}/check-blacklist-hashes.awk (100%)
- create mode 100644
-scripts/dummy-tools/dummy-plugin-dir/include/plugin-version.h
-
--- 
-Best Regards
-Masahiro Yamada
+> >
+> >> +
+> >> +       if (sample_type & PERF_SAMPLE_TID)
+> >> +               size += sizeof(u64);
+> >> +
+> >> +       if (sample_type & PERF_SAMPLE_TIME)
+> >> +               size += sizeof(u64);
+> >> +
+> >> +       if (sample_type & PERF_SAMPLE_ID)
+> >> +               size += sizeof(u64);
+> >> +
+> >> +       if (sample_type & PERF_SAMPLE_STREAM_ID)
+> >> +               size += sizeof(u64);
+> >> +
+> >> +       if (sample_type & PERF_SAMPLE_CPU)
+> >> +               size += sizeof(u64);
+> >> +
+> >> +       if (sample_type & PERF_SAMPLE_IDENTIFIER)
+> >> +               size += sizeof(u64);
+> >> +
+> >> +       return size;
+> >> +}
+> >> +
+> >>  struct tep_format_field *evsel__field(struct evsel *evsel, const char *name)
+> >>  {
+> >>         return tep_find_field(evsel->tp_format, name);
+> >> diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
+> >> index 92bed8e2f7d8..699448f2bc2b 100644
+> >> --- a/tools/perf/util/evsel.h
+> >> +++ b/tools/perf/util/evsel.h
+> >> @@ -381,6 +381,8 @@ int evsel__parse_sample(struct evsel *evsel, union perf_event *event,
+> >>  int evsel__parse_sample_timestamp(struct evsel *evsel, union perf_event *event,
+> >>                                   u64 *timestamp);
+> >>
+> >> +u16 evsel__id_hdr_size(struct evsel *evsel);
+> >> +
+> >
+> > A comment would be nice, I know this is just moving code about but
+> > this is a new function.
+> >
+> > Thanks,
+> > Ian
+> >
+> >>  static inline struct evsel *evsel__next(struct evsel *evsel)
+> >>  {
+> >>         return list_entry(evsel->core.node.next, struct evsel, core.node);
+> >> --
+> >> 2.25.1
+> >>
+>

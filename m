@@ -2,69 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00F7E58D31B
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 07:22:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0742558D326
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 07:25:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233528AbiHIFWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 01:22:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59904 "EHLO
+        id S234311AbiHIFZj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 01:25:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233143AbiHIFWP (ORCPT
+        with ESMTP id S234227AbiHIFZg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 01:22:15 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 638211EACC
-        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 22:22:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660022534; x=1691558534;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=jZw36392s8yGioSGls0W1Ee2CQUKcpeIqNTVzcAdsL8=;
-  b=bvsBB71QVgpaJeXBK1d2JV9hr665I6MArNpRuV3KDh4G05aKCB/9zaQ3
-   09mG1YxnJsXkx1b7XYkBkGtBgacAf0J9IamKoPL862DWhHjgUFrLTEm2A
-   tVdwBDssjSbYsE6aAhwb6cAxJv4LEqj03tF9AKuci/9rzkKQ9dPdZitWL
-   pIQ/HCcyyGJjeY6L69uCk2MNW+2taIKClW+pWPpGhwtlxg9CYw32jrNVb
-   o3tq1ZnFWJhRK00fZukNZy2P53Ho+6I9ljq/gC+CdVdIk8cDQG/yG9Vs5
-   RUTCSoUjSdPH98zmNYZRBSvtOj7xnee6M5UsSvWnAkqySp7r4E4dUXNDd
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="377048331"
-X-IronPort-AV: E=Sophos;i="5.93,223,1654585200"; 
-   d="scan'208";a="377048331"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 22:22:13 -0700
-X-IronPort-AV: E=Sophos;i="5.93,223,1654585200"; 
-   d="scan'208";a="580657593"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Aug 2022 22:22:10 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com
-Subject: Re: [PATCH v13 6/9] mm/demotion: Add pg_data_t member to track node
- memory tier details
-References: <20220808062601.836025-1-aneesh.kumar@linux.ibm.com>
-        <20220808062601.836025-7-aneesh.kumar@linux.ibm.com>
-Date:   Tue, 09 Aug 2022 13:21:58 +0800
-In-Reply-To: <20220808062601.836025-7-aneesh.kumar@linux.ibm.com> (Aneesh
-        Kumar K. V.'s message of "Mon, 8 Aug 2022 11:55:58 +0530")
-Message-ID: <87bksugfex.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 9 Aug 2022 01:25:36 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2A0C18378
+        for <linux-kernel@vger.kernel.org>; Mon,  8 Aug 2022 22:25:33 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id d14so15496279lfl.13
+        for <linux-kernel@vger.kernel.org>; Mon, 08 Aug 2022 22:25:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=MN/PfmZxhZGkUDtNPw5NWgDuHq3bhLxgM7464BOCO7A=;
+        b=XZrgPN9JLTKg8atSdFLRTYNXR78mzwUKGoKE9+m3YvMPYebYYnJTS2thkWjAOgWbk5
+         Gp59g/B0MEDTGRnUhfBxEFnRud/VlvToqjXrovIy0Www+xC4rMQN3M3WlpGAbdXu09r6
+         ZpdXLzv7X/df/4F54dEYXnKNlQcjkeSqIKEs9oRRrN9KDCqhEqsNKlPW5qpnFWxw93a2
+         fD6udybTtwWNYP6Qi8hXEoBOF9+yyEZKAkAw1EcPulVs4hk6FaEf1LKr6fnW8Y4DVqPe
+         7HU6MNS2/1x5Zi85kq9xobr759btcJdBQJgsSBzQgBwkk/zspIwOMZRYwN818GbG+x2+
+         T5RQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=MN/PfmZxhZGkUDtNPw5NWgDuHq3bhLxgM7464BOCO7A=;
+        b=OP0qV9boECPFU9nVT19Svb4CIOyV7VrV7jE9hS8fj9K2JclSTLmRD4kNt0b59ZTRhb
+         3y0FCwCx1/SivCEQrPDukoH59GfqyJ2LTK++Zr3MgsdHlL5QGlsFJzzQt55SMTJpX7l6
+         XiTKOhRnNchibARC/9yj9bKwTAZF4Nm/e63zScfeVXLFXEfZufOXHhqDoGu8NKWcbTjD
+         j0bSIJsCpY+XNeKQKl03OntLYUsxe4aWOSoOQp8oaO7xwDDEAZ30AYNa9d9NOvRcaM4N
+         yd5R/ss+p0IXZSFEqpu+SpASjLhRDbSW9FSU7rufOmd70uCYj7vcCeAl5xJZXwsks0/u
+         Pf9w==
+X-Gm-Message-State: ACgBeo2sFUl6b66d4gnitYMnm2HqlpDRLNE2iE7BEMop+tlbcR6VC2TL
+        Ca8SnNLOvp+XUMkaczqGVQO05w==
+X-Google-Smtp-Source: AA6agR6hw1vEdUjRQW20Lnu2pJAqZx/55rR0g6ua4dI5DTsbMqQXBvmrnt/fWy/9kP3zcmoMbyohMQ==
+X-Received: by 2002:a05:6512:3b85:b0:48b:36d0:6cde with SMTP id g5-20020a0565123b8500b0048b36d06cdemr7082766lfv.247.1660022732045;
+        Mon, 08 Aug 2022 22:25:32 -0700 (PDT)
+Received: from [192.168.1.39] ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id j3-20020a056512344300b0048a921664e8sm1632860lfr.37.2022.08.08.22.25.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 08 Aug 2022 22:25:31 -0700 (PDT)
+Message-ID: <c6b890b6-e72f-0377-f0ae-cd15d29c23a1@linaro.org>
+Date:   Tue, 9 Aug 2022 08:25:29 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 0/5] iio/hwmon/mfd/leds/net/power/ASoC: dt-bindings: few
+ stale maintainers cleanup
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Pavel Machek <pavel@ucw.cz>,
+        Tim Harvey <tharvey@gateworks.com>,
+        Robert Jones <rjones@gateworks.com>,
+        Lee Jones <lee@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Ricardo Rivera-Matos <r-rivera-matos@ti.com>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-leds@vger.kernel.org,
+        netdev@vger.kernel.org, linux-pm@vger.kernel.org,
+        alsa-devel@alsa-project.org
+References: <20220808104712.54315-1-krzysztof.kozlowski@linaro.org>
+ <20220808115202.3175eb1f@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220808115202.3175eb1f@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,129 +97,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
+On 08/08/2022 21:52, Jakub Kicinski wrote:
+> On Mon,  8 Aug 2022 13:47:07 +0300 Krzysztof Kozlowski wrote:
+>> Several of the bindings here had only one
+>> maintainer and history does not always point to a new one (although I did not
+>> perform extensive digging). I added subsystem maintainer, because dtschema
+>> requires such entry. This is not the best choice as simply subsystem maintainer
+>> might not have the actual device (or its datasheets or any interest in it).
+>>
+>> However dtschema requires a maintainer. Maybe we could add some
+>> "orphaned" entry in such case?
+> 
+> Integrating it with MAINTAINERS would be another option worth exploring
+> although slightly tangential.
+> 
+> How do you want this merged? It's all over the place subsystem-wise.
 
-> Also update different helpes to use NODE_DATA()->memtier. Since
-> node specific memtier can change based on the reassignment of
-> NUMA node to a different memory tiers, accessing NODE_DATA()->memtier
-> needs to happen under an rcu read lock or memory_tier_lock.
->
-> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
-> ---
->  include/linux/mmzone.h |  3 +++
->  mm/memory-tiers.c      | 38 ++++++++++++++++++++++++++++++++------
->  2 files changed, 35 insertions(+), 6 deletions(-)
->
-> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-> index aab70355d64f..353812495a70 100644
-> --- a/include/linux/mmzone.h
-> +++ b/include/linux/mmzone.h
-> @@ -928,6 +928,9 @@ typedef struct pglist_data {
->  	/* Per-node vmstats */
->  	struct per_cpu_nodestat __percpu *per_cpu_nodestats;
->  	atomic_long_t		vm_stat[NR_VM_NODE_STAT_ITEMS];
-> +#ifdef CONFIG_NUMA
-> +	struct memory_tier __rcu *memtier;
-> +#endif
->  } pg_data_t;
->  
->  #define node_present_pages(nid)	(NODE_DATA(nid)->node_present_pages)
-> diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
-> index 02e514e87d5c..3778ac6a44a1 100644
-> --- a/mm/memory-tiers.c
-> +++ b/mm/memory-tiers.c
-> @@ -5,6 +5,7 @@
->  #include <linux/kobject.h>
->  #include <linux/memory.h>
->  #include <linux/random.h>
-> +#include <linux/mmzone.h>
->  #include <linux/memory-tiers.h>
->  
->  #include "internal.h"
-> @@ -137,12 +138,18 @@ static struct memory_tier *find_create_memory_tier(struct memory_dev_type *memty
->  
->  static struct memory_tier *__node_get_memory_tier(int node)
->  {
-> -	struct memory_dev_type *memtype;
-> +	pg_data_t *pgdat;
->  
-> -	memtype = node_memory_types[node];
-> -	if (memtype && node_isset(node, memtype->nodes))
-> -		return memtype->memtier;
-> -	return NULL;
+I was thinking this could go via Rob's tree as fixes for current cycle,
+so your Ack would be great. If there is preference, I can split it per
+subsystem, but for such trivial updates it's a bit of a churn.
 
-After adding pgdat->memtier, it appears there's unnecessary to keep
-memtype->memtier?
 
-Best Regards,
-Huang, Ying
-
-> +	pgdat = NODE_DATA(node);
-> +	if (!pgdat)
-> +		return NULL;
-> +	/*
-> +	 * Since we hold memory_tier_lock, we can avoid
-> +	 * RCU read locks when accessing the details. No
-> +	 * parallel updates are possible here.
-> +	 */
-> +	return rcu_dereference_check(pgdat->memtier,
-> +				     lockdep_is_held(&memory_tier_lock));
->  }
->  
->  #ifdef CONFIG_MIGRATION
-> @@ -295,6 +302,8 @@ static struct memory_tier *set_node_memory_tier(int node)
->  {
->  	struct memory_tier *memtier;
->  	struct memory_dev_type *memtype;
-> +	pg_data_t *pgdat = NODE_DATA(node);
-> +
->  
->  	lockdep_assert_held_once(&memory_tier_lock);
->  
-> @@ -307,6 +316,8 @@ static struct memory_tier *set_node_memory_tier(int node)
->  	memtype = node_memory_types[node];
->  	node_set(node, memtype->nodes);
->  	memtier = find_create_memory_tier(memtype);
-> +	if (!IS_ERR(memtier))
-> +		rcu_assign_pointer(pgdat->memtier, memtier);
->  	return memtier;
->  }
->  
-> @@ -319,12 +330,25 @@ static void destroy_memory_tier(struct memory_tier *memtier)
->  static bool clear_node_memory_tier(int node)
->  {
->  	bool cleared = false;
-> +	pg_data_t *pgdat;
->  	struct memory_tier *memtier;
->  
-> +	pgdat = NODE_DATA(node);
-> +	if (!pgdat)
-> +		return false;
-> +
-> +	/*
-> +	 * Make sure that anybody looking at NODE_DATA who finds
-> +	 * a valid memtier finds memory_dev_types with nodes still
-> +	 * linked to the memtier. We achieve this by waiting for
-> +	 * rcu read section to finish using synchronize_rcu.
-> +	 */
->  	memtier = __node_get_memory_tier(node);
->  	if (memtier) {
->  		struct memory_dev_type *memtype;
->  
-> +		rcu_assign_pointer(pgdat->memtier, NULL);
-> +		synchronize_rcu();
->  		memtype = node_memory_types[node];
->  		node_clear(node, memtype->nodes);
->  		if (nodes_empty(memtype->nodes)) {
-> @@ -422,8 +446,10 @@ static int __init memory_tier_init(void)
->  		panic("%s() failed to register memory tier: %ld\n",
->  		      __func__, PTR_ERR(memtier));
->  
-> -	for_each_node_state(node, N_MEMORY)
-> +	for_each_node_state(node, N_MEMORY) {
->  		__init_node_memory_type(node, default_dram_type);
-> +		rcu_assign_pointer(NODE_DATA(node)->memtier, memtier);
-> +	}
->  
->  	mutex_unlock(&memory_tier_lock);
->  #ifdef CONFIG_MIGRATION
+Best regards,
+Krzysztof

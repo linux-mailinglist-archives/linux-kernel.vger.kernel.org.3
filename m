@@ -2,132 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F82F58E088
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 21:57:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AC1458E090
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 22:03:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345439AbiHITz3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 15:55:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
+        id S245124AbiHIUDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 16:03:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345376AbiHITzZ (ORCPT
+        with ESMTP id S1346157AbiHIUAz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 15:55:25 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F08605F7D;
-        Tue,  9 Aug 2022 12:55:24 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id f30so11358094pfq.4;
-        Tue, 09 Aug 2022 12:55:24 -0700 (PDT)
+        Tue, 9 Aug 2022 16:00:55 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11B623145
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 13:00:54 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id x21so16498551edd.3
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 13:00:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=9MuUym0qseMztmmB08QIe6J0PxQHYo7/9v1WA9Ef9Bg=;
-        b=oC3ymHBJylR7XqQ1/YsoJWKU1vaS4NJ9iVSdgfEdCt9FgymssN/Wxfz4zV0wTqb8ox
-         mHrHVPgBvk1V5bINjpZmmSZ2YVsLiVWbMc0QHAlLbxmlYteVr0eseqlyDpS3+otxKogh
-         8n/4AHVa6kc0D7E4Nj6mrsGdmf7c/OQjhIbyhwrB9YafOwrvn6lCkvFCwEL8hV8uLSwx
-         CYCfs9tOBHKWRpPEnz9suBU2fGtc5Jv3JLCCnD4ANllmc1h1yVvAZQMGRSRKbV9MiSKL
-         SBzlVoS1vtOQUaMUVkuMOTZw/vBbRy4Qj8otjY2kg7ehzaT9sqR+sB2yizTxBQEx4EV1
-         /GyA==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=3Nw+UCMkb8eM5P4o4fg5DPpCP6PyLs67xhLCM5SqQGM=;
+        b=VRBM9D6pcPFAJOfjA+37UektR0jrpOFKofLKXQ8dh9+GHqA9kghDd4C5F1PQSSakLC
+         uiJ/X8JuI7hj3D7sznroAaF0LHsLxleBjlrNKIUQ1Fvc76loYqdCHQw/er29PAcKm6dz
+         RWHrVlurVBlAOBYpfxEdiWKtz+KG/FFvLYv3A=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=9MuUym0qseMztmmB08QIe6J0PxQHYo7/9v1WA9Ef9Bg=;
-        b=BD7RJQzQKU161Hk6Oj4WKXuvoKCjyXXO0VRw1VhI+I1juzWuxbq0Qx7LuVrpbE9QgW
-         w8Rw+8wUIO0n6SbAC+0zjWiWi18ISfa0UG9utRecYIE3NfHhZR2V2R5Scu26ENbmkR1c
-         LV15Xk1L41dNNCg1whFtUIRkVogMdDF5+dk5/vMOe59T2mGKvdrUZhcHdStVC29KNyoA
-         SIwlrWY3A9QtkZY7tXMJ2Vp9V2Pj+Wcn6kiNclT5Q6F05s2CQ8aqFD4qjejeZgdVM6z1
-         9rik1rpnrHB/S63EscrWXF84NLCE/A8Nsmo/I5x68tI3DCFuWTmLzYfsKSsyvXnNWDDZ
-         apyg==
-X-Gm-Message-State: ACgBeo3RfpQEud5If5U4UEiRX4uH3qtyuMZ+/PQb8jiBWyAGcoV7+6ag
-        gyOS8ju9GQnNzFTYLpBYoBk=
-X-Google-Smtp-Source: AA6agR5T2qyURPAUNz3Ik2+ANuXj1MEgX0/CWpXSSiJzOivF1/nX/FJPYo2OmCzEmS1ezPOFCZwC9g==
-X-Received: by 2002:a65:5504:0:b0:41d:271:4929 with SMTP id f4-20020a655504000000b0041d02714929mr17565614pgr.606.1660074923724;
-        Tue, 09 Aug 2022 12:55:23 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:237b])
-        by smtp.gmail.com with ESMTPSA id u8-20020a1709026e0800b0016c4147e48asm11156900plk.219.2022.08.09.12.55.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 12:55:23 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 9 Aug 2022 09:55:21 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Will Deacon <will@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v2 2/2] cgroup/cpuset: Keep user set cpus affinity
-Message-ID: <YvK7qVkmzbA12Eut@slm.duckdns.org>
-References: <20220801154124.2011987-1-longman@redhat.com>
- <20220801154124.2011987-3-longman@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=3Nw+UCMkb8eM5P4o4fg5DPpCP6PyLs67xhLCM5SqQGM=;
+        b=bImld8CIEGmPg+I4Tg5OfB8oREHXro6Qr+8sXMGgpriLzy+R31hOo3Jl6sSBpd3/gM
+         OU51a1yiZ9VeKR2r5tDJT3gVUVmI0uWmsBijuvz7bI331qD8U44z0yuch8+bWUJzx+kR
+         04fYefccJ0w6j31HX+Q73D+vRQXByRuuJgUbTxk2bIZrz0VwED6AppKRd0+nvH1wlA3y
+         YvTKokbZ7XLdOrRKnlr3oqCPllRrSxIRwaEG3Up7PIhzm1Qjju0uo4CHtMhS6XnkkYbH
+         TZIWGTXRbBcBQdrGk0weFU09nv8oQekyslq2cpfqs3PZpZavx9AhWk2EbGdXNL+3lVzV
+         TtUQ==
+X-Gm-Message-State: ACgBeo3Z9jP5+18WghaAtgudpctgVcOHPhcY9x/KIu1qY4vDOMAyCetm
+        43c+pK4AEHvt/hYmqEVCS9Dko5XmBzizUl3o8Z0=
+X-Google-Smtp-Source: AA6agR6U9NOuwUd27+1R+q2gmMrgfsUBBkyKgo5SMN+iCjJX/fV9NGxTvXVGaNTH2zDTWJp/uOzEqg==
+X-Received: by 2002:a05:6402:1e8f:b0:440:eb20:7a05 with SMTP id f15-20020a0564021e8f00b00440eb207a05mr6301743edf.169.1660075252975;
+        Tue, 09 Aug 2022 13:00:52 -0700 (PDT)
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com. [209.85.221.50])
+        by smtp.gmail.com with ESMTPSA id cb21-20020a0564020b7500b0043cfc872e7dsm6495686edb.10.2022.08.09.13.00.51
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Aug 2022 13:00:51 -0700 (PDT)
+Received: by mail-wr1-f50.google.com with SMTP id n4so13703194wrp.10
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 13:00:51 -0700 (PDT)
+X-Received: by 2002:a5d:56cf:0:b0:21e:ce64:afe7 with SMTP id
+ m15-20020a5d56cf000000b0021ece64afe7mr14978811wrw.281.1660075250807; Tue, 09
+ Aug 2022 13:00:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220801154124.2011987-3-longman@redhat.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+References: <20220808073232.8808-1-david@redhat.com>
+In-Reply-To: <20220808073232.8808-1-david@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 9 Aug 2022 13:00:34 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgsDOz5MfYYS9mE7PvFn4kLhTFdBwXvN6HCEsw1kvJnRQ@mail.gmail.com>
+Message-ID: <CAHk-=wgsDOz5MfYYS9mE7PvFn4kLhTFdBwXvN6HCEsw1kvJnRQ@mail.gmail.com>
+Subject: Re: [PATCH v1] mm/gup: fix FOLL_FORCE COW security issue and remove FOLL_COW
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Peter Xu <peterx@redhat.com>, Hugh Dickins <hughd@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-(cc'ing Linus)
+On Mon, Aug 8, 2022 at 12:32 AM David Hildenbrand <david@redhat.com> wrote:
+>
 
-Hello,
+So I've read through the patch several times, and it seems fine, but
+this function (and the pmd version of it) just read oddly to me.
 
-On Mon, Aug 01, 2022 at 11:41:24AM -0400, Waiman Long wrote:
-> It was found that any change to the current cpuset hierarchy may reset
-> the cpumask of the tasks in the affected cpusets to the default cpuset
-> value even if those tasks have cpus affinity explicitly set by the users
-> before. That is especially easy to trigger under a cgroup v2 environment
-> where writing "+cpuset" to the root cgroup's cgroup.subtree_control
-> file will reset the cpus affinity of all the processes in the system.
-> 
-> That is problematic in a nohz_full environment where the tasks running
-> in the nohz_full CPUs usually have their cpus affinity explicitly set
-> and will behave incorrectly if cpus affinity changes.
-> 
-> Fix this problem by looking at user_cpus_ptr which will be set if
-> cpus affinity have been explicitly set before and use it to restrcit
-> the given cpumask unless there is no overlap. In that case, it will
-> fallback to the given one.
-> 
-> With that change in place, it was verified that tasks that have its
-> cpus affinity explicitly set will not be affected by changes made to
-> the v2 cgroup.subtree_control files.
+> +static inline bool can_follow_write_pte(pte_t pte, struct page *page,
+> +                                       struct vm_area_struct *vma,
+> +                                       unsigned int flags)
+> +{
+> +       if (pte_write(pte))
+> +               return true;
+> +       if (!(flags & FOLL_FORCE))
+> +               return false;
+> +
+> +       /*
+> +        * See check_vma_flags(): only COW mappings need that special
+> +        * "force" handling when they lack VM_WRITE.
+> +        */
+> +       if (vma->vm_flags & VM_WRITE)
+> +               return false;
+> +       VM_BUG_ON(!is_cow_mapping(vma->vm_flags));
 
-The fact that the kernel clobbers user-specified cpus_allowed as cpu
-availability changes always bothered me and it has been causing this sort of
-problems w/ cpu hotplug and cpuset. We've been patching this up partially
-here and there but I think it would be better if we just make the rules
-really simple - ie. allow users to configure whatever cpus_allowed as long
-as that's within cpu_possible_mask and override only the effective
-cpus_allowed if the mask leaves no runnable CPUs, so that we can restore the
-original configured behavior if and when some of the cpus become available
-again.
+So apart from the VM_BUG_ON(), this code just looks really strange -
+even despite the comment. Just conceptually, the whole "if it's
+writable, return that you cannot follow it for a write" just looks so
+very very strange.
 
-One obvious problem with changing the behavior is that it may affect /
-confuse users expecting the current behavior however inconsistent it may be,
-but given that we have partially changed how cpus_allowed interacts with
-hotplug in the past and the current behavior can be inconsistent and
-surprising, I don't think this is a bridge we can't cross. What do others
-think?
+That doesn't make the code _wrong_, but considering how many times
+this has had subtle bugs, let's not write code that looks strange.
 
-Thanks.
+So I would suggest that to protect against future bugs, we try to make
+it be fairly clear and straightforward, and maybe even a bit overly
+protective.
 
--- 
-tejun
+For example, let's kill the "shared mapping that you don't have write
+permissions to" very explicitly and without any subtle code at all.
+The vm_flags tests are cheap and easy, and we could very easily just
+add some core ones to make any mistakes much less critical.
+
+Now, making that 'is_cow_mapping()' check explicit at the very top of
+this would already go a long way:
+
+        /* FOLL_FORCE for writability only affects COW mappings */
+        if (!is_cow_mapping(vma->vm_flags))
+                return false;
+
+but I'd actually go even further: in this case that "is_cow_mapping()"
+helper to some degree actually hides what is going on.
+
+So I'd actually prefer for that function to be written something like
+
+        /* If the pte is writable, we can write to the page */
+        if (pte_write(pte))
+                return true;
+
+        /* Maybe FOLL_FORCE is set to override it? */
+        if (flags & FOLL_FORCE)
+                return false;
+
+        /* But FOLL_FORCE has no effect on shared mappings */
+        if (vma->vm_flags & MAP_SHARED)
+                return false;
+
+        /* .. or read-only private ones */
+        if (!(vma->vm_flags & MAP_MAYWRITE))
+                return false;
+
+        /* .. or already writable ones that just need to take a write fault */
+        if (vma->vm_flags & MAP_WRITE)
+                return false;
+
+and the two first vm_flags tests above are basically doing tat
+"is_cow_mapping()", and maybe we could even have a comment to that
+effect, but wouldn't it be nice to just write it out that way?
+
+And after you've written it out like the above, now that
+
+        if (!page || !PageAnon(page) || !PageAnonExclusive(page))
+                return false;
+
+makes you pretty safe from a data sharing perspective: it's most
+definitely not a shared page at that point.
+
+So if you write it that way, the only remaining issues are the magic
+special soft-dirty and uffd ones, but at that point it's purely about
+the semantics of those features, no longer about any possible "oh, we
+fooled some shared page to be writable".
+
+And I think the above is fairly legible without any subtle cases, and
+the one-liner comments make it all fairly clear that it's testing.
+
+Is any of this in any _technical_ way different from what your patch
+did? No. It's literally just rewriting it to be a bit more explicit in
+what it is doing, I think, and it makes that odd "it's not writable if
+VM_WRITE is set" case a bit more explicit.
+
+Hmm?
+
+                  Linus

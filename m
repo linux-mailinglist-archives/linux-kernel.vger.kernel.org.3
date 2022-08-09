@@ -2,110 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 200A758DC61
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 18:46:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABAB058DC68
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 18:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232484AbiHIQqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 12:46:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59758 "EHLO
+        id S244948AbiHIQrZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 12:47:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234359AbiHIQqj (ORCPT
+        with ESMTP id S244667AbiHIQrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 12:46:39 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8CBC6301;
-        Tue,  9 Aug 2022 09:46:38 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id j1so14994357wrw.1;
-        Tue, 09 Aug 2022 09:46:38 -0700 (PDT)
+        Tue, 9 Aug 2022 12:47:17 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B82220EB
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 09:47:14 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id o184so4644216oif.13
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 09:47:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=nHbf2R9YS+QLu619Bbr1qiSpwX/gscQK0/msY+tSKMI=;
-        b=qqPEBjrFDDiTHnkldL0thOUFkPzpTaagqYKlKsEpeHnOLD6l34Im7Wo+giaBoFCbbv
-         ZxBacHL6RuNnvNa7fLbWME0f1A/TVhIlVHUNXzushW3adHNO6l4mqzBiQJZIs7pOoDf1
-         Qn5cxTgzmUkwgk6Ow1CzlcirntGHBTJ9AdOxA1EG6mvA30D09vikY1qfDRYpxEjeCdpZ
-         lQ16LnpMlDrjOlZRLJCJavmAZYHbnIaHKLlN5o4M3lbJof5l3FngELdyAyMSY9U7iOwj
-         k/nt4TKPEV8WjbPoD7ryg4D5dhZWzpDcO6FlvsUrzcOR1sl/xLn1S2heZ0+Qv769jEd9
-         OjcQ==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=OQdzvI48V4v1B4ddrzc07g5SpSnYPX/QwedZe0qu4AI=;
+        b=Ri2tsj0wADEJ/FqtuFe8VA3SlsAf4KnPGgJj+nvCXLKG6B6UbcwkVSpbOgqTUzJfiT
+         QPADWiyW6UkdsfosfSRM21VsttNJKppdOEl3fp32UHIUjR1qD2Qj+PDddciPoTn7PSgy
+         2p/I96SGe3fYfgnj3La44AANjPEePv4B8NV3JfXFvZH5vcgTjFT6fVXrrAejRt36omr1
+         GV2ifLxF4sMqwvPtr1sVjQrobLRJmbowbjxOzhmAxh3ri0RdahOO9XlTVS0dtmxAEoaW
+         WbU6GKuwZ/z4LRxdcL68HvZquRVAfuGOgiix/p4keAnPKg6L68n94sAPxDxu6xuekIFX
+         87iA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=nHbf2R9YS+QLu619Bbr1qiSpwX/gscQK0/msY+tSKMI=;
-        b=w7bRzwecR5VCjXGqJyDJzi2LeX8UEXi8Fi1GQ0/9JqNhVumTCh+FWHbdhQFqGkPx2g
-         83KI3qOdDTdnESaNs/WqnqVLKekqtmefiPfbINVnBC+Qoqsaqz1Wed8u6FuMn0tbvxb5
-         2v9k7CMSSewBOUB8x50Y7wsbQFXc0O4mPGAZzK7L/+QZoy/NZUK1jTjF7RzEE0udYgaT
-         tNS6UbBcOjUKBmVMWvgWrZ/MgFZYm67wmjW0IX0V5jpwYWvOgUlgxvxySYq0RIAQ+UB4
-         9hQiLi88uv+gXJgWPxW0epRKFmvInTrkNmQE97NslRbQEd52/s91G7oOecmVmCxsQUla
-         tN2g==
-X-Gm-Message-State: ACgBeo0BsahrB1TzQPELOg94hNx6fyVJ1D6tunGPVwVPAyUxgrwTUIFq
-        5xIvKgdDzX7rlKm+sMSr+gUoackYAPPP6g==
-X-Google-Smtp-Source: AA6agR49xb05WczEjMdPv3pwaVlpJVUONYbN5CbNDLIce+skzs9XuuAUuI9NJ/o7BJdSJVOzNOp+Yg==
-X-Received: by 2002:adf:f38b:0:b0:21e:c041:7726 with SMTP id m11-20020adff38b000000b0021ec0417726mr14724896wro.394.1660063597100;
-        Tue, 09 Aug 2022 09:46:37 -0700 (PDT)
-Received: from localhost.localdomain ([46.248.82.114])
-        by smtp.gmail.com with ESMTPSA id b6-20020a5d6346000000b0022063e5228bsm14002083wrw.93.2022.08.09.09.46.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 09:46:36 -0700 (PDT)
-From:   Uros Bizjak <ubizjak@gmail.com>
-To:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Uros Bizjak <ubizjak@gmail.com>, "Theodore Ts'o" <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>
-Subject: [PATCH] fs/ext4: Use try_cmpxchg in ext4_update_bh_state
-Date:   Tue,  9 Aug 2022 18:46:26 +0200
-Message-Id: <20220809164626.8999-1-ubizjak@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=OQdzvI48V4v1B4ddrzc07g5SpSnYPX/QwedZe0qu4AI=;
+        b=iNELi6F2Q6I/xSzLMNhWwUUSJXyJFFuVtJFdZJYersBhvir43GFZa3Eaq0fENeEF6a
+         jA9dP4JRuPKZZLjfoHqEtw+uXqzUy0qPnRhSMCwRvvG6IbjF+9+saJN2kRvqyG18w1VW
+         GFoJfMtav/3i1rjB8Uui2RSQUhB3kyLZfWngay6u3z2KBQ50zc4ezH9Gmf9cI1kphvRj
+         WWDQeksKCXAO0j95ZIVfAKwXv+hQiJ8KkS/Yf3IzkCcS2QxRYBknuLCI27QVg+CcMfOI
+         xmiDgLiDLyk2d6RVebeoOJTM4A12VDCZ14jjUBsTOVWUjtjCuHoLHOtE8CbfCZmFIcuh
+         QQwA==
+X-Gm-Message-State: ACgBeo2cMYLtvh7zxx+grtYmRF+HOgQOrO8UvphforuhhkSW0mqvLF/7
+        oOr/ok/FiGGYdhp9kQ8NDYazSztyGqSLA50qx5No
+X-Google-Smtp-Source: AA6agR5poU7RDNGoYk+czRRXpPIMJZYZZhpWQ+gyzpZdCLILfBZzRWgLcpcw12THou5UlUCZUmBy3wKQtISqq+09+k0=
+X-Received: by 2002:a05:6808:2389:b0:33a:cbdb:f37a with SMTP id
+ bp9-20020a056808238900b0033acbdbf37amr10590809oib.136.1660063633970; Tue, 09
+ Aug 2022 09:47:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220801180146.1157914-1-fred@cloudflare.com> <87les7cq03.fsf@email.froward.int.ebiederm.org>
+ <CAHC9VhRpUxyxkPaTz1scGeRm+i4KviQQA7WismOX2q5agzC+DQ@mail.gmail.com>
+ <87wnbia7jh.fsf@email.froward.int.ebiederm.org> <CAHC9VhS3udhEecVYVvHm=tuqiPGh034-xPqXYtFjBk23+p-Szg@mail.gmail.com>
+ <877d3ia65v.fsf@email.froward.int.ebiederm.org> <87bksu8qs2.fsf@email.froward.int.ebiederm.org>
+ <CAHC9VhTEwD2y9Witj-1z3e2TC-NGjghQ4KT4Dqf3UOLzDcDc3Q@mail.gmail.com> <87czd95rjc.fsf@email.froward.int.ebiederm.org>
+In-Reply-To: <87czd95rjc.fsf@email.froward.int.ebiederm.org>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 9 Aug 2022 12:47:03 -0400
+Message-ID: <CAHC9VhQY6H4JxOvSYWk2cpH8E3LYeOkMP_ay+ih+ULKKdeob=Q@mail.gmail.com>
+Subject: Re: [PATCH v4 0/4] Introduce security_create_user_ns()
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
+        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
+        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        kernel-team@cloudflare.com, cgzones@googlemail.com,
+        karl@bigbadwolfsecurity.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use `!try_cmpxchg(ptr, &old, new)` instead of
-`cmpxchg(ptr, old, new) != old` in ext4_update_bh_state. This
-has two benefits:
+On Tue, Aug 9, 2022 at 12:08 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> Paul Moore <paul@paul-moore.com> writes:
+> > On Mon, Aug 8, 2022 at 3:43 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> >> "Eric W. Biederman" <ebiederm@xmission.com> writes:
+> >> > Paul Moore <paul@paul-moore.com> writes:
+> >> >
+> >> >>> I did provide constructive feedback.  My feedback to his problem
+> >> >>> was to address the real problem of bugs in the kernel.
+> >> >>
+> >> >> We've heard from several people who have use cases which require
+> >> >> adding LSM-level access controls and observability to user namespace
+> >> >> creation.  This is the problem we are trying to solve here; if you do
+> >> >> not like the approach proposed in this patchset please suggest another
+> >> >> implementation that allows LSMs visibility into user namespace
+> >> >> creation.
+> >> >
+> >> > Please stop, ignoring my feedback, not detailing what problem or
+> >> > problems you are actually trying to be solved, and threatening to merge
+> >> > code into files that I maintain that has the express purpose of breaking
+> >> > my users.
+> >> >
+> >> > You just artificially constrained the problems, so that no other
+> >> > solution is acceptable.  On that basis alone I am object to this whole
+> >> > approach to steam roll over me and my code.
+> >>
+> >> If you want an example of what kind of harm it can cause to introduce a
+> >> failure where no failure was before I invite you to look at what
+> >> happened with sendmail when setuid was modified to fail, when changing
+> >> the user of a process would cause RLIMIT_NPROC to be exceeded.
+> >
+> > I think we are all familiar with the sendmail capabilities bug and the
+> > others like it, but using that as an excuse to block additional access
+> > controls seems very weak.  The Linux Kernel is very different from
+> > when the sendmail bug hit (what was that, ~20 years ago?), with
+> > advancements in capabilities and other discretionary controls, as well
+> > as mandatory access controls which have enabled Linux to be certified
+> > through a number of third party security evaluations.
+>
+> If you are familiar with scenarios like that then why is there not
+> being due diligence performed to ensure that userspace won't break?
 
-- The x86 cmpxchg instruction returns success in the ZF flag, so this
-  change saves a compare after cmpxchg, as well as a related move
-  instruction in the front of cmpxchg.
+What level of due diligence would satisfy you Eric?  This feels very
+much like an unbounded ask that can be used to permanently block any
+effort to add any form of additional access control around user
+namespace creation.  If that isn't the case, and this request is being
+made in good faith, please elaborate on what you believe would be
+sufficient analysis of this patch?
 
-- atomic_try_cmpxchg implicitly assigns the *ptr value to &old when
-  cmpxchg fails, enabling further code simplifications.
+Personally, the fact that the fork()/clone() variants and the
+unshare() syscall all can fail and return error codes to userspace
+seems like a reasonable level of safety.  If userspace is currently
+ignoring the return values of fork/clone/unshare that is a problem
+independent of this patchset.  Even looking at the existing
+create_user_ns() function shows several cases where the user namespace
+code can forcibly error out due to access controls, memory pressure,
+etc.  I also see that additional restrictions were put on user
+namespace creation after it was introduced, e.g. the chroot
+restriction; I'm assuming that didn't break "your" users?  If you can
+describe the analysis you did on that change, perhaps we can do the
+same for this patchset and call it sufficient, yes?
 
-This patch has no functional change.
+> >> I am not arguing that what you are proposing is that bad but unexpected
+> >> failures cause real problems, and at a minimum that needs a better
+> >> response than: "There is at least one user that wants a failure here".
+> >
+> > Let me fix that for you: "There are multiple users who want to have
+> > better visibility and access control for user namespace creation."
+>
+> Visibility sure.  Design a proper hook for that.  All the proposed hook
+> can do is print an audit message.  It can't allocate or manage any state
+> as there is not the corresponding hook when a user namespace is freed.
+> So the proposed hook is not appropriate for increasing visibility.
 
-Cc: "Theodore Ts'o" <tytso@mit.edu>
-Cc: Andreas Dilger <adilger.kernel@dilger.ca>
-Signed-off-by: Uros Bizjak <ubizjak@gmail.com>
----
- fs/ext4/inode.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+Auditing very much increases visibility.  Look at what the BPF LSM can
+do, observability is one of its primary goals.
 
-diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-index 601214453c3a..ce2f03621be8 100644
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -780,11 +780,10 @@ static void ext4_update_bh_state(struct buffer_head *bh, unsigned long flags)
- 	 * once we get rid of using bh as a container for mapping information
- 	 * to pass to / from get_block functions, this can go away.
- 	 */
-+	old_state = READ_ONCE(bh->b_state);
- 	do {
--		old_state = READ_ONCE(bh->b_state);
- 		new_state = (old_state & ~EXT4_MAP_FLAGS) | flags;
--	} while (unlikely(
--		 cmpxchg(&bh->b_state, old_state, new_state) != old_state));
-+	} while (unlikely(!try_cmpxchg(&bh->b_state, &old_state, new_state)));
- }
- 
- static int _ext4_get_block(struct inode *inode, sector_t iblock,
+> Access control.  Not a chance unless it is carefully designed and
+> reviewed.
+
+See the above.  The relevant syscalls already have the risk of
+failure, if userspace is assuming fork/clone/unshare/etc. will never
+fail then that application is broken independent of this discussion.
+
 -- 
-2.37.1
-
+paul-moore.com

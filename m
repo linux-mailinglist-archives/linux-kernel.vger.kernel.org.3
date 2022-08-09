@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ED4158D428
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 09:04:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB62058D42A
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 09:05:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236322AbiHIHEx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 03:04:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34930 "EHLO
+        id S236639AbiHIHF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 03:05:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235972AbiHIHEt (ORCPT
+        with ESMTP id S236783AbiHIHFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 03:04:49 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0891CB09
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 00:04:48 -0700 (PDT)
+        Tue, 9 Aug 2022 03:05:13 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F13C5205DB
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 00:05:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660028688; x=1691564688;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=tbci+4/V+Z6565cmiIO9rrQx0jiTn36t7acZovPHmfA=;
-  b=W2NCwosXPqtOsfElJnrVMHiy+G1CQKd/l8MnFVKDr4M3A15FDV4TZDxo
-   muW3A5Rt385hzBWbU/ApcOxIk6SYjsOfGAwwtcbf0d9hYTX12eWRhzmRO
-   HY2wmtD/Q0Y/h0J5n/8s4TfDLTWX2rOBw9wjwEH7JC2w2ngSjED0ka+5J
-   YqdfLAk4qYeshJgGGzFx8I3FB5LK6KjscpdNfqAaFecpUG3aXRmzth/Aa
-   cMeCwWCDHxo8aY0Csr6odaVpdPGTdJLByD2D7vOjw2256yshl28lP17Oi
-   WSP0Biclbz4x0ZBs5vTXDIg+oanAZeHf5Pj9lW+v4b9OFuFGzlB8TjRt4
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="277705260"
+  t=1660028702; x=1691564702;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=cXZZB959KWCJvHIO1LyLb3koS8DyAmUaa2ugKCzeDog=;
+  b=JpDrk55Q5xzK5loeOG9wkb+ZuvQ5WVxVTlHp4NrshvxpTluIjucOfXnj
+   sGOTy09j/ZyquCOafJynJYTwogEAftHUpUzFuwqgpXZfJL9LxlouGS1Nj
+   1TBaNbQQH7d8m6jxdpY6cqQ53VHmavAcjdTTgwF6SbYLyITXGGNMOZtco
+   i9f9JHRJTjf90hOUq1uFCh0ZyZrr0+FGFMKKjXcYwL+R5JVsWFqAGI2Pu
+   V8xFF6ts3Wh1y5OJyrmwJvxuh+fMb2vZv4dfl12dwP2Fj9cu7Byoj2h8y
+   kOKSBwHIpc1fC6Y26+ZvXRej7FTC6ZpHe2P2dHdg+ARjTK61t/IQ7MByW
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10433"; a="289526138"
 X-IronPort-AV: E=Sophos;i="5.93,223,1654585200"; 
-   d="scan'208";a="277705260"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 00:04:47 -0700
+   d="scan'208";a="289526138"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 00:04:45 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,223,1654585200"; 
-   d="scan'208";a="672782537"
+   d="scan'208";a="932373348"
 Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 09 Aug 2022 00:04:43 -0700
+  by fmsmga005.fm.intel.com with ESMTP; 09 Aug 2022 00:04:43 -0700
 Received: from kbuild by e0eace57cfef with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oLJIA-000Mow-31;
+        id 1oLJIA-000Mor-2s;
         Tue, 09 Aug 2022 07:04:42 +0000
-Date:   Tue, 9 Aug 2022 15:04:34 +0800
+Date:   Tue, 9 Aug 2022 15:04:36 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
 Subject: [bvanassche:scsi-const-host-template 10/11]
- drivers/ata/pata_amd.c:575:50: warning: passing argument 3 of
- 'ata_pci_bmdma_init_one' discards 'const' qualifier from pointer target type
-Message-ID: <202208091539.kxKLGtDn-lkp@intel.com>
+ drivers/ata/ahci_seattle.c:169:10: error: passing 'const struct
+ scsi_host_template *' to parameter of type 'struct scsi_host_template *'
+ discards qualifiers
+Message-ID: <202208091515.nZrLKY1Q-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -67,188 +67,417 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 tree:   https://github.com/bvanassche/linux scsi-const-host-template
 head:   86b323713ebb1d9a9b2f35df76be3954ba7f1759
 commit: 579544e409bc1067fb7a362db251e6061b2ca2b2 [10/11] scsi: Declare most SCSI host templates const
-config: i386-defconfig (https://download.01.org/0day-ci/archive/20220809/202208091539.kxKLGtDn-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+config: s390-randconfig-r044-20220808 (https://download.01.org/0day-ci/archive/20220809/202208091515.nZrLKY1Q-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
 reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
         # https://github.com/bvanassche/linux/commit/579544e409bc1067fb7a362db251e6061b2ca2b2
         git remote add bvanassche https://github.com/bvanassche/linux
         git fetch --no-tags bvanassche scsi-const-host-template
         git checkout 579544e409bc1067fb7a362db251e6061b2ca2b2
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash drivers/ata/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
-   drivers/ata/pata_amd.c: In function 'amd_init_one':
->> drivers/ata/pata_amd.c:575:50: warning: passing argument 3 of 'ata_pci_bmdma_init_one' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
-     575 |         return ata_pci_bmdma_init_one(pdev, ppi, &amd_sht, hpriv, 0);
-         |                                                  ^~~~~~~~
-   In file included from drivers/ata/pata_amd.c:24:
-   include/linux/libata.h:2001:62: note: expected 'struct scsi_host_template *' but argument is of type 'const struct scsi_host_template *'
-    2001 |                                   struct scsi_host_template *sht,
-         |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+   In file included from drivers/ata/ahci_seattle.c:17:
+   In file included from include/linux/libata.h:16:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/ata/ahci_seattle.c:17:
+   In file included from include/linux/libata.h:16:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/ata/ahci_seattle.c:17:
+   In file included from include/linux/libata.h:16:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/ata/ahci_seattle.c:169:10: error: passing 'const struct scsi_host_template *' to parameter of type 'struct scsi_host_template *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                                        &ahci_platform_sht);
+                                        ^~~~~~~~~~~~~~~~~~
+   include/linux/ahci_platform.h:35:35: note: passing argument to parameter 'sht' here
+                               struct scsi_host_template *sht);
+                                                          ^
+   12 warnings and 1 error generated.
 --
-   drivers/ata/pata_oldpiix.c: In function 'oldpiix_init_one':
->> drivers/ata/pata_oldpiix.c:248:50: warning: passing argument 3 of 'ata_pci_bmdma_init_one' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
-     248 |         return ata_pci_bmdma_init_one(pdev, ppi, &oldpiix_sht, NULL, 0);
-         |                                                  ^~~~~~~~~~~~
-   In file included from drivers/ata/pata_oldpiix.c:24:
-   include/linux/libata.h:2001:62: note: expected 'struct scsi_host_template *' but argument is of type 'const struct scsi_host_template *'
-    2001 |                                   struct scsi_host_template *sht,
-         |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+   In file included from drivers/ata/ahci_brcm.c:13:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/ata/ahci_brcm.c:13:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/ata/ahci_brcm.c:13:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   drivers/ata/ahci_brcm.c:451:18: warning: cast to smaller integer type 'enum brcm_ahci_version' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+           priv->version = (enum brcm_ahci_version)of_id->data;
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/ata/ahci_brcm.c:525:11: error: passing 'const struct scsi_host_template *' to parameter of type 'struct scsi_host_template *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                                         &ahci_platform_sht);
+                                         ^~~~~~~~~~~~~~~~~~
+   include/linux/ahci_platform.h:35:35: note: passing argument to parameter 'sht' here
+                               struct scsi_host_template *sht);
+                                                          ^
+   13 warnings and 1 error generated.
 --
-   drivers/ata/pata_sch.c: In function 'sch_init_one':
->> drivers/ata/pata_sch.c:164:50: warning: passing argument 3 of 'ata_pci_bmdma_init_one' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
-     164 |         return ata_pci_bmdma_init_one(pdev, ppi, &sch_sht, NULL, 0);
-         |                                                  ^~~~~~~~
-   In file included from drivers/ata/pata_sch.c:21:
-   include/linux/libata.h:2001:62: note: expected 'struct scsi_host_template *' but argument is of type 'const struct scsi_host_template *'
-    2001 |                                   struct scsi_host_template *sht,
-         |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+   In file included from drivers/ata/ahci_da850.c:11:
+   In file included from include/linux/libata.h:16:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/ata/ahci_da850.c:11:
+   In file included from include/linux/libata.h:16:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/ata/ahci_da850.c:11:
+   In file included from include/linux/libata.h:16:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/ata/ahci_da850.c:229:10: error: passing 'const struct scsi_host_template *' to parameter of type 'struct scsi_host_template *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                                        &ahci_platform_sht);
+                                        ^~~~~~~~~~~~~~~~~~
+   include/linux/ahci_platform.h:35:35: note: passing argument to parameter 'sht' here
+                               struct scsi_host_template *sht);
+                                                          ^
+   12 warnings and 1 error generated.
 --
-   drivers/ata/ata_generic.c: In function 'ata_generic_init_one':
->> drivers/ata/ata_generic.c:209:49: warning: passing argument 3 of 'ata_pci_bmdma_init_one' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
-     209 |         return ata_pci_bmdma_init_one(dev, ppi, &generic_sht, (void *)id, 0);
-         |                                                 ^~~~~~~~~~~~
-   In file included from drivers/ata/ata_generic.c:25:
-   include/linux/libata.h:2001:62: note: expected 'struct scsi_host_template *' but argument is of type 'const struct scsi_host_template *'
-    2001 |                                   struct scsi_host_template *sht,
-         |                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+   In file included from drivers/ata/ahci_dm816.c:13:
+   In file included from include/linux/libata.h:16:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/ata/ahci_dm816.c:13:
+   In file included from include/linux/libata.h:16:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/ata/ahci_dm816.c:13:
+   In file included from include/linux/libata.h:16:
+   In file included from include/linux/dma-mapping.h:10:
+   In file included from include/linux/scatterlist.h:9:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+>> drivers/ata/ahci_dm816.c:161:10: error: passing 'const struct scsi_host_template *' to parameter of type 'struct scsi_host_template *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                                        &ahci_dm816_platform_sht);
+                                        ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/ahci_platform.h:35:35: note: passing argument to parameter 'sht' here
+                               struct scsi_host_template *sht);
+                                                          ^
+   12 warnings and 1 error generated.
+--
+   In file included from drivers/ata/ahci_imx.c:12:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:37:59: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) __swab16((__force __u16)(__le16)(x))
+                                                             ^
+   include/uapi/linux/swab.h:102:54: note: expanded from macro '__swab16'
+   #define __swab16(x) (__u16)__builtin_bswap16((__u16)(x))
+                                                        ^
+   In file included from drivers/ata/ahci_imx.c:12:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/big_endian.h:35:59: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) __swab32((__force __u32)(__le32)(x))
+                                                             ^
+   include/uapi/linux/swab.h:115:54: note: expanded from macro '__swab32'
+   #define __swab32(x) (__u32)__builtin_bswap32((__u32)(x))
+                                                        ^
+   In file included from drivers/ata/ahci_imx.c:12:
+   In file included from include/linux/regmap.h:20:
+   In file included from include/linux/iopoll.h:14:
+   In file included from include/linux/io.h:13:
+   In file included from arch/s390/include/asm/io.h:75:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:692:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsb(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:700:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsw(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:708:20: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           readsl(PCI_IOBASE + addr, buffer, count);
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:717:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:726:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:735:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   drivers/ata/ahci_imx.c:1065:18: warning: cast to smaller integer type 'enum ahci_imx_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+           imxpriv->type = (enum ahci_imx_type)of_id->data;
+                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>> drivers/ata/ahci_imx.c:1165:11: error: passing 'const struct scsi_host_template *' to parameter of type 'struct scsi_host_template *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                                         &ahci_platform_sht);
+                                         ^~~~~~~~~~~~~~~~~~
+   include/linux/ahci_platform.h:35:35: note: passing argument to parameter 'sht' here
+                               struct scsi_host_template *sht);
+                                                          ^
+   13 warnings and 1 error generated.
+..
 
 
-vim +575 drivers/ata/pata_amd.c
+vim +169 drivers/ata/ahci_seattle.c
 
-c48052cc36e02f Alan Cox        2009-02-11  457  
-669a5db411d85a Jeff Garzik     2006-08-29  458  static int amd_init_one(struct pci_dev *pdev, const struct pci_device_id *id)
-669a5db411d85a Jeff Garzik     2006-08-29  459  {
-1626aeb881236c Tejun Heo       2007-05-04  460  	static const struct ata_port_info info[10] = {
-14bdef982caeda Erik Inge Bolsø 2009-03-14  461  		{	/* 0: AMD 7401 - no swdma */
-1d2808fd3d2d5d Jeff Garzik     2007-05-28  462  			.flags = ATA_FLAG_SLAVE_POSS,
-14bdef982caeda Erik Inge Bolsø 2009-03-14  463  			.pio_mask = ATA_PIO4,
-14bdef982caeda Erik Inge Bolsø 2009-03-14  464  			.mwdma_mask = ATA_MWDMA2,
-14bdef982caeda Erik Inge Bolsø 2009-03-14  465  			.udma_mask = ATA_UDMA2,
-669a5db411d85a Jeff Garzik     2006-08-29  466  			.port_ops = &amd33_port_ops
-669a5db411d85a Jeff Garzik     2006-08-29  467  		},
-669a5db411d85a Jeff Garzik     2006-08-29  468  		{	/* 1: Early AMD7409 - no swdma */
-1d2808fd3d2d5d Jeff Garzik     2007-05-28  469  			.flags = ATA_FLAG_SLAVE_POSS,
-14bdef982caeda Erik Inge Bolsø 2009-03-14  470  			.pio_mask = ATA_PIO4,
-14bdef982caeda Erik Inge Bolsø 2009-03-14  471  			.mwdma_mask = ATA_MWDMA2,
-14bdef982caeda Erik Inge Bolsø 2009-03-14  472  			.udma_mask = ATA_UDMA4,
-669a5db411d85a Jeff Garzik     2006-08-29  473  			.port_ops = &amd66_port_ops
-669a5db411d85a Jeff Garzik     2006-08-29  474  		},
-14bdef982caeda Erik Inge Bolsø 2009-03-14  475  		{	/* 2: AMD 7409 */
-1d2808fd3d2d5d Jeff Garzik     2007-05-28  476  			.flags = ATA_FLAG_SLAVE_POSS,
-14bdef982caeda Erik Inge Bolsø 2009-03-14  477  			.pio_mask = ATA_PIO4,
-14bdef982caeda Erik Inge Bolsø 2009-03-14  478  			.mwdma_mask = ATA_MWDMA2,
-14bdef982caeda Erik Inge Bolsø 2009-03-14  479  			.udma_mask = ATA_UDMA4,
-669a5db411d85a Jeff Garzik     2006-08-29  480  			.port_ops = &amd66_port_ops
-669a5db411d85a Jeff Garzik     2006-08-29  481  		},
-669a5db411d85a Jeff Garzik     2006-08-29  482  		{	/* 3: AMD 7411 */
-1d2808fd3d2d5d Jeff Garzik     2007-05-28  483  			.flags = ATA_FLAG_SLAVE_POSS,
-14bdef982caeda Erik Inge Bolsø 2009-03-14  484  			.pio_mask = ATA_PIO4,
-14bdef982caeda Erik Inge Bolsø 2009-03-14  485  			.mwdma_mask = ATA_MWDMA2,
-14bdef982caeda Erik Inge Bolsø 2009-03-14  486  			.udma_mask = ATA_UDMA5,
-669a5db411d85a Jeff Garzik     2006-08-29  487  			.port_ops = &amd100_port_ops
-669a5db411d85a Jeff Garzik     2006-08-29  488  		},
-669a5db411d85a Jeff Garzik     2006-08-29  489  		{	/* 4: AMD 7441 */
-1d2808fd3d2d5d Jeff Garzik     2007-05-28  490  			.flags = ATA_FLAG_SLAVE_POSS,
-14bdef982caeda Erik Inge Bolsø 2009-03-14  491  			.pio_mask = ATA_PIO4,
-14bdef982caeda Erik Inge Bolsø 2009-03-14  492  			.mwdma_mask = ATA_MWDMA2,
-14bdef982caeda Erik Inge Bolsø 2009-03-14  493  			.udma_mask = ATA_UDMA5,
-669a5db411d85a Jeff Garzik     2006-08-29  494  			.port_ops = &amd100_port_ops
-669a5db411d85a Jeff Garzik     2006-08-29  495  		},
-14bdef982caeda Erik Inge Bolsø 2009-03-14  496  		{	/* 5: AMD 8111 - no swdma */
-1d2808fd3d2d5d Jeff Garzik     2007-05-28  497  			.flags = ATA_FLAG_SLAVE_POSS,
-14bdef982caeda Erik Inge Bolsø 2009-03-14  498  			.pio_mask = ATA_PIO4,
-14bdef982caeda Erik Inge Bolsø 2009-03-14  499  			.mwdma_mask = ATA_MWDMA2,
-14bdef982caeda Erik Inge Bolsø 2009-03-14  500  			.udma_mask = ATA_UDMA6,
-669a5db411d85a Jeff Garzik     2006-08-29  501  			.port_ops = &amd133_port_ops
-669a5db411d85a Jeff Garzik     2006-08-29  502  		},
-14bdef982caeda Erik Inge Bolsø 2009-03-14  503  		{	/* 6: AMD 8111 UDMA 100 (Serenade) - no swdma */
-1d2808fd3d2d5d Jeff Garzik     2007-05-28  504  			.flags = ATA_FLAG_SLAVE_POSS,
-14bdef982caeda Erik Inge Bolsø 2009-03-14  505  			.pio_mask = ATA_PIO4,
-14bdef982caeda Erik Inge Bolsø 2009-03-14  506  			.mwdma_mask = ATA_MWDMA2,
-14bdef982caeda Erik Inge Bolsø 2009-03-14  507  			.udma_mask = ATA_UDMA5,
-669a5db411d85a Jeff Garzik     2006-08-29  508  			.port_ops = &amd133_port_ops
-669a5db411d85a Jeff Garzik     2006-08-29  509  		},
-669a5db411d85a Jeff Garzik     2006-08-29  510  		{	/* 7: Nvidia Nforce */
-1d2808fd3d2d5d Jeff Garzik     2007-05-28  511  			.flags = ATA_FLAG_SLAVE_POSS,
-14bdef982caeda Erik Inge Bolsø 2009-03-14  512  			.pio_mask = ATA_PIO4,
-14bdef982caeda Erik Inge Bolsø 2009-03-14  513  			.mwdma_mask = ATA_MWDMA2,
-14bdef982caeda Erik Inge Bolsø 2009-03-14  514  			.udma_mask = ATA_UDMA5,
-669a5db411d85a Jeff Garzik     2006-08-29  515  			.port_ops = &nv100_port_ops
-669a5db411d85a Jeff Garzik     2006-08-29  516  		},
-14bdef982caeda Erik Inge Bolsø 2009-03-14  517  		{	/* 8: Nvidia Nforce2 and later - no swdma */
-1d2808fd3d2d5d Jeff Garzik     2007-05-28  518  			.flags = ATA_FLAG_SLAVE_POSS,
-14bdef982caeda Erik Inge Bolsø 2009-03-14  519  			.pio_mask = ATA_PIO4,
-14bdef982caeda Erik Inge Bolsø 2009-03-14  520  			.mwdma_mask = ATA_MWDMA2,
-14bdef982caeda Erik Inge Bolsø 2009-03-14  521  			.udma_mask = ATA_UDMA6,
-669a5db411d85a Jeff Garzik     2006-08-29  522  			.port_ops = &nv133_port_ops
-669a5db411d85a Jeff Garzik     2006-08-29  523  		},
-669a5db411d85a Jeff Garzik     2006-08-29  524  		{	/* 9: AMD CS5536 (Geode companion) */
-1d2808fd3d2d5d Jeff Garzik     2007-05-28  525  			.flags = ATA_FLAG_SLAVE_POSS,
-14bdef982caeda Erik Inge Bolsø 2009-03-14  526  			.pio_mask = ATA_PIO4,
-14bdef982caeda Erik Inge Bolsø 2009-03-14  527  			.mwdma_mask = ATA_MWDMA2,
-14bdef982caeda Erik Inge Bolsø 2009-03-14  528  			.udma_mask = ATA_UDMA5,
-669a5db411d85a Jeff Garzik     2006-08-29  529  			.port_ops = &amd100_port_ops
-669a5db411d85a Jeff Garzik     2006-08-29  530  		}
-669a5db411d85a Jeff Garzik     2006-08-29  531  	};
-887125e3740283 Tejun Heo       2008-03-25  532  	const struct ata_port_info *ppi[] = { NULL, NULL };
-669a5db411d85a Jeff Garzik     2006-08-29  533  	int type = id->driver_data;
-887125e3740283 Tejun Heo       2008-03-25  534  	void *hpriv = NULL;
-669a5db411d85a Jeff Garzik     2006-08-29  535  	u8 fifo;
-f08048e94564d0 Tejun Heo       2008-03-25  536  	int rc;
-669a5db411d85a Jeff Garzik     2006-08-29  537  
-06296a1e684bcd Joe Perches     2011-04-15  538  	ata_print_version_once(&pdev->dev, DRV_VERSION);
-669a5db411d85a Jeff Garzik     2006-08-29  539  
-f08048e94564d0 Tejun Heo       2008-03-25  540  	rc = pcim_enable_device(pdev);
-f08048e94564d0 Tejun Heo       2008-03-25  541  	if (rc)
-f08048e94564d0 Tejun Heo       2008-03-25  542  		return rc;
-f08048e94564d0 Tejun Heo       2008-03-25  543  
-669a5db411d85a Jeff Garzik     2006-08-29  544  	pci_read_config_byte(pdev, 0x41, &fifo);
-669a5db411d85a Jeff Garzik     2006-08-29  545  
-669a5db411d85a Jeff Garzik     2006-08-29  546  	/* Check for AMD7409 without swdma errata and if found adjust type */
-44c10138fd4bbc Auke Kok        2007-06-08  547  	if (type == 1 && pdev->revision > 0x7)
-669a5db411d85a Jeff Garzik     2006-08-29  548  		type = 2;
-669a5db411d85a Jeff Garzik     2006-08-29  549  
-ce54d161630211 Tejun Heo       2007-12-18  550  	/* Serenade ? */
-ce54d161630211 Tejun Heo       2007-12-18  551  	if (type == 5 && pdev->subsystem_vendor == PCI_VENDOR_ID_AMD &&
-ce54d161630211 Tejun Heo       2007-12-18  552  			 pdev->subsystem_device == PCI_DEVICE_ID_AMD_SERENADE)
-ce54d161630211 Tejun Heo       2007-12-18  553  		type = 6;	/* UDMA 100 only */
-ce54d161630211 Tejun Heo       2007-12-18  554  
-ce54d161630211 Tejun Heo       2007-12-18  555  	/*
-ce54d161630211 Tejun Heo       2007-12-18  556  	 * Okay, type is determined now.  Apply type-specific workarounds.
-ce54d161630211 Tejun Heo       2007-12-18  557  	 */
-887125e3740283 Tejun Heo       2008-03-25  558  	ppi[0] = &info[type];
-ce54d161630211 Tejun Heo       2007-12-18  559  
-ce54d161630211 Tejun Heo       2007-12-18  560  	if (type < 3)
-9363c3825ea9ad Tejun Heo       2008-04-07  561  		ata_pci_bmdma_clear_simplex(pdev);
-c48052cc36e02f Alan Cox        2009-02-11  562  	if (pdev->vendor == PCI_VENDOR_ID_AMD)
-c48052cc36e02f Alan Cox        2009-02-11  563  		amd_clear_fifo(pdev);
-ce54d161630211 Tejun Heo       2007-12-18  564  	/* Cable detection on Nvidia chips doesn't work too well,
-ce54d161630211 Tejun Heo       2007-12-18  565  	 * cache BIOS programmed UDMA mode.
-ce54d161630211 Tejun Heo       2007-12-18  566  	 */
-ce54d161630211 Tejun Heo       2007-12-18  567  	if (type == 7 || type == 8) {
-ce54d161630211 Tejun Heo       2007-12-18  568  		u32 udma;
-669a5db411d85a Jeff Garzik     2006-08-29  569  
-ce54d161630211 Tejun Heo       2007-12-18  570  		pci_read_config_dword(pdev, 0x60, &udma);
-887125e3740283 Tejun Heo       2008-03-25  571  		hpriv = (void *)(unsigned long)udma;
-ce54d161630211 Tejun Heo       2007-12-18  572  	}
-669a5db411d85a Jeff Garzik     2006-08-29  573  
-669a5db411d85a Jeff Garzik     2006-08-29  574  	/* And fire it up */
-1c5afdf7a629d2 Tejun Heo       2010-05-19 @575  	return ata_pci_bmdma_init_one(pdev, ppi, &amd_sht, hpriv, 0);
-669a5db411d85a Jeff Garzik     2006-08-29  576  }
-669a5db411d85a Jeff Garzik     2006-08-29  577  
+535dac4ab5f42e Brijesh Singh    2016-01-14  153  
+535dac4ab5f42e Brijesh Singh    2016-01-14  154  static int ahci_seattle_probe(struct platform_device *pdev)
+535dac4ab5f42e Brijesh Singh    2016-01-14  155  {
+535dac4ab5f42e Brijesh Singh    2016-01-14  156  	int rc;
+535dac4ab5f42e Brijesh Singh    2016-01-14  157  	struct ahci_host_priv *hpriv;
+535dac4ab5f42e Brijesh Singh    2016-01-14  158  
+16af2d65842d34 Kunihiko Hayashi 2018-08-22  159  	hpriv = ahci_platform_get_resources(pdev, 0);
+535dac4ab5f42e Brijesh Singh    2016-01-14  160  	if (IS_ERR(hpriv))
+535dac4ab5f42e Brijesh Singh    2016-01-14  161  		return PTR_ERR(hpriv);
+535dac4ab5f42e Brijesh Singh    2016-01-14  162  
+535dac4ab5f42e Brijesh Singh    2016-01-14  163  	rc = ahci_platform_enable_resources(hpriv);
+535dac4ab5f42e Brijesh Singh    2016-01-14  164  	if (rc)
+535dac4ab5f42e Brijesh Singh    2016-01-14  165  		return rc;
+535dac4ab5f42e Brijesh Singh    2016-01-14  166  
+535dac4ab5f42e Brijesh Singh    2016-01-14  167  	rc = ahci_platform_init_host(pdev, hpriv,
+535dac4ab5f42e Brijesh Singh    2016-01-14  168  				     ahci_seattle_get_port_info(pdev, hpriv),
+535dac4ab5f42e Brijesh Singh    2016-01-14 @169  				     &ahci_platform_sht);
+535dac4ab5f42e Brijesh Singh    2016-01-14  170  	if (rc)
+535dac4ab5f42e Brijesh Singh    2016-01-14  171  		goto disable_resources;
+535dac4ab5f42e Brijesh Singh    2016-01-14  172  
+535dac4ab5f42e Brijesh Singh    2016-01-14  173  	return 0;
+535dac4ab5f42e Brijesh Singh    2016-01-14  174  disable_resources:
+535dac4ab5f42e Brijesh Singh    2016-01-14  175  	ahci_platform_disable_resources(hpriv);
+535dac4ab5f42e Brijesh Singh    2016-01-14  176  	return rc;
+535dac4ab5f42e Brijesh Singh    2016-01-14  177  }
+535dac4ab5f42e Brijesh Singh    2016-01-14  178  
 
-:::::: The code at line 575 was first introduced by commit
-:::::: 1c5afdf7a629d2e77de8dd043b97a33dcd7e6dfa libata-sff: separate out BMDMA init
+:::::: The code at line 169 was first introduced by commit
+:::::: 535dac4ab5f42e040e8405b31e309a6b6d4eee57 ata: add AMD Seattle platform driver
 
-:::::: TO: Tejun Heo <tj@kernel.org>
-:::::: CC: Jeff Garzik <jgarzik@redhat.com>
+:::::: TO: Brijesh Singh <brijesh.singh@amd.com>
+:::::: CC: Tejun Heo <tj@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service

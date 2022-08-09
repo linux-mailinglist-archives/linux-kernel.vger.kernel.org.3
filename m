@@ -2,193 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B9F958D6B8
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 11:48:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 936D558D6C3
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 11:50:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238652AbiHIJsG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 05:48:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40322 "EHLO
+        id S240789AbiHIJux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 05:50:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbiHIJsE (ORCPT
+        with ESMTP id S240176AbiHIJup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 05:48:04 -0400
-Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D9B1F63A;
-        Tue,  9 Aug 2022 02:48:01 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id 8A1815FD05;
-        Tue,  9 Aug 2022 12:47:59 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1660038479;
-        bh=1NkSog7fNwIuD5awyrROp78DqGLAA2ojxoXb1/HAoNk=;
-        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=hFDLqYrgj81gSOH5Urbg46yf1sLyfdAl9V/bmisWnmBKVIF4b1YmuFUt0gVGqYSQf
-         42GnCO8zJNeHd6h6UtfkdBIDNeY38CJvqV1Qegwbs59Pdq4q1VXqy+fg7Bk0vXulxz
-         juLR4kmdJ1Xf81UU+kwOUJlDS+kbIgYgE4u7Cu+ze6fXOsxrkBpZoW5+U0gUhde1rc
-         Hjc8yGiVmmTzkkHrKSq5UI0GCZcA3xtrrA3yqnqsSuIu+5f55A+weRfhHDUPCNPEUb
-         aC+EvHRee3fI3Cj2gAEP1KfaNPsRQqs5vq4lVJZAFLbl2Y6wGqPmm0M4L2lLhoTYaN
-         9Sc/qN+ZJDdgw==
-Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
-        by mail.sberdevices.ru (Postfix) with ESMTP;
-        Tue,  9 Aug 2022 12:47:58 +0300 (MSK)
-From:   Dmitry Rokosov <DDRokosov@sberdevices.ru>
-To:     Jonathan Cameron <jic23@kernel.org>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "stano.jakubek@gmail.com" <stano.jakubek@gmail.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "stephan@gerhold.net" <stephan@gerhold.net>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v4 2/3] iio: add MEMSensing MSA311 3-axis accelerometer
- driver
-Thread-Topic: [PATCH v4 2/3] iio: add MEMSensing MSA311 3-axis accelerometer
- driver
-Thread-Index: AQHYpzqIoQnaRj7vNkq2cXUUGjAB/62h0pwAgARW1QA=
-Date:   Tue, 9 Aug 2022 09:47:54 +0000
-Message-ID: <20220809094754.akfed7hxcdvxoacj@CAB-WSD-L081021.sigma.sbrf.ru>
-References: <20220803131132.19630-1-ddrokosov@sberdevices.ru>
- <20220803131132.19630-3-ddrokosov@sberdevices.ru>
- <20220806163204.3262c0e7@jic23-huawei>
-In-Reply-To: <20220806163204.3262c0e7@jic23-huawei>
-Accept-Language: ru-RU, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.16.1.12]
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <6373418BF86F2844AEE00C8459CE3039@sberdevices.ru>
-Content-Transfer-Encoding: quoted-printable
+        Tue, 9 Aug 2022 05:50:45 -0400
+Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64D6CE94;
+        Tue,  9 Aug 2022 02:50:44 -0700 (PDT)
+Received: from dev011.ch-qa.sw.ru ([172.29.1.16])
+        by relay.virtuozzo.com with esmtp (Exim 4.95)
+        (envelope-from <alexander.atanasov@virtuozzo.com>)
+        id 1oLLqu-00ElUd-O7;
+        Tue, 09 Aug 2022 11:49:43 +0200
+From:   Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     kernel@openvz.org,
+        Alexander Atanasov <alexander.atanasov@virtuozzo.com>,
+        David Hildenbrand <david@redhat.com>,
+        Wei Liu <wei.liu@kernel.org>, Nadav Amit <namit@vmware.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v1 1/2] Enable balloon drivers to report inflated memory
+Date:   Tue,  9 Aug 2022 12:49:32 +0300
+Message-Id: <20220809094933.2203087-1-alexander.atanasov@virtuozzo.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <7bfac48d-2e50-641b-6523-662ea4df0240@virtuozzo.com>
+References: <7bfac48d-2e50-641b-6523-662ea4df0240@virtuozzo.com>
 MIME-Version: 1.0
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/08/09 07:32:00 #20083496
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Jonathan,
+Display reported in /proc/meminfo as:
 
-On Sat, Aug 06, 2022 at 04:32:04PM +0100, Jonathan Cameron wrote:
+Inflated(total) or Inflated(free)
 
-[...]
+depending on the driver.
 
-> > +/**
-> > + * struct msa311_priv - MSA311 internal private state
-> > + * @regs: Underlying I2C bus adapter used to abstract slave
-> > + *        register accesses
-> > + * @fields: Abstract objects for each registers fields access
-> > + * @dev: Device handler associated with appropriate bus client
-> > + * @lock: Protects msa311 device state between setup and data access r=
-outines
-> > + *        (power transitions, samp_freq/scale tune, retrieving axes da=
-ta, etc)
-> > + * @new_data_trig: Optional NEW_DATA interrupt driven trigger used
-> > + *                 to notify external consumers a new sample is ready
-> > + * @vdd: Optional external voltage regulator for the device power supp=
-ly
-> > + */
-> > +struct msa311_priv {
-> > +	struct regmap *regs;
-> > +	struct regmap_field *fields[F_MAX_FIELDS];
-> > +
-> > +	struct device *dev;
-> > +	struct mutex lock; /* state guard */
->=20
-> Shouldn't need this comment given documentation above that provides
-> more information.
+Drivers use the sign bit to indicate where they do account
+the inflated memory.
 
-Without this comment checkpatch.pl raises a warning about uncommented
-lock definition.
-I agree with you, above comment is redundant, but is it okay to ignore
-such warnings before sending the patch?
+Amount of inflated memory can be used by:
+ - as a hint for the oom a killer
+ - user space software that monitors memory pressure
 
-I'm talking about below checkpatch condition:
-=3D=3D=3D=3D=3D
-# check for spinlock_t definitions without a comment.
-		if ($line =3D~ /^.\s*(struct\s+mutex|spinlock_t)\s+\S+;/ ||
-		    $line =3D~ /^.\s*(DEFINE_MUTEX)\s*\(/) {
-			my $which =3D $1;
-			if (!ctx_has_comment($first_line, $linenr)) {
-				CHK("UNCOMMENTED_DEFINITION",
-				    "$1 definition without comment\n" . $herecurr);
-			}
-		}
-=3D=3D=3D=3D=3D
+Cc: David Hildenbrand <david@redhat.com>
+Cc: Wei Liu <wei.liu@kernel.org>
+Cc: Nadav Amit <namit@vmware.com>
 
->=20
-> > +
-> > +	struct iio_trigger *new_data_trig;
-> > +	struct regulator *vdd;
-> > +};
-> >
->=20
->=20
-> > +static irqreturn_t msa311_irq_thread(int irq, void *p)
-> > +{
-> > +	struct msa311_priv *msa311 =3D iio_priv(p);
-> > +	unsigned int new_data_int_enabled;
-> > +	struct device *dev =3D msa311->dev;
-> > +	int err;
-> > +
-> > +	mutex_lock(&msa311->lock);
->=20
-> > +
-> > +	/*
-> > +	 * We do not check NEW_DATA int status, because of based on
-> > +	 * specification it's cleared automatically after a fixed time.
-> > +	 * So just check that is enabled by driver logic.
->=20
-> That is going to be very problematic if we can have this and events comin=
-g
-> through the same interrupt pin.  Not harmful for now though given you are
-> only supporting NEW_DATA for now.  Just something to watch out for.
->=20
+Signed-off-by: Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+---
+ Documentation/filesystems/proc.rst |  5 +++++
+ fs/proc/meminfo.c                  | 11 +++++++++++
+ include/linux/mm.h                 |  4 ++++
+ mm/page_alloc.c                    |  4 ++++
+ 4 files changed, 24 insertions(+)
 
-Actually, I have run some experiments with NEW_DATA status bits. And
-looks like we can't determince actual status of NEW_DATA virtual
-interrupt when physical IRQ is raised. I will back to this problem when
-begin Motion Events feature implementation.
+diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+index 1bc91fb8c321..064b5b3d5bd8 100644
+--- a/Documentation/filesystems/proc.rst
++++ b/Documentation/filesystems/proc.rst
+@@ -986,6 +986,7 @@ Example output. You may not have all of these fields.
+     VmallocUsed:       40444 kB
+     VmallocChunk:          0 kB
+     Percpu:            29312 kB
++    Inflated(total):  2097152 kB
+     HardwareCorrupted:     0 kB
+     AnonHugePages:   4149248 kB
+     ShmemHugePages:        0 kB
+@@ -1133,6 +1134,10 @@ VmallocChunk
+ Percpu
+               Memory allocated to the percpu allocator used to back percpu
+               allocations. This stat excludes the cost of metadata.
++Inflated(total) or Inflated(free)
++               Amount of memory that is inflated by the balloon driver.
++               Due to differences among balloon drivers inflated memory
++               is either subtracted from TotalRam or from MemFree.
+ HardwareCorrupted
+               The amount of RAM/memory in KB, the kernel identifies as
+               corrupted.
+diff --git a/fs/proc/meminfo.c b/fs/proc/meminfo.c
+index 6e89f0e2fd20..ebbe52ccbb93 100644
+--- a/fs/proc/meminfo.c
++++ b/fs/proc/meminfo.c
+@@ -38,6 +38,9 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
+ 	unsigned long pages[NR_LRU_LISTS];
+ 	unsigned long sreclaimable, sunreclaim;
+ 	int lru;
++#ifdef CONFIG_MEMORY_BALLOON
++	long inflated_kb;
++#endif
+ 
+ 	si_meminfo(&i);
+ 	si_swapinfo(&i);
+@@ -153,6 +156,14 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
+ 		    global_zone_page_state(NR_FREE_CMA_PAGES));
+ #endif
+ 
++#ifdef CONFIG_MEMORY_BALLOON
++	inflated_kb = atomic_long_read(&mem_balloon_inflated_kb);
++	if (inflated_kb >= 0)
++		seq_printf(m,  "Inflated(total): %8ld kB\n", inflated_kb);
++	else
++		seq_printf(m,  "Inflated(free): %8ld kB\n", -inflated_kb);
++#endif
++
+ 	hugetlb_report_meminfo(m);
+ 
+ 	arch_report_meminfo(m);
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 7898e29bcfb5..b190811dc16e 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -2582,6 +2582,10 @@ extern int watermark_boost_factor;
+ extern int watermark_scale_factor;
+ extern bool arch_has_descending_max_zone_pfns(void);
+ 
++#ifdef CONFIG_MEMORY_BALLOON
++extern atomic_long_t mem_balloon_inflated_kb;
++#endif
++
+ /* nommu.c */
+ extern atomic_long_t mmap_pages_allocated;
+ extern int nommu_shrink_inode_mappings(struct inode *, size_t, size_t);
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index b0bcab50f0a3..12359179a3a2 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -194,6 +194,10 @@ EXPORT_SYMBOL(init_on_alloc);
+ DEFINE_STATIC_KEY_MAYBE(CONFIG_INIT_ON_FREE_DEFAULT_ON, init_on_free);
+ EXPORT_SYMBOL(init_on_free);
+ 
++#ifdef CONFIG_MEMORY_BALLOON
++atomic_long_t mem_balloon_inflated_kb = ATOMIC_LONG_INIT(0);
++#endif
++
+ static bool _init_on_alloc_enabled_early __read_mostly
+ 				= IS_ENABLED(CONFIG_INIT_ON_ALLOC_DEFAULT_ON);
+ static int __init early_init_on_alloc(char *buf)
+-- 
+2.31.1
 
-[...]
-
-> > +	err =3D devm_pm_runtime_enable(dev);
-> > +	if (err)
-> > +		return err;
-> > +
-> > +	pm_runtime_get_noresume(dev);
-> > +	pm_runtime_set_autosuspend_delay(dev, MSA311_PWR_SLEEP_DELAY_MS);
-> > +	pm_runtime_use_autosuspend(dev);
-> > +
-> > +	err =3D msa311_chip_init(msa311);
-> > +	if (err)
-> > +		return err;
-> > +
-> > +	indio_dev->modes =3D 0; /* setup buffered mode later */
->=20
-> As per other branch, I led you astray here it seems.
->=20
-
-Sorry, I've made a mistake. Comment about INDIO_DIRECT_MODE was left
-by Andy here:
-
-https://lore.kernel.org/linux-iio/CAHp75Vc0+ckNnm2tzLMPrjeFRjwoj3zy0C4koNSh=
-FRG3kP8b6w@mail.gmail.com/
-
-[...]
-
---=20
-Thank you,
-Dmitry=

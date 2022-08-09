@@ -2,233 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3CF458D841
-	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 13:36:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48E6558D840
+	for <lists+linux-kernel@lfdr.de>; Tue,  9 Aug 2022 13:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242763AbiHILf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 07:35:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56886 "EHLO
+        id S242577AbiHILft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 07:35:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242833AbiHILfY (ORCPT
+        with ESMTP id S242827AbiHILfY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 9 Aug 2022 07:35:24 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBDB22B01;
-        Tue,  9 Aug 2022 04:34:57 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 2AE7F3200979;
-        Tue,  9 Aug 2022 07:34:56 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Tue, 09 Aug 2022 07:34:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm2; t=1660044895; x=1660131295; bh=sG3dfW2+8uHUHlEdheiLB6CAO
-        Rlgb6+iLDptt+xl+L4=; b=pytOGLqMrHrV0vUIbND1YlQwelLouQz9EKwI5BOd0
-        /n9laR37cD8SDdJsrtVtaVR1zI+Fq8It8MMfkU8YJG1MpmEXr4V/rpTpqxe2e8yw
-        WijGkZRuTk79aiQgf8g6ng26Uljbhec/PvBVh5yZW44n/9uY8gUow4/lbqGicWwY
-        vHywdMVRFP008CpLNTrW23EdCL02CH/VjQTzTKP6RM1S+FS7D2C4GRoThJk3lHuk
-        wvB3ZA1gDSdQffqRehPwHttJ42O8/lgfiKGBDUYEhDoN7tgL4zEnouNkIOEXoF1Q
-        Y5lvIaFheK2UzKKF7ADNS2wRluAGltiop66+0KPjoPWeQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1660044895; x=1660131295; bh=sG3dfW2+8uHUHlEdheiLB6CAORlgb6+iLDp
-        tt+xl+L4=; b=xG9yL5lsuZcEkpa6OC61vDWSwOkV6A1Mr5sghZ1UGdyXwqfSalS
-        qx91TGjx7f0mjd1YowwyLvMzpeTSkSPqYSfbeI4oazw+/HPuboxvGYDbeW4Iz4fo
-        1aMSSpn6iWeYgupeOfH9HtMfZnDm+GprIHozgwW+cx/l+f6WV1Z/VbOPTR1ZdoZd
-        i82icUvLXmKTBq4UWPIWbb+DBZyZXJqQPRjOBLUBNcZqp6Q8/L2YNEeJfBFsioq4
-        pKmjWpyjfqtLaAP/9LpXycMJfCdjKr4iaN8hT57ZMGplNqH+dgAvIjTct45+RMvW
-        yV+pbWK+KKUYLQv0KP3BAklWBr5g/uijwKw==
-X-ME-Sender: <xms:X0byYsFpwaLn58nEbDYXxHus6b9Hl-_tWx_WlDrsK3CAJBuf8rJUcQ>
-    <xme:X0byYlWJPzU084IRx1lTBnD97Z8E_yISirIUwol_MGbaHlxY1Qjy95PGYlip_spz2
-    QdUAZBmc4fb_Sk9uwo>
-X-ME-Received: <xmr:X0byYmIvLAnDKdLnHgkeEO5Wfv_zgLWS8Nr51lwIWtC5QDy-OZmAV10NMkPCqsJVOc6t6yjPOItSWpi7OG-mjWOcvOVhXPA3pm_7SKwql9XYwbbHh_V4GKKk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegtddggeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
-    ertddtnecuhfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghes
-    fhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhephfetuddtudevieeljeejte
-    ffheeujeduhefgffejudfhueelleduffefgfffveeknecuvehluhhsthgvrhfuihiivgep
-    tdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgoh
-    grthdrtghomh
-X-ME-Proxy: <xmx:X0byYuGknYmkQBuCY2GJ0tem1zQUq4s2p1-kd9ivUasX6XlfxlZSjQ>
-    <xmx:X0byYiUe8ZPR-bxFGY7kZP-rMObb_C0cWKcyP14qEq3GwRn-15JsVA>
-    <xmx:X0byYhOwwf95n7oqO2Zq2603G1nxw1u3e6ExG0anOP3K193XSJx9-Q>
-    <xmx:X0byYhTlummVrvgyMCGN3Me02FLFQ0AIHC3-ks_Ye97LpDzxBJPuGQ>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 9 Aug 2022 07:34:54 -0400 (EDT)
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-To:     linux-mips@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, tsbogend@alpha.franken.de,
-        linux-api@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: [PATCH] MIPS: Expose prid and globalnumber to sysfs
-Date:   Tue,  9 Aug 2022 11:34:44 +0000
-Message-Id: <20220809113444.17757-1-jiaxun.yang@flygoat.com>
-X-Mailer: git-send-email 2.34.1
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B609A248E2
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 04:34:54 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id e15so16667008lfs.0
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 04:34:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:mime-version:user-agent:subject:content-language:to
+         :cc:references:from:in-reply-to:content-transfer-encoding;
+        bh=kY0VW7WRH6OusbkpplS07Fdtd4JYKcNiADl2/iZxNM4=;
+        b=KJK0csbJ8X8iQUolwDewaQzJioe6tf+1Sc3oMKJRyphO8GNc5fAs8O9MdaLYQySOaa
+         zwbXKjGxRnY5fGqIecaQHibZTxQOXUuzaI98Tv9mzYJcpPUAWa2fU+IzLuWzsI19Zs1u
+         +P5+btFkh6Sy0kqfHmpN00+r2IgJL2ddRUJh6Tkb0A7/3nBIIcWbCgrPALKXIX9U0RL9
+         Yg8yk8k5Zs87kPRl7UmCbOk2wsNG8S9wJQmvyHmQC1DuHCYKzQWYnt+LnU3lqTr8599m
+         hOaI4yd2d+Rh2Ds4mClFiZzeT9l6I7KSVMJ3X5Hcn937rJsXvzpgabeGjlcxfC9Rzn/S
+         i8xA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=x-gm-message-state:message-id:date:mime-version:user-agent:subject
+         :content-language:to:cc:references:from:in-reply-to
+         :content-transfer-encoding;
+        bh=kY0VW7WRH6OusbkpplS07Fdtd4JYKcNiADl2/iZxNM4=;
+        b=DcuRi8FzN9tkqtThTaWoxkAXkW6h6GJYNZ2Z7rq5mayvrBEwN+BW/sZncBcujdEgTT
+         0lEyydRFMACln53FOxCufkmTIkavc8zVZv1BCc4Jh4qEeuT2eMAW2Pyvtgz/rN0hp9mB
+         +v5Z2Ehp5BbuyhIcuOmJ2LQd8pfB8RW1KnkZS2OjQtZTWlwBvX257WnldhEazEbXDznT
+         0+bKLW5vzlRo3pfeGRL0S/PLVdF4wyaUaehU81Jg9XO5LOkQuGx8Bg30q0TDcUW+Ce08
+         aAxYT45Ndhe19i7F3md7s/+RCFxaRsCegaWVaS1HnZuJlQ7xes5V4XvCZmdRzNW+nIHD
+         EL2w==
+X-Gm-Message-State: ACgBeo2uOX/zXMlp1RVS9Y3B2INKUYsbLxUGSOjGZZiKAjSUsuJweq4P
+        Jtd2hJDBe7bWthJEPPZBwpeKrw==
+X-Google-Smtp-Source: AA6agR646I5X0CTuqa55/u440pAF2eLYRijfxQzVMpjwQVklzq7IlNiFuXKLdtPE9t5FEybrYt56ig==
+X-Received: by 2002:a05:6512:6c8:b0:48a:f375:9ecc with SMTP id u8-20020a05651206c800b0048af3759eccmr7515767lff.206.1660044893124;
+        Tue, 09 Aug 2022 04:34:53 -0700 (PDT)
+Received: from [192.168.1.39] ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id p8-20020a2eb7c8000000b0025e42f8e771sm1670846ljo.34.2022.08.09.04.34.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Aug 2022 04:34:52 -0700 (PDT)
+Message-ID: <3a9c6f63-64c7-d95d-496a-79516cce3939@linaro.org>
+Date:   Tue, 9 Aug 2022 14:34:51 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v5 02/20] dt-bindings: memory: mediatek: Update condition
+ for mt8195 smi node
+Content-Language: en-US
+To:     Tinghan Shen <tinghan.shen@mediatek.com>,
+        Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        MandyJH Liu <mandyjh.liu@mediatek.com>
+Cc:     iommu@lists.linux.dev, linux-mediatek@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20220804021553.14867-1-tinghan.shen@mediatek.com>
+ <20220804021553.14867-3-tinghan.shen@mediatek.com>
+ <96e66425-ff2a-4640-8b96-48fa39943bf9@linaro.org>
+ <6a1977971317059fcfad685869b6ccf233edcb68.camel@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <6a1977971317059fcfad685869b6ccf233edcb68.camel@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some application would like to know precise model and rev of processor
-to do errata workaround or optimization.
+On 09/08/2022 14:01, Tinghan Shen wrote:
+> Hi Krzysztof,
+> 
+> On Thu, 2022-08-04 at 17:12 +0200, Krzysztof Kozlowski wrote:
+>> On 04/08/2022 04:15, Tinghan Shen wrote:
+>>>
+>>> It's because the 'mediatek,mt8195-smi-sub-common' compatible incorrectly
+>>> matches the 'else' conditions for gen2 HW without gals.
+>>>
+>>> Rewrite the 'else' condition to specifically identify the compatibles
+>>> that utilizing gen2 HW without gals.
+>>>
+>>> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
+>>> Reviewed-by: AngeloGioacchino Del Regno
+>>>  <angelogioacchino.delregno@collabora.com>
+>>
+>> Unfortunately, your patches got corrupted.
+>>
+>>
+>> Best regards,
+>> Krzysztof
+> 
+> Do you mean rebase to the latest linux-next?
+> I'll rebase in the next version, thanks!
+> 
 
-Expose them in sysfs as:
-/sys/devices/system/cpu/cpuX/regs/identification/prid
-/sys/devices/system/cpu/cpuX/regs/identification/globalnumber
+No, I mean look at the line above. And many other lines. That's not a
+proper patch file.
 
-Reusing AArch64 CPU registers directory.
+It's not my email client. Lore reports the same.
 
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
----
- .../ABI/testing/sysfs-devices-system-cpu      | 11 +++
- arch/mips/kernel/topology.c                   | 96 +++++++++++++++++++
- 2 files changed, 107 insertions(+)
 
-diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
-index 5bf61881f012..adf855e7bb9b 100644
---- a/Documentation/ABI/testing/sysfs-devices-system-cpu
-+++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
-@@ -512,6 +512,17 @@ Description:	information about CPUs heterogeneity.
- 
- 		cpu_capacity: capacity of cpuX.
- 
-+What:		/sys/devices/system/cpu/cpuX/regs/
-+		/sys/devices/system/cpu/cpuX/regs/identification/
-+		/sys/devices/system/cpu/cpuX/regs/identification/prid
-+		/sys/devices/system/cpu/cpuX/regs/identification/globalnumber
-+Date:		Augest 2022
-+Contact:	Linux MIPS Kernel Mailing list <linux-mips@vger.kernel.org>
-+Description:	MIPS CPU registers
-+
-+		'identification' directory exposes the Processor ID and Global Number
-+		registers for identifying model and revision of the CPU.
-+
- What:		/sys/devices/system/cpu/vulnerabilities
- 		/sys/devices/system/cpu/vulnerabilities/meltdown
- 		/sys/devices/system/cpu/vulnerabilities/spectre_v1
-diff --git a/arch/mips/kernel/topology.c b/arch/mips/kernel/topology.c
-index 9429d85a4703..90b5136afb63 100644
---- a/arch/mips/kernel/topology.c
-+++ b/arch/mips/kernel/topology.c
-@@ -5,6 +5,8 @@
- #include <linux/node.h>
- #include <linux/nodemask.h>
- #include <linux/percpu.h>
-+#include <linux/seq_file.h>
-+#include <linux/smp.h>
- 
- static DEFINE_PER_CPU(struct cpu, cpu_devices);
- 
-@@ -26,3 +28,97 @@ static int __init topology_init(void)
- }
- 
- subsys_initcall(topology_init);
-+
-+static struct kobj_type cpuregs_kobj_type = {
-+	.sysfs_ops = &kobj_sysfs_ops,
-+};
-+
-+struct cpureg {
-+	struct kobject kobj;
-+	struct cpuinfo_mips *info;
-+};
-+static DEFINE_PER_CPU(struct cpureg, cpuregs);
-+
-+#define kobj_to_cpureg(kobj)	container_of(kobj, struct cpureg, kobj)
-+#define CPUREGS_ATTR_RO(_name, _field)						\
-+	static ssize_t _name##_show(struct kobject *kobj,			\
-+			struct kobj_attribute *attr, char *buf)			\
-+	{									\
-+		struct cpuinfo_mips *info = kobj_to_cpureg(kobj)->info;		\
-+										\
-+		return sprintf(buf, "0x%08x\n", info->_field);	\
-+	}									\
-+	static struct kobj_attribute cpuregs_attr_##_name = __ATTR_RO(_name)
-+
-+CPUREGS_ATTR_RO(prid, processor_id);
-+CPUREGS_ATTR_RO(globalnumber, globalnumber);
-+
-+static struct attribute *cpuregs_id_attrs[] = {
-+	&cpuregs_attr_prid.attr,
-+	&cpuregs_attr_globalnumber.attr,
-+	NULL
-+};
-+
-+static const struct attribute_group cpuregs_attr_group = {
-+	.attrs = cpuregs_id_attrs,
-+	.name = "identification"
-+};
-+
-+static int cpuregs_cpu_online(unsigned int cpu)
-+{
-+	int rc;
-+	struct device *dev;
-+	struct cpureg *reg = &per_cpu(cpuregs, cpu);
-+
-+	dev = get_cpu_device(cpu);
-+	if (!dev) {
-+		rc = -ENODEV;
-+		goto out;
-+	}
-+	rc = kobject_add(&reg->kobj, &dev->kobj, "regs");
-+	if (rc)
-+		goto out;
-+	rc = sysfs_create_group(&reg->kobj, &cpuregs_attr_group);
-+	if (rc)
-+		kobject_del(&reg->kobj);
-+out:
-+	return rc;
-+}
-+
-+static int cpuregs_cpu_offline(unsigned int cpu)
-+{
-+	struct device *dev;
-+	struct cpureg *reg = &per_cpu(cpuregs, cpu);
-+
-+	dev = get_cpu_device(cpu);
-+	if (!dev)
-+		return -ENODEV;
-+	if (reg->kobj.parent) {
-+		sysfs_remove_group(&reg->kobj, &cpuregs_attr_group);
-+		kobject_del(&reg->kobj);
-+	}
-+
-+	return 0;
-+}
-+
-+static int __init cpuinfo_regs_init(void)
-+{
-+	int cpu, ret;
-+
-+	for_each_possible_cpu(cpu) {
-+		struct cpureg *reg = &per_cpu(cpuregs, cpu);
-+
-+		reg->info = &cpu_data[cpu];
-+		kobject_init(&reg->kobj, &cpuregs_kobj_type);
-+	}
-+
-+	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "mips/topology:online",
-+				cpuregs_cpu_online, cpuregs_cpu_offline);
-+	if (ret < 0) {
-+		pr_err("cpuinfo: failed to register hotplug callbacks.\n");
-+		return ret;
-+	}
-+	return 0;
-+}
-+
-+device_initcall(cpuinfo_regs_init);
--- 
-2.34.1
-
+Best regards,
+Krzysztof

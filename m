@@ -2,178 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A181258E349
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 00:35:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52F4D58E359
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 00:41:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230365AbiHIWfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 18:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54266 "EHLO
+        id S229587AbiHIWkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 18:40:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230238AbiHIWe2 (ORCPT
+        with ESMTP id S229441AbiHIWk2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 18:34:28 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED72066100
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 15:34:19 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id l22so15827167wrz.7
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 15:34:19 -0700 (PDT)
+        Tue, 9 Aug 2022 18:40:28 -0400
+Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7955C9D8
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 15:40:25 -0700 (PDT)
+Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-10dc1b16c12so15758872fac.6
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 15:40:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=from:to:cc:subject:date:message-id:in-reply-to:references;
-        bh=Ht2C5hmUen8Zs+3SYPbHRSeYgcLBnHmLYbKN5MCrEgA=;
-        b=ReoNsdK6Qf7stNbwqpvMm9Ps3u5XWBgokoaC2yhwkEv62aRu1zmFBrOA1cnNu8SB7I
-         QjLddDNP2g4u9p6ZtPodt5virk5oHHyLDcmgzy14jfEvX3+F/6xCZ8ekLlzGgCRMo2ld
-         XFAztJQYM006MYg5zp/2FsunjL7yoeHmv7+nTX3URAxE8MCR8HTCaSRn/xhXYhOgbZFo
-         GRRKQgNTp7TFCR/ei2DxZOtlzQrXhCSworaV9VMnCceTGk5r84mkHs+kZWr7x0vFp+FG
-         bC3Pa30f+tsH7R3remZY5HczWX0R+oqCsoW0vI2w+Fqo0bSR1CTLMFFAabzrFbdSlsuz
-         kWjQ==
+        d=paul-moore-com.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=1P7bSaIcMszYR+JCa8vqV0slOGBPYXltybusx5DtRDM=;
+        b=ymJZNj+3ZRh6BJ8sdJOKWq3WWbUkXw6pah7LZ66RWLPU/lUKblHjIWaSbD/M/HlxZG
+         XvRNSo3oVXm145SSS41Ho65tqsFjNeoaSyRIP0bW6D/OrQGUY/gDwhF2RxO+RUiMyfX8
+         raLd9fpQ1xyculvAnmt5+WPihY3ElIT/hyo2mQADbhYzhsin1meT8LB/8oVNtwdYglR2
+         8BXLy2uW5Fa5RgTdW9YWJ9qrdQxzYFC7yR7a+zVgLQlWAzRxP+H9g8KpL7B+wKqVG4DB
+         gCXguHSRTkIZ5oafCKhLHLSwYLU2AXjEnpPWXLLbU4c91UgqdOJ2Ccc/AD0eJ2fxHc/n
+         nDPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=x-gm-message-state:from:to:cc:subject:date:message-id:in-reply-to
-         :references;
-        bh=Ht2C5hmUen8Zs+3SYPbHRSeYgcLBnHmLYbKN5MCrEgA=;
-        b=pmeLSZtjdtcEscgJmKh4WobHuLBlbvjlfJbQ1P3rvt8HcFJmaAwf4RTpmXpDQuYaz9
-         vdkx9f+9IUcOBo0uLtN0egu0Gxdk91g8soNI9Yddd7ETXj5gflI8VwwiaJ9CeMfynJD3
-         bHvQ4ELsbt+RNOqJ3oJCvxq/JYE9XUT3zUh9f2XTePZa5+t095fVPFzKMUnQmF0pBKix
-         rEnpootfoxZyI4aG7JG4vIDkypD/g25L68UT3ZW/ZKqPnM4Dl0WNWSnT4WC4jeFQn+PT
-         I1QM7aTOVUj+z6K0BoDWRhKM7uAN/UP7jebn/N1D9Kk27/pKXvFvu9zwFH5bAKOL1RFK
-         gDmg==
-X-Gm-Message-State: ACgBeo0PUd9SORDXL+dFslXpsx+85jAoKYwzhAZKuIpch8MZqn1ijAj4
-        CXD3CJplEZ5JilMbJyZ8pzLkuQ==
-X-Google-Smtp-Source: AA6agR7iJg2CnEWqKZ9yqi+h9y7+qiLbREP+KF0Qz0+eZXbO1MQ8ibEAp64ra1HPkU1Wop7FsiymEQ==
-X-Received: by 2002:a05:6000:81c:b0:222:ed7f:4445 with SMTP id bt28-20020a056000081c00b00222ed7f4445mr5671154wrb.111.1660084459352;
-        Tue, 09 Aug 2022 15:34:19 -0700 (PDT)
-Received: from linaro.org ([2a00:23c5:6809:2201:a6:74a6:5a0e:f3e2])
-        by smtp.gmail.com with ESMTPSA id e20-20020a05600c4b9400b003a2cf1ba9e2sm311650wmp.6.2022.08.09.15.34.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 15:34:18 -0700 (PDT)
-From:   Mike Leach <mike.leach@linaro.org>
-To:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     mathieu.poirier@linaro.org, suzuki.poulose@arm.com,
-        peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
-        linux-perf-users@vger.kernel.org, leo.yan@linaro.org,
-        quic_jinlmao@quicinc.com, Mike Leach <mike.leach@linaro.org>
-Subject: [PATCH v3 13/13] coresight: trace-id: Add debug & test macros to Trace ID allocation
-Date:   Tue,  9 Aug 2022 23:34:01 +0100
-Message-Id: <20220809223401.24599-14-mike.leach@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220809223401.24599-1-mike.leach@linaro.org>
-References: <20220809223401.24599-1-mike.leach@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=1P7bSaIcMszYR+JCa8vqV0slOGBPYXltybusx5DtRDM=;
+        b=3VCatTrQlxdoXOuD9fbjWlfkdZgDza4lA2nRbEM5ssHy/Goz8nlKPgix7clujv/G4X
+         NKZgcJd0CTl84tJ7V+oaadgsW8rxpJ71jKUDubAjceXkAKrjWxRRnWhIOauh+A/zYBUi
+         yOdDh6c/nOSKlm5DkZhPgaSRxm+U9qBrEhiyxNRBS4xYIeUoY8i+bXUeEeEc7qKyRY9D
+         6MIUG6fIuNZfAQ8pcA2maqBx10Ezy04QPjY57GaaTiayxhW2UltIz0LNNG+fG4Mf8IZj
+         2M6F/BWVRatblBaqgNpQi5lKiGBaVYtdmUwkzV6sqNahK6bD9mtIUSMQQkzAYHSrkxbj
+         eQXw==
+X-Gm-Message-State: ACgBeo0Bf/Qp8ViLLH2vxFaw2SNrWJhpiAR8F8HYqLvfIptS8q5ZgZgm
+        2b7xq2hvoE5svxgTsEmNAOQlSNdd03SH8Xu80ChG
+X-Google-Smtp-Source: AA6agR4ClJpq8r9ZKoAk/K/rs8TO1cCIg6yZNX6VC6EIP7MbESfv7l10f5WE4D8xn0xBGSvYXyQ13bhBRsm1jf8wpUM=
+X-Received: by 2002:a05:6870:9588:b0:101:c003:bfe6 with SMTP id
+ k8-20020a056870958800b00101c003bfe6mr292354oao.41.1660084825048; Tue, 09 Aug
+ 2022 15:40:25 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220801180146.1157914-1-fred@cloudflare.com> <87les7cq03.fsf@email.froward.int.ebiederm.org>
+ <CAHC9VhRpUxyxkPaTz1scGeRm+i4KviQQA7WismOX2q5agzC+DQ@mail.gmail.com>
+ <87wnbia7jh.fsf@email.froward.int.ebiederm.org> <CAHC9VhS3udhEecVYVvHm=tuqiPGh034-xPqXYtFjBk23+p-Szg@mail.gmail.com>
+ <877d3ia65v.fsf@email.froward.int.ebiederm.org> <87bksu8qs2.fsf@email.froward.int.ebiederm.org>
+ <CAHC9VhTEwD2y9Witj-1z3e2TC-NGjghQ4KT4Dqf3UOLzDcDc3Q@mail.gmail.com>
+ <87czd95rjc.fsf@email.froward.int.ebiederm.org> <CAHC9VhQY6H4JxOvSYWk2cpH8E3LYeOkMP_ay+ih+ULKKdeob=Q@mail.gmail.com>
+ <87a68dccyu.fsf@email.froward.int.ebiederm.org>
+In-Reply-To: <87a68dccyu.fsf@email.froward.int.ebiederm.org>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 9 Aug 2022 18:40:14 -0400
+Message-ID: <CAHC9VhRkHuwjrtOoK+vn9zzERU2TM_2PEbQGRAZsr-D1pFv9GQ@mail.gmail.com>
+Subject: Re: [PATCH v4 0/4] Introduce security_create_user_ns()
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Frederick Lawler <fred@cloudflare.com>, kpsingh@kernel.org,
+        revest@chromium.org, jackmanb@chromium.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        jmorris@namei.org, serge@hallyn.com,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        shuah@kernel.org, brauner@kernel.org, casey@schaufler-ca.com,
+        bpf@vger.kernel.org, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        kernel-team@cloudflare.com, cgzones@googlemail.com,
+        karl@bigbadwolfsecurity.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adds in a number of pr_debug macros to allow the debugging and test of
-the trace ID allocation system.
+On Tue, Aug 9, 2022 at 5:41 PM Eric W. Biederman <ebiederm@xmission.com> wrote:
+> Paul Moore <paul@paul-moore.com> writes:
+> >
+> > What level of due diligence would satisfy you Eric?
+>
+> Having a real conversation about what a change is doing and to talk
+> about it's merits and it's pro's and cons.  I can't promise I would be
+> convinced but that is the kind of conversation it would take.
 
-Signed-off-by: Mike Leach <mike.leach@linaro.org>
----
- .../hwtracing/coresight/coresight-trace-id.c  | 36 +++++++++++++++++++
- 1 file changed, 36 insertions(+)
+Earlier today you talked about due diligence to ensure that userspace
+won't break and I provided my reasoning on why userspace would not
+break (at least not because of this change).  Userspace might be
+blocked from creating a new user namespace due to a security policy,
+but that would be the expected and desired outcome, not breakage.  As
+far as your most recent comment regarding merit and pros/cons, I
+believe we have had that discussion (quite a few times already); it
+just seems you are not satisfied with the majority's conclusion.
 
-diff --git a/drivers/hwtracing/coresight/coresight-trace-id.c b/drivers/hwtracing/coresight/coresight-trace-id.c
-index ac9092896dec..24c19ff493a9 100644
---- a/drivers/hwtracing/coresight/coresight-trace-id.c
-+++ b/drivers/hwtracing/coresight/coresight-trace-id.c
-@@ -69,6 +69,30 @@ static void coresight_trace_id_set_pend_rel(int id, struct coresight_trace_id_ma
- 	set_bit(id, id_map->pend_rel_ids);
- }
- 
-+/* #define TRACE_ID_DEBUG 1 */
-+#ifdef TRACE_ID_DEBUG
-+static char page_buf[PAGE_SIZE];
-+
-+static void coresight_trace_id_dump_table(struct coresight_trace_id_map *id_map,
-+					  const char *func_name)
-+{
-+	pr_debug("%s id_map::\n", func_name);
-+	bitmap_print_to_pagebuf(0, page_buf, id_map->used_ids, CORESIGHT_TRACE_IDS_MAX);
-+	pr_debug("Avial= %s\n", page_buf);
-+	bitmap_print_to_pagebuf(0, page_buf, id_map->pend_rel_ids, CORESIGHT_TRACE_IDS_MAX);
-+	pr_debug("Pend = %s\n", page_buf);
-+}
-+#define DUMP_ID_MAP(map)   coresight_trace_id_dump_table(map, __func__)
-+#define DUMP_ID_CPU(cpu, id) pr_debug("%s called;  cpu=%d, id=%d\n", __func__, cpu, id)
-+#define DUMP_ID(id)   pr_debug("%s called; id=%d\n", __func__, id)
-+#define PERF_SESSION(n) pr_debug("%s perf count %d\n", __func__, n)
-+#else
-+#define DUMP_ID_MAP(map)
-+#define DUMP_ID(id)
-+#define DUMP_ID_CPU(cpu, id)
-+#define PERF_SESSION(n)
-+#endif
-+
- /* release all pending IDs for all current maps & clear CPU associations */
- static void coresight_trace_id_release_all_pending(void)
- {
-@@ -88,6 +112,7 @@ static void coresight_trace_id_release_all_pending(void)
- 		}
- 	}
- 	spin_unlock_irqrestore(&id_map_lock, flags);
-+	DUMP_ID_MAP(id_map);
- }
- 
- static int coresight_trace_id_map_get_cpu_id(int cpu, struct coresight_trace_id_map *id_map)
-@@ -123,6 +148,8 @@ static int coresight_trace_id_map_get_cpu_id(int cpu, struct coresight_trace_id_
- get_cpu_id_out:
- 	spin_unlock_irqrestore(&id_map_lock, flags);
- 
-+	DUMP_ID_CPU(cpu, id);
-+	DUMP_ID_MAP(id_map);
- 	return id;
- }
- 
-@@ -150,6 +177,8 @@ static void coresight_trace_id_map_put_cpu_id(int cpu, struct coresight_trace_id
- 
- 	spin_unlock_irqrestore(&id_map_lock, flags);
- put_cpu_id_out:
-+	DUMP_ID_CPU(cpu, id);
-+	DUMP_ID_MAP(id_map);
- }
- 
- static int coresight_trace_id_map_get_system_id(struct coresight_trace_id_map *id_map)
-@@ -161,6 +190,8 @@ static int coresight_trace_id_map_get_system_id(struct coresight_trace_id_map *i
- 	id = coresight_trace_id_alloc_new_id(id_map, 0);
- 	spin_unlock_irqrestore(&id_map_lock, flags);
- 
-+	DUMP_ID(id);
-+	DUMP_ID_MAP(id_map);
- 	return id;
- }
- 
-@@ -171,6 +202,9 @@ static void coresight_trace_id_map_put_system_id(struct coresight_trace_id_map *
- 	spin_lock_irqsave(&id_map_lock, flags);
- 	coresight_trace_id_free(id, id_map);
- 	spin_unlock_irqrestore(&id_map_lock, flags);
-+
-+	DUMP_ID(id);
-+	DUMP_ID_MAP(id_map);
- }
- 
- /* API functions */
-@@ -207,6 +241,7 @@ EXPORT_SYMBOL_GPL(coresight_trace_id_put_system_id);
- void coresight_trace_id_perf_start(void)
- {
- 	atomic_inc(&perf_cs_etm_session_active);
-+	PERF_SESSION(atomic_read(&perf_cs_etm_session_active));
- }
- EXPORT_SYMBOL_GPL(coresight_trace_id_perf_start);
- 
-@@ -214,6 +249,7 @@ void coresight_trace_id_perf_stop(void)
- {
- 	if (!atomic_dec_return(&perf_cs_etm_session_active))
- 		coresight_trace_id_release_all_pending();
-+	PERF_SESSION(atomic_read(&perf_cs_etm_session_active));
- }
- EXPORT_SYMBOL_GPL(coresight_trace_id_perf_stop);
- 
+Personally, I'm not sure there is anything more I can do to convince
+you that this patchset is reasonable; I'm going to leave it to others
+at this point, or we can all simply agree to disagree for the moment.
+Just as you haven't heard a compelling argument for this patchset, I
+haven't heard a compelling argument against it.  Barring some
+significant new discussion point, or opinion, I still plan on merging
+this into the LSM next branch when the merge window closes next week
+so it has time to go through a full round of linux-next testing.
+Assuming no unresolvable problems are found during the additional
+testing I plan to send it to Linus during the v6.1 merge window and
+I'm guessing we will get to go through this all again.  It's less than
+ideal, but I think this is where we are at right now.
+
 -- 
-2.17.1
-
+paul-moore.com

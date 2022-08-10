@@ -2,116 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4619958E45A
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 03:09:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1B958E45D
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 03:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229927AbiHJBJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 21:09:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34250 "EHLO
+        id S229940AbiHJBJu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 21:09:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229952AbiHJBI7 (ORCPT
+        with ESMTP id S229934AbiHJBJS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 21:08:59 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9CD0804A8;
-        Tue,  9 Aug 2022 18:08:55 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id s206so12970113pgs.3;
-        Tue, 09 Aug 2022 18:08:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=UpOhBIejKfcj5e+Ps9ytmdQy+VLPpHfE4fHPr6Z2n0Q=;
-        b=iH/wKYJ97xqOQzT097OZqousXle776MgXBwzGnv+7CRZk5/rt3dFy/FKJmdMNf3OoH
-         HphmMvF9IKCDJ8Qs4ZBZnfyFLyBw67FjskZC6dBRB/qGgwTDAXnTKFqFeXEXxZUluz1b
-         Qv/Ps6nGToNsniAbq1tQ0dilX6fCscr5BYV9DZpID+ObSMZ9rbr4CD7Y3ltaDJbqzVtu
-         zVOga0WS0hEAc+XjhK6zZdF3mDbqn9ZDu2XMJnFhvDdTwX+CN7CyTJKCidLQ5R9pqsNQ
-         DdMaYsTodUBtkR675MMfRD1yu+sz/expR+znh8vlKL8WEsGe5eOzkcNWzEy7jkr6vlXG
-         r3/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=UpOhBIejKfcj5e+Ps9ytmdQy+VLPpHfE4fHPr6Z2n0Q=;
-        b=P7DBysEjHVsxLFWFcI7aycL4GFFAELbsjlbR78NQuzFnXSGqHlncV9pIQpeRSkUUrz
-         03S8nSirkPaVK7qcuKGKIRtXx0fmdjkQxUFn5LOAW/WkPcmSXcTosGD/Sr1hQLaykyvI
-         e32CsSnlDq0P48BUwQFTi8sEaPuDiJWKVF3xst3B1PhjxgQs/WA7x/988zNQx5OITbbs
-         JYdFL1yTe4qUGCarPbKsH0LplMTBqOs+uxgoBXPNtrF6mfDf67DMK+FGILk2YVjorIOV
-         erf9RoyuhcFMLcuKcZ5cN0TcLOYqjlNXIZ31dGGXGrAgRf+gop+uHpXKdykWBkpIrUzu
-         bfng==
-X-Gm-Message-State: ACgBeo1DqJEy6aHSSpdJ/OfO4ujmKOtp81k8dp15YS5vp72u0+eEBqqy
-        kGjWgJ3lb1kPxjxO83XKiFs4fjkPYGXB8FVAwLo=
-X-Google-Smtp-Source: AA6agR6FNHKbAfMPXbJXuA4T8c4LC45hJY84BOuA/qxExxvpBTDck501Q4UDBw/7F9uL+xjieKf8reGyOszvoft0KkQ=
-X-Received: by 2002:a05:6a00:13a7:b0:52e:3139:f895 with SMTP id
- t39-20020a056a0013a700b0052e3139f895mr25037838pfg.43.1660093735211; Tue, 09
- Aug 2022 18:08:55 -0700 (PDT)
+        Tue, 9 Aug 2022 21:09:18 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCBDE7FE65
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 18:09:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660093757; x=1691629757;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=y16BOvHxV1nZ3NiVQoMe+MGNwetNYFK6shxb0qVq6cM=;
+  b=d1ApnK5IS2+3DyFsYfh6vyAv7rYOID6GFP/SGbhY0aAVx8KwQ0++URMT
+   vI2dFcwkPtdDpmsaXYCDE93ZGvWAtbu4P/LlwNFyYV4IN99ey/0Q6QANV
+   pivEhIf0XcDobqotyNe6oNQkTYTCfQj/swOToua58BAydsHt+0c/kjBl0
+   e8KYsRlzXXNaIlvj8l6+dgX0ZgUz6ehBU4Odjme5wfrzkv1OUzzGLEmct
+   qiaBlW0keknhKtSvOfT6eN4+uxGoQa7uesBH1ImTM6w/D1E3aYacKRydr
+   4WBjNrNFzmxCBuKsgELuGBxzd4pC39wkT4KOdtWufA7edbLvkP3u0uW1d
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="270743874"
+X-IronPort-AV: E=Sophos;i="5.93,225,1654585200"; 
+   d="scan'208";a="270743874"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 18:09:14 -0700
+X-IronPort-AV: E=Sophos;i="5.93,225,1654585200"; 
+   d="scan'208";a="781058671"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 18:09:10 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
+Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
+        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Tim C Chen <tim.c.chen@intel.com>,
+        Michal Hocko <mhocko@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com
+Subject: Re: [PATCH v13 4/9] mm/demotion/dax/kmem: Set node's abstract
+ distance to MEMTIER_DEFAULT_DAX_ADISTANCE
+References: <20220808062601.836025-1-aneesh.kumar@linux.ibm.com>
+        <20220808062601.836025-5-aneesh.kumar@linux.ibm.com>
+        <87o7wuglrq.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <46c8d7c2-004f-1945-8614-2452d4f28d2a@linux.ibm.com>
+Date:   Wed, 10 Aug 2022 09:09:07 +0800
+In-Reply-To: <46c8d7c2-004f-1945-8614-2452d4f28d2a@linux.ibm.com> (Aneesh
+        Kumar K. V.'s message of "Tue, 9 Aug 2022 11:03:22 +0530")
+Message-ID: <87o7wsgb0s.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-References: <20220809175513.345597655@linuxfoundation.org>
-In-Reply-To: <20220809175513.345597655@linuxfoundation.org>
-From:   Zan Aziz <zanaziz313@gmail.com>
-Date:   Tue, 9 Aug 2022 19:08:43 -0600
-Message-ID: <CAFU3qob1YMpGNeATYENBZgL28VcCUEO709sYQf2Jbx0snRN4Bw@mail.gmail.com>
-Subject: Re: [PATCH 5.19 00/21] 5.19.1-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 9, 2022 at 12:58 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
+
+> On 8/9/22 8:34 AM, Huang, Ying wrote:
+>> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
+>> 
+>>> By default, all nodes are assigned to the default memory tier which
+>>> is the memory tier designated for nodes with DRAM
+>>>
+>>> Set dax kmem device node's tier to slower memory tier by assigning
+>>> abstract distance to MEMTIER_DEFAULT_DAX_ADISTANCE. Low-level drivers
+>>> like papr_scm or ACPI NFIT can initialize memory device type to a
+>>> more accurate value based on device tree details or HMAT.
+>> 
+>> I don't know how ACPI NFIT can help here.  Can you teach me?
+>> 
+>> Per my understanding, we may use the information provided by ACPI SLIT
+>> or HMAT (or device tree via papr_scm) to create memory types.  Before
+>> that is implemented, we just create a memory type with default abstract
+>> distance.
+>> 
 >
-> This is the start of the stable review cycle for the 5.19.1 release.
-> There are 21 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 11 Aug 2022 17:55:02 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.1-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+> My idea is to use ACPI NFIT driver that creates a persistent memory region
+> (nvdimm_region_create) to also create memory type and assign that to the
+> NUMA node mapping that region. For now NFIT driver manages all the persistent
+> memory region/DIMM creation (drivers/acpi/nfit/core.c). It can also do the
+> memory type creation using other ACPI information like SLIT/HMAT etc. Similarly
+> CXL driver can do the same using CDAT.
 
-Hi Greg,
+I still think that it's better to create memory types in dax/kmem.c and
+CXL driver.  But we can discuss further on that later.
 
-Compiled and booted on my test system Lenovo P50s: Intel Core i7
-No emergency and critical messages in the dmesg
-
-./perf bench sched all
-# Running sched/messaging benchmark...
-# 20 sender and receiver processes per group
-# 10 groups == 400 processes run
-
-     Total time: 0.865 [sec]
-
-# Running sched/pipe benchmark...
-# Executed 1000000 pipe operations between two processes
-
-     Total time: 10.206 [sec]
-
-      10.206371 usecs/op
-          97978 ops/sec
-
-Tested-by: Zan Aziz <zanaziz313@gmail.com>
-
-Thanks
--Zan
+Best Regards,
+Huang, Ying

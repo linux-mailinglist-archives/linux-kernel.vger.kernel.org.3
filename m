@@ -2,64 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C78358E4BA
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 03:54:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40D1058E4BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 03:57:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbiHJByS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 21:54:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44454 "EHLO
+        id S230187AbiHJB5E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 21:57:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbiHJByI (ORCPT
+        with ESMTP id S230184AbiHJB4u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 21:54:08 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0664E7B795
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 18:54:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660096448; x=1691632448;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=CyHQEakw+ZOvcBXAXXIIx7q7LG9CfGlIZtoo3MXTCXc=;
-  b=frLyoe5sYfX5epHrlO6d2mkNAIXF45+QOfTDpAoju3fKOPmiail/W5tg
-   iWU6wxlNe/4cmgBMTIcTlgDu/kQvZ0TCWzR24dPPPh1hzV1dz2vsgXA+5
-   F8od9j+JQJb2VGtfOgPSrT3NETYsdvyW1GKmSmNeiD7Sj56YC6EBXVKx5
-   owJjEDmoIFUJBRMU8F1XYRmkFQnmcqbGR7uMfImEi3Q0g7mim3Jb+KcBu
-   ozjtvTPhmuihwfbNcW3D8YvKYpJOCbK/hRN1nuK/eAzSJScWFlkx74GSI
-   MW7EUsBx9HBPXMv04MkbRSRLgzLu2XxPbGmgaVUCguQ6YH28c4UrZc8Ej
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="289729477"
-X-IronPort-AV: E=Sophos;i="5.93,225,1654585200"; 
-   d="scan'208";a="289729477"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 18:54:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,225,1654585200"; 
-   d="scan'208";a="555556528"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 09 Aug 2022 18:54:05 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oLav6-000NPx-2t;
-        Wed, 10 Aug 2022 01:54:04 +0000
-Date:   Wed, 10 Aug 2022 09:53:59 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Patricia Alfonso <trishalfonso@google.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Richard Weinberger <richard@nod.at>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        David Gow <davidgow@google.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>
-Subject: arch/um/os-Linux/mem.c:28:6: warning: no previous prototype for
- 'kasan_map_memory'
-Message-ID: <202208100915.RsOr5Nax-lkp@intel.com>
+        Tue, 9 Aug 2022 21:56:50 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17A0B7C184
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 18:56:48 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M2Y0K3g6szmVdJ;
+        Wed, 10 Aug 2022 09:54:41 +0800 (CST)
+Received: from dggpemm500014.china.huawei.com (7.185.36.153) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 10 Aug 2022 09:56:45 +0800
+Received: from huawei.com (7.220.126.23) by dggpemm500014.china.huawei.com
+ (7.185.36.153) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 10 Aug
+ 2022 09:56:44 +0800
+From:   zhangsong <zhangsong34@huawei.com>
+To:     <mingo@redhat.com>, <peterz@infradead.org>,
+        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>
+CC:     <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
+        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
+        <vschneid@redhat.com>, <linux-kernel@vger.kernel.org>,
+        zhangsong <zhangsong34@huawei.com>,
+        "kernel test robot" <lkp@intel.com>
+Subject: [PATCH v2] sched/fair: Introduce priority load balance to reduce interference from IDLE tasks
+Date:   Wed, 10 Aug 2022 09:56:36 +0800
+Message-ID: <20220810015636.3865248-1-zhangsong34@huawei.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [7.220.126.23]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500014.china.huawei.com (7.185.36.153)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,64 +54,189 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Patricia,
+For co-location with NORMAL and IDLE tasks, when CFS trigger load balance,
+it is reasonable to prefer migrating NORMAL(Latency Sensitive) tasks from
+the busy src CPU to dst CPU, and migrating IDLE tasks lastly.
 
-FYI, the error/warning still remains.
+This is very important for reducing interference from IDLE tasks.
+So the CFS load balance can be optimized to below:
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   15205c2829ca2cbb5ece5ceaafe1171a8470e62b
-commit: 5b301409e8bc5d7fad2ee138be44c5c529dd0874 UML: add support for KASAN under x86_64
-date:   3 weeks ago
-config: um-x86_64_defconfig (https://download.01.org/0day-ci/archive/20220810/202208100915.RsOr5Nax-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5b301409e8bc5d7fad2ee138be44c5c529dd0874
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 5b301409e8bc5d7fad2ee138be44c5c529dd0874
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=um SUBARCH=x86_64 SHELL=/bin/bash
+1.`cfs_tasks` list of CPU rq is owned by NORMAL tasks.
+2.`cfs_idle_tasks` list of CPU rq which is owned by IDLE tasks.
+3.Prefer to migrate NORMAL tasks of cfs_tasks to dst CPU.
+4.Lastly migrate IDLE tasks of cfs_idle_tasks to dst CPU.
 
-If you fix the issue, kindly add following tag where applicable
+This was tested with the following reproduction:
+- small number of NORMAL tasks colocated with a large number of IDLE tasks
+
+With this patch, NORMAL tasks latency can be reduced
+about 5~10% compared with current.
+
+Signed-off-by: zhangsong <zhangsong34@huawei.com>
 Reported-by: kernel test robot <lkp@intel.com>
+---
+V1->V2:
+- fix build test error
+---
+ kernel/sched/core.c  |  1 +
+ kernel/sched/fair.c  | 45 ++++++++++++++++++++++++++++++++++++++++----
+ kernel/sched/sched.h |  1 +
+ 3 files changed, 43 insertions(+), 4 deletions(-)
 
-All warnings (new ones prefixed by >>):
-
->> arch/um/os-Linux/mem.c:28:6: warning: no previous prototype for 'kasan_map_memory' [-Wmissing-prototypes]
-      28 | void kasan_map_memory(void *start, size_t len)
-         |      ^~~~~~~~~~~~~~~~
-   arch/um/os-Linux/mem.c:212:13: warning: no previous prototype for 'check_tmpexec' [-Wmissing-prototypes]
-     212 | void __init check_tmpexec(void)
-         |             ^~~~~~~~~~~~~
-
-
-vim +/kasan_map_memory +28 arch/um/os-Linux/mem.c
-
-    19	
-    20	/*
-    21	 * kasan_map_memory - maps memory from @start with a size of @len.
-    22	 * The allocated memory is filled with zeroes upon success.
-    23	 * @start: the start address of the memory to be mapped
-    24	 * @len: the length of the memory to be mapped
-    25	 *
-    26	 * This function is used to map shadow memory for KASAN in uml
-    27	 */
-  > 28	void kasan_map_memory(void *start, size_t len)
-    29	{
-    30		if (mmap(start,
-    31			 len,
-    32			 PROT_READ|PROT_WRITE,
-    33			 MAP_FIXED|MAP_ANONYMOUS|MAP_PRIVATE|MAP_NORESERVE,
-    34			 -1,
-    35			 0) == MAP_FAILED) {
-    36			os_info("Couldn't allocate shadow memory: %s\n.",
-    37				strerror(errno));
-    38			exit(1);
-    39		}
-    40	}
-    41	
-
+diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+index ee28253c9ac0..7325c6e552d8 100644
+--- a/kernel/sched/core.c
++++ b/kernel/sched/core.c
+@@ -9733,6 +9733,7 @@ void __init sched_init(void)
+ 		rq->max_idle_balance_cost = sysctl_sched_migration_cost;
+ 
+ 		INIT_LIST_HEAD(&rq->cfs_tasks);
++		INIT_LIST_HEAD(&rq->cfs_idle_tasks);
+ 
+ 		rq_attach_root(rq, &def_root_domain);
+ #ifdef CONFIG_NO_HZ_COMMON
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 914096c5b1ae..b62bec5b1eb9 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -3034,6 +3034,21 @@ static inline void update_scan_period(struct task_struct *p, int new_cpu)
+ 
+ #endif /* CONFIG_NUMA_BALANCING */
+ 
++#ifdef CONFIG_SMP
++static void
++adjust_rq_cfs_tasks(void (*list_op)(struct list_head *, struct list_head *),
++	struct rq *rq,
++	struct sched_entity *se)
++{
++	struct cfs_rq *cfs_rq = cfs_rq_of(se);
++
++	if (task_has_idle_policy(task_of(se)) || tg_is_idle(cfs_rq->tg))
++		(*list_op)(&se->group_node, &rq->cfs_idle_tasks);
++	else
++		(*list_op)(&se->group_node, &rq->cfs_tasks);
++}
++#endif
++
+ static void
+ account_entity_enqueue(struct cfs_rq *cfs_rq, struct sched_entity *se)
+ {
+@@ -3043,7 +3058,7 @@ account_entity_enqueue(struct cfs_rq *cfs_rq, struct sched_entity *se)
+ 		struct rq *rq = rq_of(cfs_rq);
+ 
+ 		account_numa_enqueue(rq, task_of(se));
+-		list_add(&se->group_node, &rq->cfs_tasks);
++		adjust_rq_cfs_tasks(list_add, rq, se);
+ 	}
+ #endif
+ 	cfs_rq->nr_running++;
+@@ -7465,7 +7480,7 @@ done: __maybe_unused;
+ 	 * the list, so our cfs_tasks list becomes MRU
+ 	 * one.
+ 	 */
+-	list_move(&p->se.group_node, &rq->cfs_tasks);
++	adjust_rq_cfs_tasks(list_move, rq, &p->se);
+ #endif
+ 
+ 	if (hrtick_enabled_fair(rq))
+@@ -7788,6 +7803,9 @@ static int task_hot(struct task_struct *p, struct lb_env *env)
+ 	if (unlikely(task_has_idle_policy(p)))
+ 		return 0;
+ 
++	if (tg_is_idle(cfs_rq_of(&p->se)->tg))
++		return 0;
++
+ 	/* SMT siblings share cache */
+ 	if (env->sd->flags & SD_SHARE_CPUCAPACITY)
+ 		return 0;
+@@ -7800,6 +7818,11 @@ static int task_hot(struct task_struct *p, struct lb_env *env)
+ 			 &p->se == cfs_rq_of(&p->se)->last))
+ 		return 1;
+ 
++	/* Preempt sched idle cpu do not consider migration cost */
++	if (cpus_share_cache(env->src_cpu, env->dst_cpu) &&
++	    sched_idle_cpu(env->dst_cpu))
++		return 0;
++
+ 	if (sysctl_sched_migration_cost == -1)
+ 		return 1;
+ 
+@@ -7990,11 +8013,14 @@ static void detach_task(struct task_struct *p, struct lb_env *env)
+ static struct task_struct *detach_one_task(struct lb_env *env)
+ {
+ 	struct task_struct *p;
++	struct list_head *tasks = &env->src_rq->cfs_tasks;
++	int loop = 0;
+ 
+ 	lockdep_assert_rq_held(env->src_rq);
+ 
++again:
+ 	list_for_each_entry_reverse(p,
+-			&env->src_rq->cfs_tasks, se.group_node) {
++			tasks, se.group_node) {
+ 		if (!can_migrate_task(p, env))
+ 			continue;
+ 
+@@ -8009,6 +8035,10 @@ static struct task_struct *detach_one_task(struct lb_env *env)
+ 		schedstat_inc(env->sd->lb_gained[env->idle]);
+ 		return p;
+ 	}
++	if (++loop == 1) {
++		tasks = &env->src_rq->cfs_idle_tasks;
++		goto again;
++	}
+ 	return NULL;
+ }
+ 
+@@ -8026,6 +8056,7 @@ static int detach_tasks(struct lb_env *env)
+ 	unsigned long util, load;
+ 	struct task_struct *p;
+ 	int detached = 0;
++	int loop = 0;
+ 
+ 	lockdep_assert_rq_held(env->src_rq);
+ 
+@@ -8041,6 +8072,7 @@ static int detach_tasks(struct lb_env *env)
+ 	if (env->imbalance <= 0)
+ 		return 0;
+ 
++again:
+ 	while (!list_empty(tasks)) {
+ 		/*
+ 		 * We don't want to steal all, otherwise we may be treated likewise,
+@@ -8142,6 +8174,11 @@ static int detach_tasks(struct lb_env *env)
+ 		list_move(&p->se.group_node, tasks);
+ 	}
+ 
++	if (env->imbalance > 0 && ++loop == 1) {
++		tasks = &env->src_rq->cfs_idle_tasks;
++		goto again;
++	}
++
+ 	/*
+ 	 * Right now, this is one of only two places we collect this stat
+ 	 * so we can safely collect detach_one_task() stats here rather
+@@ -11643,7 +11680,7 @@ static void set_next_task_fair(struct rq *rq, struct task_struct *p, bool first)
+ 		 * Move the next running task to the front of the list, so our
+ 		 * cfs_tasks list becomes MRU one.
+ 		 */
+-		list_move(&se->group_node, &rq->cfs_tasks);
++		adjust_rq_cfs_tasks(list_move, rq, se);
+ 	}
+ #endif
+ 
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index e26688d387ae..accb4eea9769 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -1068,6 +1068,7 @@ struct rq {
+ 	int			online;
+ 
+ 	struct list_head cfs_tasks;
++	struct list_head cfs_idle_tasks;
+ 
+ 	struct sched_avg	avg_rt;
+ 	struct sched_avg	avg_dl;
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.27.0
+

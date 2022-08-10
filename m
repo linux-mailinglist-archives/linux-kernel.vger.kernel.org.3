@@ -2,107 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39FD958F2D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 21:13:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13D7158F2E4
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 21:16:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232647AbiHJTNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 15:13:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45148 "EHLO
+        id S232973AbiHJTQS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 15:16:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231409AbiHJTNP (ORCPT
+        with ESMTP id S232796AbiHJTQQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 15:13:15 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C980F1EAC2
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 12:13:13 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-10e615a36b0so18945232fac.1
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 12:13:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=KuLf+etUhT8CcgIrZoHXO32gzepZ3ln/4TrZlz8orFg=;
-        b=u5lEkBau5ums583shjRAJhrdbIjintCen6qFp4XH5imxJ+M8xX8H8MQ+5NIMhZBZ8i
-         IeQN/5+ZiBbLVpnL/7xXFhH7xRoUbK0KetOMetUjHenIqQkyw54DJsvuA3z98GvAE9iH
-         G0VEdnytyPseQBthMahRq+EFibRw4CB+uK4VWF72mRoXGJmV4vNdWD3JHmHRxpP+ACle
-         6b5GLgxfxjOnvDTUikGtWEhDDGi4TAD5fObpvDyF1/LQLrBR1CHMddWmVd63y1I5VcnA
-         WpkvX8puvnJPaELZz8V9QCipettf+POKSz9BDONtQo43feT+1fWaBJCaVwgM9SGBxHe2
-         vcTg==
+        Wed, 10 Aug 2022 15:16:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2AD14286FA
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 12:16:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660158975;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Yuk7N/xiq0HIW33fh8ipQmpkKHx9Ov4tG2OqBXiygDw=;
+        b=G7p2L5HkJUK9+iaQXO7a4Rjzu9BWXdZhhA+MxG2801TnW8LV/RYVf8iD/iPZfr5uuQXEoF
+        YZgltLIq4J27q9XYsTXpfPUD9F3w45gePYlvXqwBtDVzHySWmx0Ap7FQ6PJklYlSLVpdYE
+        3pyhHgiQSteSQ9b4grWg2EnYlezI2WU=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-660-rOYcSoUgN_OwsqE88w8g9w-1; Wed, 10 Aug 2022 15:16:14 -0400
+X-MC-Unique: rOYcSoUgN_OwsqE88w8g9w-1
+Received: by mail-ed1-f72.google.com with SMTP id i5-20020a05640242c500b0043e50334109so9782936edc.1
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 12:16:13 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=KuLf+etUhT8CcgIrZoHXO32gzepZ3ln/4TrZlz8orFg=;
-        b=jVan51AK38NPGNJgKMp+L8AgAl1E6DS04tgilLkQCUR5DEIzQ+MCI65KLyz90gsCx/
-         n1fQ6ml7Abomm4DdKQMBnFGk+89smr6htHLXjVR5ZaZvItP+XiRcLZ7OfBFoPh9t6Lna
-         f+pW6596zz0f8AIt1EP/A30bCEvRWTM+o6TsrsbHvme+UxDuEg291aHj0iSObLRfy56u
-         CyYY1CnSlP4ic9A/KoLJwcUeAPXRRSW5ERyrLkOd49Tn/z8nQyW5HMdI9l5UPmaS8Mzo
-         kJa2RMl0qmX6awEr0IWcqrp54aM9sDUL+OPqPPDUgc8L6XUyKhxkpym4ocoPR9otfFkE
-         9Ssw==
-X-Gm-Message-State: ACgBeo3yeZvkAHow9T7HhTe7y5XKB4FkLZ4bF7DSV107aIHZQbYEDQU2
-        UQa9oVAG8+z23JVjRVkJDQ+eOw==
-X-Google-Smtp-Source: AA6agR7Nri3uTxawS16Y0qws9GGPb++KL1oO57PREQCriDiGj2oEfmlndbYlomXZr8j21bdRn38m3Q==
-X-Received: by 2002:a05:6870:e390:b0:10e:893b:f1d9 with SMTP id x16-20020a056870e39000b0010e893bf1d9mr2028913oad.88.1660158793139;
-        Wed, 10 Aug 2022 12:13:13 -0700 (PDT)
-Received: from ripper (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id n15-20020a4ad12f000000b00425678b9c4bsm789575oor.0.2022.08.10.12.13.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 12:13:12 -0700 (PDT)
-Date:   Wed, 10 Aug 2022 12:15:49 -0700
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Steev Klimaszewski <steev@kali.org>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 0/2] power: supply: Lenovo Yoga C630 EC
-Message-ID: <YvQD5S8m6290EcEJ@ripper>
-References: <20220810030500.2793882-1-bjorn.andersson@linaro.org>
- <b06adc0e-6e24-5419-4e6f-33ae2029b828@kali.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=Yuk7N/xiq0HIW33fh8ipQmpkKHx9Ov4tG2OqBXiygDw=;
+        b=py7ce0TmQjK2p5CUvzume/hnEqk9jc2jPRCJhvKV4WGqVUZIIoOUqzXXFSNyKSwV3O
+         k2cVYiuzQCt8xLRfYIglWptuyLQpew+bk96qfcP4BWFTHeztRG+GmQiaJy39twGEG4qx
+         qfHoxikDABejeWM5Wc3FXL/oblv18eUdkAGF3ILet6igLuf39hRQXBZk1NtWAn7X917V
+         RiD9KS/d/UpCLBjfRkvbjSXZyZYb1IQV/8P8DAoAAH5pAucNjgSS1fFZAqYnziNBzIYA
+         WCp2hoM3x7SAZAn7MgF1CDgux3xkI8jl7OkrBgnCDU7h3RZyKMMQaVq+9aI7RN56Xj7x
+         EJTQ==
+X-Gm-Message-State: ACgBeo0ubTuDGDWgg+l9btullvtuQDFYKIdcTd72jp9qfXIeuViEqdcB
+        smAAtrSCxDKMmao50MHAWdYZTtJ+F1Nj8IzULK/bno6FG9DjXt9MAb56vH4LyHi1U8JrDcnGGJg
+        xI1jK/MjL1F9fMBa/3Isf7Lcj
+X-Received: by 2002:a17:907:2d12:b0:731:6a4e:ceb0 with SMTP id gs18-20020a1709072d1200b007316a4eceb0mr10079037ejc.115.1660158972001;
+        Wed, 10 Aug 2022 12:16:12 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6+FYQetpU3q/Q5uOyO8nSkvyFk5TvPqTUmApwtAkGzu9ywUxx5N/JvC3UE+anDgXpNN9zzBg==
+X-Received: by 2002:a17:907:2d12:b0:731:6a4e:ceb0 with SMTP id gs18-20020a1709072d1200b007316a4eceb0mr10079033ejc.115.1660158971826;
+        Wed, 10 Aug 2022 12:16:11 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
+        by smtp.googlemail.com with ESMTPSA id n6-20020aa7c786000000b0043a554818afsm8082123eds.42.2022.08.10.12.16.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Aug 2022 12:16:10 -0700 (PDT)
+Message-ID: <eb0a073d-f045-a5d7-2d3d-54abe1ae478c@redhat.com>
+Date:   Wed, 10 Aug 2022 21:16:10 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b06adc0e-6e24-5419-4e6f-33ae2029b828@kali.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [RFC PATCH 2/3] KVM: x86: Generate set of VMX feature MSRs using
+ first/last definitions
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Like Xu <like.xu.linux@gmail.com>
+References: <20220805172945.35412-1-seanjc@google.com>
+ <20220805172945.35412-3-seanjc@google.com>
+ <29150d3f-36fb-516d-55d0-a9aebe23cdcf@redhat.com>
+ <YvPDYVPgrLCRlYuH@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <YvPDYVPgrLCRlYuH@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 09 Aug 21:04 PDT 2022, Steev Klimaszewski wrote:
-
+On 8/10/22 16:40, Sean Christopherson wrote:
+>> I'd rather move all the code to a new function kvm_init_feature_msr_list()
+>> instead, and call it from kvm_arch_hardware_setup().
 > 
-> On 8/9/22 10:04 PM, Bjorn Andersson wrote:
-> > This adds binding and driver for the Lenovo Yoga C630 Embedded Controller, to
-> > provide battery information and DisplayPort support.
-> > 
-> > Bjorn Andersson (2):
-> >    dt-bindings: power: supply: Add Lenovo Yoga C630 EC
-> >    power: supply: Add Lenovo Yoga C630 EC driver
-> > 
-> >   .../power/supply/lenovo,yoga-c630-ec.yaml     |  88 +++
-> >   drivers/power/supply/Kconfig                  |  11 +
-> >   drivers/power/supply/Makefile                 |   1 +
-> >   drivers/power/supply/yoga-c630-ec.c           | 547 ++++++++++++++++++
-> >   4 files changed, 647 insertions(+)
-> >   create mode 100644 Documentation/devicetree/bindings/power/supply/lenovo,yoga-c630-ec.yaml
-> >   create mode 100644 drivers/power/supply/yoga-c630-ec.c
-> > 
-> It will be so nice to drop the "some-battery" patches that I've been
-> carrying in my kernel sources since 5.7 :D
-> 
+> Would it make sense to also split out kvm_init_emulated_msr_list()?  Hmm, and
+> rename this to kvm_init_virtualized_msr_list()?  I can't tell if that would be
+> helpful or confusing.
 
-Not only that, this is the only patch I've been carrying ont op of
-Torvalds' tree for a couple of releases now. As such, if this lands, I
-expect to be able to run an unmodified v6.1 straight off on my laptop.
+I thought of feature MSRs because it's a different ioctl altogether, but 
+this is not an objection; whatever seems less confusing to you.
 
-Regards,
-Bjorn
+Paolo
 
-> Tested-by: Steev Klimaszewski <steev@kali.org>
-> 

@@ -2,112 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3024B58E9A0
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 11:29:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 793E758E9B1
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 11:32:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232098AbiHJJ3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 05:29:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55176 "EHLO
+        id S232072AbiHJJcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 05:32:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232097AbiHJJ3H (ORCPT
+        with ESMTP id S232120AbiHJJcq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 05:29:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D3C316B662
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 02:29:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660123744;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cYlVavV3CJNDmR/k23+nnTOqqc22cvfzjUUlVxgKawU=;
-        b=VST4oFlF9bHb71OO0hPH1Ey8qI6kOu4nkyggi7JQnAzrhvaRYQuVtAUM0+vdFpY9hRoTGj
-        2ss7KSg7vMUh2T8fSLKfSPVdsbqZ7eKkGUg0OtRcgK9aj4UBSsuG9K+YnltK7Jw1McIQrY
-        jbfpUKdxCXxWT4v/4XmN2Jrl/YaWpzE=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-436-NYWbvh1iP-SbbKYv7jw6Tg-1; Wed, 10 Aug 2022 05:29:03 -0400
-X-MC-Unique: NYWbvh1iP-SbbKYv7jw6Tg-1
-Received: by mail-wr1-f72.google.com with SMTP id m2-20020adfc582000000b0021e28acded7so2187843wrg.13
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 02:29:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=cYlVavV3CJNDmR/k23+nnTOqqc22cvfzjUUlVxgKawU=;
-        b=q6fqyDSXFfH4WY1SB90CuGgeZHiW29GDuhtO7pdVsdjtjEYhWDrcTfO+00lbh4nVRL
-         syXFfQ9JmksA79qplFSdUkUScZnFLg6vn9SzEIhcVQMU2kBAN/Ev6fy7DWWFu+REaYAw
-         OEzlgCi5cUZhqU/9JuCLnLyCvTOG0m3eed7oLnHMBlomSbfd68ydZVsN7AdYoEZN6STv
-         +Pgj9AdNl8X/KncZwjOFstxFPGj20D8aczKZEmKYmHMum7edpF3M6HLaFiIDBjwmCNkN
-         AoZY10Rzam83F7XkLKzWOM5Ij4eiXNMNH6d1vC7amaMAS0BKhfWZTdbwmr3gNOiR0Xky
-         XaAw==
-X-Gm-Message-State: ACgBeo0l7m2hjT6UidAbSMpA9OH4VVmHb0aXCzwg3j8vHzT+GMXBiXG+
-        jbcvjv6eJBtD26cKBFVzUrbpQ1PKv82dxsSGBOOEtNwljl/f1KXQ1TBZfPpyHlLSPJSqYirNj1t
-        bPoA1XsGGpefnjHyamYg6Re5e
-X-Received: by 2002:a05:600c:5125:b0:3a4:f57b:d34c with SMTP id o37-20020a05600c512500b003a4f57bd34cmr1796438wms.193.1660123742438;
-        Wed, 10 Aug 2022 02:29:02 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5Ow3GCEx+75VtQ8c5nEXiLi3RCfkdiTsOt80b5J4UMof9inMEunF/B0LrI+KlpZGPls9w9Ow==
-X-Received: by 2002:a05:600c:5125:b0:3a4:f57b:d34c with SMTP id o37-20020a05600c512500b003a4f57bd34cmr1796424wms.193.1660123742178;
-        Wed, 10 Aug 2022 02:29:02 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:1600:a3ce:b459:ef57:7b93? (p200300cbc7071600a3ceb459ef577b93.dip0.t-ipconnect.de. [2003:cb:c707:1600:a3ce:b459:ef57:7b93])
-        by smtp.gmail.com with ESMTPSA id u13-20020a5d514d000000b0021d7ad6b9fdsm15792376wrt.57.2022.08.10.02.29.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Aug 2022 02:29:01 -0700 (PDT)
-Message-ID: <40b78cfd-c43a-8624-cd1e-8680a081a10d@redhat.com>
-Date:   Wed, 10 Aug 2022 11:29:01 +0200
+        Wed, 10 Aug 2022 05:32:46 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF2C16DF89;
+        Wed, 10 Aug 2022 02:32:44 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27A68jdC004798;
+        Wed, 10 Aug 2022 11:32:21 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=selector1;
+ bh=JGY5zWrfCCK8U/3zgAroqF0FgJuxZGbZAnLQqoBRrso=;
+ b=0j8S3SNqXOkek34mkUPW7uFbheMJ/q/UayZS01EQTvKX2ZCKctNple+tOvUt6NQ3XLgy
+ iflhYECKtF1WaeZkpZa7A2PzvLnKvBSfKcYcnyoPUHeMxaIH0o2ttriPdHBOZojroaeW
+ +R930MK1dlNNsgsbpbrJDhrc1c9ERT7wW1bTVTYSFBvAErdiYoWKTFnv13DItzFUo7ht
+ VOczuZv9+G37EtoMeFnkwukUOC1VQnpWfnrjx2iCkeFgDx/9gbflsMtE/l0ko4Q/eTN2
+ Uids09E37dl1rnUjsntBDXd0iw5cv5S/k0aSaZ9l+vVfDaUgshaxn/rocxeYTc9OPDud AQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3huwpmbmm8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Aug 2022 11:32:21 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id E49A110002A;
+        Wed, 10 Aug 2022 11:32:20 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id CF39421B52F;
+        Wed, 10 Aug 2022 11:32:20 +0200 (CEST)
+Received: from localhost (10.75.127.46) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Wed, 10 Aug
+ 2022 11:32:20 +0200
+From:   <patrice.chotard@foss.st.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux-spi@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>,
+        <patrice.chotard@foss.st.com>, <devicetree@vger.kernel.org>
+Subject: [PATCH v2 0/2] spi: stm32_qspi: use QSPI bus as 8 lines communication channel
+Date:   Wed, 10 Aug 2022 11:32:13 +0200
+Message-ID: <20220810093215.794977-1-patrice.chotard@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v1 1/2] mm/hugetlb: fix hugetlb not supporting
- write-notify
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Peter Feiner <pfeiner@google.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        stable@vger.kernel.org
-References: <20220805110329.80540-1-david@redhat.com>
- <20220805110329.80540-2-david@redhat.com> <Yu1eCsMqa641zj5C@xz-m1.local>
- <Yu1gHnpKRZBhSTZB@monkey> <c2a3b903-099c-4b79-6923-8b288d404c51@redhat.com>
- <Yu1ie559zt8VvDc1@monkey> <73050e64-e40f-0c94-be96-316d1e8d5f3b@redhat.com>
- <Yu2CI4wGLHCjMSWm@monkey> <Yu2kK6s8m8NLDjuV@xz-m1.local>
- <36bcc1f5-40e9-2d2b-3e94-18994bf62ca4@redhat.com>
- <YvFjww9AX/BuHdSn@xz-m1.local>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <YvFjww9AX/BuHdSn@xz-m1.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.75.127.46]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-10_03,2022-08-09_02,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08.08.22 21:28, Peter Xu wrote:
-> On Mon, Aug 08, 2022 at 06:36:58PM +0200, David Hildenbrand wrote:
->> Well, because the write-fault handler as is cannot deal with
->> write-faults in shared mappings. It cannot possibly work or ever have
->> worked.
-> 
-> Trivially - maybe drop the word "require" in "Hugetlb does not
-> require/support writenotify"?
-> 
+From: Patrice Chotard <patrice.chotard@foss.st.com>
 
-Sure, can do.
+
+The goal of this series is to allow to use QSPI bus as a 8 lines communication 
+channel for specific purpose.
+
+The QSPI block offers the possibility to communicate with 2 flashes in 
+parrallel using the dual flash mode, 8 data lines are then used.
+Usage of DT parallel-memories property is needed to enable dual flash mode.
+
+The addition of the legacy transfer_one_message() spi callback is also needed
+as currently the stm32-qspi driver only supports spi_controller_mem_ops API.
+
+
+ arch/arm/boot/dts/stm32mp15-pinctrl.dtsi |  50 +++++++----
+ arch/arm/boot/dts/stm32mp157c-ev1.dts    |  12 ++-
+ drivers/spi/spi-stm32-qspi.c             | 103 +++++++++++++++++++++--
+ 3 files changed, 139 insertions(+), 26 deletions(-)
 
 -- 
-Thanks,
-
-David / dhildenb
+2.25.1
 

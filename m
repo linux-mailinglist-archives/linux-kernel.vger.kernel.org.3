@@ -2,104 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 553B158F134
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 19:07:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E79C58F137
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 19:08:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233259AbiHJRHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 13:07:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42426 "EHLO
+        id S233277AbiHJRIk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 13:08:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233090AbiHJRHp (ORCPT
+        with ESMTP id S233148AbiHJRI2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 13:07:45 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AF886D544
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 10:07:45 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id l64so14934791pge.0
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 10:07:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=+DbX3SDxILgYRcy9rAL2BFcYYrfgkda6PI0B6f6Q+Wc=;
-        b=dXIzUSwtUBZ6mwguU9x6MqXFayTwWdFNH/quGDfA9cjEFMjiD6eWlfL3UKACXmpFwo
-         yEXz3do8WJKLybz4SqQxbq0tjhRBfuEnaPAXz+6a5hitQyZqrGh9vmHxhwXOBza8hr0I
-         CZ+eN/gi9PXzFknQXrKXv2KdcC7io2kdThNMxYtApvINmDFr8Eewi7gEVdRaxa9+aV8n
-         ORtpoQvtg9l6fwhnvjiSxYwHYLQIZAQ5RyFVuLGF4gBQ8F7xg4ef3hyznBCgqlh/jO/o
-         wVsox4lfUfkHfKUyFgh3U9uj/cxFG2BPj+FjeGBuPr0SZVdKGYX4I1XL3MlFGy35WAcS
-         qrxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=+DbX3SDxILgYRcy9rAL2BFcYYrfgkda6PI0B6f6Q+Wc=;
-        b=1pyBlrE0H2cwrlxImjSiIcQVQTNPqrrZxY5qHtMHckvcAV1d6IWzb1cqXku8lvhOo7
-         WaGscuoCRbsQMRH1K9TQgzquetNhX8vl0mtAycyvMulD+0RHeKDtTGU+0uRjRacqKJ/f
-         HKFX3Vz1FUPxLUCi5GUwdCkDeFbjElrK1tyJzCAnphMiEe0Y42IpTEoJ3J5JZRgzuoMB
-         orkX3FNqLxWvkx9bBSXN8vkAzAHT/MIzrYEKCxbQAi1FU4WaJNeQuB4fVW7AHHl5RJFu
-         XnkdsXmqtXtq1SD80UgHzyV5S+SRMbzJRm4MMllHhDii+b/nWHgEeQ7D9x2sJjga1Cn2
-         NtDw==
-X-Gm-Message-State: ACgBeo2LcRNZSfpKUuO52xw96CVw6T9ThCdH3S01axeZCUrxdKLvgiva
-        ZfEc9bRtXFwHYcjVbJohlx1qZRZPwquyGC2+8UY=
-X-Google-Smtp-Source: AA6agR6hExV1SvfL6DRTRzFUR5H98AfQE+kaKcvA7Cbd9AMeX+kOeD9uSPVVwyjGz56ei3Qfhgdd6XtAkS6/FM/rUO8=
-X-Received: by 2002:a63:8848:0:b0:41c:45da:2db9 with SMTP id
- l69-20020a638848000000b0041c45da2db9mr23108542pgd.206.1660151264726; Wed, 10
- Aug 2022 10:07:44 -0700 (PDT)
+        Wed, 10 Aug 2022 13:08:28 -0400
+Received: from 7of9.schinagl.nl (7of9.connected.by.freedominter.net [185.238.129.13])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C554B61D51;
+        Wed, 10 Aug 2022 10:08:26 -0700 (PDT)
+Received: from [10.2.12.48] (unknown [10.2.12.48])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by 7of9.schinagl.nl (Postfix) with ESMTPSA id 847CD1862968;
+        Wed, 10 Aug 2022 19:08:24 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=schinagl.nl; s=7of9;
+        t=1660151304; bh=DR6WV+9fjwKtyYwDokBzRKdbXzafPGQnd0E5u0WYmSo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=pvogSSnDLPpPySIL6smb1kDVbQZYZUNxvxZaW2N7EnSJHXgD/WyMcamsfBkHOwkY3
+         r01rcr1+YZ0PxmQiLjrUDPt9/WtotLLB70bblsZ0j9T+hpedfAtm0vB0bN5hCOrqQv
+         5/Q7bGTx8usvhyxGozRM/XGPHGKDzJWqZAt9YClU=
+Message-ID: <49ade311-76b6-4520-3a8c-fe38f1ee2a52@schinagl.nl>
+Date:   Wed, 10 Aug 2022 19:08:43 +0200
 MIME-Version: 1.0
-References: <20220805184016.2926168-1-alexlzhu@fb.com> <Yu1mcD6Jp4fCVEMi@casper.infradead.org>
- <0b16dbac6444bfcdfbeb4df4280354839bfe1a8f.camel@fb.com> <Yu1uabedm+NYnnAj@casper.infradead.org>
- <CA8C72B6-E509-4FB0-BEAA-C4368EB7A419@fb.com> <CAHbLzkp27aP4JYLPLzv2vtyzVe63bkhuZhw1jnxTF1Buvt4rew@mail.gmail.com>
- <fc108f58a4616d5d7d092a7c1f150069a92ee40c.camel@fb.com> <CAHbLzkqpn2ExBJuPD8sYJrEDCUU9=FE3GFh8kL3Bmax0KytKPw@mail.gmail.com>
- <1F8B9D85-A735-4832-AD58-CA4BD474248D@fb.com> <CAOUHufbGcuvJ8EfBkWrdCgeMCiceP0SxHZzcJnOt1Mw0P2w9kw@mail.gmail.com>
-In-Reply-To: <CAOUHufbGcuvJ8EfBkWrdCgeMCiceP0SxHZzcJnOt1Mw0P2w9kw@mail.gmail.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Wed, 10 Aug 2022 10:07:32 -0700
-Message-ID: <CAHbLzkqGq6LDDSCcFTJW9_O8dfAMje8_W6ddpDP9ESDQWUb07w@mail.gmail.com>
-Subject: Re: [PATCH v3] mm: add thp_utilization metrics to /proc/thp_utilization
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     "Alex Zhu (Kernel)" <alexlzhu@fb.com>, Rik van Riel <riel@fb.com>,
-        Kernel Team <Kernel-team@fb.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        Ning Zhang <ningzhang@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] dt-bindings: leds: Expand LED_COLOR_ID definitions
+Content-Language: nl
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Baolin Wang <baolin.wang@linaro.org>,
+        Daniel Mack <daniel@zonque.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Oleh Kravchenko <oleg@kaa.org.ua>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Simon Shields <simon@lineageos.org>,
+        Olliver Schinagl <oliver+list@schinagl.nl>,
+        devicetree@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <7c688821-140b-4b05-651b-337f602dc1fe@schinagl.nl>
+ <e38b3875-752b-0746-d6fd-0d1f537d242f@linaro.org>
+From:   Olliver Schinagl <oliver@schinagl.nl>
+In-Reply-To: <e38b3875-752b-0746-d6fd-0d1f537d242f@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 9, 2022 at 4:36 PM Yu Zhao <yuzhao@google.com> wrote:
->
-> On Tue, Aug 9, 2022 at 11:16 AM Alex Zhu (Kernel) <alexlzhu@fb.com> wrote:
-> >
-> >
-> > > OK, it is hard to tell what it looks like now. But the THPs on the
-> > > deferred split list may be on the "low utilization split" list too?
-> > > IIUC the major difference is to replace zero-filled subpage to special
-> > > zero page, so you implemented another THP split function to handle it?
-> > >
-> > > Anyway the code should answer the most questions.
-> >
-> > They can indeed end up on both lists. This did have to be handled when
-> > implementing the shrinker.
-> >
-> > We free the zero filled subpages, while modifying the existing split_huge_page()
-> > function. Will follow up that change in another patch.
->
-> FYI. This series does it:
->
-> https://lore.kernel.org/r/20210731063938.1391602-1-yuzhao@google.com/
->
-> And this one:
->
-> https://lore.kernel.org/r/1635422215-99394-1-git-send-email-ningzhang@linux.alibaba.com/
+Hey Krzysztof,
 
-Thanks, Yu. I totally forgot about these series. It is time to refresh
-my memory.
+On 10-08-2022 15:27, Krzysztof Kozlowski wrote:
+> On 10/08/2022 14:07, Olliver Schinagl wrote:
+>> In commit 853a78a7d6c7 (dt-bindings: leds: Add LED_COLOR_ID definitions,
+>> Sun Jun 9 20:19:04 2019 +0200) the most basic color definitions where
+>> added. However, there's a little more very common LED colors.
+>>
+>> While the documentation states 'add what is missing', engineers tend to
+>> be lazy and will just use what currently exists. So this patch will take
+>> (a) list from online retailers [0], [1], [2] and use the common LED
+>> colors from
+>> there, this being reasonable as this is what is currently available to
+>> purchase.
+>>
+>> Note, that LIME seems to be the modern take to 'Yellow-green' or
+>> 'Yellowish-green' from some older datasheets.
+>>
+>> [0]: https://www.digikey.com/en/products/filter/led-lighting-color/125
+>> [1]:
+>> https://eu.mouser.com/c/optoelectronics/led-lighting/led-emitters/standard-leds-smd
+>> [2]:
+>> https://nl.farnell.com/en-NL/c/optoelectronics-displays/led-products/standard-single-colour-leds-under-75ma
+>>
+>> Signed-off-by: Olliver Schinagl <oliver@schinagl.nl>
+>> ---
+>>    include/dt-bindings/leds/common.h | 28 ++++++++++++++++------------
+>>    1 file changed, 16 insertions(+), 12 deletions(-)
+>>
+>> diff --git a/include/dt-bindings/leds/common.h
+>> b/include/dt-bindings/leds/common.h
+>> index 3be89a7c20a9..1d9b955267cc 100644
+>> --- a/include/dt-bindings/leds/common.h
+>> +++ b/include/dt-bindings/leds/common.h
+>> @@ -22,18 +22,22 @@
+>>    #define LEDS_BOOST_FIXED    2
+>>
+>>    /* Standard LED colors */
+>> -#define LED_COLOR_ID_WHITE    0
+>> -#define LED_COLOR_ID_RED    1
+>> -#define LED_COLOR_ID_GREEN    2
+>> -#define LED_COLOR_ID_BLUE    3
+>> -#define LED_COLOR_ID_AMBER    4
+>> -#define LED_COLOR_ID_VIOLET    5
+>> -#define LED_COLOR_ID_YELLOW    6
+>> -#define LED_COLOR_ID_IR        7
+>> -#define LED_COLOR_ID_MULTI    8    /* For multicolor LEDs */
+>> -#define LED_COLOR_ID_RGB    9    /* For multicolor LEDs that can do
+>> arbitrary color,
+>> -                       so this would include RGBW and similar */
+>> -#define LED_COLOR_ID_MAX    10
+>> +#define LED_COLOR_ID_WHITE      0
+>> +#define LED_COLOR_ID_RED        1
+>> +#define LED_COLOR_ID_YELLOW     2
+>> +#define LED_COLOR_ID_BLUE       3
+>> +#define LED_COLOR_ID_AMBER      4
+>> +#define LED_COLOR_ID_GREEN      5
+>> +#define LED_COLOR_ID_VIOLET     6
+>> +#define LED_COLOR_ID_PUPRPLE    7
+>> +#define LED_COLOR_ID_ORANGE     8
+>> +#define LED_COLOR_ID_PINK       9
+>> +#define LED_COLOR_ID_CYAN      10
+>> +#define LED_COLOR_ID_LIME      11
+> 
+> All this is a incompatible bindings change, so shortly ABI break. You
+> cannot change defines. Feel free to add new ones.
+Yep, I realized this the moment I got your message, I was even thinking 
+about it, and figured, 'its internal defines, so should be fine' but of 
+course, backwards compatibility with old DT's indeed. In hindsight, this 
+probably could have been better as a string in the dt itself instead.
+
+I'll re-spin it, which will make the order a bit wonky, but so be it.
+
+Thanks, and sorry.
+> 
+> Best regards,
+> Krzysztof

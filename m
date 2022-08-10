@@ -2,68 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A6BE58E8F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 10:41:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DCBD58E8F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 10:41:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231761AbiHJIlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 04:41:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37008 "EHLO
+        id S231768AbiHJIlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 04:41:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231781AbiHJIku (ORCPT
+        with ESMTP id S231791AbiHJIlP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 04:40:50 -0400
-Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE45E2BB0C;
-        Wed, 10 Aug 2022 01:40:47 -0700 (PDT)
-Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
-        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 3CB0B188494E;
-        Wed, 10 Aug 2022 08:40:46 +0000 (UTC)
-Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
-        by mailout.gigahost.dk (Postfix) with ESMTP id 344BB25032B7;
-        Wed, 10 Aug 2022 08:40:46 +0000 (UTC)
-Received: by smtp.gigahost.dk (Postfix, from userid 1000)
-        id 2B1A7A1A004D; Wed, 10 Aug 2022 08:40:46 +0000 (UTC)
-X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
-MIME-Version: 1.0
-Date:   Wed, 10 Aug 2022 10:40:45 +0200
-From:   netdev@kapio-technology.com
-To:     Ido Schimmel <idosch@nvidia.com>
-Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
- flag to drivers
-In-Reply-To: <YvNcitNnyFxTw8bs@shredder>
-References: <20220708091550.2qcu3tyqkhgiudjg@skbuf>
- <e3ea3c0d72c2417430e601a150c7f0dd@kapio-technology.com>
- <20220708115624.rrjzjtidlhcqczjv@skbuf>
- <723e2995314b41ff323272536ef27341@kapio-technology.com>
- <YsqPWK67U0+Iw2Ru@shredder>
- <d3f674dc6b4f92f2fda3601685c78ced@kapio-technology.com>
- <Ys69DiAwT0Md+6ai@shredder>
- <79683d9cf122e22b66b5da3bbbb0ee1f@kapio-technology.com>
- <YvIm+OvXvxbH6POv@shredder>
- <6c6fe135ce7b5b118289dc370135b0d3@kapio-technology.com>
- <YvNcitNnyFxTw8bs@shredder>
-User-Agent: Gigahost Webmail
-Message-ID: <2491232d5c017d94ca3213197a3fb283@kapio-technology.com>
-X-Sender: netdev@kapio-technology.com
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Wed, 10 Aug 2022 04:41:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B200A5FADF;
+        Wed, 10 Aug 2022 01:41:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 117E260F2F;
+        Wed, 10 Aug 2022 08:41:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 671A9C433D6;
+        Wed, 10 Aug 2022 08:41:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660120872;
+        bh=W+5o4r15y/YZOMNcS6zt9psCyFTlTq1LiJF1ngryy9A=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=n222h+XwRK28pcXwKMTejItjWNIhfdJF4v4oQ68ChMut2KZ2ek8ntZJZtXUNNceNW
+         60cmbWLmjDFZYqbsj67G9f9oz9y6k8d2sFngcHo9HETmFNJ4Wn7jAXv3/tmV9dOqQ6
+         gOM9idD/tfYzyJftuRzBeGDr+XgaHM6wSk3lQ+5nbTi3+TEb4UUNsifolRvJ3aCeYP
+         5ZQ106rYfnlffPsl0oMgkKIg0hURsRiZo2r4KcCmt8F2ZlmOvIp5EEBtp3mTQzm+K8
+         YZBDvVDYyoDrXJXiImHtVkQ/85oeExgjgp8prerilhThxfgSEzvvtkrUHj2QtURbMM
+         lWIp7H1ogPpPg==
+Received: from [104.132.45.97] (helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oLhH3-0025Xw-Vx;
+        Wed, 10 Aug 2022 09:41:10 +0100
+Date:   Wed, 10 Aug 2022 09:41:07 +0100
+Message-ID: <87mtccbie4.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     eric.auger@redhat.com, Dmytro Maluka <dmy@semihalf.com>
+Cc:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Rong L Liu <rong.l.liu@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>, upstream@semihalf.com,
+        Dmitry Torokhov <dtor@google.com>
+Subject: Re: [PATCH v2 3/5] KVM: irqfd: Postpone resamplefd notify for oneshot interrupts
+In-Reply-To: <56ab2bc2-378b-3ece-2d45-e0f484087aa7@redhat.com>
+References: <20220805193919.1470653-1-dmy@semihalf.com>
+        <20220805193919.1470653-4-dmy@semihalf.com>
+        <56ab2bc2-378b-3ece-2d45-e0f484087aa7@redhat.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 104.132.45.97
+X-SA-Exim-Rcpt-To: eric.auger@redhat.com, dmy@semihalf.com, seanjc@google.com, pbonzini@redhat.com, kvm@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, linux-kernel@vger.kernel.org, alex.williamson@redhat.com, rong.l.liu@intel.com, zhenyuw@linux.intel.com, tn@semihalf.com, jaz@semihalf.com, upstream@semihalf.com, dtor@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,140 +78,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-10 09:21, Ido Schimmel wrote:
-> On Tue, Aug 09, 2022 at 10:00:49PM +0200, netdev@kapio-technology.com 
-> wrote:
->> On 2022-08-09 11:20, Ido Schimmel wrote:
->> > On Mon, Aug 01, 2022 at 05:33:49PM +0200, netdev@kapio-technology.com
->> > wrote:
->> > > On 2022-07-13 14:39, Ido Schimmel wrote:
->> > >
->> > > >
->> > > > What are "Storm Prevention" and "zero-DPV" FDB entries?
->> > > >
->> > >
->> > > For the zero-DPV entries, I can summarize:
->> > >
->> > > Since a CPU can become saturated from constant SA Miss Violations
->> > > from a
->> > > denied source, source MAC address are masked by loading a zero-DPV
->> > > (Destination Port Vector) entry in the ATU. As the address now
->> > > appears in
->> > > the database it will not cause more Miss Violations. ANY port trying
->> > > to send
->> > > a frame to this unauthorized address is discarded. Any locked port
->> > > trying to
->> > > use this unauthorized address has its frames discarded too (as the
->> > > ports SA
->> > > bit is not set in the ATU entry).
->> >
->> > What happens to unlocked ports that have learning enabled and are trying
->> > to use this address as SMAC? AFAICT, at least in the bridge driver, the
->> > locked entry will roam, but will keep the "locked" flag, which is
->> > probably not what we want. Let's see if we can agree on these semantics
->> > for a "locked" entry:
->> 
->> The next version of this will block forwarding to locked entries in 
->> the
->> bridge, so they will behave like the zero-DPV entries.
+On Tue, 09 Aug 2022 21:45:25 +0100,
+Eric Auger <eric.auger@redhat.com> wrote:
 > 
-> I'm talking about roaming, not forwarding. Let's say you have a locked
-> entry with MAC X pointing to port Y. Now you get a packet with SMAC X
-> from port Z which is unlocked. Will the FDB entry roam to port Z? I
-> think it should, but at least in current implementation it seems that
-> the "locked" flag will not be reset and having locked entries pointing
-> to an unlocked port looks like a bug.
+> Hi Dmytro,
 > 
+> On 8/5/22 21:39, Dmytro Maluka wrote:
+> > The existing KVM mechanism for forwarding of level-triggered interrupts
+> > using resample eventfd doesn't work quite correctly in the case of
+> > interrupts that are handled in a Linux guest as oneshot interrupts
+> > (IRQF_ONESHOT). Such an interrupt is acked to the device in its
+> > threaded irq handler, i.e. later than it is acked to the interrupt
+> > controller (EOI at the end of hardirq), not earlier.
+> >
+> > Linux keeps such interrupt masked until its threaded handler finishes,
+> > to prevent the EOI from re-asserting an unacknowledged interrupt.
+> > However, with KVM + vfio (or whatever is listening on the resamplefd)
+> > we don't check that the interrupt is still masked in the guest at the
+> > moment of EOI. Resamplefd is notified regardless, so vfio prematurely
+> > unmasks the host physical IRQ, thus a new (unwanted) physical interrupt
+> > is generated in the host and queued for injection to the guest.
+> >
+> > The fact that the virtual IRQ is still masked doesn't prevent this new
+> > physical IRQ from being propagated to the guest, because:
+> >
+> > 1. It is not guaranteed that the vIRQ will remain masked by the time
+> >    when vfio signals the trigger eventfd.
+> > 2. KVM marks this IRQ as pending (e.g. setting its bit in the virtual
+> >    IRR register of IOAPIC on x86), so after the vIRQ is unmasked, this
+> >    new pending interrupt is injected by KVM to the guest anyway.
+> >
+> > There are observed at least 2 user-visible issues caused by those
+> > extra erroneous pending interrupts for oneshot irq in the guest:
+> >
+> > 1. System suspend aborted due to a pending wakeup interrupt from
+> >    ChromeOS EC (drivers/platform/chrome/cros_ec.c).
+> > 2. Annoying "invalid report id data" errors from ELAN0000 touchpad
+> >    (drivers/input/mouse/elan_i2c_core.c), flooding the guest dmesg
+> >    every time the touchpad is touched.
+> >
+> > This patch fixes the issue on x86 by checking if the interrupt is
+> > unmasked when we receive irq ack (EOI) and, in case if it's masked,
+> > postponing resamplefd notify until the guest unmasks it.
+> >
+> > It doesn't fix the issue for other archs yet, since it relies on KVM
+> > irq mask notifiers functionality which currently works only on x86.
+> > On other archs we can register mask notifiers but they are never called.
+> > So on other archs resampler->masked is always false, so the behavior is
+> > the same as before this patch.
 
-Remember that zero-DPV entries blackhole (mask) the MAC, so whenever a 
-packet appears with the same MAC on another port it is just dropped in 
-the HW, so there is no possibility of doing any CPU processing in this 
-case. Only after the timeout (5 min) can the MAC get a normal ATU on an 
-open port.
-For the bridge to do what you suggest, a FDB search would be needed 
-afaics, and this might be in a process sensitive part of the code, thus 
-leading to too heavy a cost.
+The core issue seems that you would like to be able to retire a
+interrupt from what has been queued into the guest by a previous
+resampling (because the line has effectively dropped in the meantime).
 
->> 
->> >
->> > 1. It discards packets with matching DMAC, regardless of ingress port. I
->> > read the document [1] you linked to in a different reply and could not
->> > find anything against this approach, so this might be fine or at least
->> > not very significant.
->> >
->> > Note that this means that "locked" entries need to be notified to device
->> > drivers so that they will install a matching entry in the HW FDB.
->> 
->> Okay, so as V4 does (just without the error noted).
->> 
->> >
->> > 2. It is not refreshed and has ageing enabled. That is, after initial
->> > installation it will be removed by the bridge driver after configured
->> > ageing time unless converted to a regular (unlocked) entry.
->> >
->> > I assume this allows you to remove the timer implementation from your
->> > driver and let the bridge driver notify you about the removal of this
->> > entry.
->> 
->> Okay, but only if the scheme is not so that the driver creates the 
->> locked
->> entries itself, unless you indicate that the driver notifies the 
->> bridge,
->> which then notifies back to the driver and installs the zero-DPV 
->> entry? If
->> not I think the current implementation for the mv88e6xxx is fine.
-> 
-> I don't see a problem in having the driver notifying the bridge about
-> the installation of this entry and the bridge notifying the driver that
-> the entry needs to be removed. It removes complexity from device 
-> drivers
-> like mv88e6xxx and doesn't add extra complexity to the bridge driver.
-> 
-> Actually, there is one complication, 'SWITCHDEV_FDB_ADD_TO_BRIDGE' will
-> add the locked entry as externally learned, which means the bridge will
-> not age it. Might need something like this:
-> 
-> diff --git a/net/bridge/br_fdb.c b/net/bridge/br_fdb.c
-> index e7f4fccb6adb..5f73d0b44ed9 100644
-> --- a/net/bridge/br_fdb.c
-> +++ b/net/bridge/br_fdb.c
-> @@ -530,7 +530,8 @@ void br_fdb_cleanup(struct work_struct *work)
->  		unsigned long this_timer = f->updated + delay;
-> 
->  		if (test_bit(BR_FDB_STATIC, &f->flags) ||
-> -		    test_bit(BR_FDB_ADDED_BY_EXT_LEARN, &f->flags)) {
-> +		    (test_bit(BR_FDB_ADDED_BY_EXT_LEARN, &f->flags) &&
-> +		     !test_bit(BR_FDB_ENTRY_LOCKED, &f->flags))) {
->  			if (test_bit(BR_FDB_NOTIFY, &f->flags)) {
->  				if (time_after(this_timer, now))
->  					work_delay = min(work_delay,
-> 
+On arm64, it would be easy enough to sample the pending state of the
+physical line and adjust the state of the virtual interrupt
+accordingly. This would at least have the advantage of preserving the
+illusion of an interrupt being directly routed to the guest and its
+pending state being preserved between EOI and unmask.
 
-There is a case of ownership of the FDB/ATU entry, which if I remember 
-correctly, will point to the current implementation being the right way 
-to do it, thus having the driver keeping ownership of the entry and 
-thereby also ageing it, but I think Vladimir should have his say here.
+It isn't perfect either though as, assuming the guest can ack the
+interrupt on the device without exiting, the line would still appear
+as pending until the next exit, possibly the unmask.
 
->> 
->> >
->> > 3. With regards to roaming, the entry cannot roam between locked ports
->> > (they need to have learning disabled anyway), but can roam to an
->> > unlocked port, in which case it becomes a regular entry that can roam
->> > and age.
->> >
->> > If we agree on these semantics, then I can try to verify that at least
->> > Spectrum can support them (it seems mv88e6xxx can).
->> 
->> The consensus here is that at least for the mv88e6xxx, learning should 
->> be on
->> and link local learning should be blocked by the userspace setting you
->> pointed to earlier.
-> 
-> Why learning needs to be on in the bridge (not mv88e6xxx) driver?
+	M.
 
-I think it is seen as 'cheating' to enable learning only in the driver 
-behind the scenes, so kind of hackish. E.g. 'bridge -d link show' will 
-then report 'learning off', while learning is on in the driver.
-And learning needs to be on for the driver as discussed earlier, which 
-only gives rise to the link local learning problem, which is then solved 
-by the user space setting.
+-- 
+Without deviation from the norm, progress is not possible.

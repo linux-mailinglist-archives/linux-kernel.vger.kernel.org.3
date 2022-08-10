@@ -2,106 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABC4158E9BC
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 11:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 729A358E9BF
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 11:37:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232156AbiHJJhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 05:37:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36742 "EHLO
+        id S232176AbiHJJhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 05:37:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231587AbiHJJhO (ORCPT
+        with ESMTP id S232233AbiHJJhf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 05:37:14 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70EEC84EC7;
-        Wed, 10 Aug 2022 02:37:12 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id q9-20020a17090a2dc900b001f58bcaca95so1599801pjm.3;
-        Wed, 10 Aug 2022 02:37:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=78dgYlqKO0ZvQjJz+sJd0671q+NGfvnDDEssu3bBwM0=;
-        b=lQI08ncjvuLNvOWEIrCzsgcKgE2diNiQhT8iO8FvSLLMxYi9mCiO67CSzRUITu8LrB
-         6Qinn3mOIdhfO4Yo8lA+blRSETuEGrdp3nzbzud4oM7pAaR3zKLqTHJ1s2MVZSi24aPO
-         5lZAGgQnL717sdNqp2JFkR5rElvLbyQNeq4/cH7sJ6VfImDKU5rh8YgqAFAZr6rGxHCb
-         cnQFjNUNFbhSznox4mcKEGPNdKFO+wP8WWLeswx3i+TuwBVYZFkzNVQiqbu25QrsuTCr
-         DvZ7BEhcyuW5Nc/Gx2Humrtm3BxIPoHzopFS+r4rLMm7GQ3en8r9Ao1/fODPXoSVd/OM
-         SJuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=78dgYlqKO0ZvQjJz+sJd0671q+NGfvnDDEssu3bBwM0=;
-        b=pukuQfNqG8278BXUX3CTmYW4KNJ+XkjMHCIzXaTU0P3LqC9ArmxyDNet3+2aO8AzNE
-         qR9+AuI8zJpKVeDzul4GGY1GaGpV1kqzDA6DoueJLcvnOli/ocwlW23rOx166E16scrR
-         Z69MSNvl4tMzRyZ2BUUQn6uKNfzCXF3HjOrPHCOwEC5EQU22Hlrrr6ukEBWOBr7zzFZ5
-         xnFVVt9PqWwNIEiHViGiZeoqIl/uFOJ5JW0XXYl7sDcjg4RbFc+ibSjnN0rOx35OJBHy
-         wBwvevJW6hbxVK/uu8bJu2vEO9xzNl9KMUSwLj76XuEaa4yYwQ07iY+ktbO+2KIZrA6b
-         fxcg==
-X-Gm-Message-State: ACgBeo0lOz8QVaxvBpOHMN8lq+/TiknfOcBzdLuQpsIWFr4xRPImcsBW
-        UfXuU7rFPIreVefcPC+raiQ=
-X-Google-Smtp-Source: AA6agR7YjYI12tnWvDGyWPfOPcugQ8xdwNLGNRCSJzyQgzH6ZBvqYbBkOtqw4ycTVf9Dab7Eme6PpA==
-X-Received: by 2002:a17:90b:b13:b0:1f3:7ab:35b2 with SMTP id bf19-20020a17090b0b1300b001f307ab35b2mr2813942pjb.118.1660124231738;
-        Wed, 10 Aug 2022 02:37:11 -0700 (PDT)
-Received: from engine.. ([106.212.112.163])
-        by smtp.gmail.com with ESMTPSA id p14-20020a17090a2c4e00b001f754cd508dsm1130979pjm.35.2022.08.10.02.37.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 02:37:11 -0700 (PDT)
-From:   Piyush Thange <pthange19@gmail.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     shuah@kernel.org, vladimir.oltean@nxp.com, idosch@nvidia.com,
-        petrm@nvidia.com, troglobit@gmail.com, amcohen@nvidia.com,
-        tobias@waldekranz.com, po-hsu.lin@canonical.com,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Piyush Thange <pthange19@gmail.com>
-Subject: [PATCH] selftests:net:forwarding: Included install command
-Date:   Wed, 10 Aug 2022 15:05:08 +0530
-Message-Id: <20220810093508.33790-1-pthange19@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Wed, 10 Aug 2022 05:37:35 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C25D6EF22;
+        Wed, 10 Aug 2022 02:37:33 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27A9bNJp044357;
+        Wed, 10 Aug 2022 04:37:23 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1660124243;
+        bh=LRZK/W/kDEs0O3d9V+G9LZ2YPLkzstDnPMZlHEQHeKg=;
+        h=From:To:CC:Subject:Date;
+        b=etq9DihoImGq+l40TzPW09pAejpP3HT7dmKGb+IOQTD4n8LhA4DYvnlrAPPEVhxd3
+         vD7jhQdxlk+l+DetOsG2jfdq384ZKpzHmLhWJ/Z3qKuCDYyfdqOJSWK+NjUlXGGYwB
+         HEoBBbrGdUHQITZNGPvxtRDzpUbGWjBOKW9YD+rI=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27A9bNL2022228
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 10 Aug 2022 04:37:23 -0500
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 10
+ Aug 2022 04:37:22 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 10 Aug 2022 04:37:22 -0500
+Received: from ubuntu.ent.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27A9bF6B105196;
+        Wed, 10 Aug 2022 04:37:17 -0500
+From:   Matt Ranostay <mranostay@ti.com>
+To:     <vigneshr@ti.com>
+CC:     Matt Ranostay <mranostay@ti.com>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH RESEND 0/6] J721S2: Add support for additional IPs
+Date:   Wed, 10 Aug 2022 02:37:06 -0700
+Message-ID: <20220810093712.248425-1-mranostay@ti.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the execution is skipped due to "jq not installed" message then
-the installation methods on different OS's have been provided with
-this message.
+The following series of patches add support for the following
+on J721S2 common processor board,
 
-Signed-off-by: Piyush Thange <pthange19@gmail.com>
----
- tools/testing/selftests/net/forwarding/lib.sh | 8 ++++++++
- 1 file changed, 8 insertions(+)
+- USB
+- SerDes
+- OSPI
 
-diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-index 37ae49d47853..c4121856fe06 100755
---- a/tools/testing/selftests/net/forwarding/lib.sh
-+++ b/tools/testing/selftests/net/forwarding/lib.sh
-@@ -152,6 +152,14 @@ require_command()
+Aswath Govindraju (6):
+  arm64: dts: ti: k3-j721s2-main: Add support for USB
+  arm64: dts: ti: k3-j721s2-main: Add SERDES and WIZ device tree node
+  arm64: dts: ti: k3-j721s2-mcu-wakeup: Add support of OSPI
+  arm64: dts: ti: k3-j721s2-common-proc-board: Enable SERDES0
+  arm64: dts: ti: k3-j721s2-common-proc-board: Add USB support
+  arm64: dts: ti: k3-j721s2: Add support for OSPI Flashes
 
- 	if [[ ! -x "$(command -v "$cmd")" ]]; then
- 		echo "SKIP: $cmd not installed"
-+		if [[ $cmd == "jq" ]]; then
-+			echo " Install on Debian based systems"
-+			echo "	sudo apt -y install jq"
-+			echo " Install on RHEL based systems"
-+			echo "	sudo yum -y install jq"
-+			echo " Install on Fedora based systems"
-+			echo "	sudo dnf -y install jq"
-+		fi
- 		exit $ksft_skip
- 	fi
- }
---
-2.37.1
+ .../dts/ti/k3-j721s2-common-proc-board.dts    |  78 ++++++++++++
+ arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi    | 112 ++++++++++++++++++
+ .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     |  40 +++++++
+ arch/arm64/boot/dts/ti/k3-j721s2-som-p0.dtsi  |  42 +++++++
+ 4 files changed, 272 insertions(+)
+
+-- 
+2.36.1
 

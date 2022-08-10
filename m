@@ -2,139 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0F7058E97C
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 11:22:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E90DD58E999
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 11:28:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231503AbiHJJWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 05:22:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48526 "EHLO
+        id S232086AbiHJJ1m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 05:27:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiHJJWh (ORCPT
+        with ESMTP id S232058AbiHJJ13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 05:22:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1AFAF6B160
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 02:22:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660123356;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZyYOF0GqU38qgLQvjOSadjxAJ6Z77rN0GOf9JNRiT94=;
-        b=bCEEaHfNAawByGIdyZ9PYd1+i3rv9m7pajxuMWcDLhZj7mW96FPbyc6H1cRz/YMZJofsF0
-        cauIbvWZYKS9U5Jazh0+WaEZLvzVGnvGMkigN2euCwR0M1skUy4hlr24BBtu4hNac0GsuF
-        Up965eifYt0C/ubeor/P0U/lZHmTvB4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-340-J9531uqBNTm5SbCyI24uUQ-1; Wed, 10 Aug 2022 05:22:22 -0400
-X-MC-Unique: J9531uqBNTm5SbCyI24uUQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0EE008039A2;
-        Wed, 10 Aug 2022 09:22:20 +0000 (UTC)
-Received: from [10.43.17.48] (unknown [10.43.17.48])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 78D029457F;
-        Wed, 10 Aug 2022 09:22:19 +0000 (UTC)
-Message-ID: <f0dd80b2-97e1-c320-8517-7ebdb027f58a@redhat.com>
-Date:   Wed, 10 Aug 2022 11:22:18 +0200
+        Wed, 10 Aug 2022 05:27:29 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D146B648;
+        Wed, 10 Aug 2022 02:27:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660123648; x=1691659648;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=tUwaauJkG9H9jpzDjix3eFFhcAHzm8fbdGUPBBoncrI=;
+  b=MM/P6jH6MliPsW0XXGQm0jiy++NWrykY/WTFdl9Jc01IEBqiretP+fpQ
+   hGaRBEoOnUMsSrlpa429LIp4kagMjmbHkXqdNP0P84rpcs/wph62NHWD9
+   bktQIKk8sgWerQVShl45PjvqXGSr/oqob9WglaqCXg4c98TufQXDLATBo
+   x9C0jCWj+ez5wC/+mTvfm5XWwbwwlY5nrbjPIW2DeB6iTBzaz3rWjEV6c
+   7jig7dUo/O+dreymwVjaqrLVay40KDxh9ROFzZ1p0xycaL7hcD8dFjyz1
+   5v/vxjgMEMc3AL7I6FurcDlLHgdgSe2Y/D2lJfcOQAO6uTX8/xx/6KS+j
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="355042407"
+X-IronPort-AV: E=Sophos;i="5.93,226,1654585200"; 
+   d="scan'208";a="355042407"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 02:27:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,226,1654585200"; 
+   d="scan'208";a="664820289"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by fmsmga008.fm.intel.com with ESMTP; 10 Aug 2022 02:27:17 -0700
+Date:   Wed, 10 Aug 2022 17:22:32 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v7 03/14] mm: Introduce memfile_notifier
+Message-ID: <20220810092232.GC862421@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-4-chao.p.peng@linux.intel.com>
+ <13394075-fca0-6f2b-92a2-f1291fcec9a3@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.12.0
-Subject: Re: i915: crash with 5.19-rc2
-Content-Language: en-US
-From:   Zdenek Kabelac <zkabelac@redhat.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     intel-gfx@lists.freedesktop.org, chris@chris-wilson.co.uk
-References: <584ae788-05e3-5824-8c85-cbb833677850@redhat.com>
-In-Reply-To: <584ae788-05e3-5824-8c85-cbb833677850@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <13394075-fca0-6f2b-92a2-f1291fcec9a3@redhat.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne 22. 06. 22 v 13:18 Zdenek Kabelac napsal(a):
-> Hello
->
-> While somewhat oldish hw (T61, 4G, C2D) - I've now witnessed new crash with 
-> Xorg:
->
-> (happened while reopening iconified Firefox window  - running 'standard' 
-> rawhide -nodebug kernel 5.19.0-0.rc2.21.fc37.x86_64)
->
+On Fri, Aug 05, 2022 at 03:22:58PM +0200, David Hildenbrand wrote:
+> On 06.07.22 10:20, Chao Peng wrote:
+> > This patch introduces memfile_notifier facility so existing memory file
+> > subsystems (e.g. tmpfs/hugetlbfs) can provide memory pages to allow a
+> > third kernel component to make use of memory bookmarked in the memory
+> > file and gets notified when the pages in the memory file become
+> > invalidated.
+> 
+> Stupid question, but why is this called "memfile_notifier" and not
+> "memfd_notifier". We're only dealing with memfd's after all ... which
+> are anonymous files essentially. Or what am I missing? Are there any
+> other plans for fs than plain memfd support that I am not aware of?
 
-Hello
+There were some discussions on this in v3.
+  https://lkml.org/lkml/2021/12/28/484
+Sean commented it's OK to abstract it from memfd but he also wants the
+kAPI (name) should not bind to memfd to make room for future non-memfd
+usages.
 
+> 
+> > 
+> > It will be used for KVM to use a file descriptor as the guest memory
+> > backing store and KVM will use this memfile_notifier interface to
+> > interact with memory file subsystems. In the future there might be other
+> > consumers (e.g. VFIO with encrypted device memory).
+> > 
+> > It consists below components:
+> >  - memfile_backing_store: Each supported memory file subsystem can be
+> >    implemented as a memory backing store which bookmarks memory and
+> >    provides callbacks for other kernel systems (memfile_notifier
+> >    consumers) to interact with.
+> >  - memfile_notifier: memfile_notifier consumers defines callbacks and
+> >    associate them to a file using memfile_register_notifier().
+> >  - memfile_node: A memfile_node is associated with the file (inode) from
+> >    the backing store and includes feature flags and a list of registered
+> >    memfile_notifier for notifying.
+> > 
+> > In KVM usages, userspace is in charge of guest memory lifecycle: it first
+> > allocates pages in memory backing store and then passes the fd to KVM and
+> > lets KVM register memory slot to memory backing store via
+> > memfile_register_notifier.
+> 
+> Can we add documentation/description in any form how the different
+> functions exposed in linux/memfile_notifier.h are supposed to be used?
 
-Ok, I think I now know what is behind this BUG/crash of intel graphics  -  
-interestingly it took me a few weeks to realize this.
+Yeah, code comments can be added.
 
-So I've actually installed with some Rawhide update 'zram-generator' package 
-to use  zram swap to help with memory of Firefox & Thunderbird a bit with this 
-4G RAM laptop. All worked fine. However side effect of usage of ZRAM swapping 
-became actually this occasional  kernel BUG hitting.
+> 
+> Staring at memfile_node_set_flags() and memfile_notifier_invalidate()
+> it's not immediately clear to me who's supposed to call that and under
+> which conditions.
 
-When I've stopped using  Zram swap  -  it now runs for 2 weeks without a 
-single deadlock - with single or dual screen monitor setup with many suspends 
-& resumes in between.
+I will also amend the commit message.
 
-So I'm likely 100% sure that   ZRAM usage is triggering this issue.   While I 
-know this laptop is old and likely with low memory and so on - no sure if it's 
-worth to solve it - maybe good enough solution is to issue a warning user 
-should no comibine this old piece with ZRAM - but I'm all open to do some 
-testing for fix - although I still don't have a simple triggering path for 
-this issue to happen within short period of time.
-
-Maybe driver is missing tomark some pages as pined into memory so ZRAM can't 
-swap them out ?.
-
-
->  page:00000000577758b3 refcount:0 mapcount:0 mapping:0000000000000000 
-> index:0x1 pfn:0x1192cc
->  flags: 0x17ffffc0000000(node=0|zone=2|lastcpupid=0x1fffff)
->  raw: 0017ffffc0000000 ffffe683c47171c8 ffff8fa3f79377a8 0000000000000000
->  raw: 0000000000000001 0000000000000000 00000000ffffffff 0000000000000000
->  page dumped because: VM_BUG_ON_FOLIO(!folio_test_locked(folio))
->  ------------[ cut here ]------------
->  kernel BUG at mm/shmem.c:708!
->  invalid opcode: 0000 [#1] PREEMPT SMP NOPTI
->  CPU: 1 PID: 42896 Comm: Xorg Not tainted 5.19.0-0.rc2.21.fc37.x86_64 #1
->  Hardware name: LENOVO 6464CTO/6464CTO, BIOS 7LETC9WW (2.29 ) 03/18/2011
->  RIP: 0010:shmem_add_to_page_cache+0x48e/0x500
->  Code: 01 0f 84 0a fc ff ff 48 8d 4a ff 31 d2 48 39 cb 0f 85 ff fb ff ff e9 
-> f6 fb ff ff 48 c7 c6 70 01 64 bb 48 89 df e8 f2 99 01 00 <0f> 0b 48 c7 c6 a0 
-> 1b 64 bb 48 89 df e8 e1 99 01 00 0f 0b 48 8b 13
->  RSP: 0018:ffff9ce7c047f6b0 EFLAGS: 00010286
->  RAX: 000000000000003f RBX: ffffe683c464b300 RCX: 0000000000000000
->  RDX: 0000000000000001 RSI: ffffffffbb67b8e8 RDI: 00000000ffffffff
->  RBP: 0000000000023f97 R08: ffffffffbca122a0 R09: 64656b636f6c5f74
->  R10: 747365745f6f696c R11: 6f6621284f494c4f R12: 00000000001120d4
->  R13: ffff8fa2c6ae7890 R14: ffffe683c464b300 R15: 0000000000000001
->  FS:  00007fc1cea31380(0000) GS:ffff8fa3f7900000(0000) knlGS:0000000000000000
->  CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->  CR2: 00007f6972e228c8 CR3: 0000000104ba8000 CR4: 00000000000006e0
->  Call Trace:
->  <TASK>
->  shmem_swapin_folio+0x274/0x980
->  shmem_getpage_gfp+0x234/0x990
->  shmem_read_mapping_page_gfp+0x36/0xf0
->  shmem_sg_alloc_table+0x11b/0x250 [i915]
-
-
-
-Regards
-
-
-Zdenek
-
-
+Chao
+> 
+> -- 
+> Thanks,
+> 
+> David / dhildenb

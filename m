@@ -2,110 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5D7858EAD7
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 13:00:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 630FE58EAE0
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 13:01:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231701AbiHJLAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 07:00:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59344 "EHLO
+        id S231745AbiHJLB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 07:01:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231769AbiHJLAI (ORCPT
+        with ESMTP id S231658AbiHJLBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 07:00:08 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA30E60535;
-        Wed, 10 Aug 2022 04:00:06 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id s206so14050297pgs.3;
-        Wed, 10 Aug 2022 04:00:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=kiZ0GjFPDluN3W8aPPsegpk1Obyz0Y2e2nbcQbNMIKk=;
-        b=WBo1j09+pUgd4BLk8uzp0Baa/VzIULafaH0Vqsbzo546R7Hen63C1BKlvodtNFhqiz
-         QYCEKcntPwLU7vds7E4kOr1ynSP/U4ds6q7ybM8PqCmSBaR1q1nIaRDeIx2SkGJvJsJ/
-         Z8wUburidhIWJWSpDxj7u5qPhu4ib+IMIAzLLNefE3aNQ3kHRDbmHiMtdIAbkt5wJCzw
-         V5leEpU3f56Ga1ouQHPUYZpyeytC0W5++xzRpRq+SuzC5PXYGzdrX7GyH4nypBR+XF9R
-         b87z+aXm5FEMxos3xJEDYC1cYhY1Us+BUbztdnjUq8iQbTkhZpWZfFEBTk27xKqO3Tg9
-         iYnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=kiZ0GjFPDluN3W8aPPsegpk1Obyz0Y2e2nbcQbNMIKk=;
-        b=g+I3Jqo7cWOU02U675aMgpCnBGTLnwxbY18LS46Fn3OpN6UzpQBPTqbkTwLHBgusZe
-         AfWK+N65b8RuKt9BQDLDekHZD6bOLEvp3MUiuYltopnVr8x6Zv1bWY96LsCl60Ci9ERq
-         OlHcfKoC0sEcbXPT7uLt1IAE2/aY7iwvKyPi1qfXdKzPWqfyvwbdlJzXp6mI+f3rkyAu
-         lydx5OCxC5GMUfrG9tmO3QKku7i2zdWYjqxyTc21qYkmnvIMOqVZKUJX5t5NaMCNoZYA
-         NI3VMnpplFYze8/NlHNnMCVD/SYQxUqGn4YJiiEYMUYKnqkt72ztBkfg+dRj6XI9vNRh
-         dpYw==
-X-Gm-Message-State: ACgBeo0nEqatQ2GTDBMMWuUIFLNyf3zGFd6GDBqdOgCT+Ec6NRNV/bmc
-        DhJ0/9qGYNQz6n8Xxs1ABB4=
-X-Google-Smtp-Source: AA6agR611g62PBer1d6V3DJjIyh8ixWzC0h3DHoPl+KpCYhB99O/QkBdcNpBmy0YN4O0issm10FKKg==
-X-Received: by 2002:a05:6a00:140d:b0:52a:d561:d991 with SMTP id l13-20020a056a00140d00b0052ad561d991mr27058495pfu.46.1660129206096;
-        Wed, 10 Aug 2022 04:00:06 -0700 (PDT)
-Received: from [0.0.0.0] (ec2-13-113-80-70.ap-northeast-1.compute.amazonaws.com. [13.113.80.70])
-        by smtp.gmail.com with ESMTPSA id e11-20020a17090301cb00b0016db6bd77f4sm12891114plh.117.2022.08.10.04.00.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Aug 2022 04:00:05 -0700 (PDT)
-Message-ID: <e5775cbb-bd2a-decf-ad81-a861d796e3fe@gmail.com>
-Date:   Wed, 10 Aug 2022 19:00:00 +0800
+        Wed, 10 Aug 2022 07:01:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBCDA6BD6F;
+        Wed, 10 Aug 2022 04:01:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 985E3B81B5B;
+        Wed, 10 Aug 2022 11:01:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EE0CC433D6;
+        Wed, 10 Aug 2022 11:01:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660129279;
+        bh=6x6su5oHn4WjBSWBtUvgxfhKdMjczpssjP15rky0Ucc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KMY2BViRwxO+LS6lTNRSgjQQ0lxdAhWdIrWx87oKITfqA8c3unrpEe7yDrvdit6aP
+         LAJh1oADLa4m6DCanxivY6NzKxMsGIuHST3i3MzzmjjgMVlog/k0ZPOuyoDeIpgEXx
+         UZ8VIDuSks9qlXahIc5IeJ5OVKApkhOtMLYZl/glbvW2lmz4Q7fkrhkSzpM5OdrLs1
+         vOKs3vJGcttXSz343CpoH1x0KvOn8EnpiFTNHcpw5q4kgTWmAzyFstxLwmo0z9ctHY
+         DkBAqyv5xIbwGRFXuxNQ2reCX6YRtl9sY824SJ4PaxHM3m8ht49/FEZms4NYXFEnvJ
+         Xg4XqbbvEYd+w==
+Date:   Wed, 10 Aug 2022 12:01:10 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Pavel Machek <pavel@ucw.cz>,
+        Tim Harvey <tharvey@gateworks.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Andrew Davis <afd@ti.com>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-leds@vger.kernel.org,
+        netdev@vger.kernel.org, linux-pm@vger.kernel.org,
+        alsa-devel@alsa-project.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Subject: Re: [PATCH v2 4/5] dt-bindings: Drop Robert Jones
+Message-ID: <YvOP9qr2CR9n1FCe@google.com>
+References: <20220809162752.10186-1-krzysztof.kozlowski@linaro.org>
+ <20220809162752.10186-5-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH V2 1/1] loop: introduce LO_FLAGS_NO_DEALLOC
-Content-Language: en-US
-To:     "Darrick J. Wong" <djwong@kernel.org>
-Cc:     Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
-        linux-block@vger.kernel.org,
-        Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-        Jan Kara <jack@suse.cz>, Ming Lei <ming.lei@redhat.com>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org
-References: <20220806153022.83748-1-zhangboyang.id@gmail.com>
- <20220806153022.83748-2-zhangboyang.id@gmail.com> <YvLdc8GtbZ968qF6@magnolia>
-From:   Zhang Boyang <zhangboyang.id@gmail.com>
-In-Reply-To: <YvLdc8GtbZ968qF6@magnolia>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220809162752.10186-5-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, 09 Aug 2022, Krzysztof Kozlowski wrote:
 
-On 2022/8/10 06:19, Darrick J. Wong wrote:
+> Emails to Robert Jones bounce ("550 5.2.1 The email account that you
+> tried to reach is disabled").
 > 
-> Considering that discard isn't required to do anything, why not
-> echo 0 | sudo tee /sys/block/loopX/queue/discard_max_bytes ?
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 > 
+> ---
+> 
+> For maintainers entry see:
+> https://lore.kernel.org/all/20220808111113.71890-1-krzysztof.kozlowski@linaro.org/
+> ---
+>  Documentation/devicetree/bindings/iio/imu/nxp,fxos8700.yaml | 2 +-
+>  Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml    | 1 -
 
-Thanks for reviewing! This will disable discard completely (>=5.19), 
-thus the filesystem of backing file has no knowledge about what can be 
-freed. In contrast, my patch convert REQ_OP_DISCARD to 
-FALLOC_FL_ZERO_RANGE, the discarded parts of backing file is flagged 
-zeroed. So there is possibility for the filesystem of backing file to 
-discard (trim) the zeroed range, improving the write performance on, for 
-example, SSDs.
+Any reason to submit these as one patch?
 
-However, it seems only XFS with realtime discard enabled can do trim on 
-FALLOC_FL_ZERO_RANGE. All other filesystems (and XFS without realtime 
-discard) can't do trim on extents flagged zeroed. Batch discard like 
-FITRIM (used by `fstirm' tool) also can't help here, because no 
-filesystem track `allocated but flagged zeroed' extents at filesystem 
-level. I will probably write another patch to add the ability to trim 
-zeroed extents in single file to FITRIM. (Currently, FITRIM work on 
-filesystem level, not file level)
+>  2 files changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/iio/imu/nxp,fxos8700.yaml b/Documentation/devicetree/bindings/iio/imu/nxp,fxos8700.yaml
+> index 479e7065d4eb..0203b83b8587 100644
+> --- a/Documentation/devicetree/bindings/iio/imu/nxp,fxos8700.yaml
+> +++ b/Documentation/devicetree/bindings/iio/imu/nxp,fxos8700.yaml
+> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
+>  title: Freescale FXOS8700 Inertial Measurement Unit
+>  
+>  maintainers:
+> -  - Robert Jones <rjones@gateworks.com>
+> +  - Jonathan Cameron <jic23@kernel.org>
+>  
+>  description: |
+>    Accelerometer and magnetometer combo device with an i2c and SPI interface.
+> diff --git a/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml b/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
+> index 5a1e8d21f7a0..5e0fe3ebe1d2 100644
+> --- a/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
+> @@ -19,7 +19,6 @@ description: |
+>  
+>  maintainers:
+>    - Tim Harvey <tharvey@gateworks.com>
+> -  - Robert Jones <rjones@gateworks.com>
+>  
+>  properties:
+>    $nodename:
 
-Best Regards,
-Zhang Boyang
+-- 
+Lee Jones [李琼斯]

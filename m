@@ -2,85 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D89D258EB5C
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 13:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78ED458EB62
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 13:39:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230168AbiHJLgY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 07:36:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35520 "EHLO
+        id S231274AbiHJLjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 07:39:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiHJLgW (ORCPT
+        with ESMTP id S229447AbiHJLjq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 07:36:22 -0400
-Received: from sender-of-o50.zoho.in (sender-of-o50.zoho.in [103.117.158.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F7116E899;
-        Wed, 10 Aug 2022 04:36:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1660131358; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=aryWP3VgZHtZyyf1fe+yB/wYpwYI/5u7qDCuk5w1GPKehXmPuT4fQ2NntknHdokV+p+SUeD6kON8r3giMUsGoBWiVB4aByHFH2JxdkOXrM1D3JjBoRXbdbrkJuL5UWTBlTwZCXOQIGi092czqFn4cuqH0F0hBaFOph6DY1IcKQM=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1660131358; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=u9HSKOXe5zxLLHtzfzWYR6+aGKllL8CvnILcjWqDyDs=; 
-        b=arB6iGGmipIutBpTpMKc7FGYnmCf4+lCJ+CaqE3vw/RXvicQiTcvggjJvsZCG7K4HEK4TdB8coBHU4UiMkokfQbCBii8p9K1o7dU68dOajMXCxSmJBw6D4n5/GmEqJF0v/NgqE0ig31Fii4p2Hxe7wK1D4NGQLqNFo0MbIG3dCs=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1660131358;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=From:From:To:To:Cc:Cc:Message-ID:Subject:Subject:Date:Date:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
-        bh=u9HSKOXe5zxLLHtzfzWYR6+aGKllL8CvnILcjWqDyDs=;
-        b=ip5aGDSkBQDyzNEquBXB9jsVjgOOtNrM/DGtt9uQEr4rPWyfcKB+H6ktLYGuLfCn
-        Og51WvpUI+itDBj1tKENAVJz9IZvR5Np5c1zUuBUq1tD2EhitKeCK5RW53DVrbUanzj
-        Vor0M9FFVphLscHxTUMoeFW8KS8xgHUq0WlS18hM=
-Received: from localhost.localdomain (103.176.10.218 [103.176.10.218]) by mx.zoho.in
-        with SMTPS id 166013135646156.58855889315157; Wed, 10 Aug 2022 17:05:56 +0530 (IST)
-From:   Siddh Raman Pant <code@siddh.me>
-To:     syzbot+b6c9fe29aefe68e4ad34@syzkaller.appspotmail.com
-Cc:     davem@davemloft.net, johannes@sipsolutions.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Message-ID: <20220810113551.344792-1-code@siddh.me>
-Subject: Re: WARNING in ieee80211_ibss_csa_beacon
-Date:   Wed, 10 Aug 2022 17:05:51 +0530
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <0000000000008c848805b123f174@google.com>
-References: <0000000000008c848805b123f174@google.com>
+        Wed, 10 Aug 2022 07:39:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF7276949;
+        Wed, 10 Aug 2022 04:39:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C99AE612A4;
+        Wed, 10 Aug 2022 11:39:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19797C433D6;
+        Wed, 10 Aug 2022 11:39:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660131585;
+        bh=KA6QqoATlRfAAZ7bUCq/+kmWXNGltuff8660hhoplWQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YQPLKSPughz9Qn+Mfu19Z7lvYLVY+DGvrM3ut+bFMiBsH76YIqq1eBDozYulspfFC
+         tuNOPOwsYdK7f7F/DsA73WNXjy5nXdSbOXfoIAzJTNJeoEpgedrw8oYnAfk5CV/zzY
+         XhSI/Q87j/I2L+d1mderyG+VoL/5z86SIfNxIXoVoQ1abQHYySdPrNi+8yG5AFDmva
+         L5GSjqI1nuPZBsuGaXYme9pd/K93oqkqZeZ61z0uFozlA85HEl4C4xNtLPjzIvAS39
+         7WVQkwigfI41h44+81nskKV4zN5jrRXA5NjUtaZ6eJty9qDpiBVmTfGtHeBq9kW82D
+         MRHNAP/KJVlLQ==
+Date:   Wed, 10 Aug 2022 12:39:39 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     cy_huang <u0084500@gmail.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        dmitry.torokhov@gmail.com, cy_huang@richtek.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org
+Subject: Re: [PATCH v4 2/3] mfd: rt5120: Add Richtek PMIC support
+Message-ID: <YvOY++4KsVtd7rOz@google.com>
+References: <1660100142-32493-1-git-send-email-u0084500@gmail.com>
+ <1660100142-32493-3-git-send-email-u0084500@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-ZohoMailClient: External
-Content-Type: text/plain; charset=utf8
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_RED
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1660100142-32493-3-git-send-email-u0084500@gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When we are not connected to a channel, sending channel "switch"
-announcement doesn't make any sense.
+On Wed, 10 Aug 2022, cy_huang wrote:
 
-#syz test https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
-t master
+> From: ChiYuan Huang <cy_huang@richtek.com>
+> 
+> Add Richtek RT5120 PMIC I2C driver.
+> 
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> ---
+> Since v4:
+> - Add "Copyright" string and refine for GPL version string.
+> - For the last uncertain terminated element in struct arrays, put the comma
+>   for it to keep the extensibility.
+> 
+> Since v3:
+> - Use a 'dev' variable and dev_err_probe to decrease the LOC in mfd.
+> 
+> ---
+>  drivers/mfd/Kconfig  |  12 +++++
+>  drivers/mfd/Makefile |   1 +
+>  drivers/mfd/rt5120.c | 124 +++++++++++++++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 137 insertions(+)
+>  create mode 100644 drivers/mfd/rt5120.c
 
---- a/net/mac80211/ibss.c
-+++ b/net/mac80211/ibss.c
-@@ -530,6 +530,10 @@ int ieee80211_ibss_finish_csa(struct ieee80211_sub_if_=
-data *sdata)
-=20
- =09sdata_assert_lock(sdata);
-=20
-+=09/* When not connected/joined, sending CSA doesn't make sense. */
-+=09if (sdata->u.ibss.state !=3D IEEE80211_IBSS_MLME_JOINED)
-+=09=09return -ENOLINK;
-+
- =09/* update cfg80211 bss information with the new channel */
- =09if (!is_zero_ether_addr(ifibss->bssid)) {
- =09=09cbss =3D cfg80211_get_bss(sdata->local->hw.wiphy,
---=20
-2.35.1
+Applied, thanks.
 
-
+-- 
+Lee Jones [李琼斯]

@@ -2,52 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 129C758F1AC
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 19:40:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 358CE58F1B1
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 19:42:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231954AbiHJRkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 13:40:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44914 "EHLO
+        id S231803AbiHJRmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 13:42:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiHJRka (ORCPT
+        with ESMTP id S230006AbiHJRmM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 13:40:30 -0400
+        Wed, 10 Aug 2022 13:42:12 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2A1550B1
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 10:40:29 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B28832FE;
+        Wed, 10 Aug 2022 10:42:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA7C7613E9
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 17:40:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 030D7C433C1;
-        Wed, 10 Aug 2022 17:40:27 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 70D87613F8;
+        Wed, 10 Aug 2022 17:42:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5ED0CC433C1;
+        Wed, 10 Aug 2022 17:42:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660153228;
-        bh=nFJQxomUh9KTHwScsJk2d45OnI0XqJfT8iv+QgI0DCI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=t86dXLq6U0jQ0NbmsSk2SMYj6T6M/gntZTYucCeKLCyHJoLc1w/xt+hQI6bX5UzQ0
-         u0qMPwvJVcMM1RZLIX2/9TwZuINM64Gym9YxmPJhChzmzMkW0lICrrkYftwW/YbbG7
-         hIex14W5oeN7KS7hvwXe6lC7rBQIxpoFTCVENkAQoP6NWbQqvCsU6/oGbhh/7uRSG+
-         UFeJBPY5GJAR9BWkkX0zDAdP+LCwz42XOKoHaaOP+vI7nS/4Jwu2a9Vy/wipWEYEM+
-         efTpP2RYXRmEtFohBUbDh2ezHzyF2W7/OQsRxGPEftVBiksasHnlPPGM+nwEXWNmrQ
-         HYStKU+KnkL9A==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 66BEB4035A; Wed, 10 Aug 2022 14:40:25 -0300 (-03)
-Date:   Wed, 10 Aug 2022 14:40:25 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Adrian Hunter <adrian.hunter@intel.com>
-Cc:     Jiri Olsa <jolsa@redhat.com>, Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V2 0/3] perf tests: Fix Track with sched_switch test for
- hybrid case
-Message-ID: <YvPtib5Aslem+gtZ@kernel.org>
-References: <20220809080702.6921-1-adrian.hunter@intel.com>
+        s=k20201202; t=1660153330;
+        bh=UKjX/HIVJYtoMT63FsvLicnyqSItCHIDZerhD09rc9M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=aJ/Lpebw9EYhgUQMsaCG/pinULvjGLYsSR2sJ6EmdW/T1+ahDniIsoUEUnpD8Kmk7
+         GZgP0nAaNL/tU/4zYp8briPMQFCzmdWICG2Vl8xvRTM/nJxhfQhcwR6M20KBPp224q
+         F6+2PVMpNe7+BSby/uvyjsRKoOiIhr9KA4xDNt0IdpbryQdOVfgX8jQ0hjPscztsBV
+         VKPD/2Jvm5o5sriEWGATbng/zaSO44nIuqtL/X+ZtNVQvXKGaKJ0w5VoG6JFiA/a/R
+         Tcc9OZthEkIRD8B0hMTJDMyZc5xou6GBpi101OmxfYF7HtZstCrBoJcEYOke5rU/se
+         77aaHvUOJuWYA==
+Date:   Wed, 10 Aug 2022 10:42:09 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Tariq Toukan <ttoukan.linux@gmail.com>
+Cc:     Valentin Schneider <vschneid@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Tariq Toukan <tariqt@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Gal Pressman <gal@nvidia.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Subject: Re: [PATCH 2/2] net/mlx5e: Leverage sched_numa_hop_mask()
+Message-ID: <20220810104209.36961cc1@kernel.org>
+In-Reply-To: <8448dade-a64a-0b6b-1ed0-dd164917eedf@gmail.com>
+References: <xhsmhtu6kbckc.mognet@vschneid.remote.csb>
+        <20220810105119.2684079-1-vschneid@redhat.com>
+        <20220810105119.2684079-2-vschneid@redhat.com>
+        <8448dade-a64a-0b6b-1ed0-dd164917eedf@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220809080702.6921-1-adrian.hunter@intel.com>
-X-Url:  http://acmel.wordpress.com
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,60 +65,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Aug 09, 2022 at 11:06:59AM +0300, Adrian Hunter escreveu:
-> Hi
+On Wed, 10 Aug 2022 15:57:33 +0300 Tariq Toukan wrote:
+> > +		for_each_cpu(cpu, mask) {
+> > +			cpus[i] = cpu;
+> > +			if (++i == ncomp_eqs)
+> > +				goto spread_done;
+> > +		}
+> > +	}
+> > +spread_done:
+> > +	rcu_read_unlock();
+> >   	ret = mlx5_irqs_request_vectors(dev, cpus, ncomp_eqs, table->comp_irqs);
+> >   	kfree(cpus);
+> >   	if (ret < 0)  
 > 
-> Here are a couple of fixes (V2) related to the Track with sched_switch test,
-> and a subsequent tidy-up.
-> 
-> 
-> Changes in V2:
-> 
->       perf parse-events: Fix segfault when event parser gets an error
-> 	Amend commit message to refer to subsequent tidy-up patch
-> 
->       perf tools: Do not pass NULL to parse_events()
-> 	New patch
+> This logic is typical. Other drivers would also want to use it.
+> It must be introduced as a service/API function, if not by the sched 
+> topology, then at least by the networking subsystem.
+> Jakub, WDYT?
 
-Thanks, applied to my local branch.
-
-- Arnaldo
-
- 
-> 
-> Adrian Hunter (3):
->       perf parse-events: Fix segfault when event parser gets an error
->       perf tests: Fix Track with sched_switch test for hybrid case
->       perf tools: Do not pass NULL to parse_events()
-> 
->  tools/perf/arch/arm/util/cs-etm.c       |  2 +-
->  tools/perf/arch/arm64/util/arm-spe.c    |  2 +-
->  tools/perf/arch/x86/tests/intel-cqm.c   |  2 +-
->  tools/perf/arch/x86/util/intel-bts.c    |  2 +-
->  tools/perf/arch/x86/util/intel-pt.c     |  2 +-
->  tools/perf/arch/x86/util/iostat.c       |  2 +-
->  tools/perf/arch/x86/util/topdown.c      |  2 +-
->  tools/perf/tests/code-reading.c         |  2 +-
->  tools/perf/tests/event-times.c          |  2 +-
->  tools/perf/tests/evsel-roundtrip-name.c |  4 ++--
->  tools/perf/tests/hists_cumulate.c       |  2 +-
->  tools/perf/tests/hists_filter.c         |  4 ++--
->  tools/perf/tests/hists_link.c           |  4 ++--
->  tools/perf/tests/hists_output.c         |  2 +-
->  tools/perf/tests/keep-tracking.c        |  4 ++--
->  tools/perf/tests/perf-time-to-tsc.c     |  2 +-
->  tools/perf/tests/switch-tracking.c      | 24 ++++++++++++++++--------
->  tools/perf/util/bpf-loader.c            |  2 +-
->  tools/perf/util/parse-events.c          | 22 ++++++++++++++++++----
->  tools/perf/util/parse-events.h          |  4 ++++
->  tools/perf/util/perf_api_probe.c        |  2 +-
->  tools/perf/util/record.c                |  2 +-
->  22 files changed, 61 insertions(+), 35 deletions(-)
-> 
-> 
-> Regards
-> Adrian
-
--- 
-
-- Arnaldo
+Agreed, no preference where the helper would live tho.

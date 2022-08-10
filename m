@@ -2,92 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AFFC58E98E
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 11:26:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11B9458E991
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 11:26:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232056AbiHJJ0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 05:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52170 "EHLO
+        id S232075AbiHJJ0r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 05:26:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231750AbiHJJ0K (ORCPT
+        with ESMTP id S232072AbiHJJ0m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 05:26:10 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09F7958B7E;
-        Wed, 10 Aug 2022 02:26:08 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id E718A202EE;
-        Wed, 10 Aug 2022 09:26:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1660123566; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=fpr5Y5mYpw0WsJ35coqguIchpHb9iIINxR8BHQJF12A=;
-        b=Vymy5Qn0iv7xtQy8hRP/Z2M9P1/dH4yzKJomcwkW0yvPi4mK98LMvPDm7hAtx0nGKVDKHR
-        6yv8oNSeakD0ugn2YSZ/jZRX6k2BO+EhRy0usr+52PozWmoh5flpg5zD+HvWnDCpRAKNkI
-        Wb6UH5zX328JL4puFQPJVQwi5vwdESg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1660123566;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=fpr5Y5mYpw0WsJ35coqguIchpHb9iIINxR8BHQJF12A=;
-        b=cvuvuGDygDllzRWsoW5TNcGTph+iMtI8oixdI9eeNrZNdpXgA41EBDK1RxOksB9R7HQ0Cu
-        dvJrkT/Jk5MVjmAA==
-Received: from localhost.localdomain (unknown [10.100.201.122])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 10 Aug 2022 05:26:42 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C57426053B
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 02:26:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660123596;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=REovcAc0irul9Otc+DHjiNYKhgyWXaWXdC+TCEPnc/U=;
+        b=IFu79W3O9X4h8A0hQntdnluZjtYEYAINmzoLY69O10ZQ+uC0mcyxG0sSUfR7bECdl78MKs
+        6nOV+BPZnNiyfbWo8VPTPJ2rsora3RzjzgKUDb3DuNBELkJqWIXY/rX6ELhIyXq4dZJRR6
+        nkqclZc+h6GVALpFmPHhoPBji1qIXpU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-638-V-viqhV2OyKPRUEj6RfDPg-1; Wed, 10 Aug 2022 05:26:33 -0400
+X-MC-Unique: V-viqhV2OyKPRUEj6RfDPg-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id A27442C2A8;
-        Wed, 10 Aug 2022 09:26:06 +0000 (UTC)
-From:   Jiri Slaby <jslaby@suse.cz>
-To:     masahiroy@kernel.org
-Cc:     linux-kernel@vger.kernel.org, Jiri Slaby <jslaby@suse.cz>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kbuild@vger.kernel.org
-Subject: [PATCH] kbuild: dummy-tools: pretend we understand __LONG_DOUBLE_128__
-Date:   Wed, 10 Aug 2022 11:26:03 +0200
-Message-Id: <20220810092603.20368-1-jslaby@suse.cz>
-X-Mailer: git-send-email 2.37.1
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7707118A6585;
+        Wed, 10 Aug 2022 09:26:33 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.39.192.75])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 2352A400DFD7;
+        Wed, 10 Aug 2022 09:26:31 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     David Howells <dhowells@redhat.com>
+Cc:     linux-fsdevel@vger.kernel.org, Ian Kent <raven@themaw.net>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
+        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC][PATCH] uapi: Remove the inclusion of linux/mount.h from
+ uapi/linux/fs.h
+References: <163410.1659964655@warthog.procyon.org.uk>
+Date:   Wed, 10 Aug 2022 11:26:30 +0200
+In-Reply-To: <163410.1659964655@warthog.procyon.org.uk> (David Howells's
+        message of "Mon, 08 Aug 2022 14:17:35 +0100")
+Message-ID: <87zggce9fd.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a test in powerpc's Kconfig which checks __LONG_DOUBLE_128__
-and sets CONFIG_PPC_LONG_DOUBLE_128 if it is understood by the compiler.
+* David Howells:
 
-We currently don't handle it, so this results in PPC_LONG_DOUBLE_128 not
-being in super-config generated by dummy-tools. So take this into
-account in the gcc script and preprocess __LONG_DOUBLE_128__ as "1".
+> We're seeing issues in autofs and xfstests whereby linux/mount.h (the UAPI
+> version) as included indirectly by linux/fs.h is conflicting with
+> sys/mount.h (there's a struct and an enum).
+>
+> Would it be possible to just remove the #include from linux/fs.h (as patch
+> below) and rely on those hopefully few things that need mount flags that don't
+> use the glibc header for them working around it by configuration?
 
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Michal Marek <michal.lkml@markovi.net>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: linux-kbuild@vger.kernel.org
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
----
- scripts/dummy-tools/gcc | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Wasn't <linux/mount.h> split from <linux/fs.h> relatively recently, and
+userspace is probably using <linux/fs.h> to get the mount flag
+definitions?
 
-diff --git a/scripts/dummy-tools/gcc b/scripts/dummy-tools/gcc
-index 7db825843435..1db1889f6d81 100755
---- a/scripts/dummy-tools/gcc
-+++ b/scripts/dummy-tools/gcc
-@@ -59,7 +59,7 @@ fi
- if arg_contain -E "$@"; then
- 	# For scripts/cc-version.sh; This emulates GCC 20.0.0
- 	if arg_contain - "$@"; then
--		sed -n '/^GCC/{s/__GNUC__/20/; s/__GNUC_MINOR__/0/; s/__GNUC_PATCHLEVEL__/0/; p;}'
-+		sed -n '/^GCC/{s/__GNUC__/20/; s/__GNUC_MINOR__/0/; s/__GNUC_PATCHLEVEL__/0/; p;}; s/__LONG_DOUBLE_128__/1/ p'
- 		exit 0
- 	else
- 		echo "no input files" >&2
--- 
-2.37.1
+In retrospect, it would have been better to add the new fsmount stuff to
+a separate header file, so that we could include that easily from
+<sys/mount.h> on the glibc side.  Adhemerval posted a glibc patch to
+fake that (for recent compilers):
+
+  [PATCH] linux: Fix sys/mount.h usage with kernel headers
+  <https://sourceware.org/pipermail/libc-alpha/2022-August/141316.html>
+
+I think it should work reliably, so that's probably the direction we are
+going to move in.
+
+We'll backport this to 2.36, and distributions will pick it up.
+
+Thanks,
+Florian
 

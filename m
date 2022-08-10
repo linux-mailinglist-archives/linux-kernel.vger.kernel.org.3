@@ -2,288 +2,290 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75A0558E5E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 05:59:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43B4C58E5E7
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 06:02:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbiHJD7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 23:59:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58450 "EHLO
+        id S230301AbiHJECR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 00:02:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230261AbiHJD7j (ORCPT
+        with ESMTP id S229563AbiHJECN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 23:59:39 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2081.outbound.protection.outlook.com [40.107.93.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27000E37;
-        Tue,  9 Aug 2022 20:59:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nQjep9eoxvaHJ+/zwbtd43Vr8e+x7SONqPsYvJzPvMQXBI50QD9EZamHzaGq5lhhEw8kAmmyp7l8RhIcwySBBRnT8J/tjhG5gXQF3f2k/VKhS9N35k+xBOf+/U94+XEUqOnFJz0E/+hK2KRJi4VyrVC88+QloYasQjMTvfg1fPrSWqd9BBkGOPohp6P3Gkf7eHeg1QN2gTBZe92sxYDs7m9B8Fwq/xm0gRXlzXRR31t5YwJG/++pnLBFCkHLUmlNz5inPEhQuNvqG3jFY3GsmN/TVzLGoZ9WDU7ctyK1JHGx9GUzYGsYhAHy/Zjsyeie4gFS5hC7dLBZEU6U5Rm0uw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RVyAlXXClJnTOBhhudIbdrmRlbWwQU2uEqf2K9VNDFU=;
- b=AiP9d+q3nI1wd2BqAucBI90Ct3FOXgKVl0Bv1ftVWY++OuQ6uFnxEuIJ7m5DksUmgAFojg0DfwP9a0N4SJnsRcu6u8BtUttSNfh70kDJCE2QX4NnecQtWvH/7YlRw8ETkdWYlPYsE6OrrDeA4FCqGw7aC02TOLSbg2alKTifN99/0uVFwsxrCrOGluqC7H9Gyp2lK4lMy7jrb76fd6TI6ymuokymhleGpgFqMqB/7bxJv4bKFL0rDevym/GMmUt3Ty5LLPwUGS2NsOhrMQYCUfHrCTKU9ke/6oK8BQmNkVEoWBl/m0YBrXtMrW91xRNUupiu8GcOfuHthmjm44PQMQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RVyAlXXClJnTOBhhudIbdrmRlbWwQU2uEqf2K9VNDFU=;
- b=CKUmnbqelvrhexMbKopZ2nvCbZW2MeRcqZTPmYez88QYnTytfDR3K2Zi7/GdcmLO1NlRAXUGzqdiZrDmzkL3jd6oIJ5sAKGLRH3xwcvgn3sdKCGxUwhVpA8vEUtwD0Ii1MNiDH6s31q4fEWsl6ITS2uloifvrPWv+pImMUz6SY4=
-Received: from SN6PR12MB2767.namprd12.prod.outlook.com (2603:10b6:805:75::23)
- by MN0PR12MB6173.namprd12.prod.outlook.com (2603:10b6:208:3c6::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14; Wed, 10 Aug
- 2022 03:59:35 +0000
-Received: from SN6PR12MB2767.namprd12.prod.outlook.com
- ([fe80::8953:6baa:97bb:a15d]) by SN6PR12MB2767.namprd12.prod.outlook.com
- ([fe80::8953:6baa:97bb:a15d%7]) with mapi id 15.20.5504.020; Wed, 10 Aug 2022
- 03:59:34 +0000
-From:   "Kalra, Ashish" <Ashish.Kalra@amd.com>
-To:     Borislav Petkov <bp@alien8.de>
-CC:     "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "jroedel@suse.de" <jroedel@suse.de>,
-        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "slp@redhat.com" <slp@redhat.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "srinivas.pandruvada@linux.intel.com" 
-        <srinivas.pandruvada@linux.intel.com>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "dovmurik@linux.ibm.com" <dovmurik@linux.ibm.com>,
-        "tobin@ibm.com" <tobin@ibm.com>,
-        "Roth, Michael" <Michael.Roth@amd.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "marcorr@google.com" <marcorr@google.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "alpergun@google.com" <alpergun@google.com>,
-        "dgilbert@redhat.com" <dgilbert@redhat.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>
-Subject: RE: [PATCH Part2 v6 09/49] x86/fault: Add support to handle the RMP
- fault for user address
-Thread-Topic: [PATCH Part2 v6 09/49] x86/fault: Add support to handle the RMP
- fault for user address
-Thread-Index: AQHYrBDc30zm/ve2UUW13wSedLDd3a2nIMng
-Date:   Wed, 10 Aug 2022 03:59:34 +0000
-Message-ID: <SN6PR12MB2767322F8C573EDFA1C20AD78E659@SN6PR12MB2767.namprd12.prod.outlook.com>
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <0ecb0a4781be933fcadeb56a85070818ef3566e7.1655761627.git.ashish.kalra@amd.com>
- <YvKRjxgipxLSNCLe@zn.tnic>
-In-Reply-To: <YvKRjxgipxLSNCLe@zn.tnic>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2022-08-09T22:07:48Z;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=f0ffc751-fb2e-4796-9437-0d1a55912b87;
- MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=1
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_enabled: true
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_setdate: 2022-08-10T03:59:32Z
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_method: Standard
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_name: General
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_siteid: 3dd8961f-e488-4e60-8e11-a82d994e183d
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_actionid: ad40b16e-761b-4707-a83d-4907c7d4a2fb
-msip_label_4342314e-0df4-4b58-84bf-38bed6170a0f_contentbits: 0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 06fc8f66-1329-47ad-3f5e-08da7a84bc98
-x-ms-traffictypediagnostic: MN0PR12MB6173:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: ZXNgQ4a0ZAaHDvDNQw0zscYrYL63zpFooAumnFKkgXmjl3lrsg0tUrGBJUudjhvAzpv7o7uyt0x5zSLm+IcqRtfrbmm5ByDbnClEUDfJXdfUTpaNzR+8JFCs1X8XfzbiMVYja0faANwPERbZ4z7eOT2xQaaDSWXUibTf5g7fD7XNvonCebImKoRxelpLqle+T7et147fwBcKzOvoHWDjWto6A+e/J6vfJgSFgkBa8iHalZueMxVsB7b22RCzQIEpARGZhyUw0fvQEU6mSTbIup+mHclK5ErSFF3VcqWoS5ycTX8fzEfo2Y/YND75jVH5eEt1/9g+hA/6FdqDDfG2AEnrAXS5YKALtfIf3fUlYoqgKJqOeO19ssll8nfFbb6UTTU3YLj3MEgMSngrCN2GCoROeENyWPaXAhLcirbyl5oo2IeCZsczhFSCoQkCT+9qLXgjMtD63QvWQ2NBxvv3Bp9sQ+7WkrvESibEXM8bhOtgKc2PeawzhNNBFaWVHmbkCbwJheoPtRmEFlVqpO/BaZbRAocvMEAVVA7Yik/MSj3FQv/hsjiQIgj/eEBW1i5dW5iY1VGCqN2vaIUu8QJ/sVwyJBj8pkNAKijO1FzW8cj2djKOt+og1SfXycE4JODvWFaVdkEdxpfvcgJ2YC3+FHE+3DAoDmq3GBs28EqXHGJA+Nd3vgqYAZYFTG6u0zQjMz6ghe0xmrwac7MJACYr9InoivUq3JHcFy8gkNpaQf55Ej+7fV8G2J92vzYxwjcGDZ8dsgRIbXz3lw5GJgEgP5TRjndFxhRK3s+O8BmhuxxNizd7OHzgF7wEdkZi58UF
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR12MB2767.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(366004)(136003)(376002)(396003)(346002)(55016003)(26005)(7406005)(7416002)(5660300002)(41300700001)(33656002)(9686003)(6506007)(122000001)(186003)(2906002)(83380400001)(7696005)(76116006)(66446008)(71200400001)(6916009)(66476007)(66556008)(8676002)(54906003)(316002)(64756008)(86362001)(478600001)(66946007)(4326008)(38100700002)(52536014)(8936002)(38070700005);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?CN1rolJr8WgodNVdnFtFHmt1sMCZY1H57jgGOsvzg5IeIoeJkIfxGzju2d/G?=
- =?us-ascii?Q?iUobtrHjZll7XNBDJdS3mksCn/j0s10pUzqhYNwT35U7UD6Pn7LZiNi/ArFC?=
- =?us-ascii?Q?dP2KfSm3cBl8s6dVyFEZlwhbMVJDzQKkN08/PgAZEH36HKCIIpgS8wZ7Uhiv?=
- =?us-ascii?Q?GTHEydMM8HELWSmoD1nhsHhRTpxjhkFiAU5LnP6d4MHj3NizIuKOKCaA6Y//?=
- =?us-ascii?Q?qevfzBew53sYJRUzyhMC+PDknGC1nZggVISdkDcKK+1G3/TdmCUOFSFcSC67?=
- =?us-ascii?Q?kGelnNsJ9Vz9nubrHqL2LSPnRo6wh7kAo+DQT/AyHnYOybMLWS5d7KXtLPLe?=
- =?us-ascii?Q?I8p8augFF6vC0NiMssAmGrjR8bPtTbAOAMdisLkGmIn7d1J7KV9tLh8FGnBj?=
- =?us-ascii?Q?ASfuHbtI2lJfHlCJzs/krQ6aI58OkNYMmHgmpROFFx/b/M9Ej+Y1FAut57ad?=
- =?us-ascii?Q?05wOFyVPBJktRUzxqrOO7wd5bCZhA1djZUGnIAs6Or6n4OBMmxSAgX1jZbco?=
- =?us-ascii?Q?jHrl9DsPn/e5Qz3AeLWUInmoL0Ww//qCV9bUcLzg0vgUaBvrT74GsemFal58?=
- =?us-ascii?Q?uK6qFefR3rRLTSh7mPpJvjYGHggFXkJNwS0b1lGZrXEcNqQGs9M347cIlXdo?=
- =?us-ascii?Q?3EksV7UpZbVuGJYu4Qw5vC/1FQRf6FYhM7G3gvSFBg4X56OxkuY/vJ+q9ert?=
- =?us-ascii?Q?smEdkRGt0Enybj4vlMX3eyFwsrUDW4dG6vhCPEKEJrAdHPgZmWp9XhUdp0zx?=
- =?us-ascii?Q?TO03L+MrLI0QBG+5NEDDws4t550Mhf5Rpg9n4KCbsy75bMhXtQojUuoJ6/K+?=
- =?us-ascii?Q?Swj4QHbOP7FA0bf7uAxZuD6Ymecx7Innju9O6DBxX9E5ZLrMurnsz53E7qRR?=
- =?us-ascii?Q?wT2pOLLqpoT4KpCrT4ARe+ACkHT+kj8pWMYkEOp2BY45yl1m6UFsd6ovG3CT?=
- =?us-ascii?Q?s/XUPrTTO0hqpbUnLI0FmvESMFb4HvMtpxXzT4veaZgE72ndl1g19NdIYiyz?=
- =?us-ascii?Q?Ui7W67o0KBerEn7BLpnXq61v00zKhsQRyJgD5sKDfUGl9TbHcr5eqfsy75M7?=
- =?us-ascii?Q?rFWy4Ns8uUfR71qKUCmbzsW0OYh9rV6DvJKN6WBNLW6vRL7gJu3m31DhEBFJ?=
- =?us-ascii?Q?KW6i2FjRGJVubsZC7uFIi9lD33UCdjfWynWWZ5kDnW5esMZIJH5VEJXtdvXx?=
- =?us-ascii?Q?ompYSjK4L7KMppCiCOdmtQLLAfEGEb+mqaJ/A3DfCIGAjxa6VYQ8ZaD3SDMW?=
- =?us-ascii?Q?5dm/XHNjzouXPuxjonts0A91+Csk9qnGSyqBvCuy9bXKqwADquX8hsPEShC6?=
- =?us-ascii?Q?pAlz0+XbUSV7bjFo5g45iFdUBr3zk4IxdbsBtX5+6Ts6ugXla1oAnJvE8CNv?=
- =?us-ascii?Q?0/4vXQKXPsPHpr3sRQuw4JaPcUzzXo/VupsK6FQyO+gage7zxshOB/6zaZzO?=
- =?us-ascii?Q?UK8TNEnBsgx7LDOKY1y3Z36GJ2IXrHe2hpQYU9yWTyPTjQoruN70xiFEHWls?=
- =?us-ascii?Q?oU+axxL4vlvigfWjL5sMf4yhgnWlJeHyc7cm9Br7Fen3uJzqK8rFr+sqKzui?=
- =?us-ascii?Q?2tEJRoMo9APRCxKgvFA=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Wed, 10 Aug 2022 00:02:13 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D5B6FA06
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 21:02:12 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id b133so12594194pfb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 21:02:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=JFsV/GakC2wCXshzhvkL3vkjWivoxqwQd4pmVCTfwSA=;
+        b=qFPIbkgtwMvIDpJwpk8L2oynawJJqEV5+bLFKdedIPZ6qKy26PJOKWU4ehpHbph1NA
+         uJ+ilviOdHHBHa2sH/gWSwJmpDqAwjZpjZ/5AWAxvlEWZqQW6Kgia6n44LK4Z0U79b4W
+         53493Skkv/ysZIu56oYi+6XdC4oiLO/KGJpgrd3lC+SmRoPp1KDessU3MCHIaw6g/czi
+         ThruAfXu8xU4LXJc3Totl2L3atrw+fV7FS3Xf7Z47XgUP/8JNKHa7aaspwKI/u3IWN0+
+         uIrDIJ6yhWWf/BT28x+sRy9g04lV+5A1oKLbmbY+uMMqccfbjx0wwIlljnqnJJO5RdCV
+         FmHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=JFsV/GakC2wCXshzhvkL3vkjWivoxqwQd4pmVCTfwSA=;
+        b=QmW9mDbQnqJhlK7oroMpeFw5Sljhk9hC+6KcVEGXvcwFSlr52LgSgOPz9c46LI6dz5
+         iWoDg52xec/epwcX5n6eai5AQEiv93YOZCJHplouX71VvODlk4UEbRc1v1a2lnFBYr1Z
+         Pw9bP51RQL41w64PYWp1Omp8FZmoUaY9v6I1DwufKPpu9OWNpvduQlR67AHml4RTa0lt
+         DhfvzUns0ONVe5mgLfPp8DBNlj/WcElLVyEMLQsE8Vc+pygSd+4sNmQTvHJxRRBy1gbG
+         DEepGt0mvNFf8FXgodhmPQPHyPp9gfYO8YCRjZy7pAJ/RlQygqa5uYVglvrlQGzCXt0v
+         8wsA==
+X-Gm-Message-State: ACgBeo1obX44IUMLoqYXfWzoUuimDYOMhm2H3e3CF+Vr5aJUl4pRLiSf
+        YvJnqukUv8bKG/IBicgBSRm9vg==
+X-Google-Smtp-Source: AA6agR5lzfd0MO1x+0girLwZUpq9fAjqkGKIBhV65MRVvTY82nsOLroq/HQpyMNXRlA8eHsbKwcnGA==
+X-Received: by 2002:a63:1b03:0:b0:41d:c914:d5ba with SMTP id b3-20020a631b03000000b0041dc914d5bamr4156027pgb.536.1660104131848;
+        Tue, 09 Aug 2022 21:02:11 -0700 (PDT)
+Received: from [10.94.58.189] ([139.177.225.238])
+        by smtp.gmail.com with ESMTPSA id b2-20020a170902d50200b0016b90620910sm11863825plg.71.2022.08.09.21.02.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Aug 2022 21:02:11 -0700 (PDT)
+Message-ID: <b62804cb-2b60-a534-5096-56785a1940bd@bytedance.com>
+Date:   Wed, 10 Aug 2022 12:02:05 +0800
 MIME-Version: 1.0
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR12MB2767.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 06fc8f66-1329-47ad-3f5e-08da7a84bc98
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Aug 2022 03:59:34.4556
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 7Bo7MCChBTMYfWrBZArApoNVcF160NUE+YrtQL4AIwhwiRAvLDaf7HOn9WFHMKt9STpmrGi/0AC8jq+OA590GQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6173
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [PATCH v2] sched/fair: Introduce priority load balance to reduce
+ interference from IDLE tasks
+Content-Language: en-US
+To:     zhangsong <zhangsong34@huawei.com>, mingo@redhat.com,
+        peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org
+Cc:     dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
+References: <20220810015636.3865248-1-zhangsong34@huawei.com>
+From:   Abel Wu <wuyun.abel@bytedance.com>
+In-Reply-To: <20220810015636.3865248-1-zhangsong34@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[AMD Official Use Only - General]
+Hi Zhang Song,
 
-Hello Boris,
+On 8/10/22 9:56 AM, zhangsong Wrote:
+> For co-location with NORMAL and IDLE tasks, when CFS trigger load balance,
+> it is reasonable to prefer migrating NORMAL(Latency Sensitive) tasks from
+> the busy src CPU to dst CPU, and migrating IDLE tasks lastly.
 
->> When SEV-SNP is enabled globally, a write from the host goes through=20
->> the
+Considering the large weight difference between normal and idle tasks,
+does the re-ordering really change things? It would be helpful if you
+can offer more detailed info.
 
->globally?
+> 
+> This is very important for reducing interference from IDLE tasks.
+> So the CFS load balance can be optimized to below:
+> 
+> 1.`cfs_tasks` list of CPU rq is owned by NORMAL tasks.
+> 2.`cfs_idle_tasks` list of CPU rq which is owned by IDLE tasks.
+> 3.Prefer to migrate NORMAL tasks of cfs_tasks to dst CPU.
+> 4.Lastly migrate IDLE tasks of cfs_idle_tasks to dst CPU.
+> 
+> This was tested with the following reproduction:
+> - small number of NORMAL tasks colocated with a large number of IDLE tasks
+> 
+> With this patch, NORMAL tasks latency can be reduced
+> about 5~10% compared with current.
+> 
+> Signed-off-by: zhangsong <zhangsong34@huawei.com>
+> Reported-by: kernel test robot <lkp@intel.com>
 
->Can SNP be even enabled any other way?
+The Reported-by tag is usually used for reporting a bug in the mainline
+kernel, and build error of your patch is not one of them :)
 
->I see the APM talks about it being enabled globally, I guess this means th=
-e RMP represents *all* system memory?
+> ---
+> V1->V2:
+> - fix build test error
+> ---
+>   kernel/sched/core.c  |  1 +
+>   kernel/sched/fair.c  | 45 ++++++++++++++++++++++++++++++++++++++++----
+>   kernel/sched/sched.h |  1 +
+>   3 files changed, 43 insertions(+), 4 deletions(-)
+> 
+> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
+> index ee28253c9ac0..7325c6e552d8 100644
+> --- a/kernel/sched/core.c
+> +++ b/kernel/sched/core.c
+> @@ -9733,6 +9733,7 @@ void __init sched_init(void)
+>   		rq->max_idle_balance_cost = sysctl_sched_migration_cost;
+>   
+>   		INIT_LIST_HEAD(&rq->cfs_tasks);
+> +		INIT_LIST_HEAD(&rq->cfs_idle_tasks);
+>   
+>   		rq_attach_root(rq, &def_root_domain);
+>   #ifdef CONFIG_NO_HZ_COMMON
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 914096c5b1ae..b62bec5b1eb9 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -3034,6 +3034,21 @@ static inline void update_scan_period(struct task_struct *p, int new_cpu)
+>   
+>   #endif /* CONFIG_NUMA_BALANCING */
+>   
+> +#ifdef CONFIG_SMP
+> +static void
+> +adjust_rq_cfs_tasks(void (*list_op)(struct list_head *, struct list_head *),
+> +	struct rq *rq,
+> +	struct sched_entity *se)
+> +{
+> +	struct cfs_rq *cfs_rq = cfs_rq_of(se);
+> +
+> +	if (task_has_idle_policy(task_of(se)) || tg_is_idle(cfs_rq->tg))
 
-Actually SNP feature can be enabled globally, but SNP is activated on a per=
- VM basis.
+The tg_is_idle() doesn't have hierarchical judgement on parent task
+groups, while rq->cfs{,_idle}_tasks is rq wide. Say A->B where tgA
+is idle and tgB isn't, a task from B will be added to the non-idle
+list, is this what you want?
 
-From the APM:
-The term SNP-enabled indicates that SEV-SNP is globally enabled in the SYSC=
-FG=20
-MSR. The term SNP-active indicates that SEV-SNP is enabled for a specific V=
-M in the=20
-SEV_FEATURES field of its VMSA
+> +		(*list_op)(&se->group_node, &rq->cfs_idle_tasks);
+> +	else
+> +		(*list_op)(&se->group_node, &rq->cfs_tasks);
+> +}
+> +#endif
+> +
+>   static void
+>   account_entity_enqueue(struct cfs_rq *cfs_rq, struct sched_entity *se)
+>   {
+> @@ -3043,7 +3058,7 @@ account_entity_enqueue(struct cfs_rq *cfs_rq, struct sched_entity *se)
+>   		struct rq *rq = rq_of(cfs_rq);
+>   
+>   		account_numa_enqueue(rq, task_of(se));
+> -		list_add(&se->group_node, &rq->cfs_tasks);
+> +		adjust_rq_cfs_tasks(list_add, rq, se);
+>   	}
+>   #endif
+>   	cfs_rq->nr_running++;
+> @@ -7465,7 +7480,7 @@ done: __maybe_unused;
+>   	 * the list, so our cfs_tasks list becomes MRU
+>   	 * one.
+>   	 */
+> -	list_move(&p->se.group_node, &rq->cfs_tasks);
+> +	adjust_rq_cfs_tasks(list_move, rq, &p->se);
+>   #endif
+>   
+>   	if (hrtick_enabled_fair(rq))
+> @@ -7788,6 +7803,9 @@ static int task_hot(struct task_struct *p, struct lb_env *env)
+>   	if (unlikely(task_has_idle_policy(p)))
+>   		return 0;
+>   
+> +	if (tg_is_idle(cfs_rq_of(&p->se)->tg))
+> +		return 0;
+> +
 
->> +/*
->> + * Return 1 if the caller need to retry, 0 if it the address need to be=
- split
->> + * in order to resolve the fault.
->> + */
+Same as above. But I am not sure this is the right way to do it. We
+still want to maintain policy behavior inside an idle task group.
 
->Magic numbers.
+>   	/* SMT siblings share cache */
+>   	if (env->sd->flags & SD_SHARE_CPUCAPACITY)
+>   		return 0;
+> @@ -7800,6 +7818,11 @@ static int task_hot(struct task_struct *p, struct lb_env *env)
+>   			 &p->se == cfs_rq_of(&p->se)->last))
+>   		return 1;
+>   
+> +	/* Preempt sched idle cpu do not consider migration cost */
+> +	if (cpus_share_cache(env->src_cpu, env->dst_cpu) &&
+> +	    sched_idle_cpu(env->dst_cpu))
+> +		return 0;
+> +
+>   	if (sysctl_sched_migration_cost == -1)
+>   		return 1;
+>   
+> @@ -7990,11 +8013,14 @@ static void detach_task(struct task_struct *p, struct lb_env *env)
+>   static struct task_struct *detach_one_task(struct lb_env *env)
+>   {
+>   	struct task_struct *p;
+> +	struct list_head *tasks = &env->src_rq->cfs_tasks;
+> +	int loop = 0;
 
->Pls do instead:
-
->enum rmp_pf_ret {
->	RMP_PF_SPLIT	=3D 0,
->	RMP_PF_RETRY	=3D 1,
->};
-
->and use those instead.
-Ok.
-
->> +static int handle_user_rmp_page_fault(struct pt_regs *regs, unsigned lo=
-ng error_code,
->> +				      unsigned long address)
->> +{
->> +	int rmp_level, level;
->> +	pte_t *pte;
->> +	u64 pfn;
->> +
->> +	pte =3D lookup_address_in_mm(current->mm, address, &level);
->> +
->> +	/*
->> +	 * It can happen if there was a race between an unmap event and
->> +	 * the RMP fault delivery.
->> +	 */
-
->You need to elaborate more here: a RMP fault can happen and then the
->page can get unmapped? What is the exact scenario here?
-
-Yes, if the page gets unmapped while the RMP fault was being handled,
-will add more explanation here.
-
->> +	if (!pte || !pte_present(*pte))
->> +		return 1;
->> +
->> +	pfn =3D pte_pfn(*pte);
->> +
->> +	/* If its large page then calculte the fault pfn */
->> +	if (level > PG_LEVEL_4K) {
->> +		unsigned long mask;
->> +
->> +		mask =3D pages_per_hpage(level) - pages_per_hpage(level - 1);
->> +		pfn |=3D (address >> PAGE_SHIFT) & mask;
-
->Oh boy, this is unnecessarily complicated. Isn't this
-
->	pfn |=3D pud_index(address);
-
->or
->	pfn |=3D pmd_index(address);
-
->depending on the level?
-
-Actually, the above computes an index into the RMP table. It is basically a=
-n index into
-the 4K page within the hugepage mapped in the RMP table or in other words a=
-n index
-into the RMP table entry for 4K page(s) corresponding to a hugepage.
-
-So, pud_index()/pmd_index() can't be used for the same.
-
->I think it is but it needs more explaining.
-
->In any case, those are two static masks exactly and they don't need to
->be computed for each #PF.
-
->> diff --git a/mm/memory.c b/mm/memory.c
->> index 7274f2b52bca..c2187ffcbb8e 100644
->> --- a/mm/memory.c
->> +++ b/mm/memory.c
->> @@ -4945,6 +4945,15 @@ static vm_fault_t handle_pte_fault(struct vm_faul=
-t *vmf)
->>  	return 0;
->>  }
->>=20
->>. +static int handle_split_page_fault(struct vm_fault *vmf)
->> +{
-> >+	if (!IS_ENABLED(CONFIG_AMD_MEM_ENCRYPT))
->> +		return VM_FAULT_SIGBUS;
-
->Yah, this looks weird: generic code implies that page splitting after a
->#PF makes sense only when SEV is present and none otherwise.
-
-It is mainly a wrapper around__split_huge_pmd() for SNP use case
-where the host hugepage is split to be in sync with the RMP table.=20
+Maybe a boolean variable is enough (and more readable)?
 
 Thanks,
-Ashish
+Abel
+
+>   
+>   	lockdep_assert_rq_held(env->src_rq);
+>   
+> +again:
+>   	list_for_each_entry_reverse(p,
+> -			&env->src_rq->cfs_tasks, se.group_node) {
+> +			tasks, se.group_node) {
+>   		if (!can_migrate_task(p, env))
+>   			continue;
+>   
+> @@ -8009,6 +8035,10 @@ static struct task_struct *detach_one_task(struct lb_env *env)
+>   		schedstat_inc(env->sd->lb_gained[env->idle]);
+>   		return p;
+>   	}
+> +	if (++loop == 1) {
+> +		tasks = &env->src_rq->cfs_idle_tasks;
+> +		goto again;
+> +	}
+>   	return NULL;
+>   }
+>   
+> @@ -8026,6 +8056,7 @@ static int detach_tasks(struct lb_env *env)
+>   	unsigned long util, load;
+>   	struct task_struct *p;
+>   	int detached = 0;
+> +	int loop = 0;
+>   
+>   	lockdep_assert_rq_held(env->src_rq);
+>   
+> @@ -8041,6 +8072,7 @@ static int detach_tasks(struct lb_env *env)
+>   	if (env->imbalance <= 0)
+>   		return 0;
+>   
+> +again:
+>   	while (!list_empty(tasks)) {
+>   		/*
+>   		 * We don't want to steal all, otherwise we may be treated likewise,
+> @@ -8142,6 +8174,11 @@ static int detach_tasks(struct lb_env *env)
+>   		list_move(&p->se.group_node, tasks);
+>   	}
+>   
+> +	if (env->imbalance > 0 && ++loop == 1) {
+> +		tasks = &env->src_rq->cfs_idle_tasks;
+> +		goto again;
+> +	}
+> +
+>   	/*
+>   	 * Right now, this is one of only two places we collect this stat
+>   	 * so we can safely collect detach_one_task() stats here rather
+> @@ -11643,7 +11680,7 @@ static void set_next_task_fair(struct rq *rq, struct task_struct *p, bool first)
+>   		 * Move the next running task to the front of the list, so our
+>   		 * cfs_tasks list becomes MRU one.
+>   		 */
+> -		list_move(&se->group_node, &rq->cfs_tasks);
+> +		adjust_rq_cfs_tasks(list_move, rq, se);
+>   	}
+>   #endif
+>   
+> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> index e26688d387ae..accb4eea9769 100644
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -1068,6 +1068,7 @@ struct rq {
+>   	int			online;
+>   
+>   	struct list_head cfs_tasks;
+> +	struct list_head cfs_idle_tasks;
+>   
+>   	struct sched_avg	avg_rt;
+>   	struct sched_avg	avg_dl;

@@ -2,135 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E3C858EBA4
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 14:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 493EE58EBD2
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 14:13:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232017AbiHJMGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 08:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36504 "EHLO
+        id S231740AbiHJMNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 08:13:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230000AbiHJMGb (ORCPT
+        with ESMTP id S229476AbiHJMNu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 08:06:31 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E8311463;
-        Wed, 10 Aug 2022 05:06:29 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 9E6DD320016F;
-        Wed, 10 Aug 2022 08:06:26 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Wed, 10 Aug 2022 08:06:27 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwcx.xyz; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1660133186; x=1660219586; bh=3XbRmvT48M
-        pdRH2ywGW3ehrhy3CjGTqx3lHdeyY6c4c=; b=SXj98chvzemW2+D+giV//Vm4lf
-        r0EJ0mMccOw9xMl0/NXENd7eVaYfQ1DK1HRkBEM8KjHAlXil4CEmBiGCrwPNC+Kh
-        hdahInc6BNxj3+bgqo+qiQy3a2MuRbkMaVbxVTTfDDjaHhca/P4swZ80ycTQgIP0
-        604VoWI9WvUmBiGdjB80uacucJML0c4713e0o9R4bdQi+56kcU9DYg0uRw4eglis
-        qbIXoi+9w7g/9+gT5L4L2sgjwhOahqygyo/49KVLLkeFfHhp8A6o7Qoyir2X+5Mq
-        6W8dxW2k7Lvd2qMAtmeEvB2tHGjRBgChap1El0CZI2m45ugdRZyf9ZnTNU6w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1660133186; x=1660219586; bh=3XbRmvT48MpdRH2ywGW3ehrhy3Cj
-        GTqx3lHdeyY6c4c=; b=C4MvPgfFs+BmCzMgV9dR95NpWJBJABmCxPG4pWCiPbl8
-        69YgY7X/ywibwO4u3aUcngLbqOzs8bw21VZCUnAL0Cygb1IhJYA1Icdmur/WTwY9
-        ZUaVmJft7S26teaKS62PW3J3/L8qPLjkznmRb4g/7odmOU+016c0KvtzVpEX/zS6
-        WN7g2aQTWccy0801bi6LM8XMO000IvULM4v5i5APIsjylQiBS3H8CJFnB9bV2vws
-        guhzECP9VxdGWjhW2ZkXygBD2cXmpaGmZBfOIfUo8r07ouAKJPaF2z4GA15x/+8M
-        n+YsI8Wx6HrhkiiKF7gyhHuDQquoswTwSrBhaOlrKg==
-X-ME-Sender: <xms:QZ_zYkgQaZkPKw8JtSWIBwz6vNWku9vl9MqjBGGpTZmDOxuBH9IGmA>
-    <xme:QZ_zYtC6snDGOa6mrvRLMdy-93orr09baR-9wBpGI7lADlAMHGcJ-60FPfcW7xTMv
-    e7T6SKMXLtuWmKksvA>
-X-ME-Received: <xmr:QZ_zYsHCEB9z1_b6YnGWuGDlnFmEV7roc5fGggXpgEBZ9ATbMG-C-ywEv6jOscqBEtAsdma45N1f4GAoa7mds781xm0gNAbM>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegvddggeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    gfrhhlucfvnfffucdlfeehmdenucfjughrpeffhffvvefukfhfgggtuggjsehgtderredt
-    tddvnecuhfhrohhmpefrrghtrhhitghkucghihhllhhirghmshcuoehprghtrhhitghkse
-    hsthiftgigrdighiiiqeenucggtffrrghtthgvrhhnpeehfeejheeftdejiedvfeekffeh
-    ledukeduleelffekgfdtleduledvtdegtdehkeenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpehprghtrhhitghksehsthiftgigrdighiii
-X-ME-Proxy: <xmx:QZ_zYlS-63UCptcj1fEp1ZNjvHjt0bce7xWTP4hogKk2rjd36sJxEQ>
-    <xmx:QZ_zYhxGE4xrlLKojS2ICOQ-aNFMEGNK5xqvKbKHU2bBXS0lywT51A>
-    <xmx:QZ_zYj6e6F-ell4eS8bcMiK6iLM9_30ZCoMFOga4emjmHKycLwVd9g>
-    <xmx:Qp_zYokX29Hu51nRVBWwF7ZxD-zykgNnZehGy0mL6zPu1dJ67UE65Q>
-Feedback-ID: i68a1478a:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 10 Aug 2022 08:06:25 -0400 (EDT)
-Date:   Wed, 10 Aug 2022 07:06:24 -0500
-From:   Patrick Williams <patrick@stwcx.xyz>
-To:     Potin Lai <potin.lai.pt@gmail.com>
-Cc:     Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] Update Facebook Bletchley BMC devicetree
-Message-ID: <YvOfQEqj+XsYkuUH@heinlein.stwcx.org.github.beta.tailscale.net>
-References: <20220810004338.329832-1-potin.lai.pt@gmail.com>
+        Wed, 10 Aug 2022 08:13:50 -0400
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAC1E6AA08;
+        Wed, 10 Aug 2022 05:13:48 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id B914F43E374;
+        Wed, 10 Aug 2022 08:13:47 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id 8t9Hz8TKmCkp; Wed, 10 Aug 2022 08:13:47 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 299A343E476;
+        Wed, 10 Aug 2022 08:13:47 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 299A343E476
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1660133627;
+        bh=0eurnLuzGZ3qRL2RZDsSm+WisnojruHn4tv9O7FmRX8=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=QQxEv68RxQrIJUHel8B5NqVQiSRYnTSX4SMexm5Stu1Q6lDuB3Ld3kNF2nGXeiFaz
+         0IKoFvLzBOXNgbT2unYVeCTDOIH8xQ0HOrNsOldtTX8qr4iF1NDl5/DKOD8/v4HMR6
+         PMivxdTdid9OgK3LPHZRDRAgQ6N2N8CoRdQKvT3w2ir1Z+XqJVN6Xk/Vov3cnRjxLc
+         hShyheT/68e7en/rTTa1gcsdqJPqxrUFbFOT1k3NwvCvbbnIXz+kBNi5fQe2/+okH8
+         MSKifwpchrzhRFkCX6bsVwD8NNb/dq3SzM4HXydzMHSr+yZb10QsTDgSme9/sFNQHO
+         +kKVcxxeW2KEA==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id mEyeHWUF-4Si; Wed, 10 Aug 2022 08:13:47 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 10D1543E88F;
+        Wed, 10 Aug 2022 08:13:47 -0400 (EDT)
+Date:   Wed, 10 Aug 2022 08:13:46 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Gavin Shan <gshan@redhat.com>, shuah <shuah@kernel.org>,
+        Florian Weimer <fweimer@redhat.com>,
+        kvmarm <kvmarm@lists.cs.columbia.edu>,
+        KVM list <kvm@vger.kernel.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, maz <maz@kernel.org>,
+        oliver upton <oliver.upton@linux.dev>,
+        andrew jones <andrew.jones@linux.dev>,
+        yihyu <yihyu@redhat.com>, shan gavin <shan.gavin@gmail.com>
+Message-ID: <1478461718.353.1660133626967.JavaMail.zimbra@efficios.com>
+In-Reply-To: <YvLT1fd8ddybF5Uw@google.com>
+References: <20220809060627.115847-1-gshan@redhat.com> <8735e6ncxw.fsf@oldenburg.str.redhat.com> <7844e3fa-e49e-de75-e424-e82d3a023dd6@redhat.com> <87o7wtnay6.fsf@oldenburg.str.redhat.com> <616d4de6-81f6-9d14-4e57-4a79fec45690@redhat.com> <797306043.114963.1660047714774.JavaMail.zimbra@efficios.com> <1014177394.115022.1660052656961.JavaMail.zimbra@efficios.com> <YvLT1fd8ddybF5Uw@google.com>
+Subject: Re: [PATCH 1/2] KVM: selftests: Make rseq compatible with
+ glibc-2.35
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="DZeXxxwZnmqG9svL"
-Content-Disposition: inline
-In-Reply-To: <20220810004338.329832-1-potin.lai.pt@gmail.com>
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4372 (ZimbraWebClient - FF103 (Linux)/8.8.15_GA_4372)
+Thread-Topic: selftests: Make rseq compatible with glibc-2.35
+Thread-Index: 2L3u2zUliaiWmqLcWHUzldusZle8bA==
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+----- On Aug 9, 2022, at 5:38 PM, Sean Christopherson seanjc@google.com wrote:
 
---DZeXxxwZnmqG9svL
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On Tue, Aug 09, 2022, Mathieu Desnoyers wrote:
+>> ----- On Aug 9, 2022, at 8:21 AM, Mathieu Desnoyers
+>> mathieu.desnoyers@efficios.com wrote:
+>> 
+>> > ----- Gavin Shan <gshan@redhat.com> wrote:
+>> >> Hi Florian,
+>> >> 
+>> >> On 8/9/22 5:16 PM, Florian Weimer wrote:
+>> >> >>> __builtin_thread_pointer doesn't work on all architectures/GCC
+>> >> >>> versions.
+>> >> >>> Is this a problem for selftests?
+>> >> >>>
+>> >> >>
+>> >> >> It's a problem as the test case is running on all architectures. I think I
+>> >> >> need introduce our own __builtin_thread_pointer() for where it's not
+>> >> >> supported: (1) PowerPC  (2) x86 without GCC 11
+>> >> >>
+>> >> >> Please let me know if I still have missed cases where
+>> >> >> __buitin_thread_pointer() isn't supported?
+>> >> > 
+>> >> > As far as I know, these are the two outliers that also have rseq
+>> >> > support.  The list is a bit longer if we also consider non-rseq
+>> >> > architectures (csky, hppa, ia64, m68k, microblaze, sparc, don't know
+>> >> > about the Linux architectures without glibc support).
+>> >> > 
+>> >> 
+>> >> For kvm/selftests, there are 3 architectures involved actually. So we
+>> >> just need consider 4 cases: aarch64, x86, s390 and other. For other
+>> >> case, we just use __builtin_thread_pointer() to maintain code's
+>> >> integrity, but it's not called at all.
+>> >> 
+>> >> I think kvm/selftest is always relying on glibc if I'm correct.
+>> > 
+>> > All those are handled in the rseq selftests and in librseq. Why duplicate all
+>> > that logic again?
+>> 
+>> More to the point, considering that we have all the relevant rseq registration
+>> code in tools/testing/selftests/rseq/rseq.c already, and the relevant thread
+>> pointer getter code in tools/testing/selftests/rseq/rseq-*thread-pointer.h,
+>> is there an easy way to get test applications in tools/testing/selftests/kvm
+>> and in tools/testing/selftests/rseq to share that common code ?
+>> 
+>> Keeping duplicated compatibility code is bad for long-term maintainability.
+> 
+> Any reason not to simply add tools/lib/rseq.c and then expose a helper to get
+> the
+> registered rseq struct?
 
-On Wed, Aug 10, 2022 at 12:43:36AM +0000, Potin Lai wrote:
-> This patch series add modifications as below
-> 1. add a IPMB node for USB debug card communication.
-> 2. remove hdc1080 node due to incompatible 2nd source (si7021).=20
->=20
-> Potin Lai (2):
->   ARM: dts: aspeed: bletchley: add USB debug card IPMB node
->   ARM: dts: aspeed: bletchley: remove hdc1080 node
->=20
->  arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts | 13 ++++++++-----
->  1 file changed, 8 insertions(+), 5 deletions(-)
->=20
-> --=20
-> 2.31.1
->=20
+Indeed, moving rseq.c to tools/lib/ would allow building a .so from any selftest
+which needs to use it.
 
-Reviewed-by: Patrick Williams <patrick@stwcx.xyz>
+And we could move the relevant rseq helper header files to tools/include/rseq/*
+as well.
 
---=20
-Patrick Williams
+Thoughts ?
 
---DZeXxxwZnmqG9svL
-Content-Type: application/pgp-signature; name="signature.asc"
+Thanks,
 
------BEGIN PGP SIGNATURE-----
+Mathieu
 
-iQIzBAABCAAdFiEEBGD9ii4LE9cNbqJBqwNHzC0AwRkFAmLznz4ACgkQqwNHzC0A
-wRnPuQ/+PcGTpWhfDtWXamXrYywWWaX0ZK9HYuuwLnUyBv9SR9TL/MNpX6i8mKQ4
-YyY5eiCc9Y9WDlO5sqc6rNluye39Yvo9C87QPRWNj0tjAm7sGwKMl0MuKLx0G0sQ
-9l5Bi2I3MX6XRKnn1F0O/XlAoaG8vwSwK+9q+RYc5tqeZ/lZ5Creh54Egrh234gz
-v3nbGIoN1dIkJFwOScUTzz9SPv/i2jLIzIFJ8yrZ+uDa0gOYLkQVLyRXSNKnFzHD
-taWGhCHxEokkap+iIPjeWtzUgSli7Z/FsBwqZjNLPXGTbH1KxILuuB+ehrAqwXe2
-yBgKVum4GdFLG2/7AEJgd+atBHQ9RadrrY3ufELtM8J5Bi29qs1jG1yRklqp9r3N
-8c8zhU52qQXgMYXEQg6XIzXxZYR/qxb6DfebUJXBvJCGmr6fa3JrXmoEveqcWGpH
-KTCPN8SeziJ7yoFR5nu8NTCg/mLQ5aXi8OefTMQI8hxi3MpdNV+TUf3JUsRhuDbn
-lSQJu8MW7MFtafta+Xw2ljVQd8Wfwe2V9P3r9cDfXJZtxawVs2RJUjmjcLhutk/v
-lcUY75KCnpUhTsdxtOOjWVfO8XMQVZ+JzqugkbkxrlbamFh8D6cjtvZu+PQEq0tW
-f5uhyZhUjOYoGRN0borG4VItlm69bpUeUKOgbYbbfmDfk1CB0HU=
-=egzp
------END PGP SIGNATURE-----
-
---DZeXxxwZnmqG9svL--
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

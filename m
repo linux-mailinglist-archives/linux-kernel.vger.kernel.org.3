@@ -2,180 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D217C58EE6C
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 16:33:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD6E58EE67
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 16:33:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232683AbiHJOdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 10:33:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43170 "EHLO
+        id S232564AbiHJOcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 10:32:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232537AbiHJOce (ORCPT
+        with ESMTP id S230378AbiHJOcb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 10:32:34 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B6E2A40A
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:32:33 -0700 (PDT)
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 914423F176
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 14:32:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1660141951;
-        bh=BmcNJoX0tb4WJRJWcaohS0QcQ063FfE3jZ9bfdEJX58=;
-        h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
-         Content-Type:Date:Message-ID;
-        b=amck6QM42xHkeL3XoZE0qmvWNtlEGwwpA+sXx8mn34lGg6O6YuksklLO42Gzk3Ivb
-         kgYaObdDKCnn0Xr+tRp9iQrO3fOQbzNcA2M9l1hmB4wicQ9iNxWiB6B1CO1CQy+7Wh
-         syKJxQ+cjDvcjNFX+jcsoJvugQc+giKTq1ArUE06ZDgdTrPL9AcmDzEdGMHS995aSh
-         8K1q+eZ80o+dDHVgHBJEXtlCAFJXTp7gi9Pa39izp0D6O1+DZsp4FQ9dIMuXcMp3W5
-         OIPWOtu6DXz5Gqs0LgMz8QSZqVkY016BEV0CM6D5KM8MyxIQ1Fq8BgO7QtBEYw3fVj
-         zt3UPuLwkV0zA==
-Received: by mail-pf1-f198.google.com with SMTP id h13-20020a056a00000d00b0052de2e258dbso6541908pfk.7
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:32:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:content-transfer-encoding:content-id:mime-version
-         :comments:references:in-reply-to:subject:cc:to:from
-         :x-gm-message-state:from:to:cc;
-        bh=BmcNJoX0tb4WJRJWcaohS0QcQ063FfE3jZ9bfdEJX58=;
-        b=tYmReN8EI6WPkeYtS+Os50gD+WrWcEX+Fs0ti9XZNAKl4htxnGAC7v4qqaHgtZLtNl
-         R7IHU3qcPQDmPU60ZrpTd6rygKCaOllL+oudamHGzwT19qeD6P5rgvwe0El1ooBZBT6m
-         DmWOHENKVDgfIm0R2skPMBfL4Bz959VBdYXCFt9yaoYHDGsdUixCho3Ab+BPauhSLJyP
-         PC6KxAfL0JVKI2zjvjz6BwP2090ejZi4VLvGio04VZwEmpFIv19PuySp0DIxqPt2Nj7d
-         FHxOkuiRwUnhSya6mY4zT7+yC6llFSy1RwMqugfi3rZErlblHyTuBKiO7ABV3ve87ySa
-         3tOg==
-X-Gm-Message-State: ACgBeo3N+4ArNdLUK/XKo0qOKrRFzpESJTRu6HZ9ZId+lOQJL4M/BPGh
-        lwiWMKcH2JM87989kjs8BsjFv3g2SZsEXSElA6Mad0Kh0118qB8dNt9ZP2OgWtCQmtYAyW3Q0eT
-        AinmBW1uHdOZb+WkZ0R+S7iO1bD3Ulm6dViZgVwmd4g==
-X-Received: by 2002:a63:e4f:0:b0:41a:9472:eca0 with SMTP id 15-20020a630e4f000000b0041a9472eca0mr23118299pgo.623.1660141947107;
+        Wed, 10 Aug 2022 10:32:31 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E13EB1EAE3;
+        Wed, 10 Aug 2022 07:32:29 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6B89423A;
+        Wed, 10 Aug 2022 07:32:30 -0700 (PDT)
+Received: from [10.57.13.63] (unknown [10.57.13.63])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A81703F67D;
         Wed, 10 Aug 2022 07:32:27 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6SbPfI4FRAXuP5uxoCn7uNxC6/UShze/WtduBxD/rL03D2ONXUpeGsOaLZdHoLfJiTG3cz2w==
-X-Received: by 2002:a63:e4f:0:b0:41a:9472:eca0 with SMTP id 15-20020a630e4f000000b0041a9472eca0mr23118287pgo.623.1660141946874;
-        Wed, 10 Aug 2022 07:32:26 -0700 (PDT)
-Received: from famine.localdomain ([50.125.80.157])
-        by smtp.gmail.com with ESMTPSA id r6-20020aa79ec6000000b0052d4ffac466sm2049832pfq.188.2022.08.10.07.32.26
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 10 Aug 2022 07:32:26 -0700 (PDT)
-Received: by famine.localdomain (Postfix, from userid 1000)
-        id E25016119B; Wed, 10 Aug 2022 07:32:25 -0700 (PDT)
-Received: from famine (localhost [127.0.0.1])
-        by famine.localdomain (Postfix) with ESMTP id DC8A49FA79;
-        Wed, 10 Aug 2022 07:32:25 -0700 (PDT)
-From:   Jay Vosburgh <jay.vosburgh@canonical.com>
-To:     Sun Shouxin <sunshouxin@chinatelecom.cn>
-cc:     vfalico@gmail.com, andy@greyhouse.net, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        razor@blackwall.org, huyd12@chinatelecom.cn
-Subject: Re: [PATCH v2] net:bonding:support balance-alb interface with vlan to bridge
-In-reply-to: <20220809062103.31213-1-sunshouxin@chinatelecom.cn>
-References: <20220809062103.31213-1-sunshouxin@chinatelecom.cn>
-Comments: In-reply-to Sun Shouxin <sunshouxin@chinatelecom.cn>
-   message dated "Mon, 08 Aug 2022 23:21:03 -0700."
-X-Mailer: MH-E 8.6+git; nmh 1.6; Emacs 29.0.50
+Message-ID: <64ba1dfb-a475-e667-b59d-57e5d1e5ff1f@arm.com>
+Date:   Wed, 10 Aug 2022 15:32:26 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <14779.1660141945.1@famine>
-Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 10 Aug 2022 07:32:25 -0700
-Message-ID: <14780.1660141945@famine>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 1/1] ACPI: CPPC: Disable FIE if registers in PCC
+ regions
+Content-Language: en-US
+To:     Jeremy Linton <jeremy.linton@arm.com>
+Cc:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org,
+        robert.moore@intel.com, devel@acpica.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, vschneid@redhat.com,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+References: <20220728221043.4161903-1-jeremy.linton@arm.com>
+ <20220728221043.4161903-2-jeremy.linton@arm.com>
+ <3a5e7abd-9361-11ba-978d-8e8bae00ea31@arm.com>
+ <6f565c2d-e7cb-f5a2-0b38-995c9cd2deec@arm.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <6f565c2d-e7cb-f5a2-0b38-995c9cd2deec@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sun Shouxin <sunshouxin@chinatelecom.cn> wrote:
-
->In my test, balance-alb bonding with two slaves eth0 and eth1,
->and then Bond0.150 is created with vlan id attached bond0.
->After adding bond0.150 into one linux bridge, I noted that Bond0,
->bond0.150 and  bridge were assigned to the same MAC as eth0.
->Once bond0.150 receives a packet whose dest IP is bridge's
->and dest MAC is eth1's, the linux bridge will not match
->eth1's MAC entry in FDB, and not handle it as expected.
->The patch fix the issue, and diagram as below:
->
->eth1(mac:eth1_mac)--bond0(balance-alb,mac:eth0_mac)--eth0(mac:eth0_mac)
->                      |
->                   bond0.150(mac:eth0_mac)
->                      |
->                   bridge(ip:br_ip, mac:eth0_mac)--other port
->
->Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
->Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
-
-	As Nik suggested, please add some additional explanation here.
-You can cut and paste my description from the original discussion if
-you'd like.
-
->---
->
->changelog:
->v1->v2:
->  -declare variabls in reverse xmas tree order
->  -delete {}
->  -add explanation in commit message
->---
-> drivers/net/bonding/bond_alb.c | 7 +++++++
-> 1 file changed, 7 insertions(+)
->
->diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_al=
-b.c
->index 007d43e46dcb..60cb9a0225aa 100644
->--- a/drivers/net/bonding/bond_alb.c
->+++ b/drivers/net/bonding/bond_alb.c
->@@ -653,6 +653,7 @@ static struct slave *rlb_choose_channel(struct sk_buf=
-f *skb,
-> static struct slave *rlb_arp_xmit(struct sk_buff *skb, struct bonding *b=
-ond)
-> {
-> 	struct slave *tx_slave =3D NULL;
->+	struct net_device *dev;
-> 	struct arp_pkt *arp;
-> =
-
-> 	if (!pskb_network_may_pull(skb, sizeof(*arp)))
->@@ -665,6 +666,12 @@ static struct slave *rlb_arp_xmit(struct sk_buff *sk=
-b, struct bonding *bond)
-> 	if (!bond_slave_has_mac_rx(bond, arp->mac_src))
-> 		return NULL;
-> =
-
->+	dev =3D ip_dev_find(dev_net(bond->dev), arp->ip_src);
->+	if (dev) {
->+		if (netif_is_bridge_master(dev))
->+			return NULL;
-
-	Stylistically, the "if dev" and "if netif_is_bridge_master"
-could be one line, e.g., "if dev && netif_is_bridge_master".
-
-	Functionally, ip_dev_find acquires a reference to dev, and this
-code will need to release (dev_put) that reference.
-
-	I'm also wondering if testing bond->dev for netif_if_bridge_port
-before ip_dev_find would help here (as an optimization); I think so, for
-the case where the bond is directly in the bridge without a VLAN in the
-middle.
-
-	-J
 
 
->+	}
->+
-> 	if (arp->op_code =3D=3D htons(ARPOP_REPLY)) {
-> 		/* the arp must be sent on the selected rx channel */
-> 		tx_slave =3D rlb_choose_channel(skb, bond, arp);
->-- =
+On 8/10/22 15:08, Jeremy Linton wrote:
+> Hi,
+> 
+> On 8/10/22 07:29, Lukasz Luba wrote:
+>> Hi Jeremy,
+>>
+>> +CC Valentin since he might be interested in this finding
+>> +CC Ionela, Dietmar
+>>
+>> I have a few comments for this patch.
+>>
+>>
+>> On 7/28/22 23:10, Jeremy Linton wrote:
+>>> PCC regions utilize a mailbox to set/retrieve register values used by
+>>> the CPPC code. This is fine as long as the operations are
+>>> infrequent. With the FIE code enabled though the overhead can range
+>>> from 2-11% of system CPU overhead (ex: as measured by top) on Arm
+>>> based machines.
+>>>
+>>> So, before enabling FIE assure none of the registers used by
+>>> cppc_get_perf_ctrs() are in the PCC region. Furthermore lets also
+>>> enable a module parameter which can also disable it at boot or module
+>>> reload.
+>>>
+>>> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+>>> ---
+>>>   drivers/acpi/cppc_acpi.c       | 41 ++++++++++++++++++++++++++++++++++
+>>>   drivers/cpufreq/cppc_cpufreq.c | 19 ++++++++++++----
+>>>   include/acpi/cppc_acpi.h       |  5 +++++
+>>>   3 files changed, 61 insertions(+), 4 deletions(-)
+>>
+>>
+>> 1. You assume that all platforms would have this big overhead when
+>>     they have the PCC regions for this purpose.
+>>     Do we know which version of HW mailbox have been implemented
+>>     and used that have this 2-11% overhead in a platform?
+>>     Do also more recent MHU have such issues, so we could block
+>>     them by default (like in your code)?
+> 
+> Well, the mailbox nature of PCC pretty much assures its "slow", relative 
+> the alternative of providing an actual register.  If a platform provides 
+> direct access to say MHU registers, then of course they won't actually 
+> be in a PCC region and the FIE will remain on.
+> 
+> 
+>>
+>> 2. I would prefer to simply change the default Kconfig value to 'n' for
+>>     the ACPI_CPPC_CPUFREQ_FIE, instead of creating a runtime
+>>     check code which disables it.
+>>     We have probably introduce this overhead for older platforms with
+>>     this commit:
+> 
+> The problem here is that these ACPI kernels are being shipped as single 
+> images in distro's which expect them to run on a wide range of platforms 
+> (including x86/amd in this case), and preform optimally on all of them.
+> 
+> So the 'n' option basically is saying that the latest FIE code doesn't 
+> provide a befit anywhere?
 
->2.27.0
->
+How we define the 'benefit' here - it's a better task utilization.
+How much better it would be vs. previous approach with old-style FIE?
 
----
-	-Jay Vosburgh, jay.vosburgh@canonical.com
+TBH, I haven't found any test results from the development of the patch
+set. Maybe someone could point me to the test results which bring
+this benefit of better utilization.
+
+In the RFC I could find that statement [1]:
+
+"This is tested with some hacks, as I didn't have access to the right
+hardware, on the ARM64 hikey board to check the overall functionality
+and that works fine."
+
+There should be a rule that such code is tested on a real server with
+many CPUs under some stress-test.
+
+Ionela do you have some test results where this new FIE feature
+introduces some better & meaningful accuracy improvement to the
+tasks utilization?
+
+With this overhead measured on a real server platform I think
+it's not worth to keep it 'y' in default.
+
+The design is heavy, as stated in the commit message:
+"    On an invocation of cppc_scale_freq_tick(), we schedule an irq work
+     (since we reach here from hard-irq context), which then schedules a
+     normal work item and cppc_scale_freq_workfn() updates the per_cpu
+     arch_freq_scale variable based on the counter updates since the last
+     tick.
+"
+
+As you said Jeremy, this mailbox would always be with overhead. IMO
+untill we cannot be sure we have some powerful new HW mailbox, this
+feature should be disabled.
+
+[1] 
+https://lore.kernel.org/lkml/cover.1594289009.git.viresh.kumar@linaro.org/

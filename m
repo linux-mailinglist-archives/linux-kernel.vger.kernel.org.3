@@ -2,321 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3221758EAAD
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 12:48:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1DE958EAB1
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 12:49:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231538AbiHJKrx convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 10 Aug 2022 06:47:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45270 "EHLO
+        id S231555AbiHJKtQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 06:49:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231424AbiHJKru (ORCPT
+        with ESMTP id S229448AbiHJKtO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 06:47:50 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1C585FAF;
-        Wed, 10 Aug 2022 03:47:48 -0700 (PDT)
-Received: from fraeml709-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M2mqM0h5Hz67qSS;
-        Wed, 10 Aug 2022 18:47:43 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml709-chm.china.huawei.com (10.206.15.37) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 10 Aug 2022 12:47:46 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
- Wed, 10 Aug 2022 12:47:46 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-CC:     "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "martin.lau@linux.dev" <martin.lau@linux.dev>,
-        "song@kernel.org" <song@kernel.org>, "yhs@fb.com" <yhs@fb.com>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        "sdf@google.com" <sdf@google.com>,
-        "haoluo@google.com" <haoluo@google.com>,
-        "jolsa@kernel.org" <jolsa@kernel.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v9 00/10] bpf: Add kfuncs for PKCS#7 signature
- verification
-Thread-Topic: [PATCH v9 00/10] bpf: Add kfuncs for PKCS#7 signature
- verification
-Thread-Index: AQHYq/ZxvSq1kKhJ80GMpi61nzH0dK2mp4mAgAFNcKA=
-Date:   Wed, 10 Aug 2022 10:47:46 +0000
-Message-ID: <5ed88c6209a1435dbe6cd479edc1cacd@huawei.com>
-References: <20220809134603.1769279-1-roberto.sassu@huawei.com>
- <YvKQ8WWJgWSJB9FC@kernel.org>
-In-Reply-To: <YvKQ8WWJgWSJB9FC@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.81.210.169]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
-MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 10 Aug 2022 06:49:14 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2137885FB9
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 03:49:12 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id i14so26984219ejg.6
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 03:49:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=unimore.it; s=google;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc;
+        bh=l9usa1vuL2H6KZQuz+LzUAEvl04HjNXt9CmOhLLJBSQ=;
+        b=BTCabf1ZCfvLejWJAHR1SmlS6q6MgM/0QU8EF47Wf41/rboIWcOWDmFYVni5+WIj86
+         7NeEzoDJZVzVZXjwTlGmnLn+NV9HhWuPbqf2Yyjnjpqy4nkDx42aw8s8wopgq98SJKpa
+         gZwfBWT9VSTz+FF8YmbCzGRxOa3BTQLc0ZZSI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc;
+        bh=l9usa1vuL2H6KZQuz+LzUAEvl04HjNXt9CmOhLLJBSQ=;
+        b=r54m0rjYT4nw0d2CTrrV00osp1DYSgScQdxKHIqIuFS3VfsFzveaByRL2O89mjVOy8
+         +R21dyCrbBSZOXjmJyQTacF4GRaTnfBuZY0ehoV2/X1KEOX8RUNllsMg4ZsbG+qM2Yqy
+         2sxRGmwMB0t+GHXlgajYQD+BWp/+LtJgADRJprHo7xdKfxL4Je6tqA/sw+OCwtZtOInS
+         tFSSUA5OaJ/ZaH4mXZde7NZeGTskz6l4If/wiOBE1/vzJFeCos+HEk7XF1C13owYUpKF
+         JXr68ceL+0OEFACEr5FQsAS1qaESnxyMnVwhMiIqB0e+wIcsK1B2LwXytCrlIio6DCMU
+         1FuQ==
+X-Gm-Message-State: ACgBeo28hhpuEZPnR5TcPDd3kD9Qv1s/VDH786p+/VqPVup6Rc18pY1r
+        EcZvPGDPBga7IilMOp9nBdP4
+X-Google-Smtp-Source: AA6agR5oQvEj/s7bSddVrjIAacVoWMaOUcaPEbxOsKLxnw3UtyE01z9/EZrnD+u6mN5X+ztmAhIkTg==
+X-Received: by 2002:a17:907:6d8c:b0:731:6c60:eced with SMTP id sb12-20020a1709076d8c00b007316c60ecedmr8306368ejc.266.1660128550558;
+        Wed, 10 Aug 2022 03:49:10 -0700 (PDT)
+Received: from mbp-di-paolo.station (net-93-70-86-43.cust.vodafonedsl.it. [93.70.86.43])
+        by smtp.gmail.com with ESMTPSA id y12-20020a170906518c00b007306a4ecc9dsm2233295ejk.18.2022.08.10.03.49.07
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 10 Aug 2022 03:49:08 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [PATCH -next v10 3/4] block, bfq: refactor the counting of
+ 'num_groups_with_pending_reqs'
+From:   Paolo Valente <paolo.valente@unimore.it>
+In-Reply-To: <2f94f241-445f-1beb-c4a8-73f6efce5af2@huaweicloud.com>
+Date:   Wed, 10 Aug 2022 12:49:04 +0200
+Cc:     Jan Kara <jack@suse.cz>, cgroups@vger.kernel.org,
+        linux-block <linux-block@vger.kernel.org>,
+        Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        LKML <linux-kernel@vger.kernel.org>, yi.zhang@huawei.com,
+        "yukuai (C)" <yukuai3@huawei.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <55A07102-BE55-4606-9E32-64E884064FB9@unimore.it>
+References: <20220610021701.2347602-1-yukuai3@huawei.com>
+ <20220610021701.2347602-4-yukuai3@huawei.com>
+ <27F2DF19-7CC6-42C5-8CEB-43583EB4AE46@linaro.org>
+ <abdbb5db-e280-62f8-0670-536fcb8ec4d9@huaweicloud.com>
+ <C2CF100A-9A7C-4300-9A70-1295BC939C66@unimore.it>
+ <9b2d667f-6636-9347-08a1-8bd0aa2346f2@huaweicloud.com>
+ <2f94f241-445f-1beb-c4a8-73f6efce5af2@huaweicloud.com>
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+X-Mailer: Apple Mail (2.3445.104.11)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Jarkko Sakkinen [mailto:jarkko@kernel.org]
-> Sent: Tuesday, August 9, 2022 6:53 PM
-> On Tue, Aug 09, 2022 at 03:45:53PM +0200, Roberto Sassu wrote:
-> > One of the desirable features in security is the ability to restrict import
-> > of data to a given system based on data authenticity. If data import can be
-> > restricted, it would be possible to enforce a system-wide policy based on
-> > the signing keys the system owner trusts.
-> >
-> > This feature is widely used in the kernel. For example, if the restriction
-> > is enabled, kernel modules can be plugged in only if they are signed with a
-> > key whose public part is in the primary or secondary keyring.
-> >
-> > For eBPF, it can be useful as well. For example, it might be useful to
-> > authenticate data an eBPF program makes security decisions on.
-> 
-> Security decision in LSM BPF?
 
-Yes, based on the eBPF programs attached to it.
 
-Roberto
+> Il giorno 27 lug 2022, alle ore 14:11, Yu Kuai =
+<yukuai1@huaweicloud.com> ha scritto:
+>=20
+> Hi, Paolo
+>=20
 
-> > After a discussion in the eBPF mailing list, it was decided that the stated
-> > goal should be accomplished by introducing four new kfuncs:
-> > bpf_lookup_user_key() and bpf_lookup_system_key(), for retrieving a keyring
-> > with keys trusted for signature verification, respectively from its serial
-> > and from a pre-determined ID; bpf_key_put(), to release the reference
-> > obtained with the former two kfuncs, bpf_verify_pkcs7_signature(), for
-> > verifying PKCS#7 signatures.
-> >
-> > Other than the key serial, bpf_lookup_user_key() also accepts key lookup
-> > flags, that influence the behavior of the lookup. bpf_lookup_system_key()
-> > accepts pre-determined IDs defined in include/linux/verification.h.
-> >
-> > bpf_key_put() accepts the new bpf_key structure, introduced to tell whether
-> > the other structure member, a key pointer, is valid or not. The reason is
-> > that verify_pkcs7_signature() also accepts invalid pointers, set with the
-> > pre-determined ID, to select a system-defined keyring. key_put() must be
-> > called only for valid key pointers.
-> >
-> > Since the two key lookup functions allocate memory and one increments a key
-> > reference count, they must be used in conjunction with bpf_key_put(). The
-> > latter must be called only if the lookup functions returned a non-NULL
-> > pointer. The verifier denies the execution of eBPF programs that don't
-> > respect this rule.
-> >
-> > The two key lookup functions should be used in alternative, depending on
-> > the use case. While bpf_lookup_user_key() provides great flexibility, it
-> > seems suboptimal in terms of security guarantees, as even if the eBPF
-> > program is assumed to be trusted, the serial used to obtain the key pointer
-> > might come from untrusted user space not choosing one that the system
-> > administrator approves to enforce a mandatory policy.
-> >
-> > bpf_lookup_system_key() instead provides much stronger guarantees,
-> > especially if the pre-determined ID is not passed by user space but is
-> > hardcoded in the eBPF program, and that program is signed. In this case,
-> > bpf_verify_pkcs7_signature() will always perform signature verification
-> > with a key that the system administrator approves, i.e. the primary,
-> > secondary or platform keyring.
-> >
-> > Nevertheless, key permission checks need to be done accurately. Since
-> > bpf_lookup_user_key() cannot determine how a key will be used by other
-> > kfuncs, it has to defer the permission check to the actual kfunc using the
-> > key. It does it by calling lookup_user_key() with KEY_DEFER_PERM_CHECK as
-> > needed permission. Later, bpf_verify_pkcs7_signature(), if called,
-> > completes the permission check by calling key_validate(). It does not need
-> > to call key_task_permission() with permission KEY_NEED_SEARCH, as it is
-> > already done elsewhere by the key subsystem. Future kfuncs using the
-> > bpf_key structure need to implement the proper checks as well.
-> >
-> > Finally, the last kfunc, bpf_verify_pkcs7_signature(), accepts the data and
-> > signature to verify as eBPF dynamic pointers, to minimize the number of
-> > kfunc parameters, and the keyring with keys for signature verification as a
-> > bpf_key structure, returned by one of the two key lookup functions.
-> >
-> > All kfuncs except bpf_key_put() can be called only from sleepable programs,
-> > because of memory allocation and crypto operations. For example, the
-> > lsm.s/bpf attach point is suitable, fexit/array_map_update_elem is not.
-> >
-> > The correctness of implementation of the new kfuncs and of their usage is
-> > checked with the introduced tests.
-> >
-> > The patch set includes patches from other authors (dependencies) for sake
-> > of completeness. It is organized as follows.
-> >
-> > Patch 1 from Benjamin Tissoires introduces the new KF_SLEEPABLE kfunc flag.
-> > Patch 2 from KP Singh allows kfuncs to be used by LSM programs. Patch 3
-> > allows dynamic pointers to be used as kfunc parameters. Patch 4 exports
-> > bpf_dynptr_get_size(), to obtain the real size of data carried by a dynamic
-> > pointer. Patch 5 makes available for new eBPF kfuncs some key-related
-> > definitions. Patch 6 introduces the bpf_lookup_*_key() and bpf_key_put()
-> > kfuncs. Patch 7 introduces the bpf_verify_pkcs7_signature() kfunc. Finally,
-> > patches 8-10 introduce the tests.
-> >
-> > Changelog
-> >
-> > v8:
-> >  - Define the new bpf_key structure to carry the key pointer and whether
-> >    that pointer is valid or not (suggested by Daniel)
-> >  - Drop patch to mark a kfunc parameter with the __maybe_null suffix
-> >  - Improve documentation of kfuncs
-> >  - Introduce bpf_lookup_system_key() to obtain a key pointer suitable for
-> >    verify_pkcs7_signature() (suggested by Daniel)
-> >  - Use the new kfunc registration API
-> >  - Drop patch to test the __maybe_null suffix
-> >  - Add tests for bpf_lookup_system_key()
-> >
-> > v7:
-> >  - Add support for using dynamic and NULL pointers in kfunc (suggested by
-> >    Alexei)
-> >  - Add new kfunc-related tests
-> >
-> > v6:
-> >  - Switch back to key lookup helpers + signature verification (until v5),
-> >    and defer permission check from bpf_lookup_user_key() to
-> >    bpf_verify_pkcs7_signature()
-> >  - Add additional key lookup test to illustrate the usage of the
-> >    KEY_LOOKUP_CREATE flag and validate the flags (suggested by Daniel)
-> >  - Make description of flags of bpf_lookup_user_key() more user-friendly
-> >    (suggested by Daniel)
-> >  - Fix validation of flags parameter in bpf_lookup_user_key() (reported by
-> >    Daniel)
-> >  - Rename bpf_verify_pkcs7_signature() keyring-related parameters to
-> >    user_keyring and system_keyring to make their purpose more clear
-> >  - Accept keyring-related parameters of bpf_verify_pkcs7_signature() as
-> >    alternatives (suggested by KP)
-> >  - Replace unsigned long type with u64 in helper declaration (suggested by
-> >    Daniel)
-> >  - Extend the bpf_verify_pkcs7_signature() test by calling the helper
-> >    without data, by ensuring that the helper enforces the keyring-related
-> >    parameters as alternatives, by ensuring that the helper rejects
-> >    inaccessible and expired keyrings, and by checking all system keyrings
-> >  - Move bpf_lookup_user_key() and bpf_key_put() usage tests to
-> >    ref_tracking.c (suggested by John)
-> >  - Call bpf_lookup_user_key() and bpf_key_put() only in sleepable programs
-> >
-> > v5:
-> >  - Move KEY_LOOKUP_ to include/linux/key.h
-> >    for validation of bpf_verify_pkcs7_signature() parameter
-> >  - Remove bpf_lookup_user_key() and bpf_key_put() helpers, and the
-> >    corresponding tests
-> >  - Replace struct key parameter of bpf_verify_pkcs7_signature() with the
-> >    keyring serial and lookup flags
-> >  - Call lookup_user_key() and key_put() in bpf_verify_pkcs7_signature()
-> >    code, to ensure that the retrieved key is used according to the
-> >    permission requested at lookup time
-> >  - Clarified keyring precedence in the description of
-> >    bpf_verify_pkcs7_signature() (suggested by John)
-> >  - Remove newline in the second argument of ASSERT_
-> >  - Fix helper prototype regular expression in bpf_doc.py
-> >
-> > v4:
-> >  - Remove bpf_request_key_by_id(), don't return an invalid pointer that
-> >    other helpers can use
-> >  - Pass the keyring ID (without ULONG_MAX, suggested by Alexei) to
-> >    bpf_verify_pkcs7_signature()
-> >  - Introduce bpf_lookup_user_key() and bpf_key_put() helpers (suggested by
-> >    Alexei)
-> >  - Add lookup_key_norelease test, to ensure that the verifier blocks eBPF
-> >    programs which don't decrement the key reference count
-> >  - Parse raw PKCS#7 signature instead of module-style signature in the
-> >    verify_pkcs7_signature test (suggested by Alexei)
-> >  - Parse kernel module in user space and pass raw PKCS#7 signature to the
-> >    eBPF program for signature verification
-> >
-> > v3:
-> >  - Rename bpf_verify_signature() back to bpf_verify_pkcs7_signature() to
-> >    avoid managing different parameters for each signature verification
-> >    function in one helper (suggested by Daniel)
-> >  - Use dynamic pointers and export bpf_dynptr_get_size() (suggested by
-> >    Alexei)
-> >  - Introduce bpf_request_key_by_id() to give more flexibility to the caller
-> >    of bpf_verify_pkcs7_signature() to retrieve the appropriate keyring
-> >    (suggested by Alexei)
-> >  - Fix test by reordering the gcc command line, always compile sign-file
-> >  - Improve helper support check mechanism in the test
-> >
-> > v2:
-> >  - Rename bpf_verify_pkcs7_signature() to a more generic
-> >    bpf_verify_signature() and pass the signature type (suggested by KP)
-> >  - Move the helper and prototype declaration under #ifdef so that user
-> >    space can probe for support for the helper (suggested by Daniel)
-> >  - Describe better the keyring types (suggested by Daniel)
-> >  - Include linux/bpf.h instead of vmlinux.h to avoid implicit or
-> >    redeclaration
-> >  - Make the test selfcontained (suggested by Alexei)
-> >
-> > v1:
-> >  - Don't define new map flag but introduce simple wrapper of
-> >    verify_pkcs7_signature() (suggested by Alexei and KP)
-> >
-> > Benjamin Tissoires (1):
-> >   btf: Add a new kfunc flag which allows to mark a function to be
-> >     sleepable
-> >
-> > KP Singh (1):
-> >   bpf: Allow kfuncs to be used in LSM programs
-> >
-> > Roberto Sassu (8):
-> >   btf: Handle dynamic pointer parameter in kfuncs
-> >   bpf: Export bpf_dynptr_get_size()
-> >   KEYS: Move KEY_LOOKUP_ to include/linux/key.h
-> >   bpf: Add bpf_lookup_*_key() and bpf_key_put() kfuncs
-> >   bpf: Add bpf_verify_pkcs7_signature() kfunc
-> >   selftests/bpf: Add verifier tests for bpf_lookup_*_key() and
-> >     bpf_key_put()
-> >   selftests/bpf: Add additional tests for bpf_lookup_*_key()
-> >   selftests/bpf: Add test for bpf_verify_pkcs7_signature() kfunc
-> >
-> >  Documentation/bpf/kfuncs.rst                  |   6 +
-> >  include/linux/bpf.h                           |   7 +
-> >  include/linux/bpf_verifier.h                  |   3 +
-> >  include/linux/btf.h                           |   1 +
-> >  include/linux/key.h                           |   3 +
-> >  kernel/bpf/btf.c                              |  27 ++
-> >  kernel/bpf/helpers.c                          |   2 +-
-> >  kernel/bpf/verifier.c                         |   4 +-
-> >  kernel/trace/bpf_trace.c                      | 207 +++++++++
-> >  security/keys/internal.h                      |   2 -
-> >  tools/testing/selftests/bpf/Makefile          |  14 +-
-> >  tools/testing/selftests/bpf/config            |   2 +
-> >  .../selftests/bpf/prog_tests/lookup_key.c     | 112 +++++
-> >  .../bpf/prog_tests/verify_pkcs7_sig.c         | 399 ++++++++++++++++++
-> >  .../selftests/bpf/progs/test_lookup_key.c     |  46 ++
-> >  .../bpf/progs/test_verify_pkcs7_sig.c         | 100 +++++
-> >  tools/testing/selftests/bpf/test_verifier.c   |   3 +-
-> >  .../selftests/bpf/verifier/ref_tracking.c     | 139 ++++++
-> >  .../testing/selftests/bpf/verify_sig_setup.sh | 104 +++++
-> >  19 files changed, 1172 insertions(+), 9 deletions(-)
-> >  create mode 100644 tools/testing/selftests/bpf/prog_tests/lookup_key.c
-> >  create mode 100644
-> tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c
-> >  create mode 100644 tools/testing/selftests/bpf/progs/test_lookup_key.c
-> >  create mode 100644
-> tools/testing/selftests/bpf/progs/test_verify_pkcs7_sig.c
-> >  create mode 100755 tools/testing/selftests/bpf/verify_sig_setup.sh
-> >
-> > --
-> > 2.25.1
-> 
-> BR, Jarkko
+hi
+
+> Are you still interested in this patchset?
+>=20
+
+Yes. Sorry for replying very late again.
+
+Probably the last fix that you suggest is enough, but I'm a little bit
+concerned that it may be a little hasty.  In fact, before this fix, we
+exchanged several messages, and I didn't seem to be very good at
+convincing you about the need to keep into account also in-service
+I/O.  So, my question is: are you sure that now you have a
+clear/complete understanding of this non-trivial matter?
+Consequently, are we sure that this last fix is most certainly all we
+need?  Of course, I will check on my own, but if you reassure me on
+this point, I will feel more confident.
+
+Thanks,
+Paolo
+
+> =E5=9C=A8 2022/07/20 19:38, Yu Kuai =E5=86=99=E9=81=93:
+>> Hi
+>>=20
+>> =E5=9C=A8 2022/07/20 19:24, Paolo VALENTE =E5=86=99=E9=81=93:
+>>>=20
+>>>=20
+>>>> Il giorno 12 lug 2022, alle ore 15:30, Yu Kuai =
+<yukuai1@huaweicloud.com <mailto:yukuai1@huaweicloud.com>> ha scritto:
+>>>>=20
+>>>> Hi!
+>>>>=20
+>>>> I'm copying my reply with new mail address, because Paolo seems
+>>>> didn't receive my reply.
+>>>>=20
+>>>> =E5=9C=A8 2022/06/23 23:32, Paolo Valente =E5=86=99=E9=81=93:
+>>>>> Sorry for the delay.
+>>>>>> Il giorno 10 giu 2022, alle ore 04:17, Yu Kuai =
+<yukuai3@huawei.com <mailto:yukuai3@huawei.com>> ha scritto:
+>>>>>>=20
+>>>>>> Currently, bfq can't handle sync io concurrently as long as they
+>>>>>> are not issued from root group. This is because
+>>>>>> 'bfqd->num_groups_with_pending_reqs > 0' is always true in
+>>>>>> bfq_asymmetric_scenario().
+>>>>>>=20
+>>>>>> The way that bfqg is counted into 'num_groups_with_pending_reqs':
+>>>>>>=20
+>>>>>> Before this patch:
+>>>>>> 1) root group will never be counted.
+>>>>>> 2) Count if bfqg or it's child bfqgs have pending requests.
+>>>>>> 3) Don't count if bfqg and it's child bfqgs complete all the =
+requests.
+>>>>>>=20
+>>>>>> After this patch:
+>>>>>> 1) root group is counted.
+>>>>>> 2) Count if bfqg have pending requests.
+>>>>>> 3) Don't count if bfqg complete all the requests.
+>>>>>>=20
+>>>>>> With this change, the occasion that only one group is activated =
+can be
+>>>>>> detected, and next patch will support concurrent sync io in the
+>>>>>> occasion.
+>>>>>>=20
+>>>>>> Signed-off-by: Yu Kuai <yukuai3@huawei.com =
+<mailto:yukuai3@huawei.com>>
+>>>>>> Reviewed-by: Jan Kara <jack@suse.cz <mailto:jack@suse.cz>>
+>>>>>> ---
+>>>>>> block/bfq-iosched.c | 42 =
+------------------------------------------
+>>>>>> block/bfq-iosched.h | 18 +++++++++---------
+>>>>>> block/bfq-wf2q.c    | 19 ++++---------------
+>>>>>> 3 files changed, 13 insertions(+), 66 deletions(-)
+>>>>>>=20
+>>>>>> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+>>>>>> index 0ec21018daba..03b04892440c 100644
+>>>>>> --- a/block/bfq-iosched.c
+>>>>>> +++ b/block/bfq-iosched.c
+>>>>>> @@ -970,48 +970,6 @@ void __bfq_weights_tree_remove(struct =
+bfq_data *bfqd,
+>>>>>> void bfq_weights_tree_remove(struct bfq_data *bfqd,
+>>>>>>     struct bfq_queue *bfqq)
+>>>>>> {
+>>>>>> -struct bfq_entity *entity =3D bfqq->entity.parent;
+>>>>>> -
+>>>>>> -for_each_entity(entity) {
+>>>>>> -struct bfq_sched_data *sd =3D entity->my_sched_data;
+>>>>>> -
+>>>>>> -if (sd->next_in_service || sd->in_service_entity) {
+>>>>>> -/*
+>>>>>> -* entity is still active, because either
+>>>>>> -* next_in_service or in_service_entity is not
+>>>>>> -* NULL (see the comments on the definition of
+>>>>>> -* next_in_service for details on why
+>>>>>> -* in_service_entity must be checked too).
+>>>>>> -*
+>>>>>> -* As a consequence, its parent entities are
+>>>>>> -* active as well, and thus this loop must
+>>>>>> -* stop here.
+>>>>>> -*/
+>>>>>> -break;
+>>>>>> -}
+>>>>>> -
+>>>>>> -/*
+>>>>>> -* The decrement of num_groups_with_pending_reqs is
+>>>>>> -* not performed immediately upon the deactivation of
+>>>>>> -* entity, but it is delayed to when it also happens
+>>>>>> -* that the first leaf descendant bfqq of entity gets
+>>>>>> -* all its pending requests completed. The following
+>>>>>> -* instructions perform this delayed decrement, if
+>>>>>> -* needed. See the comments on
+>>>>>> -* num_groups_with_pending_reqs for details.
+>>>>>> -*/
+>>>>>> -if (entity->in_groups_with_pending_reqs) {
+>>>>>> -entity->in_groups_with_pending_reqs =3D false;
+>>>>>> -bfqd->num_groups_with_pending_reqs--;
+>>>>>> -}
+>>>>>> -}
+>>>>> With this part removed, I'm missing how you handle the following
+>>>>> sequence of events:
+>>>>> 1.  a queue Q becomes non busy but still has dispatched requests, =
+so
+>>>>> it must not be removed from the counter of queues with pending =
+reqs
+>>>>> yet
+>>>>> 2.  the last request of Q is completed with Q being still idle =
+(non
+>>>>> busy).  At this point Q must be removed from the counter.  It =
+seems to
+>>>>> me that this case is not handled any longer
+>>>> Hi, Paolo
+>>>>=20
+>>>> 1) At first, patch 1 support to track if bfqq has pending requests, =
+it's
+>>>> done by setting the flag 'entity->in_groups_with_pending_reqs' when =
+the
+>>>> first request is inserted to bfqq, and it's cleared when the last
+>>>> request is completed(based on weights_tree insertion and removal).
+>>>>=20
+>>>=20
+>>> In patch 1 I don't see the flag cleared for the request-completion =
+event :(
+>>>=20
+>>> The piece of code involved is this:
+>>>=20
+>>> static void bfq_completed_request(struct bfq_queue *bfqq, struct =
+bfq_data *bfqd)
+>>> {
+>>> u64 now_ns;
+>>> u32 delta_us;
+>>>=20
+>>> bfq_update_hw_tag(bfqd);
+>>>=20
+>>> bfqd->rq_in_driver[bfqq->actuator_idx]--;
+>>> bfqd->tot_rq_in_driver--;
+>>> bfqq->dispatched--;
+>>>=20
+>>> if (!bfqq->dispatched && !bfq_bfqq_busy(bfqq)) {
+>>> /*
+>>> * Set budget_timeout (which we overload to store the
+>>> * time at which the queue remains with no backlog and
+>>> * no outstanding request; used by the weight-raising
+>>> * mechanism).
+>>> */
+>>> bfqq->budget_timeout =3D jiffies;
+>>>=20
+>>> bfq_weights_tree_remove(bfqd, bfqq);
+>>> }
+>>> ...
+>>>=20
+>>> Am I missing something?
+>>=20
+>> I add a new api bfq_del_bfqq_in_groups_with_pending_reqs() in patch 1
+>> to clear the flag, and it's called both from bfq_del_bfqq_busy() and
+>> bfq_completed_request(). I think you may miss the later:
+>>=20
+>> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+>> index 0d46cb728bbf..0ec21018daba 100644
+>> --- a/block/bfq-iosched.c
+>> +++ b/block/bfq-iosched.c
+>> @@ -6263,6 +6263,7 @@ static void bfq_completed_request(struct =
+bfq_queue *bfqq, struct bfq_data *bfqd)
+>>           */
+>>          bfqq->budget_timeout =3D jiffies;
+>>=20
+>> +        bfq_del_bfqq_in_groups_with_pending_reqs(bfqq);
+>>          bfq_weights_tree_remove(bfqd, bfqq);
+>>      }
+>>=20
+>> Thanks,
+>> Kuai
+>>>=20
+>>> Thanks,
+>>> Paolo
+>=20
+

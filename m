@@ -2,77 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F35AA58E901
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 10:45:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7597958E902
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 10:45:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbiHJIpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 04:45:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40888 "EHLO
+        id S231801AbiHJIpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 04:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbiHJIpT (ORCPT
+        with ESMTP id S231177AbiHJIpj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 04:45:19 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44221ADA5;
-        Wed, 10 Aug 2022 01:45:16 -0700 (PDT)
-Received: from [192.168.10.7] (unknown [39.45.206.166])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 10 Aug 2022 04:45:39 -0400
+Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F00E27B31
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 01:45:38 -0700 (PDT)
+Received: from vanadium.ugent.be (vanadium.ugent.be [157.193.99.61])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7B0486601BE2;
-        Wed, 10 Aug 2022 09:45:06 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1660121114;
-        bh=1473869Iv8iu6o+SiEUIxAN5ZWzArP8lHuuYZHC8TEQ=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=VOT3kbYiY90iOsNmwjPKDRcrnhA+Nq+dHr2wUdQ3dp9YXfPoB45lsModbPKyApHkC
-         FqBlOolHNZDE+WjJGbgYXMW9exPj0qxxJb+ixSAn890nshpejAJA9F3VE931As8+sK
-         x6005gi8H2dMEftgItMtJpNFHI5E0rwISEYaEmkXVeTFZsMdGLpUv/fZqScFXLHSxt
-         PrF69uDmhxQOiOzlllAlwWiKiu/Fnpy2Sm4c8YBdhu2x/lEV3arOPAJ+3fOIT9prrM
-         lCuNUMzEy2M93qUld/dgvNQf3T9IPenUsGD5zceoYOZ52JX0DIPo7GXaVwqTNv8Pbd
-         48dFgrtPO/2BQ==
-Message-ID: <a5122af2-90e2-39c5-2d6a-57a4ab8d8f24@collabora.com>
-Date:   Wed, 10 Aug 2022 13:45:00 +0500
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id 06081309215;
+        Wed, 10 Aug 2022 10:45:36 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1660121137;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wW1BnO3D+++ZeyOAYr0klJvyf1VeScMpK2Hw/FycF80=;
+        b=PitDpYXr1MTFKl5Vc0Z0t9rnVUhvdMBVFgQN+FBbKqtRsWVvaWSZYLas5Pkgd82fMQA3j6
+        hz4RfghwAZznttQPPnCCJaxWRjqLdw4l2+CPFuSBBpKm6l99AxiPHH8fuTy2DYr4gRzy3G
+        2lwNPo7bDFwYduG+m6lW7IoIuF111L3y4cShuPs65OuXo1TEttxHx9Vz/hgiTPKsX7LmOA
+        4ULn5oagnjTlazB2iwa49z/kD88FgDLTtmcv0uA2ClnBmOsVwVrlhztfvOjXusFrQSCz2E
+        cRnTl4G+WgVZmS3DfawNB/HAJ+v8YCQHBcdqP/20IAg+cwx6RIpGOZCG8/2OFA==
+Message-ID: <4f334657f927865266fee19a7920f7248a111ef8.camel@svanheule.net>
+Subject: Re: [PATCH v1 1/5] lib/test_cpumask: drop cpu_possible_mask full
+ test
+From:   Sander Vanheule <sander@svanheule.net>
+To:     David Gow <davidgow@google.com>
+Cc:     Yury Norov <yury.norov@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        =?ISO-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>
+Date:   Wed, 10 Aug 2022 10:45:35 +0200
+In-Reply-To: <CABVgOSmcKHH2zcCbT-jzekFP8RFov4V0AFBsGjU9kXSy9pJ9HQ@mail.gmail.com>
+References: <cover.1660068429.git.sander@svanheule.net>
+         <30d8882efedea697da20c27563050008d1569b9e.1660068429.git.sander@svanheule.net>
+         <CABVgOSmcKHH2zcCbT-jzekFP8RFov4V0AFBsGjU9kXSy9pJ9HQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Cc:     usama.anjum@collabora.com, kernel@collabora.com
-Subject: Re: [PATCH 0/5] Add process_memwatch syscall
-Content-Language: en-US
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
-        "open list:ABI/API" <linux-api@vger.kernel.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
-        <linux-perf-users@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, krisman@collabora.com
-References: <20220726161854.276359-1-usama.anjum@collabora.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20220726161854.276359-1-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,101 +63,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/26/22 9:18 PM, Muhammad Usama Anjum wrote:
-> Hello,
-> 
-> This patch series implements a new syscall, process_memwatch. Currently,
-> only the support to watch soft-dirty PTE bit is added. This syscall is
-> generic to watch the memory of the process. There is enough room to add
-> more operations like this to watch memory in the future.
-> 
-> Soft-dirty PTE bit of the memory pages can be viewed by using pagemap
-> procfs file. The soft-dirty PTE bit for the memory in a process can be
-> cleared by writing to the clear_refs file. This series adds features that
-> weren't possible through the Proc FS interface.
-> - There is no atomic get soft-dirty PTE bit status and clear operation
->   possible.
-> - The soft-dirty PTE bit of only a part of memory cannot be cleared.
-> 
-> Historically, soft-dirty PTE bit tracking has been used in the CRIU
-> project. The Proc FS interface is enough for that as I think the process
-> is frozen. We have the use case where we need to track the soft-dirty
-> PTE bit for running processes. We need this tracking and clear mechanism
-> of a region of memory while the process is running to emulate the
-> getWriteWatch() syscall of Windows. This syscall is used by games to keep
-> track of dirty pages and keep processing only the dirty pages. This
-> syscall can be used by the CRIU project and other applications which
-> require soft-dirty PTE bit information.
-> 
-> As in the current kernel there is no way to clear a part of memory (instead
-> of clearing the Soft-Dirty bits for the entire processi) and get+clear
-> operation cannot be performed atomically, there are other methods to mimic
-> this information entirely in userspace with poor performance:
-> - The mprotect syscall and SIGSEGV handler for bookkeeping
-> - The userfaultfd syscall with the handler for bookkeeping
-> 
->         long process_memwatch(int pidfd, unsigned long start, int len,
->                               unsigned int flags, void *vec, int vec_len);
-Any thoughts?
+Hi David,
 
-> 
-> This syscall can be used by the CRIU project and other applications which
-> require soft-dirty PTE bit information. The following operations are
-> supported in this syscall:
-> - Get the pages that are soft-dirty.
-> - Clear the pages which are soft-dirty.
-> - The optional flag to ignore the VM_SOFTDIRTY and only track per page
-> soft-dirty PTE bit
-> 
-> There are two decisions which have been taken about how to get the output
-> from the syscall.
-> - Return offsets of the pages from the start in the vec
-> - Stop execution when vec is filled with dirty pages
-> These two arguments doesn't follow the mincore() philosophy where the
-> output array corresponds to the address range in one to one fashion, hence
-> the output buffer length isn't passed and only a flag is set if the page
-> is present. This makes mincore() easy to use with less control. We are
-> passing the size of the output array and putting return data consecutively
-> which is offset of dirty pages from the start. The user can convert these
-> offsets back into the dirty page addresses easily. Suppose, the user want
-> to get first 10 dirty pages from a total memory of 100 pages. He'll
-> allocate output buffer of size 10 and process_memwatch() syscall will
-> abort after finding the 10 pages. This behaviour is needed to support
-> Windows' getWriteWatch(). The behaviour like mincore() can be achieved by
-> passing output buffer of 100 size. This interface can be used for any
-> desired behaviour.
-> 
-> Regards,
-> Muhammad Usama Anjum
-> 
-> Muhammad Usama Anjum (5):
->   fs/proc/task_mmu: make functions global to be used in other files
->   mm: Implement process_memwatch syscall
->   mm: wire up process_memwatch syscall for x86
->   selftests: vm: add process_memwatch syscall tests
->   mm: add process_memwatch syscall documentation
-> 
->  Documentation/admin-guide/mm/soft-dirty.rst   |  48 +-
->  arch/x86/entry/syscalls/syscall_32.tbl        |   1 +
->  arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
->  fs/proc/task_mmu.c                            |  84 +--
->  include/linux/mm_inline.h                     |  99 +++
->  include/linux/syscalls.h                      |   3 +-
->  include/uapi/asm-generic/unistd.h             |   5 +-
->  include/uapi/linux/memwatch.h                 |  12 +
->  kernel/sys_ni.c                               |   1 +
->  mm/Makefile                                   |   2 +-
->  mm/memwatch.c                                 | 285 ++++++++
->  tools/include/uapi/asm-generic/unistd.h       |   5 +-
->  .../arch/x86/entry/syscalls/syscall_64.tbl    |   1 +
->  tools/testing/selftests/vm/.gitignore         |   1 +
->  tools/testing/selftests/vm/Makefile           |   2 +
->  tools/testing/selftests/vm/memwatch_test.c    | 635 ++++++++++++++++++
->  16 files changed, 1098 insertions(+), 87 deletions(-)
->  create mode 100644 include/uapi/linux/memwatch.h
->  create mode 100644 mm/memwatch.c
->  create mode 100644 tools/testing/selftests/vm/memwatch_test.c
-> 
+On Wed, 2022-08-10 at 12:06 +0800, David Gow wrote:
+> On Wed, Aug 10, 2022 at 2:09 AM Sander Vanheule <sander@svanheule.net> wr=
+ote:
+> >=20
+> > cpu_possible_mask is not necessarily completely filled.=C2=A0 That mean=
+s
+> > running a check on cpumask_full() doesn't make sense, so drop the test.
+> >=20
+> > Fixes: c41e8866c28c ("lib/test: introduce cpumask KUnit test suite")
+> > Link: https://lore.kernel.org/lkml/346cb279-8e75-24b0-7d12-9803f2b41c73=
+@riseup.net/
+> > Reported-by: Ma=C3=ADra Canal <mairacanal@riseup.net>
+> > Signed-off-by: Sander Vanheule <sander@svanheule.net>
+> > Cc: David Gow <davidgow@google.com>
+> > ---
+>=20
+> Looks good to me. It'd maybe be worth noting _why_=C2=A0 cpu_possible_mas=
+k
+> is not always filled (i.e., that the number of available CPUs might
+> not match the maximum number of CPUs the kernel is built to support),
+> but it's probably not worth doing a new version of the patch series
+> just for that.
+>=20
+> Reviewed-by: David Gow <davidgow@google.com>
 
--- 
-Muhammad Usama Anjum
+Thanks for the reviews!
+
+Perhaps the commit message could be replaced by:
+
+"When the number of CPUs that can possibly be brought online is known at bo=
+ot time, e.g. when
+HOTPLUG is disabled, nr_cpu_ids may be smaller than NR_CPUS. In that case, =
+cpu_possible_mask would
+not be completely filled, and cpumask_full(cpu_possible_mask) may return fa=
+lse for valid system
+configurations."
+
+
+Best,
+Sander
+
+>=20
+> Cheers,
+> -- David
+>=20
+>=20
+> > =C2=A0lib/test_cpumask.c | 1 -
+> > =C2=A01 file changed, 1 deletion(-)
+> >=20
+> > diff --git a/lib/test_cpumask.c b/lib/test_cpumask.c
+> > index a31a1622f1f6..4ebf9f5805f3 100644
+> > --- a/lib/test_cpumask.c
+> > +++ b/lib/test_cpumask.c
+> > @@ -54,7 +54,6 @@ static cpumask_t mask_all;
+> > =C2=A0static void test_cpumask_weight(struct kunit *test)
+> > =C2=A0{
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 KUNIT_EXPECT_TRUE(test, cpum=
+ask_empty(&mask_empty));
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 KUNIT_EXPECT_TRUE(test, cpumask_f=
+ull(cpu_possible_mask));
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 KUNIT_EXPECT_TRUE(test, cpum=
+ask_full(&mask_all));
+> >=20
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 KUNIT_EXPECT_EQ(test, 0, cpu=
+mask_weight(&mask_empty));
+> > --
+> > 2.37.1
+> >=20

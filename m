@@ -2,166 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D5C858F4BB
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 01:15:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBBF158F4C4
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 01:17:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233670AbiHJXPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 19:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38628 "EHLO
+        id S233693AbiHJXRP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 19:17:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233660AbiHJXPD (ORCPT
+        with ESMTP id S232777AbiHJXRC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 19:15:03 -0400
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A837C18B
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 16:15:02 -0700 (PDT)
-Received: by mail-pj1-x104a.google.com with SMTP id nn4-20020a17090b38c400b001f4f88bcc0eso2433554pjb.1
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 16:15:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc;
-        bh=GOce7Y6jdCY/zfkNNeO74zrYEvTJd53x8wkrPeEDjgU=;
-        b=ESsqWe3q8UeR7CxcjqoZATYdaP+BDRWBc4eIg8oOW2jltJ7lFVgCYASg5Xgtje53VN
-         DvVALBqdXWfXdNFYD0+7+VaPzxJjbBABh1JHvq5HYO7yAHAQusqnUlLTjasjKPmsuRvJ
-         eCighSfmzf/OPh4tmTfsixyppIzhMX0fQ0pBKDH2irzUdCzWS4c28SF2roUkSibwCrPy
-         lUUryf/wH04POtNjy54uxDvYDHR0KB3Ph190dCSMdLJ8GZ6AY13VTU0k/qLkZTjlX6Zt
-         1Xvm78AUqy1IqRVJkVMWn5pYC3MixJwdOyy2+mAhEfHZwyeOcFERDQMvru1vqi3cVq6e
-         me4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc;
-        bh=GOce7Y6jdCY/zfkNNeO74zrYEvTJd53x8wkrPeEDjgU=;
-        b=pij+lYnOgpFmvOTJHNbNHG+KEJv5sAE3QmXFy5EM7DvnwrD0bQ5ztQkzTIWMM5h4tl
-         Gy6zElt49hMTl/unM1fHDnLvXxYEsqy9ah4+CUz4Ojn5Hdp6uCmTzP8noYU6Eb1wetRf
-         jC1Z0eZHk7CENbr61z+ZIXYxgTwUqyO1/Kjb3250cMkHyKZxXraBylfaoa3VYb2G+UgR
-         fVMK5/BNZbINUzv1MPuNbTtCwor933HYUtWckBo2IkJLQOJmKHHZmezaNFAhA2y2Fhkr
-         k7LC1vjnPAhQuLpKQz50Y5FA4sA7xK6Ce3YzUT+Cq8wXYGloXVpulvd4Nn2MaPHpJgeF
-         jm4A==
-X-Gm-Message-State: ACgBeo0zKLpBXDyY+3CtrTCEFZGpeNqCBVkX52Johvy4ntBFreg9R5QG
-        J1Yu+iBEcGY+YJhwjFuYPQds14REH2/OmrqV0LQ=
-X-Google-Smtp-Source: AA6agR6OHCmnn8tCZdB3wLnDYiSz4MjJQaPKAnZVBxL4jkwALTzbKb5l7EwTPFYBGXhMb4ufXWIlKKqjMss8REmZi3g=
-X-Received: from wmcvicker.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5ebe])
- (user=willmcvicker job=sendgmr) by 2002:a17:902:b484:b0:170:a2d8:80f6 with
- SMTP id y4-20020a170902b48400b00170a2d880f6mr16898465plr.97.1660173302008;
- Wed, 10 Aug 2022 16:15:02 -0700 (PDT)
-Date:   Wed, 10 Aug 2022 23:14:44 +0000
-In-Reply-To: <20220810231445.2242126-1-willmcvicker@google.com>
-Message-Id: <20220810231445.2242126-3-willmcvicker@google.com>
-Mime-Version: 1.0
-References: <20220810231445.2242126-1-willmcvicker@google.com>
-X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
-Subject: [PATCH v3 2/2] PCI: dwc: add support for 64-bit MSI target address
-From:   Will McVicker <willmcvicker@google.com>
-To:     Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        "=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?=" <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Will McVicker <willmcvicker@google.com>
-Cc:     kernel-team@android.com, Vidya Sagar <vidyas@nvidia.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.6
+        Wed, 10 Aug 2022 19:17:02 -0400
+Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE4179EFD;
+        Wed, 10 Aug 2022 16:17:00 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id D606C58088D;
+        Wed, 10 Aug 2022 19:16:56 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 10 Aug 2022 19:16:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm3; t=1660173416; x=1660180616; bh=s2eqPpo3EcIBzlyogIed9ASwn
+        BssDbDTakSn5dsaPGk=; b=QMgOjsYj6nZ/rVWkV8dkpAOxkAZsZWJz6n+PkR/5H
+        dTu4M/bDkFKjOcvPOGro0Np/N7h+5pSfR8IXUcqup01N+NwF1CZBuMOZQmTvXsKK
+        aCcuG/MjpNNpwtRDzN3B9Y3kbjp1jCGnaGv6a347ckEZwkywJGMRmCs6F7J1QD5K
+        hFkFHypoesH22W6O62j6tCQ30i6TQd1qKaXLAniJsXkkUgsBR/KZE5tmR8HXkOLP
+        1bZ3S/Q9YIUffG8sVummTFXgegSKFjw+0GNbCQGrv0Cologd3dIehavnhnYW2NrY
+        PC0qYAS2oCJj4iVC8BdmdoYPFNxT6cD2RWLTSz9gmmNVw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1660173416; x=1660180616; bh=s2eqPpo3EcIBzlyogIed9ASwnBssDbDTakS
+        n5dsaPGk=; b=4myC0Pl5CTEM3EE3d/pP8uoxQK2YEQV+M6WAjI3S7bJsnMnL0Hc
+        0ypPBNz2PEHbt6dWorbV3/y8K3Nfl6YvUVsL8GN+ZTwsALtovuXorThQ/skjnskr
+        49Mhbpq1dHYjTtAaY/D8sX6xPPiNuXPs4hGmfQ9wP/HPAoJAgH5nJj4MbIW1la2o
+        mdgOSwZ9DxHDyXXUwOHiKwtYcs2+DHxLf8jh5WT/5A1UKgxGWTB9KNOw2jLGwmSh
+        bo2+61TRcik86NwRf6ztKkknR71r+Jj1CiT0SnW3ynaTGsMxg2mxd1kF94x5KRGA
+        zPm6HkWwLQu9da5cDCbTOVsZy3/t44DyZhA==
+X-ME-Sender: <xms:aDz0YrzwQHDukS4HjXR6ViZvzaPnCFS0Uq5mlQ2gzdIWd8YddM3TiA>
+    <xme:aDz0YjSENWFuLFMjiW57s8AEIL9PBUrDH1pwNwp6zpK1nVfh_CNmJYiu5SsV5FTzR
+    akDAP9mTheIFyxt-g>
+X-ME-Received: <xmr:aDz0YlVa4GdR5cRwMVnPTYrnTbO9oxxCMwPLh9IOcA5IB9vfVmgkjuj5htV5-XI-OoBMw7mFUTk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegfedgvdduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdlfeehmdenogevohgrshhtrg
+    hlqdfhgeduvddqtddvucdludehtddmnecujfgurhephffvvefufffkofgggfestdekredt
+    redttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqe
+    enucggtffrrghtthgvrhhnpeetueektdeuhfefvefggfevgeffgfekfefhkeekteffheev
+    tddvhedukeehffeltdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsth
+    gvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdr
+    giihii
+X-ME-Proxy: <xmx:aDz0YlhA7gwpakel8onQLP_au8kBpUiHGoLZPm29M93_FICw6eFutQ>
+    <xmx:aDz0YtA5pGxzjuwCHRDtxamnwfV2_QYepf-VZsv7J0ybhVbhkHIcEQ>
+    <xmx:aDz0YuIZhPrgJAdYUYWyj-ignIYGuu9RzDkbzCII07mOaE9k-SFehw>
+    <xmx:aDz0Yg5CuVqAVP8vqChtgZ3tLS-y0MiitCWunL3nh8ZnPIQtg-EjLQ>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 10 Aug 2022 19:16:54 -0400 (EDT)
+From:   Daniel Xu <dxu@dxuuu.xyz>
+To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, memxor@gmail.com
+Cc:     Daniel Xu <dxu@dxuuu.xyz>, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v3 0/3] Add more bpf_*_ct_lookup() selftests
+Date:   Wed, 10 Aug 2022 17:16:41 -0600
+Message-Id: <cover.1660173222.git.dxu@dxuuu.xyz>
+X-Mailer: git-send-email 2.37.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since not all devices require a 32-bit MSI address, add support to the
-PCIe host driver to allow setting the DMA mask to 64-bits. This allows
-kernels to disable ZONE_DMA32 and bounce buffering (swiotlb) without
-risking not being able to get a 32-bit address during DMA allocation.
-Basically, in the slim chance that there are no 32-bit allocations
-available, the current PCIe host driver will fail to allocate the
-msi_msg page due to a DMA address overflow (seen in [1]). With this
-patch, the PCIe driver can advertise 64-bit support via it's MSI
-capabilities to hint to the PCIe host driver to set the DMA mask to
-64-bits.
+This patchset adds more bpf_*_ct_lookup() selftests. The goal is to test
+interaction with netfilter subsystem as well as reading from `struct
+nf_conn`. The first is important when migrating legacy systems towards
+bpf. The latter is important in general to take full advantage of
+connection tracking.
 
-[1] https://lore.kernel.org/all/Yo0soniFborDl7+C@google.com/
+I'll follow this patchset up with support for writing to `struct nf_conn`.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Will McVicker <willmcvicker@google.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
- drivers/pci/controller/dwc/pcie-designware-host.c | 14 ++++++++++++--
- drivers/pci/controller/dwc/pcie-designware.c      |  9 +++++++++
- drivers/pci/controller/dwc/pcie-designware.h      |  1 +
- 3 files changed, 22 insertions(+), 2 deletions(-)
+Past discussion:
+- v2: https://lore.kernel.org/bpf/cover.1660062725.git.dxu@dxuuu.xyz/
+- v1: https://lore.kernel.org/bpf/cover.1659209738.git.dxu@dxuuu.xyz/
 
-diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
-index 39f3b37d4033..18cf96f911dc 100644
---- a/drivers/pci/controller/dwc/pcie-designware-host.c
-+++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-@@ -330,6 +330,8 @@ static int dw_pcie_msi_host_init(struct dw_pcie_rp *pp)
- 	u64 *msi_vaddr;
- 	int ret;
- 	u32 ctrl, num_ctrls;
-+	bool msi_64b = false;
-+	u16 msi_capabilities;
- 
- 	for (ctrl = 0; ctrl < MAX_MSI_CTRLS; ctrl++)
- 		pp->irq_mask[ctrl] = ~0;
-@@ -367,9 +369,17 @@ static int dw_pcie_msi_host_init(struct dw_pcie_rp *pp)
- 						    dw_chained_msi_isr, pp);
- 	}
- 
--	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
-+	msi_capabilities = dw_pcie_msi_capabilities(pci);
-+	if (msi_capabilities & PCI_MSI_FLAGS_ENABLE)
-+		msi_64b = msi_capabilities & PCI_MSI_FLAGS_64BIT ? true : false;
-+
-+	dev_dbg(dev, "Setting MSI DMA mask to %s-bit.\n",
-+		msi_64b ? "64" : "32");
-+	ret = dma_set_mask_and_coherent(dev, msi_64b ?
-+					DMA_BIT_MASK(64) : DMA_BIT_MASK(32));
- 	if (ret)
--		dev_warn(dev, "Failed to set DMA mask to 32-bit. Devices with only 32-bit MSI support may not work properly\n");
-+		dev_warn(dev, "Failed to set DMA mask to %s-bit.\n",
-+			 msi_64b ? "64" : "32");
- 
- 	msi_vaddr = dmam_alloc_coherent(dev, sizeof(u64), &pp->msi_data,
- 					GFP_KERNEL);
-diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-index c6725c519a47..8ed402307d7f 100644
---- a/drivers/pci/controller/dwc/pcie-designware.c
-+++ b/drivers/pci/controller/dwc/pcie-designware.c
-@@ -82,6 +82,15 @@ u8 dw_pcie_find_capability(struct dw_pcie *pci, u8 cap)
- }
- EXPORT_SYMBOL_GPL(dw_pcie_find_capability);
- 
-+u16 dw_pcie_msi_capabilities(struct dw_pcie *pci)
-+{
-+	u8 offset;
-+
-+	offset = dw_pcie_find_capability(pci, PCI_CAP_ID_MSI);
-+	return dw_pcie_readw_dbi(pci, offset + PCI_MSI_FLAGS);
-+}
-+EXPORT_SYMBOL_GPL(dw_pcie_msi_capabilities);
-+
- static u16 dw_pcie_find_next_ext_capability(struct dw_pcie *pci, u16 start,
- 					    u8 cap)
- {
-diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
-index a871ae7eb59e..45fcdfc8c035 100644
---- a/drivers/pci/controller/dwc/pcie-designware.h
-+++ b/drivers/pci/controller/dwc/pcie-designware.h
-@@ -332,6 +332,7 @@ void dw_pcie_version_detect(struct dw_pcie *pci);
- 
- u8 dw_pcie_find_capability(struct dw_pcie *pci, u8 cap);
- u16 dw_pcie_find_ext_capability(struct dw_pcie *pci, u8 cap);
-+u16 dw_pcie_msi_capabilities(struct dw_pcie *pci);
- 
- int dw_pcie_read(void __iomem *addr, int size, u32 *val);
- int dw_pcie_write(void __iomem *addr, int size, u32 val);
+Changes since v2:
+- Add bpf-ci kconfig changes
+
+Changes since v1:
+- Reword commit message / cover letter to not mention connmark writing
+
+
+Daniel Xu (3):
+  selftests/bpf: Add existing connection bpf_*_ct_lookup() test
+  selftests/bpf: Add connmark read test
+  selftests/bpf: Update CI kconfig
+
+ tools/testing/selftests/bpf/config            |  2 +
+ .../testing/selftests/bpf/prog_tests/bpf_nf.c | 60 +++++++++++++++++++
+ .../testing/selftests/bpf/progs/test_bpf_nf.c | 21 +++++++
+ 3 files changed, 83 insertions(+)
+
 -- 
-2.37.1.559.g78731f0fdb-goog
+2.37.1
 

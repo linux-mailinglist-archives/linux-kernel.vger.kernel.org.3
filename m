@@ -2,138 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08EC258F3BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 23:14:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4832E58F3C1
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 23:15:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232388AbiHJVOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 17:14:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51910 "EHLO
+        id S232543AbiHJVP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 17:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbiHJVOb (ORCPT
+        with ESMTP id S230461AbiHJVPY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 17:14:31 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 388B97D7BA
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 14:14:30 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id z6so15493312lfu.9
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 14:14:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=KstM2C1nqWzbgiq4lXjESSIV1F+sGBJqXZBKfIDDeII=;
-        b=mJ2qrO5MX6fYku8PgLw5AnOtIoBprrurL+nSadvPZ/nI6zBSOd74G8iKYlHjlxhSGK
-         USn07FxYrgyBuEIA+f2Mxh4Oa/e+iiBOCs19euWtk22Fu/Z9qw8oaRo30nQiHAkryS6Y
-         OkGFpD8kk5juBZ0pa8b2rWt/+dgD8gCXmdnRvQK+0MF8N9K8OaD4UraP7imW+XgEtrf+
-         eVDcIqCbW5EuGYwj2bh4+gx/7LwAiCviv4k3pi6iA8Z/WIOSMsyBb/O9EBsYHE7ukUS8
-         xokR0vi2c3FQE9t2Udn3bU0+uZ3i4ejbYLZGKdMm/LrvNqJ66BM5i1pvxlXY91KPTSBE
-         Nynw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=KstM2C1nqWzbgiq4lXjESSIV1F+sGBJqXZBKfIDDeII=;
-        b=VMHHaIYN2az5FZvPOxAwi5Omc1AflGzeMdZA2XjlpA1Vw6Z7N4x2/gznLGxlzOVem8
-         xXD4TYvgZKcLDBIyVjqunjKme/CHw6RaCkKkACy+1xo0V6+PIB/dxTVUQdnuCgAToRW1
-         0wVLMAEh1kSeYgPEhU1q5on3KffinisOUsSLzgDN/e2Rpn/hlKSJ4G3m22iN4n6PXrqG
-         i4Lw+vwebSZibAU+CrDB/d2sAWetZYltItXsTFlGTR4GOHTA7aeRn481/Oo+3/fvSFwu
-         WWaULnOXZFBfVUmDr44VfPktq7DCxIOyAKXkAw999PYWdhdv6bA8YKu4VJQyF5P5n+JZ
-         RJCw==
-X-Gm-Message-State: ACgBeo1QhYpkPRpssSFx10Bykn7ejKuIvfkkey1KChDVdsUCUB8maH7C
-        3/0gpYFWRDAlKMaOEX4CaEQNzyHN0z5hEkO7O8NggQ==
-X-Google-Smtp-Source: AA6agR7XAy8+dRFXr1tYRU78D2cRU1qIJone22+JuKdzodOZmAEH3tkfVSaACFucoUikH/AMCJJ0BTbB6CoPorjLq5E=
-X-Received: by 2002:ac2:4f03:0:b0:48a:6061:bd8e with SMTP id
- k3-20020ac24f03000000b0048a6061bd8emr11290623lfr.647.1660166068361; Wed, 10
- Aug 2022 14:14:28 -0700 (PDT)
+        Wed, 10 Aug 2022 17:15:24 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1760418B35
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 14:15:24 -0700 (PDT)
+Received: from notapiano (korma.collabora.co.uk [168.119.224.208])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5965D6601C74;
+        Wed, 10 Aug 2022 22:15:19 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1660166122;
+        bh=/jwBuBx79c+lk7i4kE7uZcAxqKWyDiBWEZ+cunWmR8o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GvWzDwX0VnghTEO0QFED/hL1bYc0BmK5NdO9GgXLRMZBmo4xFdsI1+HUKIexdrZU3
+         t1kciV686A0kO1LKnmvEBDmN+HU/UKXcHqBwOB9IXx4viufCZbIt9AWT3vohoycFYh
+         j5SrFZnSKHHuMJHCXm4D8urFnrjLTBptx49lPhnwjMG4qbYz0XIBWY+mMuQU5KCZdo
+         mZwj59EUoqrrCEE1tqhQVnkytD8qIB6mRQ4BI55in0xWVcqUVI7veJatspDIz3HqTo
+         q1hzwfwFbF3x7fmqd8OycPrqam9pIxQ7tqz54EFzf/QX+esMGspdF9PKcuU7Efp3c3
+         +hmmAOJaqc7gA==
+Date:   Wed, 10 Aug 2022 17:15:14 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     chunkuang.hu@kernel.org, p.zabel@pengutronix.de, airlied@linux.ie,
+        daniel@ffwll.ch, matthias.bgg@gmail.com, rex-bc.chen@mediatek.com,
+        jitao.shi@mediatek.com, xinlei.lee@mediatek.com,
+        dri-devel@lists.freedesktop.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/mediatek: dsi: Add atomic {destroy,duplicate}_state,
+ reset callbacks
+Message-ID: <20220810211514.nmufrsi6gssb2kel@notapiano>
+References: <20220721172727.14624-1-angelogioacchino.delregno@collabora.com>
 MIME-Version: 1.0
-References: <20220810010809.2024482-1-nathan@kernel.org>
-In-Reply-To: <20220810010809.2024482-1-nathan@kernel.org>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Wed, 10 Aug 2022 14:14:16 -0700
-Message-ID: <CAKwvOdmZvB_=JTeLg08uMFhEMpWga4FJey50QHjzCv_jMVpwkg@mail.gmail.com>
-Subject: Re: [PATCH] ASoC: mchp-spdiftx: Fix clang -Wbitfield-constant-conversion
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@microchip.com>,
-        Tom Rix <trix@redhat.com>, alsa-devel@alsa-project.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220721172727.14624-1-angelogioacchino.delregno@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 9, 2022 at 6:08 PM Nathan Chancellor <nathan@kernel.org> wrote:
->
-> A recent change in clang strengthened its -Wbitfield-constant-conversion
-> to warn when 1 is assigned to a 1-bit signed integer bitfield, as it can
-> only be 0 or -1, not 1:
->
->   sound/soc/atmel/mchp-spdiftx.c:505:20: error: implicit truncation from 'int' to bit-field changes value from 1 to -1 [-Werror,-Wbitfield-constant-conversion]
->           dev->gclk_enabled = 1;
->                             ^ ~
->   1 error generated.
->
-> The actual value of the field is never checked, just that it is not
-> zero, so there is not a real bug here. However, it is simple enough to
-> silence the warning by making the bitfield unsigned, which matches the
-> mchp-spdifrx driver.
->
-> Fixes: 06ca24e98e6b ("ASoC: mchp-spdiftx: add driver for S/PDIF TX Controller")
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1686
-> Link: https://github.com/llvm/llvm-project/commit/82afc9b169a67e8b8a1862fb9c41a2cd974d6691
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+On Thu, Jul 21, 2022 at 07:27:27PM +0200, AngeloGioacchino Del Regno wrote:
+> Add callbacks for atomic_destroy_state, atomic_duplicate_state and
+> atomic_reset to restore functionality of the DSI driver: this solves
+> vblank timeouts when another bridge is present in the chain.
+> 
+> Tested bridge chain: DSI <=> ANX7625 => aux-bus panel
+> 
+> Fixes: 7f6335c6a258 ("drm/mediatek: Modify dsi funcs to atomic operations")
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Ah yes, my favorite, signed one bit integers...thanks for the patch.
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-grepping for `gclk_enabled`, we see three drivers with similar
-duplication (single bit bitfields):
+Tested on mt8183-jacuzzi-juniper. As part of enabling IGT tests on that machine
+in KernelCI, this regression needs to be fixed. [1]
 
-sound/soc/atmel/mchp-spdifrx.c
-241: unsigned int gclk_enabled:1;
+Thanks,
+Nícolas
 
-sound/soc/atmel/mchp-pdmc.c
-118: u8 gclk_enabled:1;
-
-sound/soc/atmel/mchp-spdiftx.c
-200: int gclk_enabled:1;
+[1] https://github.com/kernelci/kernelci-core/pull/1059
 
 > ---
->  sound/soc/atmel/mchp-spdiftx.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/sound/soc/atmel/mchp-spdiftx.c b/sound/soc/atmel/mchp-spdiftx.c
-> index 4850a177803d..ab2d7a791f39 100644
-> --- a/sound/soc/atmel/mchp-spdiftx.c
-> +++ b/sound/soc/atmel/mchp-spdiftx.c
-> @@ -196,7 +196,7 @@ struct mchp_spdiftx_dev {
->         struct clk                              *pclk;
->         struct clk                              *gclk;
->         unsigned int                            fmt;
-> -       int                                     gclk_enabled:1;
-> +       unsigned int                            gclk_enabled:1;
+> 
+> Note: The commit that has been mentioned in the Fixes tag should
+>       *not* have my Reviewed-by tag, as the author changed it but
+>       erroneously retained the tag that I had released for an
+>       earlier version of that commit (which was fine, but the new
+>       version broke mtk_dsi!).
+> 
+>  drivers/gpu/drm/mediatek/mtk_dsi.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> index 9cc406e1eee1..5b624e0f5b0a 100644
+> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
+> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
+> @@ -808,10 +808,13 @@ static void mtk_dsi_bridge_atomic_post_disable(struct drm_bridge *bridge,
+>  
+>  static const struct drm_bridge_funcs mtk_dsi_bridge_funcs = {
+>  	.attach = mtk_dsi_bridge_attach,
+> +	.atomic_destroy_state = drm_atomic_helper_bridge_destroy_state,
+>  	.atomic_disable = mtk_dsi_bridge_atomic_disable,
+> +	.atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,
+>  	.atomic_enable = mtk_dsi_bridge_atomic_enable,
+>  	.atomic_pre_enable = mtk_dsi_bridge_atomic_pre_enable,
+>  	.atomic_post_disable = mtk_dsi_bridge_atomic_post_disable,
+> +	.atomic_reset = drm_atomic_helper_bridge_reset,
+>  	.mode_set = mtk_dsi_bridge_mode_set,
 >  };
->
->  static inline int mchp_spdiftx_is_running(struct mchp_spdiftx_dev *dev)
->
-> base-commit: 15205c2829ca2cbb5ece5ceaafe1171a8470e62b
-> --
-> 2.37.1
->
-
-
--- 
-Thanks,
-~Nick Desaulniers
+>  
+> -- 
+> 2.35.1
+> 
+> 

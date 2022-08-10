@@ -2,164 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 919C758E7ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 09:37:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2B1458E7F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 09:38:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231196AbiHJHhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 03:37:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60014 "EHLO
+        id S230266AbiHJHik (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 03:38:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbiHJHh3 (ORCPT
+        with ESMTP id S229649AbiHJHii (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 03:37:29 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD046AA0D;
-        Wed, 10 Aug 2022 00:37:28 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id r22so11233911pgm.5;
-        Wed, 10 Aug 2022 00:37:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-language:content-transfer-encoding:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc;
-        bh=9zO6VsxpNwvBhILnEVUXUDk4PHjbIaeGm/Tf8gWbKd8=;
-        b=g6y821k0rHBOsVO5buJzSkN4BcpKTz5ZYVLFCkB0r9v8DQbJqvahWuCALGRrLowAnb
-         qtVOWFTpZdc5T25pBIpvBL5oZqCpP3g56PF0XE/xfqe4YZYzUf61PnlljpHylKRYZrQp
-         mdFfqDAYPFTVq+7ehyyoEcPyfBPsrIbi0roDyZFH9im+tTmWxCWkzsKYI66lV3nJtSiY
-         2X8GnrdSExy0I9sSXHHxHLllp1o1Yd4LA7pAmRFC8AWFiuwhG8LYefyiDUjv340lgWCg
-         G6TdDqtQhq1cEq4qrsic/HX78K2FBVq7SmDOLorjy67Ymqsq3MOzT68xzZDaR3/x8y7R
-         U/lA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-language:content-transfer-encoding:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc;
-        bh=9zO6VsxpNwvBhILnEVUXUDk4PHjbIaeGm/Tf8gWbKd8=;
-        b=iA2ycRPnBuSSrEt8AU3ef/SrLgmHE88dBA2E17jeeRuKvJ0MS0ZEbAm8qXwENa0e0W
-         WCUUtEACFl+Tpm3Qr0/isrW30lyqYoGnGN1oE+i/zioVlayRb8hvPqequHs//KhyWZ+E
-         FouXs99gBUjNGtgFmG0kpmhieIC+FqXoyx7CyyLbIV4+YiQfsiIGmGoWR48Tsj1CBneN
-         32A6dVklwjqFthWaOGk6451lKyOgKPAq8WiimUCu4HgVFi03UtJCUDqtIrHDu98maoeW
-         JDQCPkpzBUHiTd+9/sUxli927RN0rZoHzFjlpMHDd2ha3zhRR0la/brMp1MPrTCxxLKD
-         fQpA==
-X-Gm-Message-State: ACgBeo23wS2pmInxAYsZS8+Uz2686xWS+xzOtUkBtE/CCuZd4CIJiCiV
-        PVW43KPnPar3ihXL/VGjWVPOjcWogGqocU2ZFbw=
-X-Google-Smtp-Source: AA6agR6ctfWGjpGGhS6GTB10hZ9CoTx07BOOKP6nz7E4kB0Iv6T3ovEzi0b9J0wxqEeBuDjzTxFvjg==
-X-Received: by 2002:a05:6a00:2308:b0:52f:8ae9:9465 with SMTP id h8-20020a056a00230800b0052f8ae99465mr8872860pfh.77.1660117047772;
-        Wed, 10 Aug 2022 00:37:27 -0700 (PDT)
-Received: from [0.0.0.0] ([123.253.225.53])
-        by smtp.gmail.com with ESMTPSA id l16-20020a17090a3f1000b001f56405ab36sm865509pjc.23.2022.08.10.00.37.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Aug 2022 00:37:27 -0700 (PDT)
-Subject: Re: [PATCH] igc: Remove _I_PHY_ID check for i225 devices
-To:     Tony Nguyen <anthony.l.nguyen@intel.com>
-Cc:     Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220809133502.37387-1-meljbao@gmail.com>
- <b39c9fa3-1b7c-c7b1-c3dd-bf5ceb035dc8@intel.com>
-From:   Linjun Bao <meljbao@gmail.com>
-Message-ID: <d1a03e34-56af-efd7-9e2e-61a2bad0ef2a@gmail.com>
-Date:   Wed, 10 Aug 2022 15:37:24 +0800
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Wed, 10 Aug 2022 03:38:38 -0400
+Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-eopbgr140055.outbound.protection.outlook.com [40.107.14.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B63DE6AA2F;
+        Wed, 10 Aug 2022 00:38:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=D/R6wHDx/oZAajmFb0FPeYFH5othmLpEtJWQ0z028i8zht2J7ZArQnRh8yATH8Wu3P246BzXh+KMBPf+Ke1WpN+lbB11e8X4rDZ/xUQs44roTetZ6OregPfe5RbuAAtRokG2uwRWismxxolTAsg3ObwTKtXNYFrGNMa7BL8g42fbzzoMz+KgMHaHJJTkp/GY1BDhYXno7sQPPhv4x2wmAUlBA8jdru2olbPHdFAunOlCl2RGvAmYDv4KkSLZWYHb/sanuQXmWljBS0s7kLCZK6mv+Zjxx0nyYx7eGFQqozbd6KVJskBwaHffCb0PFD1+BhltO8keFnxafMDloBZyPQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fOoxyoMqcEwWkSjOWVFQ3ffQBahuzfZDU+4pYZpg34Q=;
+ b=UTl0UfYaQTPK7G6qbet1+7ZkkyMrO2AmhPDDSQAvaZlmGA+F6Arh4y/36LmKWSLEr2BpAwSpKivb30ZC7kjsYwd77kmHcePsw67Zgy13dK0KeGxGs2ZzwAVPdf6pdiShbOF19mVS87MbMFUQN6a+Tl8iVfaSw/D0B1XqxUI9qbSLxf7M2gFeIMbC3FupJtpHJ7lwzJSPkP3LZPWd70NDyrc2jy1Ik4300w1SYxJfkG2GexGW+R9IOJ+32Ci5Fvmnf1wM1CORgxBEtgBrB+AhLFnUQBRfEhXxo7U+wh6am/zQZoIDHhOkuEjZeFNb40JErxaZhEXFsumBlWRNPDBsAw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
+ dkim=pass header.d=siemens.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fOoxyoMqcEwWkSjOWVFQ3ffQBahuzfZDU+4pYZpg34Q=;
+ b=HeT6XY8Gm5z0PrlNpJ30Tk+ZWPI9rNcIx52aMFNGZIOjTql2HlNGQUnq3qUDQaB65SkZrJ7Yc39tskAsbXAGxSGWyrETEHRno/IYtjErRfiBSxvSWn93w7GivJRUQ5SwSb3m3WgAdh5pkSwsoxUrMTcVykksghHPwPVw0RvRZBQ3S59APBTwEMt8p70Gim7PGl6H2D7y8qCcUniQwrkjacYnkxOYalVeBKtIEOkF1aTFFFCZo3uf1v7/ise+JcCZKyp39UWFKJoZyxwOzRtjW8qQCGFud5l7Go+GSsJWy6y8iBtXiWOUbUAo+BqvZbiAVB+dlIaqe/n4zYVEiQkfIw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=siemens.com;
+Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:269::8)
+ by PAXPR10MB5382.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:286::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.16; Wed, 10 Aug
+ 2022 07:38:34 +0000
+Received: from PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::75ee:d5d2:6b1d:150b]) by PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::75ee:d5d2:6b1d:150b%3]) with mapi id 15.20.5525.010; Wed, 10 Aug 2022
+ 07:38:34 +0000
+Date:   Wed, 10 Aug 2022 09:38:20 +0200
+From:   Henning Schild <henning.schild@siemens.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Tony Luck <tony.luck@intel.com>, Wolfram Sang <wsa@kernel.org>,
+        Jean Delvare <jdelvare@suse.de>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Jonathan Yong <jonathan.yong@intel.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-kernel@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-leds@vger.kernel.org,
+        linux-gpio@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        linux-watchdog@vger.kernel.org, Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Jean Delvare <jdelvare@suse.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Tyser <ptyser@xes-inc.com>,
+        Andy Shevchenko <andy@kernel.org>,
+        Mark Gross <markgross@kernel.org>
+Subject: Re: [PATCH v6 00/12] platform/x86: introduce p2sb_bar() helper
+Message-ID: <20220810093820.24ffd920@md1za8fc.ad001.siemens.net>
+In-Reply-To: <YtVBViMLFIUfFpXa@smile.fi.intel.com>
+References: <20220606164138.66535-1-andriy.shevchenko@linux.intel.com>
+        <YtVBViMLFIUfFpXa@smile.fi.intel.com>
+X-Mailer: Claws Mail 3.19.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: CH0PR04CA0047.namprd04.prod.outlook.com
+ (2603:10b6:610:77::22) To PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:102:269::8)
 MIME-Version: 1.0
-In-Reply-To: <b39c9fa3-1b7c-c7b1-c3dd-bf5ceb035dc8@intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 8bit
-Content-Language: en-US
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: c2f72177-d797-40b4-258e-08da7aa35439
+X-MS-TrafficTypeDiagnostic: PAXPR10MB5382:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: RggTqx8SbSVSn3PGKMVm8L8MP5ossP9xO8o85XrJKsxhzfnbblKVtHG9K6jAHo222HQ8pWOAzXn12szotS9H7NPL61KNwB7foRzqV4UNSe/XHuiWUOC6yFN0UyGvIaHRFafP/gOqvGHDrRnGae4/8ETb7Ov++CdWtQn9e7WCvcqonw/N18eJu6olok8vLJEXMCuqbAjvtsSIHLw27hM0YkfYGRJQwGX+9uP7b9KpaDcpAGh/k0NuPzrAthGJVFMo70CQhBaNLS1w1EsYxicOyrjrtIKBbAiWUF6MB89jep1Eg8PGhnO8A+XVvBKe0osixkqSUFppt1wURcmkwDBmqRnqDYpiLRGRnRMERdhKkJxj3xRUTMdjFwRv+eZtkCFwzpGzaev+VoOs0yQfZ0/QGJwYL2lm8mcGrgNe9z16FKrkXGWLm0Lk/qL8oXrjma5dO3sZJ1itjpbhXvKAutwx21pCaxONEGounJq9zYNH9ahBJtEjyA+sNI8gHi4b1DBgsOLKn8hn77Y9q6JhGr+Luobxmix8uYhV5wBN2I85psdr4cdBo/nW3/xCR0egFUzEnaaVUCRtxERcohUAKHwkgCW25eCYhQvMaBkGGDf2QA5K3925yzWNZu14NOiFz2LZ8t+be5ipRSs9F80+5xaBWVQM/yaYwzSX9/5N8MTyM1e3mdGZZEEa9w4yWfu9sF1WQGbOezqHF3dZrRzR5Rdq3Mnum2vv3PXhgbY28982kT8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(396003)(136003)(346002)(376002)(39860400002)(5660300002)(44832011)(8676002)(66946007)(316002)(6916009)(4326008)(9686003)(66556008)(6512007)(7416002)(2906002)(38100700002)(66476007)(8936002)(1076003)(86362001)(54906003)(41300700001)(6486002)(478600001)(83380400001)(6506007)(82960400001)(26005)(6666004)(186003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pYVB/0N2V0h1e8tFr1dYPd1zQrwlbnyu2Ue0GiR4xxgXkg4NO1JpFItfKGFl?=
+ =?us-ascii?Q?d+lZUkjD+2iqTKs2QBEi2VAPY4hcUIifI2N2OusIZcyrSOYrKjprVyyWaDlT?=
+ =?us-ascii?Q?tcW3jIzJXcAUaublDO/CLriqm9WhEuYP8OhJaoEbSG8QbK68WNYdZaJiTSaK?=
+ =?us-ascii?Q?1cAlbOymzun8kqDzWxKUVRdcyvsfRkH83LYsb92Ln7s2HBUTEIqVoIi2kvYR?=
+ =?us-ascii?Q?Xe6E1duPKuTevQdrD1VHvvWpL0yb2zJaozZZK1t+AdOiZ6t979n6t4euExmk?=
+ =?us-ascii?Q?rtf64zqwi8il5v5Xq6rOsszS6u5bPzqPXHSc4rvbD+ydPkd/0hPZlNaCkSHJ?=
+ =?us-ascii?Q?1dRFE1aBik9a7VuR0jdtbu+0MMzijiLPHjUWHS0Zc24G1DAWdO3eqlmXYl6s?=
+ =?us-ascii?Q?uk+GknNO+Kb3ZrkHmJgmZhwZbyB5oozLC0LLYDZaCKB2bb+gvnNA2SYzj5lP?=
+ =?us-ascii?Q?0HBR/5BGAqJItPo9QKXp3I9cOySXdNGUV9CNlKPKxOMoevskZFoy8MCd7Ls4?=
+ =?us-ascii?Q?2TYm7ZbRyUFrpJy7VQxVPO0rkDZpSuK5piW0Kmkm4fua67Cpcydsz4cai2pB?=
+ =?us-ascii?Q?k+5RK+WthlN85yWjn17t+tAPitszJ+kRMksbTGsXUBWNWMoZGqBrBVZVZQms?=
+ =?us-ascii?Q?Y2Sh8mC2gXpS72LtNw1RdSj+xwFEIDR6GqfiRtAQ5KpDwnB/KMysDfb7JfqT?=
+ =?us-ascii?Q?T7Mtm90bXwCmWWPmoUzsTfmCHAchWlqUCeIspNQEtjDrNN3Hlb6XjjxXcrph?=
+ =?us-ascii?Q?1YwWiGziP73Dg0nFPh9QwmjTaxLQw2LeOD+wGlRA3/pIzYgMOTkbf63uo+gS?=
+ =?us-ascii?Q?oiEzrOzzG3PqNy5qnlrJWeRVd45009pUorWTD5Ematy4sgV5jlfO+lT07OxB?=
+ =?us-ascii?Q?rAm0DMBEAkd934z8QQ7MF8PCJeD247StgxxoCb/0kixO5N4OMmtvNCJT5yr7?=
+ =?us-ascii?Q?mfWrccJkZ03JY/hjGa0PaqAEAslJ392XV/tqcD/IcUbZ/fdqpBSChiLIDbFB?=
+ =?us-ascii?Q?zduHnOWos+8MCOEC82fYkXo4BUx2BpKrecidNCIDD1xj2dqXEC0JhSySgqKw?=
+ =?us-ascii?Q?rXMIOX9MW//3qBSsi+9CNKjSaWX5JNXOMQjXJT+y3B2scH21cvQGUXLyiyrB?=
+ =?us-ascii?Q?tBm6jC2BmVRWrB3i2Zdlp5n7+TopLc9cfioPPGQrQoA86IUXRP5F+aKI2CBK?=
+ =?us-ascii?Q?Evk3fielETPl+XsnwT+q+hl6zvcHRHCOko4lgGB0LfuVrnlZCE8ZwpTKK+nF?=
+ =?us-ascii?Q?PmGqrR2ESdk8VwTwT/JsBUfioMlaKG1kTIkZ+FY4oSg1oVFYopTw/GwrYmJI?=
+ =?us-ascii?Q?8yoTQBgrPp+Rof8JLb+rb1RrEMDdPDQNIDRoP6DRNMtaqDIJfFri6xZvID7G?=
+ =?us-ascii?Q?oC4Wg5ggoHdFmi9VMDjz8MO8GkhRdCavyT0cQqJS448bfvnj+YBPvlJ1KnPd?=
+ =?us-ascii?Q?1mR+pDWo1U9dHN3T4jgEkbOxsUvFfYMx5e8HZmuNQfAt6R6ZO7OcnTgKPICW?=
+ =?us-ascii?Q?CZ0KqSZ7aKSo5+hlbCTflKW5hMW0BrSpqnyIyixvBuybw+arF16Q1qv0bp5U?=
+ =?us-ascii?Q?Q8Q4vCFgEwMM2fj/X1CTiPoXLrcB8dIDvhL4Zh5js9Fxc2p9/hgXo0CHJvHR?=
+ =?us-ascii?Q?gA=3D=3D?=
+X-OriginatorOrg: siemens.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c2f72177-d797-40b4-258e-08da7aa35439
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR10MB5780.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Aug 2022 07:38:33.9822
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OYIuC6p1FK3m68hpWRNCtlJk+ze+buKQLxwezKIoAMljmoXHKvydIygQq8CEoBuN6QMLdDZ39z74dKvRb2t422mpRS1F9iMebaPFXkF35XQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR10MB5382
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Am Mon, 18 Jul 2022 14:17:42 +0300
+schrieb Andy Shevchenko <andriy.shevchenko@linux.intel.com>:
 
-On 2022/8/10 上午1:32, Tony Nguyen wrote:
-> On 8/9/2022 6:35 AM, Linjun Bao wrote:
->> Source commit 7c496de538ee ("igc: Remove _I_PHY_ID checking"),
->> remove _I_PHY_ID check for i225 device, since i225 devices only
->> have one PHY vendor.
->
-> What are you trying to do with this patch? You're referencing the original commit so you know it's committed, but it's not clear to me why you are re-sending it.
->
-I'm new here, please correct me if I am doing things in the wrong way.
+> On Mon, Jun 06, 2022 at 07:41:26PM +0300, Andy Shevchenko wrote:
+> > There are a few users that would like to utilize P2SB mechanism of
+> > hiding and unhiding a device from the PCI configuration space.
+> > 
+> > Here is the series to consolidate p2sb handling code for existing
+> > users and to provide a generic way for new comer(s).
+> > 
+> > It also includes a patch to enable GPIO controllers on Apollo Lake
+> > when it's used with ABL bootloader w/o ACPI support.
+> > 
+> > The patch that brings the helper ("platform/x86/intel: Add Primary
+> > to Sideband (P2SB) bridge support") has a commit message that sheds
+> > a light on what the P2SB is and why this is needed.
+> > 
+> > I have tested this on Apollo Lake platform (I'm able to see SPI NOR
+> > and since we have an ACPI device for GPIO I do not see any attempts
+> > to recreate one).
+> > 
+> > The series is ready to be merged via MFD tree, but see below.
+> > 
+> > The series also includes updates for Simatic IPC drivers that
+> > partially tagged by respective maintainers (the main question is if
+> > Pavel is okay with the last three patches, since I believe Hans is
+> > okay with removing some code under PDx86). Hence the first 8
+> > patches can be merged right away and the rest when Pavel does his
+> > review.  
+> 
+> Kernel test bot seems found an issue with dependencies, because
+> selection of P2SB is not enough.
+> 
+> There are two solutions that I can see now:
+> 1) move P2SB out of X86_PLATFORM_DEVICES section (like PMC_ATOM);
+> 2) add 'depends on X86_PLATFORM_DEVICES' to the affected drivers.
+> 
+> I think the first solution cleaner, because it would be strange to
+> have the dependency on the drivers that quite unlikely be on server
+> platforms (e.g. EDAC).
+> 
+> In long term perhaps something like drivers/platform/x86/lib which is
+> for platform libraries or so and independent on X86_PLATFORM_DEVICES?
+> 
+> I will send a fix soon as per 1) above, feel free to comment here or
+> there.
 
+Hey Andy,
 
-Yes this commit was committed to mainline about one year ago. But this commit has not been included into kernel 5.4 yet, and I encountered the probe failure when using alderlake-s with Ethernet adapter i225-LM. Since I could not directly apply the patch 7c496de538ee to kernel 5.4, so I generated this patch for kernel 5.4 usage.
+is that one on the way already? I meanwhile also found a possible
+configuration issue in my patches you carry on top. And i suggest to
+include or squash
+[PATCH] leds: simatic-ipc-leds-gpio: make sure we have the GPIO
+providing driver
 
+in this series.
 
-Looks like sending a duplicated patch is not expected. Would you please advise what is the proper action when encountering such case? I would like this fix to be implemented into LTS kernel 5.4, I also wrote a ticket on https://bugzilla.kernel.org/show_bug.cgi?id=216261, but no response.
+I am also working on adding more models which have GPIO based LEDs. All
+the patches are based on this series because it is where i currently
+introduce GPIO based LEDs for simatic. I would not want to change the
+ordering but at the same time i would like to meet 5.20.
 
-
-Regards
-
-Joseph
-
-
-> Thanks,
-> Tony
->
->> Signed-off-by: Linjun Bao <meljbao@gmail.com>
->> ---
->>   drivers/net/ethernet/intel/igc/igc_base.c | 10 +---------
->>   drivers/net/ethernet/intel/igc/igc_main.c |  3 +--
->>   drivers/net/ethernet/intel/igc/igc_phy.c  |  6 ++----
->>   3 files changed, 4 insertions(+), 15 deletions(-)
->>
->> diff --git a/drivers/net/ethernet/intel/igc/igc_base.c b/drivers/net/ethernet/intel/igc/igc_base.c
->> index db289bcce21d..d66429eb14a5 100644
->> --- a/drivers/net/ethernet/intel/igc/igc_base.c
->> +++ b/drivers/net/ethernet/intel/igc/igc_base.c
->> @@ -187,15 +187,7 @@ static s32 igc_init_phy_params_base(struct igc_hw *hw)
->>         igc_check_for_copper_link(hw);
->>   -    /* Verify phy id and set remaining function pointers */
->> -    switch (phy->id) {
->> -    case I225_I_PHY_ID:
->> -        phy->type    = igc_phy_i225;
->> -        break;
->> -    default:
->> -        ret_val = -IGC_ERR_PHY;
->> -        goto out;
->> -    }
->> +    phy->type = igc_phy_i225;
->>     out:
->>       return ret_val;
->> diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
->> index 9ba05d9aa8e0..b8297a63a7fd 100644
->> --- a/drivers/net/ethernet/intel/igc/igc_main.c
->> +++ b/drivers/net/ethernet/intel/igc/igc_main.c
->> @@ -2884,8 +2884,7 @@ bool igc_has_link(struct igc_adapter *adapter)
->>           break;
->>       }
->>   -    if (hw->mac.type == igc_i225 &&
->> -        hw->phy.id == I225_I_PHY_ID) {
->> +    if (hw->mac.type == igc_i225) {
->>           if (!netif_carrier_ok(adapter->netdev)) {
->>               adapter->flags &= ~IGC_FLAG_NEED_LINK_UPDATE;
->>           } else if (!(adapter->flags & IGC_FLAG_NEED_LINK_UPDATE)) {
->> diff --git a/drivers/net/ethernet/intel/igc/igc_phy.c b/drivers/net/ethernet/intel/igc/igc_phy.c
->> index 6156c76d765f..1be112ce6774 100644
->> --- a/drivers/net/ethernet/intel/igc/igc_phy.c
->> +++ b/drivers/net/ethernet/intel/igc/igc_phy.c
->> @@ -235,8 +235,7 @@ static s32 igc_phy_setup_autoneg(struct igc_hw *hw)
->>               return ret_val;
->>       }
->>   -    if ((phy->autoneg_mask & ADVERTISE_2500_FULL) &&
->> -        hw->phy.id == I225_I_PHY_ID) {
->> +    if (phy->autoneg_mask & ADVERTISE_2500_FULL) {
->>           /* Read the MULTI GBT AN Control Register - reg 7.32 */
->>           ret_val = phy->ops.read_reg(hw, (STANDARD_AN_REG_MASK <<
->>                           MMD_DEVADDR_SHIFT) |
->> @@ -376,8 +375,7 @@ static s32 igc_phy_setup_autoneg(struct igc_hw *hw)
->>           ret_val = phy->ops.write_reg(hw, PHY_1000T_CTRL,
->>                            mii_1000t_ctrl_reg);
->>   -    if ((phy->autoneg_mask & ADVERTISE_2500_FULL) &&
->> -        hw->phy.id == I225_I_PHY_ID)
->> +    if (phy->autoneg_mask & ADVERTISE_2500_FULL)
->>           ret_val = phy->ops.write_reg(hw,
->>                            (STANDARD_AN_REG_MASK <<
->>                            MMD_DEVADDR_SHIFT) |
+regards,
+Henning

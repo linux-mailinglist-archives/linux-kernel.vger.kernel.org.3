@@ -2,218 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFA3B58F1E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 19:48:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A46A58F1E6
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 19:49:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233264AbiHJRsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 13:48:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54086 "EHLO
+        id S232333AbiHJRtb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 13:49:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232824AbiHJRsa (ORCPT
+        with ESMTP id S232748AbiHJRtE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 13:48:30 -0400
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 380208D3FB;
-        Wed, 10 Aug 2022 10:48:15 -0700 (PDT)
-Received: by mail-io1-f43.google.com with SMTP id l24so12734067ion.13;
-        Wed, 10 Aug 2022 10:48:15 -0700 (PDT)
+        Wed, 10 Aug 2022 13:49:04 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15F1B8C479
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 10:48:56 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id l5so5342075qtv.4
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 10:48:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=toxicpanda-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=b56RlgqsDjhndoKXh76AAfBh0fo34wRquvTp2LsFHgk=;
+        b=exB4l+5E6/quhEzaiSIDb4pdiGPX1b7hO2HymEU/s0Ly9NVmwcqirP380zissRt0EU
+         l7snuO/yv6izW4vfFWMEdB9B+D3ZVfwfxSr1WOYbDpIdqILXMI/K7LkiAKb+7oPxDfAJ
+         hvMf5BPeFLFvnTXDiQf2qoOGMSr1kEyaRmsWqOHzHzLHA0Ef4sYYjUkkFgQ+If6pcK5P
+         QP2rYx8ggkB2mQsu1SOwt0kvxoa+SZAhq0nCyBqRWQjksiwvXztpZ6vLKYwYnytRJsjW
+         yMZCuHzeO0c/9Ug/c5WtOF5FmRfQQc+7qd6WRT4Nd27y1o4/ilC5FSwm4ts7sYLDeN85
+         3fpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=+N6oE2+z+9jwTNAaSVyxqcqUp5JuLCFc7tr+Z6FAGws=;
-        b=7yy520wmJ/0YBsPbal+1k6ZnLybDFKDg36EuSfo2QZPVfaoSla2zCmh6r3/svafYlw
-         9JhH6OplWSi4LiA7eZxTn+sMfpb0jaV+4Bx3Owrir7CYM4+y8DIBeft7PyiGJEGrntUp
-         deT/hlyxrSvMVMQfRMvo+z2WEMeSJGvm2KKER53U39SBv7IKhHM4UFO9YB0MMZs9nDRC
-         W0ewPBELf8BNVjw/kUvNCEahZmcc91MKW5qm5IT3dZZruiMhOSHaOrp/tqWlpoFS7srC
-         RQ/nxU8ZVxwONi/Y2xUK7I8nwcrDszsy1AC6nY18HtA0c9svzTQZQGlcviNpBJILHtZC
-         9lEQ==
-X-Gm-Message-State: ACgBeo0A4ZUn5DAWZOm2RlB2kilcFtFNExy8P5G9ofr6mz1UBaENPB6v
-        09cpm88uINI3yyFT9LrMMg==
-X-Google-Smtp-Source: AA6agR79rHhKYr5RzkGcMvA3P9iJe8YVNwuun47x0eShM+Vw1kbLR7EV9dZX7F59f9epoBEIufX+yQ==
-X-Received: by 2002:a02:664a:0:b0:33f:5310:35e1 with SMTP id l10-20020a02664a000000b0033f531035e1mr13120728jaf.214.1660153692739;
-        Wed, 10 Aug 2022 10:48:12 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id x2-20020a029702000000b0034274a116f1sm7736516jai.20.2022.08.10.10.48.11
+        bh=b56RlgqsDjhndoKXh76AAfBh0fo34wRquvTp2LsFHgk=;
+        b=PP5qOybip0qGiMBCdTt+slyqh4aDdNyhkZDrNur7Lc3X2FvcAT61BR1D3A1kCXV/2L
+         I82MMdFb/vOF402AcKUW767XDrh3SlTWvm0wvUo6bYTmY+KaXLFWrma40fkoCTVmUo3i
+         nqQ9TPnsIIaLDVplT89VPbodzMzrNJVX4rDCb5Z669bO3tU8TNuzOaAXti+ob+KVLMyE
+         o/vp0+/leHgQzgFVE3W6VnBPTtPLZk/6WExU98hL+1IKyDJbT/eQKflYQ9zPGfpMuvl0
+         ajnke/evYegtABgauDQebCJC0f3NnKKEe2mxNgClDSe2JdKEdIBjYHbHPFVN1rbkTfqj
+         KM5w==
+X-Gm-Message-State: ACgBeo2KIwSQAmpm6GgJbfG8a4Z1MOiPkfqJLqtH6G1FDnCmUbUitfAu
+        c4OGkDIsemMzi6gjKdOxkCTXQA==
+X-Google-Smtp-Source: AA6agR7N7ISFUfCzkKkyp2mKsj1gWbPB/HcnKeULzt0zI4kXHOGqvXsg6K3Ka5VQlyfKqj8EDn9sRw==
+X-Received: by 2002:a05:622a:3cf:b0:32c:1d47:2164 with SMTP id k15-20020a05622a03cf00b0032c1d472164mr25047708qtx.97.1660153735049;
+        Wed, 10 Aug 2022 10:48:55 -0700 (PDT)
+Received: from localhost (cpe-174-109-172-136.nc.res.rr.com. [174.109.172.136])
+        by smtp.gmail.com with ESMTPSA id x14-20020a05620a258e00b006b9a89d408csm252567qko.100.2022.08.10.10.48.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 10:48:12 -0700 (PDT)
-Received: (nullmailer pid 223548 invoked by uid 1000);
-        Wed, 10 Aug 2022 17:48:10 -0000
-Date:   Wed, 10 Aug 2022 11:48:10 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Aradhya Bhatia <a-bhatia1@ti.com>
-Cc:     Tomi Valkeinen <tomba@kernel.org>, Jyri Sarha <jyri.sarha@iki.fi>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Darren Etheridge <detheridge@ti.com>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Rahul T R <r-ravikumar@ti.com>,
-        Krunal Bhargav <k-bhargav@ti.com>,
-        Devarsh Thakkar <devarsht@ti.com>,
-        DRI Development List <dri-devel@lists.freedesktop.org>,
-        Devicetree List <devicetree@vger.kernel.org>,
-        Linux Kernel List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 1/8] dt-bindings: display: ti,am65x-dss: Add port
- properties for DSS
-Message-ID: <20220810174810.GA200295-robh@kernel.org>
-References: <20220719080845.22122-1-a-bhatia1@ti.com>
- <20220719080845.22122-2-a-bhatia1@ti.com>
- <20220720232845.GA4164694-robh@kernel.org>
- <a2e5037c-22c0-8424-4031-0bf587120990@ti.com>
+        Wed, 10 Aug 2022 10:48:52 -0700 (PDT)
+Date:   Wed, 10 Aug 2022 13:48:50 -0400
+From:   Josef Bacik <josef@toxicpanda.com>
+To:     Chris Murphy <lists@colorremedies.com>
+Cc:     Btrfs BTRFS <linux-btrfs@vger.kernel.org>,
+        Linux-RAID <linux-raid@vger.kernel.org>,
+        linux-block@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: stalling IO regression in linux 5.12
+Message-ID: <YvPvghdv6lzVRm/S@localhost.localdomain>
+References: <e38aa76d-6034-4dde-8624-df1745bb17fc@www.fastmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a2e5037c-22c0-8424-4031-0bf587120990@ti.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <e38aa76d-6034-4dde-8624-df1745bb17fc@www.fastmail.com>
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,SUSPICIOUS_RECIPS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 25, 2022 at 04:56:15PM +0530, Aradhya Bhatia wrote:
+On Wed, Aug 10, 2022 at 12:35:34PM -0400, Chris Murphy wrote:
+> CPU: Intel E5-2680 v3
+> RAM: 128 G
+> 02:00.0 RAID bus controller [0104]: Broadcom / LSI MegaRAID SAS-3 3108 [Invader] [1000:005d] (rev 02), using megaraid_sas driver
+> 8 Disks: TOSHIBA AL13SEB600
 > 
 > 
-> On 21-Jul-22 04:58, Rob Herring wrote:
-> > On Tue, Jul 19, 2022 at 01:38:38PM +0530, Aradhya Bhatia wrote:
-> > > Add "ti,oldi-mode" property to indicate the tidss driver the OLDI output
-> > > mode. The 2 OLDI TXes on am625-dss allow a 3 different types of panel
-> > > connections with the board.
-> > > 
-> > > 1. Single Link / Single Mode on OLDI TX 0 OR 1.
-> > > 2. Single Link / Duplicate Mode on OLDI TX 0 and 1.
-> > > 3. Dual Link / Single Mode on OLDI TX 0 and 1.
-> > > 
-> > > Add "ti,rgb565-to-888" property to override 16bit output from a videoport
-> > > for a bridge that only accepts 24bit RGB888 DPI input.
-> > > 
-> > > On some boards the HDMI bridge takes a 24bit DPI input, but only 16 data
-> > > pins are actually enabled from the SoC.  This new property forces the
-> > > output to be RGB565 on a specific video port if the bridge requests a
-> > > 24bit RGB color space.
-> > > 
-> > > This assumes that the video port is connected like so:
-> > > 
-> > > SoC : Bridge
-> > > R0 ->   R3
-> > > R1 ->   R4
-> > > R2 ->   R5
-> > > R3 ->   R6
-> > > R4 ->   R7
-> > > G0 ->   G2
-> > > G1 ->   G3
-> > > G2 ->   G4
-> > > G3 ->   G5
-> > > G4 ->   G6
-> > > G5 ->   G7
-> > > B0 ->   B3
-> > > B1 ->   B4
-> > > B2 ->   B5
-> > > B3 ->   B6
-> > > B4 ->   B7
-> > > 
-> > > On the bridge side R0->R2, G0->G1, B0->B2 would be tied to ground.
-> > > The bridge sees 24bits of data,  but the lsb's are always zero.
-> > 
-> > Unless the bridge ignores the LSBs, that's not the right way to do 16 to
-> > 24 bit. The LSBs should be connected to the MSB of the color component
-> > to get full color range.
-> > 
-> > > 
-> > > Signed-off-by: Aradhya Bhatia <a-bhatia1@ti.com>
-> > > ---
-> > >   .../bindings/display/ti/ti,am65x-dss.yaml     | 25 +++++++++++++++++--
-> > >   1 file changed, 23 insertions(+), 2 deletions(-)
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/display/ti/ti,am65x-dss.yaml b/Documentation/devicetree/bindings/display/ti/ti,am65x-dss.yaml
-> > > index 6bbce921479d..11d9b3821409 100644
-> > > --- a/Documentation/devicetree/bindings/display/ti/ti,am65x-dss.yaml
-> > > +++ b/Documentation/devicetree/bindings/display/ti/ti,am65x-dss.yaml
-> > > @@ -80,15 +80,35 @@ properties:
-> > >       properties:
-> > >         port@0:
-> > > -        $ref: /schemas/graph.yaml#/properties/port
-> > > +        $ref: /schemas/graph.yaml#/$defs/port-base
-> > > +        unevaluatedProperties: false
-> > >           description:
-> > >             The DSS OLDI output port node form video port 1
-> > > +        properties:
-> > > +          ti,oldi-mode:
-> > > +            description: TI specific property to indicate the mode the OLDI TXes
-> > > +              and the display panel are connected in.
-> > > +              0 -> OLDI TXes OFF (driver default for am625-dss)
-> > > +              1 -> Single link, Single Mode (OLDI0) (driver default for am65x-dss)
-> > > +              2 -> Single link, Single Mode (OLDI1)
-> > > +              3 -> Single link, Duplicate Mode
-> > > +              4 -> Dual link (Only Single Mode)
-> > > +            $ref: /schemas/types.yaml#/definitions/uint32
-> > > +            enum: [0, 1, 2, 3, 4]
-> > 
-> > Wouldn't 'data-lanes' property work for this purpose.
-> > 
-> > Generally, we don't put properties in port nodes.
-> > 
-> Thank you for the suggestions Rob!
+> The problem exhibits as increasing load, increasing IO pressure (PSI), and actual IO goes to zero. It never happens on kernel 5.11 series, and always happens after 5.12-rc1 and persists through 5.18.0. There's a new mix of behaviors with 5.19, I suspect the mm improvements in this series might be masking the problem.
 > 
-> I looked into the "data-lanes" property and it seems that the property
-> alone would not be able to help distinguish between the "Single link,
-> Duplicate mode" (Mode 3) and "Dual link, Single mode" (Mode 4). For both
-> the cases, the property will look like "data-lanes = <0 1>;" in the DT
-> node.
+> The workload involves openqa, which spins up 30 qemu-kvm instances, and does a bunch of tests, generating quite a lot of writes: qcow2 files, and video in the form of many screenshots, and various log files, for each VM. These VMs are each in their own cgroup. As the problem begins, I see increasing IO pressure, and decreasing IO, for each qemu instance's cgroup, and the cgroups for httpd, journald, auditd, and postgresql. IO pressure goes to nearly ~99% and IO is literally 0.
 > 
-> I have an idea on what the driver could use along with the data-lanes
-> property to ascertain the OLDI mode.
+> The problem left unattended to progress will eventually result in a completely unresponsive system, with no kernel messages. It reproduces in the following configurations, the first two I provide links to full dmesg with sysrq+w:
 > 
-> By means of number of remote-endpoints in DTS.
-> The OLDI output port of DSS can be made to have 2 remote endpoints when
-> 2 panels are connected as "Single link, Duplicate Mode" vs only 1 remote
-> endpoint for "Dual Link, Single Mode". Based on the count, the driver
-> can distinguish between the two when both the data-lanes are activated
-> in DT node.
+> btrfs raid10 (native) on plain partitions [1]
+> btrfs single/dup on dmcrypt on mdadm raid 10 and parity raid [2]
+> XFS on dmcrypt on mdadm raid10 or parity raid
+> 
+> I've started a bisect, but for some reason I haven't figured out I've started getting compiled kernels that don't boot the hardware. The failure is very early on such that the UUID for the root file system isn't found, but not much to go on as to why.[3] I have tested the first and last skipped commits in the bisect log below, they successfully boot a VM but not the hardware.
+> 
+> Anyway, I'm kinda stuck at this point trying to narrow it down further. Any suggestions? Thanks.
+> 
 
-You can only have 1 'remote-endpoint'. However, you can have multiple 
-endpoint nodes which is generally used for fanout (output) or muxed 
-(input) cases. Your case is fanout as it is the same data sent to 
-multiple connections.
+I looked at the traces, btrfs is stuck waiting on IO and blk tags, which means
+we've got a lot of outstanding requests and are waiting for them to finish so we
+can allocate more requests.
 
-data-lanes would be kind of redundant in that case since it would be 1 
-lane per endpoint.
+Additionally I'm seeing a bunch of the blkg async submit things, which are used
+when we have the block cgroup stuff turned on and compression enabled, so we
+punt any compressed bios to a per-cgroup async thread to submit the IO's in the
+appropriate block cgroup context.
 
-> 
-> Let me know if you think this method would be appropriate.
-> > > +
-> > >         port@1:
-> > > -        $ref: /schemas/graph.yaml#/properties/port
-> > > +        $ref: /schemas/graph.yaml#/$defs/port-base
-> > > +        unevaluatedProperties: false
-> > >           description:
-> > >             The DSS DPI output port node from video port 2
-> > > +        properties:
-> > > +          ti,rgb565-to-888:
-> > > +            description:
-> > > +              property to override DPI output to 16bit for 24bit bridge
-> > > +            type: boolean
-> > 
-> > There's work underway for standard way to handle interface formats[1].
-> > Please help/comment on that to make sure it works for you.
-> > 
-> > Rob
-> > 
-> > [1] https://lore.kernel.org/all/20220628181838.2031-3-max.oss.09@gmail.com/
-> 
-> I also followed what this patch series is implementing. This seems to be
-> applicable for cases where the DPI pins are drawn and forwarded towards
-> a simple panel capable of accepting the raw parallel data.
-> 
-> It does not cover for the bridges with lesser number of formats to
-> support.
+This could mean we're just being overly mean and generating too many IO's, but
+since the IO goes to 0 I'm more inclined to believe there's a screw up in
+whatever IO cgroup controller you're using.
 
-Not sure what you mean here, but raise it on that thread.
+To help narrow this down can you disable any IO controller you've got enabled
+and see if you can reproduce?  If you can sysrq+w is super helpful as it'll
+point us in the next direction to look.  Thanks,
 
-Rob
+Josef

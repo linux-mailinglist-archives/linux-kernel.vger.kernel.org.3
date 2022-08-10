@@ -2,146 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FCB058E52E
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 05:09:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 073B158E58D
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 05:36:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230154AbiHJDJd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 23:09:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40798 "EHLO
+        id S230062AbiHJDfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 23:35:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbiHJDJ3 (ORCPT
+        with ESMTP id S229952AbiHJDfL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 23:09:29 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309807E330
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 20:09:28 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-10e6bdbe218so16319475fac.10
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 20:09:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=o9OOX4mTumeWxGfGIlGSIHTnrvS7ZQdKXUpha8Z8G0Q=;
-        b=mvbuZ5hQummlWWhg00HRmOlySExapbkSXpopIHAchaI/l9L9Owj7hr2qdU5nu87Igc
-         dacKD61RGtwXYkr0sTVXKXrzgY3xvTHgQ+Lehcnhpyl2BwARsLcdWLkj6tPImLHYI1zh
-         cL7jXyavKoPjc5kysLDJyu3m3eg4+DmwUPGGctCCUcQnwfinQ3/d0LrTn4ASKeKfGpCq
-         xRO846gyQce4nRdTzGcYnC/phkrGLEZSEK90f4uiatkv8JrR+dSRhsmbWPMAbvSylrKY
-         s3JpJzu7CL87x3xOiech525P0Kp+9Q8O6dNN16WRy9nYEqKsUX93//4DLHwMmiG8ERU1
-         ofng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=o9OOX4mTumeWxGfGIlGSIHTnrvS7ZQdKXUpha8Z8G0Q=;
-        b=0UNUuHRx45M4bFH/K/KVWfdteVZuoeMOcKxAMNNvwwQLI2YIxcbis3ytUyj08F6CKO
-         yOdneQlpOqJ9JZ9Zd49GW5LSzEMfgR8EUR4jGQDdSt72EBaD9Rh21ngQ27N4217JxW/X
-         0c5vXwJhbQGSFijOjSwjubiKYWr8tfC42e0qeCOfV9vGhXguYx1kjIO5lQjyqXW8+3vh
-         ThKz4/8PJX63YQdfBl0axw1uwe7RGnG9Tw1Vt8XoXRLygqUWeHMgl6nve+TldCTLVZ3W
-         DAHGiYay2biAQcoTRFzb30EkrPkNfjSv6B+12qPgFPP2QnAadvAbs6yOzghNXLgMfx8+
-         Dw2Q==
-X-Gm-Message-State: ACgBeo1/B7bAiqREbK3lrk06WJH7pMOYZONAhmH7DJjaf1Deg0STUU6R
-        IZt3enSLfG4dsYUNpdr4YRFNSA==
-X-Google-Smtp-Source: AA6agR7iTviPqVEw9B40nZ6Lak0B2tK8eToZFcYqTh1tYtSeNKzqauHW0s6cZwkBd15XPi75I7n/EA==
-X-Received: by 2002:a05:6871:7a7:b0:10d:3fb6:b632 with SMTP id o39-20020a05687107a700b0010d3fb6b632mr599519oap.237.1660100967558;
-        Tue, 09 Aug 2022 20:09:27 -0700 (PDT)
-Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id ba41-20020a056870c5a900b00101c76f7831sm3586268oab.24.2022.08.09.20.09.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 20:09:27 -0700 (PDT)
-From:   Bjorn Andersson <bjorn.andersson@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] phy: qualcomm: phy-qcom-qmp: add support for combo USB3+DP phy on SDM845
-Date:   Tue,  9 Aug 2022 22:09:26 -0500
-Message-Id: <20220810030926.2794179-1-bjorn.andersson@linaro.org>
-X-Mailer: git-send-email 2.37.1
+        Tue, 9 Aug 2022 23:35:11 -0400
+X-Greylist: delayed 1461 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 09 Aug 2022 20:35:07 PDT
+Received: from mx5.cs.washington.edu (mx5.cs.washington.edu [IPv6:2607:4000:200:11::6a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDBDA647F9
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 20:35:07 -0700 (PDT)
+Received: from mx5.cs.washington.edu (localhost [IPv6:0:0:0:0:0:0:0:1])
+        by mx5.cs.washington.edu (8.17.1/8.17.1/1.26) with ESMTP id 27A3Aj4X207166;
+        Tue, 9 Aug 2022 20:10:45 -0700
+Received: from attu4.cs.washington.edu (attu4.cs.washington.edu [IPv6:2607:4000:200:10:0:0:0:8c])
+        (authenticated bits=128)
+        by mx5.cs.washington.edu (8.17.1/8.17.1/1.26) with ESMTPSA id 27A3AjBd207162
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Tue, 9 Aug 2022 20:10:45 -0700
+Received: from attu4.cs.washington.edu (localhost [127.0.0.1])
+        by attu4.cs.washington.edu (8.15.2/8.15.2/1.23) with ESMTP id 27A3AiYQ2620315;
+        Tue, 9 Aug 2022 20:10:44 -0700
+Received: (from klee33@localhost)
+        by attu4.cs.washington.edu (8.15.2/8.15.2/Submit/1.2) id 27A3AiAT2620314;
+        Tue, 9 Aug 2022 20:10:44 -0700
+From:   Kenneth Lee <klee33@uw.edu>
+To:     srinivas.kandagatla@linaro.org
+Cc:     linux-kernel@vger.kernel.org, Kenneth Lee <klee33@uw.edu>
+Subject: [PATCH] nvmem: brcm_nvram: Use kzalloc for allocating only one element
+Date:   Tue,  9 Aug 2022 20:10:37 -0700
+Message-Id: <20220810031037.2620221-1-klee33@uw.edu>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Use kzalloc(...) rather than kcalloc(1, ...) because the number of
+elements we are specifying in this case is 1, so kzalloc would
+accomplish the same thing and we can simplify.
 
-Define configuration to be used by combo USB3 + DisplayPort phy on
-SDM845 SoC family. It closely follows sc7180, however like the main USB3
-phy it uses the qmp_v3_usb3phy_cfg config.
-
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+Signed-off-by: Kenneth Lee <klee33@uw.edu>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 41 +++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+ drivers/nvmem/brcm_nvram.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-index 4b1828976104..e9722d8aae59 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-combo.c
-@@ -903,6 +903,43 @@ static const struct qmp_phy_combo_cfg sc7180_usb3dpphy_cfg = {
- 	.dp_cfg			= &sc7180_dpphy_cfg,
- };
+diff --git a/drivers/nvmem/brcm_nvram.c b/drivers/nvmem/brcm_nvram.c
+index 450b927691c3..4441daa20965 100644
+--- a/drivers/nvmem/brcm_nvram.c
++++ b/drivers/nvmem/brcm_nvram.c
+@@ -96,7 +96,7 @@ static int brcm_nvram_parse(struct brcm_nvram *priv)
  
-+static const struct qmp_phy_cfg sdm845_usb3phy_cfg = {
-+	.type			= PHY_TYPE_USB3,
-+	.nlanes			= 1,
-+
-+	.serdes_tbl		= qmp_v3_usb3_serdes_tbl,
-+	.serdes_tbl_num		= ARRAY_SIZE(qmp_v3_usb3_serdes_tbl),
-+	.tx_tbl			= qmp_v3_usb3_tx_tbl,
-+	.tx_tbl_num		= ARRAY_SIZE(qmp_v3_usb3_tx_tbl),
-+	.rx_tbl			= qmp_v3_usb3_rx_tbl,
-+	.rx_tbl_num		= ARRAY_SIZE(qmp_v3_usb3_rx_tbl),
-+	.pcs_tbl		= qmp_v3_usb3_pcs_tbl,
-+	.pcs_tbl_num		= ARRAY_SIZE(qmp_v3_usb3_pcs_tbl),
-+	.clk_list		= qmp_v3_phy_clk_l,
-+	.num_clks		= ARRAY_SIZE(qmp_v3_phy_clk_l),
-+	.reset_list		= msm8996_usb3phy_reset_l,
-+	.num_resets		= ARRAY_SIZE(msm8996_usb3phy_reset_l),
-+	.vreg_list		= qmp_phy_vreg_l,
-+	.num_vregs		= ARRAY_SIZE(qmp_phy_vreg_l),
-+	.regs			= qmp_v3_usb3phy_regs_layout,
-+
-+	.start_ctrl		= SERDES_START | PCS_START,
-+	.pwrdn_ctrl		= SW_PWRDN,
-+	.phy_status		= PHYSTATUS,
-+
-+	.has_pwrdn_delay	= true,
-+	.pwrdn_delay_min	= POWER_DOWN_DELAY_US_MIN,
-+	.pwrdn_delay_max	= POWER_DOWN_DELAY_US_MAX,
-+
-+	.has_phy_dp_com_ctrl	= true,
-+	.is_dual_lane_phy	= true,
-+};
-+
-+static const struct qmp_phy_combo_cfg sdm845_usb3dpphy_cfg = {
-+	.usb_cfg                = &sdm845_usb3phy_cfg,
-+	.dp_cfg                 = &sc7180_dpphy_cfg,
-+};
-+
- static const struct qmp_phy_cfg sm8150_usb3phy_cfg = {
- 	.type			= PHY_TYPE_USB3,
- 	.nlanes			= 1,
-@@ -2441,6 +2478,10 @@ static const struct of_device_id qcom_qmp_combo_phy_of_match_table[] = {
- 		.compatible = "qcom,sc7180-qmp-usb3-dp-phy",
- 		.data = &sc7180_usb3dpphy_cfg,
- 	},
-+	{
-+		.compatible = "qcom,sdm845-qmp-usb3-dp-phy",
-+		.data = &sdm845_usb3dpphy_cfg,
-+	},
- 	{
- 		.compatible = "qcom,sm8250-qmp-usb3-dp-phy",
- 		.data = &sm8250_usb3dpphy_cfg,
+ 	len = le32_to_cpu(header.len);
+ 
+-	data = kcalloc(1, len, GFP_KERNEL);
++	data = kzalloc(len, GFP_KERNEL);
+ 	memcpy_fromio(data, priv->base, len);
+ 	data[len - 1] = '\0';
+ 
 -- 
-2.37.1
+2.31.1
 

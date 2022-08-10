@@ -2,153 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B433D58F3BB
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 23:09:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08EC258F3BE
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 23:14:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232234AbiHJVJw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 17:09:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48550 "EHLO
+        id S232388AbiHJVOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 17:14:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51910 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbiHJVJt (ORCPT
+        with ESMTP id S230514AbiHJVOb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 17:09:49 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC4157D7A1
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 14:09:48 -0700 (PDT)
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 2C9C63F0C8
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 21:09:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1660165786;
-        bh=CxzHwVKB4MkSWjx3IucGMQ0jDVaIvK8hJ8cizd+65EI=;
-        h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
-         Content-Type:Date:Message-ID;
-        b=S0DBHE2E/ONf6qPQhDXFOkuA8EDYdS4cPuR7/nbXCTpAtEor8XLm695DXEtMlzkPs
-         KVUE34ik8eZct3kS/d1o++il1nOWIj3QYAhyCN3N5t54dSYrQkDVWrwhOl5/vlZHiu
-         XIOWzywYh6Edr1+wb7IH0XSE7pjwg4lUFEmy47i37uU+los8s7DhjGJS3os8+LFUGm
-         3QZEZA21AtpBy1M3qDQ7mZO2toso4Kxy2IMsRJdPGf1YvEi4BNnWGnFyqLqH2tSnxC
-         nU8C/U3lpEeV9MUoLmkLAbI770+dV+79A9X7ya9v/mPFRIKthFf0ws5gSKnnKk4xeD
-         PkGfKaJfCQ/zA==
-Received: by mail-pl1-f200.google.com with SMTP id q11-20020a170902dacb00b0016efd6984c3so10436277plx.17
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 14:09:46 -0700 (PDT)
+        Wed, 10 Aug 2022 17:14:31 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 388B97D7BA
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 14:14:30 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id z6so15493312lfu.9
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 14:14:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=KstM2C1nqWzbgiq4lXjESSIV1F+sGBJqXZBKfIDDeII=;
+        b=mJ2qrO5MX6fYku8PgLw5AnOtIoBprrurL+nSadvPZ/nI6zBSOd74G8iKYlHjlxhSGK
+         USn07FxYrgyBuEIA+f2Mxh4Oa/e+iiBOCs19euWtk22Fu/Z9qw8oaRo30nQiHAkryS6Y
+         OkGFpD8kk5juBZ0pa8b2rWt/+dgD8gCXmdnRvQK+0MF8N9K8OaD4UraP7imW+XgEtrf+
+         eVDcIqCbW5EuGYwj2bh4+gx/7LwAiCviv4k3pi6iA8Z/WIOSMsyBb/O9EBsYHE7ukUS8
+         xokR0vi2c3FQE9t2Udn3bU0+uZ3i4ejbYLZGKdMm/LrvNqJ66BM5i1pvxlXY91KPTSBE
+         Nynw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=message-id:date:content-transfer-encoding:content-id:mime-version
-         :comments:references:in-reply-to:subject:cc:to:from
-         :x-gm-message-state:from:to:cc;
-        bh=CxzHwVKB4MkSWjx3IucGMQ0jDVaIvK8hJ8cizd+65EI=;
-        b=fsAjrIav+cxzGAhRxnSdgdlsIhefK4XjSsoWKffY22iplAt8lj/E1NWQWGQ2dJQ2vT
-         q/jWAKIyEmHXuQSXY1PJnB9UbVr0ce0ildouMMqLA3Y5aie7P4hOLzMWGark7FiVP4In
-         Wy4Z/yIrJsbenjwVkxixChP+09JEBjzdmtGudSnysaCjcqTDQFNftG8IpJaD9AkerAJu
-         cKEIFTh+O9zFTnsc2f7rS3lIGoJc1nt8kDUjo4Fr1rHKfCKboBO3/yA5eM6+JAnuWehi
-         RktpGVaz/qB7g3eC6DRqWrZn6VrteAovTyxhr413pRkqJzJHyNbihYVHA5GB8xXJki0X
-         rXwQ==
-X-Gm-Message-State: ACgBeo1FFwb96+eVbMR2pz2BfyyKr40Dlx4Rx0qBuQU9il85EwBfbzW1
-        aijp4vfDBOuRWCAe6nvJhdLPAS0RJRNaE9Df6kI6MZh/S5Bx7D1YMKSq+We8nrBPnk4MVyFhvJc
-        BiOhS5cvhDVko4P3sc1e9CGdqrkVNDPgfP6RBacI04g==
-X-Received: by 2002:a05:6a00:1c53:b0:52d:d673:2241 with SMTP id s19-20020a056a001c5300b0052dd6732241mr28451686pfw.71.1660165784368;
-        Wed, 10 Aug 2022 14:09:44 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4rIkCDNCZg52ppYVfEwuN8eecOggD+c8yXn5icQNlfB3zCkNXbeNI29RIbk82gZn6rJ4TpsA==
-X-Received: by 2002:a05:6a00:1c53:b0:52d:d673:2241 with SMTP id s19-20020a056a001c5300b0052dd6732241mr28451663pfw.71.1660165784052;
-        Wed, 10 Aug 2022 14:09:44 -0700 (PDT)
-Received: from famine.localdomain ([50.125.80.157])
-        by smtp.gmail.com with ESMTPSA id y27-20020aa79e1b000000b0052df34124b4sm2464912pfq.84.2022.08.10.14.09.43
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 10 Aug 2022 14:09:43 -0700 (PDT)
-Received: by famine.localdomain (Postfix, from userid 1000)
-        id D84446119B; Wed, 10 Aug 2022 14:09:42 -0700 (PDT)
-Received: from famine (localhost [127.0.0.1])
-        by famine.localdomain (Postfix) with ESMTP id D11429FA79;
-        Wed, 10 Aug 2022 14:09:42 -0700 (PDT)
-From:   Jay Vosburgh <jay.vosburgh@canonical.com>
-To:     patchwork-bot+netdevbpf@kernel.org
-cc:     Sun Shouxin <sunshouxin@chinatelecom.cn>, vfalico@gmail.com,
-        andy@greyhouse.net, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, razor@blackwall.org,
-        huyd12@chinatelecom.cn
-Subject: Re: [PATCH v2] net:bonding:support balance-alb interface with vlan to bridge
-In-reply-to: <166013581540.3703.5149069391225440733.git-patchwork-notify@kernel.org>
-References: <20220809062103.31213-1-sunshouxin@chinatelecom.cn> <166013581540.3703.5149069391225440733.git-patchwork-notify@kernel.org>
-Comments: In-reply-to patchwork-bot+netdevbpf@kernel.org
-   message dated "Wed, 10 Aug 2022 12:50:15 -0000."
-X-Mailer: MH-E 8.6+git; nmh 1.6; Emacs 29.0.50
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=KstM2C1nqWzbgiq4lXjESSIV1F+sGBJqXZBKfIDDeII=;
+        b=VMHHaIYN2az5FZvPOxAwi5Omc1AflGzeMdZA2XjlpA1Vw6Z7N4x2/gznLGxlzOVem8
+         xXD4TYvgZKcLDBIyVjqunjKme/CHw6RaCkKkACy+1xo0V6+PIB/dxTVUQdnuCgAToRW1
+         0wVLMAEh1kSeYgPEhU1q5on3KffinisOUsSLzgDN/e2Rpn/hlKSJ4G3m22iN4n6PXrqG
+         i4Lw+vwebSZibAU+CrDB/d2sAWetZYltItXsTFlGTR4GOHTA7aeRn481/Oo+3/fvSFwu
+         WWaULnOXZFBfVUmDr44VfPktq7DCxIOyAKXkAw999PYWdhdv6bA8YKu4VJQyF5P5n+JZ
+         RJCw==
+X-Gm-Message-State: ACgBeo1QhYpkPRpssSFx10Bykn7ejKuIvfkkey1KChDVdsUCUB8maH7C
+        3/0gpYFWRDAlKMaOEX4CaEQNzyHN0z5hEkO7O8NggQ==
+X-Google-Smtp-Source: AA6agR7XAy8+dRFXr1tYRU78D2cRU1qIJone22+JuKdzodOZmAEH3tkfVSaACFucoUikH/AMCJJ0BTbB6CoPorjLq5E=
+X-Received: by 2002:ac2:4f03:0:b0:48a:6061:bd8e with SMTP id
+ k3-20020ac24f03000000b0048a6061bd8emr11290623lfr.647.1660166068361; Wed, 10
+ Aug 2022 14:14:28 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3916.1660165782.1@famine>
-Content-Transfer-Encoding: quoted-printable
-Date:   Wed, 10 Aug 2022 14:09:42 -0700
-Message-ID: <3917.1660165782@famine>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220810010809.2024482-1-nathan@kernel.org>
+In-Reply-To: <20220810010809.2024482-1-nathan@kernel.org>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Wed, 10 Aug 2022 14:14:16 -0700
+Message-ID: <CAKwvOdmZvB_=JTeLg08uMFhEMpWga4FJey50QHjzCv_jMVpwkg@mail.gmail.com>
+Subject: Re: [PATCH] ASoC: mchp-spdiftx: Fix clang -Wbitfield-constant-conversion
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Tom Rix <trix@redhat.com>, alsa-devel@alsa-project.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-patchwork-bot+netdevbpf@kernel.org wrote:
-
->Hello:
+On Tue, Aug 9, 2022 at 6:08 PM Nathan Chancellor <nathan@kernel.org> wrote:
 >
->This patch was applied to netdev/net.git (master)
->by David S. Miller <davem@davemloft.net>:
+> A recent change in clang strengthened its -Wbitfield-constant-conversion
+> to warn when 1 is assigned to a 1-bit signed integer bitfield, as it can
+> only be 0 or -1, not 1:
 >
->On Mon,  8 Aug 2022 23:21:03 -0700 you wrote:
->> In my test, balance-alb bonding with two slaves eth0 and eth1,
->> and then Bond0.150 is created with vlan id attached bond0.
->> After adding bond0.150 into one linux bridge, I noted that Bond0,
->> bond0.150 and  bridge were assigned to the same MAC as eth0.
->> Once bond0.150 receives a packet whose dest IP is bridge's
->> and dest MAC is eth1's, the linux bridge will not match
->> eth1's MAC entry in FDB, and not handle it as expected.
->> The patch fix the issue, and diagram as below:
->> =
-
->> [...]
+>   sound/soc/atmel/mchp-spdiftx.c:505:20: error: implicit truncation from 'int' to bit-field changes value from 1 to -1 [-Werror,-Wbitfield-constant-conversion]
+>           dev->gclk_enabled = 1;
+>                             ^ ~
+>   1 error generated.
 >
->Here is the summary with links:
->  - [v2] net:bonding:support balance-alb interface with vlan to bridge
->    https://git.kernel.org/netdev/net/c/d5410ac7b0ba
+> The actual value of the field is never checked, just that it is not
+> zero, so there is not a real bug here. However, it is simple enough to
+> silence the warning by making the bitfield unsigned, which matches the
+> mchp-spdifrx driver.
 >
->You are awesome, thank you!
+> Fixes: 06ca24e98e6b ("ASoC: mchp-spdiftx: add driver for S/PDIF TX Controller")
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1686
+> Link: https://github.com/llvm/llvm-project/commit/82afc9b169a67e8b8a1862fb9c41a2cd974d6691
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-	There looks to be a reference count leak in the existing patch
-(ip_dev_find acquires a reference that is not released).  I.e., it needs
-something like:
+Ah yes, my favorite, signed one bit integers...thanks for the patch.
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_alb=
-.c
-index 60cb9a0225aa..b9dbad3a8af8 100644
---- a/drivers/net/bonding/bond_alb.c
-+++ b/drivers/net/bonding/bond_alb.c
-@@ -668,8 +668,11 @@ static struct slave *rlb_arp_xmit(struct sk_buff *skb=
-, struct bonding *bond)
- =
+grepping for `gclk_enabled`, we see three drivers with similar
+duplication (single bit bitfields):
 
- 	dev =3D ip_dev_find(dev_net(bond->dev), arp->ip_src);
- 	if (dev) {
--		if (netif_is_bridge_master(dev))
-+		if (netif_is_bridge_master(dev)) {
-+			dev_put(dev);
- 			return NULL;
-+		}
-+		dev_put(dev);
- 	}
- =
+sound/soc/atmel/mchp-spdifrx.c
+241: unsigned int gclk_enabled:1;
 
- 	if (arp->op_code =3D=3D htons(ARPOP_REPLY)) {
+sound/soc/atmel/mchp-pdmc.c
+118: u8 gclk_enabled:1;
 
-	I haven't tested this, but it seems correct.  Comments?
+sound/soc/atmel/mchp-spdiftx.c
+200: int gclk_enabled:1;
 
-	I'll create a formal submission here in a bit.
+> ---
+>  sound/soc/atmel/mchp-spdiftx.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/sound/soc/atmel/mchp-spdiftx.c b/sound/soc/atmel/mchp-spdiftx.c
+> index 4850a177803d..ab2d7a791f39 100644
+> --- a/sound/soc/atmel/mchp-spdiftx.c
+> +++ b/sound/soc/atmel/mchp-spdiftx.c
+> @@ -196,7 +196,7 @@ struct mchp_spdiftx_dev {
+>         struct clk                              *pclk;
+>         struct clk                              *gclk;
+>         unsigned int                            fmt;
+> -       int                                     gclk_enabled:1;
+> +       unsigned int                            gclk_enabled:1;
+>  };
+>
+>  static inline int mchp_spdiftx_is_running(struct mchp_spdiftx_dev *dev)
+>
+> base-commit: 15205c2829ca2cbb5ece5ceaafe1171a8470e62b
+> --
+> 2.37.1
+>
 
-	-J
 
----
-	-Jay Vosburgh, jay.vosburgh@canonical.com
+-- 
+Thanks,
+~Nick Desaulniers

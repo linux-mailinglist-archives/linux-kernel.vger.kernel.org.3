@@ -2,59 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4936358E897
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 10:19:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A40858E8AA
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 10:24:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231668AbiHJITF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 04:19:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38782 "EHLO
+        id S230319AbiHJIYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 04:24:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231644AbiHJIS7 (ORCPT
+        with ESMTP id S231219AbiHJIYl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 04:18:59 -0400
-Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC6483F3E
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 01:18:57 -0700 (PDT)
-Received: from vanadium.ugent.be (vanadium.ugent.be [157.193.99.61])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id 02A623091F0;
-        Wed, 10 Aug 2022 10:18:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1660119536;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=w+yQnLCiG0jbS71swkosyqiQn3pRJn0UQmrAJLLbqmM=;
-        b=nTGYPE8IrWGhX/uSDFJkX4dYFjLwq03PZD/ZishAH69GDXWKpgzY15rKvIXqMaPesYrZ1Q
-        hAzgLnfe+P1wXvABrWMiDUi6LzVS1JdeTjTPdi82S6xwveFhZ0lZ4NBwJ467fRJT7xxn19
-        bUXFq4NpR1WZ5cfGI2hSCeTQqIiTaLAwe63OYFWupV1vhz6MzXXxWl6GdFQxYt8DW6BhIy
-        VvNpZmeLYnZ9KISAllBvAWZ3xdNjb35c10ZeLI3iskKrA4ByedYU1Dl65beykfjgP//fNs
-        84P8aBo8HneIBjLDOUfvYDLj1xjRmN653KymZ9Eu/19yZ1GGZc640DQw7ElBVQ==
-Message-ID: <5640838e86add62f7e4bd811391fcc60b7ee42b1.camel@svanheule.net>
-Subject: Re: [PATCH v1 1/5] lib/test_cpumask: drop cpu_possible_mask full
- test
-From:   Sander Vanheule <sander@svanheule.net>
-To:     =?ISO-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
-        Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     linux-kernel@vger.kernel.org, David Gow <davidgow@google.com>
-Date:   Wed, 10 Aug 2022 10:18:55 +0200
-In-Reply-To: <15acd7ab-e624-b2ee-cde5-100b69cf7206@riseup.net>
-References: <cover.1660068429.git.sander@svanheule.net>
-         <30d8882efedea697da20c27563050008d1569b9e.1660068429.git.sander@svanheule.net>
-         <15acd7ab-e624-b2ee-cde5-100b69cf7206@riseup.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        Wed, 10 Aug 2022 04:24:41 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4721885F88;
+        Wed, 10 Aug 2022 01:24:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660119880; x=1691655880;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=6kT9mTMxRWS6E11jw9PH26Anrkm3qIMlLthMQe7yaTk=;
+  b=A7UeecBqYGcs818PljT93xy7yN1I2Hi5FEH2T4fJYUXeHBAvSV2hAUeT
+   V4kOGW7cqdLNQGRqAE35GoDPubqecUgDgeo3tvEnL/VsnybJAPHJhFG7g
+   CDGEQ2uCQtpCja9UOh0kL0/L1jc49///IAFQma+JN52Xk+US5sxjeLiZf
+   vLyzwrbDHKDC8sd0pImoKZ/QAVMcZ/yLzTg4lXSEc0KqkaLrMlkPZb/+A
+   YjlKv73oklEKEeKz0iDgI7CIXtho+lUjcTppRypanTTJ0AOmW5dRSfC8y
+   Acvtk/7HG6P6X0gh0DwN5G2xxOvyTGRApzwRJM/PEeFpG0ZkcayhPCMwF
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="289784598"
+X-IronPort-AV: E=Sophos;i="5.93,226,1654585200"; 
+   d="scan'208";a="289784598"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 01:24:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,226,1654585200"; 
+   d="scan'208";a="601738890"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by orsmga007.jf.intel.com with ESMTP; 10 Aug 2022 01:24:29 -0700
+Date:   Wed, 10 Aug 2022 16:19:43 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v7 07/14] KVM: Use gfn instead of hva for
+ mmu_notifier_retry
+Message-ID: <20220810081943.GB862421@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-8-chao.p.peng@linux.intel.com>
+ <20220804071044.GA4091749@ls.amr.corp.intel.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220804071044.GA4091749@ls.amr.corp.intel.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,46 +93,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Ma=C3=ADra,
+On Thu, Aug 04, 2022 at 12:10:44AM -0700, Isaku Yamahata wrote:
+> On Wed, Jul 06, 2022 at 04:20:09PM +0800,
+> Chao Peng <chao.p.peng@linux.intel.com> wrote:
+> 
+> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> > index 0bdb6044e316..e9153b54e2a4 100644
+> > --- a/include/linux/kvm_host.h
+> > +++ b/include/linux/kvm_host.h
+> > @@ -1362,10 +1362,8 @@ void kvm_mmu_free_memory_cache(struct kvm_mmu_memory_cache *mc);
+> >  void *kvm_mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc);
+> >  #endif
+> >  
+> > -void kvm_inc_notifier_count(struct kvm *kvm, unsigned long start,
+> > -				   unsigned long end);
+> > -void kvm_dec_notifier_count(struct kvm *kvm, unsigned long start,
+> > -				   unsigned long end);
+> > +void kvm_inc_notifier_count(struct kvm *kvm, gfn_t start, gfn_t end);
+> > +void kvm_dec_notifier_count(struct kvm *kvm, gfn_t start, gfn_t end);
+> >  
+> >  long kvm_arch_dev_ioctl(struct file *filp,
+> >  			unsigned int ioctl, unsigned long arg);
+> 
+> The corresponding changes in kvm_main.c are missing.
 
-On Tue, 2022-08-09 at 19:26 -0300, Ma=C3=ADra Canal wrote:
-> On 8/9/22 15:08, Sander Vanheule wrote:
-> > cpu_possible_mask is not necessarily completely filled.=C2=A0 That mean=
-s
-> > running a check on cpumask_full() doesn't make sense, so drop the test.
-> >=20
-> > Fixes: c41e8866c28c ("lib/test: introduce cpumask KUnit test suite")
-> > Link: https://lore.kernel.org/lkml/346cb279-8e75-24b0-7d12-9803f2b41c73=
-@riseup.net/
-> > Reported-by: Ma=C3=ADra Canal <mairacanal@riseup.net>
-> > Signed-off-by: Sander Vanheule <sander@svanheule.net>
->=20
-> Tested-by: Ma=C3=ADra Canal <mairacanal@riseup.net>
+Exactly! Actually it's in the next patch while it should indeed in
+this patch.
 
-Thanks for testing again, and sorry for the trouble!
-
-Best,
-Sander
-
->=20
-> > Cc: David Gow <davidgow@google.com>
-> > ---
-> > =C2=A0lib/test_cpumask.c | 1 -
-> > =C2=A01 file changed, 1 deletion(-)
-> >=20
-> > diff --git a/lib/test_cpumask.c b/lib/test_cpumask.c
-> > index a31a1622f1f6..4ebf9f5805f3 100644
-> > --- a/lib/test_cpumask.c
-> > +++ b/lib/test_cpumask.c
-> > @@ -54,7 +54,6 @@ static cpumask_t mask_all;
-> > =C2=A0static void test_cpumask_weight(struct kunit *test)
-> > =C2=A0{
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0KUNIT_EXPECT_TRUE(test,=
- cpumask_empty(&mask_empty));
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0KUNIT_EXPECT_TRUE(test, cpum=
-ask_full(cpu_possible_mask));
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0KUNIT_EXPECT_TRUE(test,=
- cpumask_full(&mask_all));
-> > =C2=A0
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0KUNIT_EXPECT_EQ(test, 0=
-, cpumask_weight(&mask_empty));
+Chao
+> 
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index b2c79bef61bd..0184e327f6f5 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -711,8 +711,7 @@ static void kvm_mmu_notifier_change_pte(struct mmu_notifier *mn,
+>         kvm_handle_hva_range(mn, address, address + 1, pte, kvm_set_spte_gfn);
+>  }
+>  
+> -void kvm_inc_notifier_count(struct kvm *kvm, unsigned long start,
+> -                                  unsigned long end)
+> +void kvm_inc_notifier_count(struct kvm *kvm, gfn_t start, gfn_t end)
+>  {
+>         /*
+>          * The count increase must become visible at unlock time as no
+> @@ -786,8 +785,7 @@ static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
+>         return 0;
+>  }
+>  
+> -void kvm_dec_notifier_count(struct kvm *kvm, unsigned long start,
+> -                                  unsigned long end)
+> +void kvm_dec_notifier_count(struct kvm *kvm, gfn_t start, gfn_t end)
+>  {
+>         /*
+>          * This sequence increase will notify the kvm page fault that
+> 
+> 
+> -- 
+> Isaku Yamahata <isaku.yamahata@gmail.com>

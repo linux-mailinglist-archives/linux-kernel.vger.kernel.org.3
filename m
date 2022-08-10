@@ -2,45 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3453258F4F5
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 01:41:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F8B458F4F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 01:41:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232824AbiHJXk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 19:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37066 "EHLO
+        id S233526AbiHJXlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 19:41:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233060AbiHJXks (ORCPT
+        with ESMTP id S233726AbiHJXlO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 19:40:48 -0400
-Received: from mail104.syd.optusnet.com.au (mail104.syd.optusnet.com.au [211.29.132.246])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 73753E14;
-        Wed, 10 Aug 2022 16:40:45 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-193-158.pa.nsw.optusnet.com.au [49.181.193.158])
-        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id C9A1E62D0EF;
-        Thu, 11 Aug 2022 09:40:43 +1000 (AEST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1oLvJZ-00BcME-R5; Thu, 11 Aug 2022 09:40:41 +1000
-Date:   Thu, 11 Aug 2022 09:40:41 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     syzbot <syzbot+ed920a72fd23eb735158@syzkaller.appspotmail.com>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
-Subject: Re: [syzbot] INFO: task hung in __generic_file_fsync (3)
-Message-ID: <20220810234041.GL3861211@dread.disaster.area>
-References: <00000000000096592405e5dcaa9f@google.com>
+        Wed, 10 Aug 2022 19:41:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B4FB01151
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 16:41:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660174872;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=ESKhhHvhyTk1a8IG7YRAI0kEcN37WFQWTM/sPGqUCUU=;
+        b=BqmbUw45NiGj+WkltP0eoIs5g2vObwDBuqADJzrzcG4xaBg8WXibD2GW10t/kpNxEop1uD
+        KBrCh5MkVub7EDjnZZ8nHq9xnU6fQT1LSh6BVZq37qxzFDqQX+7SseA0RO0QsIuW/Hnnlj
+        JElVmk7/jCJPvzC7jkH616l69qVJcDo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-190-t7_zJCnoO76MlruHlSPMxw-1; Wed, 10 Aug 2022 19:41:06 -0400
+X-MC-Unique: t7_zJCnoO76MlruHlSPMxw-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C61D03C0F376;
+        Wed, 10 Aug 2022 23:41:05 +0000 (UTC)
+Received: from localhost.localdomain.com (unknown [10.22.8.107])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 963D52166B26;
+        Wed, 10 Aug 2022 23:41:01 +0000 (UTC)
+From:   Nico Pache <npache@redhat.com>
+To:     kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, davidgow@google.com
+Cc:     skhan@linuxfoundation.org, dlatypov@google.com,
+        brendan.higgins@linux.dev, alcioa@amazon.com, lexnv@amazon.com,
+        andraprs@amazon.com, YehezkelShB@gmail.com,
+        mika.westerberg@linux.intel.com, michael.jamet@intel.com,
+        andreas.noever@gmail.com
+Subject: [PATCH] kunit: fix Kconfig for build-in tests USB4 and Nitro Enclaves
+Date:   Wed, 10 Aug 2022 19:40:56 -0400
+Message-Id: <20220810234056.2494993-1-npache@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00000000000096592405e5dcaa9f@google.com>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=VuxAv86n c=1 sm=1 tr=0 ts=62f441fc
-        a=SeswVvpAPK2RnNNwqI8AaA==:117 a=SeswVvpAPK2RnNNwqI8AaA==:17
-        a=kj9zAlcOel0A:10 a=biHskzXt2R4A:10 a=edf1wS77AAAA:8 a=7-415B0cAAAA:8
-        a=SbdPs6kyW9B9Yl0RobsA:9 a=CjuIK1q_8ugA:10 a=igBNqPyMv6gA:10
-        a=DcSpbTIhAlouE1Uv7lRv:22 a=biEYGPWJfzWAr4FL6Ov7:22
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,106 +61,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 09, 2022 at 10:53:21PM -0700, syzbot wrote:
-> Hello,
-> 
-> syzbot found the following issue on:
-> 
-> HEAD commit:    200e340f2196 Merge tag 'pull-work.dcache' of git://git.ker..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=13d08412080000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=a3f4d6985d3164cd
-> dashboard link: https://syzkaller.appspot.com/bug?extid=ed920a72fd23eb735158
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15dd033e080000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16dbfa46080000
-> 
-> Bisection is inconclusive: the issue happens on the oldest tested release.
+Both the USB4 and Nitro Enclaves KUNIT tests are now able to be compiled
+if KUNIT is compiled as a module. This leads to issues if KUNIT is being
+packaged separately from the core kernel and when KUNIT is run baremetal
+without the required driver compiled into the kernel.
 
-tl;dr: Well known problem. Don't do O_DSYNC direct IO writes on vfat.
+Fixes: 635dcd16844b ("thunderbolt: test: Use kunit_test_suite() macro")
+Fixes: fe5be808fa6c ("nitro_enclaves: test: Use kunit_test_suite() macro")
+Signed-off-by: Nico Pache <npache@redhat.com>
+---
+ drivers/thunderbolt/Kconfig         | 3 +--
+ drivers/virt/nitro_enclaves/Kconfig | 2 +-
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
-Basically, vfat uses __generic_file_sync() which takes the
-inode_lock(). It's not valid to take the inode_lock() in DIO
-completion callbacks  as we do for O_DSYNC/O_SYNC writes because
-setattr needs to do:
-
-	inode_lock()
-	inode_dio_wait()
-	  <waits for inode->i_dio_count to go to zero>
-
-to wait for all pending direct IO to drain before it can proceed.
-
-Hence:
-
-	<dio holds inode->i_dio_count reference>
-	dio_complete
-	  generic_write_sync
-	    vfs_fsync_range
-	      fat_file_fsync
-	        __generic_file_fsync
-		  inode_lock
-		    <blocks>
-
-O_DSYNC DIO completion will attempt to lock the inode with an
-elevated inode->i_dio_count (as is always the case when
-dio_complete() is called) and hence we have a trivial ABBA deadlock
-vector via truncate, hole punching, etc.
-
-> INFO: task kworker/0:1:14 blocked for more than 143 seconds.
->       Not tainted 5.19.0-syzkaller-02972-g200e340f2196 #0
-> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> task:kworker/0:1     state:D stack:26544 pid:   14 ppid:     2 flags:0x00004000
-> Workqueue: dio/loop5 dio_aio_complete_work
-> Call Trace:
->  <TASK>
->  context_switch kernel/sched/core.c:5178 [inline]
->  __schedule+0xa00/0x4c10 kernel/sched/core.c:6490
->  schedule+0xda/0x1b0 kernel/sched/core.c:6566
->  rwsem_down_write_slowpath+0x697/0x11e0 kernel/locking/rwsem.c:1182
->  __down_write_common kernel/locking/rwsem.c:1297 [inline]
->  __down_write_common kernel/locking/rwsem.c:1294 [inline]
->  __down_write kernel/locking/rwsem.c:1306 [inline]
->  down_write+0x135/0x150 kernel/locking/rwsem.c:1553
->  inode_lock include/linux/fs.h:760 [inline]
->  __generic_file_fsync+0xb0/0x1f0 fs/libfs.c:1119
->  fat_file_fsync+0x73/0x200 fs/fat/file.c:191
->  vfs_fsync_range+0x13a/0x220 fs/sync.c:188
->  generic_write_sync include/linux/fs.h:2861 [inline]
->  dio_complete+0x6dd/0x950 fs/direct-io.c:310
->  process_one_work+0x996/0x1610 kernel/workqueue.c:2289
->  worker_thread+0x665/0x1080 kernel/workqueue.c:2436
->  kthread+0x2e9/0x3a0 kernel/kthread.c:376
->  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
->  </TASK>
-
-There's dio completion.
-
-> INFO: task syz-executor775:3664 blocked for more than 144 seconds.
->       Not tainted 5.19.0-syzkaller-02972-g200e340f2196 #0
-> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> task:syz-executor775 state:D stack:26128 pid: 3664 ppid:  3656 flags:0x00004004
-> Call Trace:
->  <TASK>
->  context_switch kernel/sched/core.c:5178 [inline]
->  __schedule+0xa00/0x4c10 kernel/sched/core.c:6490
->  schedule+0xda/0x1b0 kernel/sched/core.c:6566
->  __inode_dio_wait fs/inode.c:2381 [inline]
->  inode_dio_wait+0x22a/0x270 fs/inode.c:2399
->  fat_setattr+0x3de/0x13c0 fs/fat/file.c:509
->  notify_change+0xcd0/0x1440 fs/attr.c:418
->  do_truncate+0x13c/0x200 fs/open.c:65
->  do_sys_ftruncate+0x536/0x730 fs/open.c:193
->  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
->  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-There's truncate waiting on dio completion holding the inode lock.
-
-So, as expected, any filesystem that supports DIO and calls into
-__generic_file_fsync() for fsync functionality can easily deadlock
-truncate against O_DSYNC DIO writes...
-
--Dave.
+diff --git a/drivers/thunderbolt/Kconfig b/drivers/thunderbolt/Kconfig
+index e76a6c173637..f12d0a3ee3e2 100644
+--- a/drivers/thunderbolt/Kconfig
++++ b/drivers/thunderbolt/Kconfig
+@@ -29,8 +29,7 @@ config USB4_DEBUGFS_WRITE
+ 
+ config USB4_KUNIT_TEST
+ 	bool "KUnit tests" if !KUNIT_ALL_TESTS
+-	depends on (USB4=m || KUNIT=y)
+-	depends on KUNIT
++	depends on USB4 && KUNIT=y
+ 	default KUNIT_ALL_TESTS
+ 
+ config USB4_DMA_TEST
+diff --git a/drivers/virt/nitro_enclaves/Kconfig b/drivers/virt/nitro_enclaves/Kconfig
+index ce91add81401..dc4d25c26256 100644
+--- a/drivers/virt/nitro_enclaves/Kconfig
++++ b/drivers/virt/nitro_enclaves/Kconfig
+@@ -17,7 +17,7 @@ config NITRO_ENCLAVES
+ 
+ config NITRO_ENCLAVES_MISC_DEV_TEST
+ 	bool "Tests for the misc device functionality of the Nitro Enclaves" if !KUNIT_ALL_TESTS
+-	depends on NITRO_ENCLAVES && KUNIT
++	depends on NITRO_ENCLAVES && KUNIT=y
+ 	default KUNIT_ALL_TESTS
+ 	help
+ 	  Enable KUnit tests for the misc device functionality of the Nitro
 -- 
-Dave Chinner
-david@fromorbit.com
+2.36.1
+

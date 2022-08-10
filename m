@@ -2,176 +2,311 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3239758EC93
+	by mail.lfdr.de (Postfix) with ESMTP id 7CD8958EC94
 	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 14:59:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232468AbiHJM6q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 08:58:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52928 "EHLO
+        id S232504AbiHJM6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 08:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232378AbiHJM6H (ORCPT
+        with ESMTP id S232394AbiHJM6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 08:58:07 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D6160525;
-        Wed, 10 Aug 2022 05:57:59 -0700 (PDT)
-Received: from mercury (dyndsl-095-033-155-153.ewe-ip-backbone.de [95.33.155.153])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 968926601C2A;
-        Wed, 10 Aug 2022 13:57:57 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1660136277;
-        bh=AXUViYjkfsjlWnyiLgWqWN9MZttYpnjGIynZu5rUAaw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jDXgdsOidzYTu2oNC1erHn44vbS2vts5ReWdZHenahU9BENWCkA4038OA+Nwkkb+4
-         /kUOsqVguBjz/1jC3F/3t7A+gXlSVVaUyNWk07nXB7dJANymSbUxRqRYy/NimPHiiS
-         8TexTLunA86QqT9HLoeMK639uFUaEd+QyFrVsOa8lUvBsCK6Y53MhOqGIF8FJ/oDvL
-         0jPcOgPamgd6afMYuUC20rxuBlJHdk02soJI8TezMQTsf0BgCoubktSvLhHNq9SOpi
-         tgbaI3K6qgahfLujBtUwX+9h/7FcziktKvhn7YNwpMiqeyYQmJGwfD5r9CrDeT5NAS
-         42j7pvI156W/A==
-Received: by mercury (Postfix, from userid 1000)
-        id E7D8A1060840; Wed, 10 Aug 2022 14:57:55 +0200 (CEST)
-Date:   Wed, 10 Aug 2022 14:57:55 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+        Wed, 10 Aug 2022 08:58:24 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FAA760514;
+        Wed, 10 Aug 2022 05:58:21 -0700 (PDT)
+X-UUID: f4ae14d8924147fcb4d71833793779cf-20220810
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=B9CRG8RodOdNa8sKrD7vJYhPkQF90ZulAoME56gZSvc=;
+        b=fJN17/IfIthix9/kS2nJdk17JO/HkWSBjFIBQvOitteECZOcKkV3ZUf8RWNvNAZu5R/zX2B3TZ3dtS3kjcnRJ/CVrDxcbO3Gcko3tt8luILGL0zmOBiD0FWDi7Ai5SOfeDRsQF9hdktTYaFifWwEdIGu35+WWj9idGbj1DF7Flk=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.9,REQID:88454cc2-1895-4197-bab6-cde0451a366a,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_H
+        am,ACTION:release,TS:0
+X-CID-META: VersionHash:3d8acc9,CLOUDID:7301effc-9e71-4a0f-ba6b-417998daea35,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: f4ae14d8924147fcb4d71833793779cf-20220810
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 512899187; Wed, 10 Aug 2022 20:58:17 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Wed, 10 Aug 2022 20:58:15 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Wed, 10 Aug 2022 20:58:15 +0800
+Message-ID: <6271732eb27824c5b841760243738ceb062f4c4a.camel@mediatek.com>
+Subject: Re: [PATCH v4 1/4] dt-bindings: mediatek: watchdog: Fix compatible
+ fallbacks and example
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     "=?ISO-8859-1?Q?N=EDcolas?= F. R. A. Prado" <nfraprado@collabora.com>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "Guenter Roeck" <linux@roeck-us.net>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Pavel Machek <pavel@ucw.cz>,
-        Tim Harvey <tharvey@gateworks.com>, Lee Jones <lee@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Andrew Davis <afd@ti.com>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-leds@vger.kernel.org,
-        netdev@vger.kernel.org, linux-pm@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH v2 5/5] dt-bindings: Drop Dan Murphy and Ricardo
- Rivera-Matos
-Message-ID: <20220810125755.l6ou6imgbeuj37ir@mercury.elektranox.org>
-References: <20220809162752.10186-1-krzysztof.kozlowski@linaro.org>
- <20220809162752.10186-6-krzysztof.kozlowski@linaro.org>
+        "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>
+Date:   Wed, 10 Aug 2022 20:58:15 +0800
+In-Reply-To: <20220808170355.c2ih3xwqxlddsal7@notapiano>
+References: <20220721014845.19044-1-allen-kh.cheng@mediatek.com>
+         <20220721014845.19044-2-allen-kh.cheng@mediatek.com>
+         <CAGXv+5HXwVpaJPV-4Z6qw14xZzEkx_E7dVks6-GBa7bQyN8hCg@mail.gmail.com>
+         <5dac39d1-3b42-40e9-5693-0c127e8c689a@gmail.com>
+         <0fadcd9f50d49ecbb329e76a9ceb6ee689648955.camel@mediatek.com>
+         <20220808170355.c2ih3xwqxlddsal7@notapiano>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qodvu6jzbg5jdb43"
-Content-Disposition: inline
-In-Reply-To: <20220809162752.10186-6-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Nícolas,
 
---qodvu6jzbg5jdb43
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, 2022-08-08 at 13:03 -0400, Nícolas F. R. A. Prado wrote:
+> Hi,
+> 
+> On Wed, Aug 03, 2022 at 05:23:57PM +0800, Allen-KH Cheng wrote:
+> > Hi Chen-Yu and Mathias,
+> > 
+> > Sincere apologies for the delayed response.
+> > 
+> > On Tue, 2022-08-02 at 13:04 +0200, Matthias Brugger wrote:
+> > > 
+> > > On 01/08/2022 11:29, Chen-Yu Tsai wrote:
+> > > > On Thu, Jul 21, 2022 at 10:50 AM Allen-KH Cheng
+> > > > <allen-kh.cheng@mediatek.com> wrote:
+> > > > > 
+> > > > > The watchdog timer of mt8186. mt8195 and mt7986 have their DT
+> > > > > data.
+> > > > > We should not use 'mediatek,mt6589-wdt' as fallback.
+> > > > > 
+> > > > > For mediatek,wdt example of mt8183, We remove
+> > > > > mediatek,mt6589-wdt 
+> > > > > fallback.
+> > > > 
+> > > > I think this needs some more information.
+> > > > 
+> > > > Right now on the kernel side, mt6589-wdt provides just watchdog
+> > > > support.
+> > > > The SoC-specific compatibles that are touched by this patch
+> > > > provide
+> > > > reset
+> > > > controls in addition to the standard watchdog, which remains
+> > > > the
+> > > > same.
+> > > > 
+> > > > If that is the case, then the fallback compatibles are correct.
+> > > > A
+> > > > fallback
+> > > > says that the new hardware is compatible with some older
+> > > > hardware,
+> > > > and
+> > > > can be run with the driver supporting that older hardware,
+> > > > likely
+> > > > with
+> > > > reduced functionality.
+> > > > 
+> > > 
+> > > My understanding is, that we add a fallback because although at
+> > > the
+> > > time we 
+> > > entered the compatible, the functionality of the device is the
+> > > same
+> > > as the 
+> > > fallback. Nonetheless we add a compatible specific for the device
+> > > in
+> > > case in the 
+> > > future we realize that the device has some functionality that is
+> > > not
+> > > and can not 
+> > > be covered by the fallback.
+> > > 
+> > > This is the case here. Actually adding the fallback in the first
+> > > place was 
+> > > wrong, because the driver since ever supports the extra function
+> > > for
+> > > the device, 
+> > > the reset.
+> > > 
+> > > So this is a mere cleanup of the binding to reflect what was
+> > > always
+> > > present in 
+> > > the driver.
+> > > 
+> > > Regards,
+> > > Matthias
+> > > 
+> > 
+> > mt6589-wdt dosen't contains a reset control for other modules, like
+> > chen-yu mention "mt6589-wdt provides just watchdog support."
+> > 
+> > For instance, there is a reset control in mt8195-wdt and we have a
+> > DT
+> > data to define its reset number of TOPRGU. I thought it's better
+> > not
+> > use mt6589-wdt as fallback.
+> > 
+> > Please let me know if this works and if you have any suggestions or
+> > comments.
+> 
+> The only practical usecase that I can think of that relies on keeping
+> the
+> fallback compatibles is using the current DT with an older kernel
+> that didn't
+> yet support the specific watchdog compatibles. In this case, dropping
+> the
+> fallback compatibles would make the watchdog not work at all in such
+> a kernel.
+> 
+> I'm not sure how relevant/common of a usecase that would be, but
+> maybe it's
+> worth considering given that the advantage of removing the fallback
+> compatible
+> is purely aesthetic?
+> 
+> Thanks,
+> Nícolas
+> 
 
-Hi,
+Thanks for your comments.
 
-On Tue, Aug 09, 2022 at 07:27:52PM +0300, Krzysztof Kozlowski wrote:
-> Emails to Dan Murphy and Ricardo Rivera-Matos bounce ("550 Invalid
-> recipient").  Andrew Davis agreed to take over the bindings.
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->=20
-> ---
->=20
-> Changes since v1:
-> 1. Add Andrew Davis instead.
-> 2. Not adding accumulated ack due to change above.
-> ---
-=2E..
->  Documentation/devicetree/bindings/power/supply/bq2515x.yaml    | 3 +--
->  Documentation/devicetree/bindings/power/supply/bq256xx.yaml    | 2 +-
->  Documentation/devicetree/bindings/power/supply/bq25980.yaml    | 3 +--
+I agree the advantage of patch is aesthetic. Since I also want to send
+another "watchdog: Convert binding to YAML" PATCH, it's better let all
+wdt compatibles in the binding match the contents of mtk_wdt_dt_ids in
+drivers/watchdog/mtk_wdt.c
 
-Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+static const struct of_device_id mtk_wdt_dt_ids[] = {
+	{ .compatible = "mediatek,mt2712-wdt", .data = &mt2712_data },
+	{ .compatible = "mediatek,mt6589-wdt" },
+	{ .compatible = "mediatek,mt7986-wdt", .data = &mt7986_data },
+	{ .compatible = "mediatek,mt8183-wdt", .data = &mt8183_data },
+	{ .compatible = "mediatek,mt8186-wdt", .data = &mt8186_data },
+	{ .compatible = "mediatek,mt8192-wdt", .data = &mt8192_data },
+	{ .compatible = "mediatek,mt8195-wdt", .data = &mt8195_data },
+	{ /* sentinel */ }
+};
 
--- Sebastian
+We have "mediatek,mt8186-wdt" "mediatek,mt8195-wdt" and
+"mediatek,mt7986-wdt" now and they have their DT data for the reset
+control.
 
-> [...]
-> diff --git a/Documentation/devicetree/bindings/power/supply/bq2515x.yaml =
-b/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
-> index 27db38577822..1a1b240034ef 100644
-> --- a/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
-> @@ -8,8 +8,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: TI bq2515x 500-mA Linear charger family
-> =20
->  maintainers:
-> -  - Dan Murphy <dmurphy@ti.com>
-> -  - Ricardo Rivera-Matos <r-rivera-matos@ti.com>
-> +  - Andrew Davis <afd@ti.com>
-> =20
->  description: |
->    The BQ2515x family is a highly integrated battery charge management IC=
- that
-> diff --git a/Documentation/devicetree/bindings/power/supply/bq256xx.yaml =
-b/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
-> index 91abe5733c41..82f382a7ffb3 100644
-> --- a/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
-> @@ -8,7 +8,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: TI bq256xx Switch Mode Buck Charger
-> =20
->  maintainers:
-> -  - Ricardo Rivera-Matos <r-rivera-matos@ti.com>
-> +  - Andrew Davis <afd@ti.com>
-> =20
->  description: |
->    The bq256xx devices are a family of highly-integrated battery charge
-> diff --git a/Documentation/devicetree/bindings/power/supply/bq25980.yaml =
-b/Documentation/devicetree/bindings/power/supply/bq25980.yaml
-> index 4883527ab5c7..b687b8bcd705 100644
-> --- a/Documentation/devicetree/bindings/power/supply/bq25980.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/bq25980.yaml
-> @@ -8,8 +8,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: TI BQ25980 Flash Charger
-> =20
->  maintainers:
-> -  - Dan Murphy <dmurphy@ti.com>
-> -  - Ricardo Rivera-Matos <r-rivera-matos@ti.com>
-> +  - Andrew Davis <afd@ti.com>
-> =20
->  description: |
->    The BQ25980, BQ25975, and BQ25960 are a series of flash chargers inten=
-ded
-> [...]
+It's weird and unuseful to add "mediatek,mt6589-wdt" as fallback. 
 
---qodvu6jzbg5jdb43
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+Please kindly let me know if I missed anything
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmLzq1MACgkQ2O7X88g7
-+prR3RAAguNXBrOMU277Ao4ijuGi+QU6SzrNjySRdOiRVoG9Jn3Zo3D6969KokAP
-JfuYQLSClNfcDgaNVQPpXT5TG377q5ZerWaqfEFCXAy+cp0RIZWXdpDhb+2A5gCU
-gISuq5p61V0AQM6xyU+E9q+q9ZzQ8Qjjo2ckVFCqfcxe3pX4YUUXYu39ieKJqX7G
-juQsf03XgmKXT9PfPpBvMpPe7PqYlFzZqkuvfpNILNtksDBasHS2Tm998RXq3OTe
-hTlItrD65Mb4EEkhtuhj4Xkm6VbW6PXMAJiTCWraJsBZV+aZMdPWeoC5RsnhEDjM
-XcwnQGGy7VZYotwFMBYv1AtxiP6YNim1aYyReT/LA/+HBcIBGmD8Q0v3tgO9ruou
-Gx3DlkUgoo+q1cOLP0dzb+BWxSEx1VlNwONhIv/5bciur7BLTgVPt/1Vt2qLle0V
-1oEq90rdpUTv2poZn3cTd7+Qt99Eld3cVZ/JUFxrXywZkDuKMXB0Krnbg+sOeLfn
-dCWCe7fKeqgEIL71rna2j5BwCGFazcU3JeB2WdncDLqpFQaeb/0OPB8zw6RnC+oM
-PA+3qhtyhYYbcRMP7enDBV4skvpNTlJMD+tYQdzFWkcotVCvXho+7mI/Us+KZwBC
-+CQWd+WnX+l91INLir3KpF7b3yR5BZeo5MYQND5yD7ZKylUXcRo=
-=yGj8
------END PGP SIGNATURE-----
+BRs,
+Allen
 
---qodvu6jzbg5jdb43--
+> > 
+> > Thanks,
+> > Allen
+> > 
+> > > > As an example, if mt8195-wdt is backward compatible with
+> > > > mt6589-
+> > > > wdt,
+> > > > then it should run as mt6589-wdt, and would just be missing new
+> > > > functionality, in this case the reset controls.
+> > > > 
+> > > > So either mt6589-wdt also contains a reset control that is not
+> > > > the
+> > > > same
+> > > > as the other newer chips, or has some other functionality that
+> > > > the
+> > > > other
+> > > > chips contain, and justifies the removal of the fallback, or
+> > > > this
+> > > > patch
+> > > > is incorrect. Note that mt2701-wdt and mt762*-wdt are still
+> > > > listed
+> > > > as
+> > > > compatible with mt6589-wdt. So I think a better explanation is
+> > > > required.
+> > > > 
+> > > > 
+> > > > Regards
+> > > > ChenYu
+> > > > 
+> > > > 
+> > > > > Fixes:a45b408a020b("dt-bindings: watchdog: Add compatible for
+> > > > > MediaTek MT8186")
+> > > > > Fixes:b326f2c85f3d("dt-bindings: watchdog: Add compatible for
+> > > > > Mediatek MT8195")
+> > > > > Fixes:41e73feb1024("dt-bindings: watchdog: Add compatible for
+> > > > > Mediatek MT7986")
+> > > > > Fixes:f43f97a0fc0e("dt-bindings: mediatek: mt8183: Add
+> > > > > #reset-
+> > > > > cells")
+> > > > > Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> > > > > Reviewed-by: AngeloGioacchino Del Regno <
+> > > > > angelogioacchino.delregno@collabora.com>
+> > > > > ---
+> > > > >   Documentation/devicetree/bindings/watchdog/mtk-wdt.txt | 9
+> > > > > ++++-----
+> > > > >   1 file changed, 4 insertions(+), 5 deletions(-)
+> > > > > 
+> > > > > diff --git a/Documentation/devicetree/bindings/watchdog/mtk-
+> > > > > wdt.txt b/Documentation/devicetree/bindings/watchdog/mtk-
+> > > > > wdt.txt
+> > > > > index 762c62e428ef..67ef991ec4cf 100644
+> > > > > --- a/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> > > > > +++ b/Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
+> > > > > @@ -14,12 +14,12 @@ Required properties:
+> > > > >          "mediatek,mt7622-wdt", "mediatek,mt6589-wdt": for
+> > > > > MT7622
+> > > > >          "mediatek,mt7623-wdt", "mediatek,mt6589-wdt": for
+> > > > > MT7623
+> > > > >          "mediatek,mt7629-wdt", "mediatek,mt6589-wdt": for
+> > > > > MT7629
+> > > > > -       "mediatek,mt7986-wdt", "mediatek,mt6589-wdt": for
+> > > > > MT7986
+> > > > > +       "mediatek,mt7986-wdt": for MT7986
+> > > > >          "mediatek,mt8183-wdt": for MT8183
+> > > > > -       "mediatek,mt8186-wdt", "mediatek,mt6589-wdt": for
+> > > > > MT8186
+> > > > > +       "mediatek,mt8186-wdt": for MT8186
+> > > > >          "mediatek,mt8516-wdt", "mediatek,mt6589-wdt": for
+> > > > > MT8516
+> > > > >          "mediatek,mt8192-wdt": for MT8192
+> > > > > -       "mediatek,mt8195-wdt", "mediatek,mt6589-wdt": for
+> > > > > MT8195
+> > > > > +       "mediatek,mt8195-wdt": for MT8195
+> > > > > 
+> > > > >   - reg : Specifies base physical address and size of the
+> > > > > registers.
+> > > > > 
+> > > > > @@ -32,8 +32,7 @@ Optional properties:
+> > > > >   Example:
+> > > > > 
+> > > > >   watchdog: watchdog@10007000 {
+> > > > > -       compatible = "mediatek,mt8183-wdt",
+> > > > > -                    "mediatek,mt6589-wdt";
+> > > > > +       compatible = "mediatek,mt8183-wdt";
+> > > > >          mediatek,disable-extrst;
+> > > > >          reg = <0 0x10007000 0 0x100>;
+> > > > >          interrupts = <GIC_SPI 139 IRQ_TYPE_NONE>;
+> > > > > --
+> > > > > 2.18.0
+> > > > > 
+> > > > > 
+> > 
+> > 
+

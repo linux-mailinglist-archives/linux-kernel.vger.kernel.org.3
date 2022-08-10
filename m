@@ -2,108 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48D0858ECEC
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 15:19:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CB6958ECED
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 15:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232520AbiHJNS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 09:18:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52640 "EHLO
+        id S232528AbiHJNTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 09:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232573AbiHJNSX (ORCPT
+        with ESMTP id S232526AbiHJNSo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 09:18:23 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EFE722298;
-        Wed, 10 Aug 2022 06:18:22 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id s23so612231wmj.4;
-        Wed, 10 Aug 2022 06:18:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=4/6jnVLoLFCcYZqNhg67rhZsLZRrer8rrjCvo1v3AgU=;
-        b=FkJHfIGo+XX57HUvyImG3URjElPioFGuzK5xv2ab/13owqQid/RCwPKwQTi75Z/Nko
-         3pMjfxM5mizyMKchI6MSg9PHq5xRrMp7sJ01GpDxctJMeWy7t5KUC9tgh6EzzUOnvzq3
-         KY6NP3kjdtk0lDgiv7BCCBGVFcoNvKZPProR6TXWt7Xlf15Kfm5j3XpIlpKKt9QzXXgv
-         Q2YdRu+ErWbtpOQsA+kE9qrpa9ewVc9PhQDURRZsQRe+6FPd90gZrZ7T8ZS6pzmfyYM3
-         4EARlbpK1PVOVWGQA0in2b6KHGRlBRHLJ5qaG55tHHSljXPS5AcGGAnhkFOVqAeEB0eu
-         mJEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=4/6jnVLoLFCcYZqNhg67rhZsLZRrer8rrjCvo1v3AgU=;
-        b=x2J7XL3igJoqfZMlEa/UrTI1S3lVm8zgkiivWHk61i/IzmdWx2jshivWzBJbNDmWLq
-         jXp+uRi7qX++Q88/KNblPdWbzbU4+IVYYz4ahq0V4LWuotl0W50o02a82ezDfIUDlSxL
-         XkyhqRzNL7+5QLmT2jp04CezlOpDfV/onk54CMZ6iCkZWIgbBXjgPeYSm7Vph//vX1ZZ
-         QDrbSxViOHIIERl3LJ8lQsFx+9pQZDvhIaW4r4ahFitnIGNiAWLelm+86iFrshbrDk3J
-         E5XVrevpiBHpP9FMJ9XmN0JYXcifCIEXPkqyyUMV+HvYCGQe6BbKbi+VPcG4mkqVNb3M
-         XS1A==
-X-Gm-Message-State: ACgBeo1NYzrop0q5ArQkw8goWRzPEa2EIpSu5yTigDDksD2vNMSL07zm
-        +h7b9oKr8DiknDRABxMbpJWSBGmjYF8=
-X-Google-Smtp-Source: AA6agR5vQRKlqmGy6V4gB1K/w9cx+K83y57S2SQho9w0zCUmLlsOqloE/uvjvpHgFUpmJXEFBWfqvA==
-X-Received: by 2002:a1c:cc04:0:b0:3a5:3f8e:d2a with SMTP id h4-20020a1ccc04000000b003a53f8e0d2amr2489098wmb.138.1660137501012;
-        Wed, 10 Aug 2022 06:18:21 -0700 (PDT)
-Received: from debian ([2405:201:8005:8149:e5c9:c0ac:4d82:e94b])
-        by smtp.gmail.com with ESMTPSA id j20-20020adfd214000000b0021ec32d130asm16029231wrh.74.2022.08.10.06.18.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 06:18:20 -0700 (PDT)
-Date:   Wed, 10 Aug 2022 14:18:09 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, slade@sladewatkins.com
-Subject: Re: [PATCH 4.19 00/32] 4.19.255-rc1 review
-Message-ID: <YvOwEWFE7NbqqylC@debian>
-References: <20220809175513.082573955@linuxfoundation.org>
+        Wed, 10 Aug 2022 09:18:44 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7551C22298
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 06:18:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1BFB061454
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 13:18:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57AD1C433D7;
+        Wed, 10 Aug 2022 13:18:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660137522;
+        bh=WN2qYjC4Bbzk17ZsQf+E7yH/HW9smIm3x112ImizG7A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=U9rWHa97R+I+NNkE7Xjif49Fx+x0fikN6hP6X+gJLipxINhxx4q61/7rJddHp5ScJ
+         nKKxOOHE9JjmTUlbkYGcHO5fT5lIM5xObvCP5K07kTNjht47jsQhk1KaVYE2Wim2Om
+         YieTWorWpMsKTDjWnEPww0r7PJ6Xb5cxWIc1cHySBu5o5Ivjw8oR84b6fRyxBD3jOs
+         7r6J2NoFU7dydDQlP1pJ000VFABO22cJ5rI3rfW8TMtYk5bifGjjlcKei1mWLodF/R
+         KmqHfjWSosbL29FkYY5c3wxb9aczjI3zng1hReEJ0aY0KrOoygS7NkqUbs6+HnijQw
+         0Iu496tZWYyOA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 96DB54035A; Wed, 10 Aug 2022 10:18:40 -0300 (-03)
+Date:   Wed, 10 Aug 2022 10:18:40 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>,
+        Jiri Olsa <jolsa@redhat.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] perf script: Fix reference to perf insert instead of
+ perf inject
+Message-ID: <YvOwMEfvhcQbs27O@kernel.org>
+References: <20220809123258.9086-1-adrian.hunter@intel.com>
+ <CAP-5=fVBHQby5+BxA4T7V9iH9edsCJ6i6cfJS62j275Q7ZXuTw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220809175513.082573955@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAP-5=fVBHQby5+BxA4T7V9iH9edsCJ6i6cfJS62j275Q7ZXuTw@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Tue, Aug 09, 2022 at 07:59:51PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.255 release.
-> There are 32 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+Em Tue, Aug 09, 2022 at 09:50:55AM -0700, Ian Rogers escreveu:
+> On Tue, Aug 9, 2022 at 5:33 AM Adrian Hunter <adrian.hunter@intel.com> wrote:
+> >
+> > Amend "perf insert" to "perf inject".
+> >
+> > Fixes: e28fb159f116 ("perf script: Add machine_pid and vcpu")
+> > Signed-off-by: Adrian Hunter <adrian.hunter@intel.com>
 > 
-> Responses should be made by Thu, 11 Aug 2022 17:55:02 +0000.
-> Anything received after that time might be too late.
+> Acked-by: Ian Rogers <irogers@google.com>
 
-Build test (gcc version 11.3.1 20220807):
-mips: 63 configs -> no  failure
-arm: 115 configs -> no failure
-arm64: 2 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+Thanks, applied.
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
+- Arnaldo
 
-[1]. https://openqa.qa.codethink.co.uk/tests/1616
-
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
---
-Regards
-Sudip

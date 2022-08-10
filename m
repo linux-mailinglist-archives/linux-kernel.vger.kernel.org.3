@@ -2,176 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9853358F22A
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC9C58F229
 	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 20:10:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233573AbiHJSKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 14:10:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47114 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233507AbiHJSKT (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S233569AbiHJSKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 10 Aug 2022 14:10:19 -0400
-Received: from out1.migadu.com (out1.migadu.com [91.121.223.63])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF4FA117B
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 11:10:17 -0700 (PDT)
-Date:   Wed, 10 Aug 2022 11:10:06 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1660155016;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=zTuSuFtUPwcOmTfxvlWmgCK8CoOf1NlVunoS26Fz4FY=;
-        b=gjJJ5MFRjkZZC95NgeuwwqFSHUptFn8KS1MWkoVoclKZftoX+0FmDlrVunyjPPkfXhU9T/
-        cVP/ahEN3OonmyObzIVeae46k5Hgx9I8tPxnzFH0GBpaDD99boO2ObPyaSP21Pxbat5W8t
-        jAzAqTtQ6x8un9faFNxL1KW3y+bs2YU=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] mm/slab_common: Deleting kobject in
- kmem_cache_destroy() without holding slab_mutex/cpu_hotplug_lock
-Message-ID: <YvP0ftGOZnoB0V6O@P9FQF9L96D.corp.robot.car>
-References: <20220810164946.148634-1-longman@redhat.com>
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47052 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S231213AbiHJSKR (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 10 Aug 2022 14:10:17 -0400
+Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57CC710D8;
+        Wed, 10 Aug 2022 11:10:16 -0700 (PDT)
+Received: by mail-il1-f177.google.com with SMTP id o14so8724735ilt.2;
+        Wed, 10 Aug 2022 11:10:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=0D2zsyejY7H3mCUQMpi1C3N991oh7KCilN66QDRGx+o=;
+        b=Acc3xPZtKcljW8SzxOb/ZDnvQcmPH2FU0PlBXVFCvEsQENbCymQfzQZkr12wOdJWy1
+         hFRQFq3ibeTFzbPcObvoKUBt9LpYknyqpwEvU5d4fq+pkAw/++wflHdx1LF1tacg/rJD
+         RgBGCYjjerrlaDzpZ01qIKR4KnF9qUw7rn7QSk/pIpIJUOkitrafboOkfNmSna+gkZhr
+         OXJYzWeFj0UQUmaqql4RuTu5p1PhWcrZDBpx7b8snOYgJYv86BnNI7XHVrr/P3WRAiqD
+         DegzqiovukhbjyTWzr+qiOEWC8rgBXn7oTM3xZy+ywwYahQF4iqRcjHbjx95kMA/xZOq
+         dDsw==
+X-Gm-Message-State: ACgBeo3cyNblYpl8JNWzCMv4l0kp08IoUJBWAYlk/rrpnyGT9L83vDGc
+        QK8jXaJpSaYkdrDguO92kA==
+X-Google-Smtp-Source: AA6agR5d4AsX9K90n0Ys1OYAoyj/B+E1S7TnIfhjyAAak/DzJ5cPFU4MiDHA4HNZaHyC/UVS/jKP+w==
+X-Received: by 2002:a05:6e02:1a41:b0:2de:e162:c5bb with SMTP id u1-20020a056e021a4100b002dee162c5bbmr13479096ilv.102.1660155015561;
+        Wed, 10 Aug 2022 11:10:15 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id l9-20020a02a889000000b00339e158bd3esm7757356jam.38.2022.08.10.11.10.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Aug 2022 11:10:15 -0700 (PDT)
+Received: (nullmailer pid 260691 invoked by uid 1000);
+        Wed, 10 Aug 2022 18:10:12 -0000
+Date:   Wed, 10 Aug 2022 12:10:12 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Mark Kettenis <mark.kettenis@xs4all.nl>
+Cc:     sven@svenpeter.dev, marcel@holtmann.org, johan.hedberg@gmail.com,
+        luiz.dentz@gmail.com, krzysztof.kozlowski+dt@linaro.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, marcan@marcan.st, alyssa@rosenzweig.io,
+        asahi@lists.linux.dev, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/5] dt-bindings: net: Add Broadcom BCM4377 family PCI
+ Bluetooth
+Message-ID: <20220810181012.GC200295-robh@kernel.org>
+References: <20220801103633.27772-1-sven@svenpeter.dev>
+ <20220801103633.27772-3-sven@svenpeter.dev>
+ <20220801153921.GC1031441-robh@kernel.org>
+ <d3ce6343fdaaf127@bloch.sibelius.xs4all.nl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220810164946.148634-1-longman@redhat.com>
-X-Migadu-Flow: FLOW_OUT
-X-Migadu-Auth-User: linux.dev
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <d3ce6343fdaaf127@bloch.sibelius.xs4all.nl>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 10, 2022 at 12:49:46PM -0400, Waiman Long wrote:
-> A circular locking problem is reported by lockdep due to the following
-> circular locking dependency.
+On Mon, Aug 01, 2022 at 05:51:23PM +0200, Mark Kettenis wrote:
+> > Date: Mon, 1 Aug 2022 09:39:21 -0600
+> > From: Rob Herring <robh@kernel.org>
+> > 
+> > On Mon, Aug 01, 2022 at 12:36:30PM +0200, Sven Peter wrote:
+> > > These chips are combined Wi-Fi/Bluetooth radios which expose a
+> > > PCI subfunction for the Bluetooth part.
+> > > They are found in Apple machines such as the x86 models with the T2
+> > > chip or the arm64 models with the M1 or M2 chips.
+> > > 
+> > > Signed-off-by: Sven Peter <sven@svenpeter.dev>
+> > > ---
+> > >  .../bindings/net/brcm,bcm4377-bluetooth.yaml  | 77 +++++++++++++++++++
+> > >  MAINTAINERS                                   |  1 +
+> > >  2 files changed, 78 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/net/brcm,bcm4377-bluetooth.yaml
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/net/brcm,bcm4377-bluetooth.yaml b/Documentation/devicetree/bindings/net/brcm,bcm4377-bluetooth.yaml
+> > > new file mode 100644
+> > > index 000000000000..afe6ecebd939
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/net/brcm,bcm4377-bluetooth.yaml
+> > > @@ -0,0 +1,77 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/net/brcm,bcm4377-bluetooth.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Broadcom BCM4377 family PCI Bluetooth Chips
+> > > +
+> > > +allOf:
+> > > +  - $ref: bluetooth-controller.yaml#
+> > > +
+> > > +maintainers:
+> > > +  - Sven Peter <sven@svenpeter.dev>
+> > > +
+> > > +description:
+> > > +  This binding describes Broadcom BCM4377 family PCI-attached bluetooth chips
+> > 
+> > s/PCI/PCIe/
+> > 
+> > > +  usually found in Apple machines. The Wi-Fi part of the chip is described in
+> > > +  bindings/net/wireless/brcm,bcm4329-fmac.yaml.
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    enum:
+> > > +      - pci14e4,5fa0 # BCM4377
+> > > +      - pci14e4,5f69 # BCM4378
+> > > +      - pci14e4,5f71 # BCM4387
+> > > +
+> > > +  reg:
+> > > +    description: PCI device identifier.
+> > > +
+> > > +  brcm,board-type:
+> > > +    $ref: /schemas/types.yaml#/definitions/string
+> > > +    description: Board type of the Bluetooth chip. This is used to decouple
+> > > +      the overall system board from the Bluetooth module and used to construct
+> > > +      firmware and calibration data filenames.
+> > > +      On Apple platforms, this should be the Apple module-instance codename
+> > > +      prefixed by "apple,", e.g. "apple,atlantisb".
+> > 
+> > pattern: '^apple,.*'
+> > 
+> > And when there's other known vendors we can add them.
+> > 
+> > Really, I'm not all that crazy about this property. 'firmware-name' 
+> > doesn't work? Or perhaps this should just be a more specific compatible 
+> > string.
 > 
->   +--> cpu_hotplug_lock --> slab_mutex --> kn->active --+
->   |                                                     |
->   +-----------------------------------------------------+
+> This matches the property proposed here:
 > 
-> The forward cpu_hotplug_lock ==> slab_mutex ==> kn->active dependency
-> happens in
+>   https://patchwork.kernel.org/project/linux-wireless/patch/20220104072658.69756-2-marcan@marcan.st/
 > 
->   kmem_cache_destroy():	cpus_read_lock(); mutex_lock(&slab_mutex);
->   ==> sysfs_slab_unlink()
->       ==> kobject_del()
->           ==> kernfs_remove()
-> 	      ==> __kernfs_remove()
-> 	          ==> kernfs_drain(): rwsem_acquire(&kn->dep_map, ...);
+> Unfortunately that series didn't make progress for other reasons...
 > 
-> The backward kn->active ==> cpu_hotplug_lock dependency happens in
+> There was some significant bikeshedding in the original version of that series already:
 > 
->   kernfs_fop_write_iter(): kernfs_get_active();
->   ==> slab_attr_store()
->       ==> cpu_partial_store()
->           ==> flush_all(): cpus_read_lock()
+>   https://patchwork.kernel.org/project/linux-wireless/patch/20211226153624.162281-2-marcan@marcan.st/
 > 
-> One way to break this circular locking chain is to avoid holding
-> cpu_hotplug_lock and slab_mutex while deleting the kobject in
-> sysfs_slab_unlink() which should be equivalent to doing a write_lock
-> and write_unlock pair of the kn->active virtual lock.
-> 
-> Since the kobject structures are not protected by slab_mutex or the
-> cpu_hotplug_lock, we can certainly release those locks before doing
-> the delete operation.
-> 
-> Move sysfs_slab_unlink() and sysfs_slab_release() to the newly
-> created kmem_cache_release() and call it outside the slab_mutex &
-> cpu_hotplug_lock critical sections.
-> 
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> ---
->  [v2] Break kmem_cache_release() helper into 2 separate ones.
-> 
->  mm/slab_common.c | 54 +++++++++++++++++++++++++++++++++---------------
->  1 file changed, 37 insertions(+), 17 deletions(-)
-> 
-> diff --git a/mm/slab_common.c b/mm/slab_common.c
-> index 17996649cfe3..7742d0446d8b 100644
-> --- a/mm/slab_common.c
-> +++ b/mm/slab_common.c
-> @@ -392,6 +392,36 @@ kmem_cache_create(const char *name, unsigned int size, unsigned int align,
->  }
->  EXPORT_SYMBOL(kmem_cache_create);
->  
-> +#ifdef SLAB_SUPPORTS_SYSFS
-> +static void kmem_cache_workfn_release(struct kmem_cache *s)
-> +{
-> +	sysfs_slab_release(s);
-> +}
-> +#else
-> +static void kmem_cache_workfn_release(struct kmem_cache *s)
-> +{
-> +	slab_kmem_cache_release(s);
-> +}
-> +#endif
-> +
-> +/*
-> + * For a given kmem_cache, kmem_cache_destroy() should only be called
-> + * once or there will be a use-after-free problem. The actual deletion
-> + * and release of the kobject does not need slab_mutex or cpu_hotplug_lock
-> + * protection. So they are now done without holding those locks.
-> + */
-> +static void kmem_cache_release(struct kmem_cache *s)
-> +{
-> +#ifdef SLAB_SUPPORTS_SYSFS
-> +	sysfs_slab_unlink(s);
-> +#endif
-> +
-> +	if (s->flags & SLAB_TYPESAFE_BY_RCU)
-> +		schedule_work(&slab_caches_to_rcu_destroy_work);
-> +	else
-> +		kmem_cache_workfn_release(s);
-> +}
-> +
->  static void slab_caches_to_rcu_destroy_workfn(struct work_struct *work)
->  {
->  	LIST_HEAD(to_destroy);
-> @@ -418,11 +448,7 @@ static void slab_caches_to_rcu_destroy_workfn(struct work_struct *work)
->  	list_for_each_entry_safe(s, s2, &to_destroy, list) {
->  		debugfs_slab_release(s);
->  		kfence_shutdown_cache(s);
-> -#ifdef SLAB_SUPPORTS_SYSFS
-> -		sysfs_slab_release(s);
-> -#else
-> -		slab_kmem_cache_release(s);
-> -#endif
-> +		kmem_cache_workfn_release(s);
->  	}
->  }
->  
-> @@ -437,20 +463,10 @@ static int shutdown_cache(struct kmem_cache *s)
->  	list_del(&s->list);
->  
->  	if (s->flags & SLAB_TYPESAFE_BY_RCU) {
-> -#ifdef SLAB_SUPPORTS_SYSFS
-> -		sysfs_slab_unlink(s);
-> -#endif
->  		list_add_tail(&s->list, &slab_caches_to_rcu_destroy);
-> -		schedule_work(&slab_caches_to_rcu_destroy_work);
+> Are you sure you want to repeat that? ;)
 
-Hi Waiman!
+No, it's fine. :)
 
-This version is much more readable, thank you!
-
-But can we, please, leave this schedule_work(&slab_caches_to_rcu_destroy_work)
-call here? I don't see a good reason to move it, do I miss something?
-It's nice to have list_add_tail() and schedule_work() calls nearby, so
-it's obvious we can't miss the latter.
-
-Thanks!
+Rob

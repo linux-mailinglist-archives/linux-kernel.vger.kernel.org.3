@@ -2,165 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B12E258F138
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 19:09:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A6A3C58F12B
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 19:05:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233339AbiHJRIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 13:08:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42984 "EHLO
+        id S233188AbiHJRFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 13:05:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233090AbiHJRI2 (ORCPT
+        with ESMTP id S229522AbiHJRFW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 13:08:28 -0400
-Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA2F6D555
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 10:08:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1660151307; x=1691687307;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=HLAG2MAdQMkynHzaOpUgDbLqFXb4qGmeTI64Ae+vFXc=;
-  b=EQwXjZlbfE9l0BhHfl36Q2UNYkOOJl/jfl+1M3Exhu9tcuihAwa2xzV1
-   opBghp3sI183B7idOPrTzjxfhxcCLrTqZ7XJgRJJpXIdPDuAexjCUUDWE
-   KRX3z3YNTktw4eJXOkOfOdAAGHGaDvgXj/iS0axn0E2Rke7ydQaZihU9K
-   XJOc8LD1rSob5cLTbg01/4QE3Jeoxtavm4XEJAPQpwsZUbNg6oO3Rvswm
-   Qks7iauGArF+y0/jRafMNvMzTxO37iA4Eqm76oTKYCx0JUFg6FYsxDip/
-   7FbtCR55YRnyX4RkuXRnhTZGu2Im8t+Vyt8M0HnhI0bpFA/rnu6mNeZQD
-   w==;
-X-IronPort-AV: E=Sophos;i="5.93,227,1654531200"; 
-   d="scan'208";a="312648478"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 11 Aug 2022 01:05:04 +0800
-IronPort-SDR: EJzeyO2Rzo0xerI4eXBQT9wMUsb7e0JlUXxXxdyIiRIaVJA0jikkYfvEIRdtbZvcDQZU65LSo5
- 3/v7+9NT5WP5y88utsmNsZ6Y497hSTrAaSnTnhpurqvzD66eZvdWFDqlRi7s23JhS3SnMo5q8m
- nCxTA/D4+u51lq9sAiEV/XIcL+fi1Wl/vjC97dcN+03ObxCmtk+MNpFdpF8OaNhkxVRzEYy6P/
- A0No4ZfYMm4obwDVSRZ4M5LVKD5pe7tMkJo2RaAzryCB03VcCoTcH5ksvv/i6UYsPtyg+PIAHl
- A7pWeVLX3+2jwzDM5YqawQzc
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 10 Aug 2022 09:20:34 -0700
-IronPort-SDR: RizA7CHEPqooW+aPZbtiP767KSk6GZb2F5kw1Zyy2N7Q0RSMjuv1thSEcZpj5KCJ6kBj1wRgdm
- BoDFBmM8SbJlnfxOc8Iw72MocYJcZCe2vXS9jcXou4J+deECxW3Hou/tHzqtqpDkYVFJ5Qdvz/
- KY44cqa+jmCDRdwF/ryFpPuomn0JfVAxn587UJdG6qx2pkwpchZvGRXiQDcCd3U/NUKKbdLFIh
- 6XBRuQDhpt/UUyKIzWitn8izOJFw4GijnInyfndYbj92qu+5ak4kOe7kVZPHk7ruiTqF0t//Gd
- vnk=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 10 Aug 2022 10:04:59 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4M2xBd6MBCz1Rwqy
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 10:04:57 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1660151096; x=1662743097; bh=HLAG2MAdQMkynHzaOpUgDbLqFXb4qGmeTI6
-        4Ae+vFXc=; b=TdfgDS5faJoHWDTYREJ381G9CP4HfuOIRXtpaJJLW4wBI1b/SHP
-        AAkVbsUoTm+239ekFaNGKrcFMFe97CSgbrthryJciRMN50+Hj71pirupyCdhqi6T
-        nVjIHr240xCCGgE7SICObVKAbOpVhYujaiuVVwgYovQXuEeGbelXwwXLVAvBIp8G
-        Y4ubnW7OIfiPkDXk7oDgjAqg3dlQDL2sDsz9Ur2ZXZZM5JcQtGlXBakRDQavd7i/
-        D06VIMSlVdwwuwlNK5Pfp2LCEkLucBn9DWwygSFnmvhJ6s2UUTlJF/BlKW1FQ4cS
-        RW73Ij0jIvGIaehRGYHzOcu12QVeBBmbZxw==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id Bbd-GxJ61qon for <linux-kernel@vger.kernel.org>;
-        Wed, 10 Aug 2022 10:04:56 -0700 (PDT)
-Received: from [10.111.68.99] (c02drav6md6t.sdcorp.global.sandisk.com [10.111.68.99])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4M2xBb523Qz1RtVk;
-        Wed, 10 Aug 2022 10:04:55 -0700 (PDT)
-Message-ID: <89327143-48b1-297a-bf16-1ea7a2128595@opensource.wdc.com>
-Date:   Wed, 10 Aug 2022 10:04:55 -0700
+        Wed, 10 Aug 2022 13:05:22 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B46E20F5A;
+        Wed, 10 Aug 2022 10:05:21 -0700 (PDT)
+Received: from localhost (modemcable141.102-20-96.mc.videotron.ca [96.20.102.141])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: krisman)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 227CD66019C1;
+        Wed, 10 Aug 2022 18:05:19 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1660151120;
+        bh=4xdK5anslBOIhnkqGW81pncrZ4JdPy+zW5SIE/JLnRY=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=h3/E9F9xuu0PQBdbIIIowMiztInzpGA0Sr0/+ERtIQ9Vaj8xol3qxBdNobdQ5OFOQ
+         lAbYHUygoM5LQQ5pucfxCdpxQTPn06tCWpoSfjKHlvwjjlSxcMj8Ew2NicpOm1AvJ3
+         roEcd73rt3wd9yGwbKMRSMKfTRLj6KFgYIfZ2F4vNor+cpy8eB6hytQGEFPfzNo5Md
+         msk+2xH6Fdmd57XrQPJRtVBSL67QF0eySoRR2reLPDjb1MJQU/w+xrfqcTVAbkf3vT
+         XqEyOLcJ5t7UXVh9WHIGLYw/NAFIeHfZKTVCtl5iayQ/V09KExOQ4SdIqXZDjGHMtJ
+         +LprGiO7NYsdA==
+From:   Gabriel Krisman Bertazi <krisman@collabora.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
+        "open list:ABI/API" <linux-api@vger.kernel.org>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
+        <linux-perf-users@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, kernel@collabora.com
+Subject: Re: [PATCH 0/5] Add process_memwatch syscall
+References: <20220726161854.276359-1-usama.anjum@collabora.com>
+        <95ed1a81-ff8e-2c48-8838-4b3995af51b7@redhat.com>
+Date:   Wed, 10 Aug 2022 13:05:13 -0400
+In-Reply-To: <95ed1a81-ff8e-2c48-8838-4b3995af51b7@redhat.com> (David
+        Hildenbrand's message of "Wed, 10 Aug 2022 11:03:11 +0200")
+Message-ID: <87pmh8ghbq.fsf@collabora.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.12.0
-Subject: Re: [PATCH v9 04/13] nvmet: Allow ZNS target to support
- non-power_of_2 zone sizes
-Content-Language: en-US
-To:     Pankaj Raghav <p.raghav@samsung.com>, Johannes.Thumshirn@wdc.com,
-        snitzer@kernel.org, axboe@kernel.dk, agk@redhat.com, hch@lst.de
-Cc:     dm-devel@redhat.com, matias.bjorling@wdc.com, gost.dev@samsung.com,
-        linux-kernel@vger.kernel.org, pankydev8@gmail.com,
-        jaegeuk@kernel.org, hare@suse.de, linux-block@vger.kernel.org,
-        linux-nvme@lists.infradead.org, bvanassche@acm.org,
-        Luis Chamberlain <mcgrof@kernel.org>
-References: <20220803094801.177490-1-p.raghav@samsung.com>
- <CGME20220803094806eucas1p24e1fd0f3a595e050d79c4315559d97ae@eucas1p2.samsung.com>
- <20220803094801.177490-5-p.raghav@samsung.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20220803094801.177490-5-p.raghav@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/08/03 2:47, Pankaj Raghav wrote:
-> A generic bdev_zone_no() helper is added to calculate zone number for a
-> given sector in a block device. This helper internally uses disk_zone_no()
-> to find the zone number.
-> 
-> Use the helper bdev_zone_no() to calculate nr of zones. This let's us
-> make modifications to the math if needed in one place and adds now
-> support for zoned devices with non po2 zone size.
-> 
-> Reviewed by: Adam Manzanares <a.manzanares@samsung.com>
-> Reviewed-by: Bart Van Assche <bvanassche@acm.org>
-> Reviewed-by: Hannes Reinecke <hare@suse.de>
-> Reviewed-by: Johannes Thumshirn <johannes.thumshirn@wdc.com>
-> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
-> ---
->  drivers/nvme/target/zns.c | 3 +--
->  include/linux/blkdev.h    | 5 +++++
->  2 files changed, 6 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/nvme/target/zns.c b/drivers/nvme/target/zns.c
-> index c7ef69f29fe4..662f1a92f39b 100644
-> --- a/drivers/nvme/target/zns.c
-> +++ b/drivers/nvme/target/zns.c
-> @@ -241,8 +241,7 @@ static unsigned long nvmet_req_nr_zones_from_slba(struct nvmet_req *req)
->  {
->  	unsigned int sect = nvmet_lba_to_sect(req->ns, req->cmd->zmr.slba);
->  
-> -	return bdev_nr_zones(req->ns->bdev) -
-> -		(sect >> ilog2(bdev_zone_sectors(req->ns->bdev)));
-> +	return bdev_nr_zones(req->ns->bdev) - bdev_zone_no(req->ns->bdev, sect);
->  }
->  
->  static unsigned long get_nr_zones_from_buf(struct nvmet_req *req, u32 bufsize)
-> diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
-> index 5aa15172299d..ead848a15946 100644
-> --- a/include/linux/blkdev.h
-> +++ b/include/linux/blkdev.h
-> @@ -1345,6 +1345,11 @@ static inline enum blk_zoned_model bdev_zoned_model(struct block_device *bdev)
->  	return BLK_ZONED_NONE;
->  }
->  
-> +static inline unsigned int bdev_zone_no(struct block_device *bdev, sector_t sec)
-> +{
-> +	return disk_zone_no(bdev->bd_disk, sec);
-> +}
-> +
->  static inline int queue_dma_alignment(const struct request_queue *q)
->  {
->  	return q ? q->dma_alignment : 511;
+David Hildenbrand <david@redhat.com> writes:
 
-I know that it is generally better to introduce a new helper together with its
-user, but in this case, these 2 changes belong to different subsystems. So I
-think it really may be better to have 2 patches here. Jens can decide about this
-though.
+> On 26.07.22 18:18, Muhammad Usama Anjum wrote:
+>> Hello,
+>
+> Hi,
+>
+>> 
+>> This patch series implements a new syscall, process_memwatch. Currently,
+>> only the support to watch soft-dirty PTE bit is added. This syscall is
+>> generic to watch the memory of the process. There is enough room to add
+>> more operations like this to watch memory in the future.
+>> 
+>> Soft-dirty PTE bit of the memory pages can be viewed by using pagemap
+>> procfs file. The soft-dirty PTE bit for the memory in a process can be
+>> cleared by writing to the clear_refs file. This series adds features that
+>> weren't possible through the Proc FS interface.
+>> - There is no atomic get soft-dirty PTE bit status and clear operation
+>>   possible.
+>
+> Such an interface might be easy to add, no?
+>
+>> - The soft-dirty PTE bit of only a part of memory cannot be cleared.
+>
+> Same.
+>
+> So I'm curious why we need a new syscall for that.
+
+Hi David,
+
+Yes, sure. Though it has to be through an ioctl since we need both input
+and output semantics at the same call to keep the atomic semantics.
+
+I answered Peter Enderborg about our concerns when turning this into an
+ioctl.  But they are possible to overcome.
+
+>> project. The Proc FS interface is enough for that as I think the process
+>> is frozen. We have the use case where we need to track the soft-dirty
+>> PTE bit for running processes. We need this tracking and clear mechanism
+>> of a region of memory while the process is running to emulate the
+>> getWriteWatch() syscall of Windows. This syscall is used by games to keep
+>> track of dirty pages and keep processing only the dirty pages. This
+>> syscall can be used by the CRIU project and other applications which
+>> require soft-dirty PTE bit information.
+>> 
+>> As in the current kernel there is no way to clear a part of memory (instead
+>> of clearing the Soft-Dirty bits for the entire processi) and get+clear
+>> operation cannot be performed atomically, there are other methods to mimic
+>> this information entirely in userspace with poor performance:
+>> - The mprotect syscall and SIGSEGV handler for bookkeeping
+>> - The userfaultfd syscall with the handler for bookkeeping
+>
+> You write "poor performance". Did you actually implement a prototype
+> using userfaultfd-wp? Can you share numbers for comparison?
+
+Yes, we did.  I think Usama can share some numbers.
+
+The problem with userfaultfd, as far as I understand, is that it will
+require a second userspace process to be called in order to handle the
+annotation that a page was touched, before remapping the page to make it
+accessible to the originating process, every time a page is touched.
+This context switch is prohibitively expensive to our use case, where
+Windows applications might invoke it quite often.  Soft-dirty bit
+instead, allows the page tracking to be done entirely in kernelspace.
+
+If I understand correctly, userfaultfd is usefull for VM/container
+migration, where the cost of the context switch is not a real concern,
+since there are much bigger costs from the migration itself.
+
+Maybe we're missing some feature about userfaultfd that would allow us
+to avoid the cost, but from our observations we didn't find a way to
+overcome it.
+
+>>         long process_memwatch(int pidfd, unsigned long start, int len,
+>>                               unsigned int flags, void *vec, int vec_len);
+>> 
+>> This syscall can be used by the CRIU project and other applications which
+>> require soft-dirty PTE bit information. The following operations are
+>> supported in this syscall:
+>> - Get the pages that are soft-dirty.
+>> - Clear the pages which are soft-dirty.
+>> - The optional flag to ignore the VM_SOFTDIRTY and only track per page
+>> soft-dirty PTE bit
+>
+> Huh, why? VM_SOFTDIRTY is an internal implementation detail and should
+> remain such.
+> VM_SOFTDIRTY translates to "all pages in this VMA are soft-dirty".
+
+That is something very specific about our use case, and we should
+explain it a bit better.  The problem is that VM_SOFTDIRTY modifications
+introduce the overhead of the mm write lock acquisition, which is very
+visible in our benchmarks of Windows games running over Wine.
+
+Since the main reason for VM_SOFTDIRTY to exist, as far as we understand
+it, is to track vma remapping, and this is a use case we don't need to
+worry about when implementing windows semantics, we'd like to be able to
+avoid this extra overhead, optionally, iff userspace knows it can be
+done safely.
+
+VM_SOFTDIRTY is indeed an internal interface.  Which is why we are
+proposing to expose the feature in terms of tracking VMA reuse.
+
+Thanks,
 
 -- 
-Damien Le Moal
-Western Digital Research
+Gabriel Krisman Bertazi

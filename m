@@ -2,134 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F76A58EF15
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 17:14:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F3FC58EF16
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 17:14:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233018AbiHJPN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 11:13:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56154 "EHLO
+        id S233034AbiHJPOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 11:14:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233062AbiHJPNq (ORCPT
+        with ESMTP id S233026AbiHJPN7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 11:13:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9890576953
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 08:13:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660144423;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VuHszj4L1r9q9EYspHE6rVD8WDtJziprQeMYsIFB++M=;
-        b=MQjSjsZCo7Gw7YGMybHWyziFU07I1uwLYIg7QI3gBHi/4ocBp+D282nAIN6NzBQH++2E15
-        xt6gjq+7doKdm73Bt/rXR5HoWTCgYYvMDvUZvY3hkih5D7siqSqiUqvPztVu/oArVxxrRX
-        X/R5X+FeiSK8aOMEn8gvxeg0abggOiA=
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
- [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-216-desA1vLpMKOiHil534jb4Q-1; Wed, 10 Aug 2022 11:13:42 -0400
-X-MC-Unique: desA1vLpMKOiHil534jb4Q-1
-Received: by mail-io1-f70.google.com with SMTP id j8-20020a6b7948000000b0067c2923d1b8so8103226iop.6
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 08:13:42 -0700 (PDT)
+        Wed, 10 Aug 2022 11:13:59 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4007696D
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 08:13:58 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id cr9so8137554qtb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 08:13:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=+MoVzT70dgl0mrZk7FCfrLX/L2nz+J+RAFiYQSmi77Q=;
+        b=ut7ty8IYr6nvoF8DmomdY0c0ZKH/1E4b9vQjdJzgG01Jur4RD2IQhKjY73UHj/JDQ0
+         tSK7nFjF0qMpQlLbA52iprHneX586PS0ogRCLECHukFt64gEy9kfgB2AoJo8a2qrgvwX
+         zNuwQAv3+R66dSDFDvgwej7mz2J9jYWRY55aMmzmnGxSILdVqBYNpPUzK0Q0CXYIVkFA
+         gfZQwgmCvw3L0NuAs1Cyp1DU+0Ffi9F5Cr+4BPg8/BlpPhOcr0QMPzcnPKl6epveecLF
+         AOy2DRuHHzpUZQdikwoPt4nDTfkzAnAlSDzaXgIT+VTPkJn/GNrHEEJhioGVn7rd9D6J
+         15Hw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=VuHszj4L1r9q9EYspHE6rVD8WDtJziprQeMYsIFB++M=;
-        b=Lme18QfDswGAwF/ne7vus2r9fwMLGWQXWJgGb6U+e9YaQK08vI1NlTMPWlL2KRCp03
-         I4C8oQOVzYrUw0iYoO/zxu+H5/3kAR0WvW1PXD6aGV6p5NjEhxRYqIDHOlVFKwz8m2Zi
-         VXlsTic/dMUtqpSaiNlhY5UDpQuGB2jibx/V/Su2xZZTqymNcz/HN9MbsNGL8wFSx2BA
-         ZcapqRuwCrGGLli8eX5Avk1Zistq2PGEWwATezQqDeJ9sVn8qaA67HVDSgjhwvsOM+Ck
-         /sLoKsW5sa3gHWX+65MyP4iN7tte5xHzGhLD1z49Jx6PZtKWlfgLUR9ATFjQrm5+kFR4
-         nxFQ==
-X-Gm-Message-State: ACgBeo0f4/EcEEx5KrlpIGdHFsxseXcsilbS7ukP9IQ36JtEL7LGkxs5
-        UcAqR/qdN+CRwERmq7a4hD1cyJNtL5dwNaUk3TnkU/fxMvJcmtw2emVcaOzDc2yYViOd4KYDEBm
-        TsIDwEzs5Xa96OyWWhkXkLnaY
-X-Received: by 2002:a6b:b548:0:b0:67b:fb71:9b22 with SMTP id e69-20020a6bb548000000b0067bfb719b22mr11630909iof.164.1660144421744;
-        Wed, 10 Aug 2022 08:13:41 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR58Zmo3JphRCV1dvwo1ydhZTdMnJnzqTvCJD5Jx2PD8aJZzXAXHXuj4C+qYhejwg9wwtr0mow==
-X-Received: by 2002:a6b:b548:0:b0:67b:fb71:9b22 with SMTP id e69-20020a6bb548000000b0067bfb719b22mr11630892iof.164.1660144421468;
-        Wed, 10 Aug 2022 08:13:41 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
-        by smtp.gmail.com with ESMTPSA id o9-20020a056e0214c900b002de990656f5sm2248531ilk.32.2022.08.10.08.13.40
+        bh=+MoVzT70dgl0mrZk7FCfrLX/L2nz+J+RAFiYQSmi77Q=;
+        b=oti9rx1xbJAgkh9x9Qc9Db9odbMPGLBs7OmUzOhfABAFnNg30puWFmXogj71KS5mYm
+         rqEHXqs92/QFXVa7uiokDqyFrSjUtSMlsgDktZRlIeZiCoPow0sPzWubWgFxUN/e1yU4
+         jVbyzlV0S13VtvuWoFB2BHHNXOypCzZX2ymvNAs6x54x+Kdd7tCBBsg7wJI7l6knGktb
+         1tsZVBMxC94zsbMGLvwvMjUf13CLcL9D5CfP8PwILTE1dXbocfNn4wAgrUm5oKlAWL3G
+         zs6527NvlvYM1sKKftt3lRvi4t+/ULG3iD8ano3rWEhIBwP2lFpj6m9KKb9OA1YvChPm
+         TYQA==
+X-Gm-Message-State: ACgBeo1XcWZYBbhf+bM4BAf9W0JLshQHQDMIQ0fr9BCWxnxHBOEUcL6o
+        2xDekNx8+yfbDwHloDQxfI9Ddw==
+X-Google-Smtp-Source: AA6agR7vY4GYQ0CbLjTAsDH/FBPEK+GeSb0SHUsoDFZFYUGTRwKonj1tgkgiaePEC2EAmSfzYjYCEw==
+X-Received: by 2002:ac8:59d3:0:b0:31e:ff86:f344 with SMTP id f19-20020ac859d3000000b0031eff86f344mr24108168qtf.199.1660144437339;
+        Wed, 10 Aug 2022 08:13:57 -0700 (PDT)
+Received: from localhost (2603-7000-0c01-2716-00ea-7f88-5fd9-01cd.res6.spectrum.com. [2603:7000:c01:2716:ea:7f88:5fd9:1cd])
+        by smtp.gmail.com with ESMTPSA id u14-20020a05620a0c4e00b006b6757a11fcsm13521998qki.36.2022.08.10.08.13.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 08:13:40 -0700 (PDT)
-Date:   Wed, 10 Aug 2022 11:13:39 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Minchan Kim <minchan@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andi Kleen <andi.kleen@intel.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>
-Subject: Re: [PATCH v3 4/7] mm/thp: Carry over dirty bit when thp splits on
- pmd
-Message-ID: <YvPLI0GdrlEWF959@xz-m1.local>
-References: <20220809220100.20033-1-peterx@redhat.com>
- <20220809220100.20033-5-peterx@redhat.com>
- <877d3gfwf2.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        Wed, 10 Aug 2022 08:13:57 -0700 (PDT)
+Date:   Wed, 10 Aug 2022 11:13:56 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Hao Jia <jiahao.os@bytedance.com>, mingo@redhat.com,
+        peterz@infradead.org, mingo@kernel.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] sched/psi: psi bug fixes and cleanups
+Message-ID: <YvPLNNlIyjLXv71v@cmpxchg.org>
+References: <20220806120510.96131-1-jiahao.os@bytedance.com>
+ <YvKbUbFCaf6WcF26@slm.duckdns.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <877d3gfwf2.fsf@yhuang6-desk2.ccr.corp.intel.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YvKbUbFCaf6WcF26@slm.duckdns.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 10, 2022 at 02:24:33PM +0800, Huang, Ying wrote:
-> Peter Xu <peterx@redhat.com> writes:
+On Tue, Aug 09, 2022 at 07:37:21AM -1000, Tejun Heo wrote:
+> (cc'ing Johannes)
 > 
-> > Carry over the dirty bit from pmd to pte when a huge pmd splits.  It
-> > shouldn't be a correctness issue since when pmd_dirty() we'll have the page
-> > marked dirty anyway, however having dirty bit carried over helps the next
-> > initial writes of split ptes on some archs like x86.
-> >
-> > Signed-off-by: Peter Xu <peterx@redhat.com>
-> > ---
-> >  mm/huge_memory.c | 6 +++++-
-> >  1 file changed, 5 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-> > index 0611b2fd145a..e8e78d1bac5f 100644
-> > --- a/mm/huge_memory.c
-> > +++ b/mm/huge_memory.c
-> > @@ -2005,7 +2005,7 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
-> >  	pgtable_t pgtable;
-> >  	pmd_t old_pmd, _pmd;
-> >  	bool young, write, soft_dirty, pmd_migration = false, uffd_wp = false;
-> > -	bool anon_exclusive = false;
-> > +	bool anon_exclusive = false, dirty = false;
-> >  	unsigned long addr;
-> >  	int i;
-> >  
-> > @@ -2098,6 +2098,7 @@ static void __split_huge_pmd_locked(struct vm_area_struct *vma, pmd_t *pmd,
-> >  			SetPageDirty(page);
-> >  		write = pmd_write(old_pmd);
-> >  		young = pmd_young(old_pmd);
-> > +		dirty = pmd_dirty(old_pmd);
+> On Sat, Aug 06, 2022 at 08:05:07PM +0800, Hao Jia wrote:
+> > These three patches are about PSI.
+> > patch 1: Fixed PSI statistics error caused by unzeroed memory
+> > in struct psi_group.
+> > patch 2 and patch 3 are to clean up some unused functions
+> > and parameters.
+> > 
+> > Hao Jia (3):
+> >   sched/psi: Zero the memory of struct psi_group
+> >   sched/psi: Remove unused parameter nbytes of psi_trigger_create()
+> >   sched/psi: Remove redundant cgroup_psi() when !CONFIG_CGROUPS
+> > 
+> >  include/linux/cgroup.h |  5 -----
+> >  include/linux/psi.h    |  2 +-
+> >  kernel/cgroup/cgroup.c |  2 +-
+> >  kernel/sched/psi.c     | 10 +++-------
+> >  4 files changed, 5 insertions(+), 14 deletions(-)
 > 
-> Nitpick: This can be put under
-> 
-> 		if (pmd_dirty(old_pmd))
-> 			SetPageDirty(page);
-> 
-> Not a big deal.
-> 
-> Reviewed-by: "Huang, Ying" <ying.huang@intel.com>
+> Johannes, care to review these patches?
 
-Yeah will do, thanks.
+They look good to me.
 
--- 
-Peter Xu
+Thanks!
 

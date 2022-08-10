@@ -2,212 +2,293 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A8BF58EE4F
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 16:29:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A13958EE52
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 16:29:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232439AbiHJO25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 10:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38946 "EHLO
+        id S231889AbiHJO3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 10:29:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiHJO2y (ORCPT
+        with ESMTP id S232321AbiHJO3f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 10:28:54 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D426221E25;
-        Wed, 10 Aug 2022 07:28:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660141733; x=1691677733;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JLXzoyOvEjtagIA4zvZCeFvPNymZPUjJlpaPBPMJC7w=;
-  b=cSed/nrGAax1E0M3hQWcB6EjVtFaxhZbZI0N+PYHCxWEQJrMr0kWyHpp
-   /kyHvSn3W2VK4vjCjxwa8lzbSdzsADpz30pulbYR/igP+buGRU1nBGj/E
-   0/lz1BATwDCCqx+xWd0M512eZA3ipCbZK6FaPlf/UsfErimUMxWEqWWL1
-   3CCi0TGmj07iJY45xpkErHq4uzsOdu/c+tAgMgIPrxNbPj0NabRL+64P2
-   I6ZfjmSZWZQYAemrJYJGv/5O1einoN2+iyPjgedE12TUZ8KJ0xxLfKdaT
-   Zyle60SVyMTbIxoWYrfLPFT3uOfsnrGBiyIuXx38d/svSxFvcq0e73sPJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="377385308"
-X-IronPort-AV: E=Sophos;i="5.93,227,1654585200"; 
-   d="scan'208";a="377385308"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 07:28:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,227,1654585200"; 
-   d="scan'208";a="781246975"
-Received: from lkp-server02.sh.intel.com (HELO 5d6b42aa80b8) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 10 Aug 2022 07:28:50 -0700
-Received: from kbuild by 5d6b42aa80b8 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oLmhV-0000LO-2y;
-        Wed, 10 Aug 2022 14:28:49 +0000
-Date:   Wed, 10 Aug 2022 22:28:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Richard Guy Briggs <rgb@redhat.com>,
-        Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Paul Moore <paul@paul-moore.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Steve Grubb <sgrubb@redhat.com>,
-        Richard Guy Briggs <rgb@redhat.com>, Jan Kara <jack@suse.cz>,
-        Amir Goldstein <amir73il@gmail.com>
-Subject: Re: [PATCH v4 2/4] fanotify: define struct members to hold response
- decision context
-Message-ID: <202208102231.qSUdYAdb-lkp@intel.com>
-References: <8767f3a0d43d6a994584b86c03eb659a662cc416.1659996830.git.rgb@redhat.com>
+        Wed, 10 Aug 2022 10:29:35 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 024A0220C8
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:29:34 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id n4so16194149wrp.10
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:29:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=6NCrAqjcYlhGZUqWXYrABrAD13m9MCdw4daKveaKHD4=;
+        b=bgwZ8VUxCN+fAD3U4mXgM1Ml0h0PkJfeoHPuPQDJtwXBrgXmoJdNesEQjwiXBMZ6N1
+         3xVptBaVTSMipRn13RxDhzRoSb6IwuPdBawnOJ8BS0bUDyfRG8MUxPe8vN67XsPjc7lt
+         ET5rbfrSWcA1JtHU87x43MJ6bAvXTU3UHMD0YRllFuWZJ07wPFiaju88qvItasDLohfT
+         m3ikSf3kntduelZIjuipb2KCB5SzDqcXvktCKay3rFXwv7mNp9XRpMEFZkNmpVnqCNxI
+         EjxAk26SWiqwhoaFcK4V2a/IJftgeaXeOuC/8oZ7RFT+bYyR/mhORuDtjSy2/ygQXIrI
+         QVRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=6NCrAqjcYlhGZUqWXYrABrAD13m9MCdw4daKveaKHD4=;
+        b=rpGPmCzGXZMKEk3TlSqPG3CyiZP2BbV6EGc7nThLRC0B3DF/pPCOeI54cKH4HCSqcT
+         AmPx5UOmhWhgzqxXAArprR1JejTyQZmkytxG/pPdb5WWjwKLjyJ/ezG0WyHAU0vIEKAR
+         xBY0YaSJYgZl4Nioyo/UBvUw2f1p6JpHE7aTccABAjg1zBY0fpPcxPSUdllhwwm2b6Ze
+         tJ1KmPrvnjgNnSq6Phl3py+efd7nL7sQWcgWV9wd3V3Y40MlwNNe/azukZRjE2cv52nD
+         xty8URrS3Hll2ijmPuolfWhFtJslDuRiKCOQetkBXlKFckSAqMjBTDsVoZ2RuZ5rXWbA
+         q84w==
+X-Gm-Message-State: ACgBeo1QlACqxBkVQwytXiPvsByq0DkkQJrSv6TEyUlW0F0p8fdEB+rl
+        qq5CuoPOQ0AJO9FKW1yBRYyXCewNRGuuo94++QGhvg==
+X-Google-Smtp-Source: AA6agR4Qh+xvSo11mAtUPGheEe6kESQkvRLJTpuP6tvgsKczQyDx563jSC/DfY44lbHco54DLKwW0zO9691Dxsuk5qc=
+X-Received: by 2002:a05:6000:1ac9:b0:220:7f40:49e3 with SMTP id
+ i9-20020a0560001ac900b002207f4049e3mr17099423wry.40.1660141772234; Wed, 10
+ Aug 2022 07:29:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8767f3a0d43d6a994584b86c03eb659a662cc416.1659996830.git.rgb@redhat.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220804221816.1802790-1-irogers@google.com> <20220804221816.1802790-11-irogers@google.com>
+ <463cffea-51d9-98ad-86ac-d064faac05b9@huawei.com>
+In-Reply-To: <463cffea-51d9-98ad-86ac-d064faac05b9@huawei.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 10 Aug 2022 07:29:19 -0700
+Message-ID: <CAP-5=fXuG9Jt5x-e3um=-hYNSb18j8dL5np5Edozw+H5PoZ2eA@mail.gmail.com>
+Subject: Re: [PATCH v4 10/17] perf pmu-events: Hide pmu_events_map
+To:     John Garry <john.garry@huawei.com>
+Cc:     Will Deacon <will@kernel.org>, James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Richard,
+On Fri, Aug 5, 2022 at 5:31 AM John Garry <john.garry@huawei.com> wrote:
+>
+> On 04/08/2022 23:18, Ian Rogers wrote:
+> > Move usage of the table to pmu-events.c so it may be hidden. By
+> > abstracting the table the implementation can later be changed.
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >   tools/perf/pmu-events/empty-pmu-events.c |  81 ++++++++-
+> >   tools/perf/pmu-events/jevents.py         |  81 ++++++++-
+> >   tools/perf/pmu-events/pmu-events.h       |  29 +--
+> >   tools/perf/tests/pmu-events.c            | 218 +++++++++++------------
+> >   tools/perf/util/metricgroup.c            |  15 +-
+> >   tools/perf/util/pmu.c                    |  34 +---
+> >   tools/perf/util/pmu.h                    |   2 +-
+> >   7 files changed, 280 insertions(+), 180 deletions(-)
+> >
+> > diff --git a/tools/perf/pmu-events/empty-pmu-events.c b/tools/perf/pmu-events/empty-pmu-events.c
+> > index 216ea0482c37..8ef75aff996c 100644
+> > --- a/tools/perf/pmu-events/empty-pmu-events.c
+> > +++ b/tools/perf/pmu-events/empty-pmu-events.c
+> > @@ -6,6 +6,8 @@
+> >    * The test cpu/soc is provided for testing.
+> >    */
+> >   #include "pmu-events/pmu-events.h"
+> > +#include "util/header.h"
+> > +#include "util/pmu.h"
+> >   #include <string.h>
+> >   #include <stddef.h>
+> >
+> > @@ -110,7 +112,26 @@ static const struct pmu_event pme_test_soc_cpu[] = {
+> >       },
+> >   };
+> >
+> > -const struct pmu_events_map pmu_events_map[] = {
+> > +
+> > +/*
+> > + * Map a CPU to its table of PMU events. The CPU is identified by the
+> > + * cpuid field, which is an arch-specific identifier for the CPU.
+> > + * The identifier specified in tools/perf/pmu-events/arch/xxx/mapfile
+> > + * must match the get_cpuid_str() in tools/perf/arch/xxx/util/header.c)
+> > + *
+> > + * The  cpuid can contain any character other than the comma.
+> > + */
+> > +struct pmu_events_map {
+> > +     const char *arch;
+> > +     const char *cpuid;
+> > +     const struct pmu_event *table;
+> > +};
+> > +
+> > +/*
+> > + * Global table mapping each known CPU for the architecture to its
+> > + * table of PMU events.
+> > + */
+> > +static const struct pmu_events_map pmu_events_map[] = {
+> >       {
+> >               .arch = "testarch",
+> >               .cpuid = "testcpu",
+> > @@ -162,6 +183,62 @@ static const struct pmu_sys_events pmu_sys_event_tables[] = {
+> >       },
+> >   };
+> >
+> > +const struct pmu_event *perf_pmu__find_table(struct perf_pmu *pmu)
+> > +{
+> > +     const struct pmu_event *table = NULL;
+> > +     char *cpuid = perf_pmu__getcpuid(pmu);
+> > +     int i;
+> > +
+> > +     /* on some platforms which uses cpus map, cpuid can be NULL for
+> > +      * PMUs other than CORE PMUs.
+> > +      */
+> > +     if (!cpuid)
+> > +             return NULL;
+> > +
+> > +     i = 0;
+> > +     for (;;) {
+> > +             const struct pmu_events_map *map = &pmu_events_map[i++];
+> > +
+> > +             if (!map->table)
+> > +                     break;
+> > +
+> > +             if (!strcmp_cpuid_str(map->cpuid, cpuid)) {
+> > +                     table = map->table;
+> > +                     break;
+> > +             }
+> > +     }
+> > +     free(cpuid);
+> > +     return table;
+> > +}
+> > +
+> > +const struct pmu_event *find_core_events_table(const char *arch, const char *cpuid)
+> > +{
+> > +     for (const struct pmu_events_map *tables = &pmu_events_map[0];
+> > +          tables->table;
+> > +          tables++) {
+> > +             if (!strcmp(tables->arch, arch) && !strcmp_cpuid_str(tables->cpuid, cpuid))
+> > +                     return tables->table;
+> > +     }
+> > +     return NULL;
+> > +}
+> > +
+> > +int pmu_for_each_core_event(pmu_event_iter_fn fn, void *data)
+> > +{
+> > +     for (const struct pmu_events_map *tables = &pmu_events_map[0];
+> > +          tables->table;
+> > +          tables++) {
+> > +             for (const struct pmu_event *pe = &tables->table[0];
+> > +                  pe->name || pe->metric_group || pe->metric_name;
+> > +                  pe++) {
+> > +                     int ret = fn(pe, &tables->table[0], data);
+> > +
+> > +                     if (ret)
+> > +                             return ret;
+> > +             }
+> > +     }
+> > +     return 0;
+> > +}
+> > +
+> >   const struct pmu_event *find_sys_events_table(const char *name)
+> >   {
+> >       for (const struct pmu_sys_events *tables = &pmu_sys_event_tables[0];
+> > @@ -181,7 +258,7 @@ int pmu_for_each_sys_event(pmu_event_iter_fn fn, void *data)
+> >               for (const struct pmu_event *pe = &tables->table[0];
+> >                    pe->name || pe->metric_group || pe->metric_name;
+> >                    pe++) {
+> > -                     int ret = fn(pe, data);
+> > +                     int ret = fn(pe, &tables->table[0], data);
+> >
+> >                       if (ret)
+> >                               return ret;
+> > diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
+> > index dd21bc9eeeed..e976c5e8e80b 100755
+> > --- a/tools/perf/pmu-events/jevents.py
+> > +++ b/tools/perf/pmu-events/jevents.py
+> > @@ -333,7 +333,27 @@ def process_one_file(parents: Sequence[str], item: os.DirEntry) -> None:
+> >
+> >   def print_mapping_table(archs: Sequence[str]) -> None:
+> >     """Read the mapfile and generate the struct from cpuid string to event table."""
+> > -  _args.output_file.write('const struct pmu_events_map pmu_events_map[] = {\n')
+> > +  _args.output_file.write("""
+> > +/*
+> > + * Map a CPU to its table of PMU events. The CPU is identified by the
+> > + * cpuid field, which is an arch-specific identifier for the CPU.
+> > + * The identifier specified in tools/perf/pmu-events/arch/xxx/mapfile
+> > + * must match the get_cpuid_str() in tools/perf/arch/xxx/util/header.c)
+> > + *
+> > + * The  cpuid can contain any character other than the comma.
+> > + */
+> > +struct pmu_events_map {
+> > +        const char *arch;
+> > +        const char *cpuid;
+> > +        const struct pmu_event *table;
+> > +};
+> > +
+> > +/*
+> > + * Global table mapping each known CPU for the architecture to its
+> > + * table of PMU events.
+> > + */
+> > +const struct pmu_events_map pmu_events_map[] = {
+> > +""")
+> >     for arch in archs:
+> >       if arch == 'test':
+> >         _args.output_file.write("""{
+> > @@ -389,6 +409,61 @@ static const struct pmu_sys_events pmu_sys_event_tables[] = {
+> >   \t},
+> >   };
+> >
+> > +const struct pmu_event *perf_pmu__find_table(struct perf_pmu *pmu)
+> > +{
+> > +        const struct pmu_event *table = NULL;
+> > +        char *cpuid = perf_pmu__getcpuid(pmu);
+>
+> This seems an identical implementation to that in empty-pmu-events.c -
+> can we reduce this duplication? Maybe a seperate common c file which can
+> be linked in
+>
+> The indentation seems different also - this version seems to use whitespaces
 
-Thank you for the patch! Perhaps something to improve:
+Agreed. Later on this will change, the empty version isn't compressed
+and the jevents.py one is. Having a common C file would defeat the
+goal of hiding the API, but ultimately we'd need to get rid of it in
+later changes when the empty/compressed implementations diverge.
 
-[auto build test WARNING on jack-fs/fsnotify]
-[also build test WARNING on pcmoore-audit/next linus/master v5.19 next-20220810]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks,
+Ian
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Richard-Guy-Briggs/fanotify-Allow-user-space-to-pass-back-additional-audit-info/20220810-012825
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/jack/linux-fs.git fsnotify
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220810/202208102231.qSUdYAdb-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a943676abc023c094f05b45f4d61936c567507a2
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Richard-Guy-Briggs/fanotify-Allow-user-space-to-pass-back-additional-audit-info/20220810-012825
-        git checkout a943676abc023c094f05b45f4d61936c567507a2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash fs/notify/fanotify/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> fs/notify/fanotify/fanotify_user.c:325:35: warning: format specifies type 'unsigned long' but the argument has type 'size_t' (aka 'unsigned int') [-Wformat]
-                    group, fd, response, info_buf, count);
-                                                   ^~~~~
-   include/linux/printk.h:594:38: note: expanded from macro 'pr_debug'
-           no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
-                                       ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:131:17: note: expanded from macro 'no_printk'
-                   printk(fmt, ##__VA_ARGS__);             \
-                          ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:464:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:436:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   1 warning generated.
-
-
-vim +325 fs/notify/fanotify/fanotify_user.c
-
-   312	
-   313	static int process_access_response(struct fsnotify_group *group,
-   314					   struct fanotify_response *response_struct,
-   315					   const char __user *buf,
-   316					   size_t count)
-   317	{
-   318		struct fanotify_perm_event *event;
-   319		int fd = response_struct->fd;
-   320		u32 response = response_struct->response;
-   321		struct fanotify_response_info_header info_hdr;
-   322		char *info_buf = NULL;
-   323	
-   324		pr_debug("%s: group=%p fd=%d response=%u buf=%p size=%lu\n", __func__,
- > 325			 group, fd, response, info_buf, count);
-   326		/*
-   327		 * make sure the response is valid, if invalid we do nothing and either
-   328		 * userspace can send a valid response or we will clean it up after the
-   329		 * timeout
-   330		 */
-   331		if (response & ~FANOTIFY_RESPONSE_VALID_MASK)
-   332			return -EINVAL;
-   333		switch (response & FANOTIFY_RESPONSE_ACCESS) {
-   334		case FAN_ALLOW:
-   335		case FAN_DENY:
-   336			break;
-   337		default:
-   338			return -EINVAL;
-   339		}
-   340		if ((response & FAN_AUDIT) && !FAN_GROUP_FLAG(group, FAN_ENABLE_AUDIT))
-   341			return -EINVAL;
-   342		if (fd < 0)
-   343			return -EINVAL;
-   344		if (response & FAN_INFO) {
-   345			size_t c = count;
-   346			const char __user *ib = buf;
-   347	
-   348			if (c <= 0)
-   349				return -EINVAL;
-   350			while (c >= sizeof(info_hdr)) {
-   351				if (copy_from_user(&info_hdr, ib, sizeof(info_hdr)))
-   352					return -EFAULT;
-   353				if (info_hdr.pad != 0)
-   354					return -EINVAL;
-   355				if (c < info_hdr.len)
-   356					return -EINVAL;
-   357				switch (info_hdr.type) {
-   358				case FAN_RESPONSE_INFO_AUDIT_RULE:
-   359					break;
-   360				case FAN_RESPONSE_INFO_NONE:
-   361				default:
-   362					return -EINVAL;
-   363				}
-   364				c -= info_hdr.len;
-   365				ib += info_hdr.len;
-   366			}
-   367			if (c != 0)
-   368				return -EINVAL;
-   369			/* Simplistic check for now */
-   370			if (count != sizeof(struct fanotify_response_info_audit_rule))
-   371				return -EINVAL;
-   372			info_buf = kmalloc(sizeof(struct fanotify_response_info_audit_rule),
-   373					   GFP_KERNEL);
-   374			if (!info_buf)
-   375				return -ENOMEM;
-   376			if (copy_from_user(info_buf, buf, count))
-   377				return -EFAULT;
-   378		}
-   379		spin_lock(&group->notification_lock);
-   380		list_for_each_entry(event, &group->fanotify_data.access_list,
-   381				    fae.fse.list) {
-   382			if (event->fd != fd)
-   383				continue;
-   384	
-   385			list_del_init(&event->fae.fse.list);
-   386			/* finish_permission_event() eats info_buf */
-   387			finish_permission_event(group, event, response_struct,
-   388						count, info_buf);
-   389			wake_up(&group->fanotify_data.access_waitq);
-   390			return 0;
-   391		}
-   392		spin_unlock(&group->notification_lock);
-   393	
-   394		return -ENOENT;
-   395	}
-   396	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> > +        int i;
+> > +
+> > +        /* on some platforms which uses cpus map, cpuid can be NULL for
+> > +         * PMUs other than CORE PMUs.
+> > +         */
+> > +        if (!cpuid)
+> > +                return NULL;
+> > +
+> > +        i = 0;
+> > +        for (;;) {
+> > +                const struct pmu_events_map *map = &pmu_events_map[i++];
+> > +                if (!map->table)
+> > +                        break;
+> > +
+> > +                if (!strcmp_cpuid_str(map->cpuid, cpuid)) {
+> > +                        table = map->table;
+> > +                        break;
+> > +                }
+> > +        }
+> > +        free(cpuid);
+> > +        return table;
+> > +}

@@ -2,126 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19DDF58E56F
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 05:21:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53C1B58E579
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 05:26:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229526AbiHJDVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 23:21:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50498 "EHLO
+        id S229980AbiHJD0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 23:26:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230483AbiHJDUv (ORCPT
+        with ESMTP id S229475AbiHJD0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 23:20:51 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFC99647CC
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 20:16:46 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id v3so16356659wrp.0
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 20:16:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=84NRcLKFfe/6XQq15qNZMiBSNFJ+/AXaHO09WwjXOT0=;
-        b=PrqePyJw637rEQIgXaT5QRPPe8o+bbDEL8SJeUu+NzC/ASKCeew3qy5DdUr5Jrh8iN
-         BDvJIsZtCJa6EyY4lqbG7Lbo/KvV0y2QqHhfDRhCpC/ZMwPQEv/2spQM6FFukn/3Hsyh
-         0LRW38JmCm3jdEh5uMQREhhdhoc5BqyGEq/mz/6KI44alJ7sffbjToVgrTUYTdkXXy80
-         qpcqPrtzkOEl4/4KJUQGUk8xwFfKK99En3egrrKrmbjPGlMppD0z/Z4KNDCrr7iranpi
-         P3EZK+5MPIFMJe3A5iID2tNdkiB+tHElTRp/ierU2zSSrle/bckLJVm8BSr+UZL1Zdfd
-         CDsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=84NRcLKFfe/6XQq15qNZMiBSNFJ+/AXaHO09WwjXOT0=;
-        b=RWuR4BP0ZSDtA5m/MMXDYgtqfmFu4venGUpZFarF0ncWwKyQ27KG82kky1unGggVdj
-         mK2MrNp65NZiefSRs7jCHzifX3JfBB1nWign1G/hK2IBqf9sbV+Lq7sf5lo+wqHP0KvU
-         wv5x6aKOI/erecj9Bx4PUzRmgB3JF/CzXM3MAr53ylQDaEUpmoabBa9t/5lqQop6GZV4
-         E6hRfNGpLhSE42OP1roccdYHNQ+rBTkoExVQe1RAUY52D8GnQCiIumPwRytuZGPi1pX6
-         SOFqykasYWYI4z4Gy512Eo/q9f2Yb7N4NqpsXMQlRE/tvcraaxdXe/qyWv3s3JDWY2u/
-         B6iw==
-X-Gm-Message-State: ACgBeo2PVaE4j4cJgBB2QjfJaxhT8O9SjbcSXYaU2/wCcDE+mJeqtHY4
-        Dqpl6a+KvKWUpwfknQkFix8=
-X-Google-Smtp-Source: AA6agR6vbi9PzSN4LXg7Z8Hv8wrETrEAOO6ZTjf85QXAaPac7lJ9PgZj6Gek3NzO0bdQJbVRiaSzVg==
-X-Received: by 2002:a5d:64e2:0:b0:220:7dfb:ab6f with SMTP id g2-20020a5d64e2000000b002207dfbab6fmr15514382wri.664.1660101396774;
-        Tue, 09 Aug 2022 20:16:36 -0700 (PDT)
-Received: from localhost.localdomain ([84.255.184.228])
-        by smtp.gmail.com with ESMTPSA id g11-20020a5d698b000000b0021eff2ecb31sm15575961wru.95.2022.08.09.20.16.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 20:16:36 -0700 (PDT)
-From:   Mazin Al Haddad <mazinalhaddad05@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     jirislaby@kernel.org, daniel.starke@siemens.com,
+        Tue, 9 Aug 2022 23:26:10 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F7165C356
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 20:26:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660101969; x=1691637969;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=3YPRxxFa+CD3FD7Sr9aYppDMOUvEzXzyRt/H7yDmha4=;
+  b=RegGx18FGd6qid8DSD2fPSHgZqAX/gmpsjwnlQcy6lYQ1OCfuXjvCGrD
+   tdb7g/iIAyGBuPAf1Vo5FWgR2ooOEZ/Aerr3FXo37TELRwilP8nBbdizs
+   HmCEeSwEZXIXpPdp+v+1gcJlIPRH2oW4ikK29l31f/bYEiZTb46XPlZ7m
+   jL/mWlkUjEi5eL7oPsfPp6rJOpyznaPzRUJmAtCkPTKkSwmJimmon9olK
+   8Rg7wUiDIMqE/M/LcXYOxdLqb8aY8zDR/f29in8qcl9P+yU0FgoGdHlvP
+   RBtKmUGHFxFJdZ6AYwWkxDI6zrT5o5sfnIBJ/3f9cucnl3y5w8tIe3Etm
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="274037663"
+X-IronPort-AV: E=Sophos;i="5.93,226,1654585200"; 
+   d="scan'208";a="274037663"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 20:26:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,226,1654585200"; 
+   d="scan'208";a="581061406"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 09 Aug 2022 20:26:07 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oLcMA-000NSz-23;
+        Wed, 10 Aug 2022 03:26:06 +0000
+Date:   Wed, 10 Aug 2022 11:25:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
         linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        skhan@linuxfoundation.org, paskripkin@gmail.com,
-        Mazin Al Haddad <mazinalhaddad05@gmail.com>,
-        syzbot+e3563f0c94e188366dbb@syzkaller.appspotmail.com
-Subject: [PATCH] tty: n_gsm: fix missing assignment of gsm->receive() in gsmld_attach_gsm()
-Date:   Wed, 10 Aug 2022 06:12:52 +0300
-Message-Id: <20220810031251.91291-1-mazinalhaddad05@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Alex Williamson <alex.williamson@redhat.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: drivers/vfio/vfio_iommu_type1.c:2147:35: warning: cast to smaller
+ integer type 'enum iommu_cap' from 'void *'
+Message-ID: <202208101119.7unZx9dJ-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixes a bug reported by syzbot. A null pointer dereference can
-happen when attempting to access the "gsm->receive()" function in
-gsmld_receive_buf(). Currently, the "gsm->receive()" function is only set
-after a call to the GSMIO_SETCONF ioctl. Since the gsmld_receive_buf()
-function can be accessed without the need to call the line discipline
-ioctl (GSMIO_SETCONF), the gsm->receive() function will not be set and a
-NULL pointer dereference will occur.
+Hi Robin,
 
-Fix this by setting the gsm->receive() function when the line discipline
-is being attached to the terminal device, inside gsmld_attach_gsm(). This
-will guarantee that the function is assigned and a call to TIOCSTI,
-which calls gsmld_receive_buf(), will not reference a null pointer.
+FYI, the error/warning still remains.
 
-Call Trace:
- <TASK>
- gsmld_receive_buf+0x1c2/0x2f0 drivers/tty/n_gsm.c:2861
- tiocsti drivers/tty/tty_io.c:2293 [inline]
- tty_ioctl+0xa75/0x15d0 drivers/tty/tty_io.c:2692
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   d4252071b97d2027d246f6a82cbee4d52f618b47
+commit: eed20c782aea57b7efb42af2905dc381268b21e9 vfio/type1: Simplify bus_type determination
+date:   6 weeks ago
+config: arm64-randconfig-r034-20220810 (https://download.01.org/0day-ci/archive/20220810/202208101119.7unZx9dJ-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=eed20c782aea57b7efb42af2905dc381268b21e9
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout eed20c782aea57b7efb42af2905dc381268b21e9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/vfio/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/vfio/vfio_iommu_type1.c:2147:35: warning: cast to smaller integer type 'enum iommu_cap' from 'void *' [-Wvoid-pointer-to-enum-cast]
+           return device_iommu_capable(dev, (enum iommu_cap)data);
+                                            ^~~~~~~~~~~~~~~~~~~~
+   1 warning generated.
 
 
-Fixes: 01aecd917114 ("tty: n_gsm: fix tty registration before control channel open")
-Reported-and-tested-by: syzbot+e3563f0c94e188366dbb@syzkaller.appspotmail.com
-Signed-off-by: Mazin Al Haddad <mazinalhaddad05@gmail.com>
----
- drivers/tty/n_gsm.c | 5 +++++
- 1 file changed, 5 insertions(+)
+vim +2147 drivers/vfio/vfio_iommu_type1.c
 
-diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
-index caa5c14ed57f..1d74dd9d70d0 100644
---- a/drivers/tty/n_gsm.c
-+++ b/drivers/tty/n_gsm.c
-@@ -2825,6 +2825,11 @@ static void gsmld_attach_gsm(struct tty_struct *tty, struct gsm_mux *gsm)
- 	/* Turn off tty XON/XOFF handling to handle it explicitly. */
- 	gsm->old_c_iflag = tty->termios.c_iflag;
- 	tty->termios.c_iflag &= (IXON | IXOFF);
-+
-+	if (gsm->encoding == 0)
-+		gsm->receive = gsm0_receive;
-+	else
-+		gsm->receive = gsm1_receive;
- }
- 
- /**
+  2143	
+  2144	/* Redundantly walks non-present capabilities to simplify caller */
+  2145	static int vfio_iommu_device_capable(struct device *dev, void *data)
+  2146	{
+> 2147		return device_iommu_capable(dev, (enum iommu_cap)data);
+  2148	}
+  2149	
+
 -- 
-2.37.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

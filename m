@@ -2,132 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C3E558E586
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 05:35:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF23158E58F
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 05:36:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229869AbiHJDed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 23:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60182 "EHLO
+        id S230180AbiHJDgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 23:36:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiHJDdz (ORCPT
+        with ESMTP id S230136AbiHJDgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 23:33:55 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5B1D647E6
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 20:33:54 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-32a17d3bba2so7469617b3.9
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 20:33:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=3cjaT3D6IYASOPbKDBEtNtgYyK5QupPCiaUCe5h6Nq8=;
-        b=cmBevBSVU6Br7M2bF9rmfK+ww/fcIy2N3APcYT3Og81DXB6hK79PfU3JOGbbEhh4Ei
-         wcQV7SUQ6BpJ+oWyUiMZQtj3kDjoCj4VQwW75xYQOa+ggntJq0ZV5CCE3Tq7q4XMKa4x
-         1Xt4nxlx/xLRF5aiQbfqNJ0o/02FEhFu961ZAzzBsoCWogkxmWHBCtmCPtVBx+P6XR+o
-         /1cB8BRRrh3lkGcZDF01s7GtYrVBGDhDwEjrPcwPLl5rylh8dDmzP5X0ffUt72A/K/Jy
-         9Qc5zz4P/58inRNsCpMXsxCGm4oAcZmQHJ1m8eCHGsndNPDKRcd102yKTe0ZmTvLANol
-         60MQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=3cjaT3D6IYASOPbKDBEtNtgYyK5QupPCiaUCe5h6Nq8=;
-        b=CChpmMH3u79sUMea5Ux3xeXBwn9GkzrDZ7SnNWjdZORsOlv3R7i3TjAJdbfpRytuzr
-         Rp6loHQ54hbGXVjn8T50fzGDp2fPQDAEc9oeSho8ID99kUR+RzhEY6rzU0hb6Hyxy8rL
-         LlEqo+OMyB3cug4JmnS+rGmklNliCvcPHSP8cBQ/p4tvItnek0bFocvQAMxvIxP3yPai
-         AtL4CqMqICC4eh6QOH9W7xgmoLV6ODxB2pxrR6lemDEbJgKseJOPHtruk+DAWOlCyoES
-         g8K9MHN1wGaPN3J5WXDLWdxC1VlqGMB2+pu7cjLEW8ExWR/RSBCww07aWePhL5GKaLSX
-         e5pA==
-X-Gm-Message-State: ACgBeo0rBs30/+44ZqYJzVvqBniqx5l0/HwuryzMRXNqum8B1kVIZwcz
-        58uhhALQk2yqFquotDEdkIGH2nR1M1oJeV0FyCmfoQ==
-X-Google-Smtp-Source: AA6agR7jn3MKdQrGAor5mYwf2qrDtRA5dsA9mLjSm2XKsb93VwGfri0j8JuHR+Azk1RcSpWqy5PNoDtTTag5UuVxv64=
-X-Received: by 2002:a81:50d4:0:b0:31f:5f85:566a with SMTP id
- e203-20020a8150d4000000b0031f5f85566amr25879823ywb.218.1660102433592; Tue, 09
- Aug 2022 20:33:53 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220727181936.3250466-1-saravanak@google.com>
- <20220809103052.GA1778649@roeck-us.net> <CAGETcx_ATE6vy9YhygHnBA2P1GDVi54np-=E+50F+cwnj6Wg4A@mail.gmail.com>
- <0c6ef9a3-bbb1-9f1c-7f00-ceb05589594e@roeck-us.net>
-In-Reply-To: <0c6ef9a3-bbb1-9f1c-7f00-ceb05589594e@roeck-us.net>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Tue, 9 Aug 2022 20:33:17 -0700
-Message-ID: <CAGETcx8yKqEthtyd8Zb=mqMBNp1TPRXbQOoFp+OxeCoXnTs2kw@mail.gmail.com>
-Subject: Re: [PATCH v6] amba: Remove deferred device addition
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Russell King <linux@armlinux.org.uk>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@armlinux.org.uk, kernel-team@android.com,
+        Tue, 9 Aug 2022 23:36:10 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 571942AE1A
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 20:36:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660102569; x=1691638569;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=YxmthxJXTQhxtQJ/Htfnm3RrXdQD2c318ixmJ7mgyUs=;
+  b=KVPZZaAk3cfHmmqT+4mYPtAp2sksYtwY6cak3Tlw3Ume3QD9iA9/Fvlv
+   Y1VbRQBmFw2RAo1VPkz0/P9mx07RZVbrE7Rl3ojAOomp3gOFK4qGqDtZh
+   ZfNAOuWIEqmFtxS1M7RQ+t/1OmTkpWcObNVG9fOMQC1kDgTh7rlQc9Siw
+   vipI1APDHN6dFJE6qnx9c+eGFPIDk3uPl//fDJPaxuxx7MRyJTBBCAMJ6
+   BVQhjf02QzdLfKlsS5t/cUDbCId9Wj8VoNHxECI9yeva81N9nN2KgL3Ye
+   t/SPj0VPJsXQbtT976qO6fGc7zucxWjxKKsn/wWGoKU19LhxJEx3L3+du
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="316931559"
+X-IronPort-AV: E=Sophos;i="5.93,226,1654585200"; 
+   d="scan'208";a="316931559"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 20:36:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,226,1654585200"; 
+   d="scan'208";a="581064163"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 09 Aug 2022 20:36:07 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oLcVq-000NTZ-2m;
+        Wed, 10 Aug 2022 03:36:06 +0000
+Date:   Wed, 10 Aug 2022 11:35:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Chang S. Bae" <chang.seok.bae@intel.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: [intel-amx:init_fpstate 2/3] arch/x86/kernel/fpu/xstate.c:365:24:
+ warning: format specifies type 'unsigned long' but the argument has type
+ 'unsigned int'
+Message-ID: <202208101137.JDQ1Crdy-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 9, 2022 at 6:34 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 8/9/22 17:42, Saravana Kannan wrote:
-> > On Tue, Aug 9, 2022 at 3:30 AM Guenter Roeck <linux@roeck-us.net> wrote:
-> >>
-> >> Hi,
-> >>
-> >> On Wed, Jul 27, 2022 at 11:19:35AM -0700, Saravana Kannan wrote:
-> >>> The uevents generated for an amba device need PID and CID information
-> >>> that's available only when the amba device is powered on, clocked and
-> >>> out of reset. So, if those resources aren't available, the information
-> >>> can't be read to generate the uevents. To workaround this requirement,
-> >>> if the resources weren't available, the device addition was deferred and
-> >>> retried periodically.
-> >>>
-> >> ...
-> >>
-> >> This patch results in a large number of crashes in various qemu
-> >> emulations. Crash and bisect logs below. Reverting this patch
-> >> fixes the problem.
-> >
-> > Hey Guenter,
-> >
-> > Thanks for the report. I'm kinda surprised because I had a pl011 probe
-> > successfully in my local testing.
-> >
->
-> Maybe it only happens with qemu emulations, or with certain configurations.
+tree:   https://github.com/intel/amx-linux.git init_fpstate
+head:   0dd11dae13f2a012cd33971c5917f946d09e895c
+commit: e1dead9e3ed891a5024f59708e5059cdd094e3f5 [2/3] x86/fpu: Validate the init_fpstate size
+config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220810/202208101137.JDQ1Crdy-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel/amx-linux/commit/e1dead9e3ed891a5024f59708e5059cdd094e3f5
+        git remote add intel-amx https://github.com/intel/amx-linux.git
+        git fetch --no-tags intel-amx init_fpstate
+        git checkout e1dead9e3ed891a5024f59708e5059cdd094e3f5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/fpu/
 
-I tested on a qemu emulation too.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Can you give me more details on the qemu configuration so I could try
-to reproduce it?
+All warnings (new ones prefixed by >>):
 
-> > I'm wondering if you are having an interaction with some other changes I made.
-> > Can you try pulling this series in and see if it helps?
-> >
-> > https://lore.kernel.org/lkml/20220727185012.3255200-1-saravanak@google.com/
-> >
-> >> Additional information: The decoded stack trace suggests that the
-> >> "id" parameter of pl011_probe() may be NULL.
-> >
-> > That's strange! I'll take a closer look once you confirm that the
-> > series above doesn't help.
-> >
->
-> That series does not make a difference.
+>> arch/x86/kernel/fpu/xstate.c:365:24: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
+                          "%u bytes\n", sizeof(union fpregs_state), init_fpstate.size);
+                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/printk.h:507:33: note: expanded from macro 'pr_err'
+           printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
+                                  ~~~     ^~~~~~~~~~~
+   include/linux/printk.h:464:60: note: expanded from macro 'printk'
+   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
+                                                       ~~~    ^~~~~~~~~~~
+   include/linux/printk.h:436:19: note: expanded from macro 'printk_index_wrap'
+                   _p_func(_fmt, ##__VA_ARGS__);                           \
+                           ~~~~    ^~~~~~~~~~~
+   1 warning generated.
 
-Thanks for checking that.
 
--Saravana
+vim +365 arch/x86/kernel/fpu/xstate.c
+
+   328	
+   329	/*
+   330	 * All supported features have either init state all zeros or are
+   331	 * handled in setup_init_fpu() individually. This is an explicit
+   332	 * feature list and does not use XFEATURE_MASK*SUPPORTED to catch
+   333	 * newly added supported features at build time and make people
+   334	 * actually look at the init state for the new feature.
+   335	 */
+   336	#define XFEATURES_INIT_FPSTATE_HANDLED		\
+   337		(XFEATURE_MASK_FP |			\
+   338		 XFEATURE_MASK_SSE |			\
+   339		 XFEATURE_MASK_YMM |			\
+   340		 XFEATURE_MASK_OPMASK |			\
+   341		 XFEATURE_MASK_ZMM_Hi256 |		\
+   342		 XFEATURE_MASK_Hi16_ZMM	 |		\
+   343		 XFEATURE_MASK_PKRU |			\
+   344		 XFEATURE_MASK_BNDREGS |		\
+   345		 XFEATURE_MASK_BNDCSR |			\
+   346		 XFEATURE_MASK_PASID |			\
+   347		 XFEATURE_MASK_XTILE)
+   348	
+   349	/*
+   350	 * setup the xstate image representing the init state
+   351	 */
+   352	static int __init setup_init_fpu_buf(void)
+   353	{
+   354		BUILD_BUG_ON((XFEATURE_MASK_USER_SUPPORTED |
+   355			      XFEATURE_MASK_SUPERVISOR_SUPPORTED) !=
+   356			     XFEATURES_INIT_FPSTATE_HANDLED);
+   357	
+   358		if (!boot_cpu_has(X86_FEATURE_XSAVE))
+   359			return -ENODEV;
+   360	
+   361		print_xstate_features();
+   362	
+   363		if (init_fpstate.size > sizeof(union fpregs_state)) {
+   364			pr_err("x86/fpu: init_fpstate (%lu bytes) is not enough for the configured size:"
+ > 365			       "%u bytes\n", sizeof(union fpregs_state), init_fpstate.size);
+   366			return -EINVAL;
+   367		}
+   368	
+   369		xstate_init_xcomp_bv(&init_fpstate.regs.xsave, init_fpstate.xfeatures);
+   370	
+   371		/*
+   372		 * Init all the features state with header.xfeatures being 0x0
+   373		 */
+   374		os_xrstor_booting(&init_fpstate.regs.xsave);
+   375	
+   376		/*
+   377		 * All components are now in init state. Read the state back so
+   378		 * that init_fpstate contains all non-zero init state. This only
+   379		 * works with XSAVE, but not with XSAVEOPT and XSAVEC/S because
+   380		 * those use the init optimization which skips writing data for
+   381		 * components in init state.
+   382		 *
+   383		 * XSAVE could be used, but that would require to reshuffle the
+   384		 * data when XSAVEC/S is available because XSAVEC/S uses xstate
+   385		 * compaction. But doing so is a pointless exercise because most
+   386		 * components have an all zeros init state except for the legacy
+   387		 * ones (FP and SSE). Those can be saved with FXSAVE into the
+   388		 * legacy area. Adding new features requires to ensure that init
+   389		 * state is all zeroes or if not to add the necessary handling
+   390		 * here.
+   391		 */
+   392		fxsave(&init_fpstate.regs.fxsave);
+   393		return 0;
+   394	}
+   395	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,113 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AE7E58EF9A
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 17:48:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C852F58EFD0
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 17:54:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231482AbiHJPsu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 11:48:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39078 "EHLO
+        id S232110AbiHJPvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 11:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiHJPsr (ORCPT
+        with ESMTP id S230468AbiHJPvj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 11:48:47 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E604921E24
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 08:48:46 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id s9so16524965ljs.6
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 08:48:46 -0700 (PDT)
+        Wed, 10 Aug 2022 11:51:39 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF89F4BD19;
+        Wed, 10 Aug 2022 08:51:37 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id h13so18244219wrf.6;
+        Wed, 10 Aug 2022 08:51:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=qO3R4TRwFVDwtSz2v/eVHonfq/kJTfpqe/6GQS5ROS8=;
-        b=QGoQSE8L9+ivCxqMtksPllpM+HMweN/IQWYilLu+yTlqKlOjMrmk2RYqbJ4GARJqNj
-         d5A2W/ZnN2qlSE956IWKj5T99iPxXsqbMHAnLH1FZcvXz9vE90pR0YSlZ/qPwBl+PyGP
-         N8AFl5LtST/Q35DGg57+LVj2ay2AbiaOazpgR+tsFPOgTC5MFNoHilqQWj45MQlG9Jw7
-         h6d9kEynTh3c3EsRRVen+RDp1mTmCBhQmW7kOl3LAnAwVNhmAyF4PJy+wBJrAahQhCpo
-         WbB9W1gK3Q5Fk//uf63zRNdr/9UqoxXpY5bhGJ4lbELjTYdWlrnOR3UQC4QhQGiof4it
-         1WZg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=eLUXa/7f03mrrlxRZvP1+mfNlm5ZK61/IOpf+UOnfpA=;
+        b=WqSg1M4LPvRvE7ifojxAgf7wRBU1icJ6/c02Okmzy1I7MNcWnJciMvgd9E29H25H4Q
+         hOSe7+Md7Co6t5MC+3/kIvdRVkg5NK+48WzlsJpoKmlT00h4hLNZDfBAFl5jNzjUkw2L
+         tDwbjfZBV458pAPRzXjVRiCGwRDFyQTytaD+8YF9Tuc0TmbJm9yw+HSJc6BXCFKIzpEK
+         D9d891nlEEq+OcCtS7778AT52Q5yAJ9ZCs40vzIlwX+6P3K1D46S8DHPJLWHUfGr37ct
+         L8IZcVVnoD/jWZzALGwunGKNX3cSyxrT1U/+O4o866OfJT0bJ2tZvGB0V4x8e0v/HdlK
+         ai3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=qO3R4TRwFVDwtSz2v/eVHonfq/kJTfpqe/6GQS5ROS8=;
-        b=kkYhRIuSxWVIzwp5A2GogdvDC9K6d1cS9hi2TN2m8LDbp/POsfE6Qv5o4WugBwrA3/
-         BhMts4vtz67JGc45/n0wJB0esTGhHY19BPDI/Q2U58FahNr9frcwu6qI88BzAEHkWox+
-         G0cpYqXLNRvH8sC31XajA3qxvzJkP8VGd3u2J/24ALLpZ7KsSeoQRvWUFVwyBCCESlUQ
-         h35DXPIThxe7TGXDn4HkMz16FPbD5SV39KIUcd/kZX0DjuXopbzb/k3TlKeZ2cZ0v+i0
-         iHyqu3lhyjnXETlTzYE7oKmUEL0Cp+lQIh5LzSi/PV1jhLXjh6f9+brRpMkUQfQFEwD2
-         3ECg==
-X-Gm-Message-State: ACgBeo2veSMSVqyBOrHCmxyPwgwMK5wP5ZsqeGbCgs2tP0IrvuWttuHJ
-        dXuK9wN1d9+iOD442g9JhVXgFA==
-X-Google-Smtp-Source: AA6agR6ou9uMnqssZjsv/mQww0BkhDijz8PAkwOIFkni0Ae1gAIMNMbilrMwyON1p5QltdhqGAHpfw==
-X-Received: by 2002:a2e:a889:0:b0:25e:3d55:b092 with SMTP id m9-20020a2ea889000000b0025e3d55b092mr9460020ljq.402.1660146525302;
-        Wed, 10 Aug 2022 08:48:45 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id o7-20020ac25e27000000b0048af7e1b268sm379270lfg.210.2022.08.10.08.48.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Aug 2022 08:48:44 -0700 (PDT)
-Message-ID: <271f4997-dcd6-bad5-1617-d226b724749c@linaro.org>
-Date:   Wed, 10 Aug 2022 18:48:43 +0300
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=eLUXa/7f03mrrlxRZvP1+mfNlm5ZK61/IOpf+UOnfpA=;
+        b=PDmlgHkjxhpRjysIgyU8FX7XTDV2pTtjJoJHk3fI/D9V4walimyaTK4CRsXt1W0Mal
+         imDWnQgvAHB73P9kza5SuxWIxGp4WORg+9U4HXcIMtDu2swoMLkwBvdlAfPSupk0gnjx
+         CAbZPMwO36XuvLFsAXj67RGFelK6gIlya9yWf8JJdvVPeEFp2j6PeC/ultZB69FpyKzp
+         X+H/l3koCWTbPcWjQG7ZCB9KoZyFLk1MU644GP4RNJQfHRImD0JaCuwUhVhKnBH4DHAl
+         UTqtfI5c0paVjICC50xQlUZgs+H3hEEGm3Kn++nw7Z+HFLVqVAh5GOdoCvZWYW7wst38
+         wOVg==
+X-Gm-Message-State: ACgBeo0J9DV2UUZR6tRSjf0dfJ37490P6A0Oa22uinFrbkZ8ch4trQCe
+        DXfMtkqr/JRE4MUfJmD7zM8aIbFs7Ok=
+X-Google-Smtp-Source: AA6agR5DJfVKYDlrSNLa3wNyuLPvwubsZF8VZQM6JU+GS2BugrOvjw9AFh0IiP8A3TZSNH/OEieLog==
+X-Received: by 2002:a05:6000:785:b0:220:6d7f:dd1f with SMTP id bu5-20020a056000078500b002206d7fdd1fmr18016045wrb.578.1660146695975;
+        Wed, 10 Aug 2022 08:51:35 -0700 (PDT)
+Received: from 127.0.0.1localhost (188.28.126.24.threembb.co.uk. [188.28.126.24])
+        by smtp.gmail.com with ESMTPSA id ay1-20020a05600c1e0100b003a342933727sm3004519wmb.3.2022.08.10.08.51.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Aug 2022 08:51:35 -0700 (PDT)
+From:   Pavel Begunkov <asml.silence@gmail.com>
+To:     io-uring@vger.kernel.org, netdev@vger.kernel.org
+Cc:     Jens Axboe <axboe@kernel.dk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, kernel-team@fb.com,
+        linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
+        Wei Liu <wei.liu@kernel.org>, Paul Durrant <paul@xen.org>,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        "Michael S . Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Pavel Begunkov <asml.silence@gmail.com>
+Subject: [RFC net-next io_uring 00/11] improve io_uring's ubuf_info refcounting
+Date:   Wed, 10 Aug 2022 16:49:08 +0100
+Message-Id: <cover.1660124059.git.asml.silence@gmail.com>
+X-Mailer: git-send-email 2.37.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 4/4] dt-bindings: soc: qcom: stats: Document SDM845
- compatible
-Content-Language: en-US
-To:     abel.vesa@linaro.org, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh@kernel.org>,
-        Maulik Shah <mkshah@codeaurora.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220810105718.2137015-1-abel.vesa@linaro.org>
- <20220810105718.2137015-4-abel.vesa@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220810105718.2137015-4-abel.vesa@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/08/2022 13:57, abel.vesa@linaro.org wrote:
-> From: Abel Vesa <abel.vesa@linaro.org>
-> 
-> SDM845 is a special case compared to the other platforms that use RPMh
-> stats, since it only has 2 stats (aosd and cxsd), while the others have
-> a 3rd one (ddr).
-> 
-> So in order for the driver to use the dedicated stats config, we added
-> the SDM845 dedicated compatible, which we document here.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
->  Documentation/devicetree/bindings/soc/qcom/qcom-stats.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom-stats.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom-stats.yaml
-> index 473adca4e973..ad6ac0af16bf 100644
-> --- a/Documentation/devicetree/bindings/soc/qcom/qcom-stats.yaml
-> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom-stats.yaml
-> @@ -20,6 +20,7 @@ properties:
->    compatible:
->      enum:
->        - qcom,rpmh-stats
-> +      - qcom,rpmh-stats-sdm845
+There is a couple of tricks we can do with io_uring to improve ubuf_info
+refcounting. First, we ammortise reference grabbing and then give them
+away to the network layer, which is implemented in 8 and 11. Also, we
+don't need need additional pinning for TCP, which is removed by 7.
 
-qcom,sdm845-rpmh-stats
+1-4 are needed because otherwise we're out of space in io_notif_data and
+using ->desc or some other field of ubuf_info would be ugly. It'll also
+facilitate further ideas like adding a simpler notification model for UDP.
 
-https://lore.kernel.org/all/20220720073326.19591-1-krzysztof.kozlowski@linaro.org/
+liburing/examples/io_uring-sendzc benchmark using a branch containing the
+patchset and some more [1] showed ~1.6% qps improvement for UDP (dummy dev),
+and ~1% for TCP (localhost + hacks enabling zc).
 
-Best regards,
-Krzysztof
+I didn't specifically test xen and vhost and not sure how, would love
+some help with that.
+
+[1] https://github.com/isilence/linux/tree/net/zc-ref-optimisation
+
+Pavel Begunkov (11):
+  net: introduce struct ubuf_info_msgzc
+  xen/netback: use struct ubuf_info_msgzc
+  vhost/net: use struct ubuf_info_msgzc
+  net: shrink struct ubuf_info
+  net: rename ubuf_info's flags
+  net: add flags for controlling ubuf_info
+  net/tcp: optimise tcp ubuf refcounting
+  net: let callers provide ->msg_ubuf refs
+  io_uring/notif: add helper for flushing refs
+  io_uring/notif: mark notifs with UARGFL_CALLER_PINNED
+  io_uring/notif: add ubuf_info ref caching
+
+ drivers/net/xen-netback/common.h    |  2 +-
+ drivers/net/xen-netback/interface.c |  4 +--
+ drivers/net/xen-netback/netback.c   |  7 +++---
+ drivers/vhost/net.c                 | 17 +++++++------
+ include/linux/skbuff.h              | 35 +++++++++++++++++++++++---
+ io_uring/net.c                      |  8 +++++-
+ io_uring/notif.c                    | 21 ++++++++++------
+ io_uring/notif.h                    | 22 +++++++++++++++-
+ net/core/skbuff.c                   | 39 ++++++++++++++++-------------
+ net/ipv4/ip_output.c                |  3 ++-
+ net/ipv4/tcp.c                      | 11 +++++---
+ net/ipv6/ip6_output.c               |  3 ++-
+ 12 files changed, 123 insertions(+), 49 deletions(-)
+
+-- 
+2.37.0
+

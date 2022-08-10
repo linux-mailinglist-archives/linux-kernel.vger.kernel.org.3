@@ -2,51 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E74158F01E
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 18:10:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 860D358F015
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 18:10:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233283AbiHJQKY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 12:10:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37866 "EHLO
+        id S233335AbiHJQJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 12:09:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233130AbiHJQKI (ORCPT
+        with ESMTP id S232852AbiHJQJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 12:10:08 -0400
-Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E37877C74D;
-        Wed, 10 Aug 2022 09:10:06 -0700 (PDT)
-Received: from dev010.ch-qa.sw.ru ([172.29.1.15])
-        by relay.virtuozzo.com with esmtp (Exim 4.95)
-        (envelope-from <alexander.mikhalitsyn@virtuozzo.com>)
-        id 1oLoFD-00F6Pf-G7;
-        Wed, 10 Aug 2022 18:08:42 +0200
-From:   Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>
-To:     netdev@vger.kernel.org
-Cc:     Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        David Ahern <dsahern@kernel.org>,
-        Yajun Deng <yajun.deng@linux.dev>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Christian Brauner <brauner@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
-        Konstantin Khorenko <khorenko@virtuozzo.com>,
-        kernel@openvz.org, devel@openvz.org,
-        "Denis V . Lunev" <den@openvz.org>
-Subject: [PATCH v2 2/2] neighbour: make proxy_queue.qlen limit per-device
-Date:   Wed, 10 Aug 2022 19:08:40 +0300
-Message-Id: <20220810160840.311628-3-alexander.mikhalitsyn@virtuozzo.com>
-X-Mailer: git-send-email 2.27.0
-In-Reply-To: <20220810160840.311628-1-alexander.mikhalitsyn@virtuozzo.com>
-References: <20220729103559.215140-1-alexander.mikhalitsyn@virtuozzo.com>
- <20220810160840.311628-1-alexander.mikhalitsyn@virtuozzo.com>
+        Wed, 10 Aug 2022 12:09:47 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A294A7B1C8
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 09:09:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=t4MwVAfwkCB4EmT15HXtvuXRXMl6148oIcwvT5rWzH0=; b=kPMJXR6bwoyVWhfo3Q7xsHuiDo
+        cu8JJgUYOjq7g3kEB5WIsh9x6nbEmYe6xEiLqmEL/GcqqRT1KRBcbdOcD0IQPc5DO2tLg0tFutO+n
+        8jox7enRkWZGz1Xnf4MdfmCJVKzOq4mRpK+VYzdXJtVVQ2H5CJunExT5O4E0myfZ+CxWP/zb3jxwf
+        fL8YjQ0IgMU+fDDCUbm8haoViYTGXvq78yp/5MjQ83XkXd+yz1/IUPk57t1LVhRD+3Rg2jNOETaC9
+        Ua4TR8OXpDgLDsK0RXLQ6P9pLjXNifHs7hjH82RRbDD5IkjPI/38kLQtkqWzOwtuL6KxX+LEQ+h8d
+        +RocqkeA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oLoH3-00Gzln-Lb; Wed, 10 Aug 2022 16:09:37 +0000
+Date:   Wed, 10 Aug 2022 17:09:37 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Zdenek Kabelac <zkabelac@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        intel-gfx@lists.freedesktop.org, chris@chris-wilson.co.uk,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: i915: crash with 5.19-rc2
+Message-ID: <YvPYQeMjfyruTeGe@casper.infradead.org>
+References: <584ae788-05e3-5824-8c85-cbb833677850@redhat.com>
+ <f0dd80b2-97e1-c320-8517-7ebdb027f58a@redhat.com>
+ <4a204620-7639-c844-455-10e55b372bcf@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4a204620-7639-c844-455-10e55b372bcf@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,126 +53,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Right now we have a neigh_param PROXY_QLEN which specifies maximum length
-of neigh_table->proxy_queue. But in fact, this limitation doesn't work well
-because check condition looks like:
-tbl->proxy_queue.qlen > NEIGH_VAR(p, PROXY_QLEN)
+On Wed, Aug 10, 2022 at 08:55:32AM -0700, Hugh Dickins wrote:
+> This is not a bug in zram or i915, but what Matthew fixes in
+> https://lore.kernel.org/lkml/20220730042518.1264767-1-willy@infradead.org/
 
-The problem is that p (struct neigh_parms) is a per-device thing,
-but tbl (struct neigh_table) is a system-wide global thing.
+Thanks for tracking that down, Hugh.  Nice to know it's a crash rather
+than a data corruption.  The fix is in Andrew's tree, so I think it's
+already destined for upstream soon.
 
-It seems reasonable to make proxy_queue limit per-device based.
+Andrew, I have two fixes that I don't see in your tree:
 
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: David Ahern <dsahern@kernel.org>
-Cc: Yajun Deng <yajun.deng@linux.dev>
-Cc: Roopa Prabhu <roopa@nvidia.com>
-Cc: Christian Brauner <brauner@kernel.org>
-Cc: netdev@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>
-Cc: Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>
-Cc: Konstantin Khorenko <khorenko@virtuozzo.com>
-Cc: kernel@openvz.org
-Cc: devel@openvz.org
-Suggested-by: Denis V. Lunev <den@openvz.org>
-Signed-off-by: Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>
-Reviewed-by: Denis V. Lunev <den@openvz.org>
----
- include/net/neighbour.h |  1 +
- net/core/neighbour.c    | 25 ++++++++++++++++++++++---
- 2 files changed, 23 insertions(+), 3 deletions(-)
+https://lore.kernel.org/linux-mm/20220808193430.3378317-2-willy@infradead.org/T/#u
+https://lore.kernel.org/linux-mm/20220808193430.3378317-4-willy@infradead.org/T/#u
 
-diff --git a/include/net/neighbour.h b/include/net/neighbour.h
-index 87419f7f5421..bc3fbec70d10 100644
---- a/include/net/neighbour.h
-+++ b/include/net/neighbour.h
-@@ -82,6 +82,7 @@ struct neigh_parms {
- 	struct rcu_head rcu_head;
- 
- 	int	reachable_time;
-+	int	qlen;
- 	int	data[NEIGH_VAR_DATA_MAX];
- 	DECLARE_BITMAP(data_state, NEIGH_VAR_DATA_MAX);
- };
-diff --git a/net/core/neighbour.c b/net/core/neighbour.c
-index 19d99d1eff53..0469fafffd5d 100644
---- a/net/core/neighbour.c
-+++ b/net/core/neighbour.c
-@@ -316,9 +316,18 @@ static void pneigh_queue_purge(struct sk_buff_head *list, struct net *net)
- 	skb = skb_peek(list);
- 	while (skb != NULL) {
- 		struct sk_buff *skb_next = skb_peek_next(skb, list);
--		if (net == NULL || net_eq(dev_net(skb->dev), net)) {
-+		struct net_device *dev = skb->dev;
-+		if (net == NULL || net_eq(dev_net(dev), net)) {
-+			struct in_device *in_dev;
-+
-+			rcu_read_lock();
-+			in_dev = __in_dev_get_rcu(dev);
-+			if (in_dev)
-+				in_dev->arp_parms->qlen--;
-+			rcu_read_unlock();
- 			__skb_unlink(skb, list);
--			dev_put(skb->dev);
-+
-+			dev_put(dev);
- 			kfree_skb(skb);
- 		}
- 		skb = skb_next;
-@@ -1606,8 +1615,15 @@ static void neigh_proxy_process(struct timer_list *t)
- 
- 		if (tdif <= 0) {
- 			struct net_device *dev = skb->dev;
-+			struct in_device *in_dev;
- 
-+			rcu_read_lock();
-+			in_dev = __in_dev_get_rcu(dev);
-+			if (in_dev)
-+				in_dev->arp_parms->qlen--;
-+			rcu_read_unlock();
- 			__skb_unlink(skb, &tbl->proxy_queue);
-+
- 			if (tbl->proxy_redo && netif_running(dev)) {
- 				rcu_read_lock();
- 				tbl->proxy_redo(skb);
-@@ -1632,7 +1648,7 @@ void pneigh_enqueue(struct neigh_table *tbl, struct neigh_parms *p,
- 	unsigned long sched_next = jiffies +
- 			prandom_u32_max(NEIGH_VAR(p, PROXY_DELAY));
- 
--	if (tbl->proxy_queue.qlen > NEIGH_VAR(p, PROXY_QLEN)) {
-+	if (p->qlen > NEIGH_VAR(p, PROXY_QLEN)) {
- 		kfree_skb(skb);
- 		return;
- 	}
-@@ -1648,6 +1664,7 @@ void pneigh_enqueue(struct neigh_table *tbl, struct neigh_parms *p,
- 	skb_dst_drop(skb);
- 	dev_hold(skb->dev);
- 	__skb_queue_tail(&tbl->proxy_queue, skb);
-+	p->qlen++;
- 	mod_timer(&tbl->proxy_timer, sched_next);
- 	spin_unlock(&tbl->proxy_queue.lock);
- }
-@@ -1680,6 +1697,7 @@ struct neigh_parms *neigh_parms_alloc(struct net_device *dev,
- 		refcount_set(&p->refcnt, 1);
- 		p->reachable_time =
- 				neigh_rand_reach_time(NEIGH_VAR(p, BASE_REACHABLE_TIME));
-+		p->qlen = 0;
- 		dev_hold_track(dev, &p->dev_tracker, GFP_KERNEL);
- 		p->dev = dev;
- 		write_pnet(&p->net, net);
-@@ -1745,6 +1763,7 @@ void neigh_table_init(int index, struct neigh_table *tbl)
- 	refcount_set(&tbl->parms.refcnt, 1);
- 	tbl->parms.reachable_time =
- 			  neigh_rand_reach_time(NEIGH_VAR(&tbl->parms, BASE_REACHABLE_TIME));
-+	tbl->parms.qlen = 0;
- 
- 	tbl->stats = alloc_percpu(struct neigh_statistics);
- 	if (!tbl->stats)
--- 
-2.36.1
+The first is of minor importance, the second I believe Hugh has hit in
+his testing.
 

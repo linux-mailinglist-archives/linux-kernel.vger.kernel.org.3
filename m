@@ -2,100 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42C2358EEB0
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 16:46:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1FD958EEAB
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 16:45:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232730AbiHJOpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 10:45:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58160 "EHLO
+        id S232670AbiHJOpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 10:45:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232698AbiHJOpa (ORCPT
+        with ESMTP id S232589AbiHJOpX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 10:45:30 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6F3DB39BA6
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:45:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660142728;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tUu6M2S/duiNeGM8Kec4bSt+ImPwKlLEvtTkCC42t94=;
-        b=JHEX0KFMjMZbgB4iAbdpFxlC/HZyOCfsmcUe+ZKC26+3lJjuGZCYZydeo8UNnM2CePqAyE
-        ETulEVf/KT74qqZskSDBFVCpbot8UMBhokM0q5Ja7GfMSCYRKGr4JJy+zviv3+fvtCPKaJ
-        NENQeHn+ks+tg+vivwb0IfLoQZP78qo=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-641-XHbjNoS8OyaHBysqMp1iuA-1; Wed, 10 Aug 2022 10:45:25 -0400
-X-MC-Unique: XHbjNoS8OyaHBysqMp1iuA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1F02138217F7;
-        Wed, 10 Aug 2022 14:45:24 +0000 (UTC)
-Received: from lorien.usersys.redhat.com (unknown [10.39.194.86])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 493191121314;
-        Wed, 10 Aug 2022 14:45:21 +0000 (UTC)
-Date:   Wed, 10 Aug 2022 10:45:18 -0400
-From:   Phil Auld <pauld@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Valentin Schneider <vschneid@redhat.com>
-Subject: Re: [PATCH v3 0/2] cpuhp: fix some st->target issues
-Message-ID: <YvPEfgHnmMz0U8wv@lorien.usersys.redhat.com>
-References: <20220711211619.112854-1-pauld@redhat.com>
+        Wed, 10 Aug 2022 10:45:23 -0400
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E53B3205CC
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:45:21 -0700 (PDT)
+Received: by mail-il1-x133.google.com with SMTP id o14so8402630ilt.2
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:45:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc;
+        bh=9n+0K75R7EZoV92OS1ZV/e4z3S1vV3ZMEes9Tlr0Pvo=;
+        b=J502nKl7nyY3BeHobHmwvEG+5l1dlpWjpCPBg6L95+90AoLVHXZfHmxJJX5fLvUHTf
+         SUq3Dlq4eyVriCwDYMZJ4yvZOcOte9QFj5cGCXifcsi4BBMm6wjKGkkMp6kyWVyeAmR7
+         AW7TDw0AAAN/CESK1hUuR1T5WEgzpCeqeMFBI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc;
+        bh=9n+0K75R7EZoV92OS1ZV/e4z3S1vV3ZMEes9Tlr0Pvo=;
+        b=T1lFEvqKt+SZ5lukiYt3xg1AeQoYdKqQ5HWmYYfEYFQvbLP3cgk6w48uh75eFhvY7y
+         qVRspgyJYklY+Uprk1kfTX6gA341GiDuY/A1DJosrnr0jbcmYo1pTAW9ROVDae5bt9QW
+         UXJJh/SiMiP7mbXuvdRVXVGYSW7bJEGWdSPrErkNxaRXAFJSjPSZ8HDe7brE1HN3JMgM
+         L3sFuzzkx7Rpz1T3RSot1PSfrpaQzhzWFqH6uwqezAFBQZ2beV9Qk3Jp6PrH7e335fMD
+         96OnfBwzrDJjXUkkTfy3FxZCvRrZO3v24q0bfrA39pvKIf+8ppnWkbS7NsHWYtQVNpOJ
+         zD/w==
+X-Gm-Message-State: ACgBeo18/bkdw5j/FZoKooO7YkoVoiVc1FK+ofcIqjvzhaXd9HWNrkBe
+        ZUb4C0dJeAYt+YD6TyFvZZjV3Q==
+X-Google-Smtp-Source: AA6agR5KM9HV4UMVJEXj/JAKryjBS2AmfoPfOr2M8U/nnmZ8cMDnm/XeQVESlipSKZVj3O89+pFPYg==
+X-Received: by 2002:a92:cc04:0:b0:2de:1abf:7414 with SMTP id s4-20020a92cc04000000b002de1abf7414mr12868204ilp.119.1660142721273;
+        Wed, 10 Aug 2022 07:45:21 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id u132-20020a02238a000000b0033ee1e67c6esm7503211jau.79.2022.08.10.07.45.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Aug 2022 07:45:21 -0700 (PDT)
+Subject: Re: [PATCH 5.4 00/15] 5.4.210-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220809175510.312431319@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <58175928-37ea-1a58-1382-4fe88ccedc69@linuxfoundation.org>
+Date:   Wed, 10 Aug 2022 08:45:20 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220711211619.112854-1-pauld@redhat.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.3
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220809175510.312431319@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 11, 2022 at 05:16:17PM -0400 Phil Auld wrote:
-> Several small fixes that clean up some cpuhp inconsistencies.
-> The first prevents target_store() from calling cpu_down() when
-> target == state which prevents the cpu being incorrectly marked
-> as dying.  The second just makes the boot cpu have a valid cpuhp
-> target rather than 0 (CPU_OFFLINE) while being in state
-> CPU_ONLINE.
+On 8/9/22 12:00 PM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.210 release.
+> There are 15 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> A further issue which these two patches don't address is that
-> the cpuX/online file looks at the device->offline state and can
-> thus get out of sync with the actual cpuhp state if the cpuhp
-> target is used to change state.
+> Responses should be made by Thu, 11 Aug 2022 17:55:02 +0000.
+> Anything received after that time might be too late.
 > 
-> v3: Added code to make sure st->target == target in the nop case.
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.210-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+> and the diffstat can be found below.
 > 
-> Phil Auld (2):
->   cpuhp: make target_store() a nop when target == state
->   cpuhp: Set cpuhp target for boot cpu
+> thanks,
 > 
->  kernel/cpu.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> -- 
-> 2.31.1
+> greg k-h
 > 
 
-Ping?
+Compiled and booted on my test system. No dmesg regressions.
 
-Any thoughts on this? I'm not sure what tree it needs to go in but
-getting a cpu shutdown by writing the current target/state back
-in here seems wrong.
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
-
-Thanks,
-Phil
-
--- 
-
+thanks,
+-- Shuah

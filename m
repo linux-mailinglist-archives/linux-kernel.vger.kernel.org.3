@@ -2,54 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 640D358E954
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 11:12:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA0F558E958
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 11:13:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231976AbiHJJMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 05:12:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37382 "EHLO
+        id S230250AbiHJJNE convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 10 Aug 2022 05:13:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231804AbiHJJMX (ORCPT
+        with ESMTP id S231517AbiHJJNC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 05:12:23 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D84286C2B
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 02:12:22 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id d6-20020a056e020be600b002dcc7977592so10157217ilu.17
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 02:12:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=oZmlmPgFuLzTVeJwCUtsQn3jK92/Zbe9geTOC8F9kDE=;
-        b=7sHw/qdwTonweOa+ettd5H6TPvBenoNDME8L8xmIMOQrqwVpSzKEn0kjpXjd+uqVto
-         fKJiND2kG8sF6CkGscXRkjfhENRcm5kPCTQHGo4MwhQtaEy/dJmwsH0rAxsnIMkadtlz
-         K6wesmFn43uy4Hr0rzFuEKMrqmeXUfY865r1qmxIb5ugn1zmhzKGpY4Z61pRjkYFo1ec
-         0ff6/vSuzPN5zS5HcNQD3uw6fCOzcI1l5ngd8My9i+GgJlpO9bUySaVoKqACEr06aZ2y
-         DMn4gwFz4VikuiASBOfwke8xCsNyl12f8Ea8ChzP9HUXcjH1G6LSgkfnhTiR0Lg0Xe0O
-         RRNg==
-X-Gm-Message-State: ACgBeo0sPdL/hJ4h81PS5yBp4BUgflvQM2FU2MfCdNrfU2PzsAYMDRWj
-        QHX2/2TLnD/j63vaboh2jskqNKB5DK6uqnp7JicshlJdjlJM
-X-Google-Smtp-Source: AA6agR5LGbZgJoKzBnPq44ScUexr0uehLu94E1e9uLvjC/b/BzoDxSbE4LKZtOlIcspat0kvmw6sWwbM7izBt45glwnwSIEVt8aR
+        Wed, 10 Aug 2022 05:13:02 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B6FF86C28
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 02:13:00 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-252-W1bmLIhxOFKkLHIJ4pvk4Q-1; Wed, 10 Aug 2022 10:12:58 +0100
+X-MC-Unique: W1bmLIhxOFKkLHIJ4pvk4Q-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.36; Wed, 10 Aug 2022 10:12:57 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.036; Wed, 10 Aug 2022 10:12:57 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'David Hildenbrand' <david@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Peter Xu <peterx@redhat.com>, Hugh Dickins <hughd@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Subject: RE: [PATCH v2] mm/gup: fix FOLL_FORCE COW security issue and remove
+ FOLL_COW
+Thread-Topic: [PATCH v2] mm/gup: fix FOLL_FORCE COW security issue and remove
+ FOLL_COW
+Thread-Index: AQHYrJfABWLOSW6JU02QVOI07vnRa62n2Fmw
+Date:   Wed, 10 Aug 2022 09:12:57 +0000
+Message-ID: <afab7f23d10145b590aef44b3242db64@AcuMS.aculab.com>
+References: <20220809205640.70916-1-david@redhat.com>
+In-Reply-To: <20220809205640.70916-1-david@redhat.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-X-Received: by 2002:a02:6347:0:b0:342:8ad4:ef54 with SMTP id
- j68-20020a026347000000b003428ad4ef54mr12189351jac.162.1660122741600; Wed, 10
- Aug 2022 02:12:21 -0700 (PDT)
-Date:   Wed, 10 Aug 2022 02:12:21 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000004bffef05e5df7207@google.com>
-Subject: [syzbot] linux-next boot error: WARNING in copy_process
-From:   syzbot <syzbot+0f36653d0d34001e0b43@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, bigeasy@linutronix.de,
-        bpf@vger.kernel.org, brauner@kernel.org, david@redhat.com,
-        ebiederm@xmission.com, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, luto@kernel.org, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,57 +71,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: David Hildenbrand
+> Sent: 09 August 2022 21:57
+...
 
-syzbot found the following issue on:
+These two functions seem to contain a lot of the same tests.
+They also seem a bit large for 'inline'.
 
-HEAD commit:    bc6c6584ffb2 Add linux-next specific files for 20220810
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=109b7021080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5784be4315a4403b
-dashboard link: https://syzkaller.appspot.com/bug?extid=0f36653d0d34001e0b43
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> -static inline bool can_follow_write_pte(pte_t pte, unsigned int flags)
+> +/* FOLL_FORCE can write to even unwritable PTEs in COW mappings. */
+> +static inline bool can_follow_write_pte(pte_t pte, struct page *page,
+> +					struct vm_area_struct *vma,
+> +					unsigned int flags)
+>  {
+> -	return pte_write(pte) ||
+> -		((flags & FOLL_FORCE) && (flags & FOLL_COW) && pte_dirty(pte));
+> +	/* If the pte is writable, we can write to the page. */
+> +	if (pte_write(pte))
+> +		return true;
+> +
+> +	/* Maybe FOLL_FORCE is set to override it? */
+> +	if (!(flags & FOLL_FORCE))
+> +		return false;
+> +
+> +	/* But FOLL_FORCE has no effect on shared mappings */
+> +	if (vma->vm_flags & (VM_MAYSHARE | VM_SHARED))
+> +		return false;
+> +
+> +	/* ... or read-only private ones */
+> +	if (!(vma->vm_flags & VM_MAYWRITE))
+> +		return false;
+> +
+> +	/* ... or already writable ones that just need to take a write fault */
+> +	if (vma->vm_flags & VM_WRITE)
+> +		return false;
+> +
+> +	/*
+> +	 * See can_change_pte_writable(): we broke COW and could map the page
+> +	 * writable if we have an exclusive anonymous page ...
+> +	 */
+> +	if (!page || !PageAnon(page) || !PageAnonExclusive(page))
+> +		return false;
+> +
+> +	/* ... and a write-fault isn't required for other reasons. */
+> +	if (vma_soft_dirty_enabled(vma) && !pte_soft_dirty(pte))
+> +		return false;
+> +	return !userfaultfd_pte_wp(vma, pte);
+>  }
+...
+> -static inline bool can_follow_write_pmd(pmd_t pmd, unsigned int flags)
+> +/* FOLL_FORCE can write to even unwritable PMDs in COW mappings. */
+> +static inline bool can_follow_write_pmd(pmd_t pmd, struct page *page,
+> +					struct vm_area_struct *vma,
+> +					unsigned int flags)
+>  {
+> -	return pmd_write(pmd) ||
+> -	       ((flags & FOLL_FORCE) && (flags & FOLL_COW) && pmd_dirty(pmd));
+> +	/* If the pmd is writable, we can write to the page. */
+> +	if (pmd_write(pmd))
+> +		return true;
+> +
+> +	/* Maybe FOLL_FORCE is set to override it? */
+> +	if (!(flags & FOLL_FORCE))
+> +		return false;
+> +
+> +	/* But FOLL_FORCE has no effect on shared mappings */
+> +	if (vma->vm_flags & (VM_MAYSHARE | VM_SHARED))
+> +		return false;
+> +
+> +	/* ... or read-only private ones */
+> +	if (!(vma->vm_flags & VM_MAYWRITE))
+> +		return false;
+> +
+> +	/* ... or already writable ones that just need to take a write fault */
+> +	if (vma->vm_flags & VM_WRITE)
+> +		return false;
+> +
+> +	/*
+> +	 * See can_change_pte_writable(): we broke COW and could map the page
+> +	 * writable if we have an exclusive anonymous page ...
+> +	 */
+> +	if (!page || !PageAnon(page) || !PageAnonExclusive(page))
+> +		return false;
+> +
+> +	/* ... and a write-fault isn't required for other reasons. */
+> +	if (vma_soft_dirty_enabled(vma) && !pmd_soft_dirty(pmd))
+> +		return false;
+> +	return !userfaultfd_huge_pmd_wp(vma, pmd);
+>  }
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+0f36653d0d34001e0b43@syzkaller.appspotmail.com
+Perhaps only the initial call (common success path?) should
+be inlined?
+With the flags and vma tests being moved to an inline helper.
 
-------------[ cut here ]------------
-DEBUG_LOCKS_WARN_ON(!p->softirqs_enabled)
-WARNING: CPU: 0 PID: 1047 at kernel/fork.c:2115 copy_process+0x36c9/0x7120 kernel/fork.c:2115
-Modules linked in:
-CPU: 0 PID: 1047 Comm: kworker/u4:5 Not tainted 5.19.0-next-20220810-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Workqueue: events_unbound call_usermodehelper_exec_work
-RIP: 0010:copy_process+0x36c9/0x7120 kernel/fork.c:2115
-Code: 0c 31 ff 89 de e8 a7 00 35 00 85 db 0f 85 c3 d7 ff ff e8 da 03 35 00 48 c7 c6 c0 11 eb 89 48 c7 c7 00 12 eb 89 e8 68 3a f3 07 <0f> 0b e9 a4 d7 ff ff e8 bb 03 35 00 0f 0b e8 b4 03 35 00 0f 0b e8
-RSP: 0000:ffffc90005187938 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff88801f015880 RSI: ffffffff8161f1f8 RDI: fffff52000a30f19
-RBP: ffffc90005187ac8 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000000 R11: 0000000000000001 R12: ffff88802017002c
-R13: ffff888020170000 R14: ffffc90005187c10 R15: 0000000000808100
-FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffff88823ffff000 CR3: 000000000bc8e000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- kernel_clone+0xe7/0xab0 kernel/fork.c:2675
- user_mode_thread+0xad/0xe0 kernel/fork.c:2744
- call_usermodehelper_exec_work kernel/umh.c:174 [inline]
- call_usermodehelper_exec_work+0xcc/0x180 kernel/umh.c:160
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e4/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
+	David
 
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

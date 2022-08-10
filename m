@@ -2,77 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A10AA58E7FD
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 09:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EF5F58E7FF
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 09:45:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230384AbiHJHnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 03:43:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36534 "EHLO
+        id S231151AbiHJHp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 03:45:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbiHJHnh (ORCPT
+        with ESMTP id S230119AbiHJHpX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 03:43:37 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D80F6DFB6
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 00:43:36 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id e15so20177801lfs.0
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 00:43:36 -0700 (PDT)
+        Wed, 10 Aug 2022 03:45:23 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE2572180A
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 00:45:21 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id l10so10661750lje.7
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 00:45:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=4Uo3ZWK2PkqauuhMI//wUmEctHGdo/pIjPS16v/DLy0=;
-        b=VsR7QQ+QVl+fX96n/HiH0wVDzNeE/WujLyYrlwS1BUaKKAtXTn39Y/yX5Jvr0xQwBr
-         hgSx7b9UUY9CgTJn2HLMQkSj3kKrtFIKhTylXbGKe21axbHXA9+Twz5kcDcEsDqmvIMO
-         rlw2XvctfsD+OdXlSeTx8TTPOFzPDdFUzArtLxb5k5d9S1m3pGpJ/PyfL3uBHtLSOBgk
-         +LP1d9yjOEL8kpceYEfO5dmCXrAKZWM6GLbApJTToj4MxGYteyxcaXFo6aSNzpH7ZbhL
-         Gbytzdm46sAP39As6HGxp/6tmDxeVC30B3AnrxM+BR7EuKINP9sI5WcIJZcssAZG7m7y
-         fXyQ==
+        bh=4Y8I/o2ZbiCR2XoMPvfK2Mfm06LP8ATnJlBaZaL2WHs=;
+        b=ZPY3vZrZ8hfIfAKR0pHDDnplr3AJ0h5vaoF072rkhn/U+6pqhT/wRJ9o9tyGJsPz7R
+         qkSLwvL2Hnj97oxpl/z2GYLfUUXIdoCs5zPPo9ELk7jm2lsNmmYMg+RcAmuyTSIPjPeZ
+         uoyeWXFLbXar6ODfT6wr25kab3akxPDlGMqO3RKne6tRgNlSsK+ncKwjoqgQkfKnW/iL
+         xnUiepF+ox5Igd7zPp1NRbCxR2i2xCQUISY7YZ033V4C7DMCsrQ4Ml5WyHatKEcZY73C
+         lQez4RsUV98ozXfwhVIZ0GhG9LE/Zp0cKSA9GS2Bg1W3JnUxDiOjLDFSUCNQE3DTLtH8
+         No3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=4Uo3ZWK2PkqauuhMI//wUmEctHGdo/pIjPS16v/DLy0=;
-        b=x/k1N84YNs0She7v9yZRKUKDY1HbSlQsqt12nS3kB3YTRmw9R8gwRycjcvFJxlcHv5
-         2hRWFM0KGhbG/EXxmcwcjVPROzX7OyZ//yaBOTOB3gRHyW8rxBsKcCE1zXXXeQMCRW80
-         CD31D6sqc6KilOarIbkuzXvALSJmNna1tawMj9W61ca4qb+zjjKc1bpGkqBaemLe0kYz
-         0wwXN3qV60Z2h3a+lGAFxvd7JxGBBipfN9OGHWKFH1FpBbkteKBlC6Gsyv6ixE8cnllp
-         YGXuKk+GM1mS2/8dyXyPyHF3LhBBzx7kBNtUt2DWiX6gyqyHfrx+uehlbmWJLDPUKgPg
-         0aFA==
-X-Gm-Message-State: ACgBeo2zOgZqeH+GhF3WlsJLH5HFZLSVtzH2Ici0zt1ci36jlkFpFS9S
-        dIkH8rEZAoHECCPNN1xQP4/sQw==
-X-Google-Smtp-Source: AA6agR6syBfgrUlsJSc6hKtDPcOaY8F+c1yciw+joV8Nk7hcfd3tYDrltR8Qxi4yFU1zgBfg0xHe3g==
-X-Received: by 2002:a05:6512:e8c:b0:48a:f47a:63e3 with SMTP id bi12-20020a0565120e8c00b0048af47a63e3mr9953796lfb.325.1660117414618;
-        Wed, 10 Aug 2022 00:43:34 -0700 (PDT)
+        bh=4Y8I/o2ZbiCR2XoMPvfK2Mfm06LP8ATnJlBaZaL2WHs=;
+        b=7adbuhuJ8ieVcV9eA4ZEgmzjAuCnjV4E8vP5wauqlHpFGSOoVw0K7eqg6R8yOL8nkV
+         tZU/M1R0x98HZUbzSGSn8vCVNm1QXXmh7y/JrIA3LtkqD6hhOR7J6TCx0XQ5/H61XOGV
+         5E0RV8lKAYB92lzv1JRtmkpFa0NxUGD9kyPD05lu5RCmODrmMR90E0pizdIsAEO1UsWn
+         K2SzpLVDjNXlPHE8iVyNe7kB3basXjos1lFHYmDVXn+61R2t0nvFPG0CxnLC0AuQl+MZ
+         cmpvt5EnGugNh/S+Jw1jr9waFBRkr2heUK7VsiAe46zH0e3vg47HNp4Y1gd/c1xS4j1M
+         k5Pg==
+X-Gm-Message-State: ACgBeo1BC1Z3aIGr5KXGBDuHvgOi3KZcxQ5ZAsKJNnGiwIQDfxLVCxjG
+        wLx2+rMTwy2AWyK6eSz+KKchmA==
+X-Google-Smtp-Source: AA6agR7B5+SnMSke7I7OLX8tC2RJaujbBSE5MWsv2wnEiHh8r7AIqvCB6ZCQ66mKP71PVcQhW/VGLg==
+X-Received: by 2002:a2e:9cc2:0:b0:25e:4ec0:19cc with SMTP id g2-20020a2e9cc2000000b0025e4ec019ccmr8160991ljj.401.1660117520209;
+        Wed, 10 Aug 2022 00:45:20 -0700 (PDT)
 Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id b22-20020a056512071600b0048bd7136ef3sm237892lfs.221.2022.08.10.00.43.33
+        by smtp.gmail.com with ESMTPSA id u17-20020ac243d1000000b0048b0975ac7asm240813lfl.151.2022.08.10.00.45.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Aug 2022 00:43:34 -0700 (PDT)
-Message-ID: <25eefb70-a7ae-876e-c05a-bd308d41053e@linaro.org>
-Date:   Wed, 10 Aug 2022 10:43:33 +0300
+        Wed, 10 Aug 2022 00:45:19 -0700 (PDT)
+Message-ID: <6771dc13-36ab-dc86-e231-4f9caaa06bcd@linaro.org>
+Date:   Wed, 10 Aug 2022 10:45:18 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
-Subject: Re: [PATCH 1/3] dt-bindings: hwmon: Add IBM OCC bindings
+Subject: Re: [PATCH] dt-bindings: mfd: x-powers,axp152: Document the AXP228
+ variant
 Content-Language: en-US
-To:     Eddie James <eajames@linux.ibm.com>, joel@jms.id.au
-Cc:     linux@roeck-us.net, jdelvare@suse.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-fsi@lists.ozlabs.org,
-        devicetree@vger.kernel.org
-References: <20220802194656.240564-1-eajames@linux.ibm.com>
- <20220802194656.240564-2-eajames@linux.ibm.com>
- <297ddf1f-8ddc-902c-ff3d-06b9d19c6a7b@linaro.org>
- <59ee8c2f-3d6c-14ed-c9f8-2bbd9377a7da@linux.ibm.com>
+To:     Samuel Holland <samuel@sholland.org>, Chen-Yu Tsai <wens@csie.org>,
+        Lee Jones <lee.jones@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220810013430.27061-1-samuel@sholland.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <59ee8c2f-3d6c-14ed-c9f8-2bbd9377a7da@linux.ibm.com>
+In-Reply-To: <20220810013430.27061-1-samuel@sholland.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,30 +78,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/08/2022 22:42, Eddie James wrote:
->>> +  ibm,inactive-on-init:
->>> +    description: This property describes whether or not the OCC should
->>> +      be marked as active during device initialization. The alternative
->>> +      is for user space to mark the device active based on higher level
->>> +      communications between the BMC and the host processor.
->> I find the combination property name with this description confusing. It
->> sounds like init of OCC and somehow it should be inactive? I assume if
->> you initialize device, it is active. Or maybe the "init" is of something
->> else? What is more, non-negation is easier to understand, so rather
->> "ibm,active-on-boot" (or something like that).
+On 10/08/2022 04:34, Samuel Holland wrote:
+> AXP228 is a PMIC used on boards such as the Clockwork ClockworkPi and
+> DevTerm. Its register map appears to be identical to the AXP221 variant.
+> The only known difference is in the default values for regulator on/off
+> states and voltages.
 > 
-> 
-> Well, the host processor initializes the OCC during it's boot, but this 
-> document is describing a binding to be used by a service processor 
-> talking to the OCC. So the OCC may be in any state. The init meant 
-> driver init, but I will simply the description and change the property 
-> to be more explicit: ibm,no-poll-on-init since that is what is actually 
-> happening. Similar to the FSI binding for no-scan-on-init.
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
 
-no-scan-on-init is not a good example. It wasn't even reviewed by Rob
-(looking at commit). In both cases you describe driver behavior which is
-not appropriate for bindings. Instead you should describe the hardware
-characteristics/feature/bug/state which require skipping the initialization.
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 
 Best regards,

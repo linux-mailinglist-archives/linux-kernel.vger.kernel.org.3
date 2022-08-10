@@ -2,251 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44FA758F030
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 18:16:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C873258F034
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 18:17:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232631AbiHJQQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 12:16:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44372 "EHLO
+        id S232589AbiHJQRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 12:17:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231213AbiHJQQm (ORCPT
+        with ESMTP id S233385AbiHJQRP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 12:16:42 -0400
-Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 925FB6557A;
-        Wed, 10 Aug 2022 09:16:40 -0700 (PDT)
-Received: by mail-io1-f50.google.com with SMTP id q124so12542589iod.3;
-        Wed, 10 Aug 2022 09:16:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=kiGU7zOWuRr6D2fojapSvUuackH6COPGpWOffYlVWS0=;
-        b=rMGGnG9ZAEbWmaZR6E2w4pKz07yG2bk8NJIFYpv2puYFppxsJNPIjHveFfuA6tgaHQ
-         nuxrQgUqCT/L6761qVkRG17hmEKqLn98VbqsnrOT3Ir+EwecIrnF46TFcsMnAwf4u0oT
-         O0JqHBSVcY1axZNkylp+NEOAlqjO/RrbwLCA5ppHbGHcmMf3/enJevA14mQK15e1OGFi
-         11QSdreBrAW7rQRfRP+ug3ksMbXioT0dxSBaukOSFU8Bn0sJjuarloO53n43LmQBZ0Lb
-         ZgQJ7R8zk/moA9fUByqLlljj4ZA0EkVsP8Bn66Hp47CUNMWvnvW3L78qN+KyjOXy/wEH
-         SVpg==
-X-Gm-Message-State: ACgBeo3UrdQeHdR0u8X6h72J3aT90jroTfo9xFw6UYI+Uk6atX843os6
-        Rf1I6KCsCEKLC+mbKFjKEQ==
-X-Google-Smtp-Source: AA6agR6fftMUcfA/VrqYL6f8ap5o+zuI9m+Us8vMfhi4k1mHAwni95l8MMFQpez6QgSJkwKaqsr7hw==
-X-Received: by 2002:a6b:14cc:0:b0:684:7904:1576 with SMTP id 195-20020a6b14cc000000b0068479041576mr7727715iou.130.1660148199820;
-        Wed, 10 Aug 2022 09:16:39 -0700 (PDT)
-Received: from xps15.herring.priv ([64.188.179.248])
-        by smtp.googlemail.com with ESMTPSA id z17-20020a056602081100b0067885c5fd94sm2496974iow.29.2022.08.10.09.16.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 09:16:39 -0700 (PDT)
-From:   Rob Herring <robh@kernel.org>
-To:     Lee Jones <lee@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@aj.id.au>
-Cc:     devicetree@vger.kernel.org, openbmc@lists.ozlabs.org,
-        linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] dt-bindings: mfd: aspeed,ast2x00-scu: Convert to DT schema format
-Date:   Wed, 10 Aug 2022 10:16:35 -0600
-Message-Id: <20220810161635.73936-3-robh@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220810161635.73936-1-robh@kernel.org>
-References: <20220810161635.73936-1-robh@kernel.org>
+        Wed, 10 Aug 2022 12:17:15 -0400
+Received: from relayaws-01.paragon-software.com (relayaws-01.paragon-software.com [35.157.23.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE30967163
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 09:17:14 -0700 (PDT)
+Received: from dlg2.mail.paragon-software.com (vdlg-exch-02.paragon-software.com [172.30.1.105])
+        by relayaws-01.paragon-software.com (Postfix) with ESMTPS id D97111FA5;
+        Wed, 10 Aug 2022 16:15:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paragon-software.com; s=mail; t=1660148140;
+        bh=TS+7ykxS+/RbIUIrMkBZtw+JsrC7IJjJ/ehW21gIdRc=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=Sni8K2LkW8vrm0wv1vYyOcqiGezy0wbf8/S+RUDwWLMacS8KaZWVYYPzdixnrgOlA
+         4t+etfNF7yD93OTw9nvuGnWKrirZ6H4zXaKfWEm5aDEvs0yFwSIacyP2cyY9BfVpnO
+         KL2hweUpBdBDtiv6EBkfeUiPNkVp7djmfQbXPk/s=
+Received: from [172.30.8.65] (172.30.8.65) by
+ vdlg-exch-02.paragon-software.com (172.30.1.105) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Wed, 10 Aug 2022 19:17:12 +0300
+Message-ID: <8a3b479b-dedc-2a73-32fa-5c0440048b7d@paragon-software.com>
+Date:   Wed, 10 Aug 2022 19:17:11 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] fs/ntfs3: Remove unused function wnd_bits
+Content-Language: en-US
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+CC:     <ntfs3@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+        Abaci Robot <abaci@linux.alibaba.com>
+References: <20220721031841.24571-1-jiapeng.chong@linux.alibaba.com>
+From:   Konstantin Komarov <almaz.alexandrovich@paragon-software.com>
+In-Reply-To: <20220721031841.24571-1-jiapeng.chong@linux.alibaba.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.30.8.65]
+X-ClientProxiedBy: vdlg-exch-02.paragon-software.com (172.30.1.105) To
+ vdlg-exch-02.paragon-software.com (172.30.1.105)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the aspeed,ast2[456]00-scu binding to DT schema format.
 
-The original binding was missing '#address-cells', '#size-cells',
-'ranges', and child nodes, so add them.
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- .../bindings/mfd/aspeed,ast2x00-scu.yaml      | 110 ++++++++++++++++++
- .../devicetree/bindings/mfd/aspeed-scu.txt    |  48 --------
- 2 files changed, 110 insertions(+), 48 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/mfd/aspeed,ast2x00-scu.yaml
- delete mode 100644 Documentation/devicetree/bindings/mfd/aspeed-scu.txt
+On 7/21/22 06:18, Jiapeng Chong wrote:
+> Since the function wnd_bits is defined but not called in any file, it is
+> a useless function, and we delete it in view of the brevity of the code.
+> 
+> Remove some warnings found by running scripts/kernel-doc, which is
+> caused by using 'make W=1'.
+> 
+> fs/ntfs3/bitmap.c:54:19: warning: unused function 'wnd_bits' [-Wunused-function].
+> 
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+>   fs/ntfs3/bitmap.c | 5 -----
+>   1 file changed, 5 deletions(-)
+> 
+> diff --git a/fs/ntfs3/bitmap.c b/fs/ntfs3/bitmap.c
+> index e3b5680fd516..177c5bc53373 100644
+> --- a/fs/ntfs3/bitmap.c
+> +++ b/fs/ntfs3/bitmap.c
+> @@ -51,11 +51,6 @@ void ntfs3_exit_bitmap(void)
+>   	kmem_cache_destroy(ntfs_enode_cachep);
+>   }
+>   
+> -static inline u32 wnd_bits(const struct wnd_bitmap *wnd, size_t i)
+> -{
+> -	return i + 1 == wnd->nwnd ? wnd->bits_last : wnd->sb->s_blocksize * 8;
+> -}
+> -
+>   /*
+>    * wnd_scan
+>    *
 
-diff --git a/Documentation/devicetree/bindings/mfd/aspeed,ast2x00-scu.yaml b/Documentation/devicetree/bindings/mfd/aspeed,ast2x00-scu.yaml
-new file mode 100644
-index 000000000000..1689b986f441
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mfd/aspeed,ast2x00-scu.yaml
-@@ -0,0 +1,110 @@
-+# SPDX-License-Identifier: GPL-2.0
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mfd/aspeed,ast2x00-scu.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Aspeed System Control Unit
-+
-+description:
-+  The Aspeed System Control Unit manages the global behaviour of the SoC,
-+  configuring elements such as clocks, pinmux, and reset.
-+
-+maintainers:
-+  - Joel Stanley <joel@jms.id.au>
-+  - Andrew Jeffery <andrew@aj.id.au>
-+
-+properties:
-+  compatible:
-+    items:
-+      - enum:
-+          - aspeed,ast2400-scu
-+          - aspeed,ast2500-scu
-+          - aspeed,ast2600-scu
-+      - const: syscon
-+      - const: simple-mfd
-+
-+  reg:
-+    maxItems: 1
-+
-+  ranges: true
-+
-+  '#address-cells':
-+    const: 1
-+
-+  '#size-cells':
-+    const: 1
-+
-+  '#clock-cells':
-+    const: 1
-+
-+  '#reset-cells':
-+    const: 1
-+
-+patternProperties:
-+  '^p2a-control@[0-9a-f]+$':
-+    description: See Documentation/devicetree/bindings/misc/aspeed-p2a-ctrl.txt
-+    type: object
-+
-+  '^pinctrl(@[0-9a-f]+)?$':
-+    oneOf:
-+      - $ref: /schemas/pinctrl/aspeed,ast2400-pinctrl.yaml
-+      - $ref: /schemas/pinctrl/aspeed,ast2500-pinctrl.yaml
-+      - $ref: /schemas/pinctrl/aspeed,ast2600-pinctrl.yaml
-+
-+  '^interrupt-controller@[0-9a-f]+$':
-+    description: See Documentation/devicetree/bindings/interrupt-controller/aspeed,ast2xxx-scu-ic.txt
-+    type: object
-+
-+  '^silicon-id@[0-9a-f]+$':
-+    description: Unique hardware silicon identifiers within the SoC
-+    type: object
-+    additionalProperties: false
-+
-+    properties:
-+      compatible:
-+        items:
-+          - enum:
-+              - aspeed,ast2400-silicon-id
-+              - aspeed,ast2500-silicon-id
-+              - aspeed,ast2600-silicon-id
-+          - const: aspeed,silicon-id
-+
-+      reg:
-+        description:
-+          The reg should be the unique silicon id register, and not backwards
-+          compatible one in eg. the 2600.
-+        minItems: 1
-+        items:
-+          - description: silicon id information registers
-+          - description: unique chip id registers
-+
-+required:
-+  - compatible
-+  - reg
-+  - ranges
-+  - '#address-cells'
-+  - '#size-cells'
-+  - '#clock-cells'
-+  - '#reset-cells'
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    syscon@1e6e2000 {
-+        compatible = "aspeed,ast2400-scu", "syscon", "simple-mfd";
-+        reg = <0x1e6e2000 0x1a8>;
-+        #clock-cells = <1>;
-+        #reset-cells = <1>;
-+
-+        #address-cells = <1>;
-+        #size-cells = <1>;
-+        ranges = <0x0 0x1e6e2000 0x1000>;
-+
-+        silicon-id@7c {
-+            compatible = "aspeed,ast2500-silicon-id", "aspeed,silicon-id";
-+            reg = <0x7c 0x4>, <0x150 0x8>;
-+        };
-+    };
-+...
-diff --git a/Documentation/devicetree/bindings/mfd/aspeed-scu.txt b/Documentation/devicetree/bindings/mfd/aspeed-scu.txt
-deleted file mode 100644
-index 857ee33f7329..000000000000
---- a/Documentation/devicetree/bindings/mfd/aspeed-scu.txt
-+++ /dev/null
-@@ -1,48 +0,0 @@
--The Aspeed System Control Unit manages the global behaviour of the SoC,
--configuring elements such as clocks, pinmux, and reset.
--
--Required properties:
--- compatible:	One of:
--		"aspeed,ast2400-scu", "syscon", "simple-mfd"
--		"aspeed,ast2500-scu", "syscon", "simple-mfd"
--
--- reg:		contains the offset and length of the SCU memory region
--- #clock-cells: should be set to <1> - the system controller is also a
--	clock provider
--- #reset-cells: should be set to <1> - the system controller is also a
--	reset line provider
--
--Example:
--
--syscon: syscon@1e6e2000 {
--	compatible = "aspeed,ast2400-scu", "syscon", "simple-mfd";
--	reg = <0x1e6e2000 0x1a8>;
--	#clock-cells = <1>;
--	#reset-cells = <1>;
--};
--
--Silicon ID
-------------------
--
--Families have unique hardware silicon identifiers within the SoC.
--
--Required properties:
--
-- - compatible:		"aspeed,silicon-id" or:
--			"aspeed,ast2400-silicon-id" or
--			"aspeed,ast2500-silicon-id" or
--			"aspeed,ast2600-silicon-id"
--
-- - reg:			offset and length of the silicon id information
--			optionally, a second offset and length describes the unique chip id
--
--			The reg should be the unique silicon id register, and
--			not backwards compatible one in eg. the 2600.
--
--Example:
--
--
--silicon-id@7c {
--        compatible = "aspeed,ast2500-silicon-id", "aspeed,silicon-id";
--        reg = <0x7c 0x4 0x150 0x8>;
--};
--- 
-2.34.1
-
+Applied, thanks!

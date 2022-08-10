@@ -2,90 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43FF858E871
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 10:10:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0084958E873
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 10:12:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231379AbiHJIKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 04:10:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60282 "EHLO
+        id S231547AbiHJIMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 04:12:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbiHJIKb (ORCPT
+        with ESMTP id S229969AbiHJIMZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 04:10:31 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA220422C1;
-        Wed, 10 Aug 2022 01:10:28 -0700 (PDT)
-Received: from kwepemi500013.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4M2jGW6VKgzfZ4q;
-        Wed, 10 Aug 2022 16:07:31 +0800 (CST)
-Received: from [10.67.111.192] (10.67.111.192) by
- kwepemi500013.china.huawei.com (7.221.188.120) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 10 Aug 2022 16:10:23 +0800
-Message-ID: <e8c82119-e443-2557-a7e9-bf6a5d5a7ea9@huawei.com>
-Date:   Wed, 10 Aug 2022 16:10:23 +0800
+        Wed, 10 Aug 2022 04:12:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 87B7682FA8
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 01:12:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660119143;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BVu58TYO0FPeW6T6G0V7mzScRg9HM7I3clRpI4N+hAQ=;
+        b=gT5vOG9ITfisuccqcbBP4ZA2+Zp/XudzWhyAXHn1ri6k8G/L+Sk2dfJfQxZICtpv1RZLWb
+        YEEzwKw1FmdLvvcCWcKLWnS1fpK5h9Tf3FvPseeqHD+beXZfNlfYFaaR0G5homKAaZ+qPw
+        ikwjroObE7GX6nxWsyt+oVko+raVt74=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-475-dmYG90-CMIeTJAGjBZiYaw-1; Wed, 10 Aug 2022 04:12:22 -0400
+X-MC-Unique: dmYG90-CMIeTJAGjBZiYaw-1
+Received: by mail-wm1-f70.google.com with SMTP id 9-20020a1c0209000000b003a53ae8015bso745710wmc.1
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 01:12:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:reply-to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=BVu58TYO0FPeW6T6G0V7mzScRg9HM7I3clRpI4N+hAQ=;
+        b=Tw+RFHQm74tJIOjqZy5n8NxkrEQF1/LlwffPkaTsS/DQNQ3Aca0Z+GbiOEZjbSEU1z
+         ELgaqheUWELm9YBmmBQ1Npg7XkV+1CQopCzOc4eyElQYmSIEDarzmw0LOj0qawwfgOVN
+         dTRqElWEWGAsSqg8iLEQbCJbd1sJRN26ovyzskVunkg0d4skgBdSKULFvhxt+WyNByOm
+         c4ROl0YCjF5ri7hmgNZN7Wp1fuFIfl4Jh0+tIAy2p+dT72npe93ZFxlEGk+d0cR3zPoS
+         42r9ottFMF3psLGmMAezELa/a201SFFr3TCj6xMy/lD16KHt5AVz/uJN2kqWaMrCIzNt
+         FhrQ==
+X-Gm-Message-State: ACgBeo2M231+llRKO18pe0hpxTU4PYsMBx0zHeMgWUiLWhZV7QXLKN2M
+        kQiFVTPB7I1ZMyQHRqdPUYGtvo0SCxkFjf8/T1aESZLPPaQR8aUUwKdcJDpfCOG0bMSG6zsh69X
+        KIq15g9WqG+e6hg03oquvjkEP
+X-Received: by 2002:a05:600c:1f08:b0:3a3:1b00:c201 with SMTP id bd8-20020a05600c1f0800b003a31b00c201mr1529709wmb.171.1660119141210;
+        Wed, 10 Aug 2022 01:12:21 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7oCp90BLj4T5HGfpvC4HP9o0gO2Cs98+Ewm/lwRDzAkI2WRcLJZnfEgmVfFNIcV13+azy3JQ==
+X-Received: by 2002:a05:600c:1f08:b0:3a3:1b00:c201 with SMTP id bd8-20020a05600c1f0800b003a31b00c201mr1529662wmb.171.1660119140917;
+        Wed, 10 Aug 2022 01:12:20 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
+        by smtp.gmail.com with ESMTPSA id x11-20020adfdd8b000000b0020fff0ea0a3sm15273002wrl.116.2022.08.10.01.12.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Aug 2022 01:12:20 -0700 (PDT)
+Message-ID: <8ff76b5e-ae28-70c8-2ec5-01662874fb15@redhat.com>
+Date:   Wed, 10 Aug 2022 10:12:18 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH bpf-next v5 1/6] arm64: ftrace: Add ftrace direct call
- support
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Reply-To: eric.auger@redhat.com
+Subject: Re: [PATCH v2 0/5] KVM: Fix oneshot interrupts forwarding
 Content-Language: en-US
-To:     Florent Revest <revest@chromium.org>
-CC:     Mark Rutland <mark.rutland@arm.com>, <bpf@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Zi Shen Lim <zlim.lnx@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        David Ahern <dsahern@kernel.org>,
+To:     Marc Zyngier <maz@kernel.org>, Dmytro Maluka <dmy@semihalf.com>
+Cc:     "Dong, Eddie" <eddie.dong@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Daniel Kiss <daniel.kiss@arm.com>,
-        Steven Price <steven.price@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Peter Collingbourne <pcc@google.com>,
-        Mark Brown <broonie@kernel.org>,
-        Delyan Kratunov <delyank@fb.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Wang ShaoBo <bobo.shaobowang@huawei.com>,
-        <cj.chengjian@huawei.com>, <huawei.libin@huawei.com>,
-        <xiexiuqi@huawei.com>, <liwei391@huawei.com>
-References: <Yo4xb2w+FHhUtJNw@FVFF77S0Q05N>
- <0f8fe661-c450-ccd8-761f-dbfff449c533@huawei.com>
- <Yo9REdx3nsgbZunE@FVFF77S0Q05N>
- <40fda0b0-0efc-ea1b-96d5-e51a4d1593dd@huawei.com>
- <Yp4s7eNGvb2CNtPp@FVFF77S0Q05N.cambridge.arm.com>
- <55c1b9d6-1d53-9752-fb03-00f60ed15db7@huawei.com>
- <CABRcYmKEn7eajowROwZKerngf0eo0jddNzYgFp82tAqgu0BAxg@mail.gmail.com>
-From:   Xu Kuohai <xukuohai@huawei.com>
-In-Reply-To: <CABRcYmKEn7eajowROwZKerngf0eo0jddNzYgFp82tAqgu0BAxg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        "Liu, Rong L" <rong.l.liu@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>,
+        "upstream@semihalf.com" <upstream@semihalf.com>,
+        Dmitry Torokhov <dtor@google.com>
+References: <20220805193919.1470653-1-dmy@semihalf.com>
+ <BL0PR11MB30429034B6D59253AF22BCE08A639@BL0PR11MB3042.namprd11.prod.outlook.com>
+ <c5d8f537-5695-42f0-88a9-de80e21f5f4c@semihalf.com>
+ <BL0PR11MB304213273FA9FAC4EBC70FF88A629@BL0PR11MB3042.namprd11.prod.outlook.com>
+ <ef9ffbde-445e-f00f-23c1-27e23b6cca4f@semihalf.com>
+ <87o7wsbngz.wl-maz@kernel.org>
+From:   Eric Auger <eric.auger@redhat.com>
+In-Reply-To: <87o7wsbngz.wl-maz@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.111.192]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemi500013.china.huawei.com (7.221.188.120)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,153 +103,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/10/2022 1:03 AM, Florent Revest wrote:
-> On Thu, Jun 9, 2022 at 6:27 AM Xu Kuohai <xukuohai@huawei.com> wrote:
->> On 6/7/2022 12:35 AM, Mark Rutland wrote:
->>> On Thu, May 26, 2022 at 10:48:05PM +0800, Xu Kuohai wrote:
->>>> On 5/26/2022 6:06 PM, Mark Rutland wrote:
->>>>> On Thu, May 26, 2022 at 05:45:03PM +0800, Xu Kuohai wrote:
->>>>>> On 5/25/2022 9:38 PM, Mark Rutland wrote:
->>>>>>> On Wed, May 18, 2022 at 09:16:33AM -0400, Xu Kuohai wrote:
->>>>>>>> As noted in that thread, I have a few concerns which equally apply here:
->>>>>>>
->>>>>>> * Due to the limited range of BL instructions, it's not always possible to
->>>>>>>    patch an ftrace call-site to branch to an arbitrary trampoline. The way this
->>>>>>>    works for ftrace today relies upon knowingthe set of trampolines at
->>>>>>>    compile-time, and allocating module PLTs for those, and that approach cannot
->>>>>>>    work reliably for dynanically allocated trampolines.
->>>>>>
->>>>>> Currently patch 5 returns -ENOTSUPP when long jump is detected, so no
->>>>>> bpf trampoline is constructed for out of range patch-site:
->>>>>>
->>>>>> if (is_long_jump(orig_call, image))
->>>>>>     return -ENOTSUPP;
->>>>>
->>>>> Sure, my point is that in practice that means that (from the user's PoV) this
->>>>> may randomly fail to work, and I'd like something that we can ensure works
->>>>> consistently.
->>>>>
+Hi Marc,
+
+On 8/10/22 08:51, Marc Zyngier wrote:
+> On Wed, 10 Aug 2022 00:30:29 +0100,
+> Dmytro Maluka <dmy@semihalf.com> wrote:
+>> On 8/9/22 10:01 PM, Dong, Eddie wrote:
+>>>
+>>>> -----Original Message-----
+>>>> From: Dmytro Maluka <dmy@semihalf.com>
+>>>> Sent: Tuesday, August 9, 2022 12:24 AM
+>>>> To: Dong, Eddie <eddie.dong@intel.com>; Christopherson,, Sean
+>>>> <seanjc@google.com>; Paolo Bonzini <pbonzini@redhat.com>;
+>>>> kvm@vger.kernel.org
+>>>> Cc: Thomas Gleixner <tglx@linutronix.de>; Ingo Molnar <mingo@redhat.com>;
+>>>> Borislav Petkov <bp@alien8.de>; Dave Hansen <dave.hansen@linux.intel.com>;
+>>>> x86@kernel.org; H. Peter Anvin <hpa@zytor.com>; linux-
+>>>> kernel@vger.kernel.org; Eric Auger <eric.auger@redhat.com>; Alex
+>>>> Williamson <alex.williamson@redhat.com>; Liu, Rong L <rong.l.liu@intel.com>;
+>>>> Zhenyu Wang <zhenyuw@linux.intel.com>; Tomasz Nowicki
+>>>> <tn@semihalf.com>; Grzegorz Jaszczyk <jaz@semihalf.com>;
+>>>> upstream@semihalf.com; Dmitry Torokhov <dtor@google.com>
+>>>> Subject: Re: [PATCH v2 0/5] KVM: Fix oneshot interrupts forwarding
 >>>>
->>>> OK, should I suspend this work until you finish refactoring ftrace?
->>>
->>> Yes; I'd appreciate if we could hold on this for a bit.
->>>
->>> I think with some ground work we can avoid most of the painful edge cases and
->>> might be able to avoid the need for custom trampolines.
->>>
+>>>> On 8/9/22 1:26 AM, Dong, Eddie wrote:
+>>>>>> The existing KVM mechanism for forwarding of level-triggered
+>>>>>> interrupts using resample eventfd doesn't work quite correctly in the
+>>>>>> case of interrupts that are handled in a Linux guest as oneshot
+>>>>>> interrupts (IRQF_ONESHOT). Such an interrupt is acked to the device
+>>>>>> in its threaded irq handler, i.e. later than it is acked to the
+>>>>>> interrupt controller (EOI at the end of hardirq), not earlier. The
+>>>>>> existing KVM code doesn't take that into account, which results in
+>>>>>> erroneous extra interrupts in the guest caused by premature re-assert of an
+>>>> unacknowledged IRQ by the host.
+>>>>> Interesting...  How it behaviors in native side?
+>>>> In native it behaves correctly, since Linux masks such a oneshot interrupt at the
+>>>> beginning of hardirq, so that the EOI at the end of hardirq doesn't result in its
+>>>> immediate re-assert, and then unmasks it later, after its threaded irq handler
+>>>> completes.
+>>>>
+>>>> In handle_fasteoi_irq():
+>>>>
+>>>> 	if (desc->istate & IRQS_ONESHOT)
+>>>> 		mask_irq(desc);
+>>>>
+>>>> 	handle_irq_event(desc);
+>>>>
+>>>> 	cond_unmask_eoi_irq(desc, chip);
+>>>>
+>>>>
+>>>> and later in unmask_threaded_irq():
+>>>>
+>>>> 	unmask_irq(desc);
+>>>>
+>>>> I also mentioned that in patch #3 description:
+>>>> "Linux keeps such interrupt masked until its threaded handler finishes, to
+>>>> prevent the EOI from re-asserting an unacknowledged interrupt.
+>>> That makes sense. Can you include the full story in cover letter too?
+>> Ok, I will.
 >>
->> I'v read your WIP code, but unfortunately I didn't find any mechanism to
->> replace bpf trampoline in your code, sorry.
->>
->> It looks like bpf trampoline and ftrace works can be done at the same
->> time. I think for now we can just attach bpf trampoline to bpf prog.
->> Once your ftrace work is done, we can add support for attaching bpf
->> trampoline to regular kernel function. Is this OK?
-> 
-> Hey Mark and Xu! :)
-> 
-> I'm interested in this feature too and would be happy to help.
-> 
-> I've been trying to understand what you both have in mind to figure out a way
-> forward, please correct me if I got anything wrong! :)
-> 
-> 
-> It looks like, currently, there are three places where an indirection to BPF is
-> technically possible. Chronologically these are:
-> 
-> - the function's patchsite (currently there are 2 nops, this could become 4
->    nops with Mark's series on per call-site ops)
-> 
-> - the ftrace ops (currently called by iterating over a global list but could be
->    called more directly with Mark's series on per-call-site ops or by
->    dynamically generated branches with Wang's series on dynamic trampolines)
-> 
-> - a ftrace trampoline tail call (currently, this is after restoring a full
->    pt_regs but this could become an args only restoration with Mark's series on
->    DYNAMIC_FTRACE_WITH_ARGS)
-> 
-> 
-> If we first consider the situation when only a BPF program is attached to a
-> kernel function:
-> - Using the patchsite for indirection (proposed by Xu, same as on x86)
->     Pros:
->     - We have BPF trampolines anyway because they are required for orthogonal
->       features such as calling BPF programs as functions, so jumping into that
->       existing JITed code is straightforward
->     - This has the minimum overhead (eg: these trampolines only save the actual
->       number of args used by the function in ctx and avoid indirect calls)
->     Cons:
->     - If the BPF trampoline is JITed outside BL's limits, attachment can
->       randomly fail
-> 
-> - Using a ftrace op for indirection (proposed by Mark)
->    Pros:
->    - BPF doesn't need to care about BL's range, ftrace_caller will be in range
->    Cons:
->    - The ftrace trampoline would first save all args in an ftrace_regs only for
->      the BPF op to then re-save them in a BPF ctx array (as per BPF calling
->      convention) so we'd effectively have to do the work of saving args twice
->    - BPF currently uses DYNAMIC_FTRACE_WITH_DIRECT_CALLS APIs. Either arm64
->      should implement DIRECT_CALLS with... an indirect call :) (that is, the
->      arch_ftrace_set_direct_caller op would turn back its ftrace_regs into
->      arguments for the BPF trampoline) or BPF would need to use a different
->      ftrace API just on arm64 (to define new ops, which, unless if they would be
->      dynamically JITed, wouldn't be as performant as the existing BPF
->      trampolines)
-> 
-> - Using a ftrace trampoline tail call for indirection (not discussed yet iiuc)
->    Pros:
->    - BPF also doesn't need to care about BL's range
->    - This also leverages the existing BPF trampolines
->    Cons:
->    - This also does the work of saving/restoring arguments twice
->    - DYNAMIC_FTRACE_WITH_DIRECT_CALLS depends on DYNAMIC_FTRACE_WITH_REGS now
->      although in practice the registers kept by DYNAMIC_FTRACE_WITH_ARGS
->      should be enough to call BPF trampolines
-> 
-> If we consider the situation when both ftrace ops and BPF programs are attached
-> to a kernel function:
-> - Using the patchsite for indirection can't solve this
-> 
-> - Using a ftrace op for indirection (proposed by Mark) or using a ftrace
->    trampoline tail call as an indirection (proposed by Xu, same as on x86) have
->    the same pros & cons as in the BPF only situation except that this time we
->    pay the cost of registers saving twice for good reasons (we need args in both
->    ftrace_regs and the BPF ctx array formats anyway)
-> 
-> 
-> Unless I'm missing something, it sounds like the following approach would work:
-> - Always patch patchsites with calls to ftrace trampolines (within BL ranges)
-> - Always go through ops and have arch_ftrace_set_direct_caller set
->    ftrace_regs->direct_call (instead of pt_regs->orig_x0 in this patch)
-> - If ftrace_regs->direct_call != 0 at the end of the ftrace trampoline, tail
->    call it
-> 
-> Once Mark's series on DYNAMIC_FTRACE_WITH_ARGS is merged, we would need to have
-> DYNAMIC_FTRACE_WITH_DIRECT_CALLS
->    depend on DYNAMIC_FTRACE_WITH_REGS || DYNAMIC_FTRACE_WITH_ARGS
-> BPF trampolines (the only users of this API now) only care about args to the
-> attachment point anyway so I think this would work transparently ?
-> 
-> Once Mark's series on per-callsite ops is merged, the second step (going
-> through ops) would be significantly faster in the situation where only one
-> program is used, therefore one arch_ftrace_set_direct_caller op.
-> 
-> Once Wang's series on dynamic trampolines is merged, the second step (going
-> through ops) would also be significantly faster in the case when multiple ops
-> are attached.
-> 
-> 
-> What are your thoughts? If this sounds somewhat sane, I'm happy to help out
-> with the implementation as well :)
-> 
+>>>
+>>>> However, with KVM + vfio (or whatever is listening on the resamplefd) we don't
+>>>> check that the interrupt is still masked in the guest at the moment of EOI.
+>>>> Resamplefd is notified regardless, so vfio prematurely unmasks the host
+>>>> physical IRQ, thus a new (unwanted) physical interrupt is generated in the host
+>>>> and queued for injection to the guest."
+> Sorry to barge in pretty late in the conversation (just been Cc'd on
+> this), but why shouldn't the resamplefd be notified? If there has been
+yeah sorry to get you involved here ;-)
+> an EOI, a new level must be made visible to the guest interrupt
+> controller, no matter what the state of the interrupt masking is.
+>
+> Whether this new level is actually *presented* to a vCPU is another
+> matter entirely, and is arguably a problem for the interrupt
+> controller emulation.
 
-Hi Florent,
+FWIU on guest EOI the physical line is still asserted so the pIRQ is
+immediatly re-sampled by the interrupt controller (because the
+resamplefd unmasked the physical IRQ) and recorded as a guest IRQ
+(although it is masked at guest level). When the guest actually unmasks
+the vIRQ we do not get a chance to re-evaluate the physical line level.
 
-I'm struggling with how to attach bpf trampoline to regular kernel functions. I
-think your suggestion is fine. Thanks for the help!
+When running native, when EOI is sent, the physical line is still
+asserted but the IRQ is masked. When unmasking, the line is de-asserted.
 
-> Thanks!
-> Florent
-> .
+Thanks
+
+Eric
+>
+> For example on arm64, we expect to be able to read the pending state
+> of an interrupt from the guest irrespective of the masking state of
+> that interrupt. Any change to the interrupt flow should preserve this.
+>
+> Thankfully, we don't have the polarity issue (there is no such thing
+> in the GIC architecture) and we only deal with pending/not-pending.
+>
+> Thanks,
+>
+> 	M.
+>
 

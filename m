@@ -2,90 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2FFA58ECAD
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 15:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89BD158ECB1
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 15:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbiHJNCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 09:02:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
+        id S232494AbiHJNCL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 09:02:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232446AbiHJNBe (ORCPT
+        with ESMTP id S232461AbiHJNBv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 09:01:34 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6AF761B0F;
-        Wed, 10 Aug 2022 06:01:33 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 3E50E5C0358;
-        Wed, 10 Aug 2022 09:01:32 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Wed, 10 Aug 2022 09:01:32 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=themaw.net; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1660136492; x=
-        1660222892; bh=D2dDj1/YvO3PoXFbhxtyDvrJjuK0U5n+THc//8l/nSg=; b=0
-        uEws4l4g6w2vrXp4GfCdWCnTh+CSrYDl4BIH9cfZm8TNqDt0C1F4/kQu0PjMlz/7
-        IPok/mc8SanD4aZtIwfFt3wz2LHUZHri/bel2AmR1Prp9nlTkTF6qmPVN0tIj/SG
-        AfDJZIQi/OtqscaGUmTWTXaL5dG5bm8QhmTP5cvPLeVGBHXnrd6OuRALPdmLZh0P
-        391bvUHNo4eiljos5XQkZkKDPqPNvYRQ7wUkPdLCjbDv2+IbqC85GVUeNyErpJJl
-        Xi5ccgqV8fBFhUdrjhrfRsKvfLDnbr+zSzq/FQyQOZoqf7NVUUjgMvKqO13XQ9Lt
-        V53LdIwYZE1PGG+9FgXmg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1660136492; x=
-        1660222892; bh=D2dDj1/YvO3PoXFbhxtyDvrJjuK0U5n+THc//8l/nSg=; b=g
-        4PUnbuBsbuWyDlmRz2cl0jHM/Wz9W+AAacy4xwFeYEc7jLDtN4vqJfBrNQvPBg+U
-        sY+nbk3DIt8+312Frgxpo5/eh0pZPP0UD4YIRuWX+vyTew6o8ohjY3wbA8F7WD/4
-        zVNvmYG1ldBGhPRo+DJx/GazOdXyvRtuvR9PUM86q4SoybRXO3yu2xuT86kgeiOZ
-        +nLUeLICLrWZ/MA7NQLAdZ8LqfDRUKkal0QJhULVY3dYUG/Vl6WeDoqfDVDanteq
-        o93PFZ8iw+tAFheEtKPh+kjKUtwONChc1p5w/P8cdILsF5vFYUAcltY0hTM2gHKL
-        PcviV0zo6aBwQ7dSp/n7w==
-X-ME-Sender: <xms:K6zzYgaufmFQYN3G-XE3GD_vN0bwiRO7qVkN-7J17C4m-ECwAF-3mA>
-    <xme:K6zzYraYxzysb-4EsfTXXjMDMY0mKilEmSyoJfChHtgKlkxJitcAAAyZvnFn1wjKy
-    V_hf6iZuIsn>
-X-ME-Received: <xmr:K6zzYq_hV8cfHgpYJ6ceTOAWwdug0m5PGJ7AYoOtsfGjkd4S1UUHhQcSgtIkrFVyScAdWozwAS1-XhSHVQ0PJvovtPIO8-mAKQhyK7RMb71iJgYeYlm2>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegvddgheejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpefkrghn
-    ucfmvghnthcuoehrrghvvghnsehthhgvmhgrfidrnhgvtheqnecuggftrfgrthhtvghrnh
-    epgeevhedvleejleevkeduvdfgtefgtdfgffevtdetudekteekheeluddthfdtleehnecu
-    ffhomhgrihhnpehsohhurhgtvgifrghrvgdrohhrghenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehrrghvvghnsehthhgvmhgrfidrnhgvth
-X-ME-Proxy: <xmx:K6zzYqq9Zeku69vjGyL7qCQ8y-siPza__UiByZwdf1sH727kGsR_sA>
-    <xmx:K6zzYrpBtEloIhq5qRx6uVC9MvBI9Bs9Pdmml3lfQfUOmueKype-Fw>
-    <xmx:K6zzYoS0K7lSIZ-quO3NK8tJ9UPkIejLJ1CbewJieP-GkVbetvyABg>
-    <xmx:LKzzYsnReg1zR2o7eA9WFra5rnD8htQ9ljHUtQvVHnPniq_-dR8abg>
-Feedback-ID: i31e841b0:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 10 Aug 2022 09:01:28 -0400 (EDT)
-Message-ID: <3364aae7-9247-21aa-9ea4-36348462df4c@themaw.net>
-Date:   Wed, 10 Aug 2022 21:01:26 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC][PATCH] uapi: Remove the inclusion of linux/mount.h from
- uapi/linux/fs.h
-Content-Language: en-US
-To:     Florian Weimer <fweimer@redhat.com>,
-        David Howells <dhowells@redhat.com>
-Cc:     linux-fsdevel@vger.kernel.org,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <christian@brauner.io>,
-        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <163410.1659964655@warthog.procyon.org.uk>
- <87zggce9fd.fsf@oldenburg.str.redhat.com>
-From:   Ian Kent <raven@themaw.net>
-In-Reply-To: <87zggce9fd.fsf@oldenburg.str.redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Wed, 10 Aug 2022 09:01:51 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01EAA6C770;
+        Wed, 10 Aug 2022 06:01:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B952BB81C5A;
+        Wed, 10 Aug 2022 13:01:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BEC7C433D6;
+        Wed, 10 Aug 2022 13:01:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660136508;
+        bh=sqRsv3j2KsslosUdoJUnMtju0RyhTkbMMdJP4XMtR88=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=jchSJKp9p/5pLvSZH+39SU4q8ijN/x2AHcXrL9qN7AoW7AiB37LS/ES63Pop4KgUE
+         40jkUWqzDfg0AKJ2PjdaR2uNXq3O2hzR8T9y7jVvL97ErOwZgfxRzykt+rz5D9O9o5
+         noHoK+EoDIdFoTRBXks8SetidjeJBTi5fSk6jo35EekFhZKcNJtorj7gv7zhToAqZZ
+         lvVOH5zmAywU5k9/X3T51lhVAGYLPoq7UZalTH6GU87bynLB8wNppLPxvrgGSgoQrZ
+         Vjh6ltoEUaF7xDpvaRAxbK7NWHm/tCyeQtSYn3j8kteRpWdqJZP2S51ghk0H7AFaCB
+         8DZ8Jx8ZFfkJg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=why.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oLlLG-0028Hw-Ap;
+        Wed, 10 Aug 2022 14:01:46 +0100
+Date:   Wed, 10 Aug 2022 14:01:45 +0100
+Message-ID: <87r11ouu9y.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     eric.auger@redhat.com
+Cc:     Dmytro Maluka <dmy@semihalf.com>,
+        "Dong, Eddie" <eddie.dong@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        "Liu, Rong L" <rong.l.liu@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>,
+        "upstream@semihalf.com" <upstream@semihalf.com>,
+        Dmitry Torokhov <dtor@google.com>
+Subject: Re: [PATCH v2 0/5] KVM: Fix oneshot interrupts forwarding
+In-Reply-To: <8ff76b5e-ae28-70c8-2ec5-01662874fb15@redhat.com>
+References: <20220805193919.1470653-1-dmy@semihalf.com>
+        <BL0PR11MB30429034B6D59253AF22BCE08A639@BL0PR11MB3042.namprd11.prod.outlook.com>
+        <c5d8f537-5695-42f0-88a9-de80e21f5f4c@semihalf.com>
+        <BL0PR11MB304213273FA9FAC4EBC70FF88A629@BL0PR11MB3042.namprd11.prod.outlook.com>
+        <ef9ffbde-445e-f00f-23c1-27e23b6cca4f@semihalf.com>
+        <87o7wsbngz.wl-maz@kernel.org>
+        <8ff76b5e-ae28-70c8-2ec5-01662874fb15@redhat.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: eric.auger@redhat.com, dmy@semihalf.com, eddie.dong@intel.com, seanjc@google.com, pbonzini@redhat.com, kvm@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, linux-kernel@vger.kernel.org, alex.williamson@redhat.com, rong.l.liu@intel.com, zhenyuw@linux.intel.com, tn@semihalf.com, jaz@semihalf.com, upstream@semihalf.com, dtor@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,50 +88,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/8/22 17:26, Florian Weimer wrote:
-> * David Howells:
->
->> We're seeing issues in autofs and xfstests whereby linux/mount.h (the UAPI
->> version) as included indirectly by linux/fs.h is conflicting with
->> sys/mount.h (there's a struct and an enum).
->>
->> Would it be possible to just remove the #include from linux/fs.h (as patch
->> below) and rely on those hopefully few things that need mount flags that don't
->> use the glibc header for them working around it by configuration?
-> Wasn't <linux/mount.h> split from <linux/fs.h> relatively recently, and
-> userspace is probably using <linux/fs.h> to get the mount flag
-> definitions?
+On Wed, 10 Aug 2022 09:12:18 +0100,
+Eric Auger <eric.auger@redhat.com> wrote:
+> 
+> Hi Marc,
+> 
+> On 8/10/22 08:51, Marc Zyngier wrote:
+> > On Wed, 10 Aug 2022 00:30:29 +0100,
+> > Dmytro Maluka <dmy@semihalf.com> wrote:
+> >> On 8/9/22 10:01 PM, Dong, Eddie wrote:
+> >>>
+> >>>> -----Original Message-----
+> >>>> From: Dmytro Maluka <dmy@semihalf.com>
+> >>>> Sent: Tuesday, August 9, 2022 12:24 AM
+> >>>> To: Dong, Eddie <eddie.dong@intel.com>; Christopherson,, Sean
+> >>>> <seanjc@google.com>; Paolo Bonzini <pbonzini@redhat.com>;
+> >>>> kvm@vger.kernel.org
+> >>>> Cc: Thomas Gleixner <tglx@linutronix.de>; Ingo Molnar <mingo@redhat.com>;
+> >>>> Borislav Petkov <bp@alien8.de>; Dave Hansen <dave.hansen@linux.intel.com>;
+> >>>> x86@kernel.org; H. Peter Anvin <hpa@zytor.com>; linux-
+> >>>> kernel@vger.kernel.org; Eric Auger <eric.auger@redhat.com>; Alex
+> >>>> Williamson <alex.williamson@redhat.com>; Liu, Rong L <rong.l.liu@intel.com>;
+> >>>> Zhenyu Wang <zhenyuw@linux.intel.com>; Tomasz Nowicki
+> >>>> <tn@semihalf.com>; Grzegorz Jaszczyk <jaz@semihalf.com>;
+> >>>> upstream@semihalf.com; Dmitry Torokhov <dtor@google.com>
+> >>>> Subject: Re: [PATCH v2 0/5] KVM: Fix oneshot interrupts forwarding
+> >>>>
+> >>>> On 8/9/22 1:26 AM, Dong, Eddie wrote:
+> >>>>>> The existing KVM mechanism for forwarding of level-triggered
+> >>>>>> interrupts using resample eventfd doesn't work quite correctly in the
+> >>>>>> case of interrupts that are handled in a Linux guest as oneshot
+> >>>>>> interrupts (IRQF_ONESHOT). Such an interrupt is acked to the device
+> >>>>>> in its threaded irq handler, i.e. later than it is acked to the
+> >>>>>> interrupt controller (EOI at the end of hardirq), not earlier. The
+> >>>>>> existing KVM code doesn't take that into account, which results in
+> >>>>>> erroneous extra interrupts in the guest caused by premature re-assert of an
+> >>>> unacknowledged IRQ by the host.
+> >>>>> Interesting...  How it behaviors in native side?
+> >>>> In native it behaves correctly, since Linux masks such a oneshot interrupt at the
+> >>>> beginning of hardirq, so that the EOI at the end of hardirq doesn't result in its
+> >>>> immediate re-assert, and then unmasks it later, after its threaded irq handler
+> >>>> completes.
+> >>>>
+> >>>> In handle_fasteoi_irq():
+> >>>>
+> >>>> 	if (desc->istate & IRQS_ONESHOT)
+> >>>> 		mask_irq(desc);
+> >>>>
+> >>>> 	handle_irq_event(desc);
+> >>>>
+> >>>> 	cond_unmask_eoi_irq(desc, chip);
+> >>>>
+> >>>>
+> >>>> and later in unmask_threaded_irq():
+> >>>>
+> >>>> 	unmask_irq(desc);
+> >>>>
+> >>>> I also mentioned that in patch #3 description:
+> >>>> "Linux keeps such interrupt masked until its threaded handler finishes, to
+> >>>> prevent the EOI from re-asserting an unacknowledged interrupt.
+> >>> That makes sense. Can you include the full story in cover letter too?
+> >> Ok, I will.
+> >>
+> >>>
+> >>>> However, with KVM + vfio (or whatever is listening on the resamplefd) we don't
+> >>>> check that the interrupt is still masked in the guest at the moment of EOI.
+> >>>> Resamplefd is notified regardless, so vfio prematurely unmasks the host
+> >>>> physical IRQ, thus a new (unwanted) physical interrupt is generated in the host
+> >>>> and queued for injection to the guest."
+> > Sorry to barge in pretty late in the conversation (just been Cc'd on
+> > this), but why shouldn't the resamplefd be notified? If there has been
+> yeah sorry to get you involved here ;-)
 
-Not sure myself but this is in the user space kernel includes
+No problem!
 
-and sys/mount.h has pretty much what linux/mount.h has plus a
+> > an EOI, a new level must be made visible to the guest interrupt
+> > controller, no matter what the state of the interrupt masking is.
+> >
+> > Whether this new level is actually *presented* to a vCPU is another
+> > matter entirely, and is arguably a problem for the interrupt
+> > controller emulation.
+> 
+> FWIU on guest EOI the physical line is still asserted so the pIRQ is
+> immediatly re-sampled by the interrupt controller (because the
+> resamplefd unmasked the physical IRQ) and recorded as a guest IRQ
+> (although it is masked at guest level). When the guest actually unmasks
+> the vIRQ we do not get a chance to re-evaluate the physical line level.
 
-few function declarations. It's almost a complete duplication.
+Indeed, and maybe this is what should be fixed instead of moving the
+resampling point around (I was suggesting something along these lines
+in [1]).
 
+We already do this on arm64 for the timer, and it should be easy
+enough it generalise to any interrupt backed by the GIC (there is an
+in-kernel API to sample the pending state). No idea how that translate
+for other architectures though.
 
-The reality is that the enum declaration could be changed to
+	M.
 
-#defines (not a preferred approach) which leaves only the
+[1] https://lore.kernel.org/r/87mtccbie4.wl-maz@kernel.org
 
-struct mount_attr which is the difficult one to resolve.
-
-
->
-> In retrospect, it would have been better to add the new fsmount stuff to
-> a separate header file, so that we could include that easily from
-> <sys/mount.h> on the glibc side.  Adhemerval posted a glibc patch to
-> fake that (for recent compilers):
->
->    [PATCH] linux: Fix sys/mount.h usage with kernel headers
->    <https://sourceware.org/pipermail/libc-alpha/2022-August/141316.html>
->
-> I think it should work reliably, so that's probably the direction we are
-> going to move in.
-
-Looked a lot more complicated than I thought it could be, enough
-
-that I can't say if it will work so I'll take your word for it.
-
-
-Ian
-
+-- 
+Without deviation from the norm, progress is not possible.

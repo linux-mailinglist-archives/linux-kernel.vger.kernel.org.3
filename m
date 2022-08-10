@@ -2,203 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD44758F250
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 20:27:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BB8158F259
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 20:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231824AbiHJS10 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 14:27:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60998 "EHLO
+        id S232283AbiHJSaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 14:30:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230430AbiHJS1Y (ORCPT
+        with ESMTP id S229994AbiHJSaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 14:27:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2FA5B83F32
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 11:27:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660156042;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mzDDGnwFoFo4ZkuUQSYZ0wwJT+T1upkSCfUpFoGHWQ4=;
-        b=hMW6ZJhE8ytww4uylFBBs0DQhlk7H4gBLTJiai/RZMggOX2MSCzkyzq7POO1MLtFgokO6g
-        uCNVi3f99WVhYWJy34kgT/91va16LlO2YDfKb/bE7vmP9XZ/go5fznWHGImsK4gX5K1iW4
-        xP0OSTs14H5aA2lv8h+BmBe3k6cQQTw=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-632-9MQ0UhJnNuirmd9v16oYfQ-1; Wed, 10 Aug 2022 14:27:19 -0400
-X-MC-Unique: 9MQ0UhJnNuirmd9v16oYfQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 926382999B4E;
-        Wed, 10 Aug 2022 18:27:18 +0000 (UTC)
-Received: from [10.22.9.72] (unknown [10.22.9.72])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D426140466B1;
-        Wed, 10 Aug 2022 18:27:17 +0000 (UTC)
-Message-ID: <9b95dc38-9a3f-b9f1-80cc-c834621bd81c@redhat.com>
-Date:   Wed, 10 Aug 2022 14:27:17 -0400
+        Wed, 10 Aug 2022 14:30:18 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9CA120B1
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 11:30:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660156218; x=1691692218;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=eRIfxMriTtGaH/iXtP4gPBPyX9bBYd/FuKldl09xlak=;
+  b=PjIPB7V96ZNu4fD8QZXCjvvDrvE+r+FA3F1A0C/+mA3D20zzyc9sKMQE
+   CNp9Q5Mdxby1z2T5L/eGogy4Bq9TsPR/s5+r/HWDcSDQCWmya+XM1YthH
+   MAtbnLGm4RK46jhbswom5RTkenjtQlR7xb9Nd55FEsBucfmdYz3AlSSpj
+   sjWZxuSniDCdVxEsQfrt4Cdl990h0ewPu5jhqMc9XwPpojnw38jimWgIi
+   hcTA1awur3D/pnc1rBRKISXSd9Wi2wzZMNQL3sDCwTFCBre9qLWcAU/Zq
+   oAcDmg8cXSCIZdy4hJZX4mxUgRF5Y50jHPhQQPFwh1sP2DLRBX6ON1Y9F
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="289916927"
+X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
+   d="scan'208";a="289916927"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 11:30:17 -0700
+X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
+   d="scan'208";a="708323735"
+Received: from vietnamv-mobl1.amr.corp.intel.com (HELO [10.254.67.219]) ([10.254.67.219])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 11:30:16 -0700
+Message-ID: <238ea612-5a25-9323-b31f-0a14493db2f7@linux.intel.com>
+Date:   Wed, 10 Aug 2022 11:30:13 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2] mm/slab_common: Deleting kobject in
- kmem_cache_destroy() without holding slab_mutex/cpu_hotplug_lock
+ Thunderbird/91.9.1
 Content-Language: en-US
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <20220810164946.148634-1-longman@redhat.com>
- <YvP0ftGOZnoB0V6O@P9FQF9L96D.corp.robot.car>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <YvP0ftGOZnoB0V6O@P9FQF9L96D.corp.robot.car>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>
+Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
+References: <20220809234000.783284-1-daniel.sneddon@linux.intel.com>
+ <d6ffb489-7024-ff74-bd2f-d1e06573bb82@intel.com>
+From:   Daniel Sneddon <daniel.sneddon@linux.intel.com>
+Subject: Re: [PATCH] x86/apic: Don't disable x2APIC if locked
+In-Reply-To: <d6ffb489-7024-ff74-bd2f-d1e06573bb82@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/10/22 14:10, Roman Gushchin wrote:
-> On Wed, Aug 10, 2022 at 12:49:46PM -0400, Waiman Long wrote:
->> A circular locking problem is reported by lockdep due to the following
->> circular locking dependency.
+On 8/10/22 11:01, Dave Hansen wrote:
+> On 8/9/22 16:40, Daniel Sneddon wrote:
+>> The APIC supports two modes, legacy APIC (or xAPIC), and Extended APIC
+>> (or x2APIC).  X2APIC mode is mostly compatible with legacy APIC, but
+>> it disables the memory-mapped APIC interface in favor of one that uses
+>> MSRs.  The APIC mode is controlled by the EXT bit in the APIC MSR.
 >>
->>    +--> cpu_hotplug_lock --> slab_mutex --> kn->active --+
->>    |                                                     |
->>    +-----------------------------------------------------+
+>> Introduce support for a new feature that will allow the BIOS to lock
+>> the APIC in x2APIC mode.  If the APIC is locked in x2APIC mode and the
+>> kernel tries to disable the APIC or revert to legacy APIC mode a GP
+>> fault will occur.
 >>
->> The forward cpu_hotplug_lock ==> slab_mutex ==> kn->active dependency
->> happens in
+>> Introduce support for a new MSR (IA32_XAPIC_DISABLE_STATUS) and handle the
+>> new locked mode when the LEGACY_XAPIC_DISABLED bit is set.
 >>
->>    kmem_cache_destroy():	cpus_read_lock(); mutex_lock(&slab_mutex);
->>    ==> sysfs_slab_unlink()
->>        ==> kobject_del()
->>            ==> kernfs_remove()
->> 	      ==> __kernfs_remove()
->> 	          ==> kernfs_drain(): rwsem_acquire(&kn->dep_map, ...);
->>
->> The backward kn->active ==> cpu_hotplug_lock dependency happens in
->>
->>    kernfs_fop_write_iter(): kernfs_get_active();
->>    ==> slab_attr_store()
->>        ==> cpu_partial_store()
->>            ==> flush_all(): cpus_read_lock()
->>
->> One way to break this circular locking chain is to avoid holding
->> cpu_hotplug_lock and slab_mutex while deleting the kobject in
->> sysfs_slab_unlink() which should be equivalent to doing a write_lock
->> and write_unlock pair of the kn->active virtual lock.
->>
->> Since the kobject structures are not protected by slab_mutex or the
->> cpu_hotplug_lock, we can certainly release those locks before doing
->> the delete operation.
->>
->> Move sysfs_slab_unlink() and sysfs_slab_release() to the newly
->> created kmem_cache_release() and call it outside the slab_mutex &
->> cpu_hotplug_lock critical sections.
->>
->> Signed-off-by: Waiman Long <longman@redhat.com>
->> ---
->>   [v2] Break kmem_cache_release() helper into 2 separate ones.
->>
->>   mm/slab_common.c | 54 +++++++++++++++++++++++++++++++++---------------
->>   1 file changed, 37 insertions(+), 17 deletions(-)
->>
->> diff --git a/mm/slab_common.c b/mm/slab_common.c
->> index 17996649cfe3..7742d0446d8b 100644
->> --- a/mm/slab_common.c
->> +++ b/mm/slab_common.c
->> @@ -392,6 +392,36 @@ kmem_cache_create(const char *name, unsigned int size, unsigned int align,
->>   }
->>   EXPORT_SYMBOL(kmem_cache_create);
->>   
->> +#ifdef SLAB_SUPPORTS_SYSFS
->> +static void kmem_cache_workfn_release(struct kmem_cache *s)
->> +{
->> +	sysfs_slab_release(s);
->> +}
->> +#else
->> +static void kmem_cache_workfn_release(struct kmem_cache *s)
->> +{
->> +	slab_kmem_cache_release(s);
->> +}
->> +#endif
->> +
->> +/*
->> + * For a given kmem_cache, kmem_cache_destroy() should only be called
->> + * once or there will be a use-after-free problem. The actual deletion
->> + * and release of the kobject does not need slab_mutex or cpu_hotplug_lock
->> + * protection. So they are now done without holding those locks.
->> + */
->> +static void kmem_cache_release(struct kmem_cache *s)
->> +{
->> +#ifdef SLAB_SUPPORTS_SYSFS
->> +	sysfs_slab_unlink(s);
->> +#endif
->> +
->> +	if (s->flags & SLAB_TYPESAFE_BY_RCU)
->> +		schedule_work(&slab_caches_to_rcu_destroy_work);
->> +	else
->> +		kmem_cache_workfn_release(s);
->> +}
->> +
->>   static void slab_caches_to_rcu_destroy_workfn(struct work_struct *work)
->>   {
->>   	LIST_HEAD(to_destroy);
->> @@ -418,11 +448,7 @@ static void slab_caches_to_rcu_destroy_workfn(struct work_struct *work)
->>   	list_for_each_entry_safe(s, s2, &to_destroy, list) {
->>   		debugfs_slab_release(s);
->>   		kfence_shutdown_cache(s);
->> -#ifdef SLAB_SUPPORTS_SYSFS
->> -		sysfs_slab_release(s);
->> -#else
->> -		slab_kmem_cache_release(s);
->> -#endif
->> +		kmem_cache_workfn_release(s);
->>   	}
->>   }
->>   
->> @@ -437,20 +463,10 @@ static int shutdown_cache(struct kmem_cache *s)
->>   	list_del(&s->list);
->>   
->>   	if (s->flags & SLAB_TYPESAFE_BY_RCU) {
->> -#ifdef SLAB_SUPPORTS_SYSFS
->> -		sysfs_slab_unlink(s);
->> -#endif
->>   		list_add_tail(&s->list, &slab_caches_to_rcu_destroy);
->> -		schedule_work(&slab_caches_to_rcu_destroy_work);
-> Hi Waiman!
->
-> This version is much more readable, thank you!
->
-> But can we, please, leave this schedule_work(&slab_caches_to_rcu_destroy_work)
-> call here? I don't see a good reason to move it, do I miss something?
-> It's nice to have list_add_tail() and schedule_work() calls nearby, so
-> it's obvious we can't miss the latter.
+>> If the LEGACY_XAPIC_DISABLED is set, prevent the kernel
+>> from trying to disable it.
+> 
+> Let's also not obscure the fact that the MMIO/xAPIC interface is
+> troublesome and there are real-world, practical reasons a piece of
+> hardware might not want to implement it.  First on the list is:
+> 
+> 	https://aepicleak.com/
+> 
+Great point.  Since the problem with that interface wasn't public when I wrote
+this patch I didn't have anything like that to link against.  Would you like me
+to add the above link to the commit message?  I can certainly add more about the
+SGX leak associated with APIC.
 
-The reason that I need to move out schedule_work() as well is to make 
-sure that sysfs_slab_unlink() is called before sysfs_slab_release(). I 
-can't guarantee that if I do schedule_work() first. On the other hand, 
-moving sysfs_slab_unlink() into kmem_cache_workfn_release() introduces 
-unknown delay of when the sysfs file will be removed. I can add some 
-comment to make it more clear.
+> Second on the list is TDX.  The TDX module spec currently just dictates
+> that TDX guests must use x2APIC.  If this (IA32_XAPIC_DISABLE_STATUS)
+> mechanism was enumerated to TDX guests, they could use this instead of
+> crashing in burning in whatever horrid way they are now if someone
+> disables x2APIC on the command line.
+> 
+> It would also be nice to know roughly when this feature is showing up.
+> If it's going to show up as a part of a microcode update for my laptop
+> next week or next month, this might warrant a backport.  Intel would
+> presumably *want* a backport to happen there, too.
+> 
+I've been told that this will only be on Sapphire Rapids and newer.
 
-Please let me know if you have a better idea of dealing with this issue.
+> If it's going to be on one server CPU that's coming out in ten years,
+> then we can hold off.
+SPR will certainly be sooner than 10 years, and with distros running on LTS
+kernels, it is probably worth backporting.  Since this isn't a bug fix (not a sw
+bug anyway), is this something I can just CC stable or is there a better way to
+say "Yes, this is a new feature, BUT, you really want it anyway"?
 
-Thanks,
-Longman
+> 
+> It might also help to link to the documentation, even if it's below a
+> "--" in the changelog since these URLs aren't very stable.
+> 
+>> https://www.intel.com/content/www/us/en/developer/articles/technical/software-security-guidance/technical-documentation/cpuid-enumeration-and-architectural-msrs.html
+> 
+> or at least mention what the status of the documentation is.
+> 
+> The code looks OK to me, but I'm far from impartial because this isn't
+> my first look at it.  In any case:
+> 
+> Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
+
+Thanks!
 

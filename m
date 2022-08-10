@@ -2,105 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A132858F4F3
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 01:39:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3453258F4F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 01:41:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232797AbiHJXjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 19:39:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33922 "EHLO
+        id S232824AbiHJXk7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 19:40:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229722AbiHJXjH (ORCPT
+        with ESMTP id S233060AbiHJXks (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 19:39:07 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DBE27170D
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 16:39:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660174747; x=1691710747;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=5U0CJAVTSwVbsYns1fNFFVKObm/jI/IktTM+T34toaQ=;
-  b=j9tGoJFqQaYlj3SGxAnpw3WbmRy0mTzn1u3ulD6S5U0Gy6mOe8fGjpSq
-   6NFGSRuMuB7RWKPYAdcnE+krdckBL2ibAj/Jy+lUXqi3Go41ellQM5PHB
-   FUnMY2e5dTrinwHQAArjr5ZGHen7y8uvhL0rXRshkHQZAH4HlHWcZ+c8E
-   RiW8ZyOzCkw7wIziX72x4vI6uir0NPBNAhNy0e5wXmLgRCHw1tAaxppuF
-   I/FhcXRuIP//swBC42m1FjFSjdaFXH/SsbATdGyFzAFQBd7uzx8cAgjMm
-   SJUwS7ChRj9Aono8dGcFjD8Ntr2KkukjqHcSOajvDRQ+fZWutQQSMZoH1
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="274274516"
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="274274516"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 16:39:06 -0700
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="933092240"
-Received: from sarava2x-mobl1.gar.corp.intel.com (HELO [10.254.67.234]) ([10.254.67.234])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 16:39:05 -0700
-Message-ID: <bff78ad9-57d8-ca82-cc75-0b7e5024116d@linux.intel.com>
-Date:   Wed, 10 Aug 2022 16:38:59 -0700
+        Wed, 10 Aug 2022 19:40:48 -0400
+Received: from mail104.syd.optusnet.com.au (mail104.syd.optusnet.com.au [211.29.132.246])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 73753E14;
+        Wed, 10 Aug 2022 16:40:45 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-193-158.pa.nsw.optusnet.com.au [49.181.193.158])
+        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id C9A1E62D0EF;
+        Thu, 11 Aug 2022 09:40:43 +1000 (AEST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1oLvJZ-00BcME-R5; Thu, 11 Aug 2022 09:40:41 +1000
+Date:   Thu, 11 Aug 2022 09:40:41 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     syzbot <syzbot+ed920a72fd23eb735158@syzkaller.appspotmail.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk
+Subject: Re: [syzbot] INFO: task hung in __generic_file_fsync (3)
+Message-ID: <20220810234041.GL3861211@dread.disaster.area>
+References: <00000000000096592405e5dcaa9f@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
-        "Huang, Kai" <kai.huang@intel.com>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        "Gomez Iglesias, Antonio" <antonio.gomez.iglesias@intel.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-References: <20220809234000.783284-1-daniel.sneddon@linux.intel.com>
- <d6ffb489-7024-ff74-bd2f-d1e06573bb82@intel.com>
- <238ea612-5a25-9323-b31f-0a14493db2f7@linux.intel.com>
- <d4bcb22e-224c-d256-cb93-3ff6ed89a7d0@intel.com>
- <341ea6e9-d8f3-ee7a-6794-67408abbf047@linux.intel.com> <87r11nu52l.ffs@tglx>
- <83a0d220-1872-caba-4e7e-b6a366655cf2@linux.intel.com>
- <ba80b303-31bf-d44a-b05d-5c0f83038798@intel.com>
-From:   Daniel Sneddon <daniel.sneddon@linux.intel.com>
-Subject: Re: [PATCH] x86/apic: Don't disable x2APIC if locked
-In-Reply-To: <ba80b303-31bf-d44a-b05d-5c0f83038798@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00000000000096592405e5dcaa9f@google.com>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.4 cv=VuxAv86n c=1 sm=1 tr=0 ts=62f441fc
+        a=SeswVvpAPK2RnNNwqI8AaA==:117 a=SeswVvpAPK2RnNNwqI8AaA==:17
+        a=kj9zAlcOel0A:10 a=biHskzXt2R4A:10 a=edf1wS77AAAA:8 a=7-415B0cAAAA:8
+        a=SbdPs6kyW9B9Yl0RobsA:9 a=CjuIK1q_8ugA:10 a=igBNqPyMv6gA:10
+        a=DcSpbTIhAlouE1Uv7lRv:22 a=biEYGPWJfzWAr4FL6Ov7:22
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/10/22 16:09, Dave Hansen wrote:
-> On 8/10/22 16:03, Daniel Sneddon wrote:
->> On 8/10/22 15:06, Thomas Gleixner wrote:
->>> So this affects already deployed systems and we have to
->>>
->>>   - backport the x2apic lock changes
->>>
->>>   - provide proper diagnostics
->>>
->>>   - make SGX and TDX depend on X2APIC support
->> I'll add the comments Dave mentioned earlier, and will make SGX and TDX depend
->> on X2APIC since that makes sense regardless of what hw ends up with this change.
->>  Unless we want to get rid of CONFIG_X86_X2APIC like Dave mentioned?
+On Tue, Aug 09, 2022 at 10:53:21PM -0700, syzbot wrote:
+> Hello,
 > 
-> The TDX guest support in the kernel isn't _actually_ related to this*.
-> It's the host-side support that matters and that isn't merged yet.  I've
-> cc'd Kai so he doesn't forget to do this.
+> syzbot found the following issue on:
 > 
-> I agree on the SGX side, though.
+> HEAD commit:    200e340f2196 Merge tag 'pull-work.dcache' of git://git.ker..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=13d08412080000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=a3f4d6985d3164cd
+> dashboard link: https://syzkaller.appspot.com/bug?extid=ed920a72fd23eb735158
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15dd033e080000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16dbfa46080000
 > 
-> * TDX guest support already has this dependency, but it's for unrelated
->   reasons:
-> 
-> config INTEL_TDX_GUEST
->         bool "Intel TDX (Trust Domain Extensions) - Guest Support"
->         depends on X86_64 && CPU_SUP_INTEL
->         depends on X86_X2APIC
-So I got some more input.  SPR and newer will lock the APIC.  Older products
-will get a ucode update, but that ucode update won't include the APIC lock.  So,
-on non-SPR parts do we still want to make SGX depend on X2APIC?
+> Bisection is inconclusive: the issue happens on the oldest tested release.
+
+tl;dr: Well known problem. Don't do O_DSYNC direct IO writes on vfat.
+
+Basically, vfat uses __generic_file_sync() which takes the
+inode_lock(). It's not valid to take the inode_lock() in DIO
+completion callbacks  as we do for O_DSYNC/O_SYNC writes because
+setattr needs to do:
+
+	inode_lock()
+	inode_dio_wait()
+	  <waits for inode->i_dio_count to go to zero>
+
+to wait for all pending direct IO to drain before it can proceed.
+
+Hence:
+
+	<dio holds inode->i_dio_count reference>
+	dio_complete
+	  generic_write_sync
+	    vfs_fsync_range
+	      fat_file_fsync
+	        __generic_file_fsync
+		  inode_lock
+		    <blocks>
+
+O_DSYNC DIO completion will attempt to lock the inode with an
+elevated inode->i_dio_count (as is always the case when
+dio_complete() is called) and hence we have a trivial ABBA deadlock
+vector via truncate, hole punching, etc.
+
+> INFO: task kworker/0:1:14 blocked for more than 143 seconds.
+>       Not tainted 5.19.0-syzkaller-02972-g200e340f2196 #0
+> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> task:kworker/0:1     state:D stack:26544 pid:   14 ppid:     2 flags:0x00004000
+> Workqueue: dio/loop5 dio_aio_complete_work
+> Call Trace:
+>  <TASK>
+>  context_switch kernel/sched/core.c:5178 [inline]
+>  __schedule+0xa00/0x4c10 kernel/sched/core.c:6490
+>  schedule+0xda/0x1b0 kernel/sched/core.c:6566
+>  rwsem_down_write_slowpath+0x697/0x11e0 kernel/locking/rwsem.c:1182
+>  __down_write_common kernel/locking/rwsem.c:1297 [inline]
+>  __down_write_common kernel/locking/rwsem.c:1294 [inline]
+>  __down_write kernel/locking/rwsem.c:1306 [inline]
+>  down_write+0x135/0x150 kernel/locking/rwsem.c:1553
+>  inode_lock include/linux/fs.h:760 [inline]
+>  __generic_file_fsync+0xb0/0x1f0 fs/libfs.c:1119
+>  fat_file_fsync+0x73/0x200 fs/fat/file.c:191
+>  vfs_fsync_range+0x13a/0x220 fs/sync.c:188
+>  generic_write_sync include/linux/fs.h:2861 [inline]
+>  dio_complete+0x6dd/0x950 fs/direct-io.c:310
+>  process_one_work+0x996/0x1610 kernel/workqueue.c:2289
+>  worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+>  kthread+0x2e9/0x3a0 kernel/kthread.c:376
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+>  </TASK>
+
+There's dio completion.
+
+> INFO: task syz-executor775:3664 blocked for more than 144 seconds.
+>       Not tainted 5.19.0-syzkaller-02972-g200e340f2196 #0
+> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> task:syz-executor775 state:D stack:26128 pid: 3664 ppid:  3656 flags:0x00004004
+> Call Trace:
+>  <TASK>
+>  context_switch kernel/sched/core.c:5178 [inline]
+>  __schedule+0xa00/0x4c10 kernel/sched/core.c:6490
+>  schedule+0xda/0x1b0 kernel/sched/core.c:6566
+>  __inode_dio_wait fs/inode.c:2381 [inline]
+>  inode_dio_wait+0x22a/0x270 fs/inode.c:2399
+>  fat_setattr+0x3de/0x13c0 fs/fat/file.c:509
+>  notify_change+0xcd0/0x1440 fs/attr.c:418
+>  do_truncate+0x13c/0x200 fs/open.c:65
+>  do_sys_ftruncate+0x536/0x730 fs/open.c:193
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+
+There's truncate waiting on dio completion holding the inode lock.
+
+So, as expected, any filesystem that supports DIO and calls into
+__generic_file_fsync() for fsync functionality can easily deadlock
+truncate against O_DSYNC DIO writes...
+
+-Dave.
+-- 
+Dave Chinner
+david@fromorbit.com

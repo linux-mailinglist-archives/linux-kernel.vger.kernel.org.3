@@ -2,90 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7402A58E47E
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 03:27:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAE9658E481
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 03:31:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230031AbiHJB1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 21:27:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49644 "EHLO
+        id S230044AbiHJBan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 21:30:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230093AbiHJB1I (ORCPT
+        with ESMTP id S230038AbiHJBaS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 21:27:08 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D025FADD;
-        Tue,  9 Aug 2022 18:27:05 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id w14so12903564plp.9;
-        Tue, 09 Aug 2022 18:27:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=aMmzBt/TBT59uBGgogc8HNMQteHV+aheJkP8yVZzq38=;
-        b=fHR57LZaM+eGHS8Kvxf+MdiXJkXyfzeDA4Vk/JzKtfiCwZRhUPn3KWl3V/q5iDdKsc
-         W8D739RIOCAwDUAPBW8YWUqDrgyxZjSutzq05wRMOmau4JEosK7H8fP+E/aziyBkAe3H
-         z9kqGn2u3QRBMPACkLT/3w5p+AggUYLCpI0zQGhK0aGHDoDEPx7Hqwzd8xXXrzWJo5V7
-         Ispcan8lwNq7IRwPlVyN6ACGl0WM+I7dIJF3tTT7yrqj/72PG/PCryz7adTZwXkMdA6X
-         Q9W8loZpzQtQlaSzAZWmHkxv+6EQAAcyXW9/KDemK3AW7tAjubV2CWwoIcj3V9qQYeiS
-         GEUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=aMmzBt/TBT59uBGgogc8HNMQteHV+aheJkP8yVZzq38=;
-        b=IkF2+3l8e1MyzCBewAmrGFtkjrOoU86tD+AliXj5GfkR3QfaqnQfVlCFfBZYA7/xVe
-         bXWjSo2as4mZNvy5aVhr3iTwMh9iGj4g0v2aGUOQEolwwGPlOU/h5V8KrfK1e6UTxgnf
-         6BvNwdoFpwPiJpDDnmFx7UZqPo2My8ZYjd3j2ZFnaJUnk2rZPIs1BjLm2Qb3O01RFU6Q
-         h9WHTwETJp4Taz/2/FWx/JrmuE79mzZamfAEWZ7IMxB9/IvC8tsh1s9r6OAczNC1jrHP
-         xrpg994FMJWqp9M3QYu2KWMCZkgy/cbYj73kYm+a9mBTzl2+FBaEmmaumYoEbXSUDe6H
-         0dVg==
-X-Gm-Message-State: ACgBeo2+WiaufJ1ktCf+FmCQit5f0DbAVJr7pnUwCJXBHS9229O7bJpd
-        raeu6VGo6jpbTspMTlVKil0=
-X-Google-Smtp-Source: AA6agR5ttwmHSdAARFoSlrXLSeIVikShFhitZkshbZZxVg5OnVr/Y53jsTLQPRB5rC2ztDWn9l7ikw==
-X-Received: by 2002:a17:902:c24c:b0:16d:d5d4:aa84 with SMTP id 12-20020a170902c24c00b0016dd5d4aa84mr25307703plg.36.1660094825222;
-        Tue, 09 Aug 2022 18:27:05 -0700 (PDT)
-Received: from Laptop-X1 ([209.132.188.80])
-        by smtp.gmail.com with ESMTPSA id h3-20020a17090a580300b001f2ef2f9c6fsm223336pji.56.2022.08.09.18.27.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 18:27:04 -0700 (PDT)
-Date:   Wed, 10 Aug 2022 09:26:57 +0800
-From:   Hangbin Liu <liuhangbin@gmail.com>
-To:     Jonathan Toppins <jtoppins@redhat.com>
-Cc:     netdev@vger.kernel.org, Jay Vosburgh <j.vosburgh@gmail.com>,
-        Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [RFC net] bonding: 802.3ad: fix no transmission of LACPDUs
-Message-ID: <YvMJYb0VDJW+6CRh@Laptop-X1>
-References: <c2f698e6f73e6e78232ab4ded065c3828d245dbd.1660065706.git.jtoppins@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c2f698e6f73e6e78232ab4ded065c3828d245dbd.1660065706.git.jtoppins@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 9 Aug 2022 21:30:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D52C1D1
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 18:30:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 32AE2B81A03
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 01:30:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40D54C433D6;
+        Wed, 10 Aug 2022 01:30:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1660095013;
+        bh=h1Xe4kLj1fZVvhCfG/JILBgStIWuw0hoaqbRBEzMgYg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=SAXDGcalYV4NL1NfK1zPnZDJI1TJTB5rtxKYu8NosaTL2DGD3C+Qw+3pzUxHmtOrU
+         tb7l4QpOMDGve/O/fsSj38HuX8YENl3kWAeaEvchuGx0TrmDQxgig82SdeRuDdT1J1
+         ORVrgY/uJ10ezYCWeYjf1zc3HlPrpLhP5KAt8Lkk=
+Date:   Tue, 9 Aug 2022 18:30:12 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Carlos Llamas <cmllamas@google.com>
+Cc:     Liam Howlett <liam.howlett@oracle.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        syzbot <syzbot+a7b60a176ec13cafb793@syzkaller.appspotmail.com>,
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Martijn Coenen <maco@android.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Todd Kjos <tkjos@android.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Arve =?ISO-8859-1?Q?Hj=F8nnev=E5g?= <arve@android.com>
+Subject: Re: [PATCH] binder_alloc: Add missing mmap_lock calls when using
+ the VMA
+Message-Id: <20220809183012.ac2d52eb91eba55a12d3214a@linux-foundation.org>
+In-Reply-To: <YvLLQ/qasEJffdnn@google.com>
+References: <20220809160618.1052539-1-Liam.Howlett@oracle.com>
+        <YvKsI5pMbgQ5Irup@google.com>
+        <20220809190211.ew4taam2lcomramw@revolver>
+        <YvLLQ/qasEJffdnn@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 09, 2022 at 01:21:46PM -0400, Jonathan Toppins wrote:
-> ---
->  MAINTAINERS                                   |  1 +
->  drivers/net/bonding/bond_3ad.c                |  2 +-
->  .../net/bonding/bond-break-lacpdu-tx.sh       | 88 +++++++++++++++++++
+On Tue, 9 Aug 2022 21:01:55 +0000 Carlos Llamas <cmllamas@google.com> wrote:
 
-Hi Jon,
+> On Tue, Aug 09, 2022 at 07:02:17PM +0000, Liam Howlett wrote:
+> > > 
+> > > do we need to hold on to the lock while we loop through the pages here?
+> > 
+> > I think we do?  Holding this lock will ensure the pages don't go away, I
+> > believe (looking at mm/rmap.c comments on locking at the top)?
+> > 
+> > In any case, this function is called from print_binder_proc_stats()
+> > which looks to be a debugfs/debugging call so I thought safer would be
+> > better than faster and with a potential race.
+> 
+> The pages are protected by alloc->mutex, so you could immediately
+> release the mmap lock after binder_alloc_get_vma() call. I agree this
+> is a debugging call so it would be nice to reduce contention.
 
-You need a Makefile in this folder and set TEST_PROGS so we can generate the
-test in kselftest-list.txt.
-
-Thanks
-Hangbin
+I'll queue this patch for testing, shall update it if there's a v2.

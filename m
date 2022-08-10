@@ -2,67 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66C8058F49A
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 00:59:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0A2D58F49F
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 01:02:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233343AbiHJW6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 18:58:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56974 "EHLO
+        id S231709AbiHJXBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 19:01:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230251AbiHJW63 (ORCPT
+        with ESMTP id S229646AbiHJXBt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 18:58:29 -0400
-Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33FC6581F
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 15:58:27 -0700 (PDT)
-Received: by mail-oi1-x233.google.com with SMTP id w196so14391152oiw.10
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 15:58:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:from:to:cc;
-        bh=aD8W/mU/w9DXCUMu8xmgdZ40S1mS8qDFS7ArMahu2hc=;
-        b=nkyVsblhhsBlRF+8PqzMawD8WiimmDlyEgDDHiIM70mJeUlGRrWSyyPOOHc6d8bidw
-         G2/mMrelMlcaPrwdrVkVNOtuDN9Vt054xEfCle2FsYcJX6A8Aj++Hz4F6vvfVGAa3VFE
-         TNymzBUYzxqzcFui3TrMabNCGIR+mAs3A0f14=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:x-gm-message-state:from:to:cc;
-        bh=aD8W/mU/w9DXCUMu8xmgdZ40S1mS8qDFS7ArMahu2hc=;
-        b=mpYL2yavcCocuc9A4Q70HyCdDXSbSgXqZGzvKwNy3gScvCJVwbCcsQBc9Vo5vcymRr
-         9c9QLzzcYOGf83arC15fST/9YCgfXGFutzucpGUzyF4el3bAW+DKp3rZjK0BBKrz+fT8
-         SEAG263fzpafzJg6E1BV6YH+y4iZHFWlP35u4zI9XVskZUT6dQCV12TzscH3+O80p0mF
-         31wetu0W3MfOAPseZEAJnCDVYGVTLJzhVjCJdIyBsx4BAl4vZEzjxgMQnfappspJYeP6
-         CFXW3P0A+n9ClwHeZEtr4nFhWzYfIKN3xscTqkHhaBJawQQjjIX3OxMrrJESRA/g7M1+
-         vu6A==
-X-Gm-Message-State: ACgBeo22lAjDoY2KZVcwFTZbxcPgeCZOBaDRBVh5YxwQuhMiiZ5rFSde
-        gvO5/mdJutuOCBKsLx9LQos0dAMtD4NvhRpyMCS0mg==
-X-Google-Smtp-Source: AA6agR7ODLBwGfYSSWidVfNdZ49unwaUF4wwuUR687QtAoXrutAU9yUvXQP1FFwuu9hNMbk7ixb7I9OAJFt9boAQL50=
-X-Received: by 2002:a05:6808:1588:b0:342:ce6d:bfcd with SMTP id
- t8-20020a056808158800b00342ce6dbfcdmr2345405oiw.44.1660172307108; Wed, 10 Aug
- 2022 15:58:27 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 10 Aug 2022 17:58:26 -0500
+        Wed, 10 Aug 2022 19:01:49 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F6216068D;
+        Wed, 10 Aug 2022 16:01:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1904EB81ECC;
+        Wed, 10 Aug 2022 23:01:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48AABC433C1;
+        Wed, 10 Aug 2022 23:01:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660172505;
+        bh=NnDvxipWRWd22orltCAXMkg0yBGFjX0zipam7lQ+xZk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=fQxNqwPVBp5/BwVHJmmCpTrKNt8De6t9ihL+6vUTvAmr8X94LXBb1Kr1ATSYdCpp7
+         5795/Y/AupALDlYajNSBCEJsSYz44G3JlGqSkE0776U+lFbAj8TA3ooZwWD+rVEEiS
+         41EueM3llhm6ZoHPJK3oG52p2khuVOlPNUbBfc8okBbFsOx6acrpuFhjiZwRrcibeX
+         4B70Xbe5flokCaxsL5cjvTWEVP6BeDVQaKNsEaVhegJ1ZeUq3ROqnTzpIeCRggwD9d
+         oxYKF60xbEmGx/vyc1ER0LVhwdIdJBJ30ljgMYcSyhxcktgoE1hlEKfX+X+0RryuBG
+         F2DQuYibHMKPA==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] scripts/Makefile.extrawarn: Do not disable clang's -Wformat-zero-length
+Date:   Wed, 10 Aug 2022 16:01:33 -0700
+Message-Id: <20220810230133.1895778-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-In-Reply-To: <1660107909-27947-2-git-send-email-quic_c_skakit@quicinc.com>
-References: <1660107909-27947-1-git-send-email-quic_c_skakit@quicinc.com> <1660107909-27947-2-git-send-email-quic_c_skakit@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Wed, 10 Aug 2022 17:58:26 -0500
-Message-ID: <CAE-0n51uUxfa-XGCBb+b=gQ_z_GNoTfjxYxMJ4F-KuAGWJ5gcg@mail.gmail.com>
-Subject: Re: [RESEND PATCH V4 1/3] arm64: dts: qcom: sc7280: Cleanup the
- lpasscc node
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Satya Priya <quic_c_skakit@quicinc.com>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        quic_tdas@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,13 +54,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Satya Priya (2022-08-09 22:05:07)
-> Remove "cc" regmap from lpasscc node which is overlapping
-> with the lpass_aon regmap.
->
-> Fixes: 422a295221bb ("arm64: dts: qcom: sc7280: Add clock controller nodes")
-> Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
-> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
-> ---
+There are no instances of this warning in the tree across several
+difference architectures and configurations. This was added by
+commit 26ea6bb1fef0 ("kbuild, LLVMLinux: Supress warnings unless W=1-3")
+back in 2014, where it might have been necessary, but there are no
+instances of it now so stop disabling it to increase warning coverage
+for clang.
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ scripts/Makefile.extrawarn | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
+index 9bbaf7112a9b..69cec45c4e71 100644
+--- a/scripts/Makefile.extrawarn
++++ b/scripts/Makefile.extrawarn
+@@ -48,7 +48,6 @@ else
+ ifdef CONFIG_CC_IS_CLANG
+ KBUILD_CFLAGS += -Wno-initializer-overrides
+ KBUILD_CFLAGS += -Wno-sign-compare
+-KBUILD_CFLAGS += -Wno-format-zero-length
+ KBUILD_CFLAGS += $(call cc-disable-warning, pointer-to-enum-cast)
+ KBUILD_CFLAGS += -Wno-tautological-constant-out-of-range-compare
+ KBUILD_CFLAGS += $(call cc-disable-warning, unaligned-access)
+
+base-commit: aeb6e6ac18c73ec287b3b1e2c913520699358c13
+-- 
+2.37.1
+

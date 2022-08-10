@@ -2,98 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E02FF58E597
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 05:45:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43D7158E5E1
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 05:59:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbiHJDmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 23:42:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39094 "EHLO
+        id S230193AbiHJDqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 23:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiHJDlU (ORCPT
+        with ESMTP id S230100AbiHJDp5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 23:41:20 -0400
-Received: from mail-m963.mail.126.com (mail-m963.mail.126.com [123.126.96.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A40F067CB4
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 20:41:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=qV7ak
-        zLaGXu9fGQiOMj/yV6cyOJkqSiwyUBHI4SCrYU=; b=LSkXS3jfJZxSjzP5o387Q
-        ll5Ep25eEkPk/dJSrAFvzOGRu6he/h2J0oc4jR0k9oxXNz9FYKP1lEceCkEyN0IL
-        PldISBztuwmpl78QIdUnYpDbVN6guWHy4l7nTilbfoY36QP9NbGMmZfO3Y0TmwqW
-        7BwJYMc5FwH964JUZtyI+A=
-Received: from localhost.localdomain (unknown [116.128.244.169])
-        by smtp8 (Coremail) with SMTP id NORpCgAXx5N2KPNiByMLKA--.41747S2;
-        Wed, 10 Aug 2022 11:39:34 +0800 (CST)
-From:   Bing Huang <huangbing775@126.com>
-To:     mingo@redhat.com
-Cc:     peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, Bing Huang <huangbing@kylinos.cn>
-Subject: [PATCH] sched/topology: Add __init for init_defrootdomain
-Date:   Wed, 10 Aug 2022 11:39:32 +0800
-Message-Id: <20220810033932.171690-1-huangbing775@126.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 9 Aug 2022 23:45:57 -0400
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A889F491F6
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 20:45:55 -0700 (PDT)
+Received: by mail-vs1-xe32.google.com with SMTP id b124so13884687vsc.9
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 20:45:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=KW8ybOJFichyl+rL+B899j3HSHwvcdsvy2PdBohQB9I=;
+        b=E/y0/jft2wIPxHH4A5nTLopi7mdsnl2/bFJHZt05CvjZAr1BHT3KkAeldBbd6CzAY4
+         57QNhsaCDQk8J0tTcHt4rtYNdaFLc91e1nGyw4gBsyEiY/SmfmTorGSiztQKVWEYkn02
+         yBLt3iPhz48bUN6W56AymPGxJmbLXWHVKjmjlzqLDeCEPrvdHw4KjG8gHZOUGOy2fFQ9
+         FPD1WKw2tjidpZ4jaOQ0kbNOJjpdxOoCVGPfJ3NJGbavhb3Bh0nZogAPkVP8I15nlUvk
+         b7UcruiRkPkAehmZc0CO9kTwNiycoejpg0BTgIOEwGXtqDQy5EPVx5Q+l1axQCYuQd2g
+         qy4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=KW8ybOJFichyl+rL+B899j3HSHwvcdsvy2PdBohQB9I=;
+        b=ToKhDWoLUgD3tCCeC5MerdcOcRO9AOCUM5rq1E7eHx0vx9Yge6cCt3hQ1NaXRVh5LR
+         tWZxJe4zJ0KKs8VGHWsCpw3frOMVZ7aGh9ZHgpwhFFpbvVNpOJ13E5QdRW0zd4bMmwT4
+         X8u+SBpmJD2frcO9KE9F9SwZAudHWT8CB8gcvhV9zZMc0A2jgwRwpDaaA8DN91YoIvBI
+         U9ztPX8BvCtmQRzcIi4IWsRAnCqR1/i3M+Doj/qsNAr4mX67JC3J5bF8UuHvt+jmtv4Y
+         uDTafKcUL2m6VEr3Hr+IBF3V5g6mqeJSIaQnJLxV9+KM/Lo2QX5JdhPpa70UbFdBeo63
+         yerg==
+X-Gm-Message-State: ACgBeo1p/Ip4K+A7age0BZmJxgMFBkVe40cnaORviJSKEGVsFJhksVt5
+        nH3PRDH59vQ2tFWEvDZx2290O2yZxvKOABIWPFgp2Q==
+X-Google-Smtp-Source: AA6agR4Fs4XJ4C8ExqkOl2T320CK+M9XWX8GvmKn+P9Th7az4ltDyGarR+0gM+fMtLZiqvvDSckJDQb8eqfj/DDwnJ8=
+X-Received: by 2002:a67:c885:0:b0:38a:7a34:cbca with SMTP id
+ v5-20020a67c885000000b0038a7a34cbcamr1535612vsk.22.1660103154624; Tue, 09 Aug
+ 2022 20:45:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: NORpCgAXx5N2KPNiByMLKA--.41747S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Cr48ury3Kw4fJw1xKr43GFg_yoW8JFyrpF
-        yq9rW5G3y8GrWqq348C3ykurW3W3sxKw4Skan8tws8Jr1rGwn0gFn0vF43CryY9r45Gr4a
-        yF4qq342y3WUtFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07U0tC7UUUUU=
-X-Originating-IP: [116.128.244.169]
-X-CM-SenderInfo: xkxd0w5elqwlixv6ij2wof0z/1tbimQRZr19E8NvDKAABsx
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220808125237.277126-1-mairacanal@riseup.net>
+In-Reply-To: <20220808125237.277126-1-mairacanal@riseup.net>
+From:   David Gow <davidgow@google.com>
+Date:   Wed, 10 Aug 2022 11:45:43 +0800
+Message-ID: <CABVgOS=ziJi0+_6GVt0RCr9YzW+VUBWBwrMAnMAb1W35JnjnJw@mail.gmail.com>
+Subject: Re: [PATCH v4 0/3] kunit: Introduce KUNIT_EXPECT_MEMEQ and
+ KUNIT_EXPECT_MEMNEQ macros
+To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>
+Cc:     Brendan Higgins <brendanhiggins@google.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        andrealmeid@riseup.net, melissa.srw@gmail.com,
+        siqueirajordao@riseup.net, Isabella Basso <isabbasso@riseup.net>,
+        magalilemes00@gmail.com, tales.aparecida@gmail.com,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bing Huang <huangbing@kylinos.cn>
+On Mon, Aug 8, 2022 at 8:53 PM Ma=C3=ADra Canal <mairacanal@riseup.net> wro=
+te:
+>
+> Currently, in order to compare memory blocks in KUnit, the KUNIT_EXPECT_E=
+Q or
+> KUNIT_EXPECT_FALSE macros are used in conjunction with the memcmp functio=
+n,
+> such as:
+>   KUNIT_EXPECT_EQ(test, memcmp(foo, bar, size), 0);
+>
+> Although this usage produces correct results for the test cases, if the
+> expectation fails the error message is not very helpful, indicating only =
+the
+> return of the memcmp function.
+>
+> Therefore, create a new set of macros KUNIT_EXPECT_MEMEQ and
+> KUNIT_EXPECT_MEMNEQ that compare memory blocks until a determined size. I=
+n
+> case of expectation failure, those macros print the hex dump of the memor=
+y
+> blocks, making it easier to debug test failures for memory blocks.
+>
+> The v4 doesn't bring many changes. The output is aligned just like the pr=
+evious
+> version but it fixes some mail client problems (sorry about that) and men=
+tions
+> that this macros are not recommended for structured data.
+>
+> The first patch of the series introduces the KUNIT_EXPECT_MEMEQ and
+> KUNIT_EXPECT_MEMNEQ. The second patch adds an example of memory block
+> expectations on the kunit-example-test.c. And the last patch replaces the
+> KUNIT_EXPECT_EQ for KUNIT_EXPECT_MEMEQ on the existing occurrences.
+>
+> Best Regards,
+> - Ma=C3=ADra Canal
+>
+> v1 -> v2: https://lore.kernel.org/linux-kselftest/2a0dcd75-5461-5266-2749=
+-808f638f4c50@riseup.net/T/#m402cc72eb01fb3b88d6706cf7d1705fdd51e5da2
+>
+> - Change "determinated" to "specified" (Daniel Latypov).
+> - Change the macro KUNIT_EXPECT_ARREQ to KUNIT_EXPECT_MEMEQ, in order to =
+make
+> it easier for users to infer the right size unit (Daniel Latypov).
+> - Mark the different bytes on the failure message with a <> (Daniel Latyp=
+ov).
+> - Replace a constant number of array elements for ARRAY_SIZE() (Andr=C3=
+=A9 Almeida).
+> - Rename "array" and "expected" variables to "array1" and "array2" (Danie=
+l Latypov).
+>
+> v2 -> v3: https://lore.kernel.org/linux-kselftest/20220802212621.420840-1=
+-mairacanal@riseup.net/T/#t
+>
+> - Make the bytes aligned at output.
+> - Add KUNIT_SUBSUBTEST_INDENT to the output for the indentation (Daniel L=
+atypov).
+> - Line up the trailing \ at macros using tabs (Daniel Latypov).
+> - Line up the params to the functions (Daniel Latypov).
+> - Change "Increament" to "Augment" (Daniel Latypov).
+> - Use sizeof() for array sizes (Daniel Latypov).
+> - Add Daniel Latypov's tags.
+>
+> v3 -> v4: https://lore.kernel.org/linux-kselftest/CABVgOSm_59Yr82deQm2C=
+=3D18jjSv_akmn66zs4jxx3hfziXPeHg@mail.gmail.com/T/#t
+>
+> - Fix wrapped lines by the mail client (David Gow).
+> - Mention on documentation that KUNIT_EXPECT_MEMEQ is not recommended for
+> structured data (David Gow).
+> - Add Muhammad Usama Anjum's tag.
+>
 
-init_defrootdomain is only used in initialization
+Thanks very much! I've looked through and tested this, and it looks great t=
+o me.
 
-Signed-off-by: Bing Huang <huangbing@kylinos.cn>
----
- kernel/sched/sched.h    | 2 +-
- kernel/sched/topology.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+This entire series is
+Reviewed-by: David Gow <davidgow@google.com>
 
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index b0bf2287dd9d..cd761f1fc60c 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -883,7 +883,7 @@ struct root_domain {
- 	struct perf_domain __rcu *pd;
- };
- 
--extern void init_defrootdomain(void);
-+extern void __init init_defrootdomain(void);
- extern int sched_init_domains(const struct cpumask *cpu_map);
- extern void rq_attach_root(struct rq *rq, struct root_domain *rd);
- extern void sched_get_rd(struct root_domain *rd);
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index 8739c2a5a54e..dea9fa39e7c0 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -578,7 +578,7 @@ static int init_rootdomain(struct root_domain *rd)
-  */
- struct root_domain def_root_domain;
- 
--void init_defrootdomain(void)
-+void __init init_defrootdomain(void)
- {
- 	init_rootdomain(&def_root_domain);
- 
--- 
-2.25.1
+Cheers,
+-- David
 
 
-No virus found
-		Checked by Hillstone Network AntiVirus
-
+> Ma=C3=ADra Canal (3):
+>   kunit: Introduce KUNIT_EXPECT_MEMEQ and KUNIT_EXPECT_MEMNEQ macros
+>   kunit: Add KUnit memory block assertions to the example_all_expect_macr=
+os_test
+>   kunit: Use KUNIT_EXPECT_MEMEQ macro
+>
+>  .../gpu/drm/tests/drm_format_helper_test.c    |  6 +-
+>  include/kunit/assert.h                        | 34 ++++++++
+>  include/kunit/test.h                          | 84 +++++++++++++++++++
+>  lib/kunit/assert.c                            | 56 +++++++++++++
+>  lib/kunit/kunit-example-test.c                |  7 ++
+>  net/core/dev_addr_lists_test.c                |  4 +-
+>  6 files changed, 186 insertions(+), 5 deletions(-)
+>
+> --
+> 2.37.1
+>
+> --
+> You received this message because you are subscribed to the Google Groups=
+ "KUnit Development" group.
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to kunit-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgi=
+d/kunit-dev/20220808125237.277126-1-mairacanal%40riseup.net.

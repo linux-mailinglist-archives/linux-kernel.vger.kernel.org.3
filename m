@@ -2,61 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62AE858ED7F
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 15:41:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B0CF058ED82
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 15:41:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231318AbiHJNlC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 09:41:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51734 "EHLO
+        id S232840AbiHJNlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 09:41:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232825AbiHJNkp (ORCPT
+        with ESMTP id S232691AbiHJNlE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 09:40:45 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3DED3055E;
-        Wed, 10 Aug 2022 06:40:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id CEAC8CE1BFC;
-        Wed, 10 Aug 2022 13:40:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A988C433D6;
-        Wed, 10 Aug 2022 13:40:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660138840;
-        bh=wLk5bRUV/7zoq0ykHRoJu6VMP/9stZ4NhAOjcjRvdhU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UfTKxEyXYWHbIKp5OFyPWVgJ4+pDpCPoy1i/b/7uwS+iC7Pcj4Pq52DfHnt1BfWC4
-         0wY8qwELzASM7xo0DpkVnjcaQVVNlfU0T/NgL3yaEYQj+cbrdvpVWw1WUGNOxrnD2z
-         OmB0S3VZn0165sjNrC04uOHXcoezAPz/2kO/FpybOXoHUSq4ZMxe5zlB7R0nrsH3HY
-         RyPAV+dsSlxcl6MYa6oxCmnEOJqEb6OOSpjOOFZKPSPK+f5oVytfFbVJ671+FfDmDZ
-         shJb6IrXXf7YrqiZhN3x+UQFfzgAfgU9lJUJRiVoYTS5uE//bquI1OtdtFY8ltiNu3
-         kP8v7xEHOrcCw==
-Date:   Wed, 10 Aug 2022 14:40:35 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Patrice CHOTARD <patrice.chotard@foss.st.com>
-Cc:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-spi@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        christophe.kerello@foss.st.com
-Subject: Re: [PATCH v2 1/2] spi: stm32_qspi: Add transfer_one_message() spi
- callback
-Message-ID: <YvO1U7VB7WQv0oKR@sirena.org.uk>
-References: <20220810093215.794977-1-patrice.chotard@foss.st.com>
- <20220810093215.794977-2-patrice.chotard@foss.st.com>
- <YvOtZtrRHd4AT+j+@sirena.org.uk>
- <d41e3814-3fab-18a3-7218-d5c28eaecff8@foss.st.com>
- <YvOxOg0vXSGrZLfP@sirena.org.uk>
- <38200a6f-fdc1-fa94-7bc6-91ca528235ed@foss.st.com>
+        Wed, 10 Aug 2022 09:41:04 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF1946D92
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 06:41:03 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id q30so17763120wra.11
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 06:41:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=rGP5GeklV5sYvo4vtTgYCA65Zl+6s2ik7WEi4stFPCE=;
+        b=aQKijK28zoGuV84XdC62Cvvh84niNxkPtr5NhXGjEHyRQrunxHYA8+BuunqRjXq6g1
+         xENmksC4VVje463bqODvDsthkPaBsiPcAdd8X+ThAPal8WINm1zsKbqdSu7ryff2d3EL
+         7cgH5bXvKYAXHSJNSEAnLTUo8qrX4tMz6umKkAnY5gJJRm7o+IvC6MnW3mvhLMnXZP26
+         JBHOE/DFOI4IZWYgriP5aCMWWdIfKLWvCD+eLa8La1tPv4g2LCZY4xkM0qgZiVR1dP5t
+         YTzjZxNjm6Ih/h/Xe2NYbS8G9ZiFnrC1N3jKFstwbOUsNLUobE7LFU1ITRqzGyUrti7L
+         vvxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=rGP5GeklV5sYvo4vtTgYCA65Zl+6s2ik7WEi4stFPCE=;
+        b=VDAG937hImUrPzQ83SE23r7ZOfILMT4Dfnv2xMPkDZGMb3PImO9B2XBgKN6qQlx97U
+         3GvNMvb8Pin4+FQ9KXr6hTTAtfxLT3Q1d1MeejX8Qbww0tS9Y1SZdIuxuQwZiC84TllM
+         svw7jjL/z0C2R86HAYrq6QS4vGfprlEthjmW2trvL/xfM6BNMtbUwk52rAg9GRIB0O7P
+         ch5ivemLo+3vouY6/GA3ym9K3AeJEAiFAIoLvVNPEQfR2ay3M19zudb+61zF3qLt4UkV
+         WtmyincvZBQ4XFPZyPPncqUqieXYtsANRYTvzzMOeVVvg2YhZlbxv8MGX+4lK3l3ObYe
+         J/2w==
+X-Gm-Message-State: ACgBeo0VuHIPGFRTFfXKbQcY7iSZvtGG9v6zbLLbSsmAebZ9jrtPIz1R
+        yY1AJBg2oy9I2C4BPfDRru5WYA==
+X-Google-Smtp-Source: AA6agR7hqSLgdUcHVnV1a1G0PITSckyf7Kh30N3n6ZluCQ/1E0gsyeH1nQ2QNX+thQ2W5THNKIYLfw==
+X-Received: by 2002:a5d:47c1:0:b0:221:7670:687d with SMTP id o1-20020a5d47c1000000b002217670687dmr14268120wrc.496.1660138861673;
+        Wed, 10 Aug 2022 06:41:01 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id a3-20020adfe5c3000000b0021edb2d07bbsm15809382wrn.33.2022.08.10.06.41.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Aug 2022 06:41:00 -0700 (PDT)
+Message-ID: <200c59ca-dcfc-9ad8-aa1e-977708398c3b@linaro.org>
+Date:   Wed, 10 Aug 2022 15:40:59 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="21y0RXUsptdj3o80"
-Content-Disposition: inline
-In-Reply-To: <38200a6f-fdc1-fa94-7bc6-91ca528235ed@foss.st.com>
-X-Cookie: First pull up, then pull down.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] thermal/core: Add missing EXPORT_SYMBOL_GPL
+Content-Language: en-US
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+        "open list:THERMAL" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20220810100731.749317-1-daniel.lezcano@linaro.org>
+ <CAJZ5v0iv4oMsZyUg7-YY6cD2jsYyLdi7sDeE0GEm814kCEAvmQ@mail.gmail.com>
+From:   Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <CAJZ5v0iv4oMsZyUg7-YY6cD2jsYyLdi7sDeE0GEm814kCEAvmQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,42 +77,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 10/08/2022 13:58, Rafael J. Wysocki wrote:
+> On Wed, Aug 10, 2022 at 12:07 PM Daniel Lezcano
+> <daniel.lezcano@linaro.org> wrote:
+>>
+>> The function thermal_zone_device_register_with_trips() is not exported
+>> for modules.
+>>
+>> Add the missing EXPORT_SYMBOL_GPL().
+>>
+>> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> 
+> A Fixes tag missing?
 
---21y0RXUsptdj3o80
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+He he :) Indeed ...
 
-On Wed, Aug 10, 2022 at 03:31:59PM +0200, Patrice CHOTARD wrote:
-> On 8/10/22 15:23, Mark Brown wrote:
-> > On Wed, Aug 10, 2022 at 03:15:08PM +0200, Patrice CHOTARD wrote:
 
-> > Yes.  Though I'm not clear if the bindings actually want to enforce it
-> > there, it's a device level property not a controller level one so it
-> > might not be something where controller support gets validated.
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-> Ah yes, i see, parallel-memories should not be used in our qspi controller node.
-> So i can't reuse parallel-memories for my purpose.
-
-> So i need to add a new proprietary property at controller level as done in the v1 ?
-
-Can't the controller figure this out by looking at the properties of the
-connected devices?  You'd need to just return an error if we ever
-triggered transfer_one_message() on a device that can't support the
-operation.
-
---21y0RXUsptdj3o80
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLztVIACgkQJNaLcl1U
-h9B5Nwf+LqqU0x5SAVtWEAkovEh2F95cA6yjgmiKu5b4XJoJIIkHIi8Hym6frbxI
-/Dr2p4xqVytxvWo3HeH1mc/utjZ2nogSlwgODbdIsIW9pCVdZqdIckw/Bxc7u4nF
-/sqKHA8I8UwKqgFNeEAJtLRSOvm55KPe8UrjjFXgxB3yEFLrm0jgS9ULBXNpv9Mf
-W7+hbsbmtgOhkHeh9qpWExwBx/y//jLxQ8h/D0UT9F2A2TgiXMaKUeX8du0Z+PLr
-HD2BB2+vm3Bq/YprTBNGp/zyFdg/ESuWfhlmG041cW0CxPKFTGcr9Oz2qEtV8TYY
-fhc72oFs7Ylf8lrTOVN1FuQ+cH6GPg==
-=f5sp
------END PGP SIGNATURE-----
-
---21y0RXUsptdj3o80--
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog

@@ -2,176 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFF4658ECD7
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 15:13:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFCF858ECE0
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 15:15:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232503AbiHJNNT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 09:13:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47666 "EHLO
+        id S232161AbiHJNPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 09:15:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231318AbiHJNNQ (ORCPT
+        with ESMTP id S231919AbiHJNPa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 09:13:16 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98CEF13D2D
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 06:13:15 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id w15so16082552ljw.1
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 06:13:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=nngQRZGnds/Y7NmNdfaLwTyh7fHDxPDaXz0krm4HOo0=;
-        b=c6lQknkbXfNFPzpsmuorNmQebcNwoxTJb5dqCpryz0rtLMsD6hVHC672kC8f2fgrS2
-         q5oagdpE+I2lafw4k7bIG6SfeDn8Xfm3w54Wo3dOIMLOHEK+qcifgMx5UJbM7Z7IpNXR
-         Hem9/Ds96oeqm1vCMXqn/WxKy2tOpuuZSdpPVJQdWZW9zFz1cf0X2PystESFqo90yJok
-         BBxFJIOMGlrqeapimi+HyQ6kr9w/Y5XFR9yVKa5Zqr0wp54HTiSH6lnmzu+eQi8BzT/m
-         RMAud1swZybbuuKJH2XnkpisuJxIs5oiY/xdyskyN8hav0vv8XPsGEGq5d5tXe4DFyxs
-         eGhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=nngQRZGnds/Y7NmNdfaLwTyh7fHDxPDaXz0krm4HOo0=;
-        b=ctxmBQDR26geDWNl8KeXwsx3tOlmX3IV72wsXXiXJ7jltfC2lPo0DWTlFi7YzoCvop
-         8yxAxvgqsImPLucdBz9vStB78zj/Lfs6NZGxygK0YTe+I9fDHdNPidmKTftm82z8WDNa
-         8QpcBZdivjox4Ty6Ajp0VfXPmNPe7fWQWVM5Qt7E8NWmHlJxip6diiWtIuDFaO+SkJbW
-         QfD6dH3r4iRZzNVxoIYxTB+QBp2lHULYtgBjSvMNWJTxbx9psahHm2f50gds+YQs8+uR
-         UXWE/T8hAqvfG2CoChfs1h/UPT/tFNnvvhiSAwlcHwuzqf+0aGRmhqSIk06TeheTCK/e
-         JEkA==
-X-Gm-Message-State: ACgBeo2xMHoSwxHLJAJA2Dh/OxAdJjcsrGxkZoow6KHwLL4ClBoaWblh
-        YmRcTIY4/F3Ay4hA5S1k3shMbQ==
-X-Google-Smtp-Source: AA6agR63AjRSD7TVUqQA6Z/Rd87jj+EvZtoRkDO5XZs7B2qRb+FhFcfdmxgxqZklv/4j2aNTOcmxqQ==
-X-Received: by 2002:a05:651c:546:b0:25f:dd42:5d08 with SMTP id q6-20020a05651c054600b0025fdd425d08mr4690192ljp.239.1660137193840;
-        Wed, 10 Aug 2022 06:13:13 -0700 (PDT)
-Received: from localhost.localdomain ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id h11-20020a19700b000000b0048b08f0c4e9sm337349lfc.176.2022.08.10.06.13.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 06:13:13 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Christophe Branchereau <cbranchereau@gmail.com>,
-        Jonathan Bakker <xc-racer2@live.ca>,
-        Pratyush Yadav <p.yadav@ti.com>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] spi/panel: dt-bindings: drop 3-wire from common properties
-Date:   Wed, 10 Aug 2022 16:13:11 +0300
-Message-Id: <20220810131311.428645-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Wed, 10 Aug 2022 09:15:30 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ECE514D39;
+        Wed, 10 Aug 2022 06:15:27 -0700 (PDT)
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27A9YPt2022853;
+        Wed, 10 Aug 2022 15:15:13 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=rkpHv8Tbh6b+APur6AAgNWkVAtNoRSLElkQ+Ih3mAgQ=;
+ b=6hXZBpjPuIjZqE4eqHtYmkWVRABPpkWAAiwdbmrONw++06+XoIhLE+Cj78ukYOtf2/hO
+ sWDKmGcSSEf7TAzfybv00k9q0cg0EP0VjIzhu5AvcdiOUdQDO6VHLBhRkJz/fhLsxhZY
+ 9u9AumrORfRWG/rzyTmdlRYzo8OxuKEOWs2PqoJZVX68AymXzZlGIGweqy2GmS8+d56a
+ atgFS8RxGgbJFuDe0QyJxJvllire8LXNz+twwMU5JFyQeZOZgenTONY/H1kOxJTHhT34
+ FBsssktjpmStdVfGEY7IAyY+tjpshpb8V1f//6ha+NQmnSxMt7XGMgHYFBuenPqGCSua Nw== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3huwrr5158-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Aug 2022 15:15:13 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0C8F710002A;
+        Wed, 10 Aug 2022 15:15:12 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 1B05E2132EC;
+        Wed, 10 Aug 2022 15:15:10 +0200 (CEST)
+Received: from [10.201.21.72] (10.75.127.121) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Wed, 10 Aug
+ 2022 15:15:09 +0200
+Message-ID: <d41e3814-3fab-18a3-7218-d5c28eaecff8@foss.st.com>
+Date:   Wed, 10 Aug 2022 15:15:08 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 1/2] spi: stm32_qspi: Add transfer_one_message() spi
+ callback
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+CC:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <linux-spi@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>
+References: <20220810093215.794977-1-patrice.chotard@foss.st.com>
+ <20220810093215.794977-2-patrice.chotard@foss.st.com>
+ <YvOtZtrRHd4AT+j+@sirena.org.uk>
+From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
+In-Reply-To: <YvOtZtrRHd4AT+j+@sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.121]
+X-ClientProxiedBy: GPXDAG2NODE4.st.com (10.75.127.68) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-10_08,2022-08-10_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The spi-3wire property is device specific and should be accepted only if
-device really needs them.  Drop it from common spi-peripheral-props.yaml
-schema, mention in few panel drivers which use it and include instead in
-the SPI controller bindings.  The controller bindings will provide
-spi-3wire type validation and one place for description.  Each device
-schema must list the property if it is applicable.
+Hi Mark
 
-The Samsung S6E63M0 panel uses also spi-cpha/cpol properties on at least
-one board (ste-ux500-samsung-janice/dts), so add also these to the
-panel's bindings.
+On 8/10/22 15:06, Mark Brown wrote:
+> On Wed, Aug 10, 2022 at 11:32:14AM +0200, patrice.chotard@foss.st.com wrote:
+> 
+>> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
+>>
+>> v2: _ use parallel-memories property
+>>     _ set auto_runtime_pm to true
+>>     _ remove pm_runtime_*() usage in transfer_one_message() callback
+>> ---
+> 
+> The changelog should come after the --- so that it gets automatically
+> stripped out by tooling.  No need to resend just for this.
+> 
+>> +	/*
+>> +	 * Dual flash mode is only enable in case "parallel-memories" and
+>> +	 * "cs-gpios" properties are found in DT
+>> +	 */
+>> +	if (of_property_read_bool(dev->of_node, "parallel-memories") &&
+>> +	    of_gpio_named_count(dev->of_node, "cs-gpios")) {
+>> +		qspi->cr_reg = CR_DFM;
+>> +		dev_dbg(dev, "Dual flash mode enable");
+>> +	}
+> 
+> Do we need to add something to the DT bindings to indicate that
+> parallel-memories is valid?
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../bindings/display/panel/kingdisplay,kd035g6-54nt.yaml     | 2 ++
- .../bindings/display/panel/leadtek,ltk035c5444t.yaml         | 2 ++
- .../devicetree/bindings/display/panel/samsung,s6e63m0.yaml   | 4 ++++
- Documentation/devicetree/bindings/spi/spi-controller.yaml    | 5 +++++
- .../devicetree/bindings/spi/spi-peripheral-props.yaml        | 5 -----
- 5 files changed, 13 insertions(+), 5 deletions(-)
+You mean in the st,stm32-qspi.yaml DT binding file ? Right i think it could be preferable to add it.
 
-diff --git a/Documentation/devicetree/bindings/display/panel/kingdisplay,kd035g6-54nt.yaml b/Documentation/devicetree/bindings/display/panel/kingdisplay,kd035g6-54nt.yaml
-index 2a2756d19681..b4be9bd8ddde 100644
---- a/Documentation/devicetree/bindings/display/panel/kingdisplay,kd035g6-54nt.yaml
-+++ b/Documentation/devicetree/bindings/display/panel/kingdisplay,kd035g6-54nt.yaml
-@@ -23,6 +23,8 @@ properties:
-   reg: true
-   reset-gpios: true
- 
-+  spi-3wire: true
-+
- required:
-   - compatible
-   - power-supply
-diff --git a/Documentation/devicetree/bindings/display/panel/leadtek,ltk035c5444t.yaml b/Documentation/devicetree/bindings/display/panel/leadtek,ltk035c5444t.yaml
-index 817a9bed7d5a..ebdca5f5a001 100644
---- a/Documentation/devicetree/bindings/display/panel/leadtek,ltk035c5444t.yaml
-+++ b/Documentation/devicetree/bindings/display/panel/leadtek,ltk035c5444t.yaml
-@@ -24,6 +24,8 @@ properties:
-   reg: true
-   reset-gpios: true
- 
-+  spi-3wire: true
-+
- required:
-   - compatible
-   - power-supply
-diff --git a/Documentation/devicetree/bindings/display/panel/samsung,s6e63m0.yaml b/Documentation/devicetree/bindings/display/panel/samsung,s6e63m0.yaml
-index 940f7f88526f..6f1fc7469f07 100644
---- a/Documentation/devicetree/bindings/display/panel/samsung,s6e63m0.yaml
-+++ b/Documentation/devicetree/bindings/display/panel/samsung,s6e63m0.yaml
-@@ -24,6 +24,10 @@ properties:
-   default-brightness: true
-   max-brightness: true
- 
-+  spi-3wire: true
-+  spi-cpha: true
-+  spi-cpol: true
-+
-   vdd3-supply:
-     description: VDD regulator
- 
-diff --git a/Documentation/devicetree/bindings/spi/spi-controller.yaml b/Documentation/devicetree/bindings/spi/spi-controller.yaml
-index 655713fba7e2..01042a7f382e 100644
---- a/Documentation/devicetree/bindings/spi/spi-controller.yaml
-+++ b/Documentation/devicetree/bindings/spi/spi-controller.yaml
-@@ -96,6 +96,11 @@ patternProperties:
-     $ref: spi-peripheral-props.yaml
- 
-     properties:
-+      spi-3wire:
-+        $ref: /schemas/types.yaml#/definitions/flag
-+        description:
-+          The device requires 3-wire mode.
-+
-       spi-cpha:
-         $ref: /schemas/types.yaml#/definitions/flag
-         description:
-diff --git a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-index ce048e782e80..4beeb9e17694 100644
---- a/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-+++ b/Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
-@@ -29,11 +29,6 @@ properties:
-     description:
-       Chip select used by the device.
- 
--  spi-3wire:
--    $ref: /schemas/types.yaml#/definitions/flag
--    description:
--      The device requires 3-wire mode.
--
-   spi-cs-high:
-     $ref: /schemas/types.yaml#/definitions/flag
-     description:
--- 
-2.34.1
 
+Patrice

@@ -2,132 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63CB658F48C
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 00:54:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82DF658F492
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 00:56:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231820AbiHJWyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 18:54:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52414 "EHLO
+        id S231191AbiHJW4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 18:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231250AbiHJWyB (ORCPT
+        with ESMTP id S231250AbiHJW4W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 18:54:01 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA635A8B7;
-        Wed, 10 Aug 2022 15:54:00 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id s5-20020a17090a13c500b001f4da9ffe5fso3617161pjf.5;
-        Wed, 10 Aug 2022 15:54:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=lxZ1NGAiSTP73cSUEoGkOx6aRZyABhhViwltGrYhe9E=;
-        b=owAIw5XnlxRKipTQS/kUnxW97nZAbohYpcMbsOvQ0alvR4Z4RdrlUkYJTbOKg5WGwx
-         RVXF+rno6+iqBd8fyOnwS2HCzho8dxvBSLnKRvaEtfiGga3U7txf8Fgn8VhXsZcDGbZP
-         ktk8jidhPs6f9y6OX7qJwsdcVIavhVqVrPf88aLWG94V/3ZuwdAFlMvowiC8EMqUmS6N
-         vIjz85SXIyYc+43lzj27PBWORfff48Arq+B7/gFrTyw/awy9s96IXQ5CP5pUBf90yEZu
-         5Ev1mWx5E3h6U6qAMJaKcu2DwcDNxepV980jobU6q+lvquYLPZ7tB1mXb7yogRKiunOk
-         Xkvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=lxZ1NGAiSTP73cSUEoGkOx6aRZyABhhViwltGrYhe9E=;
-        b=Ljh3KG042Nuc4cEh1WRKMdC9QtodZTEIb25SzG41/+5hjhQqJCxXL7avH3t6R5sjqb
-         +s6tHvGtkTcRuoSliSG0Wexy8mM6bEbyWO1JzPZ1C0oHMXFJEjAxn2FTk6MOGeQQHsr5
-         JxE53NQR1iA1XQShHud+f2Pud6dW5Uz+ODsiKcROahekCK4DL/wLQkaMLjGAXZEkXshD
-         VuuAjY7Ps22yFuyZwMf/GYJEKYk7drRYViOl8IKWFTbzFwyHcx6B+5MYdD1ewWixTtXK
-         KxjA09eYbHgtkeNJ4oEWeZyudvBKxgKzBY5EKXWYSE4A7g8emfrIGfujuRvmdRGK3KCa
-         l2Qw==
-X-Gm-Message-State: ACgBeo0v01Ebb0hEm3S5ZrzfdKVr8eOx8qFlyNvg519jtw5p3jxDfmH2
-        XYlrvOMhM1tEpMRv8gz2f6o=
-X-Google-Smtp-Source: AA6agR7JEoiU8e8aUzYwboJBL1uZG9zUuw7r3JBfVIeLgtMOh8tPNt6wxTuTAo7vqrkXvDiyS4PepA==
-X-Received: by 2002:a17:90b:17c9:b0:1f3:3a7c:a3a7 with SMTP id me9-20020a17090b17c900b001f33a7ca3a7mr6041466pjb.76.1660172039748;
-        Wed, 10 Aug 2022 15:53:59 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:a3c8:d6b9:a5c2:1eca])
-        by smtp.gmail.com with ESMTPSA id w3-20020a170902e88300b0016be96e07d1sm13584240plg.121.2022.08.10.15.53.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 15:53:58 -0700 (PDT)
-Date:   Wed, 10 Aug 2022 15:53:55 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Mattijs Korpershoek <mkorpershoek@baylibre.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-kernel@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Fabien Parent <fparent@baylibre.com>,
-        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        Fabien Parent <parent.f@gmail.com>
-Subject: Re: [PATCH v2 0/7] Input: mt6779-keypad - double keys support
-Message-ID: <YvQ3A2/Pop4YzzQ8@google.com>
-References: <20220720-mt8183-keypad-v2-0-6d42c357cb76@baylibre.com>
+        Wed, 10 Aug 2022 18:56:22 -0400
+Received: from mail104.syd.optusnet.com.au (mail104.syd.optusnet.com.au [211.29.132.246])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 84134642F9;
+        Wed, 10 Aug 2022 15:56:21 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-193-158.pa.nsw.optusnet.com.au [49.181.193.158])
+        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id 68C6C62D24D;
+        Thu, 11 Aug 2022 08:56:20 +1000 (AEST)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1oLucc-00Bbew-Oy; Thu, 11 Aug 2022 08:56:18 +1000
+Date:   Thu, 11 Aug 2022 08:56:18 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Uros Bizjak <ubizjak@gmail.com>
+Cc:     linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Darrick J. Wong" <djwong@kernel.org>
+Subject: Re: [PATCH] fs/xfs: Use atomic64_try_cmpxchg in
+ xlog_grant_{add,sub}_space
+Message-ID: <20220810225618.GM3600936@dread.disaster.area>
+References: <20220809165615.9694-1-ubizjak@gmail.com>
+ <20220809220511.GI3600936@dread.disaster.area>
+ <20220809230244.GJ3600936@dread.disaster.area>
+ <CAFULd4YkSG4RES8=P5BjF8JH5En++XN6LpVNd391eYcy_baeyw@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220720-mt8183-keypad-v2-0-6d42c357cb76@baylibre.com>
-X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CAFULd4YkSG4RES8=P5BjF8JH5En++XN6LpVNd391eYcy_baeyw@mail.gmail.com>
+X-Optus-CM-Score: 0
+X-Optus-CM-Analysis: v=2.4 cv=e9dl9Yl/ c=1 sm=1 tr=0 ts=62f43794
+        a=SeswVvpAPK2RnNNwqI8AaA==:117 a=SeswVvpAPK2RnNNwqI8AaA==:17
+        a=kj9zAlcOel0A:10 a=biHskzXt2R4A:10 a=7-415B0cAAAA:8 a=VwQbUJbxAAAA:8
+        a=99CUqXMKFniesV8lYRMA:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
+        a=AjGcO6oz07-iQ99wixmX:22
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 02:56:05PM +0200, Mattijs Korpershoek wrote:
-> The MediaTek keypad controller has multiple operating modes:
-> * single key detection (currently implemented)
-> * double key detection
+On Wed, Aug 10, 2022 at 09:02:16AM +0200, Uros Bizjak wrote:
+> On Wed, Aug 10, 2022 at 1:02 AM Dave Chinner <david@fromorbit.com> wrote:
+> >
+> > On Wed, Aug 10, 2022 at 08:05:11AM +1000, Dave Chinner wrote:
+> > > On Tue, Aug 09, 2022 at 06:56:15PM +0200, Uros Bizjak wrote:
+> > > > Use `!atomic64_try_cmpxchg(ptr, &old, new)` instead of
+> > > > `atomic64_cmpxchg(ptr, old, new) != old` in xlog_grant_{add,sub}_space.
+> > > > This has two benefits:
+> > > >
+> > > > - The x86 cmpxchg instruction returns success in the ZF flag, so this
+> > > >   change saves a compare after cmpxchg, as well as a related move
+> > > >   instruction in the front of cmpxchg.
+> > > >
+> > > > - atomic64_try_cmpxchg implicitly assigns the *ptr value to &old when
+> > > >   cmpxchg fails, enabling further code simplifications.
+> > >
+> > > Do the two cmpxchg operations have the same memory ordering
+> > > semantics on failure?
 > 
-> With double key detection, each (row,column) is a group that can detect
-> two keys in the key matrix.
-> This minimizes the overall pin counts for cost reduction.
-> However, pressing multiple keys in the same group will not be
-> detected properly.
-> 
-> On some boards, like mt8183-pumpkin, double key detection is used.
-> 
-> Signed-off-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
+> Yes. The API also provides _acquire, _release and _relaxed variants of
+> both, atomic64_cmpxchg and atomic64_try_cmpxchg.
 
-Applied patches 1 through 5 (leaving dts patches out), thank you.
+Yes, I know this, which was why I was asking if the default
+behaviour is the same - many people get caught out by assuming that
+cmpxchg implies release semantics even if it fails....
 
+> On x86, these two
+> functions actually compile to the same CMPXCHG instruction, the
+> difference is only in how the comparison is handled:
 > 
-> ---
-> Changes in v2:
-> - bindings: add matrix-keymap justification in commit message (Krzysztof)
-> - bindings: switch from double-keys(boolean) to keys-per-group(uint32) (Krzysztof)
-> - driver: add a function pointer for row/column calculation (Angelo)
-> - Link to v1: https://lore.kernel.org/r/20220720-mt8183-keypad-v1-0-ef9fc29dbff4@baylibre.com
+>       15:    48 09 c2                 or     %rax,%rdx
+>       18:    48 89 c8                 mov    %rcx,%rax
+>       1b:    f0 48 0f b1 16           lock cmpxchg %rdx,(%rsi)
+>       20:    48 39 c1                 cmp    %rax,%rcx
+>       23:    74 2a                    je     4f <xlog_grant_add_space+0x4f>
 > 
-> ---
-> Fabien Parent (2):
->       arm64: dts: mediatek: mt8183: add keyboard node
->       arm64: dts: mediatek: mt8183-pumpkin: add keypad support
+> becomes:
 > 
-> Mattijs Korpershoek (5):
->       MAINTAINERS: input: add mattijs for mt6779-keypad
->       dt-bindings: mediatek,mt6779-keypad: use unevaluatedProperties
->       dt-bindings: mediatek,mt6779-keypad: add mediatek,keys-per-group
->       Input: mt6779-keypad - prepare double keys support with calc_row_col
->       Input: mt6779-keypad - support double keys matrix
+>      29c:    48 09 ca                 or     %rcx,%rdx
+>      29f:    f0 48 0f b1 16           lock cmpxchg %rdx,(%rsi)
+>      2a4:    75 d2                    jne    278 <xlog_grant_add_space+0x8>
 > 
->  .../bindings/input/mediatek,mt6779-keypad.yaml     |  8 ++++-
->  MAINTAINERS                                        |  6 ++++
->  arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts    | 21 +++++++++++
->  arch/arm64/boot/dts/mediatek/mt8183.dtsi           |  9 +++++
->  drivers/input/keyboard/mt6779-keypad.c             | 41 ++++++++++++++++++++--
->  5 files changed, 82 insertions(+), 3 deletions(-)
-> ---
-> base-commit: 668af1b6548837b44a2bfe65dcbae6b250adbf63
-> change-id: 20220720-mt8183-keypad-20aa77106ff0
-> 
-> Best regards,
-> -- 
-> Mattijs Korpershoek <mkorpershoek@baylibre.com>
+> And as demonstrated in [1], even the fallback code compiles to a
+> better assembly.o
 
+FWIW, I mostly don't care about assembler level optimisations for
+the code I write. I'll try to write code efficiently, but I don't
+really care that much for micro-optimisation. Fundamentally, 
+focussing on optimising code down to the instruction level means you
+are not looking for algorithmic optimisations, which is where all
+the big gains typically come from....
+
+This thread demonstrates that - I get an improvement from roughly
+1.4 million transactions/s to roughly 2 million transactions/s with
+the change to the grant head accounting algorithm, whilst the
+improvement from removing 2 instructions from the cmpxchg can't
+actually be measured on my tests. i.e. the improvement is lost
+within the noise floor of the benchmarks.
+
+So, yeah, when it comes to making code faster, I focus on efficient
+algorithms rather than efficient code because algorithms are where
+the gains users will notice are....
+
+> > FYI, the original RFC for this was posted a bit over a month ago:
+> >
+> > https://lore.kernel.org/linux-xfs/20220708015558.1134330-1-david@fromorbit.com/
+> 
+> -static void
+> +void
+>  xlog_grant_sub_space(
+> 
+> [...]
+> 
+> - old = head_val;
+> - new = xlog_assign_grant_head_val(cycle, space);
+> - head_val = atomic64_cmpxchg(&head->grant, old, new);
+> - } while (head_val != old);
+> + atomic64_sub(bytes, &head->grant);
+>  }
+> 
+> I actually wondered why these two functions were not implemented as
+> atomic64_{add,sub}.
+
+Because the grant heads were not integer values that can be added
+and subtracted. Log sequence numbers (LSNs) are 64 bit objects made
+up of two discrete 32 bit values. Essentially the upper 32 bits
+counts the number of overflows of the fixed size space the lower 32
+bits accounts.
+
+The lower 32 bits matches the size of the journal, so will overflow
+at some boundary much lower than 2^32. Hence adding or subtracting
+to a LSN has to handle the space overflow/underflow itself to
+modify the overflow (cycle) counter top 32 bits appropriately.
+
+These calculations cannot be done as a single atomic operation,
+hence the crack/calc/combine/cmpxchg loops to enable them to be done
+without requiring locks in the fast path.
+
+Cheers,
+
+Dave.
 -- 
-Dmitry
+Dave Chinner
+david@fromorbit.com

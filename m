@@ -2,147 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A73858F011
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 18:06:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5E7158F01B
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 18:10:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233320AbiHJQGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 12:06:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35096 "EHLO
+        id S232457AbiHJQKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 12:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233381AbiHJQFk (ORCPT
+        with ESMTP id S232852AbiHJQKI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 12:05:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3058578BF0
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 09:05:39 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C2B04B81D6A
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 16:05:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F0F9C43142;
-        Wed, 10 Aug 2022 16:05:36 +0000 (UTC)
-Received: from rostedt by gandalf.local.home with local (Exim 4.96)
-        (envelope-from <rostedt@goodmis.org>)
-        id 1oLoDF-000V08-2c;
-        Wed, 10 Aug 2022 12:05:41 -0400
-Message-ID: <20220810160541.646408756@goodmis.org>
-User-Agent: quilt/0.66
-Date:   Wed, 10 Aug 2022 12:04:59 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [for-linus][PATCH 4/4] rtla: Consolidate and show all necessary libraries that failed for
- building
-References: <20220810160455.872730397@goodmis.org>
+        Wed, 10 Aug 2022 12:10:08 -0400
+Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E312D7A527;
+        Wed, 10 Aug 2022 09:10:06 -0700 (PDT)
+Received: from dev010.ch-qa.sw.ru ([172.29.1.15])
+        by relay.virtuozzo.com with esmtp (Exim 4.95)
+        (envelope-from <alexander.mikhalitsyn@virtuozzo.com>)
+        id 1oLoF9-00F6Pf-It;
+        Wed, 10 Aug 2022 18:08:38 +0200
+From:   Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>
+To:     netdev@vger.kernel.org
+Cc:     Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        David Ahern <dsahern@kernel.org>,
+        Yajun Deng <yajun.deng@linux.dev>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-kernel@vger.kernel.org, "Denis V . Lunev" <den@openvz.org>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Konstantin Khorenko <khorenko@virtuozzo.com>,
+        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
+        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
+        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+        kernel@openvz.org, devel@openvz.org
+Subject: [PATCH v2 0/2] neighbour: fix possible DoS due to net iface start/stop loop
+Date:   Wed, 10 Aug 2022 19:08:38 +0300
+Message-Id: <20220810160840.311628-1-alexander.mikhalitsyn@virtuozzo.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220729103559.215140-1-alexander.mikhalitsyn@virtuozzo.com>
+References: <20220729103559.215140-1-alexander.mikhalitsyn@virtuozzo.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+Dear friends,
 
-When building rtla tools, if the necessary libraries are not installed
-(libtraceevent and libtracefs), show the ones that are missing in one
-consolidated output, and also show how to install them (at least for
-Fedora).
+Recently one of OpenVZ users reported that they have issues with network
+availability of some containers. It was discovered that the reason is absence
+of ARP replies from the Host Node on the requests about container IPs.
 
-Link: https://lore.kernel.org/all/CAHk-=wh+e1qcCnEYJ3JRDVLNCYbJ=0u+Ts5bOYZnY3mX_k-hFA@mail.gmail.com/
-Link: https://lkml.kernel.org/r/20220810113918.5d19ce59@gandalf.local.home
+Of course, we started from tcpdump analysis and noticed that ARP requests
+successfuly comes to the problematic node external interface. So, something
+was wrong from the kernel side.
 
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- tools/tracing/rtla/Makefile | 62 +++++++++++++++++++++----------------
- 1 file changed, 36 insertions(+), 26 deletions(-)
+I've played a lot with arping and perf in attempts to understand what's
+happening. And the key observation was that we experiencing issues only
+with ARP requests with broadcast source ip (skb->pkt_type == PACKET_BROADCAST).
+But for packets skb->pkt_type == PACKET_HOST everything works flawlessly.
 
-diff --git a/tools/tracing/rtla/Makefile b/tools/tracing/rtla/Makefile
-index f392708c7a1e..22e28b76f800 100644
---- a/tools/tracing/rtla/Makefile
-+++ b/tools/tracing/rtla/Makefile
-@@ -61,40 +61,50 @@ endif
- LIBTRACEEVENT_MIN_VERSION = 1.5
- LIBTRACEFS_MIN_VERSION = 1.3
- 
-+.PHONY:	all warnings show_warnings
-+all:	warnings rtla
-+
- TEST_LIBTRACEEVENT = $(shell sh -c "$(PKG_CONFIG) --atleast-version $(LIBTRACEEVENT_MIN_VERSION) libtraceevent > /dev/null 2>&1 || echo n")
- ifeq ("$(TEST_LIBTRACEEVENT)", "n")
--.PHONY: warning_traceevent
--warning_traceevent:
--	@echo "********************************************"
--	@echo "** NOTICE: libtraceevent version $(LIBTRACEEVENT_MIN_VERSION) or higher not found"
--	@echo "**"
--	@echo "** Consider installing the latest libtraceevent from your"
--	@echo "** distribution, e.g., 'dnf install libtraceevent' on Fedora,"
--	@echo "** or from source:"
--	@echo "**"
--	@echo "**  https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/ "
--	@echo "**"
--	@echo "********************************************"
-+WARNINGS = show_warnings
-+MISSING_LIBS += echo "**   libtraceevent version $(LIBTRACEEVENT_MIN_VERSION) or higher";
-+MISSING_PACKAGES += "libtraceevent-devel"
-+MISSING_SOURCE += echo "**  https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/ ";
- endif
- 
- TEST_LIBTRACEFS = $(shell sh -c "$(PKG_CONFIG) --atleast-version $(LIBTRACEFS_MIN_VERSION) libtracefs > /dev/null 2>&1 || echo n")
- ifeq ("$(TEST_LIBTRACEFS)", "n")
--.PHONY: warning_tracefs
--warning_tracefs:
--	@echo "********************************************"
--	@echo "** NOTICE: libtracefs version $(LIBTRACEFS_MIN_VERSION) or higher not found"
--	@echo "**"
--	@echo "** Consider installing the latest libtracefs from your"
--	@echo "** distribution, e.g., 'dnf install libtracefs' on Fedora,"
--	@echo "** or from source:"
--	@echo "**"
--	@echo "**  https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/ "
--	@echo "**"
--	@echo "********************************************"
-+WARNINGS = show_warnings
-+MISSING_LIBS += echo "**   libtracefs version $(LIBTRACEFS_MIN_VERSION) or higher";
-+MISSING_PACKAGES += "libtracefs-devel"
-+MISSING_SOURCE += echo "**  https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/ ";
- endif
- 
--.PHONY:	all
--all:	rtla
-+define show_dependencies
-+	@echo "********************************************";				\
-+	echo "** NOTICE: Failed build dependencies";					\
-+	echo "**";									\
-+	echo "** Required Libraries:";							\
-+	$(MISSING_LIBS)									\
-+	echo "**";									\
-+	echo "** Consider installing the latest libtracefs from your";			\
-+	echo "** distribution, e.g., 'dnf install $(MISSING_PACKAGES)' on Fedora,";	\
-+	echo "** or from source:";							\
-+	echo "**";									\
-+	$(MISSING_SOURCE)								\
-+	echo "**";									\
-+	echo "********************************************"
-+endef
-+
-+show_warnings:
-+	$(call show_dependencies);
-+
-+ifneq ("$(WARNINGS)", "")
-+ERROR_OUT = $(error Please add the necessary dependencies)
-+
-+warnings: $(WARNINGS)
-+	$(ERROR_OUT)
-+endif
- 
- rtla: $(OBJ)
- 	$(CC) -o rtla $(LDFLAGS) $(OBJ) $(LIBS)
+Let me show a small piece of code:
+
+static int arp_process(struct sock *sk, struct sk_buff *skb)
+...
+				if (NEIGH_CB(skb)->flags & LOCALLY_ENQUEUED ||
+				    skb->pkt_type == PACKET_HOST ||
+				    NEIGH_VAR(in_dev->arp_parms, PROXY_DELAY) == 0) { // reply instantly
+					arp_send_dst(ARPOP_REPLY, ETH_P_ARP,
+						     sip, dev, tip, sha,
+						     dev->dev_addr, sha,
+						     reply_dst);
+				} else {
+					pneigh_enqueue(&arp_tbl,                     // reply with delay
+						       in_dev->arp_parms, skb);
+					goto out_free_dst;
+				}
+
+The problem was that for PACKET_BROADCAST packets we delaying replies and use pneigh_enqueue() function.
+For some reason, queued packets were lost almost all the time! The reason for such behaviour is pneigh_queue_purge()
+function which cleanups all the queue, and this function called everytime once some network device in the system
+gets link down.
+
+neigh_ifdown -> pneigh_queue_purge
+
+Now imagine that we have a node with 500+ containers with microservices. And some of that microservices are buggy
+and always restarting... in this case, pneigh_queue_purge function will be called very frequently.
+
+This problem is reproducible only with so-called "host routed" setup. The classical scheme bridge + veth
+is not affected.
+
+Minimal reproducer
+
+Suppose that we have a network 172.29.1.1/16 brd 172.29.255.255
+and we have free-to-use IP, let it be 172.29.128.3
+
+1. Network configuration. I showing the minimal configuration, it makes no sense
+as we have both veth devices stay at the same net namespace, but for demonstation and simplicity sake it's okay.
+
+ip l a veth31427 type veth peer name veth314271
+ip l s veth31427 up
+ip l s veth314271 up
+
+# setup static arp entry and publish it
+arp -Ds -i br0 172.29.128.3 veth31427 pub
+# setup static route for this address
+route add 172.29.128.3/32 dev veth31427
+
+2. "attacker" side (kubernetes pod with buggy microservice :) )
+
+unshare -n
+ip l a type veth
+ip l s veth0 up
+ip l s veth1 up
+for i in {1..100000}; do ip link set veth0 down; sleep 0.01; ip link set veth0 up; done
+
+This will totaly block ARP replies for 172.29.128.3 address. Just try
+# arping -I eth0 172.29.128.3 -c 4
+
+Our proposal is simple:
+1. Let's cleanup queue partially. Remove only skb's that related to the net namespace
+of the adapter which link is down.
+
+2. Let's account proxy_queue limit properly per-device. Current limitation looks
+not fully correct because we comparing per-device configurable limit with the
+"global" qlen of proxy_queue.
+
+Thanks,
+Alex
+
+v2:
+	- only ("neigh: fix possible DoS due to net iface start/stop") is changed
+		do del_timer_sync() if queue is empty after pneigh_queue_purge()
+
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: David Ahern <dsahern@kernel.org>
+Cc: Yajun Deng <yajun.deng@linux.dev>
+Cc: Roopa Prabhu <roopa@nvidia.com>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Denis V. Lunev <den@openvz.org>
+Cc: Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>
+Cc: Konstantin Khorenko <khorenko@virtuozzo.com>
+Cc: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+Cc: Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>
+Cc: Alexander Mikhalitsyn <alexander@mihalicyn.com>
+Cc: kernel@openvz.org
+Cc: devel@openvz.org
+Signed-off-by: Denis V. Lunev <den@openvz.org>
+Signed-off-by: Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>
+
+Alexander Mikhalitsyn (1):
+  neighbour: make proxy_queue.qlen limit per-device
+
+Denis V. Lunev (1):
+  neigh: fix possible DoS due to net iface start/stop loop
+
+ include/net/neighbour.h |  1 +
+ net/core/neighbour.c    | 46 +++++++++++++++++++++++++++++++++--------
+ 2 files changed, 38 insertions(+), 9 deletions(-)
+
 -- 
-2.35.1
+2.36.1
+

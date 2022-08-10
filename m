@@ -2,84 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A2D58F49F
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 01:02:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FFB758F4A1
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 01:03:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231709AbiHJXBw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 19:01:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59850 "EHLO
+        id S232908AbiHJXDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 19:03:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229646AbiHJXBt (ORCPT
+        with ESMTP id S231424AbiHJXDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 19:01:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F6216068D;
-        Wed, 10 Aug 2022 16:01:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1904EB81ECC;
-        Wed, 10 Aug 2022 23:01:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48AABC433C1;
-        Wed, 10 Aug 2022 23:01:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660172505;
-        bh=NnDvxipWRWd22orltCAXMkg0yBGFjX0zipam7lQ+xZk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=fQxNqwPVBp5/BwVHJmmCpTrKNt8De6t9ihL+6vUTvAmr8X94LXBb1Kr1ATSYdCpp7
-         5795/Y/AupALDlYajNSBCEJsSYz44G3JlGqSkE0776U+lFbAj8TA3ooZwWD+rVEEiS
-         41EueM3llhm6ZoHPJK3oG52p2khuVOlPNUbBfc8okBbFsOx6acrpuFhjiZwRrcibeX
-         4B70Xbe5flokCaxsL5cjvTWEVP6BeDVQaKNsEaVhegJ1ZeUq3ROqnTzpIeCRggwD9d
-         oxYKF60xbEmGx/vyc1ER0LVhwdIdJBJ30ljgMYcSyhxcktgoE1hlEKfX+X+0RryuBG
-         F2DQuYibHMKPA==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH] scripts/Makefile.extrawarn: Do not disable clang's -Wformat-zero-length
-Date:   Wed, 10 Aug 2022 16:01:33 -0700
-Message-Id: <20220810230133.1895778-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.37.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 10 Aug 2022 19:03:05 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D406CD09
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 16:03:04 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id k9-20020aa79729000000b0052d4dd3e2aeso7002762pfg.0
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 16:03:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=uYLEpBTIpZJpv0FaEI6rNdEwexq1d/LSyw8WrmmMV2Q=;
+        b=EbjQ88OHrNXOUss3JIQ65cwuB86Fb8+QBljwPow7CR0FJiguYoO+495FCdQiJt+dCj
+         KgbKxjYxbE6/ThqThN/KiNtI+t91YG5SsfWW0uCbBGmFF4K2oj1D4bUX7tmN99L/Wcby
+         cdAqO3YaGzHkAlFkLe24DXcHsLnPwYoN1YFkJhBci01kAW8p69lQqP9/l2qO3NHPFUno
+         bRZmI0gbdct9zCYpNfmM9wF6A59zVgg43VTpUwCZrQ+tZvBmAPqkDq/mO+VtMGiar1JL
+         VOiME/x5ZJGLzgqx9YAWOY3SQOi/HB7n4QabBrpfQhyPbsjppkH+LUF3iM6GK6HN8FSo
+         rJZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=uYLEpBTIpZJpv0FaEI6rNdEwexq1d/LSyw8WrmmMV2Q=;
+        b=ZlCXskExrel+gVPmOdP4Sq57bZWA9c0L9WYAriLjfpaZvPyc0yMVAGDM62+Fp80c5S
+         gV6gokzEh/No0XicBQm4sbV6wbWnzH7Pywl1szjMPhO1VVIFMNfi1eMlJ+0RCzb/JKTi
+         14GxTe2TbuIQhjK+NS1KVKFEDwoOQ44S2buEnhBFcGagAutW9X9v5rSkE4ZOojmswW+d
+         aC1qejWI2v4JG+XJPDZDSRuvHC8H9rlZPKYB2VApeMc4kGG4NTGmQeLDR9uDNRG4f1oP
+         MU55Q6fUzvOWzZrEbxlX4uSZsOKCsksgMMbWrFkWICiWCjArdMb7ieGtSqNslZQUWz90
+         NiZA==
+X-Gm-Message-State: ACgBeo1ZwlZZFGVBFiMbSCFFPbMNa6if29E4eGzkJj1BntkWYGQlGMCg
+        zzjs3dVxq+Ltx6S+vHuE7NhfovxalpvjNA==
+X-Google-Smtp-Source: AA6agR4yB/U+63MCa2/8ypKnbaxvKM/W/sKRgIv9GU9v0NRchliLy1Z+GjNF1lVTIKEnGaLckJ90xM7XWjRmag==
+X-Received: from dlatypov-spec.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f35])
+ (user=dlatypov job=sendgmr) by 2002:a17:90a:590e:b0:1f2:2184:6893 with SMTP
+ id k14-20020a17090a590e00b001f221846893mr5939523pji.57.1660172584034; Wed, 10
+ Aug 2022 16:03:04 -0700 (PDT)
+Date:   Wed, 10 Aug 2022 16:02:58 -0700
+Message-Id: <20220810230258.3933707-1-dlatypov@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
+Subject: [PATCH] kunit: tool: make --raw_output=kunit (aka --raw_output)
+ preserve leading spaces
+From:   Daniel Latypov <dlatypov@google.com>
+To:     brendanhiggins@google.com, davidgow@google.com
+Cc:     linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org,
+        Daniel Latypov <dlatypov@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are no instances of this warning in the tree across several
-difference architectures and configurations. This was added by
-commit 26ea6bb1fef0 ("kbuild, LLVMLinux: Supress warnings unless W=1-3")
-back in 2014, where it might have been necessary, but there are no
-instances of it now so stop disabling it to increase warning coverage
-for clang.
+With
+$ kunit.py run --raw_output=all ...
+you get the raw output from the kernel, e.g. something like
+> TAP version 14
+> 1..26
+>     # Subtest: time_test_cases
+>     1..1
+>     ok 1 - time64_to_tm_test_date_range
+> ok 1 - time_test_cases
 
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+But --raw_output=kunit or equivalently --raw_output, you get
+> TAP version 14
+> 1..26
+> # Subtest: time_test_cases
+> 1..1
+> ok 1 - time64_to_tm_test_date_range
+> ok 1 - time_test_cases
+
+It looks less readable in my opinion, and it also isn't "raw output."
+
+This is due to sharing code with kunit_parser.py, which wants to strip
+leading whitespace since it uses anchored regexes.
+We could update the kunit_parser.py code to tolerate leaading spaces,
+but this patch takes the easier way out and adds a bool flag.
+
+Signed-off-by: Daniel Latypov <dlatypov@google.com>
 ---
- scripts/Makefile.extrawarn | 1 -
- 1 file changed, 1 deletion(-)
+ tools/testing/kunit/kunit.py        |  2 +-
+ tools/testing/kunit/kunit_parser.py | 10 ++++++----
+ 2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/scripts/Makefile.extrawarn b/scripts/Makefile.extrawarn
-index 9bbaf7112a9b..69cec45c4e71 100644
---- a/scripts/Makefile.extrawarn
-+++ b/scripts/Makefile.extrawarn
-@@ -48,7 +48,6 @@ else
- ifdef CONFIG_CC_IS_CLANG
- KBUILD_CFLAGS += -Wno-initializer-overrides
- KBUILD_CFLAGS += -Wno-sign-compare
--KBUILD_CFLAGS += -Wno-format-zero-length
- KBUILD_CFLAGS += $(call cc-disable-warning, pointer-to-enum-cast)
- KBUILD_CFLAGS += -Wno-tautological-constant-out-of-range-compare
- KBUILD_CFLAGS += $(call cc-disable-warning, unaligned-access)
+diff --git a/tools/testing/kunit/kunit.py b/tools/testing/kunit/kunit.py
+index e132b0654029..161a3b1b0217 100755
+--- a/tools/testing/kunit/kunit.py
++++ b/tools/testing/kunit/kunit.py
+@@ -206,7 +206,7 @@ def parse_tests(request: KunitParseRequest, metadata: kunit_json.Metadata, input
+ 		if request.raw_output == 'all':
+ 			pass
+ 		elif request.raw_output == 'kunit':
+-			output = kunit_parser.extract_tap_lines(output)
++			output = kunit_parser.extract_tap_lines(output, lstrip=False)
+ 		for line in output:
+ 			print(line.rstrip())
+ 
+diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+index 12d3ec77f427..1ae873e3e341 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -218,7 +218,7 @@ TAP_START = re.compile(r'TAP version ([0-9]+)$')
+ KTAP_END = re.compile('(List of all partitions:|'
+ 	'Kernel panic - not syncing: VFS:|reboot: System halted)')
+ 
+-def extract_tap_lines(kernel_output: Iterable[str]) -> LineStream:
++def extract_tap_lines(kernel_output: Iterable[str], lstrip=True) -> LineStream:
+ 	"""Extracts KTAP lines from the kernel output."""
+ 	def isolate_ktap_output(kernel_output: Iterable[str]) \
+ 			-> Iterator[Tuple[int, str]]:
+@@ -244,9 +244,11 @@ def extract_tap_lines(kernel_output: Iterable[str]) -> LineStream:
+ 				# stop extracting KTAP lines
+ 				break
+ 			elif started:
+-				# remove prefix and any indention and yield
+-				# line with line number
+-				line = line[prefix_len:].lstrip()
++				# remove the prefix and optionally any leading
++				# whitespace. Our parsing logic relies on this.
++				line = line[prefix_len:]
++				if lstrip:
++					line = line.lstrip()
+ 				yield line_num, line
+ 	return LineStream(lines=isolate_ktap_output(kernel_output))
+ 
 
 base-commit: aeb6e6ac18c73ec287b3b1e2c913520699358c13
 -- 
-2.37.1
+2.37.1.559.g78731f0fdb-goog
 

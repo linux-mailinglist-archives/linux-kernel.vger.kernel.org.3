@@ -2,148 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6581358E74F
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 08:30:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBB5158E752
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 08:30:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231254AbiHJGaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 02:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33696 "EHLO
+        id S231312AbiHJGal (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 02:30:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230183AbiHJG35 (ORCPT
+        with ESMTP id S229611AbiHJGaj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 02:29:57 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75AE76D9E5;
-        Tue,  9 Aug 2022 23:29:52 -0700 (PDT)
+        Wed, 10 Aug 2022 02:30:39 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD6A47BA3
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 23:30:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660112992; x=1691648992;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=/Ds8O1YzSAsNmagYl2xaHo5bsSvzjPd1whfcQT8kpU0=;
-  b=YsUmCycusRtcc0NO6oug1IUVKfqzzylcRuwBq63mj+anKCVyv7QU1lb2
-   7Qp8TiOhCgbcYTmhDRqigHgx74m4Kowfu7xuXqM8tQI5ocq9pnuycbqqd
-   S739npVbpjsiK+txbSHpwyUfPbRUQhW1GsuE5NdCnzqBy4KWlEAEls+ow
-   98OJWHB18xJKdU5yHX7N8/MaX/jqt65XdXnghHRI5jfj3lZsTcyC/maSe
-   eMtKzIuTL36e84e4lDWZ0V6Km5m5cpeTFAazx+5bwBw6c6qT1db5yxukH
-   7KCjVFD56W6G1y9lV4m7ZwfYqmPlzwdDFYUWco+a8wNJgw5czzcA9FWSS
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="355010827"
+  t=1660113038; x=1691649038;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=gB7X2rsLImjBhNl6pbwqqOhUegeSwjxLluoazpjeH1E=;
+  b=LNmKDIq/nmGELeP/itBbJ3FLlsoRmzhnmlIIycRsacwBZJNFyqOPGz4k
+   UXTIwb9A9aiZ2koimpXRggoCHa2s4YTqTUqLB3TZVnH2tp+Vok/mKSy/4
+   7hzCi9dZn8f4ocYi7pFy2dBeg7EyrAmkTKa8oc48tsUByjibFaA9Lk4to
+   TdPVEJqlDSskVe3PYLr7zccjzlWP4vApa2E8V0WFATp0wadKguQwKMpBf
+   ++H4jbzBSUqqCXa5NJf1x8LNKLIM+qRT90jlROcb5ODdT9EkjAAMphgkW
+   KWxAUq3sSpI0recU1XdFzAyHDopZjRBo54f/uKi49s6orD2HS2nR2xfm2
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="291011040"
 X-IronPort-AV: E=Sophos;i="5.93,226,1654585200"; 
-   d="scan'208";a="355010827"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 23:29:51 -0700
+   d="scan'208";a="291011040"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 23:30:38 -0700
 X-IronPort-AV: E=Sophos;i="5.93,226,1654585200"; 
-   d="scan'208";a="664761300"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.249.173.89]) ([10.249.173.89])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 23:29:50 -0700
-Message-ID: <40c9ecc1-e223-160b-4939-07e4f7200781@intel.com>
-Date:   Wed, 10 Aug 2022 14:29:47 +0800
+   d="scan'208";a="673182402"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 23:30:36 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Minchan Kim <minchan@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andi Kleen <andi.kleen@intel.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>
+Subject: Re: [PATCH v3 5/7] mm: Remember young/dirty bit for page migrations
+References: <20220809220100.20033-1-peterx@redhat.com>
+        <20220809220100.20033-6-peterx@redhat.com>
+Date:   Wed, 10 Aug 2022 14:30:33 +0800
+In-Reply-To: <20220809220100.20033-6-peterx@redhat.com> (Peter Xu's message of
+        "Tue, 9 Aug 2022 18:00:58 -0400")
+Message-ID: <8735e4fw52.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Firefox/91.0 Thunderbird/91.12.0
-Subject: Re: [RFC PATCH 3/3] KVM: x86: Disallow writes to immutable feature
- MSRs after KVM_RUN
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Like Xu <like.xu.linux@gmail.com>
-References: <20220805172945.35412-1-seanjc@google.com>
- <20220805172945.35412-4-seanjc@google.com>
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <20220805172945.35412-4-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/6/2022 1:29 AM, Sean Christopherson wrote:
-> Disallow writes to feature MSRs after KVM_RUN to prevent userspace from
-> changing the vCPU model after running the vCPU.  Similar to guest CPUID,
-> KVM uses feature MSRs to configure intercepts, determine what operations
-> are/aren't allowed, etc.  Changing the capabilities while the vCPU is
-> active will at best yield unpredictable guest behavior, and at worst
-> could be dangerous to KVM.
-> 
-> Allow writing the current value, e.g. so that userspace can blindly set
-> all MSRs when emulating RESET, and unconditionally allow writes to
-> MSR_IA32_UCODE_REV so that userspace can emulate patch loads.
-> 
-> Special case the VMX MSRs to keep the generic list small, i.e. so that
-> KVM can do a linear walk of the generic list without incurring meaningful
-> overhead.
-> 
-> Cc: Like Xu <like.xu.linux@gmail.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+Peter Xu <peterx@redhat.com> writes:
+
+> When page migration happens, we always ignore the young/dirty bit settings
+> in the old pgtable, and marking the page as old in the new page table using
+> either pte_mkold() or pmd_mkold(), and keeping the pte clean.
+>
+> That's fine from functional-wise, but that's not friendly to page reclaim
+> because the moving page can be actively accessed within the procedure.  Not
+> to mention hardware setting the young bit can bring quite some overhead on
+> some systems, e.g. x86_64 needs a few hundreds nanoseconds to set the bit.
+> The same slowdown problem to dirty bits when the memory is first written
+> after page migration happened.
+>
+> Actually we can easily remember the A/D bit configuration and recover the
+> information after the page is migrated.  To achieve it, define a new set of
+> bits in the migration swap offset field to cache the A/D bits for old pte.
+> Then when removing/recovering the migration entry, we can recover the A/D
+> bits even if the page changed.
+>
+> One thing to mention is that here we used max_swapfile_size() to detect how
+> many swp offset bits we have, and we'll only enable this feature if we know
+> the swp offset can be big enough to store both the PFN value and the young
+                                                                       ~~~~~
+Nitpick: A/D
+
+> bit.  Otherwise the A/D bits are dropped like before.
+>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
 > ---
->   arch/x86/kvm/x86.c | 37 +++++++++++++++++++++++++++++++++++++
->   1 file changed, 37 insertions(+)
-> 
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index a1c65b77fb16..4da26a1f14c1 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -1541,6 +1541,26 @@ static u32 msr_based_features[ARRAY_SIZE(msr_based_features_all_except_vmx) +
->   			      (KVM_LAST_EMULATED_VMX_MSR - KVM_FIRST_EMULATED_VMX_MSR + 1)];
->   static unsigned int num_msr_based_features;
->   
-> +/*
-> + * All feature MSRs except uCode revID, which tracks the currently loaded uCode
-> + * patch, are immutable once the vCPU model is defined.
-> + */
-> +static bool kvm_is_immutable_feature_msr(u32 msr)
-> +{
-> +	int i;
-> +
-> +	if (msr >= KVM_FIRST_EMULATED_VMX_MSR && msr <= KVM_LAST_EMULATED_VMX_MSR)
-> +		return true;
-> +
-> +	for (i = 0; i < ARRAY_SIZE(msr_based_features_all_except_vmx); i++) {
-> +		if (msr == msr_based_features_all_except_vmx[i])
-> +			return msr != MSR_IA32_UCODE_REV;
-> +	}
-> +
-> +	return false;
-> +}
-> +
-> +
->   static u64 kvm_get_arch_capabilities(void)
->   {
->   	u64 data = 0;
-> @@ -2136,6 +2156,23 @@ static int do_get_msr(struct kvm_vcpu *vcpu, unsigned index, u64 *data)
->   
->   static int do_set_msr(struct kvm_vcpu *vcpu, unsigned index, u64 *data)
->   {
-> +	u64 val;
-> +
-> +	/*
-> +	 * Disallow writes to immutable feature MSRs after KVM_RUN.  KVM does
-> +	 * not support modifying the guest vCPU model on the fly, e.g. changing
-> +	 * the nVMX capabilities while L2 is running is nonsensical.  Ignore
-> +	 * writes of the same value, e.g. to allow userspace to blindly stuff
-> +	 * all MSRs when emulating RESET.
-> +	 */
-> +	if (vcpu->arch.last_vmentry_cpu != -1 &&
+>  include/linux/swapops.h | 99 +++++++++++++++++++++++++++++++++++++++++
+>  mm/huge_memory.c        | 18 +++++++-
+>  mm/migrate.c            |  6 ++-
+>  mm/migrate_device.c     |  4 ++
+>  mm/rmap.c               |  5 ++-
+>  5 files changed, 128 insertions(+), 4 deletions(-)
+>
+> diff --git a/include/linux/swapops.h b/include/linux/swapops.h
+> index e1accbcd1136..0e9579b90659 100644
+> --- a/include/linux/swapops.h
+> +++ b/include/linux/swapops.h
+> @@ -8,6 +8,10 @@
+>  
+>  #ifdef CONFIG_MMU
+>  
+> +#ifdef CONFIG_SWAP
+> +#include <linux/swapfile.h>
+> +#endif	/* CONFIG_SWAP */
 
-can we extract "vcpu->arch.last_vmentry_cpu != -1" into a function like 
-kvm_vcpu_has_runned() ?
+I don't think we need the comment here.  The #ifdef is too near.  But
+this isn't a big deal.
 
-> +	    kvm_is_immutable_feature_msr(index)) {
-> +		if (do_get_msr(vcpu, index, &val) || *data != val)
-> +			return -EINVAL;
-> +
-> +		return 0;
-> +	}
-> +
->   	return kvm_set_msr_ignored_check(vcpu, index, *data, true);
->   }
->   
-
+Best Regards,
+Huang, Ying

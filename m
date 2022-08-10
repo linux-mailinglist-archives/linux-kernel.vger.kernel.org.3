@@ -2,70 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F8F558EF7D
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 17:38:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C32958EF73
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 17:32:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231716AbiHJPiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 11:38:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57856 "EHLO
+        id S231204AbiHJPcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 11:32:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229868AbiHJPiE (ORCPT
+        with ESMTP id S229924AbiHJPcH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 11:38:04 -0400
-Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [52.237.72.81])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 1388C28E02;
-        Wed, 10 Aug 2022 08:38:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fudan.edu.cn; s=dkim; h=Received:From:To:Cc:Subject:Date:
-        Message-Id:MIME-Version:Content-Transfer-Encoding; bh=dwLcVSKssd
-        J7Q7x71NIOI0DB3SuG4iOBFHZ/ZegSBCM=; b=Sh0mUqCpfjv4X2jqzgwnx+9cjK
-        HJc+bMuzYf3WfJxDn/pF+FYJWgQIo8ijm5L0Ke4kz6RQ8zU/25OW4CJGw+zIXUuQ
-        9stvW10V7lCcpJ+R27zxxIIo6Xa7SYi8PGEbCeEcGsYZusCY0iwXCeaL7ujTxHuo
-        JIsfnCVDr5M9BL/WY=
-Received: from localhost.localdomain (unknown [202.120.224.54])
-        by app1 (Coremail) with SMTP id XAUFCgDX3oKa0PNigiMfAw--.39779S4;
-        Wed, 10 Aug 2022 23:37:29 +0800 (CST)
-From:   Xin Xiong <xiongx18@fudan.edu.cn>
-To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        =?UTF-8?q?=E2=80=9CDavid=20S=20=2E=20Miller=20?= 
-        <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Olga Kornievskaia <kolga@netapp.com>,
-        linux-nfs@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     yuanxzhang@fudan.edu.cn, Xin Xiong <xiongx18@fudan.edu.cn>,
-        Xin Tan <tanxin.ctf@gmail.com>
-Subject: [PATCH] net/sunrpc: fix potential memory leaks in rpc_sysfs_xprt_state_change()
-Date:   Wed, 10 Aug 2022 23:29:13 +0800
-Message-Id: <20220810152909.25149-1-xiongx18@fudan.edu.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 10 Aug 2022 11:32:07 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB455658C;
+        Wed, 10 Aug 2022 08:32:04 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6E00A1424;
+        Wed, 10 Aug 2022 08:32:05 -0700 (PDT)
+Received: from [10.57.42.77] (unknown [10.57.42.77])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 73B813F67D;
+        Wed, 10 Aug 2022 08:32:02 -0700 (PDT)
+Message-ID: <2d0fc5d7-d484-f64c-fe50-18d18ad95fa2@arm.com>
+Date:   Wed, 10 Aug 2022 17:32:04 +0200
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 1/1] ACPI: CPPC: Disable FIE if registers in PCC
+ regions
+Content-Language: en-US
+To:     Lukasz Luba <lukasz.luba@arm.com>,
+        Jeremy Linton <jeremy.linton@arm.com>
+Cc:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org,
+        robert.moore@intel.com, devel@acpica.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, vschneid@redhat.com,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+References: <20220728221043.4161903-1-jeremy.linton@arm.com>
+ <20220728221043.4161903-2-jeremy.linton@arm.com>
+ <3a5e7abd-9361-11ba-978d-8e8bae00ea31@arm.com>
+ <4da7cd19-4b98-9360-922f-d625c4ec55e0@arm.com>
+ <a7248e0c-f8cc-a7f1-f241-75faa7219961@arm.com>
+From:   Pierre Gondois <pierre.gondois@arm.com>
+In-Reply-To: <a7248e0c-f8cc-a7f1-f241-75faa7219961@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: XAUFCgDX3oKa0PNigiMfAw--.39779S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7Gw1DWFy3XFy3AFW8JrykuFg_yoW8JrW8pF
-        W3G347uFykKrW7Xa17Ca10ga45ZFZ8GF15JrZ5C3W3Awn8Xa45Gr109ay29F1xCrWFk34S
-        qF4vgF4rZFWDCa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUB014x267AKxVW5JVWrJwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
-        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Cr0_Gr
-        1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I
-        648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc2xSY4AK67AK6ryrMxAIw28IcxkI7VAKI4
-        8JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xv
-        wVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjx
-        v20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20E
-        Y4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I
-        0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfU5ku4UUUUU
-X-CM-SenderInfo: arytiiqsuqiimz6i3vldqovvfxof0/1tbiAg4OEFKp2quTOAAAsz
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,40 +55,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The issue happens on some error handling paths. When the function
-fails to grab the object `xprt`, it simply returns 0, forgetting to
-decrease the reference count of another object `xps`, which is
-increased by rpc_sysfs_xprt_kobj_get_xprt_switch(), causing refcount
-leaks. Also, the function forgets to check whether `xps` is valid
-before using it, which may result in NULL-dereferencing issues.
 
-Fix it by adding proper error handling code when either `xprt` or
-`xps` is NULL.
 
-Fixes: 5b7eb78486cd ("SUNRPC: take a xprt offline using sysfs")
-Signed-off-by: Xin Xiong <xiongx18@fudan.edu.cn>
-Signed-off-by: Xin Tan <tanxin.ctf@gmail.com>
----
- net/sunrpc/sysfs.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+On 8/10/22 16:37, Lukasz Luba wrote:
+> 
+> 
+> On 8/10/22 15:30, Jeremy Linton wrote:
+>> Hi,
+>>
+>> On 8/10/22 07:29, Lukasz Luba wrote:
+>>> Hi Jeremy,
+>>>
+>>> +CC Valentin since he might be interested in this finding
+>>> +CC Ionela, Dietmar
+>>>
+>>> I have a few comments for this patch.
+>>>
+>>>
+>>> On 7/28/22 23:10, Jeremy Linton wrote:
+>>>> PCC regions utilize a mailbox to set/retrieve register values used by
+>>>> the CPPC code. This is fine as long as the operations are
+>>>> infrequent. With the FIE code enabled though the overhead can range
+>>>> from 2-11% of system CPU overhead (ex: as measured by top) on Arm
+>>>> based machines.
+>>>>
+>>>> So, before enabling FIE assure none of the registers used by
+>>>> cppc_get_perf_ctrs() are in the PCC region. Furthermore lets also
+>>>> enable a module parameter which can also disable it at boot or module
+>>>> reload.
+>>>>
+>>>> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+>>>> ---
+>>>>    drivers/acpi/cppc_acpi.c       | 41 ++++++++++++++++++++++++++++++++++
+>>>>    drivers/cpufreq/cppc_cpufreq.c | 19 ++++++++++++----
+>>>>    include/acpi/cppc_acpi.h       |  5 +++++
+>>>>    3 files changed, 61 insertions(+), 4 deletions(-)
+>>>
+>>>
+>>> 1. You assume that all platforms would have this big overhead when
+>>>      they have the PCC regions for this purpose.
+>>>      Do we know which version of HW mailbox have been implemented
+>>>      and used that have this 2-11% overhead in a platform?
+>>>      Do also more recent MHU have such issues, so we could block
+>>>      them by default (like in your code)?
+>>
+>> I posted that other email before being awake and conflated MHU with AMU
+>> (which could potentially expose the values directly). But the CPPC code
+>> isn't aware of whether a MHU or some other mailbox is in use. Either
+>> way, its hard to imagine a general mailbox with a doorbell/wait for
+>> completion handshake will ever be fast enough to consider running at the
+>> granularity this code is running at. If there were a case like that, the
+>> kernel would have to benchmark it at runtime to differentiate it from
+>> something that is talking over a slow link to a slowly responding mgmt
+>> processor.
+> 
+> Exactly, I'm afraid the same, that we would never get such fast
+> mailbox-based platform. Newer platforms would just use AMU, so
+> completely different code and no one would even bother to test if
+> their HW mailbox is fast-enough for this FIE purpose ;)
 
-diff --git a/net/sunrpc/sysfs.c b/net/sunrpc/sysfs.c
-index a3a2f8aeb80e..d1a15c6d3fd9 100644
---- a/net/sunrpc/sysfs.c
-+++ b/net/sunrpc/sysfs.c
-@@ -291,8 +291,10 @@ static ssize_t rpc_sysfs_xprt_state_change(struct kobject *kobj,
- 	int offline = 0, online = 0, remove = 0;
- 	struct rpc_xprt_switch *xps = rpc_sysfs_xprt_kobj_get_xprt_switch(kobj);
- 
--	if (!xprt)
--		return 0;
-+	if (!xprt || !xps) {
-+		count = 0;
-+		goto out_put;
-+	}
- 
- 	if (!strncmp(buf, "offline", 7))
- 		offline = 1;
--- 
-2.25.1
+To add some platform information, the following platforms are using
+CPPC through PCC channels (so mailboxes):
+- Cavium ThunderX2
+- Ampere eMAG
+- Ampere Altra
 
+Fwiw, I can confirm the cppc_fie kthread can represent a significant load,
+with a utilization between 2% and 30%.
+
+Regards,
+Pierre

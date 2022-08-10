@@ -2,120 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 056DB58F3FB
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 23:54:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF02258F3FC
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 23:54:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232579AbiHJVyO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 17:54:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57584 "EHLO
+        id S232720AbiHJVyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 17:54:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231424AbiHJVyM (ORCPT
+        with ESMTP id S229867AbiHJVyf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 17:54:12 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5192F80507;
-        Wed, 10 Aug 2022 14:54:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660168451; x=1691704451;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DBd6Xw4ZxzcA53CQMZccIUfpCOANfwB8yn17vPxFfec=;
-  b=avsK4Xo6w/xJCITu1wUYQpg+9oSZMPVCkNUJV48QmZVUbTXINFiQ4kvS
-   8PWV+RYhtpL4sjmBxSjyQ+L2n6kOI/Yk4JOxdjq3KjkPFHTRyhlc2+l9F
-   o/hk4b24YpTLnpvWHFpjgWrYEzt/fev38iObyW5ytnqhKOWT1Q0K/DLi0
-   uQutc67mjrNYeJniOp9XYBwjWhGIh6oRGec5X0FkkunEEB7yrEHUzyo/7
-   Yz+1JhbHNpeWVNGe0kbeUhL8c4hvbatpCAFQcdze/KLCew2z+ANbTw4uP
-   ZCGckrit4zPEkyI22n2mCR/sz9E/NaUXrcYf7Hp0Pz6v9LDfwuyLwwONB
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="317159294"
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="317159294"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 14:54:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="605311355"
-Received: from lkp-server02.sh.intel.com (HELO 5d6b42aa80b8) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 10 Aug 2022 14:54:08 -0700
-Received: from kbuild by 5d6b42aa80b8 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oLteR-0000lh-2u;
-        Wed, 10 Aug 2022 21:54:07 +0000
-Date:   Thu, 11 Aug 2022 05:54:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vegard Nossum <vegard.nossum@oracle.com>,
-        linux-kernel@vger.kernel.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Serge Hallyn <serge@hallyn.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-hardening@vger.kernel.org, John Haxby <john.haxby@oracle.com>
-Subject: Re: [PATCH] capabilities: new kernel.ns_modules_allowed sysctl
-Message-ID: <202208110524.fN5PNDSo-lkp@intel.com>
-References: <20220809185229.28417-1-vegard.nossum@oracle.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220809185229.28417-1-vegard.nossum@oracle.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 10 Aug 2022 17:54:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33347804BA
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 14:54:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C91C8B81EA8
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 21:54:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58739C433D6;
+        Wed, 10 Aug 2022 21:54:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1660168472;
+        bh=AcqHgSNkf3IX7o9edWdCysQ90+uzp4H5UomIiuXQ1N0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Y9/kE+sO1wUIhDBFMxUYua6SQbiIyXn2/rXvGAyuLqGIl+akwW83S93IbKS1Yolgt
+         R9uahdGRzi6mnXeYehUV7q/mH6MDIfWjSggm2rHAyhX8eD7zFVWdFKj7f2SLK9Iy8M
+         envc9Zmlf82P0FwynTmJE0cuKeH0RNF/m3i6gnLg=
+Date:   Wed, 10 Aug 2022 14:54:31 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Hugh Dickins <hughd@google.com>,
+        Zdenek Kabelac <zkabelac@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        intel-gfx@lists.freedesktop.org, chris@chris-wilson.co.uk
+Subject: Re: i915: crash with 5.19-rc2
+Message-Id: <20220810145431.71d9bfda20decb357cc208ec@linux-foundation.org>
+In-Reply-To: <YvPYQeMjfyruTeGe@casper.infradead.org>
+References: <584ae788-05e3-5824-8c85-cbb833677850@redhat.com>
+        <f0dd80b2-97e1-c320-8517-7ebdb027f58a@redhat.com>
+        <4a204620-7639-c844-455-10e55b372bcf@google.com>
+        <YvPYQeMjfyruTeGe@casper.infradead.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vegard,
+On Wed, 10 Aug 2022 17:09:37 +0100 Matthew Wilcox <willy@infradead.org> wrote:
 
-Thank you for the patch! Yet something to improve:
+> On Wed, Aug 10, 2022 at 08:55:32AM -0700, Hugh Dickins wrote:
+> > This is not a bug in zram or i915, but what Matthew fixes in
+> > https://lore.kernel.org/lkml/20220730042518.1264767-1-willy@infradead.org/
+> 
+> Thanks for tracking that down, Hugh.  Nice to know it's a crash rather
+> than a data corruption.  The fix is in Andrew's tree, so I think it's
+> already destined for upstream soon.
 
-[auto build test ERROR on kees/for-next/pstore]
-[also build test ERROR on v5.19]
-[cannot apply to linus/master next-20220810]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Yes, that's in the hotfixes queue for sending upstream Fridayish.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vegard-Nossum/capabilities-new-kernel-ns_modules_allowed-sysctl/20220810-031142
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/pstore
-config: arm64-buildonly-randconfig-r006-20220810 (https://download.01.org/0day-ci/archive/20220811/202208110524.fN5PNDSo-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/bd78b69455d4b3cac70812bf23a27de310e813cd
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Vegard-Nossum/capabilities-new-kernel-ns_modules_allowed-sysctl/20220810-031142
-        git checkout bd78b69455d4b3cac70812bf23a27de310e813cd
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+> Andrew, I have two fixes that I don't see in your tree:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Is it expected to be in my tree?  It's a huge v1 patch series on which
+I wasn't cc'ed?
 
-All errors (new ones prefixed by >>):
+> https://lore.kernel.org/linux-mm/20220808193430.3378317-2-willy@infradead.org/T/#u
+> https://lore.kernel.org/linux-mm/20220808193430.3378317-4-willy@infradead.org/T/#u
+> 
+> The first is of minor importance, the second I believe Hugh has hit in
+> his testing.
 
->> kernel/kmod.c:213:2: error: call to undeclared function 'register_sysctl_init'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           register_sysctl_init("kernel", kmod_sysctl_table);
-           ^
-   1 error generated.
+In that case the second patch should be pulled out of that series, have
+its changelog made to describe the runtime effects and have a Cc:stable
+added, please.
 
-
-vim +/register_sysctl_init +213 kernel/kmod.c
-
-   210	
-   211	static int __init kmod_sysctl_init(void)
-   212	{
- > 213		register_sysctl_init("kernel", kmod_sysctl_table);
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

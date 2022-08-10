@@ -2,57 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3715658EF0A
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 17:11:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6190858EF08
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 17:11:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232995AbiHJPLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 11:11:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54542 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232959AbiHJPLl (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S232982AbiHJPLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 10 Aug 2022 11:11:41 -0400
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA876555E;
-        Wed, 10 Aug 2022 08:11:40 -0700 (PDT)
-Received: by mail-io1-f54.google.com with SMTP id y82so5543602iof.7;
-        Wed, 10 Aug 2022 08:11:40 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54528 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232387AbiHJPLj (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 10 Aug 2022 11:11:39 -0400
+Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 840186555E;
+        Wed, 10 Aug 2022 08:11:38 -0700 (PDT)
+Received: by mail-io1-f51.google.com with SMTP id v185so12351366ioe.11;
+        Wed, 10 Aug 2022 08:11:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=message-id:date:subject:references:in-reply-to:cc:to:from
          :x-gm-message-state:from:to:cc;
-        bh=MtwwWFYU1Uoel2FqSmOeukCvUy+Ds67fehOcNXE8e9w=;
-        b=5OcVIxy4M7azII0QXUgCZTFqCvBtHElHqlNnsIN6bA3U1bKESkudlC7Zlt30SX1xVj
-         SA7jLbwKPYGJ3NKcmazsI8NgSiVKhS3JKf4MJ7YC0jd7nSIPlcJsYE1s/5QMwQ4oHQ0k
-         5J5mOJo9/Rtsp4BYCvAEzVdZEkRl2n+xG/PQrdYG4PiKTZoccirRrtaSR0HTD1tVvLf0
-         sg++Q9922PEQPG1Sq0Ej9FiQj1QviaM/t9RlAr1xo5vhfpSQ6MxMNOW4tACNU72hjHL2
-         pdh32F53bNZgxEDwQ1Q0Aw+RfFQCfv0mSq04P4H/Omlx8Lc6xJwu0x0u77t1YwpRNwTj
-         9HpQ==
-X-Gm-Message-State: ACgBeo0f2EfGd/MecNVSGnlHsW/7mP3kU/KVvkzbwJhjBRTLWjUeRMWV
-        NsHraqOJVneVzF0XxZSMdJjBWn10BQ==
-X-Google-Smtp-Source: AA6agR5vrJZdRv+YRIgJJ5Erl93GQ3Lmfstkt/XR693az+1RfFDbqQ8RgIQeE4J/wOYVSqToOFJCbA==
-X-Received: by 2002:a05:6638:1386:b0:342:8d69:71c2 with SMTP id w6-20020a056638138600b003428d6971c2mr12471346jad.315.1660144299569;
-        Wed, 10 Aug 2022 08:11:39 -0700 (PDT)
+        bh=VdGy62arhSt+BL4EouUN4IOHP2gTgnK0/wSx3k0+9GQ=;
+        b=p37LXXtLjMmIAU65imJU+wvg6/LUkO86YE89axN8BOwgPRTamgDuZl6PptzZ75cZIw
+         RijsKK4+zwCMTAR9Jesc81TptEB3ScbH7OxFD8X1Ja7qxcPAa6w0X9GFcLZyIzG5AvXK
+         4MoAVHocMX5EAF5kHOjx55dbDEoxnumfL0Bjtujx6rKvTc55ewAZ37DzrKdyWp7uWB4v
+         Y+HyW7QYVipqmnCP4gFfBQLj3mbSPRz1e3Y+wOwGp0/P8rTb7L7q/njtSG69Z78OPzEX
+         LnAeiAyBPxscaIeUtbyW4s2EhGntNCvJi377S5W++5NRtyXKbSrHNqM9wA89JAnuMWQF
+         zdGw==
+X-Gm-Message-State: ACgBeo0qIJod+uWvEc4Y5W99mjYgq2xTf+5bC0pv/0Y0RXtCGwxZAty2
+        M/4pNjix1FfFZ4ieS0n2NmVipX2g0g==
+X-Google-Smtp-Source: AA6agR7WvN3Kq0NUIrMMMSYd3sVfG//5Whijw3XcGTtSkmrFdqmuuuPSGfS3vF6YdeztcytZilJZnQ==
+X-Received: by 2002:a05:6638:380c:b0:342:ceb9:7af2 with SMTP id i12-20020a056638380c00b00342ceb97af2mr9653346jav.227.1660144297690;
+        Wed, 10 Aug 2022 08:11:37 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id m14-20020a026d0e000000b0034322c00433sm2680940jac.53.2022.08.10.08.11.38
+        by smtp.gmail.com with ESMTPSA id bs27-20020a056638451b00b0033f51f165e3sm7487923jab.140.2022.08.10.08.11.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 08:11:38 -0700 (PDT)
-Received: (nullmailer pid 4155390 invoked by uid 1000);
+        Wed, 10 Aug 2022 08:11:37 -0700 (PDT)
+Received: (nullmailer pid 4155387 invoked by uid 1000);
         Wed, 10 Aug 2022 15:11:36 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-media@vger.kernel.org
-In-Reply-To: <20220810132822.32534-2-yuji2.ishikawa@toshiba.co.jp>
-References: <20220810132822.32534-1-yuji2.ishikawa@toshiba.co.jp> <20220810132822.32534-2-yuji2.ishikawa@toshiba.co.jp>
-Subject: Re: [PATCH v3 1/4] dt-bindings: media: platform: visconti: Add Toshiba Visconti Video Input Interface bindings
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>
+Cc:     linux-pm@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org
+In-Reply-To: <20220810030500.2793882-2-bjorn.andersson@linaro.org>
+References: <20220810030500.2793882-1-bjorn.andersson@linaro.org> <20220810030500.2793882-2-bjorn.andersson@linaro.org>
+Subject: Re: [PATCH 1/2] dt-bindings: power: supply: Add Lenovo Yoga C630 EC
 Date:   Wed, 10 Aug 2022 09:11:36 -0600
-Message-Id: <1660144296.251859.4155389.nullmailer@robh.at.kernel.org>
+Message-Id: <1660144296.239515.4155386.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -64,38 +62,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 10 Aug 2022 22:28:19 +0900, Yuji Ishikawa wrote:
-> Adds the Device Tree binding documentation that allows to describe
-> the Video Input Interface found in Toshiba Visconti SoCs.
+On Tue, 09 Aug 2022 22:04:59 -0500, Bjorn Andersson wrote:
+> Add binding for the Embedded Controller found in the Qualcomm
+> Snapdragon-based Lenovo Yoga C630.
 > 
-> Signed-off-by: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
-> Reviewed-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 > ---
-> Chengelog v2:
-> - no change
-> 
-> Changelog v3:
-> - no change
-> ---
->  .../bindings/media/toshiba,visconti-viif.yaml | 103 ++++++++++++++++++
->  1 file changed, 103 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml
+>  .../power/supply/lenovo,yoga-c630-ec.yaml     | 88 +++++++++++++++++++
+>  1 file changed, 88 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/power/supply/lenovo,yoga-c630-ec.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
 on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
 yamllint warnings/errors:
-./Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml:14:111: [warning] line too long (112 > 110 characters) (line-length)
 
 dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml: properties:port:properties:endpoint:properties:data-lanes:items: 'oneOf' conditional failed, one must be fixed:
-	{'minItems': 1, 'maxItems': 4, 'items': [{'const': 1}, {'const': 2}, {'const': 3}, {'const': 4}]} should not be valid under {'required': ['maxItems']}
-		hint: "maxItems" is not needed with an "items" list
-	{'minItems': 1, 'maxItems': 4, 'items': [{'const': 1}, {'const': 2}, {'const': 3}, {'const': 4}]} is not of type 'array'
-	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml: ignoring, error in schema: properties: port: properties: endpoint: properties: data-lanes: items
-Documentation/devicetree/bindings/media/toshiba,visconti-viif.example.dtb:0:0: /example-0/soc/viif@1c000000: failed to match any schema with compatible: ['toshiba,visconti-viif']
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/supply/lenovo,yoga-c630-ec.example.dtb: embedded-controller@70: connector@1:ports: 'port@0' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/supply/lenovo,yoga-c630-ec.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/supply/lenovo,yoga-c630-ec.example.dtb: connector@1: ports: 'port@0' is a required property
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/connector/usb-connector.yaml
 
 doc reference errors (make refcheckdocs):
 

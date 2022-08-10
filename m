@@ -2,49 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 518DD58EE5C
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 16:32:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DEC758EE5E
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 16:32:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232126AbiHJOb1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 10:31:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41164 "EHLO
+        id S232513AbiHJOcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 10:32:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232271AbiHJOa5 (ORCPT
+        with ESMTP id S232457AbiHJObc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 10:30:57 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C18422282;
-        Wed, 10 Aug 2022 07:30:56 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 201DF23A;
-        Wed, 10 Aug 2022 07:30:57 -0700 (PDT)
-Received: from [192.168.122.164] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F0C813F67D;
-        Wed, 10 Aug 2022 07:30:55 -0700 (PDT)
-Message-ID: <4da7cd19-4b98-9360-922f-d625c4ec55e0@arm.com>
-Date:   Wed, 10 Aug 2022 09:30:51 -0500
+        Wed, 10 Aug 2022 10:31:32 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F835248F9
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:31:31 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id t15so8359695ilm.7
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:31:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc;
+        bh=ns6JDd8CewO25+DVvrCONnPh03MSrjykonj1NN4uWq0=;
+        b=QqW8l22YCkzKw4GiMQhdY8fTQbzaxtcSs8JxhgwNoFi2zXeRFAD8VRsY9u+hCAH68W
+         EJE4wzgtTikkQ0rwBV9xDTt8nWB8aUOJh/tLQLCkGcDF2m3eJG/Z1c0LoOgWbMLBWe4t
+         TTNamrbhNtfLUiHA9wTFndmUXcWW0yTsRWnJ4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc;
+        bh=ns6JDd8CewO25+DVvrCONnPh03MSrjykonj1NN4uWq0=;
+        b=aMJFu7BRtQOv7moGpVZrWfW8zINdUDeuZdGdN5az/3Ntl9Nd9YIc7Ovwbepr0QRbF/
+         Vdiwg26iHT/pEmJnOMjAH3VNSJ5UQ8p87q9G3q3JfM47NoD81ZhognxYTOWtNlyksezc
+         IauRukkZR3QSK7nOoZKmjAWHO4euiO9LwVadWHsodWfOB7adZeWvTrXcasUMts9fyMUD
+         Uty+U8KVtojYXsdVpjxTSbDKbvyiuZPf47jtDe3lJz+Oacc90Gc2pGQ6UMXXN/ntUQV4
+         K/c0lqbtDGweW9B18qqfzVK4zWTSWTkm0k95XNFH202VwJuY48AikTjq9xaYrTZDeaWA
+         SrWg==
+X-Gm-Message-State: ACgBeo2N240cV7M0KnCSJrA7KOaIqvDgaFeUNOdsuLrySCojgnaMaRvJ
+        nkHruKOrie5QYjYIkWOLxdUKZw==
+X-Google-Smtp-Source: AA6agR4ghNnRaWdrhVSZW42u+mwllcSQXG502scOPUUZK9LyRQtgtVK6DJqVsuZDfH1hxpgGS/uj7A==
+X-Received: by 2002:a05:6e02:1aa3:b0:2df:922d:8b3b with SMTP id l3-20020a056e021aa300b002df922d8b3bmr10785127ilv.166.1660141890910;
+        Wed, 10 Aug 2022 07:31:30 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id v4-20020a92ab04000000b002dd0ff02527sm2210488ilh.55.2022.08.10.07.31.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Aug 2022 07:31:30 -0700 (PDT)
+Subject: Re: [PATCH 5.18 00/35] 5.18.17-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20220809175515.046484486@linuxfoundation.org>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Message-ID: <5c88a8d6-73b5-df3d-48cc-4a112779ff56@linuxfoundation.org>
+Date:   Wed, 10 Aug 2022 08:31:29 -0600
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.8.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2 1/1] ACPI: CPPC: Disable FIE if registers in PCC
- regions
+In-Reply-To: <20220809175515.046484486@linuxfoundation.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org,
-        robert.moore@intel.com, devel@acpica.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, vschneid@redhat.com,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>
-References: <20220728221043.4161903-1-jeremy.linton@arm.com>
- <20220728221043.4161903-2-jeremy.linton@arm.com>
- <3a5e7abd-9361-11ba-978d-8e8bae00ea31@arm.com>
-From:   Jeremy Linton <jeremy.linton@arm.com>
-In-Reply-To: <3a5e7abd-9361-11ba-978d-8e8bae00ea31@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,86 +76,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 8/9/22 12:00 PM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.18.17 release.
+> There are 35 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 11 Aug 2022 17:55:02 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.17-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
+> 
 
-On 8/10/22 07:29, Lukasz Luba wrote:
-> Hi Jeremy,
-> 
-> +CC Valentin since he might be interested in this finding
-> +CC Ionela, Dietmar
-> 
-> I have a few comments for this patch.
-> 
-> 
-> On 7/28/22 23:10, Jeremy Linton wrote:
->> PCC regions utilize a mailbox to set/retrieve register values used by
->> the CPPC code. This is fine as long as the operations are
->> infrequent. With the FIE code enabled though the overhead can range
->> from 2-11% of system CPU overhead (ex: as measured by top) on Arm
->> based machines.
->>
->> So, before enabling FIE assure none of the registers used by
->> cppc_get_perf_ctrs() are in the PCC region. Furthermore lets also
->> enable a module parameter which can also disable it at boot or module
->> reload.
->>
->> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
->> ---
->>   drivers/acpi/cppc_acpi.c       | 41 ++++++++++++++++++++++++++++++++++
->>   drivers/cpufreq/cppc_cpufreq.c | 19 ++++++++++++----
->>   include/acpi/cppc_acpi.h       |  5 +++++
->>   3 files changed, 61 insertions(+), 4 deletions(-)
-> 
-> 
-> 1. You assume that all platforms would have this big overhead when
->     they have the PCC regions for this purpose.
->     Do we know which version of HW mailbox have been implemented
->     and used that have this 2-11% overhead in a platform?
->     Do also more recent MHU have such issues, so we could block
->     them by default (like in your code)?
+Compiled and booted on my test system. No dmesg regressions.
 
-I posted that other email before being awake and conflated MHU with AMU 
-(which could potentially expose the values directly). But the CPPC code 
-isn't aware of whether a MHU or some other mailbox is in use. Either 
-way, its hard to imagine a general mailbox with a doorbell/wait for 
-completion handshake will ever be fast enough to consider running at the 
-granularity this code is running at. If there were a case like that, the 
-kernel would have to benchmark it at runtime to differentiate it from 
-something that is talking over a slow link to a slowly responding mgmt 
-processor.
+Tested-by: Shuah Khan <skhan@linuxfoundation.org>
 
-
-> 
-> 2. I would prefer to simply change the default Kconfig value to 'n' for
->     the ACPI_CPPC_CPUFREQ_FIE, instead of creating a runtime
->     check code which disables it.
->     We have probably introduce this overhead for older platforms with
->     this commit:
-> 
-> commit 4c38f2df71c8e33c0b64865992d693f5022eeaad
-> Author: Viresh Kumar <viresh.kumar@linaro.org>
-> Date:   Tue Jun 23 15:49:40 2020 +0530
-> 
->      cpufreq: CPPC: Add support for frequency invariance
-> 
-> 
-> 
-> If the test server with this config enabled performs well
-> in the stress-tests, then on production server the config may be
-> set to 'y' (or 'm' and loaded).
-> 
-> I would vote to not add extra code, which then after a while might be
-> decided to bw extended because actually some HW is actually capable (so
-> we could check in runtime and enable it). IMO this create an additional
-> complexity in our diverse configuration/tunnable space in our code.
-> 
-> When we don't compile-in this, we should fallback to old-style
-> FIE, which has been used on these old platforms.
-> 
-> BTW (I have to leave it here) the first-class solution for those servers
-> is to implement AMU counters, so the overhead to retrieve this info is
-> really low.
-> 
-> Regards,
-> Lukasz
-
+thanks,
+-- Shuah

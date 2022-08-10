@@ -2,393 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42CD058F05F
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 18:25:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6749158F065
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 18:27:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232807AbiHJQYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 12:24:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52000 "EHLO
+        id S232618AbiHJQ1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 12:27:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232659AbiHJQYA (ORCPT
+        with ESMTP id S232405AbiHJQ1R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 12:24:00 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85168760F8;
-        Wed, 10 Aug 2022 09:23:56 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id 91ea0ad7bd64d3e0; Wed, 10 Aug 2022 18:23:54 +0200
-Received: from kreacher.localnet (unknown [213.134.187.55])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id A76F566CF1C;
-        Wed, 10 Aug 2022 18:23:52 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Mark Brown <broonie@kernel.org>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        linux-hyperv@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: [PATCH v1 5/5][RFT] ACPI: Drop parent field from struct acpi_device
-Date:   Wed, 10 Aug 2022 18:23:05 +0200
-Message-ID: <2196460.iZASKD2KPV@kreacher>
-In-Reply-To: <12036348.O9o76ZdvQC@kreacher>
-References: <12036348.O9o76ZdvQC@kreacher>
+        Wed, 10 Aug 2022 12:27:17 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0732F6D9CD
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 09:27:17 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id f28so14174574pfk.1
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 09:27:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=iaOXFsKF+VEOO1NtlLaIlaeLAxiEe5HdvjUlYcOWT3Q=;
+        b=GVeX1RfPqCV4MNhmySGhqVn74U978EnXNlWy8V4rYKKPVMl+gZdNyfITPC6O1m7XA3
+         UjyTN0wfJ/TOOzSXUVhjCj6sO7zhn3q55rwo2cYlRPZp53jFzhY97gJn7NOepzENJC17
+         911046olUQ8Oxebz/BVk9RQfS9RHpiGgZBGD+Yejcwc5gLsODnSxBe9Yg7D/o+aP6mUt
+         uRAuOiJbG+pk8Ic5/M6miuaKzbyYwZ12hrI7AujiS4CYR/h1hRKEc7LNMWVYjQXS4eFL
+         Yvj98HZt91azKkPv3+HHPjurpgBb3dZSG3wA/dUHnhwUgOzhbn+FZPh4wWsKQRwV5aMZ
+         7O9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=iaOXFsKF+VEOO1NtlLaIlaeLAxiEe5HdvjUlYcOWT3Q=;
+        b=KmtqJf/bSxOFYrKWCadtCt9ZNi2ANSbEuFgE1rk+4siyBXgq537MqxZw0RIzf1H5+c
+         uCOIiQcgZmVMVEdE4ILM9IirlRpfgoTgWMwQ44ehI0Es3PWuS9j+Mz0ha3kTjxBUuE+C
+         Ya4Btk/aD+yeOvswX6LgCbqkCYRnOGRJchlhDT0D6Sb1p3JLNaJGg8sZ+ZGqw1VkmC0l
+         08QmLSkS7eM3IaTCm4bBBw3Ll3HXMn2UFPsMkT8wUd60z8hcKahEUHaic5PUvtaxpWTE
+         JsAaiNPHqMCWBaotkdKgj5RD5vyWblh5qnW625xRuu4VDb94+JE5mlyL6fD5hHqGoxyV
+         y5rA==
+X-Gm-Message-State: ACgBeo1+0VVUfyxsgpRguU8q+oT7a4ovyPtMgRNz/7xzXktRt3p3Fo7q
+        rkSkXnzXoRciyeSokXT+GSMqew==
+X-Google-Smtp-Source: AA6agR6wL/KmEd1PVXtdHewoboaIumIX8l2OdRxgDFKHwjSDuXqF//vBbcweilEAqT2bqmFBdDoTIA==
+X-Received: by 2002:a65:6755:0:b0:41d:70c1:be0 with SMTP id c21-20020a656755000000b0041d70c10be0mr12905489pgu.99.1660148836261;
+        Wed, 10 Aug 2022 09:27:16 -0700 (PDT)
+Received: from google.com (238.76.127.34.bc.googleusercontent.com. [34.127.76.238])
+        by smtp.gmail.com with ESMTPSA id m3-20020a17090a2c0300b001f021cdd73dsm1851984pjd.10.2022.08.10.09.27.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Aug 2022 09:27:15 -0700 (PDT)
+Date:   Wed, 10 Aug 2022 16:27:11 +0000
+From:   Carlos Llamas <cmllamas@google.com>
+To:     Liam Howlett <liam.howlett@oracle.com>
+Cc:     "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        syzbot <syzbot+a7b60a176ec13cafb793@syzkaller.appspotmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Ondrej Mosnacek <omosnace@redhat.com>,
+        "syzkaller-bugs@googlegroups.com" <syzkaller-bugs@googlegroups.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hridya Valsaraju <hridya@google.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Martijn Coenen <maco@android.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Todd Kjos <tkjos@android.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>
+Subject: Re: [PATCH v2] binder_alloc: Add missing mmap_lock calls when using
+ the VMA
+Message-ID: <YvPcX6/1E0hAhOO5@google.com>
+References: <20220810160209.1630707-1-Liam.Howlett@oracle.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.187.55
-X-CLIENT-HOSTNAME: 213.134.187.55
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegvddgleejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppedvudefrddufeegrddukeejrdehheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukeejrdehhedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepudejpdhrtghpthhtoheplhhinhhugidqrggtphhisehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghnughrihihrdhshhgvvhgthhgvnhhkoheslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghr
- nhgvlhdrohhrghdprhgtphhtthhopehkhihssehmihgtrhhoshhofhhtrdgtohhmpdhrtghpthhtohephhgrihihrghnghiisehmihgtrhhoshhofhhtrdgtohhmpdhrtghpthhtohepshhthhgvmhhmihhnsehmihgtrhhoshhofhhtrdgtohhmpdhrtghpthhtohepfigvihdrlhhiuheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggvtghuihesmhhitghrohhsohhfthdrtghomhdprhgtphhtthhopegsrhhoohhnihgvsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegrnhgurhgvrghsrdhnohgvvhgvrhesghhmrghilhdrtghomhdprhgtphhtthhopehmihgthhgrvghlrdhjrghmvghtsehinhhtvghlrdgtohhmpdhrtghpthhtohepmhhikhgrrdifvghsthgvrhgsvghrgheslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopegjvghhvgiikhgvlhfuhheusehgmhgrihhlrdgtohhmpdhrtghpthhtoheplhhinhhugidqhhihphgvrhhvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqshhpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhushgssehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=17 Fuz1=17 Fuz2=17
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220810160209.1630707-1-Liam.Howlett@oracle.com>
+X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Wed, Aug 10, 2022 at 04:02:25PM +0000, Liam Howlett wrote:
+> Take the mmap_read_lock() when using the VMA in
+> binder_alloc_print_pages() and when checking for a VMA in
+> binder_alloc_new_buf_locked().
+> 
+> It is worth noting binder_alloc_new_buf_locked() drops the VMA read lock
+> after it verifies a VMA exists, but may be taken again deeper in the
+> call stack, if necessary.
+> 
+> Reported-by: Ondrej Mosnacek <omosnace@redhat.com>
+> Reported-by: syzbot+a7b60a176ec13cafb793@syzkaller.appspotmail.com
+> Fixes: a43cfc87caaf (android: binder: stop saving a pointer to the VMA)
+> Signed-off-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+> ---
+>  drivers/android/binder_alloc.c | 31 +++++++++++++++++++++----------
+>  1 file changed, 21 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/android/binder_alloc.c b/drivers/android/binder_alloc.c
+> index f555eebceef6..c5e7c6d3a844 100644
+> --- a/drivers/android/binder_alloc.c
+> +++ b/drivers/android/binder_alloc.c
+> @@ -395,12 +395,15 @@ static struct binder_buffer *binder_alloc_new_buf_locked(
+>  	size_t size, data_offsets_size;
+>  	int ret;
+>  
+> +	mmap_read_lock(alloc->vma_vm_mm);
+>  	if (!binder_alloc_get_vma(alloc)) {
+> +		mmap_read_unlock(alloc->vma_vm_mm);
+>  		binder_alloc_debug(BINDER_DEBUG_USER_ERROR,
+>  				   "%d: binder_alloc_buf, no vma\n",
+>  				   alloc->pid);
+>  		return ERR_PTR(-ESRCH);
+>  	}
+> +	mmap_read_unlock(alloc->vma_vm_mm);
+>  
+>  	data_offsets_size = ALIGN(data_size, sizeof(void *)) +
+>  		ALIGN(offsets_size, sizeof(void *));
+> @@ -922,17 +925,25 @@ void binder_alloc_print_pages(struct seq_file *m,
+>  	 * Make sure the binder_alloc is fully initialized, otherwise we might
+>  	 * read inconsistent state.
+>  	 */
+> -	if (binder_alloc_get_vma(alloc) != NULL) {
+> -		for (i = 0; i < alloc->buffer_size / PAGE_SIZE; i++) {
+> -			page = &alloc->pages[i];
+> -			if (!page->page_ptr)
+> -				free++;
+> -			else if (list_empty(&page->lru))
+> -				active++;
+> -			else
+> -				lru++;
+> -		}
+> +
+> +	mmap_read_lock(alloc->vma_vm_mm);
+> +	if (binder_alloc_get_vma(alloc) == NULL) {
+> +		mmap_read_unlock(alloc->vma_vm_mm);
+> +		goto uninitialized;
+>  	}
+> +
+> +	mmap_read_unlock(alloc->vma_vm_mm);
+> +	for (i = 0; i < alloc->buffer_size / PAGE_SIZE; i++) {
+> +		page = &alloc->pages[i];
+> +		if (!page->page_ptr)
+> +			free++;
+> +		else if (list_empty(&page->lru))
+> +			active++;
+> +		else
+> +			lru++;
+> +	}
+> +
+> +uninitialized:
+>  	mutex_unlock(&alloc->mutex);
+>  	seq_printf(m, "  pages: %d:%d:%d\n", active, lru, free);
+>  	seq_printf(m, "  pages high watermark: %zu\n", alloc->pages_high);
+> -- 
+> 2.35.1
 
-The parent field in struct acpi_device is, in fact, redundant,
-because the dev.parent field in it effectively points to the same
-object and it is used by the driver core.
+Thanks Liam, this looks good.
 
-Accordingly, the parent field can be dropped from struct acpi_device
-and for this purpose define acpi_dev_parent() to retrieve the parent
-struct acpi_device pointer from the dev.parent field in struct
-acpi_device.  Next, update all of the users of the parent field
-in struct acpi_device to use acpi_dev_parent() instead of it and
-drop it.
-
-While at it, drop the ACPI_IS_ROOT_DEVICE() macro that is only used
-in one place in a confusing way.
-
-No intentional functional impact.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-
-I may have missed some places where adev->parent is used directly, so
-if that's happened, please let me know (I'm assuming that 0-day will
-pick up this patch and run it through all of the relevant configs
-anyway).
-
----
- drivers/acpi/acpi_platform.c |    6 +++---
- drivers/acpi/acpi_video.c    |    2 +-
- drivers/acpi/device_pm.c     |   19 ++++++++++---------
- drivers/acpi/property.c      |    6 ++++--
- drivers/acpi/sbs.c           |    2 +-
- drivers/acpi/sbshc.c         |    2 +-
- drivers/acpi/scan.c          |   17 ++++++-----------
- drivers/hv/vmbus_drv.c       |    3 ++-
- drivers/spi/spi.c            |    2 +-
- drivers/thunderbolt/acpi.c   |    2 +-
- include/acpi/acpi_bus.h      |   10 +++++++++-
- 11 files changed, 39 insertions(+), 32 deletions(-)
-
-Index: linux-pm/drivers/acpi/scan.c
-===================================================================
---- linux-pm.orig/drivers/acpi/scan.c
-+++ linux-pm/drivers/acpi/scan.c
-@@ -29,8 +29,6 @@ extern struct acpi_device *acpi_root;
- #define ACPI_BUS_HID			"LNXSYBUS"
- #define ACPI_BUS_DEVICE_NAME		"System Bus"
- 
--#define ACPI_IS_ROOT_DEVICE(device)    (!(device)->parent)
--
- #define INVALID_ACPI_HANDLE	((acpi_handle)empty_zero_page)
- 
- static const char *dummy_hid = "device";
-@@ -1110,7 +1108,7 @@ static void acpi_device_get_busid(struct
- 	 * The device's Bus ID is simply the object name.
- 	 * TBD: Shouldn't this value be unique (within the ACPI namespace)?
- 	 */
--	if (ACPI_IS_ROOT_DEVICE(device)) {
-+	if (!acpi_dev_parent(device)) {
- 		strcpy(device->pnp.bus_id, "ACPI");
- 		return;
- 	}
-@@ -1646,7 +1644,7 @@ static void acpi_init_coherency(struct a
- {
- 	unsigned long long cca = 0;
- 	acpi_status status;
--	struct acpi_device *parent = adev->parent;
-+	struct acpi_device *parent = acpi_dev_parent(adev);
- 
- 	if (parent && parent->flags.cca_seen) {
- 		/*
-@@ -1690,7 +1688,7 @@ static int acpi_check_serial_bus_slave(s
- 
- static bool acpi_is_indirect_io_slave(struct acpi_device *device)
- {
--	struct acpi_device *parent = device->parent;
-+	struct acpi_device *parent = acpi_dev_parent(device);
- 	static const struct acpi_device_id indirect_io_hosts[] = {
- 		{"HISI0191", 0},
- 		{}
-@@ -1766,10 +1764,7 @@ void acpi_init_device_object(struct acpi
- 	INIT_LIST_HEAD(&device->pnp.ids);
- 	device->device_type = type;
- 	device->handle = handle;
--	if (parent) {
--		device->parent = parent;
--		device->dev.parent = &parent->dev;
--	}
-+	device->dev.parent = parent ? &parent->dev : NULL;
- 	device->dev.release = release;
- 	device->dev.bus = &acpi_bus_type;
- 	fwnode_init(&device->fwnode, &acpi_device_fwnode_ops);
-@@ -1866,8 +1861,8 @@ static int acpi_add_single_object(struct
- 	acpi_device_add_finalize(device);
- 
- 	acpi_handle_debug(handle, "Added as %s, parent %s\n",
--			  dev_name(&device->dev), device->parent ?
--				dev_name(&device->parent->dev) : "(null)");
-+			  dev_name(&device->dev), device->dev.parent ?
-+				dev_name(device->dev.parent) : "(null)");
- 
- 	*child = device;
- 	return 0;
-Index: linux-pm/include/acpi/acpi_bus.h
-===================================================================
---- linux-pm.orig/include/acpi/acpi_bus.h
-+++ linux-pm/include/acpi/acpi_bus.h
-@@ -364,7 +364,6 @@ struct acpi_device {
- 	int device_type;
- 	acpi_handle handle;		/* no handle for fixed hardware */
- 	struct fwnode_handle fwnode;
--	struct acpi_device *parent;
- 	struct list_head wakeup_list;
- 	struct list_head del_list;
- 	struct acpi_device_status status;
-@@ -457,6 +456,14 @@ static inline void *acpi_driver_data(str
- #define to_acpi_device(d)	container_of(d, struct acpi_device, dev)
- #define to_acpi_driver(d)	container_of(d, struct acpi_driver, drv)
- 
-+static inline struct acpi_device *acpi_dev_parent(struct acpi_device *adev)
-+{
-+	if (adev->dev.parent)
-+		return to_acpi_device(adev->dev.parent);
-+
-+	return NULL;
-+}
-+
- static inline void acpi_set_device_status(struct acpi_device *adev, u32 sta)
- {
- 	*((u32 *)&adev->status) = sta;
-@@ -477,6 +484,7 @@ void acpi_initialize_hp_context(struct a
- /* acpi_device.dev.bus == &acpi_bus_type */
- extern struct bus_type acpi_bus_type;
- 
-+struct acpi_device *acpi_dev_parent(struct acpi_device *adev);
- int acpi_bus_for_each_dev(int (*fn)(struct device *, void *), void *data);
- int acpi_dev_for_each_child(struct acpi_device *adev,
- 			    int (*fn)(struct acpi_device *, void *), void *data);
-Index: linux-pm/drivers/acpi/property.c
-===================================================================
---- linux-pm.orig/drivers/acpi/property.c
-+++ linux-pm/drivers/acpi/property.c
-@@ -298,8 +298,10 @@ static void acpi_init_of_compatible(stru
- 		ret = acpi_dev_get_property(adev, "compatible",
- 					    ACPI_TYPE_STRING, &of_compatible);
- 		if (ret) {
--			if (adev->parent
--			    && adev->parent->flags.of_compatible_ok)
-+			struct acpi_device *parent;
-+
-+			parent = acpi_dev_parent(adev);
-+			if (parent && parent->flags.of_compatible_ok)
- 				goto out;
- 
- 			return;
-Index: linux-pm/drivers/acpi/device_pm.c
-===================================================================
---- linux-pm.orig/drivers/acpi/device_pm.c
-+++ linux-pm/drivers/acpi/device_pm.c
-@@ -74,6 +74,7 @@ static int acpi_dev_pm_explicit_get(stru
-  */
- int acpi_device_get_power(struct acpi_device *device, int *state)
- {
-+	struct acpi_device *parent = acpi_dev_parent(device);
- 	int result = ACPI_STATE_UNKNOWN;
- 	int error;
- 
-@@ -82,8 +83,7 @@ int acpi_device_get_power(struct acpi_de
- 
- 	if (!device->flags.power_manageable) {
- 		/* TBD: Non-recursive algorithm for walking up hierarchy. */
--		*state = device->parent ?
--			device->parent->power.state : ACPI_STATE_D0;
-+		*state = parent ? parent->power.state : ACPI_STATE_D0;
- 		goto out;
- 	}
- 
-@@ -122,10 +122,10 @@ int acpi_device_get_power(struct acpi_de
- 	 * point, the fact that the device is in D0 implies that the parent has
- 	 * to be in D0 too, except if ignore_parent is set.
- 	 */
--	if (!device->power.flags.ignore_parent && device->parent
--	    && device->parent->power.state == ACPI_STATE_UNKNOWN
--	    && result == ACPI_STATE_D0)
--		device->parent->power.state = ACPI_STATE_D0;
-+	if (!device->power.flags.ignore_parent && parent &&
-+	    parent->power.state == ACPI_STATE_UNKNOWN &&
-+	    result == ACPI_STATE_D0)
-+		parent->power.state = ACPI_STATE_D0;
- 
- 	*state = result;
- 
-@@ -159,6 +159,7 @@ static int acpi_dev_pm_explicit_set(stru
-  */
- int acpi_device_set_power(struct acpi_device *device, int state)
- {
-+	struct acpi_device *parent = acpi_dev_parent(device);
- 	int target_state = state;
- 	int result = 0;
- 
-@@ -191,12 +192,12 @@ int acpi_device_set_power(struct acpi_de
- 		return -ENODEV;
- 	}
- 
--	if (!device->power.flags.ignore_parent && device->parent &&
--	    state < device->parent->power.state) {
-+	if (!device->power.flags.ignore_parent && parent &&
-+	    state < parent->power.state) {
- 		acpi_handle_debug(device->handle,
- 				  "Cannot transition to %s for parent in %s\n",
- 				  acpi_power_state_string(state),
--				  acpi_power_state_string(device->parent->power.state));
-+				  acpi_power_state_string(parent->power.state));
- 		return -ENODEV;
- 	}
- 
-Index: linux-pm/drivers/acpi/acpi_platform.c
-===================================================================
---- linux-pm.orig/drivers/acpi/acpi_platform.c
-+++ linux-pm/drivers/acpi/acpi_platform.c
-@@ -78,7 +78,7 @@ static void acpi_platform_fill_resource(
- 	 * If the device has parent we need to take its resources into
- 	 * account as well because this device might consume part of those.
- 	 */
--	parent = acpi_get_first_physical_node(adev->parent);
-+	parent = acpi_get_first_physical_node(acpi_dev_parent(adev));
- 	if (parent && dev_is_pci(parent))
- 		dest->parent = pci_find_resource(to_pci_dev(parent), dest);
- }
-@@ -97,6 +97,7 @@ static void acpi_platform_fill_resource(
- struct platform_device *acpi_create_platform_device(struct acpi_device *adev,
- 						    const struct property_entry *properties)
- {
-+	struct acpi_device *parent = acpi_dev_parent(adev);
- 	struct platform_device *pdev = NULL;
- 	struct platform_device_info pdevinfo;
- 	struct resource_entry *rentry;
-@@ -137,8 +138,7 @@ struct platform_device *acpi_create_plat
- 	 * attached to it, that physical device should be the parent of the
- 	 * platform device we are about to create.
- 	 */
--	pdevinfo.parent = adev->parent ?
--		acpi_get_first_physical_node(adev->parent) : NULL;
-+	pdevinfo.parent = parent ? acpi_get_first_physical_node(parent) : NULL;
- 	pdevinfo.name = dev_name(&adev->dev);
- 	pdevinfo.id = -1;
- 	pdevinfo.res = resources;
-Index: linux-pm/drivers/acpi/acpi_video.c
-===================================================================
---- linux-pm.orig/drivers/acpi/acpi_video.c
-+++ linux-pm/drivers/acpi/acpi_video.c
-@@ -2030,7 +2030,7 @@ static int acpi_video_bus_add(struct acp
- 	acpi_status status;
- 
- 	status = acpi_walk_namespace(ACPI_TYPE_DEVICE,
--				device->parent->handle, 1,
-+				acpi_dev_parent(device)->handle, 1,
- 				acpi_video_bus_match, NULL,
- 				device, NULL);
- 	if (status == AE_ALREADY_EXISTS) {
-Index: linux-pm/drivers/acpi/sbs.c
-===================================================================
---- linux-pm.orig/drivers/acpi/sbs.c
-+++ linux-pm/drivers/acpi/sbs.c
-@@ -632,7 +632,7 @@ static int acpi_sbs_add(struct acpi_devi
- 
- 	mutex_init(&sbs->lock);
- 
--	sbs->hc = acpi_driver_data(device->parent);
-+	sbs->hc = acpi_driver_data(acpi_dev_parent(device));
- 	sbs->device = device;
- 	strcpy(acpi_device_name(device), ACPI_SBS_DEVICE_NAME);
- 	strcpy(acpi_device_class(device), ACPI_SBS_CLASS);
-Index: linux-pm/drivers/acpi/sbshc.c
-===================================================================
---- linux-pm.orig/drivers/acpi/sbshc.c
-+++ linux-pm/drivers/acpi/sbshc.c
-@@ -266,7 +266,7 @@ static int acpi_smbus_hc_add(struct acpi
- 	mutex_init(&hc->lock);
- 	init_waitqueue_head(&hc->wait);
- 
--	hc->ec = acpi_driver_data(device->parent);
-+	hc->ec = acpi_driver_data(acpi_dev_parent(device));
- 	hc->offset = (val >> 8) & 0xff;
- 	hc->query_bit = val & 0xff;
- 	device->driver_data = hc;
-Index: linux-pm/drivers/spi/spi.c
-===================================================================
---- linux-pm.orig/drivers/spi/spi.c
-+++ linux-pm/drivers/spi/spi.c
-@@ -4256,7 +4256,7 @@ static int acpi_spi_notify(struct notifi
- 
- 	switch (value) {
- 	case ACPI_RECONFIG_DEVICE_ADD:
--		ctlr = acpi_spi_find_controller_by_adev(adev->parent);
-+		ctlr = acpi_spi_find_controller_by_adev(acpi_dev_parent(adev));
- 		if (!ctlr)
- 			break;
- 
-Index: linux-pm/drivers/thunderbolt/acpi.c
-===================================================================
---- linux-pm.orig/drivers/thunderbolt/acpi.c
-+++ linux-pm/drivers/thunderbolt/acpi.c
-@@ -42,7 +42,7 @@ static acpi_status tb_acpi_add_link(acpi
- 	 */
- 	dev = acpi_get_first_physical_node(adev);
- 	while (!dev) {
--		adev = adev->parent;
-+		adev = acpi_dev_parent(adev);
- 		if (!adev)
- 			break;
- 		dev = acpi_get_first_physical_node(adev);
-Index: linux-pm/drivers/hv/vmbus_drv.c
-===================================================================
---- linux-pm.orig/drivers/hv/vmbus_drv.c
-+++ linux-pm/drivers/hv/vmbus_drv.c
-@@ -2423,7 +2423,8 @@ static int vmbus_acpi_add(struct acpi_de
- 	 * Some ancestor of the vmbus acpi device (Gen1 or Gen2
- 	 * firmware) is the VMOD that has the mmio ranges. Get that.
- 	 */
--	for (ancestor = device->parent; ancestor; ancestor = ancestor->parent) {
-+	for (ancestor = acpi_dev_parent(device); ancestor;
-+	     ancestor = acpi_dev_parent(ancestor)) {
- 		result = acpi_walk_resources(ancestor->handle, METHOD_NAME__CRS,
- 					     vmbus_walk_resources, NULL);
- 
-
-
-
+Acked-by: Carlos Llamas <cmllamas@google.com>

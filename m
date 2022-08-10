@@ -2,63 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EDAD58ECA3
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 15:00:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2FFA58ECAD
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 15:02:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232426AbiHJNAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 09:00:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55752 "EHLO
+        id S230183AbiHJNCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 09:02:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232502AbiHJNA2 (ORCPT
+        with ESMTP id S232446AbiHJNBe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 09:00:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFFB2717A;
-        Wed, 10 Aug 2022 06:00:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 43A9D61425;
-        Wed, 10 Aug 2022 13:00:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 75075C433C1;
-        Wed, 10 Aug 2022 13:00:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660136416;
-        bh=zQPYsSjGoy5+dUcfGx9q9n9WbpRBQD+ECEKKdt88zUo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rCbJZrVaQsbrpnlKnwBBo366+Pd6dpu/rfRTq+rqEsEIz+i23bsA61bMfCbmtE57U
-         8AOAzSuyxK1fDWShN2VUau2saA8WT0efTnLoV5hO+3bRTZR87fZhBxSUS/aLpL+9eL
-         Je+YPAPb5/vnT+Q03g09ZT3qhtXK/LzDF8ovAA7H3fxplG4rkYIAYzWd7IO6nvk71V
-         HgNisFNUIIYPGbhkJ1Ypm3aCGCl82Ry5StoFv6JfPD00KFoeIzOTpcgDJx/gb0Vfb9
-         T70krRQpwJcXbZpq1ASOrb660miBC7Z/jiNYbpneBV4CI0QmV3ff3SbQUWtZ1+w/06
-         y/7Jgtziy62fg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 6CF5F4035A; Wed, 10 Aug 2022 10:00:14 -0300 (-03)
-Date:   Wed, 10 Aug 2022 10:00:14 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Brian Robbins <brianrob@linux.microsoft.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] perf inject jit: Ignore memfd mmap events if jitdump
- present
-Message-ID: <YvOr3t9JNlEI4p+6@kernel.org>
-References: <20220802182502.85562-1-brianrob@linux.microsoft.com>
- <CAP-5=fXY8paDRMcyMokRMXOrrB2CHfY2=HkPsHZrWL_vd_-bWw@mail.gmail.com>
+        Wed, 10 Aug 2022 09:01:34 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6AF761B0F;
+        Wed, 10 Aug 2022 06:01:33 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id 3E50E5C0358;
+        Wed, 10 Aug 2022 09:01:32 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Wed, 10 Aug 2022 09:01:32 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=themaw.net; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm3; t=1660136492; x=
+        1660222892; bh=D2dDj1/YvO3PoXFbhxtyDvrJjuK0U5n+THc//8l/nSg=; b=0
+        uEws4l4g6w2vrXp4GfCdWCnTh+CSrYDl4BIH9cfZm8TNqDt0C1F4/kQu0PjMlz/7
+        IPok/mc8SanD4aZtIwfFt3wz2LHUZHri/bel2AmR1Prp9nlTkTF6qmPVN0tIj/SG
+        AfDJZIQi/OtqscaGUmTWTXaL5dG5bm8QhmTP5cvPLeVGBHXnrd6OuRALPdmLZh0P
+        391bvUHNo4eiljos5XQkZkKDPqPNvYRQ7wUkPdLCjbDv2+IbqC85GVUeNyErpJJl
+        Xi5ccgqV8fBFhUdrjhrfRsKvfLDnbr+zSzq/FQyQOZoqf7NVUUjgMvKqO13XQ9Lt
+        V53LdIwYZE1PGG+9FgXmg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1660136492; x=
+        1660222892; bh=D2dDj1/YvO3PoXFbhxtyDvrJjuK0U5n+THc//8l/nSg=; b=g
+        4PUnbuBsbuWyDlmRz2cl0jHM/Wz9W+AAacy4xwFeYEc7jLDtN4vqJfBrNQvPBg+U
+        sY+nbk3DIt8+312Frgxpo5/eh0pZPP0UD4YIRuWX+vyTew6o8ohjY3wbA8F7WD/4
+        zVNvmYG1ldBGhPRo+DJx/GazOdXyvRtuvR9PUM86q4SoybRXO3yu2xuT86kgeiOZ
+        +nLUeLICLrWZ/MA7NQLAdZ8LqfDRUKkal0QJhULVY3dYUG/Vl6WeDoqfDVDanteq
+        o93PFZ8iw+tAFheEtKPh+kjKUtwONChc1p5w/P8cdILsF5vFYUAcltY0hTM2gHKL
+        PcviV0zo6aBwQ7dSp/n7w==
+X-ME-Sender: <xms:K6zzYgaufmFQYN3G-XE3GD_vN0bwiRO7qVkN-7J17C4m-ECwAF-3mA>
+    <xme:K6zzYraYxzysb-4EsfTXXjMDMY0mKilEmSyoJfChHtgKlkxJitcAAAyZvnFn1wjKy
+    V_hf6iZuIsn>
+X-ME-Received: <xmr:K6zzYq_hV8cfHgpYJ6ceTOAWwdug0m5PGJ7AYoOtsfGjkd4S1UUHhQcSgtIkrFVyScAdWozwAS1-XhSHVQ0PJvovtPIO8-mAKQhyK7RMb71iJgYeYlm2>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegvddgheejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpefkrghn
+    ucfmvghnthcuoehrrghvvghnsehthhgvmhgrfidrnhgvtheqnecuggftrfgrthhtvghrnh
+    epgeevhedvleejleevkeduvdfgtefgtdfgffevtdetudekteekheeluddthfdtleehnecu
+    ffhomhgrihhnpehsohhurhgtvgifrghrvgdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehrrghvvghnsehthhgvmhgrfidrnhgvth
+X-ME-Proxy: <xmx:K6zzYqq9Zeku69vjGyL7qCQ8y-siPza__UiByZwdf1sH727kGsR_sA>
+    <xmx:K6zzYrpBtEloIhq5qRx6uVC9MvBI9Bs9Pdmml3lfQfUOmueKype-Fw>
+    <xmx:K6zzYoS0K7lSIZ-quO3NK8tJ9UPkIejLJ1CbewJieP-GkVbetvyABg>
+    <xmx:LKzzYsnReg1zR2o7eA9WFra5rnD8htQ9ljHUtQvVHnPniq_-dR8abg>
+Feedback-ID: i31e841b0:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 10 Aug 2022 09:01:28 -0400 (EDT)
+Message-ID: <3364aae7-9247-21aa-9ea4-36348462df4c@themaw.net>
+Date:   Wed, 10 Aug 2022 21:01:26 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP-5=fXY8paDRMcyMokRMXOrrB2CHfY2=HkPsHZrWL_vd_-bWw@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC][PATCH] uapi: Remove the inclusion of linux/mount.h from
+ uapi/linux/fs.h
+Content-Language: en-US
+To:     Florian Weimer <fweimer@redhat.com>,
+        David Howells <dhowells@redhat.com>
+Cc:     linux-fsdevel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <christian@brauner.io>,
+        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <163410.1659964655@warthog.procyon.org.uk>
+ <87zggce9fd.fsf@oldenburg.str.redhat.com>
+From:   Ian Kent <raven@themaw.net>
+In-Reply-To: <87zggce9fd.fsf@oldenburg.str.redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,90 +93,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Thu, Aug 04, 2022 at 08:22:14AM -0700, Ian Rogers escreveu:
-> On Tue, Aug 2, 2022 at 11:25 AM Brian Robbins
-> <brianrob@linux.microsoft.com> wrote:
-> >
-> > Some processes store jitted code in memfd mappings to avoid having rwx
-> > mappings.  These processes map the code with a writeable mapping and a
-> > read-execute mapping.  They write the code using the writeable mapping
-> > and then unmap the writeable mapping.  All subsequent execution is
-> > through the read-execute mapping.
-> >
-> > perf inject --jit ignores //anon* mappings for each process where a
-> > jitdump is present because it expects to inject mmap events for each
-> > jitted code range, and said jitted code ranges will overlap with the
-> > //anon* mappings.
-> >
-> > Ignore /memfd: mappings so that jitted code contained in /memfd:
-> > mappings is treated the same way as jitted code contained in //anon*
-> > mappings.
-> >
-> > Signed-off-by: Brian Robbins <brianrob@linux.microsoft.com>
-> 
-> Acked-by: Ian Rogers <irogers@google.com>
+On 10/8/22 17:26, Florian Weimer wrote:
+> * David Howells:
+>
+>> We're seeing issues in autofs and xfstests whereby linux/mount.h (the UAPI
+>> version) as included indirectly by linux/fs.h is conflicting with
+>> sys/mount.h (there's a struct and an enum).
+>>
+>> Would it be possible to just remove the #include from linux/fs.h (as patch
+>> below) and rely on those hopefully few things that need mount flags that don't
+>> use the glibc header for them working around it by configuration?
+> Wasn't <linux/mount.h> split from <linux/fs.h> relatively recently, and
+> userspace is probably using <linux/fs.h> to get the mount flag
+> definitions?
 
-  CC      /tmp/build/perf/util/jitdump.o
-  CC      /tmp/build/perf/pmu-events/pmu-events.o
-  LD      /tmp/build/perf/pmu-events/pmu-events-in.o
-util/jitdump.c: In function ‘jit_process’:
-util/jitdump.c:853:65: error: expected ‘)’ before ‘return’
-  853 |                          (strncmp(filename, "/memfd:", 7) == 0))
-      |                                                                 ^
-      |                                                                 )
-  854 |                         return 1;
-      |                         ~~~~~~
-util/jitdump.c:851:20: note: to match this ‘(’
-  851 |                 if (jit_has_pid(machine, pid) &&
-      |                    ^
-util/jitdump.c:857:9: error: expected expression before ‘}’ token
-  857 |         }
-      |         ^
-make[4]: *** [/var/home/acme/git/perf/tools/build/Makefile.build:96: /tmp/build/perf/util/jitdump.o] Error 1
-make[4]: *** Waiting for unfinished jobs....
-make[3]: *** [/var/home/acme/git/perf/tools/build/Makefile.build:139: util] Error 2
+Not sure myself but this is in the user space kernel includes
+
+and sys/mount.h has pretty much what linux/mount.h has plus a
+
+few function declarations. It's almost a complete duplication.
 
 
-Trying to fix now.
+The reality is that the enum declaration could be changed to
 
-- Arnaldo
- 
-> > ---
-> >  tools/perf/util/jitdump.c | 8 ++++++--
-> >  1 file changed, 6 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/tools/perf/util/jitdump.c b/tools/perf/util/jitdump.c
-> > index a23255773c60..335a3c61940b 100644
-> > --- a/tools/perf/util/jitdump.c
-> > +++ b/tools/perf/util/jitdump.c
-> > @@ -845,8 +845,12 @@ jit_process(struct perf_session *session,
-> >         if (jit_detect(filename, pid, nsi)) {
-> >                 nsinfo__put(nsi);
-> >
-> > -               // Strip //anon* mmaps if we processed a jitdump for this pid
-> > -               if (jit_has_pid(machine, pid) && (strncmp(filename, "//anon", 6) == 0))
-> > +               /*
-> > +                * Strip //anon* and /memfd:* mmaps if we processed a jitdump for this pid
-> > +                */
-> > +               if (jit_has_pid(machine, pid) &&
-> > +                       ((strncmp(filename, "//anon", 6) == 0) ||
-> > +                        (strncmp(filename, "/memfd:", 7) == 0))
-> 
-> Related to this there is the prctl PR_SET_VMA_ANON_NAME which will
-> name mapping to start with "[anon:"
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/filesystems/proc.rst#n434
-> I wonder also we should be checking the pages are executable.
-> 
-> Thanks,
-> Ian
-> 
-> >                         return 1;
-> >
-> >                 return 0;
-> > --
-> > 2.25.1
-> >
+#defines (not a preferred approach) which leaves only the
 
--- 
+struct mount_attr which is the difficult one to resolve.
 
-- Arnaldo
+
+>
+> In retrospect, it would have been better to add the new fsmount stuff to
+> a separate header file, so that we could include that easily from
+> <sys/mount.h> on the glibc side.  Adhemerval posted a glibc patch to
+> fake that (for recent compilers):
+>
+>    [PATCH] linux: Fix sys/mount.h usage with kernel headers
+>    <https://sourceware.org/pipermail/libc-alpha/2022-August/141316.html>
+>
+> I think it should work reliably, so that's probably the direction we are
+> going to move in.
+
+Looked a lot more complicated than I thought it could be, enough
+
+that I can't say if it will work so I'll take your word for it.
+
+
+Ian
+

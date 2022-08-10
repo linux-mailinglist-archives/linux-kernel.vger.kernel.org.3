@@ -2,184 +2,332 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C033958EA5F
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 12:18:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1820758EA60
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 12:18:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbiHJKRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 06:17:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49684 "EHLO
+        id S230262AbiHJKSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 06:18:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbiHJKRh (ORCPT
+        with ESMTP id S230006AbiHJKSE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 06:17:37 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC4E6F563;
-        Wed, 10 Aug 2022 03:17:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660126656; x=1691662656;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=0FSfp9pR/ryQL1qKV3++zTY8/byKiEskfvX+Dm0+mz4=;
-  b=SJ4xoHV0NFW2ZrmR59ID7Nml4EGsGuCCJwrrajV6ggUjjBb+UsRJVYsZ
-   KeBuA5FY9x2BWrrY0WQmFSfWmTa3X5m1D72RvMbY4E4OVX53iBS/BiUwE
-   kEErg1R9MlSkFxzuZMyUMW01Vs9kwipLd9imS8AFthp/i4NeY3eM93N0B
-   WGdfV/Ue6g0fwMzpTAxHUbaA0+5szYXDHRKA2XLBMqx6Tdx5RvvEmJRrv
-   Q7XZ2gOzHM8NgpFowQwpwQqTxLAOr0HP8+20GZi4oP/JC9SKsXKKtk5BA
-   /3pMJKCrI6LRj8ymdVGdCyEV7IO02ik9xA1U2sEERFaWhzy2NUIcSeqAc
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="355050208"
-X-IronPort-AV: E=Sophos;i="5.93,227,1654585200"; 
-   d="scan'208";a="355050208"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 03:17:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,227,1654585200"; 
-   d="scan'208";a="708175397"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga002.fm.intel.com with ESMTP; 10 Aug 2022 03:17:34 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Wed, 10 Aug 2022 03:17:34 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28 via Frontend Transport; Wed, 10 Aug 2022 03:17:34 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.105)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.28; Wed, 10 Aug 2022 03:17:33 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gGZj+1tIbVhCmTTxiFxEwW+Af3C05xWnA3NsmwVbHsuKT+MioJ4h5NVKiKGdKrCFRdjqHmhTVedvFfEa7y298DR5L/cpUY/PjXFzt86YW9TqhhFIemg4Jbkv+gRcTbaOLNvegnLikH4tsSuHLflR9j80NIEMrb/W5G+EPDY05g2ETOW1ltrHV4lu2SFqF8jsYaCAdjODknGbMjIMPXhbCP7uaKcroaoA8kD0Zc7fFjAswtudjzUvalWMVNHAOzO7KdeIOGtx0HJ0CqskF3qYof7tOkusE0Tq5OTYPu4OxXSSA2BUHYqVN/fPI5rz/Dj2MYXda0h/tPdYny3LJOku1g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0FSfp9pR/ryQL1qKV3++zTY8/byKiEskfvX+Dm0+mz4=;
- b=P1Y9Th7RSfxnf/R+brQpX8RrWUiZNVvOduGcSH0IrfirofRRjZx4aO4gKTeeV7TwZtg2BUjkFYYhp66sgJ62LNnpqRvtSpRApzmaiMASZkIp+VvsIIrRXXfYFM5TgCzdD+hcrA0AaD5Tb2NWrr1YPcM4/fO1p5U8KxqS5t3fPpV7MdGXk4VzDbGBoCx4L+NkH3WQgPQKaxnmiS6MCLUBqBlcUekgpIQFqSwkne7fduV+B3oGn3OtPxVZPxbskxqKtBUpa9/G2aHWkN/s04+ysVRudzcZPpBcj3mtM/P/gRV2xNyLOBXpiafUMSd0rEODd0K2ezl3fpE4hAJuMfJa+w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
- by BYAPR11MB2808.namprd11.prod.outlook.com (2603:10b6:a02:c8::26) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.17; Wed, 10 Aug
- 2022 10:17:31 +0000
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::1d3c:4dc0:6155:2aee]) by BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::1d3c:4dc0:6155:2aee%4]) with mapi id 15.20.5525.010; Wed, 10 Aug 2022
- 10:17:31 +0000
-From:   "Huang, Kai" <kai.huang@intel.com>
-To:     "dave@sr71.net" <dave@sr71.net>,
-        "haitao.huang@linux.intel.com" <haitao.huang@linux.intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
-CC:     "Lutomirski, Andy" <luto@kernel.org>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>
-Subject: Re: [PATCH] [v2] x86/sgx: Allow enclaves to use Asynchrounous Exit
- Notification
-Thread-Topic: [PATCH] [v2] x86/sgx: Allow enclaves to use Asynchrounous Exit
- Notification
-Thread-Index: AQHYnGzh1nwOjOji802J3mkwYJ5zAa2V2ruAgAZYAICAC9k2AA==
-Date:   Wed, 10 Aug 2022 10:17:31 +0000
-Message-ID: <f16af3f7887d26cde9073d443c1b796c945bc042.camel@intel.com>
-References: <20220720191347.1343986-1-dave.hansen@linux.intel.com>
-         <op.1p2k13ibwjvjmi@hhuan26-mobl1.mshome.net>
-         <35d7254cafde24b722b167c6a3566592d903acd2.camel@intel.com>
-In-Reply-To: <35d7254cafde24b722b167c6a3566592d903acd2.camel@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.44.3 (3.44.3-1.fc36) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 1f85711b-a9fb-4327-2de2-08da7ab98934
-x-ms-traffictypediagnostic: BYAPR11MB2808:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: xqw99pepRaUqkOXb8E/NspAunQXU7YcKtueaeRpdVFsnOXjQdxqi4doLcsRza6W7WePoLmHIITcYA3v+raA1DR/tKt84od19qdrk+b3ph6U/uUeM+5Ipju+cJidIf/+P4JBXHwCDXXoDTx1XVI53VQGIHRpPChIwBfV3I+HXzsHevHNzbwlxDJllLmiJkdq2f5FjTqUcZxFDis+DskLihko2QitQKiAcaPGAuRxTVuZ9pdjhf7uAWcR8rF5WgUeV6jOvXFiARQxkTUrrN619m3RwW6s5EnSL/9UzBgmBDecQrBYEzoJZYrBi+bcPu0I+c3jjFLx8y9IvD9DBzvzeKJMrD/I3gHDQeE9Sx+0tTNtvpvblmPZnPeS+Hpp0zXPzihJXC4pj5nrxd5Kt+rOSUGsXZYE1QpnYiBAFg7qFeDklC/4u7ThxGrlWLHASzyUnJ7jzUIwHVvtn9WlVPvjwShugXOYKOV/O/UTMjsmd1ItZ8RQMLFfYd4VcvYpqwPKyeeniOFmXNebHU2jpdl+GtDdRLA4l8rBLMZZU+AV4pDnCRDu/DFIy/OG2Xz+dSG/T2Ay8NVeOZMiD79vQhbx5AVWAF4DSzhEq8cY4dd+67KQQxIX0RVIzhcgkE58UlJtC+nX+L8tvDZIKfTz0ouZKcsnmwToChUU3ma15/P31wVEVCbJ9x2DwwyQk1wpdlJ8h6hJGObaaFDlAI6u7WgVW6qhjtf+z3nCUxTvItQO1aMedtLRq0RISSdBTuf5YodLbSRUo6GbvK3+2AS7AIxP/Ht/9A3epBuQK0GU5kxSX8PGLdCYd49PVVIRAS9JRnlUnQ4NswNf3QNIy4Ee5EYYi+A==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(39860400002)(366004)(396003)(136003)(376002)(346002)(66476007)(66556008)(66946007)(4326008)(316002)(64756008)(8676002)(36756003)(5660300002)(110136005)(66446008)(91956017)(86362001)(54906003)(7416002)(4744005)(122000001)(76116006)(83380400001)(2906002)(38070700005)(8936002)(82960400001)(6512007)(71200400001)(186003)(41300700001)(15650500001)(6486002)(26005)(38100700002)(966005)(478600001)(2616005)(6506007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?UE9VSk1rSk9kYkQ2alBVeW1nSUlpQy8yaWRLUGY3SXZVcHRhdS9OZzNKWldw?=
- =?utf-8?B?ek0xSE5ITWxRSzE3MmhwaEhXYjN3S0pvSmU1azc5VHJQQWFuL1VqSnoyK2lD?=
- =?utf-8?B?SmhsVmF6cjRvUXR4WjNZODlnMWRROUFHOHBKc3ZmOFlReFBCd09Jc3RlM2NH?=
- =?utf-8?B?Y3pFbXJCUUNORi9QNVFzbEpPS3Z4QnE4clRtZ2QyQ1JpdWtMSWZJL296WmNu?=
- =?utf-8?B?Qnc4VDRMMXkwK0oxc3FLRDd6amRpMHN1K09HTGpXd1AxaU5JWmhlWE03YjI4?=
- =?utf-8?B?SklMME8xZEZRdi91N2pyZWYzL0J6MHdyckxOcGV6K2YvSzlFV0Y3VDVLYzYz?=
- =?utf-8?B?L3hBNnNCWjIrald3dVRxRlVaSXoxQ0FMcko0bk1ia0hxN1hMR0tod2VPUUY5?=
- =?utf-8?B?dWJmM1R1WXE4RE9xMzNrZkhWWlpxcWsyZ21xN0dIRnV5THpHRW9iOHpyTGNi?=
- =?utf-8?B?WjZVUWY2TTFRN2M4ZlpTTjlybStwZ0QxMXhDcWdUWlg5c1BMNUZjeHcyKzUy?=
- =?utf-8?B?WThUTlp2dFY4cEg2ZXBHZWJQMmNvbSthVmRkWDZKczJOcDVreDV1TkJ4TVZ0?=
- =?utf-8?B?ZUpGdXNaTWV1aFJFbUNyMU9UaVNBSkp5M3hrMmRoTlNUOVJiYnhrSG5VNXV1?=
- =?utf-8?B?Qlg4d3loT04yK0FCR2JzTERZbWFlTFlGYW5zUDc0ZHNWYk8yWHoxRTREVkpi?=
- =?utf-8?B?SGJ3V2JTRGkrbEtxcFZXNmxLQkNHRDUvcDM1QjVwWW1nNTEwZitYdUVlMnEx?=
- =?utf-8?B?YUtmR3owVEpmdmlseGU2QkJmQ0QybjNHTEFzNDBrak5ibC90c0ZJNTQrZllV?=
- =?utf-8?B?RDhmSERVcC9NeVArSVowRlRaNHA5NmVPNDRBOHdncFZnU1FGUUMvbC9NTmxa?=
- =?utf-8?B?ajlZZy8xejJpOTg5TWdjbjFybVpYZklrQVBtT21YeDlvcDRUWDVIcmhuQ2pR?=
- =?utf-8?B?Q2k1cTV4YTdpaExDVDNTUEN2OVVka2Z1RDFZT2FCZS8vcHYzVFV5cndGZ1dN?=
- =?utf-8?B?SkR5eHVweGIrbzZRRmkwRDNKaHdqdWc2V1ZFYXZBMUJPSjdkakhzeHdqMUl3?=
- =?utf-8?B?UjJkSlBQRk5QdWp4elpiT0FyemJ3SjJ6b3AwZmozZ3lkTVJ0eEM2cmdudFhT?=
- =?utf-8?B?SUNSR2hCbjZaZG9SbnBXT0g1aDZhOXMzendaWjFIOHgwREZRck9YUjlOZVhD?=
- =?utf-8?B?aTFPUGNDZCthZnhPYno5aEZ2L1ZlbTFSWHJ3bWpXdDdnazcwRC9NVysvYk5J?=
- =?utf-8?B?T201cXJvTWtKOERBQXQ0K2FJTEtWeTAwakRBSEZZMmZ5eEs0U2l3T0E2RHdH?=
- =?utf-8?B?MUs4Mm52eHlBanZoREdFVm8zSTE3NzNFS29WN2doNnRSS0l5akZqQTJCcFl3?=
- =?utf-8?B?WXdpUTQvVW45c1RJSUdoODhkZEc0S0tXZlhja0xvTHJVdWhCTGM2UTcwMWg1?=
- =?utf-8?B?d0dndWhDaVlPazhtYkhLMFJXend6WGJpUjdsdURqNkhadWEwdzVNd2l4aTJM?=
- =?utf-8?B?SEdzN2pMVGNGVjdGQ3Fpc0hEbTE5TkgxbkhmK0tPdWRFNnk4YjYwSE1ReUNa?=
- =?utf-8?B?RzB1NGVJelJGUmVoQzAvSFpxNFdEeEFKUm5Wa0dYeXdEUjFhM2dERWRnRVhr?=
- =?utf-8?B?NWtuQW5GdmIxRjZSWFdSSTJ4N1dzQkV1cHZNMEJzaDBNLzlyWTlNYlRUQTcx?=
- =?utf-8?B?SjArako0eXZPM2FMOXJJZjU2SHViOVJKUitCdGJVOXRJNXlPZVNSOTYzRFlt?=
- =?utf-8?B?TjRuUlFmS09HZlhhQVVqUCsxblorSnFTd28rY3UyZFpqTS9uSHEyNUtEdlFO?=
- =?utf-8?B?b20yc0hJTC9pSnQ5cldvWHdTcUxBUzFBN0dSMjdFVmRXOUNiOTdKVlNNd2p1?=
- =?utf-8?B?a2RDZEhyOXZDOHQ0eUFoMmFrMmNBSkgvZ0xCdGNDOHQ0NC85dlpKYkRaMHBj?=
- =?utf-8?B?d3FISlphaDBXQzlNR3VXd0RTZ2wvbDhSeHI0eTl1NDJnS2xFRkhFNjE0N1BW?=
- =?utf-8?B?SW1hYmNDcUdVd0JWNFFKQXIzV25ucHhLQWhOL2NkZGNIUkhhUWRaaHEvMjZj?=
- =?utf-8?B?T29CTDZsR29sVlVpQ01LYkx6NGVaL3ZXekoySWdOOFlwYlFCbWkwdHBEZGsr?=
- =?utf-8?Q?LJ2X4bv3qS8+VT2+4p0JpiCMl?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <682D6AED2E0F174AAF085D241EF7D850@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Wed, 10 Aug 2022 06:18:04 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072BB6F563;
+        Wed, 10 Aug 2022 03:18:01 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id x23so13840813pll.7;
+        Wed, 10 Aug 2022 03:18:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=XB+XqKHbpNMS7fnvlhelkSlDSr5r2pbQ+tbkKgP7v+c=;
+        b=AYC2RdzGxVPY/FfVdja26JsXpaXU5giPb18iVq/Ui2bIIf6HYvnl9dcNEJrC23qK2d
+         0kkvIm4P2lQeA5S92DPXl5bJ/r+7vo6x4SmSjXG1qP4eWdmLoXvQ6Rk88kbAay1x7SVf
+         IF022QVmFD2uY+HFLofxz+uD6AmBYdWL0fNrP02noGWx05jFL6tVdgM7w1nHJcyFsQNn
+         4KzsBBop9hv4vrv4s1prBaQz+yRcox33rF6LcrhluFDlMNaSE3P2ltI8X0GiaFS4eBBg
+         LRaxgddQZ8y1BI4dNjsSt7xDk39OkAjoXkhkAK2Fud1e7JNdOzT7x+3rz4M3YsgfQfj1
+         8lAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=XB+XqKHbpNMS7fnvlhelkSlDSr5r2pbQ+tbkKgP7v+c=;
+        b=obN1x35N8Jvk5qjUIujwGbmupPv9nJpkEgRdGxqaePS+Dc7Ig27rWUKWCUda7ruUfW
+         pFrHnVN4pszviKxJwBjoFo2jwLvf7e/bNtqzOEsQHL8VkH/nsDHgJHm3d+7kBknfL6uf
+         Au2tEIMpU4VEga3akL7GSHhMdghjQhoFHqByPtaGyhO7y6zppW/lu1TN2f9l1TCvXONG
+         JQgoc7CgS6h4bHb1KPBEggt5e06dwec7iBDxEoezSKrD4SC3JJG92eWFFS7YG051kzw0
+         ovJ3h4QXqIpRRXZ6RwL99Dg/w1BKwHO6alN5QnaUt9ud+tg+VZsIu9iQu3EJ/mP8kQok
+         pM0w==
+X-Gm-Message-State: ACgBeo2KiZxA0lPKlXegOyrZMSUSKYUKbHN0blSJF78Rirp+5MZDjdxw
+        P/SN7Nz997VycwlBMUlNO5s=
+X-Google-Smtp-Source: AA6agR4eWDA14qJ3bh3ygXze00gIyn+w2HIqklz+mg4yOVJchQczP360bEpp2jU9lvdIlENEGc+V0w==
+X-Received: by 2002:a17:902:d54f:b0:16f:843d:efcb with SMTP id z15-20020a170902d54f00b0016f843defcbmr27020383plf.55.1660126680391;
+        Wed, 10 Aug 2022 03:18:00 -0700 (PDT)
+Received: from sw.. (220-128-98-63.hinet-ip.hinet.net. [220.128.98.63])
+        by smtp.gmail.com with ESMTPSA id g74-20020a62524d000000b0052d40c4c06esm1542201pfb.39.2022.08.10.03.17.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Aug 2022 03:18:00 -0700 (PDT)
+From:   Szuying Chen <chensiying21@gmail.com>
+To:     gregkh@linuxfoundation.org, mika.westerberg@linux.intel.com,
+        andreas.noever@gmail.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Yd_Tseng@asmedia.com.tw, Chloe_Chen@asmedia.com.tw,
+        Richard_Hsu@asmedia.com.tw, Szuying Chen <chensiying21@gmail.com>
+Subject: [PATCH] thunderbolt: thunderbolt: add vendor's NVM formats
+Date:   Wed, 10 Aug 2022 18:17:43 +0800
+Message-Id: <20220810101743.11214-1-chensiying21@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1f85711b-a9fb-4327-2de2-08da7ab98934
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Aug 2022 10:17:31.5313
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: TVzdWXiLf2XvO9eLiJv/2PAVvR49cW4WiTT8Y4AYfrIXQjVBDwv3VVZmmhjxxuuacGpAg8RPAS5icaovdm93IQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BYAPR11MB2808
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gVHVlLCAyMDIyLTA4LTAyIGF0IDE0OjIxICsxMjAwLCBLYWkgSHVhbmcgd3JvdGU6DQo+ID4g
-DQo+ID4gVGVzdGVkLWJ5OiBIYWl0YW8gSHVhbmcgPGhhaXRhby5odWFuZ0BpbnRlbC5jb20+DQo+
-ID4gDQo+ID4gVGhhbmtzDQo+ID4gSGFpdGFvDQo+IA0KPiBIaSBIYWl0YW8sDQo+IA0KPiBDb3Vs
-ZCB5b3UgYWxzbyBoZWxwIHRvIHRlc3QgaW4gYSBWTT8NCj4gDQo+IFlvdSB3aWxsIGFsc28gbmVl
-ZCBiZWxvdyBwYXRjaCBpbiBvcmRlciB0byB1c2UgRURFQ0NTU0EgaW4gdGhlIGd1ZXN0Og0KPiAN
-Cj4gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGttbC8yMDIyMDcyNzExNTQ0Mi40NjQzODAtMS1r
-YWkuaHVhbmdAaW50ZWwuY29tLw0KPiANCj4gV2hlbiB5b3UgY3JlYXRlIHRoZSBWTSwgcGxlYXNl
-IHVzZSAtY3B1IGhvc3QuDQo+IA0KDQpIaSBIYWl0YW8sDQoNCkRvIHlvdSBoYXZlIGFueSB1cGRh
-dGU/DQoNCklmIGl0J3Mgbm90IGVhc3kgZm9yIHlvdSB0byB2ZXJpZnkgaW4gVk0sIGNvdWxkIHlv
-dSBsZXQgbWUga25vdyBob3cgdG8gc2V0IHVwDQp0aGUgdGVzdGluZyBtYWNoaW5lIHNvIEkgY2Fu
-IGhhdmUgYSB0cnk/DQoNCi0tIA0KVGhhbmtzLA0KLUthaQ0KDQoNCg==
+The patch add tb_nvm_quirks() contain an array that has functions
+pointers to tb_nvm_vendor_apply().
+And tb_nvm_vendor_apply() that recognize supported vendor works in one
+of the following cases:
+Case NvmUpgradeSuppport: enable nvm's attribute by setting
+no_nvm_upgrade flag to create nvm_authenticate file node.
+Case NvmAdd:add active/non-active NVM devices.
+Case NvmWrite:update firmware to non-ative NVM device.
+
+Signed-off-by: Szuying Chen <chensiying21@gmail.com>
+---
+ drivers/thunderbolt/nvm.c    | 59 ++++++++++++++----------------------
+ drivers/thunderbolt/switch.c | 19 +++++++-----
+ drivers/thunderbolt/tb.h     | 18 +++++++----
+ 3 files changed, 46 insertions(+), 50 deletions(-)
+
+diff --git a/drivers/thunderbolt/nvm.c b/drivers/thunderbolt/nvm.c
+index d5f283889da8..2aae8b3fa5dc 100644
+--- a/drivers/thunderbolt/nvm.c
++++ b/drivers/thunderbolt/nvm.c
+@@ -14,6 +14,7 @@
+ #include "tb.h"
+
+ static DEFINE_IDA(nvm_ida);
++
+ static int tb_switch_nvm_read(void *priv, unsigned int offset, void *val,
+ 			      size_t bytes)
+ {
+@@ -22,7 +23,6 @@ static int tb_switch_nvm_read(void *priv, unsigned int offset, void *val,
+ 	int ret;
+
+ 	pm_runtime_get_sync(&sw->dev);
+-
+ 	if (!mutex_trylock(&sw->tb->lock)) {
+ 		ret = restart_syscall();
+ 		goto out;
+@@ -60,22 +60,23 @@ static int tb_switch_nvm_write(void *priv, unsigned int offset, void *val,
+ 	return ret;
+ }
+
+ Refer to thunderbolt source: switch.c.
+
+-static int tb_nvm_vendor_apply(struct tb_switch *sw, unsigned int handle)
++static int asm_nvm_apply(struct tb_switch *sw, unsigned int handle)
+ {
++	struct tb_nvm *nvm;
++	u32 val;
++	u32 nvm_size;
+ 	int ret = 0;
++	unsigned int image_size;
++	const u8 *buf = sw->nvm->buf;
+
+ 	switch (handle) {
+-	case 0:
++	case NvmUpgradeSuppport:
+ 		if (sw->no_nvm_upgrade)
+ 			sw->no_nvm_upgrade = false;
+
+ 		break;
+
+-	case 1:
+-		struct tb_nvm *nvm;
+-		u32 val;
+-		u32 nvm_size;
+-
++	case NvmAdd:
+ 		nvm = tb_nvm_alloc(&sw->dev);
+ 		if (IS_ERR(nvm)) {
+ 			ret = PTR_ERR(nvm);
+@@ -86,13 +87,13 @@ static int tb_nvm_vendor_apply(struct tb_switch *sw, unsigned int handle)
+ 		if (ret)
+ 			break;
+
+-		nvm->vendor.date = (((u8)val) << 0x10 | ((u8)(val >> 0x8)) << 0x8 | (u8)(val >> 0x10));
++		nvm->nvm_asm.date = (((u8)val) << 0x10 | ((u8)(val >> 0x8)) << 0x8 | (u8)(val >> 0x10));
+ 		ret = usb4_switch_nvm_read(sw, NVM_CUSTOMER_ID, &val, sizeof(val));
+ 		if (ret)
+ 			break;
+
+-		nvm->vendor.customerID = (((u8)val) << 0x8 | ((u8)(val >> 0x8)));
+-		nvm->vendor.version = (u8)(val >> 0x10);
++		nvm->nvm_asm.customerID = (((u8)val) << 0x8 | ((u8)(val >> 0x8)));
++		nvm->nvm_asm.version = (u8)(val >> 0x10);
+ 		nvm_size = SZ_512K;
+ 		ret = tb_nvm_add_active(nvm, nvm_size, tb_switch_nvm_read);
+ 		if (ret)
+@@ -105,10 +106,7 @@ static int tb_nvm_vendor_apply(struct tb_switch *sw, unsigned int handle)
+ 		sw->nvm = nvm;
+ 		break;
+
+-	case 2:
+-		unsigned int image_size;
+-		const u8 *buf = sw->nvm->buf;
+-
++	case NvmWrite:
+ 		if (!buf) {
+ 			ret = -EINVAL;
+ 			break;
+@@ -128,7 +126,7 @@ static int tb_nvm_vendor_apply(struct tb_switch *sw, unsigned int handle)
+ 		break;
+ 	}
+
+-	if ((handle == 1) && (ret != 0))
++	if ((handle == NvmAdd) && (ret != 0))
+ 		tb_nvm_free(sw->nvm);
+
+ 	return ret;
+@@ -136,45 +134,32 @@ static int tb_nvm_vendor_apply(struct tb_switch *sw, unsigned int handle)
+
+ struct tb_nvm_id {
+ 	u16 hw_vendor_id;
+-	u16 hw_device_id;
+-	u16 vendor;
+-	u16 device;
+ 	int (*hook)(struct tb_switch *sw, unsigned int handle);
+ };
+
+ static const struct tb_nvm_id tb_nvm_vendors[] = {
+ 	/* ASMedia software CM firmware upgrade */
+-	{ 0x174c, 0x2428, 0x174c, 0x0009, tb_nvm_vendor_apply },
++	{ 0x174c, asm_nvm_apply },
+ };
+
+ /**
+- * tb_nvm_quirks() - support vendor's NVM format
++ * tb_nvm_vendor_handle() - support vendor's NVM format
+  * @sw: Thunderbolt switch
++ * @handle: 0:NvmUpgradeSuppport, 1:NvmAdd, 2:NvmWrite
+  */
+-int tb_nvm_quirks(struct tb_switch *sw, unsigned int handle)
++int tb_nvm_vendor_handle(struct tb_switch *sw, unsigned int handle)
+ {
+ 	int res, i;
+-	bool NoVendor = true;
+
+ 	for (i = 0; i < ARRAY_SIZE(tb_nvm_vendors); i++) {
+-		const struct tb_nvm_id *q = &tb_nvm_vendors[i];
++		const struct tb_nvm_id *id = &tb_nvm_vendors[i];
+
+-		if (q->hw_vendor_id && q->hw_vendor_id != sw->config.vendor_id)
+-			continue;
+-		if (q->hw_device_id && q->hw_device_id != sw->config.device_id)
+-			continue;
+-		if (q->vendor && q->vendor != sw->vendor)
+-			continue;
+-		if (q->device && q->device != sw->device)
++		if (id->hw_vendor_id && id->hw_vendor_id != sw->config.vendor_id)
+ 			continue;
+
+-		 res = q->hook(sw, handle);
+-		 NoVendor = false;
++		 res = id->hook(sw, handle);
+ 	}
+-	if (NoVendor)
+-		return -ENODEV;
+-	else
+-		return res;
++	return res;
+ }
+
+ /**
+diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+index a654b6951bef..8fa9efa8a900 100644
+--- a/drivers/thunderbolt/switch.c
++++ b/drivers/thunderbolt/switch.c
+@@ -114,8 +114,12 @@ static int nvm_validate_and_write(struct tb_switch *sw)
+ 	if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE)
+ 		return -EINVAL;
+
+-	ret = tb_nvm_quirks(sw, 2);
+-	if (ret != -ENODEV)
++	/*
++	 * Vendor's nvm write. If the image has been flushed to the
++	 * storage are, nvm write is complete.
++	 */
++	ret = tb_nvm_vendor_handle(sw, NvmWrite);
++	if (sw->nvm->flushed)
+ 		return ret;
+
+ 	/*
+@@ -394,9 +398,9 @@ static int tb_switch_nvm_add(struct tb_switch *sw)
+ 	if (!nvm_readable(sw))
+ 		return 0;
+
+-	/* Vendor's NVM formats definition */
+-	ret = tb_nvm_quirks(sw, 1);
+-	if (ret != -ENODEV)
++	/* Vendor's NVM formats add */
++	ret = tb_nvm_vendor_handle(sw, NvmAdd);
++	if (ret)
+ 		return ret;
+
+ 	/*
+@@ -1962,8 +1966,9 @@ static ssize_t nvm_version_show(struct device *dev,
+ 		ret = -ENODATA;
+ 	else if (!sw->nvm)
+ 		ret = -EAGAIN;
++	/*ASMedia NVM version show format xxxxxx_xxxx_xx */
+ 	else if (sw->config.vendor_id == 0x174C)
+-		ret = sprintf(buf, "%06x_%04x_%02x\n", sw->nvm->vendor.date, sw->nvm->vendor.customerID, sw->nvm->vendor.version);
++		ret = sprintf(buf, "%06x_%04x_%02x\n", sw->nvm->nvm_asm.date, sw->nvm->nvm_asm.customerID, sw->nvm->nvm_asm.version);
+ 	else
+ 		ret = sprintf(buf, "%x.%x\n", sw->nvm->major, sw->nvm->minor);
+
+@@ -2871,7 +2876,7 @@ int tb_switch_add(struct tb_switch *sw)
+ 		tb_sw_dbg(sw, "uid: %#llx\n", sw->uid);
+
+ 		tb_check_quirks(sw);
+-		tb_nvm_quirks(sw, 0);
++		tb_nvm_vendor_handle(sw, NvmUpgradeSuppport);
+
+ 		ret = tb_switch_set_uuid(sw);
+ 		if (ret) {
+diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+index 9dd1ba7b07b6..a8dd0ae04741 100644
+--- a/drivers/thunderbolt/tb.h
++++ b/drivers/thunderbolt/tb.h
+@@ -31,10 +31,16 @@
+ #define NVM_Date	0x1C
+ #define NVM_CUSTOMER_ID	0x28
+
+-struct tb_nvm_vendor {
+-	int	date;
+-	u16	customerID;
+-	u8	version;
++/* ASMedia specific NVM handle */
++#define NvmUpgradeSuppport 0
++#define NvmAdd 1
++#define NvmWrite 2
++
++struct nvm_asmedia {
++	u32 date;
++	u32 customerID:16;
++	u32 version:8;
++	u32 reserved:8;
+ };
+
+ /**
+@@ -66,7 +72,7 @@ struct tb_nvm {
+ 	size_t buf_data_size;
+ 	bool authenticating;
+ 	bool flushed;
+-	struct tb_nvm_vendor vendor;
++	struct nvm_asmedia nvm_asm;
+ };
+
+ enum tb_nvm_write_ops {
+@@ -746,7 +752,7 @@ static inline void tb_domain_put(struct tb *tb)
+ 	put_device(&tb->dev);
+ }
+
+-int tb_nvm_quirks(struct tb_switch *sw, unsigned int handle);
++int tb_nvm_vendor_handle(struct tb_switch *sw, unsigned int handle);
+ struct tb_nvm *tb_nvm_alloc(struct device *dev);
+ int tb_nvm_add_active(struct tb_nvm *nvm, size_t size, nvmem_reg_read_t reg_read);
+ int tb_nvm_write_buf(struct tb_nvm *nvm, unsigned int offset, void *val,
+--
+2.34.1
+

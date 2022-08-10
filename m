@@ -2,114 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50F2A58E975
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 11:20:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E861958E976
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 11:21:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232033AbiHJJUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 05:20:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45390 "EHLO
+        id S231634AbiHJJUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 05:20:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230480AbiHJJUL (ORCPT
+        with ESMTP id S231616AbiHJJUP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 05:20:11 -0400
-Received: from smtp-fw-33001.amazon.com (smtp-fw-33001.amazon.com [207.171.190.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BD776B140
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 02:20:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.es; i=@amazon.es; q=dns/txt; s=amazon201209;
-  t=1660123204; x=1691659204;
-  h=message-id:date:mime-version:from:to:references:
-   in-reply-to:content-transfer-encoding:subject;
-  bh=AnDfQDpBP4GgJEu36Hy9FNfrq6eZxD+PPcjx3+GqAqw=;
-  b=c3fyiSXq9/PrQ3s0wRK4TMWBSS+PF0OHj/NJzDdd5JKUer9875lH/Zjy
-   HOqlopTlH/E8BXAduLA52IwRBNwhiDAJHRRt35GtVTN60iOokoB/WNUrc
-   5MUMyG/RPewuVLKCY2vn3b7T6LrozNEcs+sz5gTQP45jVprMqtLEJd62y
-   0=;
-X-IronPort-AV: E=Sophos;i="5.93,226,1654560000"; 
-   d="scan'208";a="216762382"
-Subject: Re: [PATCH 0/2] virt: vmgenid: add generation counter
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-35b1f9a2.us-east-1.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-33001.sea14.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 09:19:49 +0000
-Received: from EX13D37EUA003.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan2.iad.amazon.com [10.40.163.34])
-        by email-inbound-relay-iad-1d-35b1f9a2.us-east-1.amazon.com (Postfix) with ESMTPS id 70EEB201521;
-        Wed, 10 Aug 2022 09:19:48 +0000 (UTC)
-Received: from [10.85.98.134] (10.43.162.227) by EX13D37EUA003.ant.amazon.com
- (10.43.165.7) with Microsoft SMTP Server (TLS) id 15.0.1497.36; Wed, 10 Aug
- 2022 09:19:44 +0000
-Message-ID: <a9e4dd0f-7b1a-dad1-c86a-75059c20f68e@amazon.es>
-Date:   Wed, 10 Aug 2022 11:19:39 +0200
+        Wed, 10 Aug 2022 05:20:15 -0400
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B74CC2CC98
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 02:20:13 -0700 (PDT)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout01.posteo.de (Postfix) with ESMTPS id 0B19E240026
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 11:20:12 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+        t=1660123212; bh=wTyuqx5geLQ176mzwbKoKG6Wn+LpQYkcjszgmr1LVzc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=i1Q4b95Cf3/SS+Zhf6y8mdWO1mW2WrVqNVNBpRTmz9MTUIakeqgI5apLCvzYWp0lC
+         d9odatXx5hV3ZVbIxlcionoVQf11Atnh6OiP6umfREpo3WvCNqd9f6u1pGAB8DQMPI
+         oh1XdzOYeYhOnH/YRbtilh4B4MmYu+I9lT2G073vpPO8TQJso8skYebTBKYhZorSES
+         TBNphFX5wHER3Lo6jotJfwFlepKW/qbWA+BQ02mP1OcJUIFn+55smQQwRE4+OwEw8g
+         BxvhmL0t0sdEd2qV6DN0gTdBwNcZJORgNnz/8hE9tZHlb32hZ0UhQdpIGRIq/ZYNIY
+         5as9cqlnxokdQ==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4M2ktL5tPkz6tmH;
+        Wed, 10 Aug 2022 11:20:10 +0200 (CEST)
+Date:   Wed, 10 Aug 2022 09:20:09 +0000
+From:   Wilken Gottwalt <wilken.gottwalt@posteo.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
+Subject: [PATCH] hwmon: corsair-psu: add reporting of rail mode via debugfs
+Message-ID: <YvN4SbnAp3jl+Vzo@monster.localdomain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.1.0
-From:   <bchalios@amazon.es>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
-        <linux-kernel@vger.kernel.org>, <tytso@mit.edu>,
-        <dwmw@amazon.co.uk>, <graf@amazon.de>, <xmarcalx@amazon.co.uk>,
-        <gregkh@linuxfoundation.org>, <mikelley@microsoft.com>
-References: <20220803152127.48281-1-bchalios@amazon.es>
- <Yuve4vuAnU85mdRY@zx2c4.com>
-In-Reply-To: <Yuve4vuAnU85mdRY@zx2c4.com>
-X-Originating-IP: [10.43.162.227]
-X-ClientProxiedBy: EX13D42UWA004.ant.amazon.com (10.43.160.18) To
- EX13D37EUA003.ant.amazon.com (10.43.165.7)
-Content-Type: text/plain; charset="utf-8"; format="flowed"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,NICE_REPLY_A,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgSmFzb24KCk9uIDgvNC8yMiA0OjU5IFBNLCAiSmFzb24gQS4gRG9uZW5mZWxkIiA8SmFzb25A
-engyYzQuY29tPiB3cm90ZToKPiBDQVVUSU9OOiBUaGlzIGVtYWlsIG9yaWdpbmF0ZWQgZnJvbSBv
-dXRzaWRlIG9mIHRoZSBvcmdhbml6YXRpb24uIERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0
-dGFjaG1lbnRzIHVubGVzcyB5b3UgY2FuIGNvbmZpcm0gdGhlIHNlbmRlciBhbmQga25vdyB0aGUg
-Y29udGVudCBpcyBzYWZlLgo+IAo+IAo+IAo+IEhpIEJhYmlzLAo+IAo+IE9uIFdlZCwgQXVnIDAz
-LCAyMDIyIGF0IDA1OjIxOjI1UE0gKzAyMDAsIGJjaGFsaW9zQGFtYXpvbi5lcyB3cm90ZToKPiA+
-IEZyb206IEJhYmlzIENoYWxpb3MgPGJjaGFsaW9zQGFtYXpvbi5lcz4KPiA+Cj4gPiBMaW51eCBy
-ZWNlbnRseSBhZGRlZCBzdXBwb3J0IGZvciB0aGUgVk0gR2VuZXJhdGlvbiBJRCBtZWNoYW5pc20g
-ZnJvbQo+ID4gTWljcm9zb2Z0LiBUaGUgd2F5IHRoaXMgd29ya3MgY3VycmVudGx5IGlzIHVzaW5n
-IHRoZSAxMjgtYml0IGJsb2IKPiA+IHByb3ZpZGVkIGJ5IHRoZSB2bWdlbmlkIGRldmljZSB0byBy
-ZS1zZWVkIHRoZSBSTkcuIFdoaWxlIHRoaXMgd29ya3MgaXQKPiA+IGhhcyB0d28gbWFpbiBpc3N1
-ZXMsIChhKSBpdCBpcyBpbmhlcmVudGx5IHJhY3kgZHVlIHRvIHRoZSBmYWN0IHRoYXQgaXQKPiA+
-IHJlbGllcyBvbiBhIEFDUEkgbm90aWZpY2F0aW9uIGJlaW5nIGRlbGl2ZXJlZCBhbmQgaGFuZGxl
-ZCBhbmQgKGIpIHRoZSBJRAo+ID4gaXMgdW5zdWl0YWJsZSBmb3IgZXhwb3NpbmcgdG8gdXNlci1z
-cGFjZS4KPiA+Cj4gPiBUaGlzIHBhdGNoLXNldCBleHRlbmRzIHRoZSB2bWdlbmlkIGRldmljZSB0
-byBpbnRyb2R1Y2UgYSBnZW5lcmF0aW9uCj4gPiBjb3VudGVyLCBhIDMyLWJpdCBjb3VudGVyIHdo
-aWNoIGlzIGRpZmZlcmVudCBldmVyeSB0aW1lIHRoZSB1bmlxdWUgSUQKPiA+IGNoYW5nZXMuIFRo
-ZSBhZGRpdGlvbiB0byB0aGUgb3JpZ2luYWwgaW1wbGVtZW50YXRpb24gaW4gUUVNVSBjYW4gYmUK
-PiA+IGZvdW5kIGhlcmU6Cj4gPiBodHRwczovL2xpc3RzLm5vbmdudS5vcmcvYXJjaGl2ZS9odG1s
-L3FlbXUtZGV2ZWwvMjAyMi0wOC9tc2cwMDUyNC5odG1sLgo+ID4KPiA+IFRoZSBmaXJzdCBwYXRj
-aCByZS13b3JrcyBzbGlnaHRseSB0aGUgY3VycmVudCB2bWdlbmlkIGRyaXZlciB0byBhZGQgYQo+
-ID4gZnVuY3Rpb24gdGhhdCBwYXJzZXMgYW4gb2JqZWN0IGZyb20gdGhlIHZtZ2VuaWQgZGV2aWNl
-IGFuZCByZXR1cm5zIHRoZQo+ID4gcGh5c2ljYWwgYWRkcmVzcyBvZiB0aGUgdm1nZW5pZCBkYXRh
-LiBUaGUgc2Vjb25kIHBhdGNoIHVzZXMgdGhhdAo+ID4gZnVuY3Rpb24gdG8gcGFyc2UgYWRkaXRp
-b25hbGx5IHRoZSBhZGRyZXNzIG9mIHRoZSBnZW5lcmF0aW9uIGNvdW50ZXIKPiA+IGZyb20gdGhl
-IHZtZ2VuaWQgbmFtZXNwYWNlLiBUaGUgY291bnRlciBpcyB0aGVuIGV4cG9zZWQgdG8gdGhlCj4g
-PiB1c2VyLXNwYWNlIHRocm91Z2ggYSBtaXNjLWRldmljZSB3aGljaCBwcm92aWRlcyBgcmVhZGAg
-YW5kIGBtbWFwYAo+ID4gaW50ZXJmYWNlcy4KPiAKPiBGaXJzdCwgd2l0aCByZWdhcmRzIHRvIHlv
-dXIgbW1hcCBpbnRlcmZhY2UsIGl0J3MgbW9yZSBsaWtlbHkgdGhhdCB0aGlzCj4ga2luZCBvZiB0
-aGluZyB3aWxsIGJlIGV2ZW50dWFsbHkgZm9sZGVkIGludG8gbXkgaW52ZXN0aWdhdGlvbnMgcmVn
-YXJkaW5nCj4gdGhlIFJORyBhbmQgdGhlIHZEU08gKHdoaWNoIHdvdWxkIG1ha2UgdGhpcyBraW5k
-IG9mIHRoaW5nIGFjY2Vzc2libGUKPiB3aXRob3V0IG5lZWRpbmcgdGhlIGZpbGUgc3lzdGVtKS4K
-PiAKPiBSZWdhcmRpbmcgdGhlIGNvdW50ZXIgaXRzZWxmLCBJIGRvbid0IHdhbnQgdG8gcnVzaCBp
-bnRvIGF1Z21lbnRpbmcgdGhlCj4gdm1nZW5pZCBtZWNoYW5pc20gdW50aWwgd2UndmUgaGFkIHNv
-bWUgY29udmVyc2F0aW9ucyB3aXRoIE1pY3Jvc29mdC4gQnV0Cj4gYWxzbywgaXQgc2VlbXMgbGlr
-ZSB5b3UgbWlnaHQgaGF2ZSBtaXNzZWQgdGhlIGV4dGVuc2l2ZSBwcmV2aW91cwo+IGRpc2N1c3Np
-b24gYWJvdXQgdGhpcy4gVGhlcmUgd2FzIHNvbWUgdHJhZGVvZmYgaW4gZWZmaWNpZW5jeSBhYm91
-dAo+IG1hcHBpbmcgdGhpcyBhbGwgdGhlIHdheSB0aHJvdWdoLCBhcyBkb2luZyBzbyB3b3VsZCBy
-ZXF1aXJlIHRoZSBjb3VudGVyCj4gdG8gYmUgaW4gYSB0b3RhbGx5IHNlcGFyYXRlIHBhZ2UgYXMg
-dGhlIG1haW4gMTI4LWJpdCBJRCwgdmVyc3VzIGp1c3QKPiBoYXZpbmcgdGhlIGtlcm5lbCBtYW5h
-Z2UgYSBzZXBhcmF0ZSBjb3VudGVyIGFuZCBpbmN1ciBhIHBvdGVudGlhbCBbbWF5YmUKPiBhY2Nl
-cHRhYmxlPyB1bmNsZWFyXSByYWNlLgo+IAo+IEphc29uCj4gCgpKdXN0IGxpbmtpbmcgaGVyZSBh
-IGNvbW1lbnQgZnJvbSBNaWNoYWVsIG9uIHRoZSBRRU1VIGRpc2N1c3Npb246IGh0dHBzOi8vd3d3
-Lm1haWwtYXJjaGl2ZS5jb20vcWVtdS1kZXZlbEBub25nbnUub3JnL21zZzkwMzY5NS5odG1sCgpD
-aGVlcnMsCkJhYmlzCgoKQW1hem9uIFNwYWluIFNlcnZpY2VzIHNvY2llZGFkIGxpbWl0YWRhIHVu
-aXBlcnNvbmFsLCBDYWxsZSBSYW1pcmV6IGRlIFByYWRvIDUsIDI4MDQ1IE1hZHJpZC4gUmVnaXN0
-cm8gTWVyY2FudGlsIGRlIE1hZHJpZCAuIFRvbW8gMjI0NTggLiBGb2xpbyAxMDIgLiBIb2phIE0t
-NDAxMjM0IC4gQ0lGIEI4NDU3MDkzNgo=
+Adds reporting via debugfs if the PSU is running in single or multi rail
+mode. Also updates the documentation accordingly.
+
+Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+---
+ Documentation/hwmon/corsair-psu.rst |  5 +++--
+ drivers/hwmon/corsair-psu.c         | 21 ++++++++++++++++++++-
+ 2 files changed, 23 insertions(+), 3 deletions(-)
+
+diff --git a/Documentation/hwmon/corsair-psu.rst b/Documentation/hwmon/corsair-psu.rst
+index e8378e7a1d8c..c3a76305c587 100644
+--- a/Documentation/hwmon/corsair-psu.rst
++++ b/Documentation/hwmon/corsair-psu.rst
+@@ -86,8 +86,9 @@ Debugfs entries
+ ---------------
+ 
+ =======================	========================================================
+-uptime			Current uptime of the psu
++ocpmode                 Single or multi rail mode of the PCIe power connectors
++product                 Product name of the psu
++uptime			Session uptime of the psu
+ uptime_total		Total uptime of the psu
+ vendor			Vendor name of the psu
+-product			Product name of the psu
+ =======================	========================================================
+diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
+index 14389fd7afb8..9d103613db39 100644
+--- a/drivers/hwmon/corsair-psu.c
++++ b/drivers/hwmon/corsair-psu.c
+@@ -71,9 +71,10 @@
+ #define PSU_CMD_RAIL_WATTS	0x96
+ #define PSU_CMD_VEND_STR	0x99
+ #define PSU_CMD_PROD_STR	0x9A
+-#define PSU_CMD_TOTAL_WATTS	0xEE
+ #define PSU_CMD_TOTAL_UPTIME	0xD1
+ #define PSU_CMD_UPTIME		0xD2
++#define PSU_CMD_OCPMODE		0xD8
++#define PSU_CMD_TOTAL_WATTS	0xEE
+ #define PSU_CMD_INIT		0xFE
+ 
+ #define L_IN_VOLTS		"v_in"
+@@ -268,6 +269,7 @@ static int corsairpsu_get_value(struct corsairpsu_data *priv, u8 cmd, u8 rail, l
+ 		break;
+ 	case PSU_CMD_TOTAL_UPTIME:
+ 	case PSU_CMD_UPTIME:
++	case PSU_CMD_OCPMODE:
+ 		*val = tmp;
+ 		break;
+ 	default:
+@@ -660,6 +662,22 @@ static int product_show(struct seq_file *seqf, void *unused)
+ }
+ DEFINE_SHOW_ATTRIBUTE(product);
+ 
++static int ocpmode_show(struct seq_file *seqf, void *unused)
++{
++	struct corsairpsu_data *priv = seqf->private;
++	long val;
++	int ret;
++
++	ret = corsairpsu_get_value(priv, PSU_CMD_OCPMODE, 0, &val);
++	if (ret < 0)
++		seq_puts(seqf, "N/A\n");
++	else
++		seq_printf(seqf, "%s\n", (val == 0x02) ? "multi rail" : "single rail");
++
++	return 0;
++}
++DEFINE_SHOW_ATTRIBUTE(ocpmode);
++
+ static void corsairpsu_debugfs_init(struct corsairpsu_data *priv)
+ {
+ 	char name[32];
+@@ -671,6 +689,7 @@ static void corsairpsu_debugfs_init(struct corsairpsu_data *priv)
+ 	debugfs_create_file("uptime_total", 0444, priv->debugfs, priv, &uptime_total_fops);
+ 	debugfs_create_file("vendor", 0444, priv->debugfs, priv, &vendor_fops);
+ 	debugfs_create_file("product", 0444, priv->debugfs, priv, &product_fops);
++	debugfs_create_file("ocpmode", 0444, priv->debugfs, priv, &ocpmode_fops);
+ }
+ 
+ #else
+-- 
+2.37.1
 

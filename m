@@ -2,98 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DC9358F4E4
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 01:31:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 953C358F4E7
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 01:32:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233728AbiHJXa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 19:30:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51556 "EHLO
+        id S230163AbiHJXcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 19:32:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233797AbiHJXaA (ORCPT
+        with ESMTP id S229524AbiHJXc3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 19:30:00 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485498FD55
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 16:29:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:References:
-        In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=+7t/7eAOvi8kAxMn65dXL5tgH7liqj/5NHPtUP/lMtI=; b=pYnj2wc3dKklpInsGJAB6JOMxK
-        RisYrT54Mjn3hO7kYTNobeqKnjZeRV1LjM0LCfKx9FUuGDWMHLdwPeoO9Y2lM2zXRJQ5VpgSfR3wy
-        PVjjHqoaOCu60lckijE5fAPa+ogOQ0RMyw/Q9fhi5Tlaq0dGouHesKsU/MRzAriDZ0f83iXpoNJyc
-        B3ghaHF/kBAvOwRiMedh0MDLA+6z3lcGj47WLcsX1BNE0Jl2ihxaOtHyPu807Rhviy8yiAHVrXutJ
-        gffrmqdSNoNuHJUUmC2rDWmGvNQP1YQ2Is33xeR53dPYd3ZDvD/uEaV0uZjVbvW+Gn+W5+RTY6peO
-        0MUNUnKg==;
-Received: from [191.17.41.12] (helo=localhost.localdomain)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1oLv94-004r9g-EZ; Thu, 11 Aug 2022 01:29:50 +0200
-From:   =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
-To:     Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?=27Christian=20K=C3=B6nig=27?= <christian.koenig@amd.com>,
-        'Pan Xinhui' <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        Tao Zhou <tao.zhou1@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Jack Xiao <Jack.Xiao@amd.com>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Tom St Denis <tom.stdenis@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-Cc:     kernel-dev@igalia.com,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>
-Subject: [PATCH v3 4/4] drm/amdgpu: Document gfx_off members of struct amdgpu_gfx
-Date:   Wed, 10 Aug 2022 20:28:58 -0300
-Message-Id: <20220810232858.11844-5-andrealmeid@igalia.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220810232858.11844-1-andrealmeid@igalia.com>
-References: <20220810232858.11844-1-andrealmeid@igalia.com>
+        Wed, 10 Aug 2022 19:32:29 -0400
+Received: from m12-16.163.com (m12-16.163.com [220.181.12.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 52F487FE6B;
+        Wed, 10 Aug 2022 16:32:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=XIdpO
+        Qq44WwBDrfcT18lSv7b7H/On0t6NSVFCJoXbes=; b=mQcRRBoLt+b8XkGoggg2d
+        aBudR+RH0JF6aKb6yeDX3whtMyrTwIW/OJrPu5StBz4x6yGe0SxUChG/I/bP39iG
+        Lhy2QEV+u6zz84vRPy9dFKZF03sn7hBvPUhCwkZzCs4/CN6ZivXlMZfSESwg5bwP
+        nLAmlBfI1qEr24MBgjnZXA=
+Received: from localhost.localdomain (unknown [113.87.232.118])
+        by smtp12 (Coremail) with SMTP id EMCowACn0zlvP_Ri7Nf3Fw--.60811S4;
+        Thu, 11 Aug 2022 07:30:03 +0800 (CST)
+From:   Chen Lin <chen45464546@163.com>
+To:     ioana.ciornei@nxp.com
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.liu@nxp.com,
+        Chen Lin <chen45464546@163.com>,
+        Chen Lin <chen.lin5@zte.com.cn>
+Subject: [PATCH] dpaa2-eth: trace the allocated address instead of page struct
+Date:   Thu, 11 Aug 2022 07:29:48 +0800
+Message-Id: <20220810232948.40636-1-chen45464546@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: EMCowACn0zlvP_Ri7Nf3Fw--.60811S4
+X-Coremail-Antispam: 1Uf129KBjvdXoWrtw1DJFyDKF1UKF4kAFWUJwb_yoWDJFc_ur
+        nrXr17JF4jkFyFya1Fkr45Xa4v9r47Zr48AF1SgFW3G347Ar1rJw1kA34xArZ5ur4SkF9x
+        Jw17Aa43J3s3JjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRAtxhPUUUUU==
+X-Originating-IP: [113.87.232.118]
+X-CM-SenderInfo: hfkh0kqvuwkkiuw6il2tof0z/xtbBdhtZnmDkoNZ6JAAAsG
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add comments to document gfx_off related members of struct amdgpu_gfx.
+Follow the commit 27c874867c4(dpaa2-eth: Use a single page per Rx buffer),
+we should trace the allocated address instead of page struct.
 
-Signed-off-by: André Almeida <andrealmeid@igalia.com>
+Signed-off-by: Chen Lin <chen.lin5@zte.com.cn>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.h | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+ drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.h b/drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.h
-index 1b8b4a5270c9..8abdf41d0f83 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.h
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_gfx.h
-@@ -332,12 +332,12 @@ struct amdgpu_gfx {
- 	uint32_t                        srbm_soft_reset;
+diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
+index cd9ec8052..75d515726 100644
+--- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
++++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
+@@ -1660,8 +1660,8 @@ static int dpaa2_eth_add_bufs(struct dpaa2_eth_priv *priv,
+ 		buf_array[i] = addr;
  
- 	/* gfx off */
--	bool                            gfx_off_state; /* true: enabled, false: disabled */
--	struct mutex                    gfx_off_mutex;
--	uint32_t                        gfx_off_req_count; /* default 1, enable gfx off: dec 1, disable gfx off: add 1 */
--	struct delayed_work             gfx_off_delay_work;
--	uint32_t                        gfx_off_residency;
--	uint64_t                        gfx_off_entrycount;
-+	bool                            gfx_off_state;      /* true: enabled, false: disabled */
-+	struct mutex                    gfx_off_mutex;      /* mutex to change gfxoff state */
-+	uint32_t                        gfx_off_req_count;  /* default 1, enable gfx off: dec 1, disable gfx off: add 1 */
-+	struct delayed_work             gfx_off_delay_work; /* async work to set gfx block off */
-+	uint32_t                        gfx_off_residency;  /* last logged residency */
-+	uint64_t                        gfx_off_entrycount; /* count of times GPU has get into GFXOFF state */
- 
- 	/* pipe reservation */
- 	struct mutex			pipe_reserve_mutex;
+ 		/* tracing point */
+-		trace_dpaa2_eth_buf_seed(priv->net_dev,
+-					 page, DPAA2_ETH_RX_BUF_RAW_SIZE,
++		trace_dpaa2_eth_buf_seed(priv->net_dev, page_address(page),
++					 DPAA2_ETH_RX_BUF_RAW_SIZE,
+ 					 addr, priv->rx_buf_size,
+ 					 bpid);
+ 	}
 -- 
-2.37.1
+2.25.1
 

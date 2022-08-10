@@ -2,133 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D830158F504
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 01:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED7F258F506
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 01:58:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233624AbiHJX5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 19:57:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49478 "EHLO
+        id S233640AbiHJX6K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 19:58:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232777AbiHJX5w (ORCPT
+        with ESMTP id S233679AbiHJX6D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 19:57:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9C3E56CF73
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 16:57:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660175870;
-        h=from:from:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=YkaDvS1GtXz21uszXexDjRybO4QCX+ccRTITPMo9eXE=;
-        b=fHa+aBJwW/oihUz0cP73nxXbqgq+b03Czf7HUICU4R/OyRmQbBFGvi3XP0fXXJXxeWqQn9
-        Jb9E8dWdqDstSCvFFQu9jzcRIRpfG+jdpYcO1FkRKN/osv3Fdn+OmFaPK9hQ9LOe3WXcoo
-        yO2Qo+OdhuMwU/kmYuP4Glxw1srLtIU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-252-e1rY7k2YO5CQOlhqspYqBw-1; Wed, 10 Aug 2022 19:57:40 -0400
-X-MC-Unique: e1rY7k2YO5CQOlhqspYqBw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A0D8F18A64F7;
-        Wed, 10 Aug 2022 23:57:39 +0000 (UTC)
-Received: from [10.64.54.77] (vpn2-54-77.bne.redhat.com [10.64.54.77])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6BDA0C15BA3;
-        Wed, 10 Aug 2022 23:57:35 +0000 (UTC)
-Reply-To: Gavin Shan <gshan@redhat.com>
-Subject: Re: [PATCH v2 1/2] KVM: selftests: Make rseq compatible with
- glibc-2.35
-To:     Paolo Bonzini <pbonzini@redhat.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     kvmarm <kvmarm@lists.cs.columbia.edu>,
-        KVM list <kvm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        Florian Weimer <fweimer@redhat.com>,
-        shan gavin <shan.gavin@gmail.com>, maz <maz@kernel.org>,
-        andrew jones <andrew.jones@linux.dev>,
-        yihyu <yihyu@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        oliver upton <oliver.upton@linux.dev>
-References: <20220810104114.6838-1-gshan@redhat.com>
- <20220810104114.6838-2-gshan@redhat.com>
- <876568572.367.1660134156963.JavaMail.zimbra@efficios.com>
- <1e41a634-0419-e0a8-364c-2e30ed2dbe4d@redhat.com>
-From:   Gavin Shan <gshan@redhat.com>
-Message-ID: <234b81a0-d7eb-ee92-3ed3-ce2abf566b63@redhat.com>
-Date:   Thu, 11 Aug 2022 09:57:32 +1000
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.2.0
+        Wed, 10 Aug 2022 19:58:03 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B82753AA;
+        Wed, 10 Aug 2022 16:58:02 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27ANS5tu011894;
+        Wed, 10 Aug 2022 23:57:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=iKZo6L4ks80dAbx5RILErWCqMWwJ78yCTiIRsqpNI0w=;
+ b=a/qivNS2b8zA43RXF6HBTCF/jVYSzkRkg+d2y7+7tsPJeGGq6anGUv7nsAt2qIsAdisn
+ MlHPD8f2HEB7ArCltDIxY5DBxcn4L7V+2bXjwocXQdyDpeiQ47B8fwrUUh42Ei3RVh9G
+ K0754OTB2Vb0u7c0L9w6umCQXkGNEvsCm0mJGljnQjyoDL7VGNgbkbz3w5qUq2xz30z7
+ /QDfZSSUSgsc8NK9fvWCDqCmveFcchZ3Eqxp+yFE1MojzMy+m0kxjx/4ICrs1qMCELVM
+ KGS1/jAQ9SL+Y8lH6ZqEATrAgl6BS6jjqHTYsu/Z+sAv0I4H8HAgfy/dLJOxqLVUuMBM +Q== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3huwr24b0u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Aug 2022 23:57:55 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.47.97.222])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27ANvrtF004901
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Aug 2022 23:57:53 GMT
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 10 Aug 2022 16:57:53 -0700
+Received: from [10.110.86.199] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 10 Aug
+ 2022 16:57:51 -0700
+Message-ID: <dbda8bce-2890-e5e3-4052-073a52eb06a6@quicinc.com>
+Date:   Wed, 10 Aug 2022 16:57:51 -0700
 MIME-Version: 1.0
-In-Reply-To: <1e41a634-0419-e0a8-364c-2e30ed2dbe4d@redhat.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3] drm/msm/dp: check hpd_state before push idle pattern
+ at dp_bridge_disable()
 Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+To:     Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
+        <airlied@linux.ie>, <bjorn.andersson@linaro.org>,
+        <daniel@ffwll.ch>, <dianders@chromium.org>,
+        <dmitry.baryshkov@linaro.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <vkoul@kernel.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1660159551-13828-1-git-send-email-quic_khsieh@quicinc.com>
+ <CAE-0n533SUb3Bg=pR8Fhwo-M5qLWiti4nzLR-rSGVAsrXgEYNQ@mail.gmail.com>
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+In-Reply-To: <CAE-0n533SUb3Bg=pR8Fhwo-M5qLWiti4nzLR-rSGVAsrXgEYNQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: z5McM-bdfMc4yNFQcm4ab-8hgVxndqT7
+X-Proofpoint-ORIG-GUID: z5McM-bdfMc4yNFQcm4ab-8hgVxndqT7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-10_16,2022-08-10_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ mlxscore=0 adultscore=0 mlxlogscore=999 spamscore=0 lowpriorityscore=0
+ impostorscore=0 phishscore=0 clxscore=1015 priorityscore=1501
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208100072
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/10/22 10:29 PM, Paolo Bonzini wrote:
-> On 8/10/22 14:22, Mathieu Desnoyers wrote:
->>>
->>>     /*
->>>      * Create and run a dummy VM that immediately exits to userspace via
->>> @@ -256,7 +244,7 @@ int main(int argc, char *argv[])
->>>              */
->>>             smp_rmb();
->>>             cpu = sched_getcpu();
->>> -            rseq_cpu = READ_ONCE(__rseq.cpu_id);
->>> +            rseq_cpu = READ_ONCE(__rseq->cpu_id);
->> #include <rseq.h>
+
+On 8/10/2022 3:22 PM, Stephen Boyd wrote:
+> Quoting Kuogee Hsieh (2022-08-10 12:25:51)
+>> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+>> index b36f8b6..678289a 100644
+>> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+>> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+>> @@ -1729,10 +1729,20 @@ void dp_bridge_disable(struct drm_bridge *drm_bridge)
+>>          struct msm_dp_bridge *dp_bridge = to_dp_bridge(drm_bridge);
+>>          struct msm_dp *dp = dp_bridge->dp_display;
+>>          struct dp_display_private *dp_display;
+>> +       u32 state;
 >>
->> and use
+>>          dp_display = container_of(dp, struct dp_display_private, dp_display);
 >>
->> rseq_current_cpu_raw().
-> 
-> Thanks, I squashed it and queued it for -rc1 (tested on both
-> glibc 2.34 and 2.35).
-> 
+>> +       mutex_lock(&dp_display->event_mutex);
+>> +
+>> +       state = dp_display->hpd_state;
+>> +       if (state != ST_DISCONNECT_PENDING && state != ST_CONNECTED) {
+> It's concerning that we have to check this at all. Are we still
+> interjecting into the disable path when the cable is disconnected?
 
-Paolo, Thanks for the makeup, which looks good to me :)
+yes,
 
-> diff --git a/tools/testing/selftests/kvm/rseq_test.c b/tools/testing/selftests/kvm/rseq_test.c
-> index 84e8425edc2c..987a76674f4f 100644
-> --- a/tools/testing/selftests/kvm/rseq_test.c
-> +++ b/tools/testing/selftests/kvm/rseq_test.c
-> @@ -29,7 +29,6 @@
->   #define NR_TASK_MIGRATIONS 100000
-> 
->   static pthread_t migration_thread;
-> -static struct rseq_abi *__rseq;
->   static cpu_set_t possible_mask;
->   static int min_cpu, max_cpu;
->   static bool done;
-> @@ -218,7 +217,6 @@ int main(int argc, char *argv[])
->       r = rseq_register_current_thread();
->       TEST_ASSERT(!r, "rseq_register_current_thread failed, errno = %d (%s)",
->               errno, strerror(errno));
-> -    __rseq = rseq_get_abi();
-> 
->       /*
->        * Create and run a dummy VM that immediately exits to userspace via
-> @@ -256,7 +254,7 @@ int main(int argc, char *argv[])
->                */
->               smp_rmb();
->               cpu = sched_getcpu();
-> -            rseq_cpu = READ_ONCE(__rseq->cpu_id);
-> +            rseq_cpu = rseq_current_cpu_raw();
->               smp_rmb();
->           } while (snapshot != atomic_read(&seq_cnt));
-> 
+The problem is not from cable disconnected.
 
+There is a corner case that this function is called at drm shutdown 
+(drm_release).
+
+At that time, mainlink is not enabled, hence dp_ctrl_push_idle() will 
+cause system crash.
+
+
+
+>> +               mutex_unlock(&dp_display->event_mutex);
+>> +               return;
+>> +       }
+>> +
+>>          dp_ctrl_push_idle(dp_display->ctrl);
+>> +       mutex_unlock(&dp_display->event_mutex);

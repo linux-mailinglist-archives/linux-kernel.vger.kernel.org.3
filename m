@@ -2,119 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3537158EBFC
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 14:29:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB4FE58EC00
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 14:29:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232265AbiHJM3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 08:29:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54594 "EHLO
+        id S232106AbiHJM33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 08:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232241AbiHJM3N (ORCPT
+        with ESMTP id S232272AbiHJM3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 08:29:13 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A57987437F;
-        Wed, 10 Aug 2022 05:29:12 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 08CDE1FB;
-        Wed, 10 Aug 2022 05:29:13 -0700 (PDT)
-Received: from [10.57.13.63] (unknown [10.57.13.63])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3EFD23F5A1;
-        Wed, 10 Aug 2022 05:29:10 -0700 (PDT)
-Message-ID: <3a5e7abd-9361-11ba-978d-8e8bae00ea31@arm.com>
-Date:   Wed, 10 Aug 2022 13:29:08 +0100
+        Wed, 10 Aug 2022 08:29:24 -0400
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E5A677545;
+        Wed, 10 Aug 2022 05:29:21 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 68B2143EA36;
+        Wed, 10 Aug 2022 08:29:20 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id h3gb2233B6MC; Wed, 10 Aug 2022 08:29:19 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 6CD9E43ED02;
+        Wed, 10 Aug 2022 08:29:19 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 6CD9E43ED02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1660134559;
+        bh=QBchzkobu6L+jcpw+dUlEz0k3O8E4+6GRlWJ0MXHIvs=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=PI+Lh9go6DchA6I6ZfU44MkHtWrACOshp+vTuj5r62mRjexFkHf0bTwM97qiZ/UB3
+         X+UMSBKCbjhj4tGMCQnyIO2LqeuSeymfaH6LhpEZt8iYn+q/jF/v9aZKRuhorjXNnR
+         KdIyZvvD81ucWRIWTXKs0B+rCjlzsXOSGYyPnMZ7Atx0AWP1t7xbIo1DIng+pAORyl
+         Ae7SiOp0Ot3nfCnUtBJMe3V/u1tuw8BlefFcxJKDUBnq1mg/9xP4/3qpxMPuv2G0X9
+         mpl2nMqj00hi17podl51qHx2TpsJ/tJuPGhGJS/+somd7WwcN9zHiCLod2ZNGidtDh
+         8ZR/tYJ9G9qGQ==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 9xQH-mneLfu7; Wed, 10 Aug 2022 08:29:19 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 5327143E933;
+        Wed, 10 Aug 2022 08:29:19 -0400 (EDT)
+Date:   Wed, 10 Aug 2022 08:29:19 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Gavin Shan <gshan@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>, shuah <shuah@kernel.org>,
+        Florian Weimer <fweimer@redhat.com>,
+        kvmarm <kvmarm@lists.cs.columbia.edu>,
+        KVM list <kvm@vger.kernel.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, maz <maz@kernel.org>,
+        oliver upton <oliver.upton@linux.dev>,
+        andrew jones <andrew.jones@linux.dev>,
+        yihyu <yihyu@redhat.com>, shan gavin <shan.gavin@gmail.com>
+Message-ID: <1316061904.375.1660134559269.JavaMail.zimbra@efficios.com>
+In-Reply-To: <8c1f33b4-a5a1-fcfa-4521-36253ffa22c8@redhat.com>
+References: <20220809060627.115847-1-gshan@redhat.com> <7844e3fa-e49e-de75-e424-e82d3a023dd6@redhat.com> <87o7wtnay6.fsf@oldenburg.str.redhat.com> <616d4de6-81f6-9d14-4e57-4a79fec45690@redhat.com> <797306043.114963.1660047714774.JavaMail.zimbra@efficios.com> <1014177394.115022.1660052656961.JavaMail.zimbra@efficios.com> <YvLT1fd8ddybF5Uw@google.com> <8c1f33b4-a5a1-fcfa-4521-36253ffa22c8@redhat.com>
+Subject: Re: [PATCH 1/2] KVM: selftests: Make rseq compatible with
+ glibc-2.35
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 1/1] ACPI: CPPC: Disable FIE if registers in PCC
- regions
-Content-Language: en-US
-To:     Jeremy Linton <jeremy.linton@arm.com>
-Cc:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org,
-        robert.moore@intel.com, devel@acpica.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, vschneid@redhat.com,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>
-References: <20220728221043.4161903-1-jeremy.linton@arm.com>
- <20220728221043.4161903-2-jeremy.linton@arm.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20220728221043.4161903-2-jeremy.linton@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4372 (ZimbraWebClient - FF103 (Linux)/8.8.15_GA_4372)
+Thread-Topic: selftests: Make rseq compatible with glibc-2.35
+Thread-Index: Hmn4zQY3JK/eFlOJPqqhWHevLMt86A==
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jeremy,
+----- On Aug 9, 2022, at 8:37 PM, Gavin Shan gshan@redhat.com wrote:
 
-+CC Valentin since he might be interested in this finding
-+CC Ionela, Dietmar
-
-I have a few comments for this patch.
-
-
-On 7/28/22 23:10, Jeremy Linton wrote:
-> PCC regions utilize a mailbox to set/retrieve register values used by
-> the CPPC code. This is fine as long as the operations are
-> infrequent. With the FIE code enabled though the overhead can range
-> from 2-11% of system CPU overhead (ex: as measured by top) on Arm
-> based machines.
+> Hi Mathieu and Sean,
 > 
-> So, before enabling FIE assure none of the registers used by
-> cppc_get_perf_ctrs() are in the PCC region. Furthermore lets also
-> enable a module parameter which can also disable it at boot or module
-> reload.
+> On 8/10/22 7:38 AM, Sean Christopherson wrote:
+>> On Tue, Aug 09, 2022, Mathieu Desnoyers wrote:
+>>> ----- On Aug 9, 2022, at 8:21 AM, Mathieu Desnoyers
+>>> mathieu.desnoyers@efficios.com wrote:
+>>>> ----- Gavin Shan <gshan@redhat.com> wrote:
+>>>>> On 8/9/22 5:16 PM, Florian Weimer wrote:
+>>>>>>>> __builtin_thread_pointer doesn't work on all architectures/GCC
+>>>>>>>> versions.
+>>>>>>>> Is this a problem for selftests?
+>>>>>>>>
+>>>>>>>
+>>>>>>> It's a problem as the test case is running on all architectures. I think I
+>>>>>>> need introduce our own __builtin_thread_pointer() for where it's not
+>>>>>>> supported: (1) PowerPC  (2) x86 without GCC 11
+>>>>>>>
+>>>>>>> Please let me know if I still have missed cases where
+>>>>>>> __buitin_thread_pointer() isn't supported?
+>>>>>>
+>>>>>> As far as I know, these are the two outliers that also have rseq
+>>>>>> support.  The list is a bit longer if we also consider non-rseq
+>>>>>> architectures (csky, hppa, ia64, m68k, microblaze, sparc, don't know
+>>>>>> about the Linux architectures without glibc support).
+>>>>>>
+>>>>>
+>>>>> For kvm/selftests, there are 3 architectures involved actually. So we
+>>>>> just need consider 4 cases: aarch64, x86, s390 and other. For other
+>>>>> case, we just use __builtin_thread_pointer() to maintain code's
+>>>>> integrity, but it's not called at all.
+>>>>>
+>>>>> I think kvm/selftest is always relying on glibc if I'm correct.
+>>>>
+>>>> All those are handled in the rseq selftests and in librseq. Why duplicate all
+>>>> that logic again?
+>>>
+>>> More to the point, considering that we have all the relevant rseq registration
+>>> code in tools/testing/selftests/rseq/rseq.c already, and the relevant thread
+>>> pointer getter code in tools/testing/selftests/rseq/rseq-*thread-pointer.h,
+>>> is there an easy way to get test applications in tools/testing/selftests/kvm
+>>> and in tools/testing/selftests/rseq to share that common code ?
+>>>
+>>> Keeping duplicated compatibility code is bad for long-term maintainability.
+>> 
+>> Any reason not to simply add tools/lib/rseq.c and then expose a helper to get
+>> the
+>> registered rseq struct?
+>> 
 > 
-> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
-> ---
->   drivers/acpi/cppc_acpi.c       | 41 ++++++++++++++++++++++++++++++++++
->   drivers/cpufreq/cppc_cpufreq.c | 19 ++++++++++++----
->   include/acpi/cppc_acpi.h       |  5 +++++
->   3 files changed, 61 insertions(+), 4 deletions(-)
+> There are couple of reasons, not to share
+> tools/testing/selftests/rseq/librseq.so
+> or add tools/lib/librseq.so. Please let me know if the arguments making sense
+> to you?
+> 
+> - By design, selftests/rseq and selftests/kvm are parallel. It's going to
+> introduce
+>   unnecessary dependency for selftests/kvm to use selftests/rseq/librseq.so. To
+>   me,
+>   it makes the maintainability even harder.
 
+In terms of build system, yes, selftests/rseq and selftests/kvm are side-by-side,
+and I agree it is odd to have a cross-dependency.
 
-1. You assume that all platforms would have this big overhead when
-    they have the PCC regions for this purpose.
-    Do we know which version of HW mailbox have been implemented
-    and used that have this 2-11% overhead in a platform?
-    Do also more recent MHU have such issues, so we could block
-    them by default (like in your code)?
+That's where moving rseq.c to tools/lib/ makes sense.
 
-2. I would prefer to simply change the default Kconfig value to 'n' for
-    the ACPI_CPPC_CPUFREQ_FIE, instead of creating a runtime
-    check code which disables it.
-    We have probably introduce this overhead for older platforms with
-    this commit:
+> 
+> - What selftests/kvm needs is rseq-thread-pointer.h, which accounts for ~5% of
+>   functionalities, provided by selftests/rseq/librseq.so.
 
-commit 4c38f2df71c8e33c0b64865992d693f5022eeaad
-Author: Viresh Kumar <viresh.kumar@linaro.org>
-Date:   Tue Jun 23 15:49:40 2020 +0530
+I've never seen this type of argument used to prevent using a library before, except
+on extremely memory-constrained devices, which is not our target here.
 
-     cpufreq: CPPC: Add support for frequency invariance
+Even if you would only use 1% of the features of a library, it does not justify
+reimplementing that 1% if that code already sits within the same project (kernel
+selftests).
 
+> 
+> - I'm not too much familiar with selftests/rseq, but it seems it need heavy
+>   rework before it can become tools/lib/librseq.so. However, I'm not sure if
+>   the effort is worthwhile. The newly added library is fully used by
+>   testtests/rseq. ~5% of that is going to be used by selftests/kvm.
+>   In this case, we still have cross-dependency issue.
 
+No, it's just moving files around and a bit of Makefile modifications. That's
+the simple part.
 
-If the test server with this config enabled performs well
-in the stress-tests, then on production server the config may be
-set to 'y' (or 'm' and loaded).
+> 
+> I personally prefer not to use selftests/rseq/librseq.so or add
+> tools/lib/librseq.so,
+> but I need your feedback. Please share your thoughts.
 
-I would vote to not add extra code, which then after a while might be
-decided to bw extended because actually some HW is actually capable (so
-we could check in runtime and enable it). IMO this create an additional
-complexity in our diverse configuration/tunnable space in our code.
+I strongly favor that we use a two steps approach:
 
-When we don't compile-in this, we should fallback to old-style
-FIE, which has been used on these old platforms.
+1) immediate fix: include ../rseq/rseq.c into your test code and use the headers,
+   as proposed by Paolo.
 
-BTW (I have to leave it here) the first-class solution for those servers
-is to implement AMU counters, so the overhead to retrieve this info is
-really low.
+2) I'll move librseq code into tools/lib/ and tools/include/rseq/, and adapt the
+   users accordingly. (after the end of my vacation)
 
-Regards,
-Lukasz
+Thanks,
+
+Mathieu
+
+> Thanks,
+> Gavin
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

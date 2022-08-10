@@ -2,91 +2,355 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4393158EAC0
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 12:56:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E3EE58EAC2
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 12:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230268AbiHJKz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 06:55:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55238 "EHLO
+        id S231565AbiHJK5H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 06:57:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiHJKzx (ORCPT
+        with ESMTP id S229452AbiHJK5F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 06:55:53 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DFD1C133
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 03:55:52 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id v5so7620394wmj.0
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 03:55:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=uLzHaOsqO+V47sNsu3NQ7eOVEKNreR7vrk1orA6ZleY=;
-        b=fozMa+ze0kLO/rq0XhZh+UySZWY2WbbHTkW3ovbLOxDDjwkI/o2txXCccacp1NYYGd
-         4zJjgRFOP94WG41v25ReDutUY1Pi/PTALr9UB/9rzNXkwMLCnagNw6rjik720Wyx/iSz
-         C9cfZDxdPD1r2Kr00F+MoIBXkSWf17JWx44nbVpAkuNKqMRulWhMtdalwRF5ZO976jgW
-         eHar4gwM5PODKbjx8AFgv0QEnbwffpiLPH92ugpONZlI52h8OngB0ACZwrJaQ9/v30gC
-         AryZpXS7ecVDBHMfcOcFPRx2jQ+cyAYrYlGoI5yIOfOmeCfRwrUinb9tMQPRYwXEQLSr
-         GvWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=uLzHaOsqO+V47sNsu3NQ7eOVEKNreR7vrk1orA6ZleY=;
-        b=YKrOWsJQAjxrK3vGfIABGZVG/bjsig4weXxh2poP+A60GfawsEmFHLbtFaG8sC6/DT
-         N51u4kEiII8lF0eLizqKbc/Cz+J+kV13prdHrnoAqxaVt+qzgjZQxFreQeTQfFNRN+kb
-         IVR1hAWZVEJdQwNRi+S85AG+zLI1b3E+CCDOZ33PpwKPU6MAzhisjbM/95TgxTTAVzJ1
-         gO2kBPaWr5I/qBiQlcLKmCIWn7dPsYfQ3SlC83PuNzSTx8nScU+VDW5VJYzbM4jAKFIR
-         A+VfR/DmH3aqs8ruVG/Fm4U3o/0dzrjpQAnFOIk09H6myJa8DDm8dJG+wsPec3aiIcKc
-         JPCQ==
-X-Gm-Message-State: ACgBeo3zSkgTScv8EILPJmNAR/aQJ4MI9UQKxioiee8xL7P9BCtRb7PJ
-        k57KkVFOImT1oS7Tzyfh47TYDg==
-X-Google-Smtp-Source: AA6agR42eTIQeJpfVwcTcfO1vOI9DkuwkBCklpdyITuI2iuhyEyXlE1deKN+pkT+XQwsDg0XVmzLog==
-X-Received: by 2002:a05:600c:4e51:b0:3a4:e094:2520 with SMTP id e17-20020a05600c4e5100b003a4e0942520mr1996068wmq.123.1660128950692;
-        Wed, 10 Aug 2022 03:55:50 -0700 (PDT)
-Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
-        by smtp.gmail.com with ESMTPSA id c16-20020adffb50000000b002205c907474sm15899709wrs.107.2022.08.10.03.55.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 03:55:50 -0700 (PDT)
-Date:   Wed, 10 Aug 2022 11:55:48 +0100
-From:   Lee Jones <lee.jones@linaro.org>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Chen-Yu Tsai <wens@csie.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lee Jones <lee@kernel.org>
-Subject: Re: [PATCH] dt-bindings: mfd: x-powers,axp152: Document the AXP228
- variant
-Message-ID: <YvOOtGN7c7oBwZis@google.com>
-References: <20220810013430.27061-1-samuel@sholland.org>
+        Wed, 10 Aug 2022 06:57:05 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174761B7AC;
+        Wed, 10 Aug 2022 03:57:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660129024; x=1691665024;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=7ose/0mu4nC9uvmueKDnMIz2XMSo2SbomWrU6zESosw=;
+  b=mY6z4e0kL0L4Sk0LWkltvnkCfqMfqQydFF2BpZgA1uZtFRhu8oEsBTNU
+   F3QdjIgzGgVDMW5f5NkTvVBKjnB+TSUILcCZ9aeOc77szLoW4uixkz5at
+   gsJRwlNwiWvZUFIjuCrxuyxt+mXTJkc06fIb2XTy6s+buj+VPB46nWSAV
+   flEr6dtngfyfjYJeB3Mf2a/SRWIxUARGNYh5MPSLITz9zJmn58A2wvQHK
+   jfmr6K0Q/HRP+QcuhtyeHsYX9rFEldw164R79V5ZJVMUE6KI87oDSlcv1
+   a+HypL8Q5XAMjirTR/D3HIzLNQxaZa/kpt+fclK5BLFbaoIb6kAUztyKt
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="291054799"
+X-IronPort-AV: E=Sophos;i="5.93,227,1654585200"; 
+   d="scan'208";a="291054799"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 03:57:03 -0700
+X-IronPort-AV: E=Sophos;i="5.93,227,1654585200"; 
+   d="scan'208";a="731458495"
+Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 03:56:59 -0700
+Received: by lahna (sSMTP sendmail emulation); Wed, 10 Aug 2022 13:56:57 +0300
+Date:   Wed, 10 Aug 2022 13:56:57 +0300
+From:   Mika Westerberg <mika.westerberg@linux.intel.com>
+To:     Szuying Chen <chensiying21@gmail.com>
+Cc:     gregkh@linuxfoundation.org, andreas.noever@gmail.com,
+        michael.jamet@intel.com, YehezkelShB@gmail.com,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yd_Tseng@asmedia.com.tw, Chloe_Chen@asmedia.com.tw,
+        Richard_Hsu@asmedia.com.tw
+Subject: Re: [PATCH] thunderbolt: thunderbolt: add vendor's NVM formats
+Message-ID: <YvOO+W4gcs8v1lD+@lahna>
+References: <20220810101743.11214-1-chensiying21@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220810013430.27061-1-samuel@sholland.org>
-X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20220810101743.11214-1-chensiying21@gmail.com>
+X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,PDS_OTHER_BAD_TLD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 09 Aug 2022, Samuel Holland wrote:
+Hi,
 
-> AXP228 is a PMIC used on boards such as the Clockwork ClockworkPi and
-> DevTerm. Its register map appears to be identical to the AXP221 variant.
-> The only known difference is in the default values for regulator on/off
-> states and voltages.
-> 
-> Signed-off-by: Samuel Holland <samuel@sholland.org>
+On Wed, Aug 10, 2022 at 06:17:43PM +0800, Szuying Chen wrote:
+> The patch add tb_nvm_quirks() contain an array that has functions
+> pointers to tb_nvm_vendor_apply().
+> And tb_nvm_vendor_apply() that recognize supported vendor works in one
+> of the following cases:
+> Case NvmUpgradeSuppport: enable nvm's attribute by setting
+> no_nvm_upgrade flag to create nvm_authenticate file node.
+> Case NvmAdd:add active/non-active NVM devices.
+> Case NvmWrite:update firmware to non-ative NVM device.
+
+Again, on top of what Greg already commented. Please run your patches
+through checkpatch.pl and make sure they follow the coding style used in
+the kernel (these are well documented under Documentation/*).
+
+> Signed-off-by: Szuying Chen <chensiying21@gmail.com>
 > ---
+>  drivers/thunderbolt/nvm.c    | 59 ++++++++++++++----------------------
+>  drivers/thunderbolt/switch.c | 19 +++++++-----
+>  drivers/thunderbolt/tb.h     | 18 +++++++----
+>  3 files changed, 46 insertions(+), 50 deletions(-)
 > 
->  Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml | 3 +++
->  1 file changed, 3 insertions(+)
+> diff --git a/drivers/thunderbolt/nvm.c b/drivers/thunderbolt/nvm.c
+> index d5f283889da8..2aae8b3fa5dc 100644
+> --- a/drivers/thunderbolt/nvm.c
+> +++ b/drivers/thunderbolt/nvm.c
+> @@ -14,6 +14,7 @@
+>  #include "tb.h"
+> 
+>  static DEFINE_IDA(nvm_ida);
+> +
+>  static int tb_switch_nvm_read(void *priv, unsigned int offset, void *val,
+>  			      size_t bytes)
+>  {
+> @@ -22,7 +23,6 @@ static int tb_switch_nvm_read(void *priv, unsigned int offset, void *val,
+>  	int ret;
+> 
+>  	pm_runtime_get_sync(&sw->dev);
+> -
+>  	if (!mutex_trylock(&sw->tb->lock)) {
+>  		ret = restart_syscall();
+>  		goto out;
+> @@ -60,22 +60,23 @@ static int tb_switch_nvm_write(void *priv, unsigned int offset, void *val,
+>  	return ret;
+>  }
+> 
+>  Refer to thunderbolt source: switch.c.
 
-Applied, thanks.
+No idea why this is there.
 
--- 
-DEPRECATED: Please use lee@kernel.org
+> -static int tb_nvm_vendor_apply(struct tb_switch *sw, unsigned int handle)
+> +static int asm_nvm_apply(struct tb_switch *sw, unsigned int handle)
+>  {
+> +	struct tb_nvm *nvm;
+> +	u32 val;
+> +	u32 nvm_size;
+>  	int ret = 0;
+> +	unsigned int image_size;
+> +	const u8 *buf = sw->nvm->buf;
+> 
+>  	switch (handle) {
+> -	case 0:
+> +	case NvmUpgradeSuppport:
+
+These are not followign the coding style.
+
+>  		if (sw->no_nvm_upgrade)
+>  			sw->no_nvm_upgrade = false;
+> 
+>  		break;
+> 
+> -	case 1:
+> -		struct tb_nvm *nvm;
+> -		u32 val;
+> -		u32 nvm_size;
+> -
+> +	case NvmAdd:
+>  		nvm = tb_nvm_alloc(&sw->dev);
+>  		if (IS_ERR(nvm)) {
+>  			ret = PTR_ERR(nvm);
+> @@ -86,13 +87,13 @@ static int tb_nvm_vendor_apply(struct tb_switch *sw, unsigned int handle)
+>  		if (ret)
+>  			break;
+> 
+> -		nvm->vendor.date = (((u8)val) << 0x10 | ((u8)(val >> 0x8)) << 0x8 | (u8)(val >> 0x10));
+> +		nvm->nvm_asm.date = (((u8)val) << 0x10 | ((u8)(val >> 0x8)) << 0x8 | (u8)(val >> 0x10));
+>  		ret = usb4_switch_nvm_read(sw, NVM_CUSTOMER_ID, &val, sizeof(val));
+>  		if (ret)
+>  			break;
+> 
+> -		nvm->vendor.customerID = (((u8)val) << 0x8 | ((u8)(val >> 0x8)));
+> -		nvm->vendor.version = (u8)(val >> 0x10);
+> +		nvm->nvm_asm.customerID = (((u8)val) << 0x8 | ((u8)(val >> 0x8)));
+> +		nvm->nvm_asm.version = (u8)(val >> 0x10);
+>  		nvm_size = SZ_512K;
+>  		ret = tb_nvm_add_active(nvm, nvm_size, tb_switch_nvm_read);
+>  		if (ret)
+> @@ -105,10 +106,7 @@ static int tb_nvm_vendor_apply(struct tb_switch *sw, unsigned int handle)
+>  		sw->nvm = nvm;
+>  		break;
+> 
+> -	case 2:
+> -		unsigned int image_size;
+> -		const u8 *buf = sw->nvm->buf;
+> -
+> +	case NvmWrite:
+>  		if (!buf) {
+>  			ret = -EINVAL;
+>  			break;
+> @@ -128,7 +126,7 @@ static int tb_nvm_vendor_apply(struct tb_switch *sw, unsigned int handle)
+>  		break;
+>  	}
+> 
+> -	if ((handle == 1) && (ret != 0))
+> +	if ((handle == NvmAdd) && (ret != 0))
+>  		tb_nvm_free(sw->nvm);
+> 
+>  	return ret;
+> @@ -136,45 +134,32 @@ static int tb_nvm_vendor_apply(struct tb_switch *sw, unsigned int handle)
+> 
+>  struct tb_nvm_id {
+>  	u16 hw_vendor_id;
+> -	u16 hw_device_id;
+> -	u16 vendor;
+> -	u16 device;
+>  	int (*hook)(struct tb_switch *sw, unsigned int handle);
+
+hook does not mean anything. Please call it ->validate or similar that
+makes sense and document it too.
+
+>  };
+> 
+>  static const struct tb_nvm_id tb_nvm_vendors[] = {
+>  	/* ASMedia software CM firmware upgrade */
+> -	{ 0x174c, 0x2428, 0x174c, 0x0009, tb_nvm_vendor_apply },
+> +	{ 0x174c, asm_nvm_apply },
+
+_apply is bad name too. This should be called asmedia_nvm_validate or
+similar.
+
+>  };
+> 
+>  /**
+> - * tb_nvm_quirks() - support vendor's NVM format
+> + * tb_nvm_vendor_handle() - support vendor's NVM format
+>   * @sw: Thunderbolt switch
+> + * @handle: 0:NvmUpgradeSuppport, 1:NvmAdd, 2:NvmWrite
+>   */
+> -int tb_nvm_quirks(struct tb_switch *sw, unsigned int handle)
+> +int tb_nvm_vendor_handle(struct tb_switch *sw, unsigned int handle)
+
+handle is bad name choice.
+
+If this is supposed to validate vendor specific NVM, then call it
+tb_nvm_validate() or tb_nvm_validate_vendor().
+
+>  {
+>  	int res, i;
+> -	bool NoVendor = true;
+> 
+>  	for (i = 0; i < ARRAY_SIZE(tb_nvm_vendors); i++) {
+> -		const struct tb_nvm_id *q = &tb_nvm_vendors[i];
+> +		const struct tb_nvm_id *id = &tb_nvm_vendors[i];
+> 
+> -		if (q->hw_vendor_id && q->hw_vendor_id != sw->config.vendor_id)
+> -			continue;
+> -		if (q->hw_device_id && q->hw_device_id != sw->config.device_id)
+> -			continue;
+> -		if (q->vendor && q->vendor != sw->vendor)
+> -			continue;
+> -		if (q->device && q->device != sw->device)
+> +		if (id->hw_vendor_id && id->hw_vendor_id != sw->config.vendor_id)
+>  			continue;
+> 
+> -		 res = q->hook(sw, handle);
+> -		 NoVendor = false;
+> +		 res = id->hook(sw, handle);
+>  	}
+> -	if (NoVendor)
+> -		return -ENODEV;
+> -	else
+> -		return res;
+> +	return res;
+>  }
+> 
+>  /**
+> diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
+> index a654b6951bef..8fa9efa8a900 100644
+> --- a/drivers/thunderbolt/switch.c
+> +++ b/drivers/thunderbolt/switch.c
+> @@ -114,8 +114,12 @@ static int nvm_validate_and_write(struct tb_switch *sw)
+>  	if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE)
+>  		return -EINVAL;
+> 
+> -	ret = tb_nvm_quirks(sw, 2);
+> -	if (ret != -ENODEV)
+> +	/*
+> +	 * Vendor's nvm write. If the image has been flushed to the
+> +	 * storage are, nvm write is complete.
+> +	 */
+> +	ret = tb_nvm_vendor_handle(sw, NvmWrite);
+> +	if (sw->nvm->flushed)
+>  		return ret;
+> 
+>  	/*
+> @@ -394,9 +398,9 @@ static int tb_switch_nvm_add(struct tb_switch *sw)
+>  	if (!nvm_readable(sw))
+>  		return 0;
+> 
+> -	/* Vendor's NVM formats definition */
+> -	ret = tb_nvm_quirks(sw, 1);
+> -	if (ret != -ENODEV)
+> +	/* Vendor's NVM formats add */
+> +	ret = tb_nvm_vendor_handle(sw, NvmAdd);
+> +	if (ret)
+>  		return ret;
+> 
+>  	/*
+> @@ -1962,8 +1966,9 @@ static ssize_t nvm_version_show(struct device *dev,
+>  		ret = -ENODATA;
+>  	else if (!sw->nvm)
+>  		ret = -EAGAIN;
+> +	/*ASMedia NVM version show format xxxxxx_xxxx_xx */
+>  	else if (sw->config.vendor_id == 0x174C)
+> -		ret = sprintf(buf, "%06x_%04x_%02x\n", sw->nvm->vendor.date, sw->nvm->vendor.customerID, sw->nvm->vendor.version);
+> +		ret = sprintf(buf, "%06x_%04x_%02x\n", sw->nvm->nvm_asm.date, sw->nvm->nvm_asm.customerID, sw->nvm->nvm_asm.version);
+>  	else
+>  		ret = sprintf(buf, "%x.%x\n", sw->nvm->major, sw->nvm->minor);
+> 
+> @@ -2871,7 +2876,7 @@ int tb_switch_add(struct tb_switch *sw)
+>  		tb_sw_dbg(sw, "uid: %#llx\n", sw->uid);
+> 
+>  		tb_check_quirks(sw);
+> -		tb_nvm_quirks(sw, 0);
+> +		tb_nvm_vendor_handle(sw, NvmUpgradeSuppport);
+> 
+>  		ret = tb_switch_set_uuid(sw);
+>  		if (ret) {
+> diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+> index 9dd1ba7b07b6..a8dd0ae04741 100644
+> --- a/drivers/thunderbolt/tb.h
+> +++ b/drivers/thunderbolt/tb.h
+> @@ -31,10 +31,16 @@
+>  #define NVM_Date	0x1C
+
+Lower case for hex digit, 0x1c.
+
+>  #define NVM_CUSTOMER_ID	0x28
+
+> 
+> -struct tb_nvm_vendor {
+> -	int	date;
+> -	u16	customerID;
+> -	u8	version;
+> +/* ASMedia specific NVM handle */
+> +#define NvmUpgradeSuppport 0
+> +#define NvmAdd 1
+> +#define NvmWrite 2
+
+And don't use "handle" here either. 
+
+> +
+> +struct nvm_asmedia {
+> +	u32 date;
+> +	u32 customerID:16;
+> +	u32 version:8;
+> +	u32 reserved:8;
+>  };
+> 
+>  /**
+> @@ -66,7 +72,7 @@ struct tb_nvm {
+>  	size_t buf_data_size;
+>  	bool authenticating;
+>  	bool flushed;
+> -	struct tb_nvm_vendor vendor;
+> +	struct nvm_asmedia nvm_asm;
+>  };
+> 
+>  enum tb_nvm_write_ops {
+> @@ -746,7 +752,7 @@ static inline void tb_domain_put(struct tb *tb)
+>  	put_device(&tb->dev);
+>  }
+> 
+> -int tb_nvm_quirks(struct tb_switch *sw, unsigned int handle);
+> +int tb_nvm_vendor_handle(struct tb_switch *sw, unsigned int handle);
+>  struct tb_nvm *tb_nvm_alloc(struct device *dev);
+>  int tb_nvm_add_active(struct tb_nvm *nvm, size_t size, nvmem_reg_read_t reg_read);
+>  int tb_nvm_write_buf(struct tb_nvm *nvm, unsigned int offset, void *val,
+> --
+> 2.34.1

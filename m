@@ -2,158 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C813C58EBE5
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 14:20:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B63358EBEB
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 14:22:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232220AbiHJMUS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 08:20:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46408 "EHLO
+        id S232235AbiHJMWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 08:22:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbiHJMT4 (ORCPT
+        with ESMTP id S229501AbiHJMWj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 08:19:56 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02C536BD61
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 05:19:55 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id n4so15777597wrp.10
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 05:19:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc;
-        bh=RY2Ewo6bOI+v2XIS1ytjQN36YoqMz59NHMWH4OJMAHc=;
-        b=RPF7rm/X78U5LLWWcqww7LvuWd7cnT3VyaR9t5pnnOHSSeNI6gaLK19VnuEZnr9Xxu
-         ql2mH1jULHhHK1iyB7SY6LOaV20CaBEI88IbKOfcSvy1YZzsrzLxhW1BIOZxJuLPRJbs
-         XjXYXe5HKztRcVBF0e+xdH0zXb2ZSpo4KihOg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=RY2Ewo6bOI+v2XIS1ytjQN36YoqMz59NHMWH4OJMAHc=;
-        b=usaV+dCd8+NwjtSBEnohPiIlq5jryzlk6e44nkbXf8tG18Btk55ZkfHpUqfURVz3dg
-         VWliflnG1M3y/nSDHpAPozPhkBLsZi81eavJkW//n/DXws42cYcopBEAkV7PEEBWCn/m
-         P+lnPhFQbUDMHghHUunp5kfJ3D5kdyaUUZpiZansT5VirEHzh47pcVf54pzKKUOKDuk1
-         TY014CZ8FU4jtbEtnai+qSLKLXhtFIwPCjJFCpMU4byTtk8En7mf5au/cDahuHPPdOxW
-         Bwuh8inluMi1HIO8jQbe9nvywOy0vczGrRN2mqAdAz1dEwG4Z/fM2Hes2Ar76KzjQUo6
-         904w==
-X-Gm-Message-State: ACgBeo2GMbf84Y4wLvMQgydJc//Vey0ZXXtLOHCXvp6lUG/zvL4yJQ32
-        dtV/QE3MRapktAyo26QTHRySNQ==
-X-Google-Smtp-Source: AA6agR4yZWOcUa33jynrJHs2cf/zf0goQtVxoIpzpPE5JePnnd3YXT9tMWXVXa6vunC8PfoLgNNPFQ==
-X-Received: by 2002:a05:6000:1704:b0:220:69a7:ec2b with SMTP id n4-20020a056000170400b0022069a7ec2bmr17957746wrc.436.1660133993546;
-        Wed, 10 Aug 2022 05:19:53 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id q3-20020a056000136300b0021b956da1dcsm15910553wrz.113.2022.08.10.05.19.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 05:19:53 -0700 (PDT)
-Date:   Wed, 10 Aug 2022 14:19:51 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Yonghua Huang <yonghua.huang@intel.com>
-Cc:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, reinette.chatre@intel.com,
-        zhi.a.wang@intel.com, yu1.wang@intel.com, fei1.Li@intel.com,
-        Linux MM <linux-mm@kvack.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>
-Subject: Re: [PATCH] virt: acrn: obtain pa from VMA with PFNMAP flag
-Message-ID: <YvOiZ2jp2Fv0Ex0J@phenom.ffwll.local>
-Mail-Followup-To: Yonghua Huang <yonghua.huang@intel.com>,
-        gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, reinette.chatre@intel.com,
-        zhi.a.wang@intel.com, yu1.wang@intel.com, fei1.Li@intel.com,
-        Linux MM <linux-mm@kvack.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>
-References: <20220228022212.419406-1-yonghua.huang@intel.com>
+        Wed, 10 Aug 2022 08:22:39 -0400
+Received: from mail.efficios.com (mail.efficios.com [167.114.26.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332327333F;
+        Wed, 10 Aug 2022 05:22:38 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 8CD7643EA2C;
+        Wed, 10 Aug 2022 08:22:37 -0400 (EDT)
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id macRiZ503hEg; Wed, 10 Aug 2022 08:22:37 -0400 (EDT)
+Received: from localhost (localhost [127.0.0.1])
+        by mail.efficios.com (Postfix) with ESMTP id 1862A43EC11;
+        Wed, 10 Aug 2022 08:22:37 -0400 (EDT)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.efficios.com 1862A43EC11
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
+        s=default; t=1660134157;
+        bh=sfAauo/mWpg8zOIkCNkUX/HMbO4wG21Si6g++dnvoyE=;
+        h=Date:From:To:Message-ID:MIME-Version;
+        b=nZdbRT4AvSFpu8TzhuYZxIHHOAeTCCeHwddyfuBKZ1bmiJDKmNy9as3q6La1j3OfM
+         YVPperUtSSs4kRCThx1MGYQbi/kzkwT94oHNkCqB0UvliKkhsoFQ2yLqAEzV1AmZqm
+         vfw+Qp3Mo9VVmQCpvm/rJ3Zp99aKBrJ7dufoCiOMGld4ZRXr7kcskGL3n63moV63rL
+         jC+XE6JA5OhDAudAGBr+NBVb592c+ZPm9JAQaZOHnhDBpKKTp1gnuo2G80FAWedMLT
+         AsLVLBUrYatb4KKixttIkRUlnfot42FgWXu1HfsICe4e8aksGtRArF7e0KsLEHZShn
+         jxrtT1VdGkoIw==
+X-Virus-Scanned: amavisd-new at efficios.com
+Received: from mail.efficios.com ([127.0.0.1])
+        by localhost (mail03.efficios.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id pk8I3S8vxJQb; Wed, 10 Aug 2022 08:22:37 -0400 (EDT)
+Received: from mail03.efficios.com (mail03.efficios.com [167.114.26.124])
+        by mail.efficios.com (Postfix) with ESMTP id 03E2C43E9B8;
+        Wed, 10 Aug 2022 08:22:37 -0400 (EDT)
+Date:   Wed, 10 Aug 2022 08:22:36 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Gavin Shan <gshan@redhat.com>
+Cc:     kvmarm <kvmarm@lists.cs.columbia.edu>,
+        KVM list <kvm@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        Florian Weimer <fweimer@redhat.com>,
+        shan gavin <shan.gavin@gmail.com>, maz <maz@kernel.org>,
+        andrew jones <andrew.jones@linux.dev>,
+        Paolo Bonzini <pbonzini@redhat.com>, yihyu <yihyu@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        oliver upton <oliver.upton@linux.dev>
+Message-ID: <876568572.367.1660134156963.JavaMail.zimbra@efficios.com>
+In-Reply-To: <20220810104114.6838-2-gshan@redhat.com>
+References: <20220810104114.6838-1-gshan@redhat.com> <20220810104114.6838-2-gshan@redhat.com>
+Subject: Re: [PATCH v2 1/2] KVM: selftests: Make rseq compatible with
+ glibc-2.35
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220228022212.419406-1-yonghua.huang@intel.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [167.114.26.124]
+X-Mailer: Zimbra 8.8.15_GA_4372 (ZimbraWebClient - FF103 (Linux)/8.8.15_GA_4372)
+Thread-Topic: selftests: Make rseq compatible with glibc-2.35
+Thread-Index: Hk36Kh5rkKAuYYVYbwiYIwpCd68vFA==
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 28, 2022 at 05:22:12AM +0300, Yonghua Huang wrote:
->  acrn_vm_ram_map can't pin the user pages with VM_PFNMAP flag
->  by calling get_user_pages_fast(), the PA(physical pages)
->  may be mapped by kernel driver and set PFNMAP flag.
+----- On Aug 10, 2022, at 6:41 AM, Gavin Shan gshan@redhat.com wrote:
+
+> The rseq information is registered by TLS, starting from glibc-2.35.
+> In this case, the test always fails due to syscall(__NR_rseq). For
+> example, on RHEL9.1 where upstream glibc-2.35 features are enabled
+> on downstream glibc-2.34, the test fails like below.
 > 
->  This patch fixes logic to setup EPT mapping for PFN mapped RAM region
->  by checking the memory attribute before adding EPT mapping for them.
+>  # ./rseq_test
+>  ==== Test Assertion Failure ====
+>    rseq_test.c:60: !r
+>    pid=112043 tid=112043 errno=22 - Invalid argument
+>       1        0x0000000000401973: main at rseq_test.c:226
+>       2        0x0000ffff84b6c79b: ?? ??:0
+>       3        0x0000ffff84b6c86b: ?? ??:0
+>       4        0x0000000000401b6f: _start at ??:?
+>    rseq failed, errno = 22 (Invalid argument)
+>  # rpm -aq | grep glibc-2
+>  glibc-2.34-39.el9.aarch64
 > 
-> Fixes: 88f537d5e8dd ("virt: acrn: Introduce EPT mapping management")
-> Signed-off-by: Yonghua Huang <yonghua.huang@intel.com>
-> Signed-off-by: Fei Li <fei1.li@intel.com>
+> Fix the issue by using "../rseq/rseq.c" to fetch the rseq information,
+> registred by TLS if it exists. Otherwise, we're going to register our
+> own rseq information as before.
+> 
+> Reported-by: Yihuang Yu <yihyu@redhat.com>
+> Suggested-by: Florian Weimer <fweimer@redhat.com>
+> Suggested-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Suggested-by: Paolo Bonzini <pbonzini@redhat.com>
+> Signed-off-by: Gavin Shan <gshan@redhat.com>
 > ---
->  drivers/virt/acrn/mm.c | 24 ++++++++++++++++++++++++
->  1 file changed, 24 insertions(+)
+> tools/testing/selftests/kvm/Makefile    |  5 +++--
+> tools/testing/selftests/kvm/rseq_test.c | 28 +++++++------------------
+> 2 files changed, 11 insertions(+), 22 deletions(-)
 > 
-> diff --git a/drivers/virt/acrn/mm.c b/drivers/virt/acrn/mm.c
-> index c4f2e15c8a2b..3b1b1e7a844b 100644
-> --- a/drivers/virt/acrn/mm.c
-> +++ b/drivers/virt/acrn/mm.c
-> @@ -162,10 +162,34 @@ int acrn_vm_ram_map(struct acrn_vm *vm, struct acrn_vm_memmap *memmap)
->  	void *remap_vaddr;
->  	int ret, pinned;
->  	u64 user_vm_pa;
-> +	unsigned long pfn;
-> +	struct vm_area_struct *vma;
->  
->  	if (!vm || !memmap)
->  		return -EINVAL;
->  
-> +	mmap_read_lock(current->mm);
-> +	vma = vma_lookup(current->mm, memmap->vma_base);
-> +	if (vma && ((vma->vm_flags & VM_PFNMAP) != 0)) {
-> +		if ((memmap->vma_base + memmap->len) > vma->vm_end) {
-> +			mmap_read_unlock(current->mm);
-> +			return -EINVAL;
-> +		}
-> +
-> +		ret = follow_pfn(vma, memmap->vma_base, &pfn);
-
-This races, don't use follow_pfn() and most definitely don't add new
-users. In some cases follow_pte, but the pte/pfn is still only valid for
-as long as you hold the pte spinlock.
-
-> +		mmap_read_unlock(current->mm);
-
-Definitely after here there's zero guarantees about this pfn and it could
-point at anything.
-
-Please fix, I tried pretty hard to get rid of follow_pfn(), but some of
-them are just too hard to fix (e.g. kvm needs a pretty hug rewrite to get
-it all sorted).
-
-Cheers, Daniel
-
-> +		if (ret < 0) {
-> +			dev_dbg(acrn_dev.this_device,
-> +				"Failed to lookup PFN at VMA:%pK.\n", (void *)memmap->vma_base);
-> +			return ret;
-> +		}
-> +
-> +		return acrn_mm_region_add(vm, memmap->user_vm_pa,
-> +			 PFN_PHYS(pfn), memmap->len,
-> +			 ACRN_MEM_TYPE_WB, memmap->attr);
-> +	}
-> +	mmap_read_unlock(current->mm);
-> +
->  	/* Get the page number of the map region */
->  	nr_pages = memmap->len >> PAGE_SHIFT;
->  	pages = vzalloc(nr_pages * sizeof(struct page *));
+> diff --git a/tools/testing/selftests/kvm/Makefile
+> b/tools/testing/selftests/kvm/Makefile
+> index c7f47429d6cd..89c9a8c52c5f 100644
+> --- a/tools/testing/selftests/kvm/Makefile
+> +++ b/tools/testing/selftests/kvm/Makefile
+> @@ -197,7 +197,8 @@ endif
+> CFLAGS += -Wall -Wstrict-prototypes -Wuninitialized -O2 -g -std=gnu99 \
+> 	-fno-stack-protector -fno-PIE -I$(LINUX_TOOL_INCLUDE) \
+> 	-I$(LINUX_TOOL_ARCH_INCLUDE) -I$(LINUX_HDR_PATH) -Iinclude \
+> -	-I$(<D) -Iinclude/$(UNAME_M) -I.. $(EXTRA_CFLAGS) $(KHDR_INCLUDES)
+> +	-I$(<D) -Iinclude/$(UNAME_M) -I ../rseq -I.. $(EXTRA_CFLAGS) \
+> +	$(KHDR_INCLUDES)
 > 
-> base-commit: 73878e5eb1bd3c9656685ca60bc3a49d17311e0c
-> -- 
-> 2.25.1
+> no-pie-option := $(call try-run, echo 'int main() { return 0; }' | \
+>         $(CC) -Werror -no-pie -x c - -o "$$TMP", -no-pie)
+> @@ -206,7 +207,7 @@ no-pie-option := $(call try-run, echo 'int main() { return
+> 0; }' | \
+> pgste-option = $(call try-run, echo 'int main() { return 0; }' | \
+> 	$(CC) -Werror -Wl$(comma)--s390-pgste -x c - -o "$$TMP",-Wl$(comma)--s390-pgste)
 > 
+> -
+> +LDLIBS += -ldl
+> LDFLAGS += -pthread $(no-pie-option) $(pgste-option)
+> 
+> # After inclusion, $(OUTPUT) is defined and
+> diff --git a/tools/testing/selftests/kvm/rseq_test.c
+> b/tools/testing/selftests/kvm/rseq_test.c
+> index a54d4d05a058..2cd5fe49ac8b 100644
+> --- a/tools/testing/selftests/kvm/rseq_test.c
+> +++ b/tools/testing/selftests/kvm/rseq_test.c
+> @@ -20,15 +20,7 @@
+> #include "processor.h"
+> #include "test_util.h"
+> 
+> -static __thread volatile struct rseq __rseq = {
+> -	.cpu_id = RSEQ_CPU_ID_UNINITIALIZED,
+> -};
+> -
+> -/*
+> - * Use an arbitrary, bogus signature for configuring rseq, this test does not
+> - * actually enter an rseq critical section.
+> - */
+> -#define RSEQ_SIG 0xdeadbeef
+> +#include "../rseq/rseq.c"
+> 
+> /*
+>  * Any bug related to task migration is likely to be timing-dependent; perform
+> @@ -37,6 +29,7 @@ static __thread volatile struct rseq __rseq = {
+> #define NR_TASK_MIGRATIONS 100000
+> 
+> static pthread_t migration_thread;
+> +static struct rseq_abi *__rseq;
+
+What is this ?
+
+> static cpu_set_t possible_mask;
+> static int min_cpu, max_cpu;
+> static bool done;
+> @@ -49,14 +42,6 @@ static void guest_code(void)
+> 		GUEST_SYNC(0);
+> }
+> 
+> -static void sys_rseq(int flags)
+> -{
+> -	int r;
+> -
+> -	r = syscall(__NR_rseq, &__rseq, sizeof(__rseq), flags, RSEQ_SIG);
+> -	TEST_ASSERT(!r, "rseq failed, errno = %d (%s)", errno, strerror(errno));
+> -}
+> -
+> static int next_cpu(int cpu)
+> {
+> 	/*
+> @@ -218,7 +203,10 @@ int main(int argc, char *argv[])
+> 
+> 	calc_min_max_cpu();
+> 
+> -	sys_rseq(0);
+> +	r = rseq_register_current_thread();
+> +	TEST_ASSERT(!r, "rseq_register_current_thread failed, errno = %d (%s)",
+> +		    errno, strerror(errno));
+> +	__rseq = rseq_get_abi();
+> 
+> 	/*
+> 	 * Create and run a dummy VM that immediately exits to userspace via
+> @@ -256,7 +244,7 @@ int main(int argc, char *argv[])
+> 			 */
+> 			smp_rmb();
+> 			cpu = sched_getcpu();
+> -			rseq_cpu = READ_ONCE(__rseq.cpu_id);
+> +			rseq_cpu = READ_ONCE(__rseq->cpu_id);
+
+#include <rseq.h>
+
+and use
+
+rseq_current_cpu_raw().
+
+Thanks,
+
+Mathieu
+
+
+> 			smp_rmb();
+> 		} while (snapshot != atomic_read(&seq_cnt));
+> 
+> @@ -278,7 +266,7 @@ int main(int argc, char *argv[])
+> 
+> 	kvm_vm_free(vm);
+> 
+> -	sys_rseq(RSEQ_FLAG_UNREGISTER);
+> +	rseq_unregister_current_thread();
+> 
+> 	return 0;
+> }
+> --
+> 2.23.0
 
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Mathieu Desnoyers
+EfficiOS Inc.
+http://www.efficios.com

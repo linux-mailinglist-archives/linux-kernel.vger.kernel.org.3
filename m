@@ -2,177 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7427D58E86C
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 10:08:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1F8358E880
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 10:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231278AbiHJIIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 04:08:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58896 "EHLO
+        id S231590AbiHJIO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 04:14:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbiHJIIo (ORCPT
+        with ESMTP id S229969AbiHJIOZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 04:08:44 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35F1681B3C
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 01:08:43 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id f22so18016526edc.7
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 01:08:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=TbjshjjhQ+T1uLO0OvTUlM6OMRUql8fN9DD1k0ZnfXg=;
-        b=pQFzLHFC2OVQpoCL4sJe6coUv/3uWYYKEgX/lGwof0rX6wYxqsXcSa2toYl7uJ2D2m
-         u9pw5TzVNjaT3zUG0NtAerHjQ3c8xIgQk7RRTDwfo0gtkrHDRkzH7Wm6xUB1fyb2Uzk1
-         JfgogEdL3/IoP5OT3KVDDHU0RdFdIlv1MfdSQwhyQDRd0TKT1b7v5czyu4HZ7WfbXbvN
-         BuHIXWQsO4seuSgjV4vUp6zSfvSPR5L7xpASp7Lcjf+zWNkjBNiO5+n6KYQAW9MwgltH
-         K+JQS6RwXjRPGBOrkOWaExd/joAEEPFPJTJub4JwQ8nOnaMjooq4hdOA0UODvfvsnEKS
-         cxqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=TbjshjjhQ+T1uLO0OvTUlM6OMRUql8fN9DD1k0ZnfXg=;
-        b=6/EE4Lws05W0NY+btNtsaHk6qGxhrbZoYyIston6D5qOjbEycegE6JuNIBk6wFWiQ0
-         J4dvioncAGY4prJCHFjRrZEiB1N1v+Gob7s+nY8EMNfnac1br4TZCr4V9lL7rN7PoTFw
-         05ZL7J9a1569rYs01W5mpC6JvLm4bgWEPlzSBvcJ8uudT+c/xb1wtG/gxFtiBbaAGnUW
-         ReNicQpnaV1lTcxPwiB3pPjOVH/FyHBDV0NeaqDZ7oyIGbZg7F7S5dQirR5Oj7dyhSHA
-         54jHDXFuNjkkqZxAI4CVkKejRifW+WX4QS+H154GIp/RwFvtCirMsdCuL8ZyviVbrpiz
-         NMmw==
-X-Gm-Message-State: ACgBeo103GdiRsH1n+uKmnpEe0jAQ0wcRiYJPlwOPku572+4mKVu4QJA
-        9x8Xq+OzjF3xZDiHHexj7kCl3LkQh14z9uY1lhnVeecEnaXx6Q==
-X-Google-Smtp-Source: AA6agR7vPgRitL6W2ZV9lLZzL1QaUILmfY1KsZcXUUs5hkxIBOCRRdtXtFKC+RR3SWOnPkn5RQDTs7zufuAx4DvFWxw=
-X-Received: by 2002:a05:6402:32a8:b0:43e:5490:295f with SMTP id
- f40-20020a05640232a800b0043e5490295fmr25401868eda.193.1660118921614; Wed, 10
- Aug 2022 01:08:41 -0700 (PDT)
+        Wed, 10 Aug 2022 04:14:25 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB08E82FB0;
+        Wed, 10 Aug 2022 01:14:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660119264; x=1691655264;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=E0g83rEnLU+9yWmv16RmjNOqjZtTTbUeUZHLBrUwL7c=;
+  b=guxSelHBZKvw3kWVu/PCc2t6nE6juFIi4qwHX13ikjX+U2vzSL7ehNwQ
+   iZ56Y/JiluVIoCZKWlSCWZnABIj6gtD8q5GFLdon8AgWCQGkfkNKWp/lj
+   X4vs1jdOWAOxegPhqdl/OEsi/Xdz5SgCxtn5zsS5iBUYE3fPop5mqUfIz
+   Mnqtz4S07twlw8f3ssrOndCjTfvgXWJeiaiy9ih122V8GCkK1NIhVBD3H
+   bpktsn2c/WxQJ9Yav+3JofMpabCVWWeVWGiApuA2Zay3EWr5u3HzzLh0D
+   7/KXCJyil3cmpjv+fkcSDu6JKfPsdYXl8JwhYRlNx/z2IVqQC6I0wG8am
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="291816766"
+X-IronPort-AV: E=Sophos;i="5.93,226,1654585200"; 
+   d="scan'208";a="291816766"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 01:14:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,226,1654585200"; 
+   d="scan'208";a="601736291"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by orsmga007.jf.intel.com with ESMTP; 10 Aug 2022 01:14:11 -0700
+Date:   Wed, 10 Aug 2022 16:09:25 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v7 08/14] KVM: Rename mmu_notifier_*
+Message-ID: <20220810080925.GA862421@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-9-chao.p.peng@linux.intel.com>
+ <YuQutJAhKWcsrrYl@google.com>
+ <ec3fe997-37d8-22b5-65f1-72f08a16474f@redhat.com>
 MIME-Version: 1.0
-References: <20220809175514.276643253@linuxfoundation.org>
-In-Reply-To: <20220809175514.276643253@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 10 Aug 2022 13:38:30 +0530
-Message-ID: <CA+G9fYur1ndfYHyRdrZYbK2J15xQXrcmSSTXPsf15MKx8Y=9ig@mail.gmail.com>
-Subject: Re: [PATCH 5.15 00/30] 5.15.60-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ec3fe997-37d8-22b5-65f1-72f08a16474f@redhat.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 9 Aug 2022 at 23:35, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.15.60 release.
-> There are 30 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 11 Aug 2022 17:55:02 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.60-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Fri, Aug 05, 2022 at 09:54:35PM +0200, Paolo Bonzini wrote:
+> On 7/29/22 21:02, Sean Christopherson wrote:
+> > If we really want a different name, I'd vote for nomenclature that captures the
+> > invalidation aspect, which is really what the variables are all trackng, e.g.
+> > 
+> >    mmu_invalidate_seq
+> >    mmu_invalidate_in_progress
+> >    mmu_invalidate_range_start
+> >    mmu_invalidate_range_end
+> > 
+> 
+> Agreed, and this can of course be committed separately if Chao Peng sends it
+> outside this series.
 
-Results from Linaro's test farm.
-No regressions on arm64, arm, x86_64, and i386.
+I will do that, probably also includes:
+  06/14 KVM: Rename KVM_PRIVATE_MEM_SLOT
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.15.60-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.15.y
-* git commit: 9c5eacc2ad1f605c31c69d9e2436823ada99f1dc
-* git describe: v5.15.59-31-g9c5eacc2ad1f
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15.59-31-g9c5eacc2ad1f
-
-## No test Regressions (compared to v5.15.57-273-gd676d6149a2f)
-
-## No metric Regressions (compared to v5.15.57-273-gd676d6149a2f)
-
-## No test Fixes (compared to v5.15.57-273-gd676d6149a2f)
-
-## No metric Fixes (compared to v5.15.57-273-gd676d6149a2f)
-
-## Test result summary
-total: 138024, pass: 121969, fail: 720, skip: 14555, xfail: 780
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 301 total, 301 passed, 0 failed
-* arm64: 62 total, 60 passed, 2 failed
-* i386: 52 total, 50 passed, 2 failed
-* mips: 45 total, 45 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 54 total, 54 passed, 0 failed
-* riscv: 22 total, 22 passed, 0 failed
-* s390: 21 total, 21 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 55 total, 53 passed, 2 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Chao
+> 
+> Paolo

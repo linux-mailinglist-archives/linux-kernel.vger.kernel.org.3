@@ -2,133 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D46CC58F181
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 19:23:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C38458F18D
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 19:27:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233529AbiHJRXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 13:23:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58590 "EHLO
+        id S233532AbiHJR1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 13:27:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233485AbiHJRW6 (ORCPT
+        with ESMTP id S232538AbiHJR1Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 13:22:58 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CCBA7C776;
-        Wed, 10 Aug 2022 10:22:57 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27AGXV3T009468;
-        Wed, 10 Aug 2022 17:22:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=VyhYlud2uqfovhSZhzzloCqW5+1HfHKs87ndVD6JKqA=;
- b=V0CpsnGlbjhNrU7Ddz4E9qKCnrqJ4xm3uWadcWjXfpGdsyy68hyT56XXWlG2q0LuoPah
- +jWE97xy3aSPVE3aEyeEJZYRljBtAS5+yIoHkMDGkqcfh0a21mvyeJCW1GcUugrlPC/y
- WOMNUUqwKw4q/xZPmtMCnClSTXj7ucayleqFe1+wjfH9dc9zHe73yQyb/a/9cWZLdfX8
- y2piGc/jBrdcrXHMiHcWctTAXG8b4cT0s0aROsYU2xB4CQusAEMchW8s0YnpMkgsSEsn
- s62JXoAWabHTHAIXPPvYjaqujFGkq000SoFJ1/t8FsFsUbcPSDrCmUTexAOtLfU3jioA Jw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3huwr5k8nc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 Aug 2022 17:22:45 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.47.97.222])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27AHMh6m027332
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 Aug 2022 17:22:44 GMT
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 10 Aug 2022 10:22:43 -0700
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Wed, 10 Aug 2022 10:22:42 -0700
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
-        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
-        <airlied@linux.ie>, <agross@kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
-CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
-        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2] drm/msm/dp: check hpd_state before push idle pattern at dp_bridge_disable()
-Date:   Wed, 10 Aug 2022 10:22:34 -0700
-Message-ID: <1660152154-17879-1-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Wed, 10 Aug 2022 13:27:16 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 140EE7B1F6;
+        Wed, 10 Aug 2022 10:27:14 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id x10so14838237plb.3;
+        Wed, 10 Aug 2022 10:27:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=lPqOojcmdOAU79rFEpjfZKvBUO43nFGE73fllT7UubM=;
+        b=eyIMIlC3NT7t/M/JASfHlCFAM/ZU0pftD5lYftV9y52nfgtwB67ojBpqf2XsOJyPSE
+         myoOkkToXgt6K3WrTFoFZsHIpdtUfS60IWEMULjtaEAE+TjV+RuhH4obNjaaAnckuTC6
+         BA8od9MxEGi7eaZv3+xOdXOZnJG8xOpM61nKy+o20Apn56jqN9sCRN20JqYq4Pv+iw65
+         HK2ViXVajAEPsYsQna5Rtt5YlPAEu3ZDWGIAtarHArRoEI4B1VFOHV8Y8a57Fcozd92H
+         RiqaFV32hD0ryvy5JOdno8MAxtJFWUmXq0AKTETBfUdepAD+T8BmAmE4OsqE3afLYwij
+         OsGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=lPqOojcmdOAU79rFEpjfZKvBUO43nFGE73fllT7UubM=;
+        b=pgvjHmGHgZhMPDKtnFCauGtCbSe+qrfsJjhO6+V2kL6tdrr7/5O8dGHzRBJVpvItV+
+         KNB0pwOqDz61qtD4G0xA6op5ItDeTBHFwP8l3yMiJ7ulGEv+ip5ZgrZO0al0JmdNGF4L
+         13ReKXjG7SYBllQgLbQXUr59LhuKrj+YSC6IqwiwUiZYjBpE2xzdcJ5UrvO57yVqLIex
+         Q94CdudkDWvjSFff5ZcKyC461glMWq6vt5zN7T5Y4uVrC1ESVRQplgXPRAkKNDgDPBH+
+         5cjffiCyXJIoYbnbNNQklstxvSpaf6onr65CANohzN+q8AcFKgMA0IMdEuJvZo0dF/yY
+         FyyQ==
+X-Gm-Message-State: ACgBeo1KAJKvQ1aK1Z8YkBd2jVBRQE8fwTnO8bJSgdc81wnjTbCwT6vp
+        RD4A9ji+TTu3Bxvr/fncCHs=
+X-Google-Smtp-Source: AA6agR6HimZCFCXcilZTgRuOlMb+mEEd0Usepl+nOvNphpTCT8ioe8FrPaDEA5NtEG5DEwW+MzXylg==
+X-Received: by 2002:a17:903:230e:b0:16f:784:ea3f with SMTP id d14-20020a170903230e00b0016f0784ea3fmr28892311plh.160.1660152434248;
+        Wed, 10 Aug 2022 10:27:14 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:237b])
+        by smtp.gmail.com with ESMTPSA id v12-20020a17090a458c00b001f5513f6fb9sm1961423pjg.14.2022.08.10.10.27.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Aug 2022 10:27:13 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 10 Aug 2022 07:27:12 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Chengming Zhou <zhouchengming@bytedance.com>, corbet@lwn.net,
+        surenb@google.com, mingo@redhat.com, peterz@infradead.org,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        songmuchun@bytedance.com
+Subject: Re: [PATCH v2 09/10] sched/psi: per-cgroup PSI stats
+ disable/re-enable interface
+Message-ID: <YvPqcJh5Ffv4Yga9@slm.duckdns.org>
+References: <20220808110341.15799-1-zhouchengming@bytedance.com>
+ <20220808110341.15799-10-zhouchengming@bytedance.com>
+ <YvKd6dezPM6UxfD/@slm.duckdns.org>
+ <fcd0bd39-3049-a279-23e6-a6c02b4680a7@bytedance.com>
+ <b89155d3-9315-fefc-408b-4cf538360a1c@bytedance.com>
+ <YvPN07UlaPFAdlet@cmpxchg.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: YO5FJ4EgDbVWc2QJ9bjYO2-lWjYKdEBP
-X-Proofpoint-ORIG-GUID: YO5FJ4EgDbVWc2QJ9bjYO2-lWjYKdEBP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-10_11,2022-08-10_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 suspectscore=0 bulkscore=0 spamscore=0 clxscore=1015
- lowpriorityscore=0 phishscore=0 impostorscore=0 mlxscore=0 adultscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208100053
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YvPN07UlaPFAdlet@cmpxchg.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dp_bridge_disable() is the first step toward tearing down main link.
-Its major function is to start transmitting idle pattern to replace
-video stream. This patch will check hpd_state to make sure main link
-is enabled before commit changes of main link's configuration to
-push idle pattern out to avoid system crashing due to main link clock
-is disabled while access main link registers.
+Hello,
 
-Changes in v2:
--- changes Fixes patch
--- fix eported-by
--- add Closes tag
+On Wed, Aug 10, 2022 at 11:25:07AM -0400, Johannes Weiner wrote:
+> How about just cgroup.pressure? Too ambiguous?
+> 
+> cgroup.pressure.enable sounds good to me too. Or, because it's
+> default-enabled and that likely won't change, cgroup.pressure.disable.
 
-Fixes: 375a126090b9 ("drm/msm/dp: tear down main link at unplug handle immediately")
-Reported-by: leonard@lausen.nl
-Closes: https://gitlab.freedesktop.org/drm/msm/-/issues/17
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
----
- drivers/gpu/drm/msm/dp/dp_display.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+.disable sounds more logical but I like .enable better for some reason. As
+for just cgroup.pressure, yeah, maybe? The conundrum is that the prettiness
+order is the exact reverse of the logical order. So, I'm okay with any of
+the three.
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-index b36f8b6..678289a 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -1729,10 +1729,20 @@ void dp_bridge_disable(struct drm_bridge *drm_bridge)
- 	struct msm_dp_bridge *dp_bridge = to_dp_bridge(drm_bridge);
- 	struct msm_dp *dp = dp_bridge->dp_display;
- 	struct dp_display_private *dp_display;
-+	u32 state;
- 
- 	dp_display = container_of(dp, struct dp_display_private, dp_display);
- 
-+	mutex_lock(&dp_display->event_mutex);
-+
-+	state = dp_display->hpd_state;
-+	if (state != ST_DISCONNECT_PENDING && state != ST_CONNECTED) {
-+		mutex_unlock(&dp_display->event_mutex);
-+		return;
-+	}
-+
- 	dp_ctrl_push_idle(dp_display->ctrl);
-+	mutex_unlock(&dp_display->event_mutex);
- }
- 
- void dp_bridge_post_disable(struct drm_bridge *drm_bridge)
+Thanks.
+
 -- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+tejun

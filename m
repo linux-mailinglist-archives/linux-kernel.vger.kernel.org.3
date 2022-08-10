@@ -2,90 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0635458EC0F
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 14:33:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3217558EC1A
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 14:36:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231770AbiHJMd0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 08:33:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58618 "EHLO
+        id S231797AbiHJMg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 08:36:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231675AbiHJMdV (ORCPT
+        with ESMTP id S230366AbiHJMgY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 08:33:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9188F7695E
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 05:33:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 38B5361351
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 12:33:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3C20C433C1;
-        Wed, 10 Aug 2022 12:33:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660134799;
-        bh=r1pdHMac47LVUbZIJlp842Vu1LlKO5L0i0vtViGYPCQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=dUUziB0bKb2xOuypfXnJDbfXI+MK7MVXHZ5qZJ6qwws7cJVMMTWB5LbXIFB5FL9ZX
-         CJwcuN+FD0ZYPiCTwHN1Qi1+llh8OyJPTkh2mfIEdmO2lSte66VScibZ4p+0N3Sguk
-         jlU0QkQPAcVOMHnGXwInh7SzSikX7KF/CIoGfPfKuj6EnEMdhXe8rxygzB3+/FGntd
-         WZC++r+2iANpoj52xNF7VXwJWKVEucwWnpzPdd9AS2LNZCigYpT16/XinYnxeq2S2f
-         f74j6SMsN+hpBmlmenQ2S4iP3ffjYDFV4QvCuWoGk8EQT4YqRqJmxUzTViFhVHxIrO
-         g0I3u5FhRLWew==
-From:   Oded Gabbay <ogabbay@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Dafna Hirschfeld <dhirschfeld@habana.ai>
-Subject: [PATCH 3/3] habanalabs: fix bug when setting va block size
-Date:   Wed, 10 Aug 2022 15:33:12 +0300
-Message-Id: <20220810123312.1683716-3-ogabbay@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220810123312.1683716-1-ogabbay@kernel.org>
-References: <20220810123312.1683716-1-ogabbay@kernel.org>
+        Wed, 10 Aug 2022 08:36:24 -0400
+Received: from louie.mork.no (louie.mork.no [IPv6:2001:41c8:51:8a:feff:ff:fe00:e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4CB8053B;
+        Wed, 10 Aug 2022 05:36:23 -0700 (PDT)
+Received: from canardo.dyn.mork.no ([IPv6:2a01:799:c9d:7e00:0:0:0:1])
+        (authenticated bits=0)
+        by louie.mork.no (8.15.2/8.15.2) with ESMTPSA id 27ACZa9F599307
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Wed, 10 Aug 2022 13:35:37 +0100
+Received: from miraculix.mork.no ([IPv6:2a01:799:961:910a:a293:6d6e:8bbf:c204])
+        (authenticated bits=0)
+        by canardo.dyn.mork.no (8.15.2/8.15.2) with ESMTPSA id 27ACZUMD651068
+        (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=OK);
+        Wed, 10 Aug 2022 14:35:30 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mork.no; s=b;
+        t=1660134931; bh=PNPycATN8VpMrxdiigaDnAXZauhanlnMGxj1GP+uRdM=;
+        h=From:To:Cc:Subject:References:Date:Message-ID:From;
+        b=PAC5HFFSC/gd+dZIaXRmoAFqL8ui+F8zwmFf1sfSxzuenJRbPb7hV1EtUvNQygvJt
+         UKAI5BbDcNYOVLxt2P5EOnT5J93FFQLFSwNONfcSh/+UMmAvGiYUK2RLIPcqqcB7Rr
+         8pcS7xo9RLU4tQqIbvw80+oqww5eSCX/67UdVa1E=
+Received: (nullmailer pid 484366 invoked by uid 1000);
+        Wed, 10 Aug 2022 12:35:25 -0000
+From:   =?utf-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>
+To:     Slark Xiao <slark_xiao@163.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] net: usb: qmi_wwan: Add support for Cinterion MV32
+Organization: m
+References: <20220810014521.9383-1-slark_xiao@163.com>
+        <8735e4mvtd.fsf@miraculix.mork.no>
+        <e7fdcfc.30e7.1828715d7af.Coremail.slark_xiao@163.com>
+        <61ca0e63.3207.18287214d7a.Coremail.slark_xiao@163.com>
+Date:   Wed, 10 Aug 2022 14:35:24 +0200
+In-Reply-To: <61ca0e63.3207.18287214d7a.Coremail.slark_xiao@163.com> (Slark
+        Xiao's message of "Wed, 10 Aug 2022 17:41:22 +0800 (CST)")
+Message-ID: <87mtccl1ir.fsf@miraculix.mork.no>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Virus-Scanned: clamav-milter 0.103.6 at canardo
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dafna Hirschfeld <dhirschfeld@habana.ai>
+"Slark Xiao" <slark_xiao@163.com> writes:
+> At 2022-08-10 17:28:51, "Slark Xiao" <slark_xiao@163.com> wrote:
+>
+>>I have a concern, if Cinterion or other Vendors, like Quectel, use other=
+=20
+>>chip (such as intel, mediateck and so on), this methods may won't work,
+>
+> My bad. QMI_WWAN driver is designed for Qualcomm based chips only,
+> =C2=A0right?=20
 
-the size of a block is always 'block->end - block->start + 1'
+Yes, but your concern is still valid if any of them re-use ff/ff/50 for
+something which is not RMNET/QMI.  We do not want this driver to start
+matching a non-Qualcomm based device.
 
-Signed-off-by: Dafna Hirschfeld <dhirschfeld@habana.ai>
-Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
-Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
----
- drivers/misc/habanalabs/common/memory.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+>>because  they share a same VID. Also this may be changed once Qualcomm=20
+>>update the protocol patterns for future chip.
 
-diff --git a/drivers/misc/habanalabs/common/memory.c b/drivers/misc/habanalabs/common/memory.c
-index 5bc704da889d..e3b40dbf154c 100644
---- a/drivers/misc/habanalabs/common/memory.c
-+++ b/drivers/misc/habanalabs/common/memory.c
-@@ -457,7 +457,7 @@ static void merge_va_blocks_locked(struct hl_device *hdev,
- 	prev = list_prev_entry(va_block, node);
- 	if (&prev->node != va_list && prev->end + 1 == va_block->start) {
- 		prev->end = va_block->end;
--		prev->size = prev->end - prev->start;
-+		prev->size = prev->end - prev->start + 1;
- 		list_del(&va_block->node);
- 		kfree(va_block);
- 		va_block = prev;
-@@ -466,7 +466,7 @@ static void merge_va_blocks_locked(struct hl_device *hdev,
- 	next = list_next_entry(va_block, node);
- 	if (&next->node != va_list && va_block->end + 1 == next->start) {
- 		next->start = va_block->start;
--		next->size = next->end - next->start;
-+		next->size = next->end - next->start + 1;
- 		list_del(&va_block->node);
- 		kfree(va_block);
- 	}
--- 
-2.25.1
+Yes, that' a risk since we have no knowledge of Qualcomm's plans or
+thoughts around this. It's all pure guesswork from my side.  But as
+such, it doesn't differ from the rest of this driver :-) Qualcomm can
+change whatever they want and we'll just have to follow up with whatever
+is required. Like what happened when raw-ip became mandatory.
 
+I do find it unlikely that Qualcomm will ever change the meaning of this
+pattern now that they've started using it.  That would not make any
+sense. If they need to create a new vendor specific function type, then
+they can just use one of the "free" protocol numbers (and also subclass
+if they run out of protocol numbers).
+
+But it's your call.  If you want to play it safe and keep the VID+PID
+matching, then I'm fine with that too.
+
+
+Bj=C3=B8rn

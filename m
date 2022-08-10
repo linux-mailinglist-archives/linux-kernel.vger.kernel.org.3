@@ -2,80 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA6BC58F38E
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 22:29:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F342958F391
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 22:33:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233294AbiHJU3k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 16:29:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
+        id S233325AbiHJUdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 16:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233129AbiHJU3h (ORCPT
+        with ESMTP id S232579AbiHJUdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 16:29:37 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6BF27CEC
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 13:29:36 -0700 (PDT)
+        Wed, 10 Aug 2022 16:33:11 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796F26053B;
+        Wed, 10 Aug 2022 13:33:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660163376; x=1691699376;
-  h=message-id:date:mime-version:subject:from:to:cc:
-   references:in-reply-to:content-transfer-encoding;
-  bh=zEpmcia5lv0GpytXIShYDBMVXcPp+EX7efdqCEFom8k=;
-  b=Pj7Dv30DnFY1+zqpXddESbSKWscURGxgV/i2mIRw0UdO24laIu0q56d4
-   PjV3Z/QpX97KbFqRNtqJs+O4EpDrz0HhJHMiNKDYheHqG0gWFVXwkI0UF
-   KmA/xEhzdQxNzJpwOLKm1z2sAXtjDlDoNWOaN0k2C6MeumKGhQnKz8CMb
-   9GhulSR5l/qpjE18+eWfvCkn1u1FWKFJpT+iRpjMDoXc0SsFhe3ecdBwG
-   x8CcbPA2mKYuMbYzkbV54ax+lYNVKxLEfwwzGHiBVrk7anoLJBoo3S5YR
-   bv22pYXuH3ey9LXctPd1BUeEWGMCGj0crTg7vk2XEn8OE1qPyd/cZTekb
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="271569789"
+  t=1660163589; x=1691699589;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ibswwapkDX3sL0U0NstJ+ZYzNa4A6XoaZ285Cu7y9vg=;
+  b=D6/eFXcwyS/BpKs7o8QZldqzM9JoK0N+4vIv7eS0P6ZMKTav5evNTSPo
+   ryKsRLNcj51ul+wLe/EWp/MM2GU/nOIt/SIrdfLmLPjjVkELeIIFgNL+K
+   E7arya4Qk4fBysOTEmWR0SDD8d61WcAdLszGqEVrxQcmm79YQskNcBJtl
+   pRgOHbf5P/u784rKPiBz/j1ZPvUI2aul1h7J+gitv1y/2qF9Om8w2gHL8
+   fIkwshR+j9nT9v3PZi0um7oud80DnDoqMbxz+gmrFAPOXUTFE32xtFXoX
+   M3amEB8XwZJzUgHTx2vD8NI0g+hYfzZNibf1Z9UC1piHOjDKgUoXNqfYQ
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="274242611"
 X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="271569789"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 13:29:14 -0700
+   d="scan'208";a="274242611"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 13:33:08 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="605288070"
-Received: from sarava2x-mobl1.gar.corp.intel.com (HELO [10.254.67.234]) ([10.254.67.234])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 13:29:14 -0700
-Message-ID: <ef3055a8-9cfd-cbd1-d76c-a2242836d16d@linux.intel.com>
-Date:   Wed, 10 Aug 2022 13:29:13 -0700
+   d="scan'208";a="781360516"
+Received: from lkp-server02.sh.intel.com (HELO 5d6b42aa80b8) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 10 Aug 2022 13:33:06 -0700
+Received: from kbuild by 5d6b42aa80b8 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oLsO1-0000h3-1e;
+        Wed, 10 Aug 2022 20:33:05 +0000
+Date:   Thu, 11 Aug 2022 04:32:15 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Richard Guy Briggs <rgb@redhat.com>,
+        Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Steve Grubb <sgrubb@redhat.com>,
+        Richard Guy Briggs <rgb@redhat.com>, Jan Kara <jack@suse.cz>,
+        Amir Goldstein <amir73il@gmail.com>
+Subject: Re: [PATCH v4 3/4] fanotify,audit: Allow audit to use the full
+ permission event response
+Message-ID: <202208110406.Lb3ONrcP-lkp@intel.com>
+References: <c4ae9b882c07ea9cac64094294da5edc0756bb50.1659996830.git.rgb@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH] x86/apic: Don't disable x2APIC if locked
-Content-Language: en-US
-From:   Daniel Sneddon <daniel.sneddon@linux.intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "Shutemov, Kirill" <kirill.shutemov@intel.com>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        "Gomez Iglesias, Antonio" <antonio.gomez.iglesias@intel.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-References: <20220809234000.783284-1-daniel.sneddon@linux.intel.com>
- <d6ffb489-7024-ff74-bd2f-d1e06573bb82@intel.com>
- <238ea612-5a25-9323-b31f-0a14493db2f7@linux.intel.com>
- <d4bcb22e-224c-d256-cb93-3ff6ed89a7d0@intel.com>
- <341ea6e9-d8f3-ee7a-6794-67408abbf047@linux.intel.com>
- <d315aac4-8cda-bc2d-d052-09fb0649b1ad@intel.com>
- <2446fb33-9c5c-642a-797e-4e93345adb82@linux.intel.com>
-In-Reply-To: <2446fb33-9c5c-642a-797e-4e93345adb82@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c4ae9b882c07ea9cac64094294da5edc0756bb50.1659996830.git.rgb@redhat.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/10/22 13:06, Daniel Sneddon wrote:
-> I could add a blurb to the
-> documentation where nox2apic is defined as a parameter as well.  
-While I'm at it, I'm thinking of adding something where CONFIG_X86_X2APIC is
-defined in kconfig.  I'll put in a blurb about selecting N on SPR systems could
-prevent you from booting due to the lock.
+Hi Richard,
+
+Thank you for the patch! Perhaps something to improve:
+
+[auto build test WARNING on jack-fs/fsnotify]
+[also build test WARNING on pcmoore-audit/next linus/master v5.19 next-20220810]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Richard-Guy-Briggs/fanotify-Allow-user-space-to-pass-back-additional-audit-info/20220810-012825
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/jack/linux-fs.git fsnotify
+config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220811/202208110406.Lb3ONrcP-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/bee8cac0b7796a753948c83b403a152f8c6acb8c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Richard-Guy-Briggs/fanotify-Allow-user-space-to-pass-back-additional-audit-info/20220810-012825
+        git checkout bee8cac0b7796a753948c83b403a152f8c6acb8c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> kernel/auditsc.c:2907:8: warning: variable 'ib' set but not used [-Wunused-but-set-variable]
+           char *ib = buf;
+                 ^
+   1 warning generated.
+
+
+vim +/ib +2907 kernel/auditsc.c
+
+  2902	
+  2903	void __audit_fanotify(u32 response, size_t len, char *buf)
+  2904	{
+  2905		struct fanotify_response_info_audit_rule *friar;
+  2906		size_t c = len;
+> 2907		char *ib = buf;
+  2908	
+  2909		if (!(len && buf)) {
+  2910			audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
+  2911				  "resp=%u fan_type=0 fan_info=?", response);
+  2912			return;
+  2913		}
+  2914		while (c >= sizeof(struct fanotify_response_info_header)) {
+  2915			friar = (struct fanotify_response_info_audit_rule *)buf;
+  2916			switch (friar->hdr.type) {
+  2917			case FAN_RESPONSE_INFO_AUDIT_RULE:
+  2918				if (friar->hdr.len < sizeof(*friar)) {
+  2919					audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
+  2920						  "resp=%u fan_type=%u fan_info=(incomplete)",
+  2921						  response, friar->hdr.type);
+  2922					return;
+  2923				}
+  2924				audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
+  2925					  "resp=%u fan_type=%u fan_info=%u",
+  2926					  response, friar->hdr.type, friar->audit_rule);
+  2927			}
+  2928			c -= friar->hdr.len;
+  2929			ib += friar->hdr.len;
+  2930		}
+  2931	}
+  2932	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

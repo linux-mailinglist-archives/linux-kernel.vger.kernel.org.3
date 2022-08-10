@@ -2,111 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFCF858ECE0
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 15:15:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBEA358ECE1
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 15:16:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232161AbiHJNPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 09:15:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49376 "EHLO
+        id S232050AbiHJNQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 09:16:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231919AbiHJNPa (ORCPT
+        with ESMTP id S230374AbiHJNQL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 09:15:30 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ECE514D39;
-        Wed, 10 Aug 2022 06:15:27 -0700 (PDT)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27A9YPt2022853;
-        Wed, 10 Aug 2022 15:15:13 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=rkpHv8Tbh6b+APur6AAgNWkVAtNoRSLElkQ+Ih3mAgQ=;
- b=6hXZBpjPuIjZqE4eqHtYmkWVRABPpkWAAiwdbmrONw++06+XoIhLE+Cj78ukYOtf2/hO
- sWDKmGcSSEf7TAzfybv00k9q0cg0EP0VjIzhu5AvcdiOUdQDO6VHLBhRkJz/fhLsxhZY
- 9u9AumrORfRWG/rzyTmdlRYzo8OxuKEOWs2PqoJZVX68AymXzZlGIGweqy2GmS8+d56a
- atgFS8RxGgbJFuDe0QyJxJvllire8LXNz+twwMU5JFyQeZOZgenTONY/H1kOxJTHhT34
- FBsssktjpmStdVfGEY7IAyY+tjpshpb8V1f//6ha+NQmnSxMt7XGMgHYFBuenPqGCSua Nw== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3huwrr5158-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 Aug 2022 15:15:13 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 0C8F710002A;
-        Wed, 10 Aug 2022 15:15:12 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 1B05E2132EC;
-        Wed, 10 Aug 2022 15:15:10 +0200 (CEST)
-Received: from [10.201.21.72] (10.75.127.121) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Wed, 10 Aug
- 2022 15:15:09 +0200
-Message-ID: <d41e3814-3fab-18a3-7218-d5c28eaecff8@foss.st.com>
-Date:   Wed, 10 Aug 2022 15:15:08 +0200
+        Wed, 10 Aug 2022 09:16:11 -0400
+Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4701B789
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 06:16:05 -0700 (PDT)
+X-QQ-mid: bizesmtp66t1660137360tf54vmum
+Received: from localhost.localdomain ( [182.148.14.53])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 10 Aug 2022 21:15:58 +0800 (CST)
+X-QQ-SSF: 01000000002000B0D000B00A0000000
+X-QQ-FEAT: LE7C6P2vL8QZH5ItXYgHmvuuc9aXQB6IzMwJ1o6d6XtQDUTIsgCVAGd0sWqqY
+        kBi7hCCyXSuzihUSlyYfywBFQVnadK4M6CBKeRyZOr1+sg57sNa65+WUCYRcVQFFZLk2kpH
+        MKWDeO7hv6l3U/vegQfSx12Pfq912pXuBM66DmMue6ZEuzdi0VI6snucDQgjqg4mAceLTJn
+        6vouAnpK9hte7ZgNg5yQVjqX78vRDKtOKZvbobsG+8U20+72BEzpNttrFrMJYTrKxbX6b91
+        Rs3liy3qTGZ7FYpaAez4K/bcp1yuhT0PoArrNWa6w/jGl8MdsovlyudhusrkXLmCWyNTS3K
+        IJNjB+dYI2uXplmrcDyfNYeR8MYsEt62EjJgv03
+X-QQ-GoodBg: 0
+From:   Jilin Yuan <yuanjilin@cdjrlc.com>
+To:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com
+Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Jilin Yuan <yuanjilin@cdjrlc.com>
+Subject: [PATCH] drivers/mtd: fix repeated words in comments
+Date:   Wed, 10 Aug 2022 21:15:39 +0800
+Message-Id: <20220810131539.51108-1-yuanjilin@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 1/2] spi: stm32_qspi: Add transfer_one_message() spi
- callback
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-CC:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>
-References: <20220810093215.794977-1-patrice.chotard@foss.st.com>
- <20220810093215.794977-2-patrice.chotard@foss.st.com>
- <YvOtZtrRHd4AT+j+@sirena.org.uk>
-From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
-In-Reply-To: <YvOtZtrRHd4AT+j+@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.121]
-X-ClientProxiedBy: GPXDAG2NODE4.st.com (10.75.127.68) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-10_08,2022-08-10_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark
+ Delete the redundant word 'it'.
 
-On 8/10/22 15:06, Mark Brown wrote:
-> On Wed, Aug 10, 2022 at 11:32:14AM +0200, patrice.chotard@foss.st.com wrote:
-> 
->> Signed-off-by: Patrice Chotard <patrice.chotard@foss.st.com>
->>
->> v2: _ use parallel-memories property
->>     _ set auto_runtime_pm to true
->>     _ remove pm_runtime_*() usage in transfer_one_message() callback
->> ---
-> 
-> The changelog should come after the --- so that it gets automatically
-> stripped out by tooling.  No need to resend just for this.
-> 
->> +	/*
->> +	 * Dual flash mode is only enable in case "parallel-memories" and
->> +	 * "cs-gpios" properties are found in DT
->> +	 */
->> +	if (of_property_read_bool(dev->of_node, "parallel-memories") &&
->> +	    of_gpio_named_count(dev->of_node, "cs-gpios")) {
->> +		qspi->cr_reg = CR_DFM;
->> +		dev_dbg(dev, "Dual flash mode enable");
->> +	}
-> 
-> Do we need to add something to the DT bindings to indicate that
-> parallel-memories is valid?
+Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
+---
+ drivers/mtd/inftlcore.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-You mean in the st,stm32-qspi.yaml DT binding file ? Right i think it could be preferable to add it.
+diff --git a/drivers/mtd/inftlcore.c b/drivers/mtd/inftlcore.c
+index 6b48397c750c..1709f7f6bf6f 100644
+--- a/drivers/mtd/inftlcore.c
++++ b/drivers/mtd/inftlcore.c
+@@ -356,7 +356,7 @@ static u16 INFTL_foldchain(struct INFTLrecord *inftl, unsigned thisVUC, unsigned
+ 	 * Newest unit in chain now contains data from _all_ older units.
+ 	 * So go through and erase each unit in chain, oldest first. (This
+ 	 * is important, by doing oldest first if we crash/reboot then it
+-	 * it is relatively simple to clean up the mess).
++	 * is relatively simple to clean up the mess).
+ 	 */
+ 	pr_debug("INFTL: want to erase virtual chain %d\n", thisVUC);
+ 
+-- 
+2.36.1
 
-
-Patrice

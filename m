@@ -2,109 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1DD458EE83
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 16:38:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 463C458EE8A
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 16:39:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232459AbiHJOiZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 10:38:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48456 "EHLO
+        id S232577AbiHJOjB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 10:39:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232460AbiHJOiG (ORCPT
+        with ESMTP id S232276AbiHJOit (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 10:38:06 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 68511558C4;
-        Wed, 10 Aug 2022 07:37:58 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E75C623A;
-        Wed, 10 Aug 2022 07:37:58 -0700 (PDT)
-Received: from [10.57.13.63] (unknown [10.57.13.63])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2C7843F67D;
-        Wed, 10 Aug 2022 07:37:56 -0700 (PDT)
-Message-ID: <a7248e0c-f8cc-a7f1-f241-75faa7219961@arm.com>
-Date:   Wed, 10 Aug 2022 15:37:54 +0100
+        Wed, 10 Aug 2022 10:38:49 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4147A491EE
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:38:48 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id q7-20020a17090a7a8700b001f300db8677so2304644pjf.5
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:38:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=Ypn04yBcDr+ITRCaJvIIISj7ZAHB/5ZItGV+XVBLIJA=;
+        b=Ib7E12JPGES3Yh+/p5apucZMNbtgTR05tdzqgOSPvuWuFN40kpN7Y2iwzMoGGvkAZp
+         2k6pDQ5Dx3ZoMZNesLC3dNSPLtDlj6mFmyXD/hvHO01hHIZDaQ/OR4FrBHZGfdNO21hw
+         c0Xp2gA8KqMlXerNeIQmKwkXlI8cJezWd5Q2pb36QkpOhC2IVatzB9PBUsADaiqPqXP2
+         sLaur3TZOTh5i5zvWHRfjklZ2CiHLPAi2y2CsipxjSxRi1GYU+xZki37dsLL1ac5Lqxt
+         CFqKYU6lzhVRJu4rIj89PYEW8X9BB+MXX2MHW1+4lVn1QpHvQgzsA9lEsg8UN0bQzIeg
+         NyJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=Ypn04yBcDr+ITRCaJvIIISj7ZAHB/5ZItGV+XVBLIJA=;
+        b=w3wSBjT3LQVs5OvHIqCPU9gZAqoZdZrE3ZlQeD90CdIOMzlAv+LwHcydW2hXu4f2lw
+         rpC3b2OwGvCRRFw43SXa4p2ew2J7mi1dCYDEttxiWbNqai63gF0H/hxxqpAmce5/HE2b
+         UHxRTzels/PbqpIiaFM9xOBFBf9f5Wb6DvZwJblMz8a69zZtx2xTXNp/KvEAIby8pksC
+         xZbgSPg65Zjya0ZBLtNEKgEqx/tnOy7sxj4iVxklgRmgoSuSJoEtwy7Mb1eBa1/I4MuR
+         vYGCr7OzG2s3fQUHjX84wX586tfK73gYtLbmc8oWpJMU7bWto5Ii1Yh5Lo9AoIBYrtMv
+         zb0w==
+X-Gm-Message-State: ACgBeo3+iJk15thVbidqax1iZWNRH4+0RoTa6jVPzhAe5wbpSeZzFOPo
+        yF6PffQJvpbJRMKMpgF6vVP8Aw==
+X-Google-Smtp-Source: AA6agR4Cvm3nfmT646uuzkbDloN+L+b0YWWySRf26lyByFiwirk1nGGGgDmPcfMs3KzFCTJQbDMGGw==
+X-Received: by 2002:a17:90b:4c0f:b0:1f5:179a:28df with SMTP id na15-20020a17090b4c0f00b001f5179a28dfmr4088508pjb.42.1660142327422;
+        Wed, 10 Aug 2022 07:38:47 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id z125-20020a623383000000b0052c92329115sm2033721pfz.218.2022.08.10.07.38.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Aug 2022 07:38:47 -0700 (PDT)
+Date:   Wed, 10 Aug 2022 14:38:43 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v7 03/14] mm: Introduce memfile_notifier
+Message-ID: <YvPC87FMgF7uac7z@google.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-4-chao.p.peng@linux.intel.com>
+ <13394075-fca0-6f2b-92a2-f1291fcec9a3@redhat.com>
+ <20220810092232.GC862421@chaop.bj.intel.com>
+ <00f1aa03-bc82-ffce-569b-e2d5c459992c@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2 1/1] ACPI: CPPC: Disable FIE if registers in PCC
- regions
-Content-Language: en-US
-To:     Jeremy Linton <jeremy.linton@arm.com>
-Cc:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org,
-        robert.moore@intel.com, devel@acpica.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, vschneid@redhat.com,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>
-References: <20220728221043.4161903-1-jeremy.linton@arm.com>
- <20220728221043.4161903-2-jeremy.linton@arm.com>
- <3a5e7abd-9361-11ba-978d-8e8bae00ea31@arm.com>
- <4da7cd19-4b98-9360-922f-d625c4ec55e0@arm.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <4da7cd19-4b98-9360-922f-d625c4ec55e0@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00f1aa03-bc82-ffce-569b-e2d5c459992c@redhat.com>
+X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
++Will
 
-
-On 8/10/22 15:30, Jeremy Linton wrote:
-> Hi,
+On Wed, Aug 10, 2022, David Hildenbrand wrote:
+> On 10.08.22 11:22, Chao Peng wrote:
+> > On Fri, Aug 05, 2022 at 03:22:58PM +0200, David Hildenbrand wrote:
+> >> On 06.07.22 10:20, Chao Peng wrote:
+> >>> This patch introduces memfile_notifier facility so existing memory file
+> >>> subsystems (e.g. tmpfs/hugetlbfs) can provide memory pages to allow a
+> >>> third kernel component to make use of memory bookmarked in the memory
+> >>> file and gets notified when the pages in the memory file become
+> >>> invalidated.
+> >>
+> >> Stupid question, but why is this called "memfile_notifier" and not
+> >> "memfd_notifier". We're only dealing with memfd's after all ... which
+> >> are anonymous files essentially. Or what am I missing? Are there any
+> >> other plans for fs than plain memfd support that I am not aware of?
+> > 
+> > There were some discussions on this in v3.
+> >   https://lkml.org/lkml/2021/12/28/484
+> > Sean commented it's OK to abstract it from memfd but he also wants the
+> > kAPI (name) should not bind to memfd to make room for future non-memfd
+> > usages.
 > 
-> On 8/10/22 07:29, Lukasz Luba wrote:
->> Hi Jeremy,
->>
->> +CC Valentin since he might be interested in this finding
->> +CC Ionela, Dietmar
->>
->> I have a few comments for this patch.
->>
->>
->> On 7/28/22 23:10, Jeremy Linton wrote:
->>> PCC regions utilize a mailbox to set/retrieve register values used by
->>> the CPPC code. This is fine as long as the operations are
->>> infrequent. With the FIE code enabled though the overhead can range
->>> from 2-11% of system CPU overhead (ex: as measured by top) on Arm
->>> based machines.
->>>
->>> So, before enabling FIE assure none of the registers used by
->>> cppc_get_perf_ctrs() are in the PCC region. Furthermore lets also
->>> enable a module parameter which can also disable it at boot or module
->>> reload.
->>>
->>> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
->>> ---
->>>   drivers/acpi/cppc_acpi.c       | 41 ++++++++++++++++++++++++++++++++++
->>>   drivers/cpufreq/cppc_cpufreq.c | 19 ++++++++++++----
->>>   include/acpi/cppc_acpi.h       |  5 +++++
->>>   3 files changed, 61 insertions(+), 4 deletions(-)
->>
->>
->> 1. You assume that all platforms would have this big overhead when
->>     they have the PCC regions for this purpose.
->>     Do we know which version of HW mailbox have been implemented
->>     and used that have this 2-11% overhead in a platform?
->>     Do also more recent MHU have such issues, so we could block
->>     them by default (like in your code)?
-> 
-> I posted that other email before being awake and conflated MHU with AMU 
-> (which could potentially expose the values directly). But the CPPC code 
-> isn't aware of whether a MHU or some other mailbox is in use. Either 
-> way, its hard to imagine a general mailbox with a doorbell/wait for 
-> completion handshake will ever be fast enough to consider running at the 
-> granularity this code is running at. If there were a case like that, the 
-> kernel would have to benchmark it at runtime to differentiate it from 
-> something that is talking over a slow link to a slowly responding mgmt 
-> processor.
+> Sorry, but how is "memfile" any better? memfd abstracted to memfile?! :)
 
-Exactly, I'm afraid the same, that we would never get such fast
-mailbox-based platform. Newer platforms would just use AMU, so
-completely different code and no one would even bother to test if
-their HW mailbox is fast-enough for this FIE purpose ;)
+FWIW, I don't really like the memfile name either.
+
+> I understand Sean's suggestion about abstracting, but if the new name
+> makes it harder to grasp and there isn't really an alternative to memfd
+> in sight, I'm not so sure I enjoy the tried abstraction here.
+
+ARM's pKVM implementation is potentially (hopefully) going to switch to this API
+(as a consumer) sooner than later.  If they anticipate being able to use memfd,
+then there's unlikely to be a second backing type any time soon.
+
+Quentin, Will?
+ 
+> Otherwise we'd have to get creative now and discuss something like
+> "file_population_notifer" or "mapping_population_notifer" and I am not
+> sure that our time is well spent doing so right now.
+> 
+> ... as this is kernel-internal, we can always adjust the name as we
+> please later, once we *actually* now what the abstraction should be.
+> Until then I'd suggest to KIS and soft-glue this to memfd.
+> 
+> Or am I missing something important?
+
+I don't think you're missing anything.  I'd still prefer a name that doesn't couple
+KVM to memfd, but it's not a sticking point, and I've never been able to come up
+with a better name...
+
+With a little bit of cleverness I think we can keep the coupling in KVM to a
+minimum, which is what I really care about.

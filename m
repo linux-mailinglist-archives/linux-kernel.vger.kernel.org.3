@@ -2,243 +2,859 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1058A58EF62
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 17:24:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E10DB58EF60
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 17:24:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233267AbiHJPYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 11:24:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38268 "EHLO
+        id S233220AbiHJPYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 11:24:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233338AbiHJPXj (ORCPT
+        with ESMTP id S233331AbiHJPXi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 11:23:39 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on20716.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5a::716])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8D5666A71;
-        Wed, 10 Aug 2022 08:23:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=QYpvnhWMfptUx1D4nUKViw7hDArZuOAOfGfdCmwC0mmLvQebU7uTaA5YUFvBW8bU3YzgxJLonqr18mFf8fDF+Gyry3G5w2QdZ5FnLDY9tpU3bsyX7w+1smX4hE3UM0vNMuClm7fxXK+V8TXFgsq01E8JgIKx0yFNiZW5oZWMkyzzuACcAxcj9rMj0l8vDDDWzYjCYgFi/gmi7w6ye6IpNyuClpaVn6vhLWhtFQ/XEGUD/u9tfHPJxw1u31csh0wWph9HWKNXZPSu6TJzZDooCRxWXUbuYeyFnGx75flYjSkdnn7Aut56CxgEOgiLL3TZuIXp+1xzmgL5BlldHKWZlw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=b9AiKxlzJQVngdxrNDROnC6Hs2G2eDlmC36PKxzWNHI=;
- b=KJP2Q7NXk5Hbbk6ZCUNFRXADgJb79DZ2o/jMmBbrwL2D6sdvncSkPVGn3Yg3MPHCB6p3bMqFd6G3FkS6Tq2cgbbpp+nJhT87FCjG9ZltYUbae+eDrq4RDoHZ2GB5Hfy5EyBnDl5TkWpJvNr/3m6+508RyrfaL28Ohph9Fy+L+Pr3iPro8F0/6l5cuwILC1ikm2jRgb+dQ/bTIoSc0N0j0RK/kgFBfv1LV6Aj/umzzVlQSHaVVpM4d88iDW1pqVfJjCtEZ7weqVrqq+m+CQcPzw1M3lLCQCNMmx4xvBp35YyVgDKKA7n4wYL6Vb4OjJEzic6CLtp5mdph8VW/qS9WIg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hammerspace.com; dmarc=pass action=none
- header.from=hammerspace.com; dkim=pass header.d=hammerspace.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hammerspace.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=b9AiKxlzJQVngdxrNDROnC6Hs2G2eDlmC36PKxzWNHI=;
- b=URnFhvrY5MNQ+mvND7SC2HhRZX0tGTJjfJfG7KxAqZ5k6xwqn5qJAO/gwOu0mU3/V5IUYAqG5ELNi01HKBaI1NPHHW38i7NJ25PAi7IxK9MqbTd7DUUDH9EM71p5QO7rJa6b939Ji5slri1x/+s45wjXKvsJYjVMUXIzp9beWWg=
-Received: from CH0PR13MB5084.namprd13.prod.outlook.com (2603:10b6:610:111::7)
- by SN6PR13MB4237.namprd13.prod.outlook.com (2603:10b6:805:e::26) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5458.16; Wed, 10 Aug
- 2022 15:22:40 +0000
-Received: from CH0PR13MB5084.namprd13.prod.outlook.com
- ([fe80::6dcb:fcd2:921b:9035]) by CH0PR13MB5084.namprd13.prod.outlook.com
- ([fe80::6dcb:fcd2:921b:9035%9]) with mapi id 15.20.5525.009; Wed, 10 Aug 2022
- 15:22:40 +0000
-From:   Trond Myklebust <trondmy@hammerspace.com>
-To:     "torvalds@linux-foundation.org" <torvalds@linux-foundation.org>
-CC:     "linux-nfs@vger.kernel.org" <linux-nfs@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: [GIT PULL] Please pull NFS client updates for Linux 5.20
-Thread-Topic: [GIT PULL] Please pull NFS client updates for Linux 5.20
-Thread-Index: AQHYrM0H5jD0S3u1vkO/H9EVfCCTcg==
-Date:   Wed, 10 Aug 2022 15:22:40 +0000
-Message-ID: <57be8df581f3ec5face513ad7053d3a5121e1017.camel@hammerspace.com>
-Accept-Language: en-US, en-GB
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=hammerspace.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 45d538b5-29fe-4a01-ca7a-08da7ae42a00
-x-ms-traffictypediagnostic: SN6PR13MB4237:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: InFm7GUcGF0yqp9025G5GNk2TTWB8rP4mCA7s6UvuQsH+pQZqJ0p52Nn5PNKOnTdudzBwfAQ2AVb1WqG0m4KrUF+kjgeFwJ5e5USZufDkRXipKtES8SSaF2jV1XhKZEEJ/FjXZzoafSzAwNzVriVU7XPLxUyET7la4WTRWWlU8bXMDy4uM5QPdnuuZDh/CV4p9R3UR03Oo2ntX5KSicM3XKfCCYhLajiTXMCrkHywtvEA+QB/iZqtaAKBFTbt9wVmIuKHK6JokrtLKHO/gPvlqd4x7kOvY10wIKOvUCxjU5huTaWfYG9dAgn7ETEmAovDwBVUul60Fjztrz3iZcJJKyAfnMxEpZlynagO2cOj4mUugrGZYC8T84aYP4Eu9hwEgm7vpHtrJLU/k2vAQEQyIEF29DKaqdHw0moT79iiLHxxgyouq/VmjQJ2UE1ebNmmIWNuj6fsHmK0NFpQE+DMGUhckLxZIRaG5EKoKwSXEYmvkCAJGp6SIAbSS5zAoQ+lehWOjNk8ciaAeqXdSaGeOtX7X0g/89yFoAHIAbJqZ7wrINExzzd+In7hQipwWOHBe0hjw2vXwV6CXRgokQxLo4OgEOzXavpf0g712/W4BMmeLSb2iqxUVbRJM3teAUmZT/ZwnR1RWHW/ah41zExE/tWvj9aXtAZ4P1maiSKzAmnR3Oob7FJgeLj8oSBtgarvKTUdTIhNF2KtSr8WlFx97LrPlDT0Ge+trWUXbVSFNIrZhPXapjqBfsuC5URWnGrl9BWoQAElWn06uLhz6Ymh48HAznYyQRpz5TF+13GoF8c3nqcrzqXaXA9+tfeG75O
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR13MB5084.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(136003)(39840400004)(366004)(376002)(346002)(8936002)(5660300002)(15650500001)(2906002)(316002)(4326008)(76116006)(64756008)(66946007)(66476007)(66446008)(6486002)(66556008)(8676002)(54906003)(478600001)(6916009)(71200400001)(41300700001)(122000001)(86362001)(6512007)(6506007)(38100700002)(26005)(2616005)(36756003)(38070700005)(186003)(83380400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?N2l3OUFIeWsra0FScWZpWGh2dHpwcUFFRXhHV1NTb2g3b2liL1BRM1hEOSt4?=
- =?utf-8?B?OUFQL1Y3V1JIMW84WUoxeDBKQis4R1NpREFrOTRCVkxyQ09adVhzSHNsT0x3?=
- =?utf-8?B?a1VSTDJsdXh1cU84VGRtdmh1Vk4ra013K0I5Z1U3cFQwOHAyWittZkcyRk5D?=
- =?utf-8?B?U1lObGFXTmFuZURpN25FREVKRnh3WUorYVF1eDROQndHeUZJaUJiWDIxZmdY?=
- =?utf-8?B?VGNhMlJpZ3Rhd1c2NjRKT21zaTZNTTUxU25DTXF0K3dabjNwbnVybFpUUW1x?=
- =?utf-8?B?MnJXcjg4RWo3SWcyZkJ4WFZVYThzbGo3U01ZYlZHVjdDMVQ5a2Y0dHFCbGl5?=
- =?utf-8?B?WmlkbzdEMXdVNk5VL01Vc2lFVXJOSmxjSVVNVDJTcVVZYUpSVzFTRE9sV3JR?=
- =?utf-8?B?ajZ3c1RtRXc4STVqNHhYZW5JTUlpdUxmRWlOMmd2YnhrMUtPeE5Camd5M1RP?=
- =?utf-8?B?Z0Q1TmdRTnZoZC93a0hiNVM1TTEzemJZOVJYNFRCYy9abkZLeDgreGNsYjNm?=
- =?utf-8?B?MlRsQm9SNUEvdmdQWlM4SjRLcUtGa1IweVpjRWZpbVU2TEF2OUg4N2MzSk80?=
- =?utf-8?B?WmNRUTM2ZFIxb0JNamRTNWd1MjZMNHNRWGpVdU1kazByYnZaZG1wek05SWh2?=
- =?utf-8?B?dGp6RWZ0MVo2aEZGdlprZWJwbS9yTklTalZMMThmbUhObm51cTRYTW9tNzE1?=
- =?utf-8?B?Unl0WVArUENXcDUrdzNpRDFCR2pZZVBGbCsvWDFsT0h1Rk9iQnZ0Z01Pb0o3?=
- =?utf-8?B?S1VwTlZBTEw5V3FBTFZnTHlROG1uUEtOdG1hR3kwbEwvQ1hSMmxyUFZyNm56?=
- =?utf-8?B?ZXI2QnBSRmk2aHl4K3JmOUtwRzBvcExUaSt0N1RqMTlTVVg4b3VZS0FMSVNC?=
- =?utf-8?B?T0FsQmdDbTE5OE5DbXFxY0R6dW1OeFE4UFlYUnFmSUNsbGV0RkxBSE5qeFZI?=
- =?utf-8?B?REQwY2djN2t2WDRKd2JYMnJvRGJjalNRZjBLSUhpelRrMTNWdWxrMncrUFdY?=
- =?utf-8?B?ZzNpTlI3WUFqOHRSUWd5Qzg3NG1sN3V5a0h3WlFpSVRQVWFrWkJiTzVqc3dj?=
- =?utf-8?B?aXVEdVJqbU1zVnJJTVVRSGJtT1ZMU3E4TVNYLys1bW9XclBKTGM1b1pxNTdT?=
- =?utf-8?B?R1NVOHQyUVJiQVlNS3pOWjBzalZjQXlWT1NUYm5aSjhEMnExaERGUmFDODB0?=
- =?utf-8?B?MjJJamx3V0RSVGdHM3dMcGNxckh1aDJmRlBoNTJudldlR0tvM2tqSklkMWFm?=
- =?utf-8?B?ZkoxS3FINWQ1dlRaRzlDVDF4Lyt3V0N0NXdQcWExaWs5aHhBUkQyWkJqNXVo?=
- =?utf-8?B?ZVM3NXk4Z3ZPL1FpcmxtRks4UUZVY1BERXBLa1lLeWtxUFBDc1BtTlRnQXA4?=
- =?utf-8?B?YnEzcnB0MERWMUpIaXpsNUtNTjdZZURFdXY3MWhvcVNOOGxmRDRwRzFLcFR6?=
- =?utf-8?B?ZkhvbmduMnBuZmVNT1hZRk9ZcVlrWkI3L3RqcE5qTzZIZ0hZNHBvL3ZJc1BS?=
- =?utf-8?B?aHF0TEZoR2xGYStJYmZ5NUIyc0NWVmRuTStobktlazliWVVDUENxVzBDbnBh?=
- =?utf-8?B?KzJaOWkvL1ZiVjNMRE5aRUYvbmY0anRTS1JyeTgxV2RiMEl4Uk9GbUl4aXhu?=
- =?utf-8?B?ZUtZNVZxeFI1N2NhMzk1a3B0eDBrcitHUURlcHNHOVpGcXdTeWJhdGhYU3F0?=
- =?utf-8?B?RU1EVXZCdWQrby9JNU5hc3ZNMXpvQ1hCR2RITG9ubjZVTVlURlVjU1ppSzBM?=
- =?utf-8?B?SVRLQjVDNE5WNHpSV2FRK1FYbFA4QWF3ejdReFVpRHQyQUZ4RExBaEtTRkVD?=
- =?utf-8?B?YzU3N0UrbU1zTmhwN3VvVUpJc1Jxby9IeGNMZzU3TElQdGcwL0doWm8zZGJP?=
- =?utf-8?B?eERVamRiT2FIb1MvZkV2cGR3RGxaVmFkSk55MVpsRm1sM2NKUXJPRHNjekZy?=
- =?utf-8?B?NDFnQXBFOTBYUm5sMWVDUEZoVWZqc21iUmh3ZTRPVkJEOUtzR0pWUzZ0T0pC?=
- =?utf-8?B?Y1V2NFY5UjZiWS9DVytMdnJ2ZDgrbEZZSDkvTEUyNzJJK3M1am4vUlp6ckFB?=
- =?utf-8?B?NzdBQnYrNmlDNjQzNmU4QWEvQW9mbUJRcVZyU1BIU2E5VDVVaGxLdWVmV25v?=
- =?utf-8?B?NDY2VWNtblI5ZmlWWUIrOFhHQ2VudVF4eWtiVVovcmtHd3o5K0hzZE80czdF?=
- =?utf-8?B?RUE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <8E705539F5070847BD34E5868C00F1C0@namprd13.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Wed, 10 Aug 2022 11:23:38 -0400
+Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B593E2C134
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 08:23:16 -0700 (PDT)
+Received: by mail-ua1-x92a.google.com with SMTP id 38so1719215uau.4
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 08:23:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=aRcYd552P1uyaUdDKwLPhK4Vj1bJQK/r1xbc0IXHJxM=;
+        b=BbWvKidzYB5IPhkSEdfogPfdLnyLqBuIyIwf9NPN7+o31pmoTMLVxayXwYu1TUGQXK
+         toxVirZb2z2VEvQBXBiLGAgXosD0FeRm2mHOn+7k4tHsh7NfGMT1DpjLCJgyFwuZRUUL
+         RE437M6/0SuJhhuVg/sDzJs8mIxGLFGhxYdI2YcpEuZNlmHOXJzbj8mzSv0gSXha/JRF
+         IB6zTOVUxAYgsr8UFYOpMQ9gW/9To3F93ORzAeORGY7Ebni6iFeUsD1M7Y3Zy3/VKKjG
+         KJPaqL2rhK02WtT6D8UjzSgBT0dXay12aSVCKlsLRhqtHvHo72WKup5hLuHZJSoL4LCY
+         pocA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=aRcYd552P1uyaUdDKwLPhK4Vj1bJQK/r1xbc0IXHJxM=;
+        b=Gfe4GkzPfQ+/dMKAdJmiSedj499Kmot9g9Bm3aShETUHwKxsijIQjAdzovEKblAQPQ
+         bC1OpqZeLHaX0YaCRQFGtHXL/b9U/k1aPaOugskdMX5f2HmGWQSlJXCzx3yj6rlCEHPE
+         RlGoxSB+hKi+zXpGjh1qh0DRegmG0tRfEhgQW5catXEjp3/BxV33qj77XuHPkGSP2BMc
+         yCxlcsPxe5EhsDw9VqNDkk006HUSXAuuCYv6h5QeXS9iSX2aRSYy2X0670HmovWgkfSh
+         RDwXVxYmiB4pE2hx/9Wpfxsr5BpFE+bqMaj1rEWwrfaueUmmTcBrW8Mf1EsweidAb0ug
+         Qw2w==
+X-Gm-Message-State: ACgBeo04dI8HPl0AkY2nyitowi4k80Il18du4LBFve7ubitk7juOuNpO
+        BKDS6+RM6riAO9sZ7DQo/hCWtDqo0/+s2dVYOkL7Lw==
+X-Google-Smtp-Source: AA6agR4j9t4BJEY9KsoHDmzmpFqg0lyL9atPchx8mCd0kqY+oZn5Ivotxa+notg0PjeS/cV9KkrBiRSHJfJnRAl4aJM=
+X-Received: by 2002:ab0:6287:0:b0:38c:5a1d:109 with SMTP id
+ z7-20020ab06287000000b0038c5a1d0109mr9809807uao.29.1660144994528; Wed, 10 Aug
+ 2022 08:23:14 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: hammerspace.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CH0PR13MB5084.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 45d538b5-29fe-4a01-ca7a-08da7ae42a00
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Aug 2022 15:22:40.1548
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 0d4fed5c-3a70-46fe-9430-ece41741f59e
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 0Fe+cjgVXtvKtWKkdvNb9Y4l/LCLxk5SyY6W9KKXQsY8DGahk0kklYoC8he1pNA52pm+UUr9c8tcvp+Pcm+GtA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR13MB4237
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220804221816.1802790-1-irogers@google.com> <20220804221816.1802790-10-irogers@google.com>
+ <99ebff46-2b1f-e99c-693a-a6c37cfe7974@huawei.com>
+In-Reply-To: <99ebff46-2b1f-e99c-693a-a6c37cfe7974@huawei.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 10 Aug 2022 08:23:02 -0700
+Message-ID: <CAP-5=fWrGUEyNhWTHM4MjAEioJn+m7ktp0fUkLF9ZBAQXqhqpg@mail.gmail.com>
+Subject: Re: [PATCH v4 09/17] perf pmu-events: Avoid passing pmu_events_map
+To:     John Garry <john.garry@huawei.com>
+Cc:     Will Deacon <will@kernel.org>, James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGkgTGludXMsDQoNClRoZSBmb2xsb3dpbmcgY2hhbmdlcyBzaW5jZSBjb21taXQgMzIzNDY0OTFk
-ZGYyNDU5OWRlY2NhMDYxOTBlYmNhMDNmZjlkZTdmODoNCg0KICBMaW51eCA1LjE5LXJjNiAoMjAy
-Mi0wNy0xMCAxNDo0MDo1MSAtMDcwMCkNCg0KYXJlIGF2YWlsYWJsZSBpbiB0aGUgR2l0IHJlcG9z
-aXRvcnkgYXQ6DQoNCiAgZ2l0Oi8vZ2l0LmxpbnV4LW5mcy5vcmcvcHJvamVjdHMvdHJvbmRteS9s
-aW51eC1uZnMuZ2l0IHRhZ3MvbmZzLWZvci01LjIwLTENCg0KZm9yIHlvdSB0byBmZXRjaCBjaGFu
-Z2VzIHVwIHRvIDNmYTVjYmRjNDRkZTE5MGYyYzU2MDViYTdkYjAxNWFlMGQyNmY2Njg6DQoNCiAg
-TkZTOiBJbXByb3ZlIHJlYWRwYWdlL3dyaXRlcGFnZSB0cmFjaW5nICgyMDIyLTA4LTA5IDE0OjEx
-OjM0IC0wNDAwKQ0KDQpDaGVlcnMsDQogIFRyb25kDQoNCi0tLS0tLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0NCk5GUyBjbGllbnQgdXBk
-YXRlcyBmb3IgTGludXggNS4yMA0KDQpIaWdobGlnaHRzIGluY2x1ZGU6DQoNClN0YWJsZSBmaXhl
-czoNCi0gcE5GUy9mbGV4ZmlsZXM6IEZpeCBpbmZpbml0ZSBsb29waW5nIHdoZW4gdGhlIFJETUEg
-Y29ubmVjdGlvbiBlcnJvcnMgb3V0DQoNCkJ1Z2ZpeGVzOg0KLSBORlM6IGZpeCBwb3J0IHZhbHVl
-IHBhcnNpbmcNCi0gU1VOUlBDOiBSZWluaXRpYWxpc2UgdGhlIGJhY2tjaGFubmVsIHJlcXVlc3Qg
-YnVmZmVycyBiZWZvcmUgcmV1c2UNCi0gU1VOUlBDOiBmaXggZXhwaXJ5IG9mIGF1dGggY3JlZHMN
-Ci0gTkZTdjQ6IEZpeCByYWNlcyBpbiB0aGUgbGVnYWN5IGlkbWFwcGVyIHVwY2FsbA0KLSBORlM6
-IE9fRElSRUNUIGZpeGVzIGZyb20gSmVmZiBMYXl0b24NCi0gTkZTdjQuMTogRml4IE9QX1NFUVVF
-TkNFIGVycm9yIGhhbmRsaW5nDQotIFNVTlJQQzogRml4IGFuIFJQQy9SRE1BIHBlcmZvcm1hbmNl
-IHJlZ3Jlc3Npb24NCi0gTkZTOiBGaXggY2FzZSBpbnNlbnNpdGl2ZSByZW5hbWVzDQotIE5GU3Y0
-L3BuZnM6IEZpeCBhIHVzZS1hZnRlci1mcmVlIGJ1ZyBpbiBvcGVuDQotIE5GU3Y0LjE6IFJFQ0xB
-SU1fQ09NUExFVEUgbXVzdCBoYW5kbGUgRUFDQ0VTDQoNCkZlYXR1cmVzOg0KLSBORlN2NC4xOiBz
-ZXNzaW9uIHRydW5raW5nIGVuaGFuY2VtZW50cw0KLSBORlN2NC4yOiBSRUFEX1BMVVMgcGVyZm9y
-bWFuY2Ugb3B0aW1pc2F0aW9ucw0KLSBORlM6IHJlbGF4IHRoZSBydWxlcyBmb3IgcnNpemUvd3Np
-emUgbW91bnQgb3B0aW9ucw0KLSBORlM6IGRvbid0IHVuaGFzaCBkZW50cnkgZHVyaW5nIHVubGlu
-ay9yZW5hbWUNCi0gU1VOUlBDOiBGYWlsIGZhc3RlciBvbiBiYWQgdmVyaWZpZXINCi0gTkZTL1NV
-TlJQQzogVmFyaW91cyB0cmFjaW5nIGltcHJvdmVtZW50cw0KDQotLS0tLS0tLS0tLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tDQpBbm5hIFNjaHVt
-YWtlciAoNik6DQogICAgICBORlM6IEFsbG93IHNldHRpbmcgcnNpemUgLyB3c2l6ZSB0byBhIG11
-bHRpcGxlIG9mIFBBR0VfU0laRQ0KICAgICAgU1VOUlBDOiBJbnRyb2R1Y2UgeGRyX3N0cmVhbV9t
-b3ZlX3N1YnNlZ21lbnQoKQ0KICAgICAgU1VOUlBDOiBBZGQgYSBmdW5jdGlvbiBmb3IgZGlyZWN0
-bHkgc2V0dGluZyB0aGUgeGRyIHBhZ2UgbGVuDQogICAgICBTVU5SUEM6IEFkZCBhIGZ1bmN0aW9u
-IGZvciB6ZXJvaW5nIG91dCBhIHBvcnRpb24gb2YgYW4geGRyX3N0cmVhbQ0KICAgICAgTkZTOiBS
-ZXBsYWNlIHRoZSBSRUFEX1BMVVMgZGVjb2RpbmcgY29kZQ0KICAgICAgU1VOUlBDOiBSZW1vdmUg
-eGRyX2FsaWduX2RhdGEoKSBhbmQgeGRyX2V4cGFuZF9ob2xlKCkNCg0KQ2hlblhpYW9Tb25nICgx
-KToNCiAgICAgIE5GUzogcmVtb3ZlIHJlZHVuZGFudCBjb2RlIGluIG5mc19maWxlX3dyaXRlKCkN
-Cg0KQ2hyaXN0b3BoIEhlbGx3aWcgKDEpOg0KICAgICAgbmZzL2Jsb2NrbGF5b3V0OiByZWZhY3Rv
-ciBibG9jayBkZXZpY2Ugb3BlbmluZw0KDQpDaHVjayBMZXZlciAoMyk6DQogICAgICBTVU5SUEM6
-IEZhaWwgZmFzdGVyIG9uIGJhZCB2ZXJpZmllcg0KICAgICAgU1VOUlBDOiBSZXBsYWNlIGRwcmlu
-dGsoKSBjYWxsIHNpdGUgaW4geHNfZGF0YV9yZWFkeQ0KICAgICAgTkZTOiBSZXBsYWNlIGZzX2Nv
-bnRleHQtcmVsYXRlZCBkcHJpbnRrKCkgY2FsbCBzaXRlcyB3aXRoIHRyYWNlcG9pbnRzDQoNCkRh
-biBBbG9uaSAoMSk6DQogICAgICBzdW5ycGM6IGZpeCBleHBpcnkgb2YgYXV0aCBjcmVkcw0KDQpG
-YWJpbyBNLiBEZSBGcmFuY2VzY28gKDEpOg0KICAgICAgbmZzOiBSZXBsYWNlIGttYXAoKSB3aXRo
-IGttYXBfbG9jYWxfcGFnZSgpDQoNCklhbiBLZW50ICgxKToNCiAgICAgIG5mczogZml4IHBvcnQg
-dmFsdWUgcGFyc2luZw0KDQpKZWZmIExheXRvbiAoMyk6DQogICAgICBuZnM6IGFkZCBuZXcgbmZz
-X2RpcmVjdF9yZXEgdHJhY2Vwb2ludCBldmVudHMNCiAgICAgIG5mczogYWx3YXlzIGNoZWNrIGRy
-ZXEtPmVycm9yIGFmdGVyIGEgY29tbWl0DQogICAgICBuZnM6IG9ubHkgaXNzdWUgY29tbWl0IGlu
-IERJTyBjb2RlcGF0aCBpZiB3ZSBoYXZlIHVuY29tbWl0dGVkIGRhdGENCg0KTmVpbEJyb3duICgx
-KToNCiAgICAgIE5GUzogZG9uJ3QgdW5oYXNoIGRlbnRyeSBkdXJpbmcgdW5saW5rL3JlbmFtZQ0K
-DQpPbGdhIEtvcm5pZXZza2FpYSAoMTEpOg0KICAgICAgU1VOUlBDIGV4cG9zZSBmdW5jdGlvbnMg
-Zm9yIG9mZmxpbmUgcmVtb3RlIHhwcnQgZnVuY3Rpb25hbGl0eQ0KICAgICAgU1VOUlBDIGFkZCBm
-dW5jdGlvbiB0byBvZmZsaW5lIHJlbW92ZSB0cnVua2FibGUgdHJhbnNwb3J0cw0KICAgICAgTkZT
-djQuMSBvZmZsaW5lIHRydW5rYWJsZSB0cmFuc3BvcnRzIG9uIERFU1RST1lfU0VTU0lPTg0KICAg
-ICAgU1VOUlBDIGNyZWF0ZSBhbiBpdGVyYXRvciB0byBsaXN0IG9ubHkgT0ZGTElORSB4cHJ0cw0K
-ICAgICAgU1VOUlBDIGVuYWJsZSBiYWNrIG9mZmxpbmUgdHJhbnNwb3J0cyBpbiB0cnVua2luZyBk
-aXNjb3ZlcnkNCiAgICAgIFNVTlJQQyBjcmVhdGUgYW4gcnBjIGZ1bmN0aW9uIHRoYXQgYWxsb3dz
-IHhwcnQgcmVtb3ZhbCBmcm9tIHJwY19jbG50DQogICAgICBORlN2NC4xIHJlbW92ZSB4cHJ0IGZy
-b20geHBydF9zd2l0Y2ggaWYgc2Vzc2lvbiB0cnVua2luZyB0ZXN0IGZhaWxzDQogICAgICBTVU5S
-UEMgcmVzdHJ1Y3R1cmUgcnBjX2NsbnRfc2V0dXBfdGVzdF9hbmRfYWRkX3hwcnQNCiAgICAgIFNV
-TlJQQyBleHBvcnQgeHBydF9pdGVyX3Jld2luZCBmdW5jdGlvbg0KICAgICAgU1VOUlBDIGNyZWF0
-ZSBhIGZ1bmN0aW9uIHRoYXQgcHJvYmVzIG9ubHkgb2ZmbGluZSB0cmFuc3BvcnRzDQogICAgICBO
-RlN2NC4xIHByb2JlIG9mZmxpbmUgdHJhbnNwb3J0cyBmb3IgdHJ1bmtpbmcgb24gc2Vzc2lvbiBj
-cmVhdGlvbg0KDQpUcm9uZCBNeWtsZWJ1c3QgKDE2KToNCiAgICAgIFNVTlJQQzogRml4IGFuIFJQ
-Qy9SRE1BIHBlcmZvcm1hbmNlIHJlZ3Jlc3Npb24NCiAgICAgIFJldmVydCAicE5GUzogbmZzM19z
-ZXRfZHNfY2xpZW50IHNob3VsZCBzZXQgTkZTX0NTX05PUElORyINCiAgICAgIHBORlMvZmxleGZp
-bGVzOiBSZXBvcnQgUkRNQSBjb25uZWN0aW9uIGVycm9ycyB0byB0aGUgc2VydmVyDQogICAgICBw
-TkZTL2ZpbGVzOiBIYW5kbGUgUkRNQSBjb25uZWN0aW9uIGVycm9ycyBjb3JyZWN0bHkNCiAgICAg
-IE5GUzogRml4IGNhc2UgaW5zZW5zaXRpdmUgcmVuYW1lcw0KICAgICAgTkZTdjQuMTogRG9uJ3Qg
-ZGVjcmVhc2UgdGhlIHZhbHVlIG9mIHNlcV9ucl9oaWdoZXN0X3NlbnQNCiAgICAgIE5GU3Y0LjE6
-IEhhbmRsZSBORlM0RVJSX0RFTEFZIHJlcGxpZXMgdG8gT1BfU0VRVUVOQ0UgY29ycmVjdGx5DQog
-ICAgICBORlN2NDogRml4IHJhY2VzIGluIHRoZSBsZWdhY3kgaWRtYXBwZXIgdXBjYWxsDQogICAg
-ICBTVU5SUEM6IFNocmluayBzaXplIG9mIHN0cnVjdCBycGNfdGFzaw0KICAgICAgU1VOUlBDOiBS
-ZWluaXRpYWxpc2UgdGhlIGJhY2tjaGFubmVsIHJlcXVlc3QgYnVmZmVycyBiZWZvcmUgcmV1c2UN
-CiAgICAgIFNVTlJQQzogRG9uJ3QgcmV1c2UgYnZlYyBvbiByZXRyYW5zbWlzc2lvbiBvZiB0aGUg
-cmVxdWVzdA0KICAgICAgTkZTOiBuZnNfYXN5bmNfd3JpdGVfcmVzY2hlZHVsZV9pbyBtdXN0IG5v
-dCByZWN1cnNlIGludG8gdGhlIHdyaXRlYmFjayBjb2RlDQogICAgICBORlN2NC9wbmZzOiBGaXgg
-YSB1c2UtYWZ0ZXItZnJlZSBidWcgaW4gb3Blbg0KICAgICAgTkZTOiBJbXByb3ZlIHdyaXRlIGVy
-cm9yIHRyYWNpbmcNCiAgICAgIE5GUzogSW1wcm92ZSBPX0RJUkVDVCB0cmFjaW5nDQogICAgICBO
-RlM6IEltcHJvdmUgcmVhZHBhZ2Uvd3JpdGVwYWdlIHRyYWNpbmcNCg0KWmhhbmcgWGlhbndlaSAo
-MSk6DQogICAgICBORlN2NC4xOiBSRUNMQUlNX0NPTVBMRVRFIG11c3QgaGFuZGxlIEVBQ0NFUw0K
-DQogZnMvbmZzL2Jsb2NrbGF5b3V0L2Rldi5jICAgICAgICAgICAgICAgICAgfCAgNDIgKystLS0t
-DQogZnMvbmZzL2NsaWVudC5jICAgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMTMgKy0NCiBm
-cy9uZnMvZGlyLmMgICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICA4MCArKysrKysrKy0t
-LQ0KIGZzL25mcy9kaXJlY3QuYyAgICAgICAgICAgICAgICAgICAgICAgICAgIHwgIDUwICsrKy0t
-LS0NCiBmcy9uZnMvZmlsZS5jICAgICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgMiAtDQog
-ZnMvbmZzL2ZpbGVsYXlvdXQvZmlsZWxheW91dC5jICAgICAgICAgICAgfCAgIDIgKw0KIGZzL25m
-cy9mbGV4ZmlsZWxheW91dC9mbGV4ZmlsZWxheW91dC5jICAgIHwgICA0ICsNCiBmcy9uZnMvZmxl
-eGZpbGVsYXlvdXQvZmxleGZpbGVsYXlvdXRkZXYuYyB8ICAgNiArLQ0KIGZzL25mcy9mc19jb250
-ZXh0LmMgICAgICAgICAgICAgICAgICAgICAgIHwgIDI2ICsrLS0NCiBmcy9uZnMvaW50ZXJuYWwu
-aCAgICAgICAgICAgICAgICAgICAgICAgICB8ICA1MSArKysrKysrDQogZnMvbmZzL25mczNjbGll
-bnQuYyAgICAgICAgICAgICAgICAgICAgICAgfCAgIDEgLQ0KIGZzL25mcy9uZnM0Mnhkci5jICAg
-ICAgICAgICAgICAgICAgICAgICAgIHwgMTcwICsrKysrKysrKysrLS0tLS0tLS0tLS0tDQogZnMv
-bmZzL25mczRjbGllbnQuYyAgICAgICAgICAgICAgICAgICAgICAgfCAgIDQgKy0NCiBmcy9uZnMv
-bmZzNGlkbWFwLmMgICAgICAgICAgICAgICAgICAgICAgICB8ICA0NiArKysrLS0tDQogZnMvbmZz
-L25mczRwcm9jLmMgICAgICAgICAgICAgICAgICAgICAgICAgfCAgMzIgKysrLS0NCiBmcy9uZnMv
-bmZzdHJhY2UuaCAgICAgICAgICAgICAgICAgICAgICAgICB8IDIxNSArKysrKysrKysrKysrKysr
-KysrKysrKystLS0tLS0NCiBmcy9uZnMvd3JpdGUuYyAgICAgICAgICAgICAgICAgICAgICAgICAg
-ICB8ICA1OCArKysrLS0tLQ0KIGluY2x1ZGUvbGludXgvbmZzX2ZzLmggICAgICAgICAgICAgICAg
-ICAgIHwgICA5ICsrDQogaW5jbHVkZS9saW51eC9uZnNfcGFnZS5oICAgICAgICAgICAgICAgICAg
-fCAgIDMgKy0NCiBpbmNsdWRlL2xpbnV4L25mc194ZHIuaCAgICAgICAgICAgICAgICAgICB8ICAg
-MSArDQogaW5jbHVkZS9saW51eC9zdW5ycGMvY2xudC5oICAgICAgICAgICAgICAgfCAgIDUgKw0K
-IGluY2x1ZGUvbGludXgvc3VucnBjL3NjaGVkLmggICAgICAgICAgICAgIHwgICA0ICstDQogaW5j
-bHVkZS9saW51eC9zdW5ycGMveGRyLmggICAgICAgICAgICAgICAgfCAgIDcgKy0NCiBpbmNsdWRl
-L2xpbnV4L3N1bnJwYy94cHJ0LmggICAgICAgICAgICAgICB8ICAgNiArLQ0KIGluY2x1ZGUvbGlu
-dXgvc3VucnBjL3hwcnRtdWx0aXBhdGguaCAgICAgIHwgICA3ICstDQogaW5jbHVkZS90cmFjZS9l
-dmVudHMvc3VucnBjLmggICAgICAgICAgICAgfCAgMjAgKysrDQogbmV0L3N1bnJwYy9hdXRoLmMg
-ICAgICAgICAgICAgICAgICAgICAgICAgfCAgIDIgKy0NCiBuZXQvc3VucnBjL2F1dGhfZ3NzL2F1
-dGhfZ3NzLmMgICAgICAgICAgICB8ICAxMSArLQ0KIG5ldC9zdW5ycGMvYmFja2NoYW5uZWxfcnFz
-dC5jICAgICAgICAgICAgIHwgIDE0ICsrDQogbmV0L3N1bnJwYy9jbG50LmMgICAgICAgICAgICAg
-ICAgICAgICAgICAgfCAyMDcgKysrKysrKysrKysrKysrKysrKysrKysrLS0tLQ0KIG5ldC9zdW5y
-cGMvc2NoZWQuYyAgICAgICAgICAgICAgICAgICAgICAgIHwgICAxICsNCiBuZXQvc3VucnBjL3N5
-c2ZzLmMgICAgICAgICAgICAgICAgICAgICAgICB8ICAyOCArLS0tDQogbmV0L3N1bnJwYy94ZHIu
-YyAgICAgICAgICAgICAgICAgICAgICAgICAgfCAxNjggKysrKysrKysrKysrKystLS0tLS0tLS0N
-CiBuZXQvc3VucnBjL3hwcnQuYyAgICAgICAgICAgICAgICAgICAgICAgICB8ICA1OSArKysrKyst
-LQ0KIG5ldC9zdW5ycGMveHBydG11bHRpcGF0aC5jICAgICAgICAgICAgICAgIHwgMTExICsrKysr
-KysrKysrKy0tLQ0KIG5ldC9zdW5ycGMveHBydHJkbWEvdHJhbnNwb3J0LmMgICAgICAgICAgIHwg
-ICA2ICstDQogbmV0L3N1bnJwYy94cHJ0c29jay5jICAgICAgICAgICAgICAgICAgICAgfCAgMTgg
-Ky0tDQogMzcgZmlsZXMgY2hhbmdlZCwgMTAzMiBpbnNlcnRpb25zKCspLCA0NTcgZGVsZXRpb25z
-KC0pDQoNCi0tIA0KVHJvbmQgTXlrbGVidXN0DQpMaW51eCBORlMgY2xpZW50IG1haW50YWluZXIs
-IEhhbW1lcnNwYWNlDQp0cm9uZC5teWtsZWJ1c3RAaGFtbWVyc3BhY2UuY29tDQoNCg0K
+On Fri, Aug 5, 2022 at 4:28 AM John Garry <john.garry@huawei.com> wrote:
+>
+> On 04/08/2022 23:18, Ian Rogers wrote:
+> > Preparation for hiding pmu_events_map as an implementation detail. While
+> > the map is passed, the table of events is all that is normally wanted.
+> >
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+>
+> Apart from comments on naming, below:
+>
+> Reviewed-by: John Garry <john.garry@huawei.com>
+>
+> As an aside, I will mention that reviewing this series is not helped by
+> limited description of the changes in the cover letter. A primer would
+> be nice. As I go through the series, I am often assuming that the
+> motivation for the change is sound.
+
+Ack. I was hoping the compression motivation would be enough in the
+cover letter, but yeah the refactoring to get to that is painful and
+could do with more explaining. Thanks for the reviews!
+
+> Thanks,
+> John
+>
+> > ---
+> >   tools/perf/arch/arm64/util/pmu.c  |  4 +-
+> >   tools/perf/tests/expand-cgroup.c  |  6 +--
+> >   tools/perf/tests/parse-metric.c   |  7 +--
+> >   tools/perf/tests/pmu-events.c     | 63 +++++++++++-------------
+> >   tools/perf/util/metricgroup.c     | 82 +++++++++++++++----------------
+> >   tools/perf/util/metricgroup.h     |  4 +-
+> >   tools/perf/util/pmu.c             | 33 +++++++------
+> >   tools/perf/util/pmu.h             |  6 +--
+> >   tools/perf/util/s390-sample-raw.c | 12 ++---
+> >   9 files changed, 99 insertions(+), 118 deletions(-)
+> >
+> > diff --git a/tools/perf/arch/arm64/util/pmu.c b/tools/perf/arch/arm64/util/pmu.c
+> > index 79124bba713e..646af8603227 100644
+> > --- a/tools/perf/arch/arm64/util/pmu.c
+> > +++ b/tools/perf/arch/arm64/util/pmu.c
+> > @@ -3,7 +3,7 @@
+> >   #include "../../../util/cpumap.h"
+> >   #include "../../../util/pmu.h"
+> >
+> > -const struct pmu_events_map *pmu_events_map__find(void)
+> > +const struct pmu_event *pmu_events_map__find(void)
+>
+> The function name is no longer appropriate
+>
+>
+> >   {
+> >       struct perf_pmu *pmu = NULL;
+> >
+> > @@ -18,7 +18,7 @@ const struct pmu_events_map *pmu_events_map__find(void)
+> >               if (pmu->cpus->nr != cpu__max_cpu().cpu)
+> >                       return NULL;
+> >
+> > -             return perf_pmu__find_map(pmu);
+> > +             return perf_pmu__find_table(pmu);
+> >       }
+> >
+> >       return NULL;
+> > diff --git a/tools/perf/tests/expand-cgroup.c b/tools/perf/tests/expand-cgroup.c
+> > index dc4038f997d7..411fc578e5a4 100644
+> > --- a/tools/perf/tests/expand-cgroup.c
+> > +++ b/tools/perf/tests/expand-cgroup.c
+> > @@ -195,16 +195,12 @@ static int expand_metric_events(void)
+> >                       .metric_name    = NULL,
+> >               },
+> >       };
+> > -     const struct pmu_events_map ev_map = {
+> > -             .cpuid          = "test",
+> > -             .table          = pme_test,
+> > -     };
+> >
+> >       evlist = evlist__new();
+> >       TEST_ASSERT_VAL("failed to get evlist", evlist);
+> >
+> >       rblist__init(&metric_events);
+> > -     ret = metricgroup__parse_groups_test(evlist, &ev_map, metric_str,
+> > +     ret = metricgroup__parse_groups_test(evlist, pme_test, metric_str,
+> >                                            false, false, &metric_events);
+> >       if (ret < 0) {
+> >               pr_debug("failed to parse '%s' metric\n", metric_str);
+> > diff --git a/tools/perf/tests/parse-metric.c b/tools/perf/tests/parse-metric.c
+> > index 1b811a26f4ee..7aebde7c37ec 100644
+> > --- a/tools/perf/tests/parse-metric.c
+> > +++ b/tools/perf/tests/parse-metric.c
+> > @@ -79,11 +79,6 @@ static struct pmu_event pme_test[] = {
+> >   }
+> >   };
+> >
+> > -static const struct pmu_events_map map = {
+> > -     .cpuid          = "test",
+> > -     .table          = pme_test,
+> > -};
+> > -
+> >   struct value {
+> >       const char      *event;
+> >       u64              val;
+> > @@ -166,7 +161,7 @@ static int __compute_metric(const char *name, struct value *vals,
+> >       runtime_stat__init(&st);
+> >
+> >       /* Parse the metric into metric_events list. */
+> > -     err = metricgroup__parse_groups_test(evlist, &map, name,
+> > +     err = metricgroup__parse_groups_test(evlist, pme_test, name,
+> >                                            false, false,
+> >                                            &metric_events);
+> >       if (err)
+> > diff --git a/tools/perf/tests/pmu-events.c b/tools/perf/tests/pmu-events.c
+> > index a39a2c99ede6..b3cde5f98982 100644
+> > --- a/tools/perf/tests/pmu-events.c
+> > +++ b/tools/perf/tests/pmu-events.c
+> > @@ -272,13 +272,11 @@ static bool is_same(const char *reference, const char *test)
+> >       return !strcmp(reference, test);
+> >   }
+> >
+> > -static const struct pmu_events_map *__test_pmu_get_events_map(void)
+> > +static const struct pmu_event *__test_pmu_get_events_table(void)
+> >   {
+> > -     const struct pmu_events_map *map;
+> > -
+> > -     for (map = &pmu_events_map[0]; map->cpuid; map++) {
+> > +     for (const struct pmu_events_map *map = &pmu_events_map[0]; map->cpuid; map++) {
+> >               if (!strcmp(map->cpuid, "testcpu"))
+> > -                     return map;
+> > +                     return map->table;
+> >       }
+> >
+> >       pr_err("could not find test events map\n");
+> > @@ -440,8 +438,7 @@ static int test__pmu_event_table(struct test_suite *test __maybe_unused,
+> >                                int subtest __maybe_unused)
+> >   {
+> >       const struct pmu_event *sys_event_tables = find_sys_events_table("pme_test_soc_sys");
+> > -     const struct pmu_events_map *map = __test_pmu_get_events_map();
+> > -     const struct pmu_event *table;
+> > +     const struct pmu_event *table = __test_pmu_get_events_table();
+> >       int map_events = 0, expected_events;
+> >
+> >       /* ignore 3x sentinels */
+> > @@ -449,10 +446,10 @@ static int test__pmu_event_table(struct test_suite *test __maybe_unused,
+> >                         ARRAY_SIZE(uncore_events) +
+> >                         ARRAY_SIZE(sys_events) - 3;
+> >
+> > -     if (!map || !sys_event_tables)
+> > +     if (!table || !sys_event_tables)
+> >               return -1;
+> >
+> > -     for (table = map->table; table->name; table++) {
+> > +     for (; table->name; table++) {
+> >               struct perf_pmu_test_event const **test_event_table;
+> >               bool found = false;
+> >
+> > @@ -537,10 +534,10 @@ static int __test_core_pmu_event_aliases(char *pmu_name, int *count)
+> >       struct perf_pmu *pmu;
+> >       LIST_HEAD(aliases);
+> >       int res = 0;
+> > -     const struct pmu_events_map *map = __test_pmu_get_events_map();
+> > +     const struct pmu_event *table = __test_pmu_get_events_table();
+> >       struct perf_pmu_alias *a, *tmp;
+> >
+> > -     if (!map)
+> > +     if (!table)
+> >               return -1;
+> >
+> >       test_event_table = &core_events[0];
+> > @@ -551,7 +548,7 @@ static int __test_core_pmu_event_aliases(char *pmu_name, int *count)
+> >
+> >       pmu->name = pmu_name;
+> >
+> > -     pmu_add_cpu_aliases_map(&aliases, pmu, map);
+> > +     pmu_add_cpu_aliases_map(&aliases, pmu, table);
+> >
+> >       for (; *test_event_table; test_event_table++) {
+> >               struct perf_pmu_test_event const *test_event = *test_event_table;
+> > @@ -590,14 +587,14 @@ static int __test_uncore_pmu_event_aliases(struct perf_pmu_test_pmu *test_pmu)
+> >       struct perf_pmu *pmu = &test_pmu->pmu;
+> >       const char *pmu_name = pmu->name;
+> >       struct perf_pmu_alias *a, *tmp, *alias;
+> > -     const struct pmu_events_map *map;
+> > +     const struct pmu_event *events_table;
+> >       LIST_HEAD(aliases);
+> >       int res = 0;
+> >
+> > -     map = __test_pmu_get_events_map();
+> > -     if (!map)
+> > +     events_table = __test_pmu_get_events_table();
+> > +     if (!events_table)
+> >               return -1;
+> > -     pmu_add_cpu_aliases_map(&aliases, pmu, map);
+> > +     pmu_add_cpu_aliases_map(&aliases, pmu, events_table);
+> >       pmu_add_sys_aliases(&aliases, pmu);
+> >
+> >       /* Count how many aliases we generated */
+> > @@ -848,13 +845,9 @@ static int check_parse_fake(const char *id)
+> >       return ret;
+> >   }
+> >
+> > -static void expr_failure(const char *msg,
+> > -                      const struct pmu_events_map *map,
+> > -                      const struct pmu_event *pe)
+> > +static void expr_failure(const char *msg, const struct pmu_event *pe)
+> >   {
+> > -     pr_debug("%s for map %s %s\n", msg, map->arch, map->cpuid);
+> > -     pr_debug("On metric %s\n", pe->metric_name);
+> > -     pr_debug("On expression %s\n", pe->metric_expr);
+> > +     pr_debug("%s\nOn metric %s\nOn expression %s\n", msg, pe->metric_name, pe->metric_expr);
+> >   }
+> >
+> >   struct metric {
+> > @@ -864,7 +857,7 @@ struct metric {
+> >
+> >   static int resolve_metric_simple(struct expr_parse_ctx *pctx,
+> >                                struct list_head *compound_list,
+> > -                              const struct pmu_events_map *map,
+> > +                              const struct pmu_event *map,
+> >                                const char *metric_name)
+> >   {
+> >       struct hashmap_entry *cur, *cur_tmp;
+> > @@ -925,8 +918,7 @@ static int resolve_metric_simple(struct expr_parse_ctx *pctx,
+> >   static int test__parsing(struct test_suite *test __maybe_unused,
+> >                        int subtest __maybe_unused)
+> >   {
+> > -     const struct pmu_events_map *cpus_map = pmu_events_map__find();
+> > -     const struct pmu_events_map *map;
+> > +     const struct pmu_event *cpus_table = pmu_events_map__find();
+> >       const struct pmu_event *pe;
+> >       int i, j, k;
+> >       int ret = 0;
+> > @@ -940,7 +932,8 @@ static int test__parsing(struct test_suite *test __maybe_unused,
+> >       }
+> >       i = 0;
+> >       for (;;) {
+> > -             map = &pmu_events_map[i++];
+> > +             const struct pmu_events_map *map = &pmu_events_map[i++];
+> > +
+> >               if (!map->table)
+> >                       break;
+> >               j = 0;
+> > @@ -957,14 +950,14 @@ static int test__parsing(struct test_suite *test __maybe_unused,
+> >                               continue;
+> >                       expr__ctx_clear(ctx);
+> >                       if (expr__find_ids(pe->metric_expr, NULL, ctx) < 0) {
+> > -                             expr_failure("Parse find ids failed", map, pe);
+> > +                             expr_failure("Parse find ids failed", pe);
+> >                               ret++;
+> >                               continue;
+> >                       }
+> >
+> > -                     if (resolve_metric_simple(ctx, &compound_list, map,
+> > +                     if (resolve_metric_simple(ctx, &compound_list, map->table,
+> >                                                 pe->metric_name)) {
+> > -                             expr_failure("Could not resolve metrics", map, pe);
+> > +                             expr_failure("Could not resolve metrics", pe);
+> >                               ret++;
+> >                               goto exit; /* Don't tolerate errors due to severity */
+> >                       }
+> > @@ -979,7 +972,7 @@ static int test__parsing(struct test_suite *test __maybe_unused,
+> >                               expr__add_id_val(ctx, strdup(cur->key), k++);
+> >
+> >                       hashmap__for_each_entry(ctx->ids, cur, bkt) {
+> > -                             if (check_parse_cpu(cur->key, map == cpus_map,
+> > +                             if (check_parse_cpu(cur->key, map->table == cpus_table,
+> >                                                  pe))
+> >                                       ret++;
+> >                       }
+> > @@ -999,7 +992,7 @@ static int test__parsing(struct test_suite *test __maybe_unused,
+> >                               hashmap__for_each_entry(ctx->ids, cur, bkt)
+> >                                       expr__add_id_val(ctx, strdup(cur->key), k--);
+> >                               if (expr__parse(&result, ctx, pe->metric_expr)) {
+> > -                                     expr_failure("Parse failed", map, pe);
+> > +                                     expr_failure("Parse failed", pe);
+> >                                       ret++;
+> >                               }
+> >                       }
+> > @@ -1088,8 +1081,6 @@ static int metric_parse_fake(const char *str)
+> >   static int test__parsing_fake(struct test_suite *test __maybe_unused,
+> >                             int subtest __maybe_unused)
+> >   {
+> > -     const struct pmu_events_map *map;
+> > -     const struct pmu_event *pe;
+> >       unsigned int i, j;
+> >       int err = 0;
+> >
+> > @@ -1101,12 +1092,14 @@ static int test__parsing_fake(struct test_suite *test __maybe_unused,
+> >
+> >       i = 0;
+> >       for (;;) {
+> > -             map = &pmu_events_map[i++];
+> > +             const struct pmu_events_map *map = &pmu_events_map[i++];
+> > +
+> >               if (!map->table)
+> >                       break;
+> >               j = 0;
+> >               for (;;) {
+> > -                     pe = &map->table[j++];
+> > +                     const struct pmu_event *pe = &map->table[j++];
+> > +
+> >                       if (!pe->name && !pe->metric_group && !pe->metric_name)
+> >                               break;
+> >                       if (!pe->metric_expr)
+> > diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
+> > index 8f7baeabc5cf..4d32b4fbf67d 100644
+> > --- a/tools/perf/util/metricgroup.c
+> > +++ b/tools/perf/util/metricgroup.c
+> > @@ -539,9 +539,6 @@ static int metricgroup__print_sys_event_iter(const struct pmu_event *pe, void *d
+> >   void metricgroup__print(bool metrics, bool metricgroups, char *filter,
+> >                       bool raw, bool details, const char *pmu_name)
+> >   {
+> > -     const struct pmu_events_map *map = pmu_events_map__find();
+> > -     const struct pmu_event *pe;
+> > -     int i;
+> >       struct rblist groups;
+> >       struct rb_node *node, *next;
+> >       struct strlist *metriclist = NULL;
+> > @@ -556,8 +553,7 @@ void metricgroup__print(bool metrics, bool metricgroups, char *filter,
+> >       groups.node_new = mep_new;
+> >       groups.node_cmp = mep_cmp;
+> >       groups.node_delete = mep_delete;
+> > -     for (i = 0; map; i++) {
+> > -             pe = &map->table[i];
+> > +     for (const struct pmu_event *pe = pmu_events_map__find(); pe; pe++) {
+> >
+> >               if (!pe->name && !pe->metric_group && !pe->metric_name)
+> >                       break;
+> > @@ -850,7 +846,7 @@ struct metricgroup_add_iter_data {
+> >       bool metric_no_group;
+> >       struct metric *root_metric;
+> >       const struct visited_metric *visited;
+> > -     const struct pmu_events_map *map;
+> > +     const struct pmu_event *table;
+> >   };
+> >
+> >   static int add_metric(struct list_head *metric_list,
+> > @@ -859,7 +855,7 @@ static int add_metric(struct list_head *metric_list,
+> >                     bool metric_no_group,
+> >                     struct metric *root_metric,
+> >                     const struct visited_metric *visited,
+> > -                   const struct pmu_events_map *map);
+> > +                   const struct pmu_event *table);
+> >
+> >   /**
+> >    * resolve_metric - Locate metrics within the root metric and recursively add
+> > @@ -874,7 +870,7 @@ static int add_metric(struct list_head *metric_list,
+> >    *               metrics. When adding a root this argument is NULL.
+> >    * @visited: A singly linked list of metric names being added that is used to
+> >    *           detect recursion.
+> > - * @map: The map that is searched for metrics, most commonly the table for the
+> > + * @table: The table that is searched for metrics, most commonly the table for the
+> >    *       architecture perf is running upon.
+> >    */
+> >   static int resolve_metric(struct list_head *metric_list,
+> > @@ -882,7 +878,7 @@ static int resolve_metric(struct list_head *metric_list,
+> >                         bool metric_no_group,
+> >                         struct metric *root_metric,
+> >                         const struct visited_metric *visited,
+> > -                       const struct pmu_events_map *map)
+> > +                       const struct pmu_event *table)
+> >   {
+> >       struct hashmap_entry *cur;
+> >       size_t bkt;
+> > @@ -904,7 +900,7 @@ static int resolve_metric(struct list_head *metric_list,
+> >       hashmap__for_each_entry(root_metric->pctx->ids, cur, bkt) {
+> >               const struct pmu_event *pe;
+> >
+> > -             pe = metricgroup__find_metric(cur->key, map);
+> > +             pe = metricgroup__find_metric(cur->key, table);
+> >               if (pe) {
+> >                       pending = realloc(pending,
+> >                                       (pending_cnt + 1) * sizeof(struct to_resolve));
+> > @@ -927,7 +923,7 @@ static int resolve_metric(struct list_head *metric_list,
+> >        */
+> >       for (i = 0; i < pending_cnt; i++) {
+> >               ret = add_metric(metric_list, pending[i].pe, modifier, metric_no_group,
+> > -                             root_metric, visited, map);
+> > +                             root_metric, visited, table);
+> >               if (ret)
+> >                       break;
+> >       }
+> > @@ -950,7 +946,7 @@ static int resolve_metric(struct list_head *metric_list,
+> >    *               metrics. When adding a root this argument is NULL.
+> >    * @visited: A singly linked list of metric names being added that is used to
+> >    *           detect recursion.
+> > - * @map: The map that is searched for metrics, most commonly the table for the
+> > + * @table: The table that is searched for metrics, most commonly the table for the
+> >    *       architecture perf is running upon.
+> >    */
+> >   static int __add_metric(struct list_head *metric_list,
+> > @@ -960,7 +956,7 @@ static int __add_metric(struct list_head *metric_list,
+> >                       int runtime,
+> >                       struct metric *root_metric,
+> >                       const struct visited_metric *visited,
+> > -                     const struct pmu_events_map *map)
+> > +                     const struct pmu_event *table)
+> >   {
+> >       const struct visited_metric *vm;
+> >       int ret;
+> > @@ -1032,7 +1028,7 @@ static int __add_metric(struct list_head *metric_list,
+> >       } else {
+> >               /* Resolve referenced metrics. */
+> >               ret = resolve_metric(metric_list, modifier, metric_no_group, root_metric,
+> > -                                  &visited_node, map);
+> > +                                  &visited_node, table);
+> >       }
+> >
+> >       if (ret) {
+> > @@ -1045,25 +1041,25 @@ static int __add_metric(struct list_head *metric_list,
+> >       return ret;
+> >   }
+> >
+> > -#define map_for_each_event(__pe, __idx, __map)                                       \
+> > -     if (__map)                                                              \
+> > -             for (__idx = 0, __pe = &__map->table[__idx];                    \
+> > +#define table_for_each_event(__pe, __idx, __table)                                   \
+> > +     if (__table)                                                            \
+> > +             for (__idx = 0, __pe = &__table[__idx];                         \
+> >                    __pe->name || __pe->metric_group || __pe->metric_name;     \
+> > -                  __pe = &__map->table[++__idx])
+> > +                  __pe = &__table[++__idx])
+> >
+> > -#define map_for_each_metric(__pe, __idx, __map, __metric)            \
+> > -     map_for_each_event(__pe, __idx, __map)                          \
+> > +#define table_for_each_metric(__pe, __idx, __table, __metric)                \
+> > +     table_for_each_event(__pe, __idx, __table)                              \
+> >               if (__pe->metric_expr &&                                \
+> >                   (match_metric(__pe->metric_group, __metric) ||      \
+> >                    match_metric(__pe->metric_name, __metric)))
+> >
+> >   const struct pmu_event *metricgroup__find_metric(const char *metric,
+> > -                                              const struct pmu_events_map *map)
+> > +                                              const struct pmu_event *table)
+> >   {
+> >       const struct pmu_event *pe;
+> >       int i;
+> >
+> > -     map_for_each_event(pe, i, map) {
+> > +     table_for_each_event(pe, i, table) {
+> >               if (match_metric(pe->metric_name, metric))
+> >                       return pe;
+> >       }
+> > @@ -1077,7 +1073,7 @@ static int add_metric(struct list_head *metric_list,
+> >                     bool metric_no_group,
+> >                     struct metric *root_metric,
+> >                     const struct visited_metric *visited,
+> > -                   const struct pmu_events_map *map)
+> > +                   const struct pmu_event *table)
+> >   {
+> >       int ret = 0;
+> >
+> > @@ -1085,7 +1081,7 @@ static int add_metric(struct list_head *metric_list,
+> >
+> >       if (!strstr(pe->metric_expr, "?")) {
+> >               ret = __add_metric(metric_list, pe, modifier, metric_no_group, 0,
+> > -                                root_metric, visited, map);
+> > +                                root_metric, visited, table);
+> >       } else {
+> >               int j, count;
+> >
+> > @@ -1098,7 +1094,7 @@ static int add_metric(struct list_head *metric_list,
+> >
+> >               for (j = 0; j < count && !ret; j++)
+> >                       ret = __add_metric(metric_list, pe, modifier, metric_no_group, j,
+> > -                                     root_metric, visited, map);
+> > +                                     root_metric, visited, table);
+> >       }
+> >
+> >       return ret;
+> > @@ -1114,7 +1110,7 @@ static int metricgroup__add_metric_sys_event_iter(const struct pmu_event *pe,
+> >               return 0;
+> >
+> >       ret = add_metric(d->metric_list, pe, d->modifier, d->metric_no_group,
+> > -                      d->root_metric, d->visited, d->map);
+> > +                      d->root_metric, d->visited, d->table);
+> >       if (ret)
+> >               goto out;
+> >
+> > @@ -1162,13 +1158,13 @@ static int metric_list_cmp(void *priv __maybe_unused, const struct list_head *l,
+> >    *                   global. Grouping is the default but due to multiplexing the
+> >    *                   user may override.
+> >    * @metric_list: The list that the metric or metric group are added to.
+> > - * @map: The map that is searched for metrics, most commonly the table for the
+> > + * @table: The table that is searched for metrics, most commonly the table for the
+> >    *       architecture perf is running upon.
+> >    */
+> >   static int metricgroup__add_metric(const char *metric_name, const char *modifier,
+> >                                  bool metric_no_group,
+> >                                  struct list_head *metric_list,
+> > -                                const struct pmu_events_map *map)
+> > +                                const struct pmu_event *table)
+> >   {
+> >       const struct pmu_event *pe;
+> >       LIST_HEAD(list);
+> > @@ -1179,11 +1175,11 @@ static int metricgroup__add_metric(const char *metric_name, const char *modifier
+> >        * Iterate over all metrics seeing if metric matches either the name or
+> >        * group. When it does add the metric to the list.
+> >        */
+> > -     map_for_each_metric(pe, i, map, metric_name) {
+> > +     table_for_each_metric(pe, i, table, metric_name) {
+> >               has_match = true;
+> >               ret = add_metric(&list, pe, modifier, metric_no_group,
+> >                                /*root_metric=*/NULL,
+> > -                              /*visited_metrics=*/NULL, map);
+> > +                              /*visited_metrics=*/NULL, table);
+> >               if (ret)
+> >                       goto out;
+> >       }
+> > @@ -1198,7 +1194,7 @@ static int metricgroup__add_metric(const char *metric_name, const char *modifier
+> >                               .metric_no_group = metric_no_group,
+> >                               .has_match = &has_match,
+> >                               .ret = &ret,
+> > -                             .map = map,
+> > +                             .table = table,
+> >                       },
+> >               };
+> >
+> > @@ -1227,12 +1223,12 @@ static int metricgroup__add_metric(const char *metric_name, const char *modifier
+> >    *                   global. Grouping is the default but due to multiplexing the
+> >    *                   user may override.
+> >    * @metric_list: The list that metrics are added to.
+> > - * @map: The map that is searched for metrics, most commonly the table for the
+> > + * @table: The table that is searched for metrics, most commonly the table for the
+> >    *       architecture perf is running upon.
+> >    */
+> >   static int metricgroup__add_metric_list(const char *list, bool metric_no_group,
+> >                                       struct list_head *metric_list,
+> > -                                     const struct pmu_events_map *map)
+> > +                                     const struct pmu_event *table)
+> >   {
+> >       char *list_itr, *list_copy, *metric_name, *modifier;
+> >       int ret, count = 0;
+> > @@ -1249,7 +1245,7 @@ static int metricgroup__add_metric_list(const char *list, bool metric_no_group,
+> >
+> >               ret = metricgroup__add_metric(metric_name, modifier,
+> >                                             metric_no_group, metric_list,
+> > -                                           map);
+> > +                                           table);
+> >               if (ret == -EINVAL)
+> >                       pr_err("Cannot find metric or group `%s'\n", metric_name);
+> >
+> > @@ -1440,7 +1436,7 @@ static int parse_groups(struct evlist *perf_evlist, const char *str,
+> >                       bool metric_no_merge,
+> >                       struct perf_pmu *fake_pmu,
+> >                       struct rblist *metric_events_list,
+> > -                     const struct pmu_events_map *map)
+> > +                     const struct pmu_event *table)
+> >   {
+> >       struct evlist *combined_evlist = NULL;
+> >       LIST_HEAD(metric_list);
+> > @@ -1451,7 +1447,7 @@ static int parse_groups(struct evlist *perf_evlist, const char *str,
+> >       if (metric_events_list->nr_entries == 0)
+> >               metricgroup__rblist_init(metric_events_list);
+> >       ret = metricgroup__add_metric_list(str, metric_no_group,
+> > -                                        &metric_list, map);
+> > +                                        &metric_list, table);
+> >       if (ret)
+> >               goto out;
+> >
+> > @@ -1586,34 +1582,34 @@ int metricgroup__parse_groups(const struct option *opt,
+> >                             struct rblist *metric_events)
+> >   {
+> >       struct evlist *perf_evlist = *(struct evlist **)opt->value;
+> > -     const struct pmu_events_map *map = pmu_events_map__find();
+> > +     const struct pmu_event *table = pmu_events_map__find();
+> >
+> >       return parse_groups(perf_evlist, str, metric_no_group,
+> > -                         metric_no_merge, NULL, metric_events, map);
+> > +                         metric_no_merge, NULL, metric_events, table);
+> >   }
+> >
+> >   int metricgroup__parse_groups_test(struct evlist *evlist,
+> > -                                const struct pmu_events_map *map,
+> > +                                const struct pmu_event *table,
+> >                                  const char *str,
+> >                                  bool metric_no_group,
+> >                                  bool metric_no_merge,
+> >                                  struct rblist *metric_events)
+> >   {
+> >       return parse_groups(evlist, str, metric_no_group,
+> > -                         metric_no_merge, &perf_pmu__fake, metric_events, map);
+> > +                         metric_no_merge, &perf_pmu__fake, metric_events, table);
+> >   }
+> >
+> >   bool metricgroup__has_metric(const char *metric)
+> >   {
+> > -     const struct pmu_events_map *map = pmu_events_map__find();
+> > +     const struct pmu_event *table = pmu_events_map__find();
+> >       const struct pmu_event *pe;
+> >       int i;
+> >
+> > -     if (!map)
+> > +     if (!table)
+> >               return false;
+> >
+> >       for (i = 0; ; i++) {
+> > -             pe = &map->table[i];
+> > +             pe = &table[i];
+> >
+> >               if (!pe->name && !pe->metric_group && !pe->metric_name)
+> >                       break;
+> > diff --git a/tools/perf/util/metricgroup.h b/tools/perf/util/metricgroup.h
+> > index 2b42b778d1bf..5a1390e73d25 100644
+> > --- a/tools/perf/util/metricgroup.h
+> > +++ b/tools/perf/util/metricgroup.h
+> > @@ -71,9 +71,9 @@ int metricgroup__parse_groups(const struct option *opt,
+> >                             bool metric_no_merge,
+> >                             struct rblist *metric_events);
+> >   const struct pmu_event *metricgroup__find_metric(const char *metric,
+> > -                                              const struct pmu_events_map *map);
+> > +                                              const struct pmu_event *table);
+> >   int metricgroup__parse_groups_test(struct evlist *evlist,
+> > -                                const struct pmu_events_map *map,
+> > +                                const struct pmu_event *table,
+> >                                  const char *str,
+> >                                  bool metric_no_group,
+> >                                  bool metric_no_merge,
+> > diff --git a/tools/perf/util/pmu.c b/tools/perf/util/pmu.c
+> > index d8717c4548a4..f3e3c4a147e9 100644
+> > --- a/tools/perf/util/pmu.c
+> > +++ b/tools/perf/util/pmu.c
+> > @@ -710,9 +710,9 @@ static char *perf_pmu__getcpuid(struct perf_pmu *pmu)
+> >       return cpuid;
+> >   }
+> >
+> > -const struct pmu_events_map *perf_pmu__find_map(struct perf_pmu *pmu)
+> > +const struct pmu_event *perf_pmu__find_table(struct perf_pmu *pmu)
+> >   {
+> > -     const struct pmu_events_map *map;
+> > +     const struct pmu_event *table = NULL;
+> >       char *cpuid = perf_pmu__getcpuid(pmu);
+> >       int i;
+> >
+> > @@ -724,22 +724,23 @@ const struct pmu_events_map *perf_pmu__find_map(struct perf_pmu *pmu)
+> >
+> >       i = 0;
+> >       for (;;) {
+> > -             map = &pmu_events_map[i++];
+> > -             if (!map->table) {
+> > -                     map = NULL;
+> > +             const struct pmu_events_map *map = &pmu_events_map[i++];
+> > +
+> > +             if (!map->table)
+> >                       break;
+> > -             }
+> >
+> > -             if (!strcmp_cpuid_str(map->cpuid, cpuid))
+> > +             if (!strcmp_cpuid_str(map->cpuid, cpuid)) {
+> > +                     table = map->table;
+> >                       break;
+> > +             }
+> >       }
+> >       free(cpuid);
+> > -     return map;
+> > +     return table;
+> >   }
+> >
+> > -const struct pmu_events_map *__weak pmu_events_map__find(void)
+> > +__weak const struct pmu_event *pmu_events_map__find(void)
+> >   {
+> > -     return perf_pmu__find_map(NULL);
+> > +     return perf_pmu__find_table(NULL);
+> >   }
+> >
+> >   /*
+> > @@ -824,7 +825,7 @@ bool pmu_uncore_alias_match(const char *pmu_name, const char *name)
+> >    * as aliases.
+> >    */
+> >   void pmu_add_cpu_aliases_map(struct list_head *head, struct perf_pmu *pmu,
+>
+> Again, it seems that this name should be changed
+
+Ack. I'll put this into the next version. The next patch (number 10
+"perf pmu-events: Hide the pmu_events") changes things slightly:
+
+-const struct pmu_event *pmu_events_map__find(void)
++const struct pmu_events_table *pmu_events_map__find(void)
+
+So I'll try to minimize the churn in renaming.
+
+Thanks,
+Ian
+
+> > -                          const struct pmu_events_map *map)
+> > +                          const struct pmu_event *table)
+> >   {
+> >       int i;
+> >       const char *name = pmu->name;
+> > @@ -834,7 +835,7 @@ void pmu_add_cpu_aliases_map(struct list_head *head, struct perf_pmu *pmu,
+> >       i = 0;
+> >       while (1) {
+> >               const char *cpu_name = is_arm_pmu_core(name) ? name : "cpu";
+> > -             const struct pmu_event *pe = &map->table[i++];
+> > +             const struct pmu_event *pe = &table[i++];
+> >               const char *pname = pe->pmu ? pe->pmu : cpu_name;
+> >
+> >               if (!pe->name) {
+> > @@ -859,13 +860,13 @@ void pmu_add_cpu_aliases_map(struct list_head *head, struct perf_pmu *pmu,
+> >
+> >   static void pmu_add_cpu_aliases(struct list_head *head, struct perf_pmu *pmu)
+> >   {
+> > -     const struct pmu_events_map *map;
+> > +     const struct pmu_event *table;
+> >
+> > -     map = perf_pmu__find_map(pmu);
+> > -     if (!map)
+> > +     table = perf_pmu__find_table(pmu);
+> > +     if (!table)
+> >               return;
+> >
+> > -     pmu_add_cpu_aliases_map(head, pmu, map);
+> > +     pmu_add_cpu_aliases_map(head, pmu, table);
+> >   }
+> >
+> >   struct pmu_sys_event_iter_data {
+> > diff --git a/tools/perf/util/pmu.h b/tools/perf/util/pmu.h
+> > index 7e667eec2a01..015242c83698 100644
+> > --- a/tools/perf/util/pmu.h
+> > +++ b/tools/perf/util/pmu.h
+> > @@ -126,10 +126,10 @@ int perf_pmu__test(void);
+> >
+> >   struct perf_event_attr *perf_pmu__get_default_config(struct perf_pmu *pmu);
+> >   void pmu_add_cpu_aliases_map(struct list_head *head, struct perf_pmu *pmu,
+> > -                          const struct pmu_events_map *map);
+> > +                          const struct pmu_event *map);
+> >
+> > -const struct pmu_events_map *perf_pmu__find_map(struct perf_pmu *pmu);
+> > -const struct pmu_events_map *pmu_events_map__find(void);
+> > +const struct pmu_event *perf_pmu__find_table(struct perf_pmu *pmu);
+> > +const struct pmu_event *pmu_events_map__find(void);
+> >   bool pmu_uncore_alias_match(const char *pmu_name, const char *name);
+> >   void perf_pmu_free_alias(struct perf_pmu_alias *alias);
+> >
+> > diff --git a/tools/perf/util/s390-sample-raw.c b/tools/perf/util/s390-sample-raw.c
+> > index cd3a34840389..1ecb718fc0eb 100644
+> > --- a/tools/perf/util/s390-sample-raw.c
+> > +++ b/tools/perf/util/s390-sample-raw.c
+> > @@ -135,12 +135,12 @@ static int get_counterset_start(int setnr)
+> >    * the name of this counter.
+> >    * If no match is found a NULL pointer is returned.
+> >    */
+> > -static const char *get_counter_name(int set, int nr, const struct pmu_events_map *map)
+> > +static const char *get_counter_name(int set, int nr, const struct pmu_event *table)
+> >   {
+> >       int rc, event_nr, wanted = get_counterset_start(set) + nr;
+> >
+> > -     if (map) {
+> > -             const struct pmu_event *evp = map->table;
+> > +     if (table) {
+> > +             const struct pmu_event *evp = table;
+> >
+> >               for (; evp->name || evp->event || evp->desc; ++evp) {
+> >                       if (evp->name == NULL || evp->event == NULL)
+> > @@ -159,10 +159,10 @@ static void s390_cpumcfdg_dump(struct perf_sample *sample)
+> >       unsigned char *buf = sample->raw_data;
+> >       const char *color = PERF_COLOR_BLUE;
+> >       struct cf_ctrset_entry *cep, ce;
+> > -     const struct pmu_events_map *map;
+> > +     const struct pmu_event *table;
+> >       u64 *p;
+> >
+> > -     map = pmu_events_map__find();
+> > +     table = pmu_events_map__find();
+> >       while (offset < len) {
+> >               cep = (struct cf_ctrset_entry *)(buf + offset);
+> >
+> > @@ -180,7 +180,7 @@ static void s390_cpumcfdg_dump(struct perf_sample *sample)
+> >               color_fprintf(stdout, color, "    [%#08zx] Counterset:%d"
+> >                             " Counters:%d\n", offset, ce.set, ce.ctr);
+> >               for (i = 0, p = (u64 *)(cep + 1); i < ce.ctr; ++i, ++p) {
+> > -                     const char *ev_name = get_counter_name(ce.set, i, map);
+> > +                     const char *ev_name = get_counter_name(ce.set, i, table);
+> >
+> >                       color_fprintf(stdout, color,
+> >                                     "\tCounter:%03d %s Value:%#018lx\n", i,
+>

@@ -2,103 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A424858EF00
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 17:10:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3A0B58EF03
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 17:11:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232332AbiHJPKL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 11:10:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52168 "EHLO
+        id S232924AbiHJPKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 11:10:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233015AbiHJPJz (ORCPT
+        with ESMTP id S232387AbiHJPKo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 11:09:55 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B2D775FD9;
-        Wed, 10 Aug 2022 08:09:53 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id e13so19434529edj.12;
-        Wed, 10 Aug 2022 08:09:53 -0700 (PDT)
+        Wed, 10 Aug 2022 11:10:44 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE2DB4A5
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 08:10:43 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id j8so28243354ejx.9
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 08:10:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc;
-        bh=f/VOOq8lXSlkiTFVM32cY0BcJPmVEl3q/12bVuDaQYY=;
-        b=asjLVsS+PuxHh0j5TCEjcmVm3HYJxdeJGJroPrQIQBgb2x5Fa7ioKXwgzD1c1VsB6+
-         8EFTRv9KpRFdD7Qr3iTh/AllzWQ3Ztqi0DyeHoUkY3dLLNiMmo/dDq/KFN+RsTVi7JAh
-         ICDbAt4+EdjC5jGtJcbIpyvpjWcPHmCuBIAJdRadvIosOmPODYEqdL/bQwov1Hx2Otku
-         9taFV+pl5wXkPYZ3kSL3c68JBnvsAQzoR14jb1zUARx/DrtMPBc9K5c1SbrB6tyxQ6Ku
-         gyXRsObHyNq6mMonV3SJBf24qaZ/9VEgV0vmRykBemrFd81WG46KFMzoH13b+uEj9yVL
-         XJOQ==
+        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=QvWgi4bapgJrNQFkQQ/ZI8kSbG7GnXbksaof+b0rmLc=;
+        b=kDqaOrUd0p917w2v+d7X2KGqQbhozVosVzex2g0KecOPP4HWnCyfpVycR36/m83PkC
+         r/hVZZMqfEpfB7mKxkEPtcyPiqS1KgwmZdOduWmZgbmbXoFP0xMdRxrP2+IRLOL+gj+G
+         a/bob2EBbCfku/BjYYbmzh4nD1gUsYEhfM6st88Co6+JheB1J5myX7YsP+kxmieOtbH0
+         uXjeJ34pA12v4Ap3fRnc/M+VHnE8FQTkIIw+3vQwguJFVxBiSvfTZpJFZ3r48T8VlXhr
+         UxMW5Kw+ZDGmbp9LSMUOBGDLTLxf/D6w/gHE1XFb728KVwkDCNQ2f5LasZ+e5dPa9vZi
+         acow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=f/VOOq8lXSlkiTFVM32cY0BcJPmVEl3q/12bVuDaQYY=;
-        b=Wpt5gMSvVnDk1Dy14c04dX2ozoXV8P/yqdP4VuaVJ03hAwklx4m8MNWprDSE1t64+C
-         8/x3/VtMkB9uX9lyYvoimkKQIdIZHqSDmTXkSJrgaRpbEKGWGKm8Yu88NcOm8WQNwVLc
-         ohIuGaAox+eh/pxE/YmHSFnFmO+7p7oyPQqzMw0lxk8bQgpnJ4Gt2S5kqjjBnqR50dFe
-         rP0lVnpmi53Wk653TBQwy129FRXOv9YYZxu1RJT+M9t5aHhfeDOTQUHS/QnEHnm5IhYe
-         tOND4ZhnQcVLEf/sExAlyGEKvZMFfGELwm2XJCrXJhJPL3CuYrHq+viZVcCi/TAHLdJE
-         EZjA==
-X-Gm-Message-State: ACgBeo2gqEVMqc0uOR9KAGMHpUDNYUT5jRldZF5SiabLfQGIbq5VCoS/
-        fI2rQoFpqGw+cKjuoVmO5Qvhy8CG/ag=
-X-Google-Smtp-Source: AA6agR7Pi2BX4F2u2k11BqJFlDPz+CrdzSIRcFTEets2ZExEhWdZ16CQAYkc9z8ikshuPNi2SkP6bg==
-X-Received: by 2002:a50:fb99:0:b0:43c:d008:d4f9 with SMTP id e25-20020a50fb99000000b0043cd008d4f9mr26827209edq.13.1660144192117;
-        Wed, 10 Aug 2022 08:09:52 -0700 (PDT)
-Received: from felia.fritz.box (200116b826708900bd59055014c64746.dip.versatel-1u1.de. [2001:16b8:2670:8900:bd59:550:14c6:4746])
-        by smtp.gmail.com with ESMTPSA id p12-20020a1709066a8c00b0072af4af2f46sm2417358ejr.74.2022.08.10.08.09.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 08:09:51 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>,
-        Linyu Yuan <quic_linyyuan@quicinc.com>
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] tracing: react to error return from traceprobe_parse_event_name()
-Date:   Wed, 10 Aug 2022 17:09:21 +0200
-Message-Id: <20220810150921.8858-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=QvWgi4bapgJrNQFkQQ/ZI8kSbG7GnXbksaof+b0rmLc=;
+        b=ocaLVtOe2aGcA4D8lc/oLiYXzJE6sT0nju9wVk6tSfUUe+/axtqaSLoHs4S0SJq6il
+         wr6qnKtDCVyI4SFU5XIB+ugCL4OQj3JKXjCYAdluZnie99SMGEFri0vxC+tSbVwwA83p
+         6BbXyFflBIvZWGl3EYrBF20ZEgqbEmQf7C88wp7AZL1EdjQnJbKxBb51hCmH6oRyIFuI
+         S9zmUtoZ07+knn9JFLW+kFXsIsylFzIx389YCHFU35TvREah0KQi2/j6GRPntjj8T+4l
+         vto0Z/+JcC3W44qXkxh0d+kGsEqcYacihRsNRl7xFQWx0kXo3qWoZZbilxeAGh4lbsBf
+         HqGA==
+X-Gm-Message-State: ACgBeo2ATTEvPz3hgRq8PUKh04BFnsbcFCGogpqXZSgGMGBc9i/bKLaI
+        f+mTygqgmm1uRxleCdzMWE5fag==
+X-Google-Smtp-Source: AA6agR6Aze/QbsmhHuigbbQINd3adGnoFr4Q79ghohdECe7s8FeuljsSPzsyr2Iapj6rrFDG5/vvkA==
+X-Received: by 2002:a17:907:8687:b0:730:7c7b:b9ce with SMTP id qa7-20020a170907868700b007307c7bb9cemr20093525ejc.656.1660144242092;
+        Wed, 10 Aug 2022 08:10:42 -0700 (PDT)
+Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
+        by smtp.gmail.com with ESMTPSA id ku19-20020a170907789300b00730b5a35288sm2368814ejc.214.2022.08.10.08.10.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Aug 2022 08:10:41 -0700 (PDT)
+Message-ID: <74b69521-0d40-5e2f-4d1b-76e9697d7471@blackwall.org>
+Date:   Wed, 10 Aug 2022 18:10:40 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH RFC net-next 0/3] net: vlan: fix bridge binding behavior
+ and add selftests
+Content-Language: en-US
+To:     Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
+Cc:     netdev@vger.kernel.org, aroulin@nvidia.com, sbrivio@redhat.com,
+        roopa@nvidia.com, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org
+References: <cover.1660100506.git.sevinj.aghayeva@gmail.com>
+ <94ec6182-0804-7a0e-dcba-42655ff19884@blackwall.org>
+ <CAMWRUK45nbZS3PeSLR1X=Ko6oavrjKj2AWeh2F1wckMPrz_dEg@mail.gmail.com>
+ <49f933c3-7430-a133-9add-ed76c395023b@blackwall.org>
+ <CAMWRUK4J6Dp7Cff=pN9iw6OwDN8g61dd4S=OVKQ75vBch-PxXQ@mail.gmail.com>
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <CAMWRUK4J6Dp7Cff=pN9iw6OwDN8g61dd4S=OVKQ75vBch-PxXQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function traceprobe_parse_event_name() may set the first two function
-arguments to a non-null value and still return -EINVAL to indicate an
-unsuccessful completion of the function. Hence, it is not sufficient to
-just check the result of the two function arguments for being not null,
-but the return value also needs to be checked.
+On 10/08/2022 18:00, Sevinj Aghayeva wrote:
+> On Wed, Aug 10, 2022 at 10:50 AM Nikolay Aleksandrov
+> <razor@blackwall.org> wrote:
+>>
+>> On 10/08/2022 17:42, Sevinj Aghayeva wrote:
+>>>
+>>>
+>>> On Wed, Aug 10, 2022 at 4:54 AM Nikolay Aleksandrov <razor@blackwall.org <mailto:razor@blackwall.org>> wrote:
+>>>
+>>>     On 10/08/2022 06:11, Sevinj Aghayeva wrote:
+>>>     > When bridge binding is enabled for a vlan interface, it is expected
+>>>     > that the link state of the vlan interface will track the subset of the
+>>>     > ports that are also members of the corresponding vlan, rather than
+>>>     > that of all ports.
+>>>     >
+>>>     > Currently, this feature works as expected when a vlan interface is
+>>>     > created with bridge binding enabled:
+>>>     >
+>>>     >   ip link add link br name vlan10 type vlan id 10 protocol 802.1q \
+>>>     >         bridge_binding on
+>>>     >
+>>>     > However, the feature does not work when a vlan interface is created
+>>>     > with bridge binding disabled, and then enabled later:
+>>>     >
+>>>     >   ip link add link br name vlan10 type vlan id 10 protocol 802.1q \
+>>>     >         bridge_binding off
+>>>     >   ip link set vlan10 type vlan bridge_binding on
+>>>     >
+>>>     > After these two commands, the link state of the vlan interface
+>>>     > continues to track that of all ports, which is inconsistent and
+>>>     > confusing to users. This series fixes this bug and introduces two
+>>>     > tests for the valid behavior.
+>>>     >
+>>>     > Sevinj Aghayeva (3):
+>>>     >   net: core: export call_netdevice_notifiers_info
+>>>     >   net: 8021q: fix bridge binding behavior for vlan interfaces
+>>>     >   selftests: net: tests for bridge binding behavior
+>>>     >
+>>>     >  include/linux/netdevice.h                     |   2 +
+>>>     >  net/8021q/vlan.h                              |   2 +-
+>>>     >  net/8021q/vlan_dev.c                          |  25 ++-
+>>>     >  net/core/dev.c                                |   7 +-
+>>>     >  tools/testing/selftests/net/Makefile          |   1 +
+>>>     >  .../selftests/net/bridge_vlan_binding_test.sh | 143 ++++++++++++++++++
+>>>     >  6 files changed, 172 insertions(+), 8 deletions(-)
+>>>     >  create mode 100755 tools/testing/selftests/net/bridge_vlan_binding_test.sh
+>>>     >
+>>>
+>>>     Hi,
+>>>     NETDEV_CHANGE event is already propagated when the vlan changes flags,
+>>>
+>>>
+>>> I'm not sure if NETDEV_CHANGE is actually propagated when the vlan changes flags. The two functions in the bridge module that handle NETDEV_CHANGE are br_vlan_port_event  and br_vlan_bridge_event. I've installed probes for both, and when I'm changing flags using "sudo ip link set vlan10 type vlan bridge_binding on", I don't see any of those functions getting called, although I do see vlan_dev_change_flags getting called. I think there may be a bug in core/dev.c:__dev_notify_flags.
+>>
+>> are both vlan and bridge interfaces up?
+>> what exactly are you probing for?
+> 
+> 
+> I first run the attached pre.sh script that sets up the environment
+> and creates a vlan interface with bridge binding off. I then start
+> recording with perf, and here's the list of probes:
+> 
+> $ sudo ./k/linux/tools/perf/perf probe -l
+>   probe:br_vlan_bridge_event (on br_vlan_bridge_event in bridge with event dev)
+>   probe:br_vlan_port_event (on br_vlan_port_event in bridge with event)
+>   probe:br_vlan_set_vlan_dev_state (on br_vlan_set_vlan_dev_state in
+> bridge with br vlan_dev)
+>   probe:register_vlan_dev (on register_vlan_dev in 8021q with dev)
+>   probe:vlan_changelink (on vlan_changelink in 8021q with dev)
+>   probe:vlan_dev_change_flags (on vlan_dev_change_flags in 8021q with dev)
+>   probe:vlan_dev_fix_features (on vlan_dev_fix_features in 8021q with dev)
+>   probe:vlan_dev_init  (on vlan_dev_init in 8021q with dev)
+>   probe:vlan_dev_ioctl (on vlan_dev_ioctl in 8021q with dev)
+>   probe:vlan_dev_open  (on vlan_dev_open in 8021q with dev)
+>   probe:vlan_dev_stop  (on vlan_dev_stop in 8021q with dev)
+>   probe:vlan_dev_uninit (on vlan_dev_uninit in 8021q with dev)
+>   probe:vlan_newlink   (on vlan_newlink in 8021q with dev)
+> 
+> I then run the following command to turn the bridge binding flag on:
+> 
+> $ sudo ip link set vlan10 type vlan bridge_binding on
+> 
+> Then I stop the recording and print out the events, and I see this. I
+> don't see br_vlan_port_event or br_vlan_bridge_event getting called.
+> 
+>               ip  5933 [003]  2204.722470:
+> probe:vlan_changelink: (ffffffffc1042b50) dev="vlan10"
+>               ip  5933 [003]  2204.722476:
+> probe:vlan_dev_change_flags: (ffffffffc1042600) dev="vlan10"
+> 
+> Am I doing something wrong?
+> 
+> Thanks
+> 
+> 
 
-Commit 95c104c378dc ("tracing: Auto generate event name when creating a
-group of events") changed the error-return-value checking of the second
-traceprobe_parse_event_name() invocation in __trace_eprobe_create() and
-removed checking the return value to jump to the error handling case.
+You can't expect to see br_vlan_bridge_event() called because the notification
+target device is vlan10 and not the bridge. See br_device_event():
+...
+        if (netif_is_bridge_master(dev)) {
+                err = br_vlan_bridge_event(dev, event, ptr);
+                if (err)
+                        return notifier_from_errno(err);
+...
 
-Reinstate using the return value in the error-return-value checking.
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- kernel/trace/trace_eprobe.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
-index 4a0e9d927443..460d3ec8a256 100644
---- a/kernel/trace/trace_eprobe.c
-+++ b/kernel/trace/trace_eprobe.c
-@@ -883,7 +883,7 @@ static int __trace_eprobe_create(int argc, const char *argv[])
- 	trace_probe_log_set_index(1);
- 	sys_event = argv[1];
- 	ret = traceprobe_parse_event_name(&sys_event, &sys_name, buf2, 0);
--	if (!sys_event || !sys_name) {
-+	if (!ret || !sys_event || !sys_name) {
- 		trace_probe_log_err(0, NO_EVENT_INFO);
- 		goto parse_error;
- 	}
--- 
-2.17.1
+Try probing for br_device_event(), you'll see it gets called every time you change the flag.
 

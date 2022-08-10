@@ -2,69 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89CA358F44B
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 00:22:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 241E858F44D
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 00:23:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233376AbiHJWWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 18:22:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53228 "EHLO
+        id S233040AbiHJWW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 18:22:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiHJWV7 (ORCPT
+        with ESMTP id S231550AbiHJWWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 18:21:59 -0400
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710EB8C449;
-        Wed, 10 Aug 2022 15:21:58 -0700 (PDT)
-Received: by mail-pj1-f50.google.com with SMTP id t22so16105297pjy.1;
-        Wed, 10 Aug 2022 15:21:58 -0700 (PDT)
+        Wed, 10 Aug 2022 18:22:55 -0400
+Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 005518C452
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 15:22:53 -0700 (PDT)
+Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-10d845dcf92so19471961fac.12
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 15:22:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:from:to:cc;
+        bh=6ZXpeykwT3UcSDOHGtJfXAmbLhvIZVOoNhfE2nMEi9U=;
+        b=fNj6bGWSepVNh9KUpmWHunpqN8Jhu3GMgOn+GPdB4erApMi1R65km8K1Kmq7Mej4Nq
+         +A4fckaH0S/Wcj86Dko9ri0Rc+tf9fvc6osQfaJSsy13zB/TMANokZiR5NSjqI6ff4Tq
+         1Az7Ym4yC5q6aCw2z+xVuxCZpPI193+UioaKE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=YZbS2XsmWJ/nsjhvibRctXvETOOxOBZgEYWKbgY8GtQ=;
-        b=m3t8wRXM4+VtWI+JJ9Xn/pG8QOT1dxAMeE7utcz9C0OnAmW3E4PoulIv8BNcGrMOn2
-         Ob4XfB2Lukagjq4hxNkaNQBulSQsfjyWtoDYzlhNhfk/5myHLUR2M9zYeLVo4tbQN4Lc
-         U7+UYvgr+Xc2r1QLUpxYfE/zrt0kNBHjB322qLkxdbv754HaJh4CbCOBmZRQEhmMVDrX
-         AchdY+TUbh/4pDSthMqKsmEG2jTQ6303zXP3f5bPyRkPZdIxR5OrU4qNOBG6lHWv7l6x
-         5QvAp94t+sb3l42MrZIWdovrZuXS+1E0jMV9hVagc7Yr4gPLHu+ZWa91i2kMgcBOXuBM
-         1Rhg==
-X-Gm-Message-State: ACgBeo1j47FeL2PORkEukIWivnZbL+tnZNHrbSIKXHEWXPfxegKVvJcc
-        UZlMVBapzKCUzjIv5SKbKio=
-X-Google-Smtp-Source: AA6agR6jOnCaIK1g4UVpsCDqCwACNR5OVkNOYFcsanuEvLQRJkWhesCYWJ10S4BB4YfYrOIE44S7FQ==
-X-Received: by 2002:a17:902:ea02:b0:16f:11bf:f018 with SMTP id s2-20020a170902ea0200b0016f11bff018mr29159076plg.150.1660170117746;
-        Wed, 10 Aug 2022 15:21:57 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:85c9:163f:8564:e41f? ([2620:15c:211:201:85c9:163f:8564:e41f])
-        by smtp.gmail.com with ESMTPSA id l6-20020a170902f68600b0016c454598b5sm7263159plg.167.2022.08.10.15.21.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Aug 2022 15:21:57 -0700 (PDT)
-Message-ID: <91cdca66-3fd5-667c-de78-113e8a28bb59@acm.org>
-Date:   Wed, 10 Aug 2022 15:21:55 -0700
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:x-gm-message-state:from:to:cc;
+        bh=6ZXpeykwT3UcSDOHGtJfXAmbLhvIZVOoNhfE2nMEi9U=;
+        b=brGrQQvCAADQvDfbzr18VJx+cSrzPi1c4f6KGuVHtCkpQFgroSO9UIV5/gp/l3Bnvm
+         nrKDJ6WrCyZ6LUYbEz7ew+GeuH6kyhhUlzyFpg8goeNgw1ewq9mrO2suasFyCSxH2j8s
+         ME8Ux3RX5pAEIlTWZ/o0QUIG8+POac8yKLvom3Yx0a6feXSrKaMqPeBsaAl0SMwjt1Ft
+         wRJwUXsLKAQiGhevXu6iornXD4+chrImp481JoZ47N7ERbJhKdOULYOIB9IWsrNaV8b0
+         Kj4q7BPwwTN9XnyCN1lvpwLy4oHSyWqcMhkGFoMdAygaiwjd09UbjGV5QbvQ9XHP94r0
+         WjnA==
+X-Gm-Message-State: ACgBeo0O7xusar+w/hTgewPwF/O7lv946TnhZXTvvoor9rLmTNCnLaEP
+        LJZr+O4AK+TIzmuBUGV7etWFSYpVfJLd2EZLERhLWg==
+X-Google-Smtp-Source: AA6agR4tGznIvQwijtSDOPuLU9fc/WJ4b/gonUrK7uyKPVZ3I1QHlYY7Al1Vij85kOgI7HtbkFv2qGEbFQGqeEitqyg=
+X-Received: by 2002:a05:6870:9a17:b0:e9:3d1:f91a with SMTP id
+ fo23-20020a0568709a1700b000e903d1f91amr2438112oab.44.1660170173320; Wed, 10
+ Aug 2022 15:22:53 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 10 Aug 2022 17:22:52 -0500
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: fs/zonefs/./trace.h:22:1: sparse: sparse: cast to restricted
- blk_opf_t
-Content-Language: en-US
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Johannes Thumshirn <jth@kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
-References: <202208061533.YBqXyzHm-lkp@intel.com>
- <affa6eee-3b7c-105a-8f4a-35f1ed81f0cd@opensource.wdc.com>
- <b3a6b038-ba0c-2242-3a29-5bcadcaa9d71@acm.org>
- <24b7e027-e098-269b-ccf7-b14deb499c33@opensource.wdc.com>
- <8aa0e7a4-265c-21f4-bdb4-57641d15b7b9@acm.org>
- <27eed02c-fd92-6f99-b213-1be70193b37d@opensource.wdc.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <27eed02c-fd92-6f99-b213-1be70193b37d@opensource.wdc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <1660159551-13828-1-git-send-email-quic_khsieh@quicinc.com>
+References: <1660159551-13828-1-git-send-email-quic_khsieh@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Wed, 10 Aug 2022 17:22:52 -0500
+Message-ID: <CAE-0n533SUb3Bg=pR8Fhwo-M5qLWiti4nzLR-rSGVAsrXgEYNQ@mail.gmail.com>
+Subject: Re: [PATCH v3] drm/msm/dp: check hpd_state before push idle pattern
+ at dp_bridge_disable()
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
+        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
+        dianders@chromium.org, dmitry.baryshkov@linaro.org,
+        robdclark@gmail.com, sean@poorly.run, vkoul@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,18 +72,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/10/22 12:14, Damien Le Moal wrote:
-> Good point. I was using Fedora 36 sparse package. Using sparse compiled from
-> source, I now see again the warnings without the patch and no warnings with the
-> patch applied. So the patch looks good. Are you going to send it as a fix for
-> 6.0-rc1 ?
+Quoting Kuogee Hsieh (2022-08-10 12:25:51)
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> index b36f8b6..678289a 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> @@ -1729,10 +1729,20 @@ void dp_bridge_disable(struct drm_bridge *drm_bridge)
+>         struct msm_dp_bridge *dp_bridge = to_dp_bridge(drm_bridge);
+>         struct msm_dp *dp = dp_bridge->dp_display;
+>         struct dp_display_private *dp_display;
+> +       u32 state;
+>
+>         dp_display = container_of(dp, struct dp_display_private, dp_display);
+>
+> +       mutex_lock(&dp_display->event_mutex);
+> +
+> +       state = dp_display->hpd_state;
+> +       if (state != ST_DISCONNECT_PENDING && state != ST_CONNECTED) {
 
-Hi Damien,
+It's concerning that we have to check this at all. Are we still
+interjecting into the disable path when the cable is disconnected?
 
-It is not clear to me why I have not yet received any feedback from 
-Steven Rostedt on that patch. I will try to ping Steven off-list. If 
-necessary I will repost that patch.
-
-Best regards,
-
-Bart.
+> +               mutex_unlock(&dp_display->event_mutex);
+> +               return;
+> +       }
+> +
+>         dp_ctrl_push_idle(dp_display->ctrl);
+> +       mutex_unlock(&dp_display->event_mutex);

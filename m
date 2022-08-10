@@ -2,63 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0E6A58E4E4
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 04:34:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6599258E4EA
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 04:41:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbiHJCeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 22:34:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41052 "EHLO
+        id S229862AbiHJCkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 22:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230117AbiHJCd5 (ORCPT
+        with ESMTP id S229681AbiHJCke (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 22:33:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D4EB280F7B
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 19:33:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660098835;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=suhGPSWhT6dIpWdeH1NJXj9NgY38OxY1SzPNsuD/rYs=;
-        b=BgEfML/gSGAViU3Be8kjtvtjwqEfz5dKgVZ09bm9z3U/IENf4HDnCyZqKOyPhmUvRhemtJ
-        vyUOMmxUUB4PO92Y6sNTRbDwuCuKldo99vaRrCtmgRkyRKVW/kx54mWLakYQLeHZ/F7Gsw
-        xdQZkt9N5GsF7pJVAVSnlOb5edcl4Ck=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-10-g-OvmarIMQqC1ktWa0MFLA-1; Tue, 09 Aug 2022 22:33:48 -0400
-X-MC-Unique: g-OvmarIMQqC1ktWa0MFLA-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3FA4A38005C2;
-        Wed, 10 Aug 2022 02:33:48 +0000 (UTC)
-Received: from jtoppins.rdu.csb (unknown [10.22.10.143])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id CA2E82026D4C;
-        Wed, 10 Aug 2022 02:33:47 +0000 (UTC)
-From:   Jonathan Toppins <jtoppins@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     liuhangbin@gmail.com, Jay Vosburgh <j.vosburgh@gmail.com>,
-        Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH net v2 2/2] bonding: 802.3ad: fix no transmission of LACPDUs
-Date:   Tue,  9 Aug 2022 22:33:22 -0400
-Message-Id: <6cc59ad0a2aabea17a9361c374237f674a8b27b9.1660098382.git.jtoppins@redhat.com>
-In-Reply-To: <cover.1660098382.git.jtoppins@redhat.com>
-References: <cover.1660098382.git.jtoppins@redhat.com>
+        Tue, 9 Aug 2022 22:40:34 -0400
+Received: from unicom145.biz-email.net (unicom145.biz-email.net [210.51.26.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28636C3E
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 19:40:30 -0700 (PDT)
+Received: from ([60.208.111.195])
+        by unicom145.biz-email.net ((D)) with ASMTP (SSL) id EAY00024;
+        Wed, 10 Aug 2022 10:40:24 +0800
+Received: from localhost.localdomain (10.200.104.97) by
+ jtjnmail201603.home.langchao.com (10.100.2.3) with Microsoft SMTP Server id
+ 15.1.2507.9; Wed, 10 Aug 2022 10:40:23 +0800
+From:   Bo Liu <liubo03@inspur.com>
+To:     <artur.paszkiewicz@intel.com>, <jejb@linux.ibm.com>,
+        <martin.petersen@oracle.com>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Bo Liu <liubo03@inspur.com>
+Subject: [PATCH] isci: Fix all occurences of the "for for" typo
+Date:   Tue, 9 Aug 2022 22:40:22 -0400
+Message-ID: <20220810024022.2520-1-liubo03@inspur.com>
+X-Mailer: git-send-email 2.18.2
 MIME-Version: 1.0
 Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.4
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Originating-IP: [10.200.104.97]
+tUid:   20228101040245383cb680f642ebfc74891bac61e3140
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,88 +47,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is caused by the global variable ad_ticks_per_sec being zero as
-demonstrated by the reproducer script discussed below. This causes
-all timer values in __ad_timer_to_ticks to be zero, resulting
-in the periodic timer to never fire.
+There are double "for" in message in file remote_device.h, fix it.
 
-To reproduce:
-Run the script in
-`tools/testing/selftests/drivers/net/bonding/bond-break-lacpdu-tx.sh` which
-puts bonding into a state where it never transmits LACPDUs.
-
-line 44: ip link add fbond type bond mode 4 miimon 200 \
-            xmit_hash_policy 1 ad_actor_sys_prio 65535 lacp_rate fast
-setting bond param: ad_actor_sys_prio
-given:
-    params.ad_actor_system = 0
-call stack:
-    bond_option_ad_actor_sys_prio()
-    -> bond_3ad_update_ad_actor_settings()
-       -> set ad.system.sys_priority = bond->params.ad_actor_sys_prio
-       -> ad.system.sys_mac_addr = bond->dev->dev_addr; because
-            params.ad_actor_system == 0
-results:
-     ad.system.sys_mac_addr = bond->dev->dev_addr
-
-line 48: ip link set fbond address 52:54:00:3B:7C:A6
-setting bond MAC addr
-call stack:
-    bond->dev->dev_addr = new_mac
-
-line 52: ip link set fbond type bond ad_actor_sys_prio 65535
-setting bond param: ad_actor_sys_prio
-given:
-    params.ad_actor_system = 0
-call stack:
-    bond_option_ad_actor_sys_prio()
-    -> bond_3ad_update_ad_actor_settings()
-       -> set ad.system.sys_priority = bond->params.ad_actor_sys_prio
-       -> ad.system.sys_mac_addr = bond->dev->dev_addr; because
-            params.ad_actor_system == 0
-results:
-     ad.system.sys_mac_addr = bond->dev->dev_addr
-
-line 60: ip link set veth1-bond down master fbond
-given:
-    params.ad_actor_system = 0
-    params.mode = BOND_MODE_8023AD
-    ad.system.sys_mac_addr == bond->dev->dev_addr
-call stack:
-    bond_enslave
-    -> bond_3ad_initialize(); because first slave
-       -> if ad.system.sys_mac_addr != bond->dev->dev_addr
-          return
-results:
-     Nothing is run in bond_3ad_initialize() because dev_add equals
-     sys_mac_addr leaving the global ad_ticks_per_sec zero as it is
-     never initialized anywhere else.
-
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Jonathan Toppins <jtoppins@redhat.com>
+Signed-off-by: Bo Liu <liubo03@inspur.com>
 ---
+ drivers/scsi/isci/remote_device.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Notes:
-    v2:
-     * split this fix from the reproducer
-
- drivers/net/bonding/bond_3ad.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/net/bonding/bond_3ad.c b/drivers/net/bonding/bond_3ad.c
-index d7fb33c078e8..957d30db6f95 100644
---- a/drivers/net/bonding/bond_3ad.c
-+++ b/drivers/net/bonding/bond_3ad.c
-@@ -84,7 +84,8 @@ enum ad_link_speed_type {
- static const u8 null_mac_addr[ETH_ALEN + 2] __long_aligned = {
- 	0, 0, 0, 0, 0, 0
- };
--static u16 ad_ticks_per_sec;
-+
-+static u16 ad_ticks_per_sec = 1000 / AD_TIMER_INTERVAL;
- static const int ad_delta_in_ticks = (AD_TIMER_INTERVAL * HZ) / 1000;
- 
- static const u8 lacpdu_mcast_addr[ETH_ALEN + 2] __long_aligned =
+diff --git a/drivers/scsi/isci/remote_device.h b/drivers/scsi/isci/remote_device.h
+index 3ad681c4c20a..268a3c851cb0 100644
+--- a/drivers/scsi/isci/remote_device.h
++++ b/drivers/scsi/isci/remote_device.h
+@@ -211,7 +211,7 @@ enum sci_status sci_remote_device_reset_complete(
+  * device.  When there are no active IO for the device it is is in this
+  * state.
+  *
+- * @SCI_STP_DEV_CMD: This is the command state for for the STP remote
++ * @SCI_STP_DEV_CMD: This is the command state for the STP remote
+  * device.  This state is entered when the device is processing a
+  * non-NCQ command.  The device object will fail any new start IO
+  * requests until this command is complete.
 -- 
-2.31.1
+2.27.0
 

@@ -2,91 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D990E58F097
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 18:42:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5009358F0A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 18:44:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232345AbiHJQm5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 12:42:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45058 "EHLO
+        id S231942AbiHJQom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 12:44:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231557AbiHJQmy (ORCPT
+        with ESMTP id S231608AbiHJQok (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 12:42:54 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53B781183F
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 09:42:53 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id k6-20020a05600c1c8600b003a54ecc62f6so1273961wms.5
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 09:42:53 -0700 (PDT)
+        Wed, 10 Aug 2022 12:44:40 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B04611A2C
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 09:44:38 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id v7so16692898ljj.4
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 09:44:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:from:to:cc;
-        bh=caDNEl7O4r0UYVlzN7+UmHEEEUCui795HHbEaawKiHE=;
-        b=S5QQAFrMKCtLcDVFS3bfahOn76A0XBEJv+NC+1I+ozvQZtg7E8LG5y2GP0jzlL7vWg
-         KWBrzmzW3DSvxgm28eAHgY8cpKXkwpX56TpvYkpgMSSxTYZBGP3n4HsXnrqeNCIvVHWm
-         b1XBCOs4Q+O1dV/vxJKBRqh1GFYoppu4TogsM=
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=VOLDuPix/0lVR9yaNuPldPK7FBAubvn5P7aOtNnMozY=;
+        b=PxOmy31FMgnLAPzakLjut5vLpoUvufDZnrYVP17Y48jyHAinJzMIaKywcuoaJwPKTg
+         eQCMfxVEJA2L/CK8eGRqltCaWjIRMUQglFpEZvF+ERgJxnOwpG/cbVif0yKnx9z7Snow
+         SIM9KFxcdIhwV7AXsMMc1Py8OH9T+iO7fMMrI0eSP2w2qB+CTnnXbjcQrYDo7TQY9vfA
+         D51wlzvZ+klATs1G6HpGHcegPyR7hZCN7A4kOVmw6nEHCxN0XNAZIkPJshHFg9Qi1hsM
+         T08q9GkKN8t7TvEF/iUm+ruwky/ZEt0E6lvjtiRTroHzQjvUXDeK9aj1XR2+5kgZORG3
+         Tosg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc;
-        bh=caDNEl7O4r0UYVlzN7+UmHEEEUCui795HHbEaawKiHE=;
-        b=ju2e5Do5tlI1NFrNJmPPDQ6wtB9LtpNaWLlYgLUsslj/8thVZUqUv/iMNrPjrALPoz
-         nNRoP14J1632STVojjHv+lVa0J25hRC00ySoDXlwr1F7dKpEIHpTxrjSncPPl/PyiPJ4
-         f7bOZIOOj/ck7iqDucMzcuvZWwBEslLQrwcTW3QQY4MKjgsB+/aLe43h5Pq1E32bDnTD
-         Oaop5dLUU6Et4BoEIRCbVlydJVtB3Nm0yDQqFMLcAOSJQUnSOGPjeD4Ie2GHwJmbr9OQ
-         FghFVnDkd/9iFpvKEgUM5vfifXK2ruzWs6PJ+lbae+QUTNVLnG0kOl/PcEjVNFbaOgyU
-         dBqw==
-X-Gm-Message-State: ACgBeo3yl5XuQMwAtVgJwyvZbs8D5tdKLuhzXl2cThSXRfCSzx+d1qVd
-        KK2tyaEI7MK0X80wDnZhPIwQIQ==
-X-Google-Smtp-Source: AA6agR5M8dV1awXpkYQGRJWDfCDyLSLcsB22cqRYuR/yCVmcd1U/JfV3GxdJUr7JouwwYx1ndTJnOA==
-X-Received: by 2002:a05:600c:4fd5:b0:3a3:4664:6d55 with SMTP id o21-20020a05600c4fd500b003a346646d55mr3163330wmq.73.1660149771921;
-        Wed, 10 Aug 2022 09:42:51 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id s4-20020a05600c384400b003a4eea0aa48sm3120158wmr.0.2022.08.10.09.42.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 09:42:51 -0700 (PDT)
-Date:   Wed, 10 Aug 2022 18:42:49 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     John Stultz <jstultz@google.com>
-Cc:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Lionel Landwerlin <lionel.g.landwerlin@intel.com>,
-        Chunming Zhou <david1.zhou@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Shuah Khan <shuah@kernel.org>,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [RFC][PATCH 3/3] kselftest: Add drm_syncobj API test tool
-Message-ID: <YvPgCRqMz1bw9gmI@phenom.ffwll.local>
-Mail-Followup-To: John Stultz <jstultz@google.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Jason Ekstrand <jason@jlekstrand.net>,
-        Lionel Landwerlin <lionel.g.landwerlin@intel.com>,
-        Chunming Zhou <david1.zhou@amd.com>,
-        David Airlie <airlied@linux.ie>, Shuah Khan <shuah@kernel.org>,
-        dri-devel@lists.freedesktop.org
-References: <20220712042258.293010-1-jstultz@google.com>
- <20220712042258.293010-3-jstultz@google.com>
- <44e2cb41-641c-2a50-3e38-284e4504f012@amd.com>
- <CANDhNCrPhJacBjQZ4DMhmo9iaxBov8m8tbTqdU07PheaKFbE-g@mail.gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=VOLDuPix/0lVR9yaNuPldPK7FBAubvn5P7aOtNnMozY=;
+        b=BeHgbzZiokibooJbVaby/qDEx6sJFoHm6b1hx/WMCmkTsUtZ9QIg7iegZYCdx99csk
+         5ZFavXzeab487GOvj/2cIOYP13RuRO5DDN+BQrwMyvY3TN7GrKiJSUh2HCiYUlJqFG/6
+         BUCe8Y4IeD4gpyAZbFTvWw74+YFDqKbREEL4DkrK0xErNmw++mSxHU3RRb9mSJCOxgNY
+         dUxChiG9ZFJ3u24LmS1LJbwPgicjj+HKVXaFPOJaOm++wAacsE4K7OsoXCIIzS+vVcrY
+         h3CtYTA3y19d5UBkcgVYyYl2Lb+VUKJRTXof3OS7rjSC7DDkeia2dS73HTTe+/Fce36H
+         gj/A==
+X-Gm-Message-State: ACgBeo3QKYano+cZsCP6r/V0sdv9a5Yg037J0BZpawrUwrFyqSaFyS1B
+        7zLYNAWTah/D/+9LFSxHzFQSrw==
+X-Google-Smtp-Source: AA6agR4eoACd1ljMRqSIXs9EqFqbtjFc5gnzr+PoO1i7OTkPo+HY2BZ5YR46FSliA7NymB0fqOuUTg==
+X-Received: by 2002:a2e:81d2:0:b0:25e:68c3:f434 with SMTP id s18-20020a2e81d2000000b0025e68c3f434mr9196641ljg.526.1660149876935;
+        Wed, 10 Aug 2022 09:44:36 -0700 (PDT)
+Received: from [192.168.1.39] ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id 13-20020a05651c128d00b0025e0396786dsm466556ljc.93.2022.08.10.09.44.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Aug 2022 09:44:36 -0700 (PDT)
+Message-ID: <4e096cc4-a012-8ef0-d5a2-1a32d1f6c83e@linaro.org>
+Date:   Wed, 10 Aug 2022 19:44:34 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANDhNCrPhJacBjQZ4DMhmo9iaxBov8m8tbTqdU07PheaKFbE-g@mail.gmail.com>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] spi/panel: dt-bindings: drop 3-wire from common
+ properties
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Christophe Branchereau <cbranchereau@gmail.com>,
+        Jonathan Bakker <xc-racer2@live.ca>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+References: <20220810131311.428645-1-krzysztof.kozlowski@linaro.org>
+ <YvPaaOgCUABREOcX@sirena.org.uk>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <YvPaaOgCUABREOcX@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,46 +87,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 08:52:53AM -0700, John Stultz wrote:
-> On Tue, Jul 12, 2022 at 12:43 AM Christian König
-> <christian.koenig@amd.com> wrote:
-> > Am 12.07.22 um 06:22 schrieb John Stultz:
-> > > An initial pass at a drm_syncobj API test.
-> > >
-> > > Currently covers trivial use of:
-> > >    DRM_IOCTL_SYNCOBJ_CREATE
-> > >    DRM_IOCTL_SYNCOBJ_DESTROY
-> > >    DRM_IOCTL_SYNCOBJ_HANDLE_TO_FD
-> > >    DRM_IOCTL_SYNCOBJ_FD_TO_HANDLE
-> > >    DRM_IOCTL_SYNCOBJ_WAIT
-> > >    DRM_IOCTL_SYNCOBJ_RESET
-> > >    DRM_IOCTL_SYNCOBJ_SIGNAL
-> > >    DRM_IOCTL_SYNCOBJ_TIMELINE_WAIT
-> > >    DRM_IOCTL_SYNCOBJ_TIMELINE_SIGNAL
-> > >
-> > > And demonstrates how the userspace API can be used, along with
-> > > some fairly simple bad parameter checking.
-> > >
-> > > The patch includes a few helpers taken from libdrm, as at least
-> > > on the VM I was testing with, I didn't have a new enough libdrm
-> > > to support the *_TIMELINE_* ioctls. Ideally the ioctl-helper bits
-> > > can be dropped at a later time.
-> > >
-> > > Feedback would be appreciated!
-> >
-> > DRM userspace selftests usually go either into libdrm or igt and not
-> > into the kernel source.
+On 10/08/2022 19:18, Mark Brown wrote:
+> On Wed, Aug 10, 2022 at 04:13:11PM +0300, Krzysztof Kozlowski wrote:
+>> The spi-3wire property is device specific and should be accepted only if
+>> device really needs them.  Drop it from common spi-peripheral-props.yaml
+>> schema, mention in few panel drivers which use it and include instead in
+>> the SPI controller bindings.  The controller bindings will provide
+>> spi-3wire type validation and one place for description.  Each device
+>> schema must list the property if it is applicable.
 > 
-> Appreciate the pointer, I'll rework and submit to one of those projects.
+> What's the plan for getting this merged?  I can just apply it at -rc1 if
+> that works for people?
 
-https://dri.freedesktop.org/docs/drm/gpu/drm-uapi.html#testing-and-validation
+Ah, I should mention it before, my bad. There are no dependencies, no
+stoppers. I hope this will go via your SPI tree.
 
-There should be already a ton of syncobj tests, so probably more just work
-needed to make them work on vgem so we can test them all without a
-suitable hw driver loaded.
-
-Cheers, Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Best regards,
+Krzysztof

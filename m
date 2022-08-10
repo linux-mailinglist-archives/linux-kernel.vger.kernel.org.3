@@ -2,157 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BDA258F05A
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 18:24:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE12E58F03A
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 18:19:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232684AbiHJQYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 12:24:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51958 "EHLO
+        id S229816AbiHJQTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 12:19:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232637AbiHJQX7 (ORCPT
+        with ESMTP id S230359AbiHJQS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 12:23:59 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1EE8792E7;
-        Wed, 10 Aug 2022 09:23:56 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.0.0)
- id 2d7ae212334240e6; Wed, 10 Aug 2022 18:23:55 +0200
-Received: from kreacher.localnet (unknown [213.134.187.55])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 10 Aug 2022 12:18:58 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA7A7C773;
+        Wed, 10 Aug 2022 09:18:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id BD40B66CF1C;
-        Wed, 10 Aug 2022 18:23:54 +0200 (CEST)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux ACPI <linux-acpi@vger.kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>
-Subject: [PATCH v1 4/5] ACPI: scan: Eliminate __acpi_device_add()
-Date:   Wed, 10 Aug 2022 18:17:23 +0200
-Message-ID: <13078324.uLZWGnKmhe@kreacher>
-In-Reply-To: <12036348.O9o76ZdvQC@kreacher>
-References: <12036348.O9o76ZdvQC@kreacher>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 93A43B81D67;
+        Wed, 10 Aug 2022 16:18:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42FF3C433D6;
+        Wed, 10 Aug 2022 16:18:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660148335;
+        bh=WOQyPg8F0GVppRHtF6EF9IpQjF8KSCRpyTeSvQhMwxg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=S89LvgN8qVLeqDRD2w8AhD8yUAPYdHlfhL6whMkMxakEohbZ+Un4+LjsfKKaIaUe7
+         EJsJZeZPXTn3F6xD/lHbj5AEBAPRflPFS0IdDB/1GtTyuKpu6AG9Blr/jff7Dbl+ZC
+         G1adPQFCuYz404oBBoeY4IjfH5FrDXs9fnje8W/WQ8dLSYq3Oykw/u6P686Omusjzl
+         KZYjpx612gkx65/8XkAzwHWLoeJ/KLAZapG4/G7VFgkV9wdCkZ1hAXN3rF34y6D/rG
+         Eo3ONAbz+SMT+pkve212jW7LMzFgPVgtBEub//Gg0L3+sJQUFVQn2oMIX44rB/uapM
+         MjeFMq3Bc9cuw==
+Date:   Wed, 10 Aug 2022 17:18:48 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Christophe Branchereau <cbranchereau@gmail.com>,
+        Jonathan Bakker <xc-racer2@live.ca>,
+        Pratyush Yadav <p.yadav@ti.com>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org
+Subject: Re: [PATCH] spi/panel: dt-bindings: drop 3-wire from common
+ properties
+Message-ID: <YvPaaOgCUABREOcX@sirena.org.uk>
+References: <20220810131311.428645-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.187.55
-X-CLIENT-HOSTNAME: 213.134.187.55
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegvddgleejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppedvudefrddufeegrddukeejrdehheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvudefrddufeegrddukeejrdehhedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqedpnhgspghrtghpthhtohepgedprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegrnhgurhhihidrshhhvghvtghhvghnkhhosehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhn
- vghlrdhorhhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="C7paN41YzbGadmb4"
+Content-Disposition: inline
+In-Reply-To: <20220810131311.428645-1-krzysztof.kozlowski@linaro.org>
+X-Cookie: First pull up, then pull down.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Instead of having acpi_device_add() defined as a wrapper around
-__acpi_device_add(), export acpi_tie_acpi_dev() so it can be called
-directly by acpi_add_power_resource(), fold acpi_device_add() into the
-latter and rename __acpi_device_add() to acpi_device_add().
+--C7paN41YzbGadmb4
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-No intentional functional impact.
+On Wed, Aug 10, 2022 at 04:13:11PM +0300, Krzysztof Kozlowski wrote:
+> The spi-3wire property is device specific and should be accepted only if
+> device really needs them.  Drop it from common spi-peripheral-props.yaml
+> schema, mention in few panel drivers which use it and include instead in
+> the SPI controller bindings.  The controller bindings will provide
+> spi-3wire type validation and one place for description.  Each device
+> schema must list the property if it is applicable.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/internal.h |    1 +
- drivers/acpi/power.c    |    6 +++++-
- drivers/acpi/scan.c     |   17 +++--------------
- 3 files changed, 9 insertions(+), 15 deletions(-)
+What's the plan for getting this merged?  I can just apply it at -rc1 if
+that works for people?
 
-Index: linux-pm/drivers/acpi/internal.h
-===================================================================
---- linux-pm.orig/drivers/acpi/internal.h
-+++ linux-pm/drivers/acpi/internal.h
-@@ -104,6 +104,7 @@ struct acpi_device_bus_id {
- 
- void acpi_init_device_object(struct acpi_device *device, acpi_handle handle,
- 			     int type, void (*release)(struct device *));
-+int acpi_tie_acpi_dev(struct acpi_device *adev);
- int acpi_device_add(struct acpi_device *device);
- int acpi_device_setup_files(struct acpi_device *dev);
- void acpi_device_remove_files(struct acpi_device *dev);
-Index: linux-pm/drivers/acpi/scan.c
-===================================================================
---- linux-pm.orig/drivers/acpi/scan.c
-+++ linux-pm/drivers/acpi/scan.c
-@@ -643,7 +643,7 @@ static int acpi_device_set_name(struct a
- 	return 0;
- }
- 
--static int acpi_tie_acpi_dev(struct acpi_device *adev)
-+int acpi_tie_acpi_dev(struct acpi_device *adev)
- {
- 	acpi_handle handle = adev->handle;
- 	acpi_status status;
-@@ -673,7 +673,7 @@ static void acpi_store_pld_crc(struct ac
- 	ACPI_FREE(pld);
- }
- 
--static int __acpi_device_add(struct acpi_device *device)
-+int acpi_device_add(struct acpi_device *device)
- {
- 	struct acpi_device_bus_id *acpi_device_bus_id;
- 	int result;
-@@ -755,17 +755,6 @@ err_unlock:
- 	return result;
- }
- 
--int acpi_device_add(struct acpi_device *adev)
--{
--	int ret;
--
--	ret = acpi_tie_acpi_dev(adev);
--	if (ret)
--		return ret;
--
--	return __acpi_device_add(adev);
--}
--
- /* --------------------------------------------------------------------------
-                                  Device Enumeration
-    -------------------------------------------------------------------------- */
-@@ -1866,7 +1855,7 @@ static int acpi_add_single_object(struct
- 		mutex_unlock(&acpi_dep_list_lock);
- 
- 	if (!result)
--		result = __acpi_device_add(device);
-+		result = acpi_device_add(device);
- 
- 	if (result) {
- 		acpi_device_release(&device->dev);
-Index: linux-pm/drivers/acpi/power.c
-===================================================================
---- linux-pm.orig/drivers/acpi/power.c
-+++ linux-pm/drivers/acpi/power.c
-@@ -952,6 +952,7 @@ struct acpi_device *acpi_add_power_resou
- 	strcpy(acpi_device_name(device), ACPI_POWER_DEVICE_NAME);
- 	strcpy(acpi_device_class(device), ACPI_POWER_CLASS);
- 	device->power.state = ACPI_STATE_UNKNOWN;
-+	device->flags.match_driver = true;
- 
- 	/* Evaluate the object to get the system level and resource order. */
- 	status = acpi_evaluate_object(handle, NULL, NULL, &buffer);
-@@ -968,7 +969,10 @@ struct acpi_device *acpi_add_power_resou
- 
- 	pr_info("%s [%s]\n", acpi_device_name(device), acpi_device_bid(device));
- 
--	device->flags.match_driver = true;
-+	result = acpi_tie_acpi_dev(device);
-+	if (result)
-+		goto err;
-+
- 	result = acpi_device_add(device);
- 	if (result)
- 		goto err;
+--C7paN41YzbGadmb4
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLz2mgACgkQJNaLcl1U
+h9ChMQf9H6LPOdfGbu1FptjroVm8hHLsgruU3wnuUkhB1F1WtZkMEbcb9zAEutl7
+JxSo0Fu8wBzvndSpzXzOyZlQsukueeOcTXd9lFZI3NQmKRSD7DAgl9UzMeXnETdx
+aarr1MxJYaTONXaMvQxrCLMLuaqNZ7eQ4XexnuXrv52Lh6LYp52/IAijKwfH19oz
+E79hMp+bVng67iZRNwn+0HuZgbR83ZCyDqFJpP9li7m756PseyEU2nf1F3cYP0D6
+Y8hVZ02benHf+kIxA0nQR4FjM2OV1tuzvDobJikC3V3OLg8VVGoM4aZEbM6rEiaP
+gTGuMwxcZU0NSsmxTd30vnu3YkgzCg==
+=keHt
+-----END PGP SIGNATURE-----
 
+--C7paN41YzbGadmb4--

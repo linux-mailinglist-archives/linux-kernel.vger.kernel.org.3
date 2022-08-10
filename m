@@ -2,112 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE70F58E48D
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 03:35:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2110A58E47B
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 03:26:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbiHJBfB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 21:35:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
+        id S230010AbiHJB0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 21:26:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbiHJBed (ORCPT
+        with ESMTP id S229460AbiHJB0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 21:34:33 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FC216E8A6;
-        Tue,  9 Aug 2022 18:34:32 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id F00E15C0225;
-        Tue,  9 Aug 2022 21:34:31 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Tue, 09 Aug 2022 21:34:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm2; t=1660095271; x=1660181671; bh=RmoM/4oIo6wEIqBAN+lEhaPi9
-        bDevafPtd5uBxBK7UY=; b=M2j9G+Unc9fn3oNdPnclF/EUeZk3vYIqhAIIj7UVg
-        mwIgKhePiDGreA3US6YNTmw2drytW+Yc9MVctH3mtytnbFt/uG4NbIXyXJEnLrXl
-        faX0rP9zCpQfEKDWyv8SwiOJAylJCbzLlWOhS2dAR4VHiqGoT0wYK4xI1kTpcjro
-        5P9LHXRRMq2C9QvsugVT2431m2YEDo7+jvEK7OCJGwVcU3EWJIeDqVXqOKGk1yev
-        S8sLHswcAZhHaw5YsRClOHZIaV6RV2ayJYfzQ7zfjsYSZN9GrRvPRUJGqLoUq78j
-        igocq0G9V2tPiiVzpr/gFM0jQ7l3weJI+322OJru3GZ7g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1660095271; x=1660181671; bh=RmoM/4oIo6wEIqBAN+lEhaPi9bDevafPtd5
-        uBxBK7UY=; b=V8Sj/IB1vn4QSG8cNuVuFf2s0Z7QvhkBvcs8KJQy6UA9QA0BBjj
-        GNrvFiYZbQmp8x4E/RBtN5zLiCbQX0Z9G8NQNHoC91xwAu3Su44ky8l2PPe3PPy0
-        sTbeX/OibKV0zMq4rUX3QRhCfuwdvSYR55oIOQYtNe/nPic5fIxSsxHdn/pU35XB
-        YjWjBxlTO5zXH/MavQuhSKF8d7JNp4STLkPubk0dfV7TvtSA2eLKhHn390XU9Msf
-        5QHV99PirnHxqNL2ss9W5VRilmi4hHaXYhcHTNdDu7WUwcI0BdvGLG1ILyRQrE//
-        CMwrD5KM32267qsODkazOrhJjKPx+4pSWmA==
-X-ME-Sender: <xms:JwvzYqNI8oaDIY5mGybKZu15N5D4EvjjjwMWX8HLkHREtoBoYo1zsA>
-    <xme:JwvzYo97pbovDtHSk3T6RH7DYV_hV2boG-4p4P1hoRj7g_jT_Lx0XkuEH1jfbYTIX
-    hwKb2WOQCalWQVAqg>
-X-ME-Received: <xmr:JwvzYhRurAaEu5Skb3hIe2XHaCqXtCwEdfB3cTrC60SJHz5u43loWWWDRi3U_IXgkm5dyXcBIIz67UX1wL1F7QurMwA9mfDTmhDWARQ2IRgtNilObhZZW4yjn2whp2Ev_qyZqg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeguddggeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghl
-    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrf
-    grthhtvghrnhepkeevlefhjeeuleeltedvjedvfeefteegleehueejffehgffffeekhefh
-    hfekkeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:JwvzYqtCpNlmzzHOP37l2TIgXxaM-v5PB0ddjeLERezsGDD-KdIl0g>
-    <xmx:JwvzYifJvToFxzgNY1b5exkjOAIFKUtuHfAXwOqQny1pfEwAzu3WBg>
-    <xmx:JwvzYu1LYkgkZm70mmmlgIXAzqHSj67ukI1ubtvv9X_ASPqmQsSRJA>
-    <xmx:JwvzYvEjmxXhpgshZZ4feNAOcubgWNSMVxTw6tH_ArNQvQJKgIapXg>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 9 Aug 2022 21:34:31 -0400 (EDT)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Chen-Yu Tsai <wens@csie.org>, Lee Jones <lee.jones@linaro.org>
-Cc:     Samuel Holland <samuel@sholland.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: mfd: x-powers,axp152: Document the AXP228 variant
-Date:   Tue,  9 Aug 2022 20:34:30 -0500
-Message-Id: <20220810013430.27061-1-samuel@sholland.org>
-X-Mailer: git-send-email 2.35.1
+        Tue, 9 Aug 2022 21:26:10 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F815FADD
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 18:26:09 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M2XJz3RDFzmVcn;
+        Wed, 10 Aug 2022 09:24:03 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 10 Aug 2022 09:26:07 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 10 Aug
+ 2022 09:26:06 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <kvmarm@lists.cs.columbia.edu>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <maz@kernel.org>, <james.morse@arm.com>,
+        <alexandru.elisei@arm.com>, <suzuki.poulose@arm.com>,
+        <oliver.upton@linux.dev>
+Subject: [PATCH v3] KVM: arm64: fix compile error because of shift overflow
+Date:   Wed, 10 Aug 2022 09:34:35 +0800
+Message-ID: <20220810013435.1525363-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-AXP228 is a PMIC used on boards such as the Clockwork ClockworkPi and
-DevTerm. Its register map appears to be identical to the AXP221 variant.
-The only known difference is in the default values for regulator on/off
-states and voltages.
+Using GENMASK() to generate the masks of device type and device id, it makes
+code unambiguous, also it can fix the following fix compile error because of
+shift overflow when using low verison gcc(mine version is 7.5):
 
-Signed-off-by: Samuel Holland <samuel@sholland.org>
+In function ‘kvm_vm_ioctl_set_device_addr.isra.38’,
+    inlined from ‘kvm_arch_vm_ioctl’ at arch/arm64/kvm/arm.c:1454:10:
+././include/linux/compiler_types.h:354:38: error: call to ‘__compiletime_assert_599’ \
+declared with attribute error: FIELD_GET: mask is not constant
+  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+
+Fixes: 9f968c9266aa ("KVM: arm64: vgic-v2: Add helper for legacy dist/cpuif base address setting")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
 ---
+v3:
+ replace '15/31' with 'SHIFT + 15' to make it more readable.
+v2:
+  Using GENMASK() to generate the masks.
+---
+ arch/arm64/include/uapi/asm/kvm.h | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
- Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml b/Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml
-index 3a53bae611bc..cfbf221789bb 100644
---- a/Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml
-+++ b/Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml
-@@ -92,6 +92,9 @@ properties:
-           - x-powers,axp806
-           - x-powers,axp809
-           - x-powers,axp813
-+      - items:
-+          - const: x-powers,axp228
-+          - const: x-powers,axp221
-       - items:
-           - const: x-powers,axp805
-           - const: x-powers,axp806
+diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
+index 3bb134355874..316917b98707 100644
+--- a/arch/arm64/include/uapi/asm/kvm.h
++++ b/arch/arm64/include/uapi/asm/kvm.h
+@@ -75,9 +75,11 @@ struct kvm_regs {
+ 
+ /* KVM_ARM_SET_DEVICE_ADDR ioctl id encoding */
+ #define KVM_ARM_DEVICE_TYPE_SHIFT	0
+-#define KVM_ARM_DEVICE_TYPE_MASK	(0xffff << KVM_ARM_DEVICE_TYPE_SHIFT)
++#define KVM_ARM_DEVICE_TYPE_MASK	GENMASK(KVM_ARM_DEVICE_TYPE_SHIFT + 15, \
++						KVM_ARM_DEVICE_TYPE_SHIFT)
+ #define KVM_ARM_DEVICE_ID_SHIFT		16
+-#define KVM_ARM_DEVICE_ID_MASK		(0xffff << KVM_ARM_DEVICE_ID_SHIFT)
++#define KVM_ARM_DEVICE_ID_MASK		GENMASK(KVM_ARM_DEVICE_ID_SHIFT + 15, \
++						KVM_ARM_DEVICE_ID_SHIFT)
+ 
+ /* Supported device IDs */
+ #define KVM_ARM_DEVICE_VGIC_V2		0
 -- 
-2.35.1
+2.25.1
 

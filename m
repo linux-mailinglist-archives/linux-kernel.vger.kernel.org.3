@@ -2,194 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E76BB58E93B
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 11:03:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F0F258E942
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 11:03:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231918AbiHJJDB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 05:03:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59102 "EHLO
+        id S231927AbiHJJD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 05:03:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231908AbiHJJC7 (ORCPT
+        with ESMTP id S231961AbiHJJDS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 05:02:59 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26E7786C06
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 02:02:57 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id B8563352B6;
-        Wed, 10 Aug 2022 09:02:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1660122175; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Wed, 10 Aug 2022 05:03:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD738868B5
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 02:03:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660122197;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=9tcVsVn5VClQjk7I12jMWIHY3wKjQAIG7Omh7DjQH00=;
-        b=21rn5ZzzCFPhkvjqCeNHpYOpU2hheNmBGaRQrQI3owYryz/iPkWsEagB82sDVjez1pKk+b
-        Ays3MBJKZ2U90brtPggRXZvYVjW24Bz+IpMm0QpPDG4JmwcUN4uXpseR/2L+cfOe3QMwQW
-        iBATsdtzdEzVob/Fr33+k5UjdJyKYU8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1660122175;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9tcVsVn5VClQjk7I12jMWIHY3wKjQAIG7Omh7DjQH00=;
-        b=uGMCzgk1tQxH/LrROKTU1jPj3nkJKBGy83dZZDPewIlWv2IpVvbssQjCJJ78+K74P3jg9C
-        Q6Fps/pS1REj4ODw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7B11813A7E;
-        Wed, 10 Aug 2022 09:02:55 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 0d9xHD9082LYEQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 10 Aug 2022 09:02:55 +0000
-Message-ID: <fdb181de-adc7-47aa-c4d7-c26fb50454b2@suse.cz>
-Date:   Wed, 10 Aug 2022 11:02:55 +0200
+        bh=zDfT4OTVP3mlZybmyw3sBtbkZmpGAIdes/TJqqs05cY=;
+        b=KKzgIFoyfvRcdmri1ZFSg4PabPUr74q6WmaXDpVXSnEzrKtENaw4pdYFrrB5OKTOWBbK7U
+        4ouupo80IWEE+Za6XN9jytiJSAEuNNFW8CdyRO/vjAYo60NfYeqrjIGNsGqJewa9j7mHk4
+        7VI+vLB3mFXPx7azW7/3+X2pcvk55xY=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-347-nCLjho4jPJeTKQLrnzCYXQ-1; Wed, 10 Aug 2022 05:03:14 -0400
+X-MC-Unique: nCLjho4jPJeTKQLrnzCYXQ-1
+Received: by mail-wm1-f72.google.com with SMTP id j36-20020a05600c1c2400b003a540d88677so3575536wms.1
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 02:03:14 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :references:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=zDfT4OTVP3mlZybmyw3sBtbkZmpGAIdes/TJqqs05cY=;
+        b=QvX9bBE42Tz+0myNMrrEoKgtaN4a8v/45KAVjHqHwOSipFiktzLjYfSpyMFRxF+gDk
+         F0TGq2ALC3VZfj9U1pwhvsBHkLlb96UblpnOssTYco2wTHWKEREBDYaxM9Oq6Q83q80U
+         ozskUJNUwcxYkMQKSIRJEfu2yR4s0xM2VSHf3F9oGi3F3D7lOSNkCZsAykCFBAbztgXH
+         9lNZn+YomDpkGI+4168JDG7MuIq8IFtc3HGUG+73WMBvROeTB5JO9oN9yRA1IAJdE4B0
+         4Psx09lH1s9P2D3cKEB/MMlu7V+owINT8HcKtPPLfjNeCvbNmUYXDs9ish9s3DpIs1n+
+         iTww==
+X-Gm-Message-State: ACgBeo0vBgkE8zbnLWlARPEjQMOR1Omx4jhUMH0Qf+OtTa7V9t2MDUoA
+        RnYN0mplBtxASbfsB+wonl2BGVc7dyrfc7vQH+h9+NO/6qmXeP8l7J/iELd+RIaa2xO8CJrKKF3
+        +HZZUGFbFJcp7hnxh6sIZe1lm
+X-Received: by 2002:a5d:5a94:0:b0:221:6cec:2589 with SMTP id bp20-20020a5d5a94000000b002216cec2589mr15124093wrb.336.1660122193177;
+        Wed, 10 Aug 2022 02:03:13 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7B/fed6AkUKvETZNZzY2Aw/ljCBjLPi20tQHr8C2p9Bwqnl1tq+PpkGuYpyjcrSsB3Ep52mA==
+X-Received: by 2002:a5d:5a94:0:b0:221:6cec:2589 with SMTP id bp20-20020a5d5a94000000b002216cec2589mr15124042wrb.336.1660122192829;
+        Wed, 10 Aug 2022 02:03:12 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c707:1600:a3ce:b459:ef57:7b93? (p200300cbc7071600a3ceb459ef577b93.dip0.t-ipconnect.de. [2003:cb:c707:1600:a3ce:b459:ef57:7b93])
+        by smtp.gmail.com with ESMTPSA id i9-20020a05600c050900b003a3187a2d4csm1655413wmc.22.2022.08.10.02.03.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Aug 2022 02:03:12 -0700 (PDT)
+Message-ID: <95ed1a81-ff8e-2c48-8838-4b3995af51b7@redhat.com>
+Date:   Wed, 10 Aug 2022 11:03:11 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.0
-Subject: Re: [PATCH v5] mm/page_owner.c: add llseek for page_owner
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
 Content-Language: en-US
-To:     Kassey Li <quic_yingangl@quicinc.com>,
-        "Vlastimil Babka (SUSE)" <vbabka@kernel.org>,
-        akpm@linux-foundation.org
-Cc:     minchan@kernel.org, iamjoonsoo.kim@lge.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-References: <20220809024725.31980-1-quic_yingangl@quicinc.com>
- <ab4f79ea-0a02-9556-645f-cca32dea3cad@kernel.org>
- <8f64c6d5-940f-f081-7671-53e1507c8051@quicinc.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <8f64c6d5-940f-f081-7671-53e1507c8051@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
+        "open list:ABI/API" <linux-api@vger.kernel.org>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
+        <linux-perf-users@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, krisman@collabora.com
+Cc:     kernel@collabora.com
+References: <20220726161854.276359-1-usama.anjum@collabora.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH 0/5] Add process_memwatch syscall
+In-Reply-To: <20220726161854.276359-1-usama.anjum@collabora.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/10/22 03:33, Kassey Li wrote:
-> 
-> 
-> On 8/9/2022 5:30 PM, Vlastimil Babka (SUSE) wrote:
->> On 8/9/22 04:47, Kassey Li wrote:
->>> There is usage to dump a given cma region page_owner
->>> instead of all page's.
->>>
->>> This change allows to specify a ppos as start_pfn
->>> by fseek.
->>>
->>> Any invalid ppos will be skipped, so it did not
->>> broken the origin dump feature.
->>>
->>> Suggested-by: Vlastimil Babka <vbabka@suse.cz>
->>> Signed-off-by: Kassey Li <quic_yingangl@quicinc.com>
->>> ---
->>>    Documentation/vm/page_owner.rst | 6 ++++++
->>>    mm/internal.h                   | 5 +++++
->>>    mm/page_owner.c                 | 9 ++++++---
->>>    3 files changed, 17 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/Documentation/vm/page_owner.rst b/Documentation/vm/page_owner.rst
->>> index f5c954afe97c..8d33d976da8a 100644
->>> --- a/Documentation/vm/page_owner.rst
->>> +++ b/Documentation/vm/page_owner.rst
->>> @@ -95,6 +95,12 @@ Usage
->>>    	PFN XXX ...
->>>    	// Detailed stack
->>>    
->>> +   By default, it will do full pfn dump, to start with a given pfn,
->>> +   page_owner supports fseek.
->>> +
->>> +   FILE *fp = fopen("/sys/kernel/debug/page_owner", "r");
->>> +   fseek(fp, pfn_start, SEEK_SET);
->>> +
->>>       The ``page_owner_sort`` tool ignores ``PFN`` rows, puts the remaining rows
->>>       in buf, uses regexp to extract the page order value, counts the times
->>>       and pages of buf, and finally sorts them according to the parameter(s).
->>> diff --git a/mm/internal.h b/mm/internal.h
->>> index c0f8fbe0445b..1ad8f86e6e33 100644
->>> --- a/mm/internal.h
->>> +++ b/mm/internal.h
->>> @@ -189,6 +189,11 @@ extern void reclaim_throttle(pg_data_t *pgdat, enum vmscan_throttle_state reason
->>>     */
->>>    extern pmd_t *mm_find_pmd(struct mm_struct *mm, unsigned long address);
->>>    
->>> +/*
->>> + * in mm/page_owner.c:
->>
->> This should say where it's defined, not used from, and that's
->> fs/proc/base.c. But it's already declared in fs/proc/internal.h so maybe
->> page_owner.c could just include that header (although it's a bit meh).
-> ok, let's do it.
+On 26.07.22 18:18, Muhammad Usama Anjum wrote:
+> Hello,
 
-Sorry, my suggestion was wrong as the kernel test bot just showed us. 
-mem_lseek() may be unavailable without CONFIG_PROC_FS.
-The easiest way is you add a page_owner specific one back, but make it 
-correct for SEEK_CUR. Thanks.
+Hi,
 
->>
->>> + */
->>> +extern loff_t mem_lseek(struct file *, loff_t, int);
->>> +
->>>    /*
->>>     * in mm/page_alloc.c
->>>     */
->>> diff --git a/mm/page_owner.c b/mm/page_owner.c
->>> index e4c6f3f1695b..dcbe05e206e1 100644
->>> --- a/mm/page_owner.c
->>> +++ b/mm/page_owner.c
->>> @@ -497,8 +497,10 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
->>>    		return -EINVAL;
->>>    
->>>    	page = NULL;
->>> -	pfn = min_low_pfn + *ppos;
->>> -
->>> +	if (*ppos == 0)
->>> +		pfn= min_low_pfn;
->>
->> missing space before '='
 > 
->     my bad, for v6
+> This patch series implements a new syscall, process_memwatch. Currently,
+> only the support to watch soft-dirty PTE bit is added. This syscall is
+> generic to watch the memory of the process. There is enough room to add
+> more operations like this to watch memory in the future.
 > 
-> ./scripts/checkpatch.pl
-> v6-0001-mm-page_owner.c-add-llseek-for-page_owner.patch
-> total: 0 errors, 0 warnings, 46 lines checked
+> Soft-dirty PTE bit of the memory pages can be viewed by using pagemap
+> procfs file. The soft-dirty PTE bit for the memory in a process can be
+> cleared by writing to the clear_refs file. This series adds features that
+> weren't possible through the Proc FS interface.
+> - There is no atomic get soft-dirty PTE bit status and clear operation
+>   possible.
+
+Such an interface might be easy to add, no?
+
+> - The soft-dirty PTE bit of only a part of memory cannot be cleared.
+
+Same.
+
+So I'm curious why we need a new syscall for that.
+
 > 
-> v6-0001-mm-page_owner.c-add-llseek-for-page_owner.patch has no obvious
-> style problems and is ready for submission.
->>
->>> +	else
->>> +		pfn = *ppos;
->>>    	/* Find a valid PFN or the start of a MAX_ORDER_NR_PAGES area */
->>>    	while (!pfn_valid(pfn) && (pfn & (MAX_ORDER_NR_PAGES - 1)) != 0)
->>>    		pfn++;
->>> @@ -561,7 +563,7 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
->>>    			continue;
->>>    
->>>    		/* Record the next PFN to read in the file offset */
->>> -		*ppos = (pfn - min_low_pfn) + 1;
->>> +		*ppos = pfn + 1;
->>>    
->>>    		return print_page_owner(buf, count, pfn, page,
->>>    				page_owner, handle);
->>> @@ -660,6 +662,7 @@ static void init_early_allocated_pages(void)
->>>    
->>>    static const struct file_operations proc_page_owner_operations = {
->>>    	.read		= read_page_owner,
->>> +	.llseek 	= mem_lseek,
->>>    };
->>>    
->>>    static int __init pageowner_init(void)
->>
+> Historically, soft-dirty PTE bit tracking has been used in the CRIU
+> project. The Proc FS interface is enough for that as I think the process
+> is frozen. We have the use case where we need to track the soft-dirty
+> PTE bit for running processes. We need this tracking and clear mechanism
+> of a region of memory while the process is running to emulate the
+> getWriteWatch() syscall of Windows. This syscall is used by games to keep
+> track of dirty pages and keep processing only the dirty pages. This
+> syscall can be used by the CRIU project and other applications which
+> require soft-dirty PTE bit information.
+> 
+> As in the current kernel there is no way to clear a part of memory (instead
+> of clearing the Soft-Dirty bits for the entire processi) and get+clear
+> operation cannot be performed atomically, there are other methods to mimic
+> this information entirely in userspace with poor performance:
+> - The mprotect syscall and SIGSEGV handler for bookkeeping
+> - The userfaultfd syscall with the handler for bookkeeping
+
+You write "poor performance". Did you actually implement a prototype
+using userfaultfd-wp? Can you share numbers for comparison?
+
+Adding an new syscall just for handling a corner case feature
+(soft-dirty, which we all love, of course) needs good justification.
+
+> 
+>         long process_memwatch(int pidfd, unsigned long start, int len,
+>                               unsigned int flags, void *vec, int vec_len);
+> 
+> This syscall can be used by the CRIU project and other applications which
+> require soft-dirty PTE bit information. The following operations are
+> supported in this syscall:
+> - Get the pages that are soft-dirty.
+> - Clear the pages which are soft-dirty.
+> - The optional flag to ignore the VM_SOFTDIRTY and only track per page
+> soft-dirty PTE bit
+
+Huh, why? VM_SOFTDIRTY is an internal implementation detail and should
+remain such.
+
+VM_SOFTDIRTY translates to "all pages in this VMA are soft-dirty".
+
+-- 
+Thanks,
+
+David / dhildenb
 

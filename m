@@ -2,119 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7F7C58F4F1
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 01:36:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A132858F4F3
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 01:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233556AbiHJXgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 19:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56798 "EHLO
+        id S232797AbiHJXjK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 19:39:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233263AbiHJXgP (ORCPT
+        with ESMTP id S229722AbiHJXjH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 19:36:15 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3BDF6CF60;
-        Wed, 10 Aug 2022 16:36:13 -0700 (PDT)
+        Wed, 10 Aug 2022 19:39:07 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DBE27170D
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 16:39:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660174573; x=1691710573;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=avoT62DPeQ/dr+QXuZA1N2j3eBjV0qPlXy2MkTcCQno=;
-  b=BQgzrfOZoPUsgSZ9h99F3MnfLcctDm7UegVu63C4wc5w91p5IBJuGtJv
-   Ctr0XKVYGQ9SIYsXYLpPA/ttnjftnuXG2PfYfXZdkXAMwiOaNxvBOgIfi
-   CnlAMaE92ErJYyedKaZj+oyVb8QfVMpAm+Ggq7Ouj7rIZEzKnzOca4Rqz
-   //HuhNv+Xki/hWk8Pluyfky2F/iay5vFaCd0LhL94jqnxFgZj1e38hyS/
-   6gp0yM6ttgqkwx5HzIHJ8MUKTPiWiPCH1O6VVu7b60DBGPlm9IwLio4h9
-   GAmuWmHP4eCeOuQ2hEjvNuoB2aGA4XaAASrVUK1H+pssjXSWCWODlwZ38
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="292009750"
+  t=1660174747; x=1691710747;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=5U0CJAVTSwVbsYns1fNFFVKObm/jI/IktTM+T34toaQ=;
+  b=j9tGoJFqQaYlj3SGxAnpw3WbmRy0mTzn1u3ulD6S5U0Gy6mOe8fGjpSq
+   6NFGSRuMuB7RWKPYAdcnE+krdckBL2ibAj/Jy+lUXqi3Go41ellQM5PHB
+   FUnMY2e5dTrinwHQAArjr5ZGHen7y8uvhL0rXRshkHQZAH4HlHWcZ+c8E
+   RiW8ZyOzCkw7wIziX72x4vI6uir0NPBNAhNy0e5wXmLgRCHw1tAaxppuF
+   I/FhcXRuIP//swBC42m1FjFSjdaFXH/SsbATdGyFzAFQBd7uzx8cAgjMm
+   SJUwS7ChRj9Aono8dGcFjD8Ntr2KkukjqHcSOajvDRQ+fZWutQQSMZoH1
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="274274516"
 X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="292009750"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 16:36:13 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="274274516"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 16:39:06 -0700
 X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="665123415"
-Received: from lkp-server02.sh.intel.com (HELO 5d6b42aa80b8) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 10 Aug 2022 16:36:10 -0700
-Received: from kbuild by 5d6b42aa80b8 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oLvFC-0000py-0M;
-        Wed, 10 Aug 2022 23:36:10 +0000
-Date:   Thu, 11 Aug 2022 07:35:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vegard Nossum <vegard.nossum@oracle.com>,
-        linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, Vegard Nossum <vegard.nossum@oracle.com>,
-        Thadeu Lima de Souza Cascardo <cascardo@canonical.com>,
-        Serge Hallyn <serge@hallyn.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        linux-hardening@vger.kernel.org, John Haxby <john.haxby@oracle.com>
-Subject: Re: [PATCH] capabilities: new kernel.ns_modules_allowed sysctl
-Message-ID: <202208110734.tH4Z51iL-lkp@intel.com>
-References: <20220809185229.28417-1-vegard.nossum@oracle.com>
+   d="scan'208";a="933092240"
+Received: from sarava2x-mobl1.gar.corp.intel.com (HELO [10.254.67.234]) ([10.254.67.234])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 16:39:05 -0700
+Message-ID: <bff78ad9-57d8-ca82-cc75-0b7e5024116d@linux.intel.com>
+Date:   Wed, 10 Aug 2022 16:38:59 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220809185229.28417-1-vegard.nossum@oracle.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To:     Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Huang, Kai" <kai.huang@intel.com>
+Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        "Gomez Iglesias, Antonio" <antonio.gomez.iglesias@intel.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+References: <20220809234000.783284-1-daniel.sneddon@linux.intel.com>
+ <d6ffb489-7024-ff74-bd2f-d1e06573bb82@intel.com>
+ <238ea612-5a25-9323-b31f-0a14493db2f7@linux.intel.com>
+ <d4bcb22e-224c-d256-cb93-3ff6ed89a7d0@intel.com>
+ <341ea6e9-d8f3-ee7a-6794-67408abbf047@linux.intel.com> <87r11nu52l.ffs@tglx>
+ <83a0d220-1872-caba-4e7e-b6a366655cf2@linux.intel.com>
+ <ba80b303-31bf-d44a-b05d-5c0f83038798@intel.com>
+From:   Daniel Sneddon <daniel.sneddon@linux.intel.com>
+Subject: Re: [PATCH] x86/apic: Don't disable x2APIC if locked
+In-Reply-To: <ba80b303-31bf-d44a-b05d-5c0f83038798@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vegard,
-
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on kees/for-next/pstore]
-[also build test ERROR on v5.19]
-[cannot apply to linus/master next-20220810]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Vegard-Nossum/capabilities-new-kernel-ns_modules_allowed-sysctl/20220810-031142
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git for-next/pstore
-config: alpha-randconfig-r032-20220810 (https://download.01.org/0day-ci/archive/20220811/202208110734.tH4Z51iL-lkp@intel.com/config)
-compiler: alpha-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/bd78b69455d4b3cac70812bf23a27de310e813cd
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Vegard-Nossum/capabilities-new-kernel-ns_modules_allowed-sysctl/20220810-031142
-        git checkout bd78b69455d4b3cac70812bf23a27de310e813cd
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=alpha SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   kernel/kmod.c: In function 'kmod_sysctl_init':
->> kernel/kmod.c:213:9: error: implicit declaration of function 'register_sysctl_init'; did you mean 'register_sysctl_base'? [-Werror=implicit-function-declaration]
-     213 |         register_sysctl_init("kernel", kmod_sysctl_table);
-         |         ^~~~~~~~~~~~~~~~~~~~
-         |         register_sysctl_base
-   cc1: some warnings being treated as errors
-
-
-vim +213 kernel/kmod.c
-
-   210	
-   211	static int __init kmod_sysctl_init(void)
-   212	{
- > 213		register_sysctl_init("kernel", kmod_sysctl_table);
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+On 8/10/22 16:09, Dave Hansen wrote:
+> On 8/10/22 16:03, Daniel Sneddon wrote:
+>> On 8/10/22 15:06, Thomas Gleixner wrote:
+>>> So this affects already deployed systems and we have to
+>>>
+>>>   - backport the x2apic lock changes
+>>>
+>>>   - provide proper diagnostics
+>>>
+>>>   - make SGX and TDX depend on X2APIC support
+>> I'll add the comments Dave mentioned earlier, and will make SGX and TDX depend
+>> on X2APIC since that makes sense regardless of what hw ends up with this change.
+>>  Unless we want to get rid of CONFIG_X86_X2APIC like Dave mentioned?
+> 
+> The TDX guest support in the kernel isn't _actually_ related to this*.
+> It's the host-side support that matters and that isn't merged yet.  I've
+> cc'd Kai so he doesn't forget to do this.
+> 
+> I agree on the SGX side, though.
+> 
+> * TDX guest support already has this dependency, but it's for unrelated
+>   reasons:
+> 
+> config INTEL_TDX_GUEST
+>         bool "Intel TDX (Trust Domain Extensions) - Guest Support"
+>         depends on X86_64 && CPU_SUP_INTEL
+>         depends on X86_X2APIC
+So I got some more input.  SPR and newer will lock the APIC.  Older products
+will get a ucode update, but that ucode update won't include the APIC lock.  So,
+on non-SPR parts do we still want to make SGX depend on X2APIC?

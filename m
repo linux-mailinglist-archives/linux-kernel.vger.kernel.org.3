@@ -2,194 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39CBA58ED8B
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 15:44:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AA6F58ED8F
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 15:45:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232759AbiHJNog convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 10 Aug 2022 09:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54248 "EHLO
+        id S232808AbiHJNpr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 09:45:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbiHJNod (ORCPT
+        with ESMTP id S229680AbiHJNpm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 09:44:33 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D27876714A;
-        Wed, 10 Aug 2022 06:44:31 -0700 (PDT)
-Received: from fraeml715-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M2rh82TQLz67wDW;
-        Wed, 10 Aug 2022 21:41:44 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml715-chm.china.huawei.com (10.206.15.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 10 Aug 2022 15:44:29 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
- Wed, 10 Aug 2022 15:44:29 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-CC:     "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "martin.lau@linux.dev" <martin.lau@linux.dev>,
-        "song@kernel.org" <song@kernel.org>, "yhs@fb.com" <yhs@fb.com>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        "sdf@google.com" <sdf@google.com>,
-        "haoluo@google.com" <haoluo@google.com>,
-        "jolsa@kernel.org" <jolsa@kernel.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Yosry Ahmed <yosryahmed@google.com>
-Subject: RE: [PATCH v9 01/10] btf: Add a new kfunc flag which allows to mark a
- function to be sleepable
-Thread-Topic: [PATCH v9 01/10] btf: Add a new kfunc flag which allows to mark
- a function to be sleepable
-Thread-Index: AQHYq/aDa3kCDLsk5EK6T80CaXl/sK2mqA6AgAF8nfA=
-Date:   Wed, 10 Aug 2022 13:44:28 +0000
-Message-ID: <c9e73d7aa51a47c585b935a41dbf1924@huawei.com>
-References: <20220809134603.1769279-1-roberto.sassu@huawei.com>
- <20220809134603.1769279-2-roberto.sassu@huawei.com>
- <YvKRYRjJdXbAWL6Y@kernel.org>
-In-Reply-To: <YvKRYRjJdXbAWL6Y@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.45.144.193]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Wed, 10 Aug 2022 09:45:42 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4BC6647E8;
+        Wed, 10 Aug 2022 06:45:35 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id t2-20020a17090a4e4200b001f21572f3a4so2193384pjl.0;
+        Wed, 10 Aug 2022 06:45:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc;
+        bh=96pjvUrJcap1bQNqpQXS2ixIwi8nMkQJ0xsftTlwK2k=;
+        b=G5cWeDhYLR9kV47rydbHgRaCcwFtB0Md/uLpi2fjqaQrfIkk8DI6WEBC4tcRtcJri+
+         y52WW4vBMB634p+cuBIOE4uoYfiEOqasrdNiB9KMfBUpmzgfSqxQVMfux5kX9dOJTgR6
+         jwKfwxNwmE/ABUJNFUXdIu+b9lroIC0EcHL26YzGyUfGIIYaQjpLVu4IKg5CAO0+zGGj
+         egF5tz9ZamahPxpAgVbJ6R4HWDEPYdPDivbofdKRZ+XtbFoYuPLRgbsrDctIExgLFQyd
+         jp2RE/YRc5dnT2vbcNjvzGokXxSp0/yTQ8Q4vw11NJH5FnAg9erM7WcfDdqp86Uxjt7v
+         +tYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc;
+        bh=96pjvUrJcap1bQNqpQXS2ixIwi8nMkQJ0xsftTlwK2k=;
+        b=uKm6mEO4gMyMoLan12poXQCD9Vzlu1+rUO42TH5q2QPPb7od9xabrYVluVuSINDaps
+         H5QZJc5GOT6/qwL5Tjy+dl2VhwBV0w976sxLvFjSoO/9o2T1VMjgtoNYGHYVwKvUI8iF
+         SWCA9cu4IuhWBpIwFEVo7rz67qD7d/RMKsyuQJ5/xWRbdXL8N2Eq0JQEZ94Tmu3XKpYd
+         3D5r+RM1BAb2tCxdjiTGKED1PZ8ILv0J5teKDah26vY/+lV0io9kE40JVbwPAS8ufOnm
+         pU/MZ6ljmoy3/a5v3r9D0RKy4ubezP8HqtQi30G7kFbnR1NlB1zcyXyBmm55FWLCwp3y
+         FhLQ==
+X-Gm-Message-State: ACgBeo3rtHoGzpuJrrhS1HPcQ1NIlxICVzPzUzpFwnPpdW427cxJaIBq
+        l0C9rusQhq7AkFKXLS1BQtf1uin99U0=
+X-Google-Smtp-Source: AA6agR7VfMQKbzzW4fdvBsQUslvHsyiAS6gEZV7JcJMfRaDsRKcyhYgDqgLMQoP3fh1ItHxrWsp6Jg==
+X-Received: by 2002:a17:902:e886:b0:16e:d785:5a0 with SMTP id w6-20020a170902e88600b0016ed78505a0mr27254918plg.36.1660139135274;
+        Wed, 10 Aug 2022 06:45:35 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id ij21-20020a170902ab5500b0016bdeb58611sm12718930plb.112.2022.08.10.06.45.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Aug 2022 06:45:34 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] hwmon fixes for hwmon-fixes-for-v6.0-rc1
+Date:   Wed, 10 Aug 2022 06:45:33 -0700
+Message-Id: <20220810134533.380417-1-linux@roeck-us.net>
+X-Mailer: git-send-email 2.36.2
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Jarkko Sakkinen [mailto:jarkko@kernel.org]
-> Sent: Tuesday, August 9, 2022 6:55 PM
-> On Tue, Aug 09, 2022 at 03:45:54PM +0200, Roberto Sassu wrote:
-> > From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> >
-> > From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> >
-> > This allows to declare a kfunc as sleepable and prevents its use in
-> > a non sleepable program.
-> 
-> Nit: "Declare a kfunc as sleepable and prevent its use in a
-> non-sleepable program."
-> 
-> It's missing the part *how* the patch accomplishes its goals.
+Hi Linus,
 
-I will add:
+Please pull hwmon fixes for Linux hwmon-fixes-for-v6.0-rc1 from signed tag:
 
-If an eBPF program is going to call a kfunc declared as sleepable,
-eBPF will look at the eBPF program flags. If BPF_F_SLEEPABLE is
-not set, execution of that program is denied.
+    git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-fixes-for-v6.0-rc1
 
-Roberto
+Thanks,
+Guenter
+------
 
-> > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> > Co-developed-by: Yosry Ahmed <yosryahmed@google.com>
-> > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> > Signed-off-by: Hao Luo <haoluo@google.com>
-> > ---
-> >  Documentation/bpf/kfuncs.rst | 6 ++++++
-> >  include/linux/btf.h          | 1 +
-> >  kernel/bpf/btf.c             | 9 +++++++++
-> >  3 files changed, 16 insertions(+)
-> >
-> > diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-> > index c0b7dae6dbf5..c8b21de1c772 100644
-> > --- a/Documentation/bpf/kfuncs.rst
-> > +++ b/Documentation/bpf/kfuncs.rst
-> > @@ -146,6 +146,12 @@ that operate (change some property, perform some
-> operation) on an object that
-> >  was obtained using an acquire kfunc. Such kfuncs need an unchanged pointer
-> to
-> >  ensure the integrity of the operation being performed on the expected object.
-> >
-> > +2.4.6 KF_SLEEPABLE flag
-> > +-----------------------
-> > +
-> > +The KF_SLEEPABLE flag is used for kfuncs that may sleep. Such kfuncs can
-> only
-> > +be called by sleepable BPF programs (BPF_F_SLEEPABLE).
-> > +
-> >  2.5 Registering the kfuncs
-> >  --------------------------
-> >
-> > diff --git a/include/linux/btf.h b/include/linux/btf.h
-> > index cdb376d53238..976cbdd2981f 100644
-> > --- a/include/linux/btf.h
-> > +++ b/include/linux/btf.h
-> > @@ -49,6 +49,7 @@
-> >   * for this case.
-> >   */
-> >  #define KF_TRUSTED_ARGS (1 << 4) /* kfunc only takes trusted pointer
-> arguments */
-> > +#define KF_SLEEPABLE   (1 << 5) /* kfunc may sleep */
-> >
-> >  struct btf;
-> >  struct btf_member;
-> > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> > index 7e64447659f3..d3e4c86b8fcd 100644
-> > --- a/kernel/bpf/btf.c
-> > +++ b/kernel/bpf/btf.c
-> > @@ -6175,6 +6175,7 @@ static int btf_check_func_arg_match(struct
-> bpf_verifier_env *env,
-> >  {
-> >  	enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
-> >  	bool rel = false, kptr_get = false, trusted_arg = false;
-> > +	bool sleepable = false;
-> >  	struct bpf_verifier_log *log = &env->log;
-> >  	u32 i, nargs, ref_id, ref_obj_id = 0;
-> >  	bool is_kfunc = btf_is_kernel(btf);
-> > @@ -6212,6 +6213,7 @@ static int btf_check_func_arg_match(struct
-> bpf_verifier_env *env,
-> >  		rel = kfunc_flags & KF_RELEASE;
-> >  		kptr_get = kfunc_flags & KF_KPTR_GET;
-> >  		trusted_arg = kfunc_flags & KF_TRUSTED_ARGS;
-> > +		sleepable = kfunc_flags & KF_SLEEPABLE;
-> >  	}
-> >
-> >  	/* check that BTF function arguments match actual types that the
-> > @@ -6419,6 +6421,13 @@ static int btf_check_func_arg_match(struct
-> bpf_verifier_env *env,
-> >  			func_name);
-> >  		return -EINVAL;
-> >  	}
-> > +
-> > +	if (sleepable && !env->prog->aux->sleepable) {
-> > +		bpf_log(log, "kernel function %s is sleepable but the program is
-> not\n",
-> > +			func_name);
-> > +		return -EINVAL;
-> > +	}
-> > +
-> >  	/* returns argument register number > 0 in case of reference release
-> kfunc */
-> >  	return rel ? ref_regno : 0;
-> >  }
-> > --
-> > 2.25.1
-> >
-> 
-> BR, Jarkko
+The following changes since commit d4252071b97d2027d246f6a82cbee4d52f618b47:
+
+  add barriers to buffer_uptodate and set_buffer_uptodate (2022-08-09 15:03:02 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git tags/hwmon-fixes-for-v6.0-rc1
+
+for you to fetch changes up to f4e6960f4f16b1ca5da16cec7612ecc86402ac05:
+
+  hwmon: (nct6775) Fix platform driver suspend regression (2022-08-10 06:37:01 -0700)
+
+----------------------------------------------------------------
+hwmon fixes for v6.0-rc1
+
+Fix two regressions in nct6775 and lm90 drivers
+
+----------------------------------------------------------------
+Guenter Roeck (1):
+      hwmon: (lm90) Fix error return value from detect function
+
+Zev Weiss (1):
+      hwmon: (nct6775) Fix platform driver suspend regression
+
+ drivers/hwmon/lm90.c             | 2 +-
+ drivers/hwmon/nct6775-core.c     | 3 ++-
+ drivers/hwmon/nct6775-platform.c | 2 +-
+ drivers/hwmon/nct6775.h          | 2 ++
+ 4 files changed, 6 insertions(+), 3 deletions(-)

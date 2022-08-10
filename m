@@ -2,96 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 367AC58EDCD
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 16:02:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B1C358EDC6
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 16:01:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232948AbiHJOCH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 10:02:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39938 "EHLO
+        id S232913AbiHJOBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 10:01:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232923AbiHJOB7 (ORCPT
+        with ESMTP id S231821AbiHJOBi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 10:01:59 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 377FA6CD3B;
-        Wed, 10 Aug 2022 07:01:57 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id dc19so27822921ejb.12;
-        Wed, 10 Aug 2022 07:01:57 -0700 (PDT)
+        Wed, 10 Aug 2022 10:01:38 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C043A6CD33
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:01:37 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id b6so7836310wmq.5
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:01:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=bP8LP7Iq6Ef009AhSK4u5faUfPJtfq7x6vlBRz0vKas=;
-        b=TijWU1YImPghIYNgR8/CWyY/PZWAzeKl22HkIoJ4ne6EKKppFPm9MvHm56JvjZCBRN
-         1az2JaXpNqj3Vl2eodZwwVO0u9zbgandZSudKc9Ldgpy+y1ZpYYZNiYWLkNadL2lvH/v
-         MXR4Jgit8tdtFv12d62/MAXe7jYUhg6RJSaPtonzzVqcGG+HgvpND7H+qEb9gN2HG2vU
-         7Z8hOYLAiWGJebd3qcf7hME752+46DshpXmQ+hL9SiwRJGdC7OFmZEX8CBX98pPpGxSc
-         zI1DIhxIgRUXJKvOHl37SkGFx+94HMM6D13SU+xuji/rEH94Zigb+fIjDI3MkeiXMy7I
-         bdbQ==
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:from:to:cc;
+        bh=dZA7yOywUXukdcu5pO+Io3zvJr55DJZjswrAfBadLys=;
+        b=Yn8uEP++9IJloQ1BDCmMiI3k7Ee8qgEzlCEAYmHEDqta1P+Vib47gUxe6vH3H4XdOV
+         OQkpMmnZbDPz5ZX+zt2N196uqkG5xcL5/Kx/Wb43oX4ErRJWdjMi0ew0lu/wjmc8Yjuy
+         sFyHWISDMv2E9DqiHP1/J0w2EuhM24mGHNrb4Ifk62k07OzhsHShfSKkxVKjBCkYkmOC
+         SfBZ5uckbvCi0a0mbgdNeZ2wy8YvQU/QtZtPC/PFahOvXfByRXvwnLyTDuPoMx64qAnG
+         4mFLpCptRa301NI9CDIrmS097PGpKW57ag53WZk2Gx6MJ05SzA6QUFllmNpPRl9jQWFN
+         gfRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=bP8LP7Iq6Ef009AhSK4u5faUfPJtfq7x6vlBRz0vKas=;
-        b=YH/DbZVh9SsshUVeMct9EqcchZtNddoL+nJWS6ANt3ttZeMerDGrjs9oZU3r/qkoOk
-         cpUVaJlEOBsQ/qOA3AOwGarb+Zq+7b35qkL3OweJzT34GgPjzsuEohnFOvjmpXhS5M9e
-         6qDE3UmLgDA28lfOJsfxygLfSzawwrsSL22GQ33kUTZhDimCAG7JV1j0U2Jzqr9bGBqQ
-         Qfj+JRMl7VMaw6j4mHKJAHVu6Ha7/Y2H2OTZXEEWeABA2WE5mG4l/bfpeiI4se4Pq7Bw
-         lOaOQQO6a8IV1/jG7X9bACwT+zMqTRQDw8vZPxpyXhWgSng8fRoo8ghzhIX+1WnhyOMp
-         SunQ==
-X-Gm-Message-State: ACgBeo3DFsAOre8PgBO7h5YhY5Lmd37a6U69I5yRYrHl8ww6+ouiA/jQ
-        8FxrV+k9/qw00ohFK5XhVfA=
-X-Google-Smtp-Source: AA6agR461AETEjbmlAgbthQrphmCvR+8xaY7mBCUtzkT615M5qJ16zQCwVz6+7I9POz9RPFNPcpPWg==
-X-Received: by 2002:a17:907:28d6:b0:731:100c:8999 with SMTP id en22-20020a17090728d600b00731100c8999mr15647407ejc.210.1660140115247;
-        Wed, 10 Aug 2022 07:01:55 -0700 (PDT)
-Received: from xws.localdomain ([37.120.217.162])
-        by smtp.gmail.com with ESMTPSA id kz22-20020a17090777d600b0072b2ffc662esm2344013ejc.156.2022.08.10.07.01.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 07:01:54 -0700 (PDT)
-From:   Maximilian Luz <luzmaximilian@gmail.com>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Maximilian Luz <luzmaximilian@gmail.com>
-Subject: [PATCH] platform/surface: aggregator_registry: Add support for Surface Laptop Go 2
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc;
+        bh=dZA7yOywUXukdcu5pO+Io3zvJr55DJZjswrAfBadLys=;
+        b=1t5OElyVjw0rStUgBcYCmft9FCc8r+KYz+mQPb7L1vOnciaAkxbojMf5rZL3JBoJSR
+         gUAYM8+D2djTl4k9nAmLxavPeS+c4ygg9Eqd15l/fVmOC/Os8HNYdRpa5whaGoiu3HCO
+         4s4HBvlO0Njr+9NFTpmh6///FMANafvQaJEgs0ROQtJ/2DDJW306DMDCv5QlYMgoEpEH
+         fLlImpmvnOYJd+SQaxfiRUEBVUZsI0l7qL7EXJlTW4kL20aPMoYQtueTdkpqn8DdgaqD
+         O+CZJ13jWb1/y0MDe7mPA7KLYCb9c0U6PqAsVjCq9aglP0u7VNDZk/7dQreZfc8kKiOp
+         u3+w==
+X-Gm-Message-State: ACgBeo3ibJbRP1nFllKmyyIpXevkpfJF6YJegfeYEyLUzQiNwroI7Sk5
+        0bkx28EoLWMYAwybrgI600S+fw==
+X-Google-Smtp-Source: AA6agR7DzgEgT3CgQhryxKIY8bUl9vYO/MdJ9kGHKEoVxRh7PUHU+GxrH0F86bCtL7LF92AxXsWGgg==
+X-Received: by 2002:a05:600c:1d1e:b0:3a5:4f8d:743f with SMTP id l30-20020a05600c1d1e00b003a54f8d743fmr2558911wms.121.1660140096061;
+        Wed, 10 Aug 2022 07:01:36 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:bbf0:b69d:fecb:8006? ([2a01:e0a:982:cbb0:bbf0:b69d:fecb:8006])
+        by smtp.gmail.com with ESMTPSA id az21-20020a05600c601500b003a31ca9dfb6sm3347611wmb.32.2022.08.10.07.01.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Aug 2022 07:01:35 -0700 (PDT)
+Message-ID: <518f22f4-1582-924c-9eaa-28ebbe53a632@baylibre.com>
 Date:   Wed, 10 Aug 2022 16:01:33 +0200
-Message-Id: <20220810140133.99087-1-luzmaximilian@gmail.com>
-X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] spi: meson-spicc: save pow2 datarate between messages
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Da Xue <da@libre.computer>
+References: <20220809152019.461741-1-narmstrong@baylibre.com>
+ <YvJ84qkuXdvVgXRm@sirena.org.uk>
+ <39c2f53b-8f53-ceb1-ae0c-81e5e53d01aa@baylibre.com>
+ <YvOmnDJA+ov49chC@sirena.org.uk>
+From:   Neil Armstrong <narmstrong@baylibre.com>
+Organization: Baylibre
+In-Reply-To: <YvOmnDJA+ov49chC@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Surface Laptop Go 2 seems to have the same SAM client devices as the
-Surface Laptop Go 1, so re-use its node group.
+On 10/08/2022 14:37, Mark Brown wrote:
+> On Wed, Aug 10, 2022 at 11:17:14AM +0200, Neil Armstrong wrote:
+>> On 09/08/2022 17:27, Mark Brown wrote:
+>>> On Tue, Aug 09, 2022 at 05:20:19PM +0200, Neil Armstrong wrote:
+> 
+>>> When you say the value set by the clock framework does that mean that
+>>> the clock driver is adjusting hardware inside the SPI controller IP
+>>> block which is then getting reset by the SPI driver without the SPI
+>>> driver knowing about it?  That seems like a bad idea as you're finding
+>>> here.
+> 
+>> The SPI driver is explicitely triggering a reset at the end of each message
+>> to get back to a clean HW state, but it does reset the content of the "legacy"
+>> registers containing the power of 2 divider value, the new registers configuring
+>> the new clock divider path (only on newer SoCs) doesn't get cleared.
+> 
+> Sure, but that doesn't really address the concern - is this something
+> that the clk driver programmed or is this the driver forgetting to
+> restore a register that it programmed itself?  The commit message sounds
+> like the former which is a much bigger problem.
 
-Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
----
- drivers/platform/surface/surface_aggregator_registry.c | 3 +++
- 1 file changed, 3 insertions(+)
+It's what is programmed by the Clock Framework yes, it was designed as-is
+so the Clock Framework takes the most accurate clock path but the reset case
+wasn't taken in account.
 
-diff --git a/drivers/platform/surface/surface_aggregator_registry.c b/drivers/platform/surface/surface_aggregator_registry.c
-index ce2bd88feeaa..08019c6ccc9c 100644
---- a/drivers/platform/surface/surface_aggregator_registry.c
-+++ b/drivers/platform/surface/surface_aggregator_registry.c
-@@ -556,6 +556,9 @@ static const struct acpi_device_id ssam_platform_hub_match[] = {
- 	/* Surface Laptop Go 1 */
- 	{ "MSHW0118", (unsigned long)ssam_node_group_slg1 },
- 
-+	/* Surface Laptop Go 2 */
-+	{ "MSHW0290", (unsigned long)ssam_node_group_slg1 },
-+
- 	/* Surface Laptop Studio */
- 	{ "MSHW0123", (unsigned long)ssam_node_group_sls },
- 
--- 
-2.37.1
-
+Neil

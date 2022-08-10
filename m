@@ -2,73 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A95F858F15C
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 19:16:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCD8258F167
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 19:18:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233460AbiHJRQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 13:16:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50192 "EHLO
+        id S233446AbiHJRRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 13:17:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233420AbiHJRPs (ORCPT
+        with ESMTP id S233612AbiHJRRV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 13:15:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 10B1B796B7
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 10:15:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660151745;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Imye1gnnfzcz+CnTHG0VF+fJyp01Qs5zM0UuNG7EPiA=;
-        b=HCom9CbZhs/ec/YkjzzfXiJkS/b35R62VFdIZ25ZKA+cI8Vii8Musq7Qut189d3RPJKDAB
-        QGCjJaeoat99+OgQQ7423/Fnx9tv/yX85Q6LpEi+fmsBCQAz1ki/SuqY4lE3nu0nQvHHYJ
-        enMGkDQEE6ePpSgef3AOVbCMG+QV99s=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-223-JOUjUaghNQ25Zncct0Exdg-1; Wed, 10 Aug 2022 13:15:40 -0400
-X-MC-Unique: JOUjUaghNQ25Zncct0Exdg-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AE1B01C006C9;
-        Wed, 10 Aug 2022 17:15:38 +0000 (UTC)
-Received: from eperezma.remote.csb (unknown [10.39.193.156])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 512A51415125;
-        Wed, 10 Aug 2022 17:15:34 +0000 (UTC)
-From:   =?UTF-8?q?Eugenio=20P=C3=A9rez?= <eperezma@redhat.com>
-To:     kvm@vger.kernel.org, "Michael S. Tsirkin" <mst@redhat.com>,
-        linux-kernel@vger.kernel.org, Jason Wang <jasowang@redhat.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
-Cc:     dinang@xilinx.com, martinpo@xilinx.com,
-        Wu Zongyong <wuzongyong@linux.alibaba.com>,
-        Piotr.Uminski@intel.com, gautam.dawar@amd.com,
-        ecree.xilinx@gmail.com, martinh@xilinx.com,
-        Stefano Garzarella <sgarzare@redhat.com>, pabloc@xilinx.com,
-        habetsm.xilinx@gmail.com, lvivier@redhat.com,
-        Zhu Lingshan <lingshan.zhu@intel.com>, tanuj.kamde@amd.com,
-        Longpeng <longpeng2@huawei.com>, lulu@redhat.com,
-        hanand@xilinx.com, Parav Pandit <parav@nvidia.com>,
-        Si-Wei Liu <si-wei.liu@oracle.com>,
-        Eli Cohen <elic@nvidia.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        Zhang Min <zhang.min9@zte.com.cn>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH v7 4/4] vdpa_sim: Implement suspend vdpa op
-Date:   Wed, 10 Aug 2022 19:15:12 +0200
-Message-Id: <20220810171512.2343333-5-eperezma@redhat.com>
-In-Reply-To: <20220810171512.2343333-1-eperezma@redhat.com>
-References: <20220810171512.2343333-1-eperezma@redhat.com>
+        Wed, 10 Aug 2022 13:17:21 -0400
+Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D548276C
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 10:16:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1660151812; x=1691687812;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ZrG3QXHf6OeZyZRRDOE430GTJ+vsvuzlYkLafNLMIzY=;
+  b=WOOznSXce36aTwA1SAs9xEAvsJVFd0GIC5kjpHhKRo6UDUlfkHGw4uBX
+   40jclD1Aq99FVLjHei1fHaKR8jRIzxd6yQ5wgHnIfx31HTmCoiaYH0nah
+   PNsUj1zYX4VBTaPv6cJMln51D88XNIVFkRuzQanMquMLp++aroGcXDP1p
+   V1/MAbGHC/nji2fbcdfwIqDBxRUcgtbIj/Y63RxyJ0/zt55OJbA0SgEXW
+   oB5JRlsOHeZQcaXxfLb8iioxBZIdJs/L3nqYKa3/ryulmbCqF1wZrNz5B
+   afcQ4KBcI8QO7TYHGgzpWAxisZY7qkd/er5sPsssCBauk4VA8EL9p6/G7
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,227,1654531200"; 
+   d="scan'208";a="213385568"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 11 Aug 2022 01:16:44 +0800
+IronPort-SDR: VlAY+d8fgrJOvKDbXrSZQCHsO9dpHUIneqatWBPD82c3C1rwaJ9U5NStmtEo9cxGjYVxYEtH4y
+ /f6aA3gjtZV4V9QGjHhtEGrm6AZcDM7i2TYRPApIXqAug6MLlKiLGVSI/DC/P3nmFLNfGX7PC6
+ hGsocMdzlBlhG5P3bej35EJxZWX0V3i0Pky8BIKFhYa0dXDXOwRiOyHO5Hqcu1kNob4XV6Il/h
+ CAGkIk+3IbVIp8a/ly2s30VCLKKrJAlgckoWMTmrIZwo3oelhDDYl2VhV1KHp4tSN/PnvSMc4m
+ 9l1Q+7rjEIYe6sC/f8ZmePD5
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 10 Aug 2022 09:37:40 -0700
+IronPort-SDR: 0P3YHujR+I2GLd6va3Ht321LlFdUKC7ctjf+FKtD9kqozf49oHrhWyxDV7X61LCZ/udxlzOhXZ
+ 1szYKvBTWF5RVd6rK7cvSDQ/rC95YfLaD0HmHXk4U7pOohThnMFuuiYs0JPbCGiPtNpIRej8bN
+ 9PUK6JqjpgElrO8U7UYxvfx4agJCJq4lmyQEpM5bvZMBR1RUvHtqPCNvRDiALtrtMBISsgJi3y
+ naLDJZyNlYOKeeyZQIw+3ocKWpShCc8Q4NKn0Hsosz1dyxN9g7HVpD/zMPMkeUv9Z6Icgw8gHu
+ CfY=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 10 Aug 2022 10:16:47 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4M2xSF40rGz1Rws8
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 10:16:45 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1660151804; x=1662743805; bh=ZrG3QXHf6OeZyZRRDOE430GTJ+vsvuzlYkL
+        afNLMIzY=; b=q8E5j2biq7+aqtAPZCbX3uzABdCPq3/W5AC6e3lSgeyurt33e66
+        2TKqgrRhJBz924jF27EslwtHBD+j9JFqfG7kSTu2r9qKbwG3fQ9f5MLkt0bGDFzL
+        7J8aO0Jt4kYGSI9+bBsk00OqjgLIM4+Ir8bqlCCzhVKjT7bhrPKe0TqbywLC98ru
+        q+eF4mGZgxDhd1iVzqOwjZj9Bm32j8o9mkFInce7Iwe/IPJ0E9Hcmc75Q+0bD+86
+        s8pe4eRc+n6iu+kkii5juFTDKLjw4Rb7R0KaF5tUz1k+c/VMdnMVczCqTmOibpQN
+        5AAE9asQpxtUlD4zvMoDqsvew5bHTZH27wA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id MMxGklDGR41O for <linux-kernel@vger.kernel.org>;
+        Wed, 10 Aug 2022 10:16:44 -0700 (PDT)
+Received: from [10.111.68.99] (c02drav6md6t.sdcorp.global.sandisk.com [10.111.68.99])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4M2xSC1pJVz1RtVk;
+        Wed, 10 Aug 2022 10:16:43 -0700 (PDT)
+Message-ID: <3ee96421-94b2-12d8-9aa2-83d4f7027694@opensource.wdc.com>
+Date:   Wed, 10 Aug 2022 10:16:42 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [PATCH v9 12/13] dm: introduce DM_EMULATED_ZONES target type
+Content-Language: en-US
+To:     Pankaj Raghav <p.raghav@samsung.com>, Johannes.Thumshirn@wdc.com,
+        snitzer@kernel.org, axboe@kernel.dk, agk@redhat.com, hch@lst.de
+Cc:     dm-devel@redhat.com, matias.bjorling@wdc.com, gost.dev@samsung.com,
+        linux-kernel@vger.kernel.org, pankydev8@gmail.com,
+        jaegeuk@kernel.org, hare@suse.de, linux-block@vger.kernel.org,
+        linux-nvme@lists.infradead.org, bvanassche@acm.org
+References: <20220803094801.177490-1-p.raghav@samsung.com>
+ <CGME20220803094815eucas1p2dfab477daf4f2eb05342d756fdf7f14d@eucas1p2.samsung.com>
+ <20220803094801.177490-13-p.raghav@samsung.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220803094801.177490-13-p.raghav@samsung.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.7
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,115 +103,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement suspend operation for vdpa_sim devices, so vhost-vdpa will
-offer that backend feature and userspace can effectively suspend the
-device.
+On 2022/08/03 2:48, Pankaj Raghav wrote:
+> Introduce a new target type DM_EMULATED_ZONES for targets with
+> a different zone number of sectors than the underlying device zone
+> number of sectors.
 
-This is a must before get virtqueue indexes (base) for live migration,
-since the device could modify them after userland gets them. There are
-individual ways to perform that action for some devices
-(VHOST_NET_SET_BACKEND, VHOST_VSOCK_SET_RUNNING, ...) but there was no
-way to perform it for any vhost device (and, in particular, vhost-vdpa).
+"zone number of sectors" is strange. "number of sectors per zone (aka zone
+size)" is simpler and clear.
 
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
-Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
-Message-Id: <20220623160738.632852-5-eperezma@redhat.com>
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
----
-v7: Delete leftover resume code
----
- drivers/vdpa/vdpa_sim/vdpa_sim.c     | 14 ++++++++++++++
- drivers/vdpa/vdpa_sim/vdpa_sim.h     |  1 +
- drivers/vdpa/vdpa_sim/vdpa_sim_blk.c |  3 +++
- drivers/vdpa/vdpa_sim/vdpa_sim_net.c |  3 +++
- 4 files changed, 21 insertions(+)
+> 
+> This target type is introduced as the existing zoned targets assume
+> that the target and the underlying device have the same zone
+> number of sectors. The new target: dm-po2zone will use this new target
+> type as it emulates the zone boundary that is different from the
+> underlying zoned device.
+> 
+> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
 
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-index 0f2865899647..79a50edf8998 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
-@@ -107,6 +107,7 @@ static void vdpasim_do_reset(struct vdpasim *vdpasim)
- 	for (i = 0; i < vdpasim->dev_attr.nas; i++)
- 		vhost_iotlb_reset(&vdpasim->iommu[i]);
- 
-+	vdpasim->running = true;
- 	spin_unlock(&vdpasim->iommu_lock);
- 
- 	vdpasim->features = 0;
-@@ -505,6 +506,17 @@ static int vdpasim_reset(struct vdpa_device *vdpa)
- 	return 0;
- }
- 
-+static int vdpasim_suspend(struct vdpa_device *vdpa)
-+{
-+	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
-+
-+	spin_lock(&vdpasim->lock);
-+	vdpasim->running = false;
-+	spin_unlock(&vdpasim->lock);
-+
-+	return 0;
-+}
-+
- static size_t vdpasim_get_config_size(struct vdpa_device *vdpa)
- {
- 	struct vdpasim *vdpasim = vdpa_to_sim(vdpa);
-@@ -694,6 +706,7 @@ static const struct vdpa_config_ops vdpasim_config_ops = {
- 	.get_status             = vdpasim_get_status,
- 	.set_status             = vdpasim_set_status,
- 	.reset			= vdpasim_reset,
-+	.suspend		= vdpasim_suspend,
- 	.get_config_size        = vdpasim_get_config_size,
- 	.get_config             = vdpasim_get_config,
- 	.set_config             = vdpasim_set_config,
-@@ -726,6 +739,7 @@ static const struct vdpa_config_ops vdpasim_batch_config_ops = {
- 	.get_status             = vdpasim_get_status,
- 	.set_status             = vdpasim_set_status,
- 	.reset			= vdpasim_reset,
-+	.suspend		= vdpasim_suspend,
- 	.get_config_size        = vdpasim_get_config_size,
- 	.get_config             = vdpasim_get_config,
- 	.set_config             = vdpasim_set_config,
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.h b/drivers/vdpa/vdpa_sim/vdpa_sim.h
-index 622782e92239..061986f30911 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim.h
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim.h
-@@ -66,6 +66,7 @@ struct vdpasim {
- 	u32 generation;
- 	u64 features;
- 	u32 groups;
-+	bool running;
- 	/* spinlock to synchronize iommu table */
- 	spinlock_t iommu_lock;
- };
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-index 42d401d43911..bcdb1982c378 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-@@ -204,6 +204,9 @@ static void vdpasim_blk_work(struct work_struct *work)
- 	if (!(vdpasim->status & VIRTIO_CONFIG_S_DRIVER_OK))
- 		goto out;
- 
-+	if (!vdpasim->running)
-+		goto out;
-+
- 	for (i = 0; i < VDPASIM_BLK_VQ_NUM; i++) {
- 		struct vdpasim_virtqueue *vq = &vdpasim->vqs[i];
- 
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-index 5125976a4df8..886449e88502 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim_net.c
-@@ -154,6 +154,9 @@ static void vdpasim_net_work(struct work_struct *work)
- 
- 	spin_lock(&vdpasim->lock);
- 
-+	if (!vdpasim->running)
-+		goto out;
-+
- 	if (!(vdpasim->status & VIRTIO_CONFIG_S_DRIVER_OK))
- 		goto out;
- 
+With that text fixed, looks OK to me.
+
+Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+
+> ---
+>  drivers/md/dm-table.c         | 13 ++++++++++---
+>  include/linux/device-mapper.h |  9 +++++++++
+>  2 files changed, 19 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/md/dm-table.c b/drivers/md/dm-table.c
+> index 31eb1d29d136..b37991ea3ffb 100644
+> --- a/drivers/md/dm-table.c
+> +++ b/drivers/md/dm-table.c
+> @@ -1614,13 +1614,20 @@ static bool dm_table_supports_zoned_model(struct dm_table *t,
+>  	return true;
+>  }
+>  
+> -static int device_not_matches_zone_sectors(struct dm_target *ti, struct dm_dev *dev,
+> +/*
+> + * Callback function to check for device zone sector across devices. If the
+> + * DM_TARGET_EMULATED_ZONES target feature flag is not set, then the target
+> + * should have the same zone sector as the underlying devices.
+> + */
+> +static int check_valid_device_zone_sectors(struct dm_target *ti, struct dm_dev *dev,
+>  					   sector_t start, sector_t len, void *data)
+>  {
+>  	unsigned int *zone_sectors = data;
+>  
+> -	if (!bdev_is_zoned(dev->bdev))
+> +	if (!bdev_is_zoned(dev->bdev) ||
+> +	    dm_target_supports_emulated_zones(ti->type))
+>  		return 0;
+> +
+>  	return bdev_zone_sectors(dev->bdev) != *zone_sectors;
+>  }
+>  
+> @@ -1645,7 +1652,7 @@ static int validate_hardware_zoned_model(struct dm_table *t,
+>  	if (!zone_sectors)
+>  		return -EINVAL;
+>  
+> -	if (dm_table_any_dev_attr(t, device_not_matches_zone_sectors, &zone_sectors)) {
+> +	if (dm_table_any_dev_attr(t, check_valid_device_zone_sectors, &zone_sectors)) {
+>  		DMERR("%s: zone sectors is not consistent across all zoned devices",
+>  		      dm_device_name(t->md));
+>  		return -EINVAL;
+> diff --git a/include/linux/device-mapper.h b/include/linux/device-mapper.h
+> index 04c6acf7faaa..83e20de264c9 100644
+> --- a/include/linux/device-mapper.h
+> +++ b/include/linux/device-mapper.h
+> @@ -294,6 +294,15 @@ struct target_type {
+>  #define dm_target_supports_mixed_zoned_model(type) (false)
+>  #endif
+>  
+> +#ifdef CONFIG_BLK_DEV_ZONED
+> +#define DM_TARGET_EMULATED_ZONES	0x00000400
+> +#define dm_target_supports_emulated_zones(type) \
+> +	((type)->features & DM_TARGET_EMULATED_ZONES)
+> +#else
+> +#define DM_TARGET_EMULATED_ZONES	0x00000000
+> +#define dm_target_supports_emulated_zones(type) (false)
+> +#endif
+> +
+>  struct dm_target {
+>  	struct dm_table *table;
+>  	struct target_type *type;
+
+
 -- 
-2.31.1
-
+Damien Le Moal
+Western Digital Research

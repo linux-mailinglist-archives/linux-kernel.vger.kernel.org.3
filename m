@@ -2,182 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8619158EC7D
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 14:57:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 93F7B58EC70
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 14:56:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232360AbiHJM5I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 08:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51728 "EHLO
+        id S232327AbiHJM4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 08:56:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232339AbiHJM4u (ORCPT
+        with ESMTP id S232344AbiHJM4e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 08:56:50 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58DFD60519
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 05:56:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660136210; x=1691672210;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=4Y5z0ZDyydKnej9IdSZAQHbHgCINGNRafiCXrqPAudc=;
-  b=V4IdcGPPAXGUjziOyoR2K6/LQy0UhX+V0ZaEWb2heDldXTWeYyxOtpnu
-   j042FubKYmWeLW4fOsfGD0be92tL4fDGFBvxYDn5Ma8Trw4QBv0CSy612
-   9uo7Ap0AoSaTJEcWCwmGWXaTyBamfiAdEtx320bWEb1TsE5i4DcSo3rdj
-   6pWhd15dCMIxC4zx4WJoZFANIGlmSss1v46Wrk4ujZlZzTjL/545IvIGj
-   qE3znCItPG3SwtQI8oTgJY1P1X5rKG3zWMD1cDGruOZ6Z3aq5z+fqc3hP
-   gSLAkWkNArAMTK7PoXNFFULYh4Uu7F+qPzMz/Ogq92dBVUxTj8b6zA50v
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="377364386"
-X-IronPort-AV: E=Sophos;i="5.93,227,1654585200"; 
-   d="scan'208";a="377364386"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 05:56:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,227,1654585200"; 
-   d="scan'208";a="581221963"
-Received: from lkp-server02.sh.intel.com (HELO 5d6b42aa80b8) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 10 Aug 2022 05:56:48 -0700
-Received: from kbuild by 5d6b42aa80b8 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oLlGS-0000HI-0O;
-        Wed, 10 Aug 2022 12:56:48 +0000
-Date:   Wed, 10 Aug 2022 20:56:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Oded Gabbay <ogabbay@habana.ai>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [ogabbay:accel 1/2] drivers/accelerators/accel_sysfs.c:66:5:
- warning: no previous prototype for 'accel_sysfs_init'
-Message-ID: <202208102011.HntMqTCc-lkp@intel.com>
+        Wed, 10 Aug 2022 08:56:34 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296995C349;
+        Wed, 10 Aug 2022 05:56:33 -0700 (PDT)
+Received: from pps.filterd (m0098417.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27ACphew008935;
+        Wed, 10 Aug 2022 12:56:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=5t3uckrmX8TZOE2AADmHK/r+GKcm/h3E7WUWVoXfxSw=;
+ b=bLP0uM2K/8K4aENzTRKDGr/BwAzoLcUCDgpMsF+VpTkN7dWCarMfFlMgwC/cNC5z7vRv
+ AK8VT0ZSS1C1DGJPbBR1bWv+MyfWmnXYTzxr8GT+3Y+Yod/grvf2Buvfo9dQiWTtRg0W
+ lQ3W8puQDWCjX2hNKeEG9jhsDkLdMBytCbw6/+Zw5teJVJZ833AzTNsaFEH1RqLcbQMY
+ WwA2pgOzwG6pOjWNAs6ToS/xlMNGuHXbZJkFQn6RgVgFdKGNebowkMiVSEGm4/X6Fkhw
+ P4BIG6v0tQKAVbeFBA3AsoDZKOaj4SunKJTVCRyoOHKabQyHisUcsIYmZariU/OA+C7c TQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hv5r6e301-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Aug 2022 12:56:32 +0000
+Received: from m0098417.ppops.net (m0098417.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27ACphGs008926;
+        Wed, 10 Aug 2022 12:56:31 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hv5r6e2y0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Aug 2022 12:56:31 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27ACqK1m013616;
+        Wed, 10 Aug 2022 12:56:29 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04ams.nl.ibm.com with ESMTP id 3huww2guge-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Aug 2022 12:56:29 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27ACuQ3n20513218
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 10 Aug 2022 12:56:26 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 94EBF4C04E;
+        Wed, 10 Aug 2022 12:56:26 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id EC76B4C040;
+        Wed, 10 Aug 2022 12:56:25 +0000 (GMT)
+Received: from p-imbrenda.bredband2.com (unknown [9.145.0.105])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed, 10 Aug 2022 12:56:25 +0000 (GMT)
+From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
+To:     kvm@vger.kernel.org
+Cc:     borntraeger@de.ibm.com, frankja@linux.ibm.com, thuth@redhat.com,
+        pasic@linux.ibm.com, david@redhat.com, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
+        seiden@linux.ibm.com, nrb@linux.ibm.com
+Subject: [PATCH v13 0/6] KVM: s390: pv: implement lazy destroy for reboot
+Date:   Wed, 10 Aug 2022 14:56:19 +0200
+Message-Id: <20220810125625.45295-1-imbrenda@linux.ibm.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: _1C-6yW8c1OEFvRSLCTIkC3QhsuufEpO
+X-Proofpoint-ORIG-GUID: kBMtHPlgZSWQDuGt6yC4WQp3s8LI-r9F
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-10_07,2022-08-10_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
+ mlxscore=0 bulkscore=0 priorityscore=1501 spamscore=0 phishscore=0
+ mlxlogscore=857 suspectscore=0 lowpriorityscore=0 clxscore=1011
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208100038
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git accel
-head:   7cd6e545486f8ead2f046747a9557f62e8bbfff3
-commit: ddc47a3f6a4387c32ae88c644a65529533f28d96 [1/2] accel: initial commit
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220810/202208102011.HntMqTCc-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git/commit/?id=ddc47a3f6a4387c32ae88c644a65529533f28d96
-        git remote add ogabbay https://git.kernel.org/pub/scm/linux/kernel/git/ogabbay/linux.git
-        git fetch --no-tags ogabbay accel
-        git checkout ddc47a3f6a4387c32ae88c644a65529533f28d96
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/accelerators/
+Previously, when a protected VM was rebooted or when it was shut down,
+its memory was made unprotected, and then the protected VM itself was
+destroyed. Looping over the whole address space can take some time,
+considering the overhead of the various Ultravisor Calls (UVCs). This
+means that a reboot or a shutdown would take a potentially long amount
+of time, depending on the amount of used memory.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+This patchseries implements a deferred destroy mechanism for protected
+guests. When a protected guest is destroyed, its memory can be cleared
+in background, allowing the guest to restart or terminate significantly
+faster than before.
 
-All warnings (new ones prefixed by >>):
+There are 2 possibilities when a protected VM is torn down:
+* it still has an address space associated (reboot case)
+* it does not have an address space anymore (shutdown case)
 
->> drivers/accelerators/accel_sysfs.c:66:5: warning: no previous prototype for 'accel_sysfs_init' [-Wmissing-prototypes]
-      66 | int accel_sysfs_init(void)
-         |     ^~~~~~~~~~~~~~~~
->> drivers/accelerators/accel_sysfs.c:91:6: warning: no previous prototype for 'accel_sysfs_destroy' [-Wmissing-prototypes]
-      91 | void accel_sysfs_destroy(void)
-         |      ^~~~~~~~~~~~~~~~~~~
->> drivers/accelerators/accel_sysfs.c:105:16: warning: no previous prototype for 'accel_sysfs_minor_alloc' [-Wmissing-prototypes]
-     105 | struct device *accel_sysfs_minor_alloc(struct accel_minor *minor)
-         |                ^~~~~~~~~~~~~~~~~~~~~~~
+For the reboot case, two new commands are available for the
+KVM_S390_PV_COMMAND:
 
+KVM_PV_ASYNC_CLEANUP_PREPARE: prepares the current protected VM for
+asynchronous teardown. The current VM will then continue immediately
+as non-protected. If a protected VM had already been set aside without
+starting the teardown process, this call will fail. In this case the
+userspace process should issue a normal KVM_PV_DISABLE
 
-vim +/accel_sysfs_init +66 drivers/accelerators/accel_sysfs.c
+KVM_PV_ASYNC_CLEANUP_PERFORM: tears down the protected VM previously
+set aside for asychronous teardown. This PV command should ideally be
+issued by userspace from a separate thread. If a fatal signal is
+received (or the process terminates naturally), the command will
+terminate immediately without completing. The rest of the normal KVM
+teardown process will take care of properly cleaning up all leftovers.
 
-    55	
-    56	/**
-    57	 * accel_sysfs_init - initialize sysfs helpers
-    58	 *
-    59	 * This is used to create the ACCEL class, which is the implicit parent of any
-    60	 * other top-level ACCEL sysfs objects.
-    61	 *
-    62	 * You must call accel_sysfs_destroy() to release the allocated resources.
-    63	 *
-    64	 * Return: 0 on success, negative error code on failure.
-    65	 */
-  > 66	int accel_sysfs_init(void)
-    67	{
-    68		int err;
-    69	
-    70		accel_class = class_create(THIS_MODULE, "accel");
-    71		if (IS_ERR(accel_class))
-    72			return PTR_ERR(accel_class);
-    73	
-    74		err = class_create_file(accel_class, &class_attr_version.attr);
-    75		if (err) {
-    76			class_destroy(accel_class);
-    77			accel_class = NULL;
-    78			return err;
-    79		}
-    80	
-    81		accel_class->devnode = accel_devnode;
-    82	
-    83		return 0;
-    84	}
-    85	
-    86	/**
-    87	 * accel_sysfs_destroy - destroys ACCEL class
-    88	 *
-    89	 * Destroy the ACCEL device class.
-    90	 */
-  > 91	void accel_sysfs_destroy(void)
-    92	{
-    93		if (IS_ERR_OR_NULL(accel_class))
-    94			return;
-    95		class_remove_file(accel_class, &class_attr_version.attr);
-    96		class_destroy(accel_class);
-    97		accel_class = NULL;
-    98	}
-    99	
-   100	static void accel_sysfs_release(struct device *dev)
-   101	{
-   102		kfree(dev);
-   103	}
-   104	
- > 105	struct device *accel_sysfs_minor_alloc(struct accel_minor *minor)
-   106	{
-   107		const char *minor_str;
-   108		struct device *kdev;
-   109		int r;
-   110	
-   111		if (minor->type == ACCEL_MINOR_CONTROL)
-   112			minor_str = "ac_ControlD%d";
-   113		else
-   114			minor_str = "ac%d";
-   115	
-   116		kdev = kzalloc(sizeof(*kdev), GFP_KERNEL);
-   117		if (!kdev)
-   118			return ERR_PTR(-ENOMEM);
-   119	
-   120		device_initialize(kdev);
-   121		kdev->devt = MKDEV(ACCEL_MAJOR, minor->index);
-   122		kdev->class = accel_class;
-   123		kdev->type = &accel_sysfs_device_minor;
-   124		kdev->parent = minor->dev->dev;
-   125		kdev->release = accel_sysfs_release;
-   126		dev_set_drvdata(kdev, minor);
-   127	
-   128		r = dev_set_name(kdev, minor_str, minor->index);
-   129		if (r < 0)
-   130			goto err_free;
-   131	
-   132		return kdev;
-   133	
-   134	err_free:
-   135		put_device(kdev);
-   136		return ERR_PTR(r);
-   137	}
-   138	
+The idea is that userspace should first issue the
+KVM_PV_ASYNC_CLEANUP_PREPARE command, and in case of success, create a
+new thread and issue KVM_PV_ASYNC_CLEANUP_PERFORM from there. This also
+allows for proper accounting of the CPU time needed for the
+asynchronous teardown.
+
+This means that the same address space can have memory belonging to
+more than one protected guest, although only one will be running, the
+others will in fact not even have any CPUs.
+
+The shutdown case should be dealt with in userspace (e.g. using
+clone(CLONE_VM)).
+
+A module parameter is also provided to disable the new functionality,
+which is otherwise enabled by default. This should not be an issue
+since the new functionality is opt-in anyway. This is mainly thought to
+aid debugging.
+
+v12->v13
+* drop the patches that have been already merged
+* rebase
+
+Claudio Imbrenda (6):
+  KVM: s390: pv: asynchronous destroy for reboot
+  KVM: s390: pv: api documentation for asynchronous destroy
+  KVM: s390: pv: add KVM_CAP_S390_PROTECTED_ASYNC_DISABLE
+  KVM: s390: pv: avoid export before import if possible
+  KVM: s390: pv: support for Destroy fast UVC
+  KVM: s390: pv: module parameter to fence asynchronous destroy
+
+ Documentation/virt/kvm/api.rst   |  30 ++-
+ arch/s390/include/asm/kvm_host.h |   2 +
+ arch/s390/include/asm/uv.h       |  10 +
+ arch/s390/kernel/uv.c            |   2 +
+ arch/s390/kvm/kvm-s390.c         |  55 ++++-
+ arch/s390/kvm/kvm-s390.h         |   3 +
+ arch/s390/kvm/pv.c               | 331 ++++++++++++++++++++++++++++++-
+ include/uapi/linux/kvm.h         |   3 +
+ 8 files changed, 416 insertions(+), 20 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.1
+

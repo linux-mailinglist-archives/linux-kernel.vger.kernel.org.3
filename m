@@ -2,100 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52CF458F4A4
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 01:09:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBC9458F4A6
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 01:09:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232815AbiHJXJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 19:09:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34982 "EHLO
+        id S233622AbiHJXJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 19:09:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231550AbiHJXJD (ORCPT
+        with ESMTP id S230006AbiHJXJ2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 19:09:03 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB0573338
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 16:09:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660172942; x=1691708942;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=q4SxPdLSzVBG3OLsteoyYJUs7wpKwN1B3yE/EJ6LQ24=;
-  b=gHfzq4v0C/yUvHguq+0thQ3ojv690zmYrfqX6cYvMMBRLWb/Fp9HM+N2
-   /qFx9LRfjde2uW4Foho5QRSmTBsxptM8Kx2nhY1y26krsL0oo0p3off9s
-   D/kBXTpYxZZmrTIrMgQj86esoMlmzksaH+bwchaB4Q75D8fbOzyjUzjsf
-   QhlI48CnOs8O4P/5LbFSpy/hZPl8TNLln87796KRPH0rjUezs44Bb4d1q
-   bcRblHcsMyIL8lLV+ZA4EUUjTEdlps3IMMH5jwijlwbrtyQuLBNjO8hs3
-   dAWez3ShLsP6zt0qZ4xzvz0AbeOE7FbvfNZKgaiGKOhLNrEdy13G+ljeH
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="271599704"
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="271599704"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 16:09:02 -0700
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="781398405"
-Received: from snedunga-mobl2.amr.corp.intel.com (HELO [10.212.234.47]) ([10.212.234.47])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 16:09:01 -0700
-Message-ID: <ba80b303-31bf-d44a-b05d-5c0f83038798@intel.com>
-Date:   Wed, 10 Aug 2022 16:09:02 -0700
+        Wed, 10 Aug 2022 19:09:28 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C556374CD0
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 16:09:27 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id 13so14101495plo.12
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 16:09:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=IYUblAxSUIQ6YomS6SAe7QOiq/9tC9/LzRRTchU+IxE=;
+        b=qns1rAkQK4/otY2irw1U49E0MjSMaYOnuN2cHpSDDAsxpMr5u17jjwVx4NNtrzv+xg
+         OWMBGgJzYQB0Hx1dcA5B0UmbJLjUz3WsHnMhVE34YBV1OmOax2W/IllnQYCXiCp4tJ+c
+         PHGI4k4jNCgim+Dq8Gf8KGrhxi666WBzad/d6WV7XjVvIIhbHu17sYLa6DFSYK3/V2rC
+         3NBLay8W0CEyJDEcPwKl/c/vVhVqdACgwG2wtW003/T1zSkBO5KoZJavO8sWBarQQVbO
+         jOzh54JGwiNErNmr+Zg8EzOvHDiEhEvBGDvZYFfh4QVD6U1dIEGtLHROGWM/9Dq520V4
+         LHXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=IYUblAxSUIQ6YomS6SAe7QOiq/9tC9/LzRRTchU+IxE=;
+        b=0YQRzCh3s8iGf6QbdqE5ESH4VeSEW4vufC14gg3KqR2Kyq/27cBbptSIppss9KIlKE
+         WHpu9U6uVk+Lb/iPd8aEJEfIH9tmRBLObjid8WzDq+YnpukVwcx9ax2z8ufttMV1FP46
+         /TrlOBQuEtn238iP8fHDp7k4eEzuCjYT1pk0fLWIBI4GOB0i/GyIl23UfWz43PMrBjw8
+         S0zcLQa8vhnkqH67ZJCQDBA0k35GMc789+MoFOdJiITqgEZlqOOQNbYlOHCoWxgans68
+         nJrDp4pDyQYC/1oev7NZLIQK5oC4f9ZseWTEFLKG6wpXoA3UJqTMztBlrKLgmXPlzD5M
+         RNYQ==
+X-Gm-Message-State: ACgBeo2xpPNZcJPAr2Z7KB5rpUYyRjOgMOC0XD9Jwl5+NEfhPHxnlMGl
+        bCdr5Q0nDZP/0wqrMP1LSwa4Kw==
+X-Google-Smtp-Source: AA6agR6JUfKOK+mhbI8Ko7mE/jyEfI9bwxECCepOgB5bm4ykAknGjBW2rMQOY5FxSZiIH3VjLhL0Xw==
+X-Received: by 2002:a17:902:d546:b0:16e:c70c:fdf5 with SMTP id z6-20020a170902d54600b0016ec70cfdf5mr30428690plf.100.1660172967179;
+        Wed, 10 Aug 2022 16:09:27 -0700 (PDT)
+Received: from google.com (201.215.168.34.bc.googleusercontent.com. [34.168.215.201])
+        by smtp.gmail.com with ESMTPSA id s4-20020aa78bc4000000b0052d82ce65a9sm2631701pfd.143.2022.08.10.16.09.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Aug 2022 16:09:26 -0700 (PDT)
+Date:   Wed, 10 Aug 2022 23:09:22 +0000
+From:   William McVicker <willmcvicker@google.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, kernel-team@android.com,
+        Vidya Sagar <vidyas@nvidia.com>,
+        kernel test robot <lkp@intel.com>,
+        "Isaac J . Manjarres" <isaacmanjarres@google.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] PCI: dwc: drop dependency on ZONE_DMA32
+Message-ID: <YvQ6ohi0SumTAt/s@google.com>
+References: <20220810183536.1630940-1-willmcvicker@google.com>
+ <20220810183536.1630940-2-willmcvicker@google.com>
+ <20220810212716.GA557589-robh@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] x86/apic: Don't disable x2APIC if locked
-Content-Language: en-US
-To:     Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
-        "Huang, Kai" <kai.huang@intel.com>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        "Gomez Iglesias, Antonio" <antonio.gomez.iglesias@intel.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-References: <20220809234000.783284-1-daniel.sneddon@linux.intel.com>
- <d6ffb489-7024-ff74-bd2f-d1e06573bb82@intel.com>
- <238ea612-5a25-9323-b31f-0a14493db2f7@linux.intel.com>
- <d4bcb22e-224c-d256-cb93-3ff6ed89a7d0@intel.com>
- <341ea6e9-d8f3-ee7a-6794-67408abbf047@linux.intel.com> <87r11nu52l.ffs@tglx>
- <83a0d220-1872-caba-4e7e-b6a366655cf2@linux.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <83a0d220-1872-caba-4e7e-b6a366655cf2@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220810212716.GA557589-robh@kernel.org>
+X-Spam-Status: No, score=-12.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/10/22 16:03, Daniel Sneddon wrote:
-> On 8/10/22 15:06, Thomas Gleixner wrote:
->> So this affects already deployed systems and we have to
->>
->>   - backport the x2apic lock changes
->>
->>   - provide proper diagnostics
->>
->>   - make SGX and TDX depend on X2APIC support
-> I'll add the comments Dave mentioned earlier, and will make SGX and TDX depend
-> on X2APIC since that makes sense regardless of what hw ends up with this change.
->  Unless we want to get rid of CONFIG_X86_X2APIC like Dave mentioned?
+On 08/10/2022, Rob Herring wrote:
+> On Wed, Aug 10, 2022 at 06:35:34PM +0000, Will McVicker wrote:
+> > Re-work the msi_msg DMA allocation logic to use dma_alloc_coherent()
+> > which uses the coherent DMA mask to try and return an allocation within
+> > the DMA mask limits. This allows kernel configurations that disable
+> > ZONE_DMA32 to continue supporting a 32-bit DMA mask. Without this patch,
+> > the PCIe host device will fail to probe when ZONE_DMA32 is disabled.
+> > 
+> > Fixes: 35797e672ff0 ("PCI: dwc: Fix MSI msi_msg DMA mapping")
+> > Reported-by: Isaac J. Manjarres <isaacmanjarres@google.com>
+> > Signed-off-by: Will McVicker <willmcvicker@google.com>
+> > ---
+> >  .../pci/controller/dwc/pcie-designware-host.c | 23 ++++++++-----------
+> >  1 file changed, 9 insertions(+), 14 deletions(-)
+> > 
+> > diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
+> > index 7746f94a715f..8f2222f51671 100644
+> > --- a/drivers/pci/controller/dwc/pcie-designware-host.c
+> > +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
+> > @@ -272,9 +272,9 @@ static void dw_pcie_free_msi(struct dw_pcie_rp *pp)
+> >  		struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
+> >  		struct device *dev = pci->dev;
+> >  
+> > -		dma_unmap_page(dev, pp->msi_data, PAGE_SIZE, DMA_FROM_DEVICE);
+> > -		if (pp->msi_page)
+> > -			__free_page(pp->msi_page);
+> > +		dma_free_coherent(dev, PAGE_SIZE, pp->msi_page, pp->msi_data);
+> > +		pp->msi_data = 0;
+> > +		pp->msi_page = NULL;
+> >  	}
+> >  }
+> >  
+> > @@ -375,22 +375,17 @@ static int dw_pcie_msi_host_init(struct dw_pcie_rp *pp)
+> >  						    dw_chained_msi_isr, pp);
+> >  	}
+> >  
+> > -	ret = dma_set_mask(dev, DMA_BIT_MASK(32));
+> > +	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
+> >  	if (ret)
+> >  		dev_warn(dev, "Failed to set DMA mask to 32-bit. Devices with only 32-bit MSI support may not work properly\n");
+> >  
+> > -	pp->msi_page = alloc_page(GFP_DMA32);
+> > -	pp->msi_data = dma_map_page(dev, pp->msi_page, 0,
+> > -				    PAGE_SIZE, DMA_FROM_DEVICE);
+> > -	ret = dma_mapping_error(dev, pp->msi_data);
+> > -	if (ret) {
+> > -		dev_err(pci->dev, "Failed to map MSI data\n");
+> > -		__free_page(pp->msi_page);
+> > -		pp->msi_page = NULL;
+> > +	pp->msi_page = dma_alloc_coherent(dev, PAGE_SIZE, &pp->msi_data,
+> > +					  GFP_KERNEL);
+> 
+> You can use the managed version, dmam_alloc_coherent(), and avoid the 
+> freeing yourself. Also with that, I think you don't need 'msi_page'?
+> 
+> Also, no need to alloc a whole page. A u32 or u64? should be fine. The 
+> write never makes it to memory, so doesn't really matter.
+> 
+> > +	if (!pp->msi_page) {
+> > +		dev_err(dev, "Failed to alloc and map MSI data\n");
+> >  		pp->msi_data = 0;
+> >  		dw_pcie_free_msi(pp);
+> > -
+> > -		return ret;
+> > +		return -ENOMEM;
+> >  	}
+> >  
+> >  	return 0;
+> > -- 
+> > 2.37.1.559.g78731f0fdb-goog
+> > 
 
-The TDX guest support in the kernel isn't _actually_ related to this*.
-It's the host-side support that matters and that isn't merged yet.  I've
-cc'd Kai so he doesn't forget to do this.
+Thanks for the review Rob! I've updated the series to address your concerns.
 
-I agree on the SGX side, though.
-
-* TDX guest support already has this dependency, but it's for unrelated
-  reasons:
-
-config INTEL_TDX_GUEST
-        bool "Intel TDX (Trust Domain Extensions) - Guest Support"
-        depends on X86_64 && CPU_SUP_INTEL
-        depends on X86_X2APIC
+Regards,
+Will

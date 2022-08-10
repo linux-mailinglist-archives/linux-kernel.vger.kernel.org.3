@@ -2,193 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DA5C58E9C1
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 11:39:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4C2D58E9F4
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 11:44:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231871AbiHJJiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 05:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38198 "EHLO
+        id S232256AbiHJJoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 05:44:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231228AbiHJJiu (ORCPT
+        with ESMTP id S231417AbiHJJn5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 05:38:50 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A896EF00
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 02:38:49 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id dc19so26605491ejb.12
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 02:38:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Rpc1heuT2lTdf2haoFSyi9HX+0SVlsyo53PGOFGRe2g=;
-        b=wlEvESgHc817iRkxJfikIheDgY6KLfBZ1yb8op9fkFoU54F7nSPdfh7KvCPFsJEfEW
-         kngon2s5Wy8qUSYjbS7+izRz2SC73YrUkoXlRluIAKOnWAryWeF89b37VsVodWphoO4l
-         luWlnpJ8j+M16+HKwK4vb4mY0ntQtVjI1T5/VfG7L0OXZ1jLUaXEaFxT0xXo5QZpnEuS
-         3aOsJxCT4MoeEl7QM/ZrS86xZ6EQD63Z0hvFJ1ExhPoVj8DV4BjM1XgZwz1eC2Cw7PMH
-         SFO4IXplFb/ekV0vBAuZF4c2pUtHX0iIFwRn3fYXMecnQ3YMKzyBSy/ugBnkrE827rZR
-         y3hQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Rpc1heuT2lTdf2haoFSyi9HX+0SVlsyo53PGOFGRe2g=;
-        b=nNWJuJj1zZppgqjjv+QVKns08O8MLAzyFYPDUmQlBbScDyu9ExPJDqvhKnjnBnv7MX
-         Tz59TFfkIsd/VFzlT4WePzvsqpKHz5lGCnkhkrZgmQh7BatenUrEo0mIHovTtFdcLJZk
-         rljHdlenODvcWvZqWm2l6N/1cilb8s4MpwjINgLG5GiRJ5TLrZoxYL1ZyaLFmIfJTwyo
-         XWbEfI2GWffYVZu94sdz3GLQeGePID9/zla7Uk1Y+Riyj7WCL0gz5+L3sPrbLiyTBbWS
-         BP+eAvdfvPcdR9AwOZNGkftTAG7gQo6SJPy0XN8l7qt8dGzuEpD2kyW3S3Q/AjI5aLqa
-         RvcQ==
-X-Gm-Message-State: ACgBeo0l7zDEJnAK1Sqdlqiw69ymOkvmcMkacIjWWy19AJPU946+EEL4
-        T76sVmcaG/OzOwRNAWNYFGPe8v6wX28IyHzKkVhjNQ==
-X-Google-Smtp-Source: AA6agR7hUlP3cvvlEctjDrH/fvmLzvB9gYRrnFXynBOi5/OrP/CJeV01JulZEGnfXXdDJJWhBvCJiY0nyNvUFm5E6PA=
-X-Received: by 2002:a17:907:86ac:b0:731:5180:8aa0 with SMTP id
- qa44-20020a17090786ac00b0073151808aa0mr10541617ejc.366.1660124327536; Wed, 10
- Aug 2022 02:38:47 -0700 (PDT)
+        Wed, 10 Aug 2022 05:43:57 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CAA15142E;
+        Wed, 10 Aug 2022 02:43:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660124636; x=1691660636;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=+g1tHa8U1L0ibLkauTiBh/SeADRVoqwRkL+l6I4l0TE=;
+  b=KD5tS2QCDwJMQI8UA4rat5QwIhjZFuhAU3fkbBz2Qopqm39IPmlDXEB7
+   kpnEH+pswkbTBg2eWgNhNr6YiMxN3Hp+Qn5rpbdfqH9MMEcci/t6lGxQT
+   xBEaXZ4cYPW9Ix3n6fwjfDzTtBt5AuIsy2VULSwPwadzrJN9L4ktKrDPD
+   vLlT9hRei/ZdO2r5MvenMBohZmEJH/Jb9YhUNlby2H9SBCNtuhQa6IBPp
+   4Q/PUZt5bs+lbyWdpk/MKS33FWmY6c8WmBPO0nsShYhN6LaNW9Dbi/Qbd
+   Gs5zBQQ641dkV1su7JsUxg9Wp/F6lsCDV1m8gmeB4VC3Pz9mTXK4/qJG+
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="289798229"
+X-IronPort-AV: E=Sophos;i="5.93,227,1654585200"; 
+   d="scan'208";a="289798229"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 02:43:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,227,1654585200"; 
+   d="scan'208";a="601757538"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by orsmga007.jf.intel.com with ESMTP; 10 Aug 2022 02:43:45 -0700
+Date:   Wed, 10 Aug 2022 17:38:59 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v7 01/14] mm: Add F_SEAL_AUTO_ALLOCATE seal to memfd
+Message-ID: <20220810093859.GF862421@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-2-chao.p.peng@linux.intel.com>
+ <f39c4f63-a511-4beb-b3a4-66589ddb5475@redhat.com>
+ <472207cf-ff71-563b-7b66-0c7bea9ea8ad@redhat.com>
 MIME-Version: 1.0
-References: <20220809175513.082573955@linuxfoundation.org>
-In-Reply-To: <20220809175513.082573955@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 10 Aug 2022 15:08:36 +0530
-Message-ID: <CA+G9fYtb4o4uxuxO1QYpBrGfse76z_rbz1yh1cStK0fhUu9DZQ@mail.gmail.com>
-Subject: Re: [PATCH 4.19 00/32] 4.19.255-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <472207cf-ff71-563b-7b66-0c7bea9ea8ad@redhat.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 9 Aug 2022 at 23:32, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.19.255 release.
-> There are 32 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 11 Aug 2022 17:55:02 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.255-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Fri, Aug 05, 2022 at 07:55:38PM +0200, Paolo Bonzini wrote:
+> On 7/21/22 11:44, David Hildenbrand wrote:
+> > 
+> > Also, I*think*  you can place pages via userfaultfd into shmem. Not
+> > sure if that would count "auto alloc", but it would certainly bypass
+> > fallocate().
+> 
+> Yeah, userfaultfd_register would probably have to forbid this for
+> F_SEAL_AUTO_ALLOCATE vmas.  Maybe the memfile_node can be reused for this,
+> adding a new MEMFILE_F_NO_AUTO_ALLOCATE flags?  Then userfault_register
+> would do something like memfile_node_get_flags(vma->vm_file) and check the
+> result.
 
-Results from Linaro's test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Then we need change userfault_register uAPI for a new property flag.
+Userspace should still the decision-maker for this flag.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> This means moving this patch later, after "mm: Introduce memfile_notifier".
 
-NOTE:
-Following warnings were noticed on arm64 and arm
+Yes, it makes sense now.
 
-WARNING: modpost: Found 1 section mismatch(es).
-To see full details build your kernel with:
-'make CONFIG_DEBUG_SECTION_MISMATCH=y'
-aarch64-linux-gnu-ld: warning: -z norelro ignored
-aarch64-linux-gnu-ld: warning: .tmp_vmlinux1 has a LOAD segment with
-RWX permissions
-aarch64-linux-gnu-ld: warning: -z norelro ignored
-aarch64-linux-gnu-ld: warning: .tmp_vmlinux2 has a LOAD segment with
-RWX permissions
-aarch64-linux-gnu-ld: warning: -z norelro ignored
-aarch64-linux-gnu-ld: warning: vmlinux has a LOAD segment with RWX permissions
-
-This was reported on earlier stable rc reviews
-ref:
-https://lore.kernel.org/lkml/CA+G9fYuxx3wdLXiKhYAPEs-g6uxPn-OsyaiHQOvjuegVEShgMg@mail.gmail.com/
-
-## Build
-* kernel: 4.19.255-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.19.y
-* git commit: 02c6011ece11c67e9ec89b3d3e0c25cff42b3ea0
-* git describe: v4.19.254-33-g02c6011ece11
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19.254-33-g02c6011ece11
-
-## No test Regressions (compared to v4.19.253-63-gf68ffa0f9e2a)
-
-## No metric Regressions (compared to v4.19.253-63-gf68ffa0f9e2a)
-
-## No test Fixes (compared to v4.19.253-63-gf68ffa0f9e2a)
-
-## No Metric Fixes (compared to v4.19.253-63-gf68ffa0f9e2a)
-
-## Test result summary
-total: 66365, pass: 57931, fail: 287, skip: 7425, xfail: 722
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 291 total, 286 passed, 5 failed
-* arm64: 58 total, 57 passed, 1 failed
-* i386: 26 total, 25 passed, 1 failed
-* mips: 35 total, 35 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 54 total, 54 passed, 0 failed
-* s390: 12 total, 12 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 52 total, 51 passed, 1 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* rcutorture
-* ssuite
-* v4l2-compliance
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Chao
+> 
+> Thanks,
+> 
+> Paolo

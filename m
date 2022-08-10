@@ -2,54 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF02258F3FC
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 23:54:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E0D58F402
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 23:56:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232720AbiHJVyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 17:54:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57878 "EHLO
+        id S232877AbiHJV4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 17:56:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbiHJVyf (ORCPT
+        with ESMTP id S230282AbiHJVz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 17:54:35 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33347804BA
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 14:54:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 10 Aug 2022 17:55:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 04EEB80F6D
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 14:55:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660168555;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=oF/qmSrdMlmPWxsKHR15ccpRopHUBKiPd2DHFQyuT+k=;
+        b=Jqd5+cACRObgbHBiEgZNPdNWqGKezYWjB0KdhsXPZ2XH7JzxMtYBp0FXS7B5CBGgJt6Cms
+        qcbFJaS2tQW+PqsYwJW9VCtC53DV1I1qzEudAuYjmJOimMWlHkbyjubyE1mybUoJ08Vbdo
+        BbxWwPZrMjpcP5iiJUlKFmeA7xsJlGs=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-567-CtpeTOq5Poa6xto48eWGZA-1; Wed, 10 Aug 2022 17:55:50 -0400
+X-MC-Unique: CtpeTOq5Poa6xto48eWGZA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C91C8B81EA8
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 21:54:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 58739C433D6;
-        Wed, 10 Aug 2022 21:54:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1660168472;
-        bh=AcqHgSNkf3IX7o9edWdCysQ90+uzp4H5UomIiuXQ1N0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Y9/kE+sO1wUIhDBFMxUYua6SQbiIyXn2/rXvGAyuLqGIl+akwW83S93IbKS1Yolgt
-         R9uahdGRzi6mnXeYehUV7q/mH6MDIfWjSggm2rHAyhX8eD7zFVWdFKj7f2SLK9Iy8M
-         envc9Zmlf82P0FwynTmJE0cuKeH0RNF/m3i6gnLg=
-Date:   Wed, 10 Aug 2022 14:54:31 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Hugh Dickins <hughd@google.com>,
-        Zdenek Kabelac <zkabelac@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        intel-gfx@lists.freedesktop.org, chris@chris-wilson.co.uk
-Subject: Re: i915: crash with 5.19-rc2
-Message-Id: <20220810145431.71d9bfda20decb357cc208ec@linux-foundation.org>
-In-Reply-To: <YvPYQeMjfyruTeGe@casper.infradead.org>
-References: <584ae788-05e3-5824-8c85-cbb833677850@redhat.com>
-        <f0dd80b2-97e1-c320-8517-7ebdb027f58a@redhat.com>
-        <4a204620-7639-c844-455-10e55b372bcf@google.com>
-        <YvPYQeMjfyruTeGe@casper.infradead.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 66FFE80231E;
+        Wed, 10 Aug 2022 21:55:49 +0000 (UTC)
+Received: from [172.30.41.16] (unknown [10.22.18.188])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id BCB94492CA4;
+        Wed, 10 Aug 2022 21:55:48 +0000 (UTC)
+Subject: [PATCH] i915/gvt: Fix Comet Lake
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     zhenyuw@linux.intel.com, zhi.a.wang@intel.com
+Cc:     intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, jani.nikula@linux.intel.com,
+        joonas.lahtinen@linux.intel.com, rodrigo.vivi@intel.com,
+        tvrtko.ursulin@linux.intel.com, linux-kernel@vger.kernel.org
+Date:   Wed, 10 Aug 2022 15:55:48 -0600
+Message-ID: <166016852965.780835.10366587502693016900.stgit@omen>
+User-Agent: StGit/1.5.dev2+g9ce680a52bd9
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,30 +61,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 10 Aug 2022 17:09:37 +0100 Matthew Wilcox <willy@infradead.org> wrote:
+Prior to the commit below the GAMT_CHKN_BIT_REG address was setup for
+devices matching (D_KBL | D_CFL), where intel_gvt_get_device_type()
+returns D_CFL for either Coffee Lake or Comet Lake.  Include the missed
+platform.`
 
-> On Wed, Aug 10, 2022 at 08:55:32AM -0700, Hugh Dickins wrote:
-> > This is not a bug in zram or i915, but what Matthew fixes in
-> > https://lore.kernel.org/lkml/20220730042518.1264767-1-willy@infradead.org/
-> 
-> Thanks for tracking that down, Hugh.  Nice to know it's a crash rather
-> than a data corruption.  The fix is in Andrew's tree, so I think it's
-> already destined for upstream soon.
+Link: https://lore.kernel.org/all/20220808142711.02d16782.alex.williamson@redhat.com
+Fixes: e0f74ed4634d ("i915/gvt: Separate the MMIO tracking table from GVT-g")
+Signed-off-by: Alex Williamson <alex.williamson@redhat.com>
+---
+ drivers/gpu/drm/i915/intel_gvt_mmio_table.c |    3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Yes, that's in the hotfixes queue for sending upstream Fridayish.
+diff --git a/drivers/gpu/drm/i915/intel_gvt_mmio_table.c b/drivers/gpu/drm/i915/intel_gvt_mmio_table.c
+index 157e166672d7..5595639d0033 100644
+--- a/drivers/gpu/drm/i915/intel_gvt_mmio_table.c
++++ b/drivers/gpu/drm/i915/intel_gvt_mmio_table.c
+@@ -1076,7 +1076,8 @@ static int iterate_skl_plus_mmio(struct intel_gvt_mmio_table_iter *iter)
+ 	MMIO_D(GEN8_HDC_CHICKEN1);
+ 	MMIO_D(GEN9_WM_CHICKEN3);
+ 
+-	if (IS_KABYLAKE(dev_priv) || IS_COFFEELAKE(dev_priv))
++	if (IS_KABYLAKE(dev_priv) ||
++	    IS_COFFEELAKE(dev_priv) || IS_COMETLAKE(dev_priv))
+ 		MMIO_D(GAMT_CHKN_BIT_REG);
+ 	if (!IS_BROXTON(dev_priv))
+ 		MMIO_D(GEN9_CTX_PREEMPT_REG);
 
-> Andrew, I have two fixes that I don't see in your tree:
-
-Is it expected to be in my tree?  It's a huge v1 patch series on which
-I wasn't cc'ed?
-
-> https://lore.kernel.org/linux-mm/20220808193430.3378317-2-willy@infradead.org/T/#u
-> https://lore.kernel.org/linux-mm/20220808193430.3378317-4-willy@infradead.org/T/#u
-> 
-> The first is of minor importance, the second I believe Hugh has hit in
-> his testing.
-
-In that case the second patch should be pulled out of that series, have
-its changelog made to describe the runtime effects and have a Cc:stable
-added, please.
 

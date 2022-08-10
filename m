@@ -2,116 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4832E58F3C1
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 23:15:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D1FE58F3C6
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 23:24:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232543AbiHJVP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 17:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
+        id S232708AbiHJVYL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 17:24:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230461AbiHJVPY (ORCPT
+        with ESMTP id S229487AbiHJVYJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 17:15:24 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1760418B35
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 14:15:24 -0700 (PDT)
-Received: from notapiano (korma.collabora.co.uk [168.119.224.208])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 5965D6601C74;
-        Wed, 10 Aug 2022 22:15:19 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1660166122;
-        bh=/jwBuBx79c+lk7i4kE7uZcAxqKWyDiBWEZ+cunWmR8o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GvWzDwX0VnghTEO0QFED/hL1bYc0BmK5NdO9GgXLRMZBmo4xFdsI1+HUKIexdrZU3
-         t1kciV686A0kO1LKnmvEBDmN+HU/UKXcHqBwOB9IXx4viufCZbIt9AWT3vohoycFYh
-         j5SrFZnSKHHuMJHCXm4D8urFnrjLTBptx49lPhnwjMG4qbYz0XIBWY+mMuQU5KCZdo
-         mZwj59EUoqrrCEE1tqhQVnkytD8qIB6mRQ4BI55in0xWVcqUVI7veJatspDIz3HqTo
-         q1hzwfwFbF3x7fmqd8OycPrqam9pIxQ7tqz54EFzf/QX+esMGspdF9PKcuU7Efp3c3
-         +hmmAOJaqc7gA==
-Date:   Wed, 10 Aug 2022 17:15:14 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     chunkuang.hu@kernel.org, p.zabel@pengutronix.de, airlied@linux.ie,
-        daniel@ffwll.ch, matthias.bgg@gmail.com, rex-bc.chen@mediatek.com,
-        jitao.shi@mediatek.com, xinlei.lee@mediatek.com,
-        dri-devel@lists.freedesktop.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/mediatek: dsi: Add atomic {destroy,duplicate}_state,
- reset callbacks
-Message-ID: <20220810211514.nmufrsi6gssb2kel@notapiano>
-References: <20220721172727.14624-1-angelogioacchino.delregno@collabora.com>
+        Wed, 10 Aug 2022 17:24:09 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B8010541
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 14:24:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660166649; x=1691702649;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=qftdVsCU3LkGo5qbpg7jkh26LzLubTtG7x0gDcF2+f4=;
+  b=JgAUO2ISI2cLlImc7gjwurzvWIKhhzvk9k74x6DDL/EMcos6WacDWQYI
+   pbVV2uTFwJ182sV/qNHRKRdjnqdZWBzH4aVzxPZqTeOpAMU6RgX5F85I3
+   XiwWTzGBJkfagLCo1GIrCnyYoJvQVkdy4rFCjQx5iQpPJQ+cDctDCxFqm
+   hp72NYA/G/otKrWTNxZVzVjwXhCW7I/SOoww+087CAzN8eppRPICeDvNs
+   +oE5rchF7IeefjEhyF5ClY0YGeoB81FqgUA4rbsnTYxYC0QbXTcitu7Pd
+   UgJAhoia3+3ij/MKU6MqxpA3q0BmEktCMUaCCvyPjX1XAYc7G4awbyhcJ
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="291197552"
+X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
+   d="scan'208";a="291197552"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 14:24:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
+   d="scan'208";a="638254155"
+Received: from lkp-server02.sh.intel.com (HELO 5d6b42aa80b8) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 10 Aug 2022 14:24:07 -0700
+Received: from kbuild by 5d6b42aa80b8 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oLtBO-0000j4-28;
+        Wed, 10 Aug 2022 21:24:06 +0000
+Date:   Thu, 11 Aug 2022 05:23:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: sound/core/control.c:390:11: sparse: sparse: incorrect type in
+ assignment (different base types)
+Message-ID: <202208110507.pZ5Q9mMb-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220721172727.14624-1-angelogioacchino.delregno@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 21, 2022 at 07:27:27PM +0200, AngeloGioacchino Del Regno wrote:
-> Add callbacks for atomic_destroy_state, atomic_duplicate_state and
-> atomic_reset to restore functionality of the DSI driver: this solves
-> vblank timeouts when another bridge is present in the chain.
-> 
-> Tested bridge chain: DSI <=> ANX7625 => aux-bus panel
-> 
-> Fixes: 7f6335c6a258 ("drm/mediatek: Modify dsi funcs to atomic operations")
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f41445645ab5d172e6090d00c332c335d8dba337
+commit: c27e1efb61c545f36c450ef60862df9251d239a4 ALSA: control: Use xarray for faster lookups
+date:   8 weeks ago
+config: i386-randconfig-s001 (https://download.01.org/0day-ci/archive/20220811/202208110507.pZ5Q9mMb-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c27e1efb61c545f36c450ef60862df9251d239a4
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout c27e1efb61c545f36c450ef60862df9251d239a4
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=i386 SHELL=/bin/bash sound/core/
 
-Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-Tested-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Tested on mt8183-jacuzzi-juniper. As part of enabling IGT tests on that machine
-in KernelCI, this regression needs to be fixed. [1]
+sparse warnings: (new ones prefixed by >>)
+>> sound/core/control.c:390:11: sparse: sparse: incorrect type in assignment (different base types) @@     expected unsigned long h @@     got restricted snd_ctl_elem_iface_t const [usertype] iface @@
+   sound/core/control.c:390:11: sparse:     expected unsigned long h
+   sound/core/control.c:390:11: sparse:     got restricted snd_ctl_elem_iface_t const [usertype] iface
+   sound/core/control.c:926:17: sparse: sparse: restricted snd_ctl_elem_type_t degrades to integer
+   sound/core/control.c:926:26: sparse: sparse: restricted snd_ctl_elem_type_t degrades to integer
+   sound/core/control.c:927:17: sparse: sparse: restricted snd_ctl_elem_type_t degrades to integer
+   sound/core/control.c:927:26: sparse: sparse: restricted snd_ctl_elem_type_t degrades to integer
+   sound/core/control.c:946:48: sparse: sparse: restricted snd_ctl_elem_type_t degrades to integer
+   sound/core/control.c:1640:40: sparse: sparse: restricted snd_ctl_elem_type_t degrades to integer
 
-Thanks,
-Nícolas
+vim +390 sound/core/control.c
 
-[1] https://github.com/kernelci/kernelci-core/pull/1059
+   378	
+   379	#ifdef CONFIG_SND_CTL_FAST_LOOKUP
+   380	/* Compute a hash key for the corresponding ctl id
+   381	 * It's for the name lookup, hence the numid is excluded.
+   382	 * The hash key is bound in LONG_MAX to be used for Xarray key.
+   383	 */
+   384	#define MULTIPLIER	37
+   385	static unsigned long get_ctl_id_hash(const struct snd_ctl_elem_id *id)
+   386	{
+   387		unsigned long h;
+   388		const unsigned char *p;
+   389	
+ > 390		h = id->iface;
+   391		h = MULTIPLIER * h + id->device;
+   392		h = MULTIPLIER * h + id->subdevice;
+   393		for (p = id->name; *p; p++)
+   394			h = MULTIPLIER * h + *p;
+   395		h = MULTIPLIER * h + id->index;
+   396		h &= LONG_MAX;
+   397		return h;
+   398	}
+   399	
 
-> ---
-> 
-> Note: The commit that has been mentioned in the Fixes tag should
->       *not* have my Reviewed-by tag, as the author changed it but
->       erroneously retained the tag that I had released for an
->       earlier version of that commit (which was fine, but the new
->       version broke mtk_dsi!).
-> 
->  drivers/gpu/drm/mediatek/mtk_dsi.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/mediatek/mtk_dsi.c b/drivers/gpu/drm/mediatek/mtk_dsi.c
-> index 9cc406e1eee1..5b624e0f5b0a 100644
-> --- a/drivers/gpu/drm/mediatek/mtk_dsi.c
-> +++ b/drivers/gpu/drm/mediatek/mtk_dsi.c
-> @@ -808,10 +808,13 @@ static void mtk_dsi_bridge_atomic_post_disable(struct drm_bridge *bridge,
->  
->  static const struct drm_bridge_funcs mtk_dsi_bridge_funcs = {
->  	.attach = mtk_dsi_bridge_attach,
-> +	.atomic_destroy_state = drm_atomic_helper_bridge_destroy_state,
->  	.atomic_disable = mtk_dsi_bridge_atomic_disable,
-> +	.atomic_duplicate_state = drm_atomic_helper_bridge_duplicate_state,
->  	.atomic_enable = mtk_dsi_bridge_atomic_enable,
->  	.atomic_pre_enable = mtk_dsi_bridge_atomic_pre_enable,
->  	.atomic_post_disable = mtk_dsi_bridge_atomic_post_disable,
-> +	.atomic_reset = drm_atomic_helper_bridge_reset,
->  	.mode_set = mtk_dsi_bridge_mode_set,
->  };
->  
-> -- 
-> 2.35.1
-> 
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

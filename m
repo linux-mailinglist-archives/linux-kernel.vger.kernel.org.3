@@ -2,49 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82DF658F492
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 00:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D371558F493
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 00:56:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231191AbiHJW4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 18:56:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55280 "EHLO
+        id S233620AbiHJW4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 18:56:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231250AbiHJW4W (ORCPT
+        with ESMTP id S230227AbiHJW4p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 18:56:22 -0400
-Received: from mail104.syd.optusnet.com.au (mail104.syd.optusnet.com.au [211.29.132.246])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 84134642F9;
-        Wed, 10 Aug 2022 15:56:21 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-193-158.pa.nsw.optusnet.com.au [49.181.193.158])
-        by mail104.syd.optusnet.com.au (Postfix) with ESMTPS id 68C6C62D24D;
-        Thu, 11 Aug 2022 08:56:20 +1000 (AEST)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1oLucc-00Bbew-Oy; Thu, 11 Aug 2022 08:56:18 +1000
-Date:   Thu, 11 Aug 2022 08:56:18 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Uros Bizjak <ubizjak@gmail.com>
-Cc:     linux-xfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Darrick J. Wong" <djwong@kernel.org>
-Subject: Re: [PATCH] fs/xfs: Use atomic64_try_cmpxchg in
- xlog_grant_{add,sub}_space
-Message-ID: <20220810225618.GM3600936@dread.disaster.area>
-References: <20220809165615.9694-1-ubizjak@gmail.com>
- <20220809220511.GI3600936@dread.disaster.area>
- <20220809230244.GJ3600936@dread.disaster.area>
- <CAFULd4YkSG4RES8=P5BjF8JH5En++XN6LpVNd391eYcy_baeyw@mail.gmail.com>
+        Wed, 10 Aug 2022 18:56:45 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B166647D9
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 15:56:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660172204; x=1691708204;
+  h=message-id:date:mime-version:to:cc:references:from:
+   subject:in-reply-to:content-transfer-encoding;
+  bh=YKkBtzT3qUfVAd2APMnB/Z38nogl3svTGnsH+cFcuRE=;
+  b=gvJjYUb3GqO66zBue7h2Sg31Tnqf4nO3XIWtKq+vNgcRZVFuWioMk//l
+   t6FEgtA5Ts7MaYoDt02YIbv0j85jmMQVeKMOFu2sDDbghulmSeyvPnma7
+   bNyScq6n7FnOsaDORS/U8qgHd3D7tVMpE+QKjRYr8B/bBuXKMpamEk0ay
+   d6Ocm7gr8QqYQUCdaKfqOhTuKFx3w2qbfxREVw+mhYBywjnqi0ZvYkJqb
+   DBh+IOWNn8QAs6nAxphQ336LLI0XUctzO+t6YnP3Wu/5Eg0NmCCufuPPJ
+   OUzVRji170PfQLyIjE6LbduS7jw1rsXFOzoipUHmw2CyeeOv/u1XaeIGO
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="377503840"
+X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
+   d="scan'208";a="377503840"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 15:56:43 -0700
+X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
+   d="scan'208";a="933075526"
+Received: from sarava2x-mobl1.gar.corp.intel.com (HELO [10.254.67.234]) ([10.254.67.234])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 15:56:42 -0700
+Message-ID: <e0a95ff9-4567-aa2f-fdef-20793ba48c6a@linux.intel.com>
+Date:   Wed, 10 Aug 2022 15:56:36 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAFULd4YkSG4RES8=P5BjF8JH5En++XN6LpVNd391eYcy_baeyw@mail.gmail.com>
-X-Optus-CM-Score: 0
-X-Optus-CM-Analysis: v=2.4 cv=e9dl9Yl/ c=1 sm=1 tr=0 ts=62f43794
-        a=SeswVvpAPK2RnNNwqI8AaA==:117 a=SeswVvpAPK2RnNNwqI8AaA==:17
-        a=kj9zAlcOel0A:10 a=biHskzXt2R4A:10 a=7-415B0cAAAA:8 a=VwQbUJbxAAAA:8
-        a=99CUqXMKFniesV8lYRMA:9 a=CjuIK1q_8ugA:10 a=biEYGPWJfzWAr4FL6Ov7:22
-        a=AjGcO6oz07-iQ99wixmX:22
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>
+Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        "Gomez Iglesias, Antonio" <antonio.gomez.iglesias@intel.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+References: <20220809234000.783284-1-daniel.sneddon@linux.intel.com>
+ <d6ffb489-7024-ff74-bd2f-d1e06573bb82@intel.com>
+ <238ea612-5a25-9323-b31f-0a14493db2f7@linux.intel.com>
+ <d4bcb22e-224c-d256-cb93-3ff6ed89a7d0@intel.com>
+ <341ea6e9-d8f3-ee7a-6794-67408abbf047@linux.intel.com> <87r11nu52l.ffs@tglx>
+From:   Daniel Sneddon <daniel.sneddon@linux.intel.com>
+Subject: Re: [PATCH] x86/apic: Don't disable x2APIC if locked
+In-Reply-To: <87r11nu52l.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,107 +71,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 10, 2022 at 09:02:16AM +0200, Uros Bizjak wrote:
-> On Wed, Aug 10, 2022 at 1:02 AM Dave Chinner <david@fromorbit.com> wrote:
-> >
-> > On Wed, Aug 10, 2022 at 08:05:11AM +1000, Dave Chinner wrote:
-> > > On Tue, Aug 09, 2022 at 06:56:15PM +0200, Uros Bizjak wrote:
-> > > > Use `!atomic64_try_cmpxchg(ptr, &old, new)` instead of
-> > > > `atomic64_cmpxchg(ptr, old, new) != old` in xlog_grant_{add,sub}_space.
-> > > > This has two benefits:
-> > > >
-> > > > - The x86 cmpxchg instruction returns success in the ZF flag, so this
-> > > >   change saves a compare after cmpxchg, as well as a related move
-> > > >   instruction in the front of cmpxchg.
-> > > >
-> > > > - atomic64_try_cmpxchg implicitly assigns the *ptr value to &old when
-> > > >   cmpxchg fails, enabling further code simplifications.
-> > >
-> > > Do the two cmpxchg operations have the same memory ordering
-> > > semantics on failure?
+On 8/10/22 15:06, Thomas Gleixner wrote:
+> On Wed, Aug 10 2022 at 12:40, Daniel Sneddon wrote:
+>> On 8/10/22 11:52, Dave Hansen wrote:
+>>> On 8/10/22 11:30, Daniel Sneddon wrote:
+>>>>> If it's going to be on one server CPU that's coming out in ten years,
+>>>>> then we can hold off.
+>>>> SPR will certainly be sooner than 10 years, and with distros running on LTS
+>>>> kernels, it is probably worth backporting.  Since this isn't a bug fix (not a sw
+>>>> bug anyway), is this something I can just CC stable or is there a better way to
+>>>> say "Yes, this is a new feature, BUT, you really want it anyway"?
+>>>
+>>> It it going to be *forced* on those SPR system?  In other words, is it a
+>>> little BIOS switch that users can flip?  Is there any non-kernel
+>>> workaround if a user hits this, or is the entire burden of this going to
+>>> be foisted on the kernel?
+>> It won't be forced, BUT, certain features won't be available if the APIC isn't
+>> locked.  According to the documentation SGX and TDX won't be available if you
+>> don't lock the APIC.  So, yes, you don't have to fix it in the kernel, but you
+>> may lose access to features if you don't.
+>>>
+>>> The worst case scenario would be if a user has managed to compile a
+>>> CONFIG_X86_X2APIC=n kernel and is happily running along until they get a
+>>> microcode update, reboot and can't boot any more.
+>> That _shouldn't_ happen as it is only on new hardware, so a ucode update
+>> _shouldn't_ cause a crash.
 > 
-> Yes. The API also provides _acquire, _release and _relaxed variants of
-> both, atomic64_cmpxchg and atomic64_try_cmpxchg.
-
-Yes, I know this, which was why I was asking if the default
-behaviour is the same - many people get caught out by assuming that
-cmpxchg implies release semantics even if it fails....
-
-> On x86, these two
-> functions actually compile to the same CMPXCHG instruction, the
-> difference is only in how the comparison is handled:
+> Only on new hardware? The lock mechanism has to be available on _all_
+> affected systems which support SGX. See
 > 
->       15:    48 09 c2                 or     %rax,%rdx
->       18:    48 89 c8                 mov    %rcx,%rax
->       1b:    f0 48 0f b1 16           lock cmpxchg %rdx,(%rsi)
->       20:    48 39 c1                 cmp    %rax,%rcx
->       23:    74 2a                    je     4f <xlog_grant_add_space+0x4f>
-> 
-> becomes:
-> 
->      29c:    48 09 ca                 or     %rcx,%rdx
->      29f:    f0 48 0f b1 16           lock cmpxchg %rdx,(%rsi)
->      2a4:    75 d2                    jne    278 <xlog_grant_add_space+0x8>
-> 
-> And as demonstrated in [1], even the fallback code compiles to a
-> better assembly.o
+>  https://www.intel.com/content/www/us/en/developer/articles/technical/software-security-guidance/resources/intel-sgx-software-and-tcb-recovery-guidance.html
 
-FWIW, I mostly don't care about assembler level optimisations for
-the code I write. I'll try to write code efficiently, but I don't
-really care that much for micro-optimisation. Fundamentally, 
-focussing on optimising code down to the instruction level means you
-are not looking for algorithmic optimisations, which is where all
-the big gains typically come from....
+I asked the architect and security team that came up with that new MSR if it was
+going to be backported via ucode updates and I was told no.
 
-This thread demonstrates that - I get an improvement from roughly
-1.4 million transactions/s to roughly 2 million transactions/s with
-the change to the grant head accounting algorithm, whilst the
-improvement from removing 2 instructions from the cmpxchg can't
-actually be measured on my tests. i.e. the improvement is lost
-within the noise floor of the benchmarks.
+"Only SPR and newer. See the IA32_XAPIC_DISABLE_STATUS documentation at
+https://www.intel.com/content/www/us/en/developer/articles/technical/software-security-guidance/technical-documentation/cpuid-enumeration-and-architectural-msrs.html."
 
-So, yeah, when it comes to making code faster, I focus on efficient
-algorithms rather than efficient code because algorithms are where
-the gains users will notice are....
+So, it appears we have a war between which documentation do we believe!
 
-> > FYI, the original RFC for this was posted a bit over a month ago:
-> >
-> > https://lore.kernel.org/linux-xfs/20220708015558.1134330-1-david@fromorbit.com/
-> 
-> -static void
-> +void
->  xlog_grant_sub_space(
-> 
-> [...]
-> 
-> - old = head_val;
-> - new = xlog_assign_grant_head_val(cycle, space);
-> - head_val = atomic64_cmpxchg(&head->grant, old, new);
-> - } while (head_val != old);
-> + atomic64_sub(bytes, &head->grant);
->  }
-> 
-> I actually wondered why these two functions were not implemented as
-> atomic64_{add,sub}.
+I do have a few follow up questions I'm waiting on being answered to help
+clarify all this.
 
-Because the grant heads were not integer values that can be added
-and subtracted. Log sequence numbers (LSNs) are 64 bit objects made
-up of two discrete 32 bit values. Essentially the upper 32 bits
-counts the number of overflows of the fixed size space the lower 32
-bits accounts.
-
-The lower 32 bits matches the size of the journal, so will overflow
-at some boundary much lower than 2^32. Hence adding or subtracting
-to a LSN has to handle the space overflow/underflow itself to
-modify the overflow (cycle) counter top 32 bits appropriately.
-
-These calculations cannot be done as a single atomic operation,
-hence the crack/calc/combine/cmpxchg loops to enable them to be done
-without requiring locks in the fast path.
-
-Cheers,
-
-Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+Thanks,
+Dan

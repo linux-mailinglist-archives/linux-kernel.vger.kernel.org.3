@@ -2,194 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F0ED58E4F1
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 04:42:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDDC658E4FB
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 04:56:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbiHJCl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 22:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51352 "EHLO
+        id S229479AbiHJCzy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 22:55:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbiHJCl4 (ORCPT
+        with ESMTP id S229456AbiHJCzv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 22:41:56 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49D2CB7C8;
-        Tue,  9 Aug 2022 19:41:54 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d16so13010980pll.11;
-        Tue, 09 Aug 2022 19:41:54 -0700 (PDT)
+        Tue, 9 Aug 2022 22:55:51 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 658FE6E894;
+        Tue,  9 Aug 2022 19:55:50 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id m2so13068719pls.4;
+        Tue, 09 Aug 2022 19:55:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=nj31zRAcKvVnp3PgbO4ukzFmFeztnmbSMQraO9gq1VE=;
-        b=GlVlmgaXgKkOszzcjWlNMF0Brvnp8/3rYUyIKZ77MkT4tssDCq5itH57hGBSs9hpPp
-         2f42P8MA6+VIE46i9QP4m3KDP/ZcVgQV8HCHeJ7L+bFYjWA1ug5ppTYJIR2GVKABiayX
-         r5x17WWVy2F54aDwr65loSQkzk4k5EgWOpUH7ohAhm+8l6DW9/HVvVX47xdkvf1UbNT6
-         b4mDp5WO9vukyNKydz85F+bDa6OfYadtBALQwrzSG4KxHByOeFU0q9Q3Yx3mews61JNt
-         /QBMq/vmDT1koH9LHdKmQCPBCBLR9LI0MjRxqCumxs+f2geqSKvbhhoO10soNiVau0TO
-         +vrg==
+        h=message-id:date:subject:cc:to:from:from:to:cc;
+        bh=WO6tQqM10EHYIi2tDllBbfU+5oiZu0xp+kjAXZmD9VQ=;
+        b=fGPt2iWbKcUPtUbpJePn5tIAHZ7SdQUi4IxwD/UgqI6GkyvPx2GK9kw8OY1NgtdqB2
+         K/4m070tKHcKSzpKYwu6kYf94You4aJiu2Tj5SWDzC0n2Dxo06CWzFkb3/Sq5KPlERO/
+         8oR36xbflcLxc9GIIXBAsEEpRvns/d4zESYVOxDVrcWFY87gOPzA4+3N40cKNugxk/1r
+         M75hZwcTHrx32b8KqJ9GwmtxaKaaYkETRjxC7yW3GUVQeA0bwndkN+fPT9T9eotqu3gB
+         SaoOj2RYZ7bJS1xPfMbyFzIXONW05Rv6KxvbUNVFgH9pse20VGGpMWbsEO5ASlImolyG
+         bOIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=nj31zRAcKvVnp3PgbO4ukzFmFeztnmbSMQraO9gq1VE=;
-        b=hyWOV9DBRgH/Oa54dgZrppyKxokhpDdHDTyvJXne08k5MnZsygNODrBmG9Kljz06V/
-         do77+cAhK8bKykuH7YUFM2uPvmbMUHgl3RDk5vvEtzOUPLrXVvtYe43ep8pCa0UujORx
-         pYO6Yk4W0VZVDrbk8xt3QXMo6CEl5TbpEwTHoPpvOZ78PuBkPmBFAW/arOwSNQrE1xNu
-         raAXOSf3YoyzLvVzEils21BpMcyaMO67oSB+hNMQN1YTGeYI3maB8Z/jyx4YtTQLA0eb
-         wbJdQ1AjhT4F5MGUndIMxvIt7w6ZACmW7Z7qzBoErksYPr8k4T1BxOCm/OOoUz7YpNc2
-         4Lyg==
-X-Gm-Message-State: ACgBeo3jTYwDNLfzBl+hBwIpR4jKABOCXGQIdKkxR7t7vnlYp1fKqwRM
-        QZgqDTZjT0VFXpS8exAgrs8=
-X-Google-Smtp-Source: AA6agR64j1huylvw0Y1mqBNgafi4nxg6R9Vq19nYKoI4ywCsIOrdnjlJxQpjBCzqlb3H+tfPUYSxPg==
-X-Received: by 2002:a17:90a:de8a:b0:1f4:f1ef:816d with SMTP id n10-20020a17090ade8a00b001f4f1ef816dmr1399941pjv.104.1660099313565;
-        Tue, 09 Aug 2022 19:41:53 -0700 (PDT)
-Received: from macbook-pro-3.dhcp.thefacebook.com ([2620:10d:c090:400::5:3fd1])
-        by smtp.gmail.com with ESMTPSA id b3-20020a62a103000000b0052e6854e665sm596286pff.109.2022.08.09.19.41.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 19:41:52 -0700 (PDT)
-Date:   Tue, 9 Aug 2022 19:41:48 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
-        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, corbet@lwn.net,
-        dhowells@redhat.com, jarkko@kernel.org, rostedt@goodmis.org,
-        mingo@redhat.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, shuah@kernel.org, bpf@vger.kernel.org,
-        linux-doc@vger.kernel.org, keyrings@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 07/10] bpf: Add bpf_verify_pkcs7_signature() kfunc
-Message-ID: <20220810024148.e73df6dyurwt5d4u@macbook-pro-3.dhcp.thefacebook.com>
-References: <20220809134603.1769279-1-roberto.sassu@huawei.com>
- <20220809134603.1769279-8-roberto.sassu@huawei.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220809134603.1769279-8-roberto.sassu@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=WO6tQqM10EHYIi2tDllBbfU+5oiZu0xp+kjAXZmD9VQ=;
+        b=G1pFzw//G5X/HWriL7jnPtD7kKYXxJZYZ/fWUDNjz+9WsllbrOu0PZXieiHqeosANN
+         QeMAiWQcLj9SdiTki2aWXwBWRtTl7Ff5vZ+Tt2WZJy9XXKShwuEsmkMpH/NQoXsYAxNi
+         qB9WIkfEX+7PTTpaN1m3dXx2PySGz0nJ/NQ6RaKGX3hcsUeiYkaq+rNQBxQVSyI4pMTj
+         V3bHTmf4H0Kym1zYXEee02dNDPJ705JSZoV9UMUF9sTUnJ70vew+UtaeYjqVADkAQ6O1
+         dlIK0bH7d5sqwS8H9YXhZL3mwt6JgX41Ey99DKFcw0Jr9S67ZHFGW61WLzVGireXRDTD
+         Z5Ow==
+X-Gm-Message-State: ACgBeo1WEHLXWFBK2ifLPGyBNtFs9KVA5wl8G7aXWWKnCNA95EUy9Wr8
+        fEHgNHGa/8i27ssRKzK0nr4=
+X-Google-Smtp-Source: AA6agR4ccL0bsqHiZDiLBp/aEdJ0eH5feiNRFH/CTpVYuJNPArD7GDNymKRIs9b+Mu54CQzhqlsYcQ==
+X-Received: by 2002:a17:90b:38cc:b0:1f7:2835:d45e with SMTP id nn12-20020a17090b38cc00b001f72835d45emr1413068pjb.177.1660100149685;
+        Tue, 09 Aug 2022 19:55:49 -0700 (PDT)
+Received: from localhost.localdomain ([2402:7500:577:d15f:416a:c0:aecd:5d6e])
+        by smtp.gmail.com with ESMTPSA id i5-20020a170902c94500b0016d1f474653sm11785654pla.52.2022.08.09.19.55.46
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 09 Aug 2022 19:55:49 -0700 (PDT)
+From:   cy_huang <u0084500@gmail.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        lee@kernel.org, dmitry.torokhov@gmail.com
+Cc:     cy_huang@richtek.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
+Subject: [PATCH v4 0/3] Add Richtek RT5120 PMIC support
+Date:   Wed, 10 Aug 2022 10:55:39 +0800
+Message-Id: <1660100142-32493-1-git-send-email-u0084500@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 09, 2022 at 03:46:00PM +0200, Roberto Sassu wrote:
-> Add the bpf_verify_pkcs7_signature() kfunc, to give eBPF security modules
-> the ability to check the validity of a signature against supplied data, by
-> using user-provided or system-provided keys as trust anchor.
-> 
-> The new kfunc makes it possible to enforce mandatory policies, as eBPF
-> programs might be allowed to make security decisions only based on data
-> sources the system administrator approves.
-> 
-> The caller should provide the data to be verified and the signature as eBPF
-> dynamic pointers (to minimize the number of parameters) and a bpf_key
-> structure containing a reference to the keyring with keys trusted for
-> signature verification, obtained from bpf_lookup_user_key() or
-> bpf_lookup_system_key().
-> 
-> For bpf_key structures obtained from the former lookup function,
-> bpf_verify_pkcs7_signature() completes the permission check deferred by
-> that function by calling key_validate(). key_task_permission() is already
-> called by the PKCS#7 code.
-> 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> ---
->  kernel/trace/bpf_trace.c | 56 ++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 56 insertions(+)
-> 
-> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> index 33ca4cfe6e26..79ba8c96735a 100644
-> --- a/kernel/trace/bpf_trace.c
-> +++ b/kernel/trace/bpf_trace.c
-> @@ -21,6 +21,7 @@
->  #include <linux/bsearch.h>
->  #include <linux/sort.h>
->  #include <linux/key.h>
-> +#include <linux/verification.h>
->  
->  #include <net/bpf_sk_storage.h>
->  
-> @@ -1290,6 +1291,47 @@ noinline __weak void bpf_key_put(struct bpf_key *bkey)
->  	kfree(bkey);
->  }
->  
-> +#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
-> +/**
-> + * bpf_verify_pkcs7_signature - verify a PKCS#7 signature
-> + * @data_ptr: data to verify
-> + * @sig_ptr: signature of the data
-> + * @trusted_keyring: keyring with keys trusted for signature verification
-> + *
-> + * Verify the PKCS#7 signature *sig_ptr* against the supplied *data_ptr*
-> + * with keys in a keyring referenced by *trusted_keyring*.
-> + *
-> + * Return: 0 on success, a negative value on error.
-> + */
-> +noinline __weak int bpf_verify_pkcs7_signature(struct bpf_dynptr_kern *data_ptr,
-> +					       struct bpf_dynptr_kern *sig_ptr,
-> +					       struct bpf_key *trusted_keyring)
-> +{
-> +	int ret;
-> +
-> +	if (trusted_keyring->valid_ptr) {
-> +		/*
-> +		 * Do the permission check deferred in bpf_lookup_user_key().
-> +		 *
-> +		 * A call to key_task_permission() here would be redundant, as
-> +		 * it is already done by keyring_search() called by
-> +		 * find_asymmetric_key().
-> +		 */
-> +		ret = key_validate(trusted_keyring->key);
-> +		if (ret < 0)
-> +			return ret;
-> +	}
-> +
-> +	return verify_pkcs7_signature(data_ptr->data,
-> +				      bpf_dynptr_get_size(data_ptr),
-> +				      sig_ptr->data,
-> +				      bpf_dynptr_get_size(sig_ptr),
-> +				      trusted_keyring->key,
-> +				      VERIFYING_UNSPECIFIED_SIGNATURE, NULL,
-> +				      NULL);
-> +}
-> +#endif /* CONFIG_SYSTEM_DATA_VERIFICATION */
-> +
->  __diag_pop();
->  
->  BTF_SET8_START(key_kfunc_set)
-> @@ -1303,11 +1345,25 @@ static const struct btf_kfunc_id_set bpf_key_kfunc_set = {
->  	.owner = THIS_MODULE,
->  	.set = &key_kfunc_set,
->  };
-> +
-> +#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
-> +BTF_SET8_START(verify_sig_kfunc_set)
-> +BTF_ID_FLAGS(func, bpf_verify_pkcs7_signature, KF_SLEEPABLE)
-> +BTF_SET8_END(verify_sig_kfunc_set)
-> +
-> +static const struct btf_kfunc_id_set bpf_verify_sig_kfunc_set = {
-> +	.owner = THIS_MODULE,
-> +	.set = &verify_sig_kfunc_set,
-> +};
-> +#endif /* CONFIG_SYSTEM_DATA_VERIFICATION */
->  #endif /* CONFIG_KEYS */
->  
->  const struct btf_kfunc_id_set *kfunc_sets[] = {
->  #ifdef CONFIG_KEYS
->  	&bpf_key_kfunc_set,
-> +#ifdef CONFIG_SYSTEM_DATA_VERIFICATION
-> +	&bpf_verify_sig_kfunc_set,
-> +#endif /* CONFIG_SYSTEM_DATA_VERIFICATION */
->  #endif /* CONFIG_KEYS */
->  };
+From: ChiYuan Huang <cy_huang@richtek.com>
 
-Why different sets?
-The loop over the set from the previous patch can be removed if it's just one set.
-Each kfunc can be ifdef-ed independently.
+This patch series is to add Richtek RT5120 PMIC support.
+In RT5120, it integrates four channels of buck converter, one channel of LDO,
+and one external enable channel to control the external power source.
+
+rt5120-regulator can be referred in the below link
+Link: https://lore.kernel.org/lkml/165599062767.127406.12571486984170083213.b4-ty@kernel.org/
+
+Since v4:
+- Add "Copyright" string and refine for GPL version string.
+- Refine the comma usage in mfd. For the last uncertain terminated element in
+  struct arrays, put the comma for it to keep the extensibility.
+
+Since v3:
+- Use a 'dev' variable and dev_err_probe to decrease the LOC in mfd.
+- Simplify the power key irq handler key report
+- Since press and release irq not needed to keep in private data, change 'press',
+  'release' irq as local variable only.
+- Fix Kconfig typo for pwrkey.
+
+Since v2:
+- Add 'unevaluatedProperties: false' for regulator buck1~4/ldo/exten.
+- Fix indention and remove status for powerkey.
+- Refine powerkey description for more HW details.
+- For the regulator property parsing, use of_property_read_u32 instead.
+- Not to overwrite regulator constraint.
+- Refine regulator desc coding.
+
+ChiYuan Huang (3):
+  dt-binding: mfd: Add Richtek RT5120 PMIC support
+  mfd: rt5120: Add Richtek PMIC support
+  input: misc: rt5120: Add power key support
+
+ .../devicetree/bindings/mfd/richtek,rt5120.yaml    | 178 +++++++++++++++++++++
+ drivers/input/misc/Kconfig                         |   9 ++
+ drivers/input/misc/Makefile                        |   1 +
+ drivers/input/misc/rt5120-pwrkey.c                 | 109 +++++++++++++
+ drivers/mfd/Kconfig                                |  12 ++
+ drivers/mfd/Makefile                               |   1 +
+ drivers/mfd/rt5120.c                               | 124 ++++++++++++++
+ 7 files changed, 434 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/richtek,rt5120.yaml
+ create mode 100644 drivers/input/misc/rt5120-pwrkey.c
+ create mode 100644 drivers/mfd/rt5120.c
+
+-- 
+2.7.4
+

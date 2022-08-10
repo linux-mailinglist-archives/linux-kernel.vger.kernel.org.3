@@ -2,151 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A40858E8AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 10:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FED158E8A0
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 10:22:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbiHJIYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 04:24:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44648 "EHLO
+        id S231631AbiHJIWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 04:22:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231219AbiHJIYl (ORCPT
+        with ESMTP id S229806AbiHJIWt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 04:24:41 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4721885F88;
-        Wed, 10 Aug 2022 01:24:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660119880; x=1691655880;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=6kT9mTMxRWS6E11jw9PH26Anrkm3qIMlLthMQe7yaTk=;
-  b=A7UeecBqYGcs818PljT93xy7yN1I2Hi5FEH2T4fJYUXeHBAvSV2hAUeT
-   V4kOGW7cqdLNQGRqAE35GoDPubqecUgDgeo3tvEnL/VsnybJAPHJhFG7g
-   CDGEQ2uCQtpCja9UOh0kL0/L1jc49///IAFQma+JN52Xk+US5sxjeLiZf
-   vLyzwrbDHKDC8sd0pImoKZ/QAVMcZ/yLzTg4lXSEc0KqkaLrMlkPZb/+A
-   YjlKv73oklEKEeKz0iDgI7CIXtho+lUjcTppRypanTTJ0AOmW5dRSfC8y
-   Acvtk/7HG6P6X0gh0DwN5G2xxOvyTGRApzwRJM/PEeFpG0ZkcayhPCMwF
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="289784598"
-X-IronPort-AV: E=Sophos;i="5.93,226,1654585200"; 
-   d="scan'208";a="289784598"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 01:24:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,226,1654585200"; 
-   d="scan'208";a="601738890"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by orsmga007.jf.intel.com with ESMTP; 10 Aug 2022 01:24:29 -0700
-Date:   Wed, 10 Aug 2022 16:19:43 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [PATCH v7 07/14] KVM: Use gfn instead of hva for
- mmu_notifier_retry
-Message-ID: <20220810081943.GB862421@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-8-chao.p.peng@linux.intel.com>
- <20220804071044.GA4091749@ls.amr.corp.intel.com>
+        Wed, 10 Aug 2022 04:22:49 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B5D66A47;
+        Wed, 10 Aug 2022 01:22:48 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id w11-20020a17090a380b00b001f73f75a1feso1438906pjb.2;
+        Wed, 10 Aug 2022 01:22:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-language:content-transfer-encoding:in-reply-to:mime-version
+         :user-agent:date:message-id:references:cc:to:subject:from:from:to:cc;
+        bh=9zO6VsxpNwvBhILnEVUXUDk4PHjbIaeGm/Tf8gWbKd8=;
+        b=S3UoT348G+5VZXwsh4iDlr/D1pNVi+J/4RtltoMtjLQxwlM0H9OPW7euHzQf5I6QGd
+         jjAJjXGEPnTuVOxgKg1SvYGeZnpr91Vzl+LqhfWXOIpGD4vxZqlop6nCqz7/d+xCvJ2F
+         452AW2wH6gxBGU9RPMhC0huBgPtF1gOgEeipyiUlujPFJJNUJ6/4cjbH45qxL0WzkZBY
+         BU38vSIC39jXKpRLc61x6onHXk3dDyzc/cHFa6Dq1pLXBw43RVjt1driQZEnC0393Wz/
+         Rya1z9EG+P+YTXeLXwqQ4f+KdJdg3ymRIDxniqLup1T5JZpvHHTC/keirIqZdeq794IE
+         mMEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-language:content-transfer-encoding:in-reply-to:mime-version
+         :user-agent:date:message-id:references:cc:to:subject:from
+         :x-gm-message-state:from:to:cc;
+        bh=9zO6VsxpNwvBhILnEVUXUDk4PHjbIaeGm/Tf8gWbKd8=;
+        b=LxhezkHVrbUCb2bCb0gByNCUftag9P6dZu36A4fbcdYjhoj/2ntjSVKd11X1orLakf
+         /uu6TLa+N9vYxNxxvYVOPIZpsUcitB0GXkwKG4u3DLIW6khDdl+maMtgPoJxFgI+5KK0
+         Fr1QCKcsZSN8voPw8mhRL5sqwwShEx1bUpU6QbdNtQxGUUnchvWD2ZfSUGhrtQG+Lg4i
+         S77YYF6/IsR0wpwRnKlmKkhwGJAanmceWf3ms+g9YAMW/Ph7triTAPDPfdBy9wCVs4Wn
+         6rxlg2KzfkfHyFdcj3u74FSSjngJ24nldPyg0SJJkt/Vh8Vh/HQCKUtbA4Yb8LKSjAd6
+         lnGA==
+X-Gm-Message-State: ACgBeo0AtlfESs3OoOWQ4ydI32a17MjnBwd3LrdnxurmNpTPlDGhLu+9
+        7yhCGGmGrG1fGfHPg8MIVlE+Zw+Jm/8aD9ni
+X-Google-Smtp-Source: AA6agR5y9WLMW8E5HivgLerrbmcpreuQd7mObHrDuT7HnrqnxivT2oI2aJH1zwrapSoKpV1JBOFqHQ==
+X-Received: by 2002:a17:903:268f:b0:16d:d62c:5b8b with SMTP id jf15-20020a170903268f00b0016dd62c5b8bmr27408513plb.107.1660119767437;
+        Wed, 10 Aug 2022 01:22:47 -0700 (PDT)
+Received: from [0.0.0.0] ([205.198.104.55])
+        by smtp.gmail.com with ESMTPSA id j3-20020a62c503000000b0052dcd14e3desm1259922pfg.183.2022.08.10.01.22.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Aug 2022 01:22:47 -0700 (PDT)
+From:   Linjun Bao <meljbao@gmail.com>
+Subject: Re: [PATCH] igc: Remove _I_PHY_ID check for i225 devices
+To:     Tony Nguyen <anthony.l.nguyen@intel.com>
+Cc:     Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220809133502.37387-1-meljbao@gmail.com>
+ <b39c9fa3-1b7c-c7b1-c3dd-bf5ceb035dc8@intel.com>
+Message-ID: <0b4ce201-be78-5a5d-0098-0cbe14ea43fd@gmail.com>
+Date:   Wed, 10 Aug 2022 16:22:42 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.10.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220804071044.GA4091749@ls.amr.corp.intel.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <b39c9fa3-1b7c-c7b1-c3dd-bf5ceb035dc8@intel.com>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8bit
+Content-Language: en-US
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 04, 2022 at 12:10:44AM -0700, Isaku Yamahata wrote:
-> On Wed, Jul 06, 2022 at 04:20:09PM +0800,
-> Chao Peng <chao.p.peng@linux.intel.com> wrote:
-> 
-> > diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> > index 0bdb6044e316..e9153b54e2a4 100644
-> > --- a/include/linux/kvm_host.h
-> > +++ b/include/linux/kvm_host.h
-> > @@ -1362,10 +1362,8 @@ void kvm_mmu_free_memory_cache(struct kvm_mmu_memory_cache *mc);
-> >  void *kvm_mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc);
-> >  #endif
-> >  
-> > -void kvm_inc_notifier_count(struct kvm *kvm, unsigned long start,
-> > -				   unsigned long end);
-> > -void kvm_dec_notifier_count(struct kvm *kvm, unsigned long start,
-> > -				   unsigned long end);
-> > +void kvm_inc_notifier_count(struct kvm *kvm, gfn_t start, gfn_t end);
-> > +void kvm_dec_notifier_count(struct kvm *kvm, gfn_t start, gfn_t end);
-> >  
-> >  long kvm_arch_dev_ioctl(struct file *filp,
-> >  			unsigned int ioctl, unsigned long arg);
-> 
-> The corresponding changes in kvm_main.c are missing.
 
-Exactly! Actually it's in the next patch while it should indeed in
-this patch.
+On 2022/8/10 上午1:32, Tony Nguyen wrote:
+> On 8/9/2022 6:35 AM, Linjun Bao wrote:
+>> Source commit 7c496de538ee ("igc: Remove _I_PHY_ID checking"),
+>> remove _I_PHY_ID check for i225 device, since i225 devices only
+>> have one PHY vendor.
+>
+> What are you trying to do with this patch? You're referencing the original commit so you know it's committed, but it's not clear to me why you are re-sending it.
+>
+I'm new here, please correct me if I am doing things in the wrong way.
 
-Chao
-> 
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index b2c79bef61bd..0184e327f6f5 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -711,8 +711,7 @@ static void kvm_mmu_notifier_change_pte(struct mmu_notifier *mn,
->         kvm_handle_hva_range(mn, address, address + 1, pte, kvm_set_spte_gfn);
->  }
->  
-> -void kvm_inc_notifier_count(struct kvm *kvm, unsigned long start,
-> -                                  unsigned long end)
-> +void kvm_inc_notifier_count(struct kvm *kvm, gfn_t start, gfn_t end)
->  {
->         /*
->          * The count increase must become visible at unlock time as no
-> @@ -786,8 +785,7 @@ static int kvm_mmu_notifier_invalidate_range_start(struct mmu_notifier *mn,
->         return 0;
->  }
->  
-> -void kvm_dec_notifier_count(struct kvm *kvm, unsigned long start,
-> -                                  unsigned long end)
-> +void kvm_dec_notifier_count(struct kvm *kvm, gfn_t start, gfn_t end)
->  {
->         /*
->          * This sequence increase will notify the kvm page fault that
-> 
-> 
-> -- 
-> Isaku Yamahata <isaku.yamahata@gmail.com>
+
+Yes this commit was committed to mainline about one year ago. But this commit has not been included into kernel 5.4 yet, and I encountered the probe failure when using alderlake-s with Ethernet adapter i225-LM. Since I could not directly apply the patch 7c496de538ee to kernel 5.4, so I generated this patch for kernel 5.4 usage.
+
+
+Looks like sending a duplicated patch is not expected. Would you please advise what is the proper action when encountering such case? I would like this fix to be implemented into LTS kernel 5.4, I also wrote a ticket on https://bugzilla.kernel.org/show_bug.cgi?id=216261, but no response.
+
+
+Regards
+
+Joseph
+
+
+> Thanks,
+> Tony
+>
+>> Signed-off-by: Linjun Bao <meljbao@gmail.com>
+>> ---
+>>   drivers/net/ethernet/intel/igc/igc_base.c | 10 +---------
+>>   drivers/net/ethernet/intel/igc/igc_main.c |  3 +--
+>>   drivers/net/ethernet/intel/igc/igc_phy.c  |  6 ++----
+>>   3 files changed, 4 insertions(+), 15 deletions(-)
+>>
+>> diff --git a/drivers/net/ethernet/intel/igc/igc_base.c b/drivers/net/ethernet/intel/igc/igc_base.c
+>> index db289bcce21d..d66429eb14a5 100644
+>> --- a/drivers/net/ethernet/intel/igc/igc_base.c
+>> +++ b/drivers/net/ethernet/intel/igc/igc_base.c
+>> @@ -187,15 +187,7 @@ static s32 igc_init_phy_params_base(struct igc_hw *hw)
+>>         igc_check_for_copper_link(hw);
+>>   -    /* Verify phy id and set remaining function pointers */
+>> -    switch (phy->id) {
+>> -    case I225_I_PHY_ID:
+>> -        phy->type    = igc_phy_i225;
+>> -        break;
+>> -    default:
+>> -        ret_val = -IGC_ERR_PHY;
+>> -        goto out;
+>> -    }
+>> +    phy->type = igc_phy_i225;
+>>     out:
+>>       return ret_val;
+>> diff --git a/drivers/net/ethernet/intel/igc/igc_main.c b/drivers/net/ethernet/intel/igc/igc_main.c
+>> index 9ba05d9aa8e0..b8297a63a7fd 100644
+>> --- a/drivers/net/ethernet/intel/igc/igc_main.c
+>> +++ b/drivers/net/ethernet/intel/igc/igc_main.c
+>> @@ -2884,8 +2884,7 @@ bool igc_has_link(struct igc_adapter *adapter)
+>>           break;
+>>       }
+>>   -    if (hw->mac.type == igc_i225 &&
+>> -        hw->phy.id == I225_I_PHY_ID) {
+>> +    if (hw->mac.type == igc_i225) {
+>>           if (!netif_carrier_ok(adapter->netdev)) {
+>>               adapter->flags &= ~IGC_FLAG_NEED_LINK_UPDATE;
+>>           } else if (!(adapter->flags & IGC_FLAG_NEED_LINK_UPDATE)) {
+>> diff --git a/drivers/net/ethernet/intel/igc/igc_phy.c b/drivers/net/ethernet/intel/igc/igc_phy.c
+>> index 6156c76d765f..1be112ce6774 100644
+>> --- a/drivers/net/ethernet/intel/igc/igc_phy.c
+>> +++ b/drivers/net/ethernet/intel/igc/igc_phy.c
+>> @@ -235,8 +235,7 @@ static s32 igc_phy_setup_autoneg(struct igc_hw *hw)
+>>               return ret_val;
+>>       }
+>>   -    if ((phy->autoneg_mask & ADVERTISE_2500_FULL) &&
+>> -        hw->phy.id == I225_I_PHY_ID) {
+>> +    if (phy->autoneg_mask & ADVERTISE_2500_FULL) {
+>>           /* Read the MULTI GBT AN Control Register - reg 7.32 */
+>>           ret_val = phy->ops.read_reg(hw, (STANDARD_AN_REG_MASK <<
+>>                           MMD_DEVADDR_SHIFT) |
+>> @@ -376,8 +375,7 @@ static s32 igc_phy_setup_autoneg(struct igc_hw *hw)
+>>           ret_val = phy->ops.write_reg(hw, PHY_1000T_CTRL,
+>>                            mii_1000t_ctrl_reg);
+>>   -    if ((phy->autoneg_mask & ADVERTISE_2500_FULL) &&
+>> -        hw->phy.id == I225_I_PHY_ID)
+>> +    if (phy->autoneg_mask & ADVERTISE_2500_FULL)
+>>           ret_val = phy->ops.write_reg(hw,
+>>                            (STANDARD_AN_REG_MASK <<
+>>                            MMD_DEVADDR_SHIFT) |

@@ -2,60 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF23158E58F
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 05:36:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E02FF58E597
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 05:45:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230180AbiHJDgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 23:36:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34018 "EHLO
+        id S230086AbiHJDmB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 23:42:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbiHJDgK (ORCPT
+        with ESMTP id S229477AbiHJDlU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 23:36:10 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 571942AE1A
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 20:36:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660102569; x=1691638569;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=YxmthxJXTQhxtQJ/Htfnm3RrXdQD2c318ixmJ7mgyUs=;
-  b=KVPZZaAk3cfHmmqT+4mYPtAp2sksYtwY6cak3Tlw3Ume3QD9iA9/Fvlv
-   Y1VbRQBmFw2RAo1VPkz0/P9mx07RZVbrE7Rl3ojAOomp3gOFK4qGqDtZh
-   ZfNAOuWIEqmFtxS1M7RQ+t/1OmTkpWcObNVG9fOMQC1kDgTh7rlQc9Siw
-   vipI1APDHN6dFJE6qnx9c+eGFPIDk3uPl//fDJPaxuxx7MRyJTBBCAMJ6
-   BVQhjf02QzdLfKlsS5t/cUDbCId9Wj8VoNHxECI9yeva81N9nN2KgL3Ye
-   t/SPj0VPJsXQbtT976qO6fGc7zucxWjxKKsn/wWGoKU19LhxJEx3L3+du
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="316931559"
-X-IronPort-AV: E=Sophos;i="5.93,226,1654585200"; 
-   d="scan'208";a="316931559"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 20:36:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,226,1654585200"; 
-   d="scan'208";a="581064163"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 09 Aug 2022 20:36:07 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oLcVq-000NTZ-2m;
-        Wed, 10 Aug 2022 03:36:06 +0000
-Date:   Wed, 10 Aug 2022 11:35:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Chang S. Bae" <chang.seok.bae@intel.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [intel-amx:init_fpstate 2/3] arch/x86/kernel/fpu/xstate.c:365:24:
- warning: format specifies type 'unsigned long' but the argument has type
- 'unsigned int'
-Message-ID: <202208101137.JDQ1Crdy-lkp@intel.com>
+        Tue, 9 Aug 2022 23:41:20 -0400
+Received: from mail-m963.mail.126.com (mail-m963.mail.126.com [123.126.96.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A40F067CB4
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 20:41:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=qV7ak
+        zLaGXu9fGQiOMj/yV6cyOJkqSiwyUBHI4SCrYU=; b=LSkXS3jfJZxSjzP5o387Q
+        ll5Ep25eEkPk/dJSrAFvzOGRu6he/h2J0oc4jR0k9oxXNz9FYKP1lEceCkEyN0IL
+        PldISBztuwmpl78QIdUnYpDbVN6guWHy4l7nTilbfoY36QP9NbGMmZfO3Y0TmwqW
+        7BwJYMc5FwH964JUZtyI+A=
+Received: from localhost.localdomain (unknown [116.128.244.169])
+        by smtp8 (Coremail) with SMTP id NORpCgAXx5N2KPNiByMLKA--.41747S2;
+        Wed, 10 Aug 2022 11:39:34 +0800 (CST)
+From:   Bing Huang <huangbing775@126.com>
+To:     mingo@redhat.com
+Cc:     peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        linux-kernel@vger.kernel.org, Bing Huang <huangbing@kylinos.cn>
+Subject: [PATCH] sched/topology: Add __init for init_defrootdomain
+Date:   Wed, 10 Aug 2022 11:39:32 +0800
+Message-Id: <20220810033932.171690-1-huangbing775@126.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: NORpCgAXx5N2KPNiByMLKA--.41747S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Cr48ury3Kw4fJw1xKr43GFg_yoW8JFyrpF
+        yq9rW5G3y8GrWqq348C3ykurW3W3sxKw4Skan8tws8Jr1rGwn0gFn0vF43CryY9r45Gr4a
+        yF4qq342y3WUtFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07U0tC7UUUUU=
+X-Originating-IP: [116.128.244.169]
+X-CM-SenderInfo: xkxd0w5elqwlixv6ij2wof0z/1tbimQRZr19E8NvDKAABsx
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,113 +54,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/intel/amx-linux.git init_fpstate
-head:   0dd11dae13f2a012cd33971c5917f946d09e895c
-commit: e1dead9e3ed891a5024f59708e5059cdd094e3f5 [2/3] x86/fpu: Validate the init_fpstate size
-config: i386-randconfig-a013 (https://download.01.org/0day-ci/archive/20220810/202208101137.JDQ1Crdy-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel/amx-linux/commit/e1dead9e3ed891a5024f59708e5059cdd094e3f5
-        git remote add intel-amx https://github.com/intel/amx-linux.git
-        git fetch --no-tags intel-amx init_fpstate
-        git checkout e1dead9e3ed891a5024f59708e5059cdd094e3f5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kernel/fpu/
+From: Bing Huang <huangbing@kylinos.cn>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+init_defrootdomain is only used in initialization
 
-All warnings (new ones prefixed by >>):
+Signed-off-by: Bing Huang <huangbing@kylinos.cn>
+---
+ kernel/sched/sched.h    | 2 +-
+ kernel/sched/topology.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
->> arch/x86/kernel/fpu/xstate.c:365:24: warning: format specifies type 'unsigned long' but the argument has type 'unsigned int' [-Wformat]
-                          "%u bytes\n", sizeof(union fpregs_state), init_fpstate.size);
-                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/printk.h:507:33: note: expanded from macro 'pr_err'
-           printk(KERN_ERR pr_fmt(fmt), ##__VA_ARGS__)
-                                  ~~~     ^~~~~~~~~~~
-   include/linux/printk.h:464:60: note: expanded from macro 'printk'
-   #define printk(fmt, ...) printk_index_wrap(_printk, fmt, ##__VA_ARGS__)
-                                                       ~~~    ^~~~~~~~~~~
-   include/linux/printk.h:436:19: note: expanded from macro 'printk_index_wrap'
-                   _p_func(_fmt, ##__VA_ARGS__);                           \
-                           ~~~~    ^~~~~~~~~~~
-   1 warning generated.
-
-
-vim +365 arch/x86/kernel/fpu/xstate.c
-
-   328	
-   329	/*
-   330	 * All supported features have either init state all zeros or are
-   331	 * handled in setup_init_fpu() individually. This is an explicit
-   332	 * feature list and does not use XFEATURE_MASK*SUPPORTED to catch
-   333	 * newly added supported features at build time and make people
-   334	 * actually look at the init state for the new feature.
-   335	 */
-   336	#define XFEATURES_INIT_FPSTATE_HANDLED		\
-   337		(XFEATURE_MASK_FP |			\
-   338		 XFEATURE_MASK_SSE |			\
-   339		 XFEATURE_MASK_YMM |			\
-   340		 XFEATURE_MASK_OPMASK |			\
-   341		 XFEATURE_MASK_ZMM_Hi256 |		\
-   342		 XFEATURE_MASK_Hi16_ZMM	 |		\
-   343		 XFEATURE_MASK_PKRU |			\
-   344		 XFEATURE_MASK_BNDREGS |		\
-   345		 XFEATURE_MASK_BNDCSR |			\
-   346		 XFEATURE_MASK_PASID |			\
-   347		 XFEATURE_MASK_XTILE)
-   348	
-   349	/*
-   350	 * setup the xstate image representing the init state
-   351	 */
-   352	static int __init setup_init_fpu_buf(void)
-   353	{
-   354		BUILD_BUG_ON((XFEATURE_MASK_USER_SUPPORTED |
-   355			      XFEATURE_MASK_SUPERVISOR_SUPPORTED) !=
-   356			     XFEATURES_INIT_FPSTATE_HANDLED);
-   357	
-   358		if (!boot_cpu_has(X86_FEATURE_XSAVE))
-   359			return -ENODEV;
-   360	
-   361		print_xstate_features();
-   362	
-   363		if (init_fpstate.size > sizeof(union fpregs_state)) {
-   364			pr_err("x86/fpu: init_fpstate (%lu bytes) is not enough for the configured size:"
- > 365			       "%u bytes\n", sizeof(union fpregs_state), init_fpstate.size);
-   366			return -EINVAL;
-   367		}
-   368	
-   369		xstate_init_xcomp_bv(&init_fpstate.regs.xsave, init_fpstate.xfeatures);
-   370	
-   371		/*
-   372		 * Init all the features state with header.xfeatures being 0x0
-   373		 */
-   374		os_xrstor_booting(&init_fpstate.regs.xsave);
-   375	
-   376		/*
-   377		 * All components are now in init state. Read the state back so
-   378		 * that init_fpstate contains all non-zero init state. This only
-   379		 * works with XSAVE, but not with XSAVEOPT and XSAVEC/S because
-   380		 * those use the init optimization which skips writing data for
-   381		 * components in init state.
-   382		 *
-   383		 * XSAVE could be used, but that would require to reshuffle the
-   384		 * data when XSAVEC/S is available because XSAVEC/S uses xstate
-   385		 * compaction. But doing so is a pointless exercise because most
-   386		 * components have an all zeros init state except for the legacy
-   387		 * ones (FP and SSE). Those can be saved with FXSAVE into the
-   388		 * legacy area. Adding new features requires to ensure that init
-   389		 * state is all zeroes or if not to add the necessary handling
-   390		 * here.
-   391		 */
-   392		fxsave(&init_fpstate.regs.fxsave);
-   393		return 0;
-   394	}
-   395	
-
+diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+index b0bf2287dd9d..cd761f1fc60c 100644
+--- a/kernel/sched/sched.h
++++ b/kernel/sched/sched.h
+@@ -883,7 +883,7 @@ struct root_domain {
+ 	struct perf_domain __rcu *pd;
+ };
+ 
+-extern void init_defrootdomain(void);
++extern void __init init_defrootdomain(void);
+ extern int sched_init_domains(const struct cpumask *cpu_map);
+ extern void rq_attach_root(struct rq *rq, struct root_domain *rd);
+ extern void sched_get_rd(struct root_domain *rd);
+diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+index 8739c2a5a54e..dea9fa39e7c0 100644
+--- a/kernel/sched/topology.c
++++ b/kernel/sched/topology.c
+@@ -578,7 +578,7 @@ static int init_rootdomain(struct root_domain *rd)
+  */
+ struct root_domain def_root_domain;
+ 
+-void init_defrootdomain(void)
++void __init init_defrootdomain(void)
+ {
+ 	init_rootdomain(&def_root_domain);
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+
+
+No virus found
+		Checked by Hillstone Network AntiVirus
+

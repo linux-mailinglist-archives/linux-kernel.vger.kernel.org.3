@@ -2,145 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED51358EBFB
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 14:29:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3537158EBFC
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 14:29:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232253AbiHJM3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 08:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54576 "EHLO
+        id S232265AbiHJM3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 08:29:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbiHJM3L (ORCPT
+        with ESMTP id S232241AbiHJM3N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 08:29:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E0E9974DF5
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 05:29:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660134550;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ur0S3vxzmpV2P3Rj1K4ZEdqLq25lb9Wh81DhfR65pxA=;
-        b=iy0Al6ViA91u+p5pw/cnyTSiXXRzkLcPuxQur7ZO0yvRBjsvNkJ7vnNSwr+FA92/C3x5+d
-        O1WnS0cNoY0/9/0rxXHj7KB2TXdGT5HjRIovINsjSgk6U60EYIEVmrOqKAa9KlJ6J3htZy
-        EYf45WYMeQVdGUC4hyj8TexhwfocclI=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-668-1HA0q3S-OBi8-BcMaorPhw-1; Wed, 10 Aug 2022 08:29:06 -0400
-X-MC-Unique: 1HA0q3S-OBi8-BcMaorPhw-1
-Received: by mail-ed1-f71.google.com with SMTP id l19-20020a056402255300b0043df64f9a0fso9165346edb.16
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 05:29:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=Ur0S3vxzmpV2P3Rj1K4ZEdqLq25lb9Wh81DhfR65pxA=;
-        b=tU4PjmTdBDolZ0TwYsTBtFzc1FoyGTSLqZNXUe9Ve0N7bA2UT2IhXaV38OiwJ28f3z
-         hFpcB6PBR7XAK+Mt13mCsP/7XyqSriEgmY8MPyZYF3yFY2Vj0b5nsISuGBE/2rZE5Rgv
-         FbMXJMghY7C8/qMBNHa2jMiti9beFAL8vxslF6y/4VFjxQ89LjnmpXWVit+BfMimHYD/
-         mw8ji768+w8xH/YjE2tEXCWw4Z/NMhk33yNIebOTqecwsJ3mRY3eZcUtIbvkliXW8wMN
-         XbERXxPEVmUFE0n2wOu2l76pblYji/wTdZhoqmRA3bGRnPf57496ENDWlPEXBP0hSftB
-         lGMQ==
-X-Gm-Message-State: ACgBeo0FNWgxW3hW8kb/X0Yax+jhsAtTCACyD3Y0r4joSsTg5D+UFroE
-        ucTDGSUTqVQimTAhP795nFpORDWG0raDqPf1hOhs8N4iBx/vr2wJdUrcfTJYsJI5cTB3f7E9+7Q
-        hqf0iEuCKLg1K9vqBhNzih9o0
-X-Received: by 2002:a05:6402:35c3:b0:43d:f5d9:b65d with SMTP id z3-20020a05640235c300b0043df5d9b65dmr26615862edc.149.1660134545246;
-        Wed, 10 Aug 2022 05:29:05 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7s6VXCgxCV5nTHcb8Km+7rgGPW/D/i9ZJCl/KMbRISRjqKSsbjTlBqkKW6TQEEF4LuJCo/9g==
-X-Received: by 2002:a05:6402:35c3:b0:43d:f5d9:b65d with SMTP id z3-20020a05640235c300b0043df5d9b65dmr26615846edc.149.1660134545002;
-        Wed, 10 Aug 2022 05:29:05 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id f15-20020a50ee8f000000b0043bc4b28464sm7671006edr.34.2022.08.10.05.29.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Aug 2022 05:29:04 -0700 (PDT)
-Message-ID: <1e41a634-0419-e0a8-364c-2e30ed2dbe4d@redhat.com>
-Date:   Wed, 10 Aug 2022 14:29:02 +0200
+        Wed, 10 Aug 2022 08:29:13 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A57987437F;
+        Wed, 10 Aug 2022 05:29:12 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 08CDE1FB;
+        Wed, 10 Aug 2022 05:29:13 -0700 (PDT)
+Received: from [10.57.13.63] (unknown [10.57.13.63])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3EFD23F5A1;
+        Wed, 10 Aug 2022 05:29:10 -0700 (PDT)
+Message-ID: <3a5e7abd-9361-11ba-978d-8e8bae00ea31@arm.com>
+Date:   Wed, 10 Aug 2022 13:29:08 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 1/2] KVM: selftests: Make rseq compatible with
- glibc-2.35
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 1/1] ACPI: CPPC: Disable FIE if registers in PCC
+ regions
 Content-Language: en-US
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Gavin Shan <gshan@redhat.com>
-Cc:     kvmarm <kvmarm@lists.cs.columbia.edu>,
-        KVM list <kvm@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        linux-kselftest <linux-kselftest@vger.kernel.org>,
-        Florian Weimer <fweimer@redhat.com>,
-        shan gavin <shan.gavin@gmail.com>, maz <maz@kernel.org>,
-        andrew jones <andrew.jones@linux.dev>,
-        yihyu <yihyu@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        oliver upton <oliver.upton@linux.dev>
-References: <20220810104114.6838-1-gshan@redhat.com>
- <20220810104114.6838-2-gshan@redhat.com>
- <876568572.367.1660134156963.JavaMail.zimbra@efficios.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <876568572.367.1660134156963.JavaMail.zimbra@efficios.com>
+To:     Jeremy Linton <jeremy.linton@arm.com>
+Cc:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org,
+        robert.moore@intel.com, devel@acpica.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, vschneid@redhat.com,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+References: <20220728221043.4161903-1-jeremy.linton@arm.com>
+ <20220728221043.4161903-2-jeremy.linton@arm.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <20220728221043.4161903-2-jeremy.linton@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/10/22 14:22, Mathieu Desnoyers wrote:
->>
->> 	/*
->> 	 * Create and run a dummy VM that immediately exits to userspace via
->> @@ -256,7 +244,7 @@ int main(int argc, char *argv[])
->> 			 */
->> 			smp_rmb();
->> 			cpu = sched_getcpu();
->> -			rseq_cpu = READ_ONCE(__rseq.cpu_id);
->> +			rseq_cpu = READ_ONCE(__rseq->cpu_id);
-> #include <rseq.h>
+Hi Jeremy,
+
++CC Valentin since he might be interested in this finding
++CC Ionela, Dietmar
+
+I have a few comments for this patch.
+
+
+On 7/28/22 23:10, Jeremy Linton wrote:
+> PCC regions utilize a mailbox to set/retrieve register values used by
+> the CPPC code. This is fine as long as the operations are
+> infrequent. With the FIE code enabled though the overhead can range
+> from 2-11% of system CPU overhead (ex: as measured by top) on Arm
+> based machines.
 > 
-> and use
+> So, before enabling FIE assure none of the registers used by
+> cppc_get_perf_ctrs() are in the PCC region. Furthermore lets also
+> enable a module parameter which can also disable it at boot or module
+> reload.
 > 
-> rseq_current_cpu_raw().
+> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+> ---
+>   drivers/acpi/cppc_acpi.c       | 41 ++++++++++++++++++++++++++++++++++
+>   drivers/cpufreq/cppc_cpufreq.c | 19 ++++++++++++----
+>   include/acpi/cppc_acpi.h       |  5 +++++
+>   3 files changed, 61 insertions(+), 4 deletions(-)
 
-Thanks, I squashed it and queued it for -rc1 (tested on both
-glibc 2.34 and 2.35).
 
-diff --git a/tools/testing/selftests/kvm/rseq_test.c b/tools/testing/selftests/kvm/rseq_test.c
-index 84e8425edc2c..987a76674f4f 100644
---- a/tools/testing/selftests/kvm/rseq_test.c
-+++ b/tools/testing/selftests/kvm/rseq_test.c
-@@ -29,7 +29,6 @@
-  #define NR_TASK_MIGRATIONS 100000
-  
-  static pthread_t migration_thread;
--static struct rseq_abi *__rseq;
-  static cpu_set_t possible_mask;
-  static int min_cpu, max_cpu;
-  static bool done;
-@@ -218,7 +217,6 @@ int main(int argc, char *argv[])
-  	r = rseq_register_current_thread();
-  	TEST_ASSERT(!r, "rseq_register_current_thread failed, errno = %d (%s)",
-  		    errno, strerror(errno));
--	__rseq = rseq_get_abi();
-  
-  	/*
-  	 * Create and run a dummy VM that immediately exits to userspace via
-@@ -256,7 +254,7 @@ int main(int argc, char *argv[])
-  			 */
-  			smp_rmb();
-  			cpu = sched_getcpu();
--			rseq_cpu = READ_ONCE(__rseq->cpu_id);
-+			rseq_cpu = rseq_current_cpu_raw();
-  			smp_rmb();
-  		} while (snapshot != atomic_read(&seq_cnt));
-  
+1. You assume that all platforms would have this big overhead when
+    they have the PCC regions for this purpose.
+    Do we know which version of HW mailbox have been implemented
+    and used that have this 2-11% overhead in a platform?
+    Do also more recent MHU have such issues, so we could block
+    them by default (like in your code)?
 
-Paolo
+2. I would prefer to simply change the default Kconfig value to 'n' for
+    the ACPI_CPPC_CPUFREQ_FIE, instead of creating a runtime
+    check code which disables it.
+    We have probably introduce this overhead for older platforms with
+    this commit:
 
+commit 4c38f2df71c8e33c0b64865992d693f5022eeaad
+Author: Viresh Kumar <viresh.kumar@linaro.org>
+Date:   Tue Jun 23 15:49:40 2020 +0530
+
+     cpufreq: CPPC: Add support for frequency invariance
+
+
+
+If the test server with this config enabled performs well
+in the stress-tests, then on production server the config may be
+set to 'y' (or 'm' and loaded).
+
+I would vote to not add extra code, which then after a while might be
+decided to bw extended because actually some HW is actually capable (so
+we could check in runtime and enable it). IMO this create an additional
+complexity in our diverse configuration/tunnable space in our code.
+
+When we don't compile-in this, we should fallback to old-style
+FIE, which has been used on these old platforms.
+
+BTW (I have to leave it here) the first-class solution for those servers
+is to implement AMU counters, so the overhead to retrieve this info is
+really low.
+
+Regards,
+Lukasz

@@ -2,49 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E623D58EDF0
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 16:09:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D42ED58EDF2
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 16:09:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232966AbiHJOJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 10:09:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46674 "EHLO
+        id S232989AbiHJOJI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 10:09:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233120AbiHJOIX (ORCPT
+        with ESMTP id S232286AbiHJOIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 10:08:23 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 202086F554;
-        Wed, 10 Aug 2022 07:08:20 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 977861FB;
-        Wed, 10 Aug 2022 07:08:20 -0700 (PDT)
-Received: from [192.168.122.164] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6D2B13F67D;
-        Wed, 10 Aug 2022 07:08:19 -0700 (PDT)
-Message-ID: <6f565c2d-e7cb-f5a2-0b38-995c9cd2deec@arm.com>
-Date:   Wed, 10 Aug 2022 09:08:14 -0500
+        Wed, 10 Aug 2022 10:08:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AD4746E2CD
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:08:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660140512;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=JTsG7nLOp195UfpCEyp/iM5Dx9NPNBT+fzo9oY10ScM=;
+        b=On7dMZO32/x6cgh44g0YkZx4ZewN2KD1uLv8GNymnH0ZUOSS76PpV4eyZn/a4HTaVDlnXu
+        X8DSe3NlkCF+B1rUCmC7AcjqpPOdniWPHHOK8mOA7rgzCulD8MPWRjNCIommJGmkug1JIi
+        EkFFrW8ESnKL5PKrZXD12boCWex5jrU=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-651-C2hfM_2XNAyZNaL2mydf-Q-1; Wed, 10 Aug 2022 10:08:27 -0400
+X-MC-Unique: C2hfM_2XNAyZNaL2mydf-Q-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 76C4C3C10172;
+        Wed, 10 Aug 2022 14:08:26 +0000 (UTC)
+Received: from [10.22.9.72] (unknown [10.22.9.72])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 6206940CF8E8;
+        Wed, 10 Aug 2022 14:08:25 +0000 (UTC)
+Message-ID: <34d80543-322f-9c76-ad7d-d7c734163fa0@redhat.com>
+Date:   Wed, 10 Aug 2022 10:08:25 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH v2 1/1] ACPI: CPPC: Disable FIE if registers in PCC
- regions
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] mm/slab_common: Deleting kobject in kmem_cache_destroy()
+ without holding slab_mutex/cpu_hotplug_lock
 Content-Language: en-US
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org,
-        robert.moore@intel.com, devel@acpica.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, vschneid@redhat.com,
-        Ionela Voinescu <ionela.voinescu@arm.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>
-References: <20220728221043.4161903-1-jeremy.linton@arm.com>
- <20220728221043.4161903-2-jeremy.linton@arm.com>
- <3a5e7abd-9361-11ba-978d-8e8bae00ea31@arm.com>
-From:   Jeremy Linton <jeremy.linton@arm.com>
-In-Reply-To: <3a5e7abd-9361-11ba-978d-8e8bae00ea31@arm.com>
+To:     Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Xin Long <lucien.xin@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20220809205901.76595-1-longman@redhat.com>
+ <48b66d90-34ae-8666-d9ee-2d36c82a6653@suse.cz>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <48b66d90-34ae-8666-d9ee-2d36c82a6653@suse.cz>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,90 +73,183 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 8/10/22 07:29, Lukasz Luba wrote:
-> Hi Jeremy,
-> 
-> +CC Valentin since he might be interested in this finding
-> +CC Ionela, Dietmar
-> 
-> I have a few comments for this patch.
-> 
-> 
-> On 7/28/22 23:10, Jeremy Linton wrote:
->> PCC regions utilize a mailbox to set/retrieve register values used by
->> the CPPC code. This is fine as long as the operations are
->> infrequent. With the FIE code enabled though the overhead can range
->> from 2-11% of system CPU overhead (ex: as measured by top) on Arm
->> based machines.
+On 8/10/22 05:34, Vlastimil Babka wrote:
+> On 8/9/22 22:59, Waiman Long wrote:
+>> A circular locking problem is reported by lockdep due to the following
+>> circular locking dependency.
 >>
->> So, before enabling FIE assure none of the registers used by
->> cppc_get_perf_ctrs() are in the PCC region. Furthermore lets also
->> enable a module parameter which can also disable it at boot or module
->> reload.
->>
->> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
->> ---
->>   drivers/acpi/cppc_acpi.c       | 41 ++++++++++++++++++++++++++++++++++
->>   drivers/cpufreq/cppc_cpufreq.c | 19 ++++++++++++----
->>   include/acpi/cppc_acpi.h       |  5 +++++
->>   3 files changed, 61 insertions(+), 4 deletions(-)
-> 
-> 
-> 1. You assume that all platforms would have this big overhead when
->     they have the PCC regions for this purpose.
->     Do we know which version of HW mailbox have been implemented
->     and used that have this 2-11% overhead in a platform?
->     Do also more recent MHU have such issues, so we could block
->     them by default (like in your code)?
+>>    +--> cpu_hotplug_lock --> slab_mutex --> kn->active#126 --+
+>>    |                                                         |
+>>    +---------------------------------------------------------+
+>
+> This sounded familiar and I've found a thread from January:
+>
+> https://lore.kernel.org/all/388098b2c03fbf0a732834fc01b2d875c335bc49.1642170196.git.lucien.xin@gmail.com/ 
+>
+>
+> But that seemed to be specific to RHEL-8 RT kernel and not reproduced 
+> with mainline. Is it different this time? Can you share the splats?
 
-Well, the mailbox nature of PCC pretty much assures its "slow", relative 
-the alternative of providing an actual register.  If a platform provides 
-direct access to say MHU registers, then of course they won't actually 
-be in a PCC region and the FIE will remain on.
+I think this is easier to reproduce on a RT kernel, but it also happens 
+in a non-RT kernel. One example splat that I got was
 
+[ 1777.114757] ======================================================
+[ 1777.121646] WARNING: possible circular locking dependency detected
+[ 1777.128544] 4.18.0-403.el8.x86_64+debug #1 Not tainted
+[ 1777.134280] ------------------------------------------------------
+[ 1777.141176] slub_cpu_partia/4113 is trying to acquire lock:
+[ 1777.147395] ffffffffaef95b20 (cpu_hotplug_lock){++++}-{0:0}, at: 
+cpu_partial_store+0x47/0xa0
+[ 1777.156837]
+                but task is already holding lock:
+[ 1777.163346] ffff88811bd17578 (kn->count#126){++++}-{0:0}, at: 
+kernfs_fop_write+0x1d0/0x410
+[ 1777.172591]
+                which lock already depends on the new lock.
 
-> 
-> 2. I would prefer to simply change the default Kconfig value to 'n' for
->     the ACPI_CPPC_CPUFREQ_FIE, instead of creating a runtime
->     check code which disables it.
->     We have probably introduce this overhead for older platforms with
->     this commit:
+[ 1777.181718]
+                the existing dependency chain (in reverse order) is:
+[ 1777.190070]
+                -> #2 (kn->count#126){++++}-{0:0}:
+[ 1777.196688]        lock_acquire+0x1db/0x8e0
+[ 1777.201360]        __kernfs_remove+0x617/0x800
+[ 1777.206320]        kernfs_remove+0x1d/0x30
+[ 1777.210891]        kobject_del+0x8e/0x150
+[ 1777.215360]        kmem_cache_destroy+0x10d/0x130
+[ 1777.220615]        bioset_exit+0x1e3/0x2c0
+[ 1777.225189]        blk_release_queue+0x20d/0x310
+[ 1777.230336]        kobject_release+0x105/0x390
+[ 1777.235296] scsi_device_dev_release_usercontext+0x5e3/0xd60
+[ 1777.242198]        execute_in_process_context+0x27/0x130
+[ 1777.248131]        device_release+0xa1/0x210
+[ 1777.252899]        kobject_release+0x105/0x390
+[ 1777.257857]        scsi_alloc_sdev+0xa1e/0xc80
+[ 1777.262820]        scsi_probe_and_add_lun+0x809/0x2da0
+[ 1777.268557]        __scsi_scan_target+0x1c1/0xb60
+[ 1777.273801]        scsi_scan_channel+0xe2/0x150
+[ 1777.278855]        scsi_scan_host_selected+0x1fb/0x2a0
+[ 1777.284590]        do_scan_async+0x3e/0x440
+[ 1777.289258]        async_run_entry_fn+0xd8/0x660
+[ 1777.294413]        process_one_work+0x919/0x17c0
+[ 1777.299568]        worker_thread+0x87/0xb40
+[ 1777.304227]        kthread+0x30d/0x3c0
+[ 1777.308411]        ret_from_fork+0x3a/0x50
+[ 1777.312984]
+                -> #1 (slab_mutex){+.+.}-{3:3}:
+[ 1777.319309]        lock_acquire+0x1db/0x8e0
+[ 1777.323978]        __mutex_lock+0x154/0x15d0
+[ 1777.328745]        kmem_cache_destroy+0x3f/0x130
+[ 1777.333898]        bioset_exit+0x1e3/0x2c0
+[ 1777.338469]        blk_release_queue+0x20d/0x310
+[ 1777.343623]        kobject_release+0x105/0x390
+[ 1777.348582] scsi_device_dev_release_usercontext+0x5e3/0xd60
+[ 1777.355481]        execute_in_process_context+0x27/0x130
+[ 1777.361409]        device_release+0xa1/0x210
+[ 1777.366175]        kobject_release+0x105/0x390
+[ 1777.371135]        scsi_alloc_sdev+0xa1e/0xc80
+[ 1777.376096]        scsi_probe_and_add_lun+0x809/0x2da0
+[ 1777.381824]        __scsi_scan_target+0x1c1/0xb60
+[ 1777.387073]        scsi_scan_channel+0xe2/0x150
+[ 1777.392128]        scsi_scan_host_selected+0x1fb/0x2a0
+[ 1777.397864]        do_scan_async+0x3e/0x440
+[ 1777.402533]        async_run_entry_fn+0xd8/0x660
+[ 1777.407688]        process_one_work+0x919/0x17c0
+[ 1777.412841]        worker_thread+0x87/0xb40
+[ 1777.417509]        kthread+0x30d/0x3c0
+[ 1777.421693]        ret_from_fork+0x3a/0x50
+[ 1777.426263]
+                -> #0 (cpu_hotplug_lock){++++}-{0:0}:
+[ 1777.433168]        check_prevs_add+0x3fa/0x18b0
+[ 1777.438226]        __lock_acquire+0x21b3/0x2b80
+[ 1777.443273]        lock_acquire+0x1db/0x8e0
+[ 1777.447940]        cpus_read_lock+0x40/0xc0
+[ 1777.452611]        cpu_partial_store+0x47/0xa0
+[ 1777.457571]        slab_attr_store+0x20/0x30
+[ 1777.462338]        kernfs_fop_write+0x255/0x410
+[ 1777.467394]        vfs_write+0x157/0x460
+[ 1777.471777]        ksys_write+0xb8/0x170
+[ 1777.476155]        do_syscall_64+0xa5/0x450
+[ 1777.480828]        entry_SYSCALL_64_after_hwframe+0x6a/0xdf
+[ 1777.487041]
+                other info that might help us debug this:
 
-The problem here is that these ACPI kernels are being shipped as single 
-images in distro's which expect them to run on a wide range of platforms 
-(including x86/amd in this case), and preform optimally on all of them.
+[ 1777.495975] Chain exists of:
+                  cpu_hotplug_lock --> slab_mutex --> kn->count#126
 
-So the 'n' option basically is saying that the latest FIE code doesn't 
-provide a befit anywhere?
+[ 1777.507443]  Possible unsafe locking scenario:
 
+[ 1777.514049]        CPU0                    CPU1
+[ 1777.519102]        ----                    ----
+[ 1777.524155]   lock(kn->count#126);
+[ 1777.527956]                                lock(slab_mutex);
+[ 1777.534274] lock(kn->count#126);
+[ 1777.540885]   lock(cpu_hotplug_lock);
+[ 1777.544964]
+                 *** DEADLOCK ***
 
-> 
-> commit 4c38f2df71c8e33c0b64865992d693f5022eeaad
-> Author: Viresh Kumar <viresh.kumar@linaro.org>
-> Date:   Tue Jun 23 15:49:40 2020 +0530
-> 
->      cpufreq: CPPC: Add support for frequency invariance
-> 
-> 
-> 
-> If the test server with this config enabled performs well
-> in the stress-tests, then on production server the config may be
-> set to 'y' (or 'm' and loaded).
-> 
-> I would vote to not add extra code, which then after a while might be
-> decided to bw extended because actually some HW is actually capable (so
-> we could check in runtime and enable it). IMO this create an additional
-> complexity in our diverse configuration/tunnable space in our code.
-> 
-> When we don't compile-in this, we should fallback to old-style
-> FIE, which has been used on these old platforms.
-> 
-> BTW (I have to leave it here) the first-class solution for those servers
-> is to implement AMU counters, so the overhead to retrieve this info is
-> really low.
-> 
-> Regards,
-> Lukasz
+[ 1777.551570] 3 locks held by slub_cpu_partia/4113:
+[ 1777.556820]  #0: ffff8881319884d0 (sb_writers#4){.+.+}-{0:0}, at: 
+vfs_write+0x31c/0x460
+[ 1777.565771]  #1: ffff888161d39490 (&of->mutex){+.+.}-{3:3}, at: 
+kernfs_fop_write+0x1ad/0x410
+[ 1777.575203]  #2: ffff88811bd17578 (kn->count#126){++++}-{0:0}, at: 
+kernfs_fop_write+0x1d0/0x410
+[ 1777.584928]
+                stack backtrace:
+[ 1777.589792] CPU: 65 PID: 4113 Comm: slub_cpu_partia Kdump: loaded Not 
+tainted 4.18.0-403.el8.x86_64+debug #1
+[ 1777.600767] Hardware name: Lenovo ThinkSystem SR635 
+-[7Y98XXXXXX]-/System Board, BIOS CFE103A 07/04/2019
+[ 1777.611342] Call Trace:
+[ 1777.614072]  dump_stack+0x5c/0x80
+[ 1777.617777]  check_noncircular+0x27f/0x320
+[ 1777.622352]  ? print_circular_bug+0x440/0x440
+[ 1777.627215]  ? kernel_text_address+0x125/0x140
+[ 1777.632170]  ? mark_lock.part.31+0xf4/0xd40
+[ 1777.636841]  ? is_dynamic_key+0x220/0x220
+[ 1777.641326]  check_prevs_add+0x3fa/0x18b0
+[ 1777.645798]  ? sched_clock+0x5/0x10
+[ 1777.649695]  ? sched_clock_cpu+0x18/0x1e0
+[ 1777.654175]  ? check_irq_usage+0xa20/0xa20
+[ 1777.658750]  ? find_held_lock+0x1c0/0x1c0
+[ 1777.663225]  ? sched_clock_cpu+0x18/0x1e0
+[ 1777.667705]  __lock_acquire+0x21b3/0x2b80
+[ 1777.672192]  lock_acquire+0x1db/0x8e0
+[ 1777.676279]  ? cpu_partial_store+0x47/0xa0
+[ 1777.680854]  ? rcu_read_unlock+0x50/0x50
+[ 1777.685239]  ? sysfs_file_ops+0x160/0x160
+[ 1777.689718]  cpus_read_lock+0x40/0xc0
+[ 1777.693806]  ? cpu_partial_store+0x47/0xa0
+[ 1777.698380]  cpu_partial_store+0x47/0xa0
+[ 1777.702761]  slab_attr_store+0x20/0x30
+[ 1777.706944]  kernfs_fop_write+0x255/0x410
+[ 1777.711424]  vfs_write+0x157/0x460
+[ 1777.715224]  ksys_write+0xb8/0x170
+[ 1777.719023]  ? __ia32_sys_read+0xb0/0xb0
+[ 1777.723406]  ? lockdep_hardirqs_on_prepare+0x294/0x3e0
+[ 1777.729144]  ? do_syscall_64+0x22/0x450
+[ 1777.733429]  do_syscall_64+0xa5/0x450
+[ 1777.737518]  entry_SYSCALL_64_after_hwframe+0x6a/0xdf
+[ 1777.743159] RIP: 0033:0x7f4fe9b2ead8
+[ 1777.747153] Code: 89 02 48 c7 c0 ff ff ff ff eb b3 0f 1f 80 00 00 00 
+00 f3 0f 1e fa 48 8d 05 45 4c 2a 00 8b 00 85 c0 75 17 b8 01 00 00 00 0f 
+05 <48> 3d 00 f0 ff ff 77 58 c3 0f 1f 80 00 00 00 00 41 54 49 89 d4 55
+[ 1777.768112] RSP: 002b:00007ffcc2173d48 EFLAGS: 00000246 ORIG_RAX: 
+0000000000000001
+[ 1777.776565] RAX: ffffffffffffffda RBX: 0000000000000002 RCX: 
+00007f4fe9b2ead8
+[ 1777.784530] RDX: 0000000000000002 RSI: 000055d41293eb70 RDI: 
+0000000000000001
+[ 1777.792495] RBP: 000055d41293eb70 R08: 000000000000000a R09: 
+0000000000000003
+[ 1777.800459] R10: 000000000000000a R11: 0000000000000246 R12: 
+00007f4fe9dcf6e0
+[ 1777.808425] R13: 0000000000000002 R14: 00007f4fe9dca860 R15: 
+0000000000000002
+
+The cpu_partial_store() method call flush_all() which takes the 
+cpu_hotplug_lock completing the cycle.
+
+Cheers,
+Longman
 

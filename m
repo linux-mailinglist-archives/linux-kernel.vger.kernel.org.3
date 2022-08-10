@@ -2,123 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9E8358F497
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 00:57:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66C8058F49A
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 00:59:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233102AbiHJW5J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 18:57:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56292 "EHLO
+        id S233343AbiHJW6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 18:58:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230251AbiHJW5G (ORCPT
+        with ESMTP id S230251AbiHJW63 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 18:57:06 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4697465810;
-        Wed, 10 Aug 2022 15:57:06 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d20so15004471pfq.5;
-        Wed, 10 Aug 2022 15:57:06 -0700 (PDT)
+        Wed, 10 Aug 2022 18:58:29 -0400
+Received: from mail-oi1-x233.google.com (mail-oi1-x233.google.com [IPv6:2607:f8b0:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33FC6581F
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 15:58:27 -0700 (PDT)
+Received: by mail-oi1-x233.google.com with SMTP id w196so14391152oiw.10
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 15:58:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=xPdhc/0hHYmENeMDs6+MtCNPsr3iYA3ZSSH+vaWj1IM=;
-        b=RPFiz8B1rVOie58ZBdBHmpFfHRmrhoZyqdFFaGlw8qr2+il/opCX909xv8cb52fzQT
-         xuPMGTgnrNwoRvU0Ax9uGwQFFf7w4biqio0J15psnjzAAPW2Jr48Tl2BxG0By6ZoGuRg
-         hy1xCp4fpZrXlO2D2ZpvuyDqI8FpWF4fLpNTNs3y2v9D/zYPDwH0vzx8O7L+GjeAegot
-         k2LjqKAixz70q0OitDAiwtvHt9hlvnv6Yp+XsW8RL8ipwr/NKaX/BwpqEkqi49OUXUQG
-         +up0YYuOImPN5EzsYEqyhL7XsjhIShLLcXc8iqgfaryLkYQ+aopIQ1uR2yVeSPWmHFzX
-         Sd5w==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:from:to:cc;
+        bh=aD8W/mU/w9DXCUMu8xmgdZ40S1mS8qDFS7ArMahu2hc=;
+        b=nkyVsblhhsBlRF+8PqzMawD8WiimmDlyEgDDHiIM70mJeUlGRrWSyyPOOHc6d8bidw
+         G2/mMrelMlcaPrwdrVkVNOtuDN9Vt054xEfCle2FsYcJX6A8Aj++Hz4F6vvfVGAa3VFE
+         TNymzBUYzxqzcFui3TrMabNCGIR+mAs3A0f14=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=xPdhc/0hHYmENeMDs6+MtCNPsr3iYA3ZSSH+vaWj1IM=;
-        b=uI0EpgiXfDWXbZ501As4LXX92evtiVs2jqY2QvIge9TsC9epu/x6YEWgh5R1Q0Omfk
-         sdXVRrdiELQK9UDODkG6ErE7u61MAJaQaQqcLulD1rkWOA2vY7rP0nUtyO57i3/IA/ZW
-         EG9psH3UmLClKQHXbLU+9mYnJBpZT1tY4PanIYZDphg2BgL162m05YMjVL0F7GRZgH2M
-         RLJDSjFkegHT+O+pS0yxKDV/4g56gG3XNPljP8BWQQDnMdXK6mO7hM3zyZS50YB+smRA
-         7oSSScu0RLsAqIs6jNWs+JyaX5TSy2Ue1Af425zqZmW0BP+NtpwWQ0kFO3wD214mzGPF
-         bGzQ==
-X-Gm-Message-State: ACgBeo38sMu+XJWuyDxDwkpNyqk6ztYU43Ota8dAAH/Yp0XemV2ftCoX
-        3JDPEDcaxKasEkFZFakrGPA=
-X-Google-Smtp-Source: AA6agR6HLsceBFq6yTroejhdeRCo4HgSVRKlPFXjxrfQchp2WJKLeR06sqDosQDUvkh8bG0wfYFIrg==
-X-Received: by 2002:a63:7a1a:0:b0:41d:2c8c:43bc with SMTP id v26-20020a637a1a000000b0041d2c8c43bcmr18937347pgc.97.1660172225717;
-        Wed, 10 Aug 2022 15:57:05 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:a3c8:d6b9:a5c2:1eca])
-        by smtp.gmail.com with ESMTPSA id a4-20020a1709027e4400b0015e9f45c1f4sm13399301pln.186.2022.08.10.15.57.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 15:57:04 -0700 (PDT)
-Date:   Wed, 10 Aug 2022 15:57:02 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org, Lubomir Rintel <lkundrak@v3.sk>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-input@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: input: ariel-pwrbutton: use
- spi-peripheral-props.yaml
-Message-ID: <YvQ3viBmbzuai+LC@google.com>
-References: <20220727164230.385614-1-krzysztof.kozlowski@linaro.org>
- <20220728151942.GA903363-robh@kernel.org>
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:x-gm-message-state:from:to:cc;
+        bh=aD8W/mU/w9DXCUMu8xmgdZ40S1mS8qDFS7ArMahu2hc=;
+        b=mpYL2yavcCocuc9A4Q70HyCdDXSbSgXqZGzvKwNy3gScvCJVwbCcsQBc9Vo5vcymRr
+         9c9QLzzcYOGf83arC15fST/9YCgfXGFutzucpGUzyF4el3bAW+DKp3rZjK0BBKrz+fT8
+         SEAG263fzpafzJg6E1BV6YH+y4iZHFWlP35u4zI9XVskZUT6dQCV12TzscH3+O80p0mF
+         31wetu0W3MfOAPseZEAJnCDVYGVTLJzhVjCJdIyBsx4BAl4vZEzjxgMQnfappspJYeP6
+         CFXW3P0A+n9ClwHeZEtr4nFhWzYfIKN3xscTqkHhaBJawQQjjIX3OxMrrJESRA/g7M1+
+         vu6A==
+X-Gm-Message-State: ACgBeo22lAjDoY2KZVcwFTZbxcPgeCZOBaDRBVh5YxwQuhMiiZ5rFSde
+        gvO5/mdJutuOCBKsLx9LQos0dAMtD4NvhRpyMCS0mg==
+X-Google-Smtp-Source: AA6agR7ODLBwGfYSSWidVfNdZ49unwaUF4wwuUR687QtAoXrutAU9yUvXQP1FFwuu9hNMbk7ixb7I9OAJFt9boAQL50=
+X-Received: by 2002:a05:6808:1588:b0:342:ce6d:bfcd with SMTP id
+ t8-20020a056808158800b00342ce6dbfcdmr2345405oiw.44.1660172307108; Wed, 10 Aug
+ 2022 15:58:27 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 10 Aug 2022 17:58:26 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220728151942.GA903363-robh@kernel.org>
-X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <1660107909-27947-2-git-send-email-quic_c_skakit@quicinc.com>
+References: <1660107909-27947-1-git-send-email-quic_c_skakit@quicinc.com> <1660107909-27947-2-git-send-email-quic_c_skakit@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Wed, 10 Aug 2022 17:58:26 -0500
+Message-ID: <CAE-0n51uUxfa-XGCBb+b=gQ_z_GNoTfjxYxMJ4F-KuAGWJ5gcg@mail.gmail.com>
+Subject: Re: [RESEND PATCH V4 1/3] arm64: dts: qcom: sc7280: Cleanup the
+ lpasscc node
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Satya Priya <quic_c_skakit@quicinc.com>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        Andy Gross <agross@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_tdas@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 09:19:42AM -0600, Rob Herring wrote:
-> On Wed, 27 Jul 2022 18:42:30 +0200, Krzysztof Kozlowski wrote:
-> > Instead of listing directly properties typical for SPI peripherals,
-> > reference the spi-peripheral-props.yaml schema.  This allows using all
-> > properties typical for SPI-connected devices, even these which device
-> > bindings author did not tried yet.
-> > 
-> > Remove the spi-* properties which now come via spi-peripheral-props.yaml
-> > schema, except for the cases when device schema adds some constraints
-> > like maximum frequency.
-> > 
-> > While changing additionalProperties->unevaluatedProperties, put it in
-> > typical place, just before example DTS.a
-> > 
-> > The binding references also input.yaml and lists explicitly allowed
-> > properties, thus here reference only spi-peripheral-props.yaml for
-> > purpose of documenting the SPI slave device and bringing
-> > spi-max-frequency type validation.
-> > 
-> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > 
-> > ---
-> > 
-> > Technically, this depends on [1] merged to SPI tree, if we want to
-> > preserve existing behavior of not allowing SPI CPHA and CPOL in each of
-> > schemas in this patch.
+Quoting Satya Priya (2022-08-09 22:05:07)
+> Remove "cc" regmap from lpasscc node which is overlapping
+> with the lpass_aon regmap.
+>
+> Fixes: 422a295221bb ("arm64: dts: qcom: sc7280: Add clock controller nodes")
+> Signed-off-by: Satya Priya <quic_c_skakit@quicinc.com>
+> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+> ---
 
-Could we merge this through SPI tree as well?
-
-> > 
-> > If this patch comes independently via different tree, the SPI CPHA and
-> > CPOL will be allowed for brief period of time, before [1] is merged.
-> > This will not have negative impact, just DT schema checks will be
-> > loosened for that period.
-> > 
-> > [1] https://lore.kernel.org/all/20220722191539.90641-2-krzysztof.kozlowski@linaro.org/
-> > ---
-> >  Documentation/devicetree/bindings/input/ariel-pwrbutton.yaml | 1 +
-> >  1 file changed, 1 insertion(+)
-> > 
-> 
-> Acked-by: Rob Herring <robh@kernel.org>
-
-Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-
--- 
-Dmitry
+Reviewed-by: Stephen Boyd <swboyd@chromium.org>

@@ -2,104 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 803E958E4A4
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 03:44:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ECD758E4AB
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 03:47:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230131AbiHJBou (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 21:44:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37012 "EHLO
+        id S230161AbiHJBqk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 21:46:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230151AbiHJBoQ (ORCPT
+        with ESMTP id S230142AbiHJBqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 21:44:16 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD6486FA2A
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 18:44:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660095855; x=1691631855;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=N2ii/FAzsKllxKwlw1SZ3nk8zJyVTVJglFHdwFnQBrE=;
-  b=CYBDSDsrjl2i/HsUvfL4XVPeuVVaioRZskQumCrKyNkkrQcR3Yxo3sfF
-   CQxRzmfcqxDeQfKG/KPdgM8H9idQdpyee/bf74Szo1OjoFk3IKxNmVRJ2
-   Z4wdUQFLlXoo7r1ruUlAJ913PYTHz/OleNhtsYss9JPlrtX6m/zy4TTd8
-   R9QI5Cc285rrCTAsJP/dVnsrLxdZXxJMyW8YSWgk8LqHg3W4XHp+xHLmJ
-   7UtHfEfjLxcP+GO+07r7Q8GDi3Y8UL3DcmDzuWiW+mS+bvLMikFaLQVP/
-   +1QGsWRCOSpCpNvKqsUL6evxDWB7GInHVBngchYC8UNyvZ3ImNB7D43he
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="354974381"
-X-IronPort-AV: E=Sophos;i="5.93,225,1654585200"; 
-   d="scan'208";a="354974381"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 18:44:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,225,1654585200"; 
-   d="scan'208";a="637927662"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga001.jf.intel.com with ESMTP; 09 Aug 2022 18:44:05 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oLalQ-000NPV-1z;
-        Wed, 10 Aug 2022 01:44:04 +0000
-Date:   Wed, 10 Aug 2022 09:43:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kassey Li <quic_yingangl@quicinc.com>, akpm@linux-foundation.org,
-        vbabka@kernel.org
-Cc:     kbuild-all@lists.01.org, Kassey Li <quic_yingangl@quicinc.com>,
-        minchan@kernel.org, vbabka@suse.cz, iamjoonsoo.kim@lge.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v5] mm/page_owner.c: add llseek for page_owner
-Message-ID: <202208100941.jQ8Z3cEq-lkp@intel.com>
-References: <20220809024725.31980-1-quic_yingangl@quicinc.com>
+        Tue, 9 Aug 2022 21:46:22 -0400
+Received: from m12-17.163.com (m12-17.163.com [220.181.12.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2C99871BD3;
+        Tue,  9 Aug 2022 18:46:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=8MRYF
+        ldPybwLhKaNKSgBUpNJSUoLCQgtJ23xLo7LXjE=; b=pCP/FnQqlZW+ilvbm5f5c
+        6hZKAr+AeYS04BEHgvUxiMFP3fL82P1+vD63sobfJ+QBTFjrLPT+eR1tnjk0DVb/
+        aANviXuINk8qv6ON6FCV9cJhwJrm38cVpzzEIAVeFSODQIOWjO/clOaERA+VVKyv
+        9OBiQtCG20vRT0IgLCgIOg=
+Received: from localhost.localdomain (unknown [223.160.228.216])
+        by smtp13 (Coremail) with SMTP id EcCowAB3WDq0DfNi2tD4Tg--.21550S2;
+        Wed, 10 Aug 2022 09:45:26 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     bjorn@mork.no, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Slark Xiao <slark_xiao@163.com>
+Subject: [PATCH] net: usb: qmi_wwan: Add support for Cinterion MV32
+Date:   Wed, 10 Aug 2022 09:45:21 +0800
+Message-Id: <20220810014521.9383-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220809024725.31980-1-quic_yingangl@quicinc.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: EcCowAB3WDq0DfNi2tD4Tg--.21550S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Zr4DCF18GFyrWr4UWw4fAFb_yoW5JFyfp3
+        yjkr12yF18XF4jvFyDAF1furWFv3ZIg3sFka47Aan7WFWIyrn2grW3tFWxZ3Z7Kr4fKF4j
+        qFs0q347Jas5JFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUbAwcUUUUU=
+X-Originating-IP: [223.160.228.216]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiGRdZZFyPd27UAAAAst
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kassey,
+There are 2 models for MV32 serials. MV32-W-A is designed
+based on Qualcomm SDX62 chip, and MV32-W-B is designed based
+on Qualcomm SDX65 chip. So we use 2 different PID to separate it.
 
-Thank you for the patch! Yet something to improve:
+Test evidence as below:
+T:  Bus=03 Lev=01 Prnt=01 Port=02 Cnt=03 Dev#=  3 Spd=480 MxCh= 0
+D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=1e2d ProdID=00f3 Rev=05.04
+S:  Manufacturer=Cinterion
+S:  Product=Cinterion PID 0x00F3 USB Mobile Broadband
+S:  SerialNumber=d7b4be8d
+C:  #Ifs= 4 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
+I:  If#=0x1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+I:  If#=0x3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
 
-[auto build test ERROR on v5.19]
-[also build test ERROR on next-20220809]
-[cannot apply to akpm-mm/mm-everything linus/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+T:  Bus=03 Lev=01 Prnt=01 Port=02 Cnt=03 Dev#= 10 Spd=480 MxCh= 0
+D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=1e2d ProdID=00f4 Rev=05.04
+S:  Manufacturer=Cinterion
+S:  Product=Cinterion PID 0x00F4 USB Mobile Broadband
+S:  SerialNumber=d095087d
+C:  #Ifs= 4 Cfg#= 1 Atr=a0 MxPwr=500mA
+I:  If#=0x0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
+I:  If#=0x1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+I:  If#=0x2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+I:  If#=0x3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kassey-Li/mm-page_owner-c-add-llseek-for-page_owner/20220809-104956
-base:    3d7cb6b04c3f3115719235cc6866b10326de34cd
-config: arm-buildonly-randconfig-r003-20220808 (https://download.01.org/0day-ci/archive/20220810/202208100941.jQ8Z3cEq-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2c71629233aa8742e2a6ce7341287c02bc1aa9fd
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Kassey-Li/mm-page_owner-c-add-llseek-for-page_owner/20220809-104956
-        git checkout 2c71629233aa8742e2a6ce7341287c02bc1aa9fd
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
+---
+ drivers/net/usb/qmi_wwan.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   arm-linux-gnueabi-ld: mm/page_owner.o: in function `.LANCHOR4':
->> page_owner.c:(.rodata+0x4): undefined reference to `mem_lseek'
-
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 571a399c195d..709e3c59e340 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1390,6 +1390,8 @@ static const struct usb_device_id products[] = {
+ 	{QMI_QUIRK_SET_DTR(0x1e2d, 0x00b0, 4)},	/* Cinterion CLS8 */
+ 	{QMI_FIXED_INTF(0x1e2d, 0x00b7, 0)},	/* Cinterion MV31 RmNet */
+ 	{QMI_FIXED_INTF(0x1e2d, 0x00b9, 0)},	/* Cinterion MV31 RmNet based on new baseline */
++	{QMI_FIXED_INTF(0x1e2d, 0x00f3, 0)},	/* Cinterion MV32-W-A RmNet */
++	{QMI_FIXED_INTF(0x1e2d, 0x00f4, 0)},	/* Cinterion MV32-W-B RmNet */
+ 	{QMI_FIXED_INTF(0x413c, 0x81a2, 8)},	/* Dell Wireless 5806 Gobi(TM) 4G LTE Mobile Broadband Card */
+ 	{QMI_FIXED_INTF(0x413c, 0x81a3, 8)},	/* Dell Wireless 5570 HSPA+ (42Mbps) Mobile Broadband Card */
+ 	{QMI_FIXED_INTF(0x413c, 0x81a4, 8)},	/* Dell Wireless 5570e HSPA+ (42Mbps) Mobile Broadband Card */
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.25.1
+

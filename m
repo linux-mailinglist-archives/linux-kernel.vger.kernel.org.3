@@ -2,58 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6698958EE68
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 16:33:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D217C58EE6C
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 16:33:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231650AbiHJOcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 10:32:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42578 "EHLO
+        id S232683AbiHJOdP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 10:33:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232554AbiHJOcH (ORCPT
+        with ESMTP id S232537AbiHJOce (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 10:32:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04EAC2B18D;
-        Wed, 10 Aug 2022 07:32:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 10 Aug 2022 10:32:34 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B6E2A40A
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:32:33 -0700 (PDT)
+Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1975C61527;
-        Wed, 10 Aug 2022 14:32:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1488CC433C1;
-        Wed, 10 Aug 2022 14:32:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660141924;
-        bh=XP7o0LqW4ri+tvBAJ6DfVBQ+7ISFbLgZEwquRdB528k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mOOqLTx3irxJuXHiFn1x/As+urVyIjJLwJ0kZh7MRjVEOzk1HOrbpCJKqM23T08z/
-         BDVdaEdyq839+KXhhP90/qtIzq1iuFTIVvg07ZVWfcxY05UEaM1zn2bIKyCkQEZZAu
-         axdKHUl4J2Fqx5QAIugZiKPwRedE9UtOKFZJqBGC/V4mvgCU7t2mZdaza21GXzX3zd
-         3SuvUZK+BP59iZ/+aZ0PHppRLHVTFUVqr1URngKnStUvNylmaa/Hu9TgZs8eZA1pvS
-         bENV5m0pSKcrZe4JnxqKSGFplvqaklXdfOOHwlVbOnNcg3u6ow3f2QHZNnBY9CxipE
-         4WNKredHSqT2w==
-Date:   Wed, 10 Aug 2022 15:31:59 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Da Xue <da@libre.computer>
-Subject: Re: [PATCH] spi: meson-spicc: save pow2 datarate between messages
-Message-ID: <YvPBX7zJ72RXnrpk@sirena.org.uk>
-References: <20220809152019.461741-1-narmstrong@baylibre.com>
- <YvJ84qkuXdvVgXRm@sirena.org.uk>
- <39c2f53b-8f53-ceb1-ae0c-81e5e53d01aa@baylibre.com>
- <YvOmnDJA+ov49chC@sirena.org.uk>
- <518f22f4-1582-924c-9eaa-28ebbe53a632@baylibre.com>
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 914423F176
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 14:32:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1660141951;
+        bh=BmcNJoX0tb4WJRJWcaohS0QcQ063FfE3jZ9bfdEJX58=;
+        h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
+         Content-Type:Date:Message-ID;
+        b=amck6QM42xHkeL3XoZE0qmvWNtlEGwwpA+sXx8mn34lGg6O6YuksklLO42Gzk3Ivb
+         kgYaObdDKCnn0Xr+tRp9iQrO3fOQbzNcA2M9l1hmB4wicQ9iNxWiB6B1CO1CQy+7Wh
+         syKJxQ+cjDvcjNFX+jcsoJvugQc+giKTq1ArUE06ZDgdTrPL9AcmDzEdGMHS995aSh
+         8K1q+eZ80o+dDHVgHBJEXtlCAFJXTp7gi9Pa39izp0D6O1+DZsp4FQ9dIMuXcMp3W5
+         OIPWOtu6DXz5Gqs0LgMz8QSZqVkY016BEV0CM6D5KM8MyxIQ1Fq8BgO7QtBEYw3fVj
+         zt3UPuLwkV0zA==
+Received: by mail-pf1-f198.google.com with SMTP id h13-20020a056a00000d00b0052de2e258dbso6541908pfk.7
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:32:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:content-transfer-encoding:content-id:mime-version
+         :comments:references:in-reply-to:subject:cc:to:from
+         :x-gm-message-state:from:to:cc;
+        bh=BmcNJoX0tb4WJRJWcaohS0QcQ063FfE3jZ9bfdEJX58=;
+        b=tYmReN8EI6WPkeYtS+Os50gD+WrWcEX+Fs0ti9XZNAKl4htxnGAC7v4qqaHgtZLtNl
+         R7IHU3qcPQDmPU60ZrpTd6rygKCaOllL+oudamHGzwT19qeD6P5rgvwe0El1ooBZBT6m
+         DmWOHENKVDgfIm0R2skPMBfL4Bz959VBdYXCFt9yaoYHDGsdUixCho3Ab+BPauhSLJyP
+         PC6KxAfL0JVKI2zjvjz6BwP2090ejZi4VLvGio04VZwEmpFIv19PuySp0DIxqPt2Nj7d
+         FHxOkuiRwUnhSya6mY4zT7+yC6llFSy1RwMqugfi3rZErlblHyTuBKiO7ABV3ve87ySa
+         3tOg==
+X-Gm-Message-State: ACgBeo3N+4ArNdLUK/XKo0qOKrRFzpESJTRu6HZ9ZId+lOQJL4M/BPGh
+        lwiWMKcH2JM87989kjs8BsjFv3g2SZsEXSElA6Mad0Kh0118qB8dNt9ZP2OgWtCQmtYAyW3Q0eT
+        AinmBW1uHdOZb+WkZ0R+S7iO1bD3Ulm6dViZgVwmd4g==
+X-Received: by 2002:a63:e4f:0:b0:41a:9472:eca0 with SMTP id 15-20020a630e4f000000b0041a9472eca0mr23118299pgo.623.1660141947107;
+        Wed, 10 Aug 2022 07:32:27 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6SbPfI4FRAXuP5uxoCn7uNxC6/UShze/WtduBxD/rL03D2ONXUpeGsOaLZdHoLfJiTG3cz2w==
+X-Received: by 2002:a63:e4f:0:b0:41a:9472:eca0 with SMTP id 15-20020a630e4f000000b0041a9472eca0mr23118287pgo.623.1660141946874;
+        Wed, 10 Aug 2022 07:32:26 -0700 (PDT)
+Received: from famine.localdomain ([50.125.80.157])
+        by smtp.gmail.com with ESMTPSA id r6-20020aa79ec6000000b0052d4ffac466sm2049832pfq.188.2022.08.10.07.32.26
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 10 Aug 2022 07:32:26 -0700 (PDT)
+Received: by famine.localdomain (Postfix, from userid 1000)
+        id E25016119B; Wed, 10 Aug 2022 07:32:25 -0700 (PDT)
+Received: from famine (localhost [127.0.0.1])
+        by famine.localdomain (Postfix) with ESMTP id DC8A49FA79;
+        Wed, 10 Aug 2022 07:32:25 -0700 (PDT)
+From:   Jay Vosburgh <jay.vosburgh@canonical.com>
+To:     Sun Shouxin <sunshouxin@chinatelecom.cn>
+cc:     vfalico@gmail.com, andy@greyhouse.net, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        razor@blackwall.org, huyd12@chinatelecom.cn
+Subject: Re: [PATCH v2] net:bonding:support balance-alb interface with vlan to bridge
+In-reply-to: <20220809062103.31213-1-sunshouxin@chinatelecom.cn>
+References: <20220809062103.31213-1-sunshouxin@chinatelecom.cn>
+Comments: In-reply-to Sun Shouxin <sunshouxin@chinatelecom.cn>
+   message dated "Mon, 08 Aug 2022 23:21:03 -0700."
+X-Mailer: MH-E 8.6+git; nmh 1.6; Emacs 29.0.50
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="WEqUYi41ANWCpin/"
-Content-Disposition: inline
-In-Reply-To: <518f22f4-1582-924c-9eaa-28ebbe53a632@baylibre.com>
-X-Cookie: First pull up, then pull down.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <14779.1660141945.1@famine>
+Content-Transfer-Encoding: quoted-printable
+Date:   Wed, 10 Aug 2022 07:32:25 -0700
+Message-ID: <14780.1660141945@famine>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,46 +91,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Sun Shouxin <sunshouxin@chinatelecom.cn> wrote:
 
---WEqUYi41ANWCpin/
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+>In my test, balance-alb bonding with two slaves eth0 and eth1,
+>and then Bond0.150 is created with vlan id attached bond0.
+>After adding bond0.150 into one linux bridge, I noted that Bond0,
+>bond0.150 and  bridge were assigned to the same MAC as eth0.
+>Once bond0.150 receives a packet whose dest IP is bridge's
+>and dest MAC is eth1's, the linux bridge will not match
+>eth1's MAC entry in FDB, and not handle it as expected.
+>The patch fix the issue, and diagram as below:
+>
+>eth1(mac:eth1_mac)--bond0(balance-alb,mac:eth0_mac)--eth0(mac:eth0_mac)
+>                      |
+>                   bond0.150(mac:eth0_mac)
+>                      |
+>                   bridge(ip:br_ip, mac:eth0_mac)--other port
+>
+>Suggested-by: Hu Yadi <huyd12@chinatelecom.cn>
+>Signed-off-by: Sun Shouxin <sunshouxin@chinatelecom.cn>
 
-On Wed, Aug 10, 2022 at 04:01:33PM +0200, Neil Armstrong wrote:
-> On 10/08/2022 14:37, Mark Brown wrote:
+	As Nik suggested, please add some additional explanation here.
+You can cut and paste my description from the original discussion if
+you'd like.
 
-> > Sure, but that doesn't really address the concern - is this something
-> > that the clk driver programmed or is this the driver forgetting to
-> > restore a register that it programmed itself?  The commit message sounds
-> > like the former which is a much bigger problem.
+>---
+>
+>changelog:
+>v1->v2:
+>  -declare variabls in reverse xmas tree order
+>  -delete {}
+>  -add explanation in commit message
+>---
+> drivers/net/bonding/bond_alb.c | 7 +++++++
+> 1 file changed, 7 insertions(+)
+>
+>diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_al=
+b.c
+>index 007d43e46dcb..60cb9a0225aa 100644
+>--- a/drivers/net/bonding/bond_alb.c
+>+++ b/drivers/net/bonding/bond_alb.c
+>@@ -653,6 +653,7 @@ static struct slave *rlb_choose_channel(struct sk_buf=
+f *skb,
+> static struct slave *rlb_arp_xmit(struct sk_buff *skb, struct bonding *b=
+ond)
+> {
+> 	struct slave *tx_slave =3D NULL;
+>+	struct net_device *dev;
+> 	struct arp_pkt *arp;
+> =
 
-> It's what is programmed by the Clock Framework yes, it was designed as-is
-> so the Clock Framework takes the most accurate clock path but the reset case
-> wasn't taken in account.
+> 	if (!pskb_network_may_pull(skb, sizeof(*arp)))
+>@@ -665,6 +666,12 @@ static struct slave *rlb_arp_xmit(struct sk_buff *sk=
+b, struct bonding *bond)
+> 	if (!bond_slave_has_mac_rx(bond, arp->mac_src))
+> 		return NULL;
+> =
 
-This seems like a bad idea, we shouldn't have two different drivers
-managing the same register without explicit and visible coordination
-with each other, this is at best asking for trouble as you've found
-here.  I've not looked in detail but I think if you want to use the
-clock framework here then this driver should register a clock provider
-for the clock hardware in the IP block.
+>+	dev =3D ip_dev_find(dev_net(bond->dev), arp->ip_src);
+>+	if (dev) {
+>+		if (netif_is_bridge_master(dev))
+>+			return NULL;
 
-How does this work with runtime PM, what happens if the clock driver
-decides to change something while the device is powered down?
+	Stylistically, the "if dev" and "if netif_is_bridge_master"
+could be one line, e.g., "if dev && netif_is_bridge_master".
 
---WEqUYi41ANWCpin/
-Content-Type: application/pgp-signature; name="signature.asc"
+	Functionally, ip_dev_find acquires a reference to dev, and this
+code will need to release (dev_put) that reference.
 
------BEGIN PGP SIGNATURE-----
+	I'm also wondering if testing bond->dev for netif_if_bridge_port
+before ip_dev_find would help here (as an optimization); I think so, for
+the case where the bond is directly in the bridge without a VLAN in the
+middle.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLzwV8ACgkQJNaLcl1U
-h9CRwgf+K7WOMvAJpCDDJzGeEDnvO60A4KqWEROJNwU9pzFD/oES6Slzi83SHzvp
-lHZWpvuJRnofLap5EVCebAtxNtqVJzX00q+MB25XxtFgLICY+MHghQ6g9+/C3BkV
-NuexPyuLn6Q5EAXthFBx/ZKKkg2wDxBtygX5uHpMuFggSpduJ+X5Gm8fu8idcG6o
-m+tr8K+ChscFOhMkLy/6yMdXjU8sMt46egyYYhasKbKFT7oSjlMb383OBIp4WVFw
-vusuEWjSoy0xK2LmHEOD23/jxjkB2Lr7mtFe5QPkE/L9hGG4pvdU4hqaVAlSQrpZ
-aJ/9Oaoi0ApclyH8g3naLiygsa7Amw==
-=e05v
------END PGP SIGNATURE-----
+	-J
 
---WEqUYi41ANWCpin/--
+
+>+	}
+>+
+> 	if (arp->op_code =3D=3D htons(ARPOP_REPLY)) {
+> 		/* the arp must be sent on the selected rx channel */
+> 		tx_slave =3D rlb_choose_channel(skb, bond, arp);
+>-- =
+
+>2.27.0
+>
+
+---
+	-Jay Vosburgh, jay.vosburgh@canonical.com

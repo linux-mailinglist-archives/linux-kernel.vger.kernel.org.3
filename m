@@ -2,130 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E0D658E73D
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 08:18:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25D8858E727
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 08:13:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230349AbiHJGSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 02:18:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54410 "EHLO
+        id S231252AbiHJGNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 02:13:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbiHJGSF (ORCPT
+        with ESMTP id S229490AbiHJGNW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 02:18:05 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2083.outbound.protection.outlook.com [40.107.220.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BD065577;
-        Tue,  9 Aug 2022 23:18:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oXidEQYdLN9qCJcJngK8bIeKpkNMDK0BquibT0DkJi58kHw75FREBhmywgrs1lCaQWYi+kQPbsMjz1ms+PJP0NPcT5/90d7qmhD8bXnlPFuBuAHLQpUZr7qDX84DKL07WNIPq6NGGEy+cWRq8TRaEma/JCuw/zBfQ7md3qhEP8DIoz8sI+JkEjhjGo0s3JdATUow8bgngtKVTNCR3TnddI5Pz4/mmd66YVhlw94GGx+34W339S75g7jLEZuBLPdJxt8VakLNACnxZNsvJ9uxiMzmsrbWAH25VMOEeRwcjhBEfehY3G9Fc4N52CIDkJCadmbypuBCm5x1hP8s2wbEUQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dc4x+2O5Nq8AE+1JxRdXG6tPPbs3D0HGYoKEgd/YFlo=;
- b=ON75FYxJ8kk+0LH/SBe2/oIBk/D8vndJNp9wFXV7yU8Vb6xcwtmbaZxxWyUv1t+g1n6GqzkNaR7pScym8M3CrRstWLB8FuLXkHLDC+41KoyFZB4ie+6nPS3UEcx+YrzJUap50KIsIRNbR4MDDjIwKyHxEDUwC+y50KounCMbgOOIGaHdzzZDqRBTDKwGcHUhJuOwdSNViAvCKQOf1um423PIgigtworKkMIv7z3wJ8kVsjBFH7F9zS1L9jjUTOuCq4ZvuZ9e+iu+siGRi1ZR5l7ZpGxJOU4VgwxZtCLkR69DWNGOZMrwEb1fCZZPUuktTLwM6bnK7d+CRQfx4e06ow==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=redhat.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dc4x+2O5Nq8AE+1JxRdXG6tPPbs3D0HGYoKEgd/YFlo=;
- b=tceevALirQ5cDJttR4gAHDbpRfUHLegyX74dkt+LCYpkm+dMVAFYqSsre7A5DtCe3rS319ihJ/zCp0GEa84eSLI8DfjXGqvqdGWFv43jZdejoFi7TgNN84PSl5hDcPokiG6KQodEW7ae5JUzpl5HmcxipQ7NPY/ADB99EHkiQnc=
-Received: from BN0PR02CA0042.namprd02.prod.outlook.com (2603:10b6:408:e5::17)
- by DM6PR12MB2908.namprd12.prod.outlook.com (2603:10b6:5:185::26) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.16; Wed, 10 Aug
- 2022 06:18:02 +0000
-Received: from BN8NAM11FT037.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:e5:cafe::6d) by BN0PR02CA0042.outlook.office365.com
- (2603:10b6:408:e5::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.20 via Frontend
- Transport; Wed, 10 Aug 2022 06:18:02 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT037.mail.protection.outlook.com (10.13.177.182) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5525.11 via Frontend Transport; Wed, 10 Aug 2022 06:18:02 +0000
-Received: from BLR-5CG113396M.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Wed, 10 Aug
- 2022 01:17:22 -0500
-From:   Santosh Shukla <santosh.shukla@amd.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-CC:     Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>, <kvm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <santosh.shukla@amd.com>,
-        <mlevitsk@redhat.com>
-Subject: [PATCHv3 8/8] KVM: SVM: Enable VNMI feature
-Date:   Wed, 10 Aug 2022 11:42:26 +0530
-Message-ID: <20220810061226.1286-9-santosh.shukla@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220810061226.1286-1-santosh.shukla@amd.com>
-References: <20220810061226.1286-1-santosh.shukla@amd.com>
+        Wed, 10 Aug 2022 02:13:22 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6EFB60695
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 23:13:21 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id w6-20020a6bf006000000b006845b59a08bso5968708ioc.9
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 23:13:21 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=E+Mvi8z+W8TnkH/xD+yD2aHEkFWueZO6v0An11czXsI=;
+        b=prwXjOKqwFu11HroVEkgDVRAxJctgJ4JQao6SzAusxE0BF4GmMtcoV3ECkGf/PTgMg
+         RB9HwzhbeC6wMCZ+BxcGKZHuDwgeE1xbahqkyCxy0NI+a0ZpIL4+gcPM9VrN69jpYihd
+         p+El/9/+IOLnrYVxAZhiRKo5/4vUF+OWtb9u/cWqWwjavD+Twy3gr9JGAYPYS9MD64t1
+         bD/KF4XWKHROyUcW/Z9Oq5gVgkt8XT3m8Q82GPl9wkNgR+87eQDrMVp+ElsxO0wFo9va
+         EuWYOioxuTiFZXsqWFmWhr2QRIatnKSMWQ7H6as0WP2LfevggF2iNekGLCpngBRFSZbm
+         RBUg==
+X-Gm-Message-State: ACgBeo0eKv9AdZzSIeDtHwgir3X6wfi3Dewv87rDddWhC9c3BavmWj4s
+        hmW+8t8WyYeYYifv7CxyRzRhAtLhdjn+6XJAV6Ae5qmXHZ+6
+X-Google-Smtp-Source: AA6agR7Qa+ODpr/kS0RkfSrK24swAnoVqccHrbP4x+0+SNQ+P5YRFwiz7EA5wSJ4FFi4sVsVYlu+uEtW39hM2GQQAqHPvtwTV1k7
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 13141c24-945f-4ce1-46b7-08da7a98145c
-X-MS-TrafficTypeDiagnostic: DM6PR12MB2908:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: cBAsx7xJkVR6Js6gt1M8eF4VNM1rVmz9NCZfDI3Cz7CG0eXABt1Y7eKIcObdrWbrUAeN3Dkjm+6smIEMXS/0oKNOF6QU4TJ5Q2otnkOF/nHwvs9/+hZwJwrzE6Qf9G9GqKvHZH4QQR3UkV0EU6Xskwe2+rw/uP8lSRI58zyBpIe8Eq7HjhXs2HM1dRzZrGC9jxcBm2M+Uqg87IZFq0Fh81XOZZTMMSCyTWOSpiP/w7TCYkHS/+XHK/i2RjCDYtXI0hG7Es3lm0Al2+NiFkAU3jaUPXyH341Jk8k3QZnczMvo6JY5RNykVXEYVAtvQvlRTH61EeOPmeyQNgC+UJju6YdUfkkrDQBbZpJwQtAnaAbWsOnV29rpEwBGrxV2gtJFHzzlErey7z9rhK8nFMI8414L+gaU8OVBQNLR66y8Jb/1kixgGu9Ln7p61WyTquCZUjr2mny8NBP/5WyPVRYbfmwucE6rBUDrAg5UaEWJoSMsB6Up/jeVp8G3bAiWyD6Kw0h2f59VCVLw+UcejE1DD66NkngG9A4g+knb6lW2JVIIod/Pu11Q5B1xAIA3NNGf5daHZspvOOJO+w9UJj3VAgoUXYLKuacur8XmMAeatMsKqLe9/w2LY5vgISeOYuvLZWGNlsjgcSARqzFo+bwZFpjZrPDX9vPol9SgZpotHLeDgR5GQJFOciPVVX3iEt9y8xDs2qgsO/QgltTEI9tbJ7BtJJqSYmglpLxIqdXCMlrFpQJKH8Kse3pDr8yu++Us2dCkwhcwish6hVvWfrT1Ka8cG3fy25oILFSCIbkal0FwL5RStz7sqKIIjsnIPOTC9ZgWaPY/pidnlAEKCCY0tw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(396003)(346002)(39860400002)(46966006)(36840700001)(40470700004)(2906002)(36860700001)(82310400005)(2616005)(40480700001)(81166007)(356005)(40460700003)(82740400003)(26005)(8676002)(41300700001)(54906003)(336012)(5660300002)(6916009)(8936002)(44832011)(4744005)(4326008)(70586007)(70206006)(316002)(186003)(47076005)(478600001)(426003)(1076003)(16526019)(7696005)(86362001)(36756003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Aug 2022 06:18:02.0930
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 13141c24-945f-4ce1-46b7-08da7a98145c
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT037.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB2908
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:c543:0:b0:2df:bf0d:1512 with SMTP id
+ a3-20020a92c543000000b002dfbf0d1512mr8660026ilj.240.1660112001243; Tue, 09
+ Aug 2022 23:13:21 -0700 (PDT)
+Date:   Tue, 09 Aug 2022 23:13:21 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001f242e05e5dcf211@google.com>
+Subject: [syzbot] KMSAN: uninit-value in stack_trace_consume_entry
+From:   syzbot <syzbot+227ae323c9d4c04c300a@syzkaller.appspotmail.com>
+To:     glider@google.com, jpoimboe@redhat.com, jslaby@suse.cz,
+        kamalesh@linux.vnet.ibm.com, linux-kernel@vger.kernel.org,
+        mbenes@suse.cz, mingo@kernel.org, peterz@infradead.org,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable the NMI virtualization (V_NMI_ENABLE) in the VMCB interrupt
-control when the vnmi module parameter is set.
+Hello,
 
-Signed-off-by: Santosh Shukla <santosh.shukla@amd.com>
+syzbot found the following issue on:
+
+HEAD commit:    a58741ac26cc kmsan: don't compile memmove
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=13325fe3e00000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=abbc202e1724cf37
+dashboard link: https://syzkaller.appspot.com/bug?extid=227ae323c9d4c04c300a
+compiler:       clang version 10.0.0 (https://github.com/llvm/llvm-project/ c2443155a0fb245c8f17f2c1c72b6ea391e86e81)
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11e2bc23e00000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14915203e00000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+227ae323c9d4c04c300a@syzkaller.appspotmail.com
+
+=====================================================
+BUG: KMSAN: uninit-value in stack_trace_consume_entry+0x171/0x310 kernel/stacktrace.c:89
+CPU: 1 PID: 10926 Comm: syz-executor854 Not tainted 5.6.0-rc6-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/01/2011
+Call Trace:
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x1c9/0x220 lib/dump_stack.c:118
+ kmsan_report+0xf7/0x1e0 mm/kmsan/kmsan_report.c:118
+ __msan_warning+0x58/0xa0 mm/kmsan/kmsan_instr.c:215
+ stack_trace_consume_entry+0x171/0x310 kernel/stacktrace.c:89
+ arch_stack_walk+0x317/0x3e0 arch/x86/kernel/stacktrace.c:27
+ stack_trace_save+0x117/0x1a0 kernel/stacktrace.c:123
+ kmsan_save_stack_with_flags mm/kmsan/kmsan.c:144 [inline]
+ kmsan_internal_chain_origin+0xad/0x130 mm/kmsan/kmsan.c:310
+ kmsan_memcpy_memmove_metadata+0x272/0x2e0 mm/kmsan/kmsan.c:247
+ kmsan_memcpy_metadata+0xb/0x10 mm/kmsan/kmsan.c:267
+ __msan_memcpy+0x43/0x50 mm/kmsan/kmsan_instr.c:116
+ sock_write_iter+0x4f6/0x6d0 net/socket.c:1005
+ call_write_iter include/linux/fs.h:1902 [inline]
+ new_sync_write fs/read_write.c:483 [inline]
+ __vfs_write+0xa5a/0xca0 fs/read_write.c:496
+ vfs_write+0x44a/0x8f0 fs/read_write.c:558
+ ksys_write+0x267/0x450 fs/read_write.c:611
+ __do_sys_write fs/read_write.c:623 [inline]
+ __se_sys_write+0x92/0xb0 fs/read_write.c:620
+ __x64_sys_write+0x4a/0x70 fs/read_write.c:620
+ do_syscall_64+0xb8/0x160 arch/x86/entry/common.c:296
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+RIP: 0033:0x443dd9
+Code: e8 2c e8 ff ff 48 83 c4 18 c3 0f 1f 80 00 00 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 0f 83 8b 09 fc ff c3 66 2e 0f 1f 84 00 00 00 00
+RSP: 002b:00007fffb6d37698 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 0000000000443dd9
+RDX: 0000000000000018 RSI: 0000000020000280 RDI: 0000000000000003
+RBP: 00007fffb6d376b0 R08: 0000000101bbbbbb R09: 0000000101bbbbbb
+R10: 0000000000000004 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000404c80 R14: 0000000000000000 R15: 0000000000000000
+
+Uninit was stored to memory at:
+ kmsan_save_stack_with_flags mm/kmsan/kmsan.c:144 [inline]
+ kmsan_internal_chain_origin+0xad/0x130 mm/kmsan/kmsan.c:310
+ __msan_chain_origin+0x50/0x90 mm/kmsan/kmsan_instr.c:165
+ stack_trace_consume_entry+0x27a/0x310 kernel/stacktrace.c:90
+ arch_stack_walk+0x317/0x3e0 arch/x86/kernel/stacktrace.c:27
+ stack_trace_save+0x117/0x1a0 kernel/stacktrace.c:123
+ kmsan_save_stack_with_flags mm/kmsan/kmsan.c:144 [inline]
+ kmsan_internal_chain_origin+0xad/0x130 mm/kmsan/kmsan.c:310
+ kmsan_memcpy_memmove_metadata+0x272/0x2e0 mm/kmsan/kmsan.c:247
+ kmsan_memcpy_metadata+0xb/0x10 mm/kmsan/kmsan.c:267
+ __msan_memcpy+0x43/0x50 mm/kmsan/kmsan_instr.c:116
+ sock_write_iter+0x4f6/0x6d0 net/socket.c:1005
+ call_write_iter include/linux/fs.h:1902 [inline]
+ new_sync_write fs/read_write.c:483 [inline]
+ __vfs_write+0xa5a/0xca0 fs/read_write.c:496
+ vfs_write+0x44a/0x8f0 fs/read_write.c:558
+ ksys_write+0x267/0x450 fs/read_write.c:611
+ __do_sys_write fs/read_write.c:623 [inline]
+ __se_sys_write+0x92/0xb0 fs/read_write.c:620
+ __x64_sys_write+0x4a/0x70 fs/read_write.c:620
+ do_syscall_64+0xb8/0x160 arch/x86/entry/common.c:296
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+
+Uninit was stored to memory at:
+ kmsan_save_stack_with_flags mm/kmsan/kmsan.c:144 [inline]
+ kmsan_internal_chain_origin+0xad/0x130 mm/kmsan/kmsan.c:310
+ __msan_chain_origin+0x50/0x90 mm/kmsan/kmsan_instr.c:165
+ stack_trace_save+0x193/0x1a0 kernel/stacktrace.c:117
+ kmsan_save_stack_with_flags mm/kmsan/kmsan.c:144 [inline]
+ kmsan_internal_chain_origin+0xad/0x130 mm/kmsan/kmsan.c:310
+ kmsan_memcpy_memmove_metadata+0x272/0x2e0 mm/kmsan/kmsan.c:247
+ kmsan_memcpy_metadata+0xb/0x10 mm/kmsan/kmsan.c:267
+ __msan_memcpy+0x43/0x50 mm/kmsan/kmsan_instr.c:116
+ sock_write_iter+0x4f6/0x6d0 net/socket.c:1005
+ call_write_iter include/linux/fs.h:1902 [inline]
+ new_sync_write fs/read_write.c:483 [inline]
+ __vfs_write+0xa5a/0xca0 fs/read_write.c:496
+ vfs_write+0x44a/0x8f0 fs/read_write.c:558
+ ksys_write+0x267/0x450 fs/read_write.c:611
+ __do_sys_write fs/read_write.c:623 [inline]
+ __se_sys_write+0x92/0xb0 fs/read_write.c:620
+ __x64_sys_write+0x4a/0x70 fs/read_write.c:620
+ do_syscall_64+0xb8/0x160 arch/x86/entry/common.c:296
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+
+Uninit was created at:
+ kmsan_save_stack_with_flags mm/kmsan/kmsan.c:144 [inline]
+ kmsan_internal_poison_shadow+0x66/0xd0 mm/kmsan/kmsan.c:127
+ kmsan_slab_alloc+0x8a/0xe0 mm/kmsan/kmsan_hooks.c:82
+ slab_alloc_node mm/slub.c:2793 [inline]
+ __kmalloc_node_track_caller+0xb40/0x1200 mm/slub.c:4401
+ __kmalloc_reserve net/core/skbuff.c:142 [inline]
+ __alloc_skb+0x2fd/0xac0 net/core/skbuff.c:210
+ alloc_skb include/linux/skbuff.h:1081 [inline]
+ alloc_skb_with_frags+0x18c/0xa70 net/core/skbuff.c:5764
+ sock_alloc_send_pskb+0xada/0xc60 net/core/sock.c:2245
+ packet_alloc_skb net/packet/af_packet.c:2816 [inline]
+ packet_snd net/packet/af_packet.c:2911 [inline]
+ packet_sendmsg+0x66a0/0x93b0 net/packet/af_packet.c:2993
+ sock_sendmsg_nosec net/socket.c:652 [inline]
+ sock_sendmsg net/socket.c:672 [inline]
+ sock_write_iter+0x6bc/0x6d0 net/socket.c:1004
+ call_write_iter include/linux/fs.h:1902 [inline]
+ new_sync_write fs/read_write.c:483 [inline]
+ __vfs_write+0xa5a/0xca0 fs/read_write.c:496
+ vfs_write+0x44a/0x8f0 fs/read_write.c:558
+ ksys_write+0x267/0x450 fs/read_write.c:611
+ __do_sys_write fs/read_write.c:623 [inline]
+ __se_sys_write+0x92/0xb0 fs/read_write.c:620
+ __x64_sys_write+0x4a/0x70 fs/read_write.c:620
+ do_syscall_64+0xb8/0x160 arch/x86/entry/common.c:296
+ entry_SYSCALL_64_after_hwframe+0x44/0xa9
+=====================================================
+
+
 ---
- arch/x86/kvm/svm/svm.c | 3 +++
- 1 file changed, 3 insertions(+)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index c9636e033782..eefb4d5428c4 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -1309,6 +1309,9 @@ static void init_vmcb(struct kvm_vcpu *vcpu)
- 	if (kvm_vcpu_apicv_active(vcpu))
- 		avic_init_vmcb(svm, vmcb);
- 
-+	if (vnmi)
-+		svm->vmcb->control.int_ctl |= V_NMI_ENABLE;
-+
- 	if (vgif) {
- 		svm_clr_intercept(svm, INTERCEPT_STGI);
- 		svm_clr_intercept(svm, INTERCEPT_CLGI);
--- 
-2.25.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches

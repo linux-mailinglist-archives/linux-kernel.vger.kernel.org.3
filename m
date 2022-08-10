@@ -2,227 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE3EF58F450
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 00:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE3F158F453
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 00:23:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232748AbiHJWXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 18:23:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53938 "EHLO
+        id S233403AbiHJWXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 18:23:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231550AbiHJWXB (ORCPT
+        with ESMTP id S231508AbiHJWXq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 18:23:01 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852F38D3CC;
-        Wed, 10 Aug 2022 15:23:00 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id x23so15456539pll.7;
-        Wed, 10 Aug 2022 15:23:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc;
-        bh=JQqekzl1vEkZlcNOD3yssSzMeWzthaUCawc53RF6fao=;
-        b=QjJAgm/ZM369m8wZEBgNZF82SV97DWvZOlD82vsJ6lK44zJlyAyzGDu4HcQGqndv0q
-         dCE6J0RmHA9mCtFs8U1HdBvfrqISb2UK78oxgrAyriRQ3MELbF+IaSZhU2UCG+nJC2w0
-         pf20UuzSBkT76jiPJtN/4x56tmhqD1oLyUhCd4twPOI5qJTDDGab5v9xJxI4jefa2d3r
-         RRyRFIgH8jlVXcvsG1OW0Tae2aUitIYEF0M6OAGmvjR/Z7RQa8bAn4fB97ckHJQ6Midv
-         Vryb62ALcdMrTWJuQEYHh0ClM4WGXKF5LEm5MQWBNqqjeEHis50ztuikf5Bmyhw7hWVd
-         orYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=JQqekzl1vEkZlcNOD3yssSzMeWzthaUCawc53RF6fao=;
-        b=md/NPxUJ2D/pciYdENi7I2UEfSkkUsNoZO6YJWuUR3JQVsGnG+NQCOYQZykPAi2+67
-         jHuGFaAzgYBHGW5VFlQChmrT+PFXYVKP9yq2KlaUAqOHfHRYc+rmxKG3oAaI4WnI5Boy
-         U9qka4sdVe7oB6+VhlAusuObSfoR69b8XSQeCAChfW/64tpcZrGkHG5fvC2m0TGYUeb1
-         I1ezoRug4UnWsNNC8r8WaPrAq1LEpy3baxau5Wx+l5je+Pmryb3I0AIOOfvgNPTmo2Ch
-         iSE0Yeva6gwEiSmJpXyKR2wC7e7heTWtPMz1n/f5ieCPYGAPiSC/0WMsSmb5YcsJjYqH
-         hw9A==
-X-Gm-Message-State: ACgBeo3rZpuBkdWXttNiKT5wJlXPG+pDQE9Ed20i+tsiXafvBB9R6uMn
-        Gsel4GRgIjiSSl+9jKsIYVWlCjsHVq8=
-X-Google-Smtp-Source: AA6agR69sMXwMA5wf2NcYLdtAH1Cukvj4/dfYeY089n7y6V6ANrqCTfgwPXV4zRJyJ1M6bqutP8llw==
-X-Received: by 2002:a17:902:ce04:b0:16c:e142:5dd7 with SMTP id k4-20020a170902ce0400b0016ce1425dd7mr30336311plg.173.1660170179734;
-        Wed, 10 Aug 2022 15:22:59 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:a3c8:d6b9:a5c2:1eca])
-        by smtp.gmail.com with ESMTPSA id i190-20020a626dc7000000b0052f80d1a573sm2501538pfc.120.2022.08.10.15.22.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 15:22:58 -0700 (PDT)
-Date:   Wed, 10 Aug 2022 15:22:56 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
-Subject: [git pull] Input updates for v5.20-rc0
-Message-ID: <YvQvwNqu5sxr36Th@google.com>
+        Wed, 10 Aug 2022 18:23:46 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018048C47A;
+        Wed, 10 Aug 2022 15:23:44 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-119-13.nat.spd-mgts.ru [109.252.119.13])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C557D6601C72;
+        Wed, 10 Aug 2022 23:23:41 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1660170223;
+        bh=pAn4Gqp6D8HcRM++p5rp1zp4bx+HGH72YfOrKPVutak=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Hy6NwvWzvecyL1fNE9R5xtY630z1HmVBGl3iuQqiVuNBfJL0+0VcZKnZzle6iq9zO
+         TxF3zQ/l2CP2UkSffjSsNabEnA+jMXpN8wuw0/hJR2UfPqzC86GE3cntMVPo1dB+bY
+         R4F30grLWmoP9XuEm4RplG9QDUiUHgH89lqhk5p30kG1UpPNIONzXFfTH60volBVqm
+         YLNQFLrAvePwQsN5RbrOatLximRMd5AbWq8Er52vIO8XvWsg8jKQ0FtJDQZ8pKsDZ+
+         xpsTHVbbmXE8aJOvBnfOQql/CPGjgZiu49UK3PBOlkTTC9pVTKl0tSEjTscPprx2FK
+         k7f7d1npbko0Q==
+Message-ID: <fc019528-7ec7-9e5b-1b6d-c44da14346cf@collabora.com>
+Date:   Thu, 11 Aug 2022 01:23:39 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v8 2/2] drm/gem: Don't map imported GEMs
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "open list:VIRTIO GPU DRIVER" 
+        <virtualization@lists.linux-foundation.org>,
+        linux-tegra@vger.kernel.org, Dmitry Osipenko <digetx@gmail.com>,
+        kernel@collabora.com, Daniel Vetter <daniel@ffwll.ch>
+References: <20220701090240.1896131-1-dmitry.osipenko@collabora.com>
+ <20220701090240.1896131-3-dmitry.osipenko@collabora.com>
+ <2bb95e80-b60a-36c0-76c8-a06833032c77@amd.com>
+ <CAF6AEGtqPeF1DjmBKgzWK39Yi81YiNjTjDNn85TKx7uwicFTSA@mail.gmail.com>
+ <2a646ce4-c2ec-3b11-77a0-cc720afd6fe1@collabora.com>
+ <YvOav/vF2awVWIu0@phenom.ffwll.local>
+ <CAF6AEGvfAJgwBe4+sK0gAkZ++MwH9x4=698C8XSnmfYNMFZqfA@mail.gmail.com>
+ <9674d00e-c0d6-ceba-feab-5dc475bda694@collabora.com>
+ <CAF6AEGv1cVC9ZNMwpwFOki5CrwD3kSAHM9EUFZGWY-y5zcQsCg@mail.gmail.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <CAF6AEGv1cVC9ZNMwpwFOki5CrwD3kSAHM9EUFZGWY-y5zcQsCg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On 8/11/22 01:03, Rob Clark wrote:
+> On Wed, Aug 10, 2022 at 12:26 PM Dmitry Osipenko
+> <dmitry.osipenko@collabora.com> wrote:
+>>
+>> On 8/10/22 18:08, Rob Clark wrote:
+>>> On Wed, Aug 10, 2022 at 4:47 AM Daniel Vetter <daniel@ffwll.ch> wrote:
+>>>>
+>>>> On Wed, Jul 06, 2022 at 10:02:07AM +0300, Dmitry Osipenko wrote:
+>>>>> On 7/6/22 00:48, Rob Clark wrote:
+>>>>>> On Tue, Jul 5, 2022 at 4:51 AM Christian König <christian.koenig@amd.com> wrote:
+>>>>>>>
+>>>>>>> Am 01.07.22 um 11:02 schrieb Dmitry Osipenko:
+>>>>>>>> Drivers that use drm_gem_mmap() and drm_gem_mmap_obj() helpers don't
+>>>>>>>> handle imported dma-bufs properly, which results in mapping of something
+>>>>>>>> else than the imported dma-buf. On NVIDIA Tegra we get a hard lockup when
+>>>>>>>> userspace writes to the memory mapping of a dma-buf that was imported into
+>>>>>>>> Tegra's DRM GEM.
+>>>>>>>>
+>>>>>>>> Majority of DRM drivers prohibit mapping of the imported GEM objects.
+>>>>>>>> Mapping of imported GEMs require special care from userspace since it
+>>>>>>>> should sync dma-buf because mapping coherency of the exporter device may
+>>>>>>>> not match the DRM device. Let's prohibit the mapping for all DRM drivers
+>>>>>>>> for consistency.
+>>>>>>>>
+>>>>>>>> Suggested-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+>>>>>>>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+>>>>>>>
+>>>>>>> I'm pretty sure that this is the right approach, but it's certainly more
+>>>>>>> than possible that somebody abused this already.
+>>>>>>
+>>>>>> I suspect that this is abused if you run deqp cts on android.. ie. all
+>>>>>> winsys buffers are dma-buf imports from gralloc.  And then when you
+>>>>>> hit readpix...
+>>>>>>
+>>>>>> You might only hit this in scenarios with separate gpu and display (or
+>>>>>> dGPU+iGPU) because self-imports are handled differently in
+>>>>>> drm_gem_prime_import_dev().. and maybe not in cases where you end up
+>>>>>> with a blit from tiled/compressed to linear.. maybe that narrows the
+>>>>>> scope enough to just fix it in userspace?
+>>>>>
+>>>>> Given that that only drivers which use DRM-SHMEM potentially could've
+>>>>> map imported dma-bufs (Panfrost, Lima) and they already don't allow to
+>>>>> do that, I think we're good.
+>>>>
+>>>> So can I have an ack from Rob here or are there still questions that this
+>>>> might go boom?
+>>>>
+>>>> Dmitry, since you have a bunch of patches merged now I think would also be
+>>>> good to get commit rights so you can drive this more yourself. I've asked
+>>>> Daniel Stone to help you out with getting that.
+>>>
+>>> I *think* we'd be ok with this on msm, mostly just by dumb luck.
+>>> Because the dma-buf's we import will be self-import.  I'm less sure
+>>> about panfrost (src/panfrost/lib/pan_bo.c doesn't seem to have a
+>>> special path for imported dma-bufs either, and in that case they won't
+>>> be self-imports.. but I guess no one has tried to run android cts on
+>>> panfrost).
+>>
+>> The last time I tried to mmap dma-buf imported to Panfrost didn't work
+>> because Panfrost didn't implement something needed for that. I'll need
+>> to take a look again because can't recall what it was.
+>>
+>>> What about something less drastic to start, like (apologies for
+>>> hand-edited patch):
+>>>
+>>> diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
+>>> index 86d670c71286..fc9ec42fa0ab 100644
+>>> --- a/drivers/gpu/drm/drm_gem.c
+>>> +++ b/drivers/gpu/drm/drm_gem.c
+>>> @@ -1034,6 +1034,10 @@ int drm_gem_mmap_obj(struct drm_gem_object
+>>> *obj, unsigned long obj_size,
+>>>  {
+>>>         int ret;
+>>>
+>>> +       WARN_ON_ONCE(obj->import_attach);
+>>
+>> This will hang NVIDIA Tegra, which is what this patch fixed initially.
+>> If neither of upstream DRM drivers need to map imported dma-bufs and
+>> never needed, then why do we need this?
+> 
+> oh, tegra isn't using shmem helpers?  I assumed it was.  Well my point
+> was to make a more targeted fail on tegra, and a WARN_ON for everyone
+> else to make it clear that what they are doing is undefined behavior.
+> Because so far existing userspace (or well, panfrost and freedreno at
+> least, those are the two I know or checked) don't make special cases
+> for mmap'ing against the dmabuf fd against the dmabuf fd instead of
+> the drm device fd.
 
-Please pull from:
+It's not clear to me what bad Android does form yours comments. Does it
+export dma-buf from GPU and then import it to GPU? If yes, then DRM core
+has a check for the self-importing [1].
 
-	git://git.kernel.org/pub/scm/linux/kernel/git/dtor/input.git tags/input-for-v5.20-rc0
+[1]
+https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/drm_prime.c#L918
 
-to receive updates for the input subsystem. You will get:
+If you're meaning something else, then please explain in a more details.
 
-- changes to input core to properly queue synthetic events (such as
-  autorepeat) and to release multitouch contacts when an input device is
-  inhibited or suspended
-- reworked quirk handling in i8042 driver that consolidates multiple
-  DMI tables into one and adds several quirks for TUXEDO line of
-  laptops
-- update to mt6779 keypad to better reflect organization of the hardware 
-- changes to mtk-pmic-keys driver preparing it to handle more variants
-- facelift of adp5588-keys driver
-- improvements to iqs7222 driver
-- adjustments to various DT binding documents for input devices
-- other assorted driver fixes.
+> I *think* it should work out that we don't hit this path with
+> freedreno but on android I can't really guarantee or prove it.  So
+> your patch would potentially break existing working userspace.  Maybe
+> it is userspace that isn't portable (but OTOH it isn't like you are
+> going to be using freedreno on tegra).  So why don't you go for a more
+> targeted fix that only returns an error on hw where this is
+> problematic?
 
-Changelog:
----------
-
-Andy Shevchenko (1):
-      Input: goodix - switch use of acpi_gpio_get_*_resource() APIs
-
-Angela Czubak (1):
-      Input: deactivate MT slots when inhibiting or suspending devices
-
-AngeloGioacchino Del Regno (2):
-      Input: mtk-pmic-keys - transfer per-key bit in mtk_pmic_keys_regs
-      Input: mtk-pmic-keys - move long press debounce mask to mtk_pmic_regs
-
-Dario Binacchi (6):
-      dt-bindings: input: touchscreen: edt-ft5x06: add report-rate-hz
-      Input: edt-ft5x06 - get/set M12 report rate by sysfs
-      Input: edt-ft5x06 - set report rate by dts property
-      Input: edt-ft5x06 - show model name by sysfs
-      Input: edt-ft5x06 - show firmware version by sysfs
-      Input: edt-ft5x06 - show crc and header errors by sysfs
-
-Dmitry Torokhov (9):
-      Input: cros_ec_keyb - switch to using generic device properties
-      Input: adp5588-keys - drop CONFIG_PM guards
-      Input: adp5588-keys - switch to using threaded interrupt
-      Input: adp5588-keys - switch to using managed resources
-      Input: adp5588-keys - do not explicitly set device as wakeup source
-      Input: mtk-pmic-keys - allow compiling with COMPILE_TEST
-      Input: mtk-pmic-keys - use single update when configuring long press behavior
-      Input: properly queue synthetic events
-      Input: adc-joystick - fix ordering in adc_joystick_probe()
-
-Furquan Shaikh (1):
-      Input: cros_ec_keyb - handle x86 detachable/convertible Chromebooks
-
-Hans de Goede (1):
-      Input: i8042 - add dritek quirk for Acer Aspire One AO532
-
-Jeff LaBundy (10):
-      Input: iqs7222 - correct slider event disable logic
-      Input: iqs7222 - fortify slider event reporting
-      Input: iqs7222 - protect volatile registers
-      Input: iqs7222 - acknowledge reset before writing registers
-      Input: iqs7222 - handle reset during ATI
-      Input: iqs7222 - remove support for RF filter
-      dt-bindings: input: iqs7222: Remove support for RF filter
-      dt-bindings: input: iqs7222: Correct bottom speed step size
-      dt-bindings: input: iqs7222: Extend slider-mapped GPIO to IQS7222C
-      dt-bindings: input: iqs7222: Use central 'linux,code' definition
-
-Jiang Jian (2):
-      Input: gpio_mouse - fix typos in comments
-      Input: cyapa_gen6 - aligned "*" each line
-
-Krzysztof Kozlowski (5):
-      dt-bindings: input: use generic node names
-      dt-bindings: input: gpio-keys: enforce node names to match all properties
-      dt-bindings: input: gpio-keys: reference input.yaml and document properties
-      dt-bindings: input: gpio-keys: accept also interrupt-extended
-      dt-bindings: input: ariel-pwrbutton: use spi-peripheral-props.yaml
-
-Linus Walleij (1):
-      Input: zinitix - rename defines ZINITIX_*
-
-Mattijs Korpershoek (2):
-      Input: mt6779-keypad - match hardware matrix organization
-      Input: mt6779-keypad - implement row/column selection
-
-Miaoqian Lin (1):
-      Input: exc3000 - fix return value check of wait_for_completion_timeout
-
-Minghao Chi (1):
-      Input: omap4-keypad - switch to using pm_runtime_resume_and_get()
-
-Rob Herring (5):
-      dt-bindings: input: Increase maximum keycode value to 0x2ff
-      dt-bindings: input: Centralize 'linux,code' definition
-      dt-bindings: input: Use common 'linux,keycodes' definition
-      dt-bindings: input: Centralize 'linux,input-type' definition
-      dt-bindings: input: Convert adc-keys to DT schema
-
-Werner Sembach (5):
-      Input: i8042 - move __initconst to fix code styling warning
-      Input: i8042 - merge quirk tables
-      Input: i8042 - add debug output for quirks
-      Input: i8042 - add TUXEDO devices to i8042 quirk tables
-      Input: i8042 - add additional TUXEDO devices to i8042 quirk tables
-
-Yang Li (1):
-      Input: sensehat-joystick - remove unnecessary error message
-
-Diffstat:
---------
-
- .../devicetree/bindings/input/adc-joystick.yaml    |    2 +-
- .../devicetree/bindings/input/adc-keys.txt         |   67 -
- .../devicetree/bindings/input/adc-keys.yaml        |  103 ++
- .../input/allwinner,sun4i-a10-lradc-keys.yaml      |    5 +-
- .../devicetree/bindings/input/ariel-pwrbutton.yaml |    1 +
- .../devicetree/bindings/input/azoteq,iqs7222.yaml  |   41 +-
- .../bindings/input/fsl,mpr121-touchkey.yaml        |    4 +-
- .../devicetree/bindings/input/gpio-keys.yaml       |  167 ++-
- Documentation/devicetree/bindings/input/input.yaml |   24 +-
- .../devicetree/bindings/input/iqs269a.yaml         |   17 +-
- .../devicetree/bindings/input/iqs626a.yaml         |   13 +-
- .../devicetree/bindings/input/iqs62x-keys.yaml     |    9 +-
- .../devicetree/bindings/input/max77650-onkey.yaml  |    8 +-
- .../bindings/input/microchip,cap11xx.yaml          |    2 +-
- .../bindings/input/touchscreen/edt-ft5x06.yaml     |    8 +
- drivers/input/input-core-private.h                 |   16 +
- drivers/input/input-mt.c                           |   48 +-
- drivers/input/input.c                              |  149 +--
- drivers/input/joystick/adc-joystick.c              |   15 +-
- drivers/input/joystick/sensehat-joystick.c         |    4 +-
- drivers/input/keyboard/Kconfig                     |    2 +-
- drivers/input/keyboard/adp5588-keys.c              |  206 ++--
- drivers/input/keyboard/cros_ec_keyb.c              |   89 +-
- drivers/input/keyboard/mt6779-keypad.c             |   18 +-
- drivers/input/keyboard/mtk-pmic-keys.c             |   98 +-
- drivers/input/keyboard/omap4-keypad.c              |   26 +-
- drivers/input/misc/iqs7222.c                       |  178 ++-
- drivers/input/mouse/cyapa_gen6.c                   |    2 +-
- drivers/input/mouse/gpio_mouse.c                   |    2 +-
- drivers/input/serio/i8042-x86ia64io.h              | 1282 ++++++++++++--------
- drivers/input/touchscreen/edt-ft5x06.c             |   96 +-
- drivers/input/touchscreen/exc3000.c                |    7 +-
- drivers/input/touchscreen/goodix.c                 |   22 +-
- drivers/input/touchscreen/zinitix.c                |  112 +-
- 34 files changed, 1709 insertions(+), 1134 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/input/adc-keys.txt
- create mode 100644 Documentation/devicetree/bindings/input/adc-keys.yaml
- create mode 100644 drivers/input/input-core-private.h
-
-Thanks.
-
+That's what the first versions of the patch did and Christian suggested
+that it's not a good approach. In fact it should be not only Tegra that
+has a broken dma-buf mapping, but apparently OMAP driver too.
 
 -- 
+Best regards,
 Dmitry

@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A50558F459
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 00:25:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F4D958F45A
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 00:25:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233428AbiHJWYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 18:24:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55376 "EHLO
+        id S233438AbiHJWZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 18:25:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231557AbiHJWYv (ORCPT
+        with ESMTP id S231557AbiHJWZE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 18:24:51 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A838C474
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 15:24:50 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id j144-20020a25d296000000b0067ba828624fso11414600ybg.16
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 15:24:50 -0700 (PDT)
+        Wed, 10 Aug 2022 18:25:04 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3048D3E8
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 15:25:03 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-329a474c437so85699537b3.18
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 15:25:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc;
-        bh=SfdBfi7Mx5CiwtaCrFt88m0cxW+5UTO23z89f2bNn7U=;
-        b=lFVVLrMHSHntzCbJbyph7o0sN9PiQWnco1EwL5WqfpRf91tH8qslTCY2g6b5jCOk0Y
-         ylmBq8ftUplOQdBpBqkp3ThkH4lxxi/CVL77eItkBxjPdQuWw83xFeIVqr7U9p17oTkf
-         RuX//pcNkDSuZxN9B4v0bwdy5sxlS409E/UzfLDDS4qa94yMtoSW2wynFs9xpXd+cEe3
-         xgSxkLLZB4x8JIDxwsOOwGJg9eXFqXi3+wwN4DSkMjzJloEX1g1jkMyPMG2Tl59W0Cht
-         YWY1kwvmssEbmYUYUB1IpOkepodDZTcEealsM8/s47LAOtxjmj1zX5RolaHtaZtjjexX
-         CUDA==
+        bh=6I7ngn4/7OB644m4fycU8fbB2CwnISfb8LBYYNMQmtE=;
+        b=EFMENVP4gsj1ddaG66twAM7LHLhCRb8PaAswRRJAyWIvE7nwWAfgk8dcaBbouz+6yw
+         SMCpNe5KhuQfFD5cc5IeUo9kduUroOD7vfZIrVT2s6tLArPet6dRc10yL0/QKUGnkJwm
+         X+uACW502iYbfFJJmktsWJBsFn0mpDLQw8ZQKVDGft5HwdqXdiWjN3Svt6eivHvr3LK9
+         mYa2UIZxMZYsHOq98oImEPiVbnaeker7SiffhtD6kQoqcCkQtqymKqXhxxMuPRT3LOHp
+         CwepPtXWnQKl87lmCswKvbul2Mim/8svfSir/Rgdk24pvhI75HBXZh8Pc2cEl0WA5dlT
+         cZtA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=SfdBfi7Mx5CiwtaCrFt88m0cxW+5UTO23z89f2bNn7U=;
-        b=tcCPrNn0xAJpV620UGdFadRuaU+JlPRx+ARIzqYzUNLTTila68v1yhOARrsP+Sum4G
-         dkMi+aiHBJkj/9+lqWi1p5RK+hEKnQaJWcPwO4scGs3Nl+aj+ti2UDyjXctmdpPcjKHC
-         gtOGGdy9eBvlYAiL1rH9410FrFDn9p3G9W2rfy9BXcS1i9FSaKQHG3uN2rrHYi00Mst7
-         PTXu1KKyY3D18WMyoBcokFSlg9mYoVZLBbxs6aS5fa0pk7j5fhoMKFVHXmajRLkdc9dj
-         wSL0BHCgDLLGbvRq+YJwVtU4kVXaoBDdmqYUeXP1SI/M+m+HUWXUTsIbPOyp7unLXhaV
-         q3gQ==
-X-Gm-Message-State: ACgBeo1JF5lpae8NhdXkzPTfeFPdnBS/Tpp3J/pHNdAXbWwOTI/Drxsi
-        3Si8zaAVtOQHNSTtnQlB1EUYPAPF/0R2UfuMf6I=
-X-Google-Smtp-Source: AA6agR4QjOycVp/Hc0eH+Ub7N3pwJKBVI05zs+zNFYtKuxseil48HLi4FC6N8tMyPjHVz3IabbpGdRcPn9GV4DRM+Iw=
+        bh=6I7ngn4/7OB644m4fycU8fbB2CwnISfb8LBYYNMQmtE=;
+        b=zeUi6+MsJKoWdBDtJ+ppYywu50ZOUr/SqVK2LkIEF8XAr0auJN3yaHpmQTusMQRbEH
+         OM9A7qQOs+1n67JX4G9CLNZE9ZqbWC2K/FZh/fB1T2lChEoDIFBnI95sxN/vdBXqvYis
+         KCHdz5zbxmXCMxd1e+2eLVlDsLxOoZkcoutm0K+WOy80Nj7E62B+m5xHULkTO4ALyT3X
+         rEPtk5RwKzxdxkU9sClgkePUBZ8lKeiBluOEcv36hdQqjl3rHgQ0Ezfs1vatj967ckNi
+         ASVKYKtoyG3TyiClyGgilb21jZ0s7adyUAAvn2hb3IQ0M4kOAHz3x/RF3fabseK5tttU
+         ibMA==
+X-Gm-Message-State: ACgBeo3y+LXMk1qOtZY+xKqZNWs9rrRJRFaoxmwALeAGA8nUspnJxLiD
+        1cSIh7KNgy2eSWkY4Egi1JHKDYCcCPPE5g/4M5Y=
+X-Google-Smtp-Source: AA6agR5tR6VJL1cBM0+0soZnPSPXBTT5jayRGU/k7oxm6GIrojlqN3RVUkVPcdoImbPu0dg4mh37ttIN3gg3W9iHE2M=
 X-Received: from ndesaulniers1.mtv.corp.google.com ([2620:15c:211:202:88ad:cd41:8dd7:539])
- (user=ndesaulniers job=sendgmr) by 2002:a05:6902:102d:b0:676:d624:ee91 with
- SMTP id x13-20020a056902102d00b00676d624ee91mr26116199ybt.10.1660170289777;
- Wed, 10 Aug 2022 15:24:49 -0700 (PDT)
-Date:   Wed, 10 Aug 2022 15:24:40 -0700
-In-Reply-To: <20220809013653.xtmeekefwkbo46vk@google.com>
-Message-Id: <20220810222442.2296651-1-ndesaulniers@google.com>
+ (user=ndesaulniers job=sendgmr) by 2002:a81:be0a:0:b0:329:74c3:b7e6 with SMTP
+ id i10-20020a81be0a000000b0032974c3b7e6mr21898680ywn.491.1660170302652; Wed,
+ 10 Aug 2022 15:25:02 -0700 (PDT)
+Date:   Wed, 10 Aug 2022 15:24:41 -0700
+In-Reply-To: <20220810222442.2296651-1-ndesaulniers@google.com>
+Message-Id: <20220810222442.2296651-2-ndesaulniers@google.com>
 Mime-Version: 1.0
-References: <20220809013653.xtmeekefwkbo46vk@google.com>
+References: <20220809013653.xtmeekefwkbo46vk@google.com> <20220810222442.2296651-1-ndesaulniers@google.com>
 X-Developer-Key: i=ndesaulniers@google.com; a=ed25519; pk=lvO/pmg+aaCb6dPhyGC1GyOCvPueDrrc8Zeso5CaGKE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1660170281; l=2213;
- i=ndesaulniers@google.com; s=20211004; h=from:subject; bh=NinzIQmJcVXIzZMcPO+2uxtDhfBTzMzImrwCDVtvkFI=;
- b=KwgbZQliMALRYCIiUtuswI2ERGyH/jroMTb2yxtIvxH5YrYQgqdkc82NBm+3bqWUsKHABcX+vMgf
- ou2NSWLDDw2gBtN4XOxLwNlbbjGhaKdIrRpkZSYVD5Ow5Td6GGTM
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1660170282; l=3488;
+ i=ndesaulniers@google.com; s=20211004; h=from:subject; bh=kNgQ27/vj8X5tCgiHxgAYMfVSnRb71USHhs7hpHOY8Q=;
+ b=DjUQeTNVWxqPr0tBXBc+iQXgebieO233lmR8Y9zFr/FGQt5gk+gXLbJMFqL7HDGnfPNDMKujdFmu
+ 4r4C/HfuDU6KnqTkAAmXxJBLCFR5WiK7jAjlQCFIAqAtLIOfVv3X
 X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
-Subject: [PATCH v2 1/2] Makefile: link with -z noexecstack --no-warn-rwx-segments
+Subject: [PATCH v2 2/2] x86: link vdso and boot with -z noexecstack --no-warn-rwx-segments
 From:   Nick Desaulniers <ndesaulniers@google.com>
 To:     Masahiro Yamada <masahiroy@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -72,8 +72,7 @@ Cc:     Fangrui Song <maskray@google.com>,
         nathan@kernel.org, sathyanarayanan.kuppuswamy@linux.intel.com,
         trix@redhat.com, x86@kernel.org,
         Nick Desaulniers <ndesaulniers@google.com>,
-        Michal Marek <michal.lkml@markovi.net>,
-        linux-kbuild@vger.kernel.org
+        Andy Lutomirski <luto@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -88,11 +87,12 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 Users of GNU ld (BFD) from binutils 2.39+ will observe multiple
 instances of a new warning when linking kernels in the form:
 
-  ld: warning: vmlinux: missing .note.GNU-stack
-  section implies executable stack
+  ld: warning: arch/x86/boot/pmjump.o: missing .note.GNU-stack section
+  implies executable stack
   ld: NOTE: This behaviour is deprecated and will be removed in a future
   version of the linker
-  ld: warning: vmlinux has a LOAD segment with RWX permissions
+  ld: warning: arch/x86/boot/compressed/vmlinux has a LOAD segment with
+  RWX permissions
 
 Generally, we would like to avoid the stack being executable. Because
 there could be a need for the stack to be executable, assembler sources
@@ -117,25 +117,52 @@ Reported-by: Jens Axboe <axboe@kernel.dk>
 Suggested-by: Fangrui Song <maskray@google.com>
 Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 ---
- Makefile | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/x86/boot/Makefile            | 2 +-
+ arch/x86/boot/compressed/Makefile | 4 ++++
+ arch/x86/entry/vdso/Makefile      | 2 +-
+ 3 files changed, 6 insertions(+), 2 deletions(-)
 
-diff --git a/Makefile b/Makefile
-index dc6295f91263..230e6e7679f9 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1033,6 +1033,11 @@ KBUILD_CFLAGS   += $(KCFLAGS)
- KBUILD_LDFLAGS_MODULE += --build-id=sha1
- LDFLAGS_vmlinux += --build-id=sha1
+diff --git a/arch/x86/boot/Makefile b/arch/x86/boot/Makefile
+index b5aecb524a8a..ffec8bb01ba8 100644
+--- a/arch/x86/boot/Makefile
++++ b/arch/x86/boot/Makefile
+@@ -103,7 +103,7 @@ $(obj)/zoffset.h: $(obj)/compressed/vmlinux FORCE
+ AFLAGS_header.o += -I$(objtree)/$(obj)
+ $(obj)/header.o: $(obj)/zoffset.h
  
-+KBUILD_LDFLAGS	+= -z noexecstack
-+ifeq ($(CONFIG_LD_IS_BFD),y)
-+KBUILD_LDFLAGS	+= $(call ld-option,--no-warn-rwx-segments)
-+endif
-+
- ifeq ($(CONFIG_STRIP_ASM_SYMS),y)
- LDFLAGS_vmlinux	+= $(call ld-option, -X,)
+-LDFLAGS_setup.elf	:= -m elf_i386 -T
++LDFLAGS_setup.elf	:= -m elf_i386 -z noexecstack -T
+ $(obj)/setup.elf: $(src)/setup.ld $(SETUP_OBJS) FORCE
+ 	$(call if_changed,ld)
+ 
+diff --git a/arch/x86/boot/compressed/Makefile b/arch/x86/boot/compressed/Makefile
+index 19e1905dcbf6..35ce1a64068b 100644
+--- a/arch/x86/boot/compressed/Makefile
++++ b/arch/x86/boot/compressed/Makefile
+@@ -69,6 +69,10 @@ LDFLAGS_vmlinux := -pie $(call ld-option, --no-dynamic-linker)
+ ifdef CONFIG_LD_ORPHAN_WARN
+ LDFLAGS_vmlinux += --orphan-handling=warn
  endif
++LDFLAGS_vmlinux += -z noexecstack
++ifeq ($(CONFIG_LD_IS_BFD),y)
++LDFLAGS_vmlinux += $(call ld-option,--no-warn-rwx-segments)
++endif
+ LDFLAGS_vmlinux += -T
+ 
+ hostprogs	:= mkpiggy
+diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
+index 76cd790ed0bd..12f6c4d714cd 100644
+--- a/arch/x86/entry/vdso/Makefile
++++ b/arch/x86/entry/vdso/Makefile
+@@ -180,7 +180,7 @@ quiet_cmd_vdso = VDSO    $@
+ 		 sh $(srctree)/$(src)/checkundef.sh '$(NM)' '$@'
+ 
+ VDSO_LDFLAGS = -shared --hash-style=both --build-id=sha1 \
+-	$(call ld-option, --eh-frame-hdr) -Bsymbolic
++	$(call ld-option, --eh-frame-hdr) -Bsymbolic -z noexecstack
+ GCOV_PROFILE := n
+ 
+ quiet_cmd_vdso_and_check = VDSO    $@
 -- 
 2.37.1.559.g78731f0fdb-goog
 

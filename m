@@ -2,220 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5118258E795
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 09:06:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E8F558E797
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 09:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231458AbiHJHGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 03:06:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58392 "EHLO
+        id S231469AbiHJHHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 03:07:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230119AbiHJHGN (ORCPT
+        with ESMTP id S230119AbiHJHHN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 03:06:13 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC22F51430;
-        Wed, 10 Aug 2022 00:06:11 -0700 (PDT)
-Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
-        by smtp-out2.suse.de (Postfix) with ESMTP id 68C2D5C5A8;
-        Wed, 10 Aug 2022 07:06:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1660115170; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XYYdg938pZFGIHomB2WfGo+4YOhGS3k381ReP5/S6hw=;
-        b=GzLNNCw9dsfPi7hFV0zS8GFz+Hd7t3vqkztGxn37iFWRd5yCQdnDk5lsCBZvl6qf/HiBP/
-        0MAb47yaBXygwa3KSinYagPQlg19295p42BS+ikpAsZU/PfrWJfObPbeYwAQUi9kuxVoua
-        4dKGFzsWTyy/thuhF2J3PaAvzFRF+ik=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1660115170;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XYYdg938pZFGIHomB2WfGo+4YOhGS3k381ReP5/S6hw=;
-        b=wGpHg8ugvmIPiFSntIDzRSfkaXF7QqgUdzaIvPVo4TqdHDoF75+dtHvzffsFaibPdkxUsr
-        BkuvtLixWRhm2OAQ==
-Received: from localhost.localdomain (unknown [10.100.201.122])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by relay2.suse.de (Postfix) with ESMTPS id B7EBB2C226;
-        Wed, 10 Aug 2022 07:06:09 +0000 (UTC)
-From:   Jiri Slaby <jslaby@suse.cz>
-To:     akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, jack@suse.com,
-        adilger.kernel@dilger.ca, tytso@mit.edu,
-        Jiri Slaby <jslaby@suse.cz>, stable@vger.kernel.org,
-        Minchan Kim <minchan@kernel.org>,
-        Nitin Gupta <ngupta@vflare.org>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Alexey Romanov <avromanov@sberdevices.ru>,
-        Dmitry Rokosov <ddrokosov@sberdevices.ru>,
-        Lukas Czerner <lczerner@redhat.com>,
-        Ext4 Developers List <linux-ext4@vger.kernel.org>
-Subject: [PATCH] Revert "zram: remove double compression logic"
-Date:   Wed, 10 Aug 2022 09:06:09 +0200
-Message-Id: <20220810070609.14402-1-jslaby@suse.cz>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <YvJKwCXewHmuWGdh@google.com>
-References: <YvJKwCXewHmuWGdh@google.com>
+        Wed, 10 Aug 2022 03:07:13 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2080.outbound.protection.outlook.com [40.107.22.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EBCA74CFA;
+        Wed, 10 Aug 2022 00:07:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gcqa9X0Ka6PfU26V+dskoz4ZlMDvyJncMAPr0c4fbsERLrnvPKS9BVxGYlPBYjRcZUnMsPny9BXU96uTBJ2GWhNaMoqwo5ODi3SnmKVvbLgI15/2LwnN+Al9YMcfCjwY6pS6NBfUu7/9ul4alzRnFSdl+wcNuLUXCJ+h1CbpGAOwbCMSXX+C/HAOG/2kokBVG745U6m/qiwIoRc/6pj1/OKln7+B1pHlA3Xh1SSb5dbAEsZ1yoxW1my5ua81Ymd7NERqyQ8TQ9BPjAeR31B55XOcrWUFhGroOYhgdn0eaqOmS15p4DkQK/DKOOmR9cRvrtEVunekmyKpUF9k2rZloA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ve5nfEAtRdkA5f1HmqWO/FpqvoiXF0HJasJGkFJiBlc=;
+ b=XUPAZ4k0Jn/kIpFe8D+Q6PIgdTTD5FRkC54Yql1X6UNvlHG7CK1WBQLi66oybSuwHLjeGoFsvZTa6guTEqpMdaOYBaqSINQnI64eFI+RLU1A+BuciuRgl45ZnnGKD9SZSwS6lJuBhd+aDIIOgA0nFoBDQ5HBpfqbqqzFF2Zj0BNEGpjtZs7myMXJ7SBOBAM1H/kKrCOvb4WYSgzw8Bu782fQV9Y9cjpHhl5PQhImFSsjYtcQ0CSs3UtfyvdpQR3qpcobaEKPI+ktChmrt+B7INWo4A+waDh91PUdCPqlQ1tbjKpY60C7xhMWPHODNii/GYXBzbyAB13MjHFOhlEk/w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
+ dkim=pass header.d=suse.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ve5nfEAtRdkA5f1HmqWO/FpqvoiXF0HJasJGkFJiBlc=;
+ b=m+dq/k1dVInov9VzokQCFOaqPP1bHGutPuS9GQ+5hegdCd94p2TJrNE9ax7frtXrWnwNnq294ul16cTIFEwtkMR6JtPxuruBilYy6Q8stW8APi27/H32cyfFy+aa5I/5sZJZeElgFwWUXpD/x1eCRRwcgfcMHjJcchQwDmR2vOBr6tUlxbrqJyE9xEI4GdB7wBR9ZWWIXKqTBmf2AVpEq6OHswbmNYG6ae2TaUhueSwdWohwPYXSxTqCkETIsRblIUG5OeeFGaSQzWhAyM8ajhiLwG1UcWKpMzoGxN3QED4Ea4JSOgBNRjljQeZJjiTYhIkvYfHEgk1aIm86U+N13A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=suse.com;
+Received: from VE1PR04MB6560.eurprd04.prod.outlook.com (2603:10a6:803:122::25)
+ by AS8PR04MB8836.eurprd04.prod.outlook.com (2603:10a6:20b:42f::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.11; Wed, 10 Aug
+ 2022 07:07:09 +0000
+Received: from VE1PR04MB6560.eurprd04.prod.outlook.com
+ ([fe80::2d5d:bae0:430f:70ad]) by VE1PR04MB6560.eurprd04.prod.outlook.com
+ ([fe80::2d5d:bae0:430f:70ad%4]) with mapi id 15.20.5525.010; Wed, 10 Aug 2022
+ 07:07:09 +0000
+Message-ID: <d8930edf-d138-6ef2-81c3-ff4d9003066b@suse.com>
+Date:   Wed, 10 Aug 2022 09:07:07 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 1/4] xen: x86: set the config XEN_512GB after config
+ change
+Content-Language: en-US
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        xen-devel@lists.xenproject.org
+References: <20220810050712.9539-1-lukas.bulwahn@gmail.com>
+ <20220810050712.9539-2-lukas.bulwahn@gmail.com>
+From:   Jan Beulich <jbeulich@suse.com>
+In-Reply-To: <20220810050712.9539-2-lukas.bulwahn@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: FR0P281CA0142.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:96::15) To VE1PR04MB6560.eurprd04.prod.outlook.com
+ (2603:10a6:803:122::25)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 66127261-71c5-4e61-b687-08da7a9ef0cc
+X-MS-TrafficTypeDiagnostic: AS8PR04MB8836:EE_
+X-LD-Processed: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba,ExtFwd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: PW0Zid2LEhxL0yZdPSB2Oov54SWlSjbOtuxNxDSTFnWejAidBHu8R8D0KKGdlCG2SEX/VQIox1EMvuQr7rWDQ+RylH0jRYUIBL+SE6OM2XeHWdR1yiB6oCHtlyyTpmmetP4o5LOkEsCk9l+iW+Cmr6sPTGmYb7Wu0SNB3X41zyrvM1W97EVC+JJYwQ6yrHsU3q0XeYp+jOXAayF6uwNTjHicy1Opm5uHb2PU8QHoiN/IcN333QbdRKnZJymjY4IYCRuXIsFrUXRy81oBo3qtdK/c7ull6fxpjJ5j5UcocQ9Z/ijg7votyLUwbkplShj4Qjn0dKahkwynWMKkYxRlIaMqD9rPbaGztQqz3f4AyF320Va/sw6WqKfjltX5K0Y81XSNt4U6HTURD/XYrRm2q9saHNKbos1YC4uAhTzxuV/jIbmVEPSiWMa3/KnElCzGhaHZrAettsxGMq6gyYYpYaYYpsd7OUEXf7NNcj4LoqwOJP26qO/MIDeeF298abecIbyYzuukcLLcUeMH8Q6I1qlfUvkTDK9Of+9jdSCa6OMfXp5uogxMXg7/pn2Omjrm02/TASf/6jMEhylHXIf+CljoDTPImssZheClFccvbD/5+TYF9Hgowqc1QCtVY24mqNXnFWds2wzu0kU91dxZhln1nCZcQdZkn8wZoSDmk4DATJzSdZiDbaptrSavZKyhdVS5S3iBVtRnDNTAIt20UpHnqlZPoZim/fuYXho5OAbd73RVTXfAB+DQbXL5KP5fEH6zZ3lXLiYxlYlyHQKEeE9paOIhD0vT7zWsBSHZQFXiEKPx5n1b3GEyzJw2K37w58L6StdBf0BWy6u8Uh6pcA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6560.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(376002)(346002)(39860400002)(366004)(136003)(31696002)(86362001)(6916009)(38100700002)(4744005)(7416002)(8936002)(5660300002)(54906003)(316002)(8676002)(4326008)(66476007)(66556008)(66946007)(6486002)(2616005)(6512007)(26005)(186003)(478600001)(2906002)(6506007)(53546011)(41300700001)(36756003)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TC85MFoxMlVsVWwwVFdMd05JZU0zQ2dGSGNXMTI4ZTBsditJaEtaOFJaRnJ3?=
+ =?utf-8?B?Q2JWWnhqYUlvNkpLQlpBbEYybkxBOGI5eHZ2WjBubFlzT2twR0NsbkV0VEtj?=
+ =?utf-8?B?YWR4Ykc4RjlkOUlmZlVoME1KLzc0bjJqeXRRTWpsZ3R3WW02cjR2V29Fa1dw?=
+ =?utf-8?B?eTUySFY1TElHcW1Lc1AxdnlaM0JVa1RyUkVrRFBQVDZWNG9adUQ2VTRhUDlT?=
+ =?utf-8?B?dTVqWUlpeXBGcnVFM1VaV3cwaWpBK1lZRlBJZkk2WWZuS1RwY0xIZmhxSUlC?=
+ =?utf-8?B?UmVXYk13Zy9NNmJtaUZnL29BNThSSkdMZDJiTmdUTDFWRjVXZzVhZXpwVFA2?=
+ =?utf-8?B?MkI4MEo3Wm4yZk92S3NJV2pIaDlpMFpuV1lFMEp5d3o0SjZvdUM2YTNnTGRV?=
+ =?utf-8?B?M3FrQmlNZHdMMDNVS0tQYTRvN0M3UDA5WWlrTXp2VVV5RHlxZVNycUJFZ1dS?=
+ =?utf-8?B?ajc3OVlXczNQc1NmQ285MVNaL3kxUFo3d0JIdVFlWXp3dVVqWllpZnNjdXpY?=
+ =?utf-8?B?MHNzM1hsYXZHRURxaVM4akRLYjkrM0tYUjRtMzcrQTRFL3B2cjNaWTlhM0Jo?=
+ =?utf-8?B?cHJQYzY3NEhJVXZSUWRoM1BTWVYzRGY5NWhYQ3FmRm1RUlFrWHhwV29kZFhN?=
+ =?utf-8?B?bThKbmJRcVlqVTU0K3pQY3hiSkY0aHUzWmRocVJSM01DNU5oZ1RhOTFWTTdu?=
+ =?utf-8?B?VkNXZkN6WGk3TGFySG9mbWszQWJiaEVnQzBpVU9IQlpGbW9IZEF6OWVkZ1Z0?=
+ =?utf-8?B?bVdsdkQ1UHNvQ1gwcXhwMk1VY1RVcVF3bWlBL0REbTh2a2YrYzBIS0NYRDlz?=
+ =?utf-8?B?UW9uUWZFYWUrTitoallwZ01QblZwNGU0d0QwaFpRQklSTURDQ2l3cFQzZUs0?=
+ =?utf-8?B?TGhEZFJJVGorV1FPSkZwcjhkNTVHT2p2TjRaUXpYT210Tm5TdGVrY00yRzQ0?=
+ =?utf-8?B?RkVUYnJzdlhlSGFacnlBYmNIWVlRS3cranlyL3c2ZkVrWHBha3pLWk8wNTJz?=
+ =?utf-8?B?WVkvdVMrZlNTZDdsc3NBR3RnR3RhYm54RTc2VEsxWHNOdDV6cFRxV2p6T2tP?=
+ =?utf-8?B?cEszVm5LMUhrSTh6b3NVaCt3cGY1ajlEWllWeEFXeDh3cDZ4QnJGcE8waWpp?=
+ =?utf-8?B?elliKzFtMUdSZWJiMDh5VS85NllaL3RYR2xzUTA0VEF3QitJblR0N1dueHFq?=
+ =?utf-8?B?QSsxWEhjTUR1QXlFVkorcTBXT2oyYkZKQThWUTNHL2dodUk3bVdrSW9peXVr?=
+ =?utf-8?B?UDJZUDMvV2NvdGdBVHN2UTFxcVdwMnNGNXhWNjg2ZXhTUS9XTzFDT2pmU2tG?=
+ =?utf-8?B?SVgwT3VDdDFwTWdQRmt1dUNVNCtoQWJ3WVJMTlBnVlJkNm9DTkY0eUg5Y1ZX?=
+ =?utf-8?B?ZVc1T0kzdDYvd0c5cGwyS1AxditUcG4yUXBabnNoYWo4Z1J4TjZQVldrdU5o?=
+ =?utf-8?B?NjAyem9rSmlieEpmNVdUdGtXM3FDcEtSUk1IVmJUd29jbUxzVXVJaUNpM2lB?=
+ =?utf-8?B?aFh3YU1tT2RDWUNUY05NektuQ3lMQ04xTlVSNXlTU2szVFdxa2tTNFFPRmlN?=
+ =?utf-8?B?ZjB6QzBiQVNmV2NFTlVMNXBmenV0NWVjM3RsSUJyREkrdnBrQlVGU2xOU3cy?=
+ =?utf-8?B?cDJqY1RRcGFuRzd2WExuY2JlRE55eWVMRU1yZU9RdTJyVEtZdWNNcEg0MG1a?=
+ =?utf-8?B?b29Zc2p4YWZaUnR2TnNtR05BaEFhYzg1cWZTZ1dBKzFFVXh4aitRM0NZOHA0?=
+ =?utf-8?B?aFB1dVQyYi9XNUJON1RtZHQ0elp1RXY3SEdySmdBcTRzdGRiT1BnSlRUL1RT?=
+ =?utf-8?B?cldrTXlaZVN4UTJhbnBoN3VWVTNja1BPUHhzaDZKc2FPZ2hBdDBWamhjTXF4?=
+ =?utf-8?B?MDJ3MGlYYmpoVVN6eCtQWUxrUkRid2pESzVSaU1MZVRxMmh4b3JxTzVJZVMr?=
+ =?utf-8?B?ZXU5ams5QnhUdHVOczV3MlJaRTRZSVJDeW5vQ2h1SUVyVTM3aWdSS3BrUmlD?=
+ =?utf-8?B?V0g2MWRZT1FWNVBJSk5XZVRpUkNjcGNTalo5SkZvanF1SG1LTU1VRTJ1eEwz?=
+ =?utf-8?B?bVdpL2lkd3VURmsyb2JHWFdiM2JMc2R2TG5sK0RyUEg1MnczUnlOSEVrVFpi?=
+ =?utf-8?Q?1ZK/7IXXRDntO0jt+zNq84y2i?=
+X-OriginatorOrg: suse.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 66127261-71c5-4e61-b687-08da7a9ef0cc
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6560.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Aug 2022 07:07:09.0965
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: x6TPmTE9f5WmEcxpSSbi3a3SnNnuLUuqWa/HhnLQypaXEwES4IZrdUD+dFxUaZebzVX35TMcdjUwJEzFfmbglA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8836
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This reverts commit e7be8d1dd983156bbdd22c0319b71119a8fbb697 as it
-causes zram failures. It does not revert cleanly, PTR_ERR handling was
-introduced in the meantime. This is handled by appropriate IS_ERR.
+On 10.08.2022 07:07, Lukas Bulwahn wrote:
+> --- a/arch/x86/configs/xen.config
+> +++ b/arch/x86/configs/xen.config
+> @@ -14,7 +14,7 @@ CONFIG_CPU_FREQ=y
+>  
+>  # x86 xen specific config options
+>  CONFIG_XEN_PVH=y
+> -CONFIG_XEN_MAX_DOMAIN_MEMORY=500
+> +CONFIG_XEN_512GB=y
 
-When under memory pressure, zs_malloc() can fail. Before the above
-commit, the allocation was retried with direct reclaim enabled
-(GFP_NOIO). After the commit, it is not -- only __GFP_KSWAPD_RECLAIM is
-tried.
+Does this actually need setting here? The option's default is y, so
+it ought to be turned on "automatically". Hence I think it's only
+the stale line which wants deleting.
 
-So when the failure occurs under memory pressure, the overlaying
-filesystem such as ext2 (mounted by ext4 module in this case) can emit
-failures, making the (file)system unusable:
-  EXT4-fs warning (device zram0): ext4_end_bio:343: I/O error 10 writing to inode 16386 starting block 159744)
-  Buffer I/O error on device zram0, logical block 159744
-
-With direct reclaim, memory is really reclaimed and allocation succeeds,
-eventually. In the worst case, the oom killer is invoked, which is
-proper outcome if user sets up zram too large (in comparison to
-available RAM).
-
-This very diff doesn't apply to 5.19 (stable) cleanly (see PTR_ERR note
-above). Use revert of e7be8d1dd983 directly.
-
-Link: https://bugzilla.suse.com/show_bug.cgi?id=1202203
-Fixes: e7be8d1dd983 ("zram: remove double compression logic")
-Cc: stable@vger.kernel.org # 5.19
-Cc: Minchan Kim <minchan@kernel.org>
-Cc: Nitin Gupta <ngupta@vflare.org>
-Cc: Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc: Alexey Romanov <avromanov@sberdevices.ru>
-Cc: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Cc: Lukas Czerner <lczerner@redhat.com>
-Cc: Ext4 Developers List <linux-ext4@vger.kernel.org>
-Signed-off-by: Jiri Slaby <jslaby@suse.cz>
----
- drivers/block/zram/zram_drv.c | 42 ++++++++++++++++++++++++++---------
- drivers/block/zram/zram_drv.h |  1 +
- 2 files changed, 33 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
-index 92cb929a45b7..226ea76cc819 100644
---- a/drivers/block/zram/zram_drv.c
-+++ b/drivers/block/zram/zram_drv.c
-@@ -1146,14 +1146,15 @@ static ssize_t bd_stat_show(struct device *dev,
- static ssize_t debug_stat_show(struct device *dev,
- 		struct device_attribute *attr, char *buf)
- {
--	int version = 2;
-+	int version = 1;
- 	struct zram *zram = dev_to_zram(dev);
- 	ssize_t ret;
- 
- 	down_read(&zram->init_lock);
- 	ret = scnprintf(buf, PAGE_SIZE,
--			"version: %d\n%8llu\n",
-+			"version: %d\n%8llu %8llu\n",
- 			version,
-+			(u64)atomic64_read(&zram->stats.writestall),
- 			(u64)atomic64_read(&zram->stats.miss_free));
- 	up_read(&zram->init_lock);
- 
-@@ -1351,7 +1352,7 @@ static int __zram_bvec_write(struct zram *zram, struct bio_vec *bvec,
- {
- 	int ret = 0;
- 	unsigned long alloced_pages;
--	unsigned long handle = 0;
-+	unsigned long handle = -ENOMEM;
- 	unsigned int comp_len = 0;
- 	void *src, *dst, *mem;
- 	struct zcomp_strm *zstrm;
-@@ -1369,6 +1370,7 @@ static int __zram_bvec_write(struct zram *zram, struct bio_vec *bvec,
- 	}
- 	kunmap_atomic(mem);
- 
-+compress_again:
- 	zstrm = zcomp_stream_get(zram->comp);
- 	src = kmap_atomic(page);
- 	ret = zcomp_compress(zstrm, src, &comp_len);
-@@ -1377,20 +1379,39 @@ static int __zram_bvec_write(struct zram *zram, struct bio_vec *bvec,
- 	if (unlikely(ret)) {
- 		zcomp_stream_put(zram->comp);
- 		pr_err("Compression failed! err=%d\n", ret);
-+		zs_free(zram->mem_pool, handle);
- 		return ret;
- 	}
- 
- 	if (comp_len >= huge_class_size)
- 		comp_len = PAGE_SIZE;
--
--	handle = zs_malloc(zram->mem_pool, comp_len,
--			__GFP_KSWAPD_RECLAIM |
--			__GFP_NOWARN |
--			__GFP_HIGHMEM |
--			__GFP_MOVABLE);
--
-+	/*
-+	 * handle allocation has 2 paths:
-+	 * a) fast path is executed with preemption disabled (for
-+	 *  per-cpu streams) and has __GFP_DIRECT_RECLAIM bit clear,
-+	 *  since we can't sleep;
-+	 * b) slow path enables preemption and attempts to allocate
-+	 *  the page with __GFP_DIRECT_RECLAIM bit set. we have to
-+	 *  put per-cpu compression stream and, thus, to re-do
-+	 *  the compression once handle is allocated.
-+	 *
-+	 * if we have a 'non-null' handle here then we are coming
-+	 * from the slow path and handle has already been allocated.
-+	 */
-+	if (IS_ERR((void *)handle))
-+		handle = zs_malloc(zram->mem_pool, comp_len,
-+				__GFP_KSWAPD_RECLAIM |
-+				__GFP_NOWARN |
-+				__GFP_HIGHMEM |
-+				__GFP_MOVABLE);
- 	if (IS_ERR((void *)handle)) {
- 		zcomp_stream_put(zram->comp);
-+		atomic64_inc(&zram->stats.writestall);
-+		handle = zs_malloc(zram->mem_pool, comp_len,
-+				GFP_NOIO | __GFP_HIGHMEM |
-+				__GFP_MOVABLE);
-+		if (!IS_ERR((void *)handle))
-+			goto compress_again;
- 		return PTR_ERR((void *)handle);
- 	}
- 
-@@ -1948,6 +1969,7 @@ static int zram_add(void)
- 	if (ZRAM_LOGICAL_BLOCK_SIZE == PAGE_SIZE)
- 		blk_queue_max_write_zeroes_sectors(zram->disk->queue, UINT_MAX);
- 
-+	blk_queue_flag_set(QUEUE_FLAG_STABLE_WRITES, zram->disk->queue);
- 	ret = device_add_disk(NULL, zram->disk, zram_disk_groups);
- 	if (ret)
- 		goto out_cleanup_disk;
-diff --git a/drivers/block/zram/zram_drv.h b/drivers/block/zram/zram_drv.h
-index 158c91e54850..80c3b43b4828 100644
---- a/drivers/block/zram/zram_drv.h
-+++ b/drivers/block/zram/zram_drv.h
-@@ -81,6 +81,7 @@ struct zram_stats {
- 	atomic64_t huge_pages_since;	/* no. of huge pages since zram set up */
- 	atomic64_t pages_stored;	/* no. of pages currently stored */
- 	atomic_long_t max_used_pages;	/* no. of maximum pages stored */
-+	atomic64_t writestall;		/* no. of write slow paths */
- 	atomic64_t miss_free;		/* no. of missed free */
- #ifdef	CONFIG_ZRAM_WRITEBACK
- 	atomic64_t bd_count;		/* no. of pages in backing device */
--- 
-2.37.1
-
+Jan

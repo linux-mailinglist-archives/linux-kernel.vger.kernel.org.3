@@ -2,58 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF13958ED38
+	by mail.lfdr.de (Postfix) with ESMTP id 3F22358ED37
 	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 15:29:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232588AbiHJN2z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 09:28:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35248 "EHLO
+        id S232716AbiHJN2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 09:28:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232746AbiHJN2X (ORCPT
+        with ESMTP id S232749AbiHJN2X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 10 Aug 2022 09:28:23 -0400
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C780F2FFF9;
-        Wed, 10 Aug 2022 06:28:18 -0700 (PDT)
-Received: by mail-il1-f180.google.com with SMTP id o14so8276767ilt.2;
-        Wed, 10 Aug 2022 06:28:18 -0700 (PDT)
+Received: from mail-io1-f48.google.com (mail-io1-f48.google.com [209.85.166.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5442F002;
+        Wed, 10 Aug 2022 06:28:20 -0700 (PDT)
+Received: by mail-io1-f48.google.com with SMTP id x64so12141221iof.1;
+        Wed, 10 Aug 2022 06:28:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=message-id:date:subject:references:in-reply-to:cc:to:from
          :x-gm-message-state:from:to:cc;
-        bh=NzrQIGZCwIus9r1JyqSwJ+/rNe7ZRlaMYtJkznnEWLg=;
-        b=kkiI0jXtB8RIBseTVXcnJJz61eJO5Y056gWHp7gTwj+xOV3S6Epe9hm8t2Omx7nFVo
-         QPLhEazs3RDnjZNW8fsE3nlpTYUsQPv4zELqAnxDVw+mMdGLjas3q4Kue5H29qGCpTxd
-         AcDutLnXiRp6Smhps2a9VORPnPARFf8OUYqf43jBtsZy1c3wRIKje4aPTw2quAK97lH5
-         oys9TYVNArBSHBkgaWod2E0FtgQCgN2Ec6625TIhOPPnyHauTCm5kpKROUhK3RxmCpTG
-         G11OLudjq3yS81rcIvNqXvnnVh6MgY9RoDn4TL6bw4hea2/D6Bi/Lg9Il+yDJ72wYNHD
-         U2qQ==
-X-Gm-Message-State: ACgBeo0wzBqXXlS4Pu+7GAsDzqmW+Me4v/NCsfnHmAsCVV6wm8I8pr6O
-        ob6ldl10A+aedBNMspPmbw==
-X-Google-Smtp-Source: AA6agR5or8CrY7N1/B4wmO+I53M/6xlIzZiBbAgz6RffPqaplg84PR1rPJzhLCT3ceYrBI6TH4xkTA==
-X-Received: by 2002:a92:b00f:0:b0:2d6:5628:6865 with SMTP id x15-20020a92b00f000000b002d656286865mr12008908ilh.230.1660138098027;
-        Wed, 10 Aug 2022 06:28:18 -0700 (PDT)
+        bh=4epIfRahObDv/a6dumDmRQy3l18v8+waUrRo2YnWvdM=;
+        b=eHEUr1XZSj9OYrBVxxDKBDVWfgO8OLCPY8KibmX04ivuiDcIFPtDDME3s5oxjeb/cQ
+         tYTebl5IHdiHEuAnMWUBWNL8MRpRwERnwbUe3FK2/v6ALbBChg//U20f4Zv4+qdZCcza
+         wEO5qKTRPa8l2J89H9y8kF6YIcJkN3w3vvP4+4nZ6iL3sphYPogiLdwxU47ZmOuQ5eiu
+         9tjzvzVAF8vVeRz1AvsSafOk36bH/2gtTf7QBllkzqlVjxypSSHFOknXrNNNFi4tf2jD
+         033eu5LQXx88/wg9a0D2JeqbzWU7DupjyS4MzZ8tPYF5q7L+LNBSLjySftOQ/JuqJxq8
+         X8KQ==
+X-Gm-Message-State: ACgBeo0xH3ZMeCCZs8nOnSpABVTwbXY4MRbZXaqGqCpVQeubLNFjJadO
+        q4zO7B5gfsW12hO6vep8TpNJijBehA==
+X-Google-Smtp-Source: AA6agR6Y72wFm60tqJ+C1vVwSKALhtNNXerxG30Sj4nbpvo6VW5QJA0hxBdJ221EXQ/rdDb/R4f2aw==
+X-Received: by 2002:a05:6638:450:b0:343:af3:dc0 with SMTP id r16-20020a056638045000b003430af30dc0mr6247769jap.287.1660138099765;
+        Wed, 10 Aug 2022 06:28:19 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id t5-20020a92c0c5000000b002dd0bfd2467sm2189282ilf.11.2022.08.10.06.28.16
+        by smtp.gmail.com with ESMTPSA id b9-20020a92c149000000b002dd16300beasm2219717ilh.51.2022.08.10.06.28.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 06:28:17 -0700 (PDT)
-Received: (nullmailer pid 3991541 invoked by uid 1000);
+        Wed, 10 Aug 2022 06:28:19 -0700 (PDT)
+Received: (nullmailer pid 3991544 invoked by uid 1000);
         Wed, 10 Aug 2022 13:28:15 -0000
 From:   Rob Herring <robh@kernel.org>
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Cc:     perex@perex.cz, tiwai@suse.com, srinivas.kandagatla@linaro.org,
-        lgirdwood@gmail.com, linux-remoteproc@vger.kernel.org,
-        agross@kernel.org, bgoswami@quicinc.com, swboyd@chromium.org,
-        broonie@kernel.org, linux-arm-msm@vger.kernel.org,
-        quic_rohkumar@quicinc.com, robh+dt@kernel.org,
-        quic_plai@quicinc.com, linux-kernel@vger.kernel.org,
-        bjorn.andersson@linaro.org, devicetree@vger.kernel.org,
-        judyhsiao@chromium.org
-In-Reply-To: <1660117558-21829-3-git-send-email-quic_srivasam@quicinc.com>
-References: <1660117558-21829-1-git-send-email-quic_srivasam@quicinc.com> <1660117558-21829-3-git-send-email-quic_srivasam@quicinc.com>
-Subject: Re: [PATCH v3 2/8] dt-bindings: remoteproc: qcom: adsp: Add required bindings for SC7280
+To:     Cixi Geng <gengcixi@gmail.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        orsonzhai@gmail.com, linux-kernel@vger.kernel.org,
+        baolin.wang@linux.alibaba.com, devicetree@vger.kernel.org,
+        zhang.lyra@gmail.com, lee@kernel.org
+In-Reply-To: <20220810130344.1488578-1-gengcixi@gmail.com>
+References: <20220810130344.1488578-1-gengcixi@gmail.com>
+Subject: Re: [PATCH] dt-bindings: mfd: sprd: Add bindings for ums512 global registers
 Date:   Wed, 10 Aug 2022 07:28:15 -0600
-Message-Id: <1660138095.893744.3991540.nullmailer@robh.at.kernel.org>
+Message-Id: <1660138095.903227.3991543.nullmailer@robh.at.kernel.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -65,22 +61,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 10 Aug 2022 13:15:52 +0530, Srinivasa Rao Mandadapu wrote:
-> Add compatible name, clocks and update max reg items for SC7280
-> based platforms.
-> Add adsp-memory-regions property, required for memory sandboxing.
+On Wed, 10 Aug 2022 21:03:44 +0800, Cixi Geng wrote:
+> From: Chunyan Zhang <chunyan.zhang@unisoc.com>
 > 
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
+> Add bindings for Unisoc system global register which provide register map
+> for clocks.
+> 
+> Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
+> Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
 > ---
-> Changes since V2:
-> 	-- Add clock property.
-> 	-- Add qcom,adsp-memory-regions property.
-> Changes since V1:
-> 	-- Change reg property maxItems to minItems and update description.
-> 
->  .../bindings/remoteproc/qcom,lpass-adsp-pil.yaml          | 15 ++++++++++++---
->  1 file changed, 12 insertions(+), 3 deletions(-)
+>  .../bindings/mfd/sprd,ums512-glbreg.yaml      | 68 +++++++++++++++++++
+>  1 file changed, 68 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/sprd,ums512-glbreg.yaml
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
@@ -89,32 +81,10 @@ on your patch (DT_CHECKER_FLAGS is new in v5.13):
 yamllint warnings/errors:
 
 dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/remoteproc/qcom,lpass-adsp-pil.yaml: properties:qcom,adsp-memory-regions: 'oneOf' conditional failed, one must be fixed:
-	[{'description': 'List of memory regions accessed by ADSP firmware.'}] is too short
-	False schema does not allow 1
-	hint: "minItems" is only needed if less than the "items" list length
-	from schema $id: http://devicetree.org/meta-schemas/items.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/remoteproc/qcom,lpass-adsp-pil.yaml: properties:qcom,adsp-memory-regions: 'oneOf' conditional failed, one must be fixed:
-	'type' is a required property
-		hint: A vendor boolean property can use "type: boolean"
-	'description' is a required property
-		hint: A vendor boolean property can use "type: boolean"
-	Additional properties are not allowed ('items', 'minItems' were unexpected)
-		hint: A vendor boolean property can use "type: boolean"
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/remoteproc/qcom,lpass-adsp-pil.yaml: properties:qcom,adsp-memory-regions: 'oneOf' conditional failed, one must be fixed:
-		'enum' is a required property
-		'const' is a required property
-		hint: A vendor string property with exact values has an implicit type
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/remoteproc/qcom,lpass-adsp-pil.yaml: properties:qcom,adsp-memory-regions: 'oneOf' conditional failed, one must be fixed:
-		'$ref' is a required property
-		'allOf' is a required property
-		hint: A vendor property needs a $ref to types.yaml
-		from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-	hint: Vendor specific properties must have a type and description unless they have a defined, common suffix.
-	from schema $id: http://devicetree.org/meta-schemas/vendor-props.yaml#
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/remoteproc/qcom,lpass-adsp-pil.yaml: ignoring, error in schema: properties: qcom,adsp-memory-regions
-Documentation/devicetree/bindings/remoteproc/qcom,lpass-adsp-pil.example.dtb:0:0: /example-0/remoteproc@17300000: failed to match any schema with compatible: ['qcom,sdm845-adsp-pil']
+./Documentation/devicetree/bindings/mfd/sprd,ums512-glbreg.yaml: Unable to find schema file matching $id: http://devicetree.org/schemas/clock/sprd,ums512-clk.yaml
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/sprd,ums512-glbreg.example.dtb: syscon@71000000: clock-controller@0: False schema does not allow {'compatible': ['sprd,ums512-apahb-gate'], 'reg': [[0, 8192]], '#clock-cells': [[1]]}
+	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/mfd/sprd,ums512-glbreg.yaml
+Documentation/devicetree/bindings/mfd/sprd,ums512-glbreg.example.dtb:0:0: /example-0/syscon@71000000/clock-controller@0: failed to match any schema with compatible: ['sprd,ums512-apahb-gate']
 
 doc reference errors (make refcheckdocs):
 

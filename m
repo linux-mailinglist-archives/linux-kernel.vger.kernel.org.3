@@ -2,188 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEFDD58E409
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 02:20:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94AD358E406
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 02:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbiHJAUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 20:20:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58766 "EHLO
+        id S229840AbiHJAUf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 20:20:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbiHJAUj (ORCPT
+        with ESMTP id S229479AbiHJAUb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 20:20:39 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24E5EC48;
-        Tue,  9 Aug 2022 17:20:36 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 94BA55C02F0;
-        Tue,  9 Aug 2022 20:20:34 -0400 (EDT)
-Received: from imap42 ([10.202.2.92])
-  by compute2.internal (MEProxy); Tue, 09 Aug 2022 20:20:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1660090834; x=1660177234; bh=JJXnYXScrO
-        NTr0QnytBFq2JW9kKGkCqeaX23Leur64w=; b=deMUUoGI9GyzbpJZ2qZaNNaqia
-        PEv88jyoyUcckPD/knKkeJ5bd/E/VKHginf9hEU9k+cbw/S9hYElOxpQo0nvoSRC
-        nQ13t2baRPfUf9/M/BNOz20wBaJoDwBrOF/9D9XEOWi+bXo6gvUJ9QDqTisTJR5E
-        7NUSP2uqSbEkxXCB8ZxnJSkuHKcJNKD9LA2m9ymwoUC0ys+zuNJYBgE5goz+SRmg
-        u74JVIw6u6cgKqP3BkRKVewJTB7n+YGwnbcbbP34mf0Uye99+Rt+7ZQQBDOdBB0D
-        BpuX+TG+8VHFB9+POyT1nSg6Jf4GJeyEnAXX62UOuRh7id3bPO8MTSXrAMeA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1660090834; x=1660177234; bh=JJXnYXScrONTr0QnytBFq2JW9kKG
-        kCqeaX23Leur64w=; b=Ha04nrJz4DH9sleMdvxuF2B2Na0468dFVg5fAK4O3Viq
-        rk3LJh3rMSp9jH0qa82OCfUuZxmXbbZEO5LYfJE8CrTEMF+3qEsicwqqb6MMqsA0
-        6bGxMCzfg7hah91I93jRFLFp29CKzeZ54TMiZyWtnyObcNj1Ed7bzAGxSIqeRNvx
-        +Zas3FTLBA2tYSs0svf25u5g8Bf8KEE9kIyKbABFVVCTNm5X5ONPfLG9ADaaDY0O
-        yubYDTR7VMvSGoa82yTOM4glBSIeaBeNF0Blnq1gE1VxS07varm/tdebcn8XAaoB
-        bLByx3Hu2YCXo60oAPVuJxIPDHFuCKURIi6V02xNyw==
-X-ME-Sender: <xms:0vnyYoeLVRENpMw11BH7ieWgSPC4qTN4i6L5fzgBS_rwpEEjHFVwvA>
-    <xme:0vnyYqPOMTe5pREHtqTWqgzydfilAaTx3UMeIMwqXw0N6IldtLj90EOAJeC-qrxok
-    xiRxeYw7MIkzNqsfQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeguddgfeegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    gfrhhlucfvnfffucdlfeehmdenucfjughrpefofgggkfgjfhffhffvvefutgesthdtredt
-    reertdenucfhrhhomhepfdffrghnihgvlhcuighufdcuoegugihusegugihuuhhurdighi
-    iiqeenucggtffrrghtthgvrhhnpedtudehudfhveduieeikeejudeljeffuddtieffieel
-    jedtudehhfekheehuedvkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
-    grihhlfhhrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:0vnyYpjFfw-dM8ZvefI9qo0wFRir16KwkVun2Hp5LSd3O1NIlLzKbw>
-    <xmx:0vnyYt8d8aGy9_ztZljOaYl-vBvkXLEYOK02Wn4D5NLpQiNthMNj6Q>
-    <xmx:0vnyYkvWV7ybhzuHCSOpvhhhxg6Bva9BQ1Bpz23vLfch4vomtAi_4w>
-    <xmx:0vnyYgKJedoeMgy4jUvfFkeYokKHhinkwwNj2eeXJf3s6WKXwLB3Dw>
-Feedback-ID: i6a694271:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 5B8D8BC0075; Tue,  9 Aug 2022 20:20:34 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-811-gb808317eab-fm-20220801.001-gb808317e
-Mime-Version: 1.0
-Message-Id: <a2c064c4-4dd6-4f36-a00f-d1fab9e56bd4@www.fastmail.com>
-In-Reply-To: <37649bee-5eb3-93a2-ac57-56eb375ef8cd@iogearbox.net>
-References: <cover.1660062725.git.dxu@dxuuu.xyz>
- <6436220efacfa99f343ffc451e3d5dc8b7f31f05.1660062725.git.dxu@dxuuu.xyz>
- <37649bee-5eb3-93a2-ac57-56eb375ef8cd@iogearbox.net>
-Date:   Tue, 09 Aug 2022 18:20:14 -0600
-From:   "Daniel Xu" <dxu@dxuuu.xyz>
-To:     "Daniel Borkmann" <daniel@iogearbox.net>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "Alexei Starovoitov" <ast@kernel.org>,
-        "Andrii Nakryiko" <andrii@kernel.org>,
-        "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Add connmark read test
-Content-Type: text/plain
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Tue, 9 Aug 2022 20:20:31 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 696E0B05
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 17:20:28 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id 17so3460210pli.0
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 17:20:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=yocom-org.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=1x7SOVtOei70cdAgsBLTaDzhKWbFRtoFMWwMze/rFM8=;
+        b=RFUpjh/DphoZwLHaoft5BHiz2a9zHUo26WJH+Wv8XymWhJs5KZJNzguPNytnzagpC8
+         obsMdqT2SP28aUZohDbG7TY6HXkXk+VakdhhiPwJMPaGuQHGRK9imgrpR1JHujJ4/mjR
+         Ws02oUgfMZFBsOl+SYDkW5T2DThfQ6zR/hQvGEjrDhuoyGaGNRAYbteN+s2RTn3R6Hz8
+         qg8ofbAUlNAdnsMO4GyRRwr1cojH/77dbIq0kLBXC4EKM/sAIPRAoJR7JqYl09i9z7JV
+         hjZrpiyDVliI0Jg6dcLrT/QA5+E3hotNVmd/NZfYVXKh4cl8DC2Wwy1kfA8k5k+IYvlH
+         Vppg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=1x7SOVtOei70cdAgsBLTaDzhKWbFRtoFMWwMze/rFM8=;
+        b=Twx3EnZCCBAu6AsMPdBA5z+nHmg6DjuRgQRr9Ha8zfZjzj0pjOuXS4hxis1kntjBbA
+         8bS/v4uojaHixjGAGLcwc56fIEOwResx7OKXGHugs355INNQyq/CWW+JuW9UreMubIlu
+         zCBW54ZB8TdS2ekhSsKQ8gbQkvtPqqlg7+P7IYbVbVWIo2FTzFAUVfjxuJn9/6RDYniL
+         n9UbJ/uWupH0S1ve1SmP2pPwPUmiwqHk1S6PPsuAdSS+yHiuGRuijHCkn8RgrH4eN+CX
+         3kGxKlG9XquRQz1aX+7YRAbn0duFQg48NiKdeFjB6kwRB569HktP7/Qsb9aZ41DMMvL/
+         CRKQ==
+X-Gm-Message-State: ACgBeo0vL6qbdQRpa++7+hux4m3KCgSDQley8fqEzIuL4JSW+2fOd77l
+        og5ubEoZSxUK5NJX0lycpOWGbnGjihhm7mA3
+X-Google-Smtp-Source: AA6agR4x3Y5olBaNr/fKSPGTFcGSwGvHlG3yZELirqR8W/0dyJiu5xlfDN5BpskP8ZYzQF7YwuayIg==
+X-Received: by 2002:a17:902:8486:b0:16d:d4b1:ceb6 with SMTP id c6-20020a170902848600b0016dd4b1ceb6mr25708252plo.33.1660090827919;
+        Tue, 09 Aug 2022 17:20:27 -0700 (PDT)
+Received: from localhost.localdomain ([2601:600:a07f:e6ac::1c])
+        by smtp.gmail.com with ESMTPSA id i22-20020aa796f6000000b0050dc7628183sm495325pfq.93.2022.08.09.17.20.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Aug 2022 17:20:27 -0700 (PDT)
+From:   Nate Yocom <nate@yocom.org>
+To:     dmitry.torokhov@gmail.com
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        nate@yocom.org
+Subject: [PATCH] Input: joystick: xpad: Add X-Box Adaptive Controller support
+Date:   Tue,  9 Aug 2022 17:20:24 -0700
+Message-Id: <20220810002024.13686-1-nate@yocom.org>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+Adds support for the X-Box Adaptive Controller, which is protocol
+compatible with the XTYPE_XBOXONE support in the driver with two deltas:
 
-On Tue, Aug 9, 2022, at 3:14 PM, Daniel Borkmann wrote:
-> Hi Daniel,
->
-> On 8/9/22 6:34 PM, Daniel Xu wrote:
->> Test that the prog can read from the connection mark. This test is nice
->> because it ensures progs can interact with netfilter subsystem
->> correctly.
->> 
->> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
->> ---
->>   tools/testing/selftests/bpf/prog_tests/bpf_nf.c | 3 ++-
->>   tools/testing/selftests/bpf/progs/test_bpf_nf.c | 3 +++
->>   2 files changed, 5 insertions(+), 1 deletion(-)
->> 
->> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
->> index 317978cac029..7232f6dcd252 100644
->> --- a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
->> @@ -44,7 +44,7 @@ static int connect_to_server(int srv_fd)
->>   
->>   static void test_bpf_nf_ct(int mode)
->>   {
->> -	const char *iptables = "iptables -t raw %s PREROUTING -j CT";
->> +	const char *iptables = "iptables -t raw %s PREROUTING -j CONNMARK --set-mark 42/0";
->>   	int srv_fd = -1, client_fd = -1, srv_client_fd = -1;
->>   	struct sockaddr_in peer_addr = {};
->>   	struct test_bpf_nf *skel;
->> @@ -114,6 +114,7 @@ static void test_bpf_nf_ct(int mode)
->>   	/* expected status is IPS_SEEN_REPLY */
->>   	ASSERT_EQ(skel->bss->test_status, 2, "Test for ct status update ");
->>   	ASSERT_EQ(skel->data->test_exist_lookup, 0, "Test existing connection lookup");
->> +	ASSERT_EQ(skel->bss->test_exist_lookup_mark, 43, "Test existing connection lookup ctmark");
->>   end:
->>   	if (srv_client_fd != -1)
->>   		close(srv_client_fd);
->> diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
->> index 84e0fd479794..2722441850cc 100644
->> --- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
->> +++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
->> @@ -28,6 +28,7 @@ __be16 sport = 0;
->>   __be32 daddr = 0;
->>   __be16 dport = 0;
->>   int test_exist_lookup = -ENOENT;
->> +u32 test_exist_lookup_mark = 0;
->>   
->>   struct nf_conn;
->>   
->> @@ -174,6 +175,8 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
->>   		       sizeof(opts_def));
->>   	if (ct) {
->>   		test_exist_lookup = 0;
->> +		if (ct->mark == 42)
->> +			test_exist_lookup_mark = 43;
->
-> Looks like CI failed here:
->
->    [...]
->    progs/test_bpf_nf.c:178:11: error: no member named 'mark' in 'struct 
-> nf_conn'
->                    if (ct->mark == 42)
->                        ~~  ^
->    1 error generated.
->    make: *** [Makefile:521: 
-> /tmp/runner/work/bpf/bpf/tools/testing/selftests/bpf/test_bpf_nf.o] 
-> Error 1
->    make: *** Waiting for unfinished jobs....
->    Error: Process completed with exit code 2.
->
-> Likely due to missing CONFIG_NF_CONNTRACK_MARK for the CI instance.
+ - The X-Box button sets 0x02 as its activation ID, where others set
+   0x01
+ - The controller has an additional "Layer" button with 4 active states,
+   which this change maps to an Axis control with 4 possible values
 
-Originally (as stated in the cover letter) I thought the CI kconfig was hosted
-somewhere else. Looking closer I see the kconfigs are checked into the
-selftest tree.
+Signed-off-by: Nate Yocom <nate@yocom.org>
+---
+ drivers/input/joystick/xpad.c | 24 +++++++++++++++++++++++-
+ 1 file changed, 23 insertions(+), 1 deletion(-)
 
-I think the following should fix the CI. I'll send out a v3 tomorrow morning:
+diff --git a/drivers/input/joystick/xpad.c b/drivers/input/joystick/xpad.c
+index 18190b529bca..0d02d88790b6 100644
+--- a/drivers/input/joystick/xpad.c
++++ b/drivers/input/joystick/xpad.c
+@@ -80,6 +80,7 @@
+ #define MAP_TRIGGERS_TO_BUTTONS		(1 << 1)
+ #define MAP_STICKS_TO_NULL		(1 << 2)
+ #define MAP_SELECT_BUTTON		(1 << 3)
++#define MAP_LAYER_BUTTON		(1 << 4)
+ #define DANCEPAD_MAP_CONFIG	(MAP_DPAD_TO_BUTTONS |			\
+ 				MAP_TRIGGERS_TO_BUTTONS | MAP_STICKS_TO_NULL)
+ 
+@@ -131,6 +132,7 @@ static const struct xpad_device {
+ 	{ 0x045e, 0x02e3, "Microsoft X-Box One Elite pad", 0, XTYPE_XBOXONE },
+ 	{ 0x045e, 0x02ea, "Microsoft X-Box One S pad", 0, XTYPE_XBOXONE },
+ 	{ 0x045e, 0x0719, "Xbox 360 Wireless Receiver", MAP_DPAD_TO_BUTTONS, XTYPE_XBOX360W },
++	{ 0x045e, 0x0b0a, "Microsoft X-Box Adaptive Controller", MAP_LAYER_BUTTON, XTYPE_XBOXONE },
+ 	{ 0x045e, 0x0b12, "Microsoft Xbox Series S|X Controller", MAP_SELECT_BUTTON, XTYPE_XBOXONE },
+ 	{ 0x046d, 0xc21d, "Logitech Gamepad F310", 0, XTYPE_XBOX360 },
+ 	{ 0x046d, 0xc21e, "Logitech Gamepad F510", 0, XTYPE_XBOX360 },
+@@ -857,7 +859,17 @@ static void xpadone_process_packet(struct usb_xpad *xpad, u16 cmd, unsigned char
+ 		if (data[1] == 0x30)
+ 			xpadone_ack_mode_report(xpad, data[2]);
+ 
+-		input_report_key(dev, BTN_MODE, data[4] & 0x01);
++		/*
++		 * X-Box Adaptive controller sets 0x02 when x-box button is pressed,
++		 * we could probably condense into just data[4] != 0, but explicitly
++		 * checking here ensures no regression if other devices set other bits.
++		 */
++		if (le16_to_cpu(xpad->dev->id.vendor) == 0x045e &&
++			le16_to_cpu(xpad->dev->id.product) == 0x0b0a)
++			input_report_key(dev, BTN_MODE, data[4] & 0x02);
++		else
++			input_report_key(dev, BTN_MODE, data[4] & 0x01);
++
+ 		input_sync(dev);
+ 		return;
+ 	}
+@@ -926,6 +938,10 @@ static void xpadone_process_packet(struct usb_xpad *xpad, u16 cmd, unsigned char
+ 				 (__u16) le16_to_cpup((__le16 *)(data + 8)));
+ 	}
+ 
++	/* Layer button has a value of 0-4, so its reported as an axis */
++	if (xpad->mapping & MAP_LAYER_BUTTON)
++		input_report_abs(dev, ABS_MISC, data[34]);
++
+ 	input_sync(dev);
+ }
+ 
+@@ -1622,6 +1638,8 @@ static void xpad_set_up_abs(struct input_dev *input_dev, signed short abs)
+ 	case ABS_HAT0Y:	/* the d-pad (only if dpad is mapped to axes */
+ 		input_set_abs_params(input_dev, abs, -1, 1, 0, 0);
+ 		break;
++	case ABS_MISC: /* 4 value layer button (such as on the XAC) */
++		input_set_abs_params(input_dev, abs, 0, 4, 0, 0);
+ 	default:
+ 		input_set_abs_params(input_dev, abs, 0, 0, 0, 0);
+ 		break;
+@@ -1714,6 +1732,10 @@ static int xpad_init_input(struct usb_xpad *xpad)
+ 			xpad_set_up_abs(input_dev, xpad_abs_triggers[i]);
+ 	}
+ 
++	/* setup layer buton as an axis with 4 possible values */
++	if (xpad->mapping & MAP_LAYER_BUTTON)
++		xpad_set_up_abs(input_dev, ABS_MISC);
++
+ 	error = xpad_init_ff(xpad);
+ 	if (error)
+ 		goto err_free_input;
+-- 
+2.30.2
 
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index fabf0c014349..3fc46f9cfb22 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -50,9 +50,11 @@ CONFIG_NET_SCHED=y
- CONFIG_NETDEVSIM=m
- CONFIG_NETFILTER=y
- CONFIG_NETFILTER_SYNPROXY=y
-+CONFIG_NETFILTER_XT_CONNMARK=y
- CONFIG_NETFILTER_XT_MATCH_STATE=y
- CONFIG_NETFILTER_XT_TARGET_CT=y
- CONFIG_NF_CONNTRACK=y
-+CONFIG_NF_CONNTRACK_MARK=y
- CONFIG_NF_DEFRAG_IPV4=y
- CONFIG_NF_DEFRAG_IPV6=y
- CONFIG_RC_CORE=y
-
-[...]
-
-Thanks,
-Daniel

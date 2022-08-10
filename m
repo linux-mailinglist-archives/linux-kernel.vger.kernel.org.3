@@ -2,67 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3E5B58E956
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 11:12:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 640D358E954
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 11:12:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231979AbiHJJMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 05:12:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37584 "EHLO
+        id S231976AbiHJJMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 05:12:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231987AbiHJJMc (ORCPT
+        with ESMTP id S231804AbiHJJMX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 05:12:32 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E38AE208
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 02:12:30 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id r4so18202012edi.8
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 02:12:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=z5pNp3gRQvVGwmJ05VLiZxLH4XIgr85IvV8mJcL1QgY=;
-        b=sZFAANe8L9zIk80k8inK7awd8NGAgKqrCZtHegsT391lMMZ9WWE81x2EKGWnk3TbY8
-         G4KhPjpU0E2d8xuf5AgOkqmTpZSacHuAzky2qmmbC3NqwxuTvoXb6XqinrytfPQOEhRG
-         eBpDLZsH+6eOcbq9KTjcYs/wDZNfU7FRgAERpbGtTOlrE50u/pglmUwucIt7cfAU/JKo
-         4i4R7KD1GMOzhgZfg7YTKw/uaONLuSZCNb0fqR72RhgnxkEtY/5oNuVIAdA2eEiaNN7I
-         CfaRR07Xh3Nqhg2z46PXB2/bqpWfncXdQmDUxrPGv0Pf0jRDTaEziGN/Y5U85nfbq/pw
-         xooA==
+        Wed, 10 Aug 2022 05:12:23 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D84286C2B
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 02:12:22 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id d6-20020a056e020be600b002dcc7977592so10157217ilu.17
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 02:12:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=z5pNp3gRQvVGwmJ05VLiZxLH4XIgr85IvV8mJcL1QgY=;
-        b=jvnnrdws48ApeOFHi/3EqY3w4qO8fL9pAiKs03KO7kBTObzyQP9AbO+qgWgkYpKDtR
-         UXa55njJwT88i0hSSoE8I5LY2c2W5bCYmR92xXssaA6mMjKbbipHmRP1OiXaX1xq7L+A
-         NnBb+s5bPVxD0cZkqdZvgI4fpkoxNIdgkboO3Pz/en1FcSz4YYA2BrLFSeSNKy1AOc1d
-         PW8L2yCahiX+fhu0sabCKr6mDyr9EdtEVWmehYotPmqiNBe1xZM74AWuyY6hg6n5LKJR
-         6lIMg5xB8fZt2b3cxrxUnpIUec/vynyt8ZsIYg8OP+Cj5kz8j8rc+YwDlSnlJ1cJLZMf
-         20ZA==
-X-Gm-Message-State: ACgBeo38Oyt8cMWolcBOe9lSFJO4WWPPklCETJ5njJxLzXPnKPNGVa/K
-        /Nunk1WLe5J1jGNEY/52WlmomrtY8r8WDRQqcjrGKQ==
-X-Google-Smtp-Source: AA6agR4aUb5x82C6o4gs+Pwtx0SzXu4JYSeBbIZgTd0G10sFnrg7Djkfx1EPnpxj2/DRvrHj2+1iYPO4k7B2yOI6TxA=
-X-Received: by 2002:a05:6402:2387:b0:43d:3e0:4daf with SMTP id
- j7-20020a056402238700b0043d03e04dafmr25868474eda.208.1660122748984; Wed, 10
- Aug 2022 02:12:28 -0700 (PDT)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=oZmlmPgFuLzTVeJwCUtsQn3jK92/Zbe9geTOC8F9kDE=;
+        b=7sHw/qdwTonweOa+ettd5H6TPvBenoNDME8L8xmIMOQrqwVpSzKEn0kjpXjd+uqVto
+         fKJiND2kG8sF6CkGscXRkjfhENRcm5kPCTQHGo4MwhQtaEy/dJmwsH0rAxsnIMkadtlz
+         K6wesmFn43uy4Hr0rzFuEKMrqmeXUfY865r1qmxIb5ugn1zmhzKGpY4Z61pRjkYFo1ec
+         0ff6/vSuzPN5zS5HcNQD3uw6fCOzcI1l5ngd8My9i+GgJlpO9bUySaVoKqACEr06aZ2y
+         DMn4gwFz4VikuiASBOfwke8xCsNyl12f8Ea8ChzP9HUXcjH1G6LSgkfnhTiR0Lg0Xe0O
+         RRNg==
+X-Gm-Message-State: ACgBeo0sPdL/hJ4h81PS5yBp4BUgflvQM2FU2MfCdNrfU2PzsAYMDRWj
+        QHX2/2TLnD/j63vaboh2jskqNKB5DK6uqnp7JicshlJdjlJM
+X-Google-Smtp-Source: AA6agR5LGbZgJoKzBnPq44ScUexr0uehLu94E1e9uLvjC/b/BzoDxSbE4LKZtOlIcspat0kvmw6sWwbM7izBt45glwnwSIEVt8aR
 MIME-Version: 1.0
-References: <20220809175510.312431319@linuxfoundation.org>
-In-Reply-To: <20220809175510.312431319@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 10 Aug 2022 14:42:17 +0530
-Message-ID: <CA+G9fYvYuXjfTD8J9fSz=NAxL3=Ksb23Jr=4Z+Ebq=3+tjQ73g@mail.gmail.com>
-Subject: Re: [PATCH 5.4 00/15] 5.4.210-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
+X-Received: by 2002:a02:6347:0:b0:342:8ad4:ef54 with SMTP id
+ j68-20020a026347000000b003428ad4ef54mr12189351jac.162.1660122741600; Wed, 10
+ Aug 2022 02:12:21 -0700 (PDT)
+Date:   Wed, 10 Aug 2022 02:12:21 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000004bffef05e5df7207@google.com>
+Subject: [syzbot] linux-next boot error: WARNING in copy_process
+From:   syzbot <syzbot+0f36653d0d34001e0b43@syzkaller.appspotmail.com>
+To:     akpm@linux-foundation.org, bigeasy@linutronix.de,
+        bpf@vger.kernel.org, brauner@kernel.org, david@redhat.com,
+        ebiederm@xmission.com, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org, luto@kernel.org, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,109 +57,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 9 Aug 2022 at 23:33, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.4.210 release.
-> There are 15 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 11 Aug 2022 17:55:02 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.210-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
->
+Hello,
 
-Results from Linaro's test farm.
-No regressions on arm64, arm, x86_64, and i386.
+syzbot found the following issue on:
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+HEAD commit:    bc6c6584ffb2 Add linux-next specific files for 20220810
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=109b7021080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5784be4315a4403b
+dashboard link: https://syzkaller.appspot.com/bug?extid=0f36653d0d34001e0b43
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-## Build
-* kernel: 5.4.210-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.4.y
-* git commit: 0bf8828e9254e4c8917e2556001411f431ba0a70
-* git describe: v5.4.209-16-g0bf8828e9254
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.209-16-g0bf8828e9254
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+0f36653d0d34001e0b43@syzkaller.appspotmail.com
 
-## No test Regressions (compared to v5.4.207-123-gb48a8f43dce6)
+------------[ cut here ]------------
+DEBUG_LOCKS_WARN_ON(!p->softirqs_enabled)
+WARNING: CPU: 0 PID: 1047 at kernel/fork.c:2115 copy_process+0x36c9/0x7120 kernel/fork.c:2115
+Modules linked in:
+CPU: 0 PID: 1047 Comm: kworker/u4:5 Not tainted 5.19.0-next-20220810-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+Workqueue: events_unbound call_usermodehelper_exec_work
+RIP: 0010:copy_process+0x36c9/0x7120 kernel/fork.c:2115
+Code: 0c 31 ff 89 de e8 a7 00 35 00 85 db 0f 85 c3 d7 ff ff e8 da 03 35 00 48 c7 c6 c0 11 eb 89 48 c7 c7 00 12 eb 89 e8 68 3a f3 07 <0f> 0b e9 a4 d7 ff ff e8 bb 03 35 00 0f 0b e8 b4 03 35 00 0f 0b e8
+RSP: 0000:ffffc90005187938 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff88801f015880 RSI: ffffffff8161f1f8 RDI: fffff52000a30f19
+RBP: ffffc90005187ac8 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000000 R11: 0000000000000001 R12: ffff88802017002c
+R13: ffff888020170000 R14: ffffc90005187c10 R15: 0000000000808100
+FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff88823ffff000 CR3: 000000000bc8e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ kernel_clone+0xe7/0xab0 kernel/fork.c:2675
+ user_mode_thread+0xad/0xe0 kernel/fork.c:2744
+ call_usermodehelper_exec_work kernel/umh.c:174 [inline]
+ call_usermodehelper_exec_work+0xcc/0x180 kernel/umh.c:160
+ process_one_work+0x991/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e4/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
 
-## No metric Regressions (compared to v5.4.207-123-gb48a8f43dce6)
 
-## No test Fixes (compared to v5.4.207-123-gb48a8f43dce6)
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-## No metric Fixes (compared to v5.4.207-123-gb48a8f43dce6)
-
-## Test result summary
-total: 97031, pass: 85084, fail: 452, skip: 10716, xfail: 779
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 302 total, 302 passed, 0 failed
-* arm64: 61 total, 57 passed, 4 failed
-* i386: 28 total, 26 passed, 2 failed
-* mips: 45 total, 45 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 54 total, 54 passed, 0 failed
-* riscv: 27 total, 27 passed, 0 failed
-* s390: 12 total, 12 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 54 total, 52 passed, 2 failed
-
-## Test suites summary
-* fwts
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

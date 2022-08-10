@@ -2,180 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F0F258E942
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 11:03:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEB2958E945
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 11:04:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231927AbiHJJD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 05:03:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59552 "EHLO
+        id S231935AbiHJJEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 05:04:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231961AbiHJJDS (ORCPT
+        with ESMTP id S231932AbiHJJEY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 05:03:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DD738868B5
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 02:03:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660122197;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zDfT4OTVP3mlZybmyw3sBtbkZmpGAIdes/TJqqs05cY=;
-        b=KKzgIFoyfvRcdmri1ZFSg4PabPUr74q6WmaXDpVXSnEzrKtENaw4pdYFrrB5OKTOWBbK7U
-        4ouupo80IWEE+Za6XN9jytiJSAEuNNFW8CdyRO/vjAYo60NfYeqrjIGNsGqJewa9j7mHk4
-        7VI+vLB3mFXPx7azW7/3+X2pcvk55xY=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-347-nCLjho4jPJeTKQLrnzCYXQ-1; Wed, 10 Aug 2022 05:03:14 -0400
-X-MC-Unique: nCLjho4jPJeTKQLrnzCYXQ-1
-Received: by mail-wm1-f72.google.com with SMTP id j36-20020a05600c1c2400b003a540d88677so3575536wms.1
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 02:03:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=zDfT4OTVP3mlZybmyw3sBtbkZmpGAIdes/TJqqs05cY=;
-        b=QvX9bBE42Tz+0myNMrrEoKgtaN4a8v/45KAVjHqHwOSipFiktzLjYfSpyMFRxF+gDk
-         F0TGq2ALC3VZfj9U1pwhvsBHkLlb96UblpnOssTYco2wTHWKEREBDYaxM9Oq6Q83q80U
-         ozskUJNUwcxYkMQKSIRJEfu2yR4s0xM2VSHf3F9oGi3F3D7lOSNkCZsAykCFBAbztgXH
-         9lNZn+YomDpkGI+4168JDG7MuIq8IFtc3HGUG+73WMBvROeTB5JO9oN9yRA1IAJdE4B0
-         4Psx09lH1s9P2D3cKEB/MMlu7V+owINT8HcKtPPLfjNeCvbNmUYXDs9ish9s3DpIs1n+
-         iTww==
-X-Gm-Message-State: ACgBeo0vBgkE8zbnLWlARPEjQMOR1Omx4jhUMH0Qf+OtTa7V9t2MDUoA
-        RnYN0mplBtxASbfsB+wonl2BGVc7dyrfc7vQH+h9+NO/6qmXeP8l7J/iELd+RIaa2xO8CJrKKF3
-        +HZZUGFbFJcp7hnxh6sIZe1lm
-X-Received: by 2002:a5d:5a94:0:b0:221:6cec:2589 with SMTP id bp20-20020a5d5a94000000b002216cec2589mr15124093wrb.336.1660122193177;
-        Wed, 10 Aug 2022 02:03:13 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7B/fed6AkUKvETZNZzY2Aw/ljCBjLPi20tQHr8C2p9Bwqnl1tq+PpkGuYpyjcrSsB3Ep52mA==
-X-Received: by 2002:a5d:5a94:0:b0:221:6cec:2589 with SMTP id bp20-20020a5d5a94000000b002216cec2589mr15124042wrb.336.1660122192829;
-        Wed, 10 Aug 2022 02:03:12 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:1600:a3ce:b459:ef57:7b93? (p200300cbc7071600a3ceb459ef577b93.dip0.t-ipconnect.de. [2003:cb:c707:1600:a3ce:b459:ef57:7b93])
-        by smtp.gmail.com with ESMTPSA id i9-20020a05600c050900b003a3187a2d4csm1655413wmc.22.2022.08.10.02.03.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Aug 2022 02:03:12 -0700 (PDT)
-Message-ID: <95ed1a81-ff8e-2c48-8838-4b3995af51b7@redhat.com>
-Date:   Wed, 10 Aug 2022 11:03:11 +0200
-MIME-Version: 1.0
+        Wed, 10 Aug 2022 05:04:24 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2085.outbound.protection.outlook.com [40.107.93.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA94868AA;
+        Wed, 10 Aug 2022 02:04:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ny5E2VM/NqFH0HIXDWovY1vm9Q+0h4thmBnxm7mcOtttabiQsE/uF6AMCHohMVQkR5lU2pTnZb2RvNKq347XimGPZo9BTMgnbalD7/aBe6CV3nLxlEFzN3URX1inCaf6xyLV6GaEmK/t/Tp3bzElkx8rS7vpNbPWp3XuQQ3jmG9Eba780pqOjX840HmmZaaxmJU8wxD5QswAZxKtakJMR7dxBxlF4ljrddWp0wooZbIxTgJh/8RP2vrWbvyCI/3A1W0I0R60aVUNJI7QbY2XpxCrSAPaE57DulbeubqPw/KjA1pgzjtnHmOn0VULlXi3VIREZW7iezgg122Xj9i+GA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=J8/iYvYOYkCxkQGDLr5fzE9/DS340HmO+yaXPvED898=;
+ b=S335RdcI4Zd8efsXWf3cbUnfpT0OOk+x1hHcTbVRvpAVIJo/4gjos8FHDIAeDQ0Yj5FcTjFS2vcKUqLnTRwp1Nr/sxt+rRnGUdR1Uu9Njvc8NQnNqf3dW9LGzvxZ634PAA23aj5s66w1YKFSFg++eOcmY0wfm9abxKXkrBV5nK2GXUJGTGY1DKaRkFEjaimvyUwuBNC2eZ8nwTiCn5XDT6tcZEA0e4D0SMG2MjkcLr+JjgrHWxaL5ugKk7CgRzQu+kjkQyRmm+uZQeB/N5pHAltKEMRUI61yAV1BHIauVQjNbrrll3t9zd4754cXXfx+gBrjYMpEe9bNMP2i978gGg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=J8/iYvYOYkCxkQGDLr5fzE9/DS340HmO+yaXPvED898=;
+ b=j4VgwtCMa0qsBdjuYB9dM9MGV222xs++d5W4bLBjWG6iVgcBqABM73t2T6oGZ51SkvjmWYWJyoroEbdup2wE1I1tten9bNHRn4dpLPqZ+mLCu63FMMZrwU6avIt2M2tAP2q2cLlTqqTu0BMKD24vd8AOpHQHHv/6x5sC75PFUpo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by DM5PR12MB4679.namprd12.prod.outlook.com (2603:10b6:4:a2::37) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.18; Wed, 10 Aug
+ 2022 09:04:20 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::905:1701:3b51:7e39]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::905:1701:3b51:7e39%2]) with mapi id 15.20.5504.020; Wed, 10 Aug 2022
+ 09:04:20 +0000
+Message-ID: <1bb3ff1c-d89f-8b2b-b898-bb60f77462c4@amd.com>
+Date:   Wed, 10 Aug 2022 11:04:13 +0200
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
+Subject: Re: [PATCH v8 1/2] drm/gem: Properly annotate WW context on
+ drm_gem_lock_reservations() error
 Content-Language: en-US
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
-        "open list:ABI/API" <linux-api@vger.kernel.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
-        <linux-perf-users@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, krisman@collabora.com
-Cc:     kernel@collabora.com
-References: <20220726161854.276359-1-usama.anjum@collabora.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH 0/5] Add process_memwatch syscall
-In-Reply-To: <20220726161854.276359-1-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+To:     Daniel Vetter <daniel@ffwll.ch>
+Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        David Airlie <airlied@linux.ie>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>,
+        linux-tegra@vger.kernel.org, kernel@collabora.com,
+        virtualization@lists.linux-foundation.org
+References: <20220701090240.1896131-1-dmitry.osipenko@collabora.com>
+ <20220701090240.1896131-2-dmitry.osipenko@collabora.com>
+ <a42237c9-6304-4b06-cede-2175c7e7b87d@amd.com>
+ <YvKO5r5Sr56e9vBf@phenom.ffwll.local>
+ <e760f555-7f2d-dea9-70b2-c0881adc3afc@amd.com>
+ <CAKMK7uEd1xX6P4YRgYOfjvqpwVmQ0YZPkHdK=4auwrkBE9CEzQ@mail.gmail.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <CAKMK7uEd1xX6P4YRgYOfjvqpwVmQ0YZPkHdK=4auwrkBE9CEzQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AS9PR06CA0567.eurprd06.prod.outlook.com
+ (2603:10a6:20b:485::35) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: b1516170-210c-432b-76c9-08da7aaf4f92
+X-MS-TrafficTypeDiagnostic: DM5PR12MB4679:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 37dSMN1f720lnC7S/1s2W/dW9ejxW2uKRgD1WR3+DlTLo1+UKDOz12A8vb+MBK/H0xu1ZvQgjiYCjfMpknU+kbXOwzdgQlTh4ksMtPzy7EZ7FYmDKv074RHwAgPYxYEjB0chezlWlIqe7u9U1148QzTF9kg+KuNg3DQFxwHr7Tg3AzdmZchMaia2shmEVntBTrMrz7uB5qCr10eKLsz2BUneGBvpd2WX5R3UkIz/jvOXYQBlE9HhutOVWCH6FYulC2ltt24Wi5xZ1FIFIFR+Ua+jaj6N1qtUSoMVBb3cl9SoauSarQkGvLPK+iIPMFIVOY7vKUU4pymZHUyBARFTF0WocqLsGRjdKNNodXRbEpUsWnUDORsAsnS8rQzxb26KMk73zRQUYGq43QLWiEIZV343CXb566MkX88hBYxfKg5ltSMib0Snbu5RQkJdzS45yWjjE4kbHZ6AvgiRo+yRtkLKOgRoFsSatCTvf1yPxqgVFGl17KOMrBSWgfo9wIZ0KtMX08rRXA6o3EYBBPWD3w8+rjpmqop7Op2ElXJ2awpMyb96CZub5BGeuNQDfu117wpOpJqVg4DNMHeV9SmpuwqPYrpFkpHTRuOXogJO4Hl6eUxzZlURJYxQ6n5dl9iWwbmegLschWjXcBeRMCMJkR60UbpLKvhG9MQCeNTpB+cdts71d4tLIlO2Bu5qSn+YG66RRWDZIC8Jpwqzbx79Bj2oAe4yXkdLeapAQMNUvKIC6tfxiF6kjjjI3JqF2MN+2NGESRS9SWt2ua1dmS/VoB3mUAyuBs4gFFUGrxl/v+7aivq1q50QnocZkwfy3TSkXQWKB1DwQ/eTBaMdBV76uQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(396003)(376002)(136003)(39860400002)(366004)(38100700002)(31686004)(6506007)(186003)(6666004)(2616005)(66574015)(41300700001)(6512007)(86362001)(66556008)(31696002)(6486002)(8676002)(316002)(478600001)(5660300002)(66476007)(66946007)(6916009)(54906003)(4326008)(2906002)(83380400001)(8936002)(7416002)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dTJZN01VSWRIS1diTnJ6aDY5Q2t5TjlwRnJDVUVtOUhORnNUbmorc1NQbXJQ?=
+ =?utf-8?B?Nk9kU0hsWmY0TDJrTSt0RGRWUC9qU3NjU1VXaGpsSW1hVGR3T0k1VXdWSzFE?=
+ =?utf-8?B?a0wyTDcvdWxTS2xXN0czRmxaeW9WZE0zNVZROWRkUDJ2WDNvM1ZHY09vM3Fh?=
+ =?utf-8?B?ZGZWK05wTCtQdkdMcEovT2pFL0wvRDNHd2Y2RlpaRFZ4TGxIZFhsSUtOanFW?=
+ =?utf-8?B?UTY5VUttaGZnUGlud0hhUlk2QUwwZ0YxRnJUYjJsWVoyMG1aRWtTZXJzYXNy?=
+ =?utf-8?B?RUN5VnlLVlExNktHbEVSbVE0ZG9Ibk0zUEwxRk5WWElzTGNSL0xxZmY0bDZY?=
+ =?utf-8?B?dzBoQ3BWU3RzVGU2Ryt0eE8vZ3M2blJhSG5QcHpMYlg4T3FnWFpvZC9TQ05Q?=
+ =?utf-8?B?V1V4Vm5ydEpSRU0zRkRkbzlod3NRNHJHTFhUMlpTcXV4RWw2SjYrUExWOTUw?=
+ =?utf-8?B?ZHljaDlmZFVtM0IzME5yQXdVSjdDVFl5azU4NlFyS1pKWk1GaUNaNVh6dmVn?=
+ =?utf-8?B?ZDdXTURQZC95S3RBSG1WVlVoMHFIaDN2SFhXSDQrZnRtM2xoQ290TjE5TktE?=
+ =?utf-8?B?TEIwdHRLcGp5VGI2QTdtOXRhSnRLaDZncng4UUw0WnJaVzZydHFidGw3U2lS?=
+ =?utf-8?B?R1d2OG5OVWQ2MHdUd3ZJRDVRK2M1V1dvS2FPTC9XSUNITHcxWlNuV2xuRFgr?=
+ =?utf-8?B?b0g5MnFGNzBFc1Vsa1JoZnptUkcxSTVwVnNxb2hubjJ1d1Y4NmJJTVdEM0xq?=
+ =?utf-8?B?ZEdhcm40enM5ejc3TFJJd2l2aFZXTUFDZDBCT0d4QWovbFFJL3liM3ByQkxV?=
+ =?utf-8?B?QnZDcTVleG1xYlBRM0hwcmVoOFZ1QXF3b3g5djlBT29lb0ZuMC96Ylg5RmUz?=
+ =?utf-8?B?eW9WWk5GSUpKQmFOUjB0UlBjUXgxeGxJcWdJY1ZUMVp3Z1RGSFcwU1J4MFd3?=
+ =?utf-8?B?SERrbCtnMTdLNlIyc1NrdDV3T3Mxdzk0a2hJTDlWMTZ2Yjk4dkg4bDd5eHB3?=
+ =?utf-8?B?R0VEaGZBQTlRc0Z2ZVVsQ1FJL2JjVWVTSEhYR3BIU2syZTlucE9ubEpVbVhZ?=
+ =?utf-8?B?TlJVWitVSTQzbTNyaStMYzVkM3g3bU9rY1dMRFQ4eWVIT0JzbGRhb2tVeC81?=
+ =?utf-8?B?REtvNFMzL3ZrbGZXNWtMSG9OQ2pNVCsvRFVaeGQvYi90MFZJQUh0K0Nyc3ZE?=
+ =?utf-8?B?c3Fka2NmclF3RXY5L2YwUDRaOU9vZ3Y0NERFeWRjb2VMSDc2UUpTM1lyYjd6?=
+ =?utf-8?B?dlZ1czZFcFRSSVFBY1JJSkdybUsxK2lmUVZvODEyUUk0S2dZOUV5cm4wWkNS?=
+ =?utf-8?B?Um5WTEpZT3ZoOVRuMzdSck5NUHRFeFVYaVZrRXdOV1lvM0l4RnpVSDFISFJ2?=
+ =?utf-8?B?SHlRRDBTd2pJNjhuUldlRHhaU2hKQXB3SXh1dUEyWi84Y282a3AvWWx1M01a?=
+ =?utf-8?B?QnpyTkhINWNRZ1JhM0t4RFdhekxpMXN3Z3A5U05jWmhMWlBrb1owZ2wzVWlI?=
+ =?utf-8?B?a3U1OG51TnJDTWRHZzFEalQ1dEhCQ2hNUTZrS1c4RHdaU2tLZEhCM0NPKzNF?=
+ =?utf-8?B?RVNpSzJWaXVWM0RubVIydmE2c2tXV2lSUjZSMExkOGVxK3I2LzF1S2U0N09H?=
+ =?utf-8?B?VTR4V2d5QWZsYnh5RE9DNURNTmowZSs3b1A1RlArUWtwT0dlb2t5b05kaXJh?=
+ =?utf-8?B?S1ZZSGMzcERHT2tGK2J2bmtKeEZFaHB0a3RjYk1iOG9SQzA2ci9IT0VzUnFh?=
+ =?utf-8?B?Z0xPZjVwQ0FXUWp4M2tuSDNmdkoxdGM3RWdTZTZEdER5WFNQK00vUEExUExm?=
+ =?utf-8?B?VlVGbHBWNGZkN0lkeTJwZUMwNE85N3M4MWlQcnJOa1Y2ZnpYc3c0Z2hGM2Mz?=
+ =?utf-8?B?bXFQdGdnSzRabmhsNlRZbFdrOXl2NzErcXBPQXBoRmRoZk5HaFAxckU3ZDdk?=
+ =?utf-8?B?SEszd0JJdWhzVkpwR1JSMUxFOGpzSTlsWXdTaXNMdElMV3FJK3BUQzZhOUZv?=
+ =?utf-8?B?L1NRbTBaTVJZM0tGRlBQMjRjRXl4ek1JSitaTHhlYlJ0Nmp6ZXJ4d2NobFlD?=
+ =?utf-8?B?dTdVdkpnNm03MDZiTm1hWTBJczFUUitXUG5LNTgzaXlaL2MrdU5rbk50di92?=
+ =?utf-8?B?ZktNVnRraWJsUCtVQjVKZGJoRFk3d1JUZFFEdHhvbjdkMEp0M1BXc2xPa2Vx?=
+ =?utf-8?Q?0K7bwX36sxQejnZFPSchWyWxFYWsKJcUlgpUETFvrbIS?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b1516170-210c-432b-76c9-08da7aaf4f92
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Aug 2022 09:04:20.1085
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: d1/y6TSq8Xf1m/6v/s73NbrkL8w8evN6i/0HT5jDSO/br50QjTDluJuUxeAUbTV4
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB4679
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26.07.22 18:18, Muhammad Usama Anjum wrote:
-> Hello,
+Am 10.08.22 um 10:33 schrieb Daniel Vetter:
+> On Wed, 10 Aug 2022 at 08:52, Christian König <christian.koenig@amd.com> wrote:
+>> Am 09.08.22 um 18:44 schrieb Daniel Vetter:
+>>> On Tue, Jul 05, 2022 at 01:33:51PM +0200, Christian König wrote:
+>>>> Am 01.07.22 um 11:02 schrieb Dmitry Osipenko:
+>>>>> Use ww_acquire_fini() in the error code paths. Otherwise lockdep
+>>>>> thinks that lock is held when lock's memory is freed after the
+>>>>> drm_gem_lock_reservations() error. The ww_acquire_context needs to be
+>>>>> annotated as "released", which fixes the noisy "WARNING: held lock freed!"
+>>>>> splat of VirtIO-GPU driver with CONFIG_DEBUG_MUTEXES=y and enabled lockdep.
+>>>>>
+>>>>> Cc: stable@vger.kernel.org
+>>>>> Fixes: 7edc3e3b975b5 ("drm: Add helpers for locking an array of BO reservations.")
+>>>>> Reviewed-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+>>>>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+>>>> Reviewed-by: Christian König <christian.koenig@amd.com>
+>>> Also added this r-b tag when merging to drm-misc-next-fixes.
+>> IIRC I've already pushed this to drm-misc-fixes with a CC stable tag
+>> about 2 weeks ago.
+>>
+>> Please double check, it probably just hasn't come down the stream again yet.
+> Hm quickly check and I didn't spot it? There's a few patches from
+> Dmitry in the last few pulls, and some more stuff pending, but not
+> these two afaics?
 
-Hi,
+Mhm, there is some potential that I wanted to push it but got distracted 
+by the re-occurring drm-tip build breakages.
 
-> 
-> This patch series implements a new syscall, process_memwatch. Currently,
-> only the support to watch soft-dirty PTE bit is added. This syscall is
-> generic to watch the memory of the process. There is enough room to add
-> more operations like this to watch memory in the future.
-> 
-> Soft-dirty PTE bit of the memory pages can be viewed by using pagemap
-> procfs file. The soft-dirty PTE bit for the memory in a process can be
-> cleared by writing to the clear_refs file. This series adds features that
-> weren't possible through the Proc FS interface.
-> - There is no atomic get soft-dirty PTE bit status and clear operation
->   possible.
+Anyway what I wanted to say is that this stuff should probably go to 
+drm-misc-fixes with a CC: stable tag :)
 
-Such an interface might be easy to add, no?
+Christian.
 
-> - The soft-dirty PTE bit of only a part of memory cannot be cleared.
-
-Same.
-
-So I'm curious why we need a new syscall for that.
-
-> 
-> Historically, soft-dirty PTE bit tracking has been used in the CRIU
-> project. The Proc FS interface is enough for that as I think the process
-> is frozen. We have the use case where we need to track the soft-dirty
-> PTE bit for running processes. We need this tracking and clear mechanism
-> of a region of memory while the process is running to emulate the
-> getWriteWatch() syscall of Windows. This syscall is used by games to keep
-> track of dirty pages and keep processing only the dirty pages. This
-> syscall can be used by the CRIU project and other applications which
-> require soft-dirty PTE bit information.
-> 
-> As in the current kernel there is no way to clear a part of memory (instead
-> of clearing the Soft-Dirty bits for the entire processi) and get+clear
-> operation cannot be performed atomically, there are other methods to mimic
-> this information entirely in userspace with poor performance:
-> - The mprotect syscall and SIGSEGV handler for bookkeeping
-> - The userfaultfd syscall with the handler for bookkeeping
-
-You write "poor performance". Did you actually implement a prototype
-using userfaultfd-wp? Can you share numbers for comparison?
-
-Adding an new syscall just for handling a corner case feature
-(soft-dirty, which we all love, of course) needs good justification.
-
-> 
->         long process_memwatch(int pidfd, unsigned long start, int len,
->                               unsigned int flags, void *vec, int vec_len);
-> 
-> This syscall can be used by the CRIU project and other applications which
-> require soft-dirty PTE bit information. The following operations are
-> supported in this syscall:
-> - Get the pages that are soft-dirty.
-> - Clear the pages which are soft-dirty.
-> - The optional flag to ignore the VM_SOFTDIRTY and only track per page
-> soft-dirty PTE bit
-
-Huh, why? VM_SOFTDIRTY is an internal implementation detail and should
-remain such.
-
-VM_SOFTDIRTY translates to "all pages in this VMA are soft-dirty".
-
--- 
-Thanks,
-
-David / dhildenb
+> -Daniel
+>
+>> Christian.
+>>
+>>> -Daniel
+>>>
+>>>>> ---
+>>>>>     drivers/gpu/drm/drm_gem.c | 4 ++--
+>>>>>     1 file changed, 2 insertions(+), 2 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
+>>>>> index eb0c2d041f13..86d670c71286 100644
+>>>>> --- a/drivers/gpu/drm/drm_gem.c
+>>>>> +++ b/drivers/gpu/drm/drm_gem.c
+>>>>> @@ -1226,7 +1226,7 @@ drm_gem_lock_reservations(struct drm_gem_object **objs, int count,
+>>>>>              ret = dma_resv_lock_slow_interruptible(obj->resv,
+>>>>>                                                               acquire_ctx);
+>>>>>              if (ret) {
+>>>>> -                   ww_acquire_done(acquire_ctx);
+>>>>> +                   ww_acquire_fini(acquire_ctx);
+>>>>>                      return ret;
+>>>>>              }
+>>>>>      }
+>>>>> @@ -1251,7 +1251,7 @@ drm_gem_lock_reservations(struct drm_gem_object **objs, int count,
+>>>>>                              goto retry;
+>>>>>                      }
+>>>>> -                   ww_acquire_done(acquire_ctx);
+>>>>> +                   ww_acquire_fini(acquire_ctx);
+>>>>>                      return ret;
+>>>>>              }
+>>>>>      }
+>
 

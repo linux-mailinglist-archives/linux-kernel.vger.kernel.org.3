@@ -2,94 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01E4358F405
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 23:57:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA67658F408
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 23:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233013AbiHJV5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 17:57:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60342 "EHLO
+        id S233039AbiHJV6s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 17:58:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232785AbiHJV5S (ORCPT
+        with ESMTP id S231464AbiHJV6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 17:57:18 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E46781B28
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 14:57:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660168638; x=1691704638;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=zWL7knpSxfOLVTuPGGUfO9icTmdPu1AKSWoBLlI/HPY=;
-  b=hlUDhOzmpqtnelNnGFlg9kIxsJ0lykccUUSQpSbDcEplXK1InKGR9m6w
-   mx1BzcRUUMskySN0w7BzEhNMCWj2dszlJfSVTd0YfcLM/MWJXDyA27WfJ
-   wn40sC7rBQH1W3zqwVKc/kPrXDBrBBTIBszBVXL1Nh3/DASCqW/8g6W1V
-   zJs3JWCse/teN5zpP31J/NB9Qc6geGv4p0dyH8jBgQsmonNLEsBmPx0IC
-   +NvA7LAe+mvBFQ3phpIB5pydIMR5oqVCnRlTlwaJM6Hh+w2BBPjEZudEO
-   y/zrw2hO4NN9ODj8TmCFUHfezoYLr5oLq/JIehfSkVYhzveybo/BURidd
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="352939937"
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="352939937"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 14:57:18 -0700
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="781381887"
-Received: from snedunga-mobl2.amr.corp.intel.com (HELO [10.212.234.47]) ([10.212.234.47])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 14:57:17 -0700
-Message-ID: <c0e46d84-5015-34b4-a80b-758562118bde@intel.com>
-Date:   Wed, 10 Aug 2022 14:57:19 -0700
+        Wed, 10 Aug 2022 17:58:45 -0400
+Received: from qproxy6-pub.mail.unifiedlayer.com (qproxy6-pub.mail.unifiedlayer.com [69.89.23.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CFC581B37
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 14:58:45 -0700 (PDT)
+Received: from outbound-ss-820.bluehost.com (outbound-ss-820.bluehost.com [69.89.24.241])
+        by qproxy6.mail.unifiedlayer.com (Postfix) with ESMTP id D96BA803B0B4
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 21:58:44 +0000 (UTC)
+Received: from cmgw11.mail.unifiedlayer.com (unknown [10.0.90.126])
+        by progateway2.mail.pro1.eigbox.com (Postfix) with ESMTP id 4F5B710047471
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 21:58:24 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id LtiZoKnnmTQmXLtiaooSVV; Wed, 10 Aug 2022 21:58:24 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=buiJuGWi c=1 sm=1 tr=0 ts=62f42a00
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=biHskzXt2R4A:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=60dH3VH30z+oQjbWrZ1P0md7kGqiYKyCTLc3BWWRbUw=; b=2RtT8fYj4PfbBmi4Wy+r8RDtfp
+        PhACR6YHUFqg/rlFCKZ6UftUjjlrRGyg8hAOHqIWgLM7LDlb4Ihkub5OSGfmJaTan3fFV3HlTo4zR
+        H8lwv2H7iVejArxca+mNvuTUQkT+s6UVv3ab7pAuHtORuBq2SH/k13tbZmF8wq6KLSoTRyqqLIGMX
+        bdP4qLWaTqNBHSgMpPSuah9fNnCkp/j0DZhuZ9MV1yEe7Z3NDZcB2Q72pHYxKRy3hLjabS53uIqQw
+        ZQYJVmA1Z/XzoEzewdHbpj+d6qfMxENdk7LvK5u73IpjdGpp6q/QpEU1/H3NGI+5fS1NHJP417ZD/
+        +rHNUOnA==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:39186 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1oLtiY-002kjD-Gp;
+        Wed, 10 Aug 2022 15:58:22 -0600
+Subject: Re: [PATCH 5.15 00/30] 5.15.60-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220809175514.276643253@linuxfoundation.org>
+In-Reply-To: <20220809175514.276643253@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <593bd1ce-9610-a50a-9da6-e8704a1b50d0@w6rz.net>
+Date:   Wed, 10 Aug 2022 14:58:20 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] x86/apic: Don't disable x2APIC if locked
-Content-Language: en-US
-To:     Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "Shutemov, Kirill" <kirill.shutemov@intel.com>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        "Gomez Iglesias, Antonio" <antonio.gomez.iglesias@intel.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-References: <20220809234000.783284-1-daniel.sneddon@linux.intel.com>
- <d6ffb489-7024-ff74-bd2f-d1e06573bb82@intel.com>
- <238ea612-5a25-9323-b31f-0a14493db2f7@linux.intel.com>
- <d4bcb22e-224c-d256-cb93-3ff6ed89a7d0@intel.com>
- <341ea6e9-d8f3-ee7a-6794-67408abbf047@linux.intel.com>
- <d315aac4-8cda-bc2d-d052-09fb0649b1ad@intel.com>
- <2446fb33-9c5c-642a-797e-4e93345adb82@linux.intel.com>
- <ef3055a8-9cfd-cbd1-d76c-a2242836d16d@linux.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <ef3055a8-9cfd-cbd1-d76c-a2242836d16d@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1oLtiY-002kjD-Gp
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:39186
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/10/22 13:29, Daniel Sneddon wrote:
-> On 8/10/22 13:06, Daniel Sneddon wrote:
->> I could add a blurb to the
->> documentation where nox2apic is defined as a parameter as well.  
-> While I'm at it, I'm thinking of adding something where CONFIG_X86_X2APIC is
-> defined in kconfig.  I'll put in a blurb about selecting N on SPR systems could
-> prevent you from booting due to the lock.
+On 8/9/22 11:00 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.60 release.
+> There are 30 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Thu, 11 Aug 2022 17:55:02 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.60-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Please don't make it _too_ specific.  This is, after all, new
-architecture that is presumably going to be in place long after we all
-forget what SPR is.
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-Good Kconfig text would probably be something along the lines of:
+Tested-by: Ron Economos <re@w6rz.net>
 
-	Some ~2022 and later systems are locked into x2APIC mode and can
-	not fall back to the legacy APIC modes.  They will be unable to
-	boot without enabling this option.
-
-Would anybody hate if we just removed the CONFIG_X86_X2APIC prompt entirely?

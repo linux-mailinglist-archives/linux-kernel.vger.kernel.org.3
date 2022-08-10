@@ -2,57 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A4F458E8F7
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 10:42:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F35AA58E901
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 10:45:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231775AbiHJImn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 04:42:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39388 "EHLO
+        id S230071AbiHJIpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 04:45:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231779AbiHJIml (ORCPT
+        with ESMTP id S230104AbiHJIpT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 04:42:41 -0400
-Received: from polaris.svanheule.net (polaris.svanheule.net [84.16.241.116])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BACE13DE7
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 01:42:40 -0700 (PDT)
-Received: from vanadium.ugent.be (vanadium.ugent.be [157.193.99.61])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 10 Aug 2022 04:45:19 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E44221ADA5;
+        Wed, 10 Aug 2022 01:45:16 -0700 (PDT)
+Received: from [192.168.10.7] (unknown [39.45.206.166])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id F1DD2309210;
-        Wed, 10 Aug 2022 10:42:38 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1660120959;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=NnZEy9foVYLvu3RCIC82eHmY+OjNMagAgcp4aiqsDQ8=;
-        b=iyCjAHcyrxF+ZYlCgF2k3qGU2b7o49YprR35iar5QjfyDyeUF+W3vnQ/jetZ4ts1GMplj7
-        bKvRkZBWWmTHQjhrCL+1zz/hVUwEnTejmFsYH5ySj5Si/Ougo0SfaGYX+iP+KRbYv+oq6w
-        q4PFG/69Nx+tlAxT6hjQf3tzrxDsSKOTpzsI4BrmHEbIkQH/2tHYZYHNSpglDYGZtJEZto
-        QMXPB9UYE63mIHEyr64j4wU08Z1n6+g5l2vdMlI4K/3R9DdTQk0lwnfb08jKMejknzJwYW
-        9NW0tVcNybwN2R4cJkS+FX9SDUTUV8YfYItu7lVoZcaEch3weLSmh5k8BYZRqw==
-Message-ID: <04eee9167a9ad5e5bf9a03db1ede005ae9e3710c.camel@svanheule.net>
-Subject: Re: [PATCH v1 0/3] cpumask: UP optimisation fixes follow-up
-From:   Sander Vanheule <sander@svanheule.net>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 10 Aug 2022 10:42:38 +0200
-In-Reply-To: <YvNu0HvXkseAAr7D@yury-laptop>
-References: <cover.1660066581.git.sander@svanheule.net>
-         <YvM6LjJCMK4ZKrxK@yury-laptop>
-         <b723f2a292e92a792df95b912404e8d8e8e5e5f4.camel@svanheule.net>
-         <YvNu0HvXkseAAr7D@yury-laptop>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7B0486601BE2;
+        Wed, 10 Aug 2022 09:45:06 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1660121114;
+        bh=1473869Iv8iu6o+SiEUIxAN5ZWzArP8lHuuYZHC8TEQ=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=VOT3kbYiY90iOsNmwjPKDRcrnhA+Nq+dHr2wUdQ3dp9YXfPoB45lsModbPKyApHkC
+         FqBlOolHNZDE+WjJGbgYXMW9exPj0qxxJb+ixSAn890nshpejAJA9F3VE931As8+sK
+         x6005gi8H2dMEftgItMtJpNFHI5E0rwISEYaEmkXVeTFZsMdGLpUv/fZqScFXLHSxt
+         PrF69uDmhxQOiOzlllAlwWiKiu/Fnpy2Sm4c8YBdhu2x/lEV3arOPAJ+3fOIT9prrM
+         lCuNUMzEy2M93qUld/dgvNQf3T9IPenUsGD5zceoYOZ52JX0DIPo7GXaVwqTNv8Pbd
+         48dFgrtPO/2BQ==
+Message-ID: <a5122af2-90e2-39c5-2d6a-57a4ab8d8f24@collabora.com>
+Date:   Wed, 10 Aug 2022 13:45:00 +0500
 MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Cc:     usama.anjum@collabora.com, kernel@collabora.com
+Subject: Re: [PATCH 0/5] Add process_memwatch syscall
+Content-Language: en-US
+To:     Jonathan Corbet <corbet@lwn.net>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
+        "open list:ABI/API" <linux-api@vger.kernel.org>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
+        <linux-perf-users@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, krisman@collabora.com
+References: <20220726161854.276359-1-usama.anjum@collabora.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20220726161854.276359-1-usama.anjum@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -61,48 +81,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 7/26/22 9:18 PM, Muhammad Usama Anjum wrote:
+> Hello,
+> 
+> This patch series implements a new syscall, process_memwatch. Currently,
+> only the support to watch soft-dirty PTE bit is added. This syscall is
+> generic to watch the memory of the process. There is enough room to add
+> more operations like this to watch memory in the future.
+> 
+> Soft-dirty PTE bit of the memory pages can be viewed by using pagemap
+> procfs file. The soft-dirty PTE bit for the memory in a process can be
+> cleared by writing to the clear_refs file. This series adds features that
+> weren't possible through the Proc FS interface.
+> - There is no atomic get soft-dirty PTE bit status and clear operation
+>   possible.
+> - The soft-dirty PTE bit of only a part of memory cannot be cleared.
+> 
+> Historically, soft-dirty PTE bit tracking has been used in the CRIU
+> project. The Proc FS interface is enough for that as I think the process
+> is frozen. We have the use case where we need to track the soft-dirty
+> PTE bit for running processes. We need this tracking and clear mechanism
+> of a region of memory while the process is running to emulate the
+> getWriteWatch() syscall of Windows. This syscall is used by games to keep
+> track of dirty pages and keep processing only the dirty pages. This
+> syscall can be used by the CRIU project and other applications which
+> require soft-dirty PTE bit information.
+> 
+> As in the current kernel there is no way to clear a part of memory (instead
+> of clearing the Soft-Dirty bits for the entire processi) and get+clear
+> operation cannot be performed atomically, there are other methods to mimic
+> this information entirely in userspace with poor performance:
+> - The mprotect syscall and SIGSEGV handler for bookkeeping
+> - The userfaultfd syscall with the handler for bookkeeping
+> 
+>         long process_memwatch(int pidfd, unsigned long start, int len,
+>                               unsigned int flags, void *vec, int vec_len);
+Any thoughts?
 
+> 
+> This syscall can be used by the CRIU project and other applications which
+> require soft-dirty PTE bit information. The following operations are
+> supported in this syscall:
+> - Get the pages that are soft-dirty.
+> - Clear the pages which are soft-dirty.
+> - The optional flag to ignore the VM_SOFTDIRTY and only track per page
+> soft-dirty PTE bit
+> 
+> There are two decisions which have been taken about how to get the output
+> from the syscall.
+> - Return offsets of the pages from the start in the vec
+> - Stop execution when vec is filled with dirty pages
+> These two arguments doesn't follow the mincore() philosophy where the
+> output array corresponds to the address range in one to one fashion, hence
+> the output buffer length isn't passed and only a flag is set if the page
+> is present. This makes mincore() easy to use with less control. We are
+> passing the size of the output array and putting return data consecutively
+> which is offset of dirty pages from the start. The user can convert these
+> offsets back into the dirty page addresses easily. Suppose, the user want
+> to get first 10 dirty pages from a total memory of 100 pages. He'll
+> allocate output buffer of size 10 and process_memwatch() syscall will
+> abort after finding the 10 pages. This behaviour is needed to support
+> Windows' getWriteWatch(). The behaviour like mincore() can be achieved by
+> passing output buffer of 100 size. This interface can be used for any
+> desired behaviour.
+> 
+> Regards,
+> Muhammad Usama Anjum
+> 
+> Muhammad Usama Anjum (5):
+>   fs/proc/task_mmu: make functions global to be used in other files
+>   mm: Implement process_memwatch syscall
+>   mm: wire up process_memwatch syscall for x86
+>   selftests: vm: add process_memwatch syscall tests
+>   mm: add process_memwatch syscall documentation
+> 
+>  Documentation/admin-guide/mm/soft-dirty.rst   |  48 +-
+>  arch/x86/entry/syscalls/syscall_32.tbl        |   1 +
+>  arch/x86/entry/syscalls/syscall_64.tbl        |   1 +
+>  fs/proc/task_mmu.c                            |  84 +--
+>  include/linux/mm_inline.h                     |  99 +++
+>  include/linux/syscalls.h                      |   3 +-
+>  include/uapi/asm-generic/unistd.h             |   5 +-
+>  include/uapi/linux/memwatch.h                 |  12 +
+>  kernel/sys_ni.c                               |   1 +
+>  mm/Makefile                                   |   2 +-
+>  mm/memwatch.c                                 | 285 ++++++++
+>  tools/include/uapi/asm-generic/unistd.h       |   5 +-
+>  .../arch/x86/entry/syscalls/syscall_64.tbl    |   1 +
+>  tools/testing/selftests/vm/.gitignore         |   1 +
+>  tools/testing/selftests/vm/Makefile           |   2 +
+>  tools/testing/selftests/vm/memwatch_test.c    | 635 ++++++++++++++++++
+>  16 files changed, 1098 insertions(+), 87 deletions(-)
+>  create mode 100644 include/uapi/linux/memwatch.h
+>  create mode 100644 mm/memwatch.c
+>  create mode 100644 tools/testing/selftests/vm/memwatch_test.c
+> 
 
-On Wed, 2022-08-10 at 01:39 -0700, Yury Norov wrote:
-> On Wed, Aug 10, 2022 at 10:18:09AM +0200, Sander Vanheule wrote:
-> > On Tue, 2022-08-09 at 21:55 -0700, Yury Norov wrote:
-> > > On Tue, Aug 09, 2022 at 07:36:32PM +0200, Sander Vanheule wrote:
-> > > > As an older version of the UP optimisation fixes was merged, not al=
-l
-> > > > review feedback has been implemented.=C2=A0 These patches implement=
- the
-> > > > feedback received on the merged version [1], and the respin [2], fo=
-r
-> > > > changes related to include/linux/cpumask.h and lib/cpumask.c.
-> > > >=20
-> > > > [1] https://lore.kernel.org/lkml/cover.1656777646.git.sander@svanhe=
-ule.net/
-> > > > [2] https://lore.kernel.org/lkml/cover.1659077534.git.sander@svanhe=
-ule.net/
-> > > >=20
-> > > > Sander Vanheule (3):
-> > > > =C2=A0 cpumask: align signatures of UP implementations
-> > > > =C2=A0 lib/cpumask: add inline cpumask_next_wrap() for UP
-> > > > =C2=A0 lib/cpumask: drop always-true preprocessor guard
-> > >=20
-> > > Acked-by: Yury Norov <yury.norov@gmail.com>
-> > >=20
-> > > Applying at bitmap-for-next, after some testing.
-> >=20
-> > Thanks! Any chance to get this in for 6.0? I would rather avoid buildin=
-g cpumask.o only on 6.0,
-> > but
-> > otherwise I don't think anything is functionally wrong with what is cur=
-rently merged.
->=20
-> Functionally not, but something is still wrong, right? :)
->=20
-> I think -rc2 would be our best option for this, because this series is
-> a fix to v4, and because it will let this spend some time in -next.
->=20
-> Are you OK with this?
-
-Sounds perfect!
-
-Thanks,
-Sander
+-- 
+Muhammad Usama Anjum

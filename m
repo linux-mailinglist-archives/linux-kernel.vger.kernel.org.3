@@ -2,144 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D2B558E44F
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 03:03:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FDFC58E454
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 03:08:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbiHJBDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 21:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58500 "EHLO
+        id S229882AbiHJBIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 21:08:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiHJBDP (ORCPT
+        with ESMTP id S229475AbiHJBId (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 21:03:15 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985E37FE64
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 18:03:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660093394; x=1691629394;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=QU0QFQIlk9ihlrAWfjh63Fch4PO6/pP1o8deWPkNo3o=;
-  b=fkkRxeQyuAaS6flj+E5Zi/yVuS2YW6F4X58ovyXJLA+UqGj99xR0oITm
-   2N2UDZ7Kzx+oB+xbgDy7jx241uJ1rwZwCYQpcCtGkKWCcw/Eohh+3Zwsm
-   0BdfGN6PEcwYQF6t1YtcKcQoImKi0o7CtAnggdpy+gjKpPmTCEAy6K7Dt
-   idpmrfJAvKpwmlYrjeqPZZ14YUSBqtDGHj4p+YOpX0ZlLfvR8OU85fBg7
-   p3JvFHKVjDFdFRrG4sdh4yoW0PSrilHzr2DPtz2yoK4d/5jBqGDcfx+Vy
-   3RGDLoXb5cLUBvr+W2YBMZOKm7wNkTlWRQnz0kqwTQiGj3jaltmqeYX05
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="274019588"
-X-IronPort-AV: E=Sophos;i="5.93,225,1654585200"; 
-   d="scan'208";a="274019588"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 18:03:13 -0700
-X-IronPort-AV: E=Sophos;i="5.93,225,1654585200"; 
-   d="scan'208";a="581026940"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 18:03:09 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>
-Cc:     linux-mm@kvack.org, akpm@linux-foundation.org,
-        Wei Xu <weixugc@google.com>, Yang Shi <shy828301@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Tim C Chen <tim.c.chen@intel.com>,
-        Michal Hocko <mhocko@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, jvgediya.oss@gmail.com
-Subject: Re: [PATCH v13 6/9] mm/demotion: Add pg_data_t member to track node
- memory tier details
-References: <20220808062601.836025-1-aneesh.kumar@linux.ibm.com>
-        <20220808062601.836025-7-aneesh.kumar@linux.ibm.com>
-        <87bksugfex.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <f3590060-3b7b-e576-0742-bd0dae8c760d@linux.ibm.com>
-Date:   Wed, 10 Aug 2022 09:03:06 +0800
-In-Reply-To: <f3590060-3b7b-e576-0742-bd0dae8c760d@linux.ibm.com> (Aneesh
-        Kumar K. V.'s message of "Tue, 9 Aug 2022 11:11:15 +0530")
-Message-ID: <87sfm4gbat.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Tue, 9 Aug 2022 21:08:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9EEF70E52
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 18:08:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B9BF6122A
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 01:08:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09B7DC433C1;
+        Wed, 10 Aug 2022 01:08:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660093711;
+        bh=gDpZ800zuPi6XDQp4C0dv++Rl8lv0u6lVZ0kAvYcyxo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=I4WtNltDw7RjbFxENBifLW3+OiG8lw8/Jz0a0jrR+uwxaw+8zEaf9DLpCYzlDEyo6
+         5jRb7tJkSBdGG+a8nW3sSZ+Q3T3kMFgtjcb9J1yeP+FWTQRhLHNEUpvIc5AnKBMl7u
+         JB80tzys/ze1IShnCWVO/W02G11gRfQesIKCOx15HyD1QmW58+zF9hIs2O/1q0tprI
+         Uzt3W2bIPw9CPvO/tw0Yf6RJG0sFRjfGF7Q/33jrCgjb8TEW2abYzNs1xbMZrAM6+f
+         s3tsJt71azux//4MTS3/Bx9AE+SIHTPQwMKd7ghf7uPsw/2Z4KtuvS0OCz82nuCkze
+         SCdcuNkOjIGyQ==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, alsa-devel@alsa-project.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] ASoC: mchp-spdiftx: Fix clang -Wbitfield-constant-conversion
+Date:   Tue,  9 Aug 2022 18:08:09 -0700
+Message-Id: <20220810010809.2024482-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Aneesh Kumar K V <aneesh.kumar@linux.ibm.com> writes:
+A recent change in clang strengthened its -Wbitfield-constant-conversion
+to warn when 1 is assigned to a 1-bit signed integer bitfield, as it can
+only be 0 or -1, not 1:
 
-> On 8/9/22 10:51 AM, Huang, Ying wrote:
->> "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com> writes:
->> 
->>> Also update different helpes to use NODE_DATA()->memtier. Since
->>> node specific memtier can change based on the reassignment of
->>> NUMA node to a different memory tiers, accessing NODE_DATA()->memtier
->>> needs to happen under an rcu read lock or memory_tier_lock.
->>>
->>> Signed-off-by: Aneesh Kumar K.V <aneesh.kumar@linux.ibm.com>
->>> ---
->>>  include/linux/mmzone.h |  3 +++
->>>  mm/memory-tiers.c      | 38 ++++++++++++++++++++++++++++++++------
->>>  2 files changed, 35 insertions(+), 6 deletions(-)
->>>
->>> diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
->>> index aab70355d64f..353812495a70 100644
->>> --- a/include/linux/mmzone.h
->>> +++ b/include/linux/mmzone.h
->>> @@ -928,6 +928,9 @@ typedef struct pglist_data {
->>>  	/* Per-node vmstats */
->>>  	struct per_cpu_nodestat __percpu *per_cpu_nodestats;
->>>  	atomic_long_t		vm_stat[NR_VM_NODE_STAT_ITEMS];
->>> +#ifdef CONFIG_NUMA
->>> +	struct memory_tier __rcu *memtier;
->>> +#endif
->>>  } pg_data_t;
->>>  
->>>  #define node_present_pages(nid)	(NODE_DATA(nid)->node_present_pages)
->>> diff --git a/mm/memory-tiers.c b/mm/memory-tiers.c
->>> index 02e514e87d5c..3778ac6a44a1 100644
->>> --- a/mm/memory-tiers.c
->>> +++ b/mm/memory-tiers.c
->>> @@ -5,6 +5,7 @@
->>>  #include <linux/kobject.h>
->>>  #include <linux/memory.h>
->>>  #include <linux/random.h>
->>> +#include <linux/mmzone.h>
->>>  #include <linux/memory-tiers.h>
->>>  
->>>  #include "internal.h"
->>> @@ -137,12 +138,18 @@ static struct memory_tier *find_create_memory_tier(struct memory_dev_type *memty
->>>  
->>>  static struct memory_tier *__node_get_memory_tier(int node)
->>>  {
->>> -	struct memory_dev_type *memtype;
->>> +	pg_data_t *pgdat;
->>>  
->>> -	memtype = node_memory_types[node];
->>> -	if (memtype && node_isset(node, memtype->nodes))
->>> -		return memtype->memtier;
->>> -	return NULL;
->> 
->> After adding pgdat->memtier, it appears there's unnecessary to keep
->> memtype->memtier?
->> 
->
-> It do simplify find_create_memory_tier() where I use if (memtype->memtier) 
-> to check whether the memtype is already added to a memory tier. I could switch
-> that to list_empty(memtype->tier_sibiling). But I felt the current one is much
-> cleaner
+  sound/soc/atmel/mchp-spdiftx.c:505:20: error: implicit truncation from 'int' to bit-field changes value from 1 to -1 [-Werror,-Wbitfield-constant-conversion]
+          dev->gclk_enabled = 1;
+                            ^ ~
+  1 error generated.
 
-I prefer "list_empty(memtype->tier_sibiling)".  But I will let you to
-decide.
+The actual value of the field is never checked, just that it is not
+zero, so there is not a real bug here. However, it is simple enough to
+silence the warning by making the bitfield unsigned, which matches the
+mchp-spdifrx driver.
 
-Best Regards,
-Huang, Ying
+Fixes: 06ca24e98e6b ("ASoC: mchp-spdiftx: add driver for S/PDIF TX Controller")
+Link: https://github.com/ClangBuiltLinux/linux/issues/1686
+Link: https://github.com/llvm/llvm-project/commit/82afc9b169a67e8b8a1862fb9c41a2cd974d6691
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ sound/soc/atmel/mchp-spdiftx.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sound/soc/atmel/mchp-spdiftx.c b/sound/soc/atmel/mchp-spdiftx.c
+index 4850a177803d..ab2d7a791f39 100644
+--- a/sound/soc/atmel/mchp-spdiftx.c
++++ b/sound/soc/atmel/mchp-spdiftx.c
+@@ -196,7 +196,7 @@ struct mchp_spdiftx_dev {
+ 	struct clk				*pclk;
+ 	struct clk				*gclk;
+ 	unsigned int				fmt;
+-	int					gclk_enabled:1;
++	unsigned int				gclk_enabled:1;
+ };
+ 
+ static inline int mchp_spdiftx_is_running(struct mchp_spdiftx_dev *dev)
+
+base-commit: 15205c2829ca2cbb5ece5ceaafe1171a8470e62b
+-- 
+2.37.1
 

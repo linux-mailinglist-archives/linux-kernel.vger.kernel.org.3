@@ -2,94 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 103E058E8BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 10:28:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE8D58E8C0
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 10:29:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbiHJI2m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 04:28:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49948 "EHLO
+        id S231519AbiHJI3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 04:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231360AbiHJI2l (ORCPT
+        with ESMTP id S231517AbiHJI2p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 04:28:41 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A39B061D95;
-        Wed, 10 Aug 2022 01:28:39 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b9800329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:9800:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0DD9F1EC0380;
-        Wed, 10 Aug 2022 10:28:34 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1660120114;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=1s5KkfNqTz8/ZlXcXp/qDi3y0LrVX0jvXxjDnHobf2U=;
-        b=L32kBcKYCI4V/+ihY7ehc4SLXTECULeJA5TlDcepyWdTHrZcyQXDypSlq0zscN32uMIB6f
-        9wun/WBJ1414yYBCb+XmLUbEuinrzI+2aOOXBuMvDGcSah4WNRH2qe9ovMEDd9DYbgKm7t
-        06wddpmE1REq2FzOo1h6BfX3wirACJ4=
-Date:   Wed, 10 Aug 2022 10:28:29 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Justin He <Justin.He@arm.com>
-Cc:     "Kani, Toshi" <toshi.kani@hpe.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, James Morse <James.Morse@arm.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Richter <rric@kernel.org>,
-        Shuai Xue <xueshuai@linux.alibaba.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:EDAC-CORE" <linux-edac@vger.kernel.org>
-Subject: Re: =?utf-8?B?5Zue5aSNOiBbUEFUQ0hdIEFDUEk=?= =?utf-8?Q?=3A?= APEI:
- move edac_init ahead of ghes platform drv register
-Message-ID: <YvNsLViKcduXz5px@zn.tnic>
-References: <PH7PR84MB1838492812F5ABAA4BB54D9982639@PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM>
- <YvF+J/dfyOEVSbSQ@zn.tnic>
- <PH7PR84MB1838BF4F8B56EF1E24FCF1DC82639@PH7PR84MB1838.NAMPRD84.PROD.OUTLOOK.COM>
- <YvIPf/m3hU46S9Ik@zn.tnic>
- <DBBPR08MB4538A5C080B09A96A77CCDA9F7629@DBBPR08MB4538.eurprd08.prod.outlook.com>
- <YvJB5cxSldpigw1g@zn.tnic>
- <DBBPR08MB453870FA5C5D26AADFDF05C7F7629@DBBPR08MB4538.eurprd08.prod.outlook.com>
- <YvKWP2BcAh/+YKXM@zn.tnic>
- <YvKrfqAsVLUqW5PN@zn.tnic>
- <DBBPR08MB4538F9C5F3EAC189722F8F61F7659@DBBPR08MB4538.eurprd08.prod.outlook.com>
+        Wed, 10 Aug 2022 04:28:45 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 292F585FA4;
+        Wed, 10 Aug 2022 01:28:45 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 73so13719539pgb.9;
+        Wed, 10 Aug 2022 01:28:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=x82j1chcIa6nsAfChVWSl+SlW9WelN5T8r33FLrMLXw=;
+        b=ACSgD9wwcd0YaFg72/I6pBU3sUjhE8hBwevHyPMIdwsfgTnr6tmAlpltI1tLZCG5H/
+         ZSt68Pnsnfi6muxmov3S+wtD+V84jYaLXJAgGKX01WULSoDTWRrs+HgdaNZF4gIClJpA
+         rjHUxvSYCk9/I1KM1LeZpwHbYdF7g6Ah8v4GftmdQdiMI3SnaeKxMiKtPQCMlPysYVUm
+         4/qbftuzB/dMhCFl+QwhazMittDaFIiUWkEqTpA1pI4VgynXpN/2y8TwxIamaffCQOKY
+         1Ks7vdVgJr/2PfW2atld4dlOywwvEE+fkkzwtTkW89QhsZNAxEw6YYjpVkE+aZwHvE/8
+         N7yQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=x82j1chcIa6nsAfChVWSl+SlW9WelN5T8r33FLrMLXw=;
+        b=Hgnf2wwaBKXDdYcDsdgEHd6DNog5YCaoH59PdU04WUpPx0dBTq9q3fiQtICe3OcDzL
+         kRr9gEWbWtJMUj1eXUtpxbuP3Z6ylsf+p+muOTph0xNi9ApxfDXsbq8erMh1Cd3tpdvH
+         b7WMMGntqT466Uq6RBYverWOzVidxrsY/7omy8YVttM3rNS34U4Mv04C6pzcFyifOzBN
+         N3EK5QDxnHZ8IgKHpdwPNrFKjutsTvlasTfdEKf/eQM+/RKVp5WewI5YdMtKjnxyq/CU
+         0zBHZVlWOz+PFuh/wsxI74FiOB0mIkiIGdoAkgZ3B1rXJR7LyA3IvAcFbYXRk1Ki2oSw
+         8G7g==
+X-Gm-Message-State: ACgBeo2Au2aiL+LAmyjVuhvLFcfw1oexOjYeO2TC+2V0Ti0W0/Xybhdm
+        rpGV8cEhF6NBMSmvFDqzv3A=
+X-Google-Smtp-Source: AA6agR4i+VhbHUVyDzjq10H02RVPmVPlHINXmW22fppslyO9R73WAZpVukBobIpSwvo4X7SqmUvD9A==
+X-Received: by 2002:a05:6a00:1709:b0:52e:677b:702b with SMTP id h9-20020a056a00170900b0052e677b702bmr26618042pfc.19.1660120124683;
+        Wed, 10 Aug 2022 01:28:44 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-30.three.co.id. [180.214.232.30])
+        by smtp.gmail.com with ESMTPSA id u23-20020a1709026e1700b0016dafeda062sm12243685plk.232.2022.08.10.01.28.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Aug 2022 01:28:44 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 1226B101DAE; Wed, 10 Aug 2022 15:28:40 +0700 (WIB)
+Date:   Wed, 10 Aug 2022 15:28:40 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        slade@sladewatkins.com
+Subject: Re: [PATCH 5.19 00/21] 5.19.1-rc1 review
+Message-ID: <YvNsOHIfu3o6NQEm@debian.me>
+References: <20220809175513.345597655@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <DBBPR08MB4538F9C5F3EAC189722F8F61F7659@DBBPR08MB4538.eurprd08.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20220809175513.345597655@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 10, 2022 at 06:00:49AM +0000, Justin He wrote:
-> Is this strange or any other side effects?
+On Tue, Aug 09, 2022 at 08:00:52PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.19.1 release.
+> There are 21 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
 
-This is no different than what we do now on x86 MCA.
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0)
+and powerpc (ps3_defconfig, GCC 12.1.0).
 
-If the logging machinery is modules, they consume error records only
-when loaded.
-
-> IMPORTANT NOTICE: The contents of this email and any attachments are
-> confidential and may also be privileged. If you are not the intended
-> recipient, please notify the sender immediately and do not disclose
-> the contents to any other person, use it for any purpose, or store or
-> copy the information in any medium. Thank you.
-
-Btw, pls get rid of this if you want to be posting on public mailing
-lists. You can ask your other ARM colleagues how they solved it. :)
-
-Thx.
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+An old man doll... just what I always wanted! - Clara

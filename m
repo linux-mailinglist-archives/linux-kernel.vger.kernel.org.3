@@ -2,61 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3465658F211
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 20:01:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E5DB58F216
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 20:04:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233395AbiHJSBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 14:01:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42088 "EHLO
+        id S233485AbiHJSEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 14:04:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233005AbiHJSBa (ORCPT
+        with ESMTP id S232482AbiHJSEX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 14:01:30 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A5111A2F
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 11:01:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660154489; x=1691690489;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=3rTmOyYZVT0I5124ROCzwftBtAV5MQs3DeNu/klIUxI=;
-  b=F4kjhcXRK1SETFg3KgRfKkfeGVU5j2trtX1sR1K8Vp0kTn6XxycmgAto
-   sOlw5+Fqw1rLcRuaWWIh76wYTvWctaB1kqzZeTUZ8GH0uElXjTi2qAUFq
-   44MsjR6gQsYhuYO1TC89jU6c/KsJt6tMqKVSctg1EqI4UuKlzCoXLVuIK
-   i8ld3o3g1Lp8TwBXLwtB3qDpg+mHVBnXSzMIOCgXfjyz6FFbd+pKpMkul
-   Ba/TuAvgT1M4rFrh9fCTshSQOFc3l/5cEr09rnLziC84NZX4sJv0DNKKk
-   7kn4+ucpIbkg5qqx3BYznE0J8X5wb5qbX8m5XNLrXd89Y4gdbEIJVtAdU
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="288723059"
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="288723059"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 11:01:28 -0700
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="781317211"
-Received: from snedunga-mobl2.amr.corp.intel.com (HELO [10.212.234.47]) ([10.212.234.47])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 11:01:28 -0700
-Message-ID: <d6ffb489-7024-ff74-bd2f-d1e06573bb82@intel.com>
-Date:   Wed, 10 Aug 2022 11:01:29 -0700
+        Wed, 10 Aug 2022 14:04:23 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5600A2AE1E;
+        Wed, 10 Aug 2022 11:04:21 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CE9BA11FB;
+        Wed, 10 Aug 2022 11:04:21 -0700 (PDT)
+Received: from [192.168.122.164] (U203867.austin.arm.com [10.118.30.29])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DBC0E3F5A1;
+        Wed, 10 Aug 2022 11:04:20 -0700 (PDT)
+Message-ID: <151b17e9-5342-69e0-aea3-ec5b14bf5d83@arm.com>
+Date:   Wed, 10 Aug 2022 13:04:20 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] x86/apic: Don't disable x2APIC if locked
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v2 1/1] ACPI: CPPC: Disable FIE if registers in PCC
+ regions
 Content-Language: en-US
-To:     Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "Shutemov, Kirill" <kirill.shutemov@intel.com>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org
-References: <20220809234000.783284-1-daniel.sneddon@linux.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20220809234000.783284-1-daniel.sneddon@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org,
+        robert.moore@intel.com, devel@acpica.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, vschneid@redhat.com,
+        Ionela Voinescu <ionela.voinescu@arm.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+References: <20220728221043.4161903-1-jeremy.linton@arm.com>
+ <20220728221043.4161903-2-jeremy.linton@arm.com>
+ <3a5e7abd-9361-11ba-978d-8e8bae00ea31@arm.com>
+ <6f565c2d-e7cb-f5a2-0b38-995c9cd2deec@arm.com>
+ <64ba1dfb-a475-e667-b59d-57e5d1e5ff1f@arm.com>
+From:   Jeremy Linton <jeremy.linton@arm.com>
+In-Reply-To: <64ba1dfb-a475-e667-b59d-57e5d1e5ff1f@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,51 +54,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/9/22 16:40, Daniel Sneddon wrote:
-> The APIC supports two modes, legacy APIC (or xAPIC), and Extended APIC
-> (or x2APIC).  X2APIC mode is mostly compatible with legacy APIC, but
-> it disables the memory-mapped APIC interface in favor of one that uses
-> MSRs.  The APIC mode is controlled by the EXT bit in the APIC MSR.
+Hi,
+
+On 8/10/22 09:32, Lukasz Luba wrote:
 > 
-> Introduce support for a new feature that will allow the BIOS to lock
-> the APIC in x2APIC mode.  If the APIC is locked in x2APIC mode and the
-> kernel tries to disable the APIC or revert to legacy APIC mode a GP
-> fault will occur.
 > 
-> Introduce support for a new MSR (IA32_XAPIC_DISABLE_STATUS) and handle the
-> new locked mode when the LEGACY_XAPIC_DISABLED bit is set.
+> On 8/10/22 15:08, Jeremy Linton wrote:
+>> Hi,
+>>
+>> On 8/10/22 07:29, Lukasz Luba wrote:
+>>> Hi Jeremy,
+>>>
+>>> +CC Valentin since he might be interested in this finding
+>>> +CC Ionela, Dietmar
+>>>
+>>> I have a few comments for this patch.
+>>>
+>>>
+>>> On 7/28/22 23:10, Jeremy Linton wrote:
+>>>> PCC regions utilize a mailbox to set/retrieve register values used by
+>>>> the CPPC code. This is fine as long as the operations are
+>>>> infrequent. With the FIE code enabled though the overhead can range
+>>>> from 2-11% of system CPU overhead (ex: as measured by top) on Arm
+>>>> based machines.
+>>>>
+>>>> So, before enabling FIE assure none of the registers used by
+>>>> cppc_get_perf_ctrs() are in the PCC region. Furthermore lets also
+>>>> enable a module parameter which can also disable it at boot or module
+>>>> reload.
+>>>>
+>>>> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+>>>> ---
+>>>>   drivers/acpi/cppc_acpi.c       | 41 
+>>>> ++++++++++++++++++++++++++++++++++
+>>>>   drivers/cpufreq/cppc_cpufreq.c | 19 ++++++++++++----
+>>>>   include/acpi/cppc_acpi.h       |  5 +++++
+>>>>   3 files changed, 61 insertions(+), 4 deletions(-)
+>>>
+>>>
+>>> 1. You assume that all platforms would have this big overhead when
+>>>     they have the PCC regions for this purpose.
+>>>     Do we know which version of HW mailbox have been implemented
+>>>     and used that have this 2-11% overhead in a platform?
+>>>     Do also more recent MHU have such issues, so we could block
+>>>     them by default (like in your code)?
+>>
+>> Well, the mailbox nature of PCC pretty much assures its "slow", 
+>> relative the alternative of providing an actual register.  If a 
+>> platform provides direct access to say MHU registers, then of course 
+>> they won't actually be in a PCC region and the FIE will remain on.
+>>
+>>
+>>>
+>>> 2. I would prefer to simply change the default Kconfig value to 'n' for
+>>>     the ACPI_CPPC_CPUFREQ_FIE, instead of creating a runtime
+>>>     check code which disables it.
+>>>     We have probably introduce this overhead for older platforms with
+>>>     this commit:
+>>
+>> The problem here is that these ACPI kernels are being shipped as 
+>> single images in distro's which expect them to run on a wide range of 
+>> platforms (including x86/amd in this case), and preform optimally on 
+>> all of them.
+>>
+>> So the 'n' option basically is saying that the latest FIE code doesn't 
+>> provide a befit anywhere?
 > 
-> If the LEGACY_XAPIC_DISABLED is set, prevent the kernel
-> from trying to disable it.
+> How we define the 'benefit' here - it's a better task utilization.
+> How much better it would be vs. previous approach with old-style FIE?
+> 
+> TBH, I haven't found any test results from the development of the patch
+> set. Maybe someone could point me to the test results which bring
+> this benefit of better utilization.
+> 
+> In the RFC I could find that statement [1]:
+> 
+> "This is tested with some hacks, as I didn't have access to the right
+> hardware, on the ARM64 hikey board to check the overall functionality
+> and that works fine."
+> 
+> There should be a rule that such code is tested on a real server with
+> many CPUs under some stress-test.
+> 
+> Ionela do you have some test results where this new FIE feature
+> introduces some better & meaningful accuracy improvement to the
+> tasks utilization?
+> 
+> With this overhead measured on a real server platform I think
+> it's not worth to keep it 'y' in default.
+> 
+> The design is heavy, as stated in the commit message:
+> "    On an invocation of cppc_scale_freq_tick(), we schedule an irq work
+>      (since we reach here from hard-irq context), which then schedules a
+>      normal work item and cppc_scale_freq_workfn() updates the per_cpu
+>      arch_freq_scale variable based on the counter updates since the last
+>      tick.
+> "
+> 
+> As you said Jeremy, this mailbox would always be with overhead. IMO
+> untill we cannot be sure we have some powerful new HW mailbox, this
+> feature should be disabled.
 
-Let's also not obscure the fact that the MMIO/xAPIC interface is
-troublesome and there are real-world, practical reasons a piece of
-hardware might not want to implement it.  First on the list is:
 
-	https://aepicleak.com/
+Right, the design of the feature would be completely different if it 
+were a simple register read to get the delivered perf avoiding all the 
+jumping around you quoted.
 
-Second on the list is TDX.  The TDX module spec currently just dictates
-that TDX guests must use x2APIC.  If this (IA32_XAPIC_DISABLE_STATUS)
-mechanism was enumerated to TDX guests, they could use this instead of
-crashing in burning in whatever horrid way they are now if someone
-disables x2APIC on the command line.
+Which sorta implies that its not really fixable as is, which IMHO means 
+that 'n' isn't really strong enough, it should probably be under 
+CONFIG_EXPERT as well if such a change were made to discourage its use.
 
-It would also be nice to know roughly when this feature is showing up.
-If it's going to show up as a part of a microcode update for my laptop
-next week or next month, this might warrant a backport.  Intel would
-presumably *want* a backport to happen there, too.
+> 
+> [1] 
+> https://lore.kernel.org/lkml/cover.1594289009.git.viresh.kumar@linaro.org/
 
-If it's going to be on one server CPU that's coming out in ten years,
-then we can hold off.
-
-It might also help to link to the documentation, even if it's below a
-"--" in the changelog since these URLs aren't very stable.
-
-> https://www.intel.com/content/www/us/en/developer/articles/technical/software-security-guidance/technical-documentation/cpuid-enumeration-and-architectural-msrs.html
-
-or at least mention what the status of the documentation is.
-
-The code looks OK to me, but I'm far from impartial because this isn't
-my first look at it.  In any case:
-
-Acked-by: Dave Hansen <dave.hansen@linux.intel.com>

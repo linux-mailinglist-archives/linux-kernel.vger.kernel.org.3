@@ -2,100 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C38458F18D
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 19:27:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CB9258F18F
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 19:28:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233532AbiHJR1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 13:27:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34170 "EHLO
+        id S233540AbiHJR2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 13:28:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232538AbiHJR1Q (ORCPT
+        with ESMTP id S231409AbiHJR2x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 13:27:16 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 140EE7B1F6;
-        Wed, 10 Aug 2022 10:27:14 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id x10so14838237plb.3;
-        Wed, 10 Aug 2022 10:27:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=lPqOojcmdOAU79rFEpjfZKvBUO43nFGE73fllT7UubM=;
-        b=eyIMIlC3NT7t/M/JASfHlCFAM/ZU0pftD5lYftV9y52nfgtwB67ojBpqf2XsOJyPSE
-         myoOkkToXgt6K3WrTFoFZsHIpdtUfS60IWEMULjtaEAE+TjV+RuhH4obNjaaAnckuTC6
-         BA8od9MxEGi7eaZv3+xOdXOZnJG8xOpM61nKy+o20Apn56jqN9sCRN20JqYq4Pv+iw65
-         HK2ViXVajAEPsYsQna5Rtt5YlPAEu3ZDWGIAtarHArRoEI4B1VFOHV8Y8a57Fcozd92H
-         RiqaFV32hD0ryvy5JOdno8MAxtJFWUmXq0AKTETBfUdepAD+T8BmAmE4OsqE3afLYwij
-         OsGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=lPqOojcmdOAU79rFEpjfZKvBUO43nFGE73fllT7UubM=;
-        b=pgvjHmGHgZhMPDKtnFCauGtCbSe+qrfsJjhO6+V2kL6tdrr7/5O8dGHzRBJVpvItV+
-         KNB0pwOqDz61qtD4G0xA6op5ItDeTBHFwP8l3yMiJ7ulGEv+ip5ZgrZO0al0JmdNGF4L
-         13ReKXjG7SYBllQgLbQXUr59LhuKrj+YSC6IqwiwUiZYjBpE2xzdcJ5UrvO57yVqLIex
-         Q94CdudkDWvjSFff5ZcKyC461glMWq6vt5zN7T5Y4uVrC1ESVRQplgXPRAkKNDgDPBH+
-         5cjffiCyXJIoYbnbNNQklstxvSpaf6onr65CANohzN+q8AcFKgMA0IMdEuJvZo0dF/yY
-         FyyQ==
-X-Gm-Message-State: ACgBeo1KAJKvQ1aK1Z8YkBd2jVBRQE8fwTnO8bJSgdc81wnjTbCwT6vp
-        RD4A9ji+TTu3Bxvr/fncCHs=
-X-Google-Smtp-Source: AA6agR6HimZCFCXcilZTgRuOlMb+mEEd0Usepl+nOvNphpTCT8ioe8FrPaDEA5NtEG5DEwW+MzXylg==
-X-Received: by 2002:a17:903:230e:b0:16f:784:ea3f with SMTP id d14-20020a170903230e00b0016f0784ea3fmr28892311plh.160.1660152434248;
-        Wed, 10 Aug 2022 10:27:14 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:237b])
-        by smtp.gmail.com with ESMTPSA id v12-20020a17090a458c00b001f5513f6fb9sm1961423pjg.14.2022.08.10.10.27.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 10:27:13 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 10 Aug 2022 07:27:12 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Chengming Zhou <zhouchengming@bytedance.com>, corbet@lwn.net,
-        surenb@google.com, mingo@redhat.com, peterz@infradead.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        songmuchun@bytedance.com
-Subject: Re: [PATCH v2 09/10] sched/psi: per-cgroup PSI stats
- disable/re-enable interface
-Message-ID: <YvPqcJh5Ffv4Yga9@slm.duckdns.org>
-References: <20220808110341.15799-1-zhouchengming@bytedance.com>
- <20220808110341.15799-10-zhouchengming@bytedance.com>
- <YvKd6dezPM6UxfD/@slm.duckdns.org>
- <fcd0bd39-3049-a279-23e6-a6c02b4680a7@bytedance.com>
- <b89155d3-9315-fefc-408b-4cf538360a1c@bytedance.com>
- <YvPN07UlaPFAdlet@cmpxchg.org>
+        Wed, 10 Aug 2022 13:28:53 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 560CD7C761
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 10:28:52 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27AEN9Cf028793;
+        Wed, 10 Aug 2022 17:28:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=pHnYNDIbIxbTXRPWSMIXGubce2vdDoCOAC23ha+lTRU=;
+ b=BA4r2+cPOI5TRvWmgxFuCI6FY9EB3mZSrPmCI3nDO3wJFhNPMCbH6B1BieK02/IuuFPC
+ Wy+uQpOSR11NEjdCGF/iwg9TM3YhakcLoystNrXq00QfagOLUwBuTPqbusjA+OsKsENJ
+ YA4MRqFhoqCzAViq3H+kBv66dBLp0I4AfXODJlJ9Ti3QmdygdOyqWdrESkXkivLVJHzy
+ QzKxWfWHPiVXsw/clDoQmrF4NQtceFVsoXqeIyPxzztPM/hKl1pyaDQh2iiK8qUj7baO
+ iJwexdUO/j9Gj21ayJmoo/QJ5/bfmvcAcJCpnOBuBRMsbpi8DSxkBsu6caQI0YwuO6oC 3Q== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3huwr5k995-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Aug 2022 17:28:46 +0000
+Received: from pps.filterd (NALASPPMTA05.qualcomm.com [127.0.0.1])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 27AHQFF8026674;
+        Wed, 10 Aug 2022 17:28:45 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NALASPPMTA05.qualcomm.com (PPS) with ESMTPS id 3hshck5yr5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Aug 2022 17:28:45 +0000
+Received: from NALASPPMTA05.qualcomm.com (NALASPPMTA05.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27AHSiWa030570;
+        Wed, 10 Aug 2022 17:28:45 GMT
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.47.97.222])
+        by NALASPPMTA05.qualcomm.com (PPS) with ESMTPS id 27AHSi98030569
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Aug 2022 17:28:44 +0000
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 10 Aug 2022 10:28:44 -0700
+Received: from hu-charante-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 10 Aug 2022 10:28:41 -0700
+From:   Charan Teja Kalla <quic_charante@quicinc.com>
+To:     <akpm@linux-foundation.org>, <david@redhat.com>, <vbabka@suse.cz>,
+        <quic_pkondeti@quicinc.com>, <minchan@kernel.org>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        Charan Teja Kalla <quic_charante@quicinc.com>
+Subject: [PATCH] mm/cma_debug: show complete cma name in debugfs directories
+Date:   Wed, 10 Aug 2022 22:58:05 +0530
+Message-ID: <1660152485-17684-1-git-send-email-quic_charante@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YvPN07UlaPFAdlet@cmpxchg.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 5nMOJ4Gi2L-no8AreXv6h5wjT_i7xW1J
+X-Proofpoint-ORIG-GUID: 5nMOJ4Gi2L-no8AreXv6h5wjT_i7xW1J
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-10_11,2022-08-10_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 suspectscore=0 bulkscore=0 spamscore=0 clxscore=1015
+ lowpriorityscore=0 phishscore=0 impostorscore=0 mlxscore=0 adultscore=0
+ mlxlogscore=611 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208100053
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Currently only 12 characters of the cma name is being used as the debug
+directories where as the cma name can be of length CMA_MAX_NAME(=64)
+characters. One side problem with this is having 2 cma's with first
+common 12 characters would end up in trying to create directories with
+same name and fails with -EEXIST thus can limit cma debug functionality.
 
-On Wed, Aug 10, 2022 at 11:25:07AM -0400, Johannes Weiner wrote:
-> How about just cgroup.pressure? Too ambiguous?
-> 
-> cgroup.pressure.enable sounds good to me too. Or, because it's
-> default-enabled and that likely won't change, cgroup.pressure.disable.
+Also drop 'cma-' prefix for the cma debug directories as they are
+clearly evident that they are for cma debug through creating them in
+/sys/kernel/debug/cma/ path.
 
-.disable sounds more logical but I like .enable better for some reason. As
-for just cgroup.pressure, yeah, maybe? The conundrum is that the prettiness
-order is the exact reverse of the logical order. So, I'm okay with any of
-the three.
+Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
+---
+ mm/cma_debug.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-Thanks.
-
+diff --git a/mm/cma_debug.c b/mm/cma_debug.c
+index 2e77049..602fff8 100644
+--- a/mm/cma_debug.c
++++ b/mm/cma_debug.c
+@@ -163,11 +163,8 @@ DEFINE_DEBUGFS_ATTRIBUTE(cma_alloc_fops, NULL, cma_alloc_write, "%llu\n");
+ static void cma_debugfs_add_one(struct cma *cma, struct dentry *root_dentry)
+ {
+ 	struct dentry *tmp;
+-	char name[16];
+ 
+-	scnprintf(name, sizeof(name), "cma-%s", cma->name);
+-
+-	tmp = debugfs_create_dir(name, root_dentry);
++	tmp = debugfs_create_dir(cma->name, root_dentry);
+ 
+ 	debugfs_create_file("alloc", 0200, tmp, cma, &cma_alloc_fops);
+ 	debugfs_create_file("free", 0200, tmp, cma, &cma_free_fops);
 -- 
-tejun
+2.7.4
+

@@ -2,75 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A1F158F447
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 00:19:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89CA358F44B
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 00:22:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233324AbiHJWTg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 18:19:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50348 "EHLO
+        id S233376AbiHJWWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 18:22:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiHJWTe (ORCPT
+        with ESMTP id S229488AbiHJWV7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 18:19:34 -0400
-Received: from esa3.hc3370-68.iphmx.com (esa3.hc3370-68.iphmx.com [216.71.145.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1DB460503
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 15:19:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=citrix.com; s=securemail; t=1660169973;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=eFrhBRp0ThMJsKuM0aei5bWPTKxEibJ4KGXezHXrJ7w=;
-  b=U4u3Zosm7hMw2GTrHTI94h5+5JSxxwunWKbCUEw8r+eppy34Lk0F7m2X
-   gAiv7FYHDGsWFnDoWxMz0v0WaGwiIzeDNTji3LJxCxI7Ce6pxlHGRQNec
-   BQcJQs9MLOlwYVsUsWJbAdrUKDl8MLK3bn04BPcEfD3YNxU7i3VihC39b
-   o=;
-Authentication-Results: esa3.hc3370-68.iphmx.com; dkim=none (message not signed) header.i=none
-X-SBRS: 2.7
-X-MesageID: 77826260
-X-Ironport-Server: esa3.hc3370-68.iphmx.com
-X-Remote-IP: 162.221.156.83
-X-Policy: $RELAYED
-IronPort-Data: A9a23:RIYB9660jpZnXr+vWT3+KwxRtPHHchMFZxGqfqrLsTDasY5as4F+v
- jFOUWqEOK7bYDPyf4ggPt62oEsEupbdmN5jT1duq383Hi5G8cbLO4+Ufxz6V8+wwmwvb67FA
- +E2MISowBUcFyeEzvuVGuG96yM6jclkf5KkYMbcICd9WAR4fykojBNnioYRj5VhxNO0GGthg
- /uryyHkEALjimUc3l48sfrZ8ks/5ayq41v0g3RlDRx1lA6G/5UqJMp3yZGZdxPQXoRSF+imc
- OfPpJnRErTxpkpF5nuNy94XQ2VSKlLgFVHmZkl+AsBOtiNqtC0qupvXAdJHAathZ5dlqPgqo
- DlFncTYpQ7EpcQgksxFO/VTO3kW0aGrZNYriJVw2CCe5xSuTpfi/xlhJH4IMrxCpPhbOmxT+
- 6xGcRFTXi7foP3jldpXSsE07igiBMziPYdZsXB81zDJS/0hRPgvQY2Tu4Uehm1pwJkTQ7COP
- KL1ahI2BPjESzRJNk0aF9QVm+Cwi2OkWzZZtEiUtew85G27IAlZj+e9aoSPJITiqcN9hHzIg
- FyexEDALAgGN9XCwCaHwl7wmbqa9c/8cN1LT+DpnhJwu3Wfz3IeTh0fU0C2p9G9i0ijS5ReL
- VAZ/mwlqq1a3Fz7EPH+Uge+rXrCuQQTM/JVGvc/4RuAyYLV5RiYHWkOSjNdaN0gu9QyTDZs3
- ViM9/vjHRRmtLyYTyLb+rr8hTezPzUFaGwPfykJSSMb7NT55oI+lBTCSpBkCqHdpsH6HSHYx
- zGMsTQkgLMSnYgH2s2T+FHBjDWEvJXFTgcpoA7QWwqYAhhRPdD/IdbysB6CsKgGfN3xokS9U
- GYspPaR3bpQE722mTGDELtUPe+Z2aqiL2iJ6bJwJKXN5whB6lb6I94IuGAhfR43WioXUWS3O
- RGO4Gu98LcWZSL3NvEvPupdHuxwlcDd+cLZuuc4hzakSrx4b0e58S5nfiZ8NEi9wRF3wcnT1
- Xp2GPtA7Er26ow9lVJav89HjdcWKtkWnAs/v6zTwRW9yqa5b3WIU7oDO1bmRrlnsvvc/12Mo
- oYCbZHiJ/BjvArWPEHqHXM7dwhWfRDX+7ivwyCoSgJzClU/QzxwYxMg6bggZ5Zkj8xoqws8x
- VnkAxcw4Aeu2hX6xfCiMC8LhEXHAcki9hrW/EUEYT6V5pTUSd32tfhGJsBvLeNPGS4K5accc
- sTpsv6oWpxnIgkrMRxEBXUhhOSOrCiWuD8=
-IronPort-HdrOrdr: A9a23:nCV+IKH8DCf1jGfMpLqE5MeALOsnbusQ8zAXP0AYc3Jom6uj5q
- eTdZUgpHvJYVkqOE3I9ertBEDiewK4yXcW2/hzAV7KZmCP0wHEEGgL1/qF/9SKIUzDH4Bmup
- uIC5IOauHNMQ==
-X-IronPort-AV: E=Sophos;i="5.93,228,1654574400"; 
-   d="scan'208";a="77826260"
-From:   Andrew Cooper <andrew.cooper3@citrix.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-CC:     Andrew Cooper <andrew.cooper3@citrix.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        =?UTF-8?q?Marek=20Marczykowski-G=C3=B3recki?= 
-        <marmarek@invisiblethingslab.com>
-Subject: [PATCH] x86/fpu/xstate: Fix XSTATE_WARN_ON() to emit relevant diagnostics
-Date:   Wed, 10 Aug 2022 23:19:09 +0100
-Message-ID: <20220810221909.12768-1-andrew.cooper3@citrix.com>
-X-Mailer: git-send-email 2.11.0
+        Wed, 10 Aug 2022 18:21:59 -0400
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710EB8C449;
+        Wed, 10 Aug 2022 15:21:58 -0700 (PDT)
+Received: by mail-pj1-f50.google.com with SMTP id t22so16105297pjy.1;
+        Wed, 10 Aug 2022 15:21:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=YZbS2XsmWJ/nsjhvibRctXvETOOxOBZgEYWKbgY8GtQ=;
+        b=m3t8wRXM4+VtWI+JJ9Xn/pG8QOT1dxAMeE7utcz9C0OnAmW3E4PoulIv8BNcGrMOn2
+         Ob4XfB2Lukagjq4hxNkaNQBulSQsfjyWtoDYzlhNhfk/5myHLUR2M9zYeLVo4tbQN4Lc
+         U7+UYvgr+Xc2r1QLUpxYfE/zrt0kNBHjB322qLkxdbv754HaJh4CbCOBmZRQEhmMVDrX
+         AchdY+TUbh/4pDSthMqKsmEG2jTQ6303zXP3f5bPyRkPZdIxR5OrU4qNOBG6lHWv7l6x
+         5QvAp94t+sb3l42MrZIWdovrZuXS+1E0jMV9hVagc7Yr4gPLHu+ZWa91i2kMgcBOXuBM
+         1Rhg==
+X-Gm-Message-State: ACgBeo1j47FeL2PORkEukIWivnZbL+tnZNHrbSIKXHEWXPfxegKVvJcc
+        UZlMVBapzKCUzjIv5SKbKio=
+X-Google-Smtp-Source: AA6agR6jOnCaIK1g4UVpsCDqCwACNR5OVkNOYFcsanuEvLQRJkWhesCYWJ10S4BB4YfYrOIE44S7FQ==
+X-Received: by 2002:a17:902:ea02:b0:16f:11bf:f018 with SMTP id s2-20020a170902ea0200b0016f11bff018mr29159076plg.150.1660170117746;
+        Wed, 10 Aug 2022 15:21:57 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:85c9:163f:8564:e41f? ([2620:15c:211:201:85c9:163f:8564:e41f])
+        by smtp.gmail.com with ESMTPSA id l6-20020a170902f68600b0016c454598b5sm7263159plg.167.2022.08.10.15.21.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Aug 2022 15:21:57 -0700 (PDT)
+Message-ID: <91cdca66-3fd5-667c-de78-113e8a28bb59@acm.org>
+Date:   Wed, 10 Aug 2022 15:21:55 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: fs/zonefs/./trace.h:22:1: sparse: sparse: cast to restricted
+ blk_opf_t
+Content-Language: en-US
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     linux-kernel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        Johannes Thumshirn <jth@kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
+References: <202208061533.YBqXyzHm-lkp@intel.com>
+ <affa6eee-3b7c-105a-8f4a-35f1ed81f0cd@opensource.wdc.com>
+ <b3a6b038-ba0c-2242-3a29-5bcadcaa9d71@acm.org>
+ <24b7e027-e098-269b-ccf7-b14deb499c33@opensource.wdc.com>
+ <8aa0e7a4-265c-21f4-bdb4-57641d15b7b9@acm.org>
+ <27eed02c-fd92-6f99-b213-1be70193b37d@opensource.wdc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <27eed02c-fd92-6f99-b213-1be70193b37d@opensource.wdc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,72 +72,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"XSAVE consistency problem" has been reported under Xen, but that's the extent
-of my divination skills.
+On 8/10/22 12:14, Damien Le Moal wrote:
+> Good point. I was using Fedora 36 sparse package. Using sparse compiled from
+> source, I now see again the warnings without the patch and no warnings with the
+> patch applied. So the patch looks good. Are you going to send it as a fix for
+> 6.0-rc1 ?
 
-Modify XSTATE_WARN_ON() to force the caller to provide relevant diagnostic
-information, and modify each caller suitably.
+Hi Damien,
 
-For check_xstate_against_struct(), this removes a double WARN() where one will
-do perfectly fine.
+It is not clear to me why I have not yet received any feedback from 
+Steven Rostedt on that patch. I will try to ping Steven off-list. If 
+necessary I will repost that patch.
 
-Signed-off-by: Andrew Cooper <andrew.cooper3@citrix.com>
----
-CC: Thomas Gleixner <tglx@linutronix.de>
-CC: Ingo Molnar <mingo@redhat.com>
-CC: Borislav Petkov <bp@alien8.de>
-CC: Dave Hansen <dave.hansen@linux.intel.com>
-CC: x86@kernel.org
-CC: Marek Marczykowski-Górecki <marmarek@invisiblethingslab.com>
+Best regards,
 
-RFC: CC stable?  This has been wonky debugging for 7 years.
-
-Apparently "size 832 != kernel_size 0" so let the debugging continue...
----
- arch/x86/kernel/fpu/xstate.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-index c8340156bfd2..28b6478ea531 100644
---- a/arch/x86/kernel/fpu/xstate.c
-+++ b/arch/x86/kernel/fpu/xstate.c
-@@ -440,8 +440,8 @@ static void __init __xstate_dump_leaves(void)
- 	}
- }
- 
--#define XSTATE_WARN_ON(x) do {							\
--	if (WARN_ONCE(x, "XSAVE consistency problem, dumping leaves")) {	\
-+#define XSTATE_WARN_ON(x, fmt, ...) do {					\
-+	if (WARN_ONCE(x, "XSAVE consistency problem: " fmt, ##__VA_ARGS__)) {	\
- 		__xstate_dump_leaves();						\
- 	}									\
- } while (0)
-@@ -554,8 +554,7 @@ static bool __init check_xstate_against_struct(int nr)
- 	    (nr >= XFEATURE_MAX) ||
- 	    (nr == XFEATURE_PT_UNIMPLEMENTED_SO_FAR) ||
- 	    ((nr >= XFEATURE_RSRVD_COMP_11) && (nr <= XFEATURE_RSRVD_COMP_16))) {
--		WARN_ONCE(1, "no structure for xstate: %d\n", nr);
--		XSTATE_WARN_ON(1);
-+		XSTATE_WARN_ON(1, "No structure for xstate: %d\n", nr);
- 		return false;
- 	}
- 	return true;
-@@ -598,12 +597,13 @@ static bool __init paranoid_xstate_size_valid(unsigned int kernel_size)
- 		 * XSAVES.
- 		 */
- 		if (!xsaves && xfeature_is_supervisor(i)) {
--			XSTATE_WARN_ON(1);
-+			XSTATE_WARN_ON(1, "Got supervisor feature %d, but XSAVES not advertised\n", i);
- 			return false;
- 		}
- 	}
- 	size = xstate_calculate_size(fpu_kernel_cfg.max_features, compacted);
--	XSTATE_WARN_ON(size != kernel_size);
-+	XSTATE_WARN_ON(size != kernel_size,
-+		       "size %u != kernel_size %u\n", size, kernel_size);
- 	return size == kernel_size;
- }
- 
--- 
-2.11.0
-
+Bart.

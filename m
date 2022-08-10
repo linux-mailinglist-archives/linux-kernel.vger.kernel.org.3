@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 948CF58E5D7
+	by mail.lfdr.de (Postfix) with ESMTP id E0D3658E5D8
 	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 05:55:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230415AbiHJDyu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 23:54:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53622 "EHLO
+        id S230421AbiHJDyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 23:54:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230227AbiHJDya (ORCPT
+        with ESMTP id S230292AbiHJDyb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 23:54:30 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79F5E65825
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 20:54:29 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id 53-20020a9d0838000000b006371d896343so41651oty.10
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 20:54:29 -0700 (PDT)
+        Tue, 9 Aug 2022 23:54:31 -0400
+Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B1FA6613C
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 20:54:30 -0700 (PDT)
+Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-116c7286aaaso524040fac.11
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 20:54:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=7rU8bDr39Wos4pPlp5rDHY4O2R+eG5nyVtErR7bxkgQ=;
-        b=jN9MOdWDI/Rb19CdE9nA8Rw19kEKGJXLGI6QMin1iEM03ACk31Sm0RnYqYHsxuX3ku
-         gw8l6PZzL81YmIPr1G+rDByM1EVybyUvVwH/BBBDzIWSiDujXTMHdOYe4Omf+p9i3cxo
-         P+7i6zA3CUWW+Mojj0JiOqDwbVSg3zs3DlYRP/Bf0HL634Lp6tmOnzL9qL3IExYA0y8o
-         7ygRdYxo0/GnWcQNrOzoYhEOV8v57eo5Wn38uwfCEFKySVHjLQ6kIq6Zsv0rTR45TQgB
-         dNGEEYgSt//Dd/IOCenNlKpAruUyg9KxV5NP+BBDlAMEEXSJr2W6EWiMY/x1KDAnCyV3
-         9qAA==
+        bh=iRmS9eiX84T3Eljq6nFBiYGemoOHkrIHDqMiXTc5WkY=;
+        b=i76f7LSTmC2x3191zfAwPlIX3DHmSK1SSpHrmfuk0aveIhp3EAf0a8rat4UNfyrZNm
+         dsyiLOQPGQlck0KIqOtoUe/FludXJXUb9g0ZumMbSH4JqkIAKzSBEp7Qtts0qxHQd6zu
+         Jl8l/R48RpgDh3CM8/Db0wBa8B23u4/MGJ3a1E0ZBGZ00gG6D9CAtJDl8457yXdfEywm
+         IwPWZcJgP3W0ahtlfXKufJoGAthkRpzuUxPmnkqy6CsaU9CdBLSMJ5TbM9ajQq7Iy9RW
+         qLz93HOvWNlFK6y2Od5Mq7i5UaPj3ue/Z+vz+vROY5nod5rPXQvT/7+Gb8WT8+Xs2aUy
+         FYEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=7rU8bDr39Wos4pPlp5rDHY4O2R+eG5nyVtErR7bxkgQ=;
-        b=ArgT92cWtaog/RQ1hlfD61X6g4xPQvd7PaX38AMpp1dfymGWbuBO57RIOa4w3soBFu
-         wzgyqGyF0FHtsDYiNvMXib4vlhQ8gyvwVszAr0fNIsB1Sed+ZzKatu8LO+UayKivtJZM
-         qpIL5BUjxgg48PNiJdxfe4dqiPmNI8AUbg+OTz6LXdokbec3ahg0DNIuPl9z4Id9nnzi
-         2RI1g7odKXxoyyk+wk9fTnOMu/L2oa0beT0sWHo5UBABGnB2gADZgM/eI1W20t62Lzws
-         qp+k9AZuMG6yeFfPx1ztAcZ1auc8ZwyfeQcoqFylalCcg0sCOx2VouMg3/kKnCIU7VyL
-         IJmA==
-X-Gm-Message-State: ACgBeo3xoSbLj9lAJI2ugiCwmx6KQecQonmqG/c69e9palA2guTr5zh3
-        GNb1yQ0kv6PkThOMNmaQWbaFHA==
-X-Google-Smtp-Source: AA6agR52u71mq4gR0xhKvUZjvRBcpyjsvD4wjJZOe6Ml/U3mAwQDbMyFlLSB8zRTOV2mQfHtFzyX/g==
-X-Received: by 2002:a9d:1b21:0:b0:61d:2e19:4566 with SMTP id l30-20020a9d1b21000000b0061d2e194566mr9818467otl.11.1660103668834;
-        Tue, 09 Aug 2022 20:54:28 -0700 (PDT)
+        bh=iRmS9eiX84T3Eljq6nFBiYGemoOHkrIHDqMiXTc5WkY=;
+        b=SRc1TE3LgBpAoYph2WPQwBsTIiFJkteORsqgefI53uE+gD6GssYSAeuYM0DWNiiiNd
+         Z8IzZZkEuK7i1C7ESJgQx5rBj/TcDXfs+AUQwl8CZ4OrCf3s7qX47kV3tS/FSfZDabhx
+         9InRdQaUoUFgPRnugK7QC1ZJdiKAitOcu1kE+ehCXdEbpZ1ZUCd/Jn4C66e1PdDshIAK
+         Z775wWqh81F27csaICgvjZsEMMLOMtHlBoY3z/v/6q6RV53pP6qKp0GL6s8yH9eIbgCR
+         WwKdv/9HN2vxzC//D4mINYMw5Uq8J39GS0tGXIu6uZwsLmy2vL3cirHg3DvHtnUhTYf/
+         CkRQ==
+X-Gm-Message-State: ACgBeo3kPmQiU0fn2Jh+XfR1prkPnADi5EcwP5SpBG8cWlnyzWbr16W8
+        j01H8aGejwW4Wll1/SSKKO3iyg==
+X-Google-Smtp-Source: AA6agR6ybtnb3nnuOWfKEttcZflNL02RQ1P+Cg6d/WG7ASEGFg1dOw5IGpBPhZlMHsc0WXBNI1DKKQ==
+X-Received: by 2002:a05:6871:411:b0:10e:a23c:65b6 with SMTP id d17-20020a056871041100b0010ea23c65b6mr626373oag.93.1660103669926;
+        Tue, 09 Aug 2022 20:54:29 -0700 (PDT)
 Received: from builder.lan (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
-        by smtp.gmail.com with ESMTPSA id r13-20020a056871088d00b000f5f4ad194bsm3569732oaq.25.2022.08.09.20.54.27
+        by smtp.gmail.com with ESMTPSA id r13-20020a056871088d00b000f5f4ad194bsm3569732oaq.25.2022.08.09.20.54.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 20:54:28 -0700 (PDT)
+        Tue, 09 Aug 2022 20:54:29 -0700 (PDT)
 From:   Bjorn Andersson <bjorn.andersson@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <bjorn.andersson@linaro.org>,
@@ -56,9 +56,9 @@ To:     Andy Gross <agross@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 3/4] arm64: dts: qcom: c630: Add Embedded Controller node
-Date:   Tue,  9 Aug 2022 22:54:23 -0500
-Message-Id: <20220810035424.2796777-4-bjorn.andersson@linaro.org>
+Subject: [PATCH 4/4] arm64: dts: qcom: c630: Add DisplayPort controller
+Date:   Tue,  9 Aug 2022 22:54:24 -0500
+Message-Id: <20220810035424.2796777-5-bjorn.andersson@linaro.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220810035424.2796777-1-bjorn.andersson@linaro.org>
 References: <20220810035424.2796777-1-bjorn.andersson@linaro.org>
@@ -66,7 +66,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,70 +74,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Embedded Controller in the Lenovo Yoga C630 is accessible on &i2c1
-and provides battery and adapter status, as well as altmode
-notifications for the second USB Type-C port.
-
-Add a definition for the EC.
+Add and enable the DisplayPort controller found in the Lenovo Yoga C630
+and wire this up to the Embedded Controller for HPD notifications.
 
 Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 ---
- .../boot/dts/qcom/sdm850-lenovo-yoga-c630.dts | 35 +++++++++++++++++++
- 1 file changed, 35 insertions(+)
+ .../boot/dts/qcom/sdm850-lenovo-yoga-c630.dts | 25 +++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts b/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
-index a7af1bed4312..1b9b36faea27 100644
+index 1b9b36faea27..0e4d086cd64e 100644
 --- a/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
 +++ b/arch/arm64/boot/dts/qcom/sdm850-lenovo-yoga-c630.dts
-@@ -352,6 +352,33 @@ zap-shader {
- &i2c1 {
- 	status = "okay";
- 	clock-frequency = <400000>;
+@@ -377,6 +377,17 @@ connector@1 {
+ 			reg = <1>;
+ 			power-role = "source";
+ 			data-role = "host";
 +
-+	embedded-controller@70 {
-+		compatible = "lenovo,yoga-c630-ec";
-+		reg = <0x70>;
-+
-+		interrupts-extended = <&tlmm 20 IRQ_TYPE_LEVEL_HIGH>;
-+
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&ec_int_state>;
-+
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		connector@0 {
-+			compatible = "usb-c-connector";
-+			reg = <0>;
-+			power-role = "source";
-+			data-role = "host";
-+		};
-+
-+		connector@1 {
-+			compatible = "usb-c-connector";
-+			reg = <1>;
-+			power-role = "source";
-+			data-role = "host";
-+		};
-+	};
- };
- 
- &i2c3 {
-@@ -676,6 +703,14 @@ mode_pin_active: mode-pin {
- 		input-enable;
- 		bias-disable;
++			ports {
++				#address-cells = <1>;
++				#size-cells = <0>;
++				port@1 {
++					reg = <1>;
++					lenovo_ec_dp_in: endpoint {
++						remote-endpoint = <&mdss_dp_out>;
++					};
++				};
++			};
+ 		};
  	};
-+
-+	ec_int_state: ec-int-state {
-+		pins = "gpio20";
-+		function = "gpio";
-+
-+		input-enable;
-+		bias-disable;
-+	};
+ };
+@@ -500,6 +511,20 @@ &mdss {
+ 	status = "okay";
  };
  
- &uart6 {
++&mdss_dp {
++	status = "okay";
++	data-lanes = <0 1>;
++
++	ports {
++		port@1 {
++			reg = <1>;
++			mdss_dp_out: endpoint {
++				remote-endpoint = <&lenovo_ec_dp_in>;
++			};
++		};
++	};
++};
++
+ &mss_pil {
+ 	status = "okay";
+ 	firmware-name = "qcom/LENOVO/81JL/qcdsp1v2850.mbn", "qcom/LENOVO/81JL/qcdsp2850.mbn";
 -- 
 2.37.1
 

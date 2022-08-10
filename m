@@ -2,101 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 532B658E856
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 10:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 278E358E909
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 10:50:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231410AbiHJIBs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 04:01:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52818 "EHLO
+        id S231789AbiHJIuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 04:50:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbiHJIBq (ORCPT
+        with ESMTP id S231441AbiHJIuB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 04:01:46 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49B174CFB
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 01:01:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660118505; x=1691654505;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=mokVBZqJW1Yse8OYP1CTvEf/PPQJIyLVT1Zlj3li4EM=;
-  b=R/3ZkFev5Pr1/tL7forcPlGeZ0dkOnVEMzAC5tOsUfTHgpJ/eRASBO0X
-   W71f7htgTPuU20phKVdkwQsg4/4hg8UedmnoCW0mZT5pqcRXPXePZpLJ6
-   4tG2ETvMAJ0HfLoeiJASKkxwxOEyUpZVHsBzaDz0n3zTBHNGXtEnw98zp
-   EEIfr8GuBqt3R0synzVZrnWXey5tvxXy2pR/HshTdhC1WJ+JVtSGMdJ2X
-   FjbUtZiHob4NBieHx/Fn/EEFdgOn9pvo3bRKNqFA9tdEpBM/zeXRWu+W+
-   HfdZjQzwr1iZu5iaMkCuuKqWrRVTCDAPRpoxD6TlQ6W7IJPMLmW8+uQur
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="352758195"
-X-IronPort-AV: E=Sophos;i="5.93,226,1654585200"; 
-   d="scan'208";a="352758195"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 01:01:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,226,1654585200"; 
-   d="scan'208";a="633673969"
-Received: from lkp-server02.sh.intel.com (HELO 5d6b42aa80b8) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 10 Aug 2022 01:01:43 -0700
-Received: from kbuild by 5d6b42aa80b8 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oLget-00003n-0M;
-        Wed, 10 Aug 2022 08:01:43 +0000
-Date:   Wed, 10 Aug 2022 16:01:32 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     David Howells <dhowells@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org, Simo Sorce <simo@redhat.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>
-Subject: ERROR: modpost: "pkcs7_supply_detached_data"
- [crypto/asymmetric_keys/x509_key_parser.ko] undefined!
-Message-ID: <202208101504.vAW2fZNR-lkp@intel.com>
+        Wed, 10 Aug 2022 04:50:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2CC6CD33;
+        Wed, 10 Aug 2022 01:50:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A930A60F2A;
+        Wed, 10 Aug 2022 08:50:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8509FC433D6;
+        Wed, 10 Aug 2022 08:49:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660121400;
+        bh=kxqLGEuO/b/nofV0WGOHjVv9TvRvs28sordeYCxzinA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kR4V+yVrH8230+GXuqgWdLtUx+jJLnAPabOYHNGL9PCcA5MEskCIzaSeTreI6TcAm
+         MrnSCmGHWN5wdX9BH+/GwWdfwHCh2vIXRDPOhnoeY3bQWKKKSTYmD6M1H5sDXBZFG+
+         XKRzYlRxcPgnPF4biG5WRauki32odvi9Yt/b3FAo=
+Date:   Wed, 10 Aug 2022 07:03:37 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Daniil Lunev <dlunev@chromium.org>
+Cc:     Bart Van Assche <bvanassche@acm.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bean Huo <beanhuo@micron.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        Sohaib Mohamed <sohaib.amhmd@gmail.com>,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org
+Subject: Re: [PATCH v6] ufs: core: print UFSHCD capabilities in controller's
+ sysfs node
+Message-ID: <YvM8KQGAbFz9HlV8@kroah.com>
+References: <20220803074955.v6.1.Ibf9efc9be50783eeee55befa2270b7d38552354c@changeid>
+ <YuoRuP2pxgSQ6c9E@kroah.com>
+ <CAONX=-f8kHWCEEyqUdpn5wsyMZKa4eJSSCLvPDn3R5mQF9FSMA@mail.gmail.com>
+ <CAONX=-eL02see4m6wK74cX2D6rUXJXtZYSRiNhPQVDsS8kU27g@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAONX=-eL02see4m6wK74cX2D6rUXJXtZYSRiNhPQVDsS8kU27g@mail.gmail.com>
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
 
-FYI, the error/warning still remains.
+A: http://en.wikipedia.org/wiki/Top_post
+Q: Were do I find info about this thing called top-posting?
+A: Because it messes up the order in which people normally read text.
+Q: Why is top-posting such a bad thing?
+A: Top-posting.
+Q: What is the most annoying thing in e-mail?
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   d4252071b97d2027d246f6a82cbee4d52f618b47
-commit: 3cde3174eb910513d32a9ec8a9b95ea59be833df certs: Add FIPS selftests
-date:   7 weeks ago
-config: s390-randconfig-r026-20220808 (https://download.01.org/0day-ci/archive/20220810/202208101504.vAW2fZNR-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3cde3174eb910513d32a9ec8a9b95ea59be833df
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 3cde3174eb910513d32a9ec8a9b95ea59be833df
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+A: No.
+Q: Should I include quotations after my reply?
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+http://daringfireball.net/2007/07/on_top
 
->> ERROR: modpost: "pkcs7_supply_detached_data" [crypto/asymmetric_keys/x509_key_parser.ko] undefined!
-ERROR: modpost: "devm_ioremap_resource" [drivers/dma/qcom/hdma.ko] undefined!
-ERROR: modpost: "devm_ioremap_resource" [drivers/dma/idma64.ko] undefined!
-ERROR: modpost: "iounmap" [drivers/pcmcia/pcmcia.ko] undefined!
-ERROR: modpost: "ioremap" [drivers/pcmcia/pcmcia.ko] undefined!
+On Wed, Aug 10, 2022 at 07:16:34AM +1000, Daniil Lunev wrote:
+> Hello,
+> 
+> Are there any more amendments you would want me to make or is it good to go?
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+I have no context here at all, sorry, nor do I have any idea what you
+are expecting from us :(
+
+Also, it's the middle of the merge window, we can't do anything right
+now.  Resend your patch series after -rc1 is out and we can review it
+then.
+
+thanks,
+
+greg k-h

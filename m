@@ -2,127 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D98E58EC77
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 14:57:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E627758EC88
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 14:58:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232403AbiHJM5A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 08:57:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51482 "EHLO
+        id S232364AbiHJM63 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 08:58:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232348AbiHJM4j (ORCPT
+        with ESMTP id S232559AbiHJM54 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 08:56:39 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DB965C349;
-        Wed, 10 Aug 2022 05:56:38 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27ACoQWp012677;
-        Wed, 10 Aug 2022 12:56:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=8+oT9Nis5SKah9qTR3TP8xCyoTW/s4DlrF3m5iveus0=;
- b=aookoxmhPpcIx/2uPVoefBQqhfRaBKurFGSfLopJrnOJiIWEIoxL4S7+79PRqkURK4Nm
- QVtqdGX63UotogcdRWPPgTzKOZMUk9m48eBZKQGwFxcHkHkxaAPE0LhHq3f/511yKaIG
- oaLmaqU5ucPPKLCZreqr1Z9W2SYSY7FmSpp3XtrpiJrKUFxUvPxP9+arzgeSoyOQPJ18
- /YLX5L6ggPtdVfaHqs1YCLhUylip6G2xtTQHdPvrRcIb6kkTP3ZJVaPH8nPfG3TpKJT3
- Pb8Xr5QAvs0VhoP25v7QAu9beIDR/Y5eunDE+FzaobQ8j5rQsa0B2/4Kma//GWR01ab1 SA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hv6dcw2g1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 Aug 2022 12:56:37 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27ACpaRR019554;
-        Wed, 10 Aug 2022 12:56:37 GMT
-Received: from ppma05fra.de.ibm.com (6c.4a.5195.ip4.static.sl-reverse.com [149.81.74.108])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hv6dcw2en-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 Aug 2022 12:56:37 +0000
-Received: from pps.filterd (ppma05fra.de.ibm.com [127.0.0.1])
-        by ppma05fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27ACpU2k021444;
-        Wed, 10 Aug 2022 12:56:34 GMT
-Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
-        by ppma05fra.de.ibm.com with ESMTP id 3huwvjgmr9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 Aug 2022 12:56:34 +0000
-Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
-        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27ACuVbV18874850
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 10 Aug 2022 12:56:31 GMT
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2EC584C044;
-        Wed, 10 Aug 2022 12:56:31 +0000 (GMT)
-Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7DFA54C040;
-        Wed, 10 Aug 2022 12:56:30 +0000 (GMT)
-Received: from p-imbrenda.bredband2.com (unknown [9.145.0.105])
-        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
-        Wed, 10 Aug 2022 12:56:30 +0000 (GMT)
-From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
-To:     kvm@vger.kernel.org
-Cc:     borntraeger@de.ibm.com, frankja@linux.ibm.com, thuth@redhat.com,
-        pasic@linux.ibm.com, david@redhat.com, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, scgl@linux.ibm.com,
-        seiden@linux.ibm.com, nrb@linux.ibm.com
-Subject: [PATCH v13 6/6] KVM: s390: pv: module parameter to fence asynchronous destroy
-Date:   Wed, 10 Aug 2022 14:56:25 +0200
-Message-Id: <20220810125625.45295-7-imbrenda@linux.ibm.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220810125625.45295-1-imbrenda@linux.ibm.com>
-References: <20220810125625.45295-1-imbrenda@linux.ibm.com>
+        Wed, 10 Aug 2022 08:57:56 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9CB7868B8;
+        Wed, 10 Aug 2022 05:57:38 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id l4so17616128wrm.13;
+        Wed, 10 Aug 2022 05:57:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=T2be+Zp3BRWJY28DzQwwQ6dblnROjqmbLs3Ho5BkMeU=;
+        b=gfdFdeGfZtxc+le394dNA2aOBnUmu2HKWBAgmY2lLf7anpFNz2oN3dnaro8WgllmXu
+         j7N7GDZ9WQt/XYtKXVjzBsCIVWCeyE+6x8jj88swuYES2UwIx5Y14JF2T0kWUB7j+m7t
+         6kDIVLnXzDjWwrCBDKO41IKkA7kTZnfdaS8h06lzJJIAJ+wRTNfzgMznvOHv/eZjbWwm
+         c+F2l0AXKc6nF0qDnAUO7fXBdWOaddOp0saKUCfrxQddx3OZlElY+WnXSr5itZmwEzaw
+         AXGPJUkMKUSQ0cG02XSZBu5AKu+BP0GuURd/GwMxwlY9MHIKrefuYV4BaUiDOQA7RGJs
+         0QgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=T2be+Zp3BRWJY28DzQwwQ6dblnROjqmbLs3Ho5BkMeU=;
+        b=kVWIdrsRalB/AeGZHfFQQNpCW5vrJFLzsxUHNNbaJpe67a49e4ZQ7jdQ8rQcO4Rjs0
+         vqn8p2U4jXwLd+nd0MHkXYewA3eM+mLVw7TV5bEStIAwDF8wzwtkq3hhNcUzNH8QtiIQ
+         G4cDmxg7Vz6ncGbktPqFeH0cyEdctZCSpCgmaMvnEMfZ0kSKmc4Im7cqfOnS5sydvZU4
+         tsbBzr9BTTIeTUPLRIg7BXWarU1k4ypCdMcUFiQpDHXgchus1ojRDoTbOC1/6bwxkGsL
+         eK8rfyG3CzNJV8TGql3T+hxfQE+M7CnCUZbZjeXw3U1t9/PYKXc5w940lR60BM0rOwzy
+         6mVQ==
+X-Gm-Message-State: ACgBeo1Ow1slq8ujT3P4VXNHz0kocfwmjhlIhPLny7vXuc1b1LAOG3Qa
+        G78WZjeb8r2ziTzw4izFPSg=
+X-Google-Smtp-Source: AA6agR4aCrPkvCHK3qpBL3kcQh2NZUsredunvzUyeviW3uKJ42iSQWO1RC+C9aqq7DPcGWPL96hH6Q==
+X-Received: by 2002:a5d:4b8c:0:b0:223:7c9f:cad8 with SMTP id b12-20020a5d4b8c000000b002237c9fcad8mr1916083wrt.247.1660136256762;
+        Wed, 10 Aug 2022 05:57:36 -0700 (PDT)
+Received: from [192.168.0.104] ([77.126.166.31])
+        by smtp.gmail.com with ESMTPSA id e16-20020a5d65d0000000b0021b970a68f9sm16350991wrw.26.2022.08.10.05.57.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Aug 2022 05:57:36 -0700 (PDT)
+Message-ID: <8448dade-a64a-0b6b-1ed0-dd164917eedf@gmail.com>
+Date:   Wed, 10 Aug 2022 15:57:33 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: eFnpAkKohgDH_k706ceUmYZbBM5b18gU
-X-Proofpoint-GUID: MOTEmYVFB1IHnFsteb1kTmxixtJp15uB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-10_07,2022-08-10_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- priorityscore=1501 clxscore=1015 lowpriorityscore=0 malwarescore=0
- adultscore=0 impostorscore=0 mlxlogscore=999 bulkscore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208100037
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 2/2] net/mlx5e: Leverage sched_numa_hop_mask()
+Content-Language: en-US
+To:     Valentin Schneider <vschneid@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>
+Cc:     Tariq Toukan <tariqt@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Saeed Mahameed <saeedm@nvidia.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Gal Pressman <gal@nvidia.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+References: <xhsmhtu6kbckc.mognet@vschneid.remote.csb>
+ <20220810105119.2684079-1-vschneid@redhat.com>
+ <20220810105119.2684079-2-vschneid@redhat.com>
+From:   Tariq Toukan <ttoukan.linux@gmail.com>
+In-Reply-To: <20220810105119.2684079-2-vschneid@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the module parameter "async_destroy", to allow the asynchronous
-destroy mechanism to be switched off. This might be useful for
-debugging purposes.
 
-The parameter is enabled by default since the feature is opt-in anyway.
 
-Signed-off-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
-Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
----
- arch/s390/kvm/kvm-s390.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+On 8/10/2022 1:51 PM, Valentin Schneider wrote:
+> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+> ---
+>   drivers/net/ethernet/mellanox/mlx5/core/eq.c | 16 ++++++++++++++--
+>   1 file changed, 14 insertions(+), 2 deletions(-)
+> 
 
-diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-index 4a20a6be6601..8c7af96c4546 100644
---- a/arch/s390/kvm/kvm-s390.c
-+++ b/arch/s390/kvm/kvm-s390.c
-@@ -209,7 +209,13 @@ unsigned int diag9c_forwarding_hz;
- module_param(diag9c_forwarding_hz, uint, 0644);
- MODULE_PARM_DESC(diag9c_forwarding_hz, "Maximum diag9c forwarding per second, 0 to turn off");
- 
--static int async_destroy;
-+/*
-+ * allow asynchronous deinit for protected guests; enable by default since
-+ * the feature is opt-in anyway
-+ */
-+static int async_destroy = 1;
-+module_param(async_destroy, int, 0444);
-+MODULE_PARM_DESC(async_destroy, "Asynchronous destroy for protected guests");
- 
- /*
-  * For now we handle at most 16 double words as this is what the s390 base
--- 
-2.37.1
+Missing description.
 
+I had a very detailed description with performance numbers and an 
+affinity hints example with before/after tables. I don't want to get 
+them lost.
+
+
+> diff --git a/drivers/net/ethernet/mellanox/mlx5/core/eq.c b/drivers/net/ethernet/mellanox/mlx5/core/eq.c
+> index 229728c80233..2eb4ffd96a95 100644
+> --- a/drivers/net/ethernet/mellanox/mlx5/core/eq.c
+> +++ b/drivers/net/ethernet/mellanox/mlx5/core/eq.c
+> @@ -809,9 +809,12 @@ static void comp_irqs_release(struct mlx5_core_dev *dev)
+>   static int comp_irqs_request(struct mlx5_core_dev *dev)
+>   {
+>   	struct mlx5_eq_table *table = dev->priv.eq_table;
+> +	const struct cpumask *mask;
+>   	int ncomp_eqs = table->num_comp_eqs;
+> +	int hops = 0;
+>   	u16 *cpus;
+>   	int ret;
+> +	int cpu;
+>   	int i;
+>   
+>   	ncomp_eqs = table->num_comp_eqs;
+> @@ -830,8 +833,17 @@ static int comp_irqs_request(struct mlx5_core_dev *dev)
+>   		ret = -ENOMEM;
+>   		goto free_irqs;
+>   	}
+> -	for (i = 0; i < ncomp_eqs; i++)
+> -		cpus[i] = cpumask_local_spread(i, dev->priv.numa_node);
+> +
+> +	rcu_read_lock();
+> +	for_each_numa_hop_mask(dev->priv.numa_node, hops, mask) {
+
+We don't really use this 'hops' iterator. We always pass 0 (not a 
+valuable input...), and we do not care about its final value. Probably 
+it's best to hide it from the user into the macro.
+
+> +		for_each_cpu(cpu, mask) {
+> +			cpus[i] = cpu;
+> +			if (++i == ncomp_eqs)
+> +				goto spread_done;
+> +		}
+> +	}
+> +spread_done:
+> +	rcu_read_unlock();
+>   	ret = mlx5_irqs_request_vectors(dev, cpus, ncomp_eqs, table->comp_irqs);
+>   	kfree(cpus);
+>   	if (ret < 0)
+
+This logic is typical. Other drivers would also want to use it.
+It must be introduced as a service/API function, if not by the sched 
+topology, then at least by the networking subsystem.
+Jakub, WDYT?

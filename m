@@ -2,80 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB8C558E40E
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 02:25:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1843C58E425
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 02:38:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229904AbiHJAZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 20:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36406 "EHLO
+        id S229495AbiHJAh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 20:37:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiHJAZS (ORCPT
+        with ESMTP id S229441AbiHJAhz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 20:25:18 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21F16625F
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 17:25:14 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-32194238c77so127658297b3.4
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 17:25:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=1VUI2HFiheDo58arrnc79/Qbxj5WTqZQ2QhX4iv40Nk=;
-        b=ABPWt08krXKfSXeDcebcG/m72KIW6vO/4ih2HdtXW6Xcflaa31kKaLJUzYJyA+hjN5
-         /hos42tL2v9m84JqszthxP3dn6c/aGKTK66PuFX4Z0fjxJzOK5uctw+SStmmWvgWafd7
-         MKbDZ8Sg0XjW/oLYmkjK93RHOUprdKYO8gm7b5y2cWYfPwkQcxfkl1aJQz7u3MOHnZCH
-         rdFJVgtMvEFznU1m+kpmWML4RW6xlptVIsorWBXGkpapFj7ucqQosGltArtrkMjUMvr8
-         bzpYAIDT8iGLrKJTU7i0DiQ4ZrsFOu903DZ2B9J+RQpVsmlU48hAaJ4q+isVtpHsUKog
-         1ADA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=1VUI2HFiheDo58arrnc79/Qbxj5WTqZQ2QhX4iv40Nk=;
-        b=a7yn+Bm0bh0ayVOz62JG7pT1dlH/89u6CQb243I2DP6AdJ+mckNBwMF6b5v7hxZkc1
-         D1MwNSjIO75a/ruzk34moKEdypnWSHeOuAjYLbje/O9DKZgWHl6lCqlMIO4I67rzDprS
-         TStfLEsbz2njI6lEjLvtoXCSDoaDaieV9K3N0nAMR/s9RBKQTLVD+NIc9ahgbVV6qpiC
-         /zhRh6vDK9ZqmdANQhvjj+jqztmknkaZ6GZ+X2Nax/r64YPmzmzs1iHF54J/qZy06HlB
-         clfE0ul/cKtELrZZ/GjxoNSSc+SM1o+fQ23jGPtyQEYvvAxXcyINgjRXZSGboxX5Sz+3
-         HNvQ==
-X-Gm-Message-State: ACgBeo0o/Bw7KgeanwjiQ6ImItB7aAF88PhrwW15qqsSOI+AIw5R7+dY
-        Cje6bf9H63/K67qg++op9i2T39lKXLVh0vxjGFxkA6iTnmQ=
-X-Google-Smtp-Source: AA6agR6ldAkTAJtS3AzePk06qtNOc1jE0hT59EJbzuTuMPqiGKi5H6FdfLEZjbfEkE01KyVeWy2EIeHuNtHBK05yhwk=
-X-Received: by 2002:a0d:fd05:0:b0:329:3836:53ac with SMTP id
- n5-20020a0dfd05000000b00329383653acmr23670331ywf.455.1660091113143; Tue, 09
- Aug 2022 17:25:13 -0700 (PDT)
+        Tue, 9 Aug 2022 20:37:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CF89978229
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 17:37:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660091871;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gI8W3vKU6gx264pJaXZH00m10/hIkZkbLO7K9QwADAU=;
+        b=cTKVvPk2yBlttuCOl7JUT/6nDbyzPmwP8aVqEXhkFsMQ3E/qKuJ4yKcLWKYLbQc4BFjGb/
+        1O5qblJvaIpPJKVMTyEEoJEY8KKP1YE0UeHrR7zP9UW5ACz8myhJ59SvGIn7Bzk4rqtgwo
+        hZrWcUSF0GJNWquYleGZ+wNyOnvgB+I=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-3-eDbrPmK5OK6ImuSrx8J66w-1; Tue, 09 Aug 2022 20:37:48 -0400
+X-MC-Unique: eDbrPmK5OK6ImuSrx8J66w-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AA5863802AC2;
+        Wed, 10 Aug 2022 00:37:47 +0000 (UTC)
+Received: from [10.64.54.189] (vpn2-54-189.bne.redhat.com [10.64.54.189])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 10C089459C;
+        Wed, 10 Aug 2022 00:37:42 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH 1/2] KVM: selftests: Make rseq compatible with glibc-2.35
+To:     Sean Christopherson <seanjc@google.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     shuah <shuah@kernel.org>, Florian Weimer <fweimer@redhat.com>,
+        kvmarm@lists.cs.columbia.edu, KVM list <kvm@vger.kernel.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, maz <maz@kernel.org>,
+        oliver upton <oliver.upton@linux.dev>,
+        andrew jones <andrew.jones@linux.dev>, yihyu@redhat.com,
+        shan gavin <shan.gavin@gmail.com>
+References: <20220809060627.115847-1-gshan@redhat.com>
+ <20220809060627.115847-2-gshan@redhat.com>
+ <8735e6ncxw.fsf@oldenburg.str.redhat.com>
+ <7844e3fa-e49e-de75-e424-e82d3a023dd6@redhat.com>
+ <87o7wtnay6.fsf@oldenburg.str.redhat.com>
+ <616d4de6-81f6-9d14-4e57-4a79fec45690@redhat.com>
+ <797306043.114963.1660047714774.JavaMail.zimbra@efficios.com>
+ <1014177394.115022.1660052656961.JavaMail.zimbra@efficios.com>
+ <YvLT1fd8ddybF5Uw@google.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <8c1f33b4-a5a1-fcfa-4521-36253ffa22c8@redhat.com>
+Date:   Wed, 10 Aug 2022 10:37:40 +1000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-References: <20220727185012.3255200-1-saravanak@google.com>
- <YuI6shUi6iJdMSfB@kroah.com> <CAD=FV=W1P=4vzyTYQ+yVC=fH-7i=hjCAk7FV8jcGcGY+xa62pA@mail.gmail.com>
-In-Reply-To: <CAD=FV=W1P=4vzyTYQ+yVC=fH-7i=hjCAk7FV8jcGcGY+xa62pA@mail.gmail.com>
-From:   Saravana Kannan <saravanak@google.com>
-Date:   Tue, 9 Aug 2022 17:24:37 -0700
-Message-ID: <CAGETcx9+ST9OwoO8H3EMoODCW3AUtvFcwPmYDaB266fdgoXtEQ@mail.gmail.com>
-Subject: Re: [PATCH v1 0/3] Bring back driver_deferred_probe_check_state() for now
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        kernel-team@android.com, LKML <linux-kernel@vger.kernel.org>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        netdev <netdev@vger.kernel.org>,
-        Stephen Boyd <swboyd@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+In-Reply-To: <YvLT1fd8ddybF5Uw@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,64 +81,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 9, 2022 at 4:47 PM Doug Anderson <dianders@chromium.org> wrote:
->
-> Hi,
->
-> On Thu, Jul 28, 2022 at 12:29 AM Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Wed, Jul 27, 2022 at 11:50:08AM -0700, Saravana Kannan wrote:
-> > > More fixes/changes are needed before driver_deferred_probe_check_state()
-> > > can be deleted. So, bring it back for now.
-> > >
-> > > Greg,
-> > >
-> > > Can we get this into 5.19? If not, it might not be worth picking up this
-> > > series. I could just do the other/more fixes in time for 5.20.
-> >
-> > Wow, no, it is _WAY_ too late for 5.19 to make a change like this,
-> > sorry.
-> >
-> > What is so broken that we need to revert these now?  I could do so for
-> > 5.20-rc1, and then backport to 5.19.y if that release is really broken,
-> > but this feels odd so late in the cycle.
+Hi Mathieu and Sean,
 
-Greg,
+On 8/10/22 7:38 AM, Sean Christopherson wrote:
+> On Tue, Aug 09, 2022, Mathieu Desnoyers wrote:
+>> ----- On Aug 9, 2022, at 8:21 AM, Mathieu Desnoyers mathieu.desnoyers@efficios.com wrote:
+>>> ----- Gavin Shan <gshan@redhat.com> wrote:
+>>>> On 8/9/22 5:16 PM, Florian Weimer wrote:
+>>>>>>> __builtin_thread_pointer doesn't work on all architectures/GCC
+>>>>>>> versions.
+>>>>>>> Is this a problem for selftests?
+>>>>>>>
+>>>>>>
+>>>>>> It's a problem as the test case is running on all architectures. I think I
+>>>>>> need introduce our own __builtin_thread_pointer() for where it's not
+>>>>>> supported: (1) PowerPC  (2) x86 without GCC 11
+>>>>>>
+>>>>>> Please let me know if I still have missed cases where
+>>>>>> __buitin_thread_pointer() isn't supported?
+>>>>>
+>>>>> As far as I know, these are the two outliers that also have rseq
+>>>>> support.  The list is a bit longer if we also consider non-rseq
+>>>>> architectures (csky, hppa, ia64, m68k, microblaze, sparc, don't know
+>>>>> about the Linux architectures without glibc support).
+>>>>>
+>>>>
+>>>> For kvm/selftests, there are 3 architectures involved actually. So we
+>>>> just need consider 4 cases: aarch64, x86, s390 and other. For other
+>>>> case, we just use __builtin_thread_pointer() to maintain code's
+>>>> integrity, but it's not called at all.
+>>>>
+>>>> I think kvm/selftest is always relying on glibc if I'm correct.
+>>>
+>>> All those are handled in the rseq selftests and in librseq. Why duplicate all
+>>> that logic again?
+>>
+>> More to the point, considering that we have all the relevant rseq registration
+>> code in tools/testing/selftests/rseq/rseq.c already, and the relevant thread
+>> pointer getter code in tools/testing/selftests/rseq/rseq-*thread-pointer.h,
+>> is there an easy way to get test applications in tools/testing/selftests/kvm
+>> and in tools/testing/selftests/rseq to share that common code ?
+>>
+>> Keeping duplicated compatibility code is bad for long-term maintainability.
+> 
+> Any reason not to simply add tools/lib/rseq.c and then expose a helper to get the
+> registered rseq struct?
+> 
 
-I didn't realize the patches I'm trying to revert never landed on
-5.19. So you can ignore this thread.
+There are couple of reasons, not to share tools/testing/selftests/rseq/librseq.so
+or add tools/lib/librseq.so. Please let me know if the arguments making sense
+to you?
 
->
-> I spent a bunch of time bisecting mainline today on my
-> sc7180-trogdor-lazor board. When building the top of Linus's tree
-> today the display doesn't come up. I can make it come up by turning
-> fw_devlink off (after fixing a regulator bug that I just posted a fix
-> for).
->
-> I found that the first bad commit was commit 5a46079a9645 ("PM:
-> domains: Delete usage of driver_deferred_probe_check_state()")
->
-> ...but only when applied to mainline. When I cherry-pick that back to
-> v5.19-rc1 (and pick another bugfix needed to boot my board against
-> v5.19-rc1) then it works OK. After yet more bisecting, I found that on
-> trogdor there's a bad interaction with the commit e511a760 ("arm64:
-> dts: qcom: sm7180: remove assigned-clock-rate property for mdp clk").
-> That commit is perfectly legit but I guess it somehow changed how
-> fw_devlink was interpreting things?
->
-> Sure enough, picking this revert series fixes things on Linus's tree.
-> Any chance we can still get the revert in for v5.20-rc1? ;-)
+- By design, selftests/rseq and selftests/kvm are parallel. It's going to introduce
+   unnecessary dependency for selftests/kvm to use selftests/rseq/librseq.so. To me,
+   it makes the maintainability even harder.
 
-I guess it's 6.0 now. But I'm almost done with my actual fixes that
-rewrite some parts of fw_devlink to make it a lot more robust. So, I'm
-not sure if all these reverts need to land anymore.
+- What selftests/kvm needs is rseq-thread-pointer.h, which accounts for ~5% of
+   functionalities, provided by selftests/rseq/librseq.so.
 
-I'm hoping to send out the proper fixes by the end of this week. Maybe
-you can try that out and let me know if it solves your issues (I
-expect it to).
+- I'm not too much familiar with selftests/rseq, but it seems it need heavy
+   rework before it can become tools/lib/librseq.so. However, I'm not sure if
+   the effort is worthwhile. The newly added library is fully used by
+   testtests/rseq. ~5% of that is going to be used by selftests/kvm.
+   In this case, we still have cross-dependency issue.
 
-I'm surprised that specific clock patch has an impact though. It's
-just touching properties that fw_devlink doesn't parse.
+I personally prefer not to use selftests/rseq/librseq.so or add tools/lib/librseq.so,
+but I need your feedback. Please share your thoughts.
+Thanks,
+Gavin
 
--Saravana

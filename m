@@ -2,78 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A0E958EDA1
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 15:53:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F3AF58EDA6
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 15:54:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232855AbiHJNxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 09:53:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59942 "EHLO
+        id S232861AbiHJNyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 09:54:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231788AbiHJNw7 (ORCPT
+        with ESMTP id S231788AbiHJNyA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 09:52:59 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31ABA6A49B;
-        Wed, 10 Aug 2022 06:52:58 -0700 (PDT)
-Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27A9Wteb004678;
-        Wed, 10 Aug 2022 15:52:41 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=piHnlhdm1DFxcQ49aY1RvFb5vNaq7I7eTpLUu/D0dt8=;
- b=7gcqO79dpnMIJRV40lMblFDM9tS+pYwYwqAfz3/PDmTpBzu39TVu12fR9meWOhedeQaN
- gbM1RY6dzPSnh4hwu0kKC1hn/3Bjf6BKmgHOiCnLLJqd5GeJTBt3ThdNAfZYynKDDuP2
- 0yKXj/R8hdHq1Wtq4BhDG+he0vc3gYTtoFA8SFqxXDLc8ULI8AZCLw8jlxzQWoGjFDmI
- 06EkJeRkD/DNAj8Zi5DJ0nq9fdW22rLAvjt2B01m9S33wX4we1qhwrewYTI6xR+cmh0L
- OVwfAu0hzRc+ttmd0jkCRSvO2OBF2HcIgW4a4x1TnPVed//yUuLuzcpqy7we38KWd9wD BQ== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3huwpmcx0v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 Aug 2022 15:52:41 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id EEAA0100034;
-        Wed, 10 Aug 2022 15:52:40 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E6A4122FA31;
-        Wed, 10 Aug 2022 15:52:40 +0200 (CEST)
-Received: from [10.201.21.72] (10.75.127.49) by SHFDAG1NODE1.st.com
- (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Wed, 10 Aug
- 2022 15:52:40 +0200
-Message-ID: <cfc882a2-c8f3-0ec8-706e-a16dccc9fda7@foss.st.com>
-Date:   Wed, 10 Aug 2022 15:52:39 +0200
+        Wed, 10 Aug 2022 09:54:00 -0400
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 617E16A4A3
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 06:53:58 -0700 (PDT)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout01.posteo.de (Postfix) with ESMTPS id CD165240028
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 15:53:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+        t=1660139635; bh=Y41+tOHqoc+T16MMGISkHm9S39620DPWPJbzli5aIN8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=IsRlT4wcE1kTZ958key6k9GpfByrDc217/+H9FknnHfQ3wP/d4jtfiQlPm+fVKzWM
+         ZZ4ziwS6USfAC91VUq0cpE42U2BsgouQPKTjNkreJRjHrheJxD12wHul248QxalIbA
+         v5H/dZ+TXhlQSXYpx04//DVcF03DC+aXBRkhBXwtPyZoD/Mw12imfHXPmqQy4tqlO5
+         3HPe8kfZRUax/4cJHyyxUPQkYuJH62fFyj5ihWqE9XnDcPS8QyvaluE4yYAn9WxIl5
+         nveURYarnhlW8vVWKE4F5BwXbA3F869nq3kz0m5UpvKc3jNmDgixMTdCnxRddcqMWk
+         1DRjsCX/IhfvA==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4M2ryB5rrxz6tmF;
+        Wed, 10 Aug 2022 15:53:54 +0200 (CEST)
+Date:   Wed, 10 Aug 2022 13:53:53 +0000
+From:   Wilken Gottwalt <wilken.gottwalt@posteo.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
+Subject: [PATCH v2] hwmon: corsair-psu: add reporting of rail mode via debugfs
+Message-ID: <YvO4cfx12Q9gcmPg@monster.localdomain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 1/2] spi: stm32_qspi: Add transfer_one_message() spi
- callback
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-CC:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        <linux-spi@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>
-References: <20220810093215.794977-1-patrice.chotard@foss.st.com>
- <20220810093215.794977-2-patrice.chotard@foss.st.com>
- <YvOtZtrRHd4AT+j+@sirena.org.uk>
- <d41e3814-3fab-18a3-7218-d5c28eaecff8@foss.st.com>
- <YvOxOg0vXSGrZLfP@sirena.org.uk>
- <38200a6f-fdc1-fa94-7bc6-91ca528235ed@foss.st.com>
- <YvO1U7VB7WQv0oKR@sirena.org.uk>
-From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
-In-Reply-To: <YvO1U7VB7WQv0oKR@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.75.127.49]
-X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-10_08,2022-08-10_01,2022-06-22_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -82,32 +51,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add reporting if the PSU is running in single or multi rail mode via
+ocpmode debugfs entry. Also update the documentation accordingly.
 
+Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+---
+Changes in v2:
+  - fixed spelling issues in commit message
+---
+ Documentation/hwmon/corsair-psu.rst |  5 +++--
+ drivers/hwmon/corsair-psu.c         | 21 ++++++++++++++++++++-
+ 2 files changed, 23 insertions(+), 3 deletions(-)
 
-On 8/10/22 15:40, Mark Brown wrote:
-> On Wed, Aug 10, 2022 at 03:31:59PM +0200, Patrice CHOTARD wrote:
->> On 8/10/22 15:23, Mark Brown wrote:
->>> On Wed, Aug 10, 2022 at 03:15:08PM +0200, Patrice CHOTARD wrote:
-> 
->>> Yes.  Though I'm not clear if the bindings actually want to enforce it
->>> there, it's a device level property not a controller level one so it
->>> might not be something where controller support gets validated.
-> 
->> Ah yes, i see, parallel-memories should not be used in our qspi controller node.
->> So i can't reuse parallel-memories for my purpose.
-> 
->> So i need to add a new proprietary property at controller level as done in the v1 ?
-> 
-> Can't the controller figure this out by looking at the properties of the
-> connected devices?  You'd need to just return an error if we ever
-> triggered transfer_one_message() on a device that can't support the
-> operation.
-
-It should be a solution.
-
-I just noticed another point, property parallel-memories is an array of uint64 which represent device's size.
-In case a FPGA is connected to the qspi 8 line bus, parallel-memories property will be set with what ?
-simply random value to make dtbs_check happy ?
-
-IMHO, adding a new proprietary property would be cleaner.
+diff --git a/Documentation/hwmon/corsair-psu.rst b/Documentation/hwmon/corsair-psu.rst
+index e8378e7a1d8c..c3a76305c587 100644
+--- a/Documentation/hwmon/corsair-psu.rst
++++ b/Documentation/hwmon/corsair-psu.rst
+@@ -86,8 +86,9 @@ Debugfs entries
+ ---------------
+ 
+ =======================	========================================================
+-uptime			Current uptime of the psu
++ocpmode                 Single or multi rail mode of the PCIe power connectors
++product                 Product name of the psu
++uptime			Session uptime of the psu
+ uptime_total		Total uptime of the psu
+ vendor			Vendor name of the psu
+-product			Product name of the psu
+ =======================	========================================================
+diff --git a/drivers/hwmon/corsair-psu.c b/drivers/hwmon/corsair-psu.c
+index 14389fd7afb8..9d103613db39 100644
+--- a/drivers/hwmon/corsair-psu.c
++++ b/drivers/hwmon/corsair-psu.c
+@@ -71,9 +71,10 @@
+ #define PSU_CMD_RAIL_WATTS	0x96
+ #define PSU_CMD_VEND_STR	0x99
+ #define PSU_CMD_PROD_STR	0x9A
+-#define PSU_CMD_TOTAL_WATTS	0xEE
+ #define PSU_CMD_TOTAL_UPTIME	0xD1
+ #define PSU_CMD_UPTIME		0xD2
++#define PSU_CMD_OCPMODE		0xD8
++#define PSU_CMD_TOTAL_WATTS	0xEE
+ #define PSU_CMD_INIT		0xFE
+ 
+ #define L_IN_VOLTS		"v_in"
+@@ -268,6 +269,7 @@ static int corsairpsu_get_value(struct corsairpsu_data *priv, u8 cmd, u8 rail, l
+ 		break;
+ 	case PSU_CMD_TOTAL_UPTIME:
+ 	case PSU_CMD_UPTIME:
++	case PSU_CMD_OCPMODE:
+ 		*val = tmp;
+ 		break;
+ 	default:
+@@ -660,6 +662,22 @@ static int product_show(struct seq_file *seqf, void *unused)
+ }
+ DEFINE_SHOW_ATTRIBUTE(product);
+ 
++static int ocpmode_show(struct seq_file *seqf, void *unused)
++{
++	struct corsairpsu_data *priv = seqf->private;
++	long val;
++	int ret;
++
++	ret = corsairpsu_get_value(priv, PSU_CMD_OCPMODE, 0, &val);
++	if (ret < 0)
++		seq_puts(seqf, "N/A\n");
++	else
++		seq_printf(seqf, "%s\n", (val == 0x02) ? "multi rail" : "single rail");
++
++	return 0;
++}
++DEFINE_SHOW_ATTRIBUTE(ocpmode);
++
+ static void corsairpsu_debugfs_init(struct corsairpsu_data *priv)
+ {
+ 	char name[32];
+@@ -671,6 +689,7 @@ static void corsairpsu_debugfs_init(struct corsairpsu_data *priv)
+ 	debugfs_create_file("uptime_total", 0444, priv->debugfs, priv, &uptime_total_fops);
+ 	debugfs_create_file("vendor", 0444, priv->debugfs, priv, &vendor_fops);
+ 	debugfs_create_file("product", 0444, priv->debugfs, priv, &product_fops);
++	debugfs_create_file("ocpmode", 0444, priv->debugfs, priv, &ocpmode_fops);
+ }
+ 
+ #else
+-- 
+2.37.1
 

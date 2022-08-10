@@ -2,70 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 630FE58EAE0
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 13:01:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 072DA58EAE1
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 13:02:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231745AbiHJLB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 07:01:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33258 "EHLO
+        id S231758AbiHJLBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 07:01:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231658AbiHJLBX (ORCPT
+        with ESMTP id S231750AbiHJLB0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 07:01:23 -0400
+        Wed, 10 Aug 2022 07:01:26 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBCDA6BD6F;
-        Wed, 10 Aug 2022 04:01:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0702F6BD46
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 04:01:19 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 985E3B81B5B;
-        Wed, 10 Aug 2022 11:01:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EE0CC433D6;
-        Wed, 10 Aug 2022 11:01:14 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A2E83B81B58
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 11:01:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E761C433C1;
+        Wed, 10 Aug 2022 11:01:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660129279;
-        bh=6x6su5oHn4WjBSWBtUvgxfhKdMjczpssjP15rky0Ucc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KMY2BViRwxO+LS6lTNRSgjQQ0lxdAhWdIrWx87oKITfqA8c3unrpEe7yDrvdit6aP
-         LAJh1oADLa4m6DCanxivY6NzKxMsGIuHST3i3MzzmjjgMVlog/k0ZPOuyoDeIpgEXx
-         UZ8VIDuSks9qlXahIc5IeJ5OVKApkhOtMLYZl/glbvW2lmz4Q7fkrhkSzpM5OdrLs1
-         vOKs3vJGcttXSz343CpoH1x0KvOn8EnpiFTNHcpw5q4kgTWmAzyFstxLwmo0z9ctHY
-         DkBAqyv5xIbwGRFXuxNQ2reCX6YRtl9sY824SJ4PaxHM3m8ht49/FEZms4NYXFEnvJ
-         Xg4XqbbvEYd+w==
-Date:   Wed, 10 Aug 2022 12:01:10 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Pavel Machek <pavel@ucw.cz>,
-        Tim Harvey <tharvey@gateworks.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Andrew Davis <afd@ti.com>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-leds@vger.kernel.org,
-        netdev@vger.kernel.org, linux-pm@vger.kernel.org,
-        alsa-devel@alsa-project.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Subject: Re: [PATCH v2 4/5] dt-bindings: Drop Robert Jones
-Message-ID: <YvOP9qr2CR9n1FCe@google.com>
-References: <20220809162752.10186-1-krzysztof.kozlowski@linaro.org>
- <20220809162752.10186-5-krzysztof.kozlowski@linaro.org>
+        s=k20201202; t=1660129277;
+        bh=ftGtdYTnbszhVMwv2b+bcQbGmM5dxZNBf1hKIGP5B4o=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=E4JevIsueSKK+QyR4BaGulFtqyzT2F5U4Qz6DbxV8BED5dlCQoYG2yk/RuxEOGVB1
+         HtC6vCMpUNGAIn8v4hsrHq3HWaDWqFUbh9owzMP2YQPDQu61raN5ZnImwbaLzYo9bh
+         K5Lcg7294Sq2E4C2Zg+Jax1vUcUqnHO3x6DKgm8AluC3CEoOrX+8rvrKA7rJlRmZD0
+         qO6eFY59xIQwObf9nzRDNZEdEOc2ma/Y8f7q1KMObyN5aSBMVet4s1WuR46uXbgPzp
+         Mzt8QTzeMZCw6H6WxcOypsDI46Kr5rqVDfjosxQnmKVFl5aVGHfAHrINvvaMiEqb0y
+         uqebiUbG4jQCw==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oLjSc-00273X-UW;
+        Wed, 10 Aug 2022 12:01:15 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220809162752.10186-5-krzysztof.kozlowski@linaro.org>
+Date:   Wed, 10 Aug 2022 12:01:14 +0100
+From:   Marc Zyngier <maz@kernel.org>
+To:     Huacai Chen <chenhuacai@loongson.cn>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        loongarch@lists.linux.dev, Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] LoongArch: Fix the !CONFIG_SMP build for irqchip drivers
+In-Reply-To: <20220810103156.1214996-1-chenhuacai@loongson.cn>
+References: <20220810103156.1214996-1-chenhuacai@loongson.cn>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <f92fc4f34784217206b53a3709538d5c@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: chenhuacai@loongson.cn, chenhuacai@kernel.org, tglx@linutronix.de, loongarch@lists.linux.dev, lixuefeng@loongson.cn, guoren@kernel.org, kernel@xen0n.name, jiaxun.yang@flygoat.com, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -76,51 +71,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 09 Aug 2022, Krzysztof Kozlowski wrote:
-
-> Emails to Robert Jones bounce ("550 5.2.1 The email account that you
-> tried to reach is disabled").
+On 2022-08-10 11:31, Huacai Chen wrote:
+> 1, Guard get_ipi_irq() in CONFIG_SMP;
+> 2, Define cpu_logical_map() for the EIOINTC driver;
+> 3, Make eiointc_set_irq_affinity() return early for !CONFIG_SMP.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> 
-> ---
-> 
-> For maintainers entry see:
-> https://lore.kernel.org/all/20220808111113.71890-1-krzysztof.kozlowski@linaro.org/
-> ---
->  Documentation/devicetree/bindings/iio/imu/nxp,fxos8700.yaml | 2 +-
->  Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml    | 1 -
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 
-Any reason to submit these as one patch?
+Frankly, the real question is why do you even bother? As far as
+I can tell, LoongArch has no UP system.
 
->  2 files changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/iio/imu/nxp,fxos8700.yaml b/Documentation/devicetree/bindings/iio/imu/nxp,fxos8700.yaml
-> index 479e7065d4eb..0203b83b8587 100644
-> --- a/Documentation/devicetree/bindings/iio/imu/nxp,fxos8700.yaml
-> +++ b/Documentation/devicetree/bindings/iio/imu/nxp,fxos8700.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Freescale FXOS8700 Inertial Measurement Unit
->  
->  maintainers:
-> -  - Robert Jones <rjones@gateworks.com>
-> +  - Jonathan Cameron <jic23@kernel.org>
->  
->  description: |
->    Accelerometer and magnetometer combo device with an i2c and SPI interface.
-> diff --git a/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml b/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
-> index 5a1e8d21f7a0..5e0fe3ebe1d2 100644
-> --- a/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/gateworks-gsc.yaml
-> @@ -19,7 +19,6 @@ description: |
->  
->  maintainers:
->    - Tim Harvey <tharvey@gateworks.com>
-> -  - Robert Jones <rjones@gateworks.com>
->  
->  properties:
->    $nodename:
+arm64 crossed that bridge a long time ago, and we never looked
+back, because these systems hardly exist.
 
+I'd rather you simply have a CONFIG_SMP always set to 'y', and
+be done with it forever.
+
+         M.
 -- 
-Lee Jones [李琼斯]
+Jazz is not dead. It just smells funny...

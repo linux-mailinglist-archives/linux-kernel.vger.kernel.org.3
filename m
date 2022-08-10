@@ -2,104 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD76758F36B
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 22:06:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96C7958F370
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 22:12:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233146AbiHJUGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 16:06:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33290 "EHLO
+        id S232495AbiHJUMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 16:12:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbiHJUGw (ORCPT
+        with ESMTP id S230209AbiHJUMI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 16:06:52 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1908A72865
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 13:06:52 -0700 (PDT)
+        Wed, 10 Aug 2022 16:12:08 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECB5DDF16
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 13:12:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660162012; x=1691698012;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=m77Ga0zACyhhhvX7qrvZch4i5z1Aec8NBTIcASU+Fm4=;
-  b=gfLoOLtGffOWTTK8Qd2L7yJVBbDBs5keGV8I4AFha41piCRlR0Cd28np
-   fm2Nhi5iyLHttD476XarsejMEb/nmm7EcADmVVYu44MeSqzpXtWY5+JGe
-   bbAkWsR9P+U1VunY27NdRKEqiQwXCqOKExqgnX+cUNagnOxwZe6DaNN7s
-   /6mg//FJoJKDqvXhW4pOzod7RaTIgz5N7FiqJ3wCA75OassNnLriDu96i
-   fQYYvlsVo9D1VxiBbAe7fe7Ky/FqMtK+NM6da4HQ1i0IEj/HJef+7E5Ji
-   8Z1+Q1/Lo5h7i7y69kQ3JC1ynJQDD41yJuW0NrOXP4euSvCfTxnv1MtJO
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="352916953"
+  t=1660162327; x=1691698327;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=hnavblcy/9Z9lk4G3KmLerA46bJwvJS4f8sUG+q8GaU=;
+  b=MLSGyjk1Untr3mZ8CVZyKdM/iLNmRjqsMVvK/W/DoKUFlf+7Wd3sGLlX
+   Em1WbA7ip+M+FIfmLKeTjo6MVUhnfexdDo+Hs4eaa+uvun1NBsFzIf/QM
+   C8mn+b0KjEZdFMC2UB2KrWEsSyODCFlTU3DmFyiZutq6dZYhDeTtCSNe4
+   Og5KsXT7pk0f8Cj+TFe1ayzGIIrFqGyU8/4KisiDqpEAQIPbny5nLxpwV
+   qHyqFbwQSnIpwmxgIAWjXC38W+6Vng0vEugKCN5rYuLZjUsVPo4nwtCRH
+   BrYTXaYhttlMHfCeDjv1bSPKYwSgN9bnGDsxDCSIiqgQmAuaTdJY6D7d0
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="291972001"
 X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="352916953"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 13:06:51 -0700
+   d="scan'208";a="291972001"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 13:12:06 -0700
+X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="605278828"
-Received: from sarava2x-mobl1.gar.corp.intel.com (HELO [10.254.67.234]) ([10.254.67.234])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 13:06:50 -0700
-Message-ID: <2446fb33-9c5c-642a-797e-4e93345adb82@linux.intel.com>
-Date:   Wed, 10 Aug 2022 13:06:50 -0700
+   d="scan'208";a="747556497"
+Received: from lkp-server02.sh.intel.com (HELO 5d6b42aa80b8) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 10 Aug 2022 13:12:04 -0700
+Received: from kbuild by 5d6b42aa80b8 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oLs3f-0000fl-2z;
+        Wed, 10 Aug 2022 20:12:03 +0000
+Date:   Thu, 11 Aug 2022 04:11:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Alexei Starovoitov <ast@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Ammar Faizi <ammarfaizi2@gnuweeb.org>,
+        GNU/Weeb Mailing List <gwml@vger.gnuweeb.org>,
+        linux-kernel@vger.kernel.org
+Subject: [ammarfaizi2-block:bpf/bpf/master 1/2] kernel/bpf/syscall.c:5089:5:
+ warning: no previous prototype for function 'kern_sys_bpf'
+Message-ID: <202208110447.5dGsjBot-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "Shutemov, Kirill" <kirill.shutemov@intel.com>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        "Gomez Iglesias, Antonio" <antonio.gomez.iglesias@intel.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-References: <20220809234000.783284-1-daniel.sneddon@linux.intel.com>
- <d6ffb489-7024-ff74-bd2f-d1e06573bb82@intel.com>
- <238ea612-5a25-9323-b31f-0a14493db2f7@linux.intel.com>
- <d4bcb22e-224c-d256-cb93-3ff6ed89a7d0@intel.com>
- <341ea6e9-d8f3-ee7a-6794-67408abbf047@linux.intel.com>
- <d315aac4-8cda-bc2d-d052-09fb0649b1ad@intel.com>
-From:   Daniel Sneddon <daniel.sneddon@linux.intel.com>
-Subject: Re: [PATCH] x86/apic: Don't disable x2APIC if locked
-In-Reply-To: <d315aac4-8cda-bc2d-d052-09fb0649b1ad@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/10/22 12:59, Dave Hansen wrote:
-> On 8/10/22 12:40, Daniel Sneddon wrote:
->>> It it going to be *forced* on those SPR system?  In other words, is it a
->>> little BIOS switch that users can flip?  Is there any non-kernel
->>> workaround if a user hits this, or is the entire burden of this going to
->>> be foisted on the kernel?
->> It won't be forced, BUT, certain features won't be available if the APIC isn't
->> locked.  According to the documentation SGX and TDX won't be available if you
->> don't lock the APIC.  So, yes, you don't have to fix it in the kernel, but you
->> may lose access to features if you don't.
-> 
-> Let's get some of this in the changelog and _possibly_ Documentation/ so
-> that users know we're depending on the BIOS to play nice.  Let's put
-> ourselves in the place of our users for a moment at least and try to
-> figure out how we play our part to help get them from seeing "can't
-> disable x2apic mode" or whatever to them flipping knobs in the BIOS.
+tree:   https://github.com/ammarfaizi2/linux-block bpf/bpf/master
+head:   86f44fcec22ce2979507742bc53db8400e454f46
+commit: 86f44fcec22ce2979507742bc53db8400e454f46 [1/2] bpf: Disallow bpf programs call prog_run command.
+config: arm64-randconfig-r003-20220810 (https://download.01.org/0day-ci/archive/20220811/202208110447.5dGsjBot-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/ammarfaizi2/linux-block/commit/86f44fcec22ce2979507742bc53db8400e454f46
+        git remote add ammarfaizi2-block https://github.com/ammarfaizi2/linux-block
+        git fetch --no-tags ammarfaizi2-block bpf/bpf/master
+        git checkout 86f44fcec22ce2979507742bc53db8400e454f46
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash kernel/bpf/
 
-I will certainly add this to the changelog.  I could add a blurb to the
-documentation where nox2apic is defined as a parameter as well.  If there is a
-better place to document that please let me know.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> 
-> I also dearly hope that Intel has told BIOS writers that the onus is on
-> them *and* those nice BIOS folks listen to Intel. :)
-You and me both!  I know this has gone out to our BIOS partners and they are
-aware of it.  Beyond that, well, I guess we'll find out when SPR is released!
+All warnings (new ones prefixed by >>):
 
-> 
-> In any case, I don't think backports are warranted here at the moment.
-> We can always do it in the future if the need arises.
+>> kernel/bpf/syscall.c:5089:5: warning: no previous prototype for function 'kern_sys_bpf' [-Wmissing-prototypes]
+   int kern_sys_bpf(int cmd, union bpf_attr *attr, unsigned int size)
+       ^
+   kernel/bpf/syscall.c:5089:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int kern_sys_bpf(int cmd, union bpf_attr *attr, unsigned int size)
+   ^
+   static 
+   1 warning generated.
 
+
+vim +/kern_sys_bpf +5089 kernel/bpf/syscall.c
+
+  5088	
+> 5089	int kern_sys_bpf(int cmd, union bpf_attr *attr, unsigned int size)
+  5090	{
+  5091		struct bpf_prog * __maybe_unused prog;
+  5092		struct bpf_tramp_run_ctx __maybe_unused run_ctx;
+  5093	
+  5094		switch (cmd) {
+  5095	#ifdef CONFIG_BPF_JIT /* __bpf_prog_enter_sleepable used by trampoline and JIT */
+  5096		case BPF_PROG_TEST_RUN:
+  5097			if (attr->test.data_in || attr->test.data_out ||
+  5098			    attr->test.ctx_out || attr->test.duration ||
+  5099			    attr->test.repeat || attr->test.flags)
+  5100				return -EINVAL;
+  5101	
+  5102			prog = bpf_prog_get_type(attr->test.prog_fd, BPF_PROG_TYPE_SYSCALL);
+  5103			if (IS_ERR(prog))
+  5104				return PTR_ERR(prog);
+  5105	
+  5106			if (attr->test.ctx_size_in < prog->aux->max_ctx_offset ||
+  5107			    attr->test.ctx_size_in > U16_MAX) {
+  5108				bpf_prog_put(prog);
+  5109				return -EINVAL;
+  5110			}
+  5111	
+  5112			run_ctx.bpf_cookie = 0;
+  5113			run_ctx.saved_run_ctx = NULL;
+  5114			if (!__bpf_prog_enter_sleepable(prog, &run_ctx)) {
+  5115				/* recursion detected */
+  5116				bpf_prog_put(prog);
+  5117				return -EBUSY;
+  5118			}
+  5119			attr->test.retval = bpf_prog_run(prog, (void *) (long) attr->test.ctx_in);
+  5120			__bpf_prog_exit_sleepable(prog, 0 /* bpf_prog_run does runtime stats */, &run_ctx);
+  5121			bpf_prog_put(prog);
+  5122			return 0;
+  5123	#endif
+  5124		default:
+  5125			return ____bpf_sys_bpf(cmd, attr, size);
+  5126		}
+  5127	}
+  5128	EXPORT_SYMBOL(kern_sys_bpf);
+  5129	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

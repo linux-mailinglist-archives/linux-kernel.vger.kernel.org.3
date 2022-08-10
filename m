@@ -2,143 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78EA858EF83
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 17:39:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97AD358EF8A
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 17:42:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230440AbiHJPjT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 11:39:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59042 "EHLO
+        id S231301AbiHJPmg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 11:42:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230050AbiHJPjQ (ORCPT
+        with ESMTP id S231213AbiHJPme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 11:39:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C55F82D1F5
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 08:39:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D23B60B98
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 15:39:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 460C6C433D6;
-        Wed, 10 Aug 2022 15:39:14 +0000 (UTC)
-Date:   Wed, 10 Aug 2022 11:39:18 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>
-Subject: [PATCH] rtla: Consolidate and show all necessary libraries that
- failed for building
-Message-ID: <20220810113918.5d19ce59@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 10 Aug 2022 11:42:34 -0400
+Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3132C30F52;
+        Wed, 10 Aug 2022 08:42:34 -0700 (PDT)
+Received: by mail-il1-f180.google.com with SMTP id o14so8494793ilt.2;
+        Wed, 10 Aug 2022 08:42:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=lkS5zvLcljQjnjjOHPAoy1vsRnFJ0Grs3H/nJs4gz4c=;
+        b=54e0eO1HSW6vvy1dp3X4UV152ds7hln2adFQxVdUHo0+9NJP27dHbr9u475Mi0dQu1
+         L6Oh8DC9gdpU6a8chljF0SoT3CiQe18j7BFzZps/ht26JajZc0DKz0jH7fLaDpsdPnV9
+         1Dbb52ryzrcHQO+u3Ovc4UYHvK0Y03wXKGXAkcETeDGLkxrTwqQEm2tQOLGjCtT3+dyx
+         4J5Fot0oIwEZL4V0yiVssyhkqbSlmGJ5sVEma74KRIiiHGDIH+3JWdJajiumli3qGOVi
+         V1kW2pe85t5OQ6h/d17HuQGtjnbybMPQHUeqpybotHFCN2+pMOQMs1rWYYK6PQNVwpnO
+         qHHg==
+X-Gm-Message-State: ACgBeo3K/Jwpki22B9mzabwsPsPe62bFcRosuGhKY/EKKeMCdxIjejxl
+        d2tC3AUro2G0GsKXkRrSzXQHTA+7Tw==
+X-Google-Smtp-Source: AA6agR766L+G/DmfEJHQx2uTOkZHXshafK1MLBI/ihgSqeChJYk2oM42hj/91O0+xfMGZMhZBO1LZg==
+X-Received: by 2002:a92:c501:0:b0:2de:69e6:4143 with SMTP id r1-20020a92c501000000b002de69e64143mr13569520ilg.262.1660146153460;
+        Wed, 10 Aug 2022 08:42:33 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id p23-20020a02b017000000b003427daba276sm887045jah.129.2022.08.10.08.42.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Aug 2022 08:42:32 -0700 (PDT)
+Received: (nullmailer pid 17851 invoked by uid 1000);
+        Wed, 10 Aug 2022 15:42:31 -0000
+Date:   Wed, 10 Aug 2022 09:42:31 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Julian Braha <julianbraha@gmail.com>
+Cc:     robh+dt@kernel.org, dri-devel@lists.freedesktop.org,
+        thierry.reding@gmail.com, devicetree@vger.kernel.org,
+        airlied@linux.ie, sam@ravnborg.org, daniel@ffwll.ch,
+        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 1/2] dt-bindings: panel-simple-dsi: add Tianma
+ TL057FVXP01
+Message-ID: <20220810154231.GA17369-robh@kernel.org>
+References: <20220810041354.691896-1-julianbraha@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220810041354.691896-1-julianbraha@gmail.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Wed, 10 Aug 2022 00:13:53 -0400, Julian Braha wrote:
+> Adds the bindings for the Tianma TL057FVXP01 DSI panel,
+> found on the Motorola Moto G6.
+> 
+> Signed-off-by: Julian Braha <julianbraha@gmail.com>
+> ---
+> v4:
+> Fixed makefile entry.
+> 
+> v3:
+> Fixed kconfig dependencies.
+> 
+> v2:
+> Fixed accidental whitespace deletion.
+> ---
+>  .../devicetree/bindings/display/panel/panel-simple-dsi.yaml     | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
 
-When building rtla tools, if the necessary libraries are not installed
-(libtraceevent and libtracefs), show the ones that are missing in one
-consolidated output, and also show how to install them (at least for
-Fedora).
 
-Link: https://lore.kernel.org/all/CAHk-=wh+e1qcCnEYJ3JRDVLNCYbJ=0u+Ts5bOYZnY3mX_k-hFA@mail.gmail.com/
+Please add Acked-by/Reviewed-by tags when posting new versions. However,
+there's no need to repost patches *only* to add the tags. The upstream
+maintainer will do that for acks received on the version they apply.
 
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- tools/tracing/rtla/Makefile | 62 +++++++++++++++++++++----------------
- 1 file changed, 36 insertions(+), 26 deletions(-)
-
-diff --git a/tools/tracing/rtla/Makefile b/tools/tracing/rtla/Makefile
-index 3822f4ea5f49..09ed1de3685f 100644
---- a/tools/tracing/rtla/Makefile
-+++ b/tools/tracing/rtla/Makefile
-@@ -61,40 +61,50 @@ endif
- LIBTRACEEVENT_MIN_VERSION = 1.5
- LIBTRACEFS_MIN_VERSION = 1.3
- 
-+.PHONY:	all warnings show_warnings
-+all:	warnings rtla
-+
- TEST_LIBTRACEEVENT = $(shell sh -c "$(PKG_CONFIG) --atleast-version $(LIBTRACEEVENT_MIN_VERSION) libtraceevent > /dev/null 2>&1 || echo n")
- ifeq ("$(TEST_LIBTRACEEVENT)", "n")
--.PHONY: warning_traceevent
--warning_traceevent:
--	@echo "********************************************"
--	@echo "** NOTICE: libtraceevent version $(LIBTRACEEVENT_MIN_VERSION) or higher not found"
--	@echo "**"
--	@echo "** Consider installing the latest libtraceevent from your"
--	@echo "** distribution, e.g., 'dnf install libtraceevent' on Fedora,"
--	@echo "** or from source:"
--	@echo "**"
--	@echo "**  https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/ "
--	@echo "**"
--	@echo "********************************************"
-+WARNINGS = show_warnings
-+MISSING_LIBS += echo "**   libtraceevent version $(LIBTRACEEVENT_MIN_VERSION) or higher";
-+MISSING_PACKAGES += "libtraceevent-devel"
-+MISSING_SOURCE += echo "**  https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/ ";
- endif
- 
- TEST_LIBTRACEFS = $(shell sh -c "$(PKG_CONFIG) --atleast-version $(LIBTRACEFS_MIN_VERSION) libtracefs > /dev/null 2>&1 || echo n")
- ifeq ("$(TEST_LIBTRACEFS)", "n")
--.PHONY: warning_tracefs
--warning_tracefs:
--	@echo "********************************************"
--	@echo "** NOTICE: libtracefs version $(LIBTRACEFS_MIN_VERSION) or higher not found"
--	@echo "**"
--	@echo "** Consider installing the latest libtracefs from your"
--	@echo "** distribution, e.g., 'dnf install libtracefs' on Fedora,"
--	@echo "** or from source:"
--	@echo "**"
--	@echo "**  https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/ "
--	@echo "**"
--	@echo "********************************************"
-+WARNINGS = show_warnings
-+MISSING_LIBS += echo "**   libtracefs version $(LIBTRACEFS_MIN_VERSION) or higher";
-+MISSING_PACKAGES += "libtracefs-devel"
-+MISSING_SOURCE += echo "**  https://git.kernel.org/pub/scm/libs/libtrace/libtracefs.git/ ";
- endif
- 
--.PHONY:	all
--all:	rtla
-+define show_dependencies
-+	@echo "********************************************";				\
-+	echo "** NOTICE: Failed build dependencies";					\
-+	echo "**";									\
-+	echo "** Required Libraries:";							\
-+	$(MISSING_LIBS)									\
-+	echo "**";									\
-+	echo "** Consider installing the latest libtracefs from your";			\
-+	echo "** distribution, e.g., 'dnf install $(MISSING_PACKAGES)' on Fedora,";	\
-+	echo "** or from source:";							\
-+	echo "**";									\
-+	$(MISSING_SOURCE)								\
-+	echo "**";									\
-+	echo "********************************************"
-+endef
-+
-+show_warnings:
-+	$(call show_dependencies);
-+
-+ifneq ("$(WARNINGS)", "")
-+ERROR_OUT = $(error Please add the necessary dependencies)
-+
-+warnings: $(WARNINGS)
-+	$(ERROR_OUT)
-+endif
- 
- rtla: $(OBJ)
- 	$(CC) -o rtla $(LDFLAGS) $(OBJ) $(LIBS)
--- 
-2.35.1
+If a tag was not added on purpose, please state why and what changed.
 

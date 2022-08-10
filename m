@@ -2,212 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE4BB58F089
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 18:39:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3EDF58F08D
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 18:40:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233000AbiHJQjw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 12:39:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38924 "EHLO
+        id S230219AbiHJQkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 12:40:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbiHJQju (ORCPT
+        with ESMTP id S233054AbiHJQkh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 12:39:50 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23B978237;
-        Wed, 10 Aug 2022 09:39:47 -0700 (PDT)
-Received: from [192.168.58.158] (unknown [43.245.8.143])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9EFB266019C1;
-        Wed, 10 Aug 2022 17:39:34 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1660149586;
-        bh=ObL6CjqPxDbL6GAZc0g0PSlfpOj2dGXh9yxp6q4FrPI=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=U7pw0d+vqo7SnugcCvMtEGndCil2TW2VfjW9+e8Ujw/u91HO5G6phDbae8v8dQUTa
-         FU0cJ1m46EjeidMctlXpmVbjmQdMMQJaGj8GpAUJ1tuB6iKtATlRGO5mDKerRp0giw
-         dD4QJD+0ASYON9KJiV83/OXTdff+hll6H2IK7UBLlfktqXg5usg65qnKjr3D0eQZjG
-         Ce1Ge3bX3+Rm7iXL+QVlwI7rZsdnmz7behQi5Vn8q3WgeLH4zWQLONKPMBx1N/qEN+
-         9yWDOlqUUcd852iuzY+yywIu6ra4wVkXjc+0rl8HxnL8c9mivlKy2LkbZFLdiZ2kLp
-         QQk/XX87vEaRg==
-Message-ID: <54d4c322-cd6e-eefd-b161-2af2b56aae24@collabora.com>
-Date:   Wed, 10 Aug 2022 21:39:26 +0500
+        Wed, 10 Aug 2022 12:40:37 -0400
+Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179F53B2
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 09:40:36 -0700 (PDT)
+Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-10ee900cce0so18444616fac.5
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 09:40:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:from:to:cc;
+        bh=yb0FqRtMqUKU+P/ctb3sogkoQRmLyX6XlF3M71/csC8=;
+        b=HxchlGZH1QrRpSnzRgFnJlioSzOls6/F2rKMVA6MAOV4iA4+KU6W40atEbSOubwB3w
+         c/JdsXCLC2kqN4sNBOEkqeVrfzES2OBzfPC7WCW9Z0WOjXod+T0WfBTSvsV8Oor7XtJ8
+         jiUjkDA/WRhDfZXJx0kK2mqUs69AvQcXStVWU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:x-gm-message-state:from:to:cc;
+        bh=yb0FqRtMqUKU+P/ctb3sogkoQRmLyX6XlF3M71/csC8=;
+        b=DLiueFExN3L0gEAhAY21HF3K62A2dt/V206v6uyy5UAvTxnYODDppqZx6592wQoa9w
+         4tL/wpE+8KiFyTe72IJddarEXBbjIIsPKTIvD0Mcu9Ya57h2QW7F1r4YAz9IhP0VFsfp
+         Oj5A0GdaPznaOpovDkhKCZGwzmJmfu3YK/+/yJlkzUkoZw3RUtZPR4iDVDnychPgCgBD
+         YM4Q1NFE1E4p8YA5pg0u+P6toK+1qvv5RNCjYdtjT199PbZQj+j4b6XPWkzNUS7AULvn
+         MIimPnwk76kJl6fcWbydQoMnlcBYf3RQTtT9zj7ZEulNWMYohuEvb4tbX/ZNDWFhQEiG
+         rtwA==
+X-Gm-Message-State: ACgBeo043Yu4eBOV3LhW++dSdUNVJqwBro0Wq8S8iVgSxd4fDSp+YRBN
+        48phyMJwPXHonen8jepUFrZQBoYW6fbNDU34/ppoObLQMX4=
+X-Google-Smtp-Source: AA6agR7tx/Q6RJ1nEIkhY51xamWM0f+5w6PTicLMo86wNo/NH7RxeEeVDm73bfNHdaTNH9bq6+UEd8k5Bs2xIdZw0ag=
+X-Received: by 2002:a05:6870:9a17:b0:e9:3d1:f91a with SMTP id
+ fo23-20020a0568709a1700b000e903d1f91amr1879997oab.44.1660149635427; Wed, 10
+ Aug 2022 09:40:35 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 10 Aug 2022 11:40:34 -0500
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Cc:     usama.anjum@collabora.com, kernel@collabora.com
-Subject: Re: [PATCH 0/5] Add process_memwatch syscall
-Content-Language: en-US
-To:     David Hildenbrand <david@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
-        "open list:ABI/API" <linux-api@vger.kernel.org>,
-        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
-        <linux-arch@vger.kernel.org>,
-        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
-        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
-        <linux-perf-users@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, krisman@collabora.com
-References: <20220726161854.276359-1-usama.anjum@collabora.com>
- <95ed1a81-ff8e-2c48-8838-4b3995af51b7@redhat.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <95ed1a81-ff8e-2c48-8838-4b3995af51b7@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAODwPW_mYQ1gcd2Xw5s+7dL2kLcYn-VTxKHUH1iM1V4mn7pT_w@mail.gmail.com>
+References: <YuuBrUmiRYoaSmPw@google.com> <20220804142856.306032-1-jrosenth@chromium.org>
+ <CAE-0n51UcauP1ojoskV9_2+CFPoJrs08jGHVPCZdSA_oXX1zUw@mail.gmail.com> <CAODwPW_mYQ1gcd2Xw5s+7dL2kLcYn-VTxKHUH1iM1V4mn7pT_w@mail.gmail.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Wed, 10 Aug 2022 11:40:34 -0500
+Message-ID: <CAE-0n504q_NeB9e2BYF8P9Scp7TPqsp9KEWu2DO=ZzbYdJfyew@mail.gmail.com>
+Subject: Re: [PATCH v7] firmware: google: Implement cbmem in sysfs driver
+To:     Julius Werner <jwerner@chromium.org>
+Cc:     Jack Rosenthal <jrosenth@chromium.org>,
+        chrome-platform@lists.linux.dev,
+        LKML <linux-kernel@vger.kernel.org>,
+        Tzung-Bi Shih <tzungbi@kernel.org>,
+        Guenter Roeck <groeck@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Quoting Julius Werner (2022-08-04 16:14:43)
+> > Quoting Jack Rosenthal (2022-08-04 07:28:56)
+> > > cbmem entries can be read from coreboot table
+> > > 0x31 (LB_TAG_CBMEM_ENTRY).  This commit exports access to cbmem
+> > > entries in sysfs under /sys/firmware/coreboot/cbmem-*.
+> > >
+> > > Link: https://issuetracker.google.com/239604743
+> >
+> > Is what you intend to use from here essentially an nvram? If so, it may
+> > make more sense to expose just that entry in drivers/nvmem/ as a
+> > read-only sort of nvmem.
+>
+> No, it is not NV. It's just a normal memory buffer allocated and
+> filled by firmware on boot and placed in a region of normal DRAM
+> that's marked as reserved.
 
-Thank you for reviewing and commenting.
+Alright cool. The bug says 'vbnv' so I was guessing 'nv' meant
+non-volatile.
 
-On 8/10/22 2:03 PM, David Hildenbrand wrote:
-> On 26.07.22 18:18, Muhammad Usama Anjum wrote:
->> Hello,
-> 
-> Hi,
-> 
->>
->> This patch series implements a new syscall, process_memwatch. Currently,
->> only the support to watch soft-dirty PTE bit is added. This syscall is
->> generic to watch the memory of the process. There is enough room to add
->> more operations like this to watch memory in the future.
->>
->> Soft-dirty PTE bit of the memory pages can be viewed by using pagemap
->> procfs file. The soft-dirty PTE bit for the memory in a process can be
->> cleared by writing to the clear_refs file. This series adds features that
->> weren't possible through the Proc FS interface.
->> - There is no atomic get soft-dirty PTE bit status and clear operation
->>   possible.
-> 
-> Such an interface might be easy to add, no?
-Are you referring to ioctl? I think this syscall can be used in future
-for adding other operations like soft-dirty. This is why syscall has
-been added.
+>
+> > It isn't clear to me what the structure of this path is. I'd expect to
+> > see an entry for each 'address', 'size', 'id', 'mem' with a different
+> > What/Date/Contact/Description. If those attributes are all within a
+> > directory in sysfs then there could be a top-level description for that
+> > as well.
+>
+> CBMEM buffers are used by coreboot for all sorts of things and we
+> regularly define new ones. We can't maintain a full list of all IDs in
+> kernel sources because it would be a ton of churn for no reason --
+> best we could do is to add a link to the ID list in the coreboot repo
+> (e.g. https://review.coreboot.org/plugins/gitiles/coreboot/+/refs/heads/master/src/commonlib/bsd/include/commonlib/bsd/cbmem_id.h).
 
-If community doesn't agree, I can translate this syscall to the ioctl
-same as it is.
+Agreed, that's a good approach.
 
-> 
->> - The soft-dirty PTE bit of only a part of memory cannot be cleared.
-> 
-> Same.
-> 
-> So I'm curious why we need a new syscall for that.
-> 
->>
->> Historically, soft-dirty PTE bit tracking has been used in the CRIU
->> project. The Proc FS interface is enough for that as I think the process
->> is frozen. We have the use case where we need to track the soft-dirty
->> PTE bit for running processes. We need this tracking and clear mechanism
->> of a region of memory while the process is running to emulate the
->> getWriteWatch() syscall of Windows. This syscall is used by games to keep
->> track of dirty pages and keep processing only the dirty pages. This
->> syscall can be used by the CRIU project and other applications which
->> require soft-dirty PTE bit information.
->>
->> As in the current kernel there is no way to clear a part of memory (instead
->> of clearing the Soft-Dirty bits for the entire processi) and get+clear
->> operation cannot be performed atomically, there are other methods to mimic
->> this information entirely in userspace with poor performance:
->> - The mprotect syscall and SIGSEGV handler for bookkeeping
->> - The userfaultfd syscall with the handler for bookkeeping
-> 
-> You write "poor performance". Did you actually implement a prototype
-> using userfaultfd-wp? Can you share numbers for comparison?
-> 
-> Adding an new syscall just for handling a corner case feature
-> (soft-dirty, which we all love, of course) needs good justification.
+> We really only care about one of these right now and many of them will
+> never be relevant to the kernel, but I still thought that while we're
+> doing this we might as well provide a generic interface to all of them
+> because others may become useful in the future (and then you don't
+> have to update the kernel every time you get a new use case for some
+> userspace tool wanting to interact with some resident data structure
+> from coreboot).
 
-The cycles are given in thousands. 60 means 60k cycles here which have
-been measured with rdtsc().
+Exposing more than is necessary in the kernel ABI could get into
+problems with backwards compatibility. It also means we have to review
+the ABI with the consideration that something may change in the future
+and cbmem would be exposing something we don't want exposed, or maybe it
+is writeable when it shouldn't be?
 
-|   | Region size in Pages | 1    | 10   | 100   | 1000  | 10000  |
-|---|----------------------|------|------|-------|-------|--------|
-| 1 | MEMWATCH             | 7    | 58   | 281   | 1178  | 17563  |
-| 2 | MEMWATCH Perf        | 4    | 23   | 107   | 1331  | 8924   |
-| 3 | USERFAULTFD          | 5405 | 6550 | 10387 | 55708 | 621522 |
-| 4 | MPROTECT_SEGV        | 35   | 611  | 1060  | 6646  | 60149  |
+Furthermore, if the ABI that the kernel can expose already exists then
+we're better off because there may already be userspace programs written
+for that ABI with lessons learned and bugs ironed out. In this case, I
+was hoping that it was an nvmem, in which case we could tie it into the
+nvmem framework and piggyback on the nvmem APIs. It also helps to expose
+a more generic ABI to userspace instead of developing a bespoke solution
+requiring boutique software. Of course sometimes things can't be so
+generic so code has to be written.
 
-1. MEMWATCH --> process_memwatch considering VM_SOFTDIRT (splitting is
-possible)
-2. MEMWATCH Perf --> process_memwatch without considering VM_SOFTDIRTY
-3. Userafaultfd --> userfaultfd with handling is userspace
-4. Mprotect_segv --> mprotect and signal handler in userspace
+>
+> > Do you need to be able to write cbmem entries?
+>
+> Yes, see the use case in the bug (using the vboot workbuffer from
+> coreboot as a write-through cache for the vboot nvdata on flash).
 
-Note: Implementation of mprotect_segv is very similar to userfaultfd. In
-both of these, the signal/fault is being handled in the userspace. In
-mprotect_segv, the memory region is write-protected through mprotect and
-SEGV signal is received when something is written to this region. This
-signal's handler is where we do calculations about soft dirty pages.
-Mprotect_segv mechanism must be lighter than userfaultfd inside kernel.
-
-My benchmark application is purely single threaded to keep effort to a
-minimum until we decide to spend more time. It has been written to
-measure the time taken in a serial execution of these statements without
-locks. If the multi-threaded application is used and randomization is
-introduced, it should affect `MPROTECT_SEGV` and `userfaultd`
-implementations more than memwatch. But in this particular setting,
-memwatch and mprotect_segv perform closely.
-
-
-> 
->>
->>         long process_memwatch(int pidfd, unsigned long start, int len,
->>                               unsigned int flags, void *vec, int vec_len);
->>
->> This syscall can be used by the CRIU project and other applications which
->> require soft-dirty PTE bit information. The following operations are
->> supported in this syscall:
->> - Get the pages that are soft-dirty.
->> - Clear the pages which are soft-dirty.
->> - The optional flag to ignore the VM_SOFTDIRTY and only track per page
->> soft-dirty PTE bit
-> 
-> Huh, why? VM_SOFTDIRTY is an internal implementation detail and should
-> remain such.
-> 
-> VM_SOFTDIRTY translates to "all pages in this VMA are soft-dirty".
-Clearing soft-dirty bit for a range of memory may result in splitting
-the VMA. Soft-dirty bit of the per page need to be cleared. The
-VM_SOFTDIRTY flag from this splitted VMA need to be cleared. The kernel
-may decide to merge this splitted VMA back. Please note that kernel
-doesn't take into account the VM_SOFTDIRTY flag of the VMAs when it
-decides to merge the VMAs. This not only gives performance hit, but also
-the non-dirty pages of the whole VMA start to appear as dirty again
-after the VMA merging. To avoid this penalty,
-MEMWATCH_SD_NO_REUSED_REGIONS flag has been added to ignore the
-VM_SOFTDIRTY and just rely on the soft-dirty bit present on the per
-page. The user is aware about the constraint that the new regions will
-not be found dirty if this flag is specified.
-
-> 
-
--- 
-Muhammad Usama Anjum
+Is it a cached non-volatile memory?

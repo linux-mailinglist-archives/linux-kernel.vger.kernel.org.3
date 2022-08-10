@@ -2,110 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A93558F0BE
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 18:51:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE5B58F0C9
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 18:53:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232406AbiHJQvE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 12:51:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53556 "EHLO
+        id S232537AbiHJQxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 12:53:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231707AbiHJQvC (ORCPT
+        with ESMTP id S231707AbiHJQxQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 12:51:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FF6F13DDA;
-        Wed, 10 Aug 2022 09:51:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 10 Aug 2022 12:53:16 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7292F1758F;
+        Wed, 10 Aug 2022 09:53:15 -0700 (PDT)
+Received: from localhost (modemcable141.102-20-96.mc.videotron.ca [96.20.102.141])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 55DECB81E19;
-        Wed, 10 Aug 2022 16:51:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36894C433C1;
-        Wed, 10 Aug 2022 16:50:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660150259;
-        bh=P83Tql5tDzqXLpKNY/r1pvDY0Hno2eRYNpIyIJiqu4M=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=QjPtmmaL3A+2IOpCb/qcQi3rmMEn3fFona591VAMQyOQEShOZK3Bcg4z4jHWe1cxh
-         +l/m45scotgufR0MLbUsiCFcY/95oVeh6cdxCGHerDXLUzUvIQs+TWuIls7CSDGu0C
-         FCSZgcTuzCN9/mamt/nNI1+6BJl6UOIjhn/VlwSUEQRsx+Fa+8o0CYygygq3Xazsa6
-         vMUeEZm/sNXRF3Z84hSwALF+gT/3IS5et1OtlK3mYteK2XuHOomgVFQy9KR03A657y
-         mZKm2o8oJY1Vp5J7GGjw4LhLhn/K99ZtuYViiX0i+Try1dpbdrghmwwk0j8jzOck/B
-         xrfeTZfXCAuUg==
-Message-ID: <815b03aa-ab39-ec8b-294b-68dff36e2d54@kernel.org>
-Date:   Wed, 10 Aug 2022 19:50:49 +0300
+        (Authenticated sender: krisman)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4E2A966019C1;
+        Wed, 10 Aug 2022 17:53:13 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1660150394;
+        bh=Dxlub/En694B1OVwDjJc8t0TX0eJ/thQHwv6ZgyAFss=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=T3LUdJuYm6pho9zz3V+Hu1Z+mBuq56NgJIlemP6tGh4klBENeaYswfS6PYiFv9Yv+
+         LupLBkAsxaJBuY6G+ziP1qBdhiUC0YejOfT99UGZZas8pKf9alnvLGekY4mXkP+PH/
+         6H3EyQ7pR/zqWSbrksq4JXrmQ2G3HL6vXbOpp8XjblylzhMdD2rJsBs+UbOEoYDUH9
+         Q7P2oiY6Ic+dbTYxWxf3dFkwa143H2ke5lfFqYuH8GOmLDxdBOHzvnoz8CPezYwMYz
+         coHlw2dK0qd118LITxpwIQRxH2tkJCSlF0FMS7NnjzLHJ5ExL9oJdpfaNfA2djr4Bk
+         tTO5BA1GQZuPg==
+From:   Gabriel Krisman Bertazi <krisman@collabora.com>
+To:     Peter.Enderborg@sony.com
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andy Lutomirski <luto@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann <arnd@arndb.de>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:PROC FILESYSTEM" <linux-fsdevel@vger.kernel.org>,
+        "open list:ABI/API" <linux-api@vger.kernel.org>,
+        "open list:GENERIC INCLUDE/ASM HEADER FILES" 
+        <linux-arch@vger.kernel.org>,
+        "open list:MEMORY MANAGEMENT" <linux-mm@kvack.org>,
+        "open list:PERFORMANCE EVENTS SUBSYSTEM" 
+        <linux-perf-users@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "kernel@collabora.com" <kernel@collabora.com>
+Subject: Re: [PATCH 0/5] Add process_memwatch syscall
+References: <20220726161854.276359-1-usama.anjum@collabora.com>
+        <456a8052-dfd2-e00c-6da7-fb5aa0c35f2c@sony.com>
+Date:   Wed, 10 Aug 2022 12:53:07 -0400
+In-Reply-To: <456a8052-dfd2-e00c-6da7-fb5aa0c35f2c@sony.com> (Peter's message
+        of "Wed, 10 Aug 2022 09:22:02 +0000")
+Message-ID: <87tu6kghvw.fsf@collabora.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v4 1/4] dt-bindings: mediatek: watchdog: Fix compatible
- fallbacks and example
-Content-Language: en-US
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Cc:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        angelogioacchino.delregno@collabora.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-References: <20220721014845.19044-1-allen-kh.cheng@mediatek.com>
- <20220721014845.19044-2-allen-kh.cheng@mediatek.com>
- <CAGXv+5HXwVpaJPV-4Z6qw14xZzEkx_E7dVks6-GBa7bQyN8hCg@mail.gmail.com>
- <5dac39d1-3b42-40e9-5693-0c127e8c689a@gmail.com>
- <0fadcd9f50d49ecbb329e76a9ceb6ee689648955.camel@mediatek.com>
- <20220808170355.c2ih3xwqxlddsal7@notapiano>
- <6271732eb27824c5b841760243738ceb062f4c4a.camel@mediatek.com>
-From:   Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <6271732eb27824c5b841760243738ceb062f4c4a.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/08/2022 15:58, Allen-KH Cheng wrote:
-> I agree the advantage of patch is aesthetic. Since I also want to send
-> another "watchdog: Convert binding to YAML" PATCH, it's better let all
-> wdt compatibles in the binding match the contents of mtk_wdt_dt_ids in
-> drivers/watchdog/mtk_wdt.c
-> 
-> static const struct of_device_id mtk_wdt_dt_ids[] = {
-> 	{ .compatible = "mediatek,mt2712-wdt", .data = &mt2712_data },
-> 	{ .compatible = "mediatek,mt6589-wdt" },
-> 	{ .compatible = "mediatek,mt7986-wdt", .data = &mt7986_data },
-> 	{ .compatible = "mediatek,mt8183-wdt", .data = &mt8183_data },
-> 	{ .compatible = "mediatek,mt8186-wdt", .data = &mt8186_data },
-> 	{ .compatible = "mediatek,mt8192-wdt", .data = &mt8192_data },
-> 	{ .compatible = "mediatek,mt8195-wdt", .data = &mt8195_data },
-> 	{ /* sentinel */ }
-> };
-> 
-> We have "mediatek,mt8186-wdt" "mediatek,mt8195-wdt" and
-> "mediatek,mt7986-wdt" now and they have their DT data for the reset
-> control.
-> 
-> It's weird and unuseful to add "mediatek,mt6589-wdt" as fallback. 
-> 
-> 
-> Please kindly let me know if I missed anything
+"Peter.Enderborg@sony.com" <Peter.Enderborg@sony.com> writes:
+>>
+>> This syscall can be used by the CRIU project and other applications which
+>> require soft-dirty PTE bit information. The following operations are
+>> supported in this syscall:
+>> - Get the pages that are soft-dirty.
+>> - Clear the pages which are soft-dirty.
+>> - The optional flag to ignore the VM_SOFTDIRTY and only track per page
+>> soft-dirty PTE bit
+>>
 
-How the driver arranges it should not be a reason to use or not to use
-specific fallback. Although Rob acked it, but I still think you did not
-provide valid reason for the change.
+Hi Peter,
 
-Valid reason is usually the actual hardware (so they are actually not
-compatible with mt6589), not exactly how once someone did it in the driver.
+(For context, I wrote a previous version of this patch and have been
+working with Usama on the current patch).
 
-Best regards,
-Krzysztof
+> Why can it not be done as a IOCTL?
+
+Considering an ioctl is basically a namespaced syscall with extra-steps,
+surely we can do it :) There are a few reasons we haven't, though:
+
+1) ioctl auditing/controling is much harder than syscall
+
+2) There is a concern for performance, since this might be executed
+frequently by windows applications running over wine.  There is an extra
+cost with unnecessary copy_[from/to]_user that we wanted to avoid, even
+though we haven't measured.
+
+3) I originally wrote this at the time process_memadvise was merged.  I
+felt it fits the same kind of interface exposed by
+process_memadvise/process_mrelease,  recently merged.
+
+4) Not obvious whether the ioctl would be against pagemap/clear_refs.
+Neither file name describes both input and output semantics.
+
+Obviously, all of those reasons can be worked around, and we can turn
+this into an ioctl.
+
+Thanks,
+
+-- 
+Gabriel Krisman Bertazi

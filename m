@@ -2,77 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61B3F58F008
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 18:04:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5628658EFFF
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 18:04:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233322AbiHJQEY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 12:04:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60904 "EHLO
+        id S233223AbiHJQDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 12:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233310AbiHJQD5 (ORCPT
+        with ESMTP id S232809AbiHJQDp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 12:03:57 -0400
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8493E6580A;
-        Wed, 10 Aug 2022 09:03:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=ATWjZwDzLd1FXTxu36i7ECb5X4VhABeeCLXPqvahL08=;
-        t=1660147436; x=1661357036; b=ppqE0xXY3EffjWZqBNoU7T+g3g2T3n+8KYzJUWL1sNQ95fZ
-        PyDvuRaDFLmTKwfE9SaObb5OKip1oJdYKUOB0p5uvavnXLAyuZFrvc8NQW60zAQnqPJzkpXJwzLOV
-        OVqgRL22ZSmKoZ1uHX8ic6OjZb33gsBtpKlPq9wXV3wcfgYF9RUhm1i0Nk4mh7EQGKAHQXSTGpnHT
-        65Pr/DOSpR0kldRuztn1lpGQRCK1sSWLAlFQ6czIuH/3Lom2ILKGRxRyQGrqGJ/7cVg1NU+FocXZ6
-        KiB0/zdNbGTF0zMJi+P1PtT+mjkjmZ3YhLNtRkrgsYMWwokh+cixq/7/zZrGKzWg==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-        (Exim 4.96)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1oLoBH-004F4D-0T;
-        Wed, 10 Aug 2022 18:03:39 +0200
-Message-ID: <bfc5f964d8dadd6378f2da5b3b6ef4bc9fb847c2.camel@sipsolutions.net>
-Subject: Re: [PATCH v5 1/5] sysfs: Add attribute info for
- /sys/devices/.../coredump_disabled
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     Manish Mandlik <mmandlik@google.com>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        marcel@holtmann.org, luiz.dentz@gmail.com
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-bluetooth@vger.kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        chromeos-bluetooth-upstreaming@chromium.org,
-        Won Chung <wonchung@google.com>,
-        Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+        Wed, 10 Aug 2022 12:03:45 -0400
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1986A65655;
+        Wed, 10 Aug 2022 09:03:44 -0700 (PDT)
+Received: by mail-io1-f50.google.com with SMTP id 68so5850154iou.2;
+        Wed, 10 Aug 2022 09:03:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=pLszvMp06j4ZdOd51Hbi3XTm/T7L8XdJjW4rKKC5yT0=;
+        b=FuHDwaIgZ55vVVz8ajVTNg4w61riGUCOZa+nwo+IAVNGEe55EjztDTrWWpFInKRnEX
+         QHaarp7ETsCqk38kzCwMyGJjCOAErIPPOMQzQdzN77fCW4jFGMSIGg04Bk+8Pv+NoIu8
+         9gSM4YMHfxo3pfSPQc/8+uF2R1e3lh2SDYt01BfWOp4fXPsd1Air1IQzSeKM534nkJ6q
+         8gMYVElW05OpvwDzrfzdpaPgmPx1DRv+EgEu0PNYbcvkC3U/MbxqWavQTW+FvLSIgvUh
+         h2DDmMgrT2UT8p/omzpgrqd5PD6HZLu0f/Pw7/Gpik8TwqMePf+QtL97ijkRO0VfsMLl
+         kzuQ==
+X-Gm-Message-State: ACgBeo2h/88fMxJWhyVfav23vMKkXdCFa/HyR5+OsaEnu68vGV53v6zo
+        K6RCb0edy6JWBf4wcUgQOA==
+X-Google-Smtp-Source: AA6agR4+T5TZB8tmai+ZHR92K3UgZWu/lvjnSFQjQi9/vetr7i8iQFHeQNJ/h7qEmSMf7JBs7XaLkg==
+X-Received: by 2002:a02:6d1f:0:b0:33f:8d28:4d6d with SMTP id m31-20020a026d1f000000b0033f8d284d6dmr13241554jac.16.1660147423297;
+        Wed, 10 Aug 2022 09:03:43 -0700 (PDT)
+Received: from xps15.herring.priv ([64.188.179.248])
+        by smtp.googlemail.com with ESMTPSA id a27-20020a02735b000000b00341a215d3cesm7617629jae.63.2022.08.10.09.03.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Aug 2022 09:03:43 -0700 (PDT)
+From:   Rob Herring <robh@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Date:   Wed, 10 Aug 2022 18:03:37 +0200
-In-Reply-To: <20220810085753.v5.1.I5622b2a92dca4d2703a0f747e24f3ef19303e6df@changeid>
-References: <20220810085753.v5.1.I5622b2a92dca4d2703a0f747e24f3ef19303e6df@changeid>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+Subject: [PATCH 0/2] Convert arm,versatile-sysreg to DT schema
+Date:   Wed, 10 Aug 2022 10:03:39 -0600
+Message-Id: <20220810160341.51995-1-robh@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-08-10 at 09:00 -0700, Manish Mandlik wrote:
-> This patch adds the specification for /sys/devices/.../coredump_disabled
-> attribute which allows the userspace to enable/disable devcoredump for a
-> particular device and drivers can use it to enable/disable functionality
-> accordingly. It is available when the CONFIG_DEV_COREDUMP is enabled and
-> driver has implemented the .coredump() callback.
->=20
+This short series converts the arm,versatile-sysreg binding to DT schema.
+The binding is already in use in examples which unsurprisingly needs a
+fix with the schema added.
 
-It would be nice to say _why_? What problem does this solve? You could
-just create the dump and discard it, instead, for example?
+This is part of getting rid of the remaining ~40 cases of compatibles
+without a schema in the examples.
 
-johannes
+Rob
+
+
+Rob Herring (2):
+  dt-bindings: display: arm,versatile-tft-panel: Drop erroneous
+    properties in example
+  dt-bindings: arm,versatile-sysreg: Convert to DT schema format
+
+ .../bindings/arm/arm,versatile-sysreg.yaml    | 35 +++++++++++++++++++
+ .../bindings/arm/versatile-sysreg.txt         | 10 ------
+ .../panel/arm,versatile-tft-panel.yaml        |  3 --
+ 3 files changed, 35 insertions(+), 13 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/arm/arm,versatile-sysreg.yaml
+ delete mode 100644 Documentation/devicetree/bindings/arm/versatile-sysreg.txt
+
+--
+2.34.1

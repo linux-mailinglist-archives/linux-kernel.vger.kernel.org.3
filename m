@@ -2,210 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEB2958E945
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 11:04:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05D7A58E947
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 11:05:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231935AbiHJJEk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 05:04:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60230 "EHLO
+        id S231932AbiHJJFt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 05:05:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231932AbiHJJEY (ORCPT
+        with ESMTP id S231906AbiHJJFZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 05:04:24 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2085.outbound.protection.outlook.com [40.107.93.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA94868AA;
-        Wed, 10 Aug 2022 02:04:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ny5E2VM/NqFH0HIXDWovY1vm9Q+0h4thmBnxm7mcOtttabiQsE/uF6AMCHohMVQkR5lU2pTnZb2RvNKq347XimGPZo9BTMgnbalD7/aBe6CV3nLxlEFzN3URX1inCaf6xyLV6GaEmK/t/Tp3bzElkx8rS7vpNbPWp3XuQQ3jmG9Eba780pqOjX840HmmZaaxmJU8wxD5QswAZxKtakJMR7dxBxlF4ljrddWp0wooZbIxTgJh/8RP2vrWbvyCI/3A1W0I0R60aVUNJI7QbY2XpxCrSAPaE57DulbeubqPw/KjA1pgzjtnHmOn0VULlXi3VIREZW7iezgg122Xj9i+GA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=J8/iYvYOYkCxkQGDLr5fzE9/DS340HmO+yaXPvED898=;
- b=S335RdcI4Zd8efsXWf3cbUnfpT0OOk+x1hHcTbVRvpAVIJo/4gjos8FHDIAeDQ0Yj5FcTjFS2vcKUqLnTRwp1Nr/sxt+rRnGUdR1Uu9Njvc8NQnNqf3dW9LGzvxZ634PAA23aj5s66w1YKFSFg++eOcmY0wfm9abxKXkrBV5nK2GXUJGTGY1DKaRkFEjaimvyUwuBNC2eZ8nwTiCn5XDT6tcZEA0e4D0SMG2MjkcLr+JjgrHWxaL5ugKk7CgRzQu+kjkQyRmm+uZQeB/N5pHAltKEMRUI61yAV1BHIauVQjNbrrll3t9zd4754cXXfx+gBrjYMpEe9bNMP2i978gGg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=J8/iYvYOYkCxkQGDLr5fzE9/DS340HmO+yaXPvED898=;
- b=j4VgwtCMa0qsBdjuYB9dM9MGV222xs++d5W4bLBjWG6iVgcBqABM73t2T6oGZ51SkvjmWYWJyoroEbdup2wE1I1tten9bNHRn4dpLPqZ+mLCu63FMMZrwU6avIt2M2tAP2q2cLlTqqTu0BMKD24vd8AOpHQHHv/6x5sC75PFUpo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by DM5PR12MB4679.namprd12.prod.outlook.com (2603:10b6:4:a2::37) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.18; Wed, 10 Aug
- 2022 09:04:20 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::905:1701:3b51:7e39]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::905:1701:3b51:7e39%2]) with mapi id 15.20.5504.020; Wed, 10 Aug 2022
- 09:04:20 +0000
-Message-ID: <1bb3ff1c-d89f-8b2b-b898-bb60f77462c4@amd.com>
-Date:   Wed, 10 Aug 2022 11:04:13 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v8 1/2] drm/gem: Properly annotate WW context on
- drm_gem_lock_reservations() error
-Content-Language: en-US
-To:     Daniel Vetter <daniel@ffwll.ch>
-Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-tegra@vger.kernel.org, kernel@collabora.com,
-        virtualization@lists.linux-foundation.org
-References: <20220701090240.1896131-1-dmitry.osipenko@collabora.com>
- <20220701090240.1896131-2-dmitry.osipenko@collabora.com>
- <a42237c9-6304-4b06-cede-2175c7e7b87d@amd.com>
- <YvKO5r5Sr56e9vBf@phenom.ffwll.local>
- <e760f555-7f2d-dea9-70b2-c0881adc3afc@amd.com>
- <CAKMK7uEd1xX6P4YRgYOfjvqpwVmQ0YZPkHdK=4auwrkBE9CEzQ@mail.gmail.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <CAKMK7uEd1xX6P4YRgYOfjvqpwVmQ0YZPkHdK=4auwrkBE9CEzQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: AS9PR06CA0567.eurprd06.prod.outlook.com
- (2603:10a6:20b:485::35) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Wed, 10 Aug 2022 05:05:25 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E8286F55F
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 02:05:24 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id i3-20020a5d8403000000b0067bd73cc9eeso7639239ion.19
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 02:05:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=7CAwyYN1P7bwYCfNd++c46KHxEzhG6alY7g04EoLak0=;
+        b=X/ibBf7P3LehYBwAdAhfW+5vttk2m4UxhZXZGW7zWyBteCE/JiuRl5e9+j9vGq/UVC
+         ev0Wh5vCZZvwYTSjT8FDoSKdxWnGFv+BK1bKFWh4akG/3RX7ngf1//kChiewisg171sd
+         tt1EM9Z7XcP7wvp4mGwqRKRnKtb9Tm6VuPumJq3faGSPM6dKgtwAD+FT3wMkF3+u4iaI
+         XDHPQEs5eyRlck4kzIcmY9H5pafwOp8RbenEvhx4lBWA08RQFVA+nMbe1SwJzhDHugBL
+         zhd23nbYfMl6DHbdpCA/+r5g+z4uouLd9Z1V29AJBF6KDzPFQNCNE9m2VRNeBxXVtV/Y
+         OxQA==
+X-Gm-Message-State: ACgBeo0IRFgY+2ZOpEmNiMETOqElYYVi8DX/lLcFJVHAqPo5/8gCt/2E
+        DURZaDrOV7j6+4WOtgnMFjRLBWzRm8IpPYn1nd9iRZFkdYIA
+X-Google-Smtp-Source: AA6agR6OWplUDG8NQR3v1zr67/0fm3uuAZoKvRY2oNqFwwbMTG+6vm+Qwc0S7XSN8lWtYCYSoERVpeiiQNt8uc127xAgCRU2psmq
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: b1516170-210c-432b-76c9-08da7aaf4f92
-X-MS-TrafficTypeDiagnostic: DM5PR12MB4679:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 37dSMN1f720lnC7S/1s2W/dW9ejxW2uKRgD1WR3+DlTLo1+UKDOz12A8vb+MBK/H0xu1ZvQgjiYCjfMpknU+kbXOwzdgQlTh4ksMtPzy7EZ7FYmDKv074RHwAgPYxYEjB0chezlWlIqe7u9U1148QzTF9kg+KuNg3DQFxwHr7Tg3AzdmZchMaia2shmEVntBTrMrz7uB5qCr10eKLsz2BUneGBvpd2WX5R3UkIz/jvOXYQBlE9HhutOVWCH6FYulC2ltt24Wi5xZ1FIFIFR+Ua+jaj6N1qtUSoMVBb3cl9SoauSarQkGvLPK+iIPMFIVOY7vKUU4pymZHUyBARFTF0WocqLsGRjdKNNodXRbEpUsWnUDORsAsnS8rQzxb26KMk73zRQUYGq43QLWiEIZV343CXb566MkX88hBYxfKg5ltSMib0Snbu5RQkJdzS45yWjjE4kbHZ6AvgiRo+yRtkLKOgRoFsSatCTvf1yPxqgVFGl17KOMrBSWgfo9wIZ0KtMX08rRXA6o3EYBBPWD3w8+rjpmqop7Op2ElXJ2awpMyb96CZub5BGeuNQDfu117wpOpJqVg4DNMHeV9SmpuwqPYrpFkpHTRuOXogJO4Hl6eUxzZlURJYxQ6n5dl9iWwbmegLschWjXcBeRMCMJkR60UbpLKvhG9MQCeNTpB+cdts71d4tLIlO2Bu5qSn+YG66RRWDZIC8Jpwqzbx79Bj2oAe4yXkdLeapAQMNUvKIC6tfxiF6kjjjI3JqF2MN+2NGESRS9SWt2ua1dmS/VoB3mUAyuBs4gFFUGrxl/v+7aivq1q50QnocZkwfy3TSkXQWKB1DwQ/eTBaMdBV76uQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(396003)(376002)(136003)(39860400002)(366004)(38100700002)(31686004)(6506007)(186003)(6666004)(2616005)(66574015)(41300700001)(6512007)(86362001)(66556008)(31696002)(6486002)(8676002)(316002)(478600001)(5660300002)(66476007)(66946007)(6916009)(54906003)(4326008)(2906002)(83380400001)(8936002)(7416002)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dTJZN01VSWRIS1diTnJ6aDY5Q2t5TjlwRnJDVUVtOUhORnNUbmorc1NQbXJQ?=
- =?utf-8?B?Nk9kU0hsWmY0TDJrTSt0RGRWUC9qU3NjU1VXaGpsSW1hVGR3T0k1VXdWSzFE?=
- =?utf-8?B?a0wyTDcvdWxTS2xXN0czRmxaeW9WZE0zNVZROWRkUDJ2WDNvM1ZHY09vM3Fh?=
- =?utf-8?B?ZGZWK05wTCtQdkdMcEovT2pFL0wvRDNHd2Y2RlpaRFZ4TGxIZFhsSUtOanFW?=
- =?utf-8?B?UTY5VUttaGZnUGlud0hhUlk2QUwwZ0YxRnJUYjJsWVoyMG1aRWtTZXJzYXNy?=
- =?utf-8?B?RUN5VnlLVlExNktHbEVSbVE0ZG9Ibk0zUEwxRk5WWElzTGNSL0xxZmY0bDZY?=
- =?utf-8?B?dzBoQ3BWU3RzVGU2Ryt0eE8vZ3M2blJhSG5QcHpMYlg4T3FnWFpvZC9TQ05Q?=
- =?utf-8?B?V1V4Vm5ydEpSRU0zRkRkbzlod3NRNHJHTFhUMlpTcXV4RWw2SjYrUExWOTUw?=
- =?utf-8?B?ZHljaDlmZFVtM0IzME5yQXdVSjdDVFl5azU4NlFyS1pKWk1GaUNaNVh6dmVn?=
- =?utf-8?B?ZDdXTURQZC95S3RBSG1WVlVoMHFIaDN2SFhXSDQrZnRtM2xoQ290TjE5TktE?=
- =?utf-8?B?TEIwdHRLcGp5VGI2QTdtOXRhSnRLaDZncng4UUw0WnJaVzZydHFidGw3U2lS?=
- =?utf-8?B?R1d2OG5OVWQ2MHdUd3ZJRDVRK2M1V1dvS2FPTC9XSUNITHcxWlNuV2xuRFgr?=
- =?utf-8?B?b0g5MnFGNzBFc1Vsa1JoZnptUkcxSTVwVnNxb2hubjJ1d1Y4NmJJTVdEM0xq?=
- =?utf-8?B?ZEdhcm40enM5ejc3TFJJd2l2aFZXTUFDZDBCT0d4QWovbFFJL3liM3ByQkxV?=
- =?utf-8?B?QnZDcTVleG1xYlBRM0hwcmVoOFZ1QXF3b3g5djlBT29lb0ZuMC96Ylg5RmUz?=
- =?utf-8?B?eW9WWk5GSUpKQmFOUjB0UlBjUXgxeGxJcWdJY1ZUMVp3Z1RGSFcwU1J4MFd3?=
- =?utf-8?B?SERrbCtnMTdLNlIyc1NrdDV3T3Mxdzk0a2hJTDlWMTZ2Yjk4dkg4bDd5eHB3?=
- =?utf-8?B?R0VEaGZBQTlRc0Z2ZVVsQ1FJL2JjVWVTSEhYR3BIU2syZTlucE9ubEpVbVhZ?=
- =?utf-8?B?TlJVWitVSTQzbTNyaStMYzVkM3g3bU9rY1dMRFQ4eWVIT0JzbGRhb2tVeC81?=
- =?utf-8?B?REtvNFMzL3ZrbGZXNWtMSG9OQ2pNVCsvRFVaeGQvYi90MFZJQUh0K0Nyc3ZE?=
- =?utf-8?B?c3Fka2NmclF3RXY5L2YwUDRaOU9vZ3Y0NERFeWRjb2VMSDc2UUpTM1lyYjd6?=
- =?utf-8?B?dlZ1czZFcFRSSVFBY1JJSkdybUsxK2lmUVZvODEyUUk0S2dZOUV5cm4wWkNS?=
- =?utf-8?B?Um5WTEpZT3ZoOVRuMzdSck5NUHRFeFVYaVZrRXdOV1lvM0l4RnpVSDFISFJ2?=
- =?utf-8?B?SHlRRDBTd2pJNjhuUldlRHhaU2hKQXB3SXh1dUEyWi84Y282a3AvWWx1M01a?=
- =?utf-8?B?QnpyTkhINWNRZ1JhM0t4RFdhekxpMXN3Z3A5U05jWmhMWlBrb1owZ2wzVWlI?=
- =?utf-8?B?a3U1OG51TnJDTWRHZzFEalQ1dEhCQ2hNUTZrS1c4RHdaU2tLZEhCM0NPKzNF?=
- =?utf-8?B?RVNpSzJWaXVWM0RubVIydmE2c2tXV2lSUjZSMExkOGVxK3I2LzF1S2U0N09H?=
- =?utf-8?B?VTR4V2d5QWZsYnh5RE9DNURNTmowZSs3b1A1RlArUWtwT0dlb2t5b05kaXJh?=
- =?utf-8?B?S1ZZSGMzcERHT2tGK2J2bmtKeEZFaHB0a3RjYk1iOG9SQzA2ci9IT0VzUnFh?=
- =?utf-8?B?Z0xPZjVwQ0FXUWp4M2tuSDNmdkoxdGM3RWdTZTZEdER5WFNQK00vUEExUExm?=
- =?utf-8?B?VlVGbHBWNGZkN0lkeTJwZUMwNE85N3M4MWlQcnJOa1Y2ZnpYc3c0Z2hGM2Mz?=
- =?utf-8?B?bXFQdGdnSzRabmhsNlRZbFdrOXl2NzErcXBPQXBoRmRoZk5HaFAxckU3ZDdk?=
- =?utf-8?B?SEszd0JJdWhzVkpwR1JSMUxFOGpzSTlsWXdTaXNMdElMV3FJK3BUQzZhOUZv?=
- =?utf-8?B?L1NRbTBaTVJZM0tGRlBQMjRjRXl4ek1JSitaTHhlYlJ0Nmp6ZXJ4d2NobFlD?=
- =?utf-8?B?dTdVdkpnNm03MDZiTm1hWTBJczFUUitXUG5LNTgzaXlaL2MrdU5rbk50di92?=
- =?utf-8?B?ZktNVnRraWJsUCtVQjVKZGJoRFk3d1JUZFFEdHhvbjdkMEp0M1BXc2xPa2Vx?=
- =?utf-8?Q?0K7bwX36sxQejnZFPSchWyWxFYWsKJcUlgpUETFvrbIS?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b1516170-210c-432b-76c9-08da7aaf4f92
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Aug 2022 09:04:20.1085
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: d1/y6TSq8Xf1m/6v/s73NbrkL8w8evN6i/0HT5jDSO/br50QjTDluJuUxeAUbTV4
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM5PR12MB4679
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:14c5:b0:343:4296:3d28 with SMTP id
+ l5-20020a05663814c500b0034342963d28mr536209jak.36.1660122323539; Wed, 10 Aug
+ 2022 02:05:23 -0700 (PDT)
+Date:   Wed, 10 Aug 2022 02:05:23 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000060d9d005e5df5995@google.com>
+Subject: [syzbot] KASAN: use-after-free Read in slcan_open (2)
+From:   syzbot <syzbot+ee59a5daa4a85fecd0cf@syzkaller.appspotmail.com>
+To:     linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 10.08.22 um 10:33 schrieb Daniel Vetter:
-> On Wed, 10 Aug 2022 at 08:52, Christian König <christian.koenig@amd.com> wrote:
->> Am 09.08.22 um 18:44 schrieb Daniel Vetter:
->>> On Tue, Jul 05, 2022 at 01:33:51PM +0200, Christian König wrote:
->>>> Am 01.07.22 um 11:02 schrieb Dmitry Osipenko:
->>>>> Use ww_acquire_fini() in the error code paths. Otherwise lockdep
->>>>> thinks that lock is held when lock's memory is freed after the
->>>>> drm_gem_lock_reservations() error. The ww_acquire_context needs to be
->>>>> annotated as "released", which fixes the noisy "WARNING: held lock freed!"
->>>>> splat of VirtIO-GPU driver with CONFIG_DEBUG_MUTEXES=y and enabled lockdep.
->>>>>
->>>>> Cc: stable@vger.kernel.org
->>>>> Fixes: 7edc3e3b975b5 ("drm: Add helpers for locking an array of BO reservations.")
->>>>> Reviewed-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
->>>>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
->>>> Reviewed-by: Christian König <christian.koenig@amd.com>
->>> Also added this r-b tag when merging to drm-misc-next-fixes.
->> IIRC I've already pushed this to drm-misc-fixes with a CC stable tag
->> about 2 weeks ago.
->>
->> Please double check, it probably just hasn't come down the stream again yet.
-> Hm quickly check and I didn't spot it? There's a few patches from
-> Dmitry in the last few pulls, and some more stuff pending, but not
-> these two afaics?
+Hello,
 
-Mhm, there is some potential that I wanted to push it but got distracted 
-by the re-occurring drm-tip build breakages.
+syzbot found the following issue on:
 
-Anyway what I wanted to say is that this stuff should probably go to 
-drm-misc-fixes with a CC: stable tag :)
+HEAD commit:    200e340f2196 Merge tag 'pull-work.dcache' of git://git.ker..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=14f873b1080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1b664fba5e66c4bf
+dashboard link: https://syzkaller.appspot.com/bug?extid=ee59a5daa4a85fecd0cf
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Christian.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-> -Daniel
->
->> Christian.
->>
->>> -Daniel
->>>
->>>>> ---
->>>>>     drivers/gpu/drm/drm_gem.c | 4 ++--
->>>>>     1 file changed, 2 insertions(+), 2 deletions(-)
->>>>>
->>>>> diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
->>>>> index eb0c2d041f13..86d670c71286 100644
->>>>> --- a/drivers/gpu/drm/drm_gem.c
->>>>> +++ b/drivers/gpu/drm/drm_gem.c
->>>>> @@ -1226,7 +1226,7 @@ drm_gem_lock_reservations(struct drm_gem_object **objs, int count,
->>>>>              ret = dma_resv_lock_slow_interruptible(obj->resv,
->>>>>                                                               acquire_ctx);
->>>>>              if (ret) {
->>>>> -                   ww_acquire_done(acquire_ctx);
->>>>> +                   ww_acquire_fini(acquire_ctx);
->>>>>                      return ret;
->>>>>              }
->>>>>      }
->>>>> @@ -1251,7 +1251,7 @@ drm_gem_lock_reservations(struct drm_gem_object **objs, int count,
->>>>>                              goto retry;
->>>>>                      }
->>>>> -                   ww_acquire_done(acquire_ctx);
->>>>> +                   ww_acquire_fini(acquire_ctx);
->>>>>                      return ret;
->>>>>              }
->>>>>      }
->
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+ee59a5daa4a85fecd0cf@syzkaller.appspotmail.com
 
+==================================================================
+BUG: KASAN: use-after-free in slc_sync drivers/net/can/slcan.c:510 [inline]
+BUG: KASAN: use-after-free in slcan_open+0x13f/0x990 drivers/net/can/slcan.c:587
+Read of size 8 at addr ffff888086ad8c88 by task syz-executor.3/1717
+
+CPU: 1 PID: 1717 Comm: syz-executor.3 Not tainted 5.19.0-syzkaller-02972-g200e340f2196 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e3/0x2cb lib/dump_stack.c:106
+ print_address_description+0x65/0x4b0 mm/kasan/report.c:313
+ print_report+0xf4/0x210 mm/kasan/report.c:429
+ kasan_report+0xfb/0x130 mm/kasan/report.c:491
+ slc_sync drivers/net/can/slcan.c:510 [inline]
+ slcan_open+0x13f/0x990 drivers/net/can/slcan.c:587
+ tty_ldisc_open drivers/tty/tty_ldisc.c:433 [inline]
+ tty_set_ldisc+0x369/0x670 drivers/tty/tty_ldisc.c:558
+ tty_ioctl+0xada/0xc60 drivers/tty/tty_io.c:2714
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fc050689209
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fc0517be168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007fc05079bf60 RCX: 00007fc050689209
+RDX: 0000000020000080 RSI: 0000000000005423 RDI: 0000000000000003
+RBP: 00007fc0506e3161 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffc0af3dd9f R14: 00007fc0517be300 R15: 0000000000022000
+ </TASK>
+
+The buggy address belongs to the physical page:
+page:ffffea00021ab600 refcount:0 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x86ad8
+flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000000 ffffea0001cfb608 ffffea0001fdca08 0000000000000000
+raw: 0000000000000000 0000000000000000 00000000ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as freed
+page last allocated via order 3, migratetype Unmovable, gfp_mask 0x546dc0(GFP_USER|__GFP_NOWARN|__GFP_RETRY_MAYFAIL|__GFP_COMP|__GFP_ZERO|__GFP_ACCOUNT), pid 1705, tgid 1697 (syz-executor.1), ts 1569421082832, free_ts 1569554373784
+ prep_new_page mm/page_alloc.c:2457 [inline]
+ get_page_from_freelist+0x72b/0x7a0 mm/page_alloc.c:4203
+ __alloc_pages+0x259/0x560 mm/page_alloc.c:5431
+ __alloc_pages_node include/linux/gfp.h:587 [inline]
+ alloc_pages_node include/linux/gfp.h:610 [inline]
+ kmalloc_large_node+0x7c/0x180 mm/slub.c:4438
+ __kmalloc_node+0x2fd/0x420 mm/slub.c:4454
+ kmalloc_node include/linux/slab.h:623 [inline]
+ kvmalloc_node+0x6e/0x160 mm/util.c:613
+ kvmalloc include/linux/slab.h:750 [inline]
+ kvzalloc include/linux/slab.h:758 [inline]
+ alloc_netdev_mqs+0x85/0xea0 net/core/dev.c:10584
+ slc_alloc drivers/net/can/slcan.c:540 [inline]
+ slcan_open+0x317/0x990 drivers/net/can/slcan.c:598
+ tty_ldisc_open drivers/tty/tty_ldisc.c:433 [inline]
+ tty_set_ldisc+0x369/0x670 drivers/tty/tty_ldisc.c:558
+ tty_ioctl+0xada/0xc60 drivers/tty/tty_io.c:2714
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+page last free stack trace:
+ reset_page_owner include/linux/page_owner.h:24 [inline]
+ free_pages_prepare mm/page_alloc.c:1371 [inline]
+ free_pcp_prepare+0x812/0x900 mm/page_alloc.c:1421
+ free_unref_page_prepare mm/page_alloc.c:3344 [inline]
+ free_unref_page+0x7d/0x390 mm/page_alloc.c:3439
+ free_large_kmalloc+0xeb/0x1a0 mm/slub.c:3573
+ kfree+0x182/0x210 mm/slub.c:4558
+ device_release+0x98/0x1c0
+ kobject_cleanup+0x235/0x470 lib/kobject.c:673
+ netdev_run_todo+0xf9c/0x1090 net/core/dev.c:10366
+ unregister_netdev+0x1a0/0x210 net/core/dev.c:10903
+ tty_ldisc_kill drivers/tty/tty_ldisc.c:608 [inline]
+ tty_ldisc_release+0x23c/0x510 drivers/tty/tty_ldisc.c:776
+ tty_release_struct+0x27/0xd0 drivers/tty/tty_io.c:1694
+ tty_release+0xc06/0xe60 drivers/tty/tty_io.c:1865
+ __fput+0x3b9/0x820 fs/file_table.c:319
+ task_work_run+0x146/0x1c0 kernel/task_work.c:177
+ resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+ exit_to_user_mode_loop+0x134/0x160 kernel/entry/common.c:169
+ exit_to_user_mode_prepare+0xad/0x110 kernel/entry/common.c:201
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:283 [inline]
+ syscall_exit_to_user_mode+0x2e/0x60 kernel/entry/common.c:294
+
+Memory state around the buggy address:
+ ffff888086ad8b80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff888086ad8c00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+>ffff888086ad8c80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+                      ^
+ ffff888086ad8d00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+ ffff888086ad8d80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
+==================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

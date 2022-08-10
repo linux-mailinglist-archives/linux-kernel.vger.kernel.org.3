@@ -2,65 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 072DA58EAE1
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 13:02:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 531CB58EAE4
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 13:03:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231758AbiHJLBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 07:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33322 "EHLO
+        id S231765AbiHJLDp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 07:03:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231750AbiHJLB0 (ORCPT
+        with ESMTP id S229763AbiHJLDn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 07:01:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0702F6BD46
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 04:01:19 -0700 (PDT)
+        Wed, 10 Aug 2022 07:03:43 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41F606C129;
+        Wed, 10 Aug 2022 04:03:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A2E83B81B58
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 11:01:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E761C433C1;
-        Wed, 10 Aug 2022 11:01:17 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F07AFB818E4;
+        Wed, 10 Aug 2022 11:03:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB177C433D6;
+        Wed, 10 Aug 2022 11:03:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660129277;
-        bh=ftGtdYTnbszhVMwv2b+bcQbGmM5dxZNBf1hKIGP5B4o=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=E4JevIsueSKK+QyR4BaGulFtqyzT2F5U4Qz6DbxV8BED5dlCQoYG2yk/RuxEOGVB1
-         HtC6vCMpUNGAIn8v4hsrHq3HWaDWqFUbh9owzMP2YQPDQu61raN5ZnImwbaLzYo9bh
-         K5Lcg7294Sq2E4C2Zg+Jax1vUcUqnHO3x6DKgm8AluC3CEoOrX+8rvrKA7rJlRmZD0
-         qO6eFY59xIQwObf9nzRDNZEdEOc2ma/Y8f7q1KMObyN5aSBMVet4s1WuR46uXbgPzp
-         Mzt8QTzeMZCw6H6WxcOypsDI46Kr5rqVDfjosxQnmKVFl5aVGHfAHrINvvaMiEqb0y
-         uqebiUbG4jQCw==
-Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
-        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <maz@kernel.org>)
-        id 1oLjSc-00273X-UW;
-        Wed, 10 Aug 2022 12:01:15 +0100
+        s=k20201202; t=1660129419;
+        bh=gh8+q+3SCgVT0ty48TCgdbOn9Aa4aYJYb6QYSM/vEZY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lmOdiUHsBj7m5zUaHK8f0Hgghk3YeOujaPK0T3iTaOTio2UU4C9M4Y3pvcdwYf6Yq
+         /t6R2iHFSM3BTNd6rRhxlwYI/tIyt/sAKeftu+9XwndUf0FB5QC7r6eMuuaKRTCI4w
+         IVjxq9g6nWIjwivit0lr2f1xSAxDoB2KrNrEwGTFOFOuxXExjLzR7o0kEcfqlc0811
+         FtuoeWUg/yWNMOhNC8cs0aA69a9C+ymhGRafeZGwjl0VG/Oe9XdNiejky08n3yXI2C
+         i1zq8GJXkr4P7AIMi2zp+rECdATDELvU7CFmPE39WyeetZLcP8HnvAK+rqAs5GMuCD
+         6xTqNA5HlSXdQ==
+Date:   Wed, 10 Aug 2022 12:03:33 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf <bpf@vger.kernel.org>
+Subject: Re: [PATCH v2 1/1] bpf: Drop unprotected find_vpid() in favour of
+ find_get_pid()
+Message-ID: <YvOQhTUD1x6W0ozO@google.com>
+References: <20220803134821.425334-1-lee@kernel.org>
+ <CAADnVQ+X_B4LC6CtYM1PXPA4BBprWLj5Qip--Eeu32Zti==Ydw@mail.gmail.com>
+ <YvIDmku4us2SSBKu@google.com>
+ <CAADnVQ+5eq3qQTgHH6nDdVM-n1i4TWkZ35Ou8TDMi3MqGzm63w@mail.gmail.com>
 MIME-Version: 1.0
-Date:   Wed, 10 Aug 2022 12:01:14 +0100
-From:   Marc Zyngier <maz@kernel.org>
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        loongarch@lists.linux.dev, Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] LoongArch: Fix the !CONFIG_SMP build for irqchip drivers
-In-Reply-To: <20220810103156.1214996-1-chenhuacai@loongson.cn>
-References: <20220810103156.1214996-1-chenhuacai@loongson.cn>
-User-Agent: Roundcube Webmail/1.4.13
-Message-ID: <f92fc4f34784217206b53a3709538d5c@kernel.org>
-X-Sender: maz@kernel.org
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 51.254.78.96
-X-SA-Exim-Rcpt-To: chenhuacai@loongson.cn, chenhuacai@kernel.org, tglx@linutronix.de, loongarch@lists.linux.dev, lixuefeng@loongson.cn, guoren@kernel.org, kernel@xen0n.name, jiaxun.yang@flygoat.com, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQ+5eq3qQTgHH6nDdVM-n1i4TWkZ35Ou8TDMi3MqGzm63w@mail.gmail.com>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -71,22 +68,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-10 11:31, Huacai Chen wrote:
-> 1, Guard get_ipi_irq() in CONFIG_SMP;
-> 2, Define cpu_logical_map() for the EIOINTC driver;
-> 3, Make eiointc_set_irq_affinity() return early for !CONFIG_SMP.
+On Tue, 09 Aug 2022, Alexei Starovoitov wrote:
+
+> On Mon, Aug 8, 2022 at 11:50 PM Lee Jones <lee@kernel.org> wrote:
+> >
+> > On Thu, 04 Aug 2022, Alexei Starovoitov wrote:
+> >
+> > > On Wed, Aug 3, 2022 at 6:48 AM Lee Jones <lee@kernel.org> wrote:
+> > > >
+> > > > The documentation for find_pid() clearly states:
+> > > >
+> > > >   "Must be called with the tasklist_lock or rcu_read_lock() held."
+> > > >
+> > > > Presently we do neither.
+> > > >
+> > > > Let's use find_get_pid() which searches for the vpid, then takes a
+> > > > reference to it preventing early free, all within the safety of
+> > > > rcu_read_lock().  Once we have our reference we can safely make use of
+> > > > it up until the point it is put.
+> > > >
+> > > > Cc: Alexei Starovoitov <ast@kernel.org>
+> > > > Cc: Daniel Borkmann <daniel@iogearbox.net>
+> > > > Cc: John Fastabend <john.fastabend@gmail.com>
+> > > > Cc: Andrii Nakryiko <andrii@kernel.org>
+> > > > Cc: Martin KaFai Lau <martin.lau@linux.dev>
+> > > > Cc: Song Liu <song@kernel.org>
+> > > > Cc: Yonghong Song <yhs@fb.com>
+> > > > Cc: KP Singh <kpsingh@kernel.org>
+> > > > Cc: Stanislav Fomichev <sdf@google.com>
+> > > > Cc: Hao Luo <haoluo@google.com>
+> > > > Cc: Jiri Olsa <jolsa@kernel.org>
+> > > > Cc: bpf@vger.kernel.org
+> > > > Fixes: 41bdc4b40ed6f ("bpf: introduce bpf subcommand BPF_TASK_FD_QUERY")
+> > > > Signed-off-by: Lee Jones <lee@kernel.org>
+> > > > ---
+> > > >
+> > > > v1 => v2:
+> > > >   * Commit log update - no code differences
+> > > >
+> > > >  kernel/bpf/syscall.c | 5 ++++-
+> > > >  1 file changed, 4 insertions(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/kernel/bpf/syscall.c b/kernel/bpf/syscall.c
+> > > > index 83c7136c5788d..c20cff30581c4 100644
+> > > > --- a/kernel/bpf/syscall.c
+> > > > +++ b/kernel/bpf/syscall.c
+> > > > @@ -4385,6 +4385,7 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
+> > > >         const struct perf_event *event;
+> > > >         struct task_struct *task;
+> > > >         struct file *file;
+> > > > +       struct pid *ppid;
+> > > >         int err;
+> > > >
+> > > >         if (CHECK_ATTR(BPF_TASK_FD_QUERY))
+> > > > @@ -4396,7 +4397,9 @@ static int bpf_task_fd_query(const union bpf_attr *attr,
+> > > >         if (attr->task_fd_query.flags != 0)
+> > > >                 return -EINVAL;
+> > > >
+> > > > -       task = get_pid_task(find_vpid(pid), PIDTYPE_PID);
+> > > > +       ppid = find_get_pid(pid);
+> > > > +       task = get_pid_task(ppid, PIDTYPE_PID);
+> > > > +       put_pid(ppid);
+> > >
+> > > rcu_read_lock/unlock around this line
+> > > would be a cheaper and faster alternative than pid's
+> > > refcount inc/dec.
+> >
+> > This was already discussed here:
+> >
+> > https://lore.kernel.org/all/YtsFT1yFtb7UW2Xu@krava/
 > 
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> Since several people thought about rcu_read_lock instead of your
+> approach it means that it's preferred.
+> Sooner or later somebody will send a patch to optimize
+> refcnt into rcu_read_lock.
+> So let's avoid the churn and do it now.
 
-Frankly, the real question is why do you even bother? As far as
-I can tell, LoongArch has no UP system.
+I'm not wed to either approach.  Please discuss it with Yonghong and
+Jiri and I'll do whatever is agreed upon.
 
-arm64 crossed that bridge a long time ago, and we never looked
-back, because these systems hardly exist.
-
-I'd rather you simply have a CONFIG_SMP always set to 'y', and
-be done with it forever.
-
-         M.
 -- 
-Jazz is not dead. It just smells funny...
+Lee Jones [李琼斯]

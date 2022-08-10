@@ -2,118 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4C2D58E9F4
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 11:44:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1934058E9C3
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 11:40:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232256AbiHJJoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 05:44:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48248 "EHLO
+        id S232164AbiHJJkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 05:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231417AbiHJJn5 (ORCPT
+        with ESMTP id S231228AbiHJJkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 05:43:57 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CAA15142E;
-        Wed, 10 Aug 2022 02:43:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660124636; x=1691660636;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=+g1tHa8U1L0ibLkauTiBh/SeADRVoqwRkL+l6I4l0TE=;
-  b=KD5tS2QCDwJMQI8UA4rat5QwIhjZFuhAU3fkbBz2Qopqm39IPmlDXEB7
-   kpnEH+pswkbTBg2eWgNhNr6YiMxN3Hp+Qn5rpbdfqH9MMEcci/t6lGxQT
-   xBEaXZ4cYPW9Ix3n6fwjfDzTtBt5AuIsy2VULSwPwadzrJN9L4ktKrDPD
-   vLlT9hRei/ZdO2r5MvenMBohZmEJH/Jb9YhUNlby2H9SBCNtuhQa6IBPp
-   4Q/PUZt5bs+lbyWdpk/MKS33FWmY6c8WmBPO0nsShYhN6LaNW9Dbi/Qbd
-   Gs5zBQQ641dkV1su7JsUxg9Wp/F6lsCDV1m8gmeB4VC3Pz9mTXK4/qJG+
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="289798229"
-X-IronPort-AV: E=Sophos;i="5.93,227,1654585200"; 
-   d="scan'208";a="289798229"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 02:43:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,227,1654585200"; 
-   d="scan'208";a="601757538"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by orsmga007.jf.intel.com with ESMTP; 10 Aug 2022 02:43:45 -0700
-Date:   Wed, 10 Aug 2022 17:38:59 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [PATCH v7 01/14] mm: Add F_SEAL_AUTO_ALLOCATE seal to memfd
-Message-ID: <20220810093859.GF862421@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-2-chao.p.peng@linux.intel.com>
- <f39c4f63-a511-4beb-b3a4-66589ddb5475@redhat.com>
- <472207cf-ff71-563b-7b66-0c7bea9ea8ad@redhat.com>
+        Wed, 10 Aug 2022 05:40:17 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C68AB1C9;
+        Wed, 10 Aug 2022 02:40:15 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27A9eBeo091533;
+        Wed, 10 Aug 2022 04:40:11 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1660124411;
+        bh=X29vcjWFhF4UVgvsFJrukUPzgpktPiXJ72hCk4ztzTE=;
+        h=From:To:CC:Subject:Date;
+        b=XUIlmLqN/8G4QIu55VacPa/R9V/83MeZxa0BTiaOk7+RkMtbNCtStQ3SIjEar/9ma
+         cEyFWuLMx+UIqR3zMPvAXmCkIyis2eoQyOitlK/RVEyfYe2x3AWUgGSKbuPO5BJdaK
+         7EZfc/Vdxim4im4wsq9HaakFSR8EOOYiZB9rjWsg=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27A9eB8a039120
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 10 Aug 2022 04:40:11 -0500
+Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Wed, 10
+ Aug 2022 04:40:10 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Wed, 10 Aug 2022 04:40:10 -0500
+Received: from ubuntu.ent.ti.com (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27A9e2Po121822;
+        Wed, 10 Aug 2022 04:40:05 -0500
+From:   Matt Ranostay <mranostay@ti.com>
+To:     <vigneshr@ti.com>
+CC:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Nishanth Menon <nm@ti.com>,
+        Matt Ranostay <mranostay@ti.com>
+Subject: [PATCH RESEND 1/6] arm64: dts: ti: k3-j721s2-main: Add support for USB
+Date:   Wed, 10 Aug 2022 02:39:55 -0700
+Message-ID: <20220810094000.248487-1-mranostay@ti.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <472207cf-ff71-563b-7b66-0c7bea9ea8ad@redhat.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 05, 2022 at 07:55:38PM +0200, Paolo Bonzini wrote:
-> On 7/21/22 11:44, David Hildenbrand wrote:
-> > 
-> > Also, I*think*  you can place pages via userfaultfd into shmem. Not
-> > sure if that would count "auto alloc", but it would certainly bypass
-> > fallocate().
-> 
-> Yeah, userfaultfd_register would probably have to forbid this for
-> F_SEAL_AUTO_ALLOCATE vmas.  Maybe the memfile_node can be reused for this,
-> adding a new MEMFILE_F_NO_AUTO_ALLOCATE flags?  Then userfault_register
-> would do something like memfile_node_get_flags(vma->vm_file) and check the
-> result.
+From: Aswath Govindraju <a-govindraju@ti.com>
 
-Then we need change userfault_register uAPI for a new property flag.
-Userspace should still the decision-maker for this flag.
+Add support for single instance of USB 3.0 controller in J721S2 SoC.
 
-> 
-> This means moving this patch later, after "mm: Introduce memfile_notifier".
+Cc: Vignesh Raghavendra <vigneshr@ti.com>
+Cc: Nishanth Menon <nm@ti.com>
+Acked-by: Matt Ranostay <mranostay@ti.com>
+Signed-off-by: Aswath Govindraju <a-govindraju@ti.com>
+---
+ arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi | 42 ++++++++++++++++++++++
+ 1 file changed, 42 insertions(+)
 
-Yes, it makes sense now.
+diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+index 34e7d577ae13..f7e359da8690 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+@@ -26,6 +26,20 @@ l3cache-sram@200000 {
+ 		};
+ 	};
+ 
++	scm_conf: scm-conf@104000 {
++		compatible = "ti,j721e-system-controller", "syscon", "simple-mfd";
++		reg = <0x00 0x00104000 0x00 0x18000>;
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges = <0x00 0x00 0x00104000 0x18000>;
++
++		usb_serdes_mux: mux-controller@0 {
++			compatible = "mmio-mux";
++			#mux-control-cells = <1>;
++			mux-reg-masks = <0x0 0x8000000>; /* USB0 to SERDES0 lane 1/3 mux */
++		};
++	};
++
+ 	gic500: interrupt-controller@1800000 {
+ 		compatible = "arm,gic-v3";
+ 		#address-cells = <2>;
+@@ -686,6 +700,34 @@ cpts@310d0000 {
+ 		};
+ 	};
+ 
++	usbss0: cdns-usb@4104000 {
++		compatible = "ti,j721e-usb";
++		reg = <0x00 0x04104000 0x00 0x100>;
++		clocks = <&k3_clks 360 16>, <&k3_clks 360 15>;
++		clock-names = "ref", "lpm";
++		assigned-clocks = <&k3_clks 360 16>; /* USB2_REFCLK */
++		assigned-clock-parents = <&k3_clks 360 17>;
++		power-domains = <&k3_pds 360 TI_SCI_PD_EXCLUSIVE>;
++		#address-cells = <2>;
++		#size-cells = <2>;
++		ranges;
++		dma-coherent;
++
++		usb0: usb@6000000 {
++			compatible = "cdns,usb3";
++			reg = <0x00 0x06000000 0x00 0x10000>,
++			      <0x00 0x06010000 0x00 0x10000>,
++			      <0x00 0x06020000 0x00 0x10000>;
++			reg-names = "otg", "xhci", "dev";
++			interrupts = <GIC_SPI 96 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>,
++				     <GIC_SPI 120 IRQ_TYPE_LEVEL_HIGH>;
++			interrupt-names = "host", "peripheral", "otg";
++			maximum-speed = "super-speed";
++			dr_mode = "otg";
++		};
++	};
++
+ 	main_mcan0: can@2701000 {
+ 		compatible = "bosch,m_can";
+ 		reg = <0x00 0x02701000 0x00 0x200>,
+-- 
+2.36.1
 
-Chao
-> 
-> Thanks,
-> 
-> Paolo

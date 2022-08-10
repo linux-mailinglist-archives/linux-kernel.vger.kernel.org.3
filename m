@@ -2,133 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B68758EAB9
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 12:52:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4393158EAC0
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 12:56:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231635AbiHJKvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 06:51:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52084 "EHLO
+        id S230268AbiHJKz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 06:55:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231580AbiHJKvo (ORCPT
+        with ESMTP id S229452AbiHJKzx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 06:51:44 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6846FE0D0
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 03:51:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660128702;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=+QKswYb/p0TG7A62JGLMqklr1fmwHxQqVazk8yHSBgY=;
-        b=dI32g4U7MOGDUpwQkwU6hpkoBxKNyaoBM4YILN37Y9XOCU08lnMnjdiWuFc1D/gZHHYsCM
-        e1FI0ifuM1DGFrqzGcPjTt1M9aYfN8oNrRLYagwpyaDaZHwFdQpMsUAsLPnzD1oJe+Bzs7
-        0TWoGFfIUF7ZdmBzy+dqQFgdb3JfmzA=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-331-7mezMZicOhWt7wsOFXUcRg-1; Wed, 10 Aug 2022 06:51:40 -0400
-X-MC-Unique: 7mezMZicOhWt7wsOFXUcRg-1
-Received: by mail-wm1-f71.google.com with SMTP id h62-20020a1c2141000000b003a4f57eaeaaso2009451wmh.8
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 03:51:40 -0700 (PDT)
+        Wed, 10 Aug 2022 06:55:53 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DFD1C133
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 03:55:52 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id v5so7620394wmj.0
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 03:55:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=uLzHaOsqO+V47sNsu3NQ7eOVEKNreR7vrk1orA6ZleY=;
+        b=fozMa+ze0kLO/rq0XhZh+UySZWY2WbbHTkW3ovbLOxDDjwkI/o2txXCccacp1NYYGd
+         4zJjgRFOP94WG41v25ReDutUY1Pi/PTALr9UB/9rzNXkwMLCnagNw6rjik720Wyx/iSz
+         C9cfZDxdPD1r2Kr00F+MoIBXkSWf17JWx44nbVpAkuNKqMRulWhMtdalwRF5ZO976jgW
+         eHar4gwM5PODKbjx8AFgv0QEnbwffpiLPH92ugpONZlI52h8OngB0ACZwrJaQ9/v30gC
+         AryZpXS7ecVDBHMfcOcFPRx2jQ+cyAYrYlGoI5yIOfOmeCfRwrUinb9tMQPRYwXEQLSr
+         GvWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=+QKswYb/p0TG7A62JGLMqklr1fmwHxQqVazk8yHSBgY=;
-        b=1i22arWCMlmgvTRd0Vv8HVCC+BNn7LvEpIFISFFWGI00tsQNdux5hEFOb06CnPCl6w
-         CixCm6kmeagoAh7Fqm2V888LHVh2s6EVY+ywIWhvxyT+YmJ7mV1nWBEr98H7n7prcOCt
-         LDu7+J2OkEJp7hYNVAlO9z9DUfEjS37lcv+UrNYODkjthi+SL7QldQ8BML3NLiE9DW1i
-         aAKLxdCXivV/Idfd8GO5iAxioihL7EWNJliFFVsQ4ZkOFYFMm4qCbMPAxNZo7qfSF3Nd
-         wJi2ZNMRPOPZk2r8znAlUkbs3wBichzCqVjfoCYKcHe6j4Lc3+B0JxrbpfjgoFlDuu+Q
-         xVdA==
-X-Gm-Message-State: ACgBeo0/WMfbGPKsNK0nHDYdrqbzdZi7jFuFtpVk7L6/4gDK8juw1Mi1
-        pkkrKQ25POUOiqIcNCZTdRgggkGCNbqxDi2Hq14z/1dQgtdFN6gBaX6AZYTSW56DrB6FjapYZ5w
-        nyrWPQt/TqU5Rv9Wk0WLFRW/E
-X-Received: by 2002:a05:6000:1a88:b0:222:ca4d:f0d2 with SMTP id f8-20020a0560001a8800b00222ca4df0d2mr9771166wry.610.1660128698793;
-        Wed, 10 Aug 2022 03:51:38 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6s8knuL4j1oq3Fzd8so/k3D+RKPKqXDCFBb2MFvV+e9VEEggyzQfUdfbVef77LJNUZXnar9w==
-X-Received: by 2002:a05:6000:1a88:b0:222:ca4d:f0d2 with SMTP id f8-20020a0560001a8800b00222ca4df0d2mr9771155wry.610.1660128698644;
-        Wed, 10 Aug 2022 03:51:38 -0700 (PDT)
-Received: from vschneid.remote.csb ([185.11.37.247])
-        by smtp.gmail.com with ESMTPSA id g6-20020a5d5406000000b0021e491fd250sm16138637wrv.89.2022.08.10.03.51.37
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=uLzHaOsqO+V47sNsu3NQ7eOVEKNreR7vrk1orA6ZleY=;
+        b=YKrOWsJQAjxrK3vGfIABGZVG/bjsig4weXxh2poP+A60GfawsEmFHLbtFaG8sC6/DT
+         N51u4kEiII8lF0eLizqKbc/Cz+J+kV13prdHrnoAqxaVt+qzgjZQxFreQeTQfFNRN+kb
+         IVR1hAWZVEJdQwNRi+S85AG+zLI1b3E+CCDOZ33PpwKPU6MAzhisjbM/95TgxTTAVzJ1
+         gO2kBPaWr5I/qBiQlcLKmCIWn7dPsYfQ3SlC83PuNzSTx8nScU+VDW5VJYzbM4jAKFIR
+         A+VfR/DmH3aqs8ruVG/Fm4U3o/0dzrjpQAnFOIk09H6myJa8DDm8dJG+wsPec3aiIcKc
+         JPCQ==
+X-Gm-Message-State: ACgBeo3zSkgTScv8EILPJmNAR/aQJ4MI9UQKxioiee8xL7P9BCtRb7PJ
+        k57KkVFOImT1oS7Tzyfh47TYDg==
+X-Google-Smtp-Source: AA6agR42eTIQeJpfVwcTcfO1vOI9DkuwkBCklpdyITuI2iuhyEyXlE1deKN+pkT+XQwsDg0XVmzLog==
+X-Received: by 2002:a05:600c:4e51:b0:3a4:e094:2520 with SMTP id e17-20020a05600c4e5100b003a4e0942520mr1996068wmq.123.1660128950692;
+        Wed, 10 Aug 2022 03:55:50 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id c16-20020adffb50000000b002205c907474sm15899709wrs.107.2022.08.10.03.55.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 03:51:38 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Tariq Toukan <ttoukan.linux@gmail.com>,
-        Tariq Toukan <tariqt@nvidia.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Saeed Mahameed <saeedm@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Gal Pressman <gal@nvidia.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Subject: [PATCH 2/2] net/mlx5e: Leverage sched_numa_hop_mask()
-Date:   Wed, 10 Aug 2022 11:51:19 +0100
-Message-Id: <20220810105119.2684079-2-vschneid@redhat.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220810105119.2684079-1-vschneid@redhat.com>
-References: <xhsmhtu6kbckc.mognet@vschneid.remote.csb>
- <20220810105119.2684079-1-vschneid@redhat.com>
+        Wed, 10 Aug 2022 03:55:50 -0700 (PDT)
+Date:   Wed, 10 Aug 2022 11:55:48 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     Samuel Holland <samuel@sholland.org>
+Cc:     Chen-Yu Tsai <wens@csie.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Lee Jones <lee@kernel.org>
+Subject: Re: [PATCH] dt-bindings: mfd: x-powers,axp152: Document the AXP228
+ variant
+Message-ID: <YvOOtGN7c7oBwZis@google.com>
+References: <20220810013430.27061-1-samuel@sholland.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220810013430.27061-1-samuel@sholland.org>
+X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Signed-off-by: Valentin Schneider <vschneid@redhat.com>
----
- drivers/net/ethernet/mellanox/mlx5/core/eq.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+On Tue, 09 Aug 2022, Samuel Holland wrote:
 
-diff --git a/drivers/net/ethernet/mellanox/mlx5/core/eq.c b/drivers/net/ethernet/mellanox/mlx5/core/eq.c
-index 229728c80233..2eb4ffd96a95 100644
---- a/drivers/net/ethernet/mellanox/mlx5/core/eq.c
-+++ b/drivers/net/ethernet/mellanox/mlx5/core/eq.c
-@@ -809,9 +809,12 @@ static void comp_irqs_release(struct mlx5_core_dev *dev)
- static int comp_irqs_request(struct mlx5_core_dev *dev)
- {
- 	struct mlx5_eq_table *table = dev->priv.eq_table;
-+	const struct cpumask *mask;
- 	int ncomp_eqs = table->num_comp_eqs;
-+	int hops = 0;
- 	u16 *cpus;
- 	int ret;
-+	int cpu;
- 	int i;
- 
- 	ncomp_eqs = table->num_comp_eqs;
-@@ -830,8 +833,17 @@ static int comp_irqs_request(struct mlx5_core_dev *dev)
- 		ret = -ENOMEM;
- 		goto free_irqs;
- 	}
--	for (i = 0; i < ncomp_eqs; i++)
--		cpus[i] = cpumask_local_spread(i, dev->priv.numa_node);
-+
-+	rcu_read_lock();
-+	for_each_numa_hop_mask(dev->priv.numa_node, hops, mask) {
-+		for_each_cpu(cpu, mask) {
-+			cpus[i] = cpu;
-+			if (++i == ncomp_eqs)
-+				goto spread_done;
-+		}
-+	}
-+spread_done:
-+	rcu_read_unlock();
- 	ret = mlx5_irqs_request_vectors(dev, cpus, ncomp_eqs, table->comp_irqs);
- 	kfree(cpus);
- 	if (ret < 0)
+> AXP228 is a PMIC used on boards such as the Clockwork ClockworkPi and
+> DevTerm. Its register map appears to be identical to the AXP221 variant.
+> The only known difference is in the default values for regulator on/off
+> states and voltages.
+> 
+> Signed-off-by: Samuel Holland <samuel@sholland.org>
+> ---
+> 
+>  Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml | 3 +++
+>  1 file changed, 3 insertions(+)
+
+Applied, thanks.
+
 -- 
-2.31.1
-
+DEPRECATED: Please use lee@kernel.org

@@ -2,92 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E581458E760
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 08:40:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9844158E768
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 08:51:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231218AbiHJGku (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 02:40:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43610 "EHLO
+        id S231153AbiHJGvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 02:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiHJGkp (ORCPT
+        with ESMTP id S229475AbiHJGvm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 02:40:45 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BEDA61127
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 23:40:44 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Wed, 10 Aug 2022 02:51:42 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADC0171BD7;
+        Tue,  9 Aug 2022 23:51:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 3A8BD37EA8;
-        Wed, 10 Aug 2022 06:40:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1660113643; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=TF9qkQ4HKALrlOe0bqxeqVLGWf0XkDPHOA6absoSUU8=;
-        b=TQ5V2ram9Sy/U/dQ1+Qi0p6rBWXsR9MFymsIcZUb/kbkfrKot57G+IMLtDM0fxGNIWk5sk
-        8Wx5hidMIAoOMycZx7Qn0lnD/nE/lgGheHBvjxJaPyi1URKStlQJY3kc1dc64EIE4WPxDU
-        hUqZ1+CLW5WuXiy7N7nrfeBqbT29Hgk=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 164DB13A7E;
-        Wed, 10 Aug 2022 06:40:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id /C2RAutS82KVPgAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 10 Aug 2022 06:40:43 +0000
-Date:   Wed, 10 Aug 2022 08:40:42 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Baoquan He <bhe@redhat.com>, Christoph Hellwig <hch@lst.de>,
-        John Donnelly <john.p.donnelly@oracle.com>,
-        David Hildenbrand <david@redhat.com>, linux-mm@kvack.org,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] dma/pool: do not complain if DMA pool is not allocated
-Message-ID: <YvNS6iuWnoJjXin7@dhcp22.suse.cz>
-References: <YuqNToCACD8kKBG+@MiWiFi-R3L-srv>
- <YuqOrJKcgfamdXkk@dhcp22.suse.cz>
- <YuqU87SDwP0zg+c7@MiWiFi-R3L-srv>
- <YuqX0OAItlMDfRUV@dhcp22.suse.cz>
- <YuunCO2lsLDWTGw+@MiWiFi-R3L-srv>
- <Yuu1EyC95XL98XNI@dhcp22.suse.cz>
- <Yu0OWLbzLxCkSGVJ@MiWiFi-R3L-srv>
- <Yu1VTAxd9/jP/iEk@dhcp22.suse.cz>
- <YvJ/V2bor9Q3P6ov@dhcp22.suse.cz>
- <20220809183252.d168b5a8be31fff5aeef1b3e@linux-foundation.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220809183252.d168b5a8be31fff5aeef1b3e@linux-foundation.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id 54603B81AE6;
+        Wed, 10 Aug 2022 06:51:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EE0CC433D6;
+        Wed, 10 Aug 2022 06:51:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660114298;
+        bh=ahGwuAXwFB0kVpDwl1Y5QMjaxY0VAa6qcPz8jo98lIE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=m1ftmx62OGBQQmdEb6o+nyAu7gFB4JAfHm56Ki/zP1RKC9oYM8J2yq92YFlfE56iZ
+         T0FB389el0kFaEqL7QVnE4LXCA/uKqL6qtdfH3L1l+zgdXvq0E9SvyQ2Pn0GwLbX1R
+         IMmdf7zr3AulKgyCjldeSx8mNd1xqH1c9fzThLRGAGW5WHJ6L1JTbSYGnHEgXsmYoh
+         tc0vcch8qKebPkbsxJnhKxbYplgNBqalAYI0gTwD0jwA8bXmNV6lD/0DL9NIk1onOb
+         M+xlMN1v0QvjDhIl1viQJCYbqblmlKVGYdQWvbdsgbYnIfGK0SMHixU8i5xG8bYv1S
+         K9hVJOj4Jmyag==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oLfZ0-0024Yo-Rg;
+        Wed, 10 Aug 2022 07:51:35 +0100
+Date:   Wed, 10 Aug 2022 07:51:24 +0100
+Message-ID: <87o7wsbngz.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Dmytro Maluka <dmy@semihalf.com>
+Cc:     "Dong, Eddie" <eddie.dong@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Eric Auger <eric.auger@redhat.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        "Liu, Rong L" <rong.l.liu@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>,
+        "upstream@semihalf.com" <upstream@semihalf.com>,
+        Dmitry Torokhov <dtor@google.com>
+Subject: Re: [PATCH v2 0/5] KVM: Fix oneshot interrupts forwarding
+In-Reply-To: <ef9ffbde-445e-f00f-23c1-27e23b6cca4f@semihalf.com>
+References: <20220805193919.1470653-1-dmy@semihalf.com>
+        <BL0PR11MB30429034B6D59253AF22BCE08A639@BL0PR11MB3042.namprd11.prod.outlook.com>
+        <c5d8f537-5695-42f0-88a9-de80e21f5f4c@semihalf.com>
+        <BL0PR11MB304213273FA9FAC4EBC70FF88A629@BL0PR11MB3042.namprd11.prod.outlook.com>
+        <ef9ffbde-445e-f00f-23c1-27e23b6cca4f@semihalf.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: dmy@semihalf.com, eddie.dong@intel.com, seanjc@google.com, pbonzini@redhat.com, kvm@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com, linux-kernel@vger.kernel.org, eric.auger@redhat.com, alex.williamson@redhat.com, rong.l.liu@intel.com, zhenyuw@linux.intel.com, tn@semihalf.com, jaz@semihalf.com, upstream@semihalf.com, dtor@google.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 09-08-22 18:32:52, Andrew Morton wrote:
-> On Tue, 9 Aug 2022 17:37:59 +0200 Michal Hocko <mhocko@suse.com> wrote:
+On Wed, 10 Aug 2022 00:30:29 +0100,
+Dmytro Maluka <dmy@semihalf.com> wrote:
 > 
-> > we have a system complainging about order-10 allocation for the DMA pool.
+> On 8/9/22 10:01 PM, Dong, Eddie wrote:
 > > 
+> > 
+> >> -----Original Message-----
+> >> From: Dmytro Maluka <dmy@semihalf.com>
+> >> Sent: Tuesday, August 9, 2022 12:24 AM
+> >> To: Dong, Eddie <eddie.dong@intel.com>; Christopherson,, Sean
+> >> <seanjc@google.com>; Paolo Bonzini <pbonzini@redhat.com>;
+> >> kvm@vger.kernel.org
+> >> Cc: Thomas Gleixner <tglx@linutronix.de>; Ingo Molnar <mingo@redhat.com>;
+> >> Borislav Petkov <bp@alien8.de>; Dave Hansen <dave.hansen@linux.intel.com>;
+> >> x86@kernel.org; H. Peter Anvin <hpa@zytor.com>; linux-
+> >> kernel@vger.kernel.org; Eric Auger <eric.auger@redhat.com>; Alex
+> >> Williamson <alex.williamson@redhat.com>; Liu, Rong L <rong.l.liu@intel.com>;
+> >> Zhenyu Wang <zhenyuw@linux.intel.com>; Tomasz Nowicki
+> >> <tn@semihalf.com>; Grzegorz Jaszczyk <jaz@semihalf.com>;
+> >> upstream@semihalf.com; Dmitry Torokhov <dtor@google.com>
+> >> Subject: Re: [PATCH v2 0/5] KVM: Fix oneshot interrupts forwarding
+> >>
+> >> On 8/9/22 1:26 AM, Dong, Eddie wrote:
+> >>>>
+> >>>> The existing KVM mechanism for forwarding of level-triggered
+> >>>> interrupts using resample eventfd doesn't work quite correctly in the
+> >>>> case of interrupts that are handled in a Linux guest as oneshot
+> >>>> interrupts (IRQF_ONESHOT). Such an interrupt is acked to the device
+> >>>> in its threaded irq handler, i.e. later than it is acked to the
+> >>>> interrupt controller (EOI at the end of hardirq), not earlier. The
+> >>>> existing KVM code doesn't take that into account, which results in
+> >>>> erroneous extra interrupts in the guest caused by premature re-assert of an
+> >> unacknowledged IRQ by the host.
+> >>>
+> >>> Interesting...  How it behaviors in native side?
+> >>
+> >> In native it behaves correctly, since Linux masks such a oneshot interrupt at the
+> >> beginning of hardirq, so that the EOI at the end of hardirq doesn't result in its
+> >> immediate re-assert, and then unmasks it later, after its threaded irq handler
+> >> completes.
+> >>
+> >> In handle_fasteoi_irq():
+> >>
+> >> 	if (desc->istate & IRQS_ONESHOT)
+> >> 		mask_irq(desc);
+> >>
+> >> 	handle_irq_event(desc);
+> >>
+> >> 	cond_unmask_eoi_irq(desc, chip);
+> >>
+> >>
+> >> and later in unmask_threaded_irq():
+> >>
+> >> 	unmask_irq(desc);
+> >>
+> >> I also mentioned that in patch #3 description:
+> >> "Linux keeps such interrupt masked until its threaded handler finishes, to
+> >> prevent the EOI from re-asserting an unacknowledged interrupt.
+> > 
+> > That makes sense. Can you include the full story in cover letter too?
 > 
-> I'll add a cc:stable to this - if future users like the patch, so will
-> current ones!
+> Ok, I will.
+> 
+> > 
+> > 
+> >> However, with KVM + vfio (or whatever is listening on the resamplefd) we don't
+> >> check that the interrupt is still masked in the guest at the moment of EOI.
+> >> Resamplefd is notified regardless, so vfio prematurely unmasks the host
+> >> physical IRQ, thus a new (unwanted) physical interrupt is generated in the host
+> >> and queued for injection to the guest."
 
-Technically speaking this is not a fix so I am not sure the stable tree
-is really a great fit. On the other hand I am definitely going to
-backport this to older SLES kernels because we have had at least 2
-reports where this has been brought up for clarification.
+Sorry to barge in pretty late in the conversation (just been Cc'd on
+this), but why shouldn't the resamplefd be notified? If there has been
+an EOI, a new level must be made visible to the guest interrupt
+controller, no matter what the state of the interrupt masking is.
 
-That being said, no objection from me.
+Whether this new level is actually *presented* to a vCPU is another
+matter entirely, and is arguably a problem for the interrupt
+controller emulation.
+
+For example on arm64, we expect to be able to read the pending state
+of an interrupt from the guest irrespective of the masking state of
+that interrupt. Any change to the interrupt flow should preserve this.
+
+Thankfully, we don't have the polarity issue (there is no such thing
+in the GIC architecture) and we only deal with pending/not-pending.
+
+Thanks,
+
+	M.
 
 -- 
-Michal Hocko
-SUSE Labs
+Without deviation from the norm, progress is not possible.

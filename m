@@ -2,72 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7BCB58ED00
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 15:21:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C889E58ED06
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 15:22:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232573AbiHJNUv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 09:20:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54174 "EHLO
+        id S232526AbiHJNWb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 09:22:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232508AbiHJNU0 (ORCPT
+        with ESMTP id S232229AbiHJNW3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 09:20:26 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31E3E62
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 06:20:24 -0700 (PDT)
-X-QQ-mid: bizesmtp82t1660137620tvqpxd73
-Received: from localhost.localdomain ( [182.148.14.53])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Wed, 10 Aug 2022 21:20:19 +0800 (CST)
-X-QQ-SSF: 01000000002000B0D000B00A0000000
-X-QQ-FEAT: uGhnJwy6xZK3/a4RZGPHChyYxZyQ91n+aQkD5cRY+ai5ylW5xYcDUzJOD4ag6
-        UT+isujEYjcMdxFWz61a6UcvPhdLs3ds0tSLae7msJWbfm1NAk2XQpurmB8hHcsSZneUl07
-        elWLQWUOKyeIdLwGt+3bSiLUzb3DfS/nOphfpqdekAapLR3IBRBrSDnO8gmDzZpgP01b5bl
-        jik0taODm1e+3rAfeQj0rVkK4L0e/HjqZntXd/y3wGOldU6aPVbukNPuQdrGXhlD57XsObg
-        aJ03JRsCH5jnLytcPSr4cFaYdLzgb5gNg7w1hQkmqDATgCjJWIkglhRI6gjybOvd2wiQcJa
-        jVKx7hkbjAk3RXmOpA7+eoWuu0QaJQf9+gUwH2z9gXQNtOXLteIJd3dMWQWWw==
-X-QQ-GoodBg: 0
-From:   Jilin Yuan <yuanjilin@cdjrlc.com>
-To:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com
-Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jilin Yuan <yuanjilin@cdjrlc.com>
-Subject: [PATCH] drivers/mtd: fix repeated words in comments
-Date:   Wed, 10 Aug 2022 21:20:09 +0800
-Message-Id: <20220810132009.59842-1-yuanjilin@cdjrlc.com>
-X-Mailer: git-send-email 2.36.1
+        Wed, 10 Aug 2022 09:22:29 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A41B8245;
+        Wed, 10 Aug 2022 06:22:28 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id ay12so4975096wmb.1;
+        Wed, 10 Aug 2022 06:22:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=K63ZqEflkKlHTjrE9821DuVo5tu42pOb0LECm60UMOs=;
+        b=I7skc4jMkGwwslJWVtNslWOS/iXCsgjz/gM8Bn2vnAnhVKRiJ5Y5ggqRC8NmrdM4TH
+         no4igQRZZLoPjcXhUI7VvN8wfmr8f2MHdq7CmzTzMqmJJnILH+JIukLfoXHwfn+WfQU6
+         LeNnvZjuacN9WC750cdNnLjHy4N+1Mua+N55a8UJhGI6mwf6y97eMaICtDtb1g+dkMqn
+         GY+pyHGe5Hfz6T4sqn02Q/ZX6eU44OVemTz+CCuGvFuxAz3vT4cNvLcAA4GwBX4EGpNY
+         5eGTFZ4iYJ6BckWWJwIkSna1UZfOFvkMo3yFmE/EaumKyDSVpZpv0BS3B+8p6in/QyPI
+         LHHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=K63ZqEflkKlHTjrE9821DuVo5tu42pOb0LECm60UMOs=;
+        b=NrIjgTlF35JCHymBHqxTq364lzuOnc3voDgEoZz79m8hF0kPEEm6q/eJUm5RUaqX1P
+         l2bisNKvInuhkny87YDdyceFT65AreO5nZ825Qf3BCj7aJcu6BPAWkeY+CM1uwgeZrZ1
+         PqzftLLtGIis8NlXaLKgb7A4HxQHKGqs2lGu2YJUhGKUTx2TqdVFdGIHtXOu7J7IuopV
+         SHVaj+zmoYguweytyTEf0NhoXwrJZBrku08yVFUCo3eGIsgsMx5ryxzay7zu3l3qAIv+
+         tSNHOPkHjrVs64Fe/m+PlKCvVj9jbAlSWD/trkDJwVMEpJiw1uj7ER0ouzLjTAP7ghms
+         48Gw==
+X-Gm-Message-State: ACgBeo1jpB31Kso3MguEBid0d/WKFaYt+s8SVtmZBcW+naSRdGHRATqU
+        Wzg1LMgXRp3rW1I0Z57Ul1k=
+X-Google-Smtp-Source: AA6agR58igy2RDlStj+pSzD7fSnafgPftynLcrKVb9EHpUs9Oi4TxvD8EIMfvHVx557ZDAj4GnRCYQ==
+X-Received: by 2002:a05:600c:3495:b0:3a4:e323:9edd with SMTP id a21-20020a05600c349500b003a4e3239eddmr2472046wmq.104.1660137747251;
+        Wed, 10 Aug 2022 06:22:27 -0700 (PDT)
+Received: from debian ([2405:201:8005:8149:e5c9:c0ac:4d82:e94b])
+        by smtp.gmail.com with ESMTPSA id bq4-20020a5d5a04000000b002206ba7430bsm17342050wrb.15.2022.08.10.06.22.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Aug 2022 06:22:26 -0700 (PDT)
+Date:   Wed, 10 Aug 2022 14:22:16 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, slade@sladewatkins.com
+Subject: Re: [PATCH 5.10 00/23] 5.10.136-rc1 review
+Message-ID: <YvOxCEKN1BsFxDjz@debian>
+References: <20220809175512.853274191@linuxfoundation.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220809175512.853274191@linuxfoundation.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- Delete the redundant word 'in'.
+Hi Greg,
 
-Signed-off-by: Jilin Yuan <yuanjilin@cdjrlc.com>
----
- drivers/mtd/mtdconcat.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Tue, Aug 09, 2022 at 08:00:18PM +0200, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.136 release.
+> There are 23 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Thu, 11 Aug 2022 17:55:02 +0000.
+> Anything received after that time might be too late.
 
-diff --git a/drivers/mtd/mtdconcat.c b/drivers/mtd/mtdconcat.c
-index f685a581df48..193428de6a4b 100644
---- a/drivers/mtd/mtdconcat.c
-+++ b/drivers/mtd/mtdconcat.c
-@@ -836,7 +836,7 @@ struct mtd_info *mtd_concat_create(struct mtd_info *subdev[],	/* subdevices to c
- 
- 		/*
- 		 * walk the map of the new device once more and fill in
--		 * in erase region info:
-+		 * erase region info:
- 		 */
- 		curr_erasesize = subdev[0]->erasesize;
- 		begin = position = 0;
--- 
-2.36.1
+Build test (gcc version 11.3.1 20220807):
+mips: 63 configs -> no failure
+arm: 104 configs -> no failure
+arm64: 3 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> no failure
+xtensa allmodconfig -> no failure
 
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+arm64: Booted on rpi4b (4GB model). No regression. [2]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/1618
+[2]. https://openqa.qa.codethink.co.uk/tests/1623
+
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
+--
+Regards
+Sudip

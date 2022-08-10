@@ -2,188 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43D7158E5E1
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 05:59:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B091658E59D
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 05:47:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbiHJDqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 23:46:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42004 "EHLO
+        id S230245AbiHJDrN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 23:47:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbiHJDp5 (ORCPT
+        with ESMTP id S230100AbiHJDrK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 23:45:57 -0400
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A889F491F6
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 20:45:55 -0700 (PDT)
-Received: by mail-vs1-xe32.google.com with SMTP id b124so13884687vsc.9
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 20:45:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=KW8ybOJFichyl+rL+B899j3HSHwvcdsvy2PdBohQB9I=;
-        b=E/y0/jft2wIPxHH4A5nTLopi7mdsnl2/bFJHZt05CvjZAr1BHT3KkAeldBbd6CzAY4
-         57QNhsaCDQk8J0tTcHt4rtYNdaFLc91e1nGyw4gBsyEiY/SmfmTorGSiztQKVWEYkn02
-         yBLt3iPhz48bUN6W56AymPGxJmbLXWHVKjmjlzqLDeCEPrvdHw4KjG8gHZOUGOy2fFQ9
-         FPD1WKw2tjidpZ4jaOQ0kbNOJjpdxOoCVGPfJ3NJGbavhb3Bh0nZogAPkVP8I15nlUvk
-         b7UcruiRkPkAehmZc0CO9kTwNiycoejpg0BTgIOEwGXtqDQy5EPVx5Q+l1axQCYuQd2g
-         qy4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=KW8ybOJFichyl+rL+B899j3HSHwvcdsvy2PdBohQB9I=;
-        b=ToKhDWoLUgD3tCCeC5MerdcOcRO9AOCUM5rq1E7eHx0vx9Yge6cCt3hQ1NaXRVh5LR
-         tWZxJe4zJ0KKs8VGHWsCpw3frOMVZ7aGh9ZHgpwhFFpbvVNpOJ13E5QdRW0zd4bMmwT4
-         X8u+SBpmJD2frcO9KE9F9SwZAudHWT8CB8gcvhV9zZMc0A2jgwRwpDaaA8DN91YoIvBI
-         U9ztPX8BvCtmQRzcIi4IWsRAnCqR1/i3M+Doj/qsNAr4mX67JC3J5bF8UuHvt+jmtv4Y
-         uDTafKcUL2m6VEr3Hr+IBF3V5g6mqeJSIaQnJLxV9+KM/Lo2QX5JdhPpa70UbFdBeo63
-         yerg==
-X-Gm-Message-State: ACgBeo1p/Ip4K+A7age0BZmJxgMFBkVe40cnaORviJSKEGVsFJhksVt5
-        nH3PRDH59vQ2tFWEvDZx2290O2yZxvKOABIWPFgp2Q==
-X-Google-Smtp-Source: AA6agR4Fs4XJ4C8ExqkOl2T320CK+M9XWX8GvmKn+P9Th7az4ltDyGarR+0gM+fMtLZiqvvDSckJDQb8eqfj/DDwnJ8=
-X-Received: by 2002:a67:c885:0:b0:38a:7a34:cbca with SMTP id
- v5-20020a67c885000000b0038a7a34cbcamr1535612vsk.22.1660103154624; Tue, 09 Aug
- 2022 20:45:54 -0700 (PDT)
+        Tue, 9 Aug 2022 23:47:10 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6F394BD16
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 20:47:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660103229; x=1691639229;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+28lw+7dUUsqcLBAMm2Sh9p8wAh+1ntA70NRC6apqUI=;
+  b=g91rJXWTDYXSIStGzf3orxGjKf/HCxon4BE0RA/e9hB6owNWKXkpNXTL
+   lMzHujS7QhOordXFnfQToyMQ8nESyRS9jbKsl+2MRQgDu7LdVl6L1HlEB
+   uaUVgDXwf9w6yZvkqusFCeaxe8WlOOl/KuCBCu9Hf7YJ0WnZHpyDyeJYo
+   0C+Ydcd9iORVKupFVRehEd3inMcpUP+vNtNKrwWyIFgpofXF7jI4ly3th
+   WqWD+Z6b1ulgY74w78YM0oRd9+g92B/VFQLDQwNiAT1fhRl1A1nZ6OYUG
+   zHewePKhhtZ97KqwSy2lZBeEa+fRzgeFyAuzNH+EB0rn3KkBsqwbh/Aff
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="290989963"
+X-IronPort-AV: E=Sophos;i="5.93,226,1654585200"; 
+   d="scan'208";a="290989963"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 20:47:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,226,1654585200"; 
+   d="scan'208";a="581066740"
+Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 09 Aug 2022 20:47:07 -0700
+Received: from kbuild by e0eace57cfef with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oLcgV-000NU5-0O;
+        Wed, 10 Aug 2022 03:47:07 +0000
+Date:   Wed, 10 Aug 2022 11:46:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [rmk-arm:ktext 13/19] arch/arm64/mm/mmu.c:737:13: warning: no
+ previous prototype for function 'create_kernel_nid_map'
+Message-ID: <202208101140.WHKcrIlq-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220808125237.277126-1-mairacanal@riseup.net>
-In-Reply-To: <20220808125237.277126-1-mairacanal@riseup.net>
-From:   David Gow <davidgow@google.com>
-Date:   Wed, 10 Aug 2022 11:45:43 +0800
-Message-ID: <CABVgOS=ziJi0+_6GVt0RCr9YzW+VUBWBwrMAnMAb1W35JnjnJw@mail.gmail.com>
-Subject: Re: [PATCH v4 0/3] kunit: Introduce KUNIT_EXPECT_MEMEQ and
- KUNIT_EXPECT_MEMNEQ macros
-To:     =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>
-Cc:     Brendan Higgins <brendanhiggins@google.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        =?UTF-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        andrealmeid@riseup.net, melissa.srw@gmail.com,
-        siqueirajordao@riseup.net, Isabella Basso <isabbasso@riseup.net>,
-        magalilemes00@gmail.com, tales.aparecida@gmail.com,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 8, 2022 at 8:53 PM Ma=C3=ADra Canal <mairacanal@riseup.net> wro=
-te:
->
-> Currently, in order to compare memory blocks in KUnit, the KUNIT_EXPECT_E=
-Q or
-> KUNIT_EXPECT_FALSE macros are used in conjunction with the memcmp functio=
-n,
-> such as:
->   KUNIT_EXPECT_EQ(test, memcmp(foo, bar, size), 0);
->
-> Although this usage produces correct results for the test cases, if the
-> expectation fails the error message is not very helpful, indicating only =
-the
-> return of the memcmp function.
->
-> Therefore, create a new set of macros KUNIT_EXPECT_MEMEQ and
-> KUNIT_EXPECT_MEMNEQ that compare memory blocks until a determined size. I=
-n
-> case of expectation failure, those macros print the hex dump of the memor=
-y
-> blocks, making it easier to debug test failures for memory blocks.
->
-> The v4 doesn't bring many changes. The output is aligned just like the pr=
-evious
-> version but it fixes some mail client problems (sorry about that) and men=
-tions
-> that this macros are not recommended for structured data.
->
-> The first patch of the series introduces the KUNIT_EXPECT_MEMEQ and
-> KUNIT_EXPECT_MEMNEQ. The second patch adds an example of memory block
-> expectations on the kunit-example-test.c. And the last patch replaces the
-> KUNIT_EXPECT_EQ for KUNIT_EXPECT_MEMEQ on the existing occurrences.
->
-> Best Regards,
-> - Ma=C3=ADra Canal
->
-> v1 -> v2: https://lore.kernel.org/linux-kselftest/2a0dcd75-5461-5266-2749=
--808f638f4c50@riseup.net/T/#m402cc72eb01fb3b88d6706cf7d1705fdd51e5da2
->
-> - Change "determinated" to "specified" (Daniel Latypov).
-> - Change the macro KUNIT_EXPECT_ARREQ to KUNIT_EXPECT_MEMEQ, in order to =
-make
-> it easier for users to infer the right size unit (Daniel Latypov).
-> - Mark the different bytes on the failure message with a <> (Daniel Latyp=
-ov).
-> - Replace a constant number of array elements for ARRAY_SIZE() (Andr=C3=
-=A9 Almeida).
-> - Rename "array" and "expected" variables to "array1" and "array2" (Danie=
-l Latypov).
->
-> v2 -> v3: https://lore.kernel.org/linux-kselftest/20220802212621.420840-1=
--mairacanal@riseup.net/T/#t
->
-> - Make the bytes aligned at output.
-> - Add KUNIT_SUBSUBTEST_INDENT to the output for the indentation (Daniel L=
-atypov).
-> - Line up the trailing \ at macros using tabs (Daniel Latypov).
-> - Line up the params to the functions (Daniel Latypov).
-> - Change "Increament" to "Augment" (Daniel Latypov).
-> - Use sizeof() for array sizes (Daniel Latypov).
-> - Add Daniel Latypov's tags.
->
-> v3 -> v4: https://lore.kernel.org/linux-kselftest/CABVgOSm_59Yr82deQm2C=
-=3D18jjSv_akmn66zs4jxx3hfziXPeHg@mail.gmail.com/T/#t
->
-> - Fix wrapped lines by the mail client (David Gow).
-> - Mention on documentation that KUNIT_EXPECT_MEMEQ is not recommended for
-> structured data (David Gow).
-> - Add Muhammad Usama Anjum's tag.
->
+tree:   git://git.armlinux.org.uk/~rmk/linux-arm ktext
+head:   9065be4a87799659473e7d135f6db3f7419a7553
+commit: 2154e376802fd896345339e0940fca399b893515 [13/19] arm64: text replication: setup page tables for copied kernel
+config: arm64-randconfig-r004-20220810 (https://download.01.org/0day-ci/archive/20220810/202208101140.WHKcrIlq-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        git remote add rmk-arm git://git.armlinux.org.uk/~rmk/linux-arm
+        git fetch --no-tags rmk-arm ktext
+        git checkout 2154e376802fd896345339e0940fca399b893515
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/mm/
 
-Thanks very much! I've looked through and tested this, and it looks great t=
-o me.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-This entire series is
-Reviewed-by: David Gow <davidgow@google.com>
+All warnings (new ones prefixed by >>):
 
-Cheers,
--- David
+>> arch/arm64/mm/mmu.c:737:13: warning: no previous prototype for function 'create_kernel_nid_map' [-Wmissing-prototypes]
+   void __init create_kernel_nid_map(pgd_t *pgdp, void *ktext)
+               ^
+   arch/arm64/mm/mmu.c:737:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void __init create_kernel_nid_map(pgd_t *pgdp, void *ktext)
+   ^
+   static 
+   1 warning generated.
 
 
-> Ma=C3=ADra Canal (3):
->   kunit: Introduce KUNIT_EXPECT_MEMEQ and KUNIT_EXPECT_MEMNEQ macros
->   kunit: Add KUnit memory block assertions to the example_all_expect_macr=
-os_test
->   kunit: Use KUNIT_EXPECT_MEMEQ macro
->
->  .../gpu/drm/tests/drm_format_helper_test.c    |  6 +-
->  include/kunit/assert.h                        | 34 ++++++++
->  include/kunit/test.h                          | 84 +++++++++++++++++++
->  lib/kunit/assert.c                            | 56 +++++++++++++
->  lib/kunit/kunit-example-test.c                |  7 ++
->  net/core/dev_addr_lists_test.c                |  4 +-
->  6 files changed, 186 insertions(+), 5 deletions(-)
->
-> --
-> 2.37.1
->
-> --
-> You received this message because you are subscribed to the Google Groups=
- "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgi=
-d/kunit-dev/20220808125237.277126-1-mairacanal%40riseup.net.
+vim +/create_kernel_nid_map +737 arch/arm64/mm/mmu.c
+
+   736	
+ > 737	void __init create_kernel_nid_map(pgd_t *pgdp, void *ktext)
+   738	{
+   739		pgprot_t text_prot = kernel_text_pgprot();
+   740	
+   741		create_kernel_mapping(pgdp, __pa(ktext), _stext, _etext, text_prot, 0);
+   742		create_kernel_mapping(pgdp, __pa_symbol(__start_rodata),
+   743				      __start_rodata, __inittext_begin,
+   744				      PAGE_KERNEL, NO_CONT_MAPPINGS);
+   745		create_kernel_mapping(pgdp, __pa_symbol(__inittext_begin),
+   746				      __inittext_begin, __inittext_end,
+   747				      text_prot, 0);
+   748		create_kernel_mapping(pgdp, __pa_symbol(__initdata_begin),
+   749				      __initdata_begin, __initdata_end,
+   750				      PAGE_KERNEL, 0);
+   751		create_kernel_mapping(pgdp, __pa_symbol(_data), _data, _end,
+   752				      PAGE_KERNEL, 0);
+   753	}
+   754	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

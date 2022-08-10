@@ -2,134 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7597958E902
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 10:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 418CA58E906
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 10:47:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231801AbiHJIpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 04:45:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41818 "EHLO
+        id S231787AbiHJIrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 04:47:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231177AbiHJIpj (ORCPT
+        with ESMTP id S230104AbiHJIrp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 04:45:39 -0400
-Received: from polaris.svanheule.net (polaris.svanheule.net [IPv6:2a00:c98:2060:a004:1::200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F00E27B31
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 01:45:38 -0700 (PDT)
-Received: from vanadium.ugent.be (vanadium.ugent.be [157.193.99.61])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: sander@svanheule.net)
-        by polaris.svanheule.net (Postfix) with ESMTPSA id 06081309215;
-        Wed, 10 Aug 2022 10:45:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
-        s=mail1707; t=1660121137;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wW1BnO3D+++ZeyOAYr0klJvyf1VeScMpK2Hw/FycF80=;
-        b=PitDpYXr1MTFKl5Vc0Z0t9rnVUhvdMBVFgQN+FBbKqtRsWVvaWSZYLas5Pkgd82fMQA3j6
-        hz4RfghwAZznttQPPnCCJaxWRjqLdw4l2+CPFuSBBpKm6l99AxiPHH8fuTy2DYr4gRzy3G
-        2lwNPo7bDFwYduG+m6lW7IoIuF111L3y4cShuPs65OuXo1TEttxHx9Vz/hgiTPKsX7LmOA
-        4ULn5oagnjTlazB2iwa49z/kD88FgDLTtmcv0uA2ClnBmOsVwVrlhztfvOjXusFrQSCz2E
-        cRnTl4G+WgVZmS3DfawNB/HAJ+v8YCQHBcdqP/20IAg+cwx6RIpGOZCG8/2OFA==
-Message-ID: <4f334657f927865266fee19a7920f7248a111ef8.camel@svanheule.net>
-Subject: Re: [PATCH v1 1/5] lib/test_cpumask: drop cpu_possible_mask full
- test
-From:   Sander Vanheule <sander@svanheule.net>
-To:     David Gow <davidgow@google.com>
-Cc:     Yury Norov <yury.norov@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?ISO-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>
-Date:   Wed, 10 Aug 2022 10:45:35 +0200
-In-Reply-To: <CABVgOSmcKHH2zcCbT-jzekFP8RFov4V0AFBsGjU9kXSy9pJ9HQ@mail.gmail.com>
-References: <cover.1660068429.git.sander@svanheule.net>
-         <30d8882efedea697da20c27563050008d1569b9e.1660068429.git.sander@svanheule.net>
-         <CABVgOSmcKHH2zcCbT-jzekFP8RFov4V0AFBsGjU9kXSy9pJ9HQ@mail.gmail.com>
+        Wed, 10 Aug 2022 04:47:45 -0400
+Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E55E66C743
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 01:47:43 -0700 (PDT)
+Received: by mail-pg1-x549.google.com with SMTP id z18-20020a63d012000000b0041b3478e9a9so5537836pgf.17
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 01:47:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=IkO2qbmRcFc6UxfvSrEn8JNuo3OleMYGP7m+9m5YUGE=;
+        b=GRzr0X8Bvqmio2LDXmGRaknTkzJlz6XYPdUWa3HK+1BbpqjUTnoRv59n9Z8kmIe9eE
+         k4B7qwLn6g9b335FI1FmJ+y5nY4jWh0smsFLZmnN85oQd6c0NHziYC2zSVFvisEPcwo9
+         hJcKKfKbZk3azdWtI/Hc0FD/u9yIpTUj+6D+8g5WRalUtXpjHa2VYFY1MPlk/a0cX9Pd
+         /vB1Q/24aJIeFqn2hDcPipxpph02wVS892JseyWiRtsZO5s/TonCf7vXFjTgKKzyL/VR
+         +QqmiB/lJIziPqkT8mV9YpGNDQs4hNggQ10nYi0NdPevOA405NCFybuUCGZhDnH2DiNi
+         O7Sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=IkO2qbmRcFc6UxfvSrEn8JNuo3OleMYGP7m+9m5YUGE=;
+        b=hI+SdSc8n2/CWJVmQyMSDFRnYxi+2mXfWXqASYNQhlz1pBWFYHv5Bv0q1mm6Ltl7/V
+         CKyy8So6yorbNPIyoZm7ijB8g7dtEP1b99ZLdI+1OQ5nNcH1WvBK7nHMH4t1SOpNfi83
+         0ZRyi+CHxVVrhnI34o+woWoZzcsr8qlkOmyezFk6ku1UOEeyuBKa964/SX6Kfs7FJvqd
+         8o77xFskxv26GbspTFbydkUnlDITij+yGRF+OVulR5p5dKmA9o5MaEuCB90MHlYR/6QK
+         VDgREax2xUDdLQHQrDoVwFHmDwpaku2lvvXt6vZLwaWxvdZIOgZDR9BoTLcvk+bMCJ63
+         NezQ==
+X-Gm-Message-State: ACgBeo2dct8mSKXk4JcoGkXml31fkTevj8OCp8iaX5IDi4swLg4YDlWT
+        T/uiUJiKiz10mx+Za36K5FzV0M2udH54
+X-Google-Smtp-Source: AA6agR5HfTknbxKKBNTihyGsEeT4IzJR7ci36ymQ75F6+56l8RT3V41NgytngbB2802N/PnwLcTHdOtXFTJP
+X-Received: from apusaka-p920.tpe.corp.google.com ([2401:fa00:1:17:babf:73ba:88f:89e])
+ (user=apusaka job=sendgmr) by 2002:a62:38d8:0:b0:52d:1496:6775 with SMTP id
+ f207-20020a6238d8000000b0052d14966775mr26377140pfa.15.1660121263438; Wed, 10
+ Aug 2022 01:47:43 -0700 (PDT)
+Date:   Wed, 10 Aug 2022 16:47:36 +0800
+Message-Id: <20220810164627.1.Id730b98f188a504d9835b96ddcbc83d49a70bb36@changeid>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
+Subject: [PATCH] Bluetooth: Honor name resolve evt regardless of discov state
+From:   Archie Pusaka <apusaka@google.com>
+To:     linux-bluetooth <linux-bluetooth@vger.kernel.org>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>
+Cc:     CrosBT Upstreaming <chromeos-bluetooth-upstreaming@chromium.org>,
+        Archie Pusaka <apusaka@chromium.org>,
+        Ying Hsu <yinghsu@chromium.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
+From: Archie Pusaka <apusaka@chromium.org>
 
-On Wed, 2022-08-10 at 12:06 +0800, David Gow wrote:
-> On Wed, Aug 10, 2022 at 2:09 AM Sander Vanheule <sander@svanheule.net> wr=
-ote:
-> >=20
-> > cpu_possible_mask is not necessarily completely filled.=C2=A0 That mean=
-s
-> > running a check on cpumask_full() doesn't make sense, so drop the test.
-> >=20
-> > Fixes: c41e8866c28c ("lib/test: introduce cpumask KUnit test suite")
-> > Link: https://lore.kernel.org/lkml/346cb279-8e75-24b0-7d12-9803f2b41c73=
-@riseup.net/
-> > Reported-by: Ma=C3=ADra Canal <mairacanal@riseup.net>
-> > Signed-off-by: Sander Vanheule <sander@svanheule.net>
-> > Cc: David Gow <davidgow@google.com>
-> > ---
->=20
-> Looks good to me. It'd maybe be worth noting _why_=C2=A0 cpu_possible_mas=
-k
-> is not always filled (i.e., that the number of available CPUs might
-> not match the maximum number of CPUs the kernel is built to support),
-> but it's probably not worth doing a new version of the patch series
-> just for that.
->=20
-> Reviewed-by: David Gow <davidgow@google.com>
+Currently, we don't update the name resolving cache when receiving
+a name resolve event if the discovery phase is not in the resolving
+stage.
 
-Thanks for the reviews!
+However, if the user connect to a device while we are still resolving
+remote name for another device, discovery will be stopped, and because
+we are no longer in the discovery resolving phase, the corresponding
+remote name event will be ignored, and thus the device being resolved
+will stuck in NAME_PENDING state.
 
-Perhaps the commit message could be replaced by:
+If discovery is then restarted and then stopped, this will cause us to
+try cancelling the name resolve of the same device again, which is
+incorrect and might upset the controller.
 
-"When the number of CPUs that can possibly be brought online is known at bo=
-ot time, e.g. when
-HOTPLUG is disabled, nr_cpu_ids may be smaller than NR_CPUS. In that case, =
-cpu_possible_mask would
-not be completely filled, and cpumask_full(cpu_possible_mask) may return fa=
-lse for valid system
-configurations."
+Signed-off-by: Archie Pusaka <apusaka@chromium.org>
+Reviewed-by: Ying Hsu <yinghsu@chromium.org>
+
+---
+The following steps are performed:
+    (1) Prepare 2 classic peer devices that needs RNR. Put device A
+        closer to DUT and device B (much) farther from DUT.
+    (2) Remove all cache and previous connection from DUT
+    (3) Put both peers into pairing mode, then start scanning on DUT
+    (4) After ~8 sec, turn off peer B.
+    *This is done so DUT can discover peer B (discovery time is 10s),
+    but it hasn't started RNR. Peer is turned off to buy us the max
+    time in the RNR phase (5s).
+    (5) Immediately as device A is shown on UI, click to connect.
+    *We thus know that the DUT is in the RNR phase and trying to
+    resolve the name of peer B when we initiate connection to peer A.
+    (6) Forget peer A.
+    (7) Restart scan and stop scan.
+    *Before the CL, stop scan is broken because we will try to cancel
+    a nonexistent RNR
+    (8) Restart scan again. Observe DUT can scan normally.
 
 
-Best,
-Sander
+ net/bluetooth/hci_event.c | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
->=20
-> Cheers,
-> -- David
->=20
->=20
-> > =C2=A0lib/test_cpumask.c | 1 -
-> > =C2=A01 file changed, 1 deletion(-)
-> >=20
-> > diff --git a/lib/test_cpumask.c b/lib/test_cpumask.c
-> > index a31a1622f1f6..4ebf9f5805f3 100644
-> > --- a/lib/test_cpumask.c
-> > +++ b/lib/test_cpumask.c
-> > @@ -54,7 +54,6 @@ static cpumask_t mask_all;
-> > =C2=A0static void test_cpumask_weight(struct kunit *test)
-> > =C2=A0{
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 KUNIT_EXPECT_TRUE(test, cpum=
-ask_empty(&mask_empty));
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 KUNIT_EXPECT_TRUE(test, cpumask_f=
-ull(cpu_possible_mask));
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 KUNIT_EXPECT_TRUE(test, cpum=
-ask_full(&mask_all));
-> >=20
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 KUNIT_EXPECT_EQ(test, 0, cpu=
-mask_weight(&mask_empty));
-> > --
-> > 2.37.1
-> >=20
+diff --git a/net/bluetooth/hci_event.c b/net/bluetooth/hci_event.c
+index 395c6479456f..95e145e278c9 100644
+--- a/net/bluetooth/hci_event.c
++++ b/net/bluetooth/hci_event.c
+@@ -2453,6 +2453,16 @@ static void hci_check_pending_name(struct hci_dev *hdev, struct hci_conn *conn,
+ 	    !test_and_set_bit(HCI_CONN_MGMT_CONNECTED, &conn->flags))
+ 		mgmt_device_connected(hdev, conn, name, name_len);
+ 
++	e = hci_inquiry_cache_lookup_resolve(hdev, bdaddr, NAME_PENDING);
++
++	if (e) {
++		list_del(&e->list);
++
++		e->name_state = name ? NAME_KNOWN : NAME_NOT_KNOWN;
++		mgmt_remote_name(hdev, bdaddr, ACL_LINK, 0x00, e->data.rssi,
++				 name, name_len);
++	}
++
+ 	if (discov->state == DISCOVERY_STOPPED)
+ 		return;
+ 
+@@ -2462,7 +2472,6 @@ static void hci_check_pending_name(struct hci_dev *hdev, struct hci_conn *conn,
+ 	if (discov->state != DISCOVERY_RESOLVING)
+ 		return;
+ 
+-	e = hci_inquiry_cache_lookup_resolve(hdev, bdaddr, NAME_PENDING);
+ 	/* If the device was not found in a list of found devices names of which
+ 	 * are pending. there is no need to continue resolving a next name as it
+ 	 * will be done upon receiving another Remote Name Request Complete
+@@ -2470,12 +2479,6 @@ static void hci_check_pending_name(struct hci_dev *hdev, struct hci_conn *conn,
+ 	if (!e)
+ 		return;
+ 
+-	list_del(&e->list);
+-
+-	e->name_state = name ? NAME_KNOWN : NAME_NOT_KNOWN;
+-	mgmt_remote_name(hdev, bdaddr, ACL_LINK, 0x00, e->data.rssi,
+-			 name, name_len);
+-
+ 	if (hci_resolve_next_name(hdev))
+ 		return;
+ 
+-- 
+2.37.1.595.g718a3a8f04-goog
+

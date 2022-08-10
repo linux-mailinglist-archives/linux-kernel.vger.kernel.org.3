@@ -2,192 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A0B58EF03
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 17:11:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3715658EF0A
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 17:11:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232924AbiHJPKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 11:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53428 "EHLO
+        id S232995AbiHJPLo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 11:11:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232387AbiHJPKo (ORCPT
+        with ESMTP id S232959AbiHJPLl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 11:10:44 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE2DB4A5
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 08:10:43 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id j8so28243354ejx.9
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 08:10:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=QvWgi4bapgJrNQFkQQ/ZI8kSbG7GnXbksaof+b0rmLc=;
-        b=kDqaOrUd0p917w2v+d7X2KGqQbhozVosVzex2g0KecOPP4HWnCyfpVycR36/m83PkC
-         r/hVZZMqfEpfB7mKxkEPtcyPiqS1KgwmZdOduWmZgbmbXoFP0xMdRxrP2+IRLOL+gj+G
-         a/bob2EBbCfku/BjYYbmzh4nD1gUsYEhfM6st88Co6+JheB1J5myX7YsP+kxmieOtbH0
-         uXjeJ34pA12v4Ap3fRnc/M+VHnE8FQTkIIw+3vQwguJFVxBiSvfTZpJFZ3r48T8VlXhr
-         UxMW5Kw+ZDGmbp9LSMUOBGDLTLxf/D6w/gHE1XFb728KVwkDCNQ2f5LasZ+e5dPa9vZi
-         acow==
+        Wed, 10 Aug 2022 11:11:41 -0400
+Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA876555E;
+        Wed, 10 Aug 2022 08:11:40 -0700 (PDT)
+Received: by mail-io1-f54.google.com with SMTP id y82so5543602iof.7;
+        Wed, 10 Aug 2022 08:11:40 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=message-id:date:subject:references:in-reply-to:cc:to:from
          :x-gm-message-state:from:to:cc;
-        bh=QvWgi4bapgJrNQFkQQ/ZI8kSbG7GnXbksaof+b0rmLc=;
-        b=ocaLVtOe2aGcA4D8lc/oLiYXzJE6sT0nju9wVk6tSfUUe+/axtqaSLoHs4S0SJq6il
-         wr6qnKtDCVyI4SFU5XIB+ugCL4OQj3JKXjCYAdluZnie99SMGEFri0vxC+tSbVwwA83p
-         6BbXyFflBIvZWGl3EYrBF20ZEgqbEmQf7C88wp7AZL1EdjQnJbKxBb51hCmH6oRyIFuI
-         S9zmUtoZ07+knn9JFLW+kFXsIsylFzIx389YCHFU35TvREah0KQi2/j6GRPntjj8T+4l
-         vto0Z/+JcC3W44qXkxh0d+kGsEqcYacihRsNRl7xFQWx0kXo3qWoZZbilxeAGh4lbsBf
-         HqGA==
-X-Gm-Message-State: ACgBeo2ATTEvPz3hgRq8PUKh04BFnsbcFCGogpqXZSgGMGBc9i/bKLaI
-        f+mTygqgmm1uRxleCdzMWE5fag==
-X-Google-Smtp-Source: AA6agR6Aze/QbsmhHuigbbQINd3adGnoFr4Q79ghohdECe7s8FeuljsSPzsyr2Iapj6rrFDG5/vvkA==
-X-Received: by 2002:a17:907:8687:b0:730:7c7b:b9ce with SMTP id qa7-20020a170907868700b007307c7bb9cemr20093525ejc.656.1660144242092;
-        Wed, 10 Aug 2022 08:10:42 -0700 (PDT)
-Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
-        by smtp.gmail.com with ESMTPSA id ku19-20020a170907789300b00730b5a35288sm2368814ejc.214.2022.08.10.08.10.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Aug 2022 08:10:41 -0700 (PDT)
-Message-ID: <74b69521-0d40-5e2f-4d1b-76e9697d7471@blackwall.org>
-Date:   Wed, 10 Aug 2022 18:10:40 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH RFC net-next 0/3] net: vlan: fix bridge binding behavior
- and add selftests
-Content-Language: en-US
-To:     Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
-Cc:     netdev@vger.kernel.org, aroulin@nvidia.com, sbrivio@redhat.com,
-        roopa@nvidia.com, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org
-References: <cover.1660100506.git.sevinj.aghayeva@gmail.com>
- <94ec6182-0804-7a0e-dcba-42655ff19884@blackwall.org>
- <CAMWRUK45nbZS3PeSLR1X=Ko6oavrjKj2AWeh2F1wckMPrz_dEg@mail.gmail.com>
- <49f933c3-7430-a133-9add-ed76c395023b@blackwall.org>
- <CAMWRUK4J6Dp7Cff=pN9iw6OwDN8g61dd4S=OVKQ75vBch-PxXQ@mail.gmail.com>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <CAMWRUK4J6Dp7Cff=pN9iw6OwDN8g61dd4S=OVKQ75vBch-PxXQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        bh=MtwwWFYU1Uoel2FqSmOeukCvUy+Ds67fehOcNXE8e9w=;
+        b=5OcVIxy4M7azII0QXUgCZTFqCvBtHElHqlNnsIN6bA3U1bKESkudlC7Zlt30SX1xVj
+         SA7jLbwKPYGJ3NKcmazsI8NgSiVKhS3JKf4MJ7YC0jd7nSIPlcJsYE1s/5QMwQ4oHQ0k
+         5J5mOJo9/Rtsp4BYCvAEzVdZEkRl2n+xG/PQrdYG4PiKTZoccirRrtaSR0HTD1tVvLf0
+         sg++Q9922PEQPG1Sq0Ej9FiQj1QviaM/t9RlAr1xo5vhfpSQ6MxMNOW4tACNU72hjHL2
+         pdh32F53bNZgxEDwQ1Q0Aw+RfFQCfv0mSq04P4H/Omlx8Lc6xJwu0x0u77t1YwpRNwTj
+         9HpQ==
+X-Gm-Message-State: ACgBeo0f2EfGd/MecNVSGnlHsW/7mP3kU/KVvkzbwJhjBRTLWjUeRMWV
+        NsHraqOJVneVzF0XxZSMdJjBWn10BQ==
+X-Google-Smtp-Source: AA6agR5vrJZdRv+YRIgJJ5Erl93GQ3Lmfstkt/XR693az+1RfFDbqQ8RgIQeE4J/wOYVSqToOFJCbA==
+X-Received: by 2002:a05:6638:1386:b0:342:8d69:71c2 with SMTP id w6-20020a056638138600b003428d6971c2mr12471346jad.315.1660144299569;
+        Wed, 10 Aug 2022 08:11:39 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id m14-20020a026d0e000000b0034322c00433sm2680940jac.53.2022.08.10.08.11.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Aug 2022 08:11:38 -0700 (PDT)
+Received: (nullmailer pid 4155390 invoked by uid 1000);
+        Wed, 10 Aug 2022 15:11:36 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        linux-media@vger.kernel.org
+In-Reply-To: <20220810132822.32534-2-yuji2.ishikawa@toshiba.co.jp>
+References: <20220810132822.32534-1-yuji2.ishikawa@toshiba.co.jp> <20220810132822.32534-2-yuji2.ishikawa@toshiba.co.jp>
+Subject: Re: [PATCH v3 1/4] dt-bindings: media: platform: visconti: Add Toshiba Visconti Video Input Interface bindings
+Date:   Wed, 10 Aug 2022 09:11:36 -0600
+Message-Id: <1660144296.251859.4155389.nullmailer@robh.at.kernel.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/08/2022 18:00, Sevinj Aghayeva wrote:
-> On Wed, Aug 10, 2022 at 10:50 AM Nikolay Aleksandrov
-> <razor@blackwall.org> wrote:
->>
->> On 10/08/2022 17:42, Sevinj Aghayeva wrote:
->>>
->>>
->>> On Wed, Aug 10, 2022 at 4:54 AM Nikolay Aleksandrov <razor@blackwall.org <mailto:razor@blackwall.org>> wrote:
->>>
->>>     On 10/08/2022 06:11, Sevinj Aghayeva wrote:
->>>     > When bridge binding is enabled for a vlan interface, it is expected
->>>     > that the link state of the vlan interface will track the subset of the
->>>     > ports that are also members of the corresponding vlan, rather than
->>>     > that of all ports.
->>>     >
->>>     > Currently, this feature works as expected when a vlan interface is
->>>     > created with bridge binding enabled:
->>>     >
->>>     >   ip link add link br name vlan10 type vlan id 10 protocol 802.1q \
->>>     >         bridge_binding on
->>>     >
->>>     > However, the feature does not work when a vlan interface is created
->>>     > with bridge binding disabled, and then enabled later:
->>>     >
->>>     >   ip link add link br name vlan10 type vlan id 10 protocol 802.1q \
->>>     >         bridge_binding off
->>>     >   ip link set vlan10 type vlan bridge_binding on
->>>     >
->>>     > After these two commands, the link state of the vlan interface
->>>     > continues to track that of all ports, which is inconsistent and
->>>     > confusing to users. This series fixes this bug and introduces two
->>>     > tests for the valid behavior.
->>>     >
->>>     > Sevinj Aghayeva (3):
->>>     >   net: core: export call_netdevice_notifiers_info
->>>     >   net: 8021q: fix bridge binding behavior for vlan interfaces
->>>     >   selftests: net: tests for bridge binding behavior
->>>     >
->>>     >  include/linux/netdevice.h                     |   2 +
->>>     >  net/8021q/vlan.h                              |   2 +-
->>>     >  net/8021q/vlan_dev.c                          |  25 ++-
->>>     >  net/core/dev.c                                |   7 +-
->>>     >  tools/testing/selftests/net/Makefile          |   1 +
->>>     >  .../selftests/net/bridge_vlan_binding_test.sh | 143 ++++++++++++++++++
->>>     >  6 files changed, 172 insertions(+), 8 deletions(-)
->>>     >  create mode 100755 tools/testing/selftests/net/bridge_vlan_binding_test.sh
->>>     >
->>>
->>>     Hi,
->>>     NETDEV_CHANGE event is already propagated when the vlan changes flags,
->>>
->>>
->>> I'm not sure if NETDEV_CHANGE is actually propagated when the vlan changes flags. The two functions in the bridge module that handle NETDEV_CHANGE are br_vlan_port_event  and br_vlan_bridge_event. I've installed probes for both, and when I'm changing flags using "sudo ip link set vlan10 type vlan bridge_binding on", I don't see any of those functions getting called, although I do see vlan_dev_change_flags getting called. I think there may be a bug in core/dev.c:__dev_notify_flags.
->>
->> are both vlan and bridge interfaces up?
->> what exactly are you probing for?
+On Wed, 10 Aug 2022 22:28:19 +0900, Yuji Ishikawa wrote:
+> Adds the Device Tree binding documentation that allows to describe
+> the Video Input Interface found in Toshiba Visconti SoCs.
 > 
+> Signed-off-by: Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>
+> Reviewed-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+> ---
+> Chengelog v2:
+> - no change
 > 
-> I first run the attached pre.sh script that sets up the environment
-> and creates a vlan interface with bridge binding off. I then start
-> recording with perf, and here's the list of probes:
-> 
-> $ sudo ./k/linux/tools/perf/perf probe -l
->   probe:br_vlan_bridge_event (on br_vlan_bridge_event in bridge with event dev)
->   probe:br_vlan_port_event (on br_vlan_port_event in bridge with event)
->   probe:br_vlan_set_vlan_dev_state (on br_vlan_set_vlan_dev_state in
-> bridge with br vlan_dev)
->   probe:register_vlan_dev (on register_vlan_dev in 8021q with dev)
->   probe:vlan_changelink (on vlan_changelink in 8021q with dev)
->   probe:vlan_dev_change_flags (on vlan_dev_change_flags in 8021q with dev)
->   probe:vlan_dev_fix_features (on vlan_dev_fix_features in 8021q with dev)
->   probe:vlan_dev_init  (on vlan_dev_init in 8021q with dev)
->   probe:vlan_dev_ioctl (on vlan_dev_ioctl in 8021q with dev)
->   probe:vlan_dev_open  (on vlan_dev_open in 8021q with dev)
->   probe:vlan_dev_stop  (on vlan_dev_stop in 8021q with dev)
->   probe:vlan_dev_uninit (on vlan_dev_uninit in 8021q with dev)
->   probe:vlan_newlink   (on vlan_newlink in 8021q with dev)
-> 
-> I then run the following command to turn the bridge binding flag on:
-> 
-> $ sudo ip link set vlan10 type vlan bridge_binding on
-> 
-> Then I stop the recording and print out the events, and I see this. I
-> don't see br_vlan_port_event or br_vlan_bridge_event getting called.
-> 
->               ip  5933 [003]  2204.722470:
-> probe:vlan_changelink: (ffffffffc1042b50) dev="vlan10"
->               ip  5933 [003]  2204.722476:
-> probe:vlan_dev_change_flags: (ffffffffc1042600) dev="vlan10"
-> 
-> Am I doing something wrong?
-> 
-> Thanks
-> 
+> Changelog v3:
+> - no change
+> ---
+>  .../bindings/media/toshiba,visconti-viif.yaml | 103 ++++++++++++++++++
+>  1 file changed, 103 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml
 > 
 
-You can't expect to see br_vlan_bridge_event() called because the notification
-target device is vlan10 and not the bridge. See br_device_event():
-...
-        if (netif_is_bridge_master(dev)) {
-                err = br_vlan_bridge_event(dev, event, ptr);
-                if (err)
-                        return notifier_from_errno(err);
-...
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml:14:111: [warning] line too long (112 > 110 characters) (line-length)
 
-Try probing for br_device_event(), you'll see it gets called every time you change the flag.
+dtschema/dtc warnings/errors:
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml: properties:port:properties:endpoint:properties:data-lanes:items: 'oneOf' conditional failed, one must be fixed:
+	{'minItems': 1, 'maxItems': 4, 'items': [{'const': 1}, {'const': 2}, {'const': 3}, {'const': 4}]} should not be valid under {'required': ['maxItems']}
+		hint: "maxItems" is not needed with an "items" list
+	{'minItems': 1, 'maxItems': 4, 'items': [{'const': 1}, {'const': 2}, {'const': 3}, {'const': 4}]} is not of type 'array'
+	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
+/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/media/toshiba,visconti-viif.yaml: ignoring, error in schema: properties: port: properties: endpoint: properties: data-lanes: items
+Documentation/devicetree/bindings/media/toshiba,visconti-viif.example.dtb:0:0: /example-0/soc/viif@1c000000: failed to match any schema with compatible: ['toshiba,visconti-viif']
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 

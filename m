@@ -2,82 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7105E58ECC3
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 15:07:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE6AF58ECCC
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 15:10:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232458AbiHJNHU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 09:07:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39362 "EHLO
+        id S232236AbiHJNKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 09:10:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231646AbiHJNHS (ORCPT
+        with ESMTP id S231687AbiHJNKc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 09:07:18 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E47479683
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 06:07:17 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id m4so27625144ejr.3
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 06:07:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:from:to:cc;
-        bh=tyiItwVvWaAJcbf3Q+zWpKrJsXATE91lNO2jcXiWOZg=;
-        b=P4MyP7RX6EIipwZr8OPTUG1el800K2Ij1L1hpYAwlxWI7qNbRQZ2XZcSz9Fv7n/Crf
-         RpQJfygSnSWgIAmFNBRf6osfs5s5BUarn8bJIaAyh9gpJuRkwB5V+PyZ+s2Ay+g34jzi
-         O1KI/qjxaKdb6Tv3wRoPyy5Ofj4jRVrn+b7m10Fg74j3GCiKsSJOOA6N3y/7xTV3Hz4Y
-         KG7ApUsNRln++27MK/r5U+FEuU8sf9F/Sda2R+mlxfNFCRkeii5LWH+5HSCwhX1AUnJF
-         aUkCynGayEPKl/T8pAJfyX4majMvn150GciPKCeFWa7QhaTLBMowizuvDx9RKyxzzsHq
-         utGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=tyiItwVvWaAJcbf3Q+zWpKrJsXATE91lNO2jcXiWOZg=;
-        b=3faC/xM+2YuKs03cVtkcZTI9csLcLEG2Ld5VhuGNK4GAOOUKFt8OtucCUFxpkU7qx2
-         JV+Lf0pOWCbcmXRaWzT+ILYvGVLwKq9iGuNxRlIsSQGwbrOM0qsKbapiagaPj9Pof0vW
-         9VrPai9x2zxyfMgGwLHxJATIiTxj5CKdDafz3VpXmkKPhjyOl9jVrL01PUU6eNhReIi2
-         /kYZD3WEY8CKe+1YoirBeZu45j6VgmYDbGi6l+NlygVIDVIFcPONbno+VPSF1DKEHUqc
-         +TwKBFplwaci20Eo6HNBtqdBvITcbwlI47ChoW8PJ3pDUPn+zVYBjbggi3035CxgHIq6
-         LHZQ==
-X-Gm-Message-State: ACgBeo1tPTHp/rpjBk4X8dNegkikhnn2j8EHQwyuAvDCKaFMq//RSStV
-        ruXpepr62LaQkjjCqkMWLgSweSVIiUkPsz6FCB0=
-X-Google-Smtp-Source: AA6agR4xqcDQu0NU49rJFWMvw7ypyjWmxSmHsFB5B0n8lkBGkMPj+ycnGXi3kBx7PJnA25dYoRc4oERnR7kAGjO6BwM=
-X-Received: by 2002:a17:907:8a01:b0:731:4316:b0ad with SMTP id
- sc1-20020a1709078a0100b007314316b0admr12367992ejc.477.1660136835489; Wed, 10
- Aug 2022 06:07:15 -0700 (PDT)
+        Wed, 10 Aug 2022 09:10:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBBC4BEC;
+        Wed, 10 Aug 2022 06:10:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 262176144B;
+        Wed, 10 Aug 2022 13:10:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67138C433D6;
+        Wed, 10 Aug 2022 13:10:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660137029;
+        bh=sXSgjj5+4JsQMk/9Qox6+ZAQuvnEJ/J3+NWYzjJbhPE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ndzHzvgqRms/h4alSGbXbFmh+oce7SiBJ1vt6g2QWH1+sdnF7XALSFmJJE42VKRvx
+         N/+HoxuaZosX9/dOFAD9C9bTOx5GePb8PDejMMGkOfWrGFu4o7yOAmOoe5SR0uGw4z
+         MlnxKCbI1TCW32A5o0yb6QqlBkfyKHFG4Z5ey1olHRV53MslQojlf0mGJg183rjakm
+         XAIetpwJvH2eLw1fJOtRjsa89n6jIXwrfxoV1M82Cbm+Zfx16SoSHWI2kVROBRwKwF
+         tWqR4tdYaQenHKk1oKgCovH67wX3n1kSH7cGAsiqJwtBH3tF0UHpbJL2qARITQkDOH
+         jKTxxEqleyWEw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 0877F4035A; Wed, 10 Aug 2022 10:10:27 -0300 (-03)
+Date:   Wed, 10 Aug 2022 10:10:26 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v2] perf probe: Fix an error handling path in
+ 'parse_perf_probe_command()'
+Message-ID: <YvOuQnSdT31wSPZ8@kernel.org>
+References: <b71bcb01fa0c7b9778647235c3ab490f699ba278.1659797452.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Received: by 2002:a05:6f02:9:b0:1e:d239:3d35 with HTTP; Wed, 10 Aug 2022
- 06:07:15 -0700 (PDT)
-From:   Ajafor simon <simonajafor1985@gmail.com>
-Date:   Wed, 10 Aug 2022 13:07:15 +0000
-Message-ID: <CABDeXzdX8_FJJ9A0dAgcc12qnXCmWdAY1GkAAS2d_RB5XoA7=A@mail.gmail.com>
-Subject: =?UTF-8?B?7Lmc7JWg7ZWY64qULCDtg4DsvIDsmrDsuZgs?=
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_40,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b71bcb01fa0c7b9778647235c3ab490f699ba278.1659797452.git.christophe.jaillet@wanadoo.fr>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-7Lmc7JWg7ZWY64qULCDtg4DsvIDsmrDsuZgsDQoNCuyViOuFle2VmOyEuOyalC4g7KCA64qUIOyE
-nOyVhO2UhOumrOy5tCDroZzrqZTthqDqs6Dsl5DshJwg67OA7Zi47IKs66GcIOq3vOustO2VmOqz
-oCDsnojripQg67OA7Zi47IKsKEVuZywgR2VvcmdlIFRha2V1Y2hpKeydmCDrs4DtmLjsgqwNClNp
-bW9uIEFqYWZvcuyeheuLiOuLpC4g6re464qUIDEx7JuUIDIx7J28IOyEnOyVhO2UhOumrOy5tCDr
-oZzrqZTthqDqs6Dsl5Ag7J6I64qUIOyJmCDqsJzrsJwg7ZqM7IKs7JeQ7IScIOqzhOyVveyngeyc
-vOuhnCDsnbztlojrjZgg7KCB7J20DQrsnojsirXri4jri6QuIOuvuOq1reyXkOyEnCDslYTrgrTs
-mYAg7Jm464+Z65S47J20IOy9lOuhnOuCmDE566GcIOyCrOunne2VnCDtm4Qg7Ius7J6l66eI67mE
-66GcIOyCrOunne2WiOyKteuLiOuLpC4NCg0K6re4IOydtO2bhOuhnCDsoIDripQg7Jes6riwIO2G
-oOqzoOyXkCDsnojripQg64u57Iug7J2YIOuMgOyCrOq0gOyXkCDsoJwg6rOg6rCd7J2YIOy5nOyy
-meydhCDssL7quLAg7JyE7ZW0IOusuOydmO2VtCDsmZTsp4Drp4wg7J20IOyXreyLnCDshLHqs7Xs
-oIHsnbTsp4Ag66q77ZaI7Iq164uI64ukLg0KDQrsnbTsoJwg6reA7ZWY7J2YIOyXsOudveydhCDq
-uLDri6TrpqzrqbAg64qm7J2AIOqzoOqwneydtCDrgqjqsqjrkZQgMSwyNTDrp4wg64us65+sLCAx
-LDI1MOunjCDri6zrn6wg7IOB64u57J2YIOq4sOq4iOydhCDrs7jqta3snLzroZwg7Iah7ZmY7ZWY
-64qUIOuNsA0K64+E7JuA7J2EIOuTnOumrOq4sCDsnITtlbQg7Jew65297J2EIOuTnOuguOyKteuL
-iOuLpC4NCg0K7Lmc7JWg7ZWY64qULg0K67OA7Zi47IKsIFNpbW9uIEFqYWZvcihFU1EpDQrroZzr
-qZQg7Yag6rOgIOyEnOyVhO2UhOumrOy5tA0K
+Em Sat, Aug 06, 2022 at 04:51:26PM +0200, Christophe JAILLET escreveu:
+> If a memory allocation fail, we should branch to the error handling path in
+> order to free some resources allocated a few lines above.
+> 
+> Fixes: 15354d546986 ("perf probe: Generate event name with line number")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Acked-by: Masami Hiramatsu <mhiramat@kernel.org>
+
+
+Thanks, applied.
+
+- Arnaldo
+
+
+> ---
+> Change in v2:
+>  - Synch with latest -next
+>  - Add A-by tag (see link below, it was old!)
+> 
+> v1:
+>  https://lore.kernel.org/all/20200315201259.29190-1-christophe.jaillet@wanadoo.fr/
+> ---
+>  tools/perf/util/probe-event.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/perf/util/probe-event.c b/tools/perf/util/probe-event.c
+> index 67c12d5303e7..785246ff4179 100644
+> --- a/tools/perf/util/probe-event.c
+> +++ b/tools/perf/util/probe-event.c
+> @@ -1775,8 +1775,10 @@ int parse_perf_probe_command(const char *cmd, struct perf_probe_event *pev)
+>  	if (!pev->event && pev->point.function && pev->point.line
+>  			&& !pev->point.lazy_line && !pev->point.offset) {
+>  		if (asprintf(&pev->event, "%s_L%d", pev->point.function,
+> -			pev->point.line) < 0)
+> -			return -ENOMEM;
+> +			pev->point.line) < 0) {
+> +			ret = -ENOMEM;
+> +			goto out;
+> +		}
+>  	}
+>  
+>  	/* Copy arguments and ensure return probe has no C argument */
+> -- 
+> 2.34.1
+
+-- 
+
+- Arnaldo

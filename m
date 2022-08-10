@@ -2,135 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88A9C58E757
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 08:33:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3BC358E755
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 08:33:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231383AbiHJGdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 02:33:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37492 "EHLO
+        id S231326AbiHJGdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 02:33:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231376AbiHJGdP (ORCPT
+        with ESMTP id S229611AbiHJGdJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 02:33:15 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7D26E2DF
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 23:33:14 -0700 (PDT)
+        Wed, 10 Aug 2022 02:33:09 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B3326E2CF
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 23:33:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660113194; x=1691649194;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=PGR8oSk4ngEBEGDpyq9h6FThvhV42UZ8jkU3Q9MaFhM=;
-  b=Io3DLD/Ylc9cUn5VzY54YV8dXbNXx/v/lxcNfo9zNY88GeDOQX4ud/TO
-   nWjej8Xhfo2NrK4vcRtzpD4BnoLp8om3BPxMcPNJgZqkeYodjRKsxUoNr
-   Yr/pGVMxT2pPBz7w8B1qFQX8mZmv9IhmDfnzPQ+lGXi7XMO2cfgPJW5h4
-   SYQ2Fg5UhbXD3Bzw6/vlyXdiixmRLhX6Y8ux7GRSyTIovKGHyiAYryLih
-   2moNqYxoBbr3+Fft/nn2V1RqHeQjDXipb+dcWKC6YeOGwrJ+lVPvsCFjW
-   MDgLgxpsXPG1JYetse0rDqzcoh+e5/Z0tNF5E4q0g8O6dZi8yOVDYrsAR
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="277949320"
+  t=1660113188; x=1691649188;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=QIhNWhaFzPd7M69D/251lZz3jAISvGoccdRGMCoXT6o=;
+  b=UZPi+eDL2EK8hr4siEBDDeIRykc1tqGFUDOuBZbJSnVbp2pNrqeIh2lJ
+   zQ15eluFEd4/ojjsroNOCiywyTjWtAZMzrqF67uRzzcudmApmpEQ1rmTI
+   DLOynHnG3UXSP6ZbzHpiovjmaCCz88iNtV29I3zzxRVqITYlgQFnL060R
+   r3Wm6BvDP+RTz2kntjqYWyqwBautdov/rpbbmOlBI9ISy7SrPUH+kkUx3
+   TQcjhcKJYbIue1qBPZfWhKsdJwQWp2FItACpH2bgEahEnwcWt2dhw9vw8
+   rBQRBZQ6GWQkuxQcJjW23kEZo8zUdVHorWDIHTE60oimKi2mtjm5OwT8j
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="270785306"
 X-IronPort-AV: E=Sophos;i="5.93,226,1654585200"; 
-   d="scan'208";a="277949320"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 23:33:13 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="270785306"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 23:33:08 -0700
 X-IronPort-AV: E=Sophos;i="5.93,226,1654585200"; 
-   d="scan'208";a="633645557"
-Received: from lkp-server01.sh.intel.com (HELO e0eace57cfef) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 09 Aug 2022 23:33:12 -0700
-Received: from kbuild by e0eace57cfef with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oLfHE-000NbZ-0T;
-        Wed, 10 Aug 2022 06:33:12 +0000
-Date:   Wed, 10 Aug 2022 14:32:20 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "x86-ml" <x86@kernel.org>
-Cc:     linux-kernel@vger.kernel.org
-Subject: [tip:timers/urgent] BUILD SUCCESS
- e362359ace6f87c201531872486ff295df306d13
-Message-ID: <62f350f4.wDdKmKrx39xGDAdm%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+   d="scan'208";a="932771834"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Aug 2022 23:33:05 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Minchan Kim <minchan@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andi Kleen <andi.kleen@intel.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>
+Subject: Re: [PATCH v3 6/7] mm/swap: Cache maximum swapfile size when init swap
+References: <20220809220100.20033-1-peterx@redhat.com>
+        <20220809220100.20033-7-peterx@redhat.com>
+Date:   Wed, 10 Aug 2022 14:33:02 +0800
+In-Reply-To: <20220809220100.20033-7-peterx@redhat.com> (Peter Xu's message of
+        "Tue, 9 Aug 2022 18:00:59 -0400")
+Message-ID: <87y1vwehgh.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=ascii
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/urgent
-branch HEAD: e362359ace6f87c201531872486ff295df306d13  posix-cpu-timers: Cleanup CPU timers before freeing them during exec
+Peter Xu <peterx@redhat.com> writes:
 
-elapsed time: 715m
+> We used to have swapfile_maximum_size() fetching a maximum value of
+> swapfile size per-arch.
+>
+> As the caller of max_swapfile_size() grows, this patch introduce a variable
+> "swapfile_maximum_size" and cache the value of old max_swapfile_size(), so
+> that we don't need to calculate the value every time.
+>
+> Caching the value in swapfile_init() is safe because when reaching the
+> phase we should have initialized all the relevant information.  Here the
+> major arch to look after is x86, which defines the max size based on L1TF
+> mitigation.
+>
+> Here both X86_BUG_L1TF or l1tf_mitigation should have been setup properly
+> when reaching swapfile_init(). As a reference, the code path looks like
+> this for x86:
+>
+> - start_kernel
+>   - setup_arch
+>     - early_cpu_init
+>       - early_identify_cpu --> setup X86_BUG_L1TF
+>   - parse_early_param
+>     - l1tf_cmdline --> set l1tf_mitigation
+>   - check_bugs
+>     - l1tf_select_mitigation --> set l1tf_mitigation
+>   - arch_call_rest_init
+>     - rest_init
+>       - kernel_init
+>         - kernel_init_freeable
+>           - do_basic_setup
+>             - do_initcalls --> calls swapfile_init() (initcall level 4)
+>
+> The swapfile size only depends on swp pte format on non-x86 archs, so
+> caching it is safe too.
+>
+> Since at it, rename max_swapfile_size() to arch_max_swapfile_size() because
+> arch can define its own function, so it's more straightforward to have
+> "arch_" as its prefix.  At the meantime, keep the swapfile_maximum_size()
+> function to fetch the value from the cache initialized in swapfile_init().
+>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
+> ---
+>  arch/x86/mm/init.c |  2 +-
+>  mm/swapfile.c      | 10 +++++++++-
+>  2 files changed, 10 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
+> index 82a042c03824..9121bc1b9453 100644
+> --- a/arch/x86/mm/init.c
+> +++ b/arch/x86/mm/init.c
+> @@ -1054,7 +1054,7 @@ void update_cache_mode_entry(unsigned entry, enum page_cache_mode cache)
+>  }
+>  
+>  #ifdef CONFIG_SWAP
+> -unsigned long max_swapfile_size(void)
+> +unsigned long arch_max_swapfile_size(void)
+>  {
+>  	unsigned long pages;
+>  
+> diff --git a/mm/swapfile.c b/mm/swapfile.c
+> index 1fdccd2f1422..794fa37bd0c3 100644
+> --- a/mm/swapfile.c
+> +++ b/mm/swapfile.c
+> @@ -63,6 +63,7 @@ EXPORT_SYMBOL_GPL(nr_swap_pages);
+>  /* protected with swap_lock. reading in vm_swap_full() doesn't need lock */
+>  long total_swap_pages;
+>  static int least_priority = -1;
+> +static unsigned long swapfile_maximum_size;
+>  
+>  static const char Bad_file[] = "Bad swap file entry ";
+>  static const char Unused_file[] = "Unused swap file entry ";
+> @@ -2816,11 +2817,16 @@ unsigned long generic_max_swapfile_size(void)
+>  }
+>  
+>  /* Can be overridden by an architecture for additional checks. */
+> -__weak unsigned long max_swapfile_size(void)
+> +__weak unsigned long arch_max_swapfile_size(void)
+>  {
+>  	return generic_max_swapfile_size();
+>  }
+>  
+> +unsigned long max_swapfile_size(void)
+> +{
+> +	return swapfile_maximum_size;
+> +}
+> +
 
-configs tested: 53
-configs skipped: 2
+It appears unnecessary to hide a variable with a function.  Why not just
+use the variable directly.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Best Regards,
+Huang, Ying
 
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-x86_64                        randconfig-a004
-x86_64                        randconfig-a002
-i386                                defconfig
-x86_64                          rhel-8.3-func
-x86_64                              defconfig
-x86_64                         rhel-8.3-kunit
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-x86_64                           rhel-8.3-kvm
-x86_64                        randconfig-a015
-x86_64                    rhel-8.3-kselftests
-x86_64                           rhel-8.3-syz
-x86_64                        randconfig-a006
-arm                                 defconfig
-x86_64                               rhel-8.3
-i386                             allyesconfig
-riscv                randconfig-r042-20220810
-i386                          randconfig-a014
-arc                  randconfig-r043-20220810
-x86_64                           allyesconfig
-arm64                            allyesconfig
-i386                          randconfig-a012
-i386                          randconfig-a016
-arm                              allyesconfig
-s390                 randconfig-r044-20220810
-ia64                             allmodconfig
-m68k                             allyesconfig
-m68k                             allmodconfig
-arc                              allyesconfig
-alpha                            allyesconfig
-powerpc                           allnoconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-sh                               allmodconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-
-clang tested configs:
-x86_64                        randconfig-a012
-x86_64                        randconfig-a016
-x86_64                        randconfig-a005
-x86_64                        randconfig-a001
-x86_64                        randconfig-a014
-x86_64                        randconfig-a003
-i386                          randconfig-a013
-i386                          randconfig-a015
-hexagon              randconfig-r041-20220810
-i386                          randconfig-a011
-hexagon              randconfig-r045-20220810
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>  static unsigned long read_swap_header(struct swap_info_struct *p,
+>  					union swap_header *swap_header,
+>  					struct inode *inode)
+> @@ -3677,6 +3683,8 @@ static int __init swapfile_init(void)
+>  	for_each_node(nid)
+>  		plist_head_init(&swap_avail_heads[nid]);
+>  
+> +	swapfile_maximum_size = arch_max_swapfile_size();
+> +
+>  	return 0;
+>  }
+>  subsys_initcall(swapfile_init);

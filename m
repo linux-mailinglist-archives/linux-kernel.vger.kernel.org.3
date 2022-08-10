@@ -2,307 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0FEF58EEDC
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 16:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0370858EEE4
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 16:58:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232793AbiHJO4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 10:56:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41758 "EHLO
+        id S232385AbiHJO6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 10:58:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231300AbiHJO4g (ORCPT
+        with ESMTP id S229567AbiHJO6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 10:56:36 -0400
-Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6666E8B5
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:56:32 -0700 (PDT)
-Received: by mail-ot1-x32a.google.com with SMTP id r10-20020a056830448a00b0063711786b01so2934332otv.11
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:56:32 -0700 (PDT)
+        Wed, 10 Aug 2022 10:58:48 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD666E8B5
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:58:46 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id ay39-20020a05600c1e2700b003a5503a80cfso1120689wmb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:58:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc;
-        bh=4GbuXOlEIgZIiC7PpH0qrTBvd6QWDbyQ6vaZF7sexsQ=;
-        b=hpXMEiNGklbVRkf+MRDxP1TGRgsEj2HpVJl7lSOTiu5nLpaY3SgmVkl9sp1jaMWoF3
-         r/78PwQ29VbqGeYpQhm7qHm3rFAVyE2YBOjIoKbcci+RkifRfmhEzWwWwk7arStT3Ph6
-         fKTjBP4IN14bwCT+nvGoXM96gc5DLLAwwc+8MJ8cDpKPEgTrK10JNBsP+zzggPMwaiEd
-         UbFt/ncJ1Uw8qnD8UrLJt4rKdyIVOL/25JeEz3ecfqQC4+7cGdOmuOIkUqnvILVFqXUl
-         d3BBmWsyQ0AUAdyNQjclLKUzvffKAH05wwOlDU11yDfeIUz7OHYYbzMwW8F0zp/Y2BSK
-         peIA==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=BqfACkhwAWP9NRXH+qghT2ZCWYZmFePzRNh6qpDv98Y=;
+        b=nHP8P6YcWU8257oudlhd8RfKMaaMHLA4pfv48irGmWc0Uu4/ML7Zx6fBtx6ZumQIMp
+         i1Shj79/kbTs3nRmRmfa/uhMQA3oyLWWvzCCZG/ax0n+Y+2/BDoTQymVclDr3OdWyeHi
+         NT0gczx4C6PJwJkY38KiYweLeShEu7SSrnkxn6pr3xj/DC2WHncuNuXfyMRA7dO2Zipv
+         Bzu+n50FX3Y+AiY1NbgX2tCcN7d1UloZLDBayfQ/8HsBlkLnnNkyvK5J/p7JfclmIYgY
+         7MUoBsBcnU8NYdVfMNrsQdYCYJZxVBUHV7x/9r6O+HSoAZVbGoAnQVQodVu9FJPNcwGD
+         V7fQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:user-agent:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc;
-        bh=4GbuXOlEIgZIiC7PpH0qrTBvd6QWDbyQ6vaZF7sexsQ=;
-        b=IdUO8EsXIvMZqQ5pRem2M3nk6EyDm/lY8hLtaQQeuJH2Spcxr1g36GgZwKh6PtqGSq
-         oBQyfQNSM+is14gsUVe2IP4KMHR8o9J9aZK5LXI7OCeKcA4b44MertcrdBzICVpLslk8
-         1QuJhrhiiH8l1g7mKT3bMNCTPNC3szkpECBcP5dXpLjzF2KH8v/yK8to25rXj8aVtJ+K
-         QI9lO048N092yiw72BP0Y3RAXth7snQ7c5PkUWlKWrO0dbNZrHtno1+oCWc6cv4ueFg+
-         CBOkaZn5TJzkxgd3tgWRWtJYVUW7pCs3yuayAayXWZBseL0vz6k3Xd3S7rXrq4mTKy79
-         ewOA==
-X-Gm-Message-State: ACgBeo1nvNkX0WFBk5wIOLeD4iwDN5o4Cj2KlLaXjG23JgdRN2O3yIlT
-        K/Bs+5hN8GKHGZnu9KtTWwER6g==
-X-Google-Smtp-Source: AA6agR4kZA4f01vweDzQnP9WztY2lHtLUggSPAycilMEg7RDztr4QxjSTsBBN+f5IFbU6igWGaNvZg==
-X-Received: by 2002:a05:6830:3707:b0:636:913f:2313 with SMTP id bl7-20020a056830370700b00636913f2313mr10119497otb.290.1660143392087;
-        Wed, 10 Aug 2022 07:56:32 -0700 (PDT)
-Received: from [192.168.1.5] ([103.97.165.210])
-        by smtp.gmail.com with ESMTPSA id z4-20020a0568301da400b00636df823125sm716106oti.26.2022.08.10.07.56.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 07:56:31 -0700 (PDT)
-Message-ID: <18c8e9c74955c08fdbd631a35c51b30f3cff3cd3.camel@ventanamicro.com>
-Subject: Re: [PATCH v5] perf arch events: riscv sbi firmware std event files
-From:   Mayuresh Chitale <mchitale@ventanamicro.com>
-To:     Nikita Shubin <nikita.shubin@maquefel.me>
-Cc:     linux@yadro.com, Genevieve Chan <genevieve.chan@starfivetech.com>,
-        =?ISO-8859-1?Q?Jo=E3o_M=E1rio?= Domingos 
-        <joao.mario@tecnico.ulisboa.pt>,
-        Nikita Shubin <n.shubin@yadro.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Kautuk Consul <kconsul@ventanamicro.com>
-Date:   Wed, 10 Aug 2022 20:26:18 +0530
-In-Reply-To: <20220628114625.166665-4-nikita.shubin@maquefel.me>
-References: <20220628114625.166665-1-nikita.shubin@maquefel.me>
-         <20220628114625.166665-4-nikita.shubin@maquefel.me>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=BqfACkhwAWP9NRXH+qghT2ZCWYZmFePzRNh6qpDv98Y=;
+        b=k+juNAjICFYq3Szj3uLsCUIRLyiIVzkQCYGQ4P/1w2zBfPKCUOZSxpkSx5634MrGZb
+         RqQVvw5i8ois+6VniBLH2EyquAUyBfQKxQKY0PM0dmlbIlF+v6JWkklmD/PJK+ZNMboA
+         zQ/Q8vr+9slpehrU5hUwo0vXnu0eoIEFEBxt7fclha7cmY3RR+DP+4wxARYDbaWjiCMq
+         /x5umMKm/2RluSAEYldBbhDimPbRchGMU0g7vMTg1HdR603hJnCH5RPNKpt2S8cx9HoG
+         Wxw4uzsOYEx0Si2o029InsHABBlLVL4FtrXmHTY6yuLSFg67UybvdKtLwjTB3HkODCH0
+         0FvA==
+X-Gm-Message-State: ACgBeo0lRxAuG60OVdqVUxr8+JqNomCX6Hd9MeyRjzq/Sv18bIw1jnel
+        TmCQqxplPDAeuCxwQSUkNx7UkUr6vXT5Prr1qtN7LQ==
+X-Google-Smtp-Source: AA6agR5WuP6xwJAiTVFsRVVFH5xgiWOKm009pwYL5WdGG1ScSz7ubiU7aJojf133NxPrFFrNUdCIM3mcnruLRy+t/5g=
+X-Received: by 2002:a05:600c:1e05:b0:3a5:b441:e9c with SMTP id
+ ay5-20020a05600c1e0500b003a5b4410e9cmr2058339wmb.24.1660143525421; Wed, 10
+ Aug 2022 07:58:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20220809134603.1769279-1-roberto.sassu@huawei.com>
+ <20220809134603.1769279-2-roberto.sassu@huawei.com> <YvKRYRjJdXbAWL6Y@kernel.org>
+ <c9e73d7aa51a47c585b935a41dbf1924@huawei.com> <CAO-hwJLNsV00pEcTY65TBNszCTh1DfhidK+m5NULiwtGr7GLmw@mail.gmail.com>
+In-Reply-To: <CAO-hwJLNsV00pEcTY65TBNszCTh1DfhidK+m5NULiwtGr7GLmw@mail.gmail.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Wed, 10 Aug 2022 07:58:09 -0700
+Message-ID: <CAJD7tkbcLU11u3w4DhqnUbbUE_QW60fBLoZngWTXHe9qTbonNw@mail.gmail.com>
+Subject: Re: [PATCH v9 01/10] btf: Add a new kfunc flag which allows to mark a
+ function to be sleepable
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Roberto Sassu <roberto.sassu@huawei.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "martin.lau@linux.dev" <martin.lau@linux.dev>,
+        "song@kernel.org" <song@kernel.org>, "yhs@fb.com" <yhs@fb.com>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "sdf@google.com" <sdf@google.com>,
+        "haoluo@google.com" <haoluo@google.com>,
+        "jolsa@kernel.org" <jolsa@kernel.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "paul@paul-moore.com" <paul@paul-moore.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-06-28 at 14:45 +0300, Nikita Shubin wrote:
-> From: Nikita Shubin <n.shubin@yadro.com>
-> 
-> Firmware events are defined by "RISC-V Supervisor Binary Interface
-> Specification", which means they should be always available as long
-> as
-> firmware supports >= 0.3.0 SBI.
-> 
-> Expose them to arch std events, so they can be reused by particular
-> PMU bindings.
-> 
-> Signed-off-by: Nikita Shubin <n.shubin@yadro.com>
-> ---
-> v4->v5:
-> - changed EventCode to ConfigCode, as 63 bit exceeds event code
-> format
-> ---
->  .../arch/riscv/riscv-sbi-firmware.json        | 134
-> ++++++++++++++++++
->  1 file changed, 134 insertions(+)
->  create mode 100644 tools/perf/pmu-events/arch/riscv/riscv-sbi-
-> firmware.json
-> 
-> diff --git a/tools/perf/pmu-events/arch/riscv/riscv-sbi-firmware.json 
-> b/tools/perf/pmu-events/arch/riscv/riscv-sbi-firmware.json
-> new file mode 100644
-> index 000000000000..b9d305f1ada8
-> --- /dev/null
-> +++ b/tools/perf/pmu-events/arch/riscv/riscv-sbi-firmware.json
-> @@ -0,0 +1,134 @@
-> +[
-> +  {
-> +    "PublicDescription": "Misaligned load trap",
-> +    "ConfigCode": "0x8000000000000000",
-> +    "EventName": "FW_MISALIGNED_LOAD",
-> +    "BriefDescription": "Misaligned load trap event"
-> +  },
-> +  {
-> +    "PublicDescription": "Misaligned store trap",
-> +    "ConfigCode": "0x8000000000000001",
-> +    "EventName": "FW_MISALIGNED_STORE",
-> +    "BriefDescription": "Misaligned store trap event"
-> +  },
-> +  {
-> +    "PublicDescription": "Load access trap",
-> +    "ConfigCode": "0x8000000000000002",
-> +    "EventName": "FW_ACCESS_LOAD",
-> +    "BriefDescription": "Load access trap event"
-> +  },
-> +  {
-> +    "PublicDescription": "Store access trap",
-> +    "ConfigCode": "0x8000000000000003",
-> +    "EventName": "FW_ACCESS_STORE",
-> +    "BriefDescription": "Store access trap event"
-> +  },
-> +  {
-> +    "PublicDescription": "Illegal instruction trap",
-> +    "ConfigCode": "0x8000000000000004",
-> +    "EventName": "FW_ILLEGAL_INSN",
-> +    "BriefDescription": "Illegal instruction trap event"
-> +  },
-> +  {
-> +    "PublicDescription": "Set timer event",
-> +    "ConfigCode": "0x8000000000000005",
-> +    "EventName": "FW_SET_TIMER",
-> +    "BriefDescription": "Set timer event"
-> +  },
-> +  {
-> +    "PublicDescription": "Sent IPI to other HART event",
-> +    "ConfigCode": "0x8000000000000006",
-> +    "EventName": "FW_IPI_SENT",
-> +    "BriefDescription": "Sent IPI to other HART event"
-> +  },
-> +  {
-> +    "PublicDescription": "Received IPI from other HART event",
-> +    "ConfigCode": "0x8000000000000007",
-> +    "EventName": "FW_IPI_RECEIVED",
-> +    "BriefDescription": "Received IPI from other HART event"
-> +  },
-> +  {
-> +    "PublicDescription": "Sent FENCE.I request to other HART event",
-> +    "ConfigCode": "0x8000000000000008",
-> +    "EventName": "FW_FENCE_I_SENT",
-> +    "BriefDescription": "Sent FENCE.I request to other HART event"
-> +  },
-> +  {
-> +    "PublicDescription": "Received FENCE.I request from other HART
-> event",
-> +    "ConfigCode": "0x8000000000000009",
-> +    "EventName": "FW_FENCE_I_RECEIVED",
-> +    "BriefDescription": "Received FENCE.I request from other HART
-> event"
-> +  },
-> +  {
-> +    "PublicDescription": "Sent SFENCE.VMA request to other HART
-> event",
-> +    "ConfigCode": "0x80000000000000a",
-> +    "EventName": "FW_SFENCE_VMA_SENT",
-> +    "BriefDescription": "Sent SFENCE.VMA request to other HART
-> event"
-> +  },
-> +  {
-> +    "PublicDescription": "Received SFENCE.VMA request from other
-> HART event",
-> +    "ConfigCode": "0x800000000000000b",
-> +    "EventName": "FW_SFENCE_VMA_RECEIVED",
-> +    "BriefDescription": "Received SFENCE.VMA request from other HART
-> event"
-> +  },
-> +  {
-> +    "PublicDescription": "Sent SFENCE.VMA with ASID request to other
-> HART event",
-> +    "ConfigCode": "0x800000000000000c",
-> +    "EventName": "FW_SFENCE_VMA_RECEIVED",
-> +    "BriefDescription": "Sent SFENCE.VMA with ASID request to other
-> HART event"
-> +  },
-> +  {
-> +    "PublicDescription": "Received SFENCE.VMA with ASID request from
-> other HART event",
-> +    "ConfigCode": "0x800000000000000d",
-> +    "EventName": "FW_SFENCE_VMA_ASID_RECEIVED",
-> +    "BriefDescription": "Received SFENCE.VMA with ASID request from
-> other HART event"
-> +  },
-> +  {
-> +    "PublicDescription": "Sent HFENCE.GVMA request to other HART
-> event",
-> +    "ConfigCode": "0x800000000000000e",
-> +    "EventName": "FW_HFENCE_GVMA_SENT",
-> +    "BriefDescription": "Sent HFENCE.GVMA request to other HART
-> event"
-> +  },
-> +  {
-> +    "PublicDescription": "Received HFENCE.GVMA request from other
-> HART event",
-> +    "ConfigCode": "0x800000000000000f",
-> +    "EventName": "FW_HFENCE_GVMA_RECEIVED",
-> +    "BriefDescription": "Received HFENCE.GVMA request from other
-> HART event"
-> +  },
-> +  {
-> +    "PublicDescription": "Sent HFENCE.GVMA with VMID request to
-> other HART event",
-> +    "ConfigCode": "0x8000000000000010",
-> +    "EventName": "FW_HFENCE_GVMA_VMID_SENT",
-> +    "BriefDescription": "Sent HFENCE.GVMA with VMID request to other
-> HART event"
-> +  },
-> +  {
-> +    "PublicDescription": "Received HFENCE.GVMA with VMID request
-> from other HART event",
-> +    "ConfigCode": "0x8000000000000011",
-> +    "EventName": "FW_HFENCE_GVMA_VMID_RECEIVED",
-> +    "BriefDescription": "Received HFENCE.GVMA with VMID request from
-> other HART event"
-> +  },
-> +  {
-> +    "PublicDescription": "Sent HFENCE.VVMA request to other HART
-> event",
-> +    "ConfigCode": "0x8000000000000012",
-> +    "EventName": "FW_HFENCE_VVMA_SENT",
-> +    "BriefDescription": "Sent HFENCE.VVMA request to other HART
-> event"
-> +  },
-> +  {
-> +    "PublicDescription": "Received HFENCE.VVMA request from other
-> HART event",
-> +    "ConfigCode": "0x8000000000000013",
-> +    "EventName": "FW_HFENCE_VVMA_RECEIVED",
-> +    "BriefDescription": "Received HFENCE.VVMA request from other
-> HART event"
-> +  },
-> +  {
-> +    "PublicDescription": "Sent HFENCE.VVMA with ASID request to
-> other HART event",
-> +    "ConfigCode": "0x8000000000000014",
-> +    "EventName": "FW_HFENCE_VVMA_ASID_SENT",
-> +    "BriefDescription": "Sent HFENCE.VVMA with ASID request to other
-> HART event"
-> +  },
-> +  {
-> +    "PublicDescription": "Received HFENCE.VVMA with ASID request
-> from other HART event",
-> +    "ConfigCode": "0x8000000000000015",
-> +    "EventName": "FW_HFENCE_VVMA_ASID_RECEIVED",
-> +    "BriefDescription": "Received HFENCE.VVMA with ASID request from
-> other HART event"
-> +  }
-> +]
+On Wed, Aug 10, 2022 at 7:26 AM Benjamin Tissoires
+<benjamin.tissoires@redhat.com> wrote:
+>
+> On Wed, Aug 10, 2022 at 3:44 PM Roberto Sassu <roberto.sassu@huawei.com> wrote:
+> >
+> > > From: Jarkko Sakkinen [mailto:jarkko@kernel.org]
+> > > Sent: Tuesday, August 9, 2022 6:55 PM
+> > > On Tue, Aug 09, 2022 at 03:45:54PM +0200, Roberto Sassu wrote:
+> > > > From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> > > >
+> > > > From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> > > >
+> > > > This allows to declare a kfunc as sleepable and prevents its use in
+> > > > a non sleepable program.
+> > >
+> > > Nit: "Declare a kfunc as sleepable and prevent its use in a
+> > > non-sleepable program."
+> > >
+> > > It's missing the part *how* the patch accomplishes its goals.
+> >
+> > I will add:
+> >
+> > If an eBPF program is going to call a kfunc declared as sleepable,
+> > eBPF will look at the eBPF program flags. If BPF_F_SLEEPABLE is
+> > not set, execution of that program is denied.
+>
+> All those changes are looking good to me.
+>
+> Thanks a lot for keeping pushing on this patch :)
 
-When testing with perf using firmware events we saw this error: 
-WARNING: event 'N/A' not valid (bits 59 of config '80000000000000a' not
-supported by kernel)!
+Multiple series other than the HID one started resending your patch
+once you dropped it, it's obviously needed :) Thanks for sending it in
+the first place :)
 
-It looks it is due to a typo and applying the below patch resolved the
-issue for us.
-
-Tested-by: Kautuk Consul <kconsul@ventanamicro.com>
-
-diff --git a/tools/perf/pmu-events/arch/riscv/riscv-sbi-firmware.json
-b/tools/perf/pmu-events/arch/riscv/riscv-sbi-firmware.json
-index b9d305f1ada8..a9939823b14b 100644
---- a/tools/perf/pmu-events/arch/riscv/riscv-sbi-firmware.json
-+++ b/tools/perf/pmu-events/arch/riscv/riscv-sbi-firmware.json
-@@ -61,7 +61,7 @@
-   },
-   {
-     "PublicDescription": "Sent SFENCE.VMA request to other HART
-event",
--    "ConfigCode": "0x80000000000000a",
-+    "ConfigCode": "0x800000000000000a",
-     "EventName": "FW_SFENCE_VMA_SENT",
-     "BriefDescription": "Sent SFENCE.VMA request to other HART event"
-   },
-
-
-
+>
+> Cheers,
+> Benjamin
+>
+> >
+> > Roberto
+> >
+> > > > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> > > > Co-developed-by: Yosry Ahmed <yosryahmed@google.com>
+> > > > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
+> > > > Signed-off-by: Hao Luo <haoluo@google.com>
+> > > > ---
+> > > >  Documentation/bpf/kfuncs.rst | 6 ++++++
+> > > >  include/linux/btf.h          | 1 +
+> > > >  kernel/bpf/btf.c             | 9 +++++++++
+> > > >  3 files changed, 16 insertions(+)
+> > > >
+> > > > diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
+> > > > index c0b7dae6dbf5..c8b21de1c772 100644
+> > > > --- a/Documentation/bpf/kfuncs.rst
+> > > > +++ b/Documentation/bpf/kfuncs.rst
+> > > > @@ -146,6 +146,12 @@ that operate (change some property, perform some
+> > > operation) on an object that
+> > > >  was obtained using an acquire kfunc. Such kfuncs need an unchanged pointer
+> > > to
+> > > >  ensure the integrity of the operation being performed on the expected object.
+> > > >
+> > > > +2.4.6 KF_SLEEPABLE flag
+> > > > +-----------------------
+> > > > +
+> > > > +The KF_SLEEPABLE flag is used for kfuncs that may sleep. Such kfuncs can
+> > > only
+> > > > +be called by sleepable BPF programs (BPF_F_SLEEPABLE).
+> > > > +
+> > > >  2.5 Registering the kfuncs
+> > > >  --------------------------
+> > > >
+> > > > diff --git a/include/linux/btf.h b/include/linux/btf.h
+> > > > index cdb376d53238..976cbdd2981f 100644
+> > > > --- a/include/linux/btf.h
+> > > > +++ b/include/linux/btf.h
+> > > > @@ -49,6 +49,7 @@
+> > > >   * for this case.
+> > > >   */
+> > > >  #define KF_TRUSTED_ARGS (1 << 4) /* kfunc only takes trusted pointer
+> > > arguments */
+> > > > +#define KF_SLEEPABLE   (1 << 5) /* kfunc may sleep */
+> > > >
+> > > >  struct btf;
+> > > >  struct btf_member;
+> > > > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+> > > > index 7e64447659f3..d3e4c86b8fcd 100644
+> > > > --- a/kernel/bpf/btf.c
+> > > > +++ b/kernel/bpf/btf.c
+> > > > @@ -6175,6 +6175,7 @@ static int btf_check_func_arg_match(struct
+> > > bpf_verifier_env *env,
+> > > >  {
+> > > >     enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
+> > > >     bool rel = false, kptr_get = false, trusted_arg = false;
+> > > > +   bool sleepable = false;
+> > > >     struct bpf_verifier_log *log = &env->log;
+> > > >     u32 i, nargs, ref_id, ref_obj_id = 0;
+> > > >     bool is_kfunc = btf_is_kernel(btf);
+> > > > @@ -6212,6 +6213,7 @@ static int btf_check_func_arg_match(struct
+> > > bpf_verifier_env *env,
+> > > >             rel = kfunc_flags & KF_RELEASE;
+> > > >             kptr_get = kfunc_flags & KF_KPTR_GET;
+> > > >             trusted_arg = kfunc_flags & KF_TRUSTED_ARGS;
+> > > > +           sleepable = kfunc_flags & KF_SLEEPABLE;
+> > > >     }
+> > > >
+> > > >     /* check that BTF function arguments match actual types that the
+> > > > @@ -6419,6 +6421,13 @@ static int btf_check_func_arg_match(struct
+> > > bpf_verifier_env *env,
+> > > >                     func_name);
+> > > >             return -EINVAL;
+> > > >     }
+> > > > +
+> > > > +   if (sleepable && !env->prog->aux->sleepable) {
+> > > > +           bpf_log(log, "kernel function %s is sleepable but the program is
+> > > not\n",
+> > > > +                   func_name);
+> > > > +           return -EINVAL;
+> > > > +   }
+> > > > +
+> > > >     /* returns argument register number > 0 in case of reference release
+> > > kfunc */
+> > > >     return rel ? ref_regno : 0;
+> > > >  }
+> > > > --
+> > > > 2.25.1
+> > > >
+> > >
+> > > BR, Jarkko
+> >
+>

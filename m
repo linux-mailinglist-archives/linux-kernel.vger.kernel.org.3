@@ -2,187 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A29158EECB
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 16:51:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C2C458EED3
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 16:52:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231937AbiHJOv1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 10:51:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37666 "EHLO
+        id S232496AbiHJOwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 10:52:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232775AbiHJOvV (ORCPT
+        with ESMTP id S231980AbiHJOwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 10:51:21 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D25B766A77
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:51:17 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id l21so4878237ljj.2
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:51:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=DtUCGMChLqmvdjMLfi90xiJ0nBqpPpWGiSNCuCWE+Yo=;
-        b=gtpZL/WRnblKgLiaoK7ZSZg9v/iM6jRgDkCMiBpWSLxI5nWnpjGGag8G80tVh8JDxX
-         45Wefz8i3Is2ewLBX6X2bQtyVtktt6gOUNKUdll6rjoNl53cvytNYg0a2I1FbJimlSXC
-         4pGAaCBV0mGYkGk/qbuKbWC9Bt42Zh+ZQAe8MIa3pdqLC6eBPU4wOL6AzjnikGb6j6WS
-         pEpuSFMYHFwAwjJY5e/ZVu1MYJNGJ+0fF0R4+HOmxx+7+7BoLBlOmVvfDY35Bxy7urln
-         UbD7APoyL/2/sx+GcP26TEeLqQYriKnA0xunIPTpEKKXg15oryeon9vAGTirHd0tqCZu
-         YHFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=DtUCGMChLqmvdjMLfi90xiJ0nBqpPpWGiSNCuCWE+Yo=;
-        b=VLswV5HF20DtNPhlCjLx0v30UF7mzAr5fSut1ZyZVW2brUkenktDVz/R1hasrIh+BI
-         uhq5m5UWdmDieu3YLw2d5i0qtvCYCpsfvp3+rfPO+G23gRDWfdTIP4GYyruiopybXjtd
-         YFQJFKjZVboaPPJ2PrVKtT1plBOj19UdFbZO7ZeFUvz7zNExlH1vc8hqZubiHV72W4vS
-         bjghCzMtUY7YssZ6V9d3WhQv/igr4xx2MNaHWkDlqytw2/DlPl8ejZNqel7lQM0V1ADy
-         yBZGRLARnu2gf6IyJKqODgLs54ueSxDRvoR4BwH8/XhE4nzGehSe2LkOZOg72F0VrouN
-         wMIQ==
-X-Gm-Message-State: ACgBeo3oMXAjLJKlDKBVaKmFADzejMMavkd/PH+QsbNfKH6e2Oi/wP3d
-        /MdDS0lROj5UkauTAhmaIbozIQ==
-X-Google-Smtp-Source: AA6agR6BUj46IC9KhSfaa/BLM4gLct73I2FdwhqcZrf/okZeq/LcOrf+2lot6WC6KGlFP27wO/cE6Q==
-X-Received: by 2002:a2e:5351:0:b0:25e:bba1:ae87 with SMTP id t17-20020a2e5351000000b0025ebba1ae87mr7164456ljd.353.1660143076235;
-        Wed, 10 Aug 2022 07:51:16 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id z16-20020a19f710000000b00485caa0f5dfsm372763lfe.44.2022.08.10.07.51.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Aug 2022 07:51:15 -0700 (PDT)
-Message-ID: <bd0fb511-043f-55fc-5f9d-1cbeeca066e6@linaro.org>
-Date:   Wed, 10 Aug 2022 17:51:14 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 2/4] arm64: dts: qcom: sdm845: add displayport node
+        Wed, 10 Aug 2022 10:52:42 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCADF74CF8;
+        Wed, 10 Aug 2022 07:52:40 -0700 (PDT)
+Received: from fraeml713-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M2tFt5ZZZz67y8S;
+        Wed, 10 Aug 2022 22:52:34 +0800 (CST)
+Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
+ fraeml713-chm.china.huawei.com (10.206.15.32) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 10 Aug 2022 16:52:38 +0200
+Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
+ fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
+ Wed, 10 Aug 2022 16:52:38 +0200
+From:   Roberto Sassu <roberto.sassu@huawei.com>
+To:     Daniel Borkmann <daniel@iogearbox.net>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+CC:     Jarkko Sakkinen <jarkko@kernel.org>,
+        "ast@kernel.org" <ast@kernel.org>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "martin.lau@linux.dev" <martin.lau@linux.dev>,
+        "song@kernel.org" <song@kernel.org>, "yhs@fb.com" <yhs@fb.com>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "sdf@google.com" <sdf@google.com>,
+        "haoluo@google.com" <haoluo@google.com>,
+        "jolsa@kernel.org" <jolsa@kernel.org>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "dhowells@redhat.com" <dhowells@redhat.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "paul@paul-moore.com" <paul@paul-moore.com>,
+        "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com" <serge@hallyn.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org" 
+        <linux-security-module@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Yosry Ahmed <yosryahmed@google.com>
+Subject: RE: [PATCH v9 01/10] btf: Add a new kfunc flag which allows to mark a
+ function to be sleepable
+Thread-Topic: [PATCH v9 01/10] btf: Add a new kfunc flag which allows to mark
+ a function to be sleepable
+Thread-Index: AQHYq/aDa3kCDLsk5EK6T80CaXl/sK2mqA6AgAF8nfD//+wHAIAAA64AgAAlKhA=
+Date:   Wed, 10 Aug 2022 14:52:38 +0000
+Message-ID: <294f7bc395a04a129703a522c42d021e@huawei.com>
+References: <20220809134603.1769279-1-roberto.sassu@huawei.com>
+ <20220809134603.1769279-2-roberto.sassu@huawei.com>
+ <YvKRYRjJdXbAWL6Y@kernel.org> <c9e73d7aa51a47c585b935a41dbf1924@huawei.com>
+ <CAO-hwJLNsV00pEcTY65TBNszCTh1DfhidK+m5NULiwtGr7GLmw@mail.gmail.com>
+ <e807779b-e72b-e197-b833-43373e87d3df@iogearbox.net>
+In-Reply-To: <e807779b-e72b-e197-b833-43373e87d3df@iogearbox.net>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220810035424.2796777-1-bjorn.andersson@linaro.org>
- <20220810035424.2796777-3-bjorn.andersson@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220810035424.2796777-3-bjorn.andersson@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.45.144.193]
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/08/2022 06:54, Bjorn Andersson wrote:
-> From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> 
-> Add displayport controller device node, describing DisplayPort hardware
-> block on SDM845.
-> 
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
-
-If the patchset does not go with your dt-bindings change, it won't be
-tested by Rob's bot for that binding. Responsibility to run dtbs_check
-is then on you. :)
-
->  arch/arm64/boot/dts/qcom/sdm845.dtsi | 82 +++++++++++++++++++++++++++-
->  1 file changed, 80 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> index eae307a4babf..a8ba6ebc714f 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
-> @@ -4457,13 +4457,20 @@ ports {
->  
->  					port@0 {
->  						reg = <0>;
-> -						dpu_intf1_out: endpoint {
-> -							remote-endpoint = <&dsi0_in>;
-> +						dpu_intf0_out: endpoint {
-> +							remote-endpoint = <&dp_in>;
->  						};
->  					};
->  
->  					port@1 {
->  						reg = <1>;
-> +						dpu_intf1_out: endpoint {
-> +							remote-endpoint = <&dsi0_in>;
-> +						};
-> +					};
-> +
-> +					port@2 {
-> +						reg = <2>;
->  						dpu_intf2_out: endpoint {
->  							remote-endpoint = <&dsi1_in>;
->  						};
-> @@ -4495,6 +4502,77 @@ opp-430000000 {
->  				};
->  			};
->  
-> +			mdss_dp: displayport-controller@ae90000 {
-> +				status = "disabled";
-
-status at the end.
-
-> +				compatible = "qcom,sdm845-dp";
-> +
-> +				reg = <0 0xae90000 0 0x200>,
-> +				      <0 0xae90200 0 0x200>,
-> +				      <0 0xae90400 0 0x600>,
-> +				      <0 0xae90a00 0 0x600>,
-> +				      <0 0xae91000 0 0x600>;
-> +
-> +				interrupt-parent = <&mdss>;
-> +				interrupts = <12>;
-> +
-> +				clocks = <&dispcc DISP_CC_MDSS_AHB_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_DP_AUX_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_DP_LINK_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_DP_LINK_INTF_CLK>,
-> +					 <&dispcc DISP_CC_MDSS_DP_PIXEL_CLK>;
-> +				clock-names = "core_iface", "core_aux", "ctrl_link",
-> +					      "ctrl_link_iface", "stream_pixel";
-> +				#clock-cells = <1>;
-> +				assigned-clocks = <&dispcc DISP_CC_MDSS_DP_LINK_CLK_SRC>,
-> +						  <&dispcc DISP_CC_MDSS_DP_PIXEL_CLK_SRC>;
-> +				assigned-clock-parents = <&dp_phy 0>, <&dp_phy 1>;
-> +				phys = <&dp_phy>;
-> +				phy-names = "dp";
-> +
-> +				operating-points-v2 = <&dp_opp_table>;
-> +				power-domains = <&rpmhpd SDM845_CX>;
-> +
-> +				ports {
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +					port@0 {
-> +						reg = <0>;
-> +						dp_in: endpoint {
-> +							remote-endpoint = <&dpu_intf0_out>;
-> +						};
-> +					};
-> +
-> +					port@1 {
-> +						reg = <1>;
-> +						dp_out: endpoint { };
-> +					};
-> +				};
-> +
-> +				dp_opp_table: dp-opp-table {
-
-Node name just "opp-table"
-
-> +					compatible = "operating-points-v2";
-> +
-
-Best regards,
-Krzysztof
+PiBGcm9tOiBEYW5pZWwgQm9ya21hbm4gW21haWx0bzpkYW5pZWxAaW9nZWFyYm94Lm5ldF0NCj4g
+U2VudDogV2VkbmVzZGF5LCBBdWd1c3QgMTAsIDIwMjIgNDozOSBQTQ0KPiBPbiA4LzEwLzIyIDQ6
+MjUgUE0sIEJlbmphbWluIFRpc3NvaXJlcyB3cm90ZToNCj4gPiBPbiBXZWQsIEF1ZyAxMCwgMjAy
+MiBhdCAzOjQ0IFBNIFJvYmVydG8gU2Fzc3UNCj4gPHJvYmVydG8uc2Fzc3VAaHVhd2VpLmNvbT4g
+d3JvdGU6DQo+ID4+PiBGcm9tOiBKYXJra28gU2Fra2luZW4gW21haWx0bzpqYXJra29Aa2VybmVs
+Lm9yZ10NCj4gPj4+IFNlbnQ6IFR1ZXNkYXksIEF1Z3VzdCA5LCAyMDIyIDY6NTUgUE0NCj4gPj4+
+IE9uIFR1ZSwgQXVnIDA5LCAyMDIyIGF0IDAzOjQ1OjU0UE0gKzAyMDAsIFJvYmVydG8gU2Fzc3Ug
+d3JvdGU6DQo+ID4+Pj4gRnJvbTogQmVuamFtaW4gVGlzc29pcmVzIDxiZW5qYW1pbi50aXNzb2ly
+ZXNAcmVkaGF0LmNvbT4NCj4gPj4+Pg0KPiA+Pj4+IEZyb206IEJlbmphbWluIFRpc3NvaXJlcyA8
+YmVuamFtaW4udGlzc29pcmVzQHJlZGhhdC5jb20+DQo+ID4+Pj4NCj4gPj4+PiBUaGlzIGFsbG93
+cyB0byBkZWNsYXJlIGEga2Z1bmMgYXMgc2xlZXBhYmxlIGFuZCBwcmV2ZW50cyBpdHMgdXNlIGlu
+DQo+ID4+Pj4gYSBub24gc2xlZXBhYmxlIHByb2dyYW0uDQo+ID4+Pg0KPiA+Pj4gTml0OiAiRGVj
+bGFyZSBhIGtmdW5jIGFzIHNsZWVwYWJsZSBhbmQgcHJldmVudCBpdHMgdXNlIGluIGENCj4gPj4+
+IG5vbi1zbGVlcGFibGUgcHJvZ3JhbS4iDQo+ID4+Pg0KPiA+Pj4gSXQncyBtaXNzaW5nIHRoZSBw
+YXJ0ICpob3cqIHRoZSBwYXRjaCBhY2NvbXBsaXNoZXMgaXRzIGdvYWxzLg0KPiA+Pg0KPiA+PiBJ
+IHdpbGwgYWRkOg0KPiA+Pg0KPiA+PiBJZiBhbiBlQlBGIHByb2dyYW0gaXMgZ29pbmcgdG8gY2Fs
+bCBhIGtmdW5jIGRlY2xhcmVkIGFzIHNsZWVwYWJsZSwNCj4gPj4gZUJQRiB3aWxsIGxvb2sgYXQg
+dGhlIGVCUEYgcHJvZ3JhbSBmbGFncy4gSWYgQlBGX0ZfU0xFRVBBQkxFIGlzDQo+ID4+IG5vdCBz
+ZXQsIGV4ZWN1dGlvbiBvZiB0aGF0IHByb2dyYW0gaXMgZGVuaWVkLg0KPiA+DQo+ID4gQWxsIHRo
+b3NlIGNoYW5nZXMgYXJlIGxvb2tpbmcgZ29vZCB0byBtZS4NCj4gPg0KPiA+IFRoYW5rcyBhIGxv
+dCBmb3Iga2VlcGluZyBwdXNoaW5nIG9uIHRoaXMgcGF0Y2ggOikNCj4gDQo+IFRoaXMgc2luZ2xl
+IG9uZSBmcm9tIHRoZSBzZXJpZXMgZ290IGFscmVhZHkgYXBwbGllZCBoZXJlOg0KPiANCj4gICAg
+aHR0cHM6Ly9naXQua2VybmVsLm9yZy9wdWIvc2NtL2xpbnV4L2tlcm5lbC9naXQvYnBmL2JwZi0N
+Cj4gbmV4dC5naXQvY29tbWl0Lz9pZD1mYTk2YjI0MjA0YWY0MjI3NGVjMTNkZmIyZjJlNjk5MGQ3
+NTEwZTU1DQoNCk9rLCBub3cgSSB1bmRlcnN0b29kIHRoZSBtZXJnZSBtZXNzYWdlIGJldHRlci4N
+Cg0KUm9iZXJ0bw0KDQo+ID4+Pj4gU2lnbmVkLW9mZi1ieTogQmVuamFtaW4gVGlzc29pcmVzIDxi
+ZW5qYW1pbi50aXNzb2lyZXNAcmVkaGF0LmNvbT4NCj4gPj4+PiBDby1kZXZlbG9wZWQtYnk6IFlv
+c3J5IEFobWVkIDx5b3NyeWFobWVkQGdvb2dsZS5jb20+DQo+ID4+Pj4gU2lnbmVkLW9mZi1ieTog
+WW9zcnkgQWhtZWQgPHlvc3J5YWhtZWRAZ29vZ2xlLmNvbT4NCj4gPj4+PiBTaWduZWQtb2ZmLWJ5
+OiBIYW8gTHVvIDxoYW9sdW9AZ29vZ2xlLmNvbT4NCj4gPj4+PiAtLS0NCj4gPj4+PiAgIERvY3Vt
+ZW50YXRpb24vYnBmL2tmdW5jcy5yc3QgfCA2ICsrKysrKw0KPiA+Pj4+ICAgaW5jbHVkZS9saW51
+eC9idGYuaCAgICAgICAgICB8IDEgKw0KPiA+Pj4+ICAga2VybmVsL2JwZi9idGYuYyAgICAgICAg
+ICAgICB8IDkgKysrKysrKysrDQo+ID4+Pj4gICAzIGZpbGVzIGNoYW5nZWQsIDE2IGluc2VydGlv
+bnMoKykNCj4gPj4+Pg0KPiA+Pj4+IGRpZmYgLS1naXQgYS9Eb2N1bWVudGF0aW9uL2JwZi9rZnVu
+Y3MucnN0IGIvRG9jdW1lbnRhdGlvbi9icGYva2Z1bmNzLnJzdA0KPiA+Pj4+IGluZGV4IGMwYjdk
+YWU2ZGJmNS4uYzhiMjFkZTFjNzcyIDEwMDY0NA0KPiA+Pj4+IC0tLSBhL0RvY3VtZW50YXRpb24v
+YnBmL2tmdW5jcy5yc3QNCj4gPj4+PiArKysgYi9Eb2N1bWVudGF0aW9uL2JwZi9rZnVuY3MucnN0
+DQo+ID4+Pj4gQEAgLTE0Niw2ICsxNDYsMTIgQEAgdGhhdCBvcGVyYXRlIChjaGFuZ2Ugc29tZSBw
+cm9wZXJ0eSwgcGVyZm9ybQ0KPiBzb21lDQo+ID4+PiBvcGVyYXRpb24pIG9uIGFuIG9iamVjdCB0
+aGF0DQo+ID4+Pj4gICB3YXMgb2J0YWluZWQgdXNpbmcgYW4gYWNxdWlyZSBrZnVuYy4gU3VjaCBr
+ZnVuY3MgbmVlZCBhbiB1bmNoYW5nZWQNCj4gcG9pbnRlcg0KPiA+Pj4gdG8NCj4gPj4+PiAgIGVu
+c3VyZSB0aGUgaW50ZWdyaXR5IG9mIHRoZSBvcGVyYXRpb24gYmVpbmcgcGVyZm9ybWVkIG9uIHRo
+ZSBleHBlY3RlZA0KPiBvYmplY3QuDQo=

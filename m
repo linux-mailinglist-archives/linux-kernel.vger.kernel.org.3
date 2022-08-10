@@ -2,97 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30A3158F075
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 18:32:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D12C158F07E
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 18:34:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232774AbiHJQcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 12:32:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60634 "EHLO
+        id S232405AbiHJQeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 12:34:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232990AbiHJQbz (ORCPT
+        with ESMTP id S230006AbiHJQeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 12:31:55 -0400
-Received: from mail-wm1-x343.google.com (mail-wm1-x343.google.com [IPv6:2a00:1450:4864:20::343])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7C9C82FA4
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 09:31:53 -0700 (PDT)
-Received: by mail-wm1-x343.google.com with SMTP id s11-20020a1cf20b000000b003a52a0945e8so1257042wmc.1
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 09:31:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:from:to:cc;
-        bh=VlxSVSh4TBV3g0hrz44ERG5bQdABeiPaNu0wSLgb4Pg=;
-        b=X+fhvSQC7TSTK4j3QNGEQvlf6uuTzpYO/9AD715gfzd+7yaQux1eya4IyKMsorRVAM
-         cRreGrBXnuJ3+8ccozEYY4N7Gn4WxqQ7WP64+MaQDOMf9n0Ze3sO1jfWIzEi+r9EVKUM
-         PiTRLICNJLQZW3rkY4MxMd8VhJhyhshif2KxI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:mail-followup-to:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc;
-        bh=VlxSVSh4TBV3g0hrz44ERG5bQdABeiPaNu0wSLgb4Pg=;
-        b=nqfGFw3av7gKLsI0eq2QsutQ5aYhhQ2tBvL35x96bjk3fMCvzu1/PYK1c2hXwcc7bl
-         H9ViRVvsSRDD55I1P2d/9ih6c3Mtg1wlgwfqFT7fARnLgT89SXC+LscMrXRNIixOkEmC
-         zUXGxsdvtwdsuV62B1RMOH5HFh9pFjJAtnx3C32OSB0h9iGIXKjq5aLXl4hnCFRqslbF
-         jcDOZoeCp4/La1ALhV4B/gz6oC5h7zmeTBxwWWKGvnBHkm8sn99PA5PIb0y5gl0+7oxO
-         GtLWjSU94xUZYNDXQYp2zrZQKyGa0LBjTSE4sh4fTqA+d4MbiMDFiBvTgj+U6e//+7jk
-         7qmw==
-X-Gm-Message-State: ACgBeo3kdKriOc8zLtyvr1YX/+JEbtEbnV90FZuOdY/uvAQJxp3mTeOC
-        8PPnngbJoULmS1B4VDIzZxmy7w==
-X-Google-Smtp-Source: AA6agR6Kd0jjywQgmPLRp2Q+ytUTiLAiAgjJ619ktBQijD4gk6n84NU4HxO7RhUIl9YJIpn6Wquj+Q==
-X-Received: by 2002:a05:600c:4f0e:b0:3a3:3077:e5b3 with SMTP id l14-20020a05600c4f0e00b003a33077e5b3mr3016818wmq.94.1660149112232;
-        Wed, 10 Aug 2022 09:31:52 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id l3-20020a5d4803000000b0021e42e7c7dbsm16417354wrq.83.2022.08.10.09.31.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 09:31:51 -0700 (PDT)
-Date:   Wed, 10 Aug 2022 18:31:49 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-Cc:     David Gow <davidgow@google.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <mripard@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@linux.ie>,
-        maarten.lankhorst@linux.intel.com,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>,
-        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com, dri-devel@lists.freedesktop.org,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 4/4] drm/format-helper: Add KUnit tests for
- drm_fb_xrgb8888_to_rgb565()
-Message-ID: <YvPddQEptMj23HSj@phenom.ffwll.local>
-Mail-Followup-To: =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>,
-        David Gow <davidgow@google.com>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@linux.ie>,
-        maarten.lankhorst@linux.intel.com,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        =?iso-8859-1?Q?Ma=EDra?= Canal <maira.canal@usp.br>,
-        Isabella Basso <isabbasso@riseup.net>, magalilemes00@gmail.com,
-        tales.aparecida@gmail.com, dri-devel@lists.freedesktop.org,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220709115837.560877-1-jose.exposito89@gmail.com>
- <20220709115837.560877-5-jose.exposito89@gmail.com>
- <CABVgOSmhOBdXPH_=B_WRcUjMGC-wVPTLBwCdbgZLb0o3-O8pKw@mail.gmail.com>
- <20220717170054.GA1028249@elementary>
+        Wed, 10 Aug 2022 12:34:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AD182773;
+        Wed, 10 Aug 2022 09:34:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F3265B81D4B;
+        Wed, 10 Aug 2022 16:34:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47F52C433C1;
+        Wed, 10 Aug 2022 16:33:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660149239;
+        bh=TRHMkHy9TA2+R7Xo/cWt/GmZaVkYtJda3sygZr6n63E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZSqQDDuiRdorik9Pb/NCrx0oD2vlusIm0ixMcVKD77THj9qllEU6gMdB/rlZFKxQQ
+         1Y84PCd6G6/7azkAfGdqfXgZzJND6/e58nAYqDyze40HJN1++ciHIcfRGJyQBAYuRW
+         6C1oabpSKxGzXSH5QSw6SARyENrzNOAaYPdknnBcv+QKEN++KIEGoP0RR770PAqTO5
+         9d8jAGGh68yTeeux7Cm/nL71Im6g4uuE5CmShu8fZ2SYjddUgdjId4DQte/DzZ1qnz
+         pnZtzkHZEmCzy0Z54lVQP6EydD/q1GdGE4oq9kx+/kr8okcbgl4QiLKtvM3Rfl9NEL
+         MFbx0aVJuS5Tg==
+Date:   Wed, 10 Aug 2022 17:33:53 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        linux-hyperv@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v1 5/5][RFT] ACPI: Drop parent field from struct
+ acpi_device
+Message-ID: <YvPd8ewNOKdwMmR4@sirena.org.uk>
+References: <12036348.O9o76ZdvQC@kreacher>
+ <2196460.iZASKD2KPV@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Da0Ami2fDuAHDI9p"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220717170054.GA1028249@elementary>
-X-Operating-System: Linux phenom 5.10.0-8-amd64 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <2196460.iZASKD2KPV@kreacher>
+X-Cookie: First pull up, then pull down.
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,20 +70,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 17, 2022 at 07:00:54PM +0200, José Expósito wrote:
-> José Expósito <jose.exposito89@gmail.com> wrote:
-> > I already fixed the warning and added the reviewed by tags, however, I
-> > noticed that rebasing the series on the latest drm-misc-next show this
-> > error:
-> > [...]
-> 
-> Sorry for the extra email. I forgot to mention that the error is only
-> present in UML. Running in other architectures works as expected.
-> Tested on x86_64 and PowerPC.
 
-Maybe a regression in the kunit infrastructure? Just guessing here ...
--Daniel
--- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+--Da0Ami2fDuAHDI9p
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Wed, Aug 10, 2022 at 06:23:05PM +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>=20
+> The parent field in struct acpi_device is, in fact, redundant,
+> because the dev.parent field in it effectively points to the same
+> object and it is used by the driver core.
+
+Acked-by: Mark Brown <broonie@kernel.org>
+
+--Da0Ami2fDuAHDI9p
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLz3fAACgkQJNaLcl1U
+h9B8rQf/XtDVCaLNgxkwWhsW926hQ9+EvneuFPFiVGjVW+lbegON2gRrPeUWs8sS
+sC4GBIsaf1GiG5D6xQGh5Iq36TE60sjclNLk2WTG6eHppigATRVgiTwiwOnVDn4h
+IBqOYP3xauYkNpiX1QK91vc5Lh90Lh+W/B81A1RqbDaJIlNrihrFgezUZQ9Klwlm
+9lsOupKTe9TeDOdtv8xgq8fuHk9K+K28SmkPEDEg49UVhCUbx05BuPDoyOtmn+RP
+/+hKik8ajLZUd2qUg0VmM0dRNX3GnQiGQC5dAmLnF63o9XIWcu4x3XYQPHEAwy5L
+Aj0k8+2YrOgVHxyNIrsVmg01YaZIWg==
+=2BJY
+-----END PGP SIGNATURE-----
+
+--Da0Ami2fDuAHDI9p--

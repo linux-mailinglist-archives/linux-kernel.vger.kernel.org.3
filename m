@@ -2,252 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E75FA58E98A
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 11:23:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2C2658E9A6
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 11:30:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232039AbiHJJXs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 05:23:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49468 "EHLO
+        id S232109AbiHJJag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 05:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232073AbiHJJXj (ORCPT
+        with ESMTP id S232099AbiHJJab (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 05:23:39 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 090D6AE23A;
-        Wed, 10 Aug 2022 02:23:34 -0700 (PDT)
-Date:   Wed, 10 Aug 2022 11:23:31 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1660123412;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6HWN3MBEuCVFX8UKlJj6PwdpMdFjg0O5CvJcE3JmtvM=;
-        b=W34XICQTVr4AnT5zOfE1kS3VYwQoUZo2WxMrKRZbPkbN7ar0EMut6zarANq8I3rlkbuLJn
-        ZT1bVnsKw1uH/y6cm+41b/xi1tZy/04QDR8bBph/UDMJa5X23utqmFN5v3lnYJFcqmh7o7
-        k4c4Pk01P19RKtSfb9Ml+QHAa5zCpPQxQ/FixfDybpfIhbllxqSQuVlPcYa+a85XtPRVYi
-        m6CAmSPXmrTJyng6lG6vuDTaODWEVHatTA/PYJDE6u17BQBaakLS/3gI+nijtBUo/gNhWj
-        GKD6VbrvP3OP3WFWupueNMSH/LR74IqeKPKmtGurOei5BbbIlZXDsfblAqbBbA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1660123412;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6HWN3MBEuCVFX8UKlJj6PwdpMdFjg0O5CvJcE3JmtvM=;
-        b=MiSnta9s2QurxZXWkf35yqvfSbeo1OsMDOjjGCUh/jMxOcV68XhI3pqnZJAogUWNzXVjPI
-        xmFf9tC59gpODFCg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Arnd Bergmann <arnd@kernel.org>,
-        linux-arch <linux-arch@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Sai Prakash Ranjan <saiprakash.ranjan@codeaurora.org>
-Subject: [PATCH v2] asm-generic: Conditionally enable do_softirq_own_stack()
- via Kconfig.
-Message-ID: <YvN5E/PrHfUhggr7@linutronix.de>
-References: <CAK8P3a2jgQcLaDXX6eOTNrU0RJ2O625e75LBMy6v2ABP0cdoww@mail.gmail.com>
- <CAHk-=wgZSD3W2y6yczad2Am=EfHYyiPzTn3CfXxrriJf9i5W5w@mail.gmail.com>
- <YvKD4hkZ3erf54DG@linutronix.de>
- <8735e4v7yk.ffs@tglx>
+        Wed, 10 Aug 2022 05:30:31 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FBD1260A;
+        Wed, 10 Aug 2022 02:30:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660123830; x=1691659830;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=zHygXbTWCyPOJ+4aJpksT5a9YTzKkpyV1mfD/3Fs2Cg=;
+  b=JpAhHRjiVNQiy83F70gwisr6MF3gEDtSJy+qDfOk2lHMyEsCRxI/aosk
+   lYaVYequjkGeOsXkEQXgB8ebcVeovnXl0uXqPLEioH9NesaT+4VFQIOV0
+   blTcyJKDJTneMm5mouhbl4ME+zMoRU5D1I7YxHfZPoL09mVr5NdiTeDCK
+   l3fLPrLCTv71x8qb+f+GWjxZrCe4s+1tRJwxRlVgAy+PEEDzXYiLl7kLb
+   HHcaY+4oeZ1VvpPeEyFviJfs9HS4qfPbeuWYMGo6MM4kgM3CRjM8qeD1M
+   BfysjD5+GcBKVJdH9TyFPgqNe/gvQOv57xn43ITFbRk61T3y8+skcytIK
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="316987586"
+X-IronPort-AV: E=Sophos;i="5.93,227,1654585200"; 
+   d="scan'208";a="316987586"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 02:30:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,227,1654585200"; 
+   d="scan'208";a="664821304"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by fmsmga008.fm.intel.com with ESMTP; 10 Aug 2022 02:30:18 -0700
+Date:   Wed, 10 Aug 2022 17:25:32 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v7 04/14] mm/shmem: Support memfile_notifier
+Message-ID: <20220810092532.GD862421@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-5-chao.p.peng@linux.intel.com>
+ <a34d88b9-a4b9-cb9e-91d9-c5a89449fcd5@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <8735e4v7yk.ffs@tglx>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <a34d88b9-a4b9-cb9e-91d9-c5a89449fcd5@redhat.com>
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the CONFIG_PREEMPT_RT symbol from the ifdef around
-do_softirq_own_stack() and move it to Kconfig instead.
+On Fri, Aug 05, 2022 at 03:26:02PM +0200, David Hildenbrand wrote:
+> On 06.07.22 10:20, Chao Peng wrote:
+> > From: "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+> > 
+> > Implement shmem as a memfile_notifier backing store. Essentially it
+> > interacts with the memfile_notifier feature flags for userspace
+> > access/page migration/page reclaiming and implements the necessary
+> > memfile_backing_store callbacks.
+> > 
+> > Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+> > Signed-off-by: Chao Peng <chao.p.peng@linux.intel.com>
+> > ---
+> 
+> [...]
+> 
+> > +#ifdef CONFIG_MEMFILE_NOTIFIER
+> > +static struct memfile_node *shmem_lookup_memfile_node(struct file *file)
+> > +{
+> > +	struct inode *inode = file_inode(file);
+> > +
+> > +	if (!shmem_mapping(inode->i_mapping))
+> > +		return NULL;
+> > +
+> > +	return  &SHMEM_I(inode)->memfile_node;
+> > +}
+> > +
+> > +
+> > +static int shmem_get_pfn(struct file *file, pgoff_t offset, pfn_t *pfn,
+> > +			 int *order)
+> > +{
+> > +	struct page *page;
+> > +	int ret;
+> > +
+> > +	ret = shmem_getpage(file_inode(file), offset, &page, SGP_WRITE);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	unlock_page(page);
+> > +	*pfn = page_to_pfn_t(page);
+> > +	*order = thp_order(compound_head(page));
+> > +	return 0;
+> > +}
+> > +
+> > +static void shmem_put_pfn(pfn_t pfn)
+> > +{
+> > +	struct page *page = pfn_t_to_page(pfn);
+> > +
+> > +	if (!page)
+> > +		return;
+> > +
+> > +	put_page(page);
+> 
+> 
+> Why do we export shmem_get_pfn/shmem_put_pfn and not simply
+> 
+> get_folio()
+> 
+> and let the caller deal with putting the folio? What's the reason to
+> 
+> a) Operate on PFNs and not folios
+> b) Have these get/put semantics?
 
-Enable softirq stacks based on SOFTIRQ_ON_OWN_STACK which depends on
-HAVE_SOFTIRQ_ON_OWN_STACK and its default value is set to !PREEMPT_RT.
-This ensures that softirq stacks are not used on PREEMPT_RT and avoids
-a 'select' statement on an option which has a 'depends' statement.
+We have a design assumption that somedays this can even support non-page
+based backing stores. There are some discussions:
+  https://lkml.org/lkml/2022/3/28/1440
+I should add document for this two callbacks.
 
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
----
-v1=E2=80=A6v2:
-On 2022-08-10 10:06:11 [+0200], Thomas Gleixner wrote:
-> > +config SOFTIRQ_ON_OWN_STACK
-> > +	def_bool !PREEMPT_RT
-> > +	depends on HAVE_SOFTIRQ_ON_OWN_STACK
->=20
->         def_bool !PREEMPT_RT && HAVE_SOFTIRQ_ON_OWN_STACK
->=20
-> No?
+> 
+> > +}
+> > +
+> > +static struct memfile_backing_store shmem_backing_store = {
+> > +	.lookup_memfile_node = shmem_lookup_memfile_node,
+> > +	.get_pfn = shmem_get_pfn,
+> > +	.put_pfn = shmem_put_pfn,
+> > +};
+> > +#endif /* CONFIG_MEMFILE_NOTIFIER */
+> > +
+> >  void __init shmem_init(void)
+> >  {
+> >  	int error;
+> > @@ -3956,6 +4059,10 @@ void __init shmem_init(void)
+> >  	else
+> >  		shmem_huge = SHMEM_HUGE_NEVER; /* just in case it was patched */
+> >  #endif
+> > +
+> > +#ifdef CONFIG_MEMFILE_NOTIFIER
+> > +	memfile_register_backing_store(&shmem_backing_store);
+> 
+> Can we instead prove a dummy function that does nothing without
+> CONFIG_MEMFILE_NOTIFIER?
 
-works, too. Let me compress it then.
+Sounds good.
 
- arch/Kconfig                          | 3 +++
- arch/arm/kernel/irq.c                 | 2 +-
- arch/parisc/kernel/irq.c              | 2 +-
- arch/powerpc/kernel/irq.c             | 4 ++--
- arch/s390/include/asm/softirq_stack.h | 2 +-
- arch/sh/kernel/irq.c                  | 2 +-
- arch/sparc/kernel/irq_64.c            | 2 +-
- arch/x86/include/asm/irq_stack.h      | 2 +-
- arch/x86/kernel/irq_32.c              | 2 +-
- include/asm-generic/softirq_stack.h   | 2 +-
- 10 files changed, 13 insertions(+), 10 deletions(-)
-
-diff --git a/arch/Kconfig b/arch/Kconfig
-index f330410da63a6..dc2dce2120a0b 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -924,6 +924,9 @@ config HAVE_SOFTIRQ_ON_OWN_STACK
- 	  Architecture provides a function to run __do_softirq() on a
- 	  separate stack.
-=20
-+config SOFTIRQ_ON_OWN_STACK
-+	def_bool HAVE_SOFTIRQ_ON_OWN_STACK && !PREEMPT_RT
-+
- config ALTERNATE_USER_ADDRESS_SPACE
- 	bool
- 	help
-diff --git a/arch/arm/kernel/irq.c b/arch/arm/kernel/irq.c
-index 034cb48c9eeb8..fe28fc1f759d9 100644
---- a/arch/arm/kernel/irq.c
-+++ b/arch/arm/kernel/irq.c
-@@ -70,7 +70,7 @@ static void __init init_irq_stacks(void)
- 	}
- }
-=20
--#ifndef CONFIG_PREEMPT_RT
-+#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
- static void ____do_softirq(void *arg)
- {
- 	__do_softirq();
-diff --git a/arch/parisc/kernel/irq.c b/arch/parisc/kernel/irq.c
-index fbb882cb8dbb5..b05055f3ba4b8 100644
---- a/arch/parisc/kernel/irq.c
-+++ b/arch/parisc/kernel/irq.c
-@@ -480,7 +480,7 @@ static void execute_on_irq_stack(void *func, unsigned l=
-ong param1)
- 	*irq_stack_in_use =3D 1;
- }
-=20
--#ifndef CONFIG_PREEMPT_RT
-+#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
- void do_softirq_own_stack(void)
- {
- 	execute_on_irq_stack(__do_softirq, 0);
-diff --git a/arch/powerpc/kernel/irq.c b/arch/powerpc/kernel/irq.c
-index 0f17268c1f0bb..9ede61a5a469e 100644
---- a/arch/powerpc/kernel/irq.c
-+++ b/arch/powerpc/kernel/irq.c
-@@ -199,7 +199,7 @@ static inline void check_stack_overflow(unsigned long s=
-p)
- 	}
- }
-=20
--#ifndef CONFIG_PREEMPT_RT
-+#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
- static __always_inline void call_do_softirq(const void *sp)
- {
- 	/* Temporarily switch r1 to sp, call __do_softirq() then restore r1. */
-@@ -335,7 +335,7 @@ void *mcheckirq_ctx[NR_CPUS] __read_mostly;
- void *softirq_ctx[NR_CPUS] __read_mostly;
- void *hardirq_ctx[NR_CPUS] __read_mostly;
-=20
--#ifndef CONFIG_PREEMPT_RT
-+#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
- void do_softirq_own_stack(void)
- {
- 	call_do_softirq(softirq_ctx[smp_processor_id()]);
-diff --git a/arch/s390/include/asm/softirq_stack.h b/arch/s390/include/asm/=
-softirq_stack.h
-index af68d6c1d5840..1ac5115d3115e 100644
---- a/arch/s390/include/asm/softirq_stack.h
-+++ b/arch/s390/include/asm/softirq_stack.h
-@@ -5,7 +5,7 @@
- #include <asm/lowcore.h>
- #include <asm/stacktrace.h>
-=20
--#ifndef CONFIG_PREEMPT_RT
-+#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
- static inline void do_softirq_own_stack(void)
- {
- 	call_on_stack(0, S390_lowcore.async_stack, void, __do_softirq);
-diff --git a/arch/sh/kernel/irq.c b/arch/sh/kernel/irq.c
-index 9092767380780..4e6835de54cf8 100644
---- a/arch/sh/kernel/irq.c
-+++ b/arch/sh/kernel/irq.c
-@@ -149,7 +149,7 @@ void irq_ctx_exit(int cpu)
- 	hardirq_ctx[cpu] =3D NULL;
- }
-=20
--#ifndef CONFIG_PREEMPT_RT
-+#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
- void do_softirq_own_stack(void)
- {
- 	struct thread_info *curctx;
-diff --git a/arch/sparc/kernel/irq_64.c b/arch/sparc/kernel/irq_64.c
-index 41fa1be980a33..72da2e10e2559 100644
---- a/arch/sparc/kernel/irq_64.c
-+++ b/arch/sparc/kernel/irq_64.c
-@@ -855,7 +855,7 @@ void __irq_entry handler_irq(int pil, struct pt_regs *r=
-egs)
- 	set_irq_regs(old_regs);
- }
-=20
--#ifndef CONFIG_PREEMPT_RT
-+#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
- void do_softirq_own_stack(void)
- {
- 	void *orig_sp, *sp =3D softirq_stack[smp_processor_id()];
-diff --git a/arch/x86/include/asm/irq_stack.h b/arch/x86/include/asm/irq_st=
-ack.h
-index 63f818aedf770..147cb8fdda92e 100644
---- a/arch/x86/include/asm/irq_stack.h
-+++ b/arch/x86/include/asm/irq_stack.h
-@@ -203,7 +203,7 @@
- 			      IRQ_CONSTRAINTS, regs, vector);		\
- }
-=20
--#ifndef CONFIG_PREEMPT_RT
-+#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
- /*
-  * Macro to invoke __do_softirq on the irq stack. This is only called from
-  * task context when bottom halves are about to be reenabled and soft
-diff --git a/arch/x86/kernel/irq_32.c b/arch/x86/kernel/irq_32.c
-index e5dd6da78713b..01833ebf5e8e3 100644
---- a/arch/x86/kernel/irq_32.c
-+++ b/arch/x86/kernel/irq_32.c
-@@ -132,7 +132,7 @@ int irq_init_percpu_irqstack(unsigned int cpu)
- 	return 0;
- }
-=20
--#ifndef CONFIG_PREEMPT_RT
-+#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
- void do_softirq_own_stack(void)
- {
- 	struct irq_stack *irqstk;
-diff --git a/include/asm-generic/softirq_stack.h b/include/asm-generic/soft=
-irq_stack.h
-index d3e2d81656e04..2a67aed9ac528 100644
---- a/include/asm-generic/softirq_stack.h
-+++ b/include/asm-generic/softirq_stack.h
-@@ -2,7 +2,7 @@
- #ifndef __ASM_GENERIC_SOFTIRQ_STACK_H
- #define __ASM_GENERIC_SOFTIRQ_STACK_H
-=20
--#if defined(CONFIG_HAVE_SOFTIRQ_ON_OWN_STACK) && !defined(CONFIG_PREEMPT_R=
-T)
-+#ifdef CONFIG_SOFTIRQ_ON_OWN_STACK
- void do_softirq_own_stack(void);
- #else
- static inline void do_softirq_own_stack(void)
---=20
-2.36.1
-
+Chao
+> 
+> > +#endif
+> >  	return;
+> >  
+> >  out1:
+> 
+> 
+> -- 
+> Thanks,
+> 
+> David / dhildenb
+> 

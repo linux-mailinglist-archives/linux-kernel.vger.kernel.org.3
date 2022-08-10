@@ -2,68 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA32F58EF56
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 17:21:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBDAD58EF5F
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 17:23:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233235AbiHJPVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 11:21:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38266 "EHLO
+        id S233255AbiHJPX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 11:23:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233264AbiHJPVL (ORCPT
+        with ESMTP id S233296AbiHJPXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 11:21:11 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B13778BFE
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 08:20:58 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id e15-20020a17090301cf00b0016dc94ddcc5so9897159plh.3
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 08:20:58 -0700 (PDT)
+        Wed, 10 Aug 2022 11:23:04 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3505578BED;
+        Wed, 10 Aug 2022 08:22:13 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id r17so21656474lfm.11;
+        Wed, 10 Aug 2022 08:22:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc;
-        bh=7Cb3xK7C8A3dKOEhtON3+5DVL3Y0hKSgmYKmNcGLqP0=;
-        b=b8Fn3IpLxI54p6QHEIARrG3UnZQqAKm07QEdu8urKrTa5fP/KEzJBSUa7E2yWrBCJP
-         gBVZlmfDEHznQbBR9XsMhGvmvGqfH0l5rKqOPlS0gO1jeuVyVT4X7B8X+KeXWdJh9zOH
-         cvGmFTL7oXm/9lh4/8uF13jSVSDg5scSLdwp4EAOGJZ71fYOwx4jOy4X1ZXHinPwUizb
-         Sicb9txiHTH8pFnncE/APbSI5oPHswOeLHfaQXY1AOBSmwzlYkbXAbCtOzjx7qfBoEqc
-         vB5E3P6V9QGfvQd35rvMNiiaFPYnIecYZD+YR/25Q+8QA8pOJA+iDtAkmoTqCG6n1Qsx
-         odpw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=vyAa9/lSJHOKkyJlHJTvIPQn51upSW+mtKHWf2N+2CM=;
+        b=d9XfBPRuiR7Yl2Yrp0abjirhXp/wMnDKYKvxjBPdUET2S+fUf2sSsxKUVOrn9oOHoc
+         ohOiWAAfQ72+B8uXLGosK1MImKLzfraF/YUnekLjAPsPcDlbhgnosnkgagc9jNAK6xU5
+         JyxLOfQHOVL9sNlfenfAdWbO4aJoKP4YiOdem75xMQLWbBP/1FATuiIKVVtIwelQbV4/
+         08xFjo/vkWnwsHNv5wGirmCFVh3nQybdT59sXcPr/Nbc0q2/VOaaznMvZzhu2XBXjDp0
+         CwplX5vk4ZBrusRvg3rFA3MyjBOkkxGIbhwuXok7y0wFaH3Sz3hTREu3Q0RinZkj3zhJ
+         mY2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc;
-        bh=7Cb3xK7C8A3dKOEhtON3+5DVL3Y0hKSgmYKmNcGLqP0=;
-        b=P/SZJQEqQL/9IO0IysW7283H1HU6XUUM6xEN0nq/KyTXEHg1dipArRIz3l/sWKVrTP
-         xsWYeqO6o9ECsmOIniDV2gdFVp7oXrDQyX2Z36KZy1imReMLLZD3Wq5GkeKPkmj5iHzx
-         FVR3i0LGbCIcnvdRuFFYkTe4c/iqBAvDxc9ccUe3F1N4jqzm5khOt5vk7SZSdh727JiJ
-         uLgB1jMOPaed2AHLYQpxxIDZW6k7LtenTqnC6C5XT/mbrVVCyYWDcm9OAxroeymceqvq
-         zyoe4nxkrQAhQ9Uw+eUf0Lk+ywcGx5IUFdJ1fF+lL+2vk/6SLb2NpHg5TupijiDvWJHH
-         U2Ig==
-X-Gm-Message-State: ACgBeo2eFLJkYv9TVCYmHVD7BPZwJAsRK0flljuPhalEarhtauju0i2F
-        e+q9IQOg9cOlnRaeKTAFmcKpv58iaUs=
-X-Google-Smtp-Source: AA6agR4np9E2GdxSrWaYSbcobydcrRmlzA1Z3m/LeqPX//hxxwNp1p23D8O/po1r4EyzClYY0r1+JOxAAys=
-X-Received: from pgonda1.kir.corp.google.com ([2620:15c:29:203:b185:1827:5b23:bbe2])
- (user=pgonda job=sendgmr) by 2002:a05:6a00:22c6:b0:52f:4d67:b370 with SMTP id
- f6-20020a056a0022c600b0052f4d67b370mr14395559pfj.58.1660144857469; Wed, 10
- Aug 2022 08:20:57 -0700 (PDT)
-Date:   Wed, 10 Aug 2022 08:20:33 -0700
-In-Reply-To: <20220810152033.946942-1-pgonda@google.com>
-Message-Id: <20220810152033.946942-12-pgonda@google.com>
-Mime-Version: 1.0
-References: <20220810152033.946942-1-pgonda@google.com>
-X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
-Subject: [V3 11/11] KVM: selftests: Add simple sev vm testing
-From:   Peter Gonda <pgonda@google.com>
-To:     kvm@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, marcorr@google.com,
-        seanjc@google.com, michael.roth@amd.com, thomas.lendacky@amd.com,
-        joro@8bytes.org, mizhang@google.com, pbonzini@redhat.com,
-        andrew.jones@linux.dev, vannapurve@google.com,
-        Peter Gonda <pgonda@google.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=vyAa9/lSJHOKkyJlHJTvIPQn51upSW+mtKHWf2N+2CM=;
+        b=j4n5wdEtOZfxEXrnZHjv+SqZSP9buRij6RBX47SH5pU+M+lVx9ifmdhBlPsM8BOf9E
+         NXv4hOn67VY6Tk3OL3tlvAhZyr1Y0jNRo4cQTSD0P3C5mHa+2F/luveAQxqApWAS06r3
+         KmIjYdAts68EaHFGrEQ2rKJkAjp3aWgfA6xkUPx4fZaAb+nKlEg1fn0dNWASm+WZDZH2
+         9lGGjw9NgfoFhY9nJ+2dIxk+KPDVQ6ak+0sn/n9l3W4A+Ye0uSYTpv+xQ6dtah63yh1L
+         8thvqlygdjCNAm2ie9S8cdTPXRDRaaaY9DYYH2uvaYXqKs9l0d6jtAieA70BfFuP4rN3
+         sbLQ==
+X-Gm-Message-State: ACgBeo3j/HRVcxaEbROBb0HsemuXkgmzTLC3B+Kwlhh3BGbU9Up7pq0b
+        K2AgMJEFC5A9mLUu8lvdZHHkVaB6199jCuEy6ls=
+X-Google-Smtp-Source: AA6agR5Z+YOUUXgHcHiLSRw4wQklvVgHYd1TmqtH+7G+MSYKD2u+Kf9lYZtk9Ui9lMm+s62foX3k3iIt7zoSGDuqwJY=
+X-Received: by 2002:ac2:43a1:0:b0:48a:fa18:60c4 with SMTP id
+ t1-20020ac243a1000000b0048afa1860c4mr9114476lfl.27.1660144929301; Wed, 10 Aug
+ 2022 08:22:09 -0700 (PDT)
+MIME-Version: 1.0
+References: <cover.1660100506.git.sevinj.aghayeva@gmail.com>
+ <94ec6182-0804-7a0e-dcba-42655ff19884@blackwall.org> <CAMWRUK45nbZS3PeSLR1X=Ko6oavrjKj2AWeh2F1wckMPrz_dEg@mail.gmail.com>
+ <49f933c3-7430-a133-9add-ed76c395023b@blackwall.org> <CAMWRUK4J6Dp7Cff=pN9iw6OwDN8g61dd4S=OVKQ75vBch-PxXQ@mail.gmail.com>
+ <74b69521-0d40-5e2f-4d1b-76e9697d7471@blackwall.org>
+In-Reply-To: <74b69521-0d40-5e2f-4d1b-76e9697d7471@blackwall.org>
+From:   Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
+Date:   Wed, 10 Aug 2022 11:21:58 -0400
+Message-ID: <CAMWRUK4WvrkBDViq0s5Rdc8bziJf7=js4ta6B0kAcAcfV4rLiQ@mail.gmail.com>
+Subject: Re: [PATCH RFC net-next 0/3] net: vlan: fix bridge binding behavior
+ and add selftests
+To:     Nikolay Aleksandrov <razor@blackwall.org>
+Cc:     netdev@vger.kernel.org, aroulin@nvidia.com, sbrivio@redhat.com,
+        roopa@nvidia.com, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,209 +75,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A very simple of booting SEV guests that checks related CPUID bits. This
-is a stripped down version of "[PATCH v2 08/13] KVM: selftests: add SEV
-boot tests" from Michael but much simpler.
+On Wed, Aug 10, 2022 at 11:10 AM Nikolay Aleksandrov
+<razor@blackwall.org> wrote:
+>
+> On 10/08/2022 18:00, Sevinj Aghayeva wrote:
+> > On Wed, Aug 10, 2022 at 10:50 AM Nikolay Aleksandrov
+> > <razor@blackwall.org> wrote:
+> >>
+> >> On 10/08/2022 17:42, Sevinj Aghayeva wrote:
+> >>>
+> >>>
+> >>> On Wed, Aug 10, 2022 at 4:54 AM Nikolay Aleksandrov <razor@blackwall.=
+org <mailto:razor@blackwall.org>> wrote:
+> >>>
+> >>>     On 10/08/2022 06:11, Sevinj Aghayeva wrote:
+> >>>     > When bridge binding is enabled for a vlan interface, it is expe=
+cted
+> >>>     > that the link state of the vlan interface will track the subset=
+ of the
+> >>>     > ports that are also members of the corresponding vlan, rather t=
+han
+> >>>     > that of all ports.
+> >>>     >
+> >>>     > Currently, this feature works as expected when a vlan interface=
+ is
+> >>>     > created with bridge binding enabled:
+> >>>     >
+> >>>     >   ip link add link br name vlan10 type vlan id 10 protocol 802.=
+1q \
+> >>>     >         bridge_binding on
+> >>>     >
+> >>>     > However, the feature does not work when a vlan interface is cre=
+ated
+> >>>     > with bridge binding disabled, and then enabled later:
+> >>>     >
+> >>>     >   ip link add link br name vlan10 type vlan id 10 protocol 802.=
+1q \
+> >>>     >         bridge_binding off
+> >>>     >   ip link set vlan10 type vlan bridge_binding on
+> >>>     >
+> >>>     > After these two commands, the link state of the vlan interface
+> >>>     > continues to track that of all ports, which is inconsistent and
+> >>>     > confusing to users. This series fixes this bug and introduces t=
+wo
+> >>>     > tests for the valid behavior.
+> >>>     >
+> >>>     > Sevinj Aghayeva (3):
+> >>>     >   net: core: export call_netdevice_notifiers_info
+> >>>     >   net: 8021q: fix bridge binding behavior for vlan interfaces
+> >>>     >   selftests: net: tests for bridge binding behavior
+> >>>     >
+> >>>     >  include/linux/netdevice.h                     |   2 +
+> >>>     >  net/8021q/vlan.h                              |   2 +-
+> >>>     >  net/8021q/vlan_dev.c                          |  25 ++-
+> >>>     >  net/core/dev.c                                |   7 +-
+> >>>     >  tools/testing/selftests/net/Makefile          |   1 +
+> >>>     >  .../selftests/net/bridge_vlan_binding_test.sh | 143 ++++++++++=
+++++++++
+> >>>     >  6 files changed, 172 insertions(+), 8 deletions(-)
+> >>>     >  create mode 100755 tools/testing/selftests/net/bridge_vlan_bin=
+ding_test.sh
+> >>>     >
+> >>>
+> >>>     Hi,
+> >>>     NETDEV_CHANGE event is already propagated when the vlan changes f=
+lags,
+> >>>
+> >>>
+> >>> I'm not sure if NETDEV_CHANGE is actually propagated when the vlan ch=
+anges flags. The two functions in the bridge module that handle NETDEV_CHAN=
+GE are br_vlan_port_event  and br_vlan_bridge_event. I've installed probes =
+for both, and when I'm changing flags using "sudo ip link set vlan10 type v=
+lan bridge_binding on", I don't see any of those functions getting called, =
+although I do see vlan_dev_change_flags getting called. I think there may b=
+e a bug in core/dev.c:__dev_notify_flags.
+> >>
+> >> are both vlan and bridge interfaces up?
+> >> what exactly are you probing for?
+> >
+> >
+> > I first run the attached pre.sh script that sets up the environment
+> > and creates a vlan interface with bridge binding off. I then start
+> > recording with perf, and here's the list of probes:
+> >
+> > $ sudo ./k/linux/tools/perf/perf probe -l
+> >   probe:br_vlan_bridge_event (on br_vlan_bridge_event in bridge with ev=
+ent dev)
+> >   probe:br_vlan_port_event (on br_vlan_port_event in bridge with event)
+> >   probe:br_vlan_set_vlan_dev_state (on br_vlan_set_vlan_dev_state in
+> > bridge with br vlan_dev)
+> >   probe:register_vlan_dev (on register_vlan_dev in 8021q with dev)
+> >   probe:vlan_changelink (on vlan_changelink in 8021q with dev)
+> >   probe:vlan_dev_change_flags (on vlan_dev_change_flags in 8021q with d=
+ev)
+> >   probe:vlan_dev_fix_features (on vlan_dev_fix_features in 8021q with d=
+ev)
+> >   probe:vlan_dev_init  (on vlan_dev_init in 8021q with dev)
+> >   probe:vlan_dev_ioctl (on vlan_dev_ioctl in 8021q with dev)
+> >   probe:vlan_dev_open  (on vlan_dev_open in 8021q with dev)
+> >   probe:vlan_dev_stop  (on vlan_dev_stop in 8021q with dev)
+> >   probe:vlan_dev_uninit (on vlan_dev_uninit in 8021q with dev)
+> >   probe:vlan_newlink   (on vlan_newlink in 8021q with dev)
+> >
+> > I then run the following command to turn the bridge binding flag on:
+> >
+> > $ sudo ip link set vlan10 type vlan bridge_binding on
+> >
+> > Then I stop the recording and print out the events, and I see this. I
+> > don't see br_vlan_port_event or br_vlan_bridge_event getting called.
+> >
+> >               ip  5933 [003]  2204.722470:
+> > probe:vlan_changelink: (ffffffffc1042b50) dev=3D"vlan10"
+> >               ip  5933 [003]  2204.722476:
+> > probe:vlan_dev_change_flags: (ffffffffc1042600) dev=3D"vlan10"
+> >
+> > Am I doing something wrong?
+> >
+> > Thanks
+> >
+> >
+>
+> You can't expect to see br_vlan_bridge_event() called because the notific=
+ation
+> target device is vlan10 and not the bridge. See br_device_event():
+> ...
+>         if (netif_is_bridge_master(dev)) {
+>                 err =3D br_vlan_bridge_event(dev, event, ptr);
+>                 if (err)
+>                         return notifier_from_errno(err);
+> ...
+>
+>
+> Try probing for br_device_event(), you'll see it gets called every time y=
+ou change the flag.
+>
+You're right, I did see br_device_event() getting called. Thanks!
 
-Signed-off-by: Michael Roth <michael.roth@amd.com>
-Signed-off-by: Peter Gonda <pgonda@google.com>
----
- tools/testing/selftests/kvm/.gitignore        |   1 +
- tools/testing/selftests/kvm/Makefile          |   1 +
- .../selftests/kvm/include/x86_64/sev.h        |   3 +
- tools/testing/selftests/kvm/lib/x86_64/sev.c  |   2 -
- .../selftests/kvm/x86_64/sev_all_boot_test.c  | 131 ++++++++++++++++++
- 5 files changed, 136 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c
+--=20
 
-diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-index d625a3f83780..ca57969a0923 100644
---- a/tools/testing/selftests/kvm/.gitignore
-+++ b/tools/testing/selftests/kvm/.gitignore
-@@ -33,6 +33,7 @@
- /x86_64/pmu_event_filter_test
- /x86_64/set_boot_cpu_id
- /x86_64/set_sregs_test
-+/x86_64/sev_all_boot_test
- /x86_64/sev_migrate_tests
- /x86_64/smm_test
- /x86_64/state_test
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index b247c4b595af..73b083f93b46 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -122,6 +122,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/tsc_msrs_test
- TEST_GEN_PROGS_x86_64 += x86_64/vmx_pmu_caps_test
- TEST_GEN_PROGS_x86_64 += x86_64/xen_shinfo_test
- TEST_GEN_PROGS_x86_64 += x86_64/xen_vmcall_test
-+TEST_GEN_PROGS_x86_64 += x86_64/sev_all_boot_test
- TEST_GEN_PROGS_x86_64 += x86_64/sev_migrate_tests
- TEST_GEN_PROGS_x86_64 += x86_64/amx_test
- TEST_GEN_PROGS_x86_64 += x86_64/max_vcpuid_cap_test
-diff --git a/tools/testing/selftests/kvm/include/x86_64/sev.h b/tools/testing/selftests/kvm/include/x86_64/sev.h
-index 2f7f7c741b12..b6552ea1c716 100644
---- a/tools/testing/selftests/kvm/include/x86_64/sev.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/sev.h
-@@ -22,6 +22,9 @@
- #define SEV_POLICY_NO_DBG	(1UL << 0)
- #define SEV_POLICY_ES		(1UL << 2)
- 
-+#define CPUID_MEM_ENC_LEAF 0x8000001f
-+#define CPUID_EBX_CBIT_MASK 0x3f
-+
- enum {
- 	SEV_GSTATE_UNINIT = 0,
- 	SEV_GSTATE_LUPDATE,
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/sev.c b/tools/testing/selftests/kvm/lib/x86_64/sev.c
-index 3abcf50c0b5d..8f9f55c685a7 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/sev.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/sev.c
-@@ -13,8 +13,6 @@
- #include "sev.h"
- 
- #define PAGE_SHIFT		12
--#define CPUID_MEM_ENC_LEAF 0x8000001f
--#define CPUID_EBX_CBIT_MASK 0x3f
- 
- struct sev_vm {
- 	struct kvm_vm *vm;
-diff --git a/tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c b/tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c
-new file mode 100644
-index 000000000000..b319d18bdb60
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86_64/sev_all_boot_test.c
-@@ -0,0 +1,131 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Basic SEV boot tests.
-+ *
-+ * Copyright (C) 2021 Advanced Micro Devices
-+ */
-+#define _GNU_SOURCE /* for program_invocation_short_name */
-+#include <fcntl.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/ioctl.h>
-+
-+#include "test_util.h"
-+
-+#include "kvm_util.h"
-+#include "processor.h"
-+#include "svm_util.h"
-+#include "linux/psp-sev.h"
-+#include "sev.h"
-+
-+#define VCPU_ID			2
-+#define PAGE_STRIDE		32
-+
-+#define SHARED_PAGES		8192
-+#define SHARED_VADDR_MIN	0x1000000
-+
-+#define PRIVATE_PAGES		2048
-+#define PRIVATE_VADDR_MIN	(SHARED_VADDR_MIN + SHARED_PAGES * PAGE_SIZE)
-+
-+#define TOTAL_PAGES		(512 + SHARED_PAGES + PRIVATE_PAGES)
-+
-+#define NR_SYNCS 1
-+
-+static void guest_run_loop(struct kvm_vcpu *vcpu)
-+{
-+	struct ucall uc;
-+	int i;
-+
-+	for (i = 0; i <= NR_SYNCS; ++i) {
-+		vcpu_run(vcpu);
-+		switch (get_ucall(vcpu, &uc)) {
-+		case UCALL_SYNC:
-+			continue;
-+		case UCALL_DONE:
-+			return;
-+		case UCALL_ABORT:
-+			TEST_ASSERT(false, "%s at %s:%ld\n\tvalues: %#lx, %#lx",
-+				    (const char *)uc.args[0], __FILE__,
-+				    uc.args[1], uc.args[2], uc.args[3]);
-+		default:
-+			TEST_ASSERT(
-+				false, "Unexpected exit: %s",
-+				exit_reason_str(vcpu->run->exit_reason));
-+		}
-+	}
-+}
-+
-+static void __attribute__((__flatten__)) guest_sev_code(void)
-+{
-+	uint32_t eax, ebx, ecx, edx;
-+	uint64_t sev_status;
-+
-+	GUEST_SYNC(1);
-+
-+	cpuid(CPUID_MEM_ENC_LEAF, &eax, &ebx, &ecx, &edx);
-+	GUEST_ASSERT(eax & (1 << 1));
-+
-+	sev_status = rdmsr(MSR_AMD64_SEV);
-+	GUEST_ASSERT((sev_status & 0x1) == 1);
-+
-+	GUEST_DONE();
-+}
-+
-+static struct sev_vm *setup_test_common(void *guest_code, uint64_t policy,
-+					struct kvm_vcpu **vcpu)
-+{
-+	uint8_t measurement[512];
-+	struct sev_vm *sev;
-+	struct kvm_vm *vm;
-+	int i;
-+
-+	sev = sev_vm_create(policy, TOTAL_PAGES);
-+	if (!sev)
-+		return NULL;
-+	vm = sev_get_vm(sev);
-+
-+	/* Set up VCPU and initial guest kernel. */
-+	*vcpu = vm_vcpu_add(vm, VCPU_ID, guest_code);
-+	kvm_vm_elf_load(vm, program_invocation_name);
-+
-+	/* Allocations/setup done. Encrypt initial guest payload. */
-+	sev_vm_launch(sev);
-+
-+	/* Dump the initial measurement. A test to actually verify it would be nice. */
-+	sev_vm_launch_measure(sev, measurement);
-+	pr_info("guest measurement: ");
-+	for (i = 0; i < 32; ++i)
-+		pr_info("%02x", measurement[i]);
-+	pr_info("\n");
-+
-+	sev_vm_launch_finish(sev);
-+
-+	return sev;
-+}
-+
-+static void test_sev(void *guest_code, uint64_t policy)
-+{
-+	struct sev_vm *sev;
-+	struct kvm_vcpu *vcpu;
-+
-+	sev = setup_test_common(guest_code, policy, &vcpu);
-+	if (!sev)
-+		return;
-+
-+	/* Guest is ready to run. Do the tests. */
-+	guest_run_loop(vcpu);
-+
-+	pr_info("guest ran successfully\n");
-+
-+	sev_vm_free(sev);
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	/* SEV tests */
-+	test_sev(guest_sev_code, SEV_POLICY_NO_DBG);
-+	test_sev(guest_sev_code, 0);
-+
-+	return 0;
-+}
--- 
-2.37.1.559.g78731f0fdb-goog
-
+Sevinj.Aghayeva

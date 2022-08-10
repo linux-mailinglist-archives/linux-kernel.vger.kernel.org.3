@@ -2,98 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1187C58F2E9
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 21:19:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 24F2358F2EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 21:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233005AbiHJTTd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 15:19:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49410 "EHLO
+        id S233058AbiHJTUK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 15:20:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232561AbiHJTTb (ORCPT
+        with ESMTP id S233014AbiHJTUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 15:19:31 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 043972872D
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 12:19:31 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-3246910dac3so151996117b3.12
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 12:19:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=hKx1VWalS/Kw4WukWOwnOrv52qOFOeVZOoDS2/nyvSw=;
-        b=nDGS9Ngr7R8HMVfZu5I+9ubbd0j2NaAEp8oNKV0QVn5OeFo1iuYRpxDtgfR1ofERGA
-         Q0aIZOGzb5H0gz7tnUwtWDN0zkX7lOq4ZeY9KWI4Ggu8rFWqT7gyP/sRJMGjeU2+qp4i
-         M2SX3+GDvjvzrByd4uNbKs5h6dIB+S3bNo15q14WKCUu9O1e7AEsLnIMilWNYSlM3x95
-         8HvKc1ZpN6Ci3dlEaFIHqv3HgvdDzmAZmtUDRkFITKqZLAaUNkwntlWeBTbMc7dTnj0j
-         54LdGXtA7MZFZ0TldAae9FeMcs0Fa3ibtNHMKCh8UJJSr67nzRNb6n150FmM3nFBkdOv
-         02tg==
+        Wed, 10 Aug 2022 15:20:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0B21A2872D
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 12:20:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660159205;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mg9jfkgOJMJfQD+UBNUpUZRupW9q/o+qow5RgcfsokI=;
+        b=c6/RojSa6dwXMDtxI3lm2Q1KHgizIbwElXwxCsUT3JDwvoohX1aq2GO9PMg2wr5W+FsSkA
+        49jKxN3CDyhPUoPyTlPVKcq/p1GPtveextmwpg2+Lb3I8So8PzcRvG4qCRBUlAbQtJQnCb
+        cvP1U1wqIwwAtutzqhfQzwfeJfN8xRc=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-658-Eq8hyjpGOYe_6Jv6w_gRFA-1; Wed, 10 Aug 2022 15:20:04 -0400
+X-MC-Unique: Eq8hyjpGOYe_6Jv6w_gRFA-1
+Received: by mail-ej1-f70.google.com with SMTP id gs35-20020a1709072d2300b00730e14fd76eso4600187ejc.15
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 12:20:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=hKx1VWalS/Kw4WukWOwnOrv52qOFOeVZOoDS2/nyvSw=;
-        b=iBe1k1qtCjgOH7nm3HeAF0GcVVA4BrfHIKHp1ZqD9LdBV8ga0zbJluAxJvngr/JIXi
-         niSdDTsQtmNHKivhzS/qgsu2O5ahIbUyLI5e3YdQpRwPdVr5SvmQp0FClSIA73oqDI2j
-         gOeOzGgbMcfW3qBAoaezpz4qF92SkamC+nt3kxhH0iZqLBJkvc6Zu38Zs8IbvJ7zKLKR
-         b/CidJlO752KaIbC++qdlrlzw9YL7IhKEpLjllujcPb9sejd59evdKSOag2dw4ApfMoh
-         j3veE6JsBRpgHAEVyXEUHdGiAVYn0eX9AUN1oYRMKi20khiTshZiLgC6br9fC66PWsqH
-         wq7w==
-X-Gm-Message-State: ACgBeo03ZYni0EYpNtvdNeomR+akEFA1cf8o81RAhIor6iBzkcpolUfB
-        /TBM3sRA2L9hIuXpcJf34RxRWJjO9yyxXmq92xg3+w==
-X-Google-Smtp-Source: AA6agR4pNhuhSEdQX5dtH5AS5BITIuc/wWSKN+Z/7iwgnq68yrCaELClYNgORMcTEzoHJIMq0Rf4uaPgWHmqTs3ammc=
-X-Received: by 2002:a81:6e87:0:b0:323:828:2175 with SMTP id
- j129-20020a816e87000000b0032308282175mr30324091ywc.71.1660159170067; Wed, 10
- Aug 2022 12:19:30 -0700 (PDT)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=mg9jfkgOJMJfQD+UBNUpUZRupW9q/o+qow5RgcfsokI=;
+        b=xdmul8YkBnd9EwIkRsKpSlUQttGjbgl95O3dUUb6BPZuHemF/lIClGNcwKa4yoIIqs
+         YAO+XIE19MBEqphs7yLl+44m2fdHxCFR97W0UE8JMOLAETVLCkL6Af1HOOD0ozZngxEq
+         UViK2qTShfTKeJeZZU5RYdlRTTbdYuF+MFQazmjk3XxzMm1N5MTtqN+OyPkDZCcZerAk
+         g5RB7MEctodlQDM5inAfmhsQ9b2AWhBAVxqajWi0CqkgPuLqp1bAD9Nm9ZqJ+RIjHsWy
+         Frf8vkw5kRndsoAy0rzx+uT1Mc158votUOjEEqfWJ5Yd5QOPpU6Imdgjqy5HNkTnr0Ri
+         t4gw==
+X-Gm-Message-State: ACgBeo2/gTWP6NuKlEwh8jm398dTqbOHtD4siYQUaeLG0Y6XUz5q53pF
+        KnH1Y+Vko0TV5efD77TKk/pLGgfAjdMQYAfL/yYmIS/ZWfbXoViS4uw5mGozxVboorXIjyKg4Jw
+        fH375sqKwu1ydvRDd+HocxnzI
+X-Received: by 2002:a05:6402:11cb:b0:43c:c7a3:ff86 with SMTP id j11-20020a05640211cb00b0043cc7a3ff86mr28501453edw.383.1660159203356;
+        Wed, 10 Aug 2022 12:20:03 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR513nGcOyEx/cZZy+oLMyNgfYHlcNGvOvBbmD5iBHW2tkSoDlCb8kDWjvUl/mnZVx0X2sxUhw==
+X-Received: by 2002:a05:6402:11cb:b0:43c:c7a3:ff86 with SMTP id j11-20020a05640211cb00b0043cc7a3ff86mr28501439edw.383.1660159203147;
+        Wed, 10 Aug 2022 12:20:03 -0700 (PDT)
+Received: from redhat.com ([2.52.152.113])
+        by smtp.gmail.com with ESMTPSA id d15-20020aa7d5cf000000b0043d6ece495asm8111225eds.55.2022.08.10.12.19.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Aug 2022 12:20:02 -0700 (PDT)
+Date:   Wed, 10 Aug 2022 15:19:56 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jason Wang <jasowang@redhat.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        dinang@xilinx.com, martinpo@xilinx.com,
+        Wu Zongyong <wuzongyong@linux.alibaba.com>,
+        Piotr.Uminski@intel.com, gautam.dawar@amd.com,
+        ecree.xilinx@gmail.com, martinh@xilinx.com,
+        Stefano Garzarella <sgarzare@redhat.com>, pabloc@xilinx.com,
+        habetsm.xilinx@gmail.com, lvivier@redhat.com,
+        Zhu Lingshan <lingshan.zhu@intel.com>, tanuj.kamde@amd.com,
+        Longpeng <longpeng2@huawei.com>, lulu@redhat.com,
+        hanand@xilinx.com, Parav Pandit <parav@nvidia.com>,
+        Si-Wei Liu <si-wei.liu@oracle.com>,
+        Eli Cohen <elic@nvidia.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        Zhang Min <zhang.min9@zte.com.cn>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH v7 0/4] Implement vdpasim suspend operation
+Message-ID: <20220810151907-mutt-send-email-mst@kernel.org>
+References: <20220810171512.2343333-1-eperezma@redhat.com>
 MIME-Version: 1.0
-References: <20220808165006.2451180-1-bgeffon@google.com> <20220808165006.2451180-2-bgeffon@google.com>
- <YvG6fDHmVITsa/Kk@google.com>
-In-Reply-To: <YvG6fDHmVITsa/Kk@google.com>
-From:   Brian Geffon <bgeffon@google.com>
-Date:   Wed, 10 Aug 2022 15:18:54 -0400
-Message-ID: <CADyq12wAUyo4=Wya4zvD6RiVdqcwwcMqZ3xEDa1k6jVY0_o_jg@mail.gmail.com>
-Subject: Re: [RFC PATCH 1/1] zram: Allow rw_page when page isn't written back.
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Minchan Kim <minchan@kernel.org>,
-        Nitin Gupta <ngupta@vflare.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Suleiman Souhlal <suleiman@google.com>,
-        linux-mm <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220810171512.2343333-1-eperezma@redhat.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Sergey,
+On Wed, Aug 10, 2022 at 07:15:08PM +0200, Eugenio Pérez wrote:
+> Implement suspend operation for vdpa_sim devices, so vhost-vdpa will offer
+> that backend feature and userspace can effectively suspend the device.
+> 
+> This is a must before getting virtqueue indexes (base) for live migration,
+> since the device could modify them after userland gets them. There are
+> individual ways to perform that action for some devices
+> (VHOST_NET_SET_BACKEND, VHOST_VSOCK_SET_RUNNING, ...) but there was no
+> way to perform it for any vhost device (and, in particular, vhost-vdpa).
+> 
+> After a successful return of ioctl the device must not process more virtqueue
+> descriptors. The device can answer to read or writes of config fields as if it
+> were not suspended. In particular, writing to "queue_enable" with a value of 1
+> will not make the device start processing virtqueue buffers.
+> 
+> In the future, we will provide features similar to
+> VHOST_USER_GET_INFLIGHT_FD so the device can save pending operations.
+> 
+> Applied on top of [1] branch after removing the old commits.
 
-On Mon, Aug 8, 2022 at 9:38 PM Sergey Senozhatsky
-<senozhatsky@chromium.org> wrote:
->
-> On (22/08/08 12:50), Brian Geffon wrote:
-> [..]
-> >
-> >       pr_info("setup backing device %s\n", file_name);
-> > @@ -722,7 +707,8 @@ static ssize_t writeback_store(struct device *dev,
-> >
-> >               if (zram_test_flag(zram, index, ZRAM_WB) ||
-> >                               zram_test_flag(zram, index, ZRAM_SAME) ||
-> > -                             zram_test_flag(zram, index, ZRAM_UNDER_WB))
-> > +                             zram_test_flag(zram, index, ZRAM_UNDER_WB) ||
-> > +                             zram_test_flag(zram, index, ZRAM_NO_WB))
-> >                       goto next;
->
-> mark_idle() probably should also test ZRAM_NO_WB bit.
+Except, I can't really do this without invaliding all testing.
+Can't you post an incremental patch?
 
-While we definitely can add that check in mark_idle() it actually
-doesn't hurt to allow marking the page as idle as NO_WB only controls
-the writeback aspect and as long as the page is marked NO_WB it won't
-be written back, idle or not. Definitely happy to add it in later
-versions if people like this approach in general.
+> Comments are welcome.
+> 
+> v7:
+> * Remove ioctl leftover argument and update doc accordingly.
+
+> v6:
+> * Remove the resume operation, making the ioctl simpler. We can always add
+>   another ioctl for VM_STOP/VM_RESUME operation later.
+> * s/stop/suspend/ to differentiate more from reset.
+> * Clarify scope of the suspend operation.
+> 
+> v5:
+> * s/not stop/resume/ in doc.
+> 
+> v4:
+> * Replace VHOST_STOP to VHOST_VDPA_STOP in vhost ioctl switch case too.
+> 
+> v3:
+> * s/VHOST_STOP/VHOST_VDPA_STOP/
+> * Add documentation and requirements of the ioctl above its definition.
+> 
+> v2:
+> * Replace raw _F_STOP with BIT_ULL(_F_STOP).
+> * Fix obtaining of stop ioctl arg (it was not obtained but written).
+> * Add stop to vdpa_sim_blk.
+> 
+> [1] git://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git
+> 
+> Eugenio Pérez (4):
+>   vdpa: Add suspend operation
+>   vhost-vdpa: introduce SUSPEND backend feature bit
+>   vhost-vdpa: uAPI to suspend the device
+>   vdpa_sim: Implement suspend vdpa op
+> 
+>  drivers/vdpa/vdpa_sim/vdpa_sim.c     | 14 +++++++++++
+>  drivers/vdpa/vdpa_sim/vdpa_sim.h     |  1 +
+>  drivers/vdpa/vdpa_sim/vdpa_sim_blk.c |  3 +++
+>  drivers/vdpa/vdpa_sim/vdpa_sim_net.c |  3 +++
+>  drivers/vhost/vdpa.c                 | 35 +++++++++++++++++++++++++++-
+>  include/linux/vdpa.h                 |  4 ++++
+>  include/uapi/linux/vhost.h           |  9 +++++++
+>  include/uapi/linux/vhost_types.h     |  2 ++
+>  8 files changed, 70 insertions(+), 1 deletion(-)
+> 
+> -- 
+> 2.31.1
+> 
+

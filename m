@@ -2,58 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0427058F421
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 00:06:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42AED58F424
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 00:07:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233178AbiHJWGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 18:06:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39802 "EHLO
+        id S233258AbiHJWHR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 18:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231191AbiHJWGP (ORCPT
+        with ESMTP id S231191AbiHJWHN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 18:06:15 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 274966C106
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 15:06:14 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1660169171;
+        Wed, 10 Aug 2022 18:07:13 -0400
+Received: from ssl.serverraum.org (ssl.serverraum.org [IPv6:2a01:4f8:151:8464::1:2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C29B1792DA
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 15:07:09 -0700 (PDT)
+Received: from mwalle01.kontron.local. (unknown [213.135.10.150])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by ssl.serverraum.org (Postfix) with ESMTPSA id D46B5221D4;
+        Thu, 11 Aug 2022 00:07:00 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=walle.cc; s=mail2016061301;
+        t=1660169228;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/hIPshU0EsW9aMzf1duqb+3/3CdS263Kxr8Wldx7RvQ=;
-        b=YC5/5gk/89XiDB30z53bP1WRtsu9PPDrf7UMkiafkBcKgeBcvJLC/p/66UOZyAwGHK0Qsl
-        QWrwsma98sSRIcUu0cNZKgDY7Ri+uJ1nXwATlsBySe7fTPxQYo3Pv8iA4E5OYpdU1dwsNy
-        GM3nD3L9JU8LRaNzzcrZ3D1pU83+UZ3FVHcHWQY6oBJhHrcvG6fOVESbn0oZK2oEdwE62p
-        avv5EdRh/Y0ImH79Z/oQRLkT+BoEkWp6/vjRm4ApsXiPKKX37yCkKR5y5OuVEkTLlqIaL7
-        wd3/cuXH6kV7GSKdzSmcppQkJ99e6kIrkIS3XNgeRd4I4mSuA6T6M74/q5KYHA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1660169171;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=/hIPshU0EsW9aMzf1duqb+3/3CdS263Kxr8Wldx7RvQ=;
-        b=gwnrze5uO+uiMdNm1kAq5/sSNZzGwR7+oas9q/GvokeevAhYo2teW7NYHX9YWpa437qnmJ
-        yBqKGZcpGBFmCGBw==
-To:     Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "Shutemov, Kirill" <kirill.shutemov@intel.com>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        "Gomez Iglesias, Antonio" <antonio.gomez.iglesias@intel.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Subject: Re: [PATCH] x86/apic: Don't disable x2APIC if locked
-In-Reply-To: <341ea6e9-d8f3-ee7a-6794-67408abbf047@linux.intel.com>
-References: <20220809234000.783284-1-daniel.sneddon@linux.intel.com>
- <d6ffb489-7024-ff74-bd2f-d1e06573bb82@intel.com>
- <238ea612-5a25-9323-b31f-0a14493db2f7@linux.intel.com>
- <d4bcb22e-224c-d256-cb93-3ff6ed89a7d0@intel.com>
- <341ea6e9-d8f3-ee7a-6794-67408abbf047@linux.intel.com>
-Date:   Thu, 11 Aug 2022 00:06:10 +0200
-Message-ID: <87r11nu52l.ffs@tglx>
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=NqeFnD6tHk0Apg0ipYoUap63hcDSdx+M2oLGDxmnAGA=;
+        b=Pc2ISALxIS69FN6jyWJoKawAM4PcbVH3rWPFMJtBb0++4GYUI9MMpXLFN+Js3Hsc/QXfyR
+        pzTabIbJYDZLnk8RjAv7BwbNSMM2fJnSb9dDuBCIInW5JqaD9F4M8TSrJlHPiOcQzdsSwO
+        7hSx1OXY0RtfqmH47QF5/JyOudwoOXY=
+From:   Michael Walle <michael@walle.cc>
+To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
+        Pratyush Yadav <pratyush@kernel.org>
+Cc:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
+        Michael Walle <michael@walle.cc>
+Subject: [PATCH v2 0/7] mtd: spi-nor: generic flash driver
+Date:   Thu, 11 Aug 2022 00:06:47 +0200
+Message-Id: <20220810220654.1297699-1-michael@walle.cc>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -64,51 +54,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 10 2022 at 12:40, Daniel Sneddon wrote:
-> On 8/10/22 11:52, Dave Hansen wrote:
->> On 8/10/22 11:30, Daniel Sneddon wrote:
->>>> If it's going to be on one server CPU that's coming out in ten years,
->>>> then we can hold off.
->>> SPR will certainly be sooner than 10 years, and with distros running on LTS
->>> kernels, it is probably worth backporting.  Since this isn't a bug fix (not a sw
->>> bug anyway), is this something I can just CC stable or is there a better way to
->>> say "Yes, this is a new feature, BUT, you really want it anyway"?
->> 
->> It it going to be *forced* on those SPR system?  In other words, is it a
->> little BIOS switch that users can flip?  Is there any non-kernel
->> workaround if a user hits this, or is the entire burden of this going to
->> be foisted on the kernel?
-> It won't be forced, BUT, certain features won't be available if the APIC isn't
-> locked.  According to the documentation SGX and TDX won't be available if you
-> don't lock the APIC.  So, yes, you don't have to fix it in the kernel, but you
-> may lose access to features if you don't.
->> 
->> The worst case scenario would be if a user has managed to compile a
->> CONFIG_X86_X2APIC=n kernel and is happily running along until they get a
->> microcode update, reboot and can't boot any more.
-> That _shouldn't_ happen as it is only on new hardware, so a ucode update
-> _shouldn't_ cause a crash.
+Add a generic flash driver, which is used when we don't find a matching
+flash in our database. All the basic features of a flash can be discovered
+by SFDP and most (if not all) newer flashes support it.
 
-Only on new hardware? The lock mechanism has to be available on _all_
-affected systems which support SGX. See
+changes since v1:
+ - fix doc prototype mistake reported by the kernel test robot
+ - preset page_size to 256 to support flashes which just have
+   SFDP data corresponding to JESD216A
+ - add new patch
+   mtd: spi-nor: fix select_uniform_erase to skip 0 erase size
+ - add function doc to explain wanted_size=0 in
+   spi_nor_select_uniform_erase()
 
- https://www.intel.com/content/www/us/en/developer/articles/technical/software-security-guidance/resources/intel-sgx-software-and-tcb-recovery-guidance.html
+Michael Walle (7):
+  mtd: spi-nor: hide jedec_id sysfs attribute if not present
+  mtd: spi-nor: sysfs: hide manufacturer if it is not set
+  mtd: spi-nor: remember full JEDEC flash ID
+  mtd: spi-nor: move function declaration out of sfdp.h
+  mtd: spi-nor: fix select_uniform_erase to skip 0 erase size
+  mtd: spi-nor: add generic flash driver
+  mtd: spi-nor: sysfs: print JEDEC ID for generic flash driver
 
-That means at some point in the future the locked x2APIC will be a
-prerequisite for attestating a SGX enclave independent of SPR.
+ .../ABI/testing/sysfs-bus-spi-devices-spi-nor |  6 ++++
+ drivers/mtd/spi-nor/core.c                    | 35 +++++++++++++++++--
+ drivers/mtd/spi-nor/core.h                    |  3 ++
+ drivers/mtd/spi-nor/debugfs.c                 |  2 +-
+ drivers/mtd/spi-nor/sfdp.c                    | 27 ++++++++++++++
+ drivers/mtd/spi-nor/sfdp.h                    |  2 --
+ drivers/mtd/spi-nor/sysfs.c                   | 20 ++++++++++-
+ include/linux/mtd/spi-nor.h                   |  3 ++
+ 8 files changed, 92 insertions(+), 6 deletions(-)
 
-So this affects already deployed systems and we have to
-
-  - backport the x2apic lock changes
-
-  - provide proper diagnostics
-
-  - make SGX and TDX depend on X2APIC support
-
-There is not much we can do about an older kernel which fails to boot or
-explodes once a BIOS update locks down X2APIC.
-
-Thanks,
-
-        tglx
+-- 
+2.30.2
 

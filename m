@@ -2,117 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A613B58EC5E
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 14:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A2BC58EC5D
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 14:54:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232312AbiHJMyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 08:54:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48460 "EHLO
+        id S232287AbiHJMyv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 08:54:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiHJMyn (ORCPT
+        with ESMTP id S229611AbiHJMyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 08:54:43 -0400
-Received: from alt-proxy28.mail.unifiedlayer.com (alt-proxy28.mail.unifiedlayer.com [74.220.216.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F03F783F3D
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 05:54:42 -0700 (PDT)
-Received: from cmgw12.mail.unifiedlayer.com (unknown [10.0.90.127])
-        by progateway1.mail.pro1.eigbox.com (Postfix) with ESMTP id B61C11004007D
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 12:54:35 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id LlEJoldUypnCyLlEJo3veA; Wed, 10 Aug 2022 12:54:35 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=d5kwdTvE c=1 sm=1 tr=0 ts=62f3aa8b
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=biHskzXt2R4A:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=pjtRnNOP0kAI7VyGe+muUvwfAwu+JFzfnUEM6wiCPiw=; b=muCBS5v6vut3S4SVVMr1THo2PW
-        FekZdkc3OB4a+XPDiPhLAL8UoLjt9zdxSj7IDxEPVuz5cQz3kqhWkT5fTF2tBktJLlCyieSLXnap9
-        p4oGgLOK+AutFnn6uRrssx3GYfqVUdBAFMI1UqCKAUctgTqRa6qsuAvhU8Y0ng4+O0bfZci/wymVs
-        ii0aVD8c2yC0mzHXDAG9hi3EmikN2ReCKBHc/pMQO64sYkXmLWBqhOxZNprYMUXBVDhoXiaQ5L4Dy
-        P6gjgcx4ywsnaytx0hqzrQZFgPdSG/cml9ZpJoJy9moU+/BnPmt/6R+9JxopXDOCWQw0lNn6XXJR/
-        pO6Q7OXw==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:39120 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1oLlEH-003akf-Vl;
-        Wed, 10 Aug 2022 06:54:34 -0600
-Subject: Re: [PATCH 5.18 00/35] 5.18.17-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
-References: <20220809175515.046484486@linuxfoundation.org>
-In-Reply-To: <20220809175515.046484486@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <a247d33d-8b1e-b5cc-dfe2-aebf95ded005@w6rz.net>
-Date:   Wed, 10 Aug 2022 05:54:30 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 10 Aug 2022 08:54:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A096483F3D;
+        Wed, 10 Aug 2022 05:54:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5330DB81C67;
+        Wed, 10 Aug 2022 12:54:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76F2DC433D6;
+        Wed, 10 Aug 2022 12:54:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660136077;
+        bh=uPLuF+DDW04LT9gSOZbFu31bMHZHY7AuwxnDEymETPY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UNkY0zZ/dvbVjljh7EO1ErSs2YeEMilfLO5c7AcIqM6C1wcyaDC45s2CAW4+v+5bm
+         aSZTtEljP0xweM/nDWXYsXgAGq/7xNaMyvKwesvewAHqmg1qJ58a7fWwmZ2C2n+tlo
+         KD8eRKVStYwt20VObVfv4seCARLA42wybbg5rK9E=
+Date:   Wed, 10 Aug 2022 14:54:34 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Cc:     Evan Green <evgreen@chromium.org>, linux-efi@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>, bhe@redhat.com,
+        Petr Mladek <pmladek@suse.com>, kexec@lists.infradead.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        x86@kernel.org, kernel-dev@igalia.com, kernel@gpiccoli.net,
+        halves@canonical.com, fabiomirmar@gmail.com,
+        alejandro.j.jimenez@oracle.com,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Arnd Bergmann <arnd@arndb.de>, Borislav Petkov <bp@alien8.de>,
+        Jonathan Corbet <corbet@lwn.net>, d.hatayama@jp.fujitsu.com,
+        dave.hansen@linux.intel.com, dyoung@redhat.com,
+        feng.tang@intel.com, mikelley@microsoft.com,
+        hidehiro.kawai.ez@hitachi.com, jgross@suse.com,
+        john.ogness@linutronix.de, Kees Cook <keescook@chromium.org>,
+        luto@kernel.org, mhiramat@kernel.org, mingo@redhat.com,
+        paulmck@kernel.org, peterz@infradead.org, rostedt@goodmis.org,
+        senozhatsky@chromium.org, Alan Stern <stern@rowland.harvard.edu>,
+        Thomas Gleixner <tglx@linutronix.de>, vgoyal@redhat.com,
+        vkuznets@redhat.com, Will Deacon <will@kernel.org>,
+        David Gow <davidgow@google.com>,
+        Julius Werner <jwerner@chromium.org>
+Subject: Re: [PATCH v2 03/13] firmware: google: Test spinlock on panic path
+ to avoid lockups
+Message-ID: <YvOqimNnybaCDDBm@kroah.com>
+References: <20220719195325.402745-1-gpiccoli@igalia.com>
+ <20220719195325.402745-4-gpiccoli@igalia.com>
+ <CAE=gft71vH+P3iAFXC0bLu0M2x2V4uJGWc82Xa+246ECuUdT-w@mail.gmail.com>
+ <019ae735-3d69-cb4e-c003-b83cc8cd76f8@igalia.com>
+ <YvErMyM8FNjeDeiW@kroah.com>
+ <55a074a0-ca3a-8afc-4336-e40cff757394@igalia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1oLlEH-003akf-Vl
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:39120
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 2
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <55a074a0-ca3a-8afc-4336-e40cff757394@igalia.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/9/22 11:00 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.18.17 release.
-> There are 35 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 11 Aug 2022 17:55:02 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.18.17-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.18.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Mon, Aug 08, 2022 at 12:37:46PM -0300, Guilherme G. Piccoli wrote:
+> Let me clarify / ask something: this series, for example, is composed as
+> a bunch of patches "centered" around the same idea, panic notifiers
+> improvements/fixes. But its patches belong to completely different
+> subsystems, like EFI/misc, architectures (alpha, parisc, arm), core
+> kernel code, etc.
+> 
+> What is the best way of getting this merged?
+> (a) Re-send individual patches with the respective Review/ACK tags to
+> the proper subsystem, or;
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Yes.
 
-Tested-by: Ron Economos <re@w6rz.net>
+> (b) Wait until the whole series is ACKed/Reviewed, and a single
+> maintainer (like you or Andrew, for example) would pick the whole series
+> and apply at once, even if it spans across multiple parts of the kernel?
 
+No, only do this after a kernel release cycle happens and there are
+straggler patches that did not get picked up by the relevant subsystem
+maintainers.
+
+thanks,
+
+greg k-h

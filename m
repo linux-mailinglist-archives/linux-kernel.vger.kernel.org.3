@@ -2,92 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B518158EDB4
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 15:57:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D95458EDB0
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 15:56:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232885AbiHJN5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 09:57:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35500 "EHLO
+        id S232880AbiHJN4x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 09:56:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231854AbiHJN5P (ORCPT
+        with ESMTP id S231854AbiHJN4u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 09:57:15 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B32B59275;
-        Wed, 10 Aug 2022 06:57:14 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27AD4HG8029931;
-        Wed, 10 Aug 2022 13:56:48 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=kiy7WXqD6IJTKwOY8MP6pKu62ib325Ly8oJCzgZBf7E=;
- b=Vw2tLpK+1iqXPowS/3JnjNh45F+mjbA3LUt2A2gkfCPbYBcF4bZY9Qktj3D/3pRJzaYt
- tSXJy/+yzPlMqnzbFJYCLt9o8J6yUZ7T1hwlPhMkC0SR9poajw0+wFUOKtgaPPMatcjX
- 6d2B1lj3xm0yN3+5wZpxj5Q4rs6vEwk+3Jfox12AEHPVx6VGQmNguxG+rDeVStra6H7c
- E0l8Jd/0PjV8YYhoWGXixq+OaJ+dksAR/OOoT8JjEjY5oDtKAL3F5HOzCi+l5IzkSbD1
- eHFx1OXxf8+xY6Vl5LvT13m2vu0XaAF4bri7K4wLBVacmBYsxWlAtFb1epwJdihxgX5y vA== 
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hv31vv4fp-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 Aug 2022 13:56:48 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27ADohvB001640;
-        Wed, 10 Aug 2022 13:56:47 GMT
-Received: from b03cxnp07027.gho.boulder.ibm.com (b03cxnp07027.gho.boulder.ibm.com [9.17.130.14])
-        by ppma05wdc.us.ibm.com with ESMTP id 3hvcmr8e35-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 Aug 2022 13:56:47 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp07027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27ADukQa31064362
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 10 Aug 2022 13:56:46 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 426C1BE054;
-        Wed, 10 Aug 2022 13:56:46 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2096DBE051;
-        Wed, 10 Aug 2022 13:56:44 +0000 (GMT)
-Received: from [9.160.17.179] (unknown [9.160.17.179])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Wed, 10 Aug 2022 13:56:44 +0000 (GMT)
-Message-ID: <8b2fcd61-16d6-09d1-e6ef-f5964378ab9f@linux.ibm.com>
-Date:   Wed, 10 Aug 2022 08:56:44 -0500
+        Wed, 10 Aug 2022 09:56:50 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A4D359275;
+        Wed, 10 Aug 2022 06:56:49 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7E68C1FB;
+        Wed, 10 Aug 2022 06:56:49 -0700 (PDT)
+Received: from [10.57.13.63] (unknown [10.57.13.63])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B71B03F67D;
+        Wed, 10 Aug 2022 06:56:46 -0700 (PDT)
+Message-ID: <141bb7cb-0291-371f-c898-fa87144c7d94@arm.com>
+Date:   Wed, 10 Aug 2022 14:56:45 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH 1/3] dt-bindings: hwmon: Add IBM OCC bindings
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2 1/1] ACPI: CPPC: Disable FIE if registers in PCC
+ regions
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        joel@jms.id.au
-Cc:     linux@roeck-us.net, jdelvare@suse.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-fsi@lists.ozlabs.org,
-        devicetree@vger.kernel.org
-References: <20220802194656.240564-1-eajames@linux.ibm.com>
- <20220802194656.240564-2-eajames@linux.ibm.com>
- <297ddf1f-8ddc-902c-ff3d-06b9d19c6a7b@linaro.org>
- <59ee8c2f-3d6c-14ed-c9f8-2bbd9377a7da@linux.ibm.com>
- <25eefb70-a7ae-876e-c05a-bd308d41053e@linaro.org>
-From:   Eddie James <eajames@linux.ibm.com>
-In-Reply-To: <25eefb70-a7ae-876e-c05a-bd308d41053e@linaro.org>
+To:     Ionela Voinescu <ionela.voinescu@arm.com>
+Cc:     Jeremy Linton <jeremy.linton@arm.com>, rafael@kernel.org,
+        lenb@kernel.org, viresh.kumar@linaro.org, robert.moore@intel.com,
+        devel@acpica.org, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        vschneid@redhat.com, Dietmar Eggemann <dietmar.eggemann@arm.com>
+References: <20220728221043.4161903-1-jeremy.linton@arm.com>
+ <20220728221043.4161903-2-jeremy.linton@arm.com>
+ <3a5e7abd-9361-11ba-978d-8e8bae00ea31@arm.com> <YvOpy69JkluN4ITK@arm.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <YvOpy69JkluN4ITK@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: mIRS1J6dM9Y4FJFn5qM3iaMOMkC0WZsK
-X-Proofpoint-ORIG-GUID: mIRS1J6dM9Y4FJFn5qM3iaMOMkC0WZsK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-10_08,2022-08-10_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 impostorscore=0
- spamscore=0 adultscore=0 mlxscore=0 lowpriorityscore=0 bulkscore=0
- phishscore=0 suspectscore=0 malwarescore=0 priorityscore=1501
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208100042
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -95,47 +52,103 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 8/10/22 02:43, Krzysztof Kozlowski wrote:
-> On 09/08/2022 22:42, Eddie James wrote:
->>>> +  ibm,inactive-on-init:
->>>> +    description: This property describes whether or not the OCC should
->>>> +      be marked as active during device initialization. The alternative
->>>> +      is for user space to mark the device active based on higher level
->>>> +      communications between the BMC and the host processor.
->>> I find the combination property name with this description confusing. It
->>> sounds like init of OCC and somehow it should be inactive? I assume if
->>> you initialize device, it is active. Or maybe the "init" is of something
->>> else? What is more, non-negation is easier to understand, so rather
->>> "ibm,active-on-boot" (or something like that).
+
+On 8/10/22 13:51, Ionela Voinescu wrote:
+> Hi folks,
+> 
+> On Wednesday 10 Aug 2022 at 13:29:08 (+0100), Lukasz Luba wrote:
+>> Hi Jeremy,
 >>
->> Well, the host processor initializes the OCC during it's boot, but this
->> document is describing a binding to be used by a service processor
->> talking to the OCC. So the OCC may be in any state. The init meant
->> driver init, but I will simply the description and change the property
->> to be more explicit: ibm,no-poll-on-init since that is what is actually
->> happening. Similar to the FSI binding for no-scan-on-init.
-> no-scan-on-init is not a good example. It wasn't even reviewed by Rob
-> (looking at commit). In both cases you describe driver behavior which is
-> not appropriate for bindings. Instead you should describe the hardware
-> characteristics/feature/bug/state which require skipping the initialization.
+>> +CC Valentin since he might be interested in this finding
+>> +CC Ionela, Dietmar
+>>
+>> I have a few comments for this patch.
+>>
+>>
+>> On 7/28/22 23:10, Jeremy Linton wrote:
+>>> PCC regions utilize a mailbox to set/retrieve register values used by
+>>> the CPPC code. This is fine as long as the operations are
+>>> infrequent. With the FIE code enabled though the overhead can range
+>>> from 2-11% of system CPU overhead (ex: as measured by top) on Arm
+>>> based machines.
+>>>
+>>> So, before enabling FIE assure none of the registers used by
+>>> cppc_get_perf_ctrs() are in the PCC region. Furthermore lets also
+>>> enable a module parameter which can also disable it at boot or module
+>>> reload.
+>>>
+>>> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+>>> ---
+>>>    drivers/acpi/cppc_acpi.c       | 41 ++++++++++++++++++++++++++++++++++
+>>>    drivers/cpufreq/cppc_cpufreq.c | 19 ++++++++++++----
+>>>    include/acpi/cppc_acpi.h       |  5 +++++
+>>>    3 files changed, 61 insertions(+), 4 deletions(-)
+>>
+>>
+>> 1. You assume that all platforms would have this big overhead when
+>>     they have the PCC regions for this purpose.
+>>     Do we know which version of HW mailbox have been implemented
+>>     and used that have this 2-11% overhead in a platform?
+>>     Do also more recent MHU have such issues, so we could block
+>>     them by default (like in your code)?
+>>
+>> 2. I would prefer to simply change the default Kconfig value to 'n' for
+>>     the ACPI_CPPC_CPUFREQ_FIE, instead of creating a runtime
+>>     check code which disables it.
+>>     We have probably introduce this overhead for older platforms with
+>>     this commit:
+>>
+>> commit 4c38f2df71c8e33c0b64865992d693f5022eeaad
+>> Author: Viresh Kumar <viresh.kumar@linaro.org>
+>> Date:   Tue Jun 23 15:49:40 2020 +0530
+>>
+>>      cpufreq: CPPC: Add support for frequency invariance
+>>
+>>
+>>
+>> If the test server with this config enabled performs well
+>> in the stress-tests, then on production server the config may be
+>> set to 'y' (or 'm' and loaded).
+>>
+>> I would vote to not add extra code, which then after a while might be
+>> decided to bw extended because actually some HW is actually capable (so
+>> we could check in runtime and enable it). IMO this create an additional
+>> complexity in our diverse configuration/tunnable space in our code.
+>>
+> 
+> I agree that having CONFIG_ACPI_CPPC_CPUFREQ_FIE default to no is the
+> simpler solution but it puts the decision in the hands of platform
+> providers which might result in this functionality not being used most
+> of the times, if at all. This being said, the use of CPPC counters is
+> meant as a last resort for FIE, if the platform does not have AMUs. This
+> is why I recommended this to default to no in the review of the original
+> patches.
+> 
+> But I don't see these runtime options as adding a lot of complexity
+> and therefore agree with the idea of this patch, versus the config
+> change above, with two design comments:
+>   - Rather than having a check for fie_disabled in multiple init and exit
+>     functions I think the code should be slightly redesigned to elegantly
+>     bail out of most functions if cppc_freq_invariance_init() failed.
+>   - Given the multiple options to disable this functionality (config,
+>     PCC check), I don't see a need for a module parameter or runtime user
+>     input, unless we make that overwrite all previous decisions, as in: if
+>     CONFIG_ACPI_CPPC_CPUFREQ_FIE=y, even if cppc_perf_ctrs_in_pcc(), if
+>     the fie_disabled module parameter is no, then counters should be used
+>     for FIE.
+> 
 
-
-Yep... there is no such hardware thing. The driver should never poll the 
-OCC during driver initialization (since host state isn't known), but it 
-did for the first couple of years of the drivers existence because we 
-didn't catch that it could cause problems. I submitted a patch to change 
-the driver behavior, but it does change the user space interface, so the 
-argument is that the new behavior should be optional.
-
-I suppose one correct way to control that would be a module parameter, 
-but that really doesn't work well on embedded-like systems like ours.
-
-Thanks very much for your feedback Krzysztof. Joel, any suggestions here?
-
-Eddie
-
-
->
->
-> Best regards,
-> Krzysztof
+A few things:
+1. With this default CONFIG_ACPI_CPPC_CPUFREQ_FIE=y we've introduced
+a performance regression on older HW servers, which is not good IMO.
+It looks like it wasn't a good idea. The FIE which is used in a tick
+and going through mailbox and FW sounds like a bad design.
+You need to have a really fast HW mailbox, FW and uC running it,
+to be able to provide a decent performance.
+2. Keeping a code which is not used in a server because at runtime we
+discover this PCC overhead issue doesn't make sense.
+3. System integrator or distro engineers should be able to experiment
+with different kernel config options on the platform and disable/
+enable this option on particular server. I am afraid that we cannot
+figure out and assume performance at runtime in this code and say
+it would be good or not to use it. Only stress-tests would tell this.

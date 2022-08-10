@@ -2,105 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7797058F41F
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 00:05:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0427058F421
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 00:06:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233172AbiHJWE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 18:04:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37326 "EHLO
+        id S233178AbiHJWGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 18:06:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232786AbiHJWEz (ORCPT
+        with ESMTP id S231191AbiHJWGP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 18:04:55 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FFBB81B2F;
-        Wed, 10 Aug 2022 15:04:54 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id 130so14878346pfv.13;
-        Wed, 10 Aug 2022 15:04:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=YYJjRLucIChyK6APevUjSlHLzhvc7kx5V1ce89D+Ci0=;
-        b=Ina7MvM0fw6Rnu6mFHPASwMT5BfxaVoY0EkYmfHFiRlq+aIBRfdaT68FfyXhysiSa8
-         jXa5mn3ydiUXb72u7LujBk2s48+ssLJaze4g3fA3VI6amiDU5R7P0g+1thVgSJ6I+7NS
-         zEnpr0U557hWqpMmL4d5cB4J6SQKc+OXApWJv/iiWp3PAcTUlIk+QZS0XhfZYAOa2tYL
-         mpyoZAIvG/mOyz2tgA9tUge7Hee5POFzm/aPXFGgBYYys816n9+7cQbGXsCY81dL2zJl
-         bj99Us/lnrMUHnzqwDCAwm9Q28BI/0QXabncSdDe7SEAAjo+Toy75RSnz1ZaWzodTvrG
-         4Nsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=YYJjRLucIChyK6APevUjSlHLzhvc7kx5V1ce89D+Ci0=;
-        b=Be/qxLHGUJylIS/HLYbGVfYgqq89xtPPpdaGWgvnMn8Jov9157899Sea435Cu7wHLp
-         ulTc9Pxf52cRGp5BgWI9meMckx5yGeWHI9dN+mWZ4B6pqRy6QWMKDcBKns/pL9iyTdcC
-         XBmUKNpUYMS+n/yt1VIh5d51lBmLBAr/er6Nl9/yGGw1oETYWg8LDDFp+30uIJfAzhHD
-         A9wyDZ7LyNMjQigU4DZ4NYuxJsGflnm8FxRX1Vno38lQMHPx7umnYvY7ILfv3gxjnlqL
-         pgQqayqB52UGznIxHi+/vb3Vq+3eECDohGkJ/izXp236aplebNlhaiEORrSeCXGrRI2M
-         ereQ==
-X-Gm-Message-State: ACgBeo0U8kn+oW0Rm7PxjOJUjZMQRpBE3cjwy2xFYTdHh+qqn0qqWvGn
-        BsKKKHj0OJ0dMWvQEQrz/iA=
-X-Google-Smtp-Source: AA6agR7MOkZdKiZUvC077NS2slfn3nrTZbPgsNCrIP7XpHTfuH83HFEwqnMTKb/cwOt9pR8K4MbsLQ==
-X-Received: by 2002:a63:c108:0:b0:41d:6bf3:6807 with SMTP id w8-20020a63c108000000b0041d6bf36807mr13939912pgf.157.1660169093850;
-        Wed, 10 Aug 2022 15:04:53 -0700 (PDT)
-Received: from rfl-device.localdomain ([39.124.24.102])
-        by smtp.gmail.com with ESMTPSA id x13-20020a170902a38d00b0016be6a554b5sm13366035pla.233.2022.08.10.15.04.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 15:04:53 -0700 (PDT)
-From:   Ruffalo Lavoisier <ruffalolavoisier@gmail.com>
-X-Google-Original-From: Ruffalo Lavoisier <RuffaloLavoisier@gmail.com>
-To:     Felix Fietkau <nbd@nbd.name>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Shayne Chen <shayne.chen@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Ruffalo Lavoisier <RuffaloLavoisier@gmail.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] mt76: connac: fix in comment
-Date:   Thu, 11 Aug 2022 07:04:44 +0900
-Message-Id: <20220810220445.8957-1-RuffaloLavoisier@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 10 Aug 2022 18:06:15 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 274966C106
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 15:06:14 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1660169171;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/hIPshU0EsW9aMzf1duqb+3/3CdS263Kxr8Wldx7RvQ=;
+        b=YC5/5gk/89XiDB30z53bP1WRtsu9PPDrf7UMkiafkBcKgeBcvJLC/p/66UOZyAwGHK0Qsl
+        QWrwsma98sSRIcUu0cNZKgDY7Ri+uJ1nXwATlsBySe7fTPxQYo3Pv8iA4E5OYpdU1dwsNy
+        GM3nD3L9JU8LRaNzzcrZ3D1pU83+UZ3FVHcHWQY6oBJhHrcvG6fOVESbn0oZK2oEdwE62p
+        avv5EdRh/Y0ImH79Z/oQRLkT+BoEkWp6/vjRm4ApsXiPKKX37yCkKR5y5OuVEkTLlqIaL7
+        wd3/cuXH6kV7GSKdzSmcppQkJ99e6kIrkIS3XNgeRd4I4mSuA6T6M74/q5KYHA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1660169171;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/hIPshU0EsW9aMzf1duqb+3/3CdS263Kxr8Wldx7RvQ=;
+        b=gwnrze5uO+uiMdNm1kAq5/sSNZzGwR7+oas9q/GvokeevAhYo2teW7NYHX9YWpa437qnmJ
+        yBqKGZcpGBFmCGBw==
+To:     Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>
+Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        "Gomez Iglesias, Antonio" <antonio.gomez.iglesias@intel.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Subject: Re: [PATCH] x86/apic: Don't disable x2APIC if locked
+In-Reply-To: <341ea6e9-d8f3-ee7a-6794-67408abbf047@linux.intel.com>
+References: <20220809234000.783284-1-daniel.sneddon@linux.intel.com>
+ <d6ffb489-7024-ff74-bd2f-d1e06573bb82@intel.com>
+ <238ea612-5a25-9323-b31f-0a14493db2f7@linux.intel.com>
+ <d4bcb22e-224c-d256-cb93-3ff6ed89a7d0@intel.com>
+ <341ea6e9-d8f3-ee7a-6794-67408abbf047@linux.intel.com>
+Date:   Thu, 11 Aug 2022 00:06:10 +0200
+Message-ID: <87r11nu52l.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Correct spelling on 'transmitted' in comment
+On Wed, Aug 10 2022 at 12:40, Daniel Sneddon wrote:
+> On 8/10/22 11:52, Dave Hansen wrote:
+>> On 8/10/22 11:30, Daniel Sneddon wrote:
+>>>> If it's going to be on one server CPU that's coming out in ten years,
+>>>> then we can hold off.
+>>> SPR will certainly be sooner than 10 years, and with distros running on LTS
+>>> kernels, it is probably worth backporting.  Since this isn't a bug fix (not a sw
+>>> bug anyway), is this something I can just CC stable or is there a better way to
+>>> say "Yes, this is a new feature, BUT, you really want it anyway"?
+>> 
+>> It it going to be *forced* on those SPR system?  In other words, is it a
+>> little BIOS switch that users can flip?  Is there any non-kernel
+>> workaround if a user hits this, or is the entire burden of this going to
+>> be foisted on the kernel?
+> It won't be forced, BUT, certain features won't be available if the APIC isn't
+> locked.  According to the documentation SGX and TDX won't be available if you
+> don't lock the APIC.  So, yes, you don't have to fix it in the kernel, but you
+> may lose access to features if you don't.
+>> 
+>> The worst case scenario would be if a user has managed to compile a
+>> CONFIG_X86_X2APIC=n kernel and is happily running along until they get a
+>> microcode update, reboot and can't boot any more.
+> That _shouldn't_ happen as it is only on new hardware, so a ucode update
+> _shouldn't_ cause a crash.
 
-Signed-off-by: Ruffalo Lavoisier <RuffaloLavoisier@gmail.com>
----
- drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Only on new hardware? The lock mechanism has to be available on _all_
+affected systems which support SGX. See
 
-diff --git a/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.c b/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.c
-index 9b17bd97ec09..972190f7b81f 100644
---- a/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.c
-+++ b/drivers/net/wireless/mediatek/mt76/mt76_connac_mcu.c
-@@ -2648,7 +2648,7 @@ int mt76_connac_mcu_add_key(struct mt76_dev *dev, struct ieee80211_vif *vif,
- }
- EXPORT_SYMBOL_GPL(mt76_connac_mcu_add_key);
- 
--/* SIFS 20us + 512 byte beacon tranmitted by 1Mbps (3906us) */
-+/* SIFS 20us + 512 byte beacon transmitted by 1Mbps (3906us) */
- #define BCN_TX_ESTIMATE_TIME (4096 + 20)
- void mt76_connac_mcu_bss_ext_tlv(struct sk_buff *skb, struct mt76_vif *mvif)
- {
--- 
-2.25.1
+ https://www.intel.com/content/www/us/en/developer/articles/technical/software-security-guidance/resources/intel-sgx-software-and-tcb-recovery-guidance.html
+
+That means at some point in the future the locked x2APIC will be a
+prerequisite for attestating a SGX enclave independent of SPR.
+
+So this affects already deployed systems and we have to
+
+  - backport the x2apic lock changes
+
+  - provide proper diagnostics
+
+  - make SGX and TDX depend on X2APIC support
+
+There is not much we can do about an older kernel which fails to boot or
+explodes once a BIOS update locks down X2APIC.
+
+Thanks,
+
+        tglx
 

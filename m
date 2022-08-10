@@ -2,223 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2792A58EE44
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 16:26:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 414E658EE4B
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 16:26:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232435AbiHJO0F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 10:26:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36638 "EHLO
+        id S232530AbiHJO0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 10:26:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232689AbiHJO0B (ORCPT
+        with ESMTP id S232498AbiHJO0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 10:26:01 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 079F317596
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:25:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660141558;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=oHQ26Wvf1D0+B6ua9zuInzugzqKwF0GdDplI8J7sX94=;
-        b=aXLppIoBrJJmGzfn7OEVtoQHQiRnveDe/e2gZnFGVMklPgvg6b2TRAfNgdO2tENyBVymcR
-        hKMAWyz/wAPF7t0I6BHzTPSp8ZCVL8UEJze2D42PJy0/m/gNG1iJV/0ZGdjnsVHVewi1mC
-        Wg2XHFbpTtjjnhETuGLVAceZTypXDLE=
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com
- [209.85.215.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-261-niDsmhcpNdmZl7RN87Ohhw-1; Wed, 10 Aug 2022 10:25:56 -0400
-X-MC-Unique: niDsmhcpNdmZl7RN87Ohhw-1
-Received: by mail-pg1-f199.google.com with SMTP id z22-20020a630a56000000b0041b98176de9so5805488pgk.15
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:25:56 -0700 (PDT)
+        Wed, 10 Aug 2022 10:26:11 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4960B1CFDB
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:26:10 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id n4so16182947wrp.10
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:26:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=PxC7taMylQDUHixSMWrpX0lBX/KvvsQMV/F2vgDXG0c=;
+        b=HGVm54lbjow5CHbKkhecvtoEv7Dcln74pUP4USjVFB7pMfzJbJx/OxkpzaQ/KTqCKJ
+         Q4XxCbg4qes4bnKM/IPm4Oiv/M9ZhLcKH6BpN6ditlXliiApYs4ZMqOTTVuNliu+blPV
+         44yoslgnbOAC/GOVFRvZAqC1RCiCORmq7HaBr9fg0ZRTcOUOt5A2tuQherdXkUI8NOR6
+         TIMhNf1waB2m/vD/JoqFSNjwJi5pKZIFie7H2eE++/R9Nlf9INz9zufJ6F0aT9uRlT3C
+         zMUw3rfoyXHVuesoV7LgOmUgOS/W9pL5oe6aIT4CcNxSTMAJGKF/hwlg1iBru9eBtqPN
+         FKCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=oHQ26Wvf1D0+B6ua9zuInzugzqKwF0GdDplI8J7sX94=;
-        b=eBXpouAE68C38tbcnXnqiNYeKb8yIW1v7QkAzpxsQf8tWH/vOyGJxO+WGSuXs0zMJc
-         Q9RJPQb6eWMGx8N08vsiGk03UrVyh1Nsep4gcDnNqYgP3KniHAqbE97lugW4H5U0+Frn
-         +GAV87IklBCOQQtTiXWjvHAbsB8nUZ6CX8IiVnAGug3evTSgkfJNn5V1032P8M6eUQsk
-         asmDwKxxbBWXxk5vLPbMI+ls5W5fXggZKwevSvNUvAT2HgL6qocGHIU+NmrittexzkUX
-         i4NQEbrsnK+rLT6+Ux2CAotHU3CLCIEh3rf1FTrgTg4ekDLWAuiYMEa8T3JSAWuigbDy
-         sFaw==
-X-Gm-Message-State: ACgBeo2p1+ayOWJBJCHZNwnEgppc0dAEjV9gQ/WCeV3eBmVGK12N+qYb
-        +ixD2ik74QDctuZxWB/XSIk6eja7B1PxQjatrwe4LNFHpc9Y138H0WxEq8pJK/5I44THUPsWsNR
-        nnL6x1wE/JrdYcVJ02bftlySt4P5zWp90GqmsdPl4
-X-Received: by 2002:a17:902:f650:b0:15f:3a10:a020 with SMTP id m16-20020a170902f65000b0015f3a10a020mr27766174plg.61.1660141555749;
-        Wed, 10 Aug 2022 07:25:55 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6jIsgmiVAZO+kwKtA8ssDA5oXrrYxrX9v81lo5S8jlfk0LA/n9SFWvIUSV7m6d+ret3BqnKVOPUoX5Lpegc1U=
-X-Received: by 2002:a17:902:f650:b0:15f:3a10:a020 with SMTP id
- m16-20020a170902f65000b0015f3a10a020mr27766137plg.61.1660141555320; Wed, 10
- Aug 2022 07:25:55 -0700 (PDT)
+        bh=PxC7taMylQDUHixSMWrpX0lBX/KvvsQMV/F2vgDXG0c=;
+        b=pvCYgjkjhohJYRJt0YM0JiWLUqA/7ilwc6bwWG2mu7a5r/H3NldjKcPnwwRA6Km9bx
+         fabcl7F9Ryv/lG9nvMQkmrfLdDcszV5NZbSGASUsxxcZH0NcTk05g9IOP6oH3HMRRyON
+         2Bb8KBOVTyUV15v2552SJ7ejIDDL/kYiTrn3wLCul3/xgKChz83YOvwUJ0tbeSh1ADGp
+         C5xaRj7r+GJ3WXJiz+Nejx/GFyh6BEEMYf1pldlkYSQRzuDaE67hQvnEBj3eMrS54t/j
+         ByBPil15EOQpFgC/dztWI/4dPOK7XwDhwQqgR/cCgZUM1U8tVv3B5fD/xiiFYQWQQCkp
+         5UFw==
+X-Gm-Message-State: ACgBeo2lqF9H+y4uBgfnHVeDLquVgMn2j6uO7cG17ZupMdekjCB4u9n9
+        fVZnwtrD9zfxDFyuGWE2Awv9wr9LBJnSN3dqwWwPvA==
+X-Google-Smtp-Source: AA6agR5tn2cSIsF6oseDLw/DBgnH5iau93kiUtSyR4DVnZloPDnLHTkWOMq4ezSDrM3e8QPzWZPiIV6bLplCNTgzsuI=
+X-Received: by 2002:adf:e28d:0:b0:21e:4c3b:b446 with SMTP id
+ v13-20020adfe28d000000b0021e4c3bb446mr17038394wri.300.1660141568603; Wed, 10
+ Aug 2022 07:26:08 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220809134603.1769279-1-roberto.sassu@huawei.com>
- <20220809134603.1769279-2-roberto.sassu@huawei.com> <YvKRYRjJdXbAWL6Y@kernel.org>
- <c9e73d7aa51a47c585b935a41dbf1924@huawei.com>
-In-Reply-To: <c9e73d7aa51a47c585b935a41dbf1924@huawei.com>
-From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date:   Wed, 10 Aug 2022 16:25:44 +0200
-Message-ID: <CAO-hwJLNsV00pEcTY65TBNszCTh1DfhidK+m5NULiwtGr7GLmw@mail.gmail.com>
-Subject: Re: [PATCH v9 01/10] btf: Add a new kfunc flag which allows to mark a
- function to be sleepable
-To:     Roberto Sassu <roberto.sassu@huawei.com>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "martin.lau@linux.dev" <martin.lau@linux.dev>,
-        "song@kernel.org" <song@kernel.org>, "yhs@fb.com" <yhs@fb.com>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        "sdf@google.com" <sdf@google.com>,
-        "haoluo@google.com" <haoluo@google.com>,
-        "jolsa@kernel.org" <jolsa@kernel.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Yosry Ahmed <yosryahmed@google.com>
+References: <20220804221816.1802790-1-irogers@google.com> <20220804221816.1802790-9-irogers@google.com>
+ <04e1e8c1-d060-6658-141a-b7c1b7dd8400@huawei.com>
+In-Reply-To: <04e1e8c1-d060-6658-141a-b7c1b7dd8400@huawei.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Wed, 10 Aug 2022 07:25:56 -0700
+Message-ID: <CAP-5=fXr=4um5nK6Jxt3xMu481k=DGu_9rE3_Y-+XX6iYMb+5Q@mail.gmail.com>
+Subject: Re: [PATCH v4 08/17] perf pmu-events: Hide pmu_sys_event_tables
+To:     John Garry <john.garry@huawei.com>
+Cc:     Will Deacon <will@kernel.org>, James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 10, 2022 at 3:44 PM Roberto Sassu <roberto.sassu@huawei.com> wrote:
+On Fri, Aug 5, 2022 at 4:15 AM John Garry <john.garry@huawei.com> wrote:
 >
-> > From: Jarkko Sakkinen [mailto:jarkko@kernel.org]
-> > Sent: Tuesday, August 9, 2022 6:55 PM
-> > On Tue, Aug 09, 2022 at 03:45:54PM +0200, Roberto Sassu wrote:
-> > > From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> > >
-> > > From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> > >
-> > > This allows to declare a kfunc as sleepable and prevents its use in
-> > > a non sleepable program.
+> On 04/08/2022 23:18, Ian Rogers wrote:
+> > Move usage of the table to pmu-events.c so it may be hidden. By
+> > abstracting the table the implementation can later be changed.
 > >
-> > Nit: "Declare a kfunc as sleepable and prevent its use in a
-> > non-sleepable program."
-> >
-> > It's missing the part *how* the patch accomplishes its goals.
+> > Signed-off-by: Ian Rogers<irogers@google.com>
 >
-> I will add:
+> Reviewed-by: John Garry <john.garry@huawei.com>
 >
-> If an eBPF program is going to call a kfunc declared as sleepable,
-> eBPF will look at the eBPF program flags. If BPF_F_SLEEPABLE is
-> not set, execution of that program is denied.
-
-All those changes are looking good to me.
-
-Thanks a lot for keeping pushing on this patch :)
-
-Cheers,
-Benjamin
-
+> > -     const struct pmu_event *sys_event_tables = __test_pmu_get_sys_events_table();
+> > +     const struct pmu_event *sys_event_tables = find_sys_events_table("pme_test_soc_sys");
 >
-> Roberto
->
-> > > Signed-off-by: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-> > > Co-developed-by: Yosry Ahmed <yosryahmed@google.com>
-> > > Signed-off-by: Yosry Ahmed <yosryahmed@google.com>
-> > > Signed-off-by: Hao Luo <haoluo@google.com>
-> > > ---
-> > >  Documentation/bpf/kfuncs.rst | 6 ++++++
-> > >  include/linux/btf.h          | 1 +
-> > >  kernel/bpf/btf.c             | 9 +++++++++
-> > >  3 files changed, 16 insertions(+)
-> > >
-> > > diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-> > > index c0b7dae6dbf5..c8b21de1c772 100644
-> > > --- a/Documentation/bpf/kfuncs.rst
-> > > +++ b/Documentation/bpf/kfuncs.rst
-> > > @@ -146,6 +146,12 @@ that operate (change some property, perform some
-> > operation) on an object that
-> > >  was obtained using an acquire kfunc. Such kfuncs need an unchanged pointer
-> > to
-> > >  ensure the integrity of the operation being performed on the expected object.
-> > >
-> > > +2.4.6 KF_SLEEPABLE flag
-> > > +-----------------------
-> > > +
-> > > +The KF_SLEEPABLE flag is used for kfuncs that may sleep. Such kfuncs can
-> > only
-> > > +be called by sleepable BPF programs (BPF_F_SLEEPABLE).
-> > > +
-> > >  2.5 Registering the kfuncs
-> > >  --------------------------
-> > >
-> > > diff --git a/include/linux/btf.h b/include/linux/btf.h
-> > > index cdb376d53238..976cbdd2981f 100644
-> > > --- a/include/linux/btf.h
-> > > +++ b/include/linux/btf.h
-> > > @@ -49,6 +49,7 @@
-> > >   * for this case.
-> > >   */
-> > >  #define KF_TRUSTED_ARGS (1 << 4) /* kfunc only takes trusted pointer
-> > arguments */
-> > > +#define KF_SLEEPABLE   (1 << 5) /* kfunc may sleep */
-> > >
-> > >  struct btf;
-> > >  struct btf_member;
-> > > diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-> > > index 7e64447659f3..d3e4c86b8fcd 100644
-> > > --- a/kernel/bpf/btf.c
-> > > +++ b/kernel/bpf/btf.c
-> > > @@ -6175,6 +6175,7 @@ static int btf_check_func_arg_match(struct
-> > bpf_verifier_env *env,
-> > >  {
-> > >     enum bpf_prog_type prog_type = resolve_prog_type(env->prog);
-> > >     bool rel = false, kptr_get = false, trusted_arg = false;
-> > > +   bool sleepable = false;
-> > >     struct bpf_verifier_log *log = &env->log;
-> > >     u32 i, nargs, ref_id, ref_obj_id = 0;
-> > >     bool is_kfunc = btf_is_kernel(btf);
-> > > @@ -6212,6 +6213,7 @@ static int btf_check_func_arg_match(struct
-> > bpf_verifier_env *env,
-> > >             rel = kfunc_flags & KF_RELEASE;
-> > >             kptr_get = kfunc_flags & KF_KPTR_GET;
-> > >             trusted_arg = kfunc_flags & KF_TRUSTED_ARGS;
-> > > +           sleepable = kfunc_flags & KF_SLEEPABLE;
-> > >     }
-> > >
-> > >     /* check that BTF function arguments match actual types that the
-> > > @@ -6419,6 +6421,13 @@ static int btf_check_func_arg_match(struct
-> > bpf_verifier_env *env,
-> > >                     func_name);
-> > >             return -EINVAL;
-> > >     }
-> > > +
-> > > +   if (sleepable && !env->prog->aux->sleepable) {
-> > > +           bpf_log(log, "kernel function %s is sleepable but the program is
-> > not\n",
-> > > +                   func_name);
-> > > +           return -EINVAL;
-> > > +   }
-> > > +
-> > >     /* returns argument register number > 0 in case of reference release
-> > kfunc */
-> > >     return rel ? ref_regno : 0;
-> > >  }
-> > > --
-> > > 2.25.1
-> > >
-> >
-> > BR, Jarkko
->
+> Maybe we can change to not need the "pme_" prefix or even some of the
+> suffix, like "_sys"
 
+Ack. Not done here so the change is the smallest possible.
+
+Thanks,
+Ian
+
+> >       const struct pmu_events_map *map = __test_pmu_get_events_map();
+>

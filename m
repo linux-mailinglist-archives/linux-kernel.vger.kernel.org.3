@@ -2,145 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01DBC58F4FA
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 01:46:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F73458F4FF
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 01:53:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233219AbiHJXqP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 19:46:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42582 "EHLO
+        id S233473AbiHJXxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 19:53:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229868AbiHJXqN (ORCPT
+        with ESMTP id S233589AbiHJXxL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 19:46:13 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C74951EAD3
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 16:46:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660175172; x=1691711172;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=vSEwmW4+TDnMXMhJIOivQsDE/zLtPrGURz+W2RcOC3E=;
-  b=T2RxZaYLpHIFBda+ndVHbfF7cphIOLP6SgFfNF4xTAeSbFh0HMpckwY0
-   PxNuL7WZdK3vX0OebAFzu5HpzsHy3GXhSHpqUNVDXfnZ9gnBYnfJ5OD+U
-   JLQxeZuzHitLUg1Lq/xROFwe5gBDoZdumPsdLrxz8y+5qP9LiP/0MHLcl
-   Yswg8bYKniyYejKubA1t/2sCRcokx0F+vP5tE7uNY33/GCrBqytvLone+
-   ViBWV8DwxJUvm90sVGnR7bjfe8FrEY6lsXYYBO67Rr2OlJAY3Zl+yUi6C
-   ttJkh5WG+JI8VBHMvwqSTYjXiwz3qe5vaJXZo+fCRct5VSeOzdKzS8Nih
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="270995929"
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="270995929"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 16:46:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="638292859"
-Received: from lkp-server02.sh.intel.com (HELO 5d6b42aa80b8) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 10 Aug 2022 16:46:11 -0700
-Received: from kbuild by 5d6b42aa80b8 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oLvOs-0000qs-1V;
-        Wed, 10 Aug 2022 23:46:10 +0000
-Date:   Thu, 11 Aug 2022 07:45:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [bvanassche:scsi-const-host-template 12/88]
- drivers/ata/pata_platform.c:221:48: warning: passing argument 7 of
- '__pata_platform_probe' discards 'const' qualifier from pointer target type
-Message-ID: <202208110734.Ink9FfL5-lkp@intel.com>
+        Wed, 10 Aug 2022 19:53:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B71CB326C1
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 16:53:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660175589;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RK+rr0mfAx0H6DNfJ38VHaiOqlQCgpVZGMqD2Vgy3AU=;
+        b=ZqLWhRlddssTJgMWyB6IQ8ISbD8pzsWyLYaVuUnWt/8Ff5D7WkSs5eU7jZdg7R7aVklhmL
+        8LT28ndY/S6Xk8vjCN9BKQdFyV1DvYRh/ZFTDJQPv1iLrJvnXs8I3N32HQYZ1Ynx8dql8L
+        eqC0lAP+Lrfg3hFK+VS97Hu0ZVrJomM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-414-xWnBAyr8PHS6t1-mPqJvlw-1; Wed, 10 Aug 2022 19:53:03 -0400
+X-MC-Unique: xWnBAyr8PHS6t1-mPqJvlw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4495885A587;
+        Wed, 10 Aug 2022 23:53:03 +0000 (UTC)
+Received: from [10.64.54.77] (vpn2-54-77.bne.redhat.com [10.64.54.77])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8611C9459C;
+        Wed, 10 Aug 2022 23:52:58 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH 1/2] KVM: selftests: Make rseq compatible with glibc-2.35
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     shuah <shuah@kernel.org>, Florian Weimer <fweimer@redhat.com>,
+        kvmarm <kvmarm@lists.cs.columbia.edu>,
+        KVM list <kvm@vger.kernel.org>,
+        linux-kselftest <linux-kselftest@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>, maz <maz@kernel.org>,
+        oliver upton <oliver.upton@linux.dev>,
+        andrew jones <andrew.jones@linux.dev>,
+        yihyu <yihyu@redhat.com>, shan gavin <shan.gavin@gmail.com>
+References: <20220809060627.115847-1-gshan@redhat.com>
+ <8735e6ncxw.fsf@oldenburg.str.redhat.com>
+ <7844e3fa-e49e-de75-e424-e82d3a023dd6@redhat.com>
+ <87o7wtnay6.fsf@oldenburg.str.redhat.com>
+ <616d4de6-81f6-9d14-4e57-4a79fec45690@redhat.com>
+ <797306043.114963.1660047714774.JavaMail.zimbra@efficios.com>
+ <1014177394.115022.1660052656961.JavaMail.zimbra@efficios.com>
+ <YvLT1fd8ddybF5Uw@google.com>
+ <1478461718.353.1660133626967.JavaMail.zimbra@efficios.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <1191ef05-ef2c-fe8e-656d-cb89141b36fb@redhat.com>
+Date:   Thu, 11 Aug 2022 09:52:55 +1000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1478461718.353.1660133626967.JavaMail.zimbra@efficios.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.79 on 10.11.54.5
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/bvanassche/linux scsi-const-host-template
-head:   13249cc58dd0478af230234f124ec75b5331c348
-commit: 21962245b3c73a5e7c9b7b3c129a83f5c1c31608 [12/88] ata
-config: m68k-randconfig-r035-20220810 (https://download.01.org/0day-ci/archive/20220811/202208110734.Ink9FfL5-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/bvanassche/linux/commit/21962245b3c73a5e7c9b7b3c129a83f5c1c31608
-        git remote add bvanassche https://github.com/bvanassche/linux
-        git fetch --no-tags bvanassche scsi-const-host-template
-        git checkout 21962245b3c73a5e7c9b7b3c129a83f5c1c31608
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/ata/
+Hi Mathieu,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+On 8/10/22 10:13 PM, Mathieu Desnoyers wrote:
+> ----- On Aug 9, 2022, at 5:38 PM, Sean Christopherson seanjc@google.com wrote: 
+>> On Tue, Aug 09, 2022, Mathieu Desnoyers wrote:
+>>> ----- On Aug 9, 2022, at 8:21 AM, Mathieu Desnoyers
+>>> mathieu.desnoyers@efficios.com wrote:
 
-All warnings (new ones prefixed by >>):
+[...]
 
-   drivers/ata/pata_platform.c: In function 'pata_platform_probe':
->> drivers/ata/pata_platform.c:221:48: warning: passing argument 7 of '__pata_platform_probe' discards 'const' qualifier from pointer target type [-Wdiscarded-qualifiers]
-     221 |                                      pio_mask, &pata_platform_sht, false);
-         |                                                ^~~~~~~~~~~~~~~~~~
-   drivers/ata/pata_platform.c:100:54: note: expected 'struct scsi_host_template *' but argument is of type 'const struct scsi_host_template *'
-     100 |                           struct scsi_host_template *sht, bool use16bit)
-         |                           ~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+>>>>
+>>>> All those are handled in the rseq selftests and in librseq. Why duplicate all
+>>>> that logic again?
+>>>
+>>> More to the point, considering that we have all the relevant rseq registration
+>>> code in tools/testing/selftests/rseq/rseq.c already, and the relevant thread
+>>> pointer getter code in tools/testing/selftests/rseq/rseq-*thread-pointer.h,
+>>> is there an easy way to get test applications in tools/testing/selftests/kvm
+>>> and in tools/testing/selftests/rseq to share that common code ?
+>>>
+>>> Keeping duplicated compatibility code is bad for long-term maintainability.
+>>
+>> Any reason not to simply add tools/lib/rseq.c and then expose a helper to get
+>> the
+>> registered rseq struct?
+> 
+> Indeed, moving rseq.c to tools/lib/ would allow building a .so from any selftest
+> which needs to use it.
+> 
+> And we could move the relevant rseq helper header files to tools/include/rseq/*
+> as well.
+> 
+> Thoughts ?
+> 
+
+One question is how librseq.so can be built automatically, when I'm going to
+build tools/testing/selftests/kvm/rseq_test.
+
+     # cd linux/tools/testing/selftests/kvm
+     # make rseq_test
+
+It's not perfect if I have to build tools/lib/librseq.so in advance, in order
+to build tools/testing/selftests/kvm/rseq_test for the sake of dependency.
+
+Thanks,
+Gavin
 
 
-vim +221 drivers/ata/pata_platform.c
 
-a20c9e820864e18 Paul Mundt         2006-10-27  184  
-0ec24914675c482 Greg Kroah-Hartman 2012-12-21  185  static int pata_platform_probe(struct platform_device *pdev)
-cf03613e9662c28 Anton Vorontsov    2008-01-09  186  {
-cf03613e9662c28 Anton Vorontsov    2008-01-09  187  	struct resource *io_res;
-cf03613e9662c28 Anton Vorontsov    2008-01-09  188  	struct resource *ctl_res;
-cf03613e9662c28 Anton Vorontsov    2008-01-09  189  	struct resource *irq_res;
-61b8c345aa8c50c Jingoo Han         2013-07-30  190  	struct pata_platform_info *pp_info = dev_get_platdata(&pdev->dev);
-cf03613e9662c28 Anton Vorontsov    2008-01-09  191  
-cf03613e9662c28 Anton Vorontsov    2008-01-09  192  	/*
-cf03613e9662c28 Anton Vorontsov    2008-01-09  193  	 * Simple resource validation ..
-cf03613e9662c28 Anton Vorontsov    2008-01-09  194  	 */
-cf03613e9662c28 Anton Vorontsov    2008-01-09  195  	if ((pdev->num_resources != 3) && (pdev->num_resources != 2)) {
-cf03613e9662c28 Anton Vorontsov    2008-01-09  196  		dev_err(&pdev->dev, "invalid number of resources\n");
-cf03613e9662c28 Anton Vorontsov    2008-01-09  197  		return -EINVAL;
-cf03613e9662c28 Anton Vorontsov    2008-01-09  198  	}
-cf03613e9662c28 Anton Vorontsov    2008-01-09  199  
-cf03613e9662c28 Anton Vorontsov    2008-01-09  200  	/*
-cf03613e9662c28 Anton Vorontsov    2008-01-09  201  	 * Get the I/O base first
-cf03613e9662c28 Anton Vorontsov    2008-01-09  202  	 */
-8818a5342cb499b Lad Prabhakar      2022-01-17  203  	io_res = platform_get_mem_or_io(pdev, 0);
-8818a5342cb499b Lad Prabhakar      2022-01-17  204  	if (!io_res)
-cf03613e9662c28 Anton Vorontsov    2008-01-09  205  		return -EINVAL;
-cf03613e9662c28 Anton Vorontsov    2008-01-09  206  
-cf03613e9662c28 Anton Vorontsov    2008-01-09  207  	/*
-cf03613e9662c28 Anton Vorontsov    2008-01-09  208  	 * Then the CTL base
-cf03613e9662c28 Anton Vorontsov    2008-01-09  209  	 */
-8818a5342cb499b Lad Prabhakar      2022-01-17  210  	ctl_res = platform_get_mem_or_io(pdev, 1);
-8818a5342cb499b Lad Prabhakar      2022-01-17  211  	if (!ctl_res)
-cf03613e9662c28 Anton Vorontsov    2008-01-09  212  		return -EINVAL;
-cf03613e9662c28 Anton Vorontsov    2008-01-09  213  
-cf03613e9662c28 Anton Vorontsov    2008-01-09  214  	/*
-cf03613e9662c28 Anton Vorontsov    2008-01-09  215  	 * And the IRQ
-cf03613e9662c28 Anton Vorontsov    2008-01-09  216  	 */
-cf03613e9662c28 Anton Vorontsov    2008-01-09  217  	irq_res = platform_get_resource(pdev, IORESOURCE_IRQ, 0);
-cf03613e9662c28 Anton Vorontsov    2008-01-09  218  
-cf03613e9662c28 Anton Vorontsov    2008-01-09  219  	return __pata_platform_probe(&pdev->dev, io_res, ctl_res, irq_res,
-cf03613e9662c28 Anton Vorontsov    2008-01-09  220  				     pp_info ? pp_info->ioport_shift : 0,
-f3d5e4f18dba18d Alexander Shiyan   2019-01-19 @221  				     pio_mask, &pata_platform_sht, false);
-cf03613e9662c28 Anton Vorontsov    2008-01-09  222  }
-cf03613e9662c28 Anton Vorontsov    2008-01-09  223  
 
-:::::: The code at line 221 was first introduced by commit
-:::::: f3d5e4f18dba18d7c2303dda68b9dbcf5ccc05cd ata: pata_of_platform: Allow to use 16-bit wide data transfer
-
-:::::: TO: Alexander Shiyan <shc_work@mail.ru>
-:::::: CC: Jens Axboe <axboe@kernel.dk>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

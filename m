@@ -2,74 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0CF058ED82
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 15:41:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8CD658ED85
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 15:44:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232840AbiHJNlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 09:41:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51906 "EHLO
+        id S232303AbiHJNoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 09:44:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232691AbiHJNlE (ORCPT
+        with ESMTP id S229680AbiHJNoJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 09:41:04 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF1946D92
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 06:41:03 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id q30so17763120wra.11
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 06:41:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=rGP5GeklV5sYvo4vtTgYCA65Zl+6s2ik7WEi4stFPCE=;
-        b=aQKijK28zoGuV84XdC62Cvvh84niNxkPtr5NhXGjEHyRQrunxHYA8+BuunqRjXq6g1
-         xENmksC4VVje463bqODvDsthkPaBsiPcAdd8X+ThAPal8WINm1zsKbqdSu7ryff2d3EL
-         7cgH5bXvKYAXHSJNSEAnLTUo8qrX4tMz6umKkAnY5gJJRm7o+IvC6MnW3mvhLMnXZP26
-         JBHOE/DFOI4IZWYgriP5aCMWWdIfKLWvCD+eLa8La1tPv4g2LCZY4xkM0qgZiVR1dP5t
-         YTzjZxNjm6Ih/h/Xe2NYbS8G9ZiFnrC1N3jKFstwbOUsNLUobE7LFU1ITRqzGyUrti7L
-         vvxw==
+        Wed, 10 Aug 2022 09:44:09 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC7CD67148
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 06:44:08 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id w7-20020a5d9607000000b0067c6030dfb8so8055436iol.10
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 06:44:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc;
-        bh=rGP5GeklV5sYvo4vtTgYCA65Zl+6s2ik7WEi4stFPCE=;
-        b=VDAG937hImUrPzQ83SE23r7ZOfILMT4Dfnv2xMPkDZGMb3PImO9B2XBgKN6qQlx97U
-         3GvNMvb8Pin4+FQ9KXr6hTTAtfxLT3Q1d1MeejX8Qbww0tS9Y1SZdIuxuQwZiC84TllM
-         svw7jjL/z0C2R86HAYrq6QS4vGfprlEthjmW2trvL/xfM6BNMtbUwk52rAg9GRIB0O7P
-         ch5ivemLo+3vouY6/GA3ym9K3AeJEAiFAIoLvVNPEQfR2ay3M19zudb+61zF3qLt4UkV
-         WtmyincvZBQ4XFPZyPPncqUqieXYtsANRYTvzzMOeVVvg2YhZlbxv8MGX+4lK3l3ObYe
-         J/2w==
-X-Gm-Message-State: ACgBeo0VuHIPGFRTFfXKbQcY7iSZvtGG9v6zbLLbSsmAebZ9jrtPIz1R
-        yY1AJBg2oy9I2C4BPfDRru5WYA==
-X-Google-Smtp-Source: AA6agR7hqSLgdUcHVnV1a1G0PITSckyf7Kh30N3n6ZluCQ/1E0gsyeH1nQ2QNX+thQ2W5THNKIYLfw==
-X-Received: by 2002:a5d:47c1:0:b0:221:7670:687d with SMTP id o1-20020a5d47c1000000b002217670687dmr14268120wrc.496.1660138861673;
-        Wed, 10 Aug 2022 06:41:01 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id a3-20020adfe5c3000000b0021edb2d07bbsm15809382wrn.33.2022.08.10.06.41.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Aug 2022 06:41:00 -0700 (PDT)
-Message-ID: <200c59ca-dcfc-9ad8-aa1e-977708398c3b@linaro.org>
-Date:   Wed, 10 Aug 2022 15:40:59 +0200
+        bh=q2ZWxb/37oHYWsgSn6qss8EHRU0h4XaqopREH8ADb2w=;
+        b=oA/7GrXLaYTT2lCai3ugnPrDb6RnXkRIrHUKC0sCgHl1IW0rRtic060htVdw4jU2vS
+         WeYpUJZcDLt3ct5ZEcPv8u93brVW1ZTjyweln8SHkKVPrM1ZIiGxyouBTusO+YcPXnfg
+         zk3I1yG/Y/nOPYx/Y0dPat+iHhFvwMhcdoGloTbwlP4CY0c72n/jrLzNOQ2U6q1b6IiJ
+         sKWNFBr+RCj7cbB9fyXs/rHR2BpHvxjfpj3Z6cLSsQyniZZs7NF5sumLf6yv4jpkWCaN
+         Xsb0jn8czBOg971VJtykfcZbg0sQlmei/gGHoRP1dvaU3V22l5iFUKNOggpY+tY3WHEz
+         5DqQ==
+X-Gm-Message-State: ACgBeo0v7SWlMlpXeskK09XM1skloJuPo2PW1X8mdbwpLMeQBx1DIb7Y
+        7q1PWYB4q4IMlddA5a8tHVhV8xzzLyyfNAB4jIctHSUtz+y+
+X-Google-Smtp-Source: AA6agR4HtFVvZmWrQvJuTn8VbC/cTHrxgNInAuch03vrsw34fJIQ15NHt1LiagXikcXr+mdoP980LpcJUqMtmSC82Guo/Qbpgvr/
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] thermal/core: Add missing EXPORT_SYMBOL_GPL
-Content-Language: en-US
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-        "open list:THERMAL" <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220810100731.749317-1-daniel.lezcano@linaro.org>
- <CAJZ5v0iv4oMsZyUg7-YY6cD2jsYyLdi7sDeE0GEm814kCEAvmQ@mail.gmail.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <CAJZ5v0iv4oMsZyUg7-YY6cD2jsYyLdi7sDeE0GEm814kCEAvmQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6e02:1562:b0:2de:c28c:6de1 with SMTP id
+ k2-20020a056e02156200b002dec28c6de1mr11617611ilu.44.1660139048198; Wed, 10
+ Aug 2022 06:44:08 -0700 (PDT)
+Date:   Wed, 10 Aug 2022 06:44:08 -0700
+In-Reply-To: <00000000000085cb1705e5b5d9f6@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000003ee71e05e5e33e10@google.com>
+Subject: Re: [syzbot] WARNING in find_vma
+From:   syzbot <syzbot+a7b60a176ec13cafb793@syzkaller.appspotmail.com>
+To:     Liam.Howlett@oracle.com, akpm@linux-foundation.org,
+        alex.gaynor@gmail.com, arve@android.com, brauner@kernel.org,
+        cmllamas@google.com, gregkh@linuxfoundation.org, hridya@google.com,
+        joel@joelfernandes.org, keescook@chromium.org,
+        liam.howlett@oracle.com, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, maco@android.com, minchan@kernel.org,
+        ojeda@kernel.org, omosnace@redhat.com, surenb@google.com,
+        syzkaller-bugs@googlegroups.com, tkjos@android.com,
+        wedsonaf@google.com, willy@infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,25 +62,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/08/2022 13:58, Rafael J. Wysocki wrote:
-> On Wed, Aug 10, 2022 at 12:07 PM Daniel Lezcano
-> <daniel.lezcano@linaro.org> wrote:
->>
->> The function thermal_zone_device_register_with_trips() is not exported
->> for modules.
->>
->> Add the missing EXPORT_SYMBOL_GPL().
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> 
-> A Fixes tag missing?
+syzbot has bisected this issue to:
 
-He he :) Indeed ...
+commit fd0016c6bd4f6287c5c5f98b6350033ebb3c9753
+Author: Miguel Ojeda <ojeda@kernel.org>
+Date:   Sun Dec 5 18:00:43 2021 +0000
 
+    scripts: decode_stacktrace: demangle Rust symbols
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10fb7021080000
+start commit:   ca688bff68bc Add linux-next specific files for 20220808
+git tree:       linux-next
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=12fb7021080000
+console output: https://syzkaller.appspot.com/x/log.txt?x=14fb7021080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4c20e006003cdecb
+dashboard link: https://syzkaller.appspot.com/bug?extid=a7b60a176ec13cafb793
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12999232080000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15452c12080000
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Reported-by: syzbot+a7b60a176ec13cafb793@syzkaller.appspotmail.com
+Fixes: fd0016c6bd4f ("scripts: decode_stacktrace: demangle Rust symbols")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection

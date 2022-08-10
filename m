@@ -2,72 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3182158E479
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 03:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7402A58E47E
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 03:27:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229777AbiHJBZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 21:25:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47252 "EHLO
+        id S230031AbiHJB1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 21:27:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiHJBYh (ORCPT
+        with ESMTP id S230093AbiHJB1I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 21:24:37 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3EE60686
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 18:24:36 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id v3so16188901wrp.0
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 18:24:36 -0700 (PDT)
+        Tue, 9 Aug 2022 21:27:08 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D025FADD;
+        Tue,  9 Aug 2022 18:27:05 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id w14so12903564plp.9;
+        Tue, 09 Aug 2022 18:27:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=mXbQNg6xL4amK0e8t2R+lhFBx4wz53d/3c+qVrE8XHQ=;
-        b=op7XGQ/C392xu2zrnE49ze1FL2X/BB3TSORunubDIWKmitp1TLcY6O90TfdNYXvIW/
-         I7nWo69gvFaL3WiOO7zePx5tpo2DJNfPXcdSNBZYKedmn0vrrNrh7n7zFL+Def1g2U7/
-         fMUlVyAIFFHQR74Wfsfp6J21m1Y35D2MyCLOOIKEKnJToIz3tp/+fi7Ap/jiLfKkvDaz
-         mAp9Zz851/7pQPHSJXlCxdQq8uKfxguAT27V+Hze0qDBI896Jia8hJShF/FbA/RBLlhK
-         elLfNrOA702fCyHYKMBhdUEr85bN/XPjGgenSxWZCDEhg3PzcxR2Hf0b5J+V7D6IagQd
-         wqkg==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=aMmzBt/TBT59uBGgogc8HNMQteHV+aheJkP8yVZzq38=;
+        b=fHR57LZaM+eGHS8Kvxf+MdiXJkXyfzeDA4Vk/JzKtfiCwZRhUPn3KWl3V/q5iDdKsc
+         W8D739RIOCAwDUAPBW8YWUqDrgyxZjSutzq05wRMOmau4JEosK7H8fP+E/aziyBkAe3H
+         z9kqGn2u3QRBMPACkLT/3w5p+AggUYLCpI0zQGhK0aGHDoDEPx7Hqwzd8xXXrzWJo5V7
+         Ispcan8lwNq7IRwPlVyN6ACGl0WM+I7dIJF3tTT7yrqj/72PG/PCryz7adTZwXkMdA6X
+         Q9W8loZpzQtQlaSzAZWmHkxv+6EQAAcyXW9/KDemK3AW7tAjubV2CWwoIcj3V9qQYeiS
+         GEUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=mXbQNg6xL4amK0e8t2R+lhFBx4wz53d/3c+qVrE8XHQ=;
-        b=TRQmdvGMtoFG6AH6xtt0lX+hw8N+w/6hb4P+EmJogjjOT/N8m/Kql/psRX+y+BnjJs
-         Ee+zjmDPnZXDhtwYTrmghJNXA2ToehncK+hPontIWSUGOf9Us3Kuj0KyNk2ub0xSVW3Y
-         MJ0FPSwpXP8zxEYK+kgxryKC+dTkxl5rzQLAU7HnqZDILb1HEDu8FjhAyfPc/LVnWHID
-         fSwXZZQTPiqEvvHltC72/bn5zfPrvMIEIL0ggZ27PzJogAzK2xausOIwKd5KsktbW1hR
-         j4vks7D5hYyepPrLoiYtEab1CfAamH8vXMZ1b/Ql559wjgp1JPpcFijmEhV+K7HNpEqw
-         cRQg==
-X-Gm-Message-State: ACgBeo34wmtefwmVO6q61cCX5orMRLnXEcB4GPKqY64l/3aw7Z44kZEv
-        fxUdF5JuyQbxcDjjaFvgRhdTTXkuzcDlxT7wuHWwIQ==
-X-Google-Smtp-Source: AA6agR7YwzWUpfkACpeYV8uYguM7R+gPEIWJxB4Le3ZfVGmWnbsjVoQBJaXHBRBWgEBkMKC/Ubjqi4/VywGWwd8ntvM=
-X-Received: by 2002:a05:6000:1869:b0:220:639b:8337 with SMTP id
- d9-20020a056000186900b00220639b8337mr16291929wri.572.1660094674949; Tue, 09
- Aug 2022 18:24:34 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=aMmzBt/TBT59uBGgogc8HNMQteHV+aheJkP8yVZzq38=;
+        b=IkF2+3l8e1MyzCBewAmrGFtkjrOoU86tD+AliXj5GfkR3QfaqnQfVlCFfBZYA7/xVe
+         bXWjSo2as4mZNvy5aVhr3iTwMh9iGj4g0v2aGUOQEolwwGPlOU/h5V8KrfK1e6UTxgnf
+         6BvNwdoFpwPiJpDDnmFx7UZqPo2My8ZYjd3j2ZFnaJUnk2rZPIs1BjLm2Qb3O01RFU6Q
+         h9WHTwETJp4Taz/2/FWx/JrmuE79mzZamfAEWZ7IMxB9/IvC8tsh1s9r6OAczNC1jrHP
+         xrpg994FMJWqp9M3QYu2KWMCZkgy/cbYj73kYm+a9mBTzl2+FBaEmmaumYoEbXSUDe6H
+         0dVg==
+X-Gm-Message-State: ACgBeo2+WiaufJ1ktCf+FmCQit5f0DbAVJr7pnUwCJXBHS9229O7bJpd
+        raeu6VGo6jpbTspMTlVKil0=
+X-Google-Smtp-Source: AA6agR5ttwmHSdAARFoSlrXLSeIVikShFhitZkshbZZxVg5OnVr/Y53jsTLQPRB5rC2ztDWn9l7ikw==
+X-Received: by 2002:a17:902:c24c:b0:16d:d5d4:aa84 with SMTP id 12-20020a170902c24c00b0016dd5d4aa84mr25307703plg.36.1660094825222;
+        Tue, 09 Aug 2022 18:27:05 -0700 (PDT)
+Received: from Laptop-X1 ([209.132.188.80])
+        by smtp.gmail.com with ESMTPSA id h3-20020a17090a580300b001f2ef2f9c6fsm223336pji.56.2022.08.09.18.27.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Aug 2022 18:27:04 -0700 (PDT)
+Date:   Wed, 10 Aug 2022 09:26:57 +0800
+From:   Hangbin Liu <liuhangbin@gmail.com>
+To:     Jonathan Toppins <jtoppins@redhat.com>
+Cc:     netdev@vger.kernel.org, Jay Vosburgh <j.vosburgh@gmail.com>,
+        Veaceslav Falico <vfalico@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [RFC net] bonding: 802.3ad: fix no transmission of LACPDUs
+Message-ID: <YvMJYb0VDJW+6CRh@Laptop-X1>
+References: <c2f698e6f73e6e78232ab4ded065c3828d245dbd.1660065706.git.jtoppins@redhat.com>
 MIME-Version: 1.0
-References: <20220805214734.1937451-1-eugenis@google.com> <875yj1x0k0.wl-maz@kernel.org>
- <CAFKCwrjVaOdrGktxVHLCDPyJSRjZ0B3FHTGsb3PXMULL=dw9rA@mail.gmail.com>
- <87v8r1uztz.wl-maz@kernel.org> <CAFKCwriq-Vh+fhxso=xqtKzkL95QkYOOkMR8XwTOJfeg1M-2qQ@mail.gmail.com>
-In-Reply-To: <CAFKCwriq-Vh+fhxso=xqtKzkL95QkYOOkMR8XwTOJfeg1M-2qQ@mail.gmail.com>
-From:   Peter Collingbourne <pcc@google.com>
-Date:   Tue, 9 Aug 2022 18:24:23 -0700
-Message-ID: <CAMn1gO5Va0eVFqzoOLLLJ+C+x-5=cc4qXDTw0e9J7v0RpYWusA@mail.gmail.com>
-Subject: Re: [PATCH] mte: Follow arm64.nomte override in MMU setup.
-To:     Evgenii Stepanov <eugenis@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c2f698e6f73e6e78232ab4ded065c3828d245dbd.1660065706.git.jtoppins@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,23 +76,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 9, 2022 at 10:29 AM Evgenii Stepanov <eugenis@google.com> wrote:
->
-> On Tue, Aug 9, 2022 at 9:49 AM Marc Zyngier <maz@kernel.org> wrote:
-> >
-> > In which case what is the tag memory doing in the linear map?
-> > Shouldn't it be marked as reserved, not mapped, and in general
-> > completely ignored by the NS OS?
->
-> That would be wasteful. The idea is to only reserve the parts of the
-> tag memory that correspond to the TZ carveout and release the rest to
-> the NS OS.
+On Tue, Aug 09, 2022 at 01:21:46PM -0400, Jonathan Toppins wrote:
+> ---
+>  MAINTAINERS                                   |  1 +
+>  drivers/net/bonding/bond_3ad.c                |  2 +-
+>  .../net/bonding/bond-break-lacpdu-tx.sh       | 88 +++++++++++++++++++
 
-More generally, one can imagine a system where *any* tagged memory
-transaction can result in an SError because the MTE implementation was
-not configured by an earlier bootloader phase, e.g. because the
-bootloader was configured to disable MTE at runtime. On such systems,
-the kernel must refrain from causing tagged memory transactions to be
-issued via the linear map, and that's exactly what this patch does.
+Hi Jon,
 
-Peter
+You need a Makefile in this folder and set TEST_PROGS so we can generate the
+test in kselftest-list.txt.
+
+Thanks
+Hangbin

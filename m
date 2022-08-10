@@ -2,136 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDC1D58EBA6
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 14:06:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E3C858EBA4
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 14:06:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232147AbiHJMGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 08:06:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36928 "EHLO
+        id S232017AbiHJMGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 08:06:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232135AbiHJMGr (ORCPT
+        with ESMTP id S230000AbiHJMGb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 08:06:47 -0400
-X-Greylist: delayed 376 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 10 Aug 2022 05:06:44 PDT
-Received: from proxmox-new.maurer-it.com (proxmox-new.maurer-it.com [94.136.29.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D508D13D59;
-        Wed, 10 Aug 2022 05:06:44 -0700 (PDT)
-Received: from proxmox-new.maurer-it.com (localhost.localdomain [127.0.0.1])
-        by proxmox-new.maurer-it.com (Proxmox) with ESMTP id 19E5A43DAD;
-        Wed, 10 Aug 2022 14:00:26 +0200 (CEST)
-Message-ID: <96e0749a-6036-c728-d224-b812caadcd1b@proxmox.com>
-Date:   Wed, 10 Aug 2022 14:00:23 +0200
+        Wed, 10 Aug 2022 08:06:31 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3E8311463;
+        Wed, 10 Aug 2022 05:06:29 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 9E6DD320016F;
+        Wed, 10 Aug 2022 08:06:26 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute1.internal (MEProxy); Wed, 10 Aug 2022 08:06:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stwcx.xyz; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1660133186; x=1660219586; bh=3XbRmvT48M
+        pdRH2ywGW3ehrhy3CjGTqx3lHdeyY6c4c=; b=SXj98chvzemW2+D+giV//Vm4lf
+        r0EJ0mMccOw9xMl0/NXENd7eVaYfQ1DK1HRkBEM8KjHAlXil4CEmBiGCrwPNC+Kh
+        hdahInc6BNxj3+bgqo+qiQy3a2MuRbkMaVbxVTTfDDjaHhca/P4swZ80ycTQgIP0
+        604VoWI9WvUmBiGdjB80uacucJML0c4713e0o9R4bdQi+56kcU9DYg0uRw4eglis
+        qbIXoi+9w7g/9+gT5L4L2sgjwhOahqygyo/49KVLLkeFfHhp8A6o7Qoyir2X+5Mq
+        6W8dxW2k7Lvd2qMAtmeEvB2tHGjRBgChap1El0CZI2m45ugdRZyf9ZnTNU6w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660133186; x=1660219586; bh=3XbRmvT48MpdRH2ywGW3ehrhy3Cj
+        GTqx3lHdeyY6c4c=; b=C4MvPgfFs+BmCzMgV9dR95NpWJBJABmCxPG4pWCiPbl8
+        69YgY7X/ywibwO4u3aUcngLbqOzs8bw21VZCUnAL0Cygb1IhJYA1Icdmur/WTwY9
+        ZUaVmJft7S26teaKS62PW3J3/L8qPLjkznmRb4g/7odmOU+016c0KvtzVpEX/zS6
+        WN7g2aQTWccy0801bi6LM8XMO000IvULM4v5i5APIsjylQiBS3H8CJFnB9bV2vws
+        guhzECP9VxdGWjhW2ZkXygBD2cXmpaGmZBfOIfUo8r07ouAKJPaF2z4GA15x/+8M
+        n+YsI8Wx6HrhkiiKF7gyhHuDQquoswTwSrBhaOlrKg==
+X-ME-Sender: <xms:QZ_zYkgQaZkPKw8JtSWIBwz6vNWku9vl9MqjBGGpTZmDOxuBH9IGmA>
+    <xme:QZ_zYtC6snDGOa6mrvRLMdy-93orr09baR-9wBpGI7lADlAMHGcJ-60FPfcW7xTMv
+    e7T6SKMXLtuWmKksvA>
+X-ME-Received: <xmr:QZ_zYsHCEB9z1_b6YnGWuGDlnFmEV7roc5fGggXpgEBZ9ATbMG-C-ywEv6jOscqBEtAsdma45N1f4GAoa7mds781xm0gNAbM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegvddggeeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    gfrhhlucfvnfffucdlfeehmdenucfjughrpeffhffvvefukfhfgggtuggjsehgtderredt
+    tddvnecuhfhrohhmpefrrghtrhhitghkucghihhllhhirghmshcuoehprghtrhhitghkse
+    hsthiftgigrdighiiiqeenucggtffrrghtthgvrhhnpeehfeejheeftdejiedvfeekffeh
+    ledukeduleelffekgfdtleduledvtdegtdehkeenucevlhhushhtvghrufhiiigvpedtne
+    curfgrrhgrmhepmhgrihhlfhhrohhmpehprghtrhhitghksehsthiftgigrdighiii
+X-ME-Proxy: <xmx:QZ_zYlS-63UCptcj1fEp1ZNjvHjt0bce7xWTP4hogKk2rjd36sJxEQ>
+    <xmx:QZ_zYhxGE4xrlLKojS2ICOQ-aNFMEGNK5xqvKbKHU2bBXS0lywT51A>
+    <xmx:QZ_zYj6e6F-ell4eS8bcMiK6iLM9_30ZCoMFOga4emjmHKycLwVd9g>
+    <xmx:Qp_zYokX29Hu51nRVBWwF7ZxD-zykgNnZehGy0mL6zPu1dJ67UE65Q>
+Feedback-ID: i68a1478a:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 10 Aug 2022 08:06:25 -0400 (EDT)
+Date:   Wed, 10 Aug 2022 07:06:24 -0500
+From:   Patrick Williams <patrick@stwcx.xyz>
+To:     Potin Lai <potin.lai.pt@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] Update Facebook Bletchley BMC devicetree
+Message-ID: <YvOfQEqj+XsYkuUH@heinlein.stwcx.org.github.beta.tailscale.net>
+References: <20220810004338.329832-1-potin.lai.pt@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:104.0) Gecko/20100101
- Thunderbird/104.0
-Subject: Re: [PATCH v3 00/13] SMM emulation and interrupt shadow fixes
-Content-Language: en-GB
-To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        linux-kernel@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Sean Christopherson <seanjc@google.com>, x86@kernel.org,
-        Jim Mattson <jmattson@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-References: <20220803155011.43721-1-mlevitsk@redhat.com>
-From:   Thomas Lamprecht <t.lamprecht@proxmox.com>
-In-Reply-To: <20220803155011.43721-1-mlevitsk@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="DZeXxxwZnmqG9svL"
+Content-Disposition: inline
+In-Reply-To: <20220810004338.329832-1-potin.lai.pt@gmail.com>
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/08/2022 17:49, Maxim Levitsky wrote:
-> This patch series is a result of long debug work to find out why
-> sometimes guests with win11 secure boot
-> were failing during boot.
-> 
-> During writing a unit test I found another bug, turns out
-> that on rsm emulation, if the rsm instruction was done in real
-> or 32 bit mode, KVM would truncate the restored RIP to 32 bit.
-> 
-> I also refactored the way we write SMRAM so it is easier
-> now to understand what is going on.
-> 
-> The main bug in this series which I fixed is that we
-> allowed #SMI to happen during the STI interrupt shadow,
-> and we did nothing to both reset it on #SMI handler
-> entry and restore it on RSM.
-> 
-> V3: addressed most of the review feedback from Sean (thanks!)
-> 
-> Best regards,
-> 	Maxim Levitsky
-> 
-> Maxim Levitsky (13):
->   bug: introduce ASSERT_STRUCT_OFFSET
->   KVM: x86: emulator: em_sysexit should update ctxt->mode
->   KVM: x86: emulator: introduce emulator_recalc_and_set_mode
->   KVM: x86: emulator: update the emulation mode after rsm
->   KVM: x86: emulator: update the emulation mode after CR0 write
->   KVM: x86: emulator/smm: number of GPRs in the SMRAM image depends on
->     the image format
->   KVM: x86: emulator/smm: add structs for KVM's smram layout
->   KVM: x86: emulator/smm: use smram structs in the common code
->   KVM: x86: emulator/smm: use smram struct for 32 bit smram load/restore
->   KVM: x86: emulator/smm: use smram struct for 64 bit smram load/restore
->   KVM: x86: SVM: use smram structs
->   KVM: x86: SVM: don't save SVM state to SMRAM when VM is not long mode
->     capable
->   KVM: x86: emulator/smm: preserve interrupt shadow in SMRAM
-> 
->  arch/x86/include/asm/kvm_host.h |  11 +-
->  arch/x86/kvm/emulate.c          | 305 +++++++++++++++++---------------
->  arch/x86/kvm/kvm_emulate.h      | 223 ++++++++++++++++++++++-
->  arch/x86/kvm/svm/svm.c          |  30 ++--
->  arch/x86/kvm/vmx/vmcs12.h       |   5 +-
->  arch/x86/kvm/vmx/vmx.c          |   4 +-
->  arch/x86/kvm/x86.c              | 175 +++++++++---------
->  include/linux/build_bug.h       |   9 +
->  8 files changed, 497 insertions(+), 265 deletions(-)
-> 
 
-FWIW, we tested the v2 on 5.19 and backported it to 5.15 with minimal adaption
-required (mostly unrelated context change) and now also updated that backport
-to the v3 of this patch series.
+--DZeXxxwZnmqG9svL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Our reproducer got fixed with either, but v3 now also avoids triggering logs like:
+On Wed, Aug 10, 2022 at 12:43:36AM +0000, Potin Lai wrote:
+> This patch series add modifications as below
+> 1. add a IPMB node for USB debug card communication.
+> 2. remove hdc1080 node due to incompatible 2nd source (si7021).=20
+>=20
+> Potin Lai (2):
+>   ARM: dts: aspeed: bletchley: add USB debug card IPMB node
+>   ARM: dts: aspeed: bletchley: remove hdc1080 node
+>=20
+>  arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts | 13 ++++++++-----
+>  1 file changed, 8 insertions(+), 5 deletions(-)
+>=20
+> --=20
+> 2.31.1
+>=20
 
- Jul 29 04:59:18 mits4 QEMU[2775]: kvm: Could not update PFLASH: Stale file handle
- Jul 29 04:59:18 mits4 QEMU[2775]: kvm: Could not update PFLASH: Stale file handle
- Jul 29 07:15:46 mits4 kernel: kvm: vcpu 1: requested 191999 ns lapic timer period limited to 200000 ns
- Jul 29 11:06:31 mits4 kernel: kvm: vcpu 1: requested 105786 ns lapic timer period limited to 200000 ns
+Reviewed-by: Patrick Williams <patrick@stwcx.xyz>
 
-which happened earlier (not sure how deep that correlates with the v2 vs. v3, but
-it stuck out, so mentioning for sake of completeness).
+--=20
+Patrick Williams
 
-For the backport to 5.15 we skipped "KVM: x86: emulator/smm: number of GPRs in
-the SMRAM image depends on the image format", as that constant was there yet and
-the actual values stayed the same for our case FWICT and adapted to slight context
-changes for the others.
+--DZeXxxwZnmqG9svL
+Content-Type: application/pgp-signature; name="signature.asc"
 
-So, the approach seems to fix our issue and we are already rolling out a kernel
-to users for testing and got positive feedback there too.
+-----BEGIN PGP SIGNATURE-----
 
-With above in mind:
+iQIzBAABCAAdFiEEBGD9ii4LE9cNbqJBqwNHzC0AwRkFAmLznz4ACgkQqwNHzC0A
+wRnPuQ/+PcGTpWhfDtWXamXrYywWWaX0ZK9HYuuwLnUyBv9SR9TL/MNpX6i8mKQ4
+YyY5eiCc9Y9WDlO5sqc6rNluye39Yvo9C87QPRWNj0tjAm7sGwKMl0MuKLx0G0sQ
+9l5Bi2I3MX6XRKnn1F0O/XlAoaG8vwSwK+9q+RYc5tqeZ/lZ5Creh54Egrh234gz
+v3nbGIoN1dIkJFwOScUTzz9SPv/i2jLIzIFJ8yrZ+uDa0gOYLkQVLyRXSNKnFzHD
+taWGhCHxEokkap+iIPjeWtzUgSli7Z/FsBwqZjNLPXGTbH1KxILuuB+ehrAqwXe2
+yBgKVum4GdFLG2/7AEJgd+atBHQ9RadrrY3ufELtM8J5Bi29qs1jG1yRklqp9r3N
+8c8zhU52qQXgMYXEQg6XIzXxZYR/qxb6DfebUJXBvJCGmr6fa3JrXmoEveqcWGpH
+KTCPN8SeziJ7yoFR5nu8NTCg/mLQ5aXi8OefTMQI8hxi3MpdNV+TUf3JUsRhuDbn
+lSQJu8MW7MFtafta+Xw2ljVQd8Wfwe2V9P3r9cDfXJZtxawVs2RJUjmjcLhutk/v
+lcUY75KCnpUhTsdxtOOjWVfO8XMQVZ+JzqugkbkxrlbamFh8D6cjtvZu+PQEq0tW
+f5uhyZhUjOYoGRN0borG4VItlm69bpUeUKOgbYbbfmDfk1CB0HU=
+=egzp
+-----END PGP SIGNATURE-----
 
-Tested-by: Thomas Lamprecht <t.lamprecht@proxmox.com>
-
-It would be also great to see this backported to still supported upstream stable kernels
-from 5.15 onwards, as there the TDP MMU got by default enabled, and that is at least
-increasing the chance of our reproducer to trigger dramatically.
-
-thx & cheers
-Thomas
-
+--DZeXxxwZnmqG9svL--

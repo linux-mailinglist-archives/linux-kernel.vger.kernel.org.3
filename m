@@ -2,74 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29A6C58EF1B
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 17:17:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D09A58EF41
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 17:20:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233037AbiHJPRk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 11:17:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60552 "EHLO
+        id S233095AbiHJPUX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 11:20:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229631AbiHJPRi (ORCPT
+        with ESMTP id S233118AbiHJPUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 11:17:38 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 587CA77559
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 08:17:37 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id j8so28278928ejx.9
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 08:17:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=17Px2Q0XnRJSkgeDgK2Uc7SLf0lUYwKRriKLtd/OTEc=;
-        b=ZUTMtDxdkka7efEt+gZA1raHqb9DkP/Lg4D5j1qxD1fYN7g9jdBex/U0K7uwm+S0qo
-         uaIyaLY56a/OsYEm2hLsIhzkYYqGLH6I6neFSQP8w6D3oPjQxUIMBNYrsXvWYbhdrkkI
-         R2nnDfbjJY0oVKV/0lLQLRzB7Byj55mIV2c3XJYJiHLa58Ji+kmfv2mJYSFZvC0bCWtK
-         /FGxayOpGV8huVrXNUzMhj1u9cvXOmXACwbtG18l1QNlAkwtPd3pkY6WwfDo4x676h5Y
-         EB28HD4V3LczIn3BY7N/pdTuoMuZtvs0x5Yx/QtI2ybf14VoykXzue7zvGFyK3FeY/+a
-         +dEQ==
+        Wed, 10 Aug 2022 11:20:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DA00E792E3
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 08:19:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660144796;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FficIWOFeLjuHiM92gf0Vr7lpmb8nVxpiEgSclxrqmQ=;
+        b=fEbtuvdfJDYLDCJOH8l65Ck4VTA8Izz2zVwoOfwUAneBnF/XFiREGWIPXV3UxdAB+mtwFZ
+        pc5z9AmovQk7HAjZ8pKugX0Dew12N5DgNFA7LMm+NHfrFG+7GuOVUvl8GtXvFSzPiQW+Pp
+        U8GJmeGSf07ZO5K/4HxztE5sTzOZe1U=
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com
+ [209.85.166.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-220-O-Er6coPOAmJpW6NEz_uWA-1; Wed, 10 Aug 2022 11:19:54 -0400
+X-MC-Unique: O-Er6coPOAmJpW6NEz_uWA-1
+Received: by mail-io1-f72.google.com with SMTP id v14-20020a6b5b0e000000b0067bc967a6c0so8110771ioh.5
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 08:19:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=17Px2Q0XnRJSkgeDgK2Uc7SLf0lUYwKRriKLtd/OTEc=;
-        b=kE8nG/FnzLlZ7RMYRmBaYKFHLaN46AJ41t5NgNj/qhntntdJQehagowXhgPPpz856y
-         sDEvyLgNwMoVOioE2M1YN6RvFb/7YoKfECyCIG6tGL8jQ7gs4qUfFECiFpmZOntqwJkE
-         jtrgtlFrbKXNsXd/W7g2P/unS0SwcuzyFYbxrQAZLtWKJGo6RQYwb/6P+Os/lfK+VaL+
-         dctySLJquEyNQSAutgKpFTpIlwXoKAcuu9mwWI4aE4JJK/USvW618VZcoOsv4HvTIcyS
-         1Yz+C7fDuAgQl3oWJ1sOm8/SD2XfJQWX3gDHQiDmkofDheUgwXkAcWgBNc/OT/h5EZM+
-         fmqw==
-X-Gm-Message-State: ACgBeo20T9pTdZhVUEuDaNsmt2N7pf4TuydsyniLiuRVgsQ0Crsduerl
-        02vu5IxWgkXU9+tLOAnj8a6B+MS8yViK0G5jpCubWA==
-X-Google-Smtp-Source: AA6agR7oVMUUXFe//QlOo+zHflIW7QAtuhApnXJl+A4r2Npaw5Vr5HKEjpabzylR8mRvvEvfsG7wpSeFR8oo557sIwo=
-X-Received: by 2002:a17:907:a068:b0:731:366a:6005 with SMTP id
- ia8-20020a170907a06800b00731366a6005mr13932745ejc.344.1660144655892; Wed, 10
- Aug 2022 08:17:35 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=FficIWOFeLjuHiM92gf0Vr7lpmb8nVxpiEgSclxrqmQ=;
+        b=zguGVtjLAOInwtWpOW9pDEdzqQh4f0x6l1aSCOKtfC8QIH2QXUsba/2ex8qA/Aoqfn
+         Cim9jlAaocBe3Nfgbzvkmni3hVO8hQmztbDG88EDcW57XdfTAX+qUsbAbOYJJJMqrnX1
+         wdUfZ0wkxxt5yjeMzbzUcaZ+p0xlYV/T6NLVmwec+MdVoc4qcdQLFRebksDr7V8+mntt
+         hoaqD/vV527Aqbvf0e6lv8SS1QyjFLJRxamwCbKw+RIEwLX6TxswlIvk44bfy4UZgtCP
+         xVRperdf7Z15jGNpcZMsE5zTIbF7rdd43exbxIz+Cu/RHf6/JdFlnrK/EuRIHPjdZwoy
+         HyCg==
+X-Gm-Message-State: ACgBeo3AK/u5VZGCJNIqTAwSia6Q6pWyBI26+R4mbcoc5M6VUlcHj4eP
+        YWm2mvz5p5iNl33v6L6JO5LRcMpJlLPH/8a1voS9hvBVuuQEsPrckGYfCSs9Sr+wtE2Ei9cPWe/
+        O/aIj8wxKGpLP7xQ8kY9yHyvl
+X-Received: by 2002:a92:b742:0:b0:2de:14d8:e801 with SMTP id c2-20020a92b742000000b002de14d8e801mr13434705ilm.105.1660144793994;
+        Wed, 10 Aug 2022 08:19:53 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7WuT8iDHEqyGrGAlUMRx9BNUhHDxYjZWfu4PnuArLauU6rsVNMbUKyZQ96Lx+d1VEnx9IHog==
+X-Received: by 2002:a92:b742:0:b0:2de:14d8:e801 with SMTP id c2-20020a92b742000000b002de14d8e801mr13434687ilm.105.1660144793701;
+        Wed, 10 Aug 2022 08:19:53 -0700 (PDT)
+Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
+        by smtp.gmail.com with ESMTPSA id k8-20020a056e02156800b002dc100ab6fdsm2271969ilu.35.2022.08.10.08.19.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Aug 2022 08:19:53 -0700 (PDT)
+Date:   Wed, 10 Aug 2022 11:19:51 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Minchan Kim <minchan@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Andi Kleen <andi.kleen@intel.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>
+Subject: Re: [PATCH v3 5/7] mm: Remember young/dirty bit for page migrations
+Message-ID: <YvPMl1tca42yKr2y@xz-m1.local>
+References: <20220809220100.20033-1-peterx@redhat.com>
+ <20220809220100.20033-6-peterx@redhat.com>
+ <8735e4fw52.fsf@yhuang6-desk2.ccr.corp.intel.com>
 MIME-Version: 1.0
-References: <20220809201428.118523-1-sudip.mukherjee@sifive.com>
- <20220809201428.118523-3-sudip.mukherjee@sifive.com> <361fa56d-617c-ee92-151e-5d8fe0a29e53@microchip.com>
- <498c33a8-014f-e542-f143-cba5760fafdd@microchip.com>
-In-Reply-To: <498c33a8-014f-e542-f143-cba5760fafdd@microchip.com>
-From:   Sudip Mukherjee <sudip.mukherjee@sifive.com>
-Date:   Wed, 10 Aug 2022 16:17:24 +0100
-Message-ID: <CAHyZL-cKJernGp93+H69zdNnn50Pj0LpYrgmUZuck0YfAZq+2A@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] mtd: spi-nor: add SFDP fixups for Quad Page Program
-To:     Tudor Ambarus <Tudor.Ambarus@microchip.com>
-Cc:     Pratyush Yadav <pratyush@kernel.org>,
-        Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Jude Onyenegecha <jude.onyenegecha@sifive.com>,
-        William Salmon <william.salmon@sifive.com>,
-        Adnan Chowdhury <adnan.chowdhury@sifive.com>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <8735e4fw52.fsf@yhuang6-desk2.ccr.corp.intel.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,92 +86,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 10, 2022 at 9:25 AM <Tudor.Ambarus@microchip.com> wrote:
->
-> On 8/10/22 11:06, Tudor.Ambarus@microchip.com wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+On Wed, Aug 10, 2022 at 02:30:33PM +0800, Huang, Ying wrote:
+> Peter Xu <peterx@redhat.com> writes:
+> 
+> > When page migration happens, we always ignore the young/dirty bit settings
+> > in the old pgtable, and marking the page as old in the new page table using
+> > either pte_mkold() or pmd_mkold(), and keeping the pte clean.
 > >
-> > On 8/9/22 23:14, Sudip Mukherjee wrote:
-> >> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> >>
-> >> SFDP table of some flash chips do not advertise support of Quad Input
-> >> Page Program even though it has support. Use fixup flags and add hardware
-> >> cap for these chips.
-> >>
-> >> Signed-off-by: Sudip Mukherjee <sudip.mukherjee@sifive.com>
-> >> ---
-> >>  drivers/mtd/spi-nor/core.c | 9 +++++++++
-> >>  drivers/mtd/spi-nor/core.h | 2 ++
-> >>  2 files changed, 11 insertions(+)
-> >>
-> >> diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-> >> index f2c64006f8d7..7542404332a5 100644
-> >> --- a/drivers/mtd/spi-nor/core.c
-> >> +++ b/drivers/mtd/spi-nor/core.c
-> >> @@ -1962,6 +1962,12 @@ spi_nor_spimem_adjust_hwcaps(struct spi_nor *nor, u32 *hwcaps)
-> >>         if (nor->flags & SNOR_F_BROKEN_RESET)
-> >>                 *hwcaps &= ~(SNOR_HWCAPS_X_X_X | SNOR_HWCAPS_X_X_X_DTR);
-> >>
-> >> +       if (nor->flags & SNOR_F_HAS_QUAD_PP) {
-> >> +               *hwcaps |= SNOR_HWCAPS_PP_1_1_4;
-> >> +               spi_nor_set_pp_settings(&params->page_programs[SNOR_CMD_PP_1_1_4],
-> >> +                                       SPINOR_OP_PP_1_1_4, SNOR_PROTO_1_1_4);
-> >> +       }
+> > That's fine from functional-wise, but that's not friendly to page reclaim
+> > because the moving page can be actively accessed within the procedure.  Not
+> > to mention hardware setting the young bit can bring quite some overhead on
+> > some systems, e.g. x86_64 needs a few hundreds nanoseconds to set the bit.
+> > The same slowdown problem to dirty bits when the memory is first written
+> > after page migration happened.
 > >
-> > setting SPINOR_OP_PP_1_1_4 should be done in spi_nor_late_init_params().
-> > spi_nor_late_init_params() is used to adjust the ops supported by the flash
->
-> ^ s/spi_nor_late_init_params/spi_nor_spimem_adjust_hwcaps
+> > Actually we can easily remember the A/D bit configuration and recover the
+> > information after the page is migrated.  To achieve it, define a new set of
+> > bits in the migration swap offset field to cache the A/D bits for old pte.
+> > Then when removing/recovering the migration entry, we can recover the A/D
+> > bits even if the page changed.
+> >
+> > One thing to mention is that here we used max_swapfile_size() to detect how
+> > many swp offset bits we have, and we'll only enable this feature if we know
+> > the swp offset can be big enough to store both the PFN value and the young
+>                                                                        ~~~~~
+> Nitpick: A/D
 
-So, do you mean something like this:
+Fixed.
 
-diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-index f2c64006f8d7..2f41937b826d 100644
---- a/drivers/mtd/spi-nor/core.c
-+++ b/drivers/mtd/spi-nor/core.c
-@@ -1962,6 +1962,12 @@ spi_nor_spimem_adjust_hwcaps(struct spi_nor
-*nor, u32 *hwcaps)
-  if (nor->flags & SNOR_F_BROKEN_RESET)
-  *hwcaps &= ~(SNOR_HWCAPS_X_X_X | SNOR_HWCAPS_X_X_X_DTR);
+> 
+> > bit.  Otherwise the A/D bits are dropped like before.
+> >
+> > Signed-off-by: Peter Xu <peterx@redhat.com>
+> > ---
+> >  include/linux/swapops.h | 99 +++++++++++++++++++++++++++++++++++++++++
+> >  mm/huge_memory.c        | 18 +++++++-
+> >  mm/migrate.c            |  6 ++-
+> >  mm/migrate_device.c     |  4 ++
+> >  mm/rmap.c               |  5 ++-
+> >  5 files changed, 128 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/include/linux/swapops.h b/include/linux/swapops.h
+> > index e1accbcd1136..0e9579b90659 100644
+> > --- a/include/linux/swapops.h
+> > +++ b/include/linux/swapops.h
+> > @@ -8,6 +8,10 @@
+> >  
+> >  #ifdef CONFIG_MMU
+> >  
+> > +#ifdef CONFIG_SWAP
+> > +#include <linux/swapfile.h>
+> > +#endif	/* CONFIG_SWAP */
+> 
+> I don't think we need the comment here.  The #ifdef is too near.  But
+> this isn't a big deal.
 
-+ if (nor->info->flags & SPI_NOR_QUAD_PP) {
-+ *hwcaps |= SNOR_HWCAPS_PP_1_1_4;
-+ spi_nor_set_pp_settings(&params->page_programs[SNOR_CMD_PP_1_1_4],
-+ SPINOR_OP_PP_1_1_4, SNOR_PROTO_1_1_4);
-+ }
-+
-  for (cap = 0; cap < sizeof(*hwcaps) * BITS_PER_BYTE; cap++) {
-  int rdidx, ppidx;
+I'd slightly prefer keeping it (especially Nadav used to complain on
+missing comments on ifdefs in previous versions..) since any ifdef can grow
+by adding code into it. Then it'll be hard to justify how to define "near"
+or not, so hard to define who should be adding that if I'm not the one.
 
-diff --git a/drivers/mtd/spi-nor/core.h b/drivers/mtd/spi-nor/core.h
-index 85b0cf254e97..10aa1c72000f 100644
---- a/drivers/mtd/spi-nor/core.h
-+++ b/drivers/mtd/spi-nor/core.h
-@@ -507,6 +507,7 @@ struct flash_info {
- #define SPI_NOR_NO_ERASE BIT(6)
- #define NO_CHIP_ERASE BIT(7)
- #define SPI_NOR_NO_FR BIT(8)
-+#define SPI_NOR_QUAD_PP BIT(9)
+Thanks,
 
-  u8 no_sfdp_flags;
- #define SPI_NOR_SKIP_SFDP BIT(0)
-diff --git a/drivers/mtd/spi-nor/issi.c b/drivers/mtd/spi-nor/issi.c
-index 89a66a19d754..014cd9038bed 100644
---- a/drivers/mtd/spi-nor/issi.c
-+++ b/drivers/mtd/spi-nor/issi.c
-@@ -71,8 +71,9 @@ static const struct flash_info issi_nor_parts[] = {
-  { "is25wp128",  INFO(0x9d7018, 0, 64 * 1024, 256)
-  NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ) },
-  { "is25wp256", INFO(0x9d7019, 0, 64 * 1024, 512)
-- NO_SFDP_FLAGS(SECT_4K | SPI_NOR_DUAL_READ | SPI_NOR_QUAD_READ)
-+ PARSE_SFDP
-  FIXUP_FLAGS(SPI_NOR_4B_OPCODES)
-+ FLAGS(SPI_NOR_QUAD_PP)
-  .fixups = &is25lp256_fixups },
+-- 
+Peter Xu
 
-  /* PMC */
-
-
---
-Regards
-Sudip

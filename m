@@ -2,65 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0387458EED8
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 16:54:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3163B58EED7
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 16:53:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232475AbiHJOx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 10:53:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39616 "EHLO
+        id S232866AbiHJOxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 10:53:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232870AbiHJOxy (ORCPT
+        with ESMTP id S231980AbiHJOxl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 10:53:54 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 756A774DF3
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:53:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660143233; x=1691679233;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8/kiRD5KASeEm0qrDCgsbhpYlcpK5GKHycyo+DHLTPo=;
-  b=gf+QOZNp6fQNlekMxSEpZvjxR2JzPqKgIt7oSAvDxAdLVhJ1nRFZxFw9
-   lupyRLGJKiR4/Vu81F0zLHLqh8r8mr2mFEFm61xWM3SQMLHdHHPfuxPAe
-   9CH3KKoqeTrAfYofUNMTDZO8jwoGV+7sHo0AWbrp0lwetoQpyorkFt3Uh
-   +3ps4n8HRDMIj3eHSR5uC+RnLMvIxGvPo6tzsF1tB9YtI5h9SNl/cepSV
-   sijN2DcXVvSOD5F9KlCB1+BwucwQXJFSq3qV74zVumq1dPPaWhpsT5eIv
-   MV8q2xAlAX9Hb4ZfNr5ztC2MFBRBEwYltOiR3k4Cxss/vgwM8BRDiJZ7c
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="270876083"
-X-IronPort-AV: E=Sophos;i="5.93,227,1654585200"; 
-   d="scan'208";a="270876083"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 07:53:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,227,1654585200"; 
-   d="scan'208";a="694543865"
-Received: from lkp-server02.sh.intel.com (HELO 5d6b42aa80b8) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 10 Aug 2022 07:53:51 -0700
-Received: from kbuild by 5d6b42aa80b8 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oLn5i-0000N7-2D;
-        Wed, 10 Aug 2022 14:53:50 +0000
-Date:   Wed, 10 Aug 2022 22:53:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     oushixiong <oushixiong@kylinos.cn>,
-        Dave Airlie <airlied@redhat.com>
-Cc:     kbuild-all@lists.01.org, Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        oushixiong <oushixiong@kylinos.cn>
-Subject: Re: [PATCH] drm/ast: radeon amdgpu for ast add prime
-Message-ID: <202208102237.Mz7bao9A-lkp@intel.com>
-References: <20220810010216.15941-1-oushixiong@kylinos.cn>
+        Wed, 10 Aug 2022 10:53:41 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9DB74CF8
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:53:40 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id t1so21588503lft.8
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:53:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=aGcGjED9prbPBXnEB6gWrGKTgZxRPTJLA4DQ/XLkI90=;
+        b=Ox4Wzcy5pKhz+wGnJubAlRB50SpwPPFQtxPTnXz4tGPDdxZggNaFHJ/lEQnuojsTMV
+         WJ0gWOIGF1Adrz2Q09kAZDNk//AZbTgVAfCWAxD7cGEYb9wxGp4SDBurw8EQrlWHZ1iI
+         Y25R7jBUOy9ig/24To6JpJ56XskkPgDkkQNbeGY01v4l86mJedW/Q/DWzcjAJo1qb55k
+         eZo6v3GWD13zRbJhLh+sVKS6yNathv9xLJIz+wMoT2jbjKYRmne++NlCC7zpLG0J6+4+
+         /+qv4MSa2O09VoTx+eEKY6eQtn9S9xHWindKIorT1C2e/sN/wLfTciTW/oJnH+vVXycC
+         SVPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=aGcGjED9prbPBXnEB6gWrGKTgZxRPTJLA4DQ/XLkI90=;
+        b=qWBSTTbBbx/pNsRE2TWTEnkIoUGcmk4Wc55GPCxKAzfvWVsWX0RJTqnzfusoEnOiQY
+         D1c3ggZehhP2K74VdMx4omeAjprXGLT9vFJAqycjtdMP2cCSIosyKnk3cSwFWMnsXxBk
+         +PAq61h/RoDsaeSo5/wf43DG5KzZaunkTRe/hG2gC7+2Y+N/mFxbnI7JpF9u1KJojLdk
+         6pFI3qkjlaggx5zogxQHkwpjyALyS0w7SzJBH77HBkHQR+4Ivn/CCvl+ipSeI1e7m0qj
+         YieqRPXtjax2FkChEIvYF96CObopuKLd2y8GHd41WMUPVII9hVq4vXHdRIKhgi17SjRT
+         TM5w==
+X-Gm-Message-State: ACgBeo3fdrRD59Ylv0Iv1Kr42YZv0kvgy/IR0ID6FesLiCdMY2Kxa++t
+        ozoDSaNLvaitJNAKhmChYjgDIw==
+X-Google-Smtp-Source: AA6agR4PT+52gucEyV74DPfu0zHmbsxiOgaNV76cFokC2FJAHzDCKIlbVUVZxtcpkXV3OIQBCKxnEQ==
+X-Received: by 2002:a05:6512:308d:b0:48b:b7d:f1e5 with SMTP id z13-20020a056512308d00b0048b0b7df1e5mr10637923lfd.199.1660143218514;
+        Wed, 10 Aug 2022 07:53:38 -0700 (PDT)
+Received: from [192.168.1.39] ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id c5-20020ac25f65000000b00489ec0d7636sm367637lfc.110.2022.08.10.07.53.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Aug 2022 07:53:37 -0700 (PDT)
+Message-ID: <413f84e8-d21b-0002-da59-f532f3df250c@linaro.org>
+Date:   Wed, 10 Aug 2022 17:53:36 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220810010216.15941-1-oushixiong@kylinos.cn>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 3/4] arm64: dts: qcom: c630: Add Embedded Controller node
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220810035424.2796777-1-bjorn.andersson@linaro.org>
+ <20220810035424.2796777-4-bjorn.andersson@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220810035424.2796777-4-bjorn.andersson@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,71 +80,18 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi oushixiong,
-
-Thank you for the patch! Perhaps something to improve:
-
-[auto build test WARNING on drm/drm-next]
-[also build test WARNING on drm-intel/for-linux-next linus/master v5.19 next-20220810]
-[cannot apply to drm-misc/drm-misc-next drm-tip/drm-tip]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/oushixiong/drm-ast-radeon-amdgpu-for-ast-add-prime/20220810-100424
-base:   git://anongit.freedesktop.org/drm/drm drm-next
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220810/202208102237.Mz7bao9A-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/a2b719dc6ac02cee10916696a4ba1caf7b24b20f
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review oushixiong/drm-ast-radeon-amdgpu-for-ast-add-prime/20220810-100424
-        git checkout a2b719dc6ac02cee10916696a4ba1caf7b24b20f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/ast/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/gpu/drm/ast/ast_drv.c:54:24: warning: no previous prototype for 'ast_gem_prime_import_sg_table' [-Wmissing-prototypes]
-      54 | struct drm_gem_object *ast_gem_prime_import_sg_table(struct drm_device *dev,
-         |                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
---
->> drivers/gpu/drm/ast/ast_mode.c:1713:5: warning: no previous prototype for 'ast_handle_damage' [-Wmissing-prototypes]
-    1713 | int ast_handle_damage(struct drm_framebuffer *fb, int x, int y,
-         |     ^~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/ast/ast_mode.c:1772:5: warning: no previous prototype for 'ast_user_framebuffer_dirty' [-Wmissing-prototypes]
-    1772 | int ast_user_framebuffer_dirty(struct drm_framebuffer *fb,
-         |     ^~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/ast/ast_mode.c:1815:1: warning: no previous prototype for 'ast_gem_fb_create_with_dirty' [-Wmissing-prototypes]
-    1815 | ast_gem_fb_create_with_dirty(struct drm_device *dev, struct drm_file *file,
-         | ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+On 10/08/2022 06:54, Bjorn Andersson wrote:
+> The Embedded Controller in the Lenovo Yoga C630 is accessible on &i2c1
+> and provides battery and adapter status, as well as altmode
+> notifications for the second USB Type-C port.
+> 
+> Add a definition for the EC.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
 
 
-vim +/ast_gem_prime_import_sg_table +54 drivers/gpu/drm/ast/ast_drv.c
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-    53	
-  > 54	struct drm_gem_object *ast_gem_prime_import_sg_table(struct drm_device *dev,
-    55						struct dma_buf_attachment *attach,
-    56						struct sg_table *sg)
-    57	{
-    58		struct drm_gem_vram_object *gbo;
-    59		struct dma_resv *resv = attach->dmabuf->resv;
-    60	
-    61		ww_mutex_lock(&resv->lock, NULL);
-    62		gbo = drm_gem_vram_create(dev, attach->dmabuf->size, 0, sg, resv);
-    63		ww_mutex_unlock(&resv->lock);
-    64	
-    65		if (IS_ERR(gbo))
-    66			return NULL;
-    67	
-    68		return &gbo->bo.base;
-    69	}
-    70	
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Best regards,
+Krzysztof

@@ -2,103 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1FD958EEAB
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 16:45:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C527758EEAF
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 16:46:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232670AbiHJOpZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 10:45:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57852 "EHLO
+        id S232747AbiHJOp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 10:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232589AbiHJOpX (ORCPT
+        with ESMTP id S232891AbiHJOpp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 10:45:23 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E53B3205CC
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:45:21 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id o14so8402630ilt.2
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:45:21 -0700 (PDT)
+        Wed, 10 Aug 2022 10:45:45 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6914349B6D
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:45:44 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id f65so14524404pgc.12
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:45:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc;
-        bh=9n+0K75R7EZoV92OS1ZV/e4z3S1vV3ZMEes9Tlr0Pvo=;
-        b=J502nKl7nyY3BeHobHmwvEG+5l1dlpWjpCPBg6L95+90AoLVHXZfHmxJJX5fLvUHTf
-         SUq3Dlq4eyVriCwDYMZJ4yvZOcOte9QFj5cGCXifcsi4BBMm6wjKGkkMp6kyWVyeAmR7
-         AW7TDw0AAAN/CESK1hUuR1T5WEgzpCeqeMFBI=
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=n/FvnPAhiz825x+FeNfX4XyD3zxHDvzfM9TNTYZ90QU=;
+        b=E11EqlOQsY2fuSsbrXE2W+WvhjfLaXL+efuSnbpEkwWQswR3jOIlAt3bozTXqmTR2k
+         lC043zwoby/ApB4Kzbj9+ckVrdmJ3h2FAhhCptuQ99GN+DHBZrrAa1BS/4X0Y4XzRw62
+         UQ/Ik3vX/jCA7ae7OUjGfW+cO0QKG7xUxDyP3XzawnwTiiKy2v4sIimADSO5if6+m1NL
+         bQgktj4HfXOqSPRE5C7K8+TfRk0TgZYG4OtCNmh0JTBkkSvjDrDZN9sCq2D9W8Bt6SUK
+         d5xYWhA/WtVzxWWClwjRMhcrt8lFQvw7JK98ae+t/t6Xf08YqHOrHujyEoPfFt8txnuD
+         06VQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc;
-        bh=9n+0K75R7EZoV92OS1ZV/e4z3S1vV3ZMEes9Tlr0Pvo=;
-        b=T1lFEvqKt+SZ5lukiYt3xg1AeQoYdKqQ5HWmYYfEYFQvbLP3cgk6w48uh75eFhvY7y
-         qVRspgyJYklY+Uprk1kfTX6gA341GiDuY/A1DJosrnr0jbcmYo1pTAW9ROVDae5bt9QW
-         UXJJh/SiMiP7mbXuvdRVXVGYSW7bJEGWdSPrErkNxaRXAFJSjPSZ8HDe7brE1HN3JMgM
-         L3sFuzzkx7Rpz1T3RSot1PSfrpaQzhzWFqH6uwqezAFBQZ2beV9Qk3Jp6PrH7e335fMD
-         96OnfBwzrDJjXUkkTfy3FxZCvRrZO3v24q0bfrA39pvKIf+8ppnWkbS7NsHWYtQVNpOJ
-         zD/w==
-X-Gm-Message-State: ACgBeo18/bkdw5j/FZoKooO7YkoVoiVc1FK+ofcIqjvzhaXd9HWNrkBe
-        ZUb4C0dJeAYt+YD6TyFvZZjV3Q==
-X-Google-Smtp-Source: AA6agR5KM9HV4UMVJEXj/JAKryjBS2AmfoPfOr2M8U/nnmZ8cMDnm/XeQVESlipSKZVj3O89+pFPYg==
-X-Received: by 2002:a92:cc04:0:b0:2de:1abf:7414 with SMTP id s4-20020a92cc04000000b002de1abf7414mr12868204ilp.119.1660142721273;
-        Wed, 10 Aug 2022 07:45:21 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id u132-20020a02238a000000b0033ee1e67c6esm7503211jau.79.2022.08.10.07.45.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Aug 2022 07:45:21 -0700 (PDT)
-Subject: Re: [PATCH 5.4 00/15] 5.4.210-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, slade@sladewatkins.com,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20220809175510.312431319@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-Message-ID: <58175928-37ea-1a58-1382-4fe88ccedc69@linuxfoundation.org>
-Date:   Wed, 10 Aug 2022 08:45:20 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.8.1
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=n/FvnPAhiz825x+FeNfX4XyD3zxHDvzfM9TNTYZ90QU=;
+        b=6gYzVd/QOyuvU57SxEQsbEXC2mDBVyikE4nQieRp6FHbpxtodW3QpIBvGtyeTqLhcV
+         im/pVV4z29phymRhWrZwuBkNHHm7kY/C0J13OZa48CJWOMI/imO6DbrJITCfaVXazfGD
+         rz3l8FGQULMIOmCPdwpmL9NJTYa0lL6sNbK+Add1459CWb4z05ljwGnB6PKoQHt5Zvcp
+         xZ+OJXjcGshTkbu1Y8WSaXYsnw/ldvd4R5bP05CQiBTqhEaqVws2pVXUn/lw7uKFempF
+         dNyNUUv8qrq04BhcXtOSaKMlcwu63nbWx8m10Kd6YUNUL6GOvsLcl+AEmUtr6EJlGqAj
+         iXTw==
+X-Gm-Message-State: ACgBeo1mHH+YCahDP2i1vcAh4yRwWoD3A2YUHWKV7daNVVfUaSny7U+u
+        VhyWFvH6IVvhG4BeXO93sjwzRQ==
+X-Google-Smtp-Source: AA6agR6NnQkoOacZd11EckpNL+dHKB00fMf5d45XoUSU0xNg2YQ8pHkLvxGU8H6cVgBozQrJQ0y6bw==
+X-Received: by 2002:a05:6a00:27a0:b0:52f:8766:82ec with SMTP id bd32-20020a056a0027a000b0052f876682ecmr10684911pfb.17.1660142743680;
+        Wed, 10 Aug 2022 07:45:43 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id n184-20020a6227c1000000b0052d2b55be32sm2127604pfn.171.2022.08.10.07.45.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Aug 2022 07:45:43 -0700 (PDT)
+Date:   Wed, 10 Aug 2022 14:45:39 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Xiaoyao Li <xiaoyao.li@intel.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Like Xu <like.xu.linux@gmail.com>
+Subject: Re: [RFC PATCH 3/3] KVM: x86: Disallow writes to immutable feature
+ MSRs after KVM_RUN
+Message-ID: <YvPEk4tnvajOfjBl@google.com>
+References: <20220805172945.35412-1-seanjc@google.com>
+ <20220805172945.35412-4-seanjc@google.com>
+ <40c9ecc1-e223-160b-4939-07e4f7200781@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <20220809175510.312431319@linuxfoundation.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <40c9ecc1-e223-160b-4939-07e4f7200781@intel.com>
+X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/9/22 12:00 PM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.210 release.
-> There are 15 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Wed, Aug 10, 2022, Xiaoyao Li wrote:
+> On 8/6/2022 1:29 AM, Sean Christopherson wrote:
+> > @@ -2136,6 +2156,23 @@ static int do_get_msr(struct kvm_vcpu *vcpu, unsigned index, u64 *data)
+> >   static int do_set_msr(struct kvm_vcpu *vcpu, unsigned index, u64 *data)
+> >   {
+> > +	u64 val;
+> > +
+> > +	/*
+> > +	 * Disallow writes to immutable feature MSRs after KVM_RUN.  KVM does
+> > +	 * not support modifying the guest vCPU model on the fly, e.g. changing
+> > +	 * the nVMX capabilities while L2 is running is nonsensical.  Ignore
+> > +	 * writes of the same value, e.g. to allow userspace to blindly stuff
+> > +	 * all MSRs when emulating RESET.
+> > +	 */
+> > +	if (vcpu->arch.last_vmentry_cpu != -1 &&
 > 
-> Responses should be made by Thu, 11 Aug 2022 17:55:02 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.210-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
-> 
+> can we extract "vcpu->arch.last_vmentry_cpu != -1" into a function like
+> kvm_vcpu_has_runned() ?
 
-Compiled and booted on my test system. No dmesg regressions.
-
-Tested-by: Shuah Khan <skhan@linuxfoundation.org>
-
-thanks,
--- Shuah
+Ya, a helper is in order.  I'll add a patch in the next version.

@@ -2,56 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 976FC58F143
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 19:10:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23BEC58F168
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 19:18:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233370AbiHJRKw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 13:10:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45752 "EHLO
+        id S233477AbiHJRRn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 13:17:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233451AbiHJRKp (ORCPT
+        with ESMTP id S233598AbiHJRRT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 13:10:45 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB0A461105
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 10:10:43 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oLpE9-0002Xs-K0; Wed, 10 Aug 2022 19:10:41 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oLpE0-002wXh-Dx; Wed, 10 Aug 2022 19:10:34 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1oLpE1-00Apoz-VT; Wed, 10 Aug 2022 19:10:33 +0200
-Date:   Wed, 10 Aug 2022 19:10:33 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     "m.shams" <m.shams@samsung.com>
-Cc:     thierry.reding@gmail.com, lee.jones@linaro.org,
-        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alim.akhtar@samsung.com
-Subject: Re: [PATCH] pwm: removes period check from pwm_apply_state()
-Message-ID: <20220810171033.bfkzkdipw2v5yorh@pengutronix.de>
-References: <CGME20220805102056epcas5p29f22d42c854bebe6d0301b56094cf3ea@epcas5p2.samsung.com>
- <20220805101125.47955-1-m.shams@samsung.com>
- <20220805155509.edqwxcvyoqfic4pn@pengutronix.de>
- <019701d8ab31$94c86d60$be594820$@samsung.com>
- <20220808174842.jiato34jzqstchdn@pengutronix.de>
- <004301d8acad$e31fee70$a95fcb50$@samsung.com>
+        Wed, 10 Aug 2022 13:17:19 -0400
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6330A83F32
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 10:16:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1660151808; x=1691687808;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=tLjnPCdY0CPud0gZoWqOOs4dR6XNnOxfEo9SNWG799Y=;
+  b=Kf5iTCZZUe65nIf67927QBdkXHzWDUKwlrQutvLEeuwhHlFqIaSUxxUn
+   2nvcMJ9GI6J8NVF5y5Qb9g59GrSx/DVjVwCzogeJtVZXWaek8x8jOGgkK
+   D2rMHPcjpctm3HjIjE3/bcPueaA0nIGDK9b3X7HpSDztV2d015mKCvCvv
+   Z1pV7SZ+HkCkElnEDCll3FScfTqFPVAhq2H8NYmjpSF+SQq9O3iC5Y0jo
+   eEcrIV16f+iWTF8LCW4N8xx4mCAOvT8AC51BhmHRL2sev3Bq8alkaRBOL
+   xEUaSjSMWts0MXUNIGS0FFNiTR0xRDufgH9M6GecuB265VPlN2YI9y24n
+   g==;
+X-IronPort-AV: E=Sophos;i="5.93,227,1654531200"; 
+   d="scan'208";a="206863126"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 11 Aug 2022 01:10:45 +0800
+IronPort-SDR: dsG90+R46ox6j0RyVHN3TtaVpWWkKeqzPzXxZNog60PrtWU6FUcDnlLuaBtbjPEKRTFcmRbts9
+ f+QG0PxUsxzgafLiByfB7N1Mq6w/7pxYwlHck0nJcP0kurBnpvJWPKiejQvbXBa+qXZ6HLCOEs
+ 1JNI5sOyYh4pYhuidKpgy9Q5CxQVgJYfgygqY+zYwboYrtj8FdPx5/LSHNKtOpFoFBtplmRx3i
+ 8yRS0HQE5pjdIYXeqcSHP17xoGuC3SP5UJ0YWtqqRsZd/W7gBu7Mm5DC6nLhxxvhnnvQ5f0e/2
+ MvYcvzYCpNzvbzWx/HIm732G
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 10 Aug 2022 09:26:20 -0700
+IronPort-SDR: 628qlwonISVRGl67cY8N6r6Y/OAkCPRRBNHCVgdCDec1jryuGZvazGXtQH5a8ZRl6TW3d5ZEab
+ q0yM62ZH/7ltAHW/2pBwNiX0Co/6xDo0Rr22V33lUqk4DjTmVdwpUWVgA0S8P7KKNphC7Tcw4c
+ HVsfr96v5Om5b601xqK8AOGgTUIiLXwVVbXXtsYQIYJ567HMZHYTrxBQz/otE6bjRdQGYMR4W9
+ ZenMSjYjVHjodD8BPM6HEe8bYuKsadoM7dp0FTeRVacDAjXzwWwDGMM7JRce74oADpCfM7aabN
+ SbA=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 10 Aug 2022 10:10:46 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4M2xKJ269Pz1Rws6
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 10:10:44 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1660151443; x=1662743444; bh=tLjnPCdY0CPud0gZoWqOOs4dR6XNnOxfEo9
+        SNWG799Y=; b=mTBmzjOr4h1LBCukLQPRjySe6bu7paraQ9i+Drxv3pb2NYIa8R8
+        KTyqSPOkdKaLIoYzm6b2MdvfM49mbNBEJ9ml+HiWAcTD5KT3IsAvbuB5cWM2wDDX
+        MlULNVXPmpcJfh5MRYGWgstx5yPIdF4N2yD9/xktCVu1B7Nzcu+5V+uNf1X6RY4N
+        OJIUZIJiDTF8Xp4MTZ3sZ1EWOy8VnGApB3av9ZYl2B5hhXpR6a6PQh/+0ZDgFrhI
+        Xtbe+yqFDVua6mE8E0yixb8VyM94Ijv/Zxv1saGPMO+fJ0mguEQh/mueK4Qq3Ymq
+        MuqL0Zsd4YSx8YTmtq3M3x4acKdxLmwHq5Q==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id bfnz0EAaCtXf for <linux-kernel@vger.kernel.org>;
+        Wed, 10 Aug 2022 10:10:43 -0700 (PDT)
+Received: from [10.111.68.99] (c02drav6md6t.sdcorp.global.sandisk.com [10.111.68.99])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4M2xKG5Ytmz1RtVk;
+        Wed, 10 Aug 2022 10:10:42 -0700 (PDT)
+Message-ID: <4a045887-6d44-661d-24d2-4f0cf039a058@opensource.wdc.com>
+Date:   Wed, 10 Aug 2022 10:10:42 -0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xn5bz6e35anxywuy"
-Content-Disposition: inline
-In-Reply-To: <004301d8acad$e31fee70$a95fcb50$@samsung.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [PATCH v9 08/13] dm-zoned: ensure only power of 2 zone sizes are
+ allowed
+Content-Language: en-US
+To:     Pankaj Raghav <p.raghav@samsung.com>, Johannes.Thumshirn@wdc.com,
+        snitzer@kernel.org, axboe@kernel.dk, agk@redhat.com, hch@lst.de
+Cc:     dm-devel@redhat.com, matias.bjorling@wdc.com, gost.dev@samsung.com,
+        linux-kernel@vger.kernel.org, pankydev8@gmail.com,
+        jaegeuk@kernel.org, hare@suse.de, linux-block@vger.kernel.org,
+        linux-nvme@lists.infradead.org, bvanassche@acm.org,
+        Luis Chamberlain <mcgrof@kernel.org>
+References: <20220803094801.177490-1-p.raghav@samsung.com>
+ <CGME20220803094811eucas1p17a2ac191899bba7938de6b9e3a55352f@eucas1p1.samsung.com>
+ <20220803094801.177490-9-p.raghav@samsung.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20220803094801.177490-9-p.raghav@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,158 +105,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022/08/03 2:47, Pankaj Raghav wrote:
+> From: Luis Chamberlain <mcgrof@kernel.org>
+> 
+> dm-zoned relies on the assumption that the zone size is a
+> power-of-2(po2) and the zone capacity is same as the zone size.
+> 
+> Ensure only po2 devices can be used as dm-zoned target until a native
+> non po2 support is added.
+> 
+> Reviewed-by: Hannes Reinecke <hare@suse.de>
+> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+> Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
 
---xn5bz6e35anxywuy
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
 
-Hello,
+> ---
+>  drivers/md/dm-zoned-target.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+> 
+> diff --git a/drivers/md/dm-zoned-target.c b/drivers/md/dm-zoned-target.c
+> index 95b132b52f33..9325bf5dee81 100644
+> --- a/drivers/md/dm-zoned-target.c
+> +++ b/drivers/md/dm-zoned-target.c
+> @@ -792,6 +792,10 @@ static int dmz_fixup_devices(struct dm_target *ti)
+>  				return -EINVAL;
+>  			}
+>  			zone_nr_sectors = bdev_zone_sectors(bdev);
+> +			if (!is_power_of_2(zone_nr_sectors)) {
+> +				ti->error = "Zone size is not a power-of-2 number of sectors";
+> +				return -EINVAL;
+> +			}
+>  			zoned_dev->zone_nr_sectors = zone_nr_sectors;
+>  			zoned_dev->nr_zones = bdev_nr_zones(bdev);
+>  		}
+> @@ -804,6 +808,10 @@ static int dmz_fixup_devices(struct dm_target *ti)
+>  			return -EINVAL;
+>  		}
+>  		zoned_dev->zone_nr_sectors = bdev_zone_sectors(bdev);
+> +		if (!is_power_of_2(zoned_dev->zone_nr_sectors)) {
+> +			ti->error = "Zone size is not a power-of-2 number of sectors";
+> +			return -EINVAL;
+> +		}
+>  		zoned_dev->nr_zones = bdev_nr_zones(bdev);
+>  	}
+>  
 
-On Wed, Aug 10, 2022 at 05:09:30PM +0530, m.shams wrote:
-> > I fixed up the quoting for you in this mail. Please fix your mailer to =
-not
-> break
-> > quotes, this is quite annoying. (Looking at the headers of your mail
-> you're using
-> > Outlook. Then your only viable option is to switch to a saner client.)
-> >=20
->=20
-> Sorry for the inconvenience. I have fixed my mailer.
 
-No you didn't.
-
-> > On Mon, Aug 08, 2022 at 07:47:03PM +0530, m.shams wrote:
-> > > On Fri, Aug 05, 2022 at 03:41:25PM +0530, Tamseel Shams wrote:
-> > > > > There may be situation when PWM is exported using sysfs, but at
-> > > > > that point PWM period is not set. At this situation if we issue a
-> > > > > system suspend, it calls pwm_class_suspend which in turn calls
-> > > > > pwm_apply_state, where PWM period value is checked which returns
-> > > > > an invalid argument error casuing Kernel to panic. So, check for
-> > > > > PWM period value is removed so as to fix the kernel panic observed
-> > > > > during suspend.
-> > > >
-> > > > This looks and sounds wrong. One thing I would accept is:
-> > > >
-> > > > diff --git a/drivers/pwm/core.c b/drivers/pwm/core.c index
-> > > > 0e042410f6b9..075bbcdad6c1 100644
-> > > > --- a/drivers/pwm/core.c
-> > > > +++ b/drivers/pwm/core.c
-> > > > @@ -557,8 +557,8 @@ int pwm_apply_state(struct pwm_device *pwm,
-> > const struct pwm_state *state)
-> > > > 	 */
-> > > > 	might_sleep();
-> > > >
-> > > > -	if (!pwm || !state || !state->period ||
-> > > > -	    state->duty_cycle > state->period)
-> > > > +	if (!pwm || !state || state->enabled && (!state->period ||
-> > > > +	    state->duty_cycle > state->period))
-> > > >  		return -EINVAL;
-> > > >
-> > > > 	chip =3D pwm->chip;
-> > > >
-> > > > That is, don't refuse calling pwm_apply_state() for state->period =
-=3D
-> > > > 0 and even state->duty_cycle > state->period if the > > PWM is not
-> enabled.
-> > >
-> > > By this do you mean doing it following way?
-> > >
-> > > if (!pwm || !state || (pwm && !state->period) ||
-> > > 	    (pwm && state->duty_cycle > state->period))
-> > > 		return -EINVAL;
-> >=20
-> > No. Your expression is logically equivalent to what we already have. I
-> > meant:
-> >=20
-> > 	if (!pwm || !state || state->enabled && (!state->period ||
-> > 	    state->duty_cycle > state->period))
-> > 		return -EINVAL;
-> >=20
-> > Learning to read diffs (maybe Outlook scrambled the view for you, too?)=
- is
-> a
-> > nice capability you should master.
-> >=20
-> > > > But anyhow, even without that the kernel should not panic. So I ask
-> > > > you to research and provide some more info about > > the problem.
-> > > > (Which hardware does it affect? Where does it panic? ...)
-> > >
-> > > Observing Kernel panic in exynos SoC when we issue system suspend.
-> > > Following is the snippet of error:
-> > >
-> > > # echo mem > /sys/power/state
-> > > [   29.224784] 010: Kernel panic - not syncing: pwm pwmchip0:
-> > > dpm_run_callback failure
-> > > [   29.240134] 010: Call trace:
-> > > [   29.242993] 010:  dump_backtrace+0x0/0x1b8
-> > > [   29.247067] 010:  show_stack+0x24/0x30
-> > > [   29.250793] 010:  dump_stack+0xb8/0x114
-> > > [   29.254606] 010:  panic+0x180/0x398
-> > > [   29.258073] 010:  dpm_run_callback+0x270/0x278
-> > > [   29.262493] 010:  __device_suspend+0x15c/0x628
-> > > [   29.266913] 010:  dpm_suspend+0x124/0x3b0
-> > > [   29.270899] 010:  dpm_suspend_start+0xa0/0xa8
-> > > [   29.275233] 010:  suspend_devices_and_enter+0x110/0x968
-> > > [   29.280433] 010:  pm_suspend+0x308/0x3d8
-> > > [   29.284333] 010:  state_store+0x8c/0x110
-> > > [   29.288233] 010:  kobj_attr_store+0x14/0x28
-> > > [   29.292393] 010:  sysfs_kf_write+0x5c/0x78
-> > > [   29.296466] 010:  kernfs_fop_write+0x10c/0x220
-> > > [   29.300886] 010:  __vfs_write+0x48/0x90
-> > > [   29.304699] 010:  vfs_write+0xb8/0x1c0
-> > > [   29.308426] 010:  ksys_write+0x74/0x100
-> > > [   29.312240] 010:  __arm64_sys_write+0x24/0x30
-> > > [   29.316573] 010:  el0_svc_handler+0x110/0x1b8
-> > > [   29.320906] 010:  el0_svc+0x8/0x1bc
-> > > [   29.324374] 010: SMP: stopping secondary CPUs
-> > > [   29.328711] 010: Kernel Offset: disabled
-> > > [   29.332607] 010: CPU features: 0x0002,00006008
-> > > [   29.337026] 010: Memory Limit: none
-> > > [   29.343949] 010: Rebooting in 1 seconds..
-> > > [   30.344539] 010: Disabling non-boot CPUs ...
-> >=20
-> > Just locking at that and starring at drivers/base/power/main.c for a wh=
-ile
-> > doesn't make this clearer to me. Are you using a mainline kernel?
-> > Which version?
-> >=20
->=20
-> Looks like I had some local patch which was causing the error to trigger
-> Kernel Panic (sorry about that).
-> On removing those local changes, I do not observe kernel panic, but obser=
-ve
-> following error and then suspend fails.
->=20
-> [   63.963063] pwm pwmchip0: PM: dpm_run_callback ():
-> pwm_class_suspend+0x0/0xf8 returns -22
-> [   63.963079] pwm pwmchip0: PM: failed to suspend: error -22
->=20
-> So, as to fix this issue I will post a new version of patch containing
-> change suggested by you.
-
-Note that my suggestion only covers you problem, it doesn't solve it.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---xn5bz6e35anxywuy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEyBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmLz5oYACgkQwfwUeK3K
-7AnY0Af46xmtdTjGrjOkFSUni5VLOUegNhk1SyZ8TOS8GalH3qkkxHGa/p2MtRFp
-/BDaUemgATG03nz/aKy3mzfaXzD27a3D2QShE/PpIBZM08/drce9i1t1WD7MxAjz
-jC4VCjLxMr2t218ReXzSij0bRsLWn7Jl5kEVaQRE3H8cTxaIs1gU/hSsUyUaaUsa
-N08IE0mb2288Qn+WzGZ8FDT+anyjzWogV4CFdRhfIONYSfoPQKkFRwB1M99SuggT
-BqUWT+eyW6hV0qZOd+3zylUnDZWzQdDjk8BlSiPl5Xwr16iTlZVXDegLn8hfL+Ul
-PsqN9GGvi8zYC4ho2lQPSEFuer2u
-=md01
------END PGP SIGNATURE-----
-
---xn5bz6e35anxywuy--
+-- 
+Damien Le Moal
+Western Digital Research

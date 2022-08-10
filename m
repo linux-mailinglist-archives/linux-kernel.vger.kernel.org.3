@@ -2,110 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED97358EEC4
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 16:49:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3626058EEC7
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 16:50:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232834AbiHJOtS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 10:49:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35274 "EHLO
+        id S232366AbiHJOup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 10:50:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231675AbiHJOtQ (ORCPT
+        with ESMTP id S230176AbiHJOum (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 10:49:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FCA77391B;
-        Wed, 10 Aug 2022 07:49:15 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F0A4C60B7A;
-        Wed, 10 Aug 2022 14:49:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB3EBC433C1;
-        Wed, 10 Aug 2022 14:49:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660142954;
-        bh=UlnvNtS2PYfeiyYEh4WcIGFDpJnH7nyR5cNpKi8CjtA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Zl3CihL+cc0bTGDr0zwQW+ZxtIWVVPKGGYIHssAtI4F8BEqEFW3GZ1QDsy4LiJgcu
-         pQS8pZ44/jCO8laQgoeAB/z0Rl5EMylLq4BZ/7AWSnVo5ICeBOKS/xGvc8rp1tEboK
-         Z3br8a6X6buszDfU6MRpzsjARX/qygAQ5EeiNJMDg9BKS2rKJi80VOTH6ZHln1QxKn
-         N0S5JyJGGqgGO+vda1Ipocy/kKt6qjOq9xCiRAQ+zoL8DfMHrDhXP6hYDqy4O/8t2V
-         NhRF/n2unwqaf1vH5v2ZbjwHvijBzyfi8RZ+gNg/Bnnq5yXt5Cncn5N/OQmAj5376N
-         V+YcEYePjBHaA==
-Date:   Wed, 10 Aug 2022 15:49:09 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Neil Armstrong <narmstrong@baylibre.com>
-Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Da Xue <da@libre.computer>
-Subject: Re: [PATCH] spi: meson-spicc: save pow2 datarate between messages
-Message-ID: <YvPFZZ2HT2zK9XjQ@sirena.org.uk>
-References: <20220809152019.461741-1-narmstrong@baylibre.com>
- <YvJ84qkuXdvVgXRm@sirena.org.uk>
- <39c2f53b-8f53-ceb1-ae0c-81e5e53d01aa@baylibre.com>
- <YvOmnDJA+ov49chC@sirena.org.uk>
- <518f22f4-1582-924c-9eaa-28ebbe53a632@baylibre.com>
- <YvPBX7zJ72RXnrpk@sirena.org.uk>
- <9dabe979-f6b5-329d-f017-a8f0c00adeca@baylibre.com>
+        Wed, 10 Aug 2022 10:50:42 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DC6A5FAC8
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:50:38 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id x21so19416012edd.3
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:50:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=r4FpLYfUs7tX4DLeiy0sj/1t8j21OoA6g793iTCGiF8=;
+        b=MuyQbiTUTET9fzrBqJrVL6Ql0nSXUtWfMkTeV0mBDzSdpEipm6LSkDAk2TRRbHhcFY
+         wVXtGIvSLp1zX+ayyhX9X9Vs+G2gYlKwvu7a0380tbAKcuP1OMT0qzWuHj78nZ6s+5MV
+         t7/FErcC+guIKzh+XsumAfNKFOBs5o98HzCcm86P6Pb7sPlqjHuwEAFyORUJ/mWGU2Q4
+         tMlLXdYAJp+1RoMLB7y3vb09dzb4EQ8j1WhNkiMxxY35xsjpbBAxJEJn1GI8y/2KAxrJ
+         1lmT/LXOZ1+yOgsNG4F02V5uDcBUPxy4GJFG4mXV4sXABfGskmeZY1ccjVG3XET/SiJP
+         TJLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=r4FpLYfUs7tX4DLeiy0sj/1t8j21OoA6g793iTCGiF8=;
+        b=4EWEXdXvWlS/hlpHZPRqKNHI01ulpIUFe4TlsuGVM+cwBC55payk9A45X6PX3qkii8
+         XieJgM8McAC8qNXh059V3afj+35wK0CiyOK3fVKMWCsuaK33tuJjQVw+4DWer+UTh5WX
+         TjwJsbtArRYwRTdzelXyX2kgQ1latzZYr3zEbbLbqY47+D5bvNnVwWqRVCfxlnRRIX6Z
+         h28lKnwrmn/WZF/fnZevur1w8NMo5xpp6nlIg4U06HFvr0bmS1Zhbt+hxoMufEpQ2rx8
+         SBn0Nig4mNvovqSsj7FauGD3IS9eaxq9UdltvjR282cR91lojjFmvc3UiHw9g5Im6GCZ
+         q91g==
+X-Gm-Message-State: ACgBeo37ngJ/G6S/DvQg/uKvLb0+o5qhZSpDbqgKYuVdlI8FqeBpxYU+
+        4wf6XISWW9rLHpDPmzJ464FVFA==
+X-Google-Smtp-Source: AA6agR56aM67PHK/+ONTl8BroEWue4HRkKqPBqbKMvQMV90VH3pqrryFs0RWIE536XgLpzL4WCoa1A==
+X-Received: by 2002:a05:6402:43c4:b0:43b:c5eb:c9dd with SMTP id p4-20020a05640243c400b0043bc5ebc9ddmr26620352edc.402.1660143036615;
+        Wed, 10 Aug 2022 07:50:36 -0700 (PDT)
+Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
+        by smtp.gmail.com with ESMTPSA id x7-20020a170906440700b00730cc173c6asm2369268ejo.43.2022.08.10.07.50.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Aug 2022 07:50:36 -0700 (PDT)
+Message-ID: <49f933c3-7430-a133-9add-ed76c395023b@blackwall.org>
+Date:   Wed, 10 Aug 2022 17:50:34 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ueoh6h2+Qr1KrJd4"
-Content-Disposition: inline
-In-Reply-To: <9dabe979-f6b5-329d-f017-a8f0c00adeca@baylibre.com>
-X-Cookie: First pull up, then pull down.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH RFC net-next 0/3] net: vlan: fix bridge binding behavior
+ and add selftests
+Content-Language: en-US
+To:     Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
+Cc:     netdev@vger.kernel.org, aroulin@nvidia.com, sbrivio@redhat.com,
+        roopa@nvidia.com, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        bridge@lists.linux-foundation.org
+References: <cover.1660100506.git.sevinj.aghayeva@gmail.com>
+ <94ec6182-0804-7a0e-dcba-42655ff19884@blackwall.org>
+ <CAMWRUK45nbZS3PeSLR1X=Ko6oavrjKj2AWeh2F1wckMPrz_dEg@mail.gmail.com>
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <CAMWRUK45nbZS3PeSLR1X=Ko6oavrjKj2AWeh2F1wckMPrz_dEg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 10/08/2022 17:42, Sevinj Aghayeva wrote:
+> 
+> 
+> On Wed, Aug 10, 2022 at 4:54 AM Nikolay Aleksandrov <razor@blackwall.org <mailto:razor@blackwall.org>> wrote:
+> 
+>     On 10/08/2022 06:11, Sevinj Aghayeva wrote:
+>     > When bridge binding is enabled for a vlan interface, it is expected
+>     > that the link state of the vlan interface will track the subset of the
+>     > ports that are also members of the corresponding vlan, rather than
+>     > that of all ports.
+>     >
+>     > Currently, this feature works as expected when a vlan interface is
+>     > created with bridge binding enabled:
+>     >
+>     >   ip link add link br name vlan10 type vlan id 10 protocol 802.1q \
+>     >         bridge_binding on
+>     >
+>     > However, the feature does not work when a vlan interface is created
+>     > with bridge binding disabled, and then enabled later:
+>     >
+>     >   ip link add link br name vlan10 type vlan id 10 protocol 802.1q \
+>     >         bridge_binding off
+>     >   ip link set vlan10 type vlan bridge_binding on
+>     >
+>     > After these two commands, the link state of the vlan interface
+>     > continues to track that of all ports, which is inconsistent and
+>     > confusing to users. This series fixes this bug and introduces two
+>     > tests for the valid behavior.
+>     >
+>     > Sevinj Aghayeva (3):
+>     >   net: core: export call_netdevice_notifiers_info
+>     >   net: 8021q: fix bridge binding behavior for vlan interfaces
+>     >   selftests: net: tests for bridge binding behavior
+>     >
+>     >  include/linux/netdevice.h                     |   2 +
+>     >  net/8021q/vlan.h                              |   2 +-
+>     >  net/8021q/vlan_dev.c                          |  25 ++-
+>     >  net/core/dev.c                                |   7 +-
+>     >  tools/testing/selftests/net/Makefile          |   1 +
+>     >  .../selftests/net/bridge_vlan_binding_test.sh | 143 ++++++++++++++++++
+>     >  6 files changed, 172 insertions(+), 8 deletions(-)
+>     >  create mode 100755 tools/testing/selftests/net/bridge_vlan_binding_test.sh
+>     >
+> 
+>     Hi,
+>     NETDEV_CHANGE event is already propagated when the vlan changes flags,
+> 
+> 
+> I'm not sure if NETDEV_CHANGE is actually propagated when the vlan changes flags. The two functions in the bridge module that handle NETDEV_CHANGE are br_vlan_port_event  and br_vlan_bridge_event. I've installed probes for both, and when I'm changing flags using "sudo ip link set vlan10 type vlan bridge_binding on", I don't see any of those functions getting called, although I do see vlan_dev_change_flags getting called. I think there may be a bug in core/dev.c:__dev_notify_flags.
 
---ueoh6h2+Qr1KrJd4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+are both vlan and bridge interfaces up?
+what exactly are you probing for?
 
-On Wed, Aug 10, 2022 at 04:40:04PM +0200, Neil Armstrong wrote:
+I can see the NETDEV_CHANGE event go through when changing the loose binding.
 
-> I don't think it's worth adding so much code for this since we already
 
-I don't recall the code for clock providers being that hard?  They're
-generally pretty small, some of the ASoC CODEC drivers did something
-similar.
 
-> had an open-coded function which perfectly worked before.
 
-Except in the cases it didn't...
-
-> I'm perfectly OK to remove the CCF driver for the legacy clock path
-> and return back to the old open coded calculation since it perfectly
-> worked and stop using the legacy clock path for new SoCs since it would
-> never be selected anyway...
-
-It does seem better to go the clock provider route TBH.
-
-> ... but GX SoCs are broken so it would need an intermediate fix until
-> I push the refactoring to cleanup all this.
-
-I'm trying to figure out if this is actually fixing the problem or just
-papering over one case where things happened to go badly.
-
---ueoh6h2+Qr1KrJd4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLzxWQACgkQJNaLcl1U
-h9DYQQf/QZ4CbFLmTpm/v3VlaF0OZUMbkfJ+OzC3L2yQO8LFvsudGllwYcUAY0ks
-Wgk3BuL7xPDkmstAgIoJulYomZKeUgP0vnpIfk6jlfzpdDQhfA/r2z/87nrQtjCw
-9TrHXn5w9t6kDa5XIS0bE87+PHTqeuwmPcZJPNbU8faGXyJoegZPGBAb/HBpe4lz
-m6fza4Zhx66dnbmQ3r9F5cW85yEeuD95BeW9FfN583uD87bzQAOaIqDJnvbMvDj4
-gyu1xiiIw0QhxHLyNZZaMLMoaYWr4869eziFmcqNkwdejET11UqXwrnQusZzzUFs
-JoOMpvNMSzkYCQo48Vy6CGJBsXtq8w==
-=bPSm
------END PGP SIGNATURE-----
-
---ueoh6h2+Qr1KrJd4--

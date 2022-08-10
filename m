@@ -2,80 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D17058E71D
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 08:05:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D563C58E71F
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 08:07:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231236AbiHJGF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 02:05:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38558 "EHLO
+        id S231206AbiHJGHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 02:07:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231197AbiHJGF0 (ORCPT
+        with ESMTP id S230182AbiHJGHu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 02:05:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EA06326569
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 23:05:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660111525;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=sBlUQH9ZYI87QjLCL8xa8WoZuHTUiJ4rE7hGqowqg5w=;
-        b=dmh6Ql3pwrvd7E5wpD+DPyx2jgF4pAK+y5QOsuAH2TWEeQh9732acHsvdU1WxD7yFb+2Ks
-        MSSiNNHthIs8qgKqhPVkaON/eAf7U3/s8lJsHvoOl+QKkNHHoOVoP5USxetBqa/vAiIv+Z
-        2hlYec2yNJGywAjQhi2ZZLxn6QjWekI=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-187-g6CnshDEMjylHrBsH_1XNQ-1; Wed, 10 Aug 2022 02:05:15 -0400
-X-MC-Unique: g6CnshDEMjylHrBsH_1XNQ-1
-Received: by mail-ed1-f72.google.com with SMTP id t13-20020a056402524d00b0043db1fbefdeso8556279edd.2
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 23:05:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=sBlUQH9ZYI87QjLCL8xa8WoZuHTUiJ4rE7hGqowqg5w=;
-        b=efiBCqFXvvXz/ed0hShS/wt20+H+DSJCyBD28yT206ORXCeQC1KebiLkxBdvmYmHqX
-         sL+oMEvwqiS//mYyfz3VMpc+dDaZuhjkAlcDrVvAoKzh0yjV9MznaDFjGXHmH7QSxnHp
-         vENwWMkgGDq8kFfhUWs9Aa3He0SuQO8PcZcrqj1R8sDxmOi23KkyDuddK68x/Dfqzn7x
-         YriZvsJiLuEcA6DW5rmg9s5Em93oELF1FFJ1qugygSBrY3LRDKZPFdzn7MhubYSbxU3S
-         bVd1m115CRim1lZhXwErLcEjcOM8/DG2mKxKz1Wdb5uzSQa1a23RGi+sp0R6zmAgLpqY
-         BC7Q==
-X-Gm-Message-State: ACgBeo3xlAtxqo8ya8HqRbrucP8nswYmq6E/XZAudO43eJVZ9rL3cT80
-        WTuwoMn68R9xhECkuJHrDhQrDfBsQhJ/smMHEDiw8K4E6hIFk0r9EyTKngiiNtalEXgxMwS/CNr
-        wgJV7MwYon0NhUYQUY4wgh7dn
-X-Received: by 2002:a17:906:fd84:b0:730:acee:d067 with SMTP id xa4-20020a170906fd8400b00730aceed067mr19393956ejb.206.1660111514487;
-        Tue, 09 Aug 2022 23:05:14 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4zsECaQisdchCePlp4yUAvq88BKlsK7g/FdrfvnijgIa0+CeZxy11peJJUHhW3QeKUTE6NCQ==
-X-Received: by 2002:a17:906:fd84:b0:730:acee:d067 with SMTP id xa4-20020a170906fd8400b00730aceed067mr19393941ejb.206.1660111514262;
-        Tue, 09 Aug 2022 23:05:14 -0700 (PDT)
-Received: from redhat.com ([2.52.152.113])
-        by smtp.gmail.com with ESMTPSA id b18-20020a17090630d200b00732a5b3d09csm1658020ejb.89.2022.08.09.23.05.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 23:05:13 -0700 (PDT)
-Date:   Wed, 10 Aug 2022 02:05:09 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Alexander Atanasov <alexander.atanasov@virtuozzo.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>, kernel@openvz.org,
-        David Hildenbrand <david@redhat.com>,
-        Wei Liu <wei.liu@kernel.org>, Nadav Amit <namit@vmware.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH v1 1/2] Enable balloon drivers to report inflated memory
-Message-ID: <20220810020330-mutt-send-email-mst@kernel.org>
-References: <7bfac48d-2e50-641b-6523-662ea4df0240@virtuozzo.com>
- <20220809094933.2203087-1-alexander.atanasov@virtuozzo.com>
- <20220809063111-mutt-send-email-mst@kernel.org>
- <d8fd3251-898d-89fe-226e-e166606c6983@virtuozzo.com>
+        Wed, 10 Aug 2022 02:07:50 -0400
+Received: from unicom145.biz-email.net (unicom145.biz-email.net [210.51.26.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5568561DAE
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 23:07:47 -0700 (PDT)
+Received: from ([60.208.111.195])
+        by unicom145.biz-email.net ((D)) with ASMTP (SSL) id EER00042;
+        Wed, 10 Aug 2022 14:07:42 +0800
+Received: from localhost.localdomain (10.200.104.97) by
+ jtjnmail201603.home.langchao.com (10.100.2.3) with Microsoft SMTP Server id
+ 15.1.2507.9; Wed, 10 Aug 2022 14:07:41 +0800
+From:   Bo Liu <liubo03@inspur.com>
+To:     <dan.j.williams@intel.com>, <vishal.l.verma@intel.com>,
+        <dave.jiang@intel.com>, <ira.weiny@intel.com>
+CC:     <nvdimm@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+        Bo Liu <liubo03@inspur.com>
+Subject: [PATCH] nvdimm: Call ida_simple_remove() when failed
+Date:   Wed, 10 Aug 2022 02:07:37 -0400
+Message-ID: <20220810060737.5087-1-liubo03@inspur.com>
+X-Mailer: git-send-email 2.18.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d8fd3251-898d-89fe-226e-e166606c6983@virtuozzo.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain
+X-Originating-IP: [10.200.104.97]
+tUid:   20228101407423e730e450a495fa8ac99b446cb56c639
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,53 +47,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 10, 2022 at 08:54:52AM +0300, Alexander Atanasov wrote:
-> On 9.08.22 13:32, Michael S. Tsirkin wrote:
-> > On Tue, Aug 09, 2022 at 12:49:32PM +0300, Alexander Atanasov wrote:
-> > > @@ -153,6 +156,14 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
-> > >   		    global_zone_page_state(NR_FREE_CMA_PAGES));
-> > >   #endif
-> > > +#ifdef CONFIG_MEMORY_BALLOON
-> > > +	inflated_kb = atomic_long_read(&mem_balloon_inflated_kb);
-> > > +	if (inflated_kb >= 0)
-> > > +		seq_printf(m,  "Inflated(total): %8ld kB\n", inflated_kb);
-> > > +	else
-> > > +		seq_printf(m,  "Inflated(free): %8ld kB\n", -inflated_kb);
-> > > +#endif
-> > > +
-> > >   	hugetlb_report_meminfo(m);
-> > >   	arch_report_meminfo(m);
-> > 
-> > 
-> > This seems too baroque for my taste.
-> > Why not just have two counters for the two pruposes?
-> 
-> I agree it is not good but it reflects the current situation.
-> Dirvers account in only one way - either used or total - which i don't like.
-> So to save space and to avoid the possibility that some driver starts to use
-> both at the same time. I suggest to be only one value.
+In function nvdimm_bus_register(), when code execution fails, we should
+call ida_simple_remove() to free ida.
 
-I don't see what would be wrong if some driver used both
-at some point.
+Signed-off-by: Bo Liu <liubo03@inspur.com>
+---
+ drivers/nvdimm/bus.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-> 
-> > And is there any value in having this atomic?
-> > We want a consistent value but just READ_ONCE seems sufficient ...
-> 
-> I do not see this as only a value that is going to be displayed.
-> I tried to be defensive here and to avoid premature optimization.
-> One possible scenario is OOM killer(using the value) vs balloon deflate on
-> oom will need it. But any other user of that value will likely need it
-> atomic too. Drivers use spin_locks for calculations they might find a way to
-> reduce the spin lock usage and use the atomic.
-> While making it a long could only bring bugs without benefits.
-> It is not on a fast path too so i prefer to be safe.
-
-Well we do not normally spread atomics around just because we
-can, it does not magically make the code safe.
-If this needs atomics we need to document why.
-
-> -- 
-> Regards,
-> Alexander Atanasov
+diff --git a/drivers/nvdimm/bus.c b/drivers/nvdimm/bus.c
+index b38d0355b0ac..3415dc62632b 100644
+--- a/drivers/nvdimm/bus.c
++++ b/drivers/nvdimm/bus.c
+@@ -371,6 +371,7 @@ struct nvdimm_bus *nvdimm_bus_register(struct device *parent,
+ 	return nvdimm_bus;
+  err:
+ 	put_device(&nvdimm_bus->dev);
++	ida_simple_remove(&nd_ida, nvdimm_bus->id);
+ 	return NULL;
+ }
+ EXPORT_SYMBOL_GPL(nvdimm_bus_register);
+-- 
+2.27.0
 

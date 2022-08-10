@@ -2,214 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C17D58E9B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 11:35:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABC4158E9BC
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 11:37:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232154AbiHJJfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 05:35:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33752 "EHLO
+        id S232156AbiHJJhR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 05:37:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229771AbiHJJfC (ORCPT
+        with ESMTP id S231587AbiHJJhO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 05:35:02 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92A096CF46
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 02:35:00 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 43ECD3458C;
-        Wed, 10 Aug 2022 09:34:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1660124099; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kQSwjPiKaiGHj/f8V1/GnqkouaKOzplWk5CMp2oq4Fk=;
-        b=emeQYDqj0tovgbYqATK72rnUukDw5gKb++2YT8oC4dMxVGmfNN+fzty2iU0NzgUdwL4BIU
-        ZoLMeDxbZ+De2FePQ8bdzBkFL58oyYlRLoekB3c/ce9+aGencVeznxWfKQovcCZRQzdvyl
-        VKnnrRZS/DLV1PIDoDd29Pp8DVl9afY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1660124099;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kQSwjPiKaiGHj/f8V1/GnqkouaKOzplWk5CMp2oq4Fk=;
-        b=xNzhxFxRGPBn3fYPhoVReqHx1UBBH6BtRfLUMZfU/KFeq1VwT9PyFzjaFo2irA5YPiXTJy
-        tMF3+ylRot+pNsDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D719813AB3;
-        Wed, 10 Aug 2022 09:34:58 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id mPEvM8J782JRIQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Wed, 10 Aug 2022 09:34:58 +0000
-Message-ID: <48b66d90-34ae-8666-d9ee-2d36c82a6653@suse.cz>
-Date:   Wed, 10 Aug 2022 11:34:58 +0200
+        Wed, 10 Aug 2022 05:37:14 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70EEC84EC7;
+        Wed, 10 Aug 2022 02:37:12 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id q9-20020a17090a2dc900b001f58bcaca95so1599801pjm.3;
+        Wed, 10 Aug 2022 02:37:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=78dgYlqKO0ZvQjJz+sJd0671q+NGfvnDDEssu3bBwM0=;
+        b=lQI08ncjvuLNvOWEIrCzsgcKgE2diNiQhT8iO8FvSLLMxYi9mCiO67CSzRUITu8LrB
+         6Qinn3mOIdhfO4Yo8lA+blRSETuEGrdp3nzbzud4oM7pAaR3zKLqTHJ1s2MVZSi24aPO
+         5lZAGgQnL717sdNqp2JFkR5rElvLbyQNeq4/cH7sJ6VfImDKU5rh8YgqAFAZr6rGxHCb
+         cnQFjNUNFbhSznox4mcKEGPNdKFO+wP8WWLeswx3i+TuwBVYZFkzNVQiqbu25QrsuTCr
+         DvZ7BEhcyuW5Nc/Gx2Humrtm3BxIPoHzopFS+r4rLMm7GQ3en8r9Ao1/fODPXoSVd/OM
+         SJuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=78dgYlqKO0ZvQjJz+sJd0671q+NGfvnDDEssu3bBwM0=;
+        b=pukuQfNqG8278BXUX3CTmYW4KNJ+XkjMHCIzXaTU0P3LqC9ArmxyDNet3+2aO8AzNE
+         qR9+AuI8zJpKVeDzul4GGY1GaGpV1kqzDA6DoueJLcvnOli/ocwlW23rOx166E16scrR
+         Z69MSNvl4tMzRyZ2BUUQn6uKNfzCXF3HjOrPHCOwEC5EQU22Hlrrr6ukEBWOBr7zzFZ5
+         xnFVVt9PqWwNIEiHViGiZeoqIl/uFOJ5JW0XXYl7sDcjg4RbFc+ibSjnN0rOx35OJBHy
+         wBwvevJW6hbxVK/uu8bJu2vEO9xzNl9KMUSwLj76XuEaa4yYwQ07iY+ktbO+2KIZrA6b
+         fxcg==
+X-Gm-Message-State: ACgBeo0lOz8QVaxvBpOHMN8lq+/TiknfOcBzdLuQpsIWFr4xRPImcsBW
+        UfXuU7rFPIreVefcPC+raiQ=
+X-Google-Smtp-Source: AA6agR7YjYI12tnWvDGyWPfOPcugQ8xdwNLGNRCSJzyQgzH6ZBvqYbBkOtqw4ycTVf9Dab7Eme6PpA==
+X-Received: by 2002:a17:90b:b13:b0:1f3:7ab:35b2 with SMTP id bf19-20020a17090b0b1300b001f307ab35b2mr2813942pjb.118.1660124231738;
+        Wed, 10 Aug 2022 02:37:11 -0700 (PDT)
+Received: from engine.. ([106.212.112.163])
+        by smtp.gmail.com with ESMTPSA id p14-20020a17090a2c4e00b001f754cd508dsm1130979pjm.35.2022.08.10.02.37.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Aug 2022 02:37:11 -0700 (PDT)
+From:   Piyush Thange <pthange19@gmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     shuah@kernel.org, vladimir.oltean@nxp.com, idosch@nvidia.com,
+        petrm@nvidia.com, troglobit@gmail.com, amcohen@nvidia.com,
+        tobias@waldekranz.com, po-hsu.lin@canonical.com,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        Piyush Thange <pthange19@gmail.com>
+Subject: [PATCH] selftests:net:forwarding: Included install command
+Date:   Wed, 10 Aug 2022 15:05:08 +0530
+Message-Id: <20220810093508.33790-1-pthange19@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.0
-Subject: Re: [PATCH] mm/slab_common: Deleting kobject in kmem_cache_destroy()
- without holding slab_mutex/cpu_hotplug_lock
-Content-Language: en-US
-To:     Waiman Long <longman@redhat.com>, Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Xin Long <lucien.xin@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20220809205901.76595-1-longman@redhat.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20220809205901.76595-1-longman@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/9/22 22:59, Waiman Long wrote:
-> A circular locking problem is reported by lockdep due to the following
-> circular locking dependency.
-> 
->    +--> cpu_hotplug_lock --> slab_mutex --> kn->active#126 --+
->    |                                                         |
->    +---------------------------------------------------------+
+If the execution is skipped due to "jq not installed" message then
+the installation methods on different OS's have been provided with
+this message.
 
-This sounded familiar and I've found a thread from January:
+Signed-off-by: Piyush Thange <pthange19@gmail.com>
+---
+ tools/testing/selftests/net/forwarding/lib.sh | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-https://lore.kernel.org/all/388098b2c03fbf0a732834fc01b2d875c335bc49.1642170196.git.lucien.xin@gmail.com/
+diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+index 37ae49d47853..c4121856fe06 100755
+--- a/tools/testing/selftests/net/forwarding/lib.sh
++++ b/tools/testing/selftests/net/forwarding/lib.sh
+@@ -152,6 +152,14 @@ require_command()
 
-But that seemed to be specific to RHEL-8 RT kernel and not reproduced 
-with mainline. Is it different this time? Can you share the splats?
-
-> One way to break this circular locking chain is to avoid holding
-> cpu_hotplug_lock and slab_mutex while deleting the kobject in
-> sysfs_slab_unlink() which should be equivalent to doing a write_lock
-> and write_unlock pair of the kn->active virtual lock.
-> 
-> Since the kobject structures are not protected by slab_mutex or the
-> cpu_hotplug_lock, we can certainly release those locks before doing
-> the delete operation.
-> 
-> Move sysfs_slab_unlink() and sysfs_slab_release() to the newly
-> created kmem_cache_release() and call it outside the slab_mutex &
-> cpu_hotplug_lock critical sections.
-> 
-> Signed-off-by: Waiman Long <longman@redhat.com>
-> ---
->   mm/slab_common.c | 48 +++++++++++++++++++++++++++++++-----------------
->   1 file changed, 31 insertions(+), 17 deletions(-)
-> 
-> diff --git a/mm/slab_common.c b/mm/slab_common.c
-> index 17996649cfe3..9274fb03563e 100644
-> --- a/mm/slab_common.c
-> +++ b/mm/slab_common.c
-> @@ -392,6 +392,30 @@ kmem_cache_create(const char *name, unsigned int size, unsigned int align,
->   }
->   EXPORT_SYMBOL(kmem_cache_create);
->   
-> +#ifdef SLAB_SUPPORTS_SYSFS
-> +/*
-> + * For a given kmem_cache, kmem_cache_destroy() should only be called
-> + * once or there will be a use-after-free problem. The actual deletion
-> + * and release of the kobject does not need slab_mutex or cpu_hotplug_lock
-> + * protection. So they are now done without holding those locks.
-> + */
-> +static void kmem_cache_release(struct kmem_cache *s, bool workfn)
-> +{
-> +	if (!workfn)
-> +		sysfs_slab_unlink(s);
-> +
-> +	if (workfn || !(s->flags & SLAB_TYPESAFE_BY_RCU))
-> +		sysfs_slab_release(s);
-> +	else
-> +		schedule_work(&slab_caches_to_rcu_destroy_work);
-> +}
-> +#else
-> +static inline void kmem_cache_release(struct kmem_cache *s, bool workfn)
-> +{
-> +	slab_kmem_cache_release(s);
-> +}
-> +#endif
-> +
->   static void slab_caches_to_rcu_destroy_workfn(struct work_struct *work)
->   {
->   	LIST_HEAD(to_destroy);
-> @@ -418,11 +442,7 @@ static void slab_caches_to_rcu_destroy_workfn(struct work_struct *work)
->   	list_for_each_entry_safe(s, s2, &to_destroy, list) {
->   		debugfs_slab_release(s);
->   		kfence_shutdown_cache(s);
-> -#ifdef SLAB_SUPPORTS_SYSFS
-> -		sysfs_slab_release(s);
-> -#else
-> -		slab_kmem_cache_release(s);
-> -#endif
-> +		kmem_cache_release(s, true);
->   	}
->   }
->   
-> @@ -437,20 +457,10 @@ static int shutdown_cache(struct kmem_cache *s)
->   	list_del(&s->list);
->   
->   	if (s->flags & SLAB_TYPESAFE_BY_RCU) {
-> -#ifdef SLAB_SUPPORTS_SYSFS
-> -		sysfs_slab_unlink(s);
-> -#endif
->   		list_add_tail(&s->list, &slab_caches_to_rcu_destroy);
-> -		schedule_work(&slab_caches_to_rcu_destroy_work);
->   	} else {
->   		kfence_shutdown_cache(s);
->   		debugfs_slab_release(s);
-> -#ifdef SLAB_SUPPORTS_SYSFS
-> -		sysfs_slab_unlink(s);
-> -		sysfs_slab_release(s);
-> -#else
-> -		slab_kmem_cache_release(s);
-> -#endif
->   	}
->   
->   	return 0;
-> @@ -465,14 +475,16 @@ void slab_kmem_cache_release(struct kmem_cache *s)
->   
->   void kmem_cache_destroy(struct kmem_cache *s)
->   {
-> +	int refcnt;
-> +
->   	if (unlikely(!s) || !kasan_check_byte(s))
->   		return;
->   
->   	cpus_read_lock();
->   	mutex_lock(&slab_mutex);
->   
-> -	s->refcount--;
-> -	if (s->refcount)
-> +	refcnt = --s->refcount;
-> +	if (refcnt)
->   		goto out_unlock;
->   
->   	WARN(shutdown_cache(s),
-> @@ -481,6 +493,8 @@ void kmem_cache_destroy(struct kmem_cache *s)
->   out_unlock:
->   	mutex_unlock(&slab_mutex);
->   	cpus_read_unlock();
-> +	if (!refcnt)
-> +		kmem_cache_release(s, false);
->   }
->   EXPORT_SYMBOL(kmem_cache_destroy);
->   
+ 	if [[ ! -x "$(command -v "$cmd")" ]]; then
+ 		echo "SKIP: $cmd not installed"
++		if [[ $cmd == "jq" ]]; then
++			echo " Install on Debian based systems"
++			echo "	sudo apt -y install jq"
++			echo " Install on RHEL based systems"
++			echo "	sudo yum -y install jq"
++			echo " Install on Fedora based systems"
++			echo "	sudo dnf -y install jq"
++		fi
+ 		exit $ksft_skip
+ 	fi
+ }
+--
+2.37.1
 

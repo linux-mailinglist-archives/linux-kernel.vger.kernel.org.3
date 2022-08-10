@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E66AE58E69A
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 07:08:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EB8758E69B
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 07:08:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231158AbiHJFII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 01:08:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53284 "EHLO
+        id S231181AbiHJFIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 01:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbiHJFHp (ORCPT
+        with ESMTP id S230428AbiHJFHq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 01:07:45 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B809782FBC;
-        Tue,  9 Aug 2022 22:07:43 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id j8so25670567ejx.9;
-        Tue, 09 Aug 2022 22:07:43 -0700 (PDT)
+        Wed, 10 Aug 2022 01:07:46 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA1083F00;
+        Tue,  9 Aug 2022 22:07:45 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id z22so17598533edd.6;
+        Tue, 09 Aug 2022 22:07:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
          :cc;
-        bh=WsXcmjBQTbbS4kpYY9SBHjgMTL8/jvQNRCwa0TQb/Dw=;
-        b=Mv1ccTu9Pt7/8Od4hcaLuLZygPfFa1idQh4Iwor2NDR/berSoqrpXJla+nyBiiGbr3
-         h3UKWCuKMcyIMtS989oOv41ozNXbnk/WtywEAN7OcoerrgnnR1KtA//X8kaDTpzAhekZ
-         Bwj+qhKRj2694wPxYZussIJtV2Q4LxbutLacyKcUD8j9T4GJWPjqvTCp0jjDoJGA/L6T
-         FvMZmq4T7WUv/dwkaF5zWQmKwkafAwCyrzU0+7Aok6GAv03naIFweHysXUuondhs+tFi
-         ko08cm0RQP+mEek+uFcwOIZrPZRMCjtbxMSVHeoKONP17wKwbx5AkYB+xGtHEQzXCLtX
-         +7Zg==
+        bh=/QGtQjFwrpxqvD/2kl5l0yjrJcEXf60xBhPRPT4PMoA=;
+        b=GAe7/3paFERirxke/DBRSvzvyfo3gWidABn7thm95giMW+HV2HqKwT8qUQuiRWv1XN
+         ue5u3oJgkxX8+vB5ZTCuGdckZVwFAxgEKMwUB/reIkdRp8E8fhaerBfHmKkgcTvuPKEv
+         c8ZDZOgYd4avspD/J2GsUOFl/nv+GlXPY43wEkeZtmJpqBBWGRYUPdG3JwIL8WiCftml
+         40p0mA/44jsByBfIJsZxzxi0uZ3w8XW/lAAo5wrPUTXTdsm80pN1fASSj0ohcPkvmVqf
+         a77AyZl8o26lasym7opxdvnGs2Hw30CUAvzh+e7vOPAyesecgnFzDfI0wcCvG7+BzBgC
+         88Qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=references:in-reply-to:message-id:date:subject:cc:to:from
          :x-gm-message-state:from:to:cc;
-        bh=WsXcmjBQTbbS4kpYY9SBHjgMTL8/jvQNRCwa0TQb/Dw=;
-        b=3oK0z/bcGu78Z8poMflhLHo6peSRHgkQaZl0FaxT0Oo6RTKCx2kWoGiD4S7xezCNgJ
-         OuYP+H5okurk1yg1k4dwCinVWvgQR65Jg45Tm69rnjIOatHCbcU6oJx0A2ziMKC/qkMT
-         SDgexubbvQTBH6mSd3mnJ84SOqOGldoyK/vNPLj7yKMH4lAgZMK28igT+JzYEzru94Ij
-         wyPKbS0qBjI1T/Iu5ewm5E7V915LzeDjNcLqgIOsX91i3sJRGQjLTY9N5wDgMo2lm6H8
-         N86dzyodgmp+a1uK2dCUJKkHfY2w7qDlXSJ1Mq7ksqWoGvT6NCIsSUSxW73DNJXtDDrj
-         8+og==
-X-Gm-Message-State: ACgBeo0gpHl/ODuP+zC6m6o6vYVTHc270+8mn+BfG7xcURC/cL+7gbzZ
-        75sLuVxdk7V9fGMs1pCvAuU=
-X-Google-Smtp-Source: AA6agR7yLzaBfBvPVm44Z2rLdVtw/TzNrHXYRUe4nMa+MCuJoOnDFeBpiEiZup/g1QpSARwuyVKKVw==
-X-Received: by 2002:a17:907:1c24:b0:731:59f9:1b3f with SMTP id nc36-20020a1709071c2400b0073159f91b3fmr9018203ejc.595.1660108062166;
-        Tue, 09 Aug 2022 22:07:42 -0700 (PDT)
+        bh=/QGtQjFwrpxqvD/2kl5l0yjrJcEXf60xBhPRPT4PMoA=;
+        b=dlVgY8S5fkc3r/MKlhkvdPWADtDGe78vUZLOQE1A2WxJe6f3wpd6uGI4bqHtJ5XIV3
+         s07X/bnT6QAwtXVa2x6EheeJmeuphGcB03s/KVwLnpSqqVJ/3LFrV0Ib/rW8FkXtCc77
+         KjQw86FAYjHa35V8wOUVEXJoZ0q8Rptd6MaCV3mqPgMbXegpQtVqCXYou7n53wi0KZDG
+         LeqJWBti60feGb96X6K8OdvKEPXW9kST71YmP+6/CinuxhuQUjUQQLVSLaw+lwJxVocn
+         hZrSlfFbkLys8R7fd3FaDfG49gH1rR0OA/dW7U9J+NVygGx9l1jLcxh812SlYcIf8ixQ
+         Vefg==
+X-Gm-Message-State: ACgBeo1iXEQ9Lzla39k/KeWw2du799nCforn23Y1wdUR/ZwwSX8xIzfk
+        /5CgxY7kO9793+uk3sDYhrs=
+X-Google-Smtp-Source: AA6agR50NrhEtvIkwWAt2TLZ2+KyugoS0bLjK72bNnhhj6ZmZeHTbWPqCbTWKO6YhrfRBVfwhckfCA==
+X-Received: by 2002:a05:6402:c45:b0:442:c549:8e6b with SMTP id cs5-20020a0564020c4500b00442c5498e6bmr865379edb.123.1660108063872;
+        Tue, 09 Aug 2022 22:07:43 -0700 (PDT)
 Received: from felia.fritz.box (200116b826504800504e9aff21bf95aa.dip.versatel-1u1.de. [2001:16b8:2650:4800:504e:9aff:21bf:95aa])
-        by smtp.gmail.com with ESMTPSA id ew12-20020a056402538c00b0043bbbaa323dsm7009781edb.0.2022.08.09.22.07.41
+        by smtp.gmail.com with ESMTPSA id ew12-20020a056402538c00b0043bbbaa323dsm7009781edb.0.2022.08.09.22.07.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 22:07:41 -0700 (PDT)
+        Tue, 09 Aug 2022 22:07:43 -0700 (PDT)
 From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
 To:     Juergen Gross <jgross@suse.com>,
         Boris Ostrovsky <boris.ostrovsky@oracle.com>,
@@ -60,9 +60,9 @@ Cc:     Thomas Gleixner <tglx@linutronix.de>,
         "H . Peter Anvin" <hpa@zytor.com>, kernel-janitors@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH 1/4] xen: x86: set the config XEN_512GB after config change
-Date:   Wed, 10 Aug 2022 07:07:09 +0200
-Message-Id: <20220810050712.9539-2-lukas.bulwahn@gmail.com>
+Subject: [PATCH 2/4] xen: remove XEN_SCRUB_PAGES in xen.config
+Date:   Wed, 10 Aug 2022 07:07:10 +0200
+Message-Id: <20220810050712.9539-3-lukas.bulwahn@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220810050712.9539-1-lukas.bulwahn@gmail.com>
 References: <20220810050712.9539-1-lukas.bulwahn@gmail.com>
@@ -76,30 +76,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit c70727a5bc18 ("xen: allow more than 512 GB of RAM for 64 bit
-pv-domains") from July 2015 replaces the config XEN_MAX_DOMAIN_MEMORY with
-a new config XEN_512GB, but misses to adjust arch/x86/configs/xen.config.
+Commit 197ecb3802c0 ("xen/balloon: add runtime control for scrubbing
+ballooned out pages") changed config XEN_SCRUB_PAGES to config
+XEN_SCRUB_PAGES_DEFAULT. As xen.config sets 'XEN_BALLOON=y' and
+XEN_SCRUB_PAGES_DEFAULT defaults to yes, there is no further need to set
+this config in the xen.config file.
 
-Adjust this config fragment now.
+Remove setting XEN_SCRUB_PAGES in xen.config, which is without
+effect since the commit above anyway.
 
 Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 ---
- arch/x86/configs/xen.config | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ kernel/configs/xen.config | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/arch/x86/configs/xen.config b/arch/x86/configs/xen.config
-index d9fc7139fd46..8a6c88f48e75 100644
---- a/arch/x86/configs/xen.config
-+++ b/arch/x86/configs/xen.config
-@@ -14,7 +14,7 @@ CONFIG_CPU_FREQ=y
- 
- # x86 xen specific config options
- CONFIG_XEN_PVH=y
--CONFIG_XEN_MAX_DOMAIN_MEMORY=500
-+CONFIG_XEN_512GB=y
- CONFIG_XEN_SAVE_RESTORE=y
- # CONFIG_XEN_DEBUG_FS is not set
- CONFIG_XEN_MCE_LOG=y
+diff --git a/kernel/configs/xen.config b/kernel/configs/xen.config
+index ff756221f112..436f806aa1ed 100644
+--- a/kernel/configs/xen.config
++++ b/kernel/configs/xen.config
+@@ -34,7 +34,6 @@ CONFIG_INPUT_XEN_KBDDEV_FRONTEND=m
+ CONFIG_XEN_SCSI_FRONTEND=m
+ # others
+ CONFIG_XEN_BALLOON=y
+-CONFIG_XEN_SCRUB_PAGES=y
+ CONFIG_XEN_DEV_EVTCHN=m
+ CONFIG_XEN_BLKDEV_FRONTEND=m
+ CONFIG_XEN_NETDEV_FRONTEND=m
 -- 
 2.17.1
 

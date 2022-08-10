@@ -2,265 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C920E58F1B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 19:42:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 271B058F1B7
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 19:43:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231264AbiHJRmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 13:42:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47840 "EHLO
+        id S232167AbiHJRn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 13:43:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232392AbiHJRms (ORCPT
+        with ESMTP id S231285AbiHJRn1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 13:42:48 -0400
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6507C85F94;
-        Wed, 10 Aug 2022 10:42:47 -0700 (PDT)
-Received: by mail-oi1-f173.google.com with SMTP id j5so12823576oih.6;
-        Wed, 10 Aug 2022 10:42:47 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=ReTi6csPYQ4CXa/vuLDipJBo/AuIWqJL15Ka4MBCcRM=;
-        b=vJ+0UbztOk9p4KHYxxQpmwQsnx4aBRDTaBZrkYkTUCs38jdJDD8349ceQkB4oRSQZE
-         ZHlP7JJ9BBLZDv9BiXhe7XtfBngo/+2j5y7Z2tV5TW50nrCBJuR8NGq+2AzJQ+xtOYEC
-         DJULCwf9XkHpeiniupG4UMC4HyXbM+pR124opG5d2gY0EvMMyeFG9Qj8E+y7fadJjwTK
-         +adaOfLk1fXAs36+6Vf7zhPyNP0RHljxkAPi1fvPdjjfix2wAOyLxCjyha5h+Hdpj05j
-         0tnp9KbVHCwh+22YIoCRZiYHmZm5bVTcV37z+52l0xIytHVayoTsrpkCx/F2/Hgh2OIb
-         LHrg==
-X-Gm-Message-State: ACgBeo3Rf4N+mOATf2dErHMjbyZfXB+akR6TiETt8uTp15Kfs/VdOpjA
-        bL0qp4Jz7J8h0UMsmnJkayIdSSZTyGlSoBmSsfjN5B+yivU=
-X-Google-Smtp-Source: AA6agR6k9KspJf2BBoGAcVkGpqsP4ySKaqhImZYnVSb2VSaqazLGOO4Ju6PERh2iW+zHj0da9rjWisoxKaGJMxAjMQk=
-X-Received: by 2002:aca:ba86:0:b0:33a:c6f7:3001 with SMTP id
- k128-20020acaba86000000b0033ac6f73001mr1885586oif.5.1660153365444; Wed, 10
- Aug 2022 10:42:45 -0700 (PDT)
+        Wed, 10 Aug 2022 13:43:27 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 744ED832FC;
+        Wed, 10 Aug 2022 10:43:26 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F2E1F11FB;
+        Wed, 10 Aug 2022 10:43:26 -0700 (PDT)
+Received: from [192.168.122.164] (U203867.austin.arm.com [10.118.30.29])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0FD303F67D;
+        Wed, 10 Aug 2022 10:43:26 -0700 (PDT)
+Message-ID: <167502fa-d0ac-c834-170f-0f0d4e912819@arm.com>
+Date:   Wed, 10 Aug 2022 12:43:25 -0500
 MIME-Version: 1.0
-References: <20220709002046.2804157-1-rsilvera@google.com>
-In-Reply-To: <20220709002046.2804157-1-rsilvera@google.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Wed, 10 Aug 2022 10:42:34 -0700
-Message-ID: <CAM9d7cicdANoZCrqctdW+m+zx6_3nm4F_A_=5jEcBT7auOScJQ@mail.gmail.com>
-Subject: Re: [PATCH v3] perf inject: Add a command line option to specify
- build ids.
-To:     Raul Silvera <rsilvera@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        linux-perf-users <linux-perf-users@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+From:   Jeremy Linton <jeremy.linton@arm.com>
+Subject: Re: [PATCH v2 1/1] ACPI: CPPC: Disable FIE if registers in PCC
+ regions
+To:     Ionela Voinescu <ionela.voinescu@arm.com>,
+        Lukasz Luba <lukasz.luba@arm.com>
+Cc:     rafael@kernel.org, lenb@kernel.org, viresh.kumar@linaro.org,
+        robert.moore@intel.com, devel@acpica.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, vschneid@redhat.com,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>
+References: <20220728221043.4161903-1-jeremy.linton@arm.com>
+ <20220728221043.4161903-2-jeremy.linton@arm.com>
+ <3a5e7abd-9361-11ba-978d-8e8bae00ea31@arm.com> <YvOpy69JkluN4ITK@arm.com>
+Content-Language: en-US
+In-Reply-To: <YvOpy69JkluN4ITK@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi,
 
-On Fri, Jul 8, 2022 at 5:20 PM Raul Silvera <rsilvera@google.com> wrote:
->
-> This commit adds the option --known-build-ids to perf inject.
-> It allows the user to explicitly specify the build id for a given
-> path, instead of retrieving it from the current system. This is
-> useful in cases where a perf.data file is processed on a different
-> system from where it was collected, or if some of the binaries are
-> no longer available.
->
-> The build ids and paths are specified in pairs in the command line.
-> Using the file:// specifier, build ids can be loaded from a file
-> directly generated by perf buildid-list. This is convenient to copy
-> build ids from one perf.data file to another.
->
-> ** Example: In this example we use perf record to create two
-> perf.data files, one with build ids and another without, and use
-> perf buildid-list and perf inject to copy the build ids from the
-> first file to the second.
->
->  $ perf record ls /tmp
->  $ perf record --no-buildid -o perf.data.no-buildid ls /tmp
->  $ perf buildid-list > /tmp/build-ids.txt
->  $ perf inject -b --known-build-ids='file:///tmp/build-ids.txt' \
->         -i perf.data.no-buildid -o perf.data.buildid
->
-> Signed-off-by: Raul Silvera <rsilvera@google.com>
-> ---
->
->   V2 -> V3  Added documentation and removed unnecessary temps
->   V1 -> V2: Cleaned up patch description, deleted the strlist during
->             cleanup, and updated validation of the build id strings
->
->  tools/perf/Documentation/perf-inject.txt |  7 ++-
->  tools/perf/builtin-inject.c              | 57 ++++++++++++++++++++++++
->  2 files changed, 63 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/perf/Documentation/perf-inject.txt b/tools/perf/Documentation/perf-inject.txt
-> index 0570a1ccd344..78474d941fd8 100644
-> --- a/tools/perf/Documentation/perf-inject.txt
-> +++ b/tools/perf/Documentation/perf-inject.txt
-> @@ -27,9 +27,14 @@ OPTIONS
->  --build-ids::
->          Inject build-ids into the output stream
->
-> ---buildid-all:
-> +--buildid-all::
->         Inject build-ids of all DSOs into the output stream
->
-> +--known-build-ids=::
-> +       Override build-ids to inject using these comma-separated pairs of
-> +       build-id and path. Understands file://filename to read these pairs
-> +       from a file, which can be generated with perf buildid-list.
-> +
->  -v::
->  --verbose::
->         Be more verbose.
-> diff --git a/tools/perf/builtin-inject.c b/tools/perf/builtin-inject.c
-> index a75bf11585b5..bf10c6478493 100644
-> --- a/tools/perf/builtin-inject.c
-> +++ b/tools/perf/builtin-inject.c
-> @@ -21,6 +21,7 @@
->  #include "util/data.h"
->  #include "util/auxtrace.h"
->  #include "util/jit.h"
-> +#include "util/string2.h"
->  #include "util/symbol.h"
->  #include "util/synthetic-events.h"
->  #include "util/thread.h"
-> @@ -35,6 +36,7 @@
->
->  #include <linux/list.h>
->  #include <linux/string.h>
-> +#include <ctype.h>
->  #include <errno.h>
->  #include <signal.h>
->
-> @@ -59,6 +61,7 @@ struct perf_inject {
->         struct itrace_synth_opts itrace_synth_opts;
->         char                    event_copy[PERF_SAMPLE_MAX_SIZE];
->         struct perf_file_section secs[HEADER_FEAT_BITS];
-> +       struct strlist          *known_build_ids;
->  };
->
->  struct event_entry {
-> @@ -570,9 +573,45 @@ static int dso__read_build_id(struct dso *dso)
->         return dso->has_build_id ? 0 : -1;
->  }
->
-> +static bool perf_inject__lookup_known_build_id(struct perf_inject *inject,
-> +                                              struct dso *dso)
-> +{
-> +       struct str_node *pos;
-> +       int bid_len;
-> +
-> +       strlist__for_each_entry(pos, inject->known_build_ids) {
-> +               const char *build_id, *dso_name;
-> +
-> +               build_id = skip_spaces(pos->s);
-> +               dso_name = strchr(build_id, ' ');
-> +               if (dso_name == NULL)
-> +                       continue;
+On 8/10/22 07:51, Ionela Voinescu wrote:
+> Hi folks,
+> 
+> On Wednesday 10 Aug 2022 at 13:29:08 (+0100), Lukasz Luba wrote:
+>> Hi Jeremy,
+>>
+>> +CC Valentin since he might be interested in this finding
+>> +CC Ionela, Dietmar
+>>
+>> I have a few comments for this patch.
+>>
+>>
+>> On 7/28/22 23:10, Jeremy Linton wrote:
+>>> PCC regions utilize a mailbox to set/retrieve register values used by
+>>> the CPPC code. This is fine as long as the operations are
+>>> infrequent. With the FIE code enabled though the overhead can range
+>>> from 2-11% of system CPU overhead (ex: as measured by top) on Arm
+>>> based machines.
+>>>
+>>> So, before enabling FIE assure none of the registers used by
+>>> cppc_get_perf_ctrs() are in the PCC region. Furthermore lets also
+>>> enable a module parameter which can also disable it at boot or module
+>>> reload.
+>>>
+>>> Signed-off-by: Jeremy Linton <jeremy.linton@arm.com>
+>>> ---
+>>>    drivers/acpi/cppc_acpi.c       | 41 ++++++++++++++++++++++++++++++++++
+>>>    drivers/cpufreq/cppc_cpufreq.c | 19 ++++++++++++----
+>>>    include/acpi/cppc_acpi.h       |  5 +++++
+>>>    3 files changed, 61 insertions(+), 4 deletions(-)
+>>
+>>
+>> 1. You assume that all platforms would have this big overhead when
+>>     they have the PCC regions for this purpose.
+>>     Do we know which version of HW mailbox have been implemented
+>>     and used that have this 2-11% overhead in a platform?
+>>     Do also more recent MHU have such issues, so we could block
+>>     them by default (like in your code)?
+>>
+>> 2. I would prefer to simply change the default Kconfig value to 'n' for
+>>     the ACPI_CPPC_CPUFREQ_FIE, instead of creating a runtime
+>>     check code which disables it.
+>>     We have probably introduce this overhead for older platforms with
+>>     this commit:
+>>
+>> commit 4c38f2df71c8e33c0b64865992d693f5022eeaad
+>> Author: Viresh Kumar <viresh.kumar@linaro.org>
+>> Date:   Tue Jun 23 15:49:40 2020 +0530
+>>
+>>      cpufreq: CPPC: Add support for frequency invariance
+>>
+>>
+>>
+>> If the test server with this config enabled performs well
+>> in the stress-tests, then on production server the config may be
+>> set to 'y' (or 'm' and loaded).
+>>
+>> I would vote to not add extra code, which then after a while might be
+>> decided to bw extended because actually some HW is actually capable (so
+>> we could check in runtime and enable it). IMO this create an additional
+>> complexity in our diverse configuration/tunnable space in our code.
+>>
+> 
+> I agree that having CONFIG_ACPI_CPPC_CPUFREQ_FIE default to no is the
+> simpler solution but it puts the decision in the hands of platform
+> providers which might result in this functionality not being used most
+> of the times, if at all. This being said, the use of CPPC counters is
+> meant as a last resort for FIE, if the platform does not have AMUs. This
+> is why I recommended this to default to no in the review of the original
+> patches.
+> 
+> But I don't see these runtime options as adding a lot of complexity
+> and therefore agree with the idea of this patch, versus the config
+> change above, with two design comments:
+>   - Rather than having a check for fie_disabled in multiple init and exit
+>     functions I think the code should be slightly redesigned to elegantly
+>     bail out of most functions if cppc_freq_invariance_init() failed.
 
-I think this is a broken entry and it should check them when it
-creates the strlist
-rather than whenever it looks up the entries.
-
-You may use strlist__for_each_entry_safe() and strlist__remove().
+I'm not sure what that would look like, I will have to mess with it a 
+bit more, but as you can see its really just the two init entry points 
+(one for the module, and one for the registered cpufreq), and their 
+associated exit's which I'm not sure I see a way to simplify that short 
+of maybe creating a second cpufreq_driver table, which replaces the 
+.init calls with ones which include cppc_cpufreq_cpu_fie_init. The 
+alternative is runtime setting the .init to switch between an init with 
+FIE and one without. I'm not sure that clarifies what is happening in 
+the code, and I thought in general dynamic runtime dispatch was to be 
+avoided in the ACPI code when possible. Neither choice of course affects 
+actual runtime because they are both firing during module load/unload.
 
 
-> +               bid_len = dso_name - pos->s;
-> +               dso_name = skip_spaces(dso_name);
-> +               if (strcmp(dso->long_name, dso_name))
-> +                       continue;
-> +               if (bid_len % 2 != 0 || bid_len >= SBUILD_ID_SIZE)
-> +                       return false;
-> +               for (int ix = 0; 2 * ix + 1 < bid_len; ++ix) {
-> +                       if (!isxdigit(build_id[2 * ix]) ||
-> +                           !isxdigit(build_id[2 * ix + 1]))
-> +                               return false;
+>   - Given the multiple options to disable this functionality (config,
+>     PCC check), I don't see a need for a module parameter or runtime user
+>     input, unless we make that overwrite all previous decisions, as in: if
+>     CONFIG_ACPI_CPPC_CPUFREQ_FIE=y, even if cppc_perf_ctrs_in_pcc(), if
+>     the fie_disabled module parameter is no, then counters should be used
+>     for FIE.
 
-Ditto.
+Tristating the module parameter with default=detect, ON, OFF is a 
+reasonable idea, and one I considered, but ignored because in the hisi 
+quirk case even with ON it will have to be OFF, so it really ends up 
+with 4 states default=detect, request ON, ON, OFF.
 
-Thanks,
-Namhyung
+I'm good with any of this if people feel strongly about it.
+
+> 
+> Thanks,
+> Ionela.
+> 
+> 
+>> When we don't compile-in this, we should fallback to old-style
+>> FIE, which has been used on these old platforms.
+>>
+>> BTW (I have to leave it here) the first-class solution for those servers
+>> is to implement AMU counters, so the overhead to retrieve this info is
+>> really low.
+>>
+>> Regards,
+>> Lukasz
 
 
-> +
-> +                       dso->bid.data[ix] = (hex(build_id[2 * ix]) << 4 |
-> +                                            hex(build_id[2 * ix + 1]));
-> +               }
-> +               dso->bid.size = bid_len / 2;
-> +               dso->has_build_id = 1;
-> +               return true;
-> +       }
-> +       return false;
-> +}
-> +
->  static int dso__inject_build_id(struct dso *dso, struct perf_tool *tool,
->                                 struct machine *machine, u8 cpumode, u32 flags)
->  {
-> +       struct perf_inject *inject = container_of(tool, struct perf_inject,
-> +                                                 tool);
->         int err;
->
->         if (is_anon_memory(dso->long_name) || flags & MAP_HUGETLB)
-> @@ -580,6 +619,10 @@ static int dso__inject_build_id(struct dso *dso, struct perf_tool *tool,
->         if (is_no_dso_memory(dso->long_name))
->                 return 0;
->
-> +       if (inject->known_build_ids != NULL &&
-> +           perf_inject__lookup_known_build_id(inject, dso))
-> +               return 1;
-> +
->         if (dso__read_build_id(dso) < 0) {
->                 pr_debug("no build_id found for %s\n", dso->long_name);
->                 return -1;
-> @@ -1076,12 +1119,16 @@ int cmd_inject(int argc, const char **argv)
->         };
->         int ret;
->         bool repipe = true;
-> +       const char *known_build_ids = NULL;
->
->         struct option options[] = {
->                 OPT_BOOLEAN('b', "build-ids", &inject.build_ids,
->                             "Inject build-ids into the output stream"),
->                 OPT_BOOLEAN(0, "buildid-all", &inject.build_id_all,
->                             "Inject build-ids of all DSOs into the output stream"),
-> +               OPT_STRING(0, "known-build-ids", &known_build_ids,
-> +                          "buildid path [,buildid path...]",
-> +                          "build-ids to use for given paths"),
->                 OPT_STRING('i', "input", &inject.input_name, "file",
->                            "input file name"),
->                 OPT_STRING('o', "output", &inject.output.path, "file",
-> @@ -1215,6 +1262,15 @@ int cmd_inject(int argc, const char **argv)
->                  */
->                 inject.tool.ordered_events = true;
->                 inject.tool.ordering_requires_timestamps = true;
-> +               if (known_build_ids != NULL) {
-> +                       inject.known_build_ids = strlist__new(
-> +                           known_build_ids, NULL);
-> +
-> +                       if (inject.known_build_ids == NULL) {
-> +                               pr_err("Couldn't parse known build ids.\n");
-> +                               goto out_delete;
-> +                       }
-> +               }
->         }
->
->         if (inject.sched_stat) {
-> @@ -1241,6 +1297,7 @@ int cmd_inject(int argc, const char **argv)
->         ret = __cmd_inject(&inject);
->
->  out_delete:
-> +       strlist__delete(inject.known_build_ids);
->         zstd_fini(&(inject.session->zstd_data));
->         perf_session__delete(inject.session);
->  out_close_output:
-> --
-> 2.37.0.rc0.161.g10f37bed90-goog
->
+Thanks for looking at this!

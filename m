@@ -2,163 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53C0458F45D
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 00:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F37DF58F466
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 00:30:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233187AbiHJW0q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 18:26:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58944 "EHLO
+        id S233433AbiHJW1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 18:27:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiHJW0o (ORCPT
+        with ESMTP id S229487AbiHJW1s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 18:26:44 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D65A8D3E5
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 15:26:43 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id z16so19275967wrh.12
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 15:26:43 -0700 (PDT)
+        Wed, 10 Aug 2022 18:27:48 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7874A8D3E2;
+        Wed, 10 Aug 2022 15:27:47 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id l8so7366074qvr.5;
+        Wed, 10 Aug 2022 15:27:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=J1S4AO51CUHE+MiRUkGQ/82rQ/8c9Jpi9FTf1saPf2w=;
-        b=QeShLouUtmJpWBEkceLNBWarGOX1MYjbKzCn1nv4kKocJLEFoP031jL8s0SsSDrENB
-         Wda5fKDvu+0K5YNCaq9SuXTz69ykH/ukcSSjdJuM+sS8nvvKrNPrvoDt4SKJhqBeu7zc
-         YW7340fBZAbgY7HZArLppFuPztV1DCTsGz3hw=
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc;
+        bh=1kroZZlbx2mb+lZ5zbOLxVzJk8/IGmcscYwlNeEJr90=;
+        b=I6zcHS1SoFrUtXXgV0bCF5RpE7FkCxGeTZ3HJLX6/AHAeDkeolokYdxbHX41LnVXmD
+         ajXM/I9QuIzBrrbRgaLA7GwQsPahcxar2Ijoz+FgUZWB74MFanJRGAfcMG4/8maygj9m
+         BFkxaqyVWb4FUOnMsCgcqF+EkMGmURptkfEHxjNvWXo5pRZRUZ70+pGML+t4Qm0KYP9q
+         4TWclY88l5A4/aTfng7dPwA8sGWHXTxyV/obLe+bBCC8M22s199iqC3PPm99Tqnpb30k
+         0Y237mJ4k/ZxKabyyie0tjOAVQ4kHYFa5wDzSAM15r5MFku558/n6xfBL4qSsnbBW4Fs
+         pSSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=J1S4AO51CUHE+MiRUkGQ/82rQ/8c9Jpi9FTf1saPf2w=;
-        b=pCrz3VfAfgm12Anr1FkE6bQTGiqkBomA97wTOXfSOoxscpiEvUoCZlTrUye7uT3kr5
-         P7qQNFeE5bk5oI5nJedu304TMF9nBG2fLFdNE09mybc103eXuGtWil7iH4g6554Rxe6j
-         DFC8CinfJV9J7WlQ40L5VRNNnKKRJo1zJcYvmiTIuXI68GdCSrmklgwbpvQrKvwkMKeY
-         DndJ6FIryKGfCmlcUNgAcYxBqyUu5B2k4Do6NMwU+Awjz0aFbFzyWggYq8d0noLjrA42
-         lQuKi6LkPH4no3SnIqEwSil/FR1sf8pJcwquY6tdrza77+KPZf5TyOrVh6KYhxxm3ssM
-         7JqQ==
-X-Gm-Message-State: ACgBeo0cPC4gQwBmrgRuLtILb/LdynCrocEsL5zzBKRtMqmVueiearny
-        cyV1Z9SMSWEwJyQTdoKmfr9isABeDdrOKpePwhYLFQ==
-X-Google-Smtp-Source: AA6agR6zBcqjxGXqvDdiQWCumTiYzSbfSHy3S98eu0PRhYY8Qf6Q2Idre8LoyOGa2CL15n071Y0e+w/dghz8KtXIYxE=
-X-Received: by 2002:a5d:47a4:0:b0:220:600d:2b0f with SMTP id
- 4-20020a5d47a4000000b00220600d2b0fmr18598230wrb.407.1660170401636; Wed, 10
- Aug 2022 15:26:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <YuuBrUmiRYoaSmPw@google.com> <20220804142856.306032-1-jrosenth@chromium.org>
- <CAE-0n51UcauP1ojoskV9_2+CFPoJrs08jGHVPCZdSA_oXX1zUw@mail.gmail.com>
- <CAODwPW_mYQ1gcd2Xw5s+7dL2kLcYn-VTxKHUH1iM1V4mn7pT_w@mail.gmail.com> <CAE-0n504q_NeB9e2BYF8P9Scp7TPqsp9KEWu2DO=ZzbYdJfyew@mail.gmail.com>
-In-Reply-To: <CAE-0n504q_NeB9e2BYF8P9Scp7TPqsp9KEWu2DO=ZzbYdJfyew@mail.gmail.com>
-From:   Julius Werner <jwerner@chromium.org>
-Date:   Wed, 10 Aug 2022 15:26:30 -0700
-Message-ID: <CAODwPW-LaaD+ptch=R-S4GWoBDjTgWzfvwjyQeBRETZnnosR7g@mail.gmail.com>
-Subject: Re: [PATCH v7] firmware: google: Implement cbmem in sysfs driver
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Julius Werner <jwerner@chromium.org>,
-        Jack Rosenthal <jrosenth@chromium.org>,
-        chrome-platform@lists.linux.dev,
-        LKML <linux-kernel@vger.kernel.org>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        Guenter Roeck <groeck@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=1kroZZlbx2mb+lZ5zbOLxVzJk8/IGmcscYwlNeEJr90=;
+        b=KJAX53WXj9RF+ndiOp6lGjBiKgOD9TAZHXh3QVkiYE0LbAN6oGqWcws8IqyS5nM4Tw
+         vCml23GWpGX4GHCMtcmqngpbyMsnUdUMwib9wPfxSK8wCTIVswrazOdTt/E/fhmP7Kk1
+         2tJ2o6DqYoogSenv5nME4xJLctBeDOYs/Jxxgr9zK+eUemzb0tmtfdVrbVnh+/+RdnMr
+         7h5/8X5WqzEhdSKPiPhH+92c0NbAcijF3YlAFuRfVqJjLq3ovfF+c1Iy1Nrf7yc4/cNX
+         lp/TBOL5BoycfjDgNxMmReAUk6TCS5U73nE+L76197xrgk/Zwq7PyT6oCb1buLRERbn2
+         joQw==
+X-Gm-Message-State: ACgBeo37fDIOAOWlYbwTHb/YvxkNV3ylhNs/ZP0VOzg8BpkyXI+peITm
+        fx1FYVeAz/XWKCObqDKropCSYMPdkgQ=
+X-Google-Smtp-Source: AA6agR7aUXEdccWAXLss1IP/vMeIrZWTc1bQPXR3VFUBbsJnIAdnUFeILdnkbR1cSC7IvA9WtQm+0w==
+X-Received: by 2002:a05:6214:242b:b0:479:4bb0:529c with SMTP id gy11-20020a056214242b00b004794bb0529cmr22486761qvb.109.1660170466453;
+        Wed, 10 Aug 2022 15:27:46 -0700 (PDT)
+Received: from stbirv-lnx-2.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id y29-20020a37f61d000000b006b8e8c657ccsm711341qkj.117.2022.08.10.15.27.44
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 10 Aug 2022 15:27:45 -0700 (PDT)
+From:   justinpopo6@gmail.com
+To:     mathias.nyman@intel.com, gregkh@linuxfoundation.org,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     f.fainelli@gmail.com, Justin Chen <justinpopo6@gmail.com>
+Subject: [PATCH 0/2] usb: host: xhci-plat: Introduce XHCI_SUSPEND_RESUME_CLKS quirk
+Date:   Wed, 10 Aug 2022 15:27:33 -0700
+Message-Id: <1660170455-15781-1-git-send-email-justinpopo6@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Alright cool. The bug says 'vbnv' so I was guessing 'nv' meant
-> non-volatile.
+From: Justin Chen <justinpopo6@gmail.com>
 
-"vbnv" is non-volatile memory, but this driver doesn't actually access
-vbnv (which is on SPI flash). This driver is meant to access an
-in-memory cache of vbnv that was put there by firmware.
+Introduce XHCI_SUSPEND_RESUME_CLKS quirk for turning off clocks during suspend and
+turning on clocks on resume. Certain hardware, in our case xhci_plat_brcm, can have
+power savings by turning off clocks before hitting suspend states.
 
-> > We really only care about one of these right now and many of them will
-> > never be relevant to the kernel, but I still thought that while we're
-> > doing this we might as well provide a generic interface to all of them
-> > because others may become useful in the future (and then you don't
-> > have to update the kernel every time you get a new use case for some
-> > userspace tool wanting to interact with some resident data structure
-> > from coreboot).
->
-> Exposing more than is necessary in the kernel ABI could get into
-> problems with backwards compatibility. It also means we have to review
-> the ABI with the consideration that something may change in the future
-> and cbmem would be exposing something we don't want exposed, or maybe it
-> is writeable when it shouldn't be?
+Justin Chen (2):
+  usb: host: xhci-plat: suspend and resume clocks
+  usb: host: xhci-plat: suspend/resume clks for brcm
 
-I think we have a bit of a different concept of what this is supposed
-to be. Forget about the vbnv and vboot workbuffer parts for the
-moment, those are where our overall motivation for doing this comes
-from but those should not be concerns for the kernel itself. From the
-kernel's point of view, all we have here is a firmware information
-structure it already knows about (the coreboot tables) pointing to a
-list of opaque, firmware-specific memory buffers labeled with an ID,
-and we want it to expose read and write access to those buffers to
-userspace to make it easier for firmware-specific userspace helper
-tools to work with them. Note that we already have userspace tools
-doing that today anyway, e.g. the `cbmem` utility uses /dev/mem to
-search for and parse the whole coreboot table itself before then using
-it to access individual CBMEM buffers. But implementing all the logic
-to do that in each tool that wants to support anything
-coreboot-specific separately is cumbersome, so we thought that since
-the kernel already has this coreboot table parsing support anyway, we
-might as well export the info to userspace to make this job easier. So
-really all the kernel does here is expose the address, size and ID
-values from the coreboot table itself, it doesn't (and isn't supposed
-to) have any understanding about the pointed to buffer. (We could also
-leave out the `mem` node from this driver and just let our userspace
-utilities read the `address` and `size` nodes and then use that info
-to go through /dev/mem. Giving them a direct `mem` node for the buffer
-just makes that process a bit easier and cleaner.)
+ drivers/usb/host/xhci-plat.c | 18 ++++++++++++++++--
+ drivers/usb/host/xhci.h      |  1 +
+ 2 files changed, 17 insertions(+), 2 deletions(-)
 
-So backwards compatibility should not be a concern (unless we're
-talking about changes in the coreboot table itself, which we strongly
-try to avoid and which would be an issue for existing kernel drivers
-already anyway). Understanding of these buffers' contents is
-explicitly supposed to be the responsibility of the userspace tool
-that has an easier time keeping up with frequent firmware data format
-changes and maintaining long lists of back-translating routines for
-older structure formats for the specific kind of buffer it looks for
-if necessary (something I specifically wouldn't want to clutter the
-kernel with).
+-- 
+2.7.4
 
-In regards to write access, I don't really see a point restricting
-this since all these buffers are already accessible through /dev/mem
-anyway. But that should only be needed for very few of these buffers
-anyway, so if people think it's a concern I think we could also keep a
-small explicit allowlist for the IDs that can be writable (shouldn't
-need to be updated frequently) and disallow it for everything else.
-Also, of course there's still the normal file system access
-permissions that makes these only writable for root and users
-specifically granted access by root. (Actually, Jack, that reminds
-me... having the `mem` nodes world-readable is maybe not a good idea,
-there's usually not anything specifically secret in there, but since
-/dev/mem also isn't world-readable I think this one probably shouldn't
-either. I'd suggest changing the initial umask to 0660 or 0600.)
-
-> Furthermore, if the ABI that the kernel can expose already exists then
-> we're better off because there may already be userspace programs written
-> for that ABI with lessons learned and bugs ironed out. In this case, I
-> was hoping that it was an nvmem, in which case we could tie it into the
-> nvmem framework and piggyback on the nvmem APIs. It also helps to expose
-> a more generic ABI to userspace instead of developing a bespoke solution
-> requiring boutique software. Of course sometimes things can't be so
-> generic so code has to be written.
-
-Yeah but this isn't anything that can be genericized, this is
-specifically meant for boutique software to maintain its internal data
-structures. vbnv and the vb2_shared_data structure in the workbuffer
-are supposed to be completely internal to vboot and not interpreted by
-any code other than vboot itself -- even coreboot never accesses them
-directly (only by linking in vboot functions and calling those). We
-explicitly don't want to deal with having to sync data structure
-format changes to anywhere outside the vboot repository. The problem
-is just that unlike most software, vboot is a framework that contains
-both firmware and userspace components, so the latter necessarily need
-some help from the kernel (as an oblivious forwarder of opaque data)
-to be able to access the internal data structures passed on from the
-former.

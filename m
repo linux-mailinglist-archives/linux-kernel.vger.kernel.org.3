@@ -2,124 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2722058ED99
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 15:50:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E07C858ED9C
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 15:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232850AbiHJNuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 09:50:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57860 "EHLO
+        id S232836AbiHJNwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 09:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232836AbiHJNuT (ORCPT
+        with ESMTP id S231821AbiHJNwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 09:50:19 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57BEB1F5
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 06:50:18 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so2174894pjf.2
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 06:50:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=eDHehK2dT1EAEXS+z232qVuqC1dsyPdCC8aOihNHjpI=;
-        b=WyeKjiizW06I7/Wn6uNcAXOEm+otebFXGH1bMuw60y2l1PwicyVIfgwvVc4rAzG3zL
-         nTpO3ag9QcuJ3zsDWPh4x35I4/1juj8Ce5VJeE4od7PS+ztnFGtWB9giIFUlVe4AKSTV
-         lhRiPcDuoYtCyMMBbygKEnzLnzrmtRVZ/PFFW/Xgwq/Lcka/S8BwseJyyyMROVR0WZYo
-         7ebV7Dp5C2EM4qi3k2e0dfhlKtuqgP3jem7GBz/YhH3IOAmPNmbBa6Mue8BXAGzuYzpC
-         k8izK1YgCzm4r9OOkIGAJqSmx6lBxaoC6S56z1aLJRl4gnrhca//ZddeU5LKm3rlM6xa
-         RVUQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=eDHehK2dT1EAEXS+z232qVuqC1dsyPdCC8aOihNHjpI=;
-        b=z9kXgSNqOZVIZApGSEY1IAoDM7omxfZc66yHadix++mVNwDQMFlXGT/q5TrMQo1/11
-         4yrN91vDmyJoXwaE5EK5RSJo/517MkEXzFVKJoS2JHoi8HkbtcKVNJv57PnAJdvqQtAL
-         e6ICwfg9+RU5wrPtT25MGVZZcDfQnHfpacRtMlRgdWdVHteI6bEld1vTj0wdwRC6m8Tv
-         K8arA+LfxOcjZMx3g38jXodsvVtzOWKhazqyM0tqnTA3vcROHe8sIGzlXEr4oULz9gmB
-         Wq4Wp43zVRZjp3Tkrdacr7+7kt5HIMLpMPAmTGJGgyKwM1AFJVvCv9ijH4YTUdJi5reg
-         orjQ==
-X-Gm-Message-State: ACgBeo1PNRP+tLxZoBcMcNNF50UStA786OYJPhKg/kLjsuRyRMTIiOQq
-        g980zN7+oF+nEBwucVjJyQVcrlEgInyvFLR8x2ZvmH5wBQY=
-X-Google-Smtp-Source: AA6agR7z1Tl/FgN8Gf9i412hFHQM0Q9Hk9vVEfuUiU8R1pUNnIcqyWZtllI28j52JaL3RIjjszmPexHEEZAYVUvPyv0=
-X-Received: by 2002:a17:902:8502:b0:16c:c5c5:a198 with SMTP id
- bj2-20020a170902850200b0016cc5c5a198mr27576448plb.88.1660139418343; Wed, 10
- Aug 2022 06:50:18 -0700 (PDT)
+        Wed, 10 Aug 2022 09:52:08 -0400
+Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF776A492
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 06:52:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1660139526; x=1691675526;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=8p/CQBS45j5tICeYzJJVMoA/fdD7DghNb+CoI4HMZYI=;
+  b=riaX0/IKweVNro3c/aTIpbudDaA4BbVcwdmTW4soSSIz5+0xbJa7T5Z4
+   oNf/TKLjGkrz3UzABoqlJIefA+FtoP4CHc3fCy+XPXATx+Q5KiST8ddih
+   BzspLN1BOAakYDt+n43FVPjQH9vxc9vKtm88vGbEbDth0gPkGV/5lfn1X
+   xLaQuFIkbDpxzC1vyD30bLqa6erGNgKMacDCGcpMgZq9ogeYeBBPjEca2
+   uFvjqZyiMsKVGu8cTFJiQ009dF+oLs3VsLxeY93PpNl1vaZ85sRmkFXo1
+   uK1noKi+sPmlU8jbv4Zv+IudsM6Tam3SKi+sGiU//Mz5yliaCLDX0uKCf
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.93,227,1654531200"; 
+   d="scan'208";a="208346232"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 10 Aug 2022 21:52:05 +0800
+IronPort-SDR: Vo5iWK4tDonXcLgapTvLwVsoJoBfTLJYlzMvxoBuxIRsQyrFynM0e5k0n6zkZvR2NpR0lhk1Ef
+ XnxFGW47tXLgv4pkaO1+8tF60bzkvaZIdVX7RLcdIk1ULa8TJrOcjyCpPnlMTotmqicv7Wx2cv
+ VihlNQjTcoNL44vxByouhPMweqs86b08ggX/LdyPF5X1+DK9/RskxrCtvHMhWIhUmC9/JlWrgl
+ f4QXaaKNxIdGZT1QoGvQdJ1bU5gjvRQQlH0tC4+4ryoNv87z7a2m8rP0Qko+DmMZP7p+xmEKsh
+ Ix1pvooR57z7R5Ch8EyH/XSn
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 10 Aug 2022 06:13:01 -0700
+IronPort-SDR: VVY7Siw6ODQm0WNXXkjr1/Fg6mYH/NMspSvT7vB3SkJZ8N5rqddTU9hiH8hUX7n6DGXoKzcDwO
+ c1yqXN9iuHasyilmKQSO+93c4+f1oed11cfjqN76b2DGQp7PFeuD1muq4h5qXbmhi/hkrAVtHU
+ A8zGgb7bWYdZD09rDHV4LztyNBRu8arS6RKNqzvSx2265Lv7Kyd8cBhf8rJOOD15wv0ByXIBw3
+ CmbR5nSqaz2HxvBQ8Bf1winkk022Mudjhbal64lKcxHsL7+0wZ/gEHFUUD6U5mfejMEsGBilCA
+ 8jE=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 10 Aug 2022 06:52:06 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4M2rw50Hk2z1Rwnm
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 06:52:04 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1660139524; x=1662731525; bh=8p/CQBS45j5tICeYzJJVMoA/fdD7DghNb+C
+        oI4HMZYI=; b=otEE04L7O38+4u+ZpwLBrDlSZUcEYa5JrBnDLS41uaCHAl947nQ
+        LorvLUhPNZGApSJ6qhJJfz2aiSpFyt/tcxeHaVN0STPnS/tLnXFkLWzO0BcJL9BH
+        8SZPTq3ibepP1sDLOyz5X3Xo+Y/BNUlgCbqvCxI6IG0dTnCjQVnCELdEGILYbUrl
+        qNLVBj9n8r8EzOAx3iWGJtZEtO+X+D0wEjgA+32RPRwZcUMrbsvmfZ6YnFfeGT8R
+        o8iatbjcu3hbRb4OmtvI8s/Oa/OhU9TT4FVFHWKG/t84gohcVnRURowKaSYiYJ/M
+        EbvAq7gTpor3m5xtt8MB5JKPnQAGihWTmsA==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id KzJbKsreAu9S for <linux-kernel@vger.kernel.org>;
+        Wed, 10 Aug 2022 06:52:04 -0700 (PDT)
+Received: from [10.111.68.99] (c02drav6md6t.sdcorp.global.sandisk.com [10.111.68.99])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4M2rw367vnz1RtVk;
+        Wed, 10 Aug 2022 06:52:03 -0700 (PDT)
+Message-ID: <b3ce0a28-0f94-6d2a-3f88-998da8f870b4@opensource.wdc.com>
+Date:   Wed, 10 Aug 2022 06:52:03 -0700
 MIME-Version: 1.0
-References: <20220712082036.5130-1-wuyun.abel@bytedance.com> <20220712082036.5130-2-wuyun.abel@bytedance.com>
-In-Reply-To: <20220712082036.5130-2-wuyun.abel@bytedance.com>
-From:   Chen Yu <yu.chen.surf@gmail.com>
-Date:   Wed, 10 Aug 2022 21:50:06 +0800
-Message-ID: <CADjb_WRdvKm=uJGe2zE+D6fHkuCX4i+WkrWqz1A3VXmtdKN_Tg@mail.gmail.com>
-Subject: Re: [PATCH 1/5] sched/fair: ignore SIS_UTIL when has idle core
-To:     Abel Wu <wuyun.abel@bytedance.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Josh Don <joshdon@google.com>, Chen Yu <yu.c.chen@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [ata] 0568e61225: stress-ng.copy-file.ops_per_sec -15.0%
+ regression
+Content-Language: en-US
+To:     John Garry <john.garry@huawei.com>,
+        kernel test robot <oliver.sang@intel.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-ide@vger.kernel.org, lkp@lists.01.org, lkp@intel.com,
+        ying.huang@intel.com, feng.tang@intel.com,
+        zhengjun.xing@linux.intel.com, fengwei.yin@intel.com
+References: <YuzPMMnnY739Tnit@xsang-OptiPlex-9020>
+ <1f498d4a-f93f-ceb4-b713-753196e5e08d@opensource.wdc.com>
+ <3451fa5a-6229-073f-ae18-0c232cd48ed5@huawei.com>
+ <16f03f81-a8c7-bacf-c74c-67231f7f7202@huawei.com>
+ <ef84d2dd-84ea-e1c7-05ef-f0a082d4f7d0@opensource.wdc.com>
+ <82dbf4d6-2d43-20ff-22a7-857f9f11a5ce@huawei.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <82dbf4d6-2d43-20ff-22a7-857f9f11a5ce@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 12, 2022 at 4:45 PM Abel Wu <wuyun.abel@bytedance.com> wrote:
->
-> When SIS_UTIL is enabled, SIS domain scan will be skipped if
-> the LLC is overloaded. Since the overloaded status is checked
-> in the load balancing at LLC level, the interval is llc_size
-> miliseconds. The duration might be long enough to affect the
-> overall system throughput if idle cores are out of reach in
-> SIS domain scan.
->
-> Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
-> ---
->
-Tested schbench and netperf on latest 5.19 vanilla, it seems that there
-is latency performance improvement when the load is low in schbench,
-and no performance difference on netperf.
+On 2022/08/10 1:33, John Garry wrote:
+> On 09/08/2022 15:57, Damien Le Moal wrote:
+>>>> As far as I can see, this patch should not make a difference unless the
+>>>> ATA shost driver is setting the max_sectors value unnecessarily low.
+>>> For __ATA_BASE_SHT, we don't set max_sectors. As such, we default
+>>> shost->max_sectors = SCSI_DEFAULT_MAX_SECTORS (=1024) in
+>>> scsi_host_alloc(). I assume no shost dma mapping limit applied.
+>>>
+>>> Then - for example - we could select dev->max_sectors =
+>>> ATA_MAX_SECTORS_LBA48 (=65535) in ata_dev_configure().
+>>>
+>>> So with commit 0568e6122574 we would have final max sectors = 1024, as
+>>> opposed to 65535 previously. I guess that the problem is something like
+>>> this.
+>>>
+>>> If so, it seems that we would need to apply the shost dma mapping limit
+>>> separately in ata_scsi_dev_config() and not use shost->max_sectors.
+>> OK. Will have a look at that.
+>>
+> 
+> We may need to introduce something like shost->max_hw_sectors, which is 
+> set according to sht max sectors and dma mapping limits. That could be 
+> also used in USB scsiglue slave_configure()
+> 
+> Or else set max_sectors value for __ATA_BASE_SHT, but I don't know a 
+> sane value there considering ATA_MAX_SECTORS_LBA48 gives max_sectors of 
+> 65535.
+> 
+> Damien, please let me know if you need help now. I am just waiting for 
+> you to test to prove this theory about dev->max_sectors being capped. I 
+> don't have an AHCI setup readily-available for testing - just SAS cards 
+> or QEMU.
 
- ./report.py -b 5.19.0+ -c 5.19.0-skip-sis-util+ -t schbench
+I am on it.
 
-schbench
-========
-case            load    baseline(std%) compare%( std%)
-normal          mthread-1 1.00 (  0.00) +7.69 (  0.00)
-normal          mthread-2 1.00 (  0.00) +13.24 (  0.00)
-normal          mthread-4 1.00 (  0.00) -5.88 (  0.00)
-normal          mthread-8 1.00 (  0.00) -0.25 (  0.00)
+> 
+> Thanks,
+> John
 
-
-./report.py -b 5.19.0+ -c 5.19.0-skip-sis-util+ -t netperf
-netperf
-=======
-case            load    baseline(std%) compare%( std%)
-TCP_RR          thread-28 1.00 (  0.62) +0.15 (  0.55)
-TCP_RR          thread-56 1.00 (  0.42) -0.26 (  0.40)
-TCP_RR          thread-84 1.00 (  0.29) +0.39 (  0.29)
-TCP_RR          thread-112 1.00 (  0.22) +0.44 (  0.23)
-TCP_RR          thread-140 1.00 (  0.17) +0.33 (  0.18)
-TCP_RR          thread-168 1.00 (  0.17) +0.19 (  0.16)
-TCP_RR          thread-196 1.00 ( 13.65) -0.62 ( 14.83)
-TCP_RR          thread-224 1.00 (  9.80) -0.65 (  9.67)
-UDP_RR          thread-28 1.00 (  0.89) +0.92 (  0.81)
-UDP_RR          thread-56 1.00 (  0.78) +0.38 (  0.73)
-UDP_RR          thread-84 1.00 ( 14.03) +0.78 ( 16.85)
-UDP_RR          thread-112 1.00 ( 12.26) -0.42 ( 11.95)
-UDP_RR          thread-140 1.00 (  9.86) -0.89 (  6.93)
-UDP_RR          thread-168 1.00 ( 11.62) -0.82 (  8.80)
-UDP_RR          thread-196 1.00 ( 19.47) +0.42 ( 16.50)
-UDP_RR          thread-224 1.00 ( 18.68) +0.72 ( 18.50)
-
-
-Tested-by: Chen Yu <yu.c.chen@intel.com>
 
 -- 
-Thanks,
-Chenyu
+Damien Le Moal
+Western Digital Research

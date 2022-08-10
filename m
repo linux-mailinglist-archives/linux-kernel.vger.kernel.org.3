@@ -2,191 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3407458F202
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 19:58:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BBDC58F206
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 19:59:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233002AbiHJR6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 13:58:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38146 "EHLO
+        id S233131AbiHJR7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 13:59:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232178AbiHJR6i (ORCPT
+        with ESMTP id S231213AbiHJR7L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 13:58:38 -0400
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B314D642C5;
-        Wed, 10 Aug 2022 10:58:37 -0700 (PDT)
-Received: by mail-il1-f180.google.com with SMTP id r6so8675228ilc.12;
-        Wed, 10 Aug 2022 10:58:37 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=SY02ZkdHYX34GvboJkr16ACg+9RvpT639cg2EBcSKVU=;
-        b=vNSCkkvrv4XJXAyPpFd5OL//YvIJl2gQhL7qZXi2hLLqG/0KeoofnyxhC5Ed2Py8VN
-         ltMTHAKhXw14h/DPwq1+gb//ndfcuLYyHhWxDupT8oa7ZTM7OMQlunFwKjDajHCkMwLl
-         qMwNTrJZpdKNz0QVFRUXRLmyq82v7ap8/HqU0N1AdmLs1VCsoSKyTnOiK9N3lfPBQB0k
-         HKBNESCyZ293WlMwmwXGAbKSGhcvj++IzzBB0/CSt0HKDg6Xau87TKXBU4AkTfOlMKR+
-         5iK0TDyL/yTDfBxSrZSDcu7Vl2IIDF+HQ40fHpAc3953FaT9VhAMnV3ubpK0tjkGIkVx
-         Si/w==
-X-Gm-Message-State: ACgBeo1aZRlBboyKMNBa+2zqVPKJlok8Meh5MRUO2BJ3wwHXn1sjxX23
-        3QziGcu1Cxs7oNx7mlwiKw==
-X-Google-Smtp-Source: AA6agR7CyLdpEOLqF49H79wXqu/iPyHRTwMYE1VpEee0uUoWBOyXb6YmlWzXeAdJ2yMCJbwNs+ofvA==
-X-Received: by 2002:a92:2a0a:0:b0:2d9:2571:f57e with SMTP id r10-20020a922a0a000000b002d92571f57emr13004446ile.154.1660154316973;
-        Wed, 10 Aug 2022 10:58:36 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id a3-20020a027343000000b003316f4b9b26sm7743726jae.131.2022.08.10.10.58.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 10:58:36 -0700 (PDT)
-Received: (nullmailer pid 240872 invoked by uid 1000);
-        Wed, 10 Aug 2022 17:58:35 -0000
-Date:   Wed, 10 Aug 2022 11:58:35 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Shengjiu Wang <shengjiu.wang@gmail.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, alsa-devel@alsa-project.org,
-        Shengjiu Wang <shengjiu.wang@nxp.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        krzysztof.kozlowski+dt@linaro.org
-Subject: Re: [PATCH] ASoC: dt-bindings: fsl, sai: Convert format to
- json-schema
-Message-ID: <20220810175835.GB200295-robh@kernel.org>
-References: <1658741467-32620-1-git-send-email-shengjiu.wang@nxp.com>
- <e81d657f-edea-4c5d-e546-e3bdb379c659@linaro.org>
- <CAA+D8AP3o-sRtzBEQEPEOVXW2vACf38fWy=jJ0AGrxTrO=W4yA@mail.gmail.com>
+        Wed, 10 Aug 2022 13:59:11 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B32906717F;
+        Wed, 10 Aug 2022 10:59:09 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 436C811FB;
+        Wed, 10 Aug 2022 10:59:10 -0700 (PDT)
+Received: from [192.168.99.12] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7BAA63F5A1;
+        Wed, 10 Aug 2022 10:59:08 -0700 (PDT)
+Message-ID: <bcf50484-f80a-dfd6-b06d-fe1505f89999@foss.arm.com>
+Date:   Wed, 10 Aug 2022 18:59:07 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAA+D8AP3o-sRtzBEQEPEOVXW2vACf38fWy=jJ0AGrxTrO=W4yA@mail.gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v5 14/14] perf test: Add relevant documentation about
+ CoreSight testing
+Content-Language: en-US
+To:     Leo Yan <leo.yan@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
+        suzuki.poulose@arm.com, mathieu.poirier@linaro.org,
+        mike.leach@linaro.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org
+References: <20220728145256.2985298-1-carsten.haitzler@foss.arm.com>
+ <20220728145256.2985298-15-carsten.haitzler@foss.arm.com>
+ <20220807070318.GL34254@leoy-ThinkPad-X240s>
+From:   Carsten Haitzler <carsten.haitzler@foss.arm.com>
+Organization: Arm Ltd.
+In-Reply-To: <20220807070318.GL34254@leoy-ThinkPad-X240s>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 11:01:16PM +0800, Shengjiu Wang wrote:
-> On Tue, Jul 26, 2022 at 4:05 AM Krzysztof Kozlowski <
-> krzysztof.kozlowski@linaro.org> wrote:
-> 
-> > On 25/07/2022 11:31, Shengjiu Wang wrote:
-> > > Convert the NXP SAI binding to DT schema format using json-schema.
-> > >
-> > > The Synchronous Audio Interface (SAI) provides an interface that
-> > > supports full-duplex serial interfaces with frame synchronization
-> > > formats such as I2S, AC97, TDM, and codec/DSP interfaces.
-> > >
-> > > Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
-> > > ---
-> > >  .../devicetree/bindings/sound/fsl,sai.yaml    | 175 ++++++++++++++++++
-> > >  .../devicetree/bindings/sound/fsl-sai.txt     |  95 ----------
-> > >  2 files changed, 175 insertions(+), 95 deletions(-)
-> > >  create mode 100644 Documentation/devicetree/bindings/sound/fsl,sai.yaml
-> > >  delete mode 100644 Documentation/devicetree/bindings/sound/fsl-sai.txt
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/sound/fsl,sai.yaml
-> > b/Documentation/devicetree/bindings/sound/fsl,sai.yaml
-> > > new file mode 100644
-> > > index 000000000000..adcd77531eba
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/sound/fsl,sai.yaml
-> > > @@ -0,0 +1,175 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/sound/fsl,sai.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Freescale Synchronous Audio Interface (SAI).
-> > > +
-> > > +maintainers:
-> > > +  - Shengjiu Wang <shengjiu.wang@nxp.com>
-> > > +
-> > > +description: |
-> > > +  The SAI is based on I2S module that used communicating with audio
-> > codecs,
-> > > +  which provides a synchronous audio interface that supports fullduplex
-> > > +  serial interfaces with frame synchronization such as I2S, AC97, TDM,
-> > and
-> > > +  codec/DSP interfaces.
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    minItems: 1
-> > > +    maxItems: 2
-> >
-> > You allow anything here, so it's not acceptable. This has to be strictly
-> > defined.
-> >
-> 
-> ok, I will update it.
-> 
-> >
-> > > +    items:
-> > > +      enum:
-> > > +        - fsl,vf610-sai
-> > > +        - fsl,imx6sx-sai
-> > > +        - fsl,imx6ul-sai
-> > > +        - fsl,imx7ulp-sai
-> > > +        - fsl,imx8mq-sai
-> > > +        - fsl,imx8qm-sai
-> > > +        - fsl,imx8mm-sai
-> > > +        - fsl,imx8mn-sai
-> > > +        - fsl,imx8mp-sai
-> > > +        - fsl,imx8ulp-sai
-> > > +
-> > > +  reg:
-> > > +    maxItems: 1
-> > > +
-> > > +  interrupts:
-> > > +    items:
-> > > +      - description: receive and transmit interrupt
-> > > +
-> > > +  dmas:
-> > > +    minItems: 2
-> >
-> > No need for minItems.
-> >
-> 
-> ok
-> 
-> 
-> >
-> > > +    maxItems: 2
-> > > +    description:
-> > > +      Must contain a list of pairs of references to DMA specifiers, one
-> > for
-> > > +      transmission, and one for reception.
-> >
-> > Skip description and instead describe items like you did for interrupts.
-> >
-> 
-> ok, will update it
-> 
-> >
-> > > +
-> > > +  dma-names:
-> > > +    minItems: 2
-> > > +    maxItems: 2
-> > > +    items:
-> > > +      enum:
-> > > +        - tx
-> > > +        - rx
-> >
-> > No, this has to be strictly defined, so items with tx and rx (or
-> > reversed order).
-> >
-> 
-> two kind of order is needed, seems I need to use
-> if - then -else
 
-No, pick the more common one for the schema and fix the dts files for 
-the less common case.
 
-Rob
+On 8/7/22 08:03, Leo Yan wrote:
+> On Thu, Jul 28, 2022 at 03:52:56PM +0100, carsten.haitzler@foss.arm.com wrote:
+>> From: "Carsten Haitzler (Rasterman)" <raster@rasterman.com>
+>>
+>> Add/improve documentation helping people get started with CoreSight and
+>> perf as well as describe the testing and how it works.
+>>
+>> Cc: linux-doc@vger.kernel.org
+>> Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
+>> ---
+>>   .../trace/coresight/coresight-perf.rst        | 160 ++++++++++++++++++
+>>   tools/perf/Documentation/arm-coresight.txt    |   5 +
+>>   2 files changed, 165 insertions(+)
+>>   create mode 100644 Documentation/trace/coresight/coresight-perf.rst
+>>   create mode 100644 tools/perf/Documentation/arm-coresight.txt
+>>
+>> diff --git a/Documentation/trace/coresight/coresight-perf.rst b/Documentation/trace/coresight/coresight-perf.rst
+>> new file mode 100644
+>> index 000000000000..401a097aea4b
+>> --- /dev/null
+>> +++ b/Documentation/trace/coresight/coresight-perf.rst
+>> @@ -0,0 +1,160 @@
+>> +.. SPDX-License-Identifier: GPL-2.0
+>> +
+>> +================
+>> +CoreSight - Perf
+>> +================
+>> +
+>> +    :Author:   Carsten Haitzler <carsten.haitzler@arm.com>
+>> +    :Date:     June 29th, 2022
+>> +
+>> +Perf is able to locally access CoreSight trace data and store it to the
+>> +output perf data files. This data can then be later decoded to give the
+>> +instructions that were traced for debugging or profiling purposes. You
+>> +can log such data with a perf record command like::
+>> +
+>> +   perf record -e cs_etm//u testbinary
+>> +
+>> +This would run some test binary (testbinary) until it exits and record
+>> +a perf.data trace file. That file would have AUX sections if CoreSight
+>> +is working correctly. You can dump the content of this file as
+>> +readable text with a command like::
+>> +
+>> +   perf report --stdio --dump -i perf.data
+>> +
+>> +You should find some sections of this file have AUX data blocks like::
+>> +
+>> +   0x1e78 [0x30]: PERF_RECORD_AUXTRACE size: 0x11dd0  offset: 0  ref: 0x1b614fc1061b0ad1  idx: 0  tid: 531230  cpu: -1
+>> +
+>> +   . ... CoreSight ETM Trace data: size 73168 bytes
+>> +           Idx:0; ID:10;   I_ASYNC : Alignment Synchronisation.
+>> +             Idx:12; ID:10;  I_TRACE_INFO : Trace Info.; INFO=0x0 { CC.0 }
+>> +             Idx:17; ID:10;  I_ADDR_L_64IS0 : Address, Long, 64 bit, IS0.; Addr=0x0000000000000000;
+>> +             Idx:26; ID:10;  I_TRACE_ON : Trace On.
+>> +             Idx:27; ID:10;  I_ADDR_CTXT_L_64IS0 : Address & Context, Long, 64 bit, IS0.; Addr=0x0000FFFFB6069140; Ctxt: AArch64,EL0, NS;
+>> +             Idx:38; ID:10;  I_ATOM_F6 : Atom format 6.; EEEEEEEEEEEEEEEEEEEEEEEE
+>> +             Idx:39; ID:10;  I_ATOM_F6 : Atom format 6.; EEEEEEEEEEEEEEEEEEEEEEEE
+>> +             Idx:40; ID:10;  I_ATOM_F6 : Atom format 6.; EEEEEEEEEEEEEEEEEEEEEEEE
+>> +             Idx:41; ID:10;  I_ATOM_F6 : Atom format 6.; EEEEEEEEEEEN
+>> +             ...
+>> +
+>> +If you see these above, then your system is tracing CoreSight data
+>> +correctly.
+>> +
+>> +To compile perf with CoreSight support in the tools/perf directory do::
+>> +
+>> +    make CORESIGHT=1
+>> +
+>> +This requires OpenCSD to build. You may install distribution packages
+>> +for the support such as libopencsd and libopencsd-dev or download it
+>> +and build yourself. Upstream OpenCSD is located at:
+>> +
+>> +  https://github.com/Linaro/OpenCSD
+>> +
+>> +For complete information on building perf with CoreSight support and
+>> +more extensive usage look at:
+>> +
+>> +  https://github.com/Linaro/OpenCSD/blob/master/HOWTO.md
+>> +
+>> +
+>> +Kernel CoreSight Support
+>> +------------------------
+>> +
+>> +You will also want CoreSight support enabled in your kernel config.
+>> +Ensure it is enabled with::
+>> +
+>> +   CONFIG_CORESIGHT=y
+>> +
+>> +There are various other CoreSight options you probably also want
+>> +enabled like::
+>> +
+>> +   CONFIG_CORESIGHT_LINKS_AND_SINKS=y
+>> +   CONFIG_CORESIGHT_LINK_AND_SINK_TMC=y
+>> +   CONFIG_CORESIGHT_CATU=y
+>> +   CONFIG_CORESIGHT_SINK_TPIU=y
+>> +   CONFIG_CORESIGHT_SINK_ETBV10=y
+>> +   CONFIG_CORESIGHT_SOURCE_ETM4X=y
+>> +   CONFIG_CORESIGHT_STM=y
+>> +   CONFIG_CORESIGHT_CPU_DEBUG=y
+> 
+> So far CORESIGHT_STM and CORESIGHT_CPU_DEBUG are irrelevant with perf
+> recording.  Perf only creates path from source (ETM) to sink (TMC-ETR
+> or TMC-ETF), so it's good to drop them.
+
+will do.
+
+>> +   CONFIG_CORESIGHT_CTI=y
+>> +   CONFIG_CORESIGHT_CTI_INTEGRATION_REGS=y
+>> +
+>> +Please refer to the kernel configuration help for more information.
+>> +
+>> +Perf test - Verify kernel and userspace perf CoreSight work
+>> +-----------------------------------------------------------
+>> +
+>> +When you run perf test, it will do a lot of self tests. Some of those
+>> +tests will cover CoreSight (only if enabled and on ARM64). You
+>> +generally would run perf test from the tools/perf directory in the
+>> +kernel tree. Some tests will check some internal perf support like:
+>> +
+>> +   Check Arm CoreSight trace data recording and synthesized samples
+>> +   Check Arm SPE trace data recording and synthesized samples
+>> +
+>> +Some others will actually use perf record and some test binaries that
+>> +are in tests/shell/coresight and will collect traces to ensure a
+>> +minimum level of functionality is met. The scripts that launch these
+>> +tests are in the same directory. These will all look like:
+>> +
+>> +   CoreSight / ASM Pure Loop
+>> +   CoreSight / Memcpy 16k 10 Threads
+>> +   CoreSight / Thread Loop 10 Threads - Check TID
+>> +   etc.
+>> +
+>> +These perf record tests will not run if the tool binaries do not exist
+>> +in tests/shell/coresight/*/ and will be skipped. If you do not have
+>> +CoreSight support in hardware then either do not build perf with
+>> +CoreSight support or remove these binaries in order to not have these
+>> +tests fail and have them skip instead.
+>> +
+>> +These tests will log historical results in the current working
+>> +directory (e.g. tools/perf) and will be named stats-\*.csv like:
+>> +
+>> +   stats-asm_pure_loop-out.csv
+>> +   stats-memcpy_thread-16k_10.csv
+>> +   ...
+>> +
+>> +These statistic files log some aspects of the AUX data sections in
+>> +the perf data output counting some numbers of certain encodings (a
+>> +good way to know that it's working in a very simple way). One problem
+>> +with CoreSight is that given a large enough amount of data needing to
+>> +be logged, some of it can be lost due to the processor not waking up
+>> +in time to read out all the data from buffers etc.. You will notice
+>> +that the amount of data collected can vary a lot per run of perf test.
+>> +If you wish to see how this changes over time, simply run perf test
+>> +multiple times and all these csv files will have more and more data
+>> +appended to it that you can later examine, graph and otherwise use to
+>> +figure out if things have become worse or better.
+>> +
+>> +This means sometimes these tests fail as they don't capture all the
+>> +data needed. This is about tracking quality and amount of data
+>> +produced over time and to see when changes to the Linux kernel improve
+>> +quality of traces.
+>> +
+>> +Be aware that some of these tests take quite a while to run, specifically
+>> +in processing the perf data file and dumping contents to then examine what
+>> +is inside.
+>> +
+>> +You can change where these csv logs are stored by setting the
+>> +PERF_TEST_CORESIGHT_STATDIR environment variable before running perf
+>> +test like::
+>> +
+>> +   export PERF_TEST_CORESIGHT_STATDIR=/var/tmp
+>> +   perf test
+>> +
+>> +They will also store resulting perf output data in the current
+>> +directory for later inspection like::
+>> +
+>> +   perf-asm_pure_loop-out.data
+>> +   perf-memcpy_thread-16k_10.data
+>> +   ...
+>> +
+>> +You can alter where the perf data files are stored by setting the
+>> +PERF_TEST_CORESIGHT_DATADIR environment variable such as::
+>> +
+>> +   PERF_TEST_CORESIGHT_DATADIR=/var/tmp
+>> +   perf test
+>> +
+>> +You may wish to set these above environment variables if you whish to
+> 
+> s/whish/wish/
+
+good catch. :)
+
+>> +keep the output of tests outside of the current working directory for
+>> +longer term storage and examination.
+>> diff --git a/tools/perf/Documentation/arm-coresight.txt b/tools/perf/Documentation/arm-coresight.txt
+>> new file mode 100644
+>> index 000000000000..c117fc50a2a9
+>> --- /dev/null
+>> +++ b/tools/perf/Documentation/arm-coresight.txt
+> 
+> You could see we have a document perf-arm-spe.txt, for alignment it's
+> good to rename this file as perf-arm-coresight.txt.
+> 
+> The rest of this patch is good for me, with addressing the above minor
+> comments:
+
+will do.
+
+> Reviewed-by: Leo Yan <leo.yan@linaro.org>
+> 
+> 
+>> @@ -0,0 +1,5 @@
+>> +Arm CoreSight Support
+>> +=====================
+>> +
+>> +For full documentation, see Documentation/trace/coresight/coresight-perf.rst
+>> +in the kernel tree.
+>> -- 
+>> 2.32.0
+>>

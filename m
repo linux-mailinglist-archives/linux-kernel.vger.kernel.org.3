@@ -2,55 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B2E658F0B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 18:47:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E74058F0B6
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 18:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231984AbiHJQrR convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 10 Aug 2022 12:47:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49476 "EHLO
+        id S230468AbiHJQtG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 12:49:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbiHJQrO (ORCPT
+        with ESMTP id S229487AbiHJQtE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 12:47:14 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EE9C21E16
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 09:47:13 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id x7-20020a056e021ca700b002ded2e6331aso11080829ill.20
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 09:47:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:from:subject:message-id:in-reply-to
-         :date:mime-version:x-gm-message-state:from:to:cc;
-        bh=hUNWrnd+Zfkz4ZQhQ2tjQP7nALuL86rrrMxK8e0aiTE=;
-        b=qGl4tPa5FuK4vd4XstuZfU2dya7782COfBdNyVUk/FpE6xs04B29+s56MHQn0730bX
-         Opoyn5uWS3wjxvkSNdkx+OyH0SPuM8YnZhHFgWz6BoEt3mYlM3Npm+EfG+VpgRWqVVz8
-         rf29t0LjCVZ0k7oLn2/yr+g4iyVUspzwwSgDFi8hjd41xeBSFe0dlXUXRES0cE5GzkNC
-         r9GACT3IWuCqG2LJeCB3SCpbQ/pKn+k/2TuoND/RT1AA/UHQjsmf7pPTDGcuNpgr7hmr
-         z15NakFmHrzgGl+2Vxn9MR9qdmNbMcPOApHDtkcPX19XtPkxm++/6vfkT3nPHODq0sk/
-         bY/A==
-X-Gm-Message-State: ACgBeo0EZJGv++YQwGJTcoKLpds5dxtKQqW9x1aSQOcP7UFuGyW/Hi2a
-        iVSgEoebaTRjgkKllekKuMN6wYYlmDKD4eM9aLy0Z2GIWjmZ
-X-Google-Smtp-Source: AA6agR66HtL322jdgGZR1DaOw8R2zwjC0+BITQB2wgyQuiFN+btijKXxRda4MFBidyY/PgULsZgZP2IKVRS2VqayuxyEv4YiPOYj
+        Wed, 10 Aug 2022 12:49:04 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 580CC21E1C
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 09:49:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1660150143; x=1691686143;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=RqYhuYAFwiekwC6dZDPy2ZSf0SaR3zZvk79QqfwFq9o=;
+  b=kNoTMvZociYemRlJWUGIOZTP1qModuvzrLk+/kzurIMPevLnf3Ox2sDu
+   P4J5eDbBBkMzQ57tolxBTNh88GFi84vb71cBUvpsODVnxkkE4MFpPkFr3
+   ySZEoUXvsDgmGpzSWtCqPgI4uYt07BA1cOcoHxoXBUoWoZL5Qh4frJXyB
+   U4cPhfKohR5qhB5/XufaAMfeIV23qoWgrkDwCPy36ObpZ/dGe3grVeGHB
+   /UC1cZAzxqcY2TjW4l2TadUmJtWmYSg30ls7yIM7U224g0d4Qec11V7NY
+   JMoZzGxlHoJOrfskJ9kj7j7kZySk0Xf8caan5o8BLUvkCyL3C5XWdA4Q+
+   w==;
+X-IronPort-AV: E=Sophos;i="5.93,227,1654585200"; 
+   d="scan'208";a="108455320"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 Aug 2022 09:49:02 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Wed, 10 Aug 2022 09:49:01 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28 via Frontend Transport; Wed, 10 Aug 2022 09:49:01 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BRrV1Lft5n/4ipjLKhy//26G/qU2GvIH8yolOQdflozm2MdzoyD+HaWo2TipnwVNv2VJEF9GvReNmodBXno9hsV1mK6tcsd7NX+7byEccII6fLymjR+p3z01zBDeInM34m5lBvotw95wHJ3KNQft0CaNFYqHUxHcjtIb42GVYBZ0NInGG4qgkhTb6pMIRH5aIIRA20jkEvTspBI/wTsGvF2OUbwT6G1sKG4jmfl7jBKvJZMtyCtVj+r/iaP7Yk+X9c0zzzLTKGxCuSmPl1XFd8g5NXAWWizfigRDlL6RArWLsW6X9AbJtNOsS8cDZfOVtdRQj2uwSxH4BcbQ7sIo0Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RqYhuYAFwiekwC6dZDPy2ZSf0SaR3zZvk79QqfwFq9o=;
+ b=LBuQ1OfQ2i/5ar56ROJGCkP6t+NWNAFu+9RCBrSTuTw7+msz+XI1Pi3mzur7WFZrfU43WybzcxHvbkWdG09Ow5yjGR5e7ip9UjygbF94B4kK5R3cPpNtOiSdrzUrTSG8oX0wAJ4bU+KdEA4x2o9aYiutT6yzEOutS+9SZOU90PV1cie6kfO7pwXbSHSn2RJ0Z+h+ML3CzQa0vdOrOlFmvuxDDA7/eucXtWV54jea7AYIOugeWUu9QVm65qQeD+o6PLXXidb/za0yXqHNrg7UD6Oyvuf5NRbJ47mnGvN6hQkuCDPhCInMTCnlRDIZ5myvzVzRqzD29aIlA/VL0JM4AQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RqYhuYAFwiekwC6dZDPy2ZSf0SaR3zZvk79QqfwFq9o=;
+ b=l5b3nQAUxwbJcWBjL/JXrSvvv8LRQjGkqI8XRD+BNH1qZIxeGHclSG5u9KVRSaJkR/n4tawmQV8ywLeU47jpLpVTrVuIdIlAFYkwuONWqAe1eP9GjNdbbdwOQSMkieQOUM33eXwp8f7c6/MkLYL5klAAHHX+4QP9WxLv8t7GRso=
+Received: from DM4PR11MB6479.namprd11.prod.outlook.com (2603:10b6:8:8c::19) by
+ CO1PR11MB5092.namprd11.prod.outlook.com (2603:10b6:303:6e::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5525.11; Wed, 10 Aug 2022 16:48:51 +0000
+Received: from DM4PR11MB6479.namprd11.prod.outlook.com
+ ([fe80::1cf7:6d4b:5e26:3f56]) by DM4PR11MB6479.namprd11.prod.outlook.com
+ ([fe80::1cf7:6d4b:5e26:3f56%8]) with mapi id 15.20.5525.011; Wed, 10 Aug 2022
+ 16:48:51 +0000
+From:   <Tudor.Ambarus@microchip.com>
+To:     <sudip.mukherjee@sifive.com>
+CC:     <pratyush@kernel.org>, <michael@walle.cc>,
+        <miquel.raynal@bootlin.com>, <richard@nod.at>, <vigneshr@ti.com>,
+        <greentime.hu@sifive.com>, <jude.onyenegecha@sifive.com>,
+        <william.salmon@sifive.com>, <adnan.chowdhury@sifive.com>,
+        <ben.dooks@sifive.com>, <linux-mtd@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 2/3] mtd: spi-nor: add SFDP fixups for Quad Page
+ Program
+Thread-Topic: [PATCH v2 2/3] mtd: spi-nor: add SFDP fixups for Quad Page
+ Program
+Thread-Index: AQHYrJASR2XJCCWNYkmLP3pHpwj/WA==
+Date:   Wed, 10 Aug 2022 16:48:51 +0000
+Message-ID: <d380a6e8-6666-1c0c-109a-3f8449fb7f02@microchip.com>
+References: <20220809201428.118523-1-sudip.mukherjee@sifive.com>
+ <20220809201428.118523-3-sudip.mukherjee@sifive.com>
+ <361fa56d-617c-ee92-151e-5d8fe0a29e53@microchip.com>
+ <CAHyZL-dgrGu3z4ySy_EdG7KdZwU+DHdo8nH=+Go_nGZUZYFq_A@mail.gmail.com>
+In-Reply-To: <CAHyZL-dgrGu3z4ySy_EdG7KdZwU+DHdo8nH=+Go_nGZUZYFq_A@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 597e29d5-72a8-4d15-cb70-08da7af03419
+x-ms-traffictypediagnostic: CO1PR11MB5092:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: VN52UD9CUSkHM8sHUq2VuZ2iZhGDR+NQLfUbRH3DEyjYbayLvGQ4aw6e3ei2B9bZO7G/FkyqSJ1TO3YWIE31VybVU/BcbnIT0UeihX/XKv4MVyPObffWy0NVp30g3p61/MslR4XnrldP2HPv02FNIzdieQtqIpJlSl1uSAYb9kGGpNoiU2btnb7i6lV+1/A/1qv7PyGDcmkXNQEu0FvlvPmCHW/LHuLMJGJwsKi3rr8gCuFhScWQdqiGGUv2ogeFpz1itvp5+uMsEN9yBgpKyox/dwf/zu8SBuUL51T6y7WdaH+xNqA+LsspWQZKCi01Go60FYEYE27I4kc1kHRf9twOH1XvpgklGD1OzajDofY2fcfQXxihWZYrE8U/gidyINpLF3d1YMe+i/OtJYzxORULf8/1DGdhIFY5g4ZrDIibUZJQzdb5IRxUsYm1H9HJ+2RvEjdMNw5ZhwQc/NWdkdyDkx/yZFgBuyhxNwkNzMGhRVi0ybTWKhNHLCIrdhLD7FXnnWBd742GC0RHb2OmMCV68Dg/fmcs+GfmCkUZecslcSwHahnYeleFj/eSJBah/r1RIkzVI1QexGS2dq4927kw2/nNYqcel0PCulepN3rLtOST/bK75nZqjOdW9IUYKG+L46m4giKrTgs8kvh8zoWI3+lYdxYGiui7GKTG2gTUgnBEdQhfAftK5Sxwq0nLgJr7TqYf6FYdqjbZ6d7eveDG9aqLC3suFrKoNGilqBlAn1rDt70UuRAmPXJ6J1Ojc/6l3lsUncErwa2dQVBdzRMPTLHP0zD9644jVtj/32c9VrrJaMpRyZtybdyKXdIqd+TgyKOsR6mF6vbvIYxm/N67cABRkyX/ZzqslnvLFUiXnI1cNq1lUNWtC9OTtUMxTYtFzpilj88ULr1S6ZVqIA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6479.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(39860400002)(346002)(366004)(136003)(396003)(478600001)(38070700005)(71200400001)(41300700001)(6486002)(966005)(26005)(6512007)(6506007)(86362001)(31696002)(53546011)(2616005)(186003)(31686004)(54906003)(91956017)(8676002)(76116006)(4326008)(66476007)(64756008)(66556008)(66446008)(36756003)(5660300002)(66946007)(6916009)(316002)(8936002)(38100700002)(122000001)(2906002)(7416002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?anQ2SkNSUi9SOFBoSzBFMGgrcDVzZHduSndCNkE4MklqNDViTVk4UW9HZ281?=
+ =?utf-8?B?VnJaSVNCcWJWd2lOcXhFdEN3T1BRa1d5a2tEMnRDWC9kbS9hcDUvQmZiYjBC?=
+ =?utf-8?B?b05WV0hsS3QvanFRYmZWZzlDYk5ycHZmZFNPaDV3VnFUdURheVF2bDlKeW9r?=
+ =?utf-8?B?L1pORnNMeUZrUkVkMmphRFluWmF1RUM5R0VnU0ZiZXpkaVlOQm4vMCtpaG11?=
+ =?utf-8?B?OHFqMUhRSHVRTWVzdFIyWXZDM1V2K09nM1FqY0hYOHhYbGJJOS9ySDROZk0x?=
+ =?utf-8?B?b2RoOEJQOTBNWjBOYi9xc0t6cmJxZmNLSTVGQ0pZVnNDNGhsY29GS1RSZFNM?=
+ =?utf-8?B?Q1d3TEZGMG1lTUhQaEk0YXFkN1BXQ3RvVkNpR3lib2NuRDZDa01VV2EwT3Vi?=
+ =?utf-8?B?Y2EweGNhaEVyK2FXMWJHSU1ydCtyT1NwdGM0K3NQQm8rTXRERDNBNmJIVGRa?=
+ =?utf-8?B?TDJ3UWFvUk0ycVorRlczUEUxOTBnejEyYkhyamIvSjRhMzI4VWhleWtKcXlV?=
+ =?utf-8?B?WDJ6R3JkY2grbFNpZFpoZ3FnRkxxUzlJOTFCS1RxU0dhNUt3eWRycG1TcU4y?=
+ =?utf-8?B?cUROK3grS28xeGpubVhVbFpROWh6Mno2UHdRSGtySTJId2JxTVF4YTdjMDdD?=
+ =?utf-8?B?Rm5WbHN6T3Q0MkdnbXVyem1TQWxaQk1kbXNUd3p2NjB6VTRtVklBQkpoMlR0?=
+ =?utf-8?B?R1VOR0tRc2k3Qk9MWnJyMkJLdmtSRFVBSldQcmFtdFIwRmJQKzdydTRITFFS?=
+ =?utf-8?B?aitzZ0lTQjNtNTRaMFNGMWp4N05WR3g2SE5FRDFTMmhldmtXbmhSNStCSDhh?=
+ =?utf-8?B?aGZNN1pQSkR6SHFWSkF5Y1I5di9TRkxlNFdRZk9YN3pVbW1YcDlmaFNlUzV2?=
+ =?utf-8?B?WlFCeHo5anVFdDdhRzU4WVpVSEc5VllZTzUycW1aTHFtVnhmc201YVR5V2pw?=
+ =?utf-8?B?SVBOeXUreW5GeExHVE9INkxPdmlINXVVaHZybzdyaXZoN2hFeFJDTmJVS0RY?=
+ =?utf-8?B?YzNZKytrVU5SdnJPNzkvLysrSFMwcnBQWTN4MTA4WkZhZWE2V20xNVg1S0hi?=
+ =?utf-8?B?aDdJd1A0cmc1YzRYTThvWW9iSnBjeGlqRzJmV0E2bEg0bUNhNitVbmc1YSt1?=
+ =?utf-8?B?eVZrU1p3WDlmekd4T2crS004TmRXUG5UZE4vUkxpWHE2bEdUMlRxd2M0U2JX?=
+ =?utf-8?B?b0o0bTIyL1p6Rk5uZmQxYVIzeXM2SDZJT0pBa0M5U0RXdUlVR1d0blBjYmp3?=
+ =?utf-8?B?cWFPTGgwcHJwakc3SHI0TktxQVlhN3ZXUy9lZk9lRHpLV2Qvem41NG1LRlA4?=
+ =?utf-8?B?WkFTSnFHVTVoQmVUcXpRejJFU0NGeVF2UTNDa09ISXFmY2I3djFWUDYwL2Vw?=
+ =?utf-8?B?WTZrcXM3V1FRNjRZcmUyNkdBQUpaMlJveGcwV0xjL0d2Y3B5ak1lUlAxZFVY?=
+ =?utf-8?B?QmR0UVRnRldZQTN0b2ZwL2lSUmJrZzlibUtkcU9PNjVOQnA1VG5NaDZVenJS?=
+ =?utf-8?B?eU5uWEpVQTlYUi9IaHVnUThOaGJrdkNBdHZPSlVYUjFFcXo3SHhKOFFnZGdm?=
+ =?utf-8?B?Rkkvbkd0cm9VWk5MWTBEc3RlZktzbWdDc25WMFQ0Zm9jTzlwTG8wbTBRMjQ4?=
+ =?utf-8?B?TVhlZGZXSE5Vd3g4QTdvNTdjczRYODdwdGpJWHNaYlF0dnhIc0FyU1plN1NG?=
+ =?utf-8?B?OWFyNm5vQVdkUDlPcDArNGxCRFNtQlhST2VST0NlUDhRVFFpYW8zTjhVajNa?=
+ =?utf-8?B?cENCZEh5dEVEdER1R280NHlhYlpqWm9IVFBzYnVxYVBvZ2VqOTA2L3hXN2Vt?=
+ =?utf-8?B?VExPTTdFekpwRHU5aDc5YXo4QjdRUzN6eUVVbUJETTlKVmJjNng1eDVSVVNj?=
+ =?utf-8?B?SmxNVWJESEtsVU1CUWFjSzFwbS9EQnNlYkZkdUxPdFFYZ1R0L1JYdGhxZXZJ?=
+ =?utf-8?B?OS9ZMXRHWXcrbFpyY0pFalNvRTMwaUNhZlQ5Tml0MDYyM0FlbWFJVmNsdmtY?=
+ =?utf-8?B?YTNVbEIyV1VackhWOHIyOHFpY2Z6b0IzUFBWT2d3MldTRjc3ZGxxcjhwMldL?=
+ =?utf-8?B?SU1qMzlCb3dqNTVDQ0s0elc2OGdBOGtPV0pLODZ0ZmNxUHpzcm9id1pkOENY?=
+ =?utf-8?B?dW95eFJmczkzdzBmcTRYT3NycTArazM3VG1zTXZMc2d5YUtTdE4wOGVpd0h4?=
+ =?utf-8?B?dUE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <9E084B5C3EDCEA47A601D3BA8290DAF1@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:4192:b0:684:6256:e892 with SMTP id
- bx18-20020a056602419200b006846256e892mr8034820iob.89.1660150032475; Wed, 10
- Aug 2022 09:47:12 -0700 (PDT)
-Date:   Wed, 10 Aug 2022 09:47:12 -0700
-In-Reply-To: <20220810113551.344792-1-code@siddh.me>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000f5acfd05e5e5ccdc@google.com>
-Subject: Re: [syzbot] WARNING in ieee80211_ibss_csa_beacon
-From:   syzbot <syzbot+b6c9fe29aefe68e4ad34@syzkaller.appspotmail.com>
-To:     code@siddh.me, davem@davemloft.net, johannes@sipsolutions.net,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6479.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 597e29d5-72a8-4d15-cb70-08da7af03419
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Aug 2022 16:48:51.0567
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: FH2aMhBLwYjkFlUM+Gv5JC1d514FBhfScX08258MMthuPIPF9y5eSJ61OXtkrukGt7hR96iDqzm/xQncATmQGUCBMbZRO9UycUB6PBwYxzM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB5092
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,266 +163,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot tried to test the proposed patch but the build/boot failed:
-
-tered promiscuous mode
-[   49.294465][ T3636] bond0: (slave bond_slave_0): Enslaving as an active interface with an up link
-[   49.305282][ T3636] bond0: (slave bond_slave_1): Enslaving as an active interface with an up link
-[   49.325908][ T3636] team0: Port device team_slave_0 added
-[   49.333047][ T3636] team0: Port device team_slave_1 added
-[   49.350306][ T3636] batman_adv: batadv0: Adding interface: batadv_slave_0
-[   49.357336][ T3636] batman_adv: batadv0: The MTU of interface batadv_slave_0 is too small (1500) to handle the transport of batman-adv packets. Packets going over this interface will be fragmented on layer2 which could impact the performance. Setting the MTU to 1560 would solve the problem.
-[   49.383401][ T3636] batman_adv: batadv0: Not using interface batadv_slave_0 (retrying later): interface not active
-[   49.395845][ T3636] batman_adv: batadv0: Adding interface: batadv_slave_1
-[   49.402957][ T3636] batman_adv: batadv0: The MTU of interface batadv_slave_1 is too small (1500) to handle the transport of batman-adv packets. Packets going over this interface will be fragmented on layer2 which could impact the performance. Setting the MTU to 1560 would solve the problem.
-[   49.430471][ T3636] batman_adv: batadv0: Not using interface batadv_slave_1 (retrying later): interface not active
-[   49.455720][ T3636] device hsr_slave_0 entered promiscuous mode
-[   49.463006][ T3636] device hsr_slave_1 entered promiscuous mode
-[   49.538340][ T3636] netdevsim netdevsim0 netdevsim0: renamed from eth0
-[   49.549079][ T3636] netdevsim netdevsim0 netdevsim1: renamed from eth1
-[   49.558155][ T3636] netdevsim netdevsim0 netdevsim2: renamed from eth2
-[   49.569133][ T3636] netdevsim netdevsim0 netdevsim3: renamed from eth3
-[   49.590785][ T3636] bridge0: port 2(bridge_slave_1) entered blocking state
-[   49.597986][ T3636] bridge0: port 2(bridge_slave_1) entered forwarding state
-[   49.605904][ T3636] bridge0: port 1(bridge_slave_0) entered blocking state
-[   49.613050][ T3636] bridge0: port 1(bridge_slave_0) entered forwarding state
-[   49.657283][ T3636] 8021q: adding VLAN 0 to HW filter on device bond0
-[   49.669522][   T14] IPv6: ADDRCONF(NETDEV_CHANGE): veth0: link becomes ready
-[   49.679945][   T14] bridge0: port 1(bridge_slave_0) entered disabled state
-[   49.688892][   T14] bridge0: port 2(bridge_slave_1) entered disabled state
-[   49.697602][   T14] IPv6: ADDRCONF(NETDEV_CHANGE): bond0: link becomes ready
-[   49.710449][ T3636] 8021q: adding VLAN 0 to HW filter on device team0
-[   49.722894][ T3647] IPv6: ADDRCONF(NETDEV_CHANGE): bridge_slave_0: link becomes ready
-[   49.732572][ T3647] bridge0: port 1(bridge_slave_0) entered blocking state
-[   49.739646][ T3647] bridge0: port 1(bridge_slave_0) entered forwarding state
-[   49.750696][  T923] IPv6: ADDRCONF(NETDEV_CHANGE): bridge_slave_1: link becomes ready
-[   49.759168][  T923] bridge0: port 2(bridge_slave_1) entered blocking state
-[   49.766347][  T923] bridge0: port 2(bridge_slave_1) entered forwarding state
-[   49.783139][ T3647] IPv6: ADDRCONF(NETDEV_CHANGE): team_slave_0: link becomes ready
-[   49.798118][ T3647] IPv6: ADDRCONF(NETDEV_CHANGE): team0: link becomes ready
-[   49.807101][ T3647] IPv6: ADDRCONF(NETDEV_CHANGE): team_slave_1: link becomes ready
-[   49.816367][ T3647] IPv6: ADDRCONF(NETDEV_CHANGE): hsr_slave_0: link becomes ready
-[   49.828659][ T3636] hsr0: Slave B (hsr_slave_1) is not up; please bring it up to get a fully working HSR network
-[   49.841622][ T3636] IPv6: ADDRCONF(NETDEV_CHANGE): hsr0: link becomes ready
-[   49.849961][   T14] IPv6: ADDRCONF(NETDEV_CHANGE): hsr_slave_1: link becomes ready
-[   49.867463][  T923] IPv6: ADDRCONF(NETDEV_CHANGE): vxcan0: link becomes ready
-[   49.875057][  T923] IPv6: ADDRCONF(NETDEV_CHANGE): vxcan1: link becomes ready
-[   49.887724][ T3636] 8021q: adding VLAN 0 to HW filter on device batadv0
-[   49.991352][   T14] IPv6: ADDRCONF(NETDEV_CHANGE): veth0_virt_wifi: link becomes ready
-[   50.007687][   T14] IPv6: ADDRCONF(NETDEV_CHANGE): veth0_vlan: link becomes ready
-[   50.016485][   T14] IPv6: ADDRCONF(NETDEV_CHANGE): vlan0: link becomes ready
-[   50.024664][   T14] IPv6: ADDRCONF(NETDEV_CHANGE): vlan1: link becomes ready
-[   50.034755][ T3636] device veth0_vlan entered promiscuous mode
-[   50.047971][ T3636] device veth1_vlan entered promiscuous mode
-[   50.067469][   T14] IPv6: ADDRCONF(NETDEV_CHANGE): macvlan0: link becomes ready
-[   50.075584][   T14] IPv6: ADDRCONF(NETDEV_CHANGE): macvlan1: link becomes ready
-[   50.084115][   T14] IPv6: ADDRCONF(NETDEV_CHANGE): veth0_macvtap: link becomes ready
-[   50.095890][ T3636] device veth0_macvtap entered promiscuous mode
-[   50.105744][ T3636] device veth1_macvtap entered promiscuous mode
-[   50.120925][ T3636] batman_adv: batadv0: Interface activated: batadv_slave_0
-[   50.129807][   T14] IPv6: ADDRCONF(NETDEV_CHANGE): veth0_to_batadv: link becomes ready
-[   50.139778][   T14] IPv6: ADDRCONF(NETDEV_CHANGE): macvtap0: link becomes ready
-[   50.152837][ T3636] batman_adv: batadv0: Interface activated: batadv_slave_1
-[   50.161478][   T14] IPv6: ADDRCONF(NETDEV_CHANGE): veth1_to_batadv: link becomes ready
-[   50.172240][ T3636] netdevsim netdevsim0 netdevsim0: set [1, 0] type 2 family 0 port 6081 - 0
-[   50.182764][ T3636] netdevsim netdevsim0 netdevsim1: set [1, 0] type 2 family 0 port 6081 - 0
-[   50.192635][ T3636] netdevsim netdevsim0 netdevsim2: set [1, 0] type 2 family 0 port 6081 - 0
-[   50.202479][ T3636] netdevsim netdevsim0 netdevsim3: set [1, 0] type 2 family 0 port 6081 - 0
-[   50.258761][   T33] wlan0: Created IBSS using preconfigured BSSID 50:50:50:50:50:50
-[   50.276234][   T33] wlan0: Creating new IBSS network, BSSID 50:50:50:50:50:50
-[   50.292455][   T22] IPv6: ADDRCONF(NETDEV_CHANGE): wlan0: link becomes ready
-[   50.306188][   T11] wlan1: Created IBSS using preconfigured BSSID 50:50:50:50:50:50
-[   50.315505][   T11] wlan1: Creating new IBSS network, BSSID 50:50:50:50:50:50
-[   50.325576][   T14] IPv6: ADDRCONF(NETDEV_CHANGE): wlan1: link becomes ready
-2022/08/10 16:46:13 building call list...
-[   50.505046][ T3636] ------------[ cut here ]------------
-[   50.510773][ T3636] ODEBUG: assert_init not available (active state 0) object type: timer_list hint: 0x0
-[   50.520732][ T3636] WARNING: CPU: 1 PID: 3636 at lib/debugobjects.c:505 debug_object_assert_init+0x1fa/0x250
-[   50.530739][ T3636] Modules linked in:
-[   50.534652][ T3636] CPU: 1 PID: 3636 Comm: syz-executor.0 Not tainted 5.19.0-syzkaller #0
-[   50.542991][ T3636] Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-[   50.553063][ T3636] RIP: 0010:debug_object_assert_init+0x1fa/0x250
-[   50.559406][ T3636] Code: e8 bb d2 d1 fd 4c 8b 45 00 48 c7 c7 20 96 6a 8a 48 c7 c6 20 93 6a 8a 48 c7 c2 c0 97 6a 8a 31 c9 49 89 d9 31 c0 e8 86 cd 4e fd <0f> 0b ff 05 da 58 8a 09 48 83 c5 38 48 89 e8 48 c1 e8 03 42 80 3c
-[   50.579117][ T3636] RSP: 0018:ffffc9000392f8c8 EFLAGS: 00010046
-[   50.585300][ T3636] RAX: 8bc764758f9d2d00 RBX: 0000000000000000 RCX: ffff88807f27ba80
-[   50.593296][ T3636] RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
-[   50.601277][ T3636] RBP: ffffffff8a0fc700 R08: ffffffff8165ed3d R09: ffffed10173a4f14
-[   50.609266][ T3636] R10: ffffed10173a4f14 R11: 1ffff110173a4f13 R12: dffffc0000000000
-[   50.617255][ T3636] R13: ffff88801bea49d0 R14: 0000000000000015 R15: ffffffff900beb38
-[   50.625245][ T3636] FS:  0000000000000000(0000) GS:ffff8880b9d00000(0000) knlGS:0000000000000000
-[   50.634196][ T3636] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[   50.641255][ T3636] CR2: 00007fe56a2e1200 CR3: 0000000011c4e000 CR4: 00000000003506e0
-[   50.649282][ T3636] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-[   50.657280][ T3636] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-[   50.665286][ T3636] Call Trace:
-[   50.668606][ T3636]  <TASK>
-[   50.671567][ T3636]  del_timer+0x3d/0x2d0
-[   50.675770][ T3636]  ? try_to_grab_pending+0xb1/0x700
-[   50.681004][ T3636]  try_to_grab_pending+0xbf/0x700
-[   50.686321][ T3636]  __cancel_work_timer+0x81/0x5b0
-[   50.691373][ T3636]  ? mgmt_send_event_skb+0x2ee/0x4e0
-[   50.696805][ T3636]  ? kmem_cache_free+0x95/0x1d0
-[   50.701675][ T3636]  ? mgmt_send_event_skb+0x2ee/0x4e0
-[   50.706989][ T3636]  mgmt_index_removed+0x244/0x330
-[   50.712032][ T3636]  hci_unregister_dev+0x28e/0x460
-[   50.718115][ T3636]  ? vhci_open+0x360/0x360
-[   50.722542][ T3636]  vhci_release+0x7f/0xd0
-[   50.726883][ T3636]  __fput+0x3b9/0x820
-[   50.730896][ T3636]  task_work_run+0x146/0x1c0
-[   50.735510][ T3636]  do_exit+0x4ed/0x1f30
-[   50.739669][ T3636]  ? rcu_read_lock_sched_held+0x41/0xb0
-[   50.745233][ T3636]  do_group_exit+0x23b/0x2f0
-[   50.749828][ T3636]  ? _raw_spin_unlock_irq+0x1f/0x40
-[   50.755023][ T3636]  ? lockdep_hardirqs_on+0x8d/0x130
-[   50.760218][ T3636]  get_signal+0x16a3/0x1700
-[   50.766302][ T3636]  arch_do_signal_or_restart+0x29/0x5d0
-[   50.771852][ T3636]  exit_to_user_mode_loop+0x74/0x150
-[   50.777133][ T3636]  exit_to_user_mode_prepare+0xb2/0x140
-[   50.782695][ T3636]  syscall_exit_to_user_mode+0x26/0x60
-[   50.788737][ T3636]  do_syscall_64+0x49/0x90
-[   50.793176][ T3636]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-[   50.799177][ T3636] RIP: 0033:0x4191dc
-[   50.803063][ T3636] Code: Unable to access opcode bytes at RIP 0x4191b2.
-[   50.809916][ T3636] RSP: 002b:00007ffe6c6d7830 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
-[   50.818354][ T3636] RAX: fffffffffffffe00 RBX: 00007ffe6c6d78f0 RCX: 00000000004191dc
-[   50.826326][ T3636] RDX: 0000000000000050 RSI: 0000000000568020 RDI: 00000000000000f9
-[   50.834295][ T3636] RBP: 0000000000000003 R08: 0000000000000000 R09: 0079746972756365
-[   50.842269][ T3636] R10: 00000000005436a0 R11: 0000000000000246 R12: 0000000000000032
-[   50.850229][ T3636] R13: 000000000000c4c0 R14: 0000000000000000 R15: 00007ffe6c6d7930
-[   50.858211][ T3636]  </TASK>
-[   50.861256][ T3636] Kernel panic - not syncing: panic_on_warn set ...
-[   50.867835][ T3636] CPU: 1 PID: 3636 Comm: syz-executor.0 Not tainted 5.19.0-syzkaller #0
-[   50.876158][ T3636] Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-[   50.886289][ T3636] Call Trace:
-[   50.890527][ T3636]  <TASK>
-[   50.893448][ T3636]  dump_stack_lvl+0x131/0x1c8
-[   50.898221][ T3636]  panic+0x26b/0x693
-[   50.902113][ T3636]  ? __warn+0x131/0x220
-[   50.906266][ T3636]  ? debug_object_assert_init+0x1fa/0x250
-[   50.912064][ T3636]  __warn+0x1fa/0x220
-[   50.916054][ T3636]  ? debug_object_assert_init+0x1fa/0x250
-[   50.921777][ T3636]  report_bug+0x1b3/0x2d0
-[   50.926103][ T3636]  handle_bug+0x3d/0x70
-[   50.930513][ T3636]  exc_invalid_op+0x16/0x40
-[   50.935009][ T3636]  asm_exc_invalid_op+0x16/0x20
-[   50.939919][ T3636] RIP: 0010:debug_object_assert_init+0x1fa/0x250
-[   50.946259][ T3636] Code: e8 bb d2 d1 fd 4c 8b 45 00 48 c7 c7 20 96 6a 8a 48 c7 c6 20 93 6a 8a 48 c7 c2 c0 97 6a 8a 31 c9 49 89 d9 31 c0 e8 86 cd 4e fd <0f> 0b ff 05 da 58 8a 09 48 83 c5 38 48 89 e8 48 c1 e8 03 42 80 3c
-[   50.965962][ T3636] RSP: 0018:ffffc9000392f8c8 EFLAGS: 00010046
-[   50.972034][ T3636] RAX: 8bc764758f9d2d00 RBX: 0000000000000000 RCX: ffff88807f27ba80
-[   50.980009][ T3636] RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
-[   50.988148][ T3636] RBP: ffffffff8a0fc700 R08: ffffffff8165ed3d R09: ffffed10173a4f14
-[   50.996123][ T3636] R10: ffffed10173a4f14 R11: 1ffff110173a4f13 R12: dffffc0000000000
-[   51.004180][ T3636] R13: ffff88801bea49d0 R14: 0000000000000015 R15: ffffffff900beb38
-[   51.012153][ T3636]  ? __wake_up_klogd+0xcd/0x100
-[   51.017277][ T3636]  ? debug_object_assert_init+0x1fa/0x250
-[   51.023040][ T3636]  del_timer+0x3d/0x2d0
-[   51.027291][ T3636]  ? try_to_grab_pending+0xb1/0x700
-[   51.032705][ T3636]  try_to_grab_pending+0xbf/0x700
-[   51.037752][ T3636]  __cancel_work_timer+0x81/0x5b0
-[   51.042785][ T3636]  ? mgmt_send_event_skb+0x2ee/0x4e0
-[   51.048148][ T3636]  ? kmem_cache_free+0x95/0x1d0
-[   51.053085][ T3636]  ? mgmt_send_event_skb+0x2ee/0x4e0
-[   51.058748][ T3636]  mgmt_index_removed+0x244/0x330
-[   51.063855][ T3636]  hci_unregister_dev+0x28e/0x460
-[   51.069135][ T3636]  ? vhci_open+0x360/0x360
-[   51.073542][ T3636]  vhci_release+0x7f/0xd0
-[   51.077997][ T3636]  __fput+0x3b9/0x820
-[   51.082080][ T3636]  task_work_run+0x146/0x1c0
-[   51.086847][ T3636]  do_exit+0x4ed/0x1f30
-[   51.091007][ T3636]  ? rcu_read_lock_sched_held+0x41/0xb0
-[   51.096557][ T3636]  do_group_exit+0x23b/0x2f0
-[   51.101224][ T3636]  ? _raw_spin_unlock_irq+0x1f/0x40
-[   51.106439][ T3636]  ? lockdep_hardirqs_on+0x8d/0x130
-[   51.111641][ T3636]  get_signal+0x16a3/0x1700
-[   51.116151][ T3636]  arch_do_signal_or_restart+0x29/0x5d0
-[   51.121725][ T3636]  exit_to_user_mode_loop+0x74/0x150
-[   51.127039][ T3636]  exit_to_user_mode_prepare+0xb2/0x140
-[   51.132611][ T3636]  syscall_exit_to_user_mode+0x26/0x60
-[   51.138271][ T3636]  do_syscall_64+0x49/0x90
-[   51.143033][ T3636]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-[   51.149376][ T3636] RIP: 0033:0x4191dc
-[   51.153293][ T3636] Code: Unable to access opcode bytes at RIP 0x4191b2.
-[   51.160326][ T3636] RSP: 002b:00007ffe6c6d7830 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
-[   51.170079][ T3636] RAX: fffffffffffffe00 RBX: 00007ffe6c6d78f0 RCX: 00000000004191dc
-[   51.178052][ T3636] RDX: 0000000000000050 RSI: 0000000000568020 RDI: 00000000000000f9
-[   51.186026][ T3636] RBP: 0000000000000003 R08: 0000000000000000 R09: 0079746972756365
-[   51.194096][ T3636] R10: 00000000005436a0 R11: 0000000000000246 R12: 0000000000000032
-[   51.202061][ T3636] R13: 000000000000c4c0 R14: 0000000000000000 R15: 00007ffe6c6d7930
-[   51.210491][ T3636]  </TASK>
-[   51.213889][ T3636] Kernel Offset: disabled
-[   51.218357][ T3636] Rebooting in 86400 seconds..
-
-
-syzkaller build log:
-go env (err=<nil>)
-GO111MODULE="auto"
-GOARCH="amd64"
-GOBIN=""
-GOCACHE="/syzkaller/.cache/go-build"
-GOENV="/syzkaller/.config/go/env"
-GOEXE=""
-GOEXPERIMENT=""
-GOFLAGS=""
-GOHOSTARCH="amd64"
-GOHOSTOS="linux"
-GOINSECURE=""
-GOMODCACHE="/syzkaller/jobs/linux/gopath/pkg/mod"
-GONOPROXY=""
-GONOSUMDB=""
-GOOS="linux"
-GOPATH="/syzkaller/jobs/linux/gopath"
-GOPRIVATE=""
-GOPROXY="https://proxy.golang.org,direct"
-GOROOT="/usr/local/go"
-GOSUMDB="sum.golang.org"
-GOTMPDIR=""
-GOTOOLDIR="/usr/local/go/pkg/tool/linux_amd64"
-GOVCS=""
-GOVERSION="go1.17"
-GCCGO="gccgo"
-AR="ar"
-CC="gcc"
-CXX="g++"
-CGO_ENABLED="1"
-GOMOD="/syzkaller/jobs/linux/gopath/src/github.com/google/syzkaller/go.mod"
-CGO_CFLAGS="-g -O2"
-CGO_CPPFLAGS=""
-CGO_CXXFLAGS="-g -O2"
-CGO_FFLAGS="-g -O2"
-CGO_LDFLAGS="-g -O2"
-PKG_CONFIG="pkg-config"
-GOGCCFLAGS="-fPIC -m64 -pthread -fmessage-length=0 -fdebug-prefix-map=/tmp/go-build478383173=/tmp/go-build -gno-record-gcc-switches"
-
-git status (err=<nil>)
-HEAD detached at 607e3baf1
-nothing to commit, working tree clean
-
-
-go list -f '{{.Stale}}' ./sys/syz-sysgen | grep -q false || go install ./sys/syz-sysgen
-make .descriptions
-bin/syz-sysgen
-touch .descriptions
-GOOS=linux GOARCH=amd64 go build "-ldflags=-s -w -X github.com/google/syzkaller/prog.GitRevision=607e3baf1c25928040d05fc22eff6fce7edd709e -X 'github.com/google/syzkaller/prog.gitRevisionDate=20210324-183421'" "-tags=syz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-fuzzer github.com/google/syzkaller/syz-fuzzer
-GOOS=linux GOARCH=amd64 go build "-ldflags=-s -w -X github.com/google/syzkaller/prog.GitRevision=607e3baf1c25928040d05fc22eff6fce7edd709e -X 'github.com/google/syzkaller/prog.gitRevisionDate=20210324-183421'" "-tags=syz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-execprog github.com/google/syzkaller/tools/syz-execprog
-GOOS=linux GOARCH=amd64 go build "-ldflags=-s -w -X github.com/google/syzkaller/prog.GitRevision=607e3baf1c25928040d05fc22eff6fce7edd709e -X 'github.com/google/syzkaller/prog.gitRevisionDate=20210324-183421'" "-tags=syz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-stress github.com/google/syzkaller/tools/syz-stress
-mkdir -p ./bin/linux_amd64
-gcc -o ./bin/linux_amd64/syz-executor executor/executor.cc \
-	-m64 -O2 -pthread -Wall -Werror -Wparentheses -Wunused-const-variable -Wframe-larger-than=16384 -static -fpermissive -w -DGOOS_linux=1 -DGOARCH_amd64=1 \
-	-DHOSTGOOS_linux=1 -DGIT_REVISION=\"607e3baf1c25928040d05fc22eff6fce7edd709e\"
-
-
-Error text is too large and was truncated, full error text is at:
-https://syzkaller.appspot.com/x/error.txt?x=149def63080000
-
-
-Tested on:
-
-commit:         d4252071 add barriers to buffer_uptodate and set_buffe..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-kernel config:  https://syzkaller.appspot.com/x/.config?x=aac0e3f739de465e
-dashboard link: https://syzkaller.appspot.com/bug?extid=b6c9fe29aefe68e4ad34
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=12593366080000
-
+T24gOC8xMC8yMiAxODoxNCwgU3VkaXAgTXVraGVyamVlIHdyb3RlOg0KPiBFWFRFUk5BTCBFTUFJ
+TDogRG8gbm90IGNsaWNrIGxpbmtzIG9yIG9wZW4gYXR0YWNobWVudHMgdW5sZXNzIHlvdSBrbm93
+IHRoZSBjb250ZW50IGlzIHNhZmUNCj4gDQo+IE9uIFdlZCwgQXVnIDEwLCAyMDIyIGF0IDk6MDYg
+QU0gPFR1ZG9yLkFtYmFydXNAbWljcm9jaGlwLmNvbT4gd3JvdGU6DQo+Pg0KPj4gT24gOC85LzIy
+IDIzOjE0LCBTdWRpcCBNdWtoZXJqZWUgd3JvdGU6DQo+Pj4gRVhURVJOQUwgRU1BSUw6IERvIG5v
+dCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3Uga25vdyB0aGUgY29u
+dGVudCBpcyBzYWZlDQo+Pj4NCj4+PiBTRkRQIHRhYmxlIG9mIHNvbWUgZmxhc2ggY2hpcHMgZG8g
+bm90IGFkdmVydGlzZSBzdXBwb3J0IG9mIFF1YWQgSW5wdXQNCj4+PiBQYWdlIFByb2dyYW0gZXZl
+biB0aG91Z2ggaXQgaGFzIHN1cHBvcnQuIFVzZSBmaXh1cCBmbGFncyBhbmQgYWRkIGhhcmR3YXJl
+DQo+Pj4gY2FwIGZvciB0aGVzZSBjaGlwcy4NCj4+Pg0KPiANCj4gPHNuaXA+DQo+IA0KPj4+IEBA
+IC01MjAsNiArNTIxLDcgQEAgc3RydWN0IGZsYXNoX2luZm8gew0KPj4+ICAgICAgICAgdTggZml4
+dXBfZmxhZ3M7DQo+Pj4gICNkZWZpbmUgU1BJX05PUl80Ql9PUENPREVTICAgICAgICAgICAgIEJJ
+VCgwKQ0KPj4+ICAjZGVmaW5lIFNQSV9OT1JfSU9fTU9ERV9FTl9WT0xBVElMRSAgICBCSVQoMSkN
+Cj4+PiArI2RlZmluZSBTUElfTk9SX1FVQURfUFAgICAgICAgICAgICAgICAgICAgICAgICBCSVQo
+MikNCj4+DQo+PiBObywgYXMgSSBwcmV2aW91c2x5IHNhaWQsIFNQSV9OT1JfUVVBRF9QUCBzaG91
+bGQgYmUgZGVjbGFyZWQgYXMgYQ0KPj4gaW5mby0+ZmxhZ3MsIG5vdCBhcyBpbmZvLT5maXh1cF9m
+bGFncy4NCj4gDQo+IFNvcnJ5LCBJIHdhcyBjb25mdXNlZCBhcyBpbmZvLT5maXh1cF9mbGFncyBz
+YXlzICJpdCBpbmRpY2F0ZXMgc3VwcG9ydA0KPiB0aGF0IGNhbiBiZSBkaXNjb3ZlcmVkIHZpYSBT
+RkRQIGlkZWFsbHksIGJ1dCBjYW4gbm90IGJlIGRpc2NvdmVyZWQNCj4gZm9yIHRoaXMgcGFydGlj
+dWxhciBmbGFzaCBiZWNhdXNlIHRoZSBTRkRQIHRhYmxlIHRoYXQgaW5kaWNhdGVzIHRoaXMNCj4g
+c3VwcG9ydCBpcyBub3QgZGVmaW5lZCBieSB0aGUgZmxhc2guIg0KPiANClJpZ2h0LCBJJ3ZlIGp1
+c3Qgc2VudCBhIHBhdGNoIGFkZHJlc3NpbmcgdGhpcywgaG9wZWZ1bGx5IGlzIGNsZWFyZXIgbm93
+Lg0KQ2hlY2sgaXQgaGVyZToNCmh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL2xpbnV4LW10ZC8yMDIy
+MDgxMDE1NTkyNC4xMzY2MDcyLTEtdHVkb3IuYW1iYXJ1c0BtaWNyb2NoaXAuY29tL1QvI3UNCj4g
+LS0NCj4gUmVnYXJkcw0KPiBTdWRpcA0KDQoNCi0tIA0KQ2hlZXJzLA0KdGENCg==

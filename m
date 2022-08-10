@@ -2,226 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E2FB58F488
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 00:51:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63CB658F48C
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 00:54:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233613AbiHJWv2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 18:51:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51120 "EHLO
+        id S231820AbiHJWyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 18:54:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232320AbiHJWv0 (ORCPT
+        with ESMTP id S231250AbiHJWyB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 18:51:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DFFF4BD3B
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 15:51:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C51A2B81EB1
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 22:51:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBC63C433D6;
-        Wed, 10 Aug 2022 22:51:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660171882;
-        bh=Gxu775Ee6UWgBt0eLWGJTjM2Ta0+Pd54mBJiv6+TmQc=;
-        h=From:To:Cc:Subject:Date:From;
-        b=J7MRHOUIunjG8EX2o6kv7bb2DW16bFVZb0riaVeL+3pdpLTxlK1oGIYHmlzinbrW/
-         Sj4b+9jhkFgPjAiJtq3c5U1McQtnTwJc+r9npLX/fFJLI5BalLxyRIlFn8qHpJz47F
-         VylaWUjUcdsIBt8Wg3iuqNaM6pdX70ZdvEtM34Xih1kDYv853fgnRd0tzO2ZHf4k0k
-         mgs3ZBeBn+t+C4InI1R4V6VaCIvq67WejUgkkLY1BFoMuW9Mc8lePeLt8Q2rVutoPV
-         /tCOmk54Q7KU7ff5+XinDx8jDg1u5hhDt8Z7oiPN2JkLWRHMHCYw1VSCAGqtPvHPak
-         XXO3dvuvWdmJw==
-From:   SeongJae Park <sj@kernel.org>
-To:     damon@lists.linux.dev, linux-damon@amazon.com,
-        linux-damon-trial@amazon.com
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: DAMON Beer/Coffee/Tea chat series
-Date:   Wed, 10 Aug 2022 22:51:02 +0000
-Message-Id: <20220810225102.124459-1-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
+        Wed, 10 Aug 2022 18:54:01 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA635A8B7;
+        Wed, 10 Aug 2022 15:54:00 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id s5-20020a17090a13c500b001f4da9ffe5fso3617161pjf.5;
+        Wed, 10 Aug 2022 15:54:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=lxZ1NGAiSTP73cSUEoGkOx6aRZyABhhViwltGrYhe9E=;
+        b=owAIw5XnlxRKipTQS/kUnxW97nZAbohYpcMbsOvQ0alvR4Z4RdrlUkYJTbOKg5WGwx
+         RVXF+rno6+iqBd8fyOnwS2HCzho8dxvBSLnKRvaEtfiGga3U7txf8Fgn8VhXsZcDGbZP
+         ktk8jidhPs6f9y6OX7qJwsdcVIavhVqVrPf88aLWG94V/3ZuwdAFlMvowiC8EMqUmS6N
+         vIjz85SXIyYc+43lzj27PBWORfff48Arq+B7/gFrTyw/awy9s96IXQ5CP5pUBf90yEZu
+         5Ev1mWx5E3h6U6qAMJaKcu2DwcDNxepV980jobU6q+lvquYLPZ7tB1mXb7yogRKiunOk
+         Xkvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=lxZ1NGAiSTP73cSUEoGkOx6aRZyABhhViwltGrYhe9E=;
+        b=Ljh3KG042Nuc4cEh1WRKMdC9QtodZTEIb25SzG41/+5hjhQqJCxXL7avH3t6R5sjqb
+         +s6tHvGtkTcRuoSliSG0Wexy8mM6bEbyWO1JzPZ1C0oHMXFJEjAxn2FTk6MOGeQQHsr5
+         JxE53NQR1iA1XQShHud+f2Pud6dW5Uz+ODsiKcROahekCK4DL/wLQkaMLjGAXZEkXshD
+         VuuAjY7Ps22yFuyZwMf/GYJEKYk7drRYViOl8IKWFTbzFwyHcx6B+5MYdD1ewWixTtXK
+         KxjA09eYbHgtkeNJ4oEWeZyudvBKxgKzBY5EKXWYSE4A7g8emfrIGfujuRvmdRGK3KCa
+         l2Qw==
+X-Gm-Message-State: ACgBeo0v01Ebb0hEm3S5ZrzfdKVr8eOx8qFlyNvg519jtw5p3jxDfmH2
+        XYlrvOMhM1tEpMRv8gz2f6o=
+X-Google-Smtp-Source: AA6agR7JEoiU8e8aUzYwboJBL1uZG9zUuw7r3JBfVIeLgtMOh8tPNt6wxTuTAo7vqrkXvDiyS4PepA==
+X-Received: by 2002:a17:90b:17c9:b0:1f3:3a7c:a3a7 with SMTP id me9-20020a17090b17c900b001f33a7ca3a7mr6041466pjb.76.1660172039748;
+        Wed, 10 Aug 2022 15:53:59 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:a3c8:d6b9:a5c2:1eca])
+        by smtp.gmail.com with ESMTPSA id w3-20020a170902e88300b0016be96e07d1sm13584240plg.121.2022.08.10.15.53.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Aug 2022 15:53:58 -0700 (PDT)
+Date:   Wed, 10 Aug 2022 15:53:55 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Mattijs Korpershoek <mkorpershoek@baylibre.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Fabien Parent <fparent@baylibre.com>,
+        linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        Fabien Parent <parent.f@gmail.com>
+Subject: Re: [PATCH v2 0/7] Input: mt6779-keypad - double keys support
+Message-ID: <YvQ3A2/Pop4YzzQ8@google.com>
+References: <20220720-mt8183-keypad-v2-0-6d42c357cb76@baylibre.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_50,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220720-mt8183-keypad-v2-0-6d42c357cb76@baylibre.com>
+X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Jul 26, 2022 at 02:56:05PM +0200, Mattijs Korpershoek wrote:
+> The MediaTek keypad controller has multiple operating modes:
+> * single key detection (currently implemented)
+> * double key detection
+> 
+> With double key detection, each (row,column) is a group that can detect
+> two keys in the key matrix.
+> This minimizes the overall pin counts for cost reduction.
+> However, pressing multiple keys in the same group will not be
+> detected properly.
+> 
+> On some boards, like mt8183-pumpkin, double key detection is used.
+> 
+> Signed-off-by: Mattijs Korpershoek <mkorpershoek@baylibre.com>
 
+Applied patches 1 through 5 (leaving dts patches out), thank you.
 
-In short, I'd like to start an open, regular, and informal virtual bi-weekly
-meeting series for DAMON community.
+> 
+> ---
+> Changes in v2:
+> - bindings: add matrix-keymap justification in commit message (Krzysztof)
+> - bindings: switch from double-keys(boolean) to keys-per-group(uint32) (Krzysztof)
+> - driver: add a function pointer for row/column calculation (Angelo)
+> - Link to v1: https://lore.kernel.org/r/20220720-mt8183-keypad-v1-0-ef9fc29dbff4@baylibre.com
+> 
+> ---
+> Fabien Parent (2):
+>       arm64: dts: mediatek: mt8183: add keyboard node
+>       arm64: dts: mediatek: mt8183-pumpkin: add keypad support
+> 
+> Mattijs Korpershoek (5):
+>       MAINTAINERS: input: add mattijs for mt6779-keypad
+>       dt-bindings: mediatek,mt6779-keypad: use unevaluatedProperties
+>       dt-bindings: mediatek,mt6779-keypad: add mediatek,keys-per-group
+>       Input: mt6779-keypad - prepare double keys support with calc_row_col
+>       Input: mt6779-keypad - support double keys matrix
+> 
+>  .../bindings/input/mediatek,mt6779-keypad.yaml     |  8 ++++-
+>  MAINTAINERS                                        |  6 ++++
+>  arch/arm64/boot/dts/mediatek/mt8183-pumpkin.dts    | 21 +++++++++++
+>  arch/arm64/boot/dts/mediatek/mt8183.dtsi           |  9 +++++
+>  drivers/input/keyboard/mt6779-keypad.c             | 41 ++++++++++++++++++++--
+>  5 files changed, 82 insertions(+), 3 deletions(-)
+> ---
+> base-commit: 668af1b6548837b44a2bfe65dcbae6b250adbf63
+> change-id: 20220720-mt8183-keypad-20aa77106ff0
+> 
+> Best regards,
+> -- 
+> Mattijs Korpershoek <mkorpershoek@baylibre.com>
 
-Important links and dates
--------------------------
-
-Location: https://meet.google.com/ndx-evoc-gbu
-Agenda: https://docs.google.com/document/d/1v43Kcj3ly4CYqmAkMaZzLiM2GEnWfgdGbZAH3mi2vpM/edit?usp=sharing
-
-First instance: 2022-08-15 18:00 PDT
-Second instance: 2022-08-30 09:00 PDT
-
-Why
----
-
-A number of people have shown interest in DAMON, participated in the
-development, and formed a community.  I therefore tried to react to queries,
-comments, and share current works and progresses via mails, conferences, and
-some virtual meetings.  Nevertheless, that was in somewhat reactive and
-occasional manner.  It was sometimes not open to all, and might be too formal.
-
-I hence think we could make it better.  That is, helping each member of the
-community to better understand who have what kind of interest in DAMON and what
-they are doing at the moment, align their goals, and efficiently collaborate.
-
-Who
----
-
-I hope to meet with anyone having interest in DAMON including but not limited
-to kernel developers, user space developers, system administrators,
-researchers, students, and whoever.  Only one requirement is to have any kind
-of interest in the development and/or usages of DAMON.
-
-How
----
-
-I'd prefer the meeting to be informal for easy communictions.  Just grab a
-beer, a coffee, a tea, or whatever you have, join in the meeting, and chat
-anything except confidentials (of course!).  No proof of concept or concrete
-plan will be needed.  Rather than that, dumb questions and crazy ideas are more
-welcome.
-
-For meeting agenda proposal, let's use a public Google doc: 
-https://docs.google.com/document/d/1v43Kcj3ly4CYqmAkMaZzLiM2GEnWfgdGbZAH3mi2vpM/edit?usp=sharing
-The agendas proposed previous to the meeting would have higher priority, but
-proposing any agenda during the meeting is also welcome.
-
-Expected topics of the meetings include:
-
-- Introduction of each other (who they are, what kind of interest/expectation
-  they have for DAMON),
-- Sharing each person or company's current progress and bottlenecks on their
-  DAMON development/application works,
-- Discussions on possible collaborations on DAMON-related works (both on kernel
-  space and user space),
-- Discussions on direction and prioritization of DAMON's future,
-- Just show each other's face and saying hi, and
-- Anything.
-
-So the meetings might cover quite wide ranges of topics.  We could have
-separate communications for more focused topics with people who have interest
-in the specific topic on demand.  At least, I will try to share my progress and
-near future plans in every meeting.
-
-Where
------
-
-Let's use Google Meet: https://meet.google.com/ndx-evoc-gbu.  I'm using Google
-Meet only because I don't have experience in other tools.  If you know better
-tools or have concerns about Google Meet, please feel free to let me know.  If
-there is any change to the platform or the link, I will share the update to
-damon@lists.linux.dev.
-
-When
-----
-
-The meeting will be held every two weeks for 30 minutes.  To cover as many
-timezones as possible, the meeting will be held once at Monday evening (18:00)
-PDT, and then at Tuesday morning (09:00) PDT two weeks after the previous one,
-and repeat.  The two time slots will hopefully convince
-Asia/Pacific/America-near and America/Europe/Africa/-near people, respectively.
-Of course, the meetings could be canceled sometimes.
-
-The first instance will be held at 2022-08-15 (Mon) 18:00 PDT.
-
-               ,_   .  ._. _.  .                                                        ,_
-           , _-\','|~\~      ~/      ;-'_   _-'     ,;_;_,    ~~-                   , _-\',
-  /~~-\_/-'~'--' \~~| ',    ,'      /  / ~|-_\_/~/~      ~~--~~~~'--_      /~~-\_/-'~'--' \
-  /              ,/'-/~ '\ ,' _  , '|,'|~                   ._/-, /~       /              ,
-  ~/-'~\_,       '-,| '|. '   ~  ,\ /'~                /    /_  /~         ~/-'~\_,       '
-.-~      '|        '',\~|\       _\~ EU  ,_  ,               /|          .-~      '|
-          '\  AMER  /'~          |_/~\\,-,~  \ "   ASIA  ,_,/ |                    '\  AMER
-           |       /            ._-~'\_ _~|              \ ) /                      |
-            \   __-\           '/      ~ |\  \_          /  ~                        \   __
-  .,         '\ |,  ~-_      - |          \\_' ~|  /\  \~ ,                .,         '\ |,
-               ~-_'  _;       '\  AFRICA   '-,   \,' /\/  |                             ~-_
-                 '\_,~'\_       \_ _,       /'    '  |, /|'                               '
-                   /     \_       ~ |      /         \  ~'; -,_.
-                   |       ~\        |    |  ,        '-_, ,; ~ ~\
-                    \,      /        \    / /|            ,-, ,   -,
-                     |    ,/          |  |' |/          ,-   ~ \   '.
-                    ,|   ,/           \ ,/              \       |
-                    /    |             ~                 -~~-, /   _
-                    |  ,-'                                    ~    /
-                    / ,'                                      ~
-                    ',|  ~
-          │                                  │ │                                       │
-          └──────────────────────────────────┘ └───────────────────────────────────────┘
-                   Tuesday morning PDT                     Monday evening PDT
-
-FAQs
-----
-
-1. Will this replace the email based communications?
-
-Obviously not.  This is only for complementing the email based communication.
-The email based communication, especially the patches review process, will of
-course continue.  We might provide some comments on each other's patches during
-the meeting, but it should also be sent via email and archived.
-
-2. Can I miss some important information if I don't join the meetings?
-
-Probably no.  I will provide meeting summaries to DAMON mailing list
-(damon@lists.linux.dev) if there were important discussions, so you are not
-required to join in the meeting series always.  Nevertheless, as it could be
-delayed or missed, I'd recommend to join in the meetings if you could.
-
-3. Will the meetings be recorded and shared?
-
-No, unless explicitly required and everyone agreed.
-
-4. Can I discuss about some confidential things?
-
-No.  This meeting series is open for everyone, so please discuss only
-non-confidential things.  If you have to or unsure, please have a separate
-meeting with appropriate people.
-
-5. Who will organize and lead the meeting series?
-
-I would organize and lead it by default at the beginning, but would be also ok
-to be driven by anyone in the community.
-
-6. Should I say something if I join in?
-
-No.  You're welcome to just listen if you don't have anything to say.  I'd
-personally recommend people to provide a brief introduction of themselves, but
-if you feel uncomfortable about it, of course you can skip.  Simply showing up
-your face or name on the screen and saying hi to others would also be great.
-
-7. What's the benefit for me to join in the meeting series?
-
-This would be a good chance to let the people of the community know your
-problems, requirements, ongoing works and get helps or avoid unnecessary
-conflicts.  Maybe you could make a friend.  It will benefit not only you, but
-eventually help the community back.  Making community healthy will again help
-you back.  So I'd recommend you to join the meetings if you could, even if you
-don't have something special to say.
-
----
-
-I hope this to help the community to better understand each other, make
-good/efficient alignments of each goals on DAMON, and ultimately get some fun
-and deliver benefits to the community and the world.
-
-Please leave any comments or questions if you have.
-
-
-Thanks,
-SJ
+-- 
+Dmitry

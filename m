@@ -2,95 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2110A58E47B
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 03:26:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7290358E48E
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 03:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbiHJB0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 21:26:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48880 "EHLO
+        id S230123AbiHJBfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 21:35:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229460AbiHJB0K (ORCPT
+        with ESMTP id S229479AbiHJBeo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 21:26:10 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F815FADD
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 18:26:09 -0700 (PDT)
-Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M2XJz3RDFzmVcn;
-        Wed, 10 Aug 2022 09:24:03 +0800 (CST)
-Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
- dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Wed, 10 Aug 2022 09:26:07 +0800
-Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
- (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 10 Aug
- 2022 09:26:06 +0800
-From:   Yang Yingliang <yangyingliang@huawei.com>
-To:     <linux-kernel@vger.kernel.org>, <kvmarm@lists.cs.columbia.edu>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <maz@kernel.org>, <james.morse@arm.com>,
-        <alexandru.elisei@arm.com>, <suzuki.poulose@arm.com>,
-        <oliver.upton@linux.dev>
-Subject: [PATCH v3] KVM: arm64: fix compile error because of shift overflow
-Date:   Wed, 10 Aug 2022 09:34:35 +0800
-Message-ID: <20220810013435.1525363-1-yangyingliang@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 9 Aug 2022 21:34:44 -0400
+Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE636E8A6
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 18:34:44 -0700 (PDT)
+Received: by mail-pg1-x532.google.com with SMTP id r69so6460269pgr.2
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 18:34:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc;
+        bh=TlNKkwKDBQ+04BfJnUXiFCzysd/fVDo0WONXG26HlxA=;
+        b=kqVSeQzsjQpfBVvbN73SjVRJadGQFow/DtfCgkHsTLZnK/efYxkfTr8S5WoeyCXjHV
+         pe5pjauoZUEvr2KMzs15jEEB/2dc7rlzAwyBXXNWQ39UIOrJlAou8r2WoD1UzKoivPyP
+         uaC9z8srgJClFgBT8tceQCTeqOTEPrDp0g+G1/WiOVraHOejiCDooY2j72K6Td29c5G4
+         uBPEvj6spTRqqkvERkdM3TXd7jpvDHSugwHocceRzgc+mT2aJVvfarbcA+u4hPxcml5l
+         /+nM7HbagbRO36FdH1muL9P7A72JN9MrehnoN2+IuJ4zl0FWztPJjtupeXKyHIzB31Gz
+         8hJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc;
+        bh=TlNKkwKDBQ+04BfJnUXiFCzysd/fVDo0WONXG26HlxA=;
+        b=W6Rv3V1JO3KeFMsjisJH7o0/5VFNI66AqyUGkFbWAis0MUABdzP2BzcMacl8vwz4jP
+         F81EJ0PjsTUNoP/cOFsZwnVvgykglgQxzrRj4sOvjZpjlmZkVljtE7YQIPlhn1NS3RTm
+         8Buf5fhoRtoNmQ5LR0d2/TTCPakCKlCQt6h3yXIjB5TDVa37SBY3SaY4Br1jd3lwCvPu
+         tjK9jcz6aoQFlAqvedYAtAMCLVAoiLUPJoiG6LhrlvJ3rNMlB6URDVhpPZMD15+rXiII
+         2B6RsFe2yX7n6gQShZhCFUtQ2vt1qyt2uol4B2jumRPkpKNGrxqmUAiu4b3aKfc2GXmI
+         HjBA==
+X-Gm-Message-State: ACgBeo2i4QiDZxbm7J34fiEEHmwtvUdyR5DazngZRGLwQl6aJGUTfp2q
+        UuAuBv8mxXroEiSab4nA/Vg=
+X-Google-Smtp-Source: AA6agR7hnxxrUhlrsUca76wvZ5vD6JSnVFWcZLhmUg3OpMtnIt260/2O4etXR+QWOyCDd5/FzQMYzg==
+X-Received: by 2002:a63:6406:0:b0:41b:f291:2cbf with SMTP id y6-20020a636406000000b0041bf2912cbfmr21957291pgb.96.1660095283683;
+        Tue, 09 Aug 2022 18:34:43 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id b7-20020a170902d50700b0016f057b88c9sm11538048plg.26.2022.08.09.18.34.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Aug 2022 18:34:42 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <0c6ef9a3-bbb1-9f1c-7f00-ceb05589594e@roeck-us.net>
+Date:   Tue, 9 Aug 2022 18:34:40 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.175.103.91]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500007.china.huawei.com (7.185.36.183)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v6] amba: Remove deferred device addition
+Content-Language: en-US
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Russell King <linux@armlinux.org.uk>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@armlinux.org.uk, kernel-team@android.com,
+        linux-kernel@vger.kernel.org
+References: <20220727181936.3250466-1-saravanak@google.com>
+ <20220809103052.GA1778649@roeck-us.net>
+ <CAGETcx_ATE6vy9YhygHnBA2P1GDVi54np-=E+50F+cwnj6Wg4A@mail.gmail.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <CAGETcx_ATE6vy9YhygHnBA2P1GDVi54np-=E+50F+cwnj6Wg4A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Using GENMASK() to generate the masks of device type and device id, it makes
-code unambiguous, also it can fix the following fix compile error because of
-shift overflow when using low verison gcc(mine version is 7.5):
+On 8/9/22 17:42, Saravana Kannan wrote:
+> On Tue, Aug 9, 2022 at 3:30 AM Guenter Roeck <linux@roeck-us.net> wrote:
+>>
+>> Hi,
+>>
+>> On Wed, Jul 27, 2022 at 11:19:35AM -0700, Saravana Kannan wrote:
+>>> The uevents generated for an amba device need PID and CID information
+>>> that's available only when the amba device is powered on, clocked and
+>>> out of reset. So, if those resources aren't available, the information
+>>> can't be read to generate the uevents. To workaround this requirement,
+>>> if the resources weren't available, the device addition was deferred and
+>>> retried periodically.
+>>>
+>> ...
+>>
+>> This patch results in a large number of crashes in various qemu
+>> emulations. Crash and bisect logs below. Reverting this patch
+>> fixes the problem.
+> 
+> Hey Guenter,
+> 
+> Thanks for the report. I'm kinda surprised because I had a pl011 probe
+> successfully in my local testing.
+> 
 
-In function ‘kvm_vm_ioctl_set_device_addr.isra.38’,
-    inlined from ‘kvm_arch_vm_ioctl’ at arch/arm64/kvm/arm.c:1454:10:
-././include/linux/compiler_types.h:354:38: error: call to ‘__compiletime_assert_599’ \
-declared with attribute error: FIELD_GET: mask is not constant
-  _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
+Maybe it only happens with qemu emulations, or with certain configurations.
 
-Fixes: 9f968c9266aa ("KVM: arm64: vgic-v2: Add helper for legacy dist/cpuif base address setting")
-Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
----
-v3:
- replace '15/31' with 'SHIFT + 15' to make it more readable.
-v2:
-  Using GENMASK() to generate the masks.
----
- arch/arm64/include/uapi/asm/kvm.h | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+> I'm wondering if you are having an interaction with some other changes I made.
+> Can you try pulling this series in and see if it helps?
+> 
+> https://lore.kernel.org/lkml/20220727185012.3255200-1-saravanak@google.com/
+> 
+>> Additional information: The decoded stack trace suggests that the
+>> "id" parameter of pl011_probe() may be NULL.
+> 
+> That's strange! I'll take a closer look once you confirm that the
+> series above doesn't help.
+> 
 
-diff --git a/arch/arm64/include/uapi/asm/kvm.h b/arch/arm64/include/uapi/asm/kvm.h
-index 3bb134355874..316917b98707 100644
---- a/arch/arm64/include/uapi/asm/kvm.h
-+++ b/arch/arm64/include/uapi/asm/kvm.h
-@@ -75,9 +75,11 @@ struct kvm_regs {
- 
- /* KVM_ARM_SET_DEVICE_ADDR ioctl id encoding */
- #define KVM_ARM_DEVICE_TYPE_SHIFT	0
--#define KVM_ARM_DEVICE_TYPE_MASK	(0xffff << KVM_ARM_DEVICE_TYPE_SHIFT)
-+#define KVM_ARM_DEVICE_TYPE_MASK	GENMASK(KVM_ARM_DEVICE_TYPE_SHIFT + 15, \
-+						KVM_ARM_DEVICE_TYPE_SHIFT)
- #define KVM_ARM_DEVICE_ID_SHIFT		16
--#define KVM_ARM_DEVICE_ID_MASK		(0xffff << KVM_ARM_DEVICE_ID_SHIFT)
-+#define KVM_ARM_DEVICE_ID_MASK		GENMASK(KVM_ARM_DEVICE_ID_SHIFT + 15, \
-+						KVM_ARM_DEVICE_ID_SHIFT)
- 
- /* Supported device IDs */
- #define KVM_ARM_DEVICE_VGIC_V2		0
--- 
-2.25.1
+That series does not make a difference.
 
+Guenter

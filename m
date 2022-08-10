@@ -2,350 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2262058E7C3
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 09:21:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC34558E7C5
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 09:21:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230413AbiHJHVT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 03:21:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46854 "EHLO
+        id S229907AbiHJHVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 03:21:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231129AbiHJHVR (ORCPT
+        with ESMTP id S231165AbiHJHV1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 03:21:17 -0400
-Received: from sender4-pp-o92.zoho.com (sender4-pp-o92.zoho.com [136.143.188.92])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29F832BE6;
-        Wed, 10 Aug 2022 00:21:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1660116068; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=n3NSo/fEZfpx7rSdEsbwCXzAsPDLu6zTR6n6lDSi0+jdtJSeXCwaPzKHEozIJezPeD7+RBv8UxJIG+YOO5tGpUpVAsVJMAQ97koZJXDtTxFYUhblqoMd0VCGtJGr3TcxQTj+CWs2hQs4jkslhcPlTSNcz7DZ/DGf5j4iRuGN/R0=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1660116068; h=Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject; 
-        bh=G1h2kfsonmQROx/nWn0qAOswazpcP5SKYTg1aII5grM=; 
-        b=g1zxmwWz3xHyzXNKttyQBKsmhAdjEoyDS5hdB7ULSrLfJDmMVYBP1Ah2tvXI2KjvfedREqj1dhTcN1qNGls3udW2EKtqeW31XVdpcYMkZL/sCyiwIT4W4zTFWGfstEVZcIMY2V3/nLYXfpGkYSl7D8AZHzKwpaTle7pfVp/HOig=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=zoho.com;
-        spf=pass  smtp.mailfrom=hmsjwzb@zoho.com;
-        dmarc=pass header.from=<hmsjwzb@zoho.com>
-DomainKey-Signature: a=rsa-sha1; q=dns; c=nofws; 
-  s=zapps768; d=zoho.com; 
-  h=from:to:cc:subject:date:message-id:mime-version; 
-  b=SOeAJrCbkAaHpUwFrD3QrGAiK9GWvlbJBRHkgXJHDVBOlLPvd8oerJrhZ+ktsjdDmJwB45Jf191t
-    slFuZfE2ngXCKEizISPHJ8LU735K9DUOAaNj5gy32oznevY4Ii7X  
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1660116068;
-        s=zm2022; d=zoho.com; i=hmsjwzb@zoho.com;
-        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Transfer-Encoding:Reply-To;
-        bh=G1h2kfsonmQROx/nWn0qAOswazpcP5SKYTg1aII5grM=;
-        b=Nw0lodkds+Jwh9gUh1w8pgFBLll4gWR/kvsF1F+hunSJvsaL9kRjHOYNk1owHHci
-        G6ULvqRcvokHlc5lWgT8eEriEQ83KcIEeMEqIyqsvfOxvVHze/HWbkIgqJz9fNtSCVE
-        NzcA1N6mvDj9qxtdlQdmD5G19JeGDFIu54jZW8C4=
-Received: from localhost.localdomain (58.247.201.219 [58.247.201.219]) by mx.zohomail.com
-        with SMTPS id 1660116067340290.2869640543996; Wed, 10 Aug 2022 00:21:07 -0700 (PDT)
-From:   "Flint.Wang" <hmsjwzb@zoho.com>
-Cc:     anand.jain@oracle.com, nborisov@suse.com, strongbox8@zoho.com,
-        hmsjwzb@zoho.com, Chris Mason <clm@fb.com>,
-        Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] btrfs: Fix btrfs_find_device for btrfs/249
-Date:   Wed, 10 Aug 2022 15:20:21 +0800
-Message-Id: <20220810072021.4539-1-hmsjwzb@zoho.com>
-X-Mailer: git-send-email 2.37.0
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-ZohoMail-Owner: <20220810072021.4539-1-hmsjwzb@zoho.com>+zmo_0_hmsjwzb@zoho.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Wed, 10 Aug 2022 03:21:27 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82414616A
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 00:21:22 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id k16-20020a252410000000b006718984ef63so11483432ybk.3
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 00:21:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=PV7OXYmXvOy3oOI40B0c/NrQt9YbIpwW5ysp1+4Kfk4=;
+        b=K2FGfe9V4BWEOz04T3rNzNuwXWtZMfNdbP6DmrpQ84RwDIlwCdprOpZfia1FTadzEJ
+         YcbL5Dg/9HC7x4f9nS5/HiVZtQhWb6l0BfRfQWpXI8vAFQFwR+jmPBr1indQTC1+YrFt
+         Tx4ZFpy0lpbF/e0v+usbJ+cgckaEkf1NSRyfg5QvG83xWCPOL+U05N0qSdFWEn7O1F5D
+         OV3bzcS09/Jrkt9FCrrTOHqQolYCINKhuNJj6x2+jOARifAUUdtMFRU5t209dikRvBqz
+         U6YAL7iu0dwNuWOEM0ffe6vuSaC11VtfpeyOtqqMAIj/y32vbAjLi/4hXK89VqIUom4G
+         fZ8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=PV7OXYmXvOy3oOI40B0c/NrQt9YbIpwW5ysp1+4Kfk4=;
+        b=haqaE8VrAeykmik74dqmoMLKo+UAyYbEM26+9s+igpC9WbSSzpCRCA+IeyFiudlc5s
+         rswRUI0RWViSEbzzk4mWPMX3rZYi3HAQ6o/96zNLI5Dy+HDmJMFm9awD8/yWu2uomDvZ
+         K/ASzXOxk1j5WXmZs+wteGf06ibnAI3KE1vw5h1inB47SezmDdLusbSyLo5wV3WD6fz5
+         lRex6wRi9EkI8Cm2TSulu3Xoogb2gEDcNFRHWNtnXGAUV06hwJk/gmCWk+hYLNepGtfL
+         TnGpogu1FRVzfFUN0SlJWPW6W6iRcxZZ71CqK20EWVoTrZKMpPJio9JsSzzCsxTxRqit
+         HCNA==
+X-Gm-Message-State: ACgBeo3vtDnMXwFrpydoD3x791+/Ub3lig7LTDO4kDKIQ5s6we0/mX4m
+        +DQhnvmN51KSaA521IhM77XUbEy7x7I/ySYpAWXNxEG9YrVhdMzk88ig3gdrCGRyf79GZ/ShWdE
+        fqcKFpwuJI8c3dfEEX5VmqqHUA4MHMsfTODxXdu0HX4BDrvzq36Ps68wf570iFmDLzD8/DIsp
+X-Google-Smtp-Source: AA6agR4hmMW+Op22E/4cpCGBrHn7Z6qt/OcIhhC57rhdeFszcCqfUhtrpELfu3MWeftfhTZP2iucKvxNccus
+X-Received: from suichen.svl.corp.google.com ([2620:15c:2c5:13:820:de6:2fcc:8636])
+ (user=suichen job=sendgmr) by 2002:a25:3b10:0:b0:671:80ee:6a8 with SMTP id
+ i16-20020a253b10000000b0067180ee06a8mr23825802yba.114.1660116081386; Wed, 10
+ Aug 2022 00:21:21 -0700 (PDT)
+Date:   Wed, 10 Aug 2022 00:20:40 -0700
+Message-Id: <20220810072041.57055-1-suichen@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
+Subject: [RFC Patch v5 Resend 0/1] i2c counters as sysfs attributes
+From:   Sui Chen <suichen@google.com>
+To:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        wsa@kernel.org, openbmc@lists.ozlabs.org, tali.perry1@gmail.com
+Cc:     joel@jms.id.au, andrew@aj.id.au, benjaminfair@google.com,
+        krellan@google.com, Sui Chen <suichen@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-testcase btrfs249 failed.
-[How to reproduce]
-mkfs.btrfs -f -d raid1 -m raid1 /dev/sdb /dev/sdc
-btrfstune -S 1 /dev/sdb
-wipefs -a /dev/sdb
-mount -o degraded /dev/sdc /mnt/scratch
-btrfs device add -f /dev/sdd /mnt/scratch
-btrfs filesystem usage /mnt/scratch
+Hello, linux-i2c,
 
-[Root cause]
-mkfs.btrfs -f -d raid1 -m raid1 /dev/sdb /dev/sdc
-btrfstune -S 1 /dev/sdb
-wipefs -a /dev/sdb
-mount -o degraded /dev/sdc /mnt/scratch
+We would like to ping in a friendly way and see if there are any
+comments on the i2c counters as sysfs attributes.
 
-In the above commands, btrfstune command set the sdb and sdc to seeding device.
-After that you wipe the filesystem on sdb. After mount, you will find the status of sdb is missing.
+This change renames the I2C debug counters as previously, and makes them
+available to i2c_adapter's and i2c_client's:
 
-btrfs device add -f /dev/sdd /mnt/scratch:
-This command will invoke btrfs_setup_sprout to do the job.
-It put the devices on fs_devices->devices to seed_devices list.
-So only sdd is on the fs_devices->devices list. sdb(missing), sdc on the seed_devices list.
-But when we look into the btrfs_find_devices function, it find devices both in devices list and seed_devices list.
+ - bus_errors
+ - transfers (only applicable to i2c_adapter)
+ - messages (only applicable to i2c_client)
+ - nacks
+ - timeouts
+ - recovery_successes (only applicable to i2c_adapter)
+ - recovery_failures (only applicable to i2c_adapter)
 
-btrfs filesystem usage /mnt/scratch
-This command use ioctl to get device info. The assertion is triggered because it finds the number of devices is inconsistent.
+This patchset is the same as the last one, except that we are using a
+new method to verify the results in the counter for i2c_adapters:
 
-[My fix solution]
-1. Add noseed argument to btrfs_find_device. It force the function only look into devices list.
-2. Add a new ioctl request(BTRFS_IOC_DEV_INFO_NOSEED) in case some application may depend the original ioctl behavior on BTRFS_IOC_DEV_INFO
-3. Modify load_device_info and load_chunk_and_device_info in btrfs-prog for appropriate ioctl call.
+We use the Perfetto profiler+visualizer to grab the I2C kernel
+tracing events on a BMC with many I2C devices, and compared
+the I2C counters before and after the tracing process.
 
-After the change, btrfs249 passed.
+We needed to add a change for Perfetto in order to view the I2C
+events in the UI. The Perfetto change is located in
+https://android-review.googlesource.com/c/platform/external/perfetto/+/2145699
+and it currently shows the outermost I2C ID that appears in an I2C
+transaction.
 
-Signed-off-by: Flint.Wang <hmsjwzb@zoho.com>
----
- fs/btrfs/dev-replace.c     |  8 ++++----
- fs/btrfs/ioctl.c           | 10 ++++++----
- fs/btrfs/scrub.c           |  4 ++--
- fs/btrfs/volumes.c         | 22 ++++++++++++----------
- fs/btrfs/volumes.h         |  5 ++++-
- include/uapi/linux/btrfs.h |  2 ++
- 6 files changed, 30 insertions(+), 21 deletions(-)
+We inspected the counts in the Perfetto trace by executing
+the "SELECT count(name), name FROM slices WHERE name LIKE "%i2c%" GROUP
+BY name;" SQLite query.
 
-diff --git a/fs/btrfs/dev-replace.c b/fs/btrfs/dev-replace.c
-index f43196a893ca3..49d3c587c2948 100644
---- a/fs/btrfs/dev-replace.c
-+++ b/fs/btrfs/dev-replace.c
-@@ -101,7 +101,7 @@ int btrfs_init_dev_replace(struct btrfs_fs_info *fs_info)
- 		 * We don't have a replace item or it's corrupted.  If there is
- 		 * a replace target, fail the mount.
- 		 */
--		if (btrfs_find_device(fs_info->fs_devices, &args)) {
-+		if (btrfs_find_device(fs_info->fs_devices, &args, false)) {
- 			btrfs_err(fs_info,
- 			"found replace target device without a valid replace item");
- 			ret = -EUCLEAN;
-@@ -163,7 +163,7 @@ int btrfs_init_dev_replace(struct btrfs_fs_info *fs_info)
- 		 * We don't have an active replace item but if there is a
- 		 * replace target, fail the mount.
- 		 */
--		if (btrfs_find_device(fs_info->fs_devices, &args)) {
-+		if (btrfs_find_device(fs_info->fs_devices, &args, false)) {
- 			btrfs_err(fs_info,
- 			"replace devid present without an active replace item");
- 			ret = -EUCLEAN;
-@@ -174,9 +174,9 @@ int btrfs_init_dev_replace(struct btrfs_fs_info *fs_info)
- 		break;
- 	case BTRFS_IOCTL_DEV_REPLACE_STATE_STARTED:
- 	case BTRFS_IOCTL_DEV_REPLACE_STATE_SUSPENDED:
--		dev_replace->tgtdev = btrfs_find_device(fs_info->fs_devices, &args);
-+		dev_replace->tgtdev = btrfs_find_device(fs_info->fs_devices, &args, false);
- 		args.devid = src_devid;
--		dev_replace->srcdev = btrfs_find_device(fs_info->fs_devices, &args);
-+		dev_replace->srcdev = btrfs_find_device(fs_info->fs_devices, &args, false);
- 
- 		/*
- 		 * allow 'btrfs dev replace_cancel' if src/tgt device is
-diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
-index fe0cc816b4eba..bdf1578839c99 100644
---- a/fs/btrfs/ioctl.c
-+++ b/fs/btrfs/ioctl.c
-@@ -2039,7 +2039,7 @@ static noinline int btrfs_ioctl_resize(struct file *file,
- 	}
- 
- 	args.devid = devid;
--	device = btrfs_find_device(fs_info->fs_devices, &args);
-+	device = btrfs_find_device(fs_info->fs_devices, &args, false);
- 	if (!device) {
- 		btrfs_info(fs_info, "resizer unable to find device %llu",
- 			   devid);
-@@ -3721,7 +3721,7 @@ static long btrfs_ioctl_fs_info(struct btrfs_fs_info *fs_info,
- }
- 
- static long btrfs_ioctl_dev_info(struct btrfs_fs_info *fs_info,
--				 void __user *arg)
-+				 void __user *arg, bool noseed)
- {
- 	BTRFS_DEV_LOOKUP_ARGS(args);
- 	struct btrfs_ioctl_dev_info_args *di_args;
-@@ -3737,7 +3737,7 @@ static long btrfs_ioctl_dev_info(struct btrfs_fs_info *fs_info,
- 		args.uuid = di_args->uuid;
- 
- 	rcu_read_lock();
--	dev = btrfs_find_device(fs_info->fs_devices, &args);
-+	dev = btrfs_find_device(fs_info->fs_devices, &args, noseed);
- 	if (!dev) {
- 		ret = -ENODEV;
- 		goto out;
-@@ -5468,7 +5468,7 @@ long btrfs_ioctl(struct file *file, unsigned int
- 	case BTRFS_IOC_FS_INFO:
- 		return btrfs_ioctl_fs_info(fs_info, argp);
- 	case BTRFS_IOC_DEV_INFO:
--		return btrfs_ioctl_dev_info(fs_info, argp);
-+		return btrfs_ioctl_dev_info(fs_info, argp, false);
- 	case BTRFS_IOC_TREE_SEARCH:
- 		return btrfs_ioctl_tree_search(inode, argp);
- 	case BTRFS_IOC_TREE_SEARCH_V2:
-@@ -5570,6 +5570,8 @@ long btrfs_ioctl(struct file *file, unsigned int
- 	case BTRFS_IOC_ENCODED_WRITE_32:
- 		return btrfs_ioctl_encoded_write(file, argp, true);
- #endif
-+	case BTRFS_IOC_DEV_INFO_NOSEED:
-+		return btrfs_ioctl_dev_info(fs_info, argp, true);
- 	}
- 
- 	return -ENOTTY;
-diff --git a/fs/btrfs/scrub.c b/fs/btrfs/scrub.c
-index 3afe5fa50a631..4b734d76776ca 100644
---- a/fs/btrfs/scrub.c
-+++ b/fs/btrfs/scrub.c
-@@ -4143,7 +4143,7 @@ int btrfs_scrub_dev(struct btrfs_fs_info *fs_info, u64 devid, u64 start,
- 		goto out_free_ctx;
- 
- 	mutex_lock(&fs_info->fs_devices->device_list_mutex);
--	dev = btrfs_find_device(fs_info->fs_devices, &args);
-+	dev = btrfs_find_device(fs_info->fs_devices, &args, false);
- 	if (!dev || (test_bit(BTRFS_DEV_STATE_MISSING, &dev->dev_state) &&
- 		     !is_dev_replace)) {
- 		mutex_unlock(&fs_info->fs_devices->device_list_mutex);
-@@ -4321,7 +4321,7 @@ int btrfs_scrub_progress(struct btrfs_fs_info *fs_info, u64 devid,
- 	struct scrub_ctx *sctx = NULL;
- 
- 	mutex_lock(&fs_info->fs_devices->device_list_mutex);
--	dev = btrfs_find_device(fs_info->fs_devices, &args);
-+	dev = btrfs_find_device(fs_info->fs_devices, &args, false);
- 	if (dev)
- 		sctx = dev->scrub_ctx;
- 	if (sctx)
-diff --git a/fs/btrfs/volumes.c b/fs/btrfs/volumes.c
-index 272901514b0c1..1abd75e90cd9e 100644
---- a/fs/btrfs/volumes.c
-+++ b/fs/btrfs/volumes.c
-@@ -808,7 +808,7 @@ static noinline struct btrfs_device *device_list_add(const char *path,
- 		};
- 
- 		mutex_lock(&fs_devices->device_list_mutex);
--		device = btrfs_find_device(fs_devices, &args);
-+		device = btrfs_find_device(fs_devices, &args, false);
- 
- 		/*
- 		 * If this disk has been pulled into an fs devices created by
-@@ -2075,7 +2075,7 @@ int btrfs_rm_device(struct btrfs_fs_info *fs_info,
- 	if (ret)
- 		return ret;
- 
--	device = btrfs_find_device(fs_info->fs_devices, args);
-+	device = btrfs_find_device(fs_info->fs_devices, args, false);
- 	if (!device) {
- 		if (args->missing)
- 			ret = BTRFS_ERROR_DEV_MISSING_NOT_FOUND;
-@@ -2381,7 +2381,7 @@ struct btrfs_device *btrfs_find_device_by_devspec(
- 
- 	if (devid) {
- 		args.devid = devid;
--		device = btrfs_find_device(fs_info->fs_devices, &args);
-+		device = btrfs_find_device(fs_info->fs_devices, &args, false);
- 		if (!device)
- 			return ERR_PTR(-ENOENT);
- 		return device;
-@@ -2390,7 +2390,7 @@ struct btrfs_device *btrfs_find_device_by_devspec(
- 	ret = btrfs_get_dev_args_from_path(fs_info, &args, device_path);
- 	if (ret)
- 		return ERR_PTR(ret);
--	device = btrfs_find_device(fs_info->fs_devices, &args);
-+	device = btrfs_find_device(fs_info->fs_devices, &args, false);
- 	btrfs_put_dev_args_from_path(&args);
- 	if (!device)
- 		return ERR_PTR(-ENOENT);
-@@ -2551,7 +2551,7 @@ static int btrfs_finish_sprout(struct btrfs_trans_handle *trans)
- 				   BTRFS_FSID_SIZE);
- 		args.uuid = dev_uuid;
- 		args.fsid = fs_uuid;
--		device = btrfs_find_device(fs_info->fs_devices, &args);
-+		device = btrfs_find_device(fs_info->fs_devices, &args, false);
- 		BUG_ON(!device); /* Logic error */
- 
- 		if (device->fs_devices->seeding) {
-@@ -6821,7 +6821,7 @@ static bool dev_args_match_device(const struct btrfs_dev_lookup_args *args,
-  * only devid is used.
-  */
- struct btrfs_device *btrfs_find_device(const struct btrfs_fs_devices *fs_devices,
--				       const struct btrfs_dev_lookup_args *args)
-+				       const struct btrfs_dev_lookup_args *args, bool noseed)
- {
- 	struct btrfs_device *device;
- 	struct btrfs_fs_devices *seed_devs;
-@@ -6832,6 +6832,8 @@ struct btrfs_device *btrfs_find_device(const struct btrfs_fs_devices *fs_devices
- 				return device;
- 		}
- 	}
-+	if (noseed)
-+		return NULL;
- 
- 	list_for_each_entry(seed_devs, &fs_devices->seed_list, seed_list) {
- 		if (!dev_args_match_fs_devices(args, seed_devs))
-@@ -7095,7 +7097,7 @@ static int read_one_chunk(struct btrfs_key *key, struct extent_buffer *leaf,
- 				   btrfs_stripe_dev_uuid_nr(chunk, i),
- 				   BTRFS_UUID_SIZE);
- 		args.uuid = uuid;
--		map->stripes[i].dev = btrfs_find_device(fs_info->fs_devices, &args);
-+		map->stripes[i].dev = btrfs_find_device(fs_info->fs_devices, &args, false);
- 		if (!map->stripes[i].dev) {
- 			map->stripes[i].dev = handle_missing_device(fs_info,
- 								    devid, uuid);
-@@ -7226,7 +7228,7 @@ static int read_one_dev(struct extent_buffer *leaf,
- 			return PTR_ERR(fs_devices);
- 	}
- 
--	device = btrfs_find_device(fs_info->fs_devices, &args);
-+	device = btrfs_find_device(fs_info->fs_devices, &args, false);
- 	if (!device) {
- 		if (!btrfs_test_opt(fs_info, DEGRADED)) {
- 			btrfs_report_missing_device(fs_info, devid,
-@@ -7884,7 +7886,7 @@ int btrfs_get_dev_stats(struct btrfs_fs_info *fs_info,
- 
- 	mutex_lock(&fs_devices->device_list_mutex);
- 	args.devid = stats->devid;
--	dev = btrfs_find_device(fs_info->fs_devices, &args);
-+	dev = btrfs_find_device(fs_info->fs_devices, &args, false);
- 	mutex_unlock(&fs_devices->device_list_mutex);
- 
- 	if (!dev) {
-@@ -8026,7 +8028,7 @@ static int verify_one_dev_extent(struct btrfs_fs_info *fs_info,
- 	}
- 
- 	/* Make sure no dev extent is beyond device boundary */
--	dev = btrfs_find_device(fs_info->fs_devices, &args);
-+	dev = btrfs_find_device(fs_info->fs_devices, &args, false);
- 	if (!dev) {
- 		btrfs_err(fs_info, "failed to find devid %llu", devid);
- 		ret = -EUCLEAN;
-diff --git a/fs/btrfs/volumes.h b/fs/btrfs/volumes.h
-index 5639961b3626f..4b6bcc777f752 100644
---- a/fs/btrfs/volumes.h
-+++ b/fs/btrfs/volumes.h
-@@ -609,7 +609,10 @@ int btrfs_num_copies(struct btrfs_fs_info *fs_info, u64 logical, u64 len);
- int btrfs_grow_device(struct btrfs_trans_handle *trans,
- 		      struct btrfs_device *device, u64 new_size);
- struct btrfs_device *btrfs_find_device(const struct btrfs_fs_devices *fs_devices,
--				       const struct btrfs_dev_lookup_args *args);
-+				       const struct btrfs_dev_lookup_args *args,
-+				       bool noseed);
-+struct btrfs_device *btrfs_find_device_noseed(const struct btrfs_fs_devices *fs_devices,
-+					      const struct btrfs_dev_lookup_args *args);
- int btrfs_shrink_device(struct btrfs_device *device, u64 new_size);
- int btrfs_init_new_device(struct btrfs_fs_info *fs_info, const char *path);
- int btrfs_balance(struct btrfs_fs_info *fs_info,
-diff --git a/include/uapi/linux/btrfs.h b/include/uapi/linux/btrfs.h
-index 7ada84e4a3ed1..880b565479a12 100644
---- a/include/uapi/linux/btrfs.h
-+++ b/include/uapi/linux/btrfs.h
-@@ -1078,6 +1078,8 @@ enum btrfs_err_code {
- 				       struct btrfs_ioctl_scrub_args)
- #define BTRFS_IOC_DEV_INFO _IOWR(BTRFS_IOCTL_MAGIC, 30, \
- 				 struct btrfs_ioctl_dev_info_args)
-+#define BTRFS_IOC_DEV_INFO_NOSEED _IOR(BTRFS_IOCTL_MAGIC, 30, \
-+				       struct btrfs_ioctl_dev_info_args)
- #define BTRFS_IOC_FS_INFO _IOR(BTRFS_IOCTL_MAGIC, 31, \
- 			       struct btrfs_ioctl_fs_info_args)
- #define BTRFS_IOC_BALANCE_V2 _IOWR(BTRFS_IOCTL_MAGIC, 32, \
+It turns out the increment in the counters in the counters in sysfs and in
+the Perfetto trace very closely match each other; the differences were
+caused by the time differences between the moments the tracing
+started/ended and the I2C counters are obtained.
+
+We would greatly appreciate any comments on this change.
+
+Thanks!
+
+Sui Chen (1):
+  i2c debug counters as sysfs attributes
+
+ drivers/i2c/i2c-core-base.c | 240 +++++++++++++++++++++++++++++++++++-
+ drivers/i2c/i2c-dev.c       |  94 ++++++++++++++
+ include/linux/i2c.h         |  41 ++++++
+ 3 files changed, 374 insertions(+), 1 deletion(-)
+
 -- 
-2.37.0
+2.37.1.559.g78731f0fdb-goog
 

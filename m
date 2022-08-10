@@ -2,153 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32BF858E8D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 10:34:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6264358E8D6
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 10:34:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231704AbiHJIeO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 04:34:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58962 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231688AbiHJIdk (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S231689AbiHJIdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Wed, 10 Aug 2022 04:33:40 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CA3C5726A
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 01:33:34 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id n133so16946435oib.0
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 01:33:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=qng18ezuViFS4JHv1suUwHMOD3dA0ddp/TS8ruYkzxY=;
-        b=Xo7HewGoXQ93vdJ673ZkR+tcoUdDl9VfPro55Vby9VrJvIMSVQRWW+l8IzswksIecM
-         FJ23GJpiXQh/pyuvnpU5g3iQbV02xodcvNiDJwDMgL67ZXX2fNtmG9OBAvT/AJiLKz1O
-         m57OQJzScr8ptLkEC3wAZsB50Mtf/5dHx8myw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=qng18ezuViFS4JHv1suUwHMOD3dA0ddp/TS8ruYkzxY=;
-        b=qkgWJeQv1/FWU1QQmlK0U/AxRqSkTku5uLgEYh1SWBjYHsi6hfusgTrJ4mu6sr2WMJ
-         gezbFYCVCpTPZq5agYob3dSeI0MQVGtCd1H1kcvkBXRKR1eyivAbdgARSNJyMyxIsiN7
-         psL4L6zxawA0zpkdxJIXNqhNzY+SiUGQCjBU2k31KZHYiXYLtu3TlFPKwpZNY91L7VBZ
-         PTZY8g0pps/e3CT1bP21+5DwX4AugD4ck0yKDW+acZQnlPk0AK0kxBSwovMjtuibcONS
-         P6Q5zcr4eb2qbWLIYSYlprLBJnO9J9iCiYpuR48T+3KJuiK7lx9egyMKknEromTRnq2U
-         9SYw==
-X-Gm-Message-State: ACgBeo2tpjdbOp1t31YIdli/o8TYXODMjODfDr2DVRR4Y5idiOOX1i2U
-        kk9o7GMDpKo3tbMM3kv9nopz7K0rhQfGGZMZfegOww==
-X-Google-Smtp-Source: AA6agR6cStCNNsa+U2EXzNpks0Z071z2RD/SJln63AZJsOezVgSlE5S5WcCDeNCK/XxqGOBfJDhs4RSMetdDlNSIpBY=
-X-Received: by 2002:a05:6808:1489:b0:33a:861c:838e with SMTP id
- e9-20020a056808148900b0033a861c838emr895072oiw.228.1660120413972; Wed, 10 Aug
- 2022 01:33:33 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58902 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S230035AbiHJIda (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Wed, 10 Aug 2022 04:33:30 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C8557250;
+        Wed, 10 Aug 2022 01:33:29 -0700 (PDT)
+Received: from fraeml701-chm.china.huawei.com (unknown [172.18.147.200])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M2jrM3KsSz67Xgw;
+        Wed, 10 Aug 2022 16:33:23 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml701-chm.china.huawei.com (10.206.15.50) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
+ 15.1.2375.24; Wed, 10 Aug 2022 10:33:27 +0200
+Received: from [10.195.247.138] (10.195.247.138) by
+ lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Wed, 10 Aug 2022 09:33:24 +0100
+Message-ID: <82dbf4d6-2d43-20ff-22a7-857f9f11a5ce@huawei.com>
+Date:   Wed, 10 Aug 2022 09:33:23 +0100
 MIME-Version: 1.0
-References: <20220701090240.1896131-1-dmitry.osipenko@collabora.com>
- <20220701090240.1896131-2-dmitry.osipenko@collabora.com> <a42237c9-6304-4b06-cede-2175c7e7b87d@amd.com>
- <YvKO5r5Sr56e9vBf@phenom.ffwll.local> <e760f555-7f2d-dea9-70b2-c0881adc3afc@amd.com>
-In-Reply-To: <e760f555-7f2d-dea9-70b2-c0881adc3afc@amd.com>
-From:   Daniel Vetter <daniel@ffwll.ch>
-Date:   Wed, 10 Aug 2022 10:33:22 +0200
-Message-ID: <CAKMK7uEd1xX6P4YRgYOfjvqpwVmQ0YZPkHdK=4auwrkBE9CEzQ@mail.gmail.com>
-Subject: Re: [PATCH v8 1/2] drm/gem: Properly annotate WW context on
- drm_gem_lock_reservations() error
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        =?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas_os@shipmail.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-tegra@vger.kernel.org, kernel@collabora.com,
-        virtualization@lists.linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [ata] 0568e61225: stress-ng.copy-file.ops_per_sec -15.0%
+ regression
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        kernel test robot <oliver.sang@intel.com>
+CC:     Christoph Hellwig <hch@lst.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Linux Memory Management List" <linux-mm@kvack.org>,
+        <linux-ide@vger.kernel.org>, <lkp@lists.01.org>, <lkp@intel.com>,
+        <ying.huang@intel.com>, <feng.tang@intel.com>,
+        <zhengjun.xing@linux.intel.com>, <fengwei.yin@intel.com>
+References: <YuzPMMnnY739Tnit@xsang-OptiPlex-9020>
+ <1f498d4a-f93f-ceb4-b713-753196e5e08d@opensource.wdc.com>
+ <3451fa5a-6229-073f-ae18-0c232cd48ed5@huawei.com>
+ <16f03f81-a8c7-bacf-c74c-67231f7f7202@huawei.com>
+ <ef84d2dd-84ea-e1c7-05ef-f0a082d4f7d0@opensource.wdc.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <ef84d2dd-84ea-e1c7-05ef-f0a082d4f7d0@opensource.wdc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.195.247.138]
+X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 10 Aug 2022 at 08:52, Christian K=C3=B6nig <christian.koenig@amd.co=
-m> wrote:
->
-> Am 09.08.22 um 18:44 schrieb Daniel Vetter:
-> > On Tue, Jul 05, 2022 at 01:33:51PM +0200, Christian K=C3=B6nig wrote:
-> >> Am 01.07.22 um 11:02 schrieb Dmitry Osipenko:
-> >>> Use ww_acquire_fini() in the error code paths. Otherwise lockdep
-> >>> thinks that lock is held when lock's memory is freed after the
-> >>> drm_gem_lock_reservations() error. The ww_acquire_context needs to be
-> >>> annotated as "released", which fixes the noisy "WARNING: held lock fr=
-eed!"
-> >>> splat of VirtIO-GPU driver with CONFIG_DEBUG_MUTEXES=3Dy and enabled =
-lockdep.
-> >>>
-> >>> Cc: stable@vger.kernel.org
-> >>> Fixes: 7edc3e3b975b5 ("drm: Add helpers for locking an array of BO re=
-servations.")
-> >>> Reviewed-by: Thomas Hellstr=C3=B6m <thomas.hellstrom@linux.intel.com>
-> >>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> >> Reviewed-by: Christian K=C3=B6nig <christian.koenig@amd.com>
-> > Also added this r-b tag when merging to drm-misc-next-fixes.
->
-> IIRC I've already pushed this to drm-misc-fixes with a CC stable tag
-> about 2 weeks ago.
->
-> Please double check, it probably just hasn't come down the stream again y=
-et.
+On 09/08/2022 15:57, Damien Le Moal wrote:
+>>> As far as I can see, this patch should not make a difference unless the
+>>> ATA shost driver is setting the max_sectors value unnecessarily low.
+>> For __ATA_BASE_SHT, we don't set max_sectors. As such, we default
+>> shost->max_sectors = SCSI_DEFAULT_MAX_SECTORS (=1024) in
+>> scsi_host_alloc(). I assume no shost dma mapping limit applied.
+>>
+>> Then - for example - we could select dev->max_sectors =
+>> ATA_MAX_SECTORS_LBA48 (=65535) in ata_dev_configure().
+>>
+>> So with commit 0568e6122574 we would have final max sectors = 1024, as
+>> opposed to 65535 previously. I guess that the problem is something like
+>> this.
+>>
+>> If so, it seems that we would need to apply the shost dma mapping limit
+>> separately in ata_scsi_dev_config() and not use shost->max_sectors.
+> OK. Will have a look at that.
+> 
 
-Hm quickly check and I didn't spot it? There's a few patches from
-Dmitry in the last few pulls, and some more stuff pending, but not
-these two afaics?
--Daniel
+We may need to introduce something like shost->max_hw_sectors, which is 
+set according to sht max sectors and dma mapping limits. That could be 
+also used in USB scsiglue slave_configure()
 
->
-> Christian.
->
-> > -Daniel
-> >
-> >>> ---
-> >>>    drivers/gpu/drm/drm_gem.c | 4 ++--
-> >>>    1 file changed, 2 insertions(+), 2 deletions(-)
-> >>>
-> >>> diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
-> >>> index eb0c2d041f13..86d670c71286 100644
-> >>> --- a/drivers/gpu/drm/drm_gem.c
-> >>> +++ b/drivers/gpu/drm/drm_gem.c
-> >>> @@ -1226,7 +1226,7 @@ drm_gem_lock_reservations(struct drm_gem_object=
- **objs, int count,
-> >>>             ret =3D dma_resv_lock_slow_interruptible(obj->resv,
-> >>>                                                              acquire_=
-ctx);
-> >>>             if (ret) {
-> >>> -                   ww_acquire_done(acquire_ctx);
-> >>> +                   ww_acquire_fini(acquire_ctx);
-> >>>                     return ret;
-> >>>             }
-> >>>     }
-> >>> @@ -1251,7 +1251,7 @@ drm_gem_lock_reservations(struct drm_gem_object=
- **objs, int count,
-> >>>                             goto retry;
-> >>>                     }
-> >>> -                   ww_acquire_done(acquire_ctx);
-> >>> +                   ww_acquire_fini(acquire_ctx);
-> >>>                     return ret;
-> >>>             }
-> >>>     }
->
+Or else set max_sectors value for __ATA_BASE_SHT, but I don't know a 
+sane value there considering ATA_MAX_SECTORS_LBA48 gives max_sectors of 
+65535.
 
+Damien, please let me know if you need help now. I am just waiting for 
+you to test to prove this theory about dev->max_sectors being capped. I 
+don't have an AHCI setup readily-available for testing - just SAS cards 
+or QEMU.
 
---=20
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+Thanks,
+John

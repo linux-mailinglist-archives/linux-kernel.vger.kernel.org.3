@@ -2,62 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C927E58E465
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 03:15:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6098158E467
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 03:18:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229972AbiHJBPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 21:15:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38210 "EHLO
+        id S229529AbiHJBRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 21:17:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230003AbiHJBPP (ORCPT
+        with ESMTP id S229862AbiHJBRp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 21:15:15 -0400
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD6B4390;
-        Tue,  9 Aug 2022 18:15:13 -0700 (PDT)
-Received: by mail-qt1-f182.google.com with SMTP id h22so4665566qtu.2;
-        Tue, 09 Aug 2022 18:15:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=9z8DBBifgkq61eRO+eTNs7T6Uni8kIgemh6E9ctPyVk=;
-        b=kOqSB8i+OjaAZelptc48qGUHp+W0b6QQIjNUFh1Uk/579fjU4Ha2HGtZ07n5nQiPXh
-         RBCTnYHwlCfPVY8pRaHExCpuMuy4MIbYQg8E8zFzU263l/7C2we/tRHm14CIH2OJd22l
-         VzH9lRpmzeKZrGrhkW7zkQSn5nloBmamPPKDCrtiTovNJ4c3mFW7UTxkCnJoBWhDm9II
-         Yk6fm3gI1OgQpOkQgNakwzqALEr3gFAq11ZdmvnQBIIU3d+cfQe8zwJ87VSAcfkgFouZ
-         3d/QztaJQ5gdIGBB9FmHaCjhQnGlg/G+Gdpxsb9hyVSXp+NMJEXlA0oeNr5xaIjg9WJ6
-         JYbQ==
-X-Gm-Message-State: ACgBeo2sV0J54FsI3DLNVopBHdqZw90FlPmxWkczNSyPrUKErEnbEUIn
-        ElUmN3K3pzMpvGz3QWflG4c=
-X-Google-Smtp-Source: AA6agR6gwRuYaoWSNfwhCRSGAbU97vnIZ7xYN+3f4SdlOvWm8FcE+H6apQTwi27KEHzX3zsd3vling==
-X-Received: by 2002:a05:622a:654:b0:31e:e8aa:aef0 with SMTP id a20-20020a05622a065400b0031ee8aaaef0mr22124777qtb.328.1660094112722;
-        Tue, 09 Aug 2022 18:15:12 -0700 (PDT)
-Received: from maniforge (c-24-15-214-156.hsd1.il.comcast.net. [24.15.214.156])
-        by smtp.gmail.com with ESMTPSA id y5-20020a37f605000000b006b5f8f32a8fsm12152264qkj.114.2022.08.09.18.15.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 18:15:12 -0700 (PDT)
-Date:   Tue, 9 Aug 2022 20:15:10 -0500
-From:   David Vernet <void@manifault.com>
-To:     Hao Luo <haoluo@google.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, john.fastabend@gmail.com, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
-        jolsa@kernel.org, tj@kernel.org, joannelkoong@gmail.com,
+        Tue, 9 Aug 2022 21:17:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D32A606A4;
+        Tue,  9 Aug 2022 18:17:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CD0B161233;
+        Wed, 10 Aug 2022 01:17:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09280C433D7;
+        Wed, 10 Aug 2022 01:17:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1660094263;
+        bh=kLAFyrpdrl8QdNdjD7r3oy6bGtZvjGcHF8LMVdgzi6g=;
+        h=Date:From:To:Cc:Subject:From;
+        b=RHKKtGkMx0G/oNfkv3eQ6tyCYu3amobQfOBC/CwgtQrSicHVhU48mFnhnAYW5kf3x
+         6xWd82pTqiQArk1ZqUkXDXFFBr7HaNNRKiXQ7NFdp3zwdjLWpWH8FhnvYMjzyUTnbL
+         8/C2y/qW/EOsf1/A7QnXDUhaVOGzo26U3Wg78kh8=
+Date:   Tue, 9 Aug 2022 18:17:42 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-mm@kvack.org, mm-commits@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/5] bpf: Add user-space-publisher ringbuffer map type
-Message-ID: <20220810011510.c3chrli27e6ebftt@maniforge>
-References: <20220808155248.2475981-1-void@manifault.com>
- <CA+khW7iuENZHvbyWUkq1T1ieV9Yz+MJyRs=7Kd6N59kPTjz7Rg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+khW7iuENZHvbyWUkq1T1ieV9Yz+MJyRs=7Kd6N59kPTjz7Rg@mail.gmail.com>
-User-Agent: NeoMutt/20220429
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Subject: [GIT PULL] remaining MM updates for 5.20-r1
+Message-Id: <20220809181742.30eb3ee4071d2b8bb81bc959@linux-foundation.org>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,35 +50,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hao,
 
-On Mon, Aug 08, 2022 at 11:57:53AM -0700, Hao Luo wrote:
-> > Note that one thing that is not included in this patch-set is the ability
-> > to kick the kernel from user-space to have it drain messages. The selftests
-> > included in this patch-set currently just use progs with syscall hooks to
-> > "kick" the kernel and have it drain samples from a user-producer
-> > ringbuffer, but being able to kick the kernel using some other mechanism
-> > that doesn't rely on such hooks would be very useful as well. I'm planning
-> > on adding this in a future patch-set.
-> >
-> 
-> This could be done using iters. Basically, you can perform draining in
-> bpf_iter programs and export iter links as bpffs files. Then to kick
-> the kernel, you simply just read() the file.
+Three patch series - two that perform cleanups and one feature.
 
-Thanks for pointing this out. I agree that iters could be used this way to
-kick the kernel, and perhaps that would be a sufficient solution. My
-thinking, however, was that it would be useful to provide some APIs that
-are a bit more ergonomic, and specifically meant to enable kicking
-arbitrary "pre-attached" callbacks in a BPF prog, possibly along with some
-payload from userspace.
 
-Iters allow userspace to kick the kernel, but IMO they're meant to enable
-data extraction from the kernel, and dumping kernel data into user-space.
-What I'm proposing is a more generalizable way of driving logic in the
-kernel from user-space.
+The following changes since commit c8a684e2e110376c58f0bfa30fb3855d1e319670:
 
-Does that make sense? Looking forward to hearing your thoughts.
+  Merge tag 'leds-5.20-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds (2022-08-08 11:36:21 -0700)
 
-Thanks,
-David
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm tags/mm-stable-2022-08-09
+
+for you to fetch changes up to a9e9c93966afdaae74a6a7533552391646b93f2c:
+
+  Documentation/mm: add details about kmap_local_page() and preemption (2022-08-08 18:06:46 -0700)
+
+----------------------------------------------------------------
+- hugetlb_vmemmap cleanups from Muchun Song
+
+- hardware poisoning support for 1GB hugepages, from Naoya Horiguchi
+
+- highmem documentation fixups from Fabio De Francesco
+
+----------------------------------------------------------------
+Fabio M. De Francesco (7):
+      highmem: remove unneeded spaces in kmap_local_page() kdocs
+      highmem: specify that kmap_local_page() is callable from interrupts
+      Documentation/mm: don't kmap*() pages which can't come from HIGHMEM
+      Documentation/mm: avoid invalid use of addresses from kmap_local_page()
+      Documentation/mm: rrefer kmap_local_page() and avoid kmap()
+      highmem: delete a sentence from kmap_local_page() kdocs
+      Documentation/mm: add details about kmap_local_page() and preemption
+
+Muchun Song (8):
+      mm: hugetlb_vmemmap: delete hugetlb_optimize_vmemmap_enabled()
+      mm: hugetlb_vmemmap: optimize vmemmap_optimize_mode handling
+      mm: hugetlb_vmemmap: introduce the name HVO
+      mm: hugetlb_vmemmap: move vmemmap code related to HugeTLB to hugetlb_vmemmap.c
+      mm: hugetlb_vmemmap: replace early_param() with core_param()
+      mm: hugetlb_vmemmap: improve hugetlb_vmemmap code readability
+      mm: hugetlb_vmemmap: move code comments to vmemmap_dedup.rst
+      mm: hugetlb_vmemmap: use PTRS_PER_PTE instead of PMD_SIZE / PAGE_SIZE
+
+Naoya Horiguchi (8):
+      mm/hugetlb: check gigantic_page_runtime_supported() in return_unused_surplus_pages()
+      mm/hugetlb: make pud_huge() and follow_huge_pud() aware of non-present pud entry
+      mm, hwpoison, hugetlb: support saving mechanism of raw error pages
+      mm, hwpoison: make unpoison aware of raw error info in hwpoisoned hugepage
+      mm, hwpoison: set PG_hwpoison for busy hugetlb pages
+      mm, hwpoison: make __page_handle_poison returns int
+      mm, hwpoison: skip raw hwpoison page in freeing 1GB hugepage
+      mm, hwpoison: enable memory error handling on 1GB hugepage
+
+ Documentation/admin-guide/kernel-parameters.txt |   7 +-
+ Documentation/admin-guide/mm/hugetlbpage.rst    |   4 +-
+ Documentation/admin-guide/mm/memory-hotplug.rst |   4 +-
+ Documentation/admin-guide/sysctl/vm.rst         |   3 +-
+ Documentation/mm/highmem.rst                    |  31 +-
+ Documentation/mm/vmemmap_dedup.rst              |  72 ++-
+ arch/arm64/mm/flush.c                           |  13 +-
+ arch/x86/mm/hugetlbpage.c                       |   8 +-
+ fs/Kconfig                                      |  12 +-
+ include/linux/highmem.h                         |   7 +-
+ include/linux/hugetlb.h                         |  24 +-
+ include/linux/mm.h                              |   9 +-
+ include/linux/page-flags.h                      |  32 +-
+ include/linux/swapops.h                         |   9 +
+ include/linux/sysctl.h                          |   4 +
+ include/ras/ras_event.h                         |   1 -
+ mm/hugetlb.c                                    |  73 ++-
+ mm/hugetlb_vmemmap.c                            | 589 ++++++++++++++++++------
+ mm/hugetlb_vmemmap.h                            |  45 +-
+ mm/memory-failure.c                             | 179 +++++--
+ mm/sparse-vmemmap.c                             | 399 ----------------
+ 21 files changed, 823 insertions(+), 702 deletions(-)
+

@@ -2,419 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04BBB58E826
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 09:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39B9D58E82B
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 09:50:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231542AbiHJHsv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 03:48:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42298 "EHLO
+        id S231473AbiHJHuY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 03:50:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231527AbiHJHsS (ORCPT
+        with ESMTP id S230518AbiHJHuV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 03:48:18 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B32E74340;
-        Wed, 10 Aug 2022 00:48:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
-        s=badeba3b8450; t=1660117680;
-        bh=kqoJa1q6D6doV+tcpUlWiNLD/EhOKSMnNV9aYU8q4VA=;
-        h=X-UI-Sender-Class:Date:To:Cc:References:From:Subject:In-Reply-To;
-        b=O1ifeSaTa/3fmhLF7TcOFQWWciMbNwDEyqfWxwMA4LuAd+nVJ5mcXcDoNFRiYbME+
-         L518gvW1JtFPChihYQyejYp4iA37DuuSCsBfTAuI/XE9DCPRGC/hCoowIJfLeV2h41
-         kImwNH/6+G22lfvfUKvZmqRt390qse3lqn5CopE8=
-X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
-Received: from [0.0.0.0] ([149.28.201.231]) by mail.gmx.net (mrgmx104
- [212.227.17.174]) with ESMTPSA (Nemesis) id 1Mqs4f-1nZ8H80Zbl-00ms55; Wed, 10
- Aug 2022 09:47:59 +0200
-Message-ID: <f26678fe-a7cc-88f3-1fea-ba8a13b1a612@gmx.com>
-Date:   Wed, 10 Aug 2022 15:47:53 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     "Flint.Wang" <hmsjwzb@zoho.com>
-Cc:     anand.jain@oracle.com, nborisov@suse.com, strongbox8@zoho.com,
-        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
-        David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220810072021.4539-1-hmsjwzb@zoho.com>
-From:   Qu Wenruo <quwenruo.btrfs@gmx.com>
-Subject: Re: [PATCH] btrfs: Fix btrfs_find_device for btrfs/249
-In-Reply-To: <20220810072021.4539-1-hmsjwzb@zoho.com>
+        Wed, 10 Aug 2022 03:50:21 -0400
+Received: from EUR03-VE1-obe.outbound.protection.outlook.com (mail-eopbgr50111.outbound.protection.outlook.com [40.107.5.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 387A221255;
+        Wed, 10 Aug 2022 00:50:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=By9aaQq1IPJQCMd+5sdjkT07NkLHoZDOEYLxSZpWTlPz4QnwdIK09eyCJIS6wbt13vSRmme2IztXEHhxwZdpZeNuj6e8Ril1IydEyoRLS/jBjHKuwBAANnT4dbJ2BIV7e6DjArMYUNkBrA1C/IpY+19n52g3lEvjXy6J8RDeH7rwnEhIWDDktuhJJMta87u85hGd6qJdWFG7cCHdu2HcPciyQPcBYKVkKwpNB4pvBERchcMhfA0aw5hFgrxFUhipms8SssVOyEzpbjHjmMxH9XGLhC0t383AvsYu4N/TmkIlh24JzkPCmQfwXRb7syP77P/voJEE//br52EzcviVLg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=og0Ga7CN2zmm7lHS6vfelFtnF19oITN01Ty9T1yheVk=;
+ b=SMAJ7blG2sVXjC6rw1tAWArsyyg4iKIiUfM/t0YqSqhqphNP+VKwWHtL2cTkX/PLYs7bB8CIR3EOwiPBtuvIrAcerlEH3xxnWbp1tXMrjl+Ry/tqc4fD5BVDPbMO0f1FQsqkKxuLEAjWLFOpGa0Hx42IE23ptApK7L92aataHcjbg6dsIwDXjvGMDdyrDMMdLWaHkM4DkRZUTcuQrFMcyQX4LksQW2D2xMcx4NeGuq+mmJqLrJS6heRK4ASdIfqWW0bbbIvXnrmfnNxglU7f2BMTdvBd54uatAlmMYStsbhs3YrQjXUg+Rwghofjj6t+2PAxPg9x6KzFPihHhM4VQg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
+ header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=og0Ga7CN2zmm7lHS6vfelFtnF19oITN01Ty9T1yheVk=;
+ b=h0wnO+YFT0PY1KuB6L7BGUV56IJ7h/Axrd5VRmpjv1F/WrY4+5AnsTPTKehrdrn3IU/RJEP2SCeuQXu81m0oHZc6e1asnZ87P/s44v1Yn08fE0CHvaeffCzfj/f0CX6d+XkDH0ayPgFxRc2kQqGoQqk9LaaC2JVaVtofppayg+/AeuBIVTSgbGXSCc5yMPxaVfPPcqOMPtYVVZMHiDfGnZvDmkVsNoZgWSTU+Nc+s8UTfyy0DBqfeA8lsuPaCyEqkTOFK7rH/UJejm9YTPpANjiPyLO5+qFgeryNJajymTxeH0KPlVOG5El7cpiyZFbfokXbu4+S4evIqwVepokGhA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=virtuozzo.com;
+Received: from DBBPR08MB4758.eurprd08.prod.outlook.com (2603:10a6:10:da::16)
+ by DB6PR0802MB2135.eurprd08.prod.outlook.com (2603:10a6:4:82::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.16; Wed, 10 Aug
+ 2022 07:50:16 +0000
+Received: from DBBPR08MB4758.eurprd08.prod.outlook.com
+ ([fe80::3d34:b8c3:1c37:5a6a]) by DBBPR08MB4758.eurprd08.prod.outlook.com
+ ([fe80::3d34:b8c3:1c37:5a6a%4]) with mapi id 15.20.5504.020; Wed, 10 Aug 2022
+ 07:50:15 +0000
+Message-ID: <b43de131-24dc-192c-f5f6-09bacee52a00@virtuozzo.com>
+Date:   Wed, 10 Aug 2022 10:50:10 +0300
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.1.1
+From:   Alexander Atanasov <alexander.atanasov@virtuozzo.com>
+Subject: Re: [PATCH v1 1/2] Enable balloon drivers to report inflated memory
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>, kernel@openvz.org,
+        David Hildenbrand <david@redhat.com>,
+        Wei Liu <wei.liu@kernel.org>, Nadav Amit <namit@vmware.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org
+References: <7bfac48d-2e50-641b-6523-662ea4df0240@virtuozzo.com>
+ <20220809094933.2203087-1-alexander.atanasov@virtuozzo.com>
+ <20220809063111-mutt-send-email-mst@kernel.org>
+ <d8fd3251-898d-89fe-226e-e166606c6983@virtuozzo.com>
+ <20220810020330-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220810020330-mutt-send-email-mst@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:kKi9ah20CGnPae7hht8edbygrC4IKg440RTA8hWAJtj8cFO2YME
- orZ+ZblJUkFhmIu2ApK/S+0f76od0J745V1Wn5om+PT4jRE6QEgzIvKNhAFd7BP1O5xjuo7
- zdt2z3Udx4ow0ChKoK/874ZAXS8EpsVq4d6mIB8vSo1QCk/5S/ET45X6Usi6weemVB5i7Yz
- FP7kjiQKEBzNXXekyKr3A==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:5HeWP9dAGiU=:4mv49PQJb2zLBTh85rcB7Y
- AINo/aWmJeaLL8BKMtfBD3p6cZtqZXTZeNxme7tT/5amraNnZXFyxz741UUiutbRe0XcgsFca
- PXpHR9to34k4e+AdcTKplvQq26hXzqt9uqVWRCPFBERcRdiwKL6N6F3LsYZhy3PxSv2NmOM8o
- W7DHK3j6jbiS0EhRTXGqZIhEul0ipf9c8psCniZhMyKSYV1ZThOTLy4ffQ4tDHZsMgzp449my
- nKBSsdfa/W36L/0kJYitZh3TvavNTg4z1N/urHL3vG2Bb+leQvW2QoBmikJyz/Buzs85fJTg2
- pjfTS8bJm8J4pTLxzYMdq84SE+d/uIRyI0BPGR3INJrCCSGgqTaPWLy/otT7V8t2Ubb0+5irL
- w4UiOzZmDsBLRztnjoRgO72aemiOJENKOeOJkIGqJgHXMKpZ4nC1y8LK++OvniV8oevYaaUpf
- AdVk/vVcNDVL8kYAxEX+vyrIo/UdYkx7ViGED+dU0T/KM6pil1/RfP2trCGh50BnvmjJcfXUq
- WULzsvy7WO/ff7RQ/wyMQPJLppNFdoLfiCyF4eEZjwolsrdy9IEvNx3FpgSQE6TTu1xY8Fw7y
- ofne8iF7sGmnZrEp0KMf2TJR2ZFasvnzpnoQQ2blh5kNldd3ThUGwssRjXLAwO2ffKF5GeI7h
- Qlfu40v+v9Cx39Arsejnfjhc5FxDmSz9GXScIJQl5Hhc5X5SI092V943kKZ7FNAkaHbWHi/gV
- t2kWS8LeLCOU31CTUyx7gaCZz+4DEj+b0Nsxet6RUqCfr2yFCdfxMQJ8tNbHllDCn2lbFhI8F
- CcTMVeWeyNGD9ffQthlu/pIzzzDgBaryIuJKRKTJuq3vQVRgcPuJ3eJS8BSnT61pxGhVXY4Og
- 40nfIW4Cmej90aAXtQURRj9z5f5yexFY5ITc+Ym7nL5YBWkPCSWXsYAo3QEPlKp6UnOuENrZw
- fP+dkhTU/+kKglnPpP0b7UxuxgMWJ93V9Y0FHuL3pN5SnAvHX7Br9dmeCIMuGifsM2sRRXs/b
- iLKa5/4/hZ0ZM6LpqN8QT3UFcR5CZgjX/e98pXEzCnsUYLgoTYheXBs/78hY0NAs5CEJQH3pB
- 76kIVKHzWiutASPYxjRQtRGVR+JrBk4Rxizis9X2XozsYpTqmMuAa/I3BRvvkviOA6G7aFtkM
- PxMnzrCyFilYR9cBWofyWrb+TylXZtSidLvYSO2ElyEnxMlBDJAULWBybkkybfLFZ9qFHYzwx
- qB3THngE5mBb9Ft5hfhAHBohg2TYlU/cTznFx1w1iFjahaJig8zV9gUSn/nGO8TOhGwmGkW4d
- NDQwi8eM78HmjCMGvYN4PzMY/mA0YQ==
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: ZR0P278CA0103.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:23::18) To DBBPR08MB4758.eurprd08.prod.outlook.com
+ (2603:10a6:10:da::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 2911d5b5-d2da-4f2d-5041-08da7aa4f681
+X-MS-TrafficTypeDiagnostic: DB6PR0802MB2135:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: AHOvWyh+TmSHKTHGKnwb3VvJHg6/ALA66Y24vf4DpdPfyKPG/ookAH1oq5dckb55zaAiN8jv6rCj7Zb8H1g4fNfqzqC5/LdigCtuqZgOhEizGhCZqKBa2N9iHPq25R9UGuZmHIyWXHq+Cuo6AKZPHDNmEfFkWKn6lQN437up3szJc6gNn65vFUyf6pCFkE6geX6nOyMZ1qgcr+n1VOTkCtFrZ1XqzSVHUJlL4slewwtEkTGc0DeBdocm+RWcbezhasucq//KINyl8qRF5jQoGl5UaVaXzpfyOj1shMAA81xpFIqwYInw2m4UoYB9NUjH0r50cp24/jvh+Um/vJxFTY52+THGxNQpUywXATD2T+jhV52dl+j/sBFoa4ynSzxb0NadYzxWIFem7U/UXrUJYQ9GiLJ7hrC7Qlbtf584S4gh3pSQxx7OHKd5pogEDpGEp/FOpKovw/OM/HGMrXB6EdOISmDk/D4+S13QqLlk98BJID/QJMD/aj3glgcjtYNO9fb/r9g/CAdh2qGLfAfwUKsdkLROGMsU6XwrmIf4Ln999NUvccGJoyfpLlDMRSO7m17F0jUB35KVeZ1F/ZnqXYf3JH5spz5zU3wBaAeixYXlJamCaCJgDmjGXl+3YgROeOCSe4P0y0oYAi18ohq8j0BtMVMWwVJSdf65PHU8YfjZwFQp9eFa8y4FdG30SmJJ/zyeZltn94GqqGIewWghO8KCD2kdNT8qWCGlWid+2Q5I3NfqbHzat6uELPNEc9ynUv2mb+8gap5oLrQwLhegV7o7Y9wE/lKi71Ctz3DRYe2007JlGCpvX7u1MU+dIM92/O5ELRfwal3sAOTdbmkbVCN+TLkNWpFmHOUkXeYbefo=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBPR08MB4758.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(366004)(346002)(376002)(136003)(39850400004)(5660300002)(8676002)(83380400001)(66476007)(4326008)(66556008)(6916009)(66946007)(316002)(7416002)(44832011)(2906002)(8936002)(38350700002)(38100700002)(86362001)(36756003)(31696002)(478600001)(6486002)(26005)(41300700001)(6506007)(54906003)(6512007)(6666004)(53546011)(2616005)(52116002)(186003)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?c3VJNUJaUGRHU25EUE5vZDYzMGx3ejFPd3d5bGJ4UFZaUTdFWStkN0V4WlE0?=
+ =?utf-8?B?cm9JU0VqQU9XaElUdWxPN3prR1o4dTlEbDdSNDVOaXNwdFRZcENXTndPY2RW?=
+ =?utf-8?B?Y1BPQU5Gelg1QkdYRTEwa29WdlRONXZOdERZWVh1UG5xNXJIRHI4b2RlNzJs?=
+ =?utf-8?B?OWJpYUN4UjBkRVNCMXh0UnFKRnRsS3JvKzZZMnpnOVhNbk9lclZaNjE1ZTlZ?=
+ =?utf-8?B?ZEtPU3phMXl2RW1sak1lMEJFSmpZUFdpZjJhaWtjbkVqOGV5YlpQb3NiWTIw?=
+ =?utf-8?B?dlpnVTZ5R0U1SzdXUk9aTFhhNWtmQ2pHcWo0TzR5MDRmMTRqeHM0elFxQ1Bp?=
+ =?utf-8?B?WnJOUWo0MHNVYzBTenlDZmFWUS9xY2sveHU0NjhQMkNyTmljTzE3T0lRQVVC?=
+ =?utf-8?B?dU9qKzFpOVZxRWRMQWtHcnVwQ1JQVFIxQmtmVzA4V1BJMGRhckY0L0JGUzAw?=
+ =?utf-8?B?UlBpWXFPN2h2TTdsV0pOa1Exd3hvdlpzTDlxQXhoMllGVFROVjZYZjdYcFZI?=
+ =?utf-8?B?bHpkZGx5a1VtYWdiZ3lJL0o3Z0RZWGdtcTJQV2NNQU5JNGltREtaMXVJSExw?=
+ =?utf-8?B?Z3RwQjgzRmtnLzZ5VXZZN2ZhNHV0Y21FUWZYZ3lMQzA2VmM3TnN3OGxzaW1B?=
+ =?utf-8?B?KzNRa2dNK2JBMTQxVjNIbmR0VHJzVnNqSm9pcDVKcno5eXFQZ0o0aXpnYmhl?=
+ =?utf-8?B?bVcvc016VVpsb1I1M2gvaTY3RWtLcVRmQVhFZkNEYTByNDl5NSt0N29RaHE0?=
+ =?utf-8?B?MHRCdHNjTWxMd0dqZ1lybEJEYjAyWFBFTFdxc1NKU1pMSzVDZlBRbjlWRUtN?=
+ =?utf-8?B?SlBPbXRjK1prSUwvamQ1SlY3Wk9PeUQ3VjNlTk90MGk5VDBsTC9wYnp6K1p0?=
+ =?utf-8?B?TE8zUi9SbkhyazJmaE0yb3FZTmtnTFJVSnFXeTNDejl6a3FiZjJ0alU2cWtZ?=
+ =?utf-8?B?dVlWOUVBaDB2Z0R6eXR6SlJ1SCtqRGJtZVNCV3YvdXdkRnhaT2R6dm9oRi8x?=
+ =?utf-8?B?QVFtcCtJN2FsSkVmU0VudVFsaVgzcFJuMW03dFhPSndjY2cvcC9rYlN4eHYy?=
+ =?utf-8?B?R0djcHMxbHZyaExQd3BSZVhMTkZQT2lnUERjaFlUYUViRDRDcnQ1QVUwSjdC?=
+ =?utf-8?B?Qkw4UTZLakRFK2VpMHpSNnpjamZ5M1lkMyszVnBMVmdpRHZmUFdYRzl2Z2tj?=
+ =?utf-8?B?SDdYQkIzZDU1SGNUYk1nQzczR0dEc0h0bGNEVzQ0ZC9IeDQ0WjB0aWd5cGRT?=
+ =?utf-8?B?MVZLM2x4Z1licVpJOFlFUXZTdlpnaXVNeXBXbWVjN3dkL1Bzd1VZQnJsdGtG?=
+ =?utf-8?B?WXhQL1ptemRSQ1pheFNOYkwyallIRHFTUExnZk52Y2dibFVKMGVxVUpReHVQ?=
+ =?utf-8?B?STVwZVV5b3BjMEN5czNZa1l3dENORENJUjZnLzhqaExnbDd3cDhNeUVZV1pS?=
+ =?utf-8?B?L255OEUySGVZWFRQV1ZTY1ZsKzF0QVRNb2d5UWZzcE94Ni9sOGU2OU9XdVRM?=
+ =?utf-8?B?bEJDbzNudmVSSGkzeFFwQWErSHExVmpXdHhiUFE3VzJCZnpqUGpPcGt5WFVD?=
+ =?utf-8?B?UCs3SlhINWdYb1lmOXoxOW9Ibm1UZlN3ZGduWVpRM2R3TEE1eWxFQ3hRbXo4?=
+ =?utf-8?B?b2dhREpoWUlSaVVGdXZ3dWIwWlBxSjRSQXI1Q01IOTcvdUtSUkpjNmpBLzY3?=
+ =?utf-8?B?aXBaaXQ3MkQyM3VJNElOTzJMWG5RTFpWMkhBNzRDUit5ME9UUTFndFNnN3Nt?=
+ =?utf-8?B?a29RSkwyVEppMjVXUWE5STlWMXFLWCt6Q252ejZzNEI2QUYrYklPUkI4NHhh?=
+ =?utf-8?B?NFU5TjRPdEhQMjgzc0NUSzRJNGZVbFRLSlpjWG1DaXJnSDBQWkY0NTA2SnU3?=
+ =?utf-8?B?Zk5wZzB5RTRpTkMzMzg1Mkl5YU1oWi9MM0I2cVdMRWdTOEpVazR0THFCeHlI?=
+ =?utf-8?B?V0hiRGdUb2JTWU5RVkluajNxS2k3NlFkQmVCL1BMRGNybHNZWUQxL3plWUx1?=
+ =?utf-8?B?RlF6allpMXAwZ0lHaTNJUEEvY0FFK1FPT2xkcTFCc2FyTEZ6UXRnWnNFSGdR?=
+ =?utf-8?B?N3ZWampTUjNWMWhpQVdsczJDbWt4M1J1WmhlTWVCVWZObDlERHVPS2dacGdI?=
+ =?utf-8?B?UXdFZEg3bVZFNi9PMHcxbVVoTVRpRU9QRzlqYlRHYjdoWW04cjY3K0lFaXBj?=
+ =?utf-8?Q?56erYFejgVAHOo6Wc/6RXS8=3D?=
+X-OriginatorOrg: virtuozzo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2911d5b5-d2da-4f2d-5041-08da7aa4f681
+X-MS-Exchange-CrossTenant-AuthSource: DBBPR08MB4758.eurprd08.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Aug 2022 07:50:15.6803
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: HpFC02PVfGx1yB8JU2OW0ZMTC08QVHdNZdQsJvWdd6KVfbdJlIBEPZKPTZ/KT8T/eNjKWCC4Z9fo1l+V6Z2zFNUyMU/RcF7xeZ2ojEKlUcG8feaABNRamiNrDlPoDUlx
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB6PR0802MB2135
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
+On 10.08.22 9:05, Michael S. Tsirkin wrote:
+> On Wed, Aug 10, 2022 at 08:54:52AM +0300, Alexander Atanasov wrote:
+>> On 9.08.22 13:32, Michael S. Tsirkin wrote:
+>>> On Tue, Aug 09, 2022 at 12:49:32PM +0300, Alexander Atanasov wrote:
+>>>> @@ -153,6 +156,14 @@ static int meminfo_proc_show(struct seq_file *m, void *v)
+>>>>    		    global_zone_page_state(NR_FREE_CMA_PAGES));
+>>>>    #endif
+>>>> +#ifdef CONFIG_MEMORY_BALLOON
+>>>> +	inflated_kb = atomic_long_read(&mem_balloon_inflated_kb);
+>>>> +	if (inflated_kb >= 0)
+>>>> +		seq_printf(m,  "Inflated(total): %8ld kB\n", inflated_kb);
+>>>> +	else
+>>>> +		seq_printf(m,  "Inflated(free): %8ld kB\n", -inflated_kb);
+>>>> +#endif
+>>>> +
+>>>>    	hugetlb_report_meminfo(m);
+>>>>    	arch_report_meminfo(m);
+>>>
+>>>
+>>> This seems too baroque for my taste.
+>>> Why not just have two counters for the two pruposes?
+>>
+>> I agree it is not good but it reflects the current situation.
+>> Dirvers account in only one way - either used or total - which i don't like.
+>> So to save space and to avoid the possibility that some driver starts to use
+>> both at the same time. I suggest to be only one value.
+> 
+> I don't see what would be wrong if some driver used both
+> at some point.
 
-On 2022/8/10 15:20, Flint.Wang wrote:
-> testcase btrfs249 failed.
-> [How to reproduce]
-> mkfs.btrfs -f -d raid1 -m raid1 /dev/sdb /dev/sdc
-> btrfstune -S 1 /dev/sdb
-> wipefs -a /dev/sdb
-> mount -o degraded /dev/sdc /mnt/scratch
-> btrfs device add -f /dev/sdd /mnt/scratch
-> btrfs filesystem usage /mnt/scratch
->
-> [Root cause]
-> mkfs.btrfs -f -d raid1 -m raid1 /dev/sdb /dev/sdc
-> btrfstune -S 1 /dev/sdb
-> wipefs -a /dev/sdb
-> mount -o degraded /dev/sdc /mnt/scratch
->
-> In the above commands, btrfstune command set the sdb and sdc to seeding =
-device.
-> After that you wipe the filesystem on sdb. After mount, you will find th=
-e status of sdb is missing.
->
-> btrfs device add -f /dev/sdd /mnt/scratch:
-> This command will invoke btrfs_setup_sprout to do the job.
-> It put the devices on fs_devices->devices to seed_devices list.
-> So only sdd is on the fs_devices->devices list. sdb(missing), sdc on the=
- seed_devices list.
-> But when we look into the btrfs_find_devices function, it find devices b=
-oth in devices list and seed_devices list.
->
-> btrfs filesystem usage /mnt/scratch
-> This command use ioctl to get device info. The assertion is triggered be=
-cause it finds the number of devices is inconsistent.
->
-> [My fix solution]
-> 1. Add noseed argument to btrfs_find_device. It force the function only =
-look into devices list.
+If you don't see what's wrong with using both, i might as well add
+Cached and Buffers - next hypervisor might want to use them or any other 
+by its discretion leaving the fun to figure it out to the userspace?
 
-You can put the new @noseed argument into btrfs_dev_lookup_args, then no
-need to change all callers.
+Single definitive value is much better and clear from user prespective 
+and meminfo is exactly for the users.
 
-> 2. Add a new ioctl request(BTRFS_IOC_DEV_INFO_NOSEED) in case some appli=
-cation may depend the original ioctl behavior on BTRFS_IOC_DEV_INFO
+If a driver for some wierd reason needs to do both it is a whole new 
+topic that i don't like to go into. Good news is that currently no such 
+driver exists.
 
-This is too heavy just for this particular case, I stronglly doubt if we
-really need to go this way.
+> 
+>>
+>>> And is there any value in having this atomic?
+>>> We want a consistent value but just READ_ONCE seems sufficient ...
+>>
+>> I do not see this as only a value that is going to be displayed.
+>> I tried to be defensive here and to avoid premature optimization.
+>> One possible scenario is OOM killer(using the value) vs balloon deflate on
+>> oom will need it. But any other user of that value will likely need it
+>> atomic too. Drivers use spin_locks for calculations they might find a way to
+>> reduce the spin lock usage and use the atomic.
+>> While making it a long could only bring bugs without benefits.
+>> It is not on a fast path too so i prefer to be safe.
+> 
+> Well we do not normally spread atomics around just because we
+> can, it does not magically make the code safe.
+> If this needs atomics we need to document why.
 
-> 3. Modify load_device_info and load_chunk_and_device_info in btrfs-prog =
-for appropriate ioctl call.
+Of course it does not. In one of your comments to my other patches you 
+said you do not like patches that add one line then remove it in the 
+next patch. To avoid that i put an atomic - if at one point it is clear 
+it is not required i would be happy to change it but it is more likely 
+to be need than not. So i will probably have to document it instead.
 
-To me, we can still handle the work just inside btrfs-progs, thus no
-need to introducing a completely new ioctl which has the same functionalit=
-y.
+At this point the decision if it should be or should not be in the 
+meminfo is more important - if general opinion is positive i will 
+address the technical details.
 
-E.g, go tree-search ioctl to search chunk tree to get a correct number
-of devices, instead of just relying on fi_args->num_devices.
+-- 
+Regards,
+Alexander Atanasov
 
-A fix in btrfs-progs is much simpler and easier to maintain than a full
-new ioctl.
-
-Thanks,
-Qu
-
->
-> After the change, btrfs249 passed.
->
-> Signed-off-by: Flint.Wang <hmsjwzb@zoho.com>
-> ---
->   fs/btrfs/dev-replace.c     |  8 ++++----
->   fs/btrfs/ioctl.c           | 10 ++++++----
->   fs/btrfs/scrub.c           |  4 ++--
->   fs/btrfs/volumes.c         | 22 ++++++++++++----------
->   fs/btrfs/volumes.h         |  5 ++++-
->   include/uapi/linux/btrfs.h |  2 ++
->   6 files changed, 30 insertions(+), 21 deletions(-)
->
-> diff --git a/fs/btrfs/dev-replace.c b/fs/btrfs/dev-replace.c
-> index f43196a893ca3..49d3c587c2948 100644
-> --- a/fs/btrfs/dev-replace.c
-> +++ b/fs/btrfs/dev-replace.c
-> @@ -101,7 +101,7 @@ int btrfs_init_dev_replace(struct btrfs_fs_info *fs_=
-info)
->   		 * We don't have a replace item or it's corrupted.  If there is
->   		 * a replace target, fail the mount.
->   		 */
-> -		if (btrfs_find_device(fs_info->fs_devices, &args)) {
-> +		if (btrfs_find_device(fs_info->fs_devices, &args, false)) {
->   			btrfs_err(fs_info,
->   			"found replace target device without a valid replace item");
->   			ret =3D -EUCLEAN;
-> @@ -163,7 +163,7 @@ int btrfs_init_dev_replace(struct btrfs_fs_info *fs_=
-info)
->   		 * We don't have an active replace item but if there is a
->   		 * replace target, fail the mount.
->   		 */
-> -		if (btrfs_find_device(fs_info->fs_devices, &args)) {
-> +		if (btrfs_find_device(fs_info->fs_devices, &args, false)) {
->   			btrfs_err(fs_info,
->   			"replace devid present without an active replace item");
->   			ret =3D -EUCLEAN;
-> @@ -174,9 +174,9 @@ int btrfs_init_dev_replace(struct btrfs_fs_info *fs_=
-info)
->   		break;
->   	case BTRFS_IOCTL_DEV_REPLACE_STATE_STARTED:
->   	case BTRFS_IOCTL_DEV_REPLACE_STATE_SUSPENDED:
-> -		dev_replace->tgtdev =3D btrfs_find_device(fs_info->fs_devices, &args)=
-;
-> +		dev_replace->tgtdev =3D btrfs_find_device(fs_info->fs_devices, &args,=
- false);
->   		args.devid =3D src_devid;
-> -		dev_replace->srcdev =3D btrfs_find_device(fs_info->fs_devices, &args)=
-;
-> +		dev_replace->srcdev =3D btrfs_find_device(fs_info->fs_devices, &args,=
- false);
->
->   		/*
->   		 * allow 'btrfs dev replace_cancel' if src/tgt device is
-> diff --git a/fs/btrfs/ioctl.c b/fs/btrfs/ioctl.c
-> index fe0cc816b4eba..bdf1578839c99 100644
-> --- a/fs/btrfs/ioctl.c
-> +++ b/fs/btrfs/ioctl.c
-> @@ -2039,7 +2039,7 @@ static noinline int btrfs_ioctl_resize(struct file=
- *file,
->   	}
->
->   	args.devid =3D devid;
-> -	device =3D btrfs_find_device(fs_info->fs_devices, &args);
-> +	device =3D btrfs_find_device(fs_info->fs_devices, &args, false);
->   	if (!device) {
->   		btrfs_info(fs_info, "resizer unable to find device %llu",
->   			   devid);
-> @@ -3721,7 +3721,7 @@ static long btrfs_ioctl_fs_info(struct btrfs_fs_in=
-fo *fs_info,
->   }
->
->   static long btrfs_ioctl_dev_info(struct btrfs_fs_info *fs_info,
-> -				 void __user *arg)
-> +				 void __user *arg, bool noseed)
->   {
->   	BTRFS_DEV_LOOKUP_ARGS(args);
->   	struct btrfs_ioctl_dev_info_args *di_args;
-> @@ -3737,7 +3737,7 @@ static long btrfs_ioctl_dev_info(struct btrfs_fs_i=
-nfo *fs_info,
->   		args.uuid =3D di_args->uuid;
->
->   	rcu_read_lock();
-> -	dev =3D btrfs_find_device(fs_info->fs_devices, &args);
-> +	dev =3D btrfs_find_device(fs_info->fs_devices, &args, noseed);
->   	if (!dev) {
->   		ret =3D -ENODEV;
->   		goto out;
-> @@ -5468,7 +5468,7 @@ long btrfs_ioctl(struct file *file, unsigned int
->   	case BTRFS_IOC_FS_INFO:
->   		return btrfs_ioctl_fs_info(fs_info, argp);
->   	case BTRFS_IOC_DEV_INFO:
-> -		return btrfs_ioctl_dev_info(fs_info, argp);
-> +		return btrfs_ioctl_dev_info(fs_info, argp, false);
->   	case BTRFS_IOC_TREE_SEARCH:
->   		return btrfs_ioctl_tree_search(inode, argp);
->   	case BTRFS_IOC_TREE_SEARCH_V2:
-> @@ -5570,6 +5570,8 @@ long btrfs_ioctl(struct file *file, unsigned int
->   	case BTRFS_IOC_ENCODED_WRITE_32:
->   		return btrfs_ioctl_encoded_write(file, argp, true);
->   #endif
-> +	case BTRFS_IOC_DEV_INFO_NOSEED:
-> +		return btrfs_ioctl_dev_info(fs_info, argp, true);
->   	}
->
->   	return -ENOTTY;
-> diff --git a/fs/btrfs/scrub.c b/fs/btrfs/scrub.c
-> index 3afe5fa50a631..4b734d76776ca 100644
-> --- a/fs/btrfs/scrub.c
-> +++ b/fs/btrfs/scrub.c
-> @@ -4143,7 +4143,7 @@ int btrfs_scrub_dev(struct btrfs_fs_info *fs_info,=
- u64 devid, u64 start,
->   		goto out_free_ctx;
->
->   	mutex_lock(&fs_info->fs_devices->device_list_mutex);
-> -	dev =3D btrfs_find_device(fs_info->fs_devices, &args);
-> +	dev =3D btrfs_find_device(fs_info->fs_devices, &args, false);
->   	if (!dev || (test_bit(BTRFS_DEV_STATE_MISSING, &dev->dev_state) &&
->   		     !is_dev_replace)) {
->   		mutex_unlock(&fs_info->fs_devices->device_list_mutex);
-> @@ -4321,7 +4321,7 @@ int btrfs_scrub_progress(struct btrfs_fs_info *fs_=
-info, u64 devid,
->   	struct scrub_ctx *sctx =3D NULL;
->
->   	mutex_lock(&fs_info->fs_devices->device_list_mutex);
-> -	dev =3D btrfs_find_device(fs_info->fs_devices, &args);
-> +	dev =3D btrfs_find_device(fs_info->fs_devices, &args, false);
->   	if (dev)
->   		sctx =3D dev->scrub_ctx;
->   	if (sctx)
-> diff --git a/fs/btrfs/volumes.c b/fs/btrfs/volumes.c
-> index 272901514b0c1..1abd75e90cd9e 100644
-> --- a/fs/btrfs/volumes.c
-> +++ b/fs/btrfs/volumes.c
-> @@ -808,7 +808,7 @@ static noinline struct btrfs_device *device_list_add=
-(const char *path,
->   		};
->
->   		mutex_lock(&fs_devices->device_list_mutex);
-> -		device =3D btrfs_find_device(fs_devices, &args);
-> +		device =3D btrfs_find_device(fs_devices, &args, false);
->
->   		/*
->   		 * If this disk has been pulled into an fs devices created by
-> @@ -2075,7 +2075,7 @@ int btrfs_rm_device(struct btrfs_fs_info *fs_info,
->   	if (ret)
->   		return ret;
->
-> -	device =3D btrfs_find_device(fs_info->fs_devices, args);
-> +	device =3D btrfs_find_device(fs_info->fs_devices, args, false);
->   	if (!device) {
->   		if (args->missing)
->   			ret =3D BTRFS_ERROR_DEV_MISSING_NOT_FOUND;
-> @@ -2381,7 +2381,7 @@ struct btrfs_device *btrfs_find_device_by_devspec(
->
->   	if (devid) {
->   		args.devid =3D devid;
-> -		device =3D btrfs_find_device(fs_info->fs_devices, &args);
-> +		device =3D btrfs_find_device(fs_info->fs_devices, &args, false);
->   		if (!device)
->   			return ERR_PTR(-ENOENT);
->   		return device;
-> @@ -2390,7 +2390,7 @@ struct btrfs_device *btrfs_find_device_by_devspec(
->   	ret =3D btrfs_get_dev_args_from_path(fs_info, &args, device_path);
->   	if (ret)
->   		return ERR_PTR(ret);
-> -	device =3D btrfs_find_device(fs_info->fs_devices, &args);
-> +	device =3D btrfs_find_device(fs_info->fs_devices, &args, false);
->   	btrfs_put_dev_args_from_path(&args);
->   	if (!device)
->   		return ERR_PTR(-ENOENT);
-> @@ -2551,7 +2551,7 @@ static int btrfs_finish_sprout(struct btrfs_trans_=
-handle *trans)
->   				   BTRFS_FSID_SIZE);
->   		args.uuid =3D dev_uuid;
->   		args.fsid =3D fs_uuid;
-> -		device =3D btrfs_find_device(fs_info->fs_devices, &args);
-> +		device =3D btrfs_find_device(fs_info->fs_devices, &args, false);
->   		BUG_ON(!device); /* Logic error */
->
->   		if (device->fs_devices->seeding) {
-> @@ -6821,7 +6821,7 @@ static bool dev_args_match_device(const struct btr=
-fs_dev_lookup_args *args,
->    * only devid is used.
->    */
->   struct btrfs_device *btrfs_find_device(const struct btrfs_fs_devices *=
-fs_devices,
-> -				       const struct btrfs_dev_lookup_args *args)
-> +				       const struct btrfs_dev_lookup_args *args, bool noseed)
->   {
->   	struct btrfs_device *device;
->   	struct btrfs_fs_devices *seed_devs;
-> @@ -6832,6 +6832,8 @@ struct btrfs_device *btrfs_find_device(const struc=
-t btrfs_fs_devices *fs_devices
->   				return device;
->   		}
->   	}
-> +	if (noseed)
-> +		return NULL;
->
->   	list_for_each_entry(seed_devs, &fs_devices->seed_list, seed_list) {
->   		if (!dev_args_match_fs_devices(args, seed_devs))
-> @@ -7095,7 +7097,7 @@ static int read_one_chunk(struct btrfs_key *key, s=
-truct extent_buffer *leaf,
->   				   btrfs_stripe_dev_uuid_nr(chunk, i),
->   				   BTRFS_UUID_SIZE);
->   		args.uuid =3D uuid;
-> -		map->stripes[i].dev =3D btrfs_find_device(fs_info->fs_devices, &args)=
-;
-> +		map->stripes[i].dev =3D btrfs_find_device(fs_info->fs_devices, &args,=
- false);
->   		if (!map->stripes[i].dev) {
->   			map->stripes[i].dev =3D handle_missing_device(fs_info,
->   								    devid, uuid);
-> @@ -7226,7 +7228,7 @@ static int read_one_dev(struct extent_buffer *leaf=
-,
->   			return PTR_ERR(fs_devices);
->   	}
->
-> -	device =3D btrfs_find_device(fs_info->fs_devices, &args);
-> +	device =3D btrfs_find_device(fs_info->fs_devices, &args, false);
->   	if (!device) {
->   		if (!btrfs_test_opt(fs_info, DEGRADED)) {
->   			btrfs_report_missing_device(fs_info, devid,
-> @@ -7884,7 +7886,7 @@ int btrfs_get_dev_stats(struct btrfs_fs_info *fs_i=
-nfo,
->
->   	mutex_lock(&fs_devices->device_list_mutex);
->   	args.devid =3D stats->devid;
-> -	dev =3D btrfs_find_device(fs_info->fs_devices, &args);
-> +	dev =3D btrfs_find_device(fs_info->fs_devices, &args, false);
->   	mutex_unlock(&fs_devices->device_list_mutex);
->
->   	if (!dev) {
-> @@ -8026,7 +8028,7 @@ static int verify_one_dev_extent(struct btrfs_fs_i=
-nfo *fs_info,
->   	}
->
->   	/* Make sure no dev extent is beyond device boundary */
-> -	dev =3D btrfs_find_device(fs_info->fs_devices, &args);
-> +	dev =3D btrfs_find_device(fs_info->fs_devices, &args, false);
->   	if (!dev) {
->   		btrfs_err(fs_info, "failed to find devid %llu", devid);
->   		ret =3D -EUCLEAN;
-> diff --git a/fs/btrfs/volumes.h b/fs/btrfs/volumes.h
-> index 5639961b3626f..4b6bcc777f752 100644
-> --- a/fs/btrfs/volumes.h
-> +++ b/fs/btrfs/volumes.h
-> @@ -609,7 +609,10 @@ int btrfs_num_copies(struct btrfs_fs_info *fs_info,=
- u64 logical, u64 len);
->   int btrfs_grow_device(struct btrfs_trans_handle *trans,
->   		      struct btrfs_device *device, u64 new_size);
->   struct btrfs_device *btrfs_find_device(const struct btrfs_fs_devices *=
-fs_devices,
-> -				       const struct btrfs_dev_lookup_args *args);
-> +				       const struct btrfs_dev_lookup_args *args,
-> +				       bool noseed);
-> +struct btrfs_device *btrfs_find_device_noseed(const struct btrfs_fs_dev=
-ices *fs_devices,
-> +					      const struct btrfs_dev_lookup_args *args);
->   int btrfs_shrink_device(struct btrfs_device *device, u64 new_size);
->   int btrfs_init_new_device(struct btrfs_fs_info *fs_info, const char *p=
-ath);
->   int btrfs_balance(struct btrfs_fs_info *fs_info,
-> diff --git a/include/uapi/linux/btrfs.h b/include/uapi/linux/btrfs.h
-> index 7ada84e4a3ed1..880b565479a12 100644
-> --- a/include/uapi/linux/btrfs.h
-> +++ b/include/uapi/linux/btrfs.h
-> @@ -1078,6 +1078,8 @@ enum btrfs_err_code {
->   				       struct btrfs_ioctl_scrub_args)
->   #define BTRFS_IOC_DEV_INFO _IOWR(BTRFS_IOCTL_MAGIC, 30, \
->   				 struct btrfs_ioctl_dev_info_args)
-> +#define BTRFS_IOC_DEV_INFO_NOSEED _IOR(BTRFS_IOCTL_MAGIC, 30, \
-> +				       struct btrfs_ioctl_dev_info_args)
->   #define BTRFS_IOC_FS_INFO _IOR(BTRFS_IOCTL_MAGIC, 31, \
->   			       struct btrfs_ioctl_fs_info_args)
->   #define BTRFS_IOC_BALANCE_V2 _IOWR(BTRFS_IOCTL_MAGIC, 32, \

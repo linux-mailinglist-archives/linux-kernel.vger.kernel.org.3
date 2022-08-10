@@ -2,107 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E22858E497
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 03:38:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 736EC58E49C
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 03:41:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbiHJBhq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 21:37:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32904 "EHLO
+        id S230116AbiHJBlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 21:41:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbiHJBhH (ORCPT
+        with ESMTP id S229924AbiHJBk2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 21:37:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BFB5061B05
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 18:37:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660095424;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fDv7Pkf2Mty62Q47m8/QIRgG7qucyNEE5ltfwkyv+3E=;
-        b=GOQiluKqUrTP6cqp/eEWH8ExkThJkgjx0qWlWSLGe7J559CixyZMMdmC7uBuBUBftgUGNz
-        EolQMu/tNlYZg3lJuwUMI2LGnEevizkpEW4oO2lmhpHx/Qqbm0tUzYCX5plHSvTYI739Jg
-        QgkMo3Gs8VVkaFfehJzROrfN9XzygIg=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-383-43pIiNFQPjq97qJMTTPtxA-1; Tue, 09 Aug 2022 21:37:03 -0400
-X-MC-Unique: 43pIiNFQPjq97qJMTTPtxA-1
-Received: by mail-qk1-f200.google.com with SMTP id bs33-20020a05620a472100b006b97dc17ab4so2534643qkb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 18:37:03 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=fDv7Pkf2Mty62Q47m8/QIRgG7qucyNEE5ltfwkyv+3E=;
-        b=Sx4NMLoVTGgfbFyvhPRy2PdxAV8CKvhljwWU5IQb0IubBF6BesHpK5z+3Vd2FKHbKB
-         vJ3o2CqwdjIgCQX+UGq8HkwaQ7wd4IYH54DTXqZaiZ1NiO2Voogp8yo3cEunBLuWr21g
-         FhfqH1KSHepauiQ7e9u6GE+g7Fm/eXYcHn+LaBRWF8V3Yj0+0KyFQ0MtKazBMPGWC0Tt
-         F9rBctHCtDtiavbsX6U6c0iX7qxV8aUKSo99vucNwTDDpGY1WJJtcmfd0VHkjjwAzy2C
-         9sBZtYjsbOa3IQdUGNnhDTZ2lE8CNIy6yqTm96l1TjsDZeXH7e4lAD8lrmZvqytZ9l4b
-         udcA==
-X-Gm-Message-State: ACgBeo2QYiPwZ7/MiO47uox7HmtxfPyyATmN1rODAZGZoURzVEspqqUF
-        s6y+rqz+cNJVZ7U9+CwHFl0FXDjHzOr7WcfktAQvEHl3V44lAxmueolPJQsExrIT2iwrcOpJ8bb
-        f29jaebBoLgtSTU/vu9DlvKXe
-X-Received: by 2002:a05:622a:5c7:b0:320:f913:76a0 with SMTP id d7-20020a05622a05c700b00320f91376a0mr22413531qtb.115.1660095423167;
-        Tue, 09 Aug 2022 18:37:03 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6Wv3i51PLvqvZIGParL/hMF7UGnnqIvKrsgzpUw+f5GPmER0Nz9G4myzKTTrm6eQxhSVqMsQ==
-X-Received: by 2002:a05:622a:5c7:b0:320:f913:76a0 with SMTP id d7-20020a05622a05c700b00320f91376a0mr22413520qtb.115.1660095422933;
-        Tue, 09 Aug 2022 18:37:02 -0700 (PDT)
-Received: from [192.168.98.18] ([107.12.98.143])
-        by smtp.gmail.com with ESMTPSA id e123-20020a376981000000b006b5f68bc106sm11767006qkc.110.2022.08.09.18.37.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Aug 2022 18:37:02 -0700 (PDT)
-Message-ID: <0ec636c5-0162-c208-5c53-22f2ce53ea91@redhat.com>
-Date:   Tue, 9 Aug 2022 21:37:01 -0400
+        Tue, 9 Aug 2022 21:40:28 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A61A31AF09;
+        Tue,  9 Aug 2022 18:40:26 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 0C60D5C0279;
+        Tue,  9 Aug 2022 21:40:26 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 09 Aug 2022 21:40:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm2; t=1660095626; x=1660182026; bh=HbNBRJbRBFm3jhvzvtzDhklvn
+        z1h/RDiPgNM6S1lCOs=; b=XMg4KnU6zR9ZtIGpxJ3kAKJ7k0dYTZ9pnYWdZW1v2
+        rJWwyGYs5fT1Y9LXtbkskFqSJEp87cZdVdbsUlu6kskCXqC5AFrBWtDhPhKpAjJz
+        e62zK2f8wZ3CXEFiVeshZZrt05u/8GjiKT9vfe+BhhZB3ZLb2CUpN+eAh1UmqQeG
+        ZgbaaB1f1rtEM+2EzPyMRkudi1SuSU/ZyTL46jd9q6LDcllV89MYOeeUqXwiF8Yq
+        S+r6y7Kk/crm7MqxVj6hWrvbVrdCBDp+3anKYJ9Wf/reQsPkflk2kfT184LmUOH0
+        9Ke+t80OwpGvYXmk+Gd9s9FYKVnk9se2GajRoLS9DkIDA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1660095626; x=1660182026; bh=HbNBRJbRBFm3jhvzvtzDhklvnz1h/RDiPgN
+        M6S1lCOs=; b=yNGG+zBxLzBI/dOaH2dXM4jhniKVX5CXV/wlLHdvHXRDmdfcUmG
+        ZuzsDUP6ZtgFG3dIo+fL7RParwG+z0JmdV2Y/i4oXh12YzV4mPtPjuYuoHV101hi
+        49T/pM0RSGEvYH82rADFU8/nf60t0A3AfUvRSHIUsA8Atw2HzktRpCfnGmkyr2JD
+        HLjzObOQZQvbSlrfF++Heeo7G+tPTivLpdYMu8PnVIWGbfT9vimP4+b92X1hL+VA
+        g6FHtC7aoxs9bBJWy7G/aUTLQd0MV8aDROpNFPq0oHyn2YEgt3XdcsttKK0zJOvI
+        TwJqceu1+l/HtNsXp/qDwOjwCngInanOkkA==
+X-ME-Sender: <xms:iQzzYol0vKW0PCUOSREp05jEXC6L1ASP8jkd5VDZ0U_pqAyI_nBobw>
+    <xme:iQzzYn3QMmYyloj5Wl91g3hqOhvRPjhB1GRxBBgNzwVxEG8Gk-DbX4gVl7A65_b5e
+    isRK6Y4WPinWsFioA>
+X-ME-Received: <xmr:iQzzYmprj7vcbcnD0heskfd8z9uMOyMAUV6Z5n1WzkvkHHmTjy1nGIdfgc9uvtHK7gOpJJo1JOpkuudb46YdnBOH_4fDXteUU_ZcagYOjZn9Lf4gSPHzDJmoGaJDY5qvrhwgKA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeguddghedtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghl
+    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrf
+    grthhtvghrnhepkeevlefhjeeuleeltedvjedvfeefteegleehueejffehgffffeekhefh
+    hfekkeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:iQzzYklkLe1wSQMadIOch1mQ2M83eAQN4nId6NO6ZESlg9KN1mKxEA>
+    <xmx:iQzzYm0N_cEP3eR-lW1oTNkblI_fgOncwK_SobPOCzkjG0ooNhu2Bg>
+    <xmx:iQzzYrtBMVqt4uGr-y6-tX7nGIpawh4YofINRXsnPhfNujwItRjKyA>
+    <xmx:igzzYvlzlaO2x23gwnqomuDk-8mGGB9Bz8TpKSKlBgv8QoM86L2g4A>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 9 Aug 2022 21:40:25 -0400 (EDT)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: [PATCH] clk: sunxi-ng: mp: Avoid computing the rate twice
+Date:   Tue,  9 Aug 2022 20:40:24 -0500
+Message-Id: <20220810014024.27568-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC net] bonding: 802.3ad: fix no transmission of LACPDUs
-Content-Language: en-US
-To:     Hangbin Liu <liuhangbin@gmail.com>
-Cc:     netdev@vger.kernel.org, Jay Vosburgh <j.vosburgh@gmail.com>,
-        Veaceslav Falico <vfalico@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <c2f698e6f73e6e78232ab4ded065c3828d245dbd.1660065706.git.jtoppins@redhat.com>
- <YvMJYb0VDJW+6CRh@Laptop-X1>
-From:   Jonathan Toppins <jtoppins@redhat.com>
-In-Reply-To: <YvMJYb0VDJW+6CRh@Laptop-X1>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/9/22 21:26, Hangbin Liu wrote:
-> On Tue, Aug 09, 2022 at 01:21:46PM -0400, Jonathan Toppins wrote:
->> ---
->>   MAINTAINERS                                   |  1 +
->>   drivers/net/bonding/bond_3ad.c                |  2 +-
->>   .../net/bonding/bond-break-lacpdu-tx.sh       | 88 +++++++++++++++++++
-> 
-> Hi Jon,
-> 
-> You need a Makefile in this folder and set TEST_PROGS so we can generate the
-> test in kselftest-list.txt.
-> 
+ccu_mp_find_best() already computes a best_rate at the same time as the
+best m and p factors. Return it so the caller does not need to duplicate
+the division.
 
-Thank you. I have a v2 coming. I also broke up the fix from the test 
-that way it is simpler to backport.
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
 
--Jon
+ drivers/clk/sunxi-ng/ccu_mp.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/clk/sunxi-ng/ccu_mp.c b/drivers/clk/sunxi-ng/ccu_mp.c
+index 57cf2d615148..cc94a694cb67 100644
+--- a/drivers/clk/sunxi-ng/ccu_mp.c
++++ b/drivers/clk/sunxi-ng/ccu_mp.c
+@@ -10,9 +10,9 @@
+ #include "ccu_gate.h"
+ #include "ccu_mp.h"
+ 
+-static void ccu_mp_find_best(unsigned long parent, unsigned long rate,
+-			     unsigned int max_m, unsigned int max_p,
+-			     unsigned int *m, unsigned int *p)
++static unsigned long ccu_mp_find_best(unsigned long parent, unsigned long rate,
++				      unsigned int max_m, unsigned int max_p,
++				      unsigned int *m, unsigned int *p)
+ {
+ 	unsigned long best_rate = 0;
+ 	unsigned int best_m = 0, best_p = 0;
+@@ -35,6 +35,8 @@ static void ccu_mp_find_best(unsigned long parent, unsigned long rate,
+ 
+ 	*m = best_m;
+ 	*p = best_p;
++
++	return best_rate;
+ }
+ 
+ static unsigned long ccu_mp_find_best_with_parent_adj(struct clk_hw *hw,
+@@ -109,8 +111,7 @@ static unsigned long ccu_mp_round_rate(struct ccu_mux_internal *mux,
+ 	max_p = cmp->p.max ?: 1 << ((1 << cmp->p.width) - 1);
+ 
+ 	if (!clk_hw_can_set_rate_parent(&cmp->common.hw)) {
+-		ccu_mp_find_best(*parent_rate, rate, max_m, max_p, &m, &p);
+-		rate = *parent_rate / p / m;
++		rate = ccu_mp_find_best(*parent_rate, rate, max_m, max_p, &m, &p);
+ 	} else {
+ 		rate = ccu_mp_find_best_with_parent_adj(hw, parent_rate, rate,
+ 							max_m, max_p);
+-- 
+2.35.1
 

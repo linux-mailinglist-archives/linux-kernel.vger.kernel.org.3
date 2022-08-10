@@ -2,102 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C68958EBA1
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 14:03:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDC1D58EBA6
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 14:06:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232122AbiHJLkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 07:40:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39082 "EHLO
+        id S232147AbiHJMGt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 08:06:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231732AbiHJLk1 (ORCPT
+        with ESMTP id S232135AbiHJMGr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 07:40:27 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1237642FE;
-        Wed, 10 Aug 2022 04:40:21 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id dc19so27122841ejb.12;
-        Wed, 10 Aug 2022 04:40:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc;
-        bh=DdJp4UZHmlYx0A4VYaHgo2wRMc0wfMVM5lOUKK2ThO4=;
-        b=Bz3ob9RtssQY/+VrStqxVSL4x5lN7bbl61PFrrY73Et0lNuTTiOR2vflxTmV/gGAGu
-         hk/sGeRPQDy7JQQQ4fHpsGdSze1U6Hgc36NK441s5/sC+QLnyxOTos5GVqXog7HKeLgE
-         jpQffK0TfRZJATt65GZTuMXONlSdTU8y0UZpMnExkSCX9kxyit+7b3DnQ1PHeBF1K46A
-         EbO5S5s5qHaf4m8r3EVBPh6WjsxrlTWub5u5YE2BcSbS4pUqiyGWqp8L+/DJGlrWs9rj
-         88/Ta4hbjAf1paypvJz6kPFuu+mQU8DYFdsoEjGVF5TW6ebz9SQTTVqIUaPjmPPdXySn
-         iESQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=DdJp4UZHmlYx0A4VYaHgo2wRMc0wfMVM5lOUKK2ThO4=;
-        b=cTdPNDUAuvd0zZv3zeOAdikI8ovE9DKUERQVzzVzn5Rt3RMAJiXfGI0OjAUDQWGMX5
-         AQImxqOV8oUdxG8gxHhZtivIlZFk1R93chi9Yipn4Cqvz55vUZw+HjcqYxPscDbMmdJ6
-         1zOXzVzku7PvA/t0IWAMduSOV+k9BZ8nIoWLQQtL9/brUUcWnjfoUlF7F1JsFUzivgsr
-         +2ZX9ycP8U7RgEY/i8b2bxxkjCZQnTJChxJzTd2rjUD7PDDPJ0a7dRw3N1YoS3ODA2xO
-         PMIhqU2aKICr9fNPZHvMfQfl+BXrHYgqU9J970Xjqhf2kJ1hP2UyQYCFTUV7JWLNF7gt
-         hxZg==
-X-Gm-Message-State: ACgBeo2C9ufDhDmO4VyI18RfhvXYdoAb4V9l2IDFgGmjEUrtVPZJhypx
-        bvu50xrUwnfIQNpvMZWr78X9ZU/ehX0=
-X-Google-Smtp-Source: AA6agR4hTX2FKtOUU9qMLkpuVYHtU3N3YoJFjdkyuHvvYrlgWecJoyMlHenkzTFbRxSnaYNXYypt8w==
-X-Received: by 2002:a17:907:9605:b0:6f5:c66:7c13 with SMTP id gb5-20020a170907960500b006f50c667c13mr21037817ejc.66.1660131620373;
-        Wed, 10 Aug 2022 04:40:20 -0700 (PDT)
-Received: from felia.fritz.box (200116b826708900bd59055014c64746.dip.versatel-1u1.de. [2001:16b8:2670:8900:bd59:550:14c6:4746])
-        by smtp.gmail.com with ESMTPSA id ec22-20020a170906b6d600b00730560156b0sm2213435ejb.50.2022.08.10.04.40.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 04:40:20 -0700 (PDT)
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-To:     ChenXiaoSong <chenxiaosong2@huawei.com>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>, linux-nfs@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Subject: [PATCH] NFS: clean up a needless assignment in nfs_file_write()
-Date:   Wed, 10 Aug 2022 13:40:01 +0200
-Message-Id: <20220810114001.13513-1-lukas.bulwahn@gmail.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 10 Aug 2022 08:06:47 -0400
+X-Greylist: delayed 376 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 10 Aug 2022 05:06:44 PDT
+Received: from proxmox-new.maurer-it.com (proxmox-new.maurer-it.com [94.136.29.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D508D13D59;
+        Wed, 10 Aug 2022 05:06:44 -0700 (PDT)
+Received: from proxmox-new.maurer-it.com (localhost.localdomain [127.0.0.1])
+        by proxmox-new.maurer-it.com (Proxmox) with ESMTP id 19E5A43DAD;
+        Wed, 10 Aug 2022 14:00:26 +0200 (CEST)
+Message-ID: <96e0749a-6036-c728-d224-b812caadcd1b@proxmox.com>
+Date:   Wed, 10 Aug 2022 14:00:23 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:104.0) Gecko/20100101
+ Thunderbird/104.0
+Subject: Re: [PATCH v3 00/13] SMM emulation and interrupt shadow fixes
+Content-Language: en-GB
+To:     Maxim Levitsky <mlevitsk@redhat.com>, kvm@vger.kernel.org
+Cc:     Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        linux-kernel@vger.kernel.org, Wanpeng Li <wanpengli@tencent.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Sean Christopherson <seanjc@google.com>, x86@kernel.org,
+        Jim Mattson <jmattson@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "H. Peter Anvin" <hpa@zytor.com>, Joerg Roedel <joro@8bytes.org>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+References: <20220803155011.43721-1-mlevitsk@redhat.com>
+From:   Thomas Lamprecht <t.lamprecht@proxmox.com>
+In-Reply-To: <20220803155011.43721-1-mlevitsk@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 064109db53ec ("NFS: remove redundant code in nfs_file_write()")
-identifies that filemap_fdatawait_range() will always return 0 and removes
-a dead error-handling case in nfs_file_write(). With this change however,
-assigning the return of filemap_fdatawait_range() to the result variable is
-a dead store.
+On 03/08/2022 17:49, Maxim Levitsky wrote:
+> This patch series is a result of long debug work to find out why
+> sometimes guests with win11 secure boot
+> were failing during boot.
+> 
+> During writing a unit test I found another bug, turns out
+> that on rsm emulation, if the rsm instruction was done in real
+> or 32 bit mode, KVM would truncate the restored RIP to 32 bit.
+> 
+> I also refactored the way we write SMRAM so it is easier
+> now to understand what is going on.
+> 
+> The main bug in this series which I fixed is that we
+> allowed #SMI to happen during the STI interrupt shadow,
+> and we did nothing to both reset it on #SMI handler
+> entry and restore it on RSM.
+> 
+> V3: addressed most of the review feedback from Sean (thanks!)
+> 
+> Best regards,
+> 	Maxim Levitsky
+> 
+> Maxim Levitsky (13):
+>   bug: introduce ASSERT_STRUCT_OFFSET
+>   KVM: x86: emulator: em_sysexit should update ctxt->mode
+>   KVM: x86: emulator: introduce emulator_recalc_and_set_mode
+>   KVM: x86: emulator: update the emulation mode after rsm
+>   KVM: x86: emulator: update the emulation mode after CR0 write
+>   KVM: x86: emulator/smm: number of GPRs in the SMRAM image depends on
+>     the image format
+>   KVM: x86: emulator/smm: add structs for KVM's smram layout
+>   KVM: x86: emulator/smm: use smram structs in the common code
+>   KVM: x86: emulator/smm: use smram struct for 32 bit smram load/restore
+>   KVM: x86: emulator/smm: use smram struct for 64 bit smram load/restore
+>   KVM: x86: SVM: use smram structs
+>   KVM: x86: SVM: don't save SVM state to SMRAM when VM is not long mode
+>     capable
+>   KVM: x86: emulator/smm: preserve interrupt shadow in SMRAM
+> 
+>  arch/x86/include/asm/kvm_host.h |  11 +-
+>  arch/x86/kvm/emulate.c          | 305 +++++++++++++++++---------------
+>  arch/x86/kvm/kvm_emulate.h      | 223 ++++++++++++++++++++++-
+>  arch/x86/kvm/svm/svm.c          |  30 ++--
+>  arch/x86/kvm/vmx/vmcs12.h       |   5 +-
+>  arch/x86/kvm/vmx/vmx.c          |   4 +-
+>  arch/x86/kvm/x86.c              | 175 +++++++++---------
+>  include/linux/build_bug.h       |   9 +
+>  8 files changed, 497 insertions(+), 265 deletions(-)
+> 
 
-Remove this needless assignment.
+FWIW, we tested the v2 on 5.19 and backported it to 5.15 with minimal adaption
+required (mostly unrelated context change) and now also updated that backport
+to the v3 of this patch series.
 
-No functional change. No change in object code.
+Our reproducer got fixed with either, but v3 now also avoids triggering logs like:
 
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
----
- fs/nfs/file.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ Jul 29 04:59:18 mits4 QEMU[2775]: kvm: Could not update PFLASH: Stale file handle
+ Jul 29 04:59:18 mits4 QEMU[2775]: kvm: Could not update PFLASH: Stale file handle
+ Jul 29 07:15:46 mits4 kernel: kvm: vcpu 1: requested 191999 ns lapic timer period limited to 200000 ns
+ Jul 29 11:06:31 mits4 kernel: kvm: vcpu 1: requested 105786 ns lapic timer period limited to 200000 ns
 
-diff --git a/fs/nfs/file.c b/fs/nfs/file.c
-index d2bcd4834c0e..f2ad9495ee4a 100644
---- a/fs/nfs/file.c
-+++ b/fs/nfs/file.c
-@@ -658,9 +658,9 @@ ssize_t nfs_file_write(struct kiocb *iocb, struct iov_iter *from)
- 			goto out;
- 	}
- 	if (mntflags & NFS_MOUNT_WRITE_WAIT) {
--		result = filemap_fdatawait_range(file->f_mapping,
--						 iocb->ki_pos - written,
--						 iocb->ki_pos - 1);
-+		filemap_fdatawait_range(file->f_mapping,
-+					iocb->ki_pos - written,
-+					iocb->ki_pos - 1);
- 	}
- 	result = generic_write_sync(iocb, written);
- 	if (result < 0)
--- 
-2.17.1
+which happened earlier (not sure how deep that correlates with the v2 vs. v3, but
+it stuck out, so mentioning for sake of completeness).
+
+For the backport to 5.15 we skipped "KVM: x86: emulator/smm: number of GPRs in
+the SMRAM image depends on the image format", as that constant was there yet and
+the actual values stayed the same for our case FWICT and adapted to slight context
+changes for the others.
+
+So, the approach seems to fix our issue and we are already rolling out a kernel
+to users for testing and got positive feedback there too.
+
+With above in mind:
+
+Tested-by: Thomas Lamprecht <t.lamprecht@proxmox.com>
+
+It would be also great to see this backported to still supported upstream stable kernels
+from 5.15 onwards, as there the TDP MMU got by default enabled, and that is at least
+increasing the chance of our reproducer to trigger dramatically.
+
+thx & cheers
+Thomas
 

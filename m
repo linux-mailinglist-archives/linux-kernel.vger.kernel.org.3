@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9771558F4B9
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 01:15:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D5C858F4BB
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 01:15:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233663AbiHJXPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 19:15:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38492 "EHLO
+        id S233670AbiHJXPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 19:15:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231424AbiHJXPA (ORCPT
+        with ESMTP id S233660AbiHJXPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 19:15:00 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 136427969E
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 16:14:59 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id o6-20020a17090ab88600b001f30b8c11c5so1820556pjr.2
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 16:14:59 -0700 (PDT)
+        Wed, 10 Aug 2022 19:15:03 -0400
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A837C18B
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 16:15:02 -0700 (PDT)
+Received: by mail-pj1-x104a.google.com with SMTP id nn4-20020a17090b38c400b001f4f88bcc0eso2433554pjb.1
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 16:15:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc;
-        bh=Zr/UchgjXaQRCvax9ebUMELOtk9TJjfU+PyC7ZvpbdY=;
-        b=ZU9JgHhBYxLYQg88eeROGn3iAG7F2SJ0MGJtVSYrGsYzqTMRzAuYm2qDOcM1ooWoiy
-         mYzx8yZ+J+aJoUqLVeBLSDNhwKY/hKEkqTiCTcOr87K5XYKUx00EyzM673WyiqujzP7e
-         olL02JmO5ZBGgET3QrTRBgEdDJlZQhP54YvEhP9C2dQAz+QjHEEzkirFQsEyWpOv/EF4
-         G4kBC5SPmrk5jsMX1nIS032a6gyoNPZMGvjnf4h8hw8UedyXgBmzsKjviWXrpfpkoY71
-         jbUNHeyfTuS4cS8D7bNtEbHP79c1444zBgvYiEwD1byaaoMnFZ7hYWBUhT6hJN3MoEsH
-         uA8w==
+        bh=GOce7Y6jdCY/zfkNNeO74zrYEvTJd53x8wkrPeEDjgU=;
+        b=ESsqWe3q8UeR7CxcjqoZATYdaP+BDRWBc4eIg8oOW2jltJ7lFVgCYASg5Xgtje53VN
+         DvVALBqdXWfXdNFYD0+7+VaPzxJjbBABh1JHvq5HYO7yAHAQusqnUlLTjasjKPmsuRvJ
+         eCighSfmzf/OPh4tmTfsixyppIzhMX0fQ0pBKDH2irzUdCzWS4c28SF2roUkSibwCrPy
+         lUUryf/wH04POtNjy54uxDvYDHR0KB3Ph190dCSMdLJ8GZ6AY13VTU0k/qLkZTjlX6Zt
+         1Xvm78AUqy1IqRVJkVMWn5pYC3MixJwdOyy2+mAhEfHZwyeOcFERDQMvru1vqi3cVq6e
+         me4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=Zr/UchgjXaQRCvax9ebUMELOtk9TJjfU+PyC7ZvpbdY=;
-        b=gTrYd+05tiZAQFkJmVePIofpMmyQ707FqAtpjaCavCI4oAc6e4iwxn7GKN7zbtMV5P
-         zDEQN67v9qHlgnmItzN7khi0cGbJD4Qiqu3FqIJ32CG4MMfKPe0cNiy5bzoMCtGDhbhP
-         RAduz0n0Z9N3YuqH0E21f1/5qIpPNNOL3AiVMNimP3iQKQY9QDCJ4gy+Fz0pj7xDK+ca
-         esLQshP//atscp1I0Ss9V7AUQa8VbabLHU7VR2Ps8vHPTuWOewrW01fBksalf5Y7W3Du
-         qKVg9IsJaHyadvkv5RRyfbWBAFc0bECzQ5ngJNaLB+0+OL++khHqhkAiUTKZtBTFU87a
-         TMmg==
-X-Gm-Message-State: ACgBeo2tsf6mD4d/v4TKk5WkKsuEbjQUJlmzz9wqOQeXoPVJF/i4BH1F
-        yWHwS1RyLswvvswCTtOMgr8B27+TXjVP2JXmZNE=
-X-Google-Smtp-Source: AA6agR4KHtxXUDPPXDyjCrJbRcOdxSKoQXTvCjqDztdp79bk2f+zMVtaHn1ptyH11eQs8W0rfiwtB0Yl7gZwLUfXl7E=
+        bh=GOce7Y6jdCY/zfkNNeO74zrYEvTJd53x8wkrPeEDjgU=;
+        b=pij+lYnOgpFmvOTJHNbNHG+KEJv5sAE3QmXFy5EM7DvnwrD0bQ5ztQkzTIWMM5h4tl
+         Gy6zElt49hMTl/unM1fHDnLvXxYEsqy9ah4+CUz4Ojn5Hdp6uCmTzP8noYU6Eb1wetRf
+         jC1Z0eZHk7CENbr61z+ZIXYxgTwUqyO1/Kjb3250cMkHyKZxXraBylfaoa3VYb2G+UgR
+         fVMK5/BNZbINUzv1MPuNbTtCwor933HYUtWckBo2IkJLQOJmKHHZmezaNFAhA2y2Fhkr
+         k7LC1vjnPAhQuLpKQz50Y5FA4sA7xK6Ce3YzUT+Cq8wXYGloXVpulvd4Nn2MaPHpJgeF
+         jm4A==
+X-Gm-Message-State: ACgBeo0zKLpBXDyY+3CtrTCEFZGpeNqCBVkX52Johvy4ntBFreg9R5QG
+        J1Yu+iBEcGY+YJhwjFuYPQds14REH2/OmrqV0LQ=
+X-Google-Smtp-Source: AA6agR6OHCmnn8tCZdB3wLnDYiSz4MjJQaPKAnZVBxL4jkwALTzbKb5l7EwTPFYBGXhMb4ufXWIlKKqjMss8REmZi3g=
 X-Received: from wmcvicker.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5ebe])
- (user=willmcvicker job=sendgmr) by 2002:a63:ea11:0:b0:41d:9296:21e6 with SMTP
- id c17-20020a63ea11000000b0041d929621e6mr11622524pgi.603.1660173298625; Wed,
- 10 Aug 2022 16:14:58 -0700 (PDT)
-Date:   Wed, 10 Aug 2022 23:14:43 +0000
+ (user=willmcvicker job=sendgmr) by 2002:a17:902:b484:b0:170:a2d8:80f6 with
+ SMTP id y4-20020a170902b48400b00170a2d880f6mr16898465plr.97.1660173302008;
+ Wed, 10 Aug 2022 16:15:02 -0700 (PDT)
+Date:   Wed, 10 Aug 2022 23:14:44 +0000
 In-Reply-To: <20220810231445.2242126-1-willmcvicker@google.com>
-Message-Id: <20220810231445.2242126-2-willmcvicker@google.com>
+Message-Id: <20220810231445.2242126-3-willmcvicker@google.com>
 Mime-Version: 1.0
 References: <20220810231445.2242126-1-willmcvicker@google.com>
 X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
-Subject: [PATCH v3 1/2] PCI: dwc: drop dependency on ZONE_DMA32
+Subject: [PATCH v3 2/2] PCI: dwc: add support for 64-bit MSI target address
 From:   Will McVicker <willmcvicker@google.com>
 To:     Jingoo Han <jingoohan1@gmail.com>,
         Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
@@ -63,7 +63,7 @@ To:     Jingoo Han <jingoohan1@gmail.com>,
         Will McVicker <willmcvicker@google.com>
 Cc:     kernel-team@android.com, Vidya Sagar <vidyas@nvidia.com>,
         linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Isaac J . Manjarres" <isaacmanjarres@google.com>
+        kernel test robot <lkp@intel.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_FROM,
@@ -75,90 +75,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Re-work the msi_msg DMA allocation logic to use dmam_alloc_coherent() which
-uses the coherent DMA mask to try and return an allocation within the DMA
-mask limits. With that, we can now drop the msi_page parameter in struct
-dw_pcie_rp. This allows kernel configurations that disable ZONE_DMA32 to
-continue supporting a 32-bit DMA mask. Without this patch, the PCIe host
-device will fail to probe when ZONE_DMA32 is disabled.
+Since not all devices require a 32-bit MSI address, add support to the
+PCIe host driver to allow setting the DMA mask to 64-bits. This allows
+kernels to disable ZONE_DMA32 and bounce buffering (swiotlb) without
+risking not being able to get a 32-bit address during DMA allocation.
+Basically, in the slim chance that there are no 32-bit allocations
+available, the current PCIe host driver will fail to allocate the
+msi_msg page due to a DMA address overflow (seen in [1]). With this
+patch, the PCIe driver can advertise 64-bit support via it's MSI
+capabilities to hint to the PCIe host driver to set the DMA mask to
+64-bits.
 
-Fixes: 35797e672ff0 ("PCI: dwc: Fix MSI msi_msg DMA mapping")
-Reported-by: Isaac J. Manjarres <isaacmanjarres@google.com>
+[1] https://lore.kernel.org/all/Yo0soniFborDl7+C@google.com/
+
+Reported-by: kernel test robot <lkp@intel.com>
 Signed-off-by: Will McVicker <willmcvicker@google.com>
+Reviewed-by: Rob Herring <robh@kernel.org>
 ---
- .../pci/controller/dwc/pcie-designware-host.c | 28 +++++--------------
- drivers/pci/controller/dwc/pcie-designware.h  |  1 -
- 2 files changed, 7 insertions(+), 22 deletions(-)
+ drivers/pci/controller/dwc/pcie-designware-host.c | 14 ++++++++++++--
+ drivers/pci/controller/dwc/pcie-designware.c      |  9 +++++++++
+ drivers/pci/controller/dwc/pcie-designware.h      |  1 +
+ 3 files changed, 22 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/pci/controller/dwc/pcie-designware-host.c b/drivers/pci/controller/dwc/pcie-designware-host.c
-index 7746f94a715f..39f3b37d4033 100644
+index 39f3b37d4033..18cf96f911dc 100644
 --- a/drivers/pci/controller/dwc/pcie-designware-host.c
 +++ b/drivers/pci/controller/dwc/pcie-designware-host.c
-@@ -267,15 +267,6 @@ static void dw_pcie_free_msi(struct dw_pcie_rp *pp)
- 
- 	irq_domain_remove(pp->msi_domain);
- 	irq_domain_remove(pp->irq_domain);
--
--	if (pp->msi_data) {
--		struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
--		struct device *dev = pci->dev;
--
--		dma_unmap_page(dev, pp->msi_data, PAGE_SIZE, DMA_FROM_DEVICE);
--		if (pp->msi_page)
--			__free_page(pp->msi_page);
--	}
- }
- 
- static void dw_pcie_msi_init(struct dw_pcie_rp *pp)
-@@ -336,6 +327,7 @@ static int dw_pcie_msi_host_init(struct dw_pcie_rp *pp)
- 	struct dw_pcie *pci = to_dw_pcie_from_pp(pp);
- 	struct device *dev = pci->dev;
- 	struct platform_device *pdev = to_platform_device(dev);
-+	u64 *msi_vaddr;
+@@ -330,6 +330,8 @@ static int dw_pcie_msi_host_init(struct dw_pcie_rp *pp)
+ 	u64 *msi_vaddr;
  	int ret;
  	u32 ctrl, num_ctrls;
++	bool msi_64b = false;
++	u16 msi_capabilities;
  
-@@ -375,22 +367,16 @@ static int dw_pcie_msi_host_init(struct dw_pcie_rp *pp)
+ 	for (ctrl = 0; ctrl < MAX_MSI_CTRLS; ctrl++)
+ 		pp->irq_mask[ctrl] = ~0;
+@@ -367,9 +369,17 @@ static int dw_pcie_msi_host_init(struct dw_pcie_rp *pp)
  						    dw_chained_msi_isr, pp);
  	}
  
--	ret = dma_set_mask(dev, DMA_BIT_MASK(32));
-+	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
+-	ret = dma_set_mask_and_coherent(dev, DMA_BIT_MASK(32));
++	msi_capabilities = dw_pcie_msi_capabilities(pci);
++	if (msi_capabilities & PCI_MSI_FLAGS_ENABLE)
++		msi_64b = msi_capabilities & PCI_MSI_FLAGS_64BIT ? true : false;
++
++	dev_dbg(dev, "Setting MSI DMA mask to %s-bit.\n",
++		msi_64b ? "64" : "32");
++	ret = dma_set_mask_and_coherent(dev, msi_64b ?
++					DMA_BIT_MASK(64) : DMA_BIT_MASK(32));
  	if (ret)
- 		dev_warn(dev, "Failed to set DMA mask to 32-bit. Devices with only 32-bit MSI support may not work properly\n");
+-		dev_warn(dev, "Failed to set DMA mask to 32-bit. Devices with only 32-bit MSI support may not work properly\n");
++		dev_warn(dev, "Failed to set DMA mask to %s-bit.\n",
++			 msi_64b ? "64" : "32");
  
--	pp->msi_page = alloc_page(GFP_DMA32);
--	pp->msi_data = dma_map_page(dev, pp->msi_page, 0,
--				    PAGE_SIZE, DMA_FROM_DEVICE);
--	ret = dma_mapping_error(dev, pp->msi_data);
--	if (ret) {
--		dev_err(pci->dev, "Failed to map MSI data\n");
--		__free_page(pp->msi_page);
--		pp->msi_page = NULL;
--		pp->msi_data = 0;
-+	msi_vaddr = dmam_alloc_coherent(dev, sizeof(u64), &pp->msi_data,
-+					GFP_KERNEL);
-+	if (!msi_vaddr) {
-+		dev_err(dev, "Failed to alloc and map MSI data\n");
- 		dw_pcie_free_msi(pp);
--
--		return ret;
-+		return -ENOMEM;
- 	}
+ 	msi_vaddr = dmam_alloc_coherent(dev, sizeof(u64), &pp->msi_data,
+ 					GFP_KERNEL);
+diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
+index c6725c519a47..8ed402307d7f 100644
+--- a/drivers/pci/controller/dwc/pcie-designware.c
++++ b/drivers/pci/controller/dwc/pcie-designware.c
+@@ -82,6 +82,15 @@ u8 dw_pcie_find_capability(struct dw_pcie *pci, u8 cap)
+ }
+ EXPORT_SYMBOL_GPL(dw_pcie_find_capability);
  
- 	return 0;
++u16 dw_pcie_msi_capabilities(struct dw_pcie *pci)
++{
++	u8 offset;
++
++	offset = dw_pcie_find_capability(pci, PCI_CAP_ID_MSI);
++	return dw_pcie_readw_dbi(pci, offset + PCI_MSI_FLAGS);
++}
++EXPORT_SYMBOL_GPL(dw_pcie_msi_capabilities);
++
+ static u16 dw_pcie_find_next_ext_capability(struct dw_pcie *pci, u16 start,
+ 					    u8 cap)
+ {
 diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
-index 09b887093a84..a871ae7eb59e 100644
+index a871ae7eb59e..45fcdfc8c035 100644
 --- a/drivers/pci/controller/dwc/pcie-designware.h
 +++ b/drivers/pci/controller/dwc/pcie-designware.h
-@@ -243,7 +243,6 @@ struct dw_pcie_rp {
- 	struct irq_domain	*irq_domain;
- 	struct irq_domain	*msi_domain;
- 	dma_addr_t		msi_data;
--	struct page		*msi_page;
- 	struct irq_chip		*msi_irq_chip;
- 	u32			num_vectors;
- 	u32			irq_mask[MAX_MSI_CTRLS];
+@@ -332,6 +332,7 @@ void dw_pcie_version_detect(struct dw_pcie *pci);
+ 
+ u8 dw_pcie_find_capability(struct dw_pcie *pci, u8 cap);
+ u16 dw_pcie_find_ext_capability(struct dw_pcie *pci, u8 cap);
++u16 dw_pcie_msi_capabilities(struct dw_pcie *pci);
+ 
+ int dw_pcie_read(void __iomem *addr, int size, u32 *val);
+ int dw_pcie_write(void __iomem *addr, int size, u32 val);
 -- 
 2.37.1.559.g78731f0fdb-goog
 

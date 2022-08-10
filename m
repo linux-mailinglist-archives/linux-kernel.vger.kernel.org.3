@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7898858E710
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 08:02:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D5FF58E711
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 08:02:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231304AbiHJGBm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 02:01:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60064 "EHLO
+        id S231314AbiHJGBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 02:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231196AbiHJGBE (ORCPT
+        with ESMTP id S231204AbiHJGBG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 02:01:04 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3F171EAE7
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 23:01:02 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id r4-20020a259a44000000b006775138624fso11424161ybo.23
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 23:01:02 -0700 (PDT)
+        Wed, 10 Aug 2022 02:01:06 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 847E315FE8
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 23:01:05 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-31f58599ad3so119784027b3.20
+        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 23:01:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc;
-        bh=zsc6LReCkj1qjWFHoe9RU5QlsrwqzoWhqcv1gy5ixZY=;
-        b=qAChj47DwLOrFVomS2lGpLSpKGvd1Ma7wbTL3BaBnyvNDdaT6wQcELiK3Z2S6rKmW6
-         4RCg3rt6j2rD/dXyIpiJAt0rXCb4GtTf9uNP6hZi708k7YPc7ZxFVW1djWMkZKngZUyC
-         9ZOMJL5O3k7bMThCT+oPldcDnUF4i0ommrfHppvhsYUq/eEQsh/fyoQBlUi7r5vctc/F
-         9u/dHFrzIRRFZvBW99iEWRVEUfrxv+VRxXw6eyDf8bHeE9dwuyd1QG8zMM9IyxoXCqpp
-         yxsC7TNyQiZWMwjfcKw173fewjgqVWZOvnFwQB5H8vymYFjevDNXEPOljd/VGIQLMaOQ
-         7eew==
+        bh=fFDScMpOoLwobJ0B+gx6h8x63gnncNppR9XtZLm6ulE=;
+        b=oKH1GriWJVrABfs62WEip/+gg6Dy4kEs7RfdBPtZv1dDVp8IM8ot+pJYb0FYC/j+dW
+         Jmct5LS3sgXZwdmnm2b/XxlhH1LoIyQ0qPOCXNhwwxH+wse2QMfHhqHGs/zhkg4RSn4D
+         g1/uaVkRiojaOGGVwYog0xljtT9cpl4VQHiuhxaZrs5KGEF9koqVuHd1InJ75qg7O6Yo
+         UzvrcZg7E0hHEIPRlyq+1T8XU9GcavBPIWNzQ8biwtu3oLc/cA4w7xVUya1qG9ZCvGlY
+         c3HHAhKT9W4/Jp/npKG8Ei+2a9D86hwmHHvF5aX70NJY8d3uWZXJnFQQeGMksKOP8dTI
+         m+RA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=zsc6LReCkj1qjWFHoe9RU5QlsrwqzoWhqcv1gy5ixZY=;
-        b=JVbyc1g3oXTqFIH5OMwGSmMNQ56LhuGGlydab1Pv+b6dzA5wgHZGQDglixSWHfwOo3
-         bV/mEuSv8hsPJ31VfiUsA7TwyTsNhUNWs/3nYjANTppn3WW+xR6HEYjiL3Jmss3jL1mw
-         VeRIMN9USzX+LJFeIrreXrqF5Q0w7/gJmrqhM9lRzFRGtpxldsMhgSTiJH9BkPKElKvX
-         4SmePXnV6ozA6B5eBhbC8w83bWdzyGegli1UJVEUmkyY9KKB+Tbgnta/VmK8We8JiFa6
-         /W+/gSs3ZPjI/PpgzXbUOqr2JMu6AZLvNq5j+7vsTXVTNrGMXRAOZqc8x/mwSJpHvD4M
-         opsA==
-X-Gm-Message-State: ACgBeo0AI3UeBu6xP/yHohvSmdYc89HNBCgmDymDUYnzlK52gR7sghfA
-        2P8rFfGBrw9jUODtQhaCQw8aEQwuYHXMHKQ=
-X-Google-Smtp-Source: AA6agR7UHIfPmQyEJpTq1ANtIM/YpnjUfuF4LCqgIoVdmjpw9+J9eqTmKa2fu2A5mGFX/RbYZr7v9jvnFZ4Lhg0=
+        bh=fFDScMpOoLwobJ0B+gx6h8x63gnncNppR9XtZLm6ulE=;
+        b=lsa84hdBDPQc6NCQ+NEOKNaPVHj1dzpcm185tRb2VXx3cOYmfuOEs5sgD1EcuZe4S6
+         pA8OW+wHj/PorWF3T+vpCmagwRGiTPfUio4T+YOV5cQhyzr+ccu/baF9V/yqhltTV/OA
+         VdjgT7/nb230lTxDL2FpEcjZ5a20WGfn/mLt8ye/HU9IstaM4U8mfw7nnwQaTLjhHfPk
+         EM2Zqo1MEg4Acf2NqbtH8t5r9a9tfi+Y/L/1iU91FBSoV5DxM7EE2QZ/Gmm1frvMUU4Z
+         KfKsbEJ6FfjuLAYy9Ve1vnB/FJr6cquFaW2yPvW+Uf6rqXBiZCEoEnyTkexn+XjO/i+z
+         lOPA==
+X-Gm-Message-State: ACgBeo2JGcBiIuJgoKPBVecftugUid+S08Wt+1GFjJyeKy5R4SMbfwxf
+        3HBr3np2ZIUyCm1yAaSRp/n66+SkLUZg420=
+X-Google-Smtp-Source: AA6agR7Ig43NfwU15CHf57OeGOFh7gsI84hi8fC26IKcScIBv/6FfxWUkEv3BAnHx8V4jzQ/X/BwXiqy9EgrIBc=
 X-Received: from saravanak.san.corp.google.com ([2620:15c:2d:3:f21:76ca:766f:e0ab])
- (user=saravanak job=sendgmr) by 2002:a05:6902:100d:b0:67a:7141:a2bf with SMTP
- id w13-20020a056902100d00b0067a7141a2bfmr23586344ybt.54.1660111261905; Tue,
- 09 Aug 2022 23:01:01 -0700 (PDT)
-Date:   Tue,  9 Aug 2022 23:00:34 -0700
+ (user=saravanak job=sendgmr) by 2002:a25:fc0f:0:b0:67b:b846:4db2 with SMTP id
+ v15-20020a25fc0f000000b0067bb8464db2mr15311111ybd.566.1660111265238; Tue, 09
+ Aug 2022 23:01:05 -0700 (PDT)
+Date:   Tue,  9 Aug 2022 23:00:35 -0700
 In-Reply-To: <20220810060040.321697-1-saravanak@google.com>
-Message-Id: <20220810060040.321697-6-saravanak@google.com>
+Message-Id: <20220810060040.321697-7-saravanak@google.com>
 Mime-Version: 1.0
 References: <20220810060040.321697-1-saravanak@google.com>
 X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
-Subject: [PATCH v1 5/9] driver core: fw_devlink: Add DL_FLAG_CYCLE support to
- device links
+Subject: [PATCH v1 6/9] driver core: fw_devlink: Allow marking a fwnode link
+ as being part of a cycle
 From:   Saravana Kannan <saravanak@google.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -84,154 +84,137 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fw_devlink uses DL_FLAG_SYNC_STATE_ONLY device link flag for two
-purposes:
-
-1. To allow a parent device to proxy its child device's dependency on a
-   supplier so that the supplier doesn't get its sync_state() callback
-   before the child device/consumer can be added and probed. In this
-   usage scenario, we need to ignore cycles for ensure correctness of
-   sync_state() callbacks.
-
-2. When there are dependency cycles in firmware, we don't know which of
-   those dependencies are valid. So, we have to ignore them all wrt
-   probe ordering while still making sure the sync_state() callbacks
-   come correctly.
-
-However, when detecting dependency cycles, there can be multiple
-dependency cycles between two devices that we need to detect. For
-example:
-
-A -> B -> A and A -> C -> B -> A.
-
-To detect multiple cycles correct, we need to be able to differentiate
-DL_FLAG_SYNC_STATE_ONLY device links used for (1) vs (2) above.
-
-To allow this differentiation, add a DL_FLAG_CYCLE that can be use to
-mark use case (2). We can then use the DL_FLAG_CYCLE to decide which
-DL_FLAG_SYNC_STATE_ONLY device links to follow when looking for
-dependency cycles.
+To improve detection and handling of dependency cycles, we need to be
+able to mark fwnode links as being part of cycles. fwnode links marked
+as being part of a cycle should not block their consumers from probing.
 
 Signed-off-by: Saravana Kannan <saravanak@google.com>
 ---
- drivers/base/core.c    | 28 ++++++++++++++++++----------
- include/linux/device.h |  1 +
- 2 files changed, 19 insertions(+), 10 deletions(-)
+ drivers/base/core.c    | 41 +++++++++++++++++++++++++++++++++++------
+ include/linux/fwnode.h | 11 ++++++++++-
+ 2 files changed, 45 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/base/core.c b/drivers/base/core.c
-index 8ec2236b1f9c..afa660d14172 100644
+index afa660d14172..0ec2c4d5ffaa 100644
 --- a/drivers/base/core.c
 +++ b/drivers/base/core.c
-@@ -321,6 +321,12 @@ static bool device_is_ancestor(struct device *dev, struct device *target)
- 	return false;
+@@ -125,6 +125,19 @@ static void __fwnode_link_del(struct fwnode_link *link)
+ 	kfree(link);
  }
  
-+static inline bool device_link_flag_is_sync_state_only(u32 flags)
++/**
++ * __fwnode_link_cycle - Mark a fwnode link as being part of a cycle.
++ * @link: the fwnode_link to be marked
++ *
++ * The fwnode_link_lock needs to be held when this function is called.
++ */
++static void __fwnode_link_cycle(struct fwnode_link *link)
 +{
-+	return (flags & ~(DL_FLAG_INFERRED | DL_FLAG_CYCLE))
-+		== (DL_FLAG_SYNC_STATE_ONLY | DL_FLAG_MANAGED);
++	pr_debug("%pfwf: Relaxing link with %pfwf\n",
++		 link->consumer, link->supplier);
++	link->flags |= FWLINK_FLAG_CYCLE;
 +}
 +
  /**
-  * device_is_dependent - Check if one device depends on another one
-  * @dev: Device to check dependencies for.
-@@ -347,8 +353,7 @@ int device_is_dependent(struct device *dev, void *target)
- 		return ret;
+  * fwnode_links_purge_suppliers - Delete all supplier links of fwnode_handle.
+  * @fwnode: fwnode whose supplier links need to be deleted
+@@ -1040,6 +1053,23 @@ static bool dev_is_best_effort(struct device *dev)
+ 		(dev->fwnode && (dev->fwnode->flags & FWNODE_FLAG_BEST_EFFORT));
+ }
  
- 	list_for_each_entry(link, &dev->links.consumers, s_node) {
--		if ((link->flags & ~DL_FLAG_INFERRED) ==
--		    (DL_FLAG_SYNC_STATE_ONLY | DL_FLAG_MANAGED))
-+		if (device_link_flag_is_sync_state_only(link->flags))
- 			continue;
- 
- 		if (link->consumer == target)
-@@ -421,8 +426,7 @@ static int device_reorder_to_tail(struct device *dev, void *not_used)
- 
- 	device_for_each_child(dev, NULL, device_reorder_to_tail);
- 	list_for_each_entry(link, &dev->links.consumers, s_node) {
--		if ((link->flags & ~DL_FLAG_INFERRED) ==
--		    (DL_FLAG_SYNC_STATE_ONLY | DL_FLAG_MANAGED))
-+		if (device_link_flag_is_sync_state_only(link->flags))
- 			continue;
- 		device_reorder_to_tail(link->consumer, NULL);
- 	}
-@@ -683,7 +687,8 @@ postcore_initcall(devlink_class_init);
- 			       DL_FLAG_AUTOREMOVE_SUPPLIER | \
- 			       DL_FLAG_AUTOPROBE_CONSUMER  | \
- 			       DL_FLAG_SYNC_STATE_ONLY | \
--			       DL_FLAG_INFERRED)
-+			       DL_FLAG_INFERRED | \
-+			       DL_FLAG_CYCLE)
- 
- #define DL_ADD_VALID_FLAGS (DL_MANAGED_LINK_FLAGS | DL_FLAG_STATELESS | \
- 			    DL_FLAG_PM_RUNTIME | DL_FLAG_RPM_ACTIVE)
-@@ -752,8 +757,6 @@ struct device_link *device_link_add(struct device *consumer,
- 	if (!consumer || !supplier || consumer == supplier ||
- 	    flags & ~DL_ADD_VALID_FLAGS ||
- 	    (flags & DL_FLAG_STATELESS && flags & DL_MANAGED_LINK_FLAGS) ||
--	    (flags & DL_FLAG_SYNC_STATE_ONLY &&
--	     (flags & ~DL_FLAG_INFERRED) != DL_FLAG_SYNC_STATE_ONLY) ||
- 	    (flags & DL_FLAG_AUTOPROBE_CONSUMER &&
- 	     flags & (DL_FLAG_AUTOREMOVE_CONSUMER |
- 		      DL_FLAG_AUTOREMOVE_SUPPLIER)))
-@@ -769,6 +772,10 @@ struct device_link *device_link_add(struct device *consumer,
- 	if (!(flags & DL_FLAG_STATELESS))
- 		flags |= DL_FLAG_MANAGED;
- 
-+	if (flags & DL_FLAG_SYNC_STATE_ONLY &&
-+	    !device_link_flag_is_sync_state_only(flags))
++static struct fwnode_handle *fwnode_links_check_suppliers(
++						struct fwnode_handle *fwnode)
++{
++	struct fwnode_link *link;
++
++	if (!fwnode || fw_devlink_is_permissive())
 +		return NULL;
 +
- 	device_links_write_lock();
- 	device_pm_lock();
++	list_for_each_entry(link, &fwnode->suppliers, c_hook) {
++		if (link->flags & FWLINK_FLAG_CYCLE)
++			continue;
++		return link->supplier;
++	}
++
++	return NULL;
++}
++
+ /**
+  * device_links_check_suppliers - Check presence of supplier drivers.
+  * @dev: Consumer device.
+@@ -1067,11 +1097,8 @@ int device_links_check_suppliers(struct device *dev)
+ 	 * probe.
+ 	 */
+ 	mutex_lock(&fwnode_link_lock);
+-	if (dev->fwnode && !list_empty(&dev->fwnode->suppliers) &&
+-	    !fw_devlink_is_permissive()) {
+-		sup_fw = list_first_entry(&dev->fwnode->suppliers,
+-					  struct fwnode_link,
+-					  c_hook)->supplier;
++	sup_fw = fwnode_links_check_suppliers(dev->fwnode);
++	if (sup_fw) {
+ 		if (!dev_is_best_effort(dev)) {
+ 			fwnode_ret = -EPROBE_DEFER;
+ 			dev_err_probe(dev, -EPROBE_DEFER,
+@@ -1260,7 +1287,9 @@ static ssize_t waiting_for_supplier_show(struct device *dev,
+ 	bool val;
  
-@@ -1728,7 +1735,7 @@ static void fw_devlink_relax_link(struct device_link *link)
- 	if (!(link->flags & DL_FLAG_INFERRED))
- 		return;
- 
--	if (link->flags == (DL_FLAG_MANAGED | FW_DEVLINK_FLAGS_PERMISSIVE))
-+	if (device_link_flag_is_sync_state_only(link->flags))
- 		return;
- 
- 	pm_runtime_drop_link(link);
-@@ -1852,8 +1859,8 @@ static int fw_devlink_relax_cycle(struct device *con, void *sup)
- 		return ret;
- 
- 	list_for_each_entry(link, &con->links.consumers, s_node) {
--		if ((link->flags & ~DL_FLAG_INFERRED) ==
--		    (DL_FLAG_SYNC_STATE_ONLY | DL_FLAG_MANAGED))
-+		if (!(link->flags & DL_FLAG_CYCLE) &&
-+		    device_link_flag_is_sync_state_only(link->flags))
- 			continue;
- 
- 		if (!fw_devlink_relax_cycle(link->consumer, sup))
-@@ -1862,6 +1869,7 @@ static int fw_devlink_relax_cycle(struct device *con, void *sup)
- 		ret = 1;
- 
- 		fw_devlink_relax_link(link);
-+		link->flags |= DL_FLAG_CYCLE;
- 	}
- 	return ret;
+ 	device_lock(dev);
+-	val = !list_empty(&dev->fwnode->suppliers);
++	mutex_lock(&fwnode_link_lock);
++	val = !!fwnode_links_check_suppliers(dev->fwnode);
++	mutex_unlock(&fwnode_link_lock);
+ 	device_unlock(dev);
+ 	return sysfs_emit(buf, "%u\n", val);
  }
-diff --git a/include/linux/device.h b/include/linux/device.h
-index 424b55df0272..7cf24330d681 100644
---- a/include/linux/device.h
-+++ b/include/linux/device.h
-@@ -327,6 +327,7 @@ enum device_link_state {
- #define DL_FLAG_MANAGED			BIT(6)
- #define DL_FLAG_SYNC_STATE_ONLY		BIT(7)
- #define DL_FLAG_INFERRED		BIT(8)
-+#define DL_FLAG_CYCLE			BIT(9)
+diff --git a/include/linux/fwnode.h b/include/linux/fwnode.h
+index 89b9bdfca925..fdf2ee0285b7 100644
+--- a/include/linux/fwnode.h
++++ b/include/linux/fwnode.h
+@@ -18,7 +18,7 @@ struct fwnode_operations;
+ struct device;
+ 
+ /*
+- * fwnode link flags
++ * fwnode flags
+  *
+  * LINKS_ADDED:	The fwnode has already be parsed to add fwnode links.
+  * NOT_DEVICE:	The fwnode will never be populated as a struct device.
+@@ -36,6 +36,7 @@ struct device;
+ #define FWNODE_FLAG_INITIALIZED			BIT(2)
+ #define FWNODE_FLAG_NEEDS_CHILD_BOUND_ON_ADD	BIT(3)
+ #define FWNODE_FLAG_BEST_EFFORT			BIT(4)
++#define FWNODE_FLAG_VISITED			BIT(5)
+ 
+ struct fwnode_handle {
+ 	struct fwnode_handle *secondary;
+@@ -46,11 +47,19 @@ struct fwnode_handle {
+ 	u8 flags;
+ };
+ 
++/*
++ * fwnode link flags
++ *
++ * CYCLE:	The fwnode link is part of a cycle. Don't defer probe.
++ */
++#define FWLINK_FLAG_CYCLE			BIT(0)
++
+ struct fwnode_link {
+ 	struct fwnode_handle *supplier;
+ 	struct list_head s_hook;
+ 	struct fwnode_handle *consumer;
+ 	struct list_head c_hook;
++	u8 flags;
+ };
  
  /**
-  * enum dl_dev_state - Device driver presence tracking information.
 -- 
 2.37.1.559.g78731f0fdb-goog
 

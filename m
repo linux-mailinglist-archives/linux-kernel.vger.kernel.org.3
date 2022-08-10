@@ -2,173 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7612D58E6B6
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 07:22:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 377B158E6BF
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 07:27:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230446AbiHJFWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 01:22:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35032 "EHLO
+        id S231142AbiHJF1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 01:27:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230165AbiHJFWI (ORCPT
+        with ESMTP id S230375AbiHJF1L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 01:22:08 -0400
-Received: from mail-vs1-xe2a.google.com (mail-vs1-xe2a.google.com [IPv6:2607:f8b0:4864:20::e2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B082564D2;
-        Tue,  9 Aug 2022 22:22:07 -0700 (PDT)
-Received: by mail-vs1-xe2a.google.com with SMTP id 129so14047878vsq.8;
-        Tue, 09 Aug 2022 22:22:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=oSJ3PBj2dSpaR7fCdE7LTCOdjNsBWGTVYv5P7MiZ/Uo=;
-        b=q6N/lXJlPPq67/vmqmv7eUxMwDBlgmJ0clVG6xrfSqdE8UTuiMDEf6qn7zaikrA1A2
-         5lGTPOyR9/gIyw24KeSYOaTbU5rzCefzE7M+AjGcwijuCMckHVvmhhcAtseDVTgQ0v8x
-         IXIRnUzKKoDQen1FKXkWSVm+nS+0OQiVjtuSfzCzTqPbC8qrOs9+6WLEEa4j4NtDEGg2
-         LcCEdVm3/zjuRwygldiJtxUZrGvl2GUlSZlT13Rg7czPz0U+1TlNPLimYAZ+9mS2InFn
-         fY0nN9k5KXhO7fhMv+DkJJhZINo645Q7+NYjvqG4s1RbObcIquswgs+Fx2gRU28Y9NQv
-         gLoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=oSJ3PBj2dSpaR7fCdE7LTCOdjNsBWGTVYv5P7MiZ/Uo=;
-        b=mS+DIoirrNTZskqZz2B9fL5GkxmS2WEB5H0zTlVv0Z389KbDWfmx04TjwNEcbL/bsE
-         1KpB8kBi2+sQ5YUfXVnOo+6QS1vHMzJ0HsitP6EQQYi6j0d/Wegy89z+ZxEKgubtb0zj
-         VdXS/E8vklQ3oFFQ96wx0+rxMsXY64hTBOuqBhOYtI41NyT1R0friBcbBx2WMR5Ey9OA
-         Qjyxx73E65ghFtGOWy8+GfakqVS6emwufmCIfWSSjrztXTrgw0q0F89wSqr0NJvuTTzu
-         3X7UBO+fmHqmpcFCTN5DUvorx3PqyEgrMesPUIosk+qMF8hKgMCA9hkqRrsoqITOsyXL
-         zZcQ==
-X-Gm-Message-State: ACgBeo2Wtgel7UQNtlZtJTA1pfsJbDpZQ2REoBJ+h5s8Cn6p3Gf92Xz8
-        x24OmNeuUxgAVCcOwuTfPCMztBgHJS0z57bW7CQ=
-X-Google-Smtp-Source: AA6agR7Po/CU+pNnTYM3xUdj9rMd8Os9SsP3EV8ROX/RmUzooaXh1HD+5PighqocONKi7tNfMJeBU+Wtrjm24ZTXWp0=
-X-Received: by 2002:a05:6102:3ecd:b0:358:57a1:d8a with SMTP id
- n13-20020a0561023ecd00b0035857a10d8amr10842757vsv.2.1660108926141; Tue, 09
- Aug 2022 22:22:06 -0700 (PDT)
+        Wed, 10 Aug 2022 01:27:11 -0400
+Received: from qproxy3-pub.mail.unifiedlayer.com (qproxy3-pub.mail.unifiedlayer.com [67.222.38.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1787A504
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 22:27:08 -0700 (PDT)
+Received: from gproxy1-pub.mail.unifiedlayer.com (gproxy1-pub.mail.unifiedlayer.com [69.89.25.95])
+        by qproxy3.mail.unifiedlayer.com (Postfix) with ESMTP id A743D8032D1B
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 05:26:56 +0000 (UTC)
+Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
+        by progateway3.mail.pro1.eigbox.com (Postfix) with ESMTP id 2090C10048173
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 05:26:29 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id LeEeo3sccWBOVLeEeof5Gg; Wed, 10 Aug 2022 05:26:29 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=cpReL30i c=1 sm=1 tr=0 ts=62f34185
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=biHskzXt2R4A:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=d9BAYtztiwhbRRZdhnnKwe4+DEmEOoBZIyTo1YGKWzE=; b=oDnXelhDZ+p/2slAmNdL9mCKun
+        OMMRi+w7+AdyR6lMkf3DL0YA5d3Zl9FSG45nhrOYNLiQ/gIUbLrRx6/4WoTrq7JqXvXbk1Awo4pA5
+        gsaH4dvJtJ6odIlAX1GfS6p2on/cfLm7x2/Cdysj9qq3TWlz8AVZiZOIJGGFIMEAWDGntcx2nsjYC
+        VwbtNhUnuY/E+oQIPFv3Fq14jkczA9/lwEt/uONyPejaRJFSdUP5w//4AQ0HHTCjLYm2tB95p673G
+        jjhuxR6mm/lIkl0G/7XgM+LrumTgNFbJkgSvfn58GPmv8zx8ie534VO6Sbk3jKsX1fAjH5MA5e2+d
+        Xat2zYTQ==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:39062 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1oLeEc-000sxp-Tm;
+        Tue, 09 Aug 2022 23:26:26 -0600
+Subject: Re: [PATCH 5.19 00/21] 5.19.1-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     stable@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, slade@sladewatkins.com
+References: <20220809175513.345597655@linuxfoundation.org>
+In-Reply-To: <20220809175513.345597655@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <743851e1-1e9b-b213-f986-df8e5e5f0778@w6rz.net>
+Date:   Tue, 9 Aug 2022 22:26:24 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <cover.1659996830.git.rgb@redhat.com>
-In-Reply-To: <cover.1659996830.git.rgb@redhat.com>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Wed, 10 Aug 2022 07:21:54 +0200
-Message-ID: <CAOQ4uxiATP24r_0=2Y474FUPjSSg6TTv+txiXOouYE4+EYfNTA@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] fanotify: Allow user space to pass back additional
- audit info
-To:     Richard Guy Briggs <rgb@redhat.com>
-Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Paul Moore <paul@paul-moore.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Steve Grubb <sgrubb@redhat.com>, Jan Kara <jack@suse.cz>,
-        Linux API <linux-api@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1oLeEc-000sxp-Tm
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:39062
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 2
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+linux-api]
-
-On Tue, Aug 9, 2022 at 7:23 PM Richard Guy Briggs <rgb@redhat.com> wrote:
+On 8/9/22 11:00 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.19.1 release.
+> There are 21 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> The Fanotify API can be used for access control by requesting permission
-> event notification. The user space tooling that uses it may have a
-> complicated policy that inherently contains additional context for the
-> decision. If this information were available in the audit trail, policy
-> writers can close the loop on debugging policy. Also, if this additional
-> information were available, it would enable the creation of tools that
-> can suggest changes to the policy similar to how audit2allow can help
-> refine labeled security.
+> Responses should be made by Thu, 11 Aug 2022 17:55:02 +0000.
+> Anything received after that time might be too late.
 >
-> This patchset defines a new flag (FAN_INFO) and new extensions that
-> define additional information which are appended after the response
-> structure returned from user space on a permission event.  The appended
-> information is organized with headers containing a type and size that
-> can be delegated to interested subsystems.  One new information type is
-> defined for audit rule number.
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.1-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
+> and the diffstat can be found below.
 >
-> A newer kernel will work with an older userspace and an older kernel
-> will behave as expected and reject a newer userspace, leaving it up to
-> the newer userspace to test appropriately and adapt as necessary.
-
-Since you did not accept my suggestion of FAN_TEST response code [1],
-I am not really sure how you envision that "adapt as necessary" part.
-
-A well designed UAPI should allow newer userspace to check for kernel
-support of FAN_INFO on initialization.
-
-For example, without this property of UAPI, it is going to be hard to write an
-LTP test for the new functionality that does not run on older kernels.
-
-As far as I can tell, your proposed UAPI does not provide this functionality.
-It allows newer userspace to check for support of FAN_INFO only as a
-response to a permission event.
-
-You never replied to my question to explain why you think FAN_TEST
-complicated things. The only purpose of FAN_TEST is for userspace
-to be able to test FAN_INFO kernel support without providing a valid fd.
-
-[1] https://lore.kernel.org/linux-fsdevel/CAOQ4uxi+8HUqyGxQBNMqSong92nreOWLKdy9MCrYg8wgW9Dj4g@mail.gmail.com/
-
+> thanks,
 >
-> The audit function was updated to log the additional information in the
-> AUDIT_FANOTIFY record. The following is an example of the new record
-> format:
->
-> type=FANOTIFY msg=audit(1600385147.372:590): resp=2 fan_type=1 fan_info=3F
->
-> changelog:
-> v1:
-> - first version by Steve Grubb <sgrubb@redhat.com>
-> Link: https://lore.kernel.org/r/2042449.irdbgypaU6@x2
->
-> v2:
-> - enhancements suggested by Jan Kara <jack@suse.cz>
-> - 1/3 change %d to %u in pr_debug
-> - 2/3 change response from __u32 to __u16
-> - mod struct fanotify_response and fanotify_perm_event add extra_info_type, extra_info_buf
-> - extra_info_buf size max FANOTIFY_MAX_RESPONSE_EXTRA_LEN, add struct fanotify_response_audit_rule
-> - extend debug statements
-> - remove unneeded macros
-> - [internal] change interface to finish_permission_event() and process_access_response()
-> - 3/3 update format of extra information
-> - [internal] change interface to audit_fanotify()
-> - change ctx_type= to fan_type=
-> Link: https://lore.kernel.org/r/cover.1651174324.git.rgb@redhat.com
->
-> v3:
-> - 1/3 switch {,__}audit_fanotify() from uint to u32
-> - 2/3 re-add fanotify_get_response switch case FAN_DENY: to avoid unnecessary churn
-> - add FAN_EXTRA flag to indicate more info and break with old kernel
-> - change response from u16 to u32 to avoid endian issues
-> - change extra_info_buf to union
-> - move low-cost fd check earlier
-> - change FAN_RESPONSE_INFO_AUDIT_NONE to FAN_RESPONSE_INFO_NONE
-> - switch to u32 for internal and __u32 for uapi
-> Link: https://lore.kernel.org/r/cover.1652724390.git.rgb@redhat.com
+> greg k-h
 
-Link seems broken?
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
->
-> v4:
-> - scrap FAN_INVALID_RESPONSE_MASK in favour of original to catch invalid response == 0
-> - introduce FANOTIFY_RESPONSE_* macros
-> - uapi: remove union
-> - keep original struct fanotify_response, add fan_info infra starting with audit reason
-> - uapi add struct fanotify_response_info_header{type/pad/len} and struct fanotify_response_info_audit_rule{hdr/rule}
-> - rename fan_ctx= to fan_info=, FAN_EXTRA to FAN_INFO
-> - change event struct from type/buf to len/buf
-> - enable multiple info extensions in one message
-> - hex encode fan_info in __audit_fanotify()
-> - record type FANOTIFY extended to "type=FANOTIFY msg=audit(1659730979.839:284): resp=1 fan_type=0 fan_info=3F"
-> Link: https://lore.kernel.org/r/cover.1659981772.git.rgb@redhat.com
+Tested-by: Ron Economos <re@w6rz.net>
 
-Link seems broken?
-
-Thanks,
-Amir.

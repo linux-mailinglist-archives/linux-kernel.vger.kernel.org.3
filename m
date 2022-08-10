@@ -2,81 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BF5558F4CF
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 01:19:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5813E58F4D3
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 01:26:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233714AbiHJXTV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 19:19:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44234 "EHLO
+        id S233718AbiHJX00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 19:26:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233687AbiHJXTT (ORCPT
+        with ESMTP id S233626AbiHJX0Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 19:19:19 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1607B797;
-        Wed, 10 Aug 2022 16:19:18 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id g15so6945569iob.0;
-        Wed, 10 Aug 2022 16:19:18 -0700 (PDT)
+        Wed, 10 Aug 2022 19:26:24 -0400
+Received: from mail-il1-x144.google.com (mail-il1-x144.google.com [IPv6:2607:f8b0:4864:20::144])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 917CE7B7AC;
+        Wed, 10 Aug 2022 16:26:23 -0700 (PDT)
+Received: by mail-il1-x144.google.com with SMTP id x2so3015806ilp.10;
+        Wed, 10 Aug 2022 16:26:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=l5p5bclQFAlMwZmWlO8t1SaK7xuragzMNLu8+SffqhU=;
-        b=iXu8D1jJDH9R43xBAlDVHcczSFbbeceeaMs+vdM3ROkUuHlsfkvvIZAcW19okAr2K3
-         xE3/M2JLwF8VAZLWtwXzUXB12t8mT9Z/vayYB6PlkW6M1Y3xLyjL1PraTGc1n78Wigci
-         F9flaSw6/OnQjmgwMncTHnWBIqYq2Xi0Ow6NEmAtEF5j5FHI4L8GnZzkyZT0bz7RNUOH
-         LHhD/uRzrsEUGx0X4W2xZZYn5MFuBjuc2z+/KA0qJkwp4NZwNtzZbblg07DPdyIKTXX0
-         9UjqS+uM5iR9Yb0Phc/Voha3j60LENKZ03eavcdc9bZ30bEEtdHnLv3vCUeCrATxQMVO
-         8tVg==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=ZWG0Pplx8o3vWqJcu5N5Rp9ELa1xjLQiL3hpegwnr1I=;
+        b=H2OYenAG2+KJR3IyeJVLiRVGw9bcGJwfpolvXYZXJVHmXcjEBatHuOKq46aCoAQNLv
+         GyP42AURQfkEOuhsZeo4Joq1d+b9WidU1HzjaLpStNuQzGRWG/vXTwsdrFFcJTLHdySU
+         TkD+qB5DxMzkT6Xp5ePoKL1AyOIRCRnJXCHPaoMpOtRzvlKTxiXS3FVJrs+GH9z2/nKo
+         H5jU2L90uinfUEuADoseVVsvmpOJtmOEEWYahi/m9sjlelrlUImJTkbt++8kdKPoIY1A
+         Qf4FTlds9zArEOGH4F/dGVpYvrHF1xS/B1+BfFtSNjTX6vHUASRInLqtKrIrPfCD+pel
+         q6XQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=l5p5bclQFAlMwZmWlO8t1SaK7xuragzMNLu8+SffqhU=;
-        b=MRcEAKvtYrZ+To9yN+UXjHzhzaPWBNmcSxvzBYZc+FDyFQKRZGKGHk/dcz/XwJHNIV
-         Q4eWCvtYDpo2C1qBBC+8sQODGhAP8G+TVaNsRovgoAEpyynGn/jkoWdZ7WieBm/5rrl5
-         kBnlNcvvbHWnZ4wSeQDHIcX4F3YHY2rtLiY/mTcXlwxpwi/vYZYPVXuFyuzSSyhQFWwM
-         b14rJShz5evjGlQFE69re8lzqDL3LwiGEdkdxP5gJpllXg+D7J3GtDV3W2YPIErmIRw4
-         cPZregXkBZ/Hq1rq0I7N5rDk2kJLA+i1IsF/SgbubOCMEMwxVyWAxTZQgcGMtgvBuNJz
-         hptg==
-X-Gm-Message-State: ACgBeo11gS86ncBqkQD68zCPxTvD2VhP3JSvG0fj8QvNPEu6PtGTdTI8
-        jxWUABgT8rSGY0l3+uaNEXVMsul3IrTJHnYH8bp1E+W4
-X-Google-Smtp-Source: AA6agR7JzmvJ4XVRV58axL/tiNu8bHxsGLOSNYpNcG405gbAjtRKdBV0w34FaH4DoBiVQ9D2yCc0XM3fNmlllCh51DY=
-X-Received: by 2002:a05:6638:1353:b0:342:9bfb:7382 with SMTP id
- u19-20020a056638135300b003429bfb7382mr13826837jad.129.1660173557556; Wed, 10
- Aug 2022 16:19:17 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=ZWG0Pplx8o3vWqJcu5N5Rp9ELa1xjLQiL3hpegwnr1I=;
+        b=iSVW/YlmEFUxwe6oFWcxNe6JIOQK4wZQIZSXi8ijmeGUsa+UPpaBBSxHsZxThbB8q+
+         3hgGwF88QeCkApPzq6/G1Uccto6D3y2B5WEqiMuASShIzB79SMlBqwSRnr03NXCcSrlz
+         j5JrdShsaRXPncDEVVFm2NFqj4QTRypspgqVLuv5sRocHqyY9JKNFnhbe5odUfCejXnF
+         VwkLxoPHp6N6eA3LFiWgXwEm+hUe509V6etKU47+RjZIExv5dzI9S88bZcf1fY2m5QwC
+         niUWxsfBABz4VXL0b9vMd8qwRcUfMRyMiogJfC+N/LWwuBwhd4wddWR8BahWI5kNCmDe
+         W2iQ==
+X-Gm-Message-State: ACgBeo3XA6Fppa61vbgqrnm0oJr+bg5bdulHCaqdclvX3QnJ8GZ5cayl
+        NAiVeocKY1lRPHT79zcCrUHRJ1QMPHN8NItaCsJpBGpN
+X-Google-Smtp-Source: AA6agR6CxGmAs2M5Lq1KuJdo6O8i149G0FC0fNmGz0gS3OiWDA9ijhUpfFMuNKKdT72bCKe5Grdo9VG7eLB5GEqCukU=
+X-Received: by 2002:a05:6e02:218c:b0:2e0:c966:a39d with SMTP id
+ j12-20020a056e02218c00b002e0c966a39dmr9536232ila.216.1660173982972; Wed, 10
+ Aug 2022 16:26:22 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220701090240.1896131-1-dmitry.osipenko@collabora.com>
- <20220701090240.1896131-3-dmitry.osipenko@collabora.com> <2bb95e80-b60a-36c0-76c8-a06833032c77@amd.com>
- <CAF6AEGtqPeF1DjmBKgzWK39Yi81YiNjTjDNn85TKx7uwicFTSA@mail.gmail.com>
- <2a646ce4-c2ec-3b11-77a0-cc720afd6fe1@collabora.com> <YvOav/vF2awVWIu0@phenom.ffwll.local>
- <CAF6AEGvfAJgwBe4+sK0gAkZ++MwH9x4=698C8XSnmfYNMFZqfA@mail.gmail.com>
- <9674d00e-c0d6-ceba-feab-5dc475bda694@collabora.com> <CAF6AEGv1cVC9ZNMwpwFOki5CrwD3kSAHM9EUFZGWY-y5zcQsCg@mail.gmail.com>
- <fc019528-7ec7-9e5b-1b6d-c44da14346cf@collabora.com>
-In-Reply-To: <fc019528-7ec7-9e5b-1b6d-c44da14346cf@collabora.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Wed, 10 Aug 2022 16:19:05 -0700
-Message-ID: <CAF6AEGv8zSd0fEYB9hd2QOyTt53gFSQoL8JdZtCvtCdYfMfB2Q@mail.gmail.com>
-Subject: Re: [PATCH v8 2/2] drm/gem: Don't map imported GEMs
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>
-Cc:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Emil Velikov <emil.l.velikov@gmail.com>,
-        =?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas_os@shipmail.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        "open list:VIRTIO GPU DRIVER" 
-        <virtualization@lists.linux-foundation.org>,
-        linux-tegra@vger.kernel.org, Dmitry Osipenko <digetx@gmail.com>,
-        kernel@collabora.com, Daniel Vetter <daniel@ffwll.ch>
+References: <cover.1660173222.git.dxu@dxuuu.xyz> <d82d4a001572e2f29cc0537563c3ef74b1351480.1660173222.git.dxu@dxuuu.xyz>
+In-Reply-To: <d82d4a001572e2f29cc0537563c3ef74b1351480.1660173222.git.dxu@dxuuu.xyz>
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date:   Thu, 11 Aug 2022 01:25:46 +0200
+Message-ID: <CAP01T76R=rCL7YEeMyDfM_HLvfNDY=Khh0FPToB08x4cD6LZhw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 1/3] selftests/bpf: Add existing connection
+ bpf_*_ct_lookup() test
+To:     Daniel Xu <dxu@dxuuu.xyz>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -87,158 +67,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 10, 2022 at 3:23 PM Dmitry Osipenko
-<dmitry.osipenko@collabora.com> wrote:
+On Thu, 11 Aug 2022 at 01:16, Daniel Xu <dxu@dxuuu.xyz> wrote:
 >
-> On 8/11/22 01:03, Rob Clark wrote:
-> > On Wed, Aug 10, 2022 at 12:26 PM Dmitry Osipenko
-> > <dmitry.osipenko@collabora.com> wrote:
-> >>
-> >> On 8/10/22 18:08, Rob Clark wrote:
-> >>> On Wed, Aug 10, 2022 at 4:47 AM Daniel Vetter <daniel@ffwll.ch> wrote=
-:
-> >>>>
-> >>>> On Wed, Jul 06, 2022 at 10:02:07AM +0300, Dmitry Osipenko wrote:
-> >>>>> On 7/6/22 00:48, Rob Clark wrote:
-> >>>>>> On Tue, Jul 5, 2022 at 4:51 AM Christian K=C3=B6nig <christian.koe=
-nig@amd.com> wrote:
-> >>>>>>>
-> >>>>>>> Am 01.07.22 um 11:02 schrieb Dmitry Osipenko:
-> >>>>>>>> Drivers that use drm_gem_mmap() and drm_gem_mmap_obj() helpers d=
-on't
-> >>>>>>>> handle imported dma-bufs properly, which results in mapping of s=
-omething
-> >>>>>>>> else than the imported dma-buf. On NVIDIA Tegra we get a hard lo=
-ckup when
-> >>>>>>>> userspace writes to the memory mapping of a dma-buf that was imp=
-orted into
-> >>>>>>>> Tegra's DRM GEM.
-> >>>>>>>>
-> >>>>>>>> Majority of DRM drivers prohibit mapping of the imported GEM obj=
-ects.
-> >>>>>>>> Mapping of imported GEMs require special care from userspace sin=
-ce it
-> >>>>>>>> should sync dma-buf because mapping coherency of the exporter de=
-vice may
-> >>>>>>>> not match the DRM device. Let's prohibit the mapping for all DRM=
- drivers
-> >>>>>>>> for consistency.
-> >>>>>>>>
-> >>>>>>>> Suggested-by: Thomas Hellstr=C3=B6m <thomas.hellstrom@linux.inte=
-l.com>
-> >>>>>>>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
-> >>>>>>>
-> >>>>>>> I'm pretty sure that this is the right approach, but it's certain=
-ly more
-> >>>>>>> than possible that somebody abused this already.
-> >>>>>>
-> >>>>>> I suspect that this is abused if you run deqp cts on android.. ie.=
- all
-> >>>>>> winsys buffers are dma-buf imports from gralloc.  And then when yo=
-u
-> >>>>>> hit readpix...
-> >>>>>>
-> >>>>>> You might only hit this in scenarios with separate gpu and display=
- (or
-> >>>>>> dGPU+iGPU) because self-imports are handled differently in
-> >>>>>> drm_gem_prime_import_dev().. and maybe not in cases where you end =
-up
-> >>>>>> with a blit from tiled/compressed to linear.. maybe that narrows t=
-he
-> >>>>>> scope enough to just fix it in userspace?
-> >>>>>
-> >>>>> Given that that only drivers which use DRM-SHMEM potentially could'=
-ve
-> >>>>> map imported dma-bufs (Panfrost, Lima) and they already don't allow=
- to
-> >>>>> do that, I think we're good.
-> >>>>
-> >>>> So can I have an ack from Rob here or are there still questions that=
- this
-> >>>> might go boom?
-> >>>>
-> >>>> Dmitry, since you have a bunch of patches merged now I think would a=
-lso be
-> >>>> good to get commit rights so you can drive this more yourself. I've =
-asked
-> >>>> Daniel Stone to help you out with getting that.
-> >>>
-> >>> I *think* we'd be ok with this on msm, mostly just by dumb luck.
-> >>> Because the dma-buf's we import will be self-import.  I'm less sure
-> >>> about panfrost (src/panfrost/lib/pan_bo.c doesn't seem to have a
-> >>> special path for imported dma-bufs either, and in that case they won'=
-t
-> >>> be self-imports.. but I guess no one has tried to run android cts on
-> >>> panfrost).
-> >>
-> >> The last time I tried to mmap dma-buf imported to Panfrost didn't work
-> >> because Panfrost didn't implement something needed for that. I'll need
-> >> to take a look again because can't recall what it was.
-> >>
-> >>> What about something less drastic to start, like (apologies for
-> >>> hand-edited patch):
-> >>>
-> >>> diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
-> >>> index 86d670c71286..fc9ec42fa0ab 100644
-> >>> --- a/drivers/gpu/drm/drm_gem.c
-> >>> +++ b/drivers/gpu/drm/drm_gem.c
-> >>> @@ -1034,6 +1034,10 @@ int drm_gem_mmap_obj(struct drm_gem_object
-> >>> *obj, unsigned long obj_size,
-> >>>  {
-> >>>         int ret;
-> >>>
-> >>> +       WARN_ON_ONCE(obj->import_attach);
-> >>
-> >> This will hang NVIDIA Tegra, which is what this patch fixed initially.
-> >> If neither of upstream DRM drivers need to map imported dma-bufs and
-> >> never needed, then why do we need this?
-> >
-> > oh, tegra isn't using shmem helpers?  I assumed it was.  Well my point
-> > was to make a more targeted fail on tegra, and a WARN_ON for everyone
-> > else to make it clear that what they are doing is undefined behavior.
-> > Because so far existing userspace (or well, panfrost and freedreno at
-> > least, those are the two I know or checked) don't make special cases
-> > for mmap'ing against the dmabuf fd against the dmabuf fd instead of
-> > the drm device fd.
+> Add a test where we do a conntrack lookup on an existing connection.
+> This is nice because it's a more realistic test than artifically
+> creating a ct entry and looking it up afterwards.
 >
-> It's not clear to me what bad Android does form yours comments. Does it
-> export dma-buf from GPU and then import it to GPU? If yes, then DRM core
-> has a check for the self-importing [1].
+> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> ---
+>  .../testing/selftests/bpf/prog_tests/bpf_nf.c | 59 +++++++++++++++++++
+>  .../testing/selftests/bpf/progs/test_bpf_nf.c | 18 ++++++
+>  2 files changed, 77 insertions(+)
 >
-> [1]
-> https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/drm_prime.=
-c#L918
+> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
+> index 7a74a1579076..317978cac029 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
+> @@ -24,10 +24,34 @@ enum {
+>         TEST_TC_BPF,
+>  };
 >
-> If you're meaning something else, then please explain in a more details.
+> +#define TIMEOUT_MS 3000
+> +
+> +static int connect_to_server(int srv_fd)
+> +{
+> +       int fd = -1;
+> +
+> +       fd = socket(AF_INET, SOCK_STREAM, 0);
+> +       if (!ASSERT_GE(fd, 0, "socket"))
+> +               goto out;
+> +
+> +       if (CHECK_FAIL(connect_fd_to_fd(fd, srv_fd, TIMEOUT_MS))) {
 
-So, android/gralloc allocates buffers externally to the driver and
-imports them into driver.  (And that seems to not just be window
-surfaces, but in cases random textures, etc)
+CHECK_FAIL is deprecated, please consider using ASSERT_*. Sorry for
+not catching this before your respin...
 
-In the normal case these should be allocated from drm/msm so it should
-hit [1].. this is the "dumb luck" I mentioned earlier.  But I'm not
-confident enough to say that there is no other case.
-
+> +               close(fd);
+> +               fd = -1;
+> +       }
+> +out:
+> +       return fd;
+> +}
+> +
+>  static void test_bpf_nf_ct(int mode)
+>  {
+> +       const char *iptables = "iptables -t raw %s PREROUTING -j CT";
+> +       int srv_fd = -1, client_fd = -1, srv_client_fd = -1;
+> +       struct sockaddr_in peer_addr = {};
+>         struct test_bpf_nf *skel;
+>         int prog_fd, err;
+> +       socklen_t len;
+> +       u16 srv_port;
+> +       char cmd[64];
+>         LIBBPF_OPTS(bpf_test_run_opts, topts,
+>                 .data_in = &pkt_v4,
+>                 .data_size_in = sizeof(pkt_v4),
+> @@ -38,6 +62,32 @@ static void test_bpf_nf_ct(int mode)
+>         if (!ASSERT_OK_PTR(skel, "test_bpf_nf__open_and_load"))
+>                 return;
 >
-> > I *think* it should work out that we don't hit this path with
-> > freedreno but on android I can't really guarantee or prove it.  So
-> > your patch would potentially break existing working userspace.  Maybe
-> > it is userspace that isn't portable (but OTOH it isn't like you are
-> > going to be using freedreno on tegra).  So why don't you go for a more
-> > targeted fix that only returns an error on hw where this is
-> > problematic?
+> +       /* Enable connection tracking */
+> +       snprintf(cmd, sizeof(cmd), iptables, "-A");
+> +       if (!ASSERT_OK(system(cmd), "iptables"))
+> +               goto end;
+> +
+> +       srv_port = (mode == TEST_XDP) ? 5005 : 5006;
+> +       srv_fd = start_server(AF_INET, SOCK_STREAM, "127.0.0.1", srv_port, TIMEOUT_MS);
+> +       if (!ASSERT_GE(srv_fd, 0, "start_server"))
+> +               goto end;
+> +
+> +       client_fd = connect_to_server(srv_fd);
+> +       if (!ASSERT_GE(client_fd, 0, "connect_to_server"))
+> +               goto end;
+> +
+> +       len = sizeof(peer_addr);
+> +       srv_client_fd = accept(srv_fd, (struct sockaddr *)&peer_addr, &len);
+> +       if (!ASSERT_GE(srv_client_fd, 0, "accept"))
+> +               goto end;
+> +       if (!ASSERT_EQ(len, sizeof(struct sockaddr_in), "sockaddr len"))
+> +               goto end;
+> +
+> +       skel->bss->saddr = peer_addr.sin_addr.s_addr;
+> +       skel->bss->sport = peer_addr.sin_port;
+> +       skel->bss->daddr = peer_addr.sin_addr.s_addr;
+> +       skel->bss->dport = htons(srv_port);
+> +
+>         if (mode == TEST_XDP)
+>                 prog_fd = bpf_program__fd(skel->progs.nf_xdp_ct_test);
+>         else
+> @@ -63,7 +113,16 @@ static void test_bpf_nf_ct(int mode)
+>         ASSERT_LE(skel->bss->test_delta_timeout, 10, "Test for max ct timeout update");
+>         /* expected status is IPS_SEEN_REPLY */
+>         ASSERT_EQ(skel->bss->test_status, 2, "Test for ct status update ");
+> +       ASSERT_EQ(skel->data->test_exist_lookup, 0, "Test existing connection lookup");
+>  end:
+> +       if (srv_client_fd != -1)
+> +               close(srv_client_fd);
+> +       if (client_fd != -1)
+> +               close(client_fd);
+> +       if (srv_fd != -1)
+> +               close(srv_fd);
+> +       snprintf(cmd, sizeof(cmd), iptables, "-D");
+> +       system(cmd);
+>         test_bpf_nf__destroy(skel);
+>  }
 >
-> That's what the first versions of the patch did and Christian suggested
-> that it's not a good approach. In fact it should be not only Tegra that
-> has a broken dma-buf mapping, but apparently OMAP driver too.
-
-Hmm, I guess I'm a bit more conservative when it comes to potentially
-breaking userspace.
-
-BR,
--R
-
+> diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> index 196cd8dfe42a..84e0fd479794 100644
+> --- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> +++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+> @@ -23,6 +23,11 @@ int test_insert_entry = -EAFNOSUPPORT;
+>  int test_succ_lookup = -ENOENT;
+>  u32 test_delta_timeout = 0;
+>  u32 test_status = 0;
+> +__be32 saddr = 0;
+> +__be16 sport = 0;
+> +__be32 daddr = 0;
+> +__be16 dport = 0;
+> +int test_exist_lookup = -ENOENT;
 >
+>  struct nf_conn;
+>
+> @@ -160,6 +165,19 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
+>                 }
+>                 test_alloc_entry = 0;
+>         }
+> +
+> +       bpf_tuple.ipv4.saddr = saddr;
+> +       bpf_tuple.ipv4.daddr = daddr;
+> +       bpf_tuple.ipv4.sport = sport;
+> +       bpf_tuple.ipv4.dport = dport;
+> +       ct = lookup_fn(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,
+> +                      sizeof(opts_def));
+> +       if (ct) {
+> +               test_exist_lookup = 0;
+> +               bpf_ct_release(ct);
+> +       } else {
+> +               test_exist_lookup = opts_def.error;
+> +       }
+>  }
+>
+>  SEC("xdp")
 > --
-> Best regards,
-> Dmitry
+> 2.37.1
+>

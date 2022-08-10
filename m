@@ -2,88 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77D1658F2FA
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 21:21:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 72BC158F2FC
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 21:26:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232784AbiHJTVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 15:21:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53170 "EHLO
+        id S231300AbiHJT0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 15:26:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233139AbiHJTV3 (ORCPT
+        with ESMTP id S229868AbiHJT0N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 15:21:29 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 86A295E326
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 12:21:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660159286;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=IKtPa1b3cUCAoD5B4a66OaPs8cv/e+sQ8MAuok0BMJk=;
-        b=NBcniuvUQDISALSFPDZJ0+OsvgM+cDo6BH5JNyAbCBF0huiteZZzkcBLs24TXeOJQnWO3N
-        GUZ2dnliRK6V9UKYyIrp7XqJ27d4XRiSGhOW5bIeoeBqytjDwxbYhUcji7qbuIzY7VuMvX
-        tmZgpN5/cgi63Qx/bcC2ewsSswzO+4w=
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
- [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-49-S_z1xAFjM2G2TgDyTpXayg-1; Wed, 10 Aug 2022 15:21:23 -0400
-X-MC-Unique: S_z1xAFjM2G2TgDyTpXayg-1
-Received: by mail-io1-f69.google.com with SMTP id u5-20020a6b4905000000b00681e48dbd92so8623469iob.21
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 12:21:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=IKtPa1b3cUCAoD5B4a66OaPs8cv/e+sQ8MAuok0BMJk=;
-        b=XizOq90Y3vIV4yxq+IdZ+vu2MAfe0c63kloIlV0J25MZEeD/njy60bNjNnI1ZRJzQx
-         LvfN9qM+/C8Hl2wx2YLiGrAz1wa7PS3DaJPKWEry0aQcBVRN+3kfAJOmnDSHfIq+h4B/
-         6YyiEnAe19VYTGC0CGDOIVyl41wckQaqPjI55NIyl6dMfNxsJYKgfpE38AuvQ+CGgjEe
-         zQ4FAFPtxLndYG9UbGzbxVX5oFSWccpgLDB7MGjh7UCjd7+Nyaqtx5OYvm5o/zm/bwaK
-         4y6WgGQEkYiGWtA7CSDp5/KbUpi8a8h1PyGWrdqlrgcgq+8PLAoUBKwfSScJqy45xahM
-         i/sQ==
-X-Gm-Message-State: ACgBeo2BY9Lz4akzb9RfyQ38tCe5lsgzwpmm4u3nxjsZMbrKh5Nswrnj
-        /j4BsbRj4S9uaSFmWzzP7Twtv2lWFg2A5tpBTT83e4lsB2/fD8Y1a5rdPR3fICkFXD/eVEbeltU
-        50AO6CdnA9zWzOUpOvI06LKxd
-X-Received: by 2002:a05:6638:24d1:b0:343:25c0:a2d with SMTP id y17-20020a05663824d100b0034325c00a2dmr5549457jat.76.1660159282508;
-        Wed, 10 Aug 2022 12:21:22 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4Zr+K6kcQFSlk0EDzaIxLZX04rwSbXbxvY4k9mieXk0+MMJr5Dg2hqHkj3y5+L+2pU6lMo7Q==
-X-Received: by 2002:a05:6638:24d1:b0:343:25c0:a2d with SMTP id y17-20020a05663824d100b0034325c00a2dmr5549442jat.76.1660159282311;
-        Wed, 10 Aug 2022 12:21:22 -0700 (PDT)
-Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
-        by smtp.gmail.com with ESMTPSA id bo20-20020a056638439400b00339ef592279sm7636398jab.127.2022.08.10.12.21.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 12:21:21 -0700 (PDT)
-Date:   Wed, 10 Aug 2022 15:21:20 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Hugh Dickins <hughd@google.com>,
-        Andi Kleen <andi.kleen@intel.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Christoph Hellwig <hch@lst.de>,
-        Alistair Popple <apopple@nvidia.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>
-Subject: Re: [PATCH v2 2/2] mm: Remember young/dirty bit for page migrations
-Message-ID: <YvQFMMKxO2SD0T1T@xz-m1.local>
-References: <20220804203952.53665-1-peterx@redhat.com>
- <20220804203952.53665-3-peterx@redhat.com>
- <877d3hhksz.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <YvKglA2LQkYeznZ9@xz-m1.local>
- <87wnbggbqa.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        Wed, 10 Aug 2022 15:26:13 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 821406A492;
+        Wed, 10 Aug 2022 12:26:12 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27AJ2fAF009454;
+        Wed, 10 Aug 2022 19:26:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=QRXN9BzYWPSLiDAJmspLQn15ZiL/h1lw0lJm6a2Ic+k=;
+ b=ERUIjktCk84jkrZl2shBhuM9Oywox/7ILjzB8kjtsFVPjRZzGxu//TZHV12rI7/CtS4s
+ 7q2Uus3SHSyz64msFB26dm02N1d13b104z8RhkHYOLVxgU5VrRCFu2eehTtfHE+2tKig
+ T6zh4mvXKZVmH5FOrsRThuy1QdKldpTp27KZQZo1Zvn7ilfbooojpIh+ZJF95R0Kyi6L
+ VWBEldKWseDZHWsHzUnm0SCyDNLh2ZOT0cvb/uO9xnnv8bEwhbRbWrgCmiFuHrUI/PW7
+ ZL/7B26KY7OgUY7L/TM0uerS5gmtgfOw4QD8YjNHI8+RIc6R0ZUAY3IgK2mavr8jv2Yk zg== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3huwr23pur-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Aug 2022 19:26:04 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.47.97.222])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27AJQ2Vh019356
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Aug 2022 19:26:03 GMT
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 10 Aug 2022 12:26:02 -0700
+Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 10 Aug 2022 12:26:01 -0700
+From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
+To:     <robdclark@gmail.com>, <sean@poorly.run>, <swboyd@chromium.org>,
+        <dianders@chromium.org>, <vkoul@kernel.org>, <daniel@ffwll.ch>,
+        <airlied@linux.ie>, <agross@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <bjorn.andersson@linaro.org>
+CC:     <quic_abhinavk@quicinc.com>, <quic_aravindh@quicinc.com>,
+        <quic_khsieh@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <freedreno@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v3] drm/msm/dp: check hpd_state before push idle pattern at dp_bridge_disable()
+Date:   Wed, 10 Aug 2022 12:25:51 -0700
+Message-ID: <1660159551-13828-1-git-send-email-quic_khsieh@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <87wnbggbqa.fsf@yhuang6-desk2.ccr.corp.intel.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: QJccwxpnxr0NLiT3POONYcw1jbSwkiXS
+X-Proofpoint-ORIG-GUID: QJccwxpnxr0NLiT3POONYcw1jbSwkiXS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-10_12,2022-08-10_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ mlxscore=0 adultscore=0 mlxlogscore=897 spamscore=0 lowpriorityscore=0
+ impostorscore=0 phishscore=0 clxscore=1015 priorityscore=1501
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208100059
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,51 +83,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 10, 2022 at 08:53:49AM +0800, Huang, Ying wrote:
-> Peter Xu <peterx@redhat.com> writes:
-> 
-> > On Tue, Aug 09, 2022 at 04:40:12PM +0800, Huang, Ying wrote:
-> [snip]
-> >
-> >> I don't find pte_dirty() is synced to PageDirty() as in
-> >> try_to_migrate_one().  Is it a issue in the original code?
-> >
-> > I think it has?  There is:
-> >
-> > 		/* Set the dirty flag on the folio now the pte is gone. */
-> > 		if (pte_dirty(pteval))
-> > 			folio_mark_dirty(folio);
-> >
-> 
-> Sorry, my original words are confusing.  Yes, there's dirty bit syncing
-> in try_to_migrate_one().  But I don't find that in migrate_device.c
-> 
->  $ grep dirty mm/migrate_device.c
-> 				if (pte_soft_dirty(pte))
-> 					swp_pte = pte_swp_mksoft_dirty(swp_pte);
-> 				if (pte_swp_soft_dirty(pte))
-> 					swp_pte = pte_swp_mksoft_dirty(swp_pte);
-> 			entry = pte_mkwrite(pte_mkdirty(entry));
-> 
-> I guess that migrate_device.c is used to migrate between CPU visible
-> page to CPU un-visible page (device visible), so the rule is different?
+dp_bridge_disable() is the first step toward tearing down main link.
+Its major function is to start transmitting idle pattern to replace
+video stream. This patch will check hpd_state to make sure main link
+is enabled before commit changes of main link's configuration to
+push idle pattern out to avoid system crashing due to main link clock
+is disabled while access main link registers.
 
-IIUC migrate_vma_collect() handles migrations for both directions (RAM <->
-device mem).
+SError Interrupt on CPU7, code 0x00000000be000411 -- SError
+CPU: 7 PID: 3878 Comm: Xorg Not tainted 5.19.0-stb-cbq #19
+Hardware name: Google Lazor (rev3 - 8) (DT)
+pstate: a04000c9 (NzCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __cmpxchg_case_acq_32+0x14/0x2c
+lr : do_raw_spin_lock+0xa4/0xdc
+sp : ffffffc01092b6a0
+x29: ffffffc01092b6a0 x28: 0000000000000028 x27: 0000000000000038
+x26: 0000000000000004 x25: ffffffd2973dce48 x24: 0000000000000000
+x23: 00000000ffffffff x22: 00000000ffffffff x21: ffffffd2978d0008
+x20: ffffffd2978d0008 x19: ffffff80ff759fc0 x18: 0000000000000000
+x17: 004800a501260460 x16: 0441043b04600438 x15: 04380000089807d0
+x14: 07b0089807800780 x13: 0000000000000000 x12: 0000000000000000
+x11: 0000000000000438 x10: 00000000000007d0 x9 : ffffffd2973e09e4
+x8 : ffffff8092d53300 x7 : ffffff808902e8b8 x6 : 0000000000000001
+x5 : ffffff808902e880 x4 : 0000000000000000 x3 : ffffff80ff759fc0
+x2 : 0000000000000001 x1 : 0000000000000000 x0 : ffffff80ff759fc0
+Kernel panic - not syncing: Asynchronous SError Interrupt
+CPU: 7 PID: 3878 Comm: Xorg Not tainted 5.19.0-stb-cbq #19
+Hardware name: Google Lazor (rev3 - 8) (DT)
+Call trace:
+ dump_backtrace.part.0+0xbc/0xe4
+ show_stack+0x24/0x70
+ dump_stack_lvl+0x68/0x84
+ dump_stack+0x18/0x34
+ panic+0x14c/0x32c
+ nmi_panic+0x58/0x7c
+ arm64_serror_panic+0x78/0x84
+ do_serror+0x40/0x64
+ el1h_64_error_handler+0x30/0x48
+ el1h_64_error+0x68/0x6c
+ __cmpxchg_case_acq_32+0x14/0x2c
+ _raw_spin_lock_irqsave+0x38/0x4c
+ lock_timer_base+0x40/0x78
+ __mod_timer+0xf4/0x25c
+ schedule_timeout+0xd4/0xfc
+ __wait_for_common+0xac/0x140
+ wait_for_completion_timeout+0x2c/0x54
+ dp_ctrl_push_idle+0x40/0x88
+ dp_bridge_disable+0x24/0x30
+ drm_atomic_bridge_chain_disable+0x90/0xbc
+ drm_atomic_helper_commit_modeset_disables+0x198/0x444
+ msm_atomic_commit_tail+0x1d0/0x374
+ commit_tail+0x80/0x108
+ drm_atomic_helper_commit+0x118/0x11c
+ drm_atomic_commit+0xb4/0xe0
+ drm_client_modeset_commit_atomic+0x184/0x224
+ drm_client_modeset_commit_locked+0x58/0x160
+ drm_client_modeset_commit+0x3c/0x64
+ __drm_fb_helper_restore_fbdev_mode_unlocked+0x98/0xac
+ drm_fb_helper_set_par+0x74/0x80
+ drm_fb_helper_hotplug_event+0xdc/0xe0
+ __drm_fb_helper_restore_fbdev_mode_unlocked+0x7c/0xac
+ drm_fb_helper_restore_fbdev_mode_unlocked+0x20/0x2c
+ drm_fb_helper_lastclose+0x20/0x2c
+ drm_lastclose+0x44/0x6c
+ drm_release+0x88/0xd4
+ __fput+0x104/0x220
+ ____fput+0x1c/0x28
+ task_work_run+0x8c/0x100
+ do_exit+0x450/0x8d0
+ do_group_exit+0x40/0xac
+ __wake_up_parent+0x0/0x38
+ invoke_syscall+0x84/0x11c
+ el0_svc_common.constprop.0+0xb8/0xe4
+ do_el0_svc+0x8c/0xb8
+ el0_svc+0x2c/0x54
+ el0t_64_sync_handler+0x120/0x1c0
+ el0t_64_sync+0x190/0x194
+SMP: stopping secondary CPUs
+Kernel Offset: 0x128e800000 from 0xffffffc008000000
+PHYS_OFFSET: 0x80000000
+CPU features: 0x800,00c2a015,19801c82
+Memory Limit: none
 
-Yeah, indeed I also didn't see how migrate_vma_collect_pmd() handles the
-carry-over of pte dirty to page dirty, which looks a bit odd.  I also don't
-see why the dirty bit doesn't need to be maintained, e.g. when a previous
-page was dirty then after migration of ram->dev->ram it seems to be clean
-with current code.
+Changes in v3:
+-- correct Reported-by
+-- add call stack trace
 
-Another scenario is, even if the page was clean, as long as page migrated
-to device mem, device DMAed to the page, then page migrated back to RAM.  I
-also didn't see how we could detect the DMAs and set pte/page dirty
-properly after migrated back.
+Changes in v2:
+-- changes Fixes patch
+-- fix eported-by
+-- add Closes tag
 
-Copy Alistair and Jason..
+Fixes: 375a126090b9 ("drm/msm/dp: tear down main link at unplug handle immediately")
+Reported-by: Leonard Lausen <leonard@lausen.nl>
+Closes: https://gitlab.freedesktop.org/drm/msm/-/issues/17
+Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+---
+ drivers/gpu/drm/msm/dp/dp_display.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
+diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+index b36f8b6..678289a 100644
+--- a/drivers/gpu/drm/msm/dp/dp_display.c
++++ b/drivers/gpu/drm/msm/dp/dp_display.c
+@@ -1729,10 +1729,20 @@ void dp_bridge_disable(struct drm_bridge *drm_bridge)
+ 	struct msm_dp_bridge *dp_bridge = to_dp_bridge(drm_bridge);
+ 	struct msm_dp *dp = dp_bridge->dp_display;
+ 	struct dp_display_private *dp_display;
++	u32 state;
+ 
+ 	dp_display = container_of(dp, struct dp_display_private, dp_display);
+ 
++	mutex_lock(&dp_display->event_mutex);
++
++	state = dp_display->hpd_state;
++	if (state != ST_DISCONNECT_PENDING && state != ST_CONNECTED) {
++		mutex_unlock(&dp_display->event_mutex);
++		return;
++	}
++
+ 	dp_ctrl_push_idle(dp_display->ctrl);
++	mutex_unlock(&dp_display->event_mutex);
+ }
+ 
+ void dp_bridge_post_disable(struct drm_bridge *drm_bridge)
 -- 
-Peter Xu
+The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
+a Linux Foundation Collaborative Project
 

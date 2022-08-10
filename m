@@ -2,70 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC09C58E473
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 03:21:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 974FF58E433
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 02:46:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbiHJBVE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 21:21:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44848 "EHLO
+        id S229723AbiHJAqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 20:46:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbiHJBU5 (ORCPT
+        with ESMTP id S229513AbiHJAqE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 21:20:57 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E7E1147C;
-        Tue,  9 Aug 2022 18:20:56 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id q19so12343559pfg.8;
-        Tue, 09 Aug 2022 18:20:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=K8PB1ciS662o1jhXEW/30/xnIB1fBOdqWTq+opSx6m8=;
-        b=K5ZL9QYOWSZsR/ShTSrILo4k4ZAWTcKhdo8r/L9sgegOaH4Kagm2nvicjb/KBScaoa
-         OxQHtMrxRnj1OPOH0sxeqCkQG5k6Lt0Gy+zXx55QneuNCTN+caP02M/Pme2oHr9f+UjF
-         vJtcfBZLC5PMA5ENvK9lrwI8cDkPMlK7GWCOFX+Ovjoys0DY9S3E0aaQ3wlunzRE0l59
-         0xlK5p0mzbkuPId9nt9BEkPgDCQTJbIGQ+ttogMkxVGmjWGNcJZuo6XOxwZlh/PxrcHl
-         d/l1FPhk0mgA2mH/EZIPA4LL3B2P40QcoO+bURitbAtJ3FiIThP06msuHcUSi66iecbx
-         LHGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=K8PB1ciS662o1jhXEW/30/xnIB1fBOdqWTq+opSx6m8=;
-        b=hkAOIzh7hqYCYmcMQBxAOHjMHKPyUdV6GVC0YdE5I9Q51Rv00tYUsW++XDdwdpbk/n
-         LLI41G6L5j5NTPscVbxGxw2ed4WqOrKLZyhogI1dvIUDSE16AsBrAKEf0QHzHovOrNoI
-         Nvx1iPpSo9y0vY2K9bnt8jEBk62oT1yoGtMK26QKCjzPofe9+2Et1L/I0RIMS7FPXwlf
-         k3HF2ol4YbcTRDz40E14JKdwDCaf95G/+R7me4EoMWzB5PnT5GX/61BjY8owBNOvVAUp
-         UMSyXmIuqBh8MutXBTUR+LLXoU/0xd9GP7N5m00GBvKeRWce6hhPA8oYtyEO4oXNWh+5
-         BycA==
-X-Gm-Message-State: ACgBeo3Axj4l8zRc8dymz/N7Mj3MDBZFAgwRsyEhYYLAfxWXzKBIoeAN
-        0QvBF1AXpZqWK6+BbarxbHffCW5cVSLAwg==
-X-Google-Smtp-Source: AA6agR4GqR70FuMvJ7suELLr5AKo8xKVh84iqXtuNR07KxSiTtk66QetWIgLvl0R1XQOM1kT482y0g==
-X-Received: by 2002:a05:6a00:1948:b0:525:45e3:2eb7 with SMTP id s8-20020a056a00194800b0052545e32eb7mr25750251pfk.77.1660094455911;
-        Tue, 09 Aug 2022 18:20:55 -0700 (PDT)
-Received: from localhost.localdomain (125-228-123-29.hinet-ip.hinet.net. [125.228.123.29])
-        by smtp.gmail.com with ESMTPSA id s18-20020a170903215200b0016c3affe60esm11356754ple.46.2022.08.09.18.20.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 Aug 2022 18:20:55 -0700 (PDT)
-From:   Potin Lai <potin.lai.pt@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        Patrick Williams <patrick@stwcx.xyz>,
-        Potin Lai <potin.lai.pt@gmail.com>
-Subject: [PATCH 2/2] ARM: dts: aspeed: bletchley: remove hdc1080 node
-Date:   Wed, 10 Aug 2022 00:43:38 +0000
-Message-Id: <20220810004338.329832-3-potin.lai.pt@gmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20220810004338.329832-1-potin.lai.pt@gmail.com>
-References: <20220810004338.329832-1-potin.lai.pt@gmail.com>
+        Tue, 9 Aug 2022 20:46:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id EB0744B4A1
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 17:46:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660092362;
+        h=from:from:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=S/MAn6qAg/Jsbs3sbj308t0Whag8V+DOtIapBcO490g=;
+        b=cQT5/15cBRTpOXh1mAcAaGFp0rqhbVzfa/MWJnIReUgMTL5xT35SFdJ7bn8qCg3ecoVY/j
+        0kgBVAui1hFMKiC1C9apJE+2rEQ8i5HxrT5hD2zT1k9SvgKYlYK6rzboWSXvQTMXaHXnb4
+        rCuuxBJjla33riJv+W0WUBlj8GQgJOI=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-115-XoWcY8H1PiqgLZYkjOgRSg-1; Tue, 09 Aug 2022 20:45:58 -0400
+X-MC-Unique: XoWcY8H1PiqgLZYkjOgRSg-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F2ADD8039A1;
+        Wed, 10 Aug 2022 00:45:57 +0000 (UTC)
+Received: from [10.64.54.189] (vpn2-54-189.bne.redhat.com [10.64.54.189])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8B797492C3B;
+        Wed, 10 Aug 2022 00:45:53 +0000 (UTC)
+Reply-To: Gavin Shan <gshan@redhat.com>
+Subject: Re: [PATCH 2/2] KVM: selftests: Use getcpu() instead of
+ sched_getcpu() in rseq_test
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Florian Weimer <fweimer@redhat.com>, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pbonzini@redhat.com, maz@kernel.org,
+        oliver.upton@linux.dev, andrew.jones@linux.dev,
+        mathieu.desnoyers@efficios.com, yihyu@redhat.com,
+        shan.gavin@gmail.com
+References: <20220809060627.115847-1-gshan@redhat.com>
+ <20220809060627.115847-3-gshan@redhat.com>
+ <87y1vxncv1.fsf@oldenburg.str.redhat.com>
+ <87mtcdnaxe.fsf@oldenburg.str.redhat.com>
+ <ea2ef1a2-0fd8-448b-d7ca-254603518823@redhat.com>
+ <YvLJUEOcxaZKW0y1@google.com>
+From:   Gavin Shan <gshan@redhat.com>
+Message-ID: <2f8f9062-3e89-7a09-02c4-ab1b2dc07356@redhat.com>
+Date:   Wed, 10 Aug 2022 10:45:50 +1000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.2.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <YvLJUEOcxaZKW0y1@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.9
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,30 +76,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Because of incompatible 2nd source si7021, removing hdc1080 node from
-devicetree, and move node probe to user-space layer.
+On 8/10/22 6:53 AM, Sean Christopherson wrote:
+> On Tue, Aug 09, 2022, Gavin Shan wrote:
+>> On 8/9/22 5:17 PM, Florian Weimer wrote:
+>>> * Florian Weimer:
+>>>
+>>>> * Gavin Shan:
+>>>>
+>>>>> sched_getcpu() is glibc dependent and it can simply return the CPU
+>>>>> ID from the registered rseq information, as Florian Weimer pointed.
+>>>>> In this case, it's pointless to compare the return value from
+>>>>> sched_getcpu() and that fetched from the registered rseq information.
+>>>>>
+>>>>> Fix the issue by replacing sched_getcpu() with getcpu(), as Florian
+>>>>> suggested. The comments are modified accordingly.
+>>>>
+>>>> Note that getcpu was added in glibc 2.29, so perhaps you need to perform
+>>>> a direct system call?
+>>>
+>>> One more thing: syscall(__NR_getcpu) also has the advantage that it
+>>> wouldn't have to be changed again if node IDs become available via rseq
+>>> and getcpu is implemented using that.
+>>>
+>>> Thanks,
+>>> Florian
+>>>
+>>
+>> Thanks, Florian. It makes sense to me to use syscall(__NR_getcpu) in
+>> next revision. Thanks for your quick review :)
+> 
+> +1, and definitely add a comment to prevent future "cleanup".
+> 
 
-Signed-off-by: Potin Lai <potin.lai.pt@gmail.com>
----
- arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts | 5 -----
- 1 file changed, 5 deletions(-)
+Yep, I will have something like below in next revision:
 
-diff --git a/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts b/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
-index 54c9f182f6a5c..1f72017c1e2d9 100644
---- a/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
-+++ b/arch/arm/boot/dts/aspeed-bmc-facebook-bletchley.dts
-@@ -882,11 +882,6 @@ tmp421@4f {
- 		reg = <0x4f>;
- 	};
- 
--	hdc1080@40 {
--		compatible = "ti,hdc1080";
--		reg = <0x40>;
--	};
--
- 	front_leds: pca9552@67 {
- 		compatible = "nxp,pca9552";
- 		reg = <0x67>;
--- 
-2.31.1
+     /*
+      * We have to perform direct system call for getcpu() because it's not
+      * available until glic 2.29.
+      */
+
+Thanks,
+Gavin
 

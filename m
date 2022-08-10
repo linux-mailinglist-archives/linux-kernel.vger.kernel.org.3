@@ -2,103 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8A4058E484
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 03:31:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70ABC58E485
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 03:33:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbiHJBbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 21:31:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54424 "EHLO
+        id S230090AbiHJBcw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 21:32:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbiHJBbL (ORCPT
+        with ESMTP id S230071AbiHJBce (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 21:31:11 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46DD62AFC
-        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 18:31:09 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id ha11so13356887pjb.2
-        for <linux-kernel@vger.kernel.org>; Tue, 09 Aug 2022 18:31:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=jArUS+cTDYrc34PVoRCPXKulj9z0Omh43tDAwlnBe04=;
-        b=q6v8963dnNMz7nntm/3Rkm2/pPAeQvZ68R1TjZNVjNGTvgs6GYfS9Zsg888AKEaQSk
-         ITgVZHKn5W6QHF1JYsP5vCpSdHO9NQlCBC2Z5DRVUMhEPNDXg+kZ4D4v7o7R2UoISGuk
-         RzOKhIR3iJ5OdBOmoTcqzoJXJVZkaAJoVi2C60AsWLNwIBX4DQLI/Lc1+JVj+ynGe77J
-         z88XqIDu+2Zh8WYB/nqhfbCsqsMUoAk/KkJdvBfUpJbV4K+pPcFCWz49p+pw4jUTccwn
-         xp1YxVvk0IsJCEnppqbKMvnxkQirm5wazIlNeoIYMTTHBoSA25f68A+vuB+fGnT/LAwx
-         0smw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=jArUS+cTDYrc34PVoRCPXKulj9z0Omh43tDAwlnBe04=;
-        b=0OhJOf+yk8FxvII39cl+0xTQ59fHCFixRTHjJYmc4+PYIdXZrYjbgo4tsRMXDq/Nnk
-         1qCARuEcFH5FrYpShhU6zAQ7KsYkHd4sVkqoteBtpkM4tp46V1vsDnIou/vq2lncNBNs
-         vzR7VT1FPsMakc/vsrUApamrgE5NmhAa7vNpb56FZ06sNQESjhf31d6pZGa1xaJCVQRa
-         +yoHZ/Cq+39njApeWlAP9i9CeLtzOUjjjvX/6PdgkAN+TBBItOlW9rgql10WUih6Y5le
-         rSz8l1EBWmhJHnS25jOCeYKgkk03xOdQeHp2iQIQMZWkxaQpNG0qouCZfTjoKS0/5Bzs
-         txQg==
-X-Gm-Message-State: ACgBeo2QWOK/vFu4+eHrePxrVTeMUCUJhmz04XO8sQx9Fn3fieP7IOHr
-        4quD3+6s5C6vHh9H0vfVMAZAZg==
-X-Google-Smtp-Source: AA6agR7BLT3O6pJwmoNbS0ABHMXRhfGmTLSClhLCrhYSoJTn7kkIjqU4c2KyxC+3G7/tpmrYadq8gA==
-X-Received: by 2002:a17:90b:3586:b0:1f4:d507:783e with SMTP id mm6-20020a17090b358600b001f4d507783emr1158932pjb.171.1660095068808;
-        Tue, 09 Aug 2022 18:31:08 -0700 (PDT)
-Received: from [10.4.175.112] ([139.177.225.233])
-        by smtp.gmail.com with ESMTPSA id q1-20020a17090a2dc100b001f21f5c81a5sm243187pjm.19.2022.08.09.18.31.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Aug 2022 18:31:08 -0700 (PDT)
-Message-ID: <b89155d3-9315-fefc-408b-4cf538360a1c@bytedance.com>
-Date:   Wed, 10 Aug 2022 09:30:59 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.1.0
-Subject: Re: [PATCH v2 09/10] sched/psi: per-cgroup PSI stats
- disable/re-enable interface
-Content-Language: en-US
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     hannes@cmpxchg.org, corbet@lwn.net, surenb@google.com,
-        mingo@redhat.com, peterz@infradead.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, songmuchun@bytedance.com
-References: <20220808110341.15799-1-zhouchengming@bytedance.com>
- <20220808110341.15799-10-zhouchengming@bytedance.com>
- <YvKd6dezPM6UxfD/@slm.duckdns.org>
- <fcd0bd39-3049-a279-23e6-a6c02b4680a7@bytedance.com>
-In-Reply-To: <fcd0bd39-3049-a279-23e6-a6c02b4680a7@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Tue, 9 Aug 2022 21:32:34 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8A186AA3B
+        for <linux-kernel@vger.kernel.org>; Tue,  9 Aug 2022 18:32:33 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27A16QW8017125;
+        Wed, 10 Aug 2022 01:32:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=0TaMadHaWCi9+mkS7MPh/IpcAd/LeTbwsq5Cbob7Ieg=;
+ b=VmXllawIyAQfTgUT0dEC4eIhIrYE6GS05yk5PISKE0hdCT3ODhhnoLRJqXYWxQT7q/Gf
+ ZzsSfJ4q8SZZuNmIq0TRUXwxqKMy8m6nDTpLgXuXQk+alJwGOcWKrUi9FAZpGGbpu6+O
+ UcD0jukIvDoDyXAFGxFNdbfpvhD7qOj4rg/MqrvmLl6fcLrabWAOjCjrxtQ6+E+9tHBj
+ t+Eh4D+Mc1+mF50bLv5/c9U4n5vMyIw/n/hzZtt8MRkCM0RHuraBPfZPFIL9DqpnDnyy
+ Je/+I+qslNl/4kAYzUhdI75tYddUIAzy5ok3tpuE8zbxdnYd3R9mxH2mzjDhqWVcfaIY XA== 
+Received: from aptaippmta02.qualcomm.com (tpe-colo-wan-fw-bordernet.qualcomm.com [103.229.16.4])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3huwqe0s40-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Aug 2022 01:32:24 +0000
+Received: from pps.filterd (APTAIPPMTA02.qualcomm.com [127.0.0.1])
+        by APTAIPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 27A1WMsn019869;
+        Wed, 10 Aug 2022 01:32:22 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APTAIPPMTA02.qualcomm.com (PPS) with ESMTP id 3hshcntksh-1;
+        Wed, 10 Aug 2022 01:32:22 +0000
+Received: from APTAIPPMTA02.qualcomm.com (APTAIPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27A1WLbP019864;
+        Wed, 10 Aug 2022 01:32:21 GMT
+Received: from maow2-gv.ap.qualcomm.com (maow2-gv.qualcomm.com [10.232.193.133])
+        by APTAIPPMTA02.qualcomm.com (PPS) with ESMTP id 27A1WLZS019862;
+        Wed, 10 Aug 2022 01:32:21 +0000
+Received: by maow2-gv.ap.qualcomm.com (Postfix, from userid 399080)
+        id EE6F221029A4; Wed, 10 Aug 2022 09:32:19 +0800 (CST)
+From:   Kassey Li <quic_yingangl@quicinc.com>
+To:     akpm@linux-foundation.org, vbabka@kernel.org
+Cc:     Kassey Li <quic_yingangl@quicinc.com>, minchan@kernel.org,
+        vbabka@suse.cz, iamjoonsoo.kim@lge.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH v6] mm/page_owner.c: add llseek for page_owner
+Date:   Wed, 10 Aug 2022 09:32:18 +0800
+Message-Id: <20220810013218.27416-1-quic_yingangl@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 1JB7qkCbm5CSr-IodJRyN2v5pY907gv5
+X-Proofpoint-ORIG-GUID: 1JB7qkCbm5CSr-IodJRyN2v5pY907gv5
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-10_01,2022-08-09_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 clxscore=1015 priorityscore=1501 mlxscore=0 adultscore=0
+ impostorscore=0 malwarescore=0 bulkscore=0 mlxlogscore=999 phishscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208100003
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/10 08:39, Chengming Zhou wrote:
-> On 2022/8/10 01:48, Tejun Heo wrote:
->> Hello,
->>
->> On Mon, Aug 08, 2022 at 07:03:40PM +0800, Chengming Zhou wrote:
->>> So this patch introduce a per-cgroup PSI stats disable/re-enable
->>> interface "cgroup.psi", which is a read-write single value file that
->>> allowed values are "0" and "1", the defaults is "1" so per-cgroup
->>> PSI stats is enabled by default.
->>
->> Given that the knobs are named {cpu|memory|io}.pressure, I wonder whether
->> "cgroup.psi" is the best name. Also, it doesn't convey that it's the
->> enable/disable knob. I think it needs a better name.
-> 
-> Yes, "cgroup.psi" is not good. What abort "pressure.enable" or "cgroup.psi_enable"?
+There is usage to dump a given cma region page_owner
+instead of all page's.
 
-Doesn't look good either, what do you think of "cgroup.pressure.enable"?
+This change allows to specify a ppos as start_pfn
+by fseek.
 
-Thanks.
+Any invalid ppos will be skipped, so it did not
+broken the origin dump feature.
+
+Suggested-by: Vlastimil Babka <vbabka@suse.cz>
+Signed-off-by: Kassey Li <quic_yingangl@quicinc.com>
+---
+ Documentation/vm/page_owner.rst |  6 ++++++
+ mm/page_owner.c                 | 10 +++++++---
+ 2 files changed, 13 insertions(+), 3 deletions(-)
+
+diff --git a/Documentation/vm/page_owner.rst b/Documentation/vm/page_owner.rst
+index f5c954afe97c..8d33d976da8a 100644
+--- a/Documentation/vm/page_owner.rst
++++ b/Documentation/vm/page_owner.rst
+@@ -95,6 +95,12 @@ Usage
+ 	PFN XXX ...
+ 	// Detailed stack
+ 
++   By default, it will do full pfn dump, to start with a given pfn,
++   page_owner supports fseek.
++
++   FILE *fp = fopen("/sys/kernel/debug/page_owner", "r");
++   fseek(fp, pfn_start, SEEK_SET);
++
+    The ``page_owner_sort`` tool ignores ``PFN`` rows, puts the remaining rows
+    in buf, uses regexp to extract the page order value, counts the times
+    and pages of buf, and finally sorts them according to the parameter(s).
+diff --git a/mm/page_owner.c b/mm/page_owner.c
+index e4c6f3f1695b..33832b5908e6 100644
+--- a/mm/page_owner.c
++++ b/mm/page_owner.c
+@@ -13,6 +13,7 @@
+ #include <linux/memcontrol.h>
+ #include <linux/sched/clock.h>
+ 
++#include "../fs/proc/internal.h"
+ #include "internal.h"
+ 
+ /*
+@@ -497,8 +498,10 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
+ 		return -EINVAL;
+ 
+ 	page = NULL;
+-	pfn = min_low_pfn + *ppos;
+-
++	if (*ppos == 0)
++		pfn = min_low_pfn;
++	else
++		pfn = *ppos;
+ 	/* Find a valid PFN or the start of a MAX_ORDER_NR_PAGES area */
+ 	while (!pfn_valid(pfn) && (pfn & (MAX_ORDER_NR_PAGES - 1)) != 0)
+ 		pfn++;
+@@ -561,7 +564,7 @@ read_page_owner(struct file *file, char __user *buf, size_t count, loff_t *ppos)
+ 			continue;
+ 
+ 		/* Record the next PFN to read in the file offset */
+-		*ppos = (pfn - min_low_pfn) + 1;
++		*ppos = pfn + 1;
+ 
+ 		return print_page_owner(buf, count, pfn, page,
+ 				page_owner, handle);
+@@ -660,6 +663,7 @@ static void init_early_allocated_pages(void)
+ 
+ static const struct file_operations proc_page_owner_operations = {
+ 	.read		= read_page_owner,
++	.llseek		= mem_lseek,
+ };
+ 
+ static int __init pageowner_init(void)
+-- 
+2.17.1
 

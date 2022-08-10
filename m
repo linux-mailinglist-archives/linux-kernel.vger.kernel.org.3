@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BF9D58E4FE
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 04:56:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E74958E503
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 04:56:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbiHJC4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 Aug 2022 22:56:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58908 "EHLO
+        id S230247AbiHJC4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 Aug 2022 22:56:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230195AbiHJCz5 (ORCPT
+        with ESMTP id S230221AbiHJC4B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 Aug 2022 22:55:57 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B0B46FA22;
-        Tue,  9 Aug 2022 19:55:56 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id e8-20020a17090a280800b001f2fef7886eso787465pjd.3;
-        Tue, 09 Aug 2022 19:55:56 -0700 (PDT)
+        Tue, 9 Aug 2022 22:56:01 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529946E882;
+        Tue,  9 Aug 2022 19:55:59 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id h28so12471966pfq.11;
+        Tue, 09 Aug 2022 19:55:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
          :cc;
-        bh=i4QcEvTUJvP0g/7PaAMpMWTIqDgUsdWeK1PIkklhA/I=;
-        b=m6Tj5U2yYUxeIAZRv8lmgIGr6NNdu6Mf080sXV6xL4Qa7iNz0mNlLgN/PWdbyIrX6O
-         MzVkRRpyIUzxtc5Tb7p4QQXO/9m2ID/uG+43KkV+SJUcBTpI8S9wrh44GIEqZ8xNhDHc
-         kUwK5BrzBTyb9mUqUHpBcLImtBAz+k6oamxWsURqLHvO5MYeLUbKQ9JCdt5NOhK1gq0j
-         a7adHMgY0cfDhwoMITOh0Ktm7jbeRlxXyiTYBh7l/SF0y+hY015HpxEOY3vqKbSQpwTh
-         fohegxIT0TSqG4hHTW0MUYzHIIvjZEEKlnvZsnbEapuOOYoKpMXLHp6DXsUTe4CzjK5M
-         PV9Q==
+        bh=l3n0xNkM7y1LjHD6LrFxe9l1XPdXW5jtjDOQp4rcO/k=;
+        b=lo1BruH/vdXNwPVHbqSlKdobgAf6YmMjRBWtOLpQU9Je9K7s1b7Wsa2tK+2LtAm4Ki
+         mDfMwxoG/dO9Mzj8UGstVIY/PKtpY4CaSGj6cINFlhqdzgdipYDI95GNTkklhxZZ5jzs
+         JQ5cmoOpcaOloYtrjLWqs/mbhgbbbNgy86TM+ywcxvzc5UzLkTv+usNv8R89Wis87+Je
+         qt6t63W8UMSEKX1Cr0PLfqs4w3zE3KrJdIKj5S+S49NcCxLlnbmE+S4UsIDIymjtKsGT
+         PKtXO7hv6YbyJYTWnU2InIpt57HGslzItJDZtOFiddEOo7aorPhdLXpndX7qpVzSUry+
+         pQ0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=references:in-reply-to:message-id:date:subject:cc:to:from
          :x-gm-message-state:from:to:cc;
-        bh=i4QcEvTUJvP0g/7PaAMpMWTIqDgUsdWeK1PIkklhA/I=;
-        b=OU7R2K0fWuIZdAyCS1ocgCPAIkl35G5cmTm2R1TLo788+RQUAvSEZ4eQaOnPl1XQ7Q
-         XxQ89jw7n20uZLyC6OLm5YfB2hNCwgXQ+SyaajHuTISBK7oFsdIOl4i5zvLciaR9mU6m
-         QTzsUuSt2i6mk2o9cKKc2Kcy9OUkU51/hi/vym1phWAI1A3/r1k9EyebGIoTQAwNfQNF
-         Nr3XeTWb/BrR+QQtq/gqz5RsDmZ0Q8NH+Xk0h5i5KY7lH16M9RZIZ3ibxZAdxx4Aq7Fk
-         5TiGatajq9kjnISS/j+5V+s7g+mWyBCCwsRgdKcADM7Kxv3FENV6NfmBtGB1lzzYfUbQ
-         /pMw==
-X-Gm-Message-State: ACgBeo2MpK/52jpeCXABqFYZiMV+UtWwtofiQBLL2bBC57hQU1ib/NS7
-        vzYYQowszBFa22E4y+c1PJc=
-X-Google-Smtp-Source: AA6agR5BQsdmxV+r6TsHuW78pLZ7lHG/W9hzF0Xr2E7+FLTb9Ao4wv5JMrSyG/cKDKnh+MrQ2MfEVQ==
-X-Received: by 2002:a17:90b:4c8c:b0:1f5:2214:a02f with SMTP id my12-20020a17090b4c8c00b001f52214a02fmr1509389pjb.66.1660100155732;
-        Tue, 09 Aug 2022 19:55:55 -0700 (PDT)
+        bh=l3n0xNkM7y1LjHD6LrFxe9l1XPdXW5jtjDOQp4rcO/k=;
+        b=dL/LDM4Jjuc3alb4QgBMO1D1LcQ2eL462QEhZtCDpSupSREv19OUxLXprWdzn/RJMi
+         on7JImwJf6TNk0XxKhLEgHvSupwP8aA5KrLfv3MdAfR2kfKEcKi6cZ7kxzAgPKBxfIZG
+         8g9VbEbbjTywEbMJOj5IWtnSGtqvOVOLnc+QX0iOm/6anQ9Wo2W8raZeuMePWzz4B8kp
+         zfmAqCHYHF/9F8NPYMqawL/qbah6gK13Pr7A89SrYS8lExiZVN1orZHtJlK4UIvSm1Kn
+         yb1hs5W2vYRLYtaglv3v4YIKvXwYX9cCpgF2Uv6r0pjccoQ148vqFJpkEiuWNgYFCGTF
+         I3Yg==
+X-Gm-Message-State: ACgBeo2A93oeGyF4w1SOQaICx5b1p8b78Z6aXM3bVXplulGJdcyf5cHK
+        Xoj+fH+I5rH8CDT4ZUP94Dw=
+X-Google-Smtp-Source: AA6agR5Nsk8n2J7f6D5rnXastYfmjURoEK0IGsEPSab2NT41Qwb3scM9E6J0rmI44rT1FxMITyvIeQ==
+X-Received: by 2002:a05:6a00:b82:b0:52f:518f:fe6c with SMTP id g2-20020a056a000b8200b0052f518ffe6cmr11690460pfj.80.1660100158724;
+        Tue, 09 Aug 2022 19:55:58 -0700 (PDT)
 Received: from localhost.localdomain ([2402:7500:577:d15f:416a:c0:aecd:5d6e])
-        by smtp.gmail.com with ESMTPSA id i5-20020a170902c94500b0016d1f474653sm11785654pla.52.2022.08.09.19.55.52
+        by smtp.gmail.com with ESMTPSA id i5-20020a170902c94500b0016d1f474653sm11785654pla.52.2022.08.09.19.55.56
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 09 Aug 2022 19:55:55 -0700 (PDT)
+        Tue, 09 Aug 2022 19:55:58 -0700 (PDT)
 From:   cy_huang <u0084500@gmail.com>
 To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         lee@kernel.org, dmitry.torokhov@gmail.com
 Cc:     cy_huang@richtek.com, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
-Subject: [PATCH v4 2/3] mfd: rt5120: Add Richtek PMIC support
-Date:   Wed, 10 Aug 2022 10:55:41 +0800
-Message-Id: <1660100142-32493-3-git-send-email-u0084500@gmail.com>
+Subject: [PATCH v4 3/3] input: misc: rt5120: Add power key support
+Date:   Wed, 10 Aug 2022 10:55:42 +0800
+Message-Id: <1660100142-32493-4-git-send-email-u0084500@gmail.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1660100142-32493-1-git-send-email-u0084500@gmail.com>
 References: <1660100142-32493-1-git-send-email-u0084500@gmail.com>
@@ -71,189 +71,172 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: ChiYuan Huang <cy_huang@richtek.com>
 
-Add Richtek RT5120 PMIC I2C driver.
+Add RT5120 PMIC power key support.
 
 Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
 ---
 Since v4:
 - Add "Copyright" string and refine for GPL version string.
-- For the last uncertain terminated element in struct arrays, put the comma
-  for it to keep the extensibility.
 
 Since v3:
-- Use a 'dev' variable and dev_err_probe to decrease the LOC in mfd.
+- Simplify the power key irq handler key report
+- Since press and release irq not needed to keep in private data, change 'press',
+  'release' irq as local variable only.
+- Fix Kconfig typo for pwrkey.
 
 ---
- drivers/mfd/Kconfig  |  12 +++++
- drivers/mfd/Makefile |   1 +
- drivers/mfd/rt5120.c | 124 +++++++++++++++++++++++++++++++++++++++++++++++++++
- 3 files changed, 137 insertions(+)
- create mode 100644 drivers/mfd/rt5120.c
+ drivers/input/misc/Kconfig         |   9 +++
+ drivers/input/misc/Makefile        |   1 +
+ drivers/input/misc/rt5120-pwrkey.c | 109 +++++++++++++++++++++++++++++++++++++
+ 3 files changed, 119 insertions(+)
+ create mode 100644 drivers/input/misc/rt5120-pwrkey.c
 
-diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-index abb58ab..bfceece 100644
---- a/drivers/mfd/Kconfig
-+++ b/drivers/mfd/Kconfig
-@@ -1128,6 +1128,18 @@ config MFD_RT5033
- 	  sub-devices like charger, fuel gauge, flash LED, current source,
- 	  LDO and Buck.
+diff --git a/drivers/input/misc/Kconfig b/drivers/input/misc/Kconfig
+index a18ab73..92daa4d 100644
+--- a/drivers/input/misc/Kconfig
++++ b/drivers/input/misc/Kconfig
+@@ -891,6 +891,15 @@ config INPUT_SC27XX_VIBRA
+ 	  To compile this driver as a module, choose M here. The module will
+ 	  be called sc27xx_vibra.
  
-+config MFD_RT5120
-+	tristate "Richtek RT5120 Power Management IC"
-+	depends on I2C
-+	select MFD_CORE
-+	select REGMAP_I2C
-+	select REGMAP_IRQ
++config INPUT_RT5120_PWRKEY
++	tristate "RT5120 PMIC power key support"
++	depends on MFD_RT5120
 +	help
-+	  The enables support for Richtek RT5120 PMIC. It includes four high
-+	  efficiency buck converters and one LDO voltage regulator. The device
-+	  is targeted at providing the CPU voltage, memory, I/O and peripheral
-+	  power rails in home entertainment devices.
++	  This enables support for RT5120 PMIC power key driver.
 +
- config MFD_RC5T583
- 	bool "Ricoh RC5T583 Power Management system device"
- 	depends on I2C=y
-diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-index 858cacf..27e8add 100644
---- a/drivers/mfd/Makefile
-+++ b/drivers/mfd/Makefile
-@@ -234,6 +234,7 @@ obj-$(CONFIG_MFD_HI655X_PMIC)   += hi655x-pmic.o
- obj-$(CONFIG_MFD_DLN2)		+= dln2.o
- obj-$(CONFIG_MFD_RT4831)	+= rt4831.o
- obj-$(CONFIG_MFD_RT5033)	+= rt5033.o
-+obj-$(CONFIG_MFD_RT5120)	+= rt5120.o
- obj-$(CONFIG_MFD_SKY81452)	+= sky81452.o
- 
- intel-soc-pmic-objs		:= intel_soc_pmic_core.o intel_soc_pmic_crc.o
-diff --git a/drivers/mfd/rt5120.c b/drivers/mfd/rt5120.c
++	  To compile this driver as a module, choose M here. the module will
++	  be called rt5120-pwrkey.
++
+ config INPUT_STPMIC1_ONKEY
+ 	tristate "STPMIC1 PMIC Onkey support"
+ 	depends on MFD_STPMIC1
+diff --git a/drivers/input/misc/Makefile b/drivers/input/misc/Makefile
+index 28dfc44..d1fb00e 100644
+--- a/drivers/input/misc/Makefile
++++ b/drivers/input/misc/Makefile
+@@ -69,6 +69,7 @@ obj-$(CONFIG_INPUT_RAVE_SP_PWRBUTTON)	+= rave-sp-pwrbutton.o
+ obj-$(CONFIG_INPUT_RB532_BUTTON)	+= rb532_button.o
+ obj-$(CONFIG_INPUT_REGULATOR_HAPTIC)	+= regulator-haptic.o
+ obj-$(CONFIG_INPUT_RETU_PWRBUTTON)	+= retu-pwrbutton.o
++obj-$(CONFIG_INPUT_RT5120_PWRKEY)	+= rt5120-pwrkey.o
+ obj-$(CONFIG_INPUT_AXP20X_PEK)		+= axp20x-pek.o
+ obj-$(CONFIG_INPUT_GPIO_ROTARY_ENCODER)	+= rotary_encoder.o
+ obj-$(CONFIG_INPUT_RK805_PWRKEY)	+= rk805-pwrkey.o
+diff --git a/drivers/input/misc/rt5120-pwrkey.c b/drivers/input/misc/rt5120-pwrkey.c
 new file mode 100644
-index 00000000..8046e38
+index 00000000..94d25ba
 --- /dev/null
-+++ b/drivers/mfd/rt5120.c
-@@ -0,0 +1,124 @@
++++ b/drivers/input/misc/rt5120-pwrkey.c
+@@ -0,0 +1,109 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
 + * Copyright (C) 2022 Richtek Technology Corp.
 + * Author: ChiYuan Huang <cy_huang@richtek.com>
 + */
 +
-+#include <linux/i2c.h>
++#include <linux/bits.h>
++#include <linux/input.h>
++#include <linux/interrupt.h>
 +#include <linux/kernel.h>
-+#include <linux/mfd/core.h>
 +#include <linux/module.h>
 +#include <linux/mod_devicetable.h>
++#include <linux/platform_device.h>
 +#include <linux/regmap.h>
 +
-+#define RT5120_REG_INTENABLE	0x1D
 +#define RT5120_REG_INTSTAT	0x1E
-+#define RT5120_REG_FZCMODE	0x44
++#define RT5120_PWRKEYSTAT_MASK	BIT(7)
 +
-+#define RT5120_INT_HOTDIE	0
-+#define RT5120_INT_PWRKEY_REL	5
-+#define RT5120_INT_PWRKEY_PRESS	6
-+
-+static const struct regmap_range rt5120_rd_yes_ranges[] = {
-+	regmap_reg_range(0x03, 0x13),
-+	regmap_reg_range(0x1c, 0x20),
-+	regmap_reg_range(0x44, 0x44),
-+};
-+
-+static const struct regmap_range rt5120_wr_yes_ranges[] = {
-+	regmap_reg_range(0x06, 0x13),
-+	regmap_reg_range(0x1c, 0x20),
-+	regmap_reg_range(0x44, 0x44),
-+};
-+
-+static const struct regmap_access_table rt5120_rd_table = {
-+	.yes_ranges = rt5120_rd_yes_ranges,
-+	.n_yes_ranges = ARRAY_SIZE(rt5120_rd_yes_ranges),
-+};
-+
-+static const struct regmap_access_table rt5120_wr_table = {
-+	.yes_ranges = rt5120_wr_yes_ranges,
-+	.n_yes_ranges = ARRAY_SIZE(rt5120_wr_yes_ranges),
-+};
-+
-+static const struct regmap_config rt5120_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.max_register = RT5120_REG_FZCMODE,
-+
-+	.wr_table = &rt5120_wr_table,
-+	.rd_table = &rt5120_rd_table,
-+};
-+
-+static const struct regmap_irq rt5120_irqs[] = {
-+	REGMAP_IRQ_REG_LINE(RT5120_INT_HOTDIE, 8),
-+	REGMAP_IRQ_REG_LINE(RT5120_INT_PWRKEY_REL, 8),
-+	REGMAP_IRQ_REG_LINE(RT5120_INT_PWRKEY_PRESS, 8),
-+};
-+
-+static const struct regmap_irq_chip rt5120_irq_chip = {
-+	.name = "rt5120-pmic",
-+	.status_base = RT5120_REG_INTSTAT,
-+	.mask_base = RT5120_REG_INTENABLE,
-+	.ack_base = RT5120_REG_INTSTAT,
-+	.mask_invert = true,
-+	.use_ack = true,
-+	.num_regs = 1,
-+	.irqs = rt5120_irqs,
-+	.num_irqs = ARRAY_SIZE(rt5120_irqs),
-+};
-+
-+static const struct resource rt5120_regulator_resources[] = {
-+	DEFINE_RES_IRQ(RT5120_INT_HOTDIE),
-+};
-+
-+static const struct resource rt5120_pwrkey_resources[] = {
-+	DEFINE_RES_IRQ_NAMED(RT5120_INT_PWRKEY_PRESS, "pwrkey-press"),
-+	DEFINE_RES_IRQ_NAMED(RT5120_INT_PWRKEY_REL, "pwrkey-release"),
-+};
-+
-+static const struct mfd_cell rt5120_devs[] = {
-+	MFD_CELL_RES("rt5120-regulator", rt5120_regulator_resources),
-+	MFD_CELL_OF("rt5120-pwrkey", rt5120_pwrkey_resources, NULL, 0, 0, "richtek,rt5120-pwrkey"),
-+};
-+
-+static int rt5120_probe(struct i2c_client *i2c)
-+{
-+	struct device *dev = &i2c->dev;
++struct rt5120_priv {
 +	struct regmap *regmap;
-+	struct regmap_irq_chip_data *irq_data;
++	struct input_dev *input;
++};
++
++static irqreturn_t rt5120_pwrkey_handler(int irq, void *devid)
++{
++	struct rt5120_priv *priv = devid;
++	unsigned int stat;
 +	int ret;
 +
-+	regmap = devm_regmap_init_i2c(i2c, &rt5120_regmap_config);
-+	if (IS_ERR(regmap))
-+		return dev_err_probe(dev, PTR_ERR(regmap),
-+				     "Failed to init regmap\n");
-+
-+	ret = devm_regmap_add_irq_chip(dev, regmap, i2c->irq, IRQF_ONESHOT, 0,
-+				       &rt5120_irq_chip, &irq_data);
++	ret = regmap_read(priv->regmap, RT5120_REG_INTSTAT, &stat);
 +	if (ret)
-+		return dev_err_probe(dev, ret, "Failed to add IRQ chip\n");
++		return IRQ_NONE;
 +
-+	return devm_mfd_add_devices(dev, PLATFORM_DEVID_AUTO, rt5120_devs,
-+				    ARRAY_SIZE(rt5120_devs), NULL, 0,
-+				    regmap_irq_get_domain(irq_data));
++	input_report_key(priv->input, KEY_POWER,
++			 !(stat & RT5120_PWRKEYSTAT_MASK));
++	input_sync(priv->input);
++
++	return IRQ_HANDLED;
 +}
 +
-+static const struct of_device_id rt5120_device_match_table[] = {
-+	{ .compatible = "richtek,rt5120" },
++static int rt5120_pwrkey_probe(struct platform_device *pdev)
++{
++	struct rt5120_priv *priv;
++	struct device *dev = &pdev->dev;
++	int press_irq, release_irq;
++	int ret;
++
++	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	priv->regmap = dev_get_regmap(dev->parent, NULL);
++	if (!priv->regmap)
++		return dev_err_probe(dev, -ENODEV, "Failed to init regmap\n");
++
++	press_irq = platform_get_irq_byname(pdev, "pwrkey-press");
++	if (press_irq < 0)
++		return press_irq;
++
++	release_irq = platform_get_irq_byname(pdev, "pwrkey-release");
++	if (release_irq < 0)
++		return release_irq;
++
++	/* Make input device be device resource managed */
++	priv->input = devm_input_allocate_device(dev);
++	if (!priv->input)
++		return dev_err_probe(dev, -ENOMEM,
++				     "Failed to allocate input device\n");
++
++	priv->input->name = "rt5120_pwrkey";
++	priv->input->phys = "rt5120_pwrkey/input0";
++	priv->input->id.bustype = BUS_I2C;
++	input_set_capability(priv->input, EV_KEY, KEY_POWER);
++
++	ret = input_register_device(priv->input);
++	if (ret)
++		return dev_err_probe(dev, ret,
++				     "Failed to register input device\n");
++
++	ret = devm_request_threaded_irq(dev, press_irq, NULL,
++					rt5120_pwrkey_handler, 0,
++					"pwrkey-press", priv);
++	if (ret)
++		return dev_err_probe(dev, ret,
++				     "Failed to register pwrkey press irq\n");
++
++	return devm_request_threaded_irq(dev, release_irq, NULL,
++					 rt5120_pwrkey_handler, 0,
++					 "pwrkey-release", priv);
++}
++
++static const struct of_device_id r5120_pwrkey_match_table[] = {
++	{ .compatible = "richtek,rt5120-pwrkey" },
 +	{}
 +};
-+MODULE_DEVICE_TABLE(of, rt5120_device_match_table);
++MODULE_DEVICE_TABLE(of, r5120_pwrkey_match_table);
 +
-+static struct i2c_driver rt5120_driver = {
++static struct platform_driver rt5120_pwrkey_driver = {
 +	.driver = {
-+		.name = "rt5120",
-+		.of_match_table = rt5120_device_match_table,
++		.name = "rt5120-pwrkey",
++		.of_match_table = r5120_pwrkey_match_table,
 +	},
-+	.probe_new = rt5120_probe,
++	.probe = rt5120_pwrkey_probe,
 +};
-+module_i2c_driver(rt5120_driver);
++module_platform_driver(rt5120_pwrkey_driver);
 +
 +MODULE_AUTHOR("ChiYuan Huang <cy_huang@richtek.com>");
-+MODULE_DESCRIPTION("Richtek RT5120 I2C driver");
++MODULE_DESCRIPTION("Richtek RT5120 power key driver");
 +MODULE_LICENSE("GPL v2");
 -- 
 2.7.4

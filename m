@@ -2,95 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74A4958ED59
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 15:32:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6483758ED5F
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 15:33:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232818AbiHJNcF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 09:32:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40524 "EHLO
+        id S232788AbiHJNcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 09:32:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232795AbiHJNbp (ORCPT
+        with ESMTP id S232840AbiHJNcR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 09:31:45 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF5A328734;
-        Wed, 10 Aug 2022 06:31:44 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id p8so14203792plq.13;
-        Wed, 10 Aug 2022 06:31:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=7qGe3fyC/aPZu5DqJ4F8I5tCZf+Y2qRqDhOcUaohBKw=;
-        b=N0sACE4snSXLz9oOdeox6qO4602oEEbGP3pgGfNGoo9uWaCoKdilUHdFshlFNIj5fr
-         JAb3jPXqZd/6z2zl0JFyCRLtTD8No3WJbSIl3YujP3Ar66WAVs7hvLl1x3EBVeVe0xjW
-         1J45gJA6SsxsVfmkcbkkr/HBYjUQDVrcoxXKd2h1AsLwlsErLTnD2dNGsnn7ziWqQdYM
-         QZWjHq1gJSEBRwrZxPckHPrxRs4ZS4TqMKWVAlVlPJrG+UX0+hAoqZtw8tZZ41F/pE8u
-         PpxBF5q7wPJCZyZ0Y/E+p4LtozSgxnRcY4uqgGA1Wz2mfLLObWfY/L8y38+k2yhjpjeL
-         zztQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=7qGe3fyC/aPZu5DqJ4F8I5tCZf+Y2qRqDhOcUaohBKw=;
-        b=WywXCmW9mpAQhx7POtFPpZPrTST1F99KH2uuSEWNzijmliQfYZWuIdo2ynFAfA1l15
-         Ian3FoZWLAzKt2GgAxc34Sm5CO9bUeJuGHcKtvl2Ibob6c7EpYJmkM9IHNrsDGPeepk9
-         gkv9CGiDglyat+6e4Mzj3K0/o2X3l3MxHAnZBUsDfSQ0g5/IPk4Nlhj78ClhFX2dTRaG
-         +QPjU0cdGimN/0af1gw4HcCNSmjHT6IgSbNnzd7WCp9kBrlo17uhRsITwzD0N4w8Yd8w
-         H8UCge9sA7ViObLGdFq94ikV3MgfPSE38RNvk6YiO+6w94mKynIDzm7+MaDlWAzd1w8h
-         F+Gg==
-X-Gm-Message-State: ACgBeo0f2SzL7kGpTtObUE9FZweFUyW2HEmqk8o1lB3N6yu69uQ7kwmJ
-        QtV8LRvS0hHSXcG1HH+9z3o=
-X-Google-Smtp-Source: AA6agR6BTs8G9q0/wbPgLnYCjHQeXxRE2Tmbjdn+wWQh5v9O7Jkay2URStTizt3gXPokScJDWczvyA==
-X-Received: by 2002:a17:902:7b85:b0:16d:2976:42e1 with SMTP id w5-20020a1709027b8500b0016d297642e1mr27885182pll.141.1660138304392;
-        Wed, 10 Aug 2022 06:31:44 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p14-20020a17090a2c4e00b001f754cd508dsm1616327pjm.35.2022.08.10.06.31.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 06:31:43 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 10 Aug 2022 06:31:42 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Subject: Re: [PATCH 5.4 00/15] 5.4.210-rc1 review
-Message-ID: <20220810133142.GD274220@roeck-us.net>
-References: <20220809175510.312431319@linuxfoundation.org>
+        Wed, 10 Aug 2022 09:32:17 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65F394F695;
+        Wed, 10 Aug 2022 06:32:14 -0700 (PDT)
+Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27A9jLuY021932;
+        Wed, 10 Aug 2022 15:32:01 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=TqnqDMKtZ1WAdVHcFGOzKix6VQ7541Gz7ENNe8e4NxI=;
+ b=UoDUF9PUeTVkhoQazHdXjPZaYyF9eOe22/LlYtx1fV+1kIIT1q3Zt0EVrt2OaM0oE6ai
+ FTBeplTzArseunk3FfopBfZjDntvkV0I7yx/Gg7gSotBmKIGS7s3FlR8D/RmKAgahdnB
+ vPLAg29fE5Mua7O2/Py/N9hjSfhmjsaWQGA8zdCG7r3/aLsgzMDb2uT2qFcQ/s5Oesyb
+ u46+QgLlyjKDxwlSM0CeK0wpEz7Xu4uVh7pv5CXqczOfbYVZwYuUP6VzXVmx1U0nVnxr
+ h3Hx29PrWpaX2Cw3QWZ8pksv25VJbrHtoHVLIh0pXTH0ZeRgrNPHgQ2v/AvKIYeJgM6s vg== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3huwr4msff-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Aug 2022 15:32:01 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 1DCDF100034;
+        Wed, 10 Aug 2022 15:32:01 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 166B82309E5;
+        Wed, 10 Aug 2022 15:32:01 +0200 (CEST)
+Received: from [10.201.21.72] (10.75.127.120) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Wed, 10 Aug
+ 2022 15:32:00 +0200
+Message-ID: <38200a6f-fdc1-fa94-7bc6-91ca528235ed@foss.st.com>
+Date:   Wed, 10 Aug 2022 15:31:59 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220809175510.312431319@linuxfoundation.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 1/2] spi: stm32_qspi: Add transfer_one_message() spi
+ callback
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+CC:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <linux-spi@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>
+References: <20220810093215.794977-1-patrice.chotard@foss.st.com>
+ <20220810093215.794977-2-patrice.chotard@foss.st.com>
+ <YvOtZtrRHd4AT+j+@sirena.org.uk>
+ <d41e3814-3fab-18a3-7218-d5c28eaecff8@foss.st.com>
+ <YvOxOg0vXSGrZLfP@sirena.org.uk>
+From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
+In-Reply-To: <YvOxOg0vXSGrZLfP@sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.75.127.120]
+X-ClientProxiedBy: GPXDAG2NODE4.st.com (10.75.127.68) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-10_08,2022-08-10_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 09, 2022 at 08:00:18PM +0200, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.210 release.
-> There are 15 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+
+
+On 8/10/22 15:23, Mark Brown wrote:
+> On Wed, Aug 10, 2022 at 03:15:08PM +0200, Patrice CHOTARD wrote:
+>> On 8/10/22 15:06, Mark Brown wrote:
 > 
-> Responses should be made by Thu, 11 Aug 2022 17:55:02 +0000.
-> Anything received after that time might be too late.
+>>> Do we need to add something to the DT bindings to indicate that
+>>> parallel-memories is valid?
 > 
+>> You mean in the st,stm32-qspi.yaml DT binding file ? Right i think it could be preferable to add it.
+> 
+> Yes.  Though I'm not clear if the bindings actually want to enforce it
+> there, it's a device level property not a controller level one so it
+> might not be something where controller support gets validated.
 
-Build results:
-	total: 161 pass: 161 fail: 0
-Qemu test results:
-	total: 449 pass: 449 fail: 0
+Ah yes, i see, parallel-memories should not be used in our qspi controller node.
+So i can't reuse parallel-memories for my purpose.
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+So i need to add a new proprietary property at controller level as done in the v1 ?
 
-Guenter

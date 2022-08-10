@@ -2,156 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26D2A58EA1D
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 11:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EB2558EA20
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 11:56:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231436AbiHJJzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 05:55:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60206 "EHLO
+        id S231491AbiHJJ4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 05:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiHJJz0 (ORCPT
+        with ESMTP id S229476AbiHJJ4O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 05:55:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CE1E726572
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 02:55:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660125325;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=m5UKomJJr5XDUN8t2Kmb7khiadiUQsrzaj90s+j66gQ=;
-        b=XauGWYwm2YHllDCVya8h3dh2VCxcMp2eXLrGwCCuukmjOLrdAx5dk/CMcpX/u+Lxbe24xF
-        6/yzLXImuFsBVkN5tVXkNKcIczY4r9o46GIbAr0lLA4DDNQc4p7aNcS4wjx+f70N3f13Je
-        hmRhx8eqHVUmTxMEGhGKI3mOSI+l6LM=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-590-h4KSAQ4KMza2PtjPF8QVuw-1; Wed, 10 Aug 2022 05:55:23 -0400
-X-MC-Unique: h4KSAQ4KMza2PtjPF8QVuw-1
-Received: by mail-wm1-f72.google.com with SMTP id 131-20020a1c0289000000b003a52a0c70b0so5427928wmc.2
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 02:55:23 -0700 (PDT)
+        Wed, 10 Aug 2022 05:56:14 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25DF6AA2E;
+        Wed, 10 Aug 2022 02:56:13 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 73so13891096pgb.9;
+        Wed, 10 Aug 2022 02:56:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc;
+        bh=gYnpsrzUcSkvTedJeFolSDVZv7wH8NdfJvuS82L6Zr8=;
+        b=pz5dJlqmAGBo+uMSzGbOw4tvRJoiIpBKArpa50w5xy7lXuO2n7A1fLy4jx/CELb1OS
+         uga3lLNxHhqzzGk6iUIZRMIIzmBrIbXb94kPOGe1+yPgUF1REyvN7vxexI9uaHYBr3Pm
+         jm0+J+YFcZAD6w2QmwPF0ZW4YGoX79wylvWahNhEeEwCQY7a/bn2JzhsnrGwHYAcCHel
+         goC+69JAgqIz7b2P3rTN8MbVbaJh9DOFovrnwiqSaSJ83kpfGm9AaZl4L6I+HsPDpZyc
+         va5PXborI8Jg7ESqZGUgFIWVCo8fyeblg6CHUsnPzkU0221ARCgJSdZK+GetG5whJ2zB
+         k30Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=m5UKomJJr5XDUN8t2Kmb7khiadiUQsrzaj90s+j66gQ=;
-        b=qDnu6JdpR04JZS/IXEVnyAGAJGGxOkJTHzAeAuE80xY2SC+lhJkIm/9jBZVswexR6U
-         LG0vpnGr9dDV12v+vrX1MLsdWNEA3NbcNQFQjRA18HSkkk0pBvmK6z424gyQ7xLVK/Qc
-         N86gnn+MieSrE/M5eupnceadY4mErxhLI2KDkkxBBbz+tY5JNIx2k9l5D68czDEf1ssR
-         c1HQuZkEvdWJsZ02px5vb8guOt645lUUGcgs1YGdXq6otzww+LTuPBHGb7RcfqOaOmSq
-         ZnOP4IxmlpIbvRcCoabm9cA1JE7IgC1wLjh9+dmT0j43G8JwZOjZlDdweThkmzTXuqEm
-         zB8A==
-X-Gm-Message-State: ACgBeo1IyjMUq2V/8hm509zlqVGvJ0ErSTiJg2IL0XHhGlICW94ZRgZF
-        ozMJlo1syzx+XLNCRy/8n1uP3FV8OYn0xuKPlTrBFsOx3Tupdaa/m7+f/owOC5dEQ2KA+zZdwio
-        FEPThsXnsLSYaea8B2rgMAWfM
-X-Received: by 2002:a5d:64e4:0:b0:222:d4da:c2e1 with SMTP id g4-20020a5d64e4000000b00222d4dac2e1mr7468940wri.15.1660125322327;
-        Wed, 10 Aug 2022 02:55:22 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR57ng+8LAmFqiWIYkxzU0qIaLTw96OSbpCj25JDzNCtyJxE1FXqxz6BaUC8mUFwvCSeHhucCg==
-X-Received: by 2002:a5d:64e4:0:b0:222:d4da:c2e1 with SMTP id g4-20020a5d64e4000000b00222d4dac2e1mr7468880wri.15.1660125322007;
-        Wed, 10 Aug 2022 02:55:22 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:1600:a3ce:b459:ef57:7b93? (p200300cbc7071600a3ceb459ef577b93.dip0.t-ipconnect.de. [2003:cb:c707:1600:a3ce:b459:ef57:7b93])
-        by smtp.gmail.com with ESMTPSA id l3-20020a05600c4f0300b003a4bb3f9bc6sm1837127wmq.41.2022.08.10.02.55.20
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc;
+        bh=gYnpsrzUcSkvTedJeFolSDVZv7wH8NdfJvuS82L6Zr8=;
+        b=AOrYw3G6XxCbvvlKPVgw0/VnG6/ZpoGuN/mzNsq2IZ4DlWJ8oFXn8bENjzfaYPppSZ
+         wqr828f8AdRLPe/tJfUVQf7urJX0DHvG5wYIaeeMLhl2/kHXDVluA7hJ4HqA/XmP2lGN
+         WvqfCrLTlg4xW855lSNg6OyHBIotXGxa0L3+U2j9/1flBk7qlE2ylGGMT0HimelHkC8p
+         +/sb8BGUXz+5ak+gSxcgIuNod8UruawfXDYmMEzDf4tLSNzwt31+a6wVSQpnRYjzpNKi
+         UGl+oTPgbwFPQbQ1Nvovq1SrQQiWGMUaBpJSf3EtwOXBpyUxDXBU4uMK3313L8BJ8pvW
+         58Lg==
+X-Gm-Message-State: ACgBeo3Bjl5oHs1KwjoQ6ZOGsQcuAXcwrM1WIMEPK9pMniz3JWxSNS/y
+        CsY36H8JGH+uyTO7d0N/QOk=
+X-Google-Smtp-Source: AA6agR7KnM8w/qAkv2TZPlH11kVGs5XIZHHauaRjNJU4m/s0Hx+2oUJ9Y03TwSOUwRVFozMcyZDsUg==
+X-Received: by 2002:a63:8b44:0:b0:41c:df4c:7275 with SMTP id j65-20020a638b44000000b0041cdf4c7275mr22848772pge.434.1660125373153;
+        Wed, 10 Aug 2022 02:56:13 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i9-20020a17090332c900b0016f15140e66sm12594786plr.202.2022.08.10.02.56.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Aug 2022 02:55:21 -0700 (PDT)
-Message-ID: <64ab9678-c72d-b6d9-8532-346cc9c06814@redhat.com>
-Date:   Wed, 10 Aug 2022 11:55:19 +0200
+        Wed, 10 Aug 2022 02:56:10 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <fa4f12bd-4eb0-0249-d6f2-0230b904a8ad@roeck-us.net>
+Date:   Wed, 10 Aug 2022 02:56:07 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v7 05/14] mm/memfd: Introduce MFD_INACCESSIBLE flag
+Subject: Re: [PATCH v5 00/33] New thermal OF code
 Content-Language: en-US
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-6-chao.p.peng@linux.intel.com>
- <203c752f-9439-b5ae-056c-27b2631dcb81@redhat.com>
- <20220810093741.GE862421@chaop.bj.intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220810093741.GE862421@chaop.bj.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Michael Walle <michael@walle.cc>
+Cc:     daniel.lezcano@linexp.org, abailon@baylibre.com,
+        anarsoul@gmail.com, baolin.wang7@gmail.com,
+        bjorn.andersson@linaro.org, broonie@kernel.org,
+        damien.lemoal@opensource.wdc.com, digetx@gmail.com,
+        f.fainelli@gmail.com, glaroque@baylibre.com,
+        hayashi.kunihiko@socionext.com, heiko@sntech.de, j-keerthy@ti.com,
+        jonathanh@nvidia.com, khilman@baylibre.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        lukasz.luba@arm.com, matthias.bgg@gmail.com,
+        mcoquelin.stm32@gmail.com, mhiramat@kernel.org,
+        miquel.raynal@bootlin.com, niklas.soderlund@ragnatech.se,
+        rafael@kernel.org, rui.zhang@intel.com, shawnguo@kernel.org,
+        talel@amazon.com, thierry.reding@gmail.com, tiny.windzz@gmail.com
+References: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
+ <20220808094216.928018-1-michael@walle.cc>
+ <20220808102610.GA1969424@roeck-us.net>
+ <c7b3c6b3-1384-079c-fe76-dc1eca4f3ab2@linaro.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <c7b3c6b3-1384-079c-fe76-dc1eca4f3ab2@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10.08.22 11:37, Chao Peng wrote:
-> On Fri, Aug 05, 2022 at 03:28:50PM +0200, David Hildenbrand wrote:
->> On 06.07.22 10:20, Chao Peng wrote:
->>> Introduce a new memfd_create() flag indicating the content of the
->>> created memfd is inaccessible from userspace through ordinary MMU
->>> access (e.g., read/write/mmap). However, the file content can be
->>> accessed via a different mechanism (e.g. KVM MMU) indirectly.
->>>
->>> It provides semantics required for KVM guest private memory support
->>> that a file descriptor with this flag set is going to be used as the
->>> source of guest memory in confidential computing environments such
->>> as Intel TDX/AMD SEV but may not be accessible from host userspace.
->>>
->>> The flag can not coexist with MFD_ALLOW_SEALING, future sealing is
->>> also impossible for a memfd created with this flag.
->>
->> It's kind of weird to have it that way. Why should the user have to
->> care? It's the notifier requirement to have that, no?
->>
->> Why can't we handle that when register a notifier? If anything is
->> already mapped, fail registering the notifier if the notifier has these
->> demands. If registering succeeds, block it internally.
->>
->> Or what am I missing? We might not need the memfile set flag semantics
->> eventually and would not have to expose such a flag to user space.
+On 8/10/22 01:34, Daniel Lezcano wrote:
 > 
-> This makes sense if doable. The major concern was: is there a reliable
-> way to detect this (already mapped) at the time of memslot registering.
+> Hi Guenter,
+> 
+> On 08/08/2022 12:26, Guenter Roeck wrote:
+>> On Mon, Aug 08, 2022 at 11:42:16AM +0200, Michael Walle wrote:
+> 
+> [ ... ]
+> 
+>> It would also mean that all hwmon drivers registering a thermal zone sensor
+>> would fail to register unless such a thermal zone actually exists. This
+>> would make the whole concept of having the hwmon core register thermal
+>> zone sensors impossible. I have no idea how this is expected to work now,
+>> but there is an apparent flaw in the logic. That means I withdraw my
+>> Acked-by: for the hwmon patches in this series until it is guaranteed
+>> that hwmon registration does not fail as above if there is no thermal
+>> zone associated with a sensor.
+> 
+> I tried to figure out where we are not in sync and I suspect there is a misunderstanding from my side of your initial statement.
+> 
+> I understood you meant the thermal zone can not be created with the hwmon if there is no thermal zone description and that was the case before.
+> 
+> But actually, I suspect I misunderstood and you meant if the thermal OF registration fails, the hwmon creation fails for the hwmon subsystem, and before the changes it was created anyway.
+> 
+> Is that correct ?
+> 
 
-If too complicated, we could simplify to "was this ever mapped" and fail
-for now. Hooking into shmem_mmap() might be sufficient for that to get
-notified about the first mmap.
+Yes, that is what I meant.
 
-As an alternative, mapping_mapped() or similar *might* do what we want.
+> If yes, the change -EINVAL --> -ENODEV fixes the issue, shall I consider in this case your Acked-by ?
+> 
+Yes.
 
-
-
--- 
 Thanks,
+Guenter
 
-David / dhildenb
+> Thanks
+>    -- Daniel
+> 
 

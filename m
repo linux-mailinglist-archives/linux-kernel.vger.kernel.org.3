@@ -2,137 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78D6458E8B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 10:26:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 78EDC58E8BA
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 10:28:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231348AbiHJI04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 04:26:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47646 "EHLO
+        id S230484AbiHJI2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 04:28:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231750AbiHJI0l (ORCPT
+        with ESMTP id S231435AbiHJI2H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 04:26:41 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9680E61DA3
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 01:26:34 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id l22so16894583wrz.7
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 01:26:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=C4O+deHMw21i9ROh6aMeCmFYtLZ7zT5HJpdxL44+uwI=;
-        b=skHNKGe/EdlNIN/2JhTRvDNdaIJYAJYZium+/LxZVQO0MKzpOUYuSxH2xdjSGwF4DV
-         HUDoXC+raOXmQ/g1GVIjK2DfK8UF2H943OZhcV9iFmez0onZLNqDA0Sde4Wp0hNaVopL
-         phO5973aD84d2BDmNjRhrnxVP1fu1ggxab57oJpdb2s5jstkKpSJVIvyz4NT8OVfez5g
-         487I6AzTst2+OPjLwmslFsT87SiCwRj6yDbktUDlor/YGTnzAG9nvDjX4mbDesYOLbqQ
-         TY+6NylwgPvvbBFY8wYhm8xOcPeGCx0AAjjvG5pvcxMVuLBH80cS7VIt4ybHZ24ChwjN
-         NCGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=C4O+deHMw21i9ROh6aMeCmFYtLZ7zT5HJpdxL44+uwI=;
-        b=pQR2Wfp4O44CM5vzNzJZzHP8sL2/9Vm/wnPwsoZOWdbrhQTP/LEuy0gsj+v5mIzeHH
-         yO8cGY7y30yT86iWtGgKILosSU/fLWW07Gu+GKh8KK1ruFUN7j1E7HEPu9iqIGddwYme
-         vRmyIPH0OB/FdvVQxXUA1k6y3SDyAG82xYC3TNQIJAHNRBXcs23cxxi1gy8brdty+bdQ
-         CZglaD18ElS2tDwgUEDK9+mlTuC/lLZoFbAg5/z3DDYkfONFA1im6FUcJXtQ0macpuu+
-         GTUSlI0xrdBAQmvGNozsodKGOvClWv8iHiHUibf6ACaw2jatJBdUHsn0sSY9fPin4yTg
-         dUyw==
-X-Gm-Message-State: ACgBeo1pJ4ipXF3vta+sbHNSyKN7Qle5Y/kKizkt7bBPIIXseTGKu5bo
-        BwiirrBkPkWyzx+eyIfstZ04AA==
-X-Google-Smtp-Source: AA6agR4fgxq/68/WWQn+yFOTbhC53pUpIBXclTppON1LvC+cb77XJAaWf6/2h68rIy+rMscuIaf75g==
-X-Received: by 2002:a05:6000:1ac8:b0:220:8168:126b with SMTP id i8-20020a0560001ac800b002208168126bmr16394237wry.288.1660119992494;
-        Wed, 10 Aug 2022 01:26:32 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id e26-20020a05600c4b9a00b003a500b612fcsm1533910wmp.12.2022.08.10.01.26.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Aug 2022 01:26:31 -0700 (PDT)
-Message-ID: <1514c4c3-32c6-4127-0fd0-9a244445ff9c@linaro.org>
-Date:   Wed, 10 Aug 2022 10:26:29 +0200
+        Wed, 10 Aug 2022 04:28:07 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8853B79686
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 01:28:05 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27A7p73A026468;
+        Wed, 10 Aug 2022 08:27:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=JyH63/DzufmeL7nG259GtZLuQ0XDp5qO2kFdMG1yuIM=;
+ b=DM7f2eLuGJTTvAzutMYfqmDK6LfZxBtnsjhwo7QZ38H2b1Y5LBxhD2Og4hRg/qfdH1VE
+ dj8TJ3gDMuLYJwUXqeUJ0782E8EuZDcUUwKPmc7eWGN3STdeVjpb4LWHrTeZ8D9VpEZY
+ DvGTumXba60TouprRvYqflao3N5/5a25OB1ECocD9jEWvhKQTY+KUgUOak1LGicEhz2K
+ /OAqrMJxNcg+0AFIEUfi6CjPkk4YnmamOUzM3FG0M+DVvhn15p9YYHtPOPQkzAWKXS+N
+ sXHHisseIAW5wRvh7uYT8ffc8hIyBM9rWTVWGsT6rbnFm9BHCnhNKbhsOCQ2oMC8EB+F lQ== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3huwqe1rn8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Aug 2022 08:27:46 +0000
+Received: from pps.filterd (NASANPPMTA01.qualcomm.com [127.0.0.1])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 27A8Rk1j026893;
+        Wed, 10 Aug 2022 08:27:46 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NASANPPMTA01.qualcomm.com (PPS) with ESMTPS id 3hshckc8fw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Aug 2022 08:27:46 +0000
+Received: from NASANPPMTA01.qualcomm.com (NASANPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27A8IYAB007390;
+        Wed, 10 Aug 2022 08:27:46 GMT
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.47.97.222])
+        by NASANPPMTA01.qualcomm.com (PPS) with ESMTPS id 27A8Rjpw026888
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Aug 2022 08:27:45 +0000
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 10 Aug 2022 01:27:45 -0700
+Received: from [10.216.32.73] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 10 Aug
+ 2022 01:27:40 -0700
+Message-ID: <3aab7518-ff57-abdb-8bab-ea581197a07e@quicinc.com>
+Date:   Wed, 10 Aug 2022 13:57:37 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v5 00/33] New thermal OF code
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH V3] mm: fix use-after free of page_ext after race with
+ memory-offline
 Content-Language: en-US
-To:     Michael Walle <michael@walle.cc>
-Cc:     daniel.lezcano@linexp.org, abailon@baylibre.com,
-        anarsoul@gmail.com, baolin.wang7@gmail.com,
-        bjorn.andersson@linaro.org, broonie@kernel.org,
-        damien.lemoal@opensource.wdc.com, digetx@gmail.com,
-        f.fainelli@gmail.com, glaroque@baylibre.com,
-        hayashi.kunihiko@socionext.com, heiko@sntech.de, j-keerthy@ti.com,
-        jonathanh@nvidia.com, khilman@baylibre.com,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        lukasz.luba@arm.com, matthias.bgg@gmail.com,
-        mcoquelin.stm32@gmail.com, mhiramat@kernel.org,
-        miquel.raynal@bootlin.com, niklas.soderlund@ragnatech.se,
-        rafael@kernel.org, rui.zhang@intel.com, shawnguo@kernel.org,
-        talel@amazon.com, thierry.reding@gmail.com, tiny.windzz@gmail.com,
-        Guenter Roeck <linux@roeck-us.net>
-References: <20220804224349.1926752-1-daniel.lezcano@linexp.org>
- <20220808094216.928018-1-michael@walle.cc>
- <27c03303-9ee5-d9df-b7f2-016491fce9e5@linaro.org>
- <5adfe0882926d8f16c158d453069b37b@walle.cc>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <5adfe0882926d8f16c158d453069b37b@walle.cc>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+To:     Michal Hocko <mhocko@suse.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+CC:     <david@redhat.com>, <pasha.tatashin@soleen.com>,
+        <sieberf@amazon.com>, <shakeelb@google.com>, <sjpark@amazon.de>,
+        <dhowells@redhat.com>, <willy@infradead.org>,
+        <quic_pkondeti@quicinc.com>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>, Minchan Kim <minchan@kernel.org>
+References: <1660056403-20894-1-git-send-email-quic_charante@quicinc.com>
+ <20220809185714.5af7057c1270b11079cb196a@linux-foundation.org>
+ <YvNc8vuinnddc78j@dhcp22.suse.cz>
+From:   Charan Teja Kalla <quic_charante@quicinc.com>
+In-Reply-To: <YvNc8vuinnddc78j@dhcp22.suse.cz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Y8tFQTZ82Hz8mefPlE0m5I5fV6vmkqXz
+X-Proofpoint-ORIG-GUID: Y8tFQTZ82Hz8mefPlE0m5I5fV6vmkqXz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-10_03,2022-08-09_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 clxscore=1011 priorityscore=1501 mlxscore=0 adultscore=0
+ impostorscore=0 malwarescore=0 bulkscore=0 mlxlogscore=690 phishscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208100024
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
+Thanks Andrew/Michal!!
 
-On 10/08/2022 10:01, Michael Walle wrote:
-> Hi Daniel, >
-> Am 2022-08-09 10:23, schrieb Daniel Lezcano:
->>> On my second board
->>> (arch/arm/boot/dts/lan966x-kontron-kswitch-d10-mmt-6g-2gs.dts). I get 
->>> the
->>> following error:
->>>
->>> [    6.292819] thermal_sys: Unable to find thermal zones description
->>> [    6.298872] thermal_sys: Failed to find thermal zone for hwmon id=0
->>> [    6.305375] lan966x-hwmon e2010180.hwmon: error -EINVAL: failed to 
->>> register hwmon device
->>> [    6.313508] lan966x-hwmon: probe of e2010180.hwmon failed with 
->>> error -22
->>>
->>> Again, is there seems to be something missing in the device tree. For 
->>> this
->>> board a device tree change should be easily doable, as it is still in
->>> development.
+On 8/10/2022 12:53 PM, Michal Hocko wrote:
+> On Tue 09-08-22 18:57:14, Andrew Morton wrote:
+>> On Tue, 9 Aug 2022 20:16:43 +0530 Charan Teja Kalla <quic_charante@quicinc.com> wrote:
 >>
->> Logically with the fixes I've send these errors should have gone. Just
->> a pr_info should appear "... not attached to any thermal zone".
+>>> The below is one path where race between page_ext and  offline of the
+>>> respective memory blocks will cause use-after-free on the access of
+>>> page_ext structure.
 >>
->> If I'm correct, without or with the changes (new thermal OF code +
->> fixes), the hwmon message is the same and the hwmon thermal zone is
->> not created. So no regression hopefully.
+>> Has this race ever been observed at runtime?
 >>
->> Is it possible to check that?
+>> Given the size of the fix, I'm looking for excuses to not backport it
+>> into -stable kernels!
 > 
-> Yes, I'm no more seeing any error messages and the device
-> is probed successfully. Both on the kswitch board as well as on
-> the sl28 board.
+> I believe this is quite theoretical for two reasons
+> 1) the memory hotplug (offlining) is quite rare operation
+> 2) with all the retries the race window is quite hard to trigger
+> 
+> So this is good to have address long term but nothing really for stable
+> until somebody actually hits that with a real world workload.
+> 
 
-Great! thanks for testing
+Actually in the embedded systems the offline is not a rare operation,
+especially,  in cases where one want to save some power through PASR[1].
 
-   -- Daniel
+This issue is caught with and in the page_pinner[2](currently being used
+in Android) path where it is accessing the page_ext of a page after it
+is freed. This is again not with the real workload but with some stress
+tests. So, I am also agree with Michal here to not to backport it.
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+[1]https://lwn.net/Articles/478049/
+[2] https://lore.kernel.org/all/20211228175904.3739751-1-minchan@kernel.org/
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+> Btw. I plan to have a look and review this but times are busy. Hopefully
+> soon.
+> 
+> Thanks!
+> 

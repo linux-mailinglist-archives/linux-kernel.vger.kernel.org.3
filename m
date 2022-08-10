@@ -2,154 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E07C858ED9C
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 15:52:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A0E958EDA1
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 15:53:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232836AbiHJNwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 09:52:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59350 "EHLO
+        id S232855AbiHJNxB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 09:53:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231821AbiHJNwI (ORCPT
+        with ESMTP id S231788AbiHJNw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 09:52:08 -0400
-Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CF776A492
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 06:52:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1660139526; x=1691675526;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=8p/CQBS45j5tICeYzJJVMoA/fdD7DghNb+CoI4HMZYI=;
-  b=riaX0/IKweVNro3c/aTIpbudDaA4BbVcwdmTW4soSSIz5+0xbJa7T5Z4
-   oNf/TKLjGkrz3UzABoqlJIefA+FtoP4CHc3fCy+XPXATx+Q5KiST8ddih
-   BzspLN1BOAakYDt+n43FVPjQH9vxc9vKtm88vGbEbDth0gPkGV/5lfn1X
-   xLaQuFIkbDpxzC1vyD30bLqa6erGNgKMacDCGcpMgZq9ogeYeBBPjEca2
-   uFvjqZyiMsKVGu8cTFJiQ009dF+oLs3VsLxeY93PpNl1vaZ85sRmkFXo1
-   uK1noKi+sPmlU8jbv4Zv+IudsM6Tam3SKi+sGiU//Mz5yliaCLDX0uKCf
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.93,227,1654531200"; 
-   d="scan'208";a="208346232"
-Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 10 Aug 2022 21:52:05 +0800
-IronPort-SDR: Vo5iWK4tDonXcLgapTvLwVsoJoBfTLJYlzMvxoBuxIRsQyrFynM0e5k0n6zkZvR2NpR0lhk1Ef
- XnxFGW47tXLgv4pkaO1+8tF60bzkvaZIdVX7RLcdIk1ULa8TJrOcjyCpPnlMTotmqicv7Wx2cv
- VihlNQjTcoNL44vxByouhPMweqs86b08ggX/LdyPF5X1+DK9/RskxrCtvHMhWIhUmC9/JlWrgl
- f4QXaaKNxIdGZT1QoGvQdJ1bU5gjvRQQlH0tC4+4ryoNv87z7a2m8rP0Qko+DmMZP7p+xmEKsh
- Ix1pvooR57z7R5Ch8EyH/XSn
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 10 Aug 2022 06:13:01 -0700
-IronPort-SDR: VVY7Siw6ODQm0WNXXkjr1/Fg6mYH/NMspSvT7vB3SkJZ8N5rqddTU9hiH8hUX7n6DGXoKzcDwO
- c1yqXN9iuHasyilmKQSO+93c4+f1oed11cfjqN76b2DGQp7PFeuD1muq4h5qXbmhi/hkrAVtHU
- A8zGgb7bWYdZD09rDHV4LztyNBRu8arS6RKNqzvSx2265Lv7Kyd8cBhf8rJOOD15wv0ByXIBw3
- CmbR5nSqaz2HxvBQ8Bf1winkk022Mudjhbal64lKcxHsL7+0wZ/gEHFUUD6U5mfejMEsGBilCA
- 8jE=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 10 Aug 2022 06:52:06 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4M2rw50Hk2z1Rwnm
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 06:52:04 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1660139524; x=1662731525; bh=8p/CQBS45j5tICeYzJJVMoA/fdD7DghNb+C
-        oI4HMZYI=; b=otEE04L7O38+4u+ZpwLBrDlSZUcEYa5JrBnDLS41uaCHAl947nQ
-        LorvLUhPNZGApSJ6qhJJfz2aiSpFyt/tcxeHaVN0STPnS/tLnXFkLWzO0BcJL9BH
-        8SZPTq3ibepP1sDLOyz5X3Xo+Y/BNUlgCbqvCxI6IG0dTnCjQVnCELdEGILYbUrl
-        qNLVBj9n8r8EzOAx3iWGJtZEtO+X+D0wEjgA+32RPRwZcUMrbsvmfZ6YnFfeGT8R
-        o8iatbjcu3hbRb4OmtvI8s/Oa/OhU9TT4FVFHWKG/t84gohcVnRURowKaSYiYJ/M
-        EbvAq7gTpor3m5xtt8MB5JKPnQAGihWTmsA==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id KzJbKsreAu9S for <linux-kernel@vger.kernel.org>;
-        Wed, 10 Aug 2022 06:52:04 -0700 (PDT)
-Received: from [10.111.68.99] (c02drav6md6t.sdcorp.global.sandisk.com [10.111.68.99])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4M2rw367vnz1RtVk;
-        Wed, 10 Aug 2022 06:52:03 -0700 (PDT)
-Message-ID: <b3ce0a28-0f94-6d2a-3f88-998da8f870b4@opensource.wdc.com>
-Date:   Wed, 10 Aug 2022 06:52:03 -0700
+        Wed, 10 Aug 2022 09:52:59 -0400
+Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31ABA6A49B;
+        Wed, 10 Aug 2022 06:52:58 -0700 (PDT)
+Received: from pps.filterd (m0288072.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27A9Wteb004678;
+        Wed, 10 Aug 2022 15:52:41 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=piHnlhdm1DFxcQ49aY1RvFb5vNaq7I7eTpLUu/D0dt8=;
+ b=7gcqO79dpnMIJRV40lMblFDM9tS+pYwYwqAfz3/PDmTpBzu39TVu12fR9meWOhedeQaN
+ gbM1RY6dzPSnh4hwu0kKC1hn/3Bjf6BKmgHOiCnLLJqd5GeJTBt3ThdNAfZYynKDDuP2
+ 0yKXj/R8hdHq1Wtq4BhDG+he0vc3gYTtoFA8SFqxXDLc8ULI8AZCLw8jlxzQWoGjFDmI
+ 06EkJeRkD/DNAj8Zi5DJ0nq9fdW22rLAvjt2B01m9S33wX4we1qhwrewYTI6xR+cmh0L
+ OVwfAu0hzRc+ttmd0jkCRSvO2OBF2HcIgW4a4x1TnPVed//yUuLuzcpqy7we38KWd9wD BQ== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3huwpmcx0v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 Aug 2022 15:52:41 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id EEAA0100034;
+        Wed, 10 Aug 2022 15:52:40 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id E6A4122FA31;
+        Wed, 10 Aug 2022 15:52:40 +0200 (CEST)
+Received: from [10.201.21.72] (10.75.127.49) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2308.20; Wed, 10 Aug
+ 2022 15:52:40 +0200
+Message-ID: <cfc882a2-c8f3-0ec8-706e-a16dccc9fda7@foss.st.com>
+Date:   Wed, 10 Aug 2022 15:52:39 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.12.0
-Subject: Re: [ata] 0568e61225: stress-ng.copy-file.ops_per_sec -15.0%
- regression
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 1/2] spi: stm32_qspi: Add transfer_one_message() spi
+ callback
 Content-Language: en-US
-To:     John Garry <john.garry@huawei.com>,
-        kernel test robot <oliver.sang@intel.com>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-ide@vger.kernel.org, lkp@lists.01.org, lkp@intel.com,
-        ying.huang@intel.com, feng.tang@intel.com,
-        zhengjun.xing@linux.intel.com, fengwei.yin@intel.com
-References: <YuzPMMnnY739Tnit@xsang-OptiPlex-9020>
- <1f498d4a-f93f-ceb4-b713-753196e5e08d@opensource.wdc.com>
- <3451fa5a-6229-073f-ae18-0c232cd48ed5@huawei.com>
- <16f03f81-a8c7-bacf-c74c-67231f7f7202@huawei.com>
- <ef84d2dd-84ea-e1c7-05ef-f0a082d4f7d0@opensource.wdc.com>
- <82dbf4d6-2d43-20ff-22a7-857f9f11a5ce@huawei.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <82dbf4d6-2d43-20ff-22a7-857f9f11a5ce@huawei.com>
-Content-Type: text/plain; charset=UTF-8
+To:     Mark Brown <broonie@kernel.org>
+CC:     Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <linux-spi@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <christophe.kerello@foss.st.com>
+References: <20220810093215.794977-1-patrice.chotard@foss.st.com>
+ <20220810093215.794977-2-patrice.chotard@foss.st.com>
+ <YvOtZtrRHd4AT+j+@sirena.org.uk>
+ <d41e3814-3fab-18a3-7218-d5c28eaecff8@foss.st.com>
+ <YvOxOg0vXSGrZLfP@sirena.org.uk>
+ <38200a6f-fdc1-fa94-7bc6-91ca528235ed@foss.st.com>
+ <YvO1U7VB7WQv0oKR@sirena.org.uk>
+From:   Patrice CHOTARD <patrice.chotard@foss.st.com>
+In-Reply-To: <YvO1U7VB7WQv0oKR@sirena.org.uk>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.75.127.49]
+X-ClientProxiedBy: SFHDAG2NODE3.st.com (10.75.127.6) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-10_08,2022-08-10_01,2022-06-22_01
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/08/10 1:33, John Garry wrote:
-> On 09/08/2022 15:57, Damien Le Moal wrote:
->>>> As far as I can see, this patch should not make a difference unless the
->>>> ATA shost driver is setting the max_sectors value unnecessarily low.
->>> For __ATA_BASE_SHT, we don't set max_sectors. As such, we default
->>> shost->max_sectors = SCSI_DEFAULT_MAX_SECTORS (=1024) in
->>> scsi_host_alloc(). I assume no shost dma mapping limit applied.
->>>
->>> Then - for example - we could select dev->max_sectors =
->>> ATA_MAX_SECTORS_LBA48 (=65535) in ata_dev_configure().
->>>
->>> So with commit 0568e6122574 we would have final max sectors = 1024, as
->>> opposed to 65535 previously. I guess that the problem is something like
->>> this.
->>>
->>> If so, it seems that we would need to apply the shost dma mapping limit
->>> separately in ata_scsi_dev_config() and not use shost->max_sectors.
->> OK. Will have a look at that.
->>
-> 
-> We may need to introduce something like shost->max_hw_sectors, which is 
-> set according to sht max sectors and dma mapping limits. That could be 
-> also used in USB scsiglue slave_configure()
-> 
-> Or else set max_sectors value for __ATA_BASE_SHT, but I don't know a 
-> sane value there considering ATA_MAX_SECTORS_LBA48 gives max_sectors of 
-> 65535.
-> 
-> Damien, please let me know if you need help now. I am just waiting for 
-> you to test to prove this theory about dev->max_sectors being capped. I 
-> don't have an AHCI setup readily-available for testing - just SAS cards 
-> or QEMU.
-
-I am on it.
-
-> 
-> Thanks,
-> John
 
 
--- 
-Damien Le Moal
-Western Digital Research
+On 8/10/22 15:40, Mark Brown wrote:
+> On Wed, Aug 10, 2022 at 03:31:59PM +0200, Patrice CHOTARD wrote:
+>> On 8/10/22 15:23, Mark Brown wrote:
+>>> On Wed, Aug 10, 2022 at 03:15:08PM +0200, Patrice CHOTARD wrote:
+> 
+>>> Yes.  Though I'm not clear if the bindings actually want to enforce it
+>>> there, it's a device level property not a controller level one so it
+>>> might not be something where controller support gets validated.
+> 
+>> Ah yes, i see, parallel-memories should not be used in our qspi controller node.
+>> So i can't reuse parallel-memories for my purpose.
+> 
+>> So i need to add a new proprietary property at controller level as done in the v1 ?
+> 
+> Can't the controller figure this out by looking at the properties of the
+> connected devices?  You'd need to just return an error if we ever
+> triggered transfer_one_message() on a device that can't support the
+> operation.
+
+It should be a solution.
+
+I just noticed another point, property parallel-memories is an array of uint64 which represent device's size.
+In case a FPGA is connected to the qspi 8 line bus, parallel-memories property will be set with what ?
+simply random value to make dtbs_check happy ?
+
+IMHO, adding a new proprietary property would be cleaner.
+

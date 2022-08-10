@@ -2,332 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1820758EA60
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 12:18:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50F7258EA65
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 12:23:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230262AbiHJKSH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 06:18:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49824 "EHLO
+        id S229891AbiHJKXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 06:23:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbiHJKSE (ORCPT
+        with ESMTP id S229476AbiHJKXA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 06:18:04 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 072BB6F563;
-        Wed, 10 Aug 2022 03:18:01 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id x23so13840813pll.7;
-        Wed, 10 Aug 2022 03:18:01 -0700 (PDT)
+        Wed, 10 Aug 2022 06:23:00 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 151CC56B9D
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 03:22:59 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id gb36so26813984ejc.10
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 03:22:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=XB+XqKHbpNMS7fnvlhelkSlDSr5r2pbQ+tbkKgP7v+c=;
-        b=AYC2RdzGxVPY/FfVdja26JsXpaXU5giPb18iVq/Ui2bIIf6HYvnl9dcNEJrC23qK2d
-         0kkvIm4P2lQeA5S92DPXl5bJ/r+7vo6x4SmSjXG1qP4eWdmLoXvQ6Rk88kbAay1x7SVf
-         IF022QVmFD2uY+HFLofxz+uD6AmBYdWL0fNrP02noGWx05jFL6tVdgM7w1nHJcyFsQNn
-         4KzsBBop9hv4vrv4s1prBaQz+yRcox33rF6LcrhluFDlMNaSE3P2ltI8X0GiaFS4eBBg
-         LRaxgddQZ8y1BI4dNjsSt7xDk39OkAjoXkhkAK2Fud1e7JNdOzT7x+3rz4M3YsgfQfj1
-         8lAQ==
+        d=linaro.org; s=google;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc;
+        bh=sI8ZZBr1JuNoiGQh9KrzRGcAQTatYvynl+4y+qL068k=;
+        b=mmAfA8A0WBR4nMz9DKK7BUqcR2s5XjFTI3lL0Oqc1H0/wVZ6D3mOfq3Fm78hequ3uS
+         TmVvjAsqNfTCo3ArhNxxUU+RX/TBYOQXsjURCzsMX0Dz9JckVQkpyEgIraeIDBzNYnhs
+         +4esj0KvEgNPJ4Fr6tE4dAmFnwjMOcC8bPn9wnXjQ9vY7GACVrprD/lsQNN5dNuwqAIf
+         EkYDHxwxWohJiAmNXgVrR5wKUeP7plNkAIACk4X/doKOelbX6Mrt60+Ei4eUadFYoABW
+         Dfc5R9j12cjLIuB5wSVMJFXU2+qhbo1Doe2othtpJHjxOreoAaG0h1tyOThCfrQMxJFL
+         SpyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=XB+XqKHbpNMS7fnvlhelkSlDSr5r2pbQ+tbkKgP7v+c=;
-        b=obN1x35N8Jvk5qjUIujwGbmupPv9nJpkEgRdGxqaePS+Dc7Ig27rWUKWCUda7ruUfW
-         pFrHnVN4pszviKxJwBjoFo2jwLvf7e/bNtqzOEsQHL8VkH/nsDHgJHm3d+7kBknfL6uf
-         Au2tEIMpU4VEga3akL7GSHhMdghjQhoFHqByPtaGyhO7y6zppW/lu1TN2f9l1TCvXONG
-         JQgoc7CgS6h4bHb1KPBEggt5e06dwec7iBDxEoezSKrD4SC3JJG92eWFFS7YG051kzw0
-         ovJ3h4QXqIpRRXZ6RwL99Dg/w1BKwHO6alN5QnaUt9ud+tg+VZsIu9iQu3EJ/mP8kQok
-         pM0w==
-X-Gm-Message-State: ACgBeo2KiZxA0lPKlXegOyrZMSUSKYUKbHN0blSJF78Rirp+5MZDjdxw
-        P/SN7Nz997VycwlBMUlNO5s=
-X-Google-Smtp-Source: AA6agR4eWDA14qJ3bh3ygXze00gIyn+w2HIqklz+mg4yOVJchQczP360bEpp2jU9lvdIlENEGc+V0w==
-X-Received: by 2002:a17:902:d54f:b0:16f:843d:efcb with SMTP id z15-20020a170902d54f00b0016f843defcbmr27020383plf.55.1660126680391;
-        Wed, 10 Aug 2022 03:18:00 -0700 (PDT)
-Received: from sw.. (220-128-98-63.hinet-ip.hinet.net. [220.128.98.63])
-        by smtp.gmail.com with ESMTPSA id g74-20020a62524d000000b0052d40c4c06esm1542201pfb.39.2022.08.10.03.17.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 03:18:00 -0700 (PDT)
-From:   Szuying Chen <chensiying21@gmail.com>
-To:     gregkh@linuxfoundation.org, mika.westerberg@linux.intel.com,
-        andreas.noever@gmail.com, michael.jamet@intel.com,
-        YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Yd_Tseng@asmedia.com.tw, Chloe_Chen@asmedia.com.tw,
-        Richard_Hsu@asmedia.com.tw, Szuying Chen <chensiying21@gmail.com>
-Subject: [PATCH] thunderbolt: thunderbolt: add vendor's NVM formats
-Date:   Wed, 10 Aug 2022 18:17:43 +0800
-Message-Id: <20220810101743.11214-1-chensiying21@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc;
+        bh=sI8ZZBr1JuNoiGQh9KrzRGcAQTatYvynl+4y+qL068k=;
+        b=N34+F5ChRxoEsjOuxCuZScQU89RIcSDO2oaP4WKtqPYbml7r1df/5a7h02ekCh1qZh
+         z9ehaIK/crezs0IjLT8S1qt9xZEndroNeeuoHuEhHGlUxW73uc/aNXUSIOspz5/wOns5
+         Bh2V0uYpnmYb20FPpMx+BZk0n8gfLPynknhXSddIkRnSPipm8JJFn2iGZAp7eNZdEPh4
+         imTIXqxdyy6BBm8WvJVeJ0/K7DNMPe7AaZlUfm2gVqdb7a0OyFYVlDfqqXyN8jzGyF9B
+         Wx+unYPNpT6qQRvmvj07a4u10zTsdaCAw7ZSoZSoDkQqQXO60a4uueyX7qO4EM5ccZcn
+         2x4Q==
+X-Gm-Message-State: ACgBeo2Qsj8EXKXnBWkLZmGNHK9Vw0UVmKs0JqOj+kfUzBG3fg7kqtF0
+        kPGeWCsqHDsfqlkhveqWdNf78g==
+X-Google-Smtp-Source: AA6agR61pmFrc+/6dzRSTmnWlyispHL7maEVDC61kJQ1n13aNi4qab1EsNKshRSyze06UpNcdqPiFQ==
+X-Received: by 2002:a17:906:845c:b0:730:bbf1:196a with SMTP id e28-20020a170906845c00b00730bbf1196amr19895946ejy.13.1660126977530;
+        Wed, 10 Aug 2022 03:22:57 -0700 (PDT)
+Received: from mbp-di-paolo.station (net-93-70-86-43.cust.vodafonedsl.it. [93.70.86.43])
+        by smtp.gmail.com with ESMTPSA id f12-20020a17090631cc00b0072ee9790894sm2129835ejf.197.2022.08.10.03.22.55
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 10 Aug 2022 03:22:56 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.11\))
+Subject: Re: [PATCH 0/8] block, bfq: extend bfq to support multi-actuator
+ drives
+From:   Paolo Valente <paolo.valente@linaro.org>
+In-Reply-To: <SJ0PR20MB44093D6FB740E543EDAAC002A0629@SJ0PR20MB4409.namprd20.prod.outlook.com>
+Date:   Wed, 10 Aug 2022 12:22:55 +0200
+Cc:     Arie van der Hoeven <arie.vanderhoeven@seagate.com>,
+        Muhammad Ahmad <muhammad.ahmad@seagate.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Jan Kara <jack@suse.cz>,
+        "andrea.righi@canonical.com" <andrea.righi@canonical.com>,
+        "glen.valante@linaro.org" <glen.valante@linaro.org>,
+        "axboe@kernel.dk" <axboe@kernel.dk>,
+        Tyler Erickson <tyler.erickson@seagate.com>,
+        Michael English <michael.english@seagate.com>,
+        Andrew Ring <andrew.ring@seagate.com>,
+        Varun Boddu <varunreddy.boddu@seagate.com>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <74F8D5E8-0D56-413B-A3CA-7462D9C862D6@linaro.org>
+References: <20220623155335.6147-1-paolo.valente@linaro.org>
+ <PH7PR20MB505849512979A89E8A66FB24F18E9@PH7PR20MB5058.namprd20.prod.outlook.com>
+ <SJ0PR20MB44093D6FB740E543EDAAC002A0629@SJ0PR20MB4409.namprd20.prod.outlook.com>
+To:     Rory Chen <rory.c.chen@seagate.com>
+X-Mailer: Apple Mail (2.3445.104.11)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The patch add tb_nvm_quirks() contain an array that has functions
-pointers to tb_nvm_vendor_apply().
-And tb_nvm_vendor_apply() that recognize supported vendor works in one
-of the following cases:
-Case NvmUpgradeSuppport: enable nvm's attribute by setting
-no_nvm_upgrade flag to create nvm_authenticate file node.
-Case NvmAdd:add active/non-active NVM devices.
-Case NvmWrite:update firmware to non-ative NVM device.
 
-Signed-off-by: Szuying Chen <chensiying21@gmail.com>
----
- drivers/thunderbolt/nvm.c    | 59 ++++++++++++++----------------------
- drivers/thunderbolt/switch.c | 19 +++++++-----
- drivers/thunderbolt/tb.h     | 18 +++++++----
- 3 files changed, 46 insertions(+), 50 deletions(-)
 
-diff --git a/drivers/thunderbolt/nvm.c b/drivers/thunderbolt/nvm.c
-index d5f283889da8..2aae8b3fa5dc 100644
---- a/drivers/thunderbolt/nvm.c
-+++ b/drivers/thunderbolt/nvm.c
-@@ -14,6 +14,7 @@
- #include "tb.h"
+> Il giorno 9 ago 2022, alle ore 05:47, Rory Chen =
+<rory.c.chen@seagate.com> ha scritto:
+>=20
+> Resend the mail as plain text because previous mail with rich text =
+makes some mess and forget to add others at Seagate who worked on =
+validating the
+> patch as well(Muhammad, Michael, Andrew, Varun,Tyler)
+>=20
+> Hi Paolo,
+>=20
 
- static DEFINE_IDA(nvm_ida);
-+
- static int tb_switch_nvm_read(void *priv, unsigned int offset, void *val,
- 			      size_t bytes)
- {
-@@ -22,7 +23,6 @@ static int tb_switch_nvm_read(void *priv, unsigned int offset, void *val,
- 	int ret;
+Hi
 
- 	pm_runtime_get_sync(&sw->dev);
--
- 	if (!mutex_trylock(&sw->tb->lock)) {
- 		ret = restart_syscall();
- 		goto out;
-@@ -60,22 +60,23 @@ static int tb_switch_nvm_write(void *priv, unsigned int offset, void *val,
- 	return ret;
- }
+> I am from Seagate China and face a problem when I=E2=80=99m evaluating =
+the bfq patches. Could you please check?
+> Thanks
+>=20
+> Issue statement
+> When running performance test on bfq patch, I observed warning message =
+"bfq_actuator_index: bio sector out of ranges: end=3D35156656128" and OS =
+hung suddenly after some hours.
+> The warning message is reported from function bfq_actuator_index which =
+determines IO request is in which index of actuators.  The =
+bio_end_sector is 35156656128 but the max LBA for the drive is =
+35156656127 so it=E2=80=99s beyond the LBA range.
 
- Refer to thunderbolt source: switch.c.
+Yep, this sanity check fails if the end sector of a new IO does not
+belong to any sector range.
 
--static int tb_nvm_vendor_apply(struct tb_switch *sw, unsigned int handle)
-+static int asm_nvm_apply(struct tb_switch *sw, unsigned int handle)
- {
-+	struct tb_nvm *nvm;
-+	u32 val;
-+	u32 nvm_size;
- 	int ret = 0;
-+	unsigned int image_size;
-+	const u8 *buf = sw->nvm->buf;
+>  I captured the block trace and didn=E2=80=99t found request LBA =
+35156656128 instead only found max request LBA 35156656127.
 
- 	switch (handle) {
--	case 0:
-+	case NvmUpgradeSuppport:
- 		if (sw->no_nvm_upgrade)
- 			sw->no_nvm_upgrade = false;
+Maybe in the trace you see only start sectors?  The failed check si
+performed on end sectors instead.
 
- 		break;
+At any rate, there seems to be an off-by-one error in the value(s)
+stored in the sector field(s) of the blk_independent_access_range data
+structure.
 
--	case 1:
--		struct tb_nvm *nvm;
--		u32 val;
--		u32 nvm_size;
--
-+	case NvmAdd:
- 		nvm = tb_nvm_alloc(&sw->dev);
- 		if (IS_ERR(nvm)) {
- 			ret = PTR_ERR(nvm);
-@@ -86,13 +87,13 @@ static int tb_nvm_vendor_apply(struct tb_switch *sw, unsigned int handle)
- 		if (ret)
- 			break;
+I guess we may need some help/feedback from people competent on this
+stuff.
 
--		nvm->vendor.date = (((u8)val) << 0x10 | ((u8)(val >> 0x8)) << 0x8 | (u8)(val >> 0x10));
-+		nvm->nvm_asm.date = (((u8)val) << 0x10 | ((u8)(val >> 0x8)) << 0x8 | (u8)(val >> 0x10));
- 		ret = usb4_switch_nvm_read(sw, NVM_CUSTOMER_ID, &val, sizeof(val));
- 		if (ret)
- 			break;
+> I=E2=80=99m not sure if this warning message is related to later OS =
+hung.
+>=20
 
--		nvm->vendor.customerID = (((u8)val) << 0x8 | ((u8)(val >> 0x8)));
--		nvm->vendor.version = (u8)(val >> 0x10);
-+		nvm->nvm_asm.customerID = (((u8)val) << 0x8 | ((u8)(val >> 0x8)));
-+		nvm->nvm_asm.version = (u8)(val >> 0x10);
- 		nvm_size = SZ_512K;
- 		ret = tb_nvm_add_active(nvm, nvm_size, tb_switch_nvm_read);
- 		if (ret)
-@@ -105,10 +106,7 @@ static int tb_nvm_vendor_apply(struct tb_switch *sw, unsigned int handle)
- 		sw->nvm = nvm;
- 		break;
+Not easy to say.  At any rate, we can try with a development version
+of bfq.  It can help us detect the possible cause of this hang.  But
+let's see where we get with this sector error first.
 
--	case 2:
--		unsigned int image_size;
--		const u8 *buf = sw->nvm->buf;
--
-+	case NvmWrite:
- 		if (!buf) {
- 			ret = -EINVAL;
- 			break;
-@@ -128,7 +126,7 @@ static int tb_nvm_vendor_apply(struct tb_switch *sw, unsigned int handle)
- 		break;
- 	}
+Thank you for testing this extended version of bfq,
+Paolo
 
--	if ((handle == 1) && (ret != 0))
-+	if ((handle == NvmAdd) && (ret != 0))
- 		tb_nvm_free(sw->nvm);
-
- 	return ret;
-@@ -136,45 +134,32 @@ static int tb_nvm_vendor_apply(struct tb_switch *sw, unsigned int handle)
-
- struct tb_nvm_id {
- 	u16 hw_vendor_id;
--	u16 hw_device_id;
--	u16 vendor;
--	u16 device;
- 	int (*hook)(struct tb_switch *sw, unsigned int handle);
- };
-
- static const struct tb_nvm_id tb_nvm_vendors[] = {
- 	/* ASMedia software CM firmware upgrade */
--	{ 0x174c, 0x2428, 0x174c, 0x0009, tb_nvm_vendor_apply },
-+	{ 0x174c, asm_nvm_apply },
- };
-
- /**
-- * tb_nvm_quirks() - support vendor's NVM format
-+ * tb_nvm_vendor_handle() - support vendor's NVM format
-  * @sw: Thunderbolt switch
-+ * @handle: 0:NvmUpgradeSuppport, 1:NvmAdd, 2:NvmWrite
-  */
--int tb_nvm_quirks(struct tb_switch *sw, unsigned int handle)
-+int tb_nvm_vendor_handle(struct tb_switch *sw, unsigned int handle)
- {
- 	int res, i;
--	bool NoVendor = true;
-
- 	for (i = 0; i < ARRAY_SIZE(tb_nvm_vendors); i++) {
--		const struct tb_nvm_id *q = &tb_nvm_vendors[i];
-+		const struct tb_nvm_id *id = &tb_nvm_vendors[i];
-
--		if (q->hw_vendor_id && q->hw_vendor_id != sw->config.vendor_id)
--			continue;
--		if (q->hw_device_id && q->hw_device_id != sw->config.device_id)
--			continue;
--		if (q->vendor && q->vendor != sw->vendor)
--			continue;
--		if (q->device && q->device != sw->device)
-+		if (id->hw_vendor_id && id->hw_vendor_id != sw->config.vendor_id)
- 			continue;
-
--		 res = q->hook(sw, handle);
--		 NoVendor = false;
-+		 res = id->hook(sw, handle);
- 	}
--	if (NoVendor)
--		return -ENODEV;
--	else
--		return res;
-+	return res;
- }
-
- /**
-diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-index a654b6951bef..8fa9efa8a900 100644
---- a/drivers/thunderbolt/switch.c
-+++ b/drivers/thunderbolt/switch.c
-@@ -114,8 +114,12 @@ static int nvm_validate_and_write(struct tb_switch *sw)
- 	if (image_size < NVM_MIN_SIZE || image_size > NVM_MAX_SIZE)
- 		return -EINVAL;
-
--	ret = tb_nvm_quirks(sw, 2);
--	if (ret != -ENODEV)
-+	/*
-+	 * Vendor's nvm write. If the image has been flushed to the
-+	 * storage are, nvm write is complete.
-+	 */
-+	ret = tb_nvm_vendor_handle(sw, NvmWrite);
-+	if (sw->nvm->flushed)
- 		return ret;
-
- 	/*
-@@ -394,9 +398,9 @@ static int tb_switch_nvm_add(struct tb_switch *sw)
- 	if (!nvm_readable(sw))
- 		return 0;
-
--	/* Vendor's NVM formats definition */
--	ret = tb_nvm_quirks(sw, 1);
--	if (ret != -ENODEV)
-+	/* Vendor's NVM formats add */
-+	ret = tb_nvm_vendor_handle(sw, NvmAdd);
-+	if (ret)
- 		return ret;
-
- 	/*
-@@ -1962,8 +1966,9 @@ static ssize_t nvm_version_show(struct device *dev,
- 		ret = -ENODATA;
- 	else if (!sw->nvm)
- 		ret = -EAGAIN;
-+	/*ASMedia NVM version show format xxxxxx_xxxx_xx */
- 	else if (sw->config.vendor_id == 0x174C)
--		ret = sprintf(buf, "%06x_%04x_%02x\n", sw->nvm->vendor.date, sw->nvm->vendor.customerID, sw->nvm->vendor.version);
-+		ret = sprintf(buf, "%06x_%04x_%02x\n", sw->nvm->nvm_asm.date, sw->nvm->nvm_asm.customerID, sw->nvm->nvm_asm.version);
- 	else
- 		ret = sprintf(buf, "%x.%x\n", sw->nvm->major, sw->nvm->minor);
-
-@@ -2871,7 +2876,7 @@ int tb_switch_add(struct tb_switch *sw)
- 		tb_sw_dbg(sw, "uid: %#llx\n", sw->uid);
-
- 		tb_check_quirks(sw);
--		tb_nvm_quirks(sw, 0);
-+		tb_nvm_vendor_handle(sw, NvmUpgradeSuppport);
-
- 		ret = tb_switch_set_uuid(sw);
- 		if (ret) {
-diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-index 9dd1ba7b07b6..a8dd0ae04741 100644
---- a/drivers/thunderbolt/tb.h
-+++ b/drivers/thunderbolt/tb.h
-@@ -31,10 +31,16 @@
- #define NVM_Date	0x1C
- #define NVM_CUSTOMER_ID	0x28
-
--struct tb_nvm_vendor {
--	int	date;
--	u16	customerID;
--	u8	version;
-+/* ASMedia specific NVM handle */
-+#define NvmUpgradeSuppport 0
-+#define NvmAdd 1
-+#define NvmWrite 2
-+
-+struct nvm_asmedia {
-+	u32 date;
-+	u32 customerID:16;
-+	u32 version:8;
-+	u32 reserved:8;
- };
-
- /**
-@@ -66,7 +72,7 @@ struct tb_nvm {
- 	size_t buf_data_size;
- 	bool authenticating;
- 	bool flushed;
--	struct tb_nvm_vendor vendor;
-+	struct nvm_asmedia nvm_asm;
- };
-
- enum tb_nvm_write_ops {
-@@ -746,7 +752,7 @@ static inline void tb_domain_put(struct tb *tb)
- 	put_device(&tb->dev);
- }
-
--int tb_nvm_quirks(struct tb_switch *sw, unsigned int handle);
-+int tb_nvm_vendor_handle(struct tb_switch *sw, unsigned int handle);
- struct tb_nvm *tb_nvm_alloc(struct device *dev);
- int tb_nvm_add_active(struct tb_nvm *nvm, size_t size, nvmem_reg_read_t reg_read);
- int tb_nvm_write_buf(struct tb_nvm *nvm, unsigned int offset, void *val,
---
-2.34.1
+>=20
+> Problem environment
+> Kernel base is 5.18.9
+> Test HDD drive is Seagate ST18000NM0092 dual actuator SATA.
+> Actuator LBA mapping by reading VPD B9
+> Concurrent positioning ranges VPD page:
+> LBA range number:0
+> number of storage elements:1
+> starting LBA:0x0
+> number of LBAs:0x417c00000 [17578328064]
+> LBA range number:1
+> number of storage elements:1
+> starting LBA:0x417c00000
+> number of LBAs:0x417c00000 [17578328064]
+>=20
+>=20
+>=20
+>=20
+>=20
+> From: Paolo Valente <paolo.valente@linaro.org>
+> Sent: Thursday, June 23, 2022 8:53 AM
+> To: Jens Axboe <axboe@kernel.dk>
+> Cc: linux-block@vger.kernel.org <linux-block@vger.kernel.org>; =
+linux-kernel@vger.kernel.org <linux-kernel@vger.kernel.org>; =
+jack@suse.cz <jack@suse.cz>; andrea.righi@canonical.com =
+<andrea.righi@canonical.com>; glen.valante@linaro.org =
+<glen.valante@linaro.org>; Arie van der Hoeven =
+<arie.vanderhoeven@seagate.com>; Paolo Valente =
+<paolo.valente@linaro.org>
+> Subject: [PATCH 0/8] block, bfq: extend bfq to support multi-actuator =
+drives
+>=20
+>=20
+> This message has originated from an External Source. Please use proper =
+judgment and caution when opening attachments, clicking links, or =
+responding to this email.
+>=20
+>=20
+> Hi,
+> this patch series extends BFQ so as to optimize I/O dispatch to
+> multi-actuator drives. In particular, this extension addresses the
+> following issue. Multi-actuator drives appear as a single device to
+> the I/O subsystem [1].  Yet they address commands to different
+> actuators internally, as a function of Logical Block Addressing
+> (LBAs). A given sector is reachable by only one of the actuators. For
+> example, Seagate=E2=80=99s Serial Advanced Technology Attachment =
+(SATA)
+> version contains two actuators and maps the lower half of the SATA LBA
+> space to the lower actuator and the upper half to the upper actuator.
+>=20
+> Evidently, to fully utilize actuators, no actuator must be left idle
+> or underutilized while there is pending I/O for it. To reach this
+> goal, the block layer must somehow control the load of each actuator
+> individually. This series enriches BFQ with such a per-actuator
+> control, as a first step. Then it also adds a simple mechanism for
+> guaranteeing that actuators with pending I/O are never left idle.
+>=20
+> See [1] for a more detailed overview of the problem and of the
+> solutions implemented in this patch series. There you will also find
+> some preliminary performance results.
+>=20
+> Thanks,
+> Paolo
+>=20
+> [1] =
+https://secure-web.cisco.com/1hcxnN1C3h1nW7mby7S66_LE8szirQwbQI0fBpYePrA0G=
+TWfyuQyl0GpZaOn32xMSkNT0BUQWloDHFzZ23aYDZdi8NfdrEFLY9pQDBblIvn08LRiTVoIOUC=
+8zWSG_r2PCyLtx3ppZq5cWOib_8azxteRRcbKWGdbLPSqg9hfSJSqltth0ByLONHEoI3p3e9QN=
+In6nVAeQbsT3aOQe-F95XrQvaPrFJXx6RGL9kDXyfkbXIHcdcLBf895gYBFn5S2WjBDQq2kzDz=
+ZOlc1HekRUhg0qDQcFY6NydVfrqNfLbpAHAth6KyREscQhVTMVREEVa1b6bQByX6grF5pn3pTI=
+o0lODyfX6yRmcbReSYNfOZ65ZPvp-nH530FQ-5nXoRxFf74WIKDrNTALs3xQvg03DH4jLez-T2=
+M9xEu-sfEDAEdTGF7BcnmBW6vrPO4_p3k4/https%3A%2F%2Fwww.linaro.org%2Fblog%2Fb=
+udget-fair-queueing-bfq-linux-io-scheduler-optimizations-for-multi-actuato=
+r-sata-hard-drives%2F
+>=20
+> Davide Zini (3):
+>  block, bfq: split also async bfq_queues on a per-actuator basis
+>  block, bfq: inject I/O to underutilized actuators
+>  block, bfq: balance I/O injection among underutilized actuators
+>=20
+> Federico Gavioli (1):
+>  block, bfq: retrieve independent access ranges from request queue
+>=20
+> Paolo Valente (4):
+>  block, bfq: split sync bfq_queues on a per-actuator basis
+>  block, bfq: forbid stable merging of queues associated with different
+>    actuators
+>  block, bfq: turn scalar fields into arrays in bfq_io_cq
+>  block, bfq: turn BFQ_NUM_ACTUATORS into BFQ_MAX_ACTUATORS
+>=20
+> block/bfq-cgroup.c  |  97 +++++----
+> block/bfq-iosched.c | 488 +++++++++++++++++++++++++++++---------------
+> block/bfq-iosched.h | 149 ++++++++++----
+> block/bfq-wf2q.c    |   2 +-
+> 4 files changed, 493 insertions(+), 243 deletions(-)
+>=20
+> --
+> 2.20.1
+>=20
+>=20
+> Seagate Internal
+>=20
+> Seagate Internal
 

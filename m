@@ -2,102 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D12C158F07E
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 18:34:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D65858F15E
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 19:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232405AbiHJQeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 12:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34384 "EHLO
+        id S233464AbiHJRQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 13:16:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbiHJQeC (ORCPT
+        with ESMTP id S233446AbiHJRPx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 12:34:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AD182773;
-        Wed, 10 Aug 2022 09:34:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id F3265B81D4B;
-        Wed, 10 Aug 2022 16:34:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47F52C433C1;
-        Wed, 10 Aug 2022 16:33:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660149239;
-        bh=TRHMkHy9TA2+R7Xo/cWt/GmZaVkYtJda3sygZr6n63E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZSqQDDuiRdorik9Pb/NCrx0oD2vlusIm0ixMcVKD77THj9qllEU6gMdB/rlZFKxQQ
-         1Y84PCd6G6/7azkAfGdqfXgZzJND6/e58nAYqDyze40HJN1++ciHIcfRGJyQBAYuRW
-         6C1oabpSKxGzXSH5QSw6SARyENrzNOAaYPdknnBcv+QKEN++KIEGoP0RR770PAqTO5
-         9d8jAGGh68yTeeux7Cm/nL71Im6g4uuE5CmShu8fZ2SYjddUgdjId4DQte/DzZ1qnz
-         pnZtzkHZEmCzy0Z54lVQP6EydD/q1GdGE4oq9kx+/kr8okcbgl4QiLKtvM3Rfl9NEL
-         MFbx0aVJuS5Tg==
-Date:   Wed, 10 Aug 2022 17:33:53 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Stephen Hemminger <sthemmin@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Andreas Noever <andreas.noever@gmail.com>,
-        Michael Jamet <michael.jamet@intel.com>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Yehezkel Bernat <YehezkelShB@gmail.com>,
-        linux-hyperv@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-usb@vger.kernel.org
-Subject: Re: [PATCH v1 5/5][RFT] ACPI: Drop parent field from struct
- acpi_device
-Message-ID: <YvPd8ewNOKdwMmR4@sirena.org.uk>
-References: <12036348.O9o76ZdvQC@kreacher>
- <2196460.iZASKD2KPV@kreacher>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Da0Ami2fDuAHDI9p"
-Content-Disposition: inline
-In-Reply-To: <2196460.iZASKD2KPV@kreacher>
-X-Cookie: First pull up, then pull down.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 10 Aug 2022 13:15:53 -0400
+X-Greylist: delayed 1200 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 10 Aug 2022 10:15:47 PDT
+Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA97E60507;
+        Wed, 10 Aug 2022 10:15:47 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailnew.nyi.internal (Postfix) with ESMTP id 5AA815808B4;
+        Wed, 10 Aug 2022 12:35:55 -0400 (EDT)
+Received: from imap50 ([10.202.2.100])
+  by compute3.internal (MEProxy); Wed, 10 Aug 2022 12:35:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        colorremedies.com; h=cc:cc:content-type:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm1; t=1660149355; x=1660152955; bh=a5G2IQ23cL
+        Cu11/Dp61pjDw8jpOTjVuQZnVVwZuO120=; b=E5rcuw1Lzya7Hd9QgncERZJ+DM
+        3erv7Qs5pOlJ3aUk2u5R1Drx14Ej4xg9OFUX7RDcCfNpYFT/me+V7Ihsez/rdFfB
+        +56KLWTrqZBZcsPoDnfBY8reNZ+iyqRghhF7py4WzVd5FHuRo/O+nOH0ZM7uInAs
+        79QkukhEk6Ny3ntzeYWXr7f2B2+h1o0h/SiFTN5ubuJ6yshvbpm3mAA1368E8GLB
+        xEEGHdGJDiL+yfTJ64cNKY7TXY9jWUfGNJYymA5wNTJdMtf58p2Jmp32dclTOSzR
+        igoVEauuJ1Vp8M4cHOlVB19/ThpVOgog8r4iRdsdaHV/JSrby2HfJsjMN9/Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:message-id:mime-version
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1660149355; x=
+        1660152955; bh=a5G2IQ23cLCu11/Dp61pjDw8jpOTjVuQZnVVwZuO120=; b=i
+        QAlnvmltaI0+qqHZDEFRzJWpwhuxxw7oRyzuJbZUTBNRthP/6TGX5EtwfuZp0nFp
+        KLvyN2iz8RWxhBe6hLittmTZXZL2cKVFyQKVgItsCQYXl/dOytlP7qTebCIQP3v8
+        j18DXXOY9Sa9EZGKh/8dd41dPZPMNUDYzhpRVoZwgdfvXLjL6sUgm9mKqEzpUEtU
+        +NWZfGeM+UmLOHUYtRVHhA6jW/G9kvIu/MAyWU/YsUmGHQU4AMF+ruR8lbeeyH5N
+        6ohQGDpy0yjJlZWdBXkHNydNje37EwzzYgkBId7tOlHxt9saKkHo4u2szgHz5ivR
+        xEb22wBUL6ybtSGiGwjkQ==
+X-ME-Sender: <xms:at7zYihx_unb8Y37UslQb4rHWqNmFqyKW6Xqie9-5BQ9TdhFf6BIXQ>
+    <xme:at7zYjA61oOTOvUCq0Ik4EkLyFhQ0Oiqf-im02yPtZcw78osMtmD2Um4Et1SJbTRW
+    wbHLfMmxYt7p6dcyLg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegvddguddttdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enogfuuhhsphgvtghtffhomhgrihhnucdlgeelmdenucfjughrpefofgggkfffhffvvefu
+    tgesthdtredtreertdenucfhrhhomhepfdevhhhrihhsucfouhhrphhhhidfuceolhhish
+    htshestgholhhorhhrvghmvgguihgvshdrtghomheqnecuggftrfgrthhtvghrnhepffei
+    gfefgeefleejfedtudelieetfefhtefhteejkefhtdevtdeufeffffdvteelnecuffhomh
+    grihhnpehhthhtphgujhhouhhrnhgrlhgurghuughithgurghnughpohhsthhgrhgvshhq
+    lhdrihhopdhgohhoghhlvgdrtghomhdpkhgvrhhnvghlrdhorhhgpdhkvghrnhgvlhdrug
+    hknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheplhhi
+    shhtshestgholhhorhhrvghmvgguihgvshdrtghomh
+X-ME-Proxy: <xmx:at7zYqE-HtauFBCyQ9yJuM4ehPc1mXFdvQWtu1wf5fF_im_u0VIj4A>
+    <xmx:at7zYrS8dPYG12zhatdeHSkEgAYfo36uF9UmvRoWZ6qLARhaicMLWQ>
+    <xmx:at7zYvzUcRunktnbi1VaVsyMdbCty0n-7JoscqAxHhEsWhTVZNbSkQ>
+    <xmx:a97zYq8FLEaBP3xE5IHCoY-YAJ7q5K6Ngc_M9zmPRtT9l2DrIw77-w>
+Feedback-ID: i06494636:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id C62691700082; Wed, 10 Aug 2022 12:35:54 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-811-gb808317eab-fm-20220801.001-gb808317e
+Mime-Version: 1.0
+Message-Id: <e38aa76d-6034-4dde-8624-df1745bb17fc@www.fastmail.com>
+Date:   Wed, 10 Aug 2022 12:35:34 -0400
+From:   "Chris Murphy" <lists@colorremedies.com>
+To:     "Btrfs BTRFS" <linux-btrfs@vger.kernel.org>,
+        Linux-RAID <linux-raid@vger.kernel.org>,
+        linux-block@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Cc:     "Josef Bacik" <josef@toxicpanda.com>
+Subject: stalling IO regression in linux 5.12
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+CPU: Intel E5-2680 v3
+RAM: 128 G
+02:00.0 RAID bus controller [0104]: Broadcom / LSI MegaRAID SAS-3 3108 [Invader] [1000:005d] (rev 02), using megaraid_sas driver
+8 Disks: TOSHIBA AL13SEB600
 
---Da0Ami2fDuAHDI9p
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Aug 10, 2022 at 06:23:05PM +0200, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->=20
-> The parent field in struct acpi_device is, in fact, redundant,
-> because the dev.parent field in it effectively points to the same
-> object and it is used by the driver core.
+The problem exhibits as increasing load, increasing IO pressure (PSI), and actual IO goes to zero. It never happens on kernel 5.11 series, and always happens after 5.12-rc1 and persists through 5.18.0. There's a new mix of behaviors with 5.19, I suspect the mm improvements in this series might be masking the problem.
 
-Acked-by: Mark Brown <broonie@kernel.org>
+The workload involves openqa, which spins up 30 qemu-kvm instances, and does a bunch of tests, generating quite a lot of writes: qcow2 files, and video in the form of many screenshots, and various log files, for each VM. These VMs are each in their own cgroup. As the problem begins, I see increasing IO pressure, and decreasing IO, for each qemu instance's cgroup, and the cgroups for httpd, journald, auditd, and postgresql. IO pressure goes to nearly ~99% and IO is literally 0.
 
---Da0Ami2fDuAHDI9p
-Content-Type: application/pgp-signature; name="signature.asc"
+The problem left unattended to progress will eventually result in a completely unresponsive system, with no kernel messages. It reproduces in the following configurations, the first two I provide links to full dmesg with sysrq+w:
 
------BEGIN PGP SIGNATURE-----
+btrfs raid10 (native) on plain partitions [1]
+btrfs single/dup on dmcrypt on mdadm raid 10 and parity raid [2]
+XFS on dmcrypt on mdadm raid10 or parity raid
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmLz3fAACgkQJNaLcl1U
-h9B8rQf/XtDVCaLNgxkwWhsW926hQ9+EvneuFPFiVGjVW+lbegON2gRrPeUWs8sS
-sC4GBIsaf1GiG5D6xQGh5Iq36TE60sjclNLk2WTG6eHppigATRVgiTwiwOnVDn4h
-IBqOYP3xauYkNpiX1QK91vc5Lh90Lh+W/B81A1RqbDaJIlNrihrFgezUZQ9Klwlm
-9lsOupKTe9TeDOdtv8xgq8fuHk9K+K28SmkPEDEg49UVhCUbx05BuPDoyOtmn+RP
-/+hKik8ajLZUd2qUg0VmM0dRNX3GnQiGQC5dAmLnF63o9XIWcu4x3XYQPHEAwy5L
-Aj0k8+2YrOgVHxyNIrsVmg01YaZIWg==
-=2BJY
------END PGP SIGNATURE-----
+I've started a bisect, but for some reason I haven't figured out I've started getting compiled kernels that don't boot the hardware. The failure is very early on such that the UUID for the root file system isn't found, but not much to go on as to why.[3] I have tested the first and last skipped commits in the bisect log below, they successfully boot a VM but not the hardware.
 
---Da0Ami2fDuAHDI9p--
+Anyway, I'm kinda stuck at this point trying to narrow it down further. Any suggestions? Thanks.
+
+[1] btrfs raid10, plain partitions
+https://drive.google.com/file/d/1-oT3MX-hHYtQqI0F3SpgPjCIDXXTysLU/view?usp=sharing
+
+[2] btrfs single/dup, dmcrypt, mdadm raid10
+https://drive.google.com/file/d/1m_T3YYaEjBKUROz6dHt5_h92ZVRji9FM/view?usp=sharing
+
+[3] 
+$ git bisect log
+git bisect start
+# status: waiting for both good and bad commits
+# bad: [c03c21ba6f4e95e406a1a7b4c34ef334b977c194] Merge tag 'keys-misc-20210126' of git://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs
+git bisect bad c03c21ba6f4e95e406a1a7b4c34ef334b977c194
+# status: waiting for good commit(s), bad commit known
+# good: [f40ddce88593482919761f74910f42f4b84c004b] Linux 5.11
+git bisect good f40ddce88593482919761f74910f42f4b84c004b
+# bad: [df24212a493afda0d4de42176bea10d45825e9a0] Merge tag 's390-5.12-1' of git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux
+git bisect bad df24212a493afda0d4de42176bea10d45825e9a0
+# good: [82851fce6107d5a3e66d95aee2ae68860a732703] Merge tag 'arm-dt-v5.12' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
+git bisect good 82851fce6107d5a3e66d95aee2ae68860a732703
+# good: [99f1a5872b706094ece117368170a92c66b2e242] Merge tag 'nfsd-5.12' of git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
+git bisect good 99f1a5872b706094ece117368170a92c66b2e242
+# bad: [9eef02334505411667a7b51a8f349f8c6c4f3b66] Merge tag 'locking-core-2021-02-17' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip
+git bisect bad 9eef02334505411667a7b51a8f349f8c6c4f3b66
+# bad: [9820b4dca0f9c6b7ab8b4307286cdace171b724d] Merge tag 'for-5.12/drivers-2021-02-17' of git://git.kernel.dk/linux-block
+git bisect bad 9820b4dca0f9c6b7ab8b4307286cdace171b724d
+# good: [bd018bbaa58640da786d4289563e71c5ef3938c7] Merge tag 'for-5.12/libata-2021-02-17' of git://git.kernel.dk/linux-block
+git bisect good bd018bbaa58640da786d4289563e71c5ef3938c7
+# skip: [203c018079e13510f913fd0fd426370f4de0fd05] Merge branch 'md-next' of https://git.kernel.org/pub/scm/linux/kernel/git/song/md into for-5.12/drivers
+git bisect skip 203c018079e13510f913fd0fd426370f4de0fd05
+# skip: [49d1ec8573f74ff1e23df1d5092211de46baa236] block: manage bio slab cache by xarray
+git bisect skip 49d1ec8573f74ff1e23df1d5092211de46baa236
+# bad: [73d90386b559d6f4c3c5db5e6bb1b68aae8fd3e7] nvme: cleanup zone information initialization
+git bisect bad 73d90386b559d6f4c3c5db5e6bb1b68aae8fd3e7
+# skip: [71217df39dc67a0aeed83352b0d712b7892036a2] block, bfq: make waker-queue detection more robust
+git bisect skip 71217df39dc67a0aeed83352b0d712b7892036a2
+# bad: [8358c28a5d44bf0223a55a2334086c3707bb4185] block: fix memory leak of bvec
+git bisect bad 8358c28a5d44bf0223a55a2334086c3707bb4185
+# skip: [3a905c37c3510ea6d7cfcdfd0f272ba731286560] block: skip bio_check_eod for partition-remapped bios
+git bisect skip 3a905c37c3510ea6d7cfcdfd0f272ba731286560
+# skip: [3c337690d2ebb7a01fa13bfa59ce4911f358df42] block, bfq: avoid spurious switches to soft_rt of interactive queues
+git bisect skip 3c337690d2ebb7a01fa13bfa59ce4911f358df42
+# skip: [3e1a88ec96259282b9a8b45c3f1fda7a3ff4f6ea] bio: add a helper calculating nr segments to alloc
+git bisect skip 3e1a88ec96259282b9a8b45c3f1fda7a3ff4f6ea
+# skip: [4eb1d689045552eb966ebf25efbc3ce648797d96] blk-crypto: use bio_kmalloc in blk_crypto_clone_bio
+git bisect skip 4eb1d689045552eb966ebf25efbc3ce648797d96
+
+
+--
+Chris Murphy

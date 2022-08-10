@@ -2,114 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D86FA58EE98
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 16:41:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 724AC58EE9F
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 16:42:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232636AbiHJOlG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 10:41:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51998 "EHLO
+        id S232675AbiHJOmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 10:42:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232692AbiHJOku (ORCPT
+        with ESMTP id S232478AbiHJOl7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 10:40:50 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 324B745F5C
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:40:49 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id r69so7995716pgr.2
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 07:40:49 -0700 (PDT)
+        Wed, 10 Aug 2022 10:41:59 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ADBD51419;
+        Wed, 10 Aug 2022 07:41:41 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id o22so19343315edc.10;
+        Wed, 10 Aug 2022 07:41:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=SgzYODjrDYCskLdG6hpmiZvMCNisxWBgbV3pqTl+Q3I=;
-        b=tR4LTLDaKnYu7vXgPCt1xTcNJVSrSkp+qCds6DvARInYrePEvwlVzeSABqKkuX/0qn
-         RKJ9ldM8CaVPNT8otnyjeDFsvEZA3+u4QnnFe4yL4dUxLFY+BQpaO1KTCMengJksk9sF
-         XZ4pz/SaPlfUCD3zXaa1t8DiDEeJmF9ccwUiqlKGeliZy4JMdLOlvcYGWOIy9c08YRPf
-         9T43ZAXRH+wUSJ3npEUoQpPl8dOv971Bj5nOFFFHi3n5QavN1GWnH4FfTrY+PUUVovxD
-         fG72zR0J7SxVFZSlnDMkAJyDcARsfKdMF7QwMFJkLkB4WA1ks9worvXdm/fgHiJ1CCRW
-         JcSA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=XFsjrDHhcwmAj2TVK3rhCPmJ62iBuCLs+g1xt1QLbrY=;
+        b=KBXotDFJQz5FwOXfOiIoNubeYa0m16EN1yFgYCNK2SUJ1U/FXxdf+nroWhUIGcpk07
+         GgcAja6iIntTY1XGDsRyr6fi1vx2IzQK7LtE1pXtfSdgg7D6Uyk4+SNR+DK0LzYpmCBP
+         InXz+6WLrnd6kxJzdsoqOwGPtGoMRx8QYxK0e8+VnWDqQphIfTxIjAJcxwpkjSp9aXe4
+         K4fpv9I6hwjYVt//kozcqPRJfLsp5zRxkauf25gW/ZmbABA95GvtfwPZnJlrMinOUfMY
+         kXot4UYME269uoDVifsIJwWolvYaRicYZlSdaQR9GEJNpa6SsUzO4XrYa07MmqNvYsoM
+         JDFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=SgzYODjrDYCskLdG6hpmiZvMCNisxWBgbV3pqTl+Q3I=;
-        b=tmpjCvnCkeKPytKuxEaeVH41D7Qv4f0pf8EHjPRfM+jw2MaPCxUAK7FOHHo1gCs/tm
-         XPwyjxQszNisS0Pf25aUHMLD2/H6W44XJcXwq8KpYJxLKb08FVvRyKxnU2aVqJG90Je1
-         kmmSoRshH8KgVY4DZZTzdGFubIRvjXjcDZvXysDdLXUxO8793F9ln1F6rFRbOmK0DN73
-         iyuMkLGhjW4APgLSjTD/j2PVHR96TlczMsc+Qk5lrNgtYqxGdwKwk0BYp93lN8vaoO/E
-         covKHO6qb5jp7tyBb8oGcZbU8eazyRFWvc5I3TnJS9soAm4H3JRBaQnGb0nWTk1nZ+uJ
-         Uf/w==
-X-Gm-Message-State: ACgBeo38ckYm1q6zuU5BT50iUVuby3Z/2eqlLw0qVLI84sL0J9SPFRHY
-        ymyRUXVrnbIntYE5/Y9hjAStoZQkjEkRVg==
-X-Google-Smtp-Source: AA6agR6jOWMcobS3Xodlp42vExYLB2zU9HfOs/YPcr6IQfkaN7pUZsgmrFpITTy9xrKtOtal35Ipqw==
-X-Received: by 2002:a65:49c8:0:b0:41a:eb36:d1a7 with SMTP id t8-20020a6549c8000000b0041aeb36d1a7mr23394997pgs.66.1660142437995;
-        Wed, 10 Aug 2022 07:40:37 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id j12-20020a170903024c00b0016ee26224a4sm13033266plh.305.2022.08.10.07.40.37
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=XFsjrDHhcwmAj2TVK3rhCPmJ62iBuCLs+g1xt1QLbrY=;
+        b=SqcqAoHSUy9XguUfMgLfbxc9US00dYSx7CWQCqEYS8qCkeHfDqbrBPEJwx0VC3evWJ
+         o+4b5ia4FZq7UkcHYJf+Vezw7cQ9CyYXlNd8nTdJn1boYDQSTsJ9nlKtS8UC9hLBS23U
+         IvUsfcH+shM8RdWObeL7NdS/89y33FiMuyKvtYZWtHIYQgfFXlYPxsEHUSblwzPSa6t2
+         mPbKBrv+xgNutbW4kDcXFwxZAwzOISsbX8swbwH2VkdfGbnBII5B0KbRQn64yMwSEp4I
+         Xs+clXAdAHQW27btexByq5B/S/RrLVOVYExRx4x99uBGLJUDvfWYXqT9pwu3h4S5u3Q1
+         FowQ==
+X-Gm-Message-State: ACgBeo0v4EUDuY45MaRpXSwyLtpq3WJQKPWUvwo5XHetECsgunLSRcv7
+        CSXuLYXp/phDsssix9hDuj8=
+X-Google-Smtp-Source: AA6agR50nMIHqoJpTZrPNq7NO9hfuvf5CFnw+/kcffxJt+q7bYO/sYSCriCkRV06yWnK0Nf3BPSuiA==
+X-Received: by 2002:a05:6402:190b:b0:43d:d001:2cce with SMTP id e11-20020a056402190b00b0043dd0012ccemr26528876edz.326.1660142500232;
+        Wed, 10 Aug 2022 07:41:40 -0700 (PDT)
+Received: from xws.localdomain ([37.120.217.162])
+        by smtp.gmail.com with ESMTPSA id d25-20020aa7d699000000b0043cedad30a5sm7778049edr.21.2022.08.10.07.41.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 07:40:37 -0700 (PDT)
-Date:   Wed, 10 Aug 2022 14:40:33 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Like Xu <like.xu.linux@gmail.com>
-Subject: Re: [RFC PATCH 2/3] KVM: x86: Generate set of VMX feature MSRs using
- first/last definitions
-Message-ID: <YvPDYVPgrLCRlYuH@google.com>
-References: <20220805172945.35412-1-seanjc@google.com>
- <20220805172945.35412-3-seanjc@google.com>
- <29150d3f-36fb-516d-55d0-a9aebe23cdcf@redhat.com>
+        Wed, 10 Aug 2022 07:41:39 -0700 (PDT)
+From:   Maximilian Luz <luzmaximilian@gmail.com>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Maximilian Luz <luzmaximilian@gmail.com>
+Subject: [PATCH 0/3] platform/surface: aggregator_registry: Rename and add more HID device nodes
+Date:   Wed, 10 Aug 2022 16:41:14 +0200
+Message-Id: <20220810144117.493710-1-luzmaximilian@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <29150d3f-36fb-516d-55d0-a9aebe23cdcf@redhat.com>
-X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 10, 2022, Paolo Bonzini wrote:
-> On 8/5/22 19:29, Sean Christopherson wrote:
-> > +static void kvm_proble_feature_msr(u32 msr_index)
-> > +{
-> > +	struct kvm_msr_entry msr = {
-> > +		.index = msr_index,
-> > +	};
-> > +
-> > +	if (kvm_get_msr_feature(&msr))
-> > +		return;
-> > +
-> > +	msr_based_features[num_msr_based_features++] = msr_index;
-> > +}
-> > +
-> >   static void kvm_init_msr_list(void)
-> >   {
-> >   	u32 dummy[2];
-> > @@ -6954,15 +6949,11 @@ static void kvm_init_msr_list(void)
-> >   		emulated_msrs[num_emulated_msrs++] = emulated_msrs_all[i];
-> >   	}
-> > -	for (i = 0; i < ARRAY_SIZE(msr_based_features_all); i++) {
-> > -		struct kvm_msr_entry msr;
-> > +	for (i = KVM_FIRST_EMULATED_VMX_MSR; i <= KVM_LAST_EMULATED_VMX_MSR; i++)
-> > +		kvm_proble_feature_msr(i);
-> > -		msr.index = msr_based_features_all[i];
-> > -		if (kvm_get_msr_feature(&msr))
-> > -			continue;
-> > -
-> > -		msr_based_features[num_msr_based_features++] = msr_based_features_all[i];
-> > -	}
-> > +	for (i = 0; i < ARRAY_SIZE(msr_based_features_all_except_vmx); i++)
-> > +		kvm_proble_feature_msr(msr_based_features_all_except_vmx[i]);
-> 
-> I'd rather move all the code to a new function kvm_init_feature_msr_list()
-> instead, and call it from kvm_arch_hardware_setup().
+This series is twofold:
 
-Would it make sense to also split out kvm_init_emulated_msr_list()?  Hmm, and
-rename this to kvm_init_virtualized_msr_list()?  I can't tell if that would be
-helpful or confusing.
+Patch 1 and 2 rename existing HID firmware nodes to better reflect the
+devices they represent and the hierarchy they are placed under. In
+particular, the three previously unknown nodes are for sensors, firmware
+updates via the CFU mechanism, and for a USB Type-C Connector System
+Software Interface (UCSI) HID client.
+
+Patch 3 adds support for sensors and the UCSI client to the Surface Pro
+8 by adding the missing SAM-connected HID nodes.
+
+Regards,
+Max
+
+Maximilian Luz (3):
+  platform/surface: aggregator_registry: Rename HID device nodes based
+    on their function
+  platform/surface: aggregator_registry: Rename HID device nodes based
+    on new findings
+  platform/surface: aggregator_registry: Add HID devices for sensors and
+    UCSI client to SP8
+
+ .../surface/surface_aggregator_registry.c     | 44 ++++++++++---------
+ 1 file changed, 23 insertions(+), 21 deletions(-)
+
+-- 
+2.37.1
+

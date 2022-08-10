@@ -2,70 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1ABD58EA52
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 12:11:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CDF258EA54
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 12:11:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231648AbiHJKLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 06:11:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46658 "EHLO
+        id S231516AbiHJKL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 06:11:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbiHJKLd (ORCPT
+        with ESMTP id S231373AbiHJKLx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 06:11:33 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F37B6FA02;
-        Wed, 10 Aug 2022 03:11:31 -0700 (PDT)
-Received: from fraeml706-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M2lyN2W4vz67xMg;
-        Wed, 10 Aug 2022 18:08:44 +0800 (CST)
-Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
- fraeml706-chm.china.huawei.com (10.206.15.55) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Wed, 10 Aug 2022 12:11:28 +0200
-Received: from localhost (10.202.226.42) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Wed, 10 Aug
- 2022 11:11:28 +0100
-Date:   Wed, 10 Aug 2022 11:11:27 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Pavel Machek <pavel@ucw.cz>,
-        "Tim Harvey" <tharvey@gateworks.com>, Lee Jones <lee@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Sebastian Reichel" <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Andrew Davis <afd@ti.com>,
-        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-iio@vger.kernel.org>,
-        <linux-fbdev@vger.kernel.org>, <linux-leds@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <alsa-devel@alsa-project.org>
-Subject: Re: [PATCH v2 5/5] dt-bindings: Drop Dan Murphy and Ricardo
- Rivera-Matos
-Message-ID: <20220810111127.00003b83@huawei.com>
-In-Reply-To: <20220809162752.10186-6-krzysztof.kozlowski@linaro.org>
-References: <20220809162752.10186-1-krzysztof.kozlowski@linaro.org>
-        <20220809162752.10186-6-krzysztof.kozlowski@linaro.org>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.29; i686-w64-mingw32)
+        Wed, 10 Aug 2022 06:11:53 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 71EE36FA02
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 03:11:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660126311;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=bJR3+9LxDQgeJyy1ey5KsSP45xLXRXAg/fQRp6FI2JM=;
+        b=Wx2cEf5V2t7DEduRaF0ak/ifOub/4F0OsP63mz6UWvd4eU0hIyNLK3hw/+fxu7PwvVgt30
+        y1yeYDUdYIUp7aNxb5DNf2cp6nFaJcLuG2XGigSwvZ2WXytIhMwLu2lMOkQS5872p27+My
+        L+8y7ugXeNHODd1Az26v523B8CkIyB0=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-618-MkFMx-FyPLCbBnMusaScdg-1; Wed, 10 Aug 2022 06:11:50 -0400
+X-MC-Unique: MkFMx-FyPLCbBnMusaScdg-1
+Received: by mail-ej1-f69.google.com with SMTP id g18-20020a1709065d1200b0073082300e1fso4029701ejt.12
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 03:11:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=bJR3+9LxDQgeJyy1ey5KsSP45xLXRXAg/fQRp6FI2JM=;
+        b=67kv0YV161vzsoBD7zV2jRpDUZvLVLq8Tr2f9Wh6GPwNebTTt8cNeud6TyI8k0T9/8
+         1Gfzeas1xbkntLYMiRfxGyd65HuJ54Cfgdgxrmn4uDwhHEbmNtrfRy4uYH4rbUa0fKPA
+         rQxI/T4cTwQcWjJ6HoItF6a7QMB2jnB812mbZqHgGuEQw9m3b3WN+OjL3NmrpqzmCWMC
+         MBBEOovUJS2JqJJzVN7+pkO5Y1G6nGScICoTRyXBmdYOrd3+fvObzBolH8fvzi3MIYc9
+         jeZxR8KEW7Wvs/Qe/qo/xVoBIm6ETxLBS6CjmEF5Yv8MDFPVTOM9mSIJB6tvhZwyzqzc
+         ZGsg==
+X-Gm-Message-State: ACgBeo2i8Jub9I25fDWpv5nMh1Xur3S54K1vCu++wTV66qbh8j3AEatf
+        6vHo4UDYA3U0rvdKQcVXEozsILI5jNuCIAQ6Z61xX30LhcqhhUe5uFEjpAyVBJjePhhqP1/mEXe
+        jMmqI9exokquysPQkTPnRGnVb
+X-Received: by 2002:a05:6402:198:b0:442:da5a:6716 with SMTP id r24-20020a056402019800b00442da5a6716mr361485edv.5.1660126309019;
+        Wed, 10 Aug 2022 03:11:49 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4iVzbHIyTI4lT0/CgpP/DkaSi4UT2+vp37B6Xp6E9T5vSHxeAHDqM1j8fP21+RgeEhdniTRw==
+X-Received: by 2002:a05:6402:198:b0:442:da5a:6716 with SMTP id r24-20020a056402019800b00442da5a6716mr361467edv.5.1660126308849;
+        Wed, 10 Aug 2022 03:11:48 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id y18-20020a1709063db200b00730f0c19108sm2134691ejh.86.2022.08.10.03.11.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Aug 2022 03:11:48 -0700 (PDT)
+Message-ID: <a68bb582-d916-d5f9-3ed6-401a63f46ce6@redhat.com>
+Date:   Wed, 10 Aug 2022 12:11:47 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH V2] HID: HID-rmi - ignore to rmi_hid_read_block after
+ system resumes.
+Content-Language: en-US
+To:     margeyang <marge.yang@synaptics.corp-partner.google.com>,
+        dmitry.torokhov@gmail.com, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, benjamin.tissoires@redhat.com
+Cc:     marge.yang@tw.synaptics.com, derek.cheng@tw.synaptics.com,
+        vincent.huang@tw.synaptics.com
+References: <1660014544-1009-1-git-send-email-marge.yang@synaptics.corp-partner.google.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <1660014544-1009-1-git-send-email-marge.yang@synaptics.corp-partner.google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.226.42]
-X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,180 +84,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  9 Aug 2022 19:27:52 +0300
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+Hi,
 
-> Emails to Dan Murphy and Ricardo Rivera-Matos bounce ("550 Invalid
-> recipient").  Andrew Davis agreed to take over the bindings.
+On 8/9/22 05:09, margeyang wrote:
+> From: Marge Yang <marge.yang@synaptics.corp-partner.google.com>
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> The interrupt GPIO will be pulled down once
+> after RMI driver reads this command(Report ID:0x0A).
+> It will cause "Dark resume test fail" for chromebook device.
+> Hence, TP driver will ignore rmi_hid_read_block function once
+> after system resumes.
 > 
+> Signed-off-by: Marge Yang<marge.yang@synaptics.corp-partner.google.com>
 > ---
+>  drivers/hid/hid-rmi.c | 14 ++++++++++++--
+>  include/linux/rmi.h   |  2 ++
+>  2 files changed, 14 insertions(+), 2 deletions(-)
 > 
-> Changes since v1:
-> 1. Add Andrew Davis instead.
-> 2. Not adding accumulated ack due to change above.
-> ---
->  Documentation/devicetree/bindings/iio/adc/ti,ads124s08.yaml    | 2 +-
->  .../devicetree/bindings/leds/leds-class-multicolor.yaml        | 2 +-
->  Documentation/devicetree/bindings/leds/leds-lp50xx.yaml        | 2 +-
->  Documentation/devicetree/bindings/net/ti,dp83822.yaml          | 2 +-
->  Documentation/devicetree/bindings/net/ti,dp83867.yaml          | 2 +-
->  Documentation/devicetree/bindings/net/ti,dp83869.yaml          | 2 +-
->  Documentation/devicetree/bindings/power/supply/bq2515x.yaml    | 3 +--
->  Documentation/devicetree/bindings/power/supply/bq256xx.yaml    | 2 +-
->  Documentation/devicetree/bindings/power/supply/bq25980.yaml    | 3 +--
->  Documentation/devicetree/bindings/sound/tas2562.yaml           | 2 +-
->  Documentation/devicetree/bindings/sound/tlv320adcx140.yaml     | 2 +-
->  11 files changed, 11 insertions(+), 13 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/iio/adc/ti,ads124s08.yaml b/Documentation/devicetree/bindings/iio/adc/ti,ads124s08.yaml
-> index 9f5e96439c01..2e6abc9d746a 100644
-> --- a/Documentation/devicetree/bindings/iio/adc/ti,ads124s08.yaml
-> +++ b/Documentation/devicetree/bindings/iio/adc/ti,ads124s08.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Texas Instruments' ads124s08 and ads124s06 ADC chip
->  
->  maintainers:
-> -  - Dan Murphy <dmurphy@ti.com>
-> +  - Andrew Davis <afd@ti.com>
-For this one.
+> diff --git a/drivers/hid/hid-rmi.c b/drivers/hid/hid-rmi.c
+> index 311eee599ce9..b08b74b0c140 100644
+> --- a/drivers/hid/hid-rmi.c
+> +++ b/drivers/hid/hid-rmi.c
+> @@ -203,7 +203,13 @@ static int rmi_hid_read_block(struct rmi_transport_dev *xport, u16 addr,
+>  		if (ret < 0)
+>  			goto exit;
+>  	}
+> -
+> +	if ((!!xport) && (xport->ignoreonce == 1)) {
 
-Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+The top of this function has:
 
+       struct rmi_data *data = container_of(xport, struct rmi_data, xport);
+
+and data gets dereferenced unconditionally in various places,
+so there is no need for the xport check, please change this to just:
+
+	if (xport->ignoreonce == 1) {
+
+Otherwise this looks good to me now.
+
+Regards,
+
+Hans
+
+
+> +		dev_err(&hdev->dev,
+> +			"ignoreonce (%d)\n",
+> +			xport->ignoreonce);
+> +		xport->ignoreonce = 0;
+> +		goto exit;
+> +	}
+>  	for (retries = 5; retries > 0; retries--) {
+>  		data->writeReport[0] = RMI_READ_ADDR_REPORT_ID;
+>  		data->writeReport[1] = 0; /* old 1 byte read count */
+> @@ -468,8 +474,12 @@ static int rmi_post_resume(struct hid_device *hdev)
+>  	ret = hid_hw_open(hdev);
+>  	if (ret)
+>  		return ret;
+> -
+> +	// Avoid to read rmi_hid_read_block once after system resumes.
+> +	// The interrupt will be pulled down
+> +	// after RMI Read command(Report ID:0x0A).
+> +	data->xport.ignoreonce = 1;
+>  	ret = rmi_reset_attn_mode(hdev);
+> +	data->xport.ignoreonce = 0;
+>  	if (ret)
+>  		goto out;
 >  
->  properties:
->    compatible:
-> diff --git a/Documentation/devicetree/bindings/leds/leds-class-multicolor.yaml b/Documentation/devicetree/bindings/leds/leds-class-multicolor.yaml
-> index 12693483231f..31840e33dcf5 100644
-> --- a/Documentation/devicetree/bindings/leds/leds-class-multicolor.yaml
-> +++ b/Documentation/devicetree/bindings/leds/leds-class-multicolor.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Common properties for the multicolor LED class.
+> diff --git a/include/linux/rmi.h b/include/linux/rmi.h
+> index ab7eea01ab42..24f63ad00970 100644
+> --- a/include/linux/rmi.h
+> +++ b/include/linux/rmi.h
+> @@ -270,6 +270,8 @@ struct rmi_transport_dev {
+>  	struct rmi_device_platform_data pdata;
 >  
->  maintainers:
-> -  - Dan Murphy <dmurphy@ti.com>
-> +  - Andrew Davis <afd@ti.com>
+>  	struct input_dev *input;
+> +
+> +	int ignoreonce;
+>  };
 >  
->  description: |
->    Bindings for multi color LEDs show how to describe current outputs of
-> diff --git a/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml b/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml
-> index e0b658f07973..63da380748bf 100644
-> --- a/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml
-> +++ b/Documentation/devicetree/bindings/leds/leds-lp50xx.yaml
-> @@ -7,7 +7,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: LED driver for LP50XX RGB LED from Texas Instruments.
->  
->  maintainers:
-> -  - Dan Murphy <dmurphy@ti.com>
-> +  - Andrew Davis <afd@ti.com>
->  
->  description: |
->    The LP50XX is multi-channel, I2C RGB LED Drivers that can group RGB LEDs into
-> diff --git a/Documentation/devicetree/bindings/net/ti,dp83822.yaml b/Documentation/devicetree/bindings/net/ti,dp83822.yaml
-> index 75e8712e903a..f2489a9c852f 100644
-> --- a/Documentation/devicetree/bindings/net/ti,dp83822.yaml
-> +++ b/Documentation/devicetree/bindings/net/ti,dp83822.yaml
-> @@ -8,7 +8,7 @@ $schema: "http://devicetree.org/meta-schemas/core.yaml#"
->  title: TI DP83822 ethernet PHY
->  
->  maintainers:
-> -  - Dan Murphy <dmurphy@ti.com>
-> +  - Andrew Davis <afd@ti.com>
->  
->  description: |
->    The DP83822 is a low-power, single-port, 10/100 Mbps Ethernet PHY. It
-> diff --git a/Documentation/devicetree/bindings/net/ti,dp83867.yaml b/Documentation/devicetree/bindings/net/ti,dp83867.yaml
-> index 76ff08a477ba..b8c0e4b5b494 100644
-> --- a/Documentation/devicetree/bindings/net/ti,dp83867.yaml
-> +++ b/Documentation/devicetree/bindings/net/ti,dp83867.yaml
-> @@ -11,7 +11,7 @@ allOf:
->    - $ref: "ethernet-controller.yaml#"
->  
->  maintainers:
-> -  - Dan Murphy <dmurphy@ti.com>
-> +  - Andrew Davis <afd@ti.com>
->  
->  description: |
->    The DP83867 device is a robust, low power, fully featured Physical Layer
-> diff --git a/Documentation/devicetree/bindings/net/ti,dp83869.yaml b/Documentation/devicetree/bindings/net/ti,dp83869.yaml
-> index 1b780dce61ab..b04ff0014a59 100644
-> --- a/Documentation/devicetree/bindings/net/ti,dp83869.yaml
-> +++ b/Documentation/devicetree/bindings/net/ti,dp83869.yaml
-> @@ -11,7 +11,7 @@ allOf:
->    - $ref: "ethernet-phy.yaml#"
->  
->  maintainers:
-> -  - Dan Murphy <dmurphy@ti.com>
-> +  - Andrew Davis <afd@ti.com>
->  
->  description: |
->    The DP83869HM device is a robust, fully-featured Gigabit (PHY) transceiver
-> diff --git a/Documentation/devicetree/bindings/power/supply/bq2515x.yaml b/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
-> index 27db38577822..1a1b240034ef 100644
-> --- a/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/bq2515x.yaml
-> @@ -8,8 +8,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: TI bq2515x 500-mA Linear charger family
->  
->  maintainers:
-> -  - Dan Murphy <dmurphy@ti.com>
-> -  - Ricardo Rivera-Matos <r-rivera-matos@ti.com>
-> +  - Andrew Davis <afd@ti.com>
->  
->  description: |
->    The BQ2515x family is a highly integrated battery charge management IC that
-> diff --git a/Documentation/devicetree/bindings/power/supply/bq256xx.yaml b/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
-> index 91abe5733c41..82f382a7ffb3 100644
-> --- a/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/bq256xx.yaml
-> @@ -8,7 +8,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: TI bq256xx Switch Mode Buck Charger
->  
->  maintainers:
-> -  - Ricardo Rivera-Matos <r-rivera-matos@ti.com>
-> +  - Andrew Davis <afd@ti.com>
->  
->  description: |
->    The bq256xx devices are a family of highly-integrated battery charge
-> diff --git a/Documentation/devicetree/bindings/power/supply/bq25980.yaml b/Documentation/devicetree/bindings/power/supply/bq25980.yaml
-> index 4883527ab5c7..b687b8bcd705 100644
-> --- a/Documentation/devicetree/bindings/power/supply/bq25980.yaml
-> +++ b/Documentation/devicetree/bindings/power/supply/bq25980.yaml
-> @@ -8,8 +8,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: TI BQ25980 Flash Charger
->  
->  maintainers:
-> -  - Dan Murphy <dmurphy@ti.com>
-> -  - Ricardo Rivera-Matos <r-rivera-matos@ti.com>
-> +  - Andrew Davis <afd@ti.com>
->  
->  description: |
->    The BQ25980, BQ25975, and BQ25960 are a series of flash chargers intended
-> diff --git a/Documentation/devicetree/bindings/sound/tas2562.yaml b/Documentation/devicetree/bindings/sound/tas2562.yaml
-> index 5f7dd5d6cbca..30f6b029ac08 100644
-> --- a/Documentation/devicetree/bindings/sound/tas2562.yaml
-> +++ b/Documentation/devicetree/bindings/sound/tas2562.yaml
-> @@ -8,7 +8,7 @@ $schema: "http://devicetree.org/meta-schemas/core.yaml#"
->  title: Texas Instruments TAS2562 Smart PA
->  
->  maintainers:
-> -  - Dan Murphy <dmurphy@ti.com>
-> +  - Andrew Davis <afd@ti.com>
->  
->  description: |
->    The TAS2562 is a mono, digital input Class-D audio amplifier optimized for
-> diff --git a/Documentation/devicetree/bindings/sound/tlv320adcx140.yaml b/Documentation/devicetree/bindings/sound/tlv320adcx140.yaml
-> index bc2fb1a80ed7..ee698614862e 100644
-> --- a/Documentation/devicetree/bindings/sound/tlv320adcx140.yaml
-> +++ b/Documentation/devicetree/bindings/sound/tlv320adcx140.yaml
-> @@ -8,7 +8,7 @@ $schema: http://devicetree.org/meta-schemas/core.yaml#
->  title: Texas Instruments TLV320ADCX140 Quad Channel Analog-to-Digital Converter
->  
->  maintainers:
-> -  - Dan Murphy <dmurphy@ti.com>
-> +  - Andrew Davis <afd@ti.com>
->  
->  description: |
->    The TLV320ADCX140 are multichannel (4-ch analog recording or 8-ch digital
+>  /**
 

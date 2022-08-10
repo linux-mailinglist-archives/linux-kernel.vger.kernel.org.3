@@ -2,103 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 015AF58EC0B
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 14:33:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9695758EC0D
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 14:33:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231182AbiHJMdA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 08:33:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58202 "EHLO
+        id S231524AbiHJMdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 08:33:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbiHJMc5 (ORCPT
+        with ESMTP id S230514AbiHJMdS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 08:32:57 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ADA47695E;
-        Wed, 10 Aug 2022 05:32:51 -0700 (PDT)
-X-UUID: 52b81401940747069a6db42f422caf24-20220810
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=TtWR+yg+ag6c4ySzzvo2nUeXBN5GFbEppUG3w7dP/gc=;
-        b=CO0ufijyH0LMbYLByIfDiWu+w1sN/AsjupYVghxxT0TbjGHCAQOI/SAYJ3U160o9ls2IDwxINq+duY9LYFVmWIIkjxC1IHHt/sf1o/K9ftT7xkNpmj/ysV8ttVzSq+c5gSkTHHeF6+5UY9NtbNUpOJa4eaB+x3sTXAj1z8iCOec=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.9,REQID:18091ccc-f505-4a59-ad45-9e1794a43c0b,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_
-        Ham,ACTION:release,TS:-5
-X-CID-META: VersionHash:3d8acc9,CLOUDID:0c2270ae-9535-44a6-aa9b-7f62b79b6ff6,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 52b81401940747069a6db42f422caf24-20220810
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
-        (envelope-from <allen-kh.cheng@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1112623319; Wed, 10 Aug 2022 20:32:47 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Wed, 10 Aug 2022 20:32:46 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n1.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
- Transport; Wed, 10 Aug 2022 20:32:46 +0800
-Message-ID: <e85295cb7a7a0dc928337b88a14af377c34b6108.camel@mediatek.com>
-Subject: Re: [PATCH v2 0/2] Add mt8186 mutex support for mdp3
-From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@canonical.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>
-Date:   Wed, 10 Aug 2022 20:32:45 +0800
-In-Reply-To: <20220711123247.15807-1-allen-kh.cheng@mediatek.com>
-References: <20220711123247.15807-1-allen-kh.cheng@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Wed, 10 Aug 2022 08:33:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27CCF7695E
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 05:33:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7DB4761351
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 12:33:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10AE4C433C1;
+        Wed, 10 Aug 2022 12:33:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660134796;
+        bh=qHEafz/4L4clx0/D8+u1J80ED+oGx2biQ1HzFcvOY7c=;
+        h=From:To:Cc:Subject:Date:From;
+        b=HIGmfjHONYeIQ/REnkNqDODzQz3rSLYtEbeIkfRJQP1Ca1nMKAgDhbU1D5wd5E0Qn
+         6+Rh5tA+AQWGc1NOxrLxl/3RCytQnPCWbJuIwxd67ZCbJYNYlZHLyBFuOmu9DeaM/8
+         ZR9R3jUvBfFqqsfqbQmk7hzqkw8uzQRyW2xpsCVIQU37f7I69HrE1rOxiUX+g8g2L1
+         5IXqvNHAh5e0s8YO+bh7ZnZRe99WoxgEjbcMJCHnInxNmsLIwXTiVBFtrrYmfWRdmW
+         GUAvcavVoDxdXJnbkfiIGoTRXbWN+yLdcsLd/3v2uWcbyEqfU5FWu9IITITKm04ivJ
+         YmmGXP/WwDTOA==
+From:   Oded Gabbay <ogabbay@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ofir Bitton <obitton@habana.ai>
+Subject: [PATCH 1/3] habanalabs: expose device security status through sysfs
+Date:   Wed, 10 Aug 2022 15:33:10 +0300
+Message-Id: <20220810123312.1683716-1-ogabbay@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Matthias.
+From: Ofir Bitton <obitton@habana.ai>
 
-Gentle ping on this series.
+In order for the user to know if he is running on a secured device
+or not, a sysfs node is added.
 
-Is this series ok for you?
+Signed-off-by: Ofir Bitton <obitton@habana.ai>
+Reviewed-by: Oded Gabbay <ogabbay@kernel.org>
+Signed-off-by: Oded Gabbay <ogabbay@kernel.org>
+---
+ Documentation/ABI/testing/sysfs-driver-habanalabs |  6 ++++++
+ drivers/misc/habanalabs/common/sysfs.c            | 10 ++++++++++
+ 2 files changed, 16 insertions(+)
 
-BRs,
-Allen
-
-On Mon, 2022-07-11 at 20:32 +0800, Allen-KH Cheng wrote:
-> This series are based on matthias.bgg/linux.git, for-next and provide
-> mt8186 mutex support for Media Data Path 3 (MDP3).
-> 
-> As discussed, we add data field (mt8186_mdp_mutex_driver_data) for 
-> mt8186 mdp3 mutex support instead of adding mutex_table_mod into
-> mt8186
-> disp mutex data.
-> 
-> changes since v1:
->  - add mt8186_mdp_mutex_table_mod
->  - add mt8186_mdp_mutex_driver_data for mt8186-mdp3-mutex
-> 
-> Allen-KH Cheng (2):
->   dt-bindings: soc: mediatek: add mdp3 mutex support for mt8186
->   soc: mediatek: mutex: add mt8186 mutex mod settings for mdp3
-> 
->  .../bindings/soc/mediatek/mediatek,mutex.yaml |  1 +
->  drivers/soc/mediatek/mtk-mutex.c              | 28
-> +++++++++++++++++++
->  include/linux/soc/mediatek/mtk-mutex.h        |  2 ++
->  3 files changed, 31 insertions(+)
-> 
+diff --git a/Documentation/ABI/testing/sysfs-driver-habanalabs b/Documentation/ABI/testing/sysfs-driver-habanalabs
+index 96646fb2e7a1..6963640a2615 100644
+--- a/Documentation/ABI/testing/sysfs-driver-habanalabs
++++ b/Documentation/ABI/testing/sysfs-driver-habanalabs
+@@ -176,6 +176,12 @@ KernelVersion:  5.1
+ Contact:        ogabbay@kernel.org
+ Description:    Version of the device's preboot F/W code
+ 
++What:           /sys/class/habanalabs/hl<n>/security_enabled
++Date:           Oct 2022
++KernelVersion:  6.1
++Contact:        obitton@habana.ai
++Description:    Displays the device's security status
++
+ What:           /sys/class/habanalabs/hl<n>/soft_reset
+ Date:           Jan 2019
+ KernelVersion:  5.1
+diff --git a/drivers/misc/habanalabs/common/sysfs.c b/drivers/misc/habanalabs/common/sysfs.c
+index 6c5271f01160..36e9814139d1 100644
+--- a/drivers/misc/habanalabs/common/sysfs.c
++++ b/drivers/misc/habanalabs/common/sysfs.c
+@@ -375,6 +375,14 @@ static ssize_t eeprom_read_handler(struct file *filp, struct kobject *kobj,
+ 	return max_size;
+ }
+ 
++static ssize_t security_enabled_show(struct device *dev,
++				struct device_attribute *attr, char *buf)
++{
++	struct hl_device *hdev = dev_get_drvdata(dev);
++
++	return sprintf(buf, "%d\n", hdev->asic_prop.fw_security_enabled);
++}
++
+ static DEVICE_ATTR_RO(armcp_kernel_ver);
+ static DEVICE_ATTR_RO(armcp_ver);
+ static DEVICE_ATTR_RO(cpld_ver);
+@@ -393,6 +401,7 @@ static DEVICE_ATTR_RO(status);
+ static DEVICE_ATTR_RO(thermal_ver);
+ static DEVICE_ATTR_RO(uboot_ver);
+ static DEVICE_ATTR_RO(fw_os_ver);
++static DEVICE_ATTR_RO(security_enabled);
+ 
+ static struct bin_attribute bin_attr_eeprom = {
+ 	.attr = {.name = "eeprom", .mode = (0444)},
+@@ -417,6 +426,7 @@ static struct attribute *hl_dev_attrs[] = {
+ 	&dev_attr_thermal_ver.attr,
+ 	&dev_attr_uboot_ver.attr,
+ 	&dev_attr_fw_os_ver.attr,
++	&dev_attr_security_enabled.attr,
+ 	NULL,
+ };
+ 
+-- 
+2.25.1
 

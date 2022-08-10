@@ -2,177 +2,395 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D0BA58E831
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 09:52:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4049658E848
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 09:54:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231529AbiHJHwO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 03:52:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45930 "EHLO
+        id S231536AbiHJHyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 03:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231512AbiHJHwK (ORCPT
+        with ESMTP id S231497AbiHJHyh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 03:52:10 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8912F74341
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 00:52:09 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id y13so26158233ejp.13
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 00:52:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=XVSnkMwhvdCAXSk0pnxudE8JlTnO8bAUtjVsNUeiSVM=;
-        b=lqD2J2w7ql2U9DSaPmtI+q9+2IieXSsyZaE8hMpCS5L4qtH8XNJTKmFFz3vNrEg2F2
-         iT1mye2RdOc/OnBXu7c4j31KTg/uZ1cMZIJq0eIpznKw0/mO1R0GqZX3BISoMxZganGm
-         R10hJdwagRVs+GoryDoLebVTwSJbRnFECucYX4wFM7nFjT35y+4aUktEkW/UqfCJJsYO
-         Ii/diHJ35elEpai0Z9godoYitWjZpEP4wCSbto026aXcbvfEhEETOdlCEHgv1ElOpmRu
-         3siFlfsh+H3je262C3Kmcz2ktGK2FaR2qgLfMy7wP8649coZ5pPqjwoNTxGdxWaXq0HF
-         /e0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=XVSnkMwhvdCAXSk0pnxudE8JlTnO8bAUtjVsNUeiSVM=;
-        b=l+mOGuwTYXdMBmAEmfBLSXLrenydTcl2y49p5j2qKuARLPo0bMCkvYN2YMaL7knIZw
-         26KzoRdvtROM2dXsa6+i0XUM8MngV+tsGhmzT+bc1gcSVdF0mJWwM35ywYkp2SzIoOeO
-         zJ5ndmISgIEl7wgxAA7G33zaTQBCssKBB+/eDVTvtU0t1MKhqqmFxuyYs/dhQsXYD4WB
-         8amWf4dKVXTByqGm3mkiwvcgYWkVXB5eDBmRMDkFefagaDFval3d5GarYcthFJvCA5cf
-         zDGu8C+Xtz3AH+SB2u3YI5eCRpzf1aPPr0Bs67FriH6c91alZJ1HPe7RdlcYYl5ZuiO0
-         UfFg==
-X-Gm-Message-State: ACgBeo0ILKiVDpC84GOIX+wcR4aGSSBs+bblPAxp8qYAJIRvut+VcAiy
-        u7ZL5dm50zpKMxrZkpBONhWHPnLyIjFVS7wgwJR9RKMRFcFkhA==
-X-Google-Smtp-Source: AA6agR5lF83OUgtGOqZ4wYoHWdo8ZvYE0AxJjNzeXk/fXVsk0StAuquZINiLHEedp6/mxH1jhW4/3Kr//SzVhN1E5ho=
-X-Received: by 2002:a17:907:86ac:b0:731:5180:8aa0 with SMTP id
- qa44-20020a17090786ac00b0073151808aa0mr10285234ejc.366.1660117927843; Wed, 10
- Aug 2022 00:52:07 -0700 (PDT)
+        Wed, 10 Aug 2022 03:54:37 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8177474DC5;
+        Wed, 10 Aug 2022 00:54:35 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8E5EA1FB;
+        Wed, 10 Aug 2022 00:54:35 -0700 (PDT)
+Received: from [10.57.12.21] (unknown [10.57.12.21])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B61553F70D;
+        Wed, 10 Aug 2022 00:54:31 -0700 (PDT)
+Message-ID: <d2ec7790-a1fa-69f9-a9bb-f003c99517f0@arm.com>
+Date:   Wed, 10 Aug 2022 08:54:24 +0100
 MIME-Version: 1.0
-References: <20220809175513.345597655@linuxfoundation.org>
-In-Reply-To: <20220809175513.345597655@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Wed, 10 Aug 2022 13:21:56 +0530
-Message-ID: <CA+G9fYsE4qzpAjayZdLQe5Jnh90zfXQpgQof1dKu9QGbTpU_ZQ@mail.gmail.com>
-Subject: Re: [PATCH 5.19 00/21] 5.19.1-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        slade@sladewatkins.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 4/4] hwrng: virtio - always add a pending request
+Content-Language: en-US
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Laurent Vivier <lvivier@redhat.com>, linux-kernel@vger.kernel.org,
+        amit@kernel.org, Herbert Xu <herbert@gondor.apana.org.au>,
+        Matt Mackall <mpm@selenic.com>,
+        virtualization@lists.linux-foundation.org,
+        Dmitriy Vyukov <dvyukov@google.com>, rusty@rustcorp.com.au,
+        akong@redhat.com, Alexander Potapenko <glider@google.com>,
+        linux-crypto@vger.kernel.org,
+        Mauricio De Carvalho <Mauricio.DeCarvalho@arm.com>,
+        Kevin Brodsky <Kevin.Brodsky@arm.com>
+References: <20211028101111.128049-1-lvivier@redhat.com>
+ <20211028101111.128049-5-lvivier@redhat.com>
+ <7e64ce61-89b1-40aa-8295-00ca42b9a959@arm.com>
+ <2c1198c4-77aa-5cb8-6bb4-b974850651be@arm.com>
+ <20220803073243-mutt-send-email-mst@kernel.org>
+ <33f0f429-491c-49da-bd2e-bf9f62cb3efb@arm.com>
+ <20220803083406-mutt-send-email-mst@kernel.org>
+ <a18f9406-fdc5-130b-0460-eb5ad75d8876@arm.com>
+ <20220809161554-mutt-send-email-mst@kernel.org>
+From:   Vladimir Murzin <vladimir.murzin@arm.com>
+In-Reply-To: <20220809161554-mutt-send-email-mst@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 9 Aug 2022 at 23:38, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 5.19.1 release.
-> There are 21 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Thu, 11 Aug 2022 17:55:02 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.19.1-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.19.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 8/9/22 21:16, Michael S. Tsirkin wrote:
+> On Wed, Aug 03, 2022 at 02:12:25PM +0100, Vladimir Murzin wrote:
+>> On 8/3/22 13:55, Michael S. Tsirkin wrote:
+>>> On Wed, Aug 03, 2022 at 01:25:15PM +0100, Vladimir Murzin wrote:
+>>>> On 8/3/22 12:39, Michael S. Tsirkin wrote:
+>>>>> On Wed, Aug 03, 2022 at 09:57:35AM +0100, Vladimir Murzin wrote:
+>>>>>> On 8/2/22 13:49, Vladimir Murzin wrote:
+>>>>>>> Hi Laurent,
+>>>>>>>
+>>>>>>> On 10/28/21 11:11, Laurent Vivier wrote:
+>>>>>>>> If we ensure we have already some data available by enqueuing
+>>>>>>>> again the buffer once data are exhausted, we can return what we
+>>>>>>>> have without waiting for the device answer.
+>>>>>>>>
+>>>>>>>> Signed-off-by: Laurent Vivier <lvivier@redhat.com>
+>>>>>>>> ---
+>>>>>>>>  drivers/char/hw_random/virtio-rng.c | 26 ++++++++++++--------------
+>>>>>>>>  1 file changed, 12 insertions(+), 14 deletions(-)
+>>>>>>>>
+>>>>>>>> diff --git a/drivers/char/hw_random/virtio-rng.c b/drivers/char/hw_random/virtio-rng.c
+>>>>>>>> index 8ba97cf4ca8f..0a7dde135db1 100644
+>>>>>>>> --- a/drivers/char/hw_random/virtio-rng.c
+>>>>>>>> +++ b/drivers/char/hw_random/virtio-rng.c
+>>>>>>>> @@ -20,7 +20,6 @@ struct virtrng_info {
+>>>>>>>>          struct virtqueue *vq;
+>>>>>>>>          char name[25];
+>>>>>>>>          int index;
+>>>>>>>> -        bool busy;
+>>>>>>>>          bool hwrng_register_done;
+>>>>>>>>          bool hwrng_removed;
+>>>>>>>>          /* data transfer */
+>>>>>>>> @@ -44,16 +43,18 @@ static void random_recv_done(struct virtqueue *vq)
+>>>>>>>>                  return;
+>>>>>>>>
+>>>>>>>>          vi->data_idx = 0;
+>>>>>>>> -        vi->busy = false;
+>>>>>>>>
+>>>>>>>>          complete(&vi->have_data);
+>>>>>>>>  }
+>>>>>>>>
+>>>>>>>> -/* The host will fill any buffer we give it with sweet, sweet randomness. */
+>>>>>>>> -static void register_buffer(struct virtrng_info *vi)
+>>>>>>>> +static void request_entropy(struct virtrng_info *vi)
+>>>>>>>>  {
+>>>>>>>>          struct scatterlist sg;
+>>>>>>>>
+>>>>>>>> +        reinit_completion(&vi->have_data);
+>>>>>>>> +        vi->data_avail = 0;
+>>>>>>>> +        vi->data_idx = 0;
+>>>>>>>> +
+>>>>>>>>          sg_init_one(&sg, vi->data, sizeof(vi->data));
+>>>>>>>>
+>>>>>>>>          /* There should always be room for one buffer. */
+>>>>>>>> @@ -69,6 +70,8 @@ static unsigned int copy_data(struct virtrng_info *vi, void *buf,
+>>>>>>>>          memcpy(buf, vi->data + vi->data_idx, size);
+>>>>>>>>          vi->data_idx += size;
+>>>>>>>>          vi->data_avail -= size;
+>>>>>>>> +        if (vi->data_avail == 0)
+>>>>>>>> +                request_entropy(vi);
+>>>>>>>>          return size;
+>>>>>>>>  }
+>>>>>>>>
+>>>>>>>> @@ -98,13 +101,7 @@ static int virtio_read(struct hwrng *rng, void *buf, size_t size, bool wait)
+>>>>>>>>           * so either size is 0 or data_avail is 0
+>>>>>>>>           */
+>>>>>>>>          while (size != 0) {
+>>>>>>>> -                /* data_avail is 0 */
+>>>>>>>> -                if (!vi->busy) {
+>>>>>>>> -                        /* no pending request, ask for more */
+>>>>>>>> -                        vi->busy = true;
+>>>>>>>> -                        reinit_completion(&vi->have_data);
+>>>>>>>> -                        register_buffer(vi);
+>>>>>>>> -                }
+>>>>>>>> +                /* data_avail is 0 but a request is pending */
+>>>>>>>>                  ret = wait_for_completion_killable(&vi->have_data);
+>>>>>>>>                  if (ret < 0)
+>>>>>>>>                          return ret;
+>>>>>>>> @@ -126,8 +123,7 @@ static void virtio_cleanup(struct hwrng *rng)
+>>>>>>>>  {
+>>>>>>>>          struct virtrng_info *vi = (struct virtrng_info *)rng->priv;
+>>>>>>>>
+>>>>>>>> -        if (vi->busy)
+>>>>>>>> -                complete(&vi->have_data);
+>>>>>>>> +        complete(&vi->have_data);
+>>>>>>>>  }
+>>>>>>>>
+>>>>>>>>  static int probe_common(struct virtio_device *vdev)
+>>>>>>>> @@ -163,6 +159,9 @@ static int probe_common(struct virtio_device *vdev)
+>>>>>>>>                  goto err_find;
+>>>>>>>>          }
+>>>>>>>>
+>>>>>>>> +        /* we always have a pending entropy request */
+>>>>>>>> +        request_entropy(vi);
+>>>>>>>> +
+>>>>>>>>          return 0;
+>>>>>>>>
+>>>>>>>>  err_find:
+>>>>>>>> @@ -181,7 +180,6 @@ static void remove_common(struct virtio_device *vdev)
+>>>>>>>>          vi->data_idx = 0;
+>>>>>>>>          complete(&vi->have_data);
+>>>>>>>>          vdev->config->reset(vdev);
+>>>>>>>> -        vi->busy = false;
+>>>>>>>>          if (vi->hwrng_register_done)
+>>>>>>>>                  hwrng_unregister(&vi->hwrng);
+>>>>>>>>          vdev->config->del_vqs(vdev);
+>>>>>>>
+>>>>>>> We observed that after this commit virtio-rng implementation in FVP doesn't
+>>>>>>> work
+>>>>>>>
+>>>>>>> INFO: bp.virtio_rng: Selected Random Generator Device: XORSHIFT DEVICE
+>>>>>>> INFO: bp.virtio_rng: Using seed value: 0x5674bba8
+>>>>>>> Error: FVP_Base_AEMvA: bp.virtio_rng: <vq0-requestq> Found invalid descriptor index
+>>>>>>> In file: (unknown):0
+>>>>>>> In process: FVP_Base_AEMvA.thread_p_12 @ 935500020 ns
+>>>>>>> Info: FVP_Base_AEMvA: bp.virtio_rng: Could not extract buffer
+>>>>>>>
+>>>>>>> while basic baremetal test works as expected
+>>>>>>>
+>>>>>>> INFO: bp.virtio_rng: Selected Random Generator Device: XORSHIFT DEVICE
+>>>>>>> INFO: bp.virtio_rng: Using seed value: 0x541c142e
+>>>>>>> Info: FVP_Base_AEMv8A: bp.virtio_rng: Generated Number: 0x4b098991ceb377e6
+>>>>>>> Info: FVP_Base_AEMv8A: bp.virtio_rng: Generated Number: 0xbdcbe3f765ba62f7
+>>>>>>>
+>>>>>>> We are trying to get an idea what is missing and where, yet none of us familiar
+>>>>>>> with the driver :(
+>>>>>>>
+>>>>>>> I'm looping Kevin who originally reported that and Mauricio who is looking form
+>>>>>>> the FVP side.
+>>>>>>
+>>>>>> With the following diff FVP works agin
+>>>>>>
+>>>>>> diff --git a/drivers/char/hw_random/virtio-rng.c b/drivers/char/hw_random/virtio-rng.c
+>>>>>> index a6f3a8a2ac..042503ad6c 100644
+>>>>>> --- a/drivers/char/hw_random/virtio-rng.c
+>>>>>> +++ b/drivers/char/hw_random/virtio-rng.c
+>>>>>> @@ -54,6 +54,7 @@ static void request_entropy(struct virtrng_info *vi)
+>>>>>>         reinit_completion(&vi->have_data);
+>>>>>>         vi->data_avail = 0;
+>>>>>>         vi->data_idx = 0;
+>>>>>> +       smp_mb();
+>>>>>>
+>>>>>>         sg_init_one(&sg, vi->data, sizeof(vi->data));
+>>>>>>
+>>>>>>
+>>>>>> What do you reckon?
+>>>>>>
+>>>>>> Cheers
+>>>>>> Vladimir
+>>>>>
+>>>>> Thanks for debugging this!
+>>>>>
+>>>>> OK, interesting.
+>>>>>
+>>>>> data_idx and data_avail are accessed from virtio_read.
+>>>>>
+>>>>> Which as far as I can tell is invoked just with reading_mutex.
+>>>>>
+>>>>>
+>>>>> But, request_entropy is called from probe when device is registered
+>>>>> this time without locks
+>>>>> so it can trigger while another thread is calling virtio_read.
+>>>>>
+>>>>> Second request_entropy is called from a callback random_recv_done
+>>>>> also without locks.
+>>>>>
+>>>>> So it's great that smp_mb helped here but I suspect in fact we
+>>>>> need locking. Laurent?
+>>>>>
+>>>>
+>>>> I'm sorry for the noise, but it looks like I'm seeing issue for some different reasons.
+>>>> I manage to reproduce issue even with smb_mb() in place. The reason I though it helped
+>>>> is because I changed both environment and added smb_mb().
+>>>>
+>>>> Anyway, thank you for your time!
+>>>>
+>>>> Cheers
+>>>> Vladimir
+>>>
+>>> Well we at least have a race condition found by code review here. Here's
+>>> a quick hack attempting to fix it. I don't like it much since
+>>> it adds buffers with GFP_ATOMIC and kicks under a spinlock, but
+>>> for now we can at least test it. I did a quick build but that's
+>>> all, a bit rushed now sorry. Would appreciate knowing whether
+>>> this addresses the issue for you.
+>>>
+>>>
+>>> diff --git a/drivers/char/hw_random/virtio-rng.c b/drivers/char/hw_random/virtio-rng.c
+>>> index a6f3a8a2aca6..36121c8d0315 100644
+>>> --- a/drivers/char/hw_random/virtio-rng.c
+>>> +++ b/drivers/char/hw_random/virtio-rng.c
+>>> @@ -23,6 +23,7 @@ struct virtrng_info {
+>>>       bool hwrng_register_done;
+>>>       bool hwrng_removed;
+>>>       /* data transfer */
+>>> +     spinlock_t lock;
+>>>       struct completion have_data;
+>>>       unsigned int data_avail;
+>>>       unsigned int data_idx;
+>>> @@ -37,6 +38,9 @@ struct virtrng_info {
+>>>  static void random_recv_done(struct virtqueue *vq)
+>>>  {
+>>>       struct virtrng_info *vi = vq->vdev->priv;
+>>> +     unsigned long flags;
+>>> +
+>>> +     spin_lock_irqsave(&vi->lock, flags);
+>>>
+>>>       /* We can get spurious callbacks, e.g. shared IRQs + virtio_pci. */
+>>>       if (!virtqueue_get_buf(vi->vq, &vi->data_avail))
+>>> @@ -45,20 +49,20 @@ static void random_recv_done(struct virtqueue *vq)
+>>>       vi->data_idx = 0;
+>>>
+>>>       complete(&vi->have_data);
+>>> +     spin_unlock_irqrestore(&vi->lock, flags);
+>>>  }
+>>>
+>>>  static void request_entropy(struct virtrng_info *vi)
+>>>  {
+>>>       struct scatterlist sg;
+>>>
+>>> -     reinit_completion(&vi->have_data);
+>>> -     vi->data_avail = 0;
+>>> +     BUG_ON(vi->data_avail != 0);
+>>>       vi->data_idx = 0;
+>>>
+>>>       sg_init_one(&sg, vi->data, sizeof(vi->data));
+>>>
+>>>       /* There should always be room for one buffer. */
+>>> -     virtqueue_add_inbuf(vi->vq, &sg, 1, vi->data, GFP_KERNEL);
+>>> +     virtqueue_add_inbuf(vi->vq, &sg, 1, vi->data, GFP_ATOMIC);
+>>>
+>>>       virtqueue_kick(vi->vq);
+>>>  }
+>>> @@ -70,8 +74,10 @@ static unsigned int copy_data(struct virtrng_info *vi, void *buf,
+>>>       memcpy(buf, vi->data + vi->data_idx, size);
+>>>       vi->data_idx += size;
+>>>       vi->data_avail -= size;
+>>> -     if (vi->data_avail == 0)
+>>> +     if (vi->data_avail == 0) {
+>>> +             reinit_completion(&vi->have_data);
+>>>               request_entropy(vi);
+>>> +     }
+>>>       return size;
+>>>  }
+>>>
+>>> @@ -81,18 +87,21 @@ static int virtio_read(struct hwrng *rng, void *buf, size_t size, bool wait)
+>>>       struct virtrng_info *vi = (struct virtrng_info *)rng->priv;
+>>>       unsigned int chunk;
+>>>       size_t read;
+>>> +     unsigned long flags;
+>>>
+>>>       if (vi->hwrng_removed)
+>>>               return -ENODEV;
+>>>
+>>>       read = 0;
+>>>
+>>> +     spin_lock_irqsave(&vi->lock, flags);
+>>>       /* copy available data */
+>>>       if (vi->data_avail) {
+>>>               chunk = copy_data(vi, buf, size);
+>>>               size -= chunk;
+>>>               read += chunk;
+>>>       }
+>>> +     spin_unlock_irqrestore(&vi->lock, flags);
+>>>
+>>>       if (!wait)
+>>>               return read;
+>>> @@ -108,12 +117,14 @@ static int virtio_read(struct hwrng *rng, void *buf, size_t size, bool wait)
+>>>               /* if vi->data_avail is 0, we have been interrupted
+>>>                * by a cleanup, but buffer stays in the queue
+>>>                */
+>>> +             spin_lock_irqsave(&vi->lock, flags);
+>>>               if (vi->data_avail == 0)
+>>>                       return read;
+>>>
+>>>               chunk = copy_data(vi, buf + read, size);
+>>>               size -= chunk;
+>>>               read += chunk;
+>>> +             spin_unlock_irqrestore(&vi->lock, flags);
+>>>       }
+>>>
+>>>       return read;
+>>> @@ -122,19 +133,25 @@ static int virtio_read(struct hwrng *rng, void *buf, size_t size, bool wait)
+>>>  static void virtio_cleanup(struct hwrng *rng)
+>>>  {
+>>>       struct virtrng_info *vi = (struct virtrng_info *)rng->priv;
+>>> +     unsigned long flags;
+>>>
+>>> +     spin_lock_irqsave(&vi->lock, flags);
+>>>       complete(&vi->have_data);
+>>> +     spin_unlock_irqrestore(&vi->lock, flags);
+>>>  }
+>>>
+>>>  static int probe_common(struct virtio_device *vdev)
+>>>  {
+>>>       int err, index;
+>>>       struct virtrng_info *vi = NULL;
+>>> +     unsigned long flags;
+>>>
+>>>       vi = kzalloc(sizeof(struct virtrng_info), GFP_KERNEL);
+>>>       if (!vi)
+>>>               return -ENOMEM;
+>>>
+>>> +     spin_lock_init(&vi->lock);
+>>> +
+>>>       vi->index = index = ida_simple_get(&rng_index_ida, 0, 0, GFP_KERNEL);
+>>>       if (index < 0) {
+>>>               err = index;
+>>> @@ -162,7 +179,10 @@ static int probe_common(struct virtio_device *vdev)
+>>>       virtio_device_ready(vdev);
+>>>
+>>>       /* we always have a pending entropy request */
+>>> -     request_entropy(vi);
+>>> +     spin_lock_irqsave(&vi->lock, flags);
+>>> +     if (vi->data_avail == 0)
+>>> +             request_entropy(vi);
+>>> +     spin_unlock_irqrestore(&vi->lock, flags);
+>>>
+>>>       return 0;
+>>>
+>>>
+>>
+>> Thanks a lot! I gave it a go and it did not help. I think I need to find out how exactly
+>> my environment affected... it not necessary need to be kernel related.
+> 
+> Okay ... I'll wait to hear your report then. You are saying maybe
+> there's no bug in kernel, something else changed in your environment?
+> 
 
-Results from Linaro's test farm.
-No regressions on arm64, arm, x86_64, and i386.
+Yes, I noticed that if I swap bootloader then problem goes away, so unlikely
+kernel issue. I passed reproducer to people working on a model, so they can
+investigate from the other side. So far feel free to ignore my report. 
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.19.1-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.19.y
-* git commit: 8054ca35012635b5d3f63311bd312e7149d80b38
-* git describe: v5.19-22-g8054ca350126
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.19.y/build/v5.19-22-g8054ca350126/
-
-## No test regressions (compared to v5.19.0)
-
-## No metric regressions (compared to v5.19.0)
-
-## No test fixes (compared to v5.19.0)
-
-## No metric fixes (compared to v5.19.0)
-
-## Test result summary
-total: 134782, pass: 120620, fail: 1758, skip: 12404, xfail: 0
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 301 total, 301 passed, 0 failed
-* arm64: 62 total, 60 passed, 2 failed
-* i386: 52 total, 50 passed, 2 failed
-* mips: 45 total, 45 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 60 total, 54 passed, 6 failed
-* riscv: 27 total, 22 passed, 5 failed
-* s390: 18 total, 18 passed, 0 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 55 total, 53 passed, 2 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* rcutorture
-* ssuite
-* v4l2-compliance
-* vdso
-
--- 
-Linaro LKFT
-https://lkft.linaro.org
+Cheers
+Vladimir

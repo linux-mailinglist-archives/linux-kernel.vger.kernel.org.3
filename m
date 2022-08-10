@@ -2,116 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92A4B58E672
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 06:39:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DB7958E676
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 06:44:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbiHJEiz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 00:38:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58118 "EHLO
+        id S230369AbiHJEoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 00:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229513AbiHJEix (ORCPT
+        with ESMTP id S229513AbiHJEof (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 00:38:53 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C41785BC;
-        Tue,  9 Aug 2022 21:38:49 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27A3LlZY008854;
-        Wed, 10 Aug 2022 04:38:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=8CCKMKUDEkkgwAPeru2SlBoysIQo+FYrwolDljJHCLM=;
- b=mEvR1VZABFpkSdUkakfpDg43lWPPBD3rozFyv+RciJTxBv2dbk2wld8A2r+YnAWdpkit
- 2XdjP5BCIoJJFxjH8/u3ZqU1gKPl7P1ypDQVNAg7zEVAjuARW1BVvx7VHYb9wRGm0w2r
- bpX/+LVVGzIF89amVHEHnJ8rKbapYO6ltdTuyrlgnSVvzzDXPxx0xNTtUlt8zwRr7JLi
- /5nVntAE71TGSZp8M+61TADDXyHwucYYnqXg4Xz5gzS7JXI4k8eB0LgIGDV8MRBMJ9HF
- gQRl6XmkcIlVB63633E+LPWyg5ULTV14b8AvASUA2MujPnk3rYOG0Hr/i3Zkq7VBG5tG kQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3huwra16sk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 Aug 2022 04:38:45 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.47.97.222])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27A4ciSL017406
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 Aug 2022 04:38:44 GMT
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Tue, 9 Aug 2022 21:38:44 -0700
-Received: from [10.50.1.79] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Tue, 9 Aug 2022
- 21:38:40 -0700
-Message-ID: <8b75f110-9c36-8a02-5c98-f638ec6a878e@quicinc.com>
-Date:   Wed, 10 Aug 2022 10:08:36 +0530
+        Wed, 10 Aug 2022 00:44:35 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F7382FA8;
+        Tue,  9 Aug 2022 21:44:33 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 23D69320090A;
+        Wed, 10 Aug 2022 00:44:31 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Wed, 10 Aug 2022 00:44:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1660106670; x=
+        1660193070; bh=BIhDR8QyFaEyZZyv2NBJxwbm+qAB3aLtVX5s9TTqwoA=; b=c
+        +Wj0w/pXdOLqD9+xv4x9My7M7ELw1rwDcYlA3uuzRGE8LTRYSix+MnKGOP9P6nM/
+        YTyCgzuKbFvCd7AJ1Or52tddbrkti+ICgsR0yUNlK6JgE4c+uoSRFmEZqHyk5jE7
+        rKTFxWsMLL7eNgT+Ny7GlojVmHpLqKmuKSlO/ICJ3MFNs32PzM/TVwBRyTABrO/Z
+        vLH/2gGsjSU72hUALAFuNlAEfXCaQ0WREibrMBGyKiVCwT3VHMvW+AawZ9ovfD+C
+        +IF8GEX0dYgMBqmbIWIWIK2R2cI7kEEakrxs+xZzgTcbr5osWn+jfxWOi/SRkVuu
+        bdKpKys1wKZV1PFXL+Fgg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1660106670; x=
+        1660193070; bh=BIhDR8QyFaEyZZyv2NBJxwbm+qAB3aLtVX5s9TTqwoA=; b=o
+        sy2ksPtbF5E+r4gGopt81yCuclThFHt6gnoXKjTxMdoCyogCrJYVkkN5z21FV54I
+        7FaX01G6fkxDVmXz+hVWcM6xEzB3lbJY/o+OCRIzWEphT3ZWGvIPnpOqg8bZ2GUc
+        g56xwdv58P2+XMef7/RZuh7eCwAbkOmUOmrcPTHEOKPk6mCv/Xgza2lfFvQujXvf
+        W1lD2X/phBuQNxxBCYcuMWJBFj/cUvtczfY1jaw7Ug+Zy5dHIQuSYwphGNmDjIZw
+        s/Itl+jGo4HGIl0B1/WlqcSE0bBo8TrS99Rt/bDUcrAJsELhqxeNVyN3SNSDE+/M
+        jQheviTWtmyntoOZ3MrRw==
+X-ME-Sender: <xms:rjfzYg29sAORIkygg_mt-L_YVjgX1VpgFY55Oo8lTiHQSp82e-ZECQ>
+    <xme:rjfzYrFIDDIYXRsUAoZciDIbWnpXd31t6K_azAJaucHWAG_AoKmsfLjllooISwodT
+    MkaywFuKtjWBN851xA>
+X-ME-Received: <xmr:rjfzYo5RFtEO4aDF9_nKeQwSFvG0xNmIyqQ0IMDbbWQyL8xb5E8nEkE6P2M95Zh3kAirGg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeguddgkeelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkffuhffvveffjghftgfgfgggsehtqhertddtreejnecuhfhrohhmpefnuhhk
+    vgculfhonhgvshcuoehluhhkvgeslhhjohhnvghsrdguvghvqeenucggtffrrghtthgvrh
+    hnpeekfeffueejveeujeeugeelleehtdegvdeludektddtfffhieefledvudehfeejieen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehluhhkvg
+    eslhhjohhnvghsrdguvghv
+X-ME-Proxy: <xmx:rjfzYp25kavF12M5vXGxr1O09_dDujz6u1eu3Na148sZnRqVqVUTxg>
+    <xmx:rjfzYjHazngnQJKOTS8jlt76WPZm-u604zYG9OKMxxExnZ2vW79qvw>
+    <xmx:rjfzYi-JLWwW1A8GDb0UBLczxTA7hi3441EFi1B1SeliuBcueoyLIA>
+    <xmx:rjfzYrBFhiRVBru171uDUmkjsaesNwlcXRMf_LBh1gXEHlcCcnPw7Q>
+Feedback-ID: i5ec1447f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 10 Aug 2022 00:44:27 -0400 (EDT)
+Message-ID: <fcc7b7eb29abc1ac9053bce02fd9f705e5f06b0b.camel@ljones.dev>
+Subject: Re: [PATCH v3 1/6] asus-wmi: Implement TUF laptop keyboard RGB
+ control
+From:   Luke Jones <luke@ljones.dev>
+To:     Pavel Machek <pavel@ucw.cz>
+Cc:     hdegoede@redhat.com, andy.shevchenko@gmail.com,
+        pobrn@protonmail.com, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 10 Aug 2022 16:44:20 +1200
+In-Reply-To: <20220809105031.GA4971@duo.ucw.cz>
+References: <20220809025054.1626339-1-luke@ljones.dev>
+         <20220809025054.1626339-2-luke@ljones.dev>
+         <20220809105031.GA4971@duo.ucw.cz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (by Flathub.org) 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.0
-Subject: Re: [PATCH V4 1/3] arm64: dts: qcom: sc7280: Cleanup the lpasscc node
-Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh@kernel.org>
-CC:     Douglas Anderson <dianders@chromium.org>,
-        Andy Gross <agross@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_tdas@quicinc.com>
-References: <1660026909-7365-1-git-send-email-quic_c_skakit@quicinc.com>
- <1660026909-7365-2-git-send-email-quic_c_skakit@quicinc.com>
- <CAE-0n52t0MPDxGQNEdhNaqOBhUhr8FBew_cuEwmruN12k4f15A@mail.gmail.com>
-From:   "Satya Priya Kakitapalli (Temp)" <quic_c_skakit@quicinc.com>
-In-Reply-To: <CAE-0n52t0MPDxGQNEdhNaqOBhUhr8FBew_cuEwmruN12k4f15A@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: DodwyBeyljnxpgxcJrCNlKMdnQNNA6Xd
-X-Proofpoint-GUID: DodwyBeyljnxpgxcJrCNlKMdnQNNA6Xd
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-10_01,2022-08-09_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
- spamscore=0 clxscore=1011 priorityscore=1501 phishscore=0 impostorscore=0
- mlxscore=0 lowpriorityscore=0 suspectscore=0 mlxlogscore=999
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208100013
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Pavel, Andy, Hans,
 
-On 8/9/2022 10:04 PM, Stephen Boyd wrote:
-> Quoting Satya Priya (2022-08-08 23:35:07)
->> diff --git a/arch/arm64/boot/dts/qcom/sc7280.dtsi b/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> index 13d7f26..71735bb 100644
->> --- a/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> +++ b/arch/arm64/boot/dts/qcom/sc7280.dtsi
->> @@ -2168,9 +2168,8 @@
->>                  lpasscc: lpasscc@3000000 {
->>                          compatible = "qcom,sc7280-lpasscc";
->>                          reg = <0 0x03000000 0 0x40>,
->> -                             <0 0x03c04000 0 0x4>,
->> -                             <0 0x03389000 0 0x24>;
->> -                       reg-names = "qdsp6ss", "top_cc", "cc";
->> +                                 <0 0x03c04000 0 0x4>;
-> This looks oddly tabbed out? I'd expect it to align with the first reg
-> property, so be unchanged.
+> > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*
+> > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * asus::kbd_backlight still controls a
+> > > > > > > > base > > > > > > 3-level backlight and when
+> > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * it is on 0, the RGB is not visible
+> > > > > > > > at all. > > > > RGB > > should be treated as
+> > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * an additional step.
+> > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+> > > >=20
+> > > > Ouch. Lets not do that? If rgb interface is available, hide the
+> > > > 3
+> > > > level one, or something.
+> > > >=20
+
+I really don't think this is safe or sensible. There are some laptops
+that default the 3-stage method to off, and this means that the LEDs
+will not show regardless of multicolor brightness.
 
 
-Okay, I will correct the tabbing. But this wouldn't remain unchanged 
-because the comma is being replaced by semi-colon.
 
+> > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0mc_cdev->led_cdev.name =3D=C2=A0=C2=A0 > >=
+ > > > >
+> > > > > > > > "asus::multicolour::kbd_backlight";
+> > > >=20
+> > > > Make this "rgb:kbd_backlight" or "inputX:rgb:kbd_backligh" and
+> > > > document it in Documentation/leds/well-known-leds.txt.
 
->> +                       reg-names = "qdsp6ss", "top_cc";
->>                          clocks = <&gcc GCC_CFG_NOC_LPASS_CLK>;
->>                          clock-names = "iface";
+Will do.
+
+-- 4 hours later --
+
+I've spent a lot of time working on this now. I don't think multicolor
+LED is suitable for use with the way these keyboards work.
+
+The biggest issue is related to the brightness setting.
+1. If the ASUS_WMI_DEVID_KBD_BACKLIGHT method defaults to 0 on boot
+then RGB is not visible
+
+I worked around this by setting it to "3" by default in module if
+ASUS_WMI_DEVID_TUF_RGB_MODE is found. And added a check in the button
+events to adjust multicolor brightness (+/- 17). This works but now I
+can't do led notify (led_classdev_notify_brightness_hw_changed).
+
+2. Pattern trigger can't be used for these keyboard modes as the modes
+are done entirely in hardware via a single switch in the complete
+command packet.
+
+I don't see any way forward with this, and looking at the complexity I
+don't have time either.
+
+3. Nodes everywhere..
+
+To fully control control these keyboards there are two WMI methods, one
+for mode/rgb, one for power-state. Splitting each of these parameters
+out to individual nodes with sensible naming and expectations gives:
+
+- keyboard_rgb_apply, new WO node to actually write out data
+- keyboard_rgb_save, first parameter of packet, retain-on-boot
+- keyboard_rgb_mode, the factory built-in modes,
+- keyboard_rgb_speed, speed of certain modes
+
+And then for power-state:
+
+- keyboard_state_apply, new WO node to actually write out data
+- keyboard_state_save, first parameter of packet, retain-on-boot
+- keyboard_state_boot, play boot animation (on boot)
+- keyboard_state_awake, LEDs visible while awake
+- keyboard_state_sleep, play suspend animation (while suspended)
+- keyboard_state_keyboard, unknown effect
+
+Quite frankly I would rather use the method I had in the first patch I
+submitted where mode and state had two nodes each,
+- keyboard_rgb_mode, WO =3D "n n n n n n"
+- keyboard_rgb_mode_index, output =3D "save/apply, mode, r, g, b, speed"
+- keyboard_rgb_state, WO =3D "n n n n n"
+- keyboard_rgb_state_index, output =3D "save/apply, boot, awake, sleep,
+keyboard"
+
+A big benefit of this structure is that not being able to read settings
+back from the keyboard (not possible!) becomes a non-issue because
+users have to write a full input, not partial, and it will apply right
+away.
+
+Multicolor class could still be used, but from everything I've tried
+now it really isn't suitable when the proper method for brightness is a
+separate WMI method (0-3), and when that is 0 it means LEDs are fully
+off - there's potential for mistakes/issues. Losing led-notif is an
+issue for users for sure.
+
+In short, from dog-fooding the current state inlcuding the trial of
+using multicolor brightness (and hiding the proper WMI method) I can
+only conclude that multicolor is not suitable for how these keyboards
+work.
+
+Hans, Andy, can I please revert back to the node + _index pairs taking
+an array input. Everything will be cleaner and simpler.
+
+Cheers,
+Luke.
+

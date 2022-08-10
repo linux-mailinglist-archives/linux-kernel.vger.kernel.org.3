@@ -2,347 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E948F58E88D
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 10:18:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 346E758E890
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 10:18:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231613AbiHJISJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 04:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37718 "EHLO
+        id S231585AbiHJISW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 04:18:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231585AbiHJISH (ORCPT
+        with ESMTP id S231629AbiHJISS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 04:18:07 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C04883F39;
-        Wed, 10 Aug 2022 01:18:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660119486; x=1691655486;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ipFRmU88e1tOLxRIjyv4mhJWUct3BO5oR+U7KcIdmPE=;
-  b=ASvVOpbZDQUjL8nOgckA4fQjHfAb0oUTqmF4ajEM0dYr+cVvz9SsEtHn
-   zFI9bbPedbJHN9SfXS3003ygH3SrAHkpz/lQwnrwkFZedjiryaBWTYBY0
-   H+fBghkeLjzvcmn83yZqHwIrG5gQM7w+LoazKa+AnJTFt7jKc0i0rwDnm
-   gy6F/4u9GGSwIhJW5qfcw8fyzJsINsutRMByIfsKcK7qjV3KudG179Szm
-   pvU7vg57MyMmQDkviSv5Q7hk7Y8VAvbIQjrJiwo78UGdlKK6PsfBs0Mk8
-   Ht/AOLG6ewOwHNCy/S1GfHxMoGHFqVDHea8i92w9wWwqD6lqsQaib6gPX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10434"; a="292279744"
-X-IronPort-AV: E=Sophos;i="5.93,226,1654585200"; 
-   d="scan'208";a="292279744"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 01:18:05 -0700
-X-IronPort-AV: E=Sophos;i="5.93,226,1654585200"; 
-   d="scan'208";a="664797408"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.238.1.204]) ([10.238.1.204])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 01:18:03 -0700
-Message-ID: <cb23e06b-6b3e-22af-f5de-a13af7aab1e4@linux.intel.com>
-Date:   Wed, 10 Aug 2022 16:18:01 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.0
-Subject: Re: [PATCH v8 009/103] KVM: TDX: Initialize the TDX module when
- loading the KVM intel kernel module
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        Wed, 10 Aug 2022 04:18:18 -0400
+Received: from polaris.svanheule.net (polaris.svanheule.net [84.16.241.116])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B4B83F3D
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 01:18:13 -0700 (PDT)
+Received: from vanadium.ugent.be (vanadium.ugent.be [157.193.99.61])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sander@svanheule.net)
+        by polaris.svanheule.net (Postfix) with ESMTPSA id 61F523091ED;
+        Wed, 10 Aug 2022 10:18:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+        s=mail1707; t=1660119491;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=z3yd5KzYnzw3eFmZydYb79W7Hsqz+VkDumQMRZwYAVk=;
+        b=WSn7AVcsA/ajvykHO59NmIBEj52E8TkSoiJpKsV7pwEfx2Bq9BfSP7+qm2NQTD4x3X6Yyc
+        +DV5nZQ5dphB5rPQsedWJhty0pgubTynD4AIqFkiG3KIts6GqEzSosv1/q8F1d4wWzqyW9
+        La4DnLT/fRSkBvn0snIJdr/rip5aT0XjWM/++pjBALgJvj9jdf8bDNzeVoz4HZ35GL/cd+
+        nlLMFsVfbo4nfkHDlxUj2YjipEVdpgDkKC7vM3XjZ+9mQBYZpRSBlEAb04BghGm5ddPcNE
+        gfRxwjhwY35SVym9k/OL+5LHteC9Dkj+5Jr1fnHoLv8p/YrxXK0t2R1RjgJdmw==
+Message-ID: <b723f2a292e92a792df95b912404e8d8e8e5e5f4.camel@svanheule.net>
+Subject: Re: [PATCH v1 0/3] cpumask: UP optimisation fixes follow-up
+From:   Sander Vanheule <sander@svanheule.net>
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
         linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>
-References: <cover.1659854790.git.isaku.yamahata@intel.com>
- <b6f8588f51f530e3904d2b98199aba6547032ea4.1659854790.git.isaku.yamahata@intel.com>
-From:   Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <b6f8588f51f530e3904d2b98199aba6547032ea4.1659854790.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Date:   Wed, 10 Aug 2022 10:18:09 +0200
+In-Reply-To: <YvM6LjJCMK4ZKrxK@yury-laptop>
+References: <cover.1660066581.git.sander@svanheule.net>
+         <YvM6LjJCMK4ZKrxK@yury-laptop>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (3.44.4-1.fc36) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 2022-08-09 at 21:55 -0700, Yury Norov wrote:
+> On Tue, Aug 09, 2022 at 07:36:32PM +0200, Sander Vanheule wrote:
+> > As an older version of the UP optimisation fixes was merged, not all
+> > review feedback has been implemented.=C2=A0 These patches implement the
+> > feedback received on the merged version [1], and the respin [2], for
+> > changes related to include/linux/cpumask.h and lib/cpumask.c.
+> >=20
+> > [1] https://lore.kernel.org/lkml/cover.1656777646.git.sander@svanheule.=
+net/
+> > [2] https://lore.kernel.org/lkml/cover.1659077534.git.sander@svanheule.=
+net/
+> >=20
+> > Sander Vanheule (3):
+> > =C2=A0 cpumask: align signatures of UP implementations
+> > =C2=A0 lib/cpumask: add inline cpumask_next_wrap() for UP
+> > =C2=A0 lib/cpumask: drop always-true preprocessor guard
+>=20
+> Acked-by: Yury Norov <yury.norov@gmail.com>
+>=20
+> Applying at bitmap-for-next, after some testing.
 
-On 2022/8/8 6:00, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
->
-> TDX requires several initialization steps for KVM to create guest TDs.
-> Detect CPU feature, enable VMX (TDX is based on VMX), detect the TDX module
-> availability, and initialize it.  This patch implements those steps.
->
-> There are several options on when to initialize the TDX module.  A.) kernel
-> module loading time, B.) the first guest TD creation time.  A.) was chosen.
-> With B.), a user may hit an error of the TDX initialization when trying to
-> create the first guest TD.  The machine that fails to initialize the TDX
-> module can't boot any guest TD further.  Such failure is undesirable and a
-> surprise because the user expects that the machine can accommodate guest
-> TD, but actually not.  So A.) is better than B.).
->
-> Introduce a module parameter, enable_tdx, to explicitly enable TDX KVM
-> support.  It's off by default to keep same behavior for those who don't use
-> TDX.  Implement hardware_setup method to detect TDX feature of CPU.
-> Because TDX requires all present CPUs to enable VMX (VMXON).  The x86
-> specific kvm_arch_post_hardware_enable_setup overrides the existing weak
-> symbol of kvm_arch_post_hardware_enable_setup which is called at the KVM
-> module initialization.
->
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->   arch/x86/include/asm/kvm_host.h |  1 +
->   arch/x86/kvm/Makefile           |  1 +
->   arch/x86/kvm/vmx/main.c         | 29 ++++++++++-
->   arch/x86/kvm/vmx/tdx.c          | 89 +++++++++++++++++++++++++++++++++
->   arch/x86/kvm/vmx/tdx.h          |  4 ++
->   arch/x86/kvm/vmx/x86_ops.h      |  6 +++
->   arch/x86/kvm/x86.c              |  8 +++
->   arch/x86/virt/vmx/tdx/tdx.c     |  1 +
->   8 files changed, 138 insertions(+), 1 deletion(-)
->   create mode 100644 arch/x86/kvm/vmx/tdx.c
->
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 3d000f060077..f432ad32515c 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1659,6 +1659,7 @@ struct kvm_x86_init_ops {
->   	int (*cpu_has_kvm_support)(void);
->   	int (*disabled_by_bios)(void);
->   	int (*hardware_setup)(void);
-> +	int (*post_hardware_enable_setup)(void);
->   	unsigned int (*handle_intel_pt_intr)(void);
->   
->   	struct kvm_x86_ops *runtime_ops;
-> diff --git a/arch/x86/kvm/Makefile b/arch/x86/kvm/Makefile
-> index ee4d0999f20f..e2c05195cb95 100644
-> --- a/arch/x86/kvm/Makefile
-> +++ b/arch/x86/kvm/Makefile
-> @@ -24,6 +24,7 @@ kvm-$(CONFIG_KVM_XEN)	+= xen.o
->   kvm-intel-y		+= vmx/vmx.o vmx/vmenter.o vmx/pmu_intel.o vmx/vmcs12.o \
->   			   vmx/evmcs.o vmx/nested.o vmx/posted_intr.o vmx/main.o
->   kvm-intel-$(CONFIG_X86_SGX_KVM)	+= vmx/sgx.o
-> +kvm-intel-$(CONFIG_INTEL_TDX_HOST)	+= vmx/tdx.o
->   
->   kvm-amd-y		+= svm/svm.o svm/vmenter.o svm/pmu.o svm/nested.o svm/avic.o svm/sev.o
->   
-> diff --git a/arch/x86/kvm/vmx/main.c b/arch/x86/kvm/vmx/main.c
-> index a0252cc0b48d..ac788af17d92 100644
-> --- a/arch/x86/kvm/vmx/main.c
-> +++ b/arch/x86/kvm/vmx/main.c
-> @@ -7,6 +7,32 @@
->   #include "pmu.h"
->   #include "tdx.h"
->   
-> +static bool __read_mostly enable_tdx = IS_ENABLED(CONFIG_INTEL_TDX_HOST);
+Thanks! Any chance to get this in for 6.0? I would rather avoid building cp=
+umask.o only on 6.0, but
+otherwise I don't think anything is functionally wrong with what is current=
+ly merged.
 
-So, if CONFIG_INTEL_TDX_HOST is opt-in in kconfig, the code will try to 
-enable TDX.
-
-The behavior seems a bit different from what you mentioned in the commit 
-message about the option to "explicitly enable TDX KVM
-support".
-
-
-> +module_param_named(tdx, enable_tdx, bool, 0444);
-> +
-> +static __init int vt_hardware_setup(void)
-> +{
-> +	int ret;
-> +
-> +	ret = vmx_hardware_setup();
-> +	if (ret)
-> +		return ret;
-> +
-> +	enable_tdx = enable_tdx && !tdx_hardware_setup(&vt_x86_ops);
-> +
-> +	return 0;
-> +}
-> +
-> +static int __init vt_post_hardware_enable_setup(void)
-> +{
-> +	enable_tdx = enable_tdx && !tdx_module_setup();
-> +	/*
-> +	 * Even if it failed to initialize TDX module, conventional VMX is
-> +	 * available.  Keep VMX usable.
-> +	 */
-> +	return 0;
-> +}
-> +
->   struct kvm_x86_ops vt_x86_ops __initdata = {
->   	.name = "kvm_intel",
->   
-> @@ -148,7 +174,8 @@ struct kvm_x86_ops vt_x86_ops __initdata = {
->   struct kvm_x86_init_ops vt_init_ops __initdata = {
->   	.cpu_has_kvm_support = vmx_cpu_has_kvm_support,
->   	.disabled_by_bios = vmx_disabled_by_bios,
-> -	.hardware_setup = vmx_hardware_setup,
-> +	.hardware_setup = vt_hardware_setup,
-> +	.post_hardware_enable_setup = vt_post_hardware_enable_setup,
->   	.handle_intel_pt_intr = NULL,
->   
->   	.runtime_ops = &vt_x86_ops,
-> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-> new file mode 100644
-> index 000000000000..e9a17f3666de
-> --- /dev/null
-> +++ b/arch/x86/kvm/vmx/tdx.c
-> @@ -0,0 +1,89 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <linux/cpu.h>
-> +
-> +#include <asm/tdx.h>
-> +
-> +#include "capabilities.h"
-> +#include "x86_ops.h"
-> +#include "tdx.h"
-> +
-> +#undef pr_fmt
-> +#define pr_fmt(fmt) "tdx: " fmt
-> +
-> +#define TDX_MAX_NR_CPUID_CONFIGS					\
-> +	((sizeof(struct tdsysinfo_struct) -				\
-> +		offsetof(struct tdsysinfo_struct, cpuid_configs))	\
-> +		/ sizeof(struct tdx_cpuid_config))
-> +
-> +struct tdx_capabilities {
-> +	u8 tdcs_nr_pages;
-> +	u8 tdvpx_nr_pages;
-> +
-> +	u64 attrs_fixed0;
-> +	u64 attrs_fixed1;
-> +	u64 xfam_fixed0;
-> +	u64 xfam_fixed1;
-> +
-> +	u32 nr_cpuid_configs;
-> +	struct tdx_cpuid_config cpuid_configs[TDX_MAX_NR_CPUID_CONFIGS];
-> +};
-> +
-> +/* Capabilities of KVM + the TDX module. */
-> +static struct tdx_capabilities tdx_caps;
-> +
-> +int __init tdx_module_setup(void)
-> +{
-> +	const struct tdsysinfo_struct *tdsysinfo;
-> +	int ret = 0;
-> +
-> +	BUILD_BUG_ON(sizeof(*tdsysinfo) != 1024);
-> +	BUILD_BUG_ON(TDX_MAX_NR_CPUID_CONFIGS != 37);
-> +
-> +	ret = tdx_init();
-> +	if (ret) {
-> +		pr_info("Failed to initialize TDX module.\n");
-> +		return ret;
-> +	}
-> +
-> +	tdsysinfo = tdx_get_sysinfo();
-> +	if (tdsysinfo->num_cpuid_config > TDX_MAX_NR_CPUID_CONFIGS)
-> +		return -EIO;
-> +
-> +	tdx_caps = (struct tdx_capabilities) {
-> +		.tdcs_nr_pages = tdsysinfo->tdcs_base_size / PAGE_SIZE,
-> +		/*
-> +		 * TDVPS = TDVPR(4K page) + TDVPX(multiple 4K pages).
-> +		 * -1 for TDVPR.
-> +		 */
-> +		.tdvpx_nr_pages = tdsysinfo->tdvps_base_size / PAGE_SIZE - 1,
-> +		.attrs_fixed0 = tdsysinfo->attributes_fixed0,
-> +		.attrs_fixed1 = tdsysinfo->attributes_fixed1,
-> +		.xfam_fixed0 =	tdsysinfo->xfam_fixed0,
-> +		.xfam_fixed1 = tdsysinfo->xfam_fixed1,
-> +		.nr_cpuid_configs = tdsysinfo->num_cpuid_config,
-> +	};
-> +	if (!memcpy(tdx_caps.cpuid_configs, tdsysinfo->cpuid_configs,
-> +			tdsysinfo->num_cpuid_config *
-> +			sizeof(struct tdx_cpuid_config)))
-> +		return -EIO;
-> +
-> +	return 0;
-> +}
-> +
-> +int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops)
-> +{
-> +	if (!enable_ept) {
-> +		pr_warn("Cannot enable TDX with EPT disabled\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	if (!platform_tdx_enabled()) {
-> +		pr_warn("Cannot enable TDX on TDX disabled platform\n");
-> +		return -ENODEV;
-> +	}
-> +
-> +	pr_info("kvm: TDX is supported. x86 phys bits %d\n",
-> +		boot_cpu_data.x86_phys_bits);
-> +
-> +	return 0;
-> +}
-> diff --git a/arch/x86/kvm/vmx/tdx.h b/arch/x86/kvm/vmx/tdx.h
-> index 060bf48ec3d6..54d7a26ed9ee 100644
-> --- a/arch/x86/kvm/vmx/tdx.h
-> +++ b/arch/x86/kvm/vmx/tdx.h
-> @@ -3,6 +3,8 @@
->   #define __KVM_X86_TDX_H
->   
->   #ifdef CONFIG_INTEL_TDX_HOST
-> +int tdx_module_setup(void);
-> +
->   struct kvm_tdx {
->   	struct kvm kvm;
->   	/* TDX specific members follow. */
-> @@ -37,6 +39,8 @@ static inline struct vcpu_tdx *to_tdx(struct kvm_vcpu *vcpu)
->   	return container_of(vcpu, struct vcpu_tdx, vcpu);
->   }
->   #else
-> +static inline int tdx_module_setup(void) { return -ENODEV; };
-> +
->   struct kvm_tdx {
->   	struct kvm kvm;
->   };
-> diff --git a/arch/x86/kvm/vmx/x86_ops.h b/arch/x86/kvm/vmx/x86_ops.h
-> index 90a8c6824833..f318a6258a24 100644
-> --- a/arch/x86/kvm/vmx/x86_ops.h
-> +++ b/arch/x86/kvm/vmx/x86_ops.h
-> @@ -128,4 +128,10 @@ void vmx_cancel_hv_timer(struct kvm_vcpu *vcpu);
->   #endif
->   void vmx_setup_mce(struct kvm_vcpu *vcpu);
->   
-> +#ifdef CONFIG_INTEL_TDX_HOST
-> +int __init tdx_hardware_setup(struct kvm_x86_ops *x86_ops);
-> +#else
-> +static inline int tdx_hardware_setup(struct kvm_x86_ops *x86_ops) { return 0; }
-> +#endif
-> +
->   #endif /* __KVM_X86_VMX_X86_OPS_H */
-> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> index e533cce7a70b..32a2ef718112 100644
-> --- a/arch/x86/kvm/x86.c
-> +++ b/arch/x86/kvm/x86.c
-> @@ -11983,6 +11983,14 @@ int kvm_arch_hardware_setup(void *opaque)
->   	return 0;
->   }
->   
-> +int kvm_arch_post_hardware_enable_setup(void *opaque)
-> +{
-> +	struct kvm_x86_init_ops *ops = opaque;
-> +	if (ops->post_hardware_enable_setup)
-> +		return ops->post_hardware_enable_setup();
-> +	return 0;
-> +}
-> +
->   void kvm_arch_hardware_unsetup(void)
->   {
->   	kvm_unregister_perf_callbacks();
-> diff --git a/arch/x86/virt/vmx/tdx/tdx.c b/arch/x86/virt/vmx/tdx/tdx.c
-> index b9567a2217df..918e79159bbf 100644
-> --- a/arch/x86/virt/vmx/tdx/tdx.c
-> +++ b/arch/x86/virt/vmx/tdx/tdx.c
-> @@ -1283,6 +1283,7 @@ bool platform_tdx_enabled(void)
->   {
->   	return tdx_keyid_num >= 2;
->   }
-> +EXPORT_SYMBOL_GPL(platform_tdx_enabled);
->   
->   /**
->    * tdx_init - Initialize the TDX module
+Best,
+Sander

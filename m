@@ -2,60 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9484858E7D3
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 09:23:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EACAD58E7D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 Aug 2022 09:25:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231215AbiHJHXi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 03:23:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50492 "EHLO
+        id S231248AbiHJHZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 03:25:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbiHJHXf (ORCPT
+        with ESMTP id S230390AbiHJHZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 03:23:35 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC365A8A0
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 00:23:34 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id A56B85C5F4;
-        Wed, 10 Aug 2022 07:23:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1660116211; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Wed, 10 Aug 2022 03:25:53 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B784193D2
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 00:25:51 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1660116349;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=XAF+Y7ib/KCBJKhHgL+UmuGO+OSVwbzTJiPOyXkFvyI=;
-        b=YonhsmUCdhCcf0jEe6L1hAkGeyUHL3vBNrF3HeMGpp6gYkotJ7PaKD5lNibpb8hVQcz80t
-        XMiwmgMqaL6WC0iShE0ITVe5v9oFXZ1sLVTxffXk/onJXHBvvce54dfEis8AKdoeUN0C8Y
-        ohUD0xDjO+i7Dp/D9bni+wetxFw0gbs=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8607F13AB3;
-        Wed, 10 Aug 2022 07:23:31 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id pkw8HvNc82IDYAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 10 Aug 2022 07:23:31 +0000
-Date:   Wed, 10 Aug 2022 09:23:30 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Charan Teja Kalla <quic_charante@quicinc.com>, david@redhat.com,
-        pasha.tatashin@soleen.com, sieberf@amazon.com, shakeelb@google.com,
-        sjpark@amazon.de, dhowells@redhat.com, willy@infradead.org,
-        quic_pkondeti@quicinc.com, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCH V3] mm: fix use-after free of page_ext after race with
- memory-offline
-Message-ID: <YvNc8vuinnddc78j@dhcp22.suse.cz>
-References: <1660056403-20894-1-git-send-email-quic_charante@quicinc.com>
- <20220809185714.5af7057c1270b11079cb196a@linux-foundation.org>
+        bh=ffLIQVAGIVPV6ZV8JBI4al5/eLbBn8Xd04Qi2APVWdk=;
+        b=gQsDaQUUU4pAyx9RmsXuibIavf9tnZTYd9OZYRVa5gVj/fE1ONDX93WDFolM8syVh7+u4S
+        wDeJMoLB3yFhknkW+BX3i88X22r/Efn6eDxlZV6Ix/sLigonRLuMmyg72V3u7Bh/L6HFR6
+        mDgUIlQlrDXv/WKj1YpFfPPIdFMbEyWH6TjkFl0oVM+JcCLD35LkEzV2jrx6KV7/MOY8fp
+        FwAfC8P2hIRVx8BO5UUWSmjc61iQJW25J7JLkZZkt2g0G0tPUtzVvFIQdZ2EX/u2BOiJQO
+        3DsaGA6fVNz93UXnRd9NXmyxqZiFy++lnpyy0fDfbj4uykhKYhaZ1W0jHbzajA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1660116349;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ffLIQVAGIVPV6ZV8JBI4al5/eLbBn8Xd04Qi2APVWdk=;
+        b=srsQFUyf59Y1aacJivQ6q93A9cgX0D73ThYUA4+RDUoDYRGXbojmpgC2hTUKb3BKypidvL
+        O16/JJmPnCfHMwAA==
+To:     Borislav Petkov <bp@alien8.de>, ira.weiny@intel.com
+Cc:     Rik van Riel <riel@surriel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>
+Subject: Re: [RFC PATCH 1/5] entry: Pass pt_regs to
+ irqentry_exit_cond_resched()
+In-Reply-To: <87fsi5qa49.ffs@tglx>
+References: <20220805173009.3128098-1-ira.weiny@intel.com>
+ <20220805173009.3128098-2-ira.weiny@intel.com> <YvDnkALyHl77R/Ug@zn.tnic>
+ <87fsi5qa49.ffs@tglx>
+Date:   Wed, 10 Aug 2022 09:25:48 +0200
+Message-ID: <87a68cr24j.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220809185714.5af7057c1270b11079cb196a@linux-foundation.org>
+Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -66,30 +64,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 09-08-22 18:57:14, Andrew Morton wrote:
-> On Tue, 9 Aug 2022 20:16:43 +0530 Charan Teja Kalla <quic_charante@quicinc.com> wrote:
-> 
-> > The below is one path where race between page_ext and  offline of the
-> > respective memory blocks will cause use-after-free on the access of
-> > page_ext structure.
-> 
-> Has this race ever been observed at runtime?
-> 
-> Given the size of the fix, I'm looking for excuses to not backport it
-> into -stable kernels!
+On Wed, Aug 10 2022 at 01:18, Thomas Gleixner wrote:
+> Both clearly demonstrate how well tested this XEN_PV muck is which means
+> we should just delete it.
+>
+> Anyway. This wants the fix below.
 
-I believe this is quite theoretical for two reasons
-1) the memory hotplug (offlining) is quite rare operation
-2) with all the retries the race window is quite hard to trigger
+which is not sufficient. If CONFIG_PREEMPT_DYNAMIC is set then
+CONFIG_PREEMPTION is set too, which makes the preemtible hypercall magic
+a complete NOP. So if the dynamic call is disabled, then such a several
+seconds (sic!) hypercall cannot be preempted at all.
 
-So this is good to have address long term but nothing really for stable
-until somebody actually hits that with a real world workload.
+Something like the below then. Oh well...
 
-Btw. I plan to have a look and review this but times are busy. Hopefully
-soon.
+Thanks,
 
-Thanks!
-
--- 
-Michal Hocko
-SUSE Labs
+        tglx
+---
+--- a/arch/x86/entry/common.c
++++ b/arch/x86/entry/common.c
+@@ -253,7 +253,8 @@ SYSCALL_DEFINE0(ni_syscall)
+ }
+ 
+ #ifdef CONFIG_XEN_PV
+-#ifndef CONFIG_PREEMPTION
++
++#if !defined(CONFIG_PREEMPTION) || defined(CONFIG_PREEMPT_DYNAMIC)
+ /*
+  * Some hypercalls issued by the toolstack can take many 10s of
+  * seconds. Allow tasks running hypercalls via the privcmd driver to
+@@ -283,9 +284,18 @@ static __always_inline void restore_inhc
+ {
+ 	__this_cpu_write(xen_in_preemptible_hcall, inhcall);
+ }
++
++static __always_inline void xenpv_irqentry_exit_cond_resched(void)
++{
++	instrumentation_begin();
++	raw_irqentry_exit_cond_resched();
++	trace_hardirqs_on();
++	instrumentation_end();
++}
+ #else
+ static __always_inline bool get_and_clear_inhcall(void) { return false; }
+ static __always_inline void restore_inhcall(bool inhcall) { }
++static __always_inline void xenpv_irqentry_exit_cond_resched(void) { }
+ #endif
+ 
+ static void __xen_pv_evtchn_do_upcall(struct pt_regs *regs)
+@@ -306,11 +316,11 @@ static void __xen_pv_evtchn_do_upcall(st
+ 
+ 	instrumentation_begin();
+ 	run_sysvec_on_irqstack_cond(__xen_pv_evtchn_do_upcall, regs);
++	instrumentation_end();
+ 
+ 	inhcall = get_and_clear_inhcall();
+ 	if (inhcall && !WARN_ON_ONCE(state.exit_rcu)) {
+-		irqentry_exit_cond_resched();
+-		instrumentation_end();
++		xenpv_irqentry_exit_cond_resched();
+ 		restore_inhcall(inhcall);
+ 	} else {
+ 		instrumentation_end();
+--- a/include/linux/entry-common.h
++++ b/include/linux/entry-common.h
+@@ -416,6 +416,7 @@ irqentry_state_t noinstr irqentry_enter(
+  * Conditional reschedule with additional sanity checks.
+  */
+ void raw_irqentry_exit_cond_resched(void);
++
+ #ifdef CONFIG_PREEMPT_DYNAMIC
+ #if defined(CONFIG_HAVE_PREEMPT_DYNAMIC_CALL)
+ #define irqentry_exit_cond_resched_dynamic_enabled	raw_irqentry_exit_cond_resched
+--- a/include/xen/xen-ops.h
++++ b/include/xen/xen-ops.h
+@@ -194,7 +194,7 @@ bool xen_running_on_version_or_later(uns
+ void xen_efi_runtime_setup(void);
+ 
+ 
+-#if defined(CONFIG_XEN_PV) && !defined(CONFIG_PREEMPTION)
++#if defined(CONFIG_XEN_PV) && (!defined(CONFIG_PREEMPTION) || defined(CONFIG_PREEMPT_DYNAMIC))
+ 
+ DECLARE_PER_CPU(bool, xen_in_preemptible_hcall);
+ 
+--- a/kernel/entry/common.c
++++ b/kernel/entry/common.c
+@@ -385,6 +385,7 @@ void raw_irqentry_exit_cond_resched(void
+ 			preempt_schedule_irq();
+ 	}
+ }
++
+ #ifdef CONFIG_PREEMPT_DYNAMIC
+ #if defined(CONFIG_HAVE_PREEMPT_DYNAMIC_CALL)
+ DEFINE_STATIC_CALL(irqentry_exit_cond_resched, raw_irqentry_exit_cond_resched);

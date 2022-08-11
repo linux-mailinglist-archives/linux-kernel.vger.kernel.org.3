@@ -2,198 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B51D58F97E
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 10:48:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5884458F980
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 10:48:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234598AbiHKIsX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 04:48:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55586 "EHLO
+        id S234447AbiHKIsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 04:48:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234560AbiHKIsN (ORCPT
+        with ESMTP id S234588AbiHKIsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 04:48:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0843A915CC
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:48:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660207692;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=WRRIcx/kAfOd8EtYau1ApQoX7Wlp1XgJ+KDqlaJLHkM=;
-        b=TcIOJpq8IPX7TkxqH/eIQORCvluPhSjwTOaX7BTyw9BU5GZ6c4UctgEzKKb7CkJCADqv24
-        PbIiaHmTkataBAsE82S242XeFwHNOfRm2NwJaKln0Eo3vbrAWqHN++N8SM5Tpip+t23/kF
-        1DdgivzKgX8yVW4Wsf/JaHaq/7Fax3s=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-314-T03hsyQHNjCwUnBrDKXMuQ-1; Thu, 11 Aug 2022 04:48:11 -0400
-X-MC-Unique: T03hsyQHNjCwUnBrDKXMuQ-1
-Received: by mail-wm1-f72.google.com with SMTP id z11-20020a05600c0a0b00b003a043991610so1435170wmp.8
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:48:10 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=WRRIcx/kAfOd8EtYau1ApQoX7Wlp1XgJ+KDqlaJLHkM=;
-        b=U/spOQPQA60GZKoBzkKTxO887AoQf6V72A6YzHZL3z4k3ud2WnC/fJuN0YaqXXBVWM
-         fT3V/iiTZ/IQp6Xvmki/y8GntXwmCWTcNgHi1nrTtZn5sH2AZJ7Awc5v6iQnX2xWNWIn
-         TV/QFNl6pnfEdwFAOMC3I4EHPIBtSWce35Hnqmw/d7z1bZ4BupnP0oMTPQ9UBh4LfZ5Z
-         UYIzFjaAiOpOBbL5HwT2jv4tlsUZZCZqW3BoHtuE+Vdgaa8yGF9hkC9a4eioW+Otkntf
-         gKHlADObpX7gia+VeVBKYgXRztc5CAVr7XyH/JAkbyaFHiE/KxjM+tyh16fSj/AYL8Zy
-         xlyQ==
-X-Gm-Message-State: ACgBeo3svlGvR+DBVnV0G9qTUqmJdhrfCr+hH3MSTgHFNqZgkxenTXc7
-        Ne7lJUE4YWPgJXBnsVtMQEG4rXLSw66FBsxnMctyZv2XBsRKLUQ7kwzdaY6vnk2g2GlldGoyZ+C
-        U5QYdDRKE5RWZ0U7Oqff5ayoW
-X-Received: by 2002:a05:600c:a0b:b0:39e:22ef:1a0 with SMTP id z11-20020a05600c0a0b00b0039e22ef01a0mr5003913wmp.46.1660207689816;
-        Thu, 11 Aug 2022 01:48:09 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7+D4QEaXbqdi3hbwqAcTyKEKN9dtwY8eSgn7I2KYFMOhUl7xukf7Zbaeqx5TWiJqsvhjI7pw==
-X-Received: by 2002:a05:600c:a0b:b0:39e:22ef:1a0 with SMTP id z11-20020a05600c0a0b00b0039e22ef01a0mr5003897wmp.46.1660207689531;
-        Thu, 11 Aug 2022 01:48:09 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c708:2e00:4009:47dc:d0e5:dcd2? (p200300cbc7082e00400947dcd0e5dcd2.dip0.t-ipconnect.de. [2003:cb:c708:2e00:4009:47dc:d0e5:dcd2])
-        by smtp.gmail.com with ESMTPSA id d1-20020a5d6441000000b0021eb309c97dsm18589064wrw.25.2022.08.11.01.48.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Aug 2022 01:48:09 -0700 (PDT)
-Message-ID: <3d2c6064-1912-b3e3-61bc-5edf57b01310@redhat.com>
-Date:   Thu, 11 Aug 2022 10:48:08 +0200
+        Thu, 11 Aug 2022 04:48:37 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADCE915D1;
+        Thu, 11 Aug 2022 01:48:36 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27B76fFe024681;
+        Thu, 11 Aug 2022 08:48:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=EquYfRqGZXmXb9TGWW8WkU2fAx8SbOKXWJBSgXBhUco=;
+ b=nju4AjoCPMW3PJ7yH5Z+t5CFAdLlAu+vjeWFOaqPtS26fbAxDLojsyW50SlVnk2KHWGs
+ raOaZPzOCsQEZQ90qf4WmYtnWX3eewzsSIP9H+1UC9bX/ZnPers71NiDg+YC5xVyplXl
+ rDGBQbE5Hikn/dBA+xQmUe0h+Piwzv4J6Nx9y6i53N4PUF4YZdAKyulJCi6jiG84174C
+ rsbcMAckWE7iVhKoWP2bLpuG0wVs2NxqWBu+HCU1QVW62grZHNTY1i0PR0emc2Z/Uz3J
+ PprHctda/FFkYp7Ac//Jc1JSiX9rRj+AjJyk4y8/jsPWuyBhGZueoSN54Wf57iuBMTJZ FA== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3huwr8wbne-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 11 Aug 2022 08:48:31 +0000
+Received: from pps.filterd (NASANPPMTA01.qualcomm.com [127.0.0.1])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 27B8eoYa015481;
+        Thu, 11 Aug 2022 08:48:30 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NASANPPMTA01.qualcomm.com (PPS) with ESMTPS id 3hshckrmc3-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 11 Aug 2022 08:48:30 +0000
+Received: from NASANPPMTA01.qualcomm.com (NASANPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27B8mUfW028397;
+        Thu, 11 Aug 2022 08:48:30 GMT
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.47.97.222])
+        by NASANPPMTA01.qualcomm.com (PPS) with ESMTPS id 27B8mU6X028392
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 11 Aug 2022 08:48:30 +0000
+Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 11 Aug 2022 01:48:29 -0700
+Received: from [10.253.34.2] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 11 Aug
+ 2022 01:48:27 -0700
+Message-ID: <458d93ba-ff78-54e7-5639-bee89e61ce19@quicinc.com>
+Date:   Thu, 11 Aug 2022 16:48:25 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v2] tracing: react to error return from
+ traceprobe_parse_event_name()
 Content-Language: en-US
-To:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Peter Feiner <pfeiner@google.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-References: <Yu1dkZeBwv0SUQMq@xz-m1.local>
- <4f644ac5-c40b-32d4-3234-c1dac3d09f83@redhat.com>
- <YvE0OwsyQEL3K5Hm@xz-m1.local>
- <8b317ac7-f80e-4aab-4ad1-4e19a1a0740f@redhat.com>
- <YvFwU4e3WOSRseh6@xz-m1.local> <YvGJQaYeT9Y8PlDX@xz-m1.local>
- <12c65d91-5fc0-cb2e-c415-2b3447960b43@redhat.com>
- <YvQHKCylnFjgkFtw@xz-m1.local>
- <b3efd062-1548-cf80-dd1c-21f144887b9b@redhat.com>
- <YvQMhonK5cC4MXiQ@xz-m1.local> <YvRFa5YF3BQNb0ME@monkey>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v1 2/2] mm/hugetlb: support write-faults in shared
- mappings
-In-Reply-To: <YvRFa5YF3BQNb0ME@monkey>
-Content-Type: text/plain; charset=UTF-8
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Tom Zanussi <zanussi@kernel.org>
+CC:     <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20220811071734.20700-1-lukas.bulwahn@gmail.com>
+From:   Linyu Yuan <quic_linyyuan@quicinc.com>
+In-Reply-To: <20220811071734.20700-1-lukas.bulwahn@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: h0YHKHn3NZGGL2u0vRKBU07J-JfREHBj
+X-Proofpoint-ORIG-GUID: h0YHKHn3NZGGL2u0vRKBU07J-JfREHBj
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-11_04,2022-08-10_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ impostorscore=0 adultscore=0 suspectscore=0 spamscore=0 clxscore=1015
+ priorityscore=1501 mlxscore=0 phishscore=0 mlxlogscore=999 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208110024
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11.08.22 01:55, Mike Kravetz wrote:
-> On 08/10/22 15:52, Peter Xu wrote:
->> On Wed, Aug 10, 2022 at 09:40:11PM +0200, David Hildenbrand wrote:
->>> On 10.08.22 21:29, Peter Xu wrote:
->>>> On Wed, Aug 10, 2022 at 11:37:13AM +0200, David Hildenbrand wrote:
->>>>> On 09.08.22 00:08, Peter Xu wrote:
->>>>>> On Mon, Aug 08, 2022 at 04:21:39PM -0400, Peter Xu wrote:
->>>>>>> On Mon, Aug 08, 2022 at 06:25:21PM +0200, David Hildenbrand wrote:
->>>>>>>>>> Relying on VM_SHARED to detect MAP_PRIVATE vs. MAP_SHARED is
->>>>>>>>>> unfortunately wrong.
->>>>>>>>>>
->>>>>>>>>> If you're curious, take a look at f83a275dbc5c ("mm: account for
->>>>>>>>>> MAP_SHARED mappings using VM_MAYSHARE and not VM_SHARED in hugetlbfs")
->>>>>>>>>> and mmap() code.
->>>>>>>>>>
->>>>>>>>>> Long story short: if the file is read-only, we only have VM_MAYSHARE but
->>>>>>>>>> not VM_SHARED (and consequently also not VM_MAYWRITE).
->>>>>>>>>
->>>>>>>>> To ask in another way: if file is RO but mapped RW (mmap() will have
->>>>>>>>> VM_SHARED cleared but VM_MAYSHARE set), then if we check VM_MAYSHARE here
->>>>>>>>> won't we grant write bit errornously while we shouldn't? As the user
->>>>>>>>> doesn't really have write permission to the file.
->>>>>>>>
->>>>>>>> Thus the VM_WRITE check. :)
->>>>>>>>
->>>>>>>> I wonder if we should just do it cleanly and introduce the maybe_mkwrite
->>>>>>>> semantics here as well. Then there is no need for additional VM_WRITE
->>>>>>>> checks and hugetlb will work just like !hugetlb.
->>>>>>>
->>>>>>> Hmm yeah I think the VM_MAYSHARE check is correct, since we'll need to fail
->>>>>>> the cases where MAYSHARE && !SHARE - we used to silently let it pass.
->>>>>>
->>>>>> Sorry I think this is a wrong statement I made..  IIUC we'll fail correctly
->>>>>> with/without the patch on any write to hugetlb RO regions.
->>>>>>
->>>>>> Then I just don't see a difference on checking VM_SHARED or VM_MAYSHARE
->>>>>> here, it's just that VM_MAYSHARE check should work too like VM_SHARED so I
->>>>>> don't see a problem.
->>>>>>
->>>>>> It also means I can't think of any valid case of having VM_WRITE when
->>>>>> reaching here, then the WARN_ON_ONCE() is okay but maybe also redundant.
->>>>>> Using maybe_mkwrite() seems misleading to me if FOLL_FORCE not ready for
->>>>>> hugetlbfs after all.
->>>>>>
->>>>>
->>>>> The main reason we'd have it would be to scream out lout and fail
->>>>> gracefully if someone would -- for example -- use it for something like
->>>>> FOLL_FORCE.
->>>>
->>>> Having that WARN_ON_ONCE() is okay to me, but just to double check we're on
->>>> the same page: why there's concern on using FOLL_FORCE? IIUC we're talking
->>>> about shared mappings here, then no FOLL_FORCE possible at all?  IOW,
->>>> "!is_cow_mapping()" should fail in check_vma_flags() already.
->>>
->>> This code path also covers the anon case.
->>
->> But this specific warning is under the VM_MAYSHARE if clause just added in
->> this patch?
->>
->> My understanding is any FOLL_FORCE will always constantly fail before this
->> patch, and it should keep failing as usual and I don't see any case it'll
->> be failing at the warn_on_once here.
->>
->> So again, I'm fine with having the warning, but I just want to make sure
->> what you want to capture is what you expected..
->>
->>>>
->>>> The other thing is I'm wondering whether patch 2 should be postponed anyway
->>>> so that we can wait for a full resolution of the problem from Mike.
->>>
->>> To make the code more robust and avoid any other such surprises I prefer
->>> to have this in rather earlier than later.
->>>
->>> As the commit says "Let's add a safety net ..."
->>
->> Sure, no strong opinion.  I'll leave that to Mike.  Thanks,
->>
-> 
-> Sorry that I am not contributing to this thread more.  Need to spend
-> some time educating myself on the relatively new semantics here.
-> 
-> As mentioned, softdirty is on my todo list but has been there for over a
-> year.  So, better to add a safety net until that code moves forward.
-> 
-> However, just for clarification.  The only way we KNOW of to encounter
-> these situations today via softdirty.  Patch 1 takes care of that.  This
-> patch catches any unknown ways we may get here.  Correct?  i.e. We don't
-> really expect to exercise these code paths.
+thanks,
 
-While I do love a good challenge on a Thursday morning, I wish I could
-spend less time writing reproducers and arguing about obviously shaky
-code ;) . Having that said, there is a flaw in uffd-wp that will end up
-in the same code path and similarly mess up.
+Acked-by: Linyu Yuan <quic_linyyuan@quicinc.com>
 
-I'll resend including the reproducer. Note that I'll be on vacation for
-~ 1.5 weeks.
 
--- 
-Thanks,
-
-David / dhildenb
-
+On 8/11/2022 3:17 PM, Lukas Bulwahn wrote:
+> The function traceprobe_parse_event_name() may set the first two function
+> arguments to a non-null value and still return -EINVAL to indicate an
+> unsuccessful completion of the function. Hence, it is not sufficient to
+> just check the result of the two function arguments for being not null,
+> but the return value also needs to be checked.
+>
+> Commit 95c104c378dc ("tracing: Auto generate event name when creating a
+> group of events") changed the error-return-value checking of the second
+> traceprobe_parse_event_name() invocation in __trace_eprobe_create() and
+> removed checking the return value to jump to the error handling case.
+>
+> Reinstate using the return value in the error-return-value checking.
+>
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> ---
+>   kernel/trace/trace_eprobe.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
+> index 4a0e9d927443..550671985fd1 100644
+> --- a/kernel/trace/trace_eprobe.c
+> +++ b/kernel/trace/trace_eprobe.c
+> @@ -883,7 +883,7 @@ static int __trace_eprobe_create(int argc, const char *argv[])
+>   	trace_probe_log_set_index(1);
+>   	sys_event = argv[1];
+>   	ret = traceprobe_parse_event_name(&sys_event, &sys_name, buf2, 0);
+> -	if (!sys_event || !sys_name) {
+> +	if (ret || !sys_event || !sys_name) {
+>   		trace_probe_log_err(0, NO_EVENT_INFO);
+>   		goto parse_error;
+>   	}

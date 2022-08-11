@@ -2,107 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6141E58F97A
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 10:48:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EDB258F97D
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 10:48:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbiHKIsA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 04:48:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55334 "EHLO
+        id S234538AbiHKIsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 04:48:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiHKIr5 (ORCPT
+        with ESMTP id S233856AbiHKIsG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 04:47:57 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B7780910B3
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:47:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660207675;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=5AXFiHe2CmpDevMhSkIWn01i/EnbWuauw5G+9+V6hIc=;
-        b=Z7FhgcsBavDlkTC7e3Oe5sFm3cI022WMCePkPaQ8oKUrbbuEKobuNpqWowMwudPi+dJh7g
-        n0/KASgJegw6UgX4GO46wQA6lJzQDo/9mSalML0PUikIGZpsC1zRrsDvvDq5mq8Ip3WbAB
-        KjF36/GxKiS82Ht4WTqyPmg7psEG8vI=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-657-4Elf_qDrMnG6hTGIitkfMQ-1; Thu, 11 Aug 2022 04:47:54 -0400
-X-MC-Unique: 4Elf_qDrMnG6hTGIitkfMQ-1
-Received: by mail-qt1-f198.google.com with SMTP id a8-20020a05622a064800b00342240a9fccso12684406qtb.18
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:47:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=5AXFiHe2CmpDevMhSkIWn01i/EnbWuauw5G+9+V6hIc=;
-        b=ewwBbWPH+6CgDzvZfXl1AiSh0LCTT/bh+ScYfKkUSdDzXbh9rzBBl63RXxk3vfHyLV
-         EJ/6NItthQU29Xr9Vzrs118syHozwUhcrihrdtr3Qd3g1yJD+VOHQB6pMN33HPCQj+ja
-         ZVv/+UMDgKw//ZJOevetmRzMKo0qMvNuaSXF5BXo/SSDmQ/qlyyi29tIIjZFB1nnZMuo
-         iBJGIwBzVN8mOI7cYleTdbe/NtrOICfUMdMpKInfOafARjO1fgOAfFBFzaXHcTTLwrWj
-         J6Kwmf/nJaWNi8MJ4uzIGFpL9nJ4jHnAoRYM2snpvyW/0jeGCHpm6aBDkE/9lLwIFxgx
-         c7sQ==
-X-Gm-Message-State: ACgBeo2MvL4KIOEgmSd1PSPZMPR7IxivyEI7Px6FcK/q4YKfGJQ58vTZ
-        bD2SfvEjNKTxW5PWddsM+BSTyK9MbSIijktPt2+uM9m4kgdcm5qeoYmnEGqcbbOzuYJYCplhJNv
-        65I4PZ8NhnDBBjujzZ4SEqKew
-X-Received: by 2002:a05:620a:170d:b0:6b8:fd9c:da91 with SMTP id az13-20020a05620a170d00b006b8fd9cda91mr22778158qkb.683.1660207673883;
-        Thu, 11 Aug 2022 01:47:53 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR44pcESFHkNdNM3Yf3jmpUmzHiMOEidvVu/fsIBlqr+kIf/Fux++cUEWpNdKhU50QGFjuV0EQ==
-X-Received: by 2002:a05:620a:170d:b0:6b8:fd9c:da91 with SMTP id az13-20020a05620a170d00b006b8fd9cda91mr22778151qkb.683.1660207673670;
-        Thu, 11 Aug 2022 01:47:53 -0700 (PDT)
-Received: from step1.redhat.com (host-79-46-200-178.retail.telecomitalia.it. [79.46.200.178])
-        by smtp.gmail.com with ESMTPSA id q31-20020a05620a2a5f00b006a793bde241sm21508qkp.63.2022.08.11.01.47.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Aug 2022 01:47:52 -0700 (PDT)
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     virtualization@lists.linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>
-Subject: [PATCH] vdpa: fix warning casts when building with C=2
-Date:   Thu, 11 Aug 2022 10:47:49 +0200
-Message-Id: <20220811084749.83809-1-sgarzare@redhat.com>
-X-Mailer: git-send-email 2.37.1
+        Thu, 11 Aug 2022 04:48:06 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B92915C2;
+        Thu, 11 Aug 2022 01:48:04 -0700 (PDT)
+X-UUID: f72537cb771d4bdc9445ffe5dbe9282d-20220811
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=LiVXk2XwzFDt8yLn3peMfVkSM9+eJCJ3bq5pHTyqyjs=;
+        b=hDAXhdLuVnM6+0lYauPdtPSs0lXUg1ASRWXERgi5jE87QZacq6tqbJFwJJ66kphEEqc88M2JWhBPEl+6dZKoUSKD9gIEj74BfvVWjd/TVmZZ4Na5+cKSkjMhsy1kmBVIZGv3LwNJCdYs+sqgURqLWx61hI/DR6qe+UP5LQIVzag=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.9,REQID:bed13883-7436-4613-836b-43574a83db9f,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_H
+        am,ACTION:release,TS:0
+X-CID-META: VersionHash:3d8acc9,CLOUDID:d9325f9c-da39-4e3b-a854-56c7d2111b46,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: f72537cb771d4bdc9445ffe5dbe9282d-20220811
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw02.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1053201935; Thu, 11 Aug 2022 16:47:59 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 11 Aug 2022 16:47:58 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Thu, 11 Aug 2022 16:47:58 +0800
+Message-ID: <a06b9ef2126980724219b488113881f726c7b434.camel@mediatek.com>
+Subject: Re: [PATCH v4 1/4] dt-bindings: mediatek: watchdog: Fix compatible
+ fallbacks and example
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, <nfraprado@collabora.com>
+CC:     <angelogioacchino.delregno@collabora.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>
+Date:   Thu, 11 Aug 2022 16:47:58 +0800
+In-Reply-To: <5a6545cc-97a2-7aa8-7b67-6488154e9db3@linaro.org>
+References: <20220721014845.19044-1-allen-kh.cheng@mediatek.com>
+         <20220721014845.19044-2-allen-kh.cheng@mediatek.com>
+         <5a6545cc-97a2-7aa8-7b67-6488154e9db3@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use __virtio16_to_cpu() to read `max_virtqueue_pairs` field in
-virtio_net_config since its type is __virtio16.
+Hi Krzysztof,
 
-This silences the following warning when building with `make C=2`:
+On Wed, 2022-08-10 at 19:49 +0300, Krzysztof Kozlowski wrote:
+> On 21/07/2022 04:48, Allen-KH Cheng wrote:
+> > The watchdog timer of mt8186. mt8195 and mt7986 have their DT data.
+> > We should not use 'mediatek,mt6589-wdt' as fallback.
+> > 
+> > For mediatek,wdt example of mt8183, We remove mediatek,mt6589-wdt
+> > fallback.
+> > 
+> > Fixes:a45b408a020b("dt-bindings: watchdog: Add compatible for
+> > MediaTek MT8186")
+> > Fixes:b326f2c85f3d("dt-bindings: watchdog: Add compatible for
+> > Mediatek MT8195")
+> > Fixes:41e73feb1024("dt-bindings: watchdog: Add compatible for
+> > Mediatek MT7986")
+> > Fixes:f43f97a0fc0e("dt-bindings: mediatek: mt8183: Add #reset-
+> > cells")
+> 
+> Missing spaces around SHA.
+> 
+> Best regards,
+> Krzysztof
 
-    ../drivers/vdpa/vdpa.c:811:19: warning: cast to restricted __le16
-    ../drivers/vdpa/vdpa.c:811:19: warning: cast from restricted __virtio16
+Thanks for your friendly reminder.
 
-Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
----
- drivers/vdpa/vdpa.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+I'll pay more attention in the next time.
 
-diff --git a/drivers/vdpa/vdpa.c b/drivers/vdpa/vdpa.c
-index c06c02704461..2466d5087478 100644
---- a/drivers/vdpa/vdpa.c
-+++ b/drivers/vdpa/vdpa.c
-@@ -808,7 +808,7 @@ static int vdpa_dev_net_mq_config_fill(struct vdpa_device *vdev,
- 	if ((features & BIT_ULL(VIRTIO_NET_F_MQ)) == 0)
- 		return 0;
- 
--	val_u16 = le16_to_cpu(config->max_virtqueue_pairs);
-+	val_u16 = __virtio16_to_cpu(true, config->max_virtqueue_pairs);
- 	return nla_put_u16(msg, VDPA_ATTR_DEV_NET_CFG_MAX_VQP, val_u16);
- }
- 
--- 
-2.37.1
+Thanks,
+Allen
 

@@ -2,117 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AF8058FC23
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 14:24:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54ABB58FC2A
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 14:28:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235195AbiHKMYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 08:24:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59536 "EHLO
+        id S234171AbiHKM2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 08:28:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235026AbiHKMY1 (ORCPT
+        with ESMTP id S234375AbiHKM2E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 08:24:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6E19411D;
-        Thu, 11 Aug 2022 05:24:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5654161389;
-        Thu, 11 Aug 2022 12:24:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02690C433C1;
-        Thu, 11 Aug 2022 12:24:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660220665;
-        bh=imOzuUIc7EQ+6p3fVe0hZdP5nW1V/MvoWcIAVWreMKI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lX8rAn5p8GWbniVRQNn+fru2dTZniW/TGmfBD32NoOBdDTCoQ8eI7CLy/NJx5fEzj
-         JN4ZuwzkBpP7+hg8GVbIkcRTyrXcL/7oxomD7gE2ly8TsOcRGqV6H6WK7Z+ZERU4v+
-         qRjkFChxvLxQXxgKx2jInsWBD8/bki2luAISQG/rk+LQk1eL1IvsHnI325BS33iukG
-         UfDkjpD8GndNEZ0WphjXerLbmR5gOKANIw3wJj6sZShV6N7cSn82FgC3lhgGV8eOIq
-         KSdFZxexnY7QQa+TJcr4ECb3524wRtxvt/EjobL9IrhYuGDPQEy0FoyAkCYWgq4U43
-         AsnmGMUgiQalg==
-Date:   Thu, 11 Aug 2022 14:24:21 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        corbet@lwn.net
-Subject: Re: [PATCH 5/5] dt-bindings: i2c: qcom,i2c-cci: convert to dtschema
-Message-ID: <YvT09UvCAabej09i@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        corbet@lwn.net
-References: <20220802153947.44457-1-krzysztof.kozlowski@linaro.org>
- <20220802153947.44457-6-krzysztof.kozlowski@linaro.org>
+        Thu, 11 Aug 2022 08:28:04 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A039F8E998
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 05:28:02 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id o22so22714921edc.10
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 05:28:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=3MRcVxkQskaoR9Gu8vTdfe3SAmvath2jQNxcSxuvW1Y=;
+        b=NHGbxl9pUrdbk/qb8xkMm4zoxhQhX6Rs444HQVekSH5HLue8co3CqoPnGbERLio2dM
+         LGx24QotE4kcbcEEhmgdmUCglkMRj9LUgkSP/KpiNA700mP6h94Dn1d/wFOg8IXrTV5Q
+         7t8086tWE8qBuYhtW+ve33VVpMjT6RO9u3JV6fo+OXTJ5nEqqLqt5Xfar1N/31vDl+kb
+         /Qc9CeYpCrRSPvgdT5jKrAYi+Bis7pm8rvEJBRuOqCqT9rTRlL5ZiL661wC2BrmdE5CH
+         +f94perJ/2Z6mBI0Mqi+Tsy+mMxy6HBFjWyJQNFav6rilu1dhdspBsJwb60836MPgNiY
+         wunw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=3MRcVxkQskaoR9Gu8vTdfe3SAmvath2jQNxcSxuvW1Y=;
+        b=mfNJVeSaGWmBEnw4YbTtDYR6vgMD4cMNQiMVtS2rbzjiz/8T50GmYVM6P5EKN288NM
+         qL1ohZ2S9wzj235ZE1s5BGHYXfhB3kxJNrSK1MpfcAARd6qYyyxmzUKLEBgXBlFLZ1oz
+         A0BdeoF2P9KuiirNAPn2xFmx3P6GjO30i/+6sVNrH8kVttVYSoz3iv4V/Z9BH9Sgip1f
+         26XwQRc/1zA1IZn5J86adLaFYC8OGtBNdVWQaUUJEJK7JHrbIL9IpRZliMG0LisHAirn
+         HprShMrJV7ex7lniRH7VpGNlox8EPJcZ4m5N/5EmHG8H5LyHGr52eWqOcpPdyZ40ieux
+         e4gw==
+X-Gm-Message-State: ACgBeo2rCqfmWnb7D8rtCoVtv+Er1uekV/2LSs+c5OanfR6e3ICRZqcX
+        MMbxbkWSM5JadRS+Cs+cK9wPCw==
+X-Google-Smtp-Source: AA6agR6+Oii1v3EbiMDbdYw7/ayqCsy6sGwTAVm4xglPzXzpkb8k3QGndmL9Qe4QpGf4syQIGgATXw==
+X-Received: by 2002:a05:6402:3583:b0:43d:6943:44a with SMTP id y3-20020a056402358300b0043d6943044amr30188049edc.409.1660220881001;
+        Thu, 11 Aug 2022 05:28:01 -0700 (PDT)
+Received: from google.com (64.227.90.34.bc.googleusercontent.com. [34.90.227.64])
+        by smtp.gmail.com with ESMTPSA id v20-20020a170906381400b007307d099ed7sm3440458ejc.121.2022.08.11.05.27.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Aug 2022 05:27:59 -0700 (PDT)
+Date:   Thu, 11 Aug 2022 12:27:56 +0000
+From:   Quentin Perret <qperret@google.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Michael Roth <michael.roth@amd.com>,
+        mhocko@suse.com, Muchun Song <songmuchun@bytedance.com>,
+        Will Deacon <will@kernel.org>, Fuad Tabba <tabba@google.com>
+Subject: Re: [PATCH v7 03/14] mm: Introduce memfile_notifier
+Message-ID: <YvT1zOQtTQl2t300@google.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-4-chao.p.peng@linux.intel.com>
+ <13394075-fca0-6f2b-92a2-f1291fcec9a3@redhat.com>
+ <20220810092232.GC862421@chaop.bj.intel.com>
+ <00f1aa03-bc82-ffce-569b-e2d5c459992c@redhat.com>
+ <YvPC87FMgF7uac7z@google.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="0P50Fl9kCVCqrS0k"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220802153947.44457-6-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <YvPC87FMgF7uac7z@google.com>
+X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
++CC Fuad
 
---0P50Fl9kCVCqrS0k
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Wednesday 10 Aug 2022 at 14:38:43 (+0000), Sean Christopherson wrote:
+> > I understand Sean's suggestion about abstracting, but if the new name
+> > makes it harder to grasp and there isn't really an alternative to memfd
+> > in sight, I'm not so sure I enjoy the tried abstraction here.
+> 
+> ARM's pKVM implementation is potentially (hopefully) going to switch to this API
+> (as a consumer) sooner than later.  If they anticipate being able to use memfd,
+> then there's unlikely to be a second backing type any time soon.
+> 
+> Quentin, Will?
 
-On Tue, Aug 02, 2022 at 05:39:47PM +0200, Krzysztof Kozlowski wrote:
-> Convert the Qualcomm Camera Control Interface (CCI) I2C controller to DT
-> schema.  The original bindings were not complete, so this includes
-> changes:
-> 1. Add address/size-cells.
-> 2. Describe the clocks per variant.
-> 3. Use more descriptive example based on sdm845.
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Northern patch applied to for-current, thanks!
-
-
---0P50Fl9kCVCqrS0k
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmL09PUACgkQFA3kzBSg
-Kbbumw//TC38BvIbLl40+ATY33sH9w9guDGNk3QerypHH3FnlvT0pCY7XaxYPEr9
-qx4/39g3kr2BxwNdnZIQoxbaJKsyQ399plHlzCXXquniJlGuHulX8T1CE4faTKwo
-4vkzZPCMFMZorCNosW9YpCpgO0VOucipzLnvycK4DFJ32e4DE9M0ozIV6nRpE5kw
-0xDTIzjTcZmgzj+up2Zux7x5EmStwnFBSR8/U3izFVonBJYiXdfTAdCA5hJInzDi
-myArCjy2bRqAp0C7ikKtoRpPyr1vDK2B883Ad7Rxe556H20jDVq9m5UkdLqmybcJ
-bGBKpfOk0RQLRpPzMnK+D54f6tcu2k7Qhgnkx9nF/HaSgpR3EtKEy/f3svMJZkAK
-ZuTD52VisOXORd5kMb6uYLc8/6Dnq2IX2IxGsS9h19r5crtKUN0JkojFubk0x3EV
-AkV+69sDO4Gfdy1G8plQZdth7KZmUxcT7xQFjqKAsZdpl3dtEmDrT8yoQEc2RGI2
-L8hUZh8syTIp1Iy6tQObRqJznpnF/aRQd2LzkraaJvGJgLom3E4HFFLgaW8X5Qd0
-nPpx8EAFwj7nxtPvxzNmWv9hEXc8QOVKyAY25SpFmaKIeRO3ILzgNtUJwSqSAMuN
-fvd6VTgN6iTuKIMFvLLhQzSgGjyzgGojEFsWKMV8I1vYU8FHgLA=
-=/CAh
------END PGP SIGNATURE-----
-
---0P50Fl9kCVCqrS0k--
+Yep, Fuad is currently trying to port the pKVM mm stuff on top of this
+series to see how well it fits, so stay tuned. I think there is still
+some room for discussion around page conversions (private->shared etc),
+and we'll need a clearer idea of what the code might look like to have a
+constructive discussion, but so far it does seem like using a memfd (the
+new private one or perhaps just memfd_secret, to be discussed) + memfd
+notifiers is a promising option.

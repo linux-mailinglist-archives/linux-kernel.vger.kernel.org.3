@@ -2,111 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4DCC58F891
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 09:47:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E5C958F894
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 09:49:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234218AbiHKHrD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 11 Aug 2022 03:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52334 "EHLO
+        id S234274AbiHKHtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 03:49:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbiHKHq5 (ORCPT
+        with ESMTP id S234265AbiHKHtb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 03:46:57 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 714C56FA35;
-        Thu, 11 Aug 2022 00:46:56 -0700 (PDT)
-Received: from fraeml714-chm.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M3Jfz3Q4Mz67P5W;
-        Thu, 11 Aug 2022 15:42:19 +0800 (CST)
-Received: from fraeml714-chm.china.huawei.com (10.206.15.33) by
- fraeml714-chm.china.huawei.com (10.206.15.33) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 11 Aug 2022 09:46:53 +0200
-Received: from fraeml714-chm.china.huawei.com ([10.206.15.33]) by
- fraeml714-chm.china.huawei.com ([10.206.15.33]) with mapi id 15.01.2375.024;
- Thu, 11 Aug 2022 09:46:53 +0200
-From:   Roberto Sassu <roberto.sassu@huawei.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-CC:     "ast@kernel.org" <ast@kernel.org>,
-        "daniel@iogearbox.net" <daniel@iogearbox.net>,
-        "andrii@kernel.org" <andrii@kernel.org>,
-        "martin.lau@linux.dev" <martin.lau@linux.dev>,
-        "song@kernel.org" <song@kernel.org>, "yhs@fb.com" <yhs@fb.com>,
-        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
-        "kpsingh@kernel.org" <kpsingh@kernel.org>,
-        "sdf@google.com" <sdf@google.com>,
-        "haoluo@google.com" <haoluo@google.com>,
-        "jolsa@kernel.org" <jolsa@kernel.org>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "dhowells@redhat.com" <dhowells@redhat.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v10 5/9] bpf: Add bpf_lookup_*_key() and bpf_key_put()
- kfuncs
-Thread-Topic: [PATCH v10 5/9] bpf: Add bpf_lookup_*_key() and bpf_key_put()
- kfuncs
-Thread-Index: AQHYrNrI3xbltKneMkianwQkzvowha2ohoeAgADLvDA=
-Date:   Thu, 11 Aug 2022 07:46:53 +0000
-Message-ID: <2415f4931a364541b2e6d14a8185ffbb@huawei.com>
-References: <20220810165932.2143413-1-roberto.sassu@huawei.com>
- <20220810165932.2143413-6-roberto.sassu@huawei.com>
- <20220810213351.wm5utltm67q4i6lu@MacBook-Pro-3.local.dhcp.thefacebook.com>
-In-Reply-To: <20220810213351.wm5utltm67q4i6lu@MacBook-Pro-3.local.dhcp.thefacebook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.81.209.212]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Thu, 11 Aug 2022 03:49:31 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFB0B8E9B2;
+        Thu, 11 Aug 2022 00:49:22 -0700 (PDT)
+X-UUID: 2c24c874b51f4c8389e6af48ac0d47ca-20220811
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=61XhcT8p7U2ythcRq1ZKIH+rMJLYKYuleNkS3KVnsl4=;
+        b=FI8Xk3i7iekGIRyWN03AH3pJQ7yzl0IX/GfTz9JjJ23zx29hGGX8yJPt1hFmdmi9wN3rJ9pc9l4qT2k9sq+uIfpJmEHD28ACUBwreFXjNaG3WYJTmlhzfuKiPwUsvJuKmvc5CJu0y99ZSWhtgHnNcSZTJlI2mk0tQGtDyR7ZAcs=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.9,REQID:385dcd3b-2422-426b-ab46-f61ac596c3c8,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_H
+        am,ACTION:release,TS:5
+X-CID-META: VersionHash:3d8acc9,CLOUDID:67715d9c-da39-4e3b-a854-56c7d2111b46,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 2c24c874b51f4c8389e6af48ac0d47ca-20220811
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 169198960; Thu, 11 Aug 2022 15:49:15 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 11 Aug 2022 15:49:14 +0800
+Received: from mhfsdcap04 (10.17.3.154) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 11 Aug 2022 15:49:13 +0800
+Message-ID: <267e2c23f488756ab3256f787750ef4979398279.camel@mediatek.com>
+Subject: Re: [PATCH v2] usb: common: usb-conn-gpio: Simplify some error
+ message
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+CC:     <linux-kernel@vger.kernel.org>, <kernel-janitors@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Date:   Thu, 11 Aug 2022 15:49:13 +0800
+In-Reply-To: <7505a9dfa1e097070c492d6f6f84afa2a490b040.1659763173.git.christophe.jaillet@wanadoo.fr>
+References: <7505a9dfa1e097070c492d6f6f84afa2a490b040.1659763173.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
 MIME-Version: 1.0
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Alexei Starovoitov [mailto:alexei.starovoitov@gmail.com]
-> Sent: Wednesday, August 10, 2022 11:34 PM
-> On Wed, Aug 10, 2022 at 06:59:28PM +0200, Roberto Sassu wrote:
-> > +
-> > +static int __init bpf_key_sig_kfuncs_init(void)
-> > +{
-> > +	int ret;
-> > +
-> > +	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING,
-> > +					&bpf_key_sig_kfunc_set);
-> > +	if (!ret)
-> > +		return 0;
-> > +
-> > +	return register_btf_kfunc_id_set(BPF_PROG_TYPE_LSM,
-> > +					 &bpf_key_sig_kfunc_set);
+On Tue, 2022-08-09 at 22:28 +0200, Christophe JAILLET wrote:
+> dev_err_probe() already prints the error code in a human readable
+> way, so
+> there is no need to duplicate it as a numerical value at the end of
+> the
+> message.
 > 
-> Isn't this a watery water ?
-> Don't you have a patch 1 ?
-> What am I missing ?
+> Fixes: ddaf0d6dc467 ("usb: common: usb-conn-gpio: use dev_err_probe()
+> to print log")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> Change in v2:
+>   * keep the message on the same line of dev_err_probe() because the
+> line is
+>     still < 100 char   [Chunfeng Yun <chunfeng.yun@mediatek.com>]
+> ---
+>  drivers/usb/common/usb-conn-gpio.c | 7 +++----
+>  1 file changed, 3 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/common/usb-conn-gpio.c
+> b/drivers/usb/common/usb-conn-gpio.c
+> index b39c9f1c375d..44c5127175b7 100644
+> --- a/drivers/usb/common/usb-conn-gpio.c
+> +++ b/drivers/usb/common/usb-conn-gpio.c
+> @@ -208,10 +208,8 @@ static int usb_conn_probe(struct platform_device
+> *pdev)
+>  	if (PTR_ERR(info->vbus) == -ENODEV)
+>  		info->vbus = NULL;
+>  
+> -	if (IS_ERR(info->vbus)) {
+> -		ret = PTR_ERR(info->vbus);
+> -		return dev_err_probe(dev, ret, "failed to get vbus
+> :%d\n", ret);
+> -	}
+> +	if (IS_ERR(info->vbus))
+> +		return dev_err_probe(dev, PTR_ERR(info->vbus), "failed
+> to get vbus\n");
+>  
+>  	info->role_sw = usb_role_switch_get(dev);
+>  	if (IS_ERR(info->role_sw))
+Reviewed-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-Uhm, yes. I had doubts too. That was what also KP did.
+Thanks
 
-It makes sense to register once, since we mapped LSM to
-TRACING.
 
-Will resend only this patch. And I will figure out why CI failed.
-
-Roberto

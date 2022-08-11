@@ -2,76 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 816AC58F936
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 10:37:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 182B958F939
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 10:37:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234568AbiHKIg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 04:36:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42394 "EHLO
+        id S234565AbiHKIhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 04:37:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234541AbiHKIgv (ORCPT
+        with ESMTP id S234625AbiHKIhU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 04:36:51 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3DEB2792D8
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:36:50 -0700 (PDT)
+        Thu, 11 Aug 2022 04:37:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6B85A792F0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:37:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660207009;
+        s=mimecast20190719; t=1660207033;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=b2PRyz9SGjKoLZlYF6JLzg9mzaDVsgEeEMI7cjuKE+0=;
-        b=ATwJz23I2FA5hnU3jt1WEVZYvoYe+YZ1baPsl1yy1zrHrOoKbS04V01MVsCqGvj2qY6jJT
-        VEY/rkxD4ZDaDKBJ+qGdATCL3HQvlKmH13n/2fb8sW5AtbctvHCXkLMFWt0tphyYvjp4Bu
-        ukS4oClV+6rb+qyM0Z4Tc/C7lLoO/Oo=
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
- [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=wxI8STE90R3MtFxd5bcngd81yGb5pFXt8S9v1lVULlg=;
+        b=F4HuLqH2KMPn7CO5SYl9WtSKg7hXp7GhvmA8Anj0cTHAADjwRr7499YdkkMb0y0OakMCx6
+        8l+vDY/hPdMLtdzr4JfktxMaU0KXhD2kMKNpioxg8vvwKkbpcOLBky0PEdz0mPaUcG1OCB
+        rcOOzyvYPX7HlL43ytoKGtd9gre9kq4=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-351-mXuKJcVIP4aKkQyPFnJk3g-1; Thu, 11 Aug 2022 04:36:46 -0400
-X-MC-Unique: mXuKJcVIP4aKkQyPFnJk3g-1
-Received: by mail-qt1-f199.google.com with SMTP id fy18-20020a05622a5a1200b0033e5b56f031so12753289qtb.15
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:36:46 -0700 (PDT)
+ us-mta-492-EhlN-XpXNO-QPZEIjir-rA-1; Thu, 11 Aug 2022 04:37:11 -0400
+X-MC-Unique: EhlN-XpXNO-QPZEIjir-rA-1
+Received: by mail-qv1-f72.google.com with SMTP id ea7-20020ad458a7000000b00476b8d9bfdcso9037419qvb.18
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:37:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=b2PRyz9SGjKoLZlYF6JLzg9mzaDVsgEeEMI7cjuKE+0=;
-        b=Lx4A6ZdHwsD9rYzfV6BKQr6ayB6+sWTY6BGg8SwhU+gxab2iFo8JqAyAZL76UTZ6kw
-         FPZliSh3ngcfOAar717e9tW43+Zsg+u3J5igz1khUZNlj9QiJBcQ49s0BLaAsNR5peKz
-         HGuxjmvH8R/HBl/TOM00jaH6SnepicDBhlZz9SkllXRd5nkwRLNRfrbRV4wodQ/h2Xq/
-         lBBAFTgT6ZgofBmAvDeLGy7uWbg8ADTLOTs5XX32dEPQ5KpyRg/+Vz1+QZJtn14Ii5zW
-         VylX/FsufGV5EOYLRWWrjp8KyKDRNmFsbSdgDR6OtrOjAT5Z5DhSYas8fnc72JIVGxUt
-         r10Q==
-X-Gm-Message-State: ACgBeo0zGOAaZmSwl5G2fMOj6kBX9fxarfIeWespqwrTPE8gvbe+v34h
-        RpQ28+IyZ/oAt1Pte8yFVWl9Sof+2U3yyThgrUpokCpdpd8gnu1VrjqjDsc5C7LsliK4SWwpu+k
-        wg8u4s5JQv/pSyWgcRQwIWwEi
-X-Received: by 2002:a05:622a:54a:b0:343:5a1a:9acd with SMTP id m10-20020a05622a054a00b003435a1a9acdmr5424737qtx.194.1660207006117;
-        Thu, 11 Aug 2022 01:36:46 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4RFzgc5ALPcjlt3FX7MEe3xJX2GOatlwsfQrEhnbVqaD+RWcWMD5dC4uSCC4mr/t0kzhgpuw==
-X-Received: by 2002:a05:622a:54a:b0:343:5a1a:9acd with SMTP id m10-20020a05622a054a00b003435a1a9acdmr5424728qtx.194.1660207005928;
-        Thu, 11 Aug 2022 01:36:45 -0700 (PDT)
+        bh=wxI8STE90R3MtFxd5bcngd81yGb5pFXt8S9v1lVULlg=;
+        b=XITzQsDmTOrxUtyFW4arM/Jq//0hTUZfPBSBekwfZQPn8bxmNiDhgZ4fBYIpscmjwi
+         eK9mHXmKOL/G7XATgrcYm+V9jRD9ctoQ+ocHXQDm1FmJJihDSVMASnl9VXTeSi3+jVmL
+         dNpdwaYFFBurTsb4Ouz8Pyv1GDJLpCt9Lm+resupF7smTQsYYG7yYHZGTxA1Y9MgSgoa
+         rWypnqRZxNTlcjVMZgeBzita3uSrrCANFsj6/ZiWxvG7qpZ/mL7Ws/e2q32z2DyA3Rsu
+         PLnsO5V9Ld4DItNvnvSYKoqkITgt0rDDxDmFYQ8KczdoauipFdtftFrHCr9lZrqH68rO
+         sQ9g==
+X-Gm-Message-State: ACgBeo0W+/A6k8WrwUftuj0cH4+vpDUWrTuq8Ig0DszpI88sxWRZd6ld
+        45Mzdjqkplyd+jiJbqC0d467j2pQI8FdtNbaqdtHRDfRmqOBYwz1fDi26/STSxnR9klD396bJqf
+        I3GDNhnb9IomicSOvgcf4YvLt
+X-Received: by 2002:a05:622a:1a01:b0:343:310d:fedf with SMTP id f1-20020a05622a1a0100b00343310dfedfmr9614049qtb.622.1660207031464;
+        Thu, 11 Aug 2022 01:37:11 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7iG5hpVQZhHnEux2Ys32Xpb0iTat8U/eI0t5jz6ZCTF9Xjo89LNFBwu9MSbN4hXHLgOHdEhQ==
+X-Received: by 2002:a05:622a:1a01:b0:343:310d:fedf with SMTP id f1-20020a05622a1a0100b00343310dfedfmr9614035qtb.622.1660207031241;
+        Thu, 11 Aug 2022 01:37:11 -0700 (PDT)
 Received: from step1.redhat.com (host-79-46-200-178.retail.telecomitalia.it. [79.46.200.178])
-        by smtp.gmail.com with ESMTPSA id ga25-20020a05622a591900b0034361fb2f75sm1343083qtb.22.2022.08.11.01.36.43
+        by smtp.gmail.com with ESMTPSA id i14-20020a05620a248e00b006b57b63a8ddsm1485774qkn.122.2022.08.11.01.37.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Aug 2022 01:36:45 -0700 (PDT)
+        Thu, 11 Aug 2022 01:37:10 -0700 (PDT)
 From:   Stefano Garzarella <sgarzare@redhat.com>
 To:     virtualization@lists.linux-foundation.org
 Cc:     linux-kernel@vger.kernel.org,
         "Michael S. Tsirkin" <mst@redhat.com>,
         Jason Wang <jasowang@redhat.com>,
         Stefano Garzarella <sgarzare@redhat.com>
-Subject: [PATCH v3 3/4] vdpa_sim_blk: add support for VIRTIO_BLK_T_FLUSH
-Date:   Thu, 11 Aug 2022 10:36:31 +0200
-Message-Id: <20220811083632.77525-4-sgarzare@redhat.com>
+Subject: [PATCH v3 4/4] vdpa_sim_blk: add support for discard and write-zeroes
+Date:   Thu, 11 Aug 2022 10:36:32 +0200
+Message-Id: <20220811083632.77525-5-sgarzare@redhat.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220811083632.77525-1-sgarzare@redhat.com>
 References: <20220811083632.77525-1-sgarzare@redhat.com>
 MIME-Version: 1.0
 Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,41 +80,122 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The simulator behaves like a ramdisk, so we don't have to do
-anything when a VIRTIO_BLK_T_FLUSH request is received, but it
-could be useful to test driver behavior.
+Expose VIRTIO_BLK_F_DISCARD and VIRTIO_BLK_F_WRITE_ZEROES features
+to the drivers and handle VIRTIO_BLK_T_DISCARD and
+VIRTIO_BLK_T_WRITE_ZEROES requests checking ranges and flags.
 
-Let's expose the VIRTIO_BLK_F_FLUSH feature to inform the driver
-that we support the flush command.
+The simulator behaves like a ramdisk, so for VIRTIO_BLK_F_DISCARD
+does nothing, while for VIRTIO_BLK_T_WRITE_ZEROES sets to 0 the
+specified region.
 
 Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
 ---
- drivers/vdpa/vdpa_sim/vdpa_sim_blk.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/vdpa/vdpa_sim/vdpa_sim_blk.c | 74 +++++++++++++++++++++++++++-
+ 1 file changed, 73 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-index 24dd9cae6450..1f18f336cf0c 100644
+index 1f18f336cf0c..c8bfea3b7db2 100644
 --- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
 +++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-@@ -25,6 +25,7 @@
- #define DRV_LICENSE  "GPL v2"
- 
- #define VDPASIM_BLK_FEATURES	(VDPASIM_FEATURES | \
-+				 (1ULL << VIRTIO_BLK_F_FLUSH)    | \
- 				 (1ULL << VIRTIO_BLK_F_SIZE_MAX) | \
+@@ -30,11 +30,14 @@
  				 (1ULL << VIRTIO_BLK_F_SEG_MAX)  | \
  				 (1ULL << VIRTIO_BLK_F_BLK_SIZE) | \
-@@ -188,6 +189,10 @@ static bool vdpasim_blk_handle_req(struct vdpasim *vdpasim,
- 		pushed += bytes;
+ 				 (1ULL << VIRTIO_BLK_F_TOPOLOGY) | \
+-				 (1ULL << VIRTIO_BLK_F_MQ))
++				 (1ULL << VIRTIO_BLK_F_MQ)       | \
++				 (1ULL << VIRTIO_BLK_F_DISCARD)  | \
++				 (1ULL << VIRTIO_BLK_F_WRITE_ZEROES))
+ 
+ #define VDPASIM_BLK_CAPACITY	0x40000
+ #define VDPASIM_BLK_SIZE_MAX	0x1000
+ #define VDPASIM_BLK_SEG_MAX	32
++#define VDPASIM_BLK_DWZ_MAX_SECTORS UINT_MAX
+ 
+ /* 1 virtqueue, 1 address space, 1 virtqueue group */
+ #define VDPASIM_BLK_VQ_NUM	1
+@@ -193,6 +196,64 @@ static bool vdpasim_blk_handle_req(struct vdpasim *vdpasim,
+ 		/* nothing to do */
  		break;
  
-+	case VIRTIO_BLK_T_FLUSH:
-+		/* nothing to do */
-+		break;
++	case VIRTIO_BLK_T_DISCARD:
++	case VIRTIO_BLK_T_WRITE_ZEROES: {
++		struct virtio_blk_discard_write_zeroes range;
++		u32 num_sectors, flags;
 +
++		if (to_pull != sizeof(range)) {
++			dev_dbg(&vdpasim->vdpa.dev,
++				"discard/write_zeroes header len: 0x%zx [expected: 0x%zx]\n",
++				to_pull, sizeof(range));
++			status = VIRTIO_BLK_S_IOERR;
++			break;
++		}
++
++		bytes = vringh_iov_pull_iotlb(&vq->vring, &vq->out_iov, &range,
++					      to_pull);
++		if (bytes < 0) {
++			dev_dbg(&vdpasim->vdpa.dev,
++				"vringh_iov_pull_iotlb() error: %zd offset: 0x%llx len: 0x%zx\n",
++				bytes, offset, to_pull);
++			status = VIRTIO_BLK_S_IOERR;
++			break;
++		}
++
++		sector = le64_to_cpu(range.sector);
++		offset = sector << SECTOR_SHIFT;
++		num_sectors = le32_to_cpu(range.num_sectors);
++		flags = le32_to_cpu(range.flags);
++
++		if (type == VIRTIO_BLK_T_DISCARD && flags != 0) {
++			dev_dbg(&vdpasim->vdpa.dev,
++				"discard unexpected flags set - flags: 0x%x\n",
++				flags);
++			status = VIRTIO_BLK_S_UNSUPP;
++			break;
++		}
++
++		if (type == VIRTIO_BLK_T_WRITE_ZEROES &&
++		    flags & ~VIRTIO_BLK_WRITE_ZEROES_FLAG_UNMAP) {
++			dev_dbg(&vdpasim->vdpa.dev,
++				"write_zeroes unexpected flags set - flags: 0x%x\n",
++				flags);
++			status = VIRTIO_BLK_S_UNSUPP;
++			break;
++		}
++
++		if (!vdpasim_blk_check_range(vdpasim, sector, num_sectors,
++					     VDPASIM_BLK_DWZ_MAX_SECTORS)) {
++			status = VIRTIO_BLK_S_IOERR;
++			break;
++		}
++
++		if (type == VIRTIO_BLK_T_WRITE_ZEROES) {
++			memset(vdpasim->buffer + offset, 0,
++			       num_sectors << SECTOR_SHIFT);
++		}
++
++		break;
++	}
  	default:
  		dev_dbg(&vdpasim->vdpa.dev,
  			"Unsupported request type %d\n", type);
+@@ -281,6 +342,17 @@ static void vdpasim_blk_get_config(struct vdpasim *vdpasim, void *config)
+ 	blk_config->min_io_size = cpu_to_vdpasim16(vdpasim, 1);
+ 	blk_config->opt_io_size = cpu_to_vdpasim32(vdpasim, 1);
+ 	blk_config->blk_size = cpu_to_vdpasim32(vdpasim, SECTOR_SIZE);
++	/* VIRTIO_BLK_F_DISCARD */
++	blk_config->discard_sector_alignment =
++		cpu_to_vdpasim32(vdpasim, SECTOR_SIZE);
++	blk_config->max_discard_sectors =
++		cpu_to_vdpasim32(vdpasim, VDPASIM_BLK_DWZ_MAX_SECTORS);
++	blk_config->max_discard_seg = cpu_to_vdpasim32(vdpasim, 1);
++	/* VIRTIO_BLK_F_WRITE_ZEROES */
++	blk_config->max_write_zeroes_sectors =
++		cpu_to_vdpasim32(vdpasim, VDPASIM_BLK_DWZ_MAX_SECTORS);
++	blk_config->max_write_zeroes_seg = cpu_to_vdpasim32(vdpasim, 1);
++
+ }
+ 
+ static void vdpasim_blk_mgmtdev_release(struct device *dev)
 -- 
 2.37.1
 

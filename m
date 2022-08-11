@@ -2,131 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 755095906C3
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 21:07:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 965175906D4
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 21:09:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236281AbiHKTFd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 15:05:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47030 "EHLO
+        id S235720AbiHKTIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 15:08:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbiHKTFb (ORCPT
+        with ESMTP id S230006AbiHKTH6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 15:05:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB3982870;
-        Thu, 11 Aug 2022 12:05:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1ED5E60C03;
-        Thu, 11 Aug 2022 19:05:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F6C9C433D6;
-        Thu, 11 Aug 2022 19:05:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660244729;
-        bh=0SThgFqFZyXezUn0d6O27jzfZynm2O9WY2w+bU36Vno=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=iQSDeiZt3INPVzxg4SYeispGR7rJh9zxFmLpTigxTbUU/kLB3VyqAbGMoQDPfjfZa
-         VD49nTgv1XCzS+/qTcYtNcn07Y59fjdSLN9IGfLF8RpyCEN0CAku+iUPjS1PwA7G4C
-         k6b0fJ8hYYea8lR83Yd0GnOL5DFtTvJ+9Ik/NOBBH0ymxRovg7MmLxk/5Z2IfVdPq7
-         ZdCCOXwBR3Ng4lfPt4i+y5h1pUhtSG1Fye43bvjjhgGyKIk6589HNRMe349GkXAeCT
-         uq9aWw6wOLYfsthYnrgm/mF58ONb0bc+9VzsJKWD9ed1mv0HcFwP3XHmL4JHCGJ1Fd
-         BCx3UccaNLxvg==
-Date:   Thu, 11 Aug 2022 12:05:28 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-Cc:     Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-next@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-Subject: Re: build failure of next-20220811 due to 332f1795ca20 ("Bluetooth:
- L2CAP: Fix l2cap_global_chan_by_psm regression")
-Message-ID: <20220811120528.0e2bc1e5@kernel.org>
-In-Reply-To: <YvVQEDs75pxSgxjM@debian>
-References: <YvVQEDs75pxSgxjM@debian>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 11 Aug 2022 15:07:58 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03173A0339
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 12:07:58 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id s15-20020a5b044f000000b00680c4eb89f1so1559406ybp.7
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 12:07:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=S2tTmK1verVW5cijR9/dcxEFnFGeoisUmDHet7HEmdk=;
+        b=s9VwmykC9MYigWNRSVeTljf3OQwjjm3VFuOODDEPlboyniZlFP1/O1jKAm+bScO/77
+         TZX/Uk6KMzqSmnwvrQw/V+c/3yUzhsTJHY09PUpK8wMcH8AlLnCz583RZWpICPM2MzR8
+         5YdrpiA4JWGz9deibNjg5hZKvFFUz3MLz7ntAYze0eT7URxoPmQOByhZrfD4sJzpXeZ+
+         zrlD8pWNNyGUa1P5bZ5j2EviAFK6LZHCiJJuH64I3tc2vDVnQ/Uwt5E0Y2sSmHTlwOCd
+         dmvcriXjYYUPDZglkfLofezxRnbAnwP+YY7aKPlS2y9bvQs1N3sghfxL4DJ2K7n2/rSa
+         4qkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=S2tTmK1verVW5cijR9/dcxEFnFGeoisUmDHet7HEmdk=;
+        b=bQVfi0kMOMoJdutGsjZlmr9i0D/CrhhKXFrg0QU7vTaviNLGeQTSKAr4vVQRoDAvkt
+         pU6izx7TRy5qOm9VgdjdrDul2BdJ/h4lKF4LfT6cV3kRazAgzawBK6KxPhSrYH0uJdL5
+         P6FGC/DW1xlhZt9S7vCjkRWy3+wF8Gelj09RcdieVfHd2d02mFn6Vt015J/tkYCm3JpW
+         6sdD03jlcXAf6VvGDqfibAJb3JcjfDDy3YoADCTyFbQWhdJjS5+oafj6fnb8ODcQb7Kt
+         T7+30CGpDbvq8NK/1FBJc2IlkCooz8v7zL+jdCwvsrvPL667bIr71+zhADdyBTFkPd/X
+         PfaA==
+X-Gm-Message-State: ACgBeo1e+8GZxNxfyNG2U/gpijcAIawkBQGCZoHG7x0H036zOsyLgFQ9
+        3aXBIvyuTGUdXKvAMrtJGEwjcdAu9h6eq0StfmrX3w==
+X-Google-Smtp-Source: AA6agR5Q+a6oNbxYvB2KmRjQIApbOkDll5Du72cSIOw2sPMRwRDeDTbidOj/10bDwM0/E9mG8VzoDOlq/oS/tp6eO+MOWg==
+X-Received: from isaacmanjarres.irv.corp.google.com ([2620:15c:2d:3:4fcd:efd6:e25b:bec9])
+ (user=isaacmanjarres job=sendgmr) by 2002:a81:59d6:0:b0:320:163a:ca82 with
+ SMTP id n205-20020a8159d6000000b00320163aca82mr670369ywb.181.1660244877284;
+ Thu, 11 Aug 2022 12:07:57 -0700 (PDT)
+Date:   Thu, 11 Aug 2022 12:07:47 -0700
+Message-Id: <20220811190747.797081-1-isaacmanjarres@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
+Subject: [PATCH v1] driver core: Don't probe devices after bus_type.match()
+ probe deferral
+From:   "Isaac J. Manjarres" <isaacmanjarres@google.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
+        Russell King <rmk+kernel@arm.linux.org.uk>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "Isaac J. Manjarres" <isaacmanjarres@google.com>,
+        Guenter Roeck <linux@roeck-us.net>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 11 Aug 2022 19:53:04 +0100 Sudip Mukherjee (Codethink) wrote:
-> Hi All,
-> 
-> Not sure if it has been reported, builds of csky and mips allmodconfig
-> failed to build next-20220811 with gcc-12.
+Both __device_attach_driver() and __driver_attach() check the return
+code of the bus_type.match() function to see if the device needs to be
+added to the deferred probe list. After adding the device to the list,
+the logic attempts to bind the device to the driver anyway, as if the
+device had matched with the driver, which is not correct.
 
-Heh, 2 minutes after I submitted it to Linus :S
+If __device_attach_driver() detects that the device in question is not
+ready to match with a driver on the bus, then it doesn't make sense for
+the device to attempt to bind with the current driver or continue
+attempting to match with any of the other drivers on the bus. So, update
+the logic in __device_attach_driver() to reflect this.
 
-> mips error is:
-> 
-> In function 'memcmp',
->     inlined from 'bacmp' at ./include/net/bluetooth/bluetooth.h:347:9,
->     inlined from 'l2cap_global_chan_by_psm' at net/bluetooth/l2cap_core.c:2003:15:
-> ./include/linux/fortify-string.h:44:33: error: '__builtin_memcmp' specified bound 6 exceeds source size 0 [-Werror=stringop-overread]
+If __driver_attach() detects that a driver tried to match with a device
+that is not ready to match yet, then the driver should not attempt to bind
+with the device. However, the driver can still attempt to match and bind
+with other devices on the bus, as drivers can be bound to multiple
+devices. So, update the logic in __driver_attach() to reflect this.
 
-Source is the second argument? memcmp does not really have src and dst..
+Fixes: 656b8035b0ee ("ARM: 8524/1: driver cohandle -EPROBE_DEFER from bus_type.match()")
+Reported-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
+---
+ drivers/base/dd.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Assuming it's the second one it appears to object to the:
 
-#define BDADDR_ANY  (&(bdaddr_t) {{0, 0, 0, 0, 0, 0}})
+Guenter,
 
-Which, well, kinda understandable but why does it not dislike the same
-construct when used in the other 70 places in the tree?
+Thanks for testing this patch out. Can you please add your "Tested-by"?
 
-My preferred fix would be to do the same thing as we do for ethernet
-i.e. open code the helper, see is_zero_ether_addr().
+--Isaac
 
->    44 | #define __underlying_memcmp     __builtin_memcmp
->       |                                 ^
-> ./include/linux/fortify-string.h:420:16: note: in expansion of macro '__underlying_memcmp'
->   420 |         return __underlying_memcmp(p, q, size);
->       |                ^~~~~~~~~~~~~~~~~~~
-> In function 'memcmp',
->     inlined from 'bacmp' at ./include/net/bluetooth/bluetooth.h:347:9,
->     inlined from 'l2cap_global_chan_by_psm' at net/bluetooth/l2cap_core.c:2004:15:
-> ./include/linux/fortify-string.h:44:33: error: '__builtin_memcmp' specified bound 6 exceeds source size 0 [-Werror=stringop-overread]
->    44 | #define __underlying_memcmp     __builtin_memcmp
->       |                                 ^
-> ./include/linux/fortify-string.h:420:16: note: in expansion of macro '__underlying_memcmp'
->   420 |         return __underlying_memcmp(p, q, size);
->       |                ^~~~~~~~~~~~~~~~~~~
-> 
-> 
-> csky error is:
-> 
-> In file included from net/bluetooth/l2cap_core.c:37:
-> In function 'bacmp',
->     inlined from 'l2cap_global_chan_by_psm' at net/bluetooth/l2cap_core.c:2003:15:
-> ./include/net/bluetooth/bluetooth.h:347:16: error: 'memcmp' specified bound 6 exceeds source size 0 [-Werror=stringop-overread]
->   347 |         return memcmp(ba1, ba2, sizeof(bdaddr_t));
->       |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> In function 'bacmp',
->     inlined from 'l2cap_global_chan_by_psm' at net/bluetooth/l2cap_core.c:2004:15:
-> ./include/net/bluetooth/bluetooth.h:347:16: error: 'memcmp' specified bound 6 exceeds source size 0 [-Werror=stringop-overread]
->   347 |         return memcmp(ba1, ba2, sizeof(bdaddr_t));
->       |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> 
-> 
-> git bisect pointed to 332f1795ca20 ("Bluetooth: L2CAP: Fix l2cap_global_chan_by_psm regression").
-> And, reverting that commit has fixed the build failure.
-> 
-> I will be happy to test any patch or provide any extra log if needed.
-> 
-> --
-> Regards
-> Sudip
+diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+index 70f79fc71539..90b31fb141a5 100644
+--- a/drivers/base/dd.c
++++ b/drivers/base/dd.c
+@@ -881,6 +881,11 @@ static int __device_attach_driver(struct device_driver *drv, void *_data)
+ 		dev_dbg(dev, "Device match requests probe deferral\n");
+ 		dev->can_match = true;
+ 		driver_deferred_probe_add(dev);
++		/*
++		 * Device can't match with a driver right now, so don't attempt
++		 * to match or bind with other drivers on the bus.
++		 */
++		return ret;
+ 	} else if (ret < 0) {
+ 		dev_dbg(dev, "Bus failed to match device: %d\n", ret);
+ 		return ret;
+@@ -1120,6 +1125,11 @@ static int __driver_attach(struct device *dev, void *data)
+ 		dev_dbg(dev, "Device match requests probe deferral\n");
+ 		dev->can_match = true;
+ 		driver_deferred_probe_add(dev);
++		/*
++		 * Driver could not match with device, but may match with
++		 * another device on the bus.
++		 */
++		return 0;
+ 	} else if (ret < 0) {
+ 		dev_dbg(dev, "Bus failed to match device: %d\n", ret);
+ 		return ret;
+-- 
+2.37.1.559.g78731f0fdb-goog
 

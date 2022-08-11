@@ -2,88 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 105C958FD18
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 15:10:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9393B58FD23
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 15:13:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235440AbiHKNKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 09:10:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52582 "EHLO
+        id S235046AbiHKNNj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 09:13:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235082AbiHKNKF (ORCPT
+        with ESMTP id S235471AbiHKNNe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 09:10:05 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA35470E65
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 06:10:03 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id x21so22892208edd.3
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 06:10:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=ucfBP/53P+UnzU4Fa8i2eVWM9uv5/ktiToZlI9Ntdqk=;
-        b=NSbbNPqjvWfdwSYpAG4Xy3FS3qBHPq+OAXBz/qlrnN8kLAJqu707xfUJchvfsw4I4N
-         DXFkEof+pN0oul6LkwxLyXNgWKIsen0Er2mPPHp5Faw5BIv7jLe124nvftk1Louy2xdX
-         95BjKuN4xgMNugJ2DqadtrsaKsubR91EAeFuo=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=ucfBP/53P+UnzU4Fa8i2eVWM9uv5/ktiToZlI9Ntdqk=;
-        b=zhqgCY7ULpnVPcqsNNfVhDoySOwN0/3T2uxy9+NGvaHlDadg0eG6T68bGc+EszBzZX
-         OKrXv5PijxdAU8u+rgoZFj2/PGQ0m2i998mrgxBh2hG3u4tEzARzoEzdU/lhfiqu3btV
-         NSSlLXq5YS6id48VvjYBOEEoQLEksk1ThXPITDWC8D4TLXPXgIw/tAKKGd3Mk+nC361g
-         tnjPFBQhsx0+Uub4kOKv92UEB459XXXpQgZCIAgFI5qsJAhPtWp1nhCN5Sc2Hq0wowfp
-         y9D/826UXfaw36Ek3TyuTkT8tXvrMkgS+tesMuNb0ySqCcLOeOvTQ7zrdokGPw3w1O6G
-         suuQ==
-X-Gm-Message-State: ACgBeo1pkdQyuRiuz/Si6VChM53h1yVvsxWOpb65ntJLHf+ibTn5XP3y
-        vbEb2Q9iYf7M4McVUWwXzi9M7YKaVeOktpyR
-X-Google-Smtp-Source: AA6agR7A8tIB8pNogOf6xfmDTTlkPGtO7j//Y+ROi6Xs8Dw1+2tvMD6Dc6rxZlqSltCTTifyWk+UCw==
-X-Received: by 2002:a05:6402:268d:b0:43d:b9d0:9efc with SMTP id w13-20020a056402268d00b0043db9d09efcmr31340329edd.92.1660223402074;
-        Thu, 11 Aug 2022 06:10:02 -0700 (PDT)
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com. [209.85.221.48])
-        by smtp.gmail.com with ESMTPSA id 3-20020a170906328300b00722e31fcf42sm3466661ejw.184.2022.08.11.06.10.00
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Aug 2022 06:10:01 -0700 (PDT)
-Received: by mail-wr1-f48.google.com with SMTP id z16so21237771wrh.12
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 06:10:00 -0700 (PDT)
-X-Received: by 2002:a05:6512:b87:b0:48b:2247:684f with SMTP id
- b7-20020a0565120b8700b0048b2247684fmr11707556lfv.593.1660223389777; Thu, 11
- Aug 2022 06:09:49 -0700 (PDT)
+        Thu, 11 Aug 2022 09:13:34 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B93F6E2EC;
+        Thu, 11 Aug 2022 06:13:33 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b9854329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:9854:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id F16601EC059D;
+        Thu, 11 Aug 2022 15:13:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1660223608;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=OldGnQzh68j0ria9OKr1ZKpGr6HHRfZ58vsjqVtmBGM=;
+        b=Jom2upwkNnyYk1jgdaBY1cA2U9a1piccWCjIfwQWrzp2t4mYuQKDRlSYFkCHpeu/iUfeQM
+        rFpZxOGA4A+OzHUIwp8pVdVz1VL8nRyYCFZEqjBaEqylpDodbKiCnCKKXkAfKStqXDzwvo
+        CTEWgaPRc9+rgc253wfO5evolOJ5YBU=
+Date:   Thu, 11 Aug 2022 15:13:23 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Sandipan Das <sandipan.das@amd.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        x86@kernel.org, peterz@infradead.org, acme@kernel.org,
+        namhyung@kernel.org, jolsa@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, dave.hansen@linux.intel.com,
+        like.xu.linux@gmail.com, eranian@google.com,
+        ananth.narayan@amd.com, ravi.bangoria@amd.com,
+        santosh.shukla@amd.com
+Subject: Re: [PATCH 04/13] x86/cpufeatures: Add LbrExtV2 feature bit
+Message-ID: <YvUAc6sZcRJsp8wy@zn.tnic>
+References: <cover.1660211399.git.sandipan.das@amd.com>
+ <172d2b0df39306ed77221c45ee1aa62e8ae0548d.1660211399.git.sandipan.das@amd.com>
 MIME-Version: 1.0
-References: <20220809193921.544546-1-svenva@chromium.org> <YvSNSs84wMRZ8Fa9@kernel.org>
-In-Reply-To: <YvSNSs84wMRZ8Fa9@kernel.org>
-From:   Sven van Ashbrook <svenva@chromium.org>
-Date:   Thu, 11 Aug 2022 09:09:38 -0400
-X-Gmail-Original-Message-ID: <CAM7w-FX4NfeQy9chKgzjAj6gvvoK3OxCK0VYq9DT5qrdB=_tDA@mail.gmail.com>
-Message-ID: <CAM7w-FX4NfeQy9chKgzjAj6gvvoK3OxCK0VYq9DT5qrdB=_tDA@mail.gmail.com>
-Subject: Re: [PATCH] tpm: fix potential race condition in suspend/resume
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
-        Hao Wu <hao.wu@rubrik.com>, Yi Chou <yich@google.com>,
-        Andrey Pronin <apronin@chromium.org>,
-        James Morris <james.morris@microsoft.com>,
-        stable@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <172d2b0df39306ed77221c45ee1aa62e8ae0548d.1660211399.git.sandipan.das@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 1:02 AM Jarkko Sakkinen <jarkko@kernel.org> wrote:
->
-> What about adding TPM_CHIP_FLAG_SUSPENDED instead?
+On Thu, Aug 11, 2022 at 05:59:52PM +0530, Sandipan Das wrote:
+> CPUID leaf 0x80000022 i.e. ExtPerfMonAndDbg advertises some new performance
+> monitoring features for AMD processors.
+> 
+> Bit 1 of EAX indicates support for Last Branch Record Extension Version 2
+> (LbrExtV2) features. If found to be set during PMU initialization, the EBX
+> bits of the same leaf can be used to determine the number of available LBR
+> entries.
+> 
+> For better utilization of feature words, LbrExtV2 is added as a scattered
 
-Thank you for the feedback, Jarkko. After thinking this over, I
-believe this patch only moves kernel warnings around. Will re-post
-soon with a fresh approach, intended to fix the underlying issue
-rather than the symptom.
+s/LbrExtV2 is added/add LbrExtV2/
 
-So please disregard this patch.
+> feature bit.
+> 
+> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
+> ---
+>  arch/x86/include/asm/cpufeatures.h | 2 +-
+>  arch/x86/kernel/cpu/scattered.c    | 1 +
+>  2 files changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
+> index 393f2bbb5e3a..e3fa476a24b0 100644
+> --- a/arch/x86/include/asm/cpufeatures.h
+> +++ b/arch/x86/include/asm/cpufeatures.h
+> @@ -96,7 +96,7 @@
+>  #define X86_FEATURE_SYSCALL32		( 3*32+14) /* "" syscall in IA32 userspace */
+>  #define X86_FEATURE_SYSENTER32		( 3*32+15) /* "" sysenter in IA32 userspace */
+>  #define X86_FEATURE_REP_GOOD		( 3*32+16) /* REP microcode works well */
+> -/* FREE!                                ( 3*32+17) */
+> +#define X86_FEATURE_LBREXT_V2		( 3*32+17) /* AMD Last Branch Record Extension Version 2 */
+>  #define X86_FEATURE_LFENCE_RDTSC	( 3*32+18) /* "" LFENCE synchronizes RDTSC */
+>  #define X86_FEATURE_ACC_POWER		( 3*32+19) /* AMD Accumulated Power Mechanism */
+>  #define X86_FEATURE_NOPL		( 3*32+20) /* The NOPL (0F 1F) instructions */
+> diff --git a/arch/x86/kernel/cpu/scattered.c b/arch/x86/kernel/cpu/scattered.c
+> index dbaa8326d6f2..6be46dffddbf 100644
+> --- a/arch/x86/kernel/cpu/scattered.c
+> +++ b/arch/x86/kernel/cpu/scattered.c
+> @@ -44,6 +44,7 @@ static const struct cpuid_bit cpuid_bits[] = {
+>  	{ X86_FEATURE_PROC_FEEDBACK,    CPUID_EDX, 11, 0x80000007, 0 },
+>  	{ X86_FEATURE_MBA,		CPUID_EBX,  6, 0x80000008, 0 },
+>  	{ X86_FEATURE_PERFMON_V2,	CPUID_EAX,  0, 0x80000022, 0 },
+> +	{ X86_FEATURE_LBREXT_V2,	CPUID_EAX,  1, 0x80000022, 0 },
+>  	{ 0, 0, 0, 0, 0 }
+>  };
+
+Other than that:
+
+Acked-by: Borislav Petkov <bp@suse.de>
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

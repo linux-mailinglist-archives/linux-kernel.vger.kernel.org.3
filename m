@@ -2,96 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35EA858F72D
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 07:06:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C992D58F730
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 07:07:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233963AbiHKFGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 01:06:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59402 "EHLO
+        id S233982AbiHKFHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 01:07:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233535AbiHKFGg (ORCPT
+        with ESMTP id S233504AbiHKFG7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 01:06:36 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CD6D74E3E
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 22:06:35 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id bb16so20152502oib.11
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 22:06:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:message-id:subject:cc:to:from:date:from:to:cc;
-        bh=quvX6z6poO5keYLoKw9+FS7nc7zJzPFptxa1p4PFcJI=;
-        b=J3VozWdW72TUWrtZoiUsG9StCKcnf3uW3XgsbLoxPrWFIqWUQK1L8X+mKwlM3iMSmX
-         eHaVVoo9rEGnZxajxECSwZac/cp2LkMEtWqkLG9YCU1SwYJaPstqdSn+oz9voOzxl2gR
-         56h/i17y0CoEZp/rX4i7/fi8kuIr7TTWjf9onouPzPTWKYVP01RmW/JNwIHL84j9qiTe
-         H8sYzYI5Pf9wSSYlvoNq9fu7erTXBcfKN+JEmJ0z0CekMa5YBYweigdWcaLIhXQouxWq
-         hv0BCzaFJh1mxy9mgv41kiAoTaty0KKWgRLKXf6A9nrG0lR178D/5lC6Gl0O9bR+OBgZ
-         jjUw==
+        Thu, 11 Aug 2022 01:06:59 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AB72760F5
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 22:06:57 -0700 (PDT)
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 491713FB98
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 05:06:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1660194416;
+        bh=Kh+l9msGhn7mWAxPmpY/gaB6opRq+mjhr2ErkHQrNjQ=;
+        h=From:To:Cc:Subject:MIME-Version:Content-Type:Date:Message-ID;
+        b=FP+uKJINFNw0r7Q/G2x6OEyyU2zdAWZHSZ75t9rKMS0v4gFweolrdFLZ0eVVBCv/K
+         A71A69OD50lThGs9gwo1N2jsfFfRueklBTbVt1EE4cP2modAcGoesaVQvoWLt0Hnb5
+         q3hrjC/FEaPujE3OnhGKzEZrE3HMhkqcwoxhuPYLwPUHBbxHcRtYaMwvmQLJXPCn/L
+         QWEIPQIAqLZnO2wNZIo/+lhiZhCBAQ2ePRsnAglts4wpXdbWfiXSHlte2QaroGa6Bw
+         wQr+cJWNeWZERlJtEBtynaP1W0W4S4Z+29Gog+sUn+CnL/qNWQ37kg/aLHcKq9+nw0
+         jsAkx+ECFIAyA==
+Received: by mail-pl1-f200.google.com with SMTP id u10-20020a170902e5ca00b0016f091c4b6bso10907495plf.10
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 22:06:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc;
-        bh=quvX6z6poO5keYLoKw9+FS7nc7zJzPFptxa1p4PFcJI=;
-        b=5zN0JxSEi6lYszbk4LD+VgTF5M+wwguSN1V0dvBDCImNQwd5AQ+w239NqA2mxLDtbD
-         4+F/gilzmn4gCien8DkUVgOCNkEsl5qoEJzAf7x8bZdnXtFMPHfY4+KPx57djWF3WRS7
-         mXM45EY93L1Gku1BR9/ma/yU6fe+b9Y4MRLP3sk5Yq9LXxiAKyc0P922KQk6CGHFcgJ6
-         ITPbHvmn1jeeTRm6JeqhYUIpttvab4j/TfwSk4UQCGiDKzA61EwDfuxq7cKw6yWoueNS
-         qsUFlpcxgAIQoReTnNOA5T/xR23mKxib4pvM8mztXLTNDNLOQ9RM7IFkBa67IXwv+2mq
-         TIIQ==
-X-Gm-Message-State: ACgBeo3ETvesa28dqcNGhYfRB7oD1p4Z0i2pUoaz235/JaFiJHx9ZwsC
-        kSzs86iGXqynCA+PSR+G7A0fnQ==
-X-Google-Smtp-Source: AA6agR4zrYfHGR/cCGz5xRQTkDcDxPPuB6aVkKAnB3WW6LfbavZT3ojs25742RS1BdfGRBX23XKgEA==
-X-Received: by 2002:a05:6808:1598:b0:342:d044:2afc with SMTP id t24-20020a056808159800b00342d0442afcmr2857509oiw.235.1660194394565;
-        Wed, 10 Aug 2022 22:06:34 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id eh23-20020a056870f59700b0010d910ffc3asm4134807oab.18.2022.08.10.22.06.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 22:06:34 -0700 (PDT)
-Date:   Wed, 10 Aug 2022 22:06:33 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Matthew Wilcox <willy@infradead.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [PATCH] mm/shmem: shmem_replace_page() remember NR_SHMEM
-Message-ID: <cec7c09d-5874-e160-ada6-6e10ee48784@google.com>
+        h=message-id:date:content-transfer-encoding:content-id:mime-version
+         :subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=Kh+l9msGhn7mWAxPmpY/gaB6opRq+mjhr2ErkHQrNjQ=;
+        b=p8+91Ol8cuix69TGfWh+ea3zOiQxbFV4JSer6MhPIWclEUDqi61oW8Q/Z7GvafvZdy
+         T2oe/9zpfwEBwrBT7d2Y38sv5g6ZCNWPSBvBp8V5Y63WXEsKAd9NjjbqAnJz0eDJ/Zns
+         faJ1+t3EYYoWHVRjjwDWxkpRhx2h26m/EPmZupvMiwCqpXPDtGTpAPRpbDBPlNly+JCv
+         0jhirIZowgsobwl/DG5d/JqRfmaph1inwZW8dt0+aeR1XO+4h9raqPXVDOaoU0ph/AjY
+         OG3LD7L8uusJOkc7VEW0DsKJArzE4HukYE85CFPHqmWlyFEicZfd75lIEdzZXDXk1FFG
+         AW5A==
+X-Gm-Message-State: ACgBeo0cEz4hmqK3fw94R/rKXt+1ELHBMEhXEIh0aqaBa09HfN13N1hJ
+        FPauDABu6fb1NeySyeVmD9hz68UsSMSTZ6Pjf6TRSFiwWPpC/0e+g1Zvl/DO+oB04TUtaFNvmho
+        LbKafUrcFllE8q6c1qNvSU58m2MnEyRNZ1Lo8CSdJYw==
+X-Received: by 2002:a63:d006:0:b0:419:b272:9e6d with SMTP id z6-20020a63d006000000b00419b2729e6dmr25132855pgf.608.1660194414111;
+        Wed, 10 Aug 2022 22:06:54 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5hVrM4mGwjHlQTrcGOMzvOjjJAGiErxEPzeqguWkhn6+og5d4lKaROawLHMRWzY9PWLjthcA==
+X-Received: by 2002:a63:d006:0:b0:419:b272:9e6d with SMTP id z6-20020a63d006000000b00419b2729e6dmr25132838pgf.608.1660194413810;
+        Wed, 10 Aug 2022 22:06:53 -0700 (PDT)
+Received: from famine.localdomain ([50.125.80.157])
+        by smtp.gmail.com with ESMTPSA id i15-20020a17090332cf00b0016cf3f124e5sm14074191plr.131.2022.08.10.22.06.53
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 10 Aug 2022 22:06:53 -0700 (PDT)
+Received: by famine.localdomain (Postfix, from userid 1000)
+        id 139086119B; Wed, 10 Aug 2022 22:06:53 -0700 (PDT)
+Received: from famine (localhost [127.0.0.1])
+        by famine.localdomain (Postfix) with ESMTP id 0C9089FA79;
+        Wed, 10 Aug 2022 22:06:53 -0700 (PDT)
+From:   Jay Vosburgh <jay.vosburgh@canonical.com>
+To:     netdev@vger.kernel.org, sunshouxin@chinatelecom.cn
+Cc:     vfalico@gmail.com, andy@greyhouse.net, razor@blackwall.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-kernel@vger.kernel.org,
+        huyd12@chinatelecom.cn
+Subject: [PATCH net] bonding: fix reference count leak in balance-alb mode
+X-Mailer: MH-E 8.6+git; nmh 1.6; Emacs 29.0.50
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <26757.1660194413.1@famine>
+Content-Transfer-Encoding: quoted-printable
+Date:   Wed, 10 Aug 2022 22:06:53 -0700
+Message-ID: <26758.1660194413@famine>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Elsewhere, NR_SHMEM is updated at the same time as shmem NR_FILE_PAGES;
-but shmem_replace_page() was forgetting to do that - so NR_SHMEM stats
-could grow too big or too small, in those unusual cases when it's used.
+	Commit d5410ac7b0ba ("net:bonding:support balance-alb interface
+with vlan to bridge") introduced a reference count leak by not releasing
+the reference acquired by ip_dev_find().  Remedy this by insuring the
+reference is released.
 
-Signed-off-by: Hugh Dickins <hughd@google.com>
+Fixes: d5410ac7b0ba ("net:bonding:support balance-alb interface with vlan =
+to bridge")
+Signed-off-by: Jay Vosburgh <jay.vosburgh@canonical.com>
+
 ---
-This is not terribly important, and will clash with one of Matthew's
-59 for 5.21; I don't mind if this gets delayed, and we just do it again
-on top of his series later, or he fold the equivalent into his series;
-but thought I'd better send it in as another fix to shmem_replace_page()
-while that function is on our minds.
+ drivers/net/bonding/bond_alb.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
- mm/shmem.c | 2 ++
- 1 file changed, 2 insertions(+)
+diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_alb=
+.c
+index 60cb9a0225aa..b9dbad3a8af8 100644
+--- a/drivers/net/bonding/bond_alb.c
++++ b/drivers/net/bonding/bond_alb.c
+@@ -668,8 +668,11 @@ static struct slave *rlb_arp_xmit(struct sk_buff *skb=
+, struct bonding *bond)
+ =
 
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -1659,7 +1659,9 @@ static int shmem_replace_page(struct page **pagep, gfp_t gfp,
- 		new = page_folio(newpage);
- 		mem_cgroup_migrate(old, new);
- 		__inc_lruvec_page_state(newpage, NR_FILE_PAGES);
-+		__inc_lruvec_page_state(newpage, NR_SHMEM);
- 		__dec_lruvec_page_state(oldpage, NR_FILE_PAGES);
-+		__dec_lruvec_page_state(oldpage, NR_SHMEM);
+ 	dev =3D ip_dev_find(dev_net(bond->dev), arp->ip_src);
+ 	if (dev) {
+-		if (netif_is_bridge_master(dev))
++		if (netif_is_bridge_master(dev)) {
++			dev_put(dev);
+ 			return NULL;
++		}
++		dev_put(dev);
  	}
- 	xa_unlock_irq(&swap_mapping->i_pages);
- 
+ =
+
+ 	if (arp->op_code =3D=3D htons(ARPOP_REPLY)) {
+-- =
+
+2.17.1
+

@@ -2,136 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 965175906D4
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 21:09:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 982B05906D6
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 21:09:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235720AbiHKTIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 15:08:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50136 "EHLO
+        id S235247AbiHKTJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 15:09:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbiHKTH6 (ORCPT
+        with ESMTP id S230095AbiHKTJF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 15:07:58 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03173A0339
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 12:07:58 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id s15-20020a5b044f000000b00680c4eb89f1so1559406ybp.7
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 12:07:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
-        bh=S2tTmK1verVW5cijR9/dcxEFnFGeoisUmDHet7HEmdk=;
-        b=s9VwmykC9MYigWNRSVeTljf3OQwjjm3VFuOODDEPlboyniZlFP1/O1jKAm+bScO/77
-         TZX/Uk6KMzqSmnwvrQw/V+c/3yUzhsTJHY09PUpK8wMcH8AlLnCz583RZWpICPM2MzR8
-         5YdrpiA4JWGz9deibNjg5hZKvFFUz3MLz7ntAYze0eT7URxoPmQOByhZrfD4sJzpXeZ+
-         zrlD8pWNNyGUa1P5bZ5j2EviAFK6LZHCiJJuH64I3tc2vDVnQ/Uwt5E0Y2sSmHTlwOCd
-         dmvcriXjYYUPDZglkfLofezxRnbAnwP+YY7aKPlS2y9bvQs1N3sghfxL4DJ2K7n2/rSa
-         4qkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc;
-        bh=S2tTmK1verVW5cijR9/dcxEFnFGeoisUmDHet7HEmdk=;
-        b=bQVfi0kMOMoJdutGsjZlmr9i0D/CrhhKXFrg0QU7vTaviNLGeQTSKAr4vVQRoDAvkt
-         pU6izx7TRy5qOm9VgdjdrDul2BdJ/h4lKF4LfT6cV3kRazAgzawBK6KxPhSrYH0uJdL5
-         P6FGC/DW1xlhZt9S7vCjkRWy3+wF8Gelj09RcdieVfHd2d02mFn6Vt015J/tkYCm3JpW
-         6sdD03jlcXAf6VvGDqfibAJb3JcjfDDy3YoADCTyFbQWhdJjS5+oafj6fnb8ODcQb7Kt
-         T7+30CGpDbvq8NK/1FBJc2IlkCooz8v7zL+jdCwvsrvPL667bIr71+zhADdyBTFkPd/X
-         PfaA==
-X-Gm-Message-State: ACgBeo1e+8GZxNxfyNG2U/gpijcAIawkBQGCZoHG7x0H036zOsyLgFQ9
-        3aXBIvyuTGUdXKvAMrtJGEwjcdAu9h6eq0StfmrX3w==
-X-Google-Smtp-Source: AA6agR5Q+a6oNbxYvB2KmRjQIApbOkDll5Du72cSIOw2sPMRwRDeDTbidOj/10bDwM0/E9mG8VzoDOlq/oS/tp6eO+MOWg==
-X-Received: from isaacmanjarres.irv.corp.google.com ([2620:15c:2d:3:4fcd:efd6:e25b:bec9])
- (user=isaacmanjarres job=sendgmr) by 2002:a81:59d6:0:b0:320:163a:ca82 with
- SMTP id n205-20020a8159d6000000b00320163aca82mr670369ywb.181.1660244877284;
- Thu, 11 Aug 2022 12:07:57 -0700 (PDT)
-Date:   Thu, 11 Aug 2022 12:07:47 -0700
-Message-Id: <20220811190747.797081-1-isaacmanjarres@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
-Subject: [PATCH v1] driver core: Don't probe devices after bus_type.match()
- probe deferral
-From:   "Isaac J. Manjarres" <isaacmanjarres@google.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "Isaac J. Manjarres" <isaacmanjarres@google.com>,
-        Guenter Roeck <linux@roeck-us.net>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 11 Aug 2022 15:09:05 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC398A1A5E;
+        Thu, 11 Aug 2022 12:09:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660244944; x=1691780944;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MSJBbF/M9HYaTdCscRR7v5/d3Esdu4eDRtn+bYyVNcQ=;
+  b=U62qP/1S4HlOaanXNjnBgWIcxR2JaG6JU2Iz3iRzaIvqxXgC0cFclLUy
+   Nx2maykMr/Q73HMZyAlD11nPr+QScnTjP6Xm+sX83z66POVvccQpHDnKV
+   zLt0D0gFAQ8ndpK0qU17fATxbDQq/iE2XOIuSagZ662glVkPJ7vukFrRZ
+   AeFT7VdN4cWn/ePWdZlziIsSlva+vxmH2SIp/EVz8XSotO6+kSi+6P52E
+   dhMNY5fNs17QzMvZeXRgy+rjB1AfmNcGZlQTNDZkp6yWa9f2prKo8hqMI
+   Tr9vlbBQWU4W8Bgxkc97D1bUBK52FMFF2zN1gLdFzCywkM9I7PJsKMTyl
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10436"; a="291440918"
+X-IronPort-AV: E=Sophos;i="5.93,230,1654585200"; 
+   d="scan'208";a="291440918"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 12:09:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,230,1654585200"; 
+   d="scan'208";a="638634331"
+Received: from lkp-server02.sh.intel.com (HELO cfab306db114) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 11 Aug 2022 12:09:02 -0700
+Received: from kbuild by cfab306db114 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oMDYE-0000Yd-0l;
+        Thu, 11 Aug 2022 19:09:02 +0000
+Date:   Fri, 12 Aug 2022 03:08:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Jens Axboe <axboe@kernel.dk>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hongchen Zhang <zhanghongchen@loongson.cn>
+Subject: Re: [PATCH] blk-wbt: do not throttle swap write on processes other
+ than kswapd
+Message-ID: <202208120245.VvjRBGkd-lkp@intel.com>
+References: <1660217545-10697-1-git-send-email-zhanghongchen@loongson.cn>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1660217545-10697-1-git-send-email-zhanghongchen@loongson.cn>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both __device_attach_driver() and __driver_attach() check the return
-code of the bus_type.match() function to see if the device needs to be
-added to the deferred probe list. After adding the device to the list,
-the logic attempts to bind the device to the driver anyway, as if the
-device had matched with the driver, which is not correct.
+Hi Hongchen,
 
-If __device_attach_driver() detects that the device in question is not
-ready to match with a driver on the bus, then it doesn't make sense for
-the device to attempt to bind with the current driver or continue
-attempting to match with any of the other drivers on the bus. So, update
-the logic in __device_attach_driver() to reflect this.
+Thank you for the patch! Yet something to improve:
 
-If __driver_attach() detects that a driver tried to match with a device
-that is not ready to match yet, then the driver should not attempt to bind
-with the device. However, the driver can still attempt to match and bind
-with other devices on the bus, as drivers can be bound to multiple
-devices. So, update the logic in __driver_attach() to reflect this.
+[auto build test ERROR on axboe-block/for-next]
+[also build test ERROR on linus/master v5.19 next-20220811]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Fixes: 656b8035b0ee ("ARM: 8524/1: driver cohandle -EPROBE_DEFER from bus_type.match()")
-Reported-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
----
- drivers/base/dd.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+url:    https://github.com/intel-lab-lkp/linux/commits/Hongchen-Zhang/blk-wbt-do-not-throttle-swap-write-on-processes-other-than-kswapd/20220811-193652
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
+config: arm-randconfig-r001-20220811 (https://download.01.org/0day-ci/archive/20220812/202208120245.VvjRBGkd-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://github.com/intel-lab-lkp/linux/commit/a3ed95d0b72fa83c2ad007bee31d928fad40e70d
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Hongchen-Zhang/blk-wbt-do-not-throttle-swap-write-on-processes-other-than-kswapd/20220811-193652
+        git checkout a3ed95d0b72fa83c2ad007bee31d928fad40e70d
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+>> block/blk-wbt.c:558:26: error: use of undeclared identifier 'end_swap_bio_write'
+                       (bio->bi_end_io != end_swap_bio_write))
+                                          ^
+   1 error generated.
 
 
-Guenter,
+vim +/end_swap_bio_write +558 block/blk-wbt.c
 
-Thanks for testing this patch out. Can you please add your "Tested-by"?
+   542	
+   543	static enum wbt_flags bio_to_wbt_flags(struct rq_wb *rwb, struct bio *bio)
+   544	{
+   545		enum wbt_flags flags = 0;
+   546	
+   547		if (!rwb_enabled(rwb))
+   548			return 0;
+   549	
+   550		if (bio_op(bio) == REQ_OP_READ) {
+   551			flags = WBT_READ;
+   552		} else if (wbt_should_throttle(bio)) {
+   553			if (current_is_kswapd())
+   554				flags |= WBT_KSWAPD;
+   555			if (bio_op(bio) == REQ_OP_DISCARD)
+   556				flags |= WBT_DISCARD;
+   557			if (current_is_kswapd() ||
+ > 558			    (bio->bi_end_io != end_swap_bio_write))
+   559				flags |= WBT_TRACKED;
+   560		}
+   561		return flags;
+   562	}
+   563	
 
---Isaac
-
-diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-index 70f79fc71539..90b31fb141a5 100644
---- a/drivers/base/dd.c
-+++ b/drivers/base/dd.c
-@@ -881,6 +881,11 @@ static int __device_attach_driver(struct device_driver *drv, void *_data)
- 		dev_dbg(dev, "Device match requests probe deferral\n");
- 		dev->can_match = true;
- 		driver_deferred_probe_add(dev);
-+		/*
-+		 * Device can't match with a driver right now, so don't attempt
-+		 * to match or bind with other drivers on the bus.
-+		 */
-+		return ret;
- 	} else if (ret < 0) {
- 		dev_dbg(dev, "Bus failed to match device: %d\n", ret);
- 		return ret;
-@@ -1120,6 +1125,11 @@ static int __driver_attach(struct device *dev, void *data)
- 		dev_dbg(dev, "Device match requests probe deferral\n");
- 		dev->can_match = true;
- 		driver_deferred_probe_add(dev);
-+		/*
-+		 * Driver could not match with device, but may match with
-+		 * another device on the bus.
-+		 */
-+		return 0;
- 	} else if (ret < 0) {
- 		dev_dbg(dev, "Bus failed to match device: %d\n", ret);
- 		return ret;
 -- 
-2.37.1.559.g78731f0fdb-goog
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,219 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF2D158F8C3
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 10:05:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5037158F8C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 10:05:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234303AbiHKIFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 04:05:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41738 "EHLO
+        id S234313AbiHKIFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 04:05:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234084AbiHKIFF (ORCPT
+        with ESMTP id S234318AbiHKIFO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 04:05:05 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0193389CC0
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:05:04 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id f20so24486072lfc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:05:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=AWObm1t2SGsfX+EOzuUn4SeYctPOHns23Pie8FOr12w=;
-        b=blQsdmvcfi8aabm0W+4Bgxbof6mNYs6NonqMhJPZ1aVJaqcsFhXMdZFZDyiII01Fhf
-         x9SHadRxyjNFE6LHkQukeYi/PX+T/LeY29ukbibda1AWyUU0JolhqKes7iKm6crF8upp
-         PjVSelSX7gWdWVdY0E/fsOGQZv12TmTl0F0n04rlQS7j160OcGljnSOY0O6hsfmWLYNU
-         erUQklKIcGEFmbm9uSYCv7VuYJBAX7vbCUJzTehyFcxuXxX4lfsmNtLHHZwkqSDtoRU4
-         bFh+tOND5apR5OsJm2vyhaqZz8bRcXZMncjdCXcWwNp59SYUWZFKcpRUCvltmUjvXpVx
-         jqOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=AWObm1t2SGsfX+EOzuUn4SeYctPOHns23Pie8FOr12w=;
-        b=WuFXIh4liwUqcvNQ+U9K9l6O3uE/HmV0GMJo0fUFEOuDac05zyzfojXbJ14nQo/oGk
-         VN8wQPAs4HHRPVkSCtT/Ht/+JUAbvZ5GnZRqrE0HminVMBxmr66H9iiteIGSLxCGb9sf
-         RksFxf7kIpUvsz/N935tjaLS8/Ws3nSYPQi+VuUNKBuYeIgU8iC4ilzur88KGfRfzP1e
-         QnukzLvUteXGo1Z6lcQXaMwz+WxYxTmZn6JfvkxLrg+2JLIgHKu0WOQg74aRMByFUDu7
-         QZW890yDoQ8zNc1qDdvfjtycD0wCfXtrxnhpuf8G6H1XQCoL9SmTHp/VdgTx1TFOftDW
-         0VHw==
-X-Gm-Message-State: ACgBeo1qpa2RlSXds6HAyuj8SCTbfDmXoMayL8cgCgXLt0kqd/jWdH9m
-        +Ydczgk6CIx0hQWxeeH2aVcegw==
-X-Google-Smtp-Source: AA6agR7A6T7SL1WDl9JlKh+6jE8mNB65VeBjyl40+g28JZzZxZZVG575FetC+Nlr08Mgmdi51/8NDQ==
-X-Received: by 2002:a05:6512:c13:b0:48b:3b30:637d with SMTP id z19-20020a0565120c1300b0048b3b30637dmr9499019lfu.447.1660205100855;
-        Thu, 11 Aug 2022 01:05:00 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id y8-20020a2e95c8000000b0025d47a29734sm721935ljh.47.2022.08.11.01.04.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Aug 2022 01:05:00 -0700 (PDT)
-Message-ID: <74afb676-4a85-7a8e-f7ea-20d8a0967d7d@linaro.org>
-Date:   Thu, 11 Aug 2022 11:04:59 +0300
+        Thu, 11 Aug 2022 04:05:14 -0400
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FB42B2C
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:05:10 -0700 (PDT)
+Received: from submission (posteo.de [185.67.36.169]) 
+        by mout01.posteo.de (Postfix) with ESMTPS id AFF75240026
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 10:05:08 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.net; s=2017;
+        t=1660205108; bh=uBjOoAjoOE2x/uB83MFmjFqoBdTq+uDcdv7yqd4frS4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ru+9AIOAljZ4b3fVkdp19kyLiAihJ0zKPfcF1B+Rf3fwXKaLxXFddvvL39n1D8+Jc
+         PxFJgZeorWck0Ym2vyRONraZtyZ0PnRRWEt0l6AhdWsBxBWR2l5IiDoKQO4gRDS5cM
+         g6Hz2aU+fdyA4Du/JuiPQ7Q8DAnMcZAK17TbamE2m/LZ8fl5pgwPYu7S3hFcFKW3Tc
+         dLQFCf1nfs7xqn5WndsU5yiMNclcRmDppeZL+Riw+qhCZqIl6o/RzndJgIO2r9JTCD
+         DYWlerU4QpneHE80pr76/jc0bq20sZfu8bP/hiJIt4TXU7nx09TCPnx4V6JEcuf/qJ
+         MuIpMRDKkiVOQ==
+Received: from customer (localhost [127.0.0.1])
+        by submission (posteo.de) with ESMTPSA id 4M3K9H473jz9rxV;
+        Thu, 11 Aug 2022 10:05:07 +0200 (CEST)
+Date:   Thu, 11 Aug 2022 08:05:06 +0000
+From:   Wilken Gottwalt <wilken.gottwalt@posteo.net>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org
+Subject: Re: [PATCH v2] hwmon: corsair-psu: add reporting of rail mode via
+ debugfs
+Message-ID: <20220811100506.4d69b027@posteo.net>
+In-Reply-To: <8beb8ae2-04cd-fa37-5dbe-8d18e6a53f4d@roeck-us.net>
+References: <YvO4cfx12Q9gcmPg@monster.localdomain>
+        <ace70782-777f-ab7c-d190-735f5c65a5e4@roeck-us.net>
+        <20220810185658.6e27d9bd@posteo.net>
+        <bc1d22d1-45b4-7d49-bedd-f0eafdc035cd@roeck-us.net>
+        <20220810194852.78536153@posteo.net>
+        <8beb8ae2-04cd-fa37-5dbe-8d18e6a53f4d@roeck-us.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 1/3] dt-bindings: display/msm: Add binding for SC8280XP
- MDSS
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220811040121.3775613-1-bjorn.andersson@linaro.org>
- <20220811040121.3775613-2-bjorn.andersson@linaro.org>
- <db9b74f9-1f65-5b88-1c81-0a3fd6dcf9a6@linaro.org>
-In-Reply-To: <db9b74f9-1f65-5b88-1c81-0a3fd6dcf9a6@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/08/2022 10:56, Krzysztof Kozlowski wrote:
-> On 11/08/2022 07:01, Bjorn Andersson wrote:
->> Add binding for the display subsystem and display processing unit in the
->> Qualcomm SC8280XP platform.
->>
->> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
->> ---
->>  .../bindings/display/msm/dpu-sc8280xp.yaml    | 284 ++++++++++++++++++
->>  1 file changed, 284 insertions(+)
->>  create mode 100644 Documentation/devicetree/bindings/display/msm/dpu-sc8280xp.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/display/msm/dpu-sc8280xp.yaml b/Documentation/devicetree/bindings/display/msm/dpu-sc8280xp.yaml
->> new file mode 100644
->> index 000000000000..6c25943e639c
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/display/msm/dpu-sc8280xp.yaml
-> 
-> qcom prefix is needed (also when file is in msm subdir)
-> 
-> The file name should be based on compatible, so "qcom,sc8280xp-mdss.yaml"
-> 
->> @@ -0,0 +1,284 @@
->> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/display/msm/dpu-sc8280xp.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Qualcomm Display Processing Unit for SC8280XP
->> +
->> +maintainers:
->> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
->> +
->> +description:
->> +  Device tree bindings for MSM Mobile Display Subsystem (MDSS) that encapsulates
->> +  sub-blocks like DPU display controller, DSI and DP interfaces etc. Device tree
->> +  bindings of MDSS and DPU are mentioned for SC8280XP.
-> 
-> s/Device tree bindings//
-> so just:
-> 
-> SC8280XP MSM Mobile Display Subsystem (MDSS) that encapsulates
-> sub-blocks like DPU display controller, DSI and DP interfaces etc.
-> 
->> +
->> +properties:
->> +  compatible:
->> +    const: qcom,sc8280xp-mdss
->> +
->> +  reg:
->> +    maxItems: 1
->> +
->> +  reg-names:
->> +    const: mdss
-> 
-> You do not need reg names for one item, especially if the name is kind
-> of obvious... unless you re-use existing driver which needs it? Then
-> maybe let's change the driver to take first element?
+On Wed, 10 Aug 2022 11:21:36 -0700
+Guenter Roeck <linux@roeck-us.net> wrote:
 
-OK, I see the driver expects this. It seems it is legacy from
-87729e2a7871 ("drm/msm: unify MDSS drivers") times. So it could be
-changed to grab first element always (older MDSS with three reg items
-still has mdss_phys at first item).
+> On 8/10/22 10:48, Wilken Gottwalt wrote:
+> > On Wed, 10 Aug 2022 10:29:08 -0700
+> > Guenter Roeck <linux@roeck-us.net> wrote:
+> > 
+> >> On 8/10/22 09:56, Wilken Gottwalt wrote:
+> >>> On Wed, 10 Aug 2022 09:31:21 -0700
+> >>> Guenter Roeck <linux@roeck-us.net> wrote:
+> >>>
+> >>>> On 8/10/22 06:53, Wilken Gottwalt wrote:
+> >>>>> Add reporting if the PSU is running in single or multi rail mode via
+> >>>>> ocpmode debugfs entry. Also update the documentation accordingly.
+> >>>>>
+> >>>>> Signed-off-by: Wilken Gottwalt <wilken.gottwalt@posteo.net>
+> >>>>> ---
+> >>>>> Changes in v2:
+> >>>>>      - fixed spelling issues in commit message
+> >>>>
+> >>>> You did not address or even provide feedback on my second comment.
+> >>>
+> >>> Oh darn ... sorry, I was quite busy and didn't really pay attention. I will
+> >>> answer the earlier mail and think about it.
+> >>>
+> >>> Though, maybe you can help me with that what keeps me so busy. Would it be okay
+> >>> to use a kthread in a hwmon driver to do sampling (500ms - 10s) in conjunction
+> >>> with HWMON_C_UPDATE_INTERVAL, or is this a strict no-no? I know it is actually
+> >>> used to set a sample/update rate in a sensor (-register), but this USB-HID
+> >>> approach is a pure polling thing. It seems to work quite and enables the driver
+> >>> to collect data quite early in the boot process.
+> >>>
+> >>
+> >> It really depends. Is it _necessary_ ? The pwm-fan driver uses a timer for
+> >> periodic polling, but that is because it has to. We should not do it purely
+> >> for convenience, and from the code I don't immediately see why it would
+> >> be necessary.
+> > 
+> > Together with the polling I would add encountered lowest and highest values and
+> > the average of basically all available sensors (kind of session statistics). I
+> > know it is a bit odd, but currently these power supplies are sold again in a
+> > newer version and people really like to use them in their servers/workstations
+> > because of the "realtime" data and this driver. No joke, but I really got
+> > several requests to add this and I must admit I have quite some fun implementing
+> > it.
+> > 
+> 
+> That is out of scope for a kernel driver. If desired, a user space application
+> should do the polling and calculate statistics such as lowest/highest or averages.
 
-> 
->> +
->> +  power-domains:
->> +    maxItems: 1
->> +
->> +  clocks:
->> +    items:
->> +      - description: Display AHB clock from gcc
->> +      - description: Display AHB clock from dispcc
->> +      - description: Display core clock
->> +
->> +  clock-names:
->> +    items:
->> +      - const: iface
->> +      - const: ahb
->> +      - const: core
->> +
->> +  interrupts:
->> +    maxItems: 1
->> +
->> +  interrupt-controller: true
->> +
->> +  "#address-cells": true
->> +
->> +  "#size-cells": true
-> 
-> I see other DPU bindings also specify both as "true". Why not a fixed
-> number (const)?
-> 
->> +
->> +  "#interrupt-cells":
->> +    const: 1
->> +
->> +  iommus:
->> +    items:
->> +      - description: Phandle to apps_smmu node with SID mask for Hard-Fail port0
->> +
->> +  ranges: true
->> +
->> +  interconnects:
->> +    minItems: 2
-> 
-> No need for minItems in such case.
-> 
->> +    maxItems: 2
->> +
->> +  interconnect-names:
->> +    items:
->> +      - const: mdp0-mem
->> +      - const: mdp1-mem
->> +
->> +  resets:
->> +    items:
->> +      - description: MDSS_CORE reset
->> +
->> +patternProperties:
->> +  "^display-controller@[0-9a-f]+$":
->> +    type: object
->> +    description: Node containing the properties of DPU.
-> 
-> additionalProperties:false on this level
-> 
-> which will point to missing properties (e.g. opp-table)
+That is exactly what I told the requesting people. Now it is in the public
+record and I hope that kind of requests go down a bit, at least for pushing
+this in the mainline kernel.
 
-I'll fix existing bindings which have similar issue.
-
-
-Best regards,
-Krzysztof
+greetings,
+Wilken

@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 770A258FC62
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 14:34:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A36F258FC67
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 14:35:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235239AbiHKMet (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 08:34:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43830 "EHLO
+        id S235261AbiHKMfy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 08:35:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234669AbiHKMer (ORCPT
+        with ESMTP id S235272AbiHKMfi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 08:34:47 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2073.outbound.protection.outlook.com [40.107.94.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38A7313EA2;
-        Thu, 11 Aug 2022 05:34:33 -0700 (PDT)
+        Thu, 11 Aug 2022 08:35:38 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2066.outbound.protection.outlook.com [40.107.102.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE209B1F1;
+        Thu, 11 Aug 2022 05:35:23 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Oifu4e4yTYZ4H9X6b81kXeLj9tR7veYEJlv9AW0KIimK15Tqm/CDELYeS8k7aggdRoTghxV1Oom9jMzfsAGcyFPgFEzGIl5pJ6oi9PllwBb1uOe8BuhiS28A+rxHT/BqVSOFehM6tEfXLqWkfYfb5vPetSnKtFNnMHH96WsgnWE9005ZYLI+v1yMXHDEdRgBq3m2KY6CwERr3K5YnqfuQT6rJcg4Ii6oR7j6WyIPKOmu76INRHg2/WudVtmsjldpn7AbzUC1hKYT5QrnsOFdEYViTnrdvx4+eoqFxbF3F06eDLCbfEs0itJc1NULnnDoFEkjhouYQHmFAbpFKxDywg==
+ b=JIIbsj/HIah9SecJbuBqX2sk4cs4zfpycmRG0OJZJJFuTzSA3PwgIjU6ZbkF+kWO/0HiHjdxGAZi3sB6vQO/vItSlkCqbtJOCJGPTSJk9c97+jVfRvmWzDZsl0qXcpt2J65KSWr/V0UJyjMwemsjbf2+64nInZI2R37IcHT8WKx0PLCYJ8U/53i6Ynp/55+HKwOcG0M6DEDaMa9DiCZEyUQdekAL5sktpDYIB16cp/PKBHs3lUj9vjbJQhteG2+YfaNLv2fAGBsGXumCvGzatHJK6i1z5fPr7wZZdvdQSfBCN7yvBxItbzMBZ8LQaW4COTM7bNkEUebx5cOnxZ6nYw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=w2nG0q17xE51uFBZ/DKe+LXh7BN3wXbQk5XH6Qe1Hpg=;
- b=eN3n9MauDVRu4MXIsbOhE35fLYEOoFQuV9uxMveo0b3sxS5pt3iBwRBHabbiAtKlcOvcAku3qji0H1SioolxIK97E2/Jr5v3ln5VErZytcHry8C9dfpu43zhgMMJm9aboYX2H2qV4fTG07VaMD/HZqDTFs7qXO73OsSz6Ul17M0SFF92wfZNWfkKUZPQj0UWYfN9ehU8RxjbdEvbIot47z2JlbQE03ogj3FrFabG6SBPVJgY+5vg0Chh9UyX7rHUyDlEj/b5uZn9sPEuQY6xtXypOsfzJ5PHELdtjiRqJr6fyP0QEt9t19/TSGle6ra+TbRHEh48yPRuNW3of7RTqw==
+ bh=ktCkq4RksL6s63xNn8wN9/EKhsCeFjP0+cY2Mcf2TZo=;
+ b=JqdhM+kDIgJK3Cn/nAN7h8jkXOf3JcuG2SNkZKYQ5N5dr3KWfwY3o7jIdsx+NAYGAhr3AxxdT5FYtkkLp74l3e3BnqWBP2IClNleBSQJrDsUhtJDa3gJzKFststdT4QbNfhpHkJqpWi8ylwSWYy2GY1sOv2/IyvOE4RQnGBBkQ9ClinSgp0CpIwIlGt+UM3t+re53fNmVl/FwSaph44//xnRqoD2x7yZy4KkoFGh+rslFs094wpq/DFL62k/ZzK9CE/FIyyt9V4b9BQDTOU+TFD8JbjQS5dPZ2Fg2cGbjLmsRKvmiEO2/yYkUaQQPfQHK+b11ZqtvNZGfqqGqwcXvQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=w2nG0q17xE51uFBZ/DKe+LXh7BN3wXbQk5XH6Qe1Hpg=;
- b=11uZvbxAgO2ypBKK6Or8bZqVkiRANkE8poSkUmd0jxwCg+T5Sp96D1Ehge+j9btuTmdDjqsN6Zi5jxzQ3Zbd9LtvH30zVOlG+CY08DuBBbiDxhg+iZwzNfvXOLf+uPHhXFR9N3+D2TX0Kjzwjs9geFpIhiDXQafwgDSOXGIv4Ao=
-Received: from MW4PR04CA0218.namprd04.prod.outlook.com (2603:10b6:303:87::13)
- by MN2PR12MB4335.namprd12.prod.outlook.com (2603:10b6:208:1d4::13) with
+ bh=ktCkq4RksL6s63xNn8wN9/EKhsCeFjP0+cY2Mcf2TZo=;
+ b=hemKoF9yUBqo1HH7plk3mlyjtjlAR9bUawm8hpwKylXDF9kj7NQivuveOXKjOEFacJyeXpFIE3LpVNX+lm6vM0d9Pr/qhvYsK7OcIGbBm9JG0nhoiVW8wsEhrn8cDHHd1sYTz+RHti6ln5SeXZLlsJg9HczCcKg5McGftDX6JLo=
+Received: from MW4PR04CA0256.namprd04.prod.outlook.com (2603:10b6:303:88::21)
+ by PH7PR12MB5594.namprd12.prod.outlook.com (2603:10b6:510:134::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.10; Thu, 11 Aug
- 2022 12:34:31 +0000
-Received: from CO1NAM11FT008.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:87:cafe::a1) by MW4PR04CA0218.outlook.office365.com
- (2603:10b6:303:87::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.20 via Frontend
- Transport; Thu, 11 Aug 2022 12:34:30 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.20; Thu, 11 Aug
+ 2022 12:35:21 +0000
+Received: from CO1NAM11FT031.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:88:cafe::fc) by MW4PR04CA0256.outlook.office365.com
+ (2603:10b6:303:88::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.16 via Frontend
+ Transport; Thu, 11 Aug 2022 12:35:20 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -47,13 +47,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT008.mail.protection.outlook.com (10.13.175.191) with Microsoft SMTP
+ CO1NAM11FT031.mail.protection.outlook.com (10.13.174.118) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5525.11 via Frontend Transport; Thu, 11 Aug 2022 12:34:30 +0000
+ 15.20.5525.11 via Frontend Transport; Thu, 11 Aug 2022 12:35:20 +0000
 Received: from sindhu.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 11 Aug
- 2022 07:34:24 -0500
+ 2022 07:34:43 -0500
 From:   Sandipan Das <sandipan.das@amd.com>
 To:     <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
         <x86@kernel.org>
@@ -65,9 +65,9 @@ CC:     <peterz@infradead.org>, <bp@alien8.de>, <acme@kernel.org>,
         <eranian@google.com>, <ananth.narayan@amd.com>,
         <ravi.bangoria@amd.com>, <santosh.shukla@amd.com>,
         <sandipan.das@amd.com>
-Subject: [PATCH 06/13] perf/x86/amd/lbr: Add LbrExtV2 branch record support
-Date:   Thu, 11 Aug 2022 17:59:54 +0530
-Message-ID: <d3b8500a3627a0d4d0259b005891ee248f248d91.1660211399.git.sandipan.das@amd.com>
+Subject: [PATCH 07/13] perf/x86/amd/lbr: Add LbrExtV2 hardware branch filter support
+Date:   Thu, 11 Aug 2022 17:59:55 +0530
+Message-ID: <9336af5c9785b8e14c62220fc0e6cfb10ab97de3.1660211399.git.sandipan.das@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1660211399.git.sandipan.das@amd.com>
 References: <cover.1660211399.git.sandipan.das@amd.com>
@@ -79,23 +79,23 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: dc7e9389-a813-4b73-3990-08da7b95d66f
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4335:EE_
+X-MS-Office365-Filtering-Correlation-Id: ba06bbe7-b9e6-4c5b-2ee8-08da7b95f468
+X-MS-TrafficTypeDiagnostic: PH7PR12MB5594:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: r0K7wx0GJgrXx/WEKPA3pTK5Y9PKuoEBiDl8gtNMdmdD2YuXTWG59ZDarxBjr2oDPUqIvkcthjfh67I7sAikVFIlx36Ix6CXL2gt4LVaiWVleVWl9smaII7zeLSzSRZaQMM9Yt0fBqb6hRBcl7I+ZutBkcVrNItOpdTQOFVQI3lLSoVYbfcSYifkZJ74iG+gLNXguIVBmsmLgHO4Z03qNkBGkQW608zQG8+MhlXEccHGYXKPFpB/Ozk6qRyrbSdljKDx77xMrhApQR0jBqr+w99wRwSUKW4ng+CcHuPNDB+hBGQyUaNh5rvrEfKA/liIPgCMWVIIoLaJlC/IaJI5JTOUz1//8B9Z2ILbk7jOEqm66C5lGmZjNsK8mV80NdtGAwWiQON0pLz3U4TapUlWCK+oTACv6vJy/rMJXZ6DYjpJNsjrtLNbvoWjFuw2pzvmrxpGcZjetLLvdjXte0VGafLUCs1F/X/pb8mur2fa6Hu6pzzjW39fGRZI+uQbAv28yXMV310wmnnIwdMJXJeTgkMhXiFMiKxgev39XhAwiRLfnV1zAg7aek02HVXlwTvMY6kvxbKHGaWwHOESgUQuk7pT1gx4e1nUmMj9GPpc9lhGoiYbQCy92IOJ6FbMlk5dGK0VwsSf3o7PxkA6fqO8YjsbYuBzBUupHlIVhOt6yvvExsrr5h11CHGpDtGJUAIE/2kuEONP7oeLrMCdOO69gsTJZS9fgSRPcwgojJLVENnv/C3LRl8yWHcDqKD86zUhLoXp1ZxX94E5VCkubJqb6bYFJNZLuIPgWHAzCB8I3w5SeG85nCnwLs9y59eoj4kgQGfnmYwQbJEUlJdTAgPxXg==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(346002)(396003)(136003)(376002)(40470700004)(46966006)(36840700001)(316002)(7416002)(356005)(41300700001)(70206006)(8676002)(2906002)(70586007)(7696005)(26005)(4326008)(30864003)(6666004)(82740400003)(82310400005)(81166007)(44832011)(5660300002)(16526019)(186003)(36756003)(47076005)(336012)(426003)(83380400001)(86362001)(478600001)(40460700003)(8936002)(40480700001)(54906003)(110136005)(36860700001)(2616005)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: wKfkXx5ENN6vfqaYdjxsGhVc61zDciL9gH3uwMEyjir2xzGKycUI9evd/fqZ4e3rx5st6Od9y6sI038+nZx6plj11BHyzSzrOgL6lroUW1T+a9t7ASs3k6Fo5xkiSCVAdPdqjC6XXEYyQ2e/0qtJf3qSg3xYNbgzMFURrMVIOcyuIsc5Cr0q7fFXuYf5QG80UJv33dgA3oDVBatZlX955KQ91yYCxHy2p6GqtAHmzUcBhbA81Eyc0rr07EfY5+eXfJI89WvUDXV1cvD7DHV2vOENM//wX8eCZnL9j8Sxynpe3STWPQRjyDWe00+y3N1kH/zWR3H/J5EMuRvsD5N3AZuU1uY9A+Y6rlYMvVwRg8N1TOi8ez261/z8pkJO7sx4/fkjJel/cJjdGorh+nHchGGdYT6OiWidv4Z8/pvXEgAdIv6wBQcnbS7vgIwONOa3KPn1XTsN9Hcys1VGZxK+BTB1KhdxtBKuINyVGSGhEAf5AtRol88ZNkB/GQh881dMzDxYdSyGV2WJdRuki7U2OHvt/owuUktE+lKCino2m7wskNhBU9i/gdgTJ1t+Pl2r1JA006xGKDGx1BNYGBWThEWRyiPI3EuMDlp3aYk9Vmn0UWjwxmDRkz7j3nVFSNuXYdek/sEqy+7IsEyLrG7MxT5u0pgXgo1uOrvQCalE7GkRT5qOI2ZbVx972z2B4LcB7YsIJQQFETI/LtukWh6/ruRgMIU+8aiqRaAfqJPlOL+jyzScrYvK0jBPIm0vprW0yNIDsGyPPmDjGhvZegXpZ33sXZu9jYMOp4emfRquZ9q8bLr5yxYvU2LQ9jlQobL7CkkEV63bRmOdzqaJS2ukOw==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(396003)(346002)(136003)(39860400002)(376002)(46966006)(40470700004)(36840700001)(54906003)(70206006)(36860700001)(186003)(4326008)(82740400003)(5660300002)(7416002)(316002)(8676002)(82310400005)(40460700003)(44832011)(8936002)(36756003)(70586007)(110136005)(478600001)(26005)(16526019)(426003)(336012)(41300700001)(7696005)(6666004)(47076005)(2906002)(2616005)(356005)(81166007)(83380400001)(86362001)(40480700001)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Aug 2022 12:34:30.2428
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Aug 2022 12:35:20.5283
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: dc7e9389-a813-4b73-3990-08da7b95d66f
+X-MS-Exchange-CrossTenant-Network-Message-Id: ba06bbe7-b9e6-4c5b-2ee8-08da7b95f468
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT008.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT031.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4335
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB5594
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -107,414 +107,229 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 If AMD Last Branch Record Extension Version 2 (LbrExtV2) is detected,
-enable it alongside LBR Freeze on PMI when an event requests branch stack
-i.e. PERF_SAMPLE_BRANCH_STACK.
+convert the requested branch filter (PERF_SAMPLE_BRANCH_* flags) to the
+corresponding hardware filter value and stash it in the event data when
+a branch stack is requested. The hardware filter value is also saved in
+per-CPU areas for use during event scheduling.
 
-Each branch record is represented by a pair of registers, LBR From and LBR
-To. The freeze feature prevents any updates to these registers once a PMC
-overflows. The contents remain unchanged until the freeze bit is cleared by
-the PMI handler.
+Hardware filtering is provided by the LBR Branch Select register. It has
+bits which when set, suppress recording of the following types of branches:
 
-The branch records are read and copied to sample data before unfreezing.
-However, only valid entries are copied. There is no additional register to
-denote which of the register pairs represent the top of the stack (TOS)
-since internal register renaming always ensures that the first pair (i.e.
-index 0) is the one representing the most recent branch and so on.
-
-The LBR registers are per-thread resources and are cleared explicitly
-whenever a new task is scheduled in. There are no special implications on
-the contents of these registers when transitioning to deep C-states.
+  * CPL = 0 (Kernel only)
+  * CPL > 0 (Userspace only)
+  * Conditional Branches
+  * Near Relative Calls
+  * Near Indirect Calls
+  * Near Returns
+  * Near Indirect Jumps (excluding Near Indirect Calls and Near Returns)
+  * Near Relative Jumps (excluding Near Relative Calls)
+  * Far Branches
 
 Signed-off-by: Sandipan Das <sandipan.das@amd.com>
 ---
- arch/x86/events/amd/core.c       |  47 +++++--
- arch/x86/events/amd/lbr.c        | 203 +++++++++++++++++++++++++++++++
- arch/x86/events/perf_event.h     |   8 ++
- arch/x86/include/asm/msr-index.h |   5 +
- 4 files changed, 252 insertions(+), 11 deletions(-)
+ arch/x86/events/amd/core.c | 21 ++++++---
+ arch/x86/events/amd/lbr.c  | 94 +++++++++++++++++++++++++++++++++++++-
+ 2 files changed, 108 insertions(+), 7 deletions(-)
 
 diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
-index a3aa67b4fd50..d799628016c8 100644
+index d799628016c8..36bede1d7b1e 100644
 --- a/arch/x86/events/amd/core.c
 +++ b/arch/x86/events/amd/core.c
-@@ -620,7 +620,7 @@ static inline u64 amd_pmu_get_global_status(void)
- 	/* PerfCntrGlobalStatus is read-only */
- 	rdmsrl(MSR_AMD64_PERF_CNTR_GLOBAL_STATUS, status);
- 
--	return status & amd_pmu_global_cntr_mask;
-+	return status;
- }
- 
- static inline void amd_pmu_ack_global_status(u64 status)
-@@ -631,8 +631,6 @@ static inline void amd_pmu_ack_global_status(u64 status)
- 	 * clears the same bit in PerfCntrGlobalStatus
- 	 */
- 
--	/* Only allow modifications to PerfCntrGlobalStatus.PerfCntrOvfl */
--	status &= amd_pmu_global_cntr_mask;
- 	wrmsrl(MSR_AMD64_PERF_CNTR_GLOBAL_STATUS_CLR, status);
- }
- 
-@@ -742,11 +740,17 @@ static void amd_pmu_v2_enable_event(struct perf_event *event)
- 	__x86_pmu_enable_event(hwc, ARCH_PERFMON_EVENTSEL_ENABLE);
- }
- 
--static void amd_pmu_v2_enable_all(int added)
-+static __always_inline void amd_pmu_core_enable_all(void)
+@@ -542,16 +542,24 @@ static int amd_pmu_cpu_prepare(int cpu)
  {
- 	amd_pmu_set_global_ctl(amd_pmu_global_cntr_mask);
+ 	struct cpu_hw_events *cpuc = &per_cpu(cpu_hw_events, cpu);
+ 
++	cpuc->lbr_sel = kzalloc_node(sizeof(struct er_account), GFP_KERNEL,
++				     cpu_to_node(cpu));
++	if (!cpuc->lbr_sel)
++		return -ENOMEM;
++
+ 	WARN_ON_ONCE(cpuc->amd_nb);
+ 
+ 	if (!x86_pmu.amd_nb_constraints)
+ 		return 0;
+ 
+ 	cpuc->amd_nb = amd_alloc_nb(cpu);
+-	if (!cpuc->amd_nb)
+-		return -ENOMEM;
++	if (cpuc->amd_nb)
++		return 0;
+ 
+-	return 0;
++	kfree(cpuc->lbr_sel);
++	cpuc->lbr_sel = NULL;
++
++	return -ENOMEM;
  }
  
-+static void amd_pmu_v2_enable_all(int added)
-+{
-+	amd_pmu_lbr_enable_all();
-+	amd_pmu_core_enable_all();
-+}
-+
- static void amd_pmu_disable_event(struct perf_event *event)
+ static void amd_pmu_cpu_starting(int cpu)
+@@ -589,13 +597,14 @@ static void amd_pmu_cpu_starting(int cpu)
+ 
+ static void amd_pmu_cpu_dead(int cpu)
  {
- 	x86_pmu_disable_event(event);
-@@ -771,10 +775,15 @@ static void amd_pmu_disable_all(void)
- 	amd_pmu_check_overflow();
- }
- 
--static void amd_pmu_v2_disable_all(void)
-+static __always_inline void amd_pmu_core_disable_all(void)
- {
--	/* Disable all PMCs */
- 	amd_pmu_set_global_ctl(0);
-+}
+-	struct cpu_hw_events *cpuhw;
++	struct cpu_hw_events *cpuhw = &per_cpu(cpu_hw_events, cpu);
 +
-+static void amd_pmu_v2_disable_all(void)
-+{
-+	amd_pmu_core_disable_all();
-+	amd_pmu_lbr_disable_all();
- 	amd_pmu_check_overflow();
- }
++	kfree(cpuhw->lbr_sel);
++	cpuhw->lbr_sel = NULL;
  
-@@ -877,8 +886,8 @@ static int amd_pmu_v2_handle_irq(struct pt_regs *regs)
- 	pmu_enabled = cpuc->enabled;
- 	cpuc->enabled = 0;
+ 	if (!x86_pmu.amd_nb_constraints)
+ 		return;
  
--	/* Stop counting */
--	amd_pmu_v2_disable_all();
-+	/* Stop counting but do not disable LBR */
-+	amd_pmu_core_disable_all();
+-	cpuhw = &per_cpu(cpu_hw_events, cpu);
+-
+ 	if (cpuhw->amd_nb) {
+ 		struct amd_nb *nb = cpuhw->amd_nb;
  
- 	status = amd_pmu_get_global_status();
- 
-@@ -886,6 +895,12 @@ static int amd_pmu_v2_handle_irq(struct pt_regs *regs)
- 	if (!status)
- 		goto done;
- 
-+	/* Read branch records before unfreezing */
-+	if (status & GLOBAL_STATUS_LBRS_FROZEN) {
-+		amd_pmu_lbr_read();
-+		status &= ~GLOBAL_STATUS_LBRS_FROZEN;
-+	}
-+
- 	for (idx = 0; idx < x86_pmu.num_counters; idx++) {
- 		if (!test_bit(idx, cpuc->active_mask))
- 			continue;
-@@ -905,6 +920,9 @@ static int amd_pmu_v2_handle_irq(struct pt_regs *regs)
- 		if (!x86_perf_event_set_period(event))
- 			continue;
- 
-+		if (has_branch_stack(event))
-+			data.br_stack = &cpuc->lbr_stack;
-+
- 		if (perf_event_overflow(event, &data, regs))
- 			x86_pmu_stop(event, 0);
- 
-@@ -918,7 +936,7 @@ static int amd_pmu_v2_handle_irq(struct pt_regs *regs)
- 	 */
- 	WARN_ON(status > 0);
- 
--	/* Clear overflow bits */
-+	/* Clear overflow and freeze bits */
- 	amd_pmu_ack_global_status(~status);
- 
- 	/*
-@@ -932,7 +950,7 @@ static int amd_pmu_v2_handle_irq(struct pt_regs *regs)
- 
- 	/* Resume counting only if PMU is active */
- 	if (pmu_enabled)
--		amd_pmu_v2_enable_all(0);
-+		amd_pmu_core_enable_all();
- 
- 	return amd_pmu_adjust_nmi_window(handled);
- }
-@@ -1375,7 +1393,14 @@ static int __init amd_core_pmu_init(void)
- 	}
- 
- 	/* LBR and BRS are mutually exclusive features */
--	if (amd_pmu_lbr_init() && !amd_brs_init()) {
-+	if (!amd_pmu_lbr_init()) {
-+		/* LBR requires flushing on context switch */
-+		x86_pmu.sched_task = amd_pmu_lbr_sched_task;
-+		static_call_update(amd_pmu_branch_hw_config, amd_pmu_lbr_hw_config);
-+		static_call_update(amd_pmu_branch_reset, amd_pmu_lbr_reset);
-+		static_call_update(amd_pmu_branch_add, amd_pmu_lbr_add);
-+		static_call_update(amd_pmu_branch_del, amd_pmu_lbr_del);
-+	} else if (!amd_brs_init()) {
- 		/*
- 		 * BRS requires special event constraints and flushing on ctxsw.
- 		 */
 diff --git a/arch/x86/events/amd/lbr.c b/arch/x86/events/amd/lbr.c
-index d240ff722b78..39247e7be53c 100644
+index 39247e7be53c..064a6c8e1597 100644
 --- a/arch/x86/events/amd/lbr.c
 +++ b/arch/x86/events/amd/lbr.c
-@@ -4,6 +4,209 @@
+@@ -4,6 +4,39 @@
  
  #include "../perf_event.h"
  
-+struct branch_entry {
-+	union {
-+		struct {
-+			u64	ip:58;
-+			u64	ip_sign_ext:5;
-+			u64	mispredict:1;
-+		} split;
-+		u64		full;
-+	} from;
++/* LBR Branch Select valid bits */
++#define LBR_SELECT_MASK		0x1ff
 +
-+	union {
-+		struct {
-+			u64	ip:58;
-+			u64	ip_sign_ext:3;
-+			u64	reserved:1;
-+			u64	spec:1;
-+			u64	valid:1;
-+		} split;
-+		u64		full;
-+	} to;
++/*
++ * LBR Branch Select filter bits which when set, ensures that the
++ * corresponding type of branches are not recorded
++ */
++#define LBR_SELECT_KERNEL		0	/* Branches ending in CPL = 0 */
++#define LBR_SELECT_USER			1	/* Branches ending in CPL > 0 */
++#define LBR_SELECT_JCC			2	/* Conditional branches */
++#define LBR_SELECT_CALL_NEAR_REL	3	/* Near relative calls */
++#define LBR_SELECT_CALL_NEAR_IND	4	/* Indirect relative calls */
++#define LBR_SELECT_RET_NEAR		5	/* Near returns */
++#define LBR_SELECT_JMP_NEAR_IND		6	/* Near indirect jumps (excl. calls and returns) */
++#define LBR_SELECT_JMP_NEAR_REL		7	/* Near relative jumps (excl. calls) */
++#define LBR_SELECT_FAR_BRANCH		8	/* Far branches */
++
++#define LBR_KERNEL	BIT(LBR_SELECT_KERNEL)
++#define LBR_USER	BIT(LBR_SELECT_USER)
++#define LBR_JCC		BIT(LBR_SELECT_JCC)
++#define LBR_REL_CALL	BIT(LBR_SELECT_CALL_NEAR_REL)
++#define LBR_IND_CALL	BIT(LBR_SELECT_CALL_NEAR_IND)
++#define LBR_RETURN	BIT(LBR_SELECT_RET_NEAR)
++#define LBR_REL_JMP	BIT(LBR_SELECT_JMP_NEAR_REL)
++#define LBR_IND_JMP	BIT(LBR_SELECT_JMP_NEAR_IND)
++#define LBR_FAR		BIT(LBR_SELECT_FAR_BRANCH)
++#define LBR_NOT_SUPP	-1	/* unsupported filter */
++#define LBR_IGNORE	0
++
++#define LBR_ANY		\
++	(LBR_JCC | LBR_REL_CALL | LBR_IND_CALL | LBR_RETURN |	\
++	 LBR_REL_JMP | LBR_IND_JMP | LBR_FAR)
++
+ struct branch_entry {
+ 	union {
+ 		struct {
+@@ -97,12 +130,56 @@ void amd_pmu_lbr_read(void)
+ 	cpuc->lbr_stack.hw_idx = 0;
+ }
+ 
++static const int lbr_select_map[PERF_SAMPLE_BRANCH_MAX_SHIFT] = {
++	[PERF_SAMPLE_BRANCH_USER_SHIFT]		= LBR_USER,
++	[PERF_SAMPLE_BRANCH_KERNEL_SHIFT]	= LBR_KERNEL,
++	[PERF_SAMPLE_BRANCH_HV_SHIFT]		= LBR_IGNORE,
++
++	[PERF_SAMPLE_BRANCH_ANY_SHIFT]		= LBR_ANY,
++	[PERF_SAMPLE_BRANCH_ANY_CALL_SHIFT]	= LBR_REL_CALL | LBR_IND_CALL,
++	[PERF_SAMPLE_BRANCH_ANY_RETURN_SHIFT]	= LBR_RETURN,
++	[PERF_SAMPLE_BRANCH_IND_CALL_SHIFT]	= LBR_IND_CALL,
++	[PERF_SAMPLE_BRANCH_ABORT_TX_SHIFT]	= LBR_NOT_SUPP,
++	[PERF_SAMPLE_BRANCH_IN_TX_SHIFT]	= LBR_NOT_SUPP,
++	[PERF_SAMPLE_BRANCH_NO_TX_SHIFT]	= LBR_NOT_SUPP,
++	[PERF_SAMPLE_BRANCH_COND_SHIFT]		= LBR_JCC,
++
++	[PERF_SAMPLE_BRANCH_CALL_STACK_SHIFT]	= LBR_NOT_SUPP,
++	[PERF_SAMPLE_BRANCH_IND_JUMP_SHIFT]	= LBR_IND_JMP,
++	[PERF_SAMPLE_BRANCH_CALL_SHIFT]		= LBR_REL_CALL,
++
++	[PERF_SAMPLE_BRANCH_NO_FLAGS_SHIFT]	= LBR_NOT_SUPP,
++	[PERF_SAMPLE_BRANCH_NO_CYCLES_SHIFT]	= LBR_NOT_SUPP,
++
++	[PERF_SAMPLE_BRANCH_TYPE_SAVE_SHIFT]	= LBR_NOT_SUPP,
 +};
 +
-+static __always_inline void amd_pmu_lbr_set_from(unsigned int idx, u64 val)
-+{
-+	wrmsrl(MSR_AMD_SAMP_BR_FROM + idx * 2, val);
-+}
-+
-+static __always_inline void amd_pmu_lbr_set_to(unsigned int idx, u64 val)
-+{
-+	wrmsrl(MSR_AMD_SAMP_BR_FROM + idx * 2 + 1, val);
-+}
-+
-+static __always_inline u64 amd_pmu_lbr_get_from(unsigned int idx)
-+{
-+	u64 val;
-+
-+	rdmsrl(MSR_AMD_SAMP_BR_FROM + idx * 2, val);
-+
-+	return val;
-+}
-+
-+static __always_inline u64 amd_pmu_lbr_get_to(unsigned int idx)
-+{
-+	u64 val;
-+
-+	rdmsrl(MSR_AMD_SAMP_BR_FROM + idx * 2 + 1, val);
-+
-+	return val;
-+}
-+
-+static __always_inline u64 sign_ext_branch_ip(u64 ip)
-+{
-+	u32 shift = 64 - boot_cpu_data.x86_virt_bits;
-+
-+	return (u64)(((s64)ip << shift) >> shift);
-+}
-+
-+void amd_pmu_lbr_read(void)
-+{
-+	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
-+	struct perf_branch_entry *br = cpuc->lbr_entries;
-+	struct branch_entry entry;
-+	int out = 0, i;
-+
-+	if (!cpuc->lbr_users)
-+		return;
-+
-+	for (i = 0; i < x86_pmu.lbr_nr; i++) {
-+		entry.from.full	= amd_pmu_lbr_get_from(i);
-+		entry.to.full	= amd_pmu_lbr_get_to(i);
-+
-+		/* Check if a branch has been logged */
-+		if (!entry.to.split.valid)
-+			continue;
-+
-+		perf_clear_branch_entry_bitfields(br + out);
-+
-+		br[out].from	= sign_ext_branch_ip(entry.from.split.ip);
-+		br[out].to	= sign_ext_branch_ip(entry.to.split.ip);
-+		br[out].mispred	= entry.from.split.mispredict;
-+		br[out].predicted = !br[out].mispred;
-+		out++;
-+	}
-+
-+	cpuc->lbr_stack.nr = out;
-+
-+	/*
-+	 * Internal register renaming always ensures that LBR From[0] and
-+	 * LBR To[0] always represent the TOS
-+	 */
-+	cpuc->lbr_stack.hw_idx = 0;
-+}
-+
-+static int amd_pmu_lbr_setup_filter(struct perf_event *event)
-+{
-+	/* No LBR support */
-+	if (!x86_pmu.lbr_nr)
-+		return -EOPNOTSUPP;
-+
-+	return 0;
-+}
-+
-+int amd_pmu_lbr_hw_config(struct perf_event *event)
-+{
-+	int ret = 0;
-+
-+	/* LBR is not recommended in counting mode */
-+	if (!is_sampling_event(event))
-+		return -EINVAL;
-+
-+	ret = amd_pmu_lbr_setup_filter(event);
-+	if (!ret)
-+		event->attach_state |= PERF_ATTACH_SCHED_CB;
-+
-+	return ret;
-+}
-+
-+void amd_pmu_lbr_reset(void)
-+{
-+	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+ static int amd_pmu_lbr_setup_filter(struct perf_event *event)
+ {
++	struct hw_perf_event_extra *reg = &event->hw.branch_reg;
++	u64 br_type = event->attr.branch_sample_type;
++	u64 mask = 0, v;
 +	int i;
 +
-+	if (!x86_pmu.lbr_nr)
-+		return;
+ 	/* No LBR support */
+ 	if (!x86_pmu.lbr_nr)
+ 		return -EOPNOTSUPP;
+ 
++	for (i = 0; i < PERF_SAMPLE_BRANCH_MAX_SHIFT; i++) {
++		if (!(br_type & BIT_ULL(i)))
++			continue;
 +
-+	/* Reset all branch records individually */
-+	for (i = 0; i < x86_pmu.lbr_nr; i++) {
-+		amd_pmu_lbr_set_from(i, 0);
-+		amd_pmu_lbr_set_to(i, 0);
++		v = lbr_select_map[i];
++		if (v == LBR_NOT_SUPP)
++			return -EOPNOTSUPP;
++
++		if (v != LBR_IGNORE)
++			mask |= v;
 +	}
 +
-+	cpuc->last_task_ctx = NULL;
-+	cpuc->last_log_id = 0;
-+}
++	/* Filter bits operate in suppress mode */
++	reg->config = mask ^ LBR_SELECT_MASK;
 +
-+void amd_pmu_lbr_add(struct perf_event *event)
-+{
-+	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+ 	return 0;
+ }
+ 
+@@ -137,6 +214,7 @@ void amd_pmu_lbr_reset(void)
+ 
+ 	cpuc->last_task_ctx = NULL;
+ 	cpuc->last_log_id = 0;
++	wrmsrl(MSR_AMD64_LBR_SELECT, 0);
+ }
+ 
+ void amd_pmu_lbr_add(struct perf_event *event)
+@@ -146,6 +224,11 @@ void amd_pmu_lbr_add(struct perf_event *event)
+ 	if (!x86_pmu.lbr_nr)
+ 		return;
+ 
++	if (has_branch_stack(event)) {
++		cpuc->lbr_select = 1;
++		cpuc->lbr_sel->config = event->hw.branch_reg.config;
++	}
 +
-+	if (!x86_pmu.lbr_nr)
-+		return;
+ 	perf_sched_cb_inc(event->ctx->pmu);
+ 
+ 	if (!cpuc->lbr_users++ && !event->total_time_running)
+@@ -159,6 +242,9 @@ void amd_pmu_lbr_del(struct perf_event *event)
+ 	if (!x86_pmu.lbr_nr)
+ 		return;
+ 
++	if (has_branch_stack(event))
++		cpuc->lbr_select = 0;
 +
-+	perf_sched_cb_inc(event->ctx->pmu);
-+
-+	if (!cpuc->lbr_users++ && !event->total_time_running)
-+		amd_pmu_lbr_reset();
-+}
-+
-+void amd_pmu_lbr_del(struct perf_event *event)
-+{
-+	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
-+
-+	if (!x86_pmu.lbr_nr)
-+		return;
-+
-+	cpuc->lbr_users--;
-+	WARN_ON_ONCE(cpuc->lbr_users < 0);
-+	perf_sched_cb_dec(event->ctx->pmu);
-+}
-+
-+void amd_pmu_lbr_sched_task(struct perf_event_context *ctx, bool sched_in)
-+{
-+	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
-+
-+	/*
-+	 * A context switch can flip the address space and LBR entries are
-+	 * not tagged with an identifier. Hence, branches cannot be resolved
-+	 * from the old address space and the LBR records should be wiped.
-+	 */
-+	if (cpuc->lbr_users && sched_in)
-+		amd_pmu_lbr_reset();
-+}
-+
-+void amd_pmu_lbr_enable_all(void)
-+{
-+	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
-+	u64 dbg_ctl, dbg_extn_cfg;
-+
-+	if (!cpuc->lbr_users || !x86_pmu.lbr_nr)
-+		return;
-+
-+	rdmsrl(MSR_IA32_DEBUGCTLMSR, dbg_ctl);
-+	rdmsrl(MSR_AMD_DBG_EXTN_CFG, dbg_extn_cfg);
-+
-+	wrmsrl(MSR_IA32_DEBUGCTLMSR, dbg_ctl | DEBUGCTLMSR_FREEZE_LBRS_ON_PMI);
-+	wrmsrl(MSR_AMD_DBG_EXTN_CFG, dbg_extn_cfg | DBG_EXTN_CFG_LBRV2EN);
-+}
-+
-+void amd_pmu_lbr_disable_all(void)
-+{
-+	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
-+	u64 dbg_ctl, dbg_extn_cfg;
-+
-+	if (!cpuc->lbr_users || !x86_pmu.lbr_nr)
-+		return;
-+
-+	rdmsrl(MSR_AMD_DBG_EXTN_CFG, dbg_extn_cfg);
-+	rdmsrl(MSR_IA32_DEBUGCTLMSR, dbg_ctl);
-+
-+	wrmsrl(MSR_AMD_DBG_EXTN_CFG, dbg_extn_cfg & ~DBG_EXTN_CFG_LBRV2EN);
-+	wrmsrl(MSR_IA32_DEBUGCTLMSR, dbg_ctl & ~DEBUGCTLMSR_FREEZE_LBRS_ON_PMI);
-+}
-+
- __init int amd_pmu_lbr_init(void)
+ 	cpuc->lbr_users--;
+ 	WARN_ON_ONCE(cpuc->lbr_users < 0);
+ 	perf_sched_cb_dec(event->ctx->pmu);
+@@ -180,11 +266,17 @@ void amd_pmu_lbr_sched_task(struct perf_event_context *ctx, bool sched_in)
+ void amd_pmu_lbr_enable_all(void)
  {
- 	union cpuid_0x80000022_ebx ebx;
-diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
-index a6cd83c57e8b..c8397290f388 100644
---- a/arch/x86/events/perf_event.h
-+++ b/arch/x86/events/perf_event.h
-@@ -1231,6 +1231,14 @@ static inline bool fixed_counter_disabled(int i, struct pmu *pmu)
- int amd_pmu_init(void);
+ 	struct cpu_hw_events *cpuc = this_cpu_ptr(&cpu_hw_events);
+-	u64 dbg_ctl, dbg_extn_cfg;
++	u64 lbr_select, dbg_ctl, dbg_extn_cfg;
  
- int amd_pmu_lbr_init(void);
-+void amd_pmu_lbr_reset(void);
-+void amd_pmu_lbr_read(void);
-+void amd_pmu_lbr_add(struct perf_event *event);
-+void amd_pmu_lbr_del(struct perf_event *event);
-+void amd_pmu_lbr_sched_task(struct perf_event_context *ctx, bool sched_in);
-+void amd_pmu_lbr_enable_all(void);
-+void amd_pmu_lbr_disable_all(void);
-+int amd_pmu_lbr_hw_config(struct perf_event *event);
+ 	if (!cpuc->lbr_users || !x86_pmu.lbr_nr)
+ 		return;
  
- #ifdef CONFIG_PERF_EVENTS_AMD_BRS
- 
-diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-index 403e83b4adc8..440d0490f71e 100644
---- a/arch/x86/include/asm/msr-index.h
-+++ b/arch/x86/include/asm/msr-index.h
-@@ -539,6 +539,9 @@
- #define MSR_AMD64_PERF_CNTR_GLOBAL_CTL		0xc0000301
- #define MSR_AMD64_PERF_CNTR_GLOBAL_STATUS_CLR	0xc0000302
- 
-+/* AMD Last Branch Record MSRs */
-+#define MSR_AMD64_LBR_SELECT			0xc000010e
++	/* Set hardware branch filter */
++	if (cpuc->lbr_select) {
++		lbr_select = cpuc->lbr_sel->config & LBR_SELECT_MASK;
++		wrmsrl(MSR_AMD64_LBR_SELECT, lbr_select);
++	}
 +
- /* Fam 17h MSRs */
- #define MSR_F17H_IRPERF			0xc00000e9
- 
-@@ -707,6 +710,8 @@
- #define MSR_AMD_DBG_EXTN_CFG		0xc000010f
- #define MSR_AMD_SAMP_BR_FROM		0xc0010300
- 
-+#define DBG_EXTN_CFG_LBRV2EN		BIT_ULL(6)
-+
- #define MSR_IA32_MPERF			0x000000e7
- #define MSR_IA32_APERF			0x000000e8
+ 	rdmsrl(MSR_IA32_DEBUGCTLMSR, dbg_ctl);
+ 	rdmsrl(MSR_AMD_DBG_EXTN_CFG, dbg_extn_cfg);
  
 -- 
 2.34.1

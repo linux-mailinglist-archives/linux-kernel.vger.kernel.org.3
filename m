@@ -2,185 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59839590673
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 20:47:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDBFF590665
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 20:47:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235820AbiHKSjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 14:39:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46954 "EHLO
+        id S235838AbiHKSlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 14:41:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235721AbiHKSjb (ORCPT
+        with ESMTP id S235595AbiHKSlc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 14:39:31 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9602594EF7
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 11:39:28 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id z20so20176801ljq.3
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 11:39:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=uknUURtTflTbQ0gGtXa6dIUydyF1mi0HrKwpU5X0dRk=;
-        b=YXoXLAzBSz8OdrWcHCDDkhCNBRWKN5NiX8gPHmU+9yseVsP5YoszwIF1rg0pbrQ5xf
-         peyfnkEKdmld8A3zk6kBFlMgaOKYe0DyBgVIMjvj2HgW3jREWU5T3u6ri8aGmF2yyWPp
-         tOWubduW5HGIsenv44TykOYICvcA3O99J1vNlBlh0tzsDyZYBUAdR6y8VWZJ8IyWy3a2
-         Y6XqDr85iUvT1UPpsh9/M2hYA7bJO5ueruWL2v7dWANn84+1W8kxg//M03Y/Df7EkXnB
-         smtD4NdOgDF3QwzhzoLZhfbFhL16YL011jcxfSZecBJ08PvXnqhg8Whu5WpopdkZSNjF
-         yCsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=uknUURtTflTbQ0gGtXa6dIUydyF1mi0HrKwpU5X0dRk=;
-        b=CAN8B3vuSgKdkCB1tMyAq2XW3gxmLOA6VL9Hxr8cFRttdv8XAkfx7/fcVwlUv0MAHp
-         le9uz6h5KGUOTYjVJFrXW21nh+ePUTP+DPNSfXImnzqWNc8pVPLQwXjVcn+tdzf3JYfx
-         6Fmry3fC514XVXzHpTxMruzmhXvEVHnZOVLULqgUXfbdxDdIgv/YFHsYLH/LuN4Xgj/X
-         vgMcxchEOpoj4Rh5a8eEsVx2bAwr4o4VurcUXg916eSuxSNct5K7oNM6FtcyhzFr/W+e
-         HrmG9BHQEfsKdM6CqHbkhdVm4zINtLmkMgdNr5lfk8VjmgpFDe8MiJU7oi3W2qS/0RIu
-         i81Q==
-X-Gm-Message-State: ACgBeo0kt9mgX13dFg6Z4Qxy2BSILxTEfVcY3Av5Z8unFBX8Ech1jdGk
-        GNKQwssqGqlwNyOK/0/eCP7/gqiwjJrLpGnsJ2E7uw==
-X-Google-Smtp-Source: AA6agR7XTTaYi8RLnWWf+Naws8X6HS7OihvdTEknJwY4+WIdMldKbmojcTo1NXA7a4F4Z7AsGY1sMmTBAZ9HtrhSm/4=
-X-Received: by 2002:a2e:b5aa:0:b0:261:70f3:fd58 with SMTP id
- f10-20020a2eb5aa000000b0026170f3fd58mr138561ljn.295.1660243166694; Thu, 11
- Aug 2022 11:39:26 -0700 (PDT)
+        Thu, 11 Aug 2022 14:41:32 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 649367AC31
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 11:41:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660243290; x=1691779290;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=X6sZSNUzLXhRh57Cnx/Z0lXWANXXB4fzoKtBRTg8hB0=;
+  b=HWMgOLSwIK5vhMVbhgzaDtakACODVCeoFo2Ie0kOrWc4ZTSXqRkPTKgl
+   cmlUWuytK5xFjL18tFM1SGfqfrZueap/F0Hdq8Yct+l9QdTGZKvjyseCE
+   7vUvENgLRr823PYS3tXLbNQTFobIFKrgyD97EK9wVz0TRmFWHvJKx8znZ
+   zBU6Uff5Lj5AvpE7YNjzEhFJbyhPMYEYFKMHtYAdjAgCtT3MGRIX+Iubi
+   /UW9Sf0basQGLOdUxSkUN8PWX8PDJiIf+7DHTBPLy42onMS5PNIrLopzJ
+   2mmAZnvksuEB1S3I8GKRp/8e2UlU8A8HfyDQiIZfnwF2pnv3hRmDIiJSO
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10436"; a="278381507"
+X-IronPort-AV: E=Sophos;i="5.93,230,1654585200"; 
+   d="scan'208";a="278381507"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 11:41:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,230,1654585200"; 
+   d="scan'208";a="581783025"
+Received: from lkp-server02.sh.intel.com (HELO cfab306db114) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 11 Aug 2022 11:41:01 -0700
+Received: from kbuild by cfab306db114 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oMD76-0000WR-2C;
+        Thu, 11 Aug 2022 18:41:00 +0000
+Date:   Fri, 12 Aug 2022 02:40:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ 4166496e1b5ade307cc0dfbadb4e6a56e80c852f
+Message-ID: <62f54d00.peXmIGLNhYofbTca%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <YvSxeDkmwxcJL+Z0@debian> <YvUZ+9kJ/AvUMxzO@dev-arch.thelio-3990X> <CAHk-=wivP4zipYnwNWCLF5cd24GLs3m8=Sp7M-CmmPva_UC+3Q@mail.gmail.com>
-In-Reply-To: <CAHk-=wivP4zipYnwNWCLF5cd24GLs3m8=Sp7M-CmmPva_UC+3Q@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 11 Aug 2022 11:39:15 -0700
-Message-ID: <CAKwvOdnQjgtwqFXLv+QtWPfpHosM5fxE5oqbX0VUD53F8L6bRg@mail.gmail.com>
-Subject: Re: mainline build failure for arm64 allmodconfig with clang
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Joe Perches <joe@perches.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Justin Stitt <justinstitt@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 8:39 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Thu, Aug 11, 2022 at 8:05 AM Nathan Chancellor <nathan@kernel.org> wro=
-te:
-> >
-> > Right, these are exposed by commit 258fafcd0683 ("Makefile.extrawarn:
-> > re-enable -Wformat for clang").
->
-> Christ. Why is clang's format warning SO COMPLETELY BROKEN?
->
-> The warning is *WRONG*, for chrissake. Printing an 'int' with '%hhu'
-> is perfectly fine, and has well-defined semantics, and is what you
-> *want* to do in some cases.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: 4166496e1b5ade307cc0dfbadb4e6a56e80c852f  Merge branch into tip/master: 'WIP/fixes'
 
-Generally, printing an int with %hhu may truncate depending on the
-value of the int.
+elapsed time: 719m
 
-Perhaps there's something different we can be doing for literals though.
+configs tested: 92
+configs skipped: 2
 
-> I'm going to turn it off again, because honestly, this is a clang bug.
-> I don't care one whit if there are pending "fixes" for this clang bug,
-> until those fixes are in *clang*, not in the correct kernel code.
->
-> For chrissake, the value it is trying to print out as a char is '3'.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-If your referring to SOF_ABI_MAJOR from
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+arm                                 defconfig
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+arc                  randconfig-r043-20220810
+m68k                             allmodconfig
+arc                              allyesconfig
+x86_64                        randconfig-a015
+alpha                            allyesconfig
+s390                 randconfig-r044-20220810
+i386                                defconfig
+m68k                             allyesconfig
+riscv                randconfig-r042-20220810
+x86_64                              defconfig
+i386                          randconfig-a014
+arm                              allyesconfig
+arm64                            allyesconfig
+x86_64                               rhel-8.3
+i386                             allyesconfig
+i386                          randconfig-a012
+i386                          randconfig-a016
+x86_64                        randconfig-a004
+i386                          randconfig-a001
+x86_64                        randconfig-a002
+i386                          randconfig-a003
+i386                          randconfig-a005
+x86_64                        randconfig-a006
+x86_64                           allyesconfig
+ia64                             allmodconfig
+x86_64                         rhel-8.3-kunit
+x86_64                          rhel-8.3-func
+powerpc                           allnoconfig
+x86_64                           rhel-8.3-kvm
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-syz
+csky                              allnoconfig
+alpha                             allnoconfig
+arc                               allnoconfig
+riscv                             allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+m68k                       m5475evb_defconfig
+xtensa                    smp_lx200_defconfig
+nios2                               defconfig
+powerpc                        warp_defconfig
+um                                  defconfig
+sh                               j2_defconfig
+powerpc                     mpc83xx_defconfig
+powerpc                      tqm8xx_defconfig
+m68k                            q40_defconfig
+powerpc                      makalu_defconfig
+powerpc                  iss476-smp_defconfig
+powerpc                 mpc834x_mds_defconfig
+loongarch                           defconfig
+loongarch                         allnoconfig
+i386                          randconfig-c001
+mips                           ci20_defconfig
+loongarch                        alldefconfig
+xtensa                  cadence_csp_defconfig
+m68k                             alldefconfig
+sh                             espt_defconfig
+xtensa                              defconfig
+sh                     magicpanelr2_defconfig
+arm                            lart_defconfig
+arm                         lubbock_defconfig
+sh                        dreamcast_defconfig
+riscv                    nommu_k210_defconfig
+sh                        sh7757lcr_defconfig
+arm64                            alldefconfig
+ia64                            zx1_defconfig
 
-commit b7bf23c0865f ("ASoC: SOF: ipc3-topology: Fix clang -Wformat warning"=
-)
+clang tested configs:
+hexagon              randconfig-r041-20220810
+x86_64                        randconfig-a016
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+hexagon              randconfig-r045-20220810
+i386                          randconfig-a013
+i386                          randconfig-a011
+i386                          randconfig-a015
+x86_64                        randconfig-a005
+i386                          randconfig-a002
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+i386                          randconfig-a004
+i386                          randconfig-a006
+riscv                randconfig-r042-20220811
+s390                 randconfig-r044-20220811
+hexagon              randconfig-r045-20220811
+hexagon              randconfig-r041-20220811
+x86_64                        randconfig-k001
+powerpc                       ebony_defconfig
 
-in -next, 3 is an int literal.  No truncation occurs, sure, but just
-use the correct format flag!
-
-Otherwise please also considering reverting
-commit cbacb5ab0aa0 ("docs: printk-formats: Stop encouraging use of
-unnecessary %h[xudi] and %hh[xudi]")
-since for the past 3 years, we've been recommending that kernel
-developers not use %h or %hh.  You allude to this in your "Admittedly,
-" note in
-commit 21f9c8a13bb2 ("Revert "Makefile.extrawarn: re-enable -Wformat
-for clang"")
-. Otherwise, please reinstate this patch.
-
-I don't care which you pick, but let's be consistent?
-
-Because having explicit documented practices then reverting things
-when those are followed is quite obnoxious.
-
-> But even if it wasn't, and even if you wanted to print out "0xf365" as
-> a "char" value, then that is how C varargs *work*. It's an "int".
-
-This is a different case than using a literal value in which no
-truncation would occur.  (Your points about 3 and 'a' (no truncation)
-are distinct from 0xf365 (truncation)).
-
-It would be anomolous to the compiler whether the truncation in such a
-case was intentional vs accidental.
-
-printf("%hhx\n", 0xf365); // -Wformat: warning: format specifies type
-'unsigned char' but the argument has type 'int'
-
-should be
-
-printf("%hhx\n", (unsigned char)0xf365); // intentional truncation, no warn=
-ing
-
-A cast in that case helps inform the compiler that "I know what I'm
-doing," and a comment helps code reviewers & maintainers.
-
-> In fact, even a *character* is an "int". This program:
->
->         #include <stdio.h>
->
->         int main(int argc, char **argv)
->         {
->                 printf("%hhu\n", 'a');
->         }
->
-> generates a warning with "clang -Wformat", and dammit, if you are a
-> clang developer and you see no problem with that warning, then I don't
-> know what to say.
-
-Yeah, that is noisy.  I think if we had an argument that is a literal,
-we should be able to tell then and there whether that value would
-result in truncation (and avoiding diagnosing if no truncation occurs,
-or split that into -Wformat-me-harder so that we could set
--Wno-format-me-harder).
-
-printf("%hhu\n", 256); // should this produce a warning? Which
-compilers do so? ;)
-
-Though, isn't %c the correct format flag for characters?
-
->
-> Nathan, please make clang people see some sense.
->
-> Because no, I'm not in the least interested in getting kernel "fixes"
-> for this issue. -Wformat for clang goes away until people have gotten
-> their heads extracted from their derri=C3=A8res.
->
-> This is ridiculous.
->
->               Linus
-
-
-
---
-Thanks,
-~Nick Desaulniers
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

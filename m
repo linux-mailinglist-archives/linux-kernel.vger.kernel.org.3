@@ -2,307 +2,471 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55EE158FA58
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 11:59:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5326358FB68
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 13:33:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234699AbiHKJ7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 05:59:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37170 "EHLO
+        id S235048AbiHKLdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 07:33:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233931AbiHKJ7o (ORCPT
+        with ESMTP id S234930AbiHKLcw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 05:59:44 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05CFD91098;
-        Thu, 11 Aug 2022 02:59:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660211983; x=1691747983;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=Gv61OZzolzLnpab2sSXkmej5Y3qmjVqSAapMQ21hGpY=;
-  b=n7L4o9T8kEm02qFmYPWennW2Vzup1FnT/mrrMEAKmLfFL5uLldeeAkgU
-   kSfEYzqafEbhBnDm4758JC0aApRn67mBnUvBqNJEBIWCEs0fXhu4FlCCc
-   NKWm99u+tqqBPnTt1ag1dclc4nDtlrtjpBNvwAB0HMHY2jPoV8Vb50Sfp
-   y0LHlEoeMvrAk5q1+Rr/EU566Cf7xr1TEhCmohxBrUfTWOTM5qIufvdK8
-   Zrdeb3XN4w7rO1MqcfvGUw/gOcW/oBSd/ffMMVM5GA8lm1QNBMe//SV4u
-   uJzK3o7KZB4c5RKIIuSOpVCcIaC1HjyyzjUOLur0Ao5s0ZMMWs8DbnlRu
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="317270028"
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="317270028"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 02:59:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="851152031"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga006.fm.intel.com with ESMTP; 11 Aug 2022 02:59:42 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 11 Aug 2022 02:59:41 -0700
-Received: from orsmsx602.amr.corp.intel.com (10.22.229.15) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 11 Aug 2022 02:59:41 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28 via Frontend Transport; Thu, 11 Aug 2022 02:59:41 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.177)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.28; Thu, 11 Aug 2022 02:59:40 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N6nfj24p/4y5VhHZB8aclP6cmdU1RUug66RpcgBpLAeJSPmYy/BeyID7jigQsOVHe5u05ofwT4Yk3qtEzXmGQqPnsi1SZ3MDl8U1IyIcA6wswRQeYiaBX9qV38RchsmJqf+ORlSvb9Ne+T2DQA2FjFSFgqqQx95ySLit5X/G9BA1qCydmMoT/NxcFUcuc2/uVeZLgT8kXNH37atW2PbZ5krkMEmuUI+TU0ivNdHJ6ss11lyuhDw0xF2PZMHJ18qMFOs1y16G9eJgUTVSJioWiTwgLND/Jp79NFBMFiNcXznRXjaU5iyMcPRJd6nA3pfCJMx76OuOID3LzoN9W2/gog==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Gv61OZzolzLnpab2sSXkmej5Y3qmjVqSAapMQ21hGpY=;
- b=gO1T6AVr77Fvi+FliR4YoQXCtyyfly/sxQSY4cufPj3cC8MphQCuNMhaa8WuyvU/ciQ/OyZQ/WafkdX4EYNDocE/J2qhLl9S5flvQ6/fWc62HlZspki2oBuxIndkE2fnYs7l6zClB9/KwG3peIg1LEVgPkABCCkqmaDZhy4049ApzFeZ9bG3dCSBL9eSwnQYhjzrDL/Knmr8GqF0x8+i6kITrfhBqSOmUWKnQiop/c8cDoTn8OOTQJQ/DqRmrK/utB54vEh1JV17jsq16lolt/Um5ou00Mg1eZ2qXhi7dkP1jWSwnLsfTKxsX/5HbPukU8my2Bh7Ez1n40uZ26qpsg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
- by BL0PR11MB3489.namprd11.prod.outlook.com (2603:10b6:208:75::29) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.17; Thu, 11 Aug
- 2022 09:59:34 +0000
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::1d3c:4dc0:6155:2aee]) by BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::1d3c:4dc0:6155:2aee%4]) with mapi id 15.20.5525.010; Thu, 11 Aug 2022
- 09:59:34 +0000
-From:   "Huang, Kai" <kai.huang@intel.com>
-To:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>
-CC:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "Aktas, Erdem" <erdemaktas@google.com>,
-        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        "Christopherson,, Sean" <seanjc@google.com>
-Subject: Re: [PATCH v8 002/103] Partially revert "KVM: Pass kvm_init()'s
- opaque param to additional arch funcs"
-Thread-Topic: [PATCH v8 002/103] Partially revert "KVM: Pass kvm_init()'s
- opaque param to additional arch funcs"
-Thread-Index: AQHYqqltAL+hwNvkbk6t2QHjbAxA9a2pfMgA
-Date:   Thu, 11 Aug 2022 09:59:34 +0000
-Message-ID: <c2e61778ca549e8ee4cb44194df367455a20f645.camel@intel.com>
-References: <cover.1659854790.git.isaku.yamahata@intel.com>
-         <3af25cc7502769b98755920807bc8a1010de1d45.1659854790.git.isaku.yamahata@intel.com>
-In-Reply-To: <3af25cc7502769b98755920807bc8a1010de1d45.1659854790.git.isaku.yamahata@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.44.3 (3.44.3-1.fc36) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: b0290a59-0792-4e39-4721-08da7b80316f
-x-ms-traffictypediagnostic: BL0PR11MB3489:EE_
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 9DNqCoFmzE9bShFi/wkT46otw5C0i+AzHCd1rLB9UbVgSwEs0WyIkQNXmXmh79KPOnxOYg5C3PUXuwgYdQdIs6M0pNYNf2zsu9mEscBRMxTA/lfcUaCTd7HfseL0QJYnC9oktdKC75rMO56y5+ItRrw4BjyM9PilWWEOk88TIgKdH+v/EqAcfsP1kOnWS7OHpzhukXF3UuEjNxCF7Ha2dwVb70utlgRQMAycmZQAq5WAGgKJ89As6/osQ9x2E4dQIReWuxTS7OU3t85ujSRylrPNhU3xz0RHGEv1JnDYgANpbYqJyNXyQ0vQ6AKNArWLxiaSkWO0veg6DwZZdri6Zxr6ndYpJLeXGy/fH88qKGEMVIUNSQWDdBj7QgVp+tw7UKFAIfJbMifslnKLJ4jcd2yncsrMHs79sGrdKxfpzYajTdkh19W9nj993NmqguNPzcVCu/M05kG1rMHTpe6eiw7hGsE9sbiqQGAZ3hOQNmST3N1yNys2ruKC9r5YgRZQCv16OKsWJUVqz2RkMbUTQFKvJlXEP+JLgFHXSTgLjKt0a1tp13XfOukz+AMRImcSnIWe9nIHgqZ1QgWaVRgafW6RfgN/aMkr1uF0TH5WTzeIjQ4S3LPj3Cn+CAAUuLeBMNNxr/fKZMWp5LoGMpfpqjeQPhD40r2IXgfRKqb3de7Ws2F6cfhJzmySYispJYUzeLEUNFhCVlt6ugIHSSGbbrdJJrVlf4fBUKyoogF3L+a8sCbADfYo2MpgDbT8XNPRhnL7KfNN7I3D0Lfw++mWIbWx4ttB31556qmT1wpnezFuGm5x1HZ6EGsescmL/uEXcXNQrX3jbGIQFQmwGLz2Jg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(396003)(376002)(346002)(366004)(39860400002)(86362001)(2906002)(71200400001)(64756008)(66446008)(66476007)(76116006)(66946007)(8676002)(66556008)(122000001)(4326008)(38100700002)(91956017)(8936002)(316002)(82960400001)(110136005)(38070700005)(54906003)(6636002)(5660300002)(41300700001)(186003)(36756003)(6506007)(2616005)(6486002)(6512007)(26005)(478600001)(966005)(83380400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZnRUa0dRWlVIalh2bXA5UTg0ZHVDVjlwRnZXT1JnQjZpVFlWK2ptVml1RHZx?=
- =?utf-8?B?QXBSOEhqdnBXWW1KY0psREphNUhWNzFsU01kU1lVRTFEdnU4Y2h6RUFXM0Za?=
- =?utf-8?B?eUZ5M2QxOEQwdHhEYXZHbWtKWEdlYkVaWEV0MmVxSzd4ZkFma3VaTXJMSFBH?=
- =?utf-8?B?aERNdWxkTlJiMllJdDdCWEFXU0ZZNzlKbjExRytjcVNaMnNEWTFMVjh5ZWFV?=
- =?utf-8?B?WFB4ODJWcGxSQUE4RTA2NnRaYmJ4ckpTWVNEZXY4VTIvNTZiVVRmditwVGUx?=
- =?utf-8?B?Q1dUQUNxaG8zOVN2WU9JRjlZQVpDaDArR3VaSURERnZ6T0xlZ2luNmtmN3Iz?=
- =?utf-8?B?Z1cxc3VGOWwwNzBxNHpUTEZSL2FDRjV2SFdmQit4Q05xK3JPWFVvUWtsK1Rh?=
- =?utf-8?B?djZYUDFEbHhoMmFHd2dsQ00wM1dpZFVoaE4rMkQ5NlhuaXRkcVE2K3UxVXlp?=
- =?utf-8?B?NXBtSTBUTVI5cDJjd2RnREtoRVJiVkVSQTZieUZNUFloazgwUDlEUkFuQjFV?=
- =?utf-8?B?RW1IQkNFZnkvTlRpdTBlb2xaSjlvZUhITy8zLy81d0VJcFNNTDliNVVRVHF3?=
- =?utf-8?B?OVhaMzE1SWRoQlFNVkZ1OUV4ZXpYV1htMG1naWZxeDU0ZlN1QTUwT0I2dVBi?=
- =?utf-8?B?bHllMEw2Ti9VckRIVC9JMjFnQnBLcFlJVW1Kd1hRMUZ2SEQ2anFJQjVhMW9J?=
- =?utf-8?B?eGpLbE5YUjFLUFlSMWVOc3hjdVJveUFDQ0ZTMG5JMTcwVTNPVFk2elVYSDZI?=
- =?utf-8?B?dlA4UkJnWFQrd1FGUEJjSGtNU2xJekY1K1lIUHhNWndhdTBlZVAyRlRaZ0Fh?=
- =?utf-8?B?NFlOTzFUWlk0THVYZDBlejlHNXFWNzkxNVpKV0x5ZFY0Z2gyRlp0akVvdmRO?=
- =?utf-8?B?SlRwYnUyZjR0R1NMd1JVaDR2bXhOL3pIa0VCMlhLTVFIZE9ZMkIyUkRWT1Z0?=
- =?utf-8?B?US9NT2JjckNVb3pRSnNINWx2WEFWbmJTbW9kYXFzbWsyc0VPTk8wV1N6YmZE?=
- =?utf-8?B?VldzNkJ1cUlrTlJyeGkvQ0ltcCtBTXd0ZDVCUGZRblZaV3o4UDY2UHlYbXdq?=
- =?utf-8?B?SzdvRVNvWUpHTE1HZGR1NjlDeTVETVAwY2I2WmpiTVNlY3lRZjJWeVA3cjkx?=
- =?utf-8?B?MkppMU9iQ2cyVytPTVRqS2t6RFlnSVBqWng0bllHbEkrSG1nc3hOMWhDNjNI?=
- =?utf-8?B?Ymg5MjRjV3g3RHdCdFJnMU4yL0hzeE8rT1hFUWRSUGRhSTVWdGlIRnpJYlRj?=
- =?utf-8?B?ZG0yMGk4cmY3cmthTDNGaFZENnN2S1g3Y1V1cW9RTDhwS0tpUWxJNGV0cUlD?=
- =?utf-8?B?eUdwYU9WOFh3dkhVZURaSTAxOVF1ckZ1NVlUK2xZMTZXb0c3ek1VOXBOQ2p1?=
- =?utf-8?B?R2dkSVpBaWZKUnJIai8wdzhpbWsyOWk2V2JQV1lRcG9KR3ZDck1OUU5RTVhy?=
- =?utf-8?B?dUpxQVgrMXZQYmxLUTF6eUo0NSs5dWZVUU5BbEx2RWpLbTZhYTA5dmpqbm41?=
- =?utf-8?B?Q0k4R1MwTFNUQmMxOEFTSU04UEx5UUxHTTNqN1JNaEhPOGtVNEw4bUpjdHF3?=
- =?utf-8?B?MDZ0bllkZjI5dXduN2F1REFvZWd3dGdxQlVZVCt5T25CQktocTVvR3A5VlRv?=
- =?utf-8?B?TGRXeTBPUElNejhka0tEQ3BWaUVVY1M0SEJoQjhhTlZCQXQ1cFM0YnhZRG9P?=
- =?utf-8?B?bWFmMFFRU2IxamtSdHBZSHFDMjRoUHpjTko3Z1l0dHV4eW5hby9PNFJjL0JK?=
- =?utf-8?B?NjlRWG9wNUxSa0JqUldpenkwdXhuK2FSeUJCUW1tZTMrcWRDZy9NSytRL1Jv?=
- =?utf-8?B?aXpkd2h4VENKMzA4LzRLWE9kODYwTndqZ3FIUjJTaGt5Z2RCY1A2TnJsRXV2?=
- =?utf-8?B?SGVxbzNaMzV6OTdraG5RTTNDYWZYdTZJbEpxQ3hTK3hzMGRDMDllQkRoTi9n?=
- =?utf-8?B?TmNZOFBVWW1LY2tpbTdRSy9RWitwbi8vK2hoYXVhTTlGSGFVbWJCbVFaOXJN?=
- =?utf-8?B?MVJueDVDdytCR0hHMUo3SWRiR3NRbjIrL0Q3SS9OdU0zZXBmdk5lTHFUVDhy?=
- =?utf-8?B?SkVvTHJQMmhnWC9mUloydENseXhuUUQ0RlFIU0RqaWoxenJIZGc3YnFJbU9V?=
- =?utf-8?B?RU85d3FiUnp5ZVVaQ0RRNDRLTGFyeGFFam9uYTNjK2k4ZlNpZGl4NlhuOEw2?=
- =?utf-8?B?MFE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <35BD30D8F903174F89525C8942A2C70C@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Thu, 11 Aug 2022 07:32:52 -0400
+Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5283C97503
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 04:32:20 -0700 (PDT)
+X-UUID: ff9f4d8306354fb196b7d922a2cb1400-20220811
+X-Spam-Fingerprint: 0
+X-GW-Reason: 11109
+X-Policy-Incident: 5pS25Lu25Lq66LaF6L+HMTDkurrpnIDopoHlrqHmoLg=
+X-Content-Feature: ica/max.line-size 113
+        audit/email.address 1
+        dict/adv 2
+        dict/notice 2
+        dict/software 1
+        dict/transaction 1
+        meta/cnt.alert 1
+X-CPASD-INFO: 41a7705116064a5f92a4568cd298c964@fYGbV2RiY2FdVnKCg6SAoFljkWRlYli
+        ypmxZaJFpYlSVgnxsTV5qXFWCgGpQYWNdYlV3fGtQYmBgZFB5i4Jyj1RgXmCCVHSTgHZrgWdlYA==
+X-CLOUD-ID: 41a7705116064a5f92a4568cd298c964
+X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:196.
+        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:408.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
+        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-
+        5,AUF:1,DUF:2124,ACD:46,DCD:46,SL:0,EISP:0,AG:0,CFC:0.593,CFSR:0.024,UAT:0,RA
+        F:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,E
+        AF:0,CID:-5.0,VERSION:2.3.17
+X-CPASD-ID: ff9f4d8306354fb196b7d922a2cb1400-20220811
+X-CPASD-BLOCK: 1000
+X-CPASD-STAGE: 1
+X-UUID: ff9f4d8306354fb196b7d922a2cb1400-20220811
+X-User: lizhenneng@kylinos.cn
+Received: from localhost.localdomain [(116.128.244.169)] by mailgw
+        (envelope-from <lizhenneng@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 2069526652; Thu, 11 Aug 2022 15:20:31 +0800
+From:   Zhenneng Li <lizhenneng@kylinos.cn>
+To:     Alex Deucher <alexander.deucher@amd.com>
+Cc:     =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Pan Xinhui <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Tao Zhou <tao.zhou1@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Jack Xiao <Jack.Xiao@amd.com>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Zhenneng Li <lizhenneng@kylinos.cn>
+Subject: [PATCH] drm/amdgpu: use native mode for dp aux transfer
+Date:   Thu, 11 Aug 2022 15:20:12 +0800
+Message-Id: <20220811072012.962460-1-lizhenneng@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b0290a59-0792-4e39-4721-08da7b80316f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Aug 2022 09:59:34.1284
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: +A8/VbVVeXoMFlVpE1+/6YXpkBC7VZJNqJ29nGkNLbmirw2qML0BfkN3TTH2HfIhsJgsX1o5IIJQOWAsaQznRA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL0PR11MB3489
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        RDNS_DYNAMIC,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gU3VuLCAyMDIyLTA4LTA3IGF0IDE1OjAwIC0wNzAwLCBpc2FrdS55YW1haGF0YUBpbnRlbC5j
-b20gd3JvdGU6DQo+IEZyb206IENoYW8gR2FvIDxjaGFvLmdhb0BpbnRlbC5jb20+DQo+IA0KPiBU
-aGlzIHBhcnRpYWxseSByZXZlcnRzIGNvbW1pdCBiOTkwNDA4NTM3MzggKCJLVk06IFBhc3Mga3Zt
-X2luaXQoKSdzIG9wYXF1ZQ0KPiBwYXJhbSB0byBhZGRpdGlvbmFsIGFyY2ggZnVuY3MiKSByZW1v
-dmUgb3BhcXVlIGZyb20NCj4ga3ZtX2FyY2hfY2hlY2tfcHJvY2Vzc29yX2NvbXBhdCBiZWNhdXNl
-IG5vIG9uZSB1c2VzIHRoaXMgb3BhcXVlIG5vdy4NCj4gQWRkcmVzcyBjb25mbGljdHMgZm9yIEFS
-TSAoZHVlIHRvIGZpbGUgbW92ZW1lbnQpIGFuZCBtYW51YWxseSBoYW5kbGUgUklTQy1WDQo+IHdo
-aWNoIGNvbWVzIGFmdGVyIHRoZSBjb21taXQuICBUaGUgY2hhbmdlIGFib3V0IGt2bV9hcmNoX2hh
-cmR3YXJlX3NldHVwKCkNCj4gaW4gb3JpZ2luYWwgY29tbWl0IGFyZSBzdGlsbCBuZWVkZWQgc28g
-dGhleSBhcmUgbm90IHJldmVydGVkLg0KPiANCj4gVGhlIGN1cnJlbnQgaW1wbGVtZW50YXRpb24g
-ZW5hYmxlcyBoYXJkd2FyZSAoZS5nLiBlbmFibGUgVk1YIG9uIGFsbCBDUFVzKSwNCj4gYXJjaC1z
-cGVjaWZpYyBpbml0aWFsaXphdGlvbiBmb3IgVk0gY3JlYXRpb24swqANCj4gDQoNCkkgZ3Vlc3Mg
-eW91IG5lZWQgdG8gcG9pbnQgb3V0IF9maXJzdF8gVk0/DQoNCj4gYW5kIGRpc2FibGVzIGhhcmR3
-YXJlIChpbg0KPiB4ODYsIGRpc2FibGUgVk1YIG9uIGFsbCBDUFVzKSBmb3IgbGFzdCBWTSBkZXN0
-cnVjdGlvbi4NCj4gDQo+IFREWCByZXF1aXJlcyBpdHMgaW5pdGlhbGl6YXRpb24gb24gbG9hZGlu
-ZyBLVk0gbW9kdWxlIHdpdGggVk1YIGVuYWJsZWQgb24NCj4gYWxsIGF2YWlsYWJsZSBDUFVzLiBJ
-dCBuZWVkcyB0byBlbmFibGUvZGlzYWJsZSBoYXJkd2FyZSBvbiBtb2R1bGUNCj4gaW5pdGlhbGl6
-YXRpb24uICBUbyByZXVzZSB0aGUgc2FtZSBsb2dpYywgb25lIHdheSBpcyB0byBwYXNzIGFyb3Vu
-ZCB0aGUNCg0KVG8gcmV1c2UgdGhlIHNhbWUgbG9naWMgZm9yIHdoYXQ/ICBJIHRoaW5rIHlvdSBu
-ZWVkIHRvIGJlIHNwZWNpZmljIChhbmQgZm9jdXMpDQpvbiB3aHkgd2UgbmVlZCB0aGlzIHBhdGNo
-OiAgd2Ugd2lsbCBvcHBvcnR1bmlzdGljYWxseSBtb3ZlIENQVSBjb21wYXRpYmlsaXR5DQpjaGVj
-ayB0byBoYXJkd2FyZV9lbmFibGVfbm9sb2NrKCksIHdoaWNoIGRvZXNuJ3QgdGFrZSBhbnkgYXJn
-dW1lbnQsIGFuZCB0aGlzDQpwYXRjaCBpcyBhIHByZXBhcmF0aW9uIHRvIGRvIHRoYXQuDQoNCg0K
-PiB1bnVzZWQgb3BhcXVlIGFyZ3VtZW50LCBhbm90aGVyIHdheSBpcyB0byByZW1vdmUgdGhlIHVu
-dXNlZCBvcGFxdWUNCj4gYXJndW1lbnQuICBUaGlzIHBhdGNoIGlzIGEgcHJlcGFyYXRpb24gZm9y
-IHRoZSBsYXR0ZXIgYnkgcmVtb3ZpbmcgdGhlDQo+IGFyZ3VtZW50DQoNClNvIGhvdyBhYm91dCBy
-ZXBsYWNpbmcgdGhlIGxhc3QgdHdvIHBhcmFncmFwaHMgd2l0aDoNCg0KIg0KSW5pdGlhbGl6aW5n
-IFREWCB3aWxsIGJlIGRvbmUgZHVyaW5nIG1vZHVsZSBsb2FkaW5nIHRpbWUsIGFuZCBpbiBvcmRl
-ciB0byBkbw0KdGhhdCBoYXJkd2FyZV9lbmFibGVfYWxsKCkgd2lsbCBiZSBkb25lIGR1cmluZyBt
-b2R1bGUgbG9hZGluZyB0aW1lIHRvbywgYXMNCmluaXRpYWxpemluZyBURFggcmVxdWlyZXMgYWxs
-IGNwdXMgYmVpbmcgaW4gVk1YIG9wZXJhdGlvbi4gIEFzIGEgcmVzdWx0LCBDUFUNCmNvbXBhdGli
-aWxpdHkgY2hlY2sgd2lsbCBiZSBvcHBvcnR1bmlzdGljYWxseSBtb3ZlZCB0byBoYXJkd2FyZV9l
-bmFibGVfbm9sb2NrKCksDQp3aGljaCBkb2Vzbid0IHRha2UgYW55IGFyZ3VtZW50LiAgSW5zdGVh
-ZCBvZiBwYXNzaW5nICdvcGFxdWUnIGFyb3VuZCB0bw0KaGFyZHdhcmVfZW5hYmxlX25vbG9jaygp
-IGFuZCBoYXJkd2FyZV9lbmFibGVfYWxsKCksIGp1c3QgcmVtb3ZlIHRoZSB1bnVzZWQNCidvcGFx
-dWUnIGFyZ3VtZW50IGZyb20ga3ZtX2FyY2hfY2hlY2tfcHJvY2Vzc29yX2NvbXBhdCgpLg0KIg0K
-DQpPciBldmVuIHNpbXBsZXI6DQoNCiINClRvIHN1cHBvcnQgVERYLCBoYXJkd2FyZV9lbmFibGVf
-YWxsKCkgd2lsbCBiZSBkb25lIGR1cmluZyBtb2R1bGUgbG9hZGluZyB0aW1lLiANCkFzIGEgcmVz
-dWx0LCBDUFUgY29tcGF0aWJpbGl0eSBjaGVjayB3aWxsIGJlIG9wcG9ydHVuaXN0aWNhbGx5IG1v
-dmVkIHRvDQpoYXJkd2FyZV9lbmFibGVfbm9sb2NrKCksIHdoaWNoIGRvZXNuJ3QgdGFrZSBhbnkg
-YXJndW1lbnQuICBJbnN0ZWFkIG9mIHBhc3NpbmcNCidvcGFxdWUnIGFyb3VuZCB0byBoYXJkd2Fy
-ZV9lbmFibGVfbm9sb2NrKCkgYW5kIGhhcmR3YXJlX2VuYWJsZV9hbGwoKSwganVzdA0KcmVtb3Zl
-IHRoZSB1bnVzZWQgJ29wYXF1ZScgYXJndW1lbnQgZnJvbSBrdm1fYXJjaF9jaGVja19wcm9jZXNz
-b3JfY29tcGF0KCkuDQoiDQoNCldpdGggY2hhbmdlbG9nIHVwZGF0ZWQ6DQoNClJldmlld2VkLWJ5
-OiBLYWkgSHVhbmcgPGthaS5odWFuZ0BpbnRlbC5jb20+DQoNCj4gDQo+IFNpZ25lZC1vZmYtYnk6
-IENoYW8gR2FvIDxjaGFvLmdhb0BpbnRlbC5jb20+DQo+IFJldmlld2VkLWJ5OiBTZWFuIENocmlz
-dG9waGVyc29uIDxzZWFuamNAZ29vZ2xlLmNvbT4NCj4gUmV2aWV3ZWQtYnk6IFN1enVraSBLIFBv
-dWxvc2UgPHN1enVraS5wb3Vsb3NlQGFybS5jb20+DQo+IEFja2VkLWJ5OiBBbnVwIFBhdGVsIDxh
-bnVwQGJyYWluZmF1bHQub3JnPg0KPiBBY2tlZC1ieTogQ2xhdWRpbyBJbWJyZW5kYSA8aW1icmVu
-ZGFAbGludXguaWJtLmNvbT4NCj4gTGluazogaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvci8yMDIy
-MDIxNjAzMTUyOC45MjU1OC0zLWNoYW8uZ2FvQGludGVsLmNvbQ0KPiBTaWduZWQtb2ZmLWJ5OiBJ
-c2FrdSBZYW1haGF0YSA8aXNha3UueWFtYWhhdGFAaW50ZWwuY29tPg0KPiAtLS0NCj4gIGFyY2gv
-YXJtNjQva3ZtL2FybS5jICAgICAgIHwgIDIgKy0NCj4gIGFyY2gvbWlwcy9rdm0vbWlwcy5jICAg
-ICAgIHwgIDIgKy0NCj4gIGFyY2gvcG93ZXJwYy9rdm0vcG93ZXJwYy5jIHwgIDIgKy0NCj4gIGFy
-Y2gvcmlzY3Yva3ZtL21haW4uYyAgICAgIHwgIDIgKy0NCj4gIGFyY2gvczM5MC9rdm0va3ZtLXMz
-OTAuYyAgIHwgIDIgKy0NCj4gIGFyY2gveDg2L2t2bS94ODYuYyAgICAgICAgIHwgIDIgKy0NCj4g
-IGluY2x1ZGUvbGludXgva3ZtX2hvc3QuaCAgIHwgIDIgKy0NCj4gIHZpcnQva3ZtL2t2bV9tYWlu
-LmMgICAgICAgIHwgMTYgKysrLS0tLS0tLS0tLS0tLQ0KPiAgOCBmaWxlcyBjaGFuZ2VkLCAxMCBp
-bnNlcnRpb25zKCspLCAyMCBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9hcmNoL2Fy
-bTY0L2t2bS9hcm0uYyBiL2FyY2gvYXJtNjQva3ZtL2FybS5jDQo+IGluZGV4IDgzYTdmNjEzNTRk
-My4uYzU1MWNhNTg3ZjE2IDEwMDY0NA0KPiAtLS0gYS9hcmNoL2FybTY0L2t2bS9hcm0uYw0KPiAr
-KysgYi9hcmNoL2FybTY0L2t2bS9hcm0uYw0KPiBAQCAtNjgsNyArNjgsNyBAQCBpbnQga3ZtX2Fy
-Y2hfaGFyZHdhcmVfc2V0dXAodm9pZCAqb3BhcXVlKQ0KPiAgCXJldHVybiAwOw0KPiAgfQ0KPiAg
-DQo+IC1pbnQga3ZtX2FyY2hfY2hlY2tfcHJvY2Vzc29yX2NvbXBhdCh2b2lkICpvcGFxdWUpDQo+
-ICtpbnQga3ZtX2FyY2hfY2hlY2tfcHJvY2Vzc29yX2NvbXBhdCh2b2lkKQ0KPiAgew0KPiAgCXJl
-dHVybiAwOw0KPiAgfQ0KPiBkaWZmIC0tZ2l0IGEvYXJjaC9taXBzL2t2bS9taXBzLmMgYi9hcmNo
-L21pcHMva3ZtL21pcHMuYw0KPiBpbmRleCBhMjVlMGI3M2VlNzAuLjA5MmQwOWZiNmE3ZSAxMDA2
-NDQNCj4gLS0tIGEvYXJjaC9taXBzL2t2bS9taXBzLmMNCj4gKysrIGIvYXJjaC9taXBzL2t2bS9t
-aXBzLmMNCj4gQEAgLTE0MCw3ICsxNDAsNyBAQCBpbnQga3ZtX2FyY2hfaGFyZHdhcmVfc2V0dXAo
-dm9pZCAqb3BhcXVlKQ0KPiAgCXJldHVybiAwOw0KPiAgfQ0KPiAgDQo+IC1pbnQga3ZtX2FyY2hf
-Y2hlY2tfcHJvY2Vzc29yX2NvbXBhdCh2b2lkICpvcGFxdWUpDQo+ICtpbnQga3ZtX2FyY2hfY2hl
-Y2tfcHJvY2Vzc29yX2NvbXBhdCh2b2lkKQ0KPiAgew0KPiAgCXJldHVybiAwOw0KPiAgfQ0KPiBk
-aWZmIC0tZ2l0IGEvYXJjaC9wb3dlcnBjL2t2bS9wb3dlcnBjLmMgYi9hcmNoL3Bvd2VycGMva3Zt
-L3Bvd2VycGMuYw0KPiBpbmRleCAxOTE5OTJmY2IyYzIuLmNhOGVmNTEwOTJjNiAxMDA2NDQNCj4g
-LS0tIGEvYXJjaC9wb3dlcnBjL2t2bS9wb3dlcnBjLmMNCj4gKysrIGIvYXJjaC9wb3dlcnBjL2t2
-bS9wb3dlcnBjLmMNCj4gQEAgLTQ0Niw3ICs0NDYsNyBAQCBpbnQga3ZtX2FyY2hfaGFyZHdhcmVf
-c2V0dXAodm9pZCAqb3BhcXVlKQ0KPiAgCXJldHVybiAwOw0KPiAgfQ0KPiAgDQo+IC1pbnQga3Zt
-X2FyY2hfY2hlY2tfcHJvY2Vzc29yX2NvbXBhdCh2b2lkICpvcGFxdWUpDQo+ICtpbnQga3ZtX2Fy
-Y2hfY2hlY2tfcHJvY2Vzc29yX2NvbXBhdCh2b2lkKQ0KPiAgew0KPiAgCXJldHVybiBrdm1wcGNf
-Y29yZV9jaGVja19wcm9jZXNzb3JfY29tcGF0KCk7DQo+ICB9DQo+IGRpZmYgLS1naXQgYS9hcmNo
-L3Jpc2N2L2t2bS9tYWluLmMgYi9hcmNoL3Jpc2N2L2t2bS9tYWluLmMNCj4gaW5kZXggMTU0OTIw
-NWZlNWZlLi5mOGQ2MzcyZDIwOGYgMTAwNjQ0DQo+IC0tLSBhL2FyY2gvcmlzY3Yva3ZtL21haW4u
-Yw0KPiArKysgYi9hcmNoL3Jpc2N2L2t2bS9tYWluLmMNCj4gQEAgLTIwLDcgKzIwLDcgQEAgbG9u
-ZyBrdm1fYXJjaF9kZXZfaW9jdGwoc3RydWN0IGZpbGUgKmZpbHAsDQo+ICAJcmV0dXJuIC1FSU5W
-QUw7DQo+ICB9DQo+ICANCj4gLWludCBrdm1fYXJjaF9jaGVja19wcm9jZXNzb3JfY29tcGF0KHZv
-aWQgKm9wYXF1ZSkNCj4gK2ludCBrdm1fYXJjaF9jaGVja19wcm9jZXNzb3JfY29tcGF0KHZvaWQp
-DQo+ICB7DQo+ICAJcmV0dXJuIDA7DQo+ICB9DQo+IGRpZmYgLS1naXQgYS9hcmNoL3MzOTAva3Zt
-L2t2bS1zMzkwLmMgYi9hcmNoL3MzOTAva3ZtL2t2bS1zMzkwLmMNCj4gaW5kZXggZWRmZDRiYmQw
-Y2JhLi5lMjZkNGRkODU2NjggMTAwNjQ0DQo+IC0tLSBhL2FyY2gvczM5MC9rdm0va3ZtLXMzOTAu
-Yw0KPiArKysgYi9hcmNoL3MzOTAva3ZtL2t2bS1zMzkwLmMNCj4gQEAgLTI1NCw3ICsyNTQsNyBA
-QCBpbnQga3ZtX2FyY2hfaGFyZHdhcmVfZW5hYmxlKHZvaWQpDQo+ICAJcmV0dXJuIDA7DQo+ICB9
-DQo+ICANCj4gLWludCBrdm1fYXJjaF9jaGVja19wcm9jZXNzb3JfY29tcGF0KHZvaWQgKm9wYXF1
-ZSkNCj4gK2ludCBrdm1fYXJjaF9jaGVja19wcm9jZXNzb3JfY29tcGF0KHZvaWQpDQo+ICB7DQo+
-ICAJcmV0dXJuIDA7DQo+ICB9DQo+IGRpZmYgLS1naXQgYS9hcmNoL3g4Ni9rdm0veDg2LmMgYi9h
-cmNoL3g4Ni9rdm0veDg2LmMNCj4gaW5kZXggZjVmZjliMjhlMTE5Li5lNTMzY2NlN2E3MGIgMTAw
-NjQ0DQo+IC0tLSBhL2FyY2gveDg2L2t2bS94ODYuYw0KPiArKysgYi9hcmNoL3g4Ni9rdm0veDg2
-LmMNCj4gQEAgLTExOTkwLDcgKzExOTkwLDcgQEAgdm9pZCBrdm1fYXJjaF9oYXJkd2FyZV91bnNl
-dHVwKHZvaWQpDQo+ICAJc3RhdGljX2NhbGwoa3ZtX3g4Nl9oYXJkd2FyZV91bnNldHVwKSgpOw0K
-PiAgfQ0KPiAgDQo+IC1pbnQga3ZtX2FyY2hfY2hlY2tfcHJvY2Vzc29yX2NvbXBhdCh2b2lkICpv
-cGFxdWUpDQo+ICtpbnQga3ZtX2FyY2hfY2hlY2tfcHJvY2Vzc29yX2NvbXBhdCh2b2lkKQ0KPiAg
-ew0KPiAgCXN0cnVjdCBjcHVpbmZvX3g4NiAqYyA9ICZjcHVfZGF0YShzbXBfcHJvY2Vzc29yX2lk
-KCkpOw0KPiAgDQo+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L2t2bV9ob3N0LmggYi9pbmNs
-dWRlL2xpbnV4L2t2bV9ob3N0LmgNCj4gaW5kZXggMWM0ODBiMTgyMWUxLi45NjQzYjhlYWRlZmUg
-MTAwNjQ0DQo+IC0tLSBhL2luY2x1ZGUvbGludXgva3ZtX2hvc3QuaA0KPiArKysgYi9pbmNsdWRl
-L2xpbnV4L2t2bV9ob3N0LmgNCj4gQEAgLTE0MzgsNyArMTQzOCw3IEBAIGludCBrdm1fYXJjaF9o
-YXJkd2FyZV9lbmFibGUodm9pZCk7DQo+ICB2b2lkIGt2bV9hcmNoX2hhcmR3YXJlX2Rpc2FibGUo
-dm9pZCk7DQo+ICBpbnQga3ZtX2FyY2hfaGFyZHdhcmVfc2V0dXAodm9pZCAqb3BhcXVlKTsNCj4g
-IHZvaWQga3ZtX2FyY2hfaGFyZHdhcmVfdW5zZXR1cCh2b2lkKTsNCj4gLWludCBrdm1fYXJjaF9j
-aGVja19wcm9jZXNzb3JfY29tcGF0KHZvaWQgKm9wYXF1ZSk7DQo+ICtpbnQga3ZtX2FyY2hfY2hl
-Y2tfcHJvY2Vzc29yX2NvbXBhdCh2b2lkKTsNCj4gIGludCBrdm1fYXJjaF92Y3B1X3J1bm5hYmxl
-KHN0cnVjdCBrdm1fdmNwdSAqdmNwdSk7DQo+ICBib29sIGt2bV9hcmNoX3ZjcHVfaW5fa2VybmVs
-KHN0cnVjdCBrdm1fdmNwdSAqdmNwdSk7DQo+ICBpbnQga3ZtX2FyY2hfdmNwdV9zaG91bGRfa2lj
-ayhzdHJ1Y3Qga3ZtX3ZjcHUgKnZjcHUpOw0KPiBkaWZmIC0tZ2l0IGEvdmlydC9rdm0va3ZtX21h
-aW4uYyBiL3ZpcnQva3ZtL2t2bV9tYWluLmMNCj4gaW5kZXggZGEyNjNjMzcwZDAwLi4wZjU3Njdl
-NWFlNDUgMTAwNjQ0DQo+IC0tLSBhL3ZpcnQva3ZtL2t2bV9tYWluLmMNCj4gKysrIGIvdmlydC9r
-dm0va3ZtX21haW4uYw0KPiBAQCAtNTc5MywyMiArNTc5MywxNCBAQCB2b2lkIGt2bV91bnJlZ2lz
-dGVyX3BlcmZfY2FsbGJhY2tzKHZvaWQpDQo+ICB9DQo+ICAjZW5kaWYNCj4gIA0KPiAtc3RydWN0
-IGt2bV9jcHVfY29tcGF0X2NoZWNrIHsNCj4gLQl2b2lkICpvcGFxdWU7DQo+IC0JaW50ICpyZXQ7
-DQo+IC19Ow0KPiAtDQo+IC1zdGF0aWMgdm9pZCBjaGVja19wcm9jZXNzb3JfY29tcGF0KHZvaWQg
-KmRhdGEpDQo+ICtzdGF0aWMgdm9pZCBjaGVja19wcm9jZXNzb3JfY29tcGF0KHZvaWQgKnJ0bikN
-Cj4gIHsNCj4gLQlzdHJ1Y3Qga3ZtX2NwdV9jb21wYXRfY2hlY2sgKmMgPSBkYXRhOw0KPiAtDQo+
-IC0JKmMtPnJldCA9IGt2bV9hcmNoX2NoZWNrX3Byb2Nlc3Nvcl9jb21wYXQoYy0+b3BhcXVlKTsN
-Cj4gKwkqKGludCAqKXJ0biA9IGt2bV9hcmNoX2NoZWNrX3Byb2Nlc3Nvcl9jb21wYXQoKTsNCj4g
-IH0NCj4gIA0KPiAgaW50IGt2bV9pbml0KHZvaWQgKm9wYXF1ZSwgdW5zaWduZWQgdmNwdV9zaXpl
-LCB1bnNpZ25lZCB2Y3B1X2FsaWduLA0KPiAgCQkgIHN0cnVjdCBtb2R1bGUgKm1vZHVsZSkNCj4g
-IHsNCj4gLQlzdHJ1Y3Qga3ZtX2NwdV9jb21wYXRfY2hlY2sgYzsNCj4gIAlpbnQgcjsNCj4gIAlp
-bnQgY3B1Ow0KPiAgDQo+IEBAIC01ODM2LDEwICs1ODI4LDggQEAgaW50IGt2bV9pbml0KHZvaWQg
-Km9wYXF1ZSwgdW5zaWduZWQgdmNwdV9zaXplLCB1bnNpZ25lZCB2Y3B1X2FsaWduLA0KPiAgCWlm
-IChyIDwgMCkNCj4gIAkJZ290byBvdXRfZnJlZV8xOw0KPiAgDQo+IC0JYy5yZXQgPSAmcjsNCj4g
-LQljLm9wYXF1ZSA9IG9wYXF1ZTsNCj4gIAlmb3JfZWFjaF9vbmxpbmVfY3B1KGNwdSkgew0KPiAt
-CQlzbXBfY2FsbF9mdW5jdGlvbl9zaW5nbGUoY3B1LCBjaGVja19wcm9jZXNzb3JfY29tcGF0LCAm
-YywgMSk7DQo+ICsJCXNtcF9jYWxsX2Z1bmN0aW9uX3NpbmdsZShjcHUsIGNoZWNrX3Byb2Nlc3Nv
-cl9jb21wYXQsICZyLCAxKTsNCj4gIAkJaWYgKHIgPCAwKQ0KPiAgCQkJZ290byBvdXRfZnJlZV8y
-Ow0KPiAgCX0NCg0K
+When using amdgpu for e8860, the monitor sometimes haven't any signal,
+and the kernel reports some errors:
+[   17.317302][ 2] [ T1045] [drm:amdgpu_atombios_dp_link_train [amdgpu]] *ERROR* channel eq failed: 5 tries
+[   17.326963][ 2] [ T1045] [drm:amdgpu_atombios_dp_link_train [amdgpu]] *ERROR* channel eq failed
+But if I use radeon for e8860, everything are always normal, the reason is
+that radeon use native mode and amdgpu use atombios mode
+when init dp aux, so when I use native mode for amdgpu, everything
+are always normal.
+
+Signed-off-by: Zhenneng Li <lizhenneng@kylinos.cn>
+Change-Id: Ia9a2be3ab03e56b1c8337fdbf713461196fbc58f
+---
+ drivers/gpu/drm/amd/amdgpu/Makefile          |   2 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu.h          |   2 +
+ drivers/gpu/drm/amd/amdgpu/amdgpu_atombios.c |   5 +-
+ drivers/gpu/drm/amd/amdgpu/amdgpu_dp_auxch.c | 273 +++++++++++++++++++
+ drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c      |   4 +
+ drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h     |   2 +
+ drivers/gpu/drm/amd/amdgpu/atombios_dp.c     |   5 +-
+ 7 files changed, 290 insertions(+), 3 deletions(-)
+ create mode 100644 drivers/gpu/drm/amd/amdgpu/amdgpu_dp_auxch.c
+
+diff --git a/drivers/gpu/drm/amd/amdgpu/Makefile b/drivers/gpu/drm/amd/amdgpu/Makefile
+index 3e0e2eb7e235..2913cf46f848 100644
+--- a/drivers/gpu/drm/amd/amdgpu/Makefile
++++ b/drivers/gpu/drm/amd/amdgpu/Makefile
+@@ -58,7 +58,7 @@ amdgpu-y += amdgpu_device.o amdgpu_kms.o \
+ 	amdgpu_vm_sdma.o amdgpu_discovery.o amdgpu_ras_eeprom.o amdgpu_nbio.o \
+ 	amdgpu_umc.o smu_v11_0_i2c.o amdgpu_fru_eeprom.o amdgpu_rap.o \
+ 	amdgpu_fw_attestation.o amdgpu_securedisplay.o \
+-	amdgpu_eeprom.o amdgpu_mca.o amdgpu_psp_ta.o amdgpu_lsdma.o
++	amdgpu_eeprom.o amdgpu_mca.o amdgpu_psp_ta.o amdgpu_lsdma.o amdgpu_dp_auxch.o
+ 
+ amdgpu-$(CONFIG_PROC_FS) += amdgpu_fdinfo.o
+ 
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu.h b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
+index 30ce6bb6fa77..15e0288b1997 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu.h
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
+@@ -238,6 +238,8 @@ extern int amdgpu_num_kcq;
+ #define AMDGPU_VCNFW_LOG_SIZE (32 * 1024)
+ extern int amdgpu_vcnfw_log;
+ 
++extern int amdgpu_auxch;
++
+ #define AMDGPU_VM_MAX_NUM_CTX			4096
+ #define AMDGPU_SG_THRESHOLD			(256*1024*1024)
+ #define AMDGPU_DEFAULT_GTT_SIZE_MB		3072ULL /* 3GB by default */
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_atombios.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_atombios.c
+index 9ba4817a9148..68c8d79e2937 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_atombios.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_atombios.c
+@@ -49,7 +49,10 @@ static struct amdgpu_i2c_bus_rec amdgpu_atombios_get_bus_rec_for_i2c_gpio(ATOM_G
+ 
+ 	memset(&i2c, 0, sizeof(struct amdgpu_i2c_bus_rec));
+ 
+-	i2c.mask_clk_reg = le16_to_cpu(gpio->usClkMaskRegisterIndex);
++	if (amdgpu_auxch)
++		i2c.mask_clk_reg = le16_to_cpu(gpio->usClkMaskRegisterIndex) * 4;
++	else
++		i2c.mask_clk_reg = le16_to_cpu(gpio->usClkMaskRegisterIndex);
+ 	i2c.mask_data_reg = le16_to_cpu(gpio->usDataMaskRegisterIndex);
+ 	i2c.en_clk_reg = le16_to_cpu(gpio->usClkEnRegisterIndex);
+ 	i2c.en_data_reg = le16_to_cpu(gpio->usDataEnRegisterIndex);
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_dp_auxch.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_dp_auxch.c
+new file mode 100644
+index 000000000000..22078f1ca936
+--- /dev/null
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_dp_auxch.c
+@@ -0,0 +1,273 @@
++/*
++ * Copyright 2015 Red Hat Inc.
++ *
++ * Permission is hereby granted, free of charge, to any person obtaining a
++ * copy of this software and associated documentation files (the "Software"),
++ * to deal in the Software without restriction, including without limitation
++ * the rights to use, copy, modify, merge, publish, distribute, sublicense,
++ * and/or sell copies of the Software, and to permit persons to whom the
++ * Software is furnished to do so, subject to the following conditions:
++ *
++ * The above copyright notice and this permission notice shall be included in
++ * all copies or substantial portions of the Software.
++ *
++ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
++ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
++ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
++ * THE COPYRIGHT HOLDER(S) OR AUTHOR(S) BE LIABLE FOR ANY CLAIM, DAMAGES OR
++ * OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
++ * ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
++ * OTHER DEALINGS IN THE SOFTWARE.
++ *
++ * Authors: Dave Airlie
++ */
++
++#include "amdgpu.h"
++
++#define 	AUX_SW_RX_OVERFLOW			(1 << 8)
++#define 	AUX_SW_RX_HPD_DISCON			(1 << 9)
++#define 	AUX_SW_RX_PARTIAL_BYTE			(1 << 10)
++#define 	AUX_SW_NON_AUX_MODE			(1 << 11)
++#define 	AUX_SW_RX_SYNC_INVALID_L		(1 << 17)
++#define 	AUX_SW_RX_SYNC_INVALID_H		(1 << 18)
++#define 	AUX_SW_RX_INVALID_START			(1 << 19)
++#define 	AUX_SW_RX_RECV_NO_DET			(1 << 20)
++#define 	AUX_SW_RX_RECV_INVALID_H		(1 << 22)
++#define 	AUX_SW_RX_RECV_INVALID_V		(1 << 23)
++#define		AUX_CONTROL				0x6200
++#define 	AUX_HPD_SEL(x)				(((x) & 0x7) << 20)
++#define 	AUX_EN					(1 << 0)
++#define 	AUX_LS_READ_EN				(1 << 8)
++#define		AUX_SW_CONTROL				0x6204
++#define 	AUX_SW_WR_BYTES(x)			(((x) & 0x1f) << 16)
++#define AUX_SW_DATA					0x6218
++#define AUX_SW_DATA_RW					(1 << 0)
++#define AUX_SW_AUTOINCREMENT_DISABLE			(1 << 31)
++#define AUX_SW_INTERRUPT_CONTROL			0x620c
++#define 	AUX_SW_DONE_ACK				(1 << 1)
++#define 	AUX_SW_GO				(1 << 0)
++#define AUX_SW_STATUS					0x6210
++#define 	AUX_SW_DONE				(1 << 0)
++#define 	AUX_SW_RX_TIMEOUT			(1 << 7)
++#define AUX_SW_DATA_RW					(1 << 0)
++#define AUX_SW_DATA_MASK(x)				(((x) & 0xff) << 8)
++
++#define AUX_RX_ERROR_FLAGS (AUX_SW_RX_OVERFLOW |	     \
++			    AUX_SW_RX_HPD_DISCON |	     \
++			    AUX_SW_RX_PARTIAL_BYTE |	     \
++			    AUX_SW_NON_AUX_MODE |	     \
++			    AUX_SW_RX_SYNC_INVALID_L |	     \
++			    AUX_SW_RX_SYNC_INVALID_H |	     \
++			    AUX_SW_RX_INVALID_START |	     \
++			    AUX_SW_RX_RECV_NO_DET |	     \
++			    AUX_SW_RX_RECV_INVALID_H |	     \
++			    AUX_SW_RX_RECV_INVALID_V)
++
++#define AUX_SW_REPLY_GET_BYTE_COUNT(x) (((x) >> 24) & 0x1f)
++
++#define BARE_ADDRESS_SIZE 3
++
++#define R100_MM_INDEX                   0x0000
++#define R100_MM_DATA                      0x0004
++#define AMDGPU_MIN_MMIO_SIZE 0x10000
++uint32_t venus_mm_rreg_slow(struct amdgpu_device *adev, uint32_t reg)
++{
++        unsigned long flags;
++        uint32_t ret;
++
++        spin_lock_irqsave(&adev->mmio_idx_lock, flags);
++        writel(reg, ((void __iomem *)adev->rmmio) + R100_MM_INDEX);
++        ret = readl(((void __iomem *)adev->rmmio) + R100_MM_DATA);
++        spin_unlock_irqrestore(&adev->mmio_idx_lock, flags);
++        return ret;
++}
++void venus_mm_wreg_slow(struct amdgpu_device *adev, uint32_t reg, uint32_t v)
++{
++        unsigned long flags;
++
++        spin_lock_irqsave(&adev->mmio_idx_lock, flags);
++        writel(reg, ((void __iomem *)adev->rmmio) + R100_MM_INDEX);
++        writel(v, ((void __iomem *)adev->rmmio) + R100_MM_DATA);
++        spin_unlock_irqrestore(&adev->mmio_idx_lock, flags);
++}
++static inline uint32_t venus_mm_rreg(struct amdgpu_device *adev, uint32_t reg,
++                                    bool always_indirect)
++{
++        /* The mmio size is 64kb at minimum. Allows the if to be optimized out. */
++        if ((reg < adev->rmmio_size || reg < AMDGPU_MIN_MMIO_SIZE) && !always_indirect)
++                return readl(((void __iomem *)adev->rmmio) + reg);
++        else
++                return venus_mm_rreg_slow(adev, reg);
++}
++static inline void venus_mm_wreg(struct amdgpu_device *adev, uint32_t reg, uint32_t v,
++                                bool always_indirect)
++{
++        if ((reg < adev->rmmio_size || reg < AMDGPU_MIN_MMIO_SIZE) && !always_indirect)
++                writel(v, ((void __iomem *)adev->rmmio) + reg);
++        else
++                venus_mm_wreg_slow(adev, reg, v);
++}
++
++#define RREG32_VENUS(reg) venus_mm_rreg(adev, (reg), false)
++#define WREG32_VENUS(reg, v) venus_mm_wreg(adev, (reg), (v), false)
++
++static const u32 aux_offset[] =
++{
++	0x6200 - 0x6200,
++	0x6250 - 0x6200,
++	0x62a0 - 0x6200,
++	0x6300 - 0x6200,
++	0x6350 - 0x6200,
++	0x63a0 - 0x6200,
++};
++
++ssize_t
++amdgpu_dp_aux_transfer_native(struct drm_dp_aux *aux, struct drm_dp_aux_msg *msg)
++{
++	struct amdgpu_i2c_chan *chan =
++		container_of(aux, struct amdgpu_i2c_chan, aux);
++	struct drm_device *dev = chan->dev;
++	struct amdgpu_device *adev = dev->dev_private;
++	int ret = 0, i;
++	uint32_t tmp, ack = 0;
++	int instance = chan->rec.i2c_id & 0xf;
++	u8 byte;
++	u8 *buf = msg->buffer;
++	int retry_count = 0;
++	int bytes;
++	int msize;
++	bool is_write = false;
++
++	if (WARN_ON(msg->size > 16))
++		return -E2BIG;
++
++	switch (msg->request & ~DP_AUX_I2C_MOT) {
++	case DP_AUX_NATIVE_WRITE:
++	case DP_AUX_I2C_WRITE:
++		is_write = true;
++		break;
++	case DP_AUX_NATIVE_READ:
++	case DP_AUX_I2C_READ:
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	/* work out two sizes required */
++	msize = 0;
++	bytes = BARE_ADDRESS_SIZE;
++	if (msg->size) {
++		msize = msg->size - 1;
++		bytes++;
++		if (is_write)
++			bytes += msg->size;
++	}
++
++	mutex_lock(&chan->mutex);
++
++	/* switch the pad to aux mode */
++	tmp = RREG32_VENUS(chan->rec.mask_clk_reg);
++	tmp |= (1 << 16);
++	WREG32_VENUS(chan->rec.mask_clk_reg, tmp);
++
++	/* setup AUX control register with correct HPD pin */
++	tmp = RREG32_VENUS(AUX_CONTROL + aux_offset[instance]);
++	tmp &= AUX_HPD_SEL(0x7);
++	tmp |= AUX_HPD_SEL(chan->rec.hpd);
++	tmp |= AUX_EN | AUX_LS_READ_EN;
++
++	WREG32_VENUS(AUX_CONTROL + aux_offset[instance], tmp);
++
++	/* atombios appears to write this twice lets copy it */
++	WREG32_VENUS(AUX_SW_CONTROL + aux_offset[instance],
++	       AUX_SW_WR_BYTES(bytes));
++	WREG32_VENUS(AUX_SW_CONTROL + aux_offset[instance],
++	       AUX_SW_WR_BYTES(bytes));
++
++	/* write the data header into the registers */
++	/* request, address, msg size */
++	byte = (msg->request << 4) | ((msg->address >> 16) & 0xf);
++	WREG32_VENUS(AUX_SW_DATA + aux_offset[instance],
++	       AUX_SW_DATA_MASK(byte) | AUX_SW_AUTOINCREMENT_DISABLE);
++
++	byte = (msg->address >> 8) & 0xff;
++	WREG32_VENUS(AUX_SW_DATA + aux_offset[instance],
++	       AUX_SW_DATA_MASK(byte));
++
++	byte = msg->address & 0xff;
++	WREG32_VENUS(AUX_SW_DATA + aux_offset[instance],
++	       AUX_SW_DATA_MASK(byte));
++
++	byte = msize;
++	WREG32_VENUS(AUX_SW_DATA + aux_offset[instance],
++	       AUX_SW_DATA_MASK(byte));
++
++	/* if we are writing - write the msg buffer */
++	if (is_write) {
++		for (i = 0; i < msg->size; i++) {
++			WREG32_VENUS(AUX_SW_DATA + aux_offset[instance],
++			       AUX_SW_DATA_MASK(buf[i]));
++		}
++	}
++
++	/* clear the ACK */
++	WREG32_VENUS(AUX_SW_INTERRUPT_CONTROL + aux_offset[instance], AUX_SW_DONE_ACK);
++
++	/* write the size and GO bits */
++	WREG32_VENUS(AUX_SW_CONTROL + aux_offset[instance],
++	       AUX_SW_WR_BYTES(bytes) | AUX_SW_GO);
++
++	/* poll the status registers - TODO irq support */
++	do {
++		tmp = RREG32_VENUS(AUX_SW_STATUS + aux_offset[instance]);
++		if (tmp & AUX_SW_DONE) {
++			break;
++		}
++		usleep_range(100, 200);
++	} while (retry_count++ < 1000);
++
++	if (retry_count >= 1000) {
++		DRM_ERROR("auxch hw never signalled completion, error %08x\n", tmp);
++		ret = -EIO;
++		goto done;
++	}
++
++	if (tmp & AUX_SW_RX_TIMEOUT) {
++		ret = -ETIMEDOUT;
++		goto done;
++	}
++	if (tmp & AUX_RX_ERROR_FLAGS) {
++		DRM_DEBUG_KMS_RATELIMITED("dp_aux_ch flags not zero: %08x\n",
++					  tmp);
++		ret = -EIO;
++		goto done;
++	}
++
++	bytes = AUX_SW_REPLY_GET_BYTE_COUNT(tmp);
++	if (bytes) {
++		WREG32_VENUS(AUX_SW_DATA + aux_offset[instance],
++		       AUX_SW_DATA_RW | AUX_SW_AUTOINCREMENT_DISABLE);
++
++		tmp = RREG32_VENUS(AUX_SW_DATA + aux_offset[instance]);
++		ack = (tmp >> 8) & 0xff;
++
++		for (i = 0; i < bytes - 1; i++) {
++			tmp = RREG32_VENUS(AUX_SW_DATA + aux_offset[instance]);
++			if (buf)
++				buf[i] = (tmp >> 8) & 0xff;
++		}
++		if (buf)
++			ret = bytes - 1;
++	}
++
++	WREG32_VENUS(AUX_SW_INTERRUPT_CONTROL + aux_offset[instance], AUX_SW_DONE_ACK);
++
++	if (is_write)
++		ret = msg->size;
++done:
++	mutex_unlock(&chan->mutex);
++
++	if (ret >= 0)
++		msg->reply = ack >> 4;
++	return ret;
++}
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+index 8890300766a5..2ac7636ddafb 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+@@ -180,6 +180,7 @@ int amdgpu_num_kcq = -1;
+ int amdgpu_smartshift_bias;
+ int amdgpu_use_xgmi_p2p = 1;
+ int amdgpu_vcnfw_log;
++int amdgpu_auxch = 0;
+ 
+ static void amdgpu_drv_delayed_reset_work_handler(struct work_struct *work);
+ 
+@@ -882,6 +883,9 @@ MODULE_PARM_DESC(smu_pptable_id,
+ 	"specify pptable id to be used (-1 = auto(default) value, 0 = use pptable from vbios, > 0 = soft pptable id)");
+ module_param_named(smu_pptable_id, amdgpu_smu_pptable_id, int, 0444);
+ 
++MODULE_PARM_DESC(auxch, "Use native auxch experimental support (1 = enable, 0 = disable, -1 = auto)");
++module_param_named(auxch, amdgpu_auxch, int, 0444);
++
+ /* These devices are not supported by amdgpu.
+  * They are supported by the mach64, r128, radeon drivers
+  */
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h b/drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h
+index f80b4838cea1..95fffc110c75 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_mode.h
+@@ -619,5 +619,7 @@ int amdgpu_display_crtc_page_flip_target(struct drm_crtc *crtc,
+ 				uint32_t page_flip_flags, uint32_t target,
+ 				struct drm_modeset_acquire_ctx *ctx);
+ extern const struct drm_mode_config_funcs amdgpu_mode_funcs;
++extern ssize_t
++amdgpu_dp_aux_transfer_native(struct drm_dp_aux *aux, struct drm_dp_aux_msg *msg);
+ 
+ #endif
+diff --git a/drivers/gpu/drm/amd/amdgpu/atombios_dp.c b/drivers/gpu/drm/amd/amdgpu/atombios_dp.c
+index 87c41e0e9b7c..846ecc315665 100644
+--- a/drivers/gpu/drm/amd/amdgpu/atombios_dp.c
++++ b/drivers/gpu/drm/amd/amdgpu/atombios_dp.c
+@@ -188,7 +188,10 @@ amdgpu_atombios_dp_aux_transfer(struct drm_dp_aux *aux, struct drm_dp_aux_msg *m
+ void amdgpu_atombios_dp_aux_init(struct amdgpu_connector *amdgpu_connector)
+ {
+ 	amdgpu_connector->ddc_bus->rec.hpd = amdgpu_connector->hpd.hpd;
+-	amdgpu_connector->ddc_bus->aux.transfer = amdgpu_atombios_dp_aux_transfer;
++	if (amdgpu_auxch)
++		amdgpu_connector->ddc_bus->aux.transfer = amdgpu_dp_aux_transfer_native;
++	else
++		amdgpu_connector->ddc_bus->aux.transfer = amdgpu_atombios_dp_aux_transfer;
+ 	amdgpu_connector->ddc_bus->aux.drm_dev = amdgpu_connector->base.dev;
+ 
+ 	drm_dp_aux_init(&amdgpu_connector->ddc_bus->aux);
+-- 
+2.25.1
+
+
+No virus found
+		Checked by Hillstone Network AntiVirus

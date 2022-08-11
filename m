@@ -2,64 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 982B05906D6
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 21:09:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47AD45906D8
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 21:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235247AbiHKTJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 15:09:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50668 "EHLO
+        id S235745AbiHKTJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 15:09:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230095AbiHKTJF (ORCPT
+        with ESMTP id S235083AbiHKTJH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 15:09:05 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC398A1A5E;
-        Thu, 11 Aug 2022 12:09:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660244944; x=1691780944;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MSJBbF/M9HYaTdCscRR7v5/d3Esdu4eDRtn+bYyVNcQ=;
-  b=U62qP/1S4HlOaanXNjnBgWIcxR2JaG6JU2Iz3iRzaIvqxXgC0cFclLUy
-   Nx2maykMr/Q73HMZyAlD11nPr+QScnTjP6Xm+sX83z66POVvccQpHDnKV
-   zLt0D0gFAQ8ndpK0qU17fATxbDQq/iE2XOIuSagZ662glVkPJ7vukFrRZ
-   AeFT7VdN4cWn/ePWdZlziIsSlva+vxmH2SIp/EVz8XSotO6+kSi+6P52E
-   dhMNY5fNs17QzMvZeXRgy+rjB1AfmNcGZlQTNDZkp6yWa9f2prKo8hqMI
-   Tr9vlbBQWU4W8Bgxkc97D1bUBK52FMFF2zN1gLdFzCywkM9I7PJsKMTyl
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10436"; a="291440918"
-X-IronPort-AV: E=Sophos;i="5.93,230,1654585200"; 
-   d="scan'208";a="291440918"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 12:09:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,230,1654585200"; 
-   d="scan'208";a="638634331"
-Received: from lkp-server02.sh.intel.com (HELO cfab306db114) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 11 Aug 2022 12:09:02 -0700
-Received: from kbuild by cfab306db114 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oMDYE-0000Yd-0l;
-        Thu, 11 Aug 2022 19:09:02 +0000
-Date:   Fri, 12 Aug 2022 03:08:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Hongchen Zhang <zhanghongchen@loongson.cn>,
-        Jens Axboe <axboe@kernel.dk>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hongchen Zhang <zhanghongchen@loongson.cn>
-Subject: Re: [PATCH] blk-wbt: do not throttle swap write on processes other
- than kswapd
-Message-ID: <202208120245.VvjRBGkd-lkp@intel.com>
-References: <1660217545-10697-1-git-send-email-zhanghongchen@loongson.cn>
+        Thu, 11 Aug 2022 15:09:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67E08A1A43;
+        Thu, 11 Aug 2022 12:09:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 15A09B8200A;
+        Thu, 11 Aug 2022 19:09:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FD31C433C1;
+        Thu, 11 Aug 2022 19:09:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660244943;
+        bh=e7+/hsuVnFf7TiLZzimRb3KiCHnwK91WXtyUVwVpXFk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=jB2cs5MTBO8qGUqd8Dp/dhivdFH4wROLgdF0nBdvi8Puy3Mi86NDAGDHbaEtLvGwm
+         BuOMzd9Bs1+mexJHbrPd2DN+aKcHrKsB5hOdidesUIIM9smlHU9jgZENUa0MilxRwP
+         oOld7Zggob6Z5iPmNICE6cKR48l5Ux5TwAFidUCQqjlYnKTX05mw59m6IvRkhYG0Wj
+         oFJrlb5Uz1dVCWH1KjZVJf9Gcm3702/mV1U4Rfd6lUGhP6EK+KYe8B3KLLBSLCCdWd
+         iIrQg3bfqihf7dF0h9zC0SGtMt7E16O8El+jkjScTnGmk4OyT+Y+lutBWdT1j7aANk
+         HJbrhfVWOnJQQ==
+Date:   Thu, 11 Aug 2022 12:09:02 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     torvalds@linux-foundation.org
+Cc:     davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pabeni@redhat.com
+Subject: Re: [PULL] Networking for 6.0-rc1
+Message-ID: <20220811120902.7e82826a@kernel.org>
+In-Reply-To: <20220811185102.3253045-1-kuba@kernel.org>
+References: <20220811185102.3253045-1-kuba@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1660217545-10697-1-git-send-email-zhanghongchen@loongson.cn>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,69 +54,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hongchen,
+On Thu, 11 Aug 2022 11:51:02 -0700 Jakub Kicinski wrote:
+> The following changes since commit f86d1fbbe7858884d6754534a0afbb74fc30bc26:
+> 
+>   Merge tag 'net-next-6.0' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next (2022-08-03 16:29:08 -0700)
+> 
+> are available in the Git repository at:
+> 
+>   git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-6.0-rc1
+> 
+> for you to fetch changes up to c2e75634cbe368065f140dd30bf8b1a0355158fd:
+> 
+>   net: atm: bring back zatm uAPI (2022-08-11 10:31:19 -0700)
 
-Thank you for the patch! Yet something to improve:
+Let's put this one on hold, sorry. We got a report 2 minutes after
+sending that one of the BT patches broke mips and csky builds :S
+I'll try to get hold of Luiz and fix that up quickly.
 
-[auto build test ERROR on axboe-block/for-next]
-[also build test ERROR on linus/master v5.19 next-20220811]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Hongchen-Zhang/blk-wbt-do-not-throttle-swap-write-on-processes-other-than-kswapd/20220811-193652
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/axboe/linux-block.git for-next
-config: arm-randconfig-r001-20220811 (https://download.01.org/0day-ci/archive/20220812/202208120245.VvjRBGkd-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/a3ed95d0b72fa83c2ad007bee31d928fad40e70d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Hongchen-Zhang/blk-wbt-do-not-throttle-swap-write-on-processes-other-than-kswapd/20220811-193652
-        git checkout a3ed95d0b72fa83c2ad007bee31d928fad40e70d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> block/blk-wbt.c:558:26: error: use of undeclared identifier 'end_swap_bio_write'
-                       (bio->bi_end_io != end_swap_bio_write))
-                                          ^
-   1 error generated.
-
-
-vim +/end_swap_bio_write +558 block/blk-wbt.c
-
-   542	
-   543	static enum wbt_flags bio_to_wbt_flags(struct rq_wb *rwb, struct bio *bio)
-   544	{
-   545		enum wbt_flags flags = 0;
-   546	
-   547		if (!rwb_enabled(rwb))
-   548			return 0;
-   549	
-   550		if (bio_op(bio) == REQ_OP_READ) {
-   551			flags = WBT_READ;
-   552		} else if (wbt_should_throttle(bio)) {
-   553			if (current_is_kswapd())
-   554				flags |= WBT_KSWAPD;
-   555			if (bio_op(bio) == REQ_OP_DISCARD)
-   556				flags |= WBT_DISCARD;
-   557			if (current_is_kswapd() ||
- > 558			    (bio->bi_end_io != end_swap_bio_write))
-   559				flags |= WBT_TRACKED;
-   560		}
-   561		return flags;
-   562	}
-   563	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Speaking of build problems after merging with your tree I run into
+-Werror,-Wframe-larger-than on the AMD GPU drivers (gcc and clang, both). 
+Quick search of lore does not show any hits.

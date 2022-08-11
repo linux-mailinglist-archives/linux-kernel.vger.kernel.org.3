@@ -2,157 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDB4B58F5AD
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 04:02:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E7C958F5AE
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 04:04:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233580AbiHKCCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 22:02:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56034 "EHLO
+        id S233598AbiHKCD4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 22:03:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbiHKCCl (ORCPT
+        with ESMTP id S229924AbiHKCDy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 22:02:41 -0400
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8FE5550AE;
-        Wed, 10 Aug 2022 19:02:40 -0700 (PDT)
-Received: by mail-vs1-xe36.google.com with SMTP id d126so12708971vsd.13;
-        Wed, 10 Aug 2022 19:02:40 -0700 (PDT)
+        Wed, 10 Aug 2022 22:03:54 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAD205A3ED
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 19:03:52 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id p14-20020a17090a74ce00b001f4d04492faso3818342pjl.4
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 19:03:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc;
-        bh=Nxc6HpQPkKpwjHiY4PCyqpP39+h41vDJgqZmkMmJ6Bw=;
-        b=DZsvcicL7D6eG5PtgWrmj4uF3jhwd+EkuPRT0qGq77YlG4Iu3sPr5lF4jdwlG7B8cM
-         MQkheUb2MuyQ65lTBJTmBo48HuyrJ7P81OojqkN032fk1WW+Yit5r5j3Swv4AoFcW7dy
-         gxAbJogAWqfXNFaJIKRcVzDukIsSU6xKn4vHtoUXHO2H0h6i2ppm5w1Dqf5HoYgIfNVj
-         mmthaZEa1+zoIEo+O2/2T1hsb6iZ4l9sAzvT4ygK1m+DyDsYveMrk2Q/Jv5O/fxO8aTN
-         +K1S8vYjWg7VgjZIQZd0B1SQ0sZl7d1pvDKlSCLW+bHKt+WEJptQxWTTGNbGYPQm3JUT
-         3iYg==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc;
+        bh=GiE/+6siIUPepAkCpDVOEfnQBLpgG2re0zDFCb88zhQ=;
+        b=joHERJT1xeR/3qOBhs17HUmqwFTPf4spDjKd+momOQl2shFfvUEH63FMW685UOvbWu
+         eM5AEg7fFwRVwMlTt0oS2NLcuzhmywk2KcMVTcnqEqIKcESarRPJTnguW/wb4mLqRY6T
+         yOuuemKnoeHzadu7wuYjS5deU8SKBJK3Zj/9vG4G3jXMOM2XQbXJ2xkgIX+hFTWTnLz6
+         Qa59m7Cf2k3O8dQehmYOmNowELVWxQTNSo8u+/QaPEZH8/NMPhb8vDLIF8xJFOcn9r+7
+         byRmrkg+v0mxgvxg1FuG/+Gu3TVZqA/TDX6PKk4BvodPi4v4unqI+fC70/6CwbTDFXO6
+         cX+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=Nxc6HpQPkKpwjHiY4PCyqpP39+h41vDJgqZmkMmJ6Bw=;
-        b=0Dskh4aSpQQLTRq/1Pkp2FGGGyOlCDETf4V4cTvQCkjZFCvCVeCT/38nVwW00XSvUi
-         RU0Hc5bO7jUKoe+wCtZyN1sy3RWtlwbhVSdl0vlTNy60ztJ+03DdvROgkphiS+Y2CmC0
-         AS9qtOQ/45c3t6h1bBrR3u1wGU1VLpa964ThOxCrBed+kW/FV44d4J0YQ3MDWId3CH06
-         3lMRHCahIAnTN6LuCigbaiqn0sewAPw4sC7neySDv5L9nDduyfPJQzicbChQBPAE5jvB
-         QmvNK0gQlfW5FjHfblAhQw0SUHgGkwheVBAwzt8m1uXaq1wR6bC4q6ELTlCTIliJKmkb
-         RWhg==
-X-Gm-Message-State: ACgBeo07WZw9Hoai39QihHeBngBaZyOsrEg9gSlwKeI5RVpTBgaA3jos
-        s2MqI7tJrgPRWxIrl+C0PRza+ZvsY3Cx4bsr8Q2CipNOX1H69I1ZHTY=
-X-Google-Smtp-Source: AA6agR5fUMUJ07/ZFYxEiDCw7oN2pkyScl7qA7b/VXVP7HOup8m5RQwqG0VkodJ5AYDI0qJr1uceAL2CvNxnWzpqCsA=
-X-Received: by 2002:a67:f607:0:b0:388:ac13:af19 with SMTP id
- k7-20020a67f607000000b00388ac13af19mr7774530vso.19.1660183359882; Wed, 10 Aug
- 2022 19:02:39 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc;
+        bh=GiE/+6siIUPepAkCpDVOEfnQBLpgG2re0zDFCb88zhQ=;
+        b=vDW3puRyaA+LUd9fHbJ8+Q8gm9ih6HVV7BjWsdnNPXOjkv1P95+XS7rdymmK3+y2Qk
+         RZJHRpd6JplssIvjFsBTbrFb58Ed1xlosxYAAraIcotV9YhoFEu6GGtwhPvlKsYCDJ51
+         MJGDlCmZlksIyOB8Qsguolm17rPtSHeTR80TolpvSTHPMIE8UipRxVjtQ1YxWvBxVA0/
+         UBsX3X+eeKOVhHD0EqPWO5PWwYGEgEzG9+4IwbfZlHNcxPPOSXj593FiKx9WSvIHCtSg
+         A7azJnhPjoQXBtu50tw5+UlnG8d6oKgG/HTV/iPAJ2YoP7obu2tzXYPD6PdhoIbM53Tt
+         CztQ==
+X-Gm-Message-State: ACgBeo2SY+FwWDYgC54AvXOPhNm9yEGM7BUq+DJMugcczjxyeCGfpShE
+        Rq8wZ/kugYKs68udH1bY7kM=
+X-Google-Smtp-Source: AA6agR6eYLEdMc6mcH6h1NYJUYJ6BWR4sQTdRX7eCg9wtswlLhfNlrmHZNZ2r77tZd+xROogLEesKA==
+X-Received: by 2002:a17:903:22d1:b0:16f:a93:918b with SMTP id y17-20020a17090322d100b0016f0a93918bmr31356017plg.123.1660183432128;
+        Wed, 10 Aug 2022 19:03:52 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id 13-20020a170902c20d00b0016e808dbe55sm13492190pll.96.2022.08.10.19.03.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Aug 2022 19:03:51 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <225747de-4348-58b3-19be-8b14356ab3a0@roeck-us.net>
+Date:   Wed, 10 Aug 2022 19:03:49 -0700
 MIME-Version: 1.0
-From:   Rondreis <linhaoguo86@gmail.com>
-Date:   Thu, 11 Aug 2022 10:02:26 +0800
-Message-ID: <CAB7eexLLApHJwZfMQ=X-PtRhw0BgO+5KcSMS05FNUYejJXqtSA@mail.gmail.com>
-Subject: kernel v5.19 warn in usb_composite_setup_continue
-To:     stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v6] amba: Remove deferred device addition
+Content-Language: en-US
+To:     Isaac Manjarres <isaacmanjarres@google.com>
+Cc:     Saravana Kannan <saravanak@google.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Rob Herring <robh@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@armlinux.org.uk, kernel-team@android.com,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220727181936.3250466-1-saravanak@google.com>
+ <20220809103052.GA1778649@roeck-us.net>
+ <CAGETcx_ATE6vy9YhygHnBA2P1GDVi54np-=E+50F+cwnj6Wg4A@mail.gmail.com>
+ <0c6ef9a3-bbb1-9f1c-7f00-ceb05589594e@roeck-us.net>
+ <CAGETcx8yKqEthtyd8Zb=mqMBNp1TPRXbQOoFp+OxeCoXnTs2kw@mail.gmail.com>
+ <1196e002-c07d-44fd-b07a-aa5ae446ea0b@roeck-us.net>
+ <YvQnbq2RhMOElQE3@google.com>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <YvQnbq2RhMOElQE3@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 8/10/22 14:47, Isaac Manjarres wrote:
+> On Wed, Aug 10, 2022 at 05:58:58AM -0700, Guenter Roeck wrote:
+>> On 8/9/22 20:33, Saravana Kannan wrote:
+>> [ ... ]
+>>
+>>>
+>>> Can you give me more details on the qemu configuration so I could try
+>>> to reproduce it?
+>>
+>> qemu-system-arm -M vexpress-a9 -kernel arch/arm/boot/zImage -no-reboot \
+>>      -initrd rootfs-armv5.cpio -m 128 \
+>>      --append "rdinit=/sbin/init console=ttyAMA0,115200" \
+>>      -dtb arch/arm/boot/dts/vexpress-v2p-ca9.dtb \
+>>      -nographic -monitor null -serial stdio
+>>
+>> using multi_v7_defconfig will hang nicely with your patch applied,
+>> and boot as expected without. This was with qemu v7.0, but I am
+>> sure older qemu versions will show the same behavior. The initrd
+>> used should not matter, but you'll find it at
+>> https://github.com/groeck/linux-build-test/blob/master/rootfs/arm-v7/rootfs-armv5.cpio.gz
+>>
+>> Guenter
+>>
+> Hi Guenter,
+> 
+> Thanks for the information; I was able to reproduce this on my end as
+> well. The following changes fixed the problem for me. Can you please try
+> them out?
+> 
+> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+> index 70f79fc71539..b377f18d8acc 100644
+> --- a/drivers/base/dd.c
+> +++ b/drivers/base/dd.c
+> @@ -881,6 +881,11 @@ static int __device_attach_driver(struct device_driver *drv, void *_data)
+>                  dev_dbg(dev, "Device match requests probe deferral\n");
+>                  dev->can_match = true;
+>                  driver_deferred_probe_add(dev);
+> +               /*
+> +                * Device can't match with the bus right now, so don't attempt
+> +                * to match or bind with other drivers on the bus.
+> +                */
+> +               return ret;
+>          } else if (ret < 0) {
+>                  dev_dbg(dev, "Bus failed to match device: %d\n", ret);
+>                  return ret;
+> @@ -1120,6 +1125,11 @@ static int __driver_attach(struct device *dev, void *data)
+>                  dev_dbg(dev, "Device match requests probe deferral\n");
+>                  dev->can_match = true;
+>                  driver_deferred_probe_add(dev);
+> +               /*
+> +                * Driver could not match with device, but may match with
+> +                * another device on the bus.
+> +                */
+> +               return 0;
+>          } else if (ret < 0) {
+>                  dev_dbg(dev, "Bus failed to match device: %d\n", ret);
+>                  return ret;
+> 
 
-When fuzzing the Linux kernel driver 5.19.0-rc4-00208-g69cb6c6556ad,
-the following crash was triggered.
+Most of the tests pass with the above applied, but there is still one crash.
 
-HEAD commit: 4b0986a3613c92f4ec1bdc7f60ec66fea135991f (HEAD, tag: v5.18)
-git tree: upstream
+8<--- cut here ---^M
+Unhandled fault: page domain fault (0x81b) at 0x00000122^M
+[00000122] *pgd=00000000^M
+Internal error: : 81b [#1] ARM^M
+Modules linked in:^M
+CPU: 0 PID: 1 Comm: swapper Tainted: G                 N 5.19.0+ #1^M
+Hardware name: ARM-Versatile (Device Tree Support)^M
+PC is at do_alignment_ldrstr+0x7c/0x164^M
+LR is at ai_half+0x0/0x4^M
+pc : [<c001fa00>]    lr : [<c0ca1278>]    psr: 60000113^M
+sp : c8811d68  ip : 00000003  fp : 00000004^M
+r10: c05433e4  r9 : c0ca1278  r8 : 00000801^M
+r7 : 00000122  r6 : 00000000  r5 : e5823000  r4 : c8811df8^M
+r3 : 00000100  r2 : c8811df8  r1 : 00000000  r0 : 00000122^M
+Flags: nZCv  IRQs on  FIQs on  Mode SVC_32  ISA ARM  Segment none^M
+Control: 00093177  Table: 01698000  DAC: 00000051^M
+Register r0 information: non-paged memory^M
+Register r1 information: NULL pointer^M
+Register r2 information: 2-page vmalloc region starting at 0xc8810000 allocated at kernel_clone+0x70/0x644^M
+Register r3 information: non-paged memory^M
+Register r4 information: 2-page vmalloc region starting at 0xc8810000 allocated at kernel_clone+0x70/0x644^M
+Register r5 information: non-paged memory^M
+Register r6 information: NULL pointer^M
+Register r7 information: non-paged memory^M
+Register r8 information: non-paged memory^M
+Register r9 information: non-slab/vmalloc memory^M
+Register r10 information: non-slab/vmalloc memory^M
+Register r11 information: non-paged memory^M
+Register r12 information: non-paged memory^M
+Process swapper (pid: 1, stack limit = 0x(ptrval))^M
+Stack: (0xc8811d68 to 0xc8812000)^M
+1d60:                   c8811df8 e5823000 00000000 c00201dc 00000000 00000000^M
+1d80: c0bf2fd4 60000013 00000000 c006c440 00000001 00000000 e5823000 c053cdc0^M
+1da0: 00000000 c0be786c c1496d40 00000801 c0bec3f8 c001ffdc c8811df8 00000122^M
+1dc0: c1496d40 c0bc4858 00000000 c001d66c c12ae950 00000001 c0c5f3b0 c1496d40^M
+1de0: c05433e4 20000013 ffffffff c8811e2c c1496d40 c00095c4 00000001 00000001^M
+1e00: 00000122 00000100 c24d8cc0 c1552c00 00000fff c0c5f230 c1496d40 c24d6e58^M
+1e20: c0bc4858 00000000 c1497330 c8811e48 00000001 c05433e8 20000013 ffffffff^M
+1e40: 00000053 c05433cc ffffffed c1552c00 00000fff c0c5f230 c1496d40 c24d6e58^M
+1e60: c0bc4858 c053a784 c1552c00 c0c5f294 c0c5f294 c053a808 00000000 c1552c00^M
+1e80: c0c5f294 c05d9f94 00000000 c0c5f294 c05d9f74 c0c5f230 c1496d40 c05d7984^M
+1ea0: 00000000 c1540eac c7cd5fb4 c0be786c c0c5f294 c24d6e00 00000000 c05d8b7c^M
+1ec0: c0acccd4 c0c92600 c1496d40 c0c5f294 c0c92600 c1496d40 00000000 c1496d40^M
+1ee0: c0ca1000 c05dab3c c0bb0690 c0c92600 c1496d40 c000a8b0 00000000 00000000^M
+1f00: c14d7e4b c0b5f800 000000bf c0047c5c c0b5e9b4 00000000 c0c92600 c088e078^M
+1f20: c1496d40 00000007 c0c92600 c14d7e00 c0bc4874 c0b5e9b4 c0ca1000 c0bc4858^M
+1f40: 00000000 c0be786c c0bdda90 00000008 c14d7e00 c0bc4878 c0b5e9b4 c0b93230^M
+1f60: 00000007 00000007 00000000 c0b92400 00000000 000000bf 00000000 00000000^M
+1f80: c088e340 00000000 00000000 00000000 00000000 00000000 00000000 c088e350^M
+1fa0: 00000000 c088e340 00000000 c00084f8 00000000 00000000 00000000 00000000^M
+1fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000^M
+1fe0: 00000000 00000000 00000000 00000000 00000013 00000000 00000000 00000000^M
+  do_alignment_ldrstr from do_alignment+0x200/0x984^M
+  do_alignment from do_DataAbort+0x38/0xb8^M
+  do_DataAbort from __dabt_svc+0x64/0xa0^M
+Exception stack(0xc8811df8 to 0xc8811e40)^M
+1de0:                                                       00000001 00000001^M
+1e00: 00000122 00000100 c24d8cc0 c1552c00 00000fff c0c5f230 c1496d40 c24d6e58^M
+1e20: c0bc4858 00000000 c1497330 c8811e48 00000001 c05433e8 20000013 ffffffff^M
+  __dabt_svc from __clk_put+0x34/0x174^M
+  __clk_put from amba_read_periphid+0xd8/0x120^M
+  amba_read_periphid from amba_match+0x3c/0x84^M
+  amba_match from __driver_attach+0x20/0x114^M
+  __driver_attach from bus_for_each_dev+0x74/0xc0^M
+  bus_for_each_dev from bus_add_driver+0x154/0x1e8^M
+  bus_add_driver from driver_register+0x74/0x10c^M
+  driver_register from do_one_initcall+0x8c/0x2fc^M
+  do_one_initcall from kernel_init_freeable+0x190/0x220^M
+  kernel_init_freeable from kernel_init+0x10/0x108^M
+  kernel_init from ret_from_fork+0x14/0x3c^M
+Exception stack(0xc8811fb0 to 0xc8811ff8)^M
+1fa0:                                     00000000 00000000 00000000 00000000^M
+1fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000^M
+1fe0: 00000000 00000000 00000000 00000000 00000013 00000000^M
+Code: e3a00002 e782310c e8bd8070 e792310c (e4c03001) ^M
+---[ end trace 0000000000000000 ]---^M
+Kernel panic - not syncing: Attempted to kill init! exitcode=0x0000000b^M
 
-kernel config: https://pastebin.com/KecL2gaG
-C reproducer: https://pastebin.com/gTWJQwsh
-console output: https://pastebin.com/iHzBVP3B
+This is with versatile_defconfig and versatileab. Let me know if you need details.
 
-Basically, in the c reproducer, we use the gadget module to emulate
-the process of attaching a usb device (vendor id: 0x45e, product id:
-0x6d, with function: loopback_null).
-To reproduce this crash, we utilize a third-party library to emulate
-the attaching process: https://github.com/linux-usb-gadgets/libusbgx.
-Just clone this repository, make install it, and compile the c
-reproducer with ``` gcc crash.c -lusbgx -o crash ``` will do the
-trick.
-
-It seems that an error state in struct usb_device trigger such kernel warning.
-
-The crash report is as follow:
-
-```
-input: Media Center Ed. eHome Infrared Remote Transceiver (045e:006d)
-as /devices/platform/dummy_hcd.5/usb6/6-1/6-1:1.0/rc/rc0/input4
-------------[ cut here ]------------
-usb 6-1: BOGUS control dir, pipe 80000380 doesn't match bRequestType 40
-WARNING: CPU: 0 PID: 2465 at drivers/usb/core/urb.c:410
-usb_submit_urb+0x1326/0x1820 drivers/usb/core/urb.c:410
-Modules linked in:
-CPU: 0 PID: 2465 Comm: kworker/0:2 Not tainted 5.19.0-rc4-00208-g69cb6c6556ad #1
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-1.13.0-1ubuntu1.1 04/01/2014
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:usb_submit_urb+0x1326/0x1820 drivers/usb/core/urb.c:410
-Code: 7c 24 40 e8 ac 23 91 fd 48 8b 7c 24 40 e8 b2 70 1b ff 45 89 e8
-44 89 f1 4c 89 e2 48 89 c6 48 c7 c7 a0 30 a9 86 e8 48 07 11 02 <0f> 0b
-e9 1c f0 ff ff e8 7e 23 91 fd 0f b6 1d 63 22 83 05 31 ff 41
-RSP: 0018:ffffc900032becf0 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: ffff8881100f3058 RCX: 0000000000000000
-RDX: ffffc90004961000 RSI: ffff888114c6d580 RDI: fffff52000657d90
-RBP: ffff888105ad90f0 R08: ffffffff812c3638 R09: 0000000000000000
-R10: 0000000000000005 R11: ffffed1023504ef1 R12: ffff888105ad9000
-R13: 0000000000000040 R14: 0000000080000380 R15: ffff88810ba96500
-FS: 0000000000000000(0000) GS:ffff88811a800000(0000) knlGS:0000000000000000
-CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007ffe810bda58 CR3: 000000010b720000 CR4: 0000000000350ef0
-Call Trace:
-<TASK>
-usb_start_wait_urb+0x101/0x4c0 drivers/usb/core/message.c:58
-usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
-usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:153
-mceusb_gen1_init drivers/media/rc/mceusb.c:1431 [inline]
-mceusb_dev_probe+0x258e/0x33f0 drivers/media/rc/mceusb.c:1807
-usb_probe_interface+0x310/0x800 drivers/usb/core/driver.c:396
-call_driver_probe drivers/base/dd.c:555 [inline]
-really_probe drivers/base/dd.c:634 [inline]
-really_probe+0x23e/0xa80 drivers/base/dd.c:579
-__driver_probe_device+0x338/0x4d0 drivers/base/dd.c:764
-driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:794
-__device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:917
-bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
-__device_attach+0x283/0x490 drivers/base/dd.c:989
-bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
-device_add+0xc9b/0x1da0 drivers/base/core.c:3417
-usb_set_configuration+0x1019/0x1900 drivers/usb/core/message.c:2170
-usb_generic_driver_probe+0x9d/0xe0 drivers/usb/core/generic.c:238
-usb_probe_device+0xd9/0x2a0 drivers/usb/core/driver.c:293
-call_driver_probe drivers/base/dd.c:555 [inline]
-really_probe drivers/base/dd.c:634 [inline]
-really_probe+0x23e/0xa80 drivers/base/dd.c:579
-__driver_probe_device+0x338/0x4d0 drivers/base/dd.c:764
-driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:794
-__device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:917
-bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
-__device_attach+0x283/0x490 drivers/base/dd.c:989
-bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
-device_add+0xc9b/0x1da0 drivers/base/core.c:3417
-usb_new_device.cold+0x4b8/0x10ca drivers/usb/core/hub.c:2566
-hub_port_connect drivers/usb/core/hub.c:5363 [inline]
-hub_port_connect_change drivers/usb/core/hub.c:5507 [inline]
-port_event drivers/usb/core/hub.c:5663 [inline]
-hub_event+0x232d/0x4180 drivers/usb/core/hub.c:5745
-process_one_work+0x9cc/0x1650 kernel/workqueue.c:2289
-worker_thread+0x623/0x1070 kernel/workqueue.c:2436
-kthread+0x2ef/0x3a0 kernel/kthread.c:376
-ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
-</TASK>
-
-
-```
+Guenter

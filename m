@@ -2,100 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 036FA58F52E
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 02:18:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30CC358F532
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 02:20:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233582AbiHKARu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 20:17:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36482 "EHLO
+        id S231533AbiHKAU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 20:20:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233551AbiHKARq (ORCPT
+        with ESMTP id S229867AbiHKAUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 20:17:46 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E878FD5D
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 17:17:45 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1660177062;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cUuS5wR61NmFQ4xmvkQge0ofNDbuv+yhiaUNvgh6AaU=;
-        b=xmTLXaHG72SxY4EMQyLqM7ceLTg3hPNtd4Xrdl9ZuWxoHsWKeLQ0mW+RmFUQkhLx3Fegp7
-        SfHN0dCSvYLqprnsaOl5JcHbuAyRQAL90JnNA3xH5vPYXV0x+3X2fxSf3YYjrCJT9LnEzs
-        Dhuj2OYMOQijvRyu56bPTR6YqNjmlZSU7dZziAOUaddcQKnpweY9+T4W060aeULLlfiPaI
-        Asgov5Z7vcbCutdE/ZIiYMgpGQw1QvfsuNydWWoZnAj5kk7amuCVNYZD8Y9ZeACAeir8AD
-        tgksaRPvKJju9HTUv7y4lyoDBw3qFl5wm9O3OW+Mq9JpNXbDn/OrUYVlGGppSw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1660177062;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cUuS5wR61NmFQ4xmvkQge0ofNDbuv+yhiaUNvgh6AaU=;
-        b=CkbZwGW3eV47VPXcugEyl8MaxUw/0yG42ErEOPfCNPpqR5XNB8Odvxip2H3gVJQy0MQaKO
-        zAU3tNSrOfh9VgAQ==
-To:     Daniel Sneddon <daniel.sneddon@linux.intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
-        "Huang, Kai" <kai.huang@intel.com>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        "Gomez Iglesias, Antonio" <antonio.gomez.iglesias@intel.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-Subject: Re: [PATCH] x86/apic: Don't disable x2APIC if locked
-In-Reply-To: <bff78ad9-57d8-ca82-cc75-0b7e5024116d@linux.intel.com>
-References: <20220809234000.783284-1-daniel.sneddon@linux.intel.com>
- <d6ffb489-7024-ff74-bd2f-d1e06573bb82@intel.com>
- <238ea612-5a25-9323-b31f-0a14493db2f7@linux.intel.com>
- <d4bcb22e-224c-d256-cb93-3ff6ed89a7d0@intel.com>
- <341ea6e9-d8f3-ee7a-6794-67408abbf047@linux.intel.com>
- <87r11nu52l.ffs@tglx>
- <83a0d220-1872-caba-4e7e-b6a366655cf2@linux.intel.com>
- <ba80b303-31bf-d44a-b05d-5c0f83038798@intel.com>
- <bff78ad9-57d8-ca82-cc75-0b7e5024116d@linux.intel.com>
-Date:   Thu, 11 Aug 2022 02:17:41 +0200
-Message-ID: <87o7wrtyze.ffs@tglx>
+        Wed, 10 Aug 2022 20:20:23 -0400
+Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 969F22F665
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 17:20:22 -0700 (PDT)
+Received: by mail-vk1-xa36.google.com with SMTP id t64so2247771vkb.12
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 17:20:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=kjtR+7ABCsvSY53uoKHALTawd7IuvqM2GK1EO/X3/pI=;
+        b=tTBkrGnrm8fBeWHB7rdqaznsceNDwCKKvf0Uk8197ZTjNodNrjyxeB9uPUtF1gMgGy
+         8KoezoTLLkFwUYM4AKXkqIotp4ibYmTv1nxaBKnAVXl2vApHL+IWFwXOdNfPGPlHTBcW
+         Md7XuMshM9InVhb3isLjveWnAtgOhGlCd2ck4N2oaS7mczJ5lmbP/M06gyCNbzR+xbhj
+         Pazhy4hxFiIWdOA4zi33OtrRynSlVrWDFNl3047QJfacCxx5qCnb4fSgRGtEPbRxtgkO
+         /3wvc75jNRVa0Ni6zF/RoSYvizSlNqzd+CD6OdeAr9kc0HgTP2YL/azxAurfxtR9S5Xd
+         rmMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=kjtR+7ABCsvSY53uoKHALTawd7IuvqM2GK1EO/X3/pI=;
+        b=HrdEZA0XCyQv9uaV4i6vZ0qIgMF/WOVeyiHdAXsNGTX64VEjkCvVRgG43ewPmaQf9S
+         o/V8PXFGQfA4qggDnEgJrAjg+MhStX4yhzBWKCEpCxZb3ign7MOjfUWFM7NRMgSvOXgi
+         GIws1moprMBOwReEGMFoUwtwLFOpI0lp3/zGQ8PI9eJ51IoD7V2OC+a4tRbLAl/CXGwi
+         LYm4sV/jQ/QZ/BESjnZS9xWvr2/5GLFhWuQ+0u7fzPD9eeKnPC6RUJRK/JmlFS9FwhaG
+         1xpqAj6C6mxlehxXju5vTWy/DGRjN04yKwEFmwJSTPWG4k2Pv726V4tZvPY33FfiSOlV
+         qAMw==
+X-Gm-Message-State: ACgBeo13l3d0fGS8nV1r5z2sZkPgRJHmE0V2XhLp3Wf0SJg4JJefZWui
+        XJO4xXbo1Q/BvB0RK+tsFJYhQZjRZzQa9mB8pokIIVIFiwa/ht9m3o0=
+X-Google-Smtp-Source: AA6agR6bpJtbxkl82DmsbKU+7tsTOmuNRmmdwUIR8+HZQwYFLt13luLSfUz+NRXaBIO70gfVRGtR1t6sAHsGsOaSssQ=
+X-Received: by 2002:a67:cb0c:0:b0:357:9897:32d4 with SMTP id
+ b12-20020a67cb0c000000b00357989732d4mr12894315vsl.18.1660177210770; Wed, 10
+ Aug 2022 17:20:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220810234056.2494993-1-npache@redhat.com>
+In-Reply-To: <20220810234056.2494993-1-npache@redhat.com>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 11 Aug 2022 08:19:59 +0800
+Message-ID: <CABVgOSmUgkeuKKS_UYMOTUE4vARLpw--j77J9=zAkk5Zr30N9g@mail.gmail.com>
+Subject: Re: [PATCH] kunit: fix Kconfig for build-in tests USB4 and Nitro Enclaves
+To:     Nico Pache <npache@redhat.com>
+Cc:     KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-usb@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>, alcioa@amazon.com,
+        lexnv@amazon.com, Andra Paraschiv <andraprs@amazon.com>,
+        YehezkelShB@gmail.com,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        michael.jamet@intel.com, andreas.noever@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 10 2022 at 16:38, Daniel Sneddon wrote:
-> On 8/10/22 16:09, Dave Hansen wrote:
->> config INTEL_TDX_GUEST
->>         bool "Intel TDX (Trust Domain Extensions) - Guest Support"
->>         depends on X86_64 && CPU_SUP_INTEL
->>         depends on X86_X2APIC
+On Thu, Aug 11, 2022 at 7:41 AM Nico Pache <npache@redhat.com> wrote:
 >
-> So I got some more input.  SPR and newer will lock the APIC.  Older products
-> will get a ucode update, but that ucode update won't include the APIC lock.  So,
-> on non-SPR parts do we still want to make SGX depend on X2APIC?
+> Both the USB4 and Nitro Enclaves KUNIT tests are now able to be compiled
+> if KUNIT is compiled as a module. This leads to issues if KUNIT is being
+> packaged separately from the core kernel and when KUNIT is run baremetal
+> without the required driver compiled into the kernel.
+>
+> Fixes: 635dcd16844b ("thunderbolt: test: Use kunit_test_suite() macro")
+> Fixes: fe5be808fa6c ("nitro_enclaves: test: Use kunit_test_suite() macro")
+> Signed-off-by: Nico Pache <npache@redhat.com>
+> ---
 
-What is the ucode update doing on pre SPR parts?
-Just providing magic voodoo which pretends to be safe?
+Hmm... I'm not quite sure I understand the case that's broken here. Is it:
+- KUnit is built as a module (CONFIG_KUNIT=m)
+- USB4/nitro_enclaves are also built as modules, with the test enabled.
+- The kunit module is not available at runtime, so neither driver
+module can load (due to missing kunit dependencies)
 
-The public available documentation for this is a huge pile of void.
+If so, that's not a case (i.e., the kunit.ko module being unavailable
+if it was built) we've tried to support thus far. I guess a de-facto
+rule for supporting it would be to depend on KUNIT=y for any KUnit
+tests which are built into the same module as the driver they're
+testing.
 
-The point is that if the SGX attestation will fail when X2APIC is not
-enforced on the host as of 'some magic dates in 2023' according to the
-documentation I pointed to, then any pre SPR SGX capable system is going
-to be disfunctional vs. SGX at one of those magic dates.
+Alternatively, maybe we could do some horrible hacks to compile stub
+versions of various KUnit assertion symbols in unconditionally, which
+forward to the real ones if KUnit is available.
 
-Some people inside a particular company need to get their act together
-and either make this consistent or provide some coherent information why
-this is not required for pre SPR parts and why SPR needs to have it.
+(Personally, I'd love it if we could get rid of CONFIG_KUNIT=m
+altogether, and it's actually broken right at the moment[1]. There are
+still some cases (unloading / reloading KUnit with different filter
+options) which require it, though.)
 
-Thanks,
+Cheers,
+-- David
 
-        tglx
+[1]: https://patchwork.kernel.org/project/linux-kselftest/patch/20220713005221.1926290-1-davidgow@google.com/
+
+>  drivers/thunderbolt/Kconfig         | 3 +--
+>  drivers/virt/nitro_enclaves/Kconfig | 2 +-
+>  2 files changed, 2 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/thunderbolt/Kconfig b/drivers/thunderbolt/Kconfig
+> index e76a6c173637..f12d0a3ee3e2 100644
+> --- a/drivers/thunderbolt/Kconfig
+> +++ b/drivers/thunderbolt/Kconfig
+> @@ -29,8 +29,7 @@ config USB4_DEBUGFS_WRITE
+>
+>  config USB4_KUNIT_TEST
+>         bool "KUnit tests" if !KUNIT_ALL_TESTS
+> -       depends on (USB4=m || KUNIT=y)
+> -       depends on KUNIT
+> +       depends on USB4 && KUNIT=y
+
+This can probably just:
+depends on KUNIT=y
 
 
+>         default KUNIT_ALL_TESTS
+>
+>  config USB4_DMA_TEST
+> diff --git a/drivers/virt/nitro_enclaves/Kconfig b/drivers/virt/nitro_enclaves/Kconfig
+> index ce91add81401..dc4d25c26256 100644
+> --- a/drivers/virt/nitro_enclaves/Kconfig
+> +++ b/drivers/virt/nitro_enclaves/Kconfig
+> @@ -17,7 +17,7 @@ config NITRO_ENCLAVES
+>
+>  config NITRO_ENCLAVES_MISC_DEV_TEST
+>         bool "Tests for the misc device functionality of the Nitro Enclaves" if !KUNIT_ALL_TESTS
+> -       depends on NITRO_ENCLAVES && KUNIT
+> +       depends on NITRO_ENCLAVES && KUNIT=y
+>         default KUNIT_ALL_TESTS
+>         help
+>           Enable KUnit tests for the misc device functionality of the Nitro
+> --
+> 2.36.1
+>

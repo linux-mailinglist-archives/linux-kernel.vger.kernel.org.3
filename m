@@ -2,187 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85F2E58FCB5
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 14:47:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F18F858FCC1
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 14:48:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235395AbiHKMrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 08:47:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60858 "EHLO
+        id S235450AbiHKMsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 08:48:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235362AbiHKMq6 (ORCPT
+        with ESMTP id S235427AbiHKMsi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 08:46:58 -0400
-Received: from relay08.th.seeweb.it (relay08.th.seeweb.it [IPv6:2001:4b7a:2000:18::169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C5FF2558F
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 05:46:57 -0700 (PDT)
-Received: from [192.168.1.101] (abxh187.neoplus.adsl.tpnet.pl [83.9.1.187])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 103193F64F;
-        Thu, 11 Aug 2022 14:46:55 +0200 (CEST)
-Message-ID: <3ad241c6-3b94-2c4e-8e17-ba526383cecf@somainline.org>
-Date:   Thu, 11 Aug 2022 14:46:54 +0200
+        Thu, 11 Aug 2022 08:48:38 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF35275CC
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 05:48:36 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id f28so16405313pfk.1
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 05:48:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=cheSiUk9PymoQVD7nE+6cqPn4hs1XlRBmEpyUVTqYsY=;
+        b=wbj7DxgJDcpoKo/TKv9VO9o/3WuGmBZPD+D9H87SOosYRwBDuGjgAViBUj0k/bn8B6
+         7aVCNKMjpBY6SDH90rHiWbWSR3jUk29zekRY73oEmUTMr6DpWgcUhvRyo0VJQJnp9C3Y
+         WdLG7uWoU9bOCBckpqHdTm+3pHSirISLJfdqDigpf8TWoxDXpqfsfSHaYgt/VZ463wzw
+         uPZdZoKXIFMD2fuGwcfb7kT+zQByhsQtS7AoC26SHefgvYr34749IhqTFIIRa7/469gg
+         qCPHB8Eb4m5Uzxg8E0HlixlCHSWA9sR9Hjbs071zwDhlzwULGdV4PJoMmZV8XMJBWi08
+         Q3Vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=cheSiUk9PymoQVD7nE+6cqPn4hs1XlRBmEpyUVTqYsY=;
+        b=b+Ha5Al+7evzzcuBCEjwxMl1YeyoMb5Tx+Qau3Jo2kVxYDJSQoKq5K88l3GJAy/CuX
+         vR648Tkda76gdUa7F7nZk1/W0iT3gjMHFovugkxsBq6cUclLwOVxjkm3QHegF4F+pW81
+         /Xz0JqEV1g+IW+/5gnfe/z+2wcRaROH00EE/2wnBnVfmTg25dVCjVVs+aTdg7hLJZ1Oy
+         e+u9Dvrq2rIj0p0tbgFV/jJAKGLYm2EikhZrrjg8cyO5wf6aD/DGhL5RnS7wxd4v76iF
+         zh6YzwIWrk8Dh92VvqCYWeUWILOubk7PF8Y3DU/6piAoQJOQOoIWXgSD8VgdVot+IZha
+         r8rw==
+X-Gm-Message-State: ACgBeo0DzfVP0LlF+cP6CKIwMDgEeTRlDaXaAiOeIZjue+7po97/pBqE
+        HqPbtuUYUgcB9sOINwv/pZqKTXJEIV2ADI8t
+X-Google-Smtp-Source: AA6agR5YcEKbU2hA2wch00RrXvy+iHMvooiQHMUwICRVaYJ4pVPsnkccaSiS5qdNVcWthZpBhXGFyQ==
+X-Received: by 2002:a63:d012:0:b0:41c:5f9f:9ab8 with SMTP id z18-20020a63d012000000b0041c5f9f9ab8mr27014922pgf.213.1660222116098;
+        Thu, 11 Aug 2022 05:48:36 -0700 (PDT)
+Received: from leoy-huanghe.lan (n058152077182.netvigator.com. [58.152.77.182])
+        by smtp.gmail.com with ESMTPSA id r24-20020aa79638000000b0052ad6d627a6sm3872599pfg.166.2022.08.11.05.48.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Aug 2022 05:48:35 -0700 (PDT)
+Date:   Thu, 11 Aug 2022 20:48:25 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Suzuki K Poulose <suzuki.poulose@arm.com>
+Cc:     Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Will Deacon <will@kernel.org>,
+        James Morse <james.morse@arm.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] tools headers arm64: Fix compilation failure
+Message-ID: <20220811124825.GA868014@leoy-huanghe.lan>
+References: <20220811044341.426796-1-leo.yan@linaro.org>
+ <48524c3d-c858-15ec-ac79-9547f3489b7b@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 2/2] clk: qcom: Add SC8280XP GPU clock controller
-Content-Language: en-US
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Taniya Das <tdas@codeaurora.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220811042855.3867774-1-bjorn.andersson@linaro.org>
- <20220811042855.3867774-3-bjorn.andersson@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20220811042855.3867774-3-bjorn.andersson@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <48524c3d-c858-15ec-ac79-9547f3489b7b@arm.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Suzuki,
 
-
-On 11.08.2022 06:28, Bjorn Andersson wrote:
-> Add driver for the GPU clock controller in the Qualcomm SC8280XP
-> platform.
+On Thu, Aug 11, 2022 at 11:11:41AM +0100, Suzuki Kuruppassery Poulose wrote:
+> Hi Leo
 > 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> ---
->  drivers/clk/qcom/Kconfig          |   8 +
->  drivers/clk/qcom/Makefile         |   1 +
->  drivers/clk/qcom/gpucc-sc8280xp.c | 460 ++++++++++++++++++++++++++++++
->  3 files changed, 469 insertions(+)
->  create mode 100644 drivers/clk/qcom/gpucc-sc8280xp.c
+> On 11/08/2022 05:43, Leo Yan wrote:
+> > When build perf tool on x86_64, it reports failure for finding the
+> > header <asm/sysreg.h>:
+> > 
 > 
-> diff --git a/drivers/clk/qcom/Kconfig b/drivers/clk/qcom/Kconfig
-> index 7ea5c2208a86..64a9cf245295 100644
-> --- a/drivers/clk/qcom/Kconfig
-> +++ b/drivers/clk/qcom/Kconfig
-> @@ -454,6 +454,14 @@ config SC_GPUCC_7280
->  	  Say Y if you want to support graphics controller devices and
->  	  functionality such as 3D graphics.
->  
-> +config SC_GPUCC_8280XP
-> +	tristate "SC8280XP Graphics Clock Controller"
-> +	select SC_GCC_8280XP
-> +	help
-> +	  Support for the graphics clock controller on SC8280XP devices.
-> +	  Say Y if you want to support graphics controller devices and
-> +	  functionality such as 3D graphics.
-> +
->  config SC_LPASSCC_7280
->  	tristate "SC7280 Low Power Audio Subsystem (LPASS) Clock Controller"
->  	select SC_GCC_7280
-> diff --git a/drivers/clk/qcom/Makefile b/drivers/clk/qcom/Makefile
-> index 4fd88ee7679b..6cdb05152548 100644
-> --- a/drivers/clk/qcom/Makefile
-> +++ b/drivers/clk/qcom/Makefile
-> @@ -72,6 +72,7 @@ obj-$(CONFIG_SC_GCC_8180X) += gcc-sc8180x.o
->  obj-$(CONFIG_SC_GCC_8280XP) += gcc-sc8280xp.o
->  obj-$(CONFIG_SC_GPUCC_7180) += gpucc-sc7180.o
->  obj-$(CONFIG_SC_GPUCC_7280) += gpucc-sc7280.o
-> +obj-$(CONFIG_SC_GPUCC_8280XP) += gpucc-sc8280xp.o
->  obj-$(CONFIG_SC_LPASSCC_7280) += lpasscc-sc7280.o
->  obj-$(CONFIG_SC_LPASS_CORECC_7180) += lpasscorecc-sc7180.o
->  obj-$(CONFIG_SC_LPASS_CORECC_7280) += lpasscorecc-sc7280.o lpassaudiocc-sc7280.o
-> diff --git a/drivers/clk/qcom/gpucc-sc8280xp.c b/drivers/clk/qcom/gpucc-sc8280xp.c
-> new file mode 100644
-> index 000000000000..555fd4ff58ab
-> --- /dev/null
-> +++ b/drivers/clk/qcom/gpucc-sc8280xp.c
-> @@ -0,0 +1,460 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Copyright (c) 2021, The Linux Foundation. All rights reserved.
-> + */
-> +
-> +#include <linux/clk-provider.h>
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +
-> +#include <dt-bindings/clock/qcom,gpucc-sc8280xp.h>
-> +
-> +#include "clk-alpha-pll.h"
-> +#include "clk-branch.h"
-> +#include "clk-rcg.h"
-> +#include "clk-regmap-divider.h"
-> +#include "common.h"
-> +#include "reset.h"
-> +#include "gdsc.h"
-> +
-> +/* Need to match the order of clocks in DT binding */
-> +enum {
-> +	DT_BI_TCXO,
-> +	DT_GCC_GPU_GPLL0_CLK_SRC,
-> +	DT_GCC_GPU_GPLL0_DIV_CLK_SRC,
-> +};
-> +
-> +enum {
-> +	P_BI_TCXO,
-> +	P_GCC_GPU_GPLL0_CLK_SRC,
-> +	P_GCC_GPU_GPLL0_DIV_CLK_SRC,
-> +	P_GPU_CC_PLL0_OUT_MAIN,
-> +	P_GPU_CC_PLL1_OUT_MAIN,
-> +};
-> +
-> +static const struct clk_parent_data parent_data_tcxo = { .index = DT_BI_TCXO };
-> +
-> +static const struct pll_vco lucid_5lpe_vco[] = {
-> +	{ 249600000, 1800000000, 0 },
-> +};
-> +
-> +static struct alpha_pll_config gpu_cc_pll0_config = {
-> +	.l = 0x1c,
-> +	.alpha = 0xa555,
-> +	.config_ctl_val = 0x20485699,
-> +	.config_ctl_hi_val = 0x00002261,
-> +	.config_ctl_hi1_val = 0x2a9a699c,
-> +	.test_ctl_val = 0x00000000,
-> +	.test_ctl_hi_val = 0x00000000,
-> +	.test_ctl_hi1_val = 0x01800000,
-> +	.user_ctl_val = 0x00000000,
-> +	.user_ctl_hi_val = 0x00000805,
-> +	.user_ctl_hi1_val = 0x00000000,
-> +};
-> +
-> +static struct clk_alpha_pll gpu_cc_pll0 = {
-> +	.offset = 0x0,
-> +	.vco_table = lucid_5lpe_vco,
-> +	.num_vco = ARRAY_SIZE(lucid_5lpe_vco),
-> +	.regs = clk_alpha_pll_regs[CLK_ALPHA_PLL_TYPE_LUCID],
-> +	.clkr = {
-> +		.hw.init = &(struct clk_init_data){
-> +			.name = "gpu_cc_pll0",
-> +			.parent_data = &parent_data_tcxo,
-> +			.num_parents = 1,
-> +			.ops = &clk_alpha_pll_lucid_5lpe_ops,
-> +		},
-> +	},
-> +};
-> +
-> +static struct alpha_pll_config gpu_cc_pll1_config = {
-> +	.l = 0x1A,
-> +	.alpha = 0xAAA,
-> +	.config_ctl_val = 0x20485699,
-> +	.config_ctl_hi_val = 0x00002261,
-> +	.config_ctl_hi1_val = 0x2A9A699C,
-Lowercase hex, please.
+> Please could you mention the exact build options used for the perf
+> build ? (e.g, enable SPE)
 
-Otherwise, this looks nice:
+Sure, yeah, I encoutered the building failure after I applied the
+patch set; the first patch is to change Arm SPE code in perf.
+https://lore.kernel.org/lkml/20220811062451.435810-1-leo.yan@linaro.org/
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> >    In file included from util/arm-spe.c:37:
+> >    util/../../arch/arm64/include/asm/cputype.h:183:10: fatal error: asm/sysreg.h: No such file or directory
+> >      183 | #include <asm/sysreg.h>
+> >          |          ^~~~~~~~~~~~~~
+> >    compilation terminated.
+> >  > There have no sysreg.h in x86's asm folder, alternatively, this patch
+> > includes the sysreg.h header in the same folder with cputype.h to fix
+> > the compilation failure.
+> 
+> Wondering how the "cputype.h" was picked up from arch/arm64/include/ and
+> why not the sysreg.h ? Ideally, we would like to pickup the kernel
+> headers as it is without having to manually fixup, things like this.
 
-Konrad
+Actually cputype.h and sysreg.h both are copied from arch/arm64/include/
+and they are placed under tools/arch/arm64/include/asm/.
+
+> > Fixes: 37402d5d061b ("tools headers arm64: Sync arm64's cputype.h with the kernel sources")
+> 
+> Also from the above commit,
+> 
+> "That addresses this perf build warning:
+> 
+>       Warning: Kernel ABI header at 'tools/arch/arm64/include/asm/cputype.h'
+> differs from latest version at 'arch/arm64/include/asm/cputype.h'
+>       diff -u tools/arch/arm64/include/asm/cputype.h
+> arch/arm64/include/asm/cputype.h
+> "
+> 
+> Wouldn't we re-introduce the warning back ?
+
+Good point!  Thanks for pointing out this.  So I think another option
+is to tweak the CFLGAS for arm-spe.c.  The change is as below.
+
+I will send patch out a bit later in today, please let me know if this
+is fine for you?  Thanks!
+
+diff --git a/tools/perf/util/Build b/tools/perf/util/Build
+index d8fe514c9ec9..9dfae1bda9cc 100644
+--- a/tools/perf/util/Build
++++ b/tools/perf/util/Build
+@@ -289,6 +289,7 @@ CFLAGS_hweight.o       += -Wno-unused-parameter -DETC_PERFCONFIG="BUILD_STR($(ET
+ CFLAGS_parse-events.o  += -Wno-redundant-decls
+ CFLAGS_expr.o          += -Wno-redundant-decls
+ CFLAGS_header.o        += -include $(OUTPUT)PERF-VERSION-FILE
++CFLAGS_arm-spe.o       += -I$(srctree)/tools/arch/arm64/include/
+ 
+ $(OUTPUT)util/kallsyms.o: ../lib/symbol/kallsyms.c FORCE
+        $(call rule_mkdir)
+

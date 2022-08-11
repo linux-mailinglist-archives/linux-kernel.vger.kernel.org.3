@@ -2,101 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 095735907FA
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 23:22:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD03E5907FB
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 23:22:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236099AbiHKVWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 17:22:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57034 "EHLO
+        id S234129AbiHKVWv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 17:22:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235996AbiHKVWD (ORCPT
+        with ESMTP id S235677AbiHKVWr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 17:22:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E48619C203;
-        Thu, 11 Aug 2022 14:22:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7E12D61342;
-        Thu, 11 Aug 2022 21:22:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33D7EC433C1;
-        Thu, 11 Aug 2022 21:22:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660252921;
-        bh=aJjokjmK2HI84IvKk7206UZk1QgtfaZQVhLk4USKICk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Hhse4SHCqlH1aWsCb2EJtbgeyOWmEJwV0DRN1IqI6LrqmDuI0ATH9jJiSkEfbf56B
-         0cvEX6MwqnAI61+8mtqcaznu/yICnXvhMqJ48LrDeFr7rB3WVD85cKxGCmXpxHgWwh
-         74XMLYQxE5aJeouiIx8zOo004N8MTpQsRFnpwaOUIa44eAiPghYLVN4rauW2vcI53K
-         f9tcx12+VKrTWo221rjL0x4lDg5hVniGe09MnBaRrc9iWo6vnRCNWIIsE98+2LxWOx
-         CsO/iV9+nkJ9UBYWmL4wN23psNW0q2X1299iGiLvscwO94b2ZFC3aVt1HmFs4uWhNN
-         G5NFGibP+LeNw==
-Date:   Thu, 11 Aug 2022 23:21:57 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     luca.ceresoli@bootlin.com
-Cc:     linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 9/9] docs: i2c: i2c-sysfs: fix hyperlinks
-Message-ID: <YvVy9XH2YP+TFmTs@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>, luca.ceresoli@bootlin.com,
-        linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>, linux-kernel@vger.kernel.org
-References: <20220808141708.1021103-1-luca.ceresoli@bootlin.com>
- <20220808141708.1021103-10-luca.ceresoli@bootlin.com>
+        Thu, 11 Aug 2022 17:22:47 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27CD19C238;
+        Thu, 11 Aug 2022 14:22:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=6LEpFhS+nbNhkAYvaz2a0oHVJzQckQtvQ4jtQE3egEo=; b=OkAtCzwoGWlsGERfK/mkOsfGoW
+        7glbcl0wYygmElCa8xnKDiCNt+BFr1NCIPN+yGi7d6fA+gdqTjKMPpiN7lCeo8RBfKx8971dGz5nt
+        kLGL7qFZzm0mucrtASKznk6FdTGYjaJaKLIMKZBfWDIaDVdz0Qro4bo6hNfMboPa2nbVas4ORieMT
+        cCj61/a5s0kz5OLWj6gDp+tWRJMEz29HILwBkqOy8nBPR0bb0sdkArwqhhFtvDG0XOfsnh3nnRIYj
+        T0kmU2X0gVhDlkSk+rgagAKYXhun7AIytPWAOw6rxECcuikezDqtpzVcjxKY3n7UU0i+tfiLBn3lV
+        ZM3xHk/Q==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1oMFdV-003Ysv-Vx;
+        Thu, 11 Aug 2022 21:22:38 +0000
+Date:   Thu, 11 Aug 2022 22:22:37 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Ilya Dryomov <idryomov@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Matthew Wilcox <willy@infradead.org>
+Subject: Re: [GIT PULL] Ceph updates for 5.20-rc1
+Message-ID: <YvVzHQ5DVaPAvw26@ZenIV>
+References: <20220811152446.281723-1-idryomov@gmail.com>
+ <CAHk-=wifgq59uru6xDB=nY-1p6aQ-1YB8nVhW7T-N2ctK3m1gw@mail.gmail.com>
+ <CAOi1vP9BSi-65of-8D0BA1_DC0eVD_TQcWkhrGJwaXw_skhHFQ@mail.gmail.com>
+ <5d0b0367a5e28ec5b1f3b995c7792ff9a5cbcbd4.camel@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Enlf8bu3nHYGfRfC"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220808141708.1021103-10-luca.ceresoli@bootlin.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <5d0b0367a5e28ec5b1f3b995c7792ff9a5cbcbd4.camel@kernel.org>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Aug 11, 2022 at 05:08:11PM -0400, Jeff Layton wrote:
 
---Enlf8bu3nHYGfRfC
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Actually, I never got a formal ack from Al. I did send it repeatedly,
+> but I assume he has been too busy to respond. We've had it sitting in
+> linux-next for a couple of months, and he did suggest that approach in
+> the first place, but I too would also prefer to see his official ack on
+> it.
 
-On Mon, Aug 08, 2022 at 04:17:08PM +0200, luca.ceresoli@bootlin.com wrote:
-> From: Luca Ceresoli <luca.ceresoli@bootlin.com>
->=20
-> dts files cannot be linked conveniently, thus replace them with literal
-> formatting.
->=20
-> The links to other rst pages are broken, fix them using the proper syntax.
->=20
-> Fixes: 31df7195b100 ("Documentation: i2c: Add doc for I2C sysfs")
-> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+"Suggested approach" had been about inode_insert5() changes, right?
+But that's fs/inode.c side of things...  I have to admit that I'd missed
+the unlining d_same_name() - exporting the sucker per se didn't look
+insane and I hadn't looked at that in details ;-/
 
-Applied to for-current, thanks!
+Looking at it now...  might be worth renaming it into __d_same_name(),
+leaving it inlined and exporting a wrapper; not sure if the impact on
+d_lookup()/__d_lookup()/d_alloc_parallel() is worth worrying about it,
+though.
 
-
---Enlf8bu3nHYGfRfC
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmL1cvAACgkQFA3kzBSg
-KbbJ8A//YYd7ClypmCNbF6Sjb3rvAigPw+xZZbwTDQSvSTF3tdNhoM3jZ4tSHytV
-i8UuIYwsNm2VUvMOS3CTrPCeYco7lsgh1bZEosZKJOSHkGhvhHyXZhLPW6/GmewV
-TAH2HU3AzfgAcGGtDHRQyHn/R/Q4LU4NHE9AzRbWuL42yI5ZL7foXYpQ9sVWqPwb
-2omZRKVOKUP1YbQpV1uL0zyO6g0GiNO5QfeZ2JFJm/MMJ6jQdQsQ9QfIAt2nA9Gy
-fMGONtaAR4SWTHFC3clU5rSOgPvRlg31LMkw5Ch5edGVQ16t1kHkST5XQTbuAFra
-AUHdeedI+nMEQdfk9mo3tvx3TJ8liCXb5lVQgx42qko56s2mBGstliNc4h4jLKXm
-yzkH3jnB56M8T2I160MftdHfFbBUHiORPGqh1e8LLErPojIPFmpikTKlWmYDAj7x
-kr90JLMdLT2JUlNNS62a7QNewrXjOqqRYafzd87sms40maTSgieoRzmsRHwC55VU
-v9agzZl5rKD85YoL241bKQswJa4t3BWw26EdW1L/Z3DTsyX5G0gKIXCL3l3WUcHW
-IrYBeIPttExN8osfADCixxSgAoLqxUuIPKi9H3UKSLk/0ubRyvfZwd7uPU8gfG5v
-mubkb4znksxX0TODvClxDjaTM69J4YBqScyKjj8tQC4O4Tqgolw=
-=9CJS
------END PGP SIGNATURE-----
-
---Enlf8bu3nHYGfRfC--
+Profiling a case when we have a plenty of files in the same directory
+on tmpfs, with something earlier in the pathname to kick out of RCU
+mode (e.g. going through /proc/self/cwd) might be interesting...

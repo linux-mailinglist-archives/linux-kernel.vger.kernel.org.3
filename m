@@ -2,97 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8758859082C
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 23:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63FCF590854
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 23:49:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235456AbiHKVi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 17:38:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45646 "EHLO
+        id S235369AbiHKVtz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 17:49:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234075AbiHKViZ (ORCPT
+        with ESMTP id S234675AbiHKVtx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 17:38:25 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBF59F19C;
-        Thu, 11 Aug 2022 14:38:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=PP9YDeHip3JLgIFd/30i9RiuExqZxhJ75I9LntNprD0=; b=CciMJdAHkb4L29AeV9z4VvWNbz
-        fu8e9dbzuSbAiDZhkCRiDNnc74Kk3qDDwqQ83/JFGD/gZzEqES68yUr7KjnYddcEXEyhGGasAC2JO
-        JBGAWQuXO3M58GrcaesbPFBfNDQB187p7wRJ+g5yRN5VZ2A/6OBfXvs3T0s4ft5THjfKFb+DUAWn4
-        +WxU9a5JbAJX+KEjOZid6rk97Atv5VWbe4j5uY1hqulry8VZqo6JZ9Shyl+SZjbfQINrLrvpiPYNw
-        SlzDsRj9YMIwIM6M9EeC1HAqsXqvT7RzGyy6+WNlHf04ZYWCwUGUq9etKNlq/RoIuN0IUs8NTlcTI
-        CsxgsMVg==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1oMFsj-003Z1H-4O;
-        Thu, 11 Aug 2022 21:38:21 +0000
-Date:   Thu, 11 Aug 2022 22:38:21 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Jeff Layton <jlayton@kernel.org>
-Cc:     Ilya Dryomov <idryomov@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [GIT PULL] Ceph updates for 5.20-rc1
-Message-ID: <YvV2zfT0XbgwHGe/@ZenIV>
-References: <20220811152446.281723-1-idryomov@gmail.com>
- <CAHk-=wifgq59uru6xDB=nY-1p6aQ-1YB8nVhW7T-N2ctK3m1gw@mail.gmail.com>
- <CAOi1vP9BSi-65of-8D0BA1_DC0eVD_TQcWkhrGJwaXw_skhHFQ@mail.gmail.com>
- <5d0b0367a5e28ec5b1f3b995c7792ff9a5cbcbd4.camel@kernel.org>
- <YvVzHQ5DVaPAvw26@ZenIV>
- <72a93a2c8910c3615bba7c093c66c18b1a6a2696.camel@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <72a93a2c8910c3615bba7c093c66c18b1a6a2696.camel@kernel.org>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 11 Aug 2022 17:49:53 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B269FAA9
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 14:49:51 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id z187so17545486pfb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 14:49:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc;
+        bh=a6547274K2iHeQNpwwXuIMlyGaHvz13NtJhgq6J2+CU=;
+        b=0eEqkfey7J4G19PaVOI/piHoBJuBvI0VNHZvD59Ma+ludVEtEC8D3xz5dU8dWCU861
+         WNxZnA83yYBS2kbC0O8fsTwoCR5QpFaCZB8pHTnCAZ0h/eoofy5djcnzBjZVA/I82OOL
+         UVZ/nF3TmDov/7R5SfGsqn94Ms8wGGaVLDBt1ULekYRHENIKuUNBC1nnBq+up9Q4rnia
+         oyAyidS17Hm3JkJK8fWY6UXioTj3jErFXKs/lFSlucN39J0YgySyLzeZAWrcML+FBQIU
+         DY0MZZ0KeGCIxXcYFMN7EmUFGmH4XTRxTEk9yevc58KuX/iGdWnnaZEoHBMKycNAdft/
+         Dtyw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc;
+        bh=a6547274K2iHeQNpwwXuIMlyGaHvz13NtJhgq6J2+CU=;
+        b=h0LRkEXshcrJccX4mr0Bg84qmk6faptin6MKPI7ufxO0z2gDqIM4soIOWpC1aWbxgP
+         hEn9EJTdQ6zH6BxxvUy9gG4kI2ScM3gSSLwCUIskh7QdGft12jtgQAJMSivwQWBGxhdN
+         VZrIAQhSJJ7Bn8zXs1u9ULpAtquwoAopWgCT1HxiYaAujPuGdzwudMoStPqvlwDQ+BN9
+         8ry4xTAAXfWe8C0QC6zbEhF+zrCFvx4fWU1nPOGuZpfoPEVRNiPizRRNIpqX/TGHSaYC
+         rx63ZyGz5SgNILbIYMZoGoPad7BKBi3edeSER6Tgb4+MQ0wcQuLo8OzRe06t17WP6ayT
+         M4Rw==
+X-Gm-Message-State: ACgBeo315FKIFrgzjbJ+X/lEbxu0WZX5UkwHBIj9o4eLbWBw4Jxenczv
+        FQ1lbTKAvmMtgR0eD7qBvC4SXw==
+X-Google-Smtp-Source: AA6agR4dInN19yKFsA3LGylGiOASG3Dp6LBKaYH3f0WnCSF91Nk9WeBWvRzf+9+x0ZP4WM+mrQ0b1A==
+X-Received: by 2002:a63:5947:0:b0:41d:d4ea:6c87 with SMTP id j7-20020a635947000000b0041dd4ea6c87mr752298pgm.528.1660254591255;
+        Thu, 11 Aug 2022 14:49:51 -0700 (PDT)
+Received: from localhost ([50.221.140.186])
+        by smtp.gmail.com with ESMTPSA id r1-20020aa79ec1000000b0053249b67215sm161690pfq.131.2022.08.11.14.49.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Aug 2022 14:49:50 -0700 (PDT)
+Date:   Thu, 11 Aug 2022 14:49:50 -0700 (PDT)
+X-Google-Original-Date: Thu, 11 Aug 2022 14:49:38 PDT (-0700)
+Subject:     Re: [PATCH v7 0/4] Add Sstc extension support
+In-Reply-To: <CAAhSdy2UDwZYK+EaKHPXLxyKUMv-OX02EdaBDBgjNF0jdDJ7xQ@mail.gmail.com>
+CC:     Atish Patra <atishp@rivosinc.com>, linux-kernel@vger.kernel.org,
+        aou@eecs.berkeley.edu, atishp@atishpatra.org,
+        daniel.lezcano@linaro.org, guoren@kernel.org, heiko@sntech.de,
+        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-riscv@lists.infradead.org, pbonzini@redhat.com,
+        Paul Walmsley <paul.walmsley@sifive.com>, robh@kernel.org,
+        tglx@linutronix.de, research_trasio@irq.a4lg.com, wefu@redhat.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     anup@brainfault.org
+Message-ID: <mhng-368a1ddb-43d3-4d61-934b-3916c63005d4@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 05:30:03PM -0400, Jeff Layton wrote:
-> On Thu, 2022-08-11 at 22:22 +0100, Al Viro wrote:
-> > On Thu, Aug 11, 2022 at 05:08:11PM -0400, Jeff Layton wrote:
-> > 
-> > > Actually, I never got a formal ack from Al. I did send it repeatedly,
-> > > but I assume he has been too busy to respond. We've had it sitting in
-> > > linux-next for a couple of months, and he did suggest that approach in
-> > > the first place, but I too would also prefer to see his official ack on
-> > > it.
-> > 
-> > "Suggested approach" had been about inode_insert5() changes, right?
-> 
-> Right. I was talking about this patch (which I think is sane):
-> 
->     fs: change test in inode_insert5 for adding to the sb list
+On Fri, 22 Jul 2022 21:47:06 PDT (-0700), anup@brainfault.org wrote:
+> Hi Palmer,
+>
+> On Fri, Jul 22, 2022 at 10:20 PM Atish Patra <atishp@rivosinc.com> wrote:
+>>
+>> This series implements Sstc extension support which was ratified recently.
+>> Before the Sstc extension, an SBI call is necessary to generate timer
+>> interrupts as only M-mode have access to the timecompare registers. Thus,
+>> there is significant latency to generate timer interrupts at kernel.
+>> For virtualized enviornments, its even worse as the KVM handles the SBI call
+>> and uses a software timer to emulate the timecomapre register.
+>>
+>> Sstc extension solves both these problems by defining a stimecmp/vstimecmp
+>> at supervisor (host/guest) level. It allows kernel to program a timer and
+>> recieve interrupt without supervisor execution enviornment (M-mode/HS mode)
+>> intervention.
+>>
+>> KVM directly updates the vstimecmp as well if the guest kernel invokes the SBI
+>> call instead of updating stimecmp directly. This is required because KVM will
+>> enable sstc extension if the hardware supports it unless the VMM explicitly
+>> disables it for that guest. The hardware is expected to compare the
+>> vstimecmp at every cycle if sstc is enabled and any stale value in vstimecmp
+>> will lead to spurious timer interrupts. This also helps maintaining the
+>> backward compatibility with older kernels.
+>>
+>> Similary, the M-mode firmware(OpenSBI) uses stimecmp for older kernel
+>> without sstc support as STIP bit in mip is read only for hardware with sstc.
+>>
+>> The PATCH 1 & 2 enables the basic infrastructure around Sstc extension while
+>> PATCH 3 lets kernel use the Sstc extension if it is available in hardware.
+>> PATCH 4 implements the Sstc extension in KVM.
+>>
+>> This series has been tested on Qemu(RV32 & RV64) with additional patches in
+>> Qemu[2]. This series can also be found at [3].
+>>
+>> Changes from v6->v7:
+>> 1. Fixed a compilation error reported by 0-day bot.
+>>
+>> Changes from v5->v6:
+>> 1. Moved SSTC extension enum below SVPBMT.
+>>
+>> Changes from v4->v5:
+>> 1. Added RB tag.
+>> 2. Changed the pr-format.
+>> 3. Rebased on 5.19-rc7 and kvm-queue.
+>> 4. Moved the henvcfg modification from hardware enable to vcpu_load.
+>>
+>> Changes from v3->v4:
+>> 1. Rebased on 5.18-rc6
+>> 2. Unified vstimemp & next_cycles.
+>> 3. Addressed comments in PATCH 3 & 4.
+>>
+>> Changes from v2->v3:
+>> 1. Dropped unrelated KVM fixes from this series.
+>> 2. Rebased on 5.18-rc3.
+>>
+>> Changes from v1->v2:
+>> 1. Separate the static key from kvm usage
+>> 2. Makde the sstc specific static key local to the driver/clocksource
+>> 3. Moved the vstimecmp update code to the vcpu_timer
+>> 4. Used function pointers instead of static key to invoke vstimecmp vs
+>>    hrtimer at the run time. This will help in future for migration of vms
+>>    from/to sstc enabled hardware to non-sstc enabled hardware.
+>> 5. Unified the vstimer & timer to 1 timer as only one of them will be used
+>>    at runtime.
+>>
+>> [1] https://drive.google.com/file/d/1m84Re2yK8m_vbW7TspvevCDR82MOBaSX/view
+>> [2] https://github.com/atishp04/qemu/tree/sstc_v6
+>> [3] https://github.com/atishp04/linux/tree/sstc_v7
+>>
+>> Atish Patra (4):
+>> RISC-V: Add SSTC extension CSR details
+>> RISC-V: Enable sstc extension parsing from DT
+>> RISC-V: Prefer sstc extension if available
+>> RISC-V: KVM: Support sstc extension
+>
+> The PATCH4 is dependent on the KVM patches in queue for 5.20.
+>
+> I suggest you take PATCH1, PATCH2 and PATCH3. I will send
+> PATCH4 in second batch/PR for 5.20 assuming you will send the
+> first three patches in your first PR for 5.20
+>
+> Does this sound okay to you ?
 
-It is, AFAICS.
+Sorry for being slow here, I just merged the non-KVM ones onto 
+riscv/for-next.  LMK if you want me to try and sort out the KVM bits, 
+the branch base is at palmer/riscv-sstc assuming that's easier for you 
+to just merge in locally.
 
-> > But that's fs/inode.c side of things...  I have to admit that I'd missed
-> > the unlining d_same_name() - exporting the sucker per se didn't look
-> > insane and I hadn't looked at that in details ;-/
-> > 
-> > Looking at it now...  might be worth renaming it into __d_same_name(),
-> > leaving it inlined and exporting a wrapper; not sure if the impact on
-> > d_lookup()/__d_lookup()/d_alloc_parallel() is worth worrying about it,
-> > though.
-> > 
-> > Profiling a case when we have a plenty of files in the same directory
-> > on tmpfs, with something earlier in the pathname to kick out of RCU
-> > mode (e.g. going through /proc/self/cwd) might be interesting...
-> 
-> The d_name_name changes seemed ok to me, but it would be good to have
-> your ack (or qualified NAK) if possible.
-
-Exporting the functionality?  Sure, no problem.  Uninlining that one...
-I suspect that it's OK, but I'd like to see profiling data; it's not
-as if it would be hard to return to having it inlined, obviously.
-
-Again, my apologies for not spotting that one.
+>
+> Regards,
+> Anup
+>
+>>
+>> arch/riscv/include/asm/csr.h            |   5 +
+>> arch/riscv/include/asm/hwcap.h          |   1 +
+>> arch/riscv/include/asm/kvm_vcpu_timer.h |   7 ++
+>> arch/riscv/include/uapi/asm/kvm.h       |   1 +
+>> arch/riscv/kernel/cpu.c                 |   1 +
+>> arch/riscv/kernel/cpufeature.c          |   1 +
+>> arch/riscv/kvm/vcpu.c                   |   8 +-
+>> arch/riscv/kvm/vcpu_timer.c             | 144 +++++++++++++++++++++++-
+>> drivers/clocksource/timer-riscv.c       |  25 +++-
+>> 9 files changed, 185 insertions(+), 8 deletions(-)
+>>
+>> --
+>> 2.25.1
+>>

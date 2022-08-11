@@ -2,53 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44B0B58F8A3
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 09:56:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F6A58F8A6
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 09:56:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234041AbiHKH4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 03:56:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33762 "EHLO
+        id S234388AbiHKH4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 03:56:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234277AbiHKH4A (ORCPT
+        with ESMTP id S234318AbiHKH4L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 03:56:00 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 97D1F12D04
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 00:55:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660204558;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=iVXrwd35fMsbVFUzhqFqFRUwBHy2TM6hy8L8OrvAwkQ=;
-        b=X1CsDGU1jT/Y7brEIUS0y7fjSNqsn0QH5GbzGzgvO2AH7e3n/vsKnvbYmoe+xjSMvD3cFI
-        awj4u4mdTnbjQ5XDVjW98/97cpHycmfQoXB+TNMNHklybyw3a5G+85V3nLd1vChIbQFDFK
-        2BmM6ZoOaYmqmrpGwuNJGJkerX+iQPM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-17-gx9w36wYO2WA-Vp_6awxnQ-1; Thu, 11 Aug 2022 03:55:55 -0400
-X-MC-Unique: gx9w36wYO2WA-Vp_6awxnQ-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B759119705A7;
-        Thu, 11 Aug 2022 07:55:54 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9A7D140D2827;
-        Thu, 11 Aug 2022 07:55:54 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: [GIT PULL] Second batch of KVM changes for Linux 5.20 merge window
-Date:   Thu, 11 Aug 2022 03:55:54 -0400
-Message-Id: <20220811075554.198111-1-pbonzini@redhat.com>
+        Thu, 11 Aug 2022 03:56:11 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B347A1ADA6
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 00:56:09 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id u6so13155618ljk.8
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 00:56:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=HGD+mIOoUzZZibF46I+q3hJDknL0evsBnB4j8896RDE=;
+        b=w2Ve8pp7kpZ5uxP6kONzTfBLYo+GLlwLTI7YboNcnwSUyzMvCwh29zN6fAO49uGDiN
+         2VkGvu5lb5NoOGvCo9WLrxVNL2kkhkZIqJy4urwI/xgg+7eImhMqGsWALOoMnzCuQr5a
+         bKphNe9iQ97fbwjNLqIGNqLFqimYiYA4/dLFxdeNGB77EkbPI0c/rV9Hivs6Z4wDlomk
+         mQ/HBLn/W6xohgtVK02g79ptUnDbrLrzhBlbmIFRD9MiGsm31GZQ1IOFu1mw95/Nafxo
+         H+2XTOYXnTJd9XCIgwRairgOHXj4qxGE/iMLiBsmwycAmo1lOFjZ/OQyThUyS/wqO6Gi
+         L1Vw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=HGD+mIOoUzZZibF46I+q3hJDknL0evsBnB4j8896RDE=;
+        b=Yui4mHD3MUPtmAGeRBm/k7C+8IT/+Nc2g8XJh+kKI+SQK9OE6NsHTXQAKgQUmAJC/w
+         +fQHq6pGIzsC1u6lstmiGNq3BMz1Ayw16c45Mr/hGqjO4flQGGkRpwkkFhVwv/VbbhWw
+         BA00u4dapaX0evy67AVfn6YgTpLAC9iXMkHtrOBiKP/JeA8Bm8vFDyBbSPMD7F1XkUEO
+         gJYd2r2JhaYMqbqhGauT7hWQjFImm4b8ufPybZoDeUwr3y5v8PReoeEcXQe3JhzHnAgz
+         S+WxSPkbTWsFoU/4nPtD1TlCAlGlPrIZu3h+xRkhDFqEHOZA0UBLbZ/gilX1937QAI8z
+         Gjlg==
+X-Gm-Message-State: ACgBeo0gOYe3Ow9cPtWO+aJtgr8gH6elRMewYuTE9RcJbNqflXux2yZ6
+        6aoJyvuajUlhVaUwUC5R1l8kEg==
+X-Google-Smtp-Source: AA6agR4c8fIm9+sSNAAoQ/CG7qvl6RSg1/y9svFJ1Yzku00jo7ICQImd2/4B1MH6UMreW6bzwNBm1A==
+X-Received: by 2002:a05:651c:241:b0:25e:65bd:3a8a with SMTP id x1-20020a05651c024100b0025e65bd3a8amr10308517ljn.206.1660204567994;
+        Thu, 11 Aug 2022 00:56:07 -0700 (PDT)
+Received: from [192.168.1.39] ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id j2-20020a056512398200b0048b008844b8sm607407lfu.270.2022.08.11.00.56.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Aug 2022 00:56:07 -0700 (PDT)
+Message-ID: <db9b74f9-1f65-5b88-1c81-0a3fd6dcf9a6@linaro.org>
+Date:   Thu, 11 Aug 2022 10:56:06 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 1/3] dt-bindings: display/msm: Add binding for SC8280XP
+ MDSS
+Content-Language: en-US
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220811040121.3775613-1-bjorn.andersson@linaro.org>
+ <20220811040121.3775613-2-bjorn.andersson@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220811040121.3775613-2-bjorn.andersson@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,102 +84,133 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On 11/08/2022 07:01, Bjorn Andersson wrote:
+> Add binding for the display subsystem and display processing unit in the
+> Qualcomm SC8280XP platform.
+> 
+> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> ---
+>  .../bindings/display/msm/dpu-sc8280xp.yaml    | 284 ++++++++++++++++++
+>  1 file changed, 284 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/display/msm/dpu-sc8280xp.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/display/msm/dpu-sc8280xp.yaml b/Documentation/devicetree/bindings/display/msm/dpu-sc8280xp.yaml
+> new file mode 100644
+> index 000000000000..6c25943e639c
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/display/msm/dpu-sc8280xp.yaml
 
-The following changes since commit 6614a3c3164a5df2b54abb0b3559f51041cf705b:
+qcom prefix is needed (also when file is in msm subdir)
 
-  Merge tag 'mm-stable-2022-08-03' of git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm (2022-08-05 16:32:45 -0700)
+The file name should be based on compatible, so "qcom,sc8280xp-mdss.yaml"
 
-are available in the Git repository at:
+> @@ -0,0 +1,284 @@
+> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/display/msm/dpu-sc8280xp.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Qualcomm Display Processing Unit for SC8280XP
+> +
+> +maintainers:
+> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
+> +
+> +description:
+> +  Device tree bindings for MSM Mobile Display Subsystem (MDSS) that encapsulates
+> +  sub-blocks like DPU display controller, DSI and DP interfaces etc. Device tree
+> +  bindings of MDSS and DPU are mentioned for SC8280XP.
 
-  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
+s/Device tree bindings//
+so just:
 
-for you to fetch changes up to 19a7cc817a380f7a412d7d76e145e9e2bc47e52f:
+SC8280XP MSM Mobile Display Subsystem (MDSS) that encapsulates
+sub-blocks like DPU display controller, DSI and DP interfaces etc.
 
-  KVM: x86/MMU: properly format KVM_CAP_VM_DISABLE_NX_HUGE_PAGES capability table (2022-08-11 02:35:37 -0400)
+> +
+> +properties:
+> +  compatible:
+> +    const: qcom,sc8280xp-mdss
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  reg-names:
+> +    const: mdss
 
-----------------------------------------------------------------
-* Xen timer fixes
+You do not need reg names for one item, especially if the name is kind
+of obvious... unless you re-use existing driver which needs it? Then
+maybe let's change the driver to take first element?
 
-* Documentation formatting fixes
+> +
+> +  power-domains:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: Display AHB clock from gcc
+> +      - description: Display AHB clock from dispcc
+> +      - description: Display core clock
+> +
+> +  clock-names:
+> +    items:
+> +      - const: iface
+> +      - const: ahb
+> +      - const: core
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  interrupt-controller: true
+> +
+> +  "#address-cells": true
+> +
+> +  "#size-cells": true
 
-* Make rseq selftest compatible with glibc-2.35
+I see other DPU bindings also specify both as "true". Why not a fixed
+number (const)?
 
-* Fix handling of illegal LEA reg, reg
+> +
+> +  "#interrupt-cells":
+> +    const: 1
+> +
+> +  iommus:
+> +    items:
+> +      - description: Phandle to apps_smmu node with SID mask for Hard-Fail port0
+> +
+> +  ranges: true
+> +
+> +  interconnects:
+> +    minItems: 2
 
-* Cleanup creation of debugfs entries
+No need for minItems in such case.
 
-* Fix steal time cache handling bug
+> +    maxItems: 2
+> +
+> +  interconnect-names:
+> +    items:
+> +      - const: mdp0-mem
+> +      - const: mdp1-mem
+> +
+> +  resets:
+> +    items:
+> +      - description: MDSS_CORE reset
+> +
+> +patternProperties:
+> +  "^display-controller@[0-9a-f]+$":
+> +    type: object
+> +    description: Node containing the properties of DPU.
 
-* Fixes for MMIO caching
+additionalProperties:false on this level
 
-* Optimize computation of number of LBRs
+which will point to missing properties (e.g. opp-table)
 
-* Fix uninitialized field in guest_maxphyaddr < host_maxphyaddr path
+> +
+> +    properties:
+> +      compatible:
+> +        const: qcom,sc8280xp-dpu
+> +
 
-----------------------------------------------------------------
-Bagas Sanjaya (2):
-      Documentation: KVM: extend KVM_CAP_VM_DISABLE_NX_HUGE_PAGES heading underline
-      KVM: x86/MMU: properly format KVM_CAP_VM_DISABLE_NX_HUGE_PAGES capability table
 
-Coleman Dietsch (2):
-      KVM: x86/xen: Initialize Xen timer only once
-      KVM: x86/xen: Stop Xen timer before changing IRQ
-
-Gavin Shan (2):
-      KVM: selftests: Make rseq compatible with glibc-2.35
-      KVM: selftests: Use getcpu() instead of sched_getcpu() in rseq_test
-
-Michal Luczaj (1):
-      KVM: x86: emulator: Fix illegal LEA handling
-
-Mingwei Zhang (1):
-      KVM: x86/mmu: rename trace function name for asynchronous page fault
-
-Oliver Upton (5):
-      KVM: Shove vm stats_id init into kvm_create_vm()
-      KVM: Shove vcpu stats_id init into kvm_vcpu_init()
-      KVM: Get an fd before creating the VM
-      KVM: Pass the name of the VM fd to kvm_create_vm_debugfs()
-      KVM: Actually create debugfs in kvm_create_vm()
-
-Paolo Bonzini (3):
-      selftests: kvm: fix compilation
-      KVM: x86: revalidate steal time cache if MSR value changes
-      KVM: x86: do not report preemption if the steal time cache is stale
-
-Sean Christopherson (9):
-      KVM: x86: Bug the VM if an accelerated x2APIC trap occurs on a "bad" reg
-      KVM: x86: Tag kvm_mmu_x86_module_init() with __init
-      KVM: x86/mmu: Fully re-evaluate MMIO caching when SPTE masks change
-      KVM: SVM: Disable SEV-ES support if MMIO caching is disable
-      KVM: x86/mmu: Add sanity check that MMIO SPTE mask doesn't overlap gen
-      KVM: selftests: Test all possible "invalid" PERF_CAPABILITIES.LBR_FMT vals
-      KVM: x86: Refresh PMU after writes to MSR_IA32_PERF_CAPABILITIES
-      KVM: VMX: Use proper type-safe functions for vCPU => LBRs helpers
-      KVM: VMX: Adjust number of LBR records for PERF_CAPABILITIES at refresh
-
-Yu Zhang (1):
-      KVM: X86: avoid uninitialized 'fault.async_page_fault' from fixed-up #PF
-
- Documentation/virt/kvm/api.rst                     | 10 +--
- arch/x86/include/asm/kvm_host.h                    |  2 +-
- arch/x86/kvm/emulate.c                             |  6 +-
- arch/x86/kvm/lapic.c                               |  8 ++-
- arch/x86/kvm/mmu.h                                 |  2 +
- arch/x86/kvm/mmu/mmu.c                             |  8 ++-
- arch/x86/kvm/mmu/spte.c                            | 28 ++++++++
- arch/x86/kvm/mmu/spte.h                            | 17 ++++-
- arch/x86/kvm/svm/sev.c                             | 10 +++
- arch/x86/kvm/svm/svm.c                             |  9 ++-
- arch/x86/kvm/vmx/pmu_intel.c                       | 12 +---
- arch/x86/kvm/vmx/vmx.h                             | 29 +++++---
- arch/x86/kvm/x86.c                                 | 13 ++--
- arch/x86/kvm/xen.c                                 | 31 +++++----
- include/trace/events/kvm.h                         |  2 +-
- tools/testing/selftests/kvm/Makefile               |  7 +-
- tools/testing/selftests/kvm/rseq_test.c            | 58 ++++++++--------
- .../selftests/kvm/x86_64/vmx_pmu_caps_test.c       | 17 +++--
- virt/kvm/kvm_main.c                                | 81 ++++++++++++----------
- 19 files changed, 221 insertions(+), 129 deletions(-)
-
+Best regards,
+Krzysztof

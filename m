@@ -2,159 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1B5E58FF43
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 17:25:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7055658FF47
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 17:26:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235649AbiHKPZF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 11:25:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42848 "EHLO
+        id S235669AbiHKP0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 11:26:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234970AbiHKPZC (ORCPT
+        with ESMTP id S234925AbiHKP0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 11:25:02 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 314779411F;
-        Thu, 11 Aug 2022 08:25:01 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id b21-20020a05600c4e1500b003a32bc8612fso2841576wmq.3;
-        Thu, 11 Aug 2022 08:25:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=sDQypk+nipClY4bl7PZHlfgM+rY7WpeRFb079EdUwYY=;
-        b=ePOAt3TKRn0l9ScFAZI0/LDQJ9RE/DmlHuz2H0zHobG422Lzw2EYsGJhEebcVmkLq4
-         zFJzniMEA2Zahtklw818NppeVNZ8sDis0xmpt+wtI5b7uDpjTJE28ihruH7pDKnThHy/
-         W1ymfd9rROK990b/m//uTy5B5oZFAxaKBOr38YafXQ6D5zEGsQdMmcz71fOtqhDZAdXS
-         RLQoV9w3GYco6QFuzl7CMEC3d6pMdSkz/iImzDvrxGKeVDVEhoziDuZUCE9T/vZ9q/5V
-         e/s9cRzv8bNJAqObpOz49olViS/tBxVR0PsEWzsWNI9mQLutQ9xSwTpVZCx9RPIBb7pK
-         cPXA==
+        Thu, 11 Aug 2022 11:26:46 -0400
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E46D6B166;
+        Thu, 11 Aug 2022 08:26:45 -0700 (PDT)
+Received: by mail-qv1-f53.google.com with SMTP id u8so13585916qvv.1;
+        Thu, 11 Aug 2022 08:26:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=sDQypk+nipClY4bl7PZHlfgM+rY7WpeRFb079EdUwYY=;
-        b=0a0VJn/9gZ9IT3rvXJBCeFHpwOenjRi5whCwHCevG/dPU+TEvcuDYAsR7zvZb2jpL8
-         tbRbmw+q/+h32Q6qfz69oCPV3scOtYrj62Qd24g4RACRHE6YL11ZacstXWLX12tIRCTS
-         Kp4tyk+WmUT3YUkkDlnkDgYTFw93RvMTZuQbcDdibZV6f/AjtjmHc8LLLYcAjQh6qW+f
-         ydAZpYI4YSJCv7kkaPTUtvZWC7+H4+0O3Wv1EHy8U7iRf1NT41A1U43+cbfRI+uYveAo
-         Y8HV4desojwudT5eYSfszdyQ1VmYJlPMCjkghdnRH4lReUsvjTxaWh5NIuXLd91rQWnG
-         DFUw==
-X-Gm-Message-State: ACgBeo0lTh+FmSIqT0VQ8WZT8hUF2qG3Y6C1YylI+XviAtY4l7/gFEfS
-        rOTqaFivyFZfRHbNulsD43YRIuG2d1bMpg==
-X-Google-Smtp-Source: AA6agR7jzSgDT95Ajs9T/kS3HsplVmP9eug5TPIJ9hYsFs27imTgXUufnCngSVn+vZCVCz/ttGWa4A==
-X-Received: by 2002:a7b:ce05:0:b0:3a5:c069:25b3 with SMTP id m5-20020a7bce05000000b003a5c06925b3mr2149000wmc.87.1660231499483;
-        Thu, 11 Aug 2022 08:24:59 -0700 (PDT)
-Received: from zambezi.redhat.com (ip-94-112-17-81.bb.vodafone.cz. [94.112.17.81])
-        by smtp.gmail.com with ESMTPSA id v8-20020a5d5908000000b0021f131de6aesm19020112wrd.34.2022.08.11.08.24.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Aug 2022 08:24:58 -0700 (PDT)
-From:   Ilya Dryomov <idryomov@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Ceph updates for 5.20-rc1
-Date:   Thu, 11 Aug 2022 17:24:46 +0200
-Message-Id: <20220811152446.281723-1-idryomov@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=DTtQnNq6ywRHsZZL/uujOqWlFtBnXuiLlCZYEJfCk7M=;
+        b=YRRJwoNP/uegJz2mkcBcT7O54hXRzqirgIvKluwiDTt51aB+9UTmVu1k26Ws3a9xYt
+         mqkvAz3guhYyqsgsxuVK5oXi7RkfGSynL/QubWggPR+fstZ3EL0pXu4aMNayPsCJhuPO
+         yimsLbKRRKKUWnVAIHBcZftXwdntEWZp6zmOo8FfuYBxvGFN87Qy3jJXo2iYk5Ci5qNc
+         0hTGBXdAt+EeO/xBPBSM7jhhWdkT/nniTPe/Hqj3h0uRJodT99tQE0t0aiKohVGS3YZp
+         wMTxjAoW7YgWbNyqgB4P8xb1rgaJaNDBao4Q8SXb+r/hTLdRar1OK1M1St8W7eV538hn
+         svgw==
+X-Gm-Message-State: ACgBeo3AHJd2X/nWpXBIuqA4OJEwXOru0x1k22S+79TT6IwfCDAODefb
+        UGa6Z0p/1/KiuQF01WB7CvrySdYETj+1RrD2
+X-Google-Smtp-Source: AA6agR4bYlU0/EITs/MY4AcXHnUfMbG/kUQgczbthvLfPtSBLiBOUmHFfIeYi5a2Uv+GTaeWJxH+vA==
+X-Received: by 2002:a05:6214:e4e:b0:476:c48f:ad7 with SMTP id o14-20020a0562140e4e00b00476c48f0ad7mr28306940qvc.33.1660231604396;
+        Thu, 11 Aug 2022 08:26:44 -0700 (PDT)
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
+        by smtp.gmail.com with ESMTPSA id d7-20020a05620a240700b006b93ef659c3sm2310349qkn.39.2022.08.11.08.26.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Aug 2022 08:26:44 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-32194238c77so176451937b3.4;
+        Thu, 11 Aug 2022 08:26:43 -0700 (PDT)
+X-Received: by 2002:a81:af42:0:b0:31f:4e9a:74ad with SMTP id
+ x2-20020a81af42000000b0031f4e9a74admr33633524ywj.358.1660231603773; Thu, 11
+ Aug 2022 08:26:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220726180623.1668-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <20220726180623.1668-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+ <952a85ec-d1e9-7c14-6404-bc087723252f@linaro.org> <CA+V-a8vb+za1Zckk5aTxz0hKkd5fHQk7gtfV+HR_2YMZ5JuJEQ@mail.gmail.com>
+ <3e3c0c80-48eb-098d-977d-a1801036fc0c@linaro.org> <CA+V-a8tJVGz57FcJVnbksMot=pg5dXALo4QEyqO+57HnOTJLfQ@mail.gmail.com>
+In-Reply-To: <CA+V-a8tJVGz57FcJVnbksMot=pg5dXALo4QEyqO+57HnOTJLfQ@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 11 Aug 2022 17:26:32 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWih6XiVfLT0g=k8QrMmVzb2sqv9hxqtGE1t1F1Jvj_QA@mail.gmail.com>
+Message-ID: <CAMuHMdWih6XiVfLT0g=k8QrMmVzb2sqv9hxqtGE1t1F1Jvj_QA@mail.gmail.com>
+Subject: Re: [PATCH 1/6] dt-bindings: arm: renesas: Ignore the schema for
+ RISC-V arch
+To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hi Prabhakar,
 
-The following changes since commit 3d7cb6b04c3f3115719235cc6866b10326de34cd:
+On Wed, Jul 27, 2022 at 11:48 AM Lad, Prabhakar
+<prabhakar.csengg@gmail.com> wrote:
+> On Wed, Jul 27, 2022 at 10:31 AM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+> > On 27/07/2022 11:00, Lad, Prabhakar wrote:
+> > > On Wed, Jul 27, 2022 at 9:53 AM Krzysztof Kozlowski
+> > > <krzysztof.kozlowski@linaro.org> wrote:
+> > >> On 26/07/2022 20:06, Lad Prabhakar wrote:
+> > >>> Ignore the ARM renesas.yaml schema if the board is RZ/Five SMARC EVK
+> > >>> (RISC-V arch).
+> > >>>
+> > >>> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> > >>> ---
+> > >>>  Documentation/devicetree/bindings/arm/renesas.yaml | 9 +++++++++
+> > >>>  1 file changed, 9 insertions(+)
+> > >>>
+> > >>> diff --git a/Documentation/devicetree/bindings/arm/renesas.yaml b/Documentation/devicetree/bindings/arm/renesas.yaml
+> > >>> index ff80152f092f..f646df1a23af 100644
+> > >>> --- a/Documentation/devicetree/bindings/arm/renesas.yaml
+> > >>> +++ b/Documentation/devicetree/bindings/arm/renesas.yaml
+> > >>> @@ -9,6 +9,15 @@ title: Renesas SH-Mobile, R-Mobile, and R-Car Platform Device Tree Bindings
+> > >>>  maintainers:
+> > >>>    - Geert Uytterhoeven <geert+renesas@glider.be>
+> > >>>
+> > >>> +# We want to ignore this schema if the board is of RISC-V arch
+> > >>> +select:
+> > >>> +  not:
+> > >>> +    properties:
+> > >>> +      compatible:
+> > >>> +        contains:
+> > >>> +          items:
+> > >>> +            - const: renesas,r9a07g043f01
+> > >>
+> > >> Second issue - why not renesas,r9a07g043?
+> > >>
+> > > We have two R9A07G043 SOC'S one is based on ARM64 and other on RISC-V.
+> > >
+> > > RZ/G2UL ARM64:
+> > > Type-1 Part Number: R9A07G043U11GBG#BC0
+> > > Type-2 Part Number: R9A07G043U12GBG#BC0
+> > >
+> > > RZ/Five RISCV:
+> > > 13 x 13 mm Package Part Number: R9A07G043F01GBG#BC0
+> > >
+> > > So to differentiate in ARM schema I am using  renesas,r9a07g043f01.
+> >
+> > What is the point to keep then r9a07g043 fallback? The two SoCs are not
+> > compatible at all, so they must not use the same fallback.
+> >
+> Agreed, I wanted to keep it consistent with what was done with ARM64
+> (since both the SoCs shared R9A07G043 part number).
+>
+> Geert - What are your thoughts on the above?
 
-  Linux 5.19 (2022-07-31 14:03:01 -0700)
+"renesas,r9a07g043" is the CPU-less SoC base containing I/O devices.
+"renesas,r9a07g043f01", "renesas,r9a07g043u11", and
+"renesas,r9a07g043u12" are SoCs built by integrating one or more
+RV64 or ARM64 CPU cores and the related interrupt controllers with
+the CPU-less SoC base.
 
-are available in the Git repository at:
+Gr{oetje,eeting}s,
 
-  https://github.com/ceph/ceph-client.git tags/ceph-for-5.20-rc1
+                        Geert
 
-for you to fetch changes up to a8af0d682ae0c9cf62dd0ad6afdb1480951d6a10:
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-  libceph: clean up ceph_osdc_start_request prototype (2022-08-03 14:05:39 +0200)
-
-----------------------------------------------------------------
-We have a good pile of various fixes and cleanups from Xiubo, Jeff,
-Luis and others, almost exclusively in the filesystem.  Several patches
-touch files outside of our normal purview to set the stage for bringing
-in Jeff's long awaited ceph+fscrypt series in the near future.  All of
-them have appropriate acks and sat in linux-next for a while.
-
-----------------------------------------------------------------
-Daichi Mukai (1):
-      libceph: print fsid and epoch with osd id
-
-Hu Weiwen (1):
-      ceph: don't truncate file in atomic_open
-
-Jason Wang (1):
-      libceph: fix ceph_pagelist_reserve() comment typo
-
-Jeff Layton (8):
-      fs: change test in inode_insert5 for adding to the sb list
-      fscrypt: export fscrypt_fname_encrypt and fscrypt_fname_encrypted_size
-      fscrypt: add fscrypt_context_for_new_inode
-      ceph: don't leak snap_rwsem in handle_cap_grant
-      ceph: convert to generic_file_llseek
-      ceph: call netfs_subreq_terminated with was_async == false
-      ceph: switch back to testing for NULL folio->private in ceph_dirty_folio
-      libceph: clean up ceph_osdc_start_request prototype
-
-Li Qiong (1):
-      libceph: check pointer before assigned to "c->rules[]"
-
-Luis Henriques (2):
-      ceph: use correct index when encoding client supported features
-      ceph: prevent a client from exceeding the MDS maximum xattr size
-
-Xiubo Li (13):
-      ceph: remove useless CEPHFS_FEATURES_CLIENT_REQUIRED
-      fs/dcache: export d_same_name() helper
-      ceph: wait for the first reply of inflight async unlink
-      ceph: add session already open notify support
-      ceph: choose auth MDS for getxattr with the Xs caps
-      ceph: fix the incorrect comment for the ceph_mds_caps struct
-      ceph: fix incorrect old_size length in ceph_mds_request_args
-      ceph: make change_auth_cap_ses a global symbol
-      ceph: update the auth cap when the async create req is forwarded
-      ceph: don't get the inline data for new creating files
-      ceph: flush the dirty caps immediatelly when quota is approaching
-      ceph: make f_bsize always equal to f_frsize
-      ceph: remove useless check for the folio
-
- drivers/block/rbd.c             |   6 +-
- fs/ceph/addr.c                  |  59 ++++++--------
- fs/ceph/caps.c                  |  38 ++++-----
- fs/ceph/dir.c                   |  79 ++++++++++++++++---
- fs/ceph/file.c                  | 123 ++++++++++++------------------
- fs/ceph/inode.c                 |  13 +++-
- fs/ceph/mds_client.c            | 165 ++++++++++++++++++++++++++++++++++++++--
- fs/ceph/mds_client.h            |  13 ++--
- fs/ceph/mdsmap.c                |  22 +++++-
- fs/ceph/super.c                 |  19 +++--
- fs/ceph/super.h                 |  31 ++++++--
- fs/ceph/xattr.c                 |  12 ++-
- fs/crypto/fname.c               |  36 +++++++--
- fs/crypto/fscrypt_private.h     |   9 +--
- fs/crypto/hooks.c               |   6 +-
- fs/crypto/policy.c              |  35 +++++++--
- fs/dcache.c                     |  15 +++-
- fs/inode.c                      |  10 ++-
- include/linux/ceph/ceph_fs.h    |   8 +-
- include/linux/ceph/mdsmap.h     |   1 +
- include/linux/ceph/osd_client.h |   5 +-
- include/linux/dcache.h          |   2 +
- include/linux/fscrypt.h         |   5 ++
- include/linux/mmdebug.h         |  10 +++
- net/ceph/osd_client.c           |  15 ++--
- net/ceph/osdmap.c               |  32 ++++++--
- net/ceph/pagelist.c             |   2 +-
- 27 files changed, 538 insertions(+), 233 deletions(-)
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

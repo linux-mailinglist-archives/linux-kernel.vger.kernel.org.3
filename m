@@ -2,184 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1206B58F912
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 10:29:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6686A58F914
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 10:29:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234505AbiHKI3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 04:29:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34938 "EHLO
+        id S234481AbiHKI3v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 04:29:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234481AbiHKI3T (ORCPT
+        with ESMTP id S234506AbiHKI3o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 04:29:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 130B990837
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:29:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660206556;
+        Thu, 11 Aug 2022 04:29:44 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A1F8A7C6;
+        Thu, 11 Aug 2022 01:29:43 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b9870329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:9870:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 86DEC1EC04DF;
+        Thu, 11 Aug 2022 10:29:37 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1660206577;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FxVByzSzFDmsCiLB/TiRSXnYOQzfrWFzUNaldqvoDEA=;
-        b=FcuPBac9nPT8MZMNA0pvH3pQdYJ6MuzVJkVA59rxA9BLjP33Jq9yD1AYRXF85QFAqFqeDU
-        wvzOWtrUmztqKERLfFOw+8RLIzdktCFIbxb6wb+VtiL4J+zzUmAcD4ixs8CKMNziCy/ZqW
-        XR+Ku1lQuZTmqEYWk13zAaSCwpQqors=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-126-Vze-934UN4m0CCeQx0n_Jg-1; Thu, 11 Aug 2022 04:29:14 -0400
-X-MC-Unique: Vze-934UN4m0CCeQx0n_Jg-1
-Received: by mail-wm1-f70.google.com with SMTP id q10-20020a1ce90a000000b003a4f6e08166so1416236wmc.5
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:29:14 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=FxVByzSzFDmsCiLB/TiRSXnYOQzfrWFzUNaldqvoDEA=;
-        b=u7lc0vJpP42FWcGXRMsjKFQmKZTfrPlyikyZxLdFUdMwZ1DRT4TzHoqXrcKXQigdz6
-         cyICnmjm08ngjAgLKdSUUI7zsvDwy/vvRa6TqCMP3p9R2eUpAF7LQoburSBP9xP6JfXA
-         e6Dep/YP/0mI1lHQ8JWo3AAGBkcMiV9/XYYfOwkPEqw/30XoY0P8YUFO90XpTWSWG5CG
-         QGW3+6KC2Gv0vbemahDPK9XBLf+DOhWTqItQR8rRg3LCScNsf92u2CYQFmVkEVK9y6IN
-         cQx+uIGO0I9Wa06TBcJKQqyxzpgn+cYCooylwCz3gfBzfgyPtCzyGUWlSWMN6nN2V0S/
-         Wjgw==
-X-Gm-Message-State: ACgBeo3yu2Kz+G3LYR8gFOtLbLIorc6l3yhI7fScqGtTulU/f6IzATvw
-        HBrmcd2ktOyoJ3Hd2OHk3CLkc1hh0lSlYatHmoFQJXjTosoGaLkweMU/cnzVFee2xXXkUh6kICL
-        FlvaELgpYcjf0CZ4iBI0VVyQs
-X-Received: by 2002:a7b:cbd7:0:b0:3a5:500e:13bc with SMTP id n23-20020a7bcbd7000000b003a5500e13bcmr4872406wmi.83.1660206553689;
-        Thu, 11 Aug 2022 01:29:13 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR66zsuUOgvuqZVbOtSOAaY+Zmwp04081qg20ikPfEaP/6IS6rnkd3YWhqyK4i6W0P73yvfqIw==
-X-Received: by 2002:a7b:cbd7:0:b0:3a5:500e:13bc with SMTP id n23-20020a7bcbd7000000b003a5500e13bcmr4872374wmi.83.1660206553473;
-        Thu, 11 Aug 2022 01:29:13 -0700 (PDT)
-Received: from redhat.com ([2.52.152.113])
-        by smtp.gmail.com with ESMTPSA id m21-20020a05600c3b1500b003a317ee3036sm5522733wms.2.2022.08.11.01.29.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Aug 2022 01:29:12 -0700 (PDT)
-Date:   Thu, 11 Aug 2022 04:29:06 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jason Wang <jasowang@redhat.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        dinang@xilinx.com, martinpo@xilinx.com,
-        Wu Zongyong <wuzongyong@linux.alibaba.com>,
-        Piotr.Uminski@intel.com, gautam.dawar@amd.com,
-        ecree.xilinx@gmail.com, martinh@xilinx.com,
-        Stefano Garzarella <sgarzare@redhat.com>, pabloc@xilinx.com,
-        habetsm.xilinx@gmail.com, lvivier@redhat.com,
-        Zhu Lingshan <lingshan.zhu@intel.com>, tanuj.kamde@amd.com,
-        Longpeng <longpeng2@huawei.com>, lulu@redhat.com,
-        hanand@xilinx.com, Parav Pandit <parav@nvidia.com>,
-        Si-Wei Liu <si-wei.liu@oracle.com>,
-        Eli Cohen <elic@nvidia.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        Zhang Min <zhang.min9@zte.com.cn>,
-        Dan Carpenter <dan.carpenter@oracle.com>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH v7 3/4] vhost-vdpa: uAPI to suspend the device
-Message-ID: <20220811042847-mutt-send-email-mst@kernel.org>
-References: <20220810171512.2343333-1-eperezma@redhat.com>
- <20220810171512.2343333-4-eperezma@redhat.com>
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=5PuTsblVh83NGZYPqHKM9oPxgYPO8vPv5belNAU2Cv4=;
+        b=JXAQHyJbUZe+T0dZK01NGhKmSZWCyuCmFniCO7F+auJu2FU5kjpDw1Cdx2EClLbfI10V5p
+        GvdqtvHJgVFy/1hUGNu4m+yLPdWoYsvgQuLGhbsMfAMmZ8TaZ+WB4MFKBP5yhK5NfHVaK0
+        k1eE1atd8IEgQz1v02u6q18zCmZRajQ=
+Date:   Thu, 11 Aug 2022 10:29:32 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Miaoqian Lin <linmq006@gmail.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        James Morse <james.morse@arm.com>,
+        Robert Richter <rric@kernel.org>,
+        Greg Kroah-Hartman <gregkh@suse.de>,
+        Doug Thompson <dougthompson@xmission.com>,
+        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] EDAC: Fix some refcount leaks
+Message-ID: <YvS97Ixj2cbOBjek@zn.tnic>
+References: <20220512075906.21915-1-linmq006@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220810171512.2343333-4-eperezma@redhat.com>
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220512075906.21915-1-linmq006@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 10, 2022 at 07:15:11PM +0200, Eugenio Pérez wrote:
-> The ioctl adds support for suspending the device from userspace.
+On Thu, May 12, 2022 at 11:59:06AM +0400, Miaoqian Lin wrote:
+> kobject_init_and_add() takes reference even when it fails.
+> According to the doc of kobject_init_and_add()
 > 
-> This is a must before getting virtqueue indexes (base) for live migration,
-> since the device could modify them after userland gets them. There are
-> individual ways to perform that action for some devices
-> (VHOST_NET_SET_BACKEND, VHOST_VSOCK_SET_RUNNING, ...) but there was no
-> way to perform it for any vhost device (and, in particular, vhost-vdpa).
+>    If this function returns an error, kobject_put() must be called to
+>    properly clean up the memory associated with the object.
 > 
-> After a successful return of the ioctl call the device must not process
-> more virtqueue descriptors. The device can answer to read or writes of
-> config fields as if it were not suspended. In particular, writing to
-> "queue_enable" with a value of 1 will not make the device start
-> processing buffers of the virtqueue.
+> Fix this by calling kobject_put() when kobject_init_and_add() fails.
 > 
-> Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
-> Message-Id: <20220623160738.632852-4-eperezma@redhat.com>
-> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-
-You are not supposed to include upstream maintainer's signoff
-like this.
-
+> Fixes: b2ed215a3338 ("Kobject: change drivers/edac to use kobject_init_and_add")
+> Signed-off-by: Miaoqian Lin <linmq006@gmail.com>
 > ---
-> v7: Delete argument to ioctl, unused
+> Changes on v2:
+> - fix wrong label
+> v1 link: https://lore.kernel.org/all/20220511081402.19784-1-linmq006@gmail.com/
 > ---
->  drivers/vhost/vdpa.c       | 19 +++++++++++++++++++
->  include/uapi/linux/vhost.h |  9 +++++++++
->  2 files changed, 28 insertions(+)
+>  drivers/edac/edac_device_sysfs.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-> index 3d636e192061..7fa671ac4bdf 100644
-> --- a/drivers/vhost/vdpa.c
-> +++ b/drivers/vhost/vdpa.c
-> @@ -478,6 +478,22 @@ static long vhost_vdpa_get_vqs_count(struct vhost_vdpa *v, u32 __user *argp)
->  	return 0;
->  }
+> diff --git a/drivers/edac/edac_device_sysfs.c b/drivers/edac/edac_device_sysfs.c
+> index 9a61d92bdf42..a48142a8ea6f 100644
+> --- a/drivers/edac/edac_device_sysfs.c
+> +++ b/drivers/edac/edac_device_sysfs.c
+> @@ -542,7 +542,7 @@ static int edac_device_create_block(struct edac_device_ctl_info *edac_dev,
+>  		edac_dbg(1, "Failed to register instance '%s'\n", block->name);
+>  		kobject_put(main_kobj);
+>  		err = -ENODEV;
+> -		goto err_out;
+> +		goto err_on_attrib;
+>  	}
 >  
-> +/* After a successful return of ioctl the device must not process more
-> + * virtqueue descriptors. The device can answer to read or writes of config
-> + * fields as if it were not suspended. In particular, writing to "queue_enable"
-> + * with a value of 1 will not make the device start processing buffers.
-> + */
-> +static long vhost_vdpa_suspend(struct vhost_vdpa *v)
-> +{
-> +	struct vdpa_device *vdpa = v->vdpa;
-> +	const struct vdpa_config_ops *ops = vdpa->config;
-> +
-> +	if (!ops->suspend)
-> +		return -EOPNOTSUPP;
-> +
-> +	return ops->suspend(vdpa);
-> +}
-> +
->  static long vhost_vdpa_vring_ioctl(struct vhost_vdpa *v, unsigned int cmd,
->  				   void __user *argp)
->  {
-> @@ -654,6 +670,9 @@ static long vhost_vdpa_unlocked_ioctl(struct file *filep,
->  	case VHOST_VDPA_GET_VQS_COUNT:
->  		r = vhost_vdpa_get_vqs_count(v, argp);
->  		break;
-> +	case VHOST_VDPA_SUSPEND:
-> +		r = vhost_vdpa_suspend(v);
-> +		break;
->  	default:
->  		r = vhost_dev_ioctl(&v->vdev, cmd, argp);
->  		if (r == -ENOIOCTLCMD)
-> diff --git a/include/uapi/linux/vhost.h b/include/uapi/linux/vhost.h
-> index cab645d4a645..f9f115a7c75b 100644
-> --- a/include/uapi/linux/vhost.h
-> +++ b/include/uapi/linux/vhost.h
-> @@ -171,4 +171,13 @@
->  #define VHOST_VDPA_SET_GROUP_ASID	_IOW(VHOST_VIRTIO, 0x7C, \
->  					     struct vhost_vring_state)
->  
-> +/* Suspend a device so it does not process virtqueue requests anymore
-> + *
-> + * After the return of ioctl the device must preserve all the necessary state
-> + * (the virtqueue vring base plus the possible device specific states) that is
-> + * required for restoring in the future. The device must not change its
-> + * configuration after that point.
-> + */
-> +#define VHOST_VDPA_SUSPEND		_IO(VHOST_VIRTIO, 0x7D)
-> +
->  #endif
-> -- 
-> 2.31.1
+>  	/* If there are driver level block attributes, then added them
 
+Actually, on a second look, that's not necessary:
+
+                err = edac_device_create_block(edac_dev, instance,
+                                                &instance->blocks[i]);
+                if (err) {
+                        /* If any fail, remove all previous ones */
+                        for (j = 0; j < i; j++)
+                                edac_device_delete_block(edac_dev,
+                                                        &instance->blocks[j]);
+				^^^^^^^^^^^^^^
+
+that cleans up the kobjects.
+
+> @@ -640,7 +640,7 @@ static int edac_device_create_instance(struct edac_device_ctl_info *edac_dev,
+>  		edac_dbg(2, "Failed to register instance '%s'\n",
+>  			 instance->name);
+>  		kobject_put(main_kobj);
+> -		goto err_out;
+> +		goto err_release_instance_kobj;
+>  	}
+>  
+>  	edac_dbg(4, "now register '%d' blocks for instance %d\n",
+
+Ditto.
+
+But keep lookin' :-)
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

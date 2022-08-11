@@ -2,233 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43C8C58FA44
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 11:50:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80ECF58FA48
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 11:52:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234510AbiHKJuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 05:50:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57994 "EHLO
+        id S234257AbiHKJwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 05:52:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229724AbiHKJuP (ORCPT
+        with ESMTP id S229540AbiHKJwq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 05:50:15 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47FC1BBD
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 02:50:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660211413; x=1691747413;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ofy+K1zpY8NXY6GiPW67q6uAvp+9L1Ki/icb2bX70DY=;
-  b=O9Q0UD+PDSFNNpfataj4jwoEd9n++JF7GQ43nXbAIje3Psr6CKaPaHYm
-   0xjIbMkZqqSfKVkyP4//2L1rzgeKHR8FdM8idInP5uL+APpXVpsGJq0Kk
-   0qKZ9OmcOHebxQf/P1daCNf8lJf2KypH1xVtPabhixCSTPwU6moIqh8jL
-   tSGYy9Ln5WKBWdEcyySPfKEm4kJa/RU7JOs3l8M8ySYkpWH6u0+XFuprf
-   mN/W9O97faQO6RDjmsPH7GSib5ZGbXAAUqU/AAV19CW01XLj164f3b0u+
-   GnyXQtE+/iCA2hONwQ0ExL0YLOdu8/s5jRdFLVYIrUiXvfpktwm/+/a5f
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="278253074"
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="278253074"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 02:50:12 -0700
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="608871369"
-Received: from lahna.fi.intel.com (HELO lahna) ([10.237.72.162])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 02:50:10 -0700
-Received: by lahna (sSMTP sendmail emulation); Thu, 11 Aug 2022 12:50:08 +0300
-Date:   Thu, 11 Aug 2022 12:50:08 +0300
-From:   Mika Westerberg <mika.westerberg@linux.intel.com>
-To:     Brad Campbell <lists2009@fnarfbargle.com>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: Apple Thunderbolt Display chaining
-Message-ID: <YvTQ0N2Py4rc4k3Z@lahna>
-References: <YvEFtPF7SBIwNG/o@lahna>
- <d234ea9b-9303-6088-0a9b-4de887a77bf4@fnarfbargle.com>
- <YvI1lQh+C0SJiG73@lahna>
- <bcebdeb9-4f6a-e931-46f5-b9be899db9a4@fnarfbargle.com>
- <YvI9Cbin4OKQwZ05@lahna>
- <86bec398-7a5b-6d4e-bc02-5941fe6c2e73@fnarfbargle.com>
- <YvJyZ51H+YkceKJP@lahna>
- <39268cc6-4e05-b83c-ff73-3056925eeb76@fnarfbargle.com>
- <YvKCRPtoN6m2rMr2@lahna>
- <2c4420ac-d988-9dd8-c223-4243b9a6881e@fnarfbargle.com>
+        Thu, 11 Aug 2022 05:52:46 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FABC90C4C
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 02:52:45 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-32a09b909f6so63499917b3.0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 02:52:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=4TbeJ47O6jDOlyunrlIhv/Q2h3DuJDhmv18eJjgF8uk=;
+        b=VqdDDiDVHcxv6/cEuhOklTEy9FLcPOTEGIa+/IKsk/LCZuQT53AAYIS3TWyda4qA/M
+         HIRespjKzhhqI4dej17TtLo9CCH0E9IAs82ruA1R5f9FCIPASKzhjYfoYc8x5XuelNaO
+         EGJZ3XHXEWo+lEgf6GhypKG6MaQ01oQ1RTgRKH44VBOiUHr68bY5zHSdsvUuEWYR9ebd
+         rD3kRc2xgqUXWY+COavJXo7GGOAmJ64ZsYOB/EVJuFEM9lwPSyKaowlw1Eo+w+vy/gGB
+         Vd2R96hWdkyxoaosIUt9JYyC6t1v9Ec0FxCw3CJaMbippAvQTq4ukFLdRLpCGiXEPTwM
+         UnbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=4TbeJ47O6jDOlyunrlIhv/Q2h3DuJDhmv18eJjgF8uk=;
+        b=nZMatvtcLD1A3pobTw7qJRDG3ify+grnmGTB9voK8NcjJOL7jN4RaDuh8GvPqID74p
+         dDhWCPwtnwU52QPhhA2emT78YbsjEHVau8/O7rI36NW7/cvH+bAo6Lm2/P3vtFhK4PD3
+         AldSyzGgOfa1OWU+Zk9SV8HfS4gCvpauHbd9BKTLXspeyw2SnZmX328s7yqk7yS4zFom
+         Lu1s8hVnPnqSUU4rc0GRybnQJEa3FF2uGQr9UeTWhhBSzwhWp/slw9W2gu1gdFCSG5xM
+         kE5xDNE/d7DfJGmLXCTVNN3Ftx0sAHC0fs7m2tphskRLUXJAn7dEYwo3mHit7xmkF+Df
+         /r5A==
+X-Gm-Message-State: ACgBeo1QhOWIZiNDfbL4sPtCvbtt8UCcvljGcUjBpAZAdwotKcpzR9RF
+        3Xxl/oB9Om1NyXpRwynFpHFgzYt8TAzTqF/y4vnaJg==
+X-Google-Smtp-Source: AA6agR56CRCkZYeujOwS+/1v6+eUavc5Etxu+OvLhG2v0yg+u+A2XCKfi0i7a3lhzzI1WG6XP60jOMyM4rsL0fPIbes=
+X-Received: by 2002:a0d:eb12:0:b0:31f:38af:6ff with SMTP id
+ u18-20020a0deb12000000b0031f38af06ffmr31250407ywe.4.1660211564413; Thu, 11
+ Aug 2022 02:52:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2c4420ac-d988-9dd8-c223-4243b9a6881e@fnarfbargle.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220811085938.2506536-1-imran.f.khan@oracle.com> <d3cd0f34-b30b-9a1d-8715-439ffb818539@suse.cz>
+In-Reply-To: <d3cd0f34-b30b-9a1d-8715-439ffb818539@suse.cz>
+From:   Marco Elver <elver@google.com>
+Date:   Thu, 11 Aug 2022 11:52:07 +0200
+Message-ID: <CANpmjNMYwxbkOc+LxLfZ--163yfXpQj69oOfEFkSwq7JZurbdA@mail.gmail.com>
+Subject: Re: [PATCH v2] Introduce sysfs interface to disable kfence for
+ selected slabs.
+To:     vbabka@suse.cz
+Cc:     Imran Khan <imran.f.khan@oracle.com>, glider@google.com,
+        dvyukov@google.com, cl@linux.com, penberg@kernel.org,
+        rientjes@google.com, iamjoonsoo.kim@lge.com,
+        akpm@linux-foundation.org, roman.gushchin@linux.dev,
+        42.hyeyoo@gmail.com, linux-kernel@vger.kernel.org,
+        kasan-dev@googlegroups.com, linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, 11 Aug 2022 at 11:31, <vbabka@suse.cz> wrote:
+>
+> On 8/11/22 10:59, Imran Khan wrote:
+> > By default kfence allocation can happen for any slab object, whose size
+> > is up to PAGE_SIZE, as long as that allocation is the first allocation
+> > after expiration of kfence sample interval. But in certain debugging
+> > scenarios we may be interested in debugging corruptions involving
+> > some specific slub objects like dentry or ext4_* etc. In such cases
+> > limiting kfence for allocations involving only specific slub objects
+> > will increase the probablity of catching the issue since kfence pool
+> > will not be consumed by other slab objects.
+>
+> So you want to enable specific caches for kfence.
+>
+> > This patch introduces a sysfs interface '/sys/kernel/slab/<name>/skip_kfence'
+> > to disable kfence for specific slabs. Having the interface work in this
+> > way does not impact current/default behavior of kfence and allows us to
+> > use kfence for specific slabs (when needed) as well. The decision to
+> > skip/use kfence is taken depending on whether kmem_cache.flags has
+> > (newly introduced) SLAB_SKIP_KFENCE flag set or not.
+>
+> But this seems everything is still enabled and you can selectively disable.
+> Isn't that rather impractical?
 
-On Wed, Aug 10, 2022 at 03:40:08PM +0800, Brad Campbell wrote:
-> G'day Mika,
-> 
-> On 9/8/22 23:50, Mika Westerberg wrote:
-> > Hi,
-> > 
-> > On Tue, Aug 09, 2022 at 11:16:27PM +0800, Brad Campbell wrote:
-> > > If I then reboot and load the driver it fails.
-> > > 
-> > > The only thing I could think of doing was an lspci -vvv after the boot and module load
-> > > and an lspci -vvv after a warm reboot and diff them, because there are changes around the
-> > > thunderbolt bridge devices. I've done a diff -u50 to try and keep as much context as possible.
-> > > 
-> > > On the first boot I can unload/reload the thunderbolt module repeatedly and there's no issue
-> > > but loading it after a reboot locks up. There are no lspci changes on the first boot after the
-> > > initial module load unless I rescan the PCI bus, but they're minor and it doesn't cause an issue
-> > > with loading the thunderbolt module.
-> > > 
-> > > The firmware *must* be doing something on reboot I suppose or the PCIe configs wouldn't change.
-> > 
-> > Okay, let's try a bigger hammer and reset all the ports upon load. That
-> > should hopefully clear out the "bad state" too. This is completely
-> > untested but it should trigger reset and then re-initialize the TBT
-> > links.
-> > 
-> > diff --git a/drivers/thunderbolt/lc.c b/drivers/thunderbolt/lc.c
-> > index 633970fbe9b0..c419c2568de4 100644
-> > --- a/drivers/thunderbolt/lc.c
-> > +++ b/drivers/thunderbolt/lc.c
-> > @@ -6,6 +6,8 @@
-> >    * Author: Mika Westerberg <mika.westerberg@linux.intel.com>
-> >    */
-> > +#include <linux/delay.h>
+A script just iterates through all the caches that they don't want,
+and sets skip_kfence? It doesn't look more complicated.
+
+> How about making this cache flag rather denote that KFENCE is enabled (not
+> skipped), set it by default only for for caches with size <= 1024, then you
+
+Where does 1024 come from? PAGE_SIZE?
+
+The problem with that opt-in vs. opt-out is that it becomes more
+complex to maintain opt-in (as the first RFC of this did). With the
+new flag SLAB_SKIP_KFENCE, it also can serve a dual purpose, where
+someone might want to explicitly opt out by default and pass it to
+kmem_cache_create() (for whatever reason; not that we'd encourage
+that).
+
+I feel that the real use cases for selectively enabling caches for
+KFENCE are very narrow, and a design that introduces lots of
+complexity elsewhere, just to support this feature cannot be justified
+(which is why I suggested the simpler design here back in
+https://lore.kernel.org/lkml/CANpmjNNmD9z7oRqSaP72m90kWL7jYH+cxNAZEGpJP8oLrDV-vw@mail.gmail.com/
+)
+
+> can drop the size check in __kfence_alloc and rely only on the flag? And if
+> you need, you can also enable a cache with size > 1024 with the sysfs
+> interface, to override the limit, which isn't possible now.
+> (I don't think changing the limit to always act on s->object_size instead of
+> e.g. size passed to kmalloc() that it can pick up now, will change anything
+> in practice)
+> Then you can also have a kernel boot param that tells kfence to set the flag
+> on no cache at all, and you can easily enable just the specific caches you
+> want. Or make a parameter that lets you override the 1024 size limit
+> globally, and if you set it to 0, it means no cache is enabled for kfence?
+>
+> > Signed-off-by: Imran Khan <imran.f.khan@oracle.com>
+> > ---
+> >
+> > Changes since v1:
+> >  - Remove RFC tag
+> >
+> >  include/linux/slab.h |  6 ++++++
+> >  mm/kfence/core.c     |  7 +++++++
+> >  mm/slub.c            | 27 +++++++++++++++++++++++++++
+> >  3 files changed, 40 insertions(+)
+> >
+> > diff --git a/include/linux/slab.h b/include/linux/slab.h
+> > index 0fefdf528e0d..947d912fd08c 100644
+> > --- a/include/linux/slab.h
+> > +++ b/include/linux/slab.h
+> > @@ -119,6 +119,12 @@
+> >   */
+> >  #define SLAB_NO_USER_FLAGS   ((slab_flags_t __force)0x10000000U)
+> >
+> > +#ifdef CONFIG_KFENCE
+> > +#define SLAB_SKIP_KFENCE            ((slab_flags_t __force)0x20000000U)
+> > +#else
+> > +#define SLAB_SKIP_KFENCE            0
+> > +#endif
 > > +
-> >   #include "tb.h"
-> >   /**
-> > @@ -327,6 +329,34 @@ void tb_lc_xhci_disconnect(struct tb_port *port)
-> >   	tb_port_dbg(port, "xHCI disconnected\n");
-> >   }
-> > +int tb_lc_reset_port(struct tb_port *port)
+> >  /* The following flags affect the page allocator grouping pages by mobility */
+> >  /* Objects are reclaimable */
+> >  #define SLAB_RECLAIM_ACCOUNT ((slab_flags_t __force)0x00020000U)
+> > diff --git a/mm/kfence/core.c b/mm/kfence/core.c
+> > index c252081b11df..8c08ae2101d7 100644
+> > --- a/mm/kfence/core.c
+> > +++ b/mm/kfence/core.c
+> > @@ -1003,6 +1003,13 @@ void *__kfence_alloc(struct kmem_cache *s, size_t size, gfp_t flags)
+> >               return NULL;
+> >       }
+> >
+> > +     /*
+> > +      * Skip allocations for this slab, if KFENCE has been disabled for
+> > +      * this slab.
+> > +      */
+> > +     if (s->flags & SLAB_SKIP_KFENCE)
+> > +             return NULL;
+> > +
+> >       if (atomic_inc_return(&kfence_allocation_gate) > 1)
+> >               return NULL;
+> >  #ifdef CONFIG_KFENCE_STATIC_KEYS
+> > diff --git a/mm/slub.c b/mm/slub.c
+> > index 862dbd9af4f5..ee8b48327536 100644
+> > --- a/mm/slub.c
+> > +++ b/mm/slub.c
+> > @@ -5745,6 +5745,30 @@ STAT_ATTR(CPU_PARTIAL_NODE, cpu_partial_node);
+> >  STAT_ATTR(CPU_PARTIAL_DRAIN, cpu_partial_drain);
+> >  #endif       /* CONFIG_SLUB_STATS */
+> >
+> > +#ifdef CONFIG_KFENCE
+> > +static ssize_t skip_kfence_show(struct kmem_cache *s, char *buf)
 > > +{
-> > +	struct tb_switch *sw = port->sw;
-> > +	int cap, ret;
-> > +	u32 val;
-> > +
-> > +	if (sw->generation != 3)
-> > +		return -EINVAL;
-> > +
-> > +	cap = find_port_lc_cap(port);
-> > +	if (cap < 0)
-> > +		return cap;
-> > +
-> > +	ret = tb_sw_read(sw, &val, TB_CFG_SWITCH, cap + TB_LC_PORT_MODE, 1);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	val |= TB_LC_PORT_MODE_DPR;
-> > +	ret = tb_sw_write(sw, &val, TB_CFG_SWITCH, cap + TB_LC_PORT_MODE, 1);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	msleep(20);
-> > +
-> > +	val &= ~TB_LC_PORT_MODE_DPR;
-> > +	return tb_sw_write(sw, &val, TB_CFG_SWITCH, cap + TB_LC_PORT_MODE, 1);
+> > +     return sysfs_emit(buf, "%d\n", !!(s->flags & SLAB_SKIP_KFENCE));
 > > +}
 > > +
-> >   static int tb_lc_set_wake_one(struct tb_switch *sw, unsigned int offset,
-> >   			      unsigned int flags)
-> >   {
-> > diff --git a/drivers/thunderbolt/switch.c b/drivers/thunderbolt/switch.c
-> > index 0ae8a7ec7c9c..21ac3ccf1cf9 100644
-> > --- a/drivers/thunderbolt/switch.c
-> > +++ b/drivers/thunderbolt/switch.c
-> > @@ -740,6 +740,11 @@ int tb_port_disable(struct tb_port *port)
-> >   	return __tb_port_enable(port, false);
-> >   }
-> > +int tb_port_reset(struct tb_port *port)
+> > +static ssize_t skip_kfence_store(struct kmem_cache *s,
+> > +                     const char *buf, size_t length)
 > > +{
-> > +	return tb_lc_reset_port(port);
+> > +     int ret = length;
+> > +
+> > +     if (buf[0] == '0')
+> > +             s->flags &= ~SLAB_SKIP_KFENCE;
+> > +     else if (buf[0] == '1')
+> > +             s->flags |= SLAB_SKIP_KFENCE;
+> > +     else
+> > +             ret = -EINVAL;
+> > +
+> > +     return ret;
 > > +}
+> > +SLAB_ATTR(skip_kfence);
 > > +
-> >   /*
-> >    * tb_init_port() - initialize a port
-> >    *
-> > diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-> > index 8030fc544c5e..48a7396994ef 100644
-> > --- a/drivers/thunderbolt/tb.c
-> > +++ b/drivers/thunderbolt/tb.c
-> > @@ -1875,6 +1875,7 @@ static int tb_scan_finalize_switch(struct device *dev, void *data)
-> >   static int tb_start(struct tb *tb)
-> >   {
-> >   	struct tb_cm *tcm = tb_priv(tb);
-> > +	struct tb_port *p;
-> >   	int ret;
-> >   	tb->root_switch = tb_switch_alloc(tb, &tb->dev, 0);
-> > @@ -1911,6 +1912,12 @@ static int tb_start(struct tb *tb)
-> >   				false);
-> >   	/* Enable TMU if it is off */
-> >   	tb_switch_tmu_enable(tb->root_switch);
+> > +#endif
 > > +
-> > +	tb_switch_for_each_port(tb->root_switch, p) {
-> > +		if (tb_port_is_null(p))
-> > +			tb_port_reset(p);
-> > +	}
-> > +
-> >   	/* Full scan to discover devices added before the driver was loaded. */
-> >   	tb_scan_switch(tb->root_switch);
-> >   	/* Find out tunnels created by the boot firmware */
-> > diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-> > index 28bb80d967d6..fe5edefec712 100644
-> > --- a/drivers/thunderbolt/tb.h
-> > +++ b/drivers/thunderbolt/tb.h
-> > @@ -1028,6 +1028,7 @@ int tb_port_clear_counter(struct tb_port *port, int counter);
-> >   int tb_port_unlock(struct tb_port *port);
-> >   int tb_port_enable(struct tb_port *port);
-> >   int tb_port_disable(struct tb_port *port);
-> > +int tb_port_reset(struct tb_port *port);
-> >   int tb_port_alloc_in_hopid(struct tb_port *port, int hopid, int max_hopid);
-> >   void tb_port_release_in_hopid(struct tb_port *port, int hopid);
-> >   int tb_port_alloc_out_hopid(struct tb_port *port, int hopid, int max_hopid);
-> > @@ -1121,6 +1122,7 @@ bool tb_lc_is_usb_plugged(struct tb_port *port);
-> >   bool tb_lc_is_xhci_connected(struct tb_port *port);
-> >   int tb_lc_xhci_connect(struct tb_port *port);
-> >   void tb_lc_xhci_disconnect(struct tb_port *port);
-> > +int tb_lc_reset_port(struct tb_port *port);
-> >   int tb_lc_set_wake(struct tb_switch *sw, unsigned int flags);
-> >   int tb_lc_set_sleep(struct tb_switch *sw);
-> >   bool tb_lc_lane_bonding_possible(struct tb_switch *sw);
-> > diff --git a/drivers/thunderbolt/tb_regs.h b/drivers/thunderbolt/tb_regs.h
-> > index f8c1ca3464d9..8fd12bc2d500 100644
-> > --- a/drivers/thunderbolt/tb_regs.h
-> > +++ b/drivers/thunderbolt/tb_regs.h
-> > @@ -555,6 +555,9 @@ struct tb_regs_hop {
-> >   #define TB_LC_POWER				0x740
-> >   /* Link controller registers */
-> > +#define TB_LC_PORT_MODE				0x26
-> > +#define TB_LC_PORT_MODE_DPR			BIT(6)
-> > +
-> >   #define TB_LC_CS_42				0x2a
-> >   #define TB_LC_CS_42_USB_PLUGGED			BIT(31)
-> > 
-> 
-> Yep, that certainly solves the lockup/reboot issues and all PCIe devices are
-> discovered and appear to work. I can reboot repeatedly and that seems to be ok.
-> 
-> It causes some peculiarity in the DP tunnel however where one or both will fail to come up
-> leaving this in dmesg (in this instance both failed) :
-> 
-> [   10.550439] [drm] Adding stream 00000000a5b9bb95 to context failed with err 28!
-> [   10.551032] [drm:handle_hpd_irq_helper [amdgpu]] *ERROR* Restoring old state failed with -22
-> [   11.180398] [drm] Adding stream 00000000a5b9bb95 to context failed with err 28!
-> [   11.180830] [drm:handle_hpd_irq_helper [amdgpu]] *ERROR* Restoring old state failed with -22
-> 
-> Oddly enough X thinks the displays are there and is pretending to display on them, but they
-> remain black. This can be one, the other or both depending on the boot.
-> 
-> I have probably cold/warm booted 50 times now with varying combinations of activation to attempt
-> to pin some form of determinism on this behaviour, but I've got nothing at this point.
-
-Okay, do you see in the dmesg whether the DP tunnels are actually
-created when you see the issue?
+> >  static struct attribute *slab_attrs[] = {
+> >       &slab_size_attr.attr,
+> >       &object_size_attr.attr,
+> > @@ -5812,6 +5836,9 @@ static struct attribute *slab_attrs[] = {
+> >       &failslab_attr.attr,
+> >  #endif
+> >       &usersize_attr.attr,
+> > +#ifdef CONFIG_KFENCE
+> > +     &skip_kfence_attr.attr,
+> > +#endif
+> >
+> >       NULL
+> >  };
+> >
+> > base-commit: 40d43a7507e1547dd45cb02af2e40d897c591870
+>

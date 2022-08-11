@@ -2,168 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1259D58FC91
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 14:42:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C68B58FC9F
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 14:43:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235289AbiHKMmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 08:42:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55784 "EHLO
+        id S235359AbiHKMn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 08:43:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235049AbiHKMmG (ORCPT
+        with ESMTP id S235349AbiHKMnZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 08:42:06 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C97E61D46
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 05:42:05 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id d7so16983751pgc.13
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 05:42:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=0NMhQVuhzXkwwEud1IyNm6hvZaVuRoUuPkQoEp6AaTY=;
-        b=U2AwqSzPv6fO8PpGUCaF2AQotw7T7X2O6thhEuTk1KEihDUucDVJe5ziLoUa6E6d0y
-         BqnXd6O76kRCk6OFQ5nFGHiwaWZIFk/ANu5Zzfd40OwXF64SLcPX1MlHJeU5agYRo0EN
-         VHMo9ynMC0Zyal7n4+ERV5Zh4E33sJfM7rOQHgDF3N/YlQ5Izl5Ui0TmaSO8hZStkOEW
-         jQ19UPY/Ji+zJMlUVPAanUybYLK58sjcPqDTKh51IVFHGKXEB8A+UglgWADRqwb6qsav
-         ZWZtJtH5nNWJOR0TV59ioeKcoZOe9riuBAKvQP/9w7DhyOj0o1eqWr02yEDDCQY1fBIJ
-         d5MA==
+        Thu, 11 Aug 2022 08:43:25 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61BB38982E
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 05:43:24 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id u5-20020a6b4905000000b00681e48dbd92so9660840iob.21
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 05:43:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=0NMhQVuhzXkwwEud1IyNm6hvZaVuRoUuPkQoEp6AaTY=;
-        b=o4H3wphRFsM9FR3SKDW1+3BS/MXkRG2xMYg/tWdQ0Ba6RLZXWPy8uhtEevJ4qdAVf2
-         6R8iZYh85OQzYxPF0rnuYf2nTy4d35NkHCqe9Jb82o1p3JR0hnAhOhGoXIA8EB7mDcDF
-         MrHXWPEfywIJ7MVqQ8rjRqjAdxfgqfSjCX73xGrl5QDOM9xybqxbkoxTnOUQK1VDVuyj
-         +62QVoZMwjPyIO6aP2MJlQaQjziynja10lRCzyH/BfBTxk/jKiRmrIZjk2gjIfaSYiY4
-         shGXD+BkloiiRTCpw53Vu97euNPMme7eO2Yn6/E3YIKWkcbeV12EtCP0ESArWInet82w
-         ErUw==
-X-Gm-Message-State: ACgBeo0CY/ojKyLdrULxdXi5Qcq6OJRPF/WOsq0Oe/wfXP16PtPjnHI4
-        0SGkkOVnbfKJi4wgKgFF1vNKEw==
-X-Google-Smtp-Source: AA6agR4/HxN7yvc3GgDrwV/AysM6JnJrKGknSriYDYyiEe9VplJgKHrc61lciSxG6nIdfeLuw0i9qg==
-X-Received: by 2002:a63:43c2:0:b0:41a:9dea:5dac with SMTP id q185-20020a6343c2000000b0041a9dea5dacmr26052449pga.585.1660221725016;
-        Thu, 11 Aug 2022 05:42:05 -0700 (PDT)
-Received: from C02DV8HUMD6R.bytedance.net ([139.177.225.254])
-        by smtp.gmail.com with ESMTPSA id w2-20020a62c702000000b0052f0a404fa7sm4056949pfg.146.2022.08.11.05.42.01
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 11 Aug 2022 05:42:04 -0700 (PDT)
-From:   Abel Wu <wuyun.abel@bytedance.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@kernel.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Muchun Song <songmuchun@bytedance.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Abel Wu <wuyun.abel@bytedance.com>
-Subject: [PATCH v2] mm/mempolicy: fix lock contention on mems_allowed
-Date:   Thu, 11 Aug 2022 20:41:57 +0800
-Message-Id: <20220811124157.74888-1-wuyun.abel@bytedance.com>
-X-Mailer: git-send-email 2.31.1
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=N4jbo9jFiiTWtuh64UuCXIlcP86sRdsnQIPlROsB+us=;
+        b=TKtEYD9Cwm4L98qpP+HMLQRDE6Eghx7ugEEcw61MUb6hu/vFueZg5ktl010W1zzUjm
+         xP2NMNVRtpnkRFnEcu389Yvh+uVFKIyt3EjmCQ/0T351uyKIeyiaqU0SdpReLU1OdQaC
+         DLm9KM1cIjJRI6FSUrRb0IwwEm112iWsW49A5m2Jjb1yWB/Ap4o1qmgoItklKBCuzVwu
+         ej0mkStOCt/oI6DP6o9IuvWeYTMwzgcLtY0T8WvGxVpeOfcy+606MCCneON/dsqFYPtw
+         k/0tr3OhMhmzcmb/UiqMXYKv2kDMfxpPkoPCi9xhWbKKAV0eQmsYfBsStrZ0YyGgb65S
+         D3XQ==
+X-Gm-Message-State: ACgBeo2fsWIe7NB1KoZLMgUK/Yawm8WyUYxMoLetaVMPuwmj7GWgFv2V
+        UYQi6QTGONAqEJba+YjNspDheOOkLl3reVzBFSVPfyTImkZg
+X-Google-Smtp-Source: AA6agR7h/5EcbcHx98azEJNc5+fbmcmEz27gcVSe61f94SUPHSgDsaZ9H+tm5dDBzNUjwrJus9VbAPAJQX05G/QFg2ZgN63os+tK
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:b106:0:b0:2dc:eebb:e6f6 with SMTP id
+ t6-20020a92b106000000b002dceebbe6f6mr14820842ilh.54.1660221803579; Thu, 11
+ Aug 2022 05:43:23 -0700 (PDT)
+Date:   Thu, 11 Aug 2022 05:43:23 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d9cfcf05e5f68213@google.com>
+Subject: [syzbot] linux-next boot error: KASAN: out-of-bounds Read in rcu_cblist_dequeue
+From:   syzbot <syzbot+4f473a64b5132e9560d1@syzkaller.appspotmail.com>
+To:     Henry.Wang@arm.com, bigeasy@linutronix.de,
+        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
+        longpeng2@huawei.com, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
+        vschneid@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The mems_allowed field can be modified by other tasks, so it isn't
-safe to access it with alloc_lock unlocked even in the current
-process context.
+Hello,
 
-Say there are two tasks: A from cpusetA is performing set_mempolicy(2),
-and B is changing cpusetA's cpuset.mems:
+syzbot found the following issue on:
 
-  A (set_mempolicy)		B (echo xx > cpuset.mems)
-  -------------------------------------------------------
-  pol = mpol_new();
-				update_tasks_nodemask(cpusetA) {
-				  foreach t in cpusetA {
-				    cpuset_change_task_nodemask(t) {
-  mpol_set_nodemask(pol) {
-				      task_lock(t); // t could be A
-    new = f(A->mems_allowed);
-				      update t->mems_allowed;
-    pol.create(pol, new);
-				      task_unlock(t);
-  }
-				    }
-				  }
-				}
-  task_lock(A);
-  A->mempolicy = pol;
-  task_unlock(A);
+HEAD commit:    40d43a7507e1 Add linux-next specific files for 20220811
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=170595fd080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a5ae8cfa8d7075d1
+dashboard link: https://syzkaller.appspot.com/bug?extid=4f473a64b5132e9560d1
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-In this case A's pol->nodes is computed by old mems_allowed, and could
-be inconsistent with A's new mems_allowed.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+4f473a64b5132e9560d1@syzkaller.appspotmail.com
 
-While it is different when replacing vmas' policy: the pol->nodes is
-gone wild only when current_cpuset_is_being_rebound():
+==================================================================
+BUG: KASAN: out-of-bounds in rcu_cblist_dequeue+0xa4/0xe0 kernel/rcu/rcu_segcblist.c:75
+Read of size 8 at addr ffffc90004f08000 by task ksoftirqd/1/21
 
-  A (mbind)			B (echo xx > cpuset.mems)
-  -------------------------------------------------------
-  pol = mpol_new();
-  mmap_write_lock(A->mm);
-				cpuset_being_rebound = cpusetA;
-				update_tasks_nodemask(cpusetA) {
-				  foreach t in cpusetA {
-				    cpuset_change_task_nodemask(t) {
-  mpol_set_nodemask(pol) {
-				      task_lock(t); // t could be A
-    mask = f(A->mems_allowed);
-				      update t->mems_allowed;
-    pol.create(pol, mask);
-				      task_unlock(t);
-  }
-				    }
-  foreach v in A->mm {
-    if (cpuset_being_rebound == cpusetA)
-      pol.rebind(pol, cpuset.mems);
-    v->vma_policy = pol;
-  }
-  mmap_write_unlock(A->mm);
-				    mmap_write_lock(t->mm);
-				    mpol_rebind_mm(t->mm);
-				    mmap_write_unlock(t->mm);
-				  }
-				}
-				cpuset_being_rebound = NULL;
+CPU: 1 PID: 21 Comm: ksoftirqd/1 Not tainted 5.19.0-next-20220811-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+ print_address_description mm/kasan/report.c:317 [inline]
+ print_report.cold+0x59/0x719 mm/kasan/report.c:433
+ kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
+ rcu_cblist_dequeue+0xa4/0xe0 kernel/rcu/rcu_segcblist.c:75
+ rcu_do_batch kernel/rcu/tree.c:2234 [inline]
+ rcu_core+0x735/0x1890 kernel/rcu/tree.c:2505
+ __do_softirq+0x1d3/0x9c6 kernel/softirq.c:571
+ run_ksoftirqd kernel/softirq.c:934 [inline]
+ run_ksoftirqd+0x2d/0x60 kernel/softirq.c:926
+ smpboot_thread_fn+0x645/0x9c0 kernel/smpboot.c:164
+ kthread+0x2e4/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
 
-In this case, the cpuset.mems, which has already done updating, is
-finally used for calculating pol->nodes, rather than A->mems_allowed.
-So it is OK to call mpol_set_nodemask() with alloc_lock unlocked when
-doing mbind(2).
+The buggy address belongs to the virtual mapping at
+ [ffffc90004f08000, ffffc90004f11000) created by:
+ kernel_clone+0xe7/0xab0 kernel/fork.c:2675
 
-Fixes: 78b132e9bae9 ("mm/mempolicy: remove or narrow the lock on current")
-Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
+The buggy address belongs to the physical page:
+page:ffffea00007ed940 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1fb65
+flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
+raw: 00fff00000000000 0000000000000000 dead000000000122 0000000000000000
+raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 0, migratetype Unmovable, gfp_mask 0x2dc2(GFP_KERNEL|__GFP_HIGHMEM|__GFP_NOWARN|__GFP_ZERO), pid 11, tgid 11 (kworker/u4:1), ts 8261677515, free_ts 0
+ prep_new_page mm/page_alloc.c:2532 [inline]
+ get_page_from_freelist+0x109b/0x2cd0 mm/page_alloc.c:4283
+ __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5507
+ __alloc_pages_bulk+0x9fc/0x15a0 mm/page_alloc.c:5455
+ alloc_pages_bulk_array_mempolicy+0x1b3/0x360 mm/mempolicy.c:2365
+ vm_area_alloc_pages mm/vmalloc.c:2930 [inline]
+ __vmalloc_area_node mm/vmalloc.c:3026 [inline]
+ __vmalloc_node_range+0x576/0x13a0 mm/vmalloc.c:3196
+ alloc_thread_stack_node kernel/fork.c:312 [inline]
+ dup_task_struct kernel/fork.c:977 [inline]
+ copy_process+0x13cd/0x7120 kernel/fork.c:2088
+ kernel_clone+0xe7/0xab0 kernel/fork.c:2675
+ user_mode_thread+0xad/0xe0 kernel/fork.c:2744
+ call_usermodehelper_exec_work kernel/umh.c:174 [inline]
+ call_usermodehelper_exec_work+0xcc/0x180 kernel/umh.c:160
+ process_one_work+0x991/0x1610 kernel/workqueue.c:2289
+ worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+ kthread+0x2e4/0x3a0 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+page_owner free stack trace missing
+
+Memory state around the buggy address:
+ ffffc90004f07f00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+ ffffc90004f07f80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
+>ffffc90004f08000: 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+                   ^
+ ffffc90004f08080: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+ ffffc90004f08100: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+==================================================================
+
+
 ---
- mm/mempolicy.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-index d39b01fd52fe..61e4e6f5cfe8 100644
---- a/mm/mempolicy.c
-+++ b/mm/mempolicy.c
-@@ -855,12 +855,14 @@ static long do_set_mempolicy(unsigned short mode, unsigned short flags,
- 		goto out;
- 	}
- 
-+	task_lock(current);
- 	ret = mpol_set_nodemask(new, nodes, scratch);
- 	if (ret) {
-+		task_unlock(current);
- 		mpol_put(new);
- 		goto out;
- 	}
--	task_lock(current);
-+
- 	old = current->mempolicy;
- 	current->mempolicy = new;
- 	if (new && new->mode == MPOL_INTERLEAVE)
--- 
-2.31.1
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

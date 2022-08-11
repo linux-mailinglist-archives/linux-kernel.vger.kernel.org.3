@@ -2,212 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E13590733
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 22:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2A54590734
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 22:03:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233418AbiHKUCe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 16:02:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40742 "EHLO
+        id S233955AbiHKUDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 16:03:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229833AbiHKUCb (ORCPT
+        with ESMTP id S229833AbiHKUDQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 16:02:31 -0400
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98BA79BB4F;
-        Thu, 11 Aug 2022 13:02:30 -0700 (PDT)
-Received: from [127.0.0.1] ([12.0.243.163])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 27BJvVcV569135
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Thu, 11 Aug 2022 12:57:32 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 27BJvVcV569135
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2022080501; t=1660247855;
-        bh=LZ5/i1TBlH5OS+iyknyKHVuU6iY8SydC5jqehDFiCrg=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=EbPAmL9QTPSIaBoTRMPStYWl+qU6Ug1qOfcvMRQWxRtrZGXKoJtzeiYyW6agNxxfr
-         T+HeWHmKTA4oczR30s6NcwYGQoGLPrmNdGwlDB8GC143sGVRAqHiUicdlg1dEXrH/m
-         NeXj6yevSlRpo2kNlCwoVQ4UO5JhlWJz1VaUsXsxzFoCjO+c27FV3y4Oq5+Cm9SXK8
-         0huM8v14WT3kPV2w4GWBjYztOsMlqJTGZx4j5C2BHthDuAmnPuIiQxlGLR4T6zC1fK
-         SIxc8fF/p0t7gK8qatwkBKYcVdKmiRDxO6C09i894SX6A4SUW4ZWFoASW7X7FZ+KWQ
-         Si+SZXjBwBMtQ==
-Date:   Thu, 11 Aug 2022 12:57:25 -0700
-From:   "H. Peter Anvin" <hpa@zytor.com>
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Russell King <linux@armlinux.org.uk>,
+        Thu, 11 Aug 2022 16:03:16 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 829619BB70
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 13:03:15 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id w14so17813610plp.9
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 13:03:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=5DXPg8t4nKLD1PTzgaCTQkm5JKH0KySmWKOFVHH9klU=;
+        b=kDq4XVu1WdZw2CbWPKdUEkyk4G/oDO4pKstTlT0pq3kUBzkBAO8J+qPcOQ5ne6I0Y4
+         PvLW4AB+bLogHUX0g5we958xznnreN3VPoof6XeOBLptTMXXy7R3xxxWtDsuSJBJLMUD
+         yD+B1mtQV3h6AwVQG8cZPFucsdCloto60Bi26jdTyZWRXPs/Upu8NHKga6EHOXMMpy5H
+         Pt2Z/Y8Q/hx95JJ9zw0qrBre/JRVh9GEdkrVFHxyPQnssEt2iaZQ6WWqXY02y/8tT3rF
+         Fa6WBnh2fEMDMUUSjBUEkNpO/bOgb9B1jzFduyRFbFRL/WntNnoo5E1HT3flT/wiFAia
+         IEoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=5DXPg8t4nKLD1PTzgaCTQkm5JKH0KySmWKOFVHH9klU=;
+        b=SWpRQATCdEU6XQEee5WGrA1Fzg9F7E71aUIuCTT+Q31vsLk8B3tykCjG2eZOh+qFgL
+         Krvo675HORE/E9nQqDFM7zxV3YPmBwx+kOt/Bcr7aVBg56L6F84TgkeC0Fw9d5hDVO4J
+         NG7O0ivhUR8y8E7ZEXqfjsXugHSOtEYCv0c9clHwNO7bCiyYi2Y6esZbNl/h+AlSQJ2Z
+         xh1nLhWKbzsWkAu4Zb6PNBH1kBLgL0RZpnxAZdJJZ5NQLKuqg1UVR+kRcbjHNLLFCmL8
+         Zl7//QZCZcPkMWClNHQID3hVDsIk9vozvQnT2i1dMsQbFwhlkOjU6H1+JFZpBTFeaOAw
+         IXeg==
+X-Gm-Message-State: ACgBeo0F7/7celHuHLFFa2kVvkIu50pLVryCYg3Y38mZeE8ostMBmheh
+        Sg4R8uBwuI36hTiZSkvMdcDqiA==
+X-Google-Smtp-Source: AA6agR5Qw0Z88nTMdWqhmOFkd9zZDudVEqKx2PqZ66q85bdBiDssLxxztecMw08FFG+Ey1YgjhQAZg==
+X-Received: by 2002:a17:90a:c283:b0:1f8:a3e3:f937 with SMTP id f3-20020a17090ac28300b001f8a3e3f937mr6078665pjt.141.1660248194849;
+        Thu, 11 Aug 2022 13:03:14 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id a16-20020a170902ecd000b0016d295888e3sm44460plh.241.2022.08.11.13.03.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Aug 2022 13:03:14 -0700 (PDT)
+Date:   Thu, 11 Aug 2022 20:03:11 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "H. Peter Anvin" <hpa@zytor.com>
+Cc:     Adam Dunlap <acdunlap@google.com>,
         Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
         Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Arnd Bergmann <arnd@arndb.de>
-CC:     linux-gpio@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH] gpio: Allow user to customise maximum number of GPIOs
-User-Agent: K-9 Mail for Android
-In-Reply-To: <f31b818cf8d682de61c74b133beffcc8a8202478.1660041358.git.christophe.leroy@csgroup.eu>
-References: <f31b818cf8d682de61c74b133beffcc8a8202478.1660041358.git.christophe.leroy@csgroup.eu>
-Message-ID: <C1886F9A-1799-4E3D-9153-579D31488695@zytor.com>
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ben Dooks <ben-linux@fluff.org>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Jacob Xu <jacobhxu@google.com>,
+        Alper Gun <alpergun@google.com>, Marc Orr <marcorr@google.com>
+Subject: Re: [PATCH] x86/asm: Force native_apic_mem_read to use mov
+Message-ID: <YvVgfx+hah/V+r5n@google.com>
+References: <20220811180010.3067457-1-acdunlap@google.com>
+ <YvVYDn1JODiu6hKK@google.com>
+ <AB38B5DA-D3AC-4568-A8DD-FC281DDE261A@zytor.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <AB38B5DA-D3AC-4568-A8DD-FC281DDE261A@zytor.com>
+X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On August 9, 2022 3:40:38 AM PDT, Christophe Leroy <christophe=2Eleroy@csgr=
-oup=2Eeu> wrote:
->At the time being, the default maximum number of GPIOs is set to 512
->and can only get customised via an architecture specific
->CONFIG_ARCH_NR_GPIO=2E
->
->The maximum number of GPIOs might be dependent on the number of
->interface boards and is somewhat independent of architecture=2E
->
->Allow the user to select that maximum number outside of any
->architecture configuration=2E To enable that, re-define a
->core CONFIG_ARCH_NR_GPIO for architectures which don't already
->define one=2E Guard it with a new hidden CONFIG_ARCH_HAS_NR_GPIO=2E
->
->Only two architectures will need CONFIG_ARCH_HAS_NR_GPIO: x86 and arm=2E
->
->On arm, do like x86 and set 512 as the default instead of 0, that
->allows simplifying the logic in asm-generic/gpio=2Eh
->
->Signed-off-by: Christophe Leroy <christophe=2Eleroy@csgroup=2Eeu>
->---
-> Documentation/driver-api/gpio/legacy=2Erst |  2 +-
-> arch/arm/Kconfig                         |  3 ++-
-> arch/arm/include/asm/gpio=2Eh              |  1 -
-> arch/x86/Kconfig                         |  1 +
-> drivers/gpio/Kconfig                     | 14 ++++++++++++++
-> include/asm-generic/gpio=2Eh               |  6 ------
-> 6 files changed, 18 insertions(+), 9 deletions(-)
->
->diff --git a/Documentation/driver-api/gpio/legacy=2Erst b/Documentation/d=
-river-api/gpio/legacy=2Erst
->index 9b12eeb89170=2E=2E566b06a584cf 100644
->--- a/Documentation/driver-api/gpio/legacy=2Erst
->+++ b/Documentation/driver-api/gpio/legacy=2Erst
->@@ -558,7 +558,7 @@ Platform Support
-> To force-enable this framework, a platform's Kconfig will "select" GPIOL=
-IB,
-> else it is up to the user to configure support for GPIO=2E
->=20
->-It may also provide a custom value for ARCH_NR_GPIOS, so that it better
->+It may also provide a custom value for CONFIG_ARCH_NR_GPIO, so that it b=
-etter
-> reflects the number of GPIOs in actual use on that platform, without
-> wasting static table space=2E  (It should count both built-in/SoC GPIOs =
-and
-> also ones on GPIO expanders=2E
->diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
->index 53e6a1da9af5=2E=2Ee55b6560fe4f 100644
->--- a/arch/arm/Kconfig
->+++ b/arch/arm/Kconfig
->@@ -14,6 +14,7 @@ config ARM
-> 	select ARCH_HAS_KCOV
-> 	select ARCH_HAS_MEMBARRIER_SYNC_CORE
-> 	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
->+	select ARCH_HAS_NR_GPIO
-> 	select ARCH_HAS_PTE_SPECIAL if ARM_LPAE
-> 	select ARCH_HAS_PHYS_TO_DMA
-> 	select ARCH_HAS_SETUP_DMA_OPS
->@@ -1243,7 +1244,7 @@ config ARCH_NR_GPIO
-> 	default 352 if ARCH_VT8500
-> 	default 288 if ARCH_ROCKCHIP
-> 	default 264 if MACH_H4700
->-	default 0
->+	default 512
-> 	help
-> 	  Maximum number of GPIOs in the system=2E
->=20
->diff --git a/arch/arm/include/asm/gpio=2Eh b/arch/arm/include/asm/gpio=2E=
-h
->index f3bb8a2bf788=2E=2E4ebbb58f06ea 100644
->--- a/arch/arm/include/asm/gpio=2Eh
->+++ b/arch/arm/include/asm/gpio=2Eh
->@@ -2,7 +2,6 @@
-> #ifndef _ARCH_ARM_GPIO_H
-> #define _ARCH_ARM_GPIO_H
->=20
->-/* Note: this may rely upon the value of ARCH_NR_GPIOS set in mach/gpio=
-=2Eh */
-> #include <asm-generic/gpio=2Eh>
->=20
-> /* The trivial gpiolib dispatchers */
->diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
->index f9920f1341c8=2E=2Ea8c956abc21e 100644
->--- a/arch/x86/Kconfig
->+++ b/arch/x86/Kconfig
->@@ -82,6 +82,7 @@ config X86
-> 	select ARCH_HAS_MEM_ENCRYPT
-> 	select ARCH_HAS_MEMBARRIER_SYNC_CORE
-> 	select ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE
->+	select ARCH_HAS_NR_GPIO
-> 	select ARCH_HAS_PMEM_API		if X86_64
-> 	select ARCH_HAS_PTE_DEVMAP		if X86_64
-> 	select ARCH_HAS_PTE_SPECIAL
->diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
->index 0642f579196f=2E=2E250b50ed44e1 100644
->--- a/drivers/gpio/Kconfig
->+++ b/drivers/gpio/Kconfig
->@@ -11,6 +11,9 @@ config ARCH_HAVE_CUSTOM_GPIO_H
-> 	  overriding the default implementations=2E  New uses of this are
-> 	  strongly discouraged=2E
->=20
->+config ARCH_HAS_NR_GPIO
->+	bool
->+
-> menuconfig GPIOLIB
-> 	bool "GPIO Support"
-> 	help
->@@ -22,6 +25,17 @@ menuconfig GPIOLIB
->=20
-> if GPIOLIB
->=20
->+config ARCH_NR_GPIO
->+	int "Maximum number of GPIOs" if EXPERT
->+	depends on !ARCH_HAS_NR_GPIO
->+	default 512
->+	help
->+	  This allows the user to select the maximum number of GPIOs the
->+	  kernel must support=2E When the architecture defines a number
->+	  through CONFIG_ARCH_NR_GPIO, that value is taken and the user
->+	  cannot change it=2E Otherwise it defaults to 512 and the user
->+	  can change it when CONFIG_EXPERT is set=2E
->+
-> config GPIOLIB_FASTPATH_LIMIT
-> 	int "Maximum number of GPIOs for fast path"
-> 	range 32 512
->diff --git a/include/asm-generic/gpio=2Eh b/include/asm-generic/gpio=2Eh
->index aea9aee1f3e9=2E=2Eee090f534ab8 100644
->--- a/include/asm-generic/gpio=2Eh
->+++ b/include/asm-generic/gpio=2Eh
->@@ -24,13 +24,7 @@
->  * actually an estimate of a board-specific value=2E
->  */
->=20
->-#ifndef ARCH_NR_GPIOS
->-#if defined(CONFIG_ARCH_NR_GPIO) && CONFIG_ARCH_NR_GPIO > 0
-> #define ARCH_NR_GPIOS CONFIG_ARCH_NR_GPIO
->-#else
->-#define ARCH_NR_GPIOS		512
->-#endif
->-#endif
->=20
-> /*
->  * "valid" GPIO numbers are nonnegative and may be passed to
+On Thu, Aug 11, 2022, H. Peter Anvin wrote:
+> On August 11, 2022 12:27:10 PM PDT, Sean Christopherson <seanjc@google.com> wrote:
+> >On Thu, Aug 11, 2022, Adam Dunlap wrote:
+> >> Previously, when compiled with clang, native_apic_mem_read gets inlined
+> >> into __xapic_wait_icr_idle and optimized to a testl instruction. When
+> >> run in a VM with SEV-ES enabled, it attempts to emulate this
+> >> instruction, but the emulator does not support it. Instead, use inline
+> >> assembly to force native_apic_mem_read to use the mov instruction which
+> >> is supported by the emulator.
+> >> 
+> >> Signed-off-by: Adam Dunlap <acdunlap@google.com>
+> >> Reviewed-by: Marc Orr <marcorr@google.com>
+> >> Reviewed-by: Jacob Xu <jacobhxu@google.com>
+> >> ---
+> >>  arch/x86/include/asm/apic.h | 13 ++++++++++++-
+> >>  1 file changed, 12 insertions(+), 1 deletion(-)
+> >> 
+> >> diff --git a/arch/x86/include/asm/apic.h b/arch/x86/include/asm/apic.h
+> >> index 3415321c8240..281db79e76a9 100644
+> >> --- a/arch/x86/include/asm/apic.h
+> >> +++ b/arch/x86/include/asm/apic.h
+> >> @@ -109,7 +109,18 @@ static inline void native_apic_mem_write(u32 reg, u32 v)
+> >>  
+> >>  static inline u32 native_apic_mem_read(u32 reg)
+> >>  {
+> >> -	return *((volatile u32 *)(APIC_BASE + reg));
+> >> +	volatile u32 *addr = (volatile u32 *)(APIC_BASE + reg);
+> >> +	u32 out;
+> >> +
+> >> +	/*
+> >> +	 * Functionally, what we want to do is simply return *addr. However,
+> >> +	 * this accesses an MMIO which may need to be emulated in some cases.
+> >> +	 * The emulator doesn't necessarily support all instructions, so we
+> >> +	 * force the read from addr to use a mov instruction.
+> >> +	 */
+> >> +	asm_inline("movl %1, %0" : "=r"(out) : "m"(*addr));
+> >> +
+> >> +	return out;
+> >
+> >Can't this just be:
+> >
+> >	return readl((void __iomem *)(APIC_BASE + reg));
+> 
+> The very point of the patch is to force a specific instruction sequence.
 
-This seems very odd to me=2E GPIOs can be, and often are, attached to peri=
-pheral buses which means that the *same system* can have anything from none=
- to thousands of gpios =2E=2E
+Yes, and that specific emulator-friendly instruction also has to be forced for all
+of the core x86 read/write MMIO helpers.  And it's also possible for MMIO read/write
+to be enlightened to skip the MOV and go straight to #VMGEXIT, i.e. the xAPIC code
+shouldn't assume MOV is the best/only option (ignoring the handling of the P54C
+erratum in the write path).

@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3657590914
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 01:18:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D21259090F
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 01:18:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236174AbiHKXSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 19:18:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48926 "EHLO
+        id S236708AbiHKXSI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 19:18:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236331AbiHKXRH (ORCPT
+        with ESMTP id S236340AbiHKXRH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 11 Aug 2022 19:17:07 -0400
 Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBDC3A1A63
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 16:16:52 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 1E2265C0181;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B9FA1A43
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 16:16:53 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id AC7C05C0162;
         Thu, 11 Aug 2022 19:16:52 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 11 Aug 2022 19:16:52 -0400
+  by compute4.internal (MEProxy); Thu, 11 Aug 2022 19:16:52 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=cc
         :cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to
         :reply-to:sender:subject:subject:to:to; s=fm1; t=1660259812; x=
-        1660346212; bh=JJp8/WbfdgzTShpKb6EAlVBgY9k+ndflpg8+oR/k5/U=; b=a
-        VzCd2BkWTYFNhH59UG/DCqw8k/WSQRR/u3dt97Rx/Xp2zW3uPUhMloYuCEv9VLql
-        NEG0HZhwo16heeyZusiNHd7PVXiM1n/awcRkb6NwS9Sb9YxnR8q3M9GfR2pOWr8d
-        78sZ8fOk6lqn4iYSIOpwqaFR51D8tpz1EZ0I6v7yf0BCLDfutjxLR8vWWbB2FWmN
-        FXWoSvgtXWDeo6zrYpDztC9JJ/nQUzC5p0NNGjlKly4j7WmHg4jiPEZVEcNNZRlT
-        VSj+ZUnbTURnGGstbGxYV1NB9BzknroblSrEK8xVpFVfkEFBZYJbcJDyLnrSqKj6
-        aFL16VKkv4mtcwVXbFxGw==
+        1660346212; bh=JX6+NOODRkUOKgp6gGFaE5LIUkI5KzCmUjjUDH9D5W8=; b=o
+        MAZmAaohLGJohsfh/rU7NMYoGj7Har723r+mkHEsKIh8ZvsnqGOrQ+BJj2B1xIVA
+        DkG5FYekOq/RAdfYnJ74QuRFTqXGOWQxxVkBU5B5KiH6UvQljCq1wXs6zT0Wz8a7
+        Fjtuu0uCgxv+fSWxokelAQLwx1rYQNWUEwNeQ864euqkzDTwCkaI0ZWNntY6PUqe
+        ytMjmrDhNA1qQBTzHD7HgVGtlcG7BC0omuWZcAYN6xbChCtaU2UCSGQBiCuIk6HE
+        lA5D/bG/ctDByeCHhcN7qsvXLr1oJ7diYvKISNJ2CmEzNSldklCnsaYvSm/q2z8a
+        I8Pn7c1Es0vv6yDUu/fGQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:reply-to:sender
         :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
         :x-me-sender:x-sasl-enc; s=fm1; t=1660259812; x=1660346212; bh=J
-        Jp8/WbfdgzTShpKb6EAlVBgY9k+ndflpg8+oR/k5/U=; b=LdFtYcpqWUM2Q+SmN
-        b9rKag+KtCSNa5Awkn9HIwke+3Lu/DectUgGfRZymL6m4yXGqaS+/FjHa5Jpc7cE
-        WO1lStQn4KtYb68M3fOA4/nXY8smCm4bBCrtIWa46+02sXU+kQNRg2GVC6Lv/zra
-        D3axOMKaP3Z9BVOta3SV/FLqIAsxoGFUm0d1T3m7bBlSdRaWJoSN2UY9gLcy6Ebn
-        ga3Y9VXSBWZ+0ZKOAeRLAbfVxzhRppYYAL0/+HdV8kuo2Y+OJCNivzuq7wB9Hytj
-        yK0xAT6grDeibh9+v0txk898fpM6wyyXIpid4udGX/gDGmlOp6YDTAs46ezPrVtH
-        Qecyw==
-X-ME-Sender: <xms:4431YuyQ8RaADhVQJO_t-Rn4Z8DR9DZ2vo6nEYFsPyKXZgMkaii-CA>
-    <xme:4431YqTYlFaQlfhoIQ3SUCd050wbtNrmj7tv1EGHBcqOVcEKf004t3L59Lz4LXds_
-    Hr4REMLH-Ee7qCnLA>
-X-ME-Received: <xmr:4431YgXuk354WfKrOrEXReLKj6HJusDGOr_GV3obYF9tMZcEwFqpgzGACtKBZd-rPXaiwZySTchKmTG7aw>
+        X6+NOODRkUOKgp6gGFaE5LIUkI5KzCmUjjUDH9D5W8=; b=e+ZAtnJh3F/myKnVO
+        xJIUtKWprOiXXdBENhlDb7s3V0K5VmFj2hGRAtNm7ei2YtnuxPGAzxbhvbYkxhah
+        OJ178oCM+ASVPLcSjsumkCienO+zBbwssxYOr8lyvUgF5h3T+8dyVW1m9ZjWLYvU
+        p8k044vrw+q/pMPwJdVrINlYqCKPI3lE5IgJ/e30b8zzPvcZw6LatoWgzagF39xQ
+        EY+NFKF/RyJu/RCrTMIfsV1RRt+7svG1WKwa3ik/Dg+aUa9N0ufpdsaPm9ie8Jwx
+        RwLtBfHq3dRQvVStvolPgEOUwJmk+Q7TOl0D2XtA2n5oWxAMPzomWMOVuCFQ8eZx
+        85VYQ==
+X-ME-Sender: <xms:5I31Yh7KmxD7KVIMmV_-J2lKGyb7_bDVbtPw8O_EtOOVcDxUs_R9Lg>
+    <xme:5I31Yu4eiqn_mSN8ldXbi7FUs7BK2Sip6yj-r7szoQmh6cUwSS1TQVuwCS9W_kQZH
+    I2Ljk9pTOxyAv_MFg>
+X-ME-Received: <xmr:5I31YodXYSY_OmqxxnyqmiUNU1fheXc5sqMyGeiSE4pk6fkHfonwRVXT6Ee2xfKXVlRFfT4c1C2tktgLfw>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeghedgudelucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephffvvefufffkofgjfhhrggfgsedtqhertdertddtnecuhfhrohhmpegkihcu
     jggrnhcuoeiiihdrhigrnhesshgvnhhtrdgtohhmqeenucggtffrrghtthgvrhhnpeegge
     ehudfgudduvdelheehteegledtteeiveeuhfffveekhfevueefieeijeegvdenucevlhhu
-    shhtvghrufhiiigvpedvnecurfgrrhgrmhepmhgrihhlfhhrohhmpeiiihdrhigrnhessh
+    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpeiiihdrhigrnhessh
     gvnhhtrdgtohhm
-X-ME-Proxy: <xmx:4431YkhCVNTY2_OvAlpuqd4u-tbj8FRla_-lpmoIeQ8CfHRdVtj0fQ>
-    <xmx:4431YgCtEOKwmt_dTrz6MEGJtCWlzGoDlTmghYk7vjCXqY2MkPefRg>
-    <xmx:4431YlJFbjmHowgLQHEwhuENEmvZkNPRHTki059nEG2Aw_wMs2SAUQ>
-    <xmx:5I31Yk5__HsZbu_IlgJSLqVevnr3605nRuApAOdCLnK_oKNEJUJhbQ>
+X-ME-Proxy: <xmx:5I31YqL6bNM94Nr-0bB_jULHspHbilQqzRMWL8DaWDbzniGfJKNnuw>
+    <xmx:5I31YlIHMLQUyIC0zVzybadY-Ps9brct4tfO7AfVyFwi86rLBRm0Ig>
+    <xmx:5I31YjxmhTs12efRA2B4Y0SnKpQuWKw5hbCtf95rQ8TIj6dLGL0tYg>
+    <xmx:5I31YiASz8GWZXibNvGHx7ExypZQXGIfgk-7D4-TQ2z9uyw-2rIZsw>
 Feedback-ID: iccd040f4:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 11 Aug 2022 19:16:51 -0400 (EDT)
+ 11 Aug 2022 19:16:52 -0400 (EDT)
 From:   Zi Yan <zi.yan@sent.com>
 To:     linux-mm@kvack.org
 Cc:     David Hildenbrand <david@redhat.com>,
@@ -75,9 +75,9 @@ Cc:     David Hildenbrand <david@redhat.com>,
         David Rientjes <rientjes@google.com>,
         James Houghton <jthoughton@google.com>,
         Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v2 11/12] mm: introduce MIN_MAX_ORDER to replace MAX_ORDER as compile time constant.
-Date:   Thu, 11 Aug 2022 19:16:42 -0400
-Message-Id: <20220811231643.1012912-12-zi.yan@sent.com>
+Subject: [RFC PATCH v2 12/12] mm: make MAX_ORDER a kernel boot time parameter.
+Date:   Thu, 11 Aug 2022 19:16:43 -0400
+Message-Id: <20220811231643.1012912-13-zi.yan@sent.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220811231643.1012912-1-zi.yan@sent.com>
 References: <20220811231643.1012912-1-zi.yan@sent.com>
@@ -96,157 +96,156 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Zi Yan <ziy@nvidia.com>
 
-For other MAX_ORDER uses (described below), there is no need or too much
-hassle to convert certain static array to dynamic ones. Add
-MIN_MAX_ORDER to serve as compile time constant in place of MAX_ORDER.
-
-ARM64 hypervisor maintains its own free page list and does not import
-any core kernel symbols, so soon-to-be runtime variable MAX_ORDER is not
-accessible in ARM64 hypervisor code. Also there is no need to allocating
-very large pages.
-
-In SLAB/SLOB/SLUB, 2-D array kmalloc_caches uses MAX_ORDER in its second
-dimension. It is too much hassle to allocate memory for kmalloc_caches
-before any proper memory allocator is set up.
+With the new buddy_alloc_max_order, users can specify larger MAX_ORDER
+than set in CONFIG_ARCH_MAX_ORDER or CONFIG_SET_MAX_ORDER.
+It can be set any value >=3D CONFIG_ARCH_MAX_ORDER or CONFIG_SET_MAX_ORDER,
+but < 256 (limited by vmscan scan_control and per-cpu free page list).
 
 Signed-off-by: Zi Yan <ziy@nvidia.com>
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Christoph Lameter <cl@linux.com>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: "Paul E. McKenney" <paulmck@kernel.org>
+Cc: Randy Dunlap <rdunlap@infradead.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
 Cc: Vlastimil Babka <vbabka@suse.cz>
-Cc: Quentin Perret <qperret@google.com>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: kvmarm@lists.cs.columbia.edu
+Cc: linux-doc@vger.kernel.org
 Cc: linux-mm@kvack.org
 Cc: linux-kernel@vger.kernel.org
 ---
- arch/arm64/kvm/hyp/include/nvhe/gfp.h | 2 +-
- arch/arm64/kvm/hyp/nvhe/page_alloc.c  | 2 +-
- include/linux/mmzone.h                | 3 +++
- include/linux/slab.h                  | 8 ++++----
- mm/slab.c                             | 2 +-
- mm/slub.c                             | 6 +++---
- 6 files changed, 13 insertions(+), 10 deletions(-)
+ .../admin-guide/kernel-parameters.txt         |  5 +++
+ include/linux/mmzone.h                        |  8 +++++
+ mm/Kconfig                                    | 13 +++++++
+ mm/page_alloc.c                               | 34 ++++++++++++++++++-
+ mm/vmscan.c                                   |  1 -
+ 5 files changed, 59 insertions(+), 2 deletions(-)
 
-diff --git a/arch/arm64/kvm/hyp/include/nvhe/gfp.h b/arch/arm64/kvm/hyp/inc=
-lude/nvhe/gfp.h
-index fe5472a184a3..29b92f68ab69 100644
---- a/arch/arm64/kvm/hyp/include/nvhe/gfp.h
-+++ b/arch/arm64/kvm/hyp/include/nvhe/gfp.h
-@@ -16,7 +16,7 @@ struct hyp_pool {
- 	 * API at EL2.
- 	 */
- 	hyp_spinlock_t lock;
--	struct list_head free_area[MAX_ORDER + 1];
-+	struct list_head free_area[MIN_MAX_ORDER + 1];
- 	phys_addr_t range_start;
- 	phys_addr_t range_end;
- 	unsigned short max_order;
-diff --git a/arch/arm64/kvm/hyp/nvhe/page_alloc.c b/arch/arm64/kvm/hyp/nvhe=
-/page_alloc.c
-index d40f0b30b534..7ebbac3e2e76 100644
---- a/arch/arm64/kvm/hyp/nvhe/page_alloc.c
-+++ b/arch/arm64/kvm/hyp/nvhe/page_alloc.c
-@@ -241,7 +241,7 @@ int hyp_pool_init(struct hyp_pool *pool, u64 pfn, unsig=
-ned int nr_pages,
- 	int i;
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentatio=
+n/admin-guide/kernel-parameters.txt
+index ec519225b671..0f71233ae396 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -494,6 +494,11 @@
+ 	bttv.pll=3D	See Documentation/admin-guide/media/bttv.rst
+ 	bttv.tuner=3D
 =20
- 	hyp_spin_lock_init(&pool->lock);
--	pool->max_order =3D min(MAX_ORDER, get_order((nr_pages + 1) << PAGE_SHIFT=
-));
-+	pool->max_order =3D min(MIN_MAX_ORDER, get_order((nr_pages + 1) << PAGE_S=
-HIFT));
- 	for (i =3D 0; i < pool->max_order; i++)
- 		INIT_LIST_HEAD(&pool->free_area[i]);
- 	pool->range_start =3D phys;
++	buddy_alloc_max_order=3D	[KNL] This parameter adjusts the size of largest
++			pages that can be allocated from kernel buddy allocator. The largest
++			page size is 2^buddy_alloc_max_order * PAGE_SIZE.
++            Format: integer
++
+ 	bulk_remove=3Doff	[PPC]  This parameter disables the use of the pSeries
+ 			firmware feature for flushing multiple hpte entries
+ 			at a time.
 diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-index 60d8cce2aed8..b5774e4c2700 100644
+index b5774e4c2700..90121d25d660 100644
 --- a/include/linux/mmzone.h
 +++ b/include/linux/mmzone.h
-@@ -26,10 +26,13 @@
- /* Free memory management - zoned buddy allocator.  */
- #ifdef CONFIG_SET_MAX_ORDER
- #define MAX_ORDER CONFIG_SET_MAX_ORDER
-+#define MIN_MAX_ORDER CONFIG_SET_MAX_ORDER
- #elif CONFIG_ARCH_FORCE_MAX_ORDER !=3D 0
- #define MAX_ORDER CONFIG_ARCH_FORCE_MAX_ORDER
-+#define MIN_MAX_ORDER CONFIG_ARCH_FORCE_MAX_ORDER
- #else
- #define MAX_ORDER 10
-+#define MIN_MAX_ORDER MAX_ORDER
+@@ -35,6 +35,14 @@
+ #define MIN_MAX_ORDER MAX_ORDER
  #endif
 =20
++/* remap MAX_ORDER to buddy_alloc_max_order for boot time adjustment */
++#ifdef CONFIG_BOOT_TIME_MAX_ORDER
++/* Defined in mm/page_alloc.c */
++extern int buddy_alloc_max_order;
++#undef MAX_ORDER
++#define MAX_ORDER buddy_alloc_max_order
++#endif /* CONFIG_BOOT_TIME_MAX_ORDER */
++
  #define MAX_ORDER_NR_PAGES (1 << MAX_ORDER)
-diff --git a/include/linux/slab.h b/include/linux/slab.h
-index 568b5dfb3bd9..e34b2c9bda09 100644
---- a/include/linux/slab.h
-+++ b/include/linux/slab.h
-@@ -251,8 +251,8 @@ static inline unsigned int arch_slab_minalign(void)
-  * to do various tricks to work around compiler limitations in order to
-  * ensure proper constant folding.
-  */
--#define KMALLOC_SHIFT_HIGH	((MAX_ORDER + PAGE_SHIFT) <=3D 25 ? \
--				(MAX_ORDER + PAGE_SHIFT) : 25)
-+#define KMALLOC_SHIFT_HIGH	((MIN_MAX_ORDER + PAGE_SHIFT) <=3D 25 ? \
-+				(MIN_MAX_ORDER + PAGE_SHIFT) : 25)
- #define KMALLOC_SHIFT_MAX	KMALLOC_SHIFT_HIGH
- #ifndef KMALLOC_SHIFT_LOW
- #define KMALLOC_SHIFT_LOW	5
-@@ -265,7 +265,7 @@ static inline unsigned int arch_slab_minalign(void)
-  * (PAGE_SIZE*2).  Larger requests are passed to the page allocator.
-  */
- #define KMALLOC_SHIFT_HIGH	(PAGE_SHIFT + 1)
--#define KMALLOC_SHIFT_MAX	(MAX_ORDER + PAGE_SHIFT)
-+#define KMALLOC_SHIFT_MAX	(MIN_MAX_ORDER + PAGE_SHIFT)
- #ifndef KMALLOC_SHIFT_LOW
- #define KMALLOC_SHIFT_LOW	3
- #endif
-@@ -278,7 +278,7 @@ static inline unsigned int arch_slab_minalign(void)
-  * be allocated from the same page.
-  */
- #define KMALLOC_SHIFT_HIGH	PAGE_SHIFT
--#define KMALLOC_SHIFT_MAX	(MAX_ORDER + PAGE_SHIFT)
-+#define KMALLOC_SHIFT_MAX	(MIN_MAX_ORDER + PAGE_SHIFT)
- #ifndef KMALLOC_SHIFT_LOW
- #define KMALLOC_SHIFT_LOW	3
- #endif
-diff --git a/mm/slab.c b/mm/slab.c
-index 530f418a4930..23798c32bb38 100644
---- a/mm/slab.c
-+++ b/mm/slab.c
-@@ -466,7 +466,7 @@ static int __init slab_max_order_setup(char *str)
- {
- 	get_option(&str, &slab_max_order);
- 	slab_max_order =3D slab_max_order < 0 ? 0 :
--				min(slab_max_order, MAX_ORDER);
-+				min(slab_max_order, MIN_MAX_ORDER);
- 	slab_max_order_set =3D true;
 =20
- 	return 1;
-diff --git a/mm/slub.c b/mm/slub.c
-index 5acf5407cbc6..940fe48ea298 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -3876,8 +3876,8 @@ static inline int calculate_order(unsigned int size)
- 	/*
- 	 * Doh this slab cannot be placed using slub_max_order.
+ /*
+diff --git a/mm/Kconfig b/mm/Kconfig
+index e558f5679707..acccb919d72d 100644
+--- a/mm/Kconfig
++++ b/mm/Kconfig
+@@ -455,6 +455,19 @@ config SET_MAX_ORDER
+ 	  increase this value. A value of 10 means that the largest free memory
+ 	  block is 2^10 pages.
+=20
++config BOOT_TIME_MAX_ORDER
++	bool "Set maximum order of buddy allocator at boot time"
++	depends on SPARSEMEM_VMEMMAP && (ARCH_FORCE_MAX_ORDER !=3D 0 || SET_MAX_O=
+RDER !=3D 0)
++	help
++	  It enables users to set the maximum order of buddy allocator at system
++      boot time instead of a static MACRO set at compilation time. Systems=
+ with
++      a lot of memory might want to allocate large pages whereas it is much
++      less feasible and desirable for systems with less memory. This option
++      allows different systems to control the largest page they want to
++      allocate. By default, MAX_ORDER will be set to ARCH_FORCE_MAX_ORDER =
+or
++      SET_MAX_ORDER, whichever is non-zero, when the boot time parameter i=
+s not
++      set. The maximum of MAX_ORDER is currently limited at 256.
++
+ config HAVE_MEMBLOCK_PHYS_MAP
+ 	bool
+=20
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 941a94bb8cf0..4c4d68da1922 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -1581,7 +1581,7 @@ static void free_pcppages_bulk(struct zone *zone, int=
+ count,
+=20
+ 		order =3D pindex_to_order(pindex);
+ 		nr_pages =3D 1 << order;
+-		BUILD_BUG_ON(MAX_ORDER >=3D (1<<NR_PCP_ORDER_WIDTH));
++		BUILD_BUG_ON(MIN_MAX_ORDER >=3D (1<<NR_PCP_ORDER_WIDTH));
+ 		do {
+ 			int mt;
+=20
+@@ -9679,3 +9679,35 @@ bool has_managed_dma(void)
+ 	return false;
+ }
+ #endif /* CONFIG_ZONE_DMA */
++
++#ifdef CONFIG_BOOT_TIME_MAX_ORDER
++int buddy_alloc_max_order =3D MIN_MAX_ORDER;
++EXPORT_SYMBOL(buddy_alloc_max_order);
++
++static int __init buddy_alloc_set(char *val)
++{
++	int ret;
++	unsigned long max_order;
++
++	ret =3D kstrtoul(val, 10, &max_order);
++
++	if (ret < 0)
++		return -EINVAL;
++
++	/*
++	 * max_order is also limited at below locations:
++	 * 1. scan_control in mm/vmscan.c uses s8 field for order, max_order cann=
+ot
++	 * be bigger than S8_MAX before the field is changed.
++	 * 2. free_pcppages_bulk has max_order upper limit.
++	 */
++	if (max_order > MIN_MAX_ORDER && max_order <=3D S8_MAX &&
++	    max_order <=3D (1<<NR_PCP_ORDER_WIDTH))
++		buddy_alloc_max_order =3D max_order;
++	else
++		buddy_alloc_max_order =3D MIN_MAX_ORDER;
++
++	return 0;
++}
++
++early_param("buddy_alloc_max_order", buddy_alloc_set);
++#endif /* CONFIG_BOOT_TIME_MAX_ORDER */
+diff --git a/mm/vmscan.c b/mm/vmscan.c
+index 06eeeae038dd..9d4fde8705d9 100644
+--- a/mm/vmscan.c
++++ b/mm/vmscan.c
+@@ -3816,7 +3816,6 @@ unsigned long try_to_free_pages(struct zonelist *zone=
+list, int order,
+ 	 * scan_control uses s8 fields for order, priority, and reclaim_idx.
+ 	 * Confirm they are large enough for max values.
  	 */
--	order =3D calc_slab_order(size, 1, MAX_ORDER, 1);
--	if (order <=3D MAX_ORDER)
-+	order =3D calc_slab_order(size, 1, MIN_MAX_ORDER, 1);
-+	if (order <=3D MIN_MAX_ORDER)
- 		return order;
- 	return -ENOSYS;
- }
-@@ -4388,7 +4388,7 @@ __setup("slub_min_order=3D", setup_slub_min_order);
- static int __init setup_slub_max_order(char *str)
- {
- 	get_option(&str, (int *)&slub_max_order);
--	slub_max_order =3D min_t(unsigned int, slub_max_order, MAX_ORDER);
-+	slub_max_order =3D min_t(unsigned int, slub_max_order, MIN_MAX_ORDER);
+-	BUILD_BUG_ON(MAX_ORDER > S8_MAX);
+ 	BUILD_BUG_ON(DEF_PRIORITY > S8_MAX);
+ 	BUILD_BUG_ON(MAX_NR_ZONES > S8_MAX);
 =20
- 	return 1;
- }
 --=20
 2.35.1
 

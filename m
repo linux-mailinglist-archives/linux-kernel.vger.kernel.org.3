@@ -2,131 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1C8258F968
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 10:44:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA7CB58F977
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 10:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234770AbiHKIoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 04:44:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49026 "EHLO
+        id S234797AbiHKIpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 04:45:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234756AbiHKIoh (ORCPT
+        with ESMTP id S234720AbiHKIoy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 04:44:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00724915D2
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:44:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 540F06155C
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 08:44:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B60AAC43140
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 08:44:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660207461;
-        bh=QRD0SrbRLe1tnBYmPBs/QIzN5Bptooz0fAq+UbSshTw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=DcM1ERpbqxK+wP6ZmEj7Aw14MdYz28KXgzfRn+MzzE/m3/zEIeBNrpesOvBiL8f7F
-         N6dA0tBy++e4Fuu0g2N2MCwOFGOVegqv39XbpTh2qbjjmMwNB7V+HGI0rAZt1qRcJl
-         0cFK4Neu3X9YhZ0LpsjR071G3g2Pk4yIB2TFWPLq7VGKKtkv1SJdRI30R+1SPgNDGI
-         Vk4zC6oNsk1aihU2K4sZPC+zgIZM8YtjXoN81BTQt8Mhp93Esj0kKirFrWHnf+I1IH
-         NEcjEL/JH23UtqKN+2urkP5RXrRVgvr4K/L2+SSrPF5GX3JtrtWiQyl7fZLAOvy9cG
-         27Ipskii18iiQ==
-Received: by mail-vs1-f52.google.com with SMTP id j2so17645709vsp.1
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:44:21 -0700 (PDT)
-X-Gm-Message-State: ACgBeo0sqFMp1LzkHNBe7otuZ0tpG+uOFgKy7GrwnSie9lTJBJ2NGYsW
-        akf8YTTjR6ZmfGYhycWg/7lfgfcnmcjpBEV28C4=
-X-Google-Smtp-Source: AA6agR7v289aXTEpmMENNm15AnL82gCt8uU9R+rdXtgZeJQN62meRDP4J9dV3In/yxKbCNUXd+D6+Z2gDSNm+xxSgi8=
-X-Received: by 2002:a05:6102:b14:b0:38a:88dd:c169 with SMTP id
- b20-20020a0561020b1400b0038a88ddc169mr2550690vst.84.1660207460684; Thu, 11
- Aug 2022 01:44:20 -0700 (PDT)
+        Thu, 11 Aug 2022 04:44:54 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A718190C72
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:44:52 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id x10so1021163ljq.4
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:44:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=ynpT2u7FSHsjUUbW/rTosphDOzEZ4ibPFW5PkzVc0cc=;
+        b=7cMsM2ZGmT08GpiDMYW+Ucm2C8Wq1ba3l8M1fQY0wFlhRkgJXU0Y/j92/R3IZNia4L
+         9MO8vS7suGciXw0Xq4jSTvGtIeYDanHitUMUjjEqhuQbz+fdJXXjfLfgEJFbpYbnwnaO
+         Ck7xlqc/ClH4VXfQLmNJ6oE7QMCQ4WfS+XoblvLcj+H27zX4Eb3UWhD2+5PNy7OKcqPX
+         FelnqQ2/n/T6p87fmiv5R7KnWFcZyg7Vj3CXyD5NHA6XPqSQb2VaBPNkNw7FQbU518t/
+         O6w0CwIys1Ek3/Rv9G7gjOLU1xNtPN5SFvn5w17ZfI+mCJJaVv6t0QvxQ9k1mdOWEkFt
+         FLDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=ynpT2u7FSHsjUUbW/rTosphDOzEZ4ibPFW5PkzVc0cc=;
+        b=742KDAWNzwC1Ja2uyAZJAwLQ53bwAX/d4Xl5DGdnwbIqe+cJBBC9Lh18zPjVOsNo36
+         HL0ZxHXqgyoSs9nj44JNlEmb7x/IQ4pOwA2F6ldXxrsgImK99ZKcP5GagufT0vSoF8in
+         tL6iCaHFP/fLtokXq+Hhxu1ImK+o35c57QzVXcb7m618GaDAhs/6qZXcvH9T35kulPfj
+         IRUbchuvuDz3M1xfMBV8SRiaLMxkYuYIHVEKzHFENmBZhwK+OHCnx4QzYQdCR4wCfkz0
+         n8dlz1GN/hCDTjq8g3+z+I5Uxqj8vVKLW5D3mz9mvYjzlPzXa+FNQGeh1sW5PlaF8kPI
+         yElg==
+X-Gm-Message-State: ACgBeo3SZVo9ptsEw9CWI7QI/FeMreIk8Y+eokOQasR0M3oe5mIosds+
+        FCGMGD62U3yb8kN0iNe2+sZbkvhe68/pjQ==
+X-Google-Smtp-Source: AA6agR41NqYZDGykDDjqTUYpGVxwq4m0Fa6wrajT2ypGNG2Kpp29w64LKpS46XhbgoSwniJNqNZOlQ==
+X-Received: by 2002:a17:906:8445:b0:730:ba5a:ef59 with SMTP id e5-20020a170906844500b00730ba5aef59mr24540364ejy.182.1660207480710;
+        Thu, 11 Aug 2022 01:44:40 -0700 (PDT)
+Received: from blmsp.fritz.box ([2001:4090:a243:8036:200c:a862:4253:884])
+        by smtp.gmail.com with ESMTPSA id d15-20020aa7d5cf000000b0043d6ece495asm8799314eds.55.2022.08.11.01.44.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Aug 2022 01:44:40 -0700 (PDT)
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Fabien Parent <parent.f@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Markus Schneider-Pargmann <msp@baylibre.com>
+Subject: [PATCH v3 0/4] clk: mediatek: Add mt8365 support
+Date:   Thu, 11 Aug 2022 10:44:29 +0200
+Message-Id: <20220811084433.2598575-1-msp@baylibre.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-References: <20220810103156.1214996-1-chenhuacai@loongson.cn>
- <f92fc4f34784217206b53a3709538d5c@kernel.org> <CAAhV-H7DbvjEcms9Y81t_=WyDnKu5vuB4x7g7vU3f9CUhZykHQ@mail.gmail.com>
- <1359c52d-5194-7306-0e76-cde97b5aa31c@xen0n.name> <87lervb74u.wl-maz@kernel.org>
-In-Reply-To: <87lervb74u.wl-maz@kernel.org>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Thu, 11 Aug 2022 16:44:08 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5D+zHRaAPUqRQOkrv_ae+9UUEt9Cqcpcqd2cWhSiSbiw@mail.gmail.com>
-Message-ID: <CAAhV-H5D+zHRaAPUqRQOkrv_ae+9UUEt9Cqcpcqd2cWhSiSbiw@mail.gmail.com>
-Subject: Re: [PATCH] LoongArch: Fix the !CONFIG_SMP build for irqchip drivers
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     WANG Xuerui <kernel@xen0n.name>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        loongarch@lists.linux.dev, Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Marc and Xuerui,
+Hi,
 
-On Thu, Aug 11, 2022 at 2:56 PM Marc Zyngier <maz@kernel.org> wrote:
->
-> On Thu, 11 Aug 2022 01:58:15 +0100,
-> WANG Xuerui <kernel@xen0n.name> wrote:
-> >
-> > On 8/10/22 23:38, Huacai Chen wrote:
-> >
-> > > Hi, Marc,
-> > >
-> > > On Wed, Aug 10, 2022 at 7:01 PM Marc Zyngier <maz@kernel.org> wrote:
-> > >> On 2022-08-10 11:31, Huacai Chen wrote:
-> > >>> 1, Guard get_ipi_irq() in CONFIG_SMP;
-> > >>> 2, Define cpu_logical_map() for the EIOINTC driver;
-> > >>> 3, Make eiointc_set_irq_affinity() return early for !CONFIG_SMP.
-> > >>>
-> > >>> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > >> Frankly, the real question is why do you even bother? As far as
-> > >> I can tell, LoongArch has no UP system.
-> > >>
-> > >> arm64 crossed that bridge a long time ago, and we never looked
-> > >> back, because these systems hardly exist.
-> > >>
-> > >> I'd rather you simply have a CONFIG_SMP always set to 'y', and
-> > >> be done with it forever.
-> > > LoongArch also has low-end processors (even LoongArch64). Though we
-> > > haven't translate all documents at
-> > > https://loongson.github.io/LoongArch-Documentation/ in time, there are
-> > > currently 4 LoongArch64 processors: Loongson-2K500 (single-core),
-> > > Loongon-2K1000 (dual-core), Loongson-3A5000 (quad-core) and
-> > > Loongson-3C5000 (16-core). So we indeed need a UP configuration.
-> > > Thanks.
-> >
-> > I remember seeing an alternatives mechanism in the works for
-> > LoongArch. If such alternatives mechanism is to be upstreamed in short
-> > order, why make SMP one more build-time time option that developers
-> > have to decide upon? It's not like SMP code would break, or run with
-> > unacceptable overhead, on UP systems AFAIK, so it's probably better to
-> > not preemptively support so many *possibilities* that haven't been
-> > realized so the *current* maintainability suffers. Practically one
-> > can't buy the LoongArch 2K line of products anywhere right now, and
-> > the few companies developing for it are likely not using upstream
-> > kernels anyway, so it's not like we can't wait either.
->
-> And that's exactly my point. Yes, it is always possible to build a UP
-> system. But is it worth *maintaining* a configuration option for this?
-> I seriously doubt it.
->
-> My advise is to stick to SMP only for now (it will run just fine on a
-> UP machine), and only if upstream users find it completely
-> unacceptable should a !SMP option be introduced, or make it a runtime
-> decision (32bit ARM has had SMP_ON_UP support for a long time).
-OK, I will drop this patch and follow the ARM64 method, thanks.
+This series adds a clock driver for the mt8365 SoC. I took over the series from
+Fabien who posted v1 and v2.
 
-Huacai
->
->         M.
->
-> --
-> Without deviation from the norm, progress is not possible.
+Thanks you Angelo for the feedback on v2. I think I fixed everything you
+mentioned.
+
+Changes are listed in the individual patches.
+
+Best,
+Markus
+
+v2 - https://lore.kernel.org/linux-mediatek/20220530214434.1012889-1-fparent@baylibre.com/
+
+Fabien Parent (2):
+  dt-bindings: clock: mediatek: add bindings for MT8365 SoC
+  clk: mediatek: add driver for MT8365 SoC
+
+Markus Schneider-Pargmann (2):
+  clk: mediatek: Provide mtk_devm_alloc_clk_data
+  clk: mediatek: Export required common code symbols
+
+ .../bindings/clock/mediatek,mt8365-clock.yaml |   42 +
+ .../clock/mediatek,mt8365-sys-clock.yaml      |   47 +
+ drivers/clk/mediatek/Kconfig                  |   50 +
+ drivers/clk/mediatek/Makefile                 |    7 +
+ drivers/clk/mediatek/clk-gate.c               |    1 +
+ drivers/clk/mediatek/clk-mt8365-apu.c         |   55 +
+ drivers/clk/mediatek/clk-mt8365-cam.c         |   57 +
+ drivers/clk/mediatek/clk-mt8365-mfg.c         |   63 +
+ drivers/clk/mediatek/clk-mt8365-mm.c          |  112 ++
+ drivers/clk/mediatek/clk-mt8365-vdec.c        |   63 +
+ drivers/clk/mediatek/clk-mt8365-venc.c        |   52 +
+ drivers/clk/mediatek/clk-mt8365.c             | 1155 +++++++++++++++++
+ drivers/clk/mediatek/clk-mtk.c                |   37 +-
+ drivers/clk/mediatek/clk-mtk.h                |    2 +
+ .../dt-bindings/clock/mediatek,mt8365-clk.h   |  373 ++++++
+ 15 files changed, 2111 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mt8365-clock.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/mediatek,mt8365-sys-clock.yaml
+ create mode 100644 drivers/clk/mediatek/clk-mt8365-apu.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8365-cam.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8365-mfg.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8365-mm.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8365-vdec.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8365-venc.c
+ create mode 100644 drivers/clk/mediatek/clk-mt8365.c
+ create mode 100644 include/dt-bindings/clock/mediatek,mt8365-clk.h
+
+-- 
+2.36.1
+

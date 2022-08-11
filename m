@@ -2,210 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05A6E58FF2F
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 17:20:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 345D858FF37
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 17:21:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235230AbiHKPUU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 11:20:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37772 "EHLO
+        id S235690AbiHKPVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 11:21:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234338AbiHKPUQ (ORCPT
+        with ESMTP id S235656AbiHKPVN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 11:20:16 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6704BAE;
-        Thu, 11 Aug 2022 08:20:12 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27BEC72l010395;
-        Thu, 11 Aug 2022 15:20:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=mvGqMZ29M6mKHzOFXKXXUE2mOK3ZoxjsZdFT+QWufsw=;
- b=aZXp7OMhq/KBe3oCLz8xmfEw9sFUc2YPHZ2uf36hLpV+4Ix+QGVs6bPyh1T+2m4xKewy
- s08xISwnBbvSbvQKu0W/RgNSeQZ26BNu2tXFIe5u9iqLs7Y4mYKshra27b1EIpwoKO+L
- IBUpEOXjn+iy7yMj10lIO59XIueGX63igi5GJpYJGg7yU/qRI/ncL3tIaeqZYfYh69b+
- 0nLLoz17gZ0Qe/MivjwEOj90ZsrcIvy8CyySA5v38JWVLLhh1lEtTLX3R1zBQVVmddTP
- g65M534opCcRc/LdhFr7hhvVnp/DK2AeEeAk6iZlIA+MvfuBIpgHp1z2clXbXwOpq1cz XQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hw3a6r8kj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 Aug 2022 15:20:05 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27BFK4vM023929
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 Aug 2022 15:20:04 GMT
-Received: from [10.110.2.196] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 11 Aug
- 2022 08:20:02 -0700
-Message-ID: <1e792f49-febf-43bf-d828-8ecf99cbeba3@quicinc.com>
-Date:   Thu, 11 Aug 2022 08:20:01 -0700
+        Thu, 11 Aug 2022 11:21:13 -0400
+Received: from relay.virtuozzo.com (relay.virtuozzo.com [130.117.225.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D281861D54;
+        Thu, 11 Aug 2022 08:21:10 -0700 (PDT)
+Received: from dev010.ch-qa.sw.ru ([172.29.1.15])
+        by relay.virtuozzo.com with esmtp (Exim 4.95)
+        (envelope-from <alexander.mikhalitsyn@virtuozzo.com>)
+        id 1oM9xi-00FExA-NK;
+        Thu, 11 Aug 2022 17:20:17 +0200
+From:   Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>
+To:     netdev@vger.kernel.org
+Cc:     Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        David Ahern <dsahern@kernel.org>,
+        Yajun Deng <yajun.deng@linux.dev>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-kernel@vger.kernel.org, "Denis V . Lunev" <den@openvz.org>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Konstantin Khorenko <khorenko@virtuozzo.com>,
+        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
+        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
+        Alexander Mikhalitsyn <alexander@mihalicyn.com>,
+        kernel@openvz.org, devel@openvz.org
+Subject: [PATCH v3 0/2] neighbour: fix possible DoS due to net iface start/stop loop
+Date:   Thu, 11 Aug 2022 18:20:10 +0300
+Message-Id: <20220811152012.319641-1-alexander.mikhalitsyn@virtuozzo.com>
+X-Mailer: git-send-email 2.27.0
+In-Reply-To: <20220729103559.215140-1-alexander.mikhalitsyn@virtuozzo.com>
+References: <20220729103559.215140-1-alexander.mikhalitsyn@virtuozzo.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3] drm/msm/dp: check hpd_state before push idle pattern
- at dp_bridge_disable()
-Content-Language: en-US
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
-        <airlied@linux.ie>, <bjorn.andersson@linaro.org>,
-        <daniel@ffwll.ch>, <dianders@chromium.org>,
-        <dmitry.baryshkov@linaro.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <vkoul@kernel.org>
-CC:     <quic_aravindh@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <freedreno@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <1660159551-13828-1-git-send-email-quic_khsieh@quicinc.com>
- <CAE-0n533SUb3Bg=pR8Fhwo-M5qLWiti4nzLR-rSGVAsrXgEYNQ@mail.gmail.com>
- <dbda8bce-2890-e5e3-4052-073a52eb06a6@quicinc.com>
- <CAE-0n51NyrP8CikcK_3wj4EEsurmmSZ4RY3pLhJJmkY2_8wNZw@mail.gmail.com>
- <0641a116-5b58-4305-bf2d-f53dcb747276@quicinc.com>
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-In-Reply-To: <0641a116-5b58-4305-bf2d-f53dcb747276@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: cldeAc-FsMTktDbMm3jShhqS597j0rTl
-X-Proofpoint-ORIG-GUID: cldeAc-FsMTktDbMm3jShhqS597j0rTl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-11_11,2022-08-11_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 malwarescore=0
- adultscore=0 impostorscore=0 lowpriorityscore=0 suspectscore=0
- clxscore=1015 spamscore=0 priorityscore=1501 mlxscore=0 mlxlogscore=999
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208110052
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Dear friends,
 
-On 8/10/2022 6:00 PM, Abhinav Kumar wrote:
-> Hi Stephen
->
-> On 8/10/2022 5:09 PM, Stephen Boyd wrote:
->> Quoting Kuogee Hsieh (2022-08-10 16:57:51)
->>>
->>> On 8/10/2022 3:22 PM, Stephen Boyd wrote:
->>>> Quoting Kuogee Hsieh (2022-08-10 12:25:51)
->>>>> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c 
->>>>> b/drivers/gpu/drm/msm/dp/dp_display.c
->>>>> index b36f8b6..678289a 100644
->>>>> --- a/drivers/gpu/drm/msm/dp/dp_display.c
->>>>> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
->>>>> @@ -1729,10 +1729,20 @@ void dp_bridge_disable(struct drm_bridge 
->>>>> *drm_bridge)
->>>>>           struct msm_dp_bridge *dp_bridge = to_dp_bridge(drm_bridge);
->>>>>           struct msm_dp *dp = dp_bridge->dp_display;
->>>>>           struct dp_display_private *dp_display;
->>>>> +       u32 state;
->>>>>
->>>>>           dp_display = container_of(dp, struct dp_display_private, 
->>>>> dp_display);
->>>>>
->>>>> +       mutex_lock(&dp_display->event_mutex);
->>>>> +
->>>>> +       state = dp_display->hpd_state;
->>>>> +       if (state != ST_DISCONNECT_PENDING && state != 
->>>>> ST_CONNECTED) {
->>>> It's concerning that we have to check this at all. Are we still
->>>> interjecting into the disable path when the cable is disconnected?
->>>
->>> yes,
->>>
->>> The problem is not from cable disconnected.
->>>
->>> There is a corner case that this function is called at drm shutdown
->>> (drm_release).
->>>
->>> At that time, mainlink is not enabled, hence dp_ctrl_push_idle() will
->>> cause system crash.
->>
->> The mainlink is only disabled when the cable is disconnected though?
->>
->> Let me put it this way, if we have to check that the state is
->> "connected" or "disconnected pending" in the disable path then there's
->> an issue where this driver is being called in unexpected ways. This
->> driver is fighting the drm core each time there's a state check. We
->> really need to get rid of the state tracking entirely, and make sure
->> that the drm core is calling into the driver at the right time, i.e.
->> bridge disable is only called when the mainlink is enabled, etc.
->
-> So if link training failed, we do not send a uevent to usermode and 
-> will bail out here:
->
->         rc = dp_ctrl_on_link(dp->ctrl);
->         if (rc) {
->                 DRM_ERROR("failed to complete DP link training\n");
->                 goto end;
->         }
->
-> So this commit is not coming from usermode but from the drm_release() 
-> path.
->
-> Even then, you do have a valid point. DRM framework should not have 
-> caused the disable path to happen without an enable.
->
-> I went through the stack mentioned in the issue.
->
-> Lets see this part of the stack:
->
-> dp_ctrl_push_idle+0x40/0x88
->  dp_bridge_disable+0x24/0x30
->  drm_atomic_bridge_chain_disable+0x90/0xbc
->  drm_atomic_helper_commit_modeset_disables+0x198/0x444
->  msm_atomic_commit_tail+0x1d0/0x374
->
-> In drm_atomic_helper_commit_modeset_disables(), we call 
-> disable_outputs().
->
-> AFAICT, this is the only place which has a protection to not call the 
-> disable() flow if it was not enabled here:
->
-> https://gitlab.freedesktop.org/drm/msm/-/blob/msm-next/drivers/gpu/drm/drm_atomic_helper.c#L1063 
->
->
-> But that function is only checking crtc_state->active. Thats set by 
-> the usermode:
->
-> https://gitlab.freedesktop.org/drm/msm/-/blob/msm-next/drivers/gpu/drm/drm_atomic_uapi.c#L407 
->
->
-> Now, if usermode sets that to true and then crashed it can bypass this 
-> check and we will crash in the location kuogee is trying to fix.
->
-> From the issue mentioned in 
-> https://gitlab.freedesktop.org/drm/msm/-/issues/17, the reporter did 
-> mention the usermode crashed.
->
-> So this is my tentative analysis of whats happening here.
->
-> Ideally yes, we should have been protected by the location mentioned 
-> above in disable_outputs() but looks to me due to the above hypothesis 
-> its getting bypassed.
->
-> Thanks
->
-> Abhinav
->
->
-Ii sound likes that there is a hole either at user space or drm.
+Recently one of OpenVZ users reported that they have issues with network
+availability of some containers. It was discovered that the reason is absence
+of ARP replies from the Host Node on the requests about container IPs.
 
-But that should not cause dp_bridge_disable() at dp driver to crash.
+Of course, we started from tcpdump analysis and noticed that ARP requests
+successfuly comes to the problematic node external interface. So, something
+was wrong from the kernel side.
 
-Therefore it is properly to check hdp_state condition at 
-dp_bridge_disable() to prevent it from crashing.
+I've played a lot with arping and perf in attempts to understand what's
+happening. And the key observation was that we experiencing issues only
+with ARP requests with broadcast source ip (skb->pkt_type == PACKET_BROADCAST).
+But for packets skb->pkt_type == PACKET_HOST everything works flawlessly.
 
+Let me show a small piece of code:
+
+static int arp_process(struct sock *sk, struct sk_buff *skb)
+...
+				if (NEIGH_CB(skb)->flags & LOCALLY_ENQUEUED ||
+				    skb->pkt_type == PACKET_HOST ||
+				    NEIGH_VAR(in_dev->arp_parms, PROXY_DELAY) == 0) { // reply instantly
+					arp_send_dst(ARPOP_REPLY, ETH_P_ARP,
+						     sip, dev, tip, sha,
+						     dev->dev_addr, sha,
+						     reply_dst);
+				} else {
+					pneigh_enqueue(&arp_tbl,                     // reply with delay
+						       in_dev->arp_parms, skb);
+					goto out_free_dst;
+				}
+
+The problem was that for PACKET_BROADCAST packets we delaying replies and use pneigh_enqueue() function.
+For some reason, queued packets were lost almost all the time! The reason for such behaviour is pneigh_queue_purge()
+function which cleanups all the queue, and this function called everytime once some network device in the system
+gets link down.
+
+neigh_ifdown -> pneigh_queue_purge
+
+Now imagine that we have a node with 500+ containers with microservices. And some of that microservices are buggy
+and always restarting... in this case, pneigh_queue_purge function will be called very frequently.
+
+This problem is reproducible only with so-called "host routed" setup. The classical scheme bridge + veth
+is not affected.
+
+Minimal reproducer
+
+Suppose that we have a network 172.29.1.1/16 brd 172.29.255.255
+and we have free-to-use IP, let it be 172.29.128.3
+
+1. Network configuration. I showing the minimal configuration, it makes no sense
+as we have both veth devices stay at the same net namespace, but for demonstation and simplicity sake it's okay.
+
+ip l a veth31427 type veth peer name veth314271
+ip l s veth31427 up
+ip l s veth314271 up
+
+# setup static arp entry and publish it
+arp -Ds -i br0 172.29.128.3 veth31427 pub
+# setup static route for this address
+route add 172.29.128.3/32 dev veth31427
+
+2. "attacker" side (kubernetes pod with buggy microservice :) )
+
+unshare -n
+ip l a type veth
+ip l s veth0 up
+ip l s veth1 up
+for i in {1..100000}; do ip link set veth0 down; sleep 0.01; ip link set veth0 up; done
+
+This will totaly block ARP replies for 172.29.128.3 address. Just try
+# arping -I eth0 172.29.128.3 -c 4
+
+Our proposal is simple:
+1. Let's cleanup queue partially. Remove only skb's that related to the net namespace
+of the adapter which link is down.
+
+2. Let's account proxy_queue limit properly per-device. Current limitation looks
+not fully correct because we comparing per-device configurable limit with the
+"global" qlen of proxy_queue.
+
+Thanks,
+Alex
+
+v2:
+	- only ("neigh: fix possible DoS due to net iface start/stop") is changed
+		do del_timer_sync() if queue is empty after pneigh_queue_purge()
+
+v3:
+	- rebase to net tree
+
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Daniel Borkmann <daniel@iogearbox.net>
+Cc: David Ahern <dsahern@kernel.org>
+Cc: Yajun Deng <yajun.deng@linux.dev>
+Cc: Roopa Prabhu <roopa@nvidia.com>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Denis V. Lunev <den@openvz.org>
+Cc: Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>
+Cc: Konstantin Khorenko <khorenko@virtuozzo.com>
+Cc: Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+Cc: Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>
+Cc: Alexander Mikhalitsyn <alexander@mihalicyn.com>
+Cc: kernel@openvz.org
+Cc: devel@openvz.org
+Signed-off-by: Denis V. Lunev <den@openvz.org>
+Signed-off-by: Alexander Mikhalitsyn <alexander.mikhalitsyn@virtuozzo.com>
+
+Alexander Mikhalitsyn (1):
+  neighbour: make proxy_queue.qlen limit per-device
+
+Denis V. Lunev (1):
+  neigh: fix possible DoS due to net iface start/stop loop
+
+ include/net/neighbour.h |  1 +
+ net/core/neighbour.c    | 46 +++++++++++++++++++++++++++++++++--------
+ 2 files changed, 38 insertions(+), 9 deletions(-)
+
+-- 
+2.36.1
 

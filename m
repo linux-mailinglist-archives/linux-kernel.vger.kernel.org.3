@@ -2,60 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 095E45905ED
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 19:36:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D5975905EB
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 19:36:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236284AbiHKRf5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 13:35:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45122 "EHLO
+        id S236445AbiHKRgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 13:36:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234073AbiHKRfu (ORCPT
+        with ESMTP id S236490AbiHKRfz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 13:35:50 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135C86A48D
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 10:35:49 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id q124so15196498iod.3
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 10:35:49 -0700 (PDT)
+        Thu, 11 Aug 2022 13:35:55 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE9B6A48D
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 10:35:54 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id o2so15188667iof.8
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 10:35:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=JTIw/WG05XoLkTadd0S479zZDBDUHfyPokMut/KFehU=;
-        b=alQ8YnT9WWSgcXku7dMfT3dg6UwGtfLJJrBfkbYHHdtH6IdFm+qBrggozXkzoKglG9
-         ZuCw9d7LNHK9op50Ok0ou6jDsuEZGYRcf5CoBmIOHsgBKtNWRq8UEvprk1E5p63Vw2+P
-         1EMYMRyBXyDx/RBDUru86TRR8bZjBFiMbB++zcLbscgWN8Fd/4KCtdQkuBUmj20xlJYO
-         FCvYp4Gf8tCUM/Mjpzq+WcpVJI63EQPXH3gI23gR/3uH6ySMFaaIUAsmon8vGGfC1aoI
-         sUacH3BvtqRocmKwR55/njf62KOK+syoE4dgZc5bKxsL++Rxn4aOkb0Y3I0KSO3HjK7W
-         XVpw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=8o46kS926x+QNuy5c4uBrvlsDlM/ABLoibmgwB6shD8=;
+        b=U6UOu+ihAb2JTfwfKtFLGsAM5//yojM/EfxSJg1oSpNRwMmWCAKD6ad6mx1KbfzOOd
+         h13rHKkT0IktAVFiXb4kQEEsnAfleLXx7Vqr9lu2L2KtZOGYWSfiuJ0p/zWOphTUU5WD
+         gtS3fcpge3mmi4Dta/Cjq9P9AgCadxNP2NA+YUdHGeM8aJmHjY20IBOPsiwi/rUVHnug
+         VSLo9v0yu9ca5PCkKK+K5Pxk3Rg8ptP/AA1fACgzgw9JxUUaWjCDJnsUi/txCrzbaKX/
+         9sggavFA7EnP63UQGOCSGU0fUuaXdr6s6PvoRd2kj/gxKVcvIhnjBdAWtko4hqD9pN94
+         KnFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=JTIw/WG05XoLkTadd0S479zZDBDUHfyPokMut/KFehU=;
-        b=XqMf1GPcJy7f50i53T0X1nOFd/FV7GdktUCbPHj0msO0FxKC++wEPYgxxkwS9+BNyS
-         4/C2dUo8LS6YaQ9dD8dX04f86fiGJTAre0X/YuEHU0l4rJnEZ5Lz1VYpJjke3aD3TM4A
-         akxty4+FakZyGVY6s3vgFWew7RQHuYVcad8I/c8oD9g7ZfZMyuG5iPfRFxXSxPGYufaV
-         PzK660tgN06HsEreILMP9rfKCOHdHZSP7lwKjLa2ocqWj4UFy8brxnXJ5x8nzRpsWL+8
-         5h/B5qRTuLOPBkhQ7tJ5Wk5fTg+4X/AOSvxKveNiA2ypUUwUbyGsnBeOxJ2wycC5cXi0
-         +R0w==
-X-Gm-Message-State: ACgBeo01QiDg7RpYK2ON5v7w9YmlGoPwNr3DMS7W4h2I5yg/7St8utPa
-        jsxLVPTs2E7ZHwtKj9ynfsg0kZoDabU=
-X-Google-Smtp-Source: AA6agR4y0bh9mNUVmNm7jyBkJQNAmemYLnqSnEmfW4vmFCYlMLkqzQEC9tOCCelybRoc6oJE2DP3qg==
-X-Received: by 2002:a6b:f214:0:b0:684:4af0:8b40 with SMTP id q20-20020a6bf214000000b006844af08b40mr159423ioh.104.1660239347569;
-        Thu, 11 Aug 2022 10:35:47 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=8o46kS926x+QNuy5c4uBrvlsDlM/ABLoibmgwB6shD8=;
+        b=LAIaKmtn8yWxF2G92B1tF0njUZE3va0mwsn1N52CtnD9uQBH0AGUpguGkjERFhE/gc
+         8Bk/53px9qa6VI/DMzSQ9UPn9jGe7dFp/oczSaWeOtlvqnHbMc/7Eoz3ogSLpKyGuLxu
+         bMPq4fkYE80xNaT89keT7UmWlmCCYv05pAufis692Ws8Af+dDpNHozGLHLjEW01YXgV9
+         OsSk9CGUdhw8sxrHZ+dVMZ8/VC9mLe0AJezXJpSTfFs+gtYDlkhjGDMIsp8jBu3pvPte
+         FMGIk/QZSiQvnipaY9BASMcvRE0QJwR43djfvdNl7ojekEIhqzB8QXqIJO7y5gILktjD
+         QNoA==
+X-Gm-Message-State: ACgBeo1TItASLuxSzIjhV5pKTmICognVCAfOx7T+Tt0GXYsoCsES82vd
+        WKUgZ46gFRificZcyMmmsUPi/3vqFxA=
+X-Google-Smtp-Source: AA6agR75o8hqLLPSwEMM+0RAW4piNtgIvz2GqtLLtUL08G5TuwqU52b+3AxKOsC4QnNmt6RFGUsB3g==
+X-Received: by 2002:a02:b799:0:b0:343:390a:4f66 with SMTP id f25-20020a02b799000000b00343390a4f66mr180392jam.222.1660239352513;
+        Thu, 11 Aug 2022 10:35:52 -0700 (PDT)
 Received: from frodo.. (c-73-78-62-130.hsd1.co.comcast.net. [73.78.62.130])
-        by smtp.googlemail.com with ESMTPSA id n9-20020a056638110900b003435e8635bbsm27928jal.77.2022.08.11.10.35.46
+        by smtp.googlemail.com with ESMTPSA id n9-20020a056638110900b003435e8635bbsm27928jal.77.2022.08.11.10.35.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Aug 2022 10:35:46 -0700 (PDT)
+        Thu, 11 Aug 2022 10:35:52 -0700 (PDT)
 From:   Jim Cromie <jim.cromie@gmail.com>
 To:     linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
         jbaron@akamai.com
-Cc:     Jim Cromie <jim.cromie@gmail.com>
-Subject: [PATCH 00/11] DYNAMIC_DEBUG for this cycle
-Date:   Thu, 11 Aug 2022 11:35:30 -0600
-Message-Id: <20220811173541.2901122-1-jim.cromie@gmail.com>
+Cc:     Jim Cromie <jim.cromie@gmail.com>, vincent.whitchurch@axis.com
+Subject: [PATCH 01/11] dyndbg: fix static_branch manipulation
+Date:   Thu, 11 Aug 2022 11:35:31 -0600
+Message-Id: <20220811173541.2901122-2-jim.cromie@gmail.com>
 X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220811173541.2901122-1-jim.cromie@gmail.com>
+References: <20220811173541.2901122-1-jim.cromie@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -68,38 +70,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg, Jason,
+In https://lore.kernel.org/lkml/20211209150910.GA23668@axis.com/
 
-Please consider these for this rc-cycle.
-  - 1-9 have Jason's Ack,
-  - 9th removes unused EXPORTed fn.
-  - 10 is simple var cleanup
-  - 11 is a partial decoupling of dyndbg from kernel/module
+Vincent's patch commented on, and worked around, a bug toggling
+static_branch's, when a 2nd PRINTK-ish flag was added.  The bug
+results in a premature static_branch_disable when the 1st of 2 flags
+was disabled.
 
-Jim Cromie (11):
-  dyndbg: fix static_branch manipulation
-  dyndbg: fix module.dyndbg handling
-  dyndbg: show both old and new in change-info
-  dyndbg: reverse module walk in cat control
-  dyndbg: reverse module.callsite walk in cat control
-  dyndbg: use ESCAPE_SPACE for cat control
-  dyndbg: let query-modname override actual module name
-  dyndbg: add test_dynamic_debug module
-  dyndbg: drop EXPORTed dynamic_debug_exec_queries
-  dyndbg: cleanup auto vars in dynamic_debug_init
-  dyndbg: create and use struct _ddebug_info
+The cited commit computed newflags, but then in the JUMP_LABEL block,
+failed to use that result, instead using just one of the terms in it.
+Using newflags instead made the code work properly.
 
- MAINTAINERS                   |   2 +
- include/linux/dynamic_debug.h |  22 ++----
- kernel/module/internal.h      |   4 +-
- kernel/module/main.c          |  18 ++---
- lib/Kconfig.debug             |  10 +++
- lib/Makefile                  |   1 +
- lib/dynamic_debug.c           | 141 +++++++++++++++++-----------------
- lib/test_dynamic_debug.c      |  70 +++++++++++++++++
- 8 files changed, 172 insertions(+), 96 deletions(-)
- create mode 100644 lib/test_dynamic_debug.c
+This is Vincents test-case, reduced.  It needs the 2nd flag to
+demonstrate the bug, but it's explanatory here.
 
+pt_test() {
+    echo 5 > /sys/module/dynamic_debug/verbose
+
+    site="module tcp" # just one callsite
+    echo " $site =_ " > /proc/dynamic_debug/control # clear it
+
+    # A B ~A ~B
+    for flg in +T +p "-T #broke here" -p; do
+	echo " $site $flg " > /proc/dynamic_debug/control
+    done;
+
+    # A B ~B ~A
+    for flg in +T +p "-p #broke here" -T; do
+	echo " $site $flg " > /proc/dynamic_debug/control
+    done
+}
+pt_test
+
+Fixes: 84da83a6ffc0 dyndbg: combine flags & mask into a struct, simplify with it
+CC: vincent.whitchurch@axis.com
+Signed-off-by: Jim Cromie <jim.cromie@gmail.com>
+Acked-by: Jason Baron <jbaron@akamai.com>
+---
+.drop @stable, no exposed bug.
+.add jbaron ack
+---
+ lib/dynamic_debug.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/lib/dynamic_debug.c b/lib/dynamic_debug.c
+index dd7f56af9aed..a56c1286ffa4 100644
+--- a/lib/dynamic_debug.c
++++ b/lib/dynamic_debug.c
+@@ -211,10 +211,11 @@ static int ddebug_change(const struct ddebug_query *query,
+ 				continue;
+ #ifdef CONFIG_JUMP_LABEL
+ 			if (dp->flags & _DPRINTK_FLAGS_PRINT) {
+-				if (!(modifiers->flags & _DPRINTK_FLAGS_PRINT))
++				if (!(newflags & _DPRINTK_FLAGS_PRINT))
+ 					static_branch_disable(&dp->key.dd_key_true);
+-			} else if (modifiers->flags & _DPRINTK_FLAGS_PRINT)
++			} else if (newflags & _DPRINTK_FLAGS_PRINT) {
+ 				static_branch_enable(&dp->key.dd_key_true);
++			}
+ #endif
+ 			dp->flags = newflags;
+ 			v4pr_info("changed %s:%d [%s]%s =%s\n",
 -- 
 2.37.1
 

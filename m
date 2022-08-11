@@ -2,43 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0290B58FF13
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 17:17:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5F6058FF1F
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 17:17:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235605AbiHKPRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 11:17:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33688 "EHLO
+        id S235635AbiHKPRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 11:17:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbiHKPQ7 (ORCPT
+        with ESMTP id S235601AbiHKPRr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 11:16:59 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45F0661D6B;
-        Thu, 11 Aug 2022 08:16:57 -0700 (PDT)
-X-QQ-mid: bizesmtp90t1660231001t0xm8mw2
-Received: from localhost.localdomain ( [110.188.55.240])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 11 Aug 2022 23:16:34 +0800 (CST)
-X-QQ-SSF: 0100000000200080H000B00A0000020
-X-QQ-FEAT: eSZ1CZgv+JCwTB9Wg85cnslhA6pu5r4Mf+y8fjYXssxcQYaEHki9jZ0JHkRrd
-        6ARfL5d/bYQIH1phNBc6ideDH85m++WkR9GDf6+VB9q9+ioHR/OjL5D/lNXdv+dNQkEdjm/
-        BmibYsW7Eb+JsnSy/pgvPK3ii0oIDV+mjcnRfUCSbCJfVH6LCYtfKyIwzxCvynjY2G/dfNj
-        M4eMmdn54zPBgQK7Kz+ipkVS8AMbAIFVY8MXJR+9ciUywxj1JVdK4AEHAsodkK3nBwqp4sf
-        ZSFrUWJd2Rdz7LVcxRx+CzIDGclMCnuExGUujuNlASJBwgHRHClWkryvw9KtQIkxdIJ/dsc
-        N4+FekpKK9+zxwKfI2S5FT6qEp3LDD1gKntgbU8jETOW6mGOlrCSU0tShgbeOePO7GVm3Dd
-        PYbaU3ltohI=
-X-QQ-GoodBg: 0
-From:   min tang <tangmin@cdjrlc.com>
-To:     jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     artur.paszkiewicz@intel.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, min tang <tangmin@cdjrlc.com>
-Subject: [PATCH] isci: Fix comment typo
-Date:   Thu, 11 Aug 2022 23:16:22 +0800
-Message-Id: <20220811151622.12825-1-tangmin@cdjrlc.com>
-X-Mailer: git-send-email 2.17.1
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        Thu, 11 Aug 2022 11:17:47 -0400
+Received: from m12-11.163.com (m12-11.163.com [220.181.12.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CB31589814;
+        Thu, 11 Aug 2022 08:17:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=+WsXT
+        B496pRiThsdIYxgt06NE3Gcvk+x9eC2e8AKguc=; b=UVRLId1UWuRhNt+Z81hLa
+        xIIjzlL9Thuh7GE5sNukxhD8IOl0N8PKCCid6WxtdXIeJySQz/y8OupqY0SH0vbT
+        QFpncRHqcMPaZxgNKIwA1uaiDDwGqwIoX/63k16Nd6dwXRD8qfSnnmevw2rpemDC
+        4WpEMYAH8iOsL7i5KT8thU=
+Received: from localhost.localdomain (unknown [113.87.232.118])
+        by smtp7 (Coremail) with SMTP id C8CowAD3ipBlHfViwDT+Tg--.45567S4;
+        Thu, 11 Aug 2022 23:17:09 +0800 (CST)
+From:   Chen Lin <chen45464546@163.com>
+To:     ioana.ciornei@nxp.com
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yi.liu@nxp.com,
+        Chen Lin <chen45464546@163.com>,
+        Chen Lin <chen.lin5@zte.com.cn>
+Subject: [PATCH v2] dpaa2-eth: trace the allocated address instead of page struct
+Date:   Thu, 11 Aug 2022 23:16:51 +0800
+Message-Id: <20220811151651.3327-1-chen45464546@163.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220811144143.b4mlngr6x76bozwg@skbuf>
+References: <20220811144143.b4mlngr6x76bozwg@skbuf>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: C8CowAD3ipBlHfViwDT+Tg--.45567S4
+X-Coremail-Antispam: 1Uf129KBjvdXoW7Wr4xKr4UZF13Ar4xXrW7CFg_yoWDAFbE9r
+        nFqr13JF4jkFy0ka1rKr4UXa4v9r47Zr48AF1SgFW3Gr9rAry8Jr1kA34xArZ3ur4SkF9x
+        Jw17Aa43J3s3JjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRCSoGPUUUUU==
+X-Originating-IP: [113.87.232.118]
+X-CM-SenderInfo: hfkh0kqvuwkkiuw6il2tof0z/1tbiQhVanlaECkcrUQAAs2
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -47,26 +57,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The double `the' is duplicated in line 157, remove one.
+We should trace the allocated address instead of page struct.
 
-Signed-off-by: min tang <tangmin@cdjrlc.com>
+Fixes: 27c874867c4 ("dpaa2-eth: Use a single page per Rx buffer")
+Signed-off-by: Chen Lin <chen.lin5@zte.com.cn>
+Reviewed-by: Ioana Ciornei <ioana.ciornei@nxp.com>
 ---
- drivers/scsi/isci/remote_node_context.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/scsi/isci/remote_node_context.h b/drivers/scsi/isci/remote_node_context.h
-index c7ee81d01125..f22950b12b8b 100644
---- a/drivers/scsi/isci/remote_node_context.h
-+++ b/drivers/scsi/isci/remote_node_context.h
-@@ -154,7 +154,7 @@ enum sci_remote_node_context_destination_state {
- /**
-  * struct sci_remote_node_context - This structure contains the data
-  *    associated with the remote node context object.  The remote node context
-- *    (RNC) object models the the remote device information necessary to manage
-+ *    (RNC) object models the remote device information necessary to manage
-  *    the silicon RNC.
-  */
- struct sci_remote_node_context {
+diff --git a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
+index cd9ec8052..75d515726 100644
+--- a/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
++++ b/drivers/net/ethernet/freescale/dpaa2/dpaa2-eth.c
+@@ -1660,8 +1660,8 @@ static int dpaa2_eth_add_bufs(struct dpaa2_eth_priv *priv,
+ 		buf_array[i] = addr;
+ 
+ 		/* tracing point */
+-		trace_dpaa2_eth_buf_seed(priv->net_dev,
+-					 page, DPAA2_ETH_RX_BUF_RAW_SIZE,
++		trace_dpaa2_eth_buf_seed(priv->net_dev, page_address(page),
++					 DPAA2_ETH_RX_BUF_RAW_SIZE,
+ 					 addr, priv->rx_buf_size,
+ 					 bpid);
+ 	}
 -- 
-2.17.1
+2.25.1
 

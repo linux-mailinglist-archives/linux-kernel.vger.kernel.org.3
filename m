@@ -2,40 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6164958FDD6
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 15:56:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 84C8A58FDD8
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 15:56:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235250AbiHKNzj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 09:55:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38580 "EHLO
+        id S235256AbiHKN4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 09:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235268AbiHKNze (ORCPT
+        with ESMTP id S234650AbiHKN4W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 09:55:34 -0400
+        Thu, 11 Aug 2022 09:56:22 -0400
 Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C521BE56;
-        Thu, 11 Aug 2022 06:55:23 -0700 (PDT)
-X-QQ-mid: bizesmtp82t1660226113t8eblv65
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C129C7E314;
+        Thu, 11 Aug 2022 06:56:20 -0700 (PDT)
+X-QQ-mid: bizesmtp81t1660226157t4rprdd2
 Received: from localhost.localdomain ( [182.148.14.53])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 11 Aug 2022 21:55:11 +0800 (CST)
+        id ; Thu, 11 Aug 2022 21:55:56 +0800 (CST)
 X-QQ-SSF: 01000000002000G0V000B00A0000020
-X-QQ-FEAT: XC6Q9XtnZK9eJ7YYi5ptnFnj5nBsOi1bu3+p7rqQszYqiyrbWWSgmXV+r7zP0
-        eJX+MW3G+5gJdQeJYBCMDmZUu8T64P2Mu55qwvz3HdWm2Bb79bXhWJNhdGNQiIZWejJ0Ks9
-        Kib+gdPGRhptque1Xxslm5KORdqhEXj47vdH537vVeTZtVJXzXlLYyS9CUMPPf1NUEvw63o
-        OvCuFU7mL4UhR5zhSVyrOifDy/FyRx4mgnJpkZqPX2VWx+0qu9d8ZhaEjXuGcFw8soziRht
-        709h2JqxtDN+AVj293pGgtrM64xezGyJxqFF70GfFQS1LPLdK1QILEaEZfUMZkEwHUvOY5J
-        UqKb4HxFFJ8mYqbYXyv8rQIy72PBssqZ3suKQ+lxGaI9mUURwX2etWHRcLKG/37AqkUSbXi
-        mCu4OSj/5+w=
+X-QQ-FEAT: zT6n3Y95oi3bVIXAbHMtSOZADe/8+tTl6FBI+nkFergHEQ/tIvg/IiXMtb3p5
+        v+WG4L5QGH2A9B8eNWbvKjjv/NWnfr8WfMwNqw+LndVOaOJgTDsNdruK/K5Klea4R7cyGA1
+        bvFWb46Ot8J69EGuChV6Xzvly2C115SoEbqCjzXkQTOAAN//kuYbqW6f3VFReZwPb6vWqXZ
+        eNnt+IrgU4lg77v7/xR/zMeaI3VE+OZKqwfyOs2iIqZ/83W02tPVZF2s+Des+dQQYCkcQwm
+        T6e08rmM9w/Oc5StGVADkGdEBDUi+YiuwArxRr0gNSzOBvBhY9sddhcEbJFFPDuZKPpzGD/
+        nPUcXdO2gyrOsKQU8KNTf6S55twm6YtZdoVweTpDg54wBJjFAW3oESHQ3G4ZCVZnBIbZQf0
+        doe6Z/LmZn4=
 X-QQ-GoodBg: 0
 From:   Jason Wang <wangborong@cdjrlc.com>
-To:     martin.petersen@oracle.com
-Cc:     james.smart@broadcom.com, dick.kennedy@broadcom.com,
-        jejb@linux.ibm.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>
-Subject: [PATCH] scsi: lpfc: Fix comment typo
-Date:   Thu, 11 Aug 2022 21:55:03 +0800
-Message-Id: <20220811135503.23035-1-wangborong@cdjrlc.com>
+To:     aliakc@web.de
+Cc:     oliver@neukum.org, lenehan@twibble.org, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, dc395x@twibble.org,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jason Wang <wangborong@cdjrlc.com>
+Subject: [PATCH] scsi: dc395x: Fix comment typo
+Date:   Thu, 11 Aug 2022 21:55:49 +0800
+Message-Id: <20220811135549.23965-1-wangborong@cdjrlc.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -54,22 +55,23 @@ The double `the' is duplicated in the comment, remove one.
 
 Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 ---
- drivers/scsi/lpfc/lpfc_nvmet.c | 2 +-
+ drivers/scsi/dc395x.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/scsi/lpfc/lpfc_nvmet.c b/drivers/scsi/lpfc/lpfc_nvmet.c
-index f7cfac0da9b6..7517dd55fe91 100644
---- a/drivers/scsi/lpfc/lpfc_nvmet.c
-+++ b/drivers/scsi/lpfc/lpfc_nvmet.c
-@@ -1469,7 +1469,7 @@ lpfc_nvmet_cleanup_io_context(struct lpfc_hba *phba)
- 	if (!infop)
- 		return;
- 
--	/* Cycle the the entire CPU context list for every MRQ */
-+	/* Cycle the entire CPU context list for every MRQ */
- 	for (i = 0; i < phba->cfg_nvmet_mrq; i++) {
- 		for_each_present_cpu(j) {
- 			infop = lpfc_get_ctx_list(phba, j, i);
+diff --git a/drivers/scsi/dc395x.c b/drivers/scsi/dc395x.c
+index 670a836a6ba1..7c7fd511cffe 100644
+--- a/drivers/scsi/dc395x.c
++++ b/drivers/scsi/dc395x.c
+@@ -2052,7 +2052,7 @@ static void data_in_phase0(struct AdapterCtlBlk *acb, struct ScsiReqBlk *srb,
+ 		/*
+ 		 * KG: We should wait for the DMA FIFO to be empty ...
+ 		 * but: it would be better to wait first for the SCSI FIFO and then the
+-		 * the DMA FIFO to become empty? How do we know, that the device not already
++		 * DMA FIFO to become empty? How do we know, that the device not already
+ 		 * sent data to the FIFO in a MsgIn phase, eg.?
+ 		 */
+ 		if (!(DC395x_read8(acb, TRM_S1040_DMA_FIFOSTAT) & 0x80)) {
 -- 
 2.36.1
+
 

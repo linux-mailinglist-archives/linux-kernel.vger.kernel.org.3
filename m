@@ -2,93 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F5CB590617
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 19:46:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C8F0590626
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 20:00:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233756AbiHKRqj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 13:46:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58952 "EHLO
+        id S235063AbiHKSA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 14:00:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235193AbiHKRqg (ORCPT
+        with ESMTP id S229594AbiHKSAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 13:46:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DF77A025B;
-        Thu, 11 Aug 2022 10:46:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A87F161746;
-        Thu, 11 Aug 2022 17:46:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15A6EC4347C;
-        Thu, 11 Aug 2022 17:46:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660239995;
-        bh=ERpZlEJSnT2eqU2XoItuClL1ABvHKuD1I/5qTQERD9g=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=RBLDVeVA+dt+2L+u5iby39SqxlFaqE82Ch8xUqSvUOY5SvkKe9juEfwHAj/QmsYWI
-         5Fh363TEuu+p36FUmkpELZvX5i4EEWFzyxWyRpLR5/ONy9qaKdpCQYrb0dJlgvXFgA
-         iPyEjcFP0PL7AGP8jmV09luibvXZfXP2SEH/puyUuzIri9r79mh51savEToIpQNiXY
-         a0XSI6UYv1hzETkhrDc3ciZ4LdWWxvVVjjTGJwcYrIPadOELXd6K3hXQqyx/AaVSef
-         mIZuPN3y73PYa6ws5hhvUbBEKmgcu/NdHMa3HoXwzSsN+dWFe4G2aNZxKGCS7M5h5V
-         Wr0T5ZBA8Ff+A==
-Received: by mail-yb1-f181.google.com with SMTP id 7so29430682ybw.0;
-        Thu, 11 Aug 2022 10:46:35 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2hHVsv9P3/DtIDe9BynG/uf7qPykurRKFZ0XJtNsokMeJCZ7zV
-        FnSM56uZxPk8YVtn/HVZwMSPjEsbVMeRSeSNDeg=
-X-Google-Smtp-Source: AA6agR4ZCEdl4tiVg2UOwg7/4Gz0jhe16HiQ1xftAjdC5QyxW8bGm2zu3wSIiXdd14XUgyywP9FeO0UipMyOZjUntyk=
-X-Received: by 2002:a25:2d5b:0:b0:67d:e14:7daa with SMTP id
- s27-20020a252d5b000000b0067d0e147daamr350929ybe.561.1660239994038; Thu, 11
- Aug 2022 10:46:34 -0700 (PDT)
+        Thu, 11 Aug 2022 14:00:25 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2067.outbound.protection.outlook.com [40.107.244.67])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A5F14012
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 11:00:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=MLU90gOWCaG2FnDWxAD38p29tcPatiPg5qty4B+52TbNGKdfqJ+p2s61hEbvYWnT/lRECPvQW5sr56RyXvjanDv4/d/i8kiIFyBen7VqoW1n54t6RoY8r4oryujchsgWulk+M9zuVqiDk6Ori7GFF3Ag+eTabjoQX4uVn5tDISsNVsaoei7QV4/t4YNBkWICFRcnlIFcXGtGaFbjWByo/umIttIVB8JPVWJhnVXdL8CPQlWVr32cpUJLie2myY0rSTfIeqLrr82qhVRrHr9cyhmCRimD/PBE/9sU3VWVTWWwPcbJ8/zp34y6AqrabLVC+ip++pqmRWJcRu+2AcZnMA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=timqpckBfRhbWsGHEn42+tLc54XtQGdgMoFK2dCnqds=;
+ b=X85/LAn+lFru1aKwDYCkbekecqlDAAO4zynDFDwM+dlOdTvAKI9Ds/AqI7HU2bt1Yb/atdripPwlPj2siOUt70kKNPmjTOveFcvBApoWJSfYyuqVAMKx7CpMCwO7BUU3fs0QB1mPbhtz4v82tcVpGJT827QKS7dJmn/A4SwR+/6dtp+wv5L5RIsPuyYfQSEPBb5tfSb5JhQIf6Jo9QMzfUuvQhNffJ7/nBxVmHTwmGdil7gnW07YVpMcL2E7ZRIQR1zReSIAq395d7EOBN8qG0lAvIp00Winkocl/+brl+i4qp6pGe6hXOjbHBw8mFmicHX0S0uTZVZmmS9zFLJTHw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=timqpckBfRhbWsGHEn42+tLc54XtQGdgMoFK2dCnqds=;
+ b=DSohfxvZqozpUDFdbUGaLLSPSa4qzfO2r9SC/TFZXnvgDHh4ASWipyxNv+6slcLT2LSwXcNFZ+KdI39Twnk6M2z5fbE4LYhmwehSziWOYWmcacNRfAc0Zmk6BtSByNqgkDA3fKTniKcY7BdckJ+sb8IuXMI+ah/JQnNerT0ZwpU=
+Received: from BN0PR04CA0054.namprd04.prod.outlook.com (2603:10b6:408:e8::29)
+ by CH2PR12MB4053.namprd12.prod.outlook.com (2603:10b6:610:7c::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.16; Thu, 11 Aug
+ 2022 18:00:11 +0000
+Received: from BN8NAM11FT029.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:e8:cafe::1d) by BN0PR04CA0054.outlook.office365.com
+ (2603:10b6:408:e8::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.16 via Frontend
+ Transport; Thu, 11 Aug 2022 18:00:11 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BN8NAM11FT029.mail.protection.outlook.com (10.13.177.68) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5525.11 via Frontend Transport; Thu, 11 Aug 2022 18:00:10 +0000
+Received: from hamza-pc.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 11 Aug
+ 2022 13:00:09 -0500
+From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
+        Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        "Harry Wentland" <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        "Rodrigo Siqueira" <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        hersen wu <hersenxs.wu@amd.com>, Wayne Lin <Wayne.Lin@amd.com>,
+        Fangzhi Zuo <Jerry.Zuo@amd.com>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Roman Li <Roman.Li@amd.com>, <amd-gfx@lists.freedesktop.org>,
+        <dri-devel@lists.freedesktop.org>
+Subject: [PATCH v2] drm/amd/display: fix DSC related non-x86/PPC64 compilation issue
+Date:   Thu, 11 Aug 2022 13:57:58 -0400
+Message-ID: <20220811175759.1518840-1-hamza.mahfooz@amd.com>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <CADVatmN_TzJKdfM40BQPW=cRm5VxX=qAKxq2yW4P_xDN6=VoOA@mail.gmail.com>
+References: <CADVatmN_TzJKdfM40BQPW=cRm5VxX=qAKxq2yW4P_xDN6=VoOA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220811171417.147697-1-logang@deltatee.com> <20220811171417.147697-2-logang@deltatee.com>
-In-Reply-To: <20220811171417.147697-2-logang@deltatee.com>
-From:   Song Liu <song@kernel.org>
-Date:   Thu, 11 Aug 2022 10:46:22 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW66hmkAE=iWHt=F8PfFus_Q5_zB_nqPdZMKr=N2Ddfesg@mail.gmail.com>
-Message-ID: <CAPhsuW66hmkAE=iWHt=F8PfFus_Q5_zB_nqPdZMKr=N2Ddfesg@mail.gmail.com>
-Subject: Re: [PATCH 1/5] md: Flush workqueue md_rdev_misc_wq in md_alloc()
-To:     Logan Gunthorpe <logang@deltatee.com>
-Cc:     open list <linux-kernel@vger.kernel.org>,
-        linux-raid <linux-raid@vger.kernel.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Guoqing Jiang <guoqing.jiang@linux.dev>,
-        Stephen Bates <sbates@raithlin.com>,
-        Martin Oliveira <Martin.Oliveira@eideticom.com>,
-        David Sloan <David.Sloan@eideticom.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: d6b4697c-eefd-4c26-1423-08da7bc3558c
+X-MS-TrafficTypeDiagnostic: CH2PR12MB4053:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /cnmYBLMt1h29tUH9gFU/UHibwt6K/lI021ZNYhI/XKQCJVIH1di9jIHxzQCDd+yYk3NOQfRb8zfBRAGybCHdayn1lBwCxFbWd72eDhB4JKeeF6otOojpk4/Zza5O6yCNTJW760qgbTFEZgxFvQtkxoPDDP7yXFUMACh+VhvyUj/+hpZyN84WoPXFnh/Qwi75Iio/oepyqAPPhJw3ViIXtD52lekK4vgThNj2glgkF4CEjoSIMZAEBZ+bYSVWtx3lxtbdYD21Yp0qNrZN009j2rXv/SlQETnJr0zOjfxL8PPLtWv98u7ne1F2dqROooMnkSTWwbC16o4RpLMb9prlUeuOwj3TEJK1yohxOlaZTnMZ3cct7GraAFLDLeaC7tmP5XrKfSXc+QHky2Z7BoWQnyjInLQEkB7QbPrr67jeWHZihpMUIspbHnssfYBGEeIb1Nwob20NL6bq/FD6/0FbAdgvmewBX4g8TlY89WzXj/JFZK9ocuSnjZvnrHVlXVM57Q+qIQ2BzP7mlv5u9fnjISZDyWJtwG9ZPkorIdL9msk62+5/lWtCupToj0uOGQodvFSMaovyC06pnHGSrDf4+30dtF+JXtWzHmbQn3l5H80P+x/AWgda4ok04GqnaADooAt58waH7x4TdJjWsKwpAjAc5854k3SD2NEiFxB+RrjQ6eOoU/jUBTWWaeJioYhVvqYP9K+njsKBAy1xAQ9FttIQC2rjjZ6gGc2KbTl4dQA7jf58sX8u7SSlGwgoUPP59siesbQ2aWRXv7nOHONpK+068cPLVYC76EOBKyV5m212Q2XbEVp541SzgBjEzLEZGeMetFeAN+Z6JPkqcu33v2w8p3qGP0LgUgsOhcS5Rxh3bfIv/L20IE5ScMhJu/+
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(136003)(376002)(346002)(396003)(46966006)(40470700004)(36840700001)(36756003)(7696005)(478600001)(6666004)(86362001)(41300700001)(26005)(356005)(81166007)(2616005)(1076003)(47076005)(336012)(16526019)(186003)(426003)(83380400001)(82310400005)(40480700001)(70206006)(5660300002)(4326008)(8676002)(316002)(6916009)(70586007)(54906003)(36860700001)(82740400003)(44832011)(8936002)(2906002)(40460700003)(16060500005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Aug 2022 18:00:10.9491
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: d6b4697c-eefd-4c26-1423-08da7bc3558c
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT029.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4053
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 10:14 AM Logan Gunthorpe <logang@deltatee.com> wrote:
->
-> From: David Sloan <david.sloan@eideticom.com>
->
-> A race condition still exists when removing and re-creating md devices
-> in test cases. However, it is only seen on some setups.
->
-> The race condition was tracked down to a reference still being held
-> to the kobject by the rdev in the md_rdev_misc_wq which will be released
-> in rdev_delayed_delete().
->
-> md_alloc() waits for previous deletions by waiting on the md_misc_wq,
-> but the md_rdev_misc_wq may still be holding a reference to a recently
-> removed device.
->
-> To fix this, also flush the md_rdev_misc_wq in md_alloc().
->
-> Signed-off-by: David Sloan <david.sloan@eideticom.com>
-> [logang@deltatee.com: rewrote commit message]
-> Signed-off-by: Logan Gunthorpe <logang@deltatee.com>
+Need to protect DSC code with CONFIG_DRM_AMD_DC_DCN.
+Fixes the following build errors on arm64:
+ERROR: modpost: "dc_dsc_get_policy_for_timing" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+ERROR: modpost: "dc_dsc_compute_bandwidth_range" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
 
-Applied 1/5 to md-fixes.
+Fixes: 0087990a9f57 ("drm/amd/display: consider DSC pass-through during mode validation")
+Reported-by: Anders Roxell <anders.roxell@linaro.org>
+Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+---
+v2: Fix WERROR build failure by guarding unused variables
+---
+ .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c  | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-Thanks!
-Song
+diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+index ef6c94cd852b..ce6929224a6e 100644
+--- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
++++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
+@@ -1387,8 +1387,6 @@ bool pre_validate_dsc(struct drm_atomic_state *state,
+ 	return (ret == 0);
+ }
+ 
+-#endif
+-
+ static unsigned int kbps_from_pbn(unsigned int pbn)
+ {
+ 	unsigned int kbps = pbn;
+@@ -1416,17 +1414,19 @@ static bool is_dsc_common_config_possible(struct dc_stream_state *stream,
+ 
+ 	return bw_range->max_target_bpp_x16 && bw_range->min_target_bpp_x16;
+ }
++#endif /* CONFIG_DRM_AMD_DC_DCN */
+ 
+ enum dc_status dm_dp_mst_is_port_support_mode(
+ 	struct amdgpu_dm_connector *aconnector,
+ 	struct dc_stream_state *stream)
+ {
++	int bpp, pbn, branch_max_throughput_mps = 0;
++#if defined(CONFIG_DRM_AMD_DC_DCN)
+ 	struct dc_link_settings cur_link_settings;
+ 	unsigned int end_to_end_bw_in_kbps = 0;
+ 	unsigned int upper_link_bw_in_kbps = 0, down_link_bw_in_kbps = 0;
+ 	unsigned int max_compressed_bw_in_kbps = 0;
+ 	struct dc_dsc_bw_range bw_range = {0};
+-	int bpp, pbn, branch_max_throughput_mps = 0;
+ 
+ 	/*
+ 	 * check if the mode could be supported if DSC pass-through is supported
+@@ -1461,13 +1461,16 @@ enum dc_status dm_dp_mst_is_port_support_mode(
+ 			return DC_FAIL_BANDWIDTH_VALIDATE;
+ 		}
+ 	} else {
++#endif
+ 		/* check if mode could be supported within full_pbn */
+ 		bpp = convert_dc_color_depth_into_bpc(stream->timing.display_color_depth) * 3;
+ 		pbn = drm_dp_calc_pbn_mode(stream->timing.pix_clk_100hz / 10, bpp, false);
+ 
+ 		if (pbn > aconnector->port->full_pbn)
+ 			return DC_FAIL_BANDWIDTH_VALIDATE;
++#if defined(CONFIG_DRM_AMD_DC_DCN)
+ 	}
++#endif
+ 
+ 	/* check is mst dsc output bandwidth branch_overall_throughput_0_mps */
+ 	switch (stream->timing.pixel_encoding) {
+-- 
+2.37.1
+

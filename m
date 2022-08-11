@@ -2,41 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C2A158FA05
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 11:26:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF0BC58FA18
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 11:32:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234851AbiHKJ0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 05:26:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40656 "EHLO
+        id S234877AbiHKJb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 05:31:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234156AbiHKJ0x (ORCPT
+        with ESMTP id S232585AbiHKJbz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 05:26:53 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F0992F40;
-        Thu, 11 Aug 2022 02:26:49 -0700 (PDT)
-Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1oM4Si-0001SW-H1; Thu, 11 Aug 2022 11:26:44 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     Michael Riesch <michael.riesch@wolfvision.net>,
-        Quentin Schulz <foss+kernel@0leil.net>,
-        Quentin Schulz <quentin.schulz@theobroma-systems.com>
-Cc:     linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 1/1] pinctrl: rockchip: add support for per-pinmux io-domain dependency
-Date:   Thu, 11 Aug 2022 11:26:41 +0200
-Message-ID: <3152231.AJdgDx1Vlc@diego>
-In-Reply-To: <7353767b-0c38-a5a1-d3ac-3d9151140fb8@theobroma-systems.com>
-References: <20220802095252.2486591-1-foss+kernel@0leil.net> <9b965d86-9b76-77a1-658e-3675c2138414@wolfvision.net> <7353767b-0c38-a5a1-d3ac-3d9151140fb8@theobroma-systems.com>
+        Thu, 11 Aug 2022 05:31:55 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89EE190194
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 02:31:54 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 35F335C70F;
+        Thu, 11 Aug 2022 09:31:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1660210313; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rF+k9eDGRl2XR235Pzqvbau2Y08myECs6AhHVzgotHk=;
+        b=pq4UUdvCLhg6OSuHcnu72zbjUvF/b4QH0OAx+OVxfk/M5Rwn2gmm9V1IxPqtFEOW71aU7W
+        MTs9ZmmcZQAqBDsC1qLOovfsLWngc3opHyq69o6a+R5kcz1B2O9i5VlKWkFJl8N1utFaHJ
+        EW7u5H/stPeGYRVN0vrKMRW5EUJlm6o=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1660210313;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=rF+k9eDGRl2XR235Pzqvbau2Y08myECs6AhHVzgotHk=;
+        b=egvmLY85DU+veppAAo4BvoyC0Xiw+Vi3FIj+oi/gB1eCRAMyEse508mcsX4OCGpKP3Ohp1
+        fa21THKDPRn1kZBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F01821342A;
+        Thu, 11 Aug 2022 09:31:52 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id /f3ZOYjM9GJacAAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Thu, 11 Aug 2022 09:31:52 +0000
+Message-ID: <d3cd0f34-b30b-9a1d-8715-439ffb818539@suse.cz>
+Date:   Thu, 11 Aug 2022 11:31:52 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+From:   vbabka@suse.cz
+Subject: Re: [PATCH v2] Introduce sysfs interface to disable kfence for
+ selected slabs.
+Content-Language: en-US
+To:     Imran Khan <imran.f.khan@oracle.com>, glider@google.com,
+        elver@google.com, dvyukov@google.com, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        akpm@linux-foundation.org, roman.gushchin@linux.dev,
+        42.hyeyoo@gmail.com
+Cc:     linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+        linux-mm@kvack.org
+References: <20220811085938.2506536-1-imran.f.khan@oracle.com>
+In-Reply-To: <20220811085938.2506536-1-imran.f.khan@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -44,193 +79,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 8/11/22 10:59, Imran Khan wrote:
+> By default kfence allocation can happen for any slab object, whose size
+> is up to PAGE_SIZE, as long as that allocation is the first allocation
+> after expiration of kfence sample interval. But in certain debugging
+> scenarios we may be interested in debugging corruptions involving
+> some specific slub objects like dentry or ext4_* etc. In such cases
+> limiting kfence for allocations involving only specific slub objects
+> will increase the probablity of catching the issue since kfence pool
+> will not be consumed by other slab objects.
 
-Am Donnerstag, 11. August 2022, 10:45:07 CEST schrieb Quentin Schulz:
-> Hi Michael,
+So you want to enable specific caches for kfence.
+
+> This patch introduces a sysfs interface '/sys/kernel/slab/<name>/skip_kfence'
+> to disable kfence for specific slabs. Having the interface work in this
+> way does not impact current/default behavior of kfence and allows us to
+> use kfence for specific slabs (when needed) as well. The decision to
+> skip/use kfence is taken depending on whether kmem_cache.flags has
+> (newly introduced) SLAB_SKIP_KFENCE flag set or not.
+
+But this seems everything is still enabled and you can selectively disable.
+Isn't that rather impractical?
+
+How about making this cache flag rather denote that KFENCE is enabled (not
+skipped), set it by default only for for caches with size <= 1024, then you
+can drop the size check in __kfence_alloc and rely only on the flag? And if
+you need, you can also enable a cache with size > 1024 with the sysfs
+interface, to override the limit, which isn't possible now.
+(I don't think changing the limit to always act on s->object_size instead of
+e.g. size passed to kmalloc() that it can pick up now, will change anything
+in practice)
+Then you can also have a kernel boot param that tells kfence to set the flag
+on no cache at all, and you can easily enable just the specific caches you
+want. Or make a parameter that lets you override the 1024 size limit
+globally, and if you set it to 0, it means no cache is enabled for kfence?
+
+> Signed-off-by: Imran Khan <imran.f.khan@oracle.com>
+> ---
 > 
-> On 8/11/22 09:52, Michael Riesch wrote:
-> > Hi Quentin,
-> > 
-> > Thank you for your efforts! This will solve several issues that are
-> > bound to pop up if a board deviates from the Rockchip reference design.
-
-I find this approach quite nice. io-domains in their core specify pin
-voltages, so having the tie in the pinctrl space makes a lot of sense.
-
-
-> >> There already exists an IO domain driver for Rockchip SoCs[1]. This
-> >> driver allows to explicit the relationship between the external power
-> > 
-> > ...allows to model explicitly...?
-> > 
-> >> supplies and IO domains[2]. This makes sure the regulators are enabled
-> >> by the Linux kernel so the IO domains are supplied with power and
-> >> correctly configured as per the supplied voltage.
-> >> This driver is a regulator consumer and does not offer any other
-> >> interface for device dependency.
-> >>
-> >> However, IO pins belonging to an IO domain need to have this IO domain
-> >> correctly configured before they are being used otherwise they do not
-> >> operate correctly (in our case, a pin configured as output clock was
-> >> oscillating between 0 and 150mV instead of the expected 1V8).
-> >>
-> >> In order to make this dependency transparent to the consumer of those
-> >> pins and not add Rockchip-specific code to third party drivers (a camera
-> >> driver in our case), it is hooked into the pinctrl driver which is
-> >> Rockchip-specific obviously.
-> > 
-> > This approach seems reasonable. But just for my understanding: Does this
-> > mean we need to edit e.g. rk3568-pinctrl.dtsi, iterate over all entries,
-> > and add rockchip,iodomains = <&corresponding_io_domain>;?
-> > 
+> Changes since v1:
+>  - Remove RFC tag
 > 
-> That would have been my hope yes, but it is not possible for one of the 
-> boards we have based on PX30.
+>  include/linux/slab.h |  6 ++++++
+>  mm/kfence/core.c     |  7 +++++++
+>  mm/slub.c            | 27 +++++++++++++++++++++++++++
+>  3 files changed, 40 insertions(+)
 > 
-> All pinmux listed in the px30.dtsi today belong to an IO domain. This 
-> includes the I2C pins for the bus on which the PMIC is.
-> Adding the rockchip,io-domains on each pinctrl will create the following 
-> circular dependency:
-> pinctrl depends on the io-domain device which depends on
-> regulators from a PMIC on i2c which requires the i2c bus pins to be
-> muxed from the pinctrl
+> diff --git a/include/linux/slab.h b/include/linux/slab.h
+> index 0fefdf528e0d..947d912fd08c 100644
+> --- a/include/linux/slab.h
+> +++ b/include/linux/slab.h
+> @@ -119,6 +119,12 @@
+>   */
+>  #define SLAB_NO_USER_FLAGS	((slab_flags_t __force)0x10000000U)
+>  
+> +#ifdef CONFIG_KFENCE
+> +#define SLAB_SKIP_KFENCE            ((slab_flags_t __force)0x20000000U)
+> +#else
+> +#define SLAB_SKIP_KFENCE            0
+> +#endif
+> +
+>  /* The following flags affect the page allocator grouping pages by mobility */
+>  /* Objects are reclaimable */
+>  #define SLAB_RECLAIM_ACCOUNT	((slab_flags_t __force)0x00020000U)
+> diff --git a/mm/kfence/core.c b/mm/kfence/core.c
+> index c252081b11df..8c08ae2101d7 100644
+> --- a/mm/kfence/core.c
+> +++ b/mm/kfence/core.c
+> @@ -1003,6 +1003,13 @@ void *__kfence_alloc(struct kmem_cache *s, size_t size, gfp_t flags)
+>  		return NULL;
+>  	}
+>  
+> +	/*
+> +	 * Skip allocations for this slab, if KFENCE has been disabled for
+> +	 * this slab.
+> +	 */
+> +	if (s->flags & SLAB_SKIP_KFENCE)
+> +		return NULL;
+> +
+>  	if (atomic_inc_return(&kfence_allocation_gate) > 1)
+>  		return NULL;
+>  #ifdef CONFIG_KFENCE_STATIC_KEYS
+> diff --git a/mm/slub.c b/mm/slub.c
+> index 862dbd9af4f5..ee8b48327536 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -5745,6 +5745,30 @@ STAT_ATTR(CPU_PARTIAL_NODE, cpu_partial_node);
+>  STAT_ATTR(CPU_PARTIAL_DRAIN, cpu_partial_drain);
+>  #endif	/* CONFIG_SLUB_STATS */
+>  
+> +#ifdef CONFIG_KFENCE
+> +static ssize_t skip_kfence_show(struct kmem_cache *s, char *buf)
+> +{
+> +	return sysfs_emit(buf, "%d\n", !!(s->flags & SLAB_SKIP_KFENCE));
+> +}
+> +
+> +static ssize_t skip_kfence_store(struct kmem_cache *s,
+> +			const char *buf, size_t length)
+> +{
+> +	int ret = length;
+> +
+> +	if (buf[0] == '0')
+> +		s->flags &= ~SLAB_SKIP_KFENCE;
+> +	else if (buf[0] == '1')
+> +		s->flags |= SLAB_SKIP_KFENCE;
+> +	else
+> +		ret = -EINVAL;
+> +
+> +	return ret;
+> +}
+> +SLAB_ATTR(skip_kfence);
+> +
+> +#endif
+> +
+>  static struct attribute *slab_attrs[] = {
+>  	&slab_size_attr.attr,
+>  	&object_size_attr.attr,
+> @@ -5812,6 +5836,9 @@ static struct attribute *slab_attrs[] = {
+>  	&failslab_attr.attr,
+>  #endif
+>  	&usersize_attr.attr,
+> +#ifdef CONFIG_KFENCE
+> +	&skip_kfence_attr.attr,
+> +#endif
+>  
+>  	NULL
+>  };
 > 
-> Since the PMIC powering the IO domains can virtually be on any I2C bus, 
-> we cannot add it to the main SoC.dtsi, it'll need to be added per board 
-> sadly.
-
-though you could also add the main props to the dtsi and use a per-board
-/delete-property/ to free up the pmic-i2c, same result but less duplicate
-dt additions and less clutter.
-
-
-> >> diff --git a/drivers/pinctrl/pinctrl-rockchip.c b/drivers/pinctrl/pinctrl-rockchip.c
-> >> index 32e41395fc76..c3c2801237b5 100644
-> >> --- a/drivers/pinctrl/pinctrl-rockchip.c
-> >> +++ b/drivers/pinctrl/pinctrl-rockchip.c
-> >> @@ -24,6 +24,8 @@
-> >>   #include <linux/of_address.h>
-> >>   #include <linux/of_device.h>
-> >>   #include <linux/of_irq.h>
-> >> +#include <linux/of_platform.h>
-> >> +#include <linux/platform_device.h>
-> >>   #include <linux/pinctrl/machine.h>
-> >>   #include <linux/pinctrl/pinconf.h>
-> >>   #include <linux/pinctrl/pinctrl.h>
-> >> @@ -2370,6 +2372,12 @@ static int rockchip_pmx_set(struct pinctrl_dev *pctldev, unsigned selector,
-> >>   	dev_dbg(dev, "enable function %s group %s\n",
-> >>   		info->functions[selector].name, info->groups[group].name);
-> >>   
-> >> +	if (info->groups[group].io_domain &&
-> >> +	    !platform_get_drvdata(info->groups[group].io_domain)) {
-> >> +		dev_err(info->dev, "IO domain device is required but not probed yet, deferring...");
-> > 
-> > Probably this has been left in there for debugging, but should be
-> > removed to avoid spamming dmesg. IIUC this condition could occur several
-> > times.
-> > 
-> 
-> Considering that the deferred probing mechanism is to retry the 
-> to-be-deferred device after all other devices have been tried, it is 
-> very likely to not spam dmesg.
-> 
-> We could remove it though, no strong opinion on this.
-
-just move it to use dev_dbg and everybody is happy :-) .
-
-
-> >> @@ -2684,6 +2693,16 @@ static int rockchip_pinctrl_parse_groups(struct device_node *np,
-> >>   	if (!size || size % 4)
-> >>   		return dev_err_probe(dev, -EINVAL, "wrong pins number or pins and configs should be by 4\n");
-> >>   
-> >> +	node = of_parse_phandle(np, "rockchip,io-domains", 0);
-> >> +	if (node) {
-> >> +		grp->io_domain = of_find_device_by_node(node);
-> >> +		of_node_put(node);
-> >> +		if (!grp->io_domain) {
-> >> +			dev_err(info->dev, "couldn't find IO domain device\n");
-> >> +			return -ENODEV;
-> > 
-> > Again just for my understanding: The property is optional in order to
-> > provide compatibility with older device trees, right?
-> > 
-> 
-> Of course (at least that's the intent). If it is omitted, 
-> of_parse_phandle will return NULL and we'll not be executing this part 
-> of the code. However, if one phandle is provided and the device does not 
-> actually exist (IIUC, the phandle points to a DT-valid node but the 
-> device pointed at by the phandle is either disabled or its driver is not 
-> built). That being said, I don't know how this would work with an IO 
-> domain driver built as a module. That would be a pretty dumb thing to do 
-> though.
-
-I think this should work even with io-domain "disabled" or as module
-when slightly modified.
-
-I.e. for disabled nodes, no kernel-device should be created
-(grp->io_domain will be NULL) and for a module the device itself is created
-when the dt is parsed (of_populate...) and will just not have probed yet.
-
-Together with the comment farther above of having the io-domain link always
-present we should get rid of the error condition though :-) .
-
-
-
-Hmm, while going through this one thought was, do we want more verbosity
-in the dt for this?
-
-I.e. with the current approach we'll have
-
-&io_domains {
-	status = "okay";
-
-	audio-supply = <&pp1800_audio>;
-	bt656-supply = <&pp1800_ap_io>;
-	gpio1830-supply = <&pp3000_ap>;
-	sdmmc-supply = <&ppvar_sd_card_io>;
-};
-
-and pinctrl entries linking to the core <&io_domains> node. This might bite
-us down the road again in some form.
-
-Something like doing an optional updated binding like:
-
-&io_domains {
-	status = "okay";
-
-	audio-domain {
-		domain-supply = <&pp1800_audio>;
-	};
-	bt656-domain {
-		domain-supply = <&pp1800_ap_io>;
-	};
-	gpio1830-domain {
-		domain-supply = <&pp3000_ap>;
-	};
-	sdmmc-domain {
-		domain-supply = <&ppvar_sd_card_io>;
-	};
-};
-
-       pcie {
-               pcie_ep_gpio: pci-ep-gpio {
-                       rockchip,pins =
-                               <4 RK_PC6 RK_FUNC_GPIO &pcfg_pull_none>;
-                       rockchip,io-domains = <&gpio1830_domain>;
-               };
-       };
-
-
-I.e. linking the pin-set to a definition of its actual io-domain, instead
-of only the general io-domain node. Somewhat similar to power-domains.
-
-The code itself could be the same as now (except needing to get the parent
-of the linked node for the io-domains), but would leave us the option of
-modifying code behaviour without touching the binding if needed down the
-road.
-
-
-Heiko
-
+> base-commit: 40d43a7507e1547dd45cb02af2e40d897c591870
 

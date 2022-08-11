@@ -2,83 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97CDA58F902
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 10:27:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DC4A58F909
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 10:27:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234468AbiHKI1A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 04:27:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33026 "EHLO
+        id S234488AbiHKI1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 04:27:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234458AbiHKI05 (ORCPT
+        with ESMTP id S234481AbiHKI1n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 04:26:57 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3828790813
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:26:56 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id u6so13221392ljk.8
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:26:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=aFp18g3W0LGsukVneJEK/1E3oiiot3UTXvd9sFAT8nw=;
-        b=FqWcBq881TMTPntLfTmspF/MO4q8vssSHi7sEwMMId7K8gaHZO7iDS19GycjfK/9eX
-         cFkAyPoL+ZxgFs9dY8+KnKf6KghP2eQzh3/5e6CQ/yNuLXuxNR9SPKZrpjiyncVvDb3O
-         XXeumafKovUw/dYZQxYK5tO0Uaaw87e+2IHMLlXkYC2LEPH0U3H7RPvoAztqsE04Q7FO
-         Mf+k14XGfUr4CH3epxKAHe8GlAmmds9FGDbUI0nJLOb1IsNlO9dOjdxiEQQeUqdAQup0
-         8VNiPpAsjtTUvBYLnnqxgnUTB3eLW0jqoT030lVtBRxB3+Ebqa1AV3PA1it84KPPmRUC
-         l0Gg==
+        Thu, 11 Aug 2022 04:27:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3B51490819
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:27:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660206461;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fRCed6nnEDFTJS61x3dawnYdkP8v3FkULNF0fZ1BK3g=;
+        b=BKCCDC4v+T7/wizwn/5rKrvE5nI9x0VKsvi/ET4ftdk/liUaUuoDFASYwOQ9ciBIKjswGK
+        H+ySb4xs1EN5u58DB+mK4KIuIjSXh6NWJ0ikTb/91pyayfmLhkLTxugH8cdoUfaYKhdo+l
+        XTHT5bxXwKp7CDC9biKqpIoSvUgUlps=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-505-mbBbb-4yOi2FlGmMBMTwZA-1; Thu, 11 Aug 2022 04:27:40 -0400
+X-MC-Unique: mbBbb-4yOi2FlGmMBMTwZA-1
+Received: by mail-wm1-f70.google.com with SMTP id c17-20020a7bc011000000b003a2bfaf8d3dso8436818wmb.0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:27:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc;
-        bh=aFp18g3W0LGsukVneJEK/1E3oiiot3UTXvd9sFAT8nw=;
-        b=ldV/ilJ8vVzUO78n5w+rOslsaVIFq5bnJgPHodhlI0du7CMFwdDwmVHX8vOasMH3JD
-         ycl9SUYcPGysoV3qUjLVbaH23WmOP2GBsrRVvDTNiUnVaYjol7sX6/+T5HLWRQTnAfEu
-         kdG8ja1kcIiBx8bk6leYXgrwqPb2UEe3BSroJ97bmV2eFWlRXLkTZ3QQc+LZXcl+ZIig
-         6SxWoNf1FsBiqQ0KGb1+yJLulAHyi0nKRB4SGuhfkWXKHEU+HvtxSgNiA+NbapyuYeB1
-         5nkIyep5OraTOxkRjKGTlpiwzFHKpk0STwmFMteFBCcaFoiQYYnUH2y7/XnUvWTVzVVG
-         Fu6g==
-X-Gm-Message-State: ACgBeo10gR2Gben9Q3p+luiJAxXKQnIE1Ux5d4sYyp8bPV+rsyV8vTSj
-        /3bOUsBQubyh89oqyUuqla/Pfg==
-X-Google-Smtp-Source: AA6agR7WKZFo0Gd0CrwW+kQqeYyEuLnmEdTMd3As+yvfv/ebcpxDY62N1UnBLOwwuNPgfwQgBjnxwg==
-X-Received: by 2002:a05:651c:154b:b0:25e:c73d:a786 with SMTP id y11-20020a05651c154b00b0025ec73da786mr7507173ljp.397.1660206414645;
-        Thu, 11 Aug 2022 01:26:54 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id t5-20020a05651c204500b0025e08d58e75sm720412ljo.133.2022.08.11.01.26.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Aug 2022 01:26:54 -0700 (PDT)
-Message-ID: <1cbb9946-2171-46ee-be6d-84b914ecc47f@linaro.org>
-Date:   Thu, 11 Aug 2022 11:26:52 +0300
+        bh=fRCed6nnEDFTJS61x3dawnYdkP8v3FkULNF0fZ1BK3g=;
+        b=kAHXQ8A11HcBdXpV/LF3nkqnIke9S9mNnJTYSJdDM83KdGrlmTw3FuKOVAiADJrk2P
+         gKYscPukmKaz25vWC82EER0Hp83VS6kb5ppou+OGFgzpi6tvHlonzFojIr6DxI+mSDCW
+         tclpt0PXltViFoAGunkImEnrbxqFzUXx+//4m03SHvpD4VIGpADwVifgeGC+uJZpDd4L
+         0XVfpB/1daB0rz4fei3xAhacaQLYojKNXlTXwRMlBC0JXdBiqAFMkzZ4ZBNigT9Tl05f
+         5WntuYBslAC/J7jYb7vyMERrIGZS7aVTqCprhjxpeiaMOQ9fwM9Zqubs35N1aEassXoT
+         dgEA==
+X-Gm-Message-State: ACgBeo10+TB+P2uV+V69nOslqnqUIpARnFQyuSNf5XuAgxd/UE8FjW8Y
+        25rTD/14SUSpZulgQguUDWbO8QXvKX84VE7kH3OXQf+vtYfLZlrelFALkxDahmpMQqAFlXV0/aK
+        SBHnAL1nAtzgocQ8Zn27Lqb3S
+X-Received: by 2002:a1c:a3c4:0:b0:3a5:512f:717a with SMTP id m187-20020a1ca3c4000000b003a5512f717amr4823111wme.192.1660206458820;
+        Thu, 11 Aug 2022 01:27:38 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5sw3H77GbQvlSeiH8m701pegTIDjU8UzoPnZf53/Xhmt7IzjB7QDado1bpqhPaIYYSo6lqUw==
+X-Received: by 2002:a1c:a3c4:0:b0:3a5:512f:717a with SMTP id m187-20020a1ca3c4000000b003a5512f717amr4823072wme.192.1660206458571;
+        Thu, 11 Aug 2022 01:27:38 -0700 (PDT)
+Received: from redhat.com ([2.52.152.113])
+        by smtp.gmail.com with ESMTPSA id m7-20020a056000008700b00222ed7ea203sm8822453wrx.100.2022.08.11.01.27.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Aug 2022 01:27:37 -0700 (PDT)
+Date:   Thu, 11 Aug 2022 04:27:32 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jason Wang <jasowang@redhat.com>,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        dinang@xilinx.com, martinpo@xilinx.com,
+        Wu Zongyong <wuzongyong@linux.alibaba.com>,
+        Piotr.Uminski@intel.com, gautam.dawar@amd.com,
+        ecree.xilinx@gmail.com, martinh@xilinx.com,
+        Stefano Garzarella <sgarzare@redhat.com>, pabloc@xilinx.com,
+        habetsm.xilinx@gmail.com, lvivier@redhat.com,
+        Zhu Lingshan <lingshan.zhu@intel.com>, tanuj.kamde@amd.com,
+        Longpeng <longpeng2@huawei.com>, lulu@redhat.com,
+        hanand@xilinx.com, Parav Pandit <parav@nvidia.com>,
+        Si-Wei Liu <si-wei.liu@oracle.com>,
+        Eli Cohen <elic@nvidia.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        Zhang Min <zhang.min9@zte.com.cn>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH v7 1/4] vdpa: Add suspend operation
+Message-ID: <20220811042717-mutt-send-email-mst@kernel.org>
+References: <20220810171512.2343333-1-eperezma@redhat.com>
+ <20220810171512.2343333-2-eperezma@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 1/3] dt-bindings: display/msm: Add binding for SC8280XP
- MDSS
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220811040121.3775613-1-bjorn.andersson@linaro.org>
- <20220811040121.3775613-2-bjorn.andersson@linaro.org>
- <db9b74f9-1f65-5b88-1c81-0a3fd6dcf9a6@linaro.org>
- <74afb676-4a85-7a8e-f7ea-20d8a0967d7d@linaro.org>
-In-Reply-To: <74afb676-4a85-7a8e-f7ea-20d8a0967d7d@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220810171512.2343333-2-eperezma@redhat.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,18 +96,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/08/2022 11:04, Krzysztof Kozlowski wrote:
->>
->> additionalProperties:false on this level
->>
->> which will point to missing properties (e.g. opp-table)
+On Wed, Aug 10, 2022 at 07:15:09PM +0200, Eugenio Pérez wrote:
+> This operation is optional: It it's not implemented, backend feature bit
+> will not be exposed.
 > 
-> I'll fix existing bindings which have similar issue.
+> Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
+> Message-Id: <20220623160738.632852-2-eperezma@redhat.com>
+> Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
 
-Hm, I think Dmitry is already working on this:
-https://lore.kernel.org/all/20220710090040.35193-5-dmitry.baryshkov@linaro.org/
-so your patches should be on top of his.
+What is this message id doing here?
 
+> ---
+>  include/linux/vdpa.h | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/include/linux/vdpa.h b/include/linux/vdpa.h
+> index 7b4a13d3bd91..d282f464d2f1 100644
+> --- a/include/linux/vdpa.h
+> +++ b/include/linux/vdpa.h
+> @@ -218,6 +218,9 @@ struct vdpa_map_file {
+>   * @reset:			Reset device
+>   *				@vdev: vdpa device
+>   *				Returns integer: success (0) or error (< 0)
+> + * @suspend:			Suspend or resume the device (optional)
+> + *				@vdev: vdpa device
+> + *				Returns integer: success (0) or error (< 0)
+>   * @get_config_size:		Get the size of the configuration space includes
+>   *				fields that are conditional on feature bits.
+>   *				@vdev: vdpa device
+> @@ -319,6 +322,7 @@ struct vdpa_config_ops {
+>  	u8 (*get_status)(struct vdpa_device *vdev);
+>  	void (*set_status)(struct vdpa_device *vdev, u8 status);
+>  	int (*reset)(struct vdpa_device *vdev);
+> +	int (*suspend)(struct vdpa_device *vdev);
+>  	size_t (*get_config_size)(struct vdpa_device *vdev);
+>  	void (*get_config)(struct vdpa_device *vdev, unsigned int offset,
+>  			   void *buf, unsigned int len);
+> -- 
+> 2.31.1
 
-Best regards,
-Krzysztof

@@ -2,159 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4035E58FD32
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 15:16:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C53558FD53
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 15:22:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235081AbiHKNQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 09:16:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57414 "EHLO
+        id S235547AbiHKNWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 09:22:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234394AbiHKNQK (ORCPT
+        with ESMTP id S235108AbiHKNWf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 09:16:10 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA03C5A3E8
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 06:16:09 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27BCJet5012200;
-        Thu, 11 Aug 2022 13:16:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-type; s=qcppdkim1;
- bh=ZSJevoEo0/gXYnJN6XjQELpSgkgJvag66N3XNH5+np8=;
- b=eNrvVSmPJjnMAjj6NcoM8JOJP+Gp+Wj+Clh6KsQBZimzXS480vBqwAzEu6YfV4jfsCDz
- HA0HKHnaX4DZmL6OwXKaIkDhQ3nswadjNQi04XIq6L6k4fjgEY45V1paW8psICmBw3IS
- JCcCgoDRiAXtZxZ/Ypfc+8gTHHNhpLW79ju28ldKqPwgItaC2uq6omIQAJTAf2G1pyy7
- qUCG3VTUUHX63RSnbdoRKU3+CHSm7AsS/r25E7flC7qXnjEgggvRKQBvoePhTLBqFTSK
- inrowKTTLgTw7gxj1sEpmAJpBeaT357eP9kFZEFcJ3o6+AxzbhTMXWMoXtj1ZPqYz2a6 PQ== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3huwr8x45a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 Aug 2022 13:16:01 +0000
-Received: from pps.filterd (NALASPPMTA03.qualcomm.com [127.0.0.1])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 27BDG0nt028457;
-        Thu, 11 Aug 2022 13:16:00 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 3hshck9bbe-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 Aug 2022 13:16:00 +0000
-Received: from NALASPPMTA03.qualcomm.com (NALASPPMTA03.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27BDFDVH028134;
-        Thu, 11 Aug 2022 13:16:00 GMT
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 27BDG0aV028451
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 Aug 2022 13:16:00 +0000
-Received: from hu-charante-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 11 Aug 2022 06:15:56 -0700
-From:   Charan Teja Kalla <quic_charante@quicinc.com>
-To:     <akpm@linux-foundation.org>, <david@redhat.com>, <vbabka@suse.cz>,
-        <quic_pkondeti@quicinc.com>, <minchan@kernel.org>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Charan Teja Kalla <quic_charante@quicinc.com>
-Subject: [PATCH V2] mm/cma_debug: show complete cma name in debugfs directories
-Date:   Thu, 11 Aug 2022 18:45:29 +0530
-Message-ID: <1660223729-22461-1-git-send-email-quic_charante@quicinc.com>
-X-Mailer: git-send-email 2.7.4
+        Thu, 11 Aug 2022 09:22:35 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1864816AE;
+        Thu, 11 Aug 2022 06:22:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660224153; x=1691760153;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=TXGp2l7srz7CG/35HC62yaH3SzOuZ/KTY0IN1dEpGAI=;
+  b=T5Vzi5QzJt1rxP32GUX/mrs4MWVVTlwuxjMi9Y89Am1NkOMIJGTnmTNd
+   Zdg6TTt9BernHTVXvKdFu70eG2bDgOCyY2Tj7pJqxNSBByrt4YQuF1DVh
+   ySRvMMo6Bqi+PwOJXo7qFkt5EZjjljg1mMZ+4DyR5NxOPWuVZ3vmWA90X
+   L2+DuVmzXchnKnjwWqaCWWg+M0nfRWTXBNSMoHgoSYhOU7qUQeUr1XeCs
+   0Mz38l6tm5lLClygUQcHARxAM0uo6S45FtDw0Zaf0syOJvBHvIxgh3eHU
+   qIR8fakSdWch+/EOw1YROjUJuDqi1vAnIEBsIraZu7CQtL4STibM3njJg
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="292602176"
+X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
+   d="scan'208";a="292602176"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 06:22:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
+   d="scan'208";a="608920719"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by fmsmga007.fm.intel.com with ESMTP; 11 Aug 2022 06:22:23 -0700
+Date:   Thu, 11 Aug 2022 21:17:38 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: Re: [PATCH v7 05/14] mm/memfd: Introduce MFD_INACCESSIBLE flag
+Message-ID: <20220811131738.GA916119@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
+ <20220706082016.2603916-6-chao.p.peng@linux.intel.com>
+ <203c752f-9439-b5ae-056c-27b2631dcb81@redhat.com>
+ <20220810093741.GE862421@chaop.bj.intel.com>
+ <64ab9678-c72d-b6d9-8532-346cc9c06814@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: vs4fy44rX8cWr3rocS8MD_j03MkYzMnG
-X-Proofpoint-ORIG-GUID: vs4fy44rX8cWr3rocS8MD_j03MkYzMnG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-11_10,2022-08-11_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- impostorscore=0 adultscore=0 suspectscore=0 spamscore=0 clxscore=1015
- priorityscore=1501 mlxscore=0 phishscore=0 mlxlogscore=482 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208110042
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <64ab9678-c72d-b6d9-8532-346cc9c06814@redhat.com>
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently only 12 characters of the cma name is being used as the debug
-directories where as the cma name can be of length CMA_MAX_NAME(=64)
-characters. One side problem with this is having 2 cma's with first
-common 12 characters would end up in trying to create directories with
-same name and fails with -EEXIST thus can limit cma debug functionality.
+On Wed, Aug 10, 2022 at 11:55:19AM +0200, David Hildenbrand wrote:
+> On 10.08.22 11:37, Chao Peng wrote:
+> > On Fri, Aug 05, 2022 at 03:28:50PM +0200, David Hildenbrand wrote:
+> >> On 06.07.22 10:20, Chao Peng wrote:
+> >>> Introduce a new memfd_create() flag indicating the content of the
+> >>> created memfd is inaccessible from userspace through ordinary MMU
+> >>> access (e.g., read/write/mmap). However, the file content can be
+> >>> accessed via a different mechanism (e.g. KVM MMU) indirectly.
+> >>>
+> >>> It provides semantics required for KVM guest private memory support
+> >>> that a file descriptor with this flag set is going to be used as the
+> >>> source of guest memory in confidential computing environments such
+> >>> as Intel TDX/AMD SEV but may not be accessible from host userspace.
+> >>>
+> >>> The flag can not coexist with MFD_ALLOW_SEALING, future sealing is
+> >>> also impossible for a memfd created with this flag.
+> >>
+> >> It's kind of weird to have it that way. Why should the user have to
+> >> care? It's the notifier requirement to have that, no?
+> >>
+> >> Why can't we handle that when register a notifier? If anything is
+> >> already mapped, fail registering the notifier if the notifier has these
+> >> demands. If registering succeeds, block it internally.
+> >>
+> >> Or what am I missing? We might not need the memfile set flag semantics
+> >> eventually and would not have to expose such a flag to user space.
+> > 
+> > This makes sense if doable. The major concern was: is there a reliable
+> > way to detect this (already mapped) at the time of memslot registering.
+> 
+> If too complicated, we could simplify to "was this ever mapped" and fail
+> for now. Hooking into shmem_mmap() might be sufficient for that to get
+> notified about the first mmap.
+> 
+> As an alternative, mapping_mapped() or similar *might* do what we want.
 
-The 'cma-' prefix is used initially where cma areas don't have any names
-and are represented by simple integer values. Since now each cma would
-be having its own name, drop 'cma-' prefix for the cma debug directories
-as they are clearly evident that they are for cma debug through creating
-them in /sys/kernel/debug/cma/ path.
+mapping_mapped() sounds the right one, I remember SEV people want first
+map then unmap. "was this ever mapped" may not work for them.
 
-Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
----
-V2:
- o Updated the cma_debugfs.rst documentation.
-Vl:
- o https://lore.kernel.org/all/1660152485-17684-1-git-send-email-quic_charante@quicinc.com/
-
- Documentation/admin-guide/mm/cma_debugfs.rst | 10 +++++-----
- mm/cma_debug.c                               |  5 +----
- 2 files changed, 6 insertions(+), 9 deletions(-)
-
-diff --git a/Documentation/admin-guide/mm/cma_debugfs.rst b/Documentation/admin-guide/mm/cma_debugfs.rst
-index 4e06ffa..7367e62 100644
---- a/Documentation/admin-guide/mm/cma_debugfs.rst
-+++ b/Documentation/admin-guide/mm/cma_debugfs.rst
-@@ -5,10 +5,10 @@ CMA Debugfs Interface
- The CMA debugfs interface is useful to retrieve basic information out of the
- different CMA areas and to test allocation/release in each of the areas.
- 
--Each CMA zone represents a directory under <debugfs>/cma/, indexed by the
--kernel's CMA index. So the first CMA zone would be:
-+Each CMA area represents a directory under <debugfs>/cma/, represented by
-+its CMA name like below:
- 
--	<debugfs>/cma/cma-0
-+	<debugfs>/cma/<cma_name>
- 
- The structure of the files created under that directory is as follows:
- 
-@@ -18,8 +18,8 @@ The structure of the files created under that directory is as follows:
-  - [RO] bitmap: The bitmap of page states in the zone.
-  - [WO] alloc: Allocate N pages from that CMA area. For example::
- 
--	echo 5 > <debugfs>/cma/cma-2/alloc
-+	echo 5 > <debugfs>/cma/<cma_name>/alloc
- 
--would try to allocate 5 pages from the cma-2 area.
-+would try to allocate 5 pages from the 'cma_name' area.
- 
-  - [WO] free: Free N pages from that CMA area, similar to the above.
-diff --git a/mm/cma_debug.c b/mm/cma_debug.c
-index 2e77049..602fff8 100644
---- a/mm/cma_debug.c
-+++ b/mm/cma_debug.c
-@@ -163,11 +163,8 @@ DEFINE_DEBUGFS_ATTRIBUTE(cma_alloc_fops, NULL, cma_alloc_write, "%llu\n");
- static void cma_debugfs_add_one(struct cma *cma, struct dentry *root_dentry)
- {
- 	struct dentry *tmp;
--	char name[16];
- 
--	scnprintf(name, sizeof(name), "cma-%s", cma->name);
--
--	tmp = debugfs_create_dir(name, root_dentry);
-+	tmp = debugfs_create_dir(cma->name, root_dentry);
- 
- 	debugfs_create_file("alloc", 0200, tmp, cma, &cma_alloc_fops);
- 	debugfs_create_file("free", 0200, tmp, cma, &cma_free_fops);
--- 
-2.7.4
-
+Thanks,
+Chao
+> 
+> 
+> 
+> -- 
+> Thanks,
+> 
+> David / dhildenb

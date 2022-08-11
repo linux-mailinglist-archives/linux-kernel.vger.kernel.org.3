@@ -2,89 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 881E4590806
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 23:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A41D590809
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 23:28:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234180AbiHKVZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 17:25:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60806 "EHLO
+        id S234908AbiHKV2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 17:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiHKVZv (ORCPT
+        with ESMTP id S229591AbiHKV2m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 17:25:51 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E2A66A69
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 14:25:50 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id r4so24493118edi.8
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 14:25:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Av61MCjlR3mg8Dx2VvdjMo2UWGRPhMNNNMUbh2HIJOc=;
-        b=XPy1b7gHNWhW4bPEJfCMKoDTBorrVE5knZYc0pr2Yt2Prz11wJwKGcC5w3T84v8cNx
-         ENLBomSnMYVcdYS4Ru0Tv9sMoRNf4sdGGsYnRTuxk54JX8QdudMtFJ4/f4Kme0XbGqaC
-         bEvdPalHXbbi+ruOg/Nm3c1K59DoTznTR6sjc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Av61MCjlR3mg8Dx2VvdjMo2UWGRPhMNNNMUbh2HIJOc=;
-        b=KN+ocKlDi1noGyCeq4XBk6Pp/nVMHcNuzE6lJztWFp6sO+Em+5S/ldIMJna7DBdztC
-         eQ5TmI3lv5w+jd8vzrGtlM96FD+Vfaz2O0JabmCxLSIHVMNPj0SeRRLAOTnDnvemrJha
-         ds2vpbkzq+y/4WMZAfhjR3PJdjyWRRkcEC+/fYjPNTDT2XgoIqpeppmxo5JK7pevgbjL
-         tBEKLclsEWv+idI9S/13GUgz48IPygQeZ0D3zIaX+5ydyYzY4qk4bM/sTaIM5N9lXA3P
-         HCtpP/V+aMi1tq86ItEB5MVbdvUkZfvSM0VCHiPtVWthWCItvRZqqh4P2PuSIUYZBfU+
-         2tlw==
-X-Gm-Message-State: ACgBeo0uSp5/xqgPKw/bkr8d0K/ef8t3jKkF22ULwJW5IjLqrEMGWVDV
-        lSYbMHQ9h6uvWxta2SG6ZKYOiKHWNwzIKGeA
-X-Google-Smtp-Source: AA6agR5axBe3VJcWKEdnwC/bl3QE2H6qXmQ8RESZFt9/VZqGfsseY0Mx3kN+48AjQYq0QyLMJp1eGA==
-X-Received: by 2002:a05:6402:540f:b0:440:d9a4:aebf with SMTP id ev15-20020a056402540f00b00440d9a4aebfmr900815edb.196.1660253148545;
-        Thu, 11 Aug 2022 14:25:48 -0700 (PDT)
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com. [209.85.221.53])
-        by smtp.gmail.com with ESMTPSA id ec8-20020a0564020d4800b0043e67f9028esm296827edb.20.2022.08.11.14.25.47
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Aug 2022 14:25:47 -0700 (PDT)
-Received: by mail-wr1-f53.google.com with SMTP id j1so22721652wrw.1
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 14:25:47 -0700 (PDT)
-X-Received: by 2002:a5d:6248:0:b0:222:cd3b:94c8 with SMTP id
- m8-20020a5d6248000000b00222cd3b94c8mr414789wrv.97.1660253146870; Thu, 11 Aug
- 2022 14:25:46 -0700 (PDT)
+        Thu, 11 Aug 2022 17:28:42 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E64889D8DF;
+        Thu, 11 Aug 2022 14:28:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=VU1PZeaw6I4YyL6iOFs+wCjPWpBvnmOGKLSrFWd0G/s=; b=QG7bP6FilsSAZ571eM1Q1YCap/
+        VairpPnmpDhpHxSQR4JS2J4Z5dAqMi3Un8zuDp5WS0PbP1J8VXlrX7PfxIAVNcyI9XmqSCq22gPe7
+        SfTw9evl2A6qLn4poujnmCxcYlJlceCXSwEzvzlV4sAT6WN3LL0gvtXjwB6aep7QK18YbwO7iwCf1
+        0l9DxZcYbik86ikCHjgWVeXU/j5jyiBpdautmducKWbre7hkqkwLao4BRUawDVVXOVWOr6H+p39Y8
+        hoOiHExMgtVPHTWNiPuN5DJJOwYodocQ25wXfybxbHaupoN5bL8C0m9HEn1fUnWr6K2KZZmaSBgnB
+        QYLqbiuA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oMFj9-001IJD-45; Thu, 11 Aug 2022 21:28:27 +0000
+Date:   Thu, 11 Aug 2022 22:28:27 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Peter Xu <peterx@redhat.com>, Hugh Dickins <hughd@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mel Gorman <mgorman@suse.de>
+Subject: Re: [PATCH] sched/all: Change BUG_ON() instances to WARN_ON()
+Message-ID: <YvV0e7UY5yRbHNJQ@casper.infradead.org>
+References: <20220808073232.8808-1-david@redhat.com>
+ <CAHk-=wiEAH+ojSpAgx_Ep=NKPWHU8AdO3V56BXcCsU97oYJ1EA@mail.gmail.com>
+ <1a48d71d-41ee-bf39-80d2-0102f4fe9ccb@redhat.com>
+ <CAHk-=wg40EAZofO16Eviaj7mfqDhZ2gVEbvfsMf6gYzspRjYvw@mail.gmail.com>
+ <YvSsKcAXISmshtHo@gmail.com>
+ <CAHk-=wgqW6zQcAW4i-ARJ8KNZZjw6tP3nn0QimyTWO=j+ZKsLA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220811185102.3253045-1-kuba@kernel.org> <20220811120902.7e82826a@kernel.org>
- <20220811124106.703917f8@kernel.org>
-In-Reply-To: <20220811124106.703917f8@kernel.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 11 Aug 2022 14:25:29 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi0JE7EkqQajmhdvarwQBHYVOaSS5xqvtYpCrWmsZ6rkA@mail.gmail.com>
-Message-ID: <CAHk-=wi0JE7EkqQajmhdvarwQBHYVOaSS5xqvtYpCrWmsZ6rkA@mail.gmail.com>
-Subject: Re: [PULL] Networking for 6.0-rc1
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pabeni@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgqW6zQcAW4i-ARJ8KNZZjw6tP3nn0QimyTWO=j+ZKsLA@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 12:41 PM Jakub Kicinski <kuba@kernel.org> wrote:
->
-> On Thu, 11 Aug 2022 12:09:02 -0700 Jakub Kicinski wrote:
-> > Let's put this one on hold, sorry. We got a report 2 minutes after
-> > sending that one of the BT patches broke mips and csky builds :S
-> > I'll try to get hold of Luiz and fix that up quickly.
->
-> Can I take that back? I can't repro with the cross compiler
-> from kernel.org. I'll follow up with the reported separately.
+On Thu, Aug 11, 2022 at 01:43:09PM -0700, Linus Torvalds wrote:
+> May I suggest going one step further, and making these WARN_ON_ONCE() instead.
+> 
+> >From personal experience, once some scheduler bug (or task struct
+> corruption) happens, ti often *keeps* happening, and the logs just
+> fill up with more and more data, to the point where you lose sight of
+> the original report (and the machine can even get unusable just from
+> the logging).
 
-I've merged this, and don't see any new build issues, so please do
-report separately.
-
-               Linus
+I've been thinking about magically turning all the WARN_ON_ONCE() into
+(effectively) WARN_ON_RATELIMIT().  I had some patches in that direction
+a while ago but never got round to tidying them up for submission.

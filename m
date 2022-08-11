@@ -2,207 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C47E159092D
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 01:28:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7366159092F
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 01:29:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236494AbiHKX2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 19:28:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33170 "EHLO
+        id S236649AbiHKX3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 19:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234259AbiHKX2c (ORCPT
+        with ESMTP id S234259AbiHKX3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 19:28:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29EE3A1D12;
-        Thu, 11 Aug 2022 16:28:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E73B615A7;
-        Thu, 11 Aug 2022 23:28:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF3A2C433D6;
-        Thu, 11 Aug 2022 23:28:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660260511;
-        bh=K1pnTJgHJXUMiZr3606Z/nzCRJeYnqTRByEoRzKd/7o=;
-        h=Date:From:To:Cc:Subject:From;
-        b=HIRXHDytkWGeWocT5Y6EwMm+CJbDrEa9j6XN5O8Eu8tggS/sy0AK5M7lpp0JVOfij
-         GwbRDM16ekgHuzl4PZQ1EH23m7mMfd9mN69W1oPazdRXc+UJQox5HATkzxiEJSVxYI
-         88GgES/deOD/kahxMXRW7AsPEbUN2eK5TUzlaTUl5bulNsFfJh7TPxICCoxKbcO6o7
-         mKG3A0N2DqpMXWqbGBWvEJobFXCOJiK6Oij5pEwBQqo6yb6il5WS5IZJJYOOkLOFaP
-         RtkxSi4lDc8QQFsLFAIjgyoXswZqpDLP6/zE/WkyRPx3ZFACHiZpnOAPcsMe7ao55z
-         iEjSRKK7LSOFA==
-Received: by mercury (Postfix, from userid 1000)
-        id D59D6106085B; Fri, 12 Aug 2022 01:28:27 +0200 (CEST)
-Date:   Fri, 12 Aug 2022 01:28:27 +0200
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: [GIT PULL] power-supply changes for 6.0
-Message-ID: <20220811232827.e4ib5raltkbacmgc@mercury.elektranox.org>
+        Thu, 11 Aug 2022 19:29:16 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 725B1A1D18;
+        Thu, 11 Aug 2022 16:29:15 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id z22so24801960edd.6;
+        Thu, 11 Aug 2022 16:29:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=f8wt8SNd2Qsh50uz7XA5V0kZKP2oYkPYl+cvukWAopc=;
+        b=gr3DmPE0Agzr15MpmdcUohB+1kh68chdTGxcplwXyylzs3pEy6OR/IyJfRVDa2NvuN
+         TA6E1WvK2kimjqSxCf4uDi3srHWfdfrWhH4DISSICGwbGjaCVEmx1kx/hAQ/pyYhYcdr
+         mbebVrCLRHxW5G5GdmFmJ6hI5mv8CLoWq0XyMGws7ueRLbrC3JtgACYMMg/aR12PNA6i
+         1MmdnHaQZI5o+5HB1T1DfUYi5ihwesgj7dh40xy73x3OXj5qKbGoInOGMIgpayuxm7qX
+         zs0Ak52HFVPB2p5ehrqrf1U1xBmZXCWUUd8n/oVstfNRuhysyfvMjLDIK4w/qQ2uu+km
+         qbgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=f8wt8SNd2Qsh50uz7XA5V0kZKP2oYkPYl+cvukWAopc=;
+        b=REWdTr5/VrQZPmAlrZktRfQo4F9IvoG2WHduyVBFgapkL+RRWHkkc+ZvhnueN0mp/f
+         FB3P/H7TCOjhWoyy2YxlaL0cmEcAtX3W2VUiSHS9CVxmx1o2E/qdK+AW8f5aeA4fL8Sh
+         tobKxzfltI1TQCDHnx90daE/Kjs7hF8SHnYNKjIVOPneUprxqLZD07j6Nw5HyjP4Xv//
+         4xci1yrBZ71acBWdCIGvP3hVCPsVm+O7SWr2FlRNYoOfFJLztq6nAac/Q2BBBpnq15qm
+         WOEnaiSpDKvs1FsBNXXmzxwTzsZy8+qZPod/JBC65Wp7EDyoFV9UkgXkcnMiqyyPg8im
+         XF9A==
+X-Gm-Message-State: ACgBeo2BBDz3Ho1M01kalLq7st5HyV06bYm1cl9x5hJYYCnEK2LUyjFZ
+        fYPhsjVqd5ClCDE3hWt+HlmU+Ai8Ub+iAD+QJ6k=
+X-Google-Smtp-Source: AA6agR6ClXQNqxX2OKPmEV2c+upHqeyH2Cog2uXylTfAJ7xVH12/235vUeIrR+xFr9dvPquu7hFijXvfAagl6rM5KG0=
+X-Received: by 2002:aa7:de8c:0:b0:440:3516:1813 with SMTP id
+ j12-20020aa7de8c000000b0044035161813mr1271383edv.260.1660260553996; Thu, 11
+ Aug 2022 16:29:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pz5mswhhqer2puzz"
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220808155341.2479054-1-void@manifault.com> <20220808155341.2479054-2-void@manifault.com>
+In-Reply-To: <20220808155341.2479054-2-void@manifault.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Thu, 11 Aug 2022 16:29:02 -0700
+Message-ID: <CAEf4BzZdOQwym4Q2QXtWF9uKhtKEb8cya-eQvLU3h3+7wES8UA@mail.gmail.com>
+Subject: Re: [PATCH 2/5] bpf: Define new BPF_MAP_TYPE_USER_RINGBUF map type
+To:     David Vernet <void@manifault.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, john.fastabend@gmail.com, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, tj@kernel.org,
+        joannelkoong@gmail.com, linux-kernel@vger.kernel.org,
+        Kernel-team@fb.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Aug 8, 2022 at 8:54 AM David Vernet <void@manifault.com> wrote:
+>
+> We want to support a ringbuf map type where samples are published from
+> user-space to BPF programs. BPF currently supports a kernel -> user-space
+> circular ringbuffer via the BPF_MAP_TYPE_RINGBUF map type. We'll need to
+> define a new map type for user-space -> kernel, as none of the helpers
+> exported for BPF_MAP_TYPE_RINGBUF will apply to a user-space producer
+> ringbuffer, and we'll want to add one or more helper functions that would
+> not apply for a kernel-producer ringbuffer.
+>
+> This patch therefore adds a new BPF_MAP_TYPE_USER_RINGBUF map type
+> definition. The map type is useless in its current form, as there is no way
+> to access or use it for anything until we add more BPF helpers. A follow-on
+> patch will therefore add a new helper function that allows BPF programs to
+> run callbacks on samples that are published to the ringbuffer.
+>
+> Signed-off-by: David Vernet <void@manifault.com>
+> ---
+>  include/linux/bpf_types.h      |  1 +
+>  include/uapi/linux/bpf.h       |  1 +
+>  kernel/bpf/ringbuf.c           | 70 +++++++++++++++++++++++++++++-----
+>  kernel/bpf/verifier.c          |  3 ++
+>  tools/include/uapi/linux/bpf.h |  1 +
+>  tools/lib/bpf/libbpf.c         |  1 +
+>  6 files changed, 68 insertions(+), 9 deletions(-)
+>
+> diff --git a/include/linux/bpf_types.h b/include/linux/bpf_types.h
+> index 2b9112b80171..2c6a4f2562a7 100644
+> --- a/include/linux/bpf_types.h
+> +++ b/include/linux/bpf_types.h
+> @@ -126,6 +126,7 @@ BPF_MAP_TYPE(BPF_MAP_TYPE_STRUCT_OPS, bpf_struct_ops_map_ops)
+>  #endif
+>  BPF_MAP_TYPE(BPF_MAP_TYPE_RINGBUF, ringbuf_map_ops)
+>  BPF_MAP_TYPE(BPF_MAP_TYPE_BLOOM_FILTER, bloom_filter_map_ops)
+> +BPF_MAP_TYPE(BPF_MAP_TYPE_USER_RINGBUF, user_ringbuf_map_ops)
+>
+>  BPF_LINK_TYPE(BPF_LINK_TYPE_RAW_TRACEPOINT, raw_tracepoint)
+>  BPF_LINK_TYPE(BPF_LINK_TYPE_TRACING, tracing)
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 7bf9ba1329be..a341f877b230 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -909,6 +909,7 @@ enum bpf_map_type {
+>         BPF_MAP_TYPE_INODE_STORAGE,
+>         BPF_MAP_TYPE_TASK_STORAGE,
+>         BPF_MAP_TYPE_BLOOM_FILTER,
+> +       BPF_MAP_TYPE_USER_RINGBUF,
+>  };
+>
+>  /* Note that tracing related programs such as
+> diff --git a/kernel/bpf/ringbuf.c b/kernel/bpf/ringbuf.c
+> index ded4faeca192..29e2de42df15 100644
+> --- a/kernel/bpf/ringbuf.c
+> +++ b/kernel/bpf/ringbuf.c
+> @@ -38,12 +38,32 @@ struct bpf_ringbuf {
+>         struct page **pages;
+>         int nr_pages;
+>         spinlock_t spinlock ____cacheline_aligned_in_smp;
+> -       /* Consumer and producer counters are put into separate pages to allow
+> -        * mapping consumer page as r/w, but restrict producer page to r/o.
+> -        * This protects producer position from being modified by user-space
+> -        * application and ruining in-kernel position tracking.
+> +       /* Consumer and producer counters are put into separate pages to
+> +        * allow each position to be mapped with different permissions.
+> +        * This prevents a user-space application from modifying the
+> +        * position and ruining in-kernel tracking. The permissions of the
+> +        * pages depend on who is producing samples: user-space or the
+> +        * kernel.
+> +        *
+> +        * Kernel-producer
+> +        * ---------------
+> +        * The producer position and data pages are mapped as r/o in
+> +        * userspace. For this approach, bits in the header of samples are
+> +        * used to signal to user-space, and to other producers, whether a
+> +        * sample is currently being written.
+> +        *
+> +        * User-space producer
+> +        * -------------------
+> +        * Only the page containing the consumer position, and whether the
+> +        * ringbuffer is currently being consumed via a 'busy' bit, are
+> +        * mapped r/o in user-space. Sample headers may not be used to
+> +        * communicate any information between kernel consumers, as a
+> +        * user-space application could modify its contents at any time.
+>          */
+> -       unsigned long consumer_pos __aligned(PAGE_SIZE);
+> +       struct {
+> +               unsigned long consumer_pos;
+> +               atomic_t busy;
 
---pz5mswhhqer2puzz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+one more thing, why does busy have to be exposed into user-space
+mapped memory at all? Can't it be just a private variable in
+bpf_ringbuf?
 
-Hi Linus,
+> +       } __aligned(PAGE_SIZE);
+>         unsigned long producer_pos __aligned(PAGE_SIZE);
+>         char data[] __aligned(PAGE_SIZE);
+>  };
 
-Sorry, a bit late this time. On the positive site all patches have
-been in linux-next for a month.
-
-The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
-
-  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
-
-are available in the Git repository at:
-
-  ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.0
-
-for you to fetch changes up to c9d8468158adca6dffd2ff5b1befd35f75568b10:
-
-  power: supply: olpc_battery: Hold the reference returned by of_find_compatible_node (2022-07-17 01:05:54 +0200)
-
-----------------------------------------------------------------
-power supply and reset changes for the v6.0 series
-
-power-supply core:
- - none
-
-drivers:
- - pwr-mlxbf: new reset driver for Mellanox BlueField
- - at91-reset: SAMA7G5 support
- - ab8500: continue refurbishing
- - misc. minor fixes
-
-----------------------------------------------------------------
-Asmaa Mnebhi (2):
-      power: reset: pwr-mlxbf: add BlueField SoC power control driver
-      power: reset: pwr-mlxbf: add missing include
-
-Claudiu Beznea (7):
-      dt-bindings: reset: convert Atmel/Microchip reset controller to YAML
-      dt-bindings: reset: atmel,at91sam9260-reset: add sama7g5 bindings
-      dt-bindings: reset: add sama7g5 definitions
-      power: reset: at91-reset: document structures and enums
-      power: reset: at91-reset: add at91_reset_data
-      power: reset: at91-reset: add reset_controller_dev support
-      power: reset: at91-reset: add support for SAMA7G5
-
-Jiang Jian (1):
-      power: supply: ab8500_fg: drop duplicated 'is' in comment
-
-Julia Lawall (1):
-      power: supply: lp8788: fix typo in comment
-
-Krzysztof Kozlowski (5):
-      dt-bindings: power: supply: bq24190: use regulator schema for child node
-      dt-bindings: power: supply: qcom,pm8941: use regulator schema for child node
-      dt-bindings: power: supply: qcom,pm8941: document usb-charge-current-limit
-      dt-bindings: power: supply: summit,smb347: use absolute path to schema
-      dt-bindings: power: reset: qcom,pshold: convert to dtschema
-
-Liang He (1):
-      power: supply: olpc_battery: Hold the reference returned by of_find_compatible_node
-
-Linus Walleij (4):
-      power: supply: ab8500: Respect charge_restart_voltage_uv
-      power: supply: ab8500: Exit maintenance if too low voltage
-      power: supply: ab8500: Add MAINTAINERS entry
-      power: supply: ab8500: Drop external charger leftovers
-
-Luca Ceresoli (1):
-      power: supply: max77976: update Luca Ceresoli's e-mail address
-
-Schspa Shi (1):
-      power: supply: Fix typo in power_supply_check_supplies
-
-Sebastian Reichel (1):
-      Merge tag 'at91-reset-sama7g5-signed' into psy-next
-
-Tetsuo Handa (1):
-      power: supply: ab8500: Remove flush_scheduled_work() call.
-
-Tom Rix (1):
-      power: reset: pwr-mlxbf: change rst_pwr_hid and low_pwr_hid from global to local variables
-
-Xiang wangx (1):
-      power: supply: bq24257: Fix syntax error in comments
-
-Xiaohui Zhang (1):
-      power: supply: cros_peripheral: Use struct_size() helper in kzalloc()
-
-Yang Li (1):
-      power: supply: Remove unnecessary print function dev_err()
-
-Zheng Bin (1):
-      power: supply: ab8500: add missing destroy_workqueue in ab8500_charger_bind
-
- .../devicetree/bindings/arm/atmel-sysregs.txt      |  15 -
- .../bindings/power/reset/msm-poweroff.txt          |  17 -
- .../bindings/power/reset/qcom,pshold.yaml          |  35 ++
- .../devicetree/bindings/power/supply/bq24190.yaml  |   2 +-
- .../bindings/power/supply/qcom,pm8941-charger.yaml |   9 +-
- .../power/supply/summit,smb347-charger.yaml        |   2 +-
- .../bindings/reset/atmel,at91sam9260-reset.yaml    |  68 +++
- MAINTAINERS                                        |   5 +
- drivers/power/reset/Kconfig                        |   6 +
- drivers/power/reset/Makefile                       |   1 +
- drivers/power/reset/at91-reset.c                   | 184 +++++++-
- drivers/power/reset/pwr-mlxbf.c                    |  97 ++++
- drivers/power/supply/ab8500-chargalg.h             |   4 -
- drivers/power/supply/ab8500_btemp.c                |   1 -
- drivers/power/supply/ab8500_chargalg.c             |  70 ++-
- drivers/power/supply/ab8500_charger.c              |  48 +-
- drivers/power/supply/ab8500_fg.c                   |   3 +-
- drivers/power/supply/bq24257_charger.c             |   2 +-
- drivers/power/supply/cros_peripheral_charger.c     |   2 +-
- drivers/power/supply/goldfish_battery.c            |   4 +-
- drivers/power/supply/lp8788-charger.c              |   2 +-
- drivers/power/supply/max77976_charger.c            |   4 +-
- drivers/power/supply/olpc_battery.c                |   5 +-
- drivers/power/supply/pm2301_charger.h              | 492 ---------------------
- drivers/power/supply/power_supply_core.c           |   4 +-
- include/dt-bindings/reset/sama7g5-reset.h          |  10 +
- 26 files changed, 462 insertions(+), 630 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/power/reset/msm-poweroff.txt
- create mode 100644 Documentation/devicetree/bindings/power/reset/qcom,pshold.yaml
- create mode 100644 Documentation/devicetree/bindings/reset/atmel,at91sam9260-reset.yaml
- create mode 100644 drivers/power/reset/pwr-mlxbf.c
- delete mode 100644 drivers/power/supply/pm2301_charger.h
- create mode 100644 include/dt-bindings/reset/sama7g5-reset.h
-
---pz5mswhhqer2puzz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmL1kJQACgkQ2O7X88g7
-+poIZg//SqTkcIA8c0em5LVmjHI/o+4aXUrchTkkmCoEJZxv5/flXUh+tcu70B75
-dxxFTkdZ0mc+cjz3tB1i5wm0cy4mFQdQ4oGCDJrJh7dWbBxKCqVKlDmnYBnn3D1v
-0yib7CBKuEBhYRKCePWjpKgf3cw+K+kBJRf0BmMYlsTbPRPRgK4kNkfhZ+P/hmQF
-d/buaLIGdqzEd2EeYqcryJv0cv29O/USXflxnHJnsmA+jhzmPwJXqcs9gF/www5M
-BhuVK3jBHeTPA2KXRiuSOgk4ZKfI72qMHT3p+Nu5rgspIE9ZNrlXmoVybIDo9oBC
-MfFKjHIkxOk5TjvbOHgJpwodlpNMKswrLKQUjo8uD158wNCY1lCN15Xy8nwtQeM4
-EtYz/BDoKf+97sPkflam9ZGXEnbHe6ExYCVOfmgcBaoWJuJTgHL3OHjyopBYIs1h
-l1DYNM8J+CzhOheYFyDRFFuwK9og5His/jSw4zE9tLMVNPE7vD5ziV7tCaiYJlRA
-zo6yZsA81wxIXGrvQFHq8Koz79lN71RRFo8hNCAtMUfkrmzqjjjOmCh8WgUo7QUB
-IMj3QTAcmLxNEgGzkEm159njygK7O8rVXCtaiX62vGtdFaRqQNKnmCJf0DEgyuOR
-Ao6l6NMs2wtqgvAeI0OVjREPVRsCshzkEk8nW+hvcd7wyYhaMYU=
-=erri
------END PGP SIGNATURE-----
-
---pz5mswhhqer2puzz--
+[...]

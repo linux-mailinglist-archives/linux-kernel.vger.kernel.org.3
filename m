@@ -2,163 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA8B590587
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 19:15:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 106DA590588
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 19:15:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235763AbiHKROq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 13:14:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42998 "EHLO
+        id S236072AbiHKRPH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 13:15:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234936AbiHKROa (ORCPT
+        with ESMTP id S236246AbiHKROl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 13:14:30 -0400
-Received: from mail-vk1-xa2e.google.com (mail-vk1-xa2e.google.com [IPv6:2607:f8b0:4864:20::a2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8513FA00E7
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 09:56:10 -0700 (PDT)
-Received: by mail-vk1-xa2e.google.com with SMTP id x128so6204161vke.3
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 09:56:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=G0jqPx9rziCQX4VfMuTReGksQVA2TXCq4FcbporBUUE=;
-        b=bY6Z46A2sYDi7bnO93xe0wKNlM2kWwf1rZ8WXR+o0b9U0kcPZQvX/b6U7wJuCkJ0ra
-         OtVWeOHzn2C13uh/TAQVBKdSyMwxAlLY5vMkRXrVW0tXv57ai1ksQg9RI5TbRzp4x43d
-         Fj94pCnbuUVMLnlRNzV+CFBDUDJq1DUFhFZ+dmA7JCHH1VtL9Pb1qqG4go1GIUX/eEI5
-         YJD83lNAz8S4xiiVJOTKCFPgDPPb+huEJLkUpLeFiYvFq7I9xUEE9WIbxNS6s1A3s6E8
-         jKZc55buqasK/K1J0cmf7ct7U3d3VMbV/D0iKvTzJkuJegb7KftZAFJI4Io+ZEU5R0qc
-         3qgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=G0jqPx9rziCQX4VfMuTReGksQVA2TXCq4FcbporBUUE=;
-        b=eRlIyLBLzGzDQu+PyLsxu14/gucgMZDCgBc+Qr+2+cO+In395UG+mYJhHZropisDtb
-         d6Km0itmNoy7Fpw6LXYE0JPTrbJHaz1/vtIzv9r4QcLoqZRNzwKY6//Xk07U2A0qqObw
-         YPvHRtmFLk1/kggMwpUAtQSktDV8VdbvRHtdERPWVypA4YuMygCLRyhh91nPJeWWyblF
-         Pcc+mhbdc/U6vHny+uxCVC3EeSHH+pnjIgeJuVxrVxGrhRr50OK5uoL4BCQqfgRnybZT
-         f96eLAmDy5MfZ6jxPgwfCTLTWoO7uv2iM+D3jDY85P4UMUM+H1K+ZXicoMDBJqurSo4H
-         /46g==
-X-Gm-Message-State: ACgBeo0RLTzWDWZP7m3FdnjIbw/NjK+XENY7ElEoG4IbqDHwKIofEi9W
-        MRzTG3mR0m8RqdMNDUIlJdsQzRdYRddmyqHCD0I7qg==
-X-Google-Smtp-Source: AA6agR7OdJBDdsv27oJWMCBkG7w1cww7Zf3DnUJ98jysy8HZ/Q85KSrXHjt06FJo0I8HQr0pnWwdZYA6hlRaWORya6g=
-X-Received: by 2002:a1f:dac3:0:b0:377:8cb:4544 with SMTP id
- r186-20020a1fdac3000000b0037708cb4544mr12084vkg.7.1660236969573; Thu, 11 Aug
- 2022 09:56:09 -0700 (PDT)
+        Thu, 11 Aug 2022 13:14:41 -0400
+Received: from netrider.rowland.org (netrider.rowland.org [192.131.102.5])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id 547B1A0246
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 09:58:06 -0700 (PDT)
+Received: (qmail 10155 invoked by uid 1000); 11 Aug 2022 12:58:05 -0400
+Date:   Thu, 11 Aug 2022 12:58:05 -0400
+From:   Alan Stern <stern@rowland.harvard.edu>
+To:     Rondreis <linhaoguo86@gmail.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: possible recursive locking detected in kernel v5.18
+Message-ID: <YvU1HSa6ipoWc4BA@rowland.harvard.edu>
+References: <CAB7eexKUpvX-JNiLzhXBDWgfg2T9e9_0Tw4HQ6keN==voRbP0g@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220709032001.819487-1-davidgow@google.com> <20220709032001.819487-2-davidgow@google.com>
- <CAMuHMdUdvGyMFyDSX3cSGDz9x3Q0+z1e0nQB5cB0GFazyPcK3A@mail.gmail.com>
-In-Reply-To: <CAMuHMdUdvGyMFyDSX3cSGDz9x3Q0+z1e0nQB5cB0GFazyPcK3A@mail.gmail.com>
-From:   David Gow <davidgow@google.com>
-Date:   Fri, 12 Aug 2022 00:55:58 +0800
-Message-ID: <CABVgOSk_Y-eEoqH1xbbXfK5TN3P188JFeuZn3ZgV59Bs3Ds4Hg@mail.gmail.com>
-Subject: Re: [PATCH v4 1/5] kunit: unify module and builtin suite definitions
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Jeremy Kerr <jk@codeconstruct.com.au>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Andrew Jeffery <andrew@aj.id.au>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Andra Paraschiv <andraprs@amazon.com>,
-        Longpeng <longpeng2@huawei.com>,
-        Greg KH <gregkh@linuxfoundation.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        =?UTF-8?B?TWHDrXJhIENhbmFs?= <maira.canal@usp.br>,
-        Linux MMC List <linux-mmc@vger.kernel.org>,
-        linux-aspeed <linux-aspeed@lists.ozlabs.org>,
-        OpenBMC Maillist <openbmc@lists.ozlabs.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        linux-modules@vger.kernel.org,
-        Matt Johnston <matt@codeconstruct.com.au>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAB7eexKUpvX-JNiLzhXBDWgfg2T9e9_0Tw4HQ6keN==voRbP0g@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 9:49 PM Geert Uytterhoeven <geert@linux-m68k.org> w=
-rote:
->
-> Hi David, Jeremy,
->
-> On Sat, Jul 9, 2022 at 5:21 AM David Gow <davidgow@google.com> wrote:
-> > From: Jeremy Kerr <jk@codeconstruct.com.au>
-> >
-> > Currently, KUnit runs built-in tests and tests loaded from modules
-> > differently. For built-in tests, the kunit_test_suite{,s}() macro adds =
-a
-> > list of suites in the .kunit_test_suites linker section. However, for
-> > kernel modules, a module_init() function is used to run the test suites=
-.
-> >
-> > This causes problems if tests are included in a module which already
-> > defines module_init/exit_module functions, as they'll conflict with the
-> > kunit-provided ones.
-> >
-> > This change removes the kunit-defined module inits, and instead parses
-> > the kunit tests from their own section in the module. After module init=
-,
-> > we call __kunit_test_suites_init() on the contents of that section,
-> > which prepares and runs the suite.
-> >
-> > This essentially unifies the module- and non-module kunit init formats.
-> >
-> > Tested-by: Ma=C3=ADra Canal <maira.canal@usp.br>
-> > Reviewed-by: Brendan Higgins <brendanhiggins@google.com>
-> > Signed-off-by: Jeremy Kerr <jk@codeconstruct.com.au>
-> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> > Signed-off-by: David Gow <davidgow@google.com>
->
-> Thanks for your patch, which is now commit 3d6e44623841c8b8 ("kunit:
-> unify module and builtin suite definitions") upstream.
->
-> Since this commit, modular kunit tests are no longer run at all.
->
-> Before:
->
->     # insmod lib/kunit/kunit.ko
->     # insmod lib/test_hash.ko
->     test_hash: loading test module taints kernel.
->         # Subtest: hash
->         1..2
->         ok 1 - test_string_or
->         ok 2 - test_hash_or
->     # hash: pass:2 fail:0 skip:0 total:2
->     # Totals: pass:2 fail:0 skip:0 total:2
->     ok 1 - hash
->
-> After:
->
->     # insmod lib/kunit/kunit.ko
->     # insmod lib/test_hash.ko
->     test_hash: loading test module taints kernel.
->
-> The actual test code (and test init code, if it exists) is not run.
->
-> Reverting commits e5857d396f35e59e ("kunit: flatten kunit_suite***
-> to kunit_suite** in .kunit_test_suites") and 3d6e44623841c8b8 ("kunit:
-> unify module and builtin suite definitions") fixes the issue.
+On Thu, Aug 11, 2022 at 10:06:37AM +0800, Rondreis wrote:
+> Hello,
+> 
+> When fuzzing the Linux kernel driver v5.18.0, the following crash was triggered.
+> 
+> HEAD commit: 4b0986a3613c92f4ec1bdc7f60ec66fea135991f (HEAD, tag: v5.18)
+> git tree: upstream
+> 
+> kernel config: https://pastebin.com/KecL2gaG
+> C reproducer: https://pastebin.com/ZX3ZtZZ4
+> console output: https://pastebin.com/UYyiRL3E
+> 
+> Basically, in the c reproducer, we use the gadget module to emulate
+> the process of attaching a usb device (vendor id: 0x13d3, product id:
+> 0x3340, with function: ms_null and midi_null).
+> To reproduce this crash, we utilize a third-party library to emulate
+> the attaching process: https://github.com/linux-usb-gadgets/libusbgx.
+> Just clone this repository, make install it, and compile the c
+> reproducer with ``` gcc crash.c -lusbgx -o crash ``` will do the
+> trick.
+> 
+> It seems that there is a deadlock happened in function usb_stor_post_reset
+> 
+> The crash report is as follow:
+> 
+> ```
+> usb 7-1: r8712u: Loading firmware from "rtlwifi/rtl8712u.bin"
+> ============================================
+> WARNING: possible recursive locking detected
+> 5.18.0 #3 Not tainted
+> --------------------------------------------
+> kworker/1:3/1205 is trying to acquire lock:
+> ffff888018638db8 (&us_interface_key[i]){+.+.}-{3:3}, at:
+> usb_stor_pre_reset+0x35/0x40 drivers/usb/storage/usb.c:230
+> 
+> but task is already holding lock:
+> ffff888018638db8 (&us_interface_key[i]){+.+.}-{3:3}, at:
+> usb_stor_pre_reset+0x35/0x40 drivers/usb/storage/usb.c:230
+> 
+> other info that might help us debug this:
+> Possible unsafe locking scenario:
+> 
+> CPU0
+> ----
+> lock(&us_interface_key[i]);
+> lock(&us_interface_key[i]);
+> 
+> *** DEADLOCK ***
+> 
+> May be due to missing lock nesting notation
+> 
+> 7 locks held by kworker/1:3/1205:
+> #0: ffff888105a82d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at:
+> arch_atomic64_set arch/x86/include/asm/atomic64_64.h:34 [inline]
+> #0: ffff888105a82d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at:
+> arch_atomic_long_set include/linux/atomic/atomic-long.h:41 [inline]
+> #0: ffff888105a82d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at:
+> atomic_long_set include/linux/atomic/atomic-instrumented.h:1280
+> [inline]
+> #0: ffff888105a82d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at:
+> set_work_data kernel/workqueue.c:636 [inline]
+> #0: ffff888105a82d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at:
+> set_work_pool_and_clear_pending kernel/workqueue.c:663 [inline]
+> #0: ffff888105a82d38 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at:
+> process_one_work+0x8b0/0x1650 kernel/workqueue.c:2260
+> #1: ffffc900004f7db0 ((work_completion)(&hub->events)){+.+.}-{0:0},
+> at: process_one_work+0x8e4/0x1650 kernel/workqueue.c:2264
+> #2: ffff88810be5a220 (&dev->mutex){....}-{3:3}, at: device_lock
+> include/linux/device.h:835 [inline]
+> #2: ffff88810be5a220 (&dev->mutex){....}-{3:3}, at:
+> hub_event+0x1c1/0x4170 drivers/usb/core/hub.c:5691
+> #3: ffff888110850220 (&dev->mutex){....}-{3:3}, at:
+> __device_attach+0x7b/0x3f0 drivers/base/dd.c:965
+> #4: ffff888018a871a8 (&dev->mutex){....}-{3:3}, at:
+> __device_attach+0x7b/0x3f0 drivers/base/dd.c:965
+> #5: ffff888018638db8 (&us_interface_key[i]){+.+.}-{3:3}, at:
+> usb_stor_pre_reset+0x35/0x40 drivers/usb/storage/usb.c:230
+> #6: ffff8881085711a8 (&dev->mutex){....}-{3:3}, at:
+> device_release_driver_internal+0x23/0x2f0 drivers/base/dd.c:1245
+> 
+> stack backtrace:
+> CPU: 1 PID: 1205 Comm: kworker/1:3 Not tainted 5.18.0 #3
+> Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+> 1.13.0-1ubuntu1.1 04/01/2014
+> Workqueue: usb_hub_wq hub_event
+> Call Trace:
+> <TASK>
+> __dump_stack lib/dump_stack.c:88 [inline]
+> dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
+> print_deadlock_bug kernel/locking/lockdep.c:2988 [inline]
+> check_deadlock kernel/locking/lockdep.c:3031 [inline]
+> validate_chain kernel/locking/lockdep.c:3816 [inline]
+> __lock_acquire.cold+0x152/0x3ca kernel/locking/lockdep.c:5053
+> lock_acquire kernel/locking/lockdep.c:5665 [inline]
+> lock_acquire+0x1ab/0x520 kernel/locking/lockdep.c:5630
+> __mutex_lock_common kernel/locking/mutex.c:603 [inline]
+> __mutex_lock+0x14f/0x1610 kernel/locking/mutex.c:747
+> usb_stor_pre_reset+0x35/0x40 drivers/usb/storage/usb.c:230
+> usb_reset_device+0x37d/0x9a0 drivers/usb/core/hub.c:6109
+> r871xu_dev_remove+0x21a/0x270 drivers/staging/rtl8712/usb_intf.c:622
+> usb_unbind_interface+0x1bd/0x890 drivers/usb/core/driver.c:458
+> device_remove drivers/base/dd.c:545 [inline]
+> device_remove+0x11f/0x170 drivers/base/dd.c:537
+> __device_release_driver drivers/base/dd.c:1222 [inline]
+> device_release_driver_internal+0x1a7/0x2f0 drivers/base/dd.c:1248
+> usb_driver_release_interface+0x102/0x180 drivers/usb/core/driver.c:627
+> usb_forced_unbind_intf+0x4d/0xa0 drivers/usb/core/driver.c:1118
+> usb_reset_device+0x39b/0x9a0 drivers/usb/core/hub.c:6114
+> rt2x00usb_probe+0x53/0x7f0
+> usb_probe_interface+0x310/0x800 drivers/usb/core/driver.c:396
+> call_driver_probe drivers/base/dd.c:555 [inline]
+> really_probe drivers/base/dd.c:634 [inline]
+> really_probe+0x23e/0xa00 drivers/base/dd.c:579
+> __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:764
+> driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:794
+> __device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:917
+> bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
+> __device_attach+0x26d/0x3f0 drivers/base/dd.c:989
+> bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
+> device_add+0xc45/0x1d40 drivers/base/core.c:3412
+> usb_set_configuration+0x1019/0x1900 drivers/usb/core/message.c:2170
+> usb_generic_driver_probe+0x9d/0xe0 drivers/usb/core/generic.c:238
+> usb_probe_device+0xd9/0x2a0 drivers/usb/core/driver.c:293
+> call_driver_probe drivers/base/dd.c:555 [inline]
+> really_probe drivers/base/dd.c:634 [inline]
+> really_probe+0x23e/0xa00 drivers/base/dd.c:579
+> __driver_probe_device+0x338/0x4d0 drivers/base/dd.c:764
+> driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:794
+> __device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:917
+> bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
+> __device_attach+0x26d/0x3f0 drivers/base/dd.c:989
+> bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
+> device_add+0xc45/0x1d40 drivers/base/core.c:3412
+> usb_new_device.cold+0x4b8/0x10ca drivers/usb/core/hub.c:2566
+> hub_port_connect drivers/usb/core/hub.c:5359 [inline]
+> hub_port_connect_change drivers/usb/core/hub.c:5507 [inline]
+> port_event drivers/usb/core/hub.c:5663 [inline]
+> hub_event+0x231e/0x4170 drivers/usb/core/hub.c:5745
+> process_one_work+0x9cc/0x1650 kernel/workqueue.c:2289
+> worker_thread+0x623/0x1070 kernel/workqueue.c:2436
+> kthread+0x2ef/0x3a0 kernel/kthread.c:346
+> ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
+> </TASK>
+> 
+> 
+> ```
 
-Thanks Geert,
+Can you test the patch below?
 
-This is a known issue. There's a patch to fix it here, which just
-missed the pull request:
-https://patchwork.kernel.org/project/linux-kselftest/patch/20220713005221.1=
-926290-1-davidgow@google.com/
+Alan Stern
 
-We'll try to get it merged as soon as possible.
 
-Cheers,
--- David
+
+Index: usb-devel/drivers/staging/rtl8712/usb_intf.c
+===================================================================
+--- usb-devel.orig/drivers/staging/rtl8712/usb_intf.c
++++ usb-devel/drivers/staging/rtl8712/usb_intf.c
+@@ -614,13 +614,6 @@ static void r871xu_dev_remove(struct usb
+ 	 * when disconnect
+ 	 */
+ 	usb_put_dev(udev);
+-
+-	/* If we didn't unplug usb dongle and remove/insert module, driver
+-	 * fails on sitesurvey for the first time when device is up.
+-	 * Reset usb port for sitesurvey fail issue.
+-	 */
+-	if (udev->state != USB_STATE_NOTATTACHED)
+-		usb_reset_device(udev);
+ }
+ 
+ static int __init r8712u_drv_entry(void)
+

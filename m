@@ -2,257 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5894258FEAE
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 17:01:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B32C58FEB3
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 17:02:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235417AbiHKPBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 11:01:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47310 "EHLO
+        id S235443AbiHKPC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 11:02:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234066AbiHKPBX (ORCPT
+        with ESMTP id S234066AbiHKPCZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 11:01:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C2FEE019
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 08:01:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660230081;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XatOoqy1kloo+8/8ON6RPBD/1hsnqJ37T+E0u/+44gw=;
-        b=U1cflkDzQjeIgE6jFD5SzzwAXhWvpC6W7zUvvO3gbAj/rtAEYuq+1JUWzDWg0csfLVc3+J
-        F7JYWFNLEb7g2TbXFnCeUb5SqFRNoABoigoycpYZ/kRSroU9+8VQEinOQrCBz8TKDANu+p
-        VgrbinaRCQE0NDqPS6vhauf9CZBN5/U=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-552-gTLRn6dxOv-HGKzsU6GYGA-1; Thu, 11 Aug 2022 11:01:19 -0400
-X-MC-Unique: gTLRn6dxOv-HGKzsU6GYGA-1
-Received: by mail-ed1-f70.google.com with SMTP id w5-20020a05640234c500b0043dda025648so11051040edc.8
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 08:01:19 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=XatOoqy1kloo+8/8ON6RPBD/1hsnqJ37T+E0u/+44gw=;
-        b=cYAkhXSb4NDyZctHkS1zcYjRUB5iX6a0TLkLSQhLtK9U5RcP2QMZs8jAC2w9EeQ7a3
-         fHIl9BWIJI2SKQE69CtIYNVPQzNkKVTirsKGlSi6ZwId3SduoiGbASb0WnEfEN7n2tYj
-         9Uya8JBweeZhO7uX7RFZDL8h7TudNgCKqdb0ZII6C28zY15A5jOo7Po1VumBrkVnl/Ci
-         xyl41zv6DxgcNsNvWDHl7luuqxEf9qNmwwGv5d6lz+GW07VORli6Lxey0YUO65tFa8dS
-         WAP4dHdf79r7ymCV2giZfjlRUYu2ypsRirQd3H6ALnSLD/PO8LOdX1AL+zeC+Nl0iFx+
-         jZfA==
-X-Gm-Message-State: ACgBeo04jpE0Jw3lUXIE9TKw4fvbmeZD2+MEbsEgKLfrSgnuSELVPt2O
-        MiZ/sMWIz+Zps9FoTMevlxPUPszkXzAy2iK4ejUFLsOdaAGC+7sxv1sXBVRdQ8pILf7GFvvRDLw
-        Ns/I+V4qwktlcNMySF6Fb3yJC
-X-Received: by 2002:a17:906:8a63:b0:730:9e5c:b456 with SMTP id hy3-20020a1709068a6300b007309e5cb456mr23611713ejc.571.1660230078539;
-        Thu, 11 Aug 2022 08:01:18 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6bpuPGafJ4RMWsMMpJ582Vk9xLkZ4cfPW0qAws5sX8IpU8vAS9bb+qoVNPrC2tx6DWfhIi0A==
-X-Received: by 2002:a17:906:8a63:b0:730:9e5c:b456 with SMTP id hy3-20020a1709068a6300b007309e5cb456mr23611689ejc.571.1660230078258;
-        Thu, 11 Aug 2022 08:01:18 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id gn19-20020a1709070d1300b007307e7df83bsm3588081ejc.21.2022.08.11.08.01.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Aug 2022 08:01:17 -0700 (PDT)
-Message-ID: <f1ad35f6-acdf-0fc8-1ee1-99bd8c7a5e77@redhat.com>
-Date:   Thu, 11 Aug 2022 17:01:16 +0200
+        Thu, 11 Aug 2022 11:02:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7169D24BEA;
+        Thu, 11 Aug 2022 08:02:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2E776B82144;
+        Thu, 11 Aug 2022 15:02:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54807C433C1;
+        Thu, 11 Aug 2022 15:02:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660230141;
+        bh=2+gh8k2LlVNKWFxEu+WPl9ll4HYEyNbUFNiZpgXDGUU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jA46IFbUYlcBl2dGV9Jq7CrjslaVz98zknQlszPazfdGk4wzKtUoJJ5b1MbENzJHW
+         5aspY8ejQaW+oyvA/kBZu+r8VCxN2lujGULnMXO1TK3WyeNlPE3Ps9CKSIJ8guRUyt
+         vfeT8igf/6BcLLTluwkWFxTeKK3rUNGh5llG24ZElfspS5qeOVrJ+sPaw3k6c1AGXt
+         woZNRztzkLE/HU4m8vGw3ow6U5WP7x5uaC2h2w11+0W+EMHQRwIBgOAHacW2retu49
+         sDNb7/+U/wE1f8in/OGoBxTmYQWz2Sb4kSxiRsndlBwFP7nU60P1XFCF4bE8QNelo6
+         fNCL2h0Pgu0zw==
+Date:   Thu, 11 Aug 2022 08:02:19 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org,
+        clang-built-linux <llvm@lists.linux.dev>
+Subject: Re: mainline build failure for arm64 allmodconfig with clang
+Message-ID: <YvUZ+9kJ/AvUMxzO@dev-arch.thelio-3990X>
+References: <YvSxeDkmwxcJL+Z0@debian>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v3 1/6] asus-wmi: Implement TUF laptop keyboard RGB
- control
-Content-Language: en-US
-To:     Luke Jones <luke@ljones.dev>, Pavel Machek <pavel@ucw.cz>
-Cc:     andy.shevchenko@gmail.com, pobrn@protonmail.com,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220809025054.1626339-1-luke@ljones.dev>
- <20220809025054.1626339-2-luke@ljones.dev> <20220809105031.GA4971@duo.ucw.cz>
- <fcc7b7eb29abc1ac9053bce02fd9f705e5f06b0b.camel@ljones.dev>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <fcc7b7eb29abc1ac9053bce02fd9f705e5f06b0b.camel@ljones.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YvSxeDkmwxcJL+Z0@debian>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Sudip,
 
-On 8/10/22 06:44, Luke Jones wrote:
-> Hi Pavel, Andy, Hans,
+On Thu, Aug 11, 2022 at 08:36:24AM +0100, Sudip Mukherjee (Codethink) wrote:
+> Hi All,
 > 
->>>>>>>>> +               /*
->>>>>>>>> +                * asus::kbd_backlight still controls a
->>>>>>>>> base > > > > > > 3-level backlight and when
->>>>>>>>> +                * it is on 0, the RGB is not visible
->>>>>>>>> at all. > > > > RGB > > should be treated as
->>>>>>>>> +                * an additional step.
->>>>>>>>> +                */
->>>>>
->>>>> Ouch. Lets not do that? If rgb interface is available, hide the
->>>>> 3
->>>>> level one, or something.
->>>>>
+> The latest mainline kernel branch fails to build for arm64 allmodconfig
+> with clang. The errors are:
 > 
-> I really don't think this is safe or sensible. There are some laptops
-> that default the 3-stage method to off, and this means that the LEDs
-> will not show regardless of multicolor brightness.
+> sound/soc/sof/ipc3-topology.c:2343:4: error: format specifies type 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
+>                  SOF_ABI_MAJOR, SOF_ABI_MINOR, SOF_ABI_PATCH);
+>                  ^~~~~~~~~~~~~
+> ./include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
+>         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+>                                                                  ~~~     ^~~~~~~~~~~
+> ./include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+>                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+>                              ~~~    ^~~~~~~~~~~
+> ./include/uapi/sound/sof/abi.h:30:23: note: expanded from macro 'SOF_ABI_MAJOR'
+> #define SOF_ABI_MAJOR 3
+>                       ^
+> sound/soc/sof/ipc3-topology.c:2343:19: error: format specifies type 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
+>                  SOF_ABI_MAJOR, SOF_ABI_MINOR, SOF_ABI_PATCH);
+>                                 ^~~~~~~~~~~~~
+> ./include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
+>         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+>                                                                  ~~~     ^~~~~~~~~~~
+> ./include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+>                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+>                              ~~~    ^~~~~~~~~~~
+> ./include/uapi/sound/sof/abi.h:31:23: note: expanded from macro 'SOF_ABI_MINOR'
+> #define SOF_ABI_MINOR 23
+>                       ^~
+> sound/soc/sof/ipc3-topology.c:2343:34: error: format specifies type 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
+>                  SOF_ABI_MAJOR, SOF_ABI_MINOR, SOF_ABI_PATCH);
+>                                                ^~~~~~~~~~~~~
+> ./include/linux/dev_printk.h:150:67: note: expanded from macro 'dev_info'
+>         dev_printk_index_wrap(_dev_info, KERN_INFO, dev, dev_fmt(fmt), ##__VA_ARGS__)
+>                                                                  ~~~     ^~~~~~~~~~~
+> ./include/linux/dev_printk.h:110:23: note: expanded from macro 'dev_printk_index_wrap'
+>                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
+>                              ~~~    ^~~~~~~~~~~
+> ./include/uapi/sound/sof/abi.h:32:23: note: expanded from macro 'SOF_ABI_PATCH'
+> #define SOF_ABI_PATCH 0
+>                       ^
+> 3 errors generated.
 > 
+> drivers/ntb/hw/idt/ntb_hw_idt.c:2409:28: error: format specifies type 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
+>                                 "\t%hhu-%hhu.\t", idx, idx + cnt - 1);
+>                                         ~~~~           ^~~~~~~~~~~~~
+>                                         %d
+> drivers/ntb/hw/idt/ntb_hw_idt.c:2438:29: error: format specifies type 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
+>                                         "\t%hhu-%hhu.\t", idx, idx + cnt - 1);
+>                                                 ~~~~           ^~~~~~~~~~~~~
+>                                                 %d
+> drivers/ntb/hw/idt/ntb_hw_idt.c:2484:15: error: format specifies type 'unsigned char' but the argument has type 'int' [-Werror,-Wformat]
+>                         idx, data, src, ndev->peers[src].port);
+>                                    ^~~
+> 3 errors generated.
 > 
-> 
->>>>>>>>> +               mc_cdev->led_cdev.name =   > > > > > >
->>>>>>>>> "asus::multicolour::kbd_backlight";
->>>>>
->>>>> Make this "rgb:kbd_backlight" or "inputX:rgb:kbd_backligh" and
->>>>> document it in Documentation/leds/well-known-leds.txt.
-> 
-> Will do.
-> 
-> -- 4 hours later --
-> 
-> I've spent a lot of time working on this now. I don't think multicolor
-> LED is suitable for use with the way these keyboards work.
-> 
-> The biggest issue is related to the brightness setting.
-> 1. If the ASUS_WMI_DEVID_KBD_BACKLIGHT method defaults to 0 on boot
-> then RGB is not visible
+> For both, git bisect points to 0af5cb349a2c ("Merge tag 'kbuild-v5.20' of git://git.kernel.org/pub/scm/linux/kernel/git/masahiroy/linux-kbuild")
 
-Note to others following this thread I asked Luke to clarify this
-a bit in an unrelated 1:1 conversation we were having:
+Right, these are exposed by commit 258fafcd0683 ("Makefile.extrawarn:
+re-enable -Wformat for clang"). They both have fixes in -next so I am
+hoping they will be in Linus's tree soon:
 
-On 8/10/22 23:45, Luke Jones wrote:
-> On 8/10/22, Hans de Goede wrote:
->> I plan to go through all the asus-wmi stuff you've posted tomorrow,
->> so I'll reply to this then. One thing which is not entirely
->> clear to me is that:
->>
->> 1. If I understand you correctly the laptops
->> with the RGB keyboards have both the old mono-color
->> "asus::kbd_backlight"
->> as well as a new RGB interface and these somehow interact with each
->> other, do I understand that correctly?
-> 
-> Yes, and that is the problem. The "mono" switch takes precedence.
-> 
->> 2. If yes, then can you explain the interaction in a bit more detail,
->> I see you say someting along the lines of the RGB controls only
->> working when the old mono-color "asus::kbd_backlight" brightness
->> is set to 3 (which is its max brightness) ?
-> 
-> Adjusting this changes the overall keyboard brightness. So if this is
-> at 1, and all RGB is at 255, then when you switch 2, 3, the overall
-> brightness increases.
-> 
->> 3. So what happens e.g. if writing 2 to the old mono-color
->> "asus::kbd_backlight" brightness after setting some RGB values ?
-> 
-> If the brightness was 3, then the overall brightness decreases.
-> If it was at 1, then it increases.
+b7bf23c0865f ("ASoC: SOF: ipc3-topology: Fix clang -Wformat warning")
+a44252d5c3bb ("ntb: idt: fix clang -Wformat warnings")
 
-I see, so the old (still present) mono-color "asus::kbd_backlight"
-brightness works as a master brightness control and the rgb values
-in the ASUS_WMI_DEVID_TUF_RGB_MODE WMI set commands are really
-just to set the color.
-
-And I guess that the Fn + whatever kbd brightness hotkey also still
-modifies the old mono-color "asus::kbd_backlight"? Which means that
-the "asus::kbd_backlight" device is also the device on which the
-led_classdev_notify_brightness_hw_changed is done as you mention
-below.
-
-(continued below.
-
-> I worked around this by setting it to "3" by default in module if
-> ASUS_WMI_DEVID_TUF_RGB_MODE is found. And added a check in the button
-> events to adjust multicolor brightness (+/- 17). This works but now I
-> can't do led notify (led_classdev_notify_brightness_hw_changed).
-> 
-> 2. Pattern trigger can't be used for these keyboard modes as the modes
-> are done entirely in hardware via a single switch in the complete
-> command packet.
-> 
-> I don't see any way forward with this, and looking at the complexity I
-> don't have time either.
-> 
-> 3. Nodes everywhere..
-> 
-> To fully control control these keyboards there are two WMI methods, one
-> for mode/rgb, one for power-state. Splitting each of these parameters
-> out to individual nodes with sensible naming and expectations gives:
-
-<snip>
-
-> Quite frankly I would rather use the method I had in the first patch I
-> submitted where mode and state had two nodes each,
-> - keyboard_rgb_mode, WO = "n n n n n n"
-> - keyboard_rgb_mode_index, output = "save/apply, mode, r, g, b, speed"
-> - keyboard_rgb_state, WO = "n n n n n"
-> - keyboard_rgb_state_index, output = "save/apply, boot, awake, sleep,
-> keyboard"
-> 
-> A big benefit of this structure is that not being able to read settings
-> back from the keyboard (not possible!) becomes a non-issue because
-> users have to write a full input, not partial, and it will apply right
-> away.
-
-Right to me this not being able to read back the values shows that
-the firmware API here really is not suitable for doing a more
-fancy "nice" / standard sysfs API on top.
-
-Since we cannot read back any of the r, g, b, mode or speed values
-we would need to pick defaults and then setting any of them would
-override the actual values the hw is using for the others, which
-is really not a good thing to do.
-
-So that only leaves something akin to keyboard_rgb_mode[_index] +
-keyboard_rgb_state[_index] which sets all values at once, mirroring
-the limited WMI API as a good option here, I agree with you on this.
-
-Sorry Pavel, I know you don't like custom sysfs attributes
-being added to LED class devices, but I have to agree with Luke
-that there really is not a good way to deal with this here and
-we did try!
-
-Only request I have for the next version wrt the decision to
-circle all the way back to having:
-
-> - keyboard_rgb_mode, WO = "n n n n n n"
-> - keyboard_rgb_mode_index, output = "save/apply, mode, r, g, b, speed"
-> - keyboard_rgb_state, WO = "n n n n n"
-> - keyboard_rgb_state_index, output = "save/apply, boot, awake, sleep,
-
-Is please put these new attributes under the:
-/sys/class/leds/asus::kbd_backlight
-
-Using the led_class_device.groups member as discussed before, now
-that we have decided to drop the multicolor LED stuff that should
-work :)
-
-Although maybe Pavel prefers to have the new sysfs attributes
-under /sys/bus/platform/devices/asus-nb-wmi/ instead since they
-are non standard.
-
-Pavel, to me having these under /sys/class/leds/asus::kbd_backlight
-seems more logical. But since there are non-standard and since
-there already is a bunch of asus-wmi sysfs API under
-/sys/bus/platform/devices/asus-nb-wmi/ putting them there if you
-prefer that is fine with me too. So what do you prefer ?
-
-> Hans, Andy, can I please revert back to the node + _index pairs taking
-> an array input. Everything will be cleaner and simpler.
-
-Ack, see above. Thank you for at least trying to use the multi-color
-LED API. 
-
-Regards,
-
-Hans
-
+Cheers,
+Nathan

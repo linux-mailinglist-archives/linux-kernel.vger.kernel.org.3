@@ -2,55 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E342E58FEBC
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 17:03:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E1BD58FEBF
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 17:04:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235258AbiHKPDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 11:03:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50390 "EHLO
+        id S235489AbiHKPEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 11:04:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234676AbiHKPDv (ORCPT
+        with ESMTP id S234070AbiHKPE3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 11:03:51 -0400
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F9BA2C665;
-        Thu, 11 Aug 2022 08:03:51 -0700 (PDT)
-Received: by mail-qv1-f47.google.com with SMTP id d1so13538610qvs.0;
-        Thu, 11 Aug 2022 08:03:51 -0700 (PDT)
+        Thu, 11 Aug 2022 11:04:29 -0400
+Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 983092B242;
+        Thu, 11 Aug 2022 08:04:28 -0700 (PDT)
+Received: by mail-qk1-f172.google.com with SMTP id b2so936683qkh.12;
+        Thu, 11 Aug 2022 08:04:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=2b6Oow0p1Gi6gERi73kxRG3MvSeEsCXxIuq9tTMaffA=;
-        b=DtnlCkgBWm/otrFX5e6/JHNUTFDsG7o+E3ED9IXHOT7HRti9nVNQEw1/n6EBfMV+mV
-         xpSOztsrEJfmTjd5gDCO0XKDsDE3mcI/JhkVfxKM2ljTDm1VM7kXR3jPXSTZj7ytf6fs
-         jac8OzIa1C74/StQXlJM4pxRXeGl9RMkdkFBMuYXqMgX8uRRoQHOyDRRxyFaoWAgCJwB
-         g+RpLAGlLQsLfHp5J3Zzz/XE35vFqwLvfsf3hFwZxF0gSdP9DZFMgneS3r+Rc3uvVM68
-         yVPjUpyTl1GQzv2GTm9uCWKgnBeMwiy8Sb7J+1Z2L9wRXE56P8AdVcN1RxbEwn/BA3xs
-         qipA==
-X-Gm-Message-State: ACgBeo0krDej7TB3/lhtPzQilibhjzzNbSxqcKXirtF+E+RVUg8UhDqY
-        rui2m8pKo4ovQVufvpQEA/pKoEkFsk8akaot
-X-Google-Smtp-Source: AA6agR4g1FQ7c4PinDoR22h6eu0Hoi3WVCW8U7nKECMNWtPm9oYWKpflP5avgGC09Mdv59JLrmebYg==
-X-Received: by 2002:a05:6214:2265:b0:474:8865:7ba2 with SMTP id gs5-20020a056214226500b0047488657ba2mr28339686qvb.98.1660230230132;
-        Thu, 11 Aug 2022 08:03:50 -0700 (PDT)
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
-        by smtp.gmail.com with ESMTPSA id h9-20020a05622a170900b0034359fc348fsm1759450qtk.73.2022.08.11.08.03.49
+        bh=lm785/4LPbs1NDnlAeewo858fZRcKAan2W90C0EIZ80=;
+        b=IIRxhIa7Ibb07sMCowGUMxUN25XGxDDVCvYNGSQyVPtz/0oyWam40Y2tHcJRyWV52Y
+         qXnsS9DHCDS0ekg8oDW7U6vuqZqVRxXIx2FGtqlwZzCg122MqbnUHEqzeJ8yVUlVnBq9
+         u200bWqXZTuRnU6AN093dRCnZp92jhuwH0YS4pOGx09bFM+j2duPpOW5oSoFCs4XOiTA
+         3RVmTu70KtZVHimJVtYbsplBNmyy/c3b/SIxYo6JUuzrqW5ZTp/5yZff8WIWqvj+f4zI
+         5QrmbeSjPt2Dwf4IgJiOez99k31mArTI34qzyt0Z77TJsihnuaw6YBOeYuMkrc/y0llF
+         IinQ==
+X-Gm-Message-State: ACgBeo0GO3WyXD0sC9IXZdwjONtzfZFzYbXurmIAas4yobHxKq+3owSI
+        oLL4FqlwIniSj2TGUnP0XUQQ9cDvm2mSAU01
+X-Google-Smtp-Source: AA6agR4+LzpsWWc5e02gdgNaUU33K68XRYMCmYfc0l51PVz2pc6hgTX/ocBfO6Ll6DELm8OFfTHycA==
+X-Received: by 2002:a05:620a:4611:b0:6b5:fefb:5fb5 with SMTP id br17-20020a05620a461100b006b5fefb5fb5mr24924795qkb.71.1660230267500;
+        Thu, 11 Aug 2022 08:04:27 -0700 (PDT)
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
+        by smtp.gmail.com with ESMTPSA id m18-20020a05620a291200b006b5e45ff82csm1159578qkp.93.2022.08.11.08.04.27
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Aug 2022 08:03:49 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-32a17d3bba2so52941777b3.9;
-        Thu, 11 Aug 2022 08:03:49 -0700 (PDT)
-X-Received: by 2002:a81:b812:0:b0:328:68e4:c886 with SMTP id
- v18-20020a81b812000000b0032868e4c886mr32412237ywe.502.1660230228733; Thu, 11
- Aug 2022 08:03:48 -0700 (PDT)
+        Thu, 11 Aug 2022 08:04:27 -0700 (PDT)
+Received: by mail-yb1-f178.google.com with SMTP id 123so28679814ybv.7;
+        Thu, 11 Aug 2022 08:04:27 -0700 (PDT)
+X-Received: by 2002:a05:6902:100a:b0:676:ed53:25b0 with SMTP id
+ w10-20020a056902100a00b00676ed5325b0mr27586122ybt.365.1660230266927; Thu, 11
+ Aug 2022 08:04:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220722141506.20171-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220722141506.20171-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220722141506.20171-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20220722141506.20171-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220722141506.20171-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220722141506.20171-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 11 Aug 2022 17:03:37 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWD=QPqL6AcKw=Xx2GhVhNFw1EY=wqp+DxA71AQRACnmw@mail.gmail.com>
-Message-ID: <CAMuHMdWD=QPqL6AcKw=Xx2GhVhNFw1EY=wqp+DxA71AQRACnmw@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: soc: renesas: renesas,rzg2l-sysc:
- Document RZ/Five SoC
+Date:   Thu, 11 Aug 2022 17:04:15 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUdMHvYiC+aL-W6F9DjZycY5LCjMpJdCJBdyzUi41ONFw@mail.gmail.com>
+Message-ID: <CAMuHMdUdMHvYiC+aL-W6F9DjZycY5LCjMpJdCJBdyzUi41ONFw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] soc: renesas: Identify RZ/Five SoC
 To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 Cc:     Magnus Damm <magnus.damm@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
@@ -74,20 +73,13 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Fri, Jul 22, 2022 at 4:15 PM Lad Prabhakar
 <prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> Document RZ/Five (R9A07G043) SYSC bindings. The SYSC block found on the
-> RZ/Five SoC is almost identical to one found on the RZ/G2UL (and alike)
-> SoC's. "renesas,r9a07g043-sysc" compatible string will be used on the
-> RZ/Five SoC so to make this clear, update the comment to include RZ/Five
-> SoC.
->
-> The SYSC block on RZ/Five has no interrupts to the core so to accommodate
-> this SoC make interrupts{,-names} properties optional.
+> Add support for identifying the (R9A07G043) RZ/Five SoC.
 >
 > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 > ---
-> v1->v2:
-> * Dropped "renesas,r9a07g043-rzfive-sysc" compatible string
-> * Made interrupts{,-names} properties optional
+> v1->v2
+> * Replaced RISCV -> RISCV
+> * Reused "renesas,r9a07g043-sysc" string for RZ/Five detection
 
 Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 i.e. will queue in renesas-devel for v6.1.

@@ -2,208 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81CD4590011
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 17:37:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46EEF58FFF5
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 17:37:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236047AbiHKPhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 11:37:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59396 "EHLO
+        id S236126AbiHKPhH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 11:37:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236005AbiHKPgK (ORCPT
+        with ESMTP id S236071AbiHKPgT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 11:36:10 -0400
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20CDD9DF83
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 08:33:15 -0700 (PDT)
-Received: by mail-vs1-xe36.google.com with SMTP id j2so18657298vsp.1
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 08:33:15 -0700 (PDT)
+        Thu, 11 Aug 2022 11:36:19 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49C769DF9D
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 08:33:19 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id y141so16781264pfb.7
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 08:33:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Dvm3ia13p7LjxVkMgvy5ZlGi63NJFPIo0HdPXDl6r38=;
-        b=P86ZlgbVWwFgMpdgFk8WYZNaMX5S2zQBu0r3xeKlJrUx9xcd0EspmOClhF4+LmfHP/
-         VpYlXjX6HGYq91PMJz6kyVt6P2NcaFGtff5INQHJVY8TdO2XbiYgnU30dBuNu+DEhnFb
-         MGk/Ae4zjhDyybuBYiPJSG9N4fXvAggP4PRpleAWat9V4Pz2tOqEn61KTQ4JDFKoK/n+
-         kMCyZ+1ZwJg/GdMqW4FcYyAlzzsicoigj3z+Blkd8kb/QbfKtUkCKV4RuJVysCPHbAu6
-         e7PEqQvTzKY2F4+xncFhXuDpJpBQCq3iJnineXp2APH2fuuicWLOYELADimLDJTP0IaO
-         ePdw==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=sGProeHom9fEq63o7Ycx3Nip30ePXZJ0gg0Exlq4IDI=;
+        b=UMWdbwOjt2wwwtmQmLKCxuxZoFP3P+Kg+NZEMPhle2UxLYNCN6r3p6U/q91ejgdpgO
+         CcUAw61fWjwB7OkJVP+7zU8FtK6AR5mbcNGJ+/4yoLmXV694kCngxiAKxViCcEu3Awed
+         gqWbkxyvPlgPMgYg3EB8cBaSS1czINm1JHFPY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Dvm3ia13p7LjxVkMgvy5ZlGi63NJFPIo0HdPXDl6r38=;
-        b=lLu8ShVDApTQMNQn2YdTHXvT3vg5GtW9pO7WLZ0rmUt9EqTZ5f+35AOVzOba+o2rE5
-         AtArQffn7xO9VjtPIDlSdaSzmAhYHPf4TO62/zhQTXtPO0qH1fkEB3pf47sJJlL4TLvN
-         tf2NUdQy7SRbK5bRD8lfs5zxvoCFBZKzz6Uko6D86/5lI1GfRJRwnLsUq3+RnZ8BfUu3
-         Y97w7v8PltcIWm1FwLP1bQEOjSEKtXH3DViI7CqdLJd8zQRTl9qh8Tc3aVUv/OeQbi68
-         rb92uK5awmJHFCQXLE6H6+WDaV4DxNoNimVfWo8qU/ZuK+XkDyxkTohJBAN9Eg+UBkVE
-         bzog==
-X-Gm-Message-State: ACgBeo0Xe95WXN5Jss2fJph/PNGz+TtrmQ1AkDnV/7umE/vdgp9fOE2d
-        ChHC9fPH0vEyAVAKZ84Cuy8QEfpwu+BqYG+rZFV0rK7jVGI=
-X-Google-Smtp-Source: AA6agR6MaSMlLxw/gmTas3OsiCNaI1xxiwkk+27SEdqJM09NamKo62hVu8XKvL4tnvchgXB2RPjhWIBWy9L/kfPfSI0=
-X-Received: by 2002:a05:6102:3ec7:b0:356:cbdf:122d with SMTP id
- n7-20020a0561023ec700b00356cbdf122dmr13430514vsv.9.1660231994065; Thu, 11 Aug
- 2022 08:33:14 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=sGProeHom9fEq63o7Ycx3Nip30ePXZJ0gg0Exlq4IDI=;
+        b=Dh3b6EGzpIohHcqMVSL7nikJnSlt0pZyj9uFtoAmQ1YXzgYWC7m4tdIJgL8TIZWBdS
+         4E5gfECVXttVAIubY34hqJXwlYLDlRX/NMclqCGz12mlR902ijKvdjTWPkivR8l7Oy1B
+         /VXq6VR14jpa4+VUzpvDUgJe/I3p1JTHt89kg0YZqv0naSrIFQwgpPkFF0LYe0UaZz3n
+         86O7/vVQFaOgDNasYW5+8zzLL+OR+HgWZAwb4lPgEANlj0h+77VOVDz1qP5dtzjmZ/NZ
+         CUmi55BBcbcIkOcjDaIwScmQFftiyBDXcuIMnN5h6Q4qsSX/v0KgRkM9r9TKi+3TYNkX
+         D85Q==
+X-Gm-Message-State: ACgBeo34xY0VuZYX3kGrur+C/XEcnlkpEa7DPaXGLACT4CbTHBtDpzn8
+        26RBiZRqmW5ySSyd3QUEituz6g==
+X-Google-Smtp-Source: AA6agR4pxsxSK4xz4ubUfvq9BeOZLm6V+TodQzH/llWgScehFC+RV76gVNLXyA1gZQZcrMvvoubtTA==
+X-Received: by 2002:a63:eb4d:0:b0:41b:db07:8b33 with SMTP id b13-20020a63eb4d000000b0041bdb078b33mr26791093pgk.89.1660231998253;
+        Thu, 11 Aug 2022 08:33:18 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id d6-20020a170902654600b0016a3f9e4865sm15086863pln.148.2022.08.11.08.33.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Aug 2022 08:33:17 -0700 (PDT)
+Date:   Thu, 11 Aug 2022 08:33:16 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     ebiederm@xmission.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-next@vger.kernel.org, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk,
+        syzbot <syzbot+3250d9c8925ef29e975f@syzkaller.appspotmail.com>,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: Re: [syzbot] linux-next boot error: BUG: unable to handle kernel
+ paging request in kernel_execve
+Message-ID: <202208110830.8F528D6737@keescook>
+References: <0000000000008c0ba505e5f22066@google.com>
 MIME-Version: 1.0
-References: <20220810210656.2799243-1-eranian@google.com> <0267c94e-7989-ca92-4175-d820d1d63a0c@linux.intel.com>
- <CABPqkBSD5xg=sEkWU01RQ5+aj1X1dtzt2e7FbZBzrcE8dxqM=A@mail.gmail.com>
- <48297c1e-6e44-53f1-da7d-4437ed87cf6f@linux.intel.com> <CABPqkBSUkUTXxS4PwDXYwvTCZ-abY41qyedRGFVoWE9ERtmwsQ@mail.gmail.com>
-In-Reply-To: <CABPqkBSUkUTXxS4PwDXYwvTCZ-abY41qyedRGFVoWE9ERtmwsQ@mail.gmail.com>
-From:   Stephane Eranian <eranian@google.com>
-Date:   Thu, 11 Aug 2022 18:33:02 +0300
-Message-ID: <CABPqkBRKpUOEwhbu+YsGTx=bWu6DaeTxcCkcKbx5tkCONnJnRw@mail.gmail.com>
-Subject: Re: [PATCH] perf/x86/intel/lbr: fix branch type encoding
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
-        kan.liang@intel.com, ak@linux.intel.com, acme@redhat.com,
-        namhyung@kernel.org, irogers@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0000000000008c0ba505e5f22066@google.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 6:28 PM Stephane Eranian <eranian@google.com> wrote:
->
-> On Thu, Aug 11, 2022 at 5:42 PM Liang, Kan <kan.liang@linux.intel.com> wrote:
-> >
-> >
-> >
-> > On 2022-08-11 10:17 a.m., Stephane Eranian wrote:
-> > > On Thu, Aug 11, 2022 at 3:23 PM Liang, Kan <kan.liang@linux.intel.com> wrote:
-> > >>
-> > >>
-> > >>
-> > >> On 2022-08-10 5:06 p.m., Stephane Eranian wrote:
-> > >>> With architected LBR, the procesosr can record the type of each sampled taken
-> > >>> branch. The type is encoded in 4-bit field in the LBR_INFO MSR of each entry.
-> > >>>
-> > >>> The branch type must then extracted and saved in the perf_branch_entry in the
-> > >>> perf_events sampling buffer. With the current code, the raw Intel encoding of
-> > >>> the branch is exported to user tools.
-> > >>
-> > >> In the intel_pmu_lbr_filter(), the raw encoding will be converted into
-> > >> the X86_BR_* format via arch_lbr_br_type_map[]. Then the
-> > >> common_branch_type() will convert the X86_BR_* format to the generic
-> > >> PERF_BR_* type and expose to user tools.
-> > >>
-> > >> I double check the existing arch_lbr_br_type_map[] and branch_map[].
-> > >> They should generate the same PERF_BR_* type as your arch_lbr_type_map[].
-> > >>
-> > >> Is there a test case which I can use to reproduce the problem?
-> > >>
-> > > I was doing a simple:
-> > > $ perf record -b -e cpu/event=0xc4/ ....
-> > > $ perf report -D
-> > > Looking at the LBR information and the BR type, many entries has no branch type.
-> > > What I see is a function where you do: e->type = get_lbr_br_type() and
-> > > that is what
-> > > is then saved in the buffer. Unless I am missing a later patch.
-> > >
-> >
-> > To get the LBR type, the save_type filter option must be applied. See
-> > 60f83fa6341d ("perf record: Create a new option save_type in
-> > --branch-filter").
-> >
-> That seems overly complicated. I don't recall having to pass a new option
-> to get the LBR latency. It showed up automatically. So why for branch_type?
->
-> > The -b only include the ANY option. Maybe we should extend the -b option
-> > to ANY|SAVE_TYPE.
-> >
-> Ok, that explains it then. I think we need to simplify.
->
-In fact, I don't see a case where you would not benefit from the branch type.
-Furthermore, not having the branch type DOES NOT save any space in the
-branch record (given we have a reserved field). So I think I prefer not having
-to specify yet another cmdline option to get the branch type. In fact, if you do
-not pass the option, then perf report -D reports some bogus branch types, i.e.,
-not all entries have empty types.
+Hi Fabio,
 
+It seems likely that the kmap change[1] might be causing this crash. Is
+there a boot-time setup race between kmap being available and early umh
+usage?
 
-> > >
-> > >> Thanks,
-> > >> Kan
-> > >>
-> > >>> Yet tools, such as perf, expected the
-> > >>> branch type to be encoded using perf_events branch type enum
-> > >>> (see tools/perf/util/branch.c). As a result of the discrepancy, the output of
-> > >>> perf report -D shows bogus branch types.
-> > >>>
-> > >>> Fix the problem by converting the Intel raw encoding into the perf_events
-> > >>> branch type enum values. With that in place and with no changes to the tools,
-> > >>> the branch types are now reported properly.
-> > >>>
-> > >>> Signed-off-by: Stephane Eranian <eranian@google.com>
-> > >>> ---
-> > >>>  arch/x86/events/intel/lbr.c | 35 ++++++++++++++++++++++++++++++++---
-> > >>>  1 file changed, 32 insertions(+), 3 deletions(-)
-> > >>>
-> > >>> diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
-> > >>> index 4f70fb6c2c1e..ef63d4d46b50 100644
-> > >>> --- a/arch/x86/events/intel/lbr.c
-> > >>> +++ b/arch/x86/events/intel/lbr.c
-> > >>> @@ -894,9 +894,23 @@ static DEFINE_STATIC_KEY_FALSE(x86_lbr_mispred);
-> > >>>  static DEFINE_STATIC_KEY_FALSE(x86_lbr_cycles);
-> > >>>  static DEFINE_STATIC_KEY_FALSE(x86_lbr_type);
-> > >>>
-> > >>> -static __always_inline int get_lbr_br_type(u64 info)
-> > >>> +/*
-> > >>> + * Array index encodes IA32_LBR_x_INFO Branch Type Encodings
-> > >>> + * as per Intel SDM Vol3b Branch Types section
-> > >>> + */
-> > >>> +static const int arch_lbr_type_map[]={
-> > >>> +     [0] = PERF_BR_COND,
-> > >>> +     [1] = PERF_BR_IND,
-> > >>> +     [2] = PERF_BR_UNCOND,
-> > >>> +     [3] = PERF_BR_IND_CALL,
-> > >>> +     [4] = PERF_BR_CALL,
-> > >>> +     [5] = PERF_BR_RET,
-> > >>> +};
-> > >>> +#define ARCH_LBR_TYPE_COUNT ARRAY_SIZE(arch_lbr_type_map)
-> > >>> +
-> > >>> +static __always_inline u16 get_lbr_br_type(u64 info)
-> > >>>  {
-> > >>> -     int type = 0;
-> > >>> +     u16 type = 0;
-> > >>>
-> > >>>       if (static_branch_likely(&x86_lbr_type))
-> > >>>               type = (info & LBR_INFO_BR_TYPE) >> LBR_INFO_BR_TYPE_OFFSET;
-> > >>> @@ -904,6 +918,21 @@ static __always_inline int get_lbr_br_type(u64 info)
-> > >>>       return type;
-> > >>>  }
-> > >>>
-> > >>> +/*
-> > >>> + * The kernel cannot expose raw Intel branch type encodings because they are
-> > >>> + * not generic. Instead, the function below  maps the encoding to the
-> > >>> + * perf_events user visible branch types.
-> > >>> + */
-> > >>> +static __always_inline int get_lbr_br_type_mapping(u64 info)
-> > >>> +{
-> > >>> +     if (static_branch_likely(&x86_lbr_type)) {
-> > >>> +             u16 raw_type = get_lbr_br_type(info);
-> > >>> +             if (raw_type < ARCH_LBR_TYPE_COUNT)
-> > >>> +                     return arch_lbr_type_map[raw_type];
-> > >>> +     }
-> > >>> +     return PERF_BR_UNKNOWN;
-> > >>> +}
-> > >>> +
-> > >>>  static __always_inline bool get_lbr_mispred(u64 info)
-> > >>>  {
-> > >>>       bool mispred = 0;
-> > >>> @@ -957,7 +986,7 @@ static void intel_pmu_store_lbr(struct cpu_hw_events *cpuc,
-> > >>>               e->in_tx        = !!(info & LBR_INFO_IN_TX);
-> > >>>               e->abort        = !!(info & LBR_INFO_ABORT);
-> > >>>               e->cycles       = get_lbr_cycles(info);
-> > >>> -             e->type         = get_lbr_br_type(info);
-> > >>> +             e->type         = get_lbr_br_type_mapping(info);
-> > >>>       }
-> > >>>
-> > >>>       cpuc->lbr_stack.nr = i;
+-Kees
+
+[1] https://git.kernel.org/linus/c6e8e36c6ae4b11bed5643317afb66b6c3cadba8
+
+On Thu, Aug 11, 2022 at 12:29:34AM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    bc6c6584ffb2 Add linux-next specific files for 20220810
+> git tree:       linux-next
+> console output: https://syzkaller.appspot.com/x/log.txt?x=115034c3080000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=5784be4315a4403b
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3250d9c8925ef29e975f
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+3250d9c8925ef29e975f@syzkaller.appspotmail.com
+> 
+> BUG: unable to handle page fault for address: ffffdc0000000000
+> #PF: supervisor read access in kernel mode
+> #PF: error_code(0x0000) - not-present page
+> PGD 11826067 P4D 11826067 PUD 0 
+> Oops: 0000 [#1] PREEMPT SMP KASAN
+> CPU: 0 PID: 1100 Comm: kworker/u4:5 Not tainted 5.19.0-next-20220810-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+> RIP: 0010:strnlen+0x3b/0x70 lib/string.c:504
+> Code: 74 3c 48 bb 00 00 00 00 00 fc ff df 49 89 fc 48 89 f8 eb 09 48 83 c0 01 48 39 e8 74 1e 48 89 c2 48 89 c1 48 c1 ea 03 83 e1 07 <0f> b6 14 1a 38 ca 7f 04 84 d2 75 11 80 38 00 75 d9 4c 29 e0 48 83
+> RSP: 0000:ffffc90005c5fe10 EFLAGS: 00010246
+> RAX: ffff000000000000 RBX: dffffc0000000000 RCX: 0000000000000000
+> RDX: 1fffe00000000000 RSI: 0000000000020000 RDI: ffff000000000000
+> RBP: ffff000000020000 R08: 0000000000000005 R09: 0000000000000000
+> R10: 0000000000000006 R11: 0000000000000000 R12: ffff000000000000
+> R13: ffff88814764cc00 R14: ffff000000000000 R15: ffff88814764cc00
+> FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: ffffdc0000000000 CR3: 000000000bc8e000 CR4: 00000000003506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  strnlen include/linux/fortify-string.h:119 [inline]
+>  copy_string_kernel+0x26/0x250 fs/exec.c:616
+>  copy_strings_kernel+0xb3/0x190 fs/exec.c:655
+>  kernel_execve+0x377/0x500 fs/exec.c:1998
+>  call_usermodehelper_exec_async+0x2e3/0x580 kernel/umh.c:112
+>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+>  </TASK>
+> Modules linked in:
+> CR2: ffffdc0000000000
+> ---[ end trace 0000000000000000 ]---
+> RIP: 0010:strnlen+0x3b/0x70 lib/string.c:504
+> Code: 74 3c 48 bb 00 00 00 00 00 fc ff df 49 89 fc 48 89 f8 eb 09 48 83 c0 01 48 39 e8 74 1e 48 89 c2 48 89 c1 48 c1 ea 03 83 e1 07 <0f> b6 14 1a 38 ca 7f 04 84 d2 75 11 80 38 00 75 d9 4c 29 e0 48 83
+> RSP: 0000:ffffc90005c5fe10 EFLAGS: 00010246
+> RAX: ffff000000000000 RBX: dffffc0000000000 RCX: 0000000000000000
+> RDX: 1fffe00000000000 RSI: 0000000000020000 RDI: ffff000000000000
+> RBP: ffff000000020000 R08: 0000000000000005 R09: 0000000000000000
+> R10: 0000000000000006 R11: 0000000000000000 R12: ffff000000000000
+> R13: ffff88814764cc00 R14: ffff000000000000 R15: ffff88814764cc00
+> FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: ffffdc0000000000 CR3: 000000000bc8e000 CR4: 00000000003506f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> ----------------
+> Code disassembly (best guess):
+>    0:	74 3c                	je     0x3e
+>    2:	48 bb 00 00 00 00 00 	movabs $0xdffffc0000000000,%rbx
+>    9:	fc ff df
+>    c:	49 89 fc             	mov    %rdi,%r12
+>    f:	48 89 f8             	mov    %rdi,%rax
+>   12:	eb 09                	jmp    0x1d
+>   14:	48 83 c0 01          	add    $0x1,%rax
+>   18:	48 39 e8             	cmp    %rbp,%rax
+>   1b:	74 1e                	je     0x3b
+>   1d:	48 89 c2             	mov    %rax,%rdx
+>   20:	48 89 c1             	mov    %rax,%rcx
+>   23:	48 c1 ea 03          	shr    $0x3,%rdx
+>   27:	83 e1 07             	and    $0x7,%ecx
+> * 2a:	0f b6 14 1a          	movzbl (%rdx,%rbx,1),%edx <-- trapping instruction
+>   2e:	38 ca                	cmp    %cl,%dl
+>   30:	7f 04                	jg     0x36
+>   32:	84 d2                	test   %dl,%dl
+>   34:	75 11                	jne    0x47
+>   36:	80 38 00             	cmpb   $0x0,(%rax)
+>   39:	75 d9                	jne    0x14
+>   3b:	4c 29 e0             	sub    %r12,%rax
+>   3e:	48                   	rex.W
+>   3f:	83                   	.byte 0x83
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+-- 
+Kees Cook

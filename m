@@ -2,72 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1E6758F6FE
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 06:36:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97B1A58F703
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 06:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233715AbiHKEgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 00:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38242 "EHLO
+        id S233783AbiHKEjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 00:39:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233483AbiHKEg3 (ORCPT
+        with ESMTP id S233090AbiHKEjK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 00:36:29 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A9D491DD
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 21:36:25 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id qn6so19632730ejc.11
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 21:36:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kali.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=wbQAeMQOJ4LfSIWECGQFyUhqjfpSoLI8AfopCaQiJEU=;
-        b=G2Svss+8NtmivkCOl4Bh6T8tY5W084Z2nlXQ31QrJ6LZyKPy2WaINasfEgMBwOxRtb
-         7SFYLbAM+NhjMLdjquQr1/Y6LIZQlP1j/aI+enQPlzLAy7k2QQwB2Q4wDbANkwZGvwOF
-         fsSaXcGgaqc3LSOwBeGoMAMPlhKHKQDl1a6THh7/kek/2AHn0ylR3zV9K61bQ6ecRJ4k
-         WRqJvY6Gnkv+aXANNFxwpWbxaPy1atzV5pOKxDyXdGqv7bqwbyKSCkWyecybU/VTaHoe
-         A3sTBV9vizJ7LfPXsEkOI25uvnog+uhUhnof911XHQB9wHkikqAfkLgsCBIXfiUI2lpr
-         bD6Q==
+        Thu, 11 Aug 2022 00:39:10 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8BC4A82A
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 21:39:08 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id j8-20020a6b7948000000b0067c2923d1b8so9032738iop.6
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 21:39:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=wbQAeMQOJ4LfSIWECGQFyUhqjfpSoLI8AfopCaQiJEU=;
-        b=G5Tus7tavgbcq/hKPLfYqNJEempTOPf+RFgm5Wz1J/zml0GgXm9AGKvx7m3rfEoy9t
-         KRjaR016MvXJnDwGx3UtO2z42TnX72R9614w75izA1BMi1h9h212owBkAVMfqyMsDETg
-         PicQEcKKcXsvPaODQv0n1+vJJxSobNNNzp4kfVQVlx4fdEGNmCktnItXD8xWjWXpSO8x
-         B6cpDeEAcceEgRCucChW66r3BNjYfxQnEoYeuqQX6KFt/XHQyg52WGawkijpmK3OmkWR
-         W9nTO9BY3PAC1b0Wg04z0+2J62I2s4RzQvixARNWU1W0/smBqjmz/qPqY+m+SVV1G1uK
-         YlBQ==
-X-Gm-Message-State: ACgBeo3jDbdkr4pD1pw15AoVdue+wW2iQJD3i8CZ+DMIp52lA7hk25Bq
-        ITFBvoguR/W0y2jvbTSL5sQ15J03DppLB9lxZR6B1Q==
-X-Google-Smtp-Source: AA6agR7nmtkC3H2rGXWkVc5MPJ5csNAZDDyaJhdrIQp6wcJA9xfLEfa8hMO5cs2oGCS5/++TiKn6sJspoXwqiADL1Aw=
-X-Received: by 2002:a17:907:929:b0:731:3bb6:d454 with SMTP id
- au9-20020a170907092900b007313bb6d454mr14771971ejc.96.1660192584299; Wed, 10
- Aug 2022 21:36:24 -0700 (PDT)
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=PJ6eD7IGIv0bVGmHdInkGzEGqwSJCBaB6NsgompZ0bE=;
+        b=uQ0tGF6AEIc45vPoaFGUYth+86Z/swxnbmm9wPTol6HjFl5CLzUEOOKz2Z7jDq9C59
+         WMd1optXMCUzSOo+w91mBcmMR4euEUIpUqIr498NFekzOSy7GJpvNKi2KCsWV2BdGpSr
+         1ay+HgvKIzCGMeMhgLCjCiDcKDPQyj1x17orkrlOfKBrNvd7T/UWJgplYpb4mZzddlAS
+         WrJmc90KGWlnlbVCdPYV/F7iVbGyknyCya4Pb+i2CgGX7TXc4PuEaEtnjxQvrRyKWrge
+         NA+hdT/teHFR5aUmZMzoTzSxteQLJyyXVyHitVKMfsqg1A2dn/11kiwQLqCkrEueEXNr
+         XAAQ==
+X-Gm-Message-State: ACgBeo30sEFG2lOAmUO32OcM+5qdVlN9IuV9VfmKuiXwJQzwUapQJ56X
+        PbfqZ7RCFO4Rg5fOQN5mtrrMr+wID7+LP8zGuUASdWsJgtPd
+X-Google-Smtp-Source: AA6agR6ZLwECHmuKPAhaXhA6JKxqHwFTimcRugIBv1VJqekVpIqKmilxwrSQ2OE65Uc4f2VJSW951l6N73KmOM8wDaY79nXy3cGg
 MIME-Version: 1.0
-References: <20220811040121.3775613-1-bjorn.andersson@linaro.org>
- <20220811040121.3775613-4-bjorn.andersson@linaro.org> <CAKXuJqhWn8bcG3x-xvyJ5-1kGXBVqCEuG31aHNidCqKA81NSqQ@mail.gmail.com>
-In-Reply-To: <CAKXuJqhWn8bcG3x-xvyJ5-1kGXBVqCEuG31aHNidCqKA81NSqQ@mail.gmail.com>
-From:   Steev Klimaszewski <steev@kali.org>
-Date:   Wed, 10 Aug 2022 23:36:13 -0500
-Message-ID: <CAKXuJqiTQxwBdT+ZDkOuRy3+s+XTjWevJr=7+wZN7HKsy6EGbA@mail.gmail.com>
-Subject: Re: [PATCH 3/3] drm/msm/dpu: Introduce SC8280XP
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+X-Received: by 2002:a05:6638:4916:b0:342:786d:6093 with SMTP id
+ cx22-20020a056638491600b00342786d6093mr14841015jab.105.1660192747527; Wed, 10
+ Aug 2022 21:39:07 -0700 (PDT)
+Date:   Wed, 10 Aug 2022 21:39:07 -0700
+In-Reply-To: <20220810223415.2743-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000f9a4a505e5efbe81@google.com>
+Subject: Re: [syzbot] INFO: task hung in __generic_file_fsync (3)
+From:   syzbot <syzbot+ed920a72fd23eb735158@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,77 +55,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 10, 2022 at 11:28 PM Steev Klimaszewski <steev@kali.org> wrote:
->
-> Hi Bjorn,
->
->
-> On Wed, Aug 10, 2022 at 10:58 PM Bjorn Andersson
-> <bjorn.andersson@linaro.org> wrote:
-> >
-> > The Qualcomm SC8280XP platform contains DPU version 8.0.0, has 9
-> > interfaces, 2 DSI controllers and 4 DisplayPort controllers. Extend the
-> > necessary definitions and describe the DPU in the SC8280XP.
-> >
-> > Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> > ---
-> >
-> > Note that MSM_DP_CONTROLLER_3 is also defined in the DP series and as such a
-> > trivial conflict will occur when merging the latter of the two series.
-> >
-> >  .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c    | 211 ++++++++++++++++++
-> >  .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    |   1 +
-> >  .../gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c |  18 ++
-> >  .../gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h |   3 +
-> >  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h   |   2 +
-> >  drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c       |   1 +
-> >  drivers/gpu/drm/msm/msm_drv.h                 |   1 +
-> >  drivers/gpu/drm/msm/msm_mdss.c                |   2 +
-> >  8 files changed, 239 insertions(+)
-> >
-> <snip>
-> >
-> > diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
-> > index b3689a2d27d7..5978c6e26a1e 100644
-> > --- a/drivers/gpu/drm/msm/msm_drv.h
-> > +++ b/drivers/gpu/drm/msm/msm_drv.h
-> > @@ -55,6 +55,7 @@ enum msm_dp_controller {
-> >         MSM_DP_CONTROLLER_0,
-> >         MSM_DP_CONTROLLER_1,
-> >         MSM_DP_CONTROLLER_2,
-> > +       MSM_DP_CONTROLLER_3,
-> >         MSM_DP_CONTROLLER_COUNT,
-> >  };
-> >
-> This seems to also be part of
-> https://lore.kernel.org/r/20220810040745.3582985-6-bjorn.andersson@linaro.org
-> (but only th msm_drv.h hunk
-Sorry, wrong copy buffer - it's part of this patchset -
-https://lore.kernel.org/all/20220810035013.3582848-4-bjorn.andersson@linaro.org/
+Hello,
 
->
-> >
-> > diff --git a/drivers/gpu/drm/msm/msm_mdss.c b/drivers/gpu/drm/msm/msm_mdss.c
-> > index e13c5c12b775..7c391fab6263 100644
-> > --- a/drivers/gpu/drm/msm/msm_mdss.c
-> > +++ b/drivers/gpu/drm/msm/msm_mdss.c
-> > @@ -208,6 +208,7 @@ static int msm_mdss_enable(struct msm_mdss *msm_mdss)
-> >                 writel_relaxed(0x420, msm_mdss->mmio + UBWC_STATIC);
-> >                 break;
-> >         case DPU_HW_VER_600:
-> > +       case DPU_HW_VER_800:
-> >                 /* TODO: 0x102e for LP_DDR4 */
-> >                 writel_relaxed(0x103e, msm_mdss->mmio + UBWC_STATIC);
-> >                 writel_relaxed(2, msm_mdss->mmio + UBWC_CTRL_2);
-> > @@ -445,6 +446,7 @@ static const struct of_device_id mdss_dt_match[] = {
-> >         { .compatible = "qcom,sc7180-mdss" },
-> >         { .compatible = "qcom,sc7280-mdss" },
-> >         { .compatible = "qcom,sc8180x-mdss" },
-> > +       { .compatible = "qcom,sc8280xp-mdss" },
-> >         { .compatible = "qcom,sm8150-mdss" },
-> >         { .compatible = "qcom,sm8250-mdss" },
-> >         {}
-> > --
-> > 2.35.1
-> >
-> -- steev
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+WARNING in inode_dio_wait
+
+------------[ cut here ]------------
+__inode_dio_wait schedule_timeout(30 * HZ) timeout
+WARNING: CPU: 0 PID: 4182 at fs/inode.c:2381 __inode_dio_wait fs/inode.c:2381 [inline]
+WARNING: CPU: 0 PID: 4182 at fs/inode.c:2381 inode_dio_wait+0x28c/0x2e0 fs/inode.c:2400
+Modules linked in:
+CPU: 0 PID: 4182 Comm: syz-executor.1 Not tainted 5.19.0-syzkaller-02972-g200e340f2196-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+RIP: 0010:__inode_dio_wait fs/inode.c:2381 [inline]
+RIP: 0010:inode_dio_wait+0x28c/0x2e0 fs/inode.c:2400
+Code: 9d ff 45 84 ed 0f 85 2b ff ff ff e8 7e de 9d ff 48 c7 c6 a0 bb db 89 48 c7 c7 a0 b3 db 89 c6 05 8c 38 ca 0b 01 e8 85 f3 55 07 <0f> 0b e9 05 ff ff ff e8 58 de 9d ff 4c 89 fe 4c 89 f7 e8 1d 57 7e
+RSP: 0018:ffffc9000394fc30 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: ffff88806c341430 RCX: 0000000000000000
+RDX: ffff888024d35880 RSI: ffffffff81611718 RDI: fffff52000729f78
+RBP: ffff88806c34163c R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000000 R11: 0000000000000001 R12: 0000000000000007
+R13: 0000000000000000 R14: ffffffff8ba0acc0 R15: ffffc9000394fc78
+FS:  00007f5e4b930700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055c3b3bffda0 CR3: 00000000716e3000 CR4: 0000000000350ee0
+Call Trace:
+ <TASK>
+ fat_setattr+0x3de/0x13c0 fs/fat/file.c:509
+ notify_change+0xcd0/0x1440 fs/attr.c:418
+ do_truncate+0x13c/0x200 fs/open.c:65
+ do_sys_ftruncate+0x536/0x730 fs/open.c:193
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f5e4a889209
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f5e4b930168 EFLAGS: 00000246 ORIG_RAX: 000000000000004d
+RAX: ffffffffffffffda RBX: 00007f5e4a99bf60 RCX: 00007f5e4a889209
+RDX: 0000000000000000 RSI: 00000000010099b8 RDI: 0000000000000004
+RBP: 00007f5e4a8e3161 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffcd40a747f R14: 00007f5e4b930300 R15: 0000000000022000
+ </TASK>
+
+
+Tested on:
+
+commit:         200e340f Merge tag 'pull-work.dcache' of git://git.ker..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=118a0697080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a3f4d6985d3164cd
+dashboard link: https://syzkaller.appspot.com/bug?extid=ed920a72fd23eb735158
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=176c15dd080000
+

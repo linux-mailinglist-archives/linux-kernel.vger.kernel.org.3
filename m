@@ -2,53 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDF66590911
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 01:18:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AFC4590913
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 01:18:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236348AbiHKXRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 19:17:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49324 "EHLO
+        id S236664AbiHKXRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 19:17:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236287AbiHKXRG (ORCPT
+        with ESMTP id S236293AbiHKXRG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 11 Aug 2022 19:17:06 -0400
 Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B4A7A1A5B
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 16:16:50 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id D0E195C015C;
-        Thu, 11 Aug 2022 19:16:49 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 651C7A024C
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 16:16:51 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 792A95C017D;
+        Thu, 11 Aug 2022 19:16:50 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 11 Aug 2022 19:16:49 -0400
+  by compute2.internal (MEProxy); Thu, 11 Aug 2022 19:16:50 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=cc
         :cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1660259809; x=
-        1660346209; bh=581oZMKShZxT8Zn0zMTVJFcTkBUcW/2CxVH64DF0VuQ=; b=m
-        rs6vrbJsfqGYoj2XllLGP6k0bBKIeQAXZq+8slnkzIt6qYpHeZEAveoCBv29EsKe
-        6cwbZk4Lcaq3J4lyIHnjJOHF3tIEz6ytuFkazkLYiuCOb/ShDAehH+rou8pa0eqA
-        rO1EHofDIIfRYsiCf7nnlVs2AN1L6tXN7XbdBa1mohCuFWbUDR0OX/c2q+h2C7A9
-        DutPxAftBizB0uxlz1ZKes3fNpkhnsawhOQtZpzHYNIFanJuCZUW1XJPy3JSORhL
-        i3rTSpkGLHxZLzHqWBPLR/2MLpZjkU4DlXipWLclUGG5WKh8RQR46oieP9NhYIq7
-        /JLKstTjHUtZHGsMqsz/g==
+        :reply-to:sender:subject:subject:to:to; s=fm1; t=1660259810; x=
+        1660346210; bh=uhHjqO7fMake/4Yw6e31S9FQXGCwAM7iMxFEnUEtZO8=; b=I
+        xburOzFI2YavZy7hDOd13A3/uBpUcF+4U/SAds6S8HDCkF5Owkz2M1kTkV93F+95
+        xGjM71TLIEd3xgzhnZ9ZfpptKuGEFPZU64C9A3/zc28ET8TTHb8wxHzdxVgNv/VJ
+        hIzwRgASSRZ8TkmYC6yB1s3aBcTTDZ41K7s0RpGsHD3hEOedm26KRUXCGB+HegFs
+        H74C6EsqK6KS3/wV+iMkruv+P/RphinFbCk6/XoE5dzlTXfqWaE7d49wx5lC45f4
+        wXUg8PVjTZr8V+EfQwBv8nlnUqPQ9eX7VH7tLImQnhkmGdc/gSEZ/E/nmmplc5Nx
+        0N8vqm1fOyE+EdSu4utFA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:reply-to:sender
         :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
-        :x-me-sender:x-sasl-enc; s=fm1; t=1660259809; x=1660346209; bh=5
-        81oZMKShZxT8Zn0zMTVJFcTkBUcW/2CxVH64DF0VuQ=; b=ruWSPI7GHkiJJtZH4
-        YQ14GNsFKLV1B/p+GrExipeGWDt6nU2munMqzAgANctH2saJFTmNv+9qqn7n7DRt
-        yj6/To9gMxrkV6xAJ69EAAT6jmg0K5pmfCQ0K586DPJzvlm+L9FqVrCZx53bAWsq
-        c3aqjGn3ohc3m6CEqcpX58nm/VDaLGNPIqB8oiiBZv/dAXN72VB2xHZNlx01Qy+1
-        3XWWBPjN0Vi1ngMF8aQt/cNzx+0St6g4Vdf+ELktsz9B8RSVhTZoeVWGSh3C+0Fv
-        GWuClr51TgAOisHwT8JmBIhqAQ2faVVgaZxHUQRKjv5hA6tkXTYRDs4KWOedF9k5
-        KHQBQ==
-X-ME-Sender: <xms:4Y31YlTDZhDOS-HTMiLZueNG2o3I1lKHfIBHjhWVYoZ_ivFHkMGOQw>
-    <xme:4Y31Yuy-pIC7tcjZAq1bs3jge-4C7MohSuY9RUPd6ZzPQqm8xYGzBKEn1haEq2P1O
-    ioRxe1AwOa-RSIxZA>
-X-ME-Received: <xmr:4Y31Yq2qnWr943T7BDsDFLM68-A1BGu22mbjyLGp5gn8SKYM19rE25vp5T0Q1FZkeXMT4gVD0cX6HMUSqg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeghedgudelucetufdoteggodetrfdotf
+        :x-me-sender:x-sasl-enc; s=fm1; t=1660259810; x=1660346210; bh=u
+        hHjqO7fMake/4Yw6e31S9FQXGCwAM7iMxFEnUEtZO8=; b=exTAiZiEZnbLkmnO/
+        ikhXgYLh0lCm+0VKyrVL765VJ44oLKYdhfx5vsxY5vruHwptG/h5YFBNpsXnDNtN
+        4pJXt3l/EpZwAYFORNASEG7NC6f/eDIc4d700hpeBAtQD951YLEd3QvrhmZqK0O3
+        Q0EG0ZGd0KqxysvOJvMuZBdF0587x4u91gBzC8aTsDnNove6Yb/OxolIYkTwSAZB
+        6UaRRMpT/t9Izm8fMuEbP5+QXmV6/7Z2hlg/HusepiRko2DObkTWk6/rzVePPpOE
+        AUqsxv/Fn+I/TmBsIAR84URimQAitewoZ+cdFddMV7a+eztde1pL1pFZOFSINFHn
+        jLnIA==
+X-ME-Sender: <xms:4o31YnXDrYpJzGS_dW0slUegEufbPwAAm9C_DKeITBV6Roxiu3412Q>
+    <xme:4o31YvlyaRfNKRr1fk2ym_OybkMfpMnsR5XSKTwPDpbDMesxea87Rtm5TE5E9XOrz
+    _yAdQC5-AG4cwW52w>
+X-ME-Received: <xmr:4o31YjYCHphl207pA_Xc1iZrYmwnnwJE7A-eEXV2TGvy4D_vnpzLl0Yl_FiFvqhRU0sOtKWCTENFG3hwSA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeghedgvddtucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephffvvefufffkofgjfhhrggfgsedtqhertdertddtnecuhfhrohhmpegkihcu
@@ -56,10 +56,10 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeghedgudelucetufdoteggod
     ehudfgudduvdelheehteegledtteeiveeuhfffveekhfevueefieeijeegvdenucevlhhu
     shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpeiiihdrhigrnhessh
     gvnhhtrdgtohhm
-X-ME-Proxy: <xmx:4Y31YtCF2K4bNAku-_tiV6s2XJcwAPcIRs-I-FttzBCFi-2QC43K1g>
-    <xmx:4Y31YuidbfKT7AP8V336d9RJLXtTh6gd2u6fz0gMAx-zRPP-3HhWDg>
-    <xmx:4Y31YhpIUfcrrjg_FjyrCRoMuR_XQkShF8rlKAuTDVmYv9yYzHsj4w>
-    <xmx:4Y31YjZ6l4aB9lfpSQYbMKOmEdugAe9txHmyzXLsnMNz4pZKz_8Qzw>
+X-ME-Proxy: <xmx:4o31YiXhbt2fT_IkbjgW0vn-WSaokthNRMGUFqXWhucyYdu-givWog>
+    <xmx:4o31Yhnf3MYbCgfl3mJ3xVLtjE2mua5g0O1ME0BysVp-dv6H08LwzQ>
+    <xmx:4o31YvcPbvali2i4O-NRy0Ld8JQ48guxfoa3nFfAPbuqNfmfiNIihg>
+    <xmx:4o31YqdpjT_XXvtUkaX56xSLyvOFoLo3tPb7xtetlKUBxjPjcy0uFQ>
 Feedback-ID: iccd040f4:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
  11 Aug 2022 19:16:49 -0400 (EDT)
@@ -75,9 +75,9 @@ Cc:     David Hildenbrand <david@redhat.com>,
         David Rientjes <rientjes@google.com>,
         James Houghton <jthoughton@google.com>,
         Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v2 07/12] virtio: virtio_balloon: use pageblock_order instead of MAX_ORDER
-Date:   Thu, 11 Aug 2022 19:16:38 -0400
-Message-Id: <20220811231643.1012912-8-zi.yan@sent.com>
+Subject: [RFC PATCH v2 08/12] mm/page_reporting: set page_reporting_order to -1 to prevent it running
+Date:   Thu, 11 Aug 2022 19:16:39 -0400
+Message-Id: <20220811231643.1012912-9-zi.yan@sent.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220811231643.1012912-1-zi.yan@sent.com>
 References: <20220811231643.1012912-1-zi.yan@sent.com>
@@ -96,39 +96,36 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Zi Yan <ziy@nvidia.com>
 
-virtio_balloon used MAX_ORDER to report free page blocks to host, as
-MAX_ORDER becomes modifiable in later commits, the reported free size might
-be too big. pageblock_order is either 1/2 of or the same as MAX_ORDER
-currently. Use pageblock_order instead to make virtio_balloon have a
-constant free page block report size when MAX_ORDER is changed in the later
-commits.
+page_reporting_order was initialized to MAX_ORDER to prevent it running
+before its value is overwritten. Use -1 instead to remove the
+dependency on MAX_ORDER.
 
 Signed-off-by: Zi Yan <ziy@nvidia.com>
-Cc: "Michael S. Tsirkin" <mst@redhat.com>
 Cc: David Hildenbrand <david@redhat.com>
-Cc: Jason Wang <jasowang@redhat.com>
-Cc: virtualization@lists.linux-foundation.org
 Cc: linux-mm@kvack.org
 Cc: linux-kernel@vger.kernel.org
 ---
- drivers/virtio/virtio_balloon.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ mm/page_reporting.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/virtio/virtio_balloon.c b/drivers/virtio/virtio_balloo=
-n.c
-index 5b15936a5214..51447737538b 100644
---- a/drivers/virtio/virtio_balloon.c
-+++ b/drivers/virtio/virtio_balloon.c
-@@ -33,7 +33,7 @@
- #define VIRTIO_BALLOON_FREE_PAGE_ALLOC_FLAG (__GFP_NORETRY | __GFP_NOWARN =
-| \
- 					     __GFP_NOMEMALLOC)
- /* The order of free page blocks to report to host */
--#define VIRTIO_BALLOON_HINT_BLOCK_ORDER MAX_ORDER
-+#define VIRTIO_BALLOON_HINT_BLOCK_ORDER pageblock_order
- /* The size of a free page block in bytes */
- #define VIRTIO_BALLOON_HINT_BLOCK_BYTES \
- 	(1 << (VIRTIO_BALLOON_HINT_BLOCK_ORDER + PAGE_SHIFT))
+diff --git a/mm/page_reporting.c b/mm/page_reporting.c
+index b48d6ad82998..001438f3dbeb 100644
+--- a/mm/page_reporting.c
++++ b/mm/page_reporting.c
+@@ -11,7 +11,11 @@
+ #include "page_reporting.h"
+ #include "internal.h"
+=20
+-unsigned int page_reporting_order =3D MAX_PHYS_CONTIG_ORDER + 1;
++/*
++ * Set page_reporting_order to (unsigned int)-1 to prevent it running unti=
+l the
++ * value is being overwritten
++ */
++unsigned int page_reporting_order =3D (unsigned int)-1;
+ module_param(page_reporting_order, uint, 0644);
+ MODULE_PARM_DESC(page_reporting_order, "Set page reporting order");
+=20
 --=20
 2.35.1
 

@@ -2,124 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A271058F5B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 04:09:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDF9758F5BC
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 04:09:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233632AbiHKCJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 22:09:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33044 "EHLO
+        id S233659AbiHKCJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 22:09:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbiHKCI4 (ORCPT
+        with ESMTP id S233651AbiHKCJj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 22:08:56 -0400
-Received: from mail-vs1-xe31.google.com (mail-vs1-xe31.google.com [IPv6:2607:f8b0:4864:20::e31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F08844C5;
-        Wed, 10 Aug 2022 19:08:55 -0700 (PDT)
-Received: by mail-vs1-xe31.google.com with SMTP id 129so17004032vsq.8;
-        Wed, 10 Aug 2022 19:08:55 -0700 (PDT)
+        Wed, 10 Aug 2022 22:09:39 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E84844DA
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 19:09:37 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id a8so16443917pjg.5
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 19:09:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc;
-        bh=OA8ik5onCrT3CKjTeluDsMAgLLfodb0WC4L067Q2EzI=;
-        b=FoDMELBcM/z4Twa/6aKouqJtk67HKH6oMibFUaGrfJhEm8+AHLkOks46BFjqFuETIw
-         Ip0hhR4TDW102ZOs4FKi6gPbFiKyHEg/4DcVAoUi2n8xYfVgTXh7luHt3C2zxPSyn3m+
-         wnJzydgTasCpJoi3Z2RBTwVjCkABXGmh/e1ghvv/CLTiJIjKLugrKbyLvQWsHgje7hQH
-         BXD3t/JdT2COh6IRdNPBG5Pd0GqyGHVFTUD172CwQ2X4N21ngZVCZ/fdzMwSEb0f1SVU
-         OOpS5BOrTZpiT940Zsnmt2jvLfe9DYAyAjgBiA0CYAcKlYuQGM8iLsQ3oOtDxymHks4D
-         MtvA==
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=oSA+Jof75BuedTVbt4lBoiMeV523r3pp7Ny1EC5oo3o=;
+        b=w0LbbLx22MfQERbKFdETrb3ybAIxu4PakWhNX0JhVR2NfpBhq7Yqripn1YP+hcGg1G
+         NHY8+4Rr6yTKcDEvaGbHrUCApwsNJdhMdkRsTVYxZXLCqcgx+obRDTd/0VoA/KsyYkgM
+         xH9Y6GqYr8VN+x4u/U0KUA9lBlMnHdXIWFeh5HvCHJAjtbs/dhQ9C3BiKrDuXjx9U1nb
+         Bk0ohofkrChxG8d7tGGKbx2K0azQCe1H0MYPxRZTEfFLG2WGP0lilMgvtFYTnjho35Mo
+         +AEvUT3AQhyadp5mfRNM58gAtRcMxqcI1P2jRVMQ96L2Kmxs15ulMY1H9dapgPZoyLZk
+         pAsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=OA8ik5onCrT3CKjTeluDsMAgLLfodb0WC4L067Q2EzI=;
-        b=XHq0zkz7+lsaSeNLnRayEbVOitdIBTuYJV27Z7EvQeVpN9ldQBCHfroemzIt7B3zyi
-         15ToXI4BTVXonFbwTWmNe6YjIY5m3LrJ1e8IHoQ3AHB7cJFt6nzcjjYLmp/zHpSAAG7p
-         pQ279tcMqkGo4ur8R9GbnF3VVN3sT8+z5SKmQrlW57tzdeDO5+i1oa6hwD2FFXbSfjUM
-         OUNjbLI65w2WwuGAbV3KAdNIWFAgL5Aks/4uGw9jsxwB89Vh8HlccUx8KpUPfUjJl+Am
-         JJrHMXzhTCywREa2bOAB0Lb2g/iM9nUusC2k3N1gimTAQ1PdDTf0BFEk84GSrCOiwUpz
-         MmEA==
-X-Gm-Message-State: ACgBeo1rYOUgGJI724cP6UZgZ5vmtUyI9BU9LwAqhaf0eLaxpDRepI7t
-        g4Wnw3qn3SOMU3q0etKo5EpMDWDJaV2TluBB+UI=
-X-Google-Smtp-Source: AA6agR6DnHjYBAXpNOGniQV2PiFJII4Ydk5Qm5ilTVGxhX6tfXT5MmOKbahQj0Vm9uR5CO80Q6BH24713my8qVJeRUM=
-X-Received: by 2002:a67:ba03:0:b0:385:b608:300d with SMTP id
- l3-20020a67ba03000000b00385b608300dmr12866005vsn.33.1660183734777; Wed, 10
- Aug 2022 19:08:54 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=oSA+Jof75BuedTVbt4lBoiMeV523r3pp7Ny1EC5oo3o=;
+        b=s+qFVGYNqkgeRm6x9xrAd3ErP7ss5N45Hije0qOZUAwrGnSlsuxWfHSUW1UDNsC6uT
+         7i3zbi6kpCgAKJvUTkC9BKX80WCybjDAw4hl29+TyXaA4vurreRXpSlHX0k/S0AuD1Sx
+         I2LOAXmC/dH1FP4EezbEUksGSB3VYXlJEPafFo2qloNSWZLie34S7tCHEO+L9BoZjf+M
+         9Q/4hRc7nJ7EuD3j7nnPWIbQX6Z5BzN+SxzIEoCtLi2uyBvkG1FiMYVeEpnxj82yKTlx
+         3OvJRHHtqJbyzLfBak1OY66pbu5JFsaW28d2U8ZYgJsboH7bWxruPtFpigCGY0uBkt6P
+         vP9w==
+X-Gm-Message-State: ACgBeo22kJdpZUMnzn43dsZr8aauuPzhOPXlLdgKO54jZ8YjkOYvcEpR
+        qcVMZqkRu/1+HhQrvboCS9id0g==
+X-Google-Smtp-Source: AA6agR7pEvJYGfeI5QBU3XEAHO0I7vZXYDuMiae/XSEL7US94LL05wzxU5jq93JPbtgmd163xcYB4A==
+X-Received: by 2002:a17:903:230b:b0:16f:2276:1fc4 with SMTP id d11-20020a170903230b00b0016f22761fc4mr29113456plh.172.1660183777109;
+        Wed, 10 Aug 2022 19:09:37 -0700 (PDT)
+Received: from [10.70.253.98] ([139.177.225.230])
+        by smtp.gmail.com with ESMTPSA id y27-20020aa79e1b000000b0052df34124b4sm2741760pfq.84.2022.08.10.19.09.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Aug 2022 19:09:36 -0700 (PDT)
+Message-ID: <cd4983dd-8432-7f79-1066-61b6f02e99c3@bytedance.com>
+Date:   Thu, 11 Aug 2022 10:09:28 +0800
 MIME-Version: 1.0
-From:   Rondreis <linhaoguo86@gmail.com>
-Date:   Thu, 11 Aug 2022 10:08:44 +0800
-Message-ID: <CAB7eex+67KdT=dPiXwYwMw2BGMh-_KZ12+E+NfFGd_g3_8B5Ww@mail.gmail.com>
-Subject: kernerl v5.18 warn in bpa10x_open/usb_submit_urb
-To:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.1.0
+Subject: Re: [PATCH v2 09/10] sched/psi: per-cgroup PSI stats
+ disable/re-enable interface
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>
+Cc:     corbet@lwn.net, surenb@google.com, mingo@redhat.com,
+        peterz@infradead.org, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, songmuchun@bytedance.com
+References: <20220808110341.15799-1-zhouchengming@bytedance.com>
+ <20220808110341.15799-10-zhouchengming@bytedance.com>
+ <YvKd6dezPM6UxfD/@slm.duckdns.org>
+ <fcd0bd39-3049-a279-23e6-a6c02b4680a7@bytedance.com>
+ <b89155d3-9315-fefc-408b-4cf538360a1c@bytedance.com>
+ <YvPN07UlaPFAdlet@cmpxchg.org> <YvPqcJh5Ffv4Yga9@slm.duckdns.org>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <YvPqcJh5Ffv4Yga9@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 2022/8/11 01:27, Tejun Heo wrote:
+> Hello,
+> 
+> On Wed, Aug 10, 2022 at 11:25:07AM -0400, Johannes Weiner wrote:
+>> How about just cgroup.pressure? Too ambiguous?
+>>
+>> cgroup.pressure.enable sounds good to me too. Or, because it's
+>> default-enabled and that likely won't change, cgroup.pressure.disable.
+> 
+> .disable sounds more logical but I like .enable better for some reason. As
+> for just cgroup.pressure, yeah, maybe? The conundrum is that the prettiness
+> order is the exact reverse of the logical order. So, I'm okay with any of
+> the three.
 
-When fuzzing the Linux kernel driver v5.18.0, the following crash was triggered.
+Ok, so I would like to pick the prettiest "cgroup.pressure", it also looks more
+consistent with {cpu|memory|io}.pressure.
 
-HEAD commit: 4b0986a3613c92f4ec1bdc7f60ec66fea135991f (HEAD, tag: v5.18)
-git tree: upstream
+Thanks!
 
-kernel config: https://pastebin.com/KecL2gaG
-C reproducer: https://pastebin.com/r3wwCUAv
-console output: https://pastebin.com/uL3vEh5E
-
-Basically, in the c reproducer, we use the gadget module to emulate
-the process of attaching a usb device (vendor id: 0x45e, product id:
-0x6d, with function: loopback_null).
-To reproduce this crash, we utilize a third-party library to emulate
-the attaching process: https://github.com/linux-usb-gadgets/libusbgx.
-Just clone this repository, make install it, and compile the c
-reproducer with ``` gcc crash.c -lusbgx -o crash ``` will do the
-trick.
-
-It seems that an error state in struct hci_dev trigger such kernel warning.
-
-The crash report is as follow:
-
-```------------[ cut here ]------------
-usb 7-1: BOGUS urb xfer, pipe 1 != type 3
-WARNING: CPU: 0 PID: 10209 at drivers/usb/core/urb.c:502
-usb_submit_urb+0x142c/0x1820 drivers/usb/core/urb.c:502
-Modules linked in:
-CPU: 0 PID: 10209 Comm: kworker/u9:0 Not tainted 5.18.0 #3
-Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
-1.13.0-1ubuntu1.1 04/01/2014
-Workqueue: hci0 hci_power_on
-RIP: 0010:usb_submit_urb+0x142c/0x1820 drivers/usb/core/urb.c:502
-Code: 7c 24 18 e8 36 92 95 fd 48 8b 7c 24 18 e8 fc cf 1b ff 41 89 d8
-44 89 e1 4c 89 ea 48 89 c6 48 c7 c7 20 9f a7 86 e8 55 0d 10 02 <0f> 0b
-e9 fe f2 ff ff e8 08 92 95 fd 66 90 e8 01 92 95 fd 41 be a6
-RSP: 0018:ffffc9000319fa80 EFLAGS: 00010286
-RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
-RDX: 0000000000000000 RSI: ffff888107460000 RDI: fffff52000633f42
-RBP: ffff8881076a4500 R08: ffffffff812beb18 R09: 0000000000000000
-R10: 0000000000000005 R11: ffffed1023504f09 R12: 0000000000000001
-R13: ffff888100865910 R14: 0000000000000002 R15: ffff888110724e00
-FS: 0000000000000000(0000) GS:ffff88811a800000(0000) knlGS:0000000000000000
-CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00005555558340b8 CR3: 0000000111e11000 CR4: 0000000000350ef0
-Call Trace:
-<TASK>
-bpa10x_submit_intr_urb drivers/bluetooth/bpa10x.c:149 [inline]
-bpa10x_open+0x2c9/0x7c0 drivers/bluetooth/bpa10x.c:207
-hci_dev_open_sync+0x1a3/0x2080 net/bluetooth/hci_sync.c:3898
-hci_dev_do_open+0x32/0x70 net/bluetooth/hci_core.c:482
-hci_power_on+0x133/0x630 net/bluetooth/hci_core.c:963
-process_one_work+0x9cc/0x1650 kernel/workqueue.c:2289
-worker_thread+0x623/0x1070 kernel/workqueue.c:2436
-kthread+0x2ef/0x3a0 kernel/kthread.c:346
-ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
-</TASK>
-
-
-```

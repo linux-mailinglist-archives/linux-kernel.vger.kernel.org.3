@@ -2,60 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E314E58FFAC
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 17:32:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D129758FF49
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 17:27:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235703AbiHKPc0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 11:32:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48302 "EHLO
+        id S235059AbiHKP1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 11:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235862AbiHKPb5 (ORCPT
+        with ESMTP id S234705AbiHKP1j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 11:31:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512D185A89;
-        Thu, 11 Aug 2022 08:30:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E5108615FE;
-        Thu, 11 Aug 2022 15:30:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65334C433D6;
-        Thu, 11 Aug 2022 15:30:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660231846;
-        bh=fryF2K+6C57uC+nNGZ3xhsVa5xsK6PpfOvIDAELGqu8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E47K3/OKz1q6iZNPcwjuahy9UxFJuNeG4qNLKIm5y9QPIF2W2qkC0SxZD52nDKvaD
-         XU3hbGXIDbeOFDLSwIOYoJzULFI8QMsE2RKDt2SfxWD46MDstEx80t++cpldIeKEhb
-         FcJz8T/jD/oBadBb1mlQn7RpLoQTCDA/TsLIvFI+AGGhO8QZ5mTbn82SKFglEH8Txr
-         uTph1Q+NN2YS8+IJ9KAroa3tuqt+XxIEGCtKANxDY/u4cENXnZDAMr5Z8hTxKuz5m5
-         XXavMNcxFn4LytLgdxajddaQBxj5ExA912aNXmgRUC50mr/sQ8POiguxUkSNT+lJvQ
-         EM5vxNIpx0ncQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Duncan Ma <duncan.ma@amd.com>,
-        Dmytro Laktyushkin <Dmytro.Laktyushkin@amd.com>,
-        Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        Daniel Wheeler <daniel.wheeler@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>, harry.wentland@amd.com,
-        sunpeng.li@amd.com, Rodrigo.Siqueira@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@linux.ie,
-        daniel@ffwll.ch, alex.hung@amd.com, mwen@igalia.com,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Subject: [PATCH AUTOSEL 5.19 016/105] drm/amd/display: Correct min comp buffer size
-Date:   Thu, 11 Aug 2022 11:27:00 -0400
-Message-Id: <20220811152851.1520029-16-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220811152851.1520029-1-sashal@kernel.org>
-References: <20220811152851.1520029-1-sashal@kernel.org>
-MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        Thu, 11 Aug 2022 11:27:39 -0400
+Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB37745041;
+        Thu, 11 Aug 2022 08:27:36 -0700 (PDT)
+X-QQ-mid: bizesmtp77t1660231645t1zkdabr
+Received: from localhost.localdomain ( [110.188.55.240])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 11 Aug 2022 23:27:12 +0800 (CST)
+X-QQ-SSF: 0100000000200080H000B00A0000020
+X-QQ-FEAT: znfcQSa1hKbye8002B+3ChSwQTxvPS91ZN0PEfAsmpK6WSzIO68Fa27pi10jw
+        Ddhs+JMxlA/JzGGIuW3vFoZzIWA7kwpskSQmkYl7EMf2UAu6B+x9ttEBO4cUg9TyAAUAhYB
+        Ur0CQoiFyo/jDIdCPLPAuDu2qlIfyA/6NHFJLR/iGioIfVmgLXl9czJOWATtoTaqKWtnDXC
+        9IkcgZm/YvM/bw2frTd76Iqv6UUP3ih18avx1pX8auRtKIEItH/SHfk9hOBDWyD2vWm3vcX
+        d+os03GDZNgkEKNgaspXyN4anLSCjRvsL1Wo7coMsjjpNL9bPsClMZysdUipWpL2W9rEARH
+        Pd5Bk5+Cx/kicPlmPu02h05G/8S0Wbj4i8ILmGItqmd0ZLa5+IZzWUzP2I+oGtDfDhL+tv8
+X-QQ-GoodBg: 0
+From:   min tang <tangmin@cdjrlc.com>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        min tang <tangmin@cdjrlc.com>
+Subject: [PATCH] isci: Fix comment typo
+Date:   Thu, 11 Aug 2022 23:27:00 +0800
+Message-Id: <20220811152700.12979-1-tangmin@cdjrlc.com>
+X-Mailer: git-send-email 2.17.1
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,51 +46,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Duncan Ma <duncan.ma@amd.com>
+The double 'the' is duplicated in line 201, remove one,The double `is' is duplicated in line 211, remove one,The double `for' is duplicated in line 214, remove one.
 
-[ Upstream commit 0c56705d8aae9696348cc320b71d531ede001b79 ]
-
-[Why]
-In 3-way mpo pipes, there is a case that we
-overbook the CRB buffer size. At rare instances,
-overbooking the crb will cause underflow. This only
-happens when det_size changes dynamically
-based on pipe_cnt.
-
-[How]
-Set min compbuff size to 1 segment when preparing BW.
-
-Reviewed-by: Dmytro Laktyushkin <Dmytro.Laktyushkin@amd.com>
-Acked-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
-Signed-off-by: Duncan Ma <duncan.ma@amd.com>
-Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: min tang <tangmin@cdjrlc.com>
 ---
- drivers/gpu/drm/amd/display/dc/dml/dcn31/dcn31_fpu.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/scsi/isci/remote_device.h | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dml/dcn31/dcn31_fpu.c b/drivers/gpu/drm/amd/display/dc/dml/dcn31/dcn31_fpu.c
-index 54db2eca9e6b..1b02f0ebe957 100644
---- a/drivers/gpu/drm/amd/display/dc/dml/dcn31/dcn31_fpu.c
-+++ b/drivers/gpu/drm/amd/display/dc/dml/dcn31/dcn31_fpu.c
-@@ -201,7 +201,7 @@ struct _vcs_dpi_ip_params_st dcn3_15_ip = {
- 	.hostvm_max_page_table_levels = 2,
- 	.rob_buffer_size_kbytes = 64,
- 	.det_buffer_size_kbytes = DCN3_15_DEFAULT_DET_SIZE,
--	.min_comp_buffer_size_kbytes = DCN3_15_MIN_COMPBUF_SIZE_KB,
-+	.min_comp_buffer_size_kbytes = 64,
- 	.config_return_buffer_size_in_kbytes = 1024,
- 	.compressed_buffer_segment_size_in_kbytes = 64,
- 	.meta_fifo_size_in_kentries = 32,
-@@ -297,6 +297,7 @@ struct _vcs_dpi_ip_params_st dcn3_16_ip = {
- 	.hostvm_max_page_table_levels = 2,
- 	.rob_buffer_size_kbytes = 64,
- 	.det_buffer_size_kbytes = DCN3_16_DEFAULT_DET_SIZE,
-+	.min_comp_buffer_size_kbytes = 64,
- 	.config_return_buffer_size_in_kbytes = 1024,
- 	.compressed_buffer_segment_size_in_kbytes = 64,
- 	.meta_fifo_size_in_kentries = 32,
+diff --git a/drivers/scsi/isci/remote_device.h b/drivers/scsi/isci/remote_device.h
+index 3ad681c4c20a..4e0e5ce9b592 100644
+--- a/drivers/scsi/isci/remote_device.h
++++ b/drivers/scsi/isci/remote_device.h
+@@ -198,7 +198,7 @@ enum sci_status sci_remote_device_reset_complete(
+  * permitted.  This state is entered from the INITIAL state.  This state
+  * is entered from the STOPPING state.
+  *
+- * @SCI_DEV_STARTING: This state indicates the the remote device is in
++ * @SCI_DEV_STARTING: This state indicates the remote device is in
+  * the process of becoming ready (i.e. starting).  In this state no new
+  * IO operations are permitted.  This state is entered from the STOPPED
+  * state.
+@@ -208,10 +208,10 @@ enum sci_status sci_remote_device_reset_complete(
+  * This state is entered from the STARTING state.
+  *
+  * @SCI_STP_DEV_IDLE: This is the idle substate for the stp remote
+- * device.  When there are no active IO for the device it is is in this
++ * device.  When there are no active IO for the device it is in this
+  * state.
+  *
+- * @SCI_STP_DEV_CMD: This is the command state for for the STP remote
++ * @SCI_STP_DEV_CMD: This is the command state for the STP remote
+  * device.  This state is entered when the device is processing a
+  * non-NCQ command.  The device object will fail any new start IO
+  * requests until this command is complete.
 -- 
-2.35.1
+2.17.1
 

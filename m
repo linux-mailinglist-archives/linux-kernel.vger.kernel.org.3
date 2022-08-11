@@ -2,102 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01BD858F57A
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 03:03:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DC1958F57E
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 03:06:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233329AbiHKBDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 21:03:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42950 "EHLO
+        id S233360AbiHKBGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 21:06:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiHKBDl (ORCPT
+        with ESMTP id S229488AbiHKBGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 21:03:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FED3647DE;
-        Wed, 10 Aug 2022 18:03:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 299B360FA0;
-        Thu, 11 Aug 2022 01:03:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31649C433D7;
-        Thu, 11 Aug 2022 01:03:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660179819;
-        bh=Q2mxISmrGxnsGwg5SIOETjIYCqZ3F2g+PyM3nILie6A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HHccdFX5SMjLhI+sYpCZFR+uPhf3k+weepC/SRPC+r8VEm5psmgwu3wXmNYsAmTTF
-         t1ZJg4qLMFMYT/xTKpx5M15UKr+t/CLnaeDdjwT/elGCgK9oTSN58Aj6sEdIDrflI+
-         o4fhEp/vJSyxq/wYfj8p0UNw/5CQtDAifc2tZN9hMFdG5l2iO6sSSxNTCbHcMuerb2
-         dDg2GJwm2t8TR9aZLYyZiMtPhEFG51bM9DdZtrJyFkui8qNoKC/H7OS8CPPL4gniQc
-         6a3A5VXRaj4aoHKV4fADLcJsJD9uc41HgLjVvUrkhzUNq8YbI44S5KGQ3VGqMMkWDN
-         rw0pZox3fmCVQ==
-Date:   Thu, 11 Aug 2022 04:03:33 +0300
-From:   "jarkko@kernel.org" <jarkko@kernel.org>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "dave@sr71.net" <dave@sr71.net>,
-        "haitao.huang@linux.intel.com" <haitao.huang@linux.intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "bp@alien8.de" <bp@alien8.de>, "x86@kernel.org" <x86@kernel.org>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-sgx@vger.kernel.org" <linux-sgx@vger.kernel.org>
-Subject: Re: [PATCH] [v2] x86/sgx: Allow enclaves to use Asynchrounous Exit
- Notification
-Message-ID: <YvRVZQKklqnbf9oQ@kernel.org>
-References: <20220720191347.1343986-1-dave.hansen@linux.intel.com>
- <op.1p2k13ibwjvjmi@hhuan26-mobl1.mshome.net>
- <35d7254cafde24b722b167c6a3566592d903acd2.camel@intel.com>
- <f16af3f7887d26cde9073d443c1b796c945bc042.camel@intel.com>
+        Wed, 10 Aug 2022 21:06:04 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FA57647D6
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 18:06:03 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id d7so15798506pgc.13
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 18:06:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=qhmWZeCsJqnoVO/4I2HwU7vBh5Ud9ehabi2slZ+OMXA=;
+        b=czd/vDTVvda6KZUe547hGPrqW6j/oPibFGcMv5Ju4naIyPN5+WftwBAOtO9knYBBvo
+         I5jB4g+nnPGq1BrTyADevnOrvpxnlDOQwwBr0y0qd4UJ841eTsaMKn+U/YngqEf7dag7
+         2ysKxAxO39BeBxMmX2SDLCWW+W9IMI1xkYxmeVtVgB1G1lOfLhbfrieLeJ6UaEZtmiuE
+         f+ncNwpfIdjC7eg8teK07EcvvYtCQRukL9N/pGJjV2Vrio4Cp8qTaaRVmpbqxwgHe4Qj
+         4SvG0SU8U1wbD+CA82/DHrJGSUqGyhKOJ+kMtCsAkh++lu6kG7RSjq50jiYw1ORm3ugE
+         Vc0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=qhmWZeCsJqnoVO/4I2HwU7vBh5Ud9ehabi2slZ+OMXA=;
+        b=iCWXGKPllfDb7xaLTfiTI6F4QISFcF5xaT2im5uo1/lnui2Ma6YNxltkz5BQ7j3y8U
+         QPsvwLNKvaPPPXyZjVUatjkdvy5jguaVfKZGquN46Kn6j8xlCGIuI3BZunlwOhFbwaIw
+         k7NSDBR4rnpRasKHQ5R+huGpWbw7FqtW9J/pqXORT4mI+qXdOlIR3c0BGzB9+LfHykV6
+         TudB2hkOWmkH3fU67aZyax13awQn8N31CSMwwg3ASBWZT9ZXR9/M7y/NZB0IyWmChkTI
+         rpg/HUEWSglBQ06CVzuJAErCfU2BXBMIuImAoBEKlWizO/AEDDxmil65l9w3F7wY2C1H
+         iWBQ==
+X-Gm-Message-State: ACgBeo3vQx0oYFyyhGwQHZA/96bPsaGFdD2pHfKYmrqn+nQEvP6bcfB6
+        DYrHB4T6N/tK5CcpDoyCQQGq7g==
+X-Google-Smtp-Source: AA6agR7Y+m5SQRx3CxOTCGuD1TjkYJX4IebNcEiCYYik42BmCmjB4gbh8/MtxkeBRwKROOvb3Y+EuA==
+X-Received: by 2002:a63:6642:0:b0:41b:51af:63d with SMTP id a63-20020a636642000000b0041b51af063dmr25089583pgc.358.1660179962852;
+        Wed, 10 Aug 2022 18:06:02 -0700 (PDT)
+Received: from [192.168.1.100] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id j4-20020a170903028400b0016ed20eacd2sm13484492plr.150.2022.08.10.18.06.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Aug 2022 18:06:02 -0700 (PDT)
+Message-ID: <c01cb530-a937-4eba-92d0-0e7cc497929e@kernel.dk>
+Date:   Wed, 10 Aug 2022 19:06:00 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f16af3f7887d26cde9073d443c1b796c945bc042.camel@intel.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.10.0
+Subject: Re: [PATCH v2 0/2] link with -z noexecstack --no-warn-rwx-segments
+Content-Language: en-US
+To:     Nick Desaulniers <ndesaulniers@google.com>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>
+Cc:     Fangrui Song <maskray@google.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Nick Clifton <nickc@redhat.com>, brijesh.singh@amd.com,
+        hpa@zytor.com, kirill.shutemov@linux.intel.com,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        michael.roth@amd.com, n.schier@avm.de, nathan@kernel.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, trix@redhat.com,
+        x86@kernel.org
+References: <20220809013653.xtmeekefwkbo46vk@google.com>
+ <20220810222442.2296651-1-ndesaulniers@google.com>
+ <20220810222442.2296651-3-ndesaulniers@google.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20220810222442.2296651-3-ndesaulniers@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 10, 2022 at 10:17:31AM +0000, Huang, Kai wrote:
-> On Tue, 2022-08-02 at 14:21 +1200, Kai Huang wrote:
-> > > 
-> > > Tested-by: Haitao Huang <haitao.huang@intel.com>
-> > > 
-> > > Thanks
-> > > Haitao
-> > 
-> > Hi Haitao,
-> > 
-> > Could you also help to test in a VM?
-> > 
-> > You will also need below patch in order to use EDECCSSA in the guest:
-> > 
-> > https://lore.kernel.org/lkml/20220727115442.464380-1-kai.huang@intel.com/
-> > 
-> > When you create the VM, please use -cpu host.
-> > 
+On 8/10/22 4:24 PM, Nick Desaulniers wrote:
+> Users of GNU ld (BFD) from binutils 2.39+ will observe multiple
+> instances of a new warning when linking kernels in the form:
 > 
-> Hi Haitao,
+>   ld: warning: vmlinux: missing .note.GNU-stack
+>   section implies executable stack
+>   ld: NOTE: This behaviour is deprecated and will be removed in a future
+>   version of the linker
+>   ld: warning: vmlinux has a LOAD segment with RWX permissions
 > 
-> Do you have any update?
+> Generally, we would like to avoid the stack being executable. Because
+> there could be a need for the stack to be executable, assembler sources
+> have to opt-in to this security feature via explicit creation of the
+> .note.GNU-stack feature (which compilers create by default) or command
+> line flag --noexecstack. Or we can simply tell the linker the production
+> of such sections is irrelevant and to link the stack as --noexecstack.
 > 
-> If it's not easy for you to verify in VM, could you let me know how to set up
-> the testing machine so I can have a try?
+> LLVM's LLD linker defaults to -z noexecstack, so this flag isn't
+> strictly necessary when linking with LLD, only BFD, but it doesn't hurt
+> to be explicit here for all linkers IMO. --no-warn-rwx-segments is
+> currently BFD specific and only available in the current latest release,
+> so it's wrapped in an ld-option check.
+> 
+> While the kernel makes extensive usage of ELF sections, it doesn't use
+> permissions from ELF segments.
+> 
+> Broken up into 2 patches; one for the top level vmlinux, one x86
+> specific since a few places in the x86 build reset KBUILD_LDFLAGS.
 
-I can give ack for this, given that it is so obvious:
+For x86-64:
 
-Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+Tested-by: Jens Axboe <axboe@kernel.dk>
 
-Would give reviewed-by if there was ucode update available, and I
-could test this.
+-- 
+Jens Axboe
 
-BR, Jarkko

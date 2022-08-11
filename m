@@ -2,78 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C153258FA4E
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 11:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80DAB58FA54
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 11:59:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234603AbiHKJ4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 05:56:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35638 "EHLO
+        id S234646AbiHKJ7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 05:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbiHKJ4t (ORCPT
+        with ESMTP id S233931AbiHKJ67 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 05:56:49 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE1790C7C;
-        Thu, 11 Aug 2022 02:56:41 -0700 (PDT)
-X-UUID: dd9479c8580a4834ad6a1424f0a85f36-20220811
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=orX+YD+2Tvqn6+Tuj+MFgYJbcYh0B7itt3I1h7rJ9U0=;
-        b=tgLDkNQ3oJ3KE5kW9slZrLhE+oid4ZB20ELKTn6hBianObZ0DrUSQnPOcXoG8HAj8UVVQ9e+GV7qq4gETjK7dpCOuhKtmf0Z0d1EmaJ2IYZ0W0lAHKIR9sYRCIP45MgyxvNbZAOWkRmucKR/tO6ckl85ilhjrRzwSF3ixYz+FTk=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.9,REQID:55875548-051a-4c8e-be92-b7a98d45b22c,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_H
-        am,ACTION:release,TS:0
-X-CID-META: VersionHash:3d8acc9,CLOUDID:7179619c-da39-4e3b-a854-56c7d2111b46,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: dd9479c8580a4834ad6a1424f0a85f36-20220811
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
-        (envelope-from <allen-kh.cheng@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 1476812866; Thu, 11 Aug 2022 17:56:37 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 11 Aug 2022 17:56:35 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 11 Aug 2022 17:56:35 +0800
-Message-ID: <14d0e1be2fbd7bbacb7553a2e2e5b9d941403c4f.camel@mediatek.com>
-Subject: Re: [PATCH v4 1/4] dt-bindings: mediatek: watchdog: Fix compatible
- fallbacks and example
-From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-To:     Krzysztof Kozlowski <krzk@kernel.org>,
-        "=?ISO-8859-1?Q?N=EDcolas?= F. R. A. Prado" <nfraprado@collabora.com>
-CC:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        "Guenter Roeck" <linux@roeck-us.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
-        <angelogioacchino.delregno@collabora.com>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>
-Date:   Thu, 11 Aug 2022 17:56:35 +0800
-In-Reply-To: <815b03aa-ab39-ec8b-294b-68dff36e2d54@kernel.org>
-References: <20220721014845.19044-1-allen-kh.cheng@mediatek.com>
-         <20220721014845.19044-2-allen-kh.cheng@mediatek.com>
-         <CAGXv+5HXwVpaJPV-4Z6qw14xZzEkx_E7dVks6-GBa7bQyN8hCg@mail.gmail.com>
-         <5dac39d1-3b42-40e9-5693-0c127e8c689a@gmail.com>
-         <0fadcd9f50d49ecbb329e76a9ceb6ee689648955.camel@mediatek.com>
-         <20220808170355.c2ih3xwqxlddsal7@notapiano>
-         <6271732eb27824c5b841760243738ceb062f4c4a.camel@mediatek.com>
-         <815b03aa-ab39-ec8b-294b-68dff36e2d54@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 11 Aug 2022 05:58:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F040291091
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 02:58:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660211937;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/R7Dryv+d3GV8pIXJrc5C98POWrIYtqGZwBiNr+Dx9I=;
+        b=R/Nvp7V91kusqwT9k4PzuN7jZvNUv/gvSztRZ5DAlrxSTXYo926VipWA6/8rY6WmBxBO8/
+        HvWtdMkAmECg+ZL0dGU0uzjtXGhFpoSB9IJNNncESX/iFzoKxzZLtu0R3flqTpnBYucUim
+        w7fICKaxUoIRf593/gMqYgKEADCWP/8=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-146-dfe_E6B_MEaU54HU7XwEnA-1; Thu, 11 Aug 2022 05:58:55 -0400
+X-MC-Unique: dfe_E6B_MEaU54HU7XwEnA-1
+Received: by mail-qk1-f200.google.com with SMTP id bk21-20020a05620a1a1500b006b5c24695a4so14505774qkb.15
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 02:58:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=/R7Dryv+d3GV8pIXJrc5C98POWrIYtqGZwBiNr+Dx9I=;
+        b=ImPp1VPS+tYer6ZNUJ5/39Cesl1JxpKZNAHCGz8xkVPt49qI9QWdYs+f9po5DSgzdW
+         JDN1gmnZZoVFoon27U4KkIcxxj6PszyQzS1xigHto/ArmlIcWSMntSZkVHaxC8OX7HCX
+         cIlEjFsEgIIVIN/aKtkUQMC6//LcNfxVOyZo2gGCS15YXDpATOAPfPBMz86OO2+pxAqM
+         JOmxE8b2BAeyJjHoucM99gOxR5cpy0mssabZry4xmhr67nK0i7mavOSAixrXRMa9TLCB
+         J9hwmxSHm+h1B6L32y3fF8HvmlSOZerCAiWRIXWXJ2djg1HQOjnQcgGgX+clsmP1z9aw
+         ynKA==
+X-Gm-Message-State: ACgBeo0NYtlS2tD3vlpA6FuHzKvY2QOWFRahlA1xegGzjzU4+pDdpTX3
+        RDmyYacMwIzFUXBYbqpn/ZKinhd41akJUN6HoqnbPG2EjuKeH/kGwXVti+pFCdvuCVxRIrhZycg
+        IMW+/JE964y/hNhXbn45wmH/rFsMSyJwKt/Wl2Wu/
+X-Received: by 2002:a05:620a:f10:b0:6aa:318e:55a9 with SMTP id v16-20020a05620a0f1000b006aa318e55a9mr23448015qkl.559.1660211935150;
+        Thu, 11 Aug 2022 02:58:55 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR46iI6RWBek+haxJNWFLlFbtaxPouhpPjWxx1Oi5kVglzYBHHk8gTkRWafFNCXiOMZYpxsi+7dCewFJ21Y2Eu8=
+X-Received: by 2002:a05:620a:f10:b0:6aa:318e:55a9 with SMTP id
+ v16-20020a05620a0f1000b006aa318e55a9mr23447989qkl.559.1660211934843; Thu, 11
+ Aug 2022 02:58:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
-        T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS autolearn=no
+References: <20220810171512.2343333-1-eperezma@redhat.com> <20220810171512.2343333-4-eperezma@redhat.com>
+ <20220811042847-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220811042847-mutt-send-email-mst@kernel.org>
+From:   Eugenio Perez Martin <eperezma@redhat.com>
+Date:   Thu, 11 Aug 2022 11:58:18 +0200
+Message-ID: <CAJaqyWc46O6TNZzVSizDXnWk4KkM40O9+M2CNVOdkLzUdXmFqQ@mail.gmail.com>
+Subject: Re: [PATCH v7 3/4] vhost-vdpa: uAPI to suspend the device
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     kvm list <kvm@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        Jason Wang <jasowang@redhat.com>,
+        virtualization <virtualization@lists.linux-foundation.org>,
+        netdev <netdev@vger.kernel.org>,
+        Dinan Gunawardena <dinang@xilinx.com>,
+        Martin Porter <martinpo@xilinx.com>,
+        Wu Zongyong <wuzongyong@linux.alibaba.com>,
+        "Uminski, Piotr" <Piotr.Uminski@intel.com>,
+        "Dawar, Gautam" <gautam.dawar@amd.com>, ecree.xilinx@gmail.com,
+        Martin Petrus Hubertus Habets <martinh@xilinx.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        Pablo Cascon Katchadourian <pabloc@xilinx.com>,
+        habetsm.xilinx@gmail.com, Laurent Vivier <lvivier@redhat.com>,
+        Zhu Lingshan <lingshan.zhu@intel.com>,
+        "Kamde, Tanuj" <tanuj.kamde@amd.com>,
+        Longpeng <longpeng2@huawei.com>, Cindy Lu <lulu@redhat.com>,
+        Harpreet Singh Anand <hanand@xilinx.com>,
+        Parav Pandit <parav@nvidia.com>,
+        Si-Wei Liu <si-wei.liu@oracle.com>,
+        Eli Cohen <elic@nvidia.com>,
+        Xie Yongji <xieyongji@bytedance.com>,
+        Zhang Min <zhang.min9@zte.com.cn>,
+        Dan Carpenter <dan.carpenter@oracle.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,66 +98,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-he SoC-specific compatibles Hi Krzysztof,
+On Thu, Aug 11, 2022 at 10:29 AM Michael S. Tsirkin <mst@redhat.com> wrote:
+>
+> On Wed, Aug 10, 2022 at 07:15:11PM +0200, Eugenio P=C3=A9rez wrote:
+> > The ioctl adds support for suspending the device from userspace.
+> >
+> > This is a must before getting virtqueue indexes (base) for live migrati=
+on,
+> > since the device could modify them after userland gets them. There are
+> > individual ways to perform that action for some devices
+> > (VHOST_NET_SET_BACKEND, VHOST_VSOCK_SET_RUNNING, ...) but there was no
+> > way to perform it for any vhost device (and, in particular, vhost-vdpa)=
+.
+> >
+> > After a successful return of the ioctl call the device must not process
+> > more virtqueue descriptors. The device can answer to read or writes of
+> > config fields as if it were not suspended. In particular, writing to
+> > "queue_enable" with a value of 1 will not make the device start
+> > processing buffers of the virtqueue.
+> >
+> > Signed-off-by: Eugenio P=C3=A9rez <eperezma@redhat.com>
+> > Message-Id: <20220623160738.632852-4-eperezma@redhat.com>
+> > Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+>
+> You are not supposed to include upstream maintainer's signoff
+> like this.
+>
 
-On Wed, 2022-08-10 at 19:50 +0300, Krzysztof Kozlowski wrote:
-> On 10/08/2022 15:58, Allen-KH Cheng wrote:
-> > I agree the advantage of patch is aesthetic. Since I also want to
-> > send
-> > another "watchdog: Convert binding to YAML" PATCH, it's better let
-> > all
-> > wdt compatibles in the binding match the contents of mtk_wdt_dt_ids
-> > in
-> > drivers/watchdog/mtk_wdt.c
-> > 
-> > static const struct of_device_id mtk_wdt_dt_ids[] = {
-> > 	{ .compatible = "mediatek,mt2712-wdt", .data = &mt2712_data },
-> > 	{ .compatible = "mediatek,mt6589-wdt" },
-> > 	{ .compatible = "mediatek,mt7986-wdt", .data = &mt7986_data },
-> > 	{ .compatible = "mediatek,mt8183-wdt", .data = &mt8183_data },
-> > 	{ .compatible = "mediatek,mt8186-wdt", .data = &mt8186_data },
-> > 	{ .compatible = "mediatek,mt8192-wdt", .data = &mt8192_data },
-> > 	{ .compatible = "mediatek,mt8195-wdt", .data = &mt8195_data },
-> > 	{ /* sentinel */ }
-> > };
-> > 
-> > We have "mediatek,mt8186-wdt" "mediatek,mt8195-wdt" and
-> > "mediatek,mt7986-wdt" now and they have their DT data for the reset
-> > control.
-> > 
-> > It's weird and unuseful to add "mediatek,mt6589-wdt" as fallback. 
-> > 
-> > 
-> > Please kindly let me know if I missed anything
-> 
-> How the driver arranges it should not be a reason to use or not to
-> use
-> specific fallback. Although Rob acked it, but I still think you did
-> not
-> provide valid reason for the change.
-> 
-> Valid reason is usually the actual hardware (so they are actually not
-> compatible with mt6589), not exactly how once someone did it in the
-> driver.
-> 
-> Best regards,
-> Krzysztof
+I'm very sorry, I modified the commits in your vhost branch and I left
+the signoff (and message-id) lines by mistake.
 
-Thank you for your detailed and clear explanation.
-
-"mediatek,mt6589-wdt" provides the mtk watchdog support and the SoC-
-specific compatibles is for reset controls to standard wdt.
-
-"mediatek,mt6589-wdt" is compatible with mt8186, mt8195 and mt7986 and
-just not support the reset controls. 
-
-Based on the discussion of email thread, please drop my series.
-
-
-Thanks to everyone for your comments.
-
-Best regards,
-Allen
-
-
+> > ---
+> > v7: Delete argument to ioctl, unused
+> > ---
+> >  drivers/vhost/vdpa.c       | 19 +++++++++++++++++++
+> >  include/uapi/linux/vhost.h |  9 +++++++++
+> >  2 files changed, 28 insertions(+)
+> >
+> > diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+> > index 3d636e192061..7fa671ac4bdf 100644
+> > --- a/drivers/vhost/vdpa.c
+> > +++ b/drivers/vhost/vdpa.c
+> > @@ -478,6 +478,22 @@ static long vhost_vdpa_get_vqs_count(struct vhost_=
+vdpa *v, u32 __user *argp)
+> >       return 0;
+> >  }
+> >
+> > +/* After a successful return of ioctl the device must not process more
+> > + * virtqueue descriptors. The device can answer to read or writes of c=
+onfig
+> > + * fields as if it were not suspended. In particular, writing to "queu=
+e_enable"
+> > + * with a value of 1 will not make the device start processing buffers=
+.
+> > + */
+> > +static long vhost_vdpa_suspend(struct vhost_vdpa *v)
+> > +{
+> > +     struct vdpa_device *vdpa =3D v->vdpa;
+> > +     const struct vdpa_config_ops *ops =3D vdpa->config;
+> > +
+> > +     if (!ops->suspend)
+> > +             return -EOPNOTSUPP;
+> > +
+> > +     return ops->suspend(vdpa);
+> > +}
+> > +
+> >  static long vhost_vdpa_vring_ioctl(struct vhost_vdpa *v, unsigned int =
+cmd,
+> >                                  void __user *argp)
+> >  {
+> > @@ -654,6 +670,9 @@ static long vhost_vdpa_unlocked_ioctl(struct file *=
+filep,
+> >       case VHOST_VDPA_GET_VQS_COUNT:
+> >               r =3D vhost_vdpa_get_vqs_count(v, argp);
+> >               break;
+> > +     case VHOST_VDPA_SUSPEND:
+> > +             r =3D vhost_vdpa_suspend(v);
+> > +             break;
+> >       default:
+> >               r =3D vhost_dev_ioctl(&v->vdev, cmd, argp);
+> >               if (r =3D=3D -ENOIOCTLCMD)
+> > diff --git a/include/uapi/linux/vhost.h b/include/uapi/linux/vhost.h
+> > index cab645d4a645..f9f115a7c75b 100644
+> > --- a/include/uapi/linux/vhost.h
+> > +++ b/include/uapi/linux/vhost.h
+> > @@ -171,4 +171,13 @@
+> >  #define VHOST_VDPA_SET_GROUP_ASID    _IOW(VHOST_VIRTIO, 0x7C, \
+> >                                            struct vhost_vring_state)
+> >
+> > +/* Suspend a device so it does not process virtqueue requests anymore
+> > + *
+> > + * After the return of ioctl the device must preserve all the necessar=
+y state
+> > + * (the virtqueue vring base plus the possible device specific states)=
+ that is
+> > + * required for restoring in the future. The device must not change it=
+s
+> > + * configuration after that point.
+> > + */
+> > +#define VHOST_VDPA_SUSPEND           _IO(VHOST_VIRTIO, 0x7D)
+> > +
+> >  #endif
+> > --
+> > 2.31.1
+>
 

@@ -2,285 +2,325 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4946758F58B
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 03:19:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAAF458F58E
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 03:25:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232999AbiHKBTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 21:19:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53560 "EHLO
+        id S233247AbiHKBZt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 21:25:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232539AbiHKBTR (ORCPT
+        with ESMTP id S233508AbiHKBZp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 21:19:17 -0400
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD487B7AB;
-        Wed, 10 Aug 2022 18:19:15 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4M387L3QzNz6R22m;
-        Thu, 11 Aug 2022 09:17:50 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP2 (Coremail) with SMTP id Syh0CgC37roQWfRiNqTHAA--.61291S3;
-        Thu, 11 Aug 2022 09:19:13 +0800 (CST)
-Subject: Re: [PATCH -next v10 3/4] block, bfq: refactor the counting of
- 'num_groups_with_pending_reqs'
-To:     Paolo Valente <paolo.valente@unimore.it>,
-        Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     Jan Kara <jack@suse.cz>, cgroups@vger.kernel.org,
-        linux-block <linux-block@vger.kernel.org>,
-        Tejun Heo <tj@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        LKML <linux-kernel@vger.kernel.org>, yi.zhang@huawei.com,
-        "yukuai3@huawei.com >> yukuai (C)" <yukuai3@huawei.com>
-References: <20220610021701.2347602-1-yukuai3@huawei.com>
- <20220610021701.2347602-4-yukuai3@huawei.com>
- <27F2DF19-7CC6-42C5-8CEB-43583EB4AE46@linaro.org>
- <abdbb5db-e280-62f8-0670-536fcb8ec4d9@huaweicloud.com>
- <C2CF100A-9A7C-4300-9A70-1295BC939C66@unimore.it>
- <9b2d667f-6636-9347-08a1-8bd0aa2346f2@huaweicloud.com>
- <2f94f241-445f-1beb-c4a8-73f6efce5af2@huaweicloud.com>
- <55A07102-BE55-4606-9E32-64E884064FB9@unimore.it>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <5cb0e5bc-feec-86d6-6f60-3c28ee625efd@huaweicloud.com>
-Date:   Thu, 11 Aug 2022 09:19:11 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Wed, 10 Aug 2022 21:25:45 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 274BA61D97;
+        Wed, 10 Aug 2022 18:25:42 -0700 (PDT)
+X-UUID: 103c170f15d746f5b1693afdbef7461e-20220811
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=P6hP16VPEoUAkxarBzIpwl1a5NNw9mpNrl3hYIEoSIU=;
+        b=QJ2ZZu+JAyICIQQTiBayDxh/+Ef7mqk7sDkLXvcoKQNBDqXjYFYvxs/XJfM2Cggf7i+ckyi2ijtyceVRytyWT8R0N9KUmiRyKaEkx3+JYuTHcJzm/NccNuMq7jl4Y4KZD6TqtalIusGE9hrxi4mMvCUkGQyaM3xVu5xS3VsTLRE=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.9,REQID:240b4eae-bbcf-4d0b-83ab-a7e40f034189,OB:0,LO
+        B:0,IP:0,URL:5,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_
+        Ham,ACTION:release,TS:0
+X-CID-META: VersionHash:3d8acc9,CLOUDID:25c6f7fc-9e71-4a0f-ba6b-417998daea35,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:1,File:nil
+        ,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 103c170f15d746f5b1693afdbef7461e-20220811
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw02.mediatek.com
+        (envelope-from <stanley.chu@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 950314937; Thu, 11 Aug 2022 09:25:35 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 11 Aug 2022 09:25:34 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Thu, 11 Aug 2022 09:25:34 +0800
+From:   Stanley Chu <stanley.chu@mediatek.com>
+To:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <martin.petersen@oracle.com>, <avri.altman@wdc.com>,
+        <alim.akhtar@samsung.com>, <jejb@linux.ibm.com>,
+        <bvanassche@acm.org>
+CC:     <peter.wang@mediatek.com>, <chun-hung.wu@mediatek.com>,
+        <alice.chao@mediatek.com>, <powen.kao@mediatek.com>,
+        <mason.zhang@mediatek.com>, <qilin.tan@mediatek.com>,
+        <lin.gui@mediatek.com>, <eddie.huang@mediatek.com>,
+        <tun-yu.yu@mediatek.com>, <cc.chou@mediatek.com>,
+        <chaotian.jing@mediatek.com>, <jiajie.hao@mediatek.com>,
+        <stanley.chu@mediatek.com>
+Subject: [PATCH v1] ufs: core: Unify function names for clk-scaling
+Date:   Thu, 11 Aug 2022 09:25:33 +0800
+Message-ID: <20220811012533.19761-1-stanley.chu@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-In-Reply-To: <55A07102-BE55-4606-9E32-64E884064FB9@unimore.it>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgC37roQWfRiNqTHAA--.61291S3
-X-Coremail-Antispam: 1UD129KBjvJXoWxKrW3Ar4fKr18Ww4kCry3Arb_yoW3Ar43p3
-        y3Ga17Cr4UXr15tr1jqw1UXr1Sq34fArykWr1DJryxArnFyFn7JF47tr4rury8Zr95Jr12
-        qr1jg3s7uw1UtFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9Y14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka
-        0xkIwI1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7x
-        kEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E
-        67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCw
-        CI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E
-        3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCT
-        nIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Paolo
+Currently the naming style of clk-scaling related function is
+not unified. Simply unify their names for better readability.
 
-在 2022/08/10 18:49, Paolo Valente 写道:
-> 
-> 
->> Il giorno 27 lug 2022, alle ore 14:11, Yu Kuai <yukuai1@huaweicloud.com> ha scritto:
->>
->> Hi, Paolo
->>
-> 
-> hi
-> 
->> Are you still interested in this patchset?
->>
-> 
-> Yes. Sorry for replying very late again.
-> 
-> Probably the last fix that you suggest is enough, but I'm a little bit
-> concerned that it may be a little hasty.  In fact, before this fix, we
-> exchanged several messages, and I didn't seem to be very good at
-> convincing you about the need to keep into account also in-service
-> I/O.  So, my question is: are you sure that now you have a
+This patch does not change the functionality.
 
-I'm confused here, I'm pretty aware that in-service I/O(as said pending
-requests is the patchset) should be counted, as you suggested in v7, are
-you still thinking that the way in this patchset is problematic?
+Signed-off-by: Stanley Chu <stanley.chu@mediatek.com>
+---
+ drivers/ufs/core/ufs-sysfs.c |  3 +-
+ drivers/ufs/core/ufshcd.c    | 56 ++++++++++++++++++------------------
+ include/ufs/ufshcd.h         |  2 +-
+ 3 files changed, 31 insertions(+), 30 deletions(-)
 
-I'll try to explain again that how to track is bfqq has pending pending
-requests, please let me know if you still think there are some problems:
-
-patch 1 support to track if bfqq has pending requests, it's
-done by setting the flag 'entity->in_groups_with_pending_reqs' when the
-first request is inserted to bfqq, and it's cleared when the last
-request is completed. specifically the flag is set in
-bfq_add_bfqq_busy() when 'bfqq->dispatched' if false, and it's cleared
-both in bfq_completed_request() and bfq_del_bfqq_busy() when
-'bfqq->diapatched' is false.
-
-Thanks,
-Kuai
-> clear/complete understanding of this non-trivial matter?
-> Consequently, are we sure that this last fix is most certainly all we
-> need?  Of course, I will check on my own, but if you reassure me on
-> this point, I will feel more confident.
-> 
-> Thanks,
-> Paolo
-> 
->> 在 2022/07/20 19:38, Yu Kuai 写道:
->>> Hi
->>>
->>> 在 2022/07/20 19:24, Paolo VALENTE 写道:
->>>>
->>>>
->>>>> Il giorno 12 lug 2022, alle ore 15:30, Yu Kuai <yukuai1@huaweicloud.com <mailto:yukuai1@huaweicloud.com>> ha scritto:
->>>>>
->>>>> Hi!
->>>>>
->>>>> I'm copying my reply with new mail address, because Paolo seems
->>>>> didn't receive my reply.
->>>>>
->>>>> 在 2022/06/23 23:32, Paolo Valente 写道:
->>>>>> Sorry for the delay.
->>>>>>> Il giorno 10 giu 2022, alle ore 04:17, Yu Kuai <yukuai3@huawei.com <mailto:yukuai3@huawei.com>> ha scritto:
->>>>>>>
->>>>>>> Currently, bfq can't handle sync io concurrently as long as they
->>>>>>> are not issued from root group. This is because
->>>>>>> 'bfqd->num_groups_with_pending_reqs > 0' is always true in
->>>>>>> bfq_asymmetric_scenario().
->>>>>>>
->>>>>>> The way that bfqg is counted into 'num_groups_with_pending_reqs':
->>>>>>>
->>>>>>> Before this patch:
->>>>>>> 1) root group will never be counted.
->>>>>>> 2) Count if bfqg or it's child bfqgs have pending requests.
->>>>>>> 3) Don't count if bfqg and it's child bfqgs complete all the requests.
->>>>>>>
->>>>>>> After this patch:
->>>>>>> 1) root group is counted.
->>>>>>> 2) Count if bfqg have pending requests.
->>>>>>> 3) Don't count if bfqg complete all the requests.
->>>>>>>
->>>>>>> With this change, the occasion that only one group is activated can be
->>>>>>> detected, and next patch will support concurrent sync io in the
->>>>>>> occasion.
->>>>>>>
->>>>>>> Signed-off-by: Yu Kuai <yukuai3@huawei.com <mailto:yukuai3@huawei.com>>
->>>>>>> Reviewed-by: Jan Kara <jack@suse.cz <mailto:jack@suse.cz>>
->>>>>>> ---
->>>>>>> block/bfq-iosched.c | 42 ------------------------------------------
->>>>>>> block/bfq-iosched.h | 18 +++++++++---------
->>>>>>> block/bfq-wf2q.c    | 19 ++++---------------
->>>>>>> 3 files changed, 13 insertions(+), 66 deletions(-)
->>>>>>>
->>>>>>> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
->>>>>>> index 0ec21018daba..03b04892440c 100644
->>>>>>> --- a/block/bfq-iosched.c
->>>>>>> +++ b/block/bfq-iosched.c
->>>>>>> @@ -970,48 +970,6 @@ void __bfq_weights_tree_remove(struct bfq_data *bfqd,
->>>>>>> void bfq_weights_tree_remove(struct bfq_data *bfqd,
->>>>>>>      struct bfq_queue *bfqq)
->>>>>>> {
->>>>>>> -struct bfq_entity *entity = bfqq->entity.parent;
->>>>>>> -
->>>>>>> -for_each_entity(entity) {
->>>>>>> -struct bfq_sched_data *sd = entity->my_sched_data;
->>>>>>> -
->>>>>>> -if (sd->next_in_service || sd->in_service_entity) {
->>>>>>> -/*
->>>>>>> -* entity is still active, because either
->>>>>>> -* next_in_service or in_service_entity is not
->>>>>>> -* NULL (see the comments on the definition of
->>>>>>> -* next_in_service for details on why
->>>>>>> -* in_service_entity must be checked too).
->>>>>>> -*
->>>>>>> -* As a consequence, its parent entities are
->>>>>>> -* active as well, and thus this loop must
->>>>>>> -* stop here.
->>>>>>> -*/
->>>>>>> -break;
->>>>>>> -}
->>>>>>> -
->>>>>>> -/*
->>>>>>> -* The decrement of num_groups_with_pending_reqs is
->>>>>>> -* not performed immediately upon the deactivation of
->>>>>>> -* entity, but it is delayed to when it also happens
->>>>>>> -* that the first leaf descendant bfqq of entity gets
->>>>>>> -* all its pending requests completed. The following
->>>>>>> -* instructions perform this delayed decrement, if
->>>>>>> -* needed. See the comments on
->>>>>>> -* num_groups_with_pending_reqs for details.
->>>>>>> -*/
->>>>>>> -if (entity->in_groups_with_pending_reqs) {
->>>>>>> -entity->in_groups_with_pending_reqs = false;
->>>>>>> -bfqd->num_groups_with_pending_reqs--;
->>>>>>> -}
->>>>>>> -}
->>>>>> With this part removed, I'm missing how you handle the following
->>>>>> sequence of events:
->>>>>> 1.  a queue Q becomes non busy but still has dispatched requests, so
->>>>>> it must not be removed from the counter of queues with pending reqs
->>>>>> yet
->>>>>> 2.  the last request of Q is completed with Q being still idle (non
->>>>>> busy).  At this point Q must be removed from the counter.  It seems to
->>>>>> me that this case is not handled any longer
->>>>> Hi, Paolo
->>>>>
->>>>> 1) At first, patch 1 support to track if bfqq has pending requests, it's
->>>>> done by setting the flag 'entity->in_groups_with_pending_reqs' when the
->>>>> first request is inserted to bfqq, and it's cleared when the last
->>>>> request is completed(based on weights_tree insertion and removal).
->>>>>
->>>>
->>>> In patch 1 I don't see the flag cleared for the request-completion event :(
->>>>
->>>> The piece of code involved is this:
->>>>
->>>> static void bfq_completed_request(struct bfq_queue *bfqq, struct bfq_data *bfqd)
->>>> {
->>>> u64 now_ns;
->>>> u32 delta_us;
->>>>
->>>> bfq_update_hw_tag(bfqd);
->>>>
->>>> bfqd->rq_in_driver[bfqq->actuator_idx]--;
->>>> bfqd->tot_rq_in_driver--;
->>>> bfqq->dispatched--;
->>>>
->>>> if (!bfqq->dispatched && !bfq_bfqq_busy(bfqq)) {
->>>> /*
->>>> * Set budget_timeout (which we overload to store the
->>>> * time at which the queue remains with no backlog and
->>>> * no outstanding request; used by the weight-raising
->>>> * mechanism).
->>>> */
->>>> bfqq->budget_timeout = jiffies;
->>>>
->>>> bfq_weights_tree_remove(bfqd, bfqq);
->>>> }
->>>> ...
->>>>
->>>> Am I missing something?
->>>
->>> I add a new api bfq_del_bfqq_in_groups_with_pending_reqs() in patch 1
->>> to clear the flag, and it's called both from bfq_del_bfqq_busy() and
->>> bfq_completed_request(). I think you may miss the later:
->>>
->>> diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
->>> index 0d46cb728bbf..0ec21018daba 100644
->>> --- a/block/bfq-iosched.c
->>> +++ b/block/bfq-iosched.c
->>> @@ -6263,6 +6263,7 @@ static void bfq_completed_request(struct bfq_queue *bfqq, struct bfq_data *bfqd)
->>>            */
->>>           bfqq->budget_timeout = jiffies;
->>>
->>> +        bfq_del_bfqq_in_groups_with_pending_reqs(bfqq);
->>>           bfq_weights_tree_remove(bfqd, bfqq);
->>>       }
->>>
->>> Thanks,
->>> Kuai
->>>>
->>>> Thanks,
->>>> Paolo
->>
-> 
-> .
-> 
+diff --git a/drivers/ufs/core/ufs-sysfs.c b/drivers/ufs/core/ufs-sysfs.c
+index 0a088b47d557..a64d069db64c 100644
+--- a/drivers/ufs/core/ufs-sysfs.c
++++ b/drivers/ufs/core/ufs-sysfs.c
+@@ -225,7 +225,8 @@ static ssize_t wb_on_store(struct device *dev, struct device_attribute *attr,
+ 	unsigned int wb_enable;
+ 	ssize_t res;
+ 
+-	if (!ufshcd_is_wb_allowed(hba) || ufshcd_is_clkscaling_supported(hba)) {
++	if (!ufshcd_is_wb_allowed(hba) ||
++	    ufshcd_is_clk_scaling_supported(hba)) {
+ 		/*
+ 		 * If the platform supports UFSHCD_CAP_CLK_SCALING, turn WB
+ 		 * on/off will be done while clock scaling up/down.
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 581d88af07ab..d2bff2b1bdff 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -253,9 +253,9 @@ static int ufshcd_probe_hba(struct ufs_hba *hba, bool init_dev_params);
+ static int ufshcd_setup_clocks(struct ufs_hba *hba, bool on);
+ static inline void ufshcd_add_delay_before_dme_cmd(struct ufs_hba *hba);
+ static int ufshcd_host_reset_and_restore(struct ufs_hba *hba);
+-static void ufshcd_resume_clkscaling(struct ufs_hba *hba);
+-static void ufshcd_suspend_clkscaling(struct ufs_hba *hba);
+-static void __ufshcd_suspend_clkscaling(struct ufs_hba *hba);
++static void __ufshcd_clk_scaling_resume(struct ufs_hba *hba);
++static void __ufshcd_clk_scaling_suspend(struct ufs_hba *hba);
++static void ufshcd_devfreq_suspend(struct ufs_hba *hba);
+ static int ufshcd_scale_clks(struct ufs_hba *hba, bool scale_up);
+ static irqreturn_t ufshcd_intr(int irq, void *__hba);
+ static int ufshcd_change_power_mode(struct ufs_hba *hba,
+@@ -1321,7 +1321,7 @@ static void ufshcd_clk_scaling_suspend_work(struct work_struct *work)
+ 	hba->clk_scaling.is_suspended = true;
+ 	spin_unlock_irqrestore(hba->host->host_lock, irq_flags);
+ 
+-	__ufshcd_suspend_clkscaling(hba);
++	ufshcd_devfreq_suspend(hba);
+ }
+ 
+ static void ufshcd_clk_scaling_resume_work(struct work_struct *work)
+@@ -1352,7 +1352,7 @@ static int ufshcd_devfreq_target(struct device *dev,
+ 	struct ufs_clk_info *clki;
+ 	unsigned long irq_flags;
+ 
+-	if (!ufshcd_is_clkscaling_supported(hba))
++	if (!ufshcd_is_clk_scaling_supported(hba))
+ 		return -EINVAL;
+ 
+ 	clki = list_first_entry(&hba->clk_list_head, struct ufs_clk_info, list);
+@@ -1409,7 +1409,7 @@ static int ufshcd_devfreq_get_dev_status(struct device *dev,
+ 	struct ufs_clk_info *clki;
+ 	ktime_t curr_t;
+ 
+-	if (!ufshcd_is_clkscaling_supported(hba))
++	if (!ufshcd_is_clk_scaling_supported(hba))
+ 		return -EINVAL;
+ 
+ 	memset(stat, 0, sizeof(*stat));
+@@ -1498,7 +1498,7 @@ static void ufshcd_devfreq_remove(struct ufs_hba *hba)
+ 	dev_pm_opp_remove(hba->dev, clki->max_freq);
+ }
+ 
+-static void __ufshcd_suspend_clkscaling(struct ufs_hba *hba)
++static void ufshcd_devfreq_suspend(struct ufs_hba *hba)
+ {
+ 	unsigned long flags;
+ 
+@@ -1508,7 +1508,7 @@ static void __ufshcd_suspend_clkscaling(struct ufs_hba *hba)
+ 	spin_unlock_irqrestore(hba->host->host_lock, flags);
+ }
+ 
+-static void ufshcd_suspend_clkscaling(struct ufs_hba *hba)
++static void __ufshcd_clk_scaling_suspend(struct ufs_hba *hba)
+ {
+ 	unsigned long flags;
+ 	bool suspend = false;
+@@ -1524,10 +1524,10 @@ static void ufshcd_suspend_clkscaling(struct ufs_hba *hba)
+ 	spin_unlock_irqrestore(hba->host->host_lock, flags);
+ 
+ 	if (suspend)
+-		__ufshcd_suspend_clkscaling(hba);
++		ufshcd_devfreq_suspend(hba);
+ }
+ 
+-static void ufshcd_resume_clkscaling(struct ufs_hba *hba)
++static void __ufshcd_clk_scaling_resume(struct ufs_hba *hba)
+ {
+ 	unsigned long flags;
+ 	bool resume = false;
+@@ -1543,7 +1543,7 @@ static void ufshcd_resume_clkscaling(struct ufs_hba *hba)
+ 		devfreq_resume_device(hba->devfreq);
+ }
+ 
+-static ssize_t ufshcd_clkscale_enable_show(struct device *dev,
++static ssize_t ufshcd_clk_scaling_enable_show(struct device *dev,
+ 		struct device_attribute *attr, char *buf)
+ {
+ 	struct ufs_hba *hba = dev_get_drvdata(dev);
+@@ -1551,7 +1551,7 @@ static ssize_t ufshcd_clkscale_enable_show(struct device *dev,
+ 	return sysfs_emit(buf, "%d\n", hba->clk_scaling.is_enabled);
+ }
+ 
+-static ssize_t ufshcd_clkscale_enable_store(struct device *dev,
++static ssize_t ufshcd_clk_scaling_enable_store(struct device *dev,
+ 		struct device_attribute *attr, const char *buf, size_t count)
+ {
+ 	struct ufs_hba *hba = dev_get_drvdata(dev);
+@@ -1577,9 +1577,9 @@ static ssize_t ufshcd_clkscale_enable_store(struct device *dev,
+ 	hba->clk_scaling.is_enabled = value;
+ 
+ 	if (value) {
+-		ufshcd_resume_clkscaling(hba);
++		__ufshcd_clk_scaling_resume(hba);
+ 	} else {
+-		ufshcd_suspend_clkscaling(hba);
++		__ufshcd_clk_scaling_suspend(hba);
+ 		err = ufshcd_devfreq_scale(hba, true);
+ 		if (err)
+ 			dev_err(hba->dev, "%s: failed to scale clocks up %d\n",
+@@ -1595,8 +1595,8 @@ static ssize_t ufshcd_clkscale_enable_store(struct device *dev,
+ 
+ static void ufshcd_init_clk_scaling_sysfs(struct ufs_hba *hba)
+ {
+-	hba->clk_scaling.enable_attr.show = ufshcd_clkscale_enable_show;
+-	hba->clk_scaling.enable_attr.store = ufshcd_clkscale_enable_store;
++	hba->clk_scaling.enable_attr.show = ufshcd_clk_scaling_enable_show;
++	hba->clk_scaling.enable_attr.store = ufshcd_clk_scaling_enable_store;
+ 	sysfs_attr_init(&hba->clk_scaling.enable_attr.attr);
+ 	hba->clk_scaling.enable_attr.attr.name = "clkscale_enable";
+ 	hba->clk_scaling.enable_attr.attr.mode = 0644;
+@@ -1614,7 +1614,7 @@ static void ufshcd_init_clk_scaling(struct ufs_hba *hba)
+ {
+ 	char wq_name[sizeof("ufs_clkscaling_00")];
+ 
+-	if (!ufshcd_is_clkscaling_supported(hba))
++	if (!ufshcd_is_clk_scaling_supported(hba))
+ 		return;
+ 
+ 	if (!hba->clk_scaling.min_gear)
+@@ -2016,7 +2016,7 @@ static void ufshcd_clk_scaling_start_busy(struct ufs_hba *hba)
+ 	ktime_t curr_t = ktime_get();
+ 	unsigned long flags;
+ 
+-	if (!ufshcd_is_clkscaling_supported(hba))
++	if (!ufshcd_is_clk_scaling_supported(hba))
+ 		return;
+ 
+ 	spin_lock_irqsave(hba->host->host_lock, flags);
+@@ -2050,7 +2050,7 @@ static void ufshcd_clk_scaling_update_busy(struct ufs_hba *hba)
+ 	struct ufs_clk_scaling *scaling = &hba->clk_scaling;
+ 	unsigned long flags;
+ 
+-	if (!ufshcd_is_clkscaling_supported(hba))
++	if (!ufshcd_is_clk_scaling_supported(hba))
+ 		return;
+ 
+ 	spin_lock_irqsave(hba->host->host_lock, flags);
+@@ -6055,12 +6055,12 @@ static void ufshcd_clk_scaling_suspend(struct ufs_hba *hba, bool suspend)
+ {
+ 	if (suspend) {
+ 		if (hba->clk_scaling.is_enabled)
+-			ufshcd_suspend_clkscaling(hba);
++			__ufshcd_clk_scaling_suspend(hba);
+ 		ufshcd_clk_scaling_allow(hba, false);
+ 	} else {
+ 		ufshcd_clk_scaling_allow(hba, true);
+ 		if (hba->clk_scaling.is_enabled)
+-			ufshcd_resume_clkscaling(hba);
++			__ufshcd_clk_scaling_resume(hba);
+ 	}
+ }
+ 
+@@ -6089,9 +6089,9 @@ static void ufshcd_err_handling_prepare(struct ufs_hba *hba)
+ 		ufshcd_vops_resume(hba, pm_op);
+ 	} else {
+ 		ufshcd_hold(hba, false);
+-		if (ufshcd_is_clkscaling_supported(hba) &&
++		if (ufshcd_is_clk_scaling_supported(hba) &&
+ 		    hba->clk_scaling.is_enabled)
+-			ufshcd_suspend_clkscaling(hba);
++			__ufshcd_clk_scaling_suspend(hba);
+ 		ufshcd_clk_scaling_allow(hba, false);
+ 	}
+ 	ufshcd_scsi_block_requests(hba);
+@@ -6104,7 +6104,7 @@ static void ufshcd_err_handling_unprepare(struct ufs_hba *hba)
+ {
+ 	ufshcd_scsi_unblock_requests(hba);
+ 	ufshcd_release(hba);
+-	if (ufshcd_is_clkscaling_supported(hba))
++	if (ufshcd_is_clk_scaling_supported(hba))
+ 		ufshcd_clk_scaling_suspend(hba, false);
+ 	ufshcd_rpm_put(hba);
+ }
+@@ -8111,7 +8111,7 @@ static int ufshcd_add_lus(struct ufs_hba *hba)
+ 		goto out;
+ 
+ 	/* Initialize devfreq after UFS device is detected */
+-	if (ufshcd_is_clkscaling_supported(hba)) {
++	if (ufshcd_is_clk_scaling_supported(hba)) {
+ 		memcpy(&hba->clk_scaling.saved_pwr_info.info,
+ 			&hba->pwr_info,
+ 			sizeof(struct ufs_pa_layer_attr));
+@@ -8955,7 +8955,7 @@ static int __ufshcd_wl_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op)
+ 	ufshcd_hold(hba, false);
+ 	hba->clk_gating.is_suspended = true;
+ 
+-	if (ufshcd_is_clkscaling_supported(hba))
++	if (ufshcd_is_clk_scaling_supported(hba))
+ 		ufshcd_clk_scaling_suspend(hba, true);
+ 
+ 	if (req_dev_pwr_mode == UFS_ACTIVE_PWR_MODE &&
+@@ -9061,7 +9061,7 @@ static int __ufshcd_wl_suspend(struct ufs_hba *hba, enum ufs_pm_op pm_op)
+ 	if (!ufshcd_set_dev_pwr_mode(hba, UFS_ACTIVE_PWR_MODE))
+ 		ufshcd_disable_auto_bkops(hba);
+ enable_scaling:
+-	if (ufshcd_is_clkscaling_supported(hba))
++	if (ufshcd_is_clk_scaling_supported(hba))
+ 		ufshcd_clk_scaling_suspend(hba, false);
+ 
+ 	hba->dev_info.b_rpm_dev_flush_capable = false;
+@@ -9144,7 +9144,7 @@ static int __ufshcd_wl_resume(struct ufs_hba *hba, enum ufs_pm_op pm_op)
+ 	if (hba->ee_usr_mask)
+ 		ufshcd_write_ee_control(hba);
+ 
+-	if (ufshcd_is_clkscaling_supported(hba))
++	if (ufshcd_is_clk_scaling_supported(hba))
+ 		ufshcd_clk_scaling_suspend(hba, false);
+ 
+ 	if (hba->dev_info.b_rpm_dev_flush_capable) {
+diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
+index 7fe1a926cd99..5fd99a9cacb7 100644
+--- a/include/ufs/ufshcd.h
++++ b/include/ufs/ufshcd.h
+@@ -976,7 +976,7 @@ static inline bool ufshcd_can_hibern8_during_gating(struct ufs_hba *hba)
+ {
+ 	return hba->caps & UFSHCD_CAP_HIBERN8_WITH_CLK_GATING;
+ }
+-static inline int ufshcd_is_clkscaling_supported(struct ufs_hba *hba)
++static inline int ufshcd_is_clk_scaling_supported(struct ufs_hba *hba)
+ {
+ 	return hba->caps & UFSHCD_CAP_CLK_SCALING;
+ }
+-- 
+2.18.0
 

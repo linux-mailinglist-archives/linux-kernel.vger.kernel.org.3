@@ -2,208 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6ADF858F70A
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 06:51:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4479F58F70C
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 06:52:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233861AbiHKEvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 00:51:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49282 "EHLO
+        id S233895AbiHKEwV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 00:52:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233815AbiHKEvN (ORCPT
+        with ESMTP id S233839AbiHKEwT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 00:51:13 -0400
-Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529366BD7C
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 21:51:12 -0700 (PDT)
-Received: by mail-oi1-x229.google.com with SMTP id o184so10288583oif.13
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 21:51:12 -0700 (PDT)
+        Thu, 11 Aug 2022 00:52:19 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9140C66137
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 21:52:17 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id w14so16025645plp.9
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 21:52:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:message-id:subject:cc:to:from:date:from:to:cc;
-        bh=m1OXKNq7+DtNWBynhSNEKrKaVxfMrlkQMnFw/pURbg0=;
-        b=sTsT9dad5iemvIuEELMDiMVhOE0RThIC2/6RND1+gIR9BG0Tup4Ja0VLAyqCjMUQj9
-         +DIZ3WDS2XbbYkIXwp7ii2YLV3uDoUWuyylR8fUDndlLO/U/j+iWnin0bWNBiMfoaBd5
-         0Uu8sjJwP6rnNCfDnWxCUBJwpvqg6C5HSK2OdC48sFSdi7wz7GrnanfoD3gGnqd6pGHl
-         wR8UWwPrD199kDC4fOjUbz4QaVYVrhkqLe5PknSYTD24vXiE8nQpAdGEIQbuv0VlKFsa
-         OAz64t3JK/91dFMW3ucoHT/pHAtA3qbt94QVwPtopQRwyILKHlnFpUfw31PynvuAT1xU
-         hZNw==
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc;
+        bh=f9lKlYHVcsMmtqSXgvKZOc7zNWpHzbugb2ZvOggm7+8=;
+        b=S4gcGXoUOmKHDv7mFl6eUlG9J/CJI3jZ30sxu4tI7jxbsBvGExLMnbZKnJivB6YDwh
+         7A69bemlu4GU+2S8fOGcqweOrlqe1X3U7nd+qD7TLdKOOyp90ZKpNcAMnlvVEMqi6d9/
+         vuO50kb2z+nkMJd9lwWR032rWCz8BgRieK1bZGd0hgEUCPkYwiK5tieI70SRir4XPQ5m
+         17UGyABv6pu1/7YyiwBUNMx8Pk3EDi3p7URwERFthkOtIYIxmhdQ+Ew9c39bS3dyR3ik
+         zsBAdWUml+ClfZ1v8bL5gDT4BRfYYiQGijXZ32sOKVQRUX2HtL+cxuNhJp6zgTr8AB6p
+         L1Zg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc;
-        bh=m1OXKNq7+DtNWBynhSNEKrKaVxfMrlkQMnFw/pURbg0=;
-        b=h6QQtSfzxpERTOc4cwLin8yqJSTqW5mRqWWqvUhrxb8tq67qzqHRjm9Grkru+9so9i
-         erQeD88x/JEOuU33KtyxbTPGpHifTuGGTaYC+FGteAGemRw6xeXtL5bpEIk8qdf/vmet
-         NbkFNDJsYaLDGH4w9Mc+91ieUPUSkrKt2/fHQPzzeqgfH7dd2bGDMcTSRzjygzeWJsOl
-         iGAHhkX7ok/XsgWvSQQ7167N7sN3EB5JBdIk68BfqozdRo08XGgjBKKUI5ht2xDTF8rE
-         eCgf7v7Yn6jxZqgtDSdhCfu1DcONSn0cvegpvXMuwrPBC6sGD1cBX14BcY+XIWWUy7lR
-         AyIA==
-X-Gm-Message-State: ACgBeo1NYm/b0Kq3HfnbQ+7Odtpv4CnugfNKBkLWRXtYURI7r65Nw4M9
-        jhHOzsUmvydsG5qdW0Lg9cwAGQ==
-X-Google-Smtp-Source: AA6agR403qDz149yAHlea6yIhxoqoqCqmWgbvz0Cq6UeiC9cA/hbd16184lAZZZ/C/S+0UxZv8hIkA==
-X-Received: by 2002:aca:4182:0:b0:343:9d9:1d18 with SMTP id o124-20020aca4182000000b0034309d91d18mr2680250oia.86.1660193471466;
-        Wed, 10 Aug 2022 21:51:11 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id c84-20020acab357000000b003358e034f72sm931014oif.7.2022.08.10.21.51.10
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc;
+        bh=f9lKlYHVcsMmtqSXgvKZOc7zNWpHzbugb2ZvOggm7+8=;
+        b=tO/RDLNjE+Cl2lfV13Pl3Q/hCuHQRQyKYdnOVTl8IqkzH1n5MQzqg12EqmmzxMl2md
+         Q2TPeQEJqyyF7nTlWvnSyaNiN3Mm9PNxt2R52DmyVKH6IoKSv357UV86LXPwSl4MjLrc
+         taslOFs4sYUVfz/Uv04GJzPq72LZvDx3Dllys2jHxQtQgc0hCtbocxjhaVXVEZcJrS45
+         Mc1ADVX1FRUPKcKknj5Hfoa3gHFsp6P9AzfLhJw79ztiDpGfOwZe/ZKMIfW4thyiHePj
+         bGB6Ul4Hl9dCbCoCV0PbmrJjWVFCJKpgVg+JogOFg7pP3qPwRcMAA/Dq+Yi2koZQLQlI
+         k6Fw==
+X-Gm-Message-State: ACgBeo1JlVdOz3HEXCtu1m50FpvZO0asYeNBAJ3Fq4ek764d+j/iqa7+
+        QhNJgLu1g3+3DdR4y0rEFbx3Iw==
+X-Google-Smtp-Source: AA6agR49u3UFrXcLzjikkseLWSPFxFzGbnFqnrRqM5nDSGc27oRG4AhuNkUD/YKHXYE+RICXLuszxw==
+X-Received: by 2002:a17:903:1207:b0:170:96d4:ac1d with SMTP id l7-20020a170903120700b0017096d4ac1dmr20466454plh.11.1660193536910;
+        Wed, 10 Aug 2022 21:52:16 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id ok3-20020a17090b1d4300b001f23db09351sm2615106pjb.46.2022.08.10.21.52.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 21:51:11 -0700 (PDT)
-Date:   Wed, 10 Aug 2022 21:51:09 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Theodore Ts'o <tytso@mit.edu>, Radoslaw Burny <rburny@google.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [PATCH] mm/shmem: fix chattr fsflags support in tmpfs
-Message-ID: <2961dcb0-ddf3-b9f0-3268-12a4ff996856@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 10 Aug 2022 21:52:16 -0700 (PDT)
+Date:   Wed, 10 Aug 2022 21:52:16 -0700 (PDT)
+X-Google-Original-Date: Wed, 10 Aug 2022 21:52:13 PDT (-0700)
+Subject:     Re: [PATCH v7 0/4] riscv: implement Zicbom-based CMO instructions + the t-head variant
+In-Reply-To: <20220706231536.2041855-1-heiko@sntech.de>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        wefu@redhat.com, guoren@kernel.org, cmuellner@linux.com,
+        philipp.tomsich@vrull.eu, Christoph Hellwig <hch@lst.de>,
+        samuel@sholland.org, atishp@atishpatra.org, anup@brainfault.org,
+        mick@ics.forth.gr, robh+dt@kernel.org, krzk+dt@kernel.org,
+        devicetree@vger.kernel.org, drew@beagleboard.org,
+        rdunlap@infradead.org, heiko@sntech.de
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     heiko@sntech.de
+Message-ID: <mhng-2f62428c-544a-4908-a91d-fb8788ae67b3@palmer-mbp2014>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ext[234] have always allowed unimplemented chattr flags to be set,
-but other filesystems have tended to be stricter.  Follow the stricter
-approach for tmpfs: I don't want to have to explain why csu attributes
-don't actually work, and we won't need to update the chattr(1) manpage;
-and it's never wrong to start off strict, relaxing later if persuaded.
-Allow only a (append only) i (immutable) A (no atime) and d (no dump).
+On Wed, 06 Jul 2022 16:15:32 PDT (-0700), heiko@sntech.de wrote:
+> This series is based on the alternatives changes done in my svpbmt series
+> and thus also depends on Atish's isa-extension parsing series.
+>
+> It implements using the cache-management instructions from the  Zicbom-
+> extension to handle cache flush, etc actions on platforms needing them.
+>
+> SoCs using cpu cores from T-Head like the Allwinne D1 implement a
+> different set of cache instructions. But while they are different,
+> instructions they provide the same functionality, so a variant can
+> easly hook into the existing alternatives mechanism on those.
+>
+>
+> An ongoing discussion is about the currently used pre-coded
+> instructions. Palmer's current thinking is that we should wait
+> until the relevant instructions have landed in binutils.
+>
+> The main Zicbom instructions are in toolchains now and at least
+> Debian also carries a binutils snapshot with it, but the T-Head
+> variant still uses pre-coded instructions for now.
+>
+> The series sits on top of my svpbmt fixup series, which
+> for example includes the conversion away from function pointers
+> for the check-functions.
+>
+>
+> It also uses my nops-series to shorten multiple nop statements:
+> https://lore.kernel.org/r/20220607143059.1054074-1-heiko@sntech.de
+>
+>
+> A new dma-noncoherent property was added for the devicetree-specification
+> and dt-schema in:
+> - https://www.spinics.net/lists/devicetree-spec/msg01053.html
+> - https://github.com/devicetree-org/dt-schema/pull/78
+>
+> The dtschema-patch was already merged and patch1 in this series
+> got a reviewed-by from Rob, so I guess that new property should be
+> ok to use.
+>
+> changes in v7:
+> - add recently received review-tags
+> - fix wrong rv32 mabi when testing for Zicbom in Kconfig
+>
+> changes in v6:
+> - add recently received review-tags
+> - adapt non-coherent patch subject as suggested by Christoph Hellwig
+>
+> changes in v5:
+> - beautify of_dma_is_coherent as suggested by Christoph Hellwig
+> - WARN_TAINT when ARCH_DMA_MINALIGN smaller than riscv,cbom-block-size
+>   (similar to how arm64 does this)
+> - add a function to track if non-coherent handling is available
+> - WARN_TAINT if a device is non-coherent but no non-coherent handling
+> - use clean instead of inval in arch_sync_dma_for_device:DMA_FROM_DEVICE
+>   hopefully I understood
+>     https://lore.kernel.org/linux-arm-kernel/20220610151228.4562-1-will@kernel.org/T/
+>   correctly in this
+>
+> changes in v4:
+> - modify of_dma_is_coherent() also handle coherent system
+>   with maybe noncoherent devices
+> - move Zicbom to use real instructions
+> - split off the actual dma-noncoherent code from the Zicbom
+>   extension
+> - Don't assumes devices are non-coherent, instead default to
+>   coherent and require the non-coherent ones to be marked
+> - CPUFEATURE_ZICBOM instead of CPUFEATURE_CMO
+> - fix used cache addresses
+> - drop some unused headers from dma-noncoherent.c
+> - move unsigned long cast when calling ALT_CMO_OP
+> - remove unneeded memset-0
+> - define ARCH_DMA_MINALIGN
+> - use flush instead of inval in arch_sync_dma_for_cpu()
+> - depend on !XIP_KERNEL
+> - trim some line lengths
+> - improve Kconfig description
+>
+> changes in v3:
+> - rebase onto 5.19-rc1 + svpbmt-fixup-series
+> - adapt wording for block-size binding
+> - include asm/cacheflush.h into dma-noncoherent to fix the
+>   no-prototype error clang seems to generate
+> - use __nops macro for readability
+> - add some received tags
+> - add a0 to the clobber list
+>
+> changes in v2:
+> - cbom-block-size is hardware-specific and comes from firmware
+> - update Kconfig name to use the ISA extension name
+> - select the ALTERNATIVES symbol when enabled
+> - shorten the line lengths of the errata-assembly
+>
+> Heiko Stuebner (4):
+>   of: also handle dma-noncoherent in of_dma_is_coherent()
+>   dt-bindings: riscv: document cbom-block-size
+>   riscv: Add support for non-coherent devices using zicbom extension
+>   riscv: implement cache-management errata for T-Head SoCs
+>
+>  .../devicetree/bindings/riscv/cpus.yaml       |   5 +
+>  arch/riscv/Kconfig                            |  31 +++++
+>  arch/riscv/Kconfig.erratas                    |  11 ++
+>  arch/riscv/Makefile                           |   4 +
+>  arch/riscv/errata/thead/errata.c              |  20 ++++
+>  arch/riscv/include/asm/cache.h                |   4 +
+>  arch/riscv/include/asm/cacheflush.h           |  10 ++
+>  arch/riscv/include/asm/errata_list.h          |  59 ++++++++-
+>  arch/riscv/include/asm/hwcap.h                |   1 +
+>  arch/riscv/kernel/cpu.c                       |   1 +
+>  arch/riscv/kernel/cpufeature.c                |  24 ++++
+>  arch/riscv/kernel/setup.c                     |   2 +
+>  arch/riscv/mm/Makefile                        |   1 +
+>  arch/riscv/mm/dma-noncoherent.c               | 112 ++++++++++++++++++
+>  drivers/of/address.c                          |  17 +--
+>  15 files changed, 293 insertions(+), 9 deletions(-)
+>  create mode 100644 arch/riscv/mm/dma-noncoherent.c
 
-Although lsattr showed 'A' inherited, the NOATIME behavior was not
-being inherited: because nothing sync'ed FS_NOATIME_FL to S_NOATIME.
-Add shmem_set_inode_flags() to sync the flags, using inode_set_flags()
-to avoid that instant of lost immutablility during fileattr_set().
+Thanks, this is on for-next.  I had to fix up a few things, nothing big 
+but I did end up making Zicbom depend on MMU -- that's probably not 
+strictly necessary, but it looks like the dma_noncoherent stuff pulls in 
+some MMU dependencies.  Since the only hardware that has Zicbom also has 
+an MMU I figured it's OK for now, but happy to take an improvement if 
+someone has one.
 
-But that change switched generic/079 from passing to failing: because
-FS_IMMUTABLE_FL and FS_APPEND_FL had been unconventionally included in
-the INHERITED fsflags: remove them and generic/079 is back to passing.
-
-Fixes: e408e695f5f1 ("mm/shmem: support FS_IOC_[SG]ETFLAGS in tmpfs")
-Signed-off-by: Hugh Dickins <hughd@google.com>
----
-
- include/linux/shmem_fs.h | 13 +++-------
- mm/shmem.c               | 54 +++++++++++++++++++++++-----------------
- 2 files changed, 35 insertions(+), 32 deletions(-)
-
---- a/include/linux/shmem_fs.h
-+++ b/include/linux/shmem_fs.h
-@@ -29,15 +29,10 @@ struct shmem_inode_info {
- 	struct inode		vfs_inode;
- };
- 
--#define SHMEM_FL_USER_VISIBLE FS_FL_USER_VISIBLE
--#define SHMEM_FL_USER_MODIFIABLE FS_FL_USER_MODIFIABLE
--#define SHMEM_FL_INHERITED FS_FL_USER_MODIFIABLE
--
--/* Flags that are appropriate for regular files (all but dir-specific ones). */
--#define SHMEM_REG_FLMASK (~(FS_DIRSYNC_FL | FS_TOPDIR_FL))
--
--/* Flags that are appropriate for non-directories/regular files. */
--#define SHMEM_OTHER_FLMASK (FS_NODUMP_FL | FS_NOATIME_FL)
-+#define SHMEM_FL_USER_VISIBLE		FS_FL_USER_VISIBLE
-+#define SHMEM_FL_USER_MODIFIABLE \
-+	(FS_IMMUTABLE_FL | FS_APPEND_FL | FS_NODUMP_FL | FS_NOATIME_FL)
-+#define SHMEM_FL_INHERITED		(FS_NODUMP_FL | FS_NOATIME_FL)
- 
- struct shmem_sb_info {
- 	unsigned long max_blocks;   /* How many blocks are allowed */
-diff --git a/mm/shmem.c b/mm/shmem.c
-index e975fcd9d2e1..bd9b114a8650 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -2281,16 +2281,34 @@ static int shmem_mmap(struct file *file, struct vm_area_struct *vma)
- 	return 0;
- }
- 
--/* Mask out flags that are inappropriate for the given type of inode. */
--static unsigned shmem_mask_flags(umode_t mode, __u32 flags)
-+#ifdef CONFIG_TMPFS_XATTR
-+static int shmem_initxattrs(struct inode *, const struct xattr *, void *);
-+
-+/*
-+ * chattr's fsflags are unrelated to extended attributes,
-+ * but tmpfs has chosen to enable them under the same config option.
-+ */
-+static void shmem_set_inode_flags(struct inode *inode, unsigned int fsflags)
-+{
-+	unsigned int i_flags = 0;
-+
-+	if (fsflags & FS_NOATIME_FL)
-+		i_flags |= S_NOATIME;
-+	if (fsflags & FS_APPEND_FL)
-+		i_flags |= S_APPEND;
-+	if (fsflags & FS_IMMUTABLE_FL)
-+		i_flags |= S_IMMUTABLE;
-+	/*
-+	 * But FS_NODUMP_FL does not require any action in i_flags.
-+	 */
-+	inode_set_flags(inode, i_flags, S_NOATIME | S_APPEND | S_IMMUTABLE);
-+}
-+#else
-+static void shmem_set_inode_flags(struct inode *inode, unsigned int fsflags)
- {
--	if (S_ISDIR(mode))
--		return flags;
--	else if (S_ISREG(mode))
--		return flags & SHMEM_REG_FLMASK;
--	else
--		return flags & SHMEM_OTHER_FLMASK;
- }
-+#define shmem_initxattrs NULL
-+#endif
- 
- static struct inode *shmem_get_inode(struct super_block *sb, struct inode *dir,
- 				     umode_t mode, dev_t dev, unsigned long flags)
-@@ -2319,7 +2337,8 @@ static struct inode *shmem_get_inode(struct super_block *sb, struct inode *dir,
- 		info->i_crtime = inode->i_mtime;
- 		info->fsflags = (dir == NULL) ? 0 :
- 			SHMEM_I(dir)->fsflags & SHMEM_FL_INHERITED;
--		info->fsflags = shmem_mask_flags(mode, info->fsflags);
-+		if (info->fsflags)
-+			shmem_set_inode_flags(inode, info->fsflags);
- 		INIT_LIST_HEAD(&info->shrinklist);
- 		INIT_LIST_HEAD(&info->swaplist);
- 		simple_xattrs_init(&info->xattrs);
-@@ -2468,12 +2487,6 @@ int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
- static const struct inode_operations shmem_symlink_inode_operations;
- static const struct inode_operations shmem_short_symlink_operations;
- 
--#ifdef CONFIG_TMPFS_XATTR
--static int shmem_initxattrs(struct inode *, const struct xattr *, void *);
--#else
--#define shmem_initxattrs NULL
--#endif
--
- static int
- shmem_write_begin(struct file *file, struct address_space *mapping,
- 			loff_t pos, unsigned len,
-@@ -3179,18 +3192,13 @@ static int shmem_fileattr_set(struct user_namespace *mnt_userns,
- 
- 	if (fileattr_has_fsx(fa))
- 		return -EOPNOTSUPP;
-+	if (fa->flags & ~SHMEM_FL_USER_MODIFIABLE)
-+		return -EOPNOTSUPP;
- 
- 	info->fsflags = (info->fsflags & ~SHMEM_FL_USER_MODIFIABLE) |
- 		(fa->flags & SHMEM_FL_USER_MODIFIABLE);
- 
--	inode->i_flags &= ~(S_APPEND | S_IMMUTABLE | S_NOATIME);
--	if (info->fsflags & FS_APPEND_FL)
--		inode->i_flags |= S_APPEND;
--	if (info->fsflags & FS_IMMUTABLE_FL)
--		inode->i_flags |= S_IMMUTABLE;
--	if (info->fsflags & FS_NOATIME_FL)
--		inode->i_flags |= S_NOATIME;
--
-+	shmem_set_inode_flags(inode, info->fsflags);
- 	inode->i_ctime = current_time(inode);
- 	return 0;
- }
+Since there's a new extension it also requires updating sparse, I sent a 
+patch (linked in the merge commit).

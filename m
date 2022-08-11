@@ -2,111 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 550045907D8
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 23:08:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1CC65907D7
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 23:08:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235829AbiHKVIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 17:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43474 "EHLO
+        id S235909AbiHKVIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 17:08:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235823AbiHKVHo (ORCPT
+        with ESMTP id S236486AbiHKVHx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 17:07:44 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDCF998CB8
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 14:07:03 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so6253035pjf.2
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 14:07:03 -0700 (PDT)
+        Thu, 11 Aug 2022 17:07:53 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB90A061D
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 14:07:10 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id a8so18737788pjg.5
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 14:07:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:from:to:cc;
-        bh=JrHUTkJyQWr1jJIPcxndllMl3ULcPf+kBB+IZh69boA=;
-        b=QyByDNzU0LLWSP3pCHqJuo1AUxkE432ctIaCVFEaqbh6KSme27t2bncc2YpexJzZZN
-         D6Gzxaxx7+JmrmOshKQv5Wiakv025CZocwBVBjYGpOwwmNdh0ZkXePLRcn9mihdwd3bV
-         JYriUdKzNglB+n7gKMAfrwGGEaJuS6+aZ3+oaIrtoUIo3GWbRjtnTVOmZTvb4w12LhVW
-         1kWtv3jiY/xu+rOKc6Iiv5dznAh21pBsLZ0z4meReseuplORjfdbWe8XFzatF1301QGT
-         PGzPxWxX73FVuCnSeN8l9iEU2iLi1i753hcqWHCKNi/F7nOibf+/oKShN+7FyEvIQqrK
-         69qA==
+        bh=fYIwfWDqXvJTpIZp6wWu1QnQ1p5fYHmeOm5er300uW0=;
+        b=bCRcnoMd0iKE/9LgGvS5U9Khr9pMfS0mzU8SLvpNVACCVJqJPmsDOjWtSWl5n9N/yS
+         3JFou+HII01bQrn62nQVHgVrYehTqkwoV41tt8IRH+EhAQA8FXu4eaz635W9hKAyyBT1
+         85dX/QZz6Mfp8pA43pHm4uZF2LB9G58Bhmr80hx2nEcKlEnvd3wdo8BlqgCymspxvYFU
+         J1N38sMn+8GPiFZ7D5bCBr0Ia9e7/oizTh84yL2voY4yF8YBkfZEqZCyrgTduwQo0u5M
+         NYgqfBi5vLoTXmYF9Pp51zxNvyJgq91C8E0M7nVGDpEq7OLcEdpYQFjrWcbD+6SjsBI+
+         q/Fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:x-gm-message-state:from:to:cc;
-        bh=JrHUTkJyQWr1jJIPcxndllMl3ULcPf+kBB+IZh69boA=;
-        b=mk8G5p9Iff0tdrpJftCUNqjkQ2gNZcEScMz2AqZxsqnrv/yZ3Ps+6YGdEhvhNdk+0z
-         tNd02sDgYcCXCQF97pGsXUOV3+G65aGS+KAP83PAEOweyJHFlgpMiuNPpGCE1K/y4rpk
-         cwKCs+VOGpgOIy9y8BtlI9CUFq7CJxUVhH8zFn7kD4LQ4iFlBdHWt7g0LyJn3fl8QbaN
-         qJmDA4pUgS2yJ91kpPxSo0RjBgUw+V4f4HrxAec2eiBMk0CAHVj5om2MjpS6wKlJx0Mu
-         xv3V9ZVEis93Q5T1Sj4hn1bbvZ5P3bWrolQfWKeasucttwa3HRyrcztQKibyh4Gpq72V
-         dBww==
-X-Gm-Message-State: ACgBeo2LvroihZZ5WHLSWHxy3Py6oFpCrrAazFOpCJdkAvdmLrVnRL49
-        WtkWiBbf//hDiJnQTtYjPKNnYQ==
-X-Google-Smtp-Source: AA6agR6XAQlEc6RM9lomCPThmIuzbW7YQlUvuKU4lrWhPm22PyZgoIEmGk2m2jQZ59bDV3Rt0+Hb7g==
-X-Received: by 2002:a17:902:8502:b0:16c:c5c5:a198 with SMTP id bj2-20020a170902850200b0016cc5c5a198mr898604plb.88.1660252016890;
-        Thu, 11 Aug 2022 14:06:56 -0700 (PDT)
+        bh=fYIwfWDqXvJTpIZp6wWu1QnQ1p5fYHmeOm5er300uW0=;
+        b=NxRZ8Us7ADGZC+pHsKdC1LarazdFsHswfeTCuwM+roU6AKpeMnWFFpyNFD6C56sJXu
+         Qg6HFQlHIj8hWrqpnWdeOUwJ+sciHqHzkUWWvPTPP7TnPjapY6nys4Kbi2jcKARHhw+j
+         EOx0uobKgfLHx3X6AaqLay3hHQlfGcWqyJfWufVGKlTCDiqM3HPWNDZj2MmjN6ZPeWjF
+         p/MGZDQaR8/WuDotRH0U5abNQlA71U/uhWykLAWs3IldK3aIBpuwSn9ynmWFl0Dao/xp
+         dSFyu5KZkBYbrYPrU1m3/oK+dw1Njwnd33OETNwSiB+5J6Rft5cxS2P0ffbx4mhYN2Hn
+         QDUg==
+X-Gm-Message-State: ACgBeo1entN6hVQ21ZRP3LPwPpvPldySN1jijuvF/vkwRi8VuJ903DZ4
+        AWP/C40Rn3HOi+aAYE4lWL5s+A==
+X-Google-Smtp-Source: AA6agR593So6RKlwX2FqLk3gn4GVQrawLohvig5Nzam1xISqzzknSaCSE53kgSNdccIYbd1IrYZ1SQ==
+X-Received: by 2002:a17:90b:38cb:b0:1f5:2321:63cb with SMTP id nn11-20020a17090b38cb00b001f5232163cbmr10757573pjb.110.1660252021424;
+        Thu, 11 Aug 2022 14:07:01 -0700 (PDT)
 Received: from localhost ([50.221.140.186])
-        by smtp.gmail.com with ESMTPSA id lj7-20020a17090b344700b001f731a1ed88sm4150322pjb.2.2022.08.11.14.06.56
+        by smtp.gmail.com with ESMTPSA id x190-20020a6231c7000000b0052def2e20dasm122957pfx.167.2022.08.11.14.07.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Aug 2022 14:06:56 -0700 (PDT)
-Date:   Thu, 11 Aug 2022 14:06:56 -0700 (PDT)
-X-Google-Original-Date: Thu, 11 Aug 2022 12:09:15 PDT (-0700)
-Subject:     Re: [PATCH v2] riscv: dts: starfive: correct number of external interrupts
-In-Reply-To: <20220707185529.19509-1-kettenis@openbsd.org>
-CC:     mail@conchuod.ie, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org,
+        Thu, 11 Aug 2022 14:07:00 -0700 (PDT)
+Date:   Thu, 11 Aug 2022 14:07:00 -0700 (PDT)
+X-Google-Original-Date: Thu, 11 Aug 2022 14:00:19 PDT (-0700)
+Subject:     Re: [PATCH] dt-bindings: riscv: fix SiFive l2-cache's cache-sets
+In-Reply-To: <20220803185359.942928-1-mail@conchuod.ie>
+CC:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, kernel@esmil.dk, kettenis@openbsd.org,
-        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
+        aou@eecs.berkeley.edu, conor.dooley@microchip.com,
+        atulkhare@rivosinc.com, sagar.kadam@sifive.com,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
 From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     kettenis@openbsd.org
-Message-ID: <mhng-4117ac1c-2f8c-4011-91df-c920e6ab6aad@palmer-ri-x1c9>
+To:     mail@conchuod.ie
+Message-ID: <mhng-4240f01d-9505-4ae9-9406-4e44b772a551@palmer-ri-x1c9>
 Mime-Version: 1.0 (MHng)
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 07 Jul 2022 11:55:28 PDT (-0700), kettenis@openbsd.org wrote:
-> The PLIC integrated on the Vic_U7_Core integrated on the StarFive
-> JH7100 SoC actually supports 133 external interrupts.  127 of these
-> are exposed to the outside world; the remainder are used by other
-> devices that are part of the core-complex such as the L2 cache
-> controller.  But all 133 interrupts are external interrupts as far
-> as the PLIC is concerned.  Fix the property so that the driver can
-> manage these additional interrupts, which is important since the
-> interrupts for the L2 cache controller are enabled by default.
+On Wed, 03 Aug 2022 11:54:00 PDT (-0700), mail@conchuod.ie wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
 >
-> Fixes: ec85362fb121 ("RISC-V: Add initial StarFive JH7100 device tree")
-> Signed-off-by: Mark Kettenis <kettenis@openbsd.org>
+> Fix device tree schema validation error messages for the SiFive
+> Unmatched: ' cache-sets:0:0: 1024 was expected'.
+>
+> The existing bindings allow for just 1024 cache-sets but the fu740 on
+> Unmatched the has 2048 cache-sets. The ISA itself permits any arbitrary
+> power of two, however this is not supported by dt-schema. The RTL for
+> the IP, to which the number of cache-sets is a tunable parameter, has
+> been released publicly so speculatively adding a small number of
+> "reasonable" values seems unwise also.
+>
+> Instead, as the binding only supports two distinct controllers: add 2048
+> and explicitly lock it to the fu740's l2 cache while limiting 1024 to
+> the l2 cache on the fu540.
+>
+> Fixes: af951c3a113b ("dt-bindings: riscv: Update l2 cache DT documentation to add support for SiFive FU740")
+> Reported-by: Atul Khare <atulkhare@rivosinc.com>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 > ---
+> I split this off from the existing series as there is no dependancy
+> between this cache change and the gpio patch. The prior series can
+> be found at:
+> https://lore.kernel.org/all/20220726170725.3245278-2-mail@conchuod.ie/
+> ---
+>  .../devicetree/bindings/riscv/sifive-l2-cache.yaml          | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 >
-> ChangeLog:
+> diff --git a/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml b/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
+> index e2d330bd4608..69cdab18d629 100644
+> --- a/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
+> +++ b/Documentation/devicetree/bindings/riscv/sifive-l2-cache.yaml
+> @@ -46,7 +46,7 @@ properties:
+>      const: 2
 >
-> v2: - Fix commit message
+>    cache-sets:
+> -    const: 1024
+> +    enum: [1024, 2048]
 >
+>    cache-size:
+>      const: 2097152
+> @@ -84,6 +84,8 @@ then:
+>        description: |
+>          Must contain entries for DirError, DataError and DataFail signals.
+>        maxItems: 3
+> +    cache-sets:
+> +      const: 1024
 >
->  arch/riscv/boot/dts/starfive/jh7100.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  else:
+>    properties:
+> @@ -91,6 +93,8 @@ else:
+>        description: |
+>          Must contain entries for DirError, DataError, DataFail, DirFail signals.
+>        minItems: 4
+> +    cache-sets:
+> +      const: 2048
 >
-> diff --git a/arch/riscv/boot/dts/starfive/jh7100.dtsi b/arch/riscv/boot/dts/starfive/jh7100.dtsi
-> index 69f22f9aad9d..f48e232a72a7 100644
-> --- a/arch/riscv/boot/dts/starfive/jh7100.dtsi
-> +++ b/arch/riscv/boot/dts/starfive/jh7100.dtsi
-> @@ -118,7 +118,7 @@ plic: interrupt-controller@c000000 {
->  			interrupt-controller;
->  			#address-cells = <0>;
->  			#interrupt-cells = <1>;
-> -			riscv,ndev = <127>;
-> +			riscv,ndev = <133>;
->  		};
->
->  		clkgen: clock-controller@11800000 {
+>  additionalProperties: false
 
 Thanks, this is on for-next.

@@ -2,139 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6419858F8B1
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 10:00:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FAD658F8B6
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 10:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234036AbiHKIAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 04:00:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36748 "EHLO
+        id S234137AbiHKIAT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 04:00:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233028AbiHKH7z (ORCPT
+        with ESMTP id S234136AbiHKIAN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 03:59:55 -0400
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AB1B8E9AE;
-        Thu, 11 Aug 2022 00:59:54 -0700 (PDT)
-Received: by mail-qt1-f171.google.com with SMTP id a4so8261608qto.10;
-        Thu, 11 Aug 2022 00:59:54 -0700 (PDT)
+        Thu, 11 Aug 2022 04:00:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0CF57BB
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:00:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660204810;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lCmF/JYOXXlwKiezcK1qE0yFbX868q+mU1+AYkgPNXQ=;
+        b=Mg805wI3ohD4iu6ysazQxVmmKku593EWcm6xndR3N9foHtAXJwU2Jc4WQblJVh7w2hFwo0
+        bOtq2vmMCLB1km6OLwIRzSzsGZtC7erhYvMMf14SL9x6qKDmWZl9wR0cxlPCKGJ89OYvDv
+        jXwIjsCiNVx/yYbWwSGi+0jDQIiubyc=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-128-d5hP930ANT2i1RK_6oV1DA-1; Thu, 11 Aug 2022 04:00:08 -0400
+X-MC-Unique: d5hP930ANT2i1RK_6oV1DA-1
+Received: by mail-ed1-f70.google.com with SMTP id t13-20020a056402524d00b0043db1fbefdeso10362536edd.2
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:00:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Mzt9xiZn2UZTlTKHVMvt4CFBZHRE5sVzzM2CBT3iHn0=;
-        b=pTdmlRWEUv7hnG7gNZeG7U0LqUmOkF4SQ9JswnJhOhMEm1T8IpKQteS2+VdGooCB/5
-         CMCFjpRXZzCyJu271gz/UIE2E2cq5wcmOpoduz0NyXPnzQb9zU9Dfe+kPqBb4saHKU+h
-         WQZyy30fy4qw8IDv4JQ3o2RtJARmjn7QboGz3oB7vEZNwq0RxqrVM97fAU55Fxfnvc3G
-         vPpgbFi7E80SYdk5hhmKifHvcjXKCe9KKJkkWtYhoubg4y6UQbzeL/eB0/wr/120naDe
-         +iuwvTkW9SOpdegqExBwm8F8eP9LnGbUNlp4ORkUJSgpGou9hz71WstDnzXFCRg+eska
-         FH6w==
-X-Gm-Message-State: ACgBeo1PBRar37v4bLgukPzYXW51ElUotzSqLuQELkfV5N/8fGN/bnOr
-        aUVnjzIDpnMWq3SnuNnBNwlKo+1gYnePQEQQ
-X-Google-Smtp-Source: AA6agR5UjelKsbv85y1qDnOXW7mjDM3CWvFXbSNzwYa3xa5S/qotktjR3sWL/K98ghfVPgyVLdPD4g==
-X-Received: by 2002:a05:622a:3d2:b0:31f:1e36:4782 with SMTP id k18-20020a05622a03d200b0031f1e364782mr26837995qtx.190.1660204792844;
-        Thu, 11 Aug 2022 00:59:52 -0700 (PDT)
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
-        by smtp.gmail.com with ESMTPSA id f4-20020a05620a408400b006b46a78bc0fsm1479308qko.118.2022.08.11.00.59.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Aug 2022 00:59:51 -0700 (PDT)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-31f661b3f89so165054187b3.11;
-        Thu, 11 Aug 2022 00:59:51 -0700 (PDT)
-X-Received: by 2002:a81:b049:0:b0:324:7408:94b with SMTP id
- x9-20020a81b049000000b003247408094bmr31043465ywk.283.1660204791329; Thu, 11
- Aug 2022 00:59:51 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=lCmF/JYOXXlwKiezcK1qE0yFbX868q+mU1+AYkgPNXQ=;
+        b=YGeDrvSLSpI+2gART6mI7PcYJMJf305kSq0UDknWi+ZtmsFq+KaFsj3Q1g6RGjHERt
+         wmrR3HY2C8BfxoMMBQUj508hNJnEsGsAw9CV57id0+woqiM9FwxUSlmMzX2CxentjQ06
+         fPZpQbG3SU2ZqcuNSBP6O5Trsb8/Yah4XgFtucIEiwEqxsuuu3iYOPAbXVmXAuSCre2I
+         CqcWpgC6C0pMeZPE6u/47ckQwy5fMQqy6NoDDXDphUA6NODLz7vvz0znzU2GpHI9SQ8q
+         Z6+UokD6PBpojPQqLSNaRksmBGVh5Px3L71rmtX6Nwd2q2a4vD0RWzgVkkWFFedTAEld
+         xmFQ==
+X-Gm-Message-State: ACgBeo2WwKF9ONNgMIf7m8B+Xtvo1wGaWj9k42yx9gdQvk0JH6zEuFi4
+        9I+HD5f7P1btmlXEHwcar7ifkj0LaVzhWc8sMgqT+Xno+QmKsA4IG98RPMzR+YsCC2qsH1o+Aq0
+        wCcmIwskhyB5G7BkOpa5jI0q3
+X-Received: by 2002:a17:907:97d5:b0:733:1ce:9572 with SMTP id js21-20020a17090797d500b0073301ce9572mr6133100ejc.220.1660204807694;
+        Thu, 11 Aug 2022 01:00:07 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4uItR6QO/ODHWGYMDEVxIdnBWORx5KiS1xBdSWWxcZ030e6s/uS5ChGYBLMNqOoTPv8T8n7g==
+X-Received: by 2002:a17:907:97d5:b0:733:1ce:9572 with SMTP id js21-20020a17090797d500b0073301ce9572mr6133089ejc.220.1660204807494;
+        Thu, 11 Aug 2022 01:00:07 -0700 (PDT)
+Received: from redhat.com ([2.52.152.113])
+        by smtp.gmail.com with ESMTPSA id by23-20020a170906a2d700b00730979f568fsm3230336ejb.150.2022.08.11.01.00.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Aug 2022 01:00:06 -0700 (PDT)
+Date:   Thu, 11 Aug 2022 04:00:02 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Igor Skalkin <igor.skalkin@opensynergy.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        linux-bluetooth@vger.kernel.org, mgo@opensynergy.com
+Subject: Re: [PATCH] virtio_bt: Fix alignment in configuration struct
+Message-ID: <20220811035817-mutt-send-email-mst@kernel.org>
+References: <20220807221152.38948-1-Igor.Skalkin@opensynergy.com>
+ <20220807185846-mutt-send-email-mst@kernel.org>
+ <02222fcb-eaba-617a-c51c-f939678e3d74@opensynergy.com>
+ <20220808081054-mutt-send-email-mst@kernel.org>
 MIME-Version: 1.0
-References: <cover.1657294931.git.geert@linux-m68k.org> <1cae5ebc28513ec1c91c66b00647ce3ca23bfba7.1657294931.git.geert@linux-m68k.org>
- <YvPVxy4kYKdzWgT8@phenom.ffwll.local>
-In-Reply-To: <YvPVxy4kYKdzWgT8@phenom.ffwll.local>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 11 Aug 2022 09:59:39 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVMuuXgYW-AkyB+G77Wsjkm715u1ifDvaY=5DufXjryRA@mail.gmail.com>
-Message-ID: <CAMuHMdVMuuXgYW-AkyB+G77Wsjkm715u1ifDvaY=5DufXjryRA@mail.gmail.com>
-Subject: Re: [PATCH v3 01/10] drm/fourcc: Add drm_format_info_bpp() helper
-To:     Daniel Vetter <daniel@ffwll.ch>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        "Linux/m68k" <linux-m68k@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Javier Martinez Canillas <javierm@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220808081054-mutt-send-email-mst@kernel.org>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+On Mon, Aug 08, 2022 at 08:16:11AM -0400, Michael S. Tsirkin wrote:
+> On Mon, Aug 08, 2022 at 02:04:43PM +0200, Igor Skalkin wrote:
+> > On 8/8/22 01:00, Michael S. Tsirkin wrote:
+> > 
+> >     On Mon, Aug 08, 2022 at 12:11:52AM +0200, Igor Skalkin wrote:
+> > 
+> >         According to specification [1], "For the device-specific configuration
+> >         space, the driver MUST use 8 bit wide accesses for 8 bit wide fields,
+> >         16 bit wide and aligned accesses for 16 bit wide fields and 32 bit wide
+> >         and aligned accesses for 32 and 64 bit wide fields.".
+> > 
+> >         Current version of the configuration structure:
+> > 
+> >             struct virtio_bt_config {
+> >                 __u8  type;
+> >                 __u16 vendor;
+> >                 __u16 msft_opcode;
+> >             } __attribute__((packed));
+> > 
+> >         has both 16bit fields non-aligned.
+> > 
+> >         This commit fixes it.
+> > 
+> >         [1] https://ddec1-0-en-ctp.trendmicro.com:443/wis/clicktime/v1/query?url=https%3a%2f%2fdocs.oasis%2dopen.org%2fvirtio%2fvirtio%2fv1.1%2fvirtio%2dv1.1.pdf&umid=d1786ace-e8ea-40e8-9665-96c0949174e5&auth=53c7c7de28b92dfd96e93d9dd61a23e634d2fbec-39b15885ceebe9fda9357320aec1ccbac416a470
+> > 
+> >         Signed-off-by: Igor Skalkin <Igor.Skalkin@opensynergy.com>
+> > 
+> >     This is all true enough, but the problem is
+> >     1. changing uapi like this can't be done, will break userspace
+> >     2. the driver has more issues and no one seems to want to
+> >        maintain it.
+> >     I posted a patch "Bluetooth: virtio_bt: mark broken" and intend
+> >     to merge it for this release.
+> > 
+> > This is very sad. We already use this driver in our projects.
+> 
+> Really?  Can you step up to maintain it? Then we can fix the issues
+> and it won't be broken.
 
-On Wed, Aug 10, 2022 at 5:59 PM Daniel Vetter <daniel@ffwll.ch> wrote:
-> On Fri, Jul 08, 2022 at 08:20:46PM +0200, Geert Uytterhoeven wrote:
-> > Add a helper to retrieve the actual number of bits per pixel for a
-> > plane, taking into account the number of characters and pixels per
-> > block for tiled formats.
-> >
-> > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> > Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+Just a reminder that I'm waiting for a response on that.
+I just don't know enough about bluetooth.
 
-> > --- a/drivers/gpu/drm/drm_fourcc.c
-> > +++ b/drivers/gpu/drm/drm_fourcc.c
-> > @@ -370,6 +370,25 @@ unsigned int drm_format_info_block_height(const struct drm_format_info *info,
-> >  }
-> >  EXPORT_SYMBOL(drm_format_info_block_height);
-> >
-> > +/**
-> > + * drm_format_info_bpp - number of bits per pixel
-> > + * @info: pixel format info
-> > + * @plane: plane index
-> > + *
-> > + * Returns:
-> > + * The actual number of bits per pixel, depending on the plane index.
-> > + */
-> > +unsigned int drm_format_info_bpp(const struct drm_format_info *info, int plane)
-> > +{
-> > +     if (!info || plane < 0 || plane >= info->num_planes)
-> > +             return 0;
-> > +
-> > +     return info->char_per_block[plane] * 8 /
-> > +            (drm_format_info_block_width(info, plane) *
-> > +             drm_format_info_block_height(info, plane));
->
-> Do we really needs this for blocky formats where this is potentially
-> ill-defined? I think if there's no need then this should also return 0
-> when block_width/height != 1, it doesn't make much sense to compute bpp
-> when it's not really bits per _pixel_.
+-- 
+MST
 
-Yes, we do need this.  For low-color formats, the number of bits
-per pixel is less than eight, and block_width is larger than one.
-That is actually the point of this patch.
-
-> Minimally this needs to check whether the division actually makes sense or
-> whether there's a reminder, and if there's  reminder, then fail. But that
-> feels like a bad hack and I think we should avoid it if it's not
-> absolutely necessary.
-
-Looking at drivers/gpu/drm/drm_fourcc.c, the only supported format
-where there can be a remainder is P030, which has 2 spare bits per
-32-bit word, and thus is special anyway.
-Still, 4 * 8 / 3 = 10, so you get the correct numbers of bits for
-the first plane.  For the second plane, you get 8 * 8 / 3 = 21,
-but as .is_yuv = true, you have to divide that result by two again,
-so you get 10 again.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

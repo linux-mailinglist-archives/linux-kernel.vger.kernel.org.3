@@ -2,348 +2,387 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 804EA58F7AC
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 08:33:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB3BE58F7AF
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 08:34:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234117AbiHKGdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 02:33:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40686 "EHLO
+        id S234126AbiHKGeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 02:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233995AbiHKGdo (ORCPT
+        with ESMTP id S234130AbiHKGdy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 02:33:44 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D070289925;
-        Wed, 10 Aug 2022 23:33:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660199622; x=1691735622;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9J/Oq2omGg3kV6w9BoLmf9GzWDVOK4bTwVdy4MVPWLY=;
-  b=lOXAIOaEmymaHWIvc2KzgIyQDDflr8dYJ/Ns/1TJGTdZ2Z/uusABywsw
-   f5eeFIS6SKXd7/pxLhE73O/uQaPER92/17yZlXwnh1MOMHolk5fR5GPH9
-   9dFBPJJLdQ26snrDwIWBZN4UX1HGyX7KGPOu1918F/YW9Ea7lSXJDlWBP
-   3wP+9GgaQo1rq8Q296D7BYs1+vLmeKWUZSQym0Iqzy0RvUf45VwzmEYaV
-   XgEQTTaRnH3UmiTsPfoPuyk3y8jcTs9qpLPgoQ0HI+CWwpSsQPCZvG453
-   Er9ocCp0P6t0hj1wwMbJrmusLJ2ZradIFn8UgjCmzHG0DZGGt2C1f+IbV
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="317231377"
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="317231377"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 23:33:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="556018518"
-Received: from lkp-server02.sh.intel.com (HELO d10ab0927833) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 10 Aug 2022 23:33:39 -0700
-Received: from kbuild by d10ab0927833 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oM1lD-000039-0Y;
-        Thu, 11 Aug 2022 06:33:39 +0000
-Date:   Thu, 11 Aug 2022 14:33:25 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     zhoun <zhounan@nfschina.com>, john.johansen@canonical.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zhounan <zhounan@nfschina.com>
-Subject: Re: [PATCH] remove unnecessary type casting
-Message-ID: <202208111453.iWFQgZet-lkp@intel.com>
-References: <20220810083935.83452-1-zhounan@nfschina.com>
+        Thu, 11 Aug 2022 02:33:54 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C50789CCF;
+        Wed, 10 Aug 2022 23:33:53 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27B6XfMu044921;
+        Thu, 11 Aug 2022 01:33:41 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1660199621;
+        bh=yzK2an5BKyP+0RYoMBaTeudHFE1F2Hqxri5uvYv3AHA=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=o83SXv8ke8Ue04/DoJa2xxkmuhw2LWiif313DydEdDoA9UcQpz8xMGSwP3KmwIucR
+         A/gvLlfYz7tQDDo5DDC7x28NkE6a5PU18UlsChxNhwC96040lpWSyd35q7cI2w7IHw
+         iIUPbRkfQt8Qh0CtOrvo7Ku5ZQT9bbQptZchPejk=
+Received: from DFLE107.ent.ti.com (dfle107.ent.ti.com [10.64.6.28])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27B6XfHj043858
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 11 Aug 2022 01:33:41 -0500
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14; Thu, 11
+ Aug 2022 01:33:40 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2308.14 via
+ Frontend Transport; Thu, 11 Aug 2022 01:33:40 -0500
+Received: from ubuntu (ileax41-snat.itg.ti.com [10.172.224.153])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27B6XVEY026502;
+        Thu, 11 Aug 2022 01:33:33 -0500
+Date:   Wed, 10 Aug 2022 23:33:28 -0700
+From:   Matt Ranostay <mranostay@ti.com>
+To:     Lee Jones <lee@kernel.org>
+CC:     <nm@ti.com>, <linux-rtc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, Keerthy <j-keerthy@ti.com>
+Subject: Re: [PATCH 2/4] MFD: TPS6594x: Add new mfd device for TPS6594x PMIC
+Message-ID: <YvSiuElc/LM5g7hl@ubuntu>
+References: <20220805064352.793918-1-mranostay@ti.com>
+ <20220805064352.793918-3-mranostay@ti.com>
+ <YvOWHccZQ0RMkHiD@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <20220810083935.83452-1-zhounan@nfschina.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <YvOWHccZQ0RMkHiD@google.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi zhoun,
+On Wed, Aug 10, 2022 at 12:27:25PM +0100, Lee Jones wrote:
+> On Thu, 04 Aug 2022, Matt Ranostay wrote:
+> 
+> > From: Keerthy <j-keerthy@ti.com>
+> > 
+> > The TPS6594x chip is a PMIC, and contains the following components:
+> > 
+> > - Regulators
+> > - GPIO controller
+> > - RTC
+> > 
+> > However initially only RTC is supported.
+> > 
+> > Signed-off-by: Keerthy <j-keerthy@ti.com>
+> > Signed-off-by: Matt Ranostay <mranostay@ti.com>
+> > ---
+> >  drivers/mfd/Kconfig          |  14 +++++
+> >  drivers/mfd/Makefile         |   1 +
+> >  drivers/mfd/tps6594x.c       | 106 +++++++++++++++++++++++++++++++++++
+> >  include/linux/mfd/tps6594x.h |  66 ++++++++++++++++++++++
+> >  4 files changed, 187 insertions(+)
+> >  create mode 100644 drivers/mfd/tps6594x.c
+> >  create mode 100644 include/linux/mfd/tps6594x.h
+> > 
+> > diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> > index abb58ab1a1a4..cfb5b3d66b76 100644
+> > --- a/drivers/mfd/Kconfig
+> > +++ b/drivers/mfd/Kconfig
+> > @@ -1547,6 +1547,20 @@ config MFD_TI_LP873X
+> >  	  This driver can also be built as a module. If so, the module
+> >  	  will be called lp873x.
+> >  
+> > +config MFD_TPS6594X
+> > +	tristate "TI TPS6594X Power Management IC"
+> > +	depends on I2C
+> > +	select MFD_CORE
+> > +	select REGMAP_I2C
+> > +	help
+> > +	  If you say yes here then you get support for the TPS6594X series of
+> > +	  Power Management Integrated Circuits (PMIC).
+> > +	  These include voltage regulators, RTS, configurable
+> > +	  General Purpose Outputs (GPO) that are used in portable devices.
+> > +
+> > +	  This driver can also be built as a module. If so, the module
+> > +	  will be called tps7694x.
+> > +
+> >  config MFD_TI_LP87565
+> >  	tristate "TI LP87565 Power Management IC"
+> >  	depends on I2C && OF
+> > diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> > index 858cacf659d6..7ff6a8a57d55 100644
+> > --- a/drivers/mfd/Makefile
+> > +++ b/drivers/mfd/Makefile
+> > @@ -105,6 +105,7 @@ obj-$(CONFIG_MFD_TPS65910)	+= tps65910.o
+> >  obj-$(CONFIG_MFD_TPS65912)	+= tps65912-core.o
+> >  obj-$(CONFIG_MFD_TPS65912_I2C)	+= tps65912-i2c.o
+> >  obj-$(CONFIG_MFD_TPS65912_SPI)  += tps65912-spi.o
+> > +obj-$(CONFIG_MFD_TPS6594X)	+= tps6594x.o
+> >  obj-$(CONFIG_MENELAUS)		+= menelaus.o
+> >  
+> >  obj-$(CONFIG_TWL4030_CORE)	+= twl-core.o twl4030-irq.o twl6030-irq.o
+> > diff --git a/drivers/mfd/tps6594x.c b/drivers/mfd/tps6594x.c
+> > new file mode 100644
+> > index 000000000000..519162cc1fbe
+> > --- /dev/null
+> > +++ b/drivers/mfd/tps6594x.c
+> > @@ -0,0 +1,106 @@
+> > +// SPDX-License-Identifier: GPL-2.0-or-later
+> > +/*
+> > + * tps6594x.c  --  TI TPS6594x chip family multi-function driver
+> 
+> No filenames in comments please.
+> 
+> Also, there are too many spaces around the '--'.
+> 
+> It's not a "multi-function driver" it's a PMIC Core driver.
+>
 
-Thank you for the patch! Yet something to improve:
+Noted. Will change to PMIC core driver to be more concise.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v5.19 next-20220811]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> > + * Copyright (C) 2022 Texas Instruments Incorporated - https://www.ti.com/
+> > + *
+> > + * Author: Keerthy <j-keerthy@ti.com>
+> > + */
+> > +
+> > +#include <linux/interrupt.h>
+> > +#include <linux/mfd/core.h>
+> > +#include <linux/module.h>
+> > +#include <linux/of_device.h>
+> > +#include <linux/i2c.h>
+> > +#include <linux/regmap.h>
+> 
+> Alphabetical.
+> 
+> > +#include <linux/mfd/tps6594x.h>
+> > +
+> > +static const struct regmap_config tps6594x_regmap_config = {
+> > +	.reg_bits = 8,
+> > +	.val_bits = 8,
+> > +	.max_register = TPS6594X_REG_MAX,
+> > +};
+> > +
+> > +static const struct mfd_cell tps6594x_cells[] = {
+> > +	{ .name = "tps6594x-rtc", },
+> > +};
+> 
+> Where are the rest of the devices?
+> 
+> This is not an MFD with only one device.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/zhoun/remove-unnecessary-type-casting/20220810-164202
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git d4252071b97d2027d246f6a82cbee4d52f618b47
-config: x86_64-randconfig-a016 (https://download.01.org/0day-ci/archive/20220811/202208111453.iWFQgZet-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/644349c963daf046bc5ed629711825d917f1fcfc
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review zhoun/remove-unnecessary-type-casting/20220810-164202
-        git checkout 644349c963daf046bc5ed629711825d917f1fcfc
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+There are other devices, however there isn't any drivers currently for them
+just the RTC. Should there be placeholders for the gpio, and regulators even
+if support currently doesn't exist.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> 
+> > +static struct tps6594x *tps;
+> > +
+> > +static void tps6594x_power_off(void)
+> > +{
+> > +	regmap_write(tps->regmap, TPS6594X_FSM_NSLEEP_TRIGGERS, 0x3);
+> > +	regmap_write(tps->regmap, TPS6594X_INT_STARTUP, 0xff);
+> > +	regmap_write(tps->regmap, TPS6594X_INT_MISC, 0xff);
+> > +	regmap_write(tps->regmap, TPS6594X_CONFIG_1, 0xc0);
+> > +	regmap_write(tps->regmap, TPS6594X_FSM_I2C_TRIGGERS, 0x1);
+> 
+> No magic numbers please.  Define all of those values.
+>
 
-All errors (new ones prefixed by >>):
+Will add some defines for the bitmasking to make more clear.
 
->> security/apparmor/policy.c:1006:23: error: incompatible pointer types initializing 'struct aa_profile *' with an expression of type 'struct aa_policy *' [-Werror,-Wincompatible-pointer-types]
-                           struct aa_profile *p = policy;
-                                              ^   ~~~~~~
-   1 error generated.
+> > +}
+> > +
+> > +static int tps6594x_probe(struct i2c_client *client,
+> > +			const struct i2c_device_id *ids)
+> > +{
+> > +	struct tps6594x *tps6594;
+> 
+> *ddata is preferred.
+> 
+> > +	int ret;
+> > +	unsigned int otpid;
+> > +	struct device_node *node = client->dev.of_node;
+> 
+> Re-order these - usually 'structs' go first, then ints.
+> 
+> > +	tps6594 = devm_kzalloc(&client->dev, sizeof(*tps6594), GFP_KERNEL);
+> > +	if (!tps6594)
+> > +		return -ENOMEM;
+> > +
+> > +	tps6594->dev = &client->dev;
+> > +
+> > +	tps6594->regmap = devm_regmap_init_i2c(client, &tps6594x_regmap_config);
+> > +	if (IS_ERR(tps6594->regmap)) {
+> > +		ret = PTR_ERR(tps6594->regmap);
+> > +		dev_err(tps6594->dev,
+> > +			"Failed to initialize register map: %d\n", ret);
+> > +		return ret;
+> > +	}
+> > +
+> > +	ret = regmap_read(tps6594->regmap, TPS6594X_REG_DEV_REV, &otpid);
+> > +	if (ret) {
+> > +		dev_err(tps6594->dev, "Failed to read OTP ID\n");
+> > +		return ret;
+> > +	}
+> > +
+> > +	tps6594->rev = otpid;
+> > +
+> > +	i2c_set_clientdata(client, tps6594);
+> > +
+> > +	ret = mfd_add_devices(tps6594->dev, PLATFORM_DEVID_AUTO, tps6594x_cells,
+> > +			      ARRAY_SIZE(tps6594x_cells), NULL, 0, NULL);
+> > +
+> > +	tps = tps6594;
+> > +	if (of_property_read_bool(node, "ti,system-power-controller"))
+> > +		pm_power_off = tps6594x_power_off;
+> 
+> You setting this up even if mfd_add_devices() fails?
+> 
+> Seems wrong.
+> 
 
+Good catch.. yes it shouldn't be setup in that case.
 
-vim +1006 security/apparmor/policy.c
+> > +	return ret;
+> > +}
+> > +
+> > +static const struct of_device_id of_tps6594x_match_table[] = {
+> > +	{ .compatible = "ti,tps6594x", },
+> > +	{}
+> > +};
+> > +MODULE_DEVICE_TABLE(of, of_tps6594x_match_table);
+> > +
+> > +static const struct i2c_device_id tps6594x_id_table[] = {
+> > +	{ "tps6594x", 0 },
+> > +	{ },
+> > +};
+> > +MODULE_DEVICE_TABLE(i2c, tps6594x_id_table);
+> 
+> Remove this and use .probe_new instead please.
+> 
+> > +static struct i2c_driver tps6594x_driver = {
+> > +	.driver	= {
+> > +		.name	= "tps6594x",
+> > +		.of_match_table = of_tps6594x_match_table,
+> > +	},
+> > +	.probe		= tps6594x_probe,
+> > +	.id_table	= tps6594x_id_table,
+> > +};
+> > +module_i2c_driver(tps6594x_driver);
+> > +
+> > +MODULE_AUTHOR("J Keerthy <j-keerthy@ti.com>");
+> > +MODULE_DESCRIPTION("TPS6594X chip family Multi-Function Device driver");
+> 
+> Not an MFD.
+> 
+> > +MODULE_LICENSE("GPL");
+> > diff --git a/include/linux/mfd/tps6594x.h b/include/linux/mfd/tps6594x.h
+> > new file mode 100644
+> > index 000000000000..41349f96f013
+> > --- /dev/null
+> > +++ b/include/linux/mfd/tps6594x.h
+> > @@ -0,0 +1,66 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-or-later */
+> > +/*
+> > + * tps6594x.h  --  TI TPS6594x
+> 
+> No filenames.
+> 
 
-   882	
-   883	/**
-   884	 * aa_replace_profiles - replace profile(s) on the profile list
-   885	 * @policy_ns: namespace load is occurring on
-   886	 * @label: label that is attempting to load/replace policy
-   887	 * @mask: permission mask
-   888	 * @udata: serialized data stream  (NOT NULL)
-   889	 *
-   890	 * unpack and replace a profile on the profile list and uses of that profile
-   891	 * by any task creds via invalidating the old version of the profile, which
-   892	 * tasks will notice to update their own cred.  If the profile does not exist
-   893	 * on the profile list it is added.
-   894	 *
-   895	 * Returns: size of data consumed else error code on failure.
-   896	 */
-   897	ssize_t aa_replace_profiles(struct aa_ns *policy_ns, struct aa_label *label,
-   898				    u32 mask, struct aa_loaddata *udata)
-   899	{
-   900		const char *ns_name = NULL, *info = NULL;
-   901		struct aa_ns *ns = NULL;
-   902		struct aa_load_ent *ent, *tmp;
-   903		struct aa_loaddata *rawdata_ent;
-   904		const char *op;
-   905		ssize_t count, error;
-   906		LIST_HEAD(lh);
-   907	
-   908		op = mask & AA_MAY_REPLACE_POLICY ? OP_PROF_REPL : OP_PROF_LOAD;
-   909		aa_get_loaddata(udata);
-   910		/* released below */
-   911		error = aa_unpack(udata, &lh, &ns_name);
-   912		if (error)
-   913			goto out;
-   914	
-   915		/* ensure that profiles are all for the same ns
-   916		 * TODO: update locking to remove this constaint. All profiles in
-   917		 *       the load set must succeed as a set or the load will
-   918		 *       fail. Sort ent list and take ns locks in hierarchy order
-   919		 */
-   920		count = 0;
-   921		list_for_each_entry(ent, &lh, list) {
-   922			if (ns_name) {
-   923				if (ent->ns_name &&
-   924				    strcmp(ent->ns_name, ns_name) != 0) {
-   925					info = "policy load has mixed namespaces";
-   926					error = -EACCES;
-   927					goto fail;
-   928				}
-   929			} else if (ent->ns_name) {
-   930				if (count) {
-   931					info = "policy load has mixed namespaces";
-   932					error = -EACCES;
-   933					goto fail;
-   934				}
-   935				ns_name = ent->ns_name;
-   936			} else
-   937				count++;
-   938		}
-   939		if (ns_name) {
-   940			ns = aa_prepare_ns(policy_ns ? policy_ns : labels_ns(label),
-   941					   ns_name);
-   942			if (IS_ERR(ns)) {
-   943				op = OP_PROF_LOAD;
-   944				info = "failed to prepare namespace";
-   945				error = PTR_ERR(ns);
-   946				ns = NULL;
-   947				ent = NULL;
-   948				goto fail;
-   949			}
-   950		} else
-   951			ns = aa_get_ns(policy_ns ? policy_ns : labels_ns(label));
-   952	
-   953		mutex_lock_nested(&ns->lock, ns->level);
-   954		/* check for duplicate rawdata blobs: space and file dedup */
-   955		list_for_each_entry(rawdata_ent, &ns->rawdata_list, list) {
-   956			if (aa_rawdata_eq(rawdata_ent, udata)) {
-   957				struct aa_loaddata *tmp;
-   958	
-   959				tmp = __aa_get_loaddata(rawdata_ent);
-   960				/* check we didn't fail the race */
-   961				if (tmp) {
-   962					aa_put_loaddata(udata);
-   963					udata = tmp;
-   964					break;
-   965				}
-   966			}
-   967		}
-   968		/* setup parent and ns info */
-   969		list_for_each_entry(ent, &lh, list) {
-   970			struct aa_policy *policy;
-   971	
-   972			ent->new->rawdata = aa_get_loaddata(udata);
-   973			error = __lookup_replace(ns, ent->new->base.hname,
-   974						 !(mask & AA_MAY_REPLACE_POLICY),
-   975						 &ent->old, &info);
-   976			if (error)
-   977				goto fail_lock;
-   978	
-   979			if (ent->new->rename) {
-   980				error = __lookup_replace(ns, ent->new->rename,
-   981							!(mask & AA_MAY_REPLACE_POLICY),
-   982							&ent->rename, &info);
-   983				if (error)
-   984					goto fail_lock;
-   985			}
-   986	
-   987			/* released when @new is freed */
-   988			ent->new->ns = aa_get_ns(ns);
-   989	
-   990			if (ent->old || ent->rename)
-   991				continue;
-   992	
-   993			/* no ref on policy only use inside lock */
-   994			policy = __lookup_parent(ns, ent->new->base.hname);
-   995			if (!policy) {
-   996				struct aa_profile *p;
-   997				p = __list_lookup_parent(&lh, ent->new);
-   998				if (!p) {
-   999					error = -ENOENT;
-  1000					info = "parent does not exist";
-  1001					goto fail_lock;
-  1002				}
-  1003				rcu_assign_pointer(ent->new->parent, aa_get_profile(p));
-  1004			} else if (policy != &ns->base) {
-  1005				/* released on profile replacement or free_profile */
-> 1006				struct aa_profile *p = policy;
-  1007				rcu_assign_pointer(ent->new->parent, aa_get_profile(p));
-  1008			}
-  1009		}
-  1010	
-  1011		/* create new fs entries for introspection if needed */
-  1012		if (!udata->dents[AAFS_LOADDATA_DIR]) {
-  1013			error = __aa_fs_create_rawdata(ns, udata);
-  1014			if (error) {
-  1015				info = "failed to create raw_data dir and files";
-  1016				ent = NULL;
-  1017				goto fail_lock;
-  1018			}
-  1019		}
-  1020		list_for_each_entry(ent, &lh, list) {
-  1021			if (!ent->old) {
-  1022				struct dentry *parent;
-  1023				if (rcu_access_pointer(ent->new->parent)) {
-  1024					struct aa_profile *p;
-  1025					p = aa_deref_parent(ent->new);
-  1026					parent = prof_child_dir(p);
-  1027				} else
-  1028					parent = ns_subprofs_dir(ent->new->ns);
-  1029				error = __aafs_profile_mkdir(ent->new, parent);
-  1030			}
-  1031	
-  1032			if (error) {
-  1033				info = "failed to create";
-  1034				goto fail_lock;
-  1035			}
-  1036		}
-  1037	
-  1038		/* Done with checks that may fail - do actual replacement */
-  1039		__aa_bump_ns_revision(ns);
-  1040		__aa_loaddata_update(udata, ns->revision);
-  1041		list_for_each_entry_safe(ent, tmp, &lh, list) {
-  1042			list_del_init(&ent->list);
-  1043			op = (!ent->old && !ent->rename) ? OP_PROF_LOAD : OP_PROF_REPL;
-  1044	
-  1045			if (ent->old && ent->old->rawdata == ent->new->rawdata) {
-  1046				/* dedup actual profile replacement */
-  1047				audit_policy(label, op, ns_name, ent->new->base.hname,
-  1048					     "same as current profile, skipping",
-  1049					     error);
-  1050				/* break refcount cycle with proxy. */
-  1051				aa_put_proxy(ent->new->label.proxy);
-  1052				ent->new->label.proxy = NULL;
-  1053				goto skip;
-  1054			}
-  1055	
-  1056			/*
-  1057			 * TODO: finer dedup based on profile range in data. Load set
-  1058			 * can differ but profile may remain unchanged
-  1059			 */
-  1060			audit_policy(label, op, ns_name, ent->new->base.hname, NULL,
-  1061				     error);
-  1062	
-  1063			if (ent->old) {
-  1064				share_name(ent->old, ent->new);
-  1065				__replace_profile(ent->old, ent->new);
-  1066			} else {
-  1067				struct list_head *lh;
-  1068	
-  1069				if (rcu_access_pointer(ent->new->parent)) {
-  1070					struct aa_profile *parent;
-  1071	
-  1072					parent = update_to_newest_parent(ent->new);
-  1073					lh = &parent->base.profiles;
-  1074				} else
-  1075					lh = &ns->base.profiles;
-  1076				__add_profile(lh, ent->new);
-  1077			}
-  1078		skip:
-  1079			aa_load_ent_free(ent);
-  1080		}
-  1081		__aa_labelset_update_subtree(ns);
-  1082		mutex_unlock(&ns->lock);
-  1083	
-  1084	out:
-  1085		aa_put_ns(ns);
-  1086		aa_put_loaddata(udata);
-  1087		kfree(ns_name);
-  1088	
-  1089		if (error)
-  1090			return error;
-  1091		return udata->size;
-  1092	
-  1093	fail_lock:
-  1094		mutex_unlock(&ns->lock);
-  1095	
-  1096		/* audit cause of failure */
-  1097		op = (ent && !ent->old) ? OP_PROF_LOAD : OP_PROF_REPL;
-  1098	fail:
-  1099		  audit_policy(label, op, ns_name, ent ? ent->new->base.hname : NULL,
-  1100			       info, error);
-  1101		/* audit status that rest of profiles in the atomic set failed too */
-  1102		info = "valid profile in failed atomic policy load";
-  1103		list_for_each_entry(tmp, &lh, list) {
-  1104			if (tmp == ent) {
-  1105				info = "unchecked profile in failed atomic policy load";
-  1106				/* skip entry that caused failure */
-  1107				continue;
-  1108			}
-  1109			op = (!tmp->old) ? OP_PROF_LOAD : OP_PROF_REPL;
-  1110			audit_policy(label, op, ns_name, tmp->new->base.hname, info,
-  1111				     error);
-  1112		}
-  1113		list_for_each_entry_safe(ent, tmp, &lh, list) {
-  1114			list_del_init(&ent->list);
-  1115			aa_load_ent_free(ent);
-  1116		}
-  1117	
-  1118		goto out;
-  1119	}
-  1120	
+Noted.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> > + * Copyright (C) 2016 Texas Instruments Incorporated - https://www.ti.com/
+> 
+> 2016?
+
+From internal tree likely, but copyrights should be updated.
+
+> 
+> > + */
+> > +
+> > +#ifndef __LINUX_MFD_TPS6594X_H
+> > +#define __LINUX_MFD_TPS6594X_H
+> 
+> Any reason go keep the LINUX part?
+> 
+
+Nope not any real reason.
+
+> > +#include <linux/bits.h>
+> > +
+> > +/* TPS6594x chip id list */
+> 
+> "ID"
+> 
+> > +#define TPS6594X			0x00
+> > +
+> > +/* All register addresses */
+> > +#define TPS6594X_REG_DEV_REV			0x01
+> > +#define TPS6594X_INT_STARTUP			0x65
+> > +#define TPS6594X_INT_MISC			0x66
+> > +#define TPS6594X_CONFIG_1			0x7d
+> > +#define TPS6594X_FSM_I2C_TRIGGERS		0x85
+> > +#define TPS6594X_FSM_NSLEEP_TRIGGERS		0x86
+> > +
+> > +#define TPS6594X_RTC_SECONDS			0xb5
+> > +#define TPS6594X_RTC_MINUTES			0xb6
+> > +#define TPS6594X_RTC_HOURS			0xb7
+> > +#define TPS6594X_RTC_DAYS			0xb8
+> > +#define TPS6594X_RTC_MONTHS			0xb9
+> > +#define TPS6594X_RTC_YEARS			0xba
+> > +#define TPS6594X_RTC_WEEKS			0xbb
+> > +#define TPS6594X_ALARM_SECONDS			0xbc
+> > +#define TPS6594X_ALARM_MINUTES			0xbd
+> > +#define TPS6594X_ALARM_HOURS			0xbe
+> > +#define TPS6594X_ALARM_DAYS			0xbf
+> > +#define TPS6594X_ALARM_MONTHS			0xc0
+> > +#define TPS6594X_ALARM_YEARS			0xc1
+> > +#define TPS6594X_RTC_CTRL_1			0xc2
+> > +#define TPS6594X_RTC_CTRL_2			0xc3
+> > +#define TPS6594X_RTC_STATUS			0xc4
+> > +#define TPS6594X_RTC_INTERRUPTS			0xc5
+> > +#define TPS6594X_REG_MAX			0xd0
+> > +
+> > +/* Register field definitions */
+> > +#define TPS6594X_DEV_REV_DEV_ID			0xff
+> > +
+> > +#define TPS6594X_RTC_CTRL_REG_GET_TIME		BIT(6)
+> > +#define TPS6594X_RTC_CTRL_REG_STOP_RTC		BIT(0)
+> > +#define TPS6594X_RTC_INTERRUPTS_REG_IT_ALARM	BIT(3)
+> > +
+> > +#define TPS6594X_RTC_STATUS_RUN			BIT(1)
+> > +
+> > +/**
+> > + * struct tps6594x - state holder for the tps6594x driver
+> > + * @dev: struct device pointer for MFD device
+> > + * @rev: revision of the tps6594x
+> > + * @lock: lock guarding the data structure
+> > + * @regmap: register map of the tps6594x PMIC
+> > + *
+> > + * Device data may be used to access the TPS6594X chip
+> > + */
+> > +struct tps6594x {
+> > +	struct device *dev;
+> > +	u8 rev;
+> > +	struct regmap *regmap;
+> > +};
+> 
+> Please test compile with W=1 enabled and fix the issues.
+>
+
+Thanks,
+
+Matt
+
+> > +#endif /* __LINUX_MFD_TPS6594X_H */
+> 
+> -- 
+> Lee Jones [李琼斯]

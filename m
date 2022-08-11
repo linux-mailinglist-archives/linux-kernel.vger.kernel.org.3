@@ -2,83 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 427B958FAD7
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 12:45:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B36B58FADD
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 12:47:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234631AbiHKKpO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 06:45:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49978 "EHLO
+        id S234662AbiHKKrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 06:47:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52534 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234602AbiHKKpK (ORCPT
+        with ESMTP id S234645AbiHKKrg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 06:45:10 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32B8B901A4
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 03:45:09 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id u6so13525491ljk.8
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 03:45:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=eslh2ICT1A2pYV00+C3KHTnl2CWed4tgcm8YDqRAs9U=;
-        b=GqnLYktSFa5SwXk0/8vV6Z6fF55KrRJLLAny9/RxRKMgNQLH9cJeyQYeM9C8ItPACh
-         rkLKgHS4OkUrUBB03XS4SXfK74r0S0L9DXA+7uwuqcD9Vxn3idOoWMApFysXOnHV4VKQ
-         tYWShlbn1sIO8oNggNyhnHVLEP4cgishdHssrlGlA3+EzliXuLMJCqsRAdV3mX7QkpYH
-         A+QSnsfmLk+VwOgYvmddzqu9dl0bpCs6cB+26tuCuPw+lbB7Kf4my+gKi9qoFGO9DOGx
-         oJcSviaYy8+V6lsyVpTIySfzGxMxm21UalGfzC5tN2ZiePgDnLKmBPzvXQ08HpSmEj2j
-         k5CA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=eslh2ICT1A2pYV00+C3KHTnl2CWed4tgcm8YDqRAs9U=;
-        b=qBVSz0wtXOxFdkTNNal/n8k8OIolAtVL0Fy72ZBvEy01MQaabtZ47kwGCIG1WckLv0
-         bFcrpxnzeROc5P+bF+kR3bXaOxJN+0amzF9eQ6zS/2JIf+8cKs2rdw4wb+rTO9qUkAJ2
-         ppwKxTFTEfA8UwU2o7loxgFG5b85iqPOT7C45N7kescUXlk41nlUrpfU8h+WFpLpdDOS
-         gLj/JgHLCE3Ug0Ya9AAtTyg+1gW1Jn1hiYT/5m6vbOqATtPeE5UWqHSq7uKQUmkHLbu8
-         ser2a9S2ROwaHtgyD1Q8hgq3mGt7dTXxDvEId9U/U66Pa5OVRcqZZMqp8jadcQ5rOB2E
-         KGhw==
-X-Gm-Message-State: ACgBeo14cZvjFqI0OdAUK/0PojeLroRAaOueg/35rcXE6WBWWXaE2Y2v
-        uYTd9yj9kpw9vgbdMAUUCgc6oA==
-X-Google-Smtp-Source: AA6agR5phn8uFnKNoEM0rjbJ3VEqU9sWyXPAGlcDWFEIJMFGBG9IfV5Tiu82kg5VwaTIVoHboTfXdw==
-X-Received: by 2002:a2e:6101:0:b0:25d:eb9d:4c79 with SMTP id v1-20020a2e6101000000b0025deb9d4c79mr10374539ljb.354.1660214707390;
-        Thu, 11 Aug 2022 03:45:07 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id f10-20020a056512360a00b0048b27215fb3sm669556lfs.41.2022.08.11.03.45.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Aug 2022 03:45:06 -0700 (PDT)
-Message-ID: <918f80ba-d138-1c56-648e-60ad84eee3c1@linaro.org>
-Date:   Thu, 11 Aug 2022 13:45:05 +0300
+        Thu, 11 Aug 2022 06:47:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DEB52716D;
+        Thu, 11 Aug 2022 03:47:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CD7260ED3;
+        Thu, 11 Aug 2022 10:47:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C06AC433D6;
+        Thu, 11 Aug 2022 10:47:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660214854;
+        bh=4WoU4PzTqSWaKAiYjQxMqeztaU+Fg5MuY24q8LVMV78=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aYoM1/Vt15qtgK7KyhfqAX4/Yb0rFlmcFB7dAw2aNMEox9rqxt8EMfPlcNJ0QpfcH
+         dHCDd0nEpUcjZabJF8Uwqd9dlTZnOAP4gyk5yPEihH6/EAj16MJIeG0p2jt112fxk2
+         RO/U8rFO2bu0lYH3Wpunc8Tt14++HrUbamVXLNYTjsvYq+aaLGXHAybzQwT5SJdIe/
+         fRAieTTLS/igvRrWJkjW3k65trDPyWj0axh73bKuh1TZGvD6YRy/SWjg18wHTRmY/T
+         fj7kShu035g5kp6Iy3VczUU7KQA/uqYST4dv0KTTMasskriY/QpBAsm16GjTJXlSoN
+         Tki++/bIG+qFg==
+Date:   Thu, 11 Aug 2022 12:47:27 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        linux-riscv@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: rectify entry for RISC-V/MICROCHIP
+ POLARFIRE SOC SUPPORT
+Message-ID: <YvTePwvp5AigV0Ax@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        linux-riscv@lists.infradead.org, Arnd Bergmann <arnd@arndb.de>,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220811070506.12252-1-lukas.bulwahn@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 1/4] dt-bindings: power: Add MT8365 power domains
-Content-Language: en-US
-To:     Markus Schneider-Pargmann <msp@baylibre.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Weiyi Lu <weiyi.lu@mediatek.com>,
-        Fabien Parent <parent.f@gmail.com>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Fabien Parent <fparent@baylibre.com>
-References: <20220725081853.1636444-1-msp@baylibre.com>
- <20220725081853.1636444-2-msp@baylibre.com>
- <bbdde7ce-4512-2e61-5e1a-e22e5cb91184@collabora.com>
- <20220811101443.eevyf5xnctmo5y4f@blmsp>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220811101443.eevyf5xnctmo5y4f@blmsp>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="/Fg/PWpkMsj86wcD"
+Content-Disposition: inline
+In-Reply-To: <20220811070506.12252-1-lukas.bulwahn@gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,20 +64,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/08/2022 13:14, Markus Schneider-Pargmann wrote:
->>> +++ b/include/dt-bindings/power/mt8365-power.h
->>
->> Please rename this file to add the vendor prefix.
->>
->> mediatek,mt8365-power.h
-> 
-> Thank you for your feedback.
-> 
-> There are currently 12 'mt*-power.h' files without vendor prefix in that
-> directory. I can change it, but it seems very inconsistent.
 
-Which is not really argument to keep old style instead of preferred
-vendor,device.h.
+--/Fg/PWpkMsj86wcD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-Krzysztof
+On Thu, Aug 11, 2022 at 09:05:06AM +0200, Lukas Bulwahn wrote:
+> Commit 3cbd67384677 ("MAINTAINERS: add the Polarfire SoC's i2c driver")
+> adds the file entry for drivers/i2c/busses/i2c-microchip-core.c, but the
+> file is actually named drivers/i2c/busses/i2c-microchip-corei2c.c.
+>=20
+> Repair this file reference in RISC-V/MICROCHIP POLARFIRE SOC SUPPORT.
+>=20
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+
+Acked-by: Wolfram Sang <wsa@kernel.org>
+
+
+--/Fg/PWpkMsj86wcD
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmL03jsACgkQFA3kzBSg
+Kbb9ug//XvIqb1Vway8MBwrhbNGpzOqOcN4Q2c8JUiZ3oNXlBHxMTik8nRbX+JTq
+fpafbNe7CRZ1SUyIgKcz/bmagZj3dNS+3oeE9vBOi2fWBGb8xMGhTzNQib6Z+q8m
+N6NfsX7y5t7Z/IracHQhhTrVAd8nKRbNnQd9BqQhnGgR/ZJTX6QFzeoF6byhaa3c
+wX+SH46dADmYghkFdPRtNx72TlQElL1raj7Lqb7u9tlGF3NgbVQISjjPYbepx8u3
+LfRMAYanVCXMZO1tUOfXo2yZakquAl5S//Xmfx4nvpO7IU/hcF6LUVjxtGNPoDdQ
+M+n6ctoCtpZkblt/TyExfP7ijZ+cx6bPGsu0fnbiB9KoeU4BcXvPmCHvY8N9B320
+6hRucRjlYEHA6M1Cr7OCL7jikLlJtts3qnJoKO6bB3bfADUID4/KekJfeDB9NqYj
+oWTeKhF8Ekudd7v4W2+QK/QHuDHlTAW4rJuSp0Tk+6QqAFy9W8x55hHIAqu+8gr3
+Jzfb+3Gd+CDT2eXEaPPTBPV3WqX/pSyH9IGfUPSOaQgjVKmLfsda02ZvmBrWoI+b
+v9rSEma+xmrtiupifePbvgQcwM9k6WdxG0WblT0fwnKgZSXOya9/cZTUpy79D/ml
+f9ZkG9s5+t80w0F6KKRQ82z4s5soiVy4nlAtvbLOLx1Q2YfWAb0=
+=edpy
+-----END PGP SIGNATURE-----
+
+--/Fg/PWpkMsj86wcD--

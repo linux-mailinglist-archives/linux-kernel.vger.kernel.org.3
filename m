@@ -2,137 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5884458F980
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 10:48:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E13458F983
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 10:49:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234447AbiHKIsn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 04:48:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56050 "EHLO
+        id S234703AbiHKItM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 11 Aug 2022 04:49:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234588AbiHKIsh (ORCPT
+        with ESMTP id S234661AbiHKItJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 04:48:37 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ADCE915D1;
-        Thu, 11 Aug 2022 01:48:36 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27B76fFe024681;
-        Thu, 11 Aug 2022 08:48:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=EquYfRqGZXmXb9TGWW8WkU2fAx8SbOKXWJBSgXBhUco=;
- b=nju4AjoCPMW3PJ7yH5Z+t5CFAdLlAu+vjeWFOaqPtS26fbAxDLojsyW50SlVnk2KHWGs
- raOaZPzOCsQEZQ90qf4WmYtnWX3eewzsSIP9H+1UC9bX/ZnPers71NiDg+YC5xVyplXl
- rDGBQbE5Hikn/dBA+xQmUe0h+Piwzv4J6Nx9y6i53N4PUF4YZdAKyulJCi6jiG84174C
- rsbcMAckWE7iVhKoWP2bLpuG0wVs2NxqWBu+HCU1QVW62grZHNTY1i0PR0emc2Z/Uz3J
- PprHctda/FFkYp7Ac//Jc1JSiX9rRj+AjJyk4y8/jsPWuyBhGZueoSN54Wf57iuBMTJZ FA== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3huwr8wbne-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 Aug 2022 08:48:31 +0000
-Received: from pps.filterd (NASANPPMTA01.qualcomm.com [127.0.0.1])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 27B8eoYa015481;
-        Thu, 11 Aug 2022 08:48:30 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NASANPPMTA01.qualcomm.com (PPS) with ESMTPS id 3hshckrmc3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 Aug 2022 08:48:30 +0000
-Received: from NASANPPMTA01.qualcomm.com (NASANPPMTA01.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27B8mUfW028397;
-        Thu, 11 Aug 2022 08:48:30 GMT
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.47.97.222])
-        by NASANPPMTA01.qualcomm.com (PPS) with ESMTPS id 27B8mU6X028392
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 Aug 2022 08:48:30 +0000
-Received: from nalasex01b.na.qualcomm.com (10.47.209.197) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 11 Aug 2022 01:48:29 -0700
-Received: from [10.253.34.2] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 11 Aug
- 2022 01:48:27 -0700
-Message-ID: <458d93ba-ff78-54e7-5639-bee89e61ce19@quicinc.com>
-Date:   Thu, 11 Aug 2022 16:48:25 +0800
+        Thu, 11 Aug 2022 04:49:09 -0400
+Received: from smtp237.sjtu.edu.cn (smtp237.sjtu.edu.cn [202.120.2.237])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70E1915C1;
+        Thu, 11 Aug 2022 01:49:07 -0700 (PDT)
+Received: from mta91.sjtu.edu.cn (unknown [10.118.0.91])
+        by smtp237.sjtu.edu.cn (Postfix) with ESMTPS id 3279810087D60;
+        Thu, 11 Aug 2022 16:49:03 +0800 (CST)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mta91.sjtu.edu.cn (Postfix) with ESMTP id C96CB37C841;
+        Thu, 11 Aug 2022 16:49:02 +0800 (CST)
+X-Virus-Scanned: amavisd-new at 
+Received: from mta91.sjtu.edu.cn ([127.0.0.1])
+        by localhost (mta91.sjtu.edu.cn [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id HGne9ZKrBEwj; Thu, 11 Aug 2022 16:49:02 +0800 (CST)
+Received: from mstore105.sjtu.edu.cn (mstore101.sjtu.edu.cn [10.118.0.105])
+        by mta91.sjtu.edu.cn (Postfix) with ESMTP id 8513337C83E;
+        Thu, 11 Aug 2022 16:49:02 +0800 (CST)
+Date:   Thu, 11 Aug 2022 16:49:02 +0800 (CST)
+From:   Guo Zhi <qtxuning1999@sjtu.edu.cn>
+To:     jasowang <jasowang@redhat.com>
+Cc:     eperezma <eperezma@redhat.com>, sgarzare <sgarzare@redhat.com>,
+        Michael Tsirkin <mst@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        kvm list <kvm@vger.kernel.org>,
+        virtualization <virtualization@lists.linux-foundation.org>
+Message-ID: <626955266.7203994.1660207742134.JavaMail.zimbra@sjtu.edu.cn>
+In-Reply-To: <9d4c24de-f2cc-16a0-818a-16695946f3a3@redhat.com>
+References: <20220721084341.24183-1-qtxuning1999@sjtu.edu.cn> <20220721084341.24183-5-qtxuning1999@sjtu.edu.cn> <9d4c24de-f2cc-16a0-818a-16695946f3a3@redhat.com>
+Subject: Re: [RFC 4/5] virtio: get desc id in order
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [PATCH v2] tracing: react to error return from
- traceprobe_parse_event_name()
-Content-Language: en-US
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>
-CC:     <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20220811071734.20700-1-lukas.bulwahn@gmail.com>
-From:   Linyu Yuan <quic_linyyuan@quicinc.com>
-In-Reply-To: <20220811071734.20700-1-lukas.bulwahn@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: h0YHKHn3NZGGL2u0vRKBU07J-JfREHBj
-X-Proofpoint-ORIG-GUID: h0YHKHn3NZGGL2u0vRKBU07J-JfREHBj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-11_04,2022-08-10_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- impostorscore=0 adultscore=0 suspectscore=0 spamscore=0 clxscore=1015
- priorityscore=1501 mlxscore=0 phishscore=0 mlxlogscore=999 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208110024
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=GB2312
+Content-Transfer-Encoding: 8BIT
+X-Originating-IP: [43.250.201.29]
+X-Mailer: Zimbra 8.8.15_GA_4308 (ZimbraWebClient - GC103 (Mac)/8.8.15_GA_3928)
+Thread-Topic: virtio: get desc id in order
+Thread-Index: cXlU9o42KwIFHsTFxE07x53ZKbWCSQ==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-thanks,
-
-Acked-by: Linyu Yuan <quic_linyyuan@quicinc.com>
 
 
-On 8/11/2022 3:17 PM, Lukas Bulwahn wrote:
-> The function traceprobe_parse_event_name() may set the first two function
-> arguments to a non-null value and still return -EINVAL to indicate an
-> unsuccessful completion of the function. Hence, it is not sufficient to
-> just check the result of the two function arguments for being not null,
-> but the return value also needs to be checked.
->
-> Commit 95c104c378dc ("tracing: Auto generate event name when creating a
-> group of events") changed the error-return-value checking of the second
-> traceprobe_parse_event_name() invocation in __trace_eprobe_create() and
-> removed checking the return value to jump to the error handling case.
->
-> Reinstate using the return value in the error-return-value checking.
->
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> ---
->   kernel/trace/trace_eprobe.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
-> index 4a0e9d927443..550671985fd1 100644
-> --- a/kernel/trace/trace_eprobe.c
-> +++ b/kernel/trace/trace_eprobe.c
-> @@ -883,7 +883,7 @@ static int __trace_eprobe_create(int argc, const char *argv[])
->   	trace_probe_log_set_index(1);
->   	sys_event = argv[1];
->   	ret = traceprobe_parse_event_name(&sys_event, &sys_name, buf2, 0);
-> -	if (!sys_event || !sys_name) {
-> +	if (ret || !sys_event || !sys_name) {
->   		trace_probe_log_err(0, NO_EVENT_INFO);
->   		goto parse_error;
->   	}
+----- Original Message -----
+> From: "jasowang" <jasowang@redhat.com>
+> To: "Guo Zhi" <qtxuning1999@sjtu.edu.cn>, "eperezma" <eperezma@redhat.com>, "sgarzare" <sgarzare@redhat.com>, "Michael
+> Tsirkin" <mst@redhat.com>
+> Cc: "netdev" <netdev@vger.kernel.org>, "linux-kernel" <linux-kernel@vger.kernel.org>, "kvm list" <kvm@vger.kernel.org>,
+> "virtualization" <virtualization@lists.linux-foundation.org>
+> Sent: Tuesday, July 26, 2022 4:07:46 PM
+> Subject: Re: [RFC 4/5] virtio: get desc id in order
+
+> ÔÚ 2022/7/21 16:43, Guo Zhi Ð´µÀ:
+>> If in order feature negotiated, we can skip the used ring to get
+>> buffer's desc id sequentially.
+> 
+> 
+> Let's rename the patch to something like "in order support for virtio_ring"
+> 
+> 
+>>
+>> Signed-off-by: Guo Zhi <qtxuning1999@sjtu.edu.cn>
+>> ---
+>>   drivers/virtio/virtio_ring.c | 37 ++++++++++++++++++++++++++++--------
+>>   1 file changed, 29 insertions(+), 8 deletions(-)
+> 
+> 
+> I don't see packed support in this patch, we need to implement that.
+> 
+> 
+>>
+>> diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+>> index a5ec724c0..4d57a4edc 100644
+>> --- a/drivers/virtio/virtio_ring.c
+>> +++ b/drivers/virtio/virtio_ring.c
+>> @@ -144,6 +144,9 @@ struct vring_virtqueue {
+>>   			/* DMA address and size information */
+>>   			dma_addr_t queue_dma_addr;
+>>   			size_t queue_size_in_bytes;
+>> +
+>> +			/* In order feature batch begin here */
+>> +			u16 next_batch_desc_begin;
+>>   		} split;
+>>   
+>>   		/* Available for packed ring */
+>> @@ -700,8 +703,10 @@ static void detach_buf_split(struct vring_virtqueue *vq,
+>> unsigned int head,
+>>   	}
+>>   
+>>   	vring_unmap_one_split(vq, i);
+>> -	vq->split.desc_extra[i].next = vq->free_head;
+>> -	vq->free_head = head;
+>> +	if (!virtio_has_feature(vq->vq.vdev, VIRTIO_F_IN_ORDER)) {
+>> +		vq->split.desc_extra[i].next = vq->free_head;
+>> +		vq->free_head = head;
+>> +	}
+> 
+> 
+> Let's add a comment to explain why we don't need anything if in order is
+> neogitated.
+> 
+> 
+>>   
+>>   	/* Plus final descriptor */
+>>   	vq->vq.num_free++;
+>> @@ -743,7 +748,8 @@ static void *virtqueue_get_buf_ctx_split(struct virtqueue
+>> *_vq,
+>>   {
+>>   	struct vring_virtqueue *vq = to_vvq(_vq);
+>>   	void *ret;
+>> -	unsigned int i;
+>> +	__virtio16 nextflag = cpu_to_virtio16(vq->vq.vdev, VRING_DESC_F_NEXT);
+>> +	unsigned int i, j;
+>>   	u16 last_used;
+>>   
+>>   	START_USE(vq);
+>> @@ -762,11 +768,24 @@ static void *virtqueue_get_buf_ctx_split(struct virtqueue
+>> *_vq,
+>>   	/* Only get used array entries after they have been exposed by host. */
+>>   	virtio_rmb(vq->weak_barriers);
+>>   
+>> -	last_used = (vq->last_used_idx & (vq->split.vring.num - 1));
+>> -	i = virtio32_to_cpu(_vq->vdev,
+>> -			vq->split.vring.used->ring[last_used].id);
+>> -	*len = virtio32_to_cpu(_vq->vdev,
+>> -			vq->split.vring.used->ring[last_used].len);
+>> +	if (virtio_has_feature(_vq->vdev, VIRTIO_F_IN_ORDER)) {
+>> +		/* Skip used ring and get used desc in order*/
+>> +		i = vq->split.next_batch_desc_begin;
+>> +		j = i;
+>> +		while (vq->split.vring.desc[j].flags & nextflag)
+> 
+> 
+> Let's don't depend on the descriptor ring which is under the control of
+> the malicious hypervisor.
+> 
+> Let's use desc_extra that is not visible by the hypervisor. More can be
+> seen in this commit:
+> 
+> 72b5e8958738 ("virtio-ring: store DMA metadata in desc_extra for split
+> virtqueue")
+> 
+> 
+>> +			j = (j + 1) % vq->split.vring.num;
+>> +		/* move to next */
+>> +		j = (j + 1) % vq->split.vring.num;
+>> +		vq->split.next_batch_desc_begin = j;
+> 
+> 
+> I'm not sure I get the logic here, basically I think we should check
+> buffer instead of descriptor here.
+
+I's sorry I don't understand this comment.
+In order means device use descriptors in the same order as they been available.
+So we should iterate the descriptor table and calculte the next desc which will be used,
+because we don't use used ring now.
+
+> 
+> So if vring.used->ring[last_used].id != last_used, we know all
+> [last_used, vring.used->ring[last_used].id] have been used in a batch?
+> 
+
+We don't use used ring for in order feature.
+N descriptors in descriptor table from vq->split.next_batch_desc_begin have been used.
+N is vq->split.vring.used->idx - vq->last_used_idx (haven't consider ring problem for short).
+
+> 
+>> +
+>> +		/* TODO: len of buffer */
+> 
+> 
+> So spec said:
+> 
+> "
+> 
+> The skipped buffers (for which no used ring entry was written) are
+> assumed to have been used (read or written) by the device completely.
+> 
+> 
+> "
+> 
+> Thanks
+> 
+> 
+>> +	} else {
+>> +		last_used = (vq->last_used_idx & (vq->split.vring.num - 1));
+>> +		i = virtio32_to_cpu(_vq->vdev,
+>> +				    vq->split.vring.used->ring[last_used].id);
+>> +		*len = virtio32_to_cpu(_vq->vdev,
+>> +				       vq->split.vring.used->ring[last_used].len);
+>> +	}
+>>   
+>>   	if (unlikely(i >= vq->split.vring.num)) {
+>>   		BAD_RING(vq, "id %u out of range\n", i);
+>> @@ -2234,6 +2253,8 @@ struct virtqueue *__vring_new_virtqueue(unsigned int
+>> index,
+>>   	vq->split.avail_flags_shadow = 0;
+>>   	vq->split.avail_idx_shadow = 0;
+>>   
+>> +	vq->split.next_batch_desc_begin = 0;
+>> +
+>>   	/* No callback?  Tell other side not to bother us. */
+>>   	if (!callback) {
+>>   		vq->split.avail_flags_shadow |= VRING_AVAIL_F_NO_INTERRUPT;

@@ -2,65 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33D2F58F78A
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 08:23:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA9D358F78D
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 08:25:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234049AbiHKGWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 02:22:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57090 "EHLO
+        id S233818AbiHKGZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 02:25:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233504AbiHKGWv (ORCPT
+        with ESMTP id S233628AbiHKGZI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 02:22:51 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED098A6EF
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 23:22:50 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id bq11so24283263lfb.5
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 23:22:49 -0700 (PDT)
+        Thu, 11 Aug 2022 02:25:08 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18ACF8B980
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 23:25:07 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id w11-20020a17090a380b00b001f73f75a1feso4415229pjb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 23:25:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc;
-        bh=myFQW53lMmz4JFfwdyKhJU7fW2/r53OOlYHkexRkvk0=;
-        b=kZmCoibdXDwo4VCyOg9H0i19ofJ6qNDdkCQKf+d1OPhuqCtgDoV6C6DRPM1jdhzjgY
-         5bzViit6EBDmSkGAMgvUMW49/h3KqkdEDySZjfnyp2Jdut+26LunAq5pH4eZwrA54UvD
-         3WTIWaLi8yCDzMPSFRIxRcPDsC/IkJGkv49+tZGfLn9X/QvjmDXJQwswDELsdUvakJ6q
-         GzAXtxgm3HLV6dhgOLlrmO9SgY+w12A3nWcl0Tl4bqSBJWLA7UnyxWpXkkBcihOzO3B2
-         /vmR293FkhOwLmyWOueapAyyv80CT7mIDMHSLOsOc6HIpV1d6aii8UASVBDNHiiIGBxn
-         sOTw==
+        bh=i7Z567wnPQResZwkbA9bhahJXQAAUrN9ioX9I5+gOa4=;
+        b=nX+ND60x40FmgG2d5K6hI0dekXkW2/oDgX4okhvQTMgu15F9ZM8UvkWWGylQTHKsck
+         HwYD/bPW8C/qFaVLclZxyLNGxUp4oo0itYtSP708w+XR0+rESTu7qAIHem/6ZsyAaesc
+         QyE90atwq7DhODul57hjUL/0XVermZHbit0SzsLgOvVz3Kpq4nFK9yjK81NFA1dF5Aak
+         AZb7YQJhP7LKdyH4JV8g6FKvgSvjfCiJbkz/vZNCFFRZvXwl5wcjBCaV30pqNb01yZ7U
+         x02bLwOm0qvrxmVR11kENbBczkL3TM4lCZQYAO4nuXakjx1IlmhQ1n5gzLPeVsUCtEP4
+         SIPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc;
-        bh=myFQW53lMmz4JFfwdyKhJU7fW2/r53OOlYHkexRkvk0=;
-        b=JN41lDB0wJ+wt7X4+RKmXaw7QdPhuByoClps7WKkz5m2CDfKyODpbAmEG9jJeRFHcD
-         JPnaVn8Jrr8BmAfUHiC0Q2gH/X4LaoPwNoykalpqSyI/GZluAq0Y+vA46lYLlVo5dvwA
-         3uKDuhhf6XKglw4jpYCn+ot9EQpN+c7bASi+dOVsKCXOegoKdWH4ZDV/w0X3rRuARGXG
-         oHBYq4uhWaks68wkRDChoesA4hePxSssW5OVfoyOfOGi3vMaZQmKzM9w5IANzn+b3vPn
-         1Qvz7pqArQghlOQH+I8MktHgAp+hfY0P3CnEWMl6nG9p9lpv1rjrZz0Jbk0M3GkKKYWP
-         HGwg==
-X-Gm-Message-State: ACgBeo2yTRutQVASIk+C5r6RuQmB9ti6ItsCdWdb7spgT0sc8H9PxOLt
-        NiZHU2119ElIOtWK5/GJvhXNag==
-X-Google-Smtp-Source: AA6agR4X0ticYh1ve9WR7Oyr9gn0xA8WLBimiNGSbaMBCfletyAhGK0Yi1ukgPyk4mAp57e8TWv4Ow==
-X-Received: by 2002:a05:6512:3991:b0:48b:3313:2576 with SMTP id j17-20020a056512399100b0048b33132576mr11420442lfu.136.1660198968341;
-        Wed, 10 Aug 2022 23:22:48 -0700 (PDT)
-Received: from localhost.localdomain ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id bj36-20020a2eaaa4000000b0025e66a771efsm677755ljb.136.2022.08.10.23.22.47
+        bh=i7Z567wnPQResZwkbA9bhahJXQAAUrN9ioX9I5+gOa4=;
+        b=Xp5ZQlMS3cy8WXwVkciD8D77cxrsw21I/XXXKWzgqgSgEors/OSSVkQzWDjSbfKksX
+         VGYUR9j408XeEOAP2k8mwxO18KFhM/tz/H15PmY/u/rglWwu3AM+TftFHMdWBFUiWllj
+         k0+RV6KtG5izuKSYu48y/BZzsxd8iPRQHEHKWOJGTEZ9j2h68wJFN/Rq58PLJtGcwX1P
+         ZWCqmzw2B945TOntj3H1MyVK3IlY5ZJXYRyfQtEEFwBIpe5pM3m088yU2a9oO65lJbGv
+         7uFBjmS+FvtB/9OGj5AYfq26oldhrQ8cOc8m0bgrkA1zV3GR3+EUk5xT7SeytlUSmQiA
+         CJ/w==
+X-Gm-Message-State: ACgBeo2m7gY+/2B5bEJxWT9MqHqSqiYGaeVYcdqKCRl5Mmmmlh7NJtsO
+        bdxEWPxiJpnXmMwIum1E7CHCAg==
+X-Google-Smtp-Source: AA6agR7kWfMikr56EQjLtH494GZ4vZcdlrk+19bGX1lm9Fgn/Kr6nBKF54L+RwLSBp0IHuQ9ygliaQ==
+X-Received: by 2002:a17:902:d64a:b0:16d:570c:9d7b with SMTP id y10-20020a170902d64a00b0016d570c9d7bmr30896287plh.1.1660199106391;
+        Wed, 10 Aug 2022 23:25:06 -0700 (PDT)
+Received: from leoy-yangtze.lan (n058152077182.netvigator.com. [58.152.77.182])
+        by smtp.gmail.com with ESMTPSA id o12-20020a17090a55cc00b001f506009036sm2766926pjm.49.2022.08.10.23.25.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 23:22:47 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Prashant Malani <pmalani@chromium.org>,
-        devicetree@vger.kernel.org, chrome-platform@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: [PATCH v2] dt-bindings: chrome: google,cros-ec-typec: restrict allowed properties
-Date:   Thu, 11 Aug 2022 09:22:45 +0300
-Message-Id: <20220811062245.4316-1-krzysztof.kozlowski@linaro.org>
+        Wed, 10 Aug 2022 23:25:05 -0700 (PDT)
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Ali Saidi <alisaidi@amazon.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Ian Rogers <irogers@google.com>, Like Xu <likexu@tencent.com>,
+        German Gomez <german.gomez@arm.com>,
+        Timothy Hayes <timothy.hayes@arm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Leo Yan <leo.yan@linaro.org>
+Subject: [PATCH v6 00/15] perf c2c: Support data source and display for Arm64
+Date:   Thu, 11 Aug 2022 14:24:36 +0800
+Message-Id: <20220811062451.435810-1-leo.yan@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -74,55 +87,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Describe exactly what properties are allowed in Google Chrome OS EC Type
-C port, so the schema can properly validate the DTS.  Existing DTS
-defines always connectors with unit addresses, not a sole "connector"
-child.
+Arm64 Neoverse CPUs supports data source in Arm SPE trace, this allows
+us to detect cache line contention and transfers.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Acked-by: Prashant Malani <pmalani@chromium.org>
+This patch set has been rebased on the acme/perf/core branch with the latest
+commit b39c9e1b101d ("perf machine: Fix missing free of
+machine->kallsyms_filename").
 
----
+To make building success, a compilation fixing commit [1] has been sent
+to LKML, this patch set is dependent on it.  This patch set has been verified
+for both x86 perf memory events and Arm SPE events.
 
-Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
+[1] https://lore.kernel.org/lkml/20220811044341.426796-1-leo.yan@linaro.org/
 
-Changes since v1:
-1. Correct subject prefix
----
- .../bindings/chrome/google,cros-ec-typec.yaml     | 15 +++++++++++++--
- 1 file changed, 13 insertions(+), 2 deletions(-)
+Changes from v5:
+* Removed the patch "perf: Add SNOOP_PEER flag to perf mem data struct"
+  (Arnaldo);
+* Removed the patch "perf arm-spe: Don't set data source if it's not a
+  memory operation" which has been merged in the mainline kernel, so can
+  dismiss merging conflict.
+* Rebased on the latest acme perf/core branch, no any code change
+  compared to previous version.
 
-diff --git a/Documentation/devicetree/bindings/chrome/google,cros-ec-typec.yaml b/Documentation/devicetree/bindings/chrome/google,cros-ec-typec.yaml
-index 2d98f7c4d3bc..50ebd8c57795 100644
---- a/Documentation/devicetree/bindings/chrome/google,cros-ec-typec.yaml
-+++ b/Documentation/devicetree/bindings/chrome/google,cros-ec-typec.yaml
-@@ -20,13 +20,24 @@ properties:
-   compatible:
-     const: google,cros-ec-typec
- 
--  connector:
-+  '#address-cells':
-+    const: 1
-+
-+  '#size-cells':
-+    const: 0
-+
-+patternProperties:
-+  '^connector@[0-9a-f]+$':
-     $ref: /schemas/connector/usb-connector.yaml#
-+    unevaluatedProperties: false
-+    properties:
-+      reg:
-+        maxItems: 1
- 
- required:
-   - compatible
- 
--additionalProperties: true #fixme
-+additionalProperties: false
- 
- examples:
-   - |+
+Changes from v4:
+* Included Ali's patch set for adding data source in Arm SPE samples;
+* Added Ian's ACK and Ali's review and test tags;
+* Update document for the default peer dispaly for Arm64 (Ali).
+
+Changes from v3:
+* Changed to display remote and local peer accesses (Joe);
+* Fixed the usage info for display types (Joe);
+* Do not display HITM dimensions when use 'peer' display, and HITM
+  display doesn't show any 'peer' dimensions (James);
+* Split to smaller patches for adding dimensions of peer operations;
+* Updated documentation to reflect the latest GUI and stdio.
+
+
+Ali Saidi (2):
+  perf tools: sync addition of PERF_MEM_SNOOPX_PEER
+  perf arm-spe: Use SPE data source for neoverse cores
+
+Leo Yan (13):
+  perf mem: Print snoop peer flag
+  perf mem: Add statistics for peer snooping
+  perf c2c: Output statistics for peer snooping
+  perf c2c: Add dimensions for peer load operations
+  perf c2c: Add dimensions of peer metrics for cache line view
+  perf c2c: Add mean dimensions for peer operations
+  perf c2c: Use explicit names for display macros
+  perf c2c: Rename dimension from 'percent_hitm' to
+    'percent_costly_snoop'
+  perf c2c: Refactor node header
+  perf c2c: Refactor display string
+  perf c2c: Sort on peer snooping for load operations
+  perf c2c: Use 'peer' as default display for Arm64
+  perf c2c: Update documentation for new display option 'peer'
+
+ tools/include/uapi/linux/perf_event.h         |   2 +-
+ tools/perf/Documentation/perf-c2c.txt         |  31 +-
+ tools/perf/builtin-c2c.c                      | 454 ++++++++++++++----
+ .../util/arm-spe-decoder/arm-spe-decoder.c    |   1 +
+ .../util/arm-spe-decoder/arm-spe-decoder.h    |  12 +
+ tools/perf/util/arm-spe.c                     | 130 ++++-
+ tools/perf/util/mem-events.c                  |  46 +-
+ tools/perf/util/mem-events.h                  |   3 +
+ 8 files changed, 547 insertions(+), 132 deletions(-)
+
 -- 
 2.34.1
 

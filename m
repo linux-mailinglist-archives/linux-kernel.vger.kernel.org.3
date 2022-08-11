@@ -2,99 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9492D58F53E
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 02:30:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A348258F542
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 02:39:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231804AbiHKAao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 20:30:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45198 "EHLO
+        id S232280AbiHKAio (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 20:38:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229488AbiHKAam (ORCPT
+        with ESMTP id S229488AbiHKAim (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 20:30:42 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5382466A70;
-        Wed, 10 Aug 2022 17:30:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=cVnlVnJwObO86ULdSvAwM695LLQEVtnRb++QK0jLVRA=; b=vt0L8vjYEJ9MWh3HBefr68tO81
-        BEfNLfx963mhY0aqpHZnD9Bhl/KkdiiTMmf5tWA06mHQln6FyGgcg1ROqXVZO2J1VtesjykJIDU9j
-        UNfZd4ya/x74mPo8i1zAHZUypQoVnwGqtQ+9HDm+jlD08etlCYI4CkQgWRE8txurb+ec=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1oLw5k-00CyZr-5a; Thu, 11 Aug 2022 02:30:28 +0200
-Date:   Thu, 11 Aug 2022 02:30:28 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Ravi Gunasekaran <r-gunasekaran@ti.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, linux-omap@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kishon@ti.com,
-        vigneshr@ti.com
-Subject: Re: [PATCH v2 net-next] net: ethernet: ti: davinci_mdio: Add
- workaround for errata i2329
-Message-ID: <YvRNpAdG7/edUEc+@lunn.ch>
-References: <20220810111345.31200-1-r-gunasekaran@ti.com>
+        Wed, 10 Aug 2022 20:38:42 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE77E7E00E
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 17:38:40 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1660178319;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FRnVS+EneaoKmPMGcBzopQrqSsVith3/9iRTg2srvio=;
+        b=uVoMXRNQCYRCvmLpo+8b8xFp2Z8SBMG7pNAmgFdzUvy22hM1Xzs/MV8cnyWpzNZkVilmfy
+        fZrm8rwApdt6WrkOISdPX3n4+rUw8xIQId4e08xVzb51+6Oe3EwOMbU/bedBqLq0AF1z+v
+        ny5w/6WoCxBgofVF8NMqHunc/XZG61wVT+lUcHV+tASsh/1AWMAAo+p+XAqGN/a0KCuprj
+        FfCagrim3ZBSlUgwx5gJxcyfQOQ8a5Pou9dGCVXxcCLWsMv/uJmWK43LhHTtuFLNb2s6mA
+        KErgqowEuJJR1GHTvxIrqkuc/KF8N9pHdmplh6xhMBdQBoNIjf5wGS/6wb/1lw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1660178319;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FRnVS+EneaoKmPMGcBzopQrqSsVith3/9iRTg2srvio=;
+        b=Z/gZYbluxcIus8XNKR4RW2YwdnMRp5FXrdSO7zf780YXPf3ywyVjxVZw0zUUe8liLz645S
+        xgR/UWtoTEhzD8Dg==
+To:     Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Huang, Kai" <kai.huang@intel.com>
+Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        "Gomez Iglesias, Antonio" <antonio.gomez.iglesias@intel.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Subject: Re: [PATCH] x86/apic: Don't disable x2APIC if locked
+In-Reply-To: <1d81ef6a-7505-fc13-ecbf-f3ca7a6fbfce@linux.intel.com>
+References: <20220809234000.783284-1-daniel.sneddon@linux.intel.com>
+ <d6ffb489-7024-ff74-bd2f-d1e06573bb82@intel.com>
+ <238ea612-5a25-9323-b31f-0a14493db2f7@linux.intel.com>
+ <d4bcb22e-224c-d256-cb93-3ff6ed89a7d0@intel.com>
+ <341ea6e9-d8f3-ee7a-6794-67408abbf047@linux.intel.com>
+ <87r11nu52l.ffs@tglx>
+ <83a0d220-1872-caba-4e7e-b6a366655cf2@linux.intel.com>
+ <ba80b303-31bf-d44a-b05d-5c0f83038798@intel.com>
+ <bff78ad9-57d8-ca82-cc75-0b7e5024116d@linux.intel.com>
+ <9888a920-37b8-9a1f-b887-6630492955c6@intel.com>
+ <1d81ef6a-7505-fc13-ecbf-f3ca7a6fbfce@linux.intel.com>
+Date:   Thu, 11 Aug 2022 02:38:38 +0200
+Message-ID: <87lervty0h.ffs@tglx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220810111345.31200-1-r-gunasekaran@ti.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> +static int davinci_mdiobb_read(struct mii_bus *bus, int phy, int reg)
-> +{
-> +	int ret;
-> +	struct mdiobb_ctrl *ctrl = bus->priv;
-> +	struct davinci_mdio_data *data;
-> +
-> +	data = container_of(ctrl, struct davinci_mdio_data, bb_ctrl);
-> +
-> +	if (phy & ~PHY_REG_MASK || reg & ~PHY_ID_MASK)
-> +		return -EINVAL;
+On Wed, Aug 10 2022 at 17:01, Daniel Sneddon wrote:
+> On 8/10/22 16:44, Dave Hansen wrote:
+>> On 8/10/22 16:38, Daniel Sneddon wrote:
+>>>>
+>>>> config INTEL_TDX_GUEST
+>>>>         bool "Intel TDX (Trust Domain Extensions) - Guest Support"
+>>>>         depends on X86_64 && CPU_SUP_INTEL
+>>>>         depends on X86_X2APIC
+>>> So I got some more input.  SPR and newer will lock the APIC.  
+>> 
+>> Could you get a _little_ more clarity on this, please?  Exactly how and
+>> when will it be locked?  What does the BIOS writer's guide say?  Will
+>> there be an explicit x2APIC lock option?  Or, will it be implicitly
+>> locked when SGX or TDX is enabled?
+>
+> The BIOS doesn't explicitly lock the APIC.  The APIC will be locked if X2APIC
+> mode is enabled when the BIOS does an MCHECK.  X2APIC mode will be enabled if
+> SGX or TDX are enabled.  So when exactly does the BIOS do an MCHECK?  That I'll
+> have to get clarification on.
 
-You don't need this. Leave it up to the bit banging code to do the
-validation. This also breaks C45, which the bit banging code can do,
-and it looks like the hardware cannot.
+Sorry, this is uncomprehensible word salad and none of this makes any
+sense at all to me.
 
-> +
-> +	ret = pm_runtime_resume_and_get(data->dev);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	ret = mdiobb_read(bus, phy, reg);
-> +
-> +	pm_runtime_mark_last_busy(data->dev);
-> +	pm_runtime_put_autosuspend(data->dev);
+Can you please explain this in comprehensible sentences understandable
+by mere mortals?
 
-Once you take the validation out, this function then all becomes about
-runtime power management. Should the bit banging core actually be
-doing this? It seems like it is something which could be useful for
-other devices.
+Thanks,
 
-struct mii_bus has a parent member. If set, you could apply these run
-time PM functions to that. Please add a patch to modify the core bit
-banging code, and then you should be able to remove these helpers.
-
->  static int davinci_mdio_probe(struct platform_device *pdev)
->  {
->  	struct mdio_platform_data *pdata = dev_get_platdata(&pdev->dev);
-> @@ -340,12 +535,30 @@ static int davinci_mdio_probe(struct platform_device *pdev)
->  	struct phy_device *phy;
->  	int ret, addr;
->  	int autosuspend_delay_ms = -1;
-> +	const struct soc_device_attribute *soc_match_data;
-
-netdev uses reverse christmas tree. Variables should be sorted longest
-first, shortest last.
-
-       Andrew
+        tglx

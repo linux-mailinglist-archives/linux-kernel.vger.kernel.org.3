@@ -2,149 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FAD058FBB6
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 13:57:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBAEC58FBCE
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 14:01:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234778AbiHKL5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 07:57:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33224 "EHLO
+        id S235137AbiHKMBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 08:01:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234582AbiHKL5R (ORCPT
+        with ESMTP id S235016AbiHKMBc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 07:57:17 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5F4496758
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 04:57:15 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d16so16709970pll.11
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 04:57:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc;
-        bh=1PjdQiIv1kMsJkwFJMue4HRjmUNUZJ9LU6vCJsWYrUU=;
-        b=KU5q7OXMByi0n6kinxUo7WG4OyyXjQ68+HYKFQiLpLY83Q/SB6XyETN35FvaSWTKRy
-         T92Uh0WCytiioADd1sUB3/dXdAMjcfRPehHQWGYsse2fODcflVrx/rnpDhCbVKmY0Bi2
-         DyJdOFZHFuHNqzktyVeHf6Vf6RI1EPu5UthikeQ4o8TM/Jz23/sXHdC2SCHhLZ0YWE9Z
-         VAng1v+/b8P9V6MrdpnOeLWGOW+b9WHXxjmxoOKjSffTre0nnRY2wvxiZk9MUz5vKiuZ
-         d4C4qXyzoqP3SPVsPGSOI5HfkMp6qDErzPhBtlHg5Z3PNSn3a/B4VN5+42xkVYuMsn1n
-         3C7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=1PjdQiIv1kMsJkwFJMue4HRjmUNUZJ9LU6vCJsWYrUU=;
-        b=AAD6VxRMfK8qx7uxkvKzDSICK9cBw8nCuwEZor+9r+CioBCThNeau1mLknwITHs1c6
-         LKwv+KKksrZTeY/qenpCj7SWjixckVrPRyWZ8FJSTJ5KWeTuhuxsHVbAv8qasnjd2rjZ
-         wVu8ferIcNNfdIOKIDYoxCWzFNmJy9FEm0HQ43SbArX+ncrzLLF5zScAMcGYE0S0sGlz
-         +3uDB2zvSyayETaXPFhVjSi9d8spV/eCyA1IcssY4tfy4tWXs9tOkioz/wW6JJmdK5J9
-         PY/FdfMs3otBMgioKTCM9Yj5te385eewWJRS++Xnde2vAOMiHIP73DluxCswtwKFg3GJ
-         t64A==
-X-Gm-Message-State: ACgBeo2NgZ0iahNp8pOBK9uDUytdRh0082bX3bIvcEiHtApFusg17nEk
-        KNzcDewJJOSwkSgE7Misvz/B
-X-Google-Smtp-Source: AA6agR5gsam2Zx07NhcqQ8mrnHK0T8ZQKpGEl+RI0VMVLtLQpwRMwMyBFLPHonHLMR5FwQJCRUobLw==
-X-Received: by 2002:a17:903:2d1:b0:171:3773:b95 with SMTP id s17-20020a17090302d100b0017137730b95mr6719088plk.173.1660219035283;
-        Thu, 11 Aug 2022 04:57:15 -0700 (PDT)
-Received: from workstation ([59.92.103.103])
-        by smtp.gmail.com with ESMTPSA id w2-20020a62c702000000b0052f0a404fa7sm3975871pfg.146.2022.08.11.04.57.12
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Thu, 11 Aug 2022 04:57:14 -0700 (PDT)
-Date:   Thu, 11 Aug 2022 17:27:11 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     bjorn.andersson@linaro.org, mchehab@kernel.org,
-        james.morse@arm.com, rric@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] Fix crash when using Qcom LLCC/EDAC drivers
-Message-ID: <20220811115711.GD29799@workstation>
-References: <20220811100924.79505-1-manivannan.sadhasivam@linaro.org>
- <YvTehUOIqJGqXgXY@zn.tnic>
- <YvTfqg0q/8kIMY91@zn.tnic>
- <20220811112032.GB29799@workstation>
- <YvTo8tE3DaHifrSp@zn.tnic>
- <20220811115334.GC29799@workstation>
+        Thu, 11 Aug 2022 08:01:32 -0400
+Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 077D38E9B2;
+        Thu, 11 Aug 2022 05:01:29 -0700 (PDT)
+X-QQ-mid: bizesmtp71t1660219145tsz6jflk
+Received: from localhost.localdomain ( [182.148.14.53])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 11 Aug 2022 19:59:03 +0800 (CST)
+X-QQ-SSF: 01000000002000G0V000B00A0000000
+X-QQ-FEAT: 4T5cXmihZDp6QV4di6KvMH+L6MJgNYaWdg2v3Q6xnyKpPInIgV0WEAzzKPXO7
+        ik2Q+FUoo6Qpm5akFbksoE1oHzrqBto+7dhSL0awwaQWFaddDWJ0m/06BY25oZ3YH/If9Kp
+        k/DmetiJf+M49G90xxNJv6bf3GmdOS86RW9t+09tpWGWdCXY1q7inDBJprce5LsRlJ/juRY
+        utxap5XUBmd/oeAEPa49bI2UjtuzoURdQZ9UIFXuGEsvYU3DtSnoNVKdoHRn4n2+fp4VKs0
+        lqtdLOHaaHIN2El+8W2lSCREcHbhyDjaTgWkXeg7EWvgC8+TcF1L0BHdc7XLo0DXGiIwoVz
+        pQxgp71x3TmKMMw7ClOBDGW0GfFsDqaAzZ9PZ978yYj3t9xdmpaLgveeoPlGBhcCTQwyBB4
+X-QQ-GoodBg: 0
+From:   Jason Wang <wangborong@cdjrlc.com>
+To:     davem@davemloft.net
+Cc:     gregory.greenman@intel.com, kvalo@kernel.org, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, luciano.coelho@intel.com,
+        johannes.berg@intel.com, miriam.rachel.korenblit@intel.com,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>
+Subject: [PATCH] iwlwifi: mvm: Fix comment typo
+Date:   Thu, 11 Aug 2022 19:58:56 +0800
+Message-Id: <20220811115856.6725-1-wangborong@cdjrlc.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220811115334.GC29799@workstation>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clipped the bouncing email addresses...
+The double `the' is duplicated in the comment, remove one.
 
-On Thu, Aug 11, 2022 at 05:23:34PM +0530, Manivannan Sadhasivam wrote:
-> On Thu, Aug 11, 2022 at 01:33:06PM +0200, Borislav Petkov wrote:
-> > On Thu, Aug 11, 2022 at 04:50:32PM +0530, Manivannan Sadhasivam wrote:
-> > > I know get_maintainer.pl :) But the problem is, Qualcomm recently
-> > > switched their email domain from codeaurora.org to quicinc.com.
-> > 
-> > Great:
-> > 
-> > $ git grep codeaurora.org MAINTAINERS | wc -l
-> > 5
-> > 
-> 
-> Yep! Most of the active developers have already changed their domains in
-> MAINTAINERS file. But the left ones are either not actively maintained
-> (yeah bad) or the maintainers have left Qualcomm.
-> 
-> > ;-\
-> > 
-> > > So even if I use the maintainers codeaurora domain now, they will
-> > > bounce.
-> > 
-> > Hmm, so the mails I sent with codeaurora on Cc didn't bounce back - I
-> > got only the quicinc bounces. That doesn't mean that codeaurora actually
-> > gets delivered...
-> > 
-> 
-> Not sure why. It was supposed to bounce. But could be that Qualcomm IT
-> decided to not bounce anymore since they have got enough complaints from
-> developers ;)
-> 
+Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
+---
+ drivers/net/wireless/intel/iwlwifi/mvm/phy-ctxt.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Okay, seems to be bouncing for me:
+diff --git a/drivers/net/wireless/intel/iwlwifi/mvm/phy-ctxt.c b/drivers/net/wireless/intel/iwlwifi/mvm/phy-ctxt.c
+index a3cefbc43e80..abf8585bf3bd 100644
+--- a/drivers/net/wireless/intel/iwlwifi/mvm/phy-ctxt.c
++++ b/drivers/net/wireless/intel/iwlwifi/mvm/phy-ctxt.c
+@@ -29,7 +29,7 @@ u8 iwl_mvm_get_channel_width(struct cfg80211_chan_def *chandef)
+ 
+ /*
+  * Maps the driver specific control channel position (relative to the center
+- * freq) definitions to the the fw values
++ * freq) definitions to the fw values
+  */
+ u8 iwl_mvm_get_ctrl_pos(struct cfg80211_chan_def *chandef)
+ {
+-- 
+2.36.1
 
-The response from the remote server was:
-585 5.1.1 <ckadabi@codeaurora.org>: Recipient address rejected: undeliverable address: No such user here.
-585 5.1.1 <vnkgutta@codeaurora.org>: Recipient address rejected: undeliverable address: No such user here.
-
-Thanks,
-Mani
-
-> > > For that reason, I used their quicinc domain addresses. But since they
-> > > are bouncing, it looks like the maintainers left Qualcomm :/
-> > 
-> > Hmm, is there some way to get in touch with those folks?
-> > 
-> 
-> I don't think so. I checked in the internal Qualcomm database and
-> confirmed that I couldn't find the maintainers names there.
-> 
-> > Or whoever is taking over those drivers?
-> > 
-> 
-> LLCC is maintained by Bjorn (CCed) since it falls under soc/qcom. But I'm
-> not sure about EDAC. I think we should mark it as not maintainted until we
-> find a volunteer.
-> 
-> Bjorn, thoughts?
-> 
-> Thanks,
-> Mani
-> 
-> > Thx.
-> > 
-> > -- 
-> > Regards/Gruss,
-> >     Boris.
-> > 
-> > https://people.kernel.org/tglx/notes-about-netiquette

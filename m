@@ -2,95 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3C0658F9C4
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 11:09:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6312F58F9C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 11:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234806AbiHKJJW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 05:09:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51274 "EHLO
+        id S234528AbiHKJJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 05:09:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234705AbiHKJJS (ORCPT
+        with ESMTP id S229786AbiHKJJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 05:09:18 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04AA18E9A7
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 02:09:17 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id v10so15177935ljh.9
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 02:09:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=OuNBLM8BAbWtCheZfxDwqu8ugdq6TeyCqLVXqfB8AQU=;
-        b=tRUbUgQ7Z4NEozErrjbYsFQdh3BOQSl1mcSUnYMrjW47LdxtNSXjhsWqZXEfOx68BY
-         ZX/pRtHyTEIsM66BtZYKj9F06QIufj0ZJtheFfth7sujngmdNxQ67mlJiYYW6OQhWG4V
-         GllVC/j/0Hmc/VbLqRC+ULH8iWdR6m3XdanHE1MInU7VCiZlt10ld8/TXsp3ofZ2HXPT
-         Jt4VtmbqpVKZtnZATOMuLLhtxyROJy9z+Ycx8QdA+bd0I+D4EF4g+2gtsFERHnpYWLdG
-         dHBXWtvTaG/cTvHkGBtoLLxb4WAtLr7+3aDd3OA10tm+NvgBkiQQrtfb5LkeXCqA1GjG
-         KAxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=OuNBLM8BAbWtCheZfxDwqu8ugdq6TeyCqLVXqfB8AQU=;
-        b=HMFsejRdikhbDRb+mjEtevdKRFwjK6AnQ+jkbiAqbjF28grJLfLa4Z5fZJ9C7ppfzH
-         j9nQVLLAdU8kX62tOgMAiWpCJV4Dyl94UYaobVIVD3PvaKjE7PBSCwM3VygbYGETGWTa
-         lZudTVksSv5H8UIudZGQBd6fjDf2bFezYq16jb4gzicy8LLzZEnIl3g3p3cNU/rwTroJ
-         6Juc++g9mPsNVIuO++Zq05Zjocbsqb/V3QgaE/C+ylTSDqSutz1wEdeFCg/1CQWJf8od
-         2Fb0dPN4BxXh7fAWwhZTAZsb/+9Hse0ZpuDIlCqgqXJWzN+axzmIb+INYbvr44zTMjEp
-         6D+A==
-X-Gm-Message-State: ACgBeo1Ol8jqw4TfWqdQ4B/7DWxV7kbNhRGBZkznR5bYdKIM3M8HvcR/
-        0b4pEhkFFkf1E3n70mZvIo9V7A==
-X-Google-Smtp-Source: AA6agR7YslF70qu+nSE+gMvlKJgMKIhfnR3xp3n4p+4AlNM0wWjwnr4uY7K9QMoK8NtwKqFjnn/dFQ==
-X-Received: by 2002:a2e:9d91:0:b0:25e:dd34:f5d6 with SMTP id c17-20020a2e9d91000000b0025edd34f5d6mr6679686ljj.501.1660208955427;
-        Thu, 11 Aug 2022 02:09:15 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id v18-20020a2ea612000000b0025e4e2a5bbesm743871ljp.1.2022.08.11.02.09.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Aug 2022 02:09:14 -0700 (PDT)
-Message-ID: <080c6442-b45f-242a-6535-1f833fbf6cca@linaro.org>
-Date:   Thu, 11 Aug 2022 12:09:13 +0300
+        Thu, 11 Aug 2022 05:09:54 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C6F8E9A7
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 02:09:53 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 92D6A20463;
+        Thu, 11 Aug 2022 09:09:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1660208992; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ogHa+KiM+lP+RnrQji6o/A/7B+pSIENIDsiGRYFdQV4=;
+        b=f59bscZHABasVaivpCXZ8mqOezMBwxY7rljoxhkVBaGDH8c5PdZ58buL8oKRvkTtnQ3xvk
+        wwLRlH9NXa/k3jKEdxzcQyUNJc4loDtLvc4KPuct77ytp9CMUGzMpeUVBXBu22ouGVfa+q
+        3Kp+WjdKDxgD7O1+foB4h1ZrhBCmk4M=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 797351342A;
+        Thu, 11 Aug 2022 09:09:52 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id HSjGGmDH9GLYZQAAMHmgww
+        (envelope-from <mhocko@suse.com>); Thu, 11 Aug 2022 09:09:52 +0000
+Date:   Thu, 11 Aug 2022 11:09:51 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Abel Wu <wuyun.abel@bytedance.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Muchun Song <songmuchun@bytedance.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/mempolicy: fix lock contention on mems_allowed
+Message-ID: <YvTHX2Jijb8Z3LB5@dhcp22.suse.cz>
+References: <20220809104927.44366-1-wuyun.abel@bytedance.com>
+ <YvJO5uX0pSAh6weA@dhcp22.suse.cz>
+ <7ece0714-2646-4f1a-60b6-aaafc1135b1e@bytedance.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 1/2] dt-bindings: clock: Add Qualcomm SC8280XP GPU binding
-Content-Language: en-US
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Taniya Das <tdas@codeaurora.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220811042855.3867774-1-bjorn.andersson@linaro.org>
- <20220811042855.3867774-2-bjorn.andersson@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220811042855.3867774-2-bjorn.andersson@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7ece0714-2646-4f1a-60b6-aaafc1135b1e@bytedance.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/08/2022 07:28, Bjorn Andersson wrote:
-> Add compatible for the Qualcomm SC8280XP GPU.
+On Thu 11-08-22 16:43:28, Abel Wu wrote:
+> On 8/9/22 8:11 PM, Michal Hocko Wrote:
+> > On Tue 09-08-22 18:49:27, Abel Wu wrote:
+> > > The mems_allowed field can be modified by other tasks, so it
+> > > isn't safe to access it with alloc_lock unlocked even in the
+> > > current process context.
+> > 
+> > It would be useful to describe the racing scenario and the effect it
+> > would have. 78b132e9bae9 hasn't really explained thinking behind and why
+> > it was considered safe to drop the lock. I assume it was based on the
+> > fact that the operation happens on the current task but this is hard to
+> > tell.
+> > 
 > 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+> Sorry for my poor description. Say there are two tasks: A from cpusetA
+> is performing set_mempolicy(2), and B is changing cpusetA's cpuset.mems.
+> 
+>     A (set_mempolicy)		B (echo xx > cpuset.mems)
+> 
+>     pol = mpol_new();
+> 				update_tasks_nodemask(cpusetA) {
+> 				  foreach t in cpusetA {
+> 				    cpuset_change_task_nodemask(t) {
+> 				      task_lock(t); // t could be A
+>     mpol_set_nodemask(pol) {
+>       new = f(A->mems_allowed);
+> 				      update t->mems_allowed;
+>       pol.create(pol, new);
+>     }
+> 				      task_unlock(t);
+>     task_lock(A);
+>     A->mempolicy = pol;
+>     task_unlock(A);
+> 				    }
+> 				  }
+> 				}
+> 
+> In this case A's pol->nodes is computed by old mems_allowed, and could
+> be inconsistent with A's new mems_allowed.
+> 
+> While it is different when replacing vmas' policy: the pol->nodes is
+> gone wild only when current_cpuset_is_being_rebound():
+> 
+>     A (mbind)			B (echo xx > cpuset.mems)
+> 
+> 				cpuset_being_rebound = cpusetA;
+> 				update_tasks_nodemask(cpusetA) {
+> 				  foreach t in cpusetA {
+> 				    cpuset_change_task_nodemask(t) {
+> 				      task_lock(t); // t could be A
+>     pol = mpol_new();
+>     mmap_write_lock(A->mm);
+>     mpol_set_nodemask(pol) {
+>       mask = f(A->mems_allowed);
+> 				      update t->mems_allowed;
+>       pol.create(pol, mask);
+>     }
+> 				      task_unlock(t);
+> 				    }
+>     foreach v in A->mm {
+>       if (current_cpuset_is_being_rebound())
+>         pol.rebind(pol, cpuset.mems);
+>       v->vma_policy = pol;
+>     }
+>     mmap_write_unlock(A->mm);
+> 				    mmap_write_lock(t->mm);
+> 				    mpol_rebind_mm(t->mm);
+> 				    mmap_write_unlock(t->mm);
+> 				  }
+> 				}
+> 				cpuset_being_rebound = NULL;
+> 
+> In this case, the cpuset.mems, which has already done updating, is
+> finally used for calculating pol->nodes, rather than A->mems_allowed.
+> So it is OK to call mpol_set_nodemask() with alloc_lock unlocked when
+> doing mbind(2).
 
+Please add this to the patch changelog.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-
-Best regards,
-Krzysztof
+Thanks!
+-- 
+Michal Hocko
+SUSE Labs

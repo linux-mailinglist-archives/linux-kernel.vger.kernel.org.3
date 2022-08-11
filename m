@@ -2,99 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1ED4E58FE80
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 16:47:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1794158FE83
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 16:48:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234713AbiHKOrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 10:47:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32996 "EHLO
+        id S234866AbiHKOsH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 10:48:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiHKOrh (ORCPT
+        with ESMTP id S229594AbiHKOsF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 10:47:37 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FFF56F56C;
-        Thu, 11 Aug 2022 07:47:35 -0700 (PDT)
-Received: from fraeml741-chm.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M3V5X2zx7z67tXN;
-        Thu, 11 Aug 2022 22:47:28 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml741-chm.china.huawei.com (10.206.15.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Thu, 11 Aug 2022 16:47:33 +0200
-Received: from [10.48.150.65] (10.48.150.65) by lhrpeml500003.china.huawei.com
- (7.191.162.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 11 Aug
- 2022 15:47:31 +0100
-Message-ID: <0dff14dc-0287-71cf-72e8-0c8419c6fb3a@huawei.com>
-Date:   Thu, 11 Aug 2022 15:47:30 +0100
+        Thu, 11 Aug 2022 10:48:05 -0400
+Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D35B27823E;
+        Thu, 11 Aug 2022 07:48:03 -0700 (PDT)
+Received: by mail-qt1-f173.google.com with SMTP id e28so5599818qts.1;
+        Thu, 11 Aug 2022 07:48:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=OY6kXjlT/4YU1tqALSVt6+oYPv3FKO3xFRDEkjpCRDs=;
+        b=MmP7abxo1qPw+BpPRzvjqj5df5agTUdeHROw7TLY45ttT7OkfMBr6YsrJgbCV6/zdf
+         aJ9AlcS13d6E1hZv6QmlfBPpBufn3pijtiRW/W2twXuPUBZgEtY27oW0ErFnBJnjQYbt
+         bP4KMrvJYx8Nc2NFxQJiAB3OtjMX1BbsWZmidAcjBMG0miRpxYrQn2j/VJBlVeNVH1UV
+         kRteV0v7zGF3cPlrI6WXJw0GhmWeoQ+CFouUBDyyEET9HgK3o3LJ537LY9gR5ukL3m+o
+         77v9RkGElFNqVGEPkkw0rOgLcuseekbWuTmS3A4ezLmIPH/jpnGxli2tIZBLMdi+riea
+         0FYQ==
+X-Gm-Message-State: ACgBeo3zNjCNku+5aHob+CpKfW4yX3IUuhdHJu2cBxm/Bpf6U+e8ILRT
+        pAljcMwrS5LFzoWEJ3jk7WusKkBiiZcfzUqK
+X-Google-Smtp-Source: AA6agR5WsZPMiittHx0u+9sWKGxLBiyDSuXNZMsMYEbe7hezZ64I9xN2CWcicsTlHnBVPTC+Q/PE3Q==
+X-Received: by 2002:ac8:5881:0:b0:342:e993:89b2 with SMTP id t1-20020ac85881000000b00342e99389b2mr23597205qta.0.1660229282889;
+        Thu, 11 Aug 2022 07:48:02 -0700 (PDT)
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com. [209.85.219.174])
+        by smtp.gmail.com with ESMTPSA id gd8-20020a05622a5c0800b0031eeecd21d6sm1771582qtb.69.2022.08.11.07.48.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Aug 2022 07:48:02 -0700 (PDT)
+Received: by mail-yb1-f174.google.com with SMTP id 7so28648414ybw.0;
+        Thu, 11 Aug 2022 07:48:02 -0700 (PDT)
+X-Received: by 2002:a25:d811:0:b0:676:fffb:979 with SMTP id
+ p17-20020a25d811000000b00676fffb0979mr27343882ybg.604.1660229282091; Thu, 11
+ Aug 2022 07:48:02 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH v4 10/17] perf pmu-events: Hide pmu_events_map
-To:     Ian Rogers <irogers@google.com>
-CC:     Will Deacon <will@kernel.org>, James Clark <james.clark@arm.com>,
-        "Mike Leach" <mike.leach@linaro.org>, Leo Yan <leo.yan@linaro.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Arnaldo Carvalho de Melo" <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        "Zhengjun Xing" <zhengjun.xing@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-perf-users@vger.kernel.org>,
-        Stephane Eranian <eranian@google.com>
-References: <20220804221816.1802790-1-irogers@google.com>
- <20220804221816.1802790-11-irogers@google.com>
- <463cffea-51d9-98ad-86ac-d064faac05b9@huawei.com>
- <CAP-5=fXuG9Jt5x-e3um=-hYNSb18j8dL5np5Edozw+H5PoZ2eA@mail.gmail.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <CAP-5=fXuG9Jt5x-e3um=-hYNSb18j8dL5np5Edozw+H5PoZ2eA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.48.150.65]
-X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220722151155.21100-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220722151155.21100-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220722151155.21100-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 11 Aug 2022 16:47:50 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWG6FkNVYsbkvqHZHQd_XNNOKX0=fy-UdZjg62gzH4jrw@mail.gmail.com>
+Message-ID: <CAMuHMdWG6FkNVYsbkvqHZHQd_XNNOKX0=fy-UdZjg62gzH4jrw@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] arm64: dts: renesas: rzg2l-smarc-som: Add PHY
+ interrupt support for ETH{0/1}
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/08/2022 15:29, Ian Rogers wrote:
->>>          _args.output_file.write("""{
->>> @@ -389,6 +409,61 @@ static const struct pmu_sys_events pmu_sys_event_tables[] = {
->>>    \t},
->>>    };
->>>
->>> +const struct pmu_event *perf_pmu__find_table(struct perf_pmu *pmu)
->>> +{
->>> +        const struct pmu_event *table = NULL;
->>> +        char *cpuid = perf_pmu__getcpuid(pmu);
->> This seems an identical implementation to that in empty-pmu-events.c -
->> can we reduce this duplication? Maybe a seperate common c file which can
->> be linked in
->>
->> The indentation seems different also - this version seems to use whitespaces
-> Agreed. Later on this will change, the empty version isn't compressed
-> and the jevents.py one is. Having a common C file would defeat the
-> goal of hiding the API, but ultimately we'd need to get rid of it in
-> later changes when the empty/compressed implementations diverge.
+On Fri, Jul 22, 2022 at 5:12 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> The PHY interrupt (INT_N) pin is connected to IRQ2 and IRQ3 for ETH0
+> and ETH1 respectively.
+>
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> v2->v3
+> * Included irqc-rzg2l.h header
 
-ok, I suppose.. I have to say that this divergence is less then ideal 
-and I don't so like much all the difference in pmu-events/pmu-events.c 
-and pmu-events/empty-pmu-events.c
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v6.1.
 
-thanks,
-John
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

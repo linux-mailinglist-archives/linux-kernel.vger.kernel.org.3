@@ -2,87 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F6B758F9D7
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 11:16:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D637758F9E2
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 11:17:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234942AbiHKJP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 05:15:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58258 "EHLO
+        id S234952AbiHKJRb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 05:17:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234934AbiHKJPz (ORCPT
+        with ESMTP id S234843AbiHKJR3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 05:15:55 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50AA4402D4
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 02:15:54 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id u6so13324788ljk.8
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 02:15:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=eWYdVQgTkSshr+LnqPUerx5UBYrvRFihiIrrHfJRObk=;
-        b=V7SzdIVQUah6XvBKizvA1mVgIky9pI9QACts5UE/xHSbnXlzv5qvmt06tCaJpfdMEp
-         8LVG9IdKWBoImtN747jLTjxZsqEQ3SS/svIo8rGmJ/oEiKFkPfEhGmqErGXM58Zmaa3U
-         QgDqrWPMumitFhDxY4nqBRzTUmIUcSJnPGQoXXrYfpa+OvCbBU+5lbHFUthxydyGFpb4
-         wtkR+UzFC43D/+M/57s9tDYzX9kYGHpnFadSkFEFqkBFBkIpsa8vn8ngxL5OU9QgljRO
-         l2JghWSevhNV7NWvHiuF2PdGHxD2BVmk3WYK8lMj8nPIqWFkmNR/66LgmlSScYfjUelZ
-         YxeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=eWYdVQgTkSshr+LnqPUerx5UBYrvRFihiIrrHfJRObk=;
-        b=LSTYPtHYyuITpKL/jGUI1jai4zzwElIrAEGvZoYb3B9o/8EBo47n2P0/67lt1om5Dx
-         0SVWJGKS5yKJGmck7oSCizzpZl9D/aZrpCUeAdI0fmHFhUn3Jq2HPeLnqLvLh300TYGD
-         sFRlQ8rPAZIXhlATmtSN5R0Oz21N6IyU68Vif1jFiPhNHJ3eGx4IQntJSRU/8fLfXC7g
-         K2K9Ydh3sGrCHCC4hQlf7RcBRjBM8zjSWDe1xPCgIBMldKJTsqOd8m0DJIfpX6tku1qC
-         v3MeY3MF5HKr/Fa3104KNjTQ9igNhn1sq1rZ+qDf5moXmKGYcUtx3cdyv/N0e3IZbki2
-         +yDw==
-X-Gm-Message-State: ACgBeo3gmkERVu6sDgdacogezv7TSrMzAAmvFTDAkdUePVyZZMGMIVT0
-        t6dp0iWTvcip/vaGY3NrI11I5g==
-X-Google-Smtp-Source: AA6agR53XfRpjtqJX/e2qIzfPhAibPRJPgQbeXyD0yMC1ANb0zWWn7gz9PDlDZC9gFwqwtlCvsKCCQ==
-X-Received: by 2002:a2e:2ac1:0:b0:25e:4b39:e3cb with SMTP id q184-20020a2e2ac1000000b0025e4b39e3cbmr10344846ljq.458.1660209352649;
-        Thu, 11 Aug 2022 02:15:52 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id j15-20020a056512028f00b0048b2be5320csm641183lfp.118.2022.08.11.02.15.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Aug 2022 02:15:51 -0700 (PDT)
-Message-ID: <a063d48a-2096-ba5b-7f65-d55fec49d534@linaro.org>
-Date:   Thu, 11 Aug 2022 12:15:50 +0300
+        Thu, 11 Aug 2022 05:17:29 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5E83A3DBCD;
+        Thu, 11 Aug 2022 02:17:27 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A7779113E;
+        Thu, 11 Aug 2022 02:17:27 -0700 (PDT)
+Received: from entos-ampere-02.shanghai.arm.com (unknown [10.169.212.215])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6F3D73F70D;
+        Thu, 11 Aug 2022 02:17:21 -0700 (PDT)
+From:   Jia He <justin.he@arm.com>
+To:     Ard Biesheuvel <ardb@kernel.org>, Len Brown <lenb@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Robert Moore <robert.moore@intel.com>
+Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-edac@vger.kernel.org, devel@acpica.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>, linux-efi@vger.kernel.org,
+        nd@arm.com, toshi.kani@hpe.com, Jia He <justin.he@arm.com>
+Subject: [PATCH 0/2] Modularize ghes_edac driver
+Date:   Thu, 11 Aug 2022 09:17:11 +0000
+Message-Id: <20220811091713.10427-1-justin.he@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2] pmic: add mt6366 regulator document
-Content-Language: en-US
-To:     "zhiyong.tao" <zhiyong.tao@mediatek.com>, lee.jones@linaro.org,
-        robh+dt@kernel.org, matthias.bgg@gmail.com, lgirdwood@gmail.com,
-        broonie@kernel.org, eddie.huang@mediatek.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, fshao@chromium.org
-Cc:     sen.chu@mediatek.com, hui.liu@mediatek.com,
-        allen-kh.cheng@mediatek.com, hsin-hsiung.wang@mediatek.com,
-        sean.wang@mediatek.com, macpaul.lin@mediatek.com,
-        wen.su@mediatek.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        zhiyong tao <zhiyong.tao@mediatk.com>
-References: <20220728062749.18701-1-zhiyong.tao@mediatek.com>
- <20220728062749.18701-2-zhiyong.tao@mediatek.com>
- <03a13ed4-e7cd-6f7d-f8f7-9b1e6193e202@linaro.org>
- <111e1073e1ce689e289e52c645a1be2e7dc7fe12.camel@mediatek.com>
- <86ab77f5-8beb-7237-d6e2-734f52ca176b@linaro.org>
- <3d120fdb5d26d1211f797e5a26e8af3f34439424.camel@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <3d120fdb5d26d1211f797e5a26e8af3f34439424.camel@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,58 +50,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/08/2022 12:14, zhiyong.tao wrote:
-> On Thu, 2022-08-11 at 11:58 +0300, Krzysztof Kozlowski wrote:
->> On 11/08/2022 11:42, zhiyong.tao wrote:
->>>>
->>>>>
->>>>> Signed-off-by: zhiyong tao <zhiyong.tao@mediatk.com>
->>>>> ---
->>>>>  .../regulator/mediatek,mt6366-regulator.yaml  | 375
->>>>> ++++++++++++++++++
->>>>>  1 file changed, 375 insertions(+)
->>>>
->>>> Subject does not match subsystem.
->>>
->>> Hi Krzysztof,
->>>
->>> Do you mean that we should change the title like this:
->>> regulator: dt-bindings: mediatek: add mt6366 regulator document
->>> is it right?
->>
->> Yes. And remove redundant pieces so for example:
->>
->> regulator: dt-bindings: mediatek: add mt6366
->> or:
->> regulator: dt-bindings: add mediatek,mt6366
-> ==>
-> Thanks for your suggestion, we will fix it in next verison.
->>
->>
->> (...)
->>
->>>>> +    patternProperties:
->>>>> +      "^buck-
->>>>> v(dram1|core|coresshub|proc11|proc12|gpu|s2|modem|s1)$":
->>>>> +        type: object
->>>>> +        $ref: "regulator.yaml#"
->>>>
->>>> No need for quotes.
->>>
->>> ==>
->>> We will remove the line "$ref: "regulator.yaml#"" in next verison,
->>> is
->>> it right?
->>
->> No, it is not. Why do you want to remove it?
-> ==>
-> We don't understand "No need for quotes."which means.
-> Do you mean that we should remove the quotation marks.
-> We will change it like this:$ref: regulator.yaml#
-> is it right?
+Commit dc4e8c07e9e2 ("ACPI: APEI: explicit init of HEST and GHES in
+apci_init()") introduced a bug that ghes_edac_register() would be invoked
+before edac_init(). Because at that time, the bus "edac" hasn't been even
+registered, this created sysfs /devices/mc0 instead of
+/sys/devices/system/edac/mc/mc0 on an Ampere eMag server.
 
-Yes, remove the quotation marks. You wanted to remove entire line which
-is not correct. $ref should stay.
+The solution is modularizing the ghes_edac driver.
 
-Best regards,
-Krzysztof
+I tested the cases as follows:
+1. build test with ghes_edac built-in and module on Aarch64
+2. build test with ghes_edac built-in and module on x86_64
+3. boot test with ghes_edac built-in and module on Aarch64
+4. modprobe and -r for multiple times on Aarch64.
+ 
+Jia He (2):
+  efi/cper: export several helpers for ghes edac to use
+  EDAC/ghes: Modularize ghes_edac driver to remove the dependency on
+    ghes
+
+ drivers/acpi/apei/ghes.c    | 49 ++++++++++++++++++++++--
+ drivers/edac/Kconfig        |  4 +-
+ drivers/edac/ghes_edac.c    | 74 ++++++++++++++++++++++++++-----------
+ drivers/firmware/efi/cper.c |  3 ++
+ include/acpi/ghes.h         | 33 ++++-------------
+ 5 files changed, 110 insertions(+), 53 deletions(-)
+
+-- 
+2.25.1
+

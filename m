@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DB30590085
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 17:44:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51B48590082
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 17:44:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236437AbiHKPoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 11:44:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41984 "EHLO
+        id S236484AbiHKPnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 11:43:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236481AbiHKPnl (ORCPT
+        with ESMTP id S236385AbiHKPnl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 11 Aug 2022 11:43:41 -0400
 Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D1AC9F196
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 08:38:08 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99AFC9F194
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 08:38:09 -0700 (PDT)
 Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id 14A535FD05;
-        Thu, 11 Aug 2022 18:38:06 +0300 (MSK)
+        by mail.sberdevices.ru (Postfix) with ESMTP id BB5535FD07;
+        Thu, 11 Aug 2022 18:38:07 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1660232286;
-        bh=A3K4ViyKorIBmbrqaPTPKHLFa5vS3HsOnKdz/6fJLUw=;
+        s=mail; t=1660232287;
+        bh=0ZPDUCDYt8cTM0IRDWEirHqaXpS1VqLDEtitynBVmKI=;
         h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-        b=CjfUu6Mk1eOrgCOGEJXFiabeAfvs9yI04vID5EUtRBLVtn12/Tc1GhJgo+8hwgZNA
-         S307IjqsKalvRqjSLYykiOcApED8RUj8XniHQb5/z5O3TBsyORSIi2e0NCqT76DKmF
-         G2KJb8rXHRwnfIgF4rIdk9Az/kXMCTDNIwLUD2d1ro8sGK6w7/SXAl+nF+i1tB0+sn
-         wf3xeTcmNDNWU1fcj6S35CWLQoje4NysqJsb/CYntr67eik5gOgn+V61nc5Gn2fKDT
-         AYcPRkKa5PcbZrpL5/RzeK9VuDp8MZCd+d2DtPNZnzPOCfP2rv6+1LKG3RHza4w6KJ
-         yp87fQkE6dMww==
+        b=NleaxToKuULRFvBgPvAtWzSeyDWx7rdHhn5tNxtUwAdMrJnm/hM9t65IeF9pgqkEc
+         fWQucu+KVWt7bsECOLUzUDX7RnEqWpaz+BiLUac/KzfaQq/QQlC/9NS5EDkPu964m6
+         S4ViXrD4Bg6o1tenEnDT9Sueuk33ypMFhXEiNB6j/SwNRp5lC7mkY9fSlNS3/KqKy8
+         TArDFAvt3GEyihgu4iQjVaYbcSRhoBAwSeJ8Ajn6BAV2ygakX4Y5d4HUzwtTQKatPJ
+         XJYoxWnTOhV8hh9pQbCuYZdeoDTTijPEiaDcURL4qvMMUbUQFKXCj9ruSjZOMj4971
+         itHl/wKsqktXA==
 Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
         by mail.sberdevices.ru (Postfix) with ESMTP;
-        Thu, 11 Aug 2022 18:38:06 +0300 (MSK)
+        Thu, 11 Aug 2022 18:38:07 +0300 (MSK)
 From:   Alexey Romanov <avromanov@sberdevices.ru>
 To:     <minchan@kernel.org>, <senozhatsky@chromium.org>,
         <ngupta@vflare.org>, <akpm@linux-foundation.org>
 CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
         <kernel@sberdevices.ru>, Alexey Romanov <avromanov@sberdevices.ru>
-Subject: [PATCH v1 1/2] zsmalloc: zs_object_copy: add clarifying comment
-Date:   Thu, 11 Aug 2022 18:37:54 +0300
-Message-ID: <20220811153755.16102-2-avromanov@sberdevices.ru>
+Subject: [PATCH v1 2/2] zsmalloc: remove unnecessary size_class NULL check
+Date:   Thu, 11 Aug 2022 18:37:55 +0300
+Message-ID: <20220811153755.16102-3-avromanov@sberdevices.ru>
 X-Mailer: git-send-email 2.33.0
 In-Reply-To: <20220811153755.16102-1-avromanov@sberdevices.ru>
 References: <20220811153755.16102-1-avromanov@sberdevices.ru>
@@ -64,30 +64,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's not obvious why kunmap_atomic(d_addr) call is needed.
+pool->size_class array elements can't be NULL, so this check
+is not needed.
+
+In the whole code, we assign pool->size_class[i] values that are
+not NULL. Releasing memory for these values occurs in the
+zs_destroy_pool() function, which also releases and destroys the pool.
+
+In addition, in the zs_stats_size_show() and async_free_zspage(),
+with similar iterations over the array, we don't check it for NULL
+pointer.
 
 Signed-off-by: Alexey Romanov <avromanov@sberdevices.ru>
 ---
- mm/zsmalloc.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+ mm/zsmalloc.c | 7 -------
+ 1 file changed, 7 deletions(-)
 
 diff --git a/mm/zsmalloc.c b/mm/zsmalloc.c
-index 5d5fc04385b8..5efa8c592193 100644
+index 5efa8c592193..f3cf0d0925a3 100644
 --- a/mm/zsmalloc.c
 +++ b/mm/zsmalloc.c
-@@ -1564,6 +1564,12 @@ static void zs_object_copy(struct size_class *class, unsigned long dst,
- 		d_off += size;
- 		d_size -= size;
+@@ -2154,8 +2154,6 @@ unsigned long zs_compact(struct zs_pool *pool)
  
-+		/* Calling kunmap_atomic(d_addr) is necessary. kunmap_atomic() calls
-+		 * must occurs in reverse order of calls to kmap_atomic().
-+		 * So, to call kunmap_atomic(s_addr) we should first call kunmap_atomic(d_addr).
-+		 * For more details see:
-+		 * https://lore.kernel.org/linux-mm/5512421D.4000603@samsung.com/
-+		 */
- 		if (s_off >= PAGE_SIZE) {
- 			kunmap_atomic(d_addr);
- 			kunmap_atomic(s_addr);
+ 	for (i = ZS_SIZE_CLASSES - 1; i >= 0; i--) {
+ 		class = pool->size_class[i];
+-		if (!class)
+-			continue;
+ 		if (class->index != i)
+ 			continue;
+ 		pages_freed += __zs_compact(pool, class);
+@@ -2200,8 +2198,6 @@ static unsigned long zs_shrinker_count(struct shrinker *shrinker,
+ 
+ 	for (i = ZS_SIZE_CLASSES - 1; i >= 0; i--) {
+ 		class = pool->size_class[i];
+-		if (!class)
+-			continue;
+ 		if (class->index != i)
+ 			continue;
+ 
+@@ -2361,9 +2357,6 @@ void zs_destroy_pool(struct zs_pool *pool)
+ 		int fg;
+ 		struct size_class *class = pool->size_class[i];
+ 
+-		if (!class)
+-			continue;
+-
+ 		if (class->index != i)
+ 			continue;
+ 
 -- 
 2.30.1
 

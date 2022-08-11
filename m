@@ -2,177 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81BA358F707
+	by mail.lfdr.de (Postfix) with ESMTP id CDE5A58F708
 	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 06:51:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233788AbiHKEuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 00:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48534 "EHLO
+        id S233838AbiHKEu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 00:50:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229451AbiHKEuv (ORCPT
+        with ESMTP id S233627AbiHKEux (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 00:50:51 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D3C961DAD
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 21:50:50 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id q9-20020a17090a2dc900b001f58bcaca95so4222591pjm.3
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 21:50:50 -0700 (PDT)
+        Thu, 11 Aug 2022 00:50:53 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1077F647E2
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 21:50:52 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id z6so16606380lfu.9
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 21:50:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=g1tB4PzGwPaYivNuYZQ1WLvbqe8EaYq8NKrVrjSyJXc=;
-        b=c+zrxQ6+cdQYCS/N5LRVQuaOTOSbl/9tuRDxcto/BR1ntLwhL783AouGqMnQagkfQe
-         CCid8MojN38ExbqX1WzSsJBkBLAydGQBXYKDp8MxwEFdzEmitWBWrpLmWYZCwYrGL4j8
-         HKOPetspK0mSldCeqTI7vz1SoFylPycknQeTFFn1amooQyIvUXSW/5JdABj1fIS2FEm3
-         vNFfJjvwAfhR7l06ciVTDTuew/4ERRdVcvKqUKfBEmc04RHyFT6YRBmFeS0kBlGqAWCr
-         ZSxYzxYCGdT4ENBOZTRXq4/UD92v/+IBVxX/GQBw6NFetVy145HXcNjSqpOkrXP1CPsw
-         rW9A==
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc;
+        bh=evbV2QSTh0jjb46dPJrBnRBIm6kqkgOSimjCzn6KZ6w=;
+        b=B4WZkBZwZpVAxOKJXSp9lcyLT5gyyb2X3AWF8Xnmy2GIoylCEaK6I1czwsX/PHlU4V
+         hmxMBUvSpMXmaRpjiAe/nOCHrZCu2D+F8fU+l6ZvgncszfBuJPF4DtXTwkdJI9l89hgo
+         jLgih0AbwHLwRfbIvFg4uanGq1M5NCZlgV2mCHGvHZm6S/DQbljK5gRec8bL+XQJR4mh
+         aWA1qBwk4/XXKGnKBR3ioFY/XZ6T8OcV75eVyhpdp6Fnra9K/eRZFmZzh12dFEPyEO9Y
+         KP4o30+OiWtpoOfMJc/D4E4PMSnRWfMO2MeGCYMPKKa8zFvR5AHe5ByjELVCeTaFXdmH
+         Qayw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=g1tB4PzGwPaYivNuYZQ1WLvbqe8EaYq8NKrVrjSyJXc=;
-        b=Hxcn14TyMTlndwZ2q5LgoNwb5vd1M8hZrjM5X7uZgvub2wLZ4ugKFEQSPd/86G7Zfg
-         OFNfnqNZwoHv3CgyulinpwkU1dGGQbeChUUGu/4Jk7N/WHfIeWr29VF1N/EwCasdBbrR
-         q55LNQbHOFztQXxeXgHig2AEztmg9xMKpOgJJFNcaF5ExmZbWO+T8Du6LSPk+hKeVc6g
-         xL3j0qkW0Xogpij98awtgFgPnxmJc33oeeufBQ4vFC+Lsw0Y1Vv/KX6hf3yx4u+XuJiy
-         k2fHVOv206ddxYi16BibzLPscVrwtj0PPA6++OJl/i3Sn94RltLsTaO/v3EsE/uo3/nT
-         mM5A==
-X-Gm-Message-State: ACgBeo0V5hjU8p4bC0tL6LPVM4IHgF6LmZBee0F9s79FXIeARTSZsf7J
-        ris0Vpi6vADgdUWi1g1UZcI=
-X-Google-Smtp-Source: AA6agR5EbzmroQdQvkmFjNJrR7BdWQrjvhL5tELLflY63x02a3iWQJ3Y9mjlt2+z8khOhj6d/KMSUQ==
-X-Received: by 2002:a17:90a:a2a:b0:1f3:1479:e869 with SMTP id o39-20020a17090a0a2a00b001f31479e869mr6830467pjo.41.1660193449778;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=evbV2QSTh0jjb46dPJrBnRBIm6kqkgOSimjCzn6KZ6w=;
+        b=x6F/i1WIPvzszEXhROUxJ4YYztJQ2MTenYEBUkQFhvdEytmEIIYyNs+FGgRHZ2yO2M
+         0UlX+zPn4HExvoZAKJpsdHB0KJs/4/4MV/9y9qFkjWk3OpliEDc8sKtvJFRFZfDZMdv6
+         PZQvqos97LWw7IphXrcAY4/W/euY36ohq5LC4uumImL30RBzPl1XNKFWO61C4qI/qVNU
+         JqLahmHH0O25oanB7KH7UUNoCXuGjewxiLRLhoePSeCvMWKoKGFv6c590H33otp0bvbV
+         ZXpNAnEoTxxfwdqSfestPkqvpUWbxz7SGHbbRjAKkfbbME8IzLVkGW6gF8FxRNmg61Sg
+         yEwQ==
+X-Gm-Message-State: ACgBeo0P8eBEuREAt4m1M82A3kdXN9zxzJ1JWQMEJHc1NUjU7HMzpkRS
+        7VJCdW/0b69JzsnTWLGKcfx5e7WpTg8=
+X-Google-Smtp-Source: AA6agR6ZnnADrcuc6bkXwME7gPBgMJo5C2/QlR5eeXIuMbjUeQRtfjWOsd7GvXy7ChKPskMYMTaCRQ==
+X-Received: by 2002:a05:6512:4016:b0:48b:1e96:af0f with SMTP id br22-20020a056512401600b0048b1e96af0fmr11716360lfb.359.1660193450253;
+        Wed, 10 Aug 2022 21:50:50 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16ee:fa00::9? (dc73szyyyyyyyyyyyyyft-3.rev.dnainternet.fi. [2001:14ba:16ee:fa00::9])
+        by smtp.gmail.com with ESMTPSA id f19-20020a056512361300b0048a8f119e7esm563636lfs.233.2022.08.10.21.50.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Wed, 10 Aug 2022 21:50:49 -0700 (PDT)
-Received: from ip-172-31-24-42.ap-northeast-1.compute.internal (ec2-35-79-20-36.ap-northeast-1.compute.amazonaws.com. [35.79.20.36])
-        by smtp.gmail.com with ESMTPSA id h11-20020a17090a3d0b00b001f31d6fe0f3sm2604499pjc.57.2022.08.10.21.50.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 21:50:48 -0700 (PDT)
-Date:   Thu, 11 Aug 2022 04:50:44 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Aaron Lu <aaron.lu@intel.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        Rick Edgecombe <rick.p.edgecombe@intel.com>,
-        Song Liu <song@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Mike Rapoport <rppt@kernel.org>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-Subject: Re: [RFC PATCH 0/4] x86/mm/cpa: merge small mappings whenever
- possible
-Message-ID: <YvSKpCWhAz+2Y220@ip-172-31-24-42.ap-northeast-1.compute.internal>
-References: <20220808145649.2261258-1-aaron.lu@intel.com>
+Message-ID: <b17dccb5-79f1-a70b-37f6-129e20f27cfc@gmail.com>
+Date:   Thu, 11 Aug 2022 07:50:49 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220808145649.2261258-1-aaron.lu@intel.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     matti.vaittinen@fi.rohmeurope.com,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-kernel@vger.kernel.org
+References: <cover.1660127865.git.mazziesaccount@gmail.com>
+ <b6058e052b842a19c8bb639798d8692cd0e7589f.1660127865.git.mazziesaccount@gmail.com>
+ <YvOdBv0edrE3wKsO@sirena.org.uk>
+ <e8900490-1eec-83d8-b190-6d6983d81c4a@gmail.com>
+ <YvPLx5hizWMEBjVK@sirena.org.uk>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [RFC PATCH 2/7] regulator: Add devm helpers for get and enable
+In-Reply-To: <YvPLx5hizWMEBjVK@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 08, 2022 at 10:56:45PM +0800, Aaron Lu wrote:
-> This is an early RFC. While all reviews are welcome, reviewing this code
-> now will be a waste of time for the x86 subsystem maintainers. I would,
-> however, appreciate a preliminary review from the folks on the to and cc
-> list. I'm posting it to the list in case anyone else is interested in
-> seeing this early version.
+On 8/10/22 18:16, Mark Brown wrote:
+> On Wed, Aug 10, 2022 at 03:19:05PM +0300, Matti Vaittinen wrote:
 > 
+>> In order to tackle the issue the suggested API does not return handle to the
+>> regulators - it really just provides the "get'n enable, then forget"
+>> solution. The consumers who use the suggested API to "devm get'n enable"
+>> will have had time manually controlling the regulator afterwards as they
+>> will not get the handle. I would almost claim that the pattern we nowadays
+>> see (devm_get, enable, add_action_or_reset(disable())) is more error prone
+>> as users seem to in many case be storing the regulator handle w/o any
+>> comment about the automated disable at detach.
+> 
+> Hrm, right - that does help with that case.  However we do need a bulk
+> version since that's an obvious problem case.
+I'll take a look at the bulk APIs and add them if they're not too 
+complex. I'm a bit short on time as I was told I should be doing 
+something we can show to a customer ;)
 
-Hello Aaron!
+As a result of this discussion - not returning the handle to struct 
+regulator * sounds like a safest option here. I'll drop the RFC when I 
+respin this (hopefully with the bulk-APIs and a few more converted drivers)
 
-+Cc Mike Rapoport, who has been same problem. [1]
+Thanks for the input!
 
-There is also LPC discussion (with different approach on this problem)
-[2], [4]
+Best Regards
+	Matti Vaittinen
 
-and performance measurement when all pages are 4K/2M. [3]
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
 
-[1] https://lore.kernel.org/linux-mm/20220127085608.306306-1-rppt@kernel.org/
-[2] https://www.youtube.com/watch?v=egC7ZK4pcnQ
-[3] https://lpc.events/event/11/contributions/1127/attachments/922/1792/LPC21%20Direct%20map%20management%20.pdf
-[4] https://lwn.net/Articles/894557/
+~~ When things go utterly wrong vim users can always type :help! ~~
 
-> Dave Hansen: I need your ack before this goes to the maintainers.
-> 
-> Here it goes:
-> 
-> On x86_64, Linux has direct mapping of almost all physical memory. For
-> performance reasons, this mapping is usually set as large page like 2M
-> or 1G per hardware's capability with read, write and non-execute
-> protection.
-> 
-> There are cases where some pages have to change their protection to RO
-> and eXecutable, like pages that host module code or bpf prog. When these
-> pages' protection are changed, the corresponding large mapping that
-> cover these pages will have to be splitted into 4K first and then
-> individual 4k page's protection changed accordingly, i.e. unaffected
-> pages keep their original protection as RW and NX while affected pages'
-> protection changed to RO and X.
-> 
-> There is a problem due to this split: the large mapping will remain
-> splitted even after the affected pages' protection are changed back to
-> RW and NX, like when the module is unloaded or bpf progs are freed.
-> After system runs a long time, there can be more and more large mapping
-> being splitted, causing more and more dTLB misses and overall system
-> performance getting hurt[1].
-> 
-> For this reason, people tried some techniques to reduce the harm of
-> large mapping beling splitted, like bpf_prog_pack[2] which packs
-> multiple bpf progs into a single page instead of allocating and changing
-> one page's protection for each bpf prog. This approach made large
-> mapping split happen much fewer.
-> 
-> This patchset addresses this problem in another way: it merges
-> splitted mappings back to a large mapping when protections of all entries
-> of the splitted small mapping page table become same again, e.g. when the
-> page whose protection was changed to RO+X now has its protection changed
-> back to RW+NX due to reasons like module unload, bpf prog free, etc. and
-> all other entries' protection are also RW+NX.
->
-
-I tried very similar approach few months ago (for toy implementation) [5],
-and the biggest obstacle to this approach was: you need to be extremely sure
-that the page->nr_same_prot is ALWAYS correct.
-
-For example, in arch/x86/include/asm/kfence.h [6], it clears and set
-_PAGE_PRESENT without going through CPA, which can simply break the count.
-
-[5] https://github.com/hygoni/linux/tree/merge-mapping-v1r3
-[6] https://elixir.bootlin.com/linux/latest/source/arch/x86/include/asm/kfence.h#L56
-
-I think we may need to hook set_pte/set_pmd/etc and use proper
-synchronization primitives when changing init_mm's page table to go
-further on this approach.
-
-> One final note is, with features like bpf_prog_pack etc., there can be
-> much fewer large mapping split IIUC; also, this patchset can not help
-> when the page which has its protection changed keeps in use. So my take
-> on this large mapping split problem is: to get the most value of keeping
-> large mapping intact, features like bpf_prog_pack is important. This
-> patchset can help to further reduce large mapping split when in use page
-> that has special protection set finally gets released.
-> 
-> [1]: http://lkml.kernel.org/r/CAPhsuW4eAm9QrAxhZMJu-bmvHnjWjuw86gFZzTHRaMEaeFhAxw@mail.gmail.com
-> [2]: https://lore.kernel.org/lkml/20220204185742.271030-1-song@kernel.org/
-> 
-> Aaron Lu (4):
->   x86/mm/cpa: restore global bit when page is present
->   x86/mm/cpa: merge splitted direct mapping when possible
->   x86/mm/cpa: add merge event counter
->   x86/mm/cpa: add a test interface to split direct map
-> 
->  arch/x86/mm/pat/set_memory.c  | 411 +++++++++++++++++++++++++++++++++-
->  include/linux/mm_types.h      |   6 +
->  include/linux/page-flags.h    |   6 +
->  include/linux/vm_event_item.h |   2 +
->  mm/vmstat.c                   |   2 +
->  5 files changed, 420 insertions(+), 7 deletions(-)
-> 
-> -- 
-> 2.37.1
-> 
-> 
+Discuss - Estimate - Plan - Report and finally accomplish this:
+void do_work(int time) __attribute__ ((const));

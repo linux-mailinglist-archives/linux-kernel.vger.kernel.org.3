@@ -2,63 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02D7558FE8F
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 16:51:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27F9758FE8A
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 16:49:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235188AbiHKOvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 10:51:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38092 "EHLO
+        id S235095AbiHKOtV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 10:49:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235115AbiHKOvD (ORCPT
+        with ESMTP id S235026AbiHKOtS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 10:51:03 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F35226C6
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 07:51:01 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id a8so17868480pjg.5
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 07:51:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc;
-        bh=f4yt0AkjwL8NoalcQ6omdo5XI8uZSUPuP9ANadGeBG4=;
-        b=fShRpGe1UxNEOqNsTBN3/zj1kDpUtZWnbSQUvLwgUCV7wOJk7AM0/fNO/X6bzPqQOM
-         pCA7o5AjlJtiYrdxkNvMVpdW/OOxeQSdr01dKzJ0Q42fybQIQs9nvE9Fy3rBdVyMS3WT
-         RVOylgRNz6Sk1PDZpQW26sya4kEr7oOIMuSp9RSMiG0YEyYf9atkq/7Sf6bg6yPR4m5F
-         u2r5u8qa32xhrAdgp+RrOdlbHzB0IUEwsLgADKFRv42U8J2TSqTXDV0r1tNcWP2oa8M8
-         5Sip2l/6eDUoxp17UHuWpYe7xqkzKL2KzPvomM4Nu1e/c1RsjMHvdiRgFJBGZNs0N5Ml
-         hDgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=f4yt0AkjwL8NoalcQ6omdo5XI8uZSUPuP9ANadGeBG4=;
-        b=YGACl7iXkHPaDUBmUoTp1v+QU6Mm6EZbMng9HMT7Rq2XfnYseghDWya3yQG4+ESDXe
-         n1JZ1J7HmRZM7tDb6oAi5aUhLg6/G7w3UYjLP6vQxb27kc2eyw5j/8Op+X3ANtnYAWFM
-         s8gt66HlgXn1m2Rp+KwFjATlzot02wlEKscW6+SPQxg0zfgafi501/+iTKDplZEB19XP
-         HXjzUJvNlpWEkVO9ecyAPQof7jULlxUu8wMz+jQYKarjJwo2m2cQqQmBcGjYEneBs4Cd
-         CNaf7ZqTkdj1d6DPoWwtLcKaWaR1ct1sM5/MBQ1xbGBPhff3bOCW4J77wCgiundZ/30k
-         Hebg==
-X-Gm-Message-State: ACgBeo3j7eMlvr0fTs7QIhOF+hZ5MZMRNjuB5Z52Zr2oCVCy+vpSo2bx
-        oVmJRSDBpn45o3k9AM0Nag==
-X-Google-Smtp-Source: AA6agR6IJruFWNUgShBwzmal5Wxi61PVRBWSXPPFeXL43+iNFMmJ1eaumR5UbtMeIpHYYfzpMTfNzQ==
-X-Received: by 2002:a17:90b:4f8e:b0:1f4:ed30:d286 with SMTP id qe14-20020a17090b4f8e00b001f4ed30d286mr9450339pjb.66.1660229461037;
-        Thu, 11 Aug 2022 07:51:01 -0700 (PDT)
-Received: from localhost.localdomain ([116.30.110.209])
-        by smtp.gmail.com with ESMTPSA id w13-20020a62820d000000b0052d748498edsm4281028pfd.13.2022.08.11.07.50.55
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 11 Aug 2022 07:51:00 -0700 (PDT)
-From:   Ban Tao <fengzheng923@gmail.com>
-To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, wens@csie.org, jernej.skrabec@gmail.com,
-        samuel@sholland.org, fengzheng923@gmail.com
-Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: [PATCH v8 1/2] ASoC: sunxi: Add Allwinner H6 Digital MIC driver
-Date:   Thu, 11 Aug 2022 07:49:03 -0700
-Message-Id: <1660229343-14133-1-git-send-email-fengzheng923@gmail.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        Thu, 11 Aug 2022 10:49:18 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ED5A90805;
+        Thu, 11 Aug 2022 07:49:17 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27BEOmK8006288;
+        Thu, 11 Aug 2022 14:49:14 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=+GC9R7x1YfFeKd8lzcF4srU3IVSOeYic1WldiehWQdk=;
+ b=j0x9mWGyXvjKypLdpErfH/BuoNHTS3rRsp/7eg8CmNVh+L5fjvU0RVprIiw08ciq/QFC
+ Oiq75SZkhm5Axo5ovQA6k2863au2cGFDdFw7V4jWSFBCgP/ZSYVoFC8gblplO4d33iFz
+ 8yBKfKbiN43+Mr4KREEijJqDz3dyROp7eRYTY1ARXDjCyLSDdz4p96dt9LKEZdDarVYH
+ Z11X2VW+aSAovzMeZhqwGrGz47gqNzO9xiY4rMYQ+xRD+Vlst5S/EXKTE39VyPxZXFjD
+ /Gmdf8/Io5FJ9uvMmcDWZ8yzCN4aGrYp3QGZiI2DcZUOOyJ8ERMpiAPiwO30CiaNLuKe Fg== 
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3hw3gmrw9p-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 11 Aug 2022 14:49:14 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27BEbDOS024223;
+        Thu, 11 Aug 2022 14:49:12 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma03fra.de.ibm.com with ESMTP id 3huwvfsmf4-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 11 Aug 2022 14:49:12 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27BEn9qJ32834018
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 11 Aug 2022 14:49:09 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1EEDB52050;
+        Thu, 11 Aug 2022 14:49:09 +0000 (GMT)
+Received: from li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com (unknown [9.160.6.131])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 1FE2D5204F;
+        Thu, 11 Aug 2022 14:49:06 +0000 (GMT)
+Date:   Thu, 11 Aug 2022 16:49:04 +0200
+From:   Alexander Gordeev <agordeev@linux.ibm.com>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>
+Subject: Re: [PATCH v2] s390/kvm: avoid hypfs error message
+Message-ID: <YvUW4F4NHTF6DxBJ@li-4a3a4a4c-28e5-11b2-a85c-a8d192c6f089.ibm.com>
+References: <20220620094534.18967-1-jgross@suse.com>
+ <YrBarz+NVJmS+bBb@tuxmaker.boeblingen.de.ibm.com>
+ <040024a3-77dd-8869-1e64-0a67a438d1f6@suse.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <040024a3-77dd-8869-1e64-0a67a438d1f6@suse.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: IrLZtqPEP07CbpHTBtogYLZmcKiZWTam
+X-Proofpoint-ORIG-GUID: IrLZtqPEP07CbpHTBtogYLZmcKiZWTam
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-11_11,2022-08-11_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ impostorscore=0 phishscore=0 malwarescore=0 bulkscore=0 mlxlogscore=742
+ spamscore=0 mlxscore=0 adultscore=0 clxscore=1011 lowpriorityscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208110049
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,500 +84,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Allwinner H6 and later SoCs have an DMIC block
-which is capable of capture.
+On Thu, Aug 11, 2022 at 10:14:55AM +0200, Juergen Gross wrote:
+> On 20.06.22 13:31, Alexander Gordeev wrote:
+> > Applied, thanks!
+> 
+> Hmm, applied to which tree and branch?
+> 
+> I would have thought this patch should have reached upstream by now...
 
-Signed-off-by: Ban Tao <fengzheng923@gmail.com>
----
-v1->v2:
-1.Fix some compilation errors.
-2.Modify some code styles.
+Hi Juergen,
 
-v2->v3:
-None.
+This one is going to land in -rc2 or -rc3 most likely.
 
-v3->v4:
-1.add sig_bits.
+Thanks!
 
-v4->v5:
-None.
+> Juergen
 
-v5->v6:
-1.Modify RXFIFO_CTL_MODE to mode 1.
 
-v6->v7:
-1.Modify dmic_rate_s to be a global variable.
-2.Changed some macro names to make more sense.
-3.Align code format.
-4.Add a depends on PM to Kconfig entry.
 
-v7->v8:
-None.
----
- MAINTAINERS                   |   7 +
- sound/soc/sunxi/Kconfig       |   8 +
- sound/soc/sunxi/Makefile      |   1 +
- sound/soc/sunxi/sun50i-dmic.c | 405 ++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 421 insertions(+)
- create mode 100644 sound/soc/sunxi/sun50i-dmic.c
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e9d5b05..839f625 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -796,6 +796,13 @@ L:	linux-media@vger.kernel.org
- S:	Maintained
- F:	drivers/staging/media/sunxi/cedrus/
- 
-+ALLWINNER DMIC DRIVERS
-+M:	Ban Tao <fengzheng923@gmail.com>
-+L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/sound/allwinner,sun50i-h6-dmic.yaml
-+F:	sound/soc/sunxi/sun50i-dmic.c
-+
- ALPHA PORT
- M:	Richard Henderson <rth@twiddle.net>
- M:	Ivan Kokshaysky <ink@jurassic.park.msu.ru>
-diff --git a/sound/soc/sunxi/Kconfig b/sound/soc/sunxi/Kconfig
-index ddcaaa9..8543234 100644
---- a/sound/soc/sunxi/Kconfig
-+++ b/sound/soc/sunxi/Kconfig
-@@ -56,6 +56,14 @@ config SND_SUN4I_SPDIF
- 	  Say Y or M to add support for the S/PDIF audio block in the Allwinner
- 	  A10 and affiliated SoCs.
- 
-+config SND_SUN50I_DMIC
-+	tristate "Allwinner H6 DMIC Support"
-+	depends on (OF && PM && ARCH_SUNXI) || COMPILE_TEST
-+	select SND_SOC_GENERIC_DMAENGINE_PCM
-+	help
-+	  Say Y or M to add support for the DMIC audio block in the Allwinner
-+	  H6 and affiliated SoCs.
-+
- config SND_SUN8I_ADDA_PR_REGMAP
- 	tristate
- 	select REGMAP
-diff --git a/sound/soc/sunxi/Makefile b/sound/soc/sunxi/Makefile
-index a86be34..4483fe9 100644
---- a/sound/soc/sunxi/Makefile
-+++ b/sound/soc/sunxi/Makefile
-@@ -6,3 +6,4 @@ obj-$(CONFIG_SND_SUN8I_CODEC_ANALOG) += sun8i-codec-analog.o
- obj-$(CONFIG_SND_SUN50I_CODEC_ANALOG) += sun50i-codec-analog.o
- obj-$(CONFIG_SND_SUN8I_CODEC) += sun8i-codec.o
- obj-$(CONFIG_SND_SUN8I_ADDA_PR_REGMAP) += sun8i-adda-pr-regmap.o
-+obj-$(CONFIG_SND_SUN50I_DMIC) += sun50i-dmic.o
-diff --git a/sound/soc/sunxi/sun50i-dmic.c b/sound/soc/sunxi/sun50i-dmic.c
-new file mode 100644
-index 0000000..76b3378
---- /dev/null
-+++ b/sound/soc/sunxi/sun50i-dmic.c
-@@ -0,0 +1,405 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+//
-+// This driver supports the DMIC in Allwinner's H6 SoCs.
-+//
-+// Copyright 2021 Ban Tao <fengzheng923@gmail.com>
-+
-+#include <linux/clk.h>
-+#include <linux/device.h>
-+#include <linux/of_device.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/reset.h>
-+#include <sound/dmaengine_pcm.h>
-+#include <sound/pcm_params.h>
-+#include <sound/soc.h>
-+
-+#define SUN50I_DMIC_EN_CTL             (0x00)
-+	#define SUN50I_DMIC_EN_CTL_GLOBE                BIT(8)
-+	#define SUN50I_DMIC_EN_CTL_CHAN(v)              ((v) << 0)
-+	#define SUN50I_DMIC_EN_CTL_CHAN_MASK            GENMASK(7, 0)
-+#define SUN50I_DMIC_SR                 (0x04)
-+	#define SUN50I_DMIC_SR_SAMPLE_RATE(v)           ((v) << 0)
-+	#define SUN50I_DMIC_SR_SAMPLE_RATE_MASK         GENMASK(2, 0)
-+#define SUN50I_DMIC_CTL                (0x08)
-+	#define SUN50I_DMIC_CTL_OVERSAMPLE_RATE         BIT(0)
-+#define SUN50I_DMIC_DATA               (0x10)
-+#define SUN50I_DMIC_INTC               (0x14)
-+	#define SUN50I_DMIC_FIFO_DRQ_EN                 BIT(2)
-+#define SUN50I_DMIC_INT_STA            (0x18)
-+	#define SUN50I_DMIC_INT_STA_OVERRUN_IRQ_PENDING BIT(1)
-+	#define SUN50I_DMIC_INT_STA_DATA_IRQ_PENDING    BIT(0)
-+#define SUN50I_DMIC_RXFIFO_CTL         (0x1c)
-+	#define SUN50I_DMIC_RXFIFO_CTL_FLUSH            BIT(31)
-+	#define SUN50I_DMIC_RXFIFO_CTL_MODE_MASK	BIT(9)
-+	#define SUN50I_DMIC_RXFIFO_CTL_MODE_LSB		(0 << 9)
-+	#define SUN50I_DMIC_RXFIFO_CTL_MODE_MSB		(1 << 9)
-+	#define SUN50I_DMIC_RXFIFO_CTL_SAMPLE_MASK      BIT(8)
-+	#define SUN50I_DMIC_RXFIFO_CTL_SAMPLE_16        (0 << 8)
-+	#define SUN50I_DMIC_RXFIFO_CTL_SAMPLE_24        (1 << 8)
-+#define SUN50I_DMIC_CH_NUM             (0x24)
-+	#define SUN50I_DMIC_CH_NUM_N(v)                 ((v) << 0)
-+	#define SUN50I_DMIC_CH_NUM_N_MASK               GENMASK(2, 0)
-+#define SUN50I_DMIC_CNT                (0x2c)
-+	#define SUN50I_DMIC_CNT_N                       BIT(0)
-+#define SUN50I_DMIC_HPF_CTRL           (0x38)
-+#define SUN50I_DMIC_VERSION            (0x50)
-+
-+struct sun50i_dmic_dev {
-+	struct clk *dmic_clk;
-+	struct clk *bus_clk;
-+	struct reset_control *rst;
-+	struct regmap *regmap;
-+	struct snd_dmaengine_dai_dma_data dma_params_rx;
-+};
-+
-+struct dmic_rate {
-+	unsigned int samplerate;
-+	unsigned int rate_bit;
-+};
-+
-+static struct dmic_rate dmic_rate_s[] = {
-+	{48000, 0x0},
-+	{44100, 0x0},
-+	{32000, 0x1},
-+	{24000, 0x2},
-+	{22050, 0x2},
-+	{16000, 0x3},
-+	{12000, 0x4},
-+	{11025, 0x4},
-+	{8000,  0x5},
-+};
-+
-+static int sun50i_dmic_startup(struct snd_pcm_substream *substream,
-+			       struct snd_soc_dai *cpu_dai)
-+{
-+	struct snd_soc_pcm_runtime *rtd = substream->private_data;
-+	struct sun50i_dmic_dev *host = snd_soc_dai_get_drvdata(asoc_rtd_to_cpu(rtd, 0));
-+
-+	/* only support capture */
-+	if (substream->stream != SNDRV_PCM_STREAM_CAPTURE)
-+		return -EINVAL;
-+
-+	regmap_update_bits(host->regmap, SUN50I_DMIC_RXFIFO_CTL,
-+			SUN50I_DMIC_RXFIFO_CTL_FLUSH,
-+			SUN50I_DMIC_RXFIFO_CTL_FLUSH);
-+	regmap_write(host->regmap, SUN50I_DMIC_CNT, SUN50I_DMIC_CNT_N);
-+
-+	return 0;
-+}
-+
-+static int sun50i_dmic_hw_params(struct snd_pcm_substream *substream,
-+				 struct snd_pcm_hw_params *params,
-+				 struct snd_soc_dai *cpu_dai)
-+{
-+	int i = 0;
-+	unsigned long rate = params_rate(params);
-+	unsigned int mclk = 0;
-+	unsigned int channels = params_channels(params);
-+	unsigned int chan_en = (1 << channels) - 1;
-+	struct sun50i_dmic_dev *host = snd_soc_dai_get_drvdata(cpu_dai);
-+
-+	/* DMIC num is N+1 */
-+	regmap_update_bits(host->regmap, SUN50I_DMIC_CH_NUM,
-+			   SUN50I_DMIC_CH_NUM_N_MASK,
-+			   SUN50I_DMIC_CH_NUM_N(channels - 1));
-+	regmap_write(host->regmap, SUN50I_DMIC_HPF_CTRL, chan_en);
-+	regmap_update_bits(host->regmap, SUN50I_DMIC_EN_CTL,
-+			   SUN50I_DMIC_EN_CTL_CHAN_MASK,
-+			   SUN50I_DMIC_EN_CTL_CHAN(chan_en));
-+
-+	switch (params_format(params)) {
-+	case SNDRV_PCM_FORMAT_S16_LE:
-+		regmap_update_bits(host->regmap, SUN50I_DMIC_RXFIFO_CTL,
-+				   SUN50I_DMIC_RXFIFO_CTL_SAMPLE_MASK,
-+				   SUN50I_DMIC_RXFIFO_CTL_SAMPLE_16);
-+		break;
-+	case SNDRV_PCM_FORMAT_S24_LE:
-+		regmap_update_bits(host->regmap, SUN50I_DMIC_RXFIFO_CTL,
-+				   SUN50I_DMIC_RXFIFO_CTL_SAMPLE_MASK,
-+				   SUN50I_DMIC_RXFIFO_CTL_SAMPLE_24);
-+		break;
-+	default:
-+		dev_err(cpu_dai->dev, "Invalid format!\n");
-+		return -EINVAL;
-+	}
-+	regmap_update_bits(host->regmap, SUN50I_DMIC_RXFIFO_CTL,
-+			   SUN50I_DMIC_RXFIFO_CTL_MODE_MASK,
-+			   SUN50I_DMIC_RXFIFO_CTL_MODE_MSB);
-+
-+	switch (rate) {
-+	case 11025:
-+	case 22050:
-+	case 44100:
-+		mclk = 22579200;
-+		break;
-+	case 8000:
-+	case 12000:
-+	case 16000:
-+	case 24000:
-+	case 32000:
-+	case 48000:
-+		mclk = 24576000;
-+		break;
-+	default:
-+		dev_err(cpu_dai->dev, "Invalid rate!\n");
-+		return -EINVAL;
-+	}
-+
-+	if (clk_set_rate(host->dmic_clk, mclk)) {
-+		dev_err(cpu_dai->dev, "mclk : %u not support\n", mclk);
-+		return -EINVAL;
-+	}
-+
-+	for (i = 0; i < ARRAY_SIZE(dmic_rate_s); i++) {
-+		if (dmic_rate_s[i].samplerate == rate) {
-+			regmap_update_bits(host->regmap, SUN50I_DMIC_SR,
-+					   SUN50I_DMIC_SR_SAMPLE_RATE_MASK,
-+					   SUN50I_DMIC_SR_SAMPLE_RATE(dmic_rate_s[i].rate_bit));
-+			break;
-+		}
-+	}
-+
-+	switch (params_physical_width(params)) {
-+	case 16:
-+		host->dma_params_rx.addr_width = DMA_SLAVE_BUSWIDTH_2_BYTES;
-+		break;
-+	case 32:
-+		host->dma_params_rx.addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
-+		break;
-+	default:
-+		dev_err(cpu_dai->dev, "Unsupported physical sample width: %d\n",
-+			params_physical_width(params));
-+		return -EINVAL;
-+	}
-+
-+	/* oversamplerate adjust */
-+	if (params_rate(params) >= 24000)
-+		regmap_update_bits(host->regmap, SUN50I_DMIC_CTL,
-+				   SUN50I_DMIC_CTL_OVERSAMPLE_RATE,
-+				   SUN50I_DMIC_CTL_OVERSAMPLE_RATE);
-+	else
-+		regmap_update_bits(host->regmap, SUN50I_DMIC_CTL,
-+				   SUN50I_DMIC_CTL_OVERSAMPLE_RATE, 0);
-+
-+	return 0;
-+}
-+
-+static int sun50i_dmic_trigger(struct snd_pcm_substream *substream, int cmd,
-+			       struct snd_soc_dai *dai)
-+{
-+	int ret = 0;
-+	struct sun50i_dmic_dev *host = snd_soc_dai_get_drvdata(dai);
-+
-+	if (substream->stream != SNDRV_PCM_STREAM_CAPTURE)
-+		return -EINVAL;
-+
-+	switch (cmd) {
-+	case SNDRV_PCM_TRIGGER_START:
-+	case SNDRV_PCM_TRIGGER_RESUME:
-+	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
-+		/* DRQ ENABLE */
-+		regmap_update_bits(host->regmap, SUN50I_DMIC_INTC,
-+				   SUN50I_DMIC_FIFO_DRQ_EN,
-+				   SUN50I_DMIC_FIFO_DRQ_EN);
-+		/* Global enable */
-+		regmap_update_bits(host->regmap, SUN50I_DMIC_EN_CTL,
-+				   SUN50I_DMIC_EN_CTL_GLOBE,
-+				   SUN50I_DMIC_EN_CTL_GLOBE);
-+		break;
-+	case SNDRV_PCM_TRIGGER_STOP:
-+	case SNDRV_PCM_TRIGGER_SUSPEND:
-+	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
-+		/* DRQ DISABLE */
-+		regmap_update_bits(host->regmap, SUN50I_DMIC_INTC,
-+				   SUN50I_DMIC_FIFO_DRQ_EN, 0);
-+		/* Global disable */
-+		regmap_update_bits(host->regmap, SUN50I_DMIC_EN_CTL,
-+				   SUN50I_DMIC_EN_CTL_GLOBE, 0);
-+		break;
-+	default:
-+		ret = -EINVAL;
-+		break;
-+	}
-+	return ret;
-+}
-+
-+static int sun50i_dmic_soc_dai_probe(struct snd_soc_dai *dai)
-+{
-+	struct sun50i_dmic_dev *host = snd_soc_dai_get_drvdata(dai);
-+
-+	snd_soc_dai_init_dma_data(dai, NULL, &host->dma_params_rx);
-+
-+	return 0;
-+}
-+
-+static const struct snd_soc_dai_ops sun50i_dmic_dai_ops = {
-+	.startup        = sun50i_dmic_startup,
-+	.trigger        = sun50i_dmic_trigger,
-+	.hw_params      = sun50i_dmic_hw_params,
-+};
-+
-+static const struct regmap_config sun50i_dmic_regmap_config = {
-+	.reg_bits = 32,
-+	.reg_stride = 4,
-+	.val_bits = 32,
-+	.max_register = SUN50I_DMIC_VERSION,
-+	.cache_type = REGCACHE_NONE,
-+};
-+
-+#define SUN50I_DMIC_RATES (SNDRV_PCM_RATE_8000_48000)
-+#define SUN50I_DMIC_FORMATS (SNDRV_PCM_FMTBIT_S16_LE | SNDRV_PCM_FMTBIT_S24_LE)
-+
-+static struct snd_soc_dai_driver sun50i_dmic_dai = {
-+	.capture = {
-+		.channels_min = 1,
-+		.channels_max = 8,
-+		.rates = SUN50I_DMIC_RATES,
-+		.formats = SUN50I_DMIC_FORMATS,
-+		.sig_bits = 21,
-+	},
-+	.probe = sun50i_dmic_soc_dai_probe,
-+	.ops = &sun50i_dmic_dai_ops,
-+	.name = "dmic",
-+};
-+
-+static const struct of_device_id sun50i_dmic_of_match[] = {
-+	{
-+		.compatible = "allwinner,sun50i-h6-dmic",
-+	},
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, sun50i_dmic_of_match);
-+
-+static const struct snd_soc_component_driver sun50i_dmic_component = {
-+	.name           = "sun50i-dmic",
-+};
-+
-+static int sun50i_dmic_runtime_suspend(struct device *dev)
-+{
-+	struct sun50i_dmic_dev *host  = dev_get_drvdata(dev);
-+
-+	clk_disable_unprepare(host->dmic_clk);
-+	clk_disable_unprepare(host->bus_clk);
-+
-+	return 0;
-+}
-+
-+static int sun50i_dmic_runtime_resume(struct device *dev)
-+{
-+	struct sun50i_dmic_dev *host  = dev_get_drvdata(dev);
-+	int ret;
-+
-+	ret = clk_prepare_enable(host->dmic_clk);
-+	if (ret)
-+		return ret;
-+
-+	ret = clk_prepare_enable(host->bus_clk);
-+	if (ret) {
-+		clk_disable_unprepare(host->dmic_clk);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int sun50i_dmic_probe(struct platform_device *pdev)
-+{
-+	struct sun50i_dmic_dev *host;
-+	struct resource *res;
-+	int ret;
-+	void __iomem *base;
-+
-+	host = devm_kzalloc(&pdev->dev, sizeof(*host), GFP_KERNEL);
-+	if (!host)
-+		return -ENOMEM;
-+
-+	/* Get the addresses */
-+	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-+	base = devm_ioremap_resource(&pdev->dev, res);
-+	if (IS_ERR(base))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(base),
-+				     "get resource failed.\n");
-+
-+	host->regmap = devm_regmap_init_mmio(&pdev->dev, base,
-+					     &sun50i_dmic_regmap_config);
-+
-+	/* Clocks */
-+	host->bus_clk = devm_clk_get(&pdev->dev, "bus");
-+	if (IS_ERR(host->bus_clk))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(host->bus_clk),
-+				     "failed to get bus clock.\n");
-+
-+	host->dmic_clk = devm_clk_get(&pdev->dev, "mod");
-+	if (IS_ERR(host->dmic_clk))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(host->dmic_clk),
-+				     "failed to get dmic clock.\n");
-+
-+	host->dma_params_rx.addr = res->start + SUN50I_DMIC_DATA;
-+	host->dma_params_rx.maxburst = 8;
-+
-+	platform_set_drvdata(pdev, host);
-+
-+	host->rst = devm_reset_control_get_optional_exclusive(&pdev->dev, NULL);
-+	if (IS_ERR(host->rst))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(host->rst),
-+				     "Failed to get reset.\n");
-+	reset_control_deassert(host->rst);
-+
-+	ret = devm_snd_soc_register_component(&pdev->dev, &sun50i_dmic_component,
-+					      &sun50i_dmic_dai, 1);
-+	if (ret)
-+		return dev_err_probe(&pdev->dev, ret,
-+				     "failed to register component.\n");
-+
-+	pm_runtime_enable(&pdev->dev);
-+	if (!pm_runtime_enabled(&pdev->dev)) {
-+		ret = sun50i_dmic_runtime_resume(&pdev->dev);
-+		if (ret)
-+			goto err_disable_runtime_pm;
-+	}
-+
-+	ret = devm_snd_dmaengine_pcm_register(&pdev->dev, NULL, 0);
-+	if (ret)
-+		goto err_suspend;
-+
-+	return 0;
-+err_suspend:
-+	if (!pm_runtime_status_suspended(&pdev->dev))
-+		sun50i_dmic_runtime_suspend(&pdev->dev);
-+err_disable_runtime_pm:
-+	pm_runtime_disable(&pdev->dev);
-+	return ret;
-+}
-+
-+static int sun50i_dmic_remove(struct platform_device *pdev)
-+{
-+	pm_runtime_disable(&pdev->dev);
-+	if (!pm_runtime_status_suspended(&pdev->dev))
-+		sun50i_dmic_runtime_suspend(&pdev->dev);
-+
-+	return 0;
-+}
-+
-+static const struct dev_pm_ops sun50i_dmic_pm = {
-+	SET_RUNTIME_PM_OPS(sun50i_dmic_runtime_suspend,
-+			   sun50i_dmic_runtime_resume, NULL)
-+};
-+
-+static struct platform_driver sun50i_dmic_driver = {
-+	.driver         = {
-+		.name   = "sun50i-dmic",
-+		.of_match_table = of_match_ptr(sun50i_dmic_of_match),
-+		.pm     = &sun50i_dmic_pm,
-+	},
-+	.probe          = sun50i_dmic_probe,
-+	.remove         = sun50i_dmic_remove,
-+};
-+
-+module_platform_driver(sun50i_dmic_driver);
-+
-+MODULE_DESCRIPTION("Allwinner sun50i DMIC SoC Interface");
-+MODULE_AUTHOR("Ban Tao <fengzheng923@gmail.com>");
-+MODULE_LICENSE("GPL");
-+MODULE_ALIAS("platform:sun50i-dmic");
--- 
-2.7.4
 

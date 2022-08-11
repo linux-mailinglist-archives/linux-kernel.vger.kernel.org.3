@@ -2,58 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3708458F63E
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 05:03:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68E6158F63F
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 05:03:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233661AbiHKDDC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 23:03:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44668 "EHLO
+        id S233871AbiHKDDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 23:03:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234025AbiHKDCl (ORCPT
+        with ESMTP id S233269AbiHKDDj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 23:02:41 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 356D189915
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 20:01:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660186879; x=1691722879;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dUFZ2TF0jqs21nzGIjniypmxxoqhDNsINmf0i9qYRWM=;
-  b=KuyMK8lKROfMMZafUK/00YobmO7gokQvBWvXQ44g1yb8iWaKFwlCbCGN
-   QycBTkwaF7KdtBsdCBtgX68jPQe7sYYnEBLMR8LwuzO84O1G6Uiqej8ns
-   1FtTLFWPpdC3y7F3MALtjqd19NxJvdnKgOnf54IbWDOty/R8Av4ervoGb
-   k4m+zkSpxzpw7p2W8qzUUs/sTgZqOqqbRfxBMvn1DWt213sI6jiDj0C6b
-   Jvlo3NqFgqtMLo56BHEgrexCpDdV8mxMZw69FO+hN9QHJcGndsk5x7NDA
-   nvTSbHVT1OkeQiCs3Garbc7sBltqNiyyBpfgQvI/xpztjLWEqwPcTq9qt
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="355246609"
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="355246609"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 20:01:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="747656086"
-Received: from lkp-server02.sh.intel.com (HELO 5d6b42aa80b8) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 10 Aug 2022 20:01:17 -0700
-Received: from kbuild by 5d6b42aa80b8 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oLyRg-00011G-2W;
-        Thu, 11 Aug 2022 03:01:16 +0000
-Date:   Thu, 11 Aug 2022 11:00:26 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dave Jiang <dave.jiang@intel.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [djiang:cxl-security 10/18] arch/x86/include/asm/cacheflush.h:15:9:
- error: implicit declaration of function 'wbinvd_on_all_cpus'
-Message-ID: <202208111011.CGpGPHmA-lkp@intel.com>
+        Wed, 10 Aug 2022 23:03:39 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B55DC1B
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 20:03:38 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27B2grpd028283;
+        Thu, 11 Aug 2022 03:03:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=ORUsdMLQlpcFxEkLSifdi6ooex9hh0jrofOJ8Ossr6o=;
+ b=beMSzRaGutI53LvryiT1EoT198oQl5SMx35cGkf5v2tPhqHr5HAVPGLn2koxxo1PnPdo
+ CZkED8TVsy5lQBMDa0UhzPTz50vW9pm3cynElpCw8FQTteCg9W72SiCFMi3lPQD7QzgF
+ uU3eklEm04yDdN2TxOv7kghrmmkZH4FKM/q4g2wWl6msG14asatI3U2RbFiqxFmCQEYi
+ yH5jiM/2WAnuVERsu9ZOTmgUTRZQsDms3xGktqWnt/vZoPQh2LM198T39hk8uF1tAxiz
+ aSK0XmrlcA2kqTzc1nUsas1wDmfpHMClfNNGV/3UjbdIjKcRCLHeTyeC9AkGBSkT8QwS yg== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3huwqg4k8y-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 11 Aug 2022 03:03:01 +0000
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.47.97.222])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27B33095022663
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 11 Aug 2022 03:03:00 GMT
+Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
+ nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Wed, 10 Aug 2022 20:03:00 -0700
+Received: from [10.232.65.248] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Wed, 10 Aug
+ 2022 20:02:57 -0700
+Message-ID: <54f974fb-f334-78cf-d5f5-198810cc77b4@quicinc.com>
+Date:   Thu, 11 Aug 2022 11:02:53 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.3
+Subject: Re: [PATCH v6] mm/page_owner.c: add llseek for page_owner
+Content-Language: en-US
+To:     kernel test robot <lkp@intel.com>, <akpm@linux-foundation.org>,
+        <vbabka@kernel.org>
+CC:     <kbuild-all@lists.01.org>, <minchan@kernel.org>, <vbabka@suse.cz>,
+        <iamjoonsoo.kim@lge.com>, <linux-kernel@vger.kernel.org>,
+        <linux-mm@kvack.org>
+References: <20220810013218.27416-1-quic_yingangl@quicinc.com>
+ <202208101628.o6qUzx50-lkp@intel.com>
+From:   Kassey Li <quic_yingangl@quicinc.com>
+In-Reply-To: <202208101628.o6qUzx50-lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: nUbreeS9hpmPjI7NkNAjdLA5VcdYsGT2
+X-Proofpoint-GUID: nUbreeS9hpmPjI7NkNAjdLA5VcdYsGT2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-11_02,2022-08-10_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1011
+ phishscore=0 priorityscore=1501 mlxscore=0 spamscore=0 mlxlogscore=904
+ malwarescore=0 adultscore=0 impostorscore=0 suspectscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208110006
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,57 +86,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git cxl-security
-head:   6dfac91d7af3a05b518c7063b10fe5e86cc96412
-commit: be69ae055fb2ad4a855deab9a535f62450af7ba3 [10/18] cxl/pmem: Add "Unlock" security command support
-config: x86_64-randconfig-a002 (https://download.01.org/0day-ci/archive/20220811/202208111011.CGpGPHmA-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git/commit/?id=be69ae055fb2ad4a855deab9a535f62450af7ba3
-        git remote add djiang https://git.kernel.org/pub/scm/linux/kernel/git/djiang/linux.git
-        git fetch --no-tags djiang cxl-security
-        git checkout be69ae055fb2ad4a855deab9a535f62450af7ba3
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/cxl/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from include/linux/cacheflush.h:5,
-                    from include/linux/highmem.h:8,
-                    from include/linux/bvec.h:10,
-                    from include/linux/blk_types.h:10,
-                    from include/linux/bio.h:10,
-                    from include/linux/libnvdimm.h:14,
-                    from drivers/cxl/security.c:3:
-   drivers/cxl/security.c: In function 'cxl_pmem_security_unlock':
->> arch/x86/include/asm/cacheflush.h:15:9: error: implicit declaration of function 'wbinvd_on_all_cpus' [-Werror=implicit-function-declaration]
-      15 |         wbinvd_on_all_cpus();   \
-         |         ^~~~~~~~~~~~~~~~~~
-   drivers/cxl/security.c:123:9: note: in expansion of macro 'flush_cache_all'
-     123 |         flush_cache_all();
-         |         ^~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
+hi, Vlastimil:
 
 
-vim +/wbinvd_on_all_cpus +15 arch/x86/include/asm/cacheflush.h
+On 8/10/2022 5:02 PM, kernel test robot wrote:
+> Hi Kassey,
+> 
+> Thank you for the patch! Yet something to improve:
+> 
+> [auto build test ERROR on v5.19]
+> [also build test ERROR on next-20220810]
+> [cannot apply to akpm-mm/mm-everything linus/master]
+> [If your patch is applied to the wrong git tree, kindly drop us a note.
+> And when submitting patch, we suggest to use '--base' as documented in
+> https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Kassey-Li/mm-page_owner-c-add-llseek-for-page_owner/20220810-093417
+> base:    3d7cb6b04c3f3115719235cc6866b10326de34cd
+> config: parisc-buildonly-randconfig-r004-20220810 (https://download.01.org/0day-ci/archive/20220810/202208101628.o6qUzx50-lkp@intel.com/config)
+> compiler: hppa-linux-gcc (GCC) 12.1.0
+> reproduce (this is a W=1 build):
+>          wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+>          chmod +x ~/bin/make.cross
+>          # https://github.com/intel-lab-lkp/linux/commit/d2decd69a8d5756c1706092c805a4c8af14df471
+>          git remote add linux-review https://github.com/intel-lab-lkp/linux
+>          git fetch --no-tags linux-review Kassey-Li/mm-page_owner-c-add-llseek-for-page_owner/20220810-093417
+>          git checkout d2decd69a8d5756c1706092c805a4c8af14df471
+>          # save the config file
+>          mkdir build_dir && cp config build_dir/.config
+>          COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=parisc SHELL=/bin/bash
+> 
+> If you fix the issue, kindly add following tag where applicable
+> Reported-by: kernel test robot <lkp@intel.com>
+> 
+> All errors (new ones prefixed by >>):
+> 
+>     In file included from mm/page_owner.c:16:
+>>> mm/../fs/proc/internal.h:51:9: error: unknown type name 'proc_write_t'
+>        51 |         proc_write_t write;
+>           |         ^~~~~~~~~~~~
 
-b2bba72c10cdd90 include/asm-x86/cacheflush.h      Thomas Gleixner 2007-10-15  12  
-647bce130827c98 arch/x86/include/asm/cacheflush.h Davidlohr Bueso 2022-07-12  13  #define flush_cache_all()	\
-647bce130827c98 arch/x86/include/asm/cacheflush.h Davidlohr Bueso 2022-07-12  14  do {				\
-647bce130827c98 arch/x86/include/asm/cacheflush.h Davidlohr Bueso 2022-07-12 @15  	wbinvd_on_all_cpus();	\
-647bce130827c98 arch/x86/include/asm/cacheflush.h Davidlohr Bueso 2022-07-12  16  } while (0);			\
-647bce130827c98 arch/x86/include/asm/cacheflush.h Davidlohr Bueso 2022-07-12  17  
+# CONFIG_PROC_FS is not set in some arch, so we can not directly include 
+the header file.
++#include "../fs/proc/internal.h"
 
-:::::: The code at line 15 was first introduced by commit
-:::::: 647bce130827c98324f56ab35d377978e7262c57 x86: define flush_cache_all as global wbinvd
+how about add an extern  ? or do you have other suggest  ?
 
-:::::: TO: Davidlohr Bueso <dave@stgolabs.net>
-:::::: CC: Dave Jiang <dave.jiang@intel.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+> 
+> 
+> vim +/proc_write_t +51 mm/../fs/proc/internal.h
+> 
+> ^1da177e4c3f41 Linus Torvalds    2005-04-16  19
+> 59d8053f1e1690 David Howells     2013-04-11  20  /*
+> 59d8053f1e1690 David Howells     2013-04-11  21   * This is not completely implemented yet. The idea is to
+> 59d8053f1e1690 David Howells     2013-04-11  22   * create an in-memory tree (like the actual /proc filesystem
+> 59d8053f1e1690 David Howells     2013-04-11  23   * tree) of these proc_dir_entries, so that we can dynamically
+> 59d8053f1e1690 David Howells     2013-04-11  24   * add new files to /proc.
+> 59d8053f1e1690 David Howells     2013-04-11  25   *
+> 710585d4922fd3 Nicolas Dichtel   2014-12-10  26   * parent/subdir are used for the directory structure (every /proc file has a
+> 710585d4922fd3 Nicolas Dichtel   2014-12-10  27   * parent, but "subdir" is empty for all non-directory entries).
+> 710585d4922fd3 Nicolas Dichtel   2014-12-10  28   * subdir_node is used to build the rb tree "subdir" of the parent.
+> 59d8053f1e1690 David Howells     2013-04-11  29   */
+> 59d8053f1e1690 David Howells     2013-04-11  30  struct proc_dir_entry {
+> 163cf548db8887 Alexey Dobriyan   2018-02-06  31  	/*
+> 163cf548db8887 Alexey Dobriyan   2018-02-06  32  	 * number of callers into module in progress;
+> 163cf548db8887 Alexey Dobriyan   2018-02-06  33  	 * negative -> it's going away RSN
+> 163cf548db8887 Alexey Dobriyan   2018-02-06  34  	 */
+> 163cf548db8887 Alexey Dobriyan   2018-02-06  35  	atomic_t in_use;
+> 9cdd83e3100651 Alexey Dobriyan   2018-04-10  36  	refcount_t refcnt;
+> 163cf548db8887 Alexey Dobriyan   2018-02-06  37  	struct list_head pde_openers;	/* who did ->open, but not ->release */
+> 53f63345d893df Alexey Dobriyan   2018-02-06  38  	/* protects ->pde_openers and all struct pde_opener instances */
+> 53f63345d893df Alexey Dobriyan   2018-02-06  39  	spinlock_t pde_unload_lock;
+> 163cf548db8887 Alexey Dobriyan   2018-02-06  40  	struct completion *pde_unload_completion;
+> 163cf548db8887 Alexey Dobriyan   2018-02-06  41  	const struct inode_operations *proc_iops;
+> d56c0d45f0e27f Alexey Dobriyan   2020-02-03  42  	union {
+> d56c0d45f0e27f Alexey Dobriyan   2020-02-03  43  		const struct proc_ops *proc_ops;
+> d56c0d45f0e27f Alexey Dobriyan   2020-02-03  44  		const struct file_operations *proc_dir_ops;
+> d56c0d45f0e27f Alexey Dobriyan   2020-02-03  45  	};
+> 1fde6f21d90f8b Alexey Dobriyan   2019-02-01  46  	const struct dentry_operations *proc_dops;
+> 3f3942aca6da35 Christoph Hellwig 2018-05-15  47  	union {
+> fddda2b7b52118 Christoph Hellwig 2018-04-13  48  		const struct seq_operations *seq_ops;
+> 3f3942aca6da35 Christoph Hellwig 2018-05-15  49  		int (*single_show)(struct seq_file *, void *);
+> 3f3942aca6da35 Christoph Hellwig 2018-05-15  50  	};
+> 564def71765caf David Howells     2018-05-18 @51  	proc_write_t write;
+> 163cf548db8887 Alexey Dobriyan   2018-02-06  52  	void *data;
+> 44414d82cfe0f6 Christoph Hellwig 2018-04-24  53  	unsigned int state_size;
+> 59d8053f1e1690 David Howells     2013-04-11  54  	unsigned int low_ino;
+> 59d8053f1e1690 David Howells     2013-04-11  55  	nlink_t nlink;
+> 59d8053f1e1690 David Howells     2013-04-11  56  	kuid_t uid;
+> 59d8053f1e1690 David Howells     2013-04-11  57  	kgid_t gid;
+> 59d8053f1e1690 David Howells     2013-04-11  58  	loff_t size;
+> 710585d4922fd3 Nicolas Dichtel   2014-12-10  59  	struct proc_dir_entry *parent;
+> 4f1134370a29a5 Alexey Dobriyan   2018-04-10  60  	struct rb_root subdir;
+> 710585d4922fd3 Nicolas Dichtel   2014-12-10  61  	struct rb_node subdir_node;
+> b4884f23331ae3 Alexey Dobriyan   2018-04-10  62  	char *name;
+> 163cf548db8887 Alexey Dobriyan   2018-02-06  63  	umode_t mode;
+> d919b33dafb3e2 Alexey Dobriyan   2020-04-06  64  	u8 flags;
+> 59d8053f1e1690 David Howells     2013-04-11  65  	u8 namelen;
+> 24074a35c5c975 David Howells     2018-06-13  66  	char inline_name[];
+> 3859a271a003ab Kees Cook         2016-10-28  67  } __randomize_layout;
+> ^1da177e4c3f41 Linus Torvalds    2005-04-16  68
+> 

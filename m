@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B585F58FC3D
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 14:30:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0F7358FC3E
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 14:31:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234573AbiHKMay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 08:30:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39212 "EHLO
+        id S235085AbiHKMbF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 08:31:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234491AbiHKMav (ORCPT
+        with ESMTP id S235009AbiHKMbA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 08:30:51 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2068.outbound.protection.outlook.com [40.107.220.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C069ADC9;
-        Thu, 11 Aug 2022 05:30:49 -0700 (PDT)
+        Thu, 11 Aug 2022 08:31:00 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2050.outbound.protection.outlook.com [40.107.100.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C029E72;
+        Thu, 11 Aug 2022 05:30:59 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IUBYRA2wReZ21CDqfzxNlIV/Blt1mhdm0aksz7oSc+euiMCZFDuWG4ezzcyIRZ0PQj/1/75G39p9aPPHhwGZGph/qkvW50VY4cSjXqzOTy8iDR21AvY7VV68Wo/9nNdGZgW1oNdWM2ESwZc2htp6LYCZf2aZdoAQMRB7WDgWJ1S40lJ79R2kMVo/TRLL/Jys+I01LUhZwmmH9monUL4n1rAPo/gx8WQq1pgwj4XU3RbSVR9YScUgkXbqNutTLbK/ditVeOiOoFGj8T7b/sZcJbNx+rVmMXi8aS1cgUi2BBhJrugGrFggOuiE0F0+h6Lgfv3faPKmJ/1rT6X8WtxeVg==
+ b=nLBE9YWJIjVfvZl/E7ukixR6y21OZ/HJg+gDXqbYXIC2OAHB6FM1zKOLmxG+PwCZJ5DsguBELeaaNr2tVAUR03YcLTlGDduslsVR+J0EmERDs7gDgtPIF60/UUhjBSZdrXZP7uOVOn+x+LXEHyu57ceZ9s2w8Qok3xvnXApuO/gwgweiaD/WBQuWP1lZhsiWOIR5aeiDYXdaICX4VKwcCo7lEDL1N/hlXI4Gr8Nj5GbeJmiQkn9TaWG79IxHBGUuic4tawReAobZPQHptCdFWTr9b6cNZkcwbXqtirVGRuiXeqwS2Ty1GVEXwVel9rXb2KsAz5o9Y3b1dlH5ZKtypA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hhxz62pPebNwiXmKkY48CDHnplEASDNrssq4l40Jfcc=;
- b=LSdy8ReXrLwaKa5Bv9uqZKZ+XOHeKcs41Tzlv9zsqtwotQLiQLDGHJCRqRgYMEA33RcPlHEvlzFqV0qA9NbCWzjiJ3ZUED9gqhKeTpalEkNe/oEs0eMLn9IXnso+vewt+duQDWRHa2e9+hwIXaBvNvsqFmyrPrl9nHMSFiAjsysXXSw3x9hn4BwaoA7sQI41EF1SFgFXrkVzVUR02U8/281tqmnOfAg6cxSkf/zjdoCezz9uv6NuVBulpPaxSfwfw3BZPabkkmj69g3zlLiw8GgbhEZUC3o1pYw/A9Yra0NpoizhMWAcsFIf+72cFcU6FpIq1YNffsNQ7WK3WIjXtQ==
+ bh=7PDyvUjd85V4Oo0il6+awqRFkkUjo7vgpY27O48QY50=;
+ b=mwf8R1CM3b2kcZl/7waMYkbtWdf+vGLAnjCXHf2LDWaLGTZ9G4F/SGrE8+pGRk/tBNi/KN51OfzL3iwR8IVx4rnvD91SNvF+5BTrIyvLHpbdNviLtmoD7m/25PD7z2yRTsm+LliCJEuVK059GvcINv+BvsTdXFvTvyzRCNmBEOuRIQ/qulI1TcB8/M+qtZATi6EPY0cKHq9LOVYj1LZPNtujUkHKR7O6jgBQ3OpNcl+pONqTp8j4pieBQMVTp4wndZP04L8UUCtGHOzD1lOTCNwpQNWgm+FPDyfV2heYNVuPR7vh221t9luR1QfnMs0oF++82yqllkV8P2QNco608w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hhxz62pPebNwiXmKkY48CDHnplEASDNrssq4l40Jfcc=;
- b=5DRyrmNDwdtQE7ZMs8lirOz36mmG+Nqf9STHVu7YblfvWDh4ybs6VOBBvH3CKXq6OhLGhBXfE2HuNwulqA8iLvODd/yAE6s3NWKmkrPWlJFBj0cjX4hLc8/yMCJ4f8mfIyXjzQ5iKDdVNIHXXZAQULOcoY3SRlncvS1C0c/2tnQ=
-Received: from MW4PR04CA0367.namprd04.prod.outlook.com (2603:10b6:303:81::12)
- by CH0PR12MB5169.namprd12.prod.outlook.com (2603:10b6:610:b8::8) with
+ bh=7PDyvUjd85V4Oo0il6+awqRFkkUjo7vgpY27O48QY50=;
+ b=YYzlRbltQI5vqzFRJL9PELUJ6RSTVI06q15Lpu78Qb5u+j6K3+twUMwIn9A13xey9OshuDWArwIpgd2t2n4JjyTB93ycV6Bdl7weALxtkY2otm0l971j9iuVbrJ4hsknF8wbrC1N1dfkRWNKtcfB1Q6Gyj2+3IJPY3VzZvTP4yQ=
+Received: from MW4PR04CA0053.namprd04.prod.outlook.com (2603:10b6:303:6a::28)
+ by DS7PR12MB6007.namprd12.prod.outlook.com (2603:10b6:8:7e::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14; Thu, 11 Aug
- 2022 12:30:48 +0000
-Received: from CO1NAM11FT003.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:81:cafe::6c) by MW4PR04CA0367.outlook.office365.com
- (2603:10b6:303:81::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5482.15 via Frontend
- Transport; Thu, 11 Aug 2022 12:30:47 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.11; Thu, 11 Aug
+ 2022 12:30:55 +0000
+Received: from CO1NAM11FT033.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:6a:cafe::85) by MW4PR04CA0053.outlook.office365.com
+ (2603:10b6:303:6a::28) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14 via Frontend
+ Transport; Thu, 11 Aug 2022 12:30:55 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -47,13 +47,13 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT003.mail.protection.outlook.com (10.13.175.93) with Microsoft SMTP
+ CO1NAM11FT033.mail.protection.outlook.com (10.13.174.247) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5525.11 via Frontend Transport; Thu, 11 Aug 2022 12:30:32 +0000
+ 15.20.5525.11 via Frontend Transport; Thu, 11 Aug 2022 12:30:55 +0000
 Received: from sindhu.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 11 Aug
- 2022 07:30:24 -0500
+ 2022 07:30:48 -0500
 From:   Sandipan Das <sandipan.das@amd.com>
 To:     <linux-kernel@vger.kernel.org>, <linux-perf-users@vger.kernel.org>,
         <x86@kernel.org>
@@ -65,10 +65,12 @@ CC:     <peterz@infradead.org>, <bp@alien8.de>, <acme@kernel.org>,
         <eranian@google.com>, <ananth.narayan@amd.com>,
         <ravi.bangoria@amd.com>, <santosh.shukla@amd.com>,
         <sandipan.das@amd.com>
-Subject: [PATCH 00/13] perf/x86/amd: Add AMD LbrExtV2 support
-Date:   Thu, 11 Aug 2022 17:59:48 +0530
-Message-ID: <cover.1660211399.git.sandipan.das@amd.com>
+Subject: [PATCH 01/13] perf/x86/amd/brs: Move feature-specific functions
+Date:   Thu, 11 Aug 2022 17:59:49 +0530
+Message-ID: <b60283b57179475d18ee242d117c335c16733693.1660211399.git.sandipan.das@amd.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <cover.1660211399.git.sandipan.das@amd.com>
+References: <cover.1660211399.git.sandipan.das@amd.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -77,23 +79,23 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: a6e6672c-566b-494e-d79c-08da7b9551c7
-X-MS-TrafficTypeDiagnostic: CH0PR12MB5169:EE_
+X-MS-Office365-Filtering-Correlation-Id: 95f2f9ba-a382-4816-d76f-08da7b95567d
+X-MS-TrafficTypeDiagnostic: DS7PR12MB6007:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 0nrn248+pesIgYVE4v32B8PHcji+G2S5bWFdNHmjPx1qTTVCncR4EODpWrg9WkhHSyEeamGp30S8xW4RcCvX4swt1xMK62Ay7lDT/S5qOfLMQXsshQ3/7OJZO1qBXhcLki9+S85xHZzODJ8EdY5dnsqT3bpaKqFau7JyXoRJ5zrVel+yY9+KptyjPqGbFn15dgmUVF9gEK0Facd0cx91fEi4JbjORNT3DJf2XCwMtf2e+s3yZMHNVSAdnyqRdRshkKxR6aL4xsQ6/4JQVDWGTlEAZCZSpMPgdqMEN4tOEdAfMWkhuDteMBRFs5Wk3VDONVt79MSLD3bpzzDTIP+QMVHnnGiqX0SIRa+e5cxKg61OjyImapGdhAXwWdGHfuXKi/FrCqaA/iGoHjDbml+aH4CMn16S5kZBdEgNWAPMg6KoKqGMYuRUKrKgtX1DRtfULY5pUK+Nkudk++qYOhnpnYxYu/S89cIEdTApkaVdlOsBJao+M/6oQcEJ2u+aZEss6QruuQ06NTtsHGIGNIBcCIMepyEq9iLUBKSlAFWbxGUw+5E+jIwkYxm1UjS0FzUS6+zaaM3wxzEdwdZJCe7i9NXXwof0W4cZhWkcfX6XOUX6y5rlM4EkOKek0ygwXfIVWoYdMF3WG95mhk6M5pu6o/CVm+icSvoIOebIbhEHGCxqnRr6KkE+ubnyAXRenUyAsXplMHdjJb9Fy4hNMf7uzSBmesLRuKmut94YEXMX/pkcncfWDV+xvtgzTYUymC82JndOxRJ2VO1MOIYDt8AF3W2qzgpHtUWDoGuEwdqEdfZCMAKIU68g8IPxWnXsZBtVRlFT/h4kF3F+ZWdJ9JOVgdkTSuvMGq3wiKTO6sRpYsOaK1uECavKMFuH/x53LiGo
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(346002)(396003)(39860400002)(36840700001)(40470700004)(46966006)(70206006)(7416002)(41300700001)(70586007)(7696005)(186003)(6666004)(4326008)(316002)(2616005)(40480700001)(16526019)(83380400001)(8676002)(82740400003)(26005)(426003)(336012)(54906003)(47076005)(110136005)(86362001)(36756003)(2906002)(966005)(40460700003)(356005)(81166007)(8936002)(478600001)(44832011)(36860700001)(5660300002)(82310400005)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: LuGm2iycyH8nbhAtGRwEvAzVCV/ewxoaSf73E356AV4eC+Ht0dmTmqMD5Rdm9SY3s3UOQ4ssgpI0toAYekpm7A9bhL6//3ByvZzN+BC1NcIBjhc/KSl05ExFBEdnuab/PnXoMoKfOa8UlgXQj4WGNZZChnq3Fi7aU/sWm8BT5U/erQ/LkYtXHL38JALQjlgxtG8l87V/k5B22ZmrCQ+h8Hf/c0fnxvbMdHy0gbjmM+nN0Oqu8zTVeVWbzubeXQ/RsCFD+fpSv/YrCQqRHt7W+RLxcqh4PmNgZmMPVT+SrA3LaEGv7rkndki8k+NbW63dscLq04wmOBlG7qX3vsDvue+wf+vmGh0w410mU0456XAVhrZZu08CV2l/3O1pO6X60VziFnyJndYD2oHitVof0t5jdQ8qjHb9URr1MOi06cckqKdpn5Gb3aHi+mw/OtWNlSLsVtCt27aRqmRvPbAIQbttK+04EBfcr6h4GyOyUk+JCQZV/DQpFAfsoXh1z4Ot2KOqVuC2oePHMuXqWN4W43ngQrhJPiaCKa/246jaTUFJgUF8J3sV7PPHtC2mLYPaPn33EvTgubVY4++/zZK00W93L32FqWgLgba8bBr3wg5ow8BP8RfMW5+xmtDpqHILjQJIWkoRJsovsVe0bYlJLxh7JLWZcPiVci2NQVCnI0/S1Wz7GzbyY1kgUqK/PcSstpDoPka9phldNLCquiagp/OVUYW7G3koINGmSi0hmViOlL68jyKayk8sYNsd/wzSjxsZjTVR5AKAqG7RThFCHRVETwHbmwb1uRAK7NZ5Jn0Wo4e1mDbZhid4F/efT5SiQ8eXotXK5tqgbXgyNXjKjA==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(376002)(346002)(39860400002)(136003)(396003)(40470700004)(36840700001)(46966006)(316002)(110136005)(54906003)(478600001)(41300700001)(7416002)(40460700003)(40480700001)(2906002)(82310400005)(70206006)(4326008)(8676002)(70586007)(5660300002)(8936002)(44832011)(36860700001)(82740400003)(36756003)(356005)(86362001)(81166007)(186003)(16526019)(336012)(2616005)(426003)(47076005)(7696005)(26005)(83380400001)(36900700001);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Aug 2022 12:30:32.1253
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Aug 2022 12:30:55.4496
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a6e6672c-566b-494e-d79c-08da7b9551c7
+X-MS-Exchange-CrossTenant-Network-Message-Id: 95f2f9ba-a382-4816-d76f-08da7b95567d
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT003.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT033.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5169
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6007
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -104,104 +106,227 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Last Branch Record (LBR) is a feature available on modern processors for
-recording branch information. It helps determine the flow of control by
-logging branch information to registers in realtime and helps with the
-detection of hot code paths.
+Move some of the Branch Sampling (BRS) specific functions out of the Core
+events sources and into the BRS sources in preparation for adding other
+mechanisms to record branches.
 
-Add support for using AMD Last Branch Record Extension Version 2 (LbrExtV2)
-features on Zen 4 processors. New CPU features are introduced for LbrExtV2
-detection. New MSR definitions are added for configuring hardware branch
-filtering and for enabling the LBR Freeze on PMI feature.
+Signed-off-by: Sandipan Das <sandipan.das@amd.com>
+---
+ arch/x86/events/amd/brs.c    | 69 ++++++++++++++++++++++++++++++++++-
+ arch/x86/events/amd/core.c   | 70 ++----------------------------------
+ arch/x86/events/perf_event.h |  7 ++--
+ 3 files changed, 76 insertions(+), 70 deletions(-)
 
-The LBR Freeze on PMI feature is essential for ensuring that branch records
-remain consistent with the point of PMU overflow in order to provide a
-precise correlation between the two.
-
-Hardware branch filtering allows users to record only specific types of
-branches and can be mapped to most of the existing filters supported by the
-perf tool. Additional software filtering ensures that some special branches
-(syscall entry and exit) for which direct hardware filters do not exist are
-also recorded. This expands the scope of filters like "any_call".
-
-Additionally, the perf UAPI is now extended to provide branch speculation
-information, if available. LbrExtV2 provides this information through the
-"valid" and "spec" bits in the Branch To registers. The tools-side changes
-for this will be submitted as a separate series.
-
-Users of perf tool can now record branches as shown below. The 'div'
-workload used here is from https://lwn.net/Articles/680985/.
-
-E.g.
-
-  $ perf record -b -e cycles:u ./div
-
-Before:
-
-  Error:
-  cycles:u: PMU Hardware doesn't support sampling/overflow-interrupts. Try 'perf stat'
-
-After:
-
-  [ perf record: Woken up 49 times to write data ]
-  [ perf record: Captured and wrote 12.197 MB perf.data (29601 samples) ]
-
-  $ perf report --stdio
-
-  # To display the perf.data header info, please use --header/--header-only options.
-  #
-  #
-  # Total Lost Samples: 0
-  #
-  # Samples: 473K of event 'cycles:u'
-  # Event count (approx.): 473521
-  #
-  # Overhead  Command  Source Shared Object  Source Symbol           Target Symbol           Basic Block Cycles
-  # ........  .......  ....................  ......................  ......................  ..................
-  #
-      29.69%  div      div                   [.] main                [.] main                -
-      23.84%  div      div                   [.] compute_flag        [.] main                -
-      23.41%  div      div                   [.] compute_flag        [.] compute_flag        -
-      23.04%  div      div                   [.] main                [.] compute_flag        -
-  [...]
-
-No additional failures are seen upon running the following:
-  * perf built-in test suite
-  * perf_event_tests suite
-
-Sandipan Das (13):
-  perf/x86/amd/brs: Move feature-specific functions
-  perf/x86/amd/core: Refactor branch attributes
-  perf/x86/amd/core: Add generic branch record interfaces
-  x86/cpufeatures: Add LbrExtV2 feature bit
-  perf/x86/amd/lbr: Detect LbrExtV2 support
-  perf/x86/amd/lbr: Add LbrExtV2 branch record support
-  perf/x86/amd/lbr: Add LbrExtV2 hardware branch filter support
-  perf/x86: Move branch classifier
-  perf/x86/amd/lbr: Add LbrExtV2 software branch filter support
-  perf/x86: Make branch classifier fusion-aware
-  perf/x86/amd/lbr: Use fusion-aware branch classifier
-  perf/core: Add speculation info to branch entries
-  perf/x86/amd/lbr: Add LbrExtV2 branch speculation info support
-
- arch/x86/events/Makefile           |   2 +-
- arch/x86/events/amd/Makefile       |   2 +-
- arch/x86/events/amd/brs.c          |  69 ++++-
- arch/x86/events/amd/core.c         | 200 +++++++------
- arch/x86/events/amd/lbr.c          | 435 +++++++++++++++++++++++++++++
- arch/x86/events/intel/lbr.c        | 273 ------------------
- arch/x86/events/perf_event.h       |  81 +++++-
- arch/x86/events/utils.c            | 247 ++++++++++++++++
- arch/x86/include/asm/cpufeatures.h |   2 +-
- arch/x86/include/asm/msr-index.h   |   5 +
- arch/x86/include/asm/perf_event.h  |   3 +-
- arch/x86/kernel/cpu/scattered.c    |   1 +
- include/linux/perf_event.h         |   1 +
- include/uapi/linux/perf_event.h    |  15 +-
- 14 files changed, 952 insertions(+), 384 deletions(-)
- create mode 100644 arch/x86/events/amd/lbr.c
- create mode 100644 arch/x86/events/utils.c
-
+diff --git a/arch/x86/events/amd/brs.c b/arch/x86/events/amd/brs.c
+index bee8765a1e9b..f1bff153d945 100644
+--- a/arch/x86/events/amd/brs.c
++++ b/arch/x86/events/amd/brs.c
+@@ -81,7 +81,7 @@ static bool __init amd_brs_detect(void)
+  * a br_sel_map. Software filtering is not supported because it would not correlate well
+  * with a sampling period.
+  */
+-int amd_brs_setup_filter(struct perf_event *event)
++static int amd_brs_setup_filter(struct perf_event *event)
+ {
+ 	u64 type = event->attr.branch_sample_type;
+ 
+@@ -96,6 +96,73 @@ int amd_brs_setup_filter(struct perf_event *event)
+ 	return 0;
+ }
+ 
++static inline int amd_is_brs_event(struct perf_event *e)
++{
++	return (e->hw.config & AMD64_RAW_EVENT_MASK) == AMD_FAM19H_BRS_EVENT;
++}
++
++int amd_brs_hw_config(struct perf_event *event)
++{
++	int ret = 0;
++
++	/*
++	 * Due to interrupt holding, BRS is not recommended in
++	 * counting mode.
++	 */
++	if (!is_sampling_event(event))
++		return -EINVAL;
++
++	/*
++	 * Due to the way BRS operates by holding the interrupt until
++	 * lbr_nr entries have been captured, it does not make sense
++	 * to allow sampling on BRS with an event that does not match
++	 * what BRS is capturing, i.e., retired taken branches.
++	 * Otherwise the correlation with the event's period is even
++	 * more loose:
++	 *
++	 * With retired taken branch:
++	 *   Effective P = P + 16 + X
++	 * With any other event:
++	 *   Effective P = P + Y + X
++	 *
++	 * Where X is the number of taken branches due to interrupt
++	 * skid. Skid is large.
++	 *
++	 * Where Y is the occurences of the event while BRS is
++	 * capturing the lbr_nr entries.
++	 *
++	 * By using retired taken branches, we limit the impact on the
++	 * Y variable. We know it cannot be more than the depth of
++	 * BRS.
++	 */
++	if (!amd_is_brs_event(event))
++		return -EINVAL;
++
++	/*
++	 * BRS implementation does not work with frequency mode
++	 * reprogramming of the period.
++	 */
++	if (event->attr.freq)
++		return -EINVAL;
++	/*
++	 * The kernel subtracts BRS depth from period, so it must
++	 * be big enough.
++	 */
++	if (event->attr.sample_period <= x86_pmu.lbr_nr)
++		return -EINVAL;
++
++	/*
++	 * Check if we can allow PERF_SAMPLE_BRANCH_STACK
++	 */
++	ret = amd_brs_setup_filter(event);
++
++	/* only set in case of success */
++	if (!ret)
++		event->hw.flags |= PERF_X86_EVENT_AMD_BRS;
++
++	return ret;
++}
++
+ /* tos = top of stack, i.e., last valid entry written */
+ static inline int amd_brs_get_tos(union amd_debug_extn_cfg *cfg)
+ {
+diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
+index 9ac3718410ce..e32a27899e11 100644
+--- a/arch/x86/events/amd/core.c
++++ b/arch/x86/events/amd/core.c
+@@ -330,16 +330,8 @@ static inline bool amd_is_pair_event_code(struct hw_perf_event *hwc)
+ 	}
+ }
+ 
+-#define AMD_FAM19H_BRS_EVENT 0xc4 /* RETIRED_TAKEN_BRANCH_INSTRUCTIONS */
+-static inline int amd_is_brs_event(struct perf_event *e)
+-{
+-	return (e->hw.config & AMD64_RAW_EVENT_MASK) == AMD_FAM19H_BRS_EVENT;
+-}
+-
+ static int amd_core_hw_config(struct perf_event *event)
+ {
+-	int ret = 0;
+-
+ 	if (event->attr.exclude_host && event->attr.exclude_guest)
+ 		/*
+ 		 * When HO == GO == 1 the hardware treats that as GO == HO == 0
+@@ -356,66 +348,10 @@ static int amd_core_hw_config(struct perf_event *event)
+ 	if ((x86_pmu.flags & PMU_FL_PAIR) && amd_is_pair_event_code(&event->hw))
+ 		event->hw.flags |= PERF_X86_EVENT_PAIR;
+ 
+-	/*
+-	 * if branch stack is requested
+-	 */
+-	if (has_branch_stack(event)) {
+-		/*
+-		 * Due to interrupt holding, BRS is not recommended in
+-		 * counting mode.
+-		 */
+-		if (!is_sampling_event(event))
+-			return -EINVAL;
+-
+-		/*
+-		 * Due to the way BRS operates by holding the interrupt until
+-		 * lbr_nr entries have been captured, it does not make sense
+-		 * to allow sampling on BRS with an event that does not match
+-		 * what BRS is capturing, i.e., retired taken branches.
+-		 * Otherwise the correlation with the event's period is even
+-		 * more loose:
+-		 *
+-		 * With retired taken branch:
+-		 *   Effective P = P + 16 + X
+-		 * With any other event:
+-		 *   Effective P = P + Y + X
+-		 *
+-		 * Where X is the number of taken branches due to interrupt
+-		 * skid. Skid is large.
+-		 *
+-		 * Where Y is the occurences of the event while BRS is
+-		 * capturing the lbr_nr entries.
+-		 *
+-		 * By using retired taken branches, we limit the impact on the
+-		 * Y variable. We know it cannot be more than the depth of
+-		 * BRS.
+-		 */
+-		if (!amd_is_brs_event(event))
+-			return -EINVAL;
++	if (has_branch_stack(event))
++		return amd_brs_hw_config(event);
+ 
+-		/*
+-		 * BRS implementation does not work with frequency mode
+-		 * reprogramming of the period.
+-		 */
+-		if (event->attr.freq)
+-			return -EINVAL;
+-		/*
+-		 * The kernel subtracts BRS depth from period, so it must
+-		 * be big enough.
+-		 */
+-		if (event->attr.sample_period <= x86_pmu.lbr_nr)
+-			return -EINVAL;
+-
+-		/*
+-		 * Check if we can allow PERF_SAMPLE_BRANCH_STACK
+-		 */
+-		ret = amd_brs_setup_filter(event);
+-
+-		/* only set in case of success */
+-		if (!ret)
+-			event->hw.flags |= PERF_X86_EVENT_AMD_BRS;
+-	}
+-	return ret;
++	return 0;
+ }
+ 
+ static inline int amd_is_nb_event(struct hw_perf_event *hwc)
+diff --git a/arch/x86/events/perf_event.h b/arch/x86/events/perf_event.h
+index ca2f8bfe6ff1..6d23e88d232c 100644
+--- a/arch/x86/events/perf_event.h
++++ b/arch/x86/events/perf_event.h
+@@ -1231,6 +1231,9 @@ static inline bool fixed_counter_disabled(int i, struct pmu *pmu)
+ int amd_pmu_init(void);
+ 
+ #ifdef CONFIG_PERF_EVENTS_AMD_BRS
++
++#define AMD_FAM19H_BRS_EVENT 0xc4 /* RETIRED_TAKEN_BRANCH_INSTRUCTIONS */
++
+ int amd_brs_init(void);
+ void amd_brs_disable(void);
+ void amd_brs_enable(void);
+@@ -1239,7 +1242,7 @@ void amd_brs_disable_all(void);
+ void amd_brs_drain(void);
+ void amd_brs_lopwr_init(void);
+ void amd_brs_disable_all(void);
+-int amd_brs_setup_filter(struct perf_event *event);
++int amd_brs_hw_config(struct perf_event *event);
+ void amd_brs_reset(void);
+ 
+ static inline void amd_pmu_brs_add(struct perf_event *event)
+@@ -1275,7 +1278,7 @@ static inline void amd_brs_enable(void) {}
+ static inline void amd_brs_drain(void) {}
+ static inline void amd_brs_lopwr_init(void) {}
+ static inline void amd_brs_disable_all(void) {}
+-static inline int amd_brs_setup_filter(struct perf_event *event)
++static inline int amd_brs_hw_config(struct perf_event *event)
+ {
+ 	return 0;
+ }
 -- 
 2.34.1
 

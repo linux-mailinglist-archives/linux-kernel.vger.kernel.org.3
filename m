@@ -2,188 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DEC558FE95
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 16:52:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59E1E58FE91
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 16:51:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235262AbiHKOwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 10:52:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40140 "EHLO
+        id S235173AbiHKOvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 10:51:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235222AbiHKOwq (ORCPT
+        with ESMTP id S235115AbiHKOvs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 10:52:46 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69190E00D;
-        Thu, 11 Aug 2022 07:52:44 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id pm17so17888283pjb.3;
-        Thu, 11 Aug 2022 07:52:44 -0700 (PDT)
+        Thu, 11 Aug 2022 10:51:48 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66195BC1C
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 07:51:45 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id j1so21671941wrw.1
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 07:51:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc;
-        bh=DguZisXeggmcnodf9rWUz8dzLtbapr3DGYXX0AfN5WM=;
-        b=jgKPpn3DQhYyGQu4S8TmtKiJN6q16/RsGdTOp4TGGsmd2qWDcpc1T276lrRPpcIamm
-         RKtiksUIsGP0mpiFkcKWhJbCjPjOhc3CU5QfSVf5eK1Qudnl800D8zhyMkflY/fusYJb
-         qopMypW/QSXnGNuX4jAOspKijWpTApfZftWhr6rok60/jy9/QYpAVc0RCIQpWKCW+RTz
-         GadcjtRvdRqEQcYbajfM2RZIscqGOfgH/3mm4WzqPOn1JuB9iVdPc3cslBrO51tzY83O
-         cGETDK964/JSTKqquiHFN9Zk7mYIfhOEhjfboBYQth9L5K30grhOpRDSBRb+5MZhcy2f
-         9vtQ==
+        d=mihalicyn.com; s=mihalicyn;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=EB0G1pbzLa52qiVyCMsUbpkBl1VHpE7Rkuyo6w2vim4=;
+        b=DC9vE8+OJwSmBS+mIN9sayw8qFVqcAehDME4rzb7pBkt4ZkbGxfba8ljjPlVq2AcCo
+         yNQPBrJ0v9hUmKPg29aHifILBW112HYxkKCoDXamwh6Ikw+a6UKNs/MZLCtVwjPaaZNC
+         Vxl1UrigG0H0DcI1MCPzIYkjcxB8MF5w3sTIg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=DguZisXeggmcnodf9rWUz8dzLtbapr3DGYXX0AfN5WM=;
-        b=5hxRSsM4CWrdcvQsCZvwc/pvbYtdMZnKVXcsxunJdVJ5v6G3zIQ9hn/7PXzZBoaaeN
-         9cq8CBtDqXO7bzO71ond332xa/XozxMrPLNTiNlVUlkJ8t1Iv7h3yYAf/6MdU6astJKp
-         7MRv6hkIZ1PUViuD0BIMYGT2VeAnzkGuc5Lijd/H/DNAaafjO/HK4jLTvzYVJIKwE1BM
-         pvmgWvV/jRouLUhTuEOP3U8By1pFPQEd/2VbcmnUW+vL/QxQ3D4g1w8ig1Usc+TIECiu
-         QO2Si22UNvEnLn/KmYqcbJrhLOC+52PspDCBa++klYiSDexjgRW7F21OoTQmOYjnzWPD
-         SLkw==
-X-Gm-Message-State: ACgBeo12jO5VUoSSF+h28eL+UK2+VX46Gr4yuPIpKgnDHCschsCFqjfC
-        7S9sXh+r6FJFfdzhmnMv6A==
-X-Google-Smtp-Source: AA6agR4bItMMhS9eAFSfaBaDda5yHPWfGM6CGxHDWRY14bkP/YSdATf6aRaBayvvf8Xeb+0BXucshg==
-X-Received: by 2002:a17:90b:4b04:b0:1f5:2da0:b2f6 with SMTP id lx4-20020a17090b4b0400b001f52da0b2f6mr8940766pjb.195.1660229563750;
-        Thu, 11 Aug 2022 07:52:43 -0700 (PDT)
-Received: from localhost.localdomain ([116.30.110.209])
-        by smtp.gmail.com with ESMTPSA id h8-20020a63e148000000b0041c30def5e8sm11597757pgk.33.2022.08.11.07.52.35
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 11 Aug 2022 07:52:43 -0700 (PDT)
-From:   Ban Tao <fengzheng923@gmail.com>
-To:     fengzheng923@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        wens@csie.org, jernej.skrabec@gmail.com, samuel@sholland.org,
-        alsa-devel@alsa-project.org
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v8 2/2] ASoC: sun50i-dmic: dt-bindings: add DT bindings for DMIC controller
-Date:   Thu, 11 Aug 2022 07:51:31 -0700
-Message-Id: <1660229491-15068-1-git-send-email-fengzheng923@gmail.com>
-X-Mailer: git-send-email 2.7.4
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=EB0G1pbzLa52qiVyCMsUbpkBl1VHpE7Rkuyo6w2vim4=;
+        b=rrJBoY5vW7EfPpNlQcbioyZRUxaTv5BH5gMA1FrbKnmIjPgWAfY3LwQEvrlK3tGTtu
+         SGs6giz8ctuvEu0dm9PUtMp2aZzi+l+uZ5F0V1wGaQWyRsblS176NXY1s/EpymGPbKra
+         cYI/i26twscDUFvlDyIf0rybUkK2aLF4PFKXWbuXHURu1uc5YCdzkdkLV9Hs/rzWWnnF
+         jCp1wGlF/65uKXZ1QA8yj4h81bYZ8v+MGJpHAdRyBcLTn1aGVjUaXcdymU4s4vpUgNYw
+         eL1haSsNvKER881e1kfr4co7fh2BgExaGCgYUn3w/z/Vas0v7T25bLaM5y8ntksClciC
+         EMrA==
+X-Gm-Message-State: ACgBeo0e+rp9q7kTT4NNWrNRpH0s421TpdjiFGJn3/xZhlcbXlgfIbkC
+        UIhCV55Fffalwm9EkvlkfrPyexOh15YBY1KRksP8ag==
+X-Google-Smtp-Source: AA6agR7sPvYTwJB5RFx+N4uFLzEivCGWy8vpaTZ2orkldvu6m2tHz/BR+9dR5YnABPIonaZLbWg/QXj7NKC1KOFlG9U=
+X-Received: by 2002:a05:6000:1689:b0:220:8a04:69f6 with SMTP id
+ y9-20020a056000168900b002208a0469f6mr21543434wrd.357.1660229503934; Thu, 11
+ Aug 2022 07:51:43 -0700 (PDT)
+MIME-Version: 1.0
+References: <20220729103559.215140-1-alexander.mikhalitsyn@virtuozzo.com>
+ <20220810160840.311628-1-alexander.mikhalitsyn@virtuozzo.com> <20220811074630.4784fe6e@kernel.org>
+In-Reply-To: <20220811074630.4784fe6e@kernel.org>
+From:   Alexander Mikhalitsyn <alexander@mihalicyn.com>
+Date:   Thu, 11 Aug 2022 17:51:32 +0300
+Message-ID: <CAJqdLrq6D+w=H_9t8A7s0c96GyitHFTnY0a2QvUrVeuxaUdtAQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/2] neighbour: fix possible DoS due to net iface
+ start/stop loop
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        David Ahern <dsahern@kernel.org>,
+        Yajun Deng <yajun.deng@linux.dev>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Christian Brauner <brauner@kernel.org>,
+        linux-kernel@vger.kernel.org, "Denis V . Lunev" <den@openvz.org>,
+        Alexey Kuznetsov <kuznet@ms2.inr.ac.ru>,
+        Konstantin Khorenko <khorenko@virtuozzo.com>,
+        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
+        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
+        kernel@openvz.org, devel@openvz.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DT binding documentation for this new ASoC driver.
+Hi, Jakub
 
-Signed-off-by: Ban Tao <fengzheng923@gmail.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
-Reviewed-by: Maxime Ripard <maxime@cerno.tech>
----
-v1->v2:
-1.Fix some build errors.
+On Thu, Aug 11, 2022 at 5:46 PM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Wed, 10 Aug 2022 19:08:38 +0300 Alexander Mikhalitsyn wrote:
+> >  include/net/neighbour.h |  1 +
+> >  net/core/neighbour.c    | 46 +++++++++++++++++++++++++++++++++--------
+> >  2 files changed, 38 insertions(+), 9 deletions(-)
+>
+> Which tree are these based on? They don't seem to apply cleanly
 
-v2->v3:
-1.Fix some build errors.
+It's based on 5.19 tree, but I can easily resent it based on net-next.
 
-v3->v4:
-1.None.
-
-v4->v5:
-1.Add interrupt.
-2.Keep clock and reset index.
-
-v5->v6:
-1.None.
-
-v6->v7:
-1.None.
-
-v7->v8:
-1.Fix some build errors.
----
- .../bindings/sound/allwinner,sun50i-h6-dmic.yaml   | 79 ++++++++++++++++++++++
- 1 file changed, 79 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/sound/allwinner,sun50i-h6-dmic.yaml
-
-diff --git a/Documentation/devicetree/bindings/sound/allwinner,sun50i-h6-dmic.yaml b/Documentation/devicetree/bindings/sound/allwinner,sun50i-h6-dmic.yaml
-new file mode 100644
-index 0000000..0cfc07f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/allwinner,sun50i-h6-dmic.yaml
-@@ -0,0 +1,79 @@
-+# SPDX-License-Identifier: (GPL-2.0+ OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/allwinner,sun50i-h6-dmic.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Allwinner H6 DMIC Device Tree Bindings
-+
-+maintainers:
-+  - Ban Tao <fengzheng923@gmail.com>
-+
-+properties:
-+  "#sound-dai-cells":
-+    const: 0
-+
-+  compatible:
-+    const: allwinner,sun50i-h6-dmic
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: Bus Clock
-+      - description: Module Clock
-+
-+  clock-names:
-+    items:
-+      - const: bus
-+      - const: mod
-+
-+  dmas:
-+    items:
-+      - description: RX DMA Channel
-+
-+  dma-names:
-+    items:
-+      - const: rx
-+
-+  resets:
-+    maxItems: 1
-+
-+required:
-+  - "#sound-dai-cells"
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+  - dmas
-+  - dma-names
-+  - resets
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    #include <dt-bindings/clock/sun50i-h6-ccu.h>
-+    #include <dt-bindings/reset/sun50i-h6-ccu.h>
-+
-+    dmic: dmic@5095000 {
-+      #sound-dai-cells = <0>;
-+      compatible = "allwinner,sun50i-h6-dmic";
-+      reg = <0x05095000 0x400>;
-+      interrupts = <GIC_SPI 22 IRQ_TYPE_LEVEL_HIGH>;
-+      clocks = <&ccu CLK_BUS_DMIC>, <&ccu CLK_DMIC>;
-+      clock-names = "bus", "mod";
-+      dmas = <&dma 7>;
-+      dma-names = "rx";
-+      resets = <&ccu RST_BUS_DMIC>;
-+    };
-+
-+...
--- 
-2.7.4
-
+Regards,
+Alex

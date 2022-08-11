@@ -2,104 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDF9758F5BC
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 04:09:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66DD958F5BE
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 04:11:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233659AbiHKCJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 22:09:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33772 "EHLO
+        id S233666AbiHKCK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 22:10:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233651AbiHKCJj (ORCPT
+        with ESMTP id S233587AbiHKCKy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 22:09:39 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E84844DA
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 19:09:37 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id a8so16443917pjg.5
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 19:09:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=oSA+Jof75BuedTVbt4lBoiMeV523r3pp7Ny1EC5oo3o=;
-        b=w0LbbLx22MfQERbKFdETrb3ybAIxu4PakWhNX0JhVR2NfpBhq7Yqripn1YP+hcGg1G
-         NHY8+4Rr6yTKcDEvaGbHrUCApwsNJdhMdkRsTVYxZXLCqcgx+obRDTd/0VoA/KsyYkgM
-         xH9Y6GqYr8VN+x4u/U0KUA9lBlMnHdXIWFeh5HvCHJAjtbs/dhQ9C3BiKrDuXjx9U1nb
-         Bk0ohofkrChxG8d7tGGKbx2K0azQCe1H0MYPxRZTEfFLG2WGP0lilMgvtFYTnjho35Mo
-         +AEvUT3AQhyadp5mfRNM58gAtRcMxqcI1P2jRVMQ96L2Kmxs15ulMY1H9dapgPZoyLZk
-         pAsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=oSA+Jof75BuedTVbt4lBoiMeV523r3pp7Ny1EC5oo3o=;
-        b=s+qFVGYNqkgeRm6x9xrAd3ErP7ss5N45Hije0qOZUAwrGnSlsuxWfHSUW1UDNsC6uT
-         7i3zbi6kpCgAKJvUTkC9BKX80WCybjDAw4hl29+TyXaA4vurreRXpSlHX0k/S0AuD1Sx
-         I2LOAXmC/dH1FP4EezbEUksGSB3VYXlJEPafFo2qloNSWZLie34S7tCHEO+L9BoZjf+M
-         9Q/4hRc7nJ7EuD3j7nnPWIbQX6Z5BzN+SxzIEoCtLi2uyBvkG1FiMYVeEpnxj82yKTlx
-         3OvJRHHtqJbyzLfBak1OY66pbu5JFsaW28d2U8ZYgJsboH7bWxruPtFpigCGY0uBkt6P
-         vP9w==
-X-Gm-Message-State: ACgBeo22kJdpZUMnzn43dsZr8aauuPzhOPXlLdgKO54jZ8YjkOYvcEpR
-        qcVMZqkRu/1+HhQrvboCS9id0g==
-X-Google-Smtp-Source: AA6agR7pEvJYGfeI5QBU3XEAHO0I7vZXYDuMiae/XSEL7US94LL05wzxU5jq93JPbtgmd163xcYB4A==
-X-Received: by 2002:a17:903:230b:b0:16f:2276:1fc4 with SMTP id d11-20020a170903230b00b0016f22761fc4mr29113456plh.172.1660183777109;
-        Wed, 10 Aug 2022 19:09:37 -0700 (PDT)
-Received: from [10.70.253.98] ([139.177.225.230])
-        by smtp.gmail.com with ESMTPSA id y27-20020aa79e1b000000b0052df34124b4sm2741760pfq.84.2022.08.10.19.09.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Aug 2022 19:09:36 -0700 (PDT)
-Message-ID: <cd4983dd-8432-7f79-1066-61b6f02e99c3@bytedance.com>
-Date:   Thu, 11 Aug 2022 10:09:28 +0800
+        Wed, 10 Aug 2022 22:10:54 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B245525286;
+        Wed, 10 Aug 2022 19:10:52 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M39JW1ZK4z4xTx;
+        Thu, 11 Aug 2022 12:10:51 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1660183851;
+        bh=3rvXtkxg/SjbFeeDDCWuFa5wU7JjNfgGbCt4+O3rysI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=nlMLVCxD5OGPafbjzxuIu3UuLKUtKihF5E5f6mmfTuFY8fm9kNOPKW4btR3wJyNLL
+         P8JLeopL8qAVnhS4eUmjQvlvmzOtg8PWVWztoK55+7RvYMUZFr+K2KSQmilOySjqLr
+         4Kqks3eyrjtqJ/yZGhxF3eNeMyxDMzWO6w4Wl+enzE48zY4W8Bju0pOrYXIsyeBiUc
+         SlVIeTq4MolPzIuPDlTiaH23AZoY0DJYS8nUSvnKjmbzcA3l9cgcp8tSuMsSIzWOHY
+         dG+wCjjaex72JZzM2itFLOhbxvr20BWCRMwhQlN5Koyrlg02uwlds1jxjQivx3nQGH
+         nojUp0xx4oA5Q==
+Date:   Thu, 11 Aug 2022 12:10:49 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warnings after merge of the amdgpu tree
+Message-ID: <20220811121050.0da83776@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.1.0
-Subject: Re: [PATCH v2 09/10] sched/psi: per-cgroup PSI stats
- disable/re-enable interface
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>
-Cc:     corbet@lwn.net, surenb@google.com, mingo@redhat.com,
-        peterz@infradead.org, vincent.guittot@linaro.org,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, songmuchun@bytedance.com
-References: <20220808110341.15799-1-zhouchengming@bytedance.com>
- <20220808110341.15799-10-zhouchengming@bytedance.com>
- <YvKd6dezPM6UxfD/@slm.duckdns.org>
- <fcd0bd39-3049-a279-23e6-a6c02b4680a7@bytedance.com>
- <b89155d3-9315-fefc-408b-4cf538360a1c@bytedance.com>
- <YvPN07UlaPFAdlet@cmpxchg.org> <YvPqcJh5Ffv4Yga9@slm.duckdns.org>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <YvPqcJh5Ffv4Yga9@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/MinjIO9iqeHhmJ=lsNQg_Oz";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/11 01:27, Tejun Heo wrote:
-> Hello,
-> 
-> On Wed, Aug 10, 2022 at 11:25:07AM -0400, Johannes Weiner wrote:
->> How about just cgroup.pressure? Too ambiguous?
->>
->> cgroup.pressure.enable sounds good to me too. Or, because it's
->> default-enabled and that likely won't change, cgroup.pressure.disable.
-> 
-> .disable sounds more logical but I like .enable better for some reason. As
-> for just cgroup.pressure, yeah, maybe? The conundrum is that the prettiness
-> order is the exact reverse of the logical order. So, I'm okay with any of
-> the three.
+--Sig_/MinjIO9iqeHhmJ=lsNQg_Oz
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Ok, so I would like to pick the prettiest "cgroup.pressure", it also looks more
-consistent with {cpu|memory|io}.pressure.
+Hi all,
 
-Thanks!
+After merging the amdgpu tree, today's linux-next build (htmldocs)
+produced these warnings:
 
+drivers/gpu/drm/amd/display/dc/dc.h:465: warning: Enum value 'MPC_SPLIT_AVO=
+ID' not described in enum 'pipe_split_policy'
+drivers/gpu/drm/amd/display/dc/dc.h:465: warning: Enum value 'MPC_SPLIT_AVO=
+ID_MULT_DISP' not described in enum 'pipe_split_policy'
+
+Introduced by commit
+
+  a2b3b9d57bdb ("drm/amd/display: Document pipe split policy")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/MinjIO9iqeHhmJ=lsNQg_Oz
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmL0ZSoACgkQAVBC80lX
+0GybtQf+PSq7cH/HBIsYy00wH0DvZZFTbuQsLwCJrdlmH8TuXrbEnYvfz/gt5ZWT
+zC2z1mU1XrBBZUIN5QcdFv5LbApAUEjuiyVPvTMhn01b+qOhssoNqHxKfRsMO1jt
+upz3WukLSgUose5f2M7xxKEnkmH3qBXsn0tQUywbOZlSRRwMIkOVz+4n81yctGga
+LJUPaKf4QCrsso5IB4X1hCiFkAlPCoFpdtmsZyrv+BR79mx2p1gGMywKwSBAHPKG
+JWrYV+QUHJq+6XYKqvq1nvjAuwPmid0Z9vgBCriNlOLxAtlfKCM9W+6daMd+Qeqy
+OASH92at0JSCjMStnT0dqPMdTrHR/g==
+=EQfT
+-----END PGP SIGNATURE-----
+
+--Sig_/MinjIO9iqeHhmJ=lsNQg_Oz--

@@ -2,137 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 900465905A0
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 19:17:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9F6F5905A3
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 19:17:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236414AbiHKRR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 13:17:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44732 "EHLO
+        id S235581AbiHKRRl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 13:17:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbiHKRRD (ORCPT
+        with ESMTP id S235877AbiHKRRP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 13:17:03 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2EE5B01
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 10:09:43 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id d65-20020a17090a6f4700b001f303a97b14so5693058pjk.1
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 10:09:43 -0700 (PDT)
+        Thu, 11 Aug 2022 13:17:15 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF932AE9;
+        Thu, 11 Aug 2022 10:11:00 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id v5so9774869wmj.0;
+        Thu, 11 Aug 2022 10:11:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc;
-        bh=Ck/kSylQVms5JwCJbdw3zQuUtzcZAeiGwMiy/xk3l3k=;
-        b=5aM73j+gOKbnY2lxMUT5Vubsy9iseUG+jj5ulQc40FakpvcG4Etg70cohFi7yy9FwD
-         5GLf1dEUDz2X3wE4fKvCrqOGZbVEMuXTdk7AmMOKCyxVhnOpcfgop1Ql3sGPp0UH3Luf
-         kKnx0VimcbJvFpNenMwXqhfGbE+WTIUXpk+xIhbLv4MmQZWXPfx3yPCLiZVe6n7o9ZmY
-         NVlYQrQbpPON9U7V66978npspef+CJkYNhrbCQ+twSrrFiy/TWPAd47JYl6TH6jRes3p
-         F9CpdF87weDVAe4ugx5o1Dv85llM7BxakVF3eVRivYRoknUTLTYh3FcDAx30ajZoH9Vt
-         CZxQ==
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc;
+        bh=9lmCRb9w6uCDtNqUvz+VlG2tKHmhpYW/JN7ZTZ0wmWA=;
+        b=HueoZjS09HesHA6TCTd0JPvcBzWU0gb3xP9VW8Z/5Z/IKUTGcxCTFMAG6sdNrMVRPI
+         XnrC4DiqsP2rdQJP9mkDCIzGrBusm9Qc0UUy6mvDQvs1Y9D/odTmBhoAqjwVVT1PEP2a
+         JhvZLP7Y7ewJiwBLh9bNypUzht0ngPd3zFtQ3sgGLWOI4mqyM3Tb8e7fp8v1GuUb8mnW
+         BsIZT+UyxiocbCaiSIIB9NZf9tSMHiXuJipn0qbdhRIgFIWA+K/RWq1NdWpHZCzcCc+J
+         J1DEAaHrNGdyKVd4wCP6/y4ZMEMKdBfjcDWQwdB+WVDIpg0wcevdm6XgmJVtTgxQMo0t
+         WLBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc;
-        bh=Ck/kSylQVms5JwCJbdw3zQuUtzcZAeiGwMiy/xk3l3k=;
-        b=y6k6PL1vs0OV1Wd/z6XKrdxNSF/KVJD1OopNAZ0tVghny3/IGGVimoj5em0WD1ejwm
-         RQzzfjpzwZLshHLsbQHZud5wN7TViXKAX2ZYIalEPipsQOPdXRhBssysAbqhLbWnV0RI
-         SG4Ega+8IMyhb34mbaurjIHiJ+7kSEJ8klYMGog7/pnFYAkwY1p7wZt6ydC4AABMeL4i
-         XHwbqNn/jePMUoRZDcvnulGtfzRG8aVfhkXcjNNxx+yzz7BTFx4v6+VR+lAseqVBp7kq
-         /5EEVE2BGBCmcKWrhJ+PxKtdYn7bTq3AdnhAoUr74XgPmZcjnBeZThWcxDa+UGptggKu
-         WvYg==
-X-Gm-Message-State: ACgBeo2uQTG/AWX3tL4t37Wy0NmhBDz5zjNncr/h6zFaKLaGaODOvQyu
-        8nXUxhb1/roYcQAg1i6IOTDYqG09LNdHOg==
-X-Google-Smtp-Source: AA6agR7HztU5aHFmk889S5mE0ZrMU7TcZuua217HAGdwZ+A2bijuXbm3lOJbpJ0coxigOaHrJxS4nQ==
-X-Received: by 2002:a17:902:f283:b0:16f:c46:dc1f with SMTP id k3-20020a170902f28300b0016f0c46dc1fmr144542plc.162.1660237783367;
-        Thu, 11 Aug 2022 10:09:43 -0700 (PDT)
-Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id e12-20020a170902b78c00b0017154ae6265sm83497pls.211.2022.08.11.10.09.42
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=9lmCRb9w6uCDtNqUvz+VlG2tKHmhpYW/JN7ZTZ0wmWA=;
+        b=5bEikKJo0oktgkE3/NnbDwa8v5RvNJkt5w7ybFFH0+FftiafE/zZFRPK5ODysowQxO
+         GYn5gDdA9yoLndzffqOJezh8O6u3UtPUoX6GjKuzjJ5jaxsCJ3ZsyNxlw5GuFYw1KAay
+         wNSjZ8UmLKMikICZuDwphSspbTo8cKMXoiqS9CzKYrjPCsXdnWltRwcpSz1yJLkum6g7
+         39ctZzR6yJd0qEj0yF1LWpzDvehg1p+Ic4Nk7WtUEsXHT1JWu6Ha9PNSXwvbb7XGU0lk
+         xAh2ATQ3MkgFKlxx2L5VMFYxP6r4OM4zvX226qDvem8JzcaABLaxK8kgqf9nIKBSUvvN
+         c+Qg==
+X-Gm-Message-State: ACgBeo22qLvlRgQEtzEKxCiFd7BwHNi+lCfRfnyfbAMDpNlJPYJ6n0yu
+        KmhpjoXrP/F4HaqdWKjI1toIvJfQLY0=
+X-Google-Smtp-Source: AA6agR68hJQ2kVu941cLF0W2MeedTSh595znTTi1zvBbU1seBZqoyPGDGJiGim5IewA7q2JgPbE7ew==
+X-Received: by 2002:a05:600c:4ed0:b0:3a3:3ef3:c8d1 with SMTP id g16-20020a05600c4ed000b003a33ef3c8d1mr6369177wmq.154.1660237859175;
+        Thu, 11 Aug 2022 10:10:59 -0700 (PDT)
+Received: from debian ([2405:201:8005:8149:e5c9:c0ac:4d82:e94b])
+        by smtp.gmail.com with ESMTPSA id m27-20020a05600c3b1b00b003a308e9a192sm7647413wms.30.2022.08.11.10.10.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Aug 2022 10:09:42 -0700 (PDT)
-Date:   Thu, 11 Aug 2022 10:09:42 -0700 (PDT)
-X-Google-Original-Date: Thu, 11 Aug 2022 10:09:41 PDT (-0700)
-Subject:     Re: [PATCH] riscv/kprobes: allocate detour buffer from module area
-In-Reply-To: <20220629011317.259986-1-liaochang1@huawei.com>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
-        mhiramat@kernel.org, rostedt@goodmis.org, liaochang1@huawei.com,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     liaochang1@huawei.com
-Message-ID: <mhng-0e2f7f49-2680-4341-83dc-0e7cd042a3fa@palmer-mbp2014>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 11 Aug 2022 10:10:58 -0700 (PDT)
+Date:   Thu, 11 Aug 2022 18:10:48 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Alex Deucher <alexander.deucher@amd.com>,
+        Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Fangzhi Zuo <Jerry.Zuo@amd.com>
+Cc:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org
+Subject: build failure of next-20220811 due to b1a63a0b48ad
+ ("drm/amd/display: consider DSC pass-through during mode validation")
+Message-ID: <YvU4GD8HtZ1A4dhI@debian>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 28 Jun 2022 18:13:17 PDT (-0700), liaochang1@huawei.com wrote:
-> To address the limitation of PC-relative branch instruction
-> on riscv architecture, detour buffer slot is allocated from
-> a area, the distance of which from kernel should be less than 4GB.
->
-> For the time being, Modules region always live before the kernel.
-> But Vmalloc region reside far away from kernel, the distance is
-> half of the kernel address space.
->
-> Signed-off-by: Liao Chang <liaochang1@huawei.com>
-> ---
->  arch/riscv/kernel/probes/kprobes.c | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
->
-> diff --git a/arch/riscv/kernel/probes/kprobes.c b/arch/riscv/kernel/probes/kprobes.c
-> index e6e950b7cf32..bc027a663b17 100644
-> --- a/arch/riscv/kernel/probes/kprobes.c
-> +++ b/arch/riscv/kernel/probes/kprobes.c
-> @@ -6,12 +6,14 @@
->  #include <linux/extable.h>
->  #include <linux/slab.h>
->  #include <linux/stop_machine.h>
-> +#include <linux/moduleloader.h>
->  #include <asm/ptrace.h>
->  #include <linux/uaccess.h>
->  #include <asm/sections.h>
->  #include <asm/cacheflush.h>
->  #include <asm/bug.h>
->  #include <asm/patch.h>
-> +#include <asm/set_memory.h>
->
->  #include "decode-insn.h"
->
-> @@ -86,10 +88,28 @@ int __kprobes arch_prepare_kprobe(struct kprobe *p)
->  #ifdef CONFIG_MMU
->  void *alloc_insn_page(void)
->  {
-> +#if defined(CONFIG_MODULES) && defined(CONFIG_64BIT)
-> +	void *page;
-> +
-> +	page = module_alloc(PAGE_SIZE);
-> +	if (!page)
-> +		return NULL;
-> +
-> +	set_vm_flush_reset_perms(page);
-> +	/*
-> +	 * First make the page read-only, and only then make it executable to
-> +	 * prevent it from being W+X in between.
-> +	 */
-> +	set_memory_ro((unsigned long)page, 1);
-> +	set_memory_x((unsigned long)page, 1);
-> +
-> +	return page;
-> +#else
->  	return  __vmalloc_node_range(PAGE_SIZE, 1, VMALLOC_START, VMALLOC_END,
->  				     GFP_KERNEL, PAGE_KERNEL_READ_EXEC,
->  				     VM_FLUSH_RESET_PERMS, NUMA_NO_NODE,
->  				     __builtin_return_address(0));
-> +#endif
->  }
->  #endif
+Hi All,
 
-This probably shouldn't depend on CONFIG_MODULES, it's just as broken to 
-assume we can jump to the vmalloc region regardless of whether modules 
-are enabled or disabled.  We should be able to just allocate from the 
-jump-safe region either way.
+Not sure if it has been reported, builds of riscv, alpha, s390, arm,
+arm64, xtensa, mips, csky allmodconfig have failed to build next-20220811
+with the error:
+
+ERROR: modpost: "dc_dsc_compute_bandwidth_range" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+ERROR: modpost: "dc_dsc_get_policy_for_timing" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+
+git bisect pointed to b1a63a0b48ad ("drm/amd/display: consider DSC pass-through during mode validation")
+And, reverting that commit has fixed the build failure.
+
+I will be happy to test any patch or provide any extra log if needed.
+
+
+--
+Regards
+Sudip

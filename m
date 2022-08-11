@@ -2,99 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC34E58F66C
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 05:38:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EF1F58F674
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 05:41:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233924AbiHKDhw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 23:37:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51544 "EHLO
+        id S232655AbiHKDlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 23:41:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229924AbiHKDhr (ORCPT
+        with ESMTP id S233654AbiHKDlW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 23:37:47 -0400
-Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139106CF73;
-        Wed, 10 Aug 2022 20:37:38 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R541e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=24;SR=0;TI=SMTPD_---0VLxQ5Q3_1660189052;
-Received: from B-LB6YLVDL-0141.local(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VLxQ5Q3_1660189052)
-          by smtp.aliyun-inc.com;
-          Thu, 11 Aug 2022 11:37:34 +0800
-Subject: Re: [PATCH V5 5/6] riscv: crash_core: Export kernel vm layout,
- phys_ram_base
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, anup@brainfault.org, heiko@sntech.de,
-        guoren@kernel.org, mick@ics.forth.gr,
-        alexandre.ghiti@canonical.com, bhe@redhat.com, vgoyal@redhat.com,
-        dyoung@redhat.com, corbet@lwn.net, Conor.Dooley@microchip.com,
-        kexec@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        crash-utility@redhat.com, huanyi.xj@alibaba-inc.com,
-        heinrich.schuchardt@canonical.com, k-hagio-ab@nec.com,
-        hschauhan@nulltrace.org, yixun.lan@gmail.com
-References: <20220802121818.2201268-1-xianting.tian@linux.alibaba.com>
- <20220802121818.2201268-6-xianting.tian@linux.alibaba.com>
- <YvRyT5f5uH7LBs4H@debian.me>
-From:   Xianting Tian <xianting.tian@linux.alibaba.com>
-Message-ID: <81bf1acd-307c-b093-44c2-280c70f44e08@linux.alibaba.com>
-Date:   Thu, 11 Aug 2022 11:37:32 +0800
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
- Gecko/20100101 Thunderbird/78.14.0
+        Wed, 10 Aug 2022 23:41:22 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79D476C76B;
+        Wed, 10 Aug 2022 20:41:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660189280; x=1691725280;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=IhRcMxs48MRd6o5zhtgL0HKWqHEawUSuUlG+92FojtE=;
+  b=A6inff8yAEZN+rsuIwvrN1FaNso3DqF1GlzwYBmgzvFHWmPMeWjrIdcD
+   D4xh4RZ3Pb6oAtR6emYpYExtzJ/XWLAg78SoJCCZabeWebF0Gn5H6/8tg
+   TkjYc6qPUT51KaFRr7INXNCaMFmKPyk91eQv3XtbsdHcs303SBlAniaOP
+   Yy8geNmX7no721EVdPQTZcZBPm+uEVUBMGmqiGEqjYNNs5sjaGa/VCVgc
+   4GYvHyfDRt+Q1KsrftA6DRja6XFsDXJPkFGMCk2EmkJHE2VByot58Xqmm
+   wg0kahsId+ervcGhnSDny9FAMOPKSl489+MVYL3ZuQ8ar/75YZWXcu9I/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="291249556"
+X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
+   d="scan'208";a="291249556"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 20:41:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
+   d="scan'208";a="673533615"
+Received: from lkp-server02.sh.intel.com (HELO 5d6b42aa80b8) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 10 Aug 2022 20:41:18 -0700
+Received: from kbuild by 5d6b42aa80b8 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oLz4Q-00013Y-0g;
+        Thu, 11 Aug 2022 03:41:18 +0000
+Date:   Thu, 11 Aug 2022 11:41:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mikhail Khelik <mkhelik@cisco.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Hans Verkuil <hverkuil@xs4all.nl>, linux-doc@vger.kernel.org
+Subject: [hverkuil-media-tree:hdcp 1/4] htmldocs:
+ Documentation/output/videodev2.h.rst:6: WARNING: undefined label:
+ v4l2-event-hdcp-status (if the link has no caption the label must precede a
+ section header)
+Message-ID: <202208111154.lpAXlMNe-lkp@intel.com>
 MIME-Version: 1.0
-In-Reply-To: <YvRyT5f5uH7LBs4H@debian.me>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   git://linuxtv.org/hverkuil/media_tree.git hdcp
+head:   da521c491aa5d01b7a920ef66c8d9aef36f14a02
+commit: 53bddd8330386202cfeae0ebf555e2a6b95ddafe [1/4] HDCP api designed
+reproduce: make htmldocs
 
-在 2022/8/11 上午11:06, Bagas Sanjaya 写道:
-> On Tue, Aug 02, 2022 at 08:18:17PM +0800, Xianting Tian wrote:
->> These infos are needed by the kdump crash tool. Since these values change
->> from time to time, it is preferable to export them via vmcoreinfo than to
->> change the crash's code frequently.
->>
-> I have to agree with Conor.Dooley, that this patch is misleading (I see
-> documentation instead of real export). So IMO, the patch subject should
-> be "Documentation: kdump: describe VMCOREINFO export for RISCV64".
->
-> For MODULES_VADDR and friends, the doc can be improved, like:
->
-> diff --git a/Documentation/admin-guide/kdump/vmcoreinfo.rst b/Documentation/admin-guide/kdump/vmcoreinfo.rst
-> index 6b76284a503ca5..6694acc32c3588 100644
-> --- a/Documentation/admin-guide/kdump/vmcoreinfo.rst
-> +++ b/Documentation/admin-guide/kdump/vmcoreinfo.rst
-> @@ -615,14 +615,13 @@ phys_ram_base
->   
->   Indicates the start physical RAM address.
->   
-> -MODULES_VADDR|MODULES_END|VMALLOC_START|VMALLOC_END|VMEMMAP_START|VMEMMAP_END
-> ------------------------------------------------------------------------------
-> -KASAN_SHADOW_START|KASAN_SHADOW_END|KERNEL_LINK_ADDR|ADDRESS_SPACE_END
-> -----------------------------------------------------------------------
-> +MODULES_VADDR|MODULES_END|VMALLOC_START|VMALLOC_END|VMEMMAP_START|VMEMMAP_END|KASAN_SHADOW_START|KASAN_SHADOW_END|KERNEL_LINK_ADDR|ADDRESS_SPACE_END
-> +----------------------------------------------------------------------------------------------------------------------------------------------------
->   
->   Used to get the correct ranges:
-> -	MODULES_VADDR ~ MODULES_END : Kernel module space.
-> -	VMALLOC_START ~ VMALLOC_END : vmalloc() / ioremap() space.
-> -	VMEMMAP_START ~ VMEMMAP_END : vmemmap region, used for struct page array.
-> -	KASAN_SHADOW_START ~ KASAN_SHADOW_END : kasan shadow space.
-> -	KERNEL_LINK_ADDR ~ ADDRESS_SPACE_END : Kernel link and BPF space.
-> +
-> +  * MODULES_VADDR ~ MODULES_END : Kernel module space.
-> +  * VMALLOC_START ~ VMALLOC_END : vmalloc() / ioremap() space.
-> +  * VMEMMAP_START ~ VMEMMAP_END : vmemmap region, used for struct page array.
-> +  * KASAN_SHADOW_START ~ KASAN_SHADOW_END : kasan shadow space.
-> +  * KERNEL_LINK_ADDR ~ ADDRESS_SPACE_END : Kernel link and BPF space.
-Thanks for the comment, I will fix it in V6
->
-> Thanks.
->
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> Documentation/output/videodev2.h.rst:6: WARNING: undefined label: v4l2-event-hdcp-status (if the link has no caption the label must precede a section header)
+>> Documentation/output/videodev2.h.rst:6: WARNING: undefined label: v4l2-event-hdcp-stage1done (if the link has no caption the label must precede a section header)
+>> Documentation/output/videodev2.h.rst:6: WARNING: undefined label: v4l2-event-hdcp-stage2done (if the link has no caption the label must precede a section header)
+>> Documentation/output/videodev2.h.rst:6: WARNING: undefined label: v4l2-event-hpcp-err (if the link has no caption the label must precede a section header)
+>> Documentation/output/videodev2.h.rst:6: WARNING: undefined label: v4l2-event-hdcp-err-badbksv (if the link has no caption the label must precede a section header)
+>> Documentation/output/videodev2.h.rst:6: WARNING: undefined label: v4l2-event-hdcp-err-pimismatch (if the link has no caption the label must precede a section header)
+>> Documentation/output/videodev2.h.rst:6: WARNING: undefined label: v4l2-event-hdcp-err-pjmismatch (if the link has no caption the label must precede a section header)
+>> Documentation/output/videodev2.h.rst:6: WARNING: undefined label: v4l2-event-hdcp-err-io (if the link has no caption the label must precede a section header)
+>> Documentation/output/videodev2.h.rst:6: WARNING: undefined label: v4l2-event-hdcp-err-reptimeout (if the link has no caption the label must precede a section header)
+>> Documentation/output/videodev2.h.rst:6: WARNING: undefined label: v4l2-event-hdcp-err-maxcascade (if the link has no caption the label must precede a section header)
+>> Documentation/output/videodev2.h.rst:6: WARNING: undefined label: v4l2-event-hdcp-err-shamismatch (if the link has no caption the label must precede a section header)
+>> Documentation/output/videodev2.h.rst:6: WARNING: undefined label: v4l2-event-hdcp-err-maxdev (if the link has no caption the label must precede a section header)
+>> Documentation/output/videodev2.h.rst:6: WARNING: undefined label: v4l2_g_hdcp_tx_data (if the link has no caption the label must precede a section header)
+>> Documentation/output/videodev2.h.rst:6: WARNING: undefined label: v4l2_s_hdcp_rx_data (if the link has no caption the label must precede a section header)
+>> Documentation/output/videodev2.h.rst:6: WARNING: undefined label: v4l2_g_hdcp_rx_data (if the link has no caption the label must precede a section header)
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

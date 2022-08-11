@@ -2,97 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32D6F58F52C
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 02:17:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 036FA58F52E
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 02:18:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233520AbiHKARj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 20:17:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36298 "EHLO
+        id S233582AbiHKARu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 20:17:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233439AbiHKARe (ORCPT
+        with ESMTP id S233551AbiHKARq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 20:17:34 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35ABF8FD58
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 17:17:33 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id h125so19608894oif.8
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 17:17:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=to:subject:message-id:date:user-agent:from:references:in-reply-to
-         :mime-version:from:to:cc;
-        bh=EX3bVclIGOJBNN3kaIwMF8d9L76zR4WsXSoGU82tx4Q=;
-        b=Qych/knHnNXGKR2RfvhnaH6NJcqX1D8kLFdg98P+Pc+BJgn3Xs1kGY1kcHUJVQZFNI
-         ZQAaDnuSiZ+XNCRlpKRyNyJdG+q8qNVbspcFcidSTOC5vplZgYy4hmdJlkSEd9TR5BaO
-         L+DNQhBv34hgmFEbEp/m0Z2+Dz8NSNwiWv8yU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:user-agent:from:references:in-reply-to
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=EX3bVclIGOJBNN3kaIwMF8d9L76zR4WsXSoGU82tx4Q=;
-        b=y14/k6OSwyTDX0OvpGdihKVeIXfM1I0nFMpq26uMUko5kCUAW2xCLwjOg2ZzXaZoHp
-         L0sXfRfU++IUWUuWW+6OptLwcEwS0gkUNL8J9BryCuQVQepLkzJbITQtTau3uWaH3GY9
-         29o2tKiD4uGYcsKoL+YuMo2j6Y/wzOM2Qk6CGylrO4zYAEkW+aayfrkNZd4pMS6P5vCG
-         iD7I+91cRPerKqw9ulULUOdnY3/pZ+ZFri9uZ+EO6toHCIAa7uQ+/L+99BDnvBWgNWNq
-         Kcz1JUq5ULXRv55SCHvU/DaEHYbAa2nlmxkSwa1hpBz6927o5Uwk1u1apbxCAXVTPh6F
-         TC6Q==
-X-Gm-Message-State: ACgBeo2tLqY+CkwkCZXaGPc9eZzdm0DpZQf1H3qlY9SJH5x17c36O78e
-        m08OL67pVJSjQWAGS2LmQaQ18Fr8Z6MwRZnmDLjmvw==
-X-Google-Smtp-Source: AA6agR7x6T+qgCbnVB685QHwpNlUcxE7GoxSGKeORrKeDT+eh0cnqawvcvvFAUbMZk3Wf2PjS4DnA58135CCQxKtjXw=
-X-Received: by 2002:a05:6808:1389:b0:33a:bd16:c4e4 with SMTP id
- c9-20020a056808138900b0033abd16c4e4mr2323919oiw.0.1660177052568; Wed, 10 Aug
- 2022 17:17:32 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 10 Aug 2022 19:17:32 -0500
+        Wed, 10 Aug 2022 20:17:46 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14E878FD5D
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 17:17:45 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1660177062;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cUuS5wR61NmFQ4xmvkQge0ofNDbuv+yhiaUNvgh6AaU=;
+        b=xmTLXaHG72SxY4EMQyLqM7ceLTg3hPNtd4Xrdl9ZuWxoHsWKeLQ0mW+RmFUQkhLx3Fegp7
+        SfHN0dCSvYLqprnsaOl5JcHbuAyRQAL90JnNA3xH5vPYXV0x+3X2fxSf3YYjrCJT9LnEzs
+        Dhuj2OYMOQijvRyu56bPTR6YqNjmlZSU7dZziAOUaddcQKnpweY9+T4W060aeULLlfiPaI
+        Asgov5Z7vcbCutdE/ZIiYMgpGQw1QvfsuNydWWoZnAj5kk7amuCVNYZD8Y9ZeACAeir8AD
+        tgksaRPvKJju9HTUv7y4lyoDBw3qFl5wm9O3OW+Mq9JpNXbDn/OrUYVlGGppSw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1660177062;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=cUuS5wR61NmFQ4xmvkQge0ofNDbuv+yhiaUNvgh6AaU=;
+        b=CkbZwGW3eV47VPXcugEyl8MaxUw/0yG42ErEOPfCNPpqR5XNB8Odvxip2H3gVJQy0MQaKO
+        zAU3tNSrOfh9VgAQ==
+To:     Daniel Sneddon <daniel.sneddon@linux.intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
+        "Huang, Kai" <kai.huang@intel.com>
+Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
+        "Gomez Iglesias, Antonio" <antonio.gomez.iglesias@intel.com>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Subject: Re: [PATCH] x86/apic: Don't disable x2APIC if locked
+In-Reply-To: <bff78ad9-57d8-ca82-cc75-0b7e5024116d@linux.intel.com>
+References: <20220809234000.783284-1-daniel.sneddon@linux.intel.com>
+ <d6ffb489-7024-ff74-bd2f-d1e06573bb82@intel.com>
+ <238ea612-5a25-9323-b31f-0a14493db2f7@linux.intel.com>
+ <d4bcb22e-224c-d256-cb93-3ff6ed89a7d0@intel.com>
+ <341ea6e9-d8f3-ee7a-6794-67408abbf047@linux.intel.com>
+ <87r11nu52l.ffs@tglx>
+ <83a0d220-1872-caba-4e7e-b6a366655cf2@linux.intel.com>
+ <ba80b303-31bf-d44a-b05d-5c0f83038798@intel.com>
+ <bff78ad9-57d8-ca82-cc75-0b7e5024116d@linux.intel.com>
+Date:   Thu, 11 Aug 2022 02:17:41 +0200
+Message-ID: <87o7wrtyze.ffs@tglx>
 MIME-Version: 1.0
-In-Reply-To: <1660117558-21829-4-git-send-email-quic_srivasam@quicinc.com>
-References: <1660117558-21829-1-git-send-email-quic_srivasam@quicinc.com> <1660117558-21829-4-git-send-email-quic_srivasam@quicinc.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Wed, 10 Aug 2022 19:17:32 -0500
-Message-ID: <CAE-0n51a1fUx-JnfgWeyx7JRMW0mWC0QquaA2ex=WhuR1H7esA@mail.gmail.com>
-Subject: Re: [PATCH v3 3/8] remoteproc: qcom: Add flag in adsp private data structure
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        agross@kernel.org, bgoswami@quicinc.com,
-        bjorn.andersson@linaro.org, broonie@kernel.org,
-        devicetree@vger.kernel.org, judyhsiao@chromium.org,
-        lgirdwood@gmail.com, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        perex@perex.cz, quic_plai@quicinc.com, quic_rohkumar@quicinc.com,
-        robh+dt@kernel.org, srinivas.kandagatla@linaro.org, tiwai@suse.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Srinivasa Rao Mandadapu (2022-08-10 00:45:53)
-> Add flag in qcom_adsp private data structure and initialize
-> it to distinguish ADSP and WPSS modules.
+On Wed, Aug 10 2022 at 16:38, Daniel Sneddon wrote:
+> On 8/10/22 16:09, Dave Hansen wrote:
+>> config INTEL_TDX_GUEST
+>>         bool "Intel TDX (Trust Domain Extensions) - Guest Support"
+>>         depends on X86_64 && CPU_SUP_INTEL
+>>         depends on X86_X2APIC
 >
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> ---
-> Changes since V2:
->         -- Add is_adsp_sb_needed flag instead of is_wpss.
->
->  drivers/remoteproc/qcom_q6v5_adsp.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/drivers/remoteproc/qcom_q6v5_adsp.c b/drivers/remoteproc/qcom_q6v5_adsp.c
-> index 2f3b9f5..d18ec74 100644
-> --- a/drivers/remoteproc/qcom_q6v5_adsp.c
-> +++ b/drivers/remoteproc/qcom_q6v5_adsp.c
-> @@ -62,6 +62,7 @@ struct adsp_pil_data {
->         const char *sysmon_name;
->         int ssctl_id;
->         bool is_wpss;
-> +       bool is_adsp_sb_needed;
+> So I got some more input.  SPR and newer will lock the APIC.  Older products
+> will get a ucode update, but that ucode update won't include the APIC lock.  So,
+> on non-SPR parts do we still want to make SGX depend on X2APIC?
 
-What does 'sb' mean? Self boot? Can you just write it out? And maybe
-drop 'is_' prefix because if (is_*) and if (something_needed) reads the
-same.
+What is the ucode update doing on pre SPR parts?
+Just providing magic voodoo which pretends to be safe?
+
+The public available documentation for this is a huge pile of void.
+
+The point is that if the SGX attestation will fail when X2APIC is not
+enforced on the host as of 'some magic dates in 2023' according to the
+documentation I pointed to, then any pre SPR SGX capable system is going
+to be disfunctional vs. SGX at one of those magic dates.
+
+Some people inside a particular company need to get their act together
+and either make this consistent or provide some coherent information why
+this is not required for pre SPR parts and why SPR needs to have it.
+
+Thanks,
+
+        tglx
+
+

@@ -2,337 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7222858F67E
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 05:54:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDB4B58F5AD
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 04:02:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233970AbiHKDyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 23:54:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32858 "EHLO
+        id S233580AbiHKCCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 22:02:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233878AbiHKDym (ORCPT
+        with ESMTP id S229924AbiHKCCl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 23:54:42 -0400
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F07A83BDD
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 20:54:38 -0700 (PDT)
-X-UUID: b54becb6e30d460f9203479f7d63bee7-20220809
-X-Spam-Fingerprint: 0
-X-GW-Reason: 11109
-X-Policy-Incident: 5pS25Lu25Lq66LaF6L+HMeS6uumcgOimgeWuoeaguA==
-X-Content-Feature: ica/max.line-size 104
-        audit/email.address 1
-        dict/adv 1
-        dict/contack 1
-        dict/notice 2
-        dict/operate 1
-        meta/cnt.alert 1
-X-UUID: b54becb6e30d460f9203479f7d63bee7-20220809
-X-User: oushixiong@kylinos.cn
-Received: from localhost.localdomain [(116.128.244.169)] by mailgw
-        (envelope-from <oushixiong@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 57318634; Tue, 09 Aug 2022 19:52:43 +0800
-From:   oushixiong <oushixiong@kylinos.cn>
-To:     Dave Airlie <airlied@redhat.com>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        oushixiong <oushixiong@kylinos.cn>
-Subject: [PATCH] drm/ast: radeon amdgpu for ast add prime
-Date:   Tue,  9 Aug 2022 19:52:39 +0800
-Message-Id: <20220809115239.2072299-1-oushixiong@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Wed, 10 Aug 2022 22:02:41 -0400
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8FE5550AE;
+        Wed, 10 Aug 2022 19:02:40 -0700 (PDT)
+Received: by mail-vs1-xe36.google.com with SMTP id d126so12708971vsd.13;
+        Wed, 10 Aug 2022 19:02:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc;
+        bh=Nxc6HpQPkKpwjHiY4PCyqpP39+h41vDJgqZmkMmJ6Bw=;
+        b=DZsvcicL7D6eG5PtgWrmj4uF3jhwd+EkuPRT0qGq77YlG4Iu3sPr5lF4jdwlG7B8cM
+         MQkheUb2MuyQ65lTBJTmBo48HuyrJ7P81OojqkN032fk1WW+Yit5r5j3Swv4AoFcW7dy
+         gxAbJogAWqfXNFaJIKRcVzDukIsSU6xKn4vHtoUXHO2H0h6i2ppm5w1Dqf5HoYgIfNVj
+         mmthaZEa1+zoIEo+O2/2T1hsb6iZ4l9sAzvT4ygK1m+DyDsYveMrk2Q/Jv5O/fxO8aTN
+         +K1S8vYjWg7VgjZIQZd0B1SQ0sZl7d1pvDKlSCLW+bHKt+WEJptQxWTTGNbGYPQm3JUT
+         3iYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=Nxc6HpQPkKpwjHiY4PCyqpP39+h41vDJgqZmkMmJ6Bw=;
+        b=0Dskh4aSpQQLTRq/1Pkp2FGGGyOlCDETf4V4cTvQCkjZFCvCVeCT/38nVwW00XSvUi
+         RU0Hc5bO7jUKoe+wCtZyN1sy3RWtlwbhVSdl0vlTNy60ztJ+03DdvROgkphiS+Y2CmC0
+         AS9qtOQ/45c3t6h1bBrR3u1wGU1VLpa964ThOxCrBed+kW/FV44d4J0YQ3MDWId3CH06
+         3lMRHCahIAnTN6LuCigbaiqn0sewAPw4sC7neySDv5L9nDduyfPJQzicbChQBPAE5jvB
+         QmvNK0gQlfW5FjHfblAhQw0SUHgGkwheVBAwzt8m1uXaq1wR6bC4q6ELTlCTIliJKmkb
+         RWhg==
+X-Gm-Message-State: ACgBeo07WZw9Hoai39QihHeBngBaZyOsrEg9gSlwKeI5RVpTBgaA3jos
+        s2MqI7tJrgPRWxIrl+C0PRza+ZvsY3Cx4bsr8Q2CipNOX1H69I1ZHTY=
+X-Google-Smtp-Source: AA6agR5fUMUJ07/ZFYxEiDCw7oN2pkyScl7qA7b/VXVP7HOup8m5RQwqG0VkodJ5AYDI0qJr1uceAL2CvNxnWzpqCsA=
+X-Received: by 2002:a67:f607:0:b0:388:ac13:af19 with SMTP id
+ k7-20020a67f607000000b00388ac13af19mr7774530vso.19.1660183359882; Wed, 10 Aug
+ 2022 19:02:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        RDNS_DYNAMIC,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+From:   Rondreis <linhaoguo86@gmail.com>
+Date:   Thu, 11 Aug 2022 10:02:26 +0800
+Message-ID: <CAB7eexLLApHJwZfMQ=X-PtRhw0BgO+5KcSMS05FNUYejJXqtSA@mail.gmail.com>
+Subject: kernel v5.19 warn in usb_composite_setup_continue
+To:     stern@rowland.harvard.edu, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch adds ast specific codes for DRM prime feature.
-Add the prime function to solve the xorg conflict problem when AST
-and AMD are in place at the same time, so that both can be displayed.
+Hello,
 
-Signed-off-by: oushixiong <oushixiong@kylinos.cn>
----
- drivers/gpu/drm/ast/ast_drv.c                |  22 ++++
- drivers/gpu/drm/ast/ast_mode.c               | 115 ++++++++++++++++++-
- drivers/gpu/drm/drm_gem_framebuffer_helper.c |   1 -
- drivers/gpu/drm/drm_gem_vram_helper.c        |  16 ++-
- include/drm/drm_gem_vram_helper.h            |   4 +-
- 5 files changed, 150 insertions(+), 8 deletions(-)
+When fuzzing the Linux kernel driver 5.19.0-rc4-00208-g69cb6c6556ad,
+the following crash was triggered.
 
-diff --git a/drivers/gpu/drm/ast/ast_drv.c b/drivers/gpu/drm/ast/ast_drv.c
-index 7465c4f0156a..3650462a8734 100644
---- a/drivers/gpu/drm/ast/ast_drv.c
-+++ b/drivers/gpu/drm/ast/ast_drv.c
-@@ -28,6 +28,7 @@
- 
- #include <linux/module.h>
- #include <linux/pci.h>
-+#include <linux/dma-buf.h>
- 
- #include <drm/drm_aperture.h>
- #include <drm/drm_atomic_helper.h>
-@@ -50,6 +51,23 @@ module_param_named(modeset, ast_modeset, int, 0400);
- 
- DEFINE_DRM_GEM_FOPS(ast_fops);
- 
-+struct drm_gem_object *ast_gem_prime_import_sg_table(struct drm_device *dev,
-+					struct dma_buf_attachment *attach,
-+					struct sg_table *sg)
-+{
-+	struct drm_gem_vram_object *gbo;
-+	struct dma_resv *resv = attach->dmabuf->resv;
-+
-+	ww_mutex_lock(&resv->lock, NULL);
-+	gbo = drm_gem_vram_create(dev, attach->dmabuf->size, 0, sg, resv);
-+	ww_mutex_unlock(&resv->lock);
-+
-+	if (IS_ERR(gbo))
-+		return NULL;
-+
-+	return &gbo->bo.base;
-+}
-+
- static const struct drm_driver ast_driver = {
- 	.driver_features = DRIVER_ATOMIC |
- 			   DRIVER_GEM |
-@@ -63,6 +81,10 @@ static const struct drm_driver ast_driver = {
- 	.minor = DRIVER_MINOR,
- 	.patchlevel = DRIVER_PATCHLEVEL,
- 
-+	.prime_handle_to_fd = drm_gem_prime_handle_to_fd,
-+	.prime_fd_to_handle = drm_gem_prime_fd_to_handle,
-+	.gem_prime_import_sg_table = ast_gem_prime_import_sg_table,
-+
- 	DRM_GEM_VRAM_DRIVER
- };
- 
-diff --git a/drivers/gpu/drm/ast/ast_mode.c b/drivers/gpu/drm/ast/ast_mode.c
-index 45b56b39ad47..f059faa8c35a 100644
---- a/drivers/gpu/drm/ast/ast_mode.c
-+++ b/drivers/gpu/drm/ast/ast_mode.c
-@@ -48,6 +48,8 @@
- #include "ast_drv.h"
- #include "ast_tables.h"
- 
-+MODULE_IMPORT_NS(DMA_BUF);
-+
- static inline void ast_load_palette_index(struct ast_private *ast,
- 				     u8 index, u8 red, u8 green,
- 				     u8 blue)
-@@ -926,7 +928,7 @@ static int ast_cursor_plane_init(struct ast_private *ast)
- 	size = roundup(AST_HWC_SIZE + AST_HWC_SIGNATURE_SIZE, PAGE_SIZE);
- 
- 	for (i = 0; i < ARRAY_SIZE(ast_cursor_plane->hwc); ++i) {
--		gbo = drm_gem_vram_create(dev, size, 0);
-+		gbo = drm_gem_vram_create(dev, size, 0, NULL, NULL);
- 		if (IS_ERR(gbo)) {
- 			ret = PTR_ERR(gbo);
- 			goto err_hwc;
-@@ -1535,8 +1537,117 @@ static const struct drm_mode_config_helper_funcs ast_mode_config_helper_funcs =
- 	.atomic_commit_tail = drm_atomic_helper_commit_tail_rpm,
- };
- 
-+int ast_handle_damage(struct drm_framebuffer *fb, int x, int y,
-+					int width, int height)
-+{
-+	struct drm_gem_vram_object *dst_bo = NULL;
-+	void *dst = NULL;
-+	int ret = 0, i;
-+	unsigned long offset = 0;
-+	bool unmap = false;
-+	unsigned int bytesPerPixel;
-+	struct iosys_map map;
-+	struct iosys_map dmabuf_map;
-+
-+	bytesPerPixel = fb->format->cpp[0];
-+
-+	if (!fb->obj[0]->import_attach)
-+		return -EINVAL;
-+
-+	if (!fb->obj[0]->import_attach->dmabuf->vmap_ptr.vaddr) {
-+		ret = dma_buf_vmap(fb->obj[0]->import_attach->dmabuf, &dmabuf_map);
-+		if (ret)
-+			return 0;
-+	} else {
-+		dmabuf_map.vaddr = fb->obj[0]->import_attach->dmabuf->vmap_ptr.vaddr;
-+	}
-+
-+	dst_bo = drm_gem_vram_of_gem(fb->obj[0]);
-+
-+	ret = drm_gem_vram_pin(dst_bo, 0);
-+	if (ret) {
-+		DRM_ERROR("ast_bo_pin failed\n");
-+		goto error;
-+	}
-+
-+	if (!dst_bo->map.vaddr) {
-+		ret = drm_gem_vram_vmap(dst_bo, &map);
-+		if (ret) {
-+			DRM_ERROR("failed to vmap fbcon\n");
-+			drm_gem_vram_unpin(dst_bo);
-+			goto error;
-+		}
-+		unmap = true;
-+	}
-+	dst = dst_bo->map.vaddr;
-+
-+	for (i = y; i < y + height; i++) {
-+		offset = i * fb->pitches[0] + (x * bytesPerPixel);
-+		memcpy_toio(dst + offset, dmabuf_map.vaddr + offset,
-+			width * bytesPerPixel);
-+	}
-+
-+	if (unmap)
-+		drm_gem_vram_vunmap(dst_bo, &map);
-+
-+	drm_gem_vram_unpin(dst_bo);
-+error:
-+	return 0;
-+}
-+
-+
-+int ast_user_framebuffer_dirty(struct drm_framebuffer *fb,
-+				struct drm_file *file,
-+				unsigned int flags,
-+				unsigned int color,
-+				struct drm_clip_rect *clips,
-+				unsigned int num_clips)
-+{
-+	int i, ret = 0;
-+
-+	drm_modeset_lock_all(fb->dev);
-+	if (fb->obj[0]->import_attach) {
-+		ret = dma_buf_begin_cpu_access(fb->obj[0]->import_attach->dmabuf,
-+				DMA_FROM_DEVICE);
-+		if (ret)
-+			goto unlock;
-+	}
-+
-+	for (i = 0; i < num_clips; i++) {
-+		ret = ast_handle_damage(fb, clips[i].x1, clips[i].y1,
-+				clips[i].x2 - clips[i].x1, clips[i].y2 - clips[i].y1);
-+		if (ret)
-+			break;
-+	}
-+
-+	if (fb->obj[0]->import_attach) {
-+		dma_buf_end_cpu_access(fb->obj[0]->import_attach->dmabuf,
-+				DMA_FROM_DEVICE);
-+	}
-+
-+unlock:
-+	drm_modeset_unlock_all(fb->dev);
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL(ast_user_framebuffer_dirty);
-+
-+static const struct drm_framebuffer_funcs ast_gem_fb_funcs_dirtyfb = {
-+	.destroy	= drm_gem_fb_destroy,
-+	.create_handle	= drm_gem_fb_create_handle,
-+	.dirty		= ast_user_framebuffer_dirty,
-+};
-+
-+struct drm_framebuffer *
-+ast_gem_fb_create_with_dirty(struct drm_device *dev, struct drm_file *file,
-+				const struct drm_mode_fb_cmd2 *mode_cmd)
-+{
-+	return drm_gem_fb_create_with_funcs(dev, file, mode_cmd,
-+					&ast_gem_fb_funcs_dirtyfb);
-+}
-+
- static const struct drm_mode_config_funcs ast_mode_config_funcs = {
--	.fb_create = drm_gem_fb_create,
-+	.fb_create = ast_gem_fb_create_with_dirty,
- 	.mode_valid = drm_vram_helper_mode_valid,
- 	.atomic_check = drm_atomic_helper_check,
- 	.atomic_commit = drm_atomic_helper_commit,
-diff --git a/drivers/gpu/drm/drm_gem_framebuffer_helper.c b/drivers/gpu/drm/drm_gem_framebuffer_helper.c
-index f4619803acd0..f65165d5e86c 100644
---- a/drivers/gpu/drm/drm_gem_framebuffer_helper.c
-+++ b/drivers/gpu/drm/drm_gem_framebuffer_helper.c
-@@ -15,7 +15,6 @@
- #include <drm/drm_gem.h>
- #include <drm/drm_gem_framebuffer_helper.h>
- #include <drm/drm_modeset_helper.h>
--
- #include "drm_internal.h"
- 
- MODULE_IMPORT_NS(DMA_BUF);
-diff --git a/drivers/gpu/drm/drm_gem_vram_helper.c b/drivers/gpu/drm/drm_gem_vram_helper.c
-index dc7f938bfff2..a31adb3c546d 100644
---- a/drivers/gpu/drm/drm_gem_vram_helper.c
-+++ b/drivers/gpu/drm/drm_gem_vram_helper.c
-@@ -184,14 +184,22 @@ static void drm_gem_vram_placement(struct drm_gem_vram_object *gbo,
-  */
- struct drm_gem_vram_object *drm_gem_vram_create(struct drm_device *dev,
- 						size_t size,
--						unsigned long pg_align)
-+						unsigned long pg_align,
-+						struct sg_table *sg,
-+						struct dma_resv *resv)
- {
- 	struct drm_gem_vram_object *gbo;
- 	struct drm_gem_object *gem;
- 	struct drm_vram_mm *vmm = dev->vram_mm;
- 	struct ttm_device *bdev;
-+	enum ttm_bo_type type;
- 	int ret;
- 
-+	if (sg)
-+		type = ttm_bo_type_sg;
-+	else
-+		type = ttm_bo_type_device;
-+
- 	if (WARN_ONCE(!vmm, "VRAM MM not initialized"))
- 		return ERR_PTR(-EINVAL);
- 
-@@ -225,8 +233,8 @@ struct drm_gem_vram_object *drm_gem_vram_create(struct drm_device *dev,
- 	 * A failing ttm_bo_init will call ttm_buffer_object_destroy
- 	 * to release gbo->bo.base and kfree gbo.
- 	 */
--	ret = ttm_bo_init(bdev, &gbo->bo, size, ttm_bo_type_device,
--			  &gbo->placement, pg_align, false, NULL, NULL,
-+	ret = ttm_bo_init(bdev, &gbo->bo, size, type,
-+			  &gbo->placement, pg_align, false, sg, resv,
- 			  ttm_buffer_object_destroy);
- 	if (ret)
- 		return ERR_PTR(ret);
-@@ -521,7 +529,7 @@ int drm_gem_vram_fill_create_dumb(struct drm_file *file,
- 	if (!size)
- 		return -EINVAL;
- 
--	gbo = drm_gem_vram_create(dev, size, pg_align);
-+	gbo = drm_gem_vram_create(dev, size, pg_align, NULL, NULL);
- 	if (IS_ERR(gbo))
- 		return PTR_ERR(gbo);
- 
-diff --git a/include/drm/drm_gem_vram_helper.h b/include/drm/drm_gem_vram_helper.h
-index c083a1d71cf4..42c8f181cbd7 100644
---- a/include/drm/drm_gem_vram_helper.h
-+++ b/include/drm/drm_gem_vram_helper.h
-@@ -92,7 +92,9 @@ static inline struct drm_gem_vram_object *drm_gem_vram_of_gem(
- 
- struct drm_gem_vram_object *drm_gem_vram_create(struct drm_device *dev,
- 						size_t size,
--						unsigned long pg_align);
-+						unsigned long pg_align,
-+						struct sg_table *sg,
-+						struct dma_resv *resv);
- void drm_gem_vram_put(struct drm_gem_vram_object *gbo);
- s64 drm_gem_vram_offset(struct drm_gem_vram_object *gbo);
- int drm_gem_vram_pin(struct drm_gem_vram_object *gbo, unsigned long pl_flag);
--- 
-2.17.1
+HEAD commit: 4b0986a3613c92f4ec1bdc7f60ec66fea135991f (HEAD, tag: v5.18)
+git tree: upstream
+
+kernel config: https://pastebin.com/KecL2gaG
+C reproducer: https://pastebin.com/gTWJQwsh
+console output: https://pastebin.com/iHzBVP3B
+
+Basically, in the c reproducer, we use the gadget module to emulate
+the process of attaching a usb device (vendor id: 0x45e, product id:
+0x6d, with function: loopback_null).
+To reproduce this crash, we utilize a third-party library to emulate
+the attaching process: https://github.com/linux-usb-gadgets/libusbgx.
+Just clone this repository, make install it, and compile the c
+reproducer with ``` gcc crash.c -lusbgx -o crash ``` will do the
+trick.
+
+It seems that an error state in struct usb_device trigger such kernel warning.
+
+The crash report is as follow:
+
+```
+input: Media Center Ed. eHome Infrared Remote Transceiver (045e:006d)
+as /devices/platform/dummy_hcd.5/usb6/6-1/6-1:1.0/rc/rc0/input4
+------------[ cut here ]------------
+usb 6-1: BOGUS control dir, pipe 80000380 doesn't match bRequestType 40
+WARNING: CPU: 0 PID: 2465 at drivers/usb/core/urb.c:410
+usb_submit_urb+0x1326/0x1820 drivers/usb/core/urb.c:410
+Modules linked in:
+CPU: 0 PID: 2465 Comm: kworker/0:2 Not tainted 5.19.0-rc4-00208-g69cb6c6556ad #1
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS
+1.13.0-1ubuntu1.1 04/01/2014
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:usb_submit_urb+0x1326/0x1820 drivers/usb/core/urb.c:410
+Code: 7c 24 40 e8 ac 23 91 fd 48 8b 7c 24 40 e8 b2 70 1b ff 45 89 e8
+44 89 f1 4c 89 e2 48 89 c6 48 c7 c7 a0 30 a9 86 e8 48 07 11 02 <0f> 0b
+e9 1c f0 ff ff e8 7e 23 91 fd 0f b6 1d 63 22 83 05 31 ff 41
+RSP: 0018:ffffc900032becf0 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: ffff8881100f3058 RCX: 0000000000000000
+RDX: ffffc90004961000 RSI: ffff888114c6d580 RDI: fffff52000657d90
+RBP: ffff888105ad90f0 R08: ffffffff812c3638 R09: 0000000000000000
+R10: 0000000000000005 R11: ffffed1023504ef1 R12: ffff888105ad9000
+R13: 0000000000000040 R14: 0000000080000380 R15: ffff88810ba96500
+FS: 0000000000000000(0000) GS:ffff88811a800000(0000) knlGS:0000000000000000
+CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffe810bda58 CR3: 000000010b720000 CR4: 0000000000350ef0
+Call Trace:
+<TASK>
+usb_start_wait_urb+0x101/0x4c0 drivers/usb/core/message.c:58
+usb_internal_control_msg drivers/usb/core/message.c:102 [inline]
+usb_control_msg+0x31c/0x4a0 drivers/usb/core/message.c:153
+mceusb_gen1_init drivers/media/rc/mceusb.c:1431 [inline]
+mceusb_dev_probe+0x258e/0x33f0 drivers/media/rc/mceusb.c:1807
+usb_probe_interface+0x310/0x800 drivers/usb/core/driver.c:396
+call_driver_probe drivers/base/dd.c:555 [inline]
+really_probe drivers/base/dd.c:634 [inline]
+really_probe+0x23e/0xa80 drivers/base/dd.c:579
+__driver_probe_device+0x338/0x4d0 drivers/base/dd.c:764
+driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:794
+__device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:917
+bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
+__device_attach+0x283/0x490 drivers/base/dd.c:989
+bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
+device_add+0xc9b/0x1da0 drivers/base/core.c:3417
+usb_set_configuration+0x1019/0x1900 drivers/usb/core/message.c:2170
+usb_generic_driver_probe+0x9d/0xe0 drivers/usb/core/generic.c:238
+usb_probe_device+0xd9/0x2a0 drivers/usb/core/driver.c:293
+call_driver_probe drivers/base/dd.c:555 [inline]
+really_probe drivers/base/dd.c:634 [inline]
+really_probe+0x23e/0xa80 drivers/base/dd.c:579
+__driver_probe_device+0x338/0x4d0 drivers/base/dd.c:764
+driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:794
+__device_attach_driver+0x20b/0x2f0 drivers/base/dd.c:917
+bus_for_each_drv+0x15f/0x1e0 drivers/base/bus.c:427
+__device_attach+0x283/0x490 drivers/base/dd.c:989
+bus_probe_device+0x1e4/0x290 drivers/base/bus.c:487
+device_add+0xc9b/0x1da0 drivers/base/core.c:3417
+usb_new_device.cold+0x4b8/0x10ca drivers/usb/core/hub.c:2566
+hub_port_connect drivers/usb/core/hub.c:5363 [inline]
+hub_port_connect_change drivers/usb/core/hub.c:5507 [inline]
+port_event drivers/usb/core/hub.c:5663 [inline]
+hub_event+0x232d/0x4180 drivers/usb/core/hub.c:5745
+process_one_work+0x9cc/0x1650 kernel/workqueue.c:2289
+worker_thread+0x623/0x1070 kernel/workqueue.c:2436
+kthread+0x2ef/0x3a0 kernel/kthread.c:376
+ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:302
+</TASK>
 
 
-No virus found
-		Checked by Hillstone Network AntiVirus
+```

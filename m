@@ -2,90 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D9015907A0
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 22:59:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60B3F5907A4
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 23:01:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236097AbiHKU7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 16:59:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60758 "EHLO
+        id S236123AbiHKVBG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 17:01:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234269AbiHKU7H (ORCPT
+        with ESMTP id S234269AbiHKVBD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 16:59:07 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F0E98A78
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 13:59:06 -0700 (PDT)
-Received: from [192.168.1.206] (unknown [109.252.119.247])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 1A8BE40D403E;
-        Thu, 11 Aug 2022 20:59:01 +0000 (UTC)
-Subject: Re: [ldv-project] [PATCH v2] drm/fb-helper: add virtual screen size
- check to drm_fb_helper_check_var()
-To:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Andrey Strachuk <strochuk@ispras.ru>
-Cc:     ldv-project@linuxtesting.org,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>, Helge Deller <deller@gmx.de>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Daniel Vetter <daniel@ffwll.ch>
-References: <20220811144850.215377-1-strochuk@ispras.ru>
- <CAMuHMdXSnHJpy=27pkAfQC0v+tkpx7Q4Ze1=nvTmy+aMBeVPFg@mail.gmail.com>
-From:   Alexey Khoroshilov <khoroshilov@ispras.ru>
-Autocrypt: addr=khoroshilov@ispras.ru; prefer-encrypt=mutual; keydata=
- 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
- kK2E04Fb+Zk1eJvHYRc=
-Message-ID: <da72ac1b-57ef-18c5-98c7-f6f1a4c11b8d@ispras.ru>
-Date:   Thu, 11 Aug 2022 23:59:00 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.10.0
+        Thu, 11 Aug 2022 17:01:03 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CA0F326E6
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 14:01:02 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id m2so17962480pls.4
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 14:01:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=lWnO1M/dZk+khdcoUQPWpNlUVOu1wZfObn0OsAZQlYM=;
+        b=V9LZbFMbnnJyDYc0rpjV/ChWjvtnWh+ePvVn/SP+LbwIcJ4Xdttmmyc/gItE5BgYmo
+         zCCvuQvaDvZyK+OiBAVZUMAdVDztrxKkFXnXhUewtrr8K1JijIMo13YQqM7nSfWqFAh9
+         tVor4+kI9QcbF/sCYWR3cdWd5idHKtq01tmoQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=lWnO1M/dZk+khdcoUQPWpNlUVOu1wZfObn0OsAZQlYM=;
+        b=gyQLQuNq7SZLUPqzD1UeAqrgNxb+wauyw3tCrTuEdzvMU7Fpg5GqwcWBiDkKwzWzVV
+         3jpUOMyBNCPaQiI06he71s4xyfhTuCjwa1I0gpRgBw/KDqeHr0Pt01YoqlLPkjNvjTDv
+         Ip0gGxm4PiO26h0Gq3kmyBBoa1XhdVgm/k+aqIdknNxMykSszK8nAIn4ReGovS95SbNo
+         TMFb5+SzHer91R2UzamhPwa2KC1a+yJVdeJrjwHoZf1KCI1YQnodDZ7DD1dA58aL9ffI
+         duXXacWKR+flcBCUks+YedEJSndzO8OBwehGgkSCqxRfyZ8Mh+Bs+h6+autCYZc+/wO/
+         0uCA==
+X-Gm-Message-State: ACgBeo3RTMrMi4yAYISKKC6aWogRB1JGhdthCBT8UkSBoBmLR74jVtRp
+        643sPvuG/+Egn+fKqT2n+ps0CA==
+X-Google-Smtp-Source: AA6agR44dr1MfmhPd+9TrxTTBk9F8wZLKavuhV0JOxK+yOCG0NW8aR/qUetK1eh0ZVL0y8Y2x31TVA==
+X-Received: by 2002:a17:902:dac5:b0:16f:81c1:93d3 with SMTP id q5-20020a170902dac500b0016f81c193d3mr954362plx.70.1660251661554;
+        Thu, 11 Aug 2022 14:01:01 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id je2-20020a170903264200b0016dafeda062sm91816plb.232.2022.08.11.14.01.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Aug 2022 14:01:00 -0700 (PDT)
+Date:   Thu, 11 Aug 2022 14:00:59 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        ebiederm@xmission.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-next@vger.kernel.org, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk,
+        syzbot <syzbot+3250d9c8925ef29e975f@syzkaller.appspotmail.com>
+Subject: Re: [syzbot] linux-next boot error: BUG: unable to handle kernel
+ paging request in kernel_execve
+Message-ID: <202208111356.97951D32@keescook>
+References: <0000000000008c0ba505e5f22066@google.com>
+ <202208110830.8F528D6737@keescook>
+ <YvU+0UHrn9Ab4rR8@iweiny-desk3>
+ <YvVPtuel8NMmiTKk@iweiny-desk3>
 MIME-Version: 1.0
-In-Reply-To: <CAMuHMdXSnHJpy=27pkAfQC0v+tkpx7Q4Ze1=nvTmy+aMBeVPFg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YvVPtuel8NMmiTKk@iweiny-desk3>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -94,52 +75,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For v2 I would suggest to update description to something like this:
+On Thu, Aug 11, 2022 at 11:51:34AM -0700, Ira Weiny wrote:
+> On Thu, Aug 11, 2022 at 10:39:29AM -0700, Ira wrote:
+> > On Thu, Aug 11, 2022 at 08:33:16AM -0700, Kees Cook wrote:
+> > > Hi Fabio,
+> > > 
+> > > It seems likely that the kmap change[1] might be causing this crash. Is
+> > > there a boot-time setup race between kmap being available and early umh
+> > > usage?
+> > 
+> > I don't see how this is a setup problem with the config reported here.
+> > 
+> > CONFIG_64BIT=y
+> > 
+> > ...and HIGHMEM is not set.
+> > ...and PREEMPT_RT is not set.
+> > 
+> > So the kmap_local_page() call in that stack should be a page_address() only.
+> > 
+> > I think the issue must be some sort of race which was being prevented because
+> > of the preemption and/or pagefault disable built into kmap_atomic().
+> > 
+> > Is this reproducable?
+> > 
+> > The hunk below will surely fix it but I think the pagefault_disable() is
+> > the only thing that is required.  It would be nice to test it.
+> 
+> Fabio and I discussed this.  And he also mentioned that pagefault_disable() is
+> all that is required.
 
-Make sure that virtual screen size is not less than physical screen one.
+Okay, sounds good.
 
-and comment to:
-    /* make sure that virtual resolution >= physical resolution */
+> Do we have a way to test this?
 
---
-Alexey
+It doesn't look like syzbot has a reproducer yet, so its patch testing
+system[1] will not work. But if you can send me a patch, I could land it
+in -next and we could see if the reproduction frequency drops to zero.
+(Looking at the dashboard, it's seen 2 crashes, most recently 8 hours
+ago.)
 
+-Kees
 
-On 11.08.2022 17:54, Geert Uytterhoeven wrote:
-> Hi Andrey,
-> 
-> On Thu, Aug 11, 2022 at 4:49 PM Andrey Strachuk <strochuk@ispras.ru> wrote:
->> Add virtual screen size check to drm_fb_helper_check_var() in
->> order to validate userspace input.
->>
->> Found by Linux Verification Center (linuxtesting.org) with syzkaller.
->>
->> Signed-off-by: Andrey Strachuk <strochuk@ispras.ru>
-> 
-> Thanks for the update!
-> 
->> Fixes: 785b93ef8c30 ("drm/kms: move driver specific fb common code to helper functions (v2)")
-> 
-> I'd drop the Fixes tag completely, as the bug was present in the
-> intel and radeon drivers before. But probably it doesn't matter, as no one
-> is gonna backport this to v2.6.31 and earlier ;-)
-> 
-> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
-> --
-> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-> 
-> In personal conversations with technical people, I call myself a hacker. But
-> when I'm talking to journalists I just say "programmer" or something like that.
->                                 -- Linus Torvalds
-> 
-> _______________________________________________
-> ldv-project mailing list
-> ldv-project@linuxtesting.org
-> http://linuxtesting.org/cgi-bin/mailman/listinfo/ldv-project
-> 
+[1] https://github.com/google/syzkaller/blob/master/docs/syzbot.md#testing-patches
 
+> > > > syzbot found the following issue on:
+> > > > 
+> > > > HEAD commit:    bc6c6584ffb2 Add linux-next specific files for 20220810
+> > > > git tree:       linux-next
+> > > > console output: https://syzkaller.appspot.com/x/log.txt?x=115034c3080000
+> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=5784be4315a4403b
+> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=3250d9c8925ef29e975f
+> > > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > > > 
+> > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > > > Reported-by: syzbot+3250d9c8925ef29e975f@syzkaller.appspotmail.com
+> > > > 
+> > > > BUG: unable to handle page fault for address: ffffdc0000000000
+> > > > #PF: supervisor read access in kernel mode
+> > > > #PF: error_code(0x0000) - not-present page
+> > > > PGD 11826067 P4D 11826067 PUD 0 
+> > > > Oops: 0000 [#1] PREEMPT SMP KASAN
+> > > > CPU: 0 PID: 1100 Comm: kworker/u4:5 Not tainted 5.19.0-next-20220810-syzkaller #0
+> > > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+> > > > RIP: 0010:strnlen+0x3b/0x70 lib/string.c:504
+> > > > Code: 74 3c 48 bb 00 00 00 00 00 fc ff df 49 89 fc 48 89 f8 eb 09 48 83 c0 01 48 39 e8 74 1e 48 89 c2 48 89 c1 48 c1 ea 03 83 e1 07 <0f> b6 14 1a 38 ca 7f 04 84 d2 75 11 80 38 00 75 d9 4c 29 e0 48 83
+> > > > RSP: 0000:ffffc90005c5fe10 EFLAGS: 00010246
+> > > > RAX: ffff000000000000 RBX: dffffc0000000000 RCX: 0000000000000000
+> > > > RDX: 1fffe00000000000 RSI: 0000000000020000 RDI: ffff000000000000
+> > > > RBP: ffff000000020000 R08: 0000000000000005 R09: 0000000000000000
+> > > > R10: 0000000000000006 R11: 0000000000000000 R12: ffff000000000000
+> > > > R13: ffff88814764cc00 R14: ffff000000000000 R15: ffff88814764cc00
+> > > > FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+> > > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > > CR2: ffffdc0000000000 CR3: 000000000bc8e000 CR4: 00000000003506f0
+> > > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > > > Call Trace:
+> > > >  <TASK>
+> > > >  strnlen include/linux/fortify-string.h:119 [inline]
+> > > >  copy_string_kernel+0x26/0x250 fs/exec.c:616
+> > > >  copy_strings_kernel+0xb3/0x190 fs/exec.c:655
+> > > >  kernel_execve+0x377/0x500 fs/exec.c:1998
+> > > >  call_usermodehelper_exec_async+0x2e3/0x580 kernel/umh.c:112
+> > > >  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+> > > >  </TASK>
+> [...]
+> > > > ---
+> > > > This report is generated by a bot. It may contain errors.
+> > > > See https://goo.gl/tpsmEJ for more information about syzbot.
+> > > > syzbot engineers can be reached at syzkaller@googlegroups.com.
+> > > > 
+> > > > syzbot will keep track of this issue. See:
+> > > > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+-- 
+Kees Cook

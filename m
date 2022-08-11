@@ -2,44 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 238045902BD
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 18:14:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCC685902C5
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 18:14:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237551AbiHKQM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 12:12:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48758 "EHLO
+        id S235812AbiHKQMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 12:12:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236980AbiHKQMB (ORCPT
+        with ESMTP id S235371AbiHKQMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 12:12:01 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A565A760DD
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 08:56:56 -0700 (PDT)
-X-QQ-mid: bizesmtp82t1660233403tyl386yp
-Received: from localhost.localdomain ( [110.188.55.240])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 11 Aug 2022 23:56:35 +0800 (CST)
-X-QQ-SSF: 0100000000200080H000B00A0000020
-X-QQ-FEAT: ntUToVEOiWoVPRpveSlZH+C/roA2UqPB/y8XhP4iN2dSWbOjCT0FeQqVlLK8A
-        HZ3ArrUUBx0AGwShvtWE4XkltAfd6RtAJVwuXZjkPdrYmzJMT53W8Tp2flCe/vAQNtLtv1B
-        g28u0I78SSe7vTJFyHEr1TLkhe2lsCsE8UTgMyyY+DP5+x1zdopURsF1h6e+hsDMtROJ024
-        HkoZNwuhkjP8XaAfMqVfeZ0oXYjOZc/d6x5RrlcgBJAHNrYVBfVnrrvUz8yUJIVN48g/roZ
-        aor7wL8N862bQNzi5ljMuoyiw/lpIxRETahGJSnKsJAwIObGGWe7sdNBr3x/weIN+ZQCVku
-        /iX/0Me1XZzVyrvW0TNaLGsN8T5XS30D9Oqjc8NYE2LUADxR2XO1CRpCOIssB0hLewCc6z2
-        m0H1pXQRdMg=
-X-QQ-GoodBg: 0
-From:   min tang <tangmin@cdjrlc.com>
-To:     airlied@linux.ie, daniel@ffwll.ch
-Cc:     zackr@vmware.com, linux-graphics-maintainer@vmware.com,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        min tang <tangmin@cdjrlc.com>
-Subject: [PATCH] drm/vmwgfx: Fix comment typo
-Date:   Thu, 11 Aug 2022 23:56:23 +0800
-Message-Id: <20220811155623.13661-1-tangmin@cdjrlc.com>
-X-Mailer: git-send-email 2.17.1
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        Thu, 11 Aug 2022 12:12:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2A7098D04;
+        Thu, 11 Aug 2022 08:56:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 80C58B8214A;
+        Thu, 11 Aug 2022 15:56:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFC8AC43470;
+        Thu, 11 Aug 2022 15:56:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660233417;
+        bh=ZnvyI0mIDZodC4vJ4wFlk3LaRrrpcSAdA/qWbSvK0Ww=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=VyTG+PqH1Ss6lWD9+43NRO+a8Zc9sDT5QCM1yCT0VHmH5KHToaawkMLHjbNRGY2d4
+         oLJTtmvzXEmqHhJv3ujJXyyheP/cLFOcfZ2QTlUfobFk22UNQjxaqWK4SLOybqdGyc
+         2vRz5S9aT43mFmp3CZHTRFjqYEicpk/P/nfPVPUjsBKxbCzRizt4hGgKlQiwzCJTAL
+         nkDHujCTcl1pJ0Bemc8Pzs5Nj5MxxaaWAcAjQekmWIBhnjtviXcLwmK+DhHoM3X9qw
+         YHH5vDvzB2aP9lQIoacCx19LjwtUikeVVME2cCIuJI+MVHjmVVW9y9q6KXHhP+tN8K
+         6seOBjZe/JW/w==
+Date:   Thu, 11 Aug 2022 08:56:48 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Moshe Shemesh <moshe@nvidia.com>, Jiri Pirko <jiri@nvidia.com>,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 5.19 076/105] net: devlink: avoid false DEADLOCK
+ warning reported by lockdep
+Message-ID: <20220811085648.33664dda@kernel.org>
+In-Reply-To: <20220811152851.1520029-76-sashal@kernel.org>
+References: <20220811152851.1520029-1-sashal@kernel.org>
+        <20220811152851.1520029-76-sashal@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -48,27 +58,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The double `should' is duplicated in line 72, remove one.
+On Thu, 11 Aug 2022 11:28:00 -0400 Sasha Levin wrote:
+> From: Moshe Shemesh <moshe@nvidia.com>
+> 
+> [ Upstream commit e26fde2f5befad0951fe6345403616bf51e901be ]
+> 
+> Add a lock_class_key per devlink instance to avoid DEADLOCK warning by
+> lockdep, while locking more than one devlink instance in driver code,
+> for example in opening VFs flow.
 
-Signed-off-by: min tang <tangmin@cdjrlc.com>
----
- drivers/gpu/drm/vmwgfx/vmwgfx_kms.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_kms.h b/drivers/gpu/drm/vmwgfx/vmwgfx_kms.h
-index 1d1c8b82c898..7c04e8150fe2 100644
---- a/drivers/gpu/drm/vmwgfx/vmwgfx_kms.h
-+++ b/drivers/gpu/drm/vmwgfx/vmwgfx_kms.h
-@@ -69,7 +69,7 @@ struct vmw_du_update_plane {
- 	 *
- 	 * Some surface resource or buffer object need some extra cmd submission
- 	 * like update GB image for proxy surface and define a GMRFB for screen
--	 * object. That should should be done here as this callback will be
-+	 * object. That should be done here as this callback will be
- 	 * called after FIFO allocation with the address of command buufer.
- 	 *
- 	 * This callback is optional.
--- 
-2.17.1
-
-
+I think we can drop this one, no driver locks multiple instances 
+in 5.19. The whole infra for that stuff is new. Not that adding 
+a lockdep key can hurt in any way..

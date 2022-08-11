@@ -2,140 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69AEF58FB33
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 13:24:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E689E58FB39
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 13:26:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234042AbiHKLX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 07:23:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54174 "EHLO
+        id S234802AbiHKL0y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 07:26:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233983AbiHKLX4 (ORCPT
+        with ESMTP id S234724AbiHKL0u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 07:23:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78E8C11A0A
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 04:23:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660217034;
+        Thu, 11 Aug 2022 07:26:50 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9845A11810;
+        Thu, 11 Aug 2022 04:26:49 -0700 (PDT)
+Received: from zn.tnic (p200300ea971b9854329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:9854:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 247F21EC056D;
+        Thu, 11 Aug 2022 13:26:44 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1660217204;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=QDxPkPA/Vk3OxCoIfjmUcXBTKk9JZQyuU+Qz9bpxhDI=;
-        b=ZskuBdCe8c0Mx7lmRJ7qzlKvk0+fkCOi9gRDg9VSn3HoMNd5OdxQIv2EwGSpuc/wyhvpbl
-        Dn2DRjfPw++SsGEa21NRBkiVY9nljregeKRFmHskJ5/buQi9AGdU79UYYMtoGoTVVP44yl
-        wNP5TIrPdULgn06H0c0JV1yBKNZXlO8=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-599-TVWAOce9OHSkOgQ6CU_waw-1; Thu, 11 Aug 2022 07:23:53 -0400
-X-MC-Unique: TVWAOce9OHSkOgQ6CU_waw-1
-Received: by mail-wm1-f72.google.com with SMTP id v24-20020a7bcb58000000b003a37681b861so1531661wmj.9
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 04:23:53 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=QDxPkPA/Vk3OxCoIfjmUcXBTKk9JZQyuU+Qz9bpxhDI=;
-        b=C/XIxHGDMc8H/rJuhMHnoR0LcvC69fR7Q5nKrljJjlTBnd9wFjjGbXy6TfzfyJh29J
-         j09xwPOipxmEvrLt6lV5x2d6w6lgCRvgPTgn4Bkt54CuFxNvE+63mxjzgl4YVXJ+R7jL
-         ts0/7ec8RVXt5EfBcfMFWa6A8ZzDB+tBt+Vej+T2xjWy4goBmsDb3nE+m9jMO9/4qhku
-         JiBGHkeUeuh9xpHNxf0o/6mBqPX/xdYEBFkSth5TUQ6HHMwmN//6EXLjd6DcbjLjwIh5
-         Zpa3k/0kJ0Y8b0lM3A2wt29EXpvE4N23UAsudTFqBOGA3MI0LYdYO61WXQUtNGjtcMWl
-         pO6Q==
-X-Gm-Message-State: ACgBeo2kCx+BXnL9tUHkefQxy0ibdm9Nm7fjX7cRsm+YPlHizXHWi+6z
-        5z+sbZuN8toLyqzWkF5Tfyj67m7scFhCER8MHmCPkCNHf1LzKEEnYj2pVjemfV5W/JSgEstiZ3V
-        XiA7EC3qSb6nqTZpe8vF6ebuE
-X-Received: by 2002:a5d:6d49:0:b0:21b:a3ba:30b5 with SMTP id k9-20020a5d6d49000000b0021ba3ba30b5mr20332444wri.513.1660217032222;
-        Thu, 11 Aug 2022 04:23:52 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR77S6dIzOGsnWQiMM//cWa1GSRI2vnhXId8PTMJGmuNW0RZNb5joCOLTnulYlpkcuj3mY6sIw==
-X-Received: by 2002:a5d:6d49:0:b0:21b:a3ba:30b5 with SMTP id k9-20020a5d6d49000000b0021ba3ba30b5mr20332411wri.513.1660217031983;
-        Thu, 11 Aug 2022 04:23:51 -0700 (PDT)
-Received: from redhat.com ([2.52.152.113])
-        by smtp.gmail.com with ESMTPSA id n33-20020a05600c502100b003a5c21c543dsm1192075wmr.7.2022.08.11.04.23.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Aug 2022 04:23:51 -0700 (PDT)
-Date:   Thu, 11 Aug 2022 07:23:44 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Dan Carpenter <dan.carpenter@oracle.com>
-Cc:     Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jason Wang <jasowang@redhat.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        dinang@xilinx.com, martinpo@xilinx.com,
-        Wu Zongyong <wuzongyong@linux.alibaba.com>,
-        Piotr.Uminski@intel.com, gautam.dawar@amd.com,
-        ecree.xilinx@gmail.com, martinh@xilinx.com,
-        Stefano Garzarella <sgarzare@redhat.com>, pabloc@xilinx.com,
-        habetsm.xilinx@gmail.com, lvivier@redhat.com,
-        Zhu Lingshan <lingshan.zhu@intel.com>, tanuj.kamde@amd.com,
-        Longpeng <longpeng2@huawei.com>, lulu@redhat.com,
-        hanand@xilinx.com, Parav Pandit <parav@nvidia.com>,
-        Si-Wei Liu <si-wei.liu@oracle.com>,
-        Eli Cohen <elic@nvidia.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        Zhang Min <zhang.min9@zte.com.cn>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH v7 1/4] vdpa: Add suspend operation
-Message-ID: <20220811072125-mutt-send-email-mst@kernel.org>
-References: <20220810171512.2343333-1-eperezma@redhat.com>
- <20220810171512.2343333-2-eperezma@redhat.com>
- <20220811042717-mutt-send-email-mst@kernel.org>
- <20220811101507.GU3460@kadam>
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=UY0huCcMksTkB4oLQLF5MAgiiZEs9HuLdo2XFb9uvQw=;
+        b=rmFZk2nFgA8PrMSlwDnyIhuf8Azrn/VmdGgQEjg3g7nzV/uXykxOaiNeOXhEuPPb5Y8Xna
+        OomDtJMKKThisqRUyqWX9k0TBb4IO3OpJ68MEGE5BLGOuTXKJt46Pm+o7a6J8CqM8/Q/A5
+        rNB4EJb0S/cMZ6BULpUInSoHeE/W8AI=
+Date:   Thu, 11 Aug 2022 13:26:40 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        x86@kernel.org, linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv7 10/14] x86/mm: Avoid load_unaligned_zeropad() stepping
+ into unaccepted memory
+Message-ID: <YvTncOa6KSr8EIuE@zn.tnic>
+References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
+ <20220614120231.48165-11-kirill.shutemov@linux.intel.com>
+ <Yt/ANO5usdV+JSSW@zn.tnic>
+ <80cc204b-a24f-684f-ec66-1361b69cae39@intel.com>
+ <073c5a97-272c-c5a0-19f2-c3f14f916c72@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220811101507.GU3460@kadam>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <073c5a97-272c-c5a0-19f2-c3f14f916c72@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 01:15:08PM +0300, Dan Carpenter wrote:
-> On Thu, Aug 11, 2022 at 04:27:32AM -0400, Michael S. Tsirkin wrote:
-> > On Wed, Aug 10, 2022 at 07:15:09PM +0200, Eugenio Pérez wrote:
-> > > This operation is optional: It it's not implemented, backend feature bit
-> > > will not be exposed.
-> > > 
-> > > Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
-> > > Message-Id: <20220623160738.632852-2-eperezma@redhat.com>
-> > > Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-> > 
-> > What is this message id doing here?
-> > 
+On Wed, Aug 03, 2022 at 07:02:31AM -0700, Dave Hansen wrote:
+> One other thing I remembered as I re-read my write up on this.
 > 
-> I like the Message-Id tag.  It means you can `b4 mbox <mesg-id>` and get
-> the thread.
+> In the "new" mode, guests never get #VE's for unaccepted memory.  They
+> just exit to the host and can never be reentered.  They must be killed.
 
-Yes it makes sense in git. But I don't see what it does in this patch
-posted to the list. It seems to refer to the previous version of the
-patch here. Which is ok I guess but better called out e.g.
+Yeah, this is the part which I think is really silly.
 
-Previous-version: <20220623160738.632852-2-eperezma@redhat.com>
+OSes, in their execution lifetime, can - erroneously or not - but it
+happens pretty often in real life, touch some unrelated memory. And this
+has never been a big deal - #PF, that's it.
 
+But now they don't even get a chance to correct their mistake - VMEXIT,
+die.
 
-> Linus has complained (rough remembering) that everyone is using the
-> Link: tag for links to the patch itself.  It's supposed to be for Links
-> to bugzilla or to the spec or whatever.  Extra information, too much to
-> put in the commit message.  Now the Link tag is useless because it either
-> points to the patch or to a bugzilla.  Depend on what you want it to do,
-> it *always* points to the opposite thing.
+load_unaligned_zeropad() is just one case.
+
+Imagine the user loads some buggy driver in the guest and that driver
+starts doing stray memory accesses through a wild pointer into the
+fields. Guest dies immediately.
+
+Dunno bit it all feels a bit too harsh and unfriendly to me.
+
+Sure, if that user is really unlucky, those stray accesses can kill
+his OS on baremetal too. So maybe you could argue here that such stray
+accesses are actually a good thing. :)
+
+All I know is, there should be a more resilient way to handle those.
+
+> In the "old" mode, I _believe_ that the guest always gets a #VE for
+> non-EPT-present memory.  The #VE is basically the same no matter if the
+> page is unaccepted or if the host goes out and makes a
+> previously-accepted page non-present.
 > 
-> But I can't remember what people settled on as the alternative to use
-> to link to lore...
-> 
-> In theory, we should be able to figure out the link to lore automatically
-> and there have been a couple projects which tried to do this but they
-> can't make it work 100%.  Maintainers massage and reformat the patches
-> too much before applying them.
-> 
-> regards,
-> dan carpenter
+> One really nasty implication of this "old" mode is that the host can
+> remove *accepted* pages that are used in the syscall gap.  That means
+> that the #VE handler would need to be of the paranoid variety which
+> opens up all kinds of other fun.
 
+Yeah, I believe this needs to be dealt with anyway, for SNP at least.
+But on AMD it would simply cause an exception and it'll be handled in
+the #VC thing. And there's some ugly code to deal with the gap too.
+
+>  * "Old" - #VE's can happen in the syscall gap
+>  * "New" - #VE's happen at better-defined times.  Unexpected ones are
+>    fatal.
+> 
+> There's a third option which I proposed but doesn't yet exist.  The TDX
+> module _could_ separate the behavior of unaccepted memory #VE's and
+> host-induced #VEs.  This way, we could use load_unaligned_zeropad() with
+> impunity and handle it in the #VE handler.  At the same time, the host
+> would not be allowed to remove accepted memory and cause problems in the
+> syscall gap.  Kinda the best of both worlds.
+
+I like that. This should've been the default from the get-go. Oh well,
+what's it called in English, hindsight is 20 20...?
+
+> But, I'm not sure how valuable that would be now that we have the
+> (admittedly squirrelly) code to avoid load_unaligned_zeropad() #VE's.
+
+I think you should push for the bestest solution and one day we can kill
+those ugly workarounds.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

@@ -2,124 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B7E45906F0
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 21:27:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EE765906F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 21:30:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234835AbiHKT1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 15:27:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38188 "EHLO
+        id S234073AbiHKTa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 15:30:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234636AbiHKT1P (ORCPT
+        with ESMTP id S233439AbiHKTaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 15:27:15 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FFC396FC7
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 12:27:14 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d16so17727455pll.11
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 12:27:14 -0700 (PDT)
+        Thu, 11 Aug 2022 15:30:24 -0400
+Received: from mailrelay4-1.pub.mailoutpod1-cph3.one.com (mailrelay4-1.pub.mailoutpod1-cph3.one.com [46.30.210.185])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDEAEB05
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 12:30:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=xfhnVs3PaC5usAVNEu7i8rCmlaTeNScWKyrA8LXm5/8=;
-        b=N4ZESQJUwri03sK+C6U+x9SiZS1kJoOtl9/XTee6ICwy7Xn9wRFIgIYCTy1jyXjHJ/
-         gZC4Ht8Yf7BYRCKeWnlk6ufBf9mOJKddAHmFPKL956ZzlCz8OmF6QxQ5WBAEcxlMnmbP
-         9mflQUy30A6HiDqOdajiROWD+4mWjbiRScXSeMnYbPQM2FMj8r96iOwwngbKTK87U671
-         K1RKrHkAOYk79N/hjR+9d9EynSqbWEUvGngLA1a+quh6hZ+Lqd4pDCjUXPSi3jGZPaK1
-         zTwj6ReDZVb+voDAEwuhMcAFvWbOokdC/3EaOr8T43oja3Qp2Kx4weHe812fLCWYq8fJ
-         vicA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=xfhnVs3PaC5usAVNEu7i8rCmlaTeNScWKyrA8LXm5/8=;
-        b=Pd2+MbsxDunMxXuPhnbVuDzZ0H1MHjjrYAA7ri7YdQhFuKK2gWB4MrRkyRrlfKnfV8
-         4/Y0Dxvj47bThKGMDUAbshkXmcJPy5Tj4tiezmJek6+6viOAdsirNiGcksFDxJtIxlaJ
-         DAGT3sYYFjVqKqCxTZcn3uvkQiZp/Br6TcdRnefuwXKk0/fxXVSUHQkRZXcARWajiiJN
-         ldFYsE/RTkMSuPG/6T2KV/CYjd2gz7X4i76SvpTH/SCsBTiIUqpUHziCUDy+iK8GDM0H
-         Zk6mh94czMWQAFn8hppRFHXWkWrZEvBX+cbksoEIyaM70lxEOlkLcrnNH8RAL0EH5I26
-         lzdQ==
-X-Gm-Message-State: ACgBeo2ZPu8beRdPGUqliM6k7djoqFcpgxVJHgQ8wvvXsXLd2ktVFdbG
-        iQ0HrgDQ67B3IhzAJVDOAcV3pA==
-X-Google-Smtp-Source: AA6agR5haPNlMfDQXIRE8V6B5qM0hdtv6Mlx+U/U4DRnQ91rBrM+TTT+HKDHGsFItmK4U3GIFSK4PA==
-X-Received: by 2002:a17:902:7247:b0:16f:8361:ba26 with SMTP id c7-20020a170902724700b0016f8361ba26mr646092pll.83.1660246034033;
-        Thu, 11 Aug 2022 12:27:14 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id 16-20020a17090a199000b001f312e7665asm110165pji.47.2022.08.11.12.27.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Aug 2022 12:27:13 -0700 (PDT)
-Date:   Thu, 11 Aug 2022 19:27:10 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Adam Dunlap <acdunlap@google.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ben Dooks <ben-linux@fluff.org>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Jacob Xu <jacobhxu@google.com>,
-        Alper Gun <alpergun@google.com>, Marc Orr <marcorr@google.com>
-Subject: Re: [PATCH] x86/asm: Force native_apic_mem_read to use mov
-Message-ID: <YvVYDn1JODiu6hKK@google.com>
-References: <20220811180010.3067457-1-acdunlap@google.com>
+        d=ravnborg.org; s=rsa1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=PiIxReYkxtBzv66jtBR4FROfX82syegstNTwPa+ySR0=;
+        b=J4WnXA650B9xrqJFOUNC99f85fvYDJAQp733iypsjAv6EqqJCkAK7OOrj2HmV44IcKdnV3v+7OM2Q
+         VBI5UDXOx9WDYcqqlqUYamwCxt9veZ0xDP0M1tZNhzKtiTJk3LKqmoJvowc6jzgVcl1XbWbLHnWGaj
+         prL9zk8v75TMw3wvqpIdOSgv8OKdHSseFmbRB9/hcaUaQsxV1ggShec0sc4PVydd3U/hZl73hVvHxr
+         y/LkQkCaLbhyFGuCCwyE98HrhJ5vXM2lzB//fk+kRnBtI4dkJsF4/Qd47/hCwSJohfSbz0YxDuEoJO
+         R1XE1Hodc/OUYnY5cMcYNsOsE7lki1Q==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed1;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=PiIxReYkxtBzv66jtBR4FROfX82syegstNTwPa+ySR0=;
+        b=lud6DSUj9xxo1AbujB4/Ho0gbti2rokDDTZkDXnKk5P5Gu4jnxPiTtmV5CE+z6T/r+e1iMKDNB/Wp
+         EGowbZsDQ==
+X-HalOne-Cookie: 52a4d43754f5de879c648bea03fabce90926a481
+X-HalOne-ID: 07f25d33-19ac-11ed-8245-d0431ea8bb10
+Received: from mailproxy4.cst.dirpod4-cph3.one.com (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+        by mailrelay4.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPSA
+        id 07f25d33-19ac-11ed-8245-d0431ea8bb10;
+        Thu, 11 Aug 2022 19:30:17 +0000 (UTC)
+Date:   Thu, 11 Aug 2022 21:30:16 +0200
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        Linux/m68k <linux-m68k@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Javier Martinez Canillas <javierm@redhat.com>
+Subject: Re: [PATCH v3 01/10] drm/fourcc: Add drm_format_info_bpp() helper
+Message-ID: <YvVYyKZNDGfhGjb5@ravnborg.org>
+References: <cover.1657294931.git.geert@linux-m68k.org>
+ <1cae5ebc28513ec1c91c66b00647ce3ca23bfba7.1657294931.git.geert@linux-m68k.org>
+ <YvPVxy4kYKdzWgT8@phenom.ffwll.local>
+ <CAMuHMdVMuuXgYW-AkyB+G77Wsjkm715u1ifDvaY=5DufXjryRA@mail.gmail.com>
+ <YvUqPL5l8/+XbvaQ@phenom.ffwll.local>
+ <YvVKe72jYBjucmkz@ravnborg.org>
+ <CAMuHMdVD37MCXau4w87=x_jk9j-NMJCmu0d9qPuMqmHA_vPQRQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220811180010.3067457-1-acdunlap@google.com>
-X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CAMuHMdVD37MCXau4w87=x_jk9j-NMJCmu0d9qPuMqmHA_vPQRQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022, Adam Dunlap wrote:
-> Previously, when compiled with clang, native_apic_mem_read gets inlined
-> into __xapic_wait_icr_idle and optimized to a testl instruction. When
-> run in a VM with SEV-ES enabled, it attempts to emulate this
-> instruction, but the emulator does not support it. Instead, use inline
-> assembly to force native_apic_mem_read to use the mov instruction which
-> is supported by the emulator.
-> 
-> Signed-off-by: Adam Dunlap <acdunlap@google.com>
-> Reviewed-by: Marc Orr <marcorr@google.com>
-> Reviewed-by: Jacob Xu <jacobhxu@google.com>
-> ---
->  arch/x86/include/asm/apic.h | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/x86/include/asm/apic.h b/arch/x86/include/asm/apic.h
-> index 3415321c8240..281db79e76a9 100644
-> --- a/arch/x86/include/asm/apic.h
-> +++ b/arch/x86/include/asm/apic.h
-> @@ -109,7 +109,18 @@ static inline void native_apic_mem_write(u32 reg, u32 v)
->  
->  static inline u32 native_apic_mem_read(u32 reg)
->  {
-> -	return *((volatile u32 *)(APIC_BASE + reg));
-> +	volatile u32 *addr = (volatile u32 *)(APIC_BASE + reg);
-> +	u32 out;
-> +
-> +	/*
-> +	 * Functionally, what we want to do is simply return *addr. However,
-> +	 * this accesses an MMIO which may need to be emulated in some cases.
-> +	 * The emulator doesn't necessarily support all instructions, so we
-> +	 * force the read from addr to use a mov instruction.
-> +	 */
-> +	asm_inline("movl %1, %0" : "=r"(out) : "m"(*addr));
-> +
-> +	return out;
+Hi Geert.
 
-Can't this just be:
+> > >
+> > > Yeah I don't think we should describe these with bpp or cpp or anything
+> > > like that. bpp < 8 makes sense since that's how this has been done since
+> > > decades, but trying to extend these to funny new formats is a bad idea.
+> > > This is also why cpp and depth refuse to compute these (or at least
+> > > should).
+> >
+> > Daniel and I discussed this on irc. Let me try to recap here.
+> > Using the bits per pixel info from drm_format_info is something we shall
+> > try to avoid as this is often a sign of the wrong abstraction/design (my
+> > words based on the irc talk).
+> > So we shall limit the use of drm_format_info_bpp() to what we need now,
+> > thus blocky formats should not be supported - to try to avoid seeing
+> > this used more than necessary.
+> >
+> > Daniel suggested a rename to drm_format_info_legacy_bpp() to make it
+> > obvious that this is often/always the wrong solution. I did not jump on
+> > doing the rename as I do not know stuff good enough to tell people what
+> > to use when this is not the right solution. The rename is simple, it is
+> > the follow-up that keep me away.
+> >
+> > On top of this there is a few formats in drm_drourcc that has a depth
+> > field set which should be dropped. .depth is only for the few legacy
+> > formats where it is used today.
+> >
+> > We would also like to convert the fbdev helpers to drm_format_info,
+> > and doing so will likely teach us a bit more what we need and what we
+> > can drop.
+> >
+> > Geert - can you give drm_format_info_bpp() a spin so it is limited to
+> > the formats used now (not the blocky ones).
+> 
+> You mean return 0 if char_per_block[] > 1?
+if char_per_block[] > 1 AND block_w[] > 0 AND block_h[] > 0 should be
+enough.
 
-	return readl((void __iomem *)(APIC_BASE + reg));
+> I'm not sure it's actually safe to do so (and make this change this late
+> in the development cycle), as this is used in drm_client_buffer_create(),
+> drm_client_buffer_addfb(), and drm_mode_getfb().
+
+drm_client_buffer_create() and drm_client_buffer_addfb() both get their
+format from  drm_mode_legacy_fb_format() which do not produce any blocky
+formats - so they are good.
+
+drm_mode_getfb() looks up a framebuffer originally created using one of
+the above (I think), so here it should also be fine.
+I do not see the need to push this to fixes, so it has a full cycle to
+mature if it causes issues.
+
+	Sam

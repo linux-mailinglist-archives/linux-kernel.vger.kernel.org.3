@@ -2,111 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C8F0590626
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 20:00:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82A84590627
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 20:01:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235063AbiHKSA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 14:00:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41124 "EHLO
+        id S235280AbiHKSAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 14:00:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiHKSAZ (ORCPT
+        with ESMTP id S235108AbiHKSAs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 14:00:25 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2067.outbound.protection.outlook.com [40.107.244.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A5F14012
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 11:00:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MLU90gOWCaG2FnDWxAD38p29tcPatiPg5qty4B+52TbNGKdfqJ+p2s61hEbvYWnT/lRECPvQW5sr56RyXvjanDv4/d/i8kiIFyBen7VqoW1n54t6RoY8r4oryujchsgWulk+M9zuVqiDk6Ori7GFF3Ag+eTabjoQX4uVn5tDISsNVsaoei7QV4/t4YNBkWICFRcnlIFcXGtGaFbjWByo/umIttIVB8JPVWJhnVXdL8CPQlWVr32cpUJLie2myY0rSTfIeqLrr82qhVRrHr9cyhmCRimD/PBE/9sU3VWVTWWwPcbJ8/zp34y6AqrabLVC+ip++pqmRWJcRu+2AcZnMA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=timqpckBfRhbWsGHEn42+tLc54XtQGdgMoFK2dCnqds=;
- b=X85/LAn+lFru1aKwDYCkbekecqlDAAO4zynDFDwM+dlOdTvAKI9Ds/AqI7HU2bt1Yb/atdripPwlPj2siOUt70kKNPmjTOveFcvBApoWJSfYyuqVAMKx7CpMCwO7BUU3fs0QB1mPbhtz4v82tcVpGJT827QKS7dJmn/A4SwR+/6dtp+wv5L5RIsPuyYfQSEPBb5tfSb5JhQIf6Jo9QMzfUuvQhNffJ7/nBxVmHTwmGdil7gnW07YVpMcL2E7ZRIQR1zReSIAq395d7EOBN8qG0lAvIp00Winkocl/+brl+i4qp6pGe6hXOjbHBw8mFmicHX0S0uTZVZmmS9zFLJTHw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=timqpckBfRhbWsGHEn42+tLc54XtQGdgMoFK2dCnqds=;
- b=DSohfxvZqozpUDFdbUGaLLSPSa4qzfO2r9SC/TFZXnvgDHh4ASWipyxNv+6slcLT2LSwXcNFZ+KdI39Twnk6M2z5fbE4LYhmwehSziWOYWmcacNRfAc0Zmk6BtSByNqgkDA3fKTniKcY7BdckJ+sb8IuXMI+ah/JQnNerT0ZwpU=
-Received: from BN0PR04CA0054.namprd04.prod.outlook.com (2603:10b6:408:e8::29)
- by CH2PR12MB4053.namprd12.prod.outlook.com (2603:10b6:610:7c::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.16; Thu, 11 Aug
- 2022 18:00:11 +0000
-Received: from BN8NAM11FT029.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:e8:cafe::1d) by BN0PR04CA0054.outlook.office365.com
- (2603:10b6:408:e8::29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.16 via Frontend
- Transport; Thu, 11 Aug 2022 18:00:11 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN8NAM11FT029.mail.protection.outlook.com (10.13.177.68) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5525.11 via Frontend Transport; Thu, 11 Aug 2022 18:00:10 +0000
-Received: from hamza-pc.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.28; Thu, 11 Aug
- 2022 13:00:09 -0500
-From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
-To:     <linux-kernel@vger.kernel.org>
-CC:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>,
-        Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        "Harry Wentland" <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        "Rodrigo Siqueira" <Rodrigo.Siqueira@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        hersen wu <hersenxs.wu@amd.com>, Wayne Lin <Wayne.Lin@amd.com>,
-        Fangzhi Zuo <Jerry.Zuo@amd.com>,
-        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Roman Li <Roman.Li@amd.com>, <amd-gfx@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>
-Subject: [PATCH v2] drm/amd/display: fix DSC related non-x86/PPC64 compilation issue
-Date:   Thu, 11 Aug 2022 13:57:58 -0400
-Message-ID: <20220811175759.1518840-1-hamza.mahfooz@amd.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <CADVatmN_TzJKdfM40BQPW=cRm5VxX=qAKxq2yW4P_xDN6=VoOA@mail.gmail.com>
-References: <CADVatmN_TzJKdfM40BQPW=cRm5VxX=qAKxq2yW4P_xDN6=VoOA@mail.gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d6b4697c-eefd-4c26-1423-08da7bc3558c
-X-MS-TrafficTypeDiagnostic: CH2PR12MB4053:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /cnmYBLMt1h29tUH9gFU/UHibwt6K/lI021ZNYhI/XKQCJVIH1di9jIHxzQCDd+yYk3NOQfRb8zfBRAGybCHdayn1lBwCxFbWd72eDhB4JKeeF6otOojpk4/Zza5O6yCNTJW760qgbTFEZgxFvQtkxoPDDP7yXFUMACh+VhvyUj/+hpZyN84WoPXFnh/Qwi75Iio/oepyqAPPhJw3ViIXtD52lekK4vgThNj2glgkF4CEjoSIMZAEBZ+bYSVWtx3lxtbdYD21Yp0qNrZN009j2rXv/SlQETnJr0zOjfxL8PPLtWv98u7ne1F2dqROooMnkSTWwbC16o4RpLMb9prlUeuOwj3TEJK1yohxOlaZTnMZ3cct7GraAFLDLeaC7tmP5XrKfSXc+QHky2Z7BoWQnyjInLQEkB7QbPrr67jeWHZihpMUIspbHnssfYBGEeIb1Nwob20NL6bq/FD6/0FbAdgvmewBX4g8TlY89WzXj/JFZK9ocuSnjZvnrHVlXVM57Q+qIQ2BzP7mlv5u9fnjISZDyWJtwG9ZPkorIdL9msk62+5/lWtCupToj0uOGQodvFSMaovyC06pnHGSrDf4+30dtF+JXtWzHmbQn3l5H80P+x/AWgda4ok04GqnaADooAt58waH7x4TdJjWsKwpAjAc5854k3SD2NEiFxB+RrjQ6eOoU/jUBTWWaeJioYhVvqYP9K+njsKBAy1xAQ9FttIQC2rjjZ6gGc2KbTl4dQA7jf58sX8u7SSlGwgoUPP59siesbQ2aWRXv7nOHONpK+068cPLVYC76EOBKyV5m212Q2XbEVp541SzgBjEzLEZGeMetFeAN+Z6JPkqcu33v2w8p3qGP0LgUgsOhcS5Rxh3bfIv/L20IE5ScMhJu/+
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(136003)(376002)(346002)(396003)(46966006)(40470700004)(36840700001)(36756003)(7696005)(478600001)(6666004)(86362001)(41300700001)(26005)(356005)(81166007)(2616005)(1076003)(47076005)(336012)(16526019)(186003)(426003)(83380400001)(82310400005)(40480700001)(70206006)(5660300002)(4326008)(8676002)(316002)(6916009)(70586007)(54906003)(36860700001)(82740400003)(44832011)(8936002)(2906002)(40460700003)(16060500005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Aug 2022 18:00:10.9491
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: d6b4697c-eefd-4c26-1423-08da7bc3558c
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT029.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4053
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Thu, 11 Aug 2022 14:00:48 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE6D85A8E
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 11:00:47 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id r13-20020aa7988d000000b0052ed235197bso7169218pfl.20
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 11:00:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=AHPdF2iNp843/qxwt9o0Z5Yx70qagBEm5XUA1AZJq3s=;
+        b=hUouphILeY+7ZcreKxlU1ukdbwKI/z0PLnXdxgXRyGG+IFml1nB8pn1mmAe2cXc0XR
+         FMB3hhPzAuGQtoJxfAw5hwOsTQmpXmtOFkydYbAXW7d6pcehx4QDo49aKDsCj5o8A324
+         /VCxSnrbNVogJeIsO+bCb970/vWvnt5k/acHwbkLauSk5dpHDBgRKIdR2Bkj4PH/QF37
+         ypfexny7+yt3N7PuLCfp3J9Tmb25wfvkeAm7zojmAueiEHE+y+xz1lf/57Ohd4orIeK5
+         k+zd6pTc3V3h7Ji5hdleQh8BRWqLkmVw5x17GN10XTcnp6/GW/uMVMsVg/H2DMpjWpZY
+         3ieg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=AHPdF2iNp843/qxwt9o0Z5Yx70qagBEm5XUA1AZJq3s=;
+        b=wdLvZJKCI/L4Y3fFpTLEbHx0MT1egxzKDU3loZN8x194jLB2DFHSiLj469rz9vakC+
+         d4ogpX+f4V810RmCkQt+k7i/4LxXTLnOOL3Xga5YbQXsFjlDNHBpTSOUn9peW6HfjgE3
+         BM6ZMpuGBPLwQlsz3nDwTWuLMmKjqdY0btadqcbJ+RgdPlWCyCJqAhSXZcksHKGvC+Ow
+         BZNHx3fpfwanAYnjEMb8DlB0DXEs/2B/sCyMf17IEx5XNel8X6NoR72IJRxmliuvMHua
+         RGAQl9NNJChaxKjU7+QS33sX2NOuCCCaewU6yRsMUjzgdDnewEGZ2SjIL8GjOxQahSO7
+         uPug==
+X-Gm-Message-State: ACgBeo2c7HxdAeotyj69fvVlVOtSSj8upJiVo7qhkyU2Gf5zHL2nrQl4
+        jjr3z4wvM0YiOItMYZJGmzD3pb6WXx1kvA==
+X-Google-Smtp-Source: AA6agR6WWvqchDPxP5kAGNu/Ulq/79XUJejAqx8e373GcLQEy+qt6A+bV5PazXaTWuXtO6rWlR/bUqmxn0Ytqg==
+X-Received: from acdunlap03.bve.corp.google.com ([2620:15c:29:203:7899:c3d8:a49a:7086])
+ (user=acdunlap job=sendgmr) by 2002:a17:90b:20e:b0:1f5:26b0:f506 with SMTP id
+ fy14-20020a17090b020e00b001f526b0f506mr187731pjb.65.1660240847029; Thu, 11
+ Aug 2022 11:00:47 -0700 (PDT)
+Date:   Thu, 11 Aug 2022 11:00:10 -0700
+Message-Id: <20220811180010.3067457-1-acdunlap@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
+Subject: [PATCH] x86/asm: Force native_apic_mem_read to use mov
+From:   Adam Dunlap <acdunlap@google.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Adam Dunlap <acdunlap@google.com>,
+        Ben Dooks <ben-linux@fluff.org>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+Cc:     Jacob Xu <jacobhxu@google.com>, Alper Gun <alpergun@google.com>,
+        Marc Orr <marcorr@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -114,71 +79,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Need to protect DSC code with CONFIG_DRM_AMD_DC_DCN.
-Fixes the following build errors on arm64:
-ERROR: modpost: "dc_dsc_get_policy_for_timing" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
-ERROR: modpost: "dc_dsc_compute_bandwidth_range" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+Previously, when compiled with clang, native_apic_mem_read gets inlined
+into __xapic_wait_icr_idle and optimized to a testl instruction. When
+run in a VM with SEV-ES enabled, it attempts to emulate this
+instruction, but the emulator does not support it. Instead, use inline
+assembly to force native_apic_mem_read to use the mov instruction which
+is supported by the emulator.
 
-Fixes: 0087990a9f57 ("drm/amd/display: consider DSC pass-through during mode validation")
-Reported-by: Anders Roxell <anders.roxell@linaro.org>
-Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
+Signed-off-by: Adam Dunlap <acdunlap@google.com>
+Reviewed-by: Marc Orr <marcorr@google.com>
+Reviewed-by: Jacob Xu <jacobhxu@google.com>
 ---
-v2: Fix WERROR build failure by guarding unused variables
----
- .../gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c  | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ arch/x86/include/asm/apic.h | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-index ef6c94cd852b..ce6929224a6e 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm_mst_types.c
-@@ -1387,8 +1387,6 @@ bool pre_validate_dsc(struct drm_atomic_state *state,
- 	return (ret == 0);
+diff --git a/arch/x86/include/asm/apic.h b/arch/x86/include/asm/apic.h
+index 3415321c8240..281db79e76a9 100644
+--- a/arch/x86/include/asm/apic.h
++++ b/arch/x86/include/asm/apic.h
+@@ -109,7 +109,18 @@ static inline void native_apic_mem_write(u32 reg, u32 v)
+ 
+ static inline u32 native_apic_mem_read(u32 reg)
+ {
+-	return *((volatile u32 *)(APIC_BASE + reg));
++	volatile u32 *addr = (volatile u32 *)(APIC_BASE + reg);
++	u32 out;
++
++	/*
++	 * Functionally, what we want to do is simply return *addr. However,
++	 * this accesses an MMIO which may need to be emulated in some cases.
++	 * The emulator doesn't necessarily support all instructions, so we
++	 * force the read from addr to use a mov instruction.
++	 */
++	asm_inline("movl %1, %0" : "=r"(out) : "m"(*addr));
++
++	return out;
  }
  
--#endif
--
- static unsigned int kbps_from_pbn(unsigned int pbn)
- {
- 	unsigned int kbps = pbn;
-@@ -1416,17 +1414,19 @@ static bool is_dsc_common_config_possible(struct dc_stream_state *stream,
- 
- 	return bw_range->max_target_bpp_x16 && bw_range->min_target_bpp_x16;
- }
-+#endif /* CONFIG_DRM_AMD_DC_DCN */
- 
- enum dc_status dm_dp_mst_is_port_support_mode(
- 	struct amdgpu_dm_connector *aconnector,
- 	struct dc_stream_state *stream)
- {
-+	int bpp, pbn, branch_max_throughput_mps = 0;
-+#if defined(CONFIG_DRM_AMD_DC_DCN)
- 	struct dc_link_settings cur_link_settings;
- 	unsigned int end_to_end_bw_in_kbps = 0;
- 	unsigned int upper_link_bw_in_kbps = 0, down_link_bw_in_kbps = 0;
- 	unsigned int max_compressed_bw_in_kbps = 0;
- 	struct dc_dsc_bw_range bw_range = {0};
--	int bpp, pbn, branch_max_throughput_mps = 0;
- 
- 	/*
- 	 * check if the mode could be supported if DSC pass-through is supported
-@@ -1461,13 +1461,16 @@ enum dc_status dm_dp_mst_is_port_support_mode(
- 			return DC_FAIL_BANDWIDTH_VALIDATE;
- 		}
- 	} else {
-+#endif
- 		/* check if mode could be supported within full_pbn */
- 		bpp = convert_dc_color_depth_into_bpc(stream->timing.display_color_depth) * 3;
- 		pbn = drm_dp_calc_pbn_mode(stream->timing.pix_clk_100hz / 10, bpp, false);
- 
- 		if (pbn > aconnector->port->full_pbn)
- 			return DC_FAIL_BANDWIDTH_VALIDATE;
-+#if defined(CONFIG_DRM_AMD_DC_DCN)
- 	}
-+#endif
- 
- 	/* check is mst dsc output bandwidth branch_overall_throughput_0_mps */
- 	switch (stream->timing.pixel_encoding) {
+ extern void native_apic_wait_icr_idle(void);
 -- 
-2.37.1
+2.37.1.559.g78731f0fdb-goog
 

@@ -2,138 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C6E558F8A0
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 09:54:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44B0B58F8A3
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 09:56:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234128AbiHKHyl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 03:54:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60462 "EHLO
+        id S234041AbiHKH4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 03:56:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233884AbiHKHyi (ORCPT
+        with ESMTP id S234277AbiHKH4A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 03:54:38 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F200513E2E;
-        Thu, 11 Aug 2022 00:54:36 -0700 (PDT)
-X-UUID: c537b5c587bb409a98dcb065de503d5c-20220811
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Transfer-Encoding:MIME-Version:Content-Type:Date:CC:To:From:Subject:Message-ID; bh=Pl+MDAa1cNSlme5ohVZ4QGF7+/nE1dHPujEfDH6bqDU=;
-        b=JLRMdhdZ20fugIkHP1XpgLOxkA7POauHg5M/uAFqidO+2BZGke2xLp4VGEYAxgd1HlHmPaT4GsBihbZp3y3nDRC1+w3v0+fIq3yzEmL5jZuS5ux5q/ERqoxBwwpXEmytfSW9sag2IT7Fw8juTDD1LBkzFTxBWoy9nbDZLbt2/A8=;
-X-CID-UNFAMILIAR: 1
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.9,REQID:253d8c81-3ec1-4b2a-9e4c-5e265f4190c3,OB:0,LO
-        B:10,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Relea
-        se_Ham,ACTION:release,TS:95
-X-CID-INFO: VERSION:1.1.9,REQID:253d8c81-3ec1-4b2a-9e4c-5e265f4190c3,OB:0,LOB:
-        10,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS
-        981B3D,ACTION:quarantine,TS:95
-X-CID-META: VersionHash:3d8acc9,CLOUDID:2d0384ae-9535-44a6-aa9b-7f62b79b6ff6,C
-        OID:f096d32b22bb,Recheck:0,SF:28|16|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,Bulk:40,QS:nil,BEC:nil,COL:0
-X-UUID: c537b5c587bb409a98dcb065de503d5c-20220811
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <kuyo.chang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 809153656; Thu, 11 Aug 2022 15:54:30 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.792.3;
- Thu, 11 Aug 2022 15:54:28 +0800
-Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 11 Aug 2022 15:54:28 +0800
-Message-ID: <3bcf5d974b98acccde89e8d5567d3ddcdfb44800.camel@mediatek.com>
-Subject: [Race condition] Race condition at cpuidle_enter_s2idle &
- __cfi_slowpath_diag
-From:   Kuyo Chang <kuyo.chang@mediatek.com>
-To:     Sami Tolvanen <samitolvanen@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "Nick Desaulniers" <ndesaulniers@google.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        "Peter Zijlstra" <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        "Vincent Guittot" <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        "Ben Segall" <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        "Daniel Bristot de Oliveira" <bristot@redhat.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Joel Fernandes <joel@joelfernandes.org>, <rcu@vger.kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        "Daniel Lezcano" <daniel.lezcano@linaro.org>
-CC:     <kuyo.chang@mediatek.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <wsd_upstream@mediatek.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>, <rcu@vger.kernel.org>,
-        <llvm@lists.linux.dev>
-Date:   Thu, 11 Aug 2022 15:54:28 +0800
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+        Thu, 11 Aug 2022 03:56:00 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 97D1F12D04
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 00:55:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660204558;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=iVXrwd35fMsbVFUzhqFqFRUwBHy2TM6hy8L8OrvAwkQ=;
+        b=X1CsDGU1jT/Y7brEIUS0y7fjSNqsn0QH5GbzGzgvO2AH7e3n/vsKnvbYmoe+xjSMvD3cFI
+        awj4u4mdTnbjQ5XDVjW98/97cpHycmfQoXB+TNMNHklybyw3a5G+85V3nLd1vChIbQFDFK
+        2BmM6ZoOaYmqmrpGwuNJGJkerX+iQPM=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-17-gx9w36wYO2WA-Vp_6awxnQ-1; Thu, 11 Aug 2022 03:55:55 -0400
+X-MC-Unique: gx9w36wYO2WA-Vp_6awxnQ-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B759119705A7;
+        Thu, 11 Aug 2022 07:55:54 +0000 (UTC)
+Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 9A7D140D2827;
+        Thu, 11 Aug 2022 07:55:54 +0000 (UTC)
+From:   Paolo Bonzini <pbonzini@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: [GIT PULL] Second batch of KVM changes for Linux 5.20 merge window
+Date:   Thu, 11 Aug 2022 03:55:54 -0400
+Message-Id: <20220811075554.198111-1-pbonzini@redhat.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.84 on 10.11.54.2
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sami,
+Linus,
 
-During doing s2idle(Suspend-To-Idle) flow, I found a task will put into
-runqueue by __cfi_slowpath_diag.
-The code trace about fail case as below:
+The following changes since commit 6614a3c3164a5df2b54abb0b3559f51041cf705b:
 
-call_cpuidle_s2idle
-->if (current_clr_polling_and_test()) //check resched flag
-	return -EBUSY;
-->cpuidle_enter_s2idle
-->enter_s2idle_proper
-->target_state->enter_s2idle(dev, drv, index);
+  Merge tag 'mm-stable-2022-08-03' of git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm (2022-08-05 16:32:45 -0700)
 
-Meanwhile the log shows the __cfi_slowpath_diag function will wake up a
-task to CPU, below is the backtrace
-__cfi_slowpath_diag
-find_check_fn
-rcu_irq_enter
-rcu_nmi_enter
-rcu_cleanup_after_idle
-invoke_rcu_core
-raise_softirq(RCU_SOFTIRQ)
-raise_softirq_irqoff
-    if (!in_interrupt() && should_wake_ksoftirqd())
-        wakeup_softirqd();
-//wake up flow
-wake_up_process
-try_to_wake_up
-ttwu_queue
-ttwu_do_activate
-ttwu_do_wakeup
-check_preempt_curr
-resched_curr
-set_tsk_need_resched(curr);
- 
+are available in the Git repository at:
 
-So It will violate the initial check at call_cpuidle_s2idle(Now it
-exists a task at rq  and need reched, so it should not enter
-cpuidle_enter_s2idle )
-if (current_clr_polling_and_test())
-	return -EBUSY;
+  https://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/for-linus
 
-I look the racing may be related to the following patch
+for you to fetch changes up to 19a7cc817a380f7a412d7d76e145e9e2bc47e52f:
 
-57cd6d1 cfi: Fix __cfi_slowpath_diag RCU usage with cpuidle
-https://android.googlesource.com/kernel/common/+/57cd6d1
+  KVM: x86/MMU: properly format KVM_CAP_VM_DISABLE_NX_HUGE_PAGES capability table (2022-08-11 02:35:37 -0400)
 
-Do you have any suggestion for this issue?
-Thank you.
+----------------------------------------------------------------
+* Xen timer fixes
+
+* Documentation formatting fixes
+
+* Make rseq selftest compatible with glibc-2.35
+
+* Fix handling of illegal LEA reg, reg
+
+* Cleanup creation of debugfs entries
+
+* Fix steal time cache handling bug
+
+* Fixes for MMIO caching
+
+* Optimize computation of number of LBRs
+
+* Fix uninitialized field in guest_maxphyaddr < host_maxphyaddr path
+
+----------------------------------------------------------------
+Bagas Sanjaya (2):
+      Documentation: KVM: extend KVM_CAP_VM_DISABLE_NX_HUGE_PAGES heading underline
+      KVM: x86/MMU: properly format KVM_CAP_VM_DISABLE_NX_HUGE_PAGES capability table
+
+Coleman Dietsch (2):
+      KVM: x86/xen: Initialize Xen timer only once
+      KVM: x86/xen: Stop Xen timer before changing IRQ
+
+Gavin Shan (2):
+      KVM: selftests: Make rseq compatible with glibc-2.35
+      KVM: selftests: Use getcpu() instead of sched_getcpu() in rseq_test
+
+Michal Luczaj (1):
+      KVM: x86: emulator: Fix illegal LEA handling
+
+Mingwei Zhang (1):
+      KVM: x86/mmu: rename trace function name for asynchronous page fault
+
+Oliver Upton (5):
+      KVM: Shove vm stats_id init into kvm_create_vm()
+      KVM: Shove vcpu stats_id init into kvm_vcpu_init()
+      KVM: Get an fd before creating the VM
+      KVM: Pass the name of the VM fd to kvm_create_vm_debugfs()
+      KVM: Actually create debugfs in kvm_create_vm()
+
+Paolo Bonzini (3):
+      selftests: kvm: fix compilation
+      KVM: x86: revalidate steal time cache if MSR value changes
+      KVM: x86: do not report preemption if the steal time cache is stale
+
+Sean Christopherson (9):
+      KVM: x86: Bug the VM if an accelerated x2APIC trap occurs on a "bad" reg
+      KVM: x86: Tag kvm_mmu_x86_module_init() with __init
+      KVM: x86/mmu: Fully re-evaluate MMIO caching when SPTE masks change
+      KVM: SVM: Disable SEV-ES support if MMIO caching is disable
+      KVM: x86/mmu: Add sanity check that MMIO SPTE mask doesn't overlap gen
+      KVM: selftests: Test all possible "invalid" PERF_CAPABILITIES.LBR_FMT vals
+      KVM: x86: Refresh PMU after writes to MSR_IA32_PERF_CAPABILITIES
+      KVM: VMX: Use proper type-safe functions for vCPU => LBRs helpers
+      KVM: VMX: Adjust number of LBR records for PERF_CAPABILITIES at refresh
+
+Yu Zhang (1):
+      KVM: X86: avoid uninitialized 'fault.async_page_fault' from fixed-up #PF
+
+ Documentation/virt/kvm/api.rst                     | 10 +--
+ arch/x86/include/asm/kvm_host.h                    |  2 +-
+ arch/x86/kvm/emulate.c                             |  6 +-
+ arch/x86/kvm/lapic.c                               |  8 ++-
+ arch/x86/kvm/mmu.h                                 |  2 +
+ arch/x86/kvm/mmu/mmu.c                             |  8 ++-
+ arch/x86/kvm/mmu/spte.c                            | 28 ++++++++
+ arch/x86/kvm/mmu/spte.h                            | 17 ++++-
+ arch/x86/kvm/svm/sev.c                             | 10 +++
+ arch/x86/kvm/svm/svm.c                             |  9 ++-
+ arch/x86/kvm/vmx/pmu_intel.c                       | 12 +---
+ arch/x86/kvm/vmx/vmx.h                             | 29 +++++---
+ arch/x86/kvm/x86.c                                 | 13 ++--
+ arch/x86/kvm/xen.c                                 | 31 +++++----
+ include/trace/events/kvm.h                         |  2 +-
+ tools/testing/selftests/kvm/Makefile               |  7 +-
+ tools/testing/selftests/kvm/rseq_test.c            | 58 ++++++++--------
+ .../selftests/kvm/x86_64/vmx_pmu_caps_test.c       | 17 +++--
+ virt/kvm/kvm_main.c                                | 81 ++++++++++++----------
+ 19 files changed, 221 insertions(+), 129 deletions(-)
 

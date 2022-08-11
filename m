@@ -2,142 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B5B9590798
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 22:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B80A59079C
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 22:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235731AbiHKU4N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 16:56:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58940 "EHLO
+        id S235982AbiHKU6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 16:58:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234269AbiHKU4J (ORCPT
+        with ESMTP id S234743AbiHKU6P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 16:56:09 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3382749B77;
-        Thu, 11 Aug 2022 13:56:06 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id i14so35554184ejg.6;
-        Thu, 11 Aug 2022 13:56:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=uE/Qj3AMUHQd04Dxh5p1/PwdcJtjMFZ+U3MfItoUeJQ=;
-        b=N6gerAPUmhtN/1eqrOveKqdmlLg3ixq3w4Df7wThGtQ6/VIMQXi6A2E6VT7f68FwcU
-         Oj6nqiFptgo0NmHHf+LPY0LYfJsY7sLTA7XLnkMFcJXj/Q0mZzkOxikfwvbcyB2dR73X
-         vfV4fJc0k4RtLlfOAbb3Lip0QklmS6+KF+9QL6ySgBFdJq+Yr1ICTs23DNRVCZ38OHyJ
-         KXQFh9VOQIqXPoHccDbqvj6R6SWYJhLWhj39QCQaQBpUOI4Wv/jNFzRNtUe6mbS5w/yh
-         su8rkGKuYo5VYsQDE8CfAHMqT1g8qehvLTdGgWaE5MNryAViP5O4RaRz/pWboEm6udGe
-         Xn6A==
+        Thu, 11 Aug 2022 16:58:15 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 468FE81694
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 13:58:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660251491;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=umhJQzJAWrnjkW3zfGMLL67VJqv1wRHTW7++Jt2gnz8=;
+        b=RYHHOqkLJQ8+Gy6iHhjK1QkzGE56NXIm7L2UQEQEHguko+UCYLBNrDuR/f6YfSTg9yGjIZ
+        7dAHASWYh9MAcoJE2BhWyUB3w+46VW+5vQCWN/WYKYqzdElVzsi4o5Mx0augekIrcDiIcM
+        JLU+V4fgi9XLAgTRABaVNJx/CcwBf8Q=
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com
+ [209.85.166.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-663-F19paLcHO0qGJZyg94w6fw-1; Thu, 11 Aug 2022 16:58:10 -0400
+X-MC-Unique: F19paLcHO0qGJZyg94w6fw-1
+Received: by mail-io1-f71.google.com with SMTP id y23-20020a5e8717000000b00680064a707eso10127512ioj.7
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 13:58:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=uE/Qj3AMUHQd04Dxh5p1/PwdcJtjMFZ+U3MfItoUeJQ=;
-        b=qChWRJya20ym+5j2qSgr63zcqP2/a4nM1Z9slts4NdzVOxsQGD+k9nvWRuA0qmTXCJ
-         ocqPtkiHhqZ0CTk8vhomirxBXyXlN6kXqMjR2fAABopkrIly0NXKMiNg4HMKGH9OgDfV
-         +K9VkPdEjQoyYHZH7w2JttoNcwiRQKBlkH+zbwALw56AZw7MJFGbLTywDAu6BdfvUT5v
-         gdkNWX74Y5gQ03Rj3Cqihiq+kf7h4AOsTmF5zYWRPZVamJfA7AWsraygo6xGCsSOOS1E
-         eC2+5E2z2I51rHawXNJ7h4EIVo2domvbB5EZHtIEVjO1yWJCVcRohIo7U5Och1OIM2c5
-         8c2A==
-X-Gm-Message-State: ACgBeo2emXRQ+PD62kKEAZCgj6giGZecLx9HLVZ994XM6w2XOmboDjTs
-        OcOcwUWCTHTz65b01vQv6d7TwFMhPRfLNDoYEEfcf1NFletR1g==
-X-Google-Smtp-Source: AA6agR7PL90wgfQGprzftASErtgG4JShOzaaq90d5j9zZ6gJAJp5fUPtP+bGtog1nsAZcOh0tJ3p032g9/GL5AZDA8Q=
-X-Received: by 2002:a17:906:858f:b0:730:87ff:b96 with SMTP id
- v15-20020a170906858f00b0073087ff0b96mr553222ejx.649.1660251364754; Thu, 11
- Aug 2022 13:56:04 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=umhJQzJAWrnjkW3zfGMLL67VJqv1wRHTW7++Jt2gnz8=;
+        b=ToEh+KBeLrId64o7YFWPw7/6Gg8PXxN6gftq0cdOTi84XgIhwPY2lORqOMICgPFEzf
+         nYIeyKKUT4D9PT0kzc/4E8zNOibtuBPFyWuwS/zDlsXJey/7q9O42icG4YkccUDuGnNk
+         4TT3keRqTC89tdSKVRrBRTbC+8lBGpXg+m6ceW/MO4vWhbh5vbBglaSETd5w1+bGktdG
+         JzazACk8L3qekuvJkhJVmHt1u7XiAp4cXGL7zceA5xY24uHVJghm+XfxyBsdy9ZobYGt
+         p5jEGXGEcB0OTm4QIZobAY2unowhDTlzU+Ft2Hs/N7xIVU78AGlXXw6ad8D9Ust4MfC5
+         XqQQ==
+X-Gm-Message-State: ACgBeo02lS1JkvECxAptMUBee/0MkF0izBbs6hhQEqTAyi8p8xUTmyzE
+        W0A/XwRljhzL4nJ4V6RbQ6KFx5cOGeMNS9BdodWabqeKZhhH+0i4hpuFyXYILdPZEyE8h2Ruz5V
+        HVAHMZYEYHaQ5k0JWeePNVpgp
+X-Received: by 2002:a05:6602:2b84:b0:684:fb55:663b with SMTP id r4-20020a0566022b8400b00684fb55663bmr420195iov.13.1660251489446;
+        Thu, 11 Aug 2022 13:58:09 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR7xVXDdje7GojW2eJGsfbGHzi0u/S8iOtnP4nn3QprAKSMlWTOAhg/IOfoqAcJtKHrMPgHh7A==
+X-Received: by 2002:a05:6602:2b84:b0:684:fb55:663b with SMTP id r4-20020a0566022b8400b00684fb55663bmr420184iov.13.1660251489147;
+        Thu, 11 Aug 2022 13:58:09 -0700 (PDT)
+Received: from xz-m1.local (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
+        by smtp.gmail.com with ESMTPSA id z6-20020a05663822a600b0034294118e1bsm215302jas.126.2022.08.11.13.58.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Aug 2022 13:58:08 -0700 (PDT)
+Date:   Thu, 11 Aug 2022 16:58:07 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Linux MM Mailing List <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Andrea Arcangeli <aarcange@redhat.com>
+Subject: Re: [PATCH v2 3/3] kvm/x86: Allow to respond to generic signals
+ during slow page faults
+Message-ID: <YvVtX+rosTLxFPe3@xz-m1.local>
+References: <20220721000318.93522-1-peterx@redhat.com>
+ <20220721000318.93522-4-peterx@redhat.com>
+ <YvVitqmmj7Y0eggY@google.com>
 MIME-Version: 1.0
-References: <20220811152446.281723-1-idryomov@gmail.com> <CAHk-=wifgq59uru6xDB=nY-1p6aQ-1YB8nVhW7T-N2ctK3m1gw@mail.gmail.com>
-In-Reply-To: <CAHk-=wifgq59uru6xDB=nY-1p6aQ-1YB8nVhW7T-N2ctK3m1gw@mail.gmail.com>
-From:   Ilya Dryomov <idryomov@gmail.com>
-Date:   Thu, 11 Aug 2022 22:55:53 +0200
-Message-ID: <CAOi1vP9BSi-65of-8D0BA1_DC0eVD_TQcWkhrGJwaXw_skhHFQ@mail.gmail.com>
-Subject: Re: [GIT PULL] Ceph updates for 5.20-rc1
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jeff Layton <jlayton@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <YvVitqmmj7Y0eggY@google.com>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 10:04 PM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Thu, Aug 11, 2022 at 8:25 AM Ilya Dryomov <idryomov@gmail.com> wrote:
-> >
-> >    [..] Several patches
-> > touch files outside of our normal purview to set the stage for bringing
-> > in Jeff's long awaited ceph+fscrypt series in the near future.  All of
-> > them have appropriate acks and sat in linux-next for a while.
->
-> What? No.
->
-> I'm looking at the fs/dcache.c change, for example, and don't see the
-> relevant maintainers having acked it at all.
->
-> The mmdebug.h file similarly seems to not have the actual maintainer
-> acks, and seems just plain stupid (why does it add that new folio
-> warning macro, when the existing folio warning macro
-> VM_WARN_ON_ONCE_FOLIO() is *better*?
->
-> Those are some very core files, and while the changes seem harmless,
-> they sure don't seem obviously ok.
->
-> What's the point of warning about bogus folios more than once? That's
-> a debug warning - if it hits even once, that's already "uhhuh,
-> something is bad". Showing the warning more than once is likely just
-> going to cause more problems, not give you more information.
+On Thu, Aug 11, 2022 at 08:12:38PM +0000, Sean Christopherson wrote:
+> On Wed, Jul 20, 2022, Peter Xu wrote:
+> > All the facilities should be ready for this, what we need to do is to add a
+> > new "interruptible" flag showing that we're willing to be interrupted by
+> > common signals during the __gfn_to_pfn_memslot() request, and wire it up
+> > with a FOLL_INTERRUPTIBLE flag that we've just introduced.
+> > 
+> > Note that only x86 slow page fault routine will set this to true.  The new
+> > flag is by default false in non-x86 arch or on other gup paths even for
+> > x86.  It can actually be used elsewhere too but not yet covered.
+> > 
+> > When we see the PFN fetching was interrupted, do early exit to userspace
+> > with an KVM_EXIT_INTR exit reason.
+> > 
+> > Signed-off-by: Peter Xu <peterx@redhat.com>
+> > ---
+> >  arch/arm64/kvm/mmu.c                   |  2 +-
+> >  arch/powerpc/kvm/book3s_64_mmu_hv.c    |  2 +-
+> >  arch/powerpc/kvm/book3s_64_mmu_radix.c |  2 +-
+> >  arch/x86/kvm/mmu/mmu.c                 | 16 ++++++++++++--
+> >  include/linux/kvm_host.h               |  4 ++--
+> >  virt/kvm/kvm_main.c                    | 30 ++++++++++++++++----------
+> >  virt/kvm/kvm_mm.h                      |  4 ++--
+> >  virt/kvm/pfncache.c                    |  2 +-
+> >  8 files changed, 41 insertions(+), 21 deletions(-)
+> 
+> I don't usually like adding code without a user, but in this case I think I'd
+> prefer to add the @interruptible param and then activate x86's kvm_faultin_pfn()
+> in a separate patch.  It's rather difficult to tease out the functional x86
+> change, and that would also allow other architectures to use the interruptible
+> support without needing to depend on the functional x86 change.
+> 
+> And maybe squash the addition of @interruptible with the previous patch?  I.e.
+> add all of the infrastructure for KVM_PFN_ERR_SIGPENDING in patch 2, then use it
+> in x86 in patch 3.
 
-Xiubo and Jeff used it to track down some issues between netfs library
-and folio code that have been randomly plaguing our automated tests for
-a couple of releases.  We already knew that there were issues in that
-area and the actual occurrences mattered.  This was done in cooperation
-with Willy and, since he was involved and this is a no-impact change,
-I didn't think twice.
+Sounds good.
 
->
-> And did somebody verify that d_same_name() is still inlined in the
-> place that truly *matters*?  Because from my quick test, that patch
-> broke it. Now __d_lookup() does a function call.
->
-> And I _suspect_ it's all ok, because it turns out that
-> __d_lookup_rcu() is the *really* hot case, and that one has inlined it
-> all manually.
->
-> But this kind of "we touch some *truly* core functionality, without
-> the acks from the maintainers, and then we *claim* to have relevant
-> acks" is really not even remotely ok.
+> 
+> > diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> > index 17252f39bd7c..aeafe0e9cfbf 100644
+> > --- a/arch/x86/kvm/mmu/mmu.c
+> > +++ b/arch/x86/kvm/mmu/mmu.c
+> > @@ -3012,6 +3012,13 @@ static int kvm_handle_bad_page(struct kvm_vcpu *vcpu, gfn_t gfn, kvm_pfn_t pfn)
+> >  static int handle_abnormal_pfn(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
+> >  			       unsigned int access)
+> >  {
+> > +	/* NOTE: not all error pfn is fatal; handle sigpending pfn first */
+> > +	if (unlikely(is_sigpending_pfn(fault->pfn))) {
+> 
+> Move this into kvm_handle_bad_page(), then there's no need for a comment to call
+> out that this needs to come before the is_error_pfn() check.  This _is_ a "bad"
+> PFN, it just so happens that userspace might be able to resolve the "bad" PFN.
 
-I raised the lack of a formal Acked-by from Al on the dcache change
-with Jeff a while ago and my understanding was that he reached out to
-Al and got the ack (after some ghosting on Al's behalf).  I apologize
-if I got that wrong -- all this happened in the middle of Jeff
-transitioning his maintainership duties.
+It's a pity it needs to be in "bad pfn" category since that's the only
+thing we can easily use, but true it is now.
 
->
-> I've pulled this because I suspect that d_same_name() thing is fine,
-> and I think the VM_WARN_ON_FOLIO() addition is completely wrong but
-> not horrendous.
->
-> But you're on my tentative shit-list just for having claimed to have
-> appropriate acks and having been found wanting.
->
-> Just for your information: fs/dcache.c is some of the most optimized
-> code in the kernel, and some of the subtlest. That RCU pathname lookup
-> is serious business. You don't make changes to pathname lookup just
-> willy nilly. There's a reason I start looking at individual patches
-> when I see it in the diffstat.
+> 
+> > +		vcpu->run->exit_reason = KVM_EXIT_INTR;
+> > +		++vcpu->stat.signal_exits;
+> > +		return -EINTR;
+> 
+> For better or worse, kvm_handle_signal_exit() exists and can be used here.  I
+> don't love that KVM details bleed into xfer_to_guest_mode_work(), but that's a
+> future problem.
+> 
+> I do think that the "return -EINTR" should be moved into kvm_handle_signal_exit(),
+> partly for code reuse and partly because returning -EINTR is very much KVM ABI.
+> Oof, but there are a _lot_ of paths that can use kvm_handle_signal_exit(), and
+> some of them don't select KVM_XFER_TO_GUEST_WORK, i.e. kvm_handle_signal_exit()
+> should be defined unconditionally.  I'll work on a series to handle that separately,
+> no reason to take a dependency on that cleanup.
+> 
+> So for now,
+> 
+> static int kvm_handle_bad_page(struct kvm_vcpu *vcpu, gfn_t gfn, kvm_pfn_t pfn)
+> {
+> 	if (pfn == KVM_PFN_ERR_SIGPENDING) {
+> 		kvm_handle_signal_exit(vcpu);
+> 		return -EINTR;
+> 	}
+> 
+> 	...
+> }
 
-Understood.
+Sounds good too here.  Also all points taken in the wording of patch 2.
 
-Thanks,
+Will respin shortly, thanks Sean.
 
-                Ilya
+-- 
+Peter Xu
+

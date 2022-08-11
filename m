@@ -2,121 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1BDF59058A
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 19:15:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8C71590592
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 19:16:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235517AbiHKRPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 13:15:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44674 "EHLO
+        id S235930AbiHKRP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 13:15:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236337AbiHKROn (ORCPT
+        with ESMTP id S236594AbiHKRPj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 13:14:43 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE0771145E
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 09:58:34 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id b2so1201790qkh.12
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 09:58:34 -0700 (PDT)
+        Thu, 11 Aug 2022 13:15:39 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C30EE26D0;
+        Thu, 11 Aug 2022 10:02:44 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id k26so34590774ejx.5;
+        Thu, 11 Aug 2022 10:02:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=BtahUn8ztRbdF6bgP7iWCOgaLjKN7omiziYuT9SboMI=;
-        b=qhV73eXrR+Eyj+mjJSGZh0NceqY5l0YCeIOIOOn678iEs+ADJfEUdsIznLrlUaboN/
-         zXlPEh3qvlYk7/qGobO+lnJ18Tj/GCWHnxexaLfDuVkhG2y2FRH+Enquev9r5tW+h0X8
-         G3I5QcnbrH1A7fNePL+jzSL7jsax4QXG4cYFzl1+gft5tqjkJrGU1DFylq/2LO07T6OX
-         xibBTzsfi2A3vSG/oc53TpUNHlXENf7mmJjm/DRYbAPGVZEzGK8MkQmkqro13z69lrxo
-         Ts4FoWpuy5wBw5YsPSwRWlRMAXmRfs6fnH5vXEE9DQRK4swynyfXgVfvzmdNw5GR0kOd
-         +LUQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=PLSc3JU04wr/3xDHUZJS4oaaEMeBTMvazU5HyZg/WI4=;
+        b=SAVJ5zR9JddbuKzT5hRanszuHdxdjoExu2TYW3REctrGZMePVRgV3B7dzLGn0bjf6W
+         Oak3KtKixZx+P6L3u/ilCCn4y7zQN8Tf2e3Am3GYzbhqqv7/0TnyloXpJXfdZqGAEuz/
+         LLOa2m0O23hL9qqTamfnmjrSts1P16/k9wct4lKAy+u0QHq52pxNxaW7I3CqQ9/qCuGW
+         ZOEk1K/fiEp3AvDs00MFVSgpshfiKxHRnLL34gQI+DasI87LsISY5qzvaQDJyM2YM8TY
+         9Rgovx2f5mSA8bkFEOJ7o/N94WQ6dkpD0bzI00G2Dl9lF0ovijiHSQHFIqvxp5YKkWDg
+         6hJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=BtahUn8ztRbdF6bgP7iWCOgaLjKN7omiziYuT9SboMI=;
-        b=fDb5jcKhURal3GZ2s8I65IzGMOnVJEDzRMohHRY+DCJrWfIhSV8eU2oswFX/PKXtcG
-         35uaF+U/h0d1gHmaKBtnPdgW2i2i+l/nxELWa00+7+gwj01u00oC6+YBN2GbgJy+8r4G
-         4QJ69m6tdrO/1v8I6jdcU2R4lPfz4EhRPGC0Lz5WCpZ3oMa/p3MuJYJZrJkq1lvRQ4De
-         8y9oFyKBSfRsP0iTvG6I1EQr6tLZ7+zuhNoYlVaq6OrM1ZL1kmMMjtRUBhDqCrE1yKCO
-         UpfbU4yZad/YC+p1kapbaQh+03kyk9yeC5xXbRM9L1tG59zCXLSnZEy1Pn/Wy4TDT/m2
-         Nqqg==
-X-Gm-Message-State: ACgBeo1+/wOyIQ8aD5PQ40zs5GMRKDBDg5+DrL8oP/XQouaNg3+e629k
-        IlhDXMNmdgr57gOtLsbgM6iduQ==
-X-Google-Smtp-Source: AA6agR6H82uoI2xwIb1+Kz1R7unIjtXFvMihttxZVyPC2ke6j9PeGArLg2PeNRG76kgfyNmsPnL39g==
-X-Received: by 2002:a05:620a:2606:b0:6b9:a803:aecb with SMTP id z6-20020a05620a260600b006b9a803aecbmr5886354qko.656.1660237114037;
-        Thu, 11 Aug 2022 09:58:34 -0700 (PDT)
-Received: from fedora ([23.82.142.207])
-        by smtp.gmail.com with ESMTPSA id t9-20020ac87609000000b00342fc6a8e25sm1921345qtq.50.2022.08.11.09.58.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Aug 2022 09:58:32 -0700 (PDT)
-Date:   Thu, 11 Aug 2022 12:58:31 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v2 0/4] regmap: mmio: Extending to support IO ports
-Message-ID: <YvU1Nw4bvr1Ki/Ob@fedora>
-References: <20220808203401.35153-1-andriy.shevchenko@linux.intel.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=PLSc3JU04wr/3xDHUZJS4oaaEMeBTMvazU5HyZg/WI4=;
+        b=zGgQdahtPZImDPrVNPvFrUOPsUau4ijQo2uekUFK+7rWTMNosYgUfR4kF1I+N661tK
+         GEIld0ho2k29PmdoyMwMaPdfzPbQ1gu3zomhVPW1QCEZzk1qqqBVVOxFzl+CydTNz0CU
+         2UvTCTRHYXPfdSlisT/ugMKFcqrmkpNLi8ThBfZ0vVcYUGLjYeF4w2Vm+pbhQ8W8XkX8
+         aHTJMzAScX1mR5JtcpSBPUrqV9R4KhPSUJ8n6gf3CwXBH9vpaJ6Iwg2BXlZGSAI/krAZ
+         EyWYPhv67vrawPqVLIngdxv/kaBF3ZFuspb50NGpEGYArX2kxkNcsJmhKYqKcNIGTbXo
+         FS4Q==
+X-Gm-Message-State: ACgBeo0ad/8ktFwLkqwUVcLxkRxEpB8yVdd5MQlIOWo/89uUVj/Yv6yH
+        mZKC9Xi1fItiDq3wDSnjpm/8cf1+aF6RXh8dSf8=
+X-Google-Smtp-Source: AA6agR728AXZe+1Bz58HAgWvrpVI2DC3FmCsAy87AqMJW42NkGuK/bFFfkfGJq6ADtpvgeJKTBsLOT0ttauLYGMBOeY=
+X-Received: by 2002:a17:906:8cb0:b0:730:d6f3:279e with SMTP id
+ qr48-20020a1709068cb000b00730d6f3279emr3753ejc.25.1660237363214; Thu, 11 Aug
+ 2022 10:02:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rUUOkd+8RcEzdopk"
-Content-Disposition: inline
-In-Reply-To: <20220808203401.35153-1-andriy.shevchenko@linux.intel.com>
+References: <20220807221152.38948-1-Igor.Skalkin@opensynergy.com>
+ <20220807185846-mutt-send-email-mst@kernel.org> <02222fcb-eaba-617a-c51c-f939678e3d74@opensynergy.com>
+ <20220808081054-mutt-send-email-mst@kernel.org> <20220811035817-mutt-send-email-mst@kernel.org>
+In-Reply-To: <20220811035817-mutt-send-email-mst@kernel.org>
+From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
+Date:   Thu, 11 Aug 2022 10:02:31 -0700
+Message-ID: <CABBYNZKZGxbt=jdpBL77x1mCeTPdDE-p-Pt8JjZN+KoRgR3Ohw@mail.gmail.com>
+Subject: Re: [PATCH] virtio_bt: Fix alignment in configuration struct
+To:     "Michael S. Tsirkin" <mst@redhat.com>
+Cc:     Igor Skalkin <igor.skalkin@opensynergy.com>,
+        Jason Wang <jasowang@redhat.com>,
+        virtualization@lists.linux-foundation.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        mgo@opensynergy.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Michael,
 
---rUUOkd+8RcEzdopk
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, Aug 11, 2022 at 1:00 AM Michael S. Tsirkin <mst@redhat.com> wrote:
+>
+> On Mon, Aug 08, 2022 at 08:16:11AM -0400, Michael S. Tsirkin wrote:
+> > On Mon, Aug 08, 2022 at 02:04:43PM +0200, Igor Skalkin wrote:
+> > > On 8/8/22 01:00, Michael S. Tsirkin wrote:
+> > >
+> > >     On Mon, Aug 08, 2022 at 12:11:52AM +0200, Igor Skalkin wrote:
+> > >
+> > >         According to specification [1], "For the device-specific conf=
+iguration
+> > >         space, the driver MUST use 8 bit wide accesses for 8 bit wide=
+ fields,
+> > >         16 bit wide and aligned accesses for 16 bit wide fields and 3=
+2 bit wide
+> > >         and aligned accesses for 32 and 64 bit wide fields.".
+> > >
+> > >         Current version of the configuration structure:
+> > >
+> > >             struct virtio_bt_config {
+> > >                 __u8  type;
+> > >                 __u16 vendor;
+> > >                 __u16 msft_opcode;
+> > >             } __attribute__((packed));
+> > >
+> > >         has both 16bit fields non-aligned.
+> > >
+> > >         This commit fixes it.
+> > >
+> > >         [1] https://ddec1-0-en-ctp.trendmicro.com:443/wis/clicktime/v=
+1/query?url=3Dhttps%3a%2f%2fdocs.oasis%2dopen.org%2fvirtio%2fvirtio%2fv1.1%=
+2fvirtio%2dv1.1.pdf&umid=3Dd1786ace-e8ea-40e8-9665-96c0949174e5&auth=3D53c7=
+c7de28b92dfd96e93d9dd61a23e634d2fbec-39b15885ceebe9fda9357320aec1ccbac416a4=
+70
+> > >
+> > >         Signed-off-by: Igor Skalkin <Igor.Skalkin@opensynergy.com>
+> > >
+> > >     This is all true enough, but the problem is
+> > >     1. changing uapi like this can't be done, will break userspace
+> > >     2. the driver has more issues and no one seems to want to
+> > >        maintain it.
+> > >     I posted a patch "Bluetooth: virtio_bt: mark broken" and intend
+> > >     to merge it for this release.
+> > >
+> > > This is very sad. We already use this driver in our projects.
+> >
+> > Really?  Can you step up to maintain it? Then we can fix the issues
+> > and it won't be broken.
+>
+> Just a reminder that I'm waiting for a response on that.
+> I just don't know enough about bluetooth.
 
-On Mon, Aug 08, 2022 at 11:33:56PM +0300, Andy Shevchenko wrote:
-> Currently regmap MMIO doesn't support IO ports, while being inconsistent
-> in used IO accessors. Fix the latter and extend framework with the
-> former.
->=20
-> Changelog v2:
-> - dropped the first two patches (Mark)
-> - split the last patch to two (Mark)
->=20
-> Andy Shevchenko (4):
->   regmap: mmio: Remove mmio_relaxed member from context
->   regmap: mmio: Get rid of broken 64-bit IO
->   regmap: mmio: Introduce IO accessors that can talk to IO port
->   regmap: mmio: Fix MMIO accessors to avoid talking to IO port
->=20
->  drivers/base/regmap/regmap-mmio.c | 140 +++++++++++++++++++-----------
->  include/linux/regmap.h            |   3 +
->  2 files changed, 91 insertions(+), 52 deletions(-)
->=20
-> --=20
-> 2.35.1
+Just a heads up that Marcel is on vacation, he did mention that he had
+done some work to update virtio_bt thus why I didn't apply any of the
+changes yet.
 
-Thank you for adding this support. These changes should allow me to
-update the PC104 drivers to make use of regmap MMIO for device
-communication. Here's my ack for this patch series:
+> --
+> MST
+>
 
-Acked-by: William Breathitt Gray <william.gray@linaro.org>
 
---rUUOkd+8RcEzdopk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCYvU1NwAKCRC1SFbKvhIj
-K8VPAQDscpMrM6bi+TQUykYqt4iQmWqAI+rPTbbo4r1oKDKfQQD/aMQiJwLTj41F
-H1Q1sE5eIcTFD6rvjUMxdeiB3MB5BwA=
-=A/+x
------END PGP SIGNATURE-----
-
---rUUOkd+8RcEzdopk--
+--=20
+Luiz Augusto von Dentz

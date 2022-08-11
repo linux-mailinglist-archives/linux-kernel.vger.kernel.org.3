@@ -2,89 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E88E58FEDE
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 17:11:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B24DE58FEE5
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 17:12:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235503AbiHKPKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 11:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55728 "EHLO
+        id S235543AbiHKPMe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 11:12:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235543AbiHKPKq (ORCPT
+        with ESMTP id S230133AbiHKPMd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 11:10:46 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5698525E82
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 08:10:44 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id z25so25997888lfr.2
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 08:10:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=ythLCoVb9L2vBawwAE87aN65NfOERO7MePsawDGE0HM=;
-        b=GpHMp+mUorkB7eVPzZYP3xQ08kbw0mkr0pImGlClMbek72EeegLNz+nhuMZOo7wuLu
-         qzOjPuzyDt/Y/ThaKW3KFd16H+SO0VVDwWvTJKnr73a1nhQo8fQr0LvCzR+VBl1QL9f6
-         m1xSxv7/TpzHVngyUuhfrCYcVrAK0M2o8pR9d67WHzKPntTsGTIjYLMSd2BMshgaNv7f
-         ZwfuvnLKFxkSo6EY4u84KS6jhrXCMD1PO9/uETlCO0Tac3Ey02V40jeHKh4uN13U3XOU
-         3gsVNo/HiWRRtRqs/cJtjtlwzh93ZwtURmiGfAm95rmKR13v4hPOrhsG13yhr0GvZotH
-         SfTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=ythLCoVb9L2vBawwAE87aN65NfOERO7MePsawDGE0HM=;
-        b=X+bIswlmATNqVQ9RK/KpFefkW9WS1gQ3ujwDnKXWkjK1bLxqxuL3J43eSnWeMVxYTG
-         DvjQTet1G9gU9u3PFvuAox7do3Sm0ebAuPaGxB0ka1G+vXE4ws7GgBcMtKnpG++9iZpb
-         FDLb0IpQHrDdH1eV2z2FCDn4MZNwk75pc+KpJcUoRvSJJfbFV+F2lFLRW43yRQj4V2y3
-         T2w9l+iF2xPLWfA9Nsk6VqjxnRQ9zZ3KBcCTNAoIP/Br5rn7aTJ0pbvm6vMmj4d2JOZf
-         miOJ1sPy1L2J8NcOGxttyCBPJ39FVuNurb/R1TTKFJFLTGlLt3i7SGppnH4AhDhKa8wW
-         ojnw==
-X-Gm-Message-State: ACgBeo3v4jVIb95++ADIk36L9sUqixwe70hNNzlO6nA2rHiKhv8nlg8M
-        fJ3Bd4WRBJjpNUUrBAmS50ikBQ==
-X-Google-Smtp-Source: AA6agR7oR08zhJzkZ8rf5MkbjaIHuaVnR+OLR5jaO9Pq5H4A3inAXP8eN7ZQLCJOAcsPhXzgtxQT9w==
-X-Received: by 2002:a05:6512:2316:b0:48a:f2e3:be97 with SMTP id o22-20020a056512231600b0048af2e3be97mr10845161lfu.383.1660230642636;
-        Thu, 11 Aug 2022 08:10:42 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id w12-20020a05651234cc00b0048137a6486bsm726277lfr.228.2022.08.11.08.10.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Aug 2022 08:10:42 -0700 (PDT)
-Message-ID: <01c832c4-6631-4865-30b3-7f060e27a7ff@linaro.org>
-Date:   Thu, 11 Aug 2022 18:10:36 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [EXT] Re: [PATCH v4 1/3] dt-bindings: gpio: Add imx scu gpio
- driver bindings
-Content-Language: en-US
-To:     Shenwei Wang <shenwei.wang@nxp.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "brgl@bgdev.pl" <brgl@bgdev.pl>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>
-Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "imx@lists.linux.dev" <imx@lists.linux.dev>
-References: <20220811124135.95299-1-shenwei.wang@nxp.com>
- <20220811124135.95299-2-shenwei.wang@nxp.com>
- <db3020ef-7321-e171-b5bc-9c1795c2cced@linaro.org>
- <AM9PR04MB82741882E177387DB95AE3B589649@AM9PR04MB8274.eurprd04.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <AM9PR04MB82741882E177387DB95AE3B589649@AM9PR04MB8274.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Thu, 11 Aug 2022 11:12:33 -0400
+Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC3667B793;
+        Thu, 11 Aug 2022 08:12:27 -0700 (PDT)
+X-QQ-mid: bizesmtp83t1660230728t7q7362u
+Received: from localhost.localdomain ( [110.188.55.240])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Thu, 11 Aug 2022 23:11:58 +0800 (CST)
+X-QQ-SSF: 0100000000200070H000B00A0000020
+X-QQ-FEAT: UMQM+3VOEYsTPC6jMH0yz2i4V+oZLsGcQU83QUJxmWPROYvQZ4BMGwaf+LtgI
+        7CDKQfi+bB1csRp6nSTxoQx8kG1V9KxQmeH5BiOi6CS9Ol/0gDnq+ixD2kfsqM7Im1XBhWz
+        kMhcstK/vS4TqTFK9ARDHWWu/sLQG5VdWgGg0IcvIArQdg8463bTMzR/7Eo7uMempJ2/ke3
+        nKVqvori/Egh+PIrtf3WhXTZJ9FlOaQrSJt6K0J8ZEpWVKGDYvziHQW1dCPeu5BQx9T8FPt
+        aWyrnzJuO5mKnhX/cakL6fZ3p2VjveNskSCfqkGKNwP0O39midPA76BJ5ztNxQdcXcS5dqX
+        HuvjhPpQPAdXH/e5qVbSzwLRfuH+PP9qFzXGU4TLqxZdVNBEDAxOgrmnew40w==
+X-QQ-GoodBg: 0
+From:   min tang <tangmin@cdjrlc.com>
+To:     jejb@linux.ibm.com, martin.petersen@oracle.com
+Cc:     hare@suse.de, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, min tang <tangmin@cdjrlc.com>
+Subject: [PATCH] scsi: Fix comment typo
+Date:   Thu, 11 Aug 2022 23:11:46 +0800
+Message-Id: <20220811151146.12677-1-tangmin@cdjrlc.com>
+X-Mailer: git-send-email 2.17.1
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -93,49 +46,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/08/2022 17:52, Shenwei Wang wrote:
-> 
-> 
->> -----Original Message-----
->> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Sent: Thursday, August 11, 2022 9:36 AM
->> To: Shenwei Wang <shenwei.wang@nxp.com>; robh+dt@kernel.org;
->> krzysztof.kozlowski+dt@linaro.org; linus.walleij@linaro.org; brgl@bgdev.pl;
->> shawnguo@kernel.org; s.hauer@pengutronix.de; kernel@pengutronix.de;
->> festevam@gmail.com; dl-linux-imx <linux-imx@nxp.com>
->> Cc: devicetree@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
->> gpio@vger.kernel.org; linux-arm-kernel@lists.infradead.org; imx@lists.linux.dev
->> Subject: [EXT] Re: [PATCH v4 1/3] dt-bindings: gpio: Add imx scu gpio driver
->> bindings
->>> diff --git
->>> a/Documentation/devicetree/bindings/gpio/fsl,imx-sc-gpio.yaml
->>> b/Documentation/devicetree/bindings/gpio/fsl,imx-sc-gpio.yaml
->>> new file mode 100644
->>> index 000000000000..a1b024cddc97
->>> --- /dev/null
->>> +++ b/Documentation/devicetree/bindings/gpio/fsl,imx-sc-gpio.yaml
->>> +description: |
->>> +  This module provides the standard interface to control the
->>> +  resource pins in SCU domain on i.MX8 platforms.
->>> +
->>> +properties:
->>> +  compatible:
->>> +    enum:
->>> +      - fsl,imx8qxp-sc-gpio
->>
->> Now the filename does not match compatible. Use the same compatible as
->> filename.
-> 
-> The subnodes under fsl,scu.yaml have their own naming rule. For example, the watchdog
-> compatible is "fsl,imx-sc-wdt", but the file name is "fsl,scu-wdt.yaml". 
+The double `the' is duplicated in line 208, remove one.
 
-The other files have for example fsl,imx-sc-wdt, so they match compatible.
+Signed-off-by: min tang <tangmin@cdjrlc.com>
+---
+ drivers/scsi/fcoe/fcoe_ctlr.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Is the filename required 
-> to match its compatible?
+diff --git a/drivers/scsi/fcoe/fcoe_ctlr.c b/drivers/scsi/fcoe/fcoe_ctlr.c
+index 39e16eab47aa..28e8b9f1e1a4 100644
+--- a/drivers/scsi/fcoe/fcoe_ctlr.c
++++ b/drivers/scsi/fcoe/fcoe_ctlr.c
+@@ -205,7 +205,7 @@ static int fcoe_sysfs_fcf_add(struct fcoe_fcf *new)
+ 		 * that doesn't have a priv (fcf was deleted). However,
+ 		 * libfcoe will always delete FCFs before trying to add
+ 		 * them. This is ensured because both recv_adv and
+-		 * age_fcfs are protected by the the fcoe_ctlr's mutex.
++		 * age_fcfs are protected by the fcoe_ctlr's mutex.
+ 		 * This means that we should never get a FCF with a
+ 		 * non-NULL priv pointer.
+ 		 */
+-- 
+2.17.1
 
-Yes, that's the convention. Otherwise people tend to name the files in
-whatever way they like...
-
-Best regards,
-Krzysztof

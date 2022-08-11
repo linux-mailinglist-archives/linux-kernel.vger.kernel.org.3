@@ -2,99 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E9F758F600
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 04:52:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B69A958F5FF
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 04:52:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233603AbiHKCv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 22:51:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37330 "EHLO
+        id S233743AbiHKCv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 22:51:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbiHKCvz (ORCPT
+        with ESMTP id S232786AbiHKCv4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 22:51:55 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E591C883C5;
-        Wed, 10 Aug 2022 19:51:54 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id d1so12464452qvs.0;
-        Wed, 10 Aug 2022 19:51:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=MaRTXfYyFqr0HiXCCqqjA5Tp2gofP6+S10DAm5IeLT4=;
-        b=A1Ywx5+d6yl1vB1SqyqWKvyOpgv+mfVVheGmkvUrQJC5qkmBzjHMaM2n1NC2EWPUyg
-         SZS09u2yr71Dv/ueyxwbBjGFWvC6lGbR2cCPAP8K/u9XKfs/q8ijOUpkFcO959ZYnxUA
-         NaJ5+HES9ZlkPmCcrhfnhD3h6HG8BH+ng8ElxFxnSYOd+8s3ocaJIZL7prHzi/xgWF8w
-         QmLENU1eBGrFSnRN9uyTx0kuHnGWpeMPs09ZX8gjUCCBiIzN0M0+rfbhMtoPk3SH+3vS
-         AIVjnQaBIWlDnzzDuV/zHwW/0znh05/8U/jBK3O0yHhj3wNSEGPORAzZkH/VzBl5vPC8
-         JVuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=MaRTXfYyFqr0HiXCCqqjA5Tp2gofP6+S10DAm5IeLT4=;
-        b=7fwSqHpKNhK7qzXe9oNyTNkJIBIw2oZgsLwCyVyq97sbvi/nHoOxg/SgPXX3EhShlb
-         GQ8x1SJgc0ZtH5U52tiCeMN5hwtCto1b0EK13fh1HRgMPQw0Ok/cyC5i8bwEbi/HnTCL
-         bpoM0h0z+XKX097CHR/gFJC8iK+nhqjCQ6Gqvi0QMV3mEDp6XYsYFTs9jRFDb+e5gdUI
-         WeEvpFjLMCTPmYbEpxrJX4rFSjQ9bMtwLM5C86nNMdu4upyOArAiuZAHiYPvbiRtnOv6
-         dNpZPxugXaHuqYcDvhdkv+lA4fJJrbx3jzrdJwvaof985RZJrnSbN7njWTcx3jPLp/wS
-         6FEg==
-X-Gm-Message-State: ACgBeo0CQVL0eEcYUg5ql5JAbX4IcdPKpREB+9fqtz34+fd0B8vknxL9
-        iwEGzWJmkm9tCEO4zEqZNRn/0t3B1brCKP0IsSs=
-X-Google-Smtp-Source: AA6agR4AgzQzC7Ec26xU8Xdd3LO5LAt4FVM3x6beEWkiuAGReSYSVbm6ydAFwrTFMcKIwg4ZhXuZtA==
-X-Received: by 2002:a05:6214:27ca:b0:476:c754:6288 with SMTP id ge10-20020a05621427ca00b00476c7546288mr26008634qvb.54.1660186313920;
-        Wed, 10 Aug 2022 19:51:53 -0700 (PDT)
-Received: from ?IPV6:2600:4040:2036:c00:c070:f2e9:e1e5:7d17? ([2600:4040:2036:c00:c070:f2e9:e1e5:7d17])
-        by smtp.gmail.com with ESMTPSA id t25-20020ac87399000000b00342f80223adsm877426qtp.89.2022.08.10.19.51.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Aug 2022 19:51:52 -0700 (PDT)
-Message-ID: <499c8b49-a09e-e775-3242-13d37a13877e@gmail.com>
-Date:   Wed, 10 Aug 2022 22:51:51 -0400
+        Wed, 10 Aug 2022 22:51:56 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E2DA883CC;
+        Wed, 10 Aug 2022 19:51:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E8FD3B81DDA;
+        Thu, 11 Aug 2022 02:51:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D9AFC433D6;
+        Thu, 11 Aug 2022 02:51:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660186312;
+        bh=7hnvScR6aK8rXCE8zN1Thl2XIsFX60XDRgsGKqvYKBc=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=m6xsYnjDhUIGm70AEo+Qry7UocFGihU4hjiboETu3Z4bSqHypRBpAYPLoHwy2Ov5f
+         /hV9ltgRRYKaGXO3/CMsqEqsfJFvAOZxOBk125LmUi4U7fO6WXLuBzjVDeCnP2QKnD
+         nM+ghVdKzdgzRyjQ/vB0YbQIvKubWlSbFVoyrof8RYn9D56oiVNY3zCEeFHOxUbn1S
+         jkijKejDPWQ3IcWICbp8lSwZ2GPVK8oDVWmrEmrKda6wKBQEUr8RvO7qIWnzTCpsVU
+         F32gbPvGqte6d73mjofii/Q1iaHl8FVpjyOvGD0yfu584l62DxNtITov/98D1kc+Wg
+         QYp9iZXMpCjOg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 2859F5C038F; Wed, 10 Aug 2022 19:51:52 -0700 (PDT)
+Date:   Wed, 10 Aug 2022 19:51:52 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     linux-kernel@vger.kernel.org, rushikesh.s.kadam@intel.com,
+        urezki@gmail.com, neeraj.iitr10@gmail.com, frederic@kernel.org,
+        rostedt@goodmis.org, rcu@vger.kernel.org
+Subject: Re: [PATCH v3 resend 0/6] Implement call_rcu_lazy() and
+ miscellaneous fixes
+Message-ID: <20220811025152.GW2125313@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20220809034517.3867176-1-joel@joelfernandes.org>
+ <308db02b-b56d-2df1-ee33-7f66e6a85f63@joelfernandes.org>
+ <87663566-ed67-fee8-4598-13591f2f072b@joelfernandes.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 1/2] ARM: msm8960: Rename cxo_board to cxo-board and
- add alias
-Content-Language: en-US
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     agross@kernel.org, david@ixit.cz, devicetree@vger.kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, robh+dt@kernel.org
-References: <20220808234723.5184-2-guptarud@gmail.com>
- <20220809000300.6384-1-guptarud@gmail.com> <YvQMyQLohqcc8Fug@ripper>
-From:   Rudraksha Gupta <guptarud@gmail.com>
-In-Reply-To: <YvQMyQLohqcc8Fug@ripper>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87663566-ed67-fee8-4598-13591f2f072b@joelfernandes.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
- > Clock and dts patches goes through two different paths towards mainline,
+On Wed, Aug 10, 2022 at 10:31:56PM -0400, Joel Fernandes wrote:
+> 
+> 
+> On 8/10/2022 10:23 PM, Joel Fernandes wrote:
+> > 
+> > 
+> > On 8/8/2022 11:45 PM, Joel Fernandes (Google) wrote:
+> >> Just a refresh of v3 with one additional debug patch. v3's cover letter is here:
+> >>  https://lore.kernel.org/all/20220713213237.1596225-1-joel@joelfernandes.org/
+> >>
+> >> I just started working on this again while I have some time during paternity
+> >> leave ;-) So I thought I'll just send it out again. No other changes other
+> >> than that 1 debug patch I added on the top.
+> >>
+> >> Next I am going to go refine the power results as mentioned in Paul's comments
+> >> on the last cover letter.
+> > 
+> > Side note: Here is another big selling point for call_rcu_lazy().
+> > Instead of _lazy(), if you just increased jiffies_till_first_fqs, and
+> > slowed *all* call_rcu() down to achieve the same effect, that would
+> > affect percpu refcounters switching to atomic-mode, for example.
+> > 
+> > They switch to atomic mode by calling __percpu_ref_switch_mode() which
+> > is called by percpu_ref_switch_to_atomic_sync().>
+> > This will slow this call down for the full lazy duration which will slow
+> > down suspend in blk_pre_runtime_suspend().
+> 
+> Correction while I am going on the record (got to be careful these
+> days). It *might* slow down RCU for the full lazy duration, unless of
+> course a fly-by rescue call_rcu() comes in.
 
- > so they should be separated.
+Just unload a module, which if I remember correctly invokes rcu_barrier().
+Lots of rescue callbacks.  ;-)
 
-Gotcha, thanks. I will do that.
-
-
- > This breaks compatibility with existing DTB files.
-
- > What you probably want is to make sure that any clocks with parent name
-
- > of "cxo", should have a .fw_name = "cxo", then you can make a
-
- > phandle-based reference in DT and these global names doesn't matter (and
-
- > in the end we can remove this board_clk from the driver).
-
-Ah, I see. If I understand correctly, it should be something like this, 
-right?
-https://github.com/torvalds/linux/blob/master/drivers/clk/qcom/gcc-msm8996.c#L169-L172
+							Thanx, Paul

@@ -2,156 +2,331 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id CE4E95908A4
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 00:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 762295908A5
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 00:16:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234418AbiHKWMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 18:12:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51884 "EHLO
+        id S235841AbiHKWNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 18:13:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229594AbiHKWMU (ORCPT
+        with ESMTP id S235205AbiHKWNc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 18:12:20 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55D9EA0316
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 15:12:19 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id c19-20020a17090ae11300b001f2f94ed5c6so6083857pjz.1
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 15:12:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=OaIrkj9R9JywIX725xkBPhpXdGqairQfBX0VVLZM/go=;
-        b=PX9vP9e6D2i3BRyZIySwJPDwHZx7MDUBg6U5qRUg5aispyC8WAyr3Pv8uyVvQhlvEz
-         RTKtOCkS4QygbmLPynk0vftHzNBqCz15oBYSTIYhE94i0LCQR6BknkOUvScurFBTnb2a
-         4og4ZP2b8dNIfA+lVGi/77/+uXNCAd6lVc00uxhG+VKLw5Vw+htZ9EOr0ccjbOJb9Yka
-         367PUfLyCGVuykPzpCgGJReFq+9EwFmjFjKv3QSYHj6omBI45WM7AkGdtAj39X3Ri2I2
-         z2xnfGw4ZAble6fV1USkw4ESzm9ysBiDgG2zKFhGjOvhRkMI+e2pMaAGEcS6DxTuBa24
-         erjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=OaIrkj9R9JywIX725xkBPhpXdGqairQfBX0VVLZM/go=;
-        b=ziyUxycA6OgIQb8qlR8FYaZSzpa5hOPM6bVyZ2NmAgmV/vFlPGwP2at7WQn1wW9xzY
-         wQQRLx4oz40lgWEEn3VaGK4RH2r9GOZ9d4yikQHGIGBf/6X30vXJx0FTIJP8NZMvXmzs
-         xFERqwzH5d6WVqugmRArlQVxuT/k3C/YnPWGMFzetb6jV707xPNDDZg6d9qBRSKKBv3p
-         Rt60vk+PI9lWJJToIR6BIkDjjsOQGzeb4kUVaYxZ1U1DXPqQGAsHvcwGPzgXxuD103/e
-         iW03KqoDggjHqXBJ+8W6ObZ9stA82rhpqNJOzPaNp1Oh3UrLSpBCirVLocIUElnkwlV2
-         0z8Q==
-X-Gm-Message-State: ACgBeo1wXgoJEzfYX5UeeGPsrrW4V1W5VoeEc0Me0WbSEBuMN8O86WhH
-        h1AotDn4JBff8Pv3LuwqsXx2heq3O0lMDCGHmZ4=
-X-Google-Smtp-Source: AA6agR4Ot+zakUPtBASQJ+JpMLGbKl6h8feAP2zD6KXiS0sw8eytNEw/mfvgwHuT1R2IzYUAVJhtM2W/oTP4/jDPM6k=
-X-Received: by 2002:a17:902:a516:b0:16d:4379:f34a with SMTP id
- s22-20020a170902a51600b0016d4379f34amr1199760plq.26.1660255938814; Thu, 11
- Aug 2022 15:12:18 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220805184016.2926168-1-alexlzhu@fb.com> <Yu1mcD6Jp4fCVEMi@casper.infradead.org>
- <0b16dbac6444bfcdfbeb4df4280354839bfe1a8f.camel@fb.com> <Yu1uabedm+NYnnAj@casper.infradead.org>
- <CA8C72B6-E509-4FB0-BEAA-C4368EB7A419@fb.com> <CAHbLzkp27aP4JYLPLzv2vtyzVe63bkhuZhw1jnxTF1Buvt4rew@mail.gmail.com>
- <fc108f58a4616d5d7d092a7c1f150069a92ee40c.camel@fb.com> <CAHbLzkqpn2ExBJuPD8sYJrEDCUU9=FE3GFh8kL3Bmax0KytKPw@mail.gmail.com>
- <1F8B9D85-A735-4832-AD58-CA4BD474248D@fb.com> <CAOUHufbGcuvJ8EfBkWrdCgeMCiceP0SxHZzcJnOt1Mw0P2w9kw@mail.gmail.com>
- <CAHbLzkqGq6LDDSCcFTJW9_O8dfAMje8_W6ddpDP9ESDQWUb07w@mail.gmail.com>
- <F28E23D0-C635-4A49-91EE-100AAA8C9EAD@fb.com> <CAOUHufYeuMN9As58BVwMKSN6viOZKReXNeCBgGeeL6ToWGsEKw@mail.gmail.com>
- <868F0874-70E8-4416-B39B-DA74C9D76A40@fb.com> <CAOUHufas1o1Ez9EDSjjxsO-w6Ph6Km8R8yOX+1_c=4LvG6DEWw@mail.gmail.com>
- <DD679B3A-BDF7-4EBD-AAC2-A663057AC8E3@fb.com> <CAOUHufbD-9PpQ+kuD=-8z-ptsrprjyThpkFe+4_NtFnzAjDG9g@mail.gmail.com>
- <DEB2F4F2-7F62-48F0-914D-5F71BFDBCBEE@fb.com> <3195C304-2140-4E5D-890D-AC55653193E5@fb.com>
- <CAOUHufaggjiYAywB646N5Rj48eSJDjir8oLwDVu039ymbLm0PA@mail.gmail.com>
-In-Reply-To: <CAOUHufaggjiYAywB646N5Rj48eSJDjir8oLwDVu039ymbLm0PA@mail.gmail.com>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Thu, 11 Aug 2022 15:12:06 -0700
-Message-ID: <CAHbLzkpRVOOGK2d0L25A4PKfEbHngm-WEWWH34UYVg1O40Tiig@mail.gmail.com>
-Subject: Re: [PATCH v3] mm: add thp_utilization metrics to /proc/thp_utilization
-To:     Yu Zhao <yuzhao@google.com>
-Cc:     "Alex Zhu (Kernel)" <alexlzhu@fb.com>, Rik van Riel <riel@fb.com>,
-        Kernel Team <Kernel-team@fb.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        Ning Zhang <ningzhang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>
+        Thu, 11 Aug 2022 18:13:32 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD22A032E;
+        Thu, 11 Aug 2022 15:13:31 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id A151A5C00BF;
+        Thu, 11 Aug 2022 18:13:30 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Thu, 11 Aug 2022 18:13:30 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1660256010; x=
+        1660342410; bh=ZIzxJ5MgFo4JJ3fo2egieILXrZU/1FfabyPb1B3koxY=; b=q
+        GmZ0l1FwzD2KAfMEwNDY0/R1bYDvYtc+StDbWYv/pFCaErQ3yP6ZmckVMN4uBtJY
+        /3r2PR7eWW41iJcn0bhBsVCpXQs4MkiYOFCrIJuS7QHDA/KWryLKRXwABUq/3Bn6
+        E6JdIlnDpyjZgpdS44GjO//4jjtPReOTfbmCI6RZ5PMbZH5EXR/BV7ALcNJTOQ5x
+        TrJhui+5O3fVQReYbobfle9uvYIRYozq+zL4PraaEL/9NUzs31hi/JWhno/y/Omn
+        luWhYsaNOjv2LQ8Ek0AG4YQhjACw1QE+rk0qqxXfEoDb+yOURhyhnF0kAAhcVXUN
+        eqD3TaTYMDUE0ttMyauhg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1660256010; x=
+        1660342410; bh=ZIzxJ5MgFo4JJ3fo2egieILXrZU/1FfabyPb1B3koxY=; b=r
+        bFqnp42vUqEU3sQopNBHvZqQSDpH8Fath4pbmljvrPb4+BdQsovbaVzlbOi8RUNt
+        ALOd9/NvDbDXEGSoUCEJr6FNnQaVkQ20i+BfebU/inc1/ySLSg6gjHmmC0/dtELY
+        pa2cUQtb3GCvHWXF1KYV7XnacpzKsI8H2O9EslVCmbz07U6Sd5yGdxUZsnksPuFE
+        psUnbysfVqChzQaAJuKYBrAZzcijLkirZvcH4gsSVSngAKBeUA69gOxg3D0yFZiA
+        1kVv3uXr8x5iBLKmQeIXXkY2Hcn25jpy37bW5h6rcKHl6+Bx+XM5+UTLDfNpR5l+
+        W5BXbdvwJlxIcfIQ9Pshw==
+X-ME-Sender: <xms:Cn_1YkYlkl3u5vn-CG4zkzPTvPYGFOLYlUHc7uH0-aot4iyO0_GBRg>
+    <xme:Cn_1YvbeNH29Tua-j0NeXAsAeqtMzEOf9yjEGOP-vSBeQuAimbw1mfXOkhTwXqWrb
+    vF9jG9-_V0QA7BDTfk>
+X-ME-Received: <xmr:Cn_1Yu9K_KV1jVjUEuLNKMwtx2mIq8BStmoQkC8vC0fgGXFyVc6qj1pE5ZQnkxrKlpAXkg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeghedgtdejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkffuhffvveffjghftgfgfgggsehtqhertddtreejnecuhfhrohhmpefnuhhk
+    vgculfhonhgvshcuoehluhhkvgeslhhjohhnvghsrdguvghvqeenucggtffrrghtthgvrh
+    hnpeekfeffueejveeujeeugeelleehtdegvdeludektddtfffhieefledvudehfeejieen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehluhhkvg
+    eslhhjohhnvghsrdguvghv
+X-ME-Proxy: <xmx:Cn_1YuoN9vKeim6sf-1iIQVbaQHfGIt-AEnZ4My7kijVzrib6bjt6w>
+    <xmx:Cn_1YvrsP399rqv6TsoPrCtkCbteDQ41xlqMmA_c0pZ9HUMa9QSFxg>
+    <xmx:Cn_1YsQef2DApPGWhwWer9Tp6hPHxzgGK2LmIvArphoDvBzfF8kRzg>
+    <xmx:Cn_1YuUYe3jOAiQb0MGff2tq4c_CxV6PO2cVQanCaddeNdHo1-LJwg>
+Feedback-ID: i5ec1447f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 11 Aug 2022 18:13:28 -0400 (EDT)
+Message-ID: <4cefa82993c9a3560c0e0fd8969ac8e5e6d8ecc8.camel@ljones.dev>
+Subject: Re: [PATCH v3 1/6] asus-wmi: Implement TUF laptop keyboard RGB
+ control
+From:   Luke Jones <luke@ljones.dev>
+To:     Hans de Goede <hdegoede@redhat.com>, Pavel Machek <pavel@ucw.cz>
+Cc:     andy.shevchenko@gmail.com, pobrn@protonmail.com,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Fri, 12 Aug 2022 10:13:21 +1200
+In-Reply-To: <af6b9480-5e33-ec1b-94cc-e51724db0716@redhat.com>
+References: <20220809025054.1626339-1-luke@ljones.dev>
+         <20220809025054.1626339-2-luke@ljones.dev>
+         <20220809105031.GA4971@duo.ucw.cz>
+         <fcc7b7eb29abc1ac9053bce02fd9f705e5f06b0b.camel@ljones.dev>
+         <f1ad35f6-acdf-0fc8-1ee1-99bd8c7a5e77@redhat.com>
+         <af6b9480-5e33-ec1b-94cc-e51724db0716@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.44.4 (by Flathub.org) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 2:55 PM Yu Zhao <yuzhao@google.com> wrote:
->
-> On Thu, Aug 11, 2022 at 1:20 PM Alex Zhu (Kernel) <alexlzhu@fb.com> wrote=
-:
-> >
-> > Hi Yu,
-> >
-> > I=E2=80=99ve updated your patch set from last year to work with folio a=
-nd am testing it now. The functionality in split_huge_page() is the same as=
- what I have. Was there any follow up work done later?
->
-> Yes, but it won't change the landscape any time soon (see below). So
-> please feel free to continue along your current direction.
->
-> > If not, I would like to incorporate this into what I have, and then res=
-ubmit. Will reference the original patchset. We need this functionality for=
- the shrinker, but even the changes to split_huge_page() by itself it shoul=
-d show some performance improvement when used by the existing deferred_spli=
-t_huge_page().
->
-> SGTM. Thanks!
->
-> A side note:
->
-> I'm working on a new mode: THP=3Dauto, meaning the kernel will detect
-> internal fragmentation of 2MB compound pages to decide whether to map
-> them by PMDs or split them under memory pressure. The general workflow
-> of this new mode is as follows.
+On Thu, 2022-08-11 at 17:05 +0200, Hans de Goede wrote:
+>=20
+>=20
+> On 8/11/22 17:01, Hans de Goede wrote:
+> > Hi,
+> >=20
+> > On 8/10/22 06:44, Luke Jones wrote:
+> > > Hi Pavel, Andy, Hans,
+> > >=20
+> > > > > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*
+> > > > > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * asus::kbd_backlight still
+> > > > > > > > > > > controls a
+> > > > > > > > > > > base > > > > > > 3-level backlight and when
+> > > > > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * it is on 0, the RGB is not
+> > > > > > > > > > > visible
+> > > > > > > > > > > at all. > > > > RGB > > should be treated as
+> > > > > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * an additional step.
+> > > > > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+> > > > > > >=20
+> > > > > > > Ouch. Lets not do that? If rgb interface is available,
+> > > > > > > hide the
+> > > > > > > 3
+> > > > > > > level one, or something.
+> > > > > > >=20
+> > >=20
+> > > I really don't think this is safe or sensible. There are some
+> > > laptops
+> > > that default the 3-stage method to off, and this means that the
+> > > LEDs
+> > > will not show regardless of multicolor brightness.
+> > >=20
+> > >=20
+> > >=20
+> > > > > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0mc_cdev->led_cdev.name =3D=C2=A0=C2=
+=A0 > > >
+> > > > > > > > > > > > > >
+> > > > > > > > > > > "asus::multicolour::kbd_backlight";
+> > > > > > >=20
+> > > > > > > Make this "rgb:kbd_backlight" or
+> > > > > > > "inputX:rgb:kbd_backligh" and
+> > > > > > > document it in Documentation/leds/well-known-leds.txt.
+> > >=20
+> > > Will do.
+> > >=20
+> > > -- 4 hours later --
+> > >=20
+> > > I've spent a lot of time working on this now. I don't think
+> > > multicolor
+> > > LED is suitable for use with the way these keyboards work.
+> > >=20
+> > > The biggest issue is related to the brightness setting.
+> > > 1. If the ASUS_WMI_DEVID_KBD_BACKLIGHT method defaults to 0 on
+> > > boot
+> > > then RGB is not visible
+> >=20
+> > Note to others following this thread I asked Luke to clarify this
+> > a bit in an unrelated 1:1 conversation we were having:
+> >=20
+> > On 8/10/22 23:45, Luke Jones wrote:
+> > > On 8/10/22, Hans de Goede wrote:
+> > > > I plan to go through all the asus-wmi stuff you've posted
+> > > > tomorrow,
+> > > > so I'll reply to this then. One thing which is not entirely
+> > > > clear to me is that:
+> > > >=20
+> > > > 1. If I understand you correctly the laptops
+> > > > with the RGB keyboards have both the old mono-color
+> > > > "asus::kbd_backlight"
+> > > > as well as a new RGB interface and these somehow interact with
+> > > > each
+> > > > other, do I understand that correctly?
+> > >=20
+> > > Yes, and that is the problem. The "mono" switch takes precedence.
+> > >=20
+> > > > 2. If yes, then can you explain the interaction in a bit more
+> > > > detail,
+> > > > I see you say someting along the lines of the RGB controls only
+> > > > working when the old mono-color "asus::kbd_backlight"
+> > > > brightness
+> > > > is set to 3 (which is its max brightness) ?
+> > >=20
+> > > Adjusting this changes the overall keyboard brightness. So if
+> > > this is
+> > > at 1, and all RGB is at 255, then when you switch 2, 3, the
+> > > overall
+> > > brightness increases.
+> > >=20
+> > > > 3. So what happens e.g. if writing 2 to the old mono-color
+> > > > "asus::kbd_backlight" brightness after setting some RGB values
+> > > > ?
+> > >=20
+> > > If the brightness was 3, then the overall brightness decreases.
+> > > If it was at 1, then it increases.
+> >=20
+> > I see, so the old (still present) mono-color "asus::kbd_backlight"
+> > brightness works as a master brightness control and the rgb values
+> > in the ASUS_WMI_DEVID_TUF_RGB_MODE WMI set commands are really
+> > just to set the color.
+> >=20
+> > And I guess that the Fn + whatever kbd brightness hotkey also still
+> > modifies the old mono-color "asus::kbd_backlight"? Which means that
+> > the "asus::kbd_backlight" device is also the device on which the
+> > led_classdev_notify_brightness_hw_changed is done as you mention
+> > below.
+> >=20
+> > (continued below.
+> >=20
+> > > I worked around this by setting it to "3" by default in module if
+> > > ASUS_WMI_DEVID_TUF_RGB_MODE is found. And added a check in the
+> > > button
+> > > events to adjust multicolor brightness (+/- 17). This works but
+> > > now I
+> > > can't do led notify (led_classdev_notify_brightness_hw_changed).
+> > >=20
+> > > 2. Pattern trigger can't be used for these keyboard modes as the
+> > > modes
+> > > are done entirely in hardware via a single switch in the complete
+> > > command packet.
+> > >=20
+> > > I don't see any way forward with this, and looking at the
+> > > complexity I
+> > > don't have time either.
+> > >=20
+> > > 3. Nodes everywhere..
+> > >=20
+> > > To fully control control these keyboards there are two WMI
+> > > methods, one
+> > > for mode/rgb, one for power-state. Splitting each of these
+> > > parameters
+> > > out to individual nodes with sensible naming and expectations
+> > > gives:
+> >=20
+> > <snip>
+> >=20
+> > > Quite frankly I would rather use the method I had in the first
+> > > patch I
+> > > submitted where mode and state had two nodes each,
+> > > - keyboard_rgb_mode, WO =3D "n n n n n n"
+> > > - keyboard_rgb_mode_index, output =3D "save/apply, mode, r, g, b,
+> > > speed"
+> > > - keyboard_rgb_state, WO =3D "n n n n n"
+> > > - keyboard_rgb_state_index, output =3D "save/apply, boot, awake,
+> > > sleep,
+> > > keyboard"
+> > >=20
+> > > A big benefit of this structure is that not being able to read
+> > > settings
+> > > back from the keyboard (not possible!) becomes a non-issue
+> > > because
+> > > users have to write a full input, not partial, and it will apply
+> > > right
+> > > away.
+> >=20
+> > Right to me this not being able to read back the values shows that
+> > the firmware API here really is not suitable for doing a more
+> > fancy "nice" / standard sysfs API on top.
+> >=20
+> > Since we cannot read back any of the r, g, b, mode or speed values
+> > we would need to pick defaults and then setting any of them would
+> > override the actual values the hw is using for the others, which
+> > is really not a good thing to do.
+> >=20
+> > So that only leaves something akin to keyboard_rgb_mode[_index] +
+> > keyboard_rgb_state[_index] which sets all values at once, mirroring
+> > the limited WMI API as a good option here, I agree with you on
+> > this.
+> >=20
+> > Sorry Pavel, I know you don't like custom sysfs attributes
+> > being added to LED class devices, but I have to agree with Luke
+> > that there really is not a good way to deal with this here and
+> > we did try!
+> >=20
+> > Only request I have for the next version wrt the decision to
+> > circle all the way back to having:
+> >=20
+> > > - keyboard_rgb_mode, WO =3D "n n n n n n"
+> > > - keyboard_rgb_mode_index, output =3D "save/apply, mode, r, g, b,
+> > > speed"
+> > > - keyboard_rgb_state, WO =3D "n n n n n"
+> > > - keyboard_rgb_state_index, output =3D "save/apply, boot, awake,
+> > > sleep,
+> >=20
+> > Is please put these new attributes under the:
+> > /sys/class/leds/asus::kbd_backlight
+> >=20
+> > Using the led_class_device.groups member as discussed before, now
+> > that we have decided to drop the multicolor LED stuff that should
+> > work :)
+> >=20
+> > Although maybe Pavel prefers to have the new sysfs attributes
+> > under /sys/bus/platform/devices/asus-nb-wmi/ instead since they
+> > are non standard.
+> >=20
+> > Pavel, to me having these under /sys/class/leds/asus::kbd_backlight
+> > seems more logical.
+>=20
+> p.s.
+>=20
+> Besides it being more logical to group these together with the
+> main brightness control for the kbd_backlight, I believe this
+> way the files will also be easier to discover for users
+> (users not using the asusctl utility that is).
 
-I tend to agree that avoiding allocating THP in the first place is the
-preferred way to avoid internal fragmentation. But I got some
-questions about your design/implementation:
+I agree with this. From what I've seen with folks trying to debug RGB
+keyboard issues they aren't familiar with they tend to reach straight
+for looking in /sys/class/leds/asus::kbd_backlight.
 
->
-> In the page fault path:
-> 1. Compound pages are allocated as usual.
-> 2. Each is mapped by 512 consecutive PTEs rather than a PMD.
-> 3. There will be more TLB misses but the same number of page faults.
-> 4. TLB coalescing can mitigate the performance degradation.
+Doing it this way mean that the attributes will show up in udev under
+this LED class also, making it a more logical way to discover an added
+feature.
 
-Why not just allocate base pages in the first place? Khugepaged has
-max_pte_none tunable to detect internal fragmentation. If you worry
-about zero page, you could add max_pte_zero tunable.
+> > But since there are non-standard and since
+> > there already is a bunch of asus-wmi sysfs API under
+> > /sys/bus/platform/devices/asus-nb-wmi/ putting them there if you
+> > prefer that is fine with me too. So what do you prefer ?
+> >=20
+> > > Hans, Andy, can I please revert back to the node + _index pairs
+> > > taking
+> > > an array input. Everything will be cleaner and simpler.
+> >=20
+> > Ack, see above. Thank you for at least trying to use the multi-
+> > color
+> > LED API.=20
+> >=20
+> > Regards,
+> >=20
+> > Hans
+> >=20
+>=20
 
-Or did you investigate whether the new MADV_COLLAPSE may be helpful or
-not? It leaves the decision to the userspace.
-
->
-> In khugepaged:
-> 1. Check the dirty bit in the PTEs mapping a compound page, to
-> determine its utilization.
-> 2. Remap compound pages that meet a certain utilization threshold by
-> PMDs in place, i.e., no migrations.
->
-> In the reclaim path, e.g., MGLRU page table scanning:
-> 1. Decide whether compound pages mapped by PTEs should be split based
-> on their utilizations and memory pressure, e.g., reclaim priority.
-> 2. Clean subpages should be freed directly after split, rather than swapp=
-ed out.
->
-> N.B.
-> 1. This workflow relies on the dirty bit rather examining the content of =
-a page.
-> 2. Sampling can be done by periodically switching between a PMD and
-> 512 consecutive PTEs.
-> 3. It only needs to hold mmap_lock for read because this special mode
-> (512 consecutive PTEs) is not considered the split mode.
-> 4. Don't hold your breath :)
->
-> Other references:
-> 1. https://www.usenix.org/system/files/atc20-zhu-weixi_0.pdf
-> 2. https://www.usenix.org/system/files/osdi21-hunter.pdf
+Kind regards,
+Luke.

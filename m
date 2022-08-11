@@ -2,75 +2,252 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A43E458FAE4
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 12:49:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66AC958FAE3
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 12:48:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234682AbiHKKsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 06:48:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53032 "EHLO
+        id S234563AbiHKKst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 06:48:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234671AbiHKKss (ORCPT
+        with ESMTP id S234584AbiHKKsr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 06:48:48 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42186923F0;
-        Thu, 11 Aug 2022 03:48:47 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b9854329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:9854:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A13B31EC058B;
-        Thu, 11 Aug 2022 12:48:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1660214921;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Px8FbXoDYvlrBTtaaPsRT4RF6cnPoiy7gTqsL4QIX7E=;
-        b=kH9bQBxOxy4bxtNA71odBU9IxcRDMl2s/wckhf2LEQBSeXK5IYJ+51Aw3iYB5A1Gom/Bo8
-        GndAFPGIN+F0Kw8gMzR/dk1RdApWOLYRz8HyUeHRYJg6gwzIX7Gg2Lf4xvipGnd97GBVKh
-        FzG//ipxAv+8FTC4wE5qvG5A4iWmnUM=
-Date:   Thu, 11 Aug 2022 12:48:37 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     bjorn.andersson@linaro.org, ckadabi@quicinc.com,
-        vnkgutta@quicinc.com, mchehab@kernel.org, james.morse@arm.com,
-        rric@kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-edac@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Channagoud Kadabi <ckadabi@codeaurora.org>,
-        Venkata Narendra Kumar Gutta <vnkgutta@codeaurora.org>
-Subject: Re: [PATCH 0/2] Fix crash when using Qcom LLCC/EDAC drivers
-Message-ID: <YvTehUOIqJGqXgXY@zn.tnic>
-References: <20220811100924.79505-1-manivannan.sadhasivam@linaro.org>
+        Thu, 11 Aug 2022 06:48:47 -0400
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5BEE92F44;
+        Thu, 11 Aug 2022 03:48:45 -0700 (PDT)
+Received: by mail-ej1-f41.google.com with SMTP id a7so32844160ejp.2;
+        Thu, 11 Aug 2022 03:48:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=2psXapoZ13xPQOZjFEvN9Z4DOi1cREWK0pz2T2YJtmo=;
+        b=IpaDm60Ez/kHnqKOqwLqecSOwt+TofmQl/BUc7MHOIkH+fULgLOPOjr9Aw3pYpBSBv
+         R42mufR3uBI1vhL2XhmgmHEcUOGhJgWprd7YeDkcdO7VPwITvhzUs5N9bqCJnBBY6pRX
+         TFKmzXSL1kiu7hQ1UM8NGEUUbrQqAN9KMyUZMn57TtSuFmaOzXKbG6ICXX17Yw5kpCcT
+         elrAgNcjQg16pGxgqd5BX1u9AweMno7CSdUgcZyt5ioxbgN8AlIEtvilOgwLtU+xKODg
+         osd0C5snWFdL8DWNjt8XsYm/sYoxWe9a18UN+nWiheue9WpSWe8C5dkfys8QQzNXFQP2
+         DVGA==
+X-Gm-Message-State: ACgBeo1keGsGLQTGG8T2pNsCcORl7bVTfmz427qRZ34bkA5IU8tbUDEd
+        eYXvNLOXCXmjp3BTnV0LQINQw+PsaC8=
+X-Google-Smtp-Source: AA6agR7YlDJTfvAKpbFW/hQM6n5lS76ql3UMmCt24HIKcucEnGQwv4lfDeC9lNHbbPYUxsv5aMUahQ==
+X-Received: by 2002:a17:907:2e19:b0:730:acf0:4921 with SMTP id ig25-20020a1709072e1900b00730acf04921mr21902909ejc.416.1660214924186;
+        Thu, 11 Aug 2022 03:48:44 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id f15-20020a50ee8f000000b0043bc4b28464sm9002313edr.34.2022.08.11.03.48.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Aug 2022 03:48:43 -0700 (PDT)
+Message-ID: <2fd0f4e5-8b5d-4257-4700-71e68cff29f6@kernel.org>
+Date:   Thu, 11 Aug 2022 12:48:41 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220811100924.79505-1-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+Subject: Re: [PATCH] serial: stm32: make info structs static to avoid sparse
+ warnings
+Content-Language: en-US
+To:     Ben Dooks <ben-linux@fluff.org>, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Cc:     gregkh@linuxfoundation.org, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com
+References: <20220721212430.453192-1-ben-linux@fluff.org>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <20220721212430.453192-1-ben-linux@fluff.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 03:39:22PM +0530, Manivannan Sadhasivam wrote:
-> Hello,
+On 21. 07. 22, 23:24, Ben Dooks wrote:
+> The info structs are local only to the stm32-usart.c driver and are
+> triggering sparse warnings about being undecalred. Move these into
+> the main driver code and make them static to avoid the following
+> warnings:
 > 
-> This series fixes the crash seen on the Qualcomm SM8450 chipset with the
-> LLCC/EDAC drivers. The problem was due to the Qcom EDAC driver using the
-> fixed LLCC register offsets for detecting the LLCC errors.
+> drivers/tty/serial/stm32-usart.h:42:25: warning: symbol 'stm32f4_info' was not declared. Should it be static?
+> drivers/tty/serial/stm32-usart.h:63:25: warning: symbol 'stm32f7_info' was not declared. Should it be static?
+> drivers/tty/serial/stm32-usart.h:85:25: warning: symbol 'stm32h7_info' was not declared. Should it be static?
 
-I see you've CCed the QCOM maintainers using different email addresses:
+Right, I would go even further. There is no point in having a separate 
+header. So could you move the whole content to .c?
 
-$ ./scripts/get_maintainer.pl -f drivers/edac/qcom_edac.c
-Channagoud Kadabi <ckadabi@codeaurora.org> (maintainer:EDAC-QCOM)
-Venkata Narendra Kumar Gutta <vnkgutta@codeaurora.org> (maintainer:EDAC-QCOM)
+> Signed-off-by: Ben Dooks <ben-linux@fluff.org>
+> ---
+>   drivers/tty/serial/stm32-usart.c | 69 ++++++++++++++++++++++++++++++++
+>   drivers/tty/serial/stm32-usart.h | 68 -------------------------------
+>   2 files changed, 69 insertions(+), 68 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
+> index 0973b03eeeaa..01f1ab2c18c0 100644
+> --- a/drivers/tty/serial/stm32-usart.c
+> +++ b/drivers/tty/serial/stm32-usart.c
+> @@ -35,6 +35,75 @@
+>   #include "serial_mctrl_gpio.h"
+>   #include "stm32-usart.h"
+>   
+> +
+> +/* Register offsets */
+> +static struct stm32_usart_info stm32f4_info = {
+> +	.ofs = {
+> +		.isr	= 0x00,
+> +		.rdr	= 0x04,
+> +		.tdr	= 0x04,
+> +		.brr	= 0x08,
+> +		.cr1	= 0x0c,
+> +		.cr2	= 0x10,
+> +		.cr3	= 0x14,
+> +		.gtpr	= 0x18,
+> +		.rtor	= UNDEF_REG,
+> +		.rqr	= UNDEF_REG,
+> +		.icr	= UNDEF_REG,
+> +	},
+> +	.cfg = {
+> +		.uart_enable_bit = 13,
+> +		.has_7bits_data = false,
+> +		.fifosize = 1,
+> +	}
+> +};
+> +
+> +static struct stm32_usart_info stm32f7_info = {
+> +	.ofs = {
+> +		.cr1	= 0x00,
+> +		.cr2	= 0x04,
+> +		.cr3	= 0x08,
+> +		.brr	= 0x0c,
+> +		.gtpr	= 0x10,
+> +		.rtor	= 0x14,
+> +		.rqr	= 0x18,
+> +		.isr	= 0x1c,
+> +		.icr	= 0x20,
+> +		.rdr	= 0x24,
+> +		.tdr	= 0x28,
+> +	},
+> +	.cfg = {
+> +		.uart_enable_bit = 0,
+> +		.has_7bits_data = true,
+> +		.has_swap = true,
+> +		.fifosize = 1,
+> +	}
+> +};
+> +
+> +static struct stm32_usart_info stm32h7_info = {
+> +	.ofs = {
+> +		.cr1	= 0x00,
+> +		.cr2	= 0x04,
+> +		.cr3	= 0x08,
+> +		.brr	= 0x0c,
+> +		.gtpr	= 0x10,
+> +		.rtor	= 0x14,
+> +		.rqr	= 0x18,
+> +		.isr	= 0x1c,
+> +		.icr	= 0x20,
+> +		.rdr	= 0x24,
+> +		.tdr	= 0x28,
+> +	},
+> +	.cfg = {
+> +		.uart_enable_bit = 0,
+> +		.has_7bits_data = true,
+> +		.has_swap = true,
+> +		.has_wakeup = true,
+> +		.has_fifo = true,
+> +		.fifosize = 16,
+> +	}
+> +};
+> +
+>   static void stm32_usart_stop_tx(struct uart_port *port);
+>   static void stm32_usart_transmit_chars(struct uart_port *port);
+>   static void __maybe_unused stm32_usart_console_putchar(struct uart_port *port, unsigned char ch);
+> diff --git a/drivers/tty/serial/stm32-usart.h b/drivers/tty/serial/stm32-usart.h
+> index ee69c203b926..0ec41a732c88 100644
+> --- a/drivers/tty/serial/stm32-usart.h
+> +++ b/drivers/tty/serial/stm32-usart.h
+> @@ -38,74 +38,6 @@ struct stm32_usart_info {
+>   
+>   #define UNDEF_REG 0xff
+>   
+> -/* Register offsets */
+> -struct stm32_usart_info stm32f4_info = {
+> -	.ofs = {
+> -		.isr	= 0x00,
+> -		.rdr	= 0x04,
+> -		.tdr	= 0x04,
+> -		.brr	= 0x08,
+> -		.cr1	= 0x0c,
+> -		.cr2	= 0x10,
+> -		.cr3	= 0x14,
+> -		.gtpr	= 0x18,
+> -		.rtor	= UNDEF_REG,
+> -		.rqr	= UNDEF_REG,
+> -		.icr	= UNDEF_REG,
+> -	},
+> -	.cfg = {
+> -		.uart_enable_bit = 13,
+> -		.has_7bits_data = false,
+> -		.fifosize = 1,
+> -	}
+> -};
+> -
+> -struct stm32_usart_info stm32f7_info = {
+> -	.ofs = {
+> -		.cr1	= 0x00,
+> -		.cr2	= 0x04,
+> -		.cr3	= 0x08,
+> -		.brr	= 0x0c,
+> -		.gtpr	= 0x10,
+> -		.rtor	= 0x14,
+> -		.rqr	= 0x18,
+> -		.isr	= 0x1c,
+> -		.icr	= 0x20,
+> -		.rdr	= 0x24,
+> -		.tdr	= 0x28,
+> -	},
+> -	.cfg = {
+> -		.uart_enable_bit = 0,
+> -		.has_7bits_data = true,
+> -		.has_swap = true,
+> -		.fifosize = 1,
+> -	}
+> -};
+> -
+> -struct stm32_usart_info stm32h7_info = {
+> -	.ofs = {
+> -		.cr1	= 0x00,
+> -		.cr2	= 0x04,
+> -		.cr3	= 0x08,
+> -		.brr	= 0x0c,
+> -		.gtpr	= 0x10,
+> -		.rtor	= 0x14,
+> -		.rqr	= 0x18,
+> -		.isr	= 0x1c,
+> -		.icr	= 0x20,
+> -		.rdr	= 0x24,
+> -		.tdr	= 0x28,
+> -	},
+> -	.cfg = {
+> -		.uart_enable_bit = 0,
+> -		.has_7bits_data = true,
+> -		.has_swap = true,
+> -		.has_wakeup = true,
+> -		.has_fifo = true,
+> -		.fifosize = 16,
+> -	}
+> -};
+> -
+>   /* USART_SR (F4) / USART_ISR (F7) */
+>   #define USART_SR_PE		BIT(0)
+>   #define USART_SR_FE		BIT(1)
 
-Does MAINTAINERS need updating?
-
+thanks,
 -- 
-Regards/Gruss,
-    Boris.
+js
+suse labs
 
-https://people.kernel.org/tglx/notes-about-netiquette

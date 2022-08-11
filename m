@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BC2658FA79
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 12:10:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB82158FA71
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 12:09:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234702AbiHKKJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 06:09:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46348 "EHLO
+        id S234969AbiHKKJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 06:09:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234738AbiHKKJo (ORCPT
+        with ESMTP id S234937AbiHKKJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 06:09:44 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43759923CD
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 03:09:35 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id ha11so17277160pjb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 03:09:35 -0700 (PDT)
+        Thu, 11 Aug 2022 06:09:47 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 900039352B
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 03:09:40 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id z19so16561711plb.1
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 03:09:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=lSBY1yS1Xw97HWveifQYja2PT0/x+CrBFQy17+c0BDU=;
-        b=TUL9B3XAN9V+HnYPC7vRcSjCTLS5cPUYnF6JXKd1JQONfRAsJEkpfUx9cmUNxU699x
-         Qua5/zKAuevA2FrhFoT3DTPyaHF2bD79odM6WGIo7ABmiA35Ovhiybpe1y9JXE5Ku1yI
-         7d/r+qC0FYVRLz9mMyvyRNTIWWcpVeGIwH3QM8UWtQlAXt3PMYR/pKNzfAWt6B6HjLwD
-         7TAaiA84zBJMFG7S15iQgnppjkrRW5V4TMAVBTm9lLbrg5tyCNeJ4zRlmgGYes/qqyeN
-         2IQfUwYWCVXCUAD4pYxDyi2rENe9YbhcEJAVqKo20AhsuO5zJEonfESC8MzeZhCR0MEv
-         Ymjg==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=Aj7bIRpBxLE/QbhIHFv2D/FvUghNvupNjdDm/EaW0wk=;
+        b=DYDleXwOCYrNafDo5GTknws4qyaWdcZJC5pHMUT6MxD8vLe9dzIv0p5VcCtKAP5NrD
+         IOR/4nX6nmc0lHwH7I0gC2+RpzpMmGgF+f4HsAQQNL91gbmXuuhEph1cbfwrK7IZ1BpC
+         FutezzNK7GKH5Y5N56WKJAdkxbrWH/RL74Yh0N++x1tH5idG/pkA/JspCYc+4ci8cd11
+         1CTU2301kFtSPkNLUXA0fjEqUrNetZwDRrBP8urvs9WBNTDuG6HgknuV37c4mn8iVLRS
+         mImomnsYdW7fvliKsGe7LmyTpjJkHoLtt/f+jSybyV7zx/q/iCHdRkviC0xhgABbm6Js
+         dIiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=lSBY1yS1Xw97HWveifQYja2PT0/x+CrBFQy17+c0BDU=;
-        b=NxLMouIeoTgRyCnxO/DCjpVSuKgN8RGTwP3PH59iXOodxFRV+Q3c8P0JRaQVyDr9kP
-         NtSc1nU+V5cnZOI+sE9fMGKGxdtwacL+vJyfA/yiYCcEQTZcR6M2Eam+FOKFlmyVnCaR
-         p5nJUPoJ8g7x9fb9U7zvla08R8IaJkSJNLGkarOJOl1LvHKhlfFesbPcdUxEP5RvYnAJ
-         /sE5ObGDtl9sNB+Vh1GnFgtWrr2/YONmL99BhUGBuxPFzBsAqW/fWIBEDcSTe9SyrWO4
-         +QR4KYDt/UYQMujSF3y7e/xY5m9Q9sDMPhcPbeYb+wZsAdEymNS7TT338E8VTt010dUr
-         d4jQ==
-X-Gm-Message-State: ACgBeo1WKWzsN5SJCFN01qNo6LcNDrbnAzeKUt387/0vjpnLETc7kLmX
-        nO8GduA1b2PnNSoonHqBIkBu
-X-Google-Smtp-Source: AA6agR43LqVirfFoBL1a+ABeiKghnUDzWk5veNNYowKakZi591/NWu4gjeClnI0TrFP2aMtmahs7mg==
-X-Received: by 2002:a17:90a:5517:b0:1f8:a7ce:ac33 with SMTP id b23-20020a17090a551700b001f8a7ceac33mr3024058pji.83.1660212574700;
-        Thu, 11 Aug 2022 03:09:34 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=Aj7bIRpBxLE/QbhIHFv2D/FvUghNvupNjdDm/EaW0wk=;
+        b=WC5OfcoPD+8BO4TxOQ88JgPqlUfEO3UeP62L0hKJwJAHWkRgAMJweOzVX8jRxmtoc5
+         kxg0jPtjh9FWHIu+Zdna0TG1Dm1i2aA+hYxEbFGNhjdA5ykcciTYhugEnJVB9pwC/fBO
+         rjNvlI78vMrMAYIHX89vLlGh4ncF1pPmaorB5KnTUwSgLLPmthq3O8TqXUNrf6CYH0TJ
+         z+Qhf0l0cuPcSLhh2lZcfZnIxsGAg0fzznqjvnTQ/IB/mk3B8xwxaxF0+ZzK5a9DQk8S
+         HiRqawt0fnSIDY2Zx/hjLrriV41zGqfw0XmM/C+5I8Sw5oEnTUM+z0EhRy4FWlJ1HEzc
+         I/jQ==
+X-Gm-Message-State: ACgBeo2Jy0y4ru+9qFbPUYICX5HKhG0SVW1JWgRLS7KajJvgBVPQkXvQ
+        R5sL6UpqOFKsXLiAAv1Pf2J5
+X-Google-Smtp-Source: AA6agR5urAjbeR+oCpeOsDAG3lUolXvFDjzepvOgGtvARILTv9Et4w7Z6k7r7s0KasDqImWeJEh2cQ==
+X-Received: by 2002:a17:90a:bb96:b0:1f4:414a:d89e with SMTP id v22-20020a17090abb9600b001f4414ad89emr8230563pjr.240.1660212579470;
+        Thu, 11 Aug 2022 03:09:39 -0700 (PDT)
 Received: from localhost.localdomain ([59.92.103.103])
-        by smtp.gmail.com with ESMTPSA id 1-20020a621501000000b0052b9351737fsm3714839pfv.92.2022.08.11.03.09.30
+        by smtp.gmail.com with ESMTPSA id 1-20020a621501000000b0052b9351737fsm3714839pfv.92.2022.08.11.03.09.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Aug 2022 03:09:34 -0700 (PDT)
+        Thu, 11 Aug 2022 03:09:39 -0700 (PDT)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     bjorn.andersson@linaro.org, ckadabi@quicinc.com,
         vnkgutta@quicinc.com, bp@alien8.de, mchehab@kernel.org
@@ -55,10 +55,12 @@ Cc:     james.morse@arm.com, rric@kernel.org,
         linux-arm-msm@vger.kernel.org, linux-edac@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 0/2] Fix crash when using Qcom LLCC/EDAC drivers
-Date:   Thu, 11 Aug 2022 15:39:22 +0530
-Message-Id: <20220811100924.79505-1-manivannan.sadhasivam@linaro.org>
+Subject: [PATCH 1/2] soc: qcom: llcc: Pass SoC specific EDAC register offsets to EDAC driver
+Date:   Thu, 11 Aug 2022 15:39:23 +0530
+Message-Id: <20220811100924.79505-2-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220811100924.79505-1-manivannan.sadhasivam@linaro.org>
+References: <20220811100924.79505-1-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,35 +73,166 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+The LLCC EDAC register offsets varies between each SoCs. Until now, the
+EDAC driver used the hardcoded register offsets. But this caused crash
+on SM8450 SoC where the register offsets has been changed.
 
-This series fixes the crash seen on the Qualcomm SM8450 chipset with the
-LLCC/EDAC drivers. The problem was due to the Qcom EDAC driver using the
-fixed LLCC register offsets for detecting the LLCC errors.
+So to avoid this crash and also to make it easy to accommodate changes for
+new SoCs, let's pass the SoC specific register offsets to the EDAC driver.
 
-This seems to have worked for SoCs till SM8450. But in SM8450, the LLCC
-register offsets were changed. So accessing the fixed offsets causes the
-crash on this platform.
+Currently, two set of offsets are used. One is SM8450 specific and another
+one is common to all SoCs.
 
-So for fixing this issue, and also to make it work on future SoCs, let's
-pass the LLCC offsets from the Qcom LLCC driver based on the individual
-SoCs and let the EDAC driver make use of them.
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
+ drivers/soc/qcom/llcc-qcom.c | 64 ++++++++++++++++++++++++++++++++++++
+ 1 file changed, 64 insertions(+)
 
-This series has been tested on SM8450 based dev board.
-
-Thanks,
-Mani
-
-Manivannan Sadhasivam (2):
-  soc: qcom: llcc: Pass SoC specific EDAC register offsets to EDAC
-    driver
-  EDAC/qcom: Get rid of hardcoded register offsets
-
- drivers/edac/qcom_edac.c           | 112 ++++++++++++++---------------
- drivers/soc/qcom/llcc-qcom.c       |  64 +++++++++++++++++
- include/linux/soc/qcom/llcc-qcom.h |  35 +++++++--
- 3 files changed, 147 insertions(+), 64 deletions(-)
-
+diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
+index eecafeded56f..1aedbbb8e96f 100644
+--- a/drivers/soc/qcom/llcc-qcom.c
++++ b/drivers/soc/qcom/llcc-qcom.c
+@@ -104,6 +104,7 @@ struct qcom_llcc_config {
+ 	int size;
+ 	bool need_llcc_cfg;
+ 	const u32 *reg_offset;
++	const struct llcc_edac_reg *edac_reg;
+ };
+ 
+ enum llcc_reg_offset {
+@@ -252,6 +253,60 @@ static const struct llcc_slice_config sm8450_data[] =  {
+ 	{LLCC_AENPU,     8, 2048, 1, 1, 0xFFFF, 0x0,   0, 0, 0, 0, 0, 0, 0 },
+ };
+ 
++static const struct llcc_edac_reg common_edac_reg = {
++	.trp_ecc_error_status0 = 0x20344,
++	.trp_ecc_error_status1 = 0x20348,
++	.trp_ecc_sb_err_syn0 = 0x2304c,
++	.trp_ecc_db_err_syn0 = 0x20370,
++	.trp_ecc_error_cntr_clear = 0x20440,
++	.trp_interrupt_0_status = 0x20480,
++	.trp_interrupt_0_clear = 0x20484,
++	.trp_interrupt_0_enable = 0x20488,
++
++	/* LLCC Common registers */
++	.cmn_status0 = 0x3000c,
++	.cmn_interrupt_0_enable = 0x3001c,
++	.cmn_interrupt_2_enable = 0x3003c,
++
++	/* LLCC DRP registers */
++	.drp_ecc_error_cfg = 0x40000,
++	.drp_ecc_error_cntr_clear = 0x40004,
++	.drp_interrupt_status = 0x41000,
++	.drp_interrupt_clear = 0x41008,
++	.drp_interrupt_enable = 0x4100c,
++	.drp_ecc_error_status0 = 0x42044,
++	.drp_ecc_error_status1 = 0x42048,
++	.drp_ecc_sb_err_syn0 = 0x4204c,
++	.drp_ecc_db_err_syn0 = 0x42070,
++};
++
++static const struct llcc_edac_reg sm8450_edac_reg = {
++	.trp_ecc_error_status0 = 0x20344,
++	.trp_ecc_error_status1 = 0x20348,
++	.trp_ecc_sb_err_syn0 = 0x2034c,
++	.trp_ecc_db_err_syn0 = 0x20370,
++	.trp_ecc_error_cntr_clear = 0x20440,
++	.trp_interrupt_0_status = 0x20480,
++	.trp_interrupt_0_clear = 0x20484,
++	.trp_interrupt_0_enable = 0x20488,
++
++	/* LLCC Common registers */
++	.cmn_status0 = 0x3400c,
++	.cmn_interrupt_0_enable = 0x3401c,
++	.cmn_interrupt_2_enable = 0x3403c,
++
++	/* LLCC DRP registers */
++	.drp_ecc_error_cfg = 0x50000,
++	.drp_ecc_error_cntr_clear = 0x50004,
++	.drp_interrupt_status = 0x50020,
++	.drp_interrupt_clear = 0x50028,
++	.drp_interrupt_enable = 0x5002c,
++	.drp_ecc_error_status0 = 0x520f4,
++	.drp_ecc_error_status1 = 0x520f8,
++	.drp_ecc_sb_err_syn0 = 0x520fc,
++	.drp_ecc_db_err_syn0 = 0x52120,
++};
++
+ static const u32 llcc_v1_2_reg_offset[] = {
+ 	[LLCC_COMMON_HW_INFO]	= 0x00030000,
+ 	[LLCC_COMMON_STATUS0]	= 0x0003000c,
+@@ -267,6 +322,7 @@ static const struct qcom_llcc_config sc7180_cfg = {
+ 	.size		= ARRAY_SIZE(sc7180_data),
+ 	.need_llcc_cfg	= true,
+ 	.reg_offset	= llcc_v1_2_reg_offset,
++	.edac_reg	= &common_edac_reg,
+ };
+ 
+ static const struct qcom_llcc_config sc7280_cfg = {
+@@ -274,6 +330,7 @@ static const struct qcom_llcc_config sc7280_cfg = {
+ 	.size		= ARRAY_SIZE(sc7280_data),
+ 	.need_llcc_cfg	= true,
+ 	.reg_offset	= llcc_v1_2_reg_offset,
++	.edac_reg	= &common_edac_reg,
+ };
+ 
+ static const struct qcom_llcc_config sdm845_cfg = {
+@@ -281,6 +338,7 @@ static const struct qcom_llcc_config sdm845_cfg = {
+ 	.size		= ARRAY_SIZE(sdm845_data),
+ 	.need_llcc_cfg	= false,
+ 	.reg_offset	= llcc_v1_2_reg_offset,
++	.edac_reg	= &common_edac_reg,
+ };
+ 
+ static const struct qcom_llcc_config sm6350_cfg = {
+@@ -288,6 +346,7 @@ static const struct qcom_llcc_config sm6350_cfg = {
+ 	.size		= ARRAY_SIZE(sm6350_data),
+ 	.need_llcc_cfg	= true,
+ 	.reg_offset	= llcc_v1_2_reg_offset,
++	.edac_reg	= &common_edac_reg,
+ };
+ 
+ static const struct qcom_llcc_config sm8150_cfg = {
+@@ -295,6 +354,7 @@ static const struct qcom_llcc_config sm8150_cfg = {
+ 	.size           = ARRAY_SIZE(sm8150_data),
+ 	.need_llcc_cfg	= true,
+ 	.reg_offset	= llcc_v1_2_reg_offset,
++	.edac_reg	= &common_edac_reg,
+ };
+ 
+ static const struct qcom_llcc_config sm8250_cfg = {
+@@ -302,6 +362,7 @@ static const struct qcom_llcc_config sm8250_cfg = {
+ 	.size           = ARRAY_SIZE(sm8250_data),
+ 	.need_llcc_cfg	= true,
+ 	.reg_offset	= llcc_v1_2_reg_offset,
++	.edac_reg	= &common_edac_reg,
+ };
+ 
+ static const struct qcom_llcc_config sm8350_cfg = {
+@@ -309,6 +370,7 @@ static const struct qcom_llcc_config sm8350_cfg = {
+ 	.size           = ARRAY_SIZE(sm8350_data),
+ 	.need_llcc_cfg	= true,
+ 	.reg_offset	= llcc_v1_2_reg_offset,
++	.edac_reg	= &common_edac_reg,
+ };
+ 
+ static const struct qcom_llcc_config sm8450_cfg = {
+@@ -316,6 +378,7 @@ static const struct qcom_llcc_config sm8450_cfg = {
+ 	.size           = ARRAY_SIZE(sm8450_data),
+ 	.need_llcc_cfg	= true,
+ 	.reg_offset	= llcc_v21_reg_offset,
++	.edac_reg	= &sm8450_edac_reg,
+ };
+ 
+ static struct llcc_drv_data *drv_data = (void *) -EPROBE_DEFER;
+@@ -716,6 +779,7 @@ static int qcom_llcc_probe(struct platform_device *pdev)
+ 
+ 	drv_data->cfg = llcc_cfg;
+ 	drv_data->cfg_size = sz;
++	drv_data->edac_reg = cfg->edac_reg;
+ 	mutex_init(&drv_data->lock);
+ 	platform_set_drvdata(pdev, drv_data);
+ 
 -- 
 2.25.1
 

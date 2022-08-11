@@ -2,253 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 284F85906B2
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 21:07:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF2E65906CE
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 21:07:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236075AbiHKSxk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 14:53:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34642 "EHLO
+        id S236137AbiHKSyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 14:54:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236110AbiHKSxb (ORCPT
+        with ESMTP id S236110AbiHKSyx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 14:53:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 33A099E132
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 11:53:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660244008;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ozah201mnfEEDkVFShrVs48byUP3DGG4fcUS7109nSU=;
-        b=MHR15G1PInDUWUMNmzmaSdZaH1ixrJ2LRE1mKO8Wde2jE7N4OxbrjpAiSbBry5B66H4r8v
-        qGFvhhLbRgE7Ogih2ANBnSJAsk/o+SsJd8NZdtdj+sVf90yBeh5wvfrywYS4uyFLvQcoUi
-        9/ZyHU5C3ugdGewgExzdie5iN0RgAOk=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-615-7PIlt6izO_Sb4pOC9mM2TA-1; Thu, 11 Aug 2022 14:53:27 -0400
-X-MC-Unique: 7PIlt6izO_Sb4pOC9mM2TA-1
-Received: by mail-ej1-f72.google.com with SMTP id ga16-20020a1709070c1000b007331af32d3aso1692039ejc.4
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 11:53:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=Ozah201mnfEEDkVFShrVs48byUP3DGG4fcUS7109nSU=;
-        b=uBUWNqe5RLLwhIdAJLsCbwRSf82kb2gP6lKoWiNcco2wc9iPSJz12amxVSnX1cYfEF
-         XXIWSLVYo00Uj4YluuHeMkibYte0BX1XLe7qWU1hWHZdl1gnjevuiR3IGZx2aVM5ssib
-         zStVSGrlq7Vw4Y3fgRFdsTzb1Z2XU03PdBj6s9pN3UHf5ZPCXDTk5CbWfBjlKMcYkyOG
-         XtM3O62LnIO/m0Blg3DsvwpHuiHlcGERLjIQUzj3IXNylDz6aHeJAJweJxqS54bTGHSU
-         E5UJLfH/ysS3nGz7C0SJN/O/3s653vFYKGEqGGKD4/cgx4wZ4IwTMc3T1XQPuwdv9dgZ
-         6xXg==
-X-Gm-Message-State: ACgBeo32yToIY6z69BDpRB3KXHEHGF12+Cw+A/4yz8iELWDOz+ShKUpw
-        tJMChCqVDzndVb7ri2Ks9HF6TaMvqY0VbA5O9XfZyLBvU98kQo8yOnzBqjAXnQVkHJL28TxtUkB
-        5Ngg+4tE+JP951NCskrPmd2z+
-X-Received: by 2002:a05:6402:538a:b0:43a:298e:bc2b with SMTP id ew10-20020a056402538a00b0043a298ebc2bmr407780edb.125.1660244005846;
-        Thu, 11 Aug 2022 11:53:25 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4Hf0C3qERg79013qKBqVwC7oHyWQmFquBERdgftTvV6Wvyxf06qOEovcWRBXcfm3s3neBGlw==
-X-Received: by 2002:a05:6402:538a:b0:43a:298e:bc2b with SMTP id ew10-20020a056402538a00b0043a298ebc2bmr407757edb.125.1660244005666;
-        Thu, 11 Aug 2022 11:53:25 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id f2-20020a17090660c200b007317ad29921sm3879701ejk.13.2022.08.11.11.53.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Aug 2022 11:53:25 -0700 (PDT)
-Message-ID: <23778397-8080-da39-fbde-22a10c820fbd@redhat.com>
-Date:   Thu, 11 Aug 2022 20:53:24 +0200
+        Thu, 11 Aug 2022 14:54:53 -0400
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3FA79E2E5
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 11:54:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1660244092; x=1691780092;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=JAaAJR7wc67hy6jnXKsnD5CiFky15y0MQprEMGqEB0E=;
+  b=E6aRU6H6KtfriBElKkw2Kv5tEM0sH5Xqrj8W7hHa++bvV3N9e3s6vn8N
+   FqdYFJwK48n2nffhNY6oltpjI7YUiKyOJNPKfaGiwuL/kHbg347Ls+G78
+   vYCfJA21o+T/tYxMU8SylD1qzpIyAok0/NS98u6fzglkMdp4wms2jO1Kj
+   sxhplYtTKvo+8pD50I7YJnil2I85aDI89rCVEA+kJjKqzEd4AoLw0sHCz
+   Hvh5Tr1JqxWo3dIB9vrQjyRgSQq0IBUwMm6lWoG7oZqtDgXV6+u63JT3C
+   iXnsWH9QRNq4n+HHK+WiZ4s9JPOzsPeUaCgRZwjbK74dLqJk6P8qYxNR/
+   g==;
+X-IronPort-AV: E=Sophos;i="5.93,230,1654531200"; 
+   d="scan'208";a="206969515"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 12 Aug 2022 02:54:51 +0800
+IronPort-SDR: 1e6C9npo8WkVL99LlArf78sAlTWea4pMc5AAzZ0Kdn8DLU1+c0Tk3YE6+74KupEJdpMX9PXz/Y
+ /q+yn5zluqj/cKxZ5764ezLHK7u3fMmXWYgQDh7romeBsQuUCIgKuMF22Sn75nB6WalijOGykp
+ bmDseye94fsAqmKGK4zSg/HIG9qNccALt+hqQ9DjJPK102F8ikO2JE9aUEJ22SgQSYBsHdbFW5
+ ePJQqIHGva+xGt0yKbrfGRT75H3zHnxuk6U8q4CycPy7/WfI/8ccdPe1EcUXF1bTMZr7IlXvGS
+ KJ8q8gIhO49prT4U2XO/R7fr
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 11 Aug 2022 11:10:26 -0700
+IronPort-SDR: vgbzstQRRgg7wndtRC79PxaoK2MzsDCBrF47OyoFbx4SEgDDnaEOpMnjYj9SsO6wofksFL+tpm
+ J8rHiXGIXVX7YigU2C0AKMT6c44m6+zk1KuPMsCn/LO1+pFkSwTt2gaF6M2ESACZkHTg9/xbaG
+ ZLJRmQYNv/hAlaWsacC5akL4fwZOm5bBi2tyEQ1oM9mQwnVh4sgzlnqCJ8cYBe8X/r+NlWC11T
+ gLdcYLg13dl4fdTlj8+6ubn5QrSGkLPeDYDJlQMJGL80H2CO24KYBTCqLlRJxq2sToP8O/sn2U
+ gio=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 11 Aug 2022 11:54:53 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4M3bZz5rs8z1RwqM
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 11:54:51 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1660244090; x=1662836091; bh=JAaAJR7wc67hy6jnXKsnD5CiFky15y0MQpr
+        EMGqEB0E=; b=drzWJTF/t8pd3s4zbKBqUeH7KYL3iuMM9Sr8yq6MyNO1FyiWDbt
+        8ksgUqwEUQ0shqqK6lA8FcvI5aSy6Ab56dX0r//scLzc4YDvRZKf9Ht9oWUF17AB
+        CbWz7H4+eUGYoI4HbUQxTm+glMSJWBrIw2isiwrlYkMgRRqGlwgmNEB993uvM7iX
+        qOJO938hsAkq0an3yJcdnGh7En0TAjUAxXoI6HJrKBPpoIr+wgQ6PmUcy7YxAYuK
+        /1MiHD1vyIZVi/2DG96+ZcTNuyHNFAtLMnlr/k7+gP9q3u2LVMQAxHZBo3zAoaRy
+        TSNUbE71jsCawDYfLvU6J9j7YC6zpNlXzuw==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id PBll5yZ900Zm for <linux-kernel@vger.kernel.org>;
+        Thu, 11 Aug 2022 11:54:50 -0700 (PDT)
+Received: from [10.11.46.122] (c02drav6md6t.sdcorp.global.sandisk.com [10.11.46.122])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4M3bZy3NGDz1RtVk;
+        Thu, 11 Aug 2022 11:54:50 -0700 (PDT)
+Message-ID: <d2e27cb7-d90a-2f0a-1848-e1ec8faf7899@opensource.wdc.com>
+Date:   Thu, 11 Aug 2022 11:54:50 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v3 3/4] leds: simatic-ipc-leds-gpio: add new model 227G
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
+ Gecko/20100101 Thunderbird/91.12.0
+Subject: Re: [PATCH 0/6] libsas and drivers: NCQ error handling
 Content-Language: en-US
-To:     Henning Schild <henning.schild@siemens.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Pavel Machek <pavel@ucw.cz>, Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lee Jones <lee@kernel.org>, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org
-Cc:     Sheng-Yuan Huang <syhuang3@nuvoton.com>,
-        Tasanakorn Phaipool <tasanakorn@gmail.com>,
-        simon.guinot@sequanux.org
-References: <20220811153908.31283-1-henning.schild@siemens.com>
- <20220811153908.31283-4-henning.schild@siemens.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220811153908.31283-4-henning.schild@siemens.com>
+To:     John Garry <john.garry@huawei.com>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, jinpu.wang@cloud.ionos.com,
+        yangxingui@huawei.com, chenxiang66@hisilicon.com, hare@suse.de
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1658489049-232850-1-git-send-email-john.garry@huawei.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <1658489049-232850-1-git-send-email-john.garry@huawei.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 8/11/22 17:39, Henning Schild wrote:
-> This adds support of the Siemens Simatic IPC227G. Its LEDs are connected
-> to GPIO pins provided by the gpio-f7188x module. We make sure that
-> gets loaded, if not enabled in the kernel config no LED support will be
-> available.
+On 2022/07/22 4:24, John Garry wrote:
+> As reported in [0], the pm8001 driver NCQ error handling more or less
+> duplicates what libata does in link error handling, as follows:
+> - abort all commands
+> - do autopsy with read log ext 10 command
+> - reset the target to recover
 > 
-> Signed-off-by: Henning Schild <henning.schild@siemens.com>
-
-Thanks, patch looks good to me:
-
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-
-Regards,
-
-Hans
-
-
-> ---
->  drivers/leds/simple/simatic-ipc-leds-gpio.c   | 42 ++++++++++++++++---
->  drivers/platform/x86/simatic-ipc.c            |  4 +-
->  .../platform_data/x86/simatic-ipc-base.h      |  1 +
->  include/linux/platform_data/x86/simatic-ipc.h |  1 +
->  4 files changed, 42 insertions(+), 6 deletions(-)
+> Indeed for the hisi_sas driver we want to add similar handling for NCQ
+> errors.
 > 
-> diff --git a/drivers/leds/simple/simatic-ipc-leds-gpio.c b/drivers/leds/simple/simatic-ipc-leds-gpio.c
-> index 4c9e663a90ba..0d73dcbeec2d 100644
-> --- a/drivers/leds/simple/simatic-ipc-leds-gpio.c
-> +++ b/drivers/leds/simple/simatic-ipc-leds-gpio.c
-> @@ -13,28 +13,45 @@
->  #include <linux/leds.h>
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
-> +#include <linux/platform_data/x86/simatic-ipc-base.h>
->  
-> -static struct gpiod_lookup_table simatic_ipc_led_gpio_table = {
-> +struct gpiod_lookup_table *simatic_ipc_led_gpio_table;
-> +
-> +static struct gpiod_lookup_table simatic_ipc_led_gpio_table_127e = {
->  	.dev_id = "leds-gpio",
->  	.table = {
-> -		GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 51, NULL, 0, GPIO_ACTIVE_LOW),
->  		GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 52, NULL, 1, GPIO_ACTIVE_LOW),
->  		GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 53, NULL, 2, GPIO_ACTIVE_LOW),
->  		GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 57, NULL, 3, GPIO_ACTIVE_LOW),
->  		GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 58, NULL, 4, GPIO_ACTIVE_LOW),
->  		GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 60, NULL, 5, GPIO_ACTIVE_LOW),
-> +		GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 51, NULL, 0, GPIO_ACTIVE_LOW),
->  		GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 56, NULL, 6, GPIO_ACTIVE_LOW),
->  		GPIO_LOOKUP_IDX("apollolake-pinctrl.0", 59, NULL, 7, GPIO_ACTIVE_HIGH),
->  	},
->  };
->  
-> +static struct gpiod_lookup_table simatic_ipc_led_gpio_table_227g = {
-> +	.dev_id = "leds-gpio",
-> +	.table = {
-> +		GPIO_LOOKUP_IDX("gpio-f7188x-2", 0, NULL, 0, GPIO_ACTIVE_LOW),
-> +		GPIO_LOOKUP_IDX("gpio-f7188x-2", 1, NULL, 1, GPIO_ACTIVE_LOW),
-> +		GPIO_LOOKUP_IDX("gpio-f7188x-2", 2, NULL, 2, GPIO_ACTIVE_LOW),
-> +		GPIO_LOOKUP_IDX("gpio-f7188x-2", 3, NULL, 3, GPIO_ACTIVE_LOW),
-> +		GPIO_LOOKUP_IDX("gpio-f7188x-2", 4, NULL, 4, GPIO_ACTIVE_LOW),
-> +		GPIO_LOOKUP_IDX("gpio-f7188x-2", 5, NULL, 5, GPIO_ACTIVE_LOW),
-> +		GPIO_LOOKUP_IDX("gpio-f7188x-3", 6, NULL, 6, GPIO_ACTIVE_HIGH),
-> +		GPIO_LOOKUP_IDX("gpio-f7188x-3", 7, NULL, 7, GPIO_ACTIVE_HIGH),
-> +	}
-> +};
-> +
->  static const struct gpio_led simatic_ipc_gpio_leds[] = {
-> -	{ .name = "green:" LED_FUNCTION_STATUS "-3" },
->  	{ .name = "red:" LED_FUNCTION_STATUS "-1" },
->  	{ .name = "green:" LED_FUNCTION_STATUS "-1" },
->  	{ .name = "red:" LED_FUNCTION_STATUS "-2" },
->  	{ .name = "green:" LED_FUNCTION_STATUS "-2" },
->  	{ .name = "red:" LED_FUNCTION_STATUS "-3" },
-> +	{ .name = "green:" LED_FUNCTION_STATUS "-3" },
->  };
->  
->  static const struct gpio_led_platform_data simatic_ipc_gpio_leds_pdata = {
-> @@ -46,7 +63,7 @@ static struct platform_device *simatic_leds_pdev;
->  
->  static int simatic_ipc_leds_gpio_remove(struct platform_device *pdev)
->  {
-> -	gpiod_remove_lookup_table(&simatic_ipc_led_gpio_table);
-> +	gpiod_remove_lookup_table(simatic_ipc_led_gpio_table);
->  	platform_device_unregister(simatic_leds_pdev);
->  
->  	return 0;
-> @@ -54,10 +71,25 @@ static int simatic_ipc_leds_gpio_remove(struct platform_device *pdev)
->  
->  static int simatic_ipc_leds_gpio_probe(struct platform_device *pdev)
->  {
-> +	const struct simatic_ipc_platform *plat = pdev->dev.platform_data;
->  	struct gpio_desc *gpiod;
->  	int err;
->  
-> -	gpiod_add_lookup_table(&simatic_ipc_led_gpio_table);
-> +	switch (plat->devmode) {
-> +	case SIMATIC_IPC_DEVICE_127E:
-> +		simatic_ipc_led_gpio_table = &simatic_ipc_led_gpio_table_127e;
-> +		break;
-> +	case SIMATIC_IPC_DEVICE_227G:
-> +		if (!IS_ENABLED(CONFIG_GPIO_F7188X))
-> +			return -ENODEV;
-> +		request_module("gpio-f7188x");
-> +		simatic_ipc_led_gpio_table = &simatic_ipc_led_gpio_table_227g;
-> +		break;
-> +	default:
-> +		return -ENODEV;
-> +	}
-> +
-> +	gpiod_add_lookup_table(simatic_ipc_led_gpio_table);
->  	simatic_leds_pdev = platform_device_register_resndata(NULL,
->  		"leds-gpio", PLATFORM_DEVID_NONE, NULL, 0,
->  		&simatic_ipc_gpio_leds_pdata,
-> diff --git a/drivers/platform/x86/simatic-ipc.c b/drivers/platform/x86/simatic-ipc.c
-> index ca3647b751d5..1825ef21a86d 100644
-> --- a/drivers/platform/x86/simatic-ipc.c
-> +++ b/drivers/platform/x86/simatic-ipc.c
-> @@ -41,6 +41,7 @@ static struct {
->  	{SIMATIC_IPC_IPC127E, SIMATIC_IPC_DEVICE_127E, SIMATIC_IPC_DEVICE_NONE},
->  	{SIMATIC_IPC_IPC227D, SIMATIC_IPC_DEVICE_227D, SIMATIC_IPC_DEVICE_NONE},
->  	{SIMATIC_IPC_IPC227E, SIMATIC_IPC_DEVICE_427E, SIMATIC_IPC_DEVICE_227E},
-> +	{SIMATIC_IPC_IPC227G, SIMATIC_IPC_DEVICE_227G, SIMATIC_IPC_DEVICE_NONE},
->  	{SIMATIC_IPC_IPC277E, SIMATIC_IPC_DEVICE_NONE, SIMATIC_IPC_DEVICE_227E},
->  	{SIMATIC_IPC_IPC427D, SIMATIC_IPC_DEVICE_427E, SIMATIC_IPC_DEVICE_NONE},
->  	{SIMATIC_IPC_IPC427E, SIMATIC_IPC_DEVICE_427E, SIMATIC_IPC_DEVICE_427E},
-> @@ -65,7 +66,8 @@ static int register_platform_devices(u32 station_id)
->  	}
->  
->  	if (ledmode != SIMATIC_IPC_DEVICE_NONE) {
-> -		if (ledmode == SIMATIC_IPC_DEVICE_127E)
-> +		if (ledmode == SIMATIC_IPC_DEVICE_127E ||
-> +		    ledmode == SIMATIC_IPC_DEVICE_227G)
->  			pdevname = KBUILD_MODNAME "_leds_gpio";
->  		platform_data.devmode = ledmode;
->  		ipc_led_platform_device =
-> diff --git a/include/linux/platform_data/x86/simatic-ipc-base.h b/include/linux/platform_data/x86/simatic-ipc-base.h
-> index 39fefd48cf4d..57d6a10dfc9e 100644
-> --- a/include/linux/platform_data/x86/simatic-ipc-base.h
-> +++ b/include/linux/platform_data/x86/simatic-ipc-base.h
-> @@ -19,6 +19,7 @@
->  #define SIMATIC_IPC_DEVICE_427E 2
->  #define SIMATIC_IPC_DEVICE_127E 3
->  #define SIMATIC_IPC_DEVICE_227E 4
-> +#define SIMATIC_IPC_DEVICE_227G 5
->  
->  struct simatic_ipc_platform {
->  	u8	devmode;
-> diff --git a/include/linux/platform_data/x86/simatic-ipc.h b/include/linux/platform_data/x86/simatic-ipc.h
-> index f3b76b39776b..7a2e79f3be0b 100644
-> --- a/include/linux/platform_data/x86/simatic-ipc.h
-> +++ b/include/linux/platform_data/x86/simatic-ipc.h
-> @@ -31,6 +31,7 @@ enum simatic_ipc_station_ids {
->  	SIMATIC_IPC_IPC427E = 0x00000A01,
->  	SIMATIC_IPC_IPC477E = 0x00000A02,
->  	SIMATIC_IPC_IPC127E = 0x00000D01,
-> +	SIMATIC_IPC_IPC227G = 0x00000F01,
->  };
->  
->  static inline u32 simatic_ipc_get_station_id(u8 *data, int max_len)
+> This series add a new libsas API - sas_ata_link_abort() - to handle host
+> NCQ errors, and fixes up pm8001 and hisi_sas drivers to use it. As
+> mentioned in the pm8001 changeover patch, I would prefer a better place to
+> locate the SATA ABORT command (rather that nexus reset callback).
+> 
+> I would appreciate some testing of the pm8001 change as the read log ext10
+> command mostly hangs on my arm64 machine - these arm64 hangs are a known
+> issue.
 
+I applied this series on top of the current Linus tree and ran some tests: a
+bunch of fio runs and also ran libzbc test suites on a SATA SMR drive as that
+generates many command failures. No problems detected, the tests all pass.
+FYI, messages for failed commands look like this:
+
+pm80xx0:: mpi_sata_event 2685: SATA EVENT 0x23
+sas: Enter sas_scsi_recover_host busy: 1 failed: 1
+sas: sas_scsi_find_task: aborting task 0x00000000ba62a907
+pm80xx0:: mpi_sata_completion 2292: task null, freeing CCB tag 2
+sas: sas_scsi_find_task: task 0x00000000ba62a907 is aborted
+sas: sas_eh_handle_sas_errors: task 0x00000000ba62a907 is aborted
+ata21.00: exception Emask 0x0 SAct 0x20000000 SErr 0x0 action 0x0
+ata21.00: failed command: WRITE FPDMA QUEUED
+ata21.00: cmd 61/02:00:ff:ff:ea/00:00:02:00:00/40 tag 29 ncq dma 8192 out
+res 43/04:02:ff:ff:ea/00:00:02:00:00/00 Emask 0x400 (NCQ error) <F>
+ata21.00: status: { DRDY SENSE ERR }
+ata21.00: error: { ABRT }
+ata21.00: configured for UDMA/133
+ata21: EH complete
+sas: --- Exit sas_scsi_recover_host: busy: 0 failed: 1 tries: 1
+
+Seems all good to me.
+
+> 
+> Finally with these changes we can make the libsas task alloc/free APIs
+> private, which they should always have been.
+> 
+> Based on v5.19-rc6
+> 
+> [0] https://lore.kernel.org/linux-scsi/8fb3b093-55f0-1fab-81f4-e8519810a978@huawei.com/
+> 
+> John Garry (5):
+>   scsi: pm8001: Modify task abort handling for SATA task
+>   scsi: libsas: Add sas_ata_link_abort()
+>   scsi: pm8001: Use sas_ata_link_abort() to handle NCQ errors
+>   scsi: hisi_sas: Don't issue ATA softreset in hisi_sas_abort_task()
+>   scsi: libsas: Make sas_{alloc, alloc_slow, free}_task() private
+> 
+> Xingui Yang (1):
+>   scsi: hisi_sas: Add SATA_DISK_ERR bit handling for v3 hw
+> 
+>  drivers/scsi/hisi_sas/hisi_sas_main.c  |   5 +-
+>  drivers/scsi/hisi_sas/hisi_sas_v3_hw.c |  22 ++-
+>  drivers/scsi/libsas/sas_ata.c          |  10 ++
+>  drivers/scsi/libsas/sas_init.c         |   3 -
+>  drivers/scsi/libsas/sas_internal.h     |   4 +
+>  drivers/scsi/pm8001/pm8001_hwi.c       | 194 +++++++------------------
+>  drivers/scsi/pm8001/pm8001_sas.c       |  13 ++
+>  drivers/scsi/pm8001/pm8001_sas.h       |   8 +-
+>  drivers/scsi/pm8001/pm80xx_hwi.c       | 177 ++--------------------
+>  include/scsi/libsas.h                  |   4 -
+>  include/scsi/sas_ata.h                 |   5 +
+>  11 files changed, 132 insertions(+), 313 deletions(-)
+> 
+
+
+-- 
+Damien Le Moal
+Western Digital Research

@@ -2,126 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0217E58FA4B
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 11:56:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C153258FA4E
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 11:56:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234534AbiHKJ4P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 05:56:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34588 "EHLO
+        id S234603AbiHKJ4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 05:56:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbiHKJ4M (ORCPT
+        with ESMTP id S229540AbiHKJ4t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 05:56:12 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40937AC26;
-        Thu, 11 Aug 2022 02:56:10 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-32194238c77so167748797b3.4;
-        Thu, 11 Aug 2022 02:56:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=fwQUcv5ujbxHFhmwZIXEpylzN9K6eYzKvdzq8gW460k=;
-        b=W2JCmFyw36TPiiYlXpt8XIMhf4jL8fBeavxF3RVQ4MO0ioDG9T36XnEIZcELI2I3Ez
-         cAMWu4kgNZhbqn9DOfqbJROWucC2nnQZawxNo1iWeS2j9sZWn/QKU0WTACStWXgwDH02
-         4EKq3aDoivjGqql07n3S1Th2IVf93gvjIMmQ2iGFW8sjEQrIw/G7yvyQylYiOjEDkiNz
-         bEdqQeuexai4xwvy6VU/OUNzQ5EEqVd8+tWTZsROrAN2WlmBPgcEH8nwoTFqnQkwDiZa
-         tXdy19QKEH2LsapBp3HjN7GM/2VRZrP2YfwbwqNw8aLcKjrdctgs3AnXc9AAnJgm7h8j
-         KC6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=fwQUcv5ujbxHFhmwZIXEpylzN9K6eYzKvdzq8gW460k=;
-        b=yrxHWWutJSgHa66hLGJapsq0IVv/sbWqUob1jTIAVYArP79zG9fY0wkjDGbFvZvFs0
-         HGWKKWrZsNWVYoojfEKpqTcNUygnKYVhEX1xfAOqEYDcdedeM8UMVwlxvDZpqwEqiCOB
-         mitHTLkA3rEx+aQSx7KLHMxYDIAE1p4aUV8lP5+PSwKzWndcHd+pW24jKl3V7WbbYeIR
-         8cG/3pRfxN8dj8BwPMkxHUPDIDqllG7DQwr7ei6wH652jblenN+2LkO/mIyo94BCSLJ8
-         7H0amoGsBNbVgMXur82P3mZInqF+v5DQ+QOgGYEFrEMTpdbavVKgwVoQCbkq/JlPC7UE
-         o1Yg==
-X-Gm-Message-State: ACgBeo3TOHu2uWTVblsV/NE37p5P+RP7v6P3PDKZHlGLMIueqsxrJ3gZ
-        53IR6S012wMVwifYRmYggQfvbd50JvT++WUlowU=
-X-Google-Smtp-Source: AA6agR5/WapTssfcQ/DA4O1gE5u+PT2nJab9miAW7BuViSfiBauMIkLdsipQpxhXUp0NVgxB2l+QT0VGV90rNz5y0L0=
-X-Received: by 2002:a0d:e252:0:b0:322:eca5:eaf3 with SMTP id
- l79-20020a0de252000000b00322eca5eaf3mr33153433ywe.219.1660211770246; Thu, 11
- Aug 2022 02:56:10 -0700 (PDT)
-MIME-Version: 1.0
-References: <f9622b47-c45f-8c91-cb85-e5db7fd541cf@apertussolutions.com>
- <CAMj1kXEUT8BK_akqjF1Wx0JkLniFyV_h9s1TfQnPqfxCHsKfWw@mail.gmail.com>
- <7aab2990-9c57-2456-b08d-299ae96ac919@apertussolutions.com>
- <CAELHeEfZ-feZnexp7Gx3VAJPerENcoO1Uccbe3xxUX95jvLUdA@mail.gmail.com>
- <b1e7b545-8e66-5dc0-ff5a-9f69d1751a5f@apertussolutions.com>
- <CAELHeEcEN=4YrPJROvzHoOiqqe5Bk0f8pDCZDnQ6aS=2LdwNow@mail.gmail.com>
- <f09fe749-e139-db6a-b2ad-45db76da04ae@apertussolutions.com>
- <CAELHeEe5H8BNf8K22XRm3hXf=_imHBnf-MHcFYvPCXX7GYkt4w@mail.gmail.com>
- <203110bb-b70b-b4f1-9453-46136659f84c@apertussolutions.com>
- <CAELHeEe2CiTXfMf3OYu3bzc_kH=rs4qzC-4XQL12AM=Nq8Csjw@mail.gmail.com> <20220810174638.GA7906@srcf.ucam.org>
-In-Reply-To: <20220810174638.GA7906@srcf.ucam.org>
-From:   Brendan Trotter <btrotter@gmail.com>
-Date:   Thu, 11 Aug 2022 19:25:58 +0930
-Message-ID: <CAELHeEdNgYCh_kQwWpEc4aXw-YL-KGrAeDCL-VaG3ChFs6LNVw@mail.gmail.com>
-Subject: Re: Linux DRTM on UEFI platforms
-To:     Matthew Garrett <mjg59@srcf.ucam.org>
-Cc:     The development of GNU GRUB <grub-devel@gnu.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Daniel Kiper <daniel.kiper@oracle.com>,
-        Alec Brown <alec.r.brown@oracle.com>,
-        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
-        Ross Philipson <ross.philipson@oracle.com>,
-        "piotr.krol@3mdeb.com" <piotr.krol@3mdeb.com>,
-        "krystian.hebel@3mdeb.com" <krystian.hebel@3mdeb.com>,
-        "persaur@gmail.com" <persaur@gmail.com>,
-        "Yoder, Stuart" <stuart.yoder@arm.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        "michal.zygowski@3mdeb.com" <michal.zygowski@3mdeb.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        "lukasz@hawrylko.pl" <lukasz@hawrylko.pl>,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        James Morris <jmorris@namei.org>
+        Thu, 11 Aug 2022 05:56:49 -0400
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BE1790C7C;
+        Thu, 11 Aug 2022 02:56:41 -0700 (PDT)
+X-UUID: dd9479c8580a4834ad6a1424f0a85f36-20220811
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:MIME-Version:Content-Type:References:In-Reply-To:Date:CC:To:From:Subject:Message-ID; bh=orX+YD+2Tvqn6+Tuj+MFgYJbcYh0B7itt3I1h7rJ9U0=;
+        b=tgLDkNQ3oJ3KE5kW9slZrLhE+oid4ZB20ELKTn6hBianObZ0DrUSQnPOcXoG8HAj8UVVQ9e+GV7qq4gETjK7dpCOuhKtmf0Z0d1EmaJ2IYZ0W0lAHKIR9sYRCIP45MgyxvNbZAOWkRmucKR/tO6ckl85ilhjrRzwSF3ixYz+FTk=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.9,REQID:55875548-051a-4c8e-be92-b7a98d45b22c,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_H
+        am,ACTION:release,TS:0
+X-CID-META: VersionHash:3d8acc9,CLOUDID:7179619c-da39-4e3b-a854-56c7d2111b46,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: dd9479c8580a4834ad6a1424f0a85f36-20220811
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1476812866; Thu, 11 Aug 2022 17:56:37 +0800
+Received: from mtkcas10.mediatek.inc (172.21.101.39) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.2.792.15; Thu, 11 Aug 2022 17:56:35 +0800
+Received: from mtksdccf07 (172.21.84.99) by mtkcas10.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
+ Transport; Thu, 11 Aug 2022 17:56:35 +0800
+Message-ID: <14d0e1be2fbd7bbacb7553a2e2e5b9d941403c4f.camel@mediatek.com>
+Subject: Re: [PATCH v4 1/4] dt-bindings: mediatek: watchdog: Fix compatible
+ fallbacks and example
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>,
+        "=?ISO-8859-1?Q?N=EDcolas?= F. R. A. Prado" <nfraprado@collabora.com>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        "Guenter Roeck" <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+        <angelogioacchino.delregno@collabora.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>
+Date:   Thu, 11 Aug 2022 17:56:35 +0800
+In-Reply-To: <815b03aa-ab39-ec8b-294b-68dff36e2d54@kernel.org>
+References: <20220721014845.19044-1-allen-kh.cheng@mediatek.com>
+         <20220721014845.19044-2-allen-kh.cheng@mediatek.com>
+         <CAGXv+5HXwVpaJPV-4Z6qw14xZzEkx_E7dVks6-GBa7bQyN8hCg@mail.gmail.com>
+         <5dac39d1-3b42-40e9-5693-0c127e8c689a@gmail.com>
+         <0fadcd9f50d49ecbb329e76a9ceb6ee689648955.camel@mediatek.com>
+         <20220808170355.c2ih3xwqxlddsal7@notapiano>
+         <6271732eb27824c5b841760243738ceb062f4c4a.camel@mediatek.com>
+         <815b03aa-ab39-ec8b-294b-68dff36e2d54@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-MTK:  N
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,T_SCC_BODY_TEXT_LINE,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+he SoC-specific compatibles Hi Krzysztof,
 
-On Thu, Aug 11, 2022 at 3:16 AM Matthew Garrett <mjg59@srcf.ucam.org> wrote:
-> On Wed, Aug 10, 2022 at 06:37:18PM +0930, Brendan Trotter wrote:
->
-> > [1] doesn't provide any useful information. How does a kernel know
-> > that the callback provided by boot loader actually measures what it's
-> > supposed to measure, or even does anything at all?
->
-> The kernel has no way to know this - *any* code you've run before
-> performing a measurement could tamper with the kernel such that it
-> believes it's fine. This is just as true in DRTM as it is in SRTM. But
-> you know what the expected measurements should be, so you're able to
-> either seal secrets to those PCR values or rely on remote attestation.
+On Wed, 2022-08-10 at 19:50 +0300, Krzysztof Kozlowski wrote:
+> On 10/08/2022 15:58, Allen-KH Cheng wrote:
+> > I agree the advantage of patch is aesthetic. Since I also want to
+> > send
+> > another "watchdog: Convert binding to YAML" PATCH, it's better let
+> > all
+> > wdt compatibles in the binding match the contents of mtk_wdt_dt_ids
+> > in
+> > drivers/watchdog/mtk_wdt.c
+> > 
+> > static const struct of_device_id mtk_wdt_dt_ids[] = {
+> > 	{ .compatible = "mediatek,mt2712-wdt", .data = &mt2712_data },
+> > 	{ .compatible = "mediatek,mt6589-wdt" },
+> > 	{ .compatible = "mediatek,mt7986-wdt", .data = &mt7986_data },
+> > 	{ .compatible = "mediatek,mt8183-wdt", .data = &mt8183_data },
+> > 	{ .compatible = "mediatek,mt8186-wdt", .data = &mt8186_data },
+> > 	{ .compatible = "mediatek,mt8192-wdt", .data = &mt8192_data },
+> > 	{ .compatible = "mediatek,mt8195-wdt", .data = &mt8195_data },
+> > 	{ /* sentinel */ }
+> > };
+> > 
+> > We have "mediatek,mt8186-wdt" "mediatek,mt8195-wdt" and
+> > "mediatek,mt7986-wdt" now and they have their DT data for the reset
+> > control.
+> > 
+> > It's weird and unuseful to add "mediatek,mt6589-wdt" as fallback. 
+> > 
+> > 
+> > Please kindly let me know if I missed anything
+> 
+> How the driver arranges it should not be a reason to use or not to
+> use
+> specific fallback. Although Rob acked it, but I still think you did
+> not
+> provide valid reason for the change.
+> 
+> Valid reason is usually the actual hardware (so they are actually not
+> compatible with mt6589), not exactly how once someone did it in the
+> driver.
+> 
+> Best regards,
+> Krzysztof
 
-In this scenario the kernel has no idea what the measurement should
-be, it only knows the measurement that a potentially malicious boot
-loader felt like giving the kernel previously (e.g. when the kernel
-was installed).
+Thank you for your detailed and clear explanation.
 
-> > [1] doesn't provide any useful information. Senter and skinit don't
-> > provide a method for kernel to detect that (e.g.) a MiTM boot loader
-> > has always measured a forgery and has changed unmeasured code in a
-> > different way every time you boot.
->
-> Measurements are not opaque objects. If you're not able to reconstruct
-> the expected measurement then you're doing it wrong.
+"mediatek,mt6589-wdt" provides the mtk watchdog support and the SoC-
+specific compatibles is for reset controls to standard wdt.
 
-OK; so to detect if boot loader has always given kernel a bad/forged
-measurement; the kernel repeats all of the steps involved in creating
-the measurement itself exactly the same as the boot loader should have
-(but might not have) so that kernel can compare a "known
-good/trustworthy" measurement with the useless measurement that the
-boot loader created for no sane reason whatsoever?
+"mediatek,mt6589-wdt" is compatible with mt8186, mt8195 and mt7986 and
+just not support the reset controls. 
 
-- Brendan
+Based on the discussion of email thread, please drop my series.
+
+
+Thanks to everyone for your comments.
+
+Best regards,
+Allen
+
+
+

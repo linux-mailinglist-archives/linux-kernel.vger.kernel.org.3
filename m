@@ -2,115 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6224590527
+	by mail.lfdr.de (Postfix) with ESMTP id 7C964590526
 	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 18:55:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236925AbiHKQv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 12:51:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49198 "EHLO
+        id S236511AbiHKQwS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 12:52:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236741AbiHKQvb (ORCPT
+        with ESMTP id S236285AbiHKQvv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 12:51:31 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D31521A821
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 09:25:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660235102;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UjYkrJ0NaTJji01ZcUTXu/HSgTuMTSkVyUx2biIqUJU=;
-        b=gONzUm84OyIj01HsCqQXC90RhyMzNuxCjt/4K+VfHdK4yyCWcUwLiugIWbjwvxorHJfwNM
-        R6YzRHi6aGoIXA8xiR+x+653Q2f8oqcKnqBuWFYreXd6mWnWKdTY4Ob6wQKAwV8z1UUC6z
-        VpkKA8/9zPoR5OqJhbG7BKAv2X83zV0=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-659-EoKppmPOO6qRYXf9WHvhUg-1; Thu, 11 Aug 2022 12:25:01 -0400
-X-MC-Unique: EoKppmPOO6qRYXf9WHvhUg-1
-Received: by mail-wm1-f69.google.com with SMTP id f21-20020a1cc915000000b003a3551598a1so1822187wmb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 09:25:01 -0700 (PDT)
+        Thu, 11 Aug 2022 12:51:51 -0400
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2CE618B04;
+        Thu, 11 Aug 2022 09:25:19 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-328303afa6eso177602337b3.10;
+        Thu, 11 Aug 2022 09:25:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=UjYkrJ0NaTJji01ZcUTXu/HSgTuMTSkVyUx2biIqUJU=;
-        b=SU8CIpLKPTfwJh56rUwX8V2tJQs1NUmdUp9F1UHwkDPZVHz+IPQ29XeOU9AYkyiG7z
-         beR7HL/YK10HKZekmfxHk4lNewqoboE9Kz3s1sWTXNx634ktUDcEDfC+jCJpQz3C4H+e
-         i4LVolW7cqnekbyD5lKEo25Cvrey5Ny4myJohO8axW/Jc0iZ0FA5BflKOkk1p+QYpzfM
-         1fVjri6ECLUmOf6qAz+aiipR7UFrAVEGk4jsb+HHXiuKnJSJ4FqyMZDhWjkX/KMyxF0K
-         W39Kgxw34CRz9nQLI9m7xzN9//zh3/Ix1ORlN7zScwi7SyNvEj+qZ8KoJqfa1XcWz59b
-         9+DQ==
-X-Gm-Message-State: ACgBeo2bIhhyaQkTnh7frmsRI8PFRV3v+gHQYuDDl/OhP8t1YtxZ8I3H
-        d94+M5heZRJ4AWucx9z+nzYoKXVbdFH1UjM+QDP/BlG37S6Rf2pQqZN1Ks0+a52N4NOtvXdqE2z
-        p7JZvOPx4Zf9Vu+xRQc94KEOI
-X-Received: by 2002:adf:f38b:0:b0:21e:c041:7726 with SMTP id m11-20020adff38b000000b0021ec0417726mr20306117wro.394.1660235100456;
-        Thu, 11 Aug 2022 09:25:00 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7Te87JAxYpUqJdcs0ODOlsz2e/vMQll9hO7m2adqAV0n+VZZwG4sEuMPvGSxUfQ+Q56ZAo6A==
-X-Received: by 2002:adf:f38b:0:b0:21e:c041:7726 with SMTP id m11-20020adff38b000000b0021ec0417726mr20306103wro.394.1660235100211;
-        Thu, 11 Aug 2022 09:25:00 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c708:2e00:4009:47dc:d0e5:dcd2? (p200300cbc7082e00400947dcd0e5dcd2.dip0.t-ipconnect.de. [2003:cb:c708:2e00:4009:47dc:d0e5:dcd2])
-        by smtp.gmail.com with ESMTPSA id b6-20020a5d6346000000b0022063e5228bsm19597324wrw.93.2022.08.11.09.24.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Aug 2022 09:24:59 -0700 (PDT)
-Message-ID: <2cb95372-f7dd-61f9-9d2a-461390fb0907@redhat.com>
-Date:   Thu, 11 Aug 2022 18:24:59 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=JGzD77U2Oto0Aqe+gV/4YCX3SgodzAwICFq6gJm9KqQ=;
+        b=5oo0b7Nq44R77cJnbhMZjgHyLvNHWfxMWzyXIF4Nqf3IlXlKsd2eTFwvrTtzdGS7Yf
+         cm6TVya2IA0KRYJllhmPBtqv2nrI80OvY+Omrns5R+aWV6ThW4NKaaddivboGNQgUOZn
+         Dw0o27WcSlXKTJvBxBF/E+yI7Eu1ay808SEXIo3lKk+Fnehwq2y2T4kgcH6jhyR6Ta4g
+         HSuhzPLBONYLP9pvNcB+4DqNWCAPP79vk41e+g8jdxNrw1lh2UiNVNsyJxpL6doJEph2
+         Cnkd2vfHTLMjgQtEmG7NXZzpmOxi4WLCv4QBqgyppduP8kx3B16y04BFBv91DIkq1w1V
+         3uvw==
+X-Gm-Message-State: ACgBeo1nPkoxoUCegPWM0CWn+jwGdDzVvtsX/dGcmgV1m7igWA8vuOv6
+        pRF0unuydU9HJQJ1LfYYjdLAB4M1gXmQdAXhp2wvMeYc
+X-Google-Smtp-Source: AA6agR7xQjC2PfNKM8PnGugI3psJeIEWfvzwZah5ZiCgr9LZ9PxKFGb9Z0NdfE7pGOMoE9xaZ+b4si/z8AoIkxnSrz4=
+X-Received: by 2002:a81:ae0a:0:b0:324:59ab:feec with SMTP id
+ m10-20020a81ae0a000000b0032459abfeecmr34997601ywh.7.1660235118995; Thu, 11
+ Aug 2022 09:25:18 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 2/2] mm/hugetlb: support write-faults in shared
- mappings
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        stable@vger.kernel.org
-References: <20220811103435.188481-1-david@redhat.com>
- <20220811103435.188481-3-david@redhat.com> <YvULP8DtFFhJYNO4@xz-m1.local>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <YvULP8DtFFhJYNO4@xz-m1.local>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220811154357.18674-1-dengshaomin@cdjrlc.com>
+In-Reply-To: <20220811154357.18674-1-dengshaomin@cdjrlc.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 11 Aug 2022 18:25:08 +0200
+Message-ID: <CAJZ5v0gRUmMu7zGgH3F32C8DB6RsOqnNPw+L8023A89Tiqy-qw@mail.gmail.com>
+Subject: Re: [PATCH] ACPICA: Fix typo in comments
+To:     Shaomin Deng <dengshaomin@cdjrlc.com>
+Cc:     Robert Moore <robert.moore@intel.com>,
+        Rafael Wysocki <rafael.j.wysocki@intel.com>,
+        Len Brown <lenb@kernel.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        "open list:ACPI COMPONENT ARCHITECTURE (ACPICA)" <devel@acpica.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11.08.22 15:59, Peter Xu wrote:
-> On Thu, Aug 11, 2022 at 12:34:35PM +0200, David Hildenbrand wrote:
->> Reason is that uffd-wp doesn't clear the uffd-wp PTE bit when
->> unregistering and consequently keeps the PTE writeprotected. Reason for
->> this is to avoid the additional overhead when unregistering. Note
->> that this is the case also for !hugetlb and that we will end up with
->> writable PTEs that still have the uffd-wp PTE bit set once we return
->> from hugetlb_wp(). I'm not touching the uffd-wp PTE bit for now, because it
->> seems to be a generic thing -- wp_page_reuse() also doesn't clear it.
-> 
-> This may justify that lazy reset of ptes may not really be a good idea,
-> including anonymous.  I'm indeed not aware of any app that do frequent
-> reg/unreg at least.
+On Thu, Aug 11, 2022 at 5:53 PM Shaomin Deng <dengshaomin@cdjrlc.com> wrote:
+>
+> Delete the repeated word "method" in comments.
+>
+> Signed-off-by: Shaomin Deng <dengshaomin@cdjrlc.com>
 
-Yeah. QEMU snapshots come to mind, but I guess the reg/unreg overhead is
-the smallest issue.
+Please note that the ACPICA changes need to be submitted to the
+upstream ACPICA project on github.  If your change is applicable to
+that code base, please consider submitting a pull request for it on
+github.
 
-
-> 
-> I'll prepare a patch to change it from uffd side too.
-> 
-> Thanks again for finding this problem.
-
-YW!
-
--- 
-Thanks,
-
-David / dhildenb
-
+> ---
+>  drivers/acpi/acpica/psparse.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/acpi/acpica/psparse.c b/drivers/acpi/acpica/psparse.c
+> index ba93f359760a..b0faab1e6d3f 100644
+> --- a/drivers/acpi/acpica/psparse.c
+> +++ b/drivers/acpi/acpica/psparse.c
+> @@ -508,7 +508,7 @@ acpi_status acpi_ps_parse_aml(struct acpi_walk_state *walk_state)
+>                         }
+>
+>                         /*
+> -                        * If the transfer to the new method method call worked,
+> +                        * If the transfer to the new method call worked,
+>                          * a new walk state was created -- get it
+>                          */
+>                         walk_state = acpi_ds_get_current_walk_state(thread);
+> --
+> 2.35.1
+>

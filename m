@@ -2,529 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E71958FA03
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 11:26:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2A158FA05
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 11:26:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234630AbiHKJ0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 05:26:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38956 "EHLO
+        id S234851AbiHKJ0z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 05:26:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234662AbiHKJZl (ORCPT
+        with ESMTP id S234156AbiHKJ0x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 05:25:41 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F8AD3D588;
-        Thu, 11 Aug 2022 02:25:39 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1154B106F;
-        Thu, 11 Aug 2022 02:25:40 -0700 (PDT)
-Received: from [10.162.43.7] (unknown [10.162.43.7])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E8C3E3F70D;
-        Thu, 11 Aug 2022 02:25:33 -0700 (PDT)
-Message-ID: <fe9d9673-e133-3230-01b5-df463c315026@arm.com>
-Date:   Thu, 11 Aug 2022 14:55:30 +0530
+        Thu, 11 Aug 2022 05:26:53 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04F0992F40;
+        Thu, 11 Aug 2022 02:26:49 -0700 (PDT)
+Received: from ip5b412258.dynamic.kabel-deutschland.de ([91.65.34.88] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1oM4Si-0001SW-H1; Thu, 11 Aug 2022 11:26:44 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Michael Riesch <michael.riesch@wolfvision.net>,
+        Quentin Schulz <foss+kernel@0leil.net>,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Cc:     linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 1/1] pinctrl: rockchip: add support for per-pinmux io-domain dependency
+Date:   Thu, 11 Aug 2022 11:26:41 +0200
+Message-ID: <3152231.AJdgDx1Vlc@diego>
+In-Reply-To: <7353767b-0c38-a5a1-d3ac-3d9151140fb8@theobroma-systems.com>
+References: <20220802095252.2486591-1-foss+kernel@0leil.net> <9b965d86-9b76-77a1-658e-3675c2138414@wolfvision.net> <7353767b-0c38-a5a1-d3ac-3d9151140fb8@theobroma-systems.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 2/2] arm64: dts: qcom: sm8250: Add Coresight support
-Content-Language: en-US
-To:     Tao Zhang <quic_taozha@quicinc.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Mao Jinlong <quic_jinlmao@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>
-References: <1632477981-13632-1-git-send-email-quic_taozha@quicinc.com>
- <1632477981-13632-3-git-send-email-quic_taozha@quicinc.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <1632477981-13632-3-git-send-email-quic_taozha@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-
-On 9/24/21 15:36, Tao Zhang wrote:
-> Add the basic coresight components found on Qualcomm SM8250 Soc. The
-> basic coresight components include ETF, ETMs,STM and the related
-> funnels.
-
-Hello,
-
-Seems like this patch never merged mainline, what happened ? This change is
-required to enable coresight devices on RB5 platform.
-
-- Anshuman
-
+Am Donnerstag, 11. August 2022, 10:45:07 CEST schrieb Quentin Schulz:
+> Hi Michael,
 > 
-> Signed-off-by: Tao Zhang <quic_taozha@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/qrb5165-rb5.dts | 439 +++++++++++++++++++++++++++++++
->  1 file changed, 439 insertions(+)
+> On 8/11/22 09:52, Michael Riesch wrote:
+> > Hi Quentin,
+> > 
+> > Thank you for your efforts! This will solve several issues that are
+> > bound to pop up if a board deviates from the Rockchip reference design.
+
+I find this approach quite nice. io-domains in their core specify pin
+voltages, so having the tie in the pinctrl space makes a lot of sense.
+
+
+> >> There already exists an IO domain driver for Rockchip SoCs[1]. This
+> >> driver allows to explicit the relationship between the external power
+> > 
+> > ...allows to model explicitly...?
+> > 
+> >> supplies and IO domains[2]. This makes sure the regulators are enabled
+> >> by the Linux kernel so the IO domains are supplied with power and
+> >> correctly configured as per the supplied voltage.
+> >> This driver is a regulator consumer and does not offer any other
+> >> interface for device dependency.
+> >>
+> >> However, IO pins belonging to an IO domain need to have this IO domain
+> >> correctly configured before they are being used otherwise they do not
+> >> operate correctly (in our case, a pin configured as output clock was
+> >> oscillating between 0 and 150mV instead of the expected 1V8).
+> >>
+> >> In order to make this dependency transparent to the consumer of those
+> >> pins and not add Rockchip-specific code to third party drivers (a camera
+> >> driver in our case), it is hooked into the pinctrl driver which is
+> >> Rockchip-specific obviously.
+> > 
+> > This approach seems reasonable. But just for my understanding: Does this
+> > mean we need to edit e.g. rk3568-pinctrl.dtsi, iterate over all entries,
+> > and add rockchip,iodomains = <&corresponding_io_domain>;?
+> > 
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-> index 5f41de2..1e1579a 100644
-> --- a/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-> +++ b/arch/arm64/boot/dts/qcom/qrb5165-rb5.dts
-> @@ -223,6 +223,445 @@
->  		regulator-max-microvolt = <1800000>;
->  		regulator-always-on;
->  	};
-> +
-> +	stm@6002000 {
-> +		compatible = "arm,coresight-stm", "arm,primecell";
-> +		reg = <0 0x06002000 0 0x1000>,
-> +		      <0 0x16280000 0 0x180000>;
-> +		reg-names = "stm-base", "stm-stimulus-base";
-> +
-> +		clocks = <&aoss_qmp>;
-> +		clock-names = "apb_pclk";
-> +
-> +		out-ports {
-> +			port {
-> +				stm_out: endpoint {
-> +					remote-endpoint =
-> +					  <&funnel0_in7>;
-> +				};
-> +			};
-> +		};
-> +	};
-> +
-> +	funnel@6041000 {
-> +		compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-> +		reg = <0 0x06041000 0 0x1000>;
-> +
-> +		clocks = <&aoss_qmp>;
-> +		clock-names = "apb_pclk";
-> +
-> +		out-ports {
-> +			port {
-> +				funnel0_out: endpoint {
-> +					remote-endpoint =
-> +					  <&merge_funnel_in0>;
-> +				};
-> +			};
-> +		};
-> +
-> +		in-ports {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			port@7 {
-> +				reg = <7>;
-> +				funnel0_in7: endpoint {
-> +					remote-endpoint = <&stm_out>;
-> +				};
-> +			};
-> +		};
-> +	};
-> +
-> +	funnel@6042000 {
-> +		compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-> +		reg = <0 0x06042000 0 0x1000>;
-> +
-> +		clocks = <&aoss_qmp>;
-> +		clock-names = "apb_pclk";
-> +
-> +		out-ports {
-> +			port {
-> +				funnel2_out: endpoint {
-> +					remote-endpoint =
-> +					  <&merge_funnel_in2>;
-> +				};
-> +			};
-> +		};
-> +
-> +		in-ports {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			port@4 {
-> +				reg = <4>;
-> +				funnel2_in5: endpoint {
-> +					remote-endpoint =
-> +					  <&apss_merge_funnel_out>;
-> +				};
-> +			};
-> +		};
-> +	};
-> +
-> +	funnel@6b04000 {
-> +		compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-> +		arm,primecell-periphid = <0x000bb908>;
-> +
-> +		reg = <0 0x6b04000 0 0x1000>;
-> +		reg-names = "funnel-base";
-> +
-> +		clocks = <&aoss_qmp>;
-> +		clock-names = "apb_pclk";
-> +
-> +		out-ports {
-> +			port {
-> +				merge_funnel_out: endpoint {
-> +					remote-endpoint =
-> +						<&etf_in>;
-> +				};
-> +			};
-> +		};
-> +
-> +		in-ports {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			port@7 {
-> +				reg = <7>;
-> +				swao_funnel_in7: endpoint {
-> +					slave-mode;
-> +					remote-endpoint=
-> +						<&merg_funnel_out>;
-> +				};
-> +			};
-> +		};
-> +
-> +	};
-> +
-> +	funnel@6045000 {
-> +		compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-> +		reg = <0 0x06045000 0 0x1000>;
-> +
-> +		clocks = <&aoss_qmp>;
-> +		clock-names = "apb_pclk";
-> +
-> +		out-ports {
-> +			port {
-> +				merg_funnel_out: endpoint {
-> +					remote-endpoint = <&swao_funnel_in7>;
-> +				};
-> +			};
-> +		};
-> +
-> +		in-ports {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			port@0 {
-> +				reg = <0>;
-> +				merge_funnel_in0: endpoint {
-> +					remote-endpoint =
-> +					  <&funnel0_out>;
-> +				};
-> +			};
-> +
-> +			port@1 {
-> +				reg = <1>;
-> +				merge_funnel_in2: endpoint {
-> +					remote-endpoint =
-> +					  <&funnel2_out>;
-> +				};
-> +			};
-> +		};
-> +	};
-> +
-> +	etf@6b05000 {
-> +		compatible = "arm,coresight-tmc", "arm,primecell";
-> +		reg = <0 0x06b05000 0 0x1000>;
-> +
-> +		clocks = <&aoss_qmp>;
-> +		clock-names = "apb_pclk";
-> +
-> +		in-ports {
-> +			port {
-> +				etf_in: endpoint {
-> +					remote-endpoint =
-> +					  <&merge_funnel_out>;
-> +				};
-> +			};
-> +		};
-> +	};
-> +
-> +	etm@7040000 {
-> +		compatible = "arm,coresight-etm4x", "arm,primecell";
-> +		reg = <0 0x07040000 0 0x1000>;
-> +
-> +		cpu = <&CPU0>;
-> +
-> +		clocks = <&aoss_qmp>;
-> +		clock-names = "apb_pclk";
-> +		arm,coresight-loses-context-with-cpu;
-> +
-> +		out-ports {
-> +			port {
-> +				etm0_out: endpoint {
-> +					remote-endpoint =
-> +					  <&apss_funnel_in0>;
-> +				};
-> +			};
-> +		};
-> +	};
-> +
-> +	etm@7140000 {
-> +		compatible = "arm,coresight-etm4x", "arm,primecell";
-> +		reg = <0 0x07140000 0 0x1000>;
-> +
-> +		cpu = <&CPU1>;
-> +
-> +		clocks = <&aoss_qmp>;
-> +		clock-names = "apb_pclk";
-> +		arm,coresight-loses-context-with-cpu;
-> +
-> +		out-ports {
-> +			port {
-> +				etm1_out: endpoint {
-> +					remote-endpoint =
-> +					  <&apss_funnel_in1>;
-> +				};
-> +			};
-> +		};
-> +	};
-> +
-> +	etm@7240000 {
-> +		compatible = "arm,coresight-etm4x", "arm,primecell";
-> +		reg = <0 0x07240000 0 0x1000>;
-> +
-> +		cpu = <&CPU2>;
-> +
-> +		clocks = <&aoss_qmp>;
-> +		clock-names = "apb_pclk";
-> +		arm,coresight-loses-context-with-cpu;
-> +
-> +		out-ports {
-> +			port {
-> +				etm2_out: endpoint {
-> +					remote-endpoint =
-> +					  <&apss_funnel_in2>;
-> +				};
-> +			};
-> +		};
-> +	};
-> +
-> +	etm@7340000 {
-> +		compatible = "arm,coresight-etm4x", "arm,primecell";
-> +		reg = <0 0x07340000 0 0x1000>;
-> +
-> +		cpu = <&CPU3>;
-> +
-> +		clocks = <&aoss_qmp>;
-> +		clock-names = "apb_pclk";
-> +		arm,coresight-loses-context-with-cpu;
-> +
-> +		out-ports {
-> +			port {
-> +				etm3_out: endpoint {
-> +					remote-endpoint =
-> +					  <&apss_funnel_in3>;
-> +				};
-> +			};
-> +		};
-> +	};
-> +
-> +	etm@7440000 {
-> +		compatible = "arm,coresight-etm4x", "arm,primecell";
-> +		reg = <0 0x07440000 0 0x1000>;
-> +
-> +		cpu = <&CPU4>;
-> +
-> +		clocks = <&aoss_qmp>;
-> +		clock-names = "apb_pclk";
-> +		arm,coresight-loses-context-with-cpu;
-> +
-> +		out-ports {
-> +			port {
-> +				etm4_out: endpoint {
-> +					remote-endpoint =
-> +					  <&apss_funnel_in4>;
-> +				};
-> +			};
-> +		};
-> +	};
-> +
-> +	etm@7540000 {
-> +		compatible = "arm,coresight-etm4x", "arm,primecell";
-> +		reg = <0 0x07540000 0 0x1000>;
-> +
-> +		cpu = <&CPU5>;
-> +
-> +		clocks = <&aoss_qmp>;
-> +		clock-names = "apb_pclk";
-> +		arm,coresight-loses-context-with-cpu;
-> +
-> +		out-ports {
-> +			port {
-> +				etm5_out: endpoint {
-> +					remote-endpoint =
-> +					  <&apss_funnel_in5>;
-> +				};
-> +			};
-> +		};
-> +	};
-> +
-> +	etm@7640000 {
-> +		compatible = "arm,coresight-etm4x", "arm,primecell";
-> +		reg = <0 0x07640000 0 0x1000>;
-> +
-> +		cpu = <&CPU6>;
-> +
-> +		clocks = <&aoss_qmp>;
-> +		clock-names = "apb_pclk";
-> +		arm,coresight-loses-context-with-cpu;
-> +
-> +		out-ports {
-> +			port {
-> +				etm6_out: endpoint {
-> +					remote-endpoint =
-> +					  <&apss_funnel_in6>;
-> +				};
-> +			};
-> +		};
-> +	};
-> +
-> +	etm@7740000 {
-> +		compatible = "arm,coresight-etm4x", "arm,primecell";
-> +		reg = <0 0x07740000 0 0x1000>;
-> +
-> +		cpu = <&CPU7>;
-> +
-> +		clocks = <&aoss_qmp>;
-> +		clock-names = "apb_pclk";
-> +		arm,coresight-loses-context-with-cpu;
-> +
-> +		out-ports {
-> +			port {
-> +				etm7_out: endpoint {
-> +					remote-endpoint =
-> +					  <&apss_funnel_in7>;
-> +				};
-> +			};
-> +		};
-> +	};
-> +
-> +	funnel@7800000 {
-> +		compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-> +		reg = <0 0x07800000 0 0x1000>;
-> +
-> +		clocks = <&aoss_qmp>;
-> +		clock-names = "apb_pclk";
-> +
-> +		out-ports {
-> +			port {
-> +				apss_funnel_out: endpoint {
-> +					remote-endpoint =
-> +					  <&apss_merge_funnel_in>;
-> +				};
-> +			};
-> +		};
-> +
-> +		in-ports {
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +
-> +			port@0 {
-> +				reg = <0>;
-> +				apss_funnel_in0: endpoint {
-> +					remote-endpoint =
-> +					  <&etm0_out>;
-> +				};
-> +			};
-> +
-> +			port@1 {
-> +				reg = <1>;
-> +				apss_funnel_in1: endpoint {
-> +					remote-endpoint =
-> +					  <&etm1_out>;
-> +				};
-> +			};
-> +
-> +			port@2 {
-> +				reg = <2>;
-> +				apss_funnel_in2: endpoint {
-> +					remote-endpoint =
-> +					  <&etm2_out>;
-> +				};
-> +			};
-> +
-> +			port@3 {
-> +				reg = <3>;
-> +				apss_funnel_in3: endpoint {
-> +					remote-endpoint =
-> +					  <&etm3_out>;
-> +				};
-> +			};
-> +
-> +			port@4 {
-> +				reg = <4>;
-> +				apss_funnel_in4: endpoint {
-> +					remote-endpoint =
-> +					  <&etm4_out>;
-> +				};
-> +			};
-> +
-> +			port@5 {
-> +				reg = <5>;
-> +				apss_funnel_in5: endpoint {
-> +					remote-endpoint =
-> +					  <&etm5_out>;
-> +				};
-> +			};
-> +
-> +			port@6 {
-> +				reg = <6>;
-> +				apss_funnel_in6: endpoint {
-> +					remote-endpoint =
-> +					  <&etm6_out>;
-> +				};
-> +			};
-> +
-> +			port@7 {
-> +				reg = <7>;
-> +				apss_funnel_in7: endpoint {
-> +					remote-endpoint =
-> +					  <&etm7_out>;
-> +				};
-> +			};
-> +		};
-> +	};
-> +
-> +	funnel@7810000 {
-> +		compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-> +		reg = <0 0x07810000 0 0x1000>;
-> +
-> +		clocks = <&aoss_qmp>;
-> +		clock-names = "apb_pclk";
-> +
-> +		out-ports {
-> +			port {
-> +				apss_merge_funnel_out: endpoint {
-> +					remote-endpoint =
-> +					  <&funnel2_in5>;
-> +				};
-> +			};
-> +		};
-> +
-> +		in-ports {
-> +			port {
-> +				apss_merge_funnel_in: endpoint {
-> +					remote-endpoint =
-> +					  <&apss_funnel_out>;
-> +				};
-> +			};
-> +		};
-> +	};
->  };
->  
->  &adsp {
+> That would have been my hope yes, but it is not possible for one of the 
+> boards we have based on PX30.
+> 
+> All pinmux listed in the px30.dtsi today belong to an IO domain. This 
+> includes the I2C pins for the bus on which the PMIC is.
+> Adding the rockchip,io-domains on each pinctrl will create the following 
+> circular dependency:
+> pinctrl depends on the io-domain device which depends on
+> regulators from a PMIC on i2c which requires the i2c bus pins to be
+> muxed from the pinctrl
+> 
+> Since the PMIC powering the IO domains can virtually be on any I2C bus, 
+> we cannot add it to the main SoC.dtsi, it'll need to be added per board 
+> sadly.
+
+though you could also add the main props to the dtsi and use a per-board
+/delete-property/ to free up the pmic-i2c, same result but less duplicate
+dt additions and less clutter.
+
+
+> >> diff --git a/drivers/pinctrl/pinctrl-rockchip.c b/drivers/pinctrl/pinctrl-rockchip.c
+> >> index 32e41395fc76..c3c2801237b5 100644
+> >> --- a/drivers/pinctrl/pinctrl-rockchip.c
+> >> +++ b/drivers/pinctrl/pinctrl-rockchip.c
+> >> @@ -24,6 +24,8 @@
+> >>   #include <linux/of_address.h>
+> >>   #include <linux/of_device.h>
+> >>   #include <linux/of_irq.h>
+> >> +#include <linux/of_platform.h>
+> >> +#include <linux/platform_device.h>
+> >>   #include <linux/pinctrl/machine.h>
+> >>   #include <linux/pinctrl/pinconf.h>
+> >>   #include <linux/pinctrl/pinctrl.h>
+> >> @@ -2370,6 +2372,12 @@ static int rockchip_pmx_set(struct pinctrl_dev *pctldev, unsigned selector,
+> >>   	dev_dbg(dev, "enable function %s group %s\n",
+> >>   		info->functions[selector].name, info->groups[group].name);
+> >>   
+> >> +	if (info->groups[group].io_domain &&
+> >> +	    !platform_get_drvdata(info->groups[group].io_domain)) {
+> >> +		dev_err(info->dev, "IO domain device is required but not probed yet, deferring...");
+> > 
+> > Probably this has been left in there for debugging, but should be
+> > removed to avoid spamming dmesg. IIUC this condition could occur several
+> > times.
+> > 
+> 
+> Considering that the deferred probing mechanism is to retry the 
+> to-be-deferred device after all other devices have been tried, it is 
+> very likely to not spam dmesg.
+> 
+> We could remove it though, no strong opinion on this.
+
+just move it to use dev_dbg and everybody is happy :-) .
+
+
+> >> @@ -2684,6 +2693,16 @@ static int rockchip_pinctrl_parse_groups(struct device_node *np,
+> >>   	if (!size || size % 4)
+> >>   		return dev_err_probe(dev, -EINVAL, "wrong pins number or pins and configs should be by 4\n");
+> >>   
+> >> +	node = of_parse_phandle(np, "rockchip,io-domains", 0);
+> >> +	if (node) {
+> >> +		grp->io_domain = of_find_device_by_node(node);
+> >> +		of_node_put(node);
+> >> +		if (!grp->io_domain) {
+> >> +			dev_err(info->dev, "couldn't find IO domain device\n");
+> >> +			return -ENODEV;
+> > 
+> > Again just for my understanding: The property is optional in order to
+> > provide compatibility with older device trees, right?
+> > 
+> 
+> Of course (at least that's the intent). If it is omitted, 
+> of_parse_phandle will return NULL and we'll not be executing this part 
+> of the code. However, if one phandle is provided and the device does not 
+> actually exist (IIUC, the phandle points to a DT-valid node but the 
+> device pointed at by the phandle is either disabled or its driver is not 
+> built). That being said, I don't know how this would work with an IO 
+> domain driver built as a module. That would be a pretty dumb thing to do 
+> though.
+
+I think this should work even with io-domain "disabled" or as module
+when slightly modified.
+
+I.e. for disabled nodes, no kernel-device should be created
+(grp->io_domain will be NULL) and for a module the device itself is created
+when the dt is parsed (of_populate...) and will just not have probed yet.
+
+Together with the comment farther above of having the io-domain link always
+present we should get rid of the error condition though :-) .
+
+
+
+Hmm, while going through this one thought was, do we want more verbosity
+in the dt for this?
+
+I.e. with the current approach we'll have
+
+&io_domains {
+	status = "okay";
+
+	audio-supply = <&pp1800_audio>;
+	bt656-supply = <&pp1800_ap_io>;
+	gpio1830-supply = <&pp3000_ap>;
+	sdmmc-supply = <&ppvar_sd_card_io>;
+};
+
+and pinctrl entries linking to the core <&io_domains> node. This might bite
+us down the road again in some form.
+
+Something like doing an optional updated binding like:
+
+&io_domains {
+	status = "okay";
+
+	audio-domain {
+		domain-supply = <&pp1800_audio>;
+	};
+	bt656-domain {
+		domain-supply = <&pp1800_ap_io>;
+	};
+	gpio1830-domain {
+		domain-supply = <&pp3000_ap>;
+	};
+	sdmmc-domain {
+		domain-supply = <&ppvar_sd_card_io>;
+	};
+};
+
+       pcie {
+               pcie_ep_gpio: pci-ep-gpio {
+                       rockchip,pins =
+                               <4 RK_PC6 RK_FUNC_GPIO &pcfg_pull_none>;
+                       rockchip,io-domains = <&gpio1830_domain>;
+               };
+       };
+
+
+I.e. linking the pin-set to a definition of its actual io-domain, instead
+of only the general io-domain node. Somewhat similar to power-domains.
+
+The code itself could be the same as now (except needing to get the parent
+of the linked node for the io-domains), but would leave us the option of
+modifying code behaviour without touching the binding if needed down the
+road.
+
+
+Heiko
+
+

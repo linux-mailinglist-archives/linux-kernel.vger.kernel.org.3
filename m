@@ -2,111 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8065B59082A
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 23:36:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8758859082C
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 23:38:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234385AbiHKVgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 17:36:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44812 "EHLO
+        id S235456AbiHKVi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 17:38:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234075AbiHKVgk (ORCPT
+        with ESMTP id S234075AbiHKViZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 17:36:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C7A119F0DB
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 14:36:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660253797;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=WZaycEP+nZLu18YDIzSaBPrfwBpX8nQzmEAF9yLISJU=;
-        b=dR5dYTymewF7FWbjAIZWagOlwaeK6AKBTDu65tDsQMNQPnr8RoN+j0BEhCazppFxX2eeWG
-        20cemhkIdy7JoqazT/4z9x671v6A47pGAgypmMhB7xaw8dx83wnOlhdFdRjcMd8Q+6K1tB
-        mIhspXk+5G4B14qH6hVE5uvQM3iuSZU=
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com
- [209.85.166.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-297-OO4sD_VXNn6kwmTeK87p4w-1; Thu, 11 Aug 2022 17:36:36 -0400
-X-MC-Unique: OO4sD_VXNn6kwmTeK87p4w-1
-Received: by mail-io1-f69.google.com with SMTP id g22-20020a056602249600b0067caba4f24bso10354601ioe.4
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 14:36:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:organization:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc;
-        bh=WZaycEP+nZLu18YDIzSaBPrfwBpX8nQzmEAF9yLISJU=;
-        b=HALjQoiPhmLEs/VySRPr8+1cplzG7NQGNfRgTVeBVBDUYcO1dXZ83IxFg/VRbFQaZt
-         cA9piaxWogjzkK5eN/S26Br+VbPcgKGBDxYC1dmVgECpSDZLr84WHX0moFQZn92YI/k/
-         5PdUTj96eh4Iw6Zz39oYcoTuY1ZO6fWbAKu9ja0O0cdav2f+PqLVJicGhSQG0qc20j23
-         Ob6n1gDye5OtLghhHOoqfpcGWeDeTDlieCiyy0o7dYdYIlF3nCFzxf/PYjh2dS3IfJjp
-         n+SVF2NbzM+W7LuvUImh/ZNbf/V0/M2IWNVerTKvsm58dwjo9YNEAsIX7LB3Ao2DzW/Y
-         t7AA==
-X-Gm-Message-State: ACgBeo26bmhHk0wr+2gDFzuY1i4/p7Hgsrt/97j+oGvmyRiGRFXMWRHV
-        ssEvnuGAecMkr5/ii5Z6NpVQLG+FzSv2ZTqttqtXborb28uQmBHnR0lzu6wAKOSAGRQtWgfV877
-        Hcd5yzAd2fqmZAUqAYDBoX6g5
-X-Received: by 2002:a05:6638:e82:b0:343:4d92:616f with SMTP id p2-20020a0566380e8200b003434d92616fmr595764jas.166.1660253795906;
-        Thu, 11 Aug 2022 14:36:35 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR50tuCMR24UpJfhk188DB8Xdy34VDTNqzsXG7dfF/SZhinsloUn7kB/WWc1sWNK8jFGJUw8qQ==
-X-Received: by 2002:a05:6638:e82:b0:343:4d92:616f with SMTP id p2-20020a0566380e8200b003434d92616fmr595748jas.166.1660253795155;
-        Thu, 11 Aug 2022 14:36:35 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id y7-20020a029507000000b00342a1021507sm245720jah.123.2022.08.11.14.36.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Aug 2022 14:36:34 -0700 (PDT)
-Date:   Thu, 11 Aug 2022 15:36:32 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Subject: [GIT PULL] VFIO updates for v6.0-rc1 (part 2)
-Message-ID: <20220811153632.0ce73f72.alex.williamson@redhat.com>
-Organization: Red Hat
+        Thu, 11 Aug 2022 17:38:25 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBF59F19C;
+        Thu, 11 Aug 2022 14:38:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=PP9YDeHip3JLgIFd/30i9RiuExqZxhJ75I9LntNprD0=; b=CciMJdAHkb4L29AeV9z4VvWNbz
+        fu8e9dbzuSbAiDZhkCRiDNnc74Kk3qDDwqQ83/JFGD/gZzEqES68yUr7KjnYddcEXEyhGGasAC2JO
+        JBGAWQuXO3M58GrcaesbPFBfNDQB187p7wRJ+g5yRN5VZ2A/6OBfXvs3T0s4ft5THjfKFb+DUAWn4
+        +WxU9a5JbAJX+KEjOZid6rk97Atv5VWbe4j5uY1hqulry8VZqo6JZ9Shyl+SZjbfQINrLrvpiPYNw
+        SlzDsRj9YMIwIM6M9EeC1HAqsXqvT7RzGyy6+WNlHf04ZYWCwUGUq9etKNlq/RoIuN0IUs8NTlcTI
+        CsxgsMVg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1oMFsj-003Z1H-4O;
+        Thu, 11 Aug 2022 21:38:21 +0000
+Date:   Thu, 11 Aug 2022 22:38:21 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Jeff Layton <jlayton@kernel.org>
+Cc:     Ilya Dryomov <idryomov@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        ceph-devel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Matthew Wilcox <willy@infradead.org>
+Subject: Re: [GIT PULL] Ceph updates for 5.20-rc1
+Message-ID: <YvV2zfT0XbgwHGe/@ZenIV>
+References: <20220811152446.281723-1-idryomov@gmail.com>
+ <CAHk-=wifgq59uru6xDB=nY-1p6aQ-1YB8nVhW7T-N2ctK3m1gw@mail.gmail.com>
+ <CAOi1vP9BSi-65of-8D0BA1_DC0eVD_TQcWkhrGJwaXw_skhHFQ@mail.gmail.com>
+ <5d0b0367a5e28ec5b1f3b995c7792ff9a5cbcbd4.camel@kernel.org>
+ <YvVzHQ5DVaPAvw26@ZenIV>
+ <72a93a2c8910c3615bba7c093c66c18b1a6a2696.camel@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <72a93a2c8910c3615bba7c093c66c18b1a6a2696.camel@kernel.org>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+On Thu, Aug 11, 2022 at 05:30:03PM -0400, Jeff Layton wrote:
+> On Thu, 2022-08-11 at 22:22 +0100, Al Viro wrote:
+> > On Thu, Aug 11, 2022 at 05:08:11PM -0400, Jeff Layton wrote:
+> > 
+> > > Actually, I never got a formal ack from Al. I did send it repeatedly,
+> > > but I assume he has been too busy to respond. We've had it sitting in
+> > > linux-next for a couple of months, and he did suggest that approach in
+> > > the first place, but I too would also prefer to see his official ack on
+> > > it.
+> > 
+> > "Suggested approach" had been about inode_insert5() changes, right?
+> 
+> Right. I was talking about this patch (which I think is sane):
+> 
+>     fs: change test in inode_insert5 for adding to the sb list
 
-We've had a request to get this into the current merge window to ease
-re-bases in the next development cycle.  Thanks,
+It is, AFAICS.
 
-Alex
+> > But that's fs/inode.c side of things...  I have to admit that I'd missed
+> > the unlining d_same_name() - exporting the sucker per se didn't look
+> > insane and I hadn't looked at that in details ;-/
+> > 
+> > Looking at it now...  might be worth renaming it into __d_same_name(),
+> > leaving it inlined and exporting a wrapper; not sure if the impact on
+> > d_lookup()/__d_lookup()/d_alloc_parallel() is worth worrying about it,
+> > though.
+> > 
+> > Profiling a case when we have a plenty of files in the same directory
+> > on tmpfs, with something earlier in the pathname to kick out of RCU
+> > mode (e.g. going through /proc/self/cwd) might be interesting...
+> 
+> The d_name_name changes seemed ok to me, but it would be good to have
+> your ack (or qualified NAK) if possible.
 
-The following changes since commit c8a684e2e110376c58f0bfa30fb3855d1e319670:
+Exporting the functionality?  Sure, no problem.  Uninlining that one...
+I suspect that it's OK, but I'd like to see profiling data; it's not
+as if it would be hard to return to having it inlined, obviously.
 
-  Merge tag 'leds-5.20-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/pavel/linux-leds (2022-08-08 11:36:21 -0700)
-
-are available in the Git repository at:
-
-  https://github.com/awilliam/linux-vfio.git tags/vfio-v6.0-rc1pt2
-
-for you to fetch changes up to 0f3e72b5c8cfa0b57dc4fc7703a0a42dbc200ba9:
-
-  vfio: Move vfio.c to vfio_main.c (2022-08-08 14:33:41 -0600)
-
-----------------------------------------------------------------
-VFIO updates for v6.0-rc1 (part 2)
-
- - Rename vfio source file to more easily allow additional source
-   files in the upcoming development cycles (Jason Gunthorpe)
-
-----------------------------------------------------------------
-Jason Gunthorpe (1):
-      vfio: Move vfio.c to vfio_main.c
-
- drivers/vfio/Makefile                | 2 ++
- drivers/vfio/{vfio.c => vfio_main.c} | 0
- 2 files changed, 2 insertions(+)
- rename drivers/vfio/{vfio.c => vfio_main.c} (100%)
-
+Again, my apologies for not spotting that one.

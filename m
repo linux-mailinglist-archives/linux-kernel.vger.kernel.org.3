@@ -2,90 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1728758F85F
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 09:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B3C558F852
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 09:29:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234371AbiHKHaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 03:30:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35124 "EHLO
+        id S234262AbiHKH3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 03:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234386AbiHKH3z (ORCPT
+        with ESMTP id S234096AbiHKH3g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 03:29:55 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B374923FF;
-        Thu, 11 Aug 2022 00:29:53 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27B7MBou019139;
-        Thu, 11 Aug 2022 07:29:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=BJGCRmyYQPJGbgLAMygRFr672dkJN7Q+xPPqyqu4g8w=;
- b=NnOzCRBwUkGgo/fj2qVd7xrxv3Vh9wGDU8fNQuZhIfXX9XekUeDD3yTWiNUSS/vi17di
- x1jsT0aculT6QP6qlDhsMFNaJOaRbhWHiG2xCOdT2i/0WIsGJDRXDMwlzxlEkMuWD3jT
- hAQoyYnuXJteHn1lkvR5Rdn2CrBXaDQ/J07zO0xlcx4T3SZLEZuATWfdiEXJePWxRQPm
- ZyIY2K+pHsMd8lXhyz2ac3oFamACDe66MDAjOTGyyPfcJHEmgYAKTvJvxAI0gjeluSMI
- OrNXonm8ln9F9z9Qtt81Z+wvTuLs2VrkNV1yIUwFhbiWowU0asrEXBmN67LOZod7tIPS QA== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hvsaaghu2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 Aug 2022 07:29:09 +0000
-Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.47.97.222])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27B7T7Zw024814
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 Aug 2022 07:29:08 GMT
-Received: from nalasex01a.na.qualcomm.com (10.47.209.196) by
- nasanex01c.na.qualcomm.com (10.47.97.222) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Thu, 11 Aug 2022 00:29:07 -0700
-Received: from [10.216.37.224] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 11 Aug
- 2022 00:29:02 -0700
-Message-ID: <9e8f79c8-466a-91b1-63b6-38c99022e735@quicinc.com>
-Date:   Thu, 11 Aug 2022 12:58:58 +0530
+        Thu, 11 Aug 2022 03:29:36 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA57A923E4
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 00:29:34 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id u5-20020a6b4905000000b00681e48dbd92so9353926iob.21
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 00:29:34 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=/yFaxytgIiHOx+Ic1bXKL9Gku4rs+KBs+4RebWW1Oqw=;
+        b=xDAQ/o2tSs+F1BnC18PQ2vInZDNYkVekrUFX4B+pJADcaJ2s8VW5FJAGcy+eWhl3Hs
+         j+JoI/eJOZNtazo7GbPtWY4x2RGAICY2QgD4BsHg2SUu+ld0rThZuRWC5zyZa1pCxC+E
+         jxP5P8Qx5Qqpf1ojSnnO6H5EdOZMrMw/4NrrytYbl0pTC1qW4DRj44g0kcYW9pLiAsQY
+         Xm2rbA9J76XyWWniVesYaM1npLBveDUlP8Jeg26bMntH7eCvBEMUseZK6NTzogCVyGq9
+         gbnIzom5ILj+H/ln7b3DF2nQQGg9troh+RGZjLo1uxb5lmZOZZQrjCtnHqLakxhw3qJE
+         PvNw==
+X-Gm-Message-State: ACgBeo3cy0GSZ7n2SGgUif7px6qYUtRb/oheFUTSl31eDPRn+pOFG/b1
+        Tg2JnOhlP0sjcNnjvaQT9JlbfVG+QO0Me+y4ZkNayXlBQ5tk
+X-Google-Smtp-Source: AA6agR7QbnPgAxXbogoW+LXkYs4SKak5h1QOV8pgP/Zin+yh77BCgv+f6lsxKS//KxEqEm+vnHrYFnVoKMHRvqjsVHv0ArtJw6Fy
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 1/8] dt-bindings: remoteproc: qcom: adsp: Make ADSP pil
- loader as generic
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-CC:     <linux-remoteproc@vger.kernel.org>, <agross@kernel.org>,
-        <bjorn.andersson@linaro.org>, <lgirdwood@gmail.com>,
-        <broonie@kernel.org>, <quic_plai@quicinc.com>,
-        <bgoswami@quicinc.com>, <perex@perex.cz>, <tiwai@suse.com>,
-        <srinivas.kandagatla@linaro.org>, <quic_rohkumar@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <swboyd@chromium.org>, <judyhsiao@chromium.org>,
-        <devicetree@vger.kernel.org>
-References: <1659611751-7928-1-git-send-email-quic_srivasam@quicinc.com>
- <1659611751-7928-2-git-send-email-quic_srivasam@quicinc.com>
- <20220809183636.GA2158474-robh@kernel.org>
-From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-Organization: Qualcomm
-In-Reply-To: <20220809183636.GA2158474-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: VmOfpVif20bhFYcJLEp--zzOua1HooPC
-X-Proofpoint-GUID: VmOfpVif20bhFYcJLEp--zzOua1HooPC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-11_03,2022-08-10_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501 mlxscore=0
- malwarescore=0 spamscore=0 bulkscore=0 mlxlogscore=986 adultscore=0
- phishscore=0 lowpriorityscore=0 suspectscore=0 impostorscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208110019
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Received: by 2002:a05:6e02:1bad:b0:2dd:bc59:5078 with SMTP id
+ n13-20020a056e021bad00b002ddbc595078mr14145282ili.19.1660202974204; Thu, 11
+ Aug 2022 00:29:34 -0700 (PDT)
+Date:   Thu, 11 Aug 2022 00:29:34 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000885cee05e5f2204e@google.com>
+Subject: [syzbot] linux-next boot error: general protection fault in netdev_queue_update_kobjects
+From:   syzbot <syzbot+cf0ad9bc61d1fa5ef614@syzkaller.appspotmail.com>
+To:     atenart@kernel.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-next@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,29 +57,145 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-On 8/10/2022 12:06 AM, Rob Herring wrote:
-Thanks for Your time Rob!!!
-> On Thu, Aug 04, 2022 at 04:45:44PM +0530, Srinivasa Rao Mandadapu wrote:
->> Rename sdm845 adsp pil bindings to generic name, for using same binings
->> file for subsequent SoCs.
->>
->> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
->> ---
->>   .../bindings/remoteproc/qcom,lpass-adsp-pil.yaml   | 160 +++++++++++++++++++++
->>   .../bindings/remoteproc/qcom,sdm845-adsp-pil.yaml  | 160 ---------------------
->>   2 files changed, 160 insertions(+), 160 deletions(-)
->>   create mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,lpass-adsp-pil.yaml
->>   delete mode 100644 Documentation/devicetree/bindings/remoteproc/qcom,sdm845-adsp-pil.yaml
-> Please use the git-format-patch -M option so I'm not reviewing the whole
-> doc again. You also can (and should) change your git config to default
-> to this.
+syzbot found the following issue on:
 
-Actually here Common dt bindings for SDM845 and SC7280 is not working, 
-as it has conflicts with clock headers.
+HEAD commit:    bc6c6584ffb2 Add linux-next specific files for 20220810
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=1518dbbb080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5784be4315a4403b
+dashboard link: https://syzkaller.appspot.com/bug?extid=cf0ad9bc61d1fa5ef614
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-I Would like to revert this patch and create new dt bindings file for 
-SC7280 platform.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+cf0ad9bc61d1fa5ef614@syzkaller.appspotmail.com
 
->
-> Rob
+input: Sleep Button as /devices/LNXSYSTM:00/LNXSLPBN:00/input/input1
+ACPI: button: Sleep Button [SLPF]
+ACPI: \_SB_.LNKC: Enabled at IRQ 11
+virtio-pci 0000:00:03.0: virtio_pci: leaving for legacy driver
+ACPI: \_SB_.LNKD: Enabled at IRQ 10
+virtio-pci 0000:00:04.0: virtio_pci: leaving for legacy driver
+ACPI: \_SB_.LNKB: Enabled at IRQ 10
+virtio-pci 0000:00:06.0: virtio_pci: leaving for legacy driver
+virtio-pci 0000:00:07.0: virtio_pci: leaving for legacy driver
+N_HDLC line discipline registered with maxframe=4096
+Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
+00:03: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
+00:04: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
+00:05: ttyS2 at I/O 0x3e8 (irq = 6, base_baud = 115200) is a 16550A
+00:06: ttyS3 at I/O 0x2e8 (irq = 7, base_baud = 115200) is a 16550A
+Non-volatile memory driver v1.3
+Linux agpgart interface v0.103
+ACPI: bus type drm_connector registered
+[drm] Initialized vgem 1.0.0 20120112 for vgem on minor 0
+[drm] Initialized vkms 1.0.0 20180514 for vkms on minor 1
+Console: switching to colour frame buffer device 128x48
+platform vkms: [drm] fb0: vkmsdrmfb frame buffer device
+usbcore: registered new interface driver udl
+brd: module loaded
+loop: module loaded
+zram: Added device: zram0
+null_blk: disk nullb0 created
+null_blk: module loaded
+Guest personality initialized and is inactive
+VMCI host device registered (name=vmci, major=10, minor=120)
+Initialized host personality
+usbcore: registered new interface driver rtsx_usb
+usbcore: registered new interface driver viperboard
+usbcore: registered new interface driver dln2
+usbcore: registered new interface driver pn533_usb
+nfcsim 0.2 initialized
+usbcore: registered new interface driver port100
+usbcore: registered new interface driver nfcmrvl
+Loading iSCSI transport class v2.0-870.
+scsi host0: Virtio SCSI HBA
+st: Version 20160209, fixed bufsize 32768, s/g segs 256
+Rounding down aligned max_sectors from 4294967295 to 4294967288
+db_root: cannot open: /etc/target
+slram: not enough parameters.
+ftl_cs: FTL header not found.
+wireguard: WireGuard 1.0.0 loaded. See www.wireguard.com for information.
+wireguard: Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
+eql: Equalizer2002: Simon Janes (simon@ncm.com) and David S. Miller (davem@redhat.com)
+MACsec IEEE 802.1AE
+tun: Universal TUN/TAP device driver, 1.6
+general protection fault, probably for non-canonical address 0xffff000000000800: 0000 [#1] PREEMPT SMP KASAN
+KASAN: maybe wild-memory-access in range [0xfff8200000004000-0xfff8200000004007]
+CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.19.0-next-20220810-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+RIP: 0010:freelist_dereference mm/slub.c:347 [inline]
+RIP: 0010:get_freepointer mm/slub.c:354 [inline]
+RIP: 0010:get_freepointer_safe mm/slub.c:368 [inline]
+RIP: 0010:slab_alloc_node mm/slub.c:3211 [inline]
+RIP: 0010:slab_alloc mm/slub.c:3251 [inline]
+RIP: 0010:kmem_cache_alloc_trace+0x164/0x3e0 mm/slub.c:3282
+Code: 8b 51 08 48 8b 01 48 83 79 10 00 48 89 44 24 08 0f 84 bf 01 00 00 48 85 c0 0f 84 b6 01 00 00 48 8b 7d 00 8b 4d 28 40 f6 c7 0f <48> 8b 1c 08 0f 85 c2 01 00 00 48 8d 4a 08 65 48 0f c7 0f 0f 94 c0
+RSP: 0000:ffffc90000067810 EFLAGS: 00010246
+RAX: ffff000000000000 RBX: 0000000000000000 RCX: 0000000000000800
+RDX: 0000000000002d18 RSI: 0000000000000dc0 RDI: 000000000003dce0
+RBP: ffff888011842140 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000dc0 R14: 0000000000000a20 R15: 0000000000000dc0
+FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffff88823ffff000 CR3: 000000000bc8e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ kmalloc include/linux/slab.h:600 [inline]
+ kzalloc include/linux/slab.h:733 [inline]
+ kobject_uevent_env+0x230/0x1640 lib/kobject_uevent.c:524
+ netdev_queue_add_kobject net/core/net-sysfs.c:1677 [inline]
+ netdev_queue_update_kobjects+0x3d1/0x4e0 net/core/net-sysfs.c:1718
+ register_queue_kobjects net/core/net-sysfs.c:1779 [inline]
+ netdev_register_kobject+0x330/0x400 net/core/net-sysfs.c:2019
+ register_netdevice+0xe01/0x1680 net/core/dev.c:10070
+ virtnet_probe+0x1378/0x2f30 drivers/net/virtio_net.c:3923
+ virtio_dev_probe+0x577/0x870 drivers/virtio/virtio.c:305
+ call_driver_probe drivers/base/dd.c:530 [inline]
+ really_probe+0x249/0xb90 drivers/base/dd.c:609
+ __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:748
+ driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:778
+ __driver_attach+0x223/0x550 drivers/base/dd.c:1150
+ bus_for_each_dev+0x147/0x1d0 drivers/base/bus.c:301
+ bus_add_driver+0x4c9/0x640 drivers/base/bus.c:618
+ driver_register+0x220/0x3a0 drivers/base/driver.c:240
+ virtio_net_driver_init+0x93/0xd2 drivers/net/virtio_net.c:4102
+ do_one_initcall+0xfe/0x650 init/main.c:1299
+ do_initcall_level init/main.c:1374 [inline]
+ do_initcalls init/main.c:1390 [inline]
+ do_basic_setup init/main.c:1409 [inline]
+ kernel_init_freeable+0x6b1/0x73a init/main.c:1616
+ kernel_init+0x1a/0x1d0 init/main.c:1505
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
+Modules linked in:
+----------------
+Code disassembly (best guess):
+   0:	8b 51 08             	mov    0x8(%rcx),%edx
+   3:	48 8b 01             	mov    (%rcx),%rax
+   6:	48 83 79 10 00       	cmpq   $0x0,0x10(%rcx)
+   b:	48 89 44 24 08       	mov    %rax,0x8(%rsp)
+  10:	0f 84 bf 01 00 00    	je     0x1d5
+  16:	48 85 c0             	test   %rax,%rax
+  19:	0f 84 b6 01 00 00    	je     0x1d5
+  1f:	48 8b 7d 00          	mov    0x0(%rbp),%rdi
+  23:	8b 4d 28             	mov    0x28(%rbp),%ecx
+  26:	40 f6 c7 0f          	test   $0xf,%dil
+* 2a:	48 8b 1c 08          	mov    (%rax,%rcx,1),%rbx <-- trapping instruction
+  2e:	0f 85 c2 01 00 00    	jne    0x1f6
+  34:	48 8d 4a 08          	lea    0x8(%rdx),%rcx
+  38:	65 48 0f c7 0f       	cmpxchg16b %gs:(%rdi)
+  3d:	0f 94 c0             	sete   %al
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

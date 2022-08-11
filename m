@@ -2,142 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1449058FEB7
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 17:03:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E342E58FEBC
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 17:03:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235133AbiHKPC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 11:02:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49442 "EHLO
+        id S235258AbiHKPDz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 11:03:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235489AbiHKPCw (ORCPT
+        with ESMTP id S234676AbiHKPDv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 11:02:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 031052ED6C
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 08:02:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660230169;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6N6QzuAYNcLuvbpFNhmVVtzYHNHNp9A+IUqAPQVfJJk=;
-        b=aHsmr/cjc/q9DTAfHTwpQuK23E3Di07nzH483P+GdumK+BruaxWsvZiJkfNeP9q3csQEai
-        jd04e5MH66/t8IqiHteKew0RDEmo5/7G1WPzUCtmjBZbuOpDo1gZ9BHAQZaTZu0YxnhAGZ
-        mMlDeYfh1G4G53V8f6QsSi5BqfoHKYE=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-661-14biy2FHONqTPsuk-Nh5Og-1; Thu, 11 Aug 2022 11:02:47 -0400
-X-MC-Unique: 14biy2FHONqTPsuk-Nh5Og-1
-Received: by mail-wm1-f71.google.com with SMTP id m4-20020a7bce04000000b003a386063752so1752388wmc.1
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 08:02:47 -0700 (PDT)
+        Thu, 11 Aug 2022 11:03:51 -0400
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F9BA2C665;
+        Thu, 11 Aug 2022 08:03:51 -0700 (PDT)
+Received: by mail-qv1-f47.google.com with SMTP id d1so13538610qvs.0;
+        Thu, 11 Aug 2022 08:03:51 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=6N6QzuAYNcLuvbpFNhmVVtzYHNHNp9A+IUqAPQVfJJk=;
-        b=K/0UD2VP4Wr4+bar4MAa8X6gFGkPDLGutJMgIAMz2k18MqWi9v2VBkRseoJ8zPqlI/
-         c3EL924wlHQ6kyeKerrLfcjVEHd2LyyxGwcJPVCqRgaRR9lRI79ue84AqCAEMZDFfjM2
-         VDgqxDCd/x5sFxNOz+EV2zxQxgZAbEj0pR0kQ5cQhcqKbnNKF8ngW1ZWS7HaEA413PKR
-         0/Jyq+OnnzaHSRhnUXOHZrlQRyuVsihctxhtD8QQHDGAjnJEp1xvLKjy34wg+cYtj0LH
-         PtcgkA7AtT+KmUn5y2jqsQjsrIsipbLcKNivcGtFchCTQvCuAysInx3hW0Ab/gT4C9vG
-         mQ0g==
-X-Gm-Message-State: ACgBeo3odzfPHtv3Byj7Ivbaoln5Vnl87sm9UDa43Z9HL2Qa6BDXSnyt
-        nAT/0xmytkOvfZTsQ76dGtx59e70P+WZv0AfYdcQmHkfqoDBYNuHiqEX2tcnzBCi/TkPJpGEtBZ
-        eGJ2ld9ob+za59VpNLe2UW/xo
-X-Received: by 2002:a05:6000:178e:b0:220:635f:eb13 with SMTP id e14-20020a056000178e00b00220635feb13mr20336493wrg.634.1660230166542;
-        Thu, 11 Aug 2022 08:02:46 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5tCrS0IgLCyaY/OlcjExUFb573b9yp/DOgUwEtknZbmCtvPzB2Ff5feMuGpmbMfL96S+/nwQ==
-X-Received: by 2002:a05:6000:178e:b0:220:635f:eb13 with SMTP id e14-20020a056000178e00b00220635feb13mr20336469wrg.634.1660230166294;
-        Thu, 11 Aug 2022 08:02:46 -0700 (PDT)
-Received: from sgarzare-redhat (host-79-46-200-178.retail.telecomitalia.it. [79.46.200.178])
-        by smtp.gmail.com with ESMTPSA id p3-20020a05600c1d8300b003a50924f1c0sm6664611wms.18.2022.08.11.08.02.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Aug 2022 08:02:45 -0700 (PDT)
-Date:   Thu, 11 Aug 2022 17:02:42 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Zhang chunchao <chunchao@nfschina.com>
-Cc:     axboe@kernel.dk, asml.silence@gmail.com, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@nfschina.com
-Subject: Re: [PATCH] Modify the return value ret to EOPNOTSUPP when
- initialized to reduce repeated assignment of errno
-Message-ID: <20220811150242.giygjmy4vimxtrzg@sgarzare-redhat>
-References: <20220811075638.36450-1-chunchao@nfschina.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=2b6Oow0p1Gi6gERi73kxRG3MvSeEsCXxIuq9tTMaffA=;
+        b=DtnlCkgBWm/otrFX5e6/JHNUTFDsG7o+E3ED9IXHOT7HRti9nVNQEw1/n6EBfMV+mV
+         xpSOztsrEJfmTjd5gDCO0XKDsDE3mcI/JhkVfxKM2ljTDm1VM7kXR3jPXSTZj7ytf6fs
+         jac8OzIa1C74/StQXlJM4pxRXeGl9RMkdkFBMuYXqMgX8uRRoQHOyDRRxyFaoWAgCJwB
+         g+RpLAGlLQsLfHp5J3Zzz/XE35vFqwLvfsf3hFwZxF0gSdP9DZFMgneS3r+Rc3uvVM68
+         yVPjUpyTl1GQzv2GTm9uCWKgnBeMwiy8Sb7J+1Z2L9wRXE56P8AdVcN1RxbEwn/BA3xs
+         qipA==
+X-Gm-Message-State: ACgBeo0krDej7TB3/lhtPzQilibhjzzNbSxqcKXirtF+E+RVUg8UhDqY
+        rui2m8pKo4ovQVufvpQEA/pKoEkFsk8akaot
+X-Google-Smtp-Source: AA6agR4g1FQ7c4PinDoR22h6eu0Hoi3WVCW8U7nKECMNWtPm9oYWKpflP5avgGC09Mdv59JLrmebYg==
+X-Received: by 2002:a05:6214:2265:b0:474:8865:7ba2 with SMTP id gs5-20020a056214226500b0047488657ba2mr28339686qvb.98.1660230230132;
+        Thu, 11 Aug 2022 08:03:50 -0700 (PDT)
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
+        by smtp.gmail.com with ESMTPSA id h9-20020a05622a170900b0034359fc348fsm1759450qtk.73.2022.08.11.08.03.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Aug 2022 08:03:49 -0700 (PDT)
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-32a17d3bba2so52941777b3.9;
+        Thu, 11 Aug 2022 08:03:49 -0700 (PDT)
+X-Received: by 2002:a81:b812:0:b0:328:68e4:c886 with SMTP id
+ v18-20020a81b812000000b0032868e4c886mr32412237ywe.502.1660230228733; Thu, 11
+ Aug 2022 08:03:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220811075638.36450-1-chunchao@nfschina.com>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220722141506.20171-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220722141506.20171-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+In-Reply-To: <20220722141506.20171-2-prabhakar.mahadev-lad.rj@bp.renesas.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 11 Aug 2022 17:03:37 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWD=QPqL6AcKw=Xx2GhVhNFw1EY=wqp+DxA71AQRACnmw@mail.gmail.com>
+Message-ID: <CAMuHMdWD=QPqL6AcKw=Xx2GhVhNFw1EY=wqp+DxA71AQRACnmw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: soc: renesas: renesas,rzg2l-sysc:
+ Document RZ/Five SoC
+To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Cc:     Magnus Damm <magnus.damm@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Prabhakar <prabhakar.csengg@gmail.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 03:56:38PM +0800, Zhang chunchao wrote:
->Remove unnecessary initialization assignments.
+On Fri, Jul 22, 2022 at 4:15 PM Lad Prabhakar
+<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
+> Document RZ/Five (R9A07G043) SYSC bindings. The SYSC block found on the
+> RZ/Five SoC is almost identical to one found on the RZ/G2UL (and alike)
+> SoC's. "renesas,r9a07g043-sysc" compatible string will be used on the
+> RZ/Five SoC so to make this clear, update the comment to include RZ/Five
+> SoC.
 >
->Signed-off-by: Zhang chunchao <chunchao@nfschina.com>
->---
-> io_uring/io_uring.c | 3 +--
-> 1 file changed, 1 insertion(+), 2 deletions(-)
+> The SYSC block on RZ/Five has no interrupts to the core so to accommodate
+> this SoC make interrupts{,-names} properties optional.
 >
->diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
->index b54218da075c..8c267af06401 100644
->--- a/io_uring/io_uring.c
->+++ b/io_uring/io_uring.c
->@@ -3859,14 +3859,13 @@ SYSCALL_DEFINE4(io_uring_register, unsigned int, fd, unsigned int, opcode,
-> 		void __user *, arg, unsigned int, nr_args)
-> {
-> 	struct io_ring_ctx *ctx;
->-	long ret = -EBADF;
->+	long ret = -EOPNOTSUPP;
-> 	struct fd f;
->
-> 	f = fdget(fd);
-> 	if (!f.file)
-> 		return -EBADF;
->
->-	ret = -EOPNOTSUPP;
-> 	if (!io_is_uring_fops(f.file))
-> 		goto out_fput;
->
+> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+> ---
+> v1->v2:
+> * Dropped "renesas,r9a07g043-rzfive-sysc" compatible string
+> * Made interrupts{,-names} properties optional
 
-What about remove the initialization and assign it in the if branch?
-I find it a bit easier to read.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-devel for v6.1.
 
-I mean something like this:
+Gr{oetje,eeting}s,
 
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -3859,16 +3859,17 @@ SYSCALL_DEFINE4(io_uring_register, unsigned int, fd, unsigned int, opcode,
-                 void __user *, arg, unsigned int, nr_args)
-  {
-         struct io_ring_ctx *ctx;
--       long ret = -EBADF;
-+       long ret;
-         struct fd f;
+                        Geert
 
-         f = fdget(fd);
-         if (!f.file)
-                 return -EBADF;
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
--       ret = -EOPNOTSUPP;
--       if (!io_is_uring_fops(f.file))
-+       if (!io_is_uring_fops(f.file)) {
-+               ret = -EOPNOTSUPP;
-                 goto out_fput;
-+       }
-
-         ctx = f.file->private_data;
-
-
-Otherwise remove the initialization, but leave the assignment as it is 
-now.
-
-Thanks,
-Stefano
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

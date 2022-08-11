@@ -2,54 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BEAD590452
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 18:48:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20F15590430
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 18:48:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238743AbiHKQif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 12:38:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38284 "EHLO
+        id S238690AbiHKQfT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 12:35:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239082AbiHKQgT (ORCPT
+        with ESMTP id S238732AbiHKQdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 12:36:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4DC2816BB;
-        Thu, 11 Aug 2022 09:11:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 42E22B82164;
-        Thu, 11 Aug 2022 16:11:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F976C433B5;
-        Thu, 11 Aug 2022 16:11:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660234298;
-        bh=utghrLW32ISiREkGWf4NjEJsgWU4hb+gpkwwBKIRt1c=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ogN8qujRzQ9XovTzY+lt86EUk+ZVheOUIWJUoZgmxfiKNkC6OYVDb0EsozBQhQiF8
-         c5Y1A3iXr1yXu5+G8DzoNOq2/wQAT/NO/7ErSggXMjNDDqYBSFsWWOomMgyK/TG8UM
-         xD9vUgiyBzmbjfkX6v5kaA427QZS9NU3TotxfqCAo95etfQGrbK6Yj8iPXsKntB4Ho
-         1NyEfewZllss/AogobOY07qqFE21wxqz9C/G9i7mNO0oBjpg5ksCr9O9+3ujc3ctn4
-         MLTg7xnT3bEB6rxqJQ+zOLvJk41sWL7ZgAVGRHJDcKCBb9MnMINHJGbavwjvnkmw9r
-         GWQgSRTHfReKQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Oleg.Karfich@wago.com, Thomas Gleixner <tglx@linutronix.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Sasha Levin <sashal@kernel.org>, linux-fsdevel@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.14 14/14] fs/dcache: Disable preemption on i_dir_seq write side on PREEMPT_RT
-Date:   Thu, 11 Aug 2022 12:10:43 -0400
-Message-Id: <20220811161050.1543183-14-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220811161050.1543183-1-sashal@kernel.org>
-References: <20220811161050.1543183-1-sashal@kernel.org>
+        Thu, 11 Aug 2022 12:33:19 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DB509C511
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 09:10:59 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id s9so19790219ljs.6
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 09:10:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=WadkdhIBGjyW48KVPQS6VOJJuHOgD7hkCQHU3CrW5r4=;
+        b=C3xCsbJZiYMmFeHCimrB0ZWTrddOEX+yAAsE4dxCE9yo0bLODW7wRrPXo30JVEOom5
+         lZNHHqS9Q9ZZ669V5YZig1BRGrMPtMWWBG/QlFeCS/lJtKLT0apW87uqtOtVWkOkY4Qs
+         WmeqEqf0E1gwcAUa9HPdI/7tIXjdRDf1iNeBWrLwjPTPjzDbIrOzzECQFjQ4RbzKs6Qh
+         zxSvxiLroFNglqXDtciMH1rPnme3UJxqWowBe/vLiHBv7564PAdavmXdSnKgG4wmLmnQ
+         gXezuPik4TtYzLWaEZwNHJ+kdFBdTq+8rJciBrJYcoQnTCtygDRGanwmf8HwMjtZDpQ1
+         O1Xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=WadkdhIBGjyW48KVPQS6VOJJuHOgD7hkCQHU3CrW5r4=;
+        b=NYEYrYZ25TuzsowSthHwZbigNIHF0RzMHMX8LrMsZ9VZ8zXbw7KxaXT3ZOBwSAvGJM
+         cAEaJWFYJJAdWNLtkGm9p2oR5bzggdtAiDhfZMc7dvJUY5XujVGFwddL/7aHLdN1W+XC
+         jcVDslaJFOlk5Ahxr4TdGzagXpBDvSzpFfxUnoUEs6+J9f6YNrB8jUd1QosRnYaRaO7t
+         rPVvdObzPCDUB+eV5mb5BotJI1DaIyCxC95HMLy/PAs+GFJW9hTjp7ulW0uYMpkXqa4O
+         5NlB15/CiavLddX1gCcgfiw5TK6lGy7IMs3/asuZYi0oLSNt+J8s7SUVQ2l4rJnfueWP
+         LUlw==
+X-Gm-Message-State: ACgBeo2Y1dnJe0ODw5i2KoSfg8YnTiEJ0WsDnqQGJ/zngSB8dAkq1Ta+
+        09iXWReOppFsaykGW2jwMiLL3tIvKPkHpOCmKe8ZbFbjnwpNuQ==
+X-Google-Smtp-Source: AA6agR74xNZCd6uAl/bb54mBPt8npYozN6IsBpDIaMgTRAEyfH6PecKixBxiPmO3DJQF+NYupvkuQvAHxJ/MOHbC5PU=
+X-Received: by 2002:a05:651c:881:b0:25d:4865:f6b0 with SMTP id
+ d1-20020a05651c088100b0025d4865f6b0mr9904673ljq.418.1660234257438; Thu, 11
+ Aug 2022 09:10:57 -0700 (PDT)
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20220728145256.2985298-1-carsten.haitzler@foss.arm.com>
+In-Reply-To: <20220728145256.2985298-1-carsten.haitzler@foss.arm.com>
+From:   Mike Leach <mike.leach@linaro.org>
+Date:   Thu, 11 Aug 2022 17:10:46 +0100
+Message-ID: <CAJ9a7VhV3mXr4pGi2UZYkfCZzB6=trnE_U8vKytupWXB00cCCw@mail.gmail.com>
+Subject: Re: [PATCH v5 00/14] A patch series improving data quality of perf
+ test for CoreSight
+To:     carsten.haitzler@foss.arm.com
+Cc:     linux-kernel@vger.kernel.org, coresight@lists.linaro.org,
+        suzuki.poulose@arm.com, mathieu.poirier@linaro.org,
+        leo.yan@linaro.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,69 +69,161 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Hi Carsten,
 
-[ Upstream commit cf634d540a29018e8d69ab1befb7e08182bc6594 ]
+Been running the tests on my Dragonboard DB410 and see the following:-
 
-i_dir_seq is a sequence counter with a lock which is represented by the
-lowest bit. The writer atomically updates the counter which ensures that it
-can be modified by only one writer at a time. This requires preemption to
-be disabled across the write side critical section.
+1) for every test I get a warning of the form:-
+[ 4167.796633] cma: cma_alloc: reserved: alloc failed, req-size: 4096
+pages, ret: -12
+meaning the initial allocation for teh perf buffer has failed.
+is the allocation size for the perf buffer mmap fixed or can it be set
+for the individual target?
+Not sure if this is a worry - as far as I recall, if the ETR driver
+cannot set a buffer size it reduces till it can.
 
-On !PREEMPT_RT kernels this is implicit by the caller acquiring
-dentry::lock. On PREEMPT_RT kernels spin_lock() does not disable preemption
-which means that a preempting writer or reader would live lock. It's
-therefore required to disable preemption explicitly.
+2) A couple of the TID tests fail in my case, but the interesting
+output I get if I use -v is=>
 
-An alternative solution would be to replace i_dir_seq with a seqlock_t for
-PREEMPT_RT, but that comes with its own set of problems due to arbitrary
-lock nesting. A pure sequence count with an associated spinlock is not
-possible because the locks held by the caller are not necessarily related.
 
-As the critical section is small, disabling preemption is a sensible
-solution.
+ 77: CoreSight / Thread Loop 10 Threads - Check TID                  :
+--- start ---
+test child forked, pid 4646
+[ perf record: Woken up 1 times to write data ]
+[ perf record: Captured and wrote 2.005 MB
+./perf-thread_loop-check-tid-10th.data ]
+Warning:
+Please install libunwind or libdw development packages during the perf build.
+Warning:
+AUX data lost 2 times out of 2!
 
-Reported-by: Oleg.Karfich@wago.com
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Link: https://lkml.kernel.org/r/20220613140712.77932-2-bigeasy@linutronix.de
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- fs/dcache.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
+Thread IDs  4662 4662 4662 4662 4662 4662 4662 4662 not found in perf AUX data
+test child finished with -1
+---- end ----
+CoreSight / Thread Loop 10 Threads - Check TID: FAILED!
+ 78: CoreSight / Thread Loop 2 Threads - Check TID                   :
+--- start ---
+test child forked, pid 4693
+[ perf record: Woken up 1 times to write data ]
+[ perf record: Captured and wrote 0.005 MB
+./perf-thread_loop-check-tid-2th.data ]
+Warning:
+Please install libunwind or libdw development packages during the perf build.
+Thread IDs  4699 4699 not found in perf AUX data
+test child finished with -1
+---- end ----
 
-diff --git a/fs/dcache.c b/fs/dcache.c
-index e12246378834..faf6ca33fd51 100644
---- a/fs/dcache.c
-+++ b/fs/dcache.c
-@@ -2455,7 +2455,15 @@ EXPORT_SYMBOL(d_rehash);
- 
- static inline unsigned start_dir_add(struct inode *dir)
- {
--
-+	/*
-+	 * The caller holds a spinlock (dentry::d_lock). On !PREEMPT_RT
-+	 * kernels spin_lock() implicitly disables preemption, but not on
-+	 * PREEMPT_RT.  So for RT it has to be done explicitly to protect
-+	 * the sequence count write side critical section against a reader
-+	 * or another writer preempting, which would result in a live lock.
-+	 */
-+	if (IS_ENABLED(CONFIG_PREEMPT_RT))
-+		preempt_disable();
- 	for (;;) {
- 		unsigned n = dir->i_dir_seq;
- 		if (!(n & 1) && cmpxchg(&dir->i_dir_seq, n, n + 1) == n)
-@@ -2467,6 +2475,8 @@ static inline unsigned start_dir_add(struct inode *dir)
- static inline void end_dir_add(struct inode *dir, unsigned n)
- {
- 	smp_store_release(&dir->i_dir_seq, n + 2);
-+	if (IS_ENABLED(CONFIG_PREEMPT_RT))
-+		preempt_enable();
- }
- 
- static void d_wait_lookup(struct dentry *dentry)
--- 
-2.35.1
+Are we expecting the same TID to be repeated in that way?
 
+Regards
+
+Mike
+
+
+
+On Thu, 28 Jul 2022 at 15:53, <carsten.haitzler@foss.arm.com> wrote:
+>
+> From: "Carsten Haitzler (Rasterman)" <raster@rasterman.com>
+>
+> This is a prelude to adding more tests to shell tests and in order to
+> support putting those tests into subdirectories, I need to change the
+> test code that scans/finds and runs them.
+>
+> To support subdirs I have to recurse so it's time to refactor the code to
+> allow this and centralize the shell script finding into one location and
+> only one single scan that builds a list of all the found tests in memory
+> instead of it being duplicated in 3 places.
+>
+> This code also optimizes things like knowing the max width of desciption
+> strings (as we can do that while we scan instead of a whole new pass
+> of opening files). It also more cleanly filters scripts to see only
+> *.sh files thus skipping random other files in directories like *~
+> backup files, other random junk/data files that may appear and the
+> scripts must be executable to make the cut (this ensures the script
+> lib dir is not seen as scripts to run). This avoids perf test running
+> previous older versions of test scripts that are editor backup files
+> as well as skipping perf.data files that may appear and so on.
+>
+> Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
+>
+> Carsten Haitzler (Rasterman) (14):
+>   perf test: Refactor shell tests allowing subdirs
+>   perf test: Add CoreSight shell lib shared code for future tests
+>   perf test: Add build infra for perf test tools for CoreSight tests
+>   perf test: Add asm pureloop test tool
+>   perf test: Add asm pureloop test shell script
+>   perf test: Add git ignore for perf data generated by the CoreSight
+>     tests
+>   perf test: Add memcpy thread test tool
+>   perf test: Add memcpy thread test shell script
+>   perf test: Add thread loop test tool
+>   perf test: Add thread loop test shell scripts
+>   perf test: Add unroll thread test tool
+>   perf test: Add unroll thread test shell script
+>   perf test: Add git ignore for tmp and output files of CoreSight tests
+>   perf test: Add relevant documentation about CoreSight testing
+>
+>  .../trace/coresight/coresight-perf.rst        | 160 ++++++++++++++
+>  MAINTAINERS                                   |   1 +
+>  tools/perf/.gitignore                         |   6 +-
+>  tools/perf/Documentation/arm-coresight.txt    |   5 +
+>  tools/perf/Makefile.perf                      |  18 +-
+>  tools/perf/tests/Build                        |   1 +
+>  tools/perf/tests/builtin-test-list.c          | 207 ++++++++++++++++++
+>  tools/perf/tests/builtin-test-list.h          |  12 +
+>  tools/perf/tests/builtin-test.c               | 152 ++-----------
+>  tools/perf/tests/shell/coresight/Makefile     |  30 +++
+>  .../tests/shell/coresight/Makefile.miniconfig |  24 ++
+>  .../tests/shell/coresight/asm_pure_loop.sh    |  18 ++
+>  .../shell/coresight/asm_pure_loop/.gitignore  |   1 +
+>  .../shell/coresight/asm_pure_loop/Makefile    |  34 +++
+>  .../coresight/asm_pure_loop/asm_pure_loop.S   |  28 +++
+>  .../shell/coresight/memcpy_thread/.gitignore  |   1 +
+>  .../shell/coresight/memcpy_thread/Makefile    |  33 +++
+>  .../coresight/memcpy_thread/memcpy_thread.c   |  79 +++++++
+>  .../shell/coresight/memcpy_thread_16k_10.sh   |  18 ++
+>  .../shell/coresight/thread_loop/.gitignore    |   1 +
+>  .../shell/coresight/thread_loop/Makefile      |  33 +++
+>  .../shell/coresight/thread_loop/thread_loop.c |  86 ++++++++
+>  .../coresight/thread_loop_check_tid_10.sh     |  19 ++
+>  .../coresight/thread_loop_check_tid_2.sh      |  19 ++
+>  .../coresight/unroll_loop_thread/.gitignore   |   1 +
+>  .../coresight/unroll_loop_thread/Makefile     |  33 +++
+>  .../unroll_loop_thread/unroll_loop_thread.c   |  74 +++++++
+>  .../shell/coresight/unroll_loop_thread_10.sh  |  18 ++
+>  tools/perf/tests/shell/lib/coresight.sh       | 132 +++++++++++
+>  29 files changed, 1105 insertions(+), 139 deletions(-)
+>  create mode 100644 Documentation/trace/coresight/coresight-perf.rst
+>  create mode 100644 tools/perf/Documentation/arm-coresight.txt
+>  create mode 100644 tools/perf/tests/builtin-test-list.c
+>  create mode 100644 tools/perf/tests/builtin-test-list.h
+>  create mode 100644 tools/perf/tests/shell/coresight/Makefile
+>  create mode 100644 tools/perf/tests/shell/coresight/Makefile.miniconfig
+>  create mode 100755 tools/perf/tests/shell/coresight/asm_pure_loop.sh
+>  create mode 100644 tools/perf/tests/shell/coresight/asm_pure_loop/.gitignore
+>  create mode 100644 tools/perf/tests/shell/coresight/asm_pure_loop/Makefile
+>  create mode 100644 tools/perf/tests/shell/coresight/asm_pure_loop/asm_pure_loop.S
+>  create mode 100644 tools/perf/tests/shell/coresight/memcpy_thread/.gitignore
+>  create mode 100644 tools/perf/tests/shell/coresight/memcpy_thread/Makefile
+>  create mode 100644 tools/perf/tests/shell/coresight/memcpy_thread/memcpy_thread.c
+>  create mode 100755 tools/perf/tests/shell/coresight/memcpy_thread_16k_10.sh
+>  create mode 100644 tools/perf/tests/shell/coresight/thread_loop/.gitignore
+>  create mode 100644 tools/perf/tests/shell/coresight/thread_loop/Makefile
+>  create mode 100644 tools/perf/tests/shell/coresight/thread_loop/thread_loop.c
+>  create mode 100755 tools/perf/tests/shell/coresight/thread_loop_check_tid_10.sh
+>  create mode 100755 tools/perf/tests/shell/coresight/thread_loop_check_tid_2.sh
+>  create mode 100644 tools/perf/tests/shell/coresight/unroll_loop_thread/.gitignore
+>  create mode 100644 tools/perf/tests/shell/coresight/unroll_loop_thread/Makefile
+>  create mode 100644 tools/perf/tests/shell/coresight/unroll_loop_thread/unroll_loop_thread.c
+>  create mode 100755 tools/perf/tests/shell/coresight/unroll_loop_thread_10.sh
+>  create mode 100644 tools/perf/tests/shell/lib/coresight.sh
+>
+> --
+> 2.32.0
+>
+
+
+--
+Mike Leach
+Principal Engineer, ARM Ltd.
+Manchester Design Centre. UK

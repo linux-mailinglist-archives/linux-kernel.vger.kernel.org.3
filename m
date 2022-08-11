@@ -2,189 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42F045906BF
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 21:07:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A3255906BC
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 21:07:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235922AbiHKStf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 14:49:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57060 "EHLO
+        id S235872AbiHKSuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 14:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235799AbiHKStc (ORCPT
+        with ESMTP id S235934AbiHKSuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 14:49:32 -0400
-Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D6D9DB62;
-        Thu, 11 Aug 2022 11:49:30 -0700 (PDT)
-Received: by mail-qt1-f181.google.com with SMTP id h22so8718624qtu.2;
-        Thu, 11 Aug 2022 11:49:30 -0700 (PDT)
+        Thu, 11 Aug 2022 14:50:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C8E6125C6D
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 11:50:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660243817;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ZCkYKX+YocCFfhSB40Lllh1ri1NcE9eoUatp18CalQU=;
+        b=hPcy44jQlNf8ncXtzwgVh2Q1vpNLxF8zDAQVhwbv3/BR9cU8BtKyG142TJyZgSCpyHNNiE
+        YPBGPjh6Fgy4YwXO9HO318thMulyYdUgfCe8bZ3E97tzj+WXFg6GlNz27kr9jbecYQZ0PM
+        cZKPEAZjELHlMrkHOEOagaSKpkRBsdE=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-625-PyeMgj7pNZKHoC_3936_eg-1; Thu, 11 Aug 2022 14:50:16 -0400
+X-MC-Unique: PyeMgj7pNZKHoC_3936_eg-1
+Received: by mail-wm1-f70.google.com with SMTP id j36-20020a05600c1c2400b003a540d88677so5457272wms.1
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 11:50:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=RhMgUDFA93QBx75MeKT6IhTNiHWRpz583vvBHXd9MR4=;
-        b=mrT1JAXVc3Abr3ATl4rOs5VPY4cay0/AJtaq82lisovDyRPOp2KJdTt7/AH7kfjfMA
-         T5bYRJkNvKDGfUE2VnYkil36G5TQTkKT9Jcj4p6txyXYCKT5HWFE7hVLcDnENDGO3x1Y
-         wiXDREkpNvR1uAkqP9MUWOckzMG3BBTCLoUZD56An54POqGSceIK6QUIAQOKWeimKibw
-         9mulIs9M+jWa+6LX9dsValo6kAcfgbuSeddQW+QhX1+54LuvuEdu4aZ2n7CjZ5uLine5
-         iODxUl8WSKHkiRs5zYZLltgfNN89Qme2BRIZk4exDMlOHNWp3QchiVK9Sw0nRbWTeuCT
-         hrcg==
-X-Gm-Message-State: ACgBeo1DTWf4zJdC8mlPblaae7RiUrz80hNN+5UesBvP4kOgn9yooAzk
-        CfU51X+SIvYP+r6OsRRJrSvJ7hG05hBG1QUo
-X-Google-Smtp-Source: AA6agR5dUbfxBAjdtTIjhkzHKOQKq7ZXJn0esKtI+Mj9YdHcLUoFjIFyWzpy1el6zSNATtWrxwDRMg==
-X-Received: by 2002:ac8:7d14:0:b0:343:6db3:9e6c with SMTP id g20-20020ac87d14000000b003436db39e6cmr431498qtb.251.1660243769772;
-        Thu, 11 Aug 2022 11:49:29 -0700 (PDT)
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
-        by smtp.gmail.com with ESMTPSA id bi9-20020a05620a318900b006b5f0e8d1b9sm31170qkb.81.2022.08.11.11.49.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Aug 2022 11:49:27 -0700 (PDT)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-31f41584236so181932147b3.5;
-        Thu, 11 Aug 2022 11:49:26 -0700 (PDT)
-X-Received: by 2002:a81:1204:0:b0:322:7000:4ecb with SMTP id
- 4-20020a811204000000b0032270004ecbmr582563yws.47.1660243765824; Thu, 11 Aug
- 2022 11:49:25 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=ZCkYKX+YocCFfhSB40Lllh1ri1NcE9eoUatp18CalQU=;
+        b=ABugTW1/jeQFj+gB+ZN4Cfg580wM0s+arau5zQ7tRA71FKN9KG86pc1WyqTsSsSHPO
+         I6weFY4vECpbeLnOQEz0hLna6SXptpU89ysgc/Kin0N53xrJflh5AMxl+lEQH4x3zNB4
+         +agtg2rf8qfggMFY1cUtdJciC+f5qTsItOCRL3B2nacdIjV7sHYBaFgTs2rJx5BVTDuV
+         rol6Ysq5w1KHsOfMcE385pASkb1/EaAlStSvXIWH8JFa3j5noFHSKfWcdNFJhYfweZxO
+         k9o4IemajIduHIwymYV9Et5flkEkkzMokgmoGFZaH3qjZYiy5qU2p47y/ek2/xZON+tw
+         HERg==
+X-Gm-Message-State: ACgBeo3JBxe1rsXaY4dPdC1Akix95oSYZ0R3AO6g1xCa00t8AqYvcYIc
+        Ju0Zg4AcTXGTK/mD3vQAyb+x9MONWmNHTba4jZeDsUCz0qE2qlyCUC55cIi5Xb0v4qLHO1EqiNo
+        cYw6QOgw20s17CLqVESTJwUYX
+X-Received: by 2002:a05:6000:1a87:b0:222:2c85:2f5b with SMTP id f7-20020a0560001a8700b002222c852f5bmr195956wry.654.1660243815348;
+        Thu, 11 Aug 2022 11:50:15 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6LBiM5dQ9y7fRQHZ7uhmIZyZmCby6c7ic+mJTmauceGDSlYOfL1ZVjf7Fmwgdj57rpPaPTwQ==
+X-Received: by 2002:a05:6000:1a87:b0:222:2c85:2f5b with SMTP id f7-20020a0560001a8700b002222c852f5bmr195948wry.654.1660243815164;
+        Thu, 11 Aug 2022 11:50:15 -0700 (PDT)
+Received: from sgarzare-redhat (host-79-46-200-178.retail.telecomitalia.it. [79.46.200.178])
+        by smtp.gmail.com with ESMTPSA id 189-20020a1c02c6000000b003a545ff43c5sm172878wmc.45.2022.08.11.11.50.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Aug 2022 11:50:14 -0700 (PDT)
+Date:   Thu, 11 Aug 2022 20:50:08 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org,
+        clang-built-linux <llvm@lists.linux.dev>,
+        linux-next@vger.kernel.org
+Subject: Re: build failure of next-20220811 due to d79b32c2e4a4
+ ("vdpa_sim_blk: add support for discard and write-zeroes")
+Message-ID: <20220811185008.jiqcv4ovv4sglsap@sgarzare-redhat>
+References: <YvU67iF4z5gB4ZYk@debian>
+ <YvVK+ZqO75QAYYnB@dev-arch.thelio-3990X>
 MIME-Version: 1.0
-References: <cover.1657294931.git.geert@linux-m68k.org> <1cae5ebc28513ec1c91c66b00647ce3ca23bfba7.1657294931.git.geert@linux-m68k.org>
- <YvPVxy4kYKdzWgT8@phenom.ffwll.local> <CAMuHMdVMuuXgYW-AkyB+G77Wsjkm715u1ifDvaY=5DufXjryRA@mail.gmail.com>
- <YvUqPL5l8/+XbvaQ@phenom.ffwll.local> <YvVKe72jYBjucmkz@ravnborg.org>
-In-Reply-To: <YvVKe72jYBjucmkz@ravnborg.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 11 Aug 2022 20:49:14 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVD37MCXau4w87=x_jk9j-NMJCmu0d9qPuMqmHA_vPQRQ@mail.gmail.com>
-Message-ID: <CAMuHMdVD37MCXau4w87=x_jk9j-NMJCmu0d9qPuMqmHA_vPQRQ@mail.gmail.com>
-Subject: Re: [PATCH v3 01/10] drm/fourcc: Add drm_format_info_bpp() helper
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
-        "Linux/m68k" <linux-m68k@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Javier Martinez Canillas <javierm@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <YvVK+ZqO75QAYYnB@dev-arch.thelio-3990X>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sam,
-
-On Thu, Aug 11, 2022 at 8:29 PM Sam Ravnborg <sam@ravnborg.org> wrote:
-> On Thu, Aug 11, 2022 at 06:11:40PM +0200, Daniel Vetter wrote:
-> > On Thu, Aug 11, 2022 at 09:59:39AM +0200, Geert Uytterhoeven wrote:
-> > > On Wed, Aug 10, 2022 at 5:59 PM Daniel Vetter <daniel@ffwll.ch> wrote:
-> > > > On Fri, Jul 08, 2022 at 08:20:46PM +0200, Geert Uytterhoeven wrote:
-> > > > > Add a helper to retrieve the actual number of bits per pixel for a
-> > > > > plane, taking into account the number of characters and pixels per
-> > > > > block for tiled formats.
-> > > > >
-> > > > > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> > > > > Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
-> > >
-> > > > > --- a/drivers/gpu/drm/drm_fourcc.c
-> > > > > +++ b/drivers/gpu/drm/drm_fourcc.c
-> > > > > @@ -370,6 +370,25 @@ unsigned int drm_format_info_block_height(const struct drm_format_info *info,
-> > > > >  }
-> > > > >  EXPORT_SYMBOL(drm_format_info_block_height);
-> > > > >
-> > > > > +/**
-> > > > > + * drm_format_info_bpp - number of bits per pixel
-> > > > > + * @info: pixel format info
-> > > > > + * @plane: plane index
-> > > > > + *
-> > > > > + * Returns:
-> > > > > + * The actual number of bits per pixel, depending on the plane index.
-> > > > > + */
-> > > > > +unsigned int drm_format_info_bpp(const struct drm_format_info *info, int plane)
-> > > > > +{
-> > > > > +     if (!info || plane < 0 || plane >= info->num_planes)
-> > > > > +             return 0;
-> > > > > +
-> > > > > +     return info->char_per_block[plane] * 8 /
-> > > > > +            (drm_format_info_block_width(info, plane) *
-> > > > > +             drm_format_info_block_height(info, plane));
-> > > >
-> > > > Do we really needs this for blocky formats where this is potentially
-> > > > ill-defined? I think if there's no need then this should also return 0
-> > > > when block_width/height != 1, it doesn't make much sense to compute bpp
-> > > > when it's not really bits per _pixel_.
-> > >
-> > > Yes, we do need this.  For low-color formats, the number of bits
-> > > per pixel is less than eight, and block_width is larger than one.
-> > > That is actually the point of this patch.
-> >
-> > Hm right, I didn't realize that this is how we have to describe the
-> > formats with less than 8 bpp.
-> >
-> > I think we can include them easily with a check for char_per_block == 1
-> > and then making sure that the division does not have a reminder (just in
-> > case someone does something really funny, it could e.g. be a 332 layout or
-> > something like that for 3 pixels).
-> >
-> > > > Minimally this needs to check whether the division actually makes sense or
-> > > > whether there's a reminder, and if there's  reminder, then fail. But that
-> > > > feels like a bad hack and I think we should avoid it if it's not
-> > > > absolutely necessary.
-> > >
-> > > Looking at drivers/gpu/drm/drm_fourcc.c, the only supported format
-> > > where there can be a remainder is P030, which has 2 spare bits per
-> > > 32-bit word, and thus is special anyway.
-> > > Still, 4 * 8 / 3 = 10, so you get the correct numbers of bits for
-> > > the first plane.  For the second plane, you get 8 * 8 / 3 = 21,
-> > > but as .is_yuv = true, you have to divide that result by two again,
-> > > so you get 10 again.
-> >
-> > Yeah I don't think we should describe these with bpp or cpp or anything
-> > like that. bpp < 8 makes sense since that's how this has been done since
-> > decades, but trying to extend these to funny new formats is a bad idea.
-> > This is also why cpp and depth refuse to compute these (or at least
-> > should).
+On Thu, Aug 11, 2022 at 11:31:21AM -0700, Nathan Chancellor wrote:
+>On Thu, Aug 11, 2022 at 06:22:54PM +0100, Sudip Mukherjee (Codethink) wrote:
+>> Hi All,
+>>
+>> Not sure if it has been reported, builds of arm64 with clang failed to
+>> build next-20220811 with the error:
+>>
+>> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:201:3: error: expected expression
+>>                 struct virtio_blk_discard_write_zeroes range;
+>>                 ^
+>> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:204:25: error: use of undeclared identifier 'range'
+>>                 if (to_pull != sizeof(range)) {
+>>                                       ^
+>> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:207:21: error: use of undeclared identifier 'range'
+>>                                 to_pull, sizeof(range));
+>>                                                 ^
+>> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:212:60: error: use of undeclared identifier 'range'
+>>                 bytes = vringh_iov_pull_iotlb(&vq->vring, &vq->out_iov, &range,
+>>                                                                          ^
+>> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:222:38: error: use of undeclared identifier 'range'
+>>                 sector = vdpasim64_to_cpu(vdpasim, range.sector);
+>>                                                    ^
+>> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:224:43: error: use of undeclared identifier 'range'
+>>                 num_sectors = vdpasim32_to_cpu(vdpasim, range.num_sectors);
+>>                                                         ^
+>> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:225:37: error: use of undeclared identifier 'range'
+>>                 flags = vdpasim32_to_cpu(vdpasim, range.flags);
+>>                                                   ^
+>> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:202:7: error: mixing declarations and code is incompatible with standards before C99 [-Werror,-Wdeclaration-after-statement]
+>>                 u32 num_sectors, flags;
+>>                     ^
+>> 8 errors generated.
+>>
+>>
+>> git bisect pointed to d79b32c2e4a4 ("vdpa_sim_blk: add support for discard and write-zeroes").
+>> And, reverting that commit has fixed the build failure.
+>>
+>> I will be happy to test any patch or provide any extra log if needed.
 >
-> Daniel and I discussed this on irc. Let me try to recap here.
-> Using the bits per pixel info from drm_format_info is something we shall
-> try to avoid as this is often a sign of the wrong abstraction/design (my
-> words based on the irc talk).
-> So we shall limit the use of drm_format_info_bpp() to what we need now,
-> thus blocky formats should not be supported - to try to avoid seeing
-> this used more than necessary.
+>I am very surprised GCC does not error out in the same way, since as far
+>as I understand it, labeled statements have to be followed by a
+>statement and a declaration is not a statement in C so braces are
+>needed. In fact, it seems like something changed (regressed?) between
+>GCC 10.x and 11.x?
 >
-> Daniel suggested a rename to drm_format_info_legacy_bpp() to make it
-> obvious that this is often/always the wrong solution. I did not jump on
-> doing the rename as I do not know stuff good enough to tell people what
-> to use when this is not the right solution. The rename is simple, it is
-> the follow-up that keep me away.
+>https://godbolt.org/z/EYaGa1eE3
+
+Interesting, I confirm that also gcc 12 does not warns/error.
+This is my version:
+
+     $ gcc --version
+     gcc (GCC) 12.1.1 20220507 (Red Hat 12.1.1-1)
+
 >
-> On top of this there is a few formats in drm_drourcc that has a depth
-> field set which should be dropped. .depth is only for the few legacy
-> formats where it is used today.
->
-> We would also like to convert the fbdev helpers to drm_format_info,
-> and doing so will likely teach us a bit more what we need and what we
-> can drop.
->
-> Geert - can you give drm_format_info_bpp() a spin so it is limited to
-> the formats used now (not the blocky ones).
+>I am going to bisect GCC to find out whether or not that was
+>intentional. At any rate, isn't this the proper fix? I can send it as a
+>formal patch if desired.
 
-You mean return 0 if char_per_block[] > 1?
-I'm not sure it's actually safe to do so (and make this change this late
-in the development cycle), as this is used in drm_client_buffer_create(),
-drm_client_buffer_addfb(), and drm_mode_getfb().  Some of them do
-rely on bpp to be non-zero.
+Yep, that was the fix and I already re-sent a new series with the patch
+fixed:
+https://lore.kernel.org/virtualization/20220811083632.77525-1-sgarzare@redhat.com/T/#t
 
-Gr{oetje,eeting}s,
+Michael already queued the new version in his tree:
+https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
 
-                        Geert
+Thanks,
+Stefano
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

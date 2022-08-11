@@ -2,90 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C53558FD53
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 15:22:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5B5158FD3C
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 15:18:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235547AbiHKNWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 09:22:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34544 "EHLO
+        id S234868AbiHKNSB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 09:18:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235108AbiHKNWf (ORCPT
+        with ESMTP id S234050AbiHKNRz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 09:22:35 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1864816AE;
-        Thu, 11 Aug 2022 06:22:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660224153; x=1691760153;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=TXGp2l7srz7CG/35HC62yaH3SzOuZ/KTY0IN1dEpGAI=;
-  b=T5Vzi5QzJt1rxP32GUX/mrs4MWVVTlwuxjMi9Y89Am1NkOMIJGTnmTNd
-   Zdg6TTt9BernHTVXvKdFu70eG2bDgOCyY2Tj7pJqxNSBByrt4YQuF1DVh
-   ySRvMMo6Bqi+PwOJXo7qFkt5EZjjljg1mMZ+4DyR5NxOPWuVZ3vmWA90X
-   L2+DuVmzXchnKnjwWqaCWWg+M0nfRWTXBNSMoHgoSYhOU7qUQeUr1XeCs
-   0Mz38l6tm5lLClygUQcHARxAM0uo6S45FtDw0Zaf0syOJvBHvIxgh3eHU
-   qIR8fakSdWch+/EOw1YROjUJuDqi1vAnIEBsIraZu7CQtL4STibM3njJg
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="292602176"
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="292602176"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 06:22:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="608920719"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by fmsmga007.fm.intel.com with ESMTP; 11 Aug 2022 06:22:23 -0700
-Date:   Thu, 11 Aug 2022 21:17:38 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     David Hildenbrand <david@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: Re: [PATCH v7 05/14] mm/memfd: Introduce MFD_INACCESSIBLE flag
-Message-ID: <20220811131738.GA916119@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-6-chao.p.peng@linux.intel.com>
- <203c752f-9439-b5ae-056c-27b2631dcb81@redhat.com>
- <20220810093741.GE862421@chaop.bj.intel.com>
- <64ab9678-c72d-b6d9-8532-346cc9c06814@redhat.com>
+        Thu, 11 Aug 2022 09:17:55 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C24B7B7B9
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 06:17:54 -0700 (PDT)
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20220811131750euoutp02aa00fcc46760da7cc88a8b75213a2a29~KTNBlMF-d0070600706euoutp02X
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 13:17:50 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20220811131750euoutp02aa00fcc46760da7cc88a8b75213a2a29~KTNBlMF-d0070600706euoutp02X
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1660223870;
+        bh=Vun+gxn/6GGUdv/MRPXNdrbElNQFCuft36lThciOU28=;
+        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
+        b=O4xsWJm4cyq/4Yh0kN11fAjkgj2cpSM80dFLSBVBOmoH2STNgkj2OPqTg8iAx4FJF
+         l9dpnOldbBRSZjldGISht50wjzAusMdLbEjOcqpp+FfoKGNU0sexa4LuKrinANrVWT
+         JOQhMSV5f/BFc6lCfZceV3BjdlgZebPN6h0hqHcc=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20220811131750eucas1p198d4a2f1cdb759f30a96e801edc14992~KTNBNGQux1197711977eucas1p1s;
+        Thu, 11 Aug 2022 13:17:50 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id 2E.91.10067.E7105F26; Thu, 11
+        Aug 2022 14:17:50 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20220811131749eucas1p2456bbf8f8a2538b9ecf9f5be0092b643~KTNA0jRaH1732617326eucas1p2I;
+        Thu, 11 Aug 2022 13:17:49 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20220811131749eusmtrp1716c41bc4995b31c4e4725050f35189a~KTNAzmNiZ0860708607eusmtrp14;
+        Thu, 11 Aug 2022 13:17:49 +0000 (GMT)
+X-AuditID: cbfec7f4-dd7ff70000002753-ba-62f5017e867f
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id E4.A4.09038.D7105F26; Thu, 11
+        Aug 2022 14:17:49 +0100 (BST)
+Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20220811131749eusmtip1985b7f25892c387e44680c1d52d0068c~KTNAppwLl1773117731eusmtip1y;
+        Thu, 11 Aug 2022 13:17:49 +0000 (GMT)
+Received: from [192.168.8.130] (106.210.248.43) by CAMSVWEXC01.scsc.local
+        (2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+        Thu, 11 Aug 2022 14:17:47 +0100
+Message-ID: <f3ec55d3-f1fe-1875-f8e7-f7c46d89b065@samsung.com>
+Date:   Thu, 11 Aug 2022 15:17:46 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <64ab9678-c72d-b6d9-8532-346cc9c06814@redhat.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+        Thunderbird/91.11.0
+Subject: Re: [PATCH v9 13/13] dm: add power-of-2 target for zoned devices
+ with non power-of-2 zone sizes
+Content-Language: en-US
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        <Johannes.Thumshirn@wdc.com>, <snitzer@kernel.org>,
+        <axboe@kernel.dk>, <agk@redhat.com>, <hch@lst.de>
+CC:     <dm-devel@redhat.com>, <matias.bjorling@wdc.com>,
+        <gost.dev@samsung.com>, <linux-kernel@vger.kernel.org>,
+        <pankydev8@gmail.com>, <jaegeuk@kernel.org>, <hare@suse.de>,
+        <linux-block@vger.kernel.org>, <linux-nvme@lists.infradead.org>,
+        <bvanassche@acm.org>, Damien Le Moal <damien.lemoal@wdc.com>
+From:   Pankaj Raghav <p.raghav@samsung.com>
+In-Reply-To: <b73143fd-107d-177d-d647-f17a32b9423e@opensource.wdc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [106.210.248.43]
+X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
+        CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrCKsWRmVeSWpSXmKPExsWy7djPc7p1jF+TDG5MYbdYf+oYs8Xqu/1s
+        FtM+/GS2+H32PLNFa/s3Jou972azWuxZNInJYuXqo0wWT9bPYrb423UPKHFL2+LyrjlsFvOX
+        PWW3mND2ldlizc2nLBYnbkk7CHhcvuLtsXPWXXaPy2dLPTat6mTz2Lyk3mP3zQY2j52t91k9
+        3u+7ChQ6Xe3xeZOcR/uBbqYA7igum5TUnMyy1CJ9uwSujCcb57EWvBKsOHBEtoFxH08XIyeH
+        hICJxITrn9m6GLk4hARWMEq0HrwG5XxhlNi2+Cg7hPOZUeLS3kmMMC0zfi5jhUgsZ5T4dXM+
+        G1xV76UzUM4uRok3fVeZQVp4BewkJh+/ywJiswioSjQ0z2eFiAtKnJz5BCwuKhApsWb3WaB9
+        HBzCAlkSL5/KgISZBcQlbj2ZzwQyU0RgAaPE6wWNYKuZBTYwSXz8384C0sAmoCXR2MkO0sAp
+        4CYx7ed2JohmTYnW7b/ZIWx5ie1v5zCDlEsIKElsnMAP8U2txNpjZ8DelBB4xSlx5OFZdoiE
+        i8Sz1zvZIGxhiVfHt0DFZSROT+5hgbCrJZ7e+M0M0dzCKNG/cz0bxAJrib4zORA1jhILT/ey
+        Q4T5JG68FYQ4h09i0rbpzBMYVWchhcQsJC/PQvLBLCQfLGBkWcUonlpanJueWmyUl1quV5yY
+        W1yal66XnJ+7iRGYEE//O/5lB+PyVx/1DjEycTAeYpTgYFYS4S1b9DlJiDclsbIqtSg/vqg0
+        J7X4EKM0B4uSOG9y5oZEIYH0xJLU7NTUgtQimCwTB6dUA1NX/kPnfwXv2oyrF7ldvhs758xj
+        hs6555Zmcsae9zmWY/XRw+DeMoWrZillB//kSbd94XyqqZ2mFlTPekWGpWbe2n3tgsGWZ4TY
+        J3TOdJnwx1Jrx5XijjsTbgr2tW03Pabftrxi4i6hgqiiDLUJlavar1f95/kza+viFUsWNiWu
+        erZM7G6u0kWhydV1emffbH0Rvbv006Smtmk+hXxTV3xi2+Qp9/d2ZXLY086PdWWHN1VX7dBd
+        vWZ359wXBT3bp6utUUv4MK08znQun2qDq4Lu9p1u988fYMiXPtIUmvWyaf6GR8Z7cx9ICWx/
+        JhBYsfTENYNJP3LjzC5J7lo2zTCaTZXJWntVssa21ENTn6sosRRnJBpqMRcVJwIAK5QPuvcD
+        AAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprJKsWRmVeSWpSXmKPExsVy+t/xu7q1jF+TDN690rBYf+oYs8Xqu/1s
+        FtM+/GS2+H32PLNFa/s3Jou972azWuxZNInJYuXqo0wWT9bPYrb423UPKHFL2+LyrjlsFvOX
+        PWW3mND2ldlizc2nLBYnbkk7CHhcvuLtsXPWXXaPy2dLPTat6mTz2Lyk3mP3zQY2j52t91k9
+        3u+7ChQ6Xe3xeZOcR/uBbqYA7ig9m6L80pJUhYz84hJbpWhDCyM9Q0sLPSMTSz1DY/NYKyNT
+        JX07m5TUnMyy1CJ9uwS9jCcb57EWvBKsOHBEtoFxH08XIyeHhICJxIyfy1i7GLk4hASWMkp0
+        nLzEApGQkfh05SM7hC0s8edaFxtE0UdGidVH1jBBOLsYJbZM7mMGqeIVsJOYfPwuWDeLgKpE
+        Q/N8Voi4oMTJmU/A4qICkRIPlzUxgdjCAlkS635OAYszC4hL3HoyH2yoiMACRonXCxrBbmIW
+        2MAkcXryTTaQKiGBP4wSk+9rdzFycLAJaEk0doKdxyngJjHt53YmiEGaEq3bf7ND2PIS29/O
+        YQYplxBQktg4gR/im1qJV/d3M05gFJ2F5LxZSM6YhWTSLCSTFjCyrGIUSS0tzk3PLTbSK07M
+        LS7NS9dLzs/dxAhMI9uO/dyyg3Hlq496hxiZOBgPMUpwMCuJ8JYt+pwkxJuSWFmVWpQfX1Sa
+        k1p8iNEUGEYTmaVEk/OBiSyvJN7QzMDU0MTM0sDU0sxYSZzXs6AjUUggPbEkNTs1tSC1CKaP
+        iYNTqoEpq2F2332RUgvfr/IOz9tf/nnptPtgm3t/QNwJ0WsdEi2m/C8jMisvsga8uHjKKrJJ
+        bpPOggnnj/UtXV5Vbm2r37/3+w4R8Wf7Fzp8/b6epy0y+c3E6BnSaxqMK748lHskE7xM+PV9
+        dnumjjsi75a9mPTNvMv6OHf4E+0n2SwCDq9mukTMOnNCN2penCn7hh+Tfmw7HF/cdq9TqnrO
+        ZfWpYYVPQ64q8DgsvbW06XucUNzvlGMGDA0FUwtSnxq7OjcvPrJmi9zxuT7MglFbfvxe//B8
+        R1Vc42XFVDMtxQXTDc5wMprwxK38P7Vi1dmrezYUuucqxPVV+63iLmVLKrFaPZvTnVfnQ5KO
+        +VkvhelKLMUZiYZazEXFiQDruVpsrAMAAA==
+X-CMS-MailID: 20220811131749eucas1p2456bbf8f8a2538b9ecf9f5be0092b643
+X-Msg-Generator: CA
+X-RootMTR: 20220803094816eucas1p1890ceb4faebaf4f0cdbc9581d1308672
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20220803094816eucas1p1890ceb4faebaf4f0cdbc9581d1308672
+References: <20220803094801.177490-1-p.raghav@samsung.com>
+        <CGME20220803094816eucas1p1890ceb4faebaf4f0cdbc9581d1308672@eucas1p1.samsung.com>
+        <20220803094801.177490-14-p.raghav@samsung.com>
+        <b73143fd-107d-177d-d647-f17a32b9423e@opensource.wdc.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,51 +131,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 10, 2022 at 11:55:19AM +0200, David Hildenbrand wrote:
-> On 10.08.22 11:37, Chao Peng wrote:
-> > On Fri, Aug 05, 2022 at 03:28:50PM +0200, David Hildenbrand wrote:
-> >> On 06.07.22 10:20, Chao Peng wrote:
-> >>> Introduce a new memfd_create() flag indicating the content of the
-> >>> created memfd is inaccessible from userspace through ordinary MMU
-> >>> access (e.g., read/write/mmap). However, the file content can be
-> >>> accessed via a different mechanism (e.g. KVM MMU) indirectly.
-> >>>
-> >>> It provides semantics required for KVM guest private memory support
-> >>> that a file descriptor with this flag set is going to be used as the
-> >>> source of guest memory in confidential computing environments such
-> >>> as Intel TDX/AMD SEV but may not be accessible from host userspace.
-> >>>
-> >>> The flag can not coexist with MFD_ALLOW_SEALING, future sealing is
-> >>> also impossible for a memfd created with this flag.
-> >>
-> >> It's kind of weird to have it that way. Why should the user have to
-> >> care? It's the notifier requirement to have that, no?
-> >>
-> >> Why can't we handle that when register a notifier? If anything is
-> >> already mapped, fail registering the notifier if the notifier has these
-> >> demands. If registering succeeds, block it internally.
-> >>
-> >> Or what am I missing? We might not need the memfile set flag semantics
-> >> eventually and would not have to expose such a flag to user space.
-> > 
-> > This makes sense if doable. The major concern was: is there a reliable
-> > way to detect this (already mapped) at the time of memslot registering.
-> 
-> If too complicated, we could simplify to "was this ever mapped" and fail
-> for now. Hooking into shmem_mmap() might be sufficient for that to get
-> notified about the first mmap.
-> 
-> As an alternative, mapping_mapped() or similar *might* do what we want.
 
-mapping_mapped() sounds the right one, I remember SEV people want first
-map then unmap. "was this ever mapped" may not work for them.
+>> +==========
+>> +dm-po2zone
+>> +==========
+>> +The dm-po2zone device mapper target exposes a zoned block device with a
+>> +non-power-of-2(npo2) zone number of sectors as a power-of-2(po2) zone number
+> 
+> s/zone number of sectors/number of sectors per zone (zone size)
+> 
+>> +of sectors.
+>> +The filesystems that support zoned block devices such as F2FS and BTRFS
+>> +assume po2 zone size sectors as the kernel has traditionally only supported
+>> +those devices. However, as the kernel now supports zoned block devices with
+>> +npo2 zone size sectors, the dm-po2zone target can be used by the filesystems
+>> +before adding native support.
+> 
+> filesystems will not "use" the target. The user has to set up the target first
+> and the filesystem will run on top of it. Detail, but rewording this make it
+> clear that this is not an automatic thing magically happening.
+> 
+> Not that your patch series is lacking f2fs and btrfs patches to check for the
+> power of 2 zone size of the zoned device. Unless these checks are already in place ?
+> 
+btrfs already had these checks in place and f2fs patch to allow only po2
+zone size was already merged by Jaegeuk.
 
-Thanks,
-Chao
-> 
-> 
-> 
-> -- 
-> Thanks,
-> 
-> David / dhildenb
+7f262f737502 ("f2fs: ensure only power of 2 zone sizes are allowed")
+>> +
+>> +Partial mapping of the underlying device is not supported by this target.
+>> +
+>> +Algorithm
+>> +=========
+>> +The device mapper target maps the underlying device's zone size to the
+>> +zone capacity and changes the zone size to the nearest po2 number of sectors.
+>> +The gap between the zone capacity and the zone size is emulated in the target.
+>> +E.g., a zoned block device with a zone size (and capacity) of 3M will have an
+>> +equivalent target layout with mapping as follows:
+>> +
+>> +::
+>> +
+>> +  0M           3M  4M        6M 8M
+>> +  |             |  |          |  |
+>> +  +x------------+--+x---------+--+x-------  Target
+>> +  |x            |  |x         |  |x
+>> +   x               x             x
+>> +   x               x             x
+>> +   x              x             x
+>> +   x             x             x
+>> +  |x            |x            |x
+>> +  +x------------+x------------+x----------  Device
+>> +  |             |             |
+>> +  0M           3M            6M
+>> +

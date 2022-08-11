@@ -2,38 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6DD0E58FBE0
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 14:05:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD2C558FBE6
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 14:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235161AbiHKMFS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 08:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41126 "EHLO
+        id S235032AbiHKMIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 08:08:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235155AbiHKMFG (ORCPT
+        with ESMTP id S234179AbiHKMIE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 08:05:06 -0400
+        Thu, 11 Aug 2022 08:08:04 -0400
 Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086B8956A5;
-        Thu, 11 Aug 2022 05:05:04 -0700 (PDT)
-X-QQ-mid: bizesmtp80t1660219498tncr2goc
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 981BC923E8;
+        Thu, 11 Aug 2022 05:08:02 -0700 (PDT)
+X-QQ-mid: bizesmtp82t1660219665t9nj96eo
 Received: from localhost.localdomain ( [182.148.14.53])
         by bizesmtp.qq.com (ESMTP) with 
-        id ; Thu, 11 Aug 2022 20:04:57 +0800 (CST)
+        id ; Thu, 11 Aug 2022 20:07:44 +0800 (CST)
 X-QQ-SSF: 01000000002000G0V000B00A0000020
-X-QQ-FEAT: SGbEDZt3ZyZazrvh3yNR+bQlXu0qsiC+vMqnfAp9KATZkDdVTX2QhF3RKgWfR
-        I/nbnTFHwK7WZ1x+spHtaXyd7k7m+RwMNV2TeoOw0+25cnugyDRZfj3mSji48PeijRnMRV+
-        yiTPpjiYPooy0VzGAwypQKe3Mxmg3tia0mFM6FuJwvhTZQMoIXhseM0FdonTnQt2HH2YvtH
-        cFEnThKEAPSxcFnRThWjV0/NYW/Q/0/KqZKdh6Vu1EhftZDvUvkxFNLj4XUNHxbSsSqJonT
-        kqpPV1v7B4w3qEkDo3BfPF9qDnpCtIA7vwyqNtTEMLXwK46RvHj2gRifJTEgs6ZZx4CsFNW
-        vTxwA60H+KZEynFEsV6kvoa+3LTQ68eA2pg8/RFjdh6gH3h0/hRQwFcu8hApk5UkEnmSfv/
+X-QQ-FEAT: XBN7tc9DADKJnmk6DcNav8bT+HU0zq14jnTofoS9qginj1yePo8pGbSIxM1Ap
+        swE1CEgBseoyFkUYa5i3DjTY2Vh/yORSSwM28nE95ZRaf+Cv618ODtpbfaxG48cL878AsPy
+        JJnXeED/YwDbAy7qA1yYUvyVxlUmS0VJmoWnjEAwd2tBrnBLZmvFDv1mXub+j0Bpvi2c81I
+        ZrZFqphpklmZ5rZD4+60O3DlXuUn8AsnauTc8v5TIHd1Lr9kSbCf08FAWLXrGKqwwM76Aix
+        7sKeB2U+XnDUhVMDXooUpaQASHuzsqIb/QJ35JbqQ72Az8rp6RodA+n1/zM4uoyLn3miNzO
+        R0ZYx1byNgwKs0fC+d246X2bQOd6818TTGC6PvkhhJyIgDACgIPjnhVg/uWuqLOmBDf+9WY
 X-QQ-GoodBg: 0
 From:   Jason Wang <wangborong@cdjrlc.com>
-To:     daniel.lezcano@linaro.org
-Cc:     rafael@kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jason Wang <wangborong@cdjrlc.com>
-Subject: [PATCH] cpuidle/coupled: Fix comment typo
-Date:   Thu, 11 Aug 2022 20:04:50 +0800
-Message-Id: <20220811120450.13886-1-wangborong@cdjrlc.com>
+To:     davem@davemloft.net
+Cc:     gcherian@marvell.com, herbert@gondor.apana.org.au,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jason Wang <wangborong@cdjrlc.com>
+Subject: [PATCH] crypto: cavium - Fix comment typo
+Date:   Thu, 11 Aug 2022 20:07:05 +0800
+Message-Id: <20220811120705.15605-1-wangborong@cdjrlc.com>
 X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -48,26 +49,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The double `are' is duplicated in the comment, remove one.
+The double `the' is duplicated in the comment, remove one.
 
 Signed-off-by: Jason Wang <wangborong@cdjrlc.com>
 ---
- drivers/cpuidle/coupled.c | 2 +-
+ drivers/crypto/cavium/cpt/cpt_hw_types.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/cpuidle/coupled.c b/drivers/cpuidle/coupled.c
-index 74068742cef3..9acde71558d5 100644
---- a/drivers/cpuidle/coupled.c
-+++ b/drivers/cpuidle/coupled.c
-@@ -54,7 +54,7 @@
-  * variable is not locked.  It is only written from the cpu that
-  * it stores (or by the on/offlining cpu if that cpu is offline),
-  * and only read after all the cpus are ready for the coupled idle
-- * state are are no longer updating it.
-+ * state are no longer updating it.
-  *
-  * Three atomic counters are used.  alive_count tracks the number
-  * of cpus in the coupled set that are currently or soon will be
+diff --git a/drivers/crypto/cavium/cpt/cpt_hw_types.h b/drivers/crypto/cavium/cpt/cpt_hw_types.h
+index 8ec6edc69f3f..ae4791a8ec4a 100644
+--- a/drivers/crypto/cavium/cpt/cpt_hw_types.h
++++ b/drivers/crypto/cavium/cpt/cpt_hw_types.h
+@@ -396,7 +396,7 @@ union cptx_vqx_misc_ena_w1s {
+  * Word0
+  *  reserved_20_63:44 [63:20] Reserved.
+  *  dbell_cnt:20 [19:0](R/W/H) Number of instruction queue 64-bit words to add
+- *	to the CPT instruction doorbell count. Readback value is the the
++ *	to the CPT instruction doorbell count. Readback value is the
+  *	current number of pending doorbell requests. If counter overflows
+  *	CPT()_VQ()_MISC_INT[DBELL_DOVF] is set. To reset the count back to
+  *	zero, write one to clear CPT()_VQ()_MISC_INT_ENA_W1C[DBELL_DOVF],
 -- 
 2.36.1
 

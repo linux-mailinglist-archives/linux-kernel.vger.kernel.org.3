@@ -2,156 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B3EE590944
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 01:43:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D24059094F
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 01:50:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236594AbiHKXnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 19:43:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43034 "EHLO
+        id S235884AbiHKXt6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 19:49:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbiHKXnR (ORCPT
+        with ESMTP id S229524AbiHKXt4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 19:43:17 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD1CA9AFCC
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 16:43:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660261396; x=1691797396;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EvJB+EyyjrE/ViFyxaCElIufWhOTNa4V37QL/lXPjow=;
-  b=TuF/6sK4wWBQPg6/dfkAKbcuDKE9y8k0tgEqXEoX/oB4PtdGWrip6k3o
-   M9VuRpP69QP9u2oXhLV487CTntyHrPZRcyVFRclJEXxWce+shMrSvb6ug
-   EZ0jGekmMw8uldE3GEj8vEttIAtGOw/pi7jkuQJQZGLqO6ODimOM+zyMW
-   wdkGciU5u53Jj4HTugiMOAoMhTDM7UPq8xhS7oG90GF/SkgIYfSYN5gRC
-   Ll/DMXM3ZxOJ6+AahkDyQwx6RwXOsQTqn04RYQzpsGwmnCfEjbFZHvJzZ
-   6HeY6idNCQG3tUuXcYCpqNkwektH6NV0mbV4D/EALc9aOQMza6wYE41KG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10436"; a="289055194"
-X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
-   d="scan'208";a="289055194"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 16:43:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
-   d="scan'208";a="673890841"
-Received: from lkp-server02.sh.intel.com (HELO cfab306db114) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 11 Aug 2022 16:43:13 -0700
-Received: from kbuild by cfab306db114 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oMHpZ-0000o3-07;
-        Thu, 11 Aug 2022 23:43:13 +0000
-Date:   Fri, 12 Aug 2022 07:42:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Zhenneng Li <lizhenneng@kylinos.cn>,
-        Alex Deucher <alexander.deucher@amd.com>
-Cc:     kbuild-all@lists.01.org, Jack Xiao <Jack.Xiao@amd.com>,
-        Tao Zhou <tao.zhou1@amd.com>, David Airlie <airlied@linux.ie>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Pan Xinhui <Xinhui.Pan@amd.com>, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, Zhenneng Li <lizhenneng@kylinos.cn>,
-        dri-devel@lists.freedesktop.org,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Hawking Zhang <Hawking.Zhang@amd.com>
-Subject: Re: [PATCH] drm/amdgpu: use native mode for dp aux transfer
-Message-ID: <202208120737.JG7NkugC-lkp@intel.com>
-References: <20220811072012.962460-1-lizhenneng@kylinos.cn>
+        Thu, 11 Aug 2022 19:49:56 -0400
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E08B9C8D5;
+        Thu, 11 Aug 2022 16:49:55 -0700 (PDT)
+Received: by mail-qt1-f176.google.com with SMTP id h22so9255204qtu.2;
+        Thu, 11 Aug 2022 16:49:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=4/KjfZ47/vEC5Vh9INtWzHkArTxaktEznu8FJHOXlP8=;
+        b=vJqwF0a0CCG8eq83dyljzIdLOSG95qqVYjPJgBkvR+fF81MaFjj7Jgv54cTRxjg4KY
+         VNYiQN1ALvFhAuz/9q5fMPH8ixms7GRqOWPjbXo5s47N0KMaS3ahWVRDZRAUuPkLX0aY
+         +wx/a1P2MCRr/IhECO8vjpxMtUUJ8UQ5/CSfUG06C3t5+Cef+uz4apdceZjRi/J2NZCb
+         H2YHJ6NJFPjw2IDI3Nlr4ANnH96fYeWiOu0A1NloKnnxSUYsmvyncU84K5YZVBiGY/WG
+         Oa15XFpkNC5kvMDiZ4G0PNZor20SrorwDzKwiaLGhoKAIYMDovHpuaNdtfParg+cpriC
+         3mOA==
+X-Gm-Message-State: ACgBeo2YtZNXnXLcZzWrf7QgToSaDHwyBrrT6CXWzWGJCQ7HBlFyxidI
+        1F4WI4efFCtnz4xpOGJA9uBQonfbWToFvzpC
+X-Google-Smtp-Source: AA6agR7lD7u1653mNKJ9Vt+9dxuOSbfI5K0CqFhCEpzlGI1Q2A8/elmioK2SB+ipGO4JVPx8yL+dUw==
+X-Received: by 2002:a05:622a:174e:b0:343:202:4e55 with SMTP id l14-20020a05622a174e00b0034302024e55mr1478321qtk.81.1660261794425;
+        Thu, 11 Aug 2022 16:49:54 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:480::bfe0])
+        by smtp.gmail.com with ESMTPSA id l1-20020a05620a28c100b006b935e96f0bsm519187qkp.12.2022.08.11.16.49.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Aug 2022 16:49:54 -0700 (PDT)
+From:   David Vernet <void@manifault.com>
+To:     bpf@vger.kernel.org, andrii@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net
+Cc:     haoluo@google.com, joannelkoong@gmail.com,
+        john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
+        linux-kernel@vger.kernel.org, martin.lau@linux.dev, sdf@google.com,
+        song@kernel.org, yhs@fb.com, kernel-team@fb.com, tj@kernel.org
+Subject: [PATCH v2 0/4] bpf: Add user-space-publisher ringbuffer map type
+Date:   Thu, 11 Aug 2022 18:49:37 -0500
+Message-Id: <20220811234941.887747-1-void@manifault.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220811072012.962460-1-lizhenneng@kylinos.cn>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Zhenneng,
+This patch set defines a new map type, BPF_MAP_TYPE_USER_RINGBUF, which
+provides single-user-space-producer / single-kernel-consumer semantics over
+a ringbuffer.  Along with the new map type, a helper function called
+bpf_user_ringbuf_drain() is added which allows a BPF program to specify a
+callback with the following signature, to which samples are posted by the
+helper:
 
-Thank you for the patch! Perhaps something to improve:
+void (struct bpf_dynptr *dynptr, void *context);
 
-[auto build test WARNING on drm-misc/drm-misc-next]
-[also build test WARNING on linus/master v5.19 next-20220811]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+The program can then use the bpf_dynptr_read() or bpf_dynptr_data() helper
+functions to safely read the sample from the dynptr. There are currently no
+helpers available to determine the size of the sample, but one could easily
+be added if required.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Zhenneng-Li/drm-amdgpu-use-native-mode-for-dp-aux-transfer/20220811-193443
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220812/202208120737.JG7NkugC-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/1098c6fecb4292d634dbdccff9e720400dc7138d
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Zhenneng-Li/drm-amdgpu-use-native-mode-for-dp-aux-transfer/20220811-193443
-        git checkout 1098c6fecb4292d634dbdccff9e720400dc7138d
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/gpu/drm/amd/amdgpu/
+On the user-space side, libbpf has been updated to export a new
+'struct ring_buffer_user' type, along with the following symbols:
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+struct ring_buffer_user *
+ring_buffer_user__new(int map_fd,
+                      const struct ring_buffer_user_opts *opts);
+void ring_buffer_user__free(struct ring_buffer_user *rb);
+void *ring_buffer_user__reserve(struct ring_buffer_user *rb, uint32_t size);
+void *ring_buffer_user__poll(struct ring_buffer_user *rb, uint32_t size,
+			     int timeout_ms);
+void ring_buffer_user__discard(struct ring_buffer_user *rb, void *sample);
+void ring_buffer_user__submit(struct ring_buffer_user *rb, void *sample);
 
-All warnings (new ones prefixed by >>):
+These symbols are exported for inclusion in libbpf version 1.0.0.
 
->> drivers/gpu/drm/amd/amdgpu/amdgpu_dp_auxch.c:73:10: warning: no previous prototype for 'venus_mm_rreg_slow' [-Wmissing-prototypes]
-      73 | uint32_t venus_mm_rreg_slow(struct amdgpu_device *adev, uint32_t reg)
-         |          ^~~~~~~~~~~~~~~~~~
->> drivers/gpu/drm/amd/amdgpu/amdgpu_dp_auxch.c:84:6: warning: no previous prototype for 'venus_mm_wreg_slow' [-Wmissing-prototypes]
-      84 | void venus_mm_wreg_slow(struct amdgpu_device *adev, uint32_t reg, uint32_t v)
-         |      ^~~~~~~~~~~~~~~~~~
+Note that one thing that is not included in this patch-set is the
+ability to kick the kernel from user-space to have it drain messages.
+The selftests included in this patch-set currently just use progs with
+syscall hooks to "kick" the kernel and have it drain samples from a
+user-producer ringbuffer, but being able to kick the kernel using some
+other mechanism that doesn't rely on such hooks would be very useful as
+well. The intention is for this to be separate from BPF iters, which are
+meant for extracting data from the kernel. This would be a method for
+driving logic in BPF from user-space, for example, to run a callback
+(possibly with data) for each sample that's published to a BPF program
+from user-space. I'm planning on adding this in a future patch-set.
 
+Signed-off-by: David Vernet <void@manifault.com>
+--
+v1 -> v2:
+- Following Joanne landing 883743422ced ("bpf: Fix ref_obj_id for dynptr
+  data slices in verifier") [0], removed [PATCH 1/5] bpf: Clear callee
+  saved regs after updating REG0 [1].
+- Following the above adjustment, updated check_helper_call() to not store
+  a reference for bpf_dynptr_data() if the register containing the dynptr
+  is of type MEM_ALLOC.
+- Fixed casting issue pointed out by kernel test robot by adding a missing
+  (uintptr_t) cast.
 
-vim +/venus_mm_rreg_slow +73 drivers/gpu/drm/amd/amdgpu/amdgpu_dp_auxch.c
+[0] https://lore.kernel.org/all/20220809214055.4050604-1-joannelkoong@gmail.com/
+[1] https://lore.kernel.org/all/20220808155341.2479054-1-void@manifault.com/
 
-    69	
-    70	#define R100_MM_INDEX                   0x0000
-    71	#define R100_MM_DATA                      0x0004
-    72	#define AMDGPU_MIN_MMIO_SIZE 0x10000
-  > 73	uint32_t venus_mm_rreg_slow(struct amdgpu_device *adev, uint32_t reg)
-    74	{
-    75	        unsigned long flags;
-    76	        uint32_t ret;
-    77	
-    78	        spin_lock_irqsave(&adev->mmio_idx_lock, flags);
-    79	        writel(reg, ((void __iomem *)adev->rmmio) + R100_MM_INDEX);
-    80	        ret = readl(((void __iomem *)adev->rmmio) + R100_MM_DATA);
-    81	        spin_unlock_irqrestore(&adev->mmio_idx_lock, flags);
-    82	        return ret;
-    83	}
-  > 84	void venus_mm_wreg_slow(struct amdgpu_device *adev, uint32_t reg, uint32_t v)
-    85	{
-    86	        unsigned long flags;
-    87	
-    88	        spin_lock_irqsave(&adev->mmio_idx_lock, flags);
-    89	        writel(reg, ((void __iomem *)adev->rmmio) + R100_MM_INDEX);
-    90	        writel(v, ((void __iomem *)adev->rmmio) + R100_MM_DATA);
-    91	        spin_unlock_irqrestore(&adev->mmio_idx_lock, flags);
-    92	}
-    93	static inline uint32_t venus_mm_rreg(struct amdgpu_device *adev, uint32_t reg,
-    94	                                    bool always_indirect)
-    95	{
-    96	        /* The mmio size is 64kb at minimum. Allows the if to be optimized out. */
-    97	        if ((reg < adev->rmmio_size || reg < AMDGPU_MIN_MMIO_SIZE) && !always_indirect)
-    98	                return readl(((void __iomem *)adev->rmmio) + reg);
-    99	        else
-   100	                return venus_mm_rreg_slow(adev, reg);
-   101	}
-   102	static inline void venus_mm_wreg(struct amdgpu_device *adev, uint32_t reg, uint32_t v,
-   103	                                bool always_indirect)
-   104	{
-   105	        if ((reg < adev->rmmio_size || reg < AMDGPU_MIN_MMIO_SIZE) && !always_indirect)
-   106	                writel(v, ((void __iomem *)adev->rmmio) + reg);
-   107	        else
-   108	                venus_mm_wreg_slow(adev, reg, v);
-   109	}
-   110	
+David Vernet (4):
+  bpf: Define new BPF_MAP_TYPE_USER_RINGBUF map type
+  bpf: Add bpf_user_ringbuf_drain() helper
+  bpf: Add libbpf logic for user-space ring buffer
+  selftests/bpf: Add selftests validating the user ringbuf
+
+ include/linux/bpf.h                           |   6 +-
+ include/linux/bpf_types.h                     |   1 +
+ include/uapi/linux/bpf.h                      |   8 +
+ kernel/bpf/helpers.c                          |   2 +
+ kernel/bpf/ringbuf.c                          | 232 ++++++-
+ kernel/bpf/verifier.c                         |  59 +-
+ tools/include/uapi/linux/bpf.h                |   8 +
+ tools/lib/bpf/libbpf.c                        |  11 +-
+ tools/lib/bpf/libbpf.h                        |  19 +
+ tools/lib/bpf/libbpf.map                      |   6 +
+ tools/lib/bpf/libbpf_probes.c                 |   1 +
+ tools/lib/bpf/ringbuf.c                       | 216 +++++++
+ .../selftests/bpf/prog_tests/user_ringbuf.c   | 587 ++++++++++++++++++
+ .../selftests/bpf/progs/user_ringbuf_fail.c   | 174 ++++++
+ .../bpf/progs/user_ringbuf_success.c          | 220 +++++++
+ .../testing/selftests/bpf/test_user_ringbuf.h |  35 ++
+ 16 files changed, 1566 insertions(+), 19 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/user_ringbuf.c
+ create mode 100644 tools/testing/selftests/bpf/progs/user_ringbuf_fail.c
+ create mode 100644 tools/testing/selftests/bpf/progs/user_ringbuf_success.c
+ create mode 100644 tools/testing/selftests/bpf/test_user_ringbuf.h
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.37.1
+

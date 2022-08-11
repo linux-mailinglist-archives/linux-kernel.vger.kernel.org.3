@@ -2,76 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82A84590627
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 20:01:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44B06590631
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 20:12:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235280AbiHKSAw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 14:00:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41968 "EHLO
+        id S234456AbiHKSLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 14:11:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235108AbiHKSAs (ORCPT
+        with ESMTP id S229524AbiHKSLx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 14:00:48 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EE6D85A8E
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 11:00:47 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id r13-20020aa7988d000000b0052ed235197bso7169218pfl.20
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 11:00:47 -0700 (PDT)
+        Thu, 11 Aug 2022 14:11:53 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE0479753A
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 11:11:52 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-31f41584236so180997187b3.5
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 11:11:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
-        bh=AHPdF2iNp843/qxwt9o0Z5Yx70qagBEm5XUA1AZJq3s=;
-        b=hUouphILeY+7ZcreKxlU1ukdbwKI/z0PLnXdxgXRyGG+IFml1nB8pn1mmAe2cXc0XR
-         FMB3hhPzAuGQtoJxfAw5hwOsTQmpXmtOFkydYbAXW7d6pcehx4QDo49aKDsCj5o8A324
-         /VCxSnrbNVogJeIsO+bCb970/vWvnt5k/acHwbkLauSk5dpHDBgRKIdR2Bkj4PH/QF37
-         ypfexny7+yt3N7PuLCfp3J9Tmb25wfvkeAm7zojmAueiEHE+y+xz1lf/57Ohd4orIeK5
-         k+zd6pTc3V3h7Ji5hdleQh8BRWqLkmVw5x17GN10XTcnp6/GW/uMVMsVg/H2DMpjWpZY
-         3ieg==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=y2QNTJtA+QkycDzAJ2gpgSvPbeV+rknwYt+wRwQVE9U=;
+        b=DOL0/7BCufuS1Z5S25RF66e3W79quG1uKIMs+Et22SQVj9mUJ5Rr1OR1MkhErrjmbx
+         XeeZVG1bK+ZCf6fI+B/vROHj/GkE3FxDrzW1+pdtb/yN+8jpJ+NitKHfIJ5sRgsz0p8e
+         Fe/7ViKYvUdEVhAJX83sc4T4S9xx6AZbsagBU00EehxhO+bX3XN8GMGy1UdfAosvv+zD
+         lPHZ3xGY5RdmpfBsjtapQ8k5zkLzBFNU0cNnIxS6TJ3/lbcbRp3MoVlwAyFmcUDlvNRs
+         ZyYdUDmCaJQrjUsZKMFxRjOYAOppWnhkzNrcMaA/v9MlmnB2CyoZ63JCmQTMzl+PXIiN
+         SrpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc;
-        bh=AHPdF2iNp843/qxwt9o0Z5Yx70qagBEm5XUA1AZJq3s=;
-        b=wdLvZJKCI/L4Y3fFpTLEbHx0MT1egxzKDU3loZN8x194jLB2DFHSiLj469rz9vakC+
-         d4ogpX+f4V810RmCkQt+k7i/4LxXTLnOOL3Xga5YbQXsFjlDNHBpTSOUn9peW6HfjgE3
-         BM6ZMpuGBPLwQlsz3nDwTWuLMmKjqdY0btadqcbJ+RgdPlWCyCJqAhSXZcksHKGvC+Ow
-         BZNHx3fpfwanAYnjEMb8DlB0DXEs/2B/sCyMf17IEx5XNel8X6NoR72IJRxmliuvMHua
-         RGAQl9NNJChaxKjU7+QS33sX2NOuCCCaewU6yRsMUjzgdDnewEGZ2SjIL8GjOxQahSO7
-         uPug==
-X-Gm-Message-State: ACgBeo2c7HxdAeotyj69fvVlVOtSSj8upJiVo7qhkyU2Gf5zHL2nrQl4
-        jjr3z4wvM0YiOItMYZJGmzD3pb6WXx1kvA==
-X-Google-Smtp-Source: AA6agR6WWvqchDPxP5kAGNu/Ulq/79XUJejAqx8e373GcLQEy+qt6A+bV5PazXaTWuXtO6rWlR/bUqmxn0Ytqg==
-X-Received: from acdunlap03.bve.corp.google.com ([2620:15c:29:203:7899:c3d8:a49a:7086])
- (user=acdunlap job=sendgmr) by 2002:a17:90b:20e:b0:1f5:26b0:f506 with SMTP id
- fy14-20020a17090b020e00b001f526b0f506mr187731pjb.65.1660240847029; Thu, 11
- Aug 2022 11:00:47 -0700 (PDT)
-Date:   Thu, 11 Aug 2022 11:00:10 -0700
-Message-Id: <20220811180010.3067457-1-acdunlap@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
-Subject: [PATCH] x86/asm: Force native_apic_mem_read to use mov
-From:   Adam Dunlap <acdunlap@google.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Adam Dunlap <acdunlap@google.com>,
-        Ben Dooks <ben-linux@fluff.org>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Cc:     Jacob Xu <jacobhxu@google.com>, Alper Gun <alpergun@google.com>,
-        Marc Orr <marcorr@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=y2QNTJtA+QkycDzAJ2gpgSvPbeV+rknwYt+wRwQVE9U=;
+        b=u/36bUrkpiPcEU6Yk0PF2MoBwDGISPqWcLN7QelG2oX7LOiQFZrv0ldVd9BII/5xTJ
+         QP6WqA0uvf6k+MFKckbwE6Iwi6RjsEjUX6TccUuUQ6g3JiaQaNZEvlazpeitXnNJEiNz
+         DOmVTe04btfwKJnaPSkX6Ot/YFBwsbaXJsmH4Fk43kCR/llxYLyOq9Q8zEXqJPXR88Tc
+         QmCAzgMNMcCv/0m1RTXZE6qD9uDmVB5db/ZgwNmIyoGZPcfijgU0ZpB+oApeycRqp0D5
+         l9y+LD24zazRpLGjir7gytU+Drnx3YHo1Y9XikFdcjclRbupilBf0vL0JUI6qQrINHSJ
+         L+6w==
+X-Gm-Message-State: ACgBeo0mQqdquXvYEzy3We7sBB1NLMXtv2iAESzqU/jugbxhyFrpYvHJ
+        ji4nKudWGWRYsMpDWEDoB/NnW4ZAm4xRTuHTWvg=
+X-Google-Smtp-Source: AA6agR4SU1v+xBEONP5Zol2FeSnVE6WaQBbeKZ+bxN8tcA2+V/9UzSOZ2jG8TlaLq1mJcPPxaSGer5ZC+xkULYAUMIU=
+X-Received: by 2002:a0d:f846:0:b0:324:cb8a:e0ff with SMTP id
+ i67-20020a0df846000000b00324cb8ae0ffmr432591ywf.478.1660241511833; Thu, 11
+ Aug 2022 11:11:51 -0700 (PDT)
+MIME-Version: 1.0
+References: <CADVatmN_TzJKdfM40BQPW=cRm5VxX=qAKxq2yW4P_xDN6=VoOA@mail.gmail.com>
+ <20220811175759.1518840-1-hamza.mahfooz@amd.com>
+In-Reply-To: <20220811175759.1518840-1-hamza.mahfooz@amd.com>
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date:   Thu, 11 Aug 2022 19:11:15 +0100
+Message-ID: <CADVatmM3PdWy-75qJD29Xm2ow48GV5xPsE26L1_ZPL7LFgJdfQ@mail.gmail.com>
+Subject: Re: [PATCH v2] drm/amd/display: fix DSC related non-x86/PPC64
+ compilation issue
+To:     Hamza Mahfooz <hamza.mahfooz@amd.com>
+Cc:     linux-kernel <linux-kernel@vger.kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        hersen wu <hersenxs.wu@amd.com>, Wayne Lin <Wayne.Lin@amd.com>,
+        Fangzhi Zuo <Jerry.Zuo@amd.com>,
+        Nicholas Kazlauskas <nicholas.kazlauskas@amd.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Roman Li <Roman.Li@amd.com>,
+        amd-gfx mailing list <amd-gfx@lists.freedesktop.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,44 +83,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously, when compiled with clang, native_apic_mem_read gets inlined
-into __xapic_wait_icr_idle and optimized to a testl instruction. When
-run in a VM with SEV-ES enabled, it attempts to emulate this
-instruction, but the emulator does not support it. Instead, use inline
-assembly to force native_apic_mem_read to use the mov instruction which
-is supported by the emulator.
+On Thu, Aug 11, 2022 at 7:00 PM Hamza Mahfooz <hamza.mahfooz@amd.com> wrote:
+>
+> Need to protect DSC code with CONFIG_DRM_AMD_DC_DCN.
+> Fixes the following build errors on arm64:
+> ERROR: modpost: "dc_dsc_get_policy_for_timing" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+> ERROR: modpost: "dc_dsc_compute_bandwidth_range" [drivers/gpu/drm/amd/amdgpu/amdgpu.ko] undefined!
+>
+> Fixes: 0087990a9f57 ("drm/amd/display: consider DSC pass-through during mode validation")
+> Reported-by: Anders Roxell <anders.roxell@linaro.org>
+> Signed-off-by: Hamza Mahfooz <hamza.mahfooz@amd.com>
 
-Signed-off-by: Adam Dunlap <acdunlap@google.com>
-Reviewed-by: Marc Orr <marcorr@google.com>
-Reviewed-by: Jacob Xu <jacobhxu@google.com>
----
- arch/x86/include/asm/apic.h | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+Thanks, fixes the build failure for me,
+Tested-by: Sudip Mukherjee <sudipm.mukherjee@gmail.com>
 
-diff --git a/arch/x86/include/asm/apic.h b/arch/x86/include/asm/apic.h
-index 3415321c8240..281db79e76a9 100644
---- a/arch/x86/include/asm/apic.h
-+++ b/arch/x86/include/asm/apic.h
-@@ -109,7 +109,18 @@ static inline void native_apic_mem_write(u32 reg, u32 v)
- 
- static inline u32 native_apic_mem_read(u32 reg)
- {
--	return *((volatile u32 *)(APIC_BASE + reg));
-+	volatile u32 *addr = (volatile u32 *)(APIC_BASE + reg);
-+	u32 out;
-+
-+	/*
-+	 * Functionally, what we want to do is simply return *addr. However,
-+	 * this accesses an MMIO which may need to be emulated in some cases.
-+	 * The emulator doesn't necessarily support all instructions, so we
-+	 * force the read from addr to use a mov instruction.
-+	 */
-+	asm_inline("movl %1, %0" : "=r"(out) : "m"(*addr));
-+
-+	return out;
- }
- 
- extern void native_apic_wait_icr_idle(void);
+
 -- 
-2.37.1.559.g78731f0fdb-goog
-
+Regards
+Sudip

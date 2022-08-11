@@ -2,57 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74B66590654
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 20:47:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E82B59066C
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 20:47:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235741AbiHKSba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 14:31:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40148 "EHLO
+        id S235650AbiHKSdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 14:33:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235636AbiHKSb1 (ORCPT
+        with ESMTP id S235632AbiHKSdK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 14:31:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D1F66D9FD;
-        Thu, 11 Aug 2022 11:31:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AEC45B82187;
-        Thu, 11 Aug 2022 18:31:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 093F3C433C1;
-        Thu, 11 Aug 2022 18:31:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660242683;
-        bh=lkARARzWQLa6i9JTMh4hY0BpWadzELasXTHngRGpmZY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KOYlUH6L6VBnX9tFgi/D9JA2iIOR42RuG5uUtrrlKIi4K2ig3qvZJJyII63BeTLox
-         AHqS4BoEKCw7YfZk8HTG6l+1WvjiAARWkwjEqL1Hg+TsEoE4XKYXzWPtXW17Yr5n3Q
-         YmBNczlFmivLLHXI1lbIfoE9/FxKquCvXa2kTYWCkackrJIfhFBCoQyejF8WlAY/wA
-         ogZAErqbROEmHfeRC9kdjRuyGXUJ9fvCkREpOxywcCnAF9lhSb5i4pGJLA3IWgEH/h
-         q+Iysee8LcypbRgziymGoRHPnK3tVgdBiD4G9iIIyFvQvOCPK31bo4C32AMFn9IbGP
-         NHwK2aF+YcLpw==
-Date:   Thu, 11 Aug 2022 11:31:21 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-Cc:     Stefano Garzarella <sgarzare@redhat.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org,
-        clang-built-linux <llvm@lists.linux.dev>,
-        linux-next@vger.kernel.org
-Subject: Re: build failure of next-20220811 due to d79b32c2e4a4
- ("vdpa_sim_blk: add support for discard and write-zeroes")
-Message-ID: <YvVK+ZqO75QAYYnB@dev-arch.thelio-3990X>
-References: <YvU67iF4z5gB4ZYk@debian>
+        Thu, 11 Aug 2022 14:33:10 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6307979D4
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 11:33:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=gfUgkm3rzFm3+JeLSBJ3gUUgraDOnG1hTppcWY/3fRE=; b=Nb8yyTjFgFtJpVzA3oJSn6vxUF
+        5Z1m34AVhJzxQ60civQFB8gMO6v8DGnygeVIYHjNsx5yxxoAXVjhTyyFrqAa0zKuMjwmnrWlhVR67
+        GRtnmP3eXChzWUfOWWTYIAZeqGpkloe9pxp0sbvWVRSUMcQYvvqIdCatpiPrBlUEb2u02+74q81qG
+        aZkf3VNQyIQwat8V6CnjCqtKP7SwSIHIT74m7fAn1PWdRDEQUcvKTcwe1ZnlVhoV9n6EqI2DR61U0
+        YQP5nS+g80LFQLl8erHPeR3NeV4VkCRROg+jM/SZZChkrPfqk/4UVZgfVr4MC4zHTMJ31vOGkkWHJ
+        FdSRFJRA==;
+Received: from c-73-157-219-8.hsd1.or.comcast.net ([73.157.219.8] helo=[10.0.0.152])
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oMCzR-0000Yo-JC; Thu, 11 Aug 2022 18:33:05 +0000
+Message-ID: <e055ac0c-312d-78cd-dcc9-7c2e80ea3d3d@infradead.org>
+Date:   Thu, 11 Aug 2022 11:33:04 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YvU67iF4z5gB4ZYk@debian>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] Doc fix for dget_dlock
+Content-Language: en-US
+To:     Anup Parikh <parikhanupk.foss@gmail.com>
+Cc:     skhan@linuxfoundation.org, linux-kernel@vger.kernel.org
+References: <Yu1HwVoTYOeaCh4v@autolfshost>
+ <98fe1c6d-9528-05b5-c603-fb4ae028a19c@infradead.org>
+ <CAH6MFJGuHptQ8peBb8myLR8fgtLtAXwvUePcs7dbzYszF9Yyyw@mail.gmail.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <CAH6MFJGuHptQ8peBb8myLR8fgtLtAXwvUePcs7dbzYszF9Yyyw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,77 +54,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 06:22:54PM +0100, Sudip Mukherjee (Codethink) wrote:
-> Hi All,
+Hi--
+
+On 8/11/22 07:48, Anup Parikh wrote:
+> Hello Mr. Randy Dunlap,
 > 
-> Not sure if it has been reported, builds of arm64 with clang failed to
-> build next-20220811 with the error:
+> I checked include/linux/dcache.h (dget() and dget_dlock()), include/linux/lockref.h and linux/lib/lockref.c.
+> My current knowledge is limited but I think:
+> 1) dget_dlock() directly increments the count variable without any atomicity guards.
+> 2) dget() does the same but with atomicity guarantee - even across multiple-cores on a multi-core system (according to https://stackoverflow.com/questions/36964478/understanding-synchronization-with-multiple-processors <https://stackoverflow.com/questions/36964478/understanding-synchronization-with-multiple-processors> and code in linux/lib/lockref.c).
 > 
-> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:201:3: error: expected expression
->                 struct virtio_blk_discard_write_zeroes range;
->                 ^
-> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:204:25: error: use of undeclared identifier 'range'
->                 if (to_pull != sizeof(range)) {
->                                       ^
-> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:207:21: error: use of undeclared identifier 'range'
->                                 to_pull, sizeof(range));
->                                                 ^
-> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:212:60: error: use of undeclared identifier 'range'
->                 bytes = vringh_iov_pull_iotlb(&vq->vring, &vq->out_iov, &range,
->                                                                          ^
-> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:222:38: error: use of undeclared identifier 'range'
->                 sector = vdpasim64_to_cpu(vdpasim, range.sector);
->                                                    ^
-> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:224:43: error: use of undeclared identifier 'range'
->                 num_sectors = vdpasim32_to_cpu(vdpasim, range.num_sectors);
->                                                         ^
-> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:225:37: error: use of undeclared identifier 'range'
->                 flags = vdpasim32_to_cpu(vdpasim, range.flags);
->                                                   ^
-> drivers/vdpa/vdpa_sim/vdpa_sim_blk.c:202:7: error: mixing declarations and code is incompatible with standards before C99 [-Werror,-Wdeclaration-after-statement]
->                 u32 num_sectors, flags;
->                     ^
-> 8 errors generated.
+> Please let me know if I should write the corresponding documentation and send a new patch.
+
+Yes, please.
+Thanks.
+
+> Thanks and Regards,
+> Anup K Parikh.
 > 
 > 
-> git bisect pointed to d79b32c2e4a4 ("vdpa_sim_blk: add support for discard and write-zeroes").
-> And, reverting that commit has fixed the build failure.
+> On Tue, Aug 9, 2022 at 11:58 PM Randy Dunlap <rdunlap@infradead.org <mailto:rdunlap@infradead.org>> wrote:
 > 
-> I will be happy to test any patch or provide any extra log if needed.
+>     Hi--
+> 
+>     On 8/5/22 09:39, Anup K Parikh wrote:
+>     > Removes the warning for dget_dlock in include/linux/dcache.h and
+>     > enables generation of its API documentation
+>     >
+>     > Signed-off-by: Anup K Parikh <parikhanupk.foss@gmail.com <mailto:parikhanupk.foss@gmail.com>>
+>     > ---
+>     >  include/linux/dcache.h | 2 +-
+>     >  1 file changed, 1 insertion(+), 1 deletion(-)
+>     >
+>     > diff --git a/include/linux/dcache.h b/include/linux/dcache.h
+>     > index f5bba5148..ce0b36f72 100644
+>     > --- a/include/linux/dcache.h
+>     > +++ b/include/linux/dcache.h
+>     > @@ -297,7 +297,7 @@ extern char *dentry_path(const struct dentry *, char *, int);
+>     >  /* Allocation counts.. */
+>     > 
+>     >  /**
+>     > - *   dget, dget_dlock -      get a reference to a dentry
+>     > + *   dget_dlock -    get a reference to a dentry
+>     >   *   @dentry: dentry to get a reference to
+>     >   *
+>     >   *   Given a dentry or %NULL pointer increment the reference count
+> 
+>     Someone was trying to document both dget() and get_dlock() with the same
+>     kernel-doc comment block.
+>     I suppose that you could duplicate the comments for dget() also.
+> 
+>     It would be nice to know the difference(s) in the functions as well.
+> 
+>     thanks.
+>     -- 
+>     ~Randy
+> 
 
-I am very surprised GCC does not error out in the same way, since as far
-as I understand it, labeled statements have to be followed by a
-statement and a declaration is not a statement in C so braces are
-needed. In fact, it seems like something changed (regressed?) between
-GCC 10.x and 11.x?
-
-https://godbolt.org/z/EYaGa1eE3
-
-I am going to bisect GCC to find out whether or not that was
-intentional. At any rate, isn't this the proper fix? I can send it as a
-formal patch if desired.
-
-Cheers,
-Nathan
-
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-index db85df1d5073..067d4c2f7bf4 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-@@ -197,7 +197,7 @@ static bool vdpasim_blk_handle_req(struct vdpasim *vdpasim,
- 		break;
- 
- 	case VIRTIO_BLK_T_DISCARD:
--	case VIRTIO_BLK_T_WRITE_ZEROES:
-+	case VIRTIO_BLK_T_WRITE_ZEROES: {
- 		struct virtio_blk_discard_write_zeroes range;
- 		u32 num_sectors, flags;
- 
-@@ -253,6 +253,7 @@ static bool vdpasim_blk_handle_req(struct vdpasim *vdpasim,
- 		}
- 
- 		break;
-+	}
- 
- 	default:
- 		dev_dbg(&vdpasim->vdpa.dev,
+-- 
+~Randy

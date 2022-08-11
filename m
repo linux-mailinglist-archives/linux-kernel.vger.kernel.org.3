@@ -2,157 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86E4F58F947
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 10:43:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 974F658F954
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 10:43:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234613AbiHKInh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 04:43:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48270 "EHLO
+        id S234660AbiHKIny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 04:43:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234603AbiHKInf (ORCPT
+        with ESMTP id S234616AbiHKIno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 04:43:35 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 804C890C58
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:43:34 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id h132so16567421pgc.10
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:43:34 -0700 (PDT)
+        Thu, 11 Aug 2022 04:43:44 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE2DD8E0E8
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:43:41 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id e15so24729564lfs.0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:43:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=lPWGy4oKPBEqayKpF00Kr7fLSntX8eH+HLycUNnPzWY=;
-        b=TKNAY5DMmWPsUFB1Wa89v8zyOj4EVDpIP4AknSdQfHo9BqyxoEkOJgDNmzNkBQNAMG
-         SZfGoH+1RdTVl1vmm+l0PoN12Mtm7fFTQkyBIGIBtS+WQ42FRRHKnNOj+C5C+TksvoAG
-         wdrKZTK5/TgqdwKZDZtMiYlyhadrrmObnUKKfDNZtLu6kE+7jkp1hV+Rns1ACIOUIzeo
-         CF5V+L1sWU3s88okabfa6IF7mvDqCAY+iCR+VVBhKT4D1oWSg4K+fZAmaQqd97qWalfi
-         ycyPIK9oE0ZRsQH2wQkB7aBa4fT4jDn6wiPhgsVmcso9vu0BkoMG161Kd9KZTqFGd3un
-         5ICg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=j0+XWkmBPfd4tCvKIKxfSVudBOlOg9hyI7bNXGkLUSI=;
+        b=PZ63TfDUyut5YoC5OjhgChS1gehSFrI23rYrF6pCS2KlbsljChv3VHStXh0D82BqFK
+         LYOn2NEw2OA2bvJFGZOzB6Rwlt/E/usJHKgAfl34NFEOXxNSrkQ2NT54S0vW7K4bcwOS
+         j45ZnelMrOmLziYYGFkKC4mjGOFL54SJo9bEIAdc1depj3EG18QkPeF6bRySnP4xpqSo
+         O/vAo9FW3jdLiXmWEoUwL1UiRnjWFZAAX7HKVXAEIFpPQWU3sEsr7KaPrX14pD0rod+M
+         0Wi/tvfuy2+DwKe6GGIIpSXZ5YtBUE/mFQxqgazXKXrpojFiLPEffEYYlWgj34Ujrgqn
+         F6Pw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=lPWGy4oKPBEqayKpF00Kr7fLSntX8eH+HLycUNnPzWY=;
-        b=qneQvKPztHL0Fkw37WszXtAPlobzam+BsIHrjcbq/kI29vBBtyYJaukVAT116KzOZA
-         GG+/ZANZO0eKWCrKdg7bvPyA72D9+om73lP1ESioaZ+3ixRfwgtUoqqf3XvHdWYHqfBI
-         c5IiengFMEugho2bR/QolM5qTvvXocZkckEMLGk4f6Sf5Oidgq+mtBSZjFRpNPNewzpk
-         85MBbUBKD69v3ufwi9aM3wC18i9YJoFsJ/qiHUU8PGG5oMt1gaunIPreWFQhlo1Avuqk
-         iFw7ho/MY+liWV2//M0vw4gao48iIQu/TQegAfJxSZw/FpUaL5831mbV28ApgIWUKP4Z
-         kMaA==
-X-Gm-Message-State: ACgBeo30ouePo3nCOiHzquCX4fwvfqRfxP6QjdBSJgOBpirNbAukb5tq
-        ggQfNcCSvg4cc0auK6Vg1KMklg==
-X-Google-Smtp-Source: AA6agR4bUxoCD4Nwny0TXSKv5BtfxlGKcb25Zvty6m0u8Irjfklmr9/rDC1JoSk1AZGgHULBU3fFPA==
-X-Received: by 2002:aa7:8d04:0:b0:52e:1778:bcde with SMTP id j4-20020aa78d04000000b0052e1778bcdemr31418527pfe.58.1660207413976;
-        Thu, 11 Aug 2022 01:43:33 -0700 (PDT)
-Received: from [10.94.58.189] ([139.177.225.254])
-        by smtp.gmail.com with ESMTPSA id a67-20020a624d46000000b0052d8405bcd2sm3453305pfb.163.2022.08.11.01.43.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Aug 2022 01:43:33 -0700 (PDT)
-Message-ID: <7ece0714-2646-4f1a-60b6-aaafc1135b1e@bytedance.com>
-Date:   Thu, 11 Aug 2022 16:43:28 +0800
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=j0+XWkmBPfd4tCvKIKxfSVudBOlOg9hyI7bNXGkLUSI=;
+        b=YOlqEwsq3tMofwXT3JSnCb8bNHwp6sn4yehn5tiG/llWr1qitatlZsQ2MjyrhxYn++
+         2ML5ykDsMjDVq+0L6gL8zYy0wl4lqamotuug2bPxf9v20IAuUDSvlNigs0TI4I167YoS
+         S2xE6zn7uSWjIcYPEISCodryKKZ6jGo9pCkr99mtCQyTdQKBkbFstrPCAmcklzz6TvjE
+         v9qoiXqHKbdVSEc8FTdfxaxiOo/azc2v6JGwPamLiiEm2CJP76G7zF/TpYiuyp9vVr/B
+         F1hTzi41epVF7PE+qdgmjY8qfak2+VEzUjhTW3RxiutSY2XkR9Uhmr9ONP4CR2OoSaoG
+         eJ/w==
+X-Gm-Message-State: ACgBeo1Z1DrzQy+e/Y8QvN572qIFWxfEuJtJW8U+9/ptQlZJ3FrUmwjz
+        ihroDpZ1m8qXAJyb3SGYLfHbng==
+X-Google-Smtp-Source: AA6agR5DWj/+lgz0e/lMJZUw+szw6fb/cJMfuBjwi2CGFkIP75mNm5agSk+DCwMc7ErHkYRHYDGS+g==
+X-Received: by 2002:a05:6512:c02:b0:48a:80f:b92d with SMTP id z2-20020a0565120c0200b0048a080fb92dmr11308020lfu.675.1660207420156;
+        Thu, 11 Aug 2022 01:43:40 -0700 (PDT)
+Received: from localhost.localdomain ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id f4-20020a056512360400b0048af379957asm631077lfs.72.2022.08.11.01.43.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Aug 2022 01:43:39 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Del Regno <angelogioacchino.delregno@somainline.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 3/5] dt-bindings: display/msm: dpu-sc7180: add missing DPU opp-table
+Date:   Thu, 11 Aug 2022 11:43:29 +0300
+Message-Id: <20220811084331.83715-4-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220811084331.83715-1-krzysztof.kozlowski@linaro.org>
+References: <20220811084331.83715-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:91.0)
- Gecko/20100101 Thunderbird/91.12.0
-Subject: Re: [PATCH] mm/mempolicy: fix lock contention on mems_allowed
-Content-Language: en-US
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Muchun Song <songmuchun@bytedance.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Abel Wu <wuyun.abel@bytedance.com>
-References: <20220809104927.44366-1-wuyun.abel@bytedance.com>
- <YvJO5uX0pSAh6weA@dhcp22.suse.cz>
-From:   Abel Wu <wuyun.abel@bytedance.com>
-In-Reply-To: <YvJO5uX0pSAh6weA@dhcp22.suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/9/22 8:11 PM, Michal Hocko Wrote:
-> On Tue 09-08-22 18:49:27, Abel Wu wrote:
->> The mems_allowed field can be modified by other tasks, so it
->> isn't safe to access it with alloc_lock unlocked even in the
->> current process context.
-> 
-> It would be useful to describe the racing scenario and the effect it
-> would have. 78b132e9bae9 hasn't really explained thinking behind and why
-> it was considered safe to drop the lock. I assume it was based on the
-> fact that the operation happens on the current task but this is hard to
-> tell.
-> 
+The 'display-controller' child (DPU) of Display SubSystem (MDSS) uses
+opp-table, so reference it which allows restricting DPU schema to fixed
+list of properties.
 
-Sorry for my poor description. Say there are two tasks: A from cpusetA
-is performing set_mempolicy(2), and B is changing cpusetA's cpuset.mems.
+Fixes: 3d7a0dd8f39b ("dt-bindings: msm: disp: add yaml schemas for DPU bindings")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-     A (set_mempolicy)		B (echo xx > cpuset.mems)
+---
 
-     pol = mpol_new();
-				update_tasks_nodemask(cpusetA) {
-				  foreach t in cpusetA {
-				    cpuset_change_task_nodemask(t) {
-				      task_lock(t); // t could be A
-     mpol_set_nodemask(pol) {
-       new = f(A->mems_allowed);
-				      update t->mems_allowed;
-       pol.create(pol, new);
-     }
-				      task_unlock(t);
-     task_lock(A);
-     A->mempolicy = pol;
-     task_unlock(A);
-				    }
-				  }
-				}
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Rob Clark <robdclark@gmail.com>
+Cc: Sean Paul <sean@poorly.run>
+Cc: Abhinav Kumar <quic_abhinavk@quicinc.com>
+---
+ Documentation/devicetree/bindings/display/msm/dpu-sc7180.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-In this case A's pol->nodes is computed by old mems_allowed, and could
-be inconsistent with A's new mems_allowed.
+diff --git a/Documentation/devicetree/bindings/display/msm/dpu-sc7180.yaml b/Documentation/devicetree/bindings/display/msm/dpu-sc7180.yaml
+index d3c3e4b07897..d30b6f9bd9d2 100644
+--- a/Documentation/devicetree/bindings/display/msm/dpu-sc7180.yaml
++++ b/Documentation/devicetree/bindings/display/msm/dpu-sc7180.yaml
+@@ -73,6 +73,7 @@ patternProperties:
+   "^display-controller@[0-9a-f]+$":
+     type: object
+     description: Node containing the properties of DPU.
++    additionalProperties: false
+ 
+     properties:
+       compatible:
+@@ -114,6 +115,7 @@ patternProperties:
+         maxItems: 1
+ 
+       operating-points-v2: true
++      opp-table: true
+ 
+       ports:
+         $ref: /schemas/graph.yaml#/properties/ports
+-- 
+2.34.1
 
-While it is different when replacing vmas' policy: the pol->nodes is
-gone wild only when current_cpuset_is_being_rebound():
-
-     A (mbind)			B (echo xx > cpuset.mems)
-
-				cpuset_being_rebound = cpusetA;
-				update_tasks_nodemask(cpusetA) {
-				  foreach t in cpusetA {
-				    cpuset_change_task_nodemask(t) {
-				      task_lock(t); // t could be A
-     pol = mpol_new();
-     mmap_write_lock(A->mm);
-     mpol_set_nodemask(pol) {
-       mask = f(A->mems_allowed);
-				      update t->mems_allowed;
-       pol.create(pol, mask);
-     }
-				      task_unlock(t);
-				    }
-     foreach v in A->mm {
-       if (current_cpuset_is_being_rebound())
-         pol.rebind(pol, cpuset.mems);
-       v->vma_policy = pol;
-     }
-     mmap_write_unlock(A->mm);
-				    mmap_write_lock(t->mm);
-				    mpol_rebind_mm(t->mm);
-				    mmap_write_unlock(t->mm);
-				  }
-				}
-				cpuset_being_rebound = NULL;
-
-In this case, the cpuset.mems, which has already done updating, is
-finally used for calculating pol->nodes, rather than A->mems_allowed.
-So it is OK to call mpol_set_nodemask() with alloc_lock unlocked when
-doing mbind(2).
-
-Best Regards,
-Abel

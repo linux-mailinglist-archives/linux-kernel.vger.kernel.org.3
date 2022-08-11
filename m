@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75341590910
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 01:18:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C8AE759090B
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 01:18:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236077AbiHKXRu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 19:17:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49330 "EHLO
+        id S236642AbiHKXSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 19:18:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236304AbiHKXRH (ORCPT
+        with ESMTP id S236315AbiHKXRH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 11 Aug 2022 19:17:07 -0400
 Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBD11A1A5D
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 16:16:51 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 14A385C017E;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 482D6A1A46
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 16:16:52 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 8CB655C017F;
         Thu, 11 Aug 2022 19:16:51 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Thu, 11 Aug 2022 19:16:51 -0400
+  by compute3.internal (MEProxy); Thu, 11 Aug 2022 19:16:51 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=cc
         :cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to
         :reply-to:sender:subject:subject:to:to; s=fm1; t=1660259811; x=
-        1660346211; bh=nROMsz3ppqqra2BzZ2pVt6LG8fK1ajXOrNIiQ4woogA=; b=H
-        GhqMn6eaMGEs9dwuksbm0QcC3P1rGK72b5S0638UqCuG1FAGndSFzv4qnD4/RbJ/
-        lbu/YQ69n7Zx0ar+GDe+0F1raAkVeAf0pPq1tsyjn0t6ZpbN+gFN7QaawTabboLd
-        r+6g520P+po+Rg8by3137hkpijb0MIM9NQ5cXMJxfjsxqt1DzLF+tdIFH3GgediS
-        gSHViQ0w+6TclsLvjXA9hkATpo8Eij7yul54/KFP1StkA/dLCC2TKkMS9wBLNoGl
-        GKStVAtIBRbe9RqfzuZ4aiAMJxxlUoV9A3gmiJPplxI1oMYnrPj1quw0WkHpYhm4
-        ilvsLH29cn6MJvcVKozDg==
+        1660346211; bh=KqyAltuV0l6VggMJZ/X8DJ5z8l2OLxGSSS19zX3wJgA=; b=t
+        6aBBIUIiKBgyF0nq9M2l/FkGxLKyoQ5GA3HDr25AhRzkcwFdcL2GgtYrOWJ5zQqg
+        55uAFWTBlpUg3YLJ/35T98aRWOuWVIfw4vAx+4qGHKsRpVG/pJkx9+tINY2FemoY
+        1L9IEZZHzkZoZTIUgYwdalFoqXsQ6orMDiaP54yoiH7wpz2/1SlAae+WwBU1OBYC
+        dtzN/xngzp1wkdyXaP2QJ3BDMcks9vfOpeQV+bktQo978O3SlzrX2BVib8iLFQfv
+        iBsnt0V8B/Dlt0PvsOeWVmeHPEqgZTlhEeQF66UrLaPrvymUUsTezvHovlss3qSh
+        9kv/O8teFkcyEPo45wzFw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:reply-to:sender
         :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
-        :x-me-sender:x-sasl-enc; s=fm1; t=1660259811; x=1660346211; bh=n
-        ROMsz3ppqqra2BzZ2pVt6LG8fK1ajXOrNIiQ4woogA=; b=f/gWE8mW8X+chpd90
-        Y/rfrDG37b2vNVgdyu5fpeAsXvdMf80MvaxJOJE5T9nhMdZ4kxVewOBntrVyoQKm
-        UJHjRyaAcKIYvpsogON+CZf5+4+c+BUavfhMDmp1CMv20uIr735Oi90POIVGv1ia
-        JextHr2gCouPaso7Kfis1Rhm+6O0ObpBeIdwpSwiKtjdPkUolSxzNl/lPl41T7np
-        1jFP2ffXKLF85ioAGiqMcARR1nwY2EOXmSSlcroFAuAnOY7eOEbtJQW3Gp4i6Gig
-        rDLv9/lvPIGfes18MppOBpEfjL0+Kp7ialY7Jx9dd3w9CBLwI/avm8pjF3whh72w
-        Yta2A==
-X-ME-Sender: <xms:4o31Ygo4yOsQX4y0_0H4N31RGYKlgSQ9FmUjR4gkiSegjIcboDryAw>
-    <xme:4o31Ymr0xuPa5A9W7SXoNulPxbZVd7Xd0wiRcpOYfzo1H6ook84gTk6V7vquqvg57
-    wLiURnXvNqPVOW3lQ>
-X-ME-Received: <xmr:4o31YlOlZfCGIpmXVceTPKPbIgwECXRIw0fy7Ni7d5huXfGkS643aU8XxbqGTbAyzyVZJRDVPaqe6qsGSQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeghedgudelucetufdoteggodetrfdotf
+        :x-me-sender:x-sasl-enc; s=fm1; t=1660259811; x=1660346211; bh=K
+        qyAltuV0l6VggMJZ/X8DJ5z8l2OLxGSSS19zX3wJgA=; b=UNOQe8eOqO2joIxWT
+        odoyDyprra/+Mk8v4f74AJRsjFXjz8fzmX9jJ+5owNqpXzPCT4H1H0RbUBnkV6o2
+        HvE1cUH/FlJhhJvsni7HgTcNoAuj6pY3TaJHkr2nyMBJ96BhD8yhwNgWp9Ajo/2a
+        xd5GE5CYIA6nQjQPpZRHpNo1XqzQQMG41K7EKiitIMZqSIZpwIHyNPA2kxzJXd8z
+        7sOAdzLF7wRxp4Vo+aGs8vqRgiX9g8UVwjXy0vBLbYViflOkfCKWJVU+GjadMzb/
+        rdJzKSWbLJv2j4Jlh22eEYEsPlZKsMfpB1xvWyy3WbpfNBUP0Q20eaIJppZ2JW64
+        h0KSQ==
+X-ME-Sender: <xms:4431YkR4i2MOW1QsqFk3pvA-KBDGI2ckPhk7Si1SDwHfi-sBkpxaNg>
+    <xme:4431YhxpFc_10nzBvTpyADMdO31Z3Z4B88-wFmlhQ8MBZznGkQnVdMLsVHy4lwGuX
+    pJEHSOLLan00eTP2g>
+X-ME-Received: <xmr:4431Yh1BvY2zMKuQP_uEiQ4oweaHkiReylI_8wssi5dyUc1FoY6Ctc0bI-mSaGF-4F08F2XzT7uCVuWtMg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeghedgvddtucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
     cujfgurhephffvvefufffkofgjfhhrggfgsedtqhertdertddtnecuhfhrohhmpegkihcu
     jggrnhcuoeiiihdrhigrnhesshgvnhhtrdgtohhmqeenucggtffrrghtthgvrhhnpeegge
     ehudfgudduvdelheehteegledtteeiveeuhfffveekhfevueefieeijeegvdenucevlhhu
-    shhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpeiiihdrhigrnhessh
+    shhtvghrufhiiigvpedvnecurfgrrhgrmhepmhgrihhlfhhrohhmpeiiihdrhigrnhessh
     gvnhhtrdgtohhm
-X-ME-Proxy: <xmx:4o31Yn5iN1UnckVRAUDX3eygnMsm9Q1ol00mEk8VGUTGpFJRYNJ37A>
-    <xmx:4o31Yv7nfVf2KG6kDnv5xgs3Y19QOIPFFvcXyhSyTiJdLPCWuwVhNQ>
-    <xmx:4o31YniXGAIQ3sqZDlAUoMeT7R9jwRUYZ3LIqW5HLG5F4HGtLmSGZQ>
-    <xmx:4431Ysx1RiJUOOf8IcE3mwmQvpoGNb-NMvqH6dLn8Ok02r8tiMg4cA>
+X-ME-Proxy: <xmx:4431YoAztNNhFA6e3zExOL5jiBtJ3lfZKNj55lLYR4ij_o74eQZ5ag>
+    <xmx:4431YtixQsAcHqjhBVfH37elfzk1sDk-mwPoUkvDxDLCxw8gHKiHDA>
+    <xmx:4431YkplNIzkJT92D75ZgGhJgK47yM-f7Vic3KbP_qVQhPAsGMGHPg>
+    <xmx:4431YiZqmXzaiT-pYRbwargpSCPnAkVn4e6ke3d6j2bbPPK9nn7DKw>
 Feedback-ID: iccd040f4:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 11 Aug 2022 19:16:50 -0400 (EDT)
+ 11 Aug 2022 19:16:51 -0400 (EDT)
 From:   Zi Yan <zi.yan@sent.com>
 To:     linux-mm@kvack.org
 Cc:     David Hildenbrand <david@redhat.com>,
@@ -75,9 +75,9 @@ Cc:     David Hildenbrand <david@redhat.com>,
         David Rientjes <rientjes@google.com>,
         James Houghton <jthoughton@google.com>,
         Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v2 09/12] mm: Make MAX_ORDER of buddy allocator configurable via Kconfig SET_MAX_ORDER.
-Date:   Thu, 11 Aug 2022 19:16:40 -0400
-Message-Id: <20220811231643.1012912-10-zi.yan@sent.com>
+Subject: [RFC PATCH v2 10/12] mm: convert MAX_ORDER sized static arrays to dynamic ones.
+Date:   Thu, 11 Aug 2022 19:16:41 -0400
+Message-Id: <20220811231643.1012912-11-zi.yan@sent.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220811231643.1012912-1-zi.yan@sent.com>
 References: <20220811231643.1012912-1-zi.yan@sent.com>
@@ -96,114 +96,293 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Zi Yan <ziy@nvidia.com>
 
-With SPARSEMEM_VMEMMAP, all struct page are virtually contigous,
-thus kernel can manipulate arbitrarily large pages. By checking
-PFN validity during buddy page merging process, all free pages in buddy
-allocator's free area have their PFNs contiguous even if the system has
-several not physically contiguous memory sections. With these two
-conditions, it is OK to remove the restriction of
-MAX_ORDER + PAGE_SHIFT < SECTION_SIZE_BITS and change MAX_ORDER freely.
+This prepares for the upcoming changes to make MAX_ORDER a boot time
+parameter instead of compilation time constant. All static arrays with
+MAX_ORDER size are converted to pointers and their memory is allocated
+at runtime.
 
-Add SET_MAX_ORDER to allow MAX_ORDER adjustment when arch does not set
-its own MAX_ORDER via ARCH_FORCE_MAX_ORDER. Make it depend
-on SPARSEMEM_VMEMMAP, when MAX_ORDER is not limited by SECTION_SIZE_BITS.
+free_area array in struct zone is allocated using memblock_alloc_node()
+at boot time and using kzalloc() when memory is hot-added.
 
 Signed-off-by: Zi Yan <ziy@nvidia.com>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Nicholas Piggin <npiggin@gmail.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Dave Young <dyoung@redhat.com>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Christian Koenig <christian.koenig@amd.com>
+Cc: David Airlie <airlied@linux.ie>
+Cc: kexec@lists.infradead.org
+Cc: linux-doc@vger.kernel.org
+Cc: dri-devel@lists.freedesktop.org
 Cc: linux-mm@kvack.org
 Cc: linux-kernel@vger.kernel.org
 ---
- arch/Kconfig           |  4 ++++
- include/linux/mmzone.h | 17 ++++++++++++++---
- mm/Kconfig             | 14 ++++++++++++++
- 3 files changed, 32 insertions(+), 3 deletions(-)
+ .../admin-guide/kdump/vmcoreinfo.rst          |  2 +-
+ drivers/gpu/drm/ttm/ttm_device.c              |  7 ++-
+ drivers/gpu/drm/ttm/ttm_pool.c                | 58 +++++++++++++++++--
+ include/drm/ttm/ttm_pool.h                    |  4 +-
+ include/linux/mmzone.h                        |  2 +-
+ mm/page_alloc.c                               | 32 ++++++++--
+ 6 files changed, 87 insertions(+), 18 deletions(-)
 
-diff --git a/arch/Kconfig b/arch/Kconfig
-index f330410da63a..24baee6c3feb 100644
---- a/arch/Kconfig
-+++ b/arch/Kconfig
-@@ -11,6 +11,10 @@ source "arch/$(SRCARCH)/Kconfig"
+diff --git a/Documentation/admin-guide/kdump/vmcoreinfo.rst b/Documentation=
+/admin-guide/kdump/vmcoreinfo.rst
+index c572b5230fe0..a775462aa7c7 100644
+--- a/Documentation/admin-guide/kdump/vmcoreinfo.rst
++++ b/Documentation/admin-guide/kdump/vmcoreinfo.rst
+@@ -172,7 +172,7 @@ variables.
+ Offset of the free_list's member. This value is used to compute the number
+ of free pages.
 =20
- menu "General architecture-dependent options"
+-Each zone has a free_area structure array called free_area[MAX_ORDER + 1].
++Each zone has a free_area structure array called free_area with length of =
+MAX_ORDER + 1.
+ The free_list represents a linked list of free page blocks.
 =20
-+config ARCH_FORCE_MAX_ORDER
-+    int
-+    default "0"
+ (list_head, next|prev)
+diff --git a/drivers/gpu/drm/ttm/ttm_device.c b/drivers/gpu/drm/ttm/ttm_dev=
+ice.c
+index e7147e304637..442a77bb5b4f 100644
+--- a/drivers/gpu/drm/ttm/ttm_device.c
++++ b/drivers/gpu/drm/ttm/ttm_device.c
+@@ -92,7 +92,9 @@ static int ttm_global_init(void)
+ 		>> PAGE_SHIFT;
+ 	num_dma32 =3D min(num_dma32, 2UL << (30 - PAGE_SHIFT));
+=20
+-	ttm_pool_mgr_init(num_pages);
++	ret =3D ttm_pool_mgr_init(num_pages);
++	if (ret)
++		goto out;
+ 	ttm_tt_mgr_init(num_pages, num_dma32);
+=20
+ 	glob->dummy_read_page =3D alloc_page(__GFP_ZERO | GFP_DMA32);
+@@ -218,7 +220,8 @@ int ttm_device_init(struct ttm_device *bdev, struct ttm=
+_device_funcs *funcs,
+ 	bdev->funcs =3D funcs;
+=20
+ 	ttm_sys_man_init(bdev);
+-	ttm_pool_init(&bdev->pool, dev, use_dma_alloc, use_dma32);
++	if (ttm_pool_init(&bdev->pool, dev, use_dma_alloc, use_dma32))
++		return -ENOMEM;
+=20
+ 	bdev->vma_manager =3D vma_manager;
+ 	INIT_DELAYED_WORK(&bdev->wq, ttm_device_delayed_workqueue);
+diff --git a/drivers/gpu/drm/ttm/ttm_pool.c b/drivers/gpu/drm/ttm/ttm_pool.c
+index 85d19f425af6..d76f7d476421 100644
+--- a/drivers/gpu/drm/ttm/ttm_pool.c
++++ b/drivers/gpu/drm/ttm/ttm_pool.c
+@@ -64,11 +64,11 @@ module_param(page_pool_size, ulong, 0644);
+=20
+ static atomic_long_t allocated_pages;
+=20
+-static struct ttm_pool_type global_write_combined[MAX_ORDER + 1];
+-static struct ttm_pool_type global_uncached[MAX_ORDER + 1];
++static struct ttm_pool_type *global_write_combined;
++static struct ttm_pool_type *global_uncached;
+=20
+-static struct ttm_pool_type global_dma32_write_combined[MAX_ORDER + 1];
+-static struct ttm_pool_type global_dma32_uncached[MAX_ORDER + 1];
++static struct ttm_pool_type *global_dma32_write_combined;
++static struct ttm_pool_type *global_dma32_uncached;
+=20
+ static spinlock_t shrinker_lock;
+ static struct list_head shrinker_list;
+@@ -493,8 +493,10 @@ EXPORT_SYMBOL(ttm_pool_free);
+  * @use_dma32: true if GFP_DMA32 should be used
+  *
+  * Initialize the pool and its pool types.
++ *
++ * Returns: 0 on successe, negative error code otherwise
+  */
+-void ttm_pool_init(struct ttm_pool *pool, struct device *dev,
++int ttm_pool_init(struct ttm_pool *pool, struct device *dev,
+ 		   bool use_dma_alloc, bool use_dma32)
+ {
+ 	unsigned int i, j;
+@@ -506,11 +508,30 @@ void ttm_pool_init(struct ttm_pool *pool, struct devi=
+ce *dev,
+ 	pool->use_dma32 =3D use_dma32;
+=20
+ 	if (use_dma_alloc) {
+-		for (i =3D 0; i < TTM_NUM_CACHING_TYPES; ++i)
++		for (i =3D 0; i < TTM_NUM_CACHING_TYPES; ++i) {
++			pool->caching[i].orders =3D
++				kvcalloc(MAX_ORDER + 1, sizeof(struct ttm_pool_type),
++					GFP_KERNEL);
++			if (!pool->caching[i].orders) {
++				i--;
++				goto failed;
++			}
+ 			for (j =3D 0; j <=3D MAX_ORDER; ++j)
+ 				ttm_pool_type_init(&pool->caching[i].orders[j],
+ 						   pool, i, j);
 +
- config CRASH_CORE
- 	bool
++		}
++		return 0;
++
++failed:
++		for (; i >=3D 0; i--) {
++			for (j =3D 0; j <=3D MAX_ORDER; ++j)
++				ttm_pool_type_fini(&pool->caching[i].orders[j]);
++			kfree(pool->caching[i].orders);
++		}
++		return -ENOMEM;
+ 	}
++	return 0;
+ }
+=20
+ /**
+@@ -701,6 +722,31 @@ int ttm_pool_mgr_init(unsigned long num_pages)
+ 	spin_lock_init(&shrinker_lock);
+ 	INIT_LIST_HEAD(&shrinker_list);
+=20
++	if (!global_write_combined) {
++		global_write_combined =3D kvcalloc(MAX_ORDER + 1, sizeof(struct ttm_pool=
+_type),
++						GFP_KERNEL);
++		if (!global_write_combined)
++			return -ENOMEM;
++	}
++	if (!global_uncached) {
++		global_uncached =3D kvcalloc(MAX_ORDER + 1, sizeof(struct ttm_pool_type),
++					  GFP_KERNEL);
++		if (!global_uncached)
++			return -ENOMEM;
++	}
++	if (!global_dma32_write_combined) {
++		global_dma32_write_combined =3D kvcalloc(MAX_ORDER + 1, sizeof(struct tt=
+m_pool_type),
++						      GFP_KERNEL);
++		if (!global_dma32_write_combined)
++			return -ENOMEM;
++	}
++	if (!global_dma32_uncached) {
++		global_dma32_uncached =3D kvcalloc(MAX_ORDER + 1, sizeof(struct ttm_pool=
+_type),
++						GFP_KERNEL);
++		if (!global_dma32_uncached)
++			return -ENOMEM;
++	}
++
+ 	for (i =3D 0; i <=3D MAX_ORDER; ++i) {
+ 		ttm_pool_type_init(&global_write_combined[i], NULL,
+ 				   ttm_write_combined, i);
+diff --git a/include/drm/ttm/ttm_pool.h b/include/drm/ttm/ttm_pool.h
+index 8ce14f9d202a..f5ce60f629ae 100644
+--- a/include/drm/ttm/ttm_pool.h
++++ b/include/drm/ttm/ttm_pool.h
+@@ -72,7 +72,7 @@ struct ttm_pool {
+ 	bool use_dma32;
+=20
+ 	struct {
+-		struct ttm_pool_type orders[MAX_ORDER + 1];
++		struct ttm_pool_type *orders;
+ 	} caching[TTM_NUM_CACHING_TYPES];
+ };
+=20
+@@ -80,7 +80,7 @@ int ttm_pool_alloc(struct ttm_pool *pool, struct ttm_tt *=
+tt,
+ 		   struct ttm_operation_ctx *ctx);
+ void ttm_pool_free(struct ttm_pool *pool, struct ttm_tt *tt);
+=20
+-void ttm_pool_init(struct ttm_pool *pool, struct device *dev,
++int ttm_pool_init(struct ttm_pool *pool, struct device *dev,
+ 		   bool use_dma_alloc, bool use_dma32);
+ void ttm_pool_fini(struct ttm_pool *pool);
 =20
 diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-index e93faa3d7f1d..b83b481e250b 100644
+index b83b481e250b..60d8cce2aed8 100644
 --- a/include/linux/mmzone.h
 +++ b/include/linux/mmzone.h
-@@ -24,11 +24,14 @@
- #include <asm/page.h>
+@@ -635,7 +635,7 @@ struct zone {
+ 	ZONE_PADDING(_pad1_)
 =20
- /* Free memory management - zoned buddy allocator.  */
--#ifndef CONFIG_ARCH_FORCE_MAX_ORDER
--#define MAX_ORDER 10
--#else
-+#ifdef CONFIG_SET_MAX_ORDER
-+#define MAX_ORDER CONFIG_SET_MAX_ORDER
-+#elif CONFIG_ARCH_FORCE_MAX_ORDER !=3D 0
- #define MAX_ORDER CONFIG_ARCH_FORCE_MAX_ORDER
-+#else
-+#define MAX_ORDER 10
- #endif
+ 	/* free areas of different sizes */
+-	struct free_area	free_area[MAX_ORDER + 1];
++	struct free_area	*free_area;
+=20
+ 	/* zone flags, see below */
+ 	unsigned long		flags;
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 3f3af7cd5164..941a94bb8cf0 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -6195,11 +6195,21 @@ void show_free_areas(unsigned int filter, nodemask_=
+t *nodemask)
+=20
+ 	for_each_populated_zone(zone) {
+ 		unsigned int order;
+-		unsigned long nr[MAX_ORDER + 1], flags, total =3D 0;
+-		unsigned char types[MAX_ORDER + 1];
++		unsigned long *nr, flags, total =3D 0;
++		unsigned char *types;
+=20
+ 		if (show_mem_node_skip(filter, zone_to_nid(zone), nodemask))
+ 			continue;
 +
- #define MAX_ORDER_NR_PAGES (1 << MAX_ORDER)
++		nr =3D kmalloc_array(MAX_ORDER + 1, sizeof(unsigned long), GFP_KERNEL);
++		if (!nr)
++			break;
++		types =3D kmalloc_array(MAX_ORDER + 1, sizeof(unsigned char), GFP_KERNEL=
+);
++		if (!types) {
++			kfree(nr);
++			break;
++		}
++
+ 		show_node(zone);
+ 		printk(KERN_CONT "%s: ", zone->name);
+=20
+@@ -7649,8 +7659,8 @@ static void __meminit pgdat_init_internals(struct pgl=
+ist_data *pgdat)
+ 	lruvec_init(&pgdat->__lruvec);
+ }
+=20
+-static void __meminit zone_init_internals(struct zone *zone, enum zone_typ=
+e idx, int nid,
+-							unsigned long remaining_pages)
++static void __init zone_init_internals(struct zone *zone, enum zone_type i=
+dx, int nid,
++					unsigned long remaining_pages, bool hotplug)
+ {
+ 	atomic_long_set(&zone->managed_pages, remaining_pages);
+ 	zone_set_nid(zone, nid);
+@@ -7659,6 +7669,16 @@ static void __meminit zone_init_internals(struct zon=
+e *zone, enum zone_type idx,
+ 	spin_lock_init(&zone->lock);
+ 	zone_seqlock_init(zone);
+ 	zone_pcp_init(zone);
++	if (hotplug)
++		zone->free_area =3D
++			kcalloc_node(MAX_ORDER + 1, sizeof(struct free_area),
++				     GFP_KERNEL, nid);
++	else
++		zone->free_area =3D
++			memblock_alloc_node(sizeof(struct free_area) * (MAX_ORDER + 1),
++					    sizeof(struct free_area), nid);
++	BUG_ON(!zone->free_area);
++
+ }
 =20
  /*
-@@ -1379,9 +1382,17 @@ static inline bool movable_only_nodes(nodemask_t *no=
-des)
- #define SECTION_BLOCKFLAGS_BITS \
- 	((1UL << (PFN_SECTION_SHIFT - pageblock_order)) * NR_PAGEBLOCK_BITS)
+@@ -7697,7 +7717,7 @@ void __ref free_area_init_core_hotplug(struct pglist_=
+data *pgdat)
+ 	}
 =20
-+/*
-+ * The MAX_ORDER check is not necessary when CONFIG_SET_MAX_ORDER is set, =
-since
-+ * it depends on CONFIG_SPARSEMEM_VMEMMAP, where all struct page are virtu=
-ally
-+ * contiguous, thus > section size pages can be allocated and manipulated
-+ * without worrying about non-contiguous struct page.
-+ */
-+#ifndef CONFIG_SET_MAX_ORDER
- #if (MAX_ORDER + PAGE_SHIFT) > SECTION_SIZE_BITS
- #error Allocator MAX_ORDER exceeds SECTION_SIZE
+ 	for (z =3D 0; z < MAX_NR_ZONES; z++)
+-		zone_init_internals(&pgdat->node_zones[z], z, nid, 0);
++		zone_init_internals(&pgdat->node_zones[z], z, nid, 0, true);
+ }
  #endif
-+#endif /* CONFIG_SET_MAX_ORDER*/
 =20
- static inline unsigned long pfn_to_section_nr(unsigned long pfn)
- {
-diff --git a/mm/Kconfig b/mm/Kconfig
-index bbe31e85afee..e558f5679707 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -441,6 +441,20 @@ config SPARSEMEM_VMEMMAP
- 	  pfn_to_page and page_to_pfn operations.  This is the most
- 	  efficient option when sufficient kernel resources are available.
+@@ -7760,7 +7780,7 @@ static void __init free_area_init_core(struct pglist_=
+data *pgdat)
+ 		 * when the bootmem allocator frees pages into the buddy system.
+ 		 * And all highmem pages will be managed by the buddy system.
+ 		 */
+-		zone_init_internals(zone, j, nid, freesize);
++		zone_init_internals(zone, j, nid, freesize, false);
 =20
-+config SET_MAX_ORDER
-+	int "Set maximum order of buddy allocator"
-+    depends on SPARSEMEM_VMEMMAP && (ARCH_FORCE_MAX_ORDER =3D 0)
-+	range 10 255
-+	default "10"
-+	help
-+	  The kernel memory allocator divides physically contiguous memory
-+	  blocks into "zones", where each zone is a power of two number of
-+	  pages.  This option selects the largest power of two that the kernel
-+	  keeps in the memory allocator.  If you need to allocate very large
-+	  blocks of physically contiguous memory, then you may need to
-+	  increase this value. A value of 10 means that the largest free memory
-+	  block is 2^10 pages.
-+
- config HAVE_MEMBLOCK_PHYS_MAP
- 	bool
-=20
+ 		if (!size)
+ 			continue;
 --=20
 2.35.1
 

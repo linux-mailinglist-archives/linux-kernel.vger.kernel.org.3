@@ -2,139 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 008DE58FE79
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 16:42:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E86358FE7A
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 16:42:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234332AbiHKOlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 10:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56096 "EHLO
+        id S234420AbiHKOmL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 10:42:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234073AbiHKOlt (ORCPT
+        with ESMTP id S234374AbiHKOmG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 10:41:49 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2053.outbound.protection.outlook.com [40.107.20.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFD088C46B;
-        Thu, 11 Aug 2022 07:41:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SnNnXlMmtVSl5bSorZLRmnQdOJdbsVOdX0S2/0qHy/V8Qyh8TEWtwQqP4GcsNZV2BZ1bArQexZ76on758Icyp6O8pS5vKghpLoEiaSfs/4Ca7SooMm6X9scmoi+6I2VjRTOpIHe/iyY/d2NESVgc2oRZYDBI7Q74ppuiDQiRuJIhqgPYfckWl15QZtt/VdU+7S5Seg5sYhEuY6IAdD5mWNDzaf0aSEgi2fW4M+6SlahAg6GW0AXvF6S5WgYoUTrTeVUd4i3i+f+BgwfTg0YE5m94hmNzKGPq2QoWcaOWpduaFNuaZD61cPHx31KnLF+y5IW0vNC8PXdg3jFSV+dP/A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+QSNwkwYVlVPMqSc+deyGR89Zi7AJqYIFaefmKhOyfE=;
- b=VgY6vZlJDxg5Zds5DTMRl+Gyd3D0C+5sQ51RujmOzW7cLFuJ9/vuTl6qWNz4GeHPWlsIJ5mr6Rfp3aMOlNni3Dax5w9rkjOxxRKC8ZAF1XdhM4JW3FN5doR0VgOrFPTME9GkwAxZXnCKLtdv9y7no2f7lCkxMYSWl6clmXljjQfEbG19lVDaBZmQyrMOFGymsAd2FbL/olzcAKxThXGvmv9UD7OIlwZ4kOpfzXo2zz7B/jojJRZhnLfl8ionRIotCK3EbQlYQkcWuckP9C6tQ7uIQVMLyabuwfPMZWdY6yzCe2HutxMAk40roCEzP850y5sZu5NUAlMZM361goeQNQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+QSNwkwYVlVPMqSc+deyGR89Zi7AJqYIFaefmKhOyfE=;
- b=OFDehb0aVzooemLl8zAvmR+gHy2x4aKU5gX8UJHaRMEXPlviYoAhdb2if4xGwVW0kOsISI5lx+FmJPXaYxkTGA+Ux8jVGWcu4jGsBB56NChRNniIbLF4Z0de7sgAuIO4Bldh7ss19JqeD9FN/fecMNrNLK7rs8bwvZLGnA+vg2k=
-Received: from GV1PR04MB9055.eurprd04.prod.outlook.com (2603:10a6:150:1e::22)
- by VI1PR04MB5134.eurprd04.prod.outlook.com (2603:10a6:803:5f::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.10; Thu, 11 Aug
- 2022 14:41:45 +0000
-Received: from GV1PR04MB9055.eurprd04.prod.outlook.com
- ([fe80::51bc:4e42:f244:dacc]) by GV1PR04MB9055.eurprd04.prod.outlook.com
- ([fe80::51bc:4e42:f244:dacc%7]) with mapi id 15.20.5525.011; Thu, 11 Aug 2022
- 14:41:44 +0000
-From:   Ioana Ciornei <ioana.ciornei@nxp.com>
-To:     Chen Lin <chen45464546@163.com>
-CC:     "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Yi Liu <yi.liu@nxp.com>, Chen Lin <chen.lin5@zte.com.cn>
-Subject: Re: [PATCH] dpaa2-eth: trace the allocated address instead of page
- struct
-Thread-Topic: [PATCH] dpaa2-eth: trace the allocated address instead of page
- struct
-Thread-Index: AQHYrRFxybr4KMs4J0qGvHSGa/QgEK2pxs+A
-Date:   Thu, 11 Aug 2022 14:41:43 +0000
-Message-ID: <20220811144143.b4mlngr6x76bozwg@skbuf>
-References: <20220810232948.40636-1-chen45464546@163.com>
-In-Reply-To: <20220810232948.40636-1-chen45464546@163.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 6b4c3cc2-f9f0-465d-6081-08da7ba79c69
-x-ms-traffictypediagnostic: VI1PR04MB5134:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 83fbWtQIXVPaLgiIy6UeeyBD4vPgxk4MV+iQl5zlwe25s/V6uR7QgOEt4cXz2F9MthfD8fjTlIvh96D9kzrRqvyWPmY/Pe4hPUiT23Gktd17LGN+DD3pxFwgoP5aomSh3yjfGv8Ph08rI6I0IF0fSY9MSYWfCjdqigwuN5Tr/DonBA3qB4GPvO0osBpUxLLZ5S35VsJ5WsCKp/9V7Jw5XyXzcgnhKXyFOGnPtNx9L+TE6moQ65PMEP6dPK/sjCwR8byANs3uL/JVaJBOGr1IUHE3KfoS/mHZrMZ7meDS4S5UyuMrV+9qoEFjvQxr/lJl9Ox5mldt19qIjSQG+vJrSHWofiTNDvEn0yFxcrOf3LVQG7EOe6c8/4rWG4WIVh93AemOmuxubeWRdwonUXwuulHJellHtj+axCc5GJAqLFef63rrgoTFDlTZ2ZPrWzDOvcOygkOpx+VAqUWDjplc/QAw3fdtd+oMybYY5DyuBzfEY+gj8udNUMDtZSxB/GoPBzPVeoj0H2UIL/wGvHTxacXf6dZg9yaKYZan+xsv2Bwts/FR5Yy1LYGtr/l/g97yOlwBCldQh7W8UpoVrBvqwFcHEzT/wRQBIa18gHxCWldwz8r1Q6xpVR4Nd23exkqd3DLYXmn5szqVlEBBA9MD5VCNudEPrqDs+G4b88fkuk/uBoqTDGQM9MbP2wCCHDJYhjz/PitUk/H/d8Zs5dHmksMUoCSkcKzHncXrfk0HYhF3LC6sbRBHaZa02u165Vw3iITZqVEbus3Ln54/8rxS8JnybLy0goMfpYSK5LhYjR+pFw0G0moflvcXwvUttwha
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV1PR04MB9055.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(4636009)(396003)(376002)(136003)(39860400002)(346002)(366004)(6506007)(38070700005)(6916009)(54906003)(316002)(6512007)(9686003)(186003)(26005)(1076003)(41300700001)(478600001)(2906002)(71200400001)(86362001)(4326008)(122000001)(33716001)(6486002)(4744005)(44832011)(5660300002)(91956017)(8936002)(76116006)(66946007)(66556008)(8676002)(38100700002)(66476007)(66446008)(64756008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?FMuKirAmRVncqpmSPQrVl2ixsPIyyIr7kIRhINyJH2zzMZUpLVXi+VL1pTSQ?=
- =?us-ascii?Q?W+xOf6MMDXbil630nZ4PEBc4hbKTXrgrv9Mo7irkGEvkOkQkVjLtC8HilTvA?=
- =?us-ascii?Q?aedj8tpK24iLkKZLW40ZBaKIldS1I2VlhIXS9kwwRJdtwHqvYgc5WtsrzwJ0?=
- =?us-ascii?Q?3np5W/xEjElLpC6gDujIyjxunFHM5y7Kvjfls1+odE/MMO4cmaIPyE8WS7ov?=
- =?us-ascii?Q?MCIZU/MZI0lub02ZurdbU+LbX5q85OE/2OMlY/0cmVAh/0p6URpb0PsEFcBV?=
- =?us-ascii?Q?ZZoJ2JwT+nQQtFfdhyS4+4uplrLbEhwzVA5FLjtGoRrmZ09U3nAOHOWhl2F9?=
- =?us-ascii?Q?2sXh/dZY8UmflXMb4TvmLc5cYaiNgtHDpJondrjcHjPGKbIWd7mTKTC4z9+w?=
- =?us-ascii?Q?0ibuQIDoDuuupT7ogLHoc/5GRsLyiPUFgse/k0AXNXNkz4NVKiPNNnJXB070?=
- =?us-ascii?Q?J9b1d0z5pWlt+T38EXh3dC5ObQmfPXryJ3hFFmwA8gSxy4MOM2ACuMkvuPYS?=
- =?us-ascii?Q?lMKLrrT1fMkHV1G7JMhkYsUPK4hyAGFW0Z5ou0n+tWkMWDD+L1Ywp8ysg8s8?=
- =?us-ascii?Q?jkGsro6BklpVQczk4Aa1tcRtndRJ7Rsz8ZDNkg/17v04Ij4j0JUO7f6JHNmk?=
- =?us-ascii?Q?X5A0raEeLn9btAyGLACgGbYCJEQ2yLtHFI8JPsEWqoTLUctWo/gQ4wIqCjvU?=
- =?us-ascii?Q?jIE5it8Q1uPPgWgZl/ckt0hmNUqWvCOu/e/8wRPa1sYOfeoV+FAsflK4Dwcp?=
- =?us-ascii?Q?xlXM6BAEBX9Owg9oRUy5k3NCRN4GvwElp0C5/+sA7wptgFKU5GFPInBZpB5b?=
- =?us-ascii?Q?/QzCzx5065UIfglSMF5MmWJa8fS+aT8L+iz9qH3FwOE6S+do9ffIOxWmElyz?=
- =?us-ascii?Q?auFG1k+5jxzjguGy1YlrJmPoAPgiD5W1p49+mqZ+2FIVpjRVMTe2D1IEHjbD?=
- =?us-ascii?Q?ld21ygA6Tqb3GFzuS9xK9QdW4NoFOW55S++wa0TgeocpceEBPWbPU16WIKzB?=
- =?us-ascii?Q?JsWsyrA1Px46UhdiEIrTO9MZ22zYSiNEPi0b/BvLT2DofCYPPdgKVQxybnXA?=
- =?us-ascii?Q?Vzc28zHUeO1rNpWSUhS3KEHzYKUHu0qa95VPDMNkMa++3r9P++uROlJ2DVT0?=
- =?us-ascii?Q?HjGsvbun/IUvEbX0yNimrHfUgcWnVM2ucgM0kuVbdBFBdnPXLDz4LpmrTndQ?=
- =?us-ascii?Q?fSMIh57xtRnRBSgcuKofEHXujc0Y+2J4FIpuYQbE8x9TomXh8zrpCHC7IIaz?=
- =?us-ascii?Q?RbKycuj81rt/11ZqAtlhN8tq++7OFkfY85k0nvYn6KpTp10tQiPzlIfU27pT?=
- =?us-ascii?Q?mYgDGibFxd8Uxms1IxCH9EFVqlrVf0Lz0tZt8H0Y2xTLbNE8fEdqO3eRk1fo?=
- =?us-ascii?Q?N5bxJeGAoUQkF6EL4ip2byygJhhRpH1OlISMK6sX4qZQNuJboUWEAYRzLD5R?=
- =?us-ascii?Q?6UrI8o7cJMdixyUYvxx++X4iXD2pyQLwymNaydnIO4VFEaqpiw4mRBlF+p/s?=
- =?us-ascii?Q?IIoN8VvbDb9HI1sBvOQXzOb++Dw6L1lqP5OjoWSx9HhAAcgSZHbGM1hW5h0g?=
- =?us-ascii?Q?k/Pzh/SXc6ckMk9ds0vKGcMxgYaLftGEFEe17cOf7cK6o8yeH5aTPq3ng9c7?=
- =?us-ascii?Q?Dg=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <29CB40617277B346B2959B797F46D417@eurprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        Thu, 11 Aug 2022 10:42:06 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 811B48F967
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 07:42:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660228924; x=1691764924;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=IoUmRS5r9yI8Z/PkqrniiT575mG8WTNyohH5xQfhZJI=;
+  b=JlB4r36IdGyavqr6V1fPu8O9QCenR6ULlxe/AgvCI2K9lzNCBVEIX0Zr
+   oW6EHM4p2/gQ+q+wGcWAgbOylbseRh3lenKu5CLJQeBUmjjRmsiQZQu3P
+   jv9b5ECzVv/A/0bZ8kuf9YXSyfTW9btaIZD58pkuwIt8VMxKwuPG4LCFG
+   26MiRzN40D+0XpFXYsSnbdCyps75qVZ4vruY2On3KoIaffkLIc5AmpIwD
+   l0iSrHjiUteBrEFbOlUSc6B8YVjnHn3S5PCQ0zmmTxQIA0Zw1X9oTPy2b
+   H/mYQZgiLD/VIkCwb9NruoE6R8KOgHi7S3zsMYcqJ2iSX7M4T6xwEccCy
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10436"; a="317322940"
+X-IronPort-AV: E=Sophos;i="5.93,230,1654585200"; 
+   d="scan'208";a="317322940"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 07:41:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,230,1654585200"; 
+   d="scan'208";a="581690468"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga006.jf.intel.com with ESMTP; 11 Aug 2022 07:41:53 -0700
+Received: from [10.252.211.46] (kliang2-mobl1.ccr.corp.intel.com [10.252.211.46])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 6A77D580ADE;
+        Thu, 11 Aug 2022 07:41:52 -0700 (PDT)
+Message-ID: <48297c1e-6e44-53f1-da7d-4437ed87cf6f@linux.intel.com>
+Date:   Thu, 11 Aug 2022 10:41:51 -0400
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: GV1PR04MB9055.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6b4c3cc2-f9f0-465d-6081-08da7ba79c69
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Aug 2022 14:41:43.9628
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: gLkQdd8iaEr11lDnLzTpO2HxjZtQpK6D+TmCYPakc3jf+i+D0L/iT2U4QbY+56wEatXAgVeNuzMxoArdkqxHCA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5134
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH] perf/x86/intel/lbr: fix branch type encoding
+Content-Language: en-US
+To:     Stephane Eranian <eranian@google.com>
+Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
+        kan.liang@intel.com, ak@linux.intel.com, acme@redhat.com,
+        namhyung@kernel.org, irogers@google.com
+References: <20220810210656.2799243-1-eranian@google.com>
+ <0267c94e-7989-ca92-4175-d820d1d63a0c@linux.intel.com>
+ <CABPqkBSD5xg=sEkWU01RQ5+aj1X1dtzt2e7FbZBzrcE8dxqM=A@mail.gmail.com>
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <CABPqkBSD5xg=sEkWU01RQ5+aj1X1dtzt2e7FbZBzrcE8dxqM=A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 07:29:48AM +0800, Chen Lin wrote:
-> Follow the commit 27c874867c4(dpaa2-eth: Use a single page per Rx buffer)=
-,
-> we should trace the allocated address instead of page struct.
->=20
-> Signed-off-by: Chen Lin <chen.lin5@zte.com.cn>
 
-Reviewed-by: Ioana Ciornei <ioana.ciornei@nxp.com>
 
-Is this intended for the net tree? In that case, maybe it would be a
-good idea to add a fixes tag to the commit that you are already
-referencing.
+On 2022-08-11 10:17 a.m., Stephane Eranian wrote:
+> On Thu, Aug 11, 2022 at 3:23 PM Liang, Kan <kan.liang@linux.intel.com> wrote:
+>>
+>>
+>>
+>> On 2022-08-10 5:06 p.m., Stephane Eranian wrote:
+>>> With architected LBR, the procesosr can record the type of each sampled taken
+>>> branch. The type is encoded in 4-bit field in the LBR_INFO MSR of each entry.
+>>>
+>>> The branch type must then extracted and saved in the perf_branch_entry in the
+>>> perf_events sampling buffer. With the current code, the raw Intel encoding of
+>>> the branch is exported to user tools.
+>>
+>> In the intel_pmu_lbr_filter(), the raw encoding will be converted into
+>> the X86_BR_* format via arch_lbr_br_type_map[]. Then the
+>> common_branch_type() will convert the X86_BR_* format to the generic
+>> PERF_BR_* type and expose to user tools.
+>>
+>> I double check the existing arch_lbr_br_type_map[] and branch_map[].
+>> They should generate the same PERF_BR_* type as your arch_lbr_type_map[].
+>>
+>> Is there a test case which I can use to reproduce the problem?
+>>
+> I was doing a simple:
+> $ perf record -b -e cpu/event=0xc4/ ....
+> $ perf report -D
+> Looking at the LBR information and the BR type, many entries has no branch type.
+> What I see is a function where you do: e->type = get_lbr_br_type() and
+> that is what
+> is then saved in the buffer. Unless I am missing a later patch.
+>
 
-Ioana
+To get the LBR type, the save_type filter option must be applied. See
+60f83fa6341d ("perf record: Create a new option save_type in
+--branch-filter").
+
+The -b only include the ANY option. Maybe we should extend the -b option
+to ANY|SAVE_TYPE.
+
+Thanks,
+Kan
+
+> 
+>> Thanks,
+>> Kan
+>>
+>>> Yet tools, such as perf, expected the
+>>> branch type to be encoded using perf_events branch type enum
+>>> (see tools/perf/util/branch.c). As a result of the discrepancy, the output of
+>>> perf report -D shows bogus branch types.
+>>>
+>>> Fix the problem by converting the Intel raw encoding into the perf_events
+>>> branch type enum values. With that in place and with no changes to the tools,
+>>> the branch types are now reported properly.
+>>>
+>>> Signed-off-by: Stephane Eranian <eranian@google.com>
+>>> ---
+>>>  arch/x86/events/intel/lbr.c | 35 ++++++++++++++++++++++++++++++++---
+>>>  1 file changed, 32 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
+>>> index 4f70fb6c2c1e..ef63d4d46b50 100644
+>>> --- a/arch/x86/events/intel/lbr.c
+>>> +++ b/arch/x86/events/intel/lbr.c
+>>> @@ -894,9 +894,23 @@ static DEFINE_STATIC_KEY_FALSE(x86_lbr_mispred);
+>>>  static DEFINE_STATIC_KEY_FALSE(x86_lbr_cycles);
+>>>  static DEFINE_STATIC_KEY_FALSE(x86_lbr_type);
+>>>
+>>> -static __always_inline int get_lbr_br_type(u64 info)
+>>> +/*
+>>> + * Array index encodes IA32_LBR_x_INFO Branch Type Encodings
+>>> + * as per Intel SDM Vol3b Branch Types section
+>>> + */
+>>> +static const int arch_lbr_type_map[]={
+>>> +     [0] = PERF_BR_COND,
+>>> +     [1] = PERF_BR_IND,
+>>> +     [2] = PERF_BR_UNCOND,
+>>> +     [3] = PERF_BR_IND_CALL,
+>>> +     [4] = PERF_BR_CALL,
+>>> +     [5] = PERF_BR_RET,
+>>> +};
+>>> +#define ARCH_LBR_TYPE_COUNT ARRAY_SIZE(arch_lbr_type_map)
+>>> +
+>>> +static __always_inline u16 get_lbr_br_type(u64 info)
+>>>  {
+>>> -     int type = 0;
+>>> +     u16 type = 0;
+>>>
+>>>       if (static_branch_likely(&x86_lbr_type))
+>>>               type = (info & LBR_INFO_BR_TYPE) >> LBR_INFO_BR_TYPE_OFFSET;
+>>> @@ -904,6 +918,21 @@ static __always_inline int get_lbr_br_type(u64 info)
+>>>       return type;
+>>>  }
+>>>
+>>> +/*
+>>> + * The kernel cannot expose raw Intel branch type encodings because they are
+>>> + * not generic. Instead, the function below  maps the encoding to the
+>>> + * perf_events user visible branch types.
+>>> + */
+>>> +static __always_inline int get_lbr_br_type_mapping(u64 info)
+>>> +{
+>>> +     if (static_branch_likely(&x86_lbr_type)) {
+>>> +             u16 raw_type = get_lbr_br_type(info);
+>>> +             if (raw_type < ARCH_LBR_TYPE_COUNT)
+>>> +                     return arch_lbr_type_map[raw_type];
+>>> +     }
+>>> +     return PERF_BR_UNKNOWN;
+>>> +}
+>>> +
+>>>  static __always_inline bool get_lbr_mispred(u64 info)
+>>>  {
+>>>       bool mispred = 0;
+>>> @@ -957,7 +986,7 @@ static void intel_pmu_store_lbr(struct cpu_hw_events *cpuc,
+>>>               e->in_tx        = !!(info & LBR_INFO_IN_TX);
+>>>               e->abort        = !!(info & LBR_INFO_ABORT);
+>>>               e->cycles       = get_lbr_cycles(info);
+>>> -             e->type         = get_lbr_br_type(info);
+>>> +             e->type         = get_lbr_br_type_mapping(info);
+>>>       }
+>>>
+>>>       cpuc->lbr_stack.nr = i;

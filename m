@@ -2,140 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AB6958F559
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 02:49:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB3D758F56E
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 02:59:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233263AbiHKAtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 20:49:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58752 "EHLO
+        id S232453AbiHKA6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 20:58:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbiHKAtW (ORCPT
+        with ESMTP id S229488AbiHKA6V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 20:49:22 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055D4844DD;
-        Wed, 10 Aug 2022 17:49:14 -0700 (PDT)
-X-UUID: e7f7311ac8394fe8b8034fa10d0a6d13-20220811
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=J02Otlqm9jVMozONgqtzLnRRp+2ot0UG4yvdPeLI0N4=;
-        b=IP6G91uzxN+WNAGA60ai7YDH1rL6k3a1zKloseVNhmyHYVXdYqSeMSflVw2j528KZ2d6SswRWdRukAAPRRhjL7OPx0YEXCKvxEqE51n4zpFCSJrtC4+2P0qCYOuAKSvrryYIIVqQI5tBHmJbp1g74v7/02q8FYUWVG1aGxAGHXk=;
-X-CID-UNFAMILIAR: 1
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.9,REQID:df0c4343-2110-4181-a37a-1fd0a846f845,OB:0,LO
-        B:0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Release
-        _Ham,ACTION:release,TS:105
-X-CID-INFO: VERSION:1.1.9,REQID:df0c4343-2110-4181-a37a-1fd0a846f845,OB:0,LOB:
-        0,IP:0,URL:5,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS98
-        1B3D,ACTION:quarantine,TS:105
-X-CID-META: VersionHash:3d8acc9,CLOUDID:1fcd519c-da39-4e3b-a854-56c7d2111b46,C
-        OID:510a9701587b,Recheck:0,SF:28|16|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: e7f7311ac8394fe8b8034fa10d0a6d13-20220811
-Received: from mtkcas10.mediatek.inc [(172.21.101.39)] by mailgw01.mediatek.com
-        (envelope-from <sean.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
-        with ESMTP id 1779104499; Thu, 11 Aug 2022 08:49:10 +0800
-Received: from mtkcas10.mediatek.inc (172.21.101.39) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Thu, 11 Aug 2022 08:49:08 +0800
-Received: from mtkswgap22.mediatek.inc (172.21.77.33) by mtkcas10.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Thu, 11 Aug 2022 08:49:08 +0800
-From:   <sean.wang@mediatek.com>
-To:     <marcel@holtmann.org>, <johan.hedberg@gmail.com>,
-        <luiz.dentz@gmail.com>
-CC:     <sean.wang@mediatek.com>, <Soul.Huang@mediatek.com>,
-        <YN.Chen@mediatek.com>, <Leon.Yen@mediatek.com>,
-        <Eric-SY.Chang@mediatek.com>, <Deren.Wu@mediatek.com>,
-        <km.lin@mediatek.com>, <robin.chiu@mediatek.com>,
-        <Eddie.Chen@mediatek.com>, <ch.yeh@mediatek.com>,
-        <posh.sun@mediatek.com>, <ted.huang@mediatek.com>,
-        <Stella.Chang@mediatek.com>, <Tom.Chou@mediatek.com>,
-        <steve.lee@mediatek.com>, <jsiuda@google.com>,
-        <frankgor@google.com>, <abhishekpandit@google.com>,
-        <michaelfsun@google.com>, <mcchou@chromium.org>,
-        <shawnku@google.com>, <linux-bluetooth@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Jing Cai <jing.cai@mediatek.com>
-Subject: [PATCH v5] Bluetooth: btusb: mediatek: fix WMT failure during runtime suspend
-Date:   Thu, 11 Aug 2022 08:49:07 +0800
-Message-ID: <6675f56fc8b0910f17ec506d534cf5330ff04733.1660177086.git.objelf@gmail.com>
-X-Mailer: git-send-email 1.7.9.5
+        Wed, 10 Aug 2022 20:58:21 -0400
+Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49AC02611B
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 17:58:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
+        t=1660179496; bh=OyTS99sFdIE7MIH3baHBlBv1aJd28i4z8hmNZy/UQKo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=eVO31LntCu1yWUk7nIK3DpJeeP9+itbBsMwL21XzJbJmCe9j9B8Nmo26VaOLy/Faz
+         mGl7u5CbdBVPfSMLoC/iHefZMZp9UEtmxJT/hi2vJXhDoqj3gQLI3EF9+khVIzq3Kf
+         e/nthtHo0pinGt7U9AExQ/a+3VJqywBcVmLPcJ04=
+Received: from [192.168.9.172] (unknown [101.88.24.16])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id E71CC60074;
+        Thu, 11 Aug 2022 08:58:15 +0800 (CST)
+Message-ID: <1359c52d-5194-7306-0e76-cde97b5aa31c@xen0n.name>
+Date:   Thu, 11 Aug 2022 08:58:15 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_CSS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:105.0) Gecko/20100101
+ Thunderbird/105.0a1
+Subject: Re: [PATCH] LoongArch: Fix the !CONFIG_SMP build for irqchip drivers
+To:     Huacai Chen <chenhuacai@kernel.org>, Marc Zyngier <maz@kernel.org>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        loongarch@lists.linux.dev, Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        LKML <linux-kernel@vger.kernel.org>
+References: <20220810103156.1214996-1-chenhuacai@loongson.cn>
+ <f92fc4f34784217206b53a3709538d5c@kernel.org>
+ <CAAhV-H7DbvjEcms9Y81t_=WyDnKu5vuB4x7g7vU3f9CUhZykHQ@mail.gmail.com>
+Content-Language: en-US
+From:   WANG Xuerui <kernel@xen0n.name>
+In-Reply-To: <CAAhV-H7DbvjEcms9Y81t_=WyDnKu5vuB4x7g7vU3f9CUhZykHQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sean Wang <sean.wang@mediatek.com>
+On 8/10/22 23:38, Huacai Chen wrote:
 
-WMT cmd/event doesn't follow up the generic HCI cmd/event handling, it
-needs constantly polling control pipe until the host received the WMT
-event, thus, we should require to specifically acquire PM counter on the
-USB to prevent the interface from entering auto suspended while WMT
-cmd/event in progress.
+> Hi, Marc,
+>
+> On Wed, Aug 10, 2022 at 7:01 PM Marc Zyngier <maz@kernel.org> wrote:
+>> On 2022-08-10 11:31, Huacai Chen wrote:
+>>> 1, Guard get_ipi_irq() in CONFIG_SMP;
+>>> 2, Define cpu_logical_map() for the EIOINTC driver;
+>>> 3, Make eiointc_set_irq_affinity() return early for !CONFIG_SMP.
+>>>
+>>> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+>> Frankly, the real question is why do you even bother? As far as
+>> I can tell, LoongArch has no UP system.
+>>
+>> arm64 crossed that bridge a long time ago, and we never looked
+>> back, because these systems hardly exist.
+>>
+>> I'd rather you simply have a CONFIG_SMP always set to 'y', and
+>> be done with it forever.
+> LoongArch also has low-end processors (even LoongArch64). Though we
+> haven't translate all documents at
+> https://loongson.github.io/LoongArch-Documentation/ in time, there are
+> currently 4 LoongArch64 processors: Loongson-2K500 (single-core),
+> Loongon-2K1000 (dual-core), Loongson-3A5000 (quad-core) and
+> Loongson-3C5000 (16-core). So we indeed need a UP configuration.
+> Thanks.
 
-Fixes: a1c49c434e15 ("Bluetooth: btusb: Add protocol support for MediaTek
- MT7668U USB devices")
-Co-developed-by: Jing Cai <jing.cai@mediatek.com>
-Signed-off-by: Jing Cai <jing.cai@mediatek.com>
-Signed-off-by: Sean Wang <sean.wang@mediatek.com>
----
-v2:
-1. move usb_autopm_[get, put]_interface to btusb_mtk_hci_wmt_sync whenever
-wmt cmd is invoked.
-2. add the explanation why we needed the specific
-usb_autopm_[get, put]_interface there.
+I remember seeing an alternatives mechanism in the works for LoongArch. 
+If such alternatives mechanism is to be upstreamed in short order, why 
+make SMP one more build-time time option that developers have to decide 
+upon? It's not like SMP code would break, or run with unacceptable 
+overhead, on UP systems AFAIK, so it's probably better to not 
+preemptively support so many *possibilities* that haven't been realized 
+so the *current* maintainability suffers. Practically one can't buy the 
+LoongArch 2K line of products anywhere right now, and the few companies 
+developing for it are likely not using upstream kernels anyway, so it's 
+not like we can't wait either.
 
-v3: correct the version and there is no logic changed
-v4: fix GitLint fail due to Title exceeds max length
-v5: rebase to fix patches does not apply
----
- drivers/bluetooth/btusb.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
 
-diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-index 30dd443f395f..70d61bb4a053 100644
---- a/drivers/bluetooth/btusb.c
-+++ b/drivers/bluetooth/btusb.c
-@@ -2480,15 +2480,29 @@ static int btusb_mtk_hci_wmt_sync(struct hci_dev *hdev,
- 
- 	set_bit(BTUSB_TX_WAIT_VND_EVT, &data->flags);
- 
-+	/* WMT cmd/event doesn't follow up the generic HCI cmd/event handling,
-+	 * it needs constantly polling control pipe until the host received the
-+	 * WMT event, thus, we should require to specifically acquire PM counter
-+	 * on the USB to prevent the interface from entering auto suspended
-+	 * while WMT cmd/event in progress.
-+	 */
-+	err = usb_autopm_get_interface(data->intf);
-+	if (err < 0)
-+		goto err_free_wc;
-+
- 	err = __hci_cmd_send(hdev, 0xfc6f, hlen, wc);
- 
- 	if (err < 0) {
- 		clear_bit(BTUSB_TX_WAIT_VND_EVT, &data->flags);
-+		usb_autopm_put_interface(data->intf);
- 		goto err_free_wc;
- 	}
- 
- 	/* Submit control IN URB on demand to process the WMT event */
- 	err = btusb_mtk_submit_wmt_recv_urb(hdev);
-+
-+	usb_autopm_put_interface(data->intf);
-+
- 	if (err < 0)
- 		goto err_free_wc;
- 
 -- 
-2.25.1
+WANG "xen0n" Xuerui
+
+Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
 

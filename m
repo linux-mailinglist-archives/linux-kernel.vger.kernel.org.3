@@ -2,331 +2,334 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 762295908A5
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 00:16:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FB825908A8
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 00:16:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235841AbiHKWNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 18:13:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52570 "EHLO
+        id S236127AbiHKWOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 18:14:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235205AbiHKWNc (ORCPT
+        with ESMTP id S235205AbiHKWOQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 18:13:32 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD22A032E;
-        Thu, 11 Aug 2022 15:13:31 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id A151A5C00BF;
-        Thu, 11 Aug 2022 18:13:30 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Thu, 11 Aug 2022 18:13:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1660256010; x=
-        1660342410; bh=ZIzxJ5MgFo4JJ3fo2egieILXrZU/1FfabyPb1B3koxY=; b=q
-        GmZ0l1FwzD2KAfMEwNDY0/R1bYDvYtc+StDbWYv/pFCaErQ3yP6ZmckVMN4uBtJY
-        /3r2PR7eWW41iJcn0bhBsVCpXQs4MkiYOFCrIJuS7QHDA/KWryLKRXwABUq/3Bn6
-        E6JdIlnDpyjZgpdS44GjO//4jjtPReOTfbmCI6RZ5PMbZH5EXR/BV7ALcNJTOQ5x
-        TrJhui+5O3fVQReYbobfle9uvYIRYozq+zL4PraaEL/9NUzs31hi/JWhno/y/Omn
-        luWhYsaNOjv2LQ8Ek0AG4YQhjACw1QE+rk0qqxXfEoDb+yOURhyhnF0kAAhcVXUN
-        eqD3TaTYMDUE0ttMyauhg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1660256010; x=
-        1660342410; bh=ZIzxJ5MgFo4JJ3fo2egieILXrZU/1FfabyPb1B3koxY=; b=r
-        bFqnp42vUqEU3sQopNBHvZqQSDpH8Fath4pbmljvrPb4+BdQsovbaVzlbOi8RUNt
-        ALOd9/NvDbDXEGSoUCEJr6FNnQaVkQ20i+BfebU/inc1/ySLSg6gjHmmC0/dtELY
-        pa2cUQtb3GCvHWXF1KYV7XnacpzKsI8H2O9EslVCmbz07U6Sd5yGdxUZsnksPuFE
-        psUnbysfVqChzQaAJuKYBrAZzcijLkirZvcH4gsSVSngAKBeUA69gOxg3D0yFZiA
-        1kVv3uXr8x5iBLKmQeIXXkY2Hcn25jpy37bW5h6rcKHl6+Bx+XM5+UTLDfNpR5l+
-        W5BXbdvwJlxIcfIQ9Pshw==
-X-ME-Sender: <xms:Cn_1YkYlkl3u5vn-CG4zkzPTvPYGFOLYlUHc7uH0-aot4iyO0_GBRg>
-    <xme:Cn_1YvbeNH29Tua-j0NeXAsAeqtMzEOf9yjEGOP-vSBeQuAimbw1mfXOkhTwXqWrb
-    vF9jG9-_V0QA7BDTfk>
-X-ME-Received: <xmr:Cn_1Yu9K_KV1jVjUEuLNKMwtx2mIq8BStmoQkC8vC0fgGXFyVc6qj1pE5ZQnkxrKlpAXkg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeghedgtdejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkffuhffvveffjghftgfgfgggsehtqhertddtreejnecuhfhrohhmpefnuhhk
-    vgculfhonhgvshcuoehluhhkvgeslhhjohhnvghsrdguvghvqeenucggtffrrghtthgvrh
-    hnpeekfeffueejveeujeeugeelleehtdegvdeludektddtfffhieefledvudehfeejieen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehluhhkvg
-    eslhhjohhnvghsrdguvghv
-X-ME-Proxy: <xmx:Cn_1YuoN9vKeim6sf-1iIQVbaQHfGIt-AEnZ4My7kijVzrib6bjt6w>
-    <xmx:Cn_1YvrsP399rqv6TsoPrCtkCbteDQ41xlqMmA_c0pZ9HUMa9QSFxg>
-    <xmx:Cn_1YsQef2DApPGWhwWer9Tp6hPHxzgGK2LmIvArphoDvBzfF8kRzg>
-    <xmx:Cn_1YuUYe3jOAiQb0MGff2tq4c_CxV6PO2cVQanCaddeNdHo1-LJwg>
-Feedback-ID: i5ec1447f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 11 Aug 2022 18:13:28 -0400 (EDT)
-Message-ID: <4cefa82993c9a3560c0e0fd8969ac8e5e6d8ecc8.camel@ljones.dev>
-Subject: Re: [PATCH v3 1/6] asus-wmi: Implement TUF laptop keyboard RGB
- control
-From:   Luke Jones <luke@ljones.dev>
-To:     Hans de Goede <hdegoede@redhat.com>, Pavel Machek <pavel@ucw.cz>
-Cc:     andy.shevchenko@gmail.com, pobrn@protonmail.com,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Fri, 12 Aug 2022 10:13:21 +1200
-In-Reply-To: <af6b9480-5e33-ec1b-94cc-e51724db0716@redhat.com>
-References: <20220809025054.1626339-1-luke@ljones.dev>
-         <20220809025054.1626339-2-luke@ljones.dev>
-         <20220809105031.GA4971@duo.ucw.cz>
-         <fcc7b7eb29abc1ac9053bce02fd9f705e5f06b0b.camel@ljones.dev>
-         <f1ad35f6-acdf-0fc8-1ee1-99bd8c7a5e77@redhat.com>
-         <af6b9480-5e33-ec1b-94cc-e51724db0716@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (by Flathub.org) 
+        Thu, 11 Aug 2022 18:14:16 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4C0A0335;
+        Thu, 11 Aug 2022 15:14:11 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M3h0t6fVpz4wgv;
+        Fri, 12 Aug 2022 08:14:06 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1660256047;
+        bh=m6KjgOzbDaQ/Q0LqxhKfLlU33XvnbTQigjVbzGxvAFc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=GiV4fiXbYNJT7ByiAMgmHAyx+yQ3SjVEl6tnZUWoXTT0qJHi9ZpuiUcJfGeYFuXnM
+         iIXBm1lTBeB0uERNx1sjb4F6guFk5+hroZRmsiL14b72bUsPjRkFUCJUczPvx1BOSs
+         D6QWRwDkDP8xJX6fdANNWeqgJ9x3b8UM7yMJ0WMKv8Jr5ziswK1BD0frkgahMTuhT7
+         CsGKYT04ikgAqb8rJ8458DcmKSFJUrPJ5IG7/AVP5ry6GdEEz4g596XPZoFjlgdPJe
+         I3LqRX1lrcv8zfg9L8Oepg6HILYrY/CSOQiqK8sEMOwBZhsOxcAe3/K+fyBDqmME4x
+         Wj74QKN64H2bA==
+Date:   Fri, 12 Aug 2022 08:13:47 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: build warning after merge of the amdgpu tree
+Message-ID: <20220812081245.380c375f@canb.auug.org.au>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/C4H4alhtg7UI0g=K7.saxGF";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-08-11 at 17:05 +0200, Hans de Goede wrote:
->=20
->=20
-> On 8/11/22 17:01, Hans de Goede wrote:
-> > Hi,
-> >=20
-> > On 8/10/22 06:44, Luke Jones wrote:
-> > > Hi Pavel, Andy, Hans,
-> > >=20
-> > > > > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*
-> > > > > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * asus::kbd_backlight still
-> > > > > > > > > > > controls a
-> > > > > > > > > > > base > > > > > > 3-level backlight and when
-> > > > > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * it is on 0, the RGB is not
-> > > > > > > > > > > visible
-> > > > > > > > > > > at all. > > > > RGB > > should be treated as
-> > > > > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * an additional step.
-> > > > > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
-> > > > > > >=20
-> > > > > > > Ouch. Lets not do that? If rgb interface is available,
-> > > > > > > hide the
-> > > > > > > 3
-> > > > > > > level one, or something.
-> > > > > > >=20
-> > >=20
-> > > I really don't think this is safe or sensible. There are some
-> > > laptops
-> > > that default the 3-stage method to off, and this means that the
-> > > LEDs
-> > > will not show regardless of multicolor brightness.
-> > >=20
-> > >=20
-> > >=20
-> > > > > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0mc_cdev->led_cdev.name =3D=C2=A0=C2=
-=A0 > > >
-> > > > > > > > > > > > > >
-> > > > > > > > > > > "asus::multicolour::kbd_backlight";
-> > > > > > >=20
-> > > > > > > Make this "rgb:kbd_backlight" or
-> > > > > > > "inputX:rgb:kbd_backligh" and
-> > > > > > > document it in Documentation/leds/well-known-leds.txt.
-> > >=20
-> > > Will do.
-> > >=20
-> > > -- 4 hours later --
-> > >=20
-> > > I've spent a lot of time working on this now. I don't think
-> > > multicolor
-> > > LED is suitable for use with the way these keyboards work.
-> > >=20
-> > > The biggest issue is related to the brightness setting.
-> > > 1. If the ASUS_WMI_DEVID_KBD_BACKLIGHT method defaults to 0 on
-> > > boot
-> > > then RGB is not visible
-> >=20
-> > Note to others following this thread I asked Luke to clarify this
-> > a bit in an unrelated 1:1 conversation we were having:
-> >=20
-> > On 8/10/22 23:45, Luke Jones wrote:
-> > > On 8/10/22, Hans de Goede wrote:
-> > > > I plan to go through all the asus-wmi stuff you've posted
-> > > > tomorrow,
-> > > > so I'll reply to this then. One thing which is not entirely
-> > > > clear to me is that:
-> > > >=20
-> > > > 1. If I understand you correctly the laptops
-> > > > with the RGB keyboards have both the old mono-color
-> > > > "asus::kbd_backlight"
-> > > > as well as a new RGB interface and these somehow interact with
-> > > > each
-> > > > other, do I understand that correctly?
-> > >=20
-> > > Yes, and that is the problem. The "mono" switch takes precedence.
-> > >=20
-> > > > 2. If yes, then can you explain the interaction in a bit more
-> > > > detail,
-> > > > I see you say someting along the lines of the RGB controls only
-> > > > working when the old mono-color "asus::kbd_backlight"
-> > > > brightness
-> > > > is set to 3 (which is its max brightness) ?
-> > >=20
-> > > Adjusting this changes the overall keyboard brightness. So if
-> > > this is
-> > > at 1, and all RGB is at 255, then when you switch 2, 3, the
-> > > overall
-> > > brightness increases.
-> > >=20
-> > > > 3. So what happens e.g. if writing 2 to the old mono-color
-> > > > "asus::kbd_backlight" brightness after setting some RGB values
-> > > > ?
-> > >=20
-> > > If the brightness was 3, then the overall brightness decreases.
-> > > If it was at 1, then it increases.
-> >=20
-> > I see, so the old (still present) mono-color "asus::kbd_backlight"
-> > brightness works as a master brightness control and the rgb values
-> > in the ASUS_WMI_DEVID_TUF_RGB_MODE WMI set commands are really
-> > just to set the color.
-> >=20
-> > And I guess that the Fn + whatever kbd brightness hotkey also still
-> > modifies the old mono-color "asus::kbd_backlight"? Which means that
-> > the "asus::kbd_backlight" device is also the device on which the
-> > led_classdev_notify_brightness_hw_changed is done as you mention
-> > below.
-> >=20
-> > (continued below.
-> >=20
-> > > I worked around this by setting it to "3" by default in module if
-> > > ASUS_WMI_DEVID_TUF_RGB_MODE is found. And added a check in the
-> > > button
-> > > events to adjust multicolor brightness (+/- 17). This works but
-> > > now I
-> > > can't do led notify (led_classdev_notify_brightness_hw_changed).
-> > >=20
-> > > 2. Pattern trigger can't be used for these keyboard modes as the
-> > > modes
-> > > are done entirely in hardware via a single switch in the complete
-> > > command packet.
-> > >=20
-> > > I don't see any way forward with this, and looking at the
-> > > complexity I
-> > > don't have time either.
-> > >=20
-> > > 3. Nodes everywhere..
-> > >=20
-> > > To fully control control these keyboards there are two WMI
-> > > methods, one
-> > > for mode/rgb, one for power-state. Splitting each of these
-> > > parameters
-> > > out to individual nodes with sensible naming and expectations
-> > > gives:
-> >=20
-> > <snip>
-> >=20
-> > > Quite frankly I would rather use the method I had in the first
-> > > patch I
-> > > submitted where mode and state had two nodes each,
-> > > - keyboard_rgb_mode, WO =3D "n n n n n n"
-> > > - keyboard_rgb_mode_index, output =3D "save/apply, mode, r, g, b,
-> > > speed"
-> > > - keyboard_rgb_state, WO =3D "n n n n n"
-> > > - keyboard_rgb_state_index, output =3D "save/apply, boot, awake,
-> > > sleep,
-> > > keyboard"
-> > >=20
-> > > A big benefit of this structure is that not being able to read
-> > > settings
-> > > back from the keyboard (not possible!) becomes a non-issue
-> > > because
-> > > users have to write a full input, not partial, and it will apply
-> > > right
-> > > away.
-> >=20
-> > Right to me this not being able to read back the values shows that
-> > the firmware API here really is not suitable for doing a more
-> > fancy "nice" / standard sysfs API on top.
-> >=20
-> > Since we cannot read back any of the r, g, b, mode or speed values
-> > we would need to pick defaults and then setting any of them would
-> > override the actual values the hw is using for the others, which
-> > is really not a good thing to do.
-> >=20
-> > So that only leaves something akin to keyboard_rgb_mode[_index] +
-> > keyboard_rgb_state[_index] which sets all values at once, mirroring
-> > the limited WMI API as a good option here, I agree with you on
-> > this.
-> >=20
-> > Sorry Pavel, I know you don't like custom sysfs attributes
-> > being added to LED class devices, but I have to agree with Luke
-> > that there really is not a good way to deal with this here and
-> > we did try!
-> >=20
-> > Only request I have for the next version wrt the decision to
-> > circle all the way back to having:
-> >=20
-> > > - keyboard_rgb_mode, WO =3D "n n n n n n"
-> > > - keyboard_rgb_mode_index, output =3D "save/apply, mode, r, g, b,
-> > > speed"
-> > > - keyboard_rgb_state, WO =3D "n n n n n"
-> > > - keyboard_rgb_state_index, output =3D "save/apply, boot, awake,
-> > > sleep,
-> >=20
-> > Is please put these new attributes under the:
-> > /sys/class/leds/asus::kbd_backlight
-> >=20
-> > Using the led_class_device.groups member as discussed before, now
-> > that we have decided to drop the multicolor LED stuff that should
-> > work :)
-> >=20
-> > Although maybe Pavel prefers to have the new sysfs attributes
-> > under /sys/bus/platform/devices/asus-nb-wmi/ instead since they
-> > are non standard.
-> >=20
-> > Pavel, to me having these under /sys/class/leds/asus::kbd_backlight
-> > seems more logical.
->=20
-> p.s.
->=20
-> Besides it being more logical to group these together with the
-> main brightness control for the kbd_backlight, I believe this
-> way the files will also be easier to discover for users
-> (users not using the asusctl utility that is).
+--Sig_/C4H4alhtg7UI0g=K7.saxGF
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I agree with this. From what I've seen with folks trying to debug RGB
-keyboard issues they aren't familiar with they tend to reach straight
-for looking in /sys/class/leds/asus::kbd_backlight.
+Hi all,
 
-Doing it this way mean that the attributes will show up in udev under
-this LED class also, making it a more logical way to discover an added
-feature.
+After merging the amdgpu tree, today's linux-next build (htmldocs)
+produced this warning:
 
-> > But since there are non-standard and since
-> > there already is a bunch of asus-wmi sysfs API under
-> > /sys/bus/platform/devices/asus-nb-wmi/ putting them there if you
-> > prefer that is fine with me too. So what do you prefer ?
-> >=20
-> > > Hans, Andy, can I please revert back to the node + _index pairs
-> > > taking
-> > > an array input. Everything will be cleaner and simpler.
-> >=20
-> > Ack, see above. Thank you for at least trying to use the multi-
-> > color
-> > LED API.=20
-> >=20
-> > Regards,
-> >=20
-> > Hans
-> >=20
->=20
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'always_scale' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'always_use_regamma' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'aux_wake_wa' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'avoid_vbios_exec_table' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'az_endpoint_mute_only' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'bandwidth_calcs_trace' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'bw_val_profile' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'clock_trace' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'cm_in_bypass' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'crb_alloc_policy' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'crb_alloc_policy_min_disp_count' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_48mhz_pwrdwn' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_clock_gate' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_dcc' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_dfs_bypass' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_dmcu' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_dpp_power_gate' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_dram_clock_change_vactive_support' not described in 'dc_debug_=
+options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_dsc' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_dsc_edp' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_dsc_power_gate' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_dtb_ref_clk_switch' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_fams' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_fec' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_fixed_vs_aux_timeout_wa' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_hubp_power_gate' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_idle_power_optimizations' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_mem_low_power' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_min_fclk' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_pplib_clock_request' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_pplib_wm_range' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_psr' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_stereo_support' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_stutter' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_timing_sync' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_uhbr' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_z10' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'disable_z9_mpc' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'dmcub_emulation' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'dml_disallow_alternate_prefetch_modes' not described in 'dc_debug_opti=
+ons'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'dml_hostvm_override' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'dmub_command_table' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'dmub_offload_enabled' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'dpia_debug' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'dram_clock_change_latency_ns' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'dsc_bpp_increment_div' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'dsc_min_slice_height_override' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'dwb_fi_phase' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'edid_read_retry_times' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'enable_dmcub_surface_flip' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'enable_dmub_aux_for_legacy_ddc' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'enable_dp_dig_pixel_rate_div_policy' not described in 'dc_debug_option=
+s'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'enable_dram_clock_change_one_display_vactive' not described in 'dc_deb=
+ug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'enable_driver_sequence_debug' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'enable_mem_low_power' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'enable_single_display_2to1_odm_policy' not described in 'dc_debug_opti=
+ons'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'enable_sw_cntl_psr' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'enable_tri_buf' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'enable_z9_disable_interface' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'exit_idle_opt_for_cursor_updates' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'extended_blank_optimization' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'fec_enable_delay_in100us' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'fixed_vs_aux_delay_config_wa' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'force_abm_enable' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'force_clock_mode' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'force_disable_subvp' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'force_dp2_lt_fallback_method' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'force_dsc_edp_policy' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'force_fclk_khz' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'force_min_dcfclk_mhz' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'force_odm_combine' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'force_odm_combine_4to1' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'force_single_disp_pipe_split' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'force_subvp_mclk_switch' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'force_usr_allow' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'force_vblank_alignment' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'hdmi20_disable' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'hpo_optimization' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'ignore_cable_id' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'legacy_dp2_lt' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'mall_additional_timer_percent' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'mall_error_as_fatal' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'mall_size_override' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'max_disp_clk' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'max_downscale_src_width' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'min_disp_clk_khz' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'min_dpp_clk_khz' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'min_dram_clk_khz' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'mst_start_top_delay' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'native422_support' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'optimize_edp_link_rate' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'optimized_watermark' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'percent_of_ideal_drambw' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'performance_trace' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'pplib_wm_report_mode' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'psr_power_use_phy_fsm' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'pstate_enabled' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'recovery_enabled' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'root_clock_optimization' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'sanity_checks' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'scl_reset_length10' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'seamless_boot_odm_combine' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'set_mst_en_for_sst' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'skip_detection_link_training' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'sr_enter_plus_exit_time_dpm0_ns' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'sr_enter_plus_exit_time_ns' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'sr_exit_time_dpm0_ns' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'sr_exit_time_ns' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'surface_trace' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'timing_trace' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'underflow_assert_delay_us' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'urgent_latency_ns' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'usbc_combo_phy_reset_wa' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'use_legacy_soc_bb_mechanism' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'use_max_lb' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'validate_dml_output' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'validation_trace' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'visual_confirm' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'visual_confirm_rect_height' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'voltage_align_fclk' not described in 'dc_debug_options'
+drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
+ber 'vsr_support' not described in 'dc_debug_options'
 
-Kind regards,
-Luke.
+Introduced by commit
+
+  a2b3b9d57bdb ("drm/amd/display: Document pipe split policy")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/C4H4alhtg7UI0g=K7.saxGF
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmL1fxsACgkQAVBC80lX
+0GwWOggAnP25ZIkMt8PF/zqr367R+5VdFSMJI6YZbMmOpiLMlDVf4GU9OU//lkqy
+t+OvoukPjjmNkSAYN5+dmDp1h6o3WTYUZNfpTrBrygaD0ZHS4RA8aaV/4+NDNi8j
+LfEurqlfsl3rc9B1RS6tEMocsnVfTyxNS+jRRoDYABL7+pr57tZtYN2Ezmkdhzsy
+rpN2B92YaWvSl/HaSo45tpiEA2N0QMXVuGdAmxTTehjNEC6E2DOEUt6S3zvSHLzF
+Ik6PFbRPECB2rkF1R3vHz+PcV+eaiKxJpyaQ3rrO5i+lyFjIRmL991S5Usthr4wW
+L4xKiPrRJUp+RJhTbMTzSkhtdtFzBg==
+=4TVX
+-----END PGP SIGNATURE-----
+
+--Sig_/C4H4alhtg7UI0g=K7.saxGF--

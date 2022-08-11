@@ -2,52 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5235058F5C9
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 04:20:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A711A58F5D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 04:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233720AbiHKCUc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 22:20:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41734 "EHLO
+        id S233751AbiHKCXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 22:23:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233707AbiHKCUa (ORCPT
+        with ESMTP id S233743AbiHKCXc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 22:20:30 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A87262B26A
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 19:20:28 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id t7-20020a6b6407000000b00684ed320f97so5082308iog.11
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 19:20:28 -0700 (PDT)
+        Wed, 10 Aug 2022 22:23:32 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A157188DD1
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 19:23:27 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id t11so1829402qkt.6
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 19:23:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=KeCtfJVGipygRLI4b2K/87eW4TfAIQBTxBLgAlvv57E=;
+        b=XlT8SMVpqRixhv9RUiLUONNOpM0V4QREHr9wR0M3Gu8njAL5HK2ZHjLcT4xuZ+aIWp
+         NNJ/k6NH2PhQpQrR6RNp//YWhGF5VSyNKknwQKxHCxDOTnEbqaxUOlRMqRiEXMPXSGDH
+         s7nhvvgWXrqtv2YooI33AFmqGeR2V9Js0MBsc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=FRcqXcm04Kybe4wMNMlEndxwmeCXHP6BNbwcOvk5VT8=;
-        b=he3nlvrCeujTBOBnrzRyuj1ZU95BIGSvhOYfo9RrMG3lGnTpjucz7Vma/DpR7BkGIc
-         xDnavVOmjnben7XUDde5bKHkfTalA73oUq+H4WWBtU7sfeUVt528ZHtXR08ATAbzrFMl
-         /xhiYC4GTb3hQoaOyPmn/yxNYwE4TNf0wHMT1FuKOk0mwVg8huaRRBKc8n4EGD3yKHWl
-         CrScRH1akdu3Vdmvw4rzNGsn1r5mkdDbJ1CnA3t9XbJvx9TWYbMBKIRXQF9t4l22yuSP
-         IN1zFVfNccLwO9GxKQSqlA+j4ZipquCr4ZuStQ0TEQi5c4K3mGy0cujm9T73IjtpYTBi
-         gS+Q==
-X-Gm-Message-State: ACgBeo1jcddc85JfiowWayDY+r6BP91PmWLdYtdKhxF6DfsqLdcc3vKj
-        ZKG6++doTal8RPKyeZFx106+gS2r99Mry3SZC/vFhFO+SV9+
-X-Google-Smtp-Source: AA6agR5wx/dIc16+Izba6GK/VHZlbf/SOvg1d4j0B1EBQ5U61ChDckzUAkjF3HnvX5JAEttJT8QbZuE+WYosdPWeh6ZHO4AHgWGg
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=KeCtfJVGipygRLI4b2K/87eW4TfAIQBTxBLgAlvv57E=;
+        b=MpXftOpSWrHi1BEQbCD1lT3dsCAuoYD4LmiN2lMtZsV4gfioKVjSABe8yafWSCg/NO
+         HGwsHdA7D9G77+Hs9N1ne5alzhuTxA2L3U34XCKwSWwwsVBI2p4htvssw+ly0mdJ/GjN
+         aiWlg6t6B/cYvKml46IYSK7Lvt+upRwaqBzr/wmog915Dgn2PK+THO8898v5jDje/hYJ
+         uzY2Bn+gMbSp6hzZAggb/qZ4dXIKZHk0Gc7KU2Ald+9mhouiF4Hdae8bAVes80wtD5a9
+         HGMPvOLc8w7YqIKtf/G/PJaMHdvEDs6EsYwlpsMiIz46dNyOC27zMBhWXRSTmPJKj2Mu
+         iPYQ==
+X-Gm-Message-State: ACgBeo3f8VAdA29niaDloPRu4iYWdRVPxmiC/lHWu9O64b/c1+ij+uUp
+        cuMBjAx9k8XZcxIy0Rli34yiDHm4rC0L0A==
+X-Google-Smtp-Source: AA6agR6/554YftGgl4/zNuuoj6JeA7z++IJojImf7c63cJx7/nqpF0XLCLo0oG8SqKHTg40yH7hiAA==
+X-Received: by 2002:a05:620a:1a26:b0:6b5:cd80:a627 with SMTP id bk38-20020a05620a1a2600b006b5cd80a627mr23301150qkb.145.1660184606537;
+        Wed, 10 Aug 2022 19:23:26 -0700 (PDT)
+Received: from [10.0.0.40] (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
+        by smtp.gmail.com with ESMTPSA id m7-20020a05622a054700b0031ea864d3b2sm976134qtx.30.2022.08.10.19.23.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 Aug 2022 19:23:26 -0700 (PDT)
+Message-ID: <308db02b-b56d-2df1-ee33-7f66e6a85f63@joelfernandes.org>
+Date:   Wed, 10 Aug 2022 22:23:23 -0400
 MIME-Version: 1.0
-X-Received: by 2002:a92:9506:0:b0:2e0:ed70:ea7d with SMTP id
- y6-20020a929506000000b002e0ed70ea7dmr8456781ilh.207.1660184428020; Wed, 10
- Aug 2022 19:20:28 -0700 (PDT)
-Date:   Wed, 10 Aug 2022 19:20:28 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001809aa05e5edcf23@google.com>
-Subject: [syzbot] memory leak in airspy_probe
-From:   syzbot <syzbot+bb25f85e5aa482864dc0@syzkaller.appspotmail.com>
-To:     crope@iki.fi, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, mchehab@kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0.2
+Subject: Re: [PATCH v3 resend 0/6] Implement call_rcu_lazy() and miscellaneous
+ fixes
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org
+Cc:     rushikesh.s.kadam@intel.com, urezki@gmail.com,
+        neeraj.iitr10@gmail.com, frederic@kernel.org, paulmck@kernel.org,
+        rostedt@goodmis.org, rcu@vger.kernel.org
+References: <20220809034517.3867176-1-joel@joelfernandes.org>
+From:   Joel Fernandes <joel@joelfernandes.org>
+In-Reply-To: <20220809034517.3867176-1-joel@joelfernandes.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,58 +74,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
 
-syzbot found the following issue on:
 
-HEAD commit:    20cf903a0c40 Merge tag 'for-6.0/dm-changes-2' of git://git..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=14fbfa46080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=9f3121e03e34975
-dashboard link: https://syzkaller.appspot.com/bug?extid=bb25f85e5aa482864dc0
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15cb43fa080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=165877f2080000
+On 8/8/2022 11:45 PM, Joel Fernandes (Google) wrote:
+> Just a refresh of v3 with one additional debug patch. v3's cover letter is here:
+>  https://lore.kernel.org/all/20220713213237.1596225-1-joel@joelfernandes.org/
+> 
+> I just started working on this again while I have some time during paternity
+> leave ;-) So I thought I'll just send it out again. No other changes other
+> than that 1 debug patch I added on the top.
+> 
+> Next I am going to go refine the power results as mentioned in Paul's comments
+> on the last cover letter.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+bb25f85e5aa482864dc0@syzkaller.appspotmail.com
+Side note: Here is another big selling point for call_rcu_lazy().
+Instead of _lazy(), if you just increased jiffies_till_first_fqs, and
+slowed *all* call_rcu() down to achieve the same effect, that would
+affect percpu refcounters switching to atomic-mode, for example.
 
-BUG: memory leak
-unreferenced object 0xffff88810afb7300 (size 128):
-  comm "kworker/0:1", pid 44, jiffies 4294946315 (age 14.410s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff8316980e>] kmalloc include/linux/slab.h:600 [inline]
-    [<ffffffff8316980e>] kzalloc include/linux/slab.h:733 [inline]
-    [<ffffffff8316980e>] airspy_probe+0x8e/0x200 drivers/media/usb/airspy/airspy.c:981
-    [<ffffffff82d83457>] usb_probe_interface+0x177/0x370 drivers/usb/core/driver.c:396
-    [<ffffffff8277ff2d>] call_driver_probe drivers/base/dd.c:530 [inline]
-    [<ffffffff8277ff2d>] really_probe+0x12d/0x390 drivers/base/dd.c:609
-    [<ffffffff8278024f>] __driver_probe_device+0xbf/0x140 drivers/base/dd.c:748
-    [<ffffffff827802fa>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:778
-    [<ffffffff82780c46>] __device_attach_driver+0xf6/0x140 drivers/base/dd.c:901
-    [<ffffffff8277d127>] bus_for_each_drv+0xb7/0x100 drivers/base/bus.c:427
-    [<ffffffff827806d2>] __device_attach+0x102/0x2d0 drivers/base/dd.c:973
-    [<ffffffff8277ed96>] bus_probe_device+0xc6/0xe0 drivers/base/bus.c:487
-    [<ffffffff8277b152>] device_add+0x642/0xe60 drivers/base/core.c:3517
-    [<ffffffff82d80892>] usb_set_configuration+0x8f2/0xb80 drivers/usb/core/message.c:2170
-    [<ffffffff82d9121c>] usb_generic_driver_probe+0x8c/0xc0 drivers/usb/core/generic.c:238
-    [<ffffffff82d82b2c>] usb_probe_device+0x5c/0x140 drivers/usb/core/driver.c:293
-    [<ffffffff8277ff2d>] call_driver_probe drivers/base/dd.c:530 [inline]
-    [<ffffffff8277ff2d>] really_probe+0x12d/0x390 drivers/base/dd.c:609
-    [<ffffffff8278024f>] __driver_probe_device+0xbf/0x140 drivers/base/dd.c:748
-    [<ffffffff827802fa>] driver_probe_device+0x2a/0x120 drivers/base/dd.c:778
+They switch to atomic mode by calling __percpu_ref_switch_mode() which
+is called by percpu_ref_switch_to_atomic_sync().
+
+This will slow this call down for the full lazy duration which will slow
+down suspend in blk_pre_runtime_suspend().
+
+This is why, we cannot assume call_rcu() users will mostly just want to
+free memory. There could be cases just like this, and just blanket slow
+down of call_rcu() might bite at unexpected times.
+
+I am going to add this as a selling point for selective lazyfication
+(hey I get to invent words while I'm inventing new features), to my
+cover letter and slides.
+
+ - Joel
 
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+> 
+> Joel Fernandes (Google) (5):
+> rcu: Introduce call_rcu_lazy() API implementation
+> rcuscale: Add laziness and kfree tests
+> fs: Move call_rcu() to call_rcu_lazy() in some paths
+> rcutorture: Add test code for call_rcu_lazy()
+> debug: Toggle lazy at runtime and change flush jiffies
+> 
+> Vineeth Pillai (1):
+> rcu: shrinker for lazy rcu
+> 
+> fs/dcache.c                                   |   4 +-
+> fs/eventpoll.c                                |   2 +-
+> fs/file_table.c                               |   2 +-
+> fs/inode.c                                    |   2 +-
+> include/linux/rcu_segcblist.h                 |   1 +
+> include/linux/rcupdate.h                      |   6 +
+> include/linux/sched/sysctl.h                  |   3 +
+> kernel/rcu/Kconfig                            |   8 +
+> kernel/rcu/rcu.h                              |  12 +
+> kernel/rcu/rcu_segcblist.c                    |  15 +-
+> kernel/rcu/rcu_segcblist.h                    |  20 +-
+> kernel/rcu/rcuscale.c                         |  74 +++++-
+> kernel/rcu/rcutorture.c                       |  60 ++++-
+> kernel/rcu/tree.c                             | 131 ++++++----
+> kernel/rcu/tree.h                             |  10 +-
+> kernel/rcu/tree_nocb.h                        | 246 +++++++++++++++---
+> kernel/sysctl.c                               |  17 ++
+> .../selftests/rcutorture/configs/rcu/CFLIST   |   1 +
+> .../selftests/rcutorture/configs/rcu/TREE11   |  18 ++
+> .../rcutorture/configs/rcu/TREE11.boot        |   8 +
+> 20 files changed, 536 insertions(+), 104 deletions(-)
+> create mode 100644 tools/testing/selftests/rcutorture/configs/rcu/TREE11
+> create mode 100644 tools/testing/selftests/rcutorture/configs/rcu/TREE11.boot
+> 
+> --
+> 2.37.1.559.g78731f0fdb-goog
+> 

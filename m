@@ -2,79 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE06358F646
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 05:07:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6883C58F64C
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 05:11:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233937AbiHKDHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 23:07:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56012 "EHLO
+        id S233946AbiHKDLF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 23:11:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233269AbiHKDHH (ORCPT
+        with ESMTP id S233939AbiHKDLA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 23:07:07 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 774EB7647C;
-        Wed, 10 Aug 2022 20:07:01 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d20so15396138pfq.5;
-        Wed, 10 Aug 2022 20:07:01 -0700 (PDT)
+        Wed, 10 Aug 2022 23:11:00 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F49E75
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 20:10:58 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id x5so4999682qtv.9
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 20:10:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=LmnOiDMX3xGrA/oiBCR1NQTWs1yu4LdDCazzpBCjFtQ=;
-        b=H5cnkUVNltB7wWsF6EV6zhRHqMdbHRl1/9X0CDEmIn8sQxFUTqE3GaaBiao9RVv2Mz
-         GWFL+fetVlJKW24AtbvGfvy+ha6lP+7aSEb6M/IgtNFMnQUj9oK6w8bnLM4z+77rsjHZ
-         MRrtvBp8y8vyFudVo2+O9wjHDVEB9Sv3UpJbLXpDTfhjTxtHkflOHqPlh3slyuFq0hSO
-         s+W6AVm5/scjepfNTCg7e+IerJuZBjTapd0T5672TOKc2FVLrnIC/0BPN0dWSX2qIGjC
-         PpH1AyDTbPS0p3IdtusCKRavn/bxNhTlDX2GHN0uoXdU47oMbRAhkFK4Ue92EdUAtYRh
-         N9iA==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=rmxwVf7t1PNS4e5hrhApn9dN42pWVfDKUXBNKpe7GPE=;
+        b=OGIBZRTW1fN4NXGw414nvGJRbKag3aHq5Ziu4qj/DGZNt+s5Td7HX3QR6lPSb6HADc
+         Datb70J9zakU4jgz+wRg4rl/IL4md+mq9H5HvaQpBOs3NQRm8bGlH75ErXDOvcIO6khE
+         i/82PC2UyjnyduP6ecqJZpxSlRs2h+HRWC3QWdUSm3H0q5TRmo6jonEialdxv7o+UsJB
+         k0Gpp6P5KZ2AjuOSl20G3N3QYh7HHV2UI8Xr7wAFsIWsHT4qicKzKPqa/cgWbNygpWoW
+         5Newq4k5GZxGmuf8H0VKL3dOlxtYdNQANQ3AdU5I/0oigyJ5bIPJclNfjuRFFPM9aTQS
+         mafA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=LmnOiDMX3xGrA/oiBCR1NQTWs1yu4LdDCazzpBCjFtQ=;
-        b=6LdobB38vSgqgTxRKuRrXS5y1gu9QaZL4i7gw544AlDetR8/i2JCDiFHvzu1jQJzqI
-         gSpkqBbX+ddULMGfYyB+50sjqq47BGGrVrjBapE8r4hN+WK0eHJdzcbhvv2gD4oTp1u3
-         nv5wuFtefsa/TdNB9mtRbTLs6bi0ehU0RHFxEf9LQmwD61MKfdhM5Y8sLeviVlz7w7Sq
-         FISpE/BUDGrMmznHa6//ALO9uqmOM6aNntY2FLeWoZAGaEG9gH2v8UK5wucGYXRSQh75
-         2mZHtLpWXiQge/F4I0qdINYBGKjMQVxJfGxBKS/la0MvMb8YnHN8Rga9YflELYW87tXn
-         Ha/w==
-X-Gm-Message-State: ACgBeo3fZU5jxbP8GroBqXjl4vJ/1BpbtAW7+pjEp8cGYRBLDHghgO5P
-        QYVjJpVH6Us5ouBTzE2oHg8=
-X-Google-Smtp-Source: AA6agR5B0U4yEPzcfEMvg4EWSUMEiB5V88JgPoOag+aXjmtx75T7wOxR3QgN0r7Desc6C3h37KfZtA==
-X-Received: by 2002:a63:4d0e:0:b0:412:1877:9820 with SMTP id a14-20020a634d0e000000b0041218779820mr25457368pgb.177.1660187220938;
-        Wed, 10 Aug 2022 20:07:00 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-7.three.co.id. [180.214.232.7])
-        by smtp.gmail.com with ESMTPSA id oj7-20020a17090b4d8700b001df264610c4sm10902763pjb.0.2022.08.10.20.07.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 20:07:00 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id EB139103BCD; Thu, 11 Aug 2022 10:06:55 +0700 (WIB)
-Date:   Thu, 11 Aug 2022 10:06:55 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Xianting Tian <xianting.tian@linux.alibaba.com>
-Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, anup@brainfault.org, heiko@sntech.de,
-        guoren@kernel.org, mick@ics.forth.gr,
-        alexandre.ghiti@canonical.com, bhe@redhat.com, vgoyal@redhat.com,
-        dyoung@redhat.com, corbet@lwn.net, Conor.Dooley@microchip.com,
-        kexec@lists.infradead.org, linux-doc@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        crash-utility@redhat.com, huanyi.xj@alibaba-inc.com,
-        heinrich.schuchardt@canonical.com, k-hagio-ab@nec.com,
-        hschauhan@nulltrace.org, yixun.lan@gmail.com
-Subject: Re: [PATCH V5 5/6] riscv: crash_core: Export kernel vm layout,
- phys_ram_base
-Message-ID: <YvRyT5f5uH7LBs4H@debian.me>
-References: <20220802121818.2201268-1-xianting.tian@linux.alibaba.com>
- <20220802121818.2201268-6-xianting.tian@linux.alibaba.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=rmxwVf7t1PNS4e5hrhApn9dN42pWVfDKUXBNKpe7GPE=;
+        b=3xLNh6/7TtMEQ1m4fS0/iDKKgWVUtnPUe6XK9xUupCQ2/59cl+hf65yzYtnkdu8zRK
+         bXMuUmFX+/URVYlHty4m/+ZEHGP+UJnWOosD99Qw/4L1cKMMaq7g0FeHy9ptuznejN28
+         UNe/djr+VBldkEmrWX6J3gFb7q0RPIe+AhNqB25LqI5i0jRWfWTE5lAVFfqabvwB2vMj
+         /aExdUtPH53YM3q/yqz329dsHAd9Kiw3FDs1S1cWCrr9kuU8cKEe4EMzsiV0ya2+Z8Rg
+         7EB98ikjOn80aWpa27heD+/hR4QLcMOtNdB3hqgIS9fiHmP5owOjb1CBTj08/veaYNri
+         gWPg==
+X-Gm-Message-State: ACgBeo3VSdlH0HJ+Z8s8vYpL4kNPzi0bXk9IJZUQFIN1nqPgQR7vFaGb
+        jXrXxG3QsNqTapqeLabDW6hxJLict/u8tJRZamAUgg==
+X-Google-Smtp-Source: AA6agR5uQwVDamlVJyjCUGZqvGIkRQ8eaoHoIvbB4CcDt9dlXFjB2eiGntIxzgE+9KZja1ke5pi07dzP5x3i+WE2irI=
+X-Received: by 2002:ac8:57d2:0:b0:343:6785:a2e5 with SMTP id
+ w18-20020ac857d2000000b003436785a2e5mr314856qta.299.1660187457913; Wed, 10
+ Aug 2022 20:10:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220802121818.2201268-6-xianting.tian@linux.alibaba.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220805214821.1058337-1-haoluo@google.com> <20220805214821.1058337-5-haoluo@google.com>
+ <CAEf4BzZHf89Ds8nQWFCH00fKs9-9GkJ0d+Hrp-LkMCDUP_td0A@mail.gmail.com>
+ <CA+khW7hUVOkHBO3dhRze2_VKZuxD-LuNQdO3nHUkLCYmuuR6eg@mail.gmail.com>
+ <20220809162325.hwgvys5n3rivuz7a@MacBook-Pro-3.local.dhcp.thefacebook.com> <CA+khW7j0kzP+W_Qgsim52J+HeR27XJcyMk73Hq93tsmNzT7q6w@mail.gmail.com>
+In-Reply-To: <CA+khW7j0kzP+W_Qgsim52J+HeR27XJcyMk73Hq93tsmNzT7q6w@mail.gmail.com>
+From:   Hao Luo <haoluo@google.com>
+Date:   Wed, 10 Aug 2022 20:10:47 -0700
+Message-ID: <CA+khW7j1Ni_PfvsGisUpUgFtgg=f_qEUVd1VUmocn6L3=kndhw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v7 4/8] bpf: Introduce cgroup iter
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        cgroups@vger.kernel.org, netdev@vger.kernel.org,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Michal Koutny <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yosry Ahmed <yosryahmed@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,47 +88,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 02, 2022 at 08:18:17PM +0800, Xianting Tian wrote:
-> These infos are needed by the kdump crash tool. Since these values change
-> from time to time, it is preferable to export them via vmcoreinfo than to
-> change the crash's code frequently.
-> 
+On Tue, Aug 9, 2022 at 11:38 AM Hao Luo <haoluo@google.com> wrote:
+>
+> On Tue, Aug 9, 2022 at 9:23 AM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Mon, Aug 08, 2022 at 05:56:57PM -0700, Hao Luo wrote:
+> > > On Mon, Aug 8, 2022 at 5:19 PM Andrii Nakryiko
+> > > <andrii.nakryiko@gmail.com> wrote:
+> > > >
+> > > > On Fri, Aug 5, 2022 at 2:49 PM Hao Luo <haoluo@google.com> wrote:
+> > > > >
+> > > > > Cgroup_iter is a type of bpf_iter. It walks over cgroups in four modes:
+> > > > >
+> > > > >  - walking a cgroup's descendants in pre-order.
+> > > > >  - walking a cgroup's descendants in post-order.
+> > > > >  - walking a cgroup's ancestors.
+> > > > >  - process only the given cgroup.
+> > > > >
+> [...]
+> > > > > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> > > > > index 59a217ca2dfd..4d758b2e70d6 100644
+> > > > > --- a/include/uapi/linux/bpf.h
+> > > > > +++ b/include/uapi/linux/bpf.h
+> > > > > @@ -87,10 +87,37 @@ struct bpf_cgroup_storage_key {
+> > > > >         __u32   attach_type;            /* program attach type (enum bpf_attach_type) */
+> > > > >  };
+> > > > >
+> > > > > +enum bpf_iter_order {
+> > > > > +       BPF_ITER_ORDER_DEFAULT = 0,     /* default order. */
+> > > >
+> > > > why is this default order necessary? It just adds confusion (I had to
+> > > > look up source code to know what is default order). I might have
+> > > > missed some discussion, so if there is some very good reason, then
+> > > > please document this in commit message. But I'd rather not do some
+> > > > magical default order instead. We can set 0 to mean invalid and error
+> > > > out, or just do SELF as the very first value (and if user forgot to
+> > > > specify more fancy mode, they hopefully will quickly discover this in
+> > > > their testing).
+> > > >
+> > >
+> > > PRE/POST/UP are tree-specific orders. SELF applies on all iters and
+> > > yields only a single object. How does task_iter express a non-self
+> > > order? By non-self, I mean something like "I don't care about the
+> > > order, just scan _all_ the objects". And this "don't care" order, IMO,
+> > > may be the common case. I don't think everyone cares about walking
+> > > order for tasks. The DEFAULT is intentionally put at the first value,
+> > > so that if users don't care about order, they don't have to specify
+> > > this field.
+> > >
+> > > If that sounds valid, maybe using "UNSPEC" instead of "DEFAULT" is better?
+> >
+> > I agree with Andrii.
+> > This:
+> > +       if (order == BPF_ITER_ORDER_DEFAULT)
+> > +               order = BPF_ITER_DESCENDANTS_PRE;
+> >
+> > looks like an arbitrary choice.
+> > imo
+> > BPF_ITER_DESCENDANTS_PRE = 0,
+> > would have been more obvious. No need to dig into definition of "default".
+> >
+> > UNSPEC = 0
+> > is fine too if we want user to always be conscious about the order
+> > and the kernel will error if that field is not initialized.
+> > That would be my preference, since it will match the rest of uapi/bpf.h
+> >
+>
+> Sounds good. In the next version, will use
+>
+> enum bpf_iter_order {
+>         BPF_ITER_ORDER_UNSPEC = 0,
+>         BPF_ITER_SELF_ONLY,             /* process only a single object. */
+>         BPF_ITER_DESCENDANTS_PRE,       /* walk descendants in pre-order. */
+>         BPF_ITER_DESCENDANTS_POST,      /* walk descendants in post-order. */
+>         BPF_ITER_ANCESTORS_UP,          /* walk ancestors upward. */
+> };
+>
 
-I have to agree with Conor.Dooley, that this patch is misleading (I see
-documentation instead of real export). So IMO, the patch subject should
-be "Documentation: kdump: describe VMCOREINFO export for RISCV64".
+Sigh, I find that having UNSPEC=0 and erroring out when seeing UNSPEC
+doesn't work. Basically, if we have a non-iter prog and a cgroup_iter
+prog written in the same source file, I can't use
+bpf_object__attach_skeleton to attach them. Because the default
+prog_attach_fn for iter initializes `order` to 0 (that is, UNSPEC),
+which is going to be rejected by the kernel. In order to make
+bpf_object__attach_skeleton work on cgroup_iter, I think I need to use
+the following
 
-For MODULES_VADDR and friends, the doc can be improved, like:
+enum bpf_iter_order {
+        BPF_ITER_DESCENDANTS_PRE,       /* walk descendants in pre-order. */
+        BPF_ITER_DESCENDANTS_POST,      /* walk descendants in post-order. */
+        BPF_ITER_ANCESTORS_UP,          /* walk ancestors upward. */
+        BPF_ITER_SELF_ONLY,             /* process only a single object. */
+};
 
-diff --git a/Documentation/admin-guide/kdump/vmcoreinfo.rst b/Documentation/admin-guide/kdump/vmcoreinfo.rst
-index 6b76284a503ca5..6694acc32c3588 100644
---- a/Documentation/admin-guide/kdump/vmcoreinfo.rst
-+++ b/Documentation/admin-guide/kdump/vmcoreinfo.rst
-@@ -615,14 +615,13 @@ phys_ram_base
- 
- Indicates the start physical RAM address.
- 
--MODULES_VADDR|MODULES_END|VMALLOC_START|VMALLOC_END|VMEMMAP_START|VMEMMAP_END
-------------------------------------------------------------------------------
--KASAN_SHADOW_START|KASAN_SHADOW_END|KERNEL_LINK_ADDR|ADDRESS_SPACE_END
------------------------------------------------------------------------
-+MODULES_VADDR|MODULES_END|VMALLOC_START|VMALLOC_END|VMEMMAP_START|VMEMMAP_END|KASAN_SHADOW_START|KASAN_SHADOW_END|KERNEL_LINK_ADDR|ADDRESS_SPACE_END
-+----------------------------------------------------------------------------------------------------------------------------------------------------
- 
- Used to get the correct ranges:
--	MODULES_VADDR ~ MODULES_END : Kernel module space.
--	VMALLOC_START ~ VMALLOC_END : vmalloc() / ioremap() space.
--	VMEMMAP_START ~ VMEMMAP_END : vmemmap region, used for struct page array.
--	KASAN_SHADOW_START ~ KASAN_SHADOW_END : kasan shadow space.
--	KERNEL_LINK_ADDR ~ ADDRESS_SPACE_END : Kernel link and BPF space.
-+
-+  * MODULES_VADDR ~ MODULES_END : Kernel module space.
-+  * VMALLOC_START ~ VMALLOC_END : vmalloc() / ioremap() space.
-+  * VMEMMAP_START ~ VMEMMAP_END : vmemmap region, used for struct page array.
-+  * KASAN_SHADOW_START ~ KASAN_SHADOW_END : kasan shadow space.
-+  * KERNEL_LINK_ADDR ~ ADDRESS_SPACE_END : Kernel link and BPF space.
+So that when calling bpf_object__attach_skeleton() on cgroup_iter, a
+link can be generated and the generated link defaults to pre-order
+walk on the whole hierarchy. Is there a better solution?
 
-Thanks.
-
--- 
-An old man doll... just what I always wanted! - Clara
+> and explicitly list the values acceptable by cgroup_iter, error out if
+> UNSPEC is detected.
+>
+> Also, following Andrii's comments, will change BPF_ITER_SELF to
+> BPF_ITER_SELF_ONLY, which does seem a little bit explicit in
+> comparison.
+>
+> > I applied the first 3 patches to ease respin.
+>
+> Thanks! This helps!
+>
+> > Thanks!

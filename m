@@ -2,78 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D325F5906B1
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 21:07:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A77D05906C7
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 21:07:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236011AbiHKSwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 14:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33028 "EHLO
+        id S236031AbiHKSwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 14:52:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234747AbiHKSwQ (ORCPT
+        with ESMTP id S235963AbiHKSwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 14:52:16 -0400
+        Thu, 11 Aug 2022 14:52:42 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 107F99DFB3
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 11:52:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 241779E10F
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 11:52:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660243933;
+        s=mimecast20190719; t=1660243960;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=Sgm5mcggNid13CMQID8h+6VTN/oeMOW9HM233F0QERg=;
-        b=f7WsR833N2tKMDtRkWyBQSHqnmTUS5Tr5cC2IYQ2dD8G6Lb2NAv/phBDIbO9OhS/vHK5cJ
-        PzudsESdnSK2yLywSnN8jzFil/uw+heX3BZK61ukN6Z4Kyt8Xn58d+vy5EsLhzdM6YmPg3
-        F1yuz9e5itU4Lwlgo+tVEtGjoPBCCRI=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=JNyZEMFVFrFa8kgVwgLPqAYNcLyvy1ZrbXPv11GN+Lc=;
+        b=fRjb3h4ZRxzD7SF24HAd+Q/IpazD8g3tsb5sanEXr/mREG6izyCQQkFNzXYmQEKiZtKEx6
+        S43+yrZaWkEu4SrpSaTMZXZbbOUaTqZlFV/TuyuW8iaNB+STdP/yd8XdQTDb31HX/KZunh
+        8K2hkifT8mRh7ryZbCfwHlF/EejDFP0=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-557-QrbFfyd9NFm72DOCwvd-Xw-1; Thu, 11 Aug 2022 14:52:11 -0400
-X-MC-Unique: QrbFfyd9NFm72DOCwvd-Xw-1
-Received: by mail-ed1-f71.google.com with SMTP id w5-20020a05640234c500b0043dda025648so11399999edc.8
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 11:52:11 -0700 (PDT)
+ us-mta-227-flTzqUUuM4ec4ZiypNciiQ-1; Thu, 11 Aug 2022 14:52:38 -0400
+X-MC-Unique: flTzqUUuM4ec4ZiypNciiQ-1
+Received: by mail-ed1-f70.google.com with SMTP id r12-20020a05640251cc00b00440647ec649so9122503edd.21
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 11:52:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=Sgm5mcggNid13CMQID8h+6VTN/oeMOW9HM233F0QERg=;
-        b=ygWGz75MNGD/Kx+1EFdMC1kUFO+fj/Q+wGghszxQKaIV3GHNLbyCMOS6QViUshpgKq
-         FIY3rnx7ZUxg1KuzF7eG7qQbCQYvssET3lb46+KwDGTPh0NPNKGjWk6b8DNaGq+WfCl/
-         vNVn8nPk2GXmiapadJKKOHxWf1fZ8jONv21B05/1BsTcEI2momnMsNPTrFtJqaFatdT0
-         mYSfU/4qw34mhjIwI5ng1KCi/3vTGvRGsG2d/+MP1V94KynYlbuG99fzDu4ODZus9WE+
-         HYOsEtl3bwZIzqFUDsn8DPRtuVY/k7XbusbVCCTOzbWhdEcLndlmofG49UnEZ7exd/07
-         4twg==
-X-Gm-Message-State: ACgBeo0OrARm6OqCoWSC1bAJxVocqUku+X7h6Oeu2kNcN7fAZ+jM/eRH
-        Yjs6vr0O/XD6y/T653fXxHtm9psO0yBRxPOGD7mBtiAy3jF435UICFl+873RILfpgk8NG+lJY3Q
-        bWKqn3+bMxe2p40rjU1Q1QZH5
-X-Received: by 2002:a05:6402:b6a:b0:43d:2454:ddd3 with SMTP id cb10-20020a0564020b6a00b0043d2454ddd3mr443105edb.138.1660243930844;
-        Thu, 11 Aug 2022 11:52:10 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7bwetI42qiOhekFkq9dHevVo2z0CuUYEvdStjoch2SCNke1QA1jtM0is+OAm4MLRBP9b9A5A==
-X-Received: by 2002:a05:6402:b6a:b0:43d:2454:ddd3 with SMTP id cb10-20020a0564020b6a00b0043d2454ddd3mr443088edb.138.1660243930641;
-        Thu, 11 Aug 2022 11:52:10 -0700 (PDT)
+        bh=JNyZEMFVFrFa8kgVwgLPqAYNcLyvy1ZrbXPv11GN+Lc=;
+        b=6KfyG4kijtzLbNJMczyApMC+Ibsv3jsXe9VH4P8qRsbO3ll9K43VMv+d7i07zbTjb7
+         EalbEX7m34xWQD57ygnKKZsq/HNDqkP0FAXGsxdtXf43eyt46HKanddWMiv3lDSMzcKE
+         ArUOt0JCTfvrJ0ki2g0wJFcDiRuhJ1NYlA9twVQ6SJsuFjxupLV/3vMofOLZV4gjxSc8
+         d5cxx9VBFFaCRZPGKUoc0gDAKmeg2oPyZd6rNzB1NJhlB0R06N7V1q7Hyp/enjGHDG7x
+         Xz6Sqc1hFRoLmy4UnwcH9NhkFVtGhDPW6v2SF9f+fDK8w7WlOIYhdKC48ja5Ko0T5rQX
+         j3qg==
+X-Gm-Message-State: ACgBeo0j0taMeA3o53MU/EAoz2nZJ5e5OnKSEiiuCyspKP6xOm8aJLH+
+        lyBQRHo0INfnLDKI8qNMHnn5Lue23ej31dKMygrn8+jdyOnwPKBna01M9cm503W+FzECLGc2yNX
+        7fRAQkfq69k/U3w/i/NvtIY1m
+X-Received: by 2002:a17:906:58c9:b0:730:bc01:fd5f with SMTP id e9-20020a17090658c900b00730bc01fd5fmr285312ejs.504.1660243957646;
+        Thu, 11 Aug 2022 11:52:37 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5QYwkiMxkhhAF6jyTpAT0xoUswSga2mCJmeC6MtRkrn/UJ/PwLYSmER42bg7a8X/iW83cwiA==
+X-Received: by 2002:a17:906:58c9:b0:730:bc01:fd5f with SMTP id e9-20020a17090658c900b00730bc01fd5fmr285297ejs.504.1660243957406;
+        Thu, 11 Aug 2022 11:52:37 -0700 (PDT)
 Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id f11-20020a05640214cb00b0043a5bcf80a2sm112450edx.60.2022.08.11.11.52.10
+        by smtp.gmail.com with ESMTPSA id ck26-20020a0564021c1a00b0043d7b19abd0sm119740edb.39.2022.08.11.11.52.36
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Aug 2022 11:52:10 -0700 (PDT)
-Message-ID: <adaf33ba-b9dd-8ed3-a55e-40fded404fea@redhat.com>
-Date:   Thu, 11 Aug 2022 20:52:09 +0200
+        Thu, 11 Aug 2022 11:52:37 -0700 (PDT)
+Message-ID: <a019bd66-e53b-0993-77a0-c31c687c5f6f@redhat.com>
+Date:   Thu, 11 Aug 2022 20:52:36 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
-Subject: Re: [PATCH v3 5/6] asus-wmi: Convert all attr-show to use sysfs_emit
+Subject: Re: [PATCH] platform/surface: aggregator_registry: Add support for
+ Surface Laptop Go 2
 Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        "Luke D. Jones" <luke@ljones.dev>
-Cc:     =?UTF-8?Q?Barnab=c3=a1s_P=c5=91cze?= <pobrn@protonmail.com>,
-        Pavel Machek <pavel@ucw.cz>,
-        Platform Driver <platform-driver-x86@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <20220809025054.1626339-1-luke@ljones.dev>
- <20220809025054.1626339-6-luke@ljones.dev>
- <CAHp75VdoqPOZz4GG6Sr2npZwjYHDVMo2pmNGqyBRrnen2j8k7g@mail.gmail.com>
+To:     Maximilian Luz <luzmaximilian@gmail.com>
+Cc:     Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220810140133.99087-1-luzmaximilian@gmail.com>
 From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <CAHp75VdoqPOZz4GG6Sr2npZwjYHDVMo2pmNGqyBRrnen2j8k7g@mail.gmail.com>
+In-Reply-To: <20220810140133.99087-1-luzmaximilian@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -88,22 +84,11 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi,
 
-On 8/9/22 11:27, Andy Shevchenko wrote:
-> On Tue, Aug 9, 2022 at 4:51 AM Luke D. Jones <luke@ljones.dev> wrote:
->>
->> This changes all *_show attributes in asus-wmi.c to use sysfs_emit()
->> instead of the older method of writing to the output buffer manually.
+On 8/10/22 16:01, Maximilian Luz wrote:
+> The Surface Laptop Go 2 seems to have the same SAM client devices as the
+> Surface Laptop Go 1, so re-use its node group.
 > 
-> This looks good to me,
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> 
-> (Carry the tag with a new version of the series in this patch)
-> 
-> Hans, I guess this one can be applied so it will be less of a burden
-> on reviewing the rest.
-
-Thanks for the review. I agree that this one can be merged
-already, so I have just merged it:
+> Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
 
 Thank you for your patch, I've applied this patch to my review-hans 
 branch:
@@ -122,82 +107,22 @@ Regards,
 Hans
 
 
+> ---
+>  drivers/platform/surface/surface_aggregator_registry.c | 3 +++
+>  1 file changed, 3 insertions(+)
 > 
->> Signed-off-by: Luke D. Jones <luke@ljones.dev>
->> ---
->>  drivers/platform/x86/asus-wmi.c | 14 +++++++-------
->>  1 file changed, 7 insertions(+), 7 deletions(-)
->>
->> diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
->> index 719223804c0e..78f1f3af1b12 100644
->> --- a/drivers/platform/x86/asus-wmi.c
->> +++ b/drivers/platform/x86/asus-wmi.c
->> @@ -942,7 +942,7 @@ static ssize_t charge_control_end_threshold_show(struct device *device,
->>                                                  struct device_attribute *attr,
->>                                                  char *buf)
->>  {
->> -       return sprintf(buf, "%d\n", charge_end_threshold);
->> +       return sysfs_emit(buf, "%d\n", charge_end_threshold);
->>  }
->>
->>  static DEVICE_ATTR_RW(charge_control_end_threshold);
->> @@ -2032,7 +2032,7 @@ static ssize_t pwm1_show(struct device *dev,
->>                 value = -1;
->>         }
->>
->> -       return sprintf(buf, "%d\n", value);
->> +       return sysfs_emit(buf, "%d\n", value);
->>  }
->>
->>  static ssize_t pwm1_store(struct device *dev,
->> @@ -2092,7 +2092,7 @@ static ssize_t fan1_input_show(struct device *dev,
->>                 return -ENXIO;
->>         }
->>
->> -       return sprintf(buf, "%d\n", value < 0 ? -1 : value*100);
->> +       return sysfs_emit(buf, "%d\n", value < 0 ? -1 : value * 100);
->>  }
->>
->>  static ssize_t pwm1_enable_show(struct device *dev,
->> @@ -2110,7 +2110,7 @@ static ssize_t pwm1_enable_show(struct device *dev,
->>          * in practice on X532FL at least (the bit is always 0) and there's
->>          * also nothing in the DSDT to indicate that this behaviour exists.
->>          */
->> -       return sprintf(buf, "%d\n", asus->fan_pwm_mode);
->> +       return sysfs_emit(buf, "%d\n", asus->fan_pwm_mode);
->>  }
->>
->>  static ssize_t pwm1_enable_store(struct device *dev,
->> @@ -2178,7 +2178,7 @@ static ssize_t fan1_label_show(struct device *dev,
->>                                           struct device_attribute *attr,
->>                                           char *buf)
->>  {
->> -       return sprintf(buf, "%s\n", ASUS_FAN_DESC);
->> +       return sysfs_emit(buf, "%s\n", ASUS_FAN_DESC);
->>  }
->>
->>  static ssize_t asus_hwmon_temp1(struct device *dev,
->> @@ -2371,7 +2371,7 @@ static ssize_t fan_boost_mode_show(struct device *dev,
->>  {
->>         struct asus_wmi *asus = dev_get_drvdata(dev);
->>
->> -       return scnprintf(buf, PAGE_SIZE, "%d\n", asus->fan_boost_mode);
->> +       return sysfs_emit(buf, "%d\n", asus->fan_boost_mode);
->>  }
->>
->>  static ssize_t fan_boost_mode_store(struct device *dev,
->> @@ -2924,7 +2924,7 @@ static ssize_t throttle_thermal_policy_show(struct device *dev,
->>         struct asus_wmi *asus = dev_get_drvdata(dev);
->>         u8 mode = asus->throttle_thermal_policy_mode;
->>
->> -       return scnprintf(buf, PAGE_SIZE, "%d\n", mode);
->> +       return sysfs_emit(buf, "%d\n", mode);
->>  }
->>
->>  static ssize_t throttle_thermal_policy_store(struct device *dev,
->> --
->> 2.37.1
->>
-> 
-> 
+> diff --git a/drivers/platform/surface/surface_aggregator_registry.c b/drivers/platform/surface/surface_aggregator_registry.c
+> index ce2bd88feeaa..08019c6ccc9c 100644
+> --- a/drivers/platform/surface/surface_aggregator_registry.c
+> +++ b/drivers/platform/surface/surface_aggregator_registry.c
+> @@ -556,6 +556,9 @@ static const struct acpi_device_id ssam_platform_hub_match[] = {
+>  	/* Surface Laptop Go 1 */
+>  	{ "MSHW0118", (unsigned long)ssam_node_group_slg1 },
+>  
+> +	/* Surface Laptop Go 2 */
+> +	{ "MSHW0290", (unsigned long)ssam_node_group_slg1 },
+> +
+>  	/* Surface Laptop Studio */
+>  	{ "MSHW0123", (unsigned long)ssam_node_group_sls },
+>  
 

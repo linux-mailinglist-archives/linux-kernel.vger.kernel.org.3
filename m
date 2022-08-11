@@ -2,63 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B42F258F612
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 04:57:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DB04458F637
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 05:01:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233837AbiHKC5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 22:57:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43004 "EHLO
+        id S232677AbiHKC6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 22:58:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231707AbiHKC5f (ORCPT
+        with ESMTP id S233747AbiHKC62 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 22:57:35 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61418883FB;
-        Wed, 10 Aug 2022 19:57:34 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id gk3so31149620ejb.8;
-        Wed, 10 Aug 2022 19:57:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=G86Am7xGIToyaZgK/6Sab+lZR8ERmbEP88Zj48JSJOo=;
-        b=e401BypWBb9Uj3fapfDvFSIF9O4yrz1yM46IqgdveWnBegztl3dY7vk23S19OA8aIg
-         dr/xV/5wqXXJdPpmXbPXNtiIskbqasRaSXQbXy48KFT5atvPF47rtykTDh9kVNjW6XIi
-         kVXhuqJYvcuabql2Tj2JxAkdtrQQDMQxp8mTXkioiflvGknaORONFp0VgR8dNG+oC+kD
-         74nNDESYPOu5RhPHETyd0UX29ynnwe5+nzIKvGbFFaoeWHfRPYtBeJ3J1vRZPcx0bab9
-         pw/Ja7pYHsgbqAaZ/U4c7+p1LBhO96mBtxMVXkUK2sEDIuEhZfGVDA/GghsO2NXqtOOU
-         CWSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=G86Am7xGIToyaZgK/6Sab+lZR8ERmbEP88Zj48JSJOo=;
-        b=QlyFYkpT8MniWcDKV4AmeKJxIzHI4VPAcS+gdHdehP3SDI/G1jRpJ4Jp/Pm4LhOM1S
-         t8dcKAShB0SRatHyLvBJQgMo3Ywp9ZjPk4W855uwa6svVtFOrVm5Q2mgK9ZVJXY8CTAU
-         6Nrt0q53AQya5/LEr6KimU7KrFOIqW9wIQNEKM2iLPthF5QKT/r37HxmdPnTYAympCPQ
-         fuzeKmwp/CZHlM0ZZUuJ7Sm9b24Ook9iv+eBiw1FGmkKo4MgqqeBMegr2d0osdDCOzMW
-         vMezUssvclbCnbnUTbcX4/IzkooaMqFb6iM4mfNx/SzNkU7VXsOuDVCwJwObMbtI4abH
-         H7lQ==
-X-Gm-Message-State: ACgBeo1vi+5nHRwOsuX5vo7ekhOjuAip0jrpxC7P6XzZ/0SFRwDWFFMi
-        VsoVs2tP+FysuIa5mkC2kCtR1oYwdi5+YiBvSfI=
-X-Google-Smtp-Source: AA6agR43pYyUGN3beZhMeBiH2MZK8M8Mau0iR54OijLEETUOWNJm2EneLyt0CY6xYmlioMoJtjF3gx2sYBhrBEpDnDk=
-X-Received: by 2002:a17:907:28c9:b0:730:c053:986f with SMTP id
- en9-20020a17090728c900b00730c053986fmr22195591ejc.194.1660186652989; Wed, 10
- Aug 2022 19:57:32 -0700 (PDT)
+        Wed, 10 Aug 2022 22:58:28 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1357488DEA;
+        Wed, 10 Aug 2022 19:58:22 -0700 (PDT)
+X-UUID: 13fa66fbd5064fb4bf6ef72373fceb16-20220811
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=e5yTUFYEnBr3npJrCXzl+sChLO/A0Il8k7OnI7Xpsxk=;
+        b=N4hQdygMbmZwD7H1tD+JTlUpHNpQZiZbBnMTlgyYPuzr2p5UBuoLIKVm47dTzqwiqTQvYbcLMAoxvVOul0I8gxyMThM8XLsp5aFKOWEQ02gslYHR4Wxs78Ta6qUfeXHln1zub+5q0FaScFNJUBzqmkpTtDSMC4GaSihAaqgbS/A=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.9,REQID:9e704666-de8c-45b8-8720-268058ac9118,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_H
+        am,ACTION:release,TS:0
+X-CID-META: VersionHash:3d8acc9,CLOUDID:fd077cae-9535-44a6-aa9b-7f62b79b6ff6,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
+        ,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 13fa66fbd5064fb4bf6ef72373fceb16-20220811
+Received: from mtkexhb01.mediatek.inc [(172.21.101.102)] by mailgw01.mediatek.com
+        (envelope-from <tinghan.shen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 892676233; Thu, 11 Aug 2022 10:58:16 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Thu, 11 Aug 2022 10:58:14 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Thu, 11 Aug 2022 10:58:14 +0800
+From:   Tinghan Shen <tinghan.shen@mediatek.com>
+To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Lee Jones <lee@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Tinghan Shen <tinghan.shen@mediatek.com>,
+        MandyJH Liu <mandyjh.liu@mediatek.com>
+CC:     <iommu@lists.linux.dev>, <linux-mediatek@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v6 00/20] Add driver nodes for MT8195 SoC
+Date:   Thu, 11 Aug 2022 10:57:53 +0800
+Message-ID: <20220811025813.21492-1-tinghan.shen@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-References: <20220720072346.33511-1-dzm91@hust.edu.cn> <YuEu3mqTRCN9A5ig@kroah.com>
-In-Reply-To: <YuEu3mqTRCN9A5ig@kroah.com>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Thu, 11 Aug 2022 10:56:17 +0800
-Message-ID: <CAD-N9QXsQpFmLk-dfx6Y=Agtt1=7=Z5eP1RZTcTpgU9XK8NEDA@mail.gmail.com>
-Subject: Re: [PATCH] usb: trancevibrator: simplify tv_probe
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Dongliang Mu <dzm91@hust.edu.cn>, USB <linux-usb@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,22 +71,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 27, 2022 at 8:26 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Wed, Jul 20, 2022 at 03:23:43PM +0800, Dongliang Mu wrote:
-> > From: Dongliang Mu <mudongliangabcd@gmail.com>
-> >
-> > The function tv_probe does not need to invoke kfree when the
-> > allocation fails. So let's simplify the code of tv_probe.
-> > Another change is to remove a redundant space.
->
-> Those are two different things, please resend as a patch series of 2
-> different patches.
+Add driver nodes for MT8195 SoC.
 
-Sure, I have sent the patch series.
+---
+v5 -> v6:
+  - rebased on linux-next/next-20220809
+  - update the if/else condition comment in iommu.yaml
+  - some v5 patches are corrupted caused by extra line wrapping
 
->
-> thanks,
->
-> greg k-h
+v4 -> v5:
+  - rebased on linux-next/next-20220802
+  - fix indentation in scpsys.yaml
+  - rewrite if/else condition for infra iommu in iommu.yaml
+  - remove unused clock from infra iommu node
+
+v3 -> v4:
+  - remove unit address of power-controller node name from v3 scpsys bindings
+  - v3 patchset 7 and v3 patchset 6 are combined as v4 patchset 6
+  - add more commit descriptions for updating mt81xx scpsys node 
+
+v2 -> v3:
+  - fix dsp node name
+  - add descriptions for iommu interrupts
+  - limit the levels of power domain nodes
+  - update maintainer list of power controller yaml
+  - support naming power controller node with unit address
+  - add SoC specific compatible string to scpsys yaml
+
+v1 -> v2:
+  - add new dt-bindings: mfd/mediatek,scpsys.yaml
+    - update compatible string for mt81xx scpsys nodes
+  - apply comments for yaml files: iommu, smi-common, and power-controller
+  - apply comments for dts nodes: power domain, vdosys0. 
+  - apply comments for commit message of watchdog, i2c, and smi-common. 
+  - add review-by tags
+
+---
+Jason-JH.Lin (2):
+  arm64: dts: mt8195: Add gce node
+  arm64: dts: mt8195: Add display node for vdosys0
+
+Tinghan Shen (14):
+  dt-bindings: iommu: mediatek: Increase max interrupt number
+  dt-bindings: memory: mediatek: Update condition for mt8195 smi node
+  dt-bindings: power: mediatek: Refine multiple level power domain nodes
+  dt-bindings: power: mediatek: Support naming power controller node
+    with unit address
+  dt-bindings: power: mediatek: Update maintainer list
+  dt-bindings: power: mediatek: Add bindings for MediaTek SCPSYS
+  arm64: dts: mediatek: Update mt81xx scpsys node to align with
+    dt-bindings
+  arm64: dts: mt8195: Disable watchdog external reset signal
+  arm64: dts: mt8195: Add vdosys and vppsys clock nodes
+  arm64: dts: mt8195: Add power domains controller
+  arm64: dts: mt8195: Add spmi node
+  arm64: dts: mt8195: Add scp node
+  arm64: dts: mt8195: Add audio related nodes
+  arm64: dts: mt8195: Add iommu and smi nodes
+
+Trevor Wu (1):
+  arm64: dts: mt8195: Specify audio reset controller
+
+Tzung-Bi Shih (1):
+  arm64: dts: mt8195: Disable I2C0 node
+
+YC Hung (1):
+  arm64: dts: mt8195: Add adsp node and adsp mailbox nodes
+
+YT Lee (1):
+  arm64: dts: mt8195: Add cpufreq node
+
+ .../bindings/iommu/mediatek,iommu.yaml        |   29 +-
+ .../mediatek,smi-common.yaml                  |   11 +-
+ .../bindings/mfd/mediatek,mt8195-scpsys.yaml  |   67 ++
+ .../power/mediatek,power-controller.yaml      |  137 +--
+ arch/arm64/boot/dts/mediatek/mt8167.dtsi      |    3 +-
+ arch/arm64/boot/dts/mediatek/mt8173.dtsi      |    3 +-
+ arch/arm64/boot/dts/mediatek/mt8183.dtsi      |    3 +-
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi      |    3 +-
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      | 1054 ++++++++++++++++-
+ 9 files changed, 1176 insertions(+), 134 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mfd/mediatek,mt8195-scpsys.yaml
+
+-- 
+2.18.0
+

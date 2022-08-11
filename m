@@ -2,121 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45D5F58F840
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 09:21:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E605058F846
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 09:26:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234351AbiHKHVH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 03:21:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56884 "EHLO
+        id S234109AbiHKH0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 03:26:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233535AbiHKHVF (ORCPT
+        with ESMTP id S232194AbiHKH0F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 03:21:05 -0400
-Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65B5088DE3;
-        Thu, 11 Aug 2022 00:21:04 -0700 (PDT)
-Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-31f445bd486so164182757b3.13;
-        Thu, 11 Aug 2022 00:21:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=7pkrbhvnV/QbSUWqoz2X/keBi7uCVIq8rknW2hVQjeo=;
-        b=a4hJM03D6vxEEiIgVmwB20CYnvppjjbkLhxpLaY50J6vOflarnIZTzn/ox6wwKTJM8
-         f4ccdbI6uHhUeFLJowhbgzMddnByGuDD782jDA6pCdyRHWmz8VzYlrL0JIQezjiCVdLg
-         q8MsoVeq6VnJcurjILgIzT2pXw6e7t+esGTfZGIxm7XgOBJCM/2d9X41r0b1XEwjkaob
-         jsczyD3TSyVQ/SX1keN3eH9ghN9VD9ZOcVqKNzLBhRAEMMuvK+zdwtzcQeN5m8RgWZTa
-         0uoi/tpgib2b2R8rnvhFOfYjr9xOVeo54sLLUwRi/5QOhgiaWpOvRtPka4JLTb6gTwq3
-         g+og==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=7pkrbhvnV/QbSUWqoz2X/keBi7uCVIq8rknW2hVQjeo=;
-        b=BFvQIYGheZKOZlpu/93636CxdYYaYQgfE9czb5F9rVjzNwIBWGUqhFuTU+82UhkynV
-         ODcz+Nw14dPaBOJmJLAB/BSQDgWM/qLQwRL/PS9iLIgN1mz0nwF5oPZR4WH3si5TRZRA
-         NdPtvhUv3eXzgOp21YqDKxekmaVwZDLqJJnLUABY13iAIKdQU3yophcSqQr2QuOxnORQ
-         gc8+QALhE7lrYZCgzYVjA2IU3wvRlaNx9JOKDZyv9UscpOGXRLDow4WypIJQjzoK1oXC
-         K+MbhRDVrYmp9Jj7rd4ZvA4A/8mA/w1++9vClrWE80IPG3K3QSrEmcjfqWcWxAGwgDld
-         mXKQ==
-X-Gm-Message-State: ACgBeo0GyzVypUmeIn8oK8ONHM5cAzOqbjyii9gyr0W7SNz3MJu4Fbbj
-        jnlbA3pBimu2w5TZhFF0ytKm2qBJ/lE9DeItJRc=
-X-Google-Smtp-Source: AA6agR7YkeUW6mHWPGyI0rEF4Q6qVH5UaJZye+cchoREuruzAl4pfP2vRvTme3wdSXcmzkdBIpkmYtOq3y/eeY/gEDc=
-X-Received: by 2002:a81:8345:0:b0:323:9a15:7fd6 with SMTP id
- t66-20020a818345000000b003239a157fd6mr28519265ywf.104.1660202463545; Thu, 11
- Aug 2022 00:21:03 -0700 (PDT)
+        Thu, 11 Aug 2022 03:26:05 -0400
+Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8CD45F60
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 00:25:58 -0700 (PDT)
+X-UUID: 5c3c5a507470455b949f29b3a7ea64c0-20220811
+X-CPASD-INFO: 12437b500c9c49a980b461ad49267f8a@eoJuU2SUY2Bcg3uvg3ysc1hhkmRmXYG
+        zdnNSZmWWZIGVgnxsTV5qXFWCgGpQYWNdYlV3fGtQYmBgZFB5i4Jyj1RgXmCCVHSTgHNsVGNlkg==
+X-CLOUD-ID: 12437b500c9c49a980b461ad49267f8a
+X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:196.
+        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:245.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
+        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-
+        5,AUF:2,DUF:2126,ACD:46,DCD:46,SL:0,EISP:0,AG:0,CFC:0.597,CFSR:0.039,UAT:0,RA
+        F:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,E
+        AF:0,CID:-5.0,VERSION:2.3.17
+X-CPASD-ID: 5c3c5a507470455b949f29b3a7ea64c0-20220811
+X-CPASD-BLOCK: 1000
+X-CPASD-STAGE: 1
+X-UUID: 5c3c5a507470455b949f29b3a7ea64c0-20220811
+X-User: lizhenneng@kylinos.cn
+Received: from localhost.localdomain [(116.128.244.169)] by mailgw
+        (envelope-from <lizhenneng@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 634263236; Thu, 11 Aug 2022 15:25:53 +0800
+From:   Zhenneng Li <lizhenneng@kylinos.cn>
+To:     Alex Deucher <alexander.deucher@amd.com>
+Cc:     =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Pan Xinhui <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Zhenneng Li <lizhenneng@kylinos.cn>
+Subject: [PATCH] drm/radeon: add a force flush to delay work when radeon
+Date:   Thu, 11 Aug 2022 15:25:40 +0800
+Message-Id: <20220811072540.964309-1-lizhenneng@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20220810150921.8858-1-lukas.bulwahn@gmail.com> <e6839a7e-d1f4-7d9f-68f4-f99c216f647f@quicinc.com>
-In-Reply-To: <e6839a7e-d1f4-7d9f-68f4-f99c216f647f@quicinc.com>
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Thu, 11 Aug 2022 09:20:52 +0200
-Message-ID: <CAKXUXMxkLZXvJbkKNG9f_9Jog5f4azgjr2XpEgJx1j2A-2OgjQ@mail.gmail.com>
-Subject: Re: [PATCH] tracing: react to error return from traceprobe_parse_event_name()
-To:     Linyu Yuan <quic_linyyuan@quicinc.com>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Tom Zanussi <zanussi@kernel.org>,
-        kernel-janitors <kernel-janitors@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        RDNS_DYNAMIC,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 1:29 AM Linyu Yuan <quic_linyyuan@quicinc.com> wrote:
->
-> hi Lukas,
->
-> On 8/10/2022 11:09 PM, Lukas Bulwahn wrote:
-> > The function traceprobe_parse_event_name() may set the first two function
-> > arguments to a non-null value and still return -EINVAL to indicate an
-> > unsuccessful completion of the function. Hence, it is not sufficient to
-> > just check the result of the two function arguments for being not null,
-> > but the return value also needs to be checked.
-> >
-> > Commit 95c104c378dc ("tracing: Auto generate event name when creating a
-> > group of events") changed the error-return-value checking of the second
-> > traceprobe_parse_event_name() invocation in __trace_eprobe_create() and
-> > removed checking the return value to jump to the error handling case.
-> >
-> > Reinstate using the return value in the error-return-value checking.
-> >
-> > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> > ---
-> >   kernel/trace/trace_eprobe.c | 2 +-
-> >   1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/kernel/trace/trace_eprobe.c b/kernel/trace/trace_eprobe.c
-> > index 4a0e9d927443..460d3ec8a256 100644
-> > --- a/kernel/trace/trace_eprobe.c
-> > +++ b/kernel/trace/trace_eprobe.c
-> > @@ -883,7 +883,7 @@ static int __trace_eprobe_create(int argc, const char *argv[])
-> >       trace_probe_log_set_index(1);
-> >       sys_event = argv[1];
-> >       ret = traceprobe_parse_event_name(&sys_event, &sys_name, buf2, 0);
-> > -     if (!sys_event || !sys_name) {
-> > +     if (!ret || !sys_event || !sys_name) {
->
-> that's right, miss case sys_event and sys_name are not null, but invalid.
->
-> it should be  if (ret || ...)  ?
->
+Although radeon card fence and wait for gpu to finish processing current batch rings,
+there is still a corner case that radeon lockup work queue may not be fully flushed,
+and meanwhile the radeon_suspend_kms() function has called pci_set_power_state() to
+put device in D3hot state.
+Per PCI spec rev 4.0 on 5.3.1.4.1 D3hot State.
+> Configuration and Message requests are the only TLPs accepted by a Function in
+> the D3hot state. All other received Requests must be handled as Unsupported Requests,
+> and all received Completions may optionally be handled as Unexpected Completions.
+This issue will happen in following logs:
+Unable to handle kernel paging request at virtual address 00008800e0008010
+CPU 0 kworker/0:3(131): Oops 0
+pc = [<ffffffff811bea5c>]  ra = [<ffffffff81240844>]  ps = 0000 Tainted: G        W
+pc is at si_gpu_check_soft_reset+0x3c/0x240
+ra is at si_dma_is_lockup+0x34/0xd0
+v0 = 0000000000000000  t0 = fff08800e0008010  t1 = 0000000000010000
+t2 = 0000000000008010  t3 = fff00007e3c00000  t4 = fff00007e3c00258
+t5 = 000000000000ffff  t6 = 0000000000000001  t7 = fff00007ef078000
+s0 = fff00007e3c016e8  s1 = fff00007e3c00000  s2 = fff00007e3c00018
+s3 = fff00007e3c00000  s4 = fff00007fff59d80  s5 = 0000000000000000
+s6 = fff00007ef07bd98
+a0 = fff00007e3c00000  a1 = fff00007e3c016e8  a2 = 0000000000000008
+a3 = 0000000000000001  a4 = 8f5c28f5c28f5c29  a5 = ffffffff810f4338
+t8 = 0000000000000275  t9 = ffffffff809b66f8  t10 = ff6769c5d964b800
+t11= 000000000000b886  pv = ffffffff811bea20  at = 0000000000000000
+gp = ffffffff81d89690  sp = 00000000aa814126
+Disabling lock debugging due to kernel taint
+Trace:
+[<ffffffff81240844>] si_dma_is_lockup+0x34/0xd0
+[<ffffffff81119610>] radeon_fence_check_lockup+0xd0/0x290
+[<ffffffff80977010>] process_one_work+0x280/0x550
+[<ffffffff80977350>] worker_thread+0x70/0x7c0
+[<ffffffff80977410>] worker_thread+0x130/0x7c0
+[<ffffffff80982040>] kthread+0x200/0x210
+[<ffffffff809772e0>] worker_thread+0x0/0x7c0
+[<ffffffff80981f8c>] kthread+0x14c/0x210
+[<ffffffff80911658>] ret_from_kernel_thread+0x18/0x20
+[<ffffffff80981e40>] kthread+0x0/0x210
+ Code: ad3e0008  43f0074a  ad7e0018  ad9e0020  8c3001e8  40230101
+ <88210000> 4821ed21
+So force lockup work queue flush to fix this problem.
 
-Linyu, you are right. The visual symmetry tricked me into believing
-the line above was right, but it is clearly wrong if you think about
-it and look at the other invocation.
+Signed-off-by: Zhenneng Li <lizhenneng@kylinos.cn>
+---
+ drivers/gpu/drm/radeon/radeon_device.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-I send out a corrected patch v2:
+diff --git a/drivers/gpu/drm/radeon/radeon_device.c b/drivers/gpu/drm/radeon/radeon_device.c
+index 15692cb241fc..e608ca26780a 100644
+--- a/drivers/gpu/drm/radeon/radeon_device.c
++++ b/drivers/gpu/drm/radeon/radeon_device.c
+@@ -1604,6 +1604,9 @@ int radeon_suspend_kms(struct drm_device *dev, bool suspend,
+ 		if (r) {
+ 			/* delay GPU reset to resume */
+ 			radeon_fence_driver_force_completion(rdev, i);
++		} else {
++			/* finish executing delayed work */
++			flush_delayed_work(&rdev->fence_drv[i].lockup_work);
+ 		}
+ 	}
+ 
+-- 
+2.25.1
 
-https://lore.kernel.org/all/20220811071734.20700-1-lukas.bulwahn@gmail.com/
 
-Please review, ack and pick the patch v2. Thanks.
-
-Lukas
+No virus found
+		Checked by Hillstone Network AntiVirus

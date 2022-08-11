@@ -2,71 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30CC358F532
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 02:20:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBC4458F538
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 02:26:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231533AbiHKAU1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 20:20:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38240 "EHLO
+        id S232593AbiHKA0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 20:26:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbiHKAUX (ORCPT
+        with ESMTP id S229488AbiHKA03 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 20:20:23 -0400
-Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 969F22F665
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 17:20:22 -0700 (PDT)
-Received: by mail-vk1-xa36.google.com with SMTP id t64so2247771vkb.12
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 17:20:22 -0700 (PDT)
+        Wed, 10 Aug 2022 20:26:29 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A00A874367;
+        Wed, 10 Aug 2022 17:26:28 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id x64so13569441iof.1;
+        Wed, 10 Aug 2022 17:26:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=kjtR+7ABCsvSY53uoKHALTawd7IuvqM2GK1EO/X3/pI=;
-        b=tTBkrGnrm8fBeWHB7rdqaznsceNDwCKKvf0Uk8197ZTjNodNrjyxeB9uPUtF1gMgGy
-         8KoezoTLLkFwUYM4AKXkqIotp4ibYmTv1nxaBKnAVXl2vApHL+IWFwXOdNfPGPlHTBcW
-         Md7XuMshM9InVhb3isLjveWnAtgOhGlCd2ck4N2oaS7mczJ5lmbP/M06gyCNbzR+xbhj
-         Pazhy4hxFiIWdOA4zi33OtrRynSlVrWDFNl3047QJfacCxx5qCnb4fSgRGtEPbRxtgkO
-         /3wvc75jNRVa0Ni6zF/RoSYvizSlNqzd+CD6OdeAr9kc0HgTP2YL/azxAurfxtR9S5Xd
-         rmMA==
+        bh=52hp91B4o6nctmi+AsMxs5+KDTzl/WmhmAFz8/MIyO8=;
+        b=dDGa+Qwz8mCmY2TmXJMA83qpGLhEMolwQKzllwhArJrLqKH758YGEe2g5eSvz+6Y3h
+         ih63pohWsDK1LVUKnPqz+AMx3QhNpBaigoweKA8EqRcwrV4UqIkWfRn9BLz3JhODisjh
+         U3u0Vv1zEHCtGpxJUKyA/visum/Z2/MxEd+fSAIKYDkMrhac2whVsh8P5d4REL+mjiPj
+         Qjhq04zgQtu7AifOY3ATpFwdZnmGRkP+L7p3QTQviT80ipeUb4+4tSqHHR9wMtUgDZCn
+         vJcVRyA16bKMlXnuXyuCHndQr53PHvI2hALBixnAvZ1mX8FijtCMn3Mq8zRzI8TIYk2D
+         6tvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=kjtR+7ABCsvSY53uoKHALTawd7IuvqM2GK1EO/X3/pI=;
-        b=HrdEZA0XCyQv9uaV4i6vZ0qIgMF/WOVeyiHdAXsNGTX64VEjkCvVRgG43ewPmaQf9S
-         o/V8PXFGQfA4qggDnEgJrAjg+MhStX4yhzBWKCEpCxZb3ign7MOjfUWFM7NRMgSvOXgi
-         GIws1moprMBOwReEGMFoUwtwLFOpI0lp3/zGQ8PI9eJ51IoD7V2OC+a4tRbLAl/CXGwi
-         LYm4sV/jQ/QZ/BESjnZS9xWvr2/5GLFhWuQ+0u7fzPD9eeKnPC6RUJRK/JmlFS9FwhaG
-         1xpqAj6C6mxlehxXju5vTWy/DGRjN04yKwEFmwJSTPWG4k2Pv726V4tZvPY33FfiSOlV
-         qAMw==
-X-Gm-Message-State: ACgBeo13l3d0fGS8nV1r5z2sZkPgRJHmE0V2XhLp3Wf0SJg4JJefZWui
-        XJO4xXbo1Q/BvB0RK+tsFJYhQZjRZzQa9mB8pokIIVIFiwa/ht9m3o0=
-X-Google-Smtp-Source: AA6agR6bpJtbxkl82DmsbKU+7tsTOmuNRmmdwUIR8+HZQwYFLt13luLSfUz+NRXaBIO70gfVRGtR1t6sAHsGsOaSssQ=
-X-Received: by 2002:a67:cb0c:0:b0:357:9897:32d4 with SMTP id
- b12-20020a67cb0c000000b00357989732d4mr12894315vsl.18.1660177210770; Wed, 10
- Aug 2022 17:20:10 -0700 (PDT)
+        bh=52hp91B4o6nctmi+AsMxs5+KDTzl/WmhmAFz8/MIyO8=;
+        b=m8VeFLVen4GpmsHgcbt1fZ/RIoF3MXJHzq/SYuMql3r/zjoZnYlYe7dF2A+cj21vEg
+         bSUgTvMW7y2SKz4MK4fKw7rmsErpdT74FNf9Chk5GSIvNQcz+MrvLjy7oZhreLJcGeSS
+         yU4qHsyzjJAq3iIGtdhVzAZib5bOBCmbC6qB7Ap309GSKhm8P9nOd3khaPWKZVweG8v3
+         LslQHTZWwKxhMy9m8uzU7hnMLsjeuipNFkzFGO+oRwPFpwW1nONb/gqHrAPvIGbg3IyI
+         smP3sx6U60Kko3Eh8geu5oKcyxDCY1d4EBnJB6h/l/kNKLclkYUQ4jlnHcwFXzwL1GIb
+         whHA==
+X-Gm-Message-State: ACgBeo17moqMnEZPe0OtxGpNnIZESwY9zItTHkV+8OLWRdM0dEPMHvo1
+        XovE7q00kE/JvL2Q/BWlhcdVyh6rJTAYCU+gp6s=
+X-Google-Smtp-Source: AA6agR6DsMDCdJeapz0WBl/syPB6ijuEbr1lhiarDGdRh9X+4I+zvtKXZdBqrPsy9smZ+wdvIrvRbGCzFhCsYNKz5AA=
+X-Received: by 2002:a05:6638:238b:b0:343:ff4:a62 with SMTP id
+ q11-20020a056638238b00b003430ff40a62mr7319334jat.124.1660177588008; Wed, 10
+ Aug 2022 17:26:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220810234056.2494993-1-npache@redhat.com>
-In-Reply-To: <20220810234056.2494993-1-npache@redhat.com>
-From:   David Gow <davidgow@google.com>
-Date:   Thu, 11 Aug 2022 08:19:59 +0800
-Message-ID: <CABVgOSmUgkeuKKS_UYMOTUE4vARLpw--j77J9=zAkk5Zr30N9g@mail.gmail.com>
-Subject: Re: [PATCH] kunit: fix Kconfig for build-in tests USB4 and Nitro Enclaves
-To:     Nico Pache <npache@redhat.com>
-Cc:     KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-usb@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>, alcioa@amazon.com,
-        lexnv@amazon.com, Andra Paraschiv <andraprs@amazon.com>,
-        YehezkelShB@gmail.com,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        michael.jamet@intel.com, andreas.noever@gmail.com
+References: <cover.1660173222.git.dxu@dxuuu.xyz>
+In-Reply-To: <cover.1660173222.git.dxu@dxuuu.xyz>
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date:   Thu, 11 Aug 2022 02:25:51 +0200
+Message-ID: <CAP01T74aWUW-iyPCV_VfASO6YqfAZmnkYQMN2B4L8ngMMgnAcw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v3 0/3] Add more bpf_*_ct_lookup() selftests
+To:     Daniel Xu <dxu@dxuuu.xyz>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, netfilter-devel@vger.kernel.org,
+        pablo@netfilter.org, fw@strlen.de,
+        "toke@redhat.com" <toke@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,80 +69,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 7:41 AM Nico Pache <npache@redhat.com> wrote:
+On Thu, 11 Aug 2022 at 01:16, Daniel Xu <dxu@dxuuu.xyz> wrote:
 >
-> Both the USB4 and Nitro Enclaves KUNIT tests are now able to be compiled
-> if KUNIT is compiled as a module. This leads to issues if KUNIT is being
-> packaged separately from the core kernel and when KUNIT is run baremetal
-> without the required driver compiled into the kernel.
+> This patchset adds more bpf_*_ct_lookup() selftests. The goal is to test
+> interaction with netfilter subsystem as well as reading from `struct
+> nf_conn`. The first is important when migrating legacy systems towards
+> bpf. The latter is important in general to take full advantage of
+> connection tracking.
 >
-> Fixes: 635dcd16844b ("thunderbolt: test: Use kunit_test_suite() macro")
-> Fixes: fe5be808fa6c ("nitro_enclaves: test: Use kunit_test_suite() macro")
-> Signed-off-by: Nico Pache <npache@redhat.com>
-> ---
 
-Hmm... I'm not quite sure I understand the case that's broken here. Is it:
-- KUnit is built as a module (CONFIG_KUNIT=m)
-- USB4/nitro_enclaves are also built as modules, with the test enabled.
-- The kunit module is not available at runtime, so neither driver
-module can load (due to missing kunit dependencies)
+Thank you for contributing these tests. Feel free to add:
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 
-If so, that's not a case (i.e., the kunit.ko module being unavailable
-if it was built) we've tried to support thus far. I guess a de-facto
-rule for supporting it would be to depend on KUNIT=y for any KUnit
-tests which are built into the same module as the driver they're
-testing.
+People often look at selftests for usage examples these days, so it's
+great to have coverage + examples for more use cases.
 
-Alternatively, maybe we could do some horrible hacks to compile stub
-versions of various KUnit assertion symbols in unconditionally, which
-forward to the real ones if KUnit is available.
-
-(Personally, I'd love it if we could get rid of CONFIG_KUNIT=m
-altogether, and it's actually broken right at the moment[1]. There are
-still some cases (unloading / reloading KUnit with different filter
-options) which require it, though.)
-
-Cheers,
--- David
-
-[1]: https://patchwork.kernel.org/project/linux-kselftest/patch/20220713005221.1926290-1-davidgow@google.com/
-
->  drivers/thunderbolt/Kconfig         | 3 +--
->  drivers/virt/nitro_enclaves/Kconfig | 2 +-
->  2 files changed, 2 insertions(+), 3 deletions(-)
+> I'll follow this patchset up with support for writing to `struct nf_conn`.
 >
-> diff --git a/drivers/thunderbolt/Kconfig b/drivers/thunderbolt/Kconfig
-> index e76a6c173637..f12d0a3ee3e2 100644
-> --- a/drivers/thunderbolt/Kconfig
-> +++ b/drivers/thunderbolt/Kconfig
-> @@ -29,8 +29,7 @@ config USB4_DEBUGFS_WRITE
->
->  config USB4_KUNIT_TEST
->         bool "KUnit tests" if !KUNIT_ALL_TESTS
-> -       depends on (USB4=m || KUNIT=y)
-> -       depends on KUNIT
-> +       depends on USB4 && KUNIT=y
 
-This can probably just:
-depends on KUNIT=y
+Please also cc netfilter-devel, netdev, Pablo, and Florian when you send it.
+
+I think we can directly enable stores to ct->mark, since that is what
+ctnetlink is doing too, so adding another helper for this would be
+unnecessary overhead.
 
 
->         default KUNIT_ALL_TESTS
+> Past discussion:
+> - v2: https://lore.kernel.org/bpf/cover.1660062725.git.dxu@dxuuu.xyz/
+> - v1: https://lore.kernel.org/bpf/cover.1659209738.git.dxu@dxuuu.xyz/
 >
->  config USB4_DMA_TEST
-> diff --git a/drivers/virt/nitro_enclaves/Kconfig b/drivers/virt/nitro_enclaves/Kconfig
-> index ce91add81401..dc4d25c26256 100644
-> --- a/drivers/virt/nitro_enclaves/Kconfig
-> +++ b/drivers/virt/nitro_enclaves/Kconfig
-> @@ -17,7 +17,7 @@ config NITRO_ENCLAVES
+> Changes since v2:
+> - Add bpf-ci kconfig changes
 >
->  config NITRO_ENCLAVES_MISC_DEV_TEST
->         bool "Tests for the misc device functionality of the Nitro Enclaves" if !KUNIT_ALL_TESTS
-> -       depends on NITRO_ENCLAVES && KUNIT
-> +       depends on NITRO_ENCLAVES && KUNIT=y
->         default KUNIT_ALL_TESTS
->         help
->           Enable KUnit tests for the misc device functionality of the Nitro
+> Changes since v1:
+> - Reword commit message / cover letter to not mention connmark writing
+>
+>
+> Daniel Xu (3):
+>   selftests/bpf: Add existing connection bpf_*_ct_lookup() test
+>   selftests/bpf: Add connmark read test
+>   selftests/bpf: Update CI kconfig
+>
+>  tools/testing/selftests/bpf/config            |  2 +
+>  .../testing/selftests/bpf/prog_tests/bpf_nf.c | 60 +++++++++++++++++++
+>  .../testing/selftests/bpf/progs/test_bpf_nf.c | 21 +++++++
+>  3 files changed, 83 insertions(+)
+>
 > --
-> 2.36.1
+> 2.37.1
 >

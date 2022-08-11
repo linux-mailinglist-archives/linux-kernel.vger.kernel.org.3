@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67EAD58FA36
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 11:43:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55C0D58FA38
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 11:43:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234988AbiHKJn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 05:43:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51764 "EHLO
+        id S234253AbiHKJnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 05:43:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234999AbiHKJnU (ORCPT
+        with ESMTP id S234138AbiHKJnW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 05:43:20 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0FB81686
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 02:43:17 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id y1so10881611plb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 02:43:17 -0700 (PDT)
+        Thu, 11 Aug 2022 05:43:22 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457A181697
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 02:43:21 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id p14-20020a17090a74ce00b001f4d04492faso4595039pjl.4
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 02:43:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=k56CFyy5q/tLEdDa0AaNeHTf8E8dmcjqwpdigPl2beI=;
-        b=nYhxQ7ANk4AWRoCB8jzIH9ZSlpstq2dnKXa/l6fhzvMZMZDTwkFHFBixe1fIqQ85vO
-         iPECz1eMOMgDFVgb/2saEnVkaOwv4Qazm4qE0kaOpkbkfxeIRdUMQaLgfkn/gs9tLqyU
-         DNIqKF0xH4Sz42q3L2h0/sd3NBT0BG8WalPZKvCC/1/PwJjKNgJOF+oHtYc9HI+rrvrT
-         L/JU35VXhDy/vvvQS5uqs9INRQw791vA3sSKNoQB9zhZuGr07tDCYp/8HqZkjoSl2k+0
-         0eAsUG3yy5c75sAlTrbCb1HwT2AkHvESOuG4o3V94NZ+zTvxhGv2aFFzDjz03yfX+zFM
-         siUw==
+        bh=F5DxS0pA74UlPDuN8Qz9kJijHmaiEeefe4AsfGooW68=;
+        b=y6GyMKBIUT8zJ/MMaMSjghBm021AhVAoU4oIwUR8zeRVR16Y+67FdgS9F5AxSl5KjJ
+         LagRoE3XVxyah4z6sM3kBeerZCK8xCv/2czkDRdyMMjW5dEsb0f4vbpBfWha7G/g/MSg
+         763r2rplXBcg6ptEQZ3gVwSnUFBsZ7222foOBaWiOzJHWn5I7YY4qD+a3tnm7Fkfsm7j
+         9uhxptoPWzPGYvHD5BLcSOxq7C8W2otI/RA6BNTgQIl1XiAbb2QKzrqAlpPPHHPuzCVW
+         sNxVbtfO79HOUGTKbB2WJQsj2jGqNF+rnHJG+23kLvFNjwPtiLOHid0udtIX5XuQOaZn
+         HfZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=k56CFyy5q/tLEdDa0AaNeHTf8E8dmcjqwpdigPl2beI=;
-        b=HQsFxRUOjeWG+2tmTd5+RsjagFjp4Iwb6n4B0iz+8t2IJLFoMy75j2KRn80o4Kico+
-         QswkusI+ZHFo0urzScc1tMTQPT5ygDz1i8wWO9i0RFRuDhmnQ+SyvRItY9CfzQ5HejXQ
-         KohJB6T1Hagx4H/vKI1rlEMZBBJmjDbpvB8PDyDL3BFSu6c91CCH2BlQ+F1rSF4Dv+/0
-         SLqB6kuEb53ax5zHsBrAijDRUdvaK3q9GT1cg8DcNfnS/lI+LCZuERm5aKMuN/tqzdSk
-         f4jkBHcmRDwDPp0KgM82x7Te9S6fzrZyoh044dCW2i5yUJutdCHNoLgvgxb0I3qScypl
-         HfeA==
-X-Gm-Message-State: ACgBeo22NkikmYr20AUOiw2myxP1J+rAOKyoV1OKSomffc0krIQdHGBc
-        ljXXZpdQWEJfOPgrrFCzh2/F
-X-Google-Smtp-Source: AA6agR5tKVwsjMFBxrIELk3vEUMRLTH0iKIhFw/yTCr20+HlexLLyHVtt89b63geJ1+8Es3yXKKT2w==
-X-Received: by 2002:a17:90a:d789:b0:1f5:1c76:24d6 with SMTP id z9-20020a17090ad78900b001f51c7624d6mr7942691pju.188.1660210996830;
-        Thu, 11 Aug 2022 02:43:16 -0700 (PDT)
+        bh=F5DxS0pA74UlPDuN8Qz9kJijHmaiEeefe4AsfGooW68=;
+        b=lrZx6RDRAGWtW2+Ne0sRqBC3UYAThJOCZXWHWrV+q5HoaX+Ey4rmtmQanLsPvQHPHX
+         2arbkc0PPQ8Rbbol511os2nm/JzJcC3d0FK3uxm1UarVRyVLm0ELQHA1lM9AD4Xta0Jp
+         NdkvMjx0RiMqmlJrHJTfrW4u7I3DQ5f14MA0qFFo8BD8k0k/PrXMni2/blzBFb5fg/o2
+         /fMeiRaZS+AMavYYsPpf9BcW3xxioaNZlKAEL463Cs4mQZ73UDj3zN97Pxrt5z4Rkchm
+         Q2/pLYWm5iaQBGhHRIglu55IEVPttOxxo9d4C2vGW9KBcgD087JUcczVZzbW9jygaLQN
+         IRPg==
+X-Gm-Message-State: ACgBeo3Oi1v8C2slYkwjisUju9Vc0DVjp4MLfWohlXrjW5zfdw1gOvS+
+        R23+g6ytWtBWegXmlIOPEokJ
+X-Google-Smtp-Source: AA6agR5SACUm3dq6gpunYuni2ojL/+7AkWvoClch8BRRaro5aySTuRg6TuaMHSymrRsYFQp3cHt/Kw==
+X-Received: by 2002:a17:90a:db0d:b0:1f3:a48e:46b3 with SMTP id g13-20020a17090adb0d00b001f3a48e46b3mr8184317pjv.72.1660211000763;
+        Thu, 11 Aug 2022 02:43:20 -0700 (PDT)
 Received: from localhost.localdomain ([59.92.103.103])
-        by smtp.gmail.com with ESMTPSA id s5-20020a625e05000000b0052e6d5ee183sm3553931pfb.129.2022.08.11.02.43.13
+        by smtp.gmail.com with ESMTPSA id s5-20020a625e05000000b0052e6d5ee183sm3553931pfb.129.2022.08.11.02.43.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Aug 2022 02:43:16 -0700 (PDT)
+        Thu, 11 Aug 2022 02:43:20 -0700 (PDT)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     kishon@ti.com, lpieralisi@kernel.org, bhelgaas@google.com
 Cc:     kw@linux.com, robh@kernel.org, vidyas@nvidia.com,
         linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH 1/2] PCI: endpoint: Use callback mechanism for passing events from EPC to EPF
-Date:   Thu, 11 Aug 2022 15:12:36 +0530
-Message-Id: <20220811094237.77632-2-manivannan.sadhasivam@linaro.org>
+Subject: [PATCH 2/2] PCI: endpoint: Use link_up() callback in place of LINK_UP notifier
+Date:   Thu, 11 Aug 2022 15:12:37 +0530
+Message-Id: <20220811094237.77632-3-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20220811094237.77632-1-manivannan.sadhasivam@linaro.org>
 References: <20220811094237.77632-1-manivannan.sadhasivam@linaro.org>
@@ -71,140 +71,182 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Instead of using the notifiers for passing the events from EPC to EPF,
-let's introduce a callback based mechanism where the EPF drivers can
-populate relevant callbacks for EPC events they want to subscribe.
-
-The use of notifiers in kernel is not recommended if there is a real link
-between the sender and receiver, like in this case. Also, the existing
-atomic notifier forces the notification functions to be in atomic context
-while the caller may be in non-atomic context. For instance, the two
-in-kernel users of the notifiers, pcie-qcom and pcie-tegra194, both are
-calling the notifier functions in non-atomic context (from threaded IRQ
-handlers). This creates a sleeping in atomic context issue with the
-existing EPF_TEST driver that calls the EPC APIs that may sleep.
-
-For all these reasons, let's get rid of the notifier chains and use the
-simple callback mechanism for signalling the events from EPC to EPF
-drivers. This preserves the context of the caller and avoids the latency
-of going through a separate interface for triggering the notifications.
-
-As a first step of the transition, the core_init() callback is introduced
-in this commit, that'll replace the existing CORE_INIT notifier used for
-signalling the init complete event from EPC.
-
-During the occurrence of the event, EPC will go over the list of EPF
-drivers attached to it and will call the core_init() callback if available.
+As a part of the transition towards callback mechanism for signalling the
+events from EPC to EPF, let's use the link_up() callback in the place of
+the LINK_UP notifier. This also removes the notifier support completely
+from the PCI endpoint framework.
 
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
- drivers/pci/endpoint/functions/pci-epf-test.c | 13 ++++++-------
- drivers/pci/endpoint/pci-epc-core.c           |  7 ++++++-
- include/linux/pci-epf.h                       | 11 ++++++++++-
- 3 files changed, 22 insertions(+), 9 deletions(-)
+ drivers/pci/endpoint/functions/pci-epf-test.c | 33 ++++++-------------
+ drivers/pci/endpoint/pci-epc-core.c           |  8 +++--
+ include/linux/pci-epc.h                       |  8 -----
+ include/linux/pci-epf.h                       |  8 ++---
+ 4 files changed, 18 insertions(+), 39 deletions(-)
 
 diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c b/drivers/pci/endpoint/functions/pci-epf-test.c
-index d917a9d2be09..069943b57029 100644
+index 069943b57029..37454538c000 100644
 --- a/drivers/pci/endpoint/functions/pci-epf-test.c
 +++ b/drivers/pci/endpoint/functions/pci-epf-test.c
-@@ -731,20 +731,17 @@ static int pci_epf_test_core_init(struct pci_epf *epf)
+@@ -731,30 +731,21 @@ static int pci_epf_test_core_init(struct pci_epf *epf)
  	return 0;
+ }
+ 
+-static const struct pci_epc_event_ops pci_epf_test_event_ops = {
+-	.core_init = pci_epf_test_core_init,
+-};
+-
+-static int pci_epf_test_notifier(struct notifier_block *nb, unsigned long val,
+-				 void *data)
++int pci_epf_test_link_up(struct pci_epf *epf)
+ {
+-	struct pci_epf *epf = container_of(nb, struct pci_epf, nb);
+ 	struct pci_epf_test *epf_test = epf_get_drvdata(epf);
+ 
+-	switch (val) {
+-	case LINK_UP:
+-		queue_delayed_work(kpcitest_workqueue, &epf_test->cmd_handler,
+-				   msecs_to_jiffies(1));
+-		break;
+-
+-	default:
+-		dev_err(&epf->dev, "Invalid EPF test notifier event\n");
+-		return NOTIFY_BAD;
+-	}
++	queue_delayed_work(kpcitest_workqueue, &epf_test->cmd_handler,
++			   msecs_to_jiffies(1));
+ 
+-	return NOTIFY_OK;
++	return 0;
  }
  
 +static const struct pci_epc_event_ops pci_epf_test_event_ops = {
 +	.core_init = pci_epf_test_core_init,
++	.link_up = pci_epf_test_link_up,
 +};
 +
- static int pci_epf_test_notifier(struct notifier_block *nb, unsigned long val,
- 				 void *data)
+ static int pci_epf_test_alloc_space(struct pci_epf *epf)
  {
- 	struct pci_epf *epf = container_of(nb, struct pci_epf, nb);
  	struct pci_epf_test *epf_test = epf_get_drvdata(epf);
--	int ret;
+@@ -881,12 +872,8 @@ static int pci_epf_test_bind(struct pci_epf *epf)
+ 	if (ret)
+ 		epf_test->dma_supported = false;
  
- 	switch (val) {
--	case CORE_INIT:
--		ret = pci_epf_test_core_init(epf);
--		if (ret)
--			return NOTIFY_BAD;
--		break;
--
- 	case LINK_UP:
- 		queue_delayed_work(kpcitest_workqueue, &epf_test->cmd_handler,
- 				   msecs_to_jiffies(1));
-@@ -915,6 +912,8 @@ static int pci_epf_test_probe(struct pci_epf *epf, const struct pci_epf_device_i
+-	if (linkup_notifier || core_init_notifier) {
+-		epf->nb.notifier_call = pci_epf_test_notifier;
+-		pci_epc_register_notifier(epc, &epf->nb);
+-	} else {
++	if (!linkup_notifier && !core_init_notifier)
+ 		queue_work(kpcitest_workqueue, &epf_test->cmd_handler.work);
+-	}
  
- 	INIT_DELAYED_WORK(&epf_test->cmd_handler, pci_epf_test_cmd_handler);
- 
-+	epf->event_ops = &pci_epf_test_event_ops;
-+
- 	epf_set_drvdata(epf, epf_test);
  	return 0;
  }
 diff --git a/drivers/pci/endpoint/pci-epc-core.c b/drivers/pci/endpoint/pci-epc-core.c
-index 3bc9273d0a08..805f3d64f93b 100644
+index 805f3d64f93b..a51ba9f158c3 100644
 --- a/drivers/pci/endpoint/pci-epc-core.c
 +++ b/drivers/pci/endpoint/pci-epc-core.c
-@@ -707,10 +707,15 @@ EXPORT_SYMBOL_GPL(pci_epc_linkup);
+@@ -690,10 +690,15 @@ EXPORT_SYMBOL_GPL(pci_epc_remove_epf);
   */
- void pci_epc_init_notify(struct pci_epc *epc)
+ void pci_epc_linkup(struct pci_epc *epc)
  {
 +	struct pci_epf *epf;
 +
  	if (!epc || IS_ERR(epc))
  		return;
  
--	atomic_notifier_call_chain(&epc->notifier, CORE_INIT, NULL);
+-	atomic_notifier_call_chain(&epc->notifier, LINK_UP, NULL);
 +	list_for_each_entry(epf, &epc->pci_epf, list) {
-+		if (epf->event_ops->core_init)
-+			epf->event_ops->core_init(epf);
++		if (epf->event_ops->link_up)
++			epf->event_ops->link_up(epf);
 +	}
  }
- EXPORT_SYMBOL_GPL(pci_epc_init_notify);
+ EXPORT_SYMBOL_GPL(pci_epc_linkup);
  
+@@ -779,7 +784,6 @@ __pci_epc_create(struct device *dev, const struct pci_epc_ops *ops,
+ 
+ 	mutex_init(&epc->lock);
+ 	INIT_LIST_HEAD(&epc->pci_epf);
+-	ATOMIC_INIT_NOTIFIER_HEAD(&epc->notifier);
+ 
+ 	device_initialize(&epc->dev);
+ 	epc->dev.class = pci_epc_class;
+diff --git a/include/linux/pci-epc.h b/include/linux/pci-epc.h
+index a48778e1a4ee..05604fe0ede0 100644
+--- a/include/linux/pci-epc.h
++++ b/include/linux/pci-epc.h
+@@ -134,7 +134,6 @@ struct pci_epc_mem {
+  * @group: configfs group representing the PCI EPC device
+  * @lock: mutex to protect pci_epc ops
+  * @function_num_map: bitmap to manage physical function number
+- * @notifier: used to notify EPF of any EPC events (like linkup)
+  */
+ struct pci_epc {
+ 	struct device			dev;
+@@ -149,7 +148,6 @@ struct pci_epc {
+ 	/* mutex to protect against concurrent access of EP controller */
+ 	struct mutex			lock;
+ 	unsigned long			function_num_map;
+-	struct atomic_notifier_head	notifier;
+ };
+ 
+ /**
+@@ -192,12 +190,6 @@ static inline void *epc_get_drvdata(struct pci_epc *epc)
+ 	return dev_get_drvdata(&epc->dev);
+ }
+ 
+-static inline int
+-pci_epc_register_notifier(struct pci_epc *epc, struct notifier_block *nb)
+-{
+-	return atomic_notifier_chain_register(&epc->notifier, nb);
+-}
+-
+ struct pci_epc *
+ __devm_pci_epc_create(struct device *dev, const struct pci_epc_ops *ops,
+ 		      struct module *owner);
 diff --git a/include/linux/pci-epf.h b/include/linux/pci-epf.h
-index 0c94cc1513bc..a06f3b4c8bee 100644
+index a06f3b4c8bee..bc613f0df7e3 100644
 --- a/include/linux/pci-epf.h
 +++ b/include/linux/pci-epf.h
-@@ -18,7 +18,6 @@ struct pci_epf;
+@@ -17,10 +17,6 @@
+ struct pci_epf;
  enum pci_epc_interface_type;
  
- enum pci_notify_event {
--	CORE_INIT,
- 	LINK_UP,
- };
- 
-@@ -72,6 +71,14 @@ struct pci_epf_ops {
- 					struct config_group *group);
- };
- 
-+/**
-+ * struct pci_epf_event_ops - Callbacks for capturing the EPC events
-+ * @core_init: Callback for the EPC initialization complete event
-+ */
-+struct pci_epc_event_ops {
-+	int (*core_init)(struct pci_epf *epf);
-+};
-+
+-enum pci_notify_event {
+-	LINK_UP,
+-};
+-
+ enum pci_barno {
+ 	NO_BAR = -1,
+ 	BAR_0,
+@@ -74,9 +70,11 @@ struct pci_epf_ops {
  /**
-  * struct pci_epf_driver - represents the PCI EPF driver
-  * @probe: ops to perform when a new EPF device has been bound to the EPF driver
-@@ -140,6 +147,7 @@ struct pci_epf_bar {
-  * @is_vf: true - virtual function, false - physical function
-  * @vfunction_num_map: bitmap to manage virtual function number
-  * @pci_vepf: list of virtual endpoint functions associated with this function
-+ * @event_ops: Callbacks for capturing the EPC events
+  * struct pci_epf_event_ops - Callbacks for capturing the EPC events
+  * @core_init: Callback for the EPC initialization complete event
++ * @link_up: Callback for the EPC link up event
   */
- struct pci_epf {
- 	struct device		dev;
-@@ -170,6 +178,7 @@ struct pci_epf {
- 	unsigned int		is_vf;
- 	unsigned long		vfunction_num_map;
- 	struct list_head	pci_vepf;
-+	const struct pci_epc_event_ops *event_ops;
+ struct pci_epc_event_ops {
+ 	int (*core_init)(struct pci_epf *epf);
++	int (*link_up)(struct pci_epf *epf);
  };
  
  /**
+@@ -135,7 +133,6 @@ struct pci_epf_bar {
+  * @driver: the EPF driver to which this EPF device is bound
+  * @id: Pointer to the EPF device ID
+  * @list: to add pci_epf as a list of PCI endpoint functions to pci_epc
+- * @nb: notifier block to notify EPF of any EPC events (like linkup)
+  * @lock: mutex to protect pci_epf_ops
+  * @sec_epc: the secondary EPC device to which this EPF device is bound
+  * @sec_epc_list: to add pci_epf as list of PCI endpoint functions to secondary
+@@ -164,7 +161,6 @@ struct pci_epf {
+ 	struct pci_epf_driver	*driver;
+ 	const struct pci_epf_device_id *id;
+ 	struct list_head	list;
+-	struct notifier_block   nb;
+ 	/* mutex to protect against concurrent access of pci_epf_ops */
+ 	struct mutex		lock;
+ 
 -- 
 2.25.1
 

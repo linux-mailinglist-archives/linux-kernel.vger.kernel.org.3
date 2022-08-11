@@ -2,1194 +2,322 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0610858FCF5
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 14:58:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A244F58FD00
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 15:01:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235530AbiHKM6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 08:58:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44408 "EHLO
+        id S235019AbiHKNBP convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 11 Aug 2022 09:01:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235519AbiHKM6U (ORCPT
+        with ESMTP id S234456AbiHKNBM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 08:58:20 -0400
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BB3774373;
-        Thu, 11 Aug 2022 05:58:17 -0700 (PDT)
-X-UUID: ad22046bcf5341d1aeb748352fe62688-20220811
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=MzeKi7+2v6T+y7kLM8FDU3sJ3pD3dyhg+lqpBhn7eA0=;
-        b=JBEPgTq6Gpga7s6rIX9Bj5+Y/TJvuT8QuU3RJDhiz62CmVTWIZfF/FkG/zo3wD4Xxo9CIMIgH3QLrnUdqOT8pf2rR1Ysz3OEJQnAG6cM/V4omOyWcVY/7uvJUdXLnXI4BuYTLcmf9edvAD5JnRaySQ4I8Ig3P/6Wdzwb9nrwGaI=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.9,REQID:6afc49cf-dd1c-4e5c-a3b7-abf6ece69ab0,OB:0,LO
-        B:0,IP:0,URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_
-        Ham,ACTION:release,TS:-5
-X-CID-META: VersionHash:3d8acc9,CLOUDID:0c97649c-da39-4e3b-a854-56c7d2111b46,C
-        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:0,EDM:-3,IP:nil,URL:0,File:nil
-        ,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: ad22046bcf5341d1aeb748352fe62688-20220811
-Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw02.mediatek.com
-        (envelope-from <allen-kh.cheng@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 377202699; Thu, 11 Aug 2022 20:58:15 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
- mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 11 Aug 2022 20:58:13 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Thu, 11 Aug 2022 20:58:13 +0800
-From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-To:     Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        "Chen-Yu Tsai" <wenst@chromium.org>, <hsinyi@chromium.org>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
-Subject: [PATCH v14 1/1] arm64: dts: Add MediaTek MT8186 dts and evaluation board and Makefile
-Date:   Thu, 11 Aug 2022 20:58:05 +0800
-Message-ID: <20220811125805.28577-2-allen-kh.cheng@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20220811125805.28577-1-allen-kh.cheng@mediatek.com>
-References: <20220811125805.28577-1-allen-kh.cheng@mediatek.com>
+        Thu, 11 Aug 2022 09:01:12 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B8B84F1A9
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 06:01:09 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id d6-20020a056e020c0600b002deca741bc2so12483956ile.18
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 06:01:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:to:from:subject:message-id:in-reply-to
+         :date:mime-version:x-gm-message-state:from:to:cc;
+        bh=v+vtANHgtC0uBIDsQ8uCszk3yyXgrodMzwVex7Hqr9w=;
+        b=X9DBeCAYb1B7nuhI04IarYcbz/RRrrKOqjnA8jJTcodC7usBiFNLJ4FSCQP7GX5U2e
+         VaPntcqSych8znMU6yPwyXYdj7ZhyIAZg4NPvkC4wY0Fx+gvs0czVqyeVDiOXBQeUUTC
+         9shXJQvd7kx+771QcS6UHjsiNSCvVT902Ju2C3/XYzvU9y0yop9ChV4eyvpG7AtskLjO
+         8Pv1zI8iHcI3lLLriv9gS6ODToi8eQayV5+Zz1s3qZgpyvIrX3YiyvIw/BhuWtv0u+vI
+         QstfZdtA2IcAbLwONdc2kqIiBuxIQY/sLI76Glwhu3rH4hayHj89fT3ujHWnnbsksFBT
+         Bz+g==
+X-Gm-Message-State: ACgBeo3/9VWpA3JDm9R0h5ON3wM9bR97dXdYDJexPA752RX96ZoKEC2z
+        g7TyXUPDaxXhDkgxk6tavrmh0JmEXebq1ninh3zKe5C3au/f
+X-Google-Smtp-Source: AA6agR4iiK30TbnttctaI0xFNRGr0/OdLSYeUO658b/g7Xtor3QFnCAuLMe2eIbn/9xf6naV41sl4Hebq1F2gI4sahMy9FrmaFgA
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,URIBL_CSS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6638:1387:b0:342:d852:599e with SMTP id
+ w7-20020a056638138700b00342d852599emr11574337jad.281.1660222868474; Thu, 11
+ Aug 2022 06:01:08 -0700 (PDT)
+Date:   Thu, 11 Aug 2022 06:01:08 -0700
+In-Reply-To: <1828ba28d43.27f8b7ca86738.4232033862850200536@siddh.me>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000052d52c05e5f6c20a@google.com>
+Subject: Re: [syzbot] WARNING in ieee80211_ibss_csa_beacon
+From:   syzbot <syzbot+b6c9fe29aefe68e4ad34@syzkaller.appspotmail.com>
+To:     code@siddh.me, davem@davemloft.net, johannes@sipsolutions.net,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add basic chip support for MediaTek MT8186.
+Hello,
 
-Signed-off-by: Allen-KH Cheng <Allen-KH.Cheng@mediatek.com>
----
- arch/arm64/boot/dts/mediatek/Makefile       |   1 +
- arch/arm64/boot/dts/mediatek/mt8186-evb.dts | 228 ++++++
- arch/arm64/boot/dts/mediatek/mt8186.dtsi    | 858 ++++++++++++++++++++
- 3 files changed, 1087 insertions(+)
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8186-evb.dts
- create mode 100644 arch/arm64/boot/dts/mediatek/mt8186.dtsi
+syzbot tried to test the proposed patch but the build/boot failed:
 
-diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
-index af362a085a02..0ec90cb3ef28 100644
---- a/arch/arm64/boot/dts/mediatek/Makefile
-+++ b/arch/arm64/boot/dts/mediatek/Makefile
-@@ -37,6 +37,7 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-kodama-sku32.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-krane-sku0.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-kukui-krane-sku176.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8183-pumpkin.dtb
-+dtb-$(CONFIG_ARCH_MEDIATEK) += mt8186-evb.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8192-asurada-hayato-r1.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8192-asurada-spherion-r0.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8192-evb.dtb
-diff --git a/arch/arm64/boot/dts/mediatek/mt8186-evb.dts b/arch/arm64/boot/dts/mediatek/mt8186-evb.dts
-new file mode 100644
-index 000000000000..55c1682e0b2b
---- /dev/null
-+++ b/arch/arm64/boot/dts/mediatek/mt8186-evb.dts
-@@ -0,0 +1,228 @@
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+/*
-+ * Copyright (C) 2022 MediaTek Inc.
-+ */
-+/dts-v1/;
-+#include "mt8186.dtsi"
-+
-+/ {
-+	model = "MediaTek MT8186 evaluation board";
-+	compatible = "mediatek,mt8186-evb", "mediatek,mt8186";
-+
-+	aliases {
-+		serial0 = &uart0;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:921600n8";
-+	};
-+
-+	memory@40000000 {
-+		device_type = "memory";
-+		reg = <0 0x40000000 0 0x80000000>;
-+	};
-+};
-+
-+&i2c0 {
-+	status = "okay";
-+
-+	clock-frequency = <400000>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c0_pins>;
-+};
-+
-+&i2c1 {
-+	status = "okay";
-+
-+	clock-frequency = <400000>;
-+	i2c-scl-internal-delay-ns = <8000>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c1_pins>;
-+};
-+
-+&i2c2 {
-+	status = "okay";
-+
-+	clock-frequency = <400000>;
-+	i2c-scl-internal-delay-ns = <10000>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c2_pins>;
-+};
-+
-+&i2c3 {
-+	status = "okay";
-+
-+	clock-frequency = <400000>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c3_pins>;
-+};
-+
-+&i2c4 {
-+	status = "okay";
-+
-+	clock-frequency = <400000>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c4_pins>;
-+};
-+
-+&i2c5 {
-+	status = "okay";
-+
-+	clock-frequency = <400000>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c5_pins>;
-+};
-+
-+&i2c6 {
-+	status = "okay";
-+
-+	clock-frequency = <400000>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c6_pins>;
-+};
-+
-+&i2c7 {
-+	status = "okay";
-+
-+	clock-frequency = <400000>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c7_pins>;
-+};
-+
-+&i2c8 {
-+	status = "okay";
-+
-+	clock-frequency = <400000>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c8_pins>;
-+};
-+
-+&i2c9 {
-+	status = "okay";
-+
-+	clock-frequency = <400000>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c9_pins>;
-+};
-+
-+&pio {
-+	i2c0_pins: i2c0-default-pins {
-+		pins-bus {
-+			pinmux = <PINMUX_GPIO128__FUNC_SDA0>,
-+				 <PINMUX_GPIO127__FUNC_SCL0>;
-+			bias-disable;
-+			drive-strength-microamp = <1000>;
-+			input-enable;
-+		};
-+	};
-+
-+	i2c1_pins: i2c1-default-pins {
-+		pins-bus {
-+			pinmux = <PINMUX_GPIO130__FUNC_SDA1>,
-+				 <PINMUX_GPIO129__FUNC_SCL1>;
-+			bias-disable;
-+			drive-strength-microamp = <1000>;
-+			input-enable;
-+		};
-+	};
-+
-+	i2c2_pins: i2c2-default-pins {
-+		pins-bus {
-+			pinmux = <PINMUX_GPIO132__FUNC_SDA2>,
-+				 <PINMUX_GPIO131__FUNC_SCL2>;
-+			bias-disable;
-+			drive-strength-microamp = <1000>;
-+			input-enable;
-+		};
-+	};
-+
-+	i2c3_pins: i2c3-default-pins {
-+		pins-bus {
-+			pinmux = <PINMUX_GPIO134__FUNC_SDA3>,
-+				 <PINMUX_GPIO133__FUNC_SCL3>;
-+			bias-disable;
-+			drive-strength-microamp = <1000>;
-+			input-enable;
-+		};
-+	};
-+
-+	i2c4_pins: i2c4-default-pins {
-+		pins-bus {
-+			pinmux = <PINMUX_GPIO136__FUNC_SDA4>,
-+				 <PINMUX_GPIO135__FUNC_SCL4>;
-+			bias-disable;
-+			drive-strength-microamp = <1000>;
-+			input-enable;
-+		};
-+	};
-+
-+	i2c5_pins: i2c5-default-pins {
-+		pins-bus {
-+			pinmux = <PINMUX_GPIO138__FUNC_SDA5>,
-+				 <PINMUX_GPIO137__FUNC_SCL5>;
-+			bias-disable;
-+			drive-strength-microamp = <1000>;
-+			input-enable;
-+		};
-+	};
-+
-+	i2c6_pins: i2c6-default-pins {
-+		pins-bus {
-+			pinmux = <PINMUX_GPIO140__FUNC_SDA6>,
-+				 <PINMUX_GPIO139__FUNC_SCL6>;
-+			bias-pull-up = <MTK_PULL_SET_RSEL_001>;
-+			drive-strength-microamp = <1000>;
-+			input-enable;
-+		};
-+	};
-+
-+	i2c7_pins: i2c7-default-pins {
-+		pins-bus {
-+			pinmux = <PINMUX_GPIO142__FUNC_SDA7>,
-+				 <PINMUX_GPIO141__FUNC_SCL7>;
-+			bias-disable;
-+			drive-strength-microamp = <1000>;
-+			input-enable;
-+		};
-+	};
-+
-+	i2c8_pins: i2c8-default-pins {
-+		pins-bus {
-+			pinmux = <PINMUX_GPIO144__FUNC_SDA8>,
-+				 <PINMUX_GPIO143__FUNC_SCL8>;
-+			bias-disable;
-+			drive-strength-microamp = <1000>;
-+			input-enable;
-+		};
-+	};
-+
-+	i2c9_pins: i2c9-default-pins {
-+		pins-bus {
-+			pinmux = <PINMUX_GPIO146__FUNC_SDA9>,
-+				 <PINMUX_GPIO145__FUNC_SCL9>;
-+			bias-pull-up = <MTK_PULL_SET_RSEL_001>;
-+			drive-strength-microamp = <1000>;
-+			input-enable;
-+		};
-+	};
-+};
-+
-+&u3phy0 {
-+	status = "okay";
-+};
-+
-+&u3phy1 {
-+	status = "okay";
-+};
-+
-+&uart0 {
-+	status = "okay";
-+};
-+
-+&xhci0 {
-+	status = "okay";
-+};
-+
-+&xhci1 {
-+	status = "okay";
-+};
-diff --git a/arch/arm64/boot/dts/mediatek/mt8186.dtsi b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-new file mode 100644
-index 000000000000..b02832bef44d
---- /dev/null
-+++ b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-@@ -0,0 +1,858 @@
-+// SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+/*
-+ * Copyright (C) 2022 MediaTek Inc.
-+ * Author: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-+ */
-+/dts-v1/;
-+#include <dt-bindings/clock/mt8186-clk.h>
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/pinctrl/mt8186-pinfunc.h>
-+#include <dt-bindings/power/mt8186-power.h>
-+#include <dt-bindings/phy/phy.h>
-+#include <dt-bindings/reset/mt8186-resets.h>
-+
-+/ {
-+	compatible = "mediatek,mt8186";
-+	interrupt-parent = <&gic>;
-+	#address-cells = <2>;
-+	#size-cells = <2>;
-+
-+	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		cpu-map {
-+			cluster0 {
-+				core0 {
-+					cpu = <&cpu0>;
-+				};
-+
-+				core1 {
-+					cpu = <&cpu1>;
-+				};
-+
-+				core2 {
-+					cpu = <&cpu2>;
-+				};
-+
-+				core3 {
-+					cpu = <&cpu3>;
-+				};
-+
-+				core4 {
-+					cpu = <&cpu4>;
-+				};
-+
-+				core5 {
-+					cpu = <&cpu5>;
-+				};
-+			};
-+
-+			cluster1 {
-+				core0 {
-+					cpu = <&cpu6>;
-+				};
-+
-+				core1 {
-+					cpu = <&cpu7>;
-+				};
-+			};
-+		};
-+
-+		cpu0: cpu@0 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a55";
-+			reg = <0x000>;
-+			enable-method = "psci";
-+			clock-frequency = <2000000000>;
-+			capacity-dmips-mhz = <382>;
-+			cpu-idle-states = <&cpu_off_l &cluster_off_l>;
-+			next-level-cache = <&l2_0>;
-+			#cooling-cells = <2>;
-+		};
-+
-+		cpu1: cpu@100 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a55";
-+			reg = <0x100>;
-+			enable-method = "psci";
-+			clock-frequency = <2000000000>;
-+			capacity-dmips-mhz = <382>;
-+			cpu-idle-states = <&cpu_off_l &cluster_off_l>;
-+			next-level-cache = <&l2_0>;
-+			#cooling-cells = <2>;
-+		};
-+
-+		cpu2: cpu@200 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a55";
-+			reg = <0x200>;
-+			enable-method = "psci";
-+			clock-frequency = <2000000000>;
-+			capacity-dmips-mhz = <382>;
-+			cpu-idle-states = <&cpu_off_l &cluster_off_l>;
-+			next-level-cache = <&l2_0>;
-+			#cooling-cells = <2>;
-+		};
-+
-+		cpu3: cpu@300 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a55";
-+			reg = <0x300>;
-+			enable-method = "psci";
-+			clock-frequency = <2000000000>;
-+			capacity-dmips-mhz = <382>;
-+			cpu-idle-states = <&cpu_off_l &cluster_off_l>;
-+			next-level-cache = <&l2_0>;
-+			#cooling-cells = <2>;
-+		};
-+
-+		cpu4: cpu@400 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a55";
-+			reg = <0x400>;
-+			enable-method = "psci";
-+			clock-frequency = <2000000000>;
-+			capacity-dmips-mhz = <382>;
-+			cpu-idle-states = <&cpu_off_l &cluster_off_l>;
-+			next-level-cache = <&l2_0>;
-+			#cooling-cells = <2>;
-+		};
-+
-+		cpu5: cpu@500 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a55";
-+			reg = <0x500>;
-+			enable-method = "psci";
-+			clock-frequency = <2000000000>;
-+			capacity-dmips-mhz = <382>;
-+			cpu-idle-states = <&cpu_off_l &cluster_off_l>;
-+			next-level-cache = <&l2_0>;
-+			#cooling-cells = <2>;
-+		};
-+
-+		cpu6: cpu@600 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a76";
-+			reg = <0x600>;
-+			enable-method = "psci";
-+			clock-frequency = <2050000000>;
-+			capacity-dmips-mhz = <1024>;
-+			cpu-idle-states = <&cpu_off_b &cluster_off_b>;
-+			next-level-cache = <&l2_1>;
-+			#cooling-cells = <2>;
-+		};
-+
-+		cpu7: cpu@700 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a76";
-+			reg = <0x700>;
-+			enable-method = "psci";
-+			clock-frequency = <2050000000>;
-+			capacity-dmips-mhz = <1024>;
-+			cpu-idle-states = <&cpu_off_b &cluster_off_b>;
-+			next-level-cache = <&l2_1>;
-+			#cooling-cells = <2>;
-+		};
-+
-+		idle-states {
-+			entry-method = "psci";
-+
-+			cpu_off_l: cpu-off-l {
-+				compatible = "arm,idle-state";
-+				arm,psci-suspend-param = <0x00010001>;
-+				local-timer-stop;
-+				entry-latency-us = <50>;
-+				exit-latency-us = <100>;
-+				min-residency-us = <1600>;
-+			};
-+
-+			cpu_off_b: cpu-off-b {
-+				compatible = "arm,idle-state";
-+				arm,psci-suspend-param = <0x00010001>;
-+				local-timer-stop;
-+				entry-latency-us = <50>;
-+				exit-latency-us = <100>;
-+				min-residency-us = <1400>;
-+			};
-+
-+			cluster_off_l: cluster-off-l {
-+				compatible = "arm,idle-state";
-+				arm,psci-suspend-param = <0x01010001>;
-+				local-timer-stop;
-+				entry-latency-us = <100>;
-+				exit-latency-us = <250>;
-+				min-residency-us = <2100>;
-+			};
-+
-+			cluster_off_b: cluster-off-b {
-+				compatible = "arm,idle-state";
-+				arm,psci-suspend-param = <0x01010001>;
-+				local-timer-stop;
-+				entry-latency-us = <100>;
-+				exit-latency-us = <250>;
-+				min-residency-us = <1900>;
-+			};
-+		};
-+
-+		l2_0: l2-cache0 {
-+			compatible = "cache";
-+			next-level-cache = <&l3_0>;
-+		};
-+
-+		l2_1: l2-cache1 {
-+			compatible = "cache";
-+			next-level-cache = <&l3_0>;
-+		};
-+
-+		l3_0: l3-cache {
-+			compatible = "cache";
-+		};
-+	};
-+
-+	clk13m: oscillator-13m {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <13000000>;
-+		clock-output-names = "clk13m";
-+	};
-+
-+	clk26m: oscillator-26m {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <26000000>;
-+		clock-output-names = "clk26m";
-+	};
-+
-+	clk32k: oscillator-32k {
-+		compatible = "fixed-clock";
-+		#clock-cells = <0>;
-+		clock-frequency = <32768>;
-+		clock-output-names = "clk32k";
-+	};
-+
-+	pmu-a55 {
-+		compatible = "arm,cortex-a55-pmu";
-+		interrupt-parent = <&gic>;
-+		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH &ppi_cluster0>;
-+	};
-+
-+	pmu-a76 {
-+		compatible = "arm,cortex-a76-pmu";
-+		interrupt-parent = <&gic>;
-+		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_HIGH &ppi_cluster1>;
-+	};
-+
-+	psci {
-+		compatible = "arm,psci-1.0";
-+		method = "smc";
-+	};
-+
-+	timer {
-+		compatible = "arm,armv8-timer";
-+		interrupt-parent = <&gic>;
-+		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_LOW 0>,
-+			     <GIC_PPI 14 IRQ_TYPE_LEVEL_LOW 0>,
-+			     <GIC_PPI 11 IRQ_TYPE_LEVEL_LOW 0>,
-+			     <GIC_PPI 10 IRQ_TYPE_LEVEL_LOW 0>;
-+	};
-+
-+	soc {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		compatible = "simple-bus";
-+		ranges;
-+
-+		gic: interrupt-controller@c000000 {
-+			compatible = "arm,gic-v3";
-+			#interrupt-cells = <4>;
-+			#redistributor-regions = <1>;
-+			interrupt-parent = <&gic>;
-+			interrupt-controller;
-+			reg = <0 0x0c000000 0 0x40000>,
-+			      <0 0x0c040000 0 0x200000>;
-+			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH 0>;
-+
-+			ppi-partitions {
-+				ppi_cluster0: interrupt-partition-0 {
-+					affinity = <&cpu0 &cpu1 &cpu2 &cpu3 &cpu4 &cpu5>;
-+				};
-+
-+				ppi_cluster1: interrupt-partition-1 {
-+					affinity = <&cpu6 &cpu7>;
-+				};
-+			};
-+		};
-+
-+		mcusys: syscon@c53a000 {
-+			compatible = "mediatek,mt8186-mcusys", "syscon";
-+			reg = <0 0xc53a000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		topckgen: syscon@10000000 {
-+			compatible = "mediatek,mt8186-topckgen", "syscon";
-+			reg = <0 0x10000000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		infracfg_ao: syscon@10001000 {
-+			compatible = "mediatek,mt8186-infracfg_ao", "syscon";
-+			reg = <0 0x10001000 0 0x1000>;
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+		};
-+
-+		pericfg: syscon@10003000 {
-+			compatible = "mediatek,mt8186-pericfg", "syscon";
-+			reg = <0 0x10003000 0 0x1000>;
-+		};
-+
-+		pio: pinctrl@10005000 {
-+			compatible = "mediatek,mt8186-pinctrl";
-+			reg = <0 0x10005000 0 0x1000>,
-+			      <0 0x10002000 0 0x0200>,
-+			      <0 0x10002200 0 0x0200>,
-+			      <0 0x10002400 0 0x0200>,
-+			      <0 0x10002600 0 0x0200>,
-+			      <0 0x10002a00 0 0x0200>,
-+			      <0 0x10002c00 0 0x0200>,
-+			      <0 0x1000b000 0 0x1000>;
-+			reg-names = "iocfg0", "iocfg_bm", "iocfg_bl", "iocfg_br",
-+				    "iocfg_lm", "iocfg_rb", "iocfg_tl", "eint";
-+			gpio-controller;
-+			#gpio-cells = <2>;
-+			gpio-ranges = <&pio 0 0 185>;
-+			interrupt-controller;
-+			interrupts = <GIC_SPI 186 IRQ_TYPE_LEVEL_HIGH 0>;
-+			#interrupt-cells = <2>;
-+		};
-+
-+		watchdog: watchdog@10007000 {
-+			compatible = "mediatek,mt8186-wdt",
-+				     "mediatek,mt6589-wdt";
-+			mediatek,disable-extrst;
-+			reg = <0 0x10007000 0 0x1000>;
-+			#reset-cells = <1>;
-+		};
-+
-+		apmixedsys: syscon@1000c000 {
-+			compatible = "mediatek,mt8186-apmixedsys", "syscon";
-+			reg = <0 0x1000c000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		pwrap: pwrap@1000d000 {
-+			compatible = "mediatek,mt8186-pwrap", "syscon";
-+			reg = <0 0x1000d000 0 0x1000>;
-+			reg-names = "pwrap";
-+			interrupts = <GIC_SPI 194 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&infracfg_ao CLK_INFRA_AO_PMIC_AP>,
-+				 <&infracfg_ao CLK_INFRA_AO_PMIC_TMR>;
-+			clock-names = "spi", "wrap";
-+		};
-+
-+		systimer: timer@10017000 {
-+			compatible = "mediatek,mt8186-timer",
-+				     "mediatek,mt6765-timer";
-+			reg = <0 0x10017000 0 0x1000>;
-+			interrupts = <GIC_SPI 207 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&clk13m>;
-+		};
-+
-+		scp: scp@10500000 {
-+			compatible = "mediatek,mt8186-scp";
-+			reg = <0 0x10500000 0 0x40000>,
-+			      <0 0x105c0000 0 0x19080>;
-+			reg-names = "sram", "cfg";
-+			interrupts = <GIC_SPI 205 IRQ_TYPE_LEVEL_HIGH 0>;
-+		};
-+
-+		nor_flash: spi@11000000 {
-+			compatible = "mediatek,mt8186-nor";
-+			reg = <0 0x11000000 0 0x1000>;
-+			clocks = <&topckgen CLK_TOP_SPINOR>,
-+				 <&infracfg_ao CLK_INFRA_AO_SPINOR>,
-+				 <&infracfg_ao CLK_INFRA_AO_FLASHIF_133M>,
-+				 <&infracfg_ao CLK_INFRA_AO_FLASHIF_66M>;
-+			clock-names = "spi", "sf", "axi", "axi_s";
-+			assigned-clocks = <&topckgen CLK_TOP_SPINOR>;
-+			assigned-clock-parents = <&topckgen CLK_TOP_UNIVPLL_D3_D8>;
-+			interrupts = <GIC_SPI 293 IRQ_TYPE_LEVEL_HIGH 0>;
-+			status = "disabled";
-+		};
-+
-+		auxadc: adc@11001000 {
-+			compatible = "mediatek,mt8186-auxadc", "mediatek,mt8173-auxadc";
-+			reg = <0 0x11001000 0 0x1000>;
-+			#io-channel-cells = <1>;
-+			clocks = <&infracfg_ao CLK_INFRA_AO_AUXADC>;
-+			clock-names = "main";
-+		};
-+
-+		uart0: serial@11002000 {
-+			compatible = "mediatek,mt8186-uart",
-+				     "mediatek,mt6577-uart";
-+			reg = <0 0x11002000 0 0x1000>;
-+			interrupts = <GIC_SPI 112 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&clk26m>, <&infracfg_ao CLK_INFRA_AO_UART0>;
-+			clock-names = "baud", "bus";
-+			status = "disabled";
-+		};
-+
-+		uart1: serial@11003000 {
-+			compatible = "mediatek,mt8186-uart",
-+				     "mediatek,mt6577-uart";
-+			reg = <0 0x11003000 0 0x1000>;
-+			interrupts = <GIC_SPI 113 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&clk26m>, <&infracfg_ao CLK_INFRA_AO_UART1>;
-+			clock-names = "baud", "bus";
-+			status = "disabled";
-+		};
-+
-+		i2c0: i2c@11007000 {
-+			compatible = "mediatek,mt8186-i2c";
-+			reg = <0 0x11007000 0 0x1000>,
-+			      <0 0x10200100 0 0x100>;
-+			interrupts = <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&imp_iic_wrap CLK_IMP_IIC_WRAP_AP_CLOCK_I2C0>,
-+				 <&infracfg_ao CLK_INFRA_AO_AP_DMA>;
-+			clock-names = "main", "dma";
-+			clock-div = <1>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		i2c1: i2c@11008000 {
-+			compatible = "mediatek,mt8186-i2c";
-+			reg = <0 0x11008000 0 0x1000>,
-+			      <0 0x10200200 0 0x100>;
-+			interrupts = <GIC_SPI 106 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&imp_iic_wrap CLK_IMP_IIC_WRAP_AP_CLOCK_I2C1>,
-+				 <&infracfg_ao CLK_INFRA_AO_AP_DMA>;
-+			clock-names = "main", "dma";
-+			clock-div = <1>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		i2c2: i2c@11009000 {
-+			compatible = "mediatek,mt8186-i2c";
-+			reg = <0 0x11009000 0 0x1000>,
-+			      <0 0x10200300 0 0x180>;
-+			interrupts = <GIC_SPI 107 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&imp_iic_wrap CLK_IMP_IIC_WRAP_AP_CLOCK_I2C2>,
-+				 <&infracfg_ao CLK_INFRA_AO_AP_DMA>;
-+			clock-names = "main", "dma";
-+			clock-div = <1>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		i2c3: i2c@1100f000 {
-+			compatible = "mediatek,mt8186-i2c";
-+			reg = <0 0x1100f000 0 0x1000>,
-+			      <0 0x10200480 0 0x100>;
-+			interrupts = <GIC_SPI 108 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&imp_iic_wrap CLK_IMP_IIC_WRAP_AP_CLOCK_I2C3>,
-+				 <&infracfg_ao CLK_INFRA_AO_AP_DMA>;
-+			clock-names = "main", "dma";
-+			clock-div = <1>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		i2c4: i2c@11011000 {
-+			compatible = "mediatek,mt8186-i2c";
-+			reg = <0 0x11011000 0 0x1000>,
-+			      <0 0x10200580 0 0x180>;
-+			interrupts = <GIC_SPI 109 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&imp_iic_wrap CLK_IMP_IIC_WRAP_AP_CLOCK_I2C4>,
-+				 <&infracfg_ao CLK_INFRA_AO_AP_DMA>;
-+			clock-names = "main", "dma";
-+			clock-div = <1>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		i2c5: i2c@11016000 {
-+			compatible = "mediatek,mt8186-i2c";
-+			reg = <0 0x11016000 0 0x1000>,
-+			      <0 0x10200700 0 0x100>;
-+			interrupts = <GIC_SPI 354 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&imp_iic_wrap CLK_IMP_IIC_WRAP_AP_CLOCK_I2C5>,
-+				 <&infracfg_ao CLK_INFRA_AO_AP_DMA>;
-+			clock-names = "main", "dma";
-+			clock-div = <1>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		i2c6: i2c@1100d000 {
-+			compatible = "mediatek,mt8186-i2c";
-+			reg = <0 0x1100d000 0 0x1000>,
-+			      <0 0x10200800 0 0x100>;
-+			interrupts = <GIC_SPI 355 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&imp_iic_wrap CLK_IMP_IIC_WRAP_AP_CLOCK_I2C6>,
-+				 <&infracfg_ao CLK_INFRA_AO_AP_DMA>;
-+			clock-names = "main", "dma";
-+			clock-div = <1>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		i2c7: i2c@11004000 {
-+			compatible = "mediatek,mt8186-i2c";
-+			reg = <0 0x11004000 0 0x1000>,
-+			      <0 0x10200900 0 0x180>;
-+			interrupts = <GIC_SPI 110 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&imp_iic_wrap CLK_IMP_IIC_WRAP_AP_CLOCK_I2C7>,
-+				 <&infracfg_ao CLK_INFRA_AO_AP_DMA>;
-+			clock-names = "main", "dma";
-+			clock-div = <1>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		i2c8: i2c@11005000 {
-+			compatible = "mediatek,mt8186-i2c";
-+			reg = <0 0x11005000 0 0x1000>,
-+			      <0 0x10200A80 0 0x180>;
-+			interrupts = <GIC_SPI 111 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&imp_iic_wrap CLK_IMP_IIC_WRAP_AP_CLOCK_I2C8>,
-+				 <&infracfg_ao CLK_INFRA_AO_AP_DMA>;
-+			clock-names = "main", "dma";
-+			clock-div = <1>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		spi0: spi@1100a000 {
-+			compatible = "mediatek,mt8186-spi", "mediatek,mt6765-spi";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0 0x1100a000 0 0x1000>;
-+			interrupts = <GIC_SPI 138 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&topckgen CLK_TOP_MAINPLL_D5>,
-+				 <&topckgen CLK_TOP_SPI>,
-+				 <&infracfg_ao CLK_INFRA_AO_SPI0>;
-+			clock-names = "parent-clk", "sel-clk", "spi-clk";
-+			status = "disabled";
-+		};
-+
-+		pwm0: pwm@1100e000 {
-+			compatible = "mediatek,mt8186-disp-pwm", "mediatek,mt8183-disp-pwm";
-+			reg = <0 0x1100e000 0 0x1000>;
-+			interrupts = <GIC_SPI 143 IRQ_TYPE_LEVEL_HIGH 0>;
-+			#pwm-cells = <2>;
-+			clocks = <&topckgen CLK_TOP_DISP_PWM>,
-+				 <&infracfg_ao CLK_INFRA_AO_DISP_PWM>;
-+			clock-names = "main", "mm";
-+			status = "disabled";
-+		};
-+
-+		spi1: spi@11010000 {
-+			compatible = "mediatek,mt8186-spi", "mediatek,mt6765-spi";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0 0x11010000 0 0x1000>;
-+			interrupts = <GIC_SPI 139 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&topckgen CLK_TOP_MAINPLL_D5>,
-+				 <&topckgen CLK_TOP_SPI>,
-+				 <&infracfg_ao CLK_INFRA_AO_SPI1>;
-+			clock-names = "parent-clk", "sel-clk", "spi-clk";
-+			status = "disabled";
-+		};
-+
-+		spi2: spi@11012000 {
-+			compatible = "mediatek,mt8186-spi", "mediatek,mt6765-spi";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0 0x11012000 0 0x1000>;
-+			interrupts = <GIC_SPI 145 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&topckgen CLK_TOP_MAINPLL_D5>,
-+				 <&topckgen CLK_TOP_SPI>,
-+				 <&infracfg_ao CLK_INFRA_AO_SPI2>;
-+			clock-names = "parent-clk", "sel-clk", "spi-clk";
-+			status = "disabled";
-+		};
-+
-+		spi3: spi@11013000 {
-+			compatible = "mediatek,mt8186-spi", "mediatek,mt6765-spi";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0 0x11013000 0 0x1000>;
-+			interrupts = <GIC_SPI 146 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&topckgen CLK_TOP_MAINPLL_D5>,
-+				 <&topckgen CLK_TOP_SPI>,
-+				 <&infracfg_ao CLK_INFRA_AO_SPI3>;
-+			clock-names = "parent-clk", "sel-clk", "spi-clk";
-+			status = "disabled";
-+		};
-+
-+		spi4: spi@11014000 {
-+			compatible = "mediatek,mt8186-spi", "mediatek,mt6765-spi";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0 0x11014000 0 0x1000>;
-+			interrupts = <GIC_SPI 116 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&topckgen CLK_TOP_MAINPLL_D5>,
-+				 <&topckgen CLK_TOP_SPI>,
-+				 <&infracfg_ao CLK_INFRA_AO_SPI4>;
-+			clock-names = "parent-clk", "sel-clk", "spi-clk";
-+			status = "disabled";
-+		};
-+
-+		spi5: spi@11015000 {
-+			compatible = "mediatek,mt8186-spi", "mediatek,mt6765-spi";
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			reg = <0 0x11015000 0 0x1000>;
-+			interrupts = <GIC_SPI 117 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&topckgen CLK_TOP_MAINPLL_D5>,
-+				 <&topckgen CLK_TOP_SPI>,
-+				 <&infracfg_ao CLK_INFRA_AO_SPI5>;
-+			clock-names = "parent-clk", "sel-clk", "spi-clk";
-+			status = "disabled";
-+		};
-+
-+		imp_iic_wrap: clock-controller@11017000 {
-+			compatible = "mediatek,mt8186-imp_iic_wrap";
-+			reg = <0 0x11017000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		uart2: serial@11018000 {
-+			compatible = "mediatek,mt8186-uart",
-+				     "mediatek,mt6577-uart";
-+			reg = <0 0x11018000 0 0x1000>;
-+			interrupts = <GIC_SPI 246 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&clk26m>, <&infracfg_ao CLK_INFRA_AO_UART2>;
-+			clock-names = "baud", "bus";
-+			status = "disabled";
-+		};
-+
-+		i2c9: i2c@11019000 {
-+			compatible = "mediatek,mt8186-i2c";
-+			reg = <0 0x11019000 0 0x1000>,
-+			      <0 0x10200c00 0 0x180>;
-+			interrupts = <GIC_SPI 356 IRQ_TYPE_LEVEL_HIGH 0>;
-+			clocks = <&imp_iic_wrap CLK_IMP_IIC_WRAP_AP_CLOCK_I2C9>,
-+				 <&infracfg_ao CLK_INFRA_AO_AP_DMA>;
-+			clock-names = "main", "dma";
-+			clock-div = <1>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			status = "disabled";
-+		};
-+
-+		xhci0: usb@11200000 {
-+			compatible = "mediatek,mt8186-xhci",
-+				     "mediatek,mtk-xhci";
-+			reg = <0 0x11200000 0 0x1000>,
-+			      <0 0x11203e00 0 0x0100>;
-+			reg-names = "mac", "ippc";
-+			interrupts = <GIC_SPI 294 IRQ_TYPE_LEVEL_HIGH 0>;
-+			phys = <&u2port0 PHY_TYPE_USB2>;
-+			clocks = <&topckgen CLK_TOP_USB_TOP>,
-+				 <&infracfg_ao CLK_INFRA_AO_SSUSB_TOP_REF>,
-+				 <&infracfg_ao CLK_INFRA_AO_SSUSB_TOP_HCLK>,
-+				 <&infracfg_ao CLK_INFRA_AO_ICUSB>,
-+				 <&infracfg_ao CLK_INFRA_AO_SSUSB_TOP_XHCI>;
-+			clock-names = "sys_ck", "ref_ck", "mcu_ck", "dma_ck", "xhci_ck";
-+			mediatek,syscon-wakeup = <&pericfg 0x420 2>;
-+			wakeup-source;
-+			status = "disabled";
-+		};
-+
-+		mmc0: mmc@11230000 {
-+			compatible = "mediatek,mt8186-mmc",
-+				     "mediatek,mt8183-mmc";
-+			reg = <0 0x11230000 0 0x1000>,
-+			      <0 0x11cd0000 0 0x1000>;
-+			clocks = <&topckgen CLK_TOP_MSDC50_0>,
-+				 <&infracfg_ao CLK_INFRA_AO_MSDC0>,
-+				 <&infracfg_ao CLK_INFRA_AO_MSDC0_SRC>;
-+			clock-names = "source", "hclk", "source_cg";
-+			interrupts = <GIC_SPI 100 IRQ_TYPE_LEVEL_HIGH 0>;
-+			assigned-clocks = <&topckgen CLK_TOP_MSDC50_0>;
-+			assigned-clock-parents = <&apmixedsys CLK_APMIXED_MSDCPLL>;
-+			status = "disabled";
-+		};
-+
-+		mmc1: mmc@11240000 {
-+			compatible = "mediatek,mt8186-mmc",
-+				     "mediatek,mt8183-mmc";
-+			reg = <0 0x11240000 0 0x1000>,
-+			      <0 0x11c90000 0 0x1000>;
-+			clocks = <&topckgen CLK_TOP_MSDC30_1>,
-+				 <&infracfg_ao CLK_INFRA_AO_MSDC1>,
-+				 <&infracfg_ao CLK_INFRA_AO_MSDC1_SRC>;
-+			clock-names = "source", "hclk", "source_cg";
-+			interrupts = <GIC_SPI 101 IRQ_TYPE_LEVEL_HIGH 0>;
-+			assigned-clocks = <&topckgen CLK_TOP_MSDC30_1>;
-+			assigned-clock-parents = <&topckgen CLK_TOP_MSDCPLL_D2>;
-+			status = "disabled";
-+		};
-+
-+		xhci1: usb@11280000 {
-+			compatible = "mediatek,mt8186-xhci",
-+				     "mediatek,mtk-xhci";
-+			reg = <0 0x11280000 0 0x1000>,
-+			      <0 0x11283e00 0 0x0100>;
-+			reg-names = "mac", "ippc";
-+			interrupts = <GIC_SPI 324 IRQ_TYPE_LEVEL_HIGH 0>;
-+			phys = <&u2port1 PHY_TYPE_USB2>,
-+			       <&u3port1 PHY_TYPE_USB3>;
-+			clocks = <&infracfg_ao CLK_INFRA_AO_SSUSB_TOP_P1_SYS>,
-+				 <&infracfg_ao CLK_INFRA_AO_SSUSB_TOP_P1_REF>,
-+				 <&infracfg_ao CLK_INFRA_AO_SSUSB_TOP_P1_HCLK>,
-+				 <&clk26m>,
-+				 <&infracfg_ao CLK_INFRA_AO_SSUSB_TOP_P1_XHCI>;
-+			clock-names = "sys_ck", "ref_ck", "mcu_ck", "dma_ck","xhci_ck";
-+			mediatek,syscon-wakeup = <&pericfg 0x424 2>;
-+			wakeup-source;
-+			status = "disabled";
-+		};
-+
-+		u3phy0: t-phy@11c80000 {
-+			compatible = "mediatek,mt8186-tphy",
-+				     "mediatek,generic-tphy-v2";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0x0 0x11c80000 0x1000>;
-+			status = "disabled";
-+
-+			u2port1: usb-phy@0 {
-+				reg = <0x0 0x700>;
-+				clocks = <&clk26m>;
-+				clock-names = "ref";
-+				#phy-cells = <1>;
-+			};
-+
-+			u3port1: usb-phy@700 {
-+				reg = <0x700 0x900>;
-+				clocks = <&clk26m>;
-+				clock-names = "ref";
-+				#phy-cells = <1>;
-+			};
-+		};
-+
-+		u3phy1: t-phy@11ca0000 {
-+			compatible = "mediatek,mt8186-tphy",
-+				     "mediatek,generic-tphy-v2";
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0x0 0x11ca0000 0x1000>;
-+			status = "disabled";
-+
-+			u2port0: usb-phy@0 {
-+				reg = <0x0 0x700>;
-+				clocks = <&clk26m>;
-+				clock-names = "ref";
-+				#phy-cells = <1>;
-+				mediatek,discth = <0x8>;
-+			};
-+		};
-+
-+		efuse: efuse@11cb0000 {
-+			compatible = "mediatek,mt8186-efuse", "mediatek,efuse";
-+			reg = <0 0x11cb0000 0 0x1000>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+		};
-+
-+		mipi_tx0: dsi-phy@11cc0000 {
-+			compatible = "mediatek,mt8183-mipi-tx";
-+			reg = <0 0x11cc0000 0 0x1000>;
-+			clocks = <&clk26m>;
-+			#clock-cells = <0>;
-+			#phy-cells = <0>;
-+			clock-output-names = "mipi_tx0_pll";
-+			status = "disabled";
-+		};
-+
-+		mfgsys: clock-controller@13000000 {
-+			compatible = "mediatek,mt8186-mfgsys";
-+			reg = <0 0x13000000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		mmsys: syscon@14000000 {
-+			compatible = "mediatek,mt8186-mmsys", "syscon";
-+			reg = <0 0x14000000 0 0x1000>;
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
-+		};
-+
-+		wpesys: clock-controller@14020000 {
-+			compatible = "mediatek,mt8186-wpesys";
-+			reg = <0 0x14020000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		imgsys1: clock-controller@15020000 {
-+			compatible = "mediatek,mt8186-imgsys1";
-+			reg = <0 0x15020000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		imgsys2: clock-controller@15820000 {
-+			compatible = "mediatek,mt8186-imgsys2";
-+			reg = <0 0x15820000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		vdecsys: clock-controller@1602f000 {
-+			compatible = "mediatek,mt8186-vdecsys";
-+			reg = <0 0x1602f000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		vencsys: clock-controller@17000000 {
-+			compatible = "mediatek,mt8186-vencsys";
-+			reg = <0 0x17000000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		camsys: clock-controller@1a000000 {
-+			compatible = "mediatek,mt8186-camsys";
-+			reg = <0 0x1a000000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		camsys_rawa: clock-controller@1a04f000 {
-+			compatible = "mediatek,mt8186-camsys_rawa";
-+			reg = <0 0x1a04f000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		camsys_rawb: clock-controller@1a06f000 {
-+			compatible = "mediatek,mt8186-camsys_rawb";
-+			reg = <0 0x1a06f000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		mdpsys: clock-controller@1b000000 {
-+			compatible = "mediatek,mt8186-mdpsys";
-+			reg = <0 0x1b000000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+
-+		ipesys: clock-controller@1c000000 {
-+			compatible = "mediatek,mt8186-ipesys";
-+			reg = <0 0x1c000000 0 0x1000>;
-+			#clock-cells = <1>;
-+		};
-+	};
-+};
--- 
-2.18.0
+ active interface with an up link
+[   50.263416][ T3638] bond0: (slave bond_slave_1): Enslaving as an active interface with an up link
+[   50.285671][ T3638] team0: Port device team_slave_0 added
+[   50.292792][ T3638] team0: Port device team_slave_1 added
+[   50.310141][ T3638] batman_adv: batadv0: Adding interface: batadv_slave_0
+[   50.317225][ T3638] batman_adv: batadv0: The MTU of interface batadv_slave_0 is too small (1500) to handle the transport of batman-adv packets. Packets going over this interface will be fragmented on layer2 which could impact the performance. Setting the MTU to 1560 would solve the problem.
+[   50.343683][ T3638] batman_adv: batadv0: Not using interface batadv_slave_0 (retrying later): interface not active
+[   50.356731][ T3638] batman_adv: batadv0: Adding interface: batadv_slave_1
+[   50.364022][ T3638] batman_adv: batadv0: The MTU of interface batadv_slave_1 is too small (1500) to handle the transport of batman-adv packets. Packets going over this interface will be fragmented on layer2 which could impact the performance. Setting the MTU to 1560 would solve the problem.
+[   50.390221][ T3638] batman_adv: batadv0: Not using interface batadv_slave_1 (retrying later): interface not active
+[   50.416765][ T3638] device hsr_slave_0 entered promiscuous mode
+[   50.423796][ T3638] device hsr_slave_1 entered promiscuous mode
+[   50.500816][ T3638] netdevsim netdevsim0 netdevsim0: renamed from eth0
+[   50.511693][ T3638] netdevsim netdevsim0 netdevsim1: renamed from eth1
+[   50.521112][ T3638] netdevsim netdevsim0 netdevsim2: renamed from eth2
+[   50.530709][ T3638] netdevsim netdevsim0 netdevsim3: renamed from eth3
+[   50.551898][ T3638] bridge0: port 2(bridge_slave_1) entered blocking state
+[   50.559135][ T3638] bridge0: port 2(bridge_slave_1) entered forwarding state
+[   50.566985][ T3638] bridge0: port 1(bridge_slave_0) entered blocking state
+[   50.574182][ T3638] bridge0: port 1(bridge_slave_0) entered forwarding state
+[   50.620324][ T3638] 8021q: adding VLAN 0 to HW filter on device bond0
+[   50.634712][   T14] IPv6: ADDRCONF(NETDEV_CHANGE): veth0: link becomes ready
+[   50.644519][   T14] bridge0: port 1(bridge_slave_0) entered disabled state
+[   50.653256][   T14] bridge0: port 2(bridge_slave_1) entered disabled state
+[   50.661875][   T14] IPv6: ADDRCONF(NETDEV_CHANGE): bond0: link becomes ready
+[   50.675639][ T3638] 8021q: adding VLAN 0 to HW filter on device team0
+[   50.686683][   T14] IPv6: ADDRCONF(NETDEV_CHANGE): bridge_slave_0: link becomes ready
+[   50.696048][   T14] bridge0: port 1(bridge_slave_0) entered blocking state
+[   50.703313][   T14] bridge0: port 1(bridge_slave_0) entered forwarding state
+[   50.716587][  T143] IPv6: ADDRCONF(NETDEV_CHANGE): bridge_slave_1: link becomes ready
+[   50.726078][  T143] bridge0: port 2(bridge_slave_1) entered blocking state
+[   50.733163][  T143] bridge0: port 2(bridge_slave_1) entered forwarding state
+[   50.751866][   T14] IPv6: ADDRCONF(NETDEV_CHANGE): team_slave_0: link becomes ready
+[   50.766290][   T14] IPv6: ADDRCONF(NETDEV_CHANGE): team0: link becomes ready
+[   50.775160][   T14] IPv6: ADDRCONF(NETDEV_CHANGE): team_slave_1: link becomes ready
+[   50.787909][ T3650] IPv6: ADDRCONF(NETDEV_CHANGE): hsr_slave_0: link becomes ready
+[   50.800188][ T3638] hsr0: Slave B (hsr_slave_1) is not up; please bring it up to get a fully working HSR network
+[   50.812187][ T3638] IPv6: ADDRCONF(NETDEV_CHANGE): hsr0: link becomes ready
+[   50.821509][   T14] IPv6: ADDRCONF(NETDEV_CHANGE): hsr_slave_1: link becomes ready
+[   50.845246][ T3638] 8021q: adding VLAN 0 to HW filter on device batadv0
+[   50.853191][    T6] IPv6: ADDRCONF(NETDEV_CHANGE): vxcan0: link becomes ready
+[   50.861297][    T6] IPv6: ADDRCONF(NETDEV_CHANGE): vxcan1: link becomes ready
+[   50.976504][  T143] IPv6: ADDRCONF(NETDEV_CHANGE): veth0_virt_wifi: link becomes ready
+[   50.990346][    T6] IPv6: ADDRCONF(NETDEV_CHANGE): veth0_vlan: link becomes ready
+[   51.001733][    T6] IPv6: ADDRCONF(NETDEV_CHANGE): vlan0: link becomes ready
+[   51.009609][    T6] IPv6: ADDRCONF(NETDEV_CHANGE): vlan1: link becomes ready
+[   51.018756][ T3638] device veth0_vlan entered promiscuous mode
+[   51.033199][ T3638] device veth1_vlan entered promiscuous mode
+[   51.053599][ T3650] IPv6: ADDRCONF(NETDEV_CHANGE): macvlan0: link becomes ready
+[   51.063508][ T3650] IPv6: ADDRCONF(NETDEV_CHANGE): macvlan1: link becomes ready
+[   51.072555][ T3650] IPv6: ADDRCONF(NETDEV_CHANGE): veth0_macvtap: link becomes ready
+[   51.084230][ T3638] device veth0_macvtap entered promiscuous mode
+[   51.093816][ T3638] device veth1_macvtap entered promiscuous mode
+[   51.116192][ T3638] batman_adv: batadv0: Interface activated: batadv_slave_0
+[   51.124686][    T6] IPv6: ADDRCONF(NETDEV_CHANGE): veth0_to_batadv: link becomes ready
+[   51.136685][    T6] IPv6: ADDRCONF(NETDEV_CHANGE): macvtap0: link becomes ready
+[   51.149935][ T3638] batman_adv: batadv0: Interface activated: batadv_slave_1
+[   51.158614][ T3650] IPv6: ADDRCONF(NETDEV_CHANGE): batadv_slave_1: link becomes ready
+[   51.168462][ T3650] IPv6: ADDRCONF(NETDEV_CHANGE): veth1_to_batadv: link becomes ready
+[   51.182170][ T3638] netdevsim netdevsim0 netdevsim0: set [1, 0] type 2 family 0 port 6081 - 0
+[   51.192643][ T3638] netdevsim netdevsim0 netdevsim1: set [1, 0] type 2 family 0 port 6081 - 0
+[   51.202462][ T3638] netdevsim netdevsim0 netdevsim2: set [1, 0] type 2 family 0 port 6081 - 0
+[   51.212143][ T3638] netdevsim netdevsim0 netdevsim3: set [1, 0] type 2 family 0 port 6081 - 0
+[   51.299438][   T29] wlan0: Created IBSS using preconfigured BSSID 50:50:50:50:50:50
+[   51.310951][   T29] wlan0: Creating new IBSS network, BSSID 50:50:50:50:50:50
+[   51.322462][  T143] IPv6: ADDRCONF(NETDEV_CHANGE): wlan0: link becomes ready
+[   51.335671][ T2494] wlan1: Created IBSS using preconfigured BSSID 50:50:50:50:50:50
+[   51.344772][ T2494] wlan1: Creating new IBSS network, BSSID 50:50:50:50:50:50
+[   51.353568][  T143] IPv6: ADDRCONF(NETDEV_CHANGE): wlan1: link becomes ready
+2022/08/11 13:00:39 building call list...
+[   51.514478][ T3638] ------------[ cut here ]------------
+[   51.520140][ T3638] ODEBUG: assert_init not available (active state 0) object type: timer_list hint: 0x0
+[   51.530079][ T3638] WARNING: CPU: 0 PID: 3638 at lib/debugobjects.c:505 debug_object_assert_init+0x1fa/0x250
+[   51.540259][ T3638] Modules linked in:
+[   51.544336][ T3638] CPU: 0 PID: 3638 Comm: syz-executor.0 Not tainted 5.19.0-syzkaller #0
+[   51.552766][ T3638] Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+[   51.563627][ T3638] RIP: 0010:debug_object_assert_init+0x1fa/0x250
+[   51.570150][ T3638] Code: e8 eb 83 d1 fd 4c 8b 45 00 48 c7 c7 60 9f 6a 8a 48 c7 c6 60 9c 6a 8a 48 c7 c2 00 a1 6a 8a 31 c9 49 89 d9 31 c0 e8 66 73 4e fd <0f> 0b ff 05 9a 20 8a 09 48 83 c5 38 48 89 e8 48 c1 e8 03 42 80 3c
+[   51.590417][ T3638] RSP: 0018:ffffc90003b0f8c8 EFLAGS: 00010046
+[   51.596584][ T3638] RAX: af76cc1e655f6400 RBX: 0000000000000000 RCX: ffff888014741d40
+[   51.604841][ T3638] RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
+[   51.612846][ T3638] RBP: ffffffff8a0fc700 R08: ffffffff8165f59d R09: ffffed1017384f14
+[   51.621025][ T3638] R10: ffffed1017384f14 R11: 1ffff11017384f13 R12: dffffc0000000000
+[   51.629090][ T3638] R13: ffff88807f3d09d0 R14: 0000000000000011 R15: ffffffff90029988
+[   51.637103][ T3638] FS:  0000000000000000(0000) GS:ffff8880b9c00000(0000) knlGS:0000000000000000
+[   51.646131][ T3638] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   51.652815][ T3638] CR2: 000000c00060a001 CR3: 0000000020940000 CR4: 00000000003506f0
+[   51.660973][ T3638] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+[   51.668940][ T3638] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+[   51.677688][ T3638] Call Trace:
+[   51.680962][ T3638]  <TASK>
+[   51.683992][ T3638]  del_timer+0x3d/0x2d0
+[   51.688212][ T3638]  ? try_to_grab_pending+0xb1/0x700
+[   51.693412][ T3638]  try_to_grab_pending+0xbf/0x700
+[   51.698619][ T3638]  __cancel_work_timer+0x81/0x5b0
+[   51.703983][ T3638]  ? mgmt_send_event_skb+0x2ee/0x4e0
+[   51.709401][ T3638]  ? kmem_cache_free+0x95/0x1d0
+[   51.714437][ T3638]  ? mgmt_send_event_skb+0x2ee/0x4e0
+[   51.719724][ T3638]  mgmt_index_removed+0x244/0x330
+[   51.725464][ T3638]  hci_unregister_dev+0x28e/0x460
+[   51.730623][ T3638]  ? vhci_open+0x360/0x360
+[   51.735209][ T3638]  vhci_release+0x7f/0xd0
+[   51.739538][ T3638]  __fput+0x3b9/0x820
+[   51.743800][ T3638]  task_work_run+0x146/0x1c0
+[   51.748501][ T3638]  do_exit+0x4ed/0x1f30
+[   51.752680][ T3638]  ? rcu_read_lock_sched_held+0x41/0xb0
+[   51.758365][ T3638]  do_group_exit+0x23b/0x2f0
+[   51.762963][ T3638]  ? _raw_spin_unlock_irq+0x1f/0x40
+[   51.768653][ T3638]  ? lockdep_hardirqs_on+0x8d/0x130
+[   51.774245][ T3638]  get_signal+0x16a3/0x1700
+[   51.779122][ T3638]  arch_do_signal_or_restart+0x29/0x5d0
+[   51.784691][ T3638]  exit_to_user_mode_loop+0x74/0x150
+[   51.790147][ T3638]  exit_to_user_mode_prepare+0xb2/0x140
+[   51.796127][ T3638]  syscall_exit_to_user_mode+0x26/0x60
+[   51.802152][ T3638]  do_syscall_64+0x49/0x90
+[   51.806773][ T3638]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[   51.812939][ T3638] RIP: 0033:0x4191dc
+[   51.817111][ T3638] Code: Unable to access opcode bytes at RIP 0x4191b2.
+[   51.823960][ T3638] RSP: 002b:00007fffcb50dcd0 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+[   51.832477][ T3638] RAX: fffffffffffffe00 RBX: 00007fffcb50dd90 RCX: 00000000004191dc
+[   51.840566][ T3638] RDX: 0000000000000050 RSI: 0000000000568020 RDI: 00000000000000f9
+[   51.848559][ T3638] RBP: 0000000000000003 R08: 0000000000000000 R09: 0079746972756365
+[   51.857099][ T3638] R10: 00000000005436a0 R11: 0000000000000246 R12: 0000000000000032
+[   51.865523][ T3638] R13: 000000000000c8b1 R14: 0000000000000000 R15: 00007fffcb50ddd0
+[   51.873863][ T3638]  </TASK>
+[   51.876995][ T3638] Kernel panic - not syncing: panic_on_warn set ...
+[   51.883575][ T3638] CPU: 0 PID: 3638 Comm: syz-executor.0 Not tainted 5.19.0-syzkaller #0
+[   51.892096][ T3638] Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+[   51.902161][ T3638] Call Trace:
+[   51.905527][ T3638]  <TASK>
+[   51.908545][ T3638]  dump_stack_lvl+0x131/0x1c8
+[   51.913322][ T3638]  panic+0x26b/0x693
+[   51.917497][ T3638]  ? __warn+0x131/0x220
+[   51.921826][ T3638]  ? debug_object_assert_init+0x1fa/0x250
+[   51.927674][ T3638]  __warn+0x1fa/0x220
+[   51.931700][ T3638]  ? debug_object_assert_init+0x1fa/0x250
+[   51.937520][ T3638]  report_bug+0x1b3/0x2d0
+[   51.941878][ T3638]  handle_bug+0x3d/0x70
+[   51.946174][ T3638]  exc_invalid_op+0x16/0x40
+[   51.950780][ T3638]  asm_exc_invalid_op+0x16/0x20
+[   51.955734][ T3638] RIP: 0010:debug_object_assert_init+0x1fa/0x250
+[   51.962102][ T3638] Code: e8 eb 83 d1 fd 4c 8b 45 00 48 c7 c7 60 9f 6a 8a 48 c7 c6 60 9c 6a 8a 48 c7 c2 00 a1 6a 8a 31 c9 49 89 d9 31 c0 e8 66 73 4e fd <0f> 0b ff 05 9a 20 8a 09 48 83 c5 38 48 89 e8 48 c1 e8 03 42 80 3c
+[   51.981793][ T3638] RSP: 0018:ffffc90003b0f8c8 EFLAGS: 00010046
+[   51.988057][ T3638] RAX: af76cc1e655f6400 RBX: 0000000000000000 RCX: ffff888014741d40
+[   51.996245][ T3638] RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
+[   52.005054][ T3638] RBP: ffffffff8a0fc700 R08: ffffffff8165f59d R09: ffffed1017384f14
+[   52.013065][ T3638] R10: ffffed1017384f14 R11: 1ffff11017384f13 R12: dffffc0000000000
+[   52.021767][ T3638] R13: ffff88807f3d09d0 R14: 0000000000000011 R15: ffffffff90029988
+[   52.031524][ T3638]  ? __wake_up_klogd+0xcd/0x100
+[   52.036840][ T3638]  ? debug_object_assert_init+0x1fa/0x250
+[   52.042873][ T3638]  del_timer+0x3d/0x2d0
+[   52.047348][ T3638]  ? try_to_grab_pending+0xb1/0x700
+[   52.052749][ T3638]  try_to_grab_pending+0xbf/0x700
+[   52.057800][ T3638]  __cancel_work_timer+0x81/0x5b0
+[   52.062831][ T3638]  ? mgmt_send_event_skb+0x2ee/0x4e0
+[   52.068345][ T3638]  ? kmem_cache_free+0x95/0x1d0
+[   52.073224][ T3638]  ? mgmt_send_event_skb+0x2ee/0x4e0
+[   52.078681][ T3638]  mgmt_index_removed+0x244/0x330
+[   52.083977][ T3638]  hci_unregister_dev+0x28e/0x460
+[   52.089128][ T3638]  ? vhci_open+0x360/0x360
+[   52.093621][ T3638]  vhci_release+0x7f/0xd0
+[   52.097961][ T3638]  __fput+0x3b9/0x820
+[   52.102128][ T3638]  task_work_run+0x146/0x1c0
+[   52.106746][ T3638]  do_exit+0x4ed/0x1f30
+[   52.110908][ T3638]  ? rcu_read_lock_sched_held+0x41/0xb0
+[   52.116673][ T3638]  do_group_exit+0x23b/0x2f0
+[   52.121452][ T3638]  ? _raw_spin_unlock_irq+0x1f/0x40
+[   52.126661][ T3638]  ? lockdep_hardirqs_on+0x8d/0x130
+[   52.131858][ T3638]  get_signal+0x16a3/0x1700
+[   52.136804][ T3638]  arch_do_signal_or_restart+0x29/0x5d0
+[   52.142556][ T3638]  exit_to_user_mode_loop+0x74/0x150
+[   52.147840][ T3638]  exit_to_user_mode_prepare+0xb2/0x140
+[   52.153731][ T3638]  syscall_exit_to_user_mode+0x26/0x60
+[   52.159196][ T3638]  do_syscall_64+0x49/0x90
+[   52.163644][ T3638]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[   52.169629][ T3638] RIP: 0033:0x4191dc
+[   52.173526][ T3638] Code: Unable to access opcode bytes at RIP 0x4191b2.
+[   52.180458][ T3638] RSP: 002b:00007fffcb50dcd0 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
+[   52.189133][ T3638] RAX: fffffffffffffe00 RBX: 00007fffcb50dd90 RCX: 00000000004191dc
+[   52.197189][ T3638] RDX: 0000000000000050 RSI: 0000000000568020 RDI: 00000000000000f9
+[   52.205251][ T3638] RBP: 0000000000000003 R08: 0000000000000000 R09: 0079746972756365
+[   52.213269][ T3638] R10: 00000000005436a0 R11: 0000000000000246 R12: 0000000000000032
+[   52.221332][ T3638] R13: 000000000000c8b1 R14: 0000000000000000 R15: 00007fffcb50ddd0
+[   52.229405][ T3638]  </TASK>
+[   52.232869][ T3638] Kernel Offset: disabled
+[   52.237327][ T3638] Rebooting in 86400 seconds..
 
+
+syzkaller build log:
+go env (err=<nil>)
+GO111MODULE="auto"
+GOARCH="amd64"
+GOBIN=""
+GOCACHE="/syzkaller/.cache/go-build"
+GOENV="/syzkaller/.config/go/env"
+GOEXE=""
+GOEXPERIMENT=""
+GOFLAGS=""
+GOHOSTARCH="amd64"
+GOHOSTOS="linux"
+GOINSECURE=""
+GOMODCACHE="/syzkaller/jobs/linux/gopath/pkg/mod"
+GONOPROXY=""
+GONOSUMDB=""
+GOOS="linux"
+GOPATH="/syzkaller/jobs/linux/gopath"
+GOPRIVATE=""
+GOPROXY="https://proxy.golang.org,direct"
+GOROOT="/usr/local/go"
+GOSUMDB="sum.golang.org"
+GOTMPDIR=""
+GOTOOLDIR="/usr/local/go/pkg/tool/linux_amd64"
+GOVCS=""
+GOVERSION="go1.17"
+GCCGO="gccgo"
+AR="ar"
+CC="gcc"
+CXX="g++"
+CGO_ENABLED="1"
+GOMOD="/syzkaller/jobs/linux/gopath/src/github.com/google/syzkaller/go.mod"
+CGO_CFLAGS="-g -O2"
+CGO_CPPFLAGS=""
+CGO_CXXFLAGS="-g -O2"
+CGO_FFLAGS="-g -O2"
+CGO_LDFLAGS="-g -O2"
+PKG_CONFIG="pkg-config"
+GOGCCFLAGS="-fPIC -m64 -pthread -fmessage-length=0 -fdebug-prefix-map=/tmp/go-build1977670166=/tmp/go-build -gno-record-gcc-switches"
+
+git status (err=<nil>)
+HEAD detached at 607e3baf1
+nothing to commit, working tree clean
+
+
+go list -f '{{.Stale}}' ./sys/syz-sysgen | grep -q false || go install ./sys/syz-sysgen
+make .descriptions
+bin/syz-sysgen
+touch .descriptions
+GOOS=linux GOARCH=amd64 go build "-ldflags=-s -w -X github.com/google/syzkaller/prog.GitRevision=607e3baf1c25928040d05fc22eff6fce7edd709e -X 'github.com/google/syzkaller/prog.gitRevisionDate=20210324-183421'" "-tags=syz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-fuzzer github.com/google/syzkaller/syz-fuzzer
+GOOS=linux GOARCH=amd64 go build "-ldflags=-s -w -X github.com/google/syzkaller/prog.GitRevision=607e3baf1c25928040d05fc22eff6fce7edd709e -X 'github.com/google/syzkaller/prog.gitRevisionDate=20210324-183421'" "-tags=syz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-execprog github.com/google/syzkaller/tools/syz-execprog
+GOOS=linux GOARCH=amd64 go build "-ldflags=-s -w -X github.com/google/syzkaller/prog.GitRevision=607e3baf1c25928040d05fc22eff6fce7edd709e -X 'github.com/google/syzkaller/prog.gitRevisionDate=20210324-183421'" "-tags=syz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-stress github.com/google/syzkaller/tools/syz-stress
+mkdir -p ./bin/linux_amd64
+gcc -o ./bin/linux_amd64/syz-executor executor/executor.cc \
+	-m64 -O2 -pthread -Wall -Werror -Wparentheses -Wunused-const-variable -Wframe-larger-than=16384 -static -fpermissive -w -DGOOS_linux=1 -DGOARCH_amd64=1 \
+	-DHOSTGOOS_linux=1 -DGIT_REVISION=\"607e3baf1c25928040d05fc22eff6fce7edd709e\"
+
+
+Error text is too large and was truncated, full error text is at:
+https://syzkaller.appspot.com/x/error.txt?x=13730f25080000
+
+
+Tested on:
+
+commit:         64737995 wifi: mac80211: Don't finalize CSA in IBSS mo..
+git tree:       https://github.com/siddhpant/linux.git warning_ibss_csa_beacon
+kernel config:  https://syzkaller.appspot.com/x/.config?x=9b770cb261c0c061
+dashboard link: https://syzkaller.appspot.com/bug?extid=b6c9fe29aefe68e4ad34
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Note: no patches were applied.

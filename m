@@ -2,182 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0AAD58FE19
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 16:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6928F58FE1E
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 16:12:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234535AbiHKOLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 10:11:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56928 "EHLO
+        id S235025AbiHKOMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 10:12:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234066AbiHKOL0 (ORCPT
+        with ESMTP id S235102AbiHKOMn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 10:11:26 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B577C5C9FF
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 07:11:25 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 90DE15CD6C;
-        Thu, 11 Aug 2022 14:11:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1660227083; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KD4jaSHGbAyRBzJRJqOn66507StRwvghrEfKEXzhkyI=;
-        b=qIpDXvEDbdPdn8WS3gwp4TYDIrwruTgaw9qlNiLtIfC62IeGVg0tE1IGtSULet4YXEHGmk
-        ZPV403+CKrQYSuOwshPTlBqo/6NcDS/NIHRgM7SYfH6tII/LQ8NFWFvPJl80v5Q7ULlmV2
-        IuFUSIQOiYkqqd2uFpoEne+7/1kWm6Y=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 450E11342A;
-        Thu, 11 Aug 2022 14:11:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id /8juDQsO9WITegAAMHmgww
-        (envelope-from <mhocko@suse.com>); Thu, 11 Aug 2022 14:11:23 +0000
-Date:   Thu, 11 Aug 2022 16:11:21 +0200
-From:   Michal Hocko <mhocko@suse.com>
-To:     Abel Wu <wuyun.abel@bytedance.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Muchun Song <songmuchun@bytedance.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Wei Yang <richard.weiyang@linux.alibaba.com>
-Subject: Re: [PATCH v2] mm/mempolicy: fix lock contention on mems_allowed
-Message-ID: <YvUOCTlk7HSgJkdY@dhcp22.suse.cz>
-References: <20220811124157.74888-1-wuyun.abel@bytedance.com>
- <YvUM7KaJaY+xnN2Y@dhcp22.suse.cz>
+        Thu, 11 Aug 2022 10:12:43 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 996CE64FD
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 07:12:42 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id l21so7961355ljj.2
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 07:12:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=Fy9PTke51Zg9523WNK0IhcOTzgepLlEhCDidUwNqgkc=;
+        b=P95w+mFAwgJ0FxxXxzex66rQi6nyYIcEZJb2oYfGMSDpipqZAT0uLiwWDeD787QhM3
+         KroYLUjytW1C9lXHIPVrP7YaPGllx695Qb4Trl32HZWcbW6ZbD9dcBBdjGCA+b5+5imc
+         5Ao4r//YZVPdXrb4nQf1MWnvkTsFCvVBCkueiXtnB1XeC+/nI96TxdVQmaT25CRrCRy3
+         Min1eLP45HkjmHH0lqRcBgFIhEPpiK60Iah0ya92rmjnXMJhZoIn0Nh+FwpOCAVX75lS
+         QawDS5rhhX1aEOOV4ZzhcGhQwZtJMzK0zCqwTMy0RnHQJLq//f1izcx2AYFp/Qfwvr46
+         WVhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=Fy9PTke51Zg9523WNK0IhcOTzgepLlEhCDidUwNqgkc=;
+        b=xItUg9qv1FlQPU7mmIilLi2xi5YCjfAsv6cygExR7e3uxUINmoeFe2qK4gMXZ2XrfL
+         UfMzG5BTteNHuUvjoGD8sJ5DUhRq3XLfBLtsy7m03KumqwnjLJPHlF3orzHuZPMjxg/D
+         m0NMkUgDuQGdY7u8rhp18FSvr9CQI6uRBD/QjNLk5TI5uUN2M6m7zEweezSfexbYU1wm
+         1xiG03q79McFw2ZXSJXRuwXs7o/7A5/DdWj5TtoHhZM/CgIBrIvk/0Qp1F1/pWsZmiJz
+         6AhyEooS7m6XLEr1im3KXqqQnFTcwSJ3sCO4AjJdHoudWOZu6mj1dxPBfcmLIaMY+1r6
+         TrbQ==
+X-Gm-Message-State: ACgBeo22KVlVYMQ8MWEa9GuzKJhO2b/r49fqFObCVieM4t8hES0lTn7o
+        WhYVv6cjj/pChdL/X8zMGUPDuU6IhqsEA0UJ
+X-Google-Smtp-Source: AA6agR6MmknBLMsVUHGH9/LrrAYp8zz2C+2v5BuMQmzCUIrbx148w42aUH1UDSV9iibiYHLOFLnd0Q==
+X-Received: by 2002:a2e:be88:0:b0:25f:e9a8:44b8 with SMTP id a8-20020a2ebe88000000b0025fe9a844b8mr4932199ljr.92.1660227160351;
+        Thu, 11 Aug 2022 07:12:40 -0700 (PDT)
+Received: from [192.168.1.39] ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id g2-20020a19ac02000000b0048b2cde8c08sm712098lfc.244.2022.08.11.07.12.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Aug 2022 07:12:39 -0700 (PDT)
+Message-ID: <3cae9d60-4012-1dfd-abd9-4d0b9379e6bb@linaro.org>
+Date:   Thu, 11 Aug 2022 17:12:38 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YvUM7KaJaY+xnN2Y@dhcp22.suse.cz>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 1/2] dt-bindings: power: supply: Add Richtek RT9471
+ battery charger
+Content-Language: en-US
+To:     cy_huang <u0084500@gmail.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, sre@kernel.org
+Cc:     alina_yu@richtek.com, cy_huang@richtek.com, alinayu829@gmail.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1660225318-4063-1-git-send-email-u0084500@gmail.com>
+ <1660225318-4063-2-git-send-email-u0084500@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <1660225318-4063-2-git-send-email-u0084500@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-fix the lkml address (fat fingers, sorry)
+On 11/08/2022 16:41, cy_huang wrote:
+> From: ChiYuan Huang <cy_huang@richtek.com>
+> 
+> Add bindings for the Richtek RT9471 I2C controlled battery charger.
+> 
 
-On Thu 11-08-22 16:06:37, Michal Hocko wrote:
-> [Cc Wei Yang who is author of 78b132e9bae9]
-> 
-> On Thu 11-08-22 20:41:57, Abel Wu wrote:
-> > The mems_allowed field can be modified by other tasks, so it isn't
-> > safe to access it with alloc_lock unlocked even in the current
-> > process context.
-> > 
-> > Say there are two tasks: A from cpusetA is performing set_mempolicy(2),
-> > and B is changing cpusetA's cpuset.mems:
-> > 
-> >   A (set_mempolicy)		B (echo xx > cpuset.mems)
-> >   -------------------------------------------------------
-> >   pol = mpol_new();
-> > 				update_tasks_nodemask(cpusetA) {
-> > 				  foreach t in cpusetA {
-> > 				    cpuset_change_task_nodemask(t) {
-> >   mpol_set_nodemask(pol) {
-> > 				      task_lock(t); // t could be A
-> >     new = f(A->mems_allowed);
-> > 				      update t->mems_allowed;
-> >     pol.create(pol, new);
-> > 				      task_unlock(t);
-> >   }
-> > 				    }
-> > 				  }
-> > 				}
-> >   task_lock(A);
-> >   A->mempolicy = pol;
-> >   task_unlock(A);
-> > 
-> > In this case A's pol->nodes is computed by old mems_allowed, and could
-> > be inconsistent with A's new mems_allowed.
-> 
-> Just to clarify. With an unfortunate timing and those two nodemasks
-> overlap the end user effect could be a premature OOM because some nodes
-> wouldn't be considered, right?
-> 
-> > While it is different when replacing vmas' policy: the pol->nodes is
-> > gone wild only when current_cpuset_is_being_rebound():
-> > 
-> >   A (mbind)			B (echo xx > cpuset.mems)
-> >   -------------------------------------------------------
-> >   pol = mpol_new();
-> >   mmap_write_lock(A->mm);
-> > 				cpuset_being_rebound = cpusetA;
-> > 				update_tasks_nodemask(cpusetA) {
-> > 				  foreach t in cpusetA {
-> > 				    cpuset_change_task_nodemask(t) {
-> >   mpol_set_nodemask(pol) {
-> > 				      task_lock(t); // t could be A
-> >     mask = f(A->mems_allowed);
-> > 				      update t->mems_allowed;
-> >     pol.create(pol, mask);
-> > 				      task_unlock(t);
-> >   }
-> > 				    }
-> >   foreach v in A->mm {
-> >     if (cpuset_being_rebound == cpusetA)
-> >       pol.rebind(pol, cpuset.mems);
-> >     v->vma_policy = pol;
-> >   }
-> >   mmap_write_unlock(A->mm);
-> > 				    mmap_write_lock(t->mm);
-> > 				    mpol_rebind_mm(t->mm);
-> > 				    mmap_write_unlock(t->mm);
-> > 				  }
-> > 				}
-> > 				cpuset_being_rebound = NULL;
-> > 
-> > In this case, the cpuset.mems, which has already done updating, is
-> > finally used for calculating pol->nodes, rather than A->mems_allowed.
-> > So it is OK to call mpol_set_nodemask() with alloc_lock unlocked when
-> > doing mbind(2).
-> > 
-> > Fixes: 78b132e9bae9 ("mm/mempolicy: remove or narrow the lock on current")
-> > Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
-> 
-> The fix looks correct.
-> 
-> > ---
-> >  mm/mempolicy.c | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/mm/mempolicy.c b/mm/mempolicy.c
-> > index d39b01fd52fe..61e4e6f5cfe8 100644
-> > --- a/mm/mempolicy.c
-> > +++ b/mm/mempolicy.c
-> > @@ -855,12 +855,14 @@ static long do_set_mempolicy(unsigned short mode, unsigned short flags,
-> >  		goto out;
-> >  	}
-> >  
-> > +	task_lock(current);
-> >  	ret = mpol_set_nodemask(new, nodes, scratch);
-> >  	if (ret) {
-> > +		task_unlock(current);
-> >  		mpol_put(new);
-> >  		goto out;
-> >  	}
-> > -	task_lock(current);
-> > +
-> >  	old = current->mempolicy;
-> >  	current->mempolicy = new;
-> >  	if (new && new->mode == MPOL_INTERLEAVE)
-> > -- 
-> > 2.31.1
-> 
-> -- 
-> Michal Hocko
-> SUSE Labs
+Thank you for your patch. There is something to discuss/improve.
 
--- 
-Michal Hocko
-SUSE Labs
+> +properties:
+> +  compatible:
+> +    const: richtek,rt9471
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  ceb-gpios:
+> +    maxItems: 1
+
+This looks not standard, so please provide a description.
+
+> +
+> +  wakeup-source: true
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  interrupt-controller: true
+> +
+> +  "#interrupt-cells":
+> +    const: 1
+
+Why a charger driver is a interrupt-controller?
+
+> +
+> +  usb-otg-vbus-regulator:
+> +    type: object
+> +    unevaluatedProperties: false
+> +    $ref: /schemas/regulator/regulator.yaml#
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - wakeup-source
+> +  - interrupts
+> +  - interrupt-controller
+> +  - "#interrupt-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c {
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      charger@53 {
+> +        compatible = "richtek,rt9471";
+> +        reg = <0x53>;
+> +        ceb-gpios = <&gpio26 1 0>;
+
+Isn't the last value a GPIO flag? If yes, use appropriate define.
+
+
+
+Best regards,
+Krzysztof

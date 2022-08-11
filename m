@@ -2,143 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD3BD58FB94
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 13:46:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEE2D58FB75
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 13:37:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235028AbiHKLqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 07:46:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51238 "EHLO
+        id S234767AbiHKLhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 07:37:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234420AbiHKLqV (ORCPT
+        with ESMTP id S234503AbiHKLhS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 07:46:21 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D23C61DB4
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 04:46:19 -0700 (PDT)
-Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20220811114617epoutp0437147186639a6fb50921eda908a93bb7~KR9Fva6Xm1124911249epoutp04W
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 11:46:17 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20220811114617epoutp0437147186639a6fb50921eda908a93bb7~KR9Fva6Xm1124911249epoutp04W
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1660218377;
-        bh=rB/gvBVWvLIu7HTWugyowvJ5OV0wFMrOhW9GykTAGio=;
-        h=From:To:Cc:Subject:Date:References:From;
-        b=kFS0oCoD1ksZ0slYKJntqgqjCc0D0elmzTRCs8PEKamLaGvWm5JbJxUVrPvZz/Ul1
-         uElMII5ghgsEPwxg0H0S1a8mdwWdfFiMRlPbScjOltm71Zq28xvCM7vZtRw5vutFxJ
-         oGSMvMha37n3AWpePQ+reA/dvSGqDSOPA4vUruPI=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-        20220811114616epcas5p20e860f87a13af8c89701ec6adc6df663~KR9FGbST72919329193epcas5p25;
-        Thu, 11 Aug 2022 11:46:16 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.177]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4M3Q4Q6zByz4x9Pq; Thu, 11 Aug
-        2022 11:46:14 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-        epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        AD.E0.09494.60CE4F26; Thu, 11 Aug 2022 20:46:14 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220811114614epcas5p29046e326acc8d13824479504e80a0d49~KR9Ch5Z822876028760epcas5p27;
-        Thu, 11 Aug 2022 11:46:14 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220811114614epsmtrp21b83be63e967a1317ab7235713d4ab3b~KR9ChF2911552215522epsmtrp2a;
-        Thu, 11 Aug 2022 11:46:14 +0000 (GMT)
-X-AuditID: b6c32a4a-201ff70000012516-a8-62f4ec06ca77
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-        7F.EF.08905.50CE4F26; Thu, 11 Aug 2022 20:46:13 +0900 (KST)
-Received: from Jaguar.sa.corp.samsungelectronics.net (unknown
-        [107.109.115.6]) by epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20220811114612epsmtip133ef77525e3f653d6a0b4fbbe5ff0d4b~KR9BFqO4C3069330693epsmtip1N;
-        Thu, 11 Aug 2022 11:46:12 +0000 (GMT)
-From:   Alim Akhtar <alim.akhtar@samsung.com>
-To:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-Cc:     krzysztof.kozlowski+dt@linaro.org, avri.altman@wdc.com,
-        bvanassche@acm.org, martin.petersen@oracle.com,
-        chanho61.park@samsung.com, linux-samsung-soc@vger.kernel.org,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Subject: [PATCH] scsi: ufs: host: ufs-exynos: staticize fsd_ufs_drvs
-Date:   Thu, 11 Aug 2022 17:05:50 +0530
-Message-Id: <20220811113550.31914-1-alim.akhtar@samsung.com>
-X-Mailer: git-send-email 2.17.1
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrDKsWRmVeSWpSXmKPExsWy7bCmhi7bmy9JBotuGlk8mLeNzeLlz6ts
-        FtM+/GS2uLxf26LvxUNmi02Pr7FaXN41h81ixvl9TBbd13ewWSw//o/Jgcvj8hVvjzvX9rB5
-        bF5S7/Hx6S0Wj74tqxg9Pm+S82g/0M0UwB6VbZORmpiSWqSQmpecn5KZl26r5B0c7xxvamZg
-        qGtoaWGupJCXmJtqq+TiE6DrlpkDdJySQlliTilQKCCxuFhJ386mKL+0JFUhI7+4xFYptSAl
-        p8CkQK84Mbe4NC9dLy+1xMrQwMDIFKgwITvj+7mNbAXrOSre9LSyNjB+YOti5OSQEDCReDPz
-        FVMXIxeHkMBuRokVXdcZIZxPjBKnHjyCcr4xSrz9spQFpmXN9sXsEIm9jBLXJu1mg3CamSQa
-        zlxgAqliE9CWuDt9C5gtIpAicXX/T7AlzAKXGSX2zbkOlhAWcJHYsvcA0A4ODhYBVYmWm6Ug
-        YV4BG4kH13qhtslLrN5wgBmkV0LgHLvEjyk9jBAJF4llk65C2cISr45vYYewpSQ+v9vLBjJT
-        QsBDYtEfKYhwhsTb5euhyu0lDlyZwwJSwiygKbF+lz5ImFmAT6L39xMmiE5eiY42IYhqVYnm
-        d1ehrpGWmNjdzQphe0js/QARFxKIldj5eTbLBEaZWQhDFzAyrmKUTC0ozk1PLTYtMMpLLYfH
-        TXJ+7iZGcDLT8trB+PDBB71DjEwcjIcYJTiYlUR4yxZ9ThLiTUmsrEotyo8vKs1JLT7EaAoM
-        pInMUqLJ+cB0mlcSb2hiaWBiZmZmYmlsZqgkzut1dVOSkEB6YklqdmpqQWoRTB8TB6dUA9Pa
-        kM/buzSElOVqliRuyNwVcXDLXv5Da/auf998wzHJWvYK8/7H734e+7Xrir5bxvVE9om83U9r
-        /5YKLdlzP2/OuilPD3H/2P+G5eCJc0m2V8wiGvp8JjzPrri0759eWnLC9Q4rh29mE686rmDP
-        iAqSK86UaBR+ef7ILhEWtrXpXAwJ8udeyj8wOhU6R3unXnbe31+v4u8te2+q5sG4ysvU0WHP
-        yc+WqudZmHftDVoxibfuld373c3h1oJs+Ze0pfyb7e/Z5L2oWS3W8jF78jmFYzGdPBoCMyv3
-        C/+6WH5smseTE73lLjbLflol3ZlsIT/lyKTLL82e1TM+futygu1s3J09JindjOuCb+d3Xdig
-        xFKckWioxVxUnAgAGWTPOe8DAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprCLMWRmVeSWpSXmKPExsWy7bCSnC7rmy9JBj9XWlg8mLeNzeLlz6ts
-        FtM+/GS2uLxf26LvxUNmi02Pr7FaXN41h81ixvl9TBbd13ewWSw//o/Jgcvj8hVvjzvX9rB5
-        bF5S7/Hx6S0Wj74tqxg9Pm+S82g/0M0UwB7FZZOSmpNZllqkb5fAlfH93Ea2gvUcFW96Wlkb
-        GD+wdTFyckgImEis2b6YvYuRi0NIYDejxO6WK8wQCWmJ6xsnsEPYwhIr/z2HKmpkkli+eT0T
-        SIJNQFvi7vQtQDYHh4hAmsS3kyogNcwCtxkl1n34BLZBWMBFYsveA4wgNSwCqhItN0tBwrwC
-        NhIPrvWyQMyXl1i94QDzBEaeBYwMqxglUwuKc9Nziw0LDPNSy/WKE3OLS/PS9ZLzczcxggNO
-        S3MH4/ZVH/QOMTJxMB5ilOBgVhLhLVv0OUmINyWxsiq1KD++qDQntfgQozQHi5I474Wuk/FC
-        AumJJanZqakFqUUwWSYOTqkGpiZ5g2Ut/ns2vG3K8rqmsfeooOwJRRVlsetvX6kdf3CwQ3/X
-        1QvTsy3fGCzmuOg9c5nwQwMGnwwXjz8zi+/+j7br628uZ14hvXiSkkdBo0TPYlkDYakIj+3/
-        /bgveXeefbW4mJ17lsmkvjC7G3ePbOM7nfZM3mUbn1bVtNLrhpWCJ5UuzV++p5RTiftBB+dU
-        38wF9ws/nt32c82023MVdh380HNER3ryYcapbb0dx6WeLWP1mbL7e0OLLnfEVbsGRk1LyyPH
-        3S9nOspsnm+VHlbR6WfzaVmo4fWMFa5ex434vYW4Pzs/e2NkeOrY1VnTywIZZki1PfrXeurw
-        5sx/hlM4lGvVNHef23hk3SPbY0osxRmJhlrMRcWJAFjAtuenAgAA
-X-CMS-MailID: 20220811114614epcas5p29046e326acc8d13824479504e80a0d49
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20220811114614epcas5p29046e326acc8d13824479504e80a0d49
-References: <CGME20220811114614epcas5p29046e326acc8d13824479504e80a0d49@epcas5p2.samsung.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 11 Aug 2022 07:37:18 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F111C26106;
+        Thu, 11 Aug 2022 04:37:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9BA63B82008;
+        Thu, 11 Aug 2022 11:37:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4386C433C1;
+        Thu, 11 Aug 2022 11:37:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660217834;
+        bh=AK8+sZtlfOUITl/D+Su+QtLER2LO+RnNFH2qVl9R8NU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=LzjmWFi+2gNemjVX6l8Bqa8qCPc3lzksc+mMA1vuTOMVu8CfeRkvaNhh3OyG9YJPG
+         KhaI5AGGEiGFLFMIst4Bz/n18F4o+kkplJvxERFyAnLtm7BbWiMmSUVZLYU1x5D6mf
+         svNTmST2kewc8jLXAwgP1kZfaJVi/McY+7b9+0js=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 5.18.17
+Date:   Thu, 11 Aug 2022 13:37:10 +0200
+Message-Id: <166021783012854@kroah.com>
+X-Mailer: git-send-email 2.37.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-struct fsd_ufs_drvs is not used outside this file, so made it static.
-This fixes sparse warning:
+I'm announcing the release of the 5.18.17 kernel.
 
-drivers/ufs/host/ufs-exynos.c:1721:28: sparse: sparse:
-symbol 'fsd_ufs_drvs' was not declared. Should it be static?
+All users of the 5.18 kernel series must upgrade.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: 216f74e8059a ("scsi: ufs: host: ufs-exynos: Add support for FSD UFS HCI")
-Signed-off-by: Alim Akhtar <alim.akhtar@samsung.com>
----
- drivers/ufs/host/ufs-exynos.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The updated 5.18.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.18.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
 
-diff --git a/drivers/ufs/host/ufs-exynos.c b/drivers/ufs/host/ufs-exynos.c
-index eced97538082..6cef19118e07 100644
---- a/drivers/ufs/host/ufs-exynos.c
-+++ b/drivers/ufs/host/ufs-exynos.c
-@@ -1711,7 +1711,7 @@ static struct exynos_ufs_uic_attr fsd_uic_attr = {
- 	.pa_dbg_option_suite		= 0x2E820183,
- };
- 
--struct exynos_ufs_drv_data fsd_ufs_drvs = {
-+static struct exynos_ufs_drv_data fsd_ufs_drvs = {
- 	.uic_attr               = &fsd_uic_attr,
- 	.quirks                 = UFSHCD_QUIRK_PRDT_BYTE_GRAN |
- 				  UFSHCI_QUIRK_BROKEN_REQ_LIST_CLR |
--- 
-2.25.1
+thanks,
+
+greg k-h
+
+------------
+
+ Documentation/admin-guide/hw-vuln/spectre.rst                 |    8 
+ Documentation/devicetree/bindings/net/broadcom-bluetooth.yaml |    1 
+ Makefile                                                      |    2 
+ arch/arm64/crypto/poly1305-glue.c                             |    2 
+ arch/arm64/include/asm/kernel-pgtable.h                       |    4 
+ arch/arm64/kernel/head.S                                      |    2 
+ arch/x86/Kconfig                                              |    8 
+ arch/x86/include/asm/cpufeatures.h                            |    2 
+ arch/x86/include/asm/kvm_host.h                               |    3 
+ arch/x86/include/asm/msr-index.h                              |    4 
+ arch/x86/include/asm/nospec-branch.h                          |   21 ++
+ arch/x86/kernel/cpu/bugs.c                                    |   86 +++++++---
+ arch/x86/kernel/cpu/common.c                                  |   12 +
+ arch/x86/kvm/mmu/tdp_iter.c                                   |    9 +
+ arch/x86/kvm/mmu/tdp_iter.h                                   |    1 
+ arch/x86/kvm/mmu/tdp_mmu.c                                    |   38 +++-
+ arch/x86/kvm/svm/sev.c                                        |    4 
+ arch/x86/kvm/svm/svm.c                                        |    2 
+ arch/x86/kvm/vmx/vmenter.S                                    |    8 
+ arch/x86/kvm/vmx/vmx.c                                        |    1 
+ arch/x86/kvm/x86.c                                            |   50 ++++-
+ arch/x86/kvm/xen.h                                            |    6 
+ block/blk-ioc.c                                               |    2 
+ block/ioprio.c                                                |    4 
+ drivers/acpi/apei/bert.c                                      |   31 ++-
+ drivers/acpi/video_detect.c                                   |   55 ++++--
+ drivers/bluetooth/btbcm.c                                     |    2 
+ drivers/bluetooth/btusb.c                                     |   15 +
+ drivers/bluetooth/hci_bcm.c                                   |    2 
+ drivers/bluetooth/hci_qca.c                                   |    2 
+ drivers/macintosh/adb.c                                       |    2 
+ fs/btrfs/block-group.h                                        |    1 
+ fs/btrfs/extent-tree.c                                        |   20 ++
+ fs/btrfs/extent_io.c                                          |    3 
+ fs/btrfs/inode.c                                              |    2 
+ fs/btrfs/zoned.c                                              |   50 +++++
+ fs/btrfs/zoned.h                                              |    5 
+ include/linux/ioprio.h                                        |    2 
+ kernel/entry/kvm.c                                            |    6 
+ tools/arch/x86/include/asm/cpufeatures.h                      |    1 
+ tools/arch/x86/include/asm/msr-index.h                        |    4 
+ tools/kvm/kvm_stat/kvm_stat                                   |    3 
+ tools/testing/selftests/kvm/lib/aarch64/ucall.c               |    9 -
+ tools/testing/selftests/kvm/lib/perf_test_util.c              |   18 +-
+ tools/testing/selftests/kvm/x86_64/hyperv_clock.c             |   10 -
+ tools/vm/slabinfo.c                                           |   26 ++-
+ virt/kvm/kvm_main.c                                           |    8 
+ 47 files changed, 433 insertions(+), 124 deletions(-)
+
+Aaron Ma (1):
+      Bluetooth: btusb: Add support of IMC Networks PID 0x3568
+
+Ahmad Fatoum (2):
+      Bluetooth: hci_bcm: Add BCM4349B1 variant
+      dt-bindings: bluetooth: broadcom: Add BCM4349B1 DT binding
+
+Ben Gardon (1):
+      KVM: x86/MMU: Zap non-leaf SPTEs when disabling dirty logging
+
+Ben Hutchings (1):
+      x86/speculation: Make all RETbleed mitigations 64-bit only
+
+Daniel Sneddon (1):
+      x86/speculation: Add RSB VM Exit protections
+
+David Matlack (1):
+      KVM: selftests: Restrict test region to 48-bit physical addresses when using nested
+
+Dmitry Klochkov (1):
+      tools/kvm_stat: fix display of error when multiple processes are found
+
+GUO Zihua (1):
+      crypto: arm64/poly1305 - fix a read out-of-bound
+
+Greg Kroah-Hartman (1):
+      Linux 5.18.17
+
+Hakan Jansson (1):
+      Bluetooth: hci_bcm: Add DT compatible for CYW55572
+
+Hilda Wu (5):
+      Bluetooth: btusb: Add Realtek RTL8852C support ID 0x04CA:0x4007
+      Bluetooth: btusb: Add Realtek RTL8852C support ID 0x04C5:0x1675
+      Bluetooth: btusb: Add Realtek RTL8852C support ID 0x0CB8:0xC558
+      Bluetooth: btusb: Add Realtek RTL8852C support ID 0x13D3:0x3587
+      Bluetooth: btusb: Add Realtek RTL8852C support ID 0x13D3:0x3586
+
+Jan Kara (1):
+      block: fix default IO priority handling again
+
+Maxim Levitsky (2):
+      KVM: x86: disable preemption while updating apicv inhibition
+      KVM: x86: disable preemption around the call to kvm_arch_vcpu_{un|}blocking
+
+Mingwei Zhang (1):
+      KVM: x86/svm: add __GFP_ACCOUNT to __sev_dbg_{en,de}crypt_user()
+
+Naohiro Aota (3):
+      btrfs: zoned: prevent allocation from previous data relocation BG
+      btrfs: zoned: fix critical section of relocation inode writeback
+      btrfs: zoned: drop optimization of zone finish
+
+Ning Qiang (1):
+      macintosh/adb: fix oob read in do_adb_query() function
+
+Paolo Bonzini (2):
+      KVM: x86: do not report a vCPU as preempted outside instruction boundaries
+      KVM: x86: do not set st->preempted when going back to user space
+
+Pawan Gupta (1):
+      x86/speculation: Add LFENCE to RSB fill sequence
+
+Peter Collingbourne (1):
+      arm64: set UXN on swapper page tables
+
+Raghavendra Rao Ananta (1):
+      selftests: KVM: Handle compiler optimizations in ucall
+
+Sai Teja Aluvala (1):
+      Bluetooth: hci_qca: Return wakeup for qca_wakeup
+
+Seth Forshee (1):
+      entry/kvm: Exit to user mode when TIF_NOTIFY_SIGNAL is set
+
+Stéphane Graber (1):
+      tools/vm/slabinfo: Handle files in debugfs
+
+Tony Luck (1):
+      ACPI: APEI: Better fix to avoid spamming the console with old error logs
+
+Vitaly Kuznetsov (1):
+      KVM: selftests: Make hyperv_clock selftest more stable
+
+Werner Sembach (2):
+      ACPI: video: Force backlight native for some TongFang devices
+      ACPI: video: Shortening quirk list by identifying Clevo by board_name only
 

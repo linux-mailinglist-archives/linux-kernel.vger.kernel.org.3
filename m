@@ -2,152 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1023B59013C
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 17:52:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1E285901D5
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 18:01:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236793AbiHKPtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 11:49:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51416 "EHLO
+        id S237119AbiHKP7J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 11:59:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236648AbiHKPrp (ORCPT
+        with ESMTP id S237415AbiHKP42 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 11:47:45 -0400
-Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9BFF9925A
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 08:41:40 -0700 (PDT)
-Received: by mail-il1-x132.google.com with SMTP id t15so10140827ilm.7
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 08:41:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=RTT7+zmODbaYBRXOi2mBaSvbEGfH2m4oaESkivpOFK0=;
-        b=k4VcTzmJAF0QbnrcgMbHraqcamIW+G6IhTmAT4XOjdaUJIJRgqyVjAyj9cq+L0hqCv
-         4F/elIW0d0B+OsQEXI85JASEvOCoBJKvTdGPbHxZmOBHByHf9JOR1CVslBxhDbuqgRt9
-         0y7gJKaqCxd3KDak8WX894EN1nL8QtOk8leVMOuHtYvhiRCacGLraP6YGaxn8w2oCDZo
-         TGey/4rZzROzLPy5Mna3e5Rn2+Yw20KGzZPNSmMX6Wc7rFsvtrIxj4W8/RY4GcPuvBAw
-         w51+C/sKcLFo9QQo/dHE5nDPPj1b7vK/y0jZ0SK7Q4cWad/sHTHGPpTIb5g/+ykhCFJ7
-         VhyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=RTT7+zmODbaYBRXOi2mBaSvbEGfH2m4oaESkivpOFK0=;
-        b=v2pfQEgjy3q1H3E+Pin/++SMceGXlHg3v8n+iF24SsB1NJYdFAFCSLYJ8imFYNUVgw
-         DB4VuIGblI0QjMDoDXg8KFYuuQrAzvnE56Eu6wL4ZwOpJFXuhS6x01RLuv1MPO44g9bt
-         4aejEVQHkG4d3iLx2PffjKWA5AToUcuiDEeylUjJ1LogE38sVT/sSlh1ZH1PkyN3nfxO
-         qML5kUm4nAqJb3wyTwZsyKU6pOxDJvG0v8dVIjVe9rN8v1kNRdFORttev3vCefBQYK0i
-         Q8IptmcrU1+eq2g8bpD2gA73geMx/6Tl6KMes1wAS0LV6+P657LFZt5RmEbRKqTOH7tL
-         XvJQ==
-X-Gm-Message-State: ACgBeo03JBw/j9qriYBbjZ8pqFsDNvb0RY5dOPpwYOTFVVs50PeglJ2Y
-        lWUNqUrEWWd6Nlex/9RZW4VCvg==
-X-Google-Smtp-Source: AA6agR4FZsdtqkq3Ho6PTNYBe3yE06cxzSBqfyXK1oz0gKpICAgWMmTtexNviq+rdefhaAChwkzqig==
-X-Received: by 2002:a05:6e02:180a:b0:2de:533a:dcb6 with SMTP id a10-20020a056e02180a00b002de533adcb6mr15284519ilv.277.1660232500162;
-        Thu, 11 Aug 2022 08:41:40 -0700 (PDT)
-Received: from [192.168.1.172] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id l16-20020a92d950000000b002df5a4c59f5sm3420813ilq.7.2022.08.11.08.41.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Aug 2022 08:41:39 -0700 (PDT)
-Message-ID: <8f3d1bf5-48f6-411d-674e-1568e3841d75@kernel.dk>
-Date:   Thu, 11 Aug 2022 09:41:38 -0600
+        Thu, 11 Aug 2022 11:56:28 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06919A2850;
+        Thu, 11 Aug 2022 08:47:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7BE2FB82162;
+        Thu, 11 Aug 2022 15:47:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64FABC433C1;
+        Thu, 11 Aug 2022 15:47:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660232829;
+        bh=XigKxQKnX8HVGGyUm7u2+VJg1iggexTC6eLWlfLd0Og=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=tVnvTXZarE0nV9Q8ZDoDgzN94LkA5UimxOQVjPcZeN0yxqsUhqpEeeJ9VPBWgBL3O
+         Z1/JorieoMo6cvVvNiksfQT3Prp9mGKW5lE89FUeXk9WUaShuy+JeFmUG8RhY4Tcx7
+         1v3IO9IblUwrho/wJzWV41L2CUKXm6T7ztVv7jL/eUAX6swZi4GpUt68wGjObpGOtW
+         XnWgeRTCnpl1eKp0uYHQihK6beUlc0oEDtsruvF4huCzJN4jVOFZaqyjUlUCwXgosw
+         oKjMt0lLJfYUZMysVHKziEcb5AVvCc0Bsb/8T+mtYT0AxtDc4rEZJ+6ARDaieK/ez0
+         6BRXNpJ+zYwKg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Gautam <gautammenghani201@gmail.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.18 45/93] kselftests: Enable the echo command to print newlines in Makefile
+Date:   Thu, 11 Aug 2022 11:41:39 -0400
+Message-Id: <20220811154237.1531313-45-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220811154237.1531313-1-sashal@kernel.org>
+References: <20220811154237.1531313-1-sashal@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] Modify the return value ret to EOPNOTSUPP when
- initialized to reduce repeated assignment of errno
-Content-Language: en-US
-To:     Stefano Garzarella <sgarzare@redhat.com>,
-        Zhang chunchao <chunchao@nfschina.com>
-Cc:     asml.silence@gmail.com, io-uring@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@nfschina.com
-References: <20220811075638.36450-1-chunchao@nfschina.com>
- <20220811150242.giygjmy4vimxtrzg@sgarzare-redhat>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220811150242.giygjmy4vimxtrzg@sgarzare-redhat>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/11/22 9:02 AM, Stefano Garzarella wrote:
-> On Thu, Aug 11, 2022 at 03:56:38PM +0800, Zhang chunchao wrote:
->> Remove unnecessary initialization assignments.
->>
->> Signed-off-by: Zhang chunchao <chunchao@nfschina.com>
->> ---
->> io_uring/io_uring.c | 3 +--
->> 1 file changed, 1 insertion(+), 2 deletions(-)
->>
->> diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
->> index b54218da075c..8c267af06401 100644
->> --- a/io_uring/io_uring.c
->> +++ b/io_uring/io_uring.c
->> @@ -3859,14 +3859,13 @@ SYSCALL_DEFINE4(io_uring_register, unsigned int, fd, unsigned int, opcode,
->>         void __user *, arg, unsigned int, nr_args)
->> {
->>     struct io_ring_ctx *ctx;
->> -    long ret = -EBADF;
->> +    long ret = -EOPNOTSUPP;
->>     struct fd f;
->>
->>     f = fdget(fd);
->>     if (!f.file)
->>         return -EBADF;
->>
->> -    ret = -EOPNOTSUPP;
->>     if (!io_is_uring_fops(f.file))
->>         goto out_fput;
->>
-> 
-> What about remove the initialization and assign it in the if branch?
-> I find it a bit easier to read.
-> 
-> I mean something like this:
-> 
-> --- a/io_uring/io_uring.c
-> +++ b/io_uring/io_uring.c
-> @@ -3859,16 +3859,17 @@ SYSCALL_DEFINE4(io_uring_register, unsigned int, fd, unsigned int, opcode,
->                 void __user *, arg, unsigned int, nr_args)
->  {
->         struct io_ring_ctx *ctx;
-> -       long ret = -EBADF;
-> +       long ret;
->         struct fd f;
-> 
->         f = fdget(fd);
->         if (!f.file)
->                 return -EBADF;
-> 
-> -       ret = -EOPNOTSUPP;
-> -       if (!io_is_uring_fops(f.file))
-> +       if (!io_is_uring_fops(f.file)) {
-> +               ret = -EOPNOTSUPP;
->                 goto out_fput;
-> +       }
-> 
->         ctx = f.file->private_data;
-> 
-> 
-> Otherwise remove the initialization, but leave the assignment as it is now.
+From: Gautam <gautammenghani201@gmail.com>
 
-Generally the kernel likes to do:
+[ Upstream commit 3297a4df805d4263506b6dfec4d1bbeff8862dd8 ]
 
-err = -EFOO;
-if (something)
-	goto err_out;
+In the install section of the main Makefile of kselftests, the echo
+command is used with -n flag, which disables the printing of new line
+due to which the output contains "\n" chars as follows:
 
-rather than put it inside the if clause. I guess the rationale is it
-makes it harder to forget to init the error value. I don't feel too
-strongly, I'm fine with your patch too. Can you send it as a real patch?
+  Emit Tests for alsa\nSkipping non-existent dir: arm64
+  Emit Tests for breakpoints\nEmit Tests for capabilities\n
 
+This patch fixes the above bug by using the -e flag.
+
+Signed-off-by: Gautam <gautammenghani201@gmail.com>
+Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index bd2ac8b3bf1f..197126a6614e 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -251,7 +251,7 @@ ifdef INSTALL_PATH
+ 	for TARGET in $(TARGETS); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+ 		[ ! -d $(INSTALL_PATH)/$$TARGET ] && echo "Skipping non-existent dir: $$TARGET" && continue; \
+-		echo -n "Emit Tests for $$TARGET\n"; \
++		echo -ne "Emit Tests for $$TARGET\n"; \
+ 		$(MAKE) -s --no-print-directory OUTPUT=$$BUILD_TARGET COLLECTION=$$TARGET \
+ 			-C $$TARGET emit_tests >> $(TEST_LIST); \
+ 	done;
 -- 
-Jens Axboe
+2.35.1
 

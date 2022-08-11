@@ -2,98 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52FBF58F715
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 06:55:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC13458F721
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 06:59:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233930AbiHKEzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 00:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52358 "EHLO
+        id S233902AbiHKE7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 00:59:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233898AbiHKEzk (ORCPT
+        with ESMTP id S233459AbiHKE7u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 00:55:40 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CF5D606BA
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 21:55:39 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id e28so4713278qts.1
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 21:55:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:message-id:subject:cc:to:from:date:from:to:cc;
-        bh=Livy2eVp0oE6BvapXUHOqoc+qrYCMvetxKGx/oHIznU=;
-        b=KYTrUnak0g/usjIFO/ZNDzJxAOGsMVs1p9UqyFngCX4RIQ2DhFYpf7yXJbAuSyNX8V
-         tXLInbqEaia/rWRDMzQ2cmqhqvi7w8r40U2u8xmdsl5ZgwDQOrNAjiFQkRgW46gvP9cQ
-         ye2YKsn3lpYXP5HbehH5s92HgTRT8biHp3dcxAc7Yna3k2Lm2iJISektyNABe1nRXzYs
-         JQto9/AHKRUxSR9VBP9mf2AfeXUd2RBew76Jic7w4t72yC6t/hEJhdUsUet2PaaXG+it
-         /bJnc3Z6gGNSy2O0o3rA7Da+zr+yfNsIDQicrNEGlVJEQhh9x4P1k+GbaelgZ0GAJnCR
-         kb7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc;
-        bh=Livy2eVp0oE6BvapXUHOqoc+qrYCMvetxKGx/oHIznU=;
-        b=SwcVQ0wmLwHV8Gih86oXrdiO7TyTRLYE1JJek5MTzvUvGJQUzKGxrYWkbtTLJZj+lj
-         hGj8j84mYNc4a0D3VYSRUVSrUS20K2l31TmENlc/NyxLetuz1aKSht3qmyMUOc/EZ+v7
-         sGFz+VFTvmM2HCFPEF/Y7L15NfeEbVy0GfwULAm2DIgSq2ZkotWlgjzci+ripVyxJJ2V
-         51omQ/kopK2ggyc+igp8LmQWmwIRFUs+cFhHbsiSM2lMdCiV+f2M1rHOJE5a8CdNvGji
-         cuKR83EA9CHL6eKjPBNLs4ZJd0REC5CyI4pA1Jklmb0+fxlHiirlsYYhqBjqRz5zJPnL
-         zKgw==
-X-Gm-Message-State: ACgBeo2DhpRYuRT0Tni7C0DKj0d8T3Hs9wA8ejjJSo/mKRsUuJEeqZl+
-        +2JnRWfqwhzDahJSCyEh2gQobw==
-X-Google-Smtp-Source: AA6agR4AybdacHnM4HqeZIxBY+/3+U4qzpHnjFLWyZ+Sv/uep2K5Ga46VfT3pVrkxOdkftnl12lyFA==
-X-Received: by 2002:ac8:7d92:0:b0:31f:1fe3:2bfe with SMTP id c18-20020ac87d92000000b0031f1fe32bfemr27577728qtd.628.1660193738692;
-        Wed, 10 Aug 2022 21:55:38 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id y6-20020ae9f406000000b006b8cff25187sm1261607qkl.42.2022.08.10.21.55.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Aug 2022 21:55:38 -0700 (PDT)
-Date:   Wed, 10 Aug 2022 21:55:36 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.anvils
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     "Darrick J. Wong" <djwong@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [PATCH] mm/shmem: tmpfs fallocate use file_modified()
-Message-ID: <39c5e62-4896-7795-c0a0-f79c50d4909@google.com>
+        Thu, 11 Aug 2022 00:59:50 -0400
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43B087CB58;
+        Wed, 10 Aug 2022 21:59:47 -0700 (PDT)
+Received: from localhost.localdomain ([172.16.0.254])
+        (user=dzm91@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 27B4w4gc000522-27B4w4gf000522
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Thu, 11 Aug 2022 12:58:08 +0800
+From:   Dongliang Mu <dzm91@hust.edu.cn>
+To:     Antti Palosaari <crope@iki.fi>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Oliver Neukum <oneukum@suse.com>
+Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
+        syzbot+bb25f85e5aa482864dc0@syzkaller.appspotmail.com,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] media: airspy: fix memory leak in airspy probe
+Date:   Thu, 11 Aug 2022 12:57:00 +0800
+Message-Id: <20220811045701.31152-1-dzm91@hust.edu.cn>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: dzm91@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-5.18 fixed the btrfs and ext4 fallocates to use file_modified(), as xfs
-was already doing, to drop privileges: and fstests generic/{683,684,688}
-expect this.  There's no need to argue over keep-size allocation (which
-could just update ctime): fix shmem_fallocate() to behave the same way.
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-Signed-off-by: Hugh Dickins <hughd@google.com>
+The commit ca9dc8d06ab6 ("media: airspy: respect the DMA coherency
+ rules") moves variable buf from stack to heap, however, it only frees
+buf in the error handling code, missing deallocation in the success
+path.
+
+Fix this by freeing buf in the success path since this variable does not
+have any references in other code.
+
+Fixes: ca9dc8d06ab6 ("media: airspy: respect the DMA coherency rules")
+Reported-by: syzbot+bb25f85e5aa482864dc0@syzkaller.appspotmail.com
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
 ---
+ drivers/media/usb/airspy/airspy.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- mm/shmem.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+diff --git a/drivers/media/usb/airspy/airspy.c b/drivers/media/usb/airspy/airspy.c
+index 240a7cc56777..7b1c40132555 100644
+--- a/drivers/media/usb/airspy/airspy.c
++++ b/drivers/media/usb/airspy/airspy.c
+@@ -1070,6 +1070,10 @@ static int airspy_probe(struct usb_interface *intf,
+ 				ret);
+ 		goto err_free_controls;
+ 	}
++
++	/* Free buf if success*/
++	kfree(buf);
++
+ 	dev_info(s->dev, "Registered as %s\n",
+ 			video_device_node_name(&s->vdev));
+ 	dev_notice(s->dev, "SDR API is still slightly experimental and functionality changes may follow\n");
+-- 
+2.35.1
 
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -2839,12 +2839,13 @@ static long shmem_fallocate(struct file *file, int mode, loff_t offset,
- 
- 	if (!(mode & FALLOC_FL_KEEP_SIZE) && offset + len > inode->i_size)
- 		i_size_write(inode, offset + len);
--	inode->i_ctime = current_time(inode);
- undone:
- 	spin_lock(&inode->i_lock);
- 	inode->i_private = NULL;
- 	spin_unlock(&inode->i_lock);
- out:
-+	if (!error)
-+		file_modified(file);
- 	inode_unlock(inode);
- 	return error;
- }

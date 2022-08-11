@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09FF5590500
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 18:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E89B590470
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 18:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238939AbiHKQmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 12:42:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35654 "EHLO
+        id S238867AbiHKQmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 12:42:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239280AbiHKQlN (ORCPT
+        with ESMTP id S239285AbiHKQlO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 12:41:13 -0400
+        Thu, 11 Aug 2022 12:41:14 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A4E7CA61D2
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C0F8EA61DC
         for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 09:13:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1660234429;
@@ -21,40 +21,40 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/Huxd7IPCPnmA3ZqjXCerOPqYjMrNourUX2B7v06rhc=;
-        b=XJGWxRejrCYVzyK6dIdGSsJ4OuX4L4sncbi2UZ+wij7Gh1D7F2QbXHHwDm0c2yy+nMACnZ
-        /gKXI/q5Ad08mY5oC7Z/jMuWwM6y/3MianCP5hKisHPsgDLAFW/SRhKdqGOqD9MlZbTeFr
-        wE0r1+4YXoyk03NNEPaeah2rSitJjkY=
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com
- [209.85.166.197]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=Kvn+70I7yPIly7NIcpI+E4BYwfh3vfPaXmRAy92AF5w=;
+        b=hVTN7i0QMKFBh392bac4jgfDb9v6Stf77skSImDft/H2S9/YrAmTxie6y+yysl3hue34rX
+        D7vxaR3YmB3QBPB8v7/q/gafzHMI/KYJYff/osB3qs64VorXQWGuLXU0Fvi+AGgk1cAgjk
+        aDWQpi0nGivaYsrkGwxgC+HCzwkYqk0=
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
+ [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-446-HN37TWv9OBi_S03WOuowgQ-1; Thu, 11 Aug 2022 12:13:45 -0400
-X-MC-Unique: HN37TWv9OBi_S03WOuowgQ-1
-Received: by mail-il1-f197.google.com with SMTP id i12-20020a056e021d0c00b002df2d676974so12730071ila.5
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 09:13:45 -0700 (PDT)
+ us-mta-660-GKQMlPldOKq3pJ_IvPSDHA-1; Thu, 11 Aug 2022 12:13:48 -0400
+X-MC-Unique: GKQMlPldOKq3pJ_IvPSDHA-1
+Received: by mail-il1-f200.google.com with SMTP id x7-20020a056e021ca700b002ded2e6331aso13023929ill.20
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 09:13:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=/Huxd7IPCPnmA3ZqjXCerOPqYjMrNourUX2B7v06rhc=;
-        b=aP3l1Xfj8TC0RuOCq3rvR1SjnTG2xjsegvremxzdLgU6CI/NFslkNwcg3/bIyXdyXA
-         VkAJIufIWTUtY/vcp4TSctMIi+FfJOK4hSmnBjU2fdJ0RhfpN/HKym+gtuAskEu7xRi8
-         Ln6E8Nl8VP9SZs43eB4K9hfj7+jaip/ydzY+ZEWeGTmgOrb12Z3c+x/nofT78bqntwU2
-         pE5kroog6bWUEdI3SMGDTnZhMaxptBSLW8WhXB8H/sQOJGZPP7VI/ccuOYKuonlwF7Er
-         zCLi2dBbQ88IqAtzX3hhkC0j/TRpyYeGgP3Io5uuMAi5Asb/LBJgq++nmLG6fUK2IHZ5
-         elbg==
-X-Gm-Message-State: ACgBeo1Qh4c2V8ruVCuwlay06YiJXvFAfIOJpdjewjsYsqFOXzXvq65v
-        rr5LhrhrQK0NmVa+Od7C3moC8JYs2mDjxNyIU52lJ6630xh1PFXxScU+gfzfkRK6+TONUfL4le7
-        RrSYqtzgu8YLN632io3FEIhhP
-X-Received: by 2002:a05:6638:1301:b0:342:c20d:3b15 with SMTP id r1-20020a056638130100b00342c20d3b15mr21422jad.59.1660234424221;
-        Thu, 11 Aug 2022 09:13:44 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4T6gWtzxZxHWUIVbSUYS7vdfLC8nfHajGAKsVlnVfjs8zkeYJ9u3kFIxUuxfWF4Czl1LgvQg==
-X-Received: by 2002:a05:6638:1301:b0:342:c20d:3b15 with SMTP id r1-20020a056638130100b00342c20d3b15mr21411jad.59.1660234424004;
-        Thu, 11 Aug 2022 09:13:44 -0700 (PDT)
+        bh=Kvn+70I7yPIly7NIcpI+E4BYwfh3vfPaXmRAy92AF5w=;
+        b=cczcbIcih1Oc2hhZ5G7QkoPklNPPYzk2khBqf5fPcWY14Q7rNZiRGl7t2/cLfN92Hl
+         YKBmCIw9fFs4L8LlLsI9fw/8auejIdOkwrENCmJbzcVRduhERuIj2SjTCX08Fqkztisp
+         4GU9NzMSbIMJStE+FsqZ8N9+EwUfQBK4N1JyHrBnGdgSU3oUDlvBLo6J1LfUCpmNN9TG
+         dikcuxH785qSxADkt5BZMybRoq7/6TDcVkUMe1nypavtTXVgx5rA9VFqzPNuCUXBHx6D
+         1auPEUewD/N3f6JAMR41Z6aCeHtkYC0yEjOAtBH9vFTETGjcBk50NV8uFS/rRVP5deMP
+         cuoA==
+X-Gm-Message-State: ACgBeo384bJTAFqZwuy7CPJwJKJv5CEtG7NzxUeBvXDctLYSlqfMk9gq
+        HdwfiHbEKC4N7u2uaHHYoP27Oc8FYRiZURjLXyF2lKwDMLPoEzFjdT8M+/WhudRUQMv2hDWOzxC
+        V6yxZmP6hTIksNnDoNLo+qTG8
+X-Received: by 2002:a92:ce50:0:b0:2dd:dc8e:1f36 with SMTP id a16-20020a92ce50000000b002dddc8e1f36mr16218642ilr.34.1660234425789;
+        Thu, 11 Aug 2022 09:13:45 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4ZzxcH25ORg0vfYxNfi+ta3V6GDOQvV28uQeT5mwGBGdlqyFRzS44blQE276L9QlyIzt5Fvg==
+X-Received: by 2002:a92:ce50:0:b0:2dd:dc8e:1f36 with SMTP id a16-20020a92ce50000000b002dddc8e1f36mr16218626ilr.34.1660234425555;
+        Thu, 11 Aug 2022 09:13:45 -0700 (PDT)
 Received: from localhost.localdomain (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
-        by smtp.gmail.com with ESMTPSA id t1-20020a92ca81000000b002dd1c3c5c46sm3415429ilo.73.2022.08.11.09.13.42
+        by smtp.gmail.com with ESMTPSA id t1-20020a92ca81000000b002dd1c3c5c46sm3415429ilo.73.2022.08.11.09.13.44
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 11 Aug 2022 09:13:43 -0700 (PDT)
+        Thu, 11 Aug 2022 09:13:45 -0700 (PDT)
 From:   Peter Xu <peterx@redhat.com>
 To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
 Cc:     Hugh Dickins <hughd@google.com>,
@@ -68,9 +68,9 @@ Cc:     Hugh Dickins <hughd@google.com>,
         Nadav Amit <nadav.amit@gmail.com>,
         Huang Ying <ying.huang@intel.com>,
         Vlastimil Babka <vbabka@suse.cz>
-Subject: [PATCH v4 6/7] mm/swap: Cache maximum swapfile size when init swap
-Date:   Thu, 11 Aug 2022 12:13:30 -0400
-Message-Id: <20220811161331.37055-7-peterx@redhat.com>
+Subject: [PATCH v4 7/7] mm/swap: Cache swap migration A/D bits support
+Date:   Thu, 11 Aug 2022 12:13:31 -0400
+Message-Id: <20220811161331.37055-8-peterx@redhat.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220811161331.37055-1-peterx@redhat.com>
 References: <20220811161331.37055-1-peterx@redhat.com>
@@ -87,30 +87,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We used to have swapfile_maximum_size() fetching a maximum value of
-swapfile size per-arch.
+Introduce a variable swap_migration_ad_supported to cache whether the arch
+supports swap migration A/D bits.
 
-As the caller of max_swapfile_size() grows, this patch introduce a variable
-"swapfile_maximum_size" and cache the value of old max_swapfile_size(), so
-that we don't need to calculate the value every time.
+Here one thing to mention is that SWP_MIG_TOTAL_BITS will internally
+reference the other macro MAX_PHYSMEM_BITS, which is a function call on
+x86 (constant on all the rest of archs).
 
-Caching the value in swapfile_init() is safe because when reaching the
-phase we should have initialized all the relevant information.  Here the
-major arch to take care of is x86, which defines the max swapfile size
-based on L1TF mitigation.
-
-Here both X86_BUG_L1TF or l1tf_mitigation should have been setup properly
-when reaching swapfile_init(). As a reference, the code path looks like
-this for x86:
+It's safe to reference it in swapfile_init() because when reaching here
+we're already during initcalls level 4 so we must have initialized 5-level
+pgtable for x86_64 (right after early_identify_cpu() finishes).
 
 - start_kernel
   - setup_arch
     - early_cpu_init
-      - early_identify_cpu --> setup X86_BUG_L1TF
-  - parse_early_param
-    - l1tf_cmdline --> set l1tf_mitigation
-  - check_bugs
-    - l1tf_select_mitigation --> set l1tf_mitigation
+      - get_cpu_cap --> fetch from CPUID (including X86_FEATURE_LA57)
+      - early_identify_cpu --> clear X86_FEATURE_LA57 (if early lvl5 not enabled (USE_EARLY_PGTABLE_L5))
   - arch_call_rest_init
     - rest_init
       - kernel_init
@@ -118,96 +110,68 @@ this for x86:
           - do_basic_setup
             - do_initcalls --> calls swapfile_init() (initcall level 4)
 
-The swapfile size only depends on swp pte format on non-x86 archs, so
-caching it is safe too.
-
-Since at it, rename max_swapfile_size() to arch_max_swapfile_size() because
-arch can define its own function, so it's more straightforward to have
-"arch_" as its prefix.  At the meantime, export swapfile_maximum_size to
-replace the old usages of max_swapfile_size().
+This should slightly speed up the migration swap entry handlings.
 
 Signed-off-by: Peter Xu <peterx@redhat.com>
 ---
- arch/x86/mm/init.c       | 2 +-
- include/linux/swapfile.h | 3 ++-
- include/linux/swapops.h  | 2 +-
- mm/swapfile.c            | 7 +++++--
- 4 files changed, 9 insertions(+), 5 deletions(-)
+ include/linux/swapfile.h | 2 ++
+ include/linux/swapops.h  | 7 +------
+ mm/swapfile.c            | 8 ++++++++
+ 3 files changed, 11 insertions(+), 6 deletions(-)
 
-diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
-index 82a042c03824..9121bc1b9453 100644
---- a/arch/x86/mm/init.c
-+++ b/arch/x86/mm/init.c
-@@ -1054,7 +1054,7 @@ void update_cache_mode_entry(unsigned entry, enum page_cache_mode cache)
- }
- 
- #ifdef CONFIG_SWAP
--unsigned long max_swapfile_size(void)
-+unsigned long arch_max_swapfile_size(void)
- {
- 	unsigned long pages;
- 
 diff --git a/include/linux/swapfile.h b/include/linux/swapfile.h
-index 54078542134c..165e0bd04862 100644
+index 165e0bd04862..2fbcc9afd814 100644
 --- a/include/linux/swapfile.h
 +++ b/include/linux/swapfile.h
-@@ -8,6 +8,7 @@
-  */
- extern struct swap_info_struct *swap_info[];
+@@ -10,5 +10,7 @@ extern struct swap_info_struct *swap_info[];
  extern unsigned long generic_max_swapfile_size(void);
--extern unsigned long max_swapfile_size(void);
-+/* Maximum swapfile size supported for the arch (not inclusive). */
-+extern unsigned long swapfile_maximum_size;
+ /* Maximum swapfile size supported for the arch (not inclusive). */
+ extern unsigned long swapfile_maximum_size;
++/* Whether swap migration entry supports storing A/D bits for the arch */
++extern bool swap_migration_ad_supported;
  
  #endif /* _LINUX_SWAPFILE_H */
 diff --git a/include/linux/swapops.h b/include/linux/swapops.h
-index 36e462e116af..f25b566643f1 100644
+index f25b566643f1..dbf9df854124 100644
 --- a/include/linux/swapops.h
 +++ b/include/linux/swapops.h
-@@ -307,7 +307,7 @@ static inline bool migration_entry_supports_ad(void)
- 	 * the offset large enough to cover all of them (PFN, A & D bits).
- 	 */
+@@ -301,13 +301,8 @@ static inline swp_entry_t make_writable_migration_entry(pgoff_t offset)
+  */
+ static inline bool migration_entry_supports_ad(void)
+ {
+-	/*
+-	 * max_swapfile_size() returns the max supported swp-offset plus 1.
+-	 * We can support the migration A/D bits iff the pfn swap entry has
+-	 * the offset large enough to cover all of them (PFN, A & D bits).
+-	 */
  #ifdef CONFIG_SWAP
--	return max_swapfile_size() >= (1UL << SWP_MIG_TOTAL_BITS);
-+	return swapfile_maximum_size >= (1UL << SWP_MIG_TOTAL_BITS);
+-	return swapfile_maximum_size >= (1UL << SWP_MIG_TOTAL_BITS);
++	return swap_migration_ad_supported;
  #else  /* CONFIG_SWAP */
  	return false;
  #endif	/* CONFIG_SWAP */
 diff --git a/mm/swapfile.c b/mm/swapfile.c
-index 1fdccd2f1422..3cc64399df44 100644
+index 3cc64399df44..263b19e693cf 100644
 --- a/mm/swapfile.c
 +++ b/mm/swapfile.c
-@@ -63,6 +63,7 @@ EXPORT_SYMBOL_GPL(nr_swap_pages);
- /* protected with swap_lock. reading in vm_swap_full() doesn't need lock */
+@@ -64,6 +64,9 @@ EXPORT_SYMBOL_GPL(nr_swap_pages);
  long total_swap_pages;
  static int least_priority = -1;
-+unsigned long swapfile_maximum_size;
+ unsigned long swapfile_maximum_size;
++#ifdef CONFIG_MIGRATION
++bool swap_migration_ad_supported;
++#endif	/* CONFIG_MIGRATION */
  
  static const char Bad_file[] = "Bad swap file entry ";
  static const char Unused_file[] = "Unused swap file entry ";
-@@ -2816,7 +2817,7 @@ unsigned long generic_max_swapfile_size(void)
- }
+@@ -3680,6 +3683,11 @@ static int __init swapfile_init(void)
  
- /* Can be overridden by an architecture for additional checks. */
--__weak unsigned long max_swapfile_size(void)
-+__weak unsigned long arch_max_swapfile_size(void)
- {
- 	return generic_max_swapfile_size();
- }
-@@ -2856,7 +2857,7 @@ static unsigned long read_swap_header(struct swap_info_struct *p,
- 	p->cluster_next = 1;
- 	p->cluster_nr = 0;
+ 	swapfile_maximum_size = arch_max_swapfile_size();
  
--	maxpages = max_swapfile_size();
-+	maxpages = swapfile_maximum_size;
- 	last_page = swap_header->info.last_page;
- 	if (!last_page) {
- 		pr_warn("Empty swap-file\n");
-@@ -3677,6 +3678,8 @@ static int __init swapfile_init(void)
- 	for_each_node(nid)
- 		plist_head_init(&swap_avail_heads[nid]);
- 
-+	swapfile_maximum_size = arch_max_swapfile_size();
++#ifdef CONFIG_MIGRATION
++	if (swapfile_maximum_size >= (1UL << SWP_MIG_TOTAL_BITS))
++		swap_migration_ad_supported = true;
++#endif	/* CONFIG_MIGRATION */
 +
  	return 0;
  }

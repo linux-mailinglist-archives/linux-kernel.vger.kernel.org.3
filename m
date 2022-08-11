@@ -2,79 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A77D05906C7
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 21:07:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB74A5906B4
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 21:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236031AbiHKSwt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 14:52:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33406 "EHLO
+        id S236067AbiHKSxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 14:53:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235963AbiHKSwm (ORCPT
+        with ESMTP id S236035AbiHKSxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 14:52:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 241779E10F
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 11:52:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660243960;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JNyZEMFVFrFa8kgVwgLPqAYNcLyvy1ZrbXPv11GN+Lc=;
-        b=fRjb3h4ZRxzD7SF24HAd+Q/IpazD8g3tsb5sanEXr/mREG6izyCQQkFNzXYmQEKiZtKEx6
-        S43+yrZaWkEu4SrpSaTMZXZbbOUaTqZlFV/TuyuW8iaNB+STdP/yd8XdQTDb31HX/KZunh
-        8K2hkifT8mRh7ryZbCfwHlF/EejDFP0=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-227-flTzqUUuM4ec4ZiypNciiQ-1; Thu, 11 Aug 2022 14:52:38 -0400
-X-MC-Unique: flTzqUUuM4ec4ZiypNciiQ-1
-Received: by mail-ed1-f70.google.com with SMTP id r12-20020a05640251cc00b00440647ec649so9122503edd.21
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 11:52:38 -0700 (PDT)
+        Thu, 11 Aug 2022 14:53:19 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EEB49E10A;
+        Thu, 11 Aug 2022 11:53:17 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id p10so22276081wru.8;
+        Thu, 11 Aug 2022 11:53:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc;
+        bh=os3g0edKIMTDU2FvQTzWGxtvkNImM/E4AAN0AbFTqTw=;
+        b=MrG+FtNnbmMga73Hd/PQqg2BumDSlAE16w4U9knvpnIhukagSl/JS2/Sj87gDZILKg
+         8yxldD8JZXGYLBv8WFXQMfedTg3X8NetJdz0VNQLK64ChlYb+ShVQDspNq2l2qoqzdGa
+         W/EAqg5YU1REGjYCrslVvYSWn8ihw3UkF1romEI4vd1wcWJXKUNXoRcyAKHTr+3KmWbT
+         T1vFtqQyOLNlWSfSLbtjQuwz9LIx/ihNjUvo/f+15HsMkboLO6G8Kf+hNOW6FKi1YAad
+         /HmmXqf7zW9t3EeX+Xkg+kI+Lf1DSoiE+33Xs/kY2kW0xrVJ12+AC5cpkch3GDyZayjZ
+         CGXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc;
-        bh=JNyZEMFVFrFa8kgVwgLPqAYNcLyvy1ZrbXPv11GN+Lc=;
-        b=6KfyG4kijtzLbNJMczyApMC+Ibsv3jsXe9VH4P8qRsbO3ll9K43VMv+d7i07zbTjb7
-         EalbEX7m34xWQD57ygnKKZsq/HNDqkP0FAXGsxdtXf43eyt46HKanddWMiv3lDSMzcKE
-         ArUOt0JCTfvrJ0ki2g0wJFcDiRuhJ1NYlA9twVQ6SJsuFjxupLV/3vMofOLZV4gjxSc8
-         d5cxx9VBFFaCRZPGKUoc0gDAKmeg2oPyZd6rNzB1NJhlB0R06N7V1q7Hyp/enjGHDG7x
-         Xz6Sqc1hFRoLmy4UnwcH9NhkFVtGhDPW6v2SF9f+fDK8w7WlOIYhdKC48ja5Ko0T5rQX
-         j3qg==
-X-Gm-Message-State: ACgBeo0j0taMeA3o53MU/EAoz2nZJ5e5OnKSEiiuCyspKP6xOm8aJLH+
-        lyBQRHo0INfnLDKI8qNMHnn5Lue23ej31dKMygrn8+jdyOnwPKBna01M9cm503W+FzECLGc2yNX
-        7fRAQkfq69k/U3w/i/NvtIY1m
-X-Received: by 2002:a17:906:58c9:b0:730:bc01:fd5f with SMTP id e9-20020a17090658c900b00730bc01fd5fmr285312ejs.504.1660243957646;
-        Thu, 11 Aug 2022 11:52:37 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5QYwkiMxkhhAF6jyTpAT0xoUswSga2mCJmeC6MtRkrn/UJ/PwLYSmER42bg7a8X/iW83cwiA==
-X-Received: by 2002:a17:906:58c9:b0:730:bc01:fd5f with SMTP id e9-20020a17090658c900b00730bc01fd5fmr285297ejs.504.1660243957406;
-        Thu, 11 Aug 2022 11:52:37 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id ck26-20020a0564021c1a00b0043d7b19abd0sm119740edb.39.2022.08.11.11.52.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Aug 2022 11:52:37 -0700 (PDT)
-Message-ID: <a019bd66-e53b-0993-77a0-c31c687c5f6f@redhat.com>
-Date:   Thu, 11 Aug 2022 20:52:36 +0200
+        bh=os3g0edKIMTDU2FvQTzWGxtvkNImM/E4AAN0AbFTqTw=;
+        b=RH82arE98mausTHZDsueLz4/CcRREMiHe1IUswRjO89njTnMVZJx045KMhxrmGrqxB
+         Lda75U0Y1S52gW2QH1nZ8e5GMMsb3kIHEfYWgbGVPz2KuD0Hl3Ktu5RxOfPqCqdDZEIs
+         IpDSsdJVuHaP6TVPJxX1Ca/TlhPUqW4MoFLtSFV2NsKQ1pFIKF6/goD4RemUKEoynxIL
+         ur1M5MHxlI+0DR3Cv288/LgY9ARs/DXLWUUv6Q3l3XpGf6awxkw8AMf9wqYxSRBDzZ4L
+         oBze4OnWVBxqMzYYHThpQTJxMpCguM3QZz/6cjO96Q7JZU+Vp1EYwX6RoykiO5O+hvJk
+         py9w==
+X-Gm-Message-State: ACgBeo21D8K7LmAAeqUDDzn5qSHgAnIzxas/h6BaxSlzMienyJV68gGu
+        Xae82eRjQL46VJSvlzEa17c=
+X-Google-Smtp-Source: AA6agR7V0H2RXHPWo9CnZkJvbm8Y5dMdsA/qj59j5RUNvq+GycirdFrtyJ+5HwPDPw4etBnpeFE16g==
+X-Received: by 2002:a5d:548a:0:b0:220:785d:38eb with SMTP id h10-20020a5d548a000000b00220785d38ebmr224065wrv.56.1660243995580;
+        Thu, 11 Aug 2022 11:53:15 -0700 (PDT)
+Received: from debian ([2405:201:8005:8149:e5c9:c0ac:4d82:e94b])
+        by smtp.gmail.com with ESMTPSA id j42-20020a05600c1c2a00b003a30c3d0c9csm8131285wms.8.2022.08.11.11.53.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Aug 2022 11:53:15 -0700 (PDT)
+Date:   Thu, 11 Aug 2022 19:53:04 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-bluetooth@vger.kernel.org, linux-next@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org
+Subject: build failure of next-20220811 due to 332f1795ca20 ("Bluetooth:
+ L2CAP: Fix l2cap_global_chan_by_psm regression")
+Message-ID: <YvVQEDs75pxSgxjM@debian>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] platform/surface: aggregator_registry: Add support for
- Surface Laptop Go 2
-Content-Language: en-US
-To:     Maximilian Luz <luzmaximilian@gmail.com>
-Cc:     Mark Gross <markgross@kernel.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220810140133.99087-1-luzmaximilian@gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20220810140133.99087-1-luzmaximilian@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,47 +77,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi All,
 
-On 8/10/22 16:01, Maximilian Luz wrote:
-> The Surface Laptop Go 2 seems to have the same SAM client devices as the
-> Surface Laptop Go 1, so re-use its node group.
-> 
-> Signed-off-by: Maximilian Luz <luzmaximilian@gmail.com>
+Not sure if it has been reported, builds of csky and mips allmodconfig
+failed to build next-20220811 with gcc-12.
 
-Thank you for your patch, I've applied this patch to my review-hans 
-branch:
-https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+mips error is:
 
-Note it will show up in my review-hans branch once I've pushed my
-local branch there, which might take a while.
+In function 'memcmp',
+    inlined from 'bacmp' at ./include/net/bluetooth/bluetooth.h:347:9,
+    inlined from 'l2cap_global_chan_by_psm' at net/bluetooth/l2cap_core.c:2003:15:
+./include/linux/fortify-string.h:44:33: error: '__builtin_memcmp' specified bound 6 exceeds source size 0 [-Werror=stringop-overread]
+   44 | #define __underlying_memcmp     __builtin_memcmp
+      |                                 ^
+./include/linux/fortify-string.h:420:16: note: in expansion of macro '__underlying_memcmp'
+  420 |         return __underlying_memcmp(p, q, size);
+      |                ^~~~~~~~~~~~~~~~~~~
+In function 'memcmp',
+    inlined from 'bacmp' at ./include/net/bluetooth/bluetooth.h:347:9,
+    inlined from 'l2cap_global_chan_by_psm' at net/bluetooth/l2cap_core.c:2004:15:
+./include/linux/fortify-string.h:44:33: error: '__builtin_memcmp' specified bound 6 exceeds source size 0 [-Werror=stringop-overread]
+   44 | #define __underlying_memcmp     __builtin_memcmp
+      |                                 ^
+./include/linux/fortify-string.h:420:16: note: in expansion of macro '__underlying_memcmp'
+  420 |         return __underlying_memcmp(p, q, size);
+      |                ^~~~~~~~~~~~~~~~~~~
 
-Patches which are added to review-hans now are intended for
-the next rc1. This branch will get rebased to the next rc1 when
-it is out and after the rebasing the contents of review-hans
-will be pushed to the platform-drivers-x86/for-next branch.
 
-Regards,
+csky error is:
 
-Hans
+In file included from net/bluetooth/l2cap_core.c:37:
+In function 'bacmp',
+    inlined from 'l2cap_global_chan_by_psm' at net/bluetooth/l2cap_core.c:2003:15:
+./include/net/bluetooth/bluetooth.h:347:16: error: 'memcmp' specified bound 6 exceeds source size 0 [-Werror=stringop-overread]
+  347 |         return memcmp(ba1, ba2, sizeof(bdaddr_t));
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In function 'bacmp',
+    inlined from 'l2cap_global_chan_by_psm' at net/bluetooth/l2cap_core.c:2004:15:
+./include/net/bluetooth/bluetooth.h:347:16: error: 'memcmp' specified bound 6 exceeds source size 0 [-Werror=stringop-overread]
+  347 |         return memcmp(ba1, ba2, sizeof(bdaddr_t));
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-> ---
->  drivers/platform/surface/surface_aggregator_registry.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/platform/surface/surface_aggregator_registry.c b/drivers/platform/surface/surface_aggregator_registry.c
-> index ce2bd88feeaa..08019c6ccc9c 100644
-> --- a/drivers/platform/surface/surface_aggregator_registry.c
-> +++ b/drivers/platform/surface/surface_aggregator_registry.c
-> @@ -556,6 +556,9 @@ static const struct acpi_device_id ssam_platform_hub_match[] = {
->  	/* Surface Laptop Go 1 */
->  	{ "MSHW0118", (unsigned long)ssam_node_group_slg1 },
->  
-> +	/* Surface Laptop Go 2 */
-> +	{ "MSHW0290", (unsigned long)ssam_node_group_slg1 },
-> +
->  	/* Surface Laptop Studio */
->  	{ "MSHW0123", (unsigned long)ssam_node_group_sls },
->  
+git bisect pointed to 332f1795ca20 ("Bluetooth: L2CAP: Fix l2cap_global_chan_by_psm regression").
+And, reverting that commit has fixed the build failure.
 
+I will be happy to test any patch or provide any extra log if needed.
+
+--
+Regards
+Sudip

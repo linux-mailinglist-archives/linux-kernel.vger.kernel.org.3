@@ -2,102 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA06D59071A
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 21:46:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B988590725
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 21:55:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235940AbiHKTqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 15:46:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56156 "EHLO
+        id S235965AbiHKTzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 15:55:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231131AbiHKTqk (ORCPT
+        with ESMTP id S231131AbiHKTzG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 15:46:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F534286CC;
-        Thu, 11 Aug 2022 12:46:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BE5E461227;
-        Thu, 11 Aug 2022 19:46:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 964D5C433C1;
-        Thu, 11 Aug 2022 19:46:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660247199;
-        bh=YRkMMlNwzmEJEYtybHoLH5VDXMoCZrySBAWcK7AYlRI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=fD87LsFkvPINJn8YnlIiDNG/PxAxlrZ63mXGJwBIvYKdlGXiWiAfBx7/Kq7/OqQ2Q
-         dOfZLQjJt+0dpkIQlK1KZy6M4hcTduS5X9zvXv/72MvrlKlOn6DpfMqEYepCxy7epX
-         4HuoeRUILihq7onsL+2tQ88ETmqchhxCPNZ+jqyeSjRTyk0mrbiH7iwm3zA/qMfDgX
-         dwRPs9JUGSELyfd2+dKQGkXQwzx7QMxd8UNA5uF9p6rPcQ9vdWQRMMOQ/bpy21AKOJ
-         jvU75o0k6yYmsXr+rveRyL8HseMj2NJJuaeaxX7BkdAc6aqRPvMWlGXo4e/O6rZ36b
-         FWDmNXW+0Pkfw==
-Date:   Thu, 11 Aug 2022 12:46:37 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-Cc:     Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-next@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-Subject: Re: build failure of next-20220811 due to 332f1795ca20 ("Bluetooth:
- L2CAP: Fix l2cap_global_chan_by_psm regression")
-Message-ID: <20220811124637.4cdb84f1@kernel.org>
-In-Reply-To: <YvVQEDs75pxSgxjM@debian>
-References: <YvVQEDs75pxSgxjM@debian>
+        Thu, 11 Aug 2022 15:55:06 -0400
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2E06E885
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 12:55:04 -0700 (PDT)
+Received: from [127.0.0.1] ([12.0.243.163])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 27BJs2nF568664
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Thu, 11 Aug 2022 12:54:02 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 27BJs2nF568664
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2022080501; t=1660247645;
+        bh=pmf6BMEHJK5PK7BNKtSJh7WF6hlmWzZhuKR8Hozwx5g=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=iBOr2Wpk9AMENOiksLgBGwDaGjrFDubQGmCUx5HZLynAluG4ahFuDZvwQcIW0dhZ2
+         iHoup1YrmiBlJpE5vmi6peH5/Skh8LG+d6DL9h6F6lUluF3iJujPd9shrRsHyZHuzo
+         sfK+yQsmvrPoLv7dLi62uF5DzMm5HcykymnCDOjjsi3AkghbVgs/Hdn6dBXMM2a2e2
+         jlRog8Nte2oLpacw7d2kGLaBk1uInNpONWU82WTDH5jVSZnAvJLV0cuUjOAhBzlpn+
+         NHz54cW8E1qBYTw95A8ey4varnvEiRE1xsS/zeDFtN9UZuiK+uOd4jof95qdzWWEXd
+         Fdo8VGu5WlqUA==
+Date:   Thu, 11 Aug 2022 12:53:56 -0700
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     Adam Dunlap <acdunlap@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Ben Dooks <ben-linux@fluff.org>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev
+CC:     Jacob Xu <jacobhxu@google.com>, Alper Gun <alpergun@google.com>,
+        Marc Orr <marcorr@google.com>
+Subject: Re: [PATCH] x86/asm: Force native_apic_mem_read to use mov
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20220811180010.3067457-1-acdunlap@google.com>
+References: <20220811180010.3067457-1-acdunlap@google.com>
+Message-ID: <657243C6-8EC8-4B44-BC74-8723BEC7B580@zytor.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 11 Aug 2022 19:53:04 +0100 Sudip Mukherjee (Codethink) wrote:
-> Not sure if it has been reported, builds of csky and mips allmodconfig
-> failed to build next-20220811 with gcc-12.
+On August 11, 2022 11:00:10 AM PDT, Adam Dunlap <acdunlap@google=2Ecom> wro=
+te:
+>Previously, when compiled with clang, native_apic_mem_read gets inlined
+>into __xapic_wait_icr_idle and optimized to a testl instruction=2E When
+>run in a VM with SEV-ES enabled, it attempts to emulate this
+>instruction, but the emulator does not support it=2E Instead, use inline
+>assembly to force native_apic_mem_read to use the mov instruction which
+>is supported by the emulator=2E
+>
+>Signed-off-by: Adam Dunlap <acdunlap@google=2Ecom>
+>Reviewed-by: Marc Orr <marcorr@google=2Ecom>
+>Reviewed-by: Jacob Xu <jacobhxu@google=2Ecom>
+>---
+> arch/x86/include/asm/apic=2Eh | 13 ++++++++++++-
+> 1 file changed, 12 insertions(+), 1 deletion(-)
+>
+>diff --git a/arch/x86/include/asm/apic=2Eh b/arch/x86/include/asm/apic=2E=
+h
+>index 3415321c8240=2E=2E281db79e76a9 100644
+>--- a/arch/x86/include/asm/apic=2Eh
+>+++ b/arch/x86/include/asm/apic=2Eh
+>@@ -109,7 +109,18 @@ static inline void native_apic_mem_write(u32 reg, u3=
+2 v)
+>=20
+> static inline u32 native_apic_mem_read(u32 reg)
+> {
+>-	return *((volatile u32 *)(APIC_BASE + reg));
+>+	volatile u32 *addr =3D (volatile u32 *)(APIC_BASE + reg);
+>+	u32 out;
+>+
+>+	/*
+>+	 * Functionally, what we want to do is simply return *addr=2E However,
+>+	 * this accesses an MMIO which may need to be emulated in some cases=2E
+>+	 * The emulator doesn't necessarily support all instructions, so we
+>+	 * force the read from addr to use a mov instruction=2E
+>+	 */
+>+	asm_inline("movl %1, %0" : "=3Dr"(out) : "m"(*addr));
+>+
+>+	return out;
+> }
+>=20
+> extern void native_apic_wait_icr_idle(void);
 
-I can't repro with the cross compiler from kernel.org.
-Can you test something like this?
-
-diff --git a/include/net/bluetooth/bluetooth.h b/include/net/bluetooth/bluetooth.h
-index e72f3b247b5e..82bf8e01f7af 100644
---- a/include/net/bluetooth/bluetooth.h
-+++ b/include/net/bluetooth/bluetooth.h
-@@ -341,6 +341,11 @@ static inline bool bdaddr_type_is_le(u8 type)
- #define BDADDR_ANY  (&(bdaddr_t) {{0, 0, 0, 0, 0, 0}})
- #define BDADDR_NONE (&(bdaddr_t) {{0xff, 0xff, 0xff, 0xff, 0xff, 0xff}})
- 
-+static inline int ba_is_any(const bdaddr_t *ba)
-+{
-+	return memchr_inv(ba, sizeof(*ba), 0);
-+}
-+
- /* Copy, swap, convert BD Address */
- static inline int bacmp(const bdaddr_t *ba1, const bdaddr_t *ba2)
- {
-diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
-index 77c0aac14539..a08ec272be4a 100644
---- a/net/bluetooth/l2cap_core.c
-+++ b/net/bluetooth/l2cap_core.c
-@@ -2001,8 +2001,8 @@ static struct l2cap_chan *l2cap_global_chan_by_psm(int state, __le16 psm,
- 			}
- 
- 			/* Closest match */
--			src_any = !bacmp(&c->src, BDADDR_ANY);
--			dst_any = !bacmp(&c->dst, BDADDR_ANY);
-+			src_any = !ba_is_any(&c->src);
-+			dst_any = !ba_is_any(&c->dst);
- 			if ((src_match && dst_any) || (src_any && dst_match) ||
- 			    (src_any && dst_any))
- 				c1 = c;
+As I recall, there are some variants which only support using the ax regis=
+ter, so if you are going to do this might as well go all the way and force =
+a specific instruction with specific registers, like mov (%rdx),%rax (by an=
+alogy with the I/O registers=2E)

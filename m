@@ -2,78 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 098F05908CA
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 00:55:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21EA15908CE
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 00:56:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236442AbiHKWzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 18:55:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54990 "EHLO
+        id S236487AbiHKW4s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 18:56:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiHKWzC (ORCPT
+        with ESMTP id S231131AbiHKW4q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 18:55:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C190A9E2E7
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 15:55:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 80228B822B6
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 22:55:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA759C433D6;
-        Thu, 11 Aug 2022 22:54:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660258499;
-        bh=ycUQg3EfV3v4qlL6WPECdZb5Kbc9wh21Vkk4bXPCQE8=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ZfGRPM+5Hbj+TjCjF2RdOsqXvKIrZw4ySN6OMBRbjqaC/OMnx2GDyjQVWH3rdAzZ6
-         e8YvFuhtNGzDU+X873B2+VZB4vHoQ5hPil55vppAunZ5XmLWuV6G5xYGSBAjS1u9n3
-         Wkb8vLKSRHuxHgrPHLTm+lzXx7J5bQdpOS3OO9LWkF5iOJB92nTu2yjas/9YhpCgWf
-         91r9kozclbD8+ApDDsoHBSr7oNBb24OhF1XfyH836cfjLWFFoRTMn7l/rL/KoEQJnU
-         dBV/hov2FubePJx9E9MF9+kZapE8eKrROpfGIzqwt0o01MS46ggGChzeerwTSRq45c
-         xZ6fTloK9PxFQ==
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>
-Subject: [PATCH] f2fs: zoned device does not support ATGC
-Date:   Thu, 11 Aug 2022 15:54:54 -0700
-Message-Id: <20220811225454.2125297-1-jaegeuk@kernel.org>
-X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
+        Thu, 11 Aug 2022 18:56:46 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B9A94EFF;
+        Thu, 11 Aug 2022 15:56:45 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id u133so17670783pfc.10;
+        Thu, 11 Aug 2022 15:56:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=A5BvUw9DHDs145kZowhBaJ4O1ZR9lKngl0DmWaJQmow=;
+        b=L+08adCWxhKXEZascNszKuNEllEEJ75u8zaDs3gl3ePwhzjJWEnlvQ/UO+Z+KswkmI
+         KIDwOORijsD/8zQz6RNkQQSl6i2qrbG7oo/mAYzwpk3cQq5QKcghHsvHsH9Rn+uUdzdd
+         nOOVTx0MKZXBa49izNI3MWGczTbzH01Mm5e8AcqrvkrMtxNpUgOQzjMTfWBf5ePfjiuI
+         Yfey0YG1CseWGFZcZGTi7OMwa1sGEJRekwboB6hG/hWiimhMGaXvBjmCXl8t8b6VoO2N
+         qU1yXiWHGGTIz0zrqMQ16WMhT20XP/bpH0IRQamUsjBBDpnQP8gS/I9kwrwBbfE1Gkk8
+         q21A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=A5BvUw9DHDs145kZowhBaJ4O1ZR9lKngl0DmWaJQmow=;
+        b=UX6UMhOWQW6w2vNgJepjhvcnPa2YU53LOaq/w5nkBDMMxAcc8cNmVrsPaBL6Y5A1F1
+         oTKzLp4J7ag/Ck21Hf0QKvrOTCofGCQI788OLFVpCah6/Bf86tlMUe5KbONawLQ7r9O5
+         k5P59hrEaXzeu0oZB4xIkD/3rFHRgf9E16xIQWU/dW6R2VDfq/YXroWVj1T7KlmwrosM
+         yAEmhgdpaT24MQi3Tl2LY/ryZVvz9EhP+rFwTBhqjUXlXN9jNglT6UCLw1VpCBdoArG9
+         SjF5vHHLC2JeWnp8dAgpPKw1XY4klXfLycJcWWbqIFHWny7tVvdp9W4ExvRMdt6HUvNO
+         ckYA==
+X-Gm-Message-State: ACgBeo2NwnFt3Pd09AQmwZqrXqooecy7ewpwt5mG+206x4A7S4V1WQVj
+        XnWssB8SyUc817SoWUPTl+U=
+X-Google-Smtp-Source: AA6agR6hUkYo4PiF0HYlysZjr6uPc20IERTxrPMMRhbiZqUW0ubj0RKGPBTMsrAU3LfjQIAi/rcvsg==
+X-Received: by 2002:a63:f24e:0:b0:41d:7381:ee6b with SMTP id d14-20020a63f24e000000b0041d7381ee6bmr927921pgk.305.1660258604498;
+        Thu, 11 Aug 2022 15:56:44 -0700 (PDT)
+Received: from localhost ([192.55.54.53])
+        by smtp.gmail.com with ESMTPSA id ik28-20020a170902ab1c00b0016dbb5bbeebsm180382plb.228.2022.08.11.15.56.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Aug 2022 15:56:43 -0700 (PDT)
+Date:   Thu, 11 Aug 2022 15:56:42 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Xiaoyao Li <xiaoyao.li@intel.com>
+Cc:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaku.yamahata@gmail.com,
+        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
+        Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>
+Subject: Re: [RFC PATCH 13/13] KVM: x86: remove struct
+ kvm_arch.tdp_max_page_level
+Message-ID: <20220811225642.GA826621@ls.amr.corp.intel.com>
+References: <cover.1659854957.git.isaku.yamahata@intel.com>
+ <1469a0a4aabcaf51f67ed4b4e25155267e07bfd1.1659854957.git.isaku.yamahata@intel.com>
+ <e275d842-d115-d1d2-a4c2-07ddd057ece1@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <e275d842-d115-d1d2-a4c2-07ddd057ece1@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ATGC is using SSR which violates zoned device.
+On Mon, Aug 08, 2022 at 01:40:53PM +0800,
+Xiaoyao Li <xiaoyao.li@intel.com> wrote:
 
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
----
- fs/f2fs/super.c | 4 ++++
- 1 file changed, 4 insertions(+)
+> On 8/8/2022 6:18 AM, isaku.yamahata@intel.com wrote:
+> > From: Xiaoyao Li <xiaoyao.li@intel.com>
+> > 
+> > Now that everything is there to support large page for TD guest.  Remove
+> > tdp_max_page_level from struct kvm_arch that limits the page size.
+> 
+> Isaku, we cannot do this to remove tdp_max_page_level. Instead, we need
+> assign it as PG_LEVEL_2M, because TDX currently only supports AUG'ing a
+> 4K/2M page, 1G is not supported yet.
 
-diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
-index 2451623c05a7..212ec2b4926b 100644
---- a/fs/f2fs/super.c
-+++ b/fs/f2fs/super.c
-@@ -1298,6 +1298,10 @@ static int parse_options(struct super_block *sb, char *options, bool is_remount)
- 			F2FS_OPTION(sbi).discard_unit =
- 					DISCARD_UNIT_SECTION;
- 		}
-+		if (test_opt(sbi, ATGC)) {
-+			f2fs_err(sbi, "Zoned block device doesn't support ATGC.");
-+			return -EINVAL;
-+		}
- 	}
- 
- #ifdef CONFIG_F2FS_FS_COMPRESSION
+I went too further. I'll fix it, thanks.
 -- 
-2.37.1.559.g78731f0fdb-goog
-
+Isaku Yamahata <isaku.yamahata@gmail.com>

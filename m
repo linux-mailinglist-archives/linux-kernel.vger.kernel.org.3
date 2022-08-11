@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B4F1590459
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 18:48:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9BA7590468
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 18:48:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236543AbiHKQdg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 12:33:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54802 "EHLO
+        id S239001AbiHKQe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 12:34:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238961AbiHKQbl (ORCPT
+        with ESMTP id S236088AbiHKQcV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 12:31:41 -0400
+        Thu, 11 Aug 2022 12:32:21 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA83C10FB;
-        Thu, 11 Aug 2022 09:10:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F65424BD8;
+        Thu, 11 Aug 2022 09:10:54 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EFFD16145B;
-        Thu, 11 Aug 2022 16:10:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 54816C4347C;
-        Thu, 11 Aug 2022 16:10:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C01F06133D;
+        Thu, 11 Aug 2022 16:10:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0FEB4C433C1;
+        Thu, 11 Aug 2022 16:10:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660234215;
-        bh=fwNryxcXoLuBUuV+BJ0v6gHwy+VG3pWeBl4er5b7iiQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=FUhA5HBWP6tafLrt5KNuOu44kVTAlGPW/0xiZ55lAyX1vT1oV0LfruA86r4s5y1lt
-         RCMWj98Abx4w8w++H/sdvVSQlmrSwR1hNlLxKcOgj5xX3jfeZXo34N9IB1Oa1vY+Al
-         xx57qIR4XBwtjVOSNGmr6KytFxx5lSJXtRvxwd+BrgkNy0+tyeV7sXJ+7oedGICxN/
-         Sj3Ib4iejilkBAqTbeXrYbzqeprBBwc1qtOwSvD4eBJjoMtCMDj140+A/VuAnHxsyj
-         ghkhpeZjqMvQrZoPXPiCcOkbBcF2Ilg3boBQEGa0GwwT0I/xNOyD3ejBKXiBUonBka
-         04Zb9MxShstaA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 35C28C43144;
-        Thu, 11 Aug 2022 16:10:15 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        s=k20201202; t=1660234253;
+        bh=hNnG/QF449VVgko0ZeoXmHgr1IPIPHXrWVvntaAq3ww=;
+        h=From:To:Cc:Subject:Date:From;
+        b=C+0IIqK4gfhLAavO8tSqO9oGIR1nugAnWas7AUoDcnH+b4brVTINJvbQOqjFUpVYW
+         rFMTDTbTDEt4zYbbiorxkvfZkzmmQmCoAV0vut5oBVps7iQ1D7upR29Q/1QtTd7OEK
+         SfVzwfHYVvEYUhQuVTgZBwUcuTqbIPkuuRveNnQM2pJBHseCTpxGMw2b2QWA2LQHn7
+         O+nRJeLx5BkqgHQkCUiXSTuwvB/7skcIi+qKaXCP+lOHlGVrXkh+rM596oyZMWfzas
+         xNIOepsfzt6iygEKjSEu0C1J8sp7tF1dU4NpgSbFj6YNVfeLW+jJHGlTyKlw4bn2NU
+         K+rTN+bT5CYXQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Borislav Petkov <bp@suse.de>, Randy Dunlap <rdunlap@infradead.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        dri-devel@lists.freedesktop.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.14 01/14] drm/r128: Fix undefined behavior due to shift overflowing the constant
+Date:   Thu, 11 Aug 2022 12:10:30 -0400
+Message-Id: <20220811161050.1543183-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net] mlxsw: minimal: Fix deadlock in ports creation
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166023421521.9507.10489139013497988620.git-patchwork-notify@kernel.org>
-Date:   Thu, 11 Aug 2022 16:10:15 +0000
-References: <f4afce5ab0318617f3866b85274be52542d59b32.1660211614.git.petrm@nvidia.com>
-In-Reply-To: <f4afce5ab0318617f3866b85274be52542d59b32.1660211614.git.petrm@nvidia.com>
-To:     Petr Machata <petrm@nvidia.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, vadimp@nvidia.com, idosch@nvidia.com
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,31 +60,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+From: Borislav Petkov <bp@suse.de>
 
-This patch was applied to netdev/net.git (master)
-by Jakub Kicinski <kuba@kernel.org>:
+[ Upstream commit 6556551f8848f98eff356c8aacae42c8dd65b2df ]
 
-On Thu, 11 Aug 2022 11:57:36 +0200 you wrote:
-> From: Vadim Pasternak <vadimp@nvidia.com>
-> 
-> Drop devl_lock() / devl_unlock() from ports creation and removal flows
-> since the devlink instance lock is now taken by mlxsw_core.
-> 
-> Fixes: 72a4c8c94efa ("mlxsw: convert driver to use unlocked devlink API during init/fini")
-> Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
-> Signed-off-by: Ido Schimmel <idosch@nvidia.com>
-> Signed-off-by: Petr Machata <petrm@nvidia.com>
-> 
-> [...]
+Fix:
 
-Here is the summary with links:
-  - [net] mlxsw: minimal: Fix deadlock in ports creation
-    https://git.kernel.org/netdev/net/c/4f98cb0408b0
+  drivers/gpu/drm/r128/r128_cce.c: In function ‘r128_do_init_cce’:
+  drivers/gpu/drm/r128/r128_cce.c:417:2: error: case label does not reduce to an integer constant
+    case R128_PM4_64BM_64VCBM_64INDBM:
+    ^~~~
+  drivers/gpu/drm/r128/r128_cce.c:418:2: error: case label does not reduce to an integer constant
+    case R128_PM4_64PIO_64VCPIO_64INDPIO:
+    ^~~~
 
-You are awesome, thank you!
+See https://lore.kernel.org/r/YkwQ6%2BtIH8GQpuct@zn.tnic for the gory
+details as to why it triggers with older gccs only.
+
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: David Airlie <airlied@linux.ie>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: Alex Deucher <alexander.deucher@amd.com>
+Cc: dri-devel@lists.freedesktop.org
+Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220405151517.29753-5-bp@alien8.de
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/gpu/drm/r128/r128_drv.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/gpu/drm/r128/r128_drv.h b/drivers/gpu/drm/r128/r128_drv.h
+index 09143b840482..6553a855a176 100644
+--- a/drivers/gpu/drm/r128/r128_drv.h
++++ b/drivers/gpu/drm/r128/r128_drv.h
+@@ -289,8 +289,8 @@ extern long r128_compat_ioctl(struct file *filp, unsigned int cmd,
+ #	define R128_PM4_64PIO_128INDBM		(5  << 28)
+ #	define R128_PM4_64BM_128INDBM		(6  << 28)
+ #	define R128_PM4_64PIO_64VCBM_64INDBM	(7  << 28)
+-#	define R128_PM4_64BM_64VCBM_64INDBM	(8  << 28)
+-#	define R128_PM4_64PIO_64VCPIO_64INDPIO	(15 << 28)
++#	define R128_PM4_64BM_64VCBM_64INDBM	(8U  << 28)
++#	define R128_PM4_64PIO_64VCPIO_64INDPIO	(15U << 28)
+ #	define R128_PM4_BUFFER_CNTL_NOUPDATE	(1  << 27)
+ 
+ #define R128_PM4_BUFFER_WM_CNTL		0x0708
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.35.1
 

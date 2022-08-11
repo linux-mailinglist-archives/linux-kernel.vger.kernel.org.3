@@ -2,131 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E0A158F7E2
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 08:48:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE61558F7EA
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 08:50:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234272AbiHKGsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 02:48:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57140 "EHLO
+        id S234286AbiHKGuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 02:50:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234088AbiHKGsf (ORCPT
+        with ESMTP id S234088AbiHKGuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 02:48:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 67F398B98A
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 23:48:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660200513;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UUY4oNhCDV5ex2akqHR3TnYfzZigpKeeFYzIPsZyWj4=;
-        b=GMiC1waYQKfQeG75Wsp+B7Pv9Jq4Zbbqvae4vRDRtLSohWesW9x/4ombHiI8hFyAvJwV+p
-        YjJdrd4mHb8s7+KTGOyWxv4dbhUCSvO2UMYNtLbEnvipVlkAo0Ci/Sqd5/x7CRGAIAmIJK
-        Kkg+NftwDzLsIVMdPBhweU2tnH+wCHI=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-370-RefDHaKNOECJadoosXPY9w-1; Thu, 11 Aug 2022 02:48:31 -0400
-X-MC-Unique: RefDHaKNOECJadoosXPY9w-1
-Received: by mail-ed1-f71.google.com with SMTP id b6-20020a056402278600b0043e686058feso10306540ede.10
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 23:48:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=UUY4oNhCDV5ex2akqHR3TnYfzZigpKeeFYzIPsZyWj4=;
-        b=oMt20MBviMo2GDWdIx7Ue+glh/fxVZ8fqpDloPp8DsMnpUwHR0kO3iDBJuhPVfutu5
-         ugeE6PyIB6o6MNOy3d+ozw2Ik8eSebGav3L5FHfTm01Gds9OpGH9dBnA0746iNCrmLXx
-         U/3fF3tapyyRjsmQ8mC4BRTSHzhN5ySsM0DQlqNGv6273HD2CoZHmOvAysuEBlm/g7mg
-         MuxRV8qMPUMhD7KmdW7khWiJec1dEnxV/7Q+Fs+EjpOS16ppKdcLADwRW5H8RndyMSik
-         P5IIrCu5FUkpSksIPxNwZOCUE8klwfGw73wE1TKM3wOOkDan8IvUjN6SRmEvIpQr1KeW
-         cYtw==
-X-Gm-Message-State: ACgBeo2nFCEMXyqFwkxVxX8WdkhJHOICIgNIGRXmS8F9V/rVJ0q2G/xm
-        4QH7s9Lam885bxe1GGcluagDEwWfa3miGnsWiVpWueVqALcnALlTQiFd48VfciB623cZVGDk/v+
-        nCSRlSq2vF3F909aN/4BU/gYF
-X-Received: by 2002:a05:6402:14b:b0:43d:a7dd:4376 with SMTP id s11-20020a056402014b00b0043da7dd4376mr29192334edu.89.1660200510619;
-        Wed, 10 Aug 2022 23:48:30 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5Ba9YTjPkLaTzT5BEMehKw/OU/+gGLQ1lTMMIGpaZjcs1rvnE8O296hVvPRv4q9RDqgjacjQ==
-X-Received: by 2002:a05:6402:14b:b0:43d:a7dd:4376 with SMTP id s11-20020a056402014b00b0043da7dd4376mr29192311edu.89.1660200510368;
-        Wed, 10 Aug 2022 23:48:30 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:9af8:e5f5:7516:fa89? ([2001:b07:6468:f312:9af8:e5f5:7516:fa89])
-        by smtp.googlemail.com with ESMTPSA id s19-20020a056402015300b0043af8007e7fsm8697671edu.3.2022.08.10.23.48.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Aug 2022 23:48:29 -0700 (PDT)
-Message-ID: <d8704ffa-8d9e-2261-1bcf-1b402f955fad@redhat.com>
-Date:   Thu, 11 Aug 2022 08:48:21 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 0/5] KVM: Fix oneshot interrupts forwarding
-Content-Language: en-US
-To:     Dmytro Maluka <dmy@semihalf.com>, Marc Zyngier <maz@kernel.org>,
-        eric.auger@redhat.com
-Cc:     "Dong, Eddie" <eddie.dong@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Thu, 11 Aug 2022 02:50:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B488B98F;
+        Wed, 10 Aug 2022 23:49:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A2F4BB81ECD;
+        Thu, 11 Aug 2022 06:49:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41C60C433D6;
+        Thu, 11 Aug 2022 06:49:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660200595;
+        bh=nqJm+oBAG4nwtxVy6XW19Cq4t610ItQ+9KHptzLd5cw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=I7fQ4dsGGwFGm4V3/IaCXSsIUhTDDD69apZZPRnQXPCLIhvyBw22aHvQOp/l1+lT3
+         SEGDkDuRFmqJhPL/gWV8jR96mc0wyHmuv7acoT87ilyA2aWbu1m/TnvKAiMdQEz8zn
+         F27GVd6nR5YVkilwqnumtYH/caN+qlgsF/K3NQNTggqiKpWWUYpKv8ZHn8Aw5CXwbb
+         6cRKFfk+dErYwd45E+4TR/3lPtGWTmZTxNPLYHzbnQSYhq5mbER/logkjyOHtcrEHI
+         5OKsY7B0BVEdUjVFHr4QTPXhcFlkFl3Qk6TkIsz2sDX6VUU9DwEDxvCuhyL6PuOvGs
+         68IJ4wzPQeISw==
+Date:   Thu, 11 Aug 2022 09:49:33 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
         Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        "Liu, Rong L" <rong.l.liu@intel.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        "upstream@semihalf.com" <upstream@semihalf.com>,
-        Dmitry Torokhov <dtor@google.com>
-References: <20220805193919.1470653-1-dmy@semihalf.com>
- <BL0PR11MB30429034B6D59253AF22BCE08A639@BL0PR11MB3042.namprd11.prod.outlook.com>
- <c5d8f537-5695-42f0-88a9-de80e21f5f4c@semihalf.com>
- <BL0PR11MB304213273FA9FAC4EBC70FF88A629@BL0PR11MB3042.namprd11.prod.outlook.com>
- <ef9ffbde-445e-f00f-23c1-27e23b6cca4f@semihalf.com>
- <87o7wsbngz.wl-maz@kernel.org>
- <8ff76b5e-ae28-70c8-2ec5-01662874fb15@redhat.com>
- <87r11ouu9y.wl-maz@kernel.org>
- <72e40c17-e5cd-1ffd-9a38-00b47e1cbd8e@semihalf.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <72e40c17-e5cd-1ffd-9a38-00b47e1cbd8e@semihalf.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        "Dmitry V . Levin" <ldv@altlinux.org>,
+        Gleb Fotengauer-Malinovskiy <glebfm@altlinux.org>,
+        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        zhangyi <yi.zhang@huawei.com>, linux-doc@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        linux-security-module@vger.kernel.org
+Subject: Re: [PATCH v5 4/5] userfaultfd: update documentation to describe
+ /dev/userfaultfd
+Message-ID: <YvSmfcO2b8haJhEe@kernel.org>
+References: <20220808175614.3885028-1-axelrasmussen@google.com>
+ <20220808175614.3885028-5-axelrasmussen@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220808175614.3885028-5-axelrasmussen@google.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/10/22 19:02, Dmytro Maluka wrote:
->      1. If vEOI happens for a masked vIRQ, notify resamplefd as usual,
->         but also remember this vIRQ as, let's call it, "pending oneshot".
+On Mon, Aug 08, 2022 at 10:56:13AM -0700, Axel Rasmussen wrote:
+> Explain the different ways to create a new userfaultfd, and how access
+> control works for each way.
 > 
->      2. A new physical IRQ is immediately generated, so the vIRQ is
->         properly set as pending.
+> Acked-by: Peter Xu <peterx@redhat.com>
+> Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+> ---
+>  Documentation/admin-guide/mm/userfaultfd.rst | 41 ++++++++++++++++++--
+>  Documentation/admin-guide/sysctl/vm.rst      |  3 ++
+>  2 files changed, 41 insertions(+), 3 deletions(-)
 > 
->      3. After the vIRQ is unmasked by the guest, check and find out that
->         it is not just pending but also "pending oneshot", so don't
->         deliver it to a vCPU. Instead, immediately notify resamplefd once
->         again.
-> 
-> In other words, don't avoid extra physical interrupts in the host
-> (rather, use those extra interrupts for properly updating the pending
-> state of the vIRQ) but avoid propagating those extra interrupts to the
-> guest.
-> 
-> Does this sound reasonable to you?
+> diff --git a/Documentation/admin-guide/mm/userfaultfd.rst b/Documentation/admin-guide/mm/userfaultfd.rst
+> index 6528036093e1..a76c9dc1865b 100644
+> --- a/Documentation/admin-guide/mm/userfaultfd.rst
+> +++ b/Documentation/admin-guide/mm/userfaultfd.rst
+> @@ -17,7 +17,10 @@ of the ``PROT_NONE+SIGSEGV`` trick.
+>  Design
+>  ======
+>  
+> -Userfaults are delivered and resolved through the ``userfaultfd`` syscall.
+> +Userspace creates a new userfaultfd, initializes it, and registers one or more
+> +regions of virtual memory with it. Then, any page faults which occur within the
+> +region(s) result in a message being delivered to the userfaultfd, notifying
+> +userspace of the fault.
+>  
+>  The ``userfaultfd`` (aside from registering and unregistering virtual
+>  memory ranges) provides two primary functionalities:
+> @@ -34,12 +37,11 @@ The real advantage of userfaults if compared to regular virtual memory
+>  management of mremap/mprotect is that the userfaults in all their
+>  operations never involve heavyweight structures like vmas (in fact the
+>  ``userfaultfd`` runtime load never takes the mmap_lock for writing).
+> -
+>  Vmas are not suitable for page- (or hugepage) granular fault tracking
+>  when dealing with virtual address spaces that could span
+>  Terabytes. Too many vmas would be needed for that.
+>  
+> -The ``userfaultfd`` once opened by invoking the syscall, can also be
+> +The ``userfaultfd``, once created, can also be
+>  passed using unix domain sockets to a manager process, so the same
+>  manager process could handle the userfaults of a multitude of
+>  different processes without them being aware about what is going on
+> @@ -50,6 +52,39 @@ is a corner case that would currently return ``-EBUSY``).
+>  API
+>  ===
+>  
+> +Creating a userfaultfd
+> +----------------------
+> +
+> +There are two ways to create a new userfaultfd, each of which provide ways to
+> +restrict access to this functionality (since historically userfaultfds which
+> +handle kernel page faults have been a useful tool for exploiting the kernel).
+> +
+> +The first way, supported since userfaultfd was introduced, is the
+> +userfaultfd(2) syscall. Access to this is controlled in several ways:
+> +
+> +- Any user can always create a userfaultfd which traps userspace page faults
+> +  only. Such a userfaultfd can be created using the userfaultfd(2) syscall
+> +  with the flag UFFD_USER_MODE_ONLY.
+> +
+> +- In order to also trap kernel page faults for the address space, then either
 
-Yeah, this makes sense and it lets the resamplefd set the "pending" 
-status in the vGIC.  It still has the issue that the interrupt can 
-remain pending in the guest for longer than it's pending on the host, 
-but that can't be fixed?
+                                    I think "then" is excessive here ^
 
-Paolo
+> +  the process needs the CAP_SYS_PTRACE capability, or the system must have
+> +  vm.unprivileged_userfaultfd set to 1. By default, vm.unprivileged_userfaultfd
+> +  is set to 0.
+> +
+> +The second way, added to the kernel more recently, is by opening and issuing a
 
+Maybe:
+
+..., is by opening /dev/userfaultfd and issuing USERFAULTFD_IOC_NEW ioctl
+to it.
+
+> +USERFAULTFD_IOC_NEW ioctl to /dev/userfaultfd. This method yields equivalent
+> +userfaultfds to the userfaultfd(2) syscall.
+> +
+> +Unlike userfaultfd(2), access to /dev/userfaultfd is controlled via normal
+> +filesystem permissions (user/group/mode), which gives fine grained access to
+> +userfaultfd specifically, without also granting other unrelated privileges at
+> +the same time (as e.g. granting CAP_SYS_PTRACE would do). Users who have access
+> +to /dev/userfaultfd can always create userfaultfds that trap kernel page faults;
+> +vm.unprivileged_userfaultfd is not considered.
+> +
+> +Initializing a userfaultfd
+> +--------------------------
+> +
+>  When first opened the ``userfaultfd`` must be enabled invoking the
+>  ``UFFDIO_API`` ioctl specifying a ``uffdio_api.api`` value set to ``UFFD_API`` (or
+>  a later API version) which will specify the ``read/POLLIN`` protocol
+> diff --git a/Documentation/admin-guide/sysctl/vm.rst b/Documentation/admin-guide/sysctl/vm.rst
+> index f74f722ad702..b3e40b42e1b3 100644
+> --- a/Documentation/admin-guide/sysctl/vm.rst
+> +++ b/Documentation/admin-guide/sysctl/vm.rst
+> @@ -927,6 +927,9 @@ calls without any restrictions.
+>  
+>  The default value is 0.
+>  
+> +Another way to control permissions for userfaultfd is to use
+> +/dev/userfaultfd instead of userfaultfd(2). See
+> +Documentation/admin-guide/mm/userfaultfd.rst.
+>  
+>  user_reserve_kbytes
+>  ===================
+> -- 
+> 2.37.1.559.g78731f0fdb-goog
+> 
+
+-- 
+Sincerely yours,
+Mike.

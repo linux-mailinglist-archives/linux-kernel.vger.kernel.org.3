@@ -2,111 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D86B458F8C0
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 10:04:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF2D158F8C3
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 10:05:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234292AbiHKIEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 04:04:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41058 "EHLO
+        id S234303AbiHKIFH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 04:05:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234156AbiHKIED (ORCPT
+        with ESMTP id S234084AbiHKIFF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 04:04:03 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B87905005A
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:04:02 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id i14so32160797ejg.6
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:04:02 -0700 (PDT)
+        Thu, 11 Aug 2022 04:05:05 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0193389CC0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:05:04 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id f20so24486072lfc.10
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:05:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=xDa5LDC2OZSh8eP2hQRQmGnezW0BSLHEBttI1qvVfns=;
-        b=XAQaIZ/lYM+J2Xmgb4OV59DbJa22/EL4euqT9xkG48SWklz/0K0yy22BGxpNihcFpw
-         jZs+dnl0itp10y89pJENSspuIwl1xUHcp0080DnyYFMDKZmki/68Byu8xvz0uff56cG4
-         jpXAGMkNfUTuCtMosL9QmMQtqorASt5Om50s6/ENkxgCEJeaW8SXuHHVf8O6A/SwwogN
-         p9lF0H7LC35z4s7NGVYJn+/lvh0pCvwHetLIjJR1DwDjNyjYde1j9cbJZDOR2DF9Jb52
-         Foofxhk9EwVaLjDqH2LYjRjn54cPwiOXPg3a1rEvu+jydul79vaEwKFn4agKRshRSDB+
-         ET8w==
+        bh=AWObm1t2SGsfX+EOzuUn4SeYctPOHns23Pie8FOr12w=;
+        b=blQsdmvcfi8aabm0W+4Bgxbof6mNYs6NonqMhJPZ1aVJaqcsFhXMdZFZDyiII01Fhf
+         x9SHadRxyjNFE6LHkQukeYi/PX+T/LeY29ukbibda1AWyUU0JolhqKes7iKm6crF8upp
+         PjVSelSX7gWdWVdY0E/fsOGQZv12TmTl0F0n04rlQS7j160OcGljnSOY0O6hsfmWLYNU
+         erUQklKIcGEFmbm9uSYCv7VuYJBAX7vbCUJzTehyFcxuXxX4lfsmNtLHHZwkqSDtoRU4
+         bFh+tOND5apR5OsJm2vyhaqZz8bRcXZMncjdCXcWwNp59SYUWZFKcpRUCvltmUjvXpVx
+         jqOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=xDa5LDC2OZSh8eP2hQRQmGnezW0BSLHEBttI1qvVfns=;
-        b=EdT8oSMZwTbX4Mg7uZ6AFq5i0HZ4jOykC64ziMKM01kttboLQe+Iw6XjFWY43H/xSi
-         l4Hg5tCu6NBTvP4muwobHChk9YetLZEgYjBl0bKyl9u9F/i+ye7JK1LXhulEAI4jN44r
-         NS6P9u5sOLUNsOr2tt0DCjXBIiB4+urJg4TKqUIfY85PP5J8aL7/zC4tDDKxlpTXe0sj
-         o8ZDnKcamVHMI7TnKJyWtJd3Uy6OFFApU8eYw2TErfhKK0BB08V5jUqd8JFn7urkTYHr
-         zWBig6IhD1vKpbNyY+6WweX6uAKGhSoVbxDGF8SPj6Il+qRH1DJ8C7oO723682DieECA
-         yrvw==
-X-Gm-Message-State: ACgBeo0y4Y26hySvDgUM+8DtnRZDsY2y9hWrwnBh8ZxHlY/45jsttru/
-        W2CWUtKJ9gQ/AY/7msG3T9SK6g==
-X-Google-Smtp-Source: AA6agR7dHGU+mmMS1/rSvLggSO020w6y6GiU/+K5dKvH8Oofe5Pr9WaXRuyjNYDY+B4RCGOhj5KHIg==
-X-Received: by 2002:a17:907:6288:b0:72f:90ba:f0b2 with SMTP id nd8-20020a170907628800b0072f90baf0b2mr21961452ejc.696.1660205041165;
-        Thu, 11 Aug 2022 01:04:01 -0700 (PDT)
-Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
-        by smtp.gmail.com with ESMTPSA id la19-20020a170907781300b0072f0a9a8e6dsm3172157ejc.194.2022.08.11.01.04.00
+        bh=AWObm1t2SGsfX+EOzuUn4SeYctPOHns23Pie8FOr12w=;
+        b=WuFXIh4liwUqcvNQ+U9K9l6O3uE/HmV0GMJo0fUFEOuDac05zyzfojXbJ14nQo/oGk
+         VN8wQPAs4HHRPVkSCtT/Ht/+JUAbvZ5GnZRqrE0HminVMBxmr66H9iiteIGSLxCGb9sf
+         RksFxf7kIpUvsz/N935tjaLS8/Ws3nSYPQi+VuUNKBuYeIgU8iC4ilzur88KGfRfzP1e
+         QnukzLvUteXGo1Z6lcQXaMwz+WxYxTmZn6JfvkxLrg+2JLIgHKu0WOQg74aRMByFUDu7
+         QZW890yDoQ8zNc1qDdvfjtycD0wCfXtrxnhpuf8G6H1XQCoL9SmTHp/VdgTx1TFOftDW
+         0VHw==
+X-Gm-Message-State: ACgBeo1qpa2RlSXds6HAyuj8SCTbfDmXoMayL8cgCgXLt0kqd/jWdH9m
+        +Ydczgk6CIx0hQWxeeH2aVcegw==
+X-Google-Smtp-Source: AA6agR7A6T7SL1WDl9JlKh+6jE8mNB65VeBjyl40+g28JZzZxZZVG575FetC+Nlr08Mgmdi51/8NDQ==
+X-Received: by 2002:a05:6512:c13:b0:48b:3b30:637d with SMTP id z19-20020a0565120c1300b0048b3b30637dmr9499019lfu.447.1660205100855;
+        Thu, 11 Aug 2022 01:05:00 -0700 (PDT)
+Received: from [192.168.1.39] ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id y8-20020a2e95c8000000b0025d47a29734sm721935ljh.47.2022.08.11.01.04.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Aug 2022 01:04:00 -0700 (PDT)
-Message-ID: <251c1455-f30c-0130-2bb7-036d412a0516@blackwall.org>
-Date:   Thu, 11 Aug 2022 11:03:59 +0300
+        Thu, 11 Aug 2022 01:05:00 -0700 (PDT)
+Message-ID: <74afb676-4a85-7a8e-f7ea-20d8a0967d7d@linaro.org>
+Date:   Thu, 11 Aug 2022 11:04:59 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH net] bonding: fix reference count leak in balance-alb mode
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 1/3] dt-bindings: display/msm: Add binding for SC8280XP
+ MDSS
 Content-Language: en-US
-To:     Jay Vosburgh <jay.vosburgh@canonical.com>, netdev@vger.kernel.org,
-        sunshouxin@chinatelecom.cn
-Cc:     vfalico@gmail.com, andy@greyhouse.net, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-kernel@vger.kernel.org, huyd12@chinatelecom.cn
-References: <26758.1660194413@famine>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <26758.1660194413@famine>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220811040121.3775613-1-bjorn.andersson@linaro.org>
+ <20220811040121.3775613-2-bjorn.andersson@linaro.org>
+ <db9b74f9-1f65-5b88-1c81-0a3fd6dcf9a6@linaro.org>
+In-Reply-To: <db9b74f9-1f65-5b88-1c81-0a3fd6dcf9a6@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/08/2022 08:06, Jay Vosburgh wrote:
-> 	Commit d5410ac7b0ba ("net:bonding:support balance-alb interface
-> with vlan to bridge") introduced a reference count leak by not releasing
-> the reference acquired by ip_dev_find().  Remedy this by insuring the
-> reference is released.
+On 11/08/2022 10:56, Krzysztof Kozlowski wrote:
+> On 11/08/2022 07:01, Bjorn Andersson wrote:
+>> Add binding for the display subsystem and display processing unit in the
+>> Qualcomm SC8280XP platform.
+>>
+>> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
+>> ---
+>>  .../bindings/display/msm/dpu-sc8280xp.yaml    | 284 ++++++++++++++++++
+>>  1 file changed, 284 insertions(+)
+>>  create mode 100644 Documentation/devicetree/bindings/display/msm/dpu-sc8280xp.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/display/msm/dpu-sc8280xp.yaml b/Documentation/devicetree/bindings/display/msm/dpu-sc8280xp.yaml
+>> new file mode 100644
+>> index 000000000000..6c25943e639c
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/display/msm/dpu-sc8280xp.yaml
 > 
-> Fixes: d5410ac7b0ba ("net:bonding:support balance-alb interface with vlan to bridge")
-> Signed-off-by: Jay Vosburgh <jay.vosburgh@canonical.com>
+> qcom prefix is needed (also when file is in msm subdir)
 > 
-> ---
->  drivers/net/bonding/bond_alb.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
+> The file name should be based on compatible, so "qcom,sc8280xp-mdss.yaml"
 > 
-> diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_alb.c
-> index 60cb9a0225aa..b9dbad3a8af8 100644
-> --- a/drivers/net/bonding/bond_alb.c
-> +++ b/drivers/net/bonding/bond_alb.c
-> @@ -668,8 +668,11 @@ static struct slave *rlb_arp_xmit(struct sk_buff *skb, struct bonding *bond)
->  
->  	dev = ip_dev_find(dev_net(bond->dev), arp->ip_src);
->  	if (dev) {
-> -		if (netif_is_bridge_master(dev))
-> +		if (netif_is_bridge_master(dev)) {
-> +			dev_put(dev);
->  			return NULL;
-> +		}
-> +		dev_put(dev);
->  	}
->  
->  	if (arp->op_code == htons(ARPOP_REPLY)) {
+>> @@ -0,0 +1,284 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only or BSD-2-Clause
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/display/msm/dpu-sc8280xp.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Qualcomm Display Processing Unit for SC8280XP
+>> +
+>> +maintainers:
+>> +  - Bjorn Andersson <bjorn.andersson@linaro.org>
+>> +
+>> +description:
+>> +  Device tree bindings for MSM Mobile Display Subsystem (MDSS) that encapsulates
+>> +  sub-blocks like DPU display controller, DSI and DP interfaces etc. Device tree
+>> +  bindings of MDSS and DPU are mentioned for SC8280XP.
+> 
+> s/Device tree bindings//
+> so just:
+> 
+> SC8280XP MSM Mobile Display Subsystem (MDSS) that encapsulates
+> sub-blocks like DPU display controller, DSI and DP interfaces etc.
+> 
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: qcom,sc8280xp-mdss
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  reg-names:
+>> +    const: mdss
+> 
+> You do not need reg names for one item, especially if the name is kind
+> of obvious... unless you re-use existing driver which needs it? Then
+> maybe let's change the driver to take first element?
 
-Nice catch,
-Reviewed-by: Nikolay Aleksandrov <razor@blackwall.org>
+OK, I see the driver expects this. It seems it is legacy from
+87729e2a7871 ("drm/msm: unify MDSS drivers") times. So it could be
+changed to grab first element always (older MDSS with three reg items
+still has mdss_phys at first item).
 
+> 
+>> +
+>> +  power-domains:
+>> +    maxItems: 1
+>> +
+>> +  clocks:
+>> +    items:
+>> +      - description: Display AHB clock from gcc
+>> +      - description: Display AHB clock from dispcc
+>> +      - description: Display core clock
+>> +
+>> +  clock-names:
+>> +    items:
+>> +      - const: iface
+>> +      - const: ahb
+>> +      - const: core
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +
+>> +  interrupt-controller: true
+>> +
+>> +  "#address-cells": true
+>> +
+>> +  "#size-cells": true
+> 
+> I see other DPU bindings also specify both as "true". Why not a fixed
+> number (const)?
+> 
+>> +
+>> +  "#interrupt-cells":
+>> +    const: 1
+>> +
+>> +  iommus:
+>> +    items:
+>> +      - description: Phandle to apps_smmu node with SID mask for Hard-Fail port0
+>> +
+>> +  ranges: true
+>> +
+>> +  interconnects:
+>> +    minItems: 2
+> 
+> No need for minItems in such case.
+> 
+>> +    maxItems: 2
+>> +
+>> +  interconnect-names:
+>> +    items:
+>> +      - const: mdp0-mem
+>> +      - const: mdp1-mem
+>> +
+>> +  resets:
+>> +    items:
+>> +      - description: MDSS_CORE reset
+>> +
+>> +patternProperties:
+>> +  "^display-controller@[0-9a-f]+$":
+>> +    type: object
+>> +    description: Node containing the properties of DPU.
+> 
+> additionalProperties:false on this level
+> 
+> which will point to missing properties (e.g. opp-table)
+
+I'll fix existing bindings which have similar issue.
+
+
+Best regards,
+Krzysztof

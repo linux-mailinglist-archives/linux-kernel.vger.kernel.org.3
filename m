@@ -2,131 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90A5458FDA1
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 15:44:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FCD858FD8E
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 15:42:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235012AbiHKNoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 09:44:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54330 "EHLO
+        id S234309AbiHKNmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 09:42:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234939AbiHKNoL (ORCPT
+        with ESMTP id S229594AbiHKNmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 09:44:11 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A369661D5B;
-        Thu, 11 Aug 2022 06:44:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660225450; x=1691761450;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   mime-version:in-reply-to;
-  bh=6G1vjfFDPRBJq3hrus4RUCAj1Ik6SbGGx7LGPLT4CKc=;
-  b=d4c4cnSceeeu7pOr1M6yPJGfJ3fVRak7yxgC47zNN1IUy5Tdxab8FQpQ
-   cnBQ7gPpd/hvDbuy5gyByOuMb4lwo8Im4oHMUbzDm0qlCTHn/ijQFZOvj
-   Mq3lq+LDZMrEPRr48zUj5FDkcV8nz5k9ctL5KIPNwWcpCtzi1hkz1qA6q
-   pWtjiYJKJbCH2SMClUXcoA9fT++42hoDozM5J4GtXDH6azUGtBvupYHp5
-   MElZW9qgLRhScPlvOPYRA8D2igtaz9uCPWI1Q3gwwFAcoWWRDjFf8DJPw
-   0BgRP0lvXbrnQokLfItXaKv0DQOp2FbifwnxcSyaisiM8C2qnOGVb1Sxb
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="271731755"
-X-IronPort-AV: E=Sophos;i="5.93,230,1654585200"; 
-   d="scan'208";a="271731755"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 06:44:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,230,1654585200"; 
-   d="scan'208";a="665377410"
-Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
-  by fmsmga008.fm.intel.com with ESMTP; 11 Aug 2022 06:43:59 -0700
-Date:   Thu, 11 Aug 2022 21:39:14 +0800
-From:   Chao Peng <chao.p.peng@linux.intel.com>
-To:     Quentin Perret <qperret@google.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        linux-kselftest@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Michael Roth <michael.roth@amd.com>,
-        mhocko@suse.com, Muchun Song <songmuchun@bytedance.com>,
-        Will Deacon <will@kernel.org>, Fuad Tabba <tabba@google.com>
-Subject: Re: [PATCH v7 03/14] mm: Introduce memfile_notifier
-Message-ID: <20220811133914.GC916119@chaop.bj.intel.com>
-Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
-References: <20220706082016.2603916-1-chao.p.peng@linux.intel.com>
- <20220706082016.2603916-4-chao.p.peng@linux.intel.com>
- <13394075-fca0-6f2b-92a2-f1291fcec9a3@redhat.com>
- <20220810092232.GC862421@chaop.bj.intel.com>
- <00f1aa03-bc82-ffce-569b-e2d5c459992c@redhat.com>
- <YvPC87FMgF7uac7z@google.com>
- <YvT1zOQtTQl2t300@google.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YvT1zOQtTQl2t300@google.com>
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 11 Aug 2022 09:42:07 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 530F015A22;
+        Thu, 11 Aug 2022 06:42:06 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id 17so16926057plj.10;
+        Thu, 11 Aug 2022 06:42:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc;
+        bh=p1TxuLj+R0HduMtTWToeGigGtVfbsJW4F/EMut9GGiE=;
+        b=QEm2doY3whZViiKl5O4Vw4CbKk4s64aQAFofySTGsdge5sZXoZQ74qjezABR7sfRir
+         2u1dxxMYd78ms9zj7Z7Ru9dCcCcN4Ss6+L1GqJ8rQk+EZwKEeE88TiE/nclF8xgRX9po
+         gc+qq54uDrMTdQhjgofBGyL/keejTSJh9vlVtQeut7CyjXfZHgf77jXgInIjpv8h5gCG
+         uTqBDKdKVxvYFXicbTngStewjSCQ5wAMIAOj5DqPGXidx3rYeF4A9+3MKC9Lfd9touGW
+         riCM0ptUKKbQS9ptbB6Qc2XPX3KC9CyLy9bEZFrv1n99ccAnwPY+nW4Q5LzHgc7csXL6
+         cq8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=p1TxuLj+R0HduMtTWToeGigGtVfbsJW4F/EMut9GGiE=;
+        b=7qNo2bOHNeI3EUKz+G/Ii/wH+xvLklztloFAZJHtYe0VOy4bDnP/Xj+PtCtrWYTp6X
+         8xsZxiovOy1c1K9vWXXdWBYhKRjHRAD+rnIGpZyjuOIkRfHhKpEIpv5Y8E8JEjZWIuJE
+         25c2LBIAVmtG+KL7AAeeUxt3F4mLCtTLR/IEI6zM23sjbxRhVt7YtogAWgP9I72Zhpc3
+         J3zoXluRS25QzJ0DPbmb5lFSZ8br23F9QRTe9D3aXl1ekPEwiTBZKq4+4yKcC0go2OR6
+         ppNOis2B3/8QhjOD7LxYmQ5x1d8NngikupQZBhYy/fKDWK9tkfjFUoR5i6hzj9LH+PZR
+         9uag==
+X-Gm-Message-State: ACgBeo0tKhj9GUVPD5bo9oQYHbcspRkELsp4TEgR54oWx96/Vz4ufmCG
+        qXzABiaRa3RkG/2tWlnmeQo=
+X-Google-Smtp-Source: AA6agR7AmQJEmAqJXah+6Iwv6S6YIzgVGXrvfYC0EK86MDFozFmLC/Do8uMgQY242hJI5cjmzj8JqA==
+X-Received: by 2002:a17:90b:3e8c:b0:1f7:3792:d336 with SMTP id rj12-20020a17090b3e8c00b001f73792d336mr9053879pjb.0.1660225325598;
+        Thu, 11 Aug 2022 06:42:05 -0700 (PDT)
+Received: from localhost.localdomain (1-171-1-124.dynamic-ip.hinet.net. [1.171.1.124])
+        by smtp.gmail.com with ESMTPSA id b11-20020a170903228b00b0016edff78844sm14887753plh.277.2022.08.11.06.42.02
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 11 Aug 2022 06:42:05 -0700 (PDT)
+From:   cy_huang <u0084500@gmail.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        sre@kernel.org
+Cc:     alina_yu@richtek.com, cy_huang@richtek.com, alinayu829@gmail.com,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] Add Richtek RT9471 3A battery charger support
+Date:   Thu, 11 Aug 2022 21:41:56 +0800
+Message-Id: <1660225318-4063-1-git-send-email-u0084500@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 12:27:56PM +0000, Quentin Perret wrote:
-> +CC Fuad
-> 
-> On Wednesday 10 Aug 2022 at 14:38:43 (+0000), Sean Christopherson wrote:
-> > > I understand Sean's suggestion about abstracting, but if the new name
-> > > makes it harder to grasp and there isn't really an alternative to memfd
-> > > in sight, I'm not so sure I enjoy the tried abstraction here.
-> > 
-> > ARM's pKVM implementation is potentially (hopefully) going to switch to this API
-> > (as a consumer) sooner than later.  If they anticipate being able to use memfd,
-> > then there's unlikely to be a second backing type any time soon.
-> > 
-> > Quentin, Will?
-> 
-> Yep, Fuad is currently trying to port the pKVM mm stuff on top of this
-> series to see how well it fits, so stay tuned.
+From: ChiYuan Huang <cy_huang@richtek.com>
 
-Good to hear that.
+This patch set is to add Richtek RT9471 charger support.
 
->I think there is still
-> some room for discussion around page conversions (private->shared etc),
-> and we'll need a clearer idea of what the code might look like to have a
-> constructive discussion,
+The RT9471/D is a highly-integrated 3A switch mode battery charge management
+and system power path management device for single cell Li-Ion and Li-polymer
+battery. The low impedance power path optimizes switch-mode operation
+efficiency, reduces battery charging time and extends battery life during
+discharging phase.
 
-That's fine. Looking forward to your feedbacks.
+ChiYuan Huang (2):
+  dt-bindings: power: supply: Add Richtek RT9471 battery charger
+  power: supply: rt9471: Add Richtek RT9471 charger driver
 
->but so far it does seem like using a memfd (the
-> new private one or perhaps just memfd_secret, to be discussed) + memfd
-> notifiers is a promising option.
+ .../bindings/power/supply/richtek,rt9471.yaml      |  78 ++
+ drivers/power/supply/Kconfig                       |  16 +
+ drivers/power/supply/Makefile                      |   1 +
+ drivers/power/supply/rt9471.c                      | 952 +++++++++++++++++++++
+ drivers/power/supply/rt9471.h                      |  76 ++
+ 5 files changed, 1123 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt9471.yaml
+ create mode 100644 drivers/power/supply/rt9471.c
+ create mode 100644 drivers/power/supply/rt9471.h
 
-If it still memfd (even memfd_secret), maybe we can use the name
-memfd_notifier?
+-- 
+2.7.4
 
-Chao

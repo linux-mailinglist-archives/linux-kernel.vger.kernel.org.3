@@ -2,65 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DA9E590777
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 22:37:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17B2859077C
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 22:41:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235877AbiHKUhL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 16:37:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42492 "EHLO
+        id S229868AbiHKUlQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 16:41:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiHKUhI (ORCPT
+        with ESMTP id S229591AbiHKUlM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 16:37:08 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF8C95AF7;
-        Thu, 11 Aug 2022 13:37:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id A0FFECE2210;
-        Thu, 11 Aug 2022 20:37:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53367C433C1;
-        Thu, 11 Aug 2022 20:37:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660250224;
-        bh=iAHSIcwc9lbNY2SNrS1flvARRGdNR3L+I0y3PoflCcI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HMjG+IDKqiprCA8C+eGLm7H7/UfNH7v7if4AvU6pWjH8Zo5AXbGeyAmrCYLv/FjJU
-         btx354rFfR3j4/k4qFoanNIdC198ZccrwpuH8cijfn5l0iWk5eHSvz/vWcTl2eqLrj
-         Vx0MBtPgwt163EyamiO2U0jbNZbIEnIa61fV7lHisOINxgxE6EpzceIe+B04Q20Hpz
-         kJoxm5W9sobbU+QIke9mz3rIp1Qt3161bilb54A01bDeE0lWUsDxohzKYCz98pIoMa
-         ndVaG0UJFntMQhdI78IeHdzCw9HinC6CyTbfK7EfyiOHZ/yZj4QGYbhrqqqMOuVpGC
-         CN/HHmR/Pyslw==
-Date:   Thu, 11 Aug 2022 13:37:03 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Cc:     "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        linux-next@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org
-Subject: Re: build failure of next-20220811 due to 332f1795ca20 ("Bluetooth:
- L2CAP: Fix l2cap_global_chan_by_psm regression")
-Message-ID: <20220811133703.30fb948e@kernel.org>
-In-Reply-To: <CABBYNZKxM5Z2CUah1EB2uUDs=gEgDbrK0B9gbxeoyvtL6g=4+w@mail.gmail.com>
-References: <YvVQEDs75pxSgxjM@debian>
-        <20220811124637.4cdb84f1@kernel.org>
-        <CABBYNZKxM5Z2CUah1EB2uUDs=gEgDbrK0B9gbxeoyvtL6g=4+w@mail.gmail.com>
+        Thu, 11 Aug 2022 16:41:12 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6351264C5
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 13:41:11 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id q30so22530548wra.11
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 13:41:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=conchuod.ie; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=v65TxKsCBooVHdoEozViTk8e8Jlbg0tbZcJ4XTkHA9Q=;
+        b=UUw0P6y4EVVg3hSO5g1xxA0buwiU3NfFunLUxWYXGTc7EdsPQc8SlO1HZ4xr90lqEk
+         +NwqlyVyC0eL8gR2/XPe6/BTLzMaRRUtJDX09W+Sm8OEdXbQGXC9R5+9uwIatHXVl2vN
+         kskdHTXwoc61oZ/GFsoUkRWtUGokNebzDIwnXFzPUvCzYKuUN8GIb1eKhk2sl6Vetaiy
+         oN7UuyTXGZvcYkUyfV7AuxMUi2TrY5nNgyz15XMXWLp/LCPlFODZMqkUQpPsh//bsYsa
+         yIgbS4fdIfZR3Y7zNQI6TxrYHf304TS7ZxBBwFOlTHsTL0enqbNq7wZcPQ/uj8whmx9O
+         IivA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=v65TxKsCBooVHdoEozViTk8e8Jlbg0tbZcJ4XTkHA9Q=;
+        b=XmKZluQ8P1SgRuxfLllw8gHdwlEVRpb4UeExsef04bhAsMW9y4Nl7yRTsxwx3kkt2t
+         Ltgtb1FrQFUHnVjNGOzMbr6HM+BSuwI6xAoQlkFqJgpVJ4S6VVBd51xl+Jsj+0iL9Ljv
+         6urmwTYiR96ZCfW5xnUJ8VxZxAknuqVCV8Br5A8qHsJ1bs6pMGqwL8ZTngUm2tKkNmLe
+         dIALthTXAdbNqzjntG6b1K+p88uhOUiiqmngMSYjOKtfDBjkEgSRxpvsUb03xZijz3Vk
+         Mp00/wTPlIDUizUEPQxW7GrmEHorWgEz583tUz83FHnW5ZpuInMCb9OTgJlKVlOZ+Mq4
+         B4xA==
+X-Gm-Message-State: ACgBeo0dplPMXlWyFUXi3fvEhbSFhAte8PXk0oWmX48lJjA8ub4lVZtO
+        clpvgAj+13CjtX/TIb+mrq4qAg==
+X-Google-Smtp-Source: AA6agR6lpzSQl0I67ePvjSIBO0Obd6xiyVZ5YQEY/ZBqrqs7lEllEDAiTUTW7qGxMjPrmrSfdG2OtQ==
+X-Received: by 2002:a5d:6b12:0:b0:21f:1568:c7e1 with SMTP id v18-20020a5d6b12000000b0021f1568c7e1mr352199wrw.532.1660250469981;
+        Thu, 11 Aug 2022 13:41:09 -0700 (PDT)
+Received: from henark71.. ([109.76.58.63])
+        by smtp.gmail.com with ESMTPSA id g10-20020a05600c4eca00b003a3199c243bsm11213544wmq.0.2022.08.11.13.41.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Aug 2022 13:41:09 -0700 (PDT)
+From:   Conor Dooley <mail@conchuod.ie>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Masahiro Yamada <yamada.masahiro@socionext.com>,
+        Piotr Sroka <piotrs@cadence.com>, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Conor Dooley <conor.dooley@microchip.com>
+Subject: [PATCH] dt-bindings: mmc: cdns: remove Piotr Sroka as a maintainer
+Date:   Thu, 11 Aug 2022 21:40:24 +0100
+Message-Id: <20220811204024.182453-1-mail@conchuod.ie>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,19 +72,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 11 Aug 2022 13:20:52 -0700 Luiz Augusto von Dentz wrote:
-> > +static inline int ba_is_any(const bdaddr_t *ba)
-> > +{
-> > +       return memchr_inv(ba, sizeof(*ba), 0);
-> > +}  
-> 
-> So we can't use something like BDADDR_ANY to compare? Anyway afaik
-> these were already present before the patch so I do wonder what had
-> trigger it show now or perhaps it was being suppressed before and
-> since we change it now start showing again?
+From: Conor Dooley <conor.dooley@microchip.com>
 
-Yeah, I mentioned that in my previous reply as well, a quick grep
-counts 70 instances, IDK what makes the l2cap code different :S
-Then again I don't know how the compiler deals with passing a pointer
-to a constant to an inline function.... so I figured memchr_inv()
-could help us avoid hitting compiler bugs.
+Mails to Piotr bounce with a :550 5.1.1 User Unknown and the last
+mention of him on lore is the orphaning of Cadence NFC drivers.
+Remove him from the binding too.
+
+Link: https://lore.kernel.org/all/20200510122430.19105-1-miquel.raynal@bootlin.com/
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+---
+ Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+index 99f89eb19356..7124e77617c9 100644
+--- a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
++++ b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+@@ -8,7 +8,6 @@ title: Cadence SD/SDIO/eMMC Host Controller (SD4HC)
+ 
+ maintainers:
+   - Masahiro Yamada <yamada.masahiro@socionext.com>
+-  - Piotr Sroka <piotrs@cadence.com>
+ 
+ allOf:
+   - $ref: mmc-controller.yaml
+-- 
+2.37.1
+

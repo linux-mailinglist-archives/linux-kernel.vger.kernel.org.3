@@ -2,65 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5757258FF4E
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 17:28:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65CB358FFB8
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 17:33:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235700AbiHKP2u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 11:28:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46338 "EHLO
+        id S236010AbiHKPd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 11:33:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235063AbiHKP2t (ORCPT
+        with ESMTP id S235952AbiHKPci (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 11:28:49 -0400
-Received: from mail-ua1-x929.google.com (mail-ua1-x929.google.com [IPv6:2607:f8b0:4864:20::929])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 271B492F57
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 08:28:48 -0700 (PDT)
-Received: by mail-ua1-x929.google.com with SMTP id t21so7079550uaq.3
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 08:28:48 -0700 (PDT)
+        Thu, 11 Aug 2022 11:32:38 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B3FE97D57
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 08:31:32 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id w197so8755506oie.5
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 08:31:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=c/nuhX7+RYdmqtLyvc2oaaVrK9PE6Uvqqdw/nzrLb/Q=;
-        b=WfOxla24MB9Jh3O9QDZHpGBtdFiHvvRlriHR1dXKr2QRQS9m+oTPIxRo7Fw0VWgbOi
-         xf9bL7U7MBR2FJ2pE4NpekGVgdhL8yTqR2JRLEYFt4g4/tWTgBOIUtt3/pyWqWMyJ5EB
-         stm3l6995LnAU9ZrhEmFcs/sr9+67vlaFhNZ2mZdzk16BOIMfKFff3laiiKy4wWmRODp
-         GKgWlEAnVDqNPiLfQ8sKEaCM7uyx+E2Td5wQlALoytDYyjhdV7YEHDV9T7L1h7QucQZh
-         q10Hrge8L+lP3s46trs91HPx0+KqGknWIXfGt1C3jZM+P3imvcn0mZzW5hl724YJgNwW
-         Y/hg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=7DrcmAf9Cs9YQAf7id7R52Yp/mcVnx55k0vZxgZh1Uw=;
+        b=Rw4iLOLh+LaT7yhFHWhvYNd9mq2StwwLxRBqGi/7Ds5ITmJkjPTTnp9H1/rQwMxfPd
+         vk3AuHrWhNu4tvUbrcuBxPmQ4Z1YgdYZPFNjb2iUH1vUTicenuebBmVvtsA8jwGb3vnp
+         qmZq+2s4xNzARka6ovk9o2eLfbHdP1VLJILO14qC+/xbSNYF4HW2mOvbQz3yve+pd5E4
+         RcHpNCpwXjawlcf3x5kVKr1aUo3Z5RYn2oYlkYEHUFCM8uQwu7fADBx7FQvDhnlyePi+
+         FlHs0M4pxjjfeXt4Y1a7Y6IeIwwMMRjJUq/Lz/l7jPd7awQfp4VSm7NV2dI8lqMPzQUR
+         fmWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=c/nuhX7+RYdmqtLyvc2oaaVrK9PE6Uvqqdw/nzrLb/Q=;
-        b=WybnNq7FTTLkghVl9EbLKjm/nQJj7cl7bCFee5ZLetK0kW14tqXJEpTqwLhdhgg3FF
-         ZAlRsg6iOAYzsHqhJc0KEzHlk7JBIJ4MkRvkbiYWi+Se8AnLA7vBD0klEvFCScpuoCGV
-         Xv1gVX2z5jXQbyFuUxddDo5yjqZy2jGZVkuzzPrwkModEnHp7EgIxncYJDePTuDQFgvi
-         lkGgHBXnUJygbRvRq5ePC7XLW110jFQbudaQieCrUKyirDFnp/rxvXCTOzCV3h3bdiIo
-         0EEOGbfnXP6bIsseSO2MSmNP+G4Zrjtp9XUHdOo+h5cPJSmFRDZ/Vl9sLHPcoJgQLGXl
-         tuaw==
-X-Gm-Message-State: ACgBeo2zYBRjzd5l3muVRPVCkyEJ2tf9XXzlr/E1mIS+NIyoEYRRhvC8
-        7kEHDDJL2ZxnErNr2HD/RJU38vmmOb1Ucj2aGPettA==
-X-Google-Smtp-Source: AA6agR7KXCXTj1b+jmngAPB9jrl2AWzJNaa0NAtJSzdNpg0afNC5eCpW+aqX22jfxFfZK4UhFsA/Y3v+Y6l3E1jBeu8=
-X-Received: by 2002:ab0:3cc:0:b0:384:defe:ff2 with SMTP id 70-20020ab003cc000000b00384defe0ff2mr13612320uau.71.1660231727143;
- Thu, 11 Aug 2022 08:28:47 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=7DrcmAf9Cs9YQAf7id7R52Yp/mcVnx55k0vZxgZh1Uw=;
+        b=yci2KgcwNa46TadnJuYplT4sua4W/s2o4p0N7c6Rs0gzCR8s4HOu24aJmd5dR6nzD+
+         MheIJEdsItb+vt3IYlqZ9Ve555KmafxZV/DEL2Lcqw772t7wZd6S36GwEBxcoOnlQjKB
+         ueT+RkalHyy44P5PDQhWFnf7686i90AqXTx3raoh/dpeTF80W+v1iLuR+bEmgSYSo0w9
+         aPmoA34qMVQ3nqHw5BWExgQYJPzltY0eHTuw189O/qleQbpd+Iq51epCWC3eNFV0rHGy
+         Y+RSTjyj+FAZBK9CUeBEKRz6ilAr1HTGJQ3bLh1HATit6Pr7cvPEavwEGYNvDdosumsP
+         pdGg==
+X-Gm-Message-State: ACgBeo03ji7+lP0OEFMWW5njzqrhfqRX0f9w0h6+Bae7EaePNnRpQKs8
+        6G+PDXvE8bLr41JDfDoHuj8=
+X-Google-Smtp-Source: AA6agR6yp1Ne41XGFgWnopYd04fjJH6BITIgPT75nqhbRjKeRsuC9t4fHGyB0rHVv05RlLpzODHwvg==
+X-Received: by 2002:a05:6808:302c:b0:339:ee90:94df with SMTP id ay44-20020a056808302c00b00339ee9094dfmr3712525oib.193.1660231891790;
+        Thu, 11 Aug 2022 08:31:31 -0700 (PDT)
+Received: from localhost ([2600:1700:7130:4fa0::49])
+        by smtp.gmail.com with ESMTPSA id r10-20020a05683001ca00b006370b948974sm1187015ota.32.2022.08.11.08.31.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Aug 2022 08:31:31 -0700 (PDT)
+From:   Fae <faenkhauser@gmail.com>
+To:     James Schulman <james.schulman@cirrus.com>,
+        David Rhodes <david.rhodes@cirrus.com>,
+        Lucas Tanure <tanureal@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, linux-kernel@vger.kernel.org
+Cc:     Fae <faenkhauser@gmail.com>
+Subject: [PATCH] Sound: pci/hda: Add quirk for HP Envy x360 ey0xxx
+Date:   Thu, 11 Aug 2022 10:29:24 -0500
+Message-Id: <20220811152923.10143-1-faenkhauser@gmail.com>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20220811053950.11810-1-faenkhauser@gmail.com>
+References: <20220811053950.11810-1-faenkhauser@gmail.com>
 MIME-Version: 1.0
-References: <20220810210656.2799243-1-eranian@google.com> <0267c94e-7989-ca92-4175-d820d1d63a0c@linux.intel.com>
- <CABPqkBSD5xg=sEkWU01RQ5+aj1X1dtzt2e7FbZBzrcE8dxqM=A@mail.gmail.com> <48297c1e-6e44-53f1-da7d-4437ed87cf6f@linux.intel.com>
-In-Reply-To: <48297c1e-6e44-53f1-da7d-4437ed87cf6f@linux.intel.com>
-From:   Stephane Eranian <eranian@google.com>
-Date:   Thu, 11 Aug 2022 18:28:35 +0300
-Message-ID: <CABPqkBSUkUTXxS4PwDXYwvTCZ-abY41qyedRGFVoWE9ERtmwsQ@mail.gmail.com>
-Subject: Re: [PATCH] perf/x86/intel/lbr: fix branch type encoding
-To:     "Liang, Kan" <kan.liang@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
-        kan.liang@intel.com, ak@linux.intel.com, acme@redhat.com,
-        namhyung@kernel.org, irogers@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,134 +75,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 5:42 PM Liang, Kan <kan.liang@linux.intel.com> wrote:
->
->
->
-> On 2022-08-11 10:17 a.m., Stephane Eranian wrote:
-> > On Thu, Aug 11, 2022 at 3:23 PM Liang, Kan <kan.liang@linux.intel.com> wrote:
-> >>
-> >>
-> >>
-> >> On 2022-08-10 5:06 p.m., Stephane Eranian wrote:
-> >>> With architected LBR, the procesosr can record the type of each sampled taken
-> >>> branch. The type is encoded in 4-bit field in the LBR_INFO MSR of each entry.
-> >>>
-> >>> The branch type must then extracted and saved in the perf_branch_entry in the
-> >>> perf_events sampling buffer. With the current code, the raw Intel encoding of
-> >>> the branch is exported to user tools.
-> >>
-> >> In the intel_pmu_lbr_filter(), the raw encoding will be converted into
-> >> the X86_BR_* format via arch_lbr_br_type_map[]. Then the
-> >> common_branch_type() will convert the X86_BR_* format to the generic
-> >> PERF_BR_* type and expose to user tools.
-> >>
-> >> I double check the existing arch_lbr_br_type_map[] and branch_map[].
-> >> They should generate the same PERF_BR_* type as your arch_lbr_type_map[].
-> >>
-> >> Is there a test case which I can use to reproduce the problem?
-> >>
-> > I was doing a simple:
-> > $ perf record -b -e cpu/event=0xc4/ ....
-> > $ perf report -D
-> > Looking at the LBR information and the BR type, many entries has no branch type.
-> > What I see is a function where you do: e->type = get_lbr_br_type() and
-> > that is what
-> > is then saved in the buffer. Unless I am missing a later patch.
-> >
->
-> To get the LBR type, the save_type filter option must be applied. See
-> 60f83fa6341d ("perf record: Create a new option save_type in
-> --branch-filter").
->
-That seems overly complicated. I don't recall having to pass a new option
-to get the LBR latency. It showed up automatically. So why for branch_type?
+There's at least 1 more device that doesn't use ACPI/BIOS config for the CSC3551
+https://lore.kernel.org/lkml/20220703053225.2203-1-xw897002528@gmail.com/T/
 
-> The -b only include the ANY option. Maybe we should extend the -b option
-> to ANY|SAVE_TYPE.
->
-Ok, that explains it then. I think we need to simplify.
+Signed-off-by: Fae <faenkhauser@gmail.com>
+---
+ sound/pci/hda/cs35l41_hda.c   | 3 ++-
+ sound/pci/hda/patch_realtek.c | 1 +
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
+diff --git a/sound/pci/hda/cs35l41_hda.c b/sound/pci/hda/cs35l41_hda.c
+index 129bffb431c22..21d8c2de128ff 100644
+--- a/sound/pci/hda/cs35l41_hda.c
++++ b/sound/pci/hda/cs35l41_hda.c
+@@ -1156,7 +1156,8 @@ static int cs35l41_no_acpi_dsd(struct cs35l41_hda *cs35l41, struct device *physd
+ 	hw_cfg->valid = true;
+ 	put_device(physdev);
+ 
+-	if (strncmp(hid, "CLSA0100", 8) == 0) {
++	if ((strncmp(hid, "CLSA0100", 8) == 0) ||
++	    (strncmp(hid, "CSC3551", 7) == 0)) {
+ 		hw_cfg->bst_type = CS35L41_EXT_BOOST_NO_VSPK_SWITCH;
+ 	} else if (strncmp(hid, "CLSA0101", 8) == 0) {
+ 		hw_cfg->bst_type = CS35L41_EXT_BOOST;
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index 8a57636f622e9..e7053cbc6bb6e 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -9179,6 +9179,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x103c, 0x83b9, "HP Spectre x360", ALC269_FIXUP_HP_MUTE_LED_MIC3),
+ 	SND_PCI_QUIRK(0x103c, 0x841c, "HP Pavilion 15-CK0xx", ALC269_FIXUP_HP_MUTE_LED_MIC3),
+ 	SND_PCI_QUIRK(0x103c, 0x8497, "HP Envy x360", ALC269_FIXUP_HP_MUTE_LED_MIC3),
++	SND_PCI_QUIRK(0x103c, 0x8a31, "HP ENVY x360 2-in-1 Laptop 15-ey0xxx", ALC287_FIXUP_CS35L41_I2C_2),
+ 	SND_PCI_QUIRK(0x103c, 0x84da, "HP OMEN dc0019-ur", ALC295_FIXUP_HP_OMEN),
+ 	SND_PCI_QUIRK(0x103c, 0x84e7, "HP Pavilion 15", ALC269_FIXUP_HP_MUTE_LED_MIC3),
+ 	SND_PCI_QUIRK(0x103c, 0x8519, "HP Spectre x360 15-df0xxx", ALC285_FIXUP_HP_SPECTRE_X360),
+-- 
+2.37.1
 
-> Thanks,
-> Kan
->
-> >
-> >> Thanks,
-> >> Kan
-> >>
-> >>> Yet tools, such as perf, expected the
-> >>> branch type to be encoded using perf_events branch type enum
-> >>> (see tools/perf/util/branch.c). As a result of the discrepancy, the output of
-> >>> perf report -D shows bogus branch types.
-> >>>
-> >>> Fix the problem by converting the Intel raw encoding into the perf_events
-> >>> branch type enum values. With that in place and with no changes to the tools,
-> >>> the branch types are now reported properly.
-> >>>
-> >>> Signed-off-by: Stephane Eranian <eranian@google.com>
-> >>> ---
-> >>>  arch/x86/events/intel/lbr.c | 35 ++++++++++++++++++++++++++++++++---
-> >>>  1 file changed, 32 insertions(+), 3 deletions(-)
-> >>>
-> >>> diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
-> >>> index 4f70fb6c2c1e..ef63d4d46b50 100644
-> >>> --- a/arch/x86/events/intel/lbr.c
-> >>> +++ b/arch/x86/events/intel/lbr.c
-> >>> @@ -894,9 +894,23 @@ static DEFINE_STATIC_KEY_FALSE(x86_lbr_mispred);
-> >>>  static DEFINE_STATIC_KEY_FALSE(x86_lbr_cycles);
-> >>>  static DEFINE_STATIC_KEY_FALSE(x86_lbr_type);
-> >>>
-> >>> -static __always_inline int get_lbr_br_type(u64 info)
-> >>> +/*
-> >>> + * Array index encodes IA32_LBR_x_INFO Branch Type Encodings
-> >>> + * as per Intel SDM Vol3b Branch Types section
-> >>> + */
-> >>> +static const int arch_lbr_type_map[]={
-> >>> +     [0] = PERF_BR_COND,
-> >>> +     [1] = PERF_BR_IND,
-> >>> +     [2] = PERF_BR_UNCOND,
-> >>> +     [3] = PERF_BR_IND_CALL,
-> >>> +     [4] = PERF_BR_CALL,
-> >>> +     [5] = PERF_BR_RET,
-> >>> +};
-> >>> +#define ARCH_LBR_TYPE_COUNT ARRAY_SIZE(arch_lbr_type_map)
-> >>> +
-> >>> +static __always_inline u16 get_lbr_br_type(u64 info)
-> >>>  {
-> >>> -     int type = 0;
-> >>> +     u16 type = 0;
-> >>>
-> >>>       if (static_branch_likely(&x86_lbr_type))
-> >>>               type = (info & LBR_INFO_BR_TYPE) >> LBR_INFO_BR_TYPE_OFFSET;
-> >>> @@ -904,6 +918,21 @@ static __always_inline int get_lbr_br_type(u64 info)
-> >>>       return type;
-> >>>  }
-> >>>
-> >>> +/*
-> >>> + * The kernel cannot expose raw Intel branch type encodings because they are
-> >>> + * not generic. Instead, the function below  maps the encoding to the
-> >>> + * perf_events user visible branch types.
-> >>> + */
-> >>> +static __always_inline int get_lbr_br_type_mapping(u64 info)
-> >>> +{
-> >>> +     if (static_branch_likely(&x86_lbr_type)) {
-> >>> +             u16 raw_type = get_lbr_br_type(info);
-> >>> +             if (raw_type < ARCH_LBR_TYPE_COUNT)
-> >>> +                     return arch_lbr_type_map[raw_type];
-> >>> +     }
-> >>> +     return PERF_BR_UNKNOWN;
-> >>> +}
-> >>> +
-> >>>  static __always_inline bool get_lbr_mispred(u64 info)
-> >>>  {
-> >>>       bool mispred = 0;
-> >>> @@ -957,7 +986,7 @@ static void intel_pmu_store_lbr(struct cpu_hw_events *cpuc,
-> >>>               e->in_tx        = !!(info & LBR_INFO_IN_TX);
-> >>>               e->abort        = !!(info & LBR_INFO_ABORT);
-> >>>               e->cycles       = get_lbr_cycles(info);
-> >>> -             e->type         = get_lbr_br_type(info);
-> >>> +             e->type         = get_lbr_br_type_mapping(info);
-> >>>       }
-> >>>
-> >>>       cpuc->lbr_stack.nr = i;

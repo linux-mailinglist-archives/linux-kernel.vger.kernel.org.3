@@ -2,140 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D79D4590860
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 23:55:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E070859086B
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 23:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235979AbiHKVzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 17:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34866 "EHLO
+        id S236018AbiHKVzz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 17:55:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233840AbiHKVzq (ORCPT
+        with ESMTP id S235897AbiHKVzr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 17:55:46 -0400
-Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E146111447
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 14:55:44 -0700 (PDT)
-Received: by mail-ua1-x92d.google.com with SMTP id f10so7448262uap.2
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 14:55:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=u3u7luPR9C1c21z1wcEFU9ERQpt0EtbUvjlQMy/wwkU=;
-        b=WHnAQw3Fn+MhoaqG0bfhnnVecOudD4nKJomuJkJtLlPc73RGk16RaZEsZCo0AyKYAG
-         hLT55YNLUNBmyB7qfq9ukOUKEp+KSrAg5X8ZBJE5l805apiOOv22gupHbyg4DAWjLyzT
-         8bCnmti2bbfTONXj0S5O2a5tlaij4d2C0TjSSZfl2HxlTfCbEVgXOm7QLCateFha975K
-         9yrRtke8GyUrs/F8ExY/T0IqEMspYDpaI5DSmYvYardrSHIxk8BONM91hh0mmv6I/VhO
-         h62YLXCmLV5J9pIxKqGXNKtbPS4+Luq4ECo+Zpgwf634ERs/7PE318BbIPq+RX+I3Asa
-         Um9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=u3u7luPR9C1c21z1wcEFU9ERQpt0EtbUvjlQMy/wwkU=;
-        b=tToEgN/6VfejZW77kmVZYnIF9SyQ8hGfo2fX2s+ssw4dQ/NRKQ643i0hX7JpNlYTef
-         is9C7PJMoXshAYqatxZiGcpU1oUp1IrpbOjjws6X9WCvC721HREJ4DxR+aQTx6p2TM4P
-         xbHHuEgBUCcDqRL9nDxV1gTMZWzeJrEpt3Ji3ySd79Fr6LWoI6BRytbuX0TXEdnenmO9
-         l3gEt6FDS30IyOYb141UccfOkPztTb6XcNPAkn0qKh+0Zaf+coAE2bHI/LGF0dXlLNWH
-         j2MrfMMl2kzzEC6PTzlO7n1+J2Edr6ETL34cz4OUBzBlB7IyHd3iiNgR8hBC1swtAaQ4
-         g07g==
-X-Gm-Message-State: ACgBeo3ynmWD+92PmCS8ASnor//me2SWUi+C5OpNIAz6e+EYAAu2jykf
-        EUwlwX/2Sp7KjdPpKKsduTQe2laj36OTY0uSPc5i+g==
-X-Google-Smtp-Source: AA6agR6Tl+w+Cq6fu3hieYhhq29AyLFFQMUDA63A0mOeqSL+4TzW/EZ7q2sgSksfPwbPM376pPSol9onTGk92ef9F1I=
-X-Received: by 2002:a9f:2bcd:0:b0:387:471e:c4c1 with SMTP id
- f13-20020a9f2bcd000000b00387471ec4c1mr640310uaj.113.1660254943981; Thu, 11
- Aug 2022 14:55:43 -0700 (PDT)
+        Thu, 11 Aug 2022 17:55:47 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A883F205EF;
+        Thu, 11 Aug 2022 14:55:46 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 405513200A0B;
+        Thu, 11 Aug 2022 17:55:45 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Thu, 11 Aug 2022 17:55:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1660254944; x=1660341344; bh=Vq
+        TrSm+ya66oiGwyuUz91JD64VsI4fFY3wbADjNL3Fk=; b=DRk25ikKXNXo/32qX9
+        xSDBVzQt5n4uz74u7ZhFdm7NVEjO+wL0m6Mex7U+QIE9kUjORU/nhD2UGFb8oD5o
+        xg6v9RQd1LKChoEMY0bUj85xrvLhXz5t6Wqzmpvm19F2Fv6D8ohX/q2gQbt9MPdn
+        E41VaNGFoTBxPz1SUmAbWypCmYxs3/rNmURfOdvGIB3BHVYIntm3+iLKV48c8vOe
+        tE33GLYdJgzQF5GdJM9GawDqJHciAhW1b35C1EiJT1gLtvCa1NhTooy64MZfnmEw
+        SCONzel0LGpq/wkQckrWxjqHE5SsNiCQhzfCGKreuNN+6W/ulyeemk+EEL63uxEx
+        VOpA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1660254944; x=1660341344; bh=VqTrSm+ya66oi
+        GwyuUz91JD64VsI4fFY3wbADjNL3Fk=; b=KOxToTnw0HYsvsqonkiFMqDa9+Hbn
+        4iDe4lnCJTtucF/HCx4QTHUfONOPWUtazE+4LA8qwjDHRkukbtMvkKMnnl9+4j63
+        Dk/qYWZ57KyNISDoHJkuyzbIW+EKsGwZfH7W+Z/eZK+e3cpy9B84HwpQxFgkO679
+        +e1bLVoEhzGNZtxELnMh+1v0L/wTKXQZ6Lo+eP/RFhFdbXgiBFRCXxVSFFSPrsMH
+        WXZHBoN/wD1eKUwVUTMFhBIwKS/gEYuX0Dn+UuUSzp3QpkZM7p4ANRxtXkMd+f3S
+        3y+Ei5gB3Jx5qteYVPodD6kJ4Qx34EcmuB/PgE353wJ9DZ5Z0xGm2yb5Q==
+X-ME-Sender: <xms:4Hr1YlDw7wqN1T9pwikt8GfLvWowhlljRyp_0N3UlGizF2p6FU2WXg>
+    <xme:4Hr1YjhOx2vsVnigQMzVbEnYe4xm-5TYghyilw0vb1HIBwyE66uYp8z9K6_q3_OVC
+    aRYKo8DL_rPMsjrSw>
+X-ME-Received: <xmr:4Hr1Ygn2IpeF72lMcmbcktW0J68-bcfrbbGI1QCKc8wmD7hYfUAJzscXQ3RAsC5B0Mh7vNqdKw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeghedgtdegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdlfeehmdenucfjughrpefhvf
+    evufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeffrghnihgvlhcuighuuceo
+    ugiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhephfejheejleejtdelie
+    efudejvdeutdetueevkeehudeuheelteethfeukedtieefnecuffhomhgrihhnpehiphhv
+    gedrshhpohhrthenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:4Hr1YvxDHqY0rLcy-3K_C2qbOoHfeVuHW5qvXbWSBofxh4xCtndWQQ>
+    <xmx:4Hr1YqQei1zBt9zE56S7cIrW7XLvOKoO7LiSNoi3dcJSAkdVFAHS0w>
+    <xmx:4Hr1YiYA2lyGVJ8i4WvzXGITWVU5GNohzEzxMR5B9p_AMFda0BInVA>
+    <xmx:4Hr1Yr9bfNWQqN8-x_TExZlOdQN2ns8IriHiFC6iyfo5iHzA8ax3gQ>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 11 Aug 2022 17:55:42 -0400 (EDT)
+From:   Daniel Xu <dxu@dxuuu.xyz>
+To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, memxor@gmail.com
+Cc:     Daniel Xu <dxu@dxuuu.xyz>, pablo@netfilter.org, fw@strlen.de,
+        netfilter-devel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v4 1/3] selftests/bpf: Add existing connection bpf_*_ct_lookup() test
+Date:   Thu, 11 Aug 2022 15:55:25 -0600
+Message-Id: <de5a617832f38f8b5631cc87e2a836da7c94d497.1660254747.git.dxu@dxuuu.xyz>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <cover.1660254747.git.dxu@dxuuu.xyz>
+References: <cover.1660254747.git.dxu@dxuuu.xyz>
 MIME-Version: 1.0
-References: <20220805184016.2926168-1-alexlzhu@fb.com> <Yu1mcD6Jp4fCVEMi@casper.infradead.org>
- <0b16dbac6444bfcdfbeb4df4280354839bfe1a8f.camel@fb.com> <Yu1uabedm+NYnnAj@casper.infradead.org>
- <CA8C72B6-E509-4FB0-BEAA-C4368EB7A419@fb.com> <CAHbLzkp27aP4JYLPLzv2vtyzVe63bkhuZhw1jnxTF1Buvt4rew@mail.gmail.com>
- <fc108f58a4616d5d7d092a7c1f150069a92ee40c.camel@fb.com> <CAHbLzkqpn2ExBJuPD8sYJrEDCUU9=FE3GFh8kL3Bmax0KytKPw@mail.gmail.com>
- <1F8B9D85-A735-4832-AD58-CA4BD474248D@fb.com> <CAOUHufbGcuvJ8EfBkWrdCgeMCiceP0SxHZzcJnOt1Mw0P2w9kw@mail.gmail.com>
- <CAHbLzkqGq6LDDSCcFTJW9_O8dfAMje8_W6ddpDP9ESDQWUb07w@mail.gmail.com>
- <F28E23D0-C635-4A49-91EE-100AAA8C9EAD@fb.com> <CAOUHufYeuMN9As58BVwMKSN6viOZKReXNeCBgGeeL6ToWGsEKw@mail.gmail.com>
- <868F0874-70E8-4416-B39B-DA74C9D76A40@fb.com> <CAOUHufas1o1Ez9EDSjjxsO-w6Ph6Km8R8yOX+1_c=4LvG6DEWw@mail.gmail.com>
- <DD679B3A-BDF7-4EBD-AAC2-A663057AC8E3@fb.com> <CAOUHufbD-9PpQ+kuD=-8z-ptsrprjyThpkFe+4_NtFnzAjDG9g@mail.gmail.com>
- <DEB2F4F2-7F62-48F0-914D-5F71BFDBCBEE@fb.com> <3195C304-2140-4E5D-890D-AC55653193E5@fb.com>
-In-Reply-To: <3195C304-2140-4E5D-890D-AC55653193E5@fb.com>
-From:   Yu Zhao <yuzhao@google.com>
-Date:   Thu, 11 Aug 2022 15:55:07 -0600
-Message-ID: <CAOUHufaggjiYAywB646N5Rj48eSJDjir8oLwDVu039ymbLm0PA@mail.gmail.com>
-Subject: Re: [PATCH v3] mm: add thp_utilization metrics to /proc/thp_utilization
-To:     "Alex Zhu (Kernel)" <alexlzhu@fb.com>
-Cc:     Yang Shi <shy828301@gmail.com>, Rik van Riel <riel@fb.com>,
-        Kernel Team <Kernel-team@fb.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        Ning Zhang <ningzhang@linux.alibaba.com>,
-        Miaohe Lin <linmiaohe@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 1:20 PM Alex Zhu (Kernel) <alexlzhu@fb.com> wrote:
->
-> Hi Yu,
->
-> I=E2=80=99ve updated your patch set from last year to work with folio and=
- am testing it now. The functionality in split_huge_page() is the same as w=
-hat I have. Was there any follow up work done later?
+Add a test where we do a conntrack lookup on an existing connection.
+This is nice because it's a more realistic test than artifically
+creating a ct entry and looking it up afterwards.
 
-Yes, but it won't change the landscape any time soon (see below). So
-please feel free to continue along your current direction.
+Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+ .../testing/selftests/bpf/prog_tests/bpf_nf.c | 59 +++++++++++++++++++
+ .../testing/selftests/bpf/progs/test_bpf_nf.c | 18 ++++++
+ 2 files changed, 77 insertions(+)
 
-> If not, I would like to incorporate this into what I have, and then resub=
-mit. Will reference the original patchset. We need this functionality for t=
-he shrinker, but even the changes to split_huge_page() by itself it should =
-show some performance improvement when used by the existing deferred_split_=
-huge_page().
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
+index 7a74a1579076..88a2c0bdefec 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_nf.c
+@@ -24,10 +24,34 @@ enum {
+ 	TEST_TC_BPF,
+ };
+ 
++#define TIMEOUT_MS 3000
++
++static int connect_to_server(int srv_fd)
++{
++	int fd = -1;
++
++	fd = socket(AF_INET, SOCK_STREAM, 0);
++	if (!ASSERT_GE(fd, 0, "socket"))
++		goto out;
++
++	if (!ASSERT_EQ(connect_fd_to_fd(fd, srv_fd, TIMEOUT_MS), 0, "connect_fd_to_fd")) {
++		close(fd);
++		fd = -1;
++	}
++out:
++	return fd;
++}
++
+ static void test_bpf_nf_ct(int mode)
+ {
++	const char *iptables = "iptables -t raw %s PREROUTING -j CT";
++	int srv_fd = -1, client_fd = -1, srv_client_fd = -1;
++	struct sockaddr_in peer_addr = {};
+ 	struct test_bpf_nf *skel;
+ 	int prog_fd, err;
++	socklen_t len;
++	u16 srv_port;
++	char cmd[64];
+ 	LIBBPF_OPTS(bpf_test_run_opts, topts,
+ 		.data_in = &pkt_v4,
+ 		.data_size_in = sizeof(pkt_v4),
+@@ -38,6 +62,32 @@ static void test_bpf_nf_ct(int mode)
+ 	if (!ASSERT_OK_PTR(skel, "test_bpf_nf__open_and_load"))
+ 		return;
+ 
++	/* Enable connection tracking */
++	snprintf(cmd, sizeof(cmd), iptables, "-A");
++	if (!ASSERT_OK(system(cmd), "iptables"))
++		goto end;
++
++	srv_port = (mode == TEST_XDP) ? 5005 : 5006;
++	srv_fd = start_server(AF_INET, SOCK_STREAM, "127.0.0.1", srv_port, TIMEOUT_MS);
++	if (!ASSERT_GE(srv_fd, 0, "start_server"))
++		goto end;
++
++	client_fd = connect_to_server(srv_fd);
++	if (!ASSERT_GE(client_fd, 0, "connect_to_server"))
++		goto end;
++
++	len = sizeof(peer_addr);
++	srv_client_fd = accept(srv_fd, (struct sockaddr *)&peer_addr, &len);
++	if (!ASSERT_GE(srv_client_fd, 0, "accept"))
++		goto end;
++	if (!ASSERT_EQ(len, sizeof(struct sockaddr_in), "sockaddr len"))
++		goto end;
++
++	skel->bss->saddr = peer_addr.sin_addr.s_addr;
++	skel->bss->sport = peer_addr.sin_port;
++	skel->bss->daddr = peer_addr.sin_addr.s_addr;
++	skel->bss->dport = htons(srv_port);
++
+ 	if (mode == TEST_XDP)
+ 		prog_fd = bpf_program__fd(skel->progs.nf_xdp_ct_test);
+ 	else
+@@ -63,7 +113,16 @@ static void test_bpf_nf_ct(int mode)
+ 	ASSERT_LE(skel->bss->test_delta_timeout, 10, "Test for max ct timeout update");
+ 	/* expected status is IPS_SEEN_REPLY */
+ 	ASSERT_EQ(skel->bss->test_status, 2, "Test for ct status update ");
++	ASSERT_EQ(skel->data->test_exist_lookup, 0, "Test existing connection lookup");
+ end:
++	if (srv_client_fd != -1)
++		close(srv_client_fd);
++	if (client_fd != -1)
++		close(client_fd);
++	if (srv_fd != -1)
++		close(srv_fd);
++	snprintf(cmd, sizeof(cmd), iptables, "-D");
++	system(cmd);
+ 	test_bpf_nf__destroy(skel);
+ }
+ 
+diff --git a/tools/testing/selftests/bpf/progs/test_bpf_nf.c b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+index 196cd8dfe42a..84e0fd479794 100644
+--- a/tools/testing/selftests/bpf/progs/test_bpf_nf.c
++++ b/tools/testing/selftests/bpf/progs/test_bpf_nf.c
+@@ -23,6 +23,11 @@ int test_insert_entry = -EAFNOSUPPORT;
+ int test_succ_lookup = -ENOENT;
+ u32 test_delta_timeout = 0;
+ u32 test_status = 0;
++__be32 saddr = 0;
++__be16 sport = 0;
++__be32 daddr = 0;
++__be16 dport = 0;
++int test_exist_lookup = -ENOENT;
+ 
+ struct nf_conn;
+ 
+@@ -160,6 +165,19 @@ nf_ct_test(struct nf_conn *(*lookup_fn)(void *, struct bpf_sock_tuple *, u32,
+ 		}
+ 		test_alloc_entry = 0;
+ 	}
++
++	bpf_tuple.ipv4.saddr = saddr;
++	bpf_tuple.ipv4.daddr = daddr;
++	bpf_tuple.ipv4.sport = sport;
++	bpf_tuple.ipv4.dport = dport;
++	ct = lookup_fn(ctx, &bpf_tuple, sizeof(bpf_tuple.ipv4), &opts_def,
++		       sizeof(opts_def));
++	if (ct) {
++		test_exist_lookup = 0;
++		bpf_ct_release(ct);
++	} else {
++		test_exist_lookup = opts_def.error;
++	}
+ }
+ 
+ SEC("xdp")
+-- 
+2.37.1
 
-SGTM. Thanks!
-
-A side note:
-
-I'm working on a new mode: THP=3Dauto, meaning the kernel will detect
-internal fragmentation of 2MB compound pages to decide whether to map
-them by PMDs or split them under memory pressure. The general workflow
-of this new mode is as follows.
-
-In the page fault path:
-1. Compound pages are allocated as usual.
-2. Each is mapped by 512 consecutive PTEs rather than a PMD.
-3. There will be more TLB misses but the same number of page faults.
-4. TLB coalescing can mitigate the performance degradation.
-
-In khugepaged:
-1. Check the dirty bit in the PTEs mapping a compound page, to
-determine its utilization.
-2. Remap compound pages that meet a certain utilization threshold by
-PMDs in place, i.e., no migrations.
-
-In the reclaim path, e.g., MGLRU page table scanning:
-1. Decide whether compound pages mapped by PTEs should be split based
-on their utilizations and memory pressure, e.g., reclaim priority.
-2. Clean subpages should be freed directly after split, rather than swapped=
- out.
-
-N.B.
-1. This workflow relies on the dirty bit rather examining the content of a =
-page.
-2. Sampling can be done by periodically switching between a PMD and
-512 consecutive PTEs.
-3. It only needs to hold mmap_lock for read because this special mode
-(512 consecutive PTEs) is not considered the split mode.
-4. Don't hold your breath :)
-
-Other references:
-1. https://www.usenix.org/system/files/atc20-zhu-weixi_0.pdf
-2. https://www.usenix.org/system/files/osdi21-hunter.pdf

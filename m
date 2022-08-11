@@ -2,54 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C68B58FC9F
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 14:43:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5613C58FCA4
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 14:44:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235359AbiHKMn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 08:43:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56922 "EHLO
+        id S235349AbiHKMoD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 08:44:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235349AbiHKMnZ (ORCPT
+        with ESMTP id S234084AbiHKMoB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 08:43:25 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61BB38982E
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 05:43:24 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id u5-20020a6b4905000000b00681e48dbd92so9660840iob.21
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 05:43:24 -0700 (PDT)
+        Thu, 11 Aug 2022 08:44:01 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AC77089928
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 05:44:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660221839;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=519IfCfIaIEiaBspR8OgsiWe3H9s5RpR3pee6j3OXrw=;
+        b=g+ZTs6ZPy/a5C7OyZlN6TWOcVBxwV2RmpQk/ok2X6onlSjHx10DX87sgRz27xhA10y5yCN
+        gvkggNiIcUSAvS4pzbDicyGXJ+JT62xx7GneP4WkrN07ndNunEG47PL8UjnCLQoKuONjih
+        jOda440BBUaBJc+0Zu+eB0B+cUYXCRk=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-189-DjJGebecPIeMCbAo_-wbMQ-1; Thu, 11 Aug 2022 08:43:58 -0400
+X-MC-Unique: DjJGebecPIeMCbAo_-wbMQ-1
+Received: by mail-ed1-f72.google.com with SMTP id m22-20020a056402431600b0043d6a88130aso10755999edc.18
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 05:43:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=N4jbo9jFiiTWtuh64UuCXIlcP86sRdsnQIPlROsB+us=;
-        b=TKtEYD9Cwm4L98qpP+HMLQRDE6Eghx7ugEEcw61MUb6hu/vFueZg5ktl010W1zzUjm
-         xP2NMNVRtpnkRFnEcu389Yvh+uVFKIyt3EjmCQ/0T351uyKIeyiaqU0SdpReLU1OdQaC
-         DLm9KM1cIjJRI6FSUrRb0IwwEm112iWsW49A5m2Jjb1yWB/Ap4o1qmgoItklKBCuzVwu
-         ej0mkStOCt/oI6DP6o9IuvWeYTMwzgcLtY0T8WvGxVpeOfcy+606MCCneON/dsqFYPtw
-         k/0tr3OhMhmzcmb/UiqMXYKv2kDMfxpPkoPCi9xhWbKKAV0eQmsYfBsStrZ0YyGgb65S
-         D3XQ==
-X-Gm-Message-State: ACgBeo2fsWIe7NB1KoZLMgUK/Yawm8WyUYxMoLetaVMPuwmj7GWgFv2V
-        UYQi6QTGONAqEJba+YjNspDheOOkLl3reVzBFSVPfyTImkZg
-X-Google-Smtp-Source: AA6agR7h/5EcbcHx98azEJNc5+fbmcmEz27gcVSe61f94SUPHSgDsaZ9H+tm5dDBzNUjwrJus9VbAPAJQX05G/QFg2ZgN63os+tK
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=519IfCfIaIEiaBspR8OgsiWe3H9s5RpR3pee6j3OXrw=;
+        b=OjiC8Ebg2/gA4Iygk2mstwFI5JfFNOjdSgd+RNQ9tYlP10Yqjwivud1yDlT9J294MQ
+         lK0Bse505+aCH84Xiq/7eCmJP83dRPSCeAx2/Yr94DuPA0sliW7PuuCgM/ZD9lXAHOzd
+         nrUIkfuW4BaTSW2buFTVCknN/7PbKKmG70Mf20+1lb6foj4qFMpY/vBBNFHtujNOJIzs
+         B9E0BoCUdLvZ7HFEKGblfLCHzyvD78Pf/5nJkxbd3izYZReCqSypZNKoICYoIW9lD695
+         gikHP166keAWCQGH381ztHjaWNRL1ETsURRCKvh2//djxXZIL29clAR8tTzok5JFAUZX
+         DlzA==
+X-Gm-Message-State: ACgBeo1KzYDnlJNc964RQuIql0S9mGOnTMxqKFzgG3xR3uQgI+Z7ApUO
+        +E4ehmd5zl4eyUI9p1uZTTpdUTxwB5GOOlhGT3XRw5sNtHvGnCEd87JoENqfKdCpRaAiODtunud
+        KDbw3WARMnZft9aNta2btJD+9xrmea0RKBGZ61VG9
+X-Received: by 2002:a05:6402:1bcf:b0:443:1c7:cd07 with SMTP id ch15-20020a0564021bcf00b0044301c7cd07mr2483197edb.365.1660221837693;
+        Thu, 11 Aug 2022 05:43:57 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6BQ+ukW/OILBIVEwiikKu/2YOrsmB3Jm4hsmMTKAYd3aASj+Rk+GDlOpfAOZmzBVAP2EOFOJLG7HamTc3wDdw=
+X-Received: by 2002:a05:6402:1bcf:b0:443:1c7:cd07 with SMTP id
+ ch15-20020a0564021bcf00b0044301c7cd07mr2483172edb.365.1660221837436; Thu, 11
+ Aug 2022 05:43:57 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a92:b106:0:b0:2dc:eebb:e6f6 with SMTP id
- t6-20020a92b106000000b002dceebbe6f6mr14820842ilh.54.1660221803579; Thu, 11
- Aug 2022 05:43:23 -0700 (PDT)
-Date:   Thu, 11 Aug 2022 05:43:23 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000d9cfcf05e5f68213@google.com>
-Subject: [syzbot] linux-next boot error: KASAN: out-of-bounds Read in rcu_cblist_dequeue
-From:   syzbot <syzbot+4f473a64b5132e9560d1@syzkaller.appspotmail.com>
-To:     Henry.Wang@arm.com, bigeasy@linutronix.de,
-        linux-kernel@vger.kernel.org, linux-next@vger.kernel.org,
-        longpeng2@huawei.com, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
-        vschneid@redhat.com
+References: <20220810234056.2494993-1-npache@redhat.com> <CABVgOSmUgkeuKKS_UYMOTUE4vARLpw--j77J9=zAkk5Zr30N9g@mail.gmail.com>
+In-Reply-To: <CABVgOSmUgkeuKKS_UYMOTUE4vARLpw--j77J9=zAkk5Zr30N9g@mail.gmail.com>
+From:   Nico Pache <npache@redhat.com>
+Date:   Thu, 11 Aug 2022 08:43:30 -0400
+Message-ID: <CAA1CXcBjf411E7gCbTfowpOmas-ykuVCyn1B4oAua_VKxMkOCg@mail.gmail.com>
+Subject: Re: [PATCH] kunit: fix Kconfig for build-in tests USB4 and Nitro Enclaves
+To:     David Gow <davidgow@google.com>
+Cc:     KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-usb@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>, alcioa@amazon.com,
+        lexnv@amazon.com, Andra Paraschiv <andraprs@amazon.com>,
+        YehezkelShB@gmail.com,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        michael.jamet@intel.com, andreas.noever@gmail.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,91 +79,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Aug 10, 2022 at 8:20 PM David Gow <davidgow@google.com> wrote:
+>
+> On Thu, Aug 11, 2022 at 7:41 AM Nico Pache <npache@redhat.com> wrote:
+> >
+> > Both the USB4 and Nitro Enclaves KUNIT tests are now able to be compiled
+> > if KUNIT is compiled as a module. This leads to issues if KUNIT is being
+> > packaged separately from the core kernel and when KUNIT is run baremetal
+> > without the required driver compiled into the kernel.
+> >
+> > Fixes: 635dcd16844b ("thunderbolt: test: Use kunit_test_suite() macro")
+> > Fixes: fe5be808fa6c ("nitro_enclaves: test: Use kunit_test_suite() macro")
+> > Signed-off-by: Nico Pache <npache@redhat.com>
+> > ---
+>
+> Hmm... I'm not quite sure I understand the case that's broken here. Is it:
+> - KUnit is built as a module (CONFIG_KUNIT=m)
+> - USB4/nitro_enclaves are also built as modules, with the test enabled.
+> - The kunit module is not available at runtime, so neither driver
+> module can load (due to missing kunit dependencies)
+Exactly, except the issue is also when the USB/NE=y not just when they
+are modules. This is currently creating an issue with our build system
+during the depmod stage and has been preventing us from generating
+Fedora builds.
+>
+> If so, that's not a case (i.e., the kunit.ko module being unavailable
+> if it was built) we've tried to support thus far. I guess a de-facto
+> rule for supporting it would be to depend on KUNIT=y for any KUnit
+> tests which are built into the same module as the driver they're
+> testing.
+Yeah, although it's not been a case you've been trying to support, it
+has been working so far :) This has been the case (built-in tests
+utilizing 'depends on KUNIT=y') since we began supporting KUNIT in our
+testing infrastructure and it would be nice to keep that as a de-facto
+rule :)
+>
+> Alternatively, maybe we could do some horrible hacks to compile stub
+> versions of various KUnit assertion symbols in unconditionally, which
+> forward to the real ones if KUnit is available.
+>
+> (Personally, I'd love it if we could get rid of CONFIG_KUNIT=m
+> altogether, and it's actually broken right at the moment[1]. There are
+> still some cases (unloading / reloading KUnit with different filter
+> options) which require it, though.)
+Personally I'd hate to see KUNIT=m go as that is how we have been able
+to support running Kunit tests so far.
 
-syzbot found the following issue on:
+A little background on how we utilize Kunit. We build with KUNIT=m and
+KUNIT_ALL_TESTS=m and run the tests baremetal.
+Our build system creates 3 packages (kernel, kernel-modules, and
+kernel-modules-internal), this allows us to ship the kernel and its
+modules, while also isolating packages that we dont want to ship
+outside of QE and developers. We then have our own infrastructure in
+place to run and collect the output of these tests in our pipelined
+environments. We dont utilize UML because we dont support that feature
+in RHEL.
 
-HEAD commit:    40d43a7507e1 Add linux-next specific files for 20220811
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=170595fd080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a5ae8cfa8d7075d1
-dashboard link: https://syzkaller.appspot.com/bug?extid=4f473a64b5132e9560d1
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+Fedora uses this same methodology for running KUNIT, so we are
+frequently running kunit on an 'upstream' variant.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+4f473a64b5132e9560d1@syzkaller.appspotmail.com
+I'm not sure how many organizations are supporting continuous KUNIT
+testing, or how they are achieving it, but dropping module support
+would prevent us from doing the CI testing we have in place.
 
-==================================================================
-BUG: KASAN: out-of-bounds in rcu_cblist_dequeue+0xa4/0xe0 kernel/rcu/rcu_segcblist.c:75
-Read of size 8 at addr ffffc90004f08000 by task ksoftirqd/1/21
+Cheers!
+-- Nico
+>
+> Cheers,
+> -- David
+>
+> [1]: https://patchwork.kernel.org/project/linux-kselftest/patch/20220713005221.1926290-1-davidgow@google.com/
+>
+> >  drivers/thunderbolt/Kconfig         | 3 +--
+> >  drivers/virt/nitro_enclaves/Kconfig | 2 +-
+> >  2 files changed, 2 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/thunderbolt/Kconfig b/drivers/thunderbolt/Kconfig
+> > index e76a6c173637..f12d0a3ee3e2 100644
+> > --- a/drivers/thunderbolt/Kconfig
+> > +++ b/drivers/thunderbolt/Kconfig
+> > @@ -29,8 +29,7 @@ config USB4_DEBUGFS_WRITE
+> >
+> >  config USB4_KUNIT_TEST
+> >         bool "KUnit tests" if !KUNIT_ALL_TESTS
+> > -       depends on (USB4=m || KUNIT=y)
+> > -       depends on KUNIT
+> > +       depends on USB4 && KUNIT=y
+>
+> This can probably just:
+> depends on KUNIT=y
+>
+>
+> >         default KUNIT_ALL_TESTS
+> >
+> >  config USB4_DMA_TEST
+> > diff --git a/drivers/virt/nitro_enclaves/Kconfig b/drivers/virt/nitro_enclaves/Kconfig
+> > index ce91add81401..dc4d25c26256 100644
+> > --- a/drivers/virt/nitro_enclaves/Kconfig
+> > +++ b/drivers/virt/nitro_enclaves/Kconfig
+> > @@ -17,7 +17,7 @@ config NITRO_ENCLAVES
+> >
+> >  config NITRO_ENCLAVES_MISC_DEV_TEST
+> >         bool "Tests for the misc device functionality of the Nitro Enclaves" if !KUNIT_ALL_TESTS
+> > -       depends on NITRO_ENCLAVES && KUNIT
+> > +       depends on NITRO_ENCLAVES && KUNIT=y
+> >         default KUNIT_ALL_TESTS
+> >         help
+> >           Enable KUnit tests for the misc device functionality of the Nitro
+> > --
+> > 2.36.1
+> >
+>
 
-CPU: 1 PID: 21 Comm: ksoftirqd/1 Not tainted 5.19.0-next-20220811-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- print_address_description mm/kasan/report.c:317 [inline]
- print_report.cold+0x59/0x719 mm/kasan/report.c:433
- kasan_report+0xb1/0x1e0 mm/kasan/report.c:495
- rcu_cblist_dequeue+0xa4/0xe0 kernel/rcu/rcu_segcblist.c:75
- rcu_do_batch kernel/rcu/tree.c:2234 [inline]
- rcu_core+0x735/0x1890 kernel/rcu/tree.c:2505
- __do_softirq+0x1d3/0x9c6 kernel/softirq.c:571
- run_ksoftirqd kernel/softirq.c:934 [inline]
- run_ksoftirqd+0x2d/0x60 kernel/softirq.c:926
- smpboot_thread_fn+0x645/0x9c0 kernel/smpboot.c:164
- kthread+0x2e4/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
-
-The buggy address belongs to the virtual mapping at
- [ffffc90004f08000, ffffc90004f11000) created by:
- kernel_clone+0xe7/0xab0 kernel/fork.c:2675
-
-The buggy address belongs to the physical page:
-page:ffffea00007ed940 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1fb65
-flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
-raw: 00fff00000000000 0000000000000000 dead000000000122 0000000000000000
-raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x2dc2(GFP_KERNEL|__GFP_HIGHMEM|__GFP_NOWARN|__GFP_ZERO), pid 11, tgid 11 (kworker/u4:1), ts 8261677515, free_ts 0
- prep_new_page mm/page_alloc.c:2532 [inline]
- get_page_from_freelist+0x109b/0x2cd0 mm/page_alloc.c:4283
- __alloc_pages+0x1c7/0x510 mm/page_alloc.c:5507
- __alloc_pages_bulk+0x9fc/0x15a0 mm/page_alloc.c:5455
- alloc_pages_bulk_array_mempolicy+0x1b3/0x360 mm/mempolicy.c:2365
- vm_area_alloc_pages mm/vmalloc.c:2930 [inline]
- __vmalloc_area_node mm/vmalloc.c:3026 [inline]
- __vmalloc_node_range+0x576/0x13a0 mm/vmalloc.c:3196
- alloc_thread_stack_node kernel/fork.c:312 [inline]
- dup_task_struct kernel/fork.c:977 [inline]
- copy_process+0x13cd/0x7120 kernel/fork.c:2088
- kernel_clone+0xe7/0xab0 kernel/fork.c:2675
- user_mode_thread+0xad/0xe0 kernel/fork.c:2744
- call_usermodehelper_exec_work kernel/umh.c:174 [inline]
- call_usermodehelper_exec_work+0xcc/0x180 kernel/umh.c:160
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e4/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-page_owner free stack trace missing
-
-Memory state around the buggy address:
- ffffc90004f07f00: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
- ffffc90004f07f80: f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8 f8
->ffffc90004f08000: 01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-                   ^
- ffffc90004f08080: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffffc90004f08100: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

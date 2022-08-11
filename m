@@ -2,110 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABF325907CA
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 23:07:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5DE55907D4
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 23:08:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236496AbiHKVGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 17:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41116 "EHLO
+        id S236663AbiHKVID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 17:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236331AbiHKVGO (ORCPT
+        with ESMTP id S236654AbiHKVHo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 17:06:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F283D89802
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 14:06:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660251971;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=e3seP/frNyLsAlU7K9H6qLEBTEwpcXPprkWdZzIof8M=;
-        b=QZ7i94casfweiNk+lOHDNpEaCbYaZ5ASrnvW5H3kIrM/mCe2/Jolwq1Gyy7dXkSVoK/kpo
-        HMDyBur42iPuvpOj2Jz/HtkAdrxlf1M9Wz8vFISUWqNNKazS/7wUSszKaZI9qhmm1gZP7g
-        Z6nX2XG7o7o0USLIOE2N83b95nSKRuQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-19-HKzmCSrrPo6qeeTQL5u-fg-1; Thu, 11 Aug 2022 17:06:08 -0400
-X-MC-Unique: HKzmCSrrPo6qeeTQL5u-fg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0ED9D943206;
-        Thu, 11 Aug 2022 21:06:08 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id DCB3C492C3B;
-        Thu, 11 Aug 2022 21:06:07 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     seanjc@google.com, mlevitsk@redhat.com, vkuznets@redhat.com
-Subject: [PATCH v2 9/9] KVM: x86: never write to memory from kvm_vcpu_check_block
-Date:   Thu, 11 Aug 2022 17:06:05 -0400
-Message-Id: <20220811210605.402337-10-pbonzini@redhat.com>
-In-Reply-To: <20220811210605.402337-1-pbonzini@redhat.com>
-References: <20220811210605.402337-1-pbonzini@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain
+        Thu, 11 Aug 2022 17:07:44 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7FEC98C98
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 14:07:03 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id o3-20020a17090a0a0300b001f7649cd317so6577932pjo.0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 14:07:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc;
+        bh=DVb1z5kbBA1ujjv+xteyYloR7hoULhfIuEQt2vBqJwI=;
+        b=pNYmvDNysYVnE4y5bj1U2pPQKZhnczdw1WnTDfu9aNj1/nEdGinf042LPTih/OaFlE
+         V4h26+g7TJFlK35T0cyNlZpbfK3Mv0wvUrHmErAczQbmnLnnGvLm0Hdy7G2rbWhAY99N
+         7gIzo5l+Uz9j7uJ61XUPc3O1uP3nlXc4IEic3n/xnfDrqfeKp78nopWEkgHXFENdgQ10
+         17Pt9pzKV1a38XwgA1ZwNNdJR+L5JYcwLBZhYaCpHBw5j+E4XTkEUtGAaiWdYIMSE6WC
+         kcqJCw04jzdvuHwAd4Nr0qPOaknSJVD+aJ8gyRtaul0GqOGYqX8mP6LvqkV3aYssrBIU
+         W1QQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc;
+        bh=DVb1z5kbBA1ujjv+xteyYloR7hoULhfIuEQt2vBqJwI=;
+        b=78rsW7uTCsegTyWOgHJwmy/qcu4kSgPVvKNFAbQcE6o8HSyC+lILzFQVC2DLSJ4yzn
+         He0phz1yrVdk3mQEGK2DxWaav76nRAmigI+9TAQM+cRepEG7sX7ulNP3kEdbzQ5+/I+B
+         H490+v1IUE5SZlFIs//cqiTssoUSJFEMoV21qfHFQWeubHPYbFHhyeMpMd0Z2hAM5qYA
+         0iEeewRHM0IgF1DmOgaZu4NZ6qTyra5fVS6PICj/Flkday5Cp5KgTZTT32Oy/ppj8qxJ
+         mFbdQQTGUJMiHZUFr0Kg5Wypu8KaqtBbj0Q8GVjONeWm4R6FBo7r2uhfORa1LrC8EZa9
+         qemA==
+X-Gm-Message-State: ACgBeo2EvEVpxN7lAnPJ5qGbFzODyijp5p4kXhQSs2MaVFE8G5jHxK8j
+        qxx+eae8zQBiCUOPkG9kHHY8K1/WtlS9bSxI
+X-Google-Smtp-Source: AA6agR721/2w32bRDonI7TCGaPitO08W/FFsdL1xIehUgwWUxXReEgXRnl8nsgo7Emy01/s6+rWZSg==
+X-Received: by 2002:a17:90a:2b42:b0:1f4:fc9a:be32 with SMTP id y2-20020a17090a2b4200b001f4fc9abe32mr10310074pjc.221.1660252015738;
+        Thu, 11 Aug 2022 14:06:55 -0700 (PDT)
+Received: from localhost ([50.221.140.186])
+        by smtp.gmail.com with ESMTPSA id y22-20020a170902b49600b0016ee4b0bd60sm107352plr.166.2022.08.11.14.06.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Aug 2022 14:06:55 -0700 (PDT)
+Date:   Thu, 11 Aug 2022 14:06:55 -0700 (PDT)
+X-Google-Original-Date: Thu, 11 Aug 2022 11:35:28 PDT (-0700)
+Subject:     Re: [PATCH v1 0/4] Add HiFive Unmatched LEDs
+In-Reply-To: <20220717110249.GF14285@duo.ucw.cz>
+CC:     emil.renner.berthing@canonical.com, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        plr.vincent@gmail.com, bin.meng@windriver.com,
+        aurelien@aurel32.net, w6rz@comcast.net, qiuwenbo@kylinos.com.cn,
+        geert@linux-m68k.org, nerdboy@gentoo.org,
+        jianlong.huang@starfivetech.com, kettenis@openbsd.org,
+        sven.schwermer@disruptive-technologies.com,
+        andy.shevchenko@gmail.com, davidlt@rivosinc.com,
+        linux-leds@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     pavel@ucw.cz
+Message-ID: <mhng-ac0025f9-3572-432f-9e8d-64ef87730b45@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kvm_vcpu_check_block() is called while not in TASK_RUNNING, and therefore
-it cannot sleep.  Writing to guest memory is therefore forbidden, but it
-can happen on AMD processors if kvm_check_nested_events() causes a vmexit.
+On Sun, 17 Jul 2022 04:02:49 PDT (-0700), pavel@ucw.cz wrote:
+> Hi!
+>
+>> This series adds support for the two LEDs on the HiFive Unmatched
+>> RISC-V board.
+>> 
+>> Emil Renner Berthing (4):
+>>   leds: pwm-multicolor: Don't show -EPROBE_DEFER as errors
+>>   dt-bindings: leds: pwm-multicolor: Add active-low property
+>>   leds: pwm-multicolor: Support active-low LEDs
+>
+> Thank you, applied. Not taking the dts change
 
-Fortunately, all events that are caught by kvm_check_nested_events() are
-also recognized by kvm_vcpu_has_events() through vendor callbacks such as
-kvm_x86_interrupt_allowed() or kvm_x86_ops.nested_ops->has_events(), so
-remove the call and postpone the actual processing to vcpu_block().
-
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- arch/x86/kvm/x86.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 5e9358ea112b..9226fd536783 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -10639,6 +10639,17 @@ static inline int vcpu_block(struct kvm_vcpu *vcpu)
- 			return 1;
- 	}
- 
-+	if (is_guest_mode(vcpu)) {
-+		/*
-+		 * Evaluate nested events before exiting the halted state.
-+		 * This allows the halt state to be recorded properly in
-+		 * the VMCS12's activity state field (AMD does not have
-+		 * a similar field and a vmexit always causes a spurious
-+		 * wakeup from HLT).
-+		 */
-+		kvm_check_nested_events(vcpu);
-+	}
-+
- 	if (kvm_apic_accept_events(vcpu) < 0)
- 		return 0;
- 	switch(vcpu->arch.mp_state) {
-@@ -10662,9 +10673,6 @@ static inline int vcpu_block(struct kvm_vcpu *vcpu)
- 
- static inline bool kvm_vcpu_running(struct kvm_vcpu *vcpu)
- {
--	if (is_guest_mode(vcpu))
--		kvm_check_nested_events(vcpu);
--
- 	return (vcpu->arch.mp_state == KVM_MP_STATE_RUNNABLE &&
- 		!vcpu->arch.apf.halted);
- }
--- 
-2.31.1
-
+I took the DTS change (#4) on riscv/for-next.  Thanks!

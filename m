@@ -1,335 +1,170 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FB825908A8
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 00:16:09 +0200 (CEST)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 9C4B85908B2
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 00:23:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236127AbiHKWOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 18:14:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53026 "EHLO
+        id S236302AbiHKWXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 18:23:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235205AbiHKWOQ (ORCPT
+        with ESMTP id S234269AbiHKWXC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 18:14:16 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4C0A0335;
-        Thu, 11 Aug 2022 15:14:11 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M3h0t6fVpz4wgv;
-        Fri, 12 Aug 2022 08:14:06 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1660256047;
-        bh=m6KjgOzbDaQ/Q0LqxhKfLlU33XvnbTQigjVbzGxvAFc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=GiV4fiXbYNJT7ByiAMgmHAyx+yQ3SjVEl6tnZUWoXTT0qJHi9ZpuiUcJfGeYFuXnM
-         iIXBm1lTBeB0uERNx1sjb4F6guFk5+hroZRmsiL14b72bUsPjRkFUCJUczPvx1BOSs
-         D6QWRwDkDP8xJX6fdANNWeqgJ9x3b8UM7yMJ0WMKv8Jr5ziswK1BD0frkgahMTuhT7
-         CsGKYT04ikgAqb8rJ8458DcmKSFJUrPJ5IG7/AVP5ry6GdEEz4g596XPZoFjlgdPJe
-         I3LqRX1lrcv8zfg9L8Oepg6HILYrY/CSOQiqK8sEMOwBZhsOxcAe3/K+fyBDqmME4x
-         Wj74QKN64H2bA==
-Date:   Fri, 12 Aug 2022 08:13:47 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build warning after merge of the amdgpu tree
-Message-ID: <20220812081245.380c375f@canb.auug.org.au>
+        Thu, 11 Aug 2022 18:23:02 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E11898D39
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 15:23:00 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id dc19so35798518ejb.12
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 15:23:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=KsXfDpsnVQseda5Cb9wrMuyheSum/QLurm0boPOtabg=;
+        b=Vp4dIwe+h6J4VNgbqF8TkHeZtIkW/LqXfVLkoCaEAJpjkFf6k4OtqgQyFwEq/7r6Pa
+         AoZaJmmTKCPx93aAIiaAT4WcQtLEMS28t4ettuGfokGi6wc8E62KOqaKLkouMdPv5yId
+         DBGGC6qyUU6I0MoYBNjtaTcpwbuzWkmg3hUIg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=KsXfDpsnVQseda5Cb9wrMuyheSum/QLurm0boPOtabg=;
+        b=ANlQmrzaca+5oy3jFzHpIMrDb4QnlkZiGi8gpGlHDuHfP4yHeW9sOES03zTy0FX/BU
+         m7A8adE1AF0gEb9RCNuDQ6kG1lwt69niwGVynnEPaGP0qCL4JjLOtbuYCTDcUPMr62vM
+         +sUPcfyFk1rBRQ7BVoHA4AxI42zIdb679ks2F9CqTjR1svXlbkJ2EbeZob9YX4ezIdFl
+         zn2T4CODi8BZAziadRGTNKn66gBZhM+HKPYbKzsxSv204yR5cQqHYpn3XYhFuy7p93+c
+         zoIAI3Z4kuRsiMYRttLspcwRWmsBY6Ap+TBpFP4H0SY4qQl4O5txNNSJyYX+2f+cZ1jg
+         zFzw==
+X-Gm-Message-State: ACgBeo26yVrw0J8T/ljmS78uaXs2Z2jZKe0M8DfTdddTdfcPZU2gzU2v
+        XoL+Jjup3C5OF9psmFs8A5SR0tV+zv6NzvkK
+X-Google-Smtp-Source: AA6agR5sO64XY0kZ6oNjllVgtQsWy/0/hMXAFivhfWYFjvmSEslwEmwG4nDBU51Poil/lFcK3/OSdw==
+X-Received: by 2002:a17:907:3e86:b0:6f5:917:10cc with SMTP id hs6-20020a1709073e8600b006f5091710ccmr771654ejc.53.1660256578990;
+        Thu, 11 Aug 2022 15:22:58 -0700 (PDT)
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com. [209.85.221.42])
+        by smtp.gmail.com with ESMTPSA id q17-20020aa7d451000000b0044235219c07sm345338edr.73.2022.08.11.15.22.55
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Aug 2022 15:22:56 -0700 (PDT)
+Received: by mail-wr1-f42.google.com with SMTP id l4so22763771wrm.13
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 15:22:55 -0700 (PDT)
+X-Received: by 2002:a05:6000:1888:b0:222:ca41:dc26 with SMTP id
+ a8-20020a056000188800b00222ca41dc26mr465484wri.442.1660256575053; Thu, 11 Aug
+ 2022 15:22:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/C4H4alhtg7UI0g=K7.saxGF";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220811152446.281723-1-idryomov@gmail.com> <CAHk-=wifgq59uru6xDB=nY-1p6aQ-1YB8nVhW7T-N2ctK3m1gw@mail.gmail.com>
+ <CAOi1vP9BSi-65of-8D0BA1_DC0eVD_TQcWkhrGJwaXw_skhHFQ@mail.gmail.com>
+ <5d0b0367a5e28ec5b1f3b995c7792ff9a5cbcbd4.camel@kernel.org>
+ <YvVzHQ5DVaPAvw26@ZenIV> <72a93a2c8910c3615bba7c093c66c18b1a6a2696.camel@kernel.org>
+ <YvV2zfT0XbgwHGe/@ZenIV> <CAHk-=wgYnAPiGsh7H4BS_E1aMM46PdSGg8YqFhi2SpGw+Ac_PQ@mail.gmail.com>
+ <YvV86p5DjBLjjXHo@ZenIV>
+In-Reply-To: <YvV86p5DjBLjjXHo@ZenIV>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 11 Aug 2022 15:22:38 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjCa=Xf=pA2Z844WnwEeYgy9OPoB2kWphvg7PVn3ohScw@mail.gmail.com>
+Message-ID: <CAHk-=wjCa=Xf=pA2Z844WnwEeYgy9OPoB2kWphvg7PVn3ohScw@mail.gmail.com>
+Subject: Re: [GIT PULL] Ceph updates for 5.20-rc1
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Matthew Wilcox <willy@infradead.org>
+Content-Type: multipart/mixed; boundary="00000000000064959705e5fe9bf0"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/C4H4alhtg7UI0g=K7.saxGF
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+--00000000000064959705e5fe9bf0
+Content-Type: text/plain; charset="UTF-8"
 
-Hi all,
+On Thu, Aug 11, 2022 at 3:04 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+> FWIW, I wonder if we should do
+>         if (READ_ONCE(dentry->d_parent) != parent)
+>                 continue;
+> before grabbing ->d_lock (and repeat the check after grabbing it,
 
-After merging the amdgpu tree, today's linux-next build (htmldocs)
-produced this warning:
+It kind of makes sense. We already do that d_name.hash check outside
+of the lock, so we already have that "we might race with a rename"
+situation.
 
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'always_scale' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'always_use_regamma' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'aux_wake_wa' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'avoid_vbios_exec_table' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'az_endpoint_mute_only' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'bandwidth_calcs_trace' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'bw_val_profile' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'clock_trace' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'cm_in_bypass' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'crb_alloc_policy' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'crb_alloc_policy_min_disp_count' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'disable_48mhz_pwrdwn' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'disable_clock_gate' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'disable_dcc' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'disable_dfs_bypass' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'disable_dmcu' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'disable_dpp_power_gate' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'disable_dram_clock_change_vactive_support' not described in 'dc_debug_=
-options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'disable_dsc' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'disable_dsc_edp' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'disable_dsc_power_gate' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'disable_dtb_ref_clk_switch' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'disable_fams' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'disable_fec' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'disable_fixed_vs_aux_timeout_wa' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'disable_hubp_power_gate' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'disable_idle_power_optimizations' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'disable_mem_low_power' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'disable_min_fclk' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'disable_pplib_clock_request' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'disable_pplib_wm_range' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'disable_psr' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'disable_stereo_support' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'disable_stutter' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'disable_timing_sync' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'disable_uhbr' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'disable_z10' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'disable_z9_mpc' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'dmcub_emulation' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'dml_disallow_alternate_prefetch_modes' not described in 'dc_debug_opti=
-ons'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'dml_hostvm_override' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'dmub_command_table' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'dmub_offload_enabled' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'dpia_debug' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'dram_clock_change_latency_ns' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'dsc_bpp_increment_div' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'dsc_min_slice_height_override' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'dwb_fi_phase' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'edid_read_retry_times' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'enable_dmcub_surface_flip' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'enable_dmub_aux_for_legacy_ddc' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'enable_dp_dig_pixel_rate_div_policy' not described in 'dc_debug_option=
-s'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'enable_dram_clock_change_one_display_vactive' not described in 'dc_deb=
-ug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'enable_driver_sequence_debug' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'enable_mem_low_power' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'enable_single_display_2to1_odm_policy' not described in 'dc_debug_opti=
-ons'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'enable_sw_cntl_psr' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'enable_tri_buf' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'enable_z9_disable_interface' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'exit_idle_opt_for_cursor_updates' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'extended_blank_optimization' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'fec_enable_delay_in100us' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'fixed_vs_aux_delay_config_wa' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'force_abm_enable' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'force_clock_mode' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'force_disable_subvp' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'force_dp2_lt_fallback_method' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'force_dsc_edp_policy' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'force_fclk_khz' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'force_min_dcfclk_mhz' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'force_odm_combine' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'force_odm_combine_4to1' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'force_single_disp_pipe_split' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'force_subvp_mclk_switch' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'force_usr_allow' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'force_vblank_alignment' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'hdmi20_disable' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'hpo_optimization' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'ignore_cable_id' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'legacy_dp2_lt' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'mall_additional_timer_percent' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'mall_error_as_fatal' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'mall_size_override' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'max_disp_clk' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'max_downscale_src_width' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'min_disp_clk_khz' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'min_dpp_clk_khz' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'min_dram_clk_khz' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'mst_start_top_delay' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'native422_support' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'optimize_edp_link_rate' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'optimized_watermark' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'percent_of_ideal_drambw' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'performance_trace' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'pplib_wm_report_mode' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'psr_power_use_phy_fsm' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'pstate_enabled' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'recovery_enabled' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'root_clock_optimization' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'sanity_checks' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'scl_reset_length10' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'seamless_boot_odm_combine' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'set_mst_en_for_sst' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'skip_detection_link_training' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'sr_enter_plus_exit_time_dpm0_ns' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'sr_enter_plus_exit_time_ns' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'sr_exit_time_dpm0_ns' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'sr_exit_time_ns' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'surface_trace' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'timing_trace' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'underflow_assert_delay_us' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'urgent_latency_ns' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'usbc_combo_phy_reset_wa' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'use_legacy_soc_bb_mechanism' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'use_max_lb' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'validate_dml_output' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'validation_trace' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'visual_confirm' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'visual_confirm_rect_height' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'voltage_align_fclk' not described in 'dc_debug_options'
-drivers/gpu/drm/amd/display/dc/dc.h:847: warning: Function parameter or mem=
-ber 'vsr_support' not described in 'dc_debug_options'
+That said, I do think __d_lookup_rcu() is the more important of the two.
 
-Introduced by commit
+Here's a recreation of that patch I mentioned where the OP_COMPARE is
+moved out of the loop. Just for fun, look at how much better the code
+generation is for the common case when you don't have the call messing
+up the clobbered registers etc.
 
-  a2b3b9d57bdb ("drm/amd/display: Document pipe split policy")
+Entirely untested, and I might have messed something up, but I suspect
+this is a much bigger deal than whether d_same_name() is inlined or
+not in the non-RCU path.
 
---=20
-Cheers,
-Stephen Rothwell
+              Linus
 
---Sig_/C4H4alhtg7UI0g=K7.saxGF
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+--00000000000064959705e5fe9bf0
+Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
+Content-Disposition: attachment; filename="patch.diff"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l6plvdp70>
+X-Attachment-Id: f_l6plvdp70
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmL1fxsACgkQAVBC80lX
-0GwWOggAnP25ZIkMt8PF/zqr367R+5VdFSMJI6YZbMmOpiLMlDVf4GU9OU//lkqy
-t+OvoukPjjmNkSAYN5+dmDp1h6o3WTYUZNfpTrBrygaD0ZHS4RA8aaV/4+NDNi8j
-LfEurqlfsl3rc9B1RS6tEMocsnVfTyxNS+jRRoDYABL7+pr57tZtYN2Ezmkdhzsy
-rpN2B92YaWvSl/HaSo45tpiEA2N0QMXVuGdAmxTTehjNEC6E2DOEUt6S3zvSHLzF
-Ik6PFbRPECB2rkF1R3vHz+PcV+eaiKxJpyaQ3rrO5i+lyFjIRmL991S5Usthr4wW
-L4xKiPrRJUp+RJhTbMTzSkhtdtFzBg==
-=4TVX
------END PGP SIGNATURE-----
-
---Sig_/C4H4alhtg7UI0g=K7.saxGF--
+IGZzL2RjYWNoZS5jIHwgNzIgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysr
+KystLS0tLS0tLS0tLS0tLS0tLS0tLQogMSBmaWxlIGNoYW5nZWQsIDQ5IGluc2VydGlvbnMoKyks
+IDIzIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2ZzL2RjYWNoZS5jIGIvZnMvZGNhY2hlLmMK
+aW5kZXggYzVkYzMyYTU5Yzc2Li5iYjBjNGQwMDM4ZGIgMTAwNjQ0Ci0tLSBhL2ZzL2RjYWNoZS5j
+CisrKyBiL2ZzL2RjYWNoZS5jCkBAIC0yMjcwLDYgKzIyNzAsNDggQEAgYm9vbCBkX3NhbWVfbmFt
+ZShjb25zdCBzdHJ1Y3QgZGVudHJ5ICpkZW50cnksIGNvbnN0IHN0cnVjdCBkZW50cnkgKnBhcmVu
+dCwKIH0KIEVYUE9SVF9TWU1CT0xfR1BMKGRfc2FtZV9uYW1lKTsKIAorLyoKKyAqIFRoaXMgaXMg
+X19kX2xvb2t1cF9yY3UoKSB3aGVuIHRoZSBwYXJlbnQgZGVudHJ5IGhhcworICogRENBQ0hFX09Q
+X0NPTVBBUkUsIHdoaWNoIG1ha2VzIHRoaW5ncyBtdWNoIG5hc3RpZXIuCisgKi8KK3N0YXRpYyBu
+b2lubGluZSBzdHJ1Y3QgZGVudHJ5ICpfX2RfbG9va3VwX3JjdV9vcF9jb21wYXJlKAorCWNvbnN0
+IHN0cnVjdCBkZW50cnkgKnBhcmVudCwKKwljb25zdCBzdHJ1Y3QgcXN0ciAqbmFtZSwKKwl1bnNp
+Z25lZCAqc2VxcCkKK3sKKwl1NjQgaGFzaGxlbiA9IG5hbWUtPmhhc2hfbGVuOworCXN0cnVjdCBo
+bGlzdF9ibF9oZWFkICpiID0gZF9oYXNoKGhhc2hsZW5faGFzaChoYXNobGVuKSk7CisJc3RydWN0
+IGhsaXN0X2JsX25vZGUgKm5vZGU7CisJc3RydWN0IGRlbnRyeSAqZGVudHJ5OworCisJaGxpc3Rf
+YmxfZm9yX2VhY2hfZW50cnlfcmN1KGRlbnRyeSwgbm9kZSwgYiwgZF9oYXNoKSB7CisJCWludCB0
+bGVuOworCQljb25zdCBjaGFyICp0bmFtZTsKKwkJdW5zaWduZWQgc2VxOworCitzZXFyZXRyeToK
+KwkJc2VxID0gcmF3X3NlcWNvdW50X2JlZ2luKCZkZW50cnktPmRfc2VxKTsKKwkJaWYgKGRlbnRy
+eS0+ZF9wYXJlbnQgIT0gcGFyZW50KQorCQkJY29udGludWU7CisJCWlmIChkX3VuaGFzaGVkKGRl
+bnRyeSkpCisJCQljb250aW51ZTsKKwkJaWYgKGRlbnRyeS0+ZF9uYW1lLmhhc2ggIT0gaGFzaGxl
+bl9oYXNoKGhhc2hsZW4pKQorCQkJY29udGludWU7CisJCXRsZW4gPSBkZW50cnktPmRfbmFtZS5s
+ZW47CisJCXRuYW1lID0gZGVudHJ5LT5kX25hbWUubmFtZTsKKwkJLyogd2Ugd2FudCBhIGNvbnNp
+c3RlbnQgKG5hbWUsbGVuKSBwYWlyICovCisJCWlmIChyZWFkX3NlcWNvdW50X3JldHJ5KCZkZW50
+cnktPmRfc2VxLCBzZXEpKSB7CisJCQljcHVfcmVsYXgoKTsKKwkJCWdvdG8gc2VxcmV0cnk7CisJ
+CX0KKwkJaWYgKHBhcmVudC0+ZF9vcC0+ZF9jb21wYXJlKGRlbnRyeSwgdGxlbiwgdG5hbWUsIG5h
+bWUpICE9IDApCisJCQljb250aW51ZTsKKwkJKnNlcXAgPSBzZXE7CisJCXJldHVybiBkZW50cnk7
+CisJfQorCXJldHVybiBOVUxMOworfQorCiAvKioKICAqIF9fZF9sb29rdXBfcmN1IC0gc2VhcmNo
+IGZvciBhIGRlbnRyeSAocmFjeSwgc3RvcmUtZnJlZSkKICAqIEBwYXJlbnQ6IHBhcmVudCBkZW50
+cnkKQEAgLTIzMTYsNiArMjM1OCw5IEBAIHN0cnVjdCBkZW50cnkgKl9fZF9sb29rdXBfcmN1KGNv
+bnN0IHN0cnVjdCBkZW50cnkgKnBhcmVudCwKIAkgKiBLZWVwIHRoZSB0d28gZnVuY3Rpb25zIGlu
+IHN5bmMuCiAJICovCiAKKwlpZiAodW5saWtlbHkocGFyZW50LT5kX2ZsYWdzICYgRENBQ0hFX09Q
+X0NPTVBBUkUpKQorCQlyZXR1cm4gX19kX2xvb2t1cF9yY3Vfb3BfY29tcGFyZShwYXJlbnQsIG5h
+bWUsIHNlcXApOworCiAJLyoKIAkgKiBUaGUgaGFzaCBsaXN0IGlzIHByb3RlY3RlZCB1c2luZyBS
+Q1UuCiAJICoKQEAgLTIzMzIsNyArMjM3Nyw2IEBAIHN0cnVjdCBkZW50cnkgKl9fZF9sb29rdXBf
+cmN1KGNvbnN0IHN0cnVjdCBkZW50cnkgKnBhcmVudCwKIAlobGlzdF9ibF9mb3JfZWFjaF9lbnRy
+eV9yY3UoZGVudHJ5LCBub2RlLCBiLCBkX2hhc2gpIHsKIAkJdW5zaWduZWQgc2VxOwogCi1zZXFy
+ZXRyeToKIAkJLyoKIAkJICogVGhlIGRlbnRyeSBzZXF1ZW5jZSBjb3VudCBwcm90ZWN0cyB1cyBm
+cm9tIGNvbmN1cnJlbnQKIAkJICogcmVuYW1lcywgYW5kIHRodXMgcHJvdGVjdHMgcGFyZW50IGFu
+ZCBuYW1lIGZpZWxkcy4KQEAgLTIzNTUsMjggKzIzOTksMTAgQEAgc3RydWN0IGRlbnRyeSAqX19k
+X2xvb2t1cF9yY3UoY29uc3Qgc3RydWN0IGRlbnRyeSAqcGFyZW50LAogCQkJY29udGludWU7CiAJ
+CWlmIChkX3VuaGFzaGVkKGRlbnRyeSkpCiAJCQljb250aW51ZTsKLQotCQlpZiAodW5saWtlbHko
+cGFyZW50LT5kX2ZsYWdzICYgRENBQ0hFX09QX0NPTVBBUkUpKSB7Ci0JCQlpbnQgdGxlbjsKLQkJ
+CWNvbnN0IGNoYXIgKnRuYW1lOwotCQkJaWYgKGRlbnRyeS0+ZF9uYW1lLmhhc2ggIT0gaGFzaGxl
+bl9oYXNoKGhhc2hsZW4pKQotCQkJCWNvbnRpbnVlOwotCQkJdGxlbiA9IGRlbnRyeS0+ZF9uYW1l
+LmxlbjsKLQkJCXRuYW1lID0gZGVudHJ5LT5kX25hbWUubmFtZTsKLQkJCS8qIHdlIHdhbnQgYSBj
+b25zaXN0ZW50IChuYW1lLGxlbikgcGFpciAqLwotCQkJaWYgKHJlYWRfc2VxY291bnRfcmV0cnko
+JmRlbnRyeS0+ZF9zZXEsIHNlcSkpIHsKLQkJCQljcHVfcmVsYXgoKTsKLQkJCQlnb3RvIHNlcXJl
+dHJ5OwotCQkJfQotCQkJaWYgKHBhcmVudC0+ZF9vcC0+ZF9jb21wYXJlKGRlbnRyeSwKLQkJCQkJ
+CSAgICB0bGVuLCB0bmFtZSwgbmFtZSkgIT0gMCkKLQkJCQljb250aW51ZTsKLQkJfSBlbHNlIHsK
+LQkJCWlmIChkZW50cnktPmRfbmFtZS5oYXNoX2xlbiAhPSBoYXNobGVuKQotCQkJCWNvbnRpbnVl
+OwotCQkJaWYgKGRlbnRyeV9jbXAoZGVudHJ5LCBzdHIsIGhhc2hsZW5fbGVuKGhhc2hsZW4pKSAh
+PSAwKQotCQkJCWNvbnRpbnVlOwotCQl9CisJCWlmIChkZW50cnktPmRfbmFtZS5oYXNoX2xlbiAh
+PSBoYXNobGVuKQorCQkJY29udGludWU7CisJCWlmIChkZW50cnlfY21wKGRlbnRyeSwgc3RyLCBo
+YXNobGVuX2xlbihoYXNobGVuKSkgIT0gMCkKKwkJCWNvbnRpbnVlOwogCQkqc2VxcCA9IHNlcTsK
+IAkJcmV0dXJuIGRlbnRyeTsKIAl9Cg==
+--00000000000064959705e5fe9bf0--

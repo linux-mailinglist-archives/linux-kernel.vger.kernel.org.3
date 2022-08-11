@@ -2,157 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CABED59091E
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 01:23:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE44590926
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 01:26:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236026AbiHKXXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 19:23:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56090 "EHLO
+        id S236571AbiHKX0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 19:26:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234234AbiHKXW6 (ORCPT
+        with ESMTP id S235176AbiHKX0B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 19:22:58 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F31A1A49;
-        Thu, 11 Aug 2022 16:22:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=V1h1XrgwOt/y6x3JRSaO7VcTp4/3cdnHC5zyEmz6jfG/aypexz3lwXwUDephjnxCKZLo25VNRPF9lIqLdQCtP/WurdF5EonISVbrLDkRzDnPbwGcK1dtwubu9giu7SPUdQw6tAcZ6zJD3qMaJwYwv698mRvbo9vqquU+NdA1RRwAex/Q4HfL60EP/f8Fyjyo+DjJKiRTmcGzfUHrFuWPLb4r07tatUcCy8iGIkbRFCwLtbzxS4M46lXfG5/YC3ATGR0sh8p5C4pfAicz873pTcIl8qlwppNNIwDoRlJcpQMDXQ57MY97ZBwDL7TQl7LbUGNFtDAY2d60aaaEZx3cAA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QybElcSP2bDmvmjdIgaCzA5rzSPnDfQ/K6FOeY45wpY=;
- b=n5ClyvWrX1+iyeWgkmrIaoy/mpDjUUMfRZxZKAc4nr1BvZwgJKQZuUJDhTMps6JeE86Kg9jZjWbJV5AK9XmK8pfG8SOuAtKfoLc77s8fIvMRK/55TbhrDlriFfPAgvHQoIy5AjCOJKmZjFAJjuuOe9SYDWQ/X0TEE85TUGU0Xb13F1dMlsRZP9Dn3Nk52R2zJoTCUSUaVloCykyuD42zBaukYfXpyFk0NXL9AA2fxMpYoa0vx7m3L2XZ98+G0wZvJZ9ImlFZ2HbkVykowT+ak3RdBLF+M+y+VSPaHt59z1NNe5Wenp9AD2eBR4yGHZM04wBfoCO78OINAQkYzovtgQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QybElcSP2bDmvmjdIgaCzA5rzSPnDfQ/K6FOeY45wpY=;
- b=rSkM5XfV69X69c1Ju7z5ewWGTudhRqp8QjK1upoOGfrIh3JuHoiRYuLvjmpjnzJCcu3B5LZE77WUVZIXQBIrjMcGPL4bhjTepO39xzs7CKUhvaTToueHIZOFdejOia8hX7mgTuUMRH6qRp8Ld88r/6DALmSdtMKT8Wr2t0p1AzMibmBvFycAc7hADmd2ypPzQe9OMbzeM8W1DX60ezX/51xuuG1gOEvqGhw1/EIMsKbMw8O3lWAJL3sxTf6qFg2P4QhasBlZFQvOpYCtdH9olRcU8kNFdwSoCJdVCTlTAFiCANJ9q6ApRlJyGUUapPBrBlbHekdu8Z0gMtCaYz94iw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by DM4PR12MB6063.namprd12.prod.outlook.com (2603:10b6:8:b1::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.11; Thu, 11 Aug
- 2022 23:22:56 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::462:7fe:f04f:d0d5]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::462:7fe:f04f:d0d5%6]) with mapi id 15.20.5525.011; Thu, 11 Aug 2022
- 23:22:55 +0000
-Date:   Thu, 11 Aug 2022 20:22:54 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Peter Xu <peterx@redhat.com>, Hugh Dickins <hughd@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>
-Subject: Re: [PATCH] sched/all: Change BUG_ON() instances to WARN_ON()
-Message-ID: <YvWPThSv65hwuSMl@nvidia.com>
-References: <20220808073232.8808-1-david@redhat.com>
- <CAHk-=wiEAH+ojSpAgx_Ep=NKPWHU8AdO3V56BXcCsU97oYJ1EA@mail.gmail.com>
- <1a48d71d-41ee-bf39-80d2-0102f4fe9ccb@redhat.com>
- <CAHk-=wg40EAZofO16Eviaj7mfqDhZ2gVEbvfsMf6gYzspRjYvw@mail.gmail.com>
- <YvSsKcAXISmshtHo@gmail.com>
- <CAHk-=wgqW6zQcAW4i-ARJ8KNZZjw6tP3nn0QimyTWO=j+ZKsLA@mail.gmail.com>
- <YvV0e7UY5yRbHNJQ@casper.infradead.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YvV0e7UY5yRbHNJQ@casper.infradead.org>
-X-ClientProxiedBy: BLAPR03CA0119.namprd03.prod.outlook.com
- (2603:10b6:208:32a::34) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
+        Thu, 11 Aug 2022 19:26:01 -0400
+Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D0598F941;
+        Thu, 11 Aug 2022 16:25:59 -0700 (PDT)
+Received: by mail-vk1-xa31.google.com with SMTP id q14so9678913vke.9;
+        Thu, 11 Aug 2022 16:25:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=Z/3c/f13BD6UjeEAmo6vUxRREzPPnc4YEqQv9afkgVc=;
+        b=Uy1/Wa7qyoxj3+x2u6VOkfR8q0VrissUQtRsubf7kkTf5Ntq+WSwaWFhexoWFqM/w+
+         rTDTiGJZdXD7RmYSnXxOhiLh9IHQVAWPCjKVChjiwsdudtbmYW8e3mu2ENVHAx+Dd7kG
+         ttimuBSd0PUZ/QrvMew8T/L4Y9dhnP3p5zhATaeGmg80capBbIF8ZBuSWxg0EFwcv98v
+         EbfJ69V0yvixc7tq9YZ91FuTPSk0/TH+3Nt+4lUc68HUq8jZnDubLOHMn34SuwhvIri8
+         UoX8bpTIsv0rtE4cPpXsNGxzMDBzeb+GUB8ewB53izYeVOZsrvLHiR8puT1GUYoCV0tq
+         raFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=Z/3c/f13BD6UjeEAmo6vUxRREzPPnc4YEqQv9afkgVc=;
+        b=giCM5syvNmi7gMoMj/Pasp0s76bfDbIezqNzltolY8XB8eLWjGhmeZa5uXSZQkqPJ+
+         Fk5zm1arc36PVMqgSwXhYRg2EUbtyyATefq7dcZ5YTmO75mqcQmbyrDho3E8kR9DYDk5
+         DJksY96WDXhS2fQ+75QOMP/42DeUmvgFOAn1O0KwdXdQG1cgPfyHQ5n3e9c3P4uMtUfW
+         eKyb5m7xY1RpasffM8xqIdUfxPqxLOzSr3Hb6J0/HpwvMm/yuCr37Cv3kxVWPG1easT9
+         iwgB4re7lqZ4y4wyZt9LelIQdHjH4kiatQ7V1Vrxm0olPCs0ljMP+O/2jMqTZ7pI/Ijc
+         hYVw==
+X-Gm-Message-State: ACgBeo0hUC2ZgzrOZhQMGeqhprJ1VHLTv5ChUnE5Ef8IkM/k6ihwYu82
+        t95ldfqquSFHPpGGfA+kIis=
+X-Google-Smtp-Source: AA6agR7Xd9nIhNp3jx0UJrnrQCfSISfHh2FtRwIg12f5DR7H9eKiurWK8PGYvxm2WkQz5IWt/8gg0Q==
+X-Received: by 2002:a1f:c117:0:b0:377:855a:4e9f with SMTP id r23-20020a1fc117000000b00377855a4e9fmr825613vkf.16.1660260357229;
+        Thu, 11 Aug 2022 16:25:57 -0700 (PDT)
+Received: from macondo.. ([2804:431:e7cc:d33f:249:c106:90c1:7b7f])
+        by smtp.gmail.com with ESMTPSA id g128-20020a1f2086000000b00375ecb78541sm502816vkg.12.2022.08.11.16.25.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Aug 2022 16:25:56 -0700 (PDT)
+From:   Rafael Mendonca <rafaelmendsr@gmail.com>
+To:     Jens Axboe <axboe@kernel.dk>, Hannes Reinecke <hare@suse.de>
+Cc:     Rafael Mendonca <rafaelmendsr@gmail.com>,
+        syzbot+31c9594f6e43b9289b25@syzkaller.appspotmail.com,
+        Hillf Danton <hdanton@sina.com>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] block: Do not call blk_put_queue() if gendisk allocation fails
+Date:   Thu, 11 Aug 2022 20:23:37 -0300
+Message-Id: <20220811232338.254673-1-rafaelmendsr@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7e64acf7-4cb4-4378-7e69-08da7bf06baa
-X-MS-TrafficTypeDiagnostic: DM4PR12MB6063:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: XL5bFRRckjknW01F7lbupqr+pfc5TCm5Xnkk1raf+FgfBVaFI2I6knygnEU3KapO8Xjn8QsD35TVVwY1iozRWdNIme9IE6im9dD9MqROJJ6fF7qTUhN0aoflRdwjHUCBPHDA9qL0yA8rcewK2IJTLX09e3PlyZndbnEoQBzhxnJy3pl+k7hM1wfZu5QhbruS+JV56mtnI/bzMUn9DXfa+wIQOiyyxtwppnMfyOPjWN7/JmComf7yBLvHbkWsxfBXxADOPbKyvmdqmhkZNULKnv9ld6G6zeDj47SA6yBav5q8R49IfpmkhSfsNtXa8B7w6/ANCaK30ji+eSJWf9G53QGHsdAmfrItCzhjXa4FBWbPgJtaogBY9PJMCSXNzugxcQmr8Aa2EQwVUJgsGesmHTsp1TtgvsN4KkhhXp4Gk5BKB+M7Ssqba7GA2Af1SB32+jya20s0VdI7Bn6ghv5RFnFpAZRowCa7ol2tVCOq1AZIrKHD/zXOL62rtQYfsHiwQ4kXZHIzRIAQtbVcQKS5FCL4LcUOmr0ksNmr5H2BclsHi3bThE1jIr6TKuRUz0aB4w8IBznkkyt3xoDSnv8DFE8cjqJ+2iiQc3gYWpVk10lymSzkpb3PUBJ801VM8hQ65I7CpAuAK7cy/BSy9E7N3OhSdiauBaJeQZBJ+Oq57letm3qKq29M8MeaFjH+kKyqy2pv4Qob+GmxIUCBLLsHn5z21kFtHZ66/TZ3a9mhxjJrN5ZNHuV+/X+N2w6aeJO+
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(346002)(396003)(376002)(39860400002)(136003)(2906002)(8936002)(7416002)(5660300002)(26005)(86362001)(66476007)(2616005)(186003)(41300700001)(6506007)(6512007)(83380400001)(478600001)(316002)(6916009)(66556008)(8676002)(4326008)(38100700002)(54906003)(66946007)(6486002)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4onB5umgFGelVRoRbCtqCEuWDhVRtHPeis8FRYEVcm/48JAEBhiSB0qKGWGB?=
- =?us-ascii?Q?YYREM9CgjtCZ7uamKDhCWE5XgerN12PQpQSd964TAZ8UWAzM5AstenkqioKB?=
- =?us-ascii?Q?tvjV/slHy9YBSLlPZfZyjVxZ9QDAosq/QYJ0cRgujSLbHof99q5Oqo62zutN?=
- =?us-ascii?Q?FlBlzID+BOe7b4sriEbfZCDyGNq5cajHO+SGGfhbNyV/qNozTeNHOnCtfsNH?=
- =?us-ascii?Q?junAsjGskDUc6mNHHLAf1zxndUyM3cKITLC+3ErXO8u31EQpwPE7zVbzMctB?=
- =?us-ascii?Q?/a2OQhSmQg54ZTno760cPZPTghQH9mLgv670s9T7SWMSjACtw9xbRiwLqf4s?=
- =?us-ascii?Q?DQMgrlGZhO7P+zStQ9sQ+LBilmyAEm3oJYKsMI4uUJOSvdvocmD9lonvbX0i?=
- =?us-ascii?Q?Ut/PvDT/2EJI1tuLHl6mEXI5gORx4tEhOc0Bz06c20lAgyxtx9cnxQ/bSvox?=
- =?us-ascii?Q?mJHOa+cQLQDj4JCggGuX3aATSturlcQO4R3JaSaBLkSckYF+IvlCfKqpiHMW?=
- =?us-ascii?Q?hL6SU2QTV2cYQk83q035Wn9GGlObb3i0pqPhiHxf+RbaHBMCizLyKXJDHfFC?=
- =?us-ascii?Q?oYH134qzCOrSm8Qp7TISHe9DdCFIsMcsy0lt2JJMw7gc5FFy1cN/C5w8mxZR?=
- =?us-ascii?Q?hlxOolicKVQcCE8nsBxnmskuXvSVW4JKPP4UDCZWC4BJV2huDMsyZizILbrP?=
- =?us-ascii?Q?3xaBk4vj/vpB77ebvrH5XmOznusP6jtSOZalmA4yeseSF5xbUSPpvpv+8uHR?=
- =?us-ascii?Q?GY8+kPYzamMkocUpRKM/YpEZqzpA7zMCWKBVrhoveVzeVIgtGMQ0jbMOTBqr?=
- =?us-ascii?Q?FRSACgvYTZsfovFhOHMLcgzvRymOrr15iVsdqTKMEpRZv9mNtj7pHn96mraQ?=
- =?us-ascii?Q?FKzRWGIDoUhDrGVYJDP9KRvWg9th7FaX1qmgEDpMm7yNlJJCWOoTtvjEwI0C?=
- =?us-ascii?Q?FnKIDD7cg/KMQd+oKusuhV265HnkhI/NzuS27N8H+mwJjfIdtu0Vl6BEKqRT?=
- =?us-ascii?Q?2wKCxnMlQhDrdjPyEu2iRxWNqO536yrkNkySIr/qavO1ICdaSczowV2ZZCOw?=
- =?us-ascii?Q?o4cD2RgdBkMq+mNFH160sMpoP+gn+aQXZYO82JkobASpSICAFZ/5h0Rq82Wv?=
- =?us-ascii?Q?dGZtNedoylwtztVuc6EOC1aJl4/Mj0t/IiUUO9F2/JLtT22cusxLX6gep5MY?=
- =?us-ascii?Q?ClrhQGw0iKnvyySEbUUmlPV6ySh7crhPwRHClSWEHgVr/EIS8faR0PV9VUVS?=
- =?us-ascii?Q?TZ0SYaghURnyQJRMYVcZacHBl13cZKpWu6F2t2YREOT85MOIRyR1OD8gBdcG?=
- =?us-ascii?Q?a//ZMZQdv2wE9GYYSaB3c6GQG2sPAcesk+9r8biXHX4OHDHKocm0RYshGDDS?=
- =?us-ascii?Q?cRZ70l7VgR9Km9r/KR0vVQ19EddTa2qJRw0PgcS1uVjvMwzxzb9iswf2a+57?=
- =?us-ascii?Q?8RQpmmBRRI7lxnBgXsIWQg8j+VJIfdR2P0M2YF/+0hE2j/XmvGnFhszkjHxV?=
- =?us-ascii?Q?nmTB3WmbC2GLEsQXgFdm2C0M6n+UMrXHERUlCQHi9+m3QII53mrOXkjSE6Ja?=
- =?us-ascii?Q?cEdAli9N2bhZq2GQKLuaOFYdELlGCHP/pZ+cOZD0?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7e64acf7-4cb4-4378-7e69-08da7bf06baa
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Aug 2022 23:22:55.8031
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AlLVtU+jDaHPCirRT18ESAaexBCZB2loipi1ailyZdpLY5uF4QWsvYaoIjQgFeW4
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6063
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 10:28:27PM +0100, Matthew Wilcox wrote:
-> On Thu, Aug 11, 2022 at 01:43:09PM -0700, Linus Torvalds wrote:
-> > May I suggest going one step further, and making these WARN_ON_ONCE() instead.
-> > 
-> > >From personal experience, once some scheduler bug (or task struct
-> > corruption) happens, ti often *keeps* happening, and the logs just
-> > fill up with more and more data, to the point where you lose sight of
-> > the original report (and the machine can even get unusable just from
-> > the logging).
-> 
-> I've been thinking about magically turning all the WARN_ON_ONCE() into
-> (effectively) WARN_ON_RATELIMIT().  I had some patches in that direction
-> a while ago but never got round to tidying them up for submission.
+Commit 6f8191fdf41d ("block: simplify disk shutdown") removed the call
+to blk_get_queue() during gendisk allocation but missed to remove the
+corresponding cleanup code blk_put_queue() for it. Thus, if the gendisk
+allocation fails, the request_queue refcount gets decremented and
+reaches 0, causing blk_mq_release() to be called with a hctx still
+alive. That triggers a WARNING report, as found by syzkaller:
 
-I often wonder if we have a justification for WARN_ON to even exist, I
-see a lot of pressure to make things into WARN_ON_ONCE based on the
-logic that spamming makes it useless..
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 23016 at block/blk-mq.c:3881
+blk_mq_release+0xf8/0x3e0 block/blk-mq.c:3881
+[...] stripped
+RIP: 0010:blk_mq_release+0xf8/0x3e0 block/blk-mq.c:3881
+[...] stripped
+Call Trace:
+ <TASK>
+ blk_release_queue+0x153/0x270 block/blk-sysfs.c:780
+ kobject_cleanup lib/kobject.c:673 [inline]
+ kobject_release lib/kobject.c:704 [inline]
+ kref_put include/linux/kref.h:65 [inline]
+ kobject_put+0x1c8/0x540 lib/kobject.c:721
+ __alloc_disk_node+0x4f7/0x610 block/genhd.c:1388
+ __blk_mq_alloc_disk+0x13b/0x1f0 block/blk-mq.c:3961
+ loop_add+0x3e2/0xaf0 drivers/block/loop.c:1978
+ loop_control_ioctl+0x133/0x620 drivers/block/loop.c:2150
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[...] stripped
 
-Maybe a global limit of 10 warn ons per minute or something would be
-interesting?
+Fixes: 6f8191fdf41d ("block: simplify disk shutdown")
+Reported-by: syzbot+31c9594f6e43b9289b25@syzkaller.appspotmail.com
+Suggested-by: Hillf Danton <hdanton@sina.com>
+Signed-off-by: Rafael Mendonca <rafaelmendsr@gmail.com>
+---
+ block/genhd.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Jason
+diff --git a/block/genhd.c b/block/genhd.c
+index b901fea1d55a..d36fabf0abc1 100644
+--- a/block/genhd.c
++++ b/block/genhd.c
+@@ -1341,7 +1341,7 @@ struct gendisk *__alloc_disk_node(struct request_queue *q, int node_id,
+ 
+ 	disk = kzalloc_node(sizeof(struct gendisk), GFP_KERNEL, node_id);
+ 	if (!disk)
+-		goto out_put_queue;
++		return NULL;
+ 
+ 	if (bioset_init(&disk->bio_split, BIO_POOL_SIZE, 0, 0))
+ 		goto out_free_disk;
+@@ -1390,8 +1390,6 @@ struct gendisk *__alloc_disk_node(struct request_queue *q, int node_id,
+ 	bioset_exit(&disk->bio_split);
+ out_free_disk:
+ 	kfree(disk);
+-out_put_queue:
+-	blk_put_queue(q);
+ 	return NULL;
+ }
+ 
+-- 
+2.34.1
+

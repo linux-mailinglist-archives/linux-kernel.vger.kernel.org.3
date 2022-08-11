@@ -2,164 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EAF3590679
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 20:47:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42F045906BF
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 21:07:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235865AbiHKSmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 14:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51784 "EHLO
+        id S235922AbiHKStf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 14:49:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235855AbiHKSmd (ORCPT
+        with ESMTP id S235799AbiHKStc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 14:42:33 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 412C397D4F
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 11:42:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660243351;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1N+sfudTifSbHYKxE9qrlKzOedXyqPZF8dt12A/wwZ0=;
-        b=gBibRswCvrrhVssO4wzyX8dfaT/sGWJAJDPPoqeOYOsGQZJNrb5O9MRoJ+ODPp6dum41oW
-        di4FQUrpQgelNomPznKnolMMXImFNAhQ5flENaM3HR6pK8CfzUlgfiRhvlUf7y5TxBYyAA
-        Ef7/DRmttYVUcxoFyPpqo+pzXRtm+tM=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-327-PEPENu_BObmfqcRd8d-b6w-1; Thu, 11 Aug 2022 14:42:30 -0400
-X-MC-Unique: PEPENu_BObmfqcRd8d-b6w-1
-Received: by mail-ed1-f72.google.com with SMTP id g8-20020a056402424800b0043e81c582a4so11484392edb.17
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 11:42:29 -0700 (PDT)
+        Thu, 11 Aug 2022 14:49:32 -0400
+Received: from mail-qt1-f181.google.com (mail-qt1-f181.google.com [209.85.160.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D6D9DB62;
+        Thu, 11 Aug 2022 11:49:30 -0700 (PDT)
+Received: by mail-qt1-f181.google.com with SMTP id h22so8718624qtu.2;
+        Thu, 11 Aug 2022 11:49:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=1N+sfudTifSbHYKxE9qrlKzOedXyqPZF8dt12A/wwZ0=;
-        b=L5Wx1droNr1Yh6S0fP9yLmdnrQwAdk41d+nNACfCarx9l0H3RPUQo61WRxUjGlOiQK
-         5NCnX1nHJD7eLqvUeyJwHGH5AB1x9ZWHHN6ypN5tIkWeYwcJ+NNhvjkwL4xtCg9enTur
-         pR+R9o4R1W834pLP2kbcjQL+NCWumK8+DS9ioMfuAc0rZ6BPh7kFDgMaQ9SApjILZcWZ
-         JF4WtH4J3a78TNgVFUxMYjxPx1a1UTvSmzh6oxfrMJuxfbMAQd+lc+tCTTF+t0zWkOrF
-         uT/iLOX2zBXKicI9NHvyf4OLR9GQuMcABSmGvZfNFe/iME1s8Nl0eXKLTFdJxyA0Tb/l
-         wxJA==
-X-Gm-Message-State: ACgBeo3NNsb/w3qaYTPCcAxyS+CMba2NzQnlHCK9D7/oDOICo5w0+Gpz
-        59DhGl358slK/sPeL/grka8dg11dj/mMBy5yqQrbOHAzRLIx1AwNgz+c9NNJzmT/ieZR+CzIGe0
-        ZnS/q3h+M8PiCjSPhVZJtNjVU
-X-Received: by 2002:a17:906:4fc6:b0:731:137:8656 with SMTP id i6-20020a1709064fc600b0073101378656mr268660ejw.582.1660243349063;
-        Thu, 11 Aug 2022 11:42:29 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR5DYRpr7HFJH/ifHNf55/xClsMWmSBMBVBK/FNBiruL/xrRpCO6iCiJrjPDBgKW3RfIxncBRQ==
-X-Received: by 2002:a17:906:4fc6:b0:731:137:8656 with SMTP id i6-20020a1709064fc600b0073101378656mr268644ejw.582.1660243348803;
-        Thu, 11 Aug 2022 11:42:28 -0700 (PDT)
-Received: from sgarzare-redhat (host-79-46-200-178.retail.telecomitalia.it. [79.46.200.178])
-        by smtp.gmail.com with ESMTPSA id h12-20020aa7c94c000000b00440ced0e117sm101543edt.58.2022.08.11.11.42.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Aug 2022 11:42:28 -0700 (PDT)
-Date:   Thu, 11 Aug 2022 20:42:22 +0200
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>,
-        Zhang chunchao <chunchao@nfschina.com>
-Cc:     Zhang chunchao <chunchao@nfschina.com>, asml.silence@gmail.com,
-        io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@nfschina.com
-Subject: Re: [PATCH] Modify the return value ret to EOPNOTSUPP when
- initialized to reduce repeated assignment of errno
-Message-ID: <20220811184222.ey2nwpk2flrd6hzm@sgarzare-redhat>
-References: <20220811075638.36450-1-chunchao@nfschina.com>
- <20220811150242.giygjmy4vimxtrzg@sgarzare-redhat>
- <8f3d1bf5-48f6-411d-674e-1568e3841d75@kernel.dk>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=RhMgUDFA93QBx75MeKT6IhTNiHWRpz583vvBHXd9MR4=;
+        b=mrT1JAXVc3Abr3ATl4rOs5VPY4cay0/AJtaq82lisovDyRPOp2KJdTt7/AH7kfjfMA
+         T5bYRJkNvKDGfUE2VnYkil36G5TQTkKT9Jcj4p6txyXYCKT5HWFE7hVLcDnENDGO3x1Y
+         wiXDREkpNvR1uAkqP9MUWOckzMG3BBTCLoUZD56An54POqGSceIK6QUIAQOKWeimKibw
+         9mulIs9M+jWa+6LX9dsValo6kAcfgbuSeddQW+QhX1+54LuvuEdu4aZ2n7CjZ5uLine5
+         iODxUl8WSKHkiRs5zYZLltgfNN89Qme2BRIZk4exDMlOHNWp3QchiVK9Sw0nRbWTeuCT
+         hrcg==
+X-Gm-Message-State: ACgBeo1DTWf4zJdC8mlPblaae7RiUrz80hNN+5UesBvP4kOgn9yooAzk
+        CfU51X+SIvYP+r6OsRRJrSvJ7hG05hBG1QUo
+X-Google-Smtp-Source: AA6agR5dUbfxBAjdtTIjhkzHKOQKq7ZXJn0esKtI+Mj9YdHcLUoFjIFyWzpy1el6zSNATtWrxwDRMg==
+X-Received: by 2002:ac8:7d14:0:b0:343:6db3:9e6c with SMTP id g20-20020ac87d14000000b003436db39e6cmr431498qtb.251.1660243769772;
+        Thu, 11 Aug 2022 11:49:29 -0700 (PDT)
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
+        by smtp.gmail.com with ESMTPSA id bi9-20020a05620a318900b006b5f0e8d1b9sm31170qkb.81.2022.08.11.11.49.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Aug 2022 11:49:27 -0700 (PDT)
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-31f41584236so181932147b3.5;
+        Thu, 11 Aug 2022 11:49:26 -0700 (PDT)
+X-Received: by 2002:a81:1204:0:b0:322:7000:4ecb with SMTP id
+ 4-20020a811204000000b0032270004ecbmr582563yws.47.1660243765824; Thu, 11 Aug
+ 2022 11:49:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <8f3d1bf5-48f6-411d-674e-1568e3841d75@kernel.dk>
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1657294931.git.geert@linux-m68k.org> <1cae5ebc28513ec1c91c66b00647ce3ca23bfba7.1657294931.git.geert@linux-m68k.org>
+ <YvPVxy4kYKdzWgT8@phenom.ffwll.local> <CAMuHMdVMuuXgYW-AkyB+G77Wsjkm715u1ifDvaY=5DufXjryRA@mail.gmail.com>
+ <YvUqPL5l8/+XbvaQ@phenom.ffwll.local> <YvVKe72jYBjucmkz@ravnborg.org>
+In-Reply-To: <YvVKe72jYBjucmkz@ravnborg.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Thu, 11 Aug 2022 20:49:14 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdVD37MCXau4w87=x_jk9j-NMJCmu0d9qPuMqmHA_vPQRQ@mail.gmail.com>
+Message-ID: <CAMuHMdVD37MCXau4w87=x_jk9j-NMJCmu0d9qPuMqmHA_vPQRQ@mail.gmail.com>
+Subject: Re: [PATCH v3 01/10] drm/fourcc: Add drm_format_info_bpp() helper
+To:     Sam Ravnborg <sam@ravnborg.org>
+Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        David Airlie <airlied@linux.ie>,
+        DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Fbdev development list <linux-fbdev@vger.kernel.org>,
+        "Linux/m68k" <linux-m68k@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Javier Martinez Canillas <javierm@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 09:41:38AM -0600, Jens Axboe wrote:
->On 8/11/22 9:02 AM, Stefano Garzarella wrote:
->> On Thu, Aug 11, 2022 at 03:56:38PM +0800, Zhang chunchao wrote:
->>> Remove unnecessary initialization assignments.
->>>
->>> Signed-off-by: Zhang chunchao <chunchao@nfschina.com>
->>> ---
->>> io_uring/io_uring.c | 3 +--
->>> 1 file changed, 1 insertion(+), 2 deletions(-)
->>>
->>> diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
->>> index b54218da075c..8c267af06401 100644
->>> --- a/io_uring/io_uring.c
->>> +++ b/io_uring/io_uring.c
->>> @@ -3859,14 +3859,13 @@ SYSCALL_DEFINE4(io_uring_register, unsigned int, fd, unsigned int, opcode,
->>>         void __user *, arg, unsigned int, nr_args)
->>> {
->>>     struct io_ring_ctx *ctx;
->>> -    long ret = -EBADF;
->>> +    long ret = -EOPNOTSUPP;
->>>     struct fd f;
->>>
->>>     f = fdget(fd);
->>>     if (!f.file)
->>>         return -EBADF;
->>>
->>> -    ret = -EOPNOTSUPP;
->>>     if (!io_is_uring_fops(f.file))
->>>         goto out_fput;
->>>
->>
->> What about remove the initialization and assign it in the if branch?
->> I find it a bit easier to read.
->>
->> I mean something like this:
->>
->> --- a/io_uring/io_uring.c
->> +++ b/io_uring/io_uring.c
->> @@ -3859,16 +3859,17 @@ SYSCALL_DEFINE4(io_uring_register, unsigned int, fd, unsigned int, opcode,
->>                 void __user *, arg, unsigned int, nr_args)
->>  {
->>         struct io_ring_ctx *ctx;
->> -       long ret = -EBADF;
->> +       long ret;
->>         struct fd f;
->>
->>         f = fdget(fd);
->>         if (!f.file)
->>                 return -EBADF;
->>
->> -       ret = -EOPNOTSUPP;
->> -       if (!io_is_uring_fops(f.file))
->> +       if (!io_is_uring_fops(f.file)) {
->> +               ret = -EOPNOTSUPP;
->>                 goto out_fput;
->> +       }
->>
->>         ctx = f.file->private_data;
->>
->>
->> Otherwise remove the initialization, but leave the assignment as it is now.
+Hi Sam,
+
+On Thu, Aug 11, 2022 at 8:29 PM Sam Ravnborg <sam@ravnborg.org> wrote:
+> On Thu, Aug 11, 2022 at 06:11:40PM +0200, Daniel Vetter wrote:
+> > On Thu, Aug 11, 2022 at 09:59:39AM +0200, Geert Uytterhoeven wrote:
+> > > On Wed, Aug 10, 2022 at 5:59 PM Daniel Vetter <daniel@ffwll.ch> wrote:
+> > > > On Fri, Jul 08, 2022 at 08:20:46PM +0200, Geert Uytterhoeven wrote:
+> > > > > Add a helper to retrieve the actual number of bits per pixel for a
+> > > > > plane, taking into account the number of characters and pixels per
+> > > > > block for tiled formats.
+> > > > >
+> > > > > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> > > > > Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+> > >
+> > > > > --- a/drivers/gpu/drm/drm_fourcc.c
+> > > > > +++ b/drivers/gpu/drm/drm_fourcc.c
+> > > > > @@ -370,6 +370,25 @@ unsigned int drm_format_info_block_height(const struct drm_format_info *info,
+> > > > >  }
+> > > > >  EXPORT_SYMBOL(drm_format_info_block_height);
+> > > > >
+> > > > > +/**
+> > > > > + * drm_format_info_bpp - number of bits per pixel
+> > > > > + * @info: pixel format info
+> > > > > + * @plane: plane index
+> > > > > + *
+> > > > > + * Returns:
+> > > > > + * The actual number of bits per pixel, depending on the plane index.
+> > > > > + */
+> > > > > +unsigned int drm_format_info_bpp(const struct drm_format_info *info, int plane)
+> > > > > +{
+> > > > > +     if (!info || plane < 0 || plane >= info->num_planes)
+> > > > > +             return 0;
+> > > > > +
+> > > > > +     return info->char_per_block[plane] * 8 /
+> > > > > +            (drm_format_info_block_width(info, plane) *
+> > > > > +             drm_format_info_block_height(info, plane));
+> > > >
+> > > > Do we really needs this for blocky formats where this is potentially
+> > > > ill-defined? I think if there's no need then this should also return 0
+> > > > when block_width/height != 1, it doesn't make much sense to compute bpp
+> > > > when it's not really bits per _pixel_.
+> > >
+> > > Yes, we do need this.  For low-color formats, the number of bits
+> > > per pixel is less than eight, and block_width is larger than one.
+> > > That is actually the point of this patch.
+> >
+> > Hm right, I didn't realize that this is how we have to describe the
+> > formats with less than 8 bpp.
+> >
+> > I think we can include them easily with a check for char_per_block == 1
+> > and then making sure that the division does not have a reminder (just in
+> > case someone does something really funny, it could e.g. be a 332 layout or
+> > something like that for 3 pixels).
+> >
+> > > > Minimally this needs to check whether the division actually makes sense or
+> > > > whether there's a reminder, and if there's  reminder, then fail. But that
+> > > > feels like a bad hack and I think we should avoid it if it's not
+> > > > absolutely necessary.
+> > >
+> > > Looking at drivers/gpu/drm/drm_fourcc.c, the only supported format
+> > > where there can be a remainder is P030, which has 2 spare bits per
+> > > 32-bit word, and thus is special anyway.
+> > > Still, 4 * 8 / 3 = 10, so you get the correct numbers of bits for
+> > > the first plane.  For the second plane, you get 8 * 8 / 3 = 21,
+> > > but as .is_yuv = true, you have to divide that result by two again,
+> > > so you get 10 again.
+> >
+> > Yeah I don't think we should describe these with bpp or cpp or anything
+> > like that. bpp < 8 makes sense since that's how this has been done since
+> > decades, but trying to extend these to funny new formats is a bad idea.
+> > This is also why cpp and depth refuse to compute these (or at least
+> > should).
 >
->Generally the kernel likes to do:
+> Daniel and I discussed this on irc. Let me try to recap here.
+> Using the bits per pixel info from drm_format_info is something we shall
+> try to avoid as this is often a sign of the wrong abstraction/design (my
+> words based on the irc talk).
+> So we shall limit the use of drm_format_info_bpp() to what we need now,
+> thus blocky formats should not be supported - to try to avoid seeing
+> this used more than necessary.
 >
->err = -EFOO;
->if (something)
->	goto err_out;
+> Daniel suggested a rename to drm_format_info_legacy_bpp() to make it
+> obvious that this is often/always the wrong solution. I did not jump on
+> doing the rename as I do not know stuff good enough to tell people what
+> to use when this is not the right solution. The rename is simple, it is
+> the follow-up that keep me away.
 >
->rather than put it inside the if clause. I guess the rationale is it
->makes it harder to forget to init the error value. I don't feel too
+> On top of this there is a few formats in drm_drourcc that has a depth
+> field set which should be dropped. .depth is only for the few legacy
+> formats where it is used today.
+>
+> We would also like to convert the fbdev helpers to drm_format_info,
+> and doing so will likely teach us a bit more what we need and what we
+> can drop.
+>
+> Geert - can you give drm_format_info_bpp() a spin so it is limited to
+> the formats used now (not the blocky ones).
 
-ah, thanks for pointing this out! Make sense to me, but I hope recent 
-compilers can spot that kind of issue :-)
+You mean return 0 if char_per_block[] > 1?
+I'm not sure it's actually safe to do so (and make this change this late
+in the development cycle), as this is used in drm_client_buffer_create(),
+drm_client_buffer_addfb(), and drm_mode_getfb().  Some of them do
+rely on bpp to be non-zero.
 
->strongly, I'm fine with your patch too. Can you send it as a real patch?
+Gr{oetje,eeting}s,
 
-@Zhang: if you want, feel free to change your patch following the 
-suggestions and send a new version, otherwise I can send mine of course.
+                        Geert
 
-Thanks,
-Stefano
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds

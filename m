@@ -2,52 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10A6F58F6F1
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 06:28:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35F3B58F6B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 06:21:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233875AbiHKE2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 00:28:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33286 "EHLO
+        id S233692AbiHKEVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 00:21:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233795AbiHKE2K (ORCPT
+        with ESMTP id S233585AbiHKEVB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 00:28:10 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44AAD2A721
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 21:28:08 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id v20-20020a5ec114000000b00682428f8d31so9058514iol.8
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 21:28:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=1fG6vnw/OOzyw9CFKDsXSOWOXHtvCj5eOaEAMYM3v6E=;
-        b=QqkAosOIZ7DlYz2AcQH2dsFfg4X7b2DFtu/NpQgxtM4RVcXrRtgyv4x0ueMeCfFP3y
-         0U5xu6j6oWH2II0eSN3vB+I68//ahB3e/IHbNFhqwV5yOehsB+0Qr5Ql8p5KghxMSZ07
-         3aUgxbMljxXrW4+05SD+goG5OrpcF1sbPkaC/slUTpHUR2Z+H7IKbfTSXq/WwcXrACI2
-         nDrg9w93EyJp5TH5jFdebiYX1JPgKKzXlVwHNFyv6lvYJqAsr6iO8/dN3me07EtzEgd6
-         Q75CPzOhjt4KIVGRYCL5gcfHzJtTdyK5cgKDzdWUnGNq8dyBywmo25moKKrP5LUztCKL
-         EB2Q==
-X-Gm-Message-State: ACgBeo1k7OLhpBWGZnn4sTIl0hOOzmt17Z0DPDRLlf8a+iqgBAjcNXer
-        6CimdoQXo5oVo29zTxTtQg2mrM4HuuH4sEI+no3QYtvbKPvs
-X-Google-Smtp-Source: AA6agR5F7iEntHJQWaW4AoXqRlJTPJFVIA22olt5THQjR+jd5WWqoIYcnkeSwiuj1F3XEfFYo74RvYhiSWPlQDB/DbR/zN1yrOoL
+        Thu, 11 Aug 2022 00:21:01 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2752262E
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 21:20:59 -0700 (PDT)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4M3D5v1WVjzXdRJ;
+        Thu, 11 Aug 2022 12:16:51 +0800 (CST)
+Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Thu, 11 Aug 2022 12:20:57 +0800
+Received: from huawei.com (10.175.101.6) by kwepemm600015.china.huawei.com
+ (7.193.23.52) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Thu, 11 Aug
+ 2022 12:20:57 +0800
+From:   ChenXiaoSong <chenxiaosong2@huawei.com>
+To:     <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <chenxiaosong2@huawei.com>,
+        <zhangxiaoxu5@huawei.com>
+Subject: [PATCH] tty: n_gsm: fix NULL pointer dereference in gsmld_receive_buf()
+Date:   Thu, 11 Aug 2022 12:28:48 +0800
+Message-ID: <20220811042848.3017861-1-chenxiaosong2@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:478b:b0:342:7afd:8206 with SMTP id
- cq11-20020a056638478b00b003427afd8206mr14659827jab.181.1660192087662; Wed, 10
- Aug 2022 21:28:07 -0700 (PDT)
-Date:   Wed, 10 Aug 2022 21:28:07 -0700
-In-Reply-To: <20220810221908.2686-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a4e68605e5ef97f4@google.com>
-Subject: Re: [syzbot] INFO: task hung in __generic_file_fsync (3)
-From:   syzbot <syzbot+ed920a72fd23eb735158@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600015.china.huawei.com (7.193.23.52)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,57 +50,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Syzkaller reported NULL pointer dereference bug as follows:
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-WARNING in inode_dio_wait
-
-------------[ cut here ]------------
-__inode_dio_wait schedule_timeout(30 * HZ) timeout
-WARNING: CPU: 1 PID: 4223 at fs/inode.c:2381 __inode_dio_wait fs/inode.c:2381 [inline]
-WARNING: CPU: 1 PID: 4223 at fs/inode.c:2381 inode_dio_wait+0x28c/0x2e0 fs/inode.c:2400
-Modules linked in:
-CPU: 1 PID: 4223 Comm: syz-executor.2 Not tainted 5.19.0-syzkaller-02972-g200e340f2196-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-RIP: 0010:__inode_dio_wait fs/inode.c:2381 [inline]
-RIP: 0010:inode_dio_wait+0x28c/0x2e0 fs/inode.c:2400
-Code: 9d ff 45 84 ed 0f 85 2b ff ff ff e8 7e de 9d ff 48 c7 c6 a0 bb db 89 48 c7 c7 a0 b3 db 89 c6 05 8c 38 ca 0b 01 e8 85 f3 55 07 <0f> 0b e9 05 ff ff ff e8 58 de 9d ff 4c 89 fe 4c 89 f7 e8 1d 57 7e
-RSP: 0018:ffffc90003aafc30 EFLAGS: 00010282
-RAX: 0000000000000000 RBX: ffff88806a005ff0 RCX: 0000000000000000
-RDX: ffff88801c5f5880 RSI: ffffffff81611718 RDI: fffff52000755f78
-RBP: ffff88806a0061fc R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000080000000 R11: 0000000000000001 R12: 0000000000000007
-R13: 0000000000000000 R14: ffffffff8ba0dce0 R15: ffffc90003aafc78
-FS:  00007f7e298af700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+BUG: kernel NULL pointer dereference, address: 0000000000000000
+PGD 0 P4D 0
+Oops: 0010 [#1] PREEMPT SMP KASAN PTI
+CPU: 3 PID: 1360 Comm: a.out Not tainted 5.19.0-next-20220810 #9
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+ BIOS rel-1.16.0-0-gd239552ce722-prebuilt.qemu.org 04/01/2014
+RIP: 0010:0x0
+Code: Unable to access opcode bytes at RIP 0xffffffffffffffd6.
+RSP: 0018:ffffc9000570fcf8 EFLAGS: 00010202
+RAX: 0000000000000001 RBX: ffff8880189c2000 RCX: 0000000000000000
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffff8880189c2000
+RBP: ffffc9000570fda1 R08: 0000000000000000 R09: ffffffff8f59ab27
+R10: ffffc9000570fd58 R11: ffff8880196f8000 R12: 0000000000000001
+R13: 0000000000000000 R14: ffffc9000570fd90 R15: dffffc0000000000
+FS:  00007f382232c540(0000) GS:ffff888107d80000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055dd6735d848 CR3: 0000000020d2b000 CR4: 0000000000350ee0
+CR2: ffffffffffffffd6 CR3: 0000000101452005 CR4: 0000000000770ee0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+PKRU: 55555554
 Call Trace:
  <TASK>
- fat_setattr+0x3de/0x13c0 fs/fat/file.c:509
- notify_change+0xcd0/0x1440 fs/attr.c:418
- do_truncate+0x13c/0x200 fs/open.c:65
- do_sys_ftruncate+0x536/0x730 fs/open.c:193
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ gsmld_receive_buf+0x1c7/0x320
+ tty_ioctl+0x50e/0x1520
+ __x64_sys_ioctl+0x19c/0x210
+ do_syscall_64+0x38/0x90
  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f7e28689209
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f7e298af168 EFLAGS: 00000246 ORIG_RAX: 000000000000004d
-RAX: ffffffffffffffda RBX: 00007f7e2879bf60 RCX: 00007f7e28689209
-RDX: 0000000000000000 RSI: 00000000010099b8 RDI: 0000000000000004
-RBP: 00007f7e286e3161 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007fff0662fb6f R14: 00007f7e298af300 R15: 0000000000022000
+RIP: 0033:0x7f382225e9b9
+Code: 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7
+ 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff
+ ff 73 01 c3 48 8b 0d a7 54 0c 00 f7 d8 64 89 01 48
+RSP: 002b:00007ffd1c0fdd98 EFLAGS: 00000217 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f382225e9b9
+RDX: 00007ffd1c0fdda4 RSI: 0000000000005412 RDI: 0000000000000004
+RBP: 00007ffd1c0fddb0 R08: 000000000000000e R09: 000000001c0fdea0
+R10: 0000000000000000 R11: 0000000000000217 R12: 0000560d89007070
+R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
  </TASK>
+Modules linked in:
+CR2: 0000000000000000
+---[ end trace 0000000000000000 ]---
 
+Reproducer(c program):
+1. int fd = open("/dev/char/4:20", O_RDWR, 0);
+2. int arg = 0x15; ioctl(fd, 0x5423, &arg);
+3. int arg2 = 0; ioctl(fd, 0x5412, &arg2);
 
-Tested on:
+gsm->receive is NULL when gsm_mux is not activated by gsm_activate_mux():
 
-commit:         200e340f Merge tag 'pull-work.dcache' of git://git.ker..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-console output: https://syzkaller.appspot.com/x/log.txt?x=15dbd773080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a3f4d6985d3164cd
-dashboard link: https://syzkaller.appspot.com/bug?extid=ed920a72fd23eb735158
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=10fd97bb080000
+  ioctl(fd, 0x5423, &arg)
+    vfs_ioctl
+      tty_ioctl
+        tiocsetd
+          tty_set_ldisc
+            tty_ldisc_open
+              gsmld_open
+                gsm_alloc_mux
+                  gsm = kzalloc(sizeof(struct gsm_mux), GFP_KERNEL)
+                  gsm->receive == NULL
+  ioctl(fd, 0x5412, &arg2)
+    vfs_ioctl
+      tty_ioctl
+        tiocsti // fake input character
+          gsmld_receive_buf
+            gsm->receive == NULL
+
+Fix this by adding sanity check on struct gsm_mux->receive.
+
+Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
+---
+ drivers/tty/n_gsm.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index caa5c14ed57f..f1621667b69f 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -2850,6 +2850,9 @@ static void gsmld_receive_buf(struct tty_struct *tty, const unsigned char *cp,
+ 	struct gsm_mux *gsm = tty->disc_data;
+ 	char flags = TTY_NORMAL;
+ 
++	if (!gsm->receive)
++		return;
++
+ 	if (debug & 4)
+ 		gsm_hex_dump_bytes(__func__, cp, count);
+ 
+-- 
+2.31.1
 

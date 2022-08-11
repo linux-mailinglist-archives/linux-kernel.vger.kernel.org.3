@@ -2,200 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 182B958F939
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 10:37:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65D0358F93F
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 10:41:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234565AbiHKIhm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 04:37:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43532 "EHLO
+        id S234578AbiHKIlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 04:41:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234625AbiHKIhU (ORCPT
+        with ESMTP id S234376AbiHKIlB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 04:37:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6B85A792F0
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:37:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660207033;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wxI8STE90R3MtFxd5bcngd81yGb5pFXt8S9v1lVULlg=;
-        b=F4HuLqH2KMPn7CO5SYl9WtSKg7hXp7GhvmA8Anj0cTHAADjwRr7499YdkkMb0y0OakMCx6
-        8l+vDY/hPdMLtdzr4JfktxMaU0KXhD2kMKNpioxg8vvwKkbpcOLBky0PEdz0mPaUcG1OCB
-        rcOOzyvYPX7HlL43ytoKGtd9gre9kq4=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-492-EhlN-XpXNO-QPZEIjir-rA-1; Thu, 11 Aug 2022 04:37:11 -0400
-X-MC-Unique: EhlN-XpXNO-QPZEIjir-rA-1
-Received: by mail-qv1-f72.google.com with SMTP id ea7-20020ad458a7000000b00476b8d9bfdcso9037419qvb.18
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:37:11 -0700 (PDT)
+        Thu, 11 Aug 2022 04:41:01 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF7818E0CA
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:40:59 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id n8so27219866yba.2
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:40:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=/4ZTaTdAfStvS4s3TOdOS9NhP4siit/2BMoKXlrckaA=;
+        b=maHTlgEHrpe6tj9nvhzxaSrJ45tS/dMomQsC4OUZtUDQIY91YBvD+WcD6l5LWlmBDR
+         BDFUVlokTb9C+kv7eRbiexzQwKwt8IHYJrFQNtuj1yxO/6h5o4j3FYBGCzVDINm7hzfg
+         n3JoDsTib4lPk2YSAfY14M6lCYe2pRgHI4SJgLHvenop0b7YzA32OtNRtqiHNSJLE4hi
+         OZSddfCPZ+uBwwdyLx3Pct6tH86VEaq+Ge1D2T950HKZ9zFrtZ543CPY5mYuyNyd00hp
+         P9l1DGgsMOp0AnFzbMlLJg6gslhG7VAnuxe2ut4tBGWDzk/kRVu/AFnqst6UsKr4R46V
+         wAbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=wxI8STE90R3MtFxd5bcngd81yGb5pFXt8S9v1lVULlg=;
-        b=XITzQsDmTOrxUtyFW4arM/Jq//0hTUZfPBSBekwfZQPn8bxmNiDhgZ4fBYIpscmjwi
-         eK9mHXmKOL/G7XATgrcYm+V9jRD9ctoQ+ocHXQDm1FmJJihDSVMASnl9VXTeSi3+jVmL
-         dNpdwaYFFBurTsb4Ouz8Pyv1GDJLpCt9Lm+resupF7smTQsYYG7yYHZGTxA1Y9MgSgoa
-         rWypnqRZxNTlcjVMZgeBzita3uSrrCANFsj6/ZiWxvG7qpZ/mL7Ws/e2q32z2DyA3Rsu
-         PLnsO5V9Ld4DItNvnvSYKoqkITgt0rDDxDmFYQ8KczdoauipFdtftFrHCr9lZrqH68rO
-         sQ9g==
-X-Gm-Message-State: ACgBeo0W+/A6k8WrwUftuj0cH4+vpDUWrTuq8Ig0DszpI88sxWRZd6ld
-        45Mzdjqkplyd+jiJbqC0d467j2pQI8FdtNbaqdtHRDfRmqOBYwz1fDi26/STSxnR9klD396bJqf
-        I3GDNhnb9IomicSOvgcf4YvLt
-X-Received: by 2002:a05:622a:1a01:b0:343:310d:fedf with SMTP id f1-20020a05622a1a0100b00343310dfedfmr9614049qtb.622.1660207031464;
-        Thu, 11 Aug 2022 01:37:11 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR7iG5hpVQZhHnEux2Ys32Xpb0iTat8U/eI0t5jz6ZCTF9Xjo89LNFBwu9MSbN4hXHLgOHdEhQ==
-X-Received: by 2002:a05:622a:1a01:b0:343:310d:fedf with SMTP id f1-20020a05622a1a0100b00343310dfedfmr9614035qtb.622.1660207031241;
-        Thu, 11 Aug 2022 01:37:11 -0700 (PDT)
-Received: from step1.redhat.com (host-79-46-200-178.retail.telecomitalia.it. [79.46.200.178])
-        by smtp.gmail.com with ESMTPSA id i14-20020a05620a248e00b006b57b63a8ddsm1485774qkn.122.2022.08.11.01.37.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Aug 2022 01:37:10 -0700 (PDT)
-From:   Stefano Garzarella <sgarzare@redhat.com>
-To:     virtualization@lists.linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>
-Subject: [PATCH v3 4/4] vdpa_sim_blk: add support for discard and write-zeroes
-Date:   Thu, 11 Aug 2022 10:36:32 +0200
-Message-Id: <20220811083632.77525-5-sgarzare@redhat.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220811083632.77525-1-sgarzare@redhat.com>
-References: <20220811083632.77525-1-sgarzare@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=/4ZTaTdAfStvS4s3TOdOS9NhP4siit/2BMoKXlrckaA=;
+        b=DVj8vu5gWzA/cDPuJfvUVrDyJq6lhxFG7JMNPPN4U58wH2xbUqprkHqjtF0oAbu/31
+         itHhJFwV1JO8Z1O+DQWsFJIl+QB2aGRjsYMYGyHi9jfgzqQ5C8odvGtaNfyNvYwnvALH
+         hQDQAyYXuc1mcUWNFmCEMTqovQRiIS627GUwFYAcYzxTU1Zw++dWipQjHCRQsLn5sLmk
+         KbSNKPQjskuKCjpezgtAs9o1snBDrOpMXqstWZUujv1AsIz239VAb7Fv9/Kc7cqquGVg
+         Sa5W2mH6C5iH7W10LvlyD0gfoSTnqb98zh1qgBu4MfjUjKiHFHyI+KJUqxIWoidQye9J
+         RDYQ==
+X-Gm-Message-State: ACgBeo3geygB+hYYNQWfl+tFKIxvr8fweOgd2XEYq7Liyygn1bYcYaFW
+        vvSp+2LhbgIkv+xX18tipKQP40n5ACKtkHSPfnHfVw==
+X-Google-Smtp-Source: AA6agR5puIpv1SM0e6ZjHmAIk3xIEbhFB/Ezw1pbmfbdbe/PLTBFlB7hM8I4dwawIuHSOABt/sc6PePv5kMHYafXt+g=
+X-Received: by 2002:a25:5c7:0:b0:67c:37a4:36d with SMTP id 190-20020a2505c7000000b0067c37a4036dmr8315769ybf.584.1660207258506;
+ Thu, 11 Aug 2022 01:40:58 -0700 (PDT)
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220811072551.2506005-1-imran.f.khan@oracle.com>
+In-Reply-To: <20220811072551.2506005-1-imran.f.khan@oracle.com>
+From:   Marco Elver <elver@google.com>
+Date:   Thu, 11 Aug 2022 10:40:22 +0200
+Message-ID: <CANpmjNNDy5-OssTWP6sm7r0BOFkBVdOa1_ZsPWGQOKjLwGZoCQ@mail.gmail.com>
+Subject: Re: [RFC PATCH] Introduce sysfs interface to disable kfence for
+ selected slabs.
+To:     Imran Khan <imran.f.khan@oracle.com>
+Cc:     glider@google.com, dvyukov@google.com, cl@linux.com,
+        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
+        akpm@linux-foundation.org, vbabka@suse.cz,
+        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
+        linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com,
+        linux-mm@kvack.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Expose VIRTIO_BLK_F_DISCARD and VIRTIO_BLK_F_WRITE_ZEROES features
-to the drivers and handle VIRTIO_BLK_T_DISCARD and
-VIRTIO_BLK_T_WRITE_ZEROES requests checking ranges and flags.
+On Thu, 11 Aug 2022 at 09:26, Imran Khan <imran.f.khan@oracle.com> wrote:
+>
+> By default kfence allocation can happen for any slab object, whose size
+> is up to PAGE_SIZE, as long as that allocation is the first allocation
+> after expiration of kfence sample interval. But in certain debugging
+> scenarios we may be interested in debugging corruptions involving
+> some specific slub objects like dentry or ext4_* etc. In such cases
+> limiting kfence for allocations involving only specific slub objects
+> will increase the probablity of catching the issue since kfence pool
+> will not be consumed by other slab objects.
+>
+> This patch introduces a sysfs interface '/sys/kernel/slab/<name>/skip_kfence'
+> to disable kfence for specific slabs. Having the interface work in this
+> way does not impact current/default behavior of kfence and allows us to
+> use kfence for specific slabs (when needed) as well. The decision to
+> skip/use kfence is taken depending on whether kmem_cache.flags has
+> (newly introduced) SLAB_SKIP_KFENCE flag set or not.
+>
+> Signed-off-by: Imran Khan <imran.f.khan@oracle.com>
+> ---
+>
+> This RFC patch is implementing the sysfs work mentioned in [1]. Since the
+> approach taken in [1] was not proper, I am sending this RFC patch as a
+> separate change.
 
-The simulator behaves like a ramdisk, so for VIRTIO_BLK_F_DISCARD
-does nothing, while for VIRTIO_BLK_T_WRITE_ZEROES sets to 0 the
-specified region.
+This design is much simpler and looks good to me. Feel free to send as
+a non-RFC.
 
-Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
----
- drivers/vdpa/vdpa_sim/vdpa_sim_blk.c | 74 +++++++++++++++++++++++++++-
- 1 file changed, 73 insertions(+), 1 deletion(-)
+> [1]: https://lore.kernel.org/lkml/20220727234241.1423357-1-imran.f.khan@oracle.com/
+>
+>  include/linux/slab.h |  6 ++++++
+>  mm/kfence/core.c     |  7 +++++++
+>  mm/slub.c            | 27 +++++++++++++++++++++++++++
+>  3 files changed, 40 insertions(+)
+>
+> diff --git a/include/linux/slab.h b/include/linux/slab.h
+> index 0fefdf528e0d..947d912fd08c 100644
+> --- a/include/linux/slab.h
+> +++ b/include/linux/slab.h
+> @@ -119,6 +119,12 @@
+>   */
+>  #define SLAB_NO_USER_FLAGS     ((slab_flags_t __force)0x10000000U)
+>
+> +#ifdef CONFIG_KFENCE
+> +#define SLAB_SKIP_KFENCE            ((slab_flags_t __force)0x20000000U)
+> +#else
+> +#define SLAB_SKIP_KFENCE            0
+> +#endif
+> +
+>  /* The following flags affect the page allocator grouping pages by mobility */
+>  /* Objects are reclaimable */
+>  #define SLAB_RECLAIM_ACCOUNT   ((slab_flags_t __force)0x00020000U)
+> diff --git a/mm/kfence/core.c b/mm/kfence/core.c
+> index c252081b11df..8c08ae2101d7 100644
+> --- a/mm/kfence/core.c
+> +++ b/mm/kfence/core.c
+> @@ -1003,6 +1003,13 @@ void *__kfence_alloc(struct kmem_cache *s, size_t size, gfp_t flags)
+>                 return NULL;
+>         }
+>
+> +       /*
+> +        * Skip allocations for this slab, if KFENCE has been disabled for
+> +        * this slab.
+> +        */
+> +       if (s->flags & SLAB_SKIP_KFENCE)
+> +               return NULL;
+> +
+>         if (atomic_inc_return(&kfence_allocation_gate) > 1)
+>                 return NULL;
+>  #ifdef CONFIG_KFENCE_STATIC_KEYS
+> diff --git a/mm/slub.c b/mm/slub.c
+> index 862dbd9af4f5..ee8b48327536 100644
+> --- a/mm/slub.c
+> +++ b/mm/slub.c
+> @@ -5745,6 +5745,30 @@ STAT_ATTR(CPU_PARTIAL_NODE, cpu_partial_node);
+>  STAT_ATTR(CPU_PARTIAL_DRAIN, cpu_partial_drain);
+>  #endif /* CONFIG_SLUB_STATS */
+>
+> +#ifdef CONFIG_KFENCE
+> +static ssize_t skip_kfence_show(struct kmem_cache *s, char *buf)
+> +{
+> +       return sysfs_emit(buf, "%d\n", !!(s->flags & SLAB_SKIP_KFENCE));
+> +}
+> +
+> +static ssize_t skip_kfence_store(struct kmem_cache *s,
+> +                       const char *buf, size_t length)
+> +{
+> +       int ret = length;
+> +
+> +       if (buf[0] == '0')
+> +               s->flags &= ~SLAB_SKIP_KFENCE;
+> +       else if (buf[0] == '1')
+> +               s->flags |= SLAB_SKIP_KFENCE;
+> +       else
+> +               ret = -EINVAL;
+> +
+> +       return ret;
+> +}
+> +SLAB_ATTR(skip_kfence);
+> +
 
-diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-index 1f18f336cf0c..c8bfea3b7db2 100644
---- a/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-+++ b/drivers/vdpa/vdpa_sim/vdpa_sim_blk.c
-@@ -30,11 +30,14 @@
- 				 (1ULL << VIRTIO_BLK_F_SEG_MAX)  | \
- 				 (1ULL << VIRTIO_BLK_F_BLK_SIZE) | \
- 				 (1ULL << VIRTIO_BLK_F_TOPOLOGY) | \
--				 (1ULL << VIRTIO_BLK_F_MQ))
-+				 (1ULL << VIRTIO_BLK_F_MQ)       | \
-+				 (1ULL << VIRTIO_BLK_F_DISCARD)  | \
-+				 (1ULL << VIRTIO_BLK_F_WRITE_ZEROES))
- 
- #define VDPASIM_BLK_CAPACITY	0x40000
- #define VDPASIM_BLK_SIZE_MAX	0x1000
- #define VDPASIM_BLK_SEG_MAX	32
-+#define VDPASIM_BLK_DWZ_MAX_SECTORS UINT_MAX
- 
- /* 1 virtqueue, 1 address space, 1 virtqueue group */
- #define VDPASIM_BLK_VQ_NUM	1
-@@ -193,6 +196,64 @@ static bool vdpasim_blk_handle_req(struct vdpasim *vdpasim,
- 		/* nothing to do */
- 		break;
- 
-+	case VIRTIO_BLK_T_DISCARD:
-+	case VIRTIO_BLK_T_WRITE_ZEROES: {
-+		struct virtio_blk_discard_write_zeroes range;
-+		u32 num_sectors, flags;
-+
-+		if (to_pull != sizeof(range)) {
-+			dev_dbg(&vdpasim->vdpa.dev,
-+				"discard/write_zeroes header len: 0x%zx [expected: 0x%zx]\n",
-+				to_pull, sizeof(range));
-+			status = VIRTIO_BLK_S_IOERR;
-+			break;
-+		}
-+
-+		bytes = vringh_iov_pull_iotlb(&vq->vring, &vq->out_iov, &range,
-+					      to_pull);
-+		if (bytes < 0) {
-+			dev_dbg(&vdpasim->vdpa.dev,
-+				"vringh_iov_pull_iotlb() error: %zd offset: 0x%llx len: 0x%zx\n",
-+				bytes, offset, to_pull);
-+			status = VIRTIO_BLK_S_IOERR;
-+			break;
-+		}
-+
-+		sector = le64_to_cpu(range.sector);
-+		offset = sector << SECTOR_SHIFT;
-+		num_sectors = le32_to_cpu(range.num_sectors);
-+		flags = le32_to_cpu(range.flags);
-+
-+		if (type == VIRTIO_BLK_T_DISCARD && flags != 0) {
-+			dev_dbg(&vdpasim->vdpa.dev,
-+				"discard unexpected flags set - flags: 0x%x\n",
-+				flags);
-+			status = VIRTIO_BLK_S_UNSUPP;
-+			break;
-+		}
-+
-+		if (type == VIRTIO_BLK_T_WRITE_ZEROES &&
-+		    flags & ~VIRTIO_BLK_WRITE_ZEROES_FLAG_UNMAP) {
-+			dev_dbg(&vdpasim->vdpa.dev,
-+				"write_zeroes unexpected flags set - flags: 0x%x\n",
-+				flags);
-+			status = VIRTIO_BLK_S_UNSUPP;
-+			break;
-+		}
-+
-+		if (!vdpasim_blk_check_range(vdpasim, sector, num_sectors,
-+					     VDPASIM_BLK_DWZ_MAX_SECTORS)) {
-+			status = VIRTIO_BLK_S_IOERR;
-+			break;
-+		}
-+
-+		if (type == VIRTIO_BLK_T_WRITE_ZEROES) {
-+			memset(vdpasim->buffer + offset, 0,
-+			       num_sectors << SECTOR_SHIFT);
-+		}
-+
-+		break;
-+	}
- 	default:
- 		dev_dbg(&vdpasim->vdpa.dev,
- 			"Unsupported request type %d\n", type);
-@@ -281,6 +342,17 @@ static void vdpasim_blk_get_config(struct vdpasim *vdpasim, void *config)
- 	blk_config->min_io_size = cpu_to_vdpasim16(vdpasim, 1);
- 	blk_config->opt_io_size = cpu_to_vdpasim32(vdpasim, 1);
- 	blk_config->blk_size = cpu_to_vdpasim32(vdpasim, SECTOR_SIZE);
-+	/* VIRTIO_BLK_F_DISCARD */
-+	blk_config->discard_sector_alignment =
-+		cpu_to_vdpasim32(vdpasim, SECTOR_SIZE);
-+	blk_config->max_discard_sectors =
-+		cpu_to_vdpasim32(vdpasim, VDPASIM_BLK_DWZ_MAX_SECTORS);
-+	blk_config->max_discard_seg = cpu_to_vdpasim32(vdpasim, 1);
-+	/* VIRTIO_BLK_F_WRITE_ZEROES */
-+	blk_config->max_write_zeroes_sectors =
-+		cpu_to_vdpasim32(vdpasim, VDPASIM_BLK_DWZ_MAX_SECTORS);
-+	blk_config->max_write_zeroes_seg = cpu_to_vdpasim32(vdpasim, 1);
-+
- }
- 
- static void vdpasim_blk_mgmtdev_release(struct device *dev)
--- 
-2.37.1
+^ unnecessary space?
 
+
+> +#endif
+> +
+>  static struct attribute *slab_attrs[] = {
+>         &slab_size_attr.attr,
+>         &object_size_attr.attr,
+> @@ -5812,6 +5836,9 @@ static struct attribute *slab_attrs[] = {
+>         &failslab_attr.attr,
+>  #endif
+>         &usersize_attr.attr,
+> +#ifdef CONFIG_KFENCE
+> +       &skip_kfence_attr.attr,
+> +#endif
+>
+>         NULL
+>  };
+>
+> base-commit: 40d43a7507e1547dd45cb02af2e40d897c591870
+> --
+> 2.30.2
+>

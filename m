@@ -2,108 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 456A158F675
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 05:46:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 529F158F67A
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 05:52:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233853AbiHKDqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 23:46:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57092 "EHLO
+        id S233810AbiHKDwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 23:52:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230463AbiHKDq3 (ORCPT
+        with ESMTP id S230463AbiHKDwc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 23:46:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47C328277E;
-        Wed, 10 Aug 2022 20:46:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E9F4DB81EFF;
-        Thu, 11 Aug 2022 03:46:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8347CC433C1;
-        Thu, 11 Aug 2022 03:46:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660189585;
-        bh=Xxh06Q4Yhsx+3pyvHZwT7mx+roo9eT6HXDouomooxbY=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=M5OWs5FVH2u5LHi69HxnvmDrLH/qE8Oqox2gVylYWe8DkmluDRIQFromGKuBxPYWc
-         MJKREDlnSfFuOULgt+lXcsBWY2/IpC56h4egROTTFLFHR5EOf6uPlfH0GP0Pk+zR8a
-         6AzGJFqwewVmGdreUemI/skHZK1332XoKMiC21fYy4LWg2siqoJbPw+X5U0WJlr38p
-         Yi5+yfKLs79fz5PFkHW0F5Hc9PFvj9xNuBTnI6dn/lG31CAnxJuov6dn31hypDZ0YZ
-         U8OzBBCIE81PSgZaOsgDXAL/UYeD7SdqzwJ8q9yOZNBKFKE4tVcbXW/NB8AkLUyrLj
-         ANJzdGirn/npg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 1FD205C128A; Wed, 10 Aug 2022 20:46:25 -0700 (PDT)
-Date:   Wed, 10 Aug 2022 20:46:25 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org, rushikesh.s.kadam@intel.com,
-        urezki@gmail.com, neeraj.iitr10@gmail.com, frederic@kernel.org,
-        rostedt@goodmis.org, rcu@vger.kernel.org
-Subject: Re: [PATCH v3 resend 0/6] Implement call_rcu_lazy() and
- miscellaneous fixes
-Message-ID: <20220811034625.GX2125313@paulmck-ThinkPad-P17-Gen-1>
-Reply-To: paulmck@kernel.org
-References: <20220809034517.3867176-1-joel@joelfernandes.org>
- <308db02b-b56d-2df1-ee33-7f66e6a85f63@joelfernandes.org>
- <87663566-ed67-fee8-4598-13591f2f072b@joelfernandes.org>
- <20220811025152.GW2125313@paulmck-ThinkPad-P17-Gen-1>
- <07976e09-214d-0d1b-6803-23754a9f3d8a@joelfernandes.org>
+        Wed, 10 Aug 2022 23:52:32 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C14583BCC
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 20:52:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660189951; x=1691725951;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=b14yv4zybEMk92MOe9Nad/0zi8R6E4nAO4ZOGlB6gME=;
+  b=Kce8W2+9L8++3/ZQ9YwskGLwR/FBnIHRX6l8KiWRaNZpJAUw3lVAqxBQ
+   WwH4rwpZxqrYlcHoFBn/ZVhfmSd/oF340ZuwnkTOSFii85+6nIJc4zNbP
+   ekw1GIJVGbUUhfM4kEI0Xi4nkoj7y8lCPCHL/CCRGUNJG5POXrKj8LLWQ
+   FtNF9LIE4aQP7HcE/DMscv9Osce+2QJKiKQqubkVq7Yvxw9e+U790+oJa
+   /gnBvovVcOovp4mb/uf9EQZC0WWVdA9QzrjWsYraaxYtSuiSAxG6xqTxz
+   Sdg7FDORwx5E7+3P/N+djfcXWTdRJYWmU9IsN7TbZ4wIE92bnIrV+dm7S
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="278194409"
+X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
+   d="scan'208";a="278194409"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 20:52:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
+   d="scan'208";a="638349207"
+Received: from lkp-server02.sh.intel.com (HELO cf3507895f13) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 10 Aug 2022 20:52:29 -0700
+Received: from kbuild by cf3507895f13 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oLzFF-00001B-0b;
+        Thu, 11 Aug 2022 03:52:29 +0000
+Date:   Thu, 11 Aug 2022 11:51:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [mnyman-xhci:fix_port_disable_s4 1/1]
+ drivers/usb/core/hcd-pci.c:637:27: error: 'hcd_pci_poweroff_late' undeclared
+ here (not in a function)
+Message-ID: <202208111117.4rp9JQa6-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <07976e09-214d-0d1b-6803-23754a9f3d8a@joelfernandes.org>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 10, 2022 at 11:22:13PM -0400, Joel Fernandes wrote:
-> 
-> 
-> On 8/10/2022 10:51 PM, Paul E. McKenney wrote:
-> > On Wed, Aug 10, 2022 at 10:31:56PM -0400, Joel Fernandes wrote:
-> >>
-> >>
-> >> On 8/10/2022 10:23 PM, Joel Fernandes wrote:
-> >>>
-> >>>
-> >>> On 8/8/2022 11:45 PM, Joel Fernandes (Google) wrote:
-> >>>> Just a refresh of v3 with one additional debug patch. v3's cover letter is here:
-> >>>>  https://lore.kernel.org/all/20220713213237.1596225-1-joel@joelfernandes.org/
-> >>>>
-> >>>> I just started working on this again while I have some time during paternity
-> >>>> leave ;-) So I thought I'll just send it out again. No other changes other
-> >>>> than that 1 debug patch I added on the top.
-> >>>>
-> >>>> Next I am going to go refine the power results as mentioned in Paul's comments
-> >>>> on the last cover letter.
-> >>>
-> >>> Side note: Here is another big selling point for call_rcu_lazy().
-> >>> Instead of _lazy(), if you just increased jiffies_till_first_fqs, and
-> >>> slowed *all* call_rcu() down to achieve the same effect, that would
-> >>> affect percpu refcounters switching to atomic-mode, for example.
-> >>>
-> >>> They switch to atomic mode by calling __percpu_ref_switch_mode() which
-> >>> is called by percpu_ref_switch_to_atomic_sync().>
-> >>> This will slow this call down for the full lazy duration which will slow
-> >>> down suspend in blk_pre_runtime_suspend().
-> >>
-> >> Correction while I am going on the record (got to be careful these
-> >> days). It *might* slow down RCU for the full lazy duration, unless of
-> >> course a fly-by rescue call_rcu() comes in.
-> > 
-> > Just unload a module, which if I remember correctly invokes rcu_barrier().
-> > Lots of rescue callbacks.  ;-)
-> 
-> Haha. Yes I suppose the per-cpu atomic switch paths can also invoke
-> rcu_barrier() but I suspect somebody might complain about IPIs :-P
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git fix_port_disable_s4
+head:   a41d3a635cb80d88f6d5fa958ebce3d81abd5c73
+commit: a41d3a635cb80d88f6d5fa958ebce3d81abd5c73 [1/1] xhci: pci: disable all xhci ports in hibernate poweroff_late stage,
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20220811/202208111117.4rp9JQa6-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/commit/?id=a41d3a635cb80d88f6d5fa958ebce3d81abd5c73
+        git remote add mnyman-xhci https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git
+        git fetch --no-tags mnyman-xhci fix_port_disable_s4
+        git checkout a41d3a635cb80d88f6d5fa958ebce3d81abd5c73
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
 
-There is always a critic!  ;-)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-							Thanx, Paul
+All errors (new ones prefixed by >>):
+
+>> drivers/usb/core/hcd-pci.c:637:27: error: 'hcd_pci_poweroff_late' undeclared here (not in a function)
+     637 |         .poweroff_late  = hcd_pci_poweroff_late,
+         |                           ^~~~~~~~~~~~~~~~~~~~~
+
+
+vim +/hcd_pci_poweroff_late +637 drivers/usb/core/hcd-pci.c
+
+   626	
+   627	const struct dev_pm_ops usb_hcd_pci_pm_ops = {
+   628		.suspend	= hcd_pci_suspend,
+   629		.suspend_noirq	= hcd_pci_suspend_noirq,
+   630		.resume_noirq	= hcd_pci_resume_noirq,
+   631		.resume		= hcd_pci_resume,
+   632		.freeze		= hcd_pci_suspend,
+   633		.freeze_noirq	= check_root_hub_suspended,
+   634		.thaw_noirq	= NULL,
+   635		.thaw		= hcd_pci_resume,
+   636		.poweroff	= hcd_pci_suspend,
+ > 637		.poweroff_late	= hcd_pci_poweroff_late,
+   638		.poweroff_noirq	= hcd_pci_suspend_noirq,
+   639		.restore_noirq	= hcd_pci_resume_noirq,
+   640		.restore	= hcd_pci_restore,
+   641		.runtime_suspend = hcd_pci_runtime_suspend,
+   642		.runtime_resume	= hcd_pci_runtime_resume,
+   643	};
+   644	EXPORT_SYMBOL_GPL(usb_hcd_pci_pm_ops);
+   645	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

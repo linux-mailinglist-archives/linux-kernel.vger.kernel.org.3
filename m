@@ -2,299 +2,263 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27EFF590601
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 19:40:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA42D590604
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 19:40:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235296AbiHKRkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 13:40:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51106 "EHLO
+        id S235279AbiHKRkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 13:40:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234549AbiHKRj4 (ORCPT
+        with ESMTP id S234706AbiHKRj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 13:39:56 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACB11910A0;
-        Thu, 11 Aug 2022 10:39:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660239595; x=1691775595;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=yrvkw+cci9TbJPb+w//clcP/WE/d5azNJ5b08Nr/J4s=;
-  b=DRPULetwHFBC+jTLd3/6XV1DmRioVkD+0Qok3hn+ED1/Ms5Ynn14Q66z
-   nAQgmLytg7iwTGFGZ6/iV2UcF75Q/Ex5ySp3MJRQ7uvd9xBagQQUF9Pt5
-   Fam7QOC8XaxeOzFih1OPqbXT/LUE4pMQnF4B8WkdpFRSss8cBQzebkKp5
-   s1x2il6UNcpUyr5+35MZPMcDiSJS/sYbtytY1CpJ9e3poNLYp/U7IpXEd
-   j6YzVI2BEUZQU7h9mMN+P1zrBkslw3Y8YoAuGWhYokmdKLsviEAn6lcie
-   jEaharXvD31j1Fa5zKkYwPgsHem/7bcps1tXtx/2qPGmWpCnaCGvmOWnZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10436"; a="353158137"
-X-IronPort-AV: E=Sophos;i="5.93,230,1654585200"; 
-   d="scan'208";a="353158137"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 10:39:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,230,1654585200"; 
-   d="scan'208";a="694978248"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by FMSMGA003.fm.intel.com with ESMTP; 11 Aug 2022 10:39:38 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 11 Aug 2022 10:39:37 -0700
-Received: from fmsmsx608.amr.corp.intel.com (10.18.126.88) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28; Thu, 11 Aug 2022 10:39:37 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx608.amr.corp.intel.com (10.18.126.88) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.28 via Frontend Transport; Thu, 11 Aug 2022 10:39:37 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.101)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.28; Thu, 11 Aug 2022 10:39:36 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EXpaq2ZAlB1wX35Rc5Z0h8/UuKzf1xF4IOZmCGuG5EcvPbsTPt96aytLnXqXLNjnlUbHPFRvd6dgiidVTXynAAvP8nv8qxMLdWUfqrLQagNzYR+1jrxz/F7qU+agN2P+pksC6/FQs5jr6FMUIRZ6SSXIq8NqolND3kN/vDPHyt44J7eAtAlrfMh4WrODR4XxQUMl2OZcoawwESnwYo1BZdCuScqWGrOTKabMvWulajWvyQ0VzoxnyEWbYYMWRX74D7FJRcsR9RBrVNiJsxK7qdVTiyrmokfUdXauwliK8hzIVmib5PiyhymcW6AkhiAu+s+ZgGMpJm87agh84ziFrQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=d2+Bjd6sDrchMGDbmaCer/pmOycJMuUuTaaj0MkBKak=;
- b=UQIBkTC11Hq3sVjGgUgpgDhWYPKRumroKQHfDC6/TMW7hGhxwDuzPXR48dDqrw1Lm4LEQ7noKbc8b3JeBBCzIt8a6cRiEu37OYRBsKHOQ92n9pWaH6FL4dthzKTY3E0ODJ7lU0lTHK1VIQjd0Ct+O5OYNOcoj2GK/85JViJE8TJuDgTdXqMMziWPgnOOenDi+2Ed11rEro5IX1RKaSynrC3Gnehi+VNr9KDHJr5dPQfd6wa2+v6BVl9yXD4waSNy/f3B068/zQ8ZZ56iaOYH/NwAem26DOUDVkyLOoCi0wwCigtSPwSZjpM2CKCBIh8BNCfxwC1hCvGbns2y2i19WA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB6311.namprd11.prod.outlook.com (2603:10b6:8:a6::21) by
- SN6PR11MB2621.namprd11.prod.outlook.com (2603:10b6:805:59::15) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5504.17; Thu, 11 Aug 2022 17:39:34 +0000
-Received: from DM4PR11MB6311.namprd11.prod.outlook.com
- ([fe80::a85f:4978:86e2:8b44]) by DM4PR11MB6311.namprd11.prod.outlook.com
- ([fe80::a85f:4978:86e2:8b44%7]) with mapi id 15.20.5525.011; Thu, 11 Aug 2022
- 17:39:33 +0000
-Date:   Thu, 11 Aug 2022 10:39:29 -0700
-From:   Ira Weiny <ira.weiny@intel.com>
-To:     Kees Cook <keescook@chromium.org>
-CC:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        <ebiederm@xmission.com>, <linux-fsdevel@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-next@vger.kernel.org>, <sfr@canb.auug.org.au>,
-        <syzkaller-bugs@googlegroups.com>, <viro@zeniv.linux.org.uk>,
-        syzbot <syzbot+3250d9c8925ef29e975f@syzkaller.appspotmail.com>
-Subject: Re: [syzbot] linux-next boot error: BUG: unable to handle kernel
- paging request in kernel_execve
-Message-ID: <YvU+0UHrn9Ab4rR8@iweiny-desk3>
-References: <0000000000008c0ba505e5f22066@google.com>
- <202208110830.8F528D6737@keescook>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <202208110830.8F528D6737@keescook>
-X-ClientProxiedBy: SJ0PR13CA0221.namprd13.prod.outlook.com
- (2603:10b6:a03:2c1::16) To DM4PR11MB6311.namprd11.prod.outlook.com
- (2603:10b6:8:a6::21)
+        Thu, 11 Aug 2022 13:39:59 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 870A89108C
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 10:39:58 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id f30so16694052pfq.4
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 10:39:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=L+RpAHjrFghjSrraTNT3ek1779b4qvURmkDkKl4LVZg=;
+        b=M599mjp862F/8rejkM9qorj5l2AbUCBGp914vD5jHOsH9NBtqn8KFnY9V0KkfOH/vv
+         tfHM+obkdFit42CAeQtUMorxpLfLGi+C8IJFVpVuDxTiEwfaUKX6i9ZhXGP96X4Aw3IW
+         cfi3U2we4ygRCjjFGf3UMQiySGT+522cAl62USOBXPZGLFeW6s8fLC6+qOvHNYFsSkkZ
+         sA5ET0zxsQSHUMslEPv1MP4nrLFPj3UipFkQ8HteEb+z6eTZftCg34V9HAlDYMdwq7U6
+         34NooR6FfwqNkTqaRV2zGIJ11RNU75UTe7bhcYTZVgfH4RhYUfBJFdw3yW6j9r4Vkbuc
+         IK9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=L+RpAHjrFghjSrraTNT3ek1779b4qvURmkDkKl4LVZg=;
+        b=b6lMe6D1S+VT2a5mlanoZybkuyCatxqIpNRV4HoQZI+A+5O8dxTiiKvSv8AbvRmmki
+         WoEfejc48dUMQk+kwP6mj1hzWmrwHs8oDQn/1OzRG3l3VfybTQxq8IvSFZMyRiSc9z39
+         2qYkvWwuEPXZO8iCwVJQF1mCV0zLoZYv+cmaR+tTniVciaHfrSqqHcBX4GkW05Kk/BT6
+         uCKWkcwxXFWxyJWRl9+Bf/zprwu6TUXnXkOaYyQFGnphbSIS1JBz4EfI5C9reKSZ3sOI
+         iSjaoClwhGmjFUcxM7WScifjgD62FPCovSvOIKBrZbPTFfqZqRQDDgDTR3/qKdhg/JUv
+         aoDw==
+X-Gm-Message-State: ACgBeo3uMhO9PKjeokjqAi9h7cuJkakrQyolQFF3krL+qdAaaX5Edlut
+        HSoglcrT3VSxA0Jf1U2cAW5Rmg==
+X-Google-Smtp-Source: AA6agR5oDzHgOrhCqr0mS08u18mQr4UotTpXxeTcCdSPkI2zMYwAKPGmBvwjp9WqEMXItBWFhy8uNg==
+X-Received: by 2002:a05:6a00:189d:b0:52d:d4ae:d9f2 with SMTP id x29-20020a056a00189d00b0052dd4aed9f2mr338433pfh.2.1660239597839;
+        Thu, 11 Aug 2022 10:39:57 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id 85-20020a621558000000b0052b6ed5ca40sm4276909pfv.192.2022.08.11.10.39.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Aug 2022 10:39:57 -0700 (PDT)
+Date:   Thu, 11 Aug 2022 17:39:53 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Shahar, Sagi" <sagis@google.com>,
+        "Aktas, Erdem" <erdemaktas@google.com>,
+        "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v8 003/103] KVM: Refactor CPU compatibility check on
+ module initialization
+Message-ID: <YvU+6fdkHaqQiKxp@google.com>
+References: <cover.1659854790.git.isaku.yamahata@intel.com>
+ <4092a37d18f377003c6aebd9ced1280b0536c529.1659854790.git.isaku.yamahata@intel.com>
+ <d36802ee3d96d0fdac00d2c11be341f94a362ef9.camel@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: d6d37411-9e8d-49cc-ddff-08da7bc073ed
-X-MS-TrafficTypeDiagnostic: SN6PR11MB2621:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rf/yo0BwCq2sC1jpIC0xOaed8DArN1EZDjRqEoXrV2w698gvHSfF45Fgaa+FfAuDEpiH7nG16zRDffblfL4CZrWpUFhi/jUd3I071p/0O+/BlKZsLuV8X2Hy9GRR1bQktL/alqPLy3AYGM/Qal4hwC3m0L7cpDA+A+nANab4IQi15l+akaUuTBLjLWq8UyKA71JJvqXfr+k+THV1bU8QyknIAgpojZpcPLem/NgoiC0SfwsecxSd6S9rJWdqimvsa4BWOep7FTWXPamdMRDN+2BrYonU2K/JHF17b8VJrmsY12CdTu/eWNNnQkZzn4qUXRstTEs5R15cZlonPp/7SXUHlm5u3TTmI2C38aKyzqKP/dQbWj08cefQY6R2U5puGdUtj88Kx70lmBk8Lw9Ij59YCuJwpcmrpB7PqPM8HLqTeof4lmhnERyPuK3A5lci4Ajj9BWcUOAw1Q6INfDtHs7JGnWtB+WS9EscJaQjhKz0t9p6UvgnZ70NonXFO4mMursIjOgE/kDbCkbLBcTpRTxO59+R/bJ1bfW9Vcjpmi9Mflvgw9G58A5WCBGOAlJErswOIJ1YTImSZ5TdSkuw6s0GIOV6EjCbzf/YjSng2A9Oc5LiYoLl4Za+66IrCXVGJZLaGtrb572R+OeYE3rls1JmKI3ZnDWrYzXBq/Jd4HFEQ+6NswCOh6Ze8x9akRwZ1zsMgyl7pBn7AOWGQ4sgn1iSvMCkvNKOcxWopofyybJOS97cIOdxOWbR/nUndo3EHHOC5JlEw5D4u/7RsvMS3GRmAS0TUF/cD9phc/lf4fffi1Nz0nGgRI6O4y/ZomEzGKAYWKJUZWCn0uWJu1NsB+ehH4fOxZAhHjYPuCrpMdOxtpxh3By0QNzUyV1uo6qn
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB6311.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(396003)(366004)(136003)(346002)(376002)(39860400002)(316002)(66556008)(6916009)(5660300002)(4326008)(8676002)(66476007)(54906003)(478600001)(186003)(33716001)(86362001)(8936002)(44832011)(2906002)(7416002)(66946007)(83380400001)(82960400001)(26005)(6512007)(41300700001)(6666004)(45080400002)(9686003)(6486002)(966005)(6506007)(38100700002)(99710200001)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?3Cd1s0hJUsBisD1neM3fQKmelNBaqFgFbYHhrqJ4Kc/Zl7+t0mGk5EYnie7e?=
- =?us-ascii?Q?qjrgVYmmLDNB0Gn3nA2Qs5CJrlrrTRfCGvGbmPyNJ8xzG8mYrb7Z/cOZNKpZ?=
- =?us-ascii?Q?kEJS7vKoYQjZyXgiD/DmHvA/hVw6b1Na/57luWgoUIwJG22UN2TEWqFf3Dky?=
- =?us-ascii?Q?1lqLcthTWu9kAyatV9XarhwZNiGnSsheHMPcJtaeLgmHroquluhQqD6hTdDE?=
- =?us-ascii?Q?SZ5w9+/PagFkEVy9zYusYrxuuReSCpYwcaxYW3x1OG+mi9sNk9hj8Qpk1a6U?=
- =?us-ascii?Q?GGSSb6hkysV9cNVBwu/3QTXmFUi/D/K0XHnPASvMC4oVH5BfmfG1+p9XFpD2?=
- =?us-ascii?Q?1Qj9SezJczfObQM401hYwYX5HQePIdoABC8OmlsOm2Pn+zGU4XX9XUs2TcHB?=
- =?us-ascii?Q?9Vgyi8l1IZpISxdhox/McOfvJzQ0KRDR3IJdqBCh0nshsX64p5t+QjFfhLbu?=
- =?us-ascii?Q?uWkTsGLtGjWDsNwvwLIfOHD70hdetj1ezrQ7uIzpmK30li5D8PSFUJZPt6OI?=
- =?us-ascii?Q?r3l2m+FMcsM8P8nc03Z2XZudEQszQHrGZPm8bhBqc4z2ADME8TY487gdigzJ?=
- =?us-ascii?Q?cXv7TWQBH7BBlJ0HWwaxQYGW7QAfk5y/PYTJuh7fd/1YbaHNB1SWZQRnDc8h?=
- =?us-ascii?Q?UkqVzVmG9IgxflF6QA0sR2FZn93/wYRXM+swdiVeYSjWxcYs/Iw4P2mbwE7/?=
- =?us-ascii?Q?Fxx3exDQJYUPcMuh2LLSQNVDA6guipUn/dw1Sa0MQEg7hDcbynCOv/K4nhb3?=
- =?us-ascii?Q?XtbMXn96wn6jvUnTGHcsk8X7epRoP+bTSQQcRKlaD4JBaM/idOq1fmk2ulR7?=
- =?us-ascii?Q?D5bd828lKqbnmMSzCpvasWOyhw/l47F6903uYd7V5cdJxSfaxkbLY+IZBzsg?=
- =?us-ascii?Q?tj3uko3qTuZ/p/tCZ9yt4Suj65n0c0T/J4gRG7/Ojao/ZxfD0XMiUDFMzWBx?=
- =?us-ascii?Q?G46VtAVvfBVGyh/MSPHDGkMyeartp1aSNwNBZN5aZ8dNlnDzkcdV/GNMzyjP?=
- =?us-ascii?Q?CoOtKFzs9+u6gXvKaheCvJ1MXRp6RBF3DknqknjQRG9LBImyvg7fUNCahXnC?=
- =?us-ascii?Q?QIutRFAIZrL08Ykibj73iMdnynrFXoV5ZxCJFnJpT6EViExipNurB3TJCo7J?=
- =?us-ascii?Q?/5BP7UW8uzboyyCgAks8qi4qkNNoe7HVEQDlnch/nWQlXTzrzZ6Jfo0CCJ22?=
- =?us-ascii?Q?uhbsMnwSMSjtugPogXNzK1jDy+Trutg2ftz4H6LVvnAzvFhL10R0x0xgIEdt?=
- =?us-ascii?Q?IiqHkGOt3HCqAVKCn5t31tndY7X1h/d5GQJ70i1Wle7hy5bIx+BRqt12Waqy?=
- =?us-ascii?Q?Yc943SptTjidrd74AoEEsi0pxY9I+ng4lMzcA6XXfPM9Jf2y5DM4NiBzzAcJ?=
- =?us-ascii?Q?7MwF+/6g4CWdvwB0bEDYfoO7hNxrMIBeuM5AXm5kcEneQ2JyTbRN4Tm3XuUB?=
- =?us-ascii?Q?SiWlntp0v65zW6iLcA/njgF9RplEERDjcF3FpOl5L5brS5uDQLXSdFHFE5tz?=
- =?us-ascii?Q?h5sOf/jahERVnBmz2jt7DfT9RHtSx1owiH2ywQDB9yc/4vcjLmsC0Av+MHM/?=
- =?us-ascii?Q?RiT1+2a4LpV29Mys9ED5ER26FgGUlZOtvddFs0Hm?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: d6d37411-9e8d-49cc-ddff-08da7bc073ed
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB6311.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Aug 2022 17:39:33.6502
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cVa/nQJt/XQ9qqx/G7eAi5rSyWMXBHyXXoBzd0EERM7CxtxeAvrSgD70NN0WLlcADTw4hd0h+TX2vO+tERHPIw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN6PR11MB2621
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d36802ee3d96d0fdac00d2c11be341f94a362ef9.camel@intel.com>
+X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 08:33:16AM -0700, Kees Cook wrote:
-> Hi Fabio,
++Will (for arm crud)
+
+On Thu, Aug 11, 2022, Huang, Kai wrote:
+> First of all, I think the patch title can be improved.  "refactor CPU
+> compatibility check on module initialization" isn't the purpose of this patch. 
+> It is just a bonus.  The title should reflect the main purpose (or behaviour) of
+> this patch:
 > 
-> It seems likely that the kmap change[1] might be causing this crash. Is
-> there a boot-time setup race between kmap being available and early umh
-> usage?
+> 	KVM: Temporarily enable hardware on all cpus during module loading time
 
-I don't see how this is a setup problem with the config reported here.
+...
 
-CONFIG_64BIT=y
-
-...and HIGHMEM is not set.
-...and PREEMPT_RT is not set.
-
-So the kmap_local_page() call in that stack should be a page_address() only.
-
-I think the issue must be some sort of race which was being prevented because
-of the preemption and/or pagefault disable built into kmap_atomic().
-
-Is this reproducable?
-
-The hunk below will surely fix it but I think the pagefault_disable() is
-the only thing that is required.  It would be nice to test it.
-
-Ira
-
-
-diff --git a/fs/exec.c b/fs/exec.c
-index b51dd14e7388..3da588c858ca 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -640,7 +640,11 @@ int copy_string_kernel(const char *arg, struct linux_binprm *bprm)
-                if (!page)
-                        return -E2BIG;
-                flush_arg_page(bprm, pos & PAGE_MASK, page);
-+               preempt_disable();
-+               pagefault_disable();
-                memcpy_to_page(page, offset_in_page(pos), arg, bytes_to_copy);
-+               pagefault_enable();
-+               preempt_enable();
-                put_arg_page(page);
-        }
- 
-
+> > +	/* hardware_enable_nolock() checks CPU compatibility on each CPUs. */
+> > +	r = hardware_enable_all();
+> > +	if (r)
+> > +		goto out_free_2;
+> > +	/*
+> > +	 * Arch specific initialization that requires to enable virtualization
+> > +	 * feature.  e.g. TDX module initialization requires VMXON on all
+> > +	 * present CPUs.
+> > +	 */
+> > +	kvm_arch_post_hardware_enable_setup(opaque);
+> > +	/*
+> > +	 * Make hardware disabled after the KVM module initialization.  KVM
+> > +	 * enables hardware when the first KVM VM is created and disables
+> > +	 * hardware when the last KVM VM is destroyed.  When no KVM VM is
+> > +	 * running, hardware is disabled.  Keep that semantics.
+> > +	 */
 > 
-> -Kees
+> Except the first sentence, the remaining sentences are more like changelog
+> material.  Perhaps just say something below to be more specific on the purpose:
 > 
-> [1] https://git.kernel.org/linus/c6e8e36c6ae4b11bed5643317afb66b6c3cadba8
+> 	/*
+> 	 * Disable hardware on all cpus so that out-of-tree drivers which
+> 	 * also use hardware-assisted virtualization (such as virtualbox
+> 	 * kernel module) can still be loaded when KVM is loaded.
+> 	 */
 > 
-> On Thu, Aug 11, 2022 at 12:29:34AM -0700, syzbot wrote:
-> > Hello,
-> > 
-> > syzbot found the following issue on:
-> > 
-> > HEAD commit:    bc6c6584ffb2 Add linux-next specific files for 20220810
-> > git tree:       linux-next
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=115034c3080000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=5784be4315a4403b
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=3250d9c8925ef29e975f
-> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > 
-> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > Reported-by: syzbot+3250d9c8925ef29e975f@syzkaller.appspotmail.com
-> > 
-> > BUG: unable to handle page fault for address: ffffdc0000000000
-> > #PF: supervisor read access in kernel mode
-> > #PF: error_code(0x0000) - not-present page
-> > PGD 11826067 P4D 11826067 PUD 0 
-> > Oops: 0000 [#1] PREEMPT SMP KASAN
-> > CPU: 0 PID: 1100 Comm: kworker/u4:5 Not tainted 5.19.0-next-20220810-syzkaller #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-> > RIP: 0010:strnlen+0x3b/0x70 lib/string.c:504
-> > Code: 74 3c 48 bb 00 00 00 00 00 fc ff df 49 89 fc 48 89 f8 eb 09 48 83 c0 01 48 39 e8 74 1e 48 89 c2 48 89 c1 48 c1 ea 03 83 e1 07 <0f> b6 14 1a 38 ca 7f 04 84 d2 75 11 80 38 00 75 d9 4c 29 e0 48 83
-> > RSP: 0000:ffffc90005c5fe10 EFLAGS: 00010246
-> > RAX: ffff000000000000 RBX: dffffc0000000000 RCX: 0000000000000000
-> > RDX: 1fffe00000000000 RSI: 0000000000020000 RDI: ffff000000000000
-> > RBP: ffff000000020000 R08: 0000000000000005 R09: 0000000000000000
-> > R10: 0000000000000006 R11: 0000000000000000 R12: ffff000000000000
-> > R13: ffff88814764cc00 R14: ffff000000000000 R15: ffff88814764cc00
-> > FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: ffffdc0000000000 CR3: 000000000bc8e000 CR4: 00000000003506f0
-> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > Call Trace:
-> >  <TASK>
-> >  strnlen include/linux/fortify-string.h:119 [inline]
-> >  copy_string_kernel+0x26/0x250 fs/exec.c:616
-> >  copy_strings_kernel+0xb3/0x190 fs/exec.c:655
-> >  kernel_execve+0x377/0x500 fs/exec.c:1998
-> >  call_usermodehelper_exec_async+0x2e3/0x580 kernel/umh.c:112
-> >  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-> >  </TASK>
-> > Modules linked in:
-> > CR2: ffffdc0000000000
-> > ---[ end trace 0000000000000000 ]---
-> > RIP: 0010:strnlen+0x3b/0x70 lib/string.c:504
-> > Code: 74 3c 48 bb 00 00 00 00 00 fc ff df 49 89 fc 48 89 f8 eb 09 48 83 c0 01 48 39 e8 74 1e 48 89 c2 48 89 c1 48 c1 ea 03 83 e1 07 <0f> b6 14 1a 38 ca 7f 04 84 d2 75 11 80 38 00 75 d9 4c 29 e0 48 83
-> > RSP: 0000:ffffc90005c5fe10 EFLAGS: 00010246
-> > RAX: ffff000000000000 RBX: dffffc0000000000 RCX: 0000000000000000
-> > RDX: 1fffe00000000000 RSI: 0000000000020000 RDI: ffff000000000000
-> > RBP: ffff000000020000 R08: 0000000000000005 R09: 0000000000000000
-> > R10: 0000000000000006 R11: 0000000000000000 R12: ffff000000000000
-> > R13: ffff88814764cc00 R14: ffff000000000000 R15: ffff88814764cc00
-> > FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: ffffdc0000000000 CR3: 000000000bc8e000 CR4: 00000000003506f0
-> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > ----------------
-> > Code disassembly (best guess):
-> >    0:	74 3c                	je     0x3e
-> >    2:	48 bb 00 00 00 00 00 	movabs $0xdffffc0000000000,%rbx
-> >    9:	fc ff df
-> >    c:	49 89 fc             	mov    %rdi,%r12
-> >    f:	48 89 f8             	mov    %rdi,%rax
-> >   12:	eb 09                	jmp    0x1d
-> >   14:	48 83 c0 01          	add    $0x1,%rax
-> >   18:	48 39 e8             	cmp    %rbp,%rax
-> >   1b:	74 1e                	je     0x3b
-> >   1d:	48 89 c2             	mov    %rax,%rdx
-> >   20:	48 89 c1             	mov    %rax,%rcx
-> >   23:	48 c1 ea 03          	shr    $0x3,%rdx
-> >   27:	83 e1 07             	and    $0x7,%ecx
-> > * 2a:	0f b6 14 1a          	movzbl (%rdx,%rbx,1),%edx <-- trapping instruction
-> >   2e:	38 ca                	cmp    %cl,%dl
-> >   30:	7f 04                	jg     0x36
-> >   32:	84 d2                	test   %dl,%dl
-> >   34:	75 11                	jne    0x47
-> >   36:	80 38 00             	cmpb   $0x0,(%rax)
-> >   39:	75 d9                	jne    0x14
-> >   3b:	4c 29 e0             	sub    %r12,%rax
-> >   3e:	48                   	rex.W
-> >   3f:	83                   	.byte 0x83
-> > 
-> > 
-> > ---
-> > This report is generated by a bot. It may contain errors.
-> > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> > 
-> > syzbot will keep track of this issue. See:
-> > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> 
-> -- 
-> Kees Cook
+> > +	hardware_disable_all();
+> >  
+> >  	r = cpuhp_setup_state_nocalls(CPUHP_AP_KVM_STARTING, "kvm/cpu:starting",
+> >  				      kvm_starting_cpu, kvm_dying_cpu);
+
+I've been poking at the "hardware enable" code this week for other reasons, and
+have come to the conclusion that the current implementation is a mess.
+
+x86 overloads "hardware enable" to do three different things:
+
+  1. actually enable hardware
+  2. snapshot per-CPU MSR value for user-return MSRs
+  3. handle unstable TSC _for existing VMs_ on suspend+resume and/or CPU hotplug
+
+#2 and #3 have nothing to do with enabling hardware, kvm_arch_hardware_enable() just
+so happens to be called in a superset of what is needed for dealing with unstable TSCs,
+and AFAICT the user-return MSRs is simply a historical wart.  The user-return MSRs
+code is subtly very, very nasty, as it means that KVM snaphots MSRs from IRQ context,
+e.g. if an out-of-tree module is running VMs, the IRQ can interrupt the _guest_ and
+cause KVM to snapshot guest registers.  VMX and SVM kinda sorta guard against this
+by refusing to load if VMX/SVM are already enabled, but it's not foolproof.
+
+Eww, and #3 is broken.  If CPU (un)hotplug collides with kvm_destroy_vm() or
+kvm_create_vm(), kvm_arch_hardware_enable() could explode due to vm_list being
+modified while it's being walked.
+
+Of course, that path is broken for other reasons too, e.g. needs to prevent CPUs
+from going on/off-line when KVM is enabling hardware.
+https://lore.kernel.org/all/20220216031528.92558-7-chao.gao@intel.com
+
+arm64 is also quite evil and circumvents KVM's hardware enabling logic to some extent.
+kvm_arch_init() => init_subsystems() unconditionally enables hardware, and for pKVM
+_leaves_ hardware enabled.  And then hyp_init_cpu_pm_notifier() disables/enables
+hardware across lower power enter+exit, except if pKVM is enabled.  The icing on
+the cake is "disabling" hardware doesn't even do anything (AFAICT) if the kernel is
+running at EL2 (which I think is nVHE + not-pKVM?).
+
+PPC apparently didn't want to be left out of the party, and despite having a nop
+for kvm_arch_hardware_disable(), it does its own "is KVM enabled" tracking (see
+kvm_hv_vm_(de)activated()).  At least PPC gets the cpus_read_(un)lock() stuff right...
+
+MIPS doesn't appear to have any shenanigans, but kvm_vz_hardware_enable() appears
+to be a "heavy" operation, i.e. ideally not something that should be done spuriously.
+
+s390 and PPC are the only sane architectures and don't require explicit enabling
+of virtualization.
+
+At a glance, arm64 won't explode, but enabling hardware _twice_ during kvm_init()
+is all kinds of gross.
+
+Another wart that we can clean up is the cpus_hardware_enabled mask.  I don't see
+any reason KVM needs to use a global mask, a per-cpu variable a la kvm_arm_hardware_enabled
+would do just fine.
+
+OMG, and there's another bug lurking (I need to stop looking at this code).  Commit
+5f6de5cbebee ("KVM: Prevent module exit until all VMs are freed") added an error
+path that can cause VM creation to fail _after_ it has been added to the list, but
+doesn't unwind _any_ of the stuff done by kvm_arch_post_init_vm() and beyond.
+
+Rather than trying to rework common KVM to fit all the architectures random needs,
+I think we should instead overhaul the entire mess.  And we should do that ASAP
+ahead of TDX, though obviously with an eye toward not sucking for TDX.
+
+Not 100% thought out at this point, but I think we can do:
+
+  1.  Have x86 snapshot per-CPU user-return MRS on first use (trivial to do by adding
+      a flag to struct kvm_user_return_msrs, as user_return_msrs is already per-CPU).
+
+  2.  Drop kvm_count_lock and instead protect kvm_usage_count with kvm_lock and
+      cpu_read_lock().
+
+  3.  Provide arch hooks that are invoked for "power management" operations (including
+      CPU hotplug and host reboot, hence the quotes).  Note, there's both a platform-
+      wide PM notifier and a per-CPU notifier...
+
+  4.  Rename kvm_arch_post_init_vm() to e.g. kvm_arch_add_vm(), call it under
+      kvm_lock, and pass in kvm_usage_count.
+
+  5a. Drop cpus_hardware_enabled and drop the common hardware enable/disable code.
+
+ or 
+
+  5b. Expose kvm_hardware_enable_all() and/or kvm_hardware_enable() so that archs
+      don't need to implement their own error handling and per-CPU flags.
+
+I.e. give each architecture hooks to handle possible transition points, but otherwise
+let arch code decide when and how to do hardware enabling/disabling. 
+
+I'm very tempted to vote for (5a); x86 is the only architecture has an error path
+in kvm_arch_hardware_enable(), and trying to get common code to play nice with arm's
+kvm_arm_hardware_enabled logic is probably going to be weird.
+
+E.g. if we can get the back half kvm_create_vm() to look like the below, then arch
+code can enable hardware during kvm_arch_add_vm() if the existing count is zero
+without generic KVM needing to worry about when hardware needs to be enabled and
+disabled.
+
+	r = kvm_arch_init_vm(kvm, type);
+	if (r)
+		goto out_err_no_arch_destroy_vm;
+
+	r = kvm_init_mmu_notifier(kvm);
+	if (r)
+		goto out_err_no_mmu_notifier;
+
+	/*
+	 * When the fd passed to this ioctl() is opened it pins the module,
+	 * but try_module_get() also prevents getting a reference if the module
+	 * is in MODULE_STATE_GOING (e.g. if someone ran "rmmod --wait").
+	 */
+	if (!try_module_get(kvm_chardev_ops.owner)) {
+		r = -ENODEV;
+		goto out_err;
+	}
+
+	mutex_lock(&kvm_lock);
+	cpus_read_lock();
+	r = kvm_arch_add_vm(kvm, kvm_usage_count);
+	if (r)
+		goto out_final;
+	kvm_usage_count++;
+	list_add(&kvm->vm_list, &vm_list);
+	cpus_read_unlock();
+	mutex_unlock(&kvm_lock);
+
+	if (r)
+		goto out_put_module;
+
+	preempt_notifier_inc();
+	kvm_init_pm_notifier(kvm);
+
+	return kvm;
+
+out_final:
+	cpus_read_unlock();
+	mutex_unlock(&kvm_lock);
+	module_put(kvm_chardev_ops.owner);
+out_err_no_put_module:
+#if defined(CONFIG_MMU_NOTIFIER) && defined(KVM_ARCH_WANT_MMU_NOTIFIER)
+	if (kvm->mmu_notifier.ops)
+		mmu_notifier_unregister(&kvm->mmu_notifier, current->mm);
+#endif
+out_err_no_mmu_notifier:
+	kvm_arch_destroy_vm(kvm);

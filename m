@@ -2,181 +2,613 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F81B58FB9C
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 13:49:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9B3B58FB98
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 13:46:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234829AbiHKLtD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 07:49:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53008 "EHLO
+        id S234517AbiHKLqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 07:46:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234269AbiHKLtB (ORCPT
+        with ESMTP id S235046AbiHKLqf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 07:49:01 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2066.outbound.protection.outlook.com [40.107.243.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35DBF3206C;
-        Thu, 11 Aug 2022 04:49:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JX25wAkVhm6/qQ1rQ/iXdmfoKrUdev9LCraIMbE1qjWDQ8Aaq2uFNcLG9IE5TSQJ23Gx6bJxHhVg7HBRZpm4K3r9B8xabNuokM5NmcvODX+68t+EtQqBCjdOhVL8CSy/FUyMmJUmfCYuNwGrvk6WpietD58Meo45+5bmkbT393YXhOvlO2NqmHJvj2mj3c4NWqbKKFqlDJBW4J2gx/08NRxAF5Gns7Mg8CLSqUpU8v6LZuIM6ht60JCeAAO3eXi+I0xhVUZ+FqWH6PWAUfAOtRSBIPd9Dujys/nYhc8h+fNTFOfw0uBm/dXvdOVhTKvgXJ5xSdqxgDamFc54EQ7Xpg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=50X5CNs9BEzLUoyUIlxso+OeNwN6Avdn42ZoNNz5DvE=;
- b=DTIUTrca5W6qNnC+pmlN+JmgT7HawQaQkjzAOol6aAuvs+9l2rsi2hv0SEGe1hXAorz5+FDVyt8gTqrQ34+eS67Xlv5cVE1RAuETgDyoX7e86D78YoeFIjPLuNHL/8rL88tNnU8H+fHPusku1ZBGZLIo5HF9GaJuq43djpj0kAsnoqJIDt0TlmXlWdFWzsyqsNwe8gVit5uT3vzCIOBKCE/Bxzs7wTN2Asp1XDSx1hPI7+WHlNNyFcYO5qb5Ao2NjD7bpsvuBJHuItqbSqpzpaH4jV7wbG+3jW+l4WwDjEZEZbsG0F5tlQDIvc1GSUAoOeDQaSPa1kc/cBYHUSTefw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 12.22.5.234) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=50X5CNs9BEzLUoyUIlxso+OeNwN6Avdn42ZoNNz5DvE=;
- b=afYwbGPqB2WIiUU23u1at2pMVYTcXvW2JnwkL60BcH8WY1se8vReMGLA8xcCxh0UKty+hziXXgUT46bCtaJJ0U/bJrRauPLZ59XoDtkmNlxuVbufz+usJ/HaydeoFheRgCi8Wyr7fcCKcQ3QZwUO8HabN7pbilKnqxXrSb2N4ueCHxdovcl1cu0EzMluoRmZrckt9QtqLR2ALCXAxyVYoaliirlMcPX1zJx8ZSwz5FjXNurXiqO+T6C3nmyF1SrOLnXjfccwAT4NZ/lpl+4NCVYrMr0BVTIpEDonXyxLhzRWdRIJphZPT2ZPg6emhZzk+viao8s7j7gWbANRWclDDQ==
-Received: from BN9PR03CA0426.namprd03.prod.outlook.com (2603:10b6:408:113::11)
- by PH8PR12MB6867.namprd12.prod.outlook.com (2603:10b6:510:1ca::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.15; Thu, 11 Aug
- 2022 11:48:58 +0000
-Received: from BN8NAM11FT063.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:113:cafe::61) by BN9PR03CA0426.outlook.office365.com
- (2603:10b6:408:113::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.12 via Frontend
- Transport; Thu, 11 Aug 2022 11:48:58 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.234)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 12.22.5.234 as permitted sender) receiver=protection.outlook.com;
- client-ip=12.22.5.234; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (12.22.5.234) by
- BN8NAM11FT063.mail.protection.outlook.com (10.13.177.110) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.20.5525.11 via Frontend Transport; Thu, 11 Aug 2022 11:48:57 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by DRHQMAIL101.nvidia.com
- (10.27.9.10) with Microsoft SMTP Server (TLS) id 15.0.1497.32; Thu, 11 Aug
- 2022 11:48:56 +0000
-Received: from yaviefel (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 11 Aug
- 2022 04:48:53 -0700
-References: <f4afce5ab0318617f3866b85274be52542d59b32.1660211614.git.petrm@nvidia.com>
-User-agent: mu4e 1.6.6; emacs 28.1
-From:   Petr Machata <petrm@nvidia.com>
-To:     Petr Machata <petrm@nvidia.com>
-CC:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Vadim Pasternak <vadimp@nvidia.com>,
-        "Ido Schimmel" <idosch@nvidia.com>, Jiri Pirko <jiri@nvidia.com>
-Subject: Re: [PATCH net] mlxsw: minimal: Fix deadlock in ports creation
-Date:   Thu, 11 Aug 2022 13:44:17 +0200
-In-Reply-To: <f4afce5ab0318617f3866b85274be52542d59b32.1660211614.git.petrm@nvidia.com>
-Message-ID: <87wnbf57bw.fsf@nvidia.com>
+        Thu, 11 Aug 2022 07:46:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DA5D7AC22;
+        Thu, 11 Aug 2022 04:46:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B31CFB8206D;
+        Thu, 11 Aug 2022 11:46:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87DF8C433C1;
+        Thu, 11 Aug 2022 11:46:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660218389;
+        bh=a10s9NCedazFP3CwhbA5hHKRBrS6zBk8vpUE9UgfD24=;
+        h=From:To:Cc:Subject:Date:From;
+        b=pfr5W3Nb9MlwP06yNjWw5mnLULiZYF7Y+6ZZdSYsvSz8K0U7UJLtv6a0nOZc3uHzZ
+         19N+bF3xwv5bT8ELJ3OHcfradT0AqnbUM1G9MxyGO44E4FhSSTeOHa2iPMgrLCMGTQ
+         3lbFbSYWcSIafoRw04tTwL75U6+7TKGceB8gbAWiI85bf5eCsa4qK4uE43vmfL3ltu
+         7yGE2c0Xc1ZdIDk7V0ev8dEDMWFSliUuScF06gdHlSJp8moTq5TFwscl+3hErydpU5
+         2Wrnup7Te13bS9PCeUeNSo6y9Cycay2TsuGRRIAyPeE9m5/AG91KAH9SVhhZer8aF0
+         /U2/wcJTQwZFA==
+From:   Arnd Bergmann <arnd@kernel.org>
+To:     Richard Henderson <rth@twiddle.net>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kees Cook <keescook@chromium.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org, linux-mips@vger.kernel.org,
+        linux-sh@vger.kernel.org, linux-um@lists.infradead.org,
+        linux-xtensa@linux-xtensa.org
+Subject: [PATCH] treewide: defconfig: address renamed CONFIG_DEBUG_INFO=y
+Date:   Thu, 11 Aug 2022 13:44:34 +0200
+Message-Id: <20220811114609.2097335-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.29.2
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.126.230.35]
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 15e1a9ff-109b-4885-73c4-08da7b8f79d8
-X-MS-TrafficTypeDiagnostic: PH8PR12MB6867:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rH9at42wWu8sLLEko1OGLwim1Z85h1j2Ym/PnWZU2FH01RvGXsbU5BYjcltIrMuPS4mkXWXtrqaoNnHX5C8R9xnmCyXOfzHqNesUbGDjtQivjQ32MPSd1uwCq7wxhKUqiU6H8Bm2iDO9ayCs9p57e8L2io456aK5Dc7ip3EF+e9xXirvqudwmXh9yV700Sg4Ad6fag1PW6MGn8shxtoCvYEQwmClBDaIdozli9qTOwkCq9AZ3dfnbaJRWJHyCK9uIuptsV1s0BDu2/UCxjgnW/bWyEqFjqSy/9FWLhsIfEFaIqokRqwqZyCWmY6xWXpVh8whXlvdHLi7D0Samj0b/E9B1TbAQMjmM6OqNSdiHTJEp7FAzgpeRno9NgSHEmPZ+kebgRqpTP8WxMdPldrBQOyQ0oxy0JXl4VKVBxYlZBKCUTNRCAzcPGtdNN2QkNkLI4AQNBhLmcVOXgF9jtdAWOsJn9AWo2yTzZRz/O/EivdWIp08cDVATP59O6C834V0DzABZWyGOd6MKTsbsEr99ZvH1L1Uk4OhFgVCucpUoKgSPSgVtQZMs91xXXHT8eUtradai3fJDYT9AUmv4cB2xIJMNBQvX+FoHPyUpoMbN1LJBp0weSHixZijxXFecIUAUa+MAi0GWObLRsnf0/VcOUYxJI4b9kclzkhXZ/cDk1qB+PFKbIsETMzt9Tuxhxk9dVGHqJjR7EIq8ZtDLZ5myJQ87CwtyBZluiFw5t0YWuCYHBd4/TtUk8XLV3x00ounTi+RZ2z0tT/HXP26fGLJfR+j4GN0I3AtD3HomoSK+K/e3GJUNVQm+cGHftAGErMa1xwJ7qPvQyfCiTIRw1AA2Q==
-X-Forefront-Antispam-Report: CIP:12.22.5.234;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(136003)(396003)(376002)(346002)(40470700004)(36840700001)(46966006)(83380400001)(6862004)(2616005)(86362001)(70206006)(8936002)(70586007)(16526019)(6200100001)(316002)(4326008)(426003)(186003)(107886003)(37006003)(40460700003)(54906003)(36860700001)(47076005)(336012)(8676002)(36756003)(40480700001)(356005)(82740400003)(81166007)(26005)(41300700001)(478600001)(5660300002)(6666004)(2906002)(82310400005)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Aug 2022 11:48:57.9239
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 15e1a9ff-109b-4885-73c4-08da7b8f79d8
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.234];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT063.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6867
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CC'ing Jiri, which I forgot to do.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Petr Machata <petrm@nvidia.com> writes:
+CONFIG_DEBUG_INFO is now implicitly selected if one picks one of the
+explicit options that could be DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT,
+DEBUG_INFO_DWARF4, DEBUG_INFO_DWARF5.
 
-> From: Vadim Pasternak <vadimp@nvidia.com>
->
-> Drop devl_lock() / devl_unlock() from ports creation and removal flows
-> since the devlink instance lock is now taken by mlxsw_core.
->
-> Fixes: 72a4c8c94efa ("mlxsw: convert driver to use unlocked devlink API during init/fini")
-> Signed-off-by: Vadim Pasternak <vadimp@nvidia.com>
-> Signed-off-by: Ido Schimmel <idosch@nvidia.com>
-> Signed-off-by: Petr Machata <petrm@nvidia.com>
-> ---
->  drivers/net/ethernet/mellanox/mlxsw/minimal.c | 7 -------
->  1 file changed, 7 deletions(-)
->
-> diff --git a/drivers/net/ethernet/mellanox/mlxsw/minimal.c b/drivers/net/ethernet/mellanox/mlxsw/minimal.c
-> index d9bf584234a6..bb1cd4bae82e 100644
-> --- a/drivers/net/ethernet/mellanox/mlxsw/minimal.c
-> +++ b/drivers/net/ethernet/mellanox/mlxsw/minimal.c
-> @@ -328,7 +328,6 @@ static void mlxsw_m_port_module_unmap(struct mlxsw_m *mlxsw_m, u8 module)
->  static int mlxsw_m_ports_create(struct mlxsw_m *mlxsw_m)
->  {
->  	unsigned int max_ports = mlxsw_core_max_ports(mlxsw_m->core);
-> -	struct devlink *devlink = priv_to_devlink(mlxsw_m->core);
->  	u8 last_module = max_ports;
->  	int i;
->  	int err;
-> @@ -357,7 +356,6 @@ static int mlxsw_m_ports_create(struct mlxsw_m *mlxsw_m)
->  	}
->  
->  	/* Create port objects for each valid entry */
-> -	devl_lock(devlink);
->  	for (i = 0; i < mlxsw_m->max_ports; i++) {
->  		if (mlxsw_m->module_to_port[i] > 0) {
->  			err = mlxsw_m_port_create(mlxsw_m,
-> @@ -367,7 +365,6 @@ static int mlxsw_m_ports_create(struct mlxsw_m *mlxsw_m)
->  				goto err_module_to_port_create;
->  		}
->  	}
-> -	devl_unlock(devlink);
->  
->  	return 0;
->  
-> @@ -377,7 +374,6 @@ static int mlxsw_m_ports_create(struct mlxsw_m *mlxsw_m)
->  			mlxsw_m_port_remove(mlxsw_m,
->  					    mlxsw_m->module_to_port[i]);
->  	}
-> -	devl_unlock(devlink);
->  	i = max_ports;
->  err_module_to_port_map:
->  	for (i--; i > 0; i--)
-> @@ -390,10 +386,8 @@ static int mlxsw_m_ports_create(struct mlxsw_m *mlxsw_m)
->  
->  static void mlxsw_m_ports_remove(struct mlxsw_m *mlxsw_m)
->  {
-> -	struct devlink *devlink = priv_to_devlink(mlxsw_m->core);
->  	int i;
->  
-> -	devl_lock(devlink);
->  	for (i = 0; i < mlxsw_m->max_ports; i++) {
->  		if (mlxsw_m->module_to_port[i] > 0) {
->  			mlxsw_m_port_remove(mlxsw_m,
-> @@ -401,7 +395,6 @@ static void mlxsw_m_ports_remove(struct mlxsw_m *mlxsw_m)
->  			mlxsw_m_port_module_unmap(mlxsw_m, i);
->  		}
->  	}
-> -	devl_unlock(devlink);
->  
->  	kfree(mlxsw_m->module_to_port);
->  	kfree(mlxsw_m->ports);
+This was actually not what I had in mind when I suggested making
+it a 'choice' statement, but it's too late to change again now,
+and the Kconfig logic is more sensible in the new form.
+
+Change any defconfig file that had CONFIG_DEBUG_INFO enabled
+but did not pick DWARF4 or DWARF5 explicitly to now pick the toolchain
+default.
+
+Fixes: f9b3cd245784 ("Kconfig.debug: make DEBUG_INFO selectable from a choice")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+---
+ arch/alpha/configs/defconfig                | 2 +-
+ arch/arc/configs/tb10x_defconfig            | 2 +-
+ arch/microblaze/configs/mmu_defconfig       | 2 +-
+ arch/mips/configs/bcm47xx_defconfig         | 2 +-
+ arch/mips/configs/cavium_octeon_defconfig   | 2 +-
+ arch/mips/configs/ci20_defconfig            | 2 +-
+ arch/mips/configs/cu1000-neo_defconfig      | 2 +-
+ arch/mips/configs/cu1830-neo_defconfig      | 2 +-
+ arch/mips/configs/generic_defconfig         | 2 +-
+ arch/mips/configs/omega2p_defconfig         | 2 +-
+ arch/mips/configs/qi_lb60_defconfig         | 2 +-
+ arch/mips/configs/vocore2_defconfig         | 2 +-
+ arch/nios2/configs/10m50_defconfig          | 2 +-
+ arch/nios2/configs/3c120_defconfig          | 2 +-
+ arch/sh/configs/apsh4a3a_defconfig          | 2 +-
+ arch/sh/configs/apsh4ad0a_defconfig         | 2 +-
+ arch/sh/configs/edosk7760_defconfig         | 2 +-
+ arch/sh/configs/magicpanelr2_defconfig      | 2 +-
+ arch/sh/configs/polaris_defconfig           | 2 +-
+ arch/sh/configs/r7780mp_defconfig           | 2 +-
+ arch/sh/configs/r7785rp_defconfig           | 2 +-
+ arch/sh/configs/rsk7203_defconfig           | 2 +-
+ arch/sh/configs/sdk7780_defconfig           | 2 +-
+ arch/sh/configs/se7712_defconfig            | 2 +-
+ arch/sh/configs/se7721_defconfig            | 2 +-
+ arch/sh/configs/sh2007_defconfig            | 2 +-
+ arch/sh/configs/sh7757lcr_defconfig         | 2 +-
+ arch/sh/configs/sh7785lcr_32bit_defconfig   | 2 +-
+ arch/sh/configs/urquell_defconfig           | 2 +-
+ arch/um/configs/i386_defconfig              | 2 +-
+ arch/um/configs/x86_64_defconfig            | 2 +-
+ arch/xtensa/configs/audio_kc705_defconfig   | 2 +-
+ arch/xtensa/configs/cadence_csp_defconfig   | 2 +-
+ arch/xtensa/configs/generic_kc705_defconfig | 2 +-
+ arch/xtensa/configs/nommu_kc705_defconfig   | 2 +-
+ arch/xtensa/configs/smp_lx200_defconfig     | 2 +-
+ arch/xtensa/configs/virt_defconfig          | 2 +-
+ arch/xtensa/configs/xip_kc705_defconfig     | 2 +-
+ 38 files changed, 38 insertions(+), 38 deletions(-)
+
+diff --git a/arch/alpha/configs/defconfig b/arch/alpha/configs/defconfig
+index 7e9336930880..6a39fe8ce9e5 100644
+--- a/arch/alpha/configs/defconfig
++++ b/arch/alpha/configs/defconfig
+@@ -65,7 +65,7 @@ CONFIG_NFSD=m
+ CONFIG_NLS_CODEPAGE_437=y
+ CONFIG_MAGIC_SYSRQ=y
+ CONFIG_DEBUG_KERNEL=y
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_ALPHA_LEGACY_START_ADDRESS=y
+ CONFIG_MATHEMU=y
+ CONFIG_CRYPTO_HMAC=y
+diff --git a/arch/arc/configs/tb10x_defconfig b/arch/arc/configs/tb10x_defconfig
+index a12656ec0072..c3a35592872a 100644
+--- a/arch/arc/configs/tb10x_defconfig
++++ b/arch/arc/configs/tb10x_defconfig
+@@ -91,7 +91,7 @@ CONFIG_TMPFS=y
+ CONFIG_CONFIGFS_FS=y
+ # CONFIG_MISC_FILESYSTEMS is not set
+ # CONFIG_NETWORK_FILESYSTEMS is not set
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_STRIP_ASM_SYMS=y
+ CONFIG_DEBUG_FS=y
+ CONFIG_HEADERS_INSTALL=y
+diff --git a/arch/microblaze/configs/mmu_defconfig b/arch/microblaze/configs/mmu_defconfig
+index 51337fffb947..8150daf04a76 100644
+--- a/arch/microblaze/configs/mmu_defconfig
++++ b/arch/microblaze/configs/mmu_defconfig
+@@ -83,7 +83,7 @@ CONFIG_CIFS=y
+ CONFIG_CIFS_STATS2=y
+ CONFIG_ENCRYPTED_KEYS=y
+ CONFIG_DMA_CMA=y
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_KGDB=y
+ CONFIG_KGDB_TESTS=y
+ CONFIG_KGDB_KDB=y
+diff --git a/arch/mips/configs/bcm47xx_defconfig b/arch/mips/configs/bcm47xx_defconfig
+index 91ce75edbfb4..22ffde722bb9 100644
+--- a/arch/mips/configs/bcm47xx_defconfig
++++ b/arch/mips/configs/bcm47xx_defconfig
+@@ -72,7 +72,7 @@ CONFIG_LEDS_TRIGGER_TIMER=y
+ CONFIG_LEDS_TRIGGER_DEFAULT_ON=y
+ CONFIG_CRC32_SARWATE=y
+ CONFIG_PRINTK_TIME=y
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_DEBUG_INFO_REDUCED=y
+ CONFIG_STRIP_ASM_SYMS=y
+ CONFIG_DEBUG_FS=y
+diff --git a/arch/mips/configs/cavium_octeon_defconfig b/arch/mips/configs/cavium_octeon_defconfig
+index b6695367aa33..0578b725dd88 100644
+--- a/arch/mips/configs/cavium_octeon_defconfig
++++ b/arch/mips/configs/cavium_octeon_defconfig
+@@ -162,7 +162,7 @@ CONFIG_CRYPTO_SHA1_OCTEON=m
+ CONFIG_CRYPTO_SHA256_OCTEON=m
+ CONFIG_CRYPTO_SHA512_OCTEON=m
+ CONFIG_CRYPTO_DES=y
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_DEBUG_FS=y
+ CONFIG_MAGIC_SYSRQ=y
+ # CONFIG_SCHED_DEBUG is not set
+diff --git a/arch/mips/configs/ci20_defconfig b/arch/mips/configs/ci20_defconfig
+index cc69b215854e..955b6ac581ab 100644
+--- a/arch/mips/configs/ci20_defconfig
++++ b/arch/mips/configs/ci20_defconfig
+@@ -199,7 +199,7 @@ CONFIG_NLS_UTF8=y
+ CONFIG_DMA_CMA=y
+ CONFIG_CMA_SIZE_MBYTES=32
+ CONFIG_PRINTK_TIME=y
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_STRIP_ASM_SYMS=y
+ CONFIG_MAGIC_SYSRQ=y
+ CONFIG_DEBUG_FS=y
+diff --git a/arch/mips/configs/cu1000-neo_defconfig b/arch/mips/configs/cu1000-neo_defconfig
+index 5bd55eb32fe5..1cbc9302e1d1 100644
+--- a/arch/mips/configs/cu1000-neo_defconfig
++++ b/arch/mips/configs/cu1000-neo_defconfig
+@@ -113,7 +113,7 @@ CONFIG_PRINTK_TIME=y
+ CONFIG_CONSOLE_LOGLEVEL_DEFAULT=15
+ CONFIG_CONSOLE_LOGLEVEL_QUIET=15
+ CONFIG_MESSAGE_LOGLEVEL_DEFAULT=7
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_STRIP_ASM_SYMS=y
+ CONFIG_MAGIC_SYSRQ=y
+ CONFIG_DEBUG_FS=y
+diff --git a/arch/mips/configs/cu1830-neo_defconfig b/arch/mips/configs/cu1830-neo_defconfig
+index cc69688962e8..a0f73f3cd6ce 100644
+--- a/arch/mips/configs/cu1830-neo_defconfig
++++ b/arch/mips/configs/cu1830-neo_defconfig
+@@ -116,7 +116,7 @@ CONFIG_PRINTK_TIME=y
+ CONFIG_CONSOLE_LOGLEVEL_DEFAULT=15
+ CONFIG_CONSOLE_LOGLEVEL_QUIET=15
+ CONFIG_MESSAGE_LOGLEVEL_DEFAULT=7
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_STRIP_ASM_SYMS=y
+ CONFIG_MAGIC_SYSRQ=y
+ CONFIG_DEBUG_FS=y
+diff --git a/arch/mips/configs/generic_defconfig b/arch/mips/configs/generic_defconfig
+index 714169e411cf..bbc0d9b1c398 100644
+--- a/arch/mips/configs/generic_defconfig
++++ b/arch/mips/configs/generic_defconfig
+@@ -83,7 +83,7 @@ CONFIG_ROOT_NFS=y
+ # CONFIG_XZ_DEC_ARMTHUMB is not set
+ # CONFIG_XZ_DEC_SPARC is not set
+ CONFIG_PRINTK_TIME=y
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_DEBUG_INFO_REDUCED=y
+ CONFIG_DEBUG_FS=y
+ # CONFIG_SCHED_DEBUG is not set
+diff --git a/arch/mips/configs/omega2p_defconfig b/arch/mips/configs/omega2p_defconfig
+index fc39ddf610a9..6a5cb2d6de6b 100644
+--- a/arch/mips/configs/omega2p_defconfig
++++ b/arch/mips/configs/omega2p_defconfig
+@@ -116,7 +116,7 @@ CONFIG_CRYPTO_LZO=y
+ CONFIG_CRC16=y
+ CONFIG_XZ_DEC=y
+ CONFIG_PRINTK_TIME=y
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_STRIP_ASM_SYMS=y
+ CONFIG_DEBUG_FS=y
+ CONFIG_MAGIC_SYSRQ=y
+diff --git a/arch/mips/configs/qi_lb60_defconfig b/arch/mips/configs/qi_lb60_defconfig
+index b4448d0876d5..7e5d9741bd5d 100644
+--- a/arch/mips/configs/qi_lb60_defconfig
++++ b/arch/mips/configs/qi_lb60_defconfig
+@@ -166,7 +166,7 @@ CONFIG_NLS_UTF8=y
+ CONFIG_FONTS=y
+ CONFIG_FONT_SUN8x16=y
+ CONFIG_PRINTK_TIME=y
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_STRIP_ASM_SYMS=y
+ CONFIG_READABLE_ASM=y
+ CONFIG_KGDB=y
+diff --git a/arch/mips/configs/vocore2_defconfig b/arch/mips/configs/vocore2_defconfig
+index a14f8ea5c386..302cab9bd7bd 100644
+--- a/arch/mips/configs/vocore2_defconfig
++++ b/arch/mips/configs/vocore2_defconfig
+@@ -116,7 +116,7 @@ CONFIG_CRYPTO_LZO=y
+ CONFIG_CRC16=y
+ CONFIG_XZ_DEC=y
+ CONFIG_PRINTK_TIME=y
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_STRIP_ASM_SYMS=y
+ CONFIG_DEBUG_FS=y
+ CONFIG_MAGIC_SYSRQ=y
+diff --git a/arch/nios2/configs/10m50_defconfig b/arch/nios2/configs/10m50_defconfig
+index a7967b4cfb6e..91c3fce4dc7f 100644
+--- a/arch/nios2/configs/10m50_defconfig
++++ b/arch/nios2/configs/10m50_defconfig
+@@ -74,4 +74,4 @@ CONFIG_NFS_FS=y
+ CONFIG_NFS_V3_ACL=y
+ CONFIG_ROOT_NFS=y
+ CONFIG_SUNRPC_DEBUG=y
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+diff --git a/arch/nios2/configs/3c120_defconfig b/arch/nios2/configs/3c120_defconfig
+index 423a0c40a162..c42ad7e162a3 100644
+--- a/arch/nios2/configs/3c120_defconfig
++++ b/arch/nios2/configs/3c120_defconfig
+@@ -71,4 +71,4 @@ CONFIG_NFS_FS=y
+ CONFIG_NFS_V3_ACL=y
+ CONFIG_ROOT_NFS=y
+ CONFIG_SUNRPC_DEBUG=y
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+diff --git a/arch/sh/configs/apsh4a3a_defconfig b/arch/sh/configs/apsh4a3a_defconfig
+index 530498f18990..99931a13a74d 100644
+--- a/arch/sh/configs/apsh4a3a_defconfig
++++ b/arch/sh/configs/apsh4a3a_defconfig
+@@ -85,7 +85,7 @@ CONFIG_DEBUG_FS=y
+ CONFIG_DEBUG_KERNEL=y
+ # CONFIG_DEBUG_PREEMPT is not set
+ # CONFIG_DEBUG_BUGVERBOSE is not set
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ # CONFIG_FTRACE is not set
+ # CONFIG_CRYPTO_ANSI_CPRNG is not set
+ # CONFIG_CRYPTO_HW is not set
+diff --git a/arch/sh/configs/apsh4ad0a_defconfig b/arch/sh/configs/apsh4ad0a_defconfig
+index 6abd9bd70106..d9fb124bf015 100644
+--- a/arch/sh/configs/apsh4ad0a_defconfig
++++ b/arch/sh/configs/apsh4ad0a_defconfig
+@@ -116,7 +116,7 @@ CONFIG_MAGIC_SYSRQ=y
+ CONFIG_DEBUG_KERNEL=y
+ CONFIG_DEBUG_SHIRQ=y
+ CONFIG_DETECT_HUNG_TASK=y
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_DEBUG_VM=y
+ CONFIG_DWARF_UNWINDER=y
+ # CONFIG_CRYPTO_ANSI_CPRNG is not set
+diff --git a/arch/sh/configs/edosk7760_defconfig b/arch/sh/configs/edosk7760_defconfig
+index d77f54e906fd..f427a95bcd21 100644
+--- a/arch/sh/configs/edosk7760_defconfig
++++ b/arch/sh/configs/edosk7760_defconfig
+@@ -107,7 +107,7 @@ CONFIG_DEBUG_SHIRQ=y
+ CONFIG_DETECT_HUNG_TASK=y
+ # CONFIG_SCHED_DEBUG is not set
+ CONFIG_TIMER_STATS=y
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_CRYPTO=y
+ CONFIG_CRYPTO_MD5=y
+ CONFIG_CRYPTO_DES=y
+diff --git a/arch/sh/configs/magicpanelr2_defconfig b/arch/sh/configs/magicpanelr2_defconfig
+index 0989ed929540..ef1d98e35c91 100644
+--- a/arch/sh/configs/magicpanelr2_defconfig
++++ b/arch/sh/configs/magicpanelr2_defconfig
+@@ -84,7 +84,7 @@ CONFIG_MAGIC_SYSRQ=y
+ CONFIG_DEBUG_KERNEL=y
+ # CONFIG_SCHED_DEBUG is not set
+ CONFIG_DEBUG_KOBJECT=y
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_FRAME_POINTER=y
+ CONFIG_CRC_CCITT=m
+ CONFIG_CRC16=m
+diff --git a/arch/sh/configs/polaris_defconfig b/arch/sh/configs/polaris_defconfig
+index 246408ec7462..f42e4867ddc1 100644
+--- a/arch/sh/configs/polaris_defconfig
++++ b/arch/sh/configs/polaris_defconfig
+@@ -79,5 +79,5 @@ CONFIG_DETECT_HUNG_TASK=y
+ CONFIG_DEBUG_RT_MUTEXES=y
+ CONFIG_DEBUG_LOCK_ALLOC=y
+ CONFIG_DEBUG_SPINLOCK_SLEEP=y
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_DEBUG_SG=y
+diff --git a/arch/sh/configs/r7780mp_defconfig b/arch/sh/configs/r7780mp_defconfig
+index f823cc6b18f9..e527cd60a191 100644
+--- a/arch/sh/configs/r7780mp_defconfig
++++ b/arch/sh/configs/r7780mp_defconfig
+@@ -101,7 +101,7 @@ CONFIG_DEBUG_FS=y
+ CONFIG_DEBUG_KERNEL=y
+ CONFIG_DETECT_HUNG_TASK=y
+ # CONFIG_DEBUG_PREEMPT is not set
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_CRYPTO_ECB=m
+ CONFIG_CRYPTO_PCBC=m
+ CONFIG_CRYPTO_HMAC=y
+diff --git a/arch/sh/configs/r7785rp_defconfig b/arch/sh/configs/r7785rp_defconfig
+index f96bc20d4b1a..a3f952a83d97 100644
+--- a/arch/sh/configs/r7785rp_defconfig
++++ b/arch/sh/configs/r7785rp_defconfig
+@@ -96,7 +96,7 @@ CONFIG_DEBUG_KERNEL=y
+ # CONFIG_DEBUG_PREEMPT is not set
+ CONFIG_DEBUG_LOCK_ALLOC=y
+ CONFIG_DEBUG_LOCKING_API_SELFTESTS=y
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_SH_STANDARD_BIOS=y
+ CONFIG_DEBUG_STACK_USAGE=y
+ CONFIG_4KSTACKS=y
+diff --git a/arch/sh/configs/rsk7203_defconfig b/arch/sh/configs/rsk7203_defconfig
+index 5a54e2b883f0..d00fafc021e1 100644
+--- a/arch/sh/configs/rsk7203_defconfig
++++ b/arch/sh/configs/rsk7203_defconfig
+@@ -112,7 +112,7 @@ CONFIG_DETECT_HUNG_TASK=y
+ CONFIG_DEBUG_OBJECTS=y
+ CONFIG_DEBUG_MUTEXES=y
+ CONFIG_DEBUG_SPINLOCK_SLEEP=y
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_DEBUG_VM=y
+ CONFIG_DEBUG_LIST=y
+ CONFIG_DEBUG_SG=y
+diff --git a/arch/sh/configs/sdk7780_defconfig b/arch/sh/configs/sdk7780_defconfig
+index 7d6d32359848..41cb588ca99c 100644
+--- a/arch/sh/configs/sdk7780_defconfig
++++ b/arch/sh/configs/sdk7780_defconfig
+@@ -131,7 +131,7 @@ CONFIG_DEBUG_KERNEL=y
+ CONFIG_DETECT_HUNG_TASK=y
+ # CONFIG_SCHED_DEBUG is not set
+ CONFIG_TIMER_STATS=y
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_SH_STANDARD_BIOS=y
+ CONFIG_CRYPTO_MD5=y
+ CONFIG_CRYPTO_DES=y
+diff --git a/arch/sh/configs/se7712_defconfig b/arch/sh/configs/se7712_defconfig
+index ee6d28ae08de..36356223d51c 100644
+--- a/arch/sh/configs/se7712_defconfig
++++ b/arch/sh/configs/se7712_defconfig
+@@ -93,7 +93,7 @@ CONFIG_CRAMFS=y
+ CONFIG_NFS_FS=y
+ CONFIG_ROOT_NFS=y
+ CONFIG_DEBUG_KERNEL=y
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_FRAME_POINTER=y
+ CONFIG_CRYPTO_ECB=m
+ CONFIG_CRYPTO_PCBC=m
+diff --git a/arch/sh/configs/se7721_defconfig b/arch/sh/configs/se7721_defconfig
+index bad921bc10f8..46c5a263a239 100644
+--- a/arch/sh/configs/se7721_defconfig
++++ b/arch/sh/configs/se7721_defconfig
+@@ -121,7 +121,7 @@ CONFIG_NLS_CODEPAGE_437=y
+ CONFIG_NLS_CODEPAGE_932=y
+ CONFIG_NLS_ISO8859_1=y
+ CONFIG_DEBUG_KERNEL=y
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_FRAME_POINTER=y
+ # CONFIG_CRYPTO_ANSI_CPRNG is not set
+ CONFIG_CRC_CCITT=y
+diff --git a/arch/sh/configs/sh2007_defconfig b/arch/sh/configs/sh2007_defconfig
+index 79f02f1c0dc8..259c69e3fa22 100644
+--- a/arch/sh/configs/sh2007_defconfig
++++ b/arch/sh/configs/sh2007_defconfig
+@@ -159,7 +159,7 @@ CONFIG_DEBUG_FS=y
+ CONFIG_DEBUG_KERNEL=y
+ # CONFIG_DETECT_SOFTLOCKUP is not set
+ # CONFIG_SCHED_DEBUG is not set
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_FRAME_POINTER=y
+ CONFIG_SH_STANDARD_BIOS=y
+ CONFIG_CRYPTO_NULL=y
+diff --git a/arch/sh/configs/sh7757lcr_defconfig b/arch/sh/configs/sh7757lcr_defconfig
+index a2700ab165af..2579dc4bc0c8 100644
+--- a/arch/sh/configs/sh7757lcr_defconfig
++++ b/arch/sh/configs/sh7757lcr_defconfig
+@@ -80,6 +80,6 @@ CONFIG_NLS_ISO8859_1=y
+ CONFIG_DEBUG_KERNEL=y
+ # CONFIG_SCHED_DEBUG is not set
+ # CONFIG_DEBUG_BUGVERBOSE is not set
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ # CONFIG_FTRACE is not set
+ # CONFIG_CRYPTO_ANSI_CPRNG is not set
+diff --git a/arch/sh/configs/sh7785lcr_32bit_defconfig b/arch/sh/configs/sh7785lcr_32bit_defconfig
+index 7eb3c10f28ad..781ff13227fc 100644
+--- a/arch/sh/configs/sh7785lcr_32bit_defconfig
++++ b/arch/sh/configs/sh7785lcr_32bit_defconfig
+@@ -141,7 +141,7 @@ CONFIG_DEBUG_KMEMLEAK=y
+ CONFIG_DEBUG_SPINLOCK=y
+ CONFIG_DEBUG_MUTEXES=y
+ CONFIG_DEBUG_SPINLOCK_SLEEP=y
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_LATENCYTOP=y
+ # CONFIG_FTRACE is not set
+ CONFIG_CRYPTO_HMAC=y
+diff --git a/arch/sh/configs/urquell_defconfig b/arch/sh/configs/urquell_defconfig
+index cb2f56468fe0..ea773c764c5a 100644
+--- a/arch/sh/configs/urquell_defconfig
++++ b/arch/sh/configs/urquell_defconfig
+@@ -139,7 +139,7 @@ CONFIG_PRINTK_TIME=y
+ CONFIG_DEBUG_FS=y
+ CONFIG_DEBUG_KERNEL=y
+ CONFIG_DETECT_HUNG_TASK=y
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_FRAME_POINTER=y
+ # CONFIG_FTRACE is not set
+ # CONFIG_DUMP_CODE is not set
+diff --git a/arch/um/configs/i386_defconfig b/arch/um/configs/i386_defconfig
+index fb51bd206dbe..c0162286d68b 100644
+--- a/arch/um/configs/i386_defconfig
++++ b/arch/um/configs/i386_defconfig
+@@ -69,5 +69,5 @@ CONFIG_JOLIET=y
+ CONFIG_PROC_KCORE=y
+ CONFIG_TMPFS=y
+ CONFIG_NLS=y
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_DEBUG_KERNEL=y
+diff --git a/arch/um/configs/x86_64_defconfig b/arch/um/configs/x86_64_defconfig
+index 477b87317424..bec6e5d95687 100644
+--- a/arch/um/configs/x86_64_defconfig
++++ b/arch/um/configs/x86_64_defconfig
+@@ -67,6 +67,6 @@ CONFIG_JOLIET=y
+ CONFIG_PROC_KCORE=y
+ CONFIG_TMPFS=y
+ CONFIG_NLS=y
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_FRAME_WARN=1024
+ CONFIG_DEBUG_KERNEL=y
+diff --git a/arch/xtensa/configs/audio_kc705_defconfig b/arch/xtensa/configs/audio_kc705_defconfig
+index 3be62da8089b..ef0ebcfbccf9 100644
+--- a/arch/xtensa/configs/audio_kc705_defconfig
++++ b/arch/xtensa/configs/audio_kc705_defconfig
+@@ -120,7 +120,7 @@ CONFIG_NLS_CODEPAGE_437=y
+ CONFIG_NLS_ISO8859_1=y
+ CONFIG_PRINTK_TIME=y
+ CONFIG_DYNAMIC_DEBUG=y
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_MAGIC_SYSRQ=y
+ CONFIG_LOCKUP_DETECTOR=y
+ # CONFIG_SCHED_DEBUG is not set
+diff --git a/arch/xtensa/configs/cadence_csp_defconfig b/arch/xtensa/configs/cadence_csp_defconfig
+index fc240737b14d..2665962d247a 100644
+--- a/arch/xtensa/configs/cadence_csp_defconfig
++++ b/arch/xtensa/configs/cadence_csp_defconfig
+@@ -100,7 +100,7 @@ CONFIG_NLS_CODEPAGE_437=y
+ CONFIG_NLS_ISO8859_1=y
+ CONFIG_PRINTK_TIME=y
+ CONFIG_DYNAMIC_DEBUG=y
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_MAGIC_SYSRQ=y
+ CONFIG_LOCKUP_DETECTOR=y
+ # CONFIG_SCHED_DEBUG is not set
+diff --git a/arch/xtensa/configs/generic_kc705_defconfig b/arch/xtensa/configs/generic_kc705_defconfig
+index e9d6b6f6eca1..236c7f23cc10 100644
+--- a/arch/xtensa/configs/generic_kc705_defconfig
++++ b/arch/xtensa/configs/generic_kc705_defconfig
+@@ -107,7 +107,7 @@ CONFIG_NLS_CODEPAGE_437=y
+ CONFIG_NLS_ISO8859_1=y
+ CONFIG_PRINTK_TIME=y
+ CONFIG_DYNAMIC_DEBUG=y
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_MAGIC_SYSRQ=y
+ CONFIG_LOCKUP_DETECTOR=y
+ # CONFIG_SCHED_DEBUG is not set
+diff --git a/arch/xtensa/configs/nommu_kc705_defconfig b/arch/xtensa/configs/nommu_kc705_defconfig
+index fcb620ef3799..8263da9e078d 100644
+--- a/arch/xtensa/configs/nommu_kc705_defconfig
++++ b/arch/xtensa/configs/nommu_kc705_defconfig
+@@ -105,7 +105,7 @@ CONFIG_NLS_CODEPAGE_437=y
+ CONFIG_NLS_ISO8859_1=y
+ CONFIG_PRINTK_TIME=y
+ CONFIG_DYNAMIC_DEBUG=y
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ # CONFIG_FRAME_POINTER is not set
+ CONFIG_MAGIC_SYSRQ=y
+ CONFIG_DEBUG_VM=y
+diff --git a/arch/xtensa/configs/smp_lx200_defconfig b/arch/xtensa/configs/smp_lx200_defconfig
+index a47c85638ec1..7bdffa3a69c6 100644
+--- a/arch/xtensa/configs/smp_lx200_defconfig
++++ b/arch/xtensa/configs/smp_lx200_defconfig
+@@ -111,7 +111,7 @@ CONFIG_NLS_CODEPAGE_437=y
+ CONFIG_NLS_ISO8859_1=y
+ CONFIG_PRINTK_TIME=y
+ CONFIG_DYNAMIC_DEBUG=y
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_MAGIC_SYSRQ=y
+ CONFIG_DEBUG_VM=y
+ CONFIG_LOCKUP_DETECTOR=y
+diff --git a/arch/xtensa/configs/virt_defconfig b/arch/xtensa/configs/virt_defconfig
+index 6d1387dfa96f..98acb7191cb7 100644
+--- a/arch/xtensa/configs/virt_defconfig
++++ b/arch/xtensa/configs/virt_defconfig
+@@ -97,7 +97,7 @@ CONFIG_CRYPTO_DEV_VIRTIO=y
+ CONFIG_FONTS=y
+ CONFIG_PRINTK_TIME=y
+ CONFIG_DYNAMIC_DEBUG=y
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_MAGIC_SYSRQ=y
+ # CONFIG_SCHED_DEBUG is not set
+ CONFIG_SCHEDSTATS=y
+diff --git a/arch/xtensa/configs/xip_kc705_defconfig b/arch/xtensa/configs/xip_kc705_defconfig
+index 062148e17135..1c3cebaaa71b 100644
+--- a/arch/xtensa/configs/xip_kc705_defconfig
++++ b/arch/xtensa/configs/xip_kc705_defconfig
+@@ -102,7 +102,7 @@ CONFIG_CRYPTO_LZO=y
+ CONFIG_CRYPTO_ANSI_CPRNG=y
+ CONFIG_PRINTK_TIME=y
+ CONFIG_DYNAMIC_DEBUG=y
+-CONFIG_DEBUG_INFO=y
++CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT=y
+ CONFIG_MAGIC_SYSRQ=y
+ CONFIG_DETECT_HUNG_TASK=y
+ # CONFIG_SCHED_DEBUG is not set
+-- 
+2.29.2
 

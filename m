@@ -2,128 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7464358FD4D
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 15:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E633B58FD56
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 15:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234994AbiHKNW3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 09:22:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34398 "EHLO
+        id S235496AbiHKNYN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 09:24:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232321AbiHKNW0 (ORCPT
+        with ESMTP id S234066AbiHKNYK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 09:22:26 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6D181696
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 06:22:25 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id g5so28143771ybg.11
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 06:22:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Eb3rnYYvtIKOzVfVgbxd4mjo9Ht+qE4u6mbe1XaOMUQ=;
-        b=bqqg6BYyIOZ+h3ZXDwmc1lPC+7zZ8KZPrW8UMe1KSZnMVQwVGPH83VQznwGbQMsPQ9
-         J/3yQt9Ic1sYAuWcEt9l2/nrJRihNOWq62cn9NjGKGBF/9uZDOHFqVzyxqvQwPwlruLK
-         jYTU0YZvCk0WsDLY8mEElC6obFA6qFIk8EJn3iZC53PmNEx/Nc2tD80cMlirKBaDOhqi
-         6JdYmtFJVr1AioB69OvBOLuth+Qyyye6xTZLri+QP5m4b/ODp7QmNs5sw/VRiL4e/QRV
-         2zPn0ZfzKxi3876GjtpQjVDQfOrgqnbJdwS2fvF15LFcAnyzyoTcB40sKWl4XJ82lKhs
-         ZM0Q==
+        Thu, 11 Aug 2022 09:24:10 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CE70816A5
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 06:24:10 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id u5-20020a6b4905000000b00681e48dbd92so9716989iob.21
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 06:24:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Eb3rnYYvtIKOzVfVgbxd4mjo9Ht+qE4u6mbe1XaOMUQ=;
-        b=PYk4fcLJA05Z6swp71P5Au2M3Ci76xbA35CwiC3bz2T/roo9veWsqpT62N8nelvKHT
-         zh5uQgQ7CL2YyKVPRVV3EaeB1hkKC2F7hbS2oU5X0wAPAGqVMHs7Wyn+SmItq/KPs8Lm
-         HJnyHXFEKAmfRmzJcgTE8Z9pjVvG/yf/PN4Rpr8yyx05aKbjtr9000yANyX2Hbz1zK9X
-         GHZmi8nMtXX8CJSIPufpzmzK5olB2B+fZjIftxSPNBKZFSH4u6t1vOqOPzPj1Y2BvMEK
-         vhydNO0Mn6xrm9rWH/R01n3/tny3E4hQRtdGm1vFtvQi9vFoUndsZBqr0SoCGKQ4F65t
-         NAqA==
-X-Gm-Message-State: ACgBeo07kWnrv/YpmuCt0HrpVbMDNvwI8d0/I98IDkmSUAoN/re6HIzE
-        OMRiUV/GfamrU4U9MLU5xg8hUyxhJMgiykAlsqcvTQ==
-X-Google-Smtp-Source: AA6agR6zVaiHK/kIrAry6AatC6jYuU0aS2xrWFmXfwvuQwVa//jF132uNnBuKNJYM9vd5ehlbi0mN76VRryf7Tb1eqA=
-X-Received: by 2002:a25:ad16:0:b0:671:75d9:6aad with SMTP id
- y22-20020a25ad16000000b0067175d96aadmr28012031ybi.143.1660224144897; Thu, 11
- Aug 2022 06:22:24 -0700 (PDT)
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=Tz3EySJ3G4jRxpLoZxF4SZXo5koC2ppG85L8I0jq3G4=;
+        b=BeW4UG3gz9TmSnZ4cyJX+ar5RmyXR33hfjwCTn5ChkIQ8pNNJGaxNdn1h7Na8+XZcP
+         T7tefsGzJhrdx6uvImJhzwHpEGgSy0X8pEEy6RN7KNCjwLmObzpPVFJ2M8YmJ041XB2g
+         YEfVIn0snVg6a4sMZe4TYWZgX1hyZw5haS4KryMSCihxikt4qXh2+Y0eaKGLYNFhUvgX
+         ExEezNX+uE/jEaOaVJ3Gu5eSXPTAxEMFYZc+QJ0F47ZIQtXGMcaG5bxLyX5HoSd6OzQD
+         GL5cNrN8fILsmjx8lbiqbHAdYME0TpPeQzq3abm6oc4uKZrBTfI5YXCWYIPaQFkKBvQa
+         K05Q==
+X-Gm-Message-State: ACgBeo3gdyNIOyd9+clJB1efsN/yQCqczPGCYgVwLQr19rNeKpD0YetR
+        ZptB0oxgjQr5lkfape1t5vZOCydl6mTWdCXlGF2gXc+6/d9w
+X-Google-Smtp-Source: AA6agR4PDNFIDZLUnFtMh84ZcSt77qOF1CqKiM3wLwJu8aFeKZT5JwMjvuUcAAP5JcTadc3KZp6KSptfobmmcywosSmL5Q/fzrXJ
 MIME-Version: 1.0
-References: <20220811085938.2506536-1-imran.f.khan@oracle.com>
- <d3cd0f34-b30b-9a1d-8715-439ffb818539@suse.cz> <CANpmjNMYwxbkOc+LxLfZ--163yfXpQj69oOfEFkSwq7JZurbdA@mail.gmail.com>
- <6b41bb2c-6305-2bf4-1949-84ba08fdbd72@suse.cz>
-In-Reply-To: <6b41bb2c-6305-2bf4-1949-84ba08fdbd72@suse.cz>
-From:   Marco Elver <elver@google.com>
-Date:   Thu, 11 Aug 2022 15:21:48 +0200
-Message-ID: <CANpmjNNC3F88_Jr24DuFyubvQR2Huz6i3BGXgDgi5o_Gs0Znmg@mail.gmail.com>
-Subject: Re: [PATCH v2] Introduce sysfs interface to disable kfence for
- selected slabs.
-To:     vbabka@suse.cz
-Cc:     Imran Khan <imran.f.khan@oracle.com>, glider@google.com,
-        dvyukov@google.com, cl@linux.com, penberg@kernel.org,
-        rientjes@google.com, iamjoonsoo.kim@lge.com,
-        akpm@linux-foundation.org, roman.gushchin@linux.dev,
-        42.hyeyoo@gmail.com, linux-kernel@vger.kernel.org,
-        kasan-dev@googlegroups.com, linux-mm@kvack.org
+X-Received: by 2002:a05:6602:13c8:b0:669:c3de:776f with SMTP id
+ o8-20020a05660213c800b00669c3de776fmr12529611iov.124.1660224249853; Thu, 11
+ Aug 2022 06:24:09 -0700 (PDT)
+Date:   Thu, 11 Aug 2022 06:24:09 -0700
+In-Reply-To: <20220811103620.2807-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000a9029805e5f71478@google.com>
+Subject: Re: [syzbot] INFO: task hung in __generic_file_fsync (3)
+From:   syzbot <syzbot+ed920a72fd23eb735158@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 11 Aug 2022 at 12:07, <vbabka@suse.cz> wrote:
-[...]
-> > new flag SLAB_SKIP_KFENCE, it also can serve a dual purpose, where
-> > someone might want to explicitly opt out by default and pass it to
-> > kmem_cache_create() (for whatever reason; not that we'd encourage
-> > that).
->
-> Right, not be able to do that would be a downside (although it should be
-> possible even with opt-in to add an opt-out cache flag that would just make
-> sure the opt-in flag is not set even if eligible by global defaults).
+Hello,
 
-True, but I'd avoid all this unnecessary complexity if possible.
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-> > I feel that the real use cases for selectively enabling caches for
-> > KFENCE are very narrow, and a design that introduces lots of
-> > complexity elsewhere, just to support this feature cannot be justified
-> > (which is why I suggested the simpler design here back in
-> > https://lore.kernel.org/lkml/CANpmjNNmD9z7oRqSaP72m90kWL7jYH+cxNAZEGpJP8oLrDV-vw@mail.gmail.com/
-> > )
->
-> I don't mind strongly either way, just a suggestion to consider.
+Reported-and-tested-by: syzbot+ed920a72fd23eb735158@syzkaller.appspotmail.com
 
-While switching the semantics of the flag from opt-out to opt-in is
-just as valid, I'm more comfortable with the opt-out flag: the rest of
-the logic can stay the same, and we're aware of the fact that changing
-cache coverage by KFENCE shouldn't be something that needs to be done
-manually.
+Tested on:
 
-My main point is that opting out or in to only a few select caches
-should be a rarely used feature, and accordingly it should be as
-simple as possible. Honestly, I still don't quite see the point of it,
-and my solution would be to just increase the KFENCE pool, increase
-sample rate, or decrease the "skip covered threshold%". But in the
-case described by Imran, perhaps a running machine is having trouble
-and limiting the caches to be analyzed by KFENCE might be worthwhile
-if a more aggressive configuration doesn't yield anything (and then
-there's of course KASAN, but I recognize it's not always possible to
-switch kernel and run the same workload with it).
+commit:         200e340f Merge tag 'pull-work.dcache' of git://git.ker..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+console output: https://syzkaller.appspot.com/x/log.txt?x=16422f53080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a3f4d6985d3164cd
+dashboard link: https://syzkaller.appspot.com/bug?extid=ed920a72fd23eb735158
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=16273ac3080000
 
-The use case for the proposed change is definitely when an admin or
-kernel dev is starting to debug a problem. KFENCE wasn't designed for
-that (vs. deployment at scale, discovery of bugs). As such I'm having
-a hard time admitting how useful this feature will really be, but
-given the current implementation is simple, having it might actually
-help a few people.
-
-Imran, just to make sure my assumptions here are right, have you had
-success debugging an issue in this way? Can you elaborate on what
-"certain debugging scenarios" you mean (admin debugging something, or
-a kernel dev, production fleet, or test machine)?
-
-Thanks,
--- Marco
+Note: testing is done by a robot and is best-effort only.

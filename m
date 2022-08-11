@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50EFC59045D
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 18:48:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6EF6590472
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 18:48:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238523AbiHKQeX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 12:34:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59408 "EHLO
+        id S238806AbiHKQd3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 12:33:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239199AbiHKQcP (ORCPT
+        with ESMTP id S238944AbiHKQbj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 12:32:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FD32625F;
-        Thu, 11 Aug 2022 09:10:44 -0700 (PDT)
+        Thu, 11 Aug 2022 12:31:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DC329C;
+        Thu, 11 Aug 2022 09:10:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EF8CFB821B0;
-        Thu, 11 Aug 2022 16:10:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0992C43141;
-        Thu, 11 Aug 2022 16:10:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DB6236141C;
+        Thu, 11 Aug 2022 16:10:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3C481C433D7;
+        Thu, 11 Aug 2022 16:10:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660234241;
-        bh=YrOK6aktqDuP785lh37qZa+7sVi7/Y7Vh8j+5PrfHGY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=sjOnz4c/96mOMMKbr4ACFGJ4jJlUhNpVvaUh/IxIB+3kWdVo8TvnxbKNMM6dAub3V
-         dVw59iKa8/3WcATG8y6ROz/zfdh3NNrogQXuAJZG8OsHVcvveZWVR+jZGhHndldENG
-         NZ2jLpiy0cf0MM2zvtjSDJ5AC8BR88pk3TfdvO0A/6ykM0w3/PJvEN7X7MOhlvQAzI
-         Qg/Fu7uu+IY/AIqw44B/WEYmMMgJ1neiw/y+IuQm8vuyk7vIMeyKFqi/m+AzqXP/NB
-         b0ve4xlYJdAtSKIR3+vCDTeXVdi0nxpw6JCaHOyEkJZmX3al0xsp18mnNzPS0hwR1M
-         K8EiKcW3InBWg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Oleg.Karfich@wago.com, Thomas Gleixner <tglx@linutronix.de>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Sasha Levin <sashal@kernel.org>, linux-fsdevel@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 14/14] fs/dcache: Disable preemption on i_dir_seq write side on PREEMPT_RT
-Date:   Thu, 11 Aug 2022 12:09:42 -0400
-Message-Id: <20220811160948.1542842-14-sashal@kernel.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220811160948.1542842-1-sashal@kernel.org>
-References: <20220811160948.1542842-1-sashal@kernel.org>
+        s=k20201202; t=1660234215;
+        bh=HXAbDfVeXmIO5DEFlIxEcJYO7aeSrFuwHUb0hgRFnoA=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=uv3O1Kt1q6z/eN1cEL2/BHFpyxBdegNZvreMLJr/KyXa+ZRT/eHBGb4xi3jdEOOtR
+         Wm0+pHPzrqQm81UjWFJFyqGeF9kvdIUeGm3HJ7t8rsM/L2TGpgR9HpA+GiBmhiJwd/
+         PAwCPS6TxrCXAVfkYXyxSpyHeu7C2DP5w+fESSp0RW0yYHyN60BO8SViml1wLOgQKd
+         G43la+Af9BoRscgBqnv8VVhQskvczXqpeGhWliEXyD2y5wTHdYKhn0monw3dYLM4NQ
+         NKdux0pc2CDi+e/kSK4mkGWTt8onL3a3GM2gz3ryynukA7TclWg9JK4ixYKXunS0Ks
+         8t9s3BYFoSF9Q==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1C2F0C43143;
+        Thu, 11 Aug 2022 16:10:15 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net] bonding: fix reference count leak in balance-alb mode
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166023421511.9507.3349317019551791684.git-patchwork-notify@kernel.org>
+Date:   Thu, 11 Aug 2022 16:10:15 +0000
+References: <26758.1660194413@famine>
+In-Reply-To: <26758.1660194413@famine>
+To:     Jay Vosburgh <jay.vosburgh@canonical.com>
+Cc:     netdev@vger.kernel.org, sunshouxin@chinatelecom.cn,
+        vfalico@gmail.com, andy@greyhouse.net, razor@blackwall.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, linux-kernel@vger.kernel.org,
+        huyd12@chinatelecom.cn
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,69 +60,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Hello:
 
-[ Upstream commit cf634d540a29018e8d69ab1befb7e08182bc6594 ]
+This patch was applied to netdev/net.git (master)
+by Jakub Kicinski <kuba@kernel.org>:
 
-i_dir_seq is a sequence counter with a lock which is represented by the
-lowest bit. The writer atomically updates the counter which ensures that it
-can be modified by only one writer at a time. This requires preemption to
-be disabled across the write side critical section.
+On Wed, 10 Aug 2022 22:06:53 -0700 you wrote:
+> Commit d5410ac7b0ba ("net:bonding:support balance-alb interface
+> with vlan to bridge") introduced a reference count leak by not releasing
+> the reference acquired by ip_dev_find().  Remedy this by insuring the
+> reference is released.
+> 
+> Fixes: d5410ac7b0ba ("net:bonding:support balance-alb interface with vlan to bridge")
+> Signed-off-by: Jay Vosburgh <jay.vosburgh@canonical.com>
+> 
+> [...]
 
-On !PREEMPT_RT kernels this is implicit by the caller acquiring
-dentry::lock. On PREEMPT_RT kernels spin_lock() does not disable preemption
-which means that a preempting writer or reader would live lock. It's
-therefore required to disable preemption explicitly.
+Here is the summary with links:
+  - [net] bonding: fix reference count leak in balance-alb mode
+    https://git.kernel.org/netdev/net/c/4f5d33f4f798
 
-An alternative solution would be to replace i_dir_seq with a seqlock_t for
-PREEMPT_RT, but that comes with its own set of problems due to arbitrary
-lock nesting. A pure sequence count with an associated spinlock is not
-possible because the locks held by the caller are not necessarily related.
-
-As the critical section is small, disabling preemption is a sensible
-solution.
-
-Reported-by: Oleg.Karfich@wago.com
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Link: https://lkml.kernel.org/r/20220613140712.77932-2-bigeasy@linutronix.de
-Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- fs/dcache.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
-
-diff --git a/fs/dcache.c b/fs/dcache.c
-index 1e9f4dd94e6c..6f6a972ea20c 100644
---- a/fs/dcache.c
-+++ b/fs/dcache.c
-@@ -2406,7 +2406,15 @@ EXPORT_SYMBOL(d_rehash);
- 
- static inline unsigned start_dir_add(struct inode *dir)
- {
--
-+	/*
-+	 * The caller holds a spinlock (dentry::d_lock). On !PREEMPT_RT
-+	 * kernels spin_lock() implicitly disables preemption, but not on
-+	 * PREEMPT_RT.  So for RT it has to be done explicitly to protect
-+	 * the sequence count write side critical section against a reader
-+	 * or another writer preempting, which would result in a live lock.
-+	 */
-+	if (IS_ENABLED(CONFIG_PREEMPT_RT))
-+		preempt_disable();
- 	for (;;) {
- 		unsigned n = dir->i_dir_seq;
- 		if (!(n & 1) && cmpxchg(&dir->i_dir_seq, n, n + 1) == n)
-@@ -2418,6 +2426,8 @@ static inline unsigned start_dir_add(struct inode *dir)
- static inline void end_dir_add(struct inode *dir, unsigned n)
- {
- 	smp_store_release(&dir->i_dir_seq, n + 2);
-+	if (IS_ENABLED(CONFIG_PREEMPT_RT))
-+		preempt_enable();
- }
- 
- static void d_wait_lookup(struct dentry *dentry)
+You are awesome, thank you!
 -- 
-2.35.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 

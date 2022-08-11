@@ -2,199 +2,295 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E33858FA92
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 12:16:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D61958FA9E
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 12:21:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234622AbiHKKPz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 06:15:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55228 "EHLO
+        id S233883AbiHKKVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 06:21:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234720AbiHKKPs (ORCPT
+        with ESMTP id S229591AbiHKKVr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 06:15:48 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15556B1D1;
-        Thu, 11 Aug 2022 03:15:45 -0700 (PDT)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27B95Qa5021745;
-        Thu, 11 Aug 2022 10:15:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type :
- content-transfer-encoding : in-reply-to : mime-version; s=corp-2022-7-12;
- bh=NvVOI+4quAF2kQHc2Ph5rJrsILOCj/jm29TavGuBEjE=;
- b=FbCn7C4PDtb4+vCUGbpZ81nY4WwtDtlErs5jGQlg2U9JNhZMGlcX0Un871oaM3Qsi2UH
- /fPamuQGuuT6Vp9FOopSPJYf9UjhidcEUNcMA0flq3TC7go79nwmKCQ/jEk+aUb3TmoF
- hEMuJqOI2UtQt3BPHxiLCJbNI0NbOxxiMSASoPK6n07pmDA7OIlOqaKHtaI4NorIS76M
- 0CwZtEKEogo4Yb3jW1/zA88+tjGKvhIQJtLhCI1Z9BUZkQaEmug5kqZitpPeEwKQuwNg
- 8ryHDjvJL3rKpHH5hvDTLwmuQtuVcX3IPABTpcud/dli9I/SOrsYFMnhtloQNKW3shcR 5g== 
-Received: from phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta01.appoci.oracle.com [138.1.114.2])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3huwqj48wv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 11 Aug 2022 10:15:29 +0000
-Received: from pps.filterd (phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 27B9061g018969;
-        Thu, 11 Aug 2022 10:15:28 GMT
-Received: from nam04-dm6-obe.outbound.protection.outlook.com (mail-dm6nam04lp2043.outbound.protection.outlook.com [104.47.73.43])
-        by phxpaimrmta01.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3huwqjycyv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 11 Aug 2022 10:15:28 +0000
+        Thu, 11 Aug 2022 06:21:47 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-eopbgr60084.outbound.protection.outlook.com [40.107.6.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B20E0FE;
+        Thu, 11 Aug 2022 03:21:46 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=k/WPuPGNkQt2UktSj+XIsiLdJmuH2n8C777af8OA5lRDIaIGThc2BbiTodL6Bb8NMS18FW0Oh7vWBQsQ36RZHPNcUkRCrpyKHJxL5IgwwQXCP79xRl8wG8rEnWVcverfs7z+lBNRmDR7LWhmk2EcWnqzGR6srCpG6UBNI/TodCZb39c04Lcg0uNxOu9TkVt7FEk2M+xy5qj/3YQFk2SNc6BRtF7N+14PdFue7VFuNJT0SRF9o16lDgyQipFZm/GGg75djAZu4Lj5cSYOuW2zAN3V+spIp6fW5t16OTUsZLGzb+qkzvVQQ96eEYeTMMouSTiqHbhzU12ZkQknENogrQ==
+ b=VPKQddEofl4r1yeq4HLUJoEew5wI7HVte6QdVeArm7+/6qZxy0WNbIk0gE9xNLGvx9oSTritrrJ4CPB4z5NHl1DCByoThUS3Kaqb5iPQbfX2ydkJGrgscWcOcoEo7GRhZR/Cfkel34/H6yR68ZkzmEvHWSsal33SDfMzrmnfTzAcYjjBlpo/ODFFxSWH0G0Tfy3RVnw/5bWer6Ca1afHqK5f6ESStgwHMRaB/tM3yku9+XLc0jffREWMaSA+Iw4HnsTKJKzpVoYRIVe18SBK+rHML6MQUsoi+r28RL36ibp9kVmNFCtbx8RgOT7sfHoT6/tumK5YT5Z8ajUHSB2RNg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vlDDiVmnXybg9C6T86G1EMm5/WFg5HjeAb+PKnAjEKE=;
- b=E4t5RcpSXObT8KtBZZkDwnxlXh7VY5bvFxp6gBeEy+R8kVteWyIu+334tAkwZ+Sec72wm94HuRjwQYFCuaSbTxxN/lSnY5OsvVhPdL3PBLp8nJRL/9Gm3AJ1B++qob1TA+gmwOiK/9i98A4Z422aFkdVw+ulqgEN8WyqWFTIheovI4eefVByvBCW6NU0D1wbSiCUrJzN1hlbzEy2kcRFJSQMI9SvZJZuvZL6lHx/9i8GHjka9xyLiZzLIG8yTn7lOLo6GhcvzBNhNyUjVxK6SjMbyR4tJNzasG6ZRo7sQN+rfTV3AmwB/1MQDaXKTk/ewJZ4vigh1iLrUMawEfpOIw==
+ bh=Rvigl8SyHGXgc6wu8J3t2+V3RiYM0DpRJYciY9emDqs=;
+ b=PKRgv4B13vPnYr6gPhohIICnOhKVcK+1a/yQueqqAi7/OKU8xgP/6G83aBe5ZhxULyNFNE6oC+0tSesM99nPKv0qDgKgvwb9kA3SJG6tc8I49dYiCtc3HRF6pbEE9wL0rek7L36X7V83yp3XJ4MKqdyJ5OLuoU3pKVKs+DJyWZ+tuhVOD8dnmZbevWmei+aWImq4a0WLQBghbgFSDxfX9fl7PxD9uuPYE731AlDlj2fcDxPaVBIizYB0ygpgFT3QOcSdou3cuGeBzOEkcMVThe6GSqNg5WlC1kg4hhK9x/mhr38BEflZrbQBoJfhhAn+9QU9uSQP4BR35hGcPLQ4MA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+ smtp.mailfrom=theobroma-systems.com; dmarc=pass action=none
+ header.from=theobroma-systems.com; dkim=pass header.d=theobroma-systems.com;
+ arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ d=cherrycloud.onmicrosoft.com; s=selector2-cherrycloud-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=vlDDiVmnXybg9C6T86G1EMm5/WFg5HjeAb+PKnAjEKE=;
- b=KGW/jD2iwjG0xHAhtP05/nMNBWMuOr40zCNxTz/QrLXVnyJYB6M+h4Y9MhTB7ORAan9HIwBrqvMhPQmaErriCMiJrfMO8//FwwOYlsKLuX3dNecALFe0c+6DmCob2Djt4gJSKTb2nwXziIeLyc+XyowSXhefLshKtdV/QC608qI=
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28) by PH7PR10MB5721.namprd10.prod.outlook.com
- (2603:10b6:510:130::8) with Microsoft SMTP Server (version=TLS1_2,
+ bh=Rvigl8SyHGXgc6wu8J3t2+V3RiYM0DpRJYciY9emDqs=;
+ b=XstH4ov8+H0nfwTAMnmv+2bDRxZdEfoYR2agccXvlzBUgb2Q3i1G1spb/MvgNCM/l4KK8QgmogD5TEtbagoqf3thL4xFqr5kHk7nNN0goi+D+T9q/qDfKoIWcSVYkBpAEmhI2bGkWNMPHHoYYVnBWe3ct/Ix40/xbfamzTpODVM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=theobroma-systems.com;
+Received: from PA4PR04MB9367.eurprd04.prod.outlook.com (2603:10a6:102:2aa::7)
+ by VI1PR04MB5101.eurprd04.prod.outlook.com (2603:10a6:803:5f::31) with
+ Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.21; Thu, 11 Aug
- 2022 10:15:26 +0000
-Received: from MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::209e:de4d:68ea:c026]) by MWHPR1001MB2365.namprd10.prod.outlook.com
- ([fe80::209e:de4d:68ea:c026%3]) with mapi id 15.20.5504.024; Thu, 11 Aug 2022
- 10:15:25 +0000
-Date:   Thu, 11 Aug 2022 13:15:08 +0300
-From:   Dan Carpenter <dan.carpenter@oracle.com>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jason Wang <jasowang@redhat.com>,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
-        dinang@xilinx.com, martinpo@xilinx.com,
-        Wu Zongyong <wuzongyong@linux.alibaba.com>,
-        Piotr.Uminski@intel.com, gautam.dawar@amd.com,
-        ecree.xilinx@gmail.com, martinh@xilinx.com,
-        Stefano Garzarella <sgarzare@redhat.com>, pabloc@xilinx.com,
-        habetsm.xilinx@gmail.com, lvivier@redhat.com,
-        Zhu Lingshan <lingshan.zhu@intel.com>, tanuj.kamde@amd.com,
-        Longpeng <longpeng2@huawei.com>, lulu@redhat.com,
-        hanand@xilinx.com, Parav Pandit <parav@nvidia.com>,
-        Si-Wei Liu <si-wei.liu@oracle.com>,
-        Eli Cohen <elic@nvidia.com>,
-        Xie Yongji <xieyongji@bytedance.com>,
-        Zhang Min <zhang.min9@zte.com.cn>,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: Re: [PATCH v7 1/4] vdpa: Add suspend operation
-Message-ID: <20220811101507.GU3460@kadam>
-References: <20220810171512.2343333-1-eperezma@redhat.com>
- <20220810171512.2343333-2-eperezma@redhat.com>
- <20220811042717-mutt-send-email-mst@kernel.org>
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+ 2022 10:21:41 +0000
+Received: from PA4PR04MB9367.eurprd04.prod.outlook.com
+ ([fe80::81a8:1bbf:5e16:9b4e]) by PA4PR04MB9367.eurprd04.prod.outlook.com
+ ([fe80::81a8:1bbf:5e16:9b4e%4]) with mapi id 15.20.5525.010; Thu, 11 Aug 2022
+ 10:21:41 +0000
+Message-ID: <c7946a7e-d823-d43d-a595-00e8f10829e8@theobroma-systems.com>
+Date:   Thu, 11 Aug 2022 12:21:40 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [RFC PATCH 1/1] pinctrl: rockchip: add support for per-pinmux
+ io-domain dependency
+Content-Language: en-US
+To:     =?UTF-8?Q?Heiko_St=c3=bcbner?= <heiko@sntech.de>,
+        Michael Riesch <michael.riesch@wolfvision.net>,
+        Quentin Schulz <foss+kernel@0leil.net>
+Cc:     linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20220802095252.2486591-1-foss+kernel@0leil.net>
+ <9b965d86-9b76-77a1-658e-3675c2138414@wolfvision.net>
+ <7353767b-0c38-a5a1-d3ac-3d9151140fb8@theobroma-systems.com>
+ <3152231.AJdgDx1Vlc@diego>
+From:   Quentin Schulz <quentin.schulz@theobroma-systems.com>
+In-Reply-To: <3152231.AJdgDx1Vlc@diego>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220811042717-mutt-send-email-mst@kernel.org>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: MR1P264CA0099.FRAP264.PROD.OUTLOOK.COM
- (2603:10a6:501:50::22) To MWHPR1001MB2365.namprd10.prod.outlook.com
- (2603:10b6:301:2d::28)
+X-ClientProxiedBy: AS9PR0301CA0018.eurprd03.prod.outlook.com
+ (2603:10a6:20b:468::20) To PA4PR04MB9367.eurprd04.prod.outlook.com
+ (2603:10a6:102:2aa::7)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1e1df1db-4d01-4b7d-0a46-08da7b82683f
-X-MS-TrafficTypeDiagnostic: PH7PR10MB5721:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8d796c8c-b2c1-49a5-e1d8-08da7b83487f
+X-MS-TrafficTypeDiagnostic: VI1PR04MB5101:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tlHOA641WP3M8+TeMtUBVR329GZ6H7sXuQgaq6OBPu1s4NGv2lt8ET72P8ZGxeZqKvHBknmQ4iTTZQonBz+ks4dtwHIk6UIUyxVRy+I7qLd43z+fUg8LkcfDe+BHz5qv1m3yuqqkdlo41cNV0w43EUII8Y/kS2+ICXGMh+8qQCQUpZxGL/RIX/f06Oe6nclrStcNO4WN43XNLV5s4KviE5TpW8dtr+3kZQFeaoaE3y0JzWb72LkoXO8g/h7EqkHQXyvgenwEFLf379OYKicHsxyTIQccY1wan/uDF5ZiJoAWe8mzWJKgyCdjiH0xlmnOTGVlmZdE0jqxlIXBjn/jzqgl9J+C/xolD01a/GcE3cjG6CDaP7VR51opKkk4cZhf4SEM9uhhrYiwTPqJyONBUdMDbJcJm9ANXti8DwLeV4u7jLMOQJ1gne0ZVWTBaUOeT45euhUFmEKiOPJz4PRL1I+ZRMaSblYMG3zQ0FrSDmHJeZcTDBKNXMFzlVT9/HzkgmM1P5KHPysdT76CucOiNAY9GMZ/f+4lrADm7uV41n7JF6FInMTvoGdCcBt2koVG7KHd2M+vDK1cqphjBdZ78UuKrF8Y29MHvK4YiH8+YRRgn4gayHQV1QzREIsOqTcJzix6L6NNNlw+m/wn+brLz74/7WvdPn7GFNV7rpl2W5GGPdg6E23q26M073w6Cd26xTAPoSJ1yTjXo2P5azbYJV418ey83o0yP3Q/4BCGxpQAEa5xBfgib4oKrRrqsiXXAUnzCK9AbePRNWHMlZXQQRAHigKpP5+APhukmDdyGaqT7+tUY4ZEDYu/5uLJMYIp
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2365.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(376002)(136003)(396003)(366004)(346002)(39860400002)(66476007)(8676002)(66946007)(5660300002)(1076003)(66556008)(4326008)(7416002)(478600001)(186003)(8936002)(33716001)(52116002)(38100700002)(86362001)(33656002)(6486002)(44832011)(26005)(6916009)(54906003)(316002)(9686003)(6666004)(41300700001)(38350700002)(6512007)(15650500001)(83380400001)(2906002)(6506007);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: NEvcBupDCSIyYcDzRZofiAS0n2prlh7irRpzqGd5dHeBWbtL7W4wjCx6VTG5LvyWqTteL8jTU70J6z9h03en4gWdpIm6Fgg9vnRPjRRMGo0miI3S7hy3KoSrXq7YSfl+XBZKVhLg1z9iLB8lG9RDwvtTi/r2W9Jr8lQLTK2FZ5hoU2fE2CKPIt87ej/IgyYHo/+97d6xzkA2wggpQcVBG/cUPna+mnZneaKAeZakVdvdbZSVbSMqSNfCYnwrtuGA96D60ObWBIH2VaLcKH+tjBeF8TfboVe58dXFMdhItj/3i2MXt8qTr7fbNBdYUTgHDyClmHwrlSc5UIHnuw/VljoJ0ehPUnt4CzhIShqO1vAFYpQYbjiWepX9mzSHoWSh0YqHoOefdbiehANt5vKG2KBiRUlQHDesyiAHIv75YtoE6hE2Rg1vJEJp+ijkUhbbsxAFTbJdKecSn2GVFwgFtjKrcmEjyc7PdEioXnQx8cXY6VKxCJA7pARk1tehH5k9Nlil19YuIpBT9nR4X8FOvPDxyaCxq6ZCy/t7NTeKRTBWIXwzyUcTGT3TVjpCpLzfd5VhRDQ8Ksq1/60XcAoFxxc8Iv4UCB14GFqRDUKDahDBQ+3ayDGWbboRMPmBD6PIpngi47v5NXy7jFkm7MRK04aAm6Rf2ncz+6rBupcznUEpvy7DIzuToq6+zHhlcifP1V2LN5Hjmkw9fc7mROWznRAgpVrDpa5QlRsrN5Zz16KmCBV3CbGEC+5MAiVzTIw01Fnel0P5CNv59//ETaJbNvfOhMCSW25NfAqeNP8tPrm3s0xfsj8QMjX0xSRBom2k+uhpjtzcgflFtD6rrUBA5g==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR04MB9367.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(366004)(346002)(136003)(39840400004)(376002)(110136005)(316002)(31686004)(38100700002)(36756003)(4326008)(8676002)(66556008)(41300700001)(6512007)(66574015)(26005)(2616005)(83380400001)(66946007)(66476007)(5660300002)(6486002)(186003)(8936002)(53546011)(6506007)(86362001)(31696002)(44832011)(478600001)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?w0n1aQFcmVIMxyFKvTfCzxIJ31QWmfFKsi+mDFmin2cAq/TlUWAfgL4Zao?=
- =?iso-8859-1?Q?+u5XGlHt1lpzoXEYf9ffh7G+mPZhtvtMBIpJkOpbBhNrxpx10cY9Aoj0C4?=
- =?iso-8859-1?Q?56WUa1RhssSBdhjHSYU9m3IUAEi3GwpyRgAXoCRD4K2W29u+VkH/2idkv1?=
- =?iso-8859-1?Q?ojTlsltMqo5yJYQ7QBTXGRK5IxHoh+VHQQRZrYj6XPg5PJiydQdu7wS2cb?=
- =?iso-8859-1?Q?ZrREi9xZ4Fp0U6ZD347c7oo+WfW35DLXK/UT29FCVLuXsShb7Z0WAvPTSZ?=
- =?iso-8859-1?Q?ra1v8F0N2POa/QHcdf09Xdj97AFq+3DSSUzFbP8OnquqzvJMzAzLDgHMUK?=
- =?iso-8859-1?Q?Km4vPXvTz8PWUY2A1j0co8svpla4BG33/FvE2ik/wiZZctMi/SgZsRI5eW?=
- =?iso-8859-1?Q?US6JZdFxyMzN9N3ESj9xqQU31xlE4ohst6iCdu2x7VEVkS7KNnVoWtGplR?=
- =?iso-8859-1?Q?62zvt608he4nK0jAy+15S56KQqn05QKAipf78IXh33NcgWz6p3SY5n96AW?=
- =?iso-8859-1?Q?w8pZsCA42Mbg3h971YZM+hOPh4YVBz756bCaD575vB0u0PUhhHgfE0M41z?=
- =?iso-8859-1?Q?bkiwcKgUO43xLIEcC61JnslaXQxMOLLkAfRAwFtmSqcoWqlWYAv5fZX1Hw?=
- =?iso-8859-1?Q?/arE8ejW8cR9yS/RDLAYe3ECdG/s9sGsZxYi/+EEk44qWnYyvKZI02BQwM?=
- =?iso-8859-1?Q?3PpXtU1jwcTh/Imkdw4COh/0RusrU4Fy3bSa6VE/zqImnCfWlnv7e61xCf?=
- =?iso-8859-1?Q?WuM/H0AltbPWvjytTwsy0B3+S+VFINLcpSAi98FA1Ht0TN8o3u+9lVrPot?=
- =?iso-8859-1?Q?OvObkrwVuriYWzJSrV8YRUZUg7GXL65YoH7wjFUYnA143N/C9tYD58i37W?=
- =?iso-8859-1?Q?VHo1fZtjFUsr0JeqY/IoPy3k1mN1jtFxtOEi3zhOa6XoRY9a/2EIV1PvCO?=
- =?iso-8859-1?Q?sl0JqOMTpfWorSVpxbIt9EisA1m9VHDiRzITAsQ20O0gRo0iqsJ8VdzfrI?=
- =?iso-8859-1?Q?SnnYnlcjvdewt5rmpijJQamgMsyJEH8TVObxzGUcSbyKGt8ekb4yDpyFcF?=
- =?iso-8859-1?Q?7sHbDsQwMYSc6/Ftx+swHiB8OwnecfbxROfltR/wJFkJd8ylAU4eRq9Rrh?=
- =?iso-8859-1?Q?vX3A9BpyzIsLpLsX8VFSQWNBFREuzpwuCmvmP1E7l0RsJBfi0mbRU856/N?=
- =?iso-8859-1?Q?GufYg1BFxBN0gZcPBdO3Uq0KpZXKyEqFkvi8AKPJuFiIpzy7XeLeTPrL3V?=
- =?iso-8859-1?Q?uYXRIRyC/3aIUQsWrYhq9Q6gdilZOWV94CRULKhL2lLYGwI4YsNbY2jBm8?=
- =?iso-8859-1?Q?cGEUwQo0vWaLvfoVIuWRmJZQUh5PWqeqQSLjDeAjpWd6Xg74ug0dfDTIlL?=
- =?iso-8859-1?Q?9kYNDLL2cqDhxmY28SK4oX7L1rVbnj9XGb1x345vWohcN5986hTqzTxFPt?=
- =?iso-8859-1?Q?nJneKQp7IcP98NGDQfsdmYbS8EdTf3AsYsKekFxD4o1IFXdhCGomP5NccY?=
- =?iso-8859-1?Q?SNHjZaT1BauaROiVc/XglJEWN9kb+X5JQOs0NUb8cV8Cx/6oilAqLgBlRM?=
- =?iso-8859-1?Q?kmRqF5/nXZvNp2J0koFVt6fSiyW1mAdBO6rsILEFDhi8LPC/bdvlsj/UrL?=
- =?iso-8859-1?Q?lhFzhsdvV5d88h2E9WVYP/fIcnCpqRirIa3HSI6HEAl/APDk7AtBY4ag?=
- =?iso-8859-1?Q?=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1e1df1db-4d01-4b7d-0a46-08da7b82683f
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2365.namprd10.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bkp6bXgzQU95WVRNejB5NTJDOTBDTmdpbnhqWUpLTDdCdXZzVmtKak9CS0pw?=
+ =?utf-8?B?ZHJZM3lVT05ubVR2eTFERkxSNG1iNUtRRHJQT0lKUGxXTHc0aml0YnNGSkxV?=
+ =?utf-8?B?Q1JIQnlLTUJrK2hKbGVIaGhpOGt1THlmTkQrRjR0MmdPWGhDU2tOT2J1ZEZV?=
+ =?utf-8?B?R29ma0hPdUZyTmdZREkzWGVLSXZodTF2VXR1WWFTNWkyU2thOXB5L0JkVERz?=
+ =?utf-8?B?TTNwaGpDRTJNSnY0K3FwUDkvZEl5QlUwQ0RIMFNhenVKbHc3eTZHck14cXBT?=
+ =?utf-8?B?bzhTeUdiWFNIVjR2bmJnNnplbTh1ajJyTHIweERXS0tGT2p2Z3BkUGVpNDJj?=
+ =?utf-8?B?OUVtWjVIaDBtL2xVNW4xU0FsQ3JrVlFSZXVROUhYcHBLZlhwcTMvdTdITmZ4?=
+ =?utf-8?B?WmZhV3JYK2Z3ZDNIdjF0aW1Pd2FHbEJmMmxPa25adFRXK0N3Mm9zVzdSRU80?=
+ =?utf-8?B?UEpHRjM3TzQ2b3lVQXZPYXN1aDZveUxGYnZFWTlRSlkxKzlEeFozWWtUZGcr?=
+ =?utf-8?B?TXVuQU9ZL0FUZDF2QnhTV2pnNHhSbUE2WnFheWxQTElFQmt0QTU0UDRXQTZz?=
+ =?utf-8?B?QlZvUWJkNFR5Q0Zsd3krczNIbS9YNTU2MkI5czV0bE9MU2RPcDdibjJvaDBD?=
+ =?utf-8?B?eExSazVDd3VDMlUrUmFHeHlYK25CeUtUcFE5dzg3NzNHb1Frc1M3R3lQeUVh?=
+ =?utf-8?B?a1J0T1VIVDl1SjVLUGd0V0dpYzdhZ3BEOHYxK2NnQWdadGtsVVpIRDlkMzNw?=
+ =?utf-8?B?Um1YaWcvQlVWYzVPODg1QksxWDFmSHNITWtaS1A2YTBkUC81VzZpVHZ0bUtQ?=
+ =?utf-8?B?Y1c1ZTl5WjRmc0orRlJPdkVyMmVCMGRmQVJJWGhzbnpNSVRwUUQ5cHhyaC9U?=
+ =?utf-8?B?WmlPTWRaVHNWQi9mekNlQzBIdTRkSWV1ZzFwUDdlMG5OSm5XeElLWXUwMHNo?=
+ =?utf-8?B?azNFTi9vSDIrditNWkhoSDhqVzBqcWc0SzV3cVZsZFBPY3U1R2ZhN0N1dVdD?=
+ =?utf-8?B?VEVSR3IrQTVmSG1Ic3lmU09QNlhPMC9jVWM0QkpwQ3hBL1kwcUtjeFVxYkJz?=
+ =?utf-8?B?RGx2eks1cXp0SXF0VFlaUmE2Q3FtVDNTbkRra0VKaVJHazJTVUVGb2ZZUTY0?=
+ =?utf-8?B?MjhlS1MwZDZqUmdoL3VOcjFsRHd2OUJQSFl0Sk9IQklhSVpZdG5nc0J3ajg4?=
+ =?utf-8?B?eDdWOTdpT21hUzN2ejZjVEhtRFZmaEhneklwUU5McFBUNlI1czBKZld3Ylda?=
+ =?utf-8?B?N2NMcEZCYjh5OG1EQU4yU2lBQW8wd2ZSNy9Ub0R2MUp1RnY5MFdCMW9qWXBn?=
+ =?utf-8?B?VDh2Y1NoZno0aE5EaWNpSUhyZEpzTklxSWx3bEt5aGJMVWVkckgzV1VIeXdT?=
+ =?utf-8?B?VDBpSGh1b0hqbHRySFpOelFLdkVtQUNvRVRzaGhFVlUza1ZvVm5FZVY0czJH?=
+ =?utf-8?B?dllCTC9Ca0JueEpSUUdTajUzYUV5L3VkYTFNRG03aHlLbGFrMWV2SkdEb3NF?=
+ =?utf-8?B?bEFibzl4VlU4YTc5MG13TWZMUnNzRklLVG1DbTRIYU94NHpGb1FrVm83OE5Y?=
+ =?utf-8?B?NzMvMy9BVFdHNG1xK2pFelNieTd3dlRoV1RocFpqYXQwa2UyTWc1c280cjlQ?=
+ =?utf-8?B?V0pmbGZuaDdSYkFQeWVDWGdVWGNIRkUrcTFja3B6RjZMNGdScFN6WklxcXJ5?=
+ =?utf-8?B?cjE1Q2Zaa2paNXN4Zk8xRmhlYi9jNitacVhOOHNVKzYrcWhHL2ZCVU01aU9H?=
+ =?utf-8?B?Z1FDdDQrQWNJK21kOUVvbUQ3SU1IZGdRd3hock9TK3kvUGNQWDkyemwvd3RZ?=
+ =?utf-8?B?aHZWZ0FCSVJYdlJpdUJJaXN2Z01hbmNibXhES3lFSkFJL0NKUWZyV2tLM0Uy?=
+ =?utf-8?B?QzNBNTFSYzJwaXM1SEVPT2w5MStjeGRBMS8reXl4a0dwTElyZXNnVlZLZXE0?=
+ =?utf-8?B?Yk02c09BZERrbFRIc3JHUnZPMmkwRFpSWnEyTFZzdDZsdnBWdTVRdGppR1NT?=
+ =?utf-8?B?NlVXVlN1UzJUdmloODFScDlaWTdwYUFFNXd2eCtTUTNIY0kxc0s1NVhJNWV2?=
+ =?utf-8?B?VTFKdDNISnBucEpRNFp2MEdXSHZZYkpxY0lpVHdzOE5iNU9ua2E4OS9XT21q?=
+ =?utf-8?B?RmZTV3JhdU82TGc0dGt4VHkxamphT0RGeEpsVHVjWVo3c3hmZTVuTGFZUzhF?=
+ =?utf-8?Q?3BNtjmxMnYdYZkZUrxV9iK8=3D?=
+X-OriginatorOrg: theobroma-systems.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8d796c8c-b2c1-49a5-e1d8-08da7b83487f
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR04MB9367.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Aug 2022 10:15:25.7054
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Aug 2022 10:21:41.4868
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-Id: 5e0e1b52-21b5-4e7b-83bb-514ec460677e
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: js4AmwZGWcF1dgDJVIrMh2/+LFuijbSwGp3Sb4eueGPd6L7FkhmxIiba0nQP4DOOP671Y+5M74aYed90oLcrw09/TMWch+KXNnwz04jW1TY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR10MB5721
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-11_05,2022-08-11_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 suspectscore=0
- spamscore=0 phishscore=0 adultscore=0 mlxscore=0 malwarescore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208110029
-X-Proofpoint-ORIG-GUID: ke2nGLweUi8c1CK1sobUhNj2eJ-T6F5N
-X-Proofpoint-GUID: ke2nGLweUi8c1CK1sobUhNj2eJ-T6F5N
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: W0d9O5Qr0hmkPDRlBz7EhvnDsUsZSck7ZB7UeC9z6nXhD3JDfvWSKcK5oP1chO6zNM8qUQzoyk/Yo0tTqhbH1xh939/Mj01UAd+Pih9WwDFO0t8b7r+NqrScbdZsswFl
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB5101
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 04:27:32AM -0400, Michael S. Tsirkin wrote:
-> On Wed, Aug 10, 2022 at 07:15:09PM +0200, Eugenio Pérez wrote:
-> > This operation is optional: It it's not implemented, backend feature bit
-> > will not be exposed.
-> > 
-> > Signed-off-by: Eugenio Pérez <eperezma@redhat.com>
-> > Message-Id: <20220623160738.632852-2-eperezma@redhat.com>
-> > Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+Hi Heiko,
+
+On 8/11/22 11:26, Heiko StÃ¼bner wrote:
+[...]
+>>>> In order to make this dependency transparent to the consumer of those
+>>>> pins and not add Rockchip-specific code to third party drivers (a camera
+>>>> driver in our case), it is hooked into the pinctrl driver which is
+>>>> Rockchip-specific obviously.
+>>>
+>>> This approach seems reasonable. But just for my understanding: Does this
+>>> mean we need to edit e.g. rk3568-pinctrl.dtsi, iterate over all entries,
+>>> and add rockchip,iodomains = <&corresponding_io_domain>;?
+>>>
+>>
+>> That would have been my hope yes, but it is not possible for one of the
+>> boards we have based on PX30.
+>>
+>> All pinmux listed in the px30.dtsi today belong to an IO domain. This
+>> includes the I2C pins for the bus on which the PMIC is.
+>> Adding the rockchip,io-domains on each pinctrl will create the following
+>> circular dependency:
+>> pinctrl depends on the io-domain device which depends on
+>> regulators from a PMIC on i2c which requires the i2c bus pins to be
+>> muxed from the pinctrl
+>>
+>> Since the PMIC powering the IO domains can virtually be on any I2C bus,
+>> we cannot add it to the main SoC.dtsi, it'll need to be added per board
+>> sadly.
 > 
-> What is this message id doing here?
+> though you could also add the main props to the dtsi and use a per-board
+> /delete-property/ to free up the pmic-i2c, same result but less duplicate
+> dt additions and less clutter.
 > 
 
-I like the Message-Id tag.  It means you can `b4 mbox <mesg-id>` and get
-the thread.
+That is also a possibility, yes. However, this means that it'll make the 
+bring-up of a new board slightly more complex since it'll just not boot 
+until you have this /delete-property/ in your board dts. Remember that 
+the current implementation basically forbids *all* pinmux (well the ones 
+with rockchip,io-domains.. but that would be all of them in most cases) 
+to be used until io-domains is probed, which very likely involves boot 
+media such as eMMC which require some pinmux to be done. (I had this 
+issue on my device already, so not hypothetical).
 
-Linus has complained (rough remembering) that everyone is using the
-Link: tag for links to the patch itself.  It's supposed to be for Links
-to bugzilla or to the spec or whatever.  Extra information, too much to
-put in the commit message.  Now the Link tag is useless because it either
-points to the patch or to a bugzilla.  Depend on what you want it to do,
-it *always* points to the opposite thing.
+[...]
+>>>> @@ -2684,6 +2693,16 @@ static int rockchip_pinctrl_parse_groups(struct device_node *np,
+>>>>    	if (!size || size % 4)
+>>>>    		return dev_err_probe(dev, -EINVAL, "wrong pins number or pins and configs should be by 4\n");
+>>>>    
+>>>> +	node = of_parse_phandle(np, "rockchip,io-domains", 0);
+>>>> +	if (node) {
+>>>> +		grp->io_domain = of_find_device_by_node(node);
+>>>> +		of_node_put(node);
+>>>> +		if (!grp->io_domain) {
+>>>> +			dev_err(info->dev, "couldn't find IO domain device\n");
+>>>> +			return -ENODEV;
+>>>
+>>> Again just for my understanding: The property is optional in order to
+>>> provide compatibility with older device trees, right?
+>>>
+>>
+>> Of course (at least that's the intent). If it is omitted,
+>> of_parse_phandle will return NULL and we'll not be executing this part
+>> of the code. However, if one phandle is provided and the device does not
+>> actually exist (IIUC, the phandle points to a DT-valid node but the
+>> device pointed at by the phandle is either disabled or its driver is not
+>> built). That being said, I don't know how this would work with an IO
+>> domain driver built as a module. That would be a pretty dumb thing to do
+>> though.
+> 
+> I think this should work even with io-domain "disabled" or as module
+> when slightly modified.
+> 
+> I.e. for disabled nodes, no kernel-device should be created
+> (grp->io_domain will be NULL) and for a module the device itself is created
+> when the dt is parsed (of_populate...) and will just not have probed yet.
+> 
+> Together with the comment farther above of having the io-domain link always
+> present we should get rid of the error condition though :-) .
+> 
 
-But I can't remember what people settled on as the alternative to use
-to link to lore...
+It is not possible to have a rockchip,io-domains entry for all pinctrl, 
+because at least a few needs to be removed, the ones related to the 
+regulators used by the io-domain devices. But I guess you were talking 
+about the check on grp->io_domain pointer?
 
-In theory, we should be able to figure out the link to lore automatically
-and there have been a couple projects which tried to do this but they
-can't make it work 100%.  Maintainers massage and reformat the patches
-too much before applying them.
+> 
+> 
+> Hmm, while going through this one thought was, do we want more verbosity
+> in the dt for this?
+> 
+> I.e. with the current approach we'll have
+> 
+> &io_domains {
+> 	status = "okay";
+> 
+> 	audio-supply = <&pp1800_audio>;
+> 	bt656-supply = <&pp1800_ap_io>;
+> 	gpio1830-supply = <&pp3000_ap>;
+> 	sdmmc-supply = <&ppvar_sd_card_io>;
+> };
+> 
+> and pinctrl entries linking to the core <&io_domains> node. This might bite
+> us down the road again in some form.
+> 
+> Something like doing an optional updated binding like:
+> 
+> &io_domains {
+> 	status = "okay";
+> 
+> 	audio-domain {
+> 		domain-supply = <&pp1800_audio>;
+> 	};
+> 	bt656-domain {
+> 		domain-supply = <&pp1800_ap_io>;
+> 	};
+> 	gpio1830-domain {
+> 		domain-supply = <&pp3000_ap>;
+> 	};
+> 	sdmmc-domain {
+> 		domain-supply = <&ppvar_sd_card_io>;
+> 	};
+> };
+> 
+>         pcie {
+>                 pcie_ep_gpio: pci-ep-gpio {
+>                         rockchip,pins =
+>                                 <4 RK_PC6 RK_FUNC_GPIO &pcfg_pull_none>;
+>                         rockchip,io-domains = <&gpio1830_domain>;
+>                 };
+>         };
+> 
+> 
+> I.e. linking the pin-set to a definition of its actual io-domain, instead
+> of only the general io-domain node. Somewhat similar to power-domains.
+> 
 
-regards,
-dan carpenter
+I like this (well, not the "modifying existing bindings" part though). 
+This could allow io-domain driver to be more of a bus kind and "probe" 
+each subnode individually, allowing to break out of circular 
+dependencies. E.g., I could have some supplies provided by fixed 
+non-controllable always-on regulators, and some by some controllable 
+PMIC. Though this wouldn't have helped for our design since the PMIC is 
+providing the power to the IO domains pins of the i2c bus on which the 
+PMIC is (so whatever we do, the HW representation will always include a 
+theoretical circular loop). This would maybe allow us to mitigate the 
+issue I talked about earlier with the need of removing some 
+rockchip,io-domains to break this circular dependency.
 
+> The code itself could be the same as now (except needing to get the parent
+> of the linked node for the io-domains), but would leave us the option of
+> modifying code behaviour without touching the binding if needed down the
+> road.
+> 
+
+Would I need to support forward compatibility of the DT? i.e. having 
+rockchip,io-domains DT property work with the io_domains phandle AND 
+sdmmc_domain phandle?
+
+Cheers,
+Quentin

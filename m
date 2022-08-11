@@ -2,76 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDE5A58F708
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 06:51:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ADF858F70A
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 06:51:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233838AbiHKEu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 00:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48554 "EHLO
+        id S233861AbiHKEvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 00:51:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233627AbiHKEux (ORCPT
+        with ESMTP id S233815AbiHKEvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 00:50:53 -0400
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1077F647E2
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 21:50:52 -0700 (PDT)
-Received: by mail-lf1-x131.google.com with SMTP id z6so16606380lfu.9
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 21:50:51 -0700 (PDT)
+        Thu, 11 Aug 2022 00:51:13 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529366BD7C
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 21:51:12 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id o184so10288583oif.13
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 21:51:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc;
-        bh=evbV2QSTh0jjb46dPJrBnRBIm6kqkgOSimjCzn6KZ6w=;
-        b=B4WZkBZwZpVAxOKJXSp9lcyLT5gyyb2X3AWF8Xnmy2GIoylCEaK6I1czwsX/PHlU4V
-         hmxMBUvSpMXmaRpjiAe/nOCHrZCu2D+F8fU+l6ZvgncszfBuJPF4DtXTwkdJI9l89hgo
-         jLgih0AbwHLwRfbIvFg4uanGq1M5NCZlgV2mCHGvHZm6S/DQbljK5gRec8bL+XQJR4mh
-         aWA1qBwk4/XXKGnKBR3ioFY/XZ6T8OcV75eVyhpdp6Fnra9K/eRZFmZzh12dFEPyEO9Y
-         KP4o30+OiWtpoOfMJc/D4E4PMSnRWfMO2MeGCYMPKKa8zFvR5AHe5ByjELVCeTaFXdmH
-         Qayw==
+        d=google.com; s=20210112;
+        h=mime-version:message-id:subject:cc:to:from:date:from:to:cc;
+        bh=m1OXKNq7+DtNWBynhSNEKrKaVxfMrlkQMnFw/pURbg0=;
+        b=sTsT9dad5iemvIuEELMDiMVhOE0RThIC2/6RND1+gIR9BG0Tup4Ja0VLAyqCjMUQj9
+         +DIZ3WDS2XbbYkIXwp7ii2YLV3uDoUWuyylR8fUDndlLO/U/j+iWnin0bWNBiMfoaBd5
+         0Uu8sjJwP6rnNCfDnWxCUBJwpvqg6C5HSK2OdC48sFSdi7wz7GrnanfoD3gGnqd6pGHl
+         wR8UWwPrD199kDC4fOjUbz4QaVYVrhkqLe5PknSYTD24vXiE8nQpAdGEIQbuv0VlKFsa
+         OAz64t3JK/91dFMW3ucoHT/pHAtA3qbt94QVwPtopQRwyILKHlnFpUfw31PynvuAT1xU
+         hZNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=evbV2QSTh0jjb46dPJrBnRBIm6kqkgOSimjCzn6KZ6w=;
-        b=x6F/i1WIPvzszEXhROUxJ4YYztJQ2MTenYEBUkQFhvdEytmEIIYyNs+FGgRHZ2yO2M
-         0UlX+zPn4HExvoZAKJpsdHB0KJs/4/4MV/9y9qFkjWk3OpliEDc8sKtvJFRFZfDZMdv6
-         PZQvqos97LWw7IphXrcAY4/W/euY36ohq5LC4uumImL30RBzPl1XNKFWO61C4qI/qVNU
-         JqLahmHH0O25oanB7KH7UUNoCXuGjewxiLRLhoePSeCvMWKoKGFv6c590H33otp0bvbV
-         ZXpNAnEoTxxfwdqSfestPkqvpUWbxz7SGHbbRjAKkfbbME8IzLVkGW6gF8FxRNmg61Sg
-         yEwQ==
-X-Gm-Message-State: ACgBeo0P8eBEuREAt4m1M82A3kdXN9zxzJ1JWQMEJHc1NUjU7HMzpkRS
-        7VJCdW/0b69JzsnTWLGKcfx5e7WpTg8=
-X-Google-Smtp-Source: AA6agR6ZnnADrcuc6bkXwME7gPBgMJo5C2/QlR5eeXIuMbjUeQRtfjWOsd7GvXy7ChKPskMYMTaCRQ==
-X-Received: by 2002:a05:6512:4016:b0:48b:1e96:af0f with SMTP id br22-20020a056512401600b0048b1e96af0fmr11716360lfb.359.1660193450253;
-        Wed, 10 Aug 2022 21:50:50 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16ee:fa00::9? (dc73szyyyyyyyyyyyyyft-3.rev.dnainternet.fi. [2001:14ba:16ee:fa00::9])
-        by smtp.gmail.com with ESMTPSA id f19-20020a056512361300b0048a8f119e7esm563636lfs.233.2022.08.10.21.50.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Aug 2022 21:50:49 -0700 (PDT)
-Message-ID: <b17dccb5-79f1-a70b-37f6-129e20f27cfc@gmail.com>
-Date:   Thu, 11 Aug 2022 07:50:49 +0300
+        h=mime-version:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc;
+        bh=m1OXKNq7+DtNWBynhSNEKrKaVxfMrlkQMnFw/pURbg0=;
+        b=h6QQtSfzxpERTOc4cwLin8yqJSTqW5mRqWWqvUhrxb8tq67qzqHRjm9Grkru+9so9i
+         erQeD88x/JEOuU33KtyxbTPGpHifTuGGTaYC+FGteAGemRw6xeXtL5bpEIk8qdf/vmet
+         NbkFNDJsYaLDGH4w9Mc+91ieUPUSkrKt2/fHQPzzeqgfH7dd2bGDMcTSRzjygzeWJsOl
+         iGAHhkX7ok/XsgWvSQQ7167N7sN3EB5JBdIk68BfqozdRo08XGgjBKKUI5ht2xDTF8rE
+         eCgf7v7Yn6jxZqgtDSdhCfu1DcONSn0cvegpvXMuwrPBC6sGD1cBX14BcY+XIWWUy7lR
+         AyIA==
+X-Gm-Message-State: ACgBeo1NYm/b0Kq3HfnbQ+7Odtpv4CnugfNKBkLWRXtYURI7r65Nw4M9
+        jhHOzsUmvydsG5qdW0Lg9cwAGQ==
+X-Google-Smtp-Source: AA6agR403qDz149yAHlea6yIhxoqoqCqmWgbvz0Cq6UeiC9cA/hbd16184lAZZZ/C/S+0UxZv8hIkA==
+X-Received: by 2002:aca:4182:0:b0:343:9d9:1d18 with SMTP id o124-20020aca4182000000b0034309d91d18mr2680250oia.86.1660193471466;
+        Wed, 10 Aug 2022 21:51:11 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id c84-20020acab357000000b003358e034f72sm931014oif.7.2022.08.10.21.51.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Aug 2022 21:51:11 -0700 (PDT)
+Date:   Wed, 10 Aug 2022 21:51:09 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.anvils
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     Theodore Ts'o <tytso@mit.edu>, Radoslaw Burny <rburny@google.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH] mm/shmem: fix chattr fsflags support in tmpfs
+Message-ID: <2961dcb0-ddf3-b9f0-3268-12a4ff996856@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Content-Language: en-US
-To:     Mark Brown <broonie@kernel.org>
-Cc:     matti.vaittinen@fi.rohmeurope.com,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel@vger.kernel.org
-References: <cover.1660127865.git.mazziesaccount@gmail.com>
- <b6058e052b842a19c8bb639798d8692cd0e7589f.1660127865.git.mazziesaccount@gmail.com>
- <YvOdBv0edrE3wKsO@sirena.org.uk>
- <e8900490-1eec-83d8-b190-6d6983d81c4a@gmail.com>
- <YvPLx5hizWMEBjVK@sirena.org.uk>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [RFC PATCH 2/7] regulator: Add devm helpers for get and enable
-In-Reply-To: <YvPLx5hizWMEBjVK@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,39 +69,141 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/10/22 18:16, Mark Brown wrote:
-> On Wed, Aug 10, 2022 at 03:19:05PM +0300, Matti Vaittinen wrote:
-> 
->> In order to tackle the issue the suggested API does not return handle to the
->> regulators - it really just provides the "get'n enable, then forget"
->> solution. The consumers who use the suggested API to "devm get'n enable"
->> will have had time manually controlling the regulator afterwards as they
->> will not get the handle. I would almost claim that the pattern we nowadays
->> see (devm_get, enable, add_action_or_reset(disable())) is more error prone
->> as users seem to in many case be storing the regulator handle w/o any
->> comment about the automated disable at detach.
-> 
-> Hrm, right - that does help with that case.  However we do need a bulk
-> version since that's an obvious problem case.
-I'll take a look at the bulk APIs and add them if they're not too 
-complex. I'm a bit short on time as I was told I should be doing 
-something we can show to a customer ;)
+ext[234] have always allowed unimplemented chattr flags to be set,
+but other filesystems have tended to be stricter.  Follow the stricter
+approach for tmpfs: I don't want to have to explain why csu attributes
+don't actually work, and we won't need to update the chattr(1) manpage;
+and it's never wrong to start off strict, relaxing later if persuaded.
+Allow only a (append only) i (immutable) A (no atime) and d (no dump).
 
-As a result of this discussion - not returning the handle to struct 
-regulator * sounds like a safest option here. I'll drop the RFC when I 
-respin this (hopefully with the bulk-APIs and a few more converted drivers)
+Although lsattr showed 'A' inherited, the NOATIME behavior was not
+being inherited: because nothing sync'ed FS_NOATIME_FL to S_NOATIME.
+Add shmem_set_inode_flags() to sync the flags, using inode_set_flags()
+to avoid that instant of lost immutablility during fileattr_set().
 
-Thanks for the input!
+But that change switched generic/079 from passing to failing: because
+FS_IMMUTABLE_FL and FS_APPEND_FL had been unconventionally included in
+the INHERITED fsflags: remove them and generic/079 is back to passing.
 
-Best Regards
-	Matti Vaittinen
+Fixes: e408e695f5f1 ("mm/shmem: support FS_IOC_[SG]ETFLAGS in tmpfs")
+Signed-off-by: Hugh Dickins <hughd@google.com>
+---
 
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
+ include/linux/shmem_fs.h | 13 +++-------
+ mm/shmem.c               | 54 +++++++++++++++++++++++-----------------
+ 2 files changed, 35 insertions(+), 32 deletions(-)
 
-~~ When things go utterly wrong vim users can always type :help! ~~
-
-Discuss - Estimate - Plan - Report and finally accomplish this:
-void do_work(int time) __attribute__ ((const));
+--- a/include/linux/shmem_fs.h
++++ b/include/linux/shmem_fs.h
+@@ -29,15 +29,10 @@ struct shmem_inode_info {
+ 	struct inode		vfs_inode;
+ };
+ 
+-#define SHMEM_FL_USER_VISIBLE FS_FL_USER_VISIBLE
+-#define SHMEM_FL_USER_MODIFIABLE FS_FL_USER_MODIFIABLE
+-#define SHMEM_FL_INHERITED FS_FL_USER_MODIFIABLE
+-
+-/* Flags that are appropriate for regular files (all but dir-specific ones). */
+-#define SHMEM_REG_FLMASK (~(FS_DIRSYNC_FL | FS_TOPDIR_FL))
+-
+-/* Flags that are appropriate for non-directories/regular files. */
+-#define SHMEM_OTHER_FLMASK (FS_NODUMP_FL | FS_NOATIME_FL)
++#define SHMEM_FL_USER_VISIBLE		FS_FL_USER_VISIBLE
++#define SHMEM_FL_USER_MODIFIABLE \
++	(FS_IMMUTABLE_FL | FS_APPEND_FL | FS_NODUMP_FL | FS_NOATIME_FL)
++#define SHMEM_FL_INHERITED		(FS_NODUMP_FL | FS_NOATIME_FL)
+ 
+ struct shmem_sb_info {
+ 	unsigned long max_blocks;   /* How many blocks are allowed */
+diff --git a/mm/shmem.c b/mm/shmem.c
+index e975fcd9d2e1..bd9b114a8650 100644
+--- a/mm/shmem.c
++++ b/mm/shmem.c
+@@ -2281,16 +2281,34 @@ static int shmem_mmap(struct file *file, struct vm_area_struct *vma)
+ 	return 0;
+ }
+ 
+-/* Mask out flags that are inappropriate for the given type of inode. */
+-static unsigned shmem_mask_flags(umode_t mode, __u32 flags)
++#ifdef CONFIG_TMPFS_XATTR
++static int shmem_initxattrs(struct inode *, const struct xattr *, void *);
++
++/*
++ * chattr's fsflags are unrelated to extended attributes,
++ * but tmpfs has chosen to enable them under the same config option.
++ */
++static void shmem_set_inode_flags(struct inode *inode, unsigned int fsflags)
++{
++	unsigned int i_flags = 0;
++
++	if (fsflags & FS_NOATIME_FL)
++		i_flags |= S_NOATIME;
++	if (fsflags & FS_APPEND_FL)
++		i_flags |= S_APPEND;
++	if (fsflags & FS_IMMUTABLE_FL)
++		i_flags |= S_IMMUTABLE;
++	/*
++	 * But FS_NODUMP_FL does not require any action in i_flags.
++	 */
++	inode_set_flags(inode, i_flags, S_NOATIME | S_APPEND | S_IMMUTABLE);
++}
++#else
++static void shmem_set_inode_flags(struct inode *inode, unsigned int fsflags)
+ {
+-	if (S_ISDIR(mode))
+-		return flags;
+-	else if (S_ISREG(mode))
+-		return flags & SHMEM_REG_FLMASK;
+-	else
+-		return flags & SHMEM_OTHER_FLMASK;
+ }
++#define shmem_initxattrs NULL
++#endif
+ 
+ static struct inode *shmem_get_inode(struct super_block *sb, struct inode *dir,
+ 				     umode_t mode, dev_t dev, unsigned long flags)
+@@ -2319,7 +2337,8 @@ static struct inode *shmem_get_inode(struct super_block *sb, struct inode *dir,
+ 		info->i_crtime = inode->i_mtime;
+ 		info->fsflags = (dir == NULL) ? 0 :
+ 			SHMEM_I(dir)->fsflags & SHMEM_FL_INHERITED;
+-		info->fsflags = shmem_mask_flags(mode, info->fsflags);
++		if (info->fsflags)
++			shmem_set_inode_flags(inode, info->fsflags);
+ 		INIT_LIST_HEAD(&info->shrinklist);
+ 		INIT_LIST_HEAD(&info->swaplist);
+ 		simple_xattrs_init(&info->xattrs);
+@@ -2468,12 +2487,6 @@ int shmem_mfill_atomic_pte(struct mm_struct *dst_mm,
+ static const struct inode_operations shmem_symlink_inode_operations;
+ static const struct inode_operations shmem_short_symlink_operations;
+ 
+-#ifdef CONFIG_TMPFS_XATTR
+-static int shmem_initxattrs(struct inode *, const struct xattr *, void *);
+-#else
+-#define shmem_initxattrs NULL
+-#endif
+-
+ static int
+ shmem_write_begin(struct file *file, struct address_space *mapping,
+ 			loff_t pos, unsigned len,
+@@ -3179,18 +3192,13 @@ static int shmem_fileattr_set(struct user_namespace *mnt_userns,
+ 
+ 	if (fileattr_has_fsx(fa))
+ 		return -EOPNOTSUPP;
++	if (fa->flags & ~SHMEM_FL_USER_MODIFIABLE)
++		return -EOPNOTSUPP;
+ 
+ 	info->fsflags = (info->fsflags & ~SHMEM_FL_USER_MODIFIABLE) |
+ 		(fa->flags & SHMEM_FL_USER_MODIFIABLE);
+ 
+-	inode->i_flags &= ~(S_APPEND | S_IMMUTABLE | S_NOATIME);
+-	if (info->fsflags & FS_APPEND_FL)
+-		inode->i_flags |= S_APPEND;
+-	if (info->fsflags & FS_IMMUTABLE_FL)
+-		inode->i_flags |= S_IMMUTABLE;
+-	if (info->fsflags & FS_NOATIME_FL)
+-		inode->i_flags |= S_NOATIME;
+-
++	shmem_set_inode_flags(inode, info->fsflags);
+ 	inode->i_ctime = current_time(inode);
+ 	return 0;
+ }

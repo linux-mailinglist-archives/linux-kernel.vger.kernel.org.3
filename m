@@ -2,124 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C9459088F
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 00:05:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A161E59087D
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 00:02:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236268AbiHKWFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 18:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45634 "EHLO
+        id S236321AbiHKWCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 18:02:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236488AbiHKWFu (ORCPT
+        with ESMTP id S236246AbiHKWCF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 18:05:50 -0400
-X-Greylist: delayed 607 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 11 Aug 2022 15:05:49 PDT
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7036B1EEDF;
-        Thu, 11 Aug 2022 15:05:49 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.west.internal (Postfix) with ESMTP id BFB892B05D1B;
-        Thu, 11 Aug 2022 17:55:40 -0400 (EDT)
+        Thu, 11 Aug 2022 18:02:05 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2278567C9B;
+        Thu, 11 Aug 2022 15:02:03 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 9942C5C005E;
+        Thu, 11 Aug 2022 18:02:01 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Thu, 11 Aug 2022 17:55:41 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm3; t=1660254940; x=1660262140; bh=ZgAnECcKiNINQ/nMekoYRrtEA
-        FO/LNkk2RLbQLXX3Oc=; b=vIS86Kh2zXrtYCvVOYCzWsRKom8XuVEa6HpXfxCra
-        EIctIqfcntjf8OVXYRma1/nuFkyBfXewbOo1jb1iSFJgi8594bKSqe9Q9hCQ3i87
-        0aASAw1PBw3nhZm6tJ2L9ktWvqAPmywm4Jh1BxR8tkNoHRjCTn8jNT+Uq9scl1Qs
-        uG1sHoeBCz/ZyMI1jqiuEHUvzdaIms194LGwvTtcG+2xzLjQ/k3uzI3Y7bnt2+Yc
-        oDs5svJYGA059hsCN31fI83KYApBBOWUIh85/vsQ1M6VAhQERTH1jJq4OCSTJjDd
-        XVb2a38JdhsPW1kRekHmb/AVgZ4Sr/7RIHakJp5Nj+xZQ==
+  by compute2.internal (MEProxy); Thu, 11 Aug 2022 18:02:01 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1660255321; x=
+        1660341721; bh=CTZyQu3k2T4ygetTKcwPn3NWnNrR4oMoRyDyOnzTuKk=; b=p
+        JXlaIsTzR3RliCOqfus13+e4Mw5GdwEzUtdCgETjH7tCHCuoojoQjiiBbJlQGEHQ
+        +DrYuEUM9trb5reHKBY0N1WqRTxfaGfDk0kkWQQezXC6KGrQOQTLt2cc8AKKhrXb
+        g5qiGCSSgb5KJxQKsfBctVNM8N+UjO/WdsGt37o1TSXKophZHQPOd+WF/mqQh8sK
+        qNPbsV9cKT1RsAdfLDQhRH97Vvz7YQ0hQHv6bK3uaNhiuh05QOifu7ICbM9OORoI
+        vFMh/h0+0IB11ilXad9kDhX0KLg2Pk6QjWtxEnO7xazXLEaLsf1Hh3QHycuQCOCK
+        TPse55UkdICxDp4v1qJEA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1660254940; x=1660262140; bh=ZgAnECcKiNINQ/nMekoYRrtEAFO/LNkk2RL
-        bQLXX3Oc=; b=ASUoPEXG3PHwYvWY3SPVwQ1CDMrHQ9S6NdthZQlptZrRfxUyPkm
-        92Rxw0hoUr8iRn9VRo9DgXcYDb7FgAmT6aeVKfAM/5bFFXOIc1m/WjWloMAhjcEE
-        DkrelS1no3NoV1gQ4WSAVlpsMKsa/j+5zbpdjuHtGL+dOME+oKvo1ll6UFMZkgdt
-        cbCr7u6w3q34os3ix8cVsPrKOiBL+4T24Q5NvdxHH4tzy33kstxUgb+ihhMxMc4i
-        XS6QA+lsAt7xkBDtjmQxWVO+1URgSpBzjcB9fx/wSa7IjdiegrUU1mXkJpq/RgLK
-        fn8w3BGK47Dc9Ambigh68Uozi28mNVMdb3w==
-X-ME-Sender: <xms:23r1YubqbHJ3u0qSoa4DJXrUQfZqWDFSq-wcjxKWZWCD1yEGjtEKZg>
-    <xme:23r1YhbEaNt4rqDvZQvph7P3MuS0WWF8rhpSFDyXpSjqpaD1vkRYKMLfKcHF3bwT_
-    3AGoCqxGgZEYRlKcA>
-X-ME-Received: <xmr:23r1Yo-Zb1ulSDneO6iolcO3ljq6WFv8xOMzlO_w0AprgE_RUb-hvw-S3QMe7ModH-PvHOuUAQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeghedgtdefucetufdoteggodetrfdotf
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1660255321; x=
+        1660341721; bh=CTZyQu3k2T4ygetTKcwPn3NWnNrR4oMoRyDyOnzTuKk=; b=A
+        YnrfKvRehig5zjxHamNNXXl/LSZYPvSj3loCapKsFK60JBxRqY1s/XLKvLkrfz8q
+        bjpHiDptsCguKnMbqc06waPX+tZNrzlBLOZl2i8FoV6+Z7r2OMimYxcc3ZuUecND
+        PDXRD9uc17lFNPSx00dfczc1kb81yNQPLb9Q9Pdv5i61hmbw96rnKLN5F6BDz72z
+        PxftOR/vDJuKePK+R6ns3zrfRVe6mr4CRumug3ku0HdDYSJn+Wb/D/KHCA9Uya1L
+        g1NTdlNhZSkj3sTJTiKf0OK5w0bSI0DDO2+eLCfpe0f1Rr7g8ojzfev4Q0eDeRFO
+        uI6f6rs7oWm+20kr1dpmw==
+X-ME-Sender: <xms:WXz1YjjXGEr5NWN1FyDWKptOktiGCLfyr3c2fCCCfunWqtMOZOb-sg>
+    <xme:WXz1YgAPhh1jqe1014656hDUzvNPc-0dEAES0jse4PYn8EXtUhNWMpR2pKdDJORBo
+    0NQfpp1jIINhensm9E>
+X-ME-Received: <xmr:WXz1YjG77s4BpoqMX0F4_yoPHF4C9PyxcuO12v5o1EgGGvTZ6OWWlweH91MfA7UE-blEQQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeghedgtdehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdlfeehmdenogevohgrshhtrg
-    hlqdfhgeduvddqtddvucdludehtddmnecujfgurhephffvvefufffkofgggfestdekredt
-    redttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqe
-    enucggtffrrghtthgvrhhnpeetueektdeuhfefvefggfevgeffgfekfefhkeekteffheev
-    tddvhedukeehffeltdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsth
-    gvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdr
-    giihii
-X-ME-Proxy: <xmx:23r1YgpIMgm9fSTff6UETf1xQBxZW_7i5zefq8K0v1euPdO-ESvdsA>
-    <xmx:23r1YppsnWjtVI3hs1EEsfvJWk2NAB7K1H_Ojki1vG5JgeoR8YUIOQ>
-    <xmx:23r1YuQ1eCWumr42QYffI2-ddQqlnh4IolG1rQfGt5eVF8vh6cacgg>
-    <xmx:3Hr1Yk1_8Tt381-AngQtpf7HiVpvoiSgVDPJA9JQuCE3ESDSpWkktg_eHkQ>
-Feedback-ID: i6a694271:Fastmail
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkffuhffvveffjghftgfgfgggsehtqhertddtreejnecuhfhrohhmpefnuhhk
+    vgculfhonhgvshcuoehluhhkvgeslhhjohhnvghsrdguvghvqeenucggtffrrghtthgvrh
+    hnpeekfeffueejveeujeeugeelleehtdegvdeludektddtfffhieefledvudehfeejieen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehluhhkvg
+    eslhhjohhnvghsrdguvghv
+X-ME-Proxy: <xmx:WXz1YgQm4-sx7vJVUhU-LFQwomGc1cBNJaJe6jTcoXT-8nTRwiP3gw>
+    <xmx:WXz1YgyM0kOaC36wy9IWDOEWWsmklJkBPnFL8n1WF97u6g06z-5GJg>
+    <xmx:WXz1Ym4Fbw7ag1JDflznlDc8LdbLipobE0HDs8RCyxMIymVGxV8MfQ>
+    <xmx:WXz1Ys9qPdGlCfjTo3hhFGbwRntUJnyk46_9XQ03bJAzkPzBlaqlmA>
+Feedback-ID: i5ec1447f:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 11 Aug 2022 17:55:38 -0400 (EDT)
-From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, memxor@gmail.com
-Cc:     Daniel Xu <dxu@dxuuu.xyz>, pablo@netfilter.org, fw@strlen.de,
-        netfilter-devel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v4 0/3] Add more bpf_*_ct_lookup() selftests
-Date:   Thu, 11 Aug 2022 15:55:24 -0600
-Message-Id: <cover.1660254747.git.dxu@dxuuu.xyz>
-X-Mailer: git-send-email 2.37.1
+ 11 Aug 2022 18:01:59 -0400 (EDT)
+Message-ID: <9ed62983bd03ed26cdb4399dd69b4096e8711fa9.camel@ljones.dev>
+Subject: Re: [PATCH v3 6/6] asus-wmi: Support the hardware GPU MUX on some
+ laptops
+From:   Luke Jones <luke@ljones.dev>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     andy.shevchenko@gmail.com, pobrn@protonmail.com, pavel@ucw.cz,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Fri, 12 Aug 2022 10:01:51 +1200
+In-Reply-To: <7365d41a-1475-118c-96a8-6ab927bda5b7@redhat.com>
+References: <20220809025054.1626339-1-luke@ljones.dev>
+         <20220809025054.1626339-7-luke@ljones.dev>
+         <7365d41a-1475-118c-96a8-6ab927bda5b7@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (by Flathub.org) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patchset adds more bpf_*_ct_lookup() selftests. The goal is to test
-interaction with netfilter subsystem as well as reading from `struct
-nf_conn`. The first is important when migrating legacy systems towards
-bpf. The latter is important in general to take full advantage of
-connection tracking.
+Hi Hans,
 
-I'll follow this patchset up with support for writing to `struct nf_conn`.
+On Thu, 2022-08-11 at 15:53 +0200, Hans de Goede wrote:
+> Hi,
+>=20
+> On 8/9/22 04:50, Luke D. Jones wrote:
+> > Support the hardware GPU MUX switch available on some models. This
+> > switch can toggle the MUX between:
+> >=20
+> > - 0, Dedicated mode
+> > - 1, Optimus mode
+> >=20
+> > Optimus mode is the regular iGPU + dGPU available, while dedicated
+> > mode switches the system to have only the dGPU available.
+> >=20
+> > Signed-off-by: Luke D. Jones <luke@ljones.dev>
+>=20
+> I see that you have replied to this that it needs more work.
+>=20
+> Besides it needing more work, ideally this should hook into
+> the existing vga-switcheroo mechanism for this. Can you take
+> a look at that please?
+>=20
+> I think this might be the first non GPU driver doing vga-
+> switcheroo stuff. So this may be something to discuss
+> on the dri-devel list.
 
-Past discussion:
-- v3: https://lore.kernel.org/bpf/cover.1660173222.git.dxu@dxuuu.xyz/
-- v2: https://lore.kernel.org/bpf/cover.1660062725.git.dxu@dxuuu.xyz/
-- v1: https://lore.kernel.org/bpf/cover.1659209738.git.dxu@dxuuu.xyz/
+I'm not sure how this would work. In typical ASUS fashion they do non-
+standard stuff. This switch is a basic toggle that requires a reboot to
+enable after writing to the ACPI method, after reboot the dGPU becomes
+the only visible GPU on the system and (this GPU) can not be suspended.
 
-Changes since v3:
-- Remove deprecated CHECK_FAIL() usage
-- cc netfilter folks
+In short: it toggles the laptop from discrete-only mode, and optimus
+mode, requiring a reboot to switch.
 
-Changes since v2:
-- Add bpf-ci kconfig changes
+From what I understand of switcheroo it is more to manage having dual
+(or more) GPU available during runtime, and manage the power states,
+offload etc.
 
-Changes since v1:
-- Reword commit message / cover letter to not mention connmark writing
+I have a vastly improved patch for this prepared now. Because of how
+the actual feature works (and the above explanation) it must be under
+the asus-nb-wmi sysfs (next to the dgpu_disable and egpu_enable toggles
+which are also unusual and non-standard work-arounds of Windows
+issues).
 
-Daniel Xu (3):
-  selftests/bpf: Add existing connection bpf_*_ct_lookup() test
-  selftests/bpf: Add connmark read test
-  selftests/bpf: Update CI kconfig
-
- tools/testing/selftests/bpf/config            |  2 +
- .../testing/selftests/bpf/prog_tests/bpf_nf.c | 60 +++++++++++++++++++
- .../testing/selftests/bpf/progs/test_bpf_nf.c | 21 +++++++
- 3 files changed, 83 insertions(+)
-
--- 
-2.37.1
-
+Kind regards,
+Luke.

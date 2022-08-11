@@ -2,84 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E89B590470
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 18:48:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EC1A55904A6
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 18:48:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238867AbiHKQmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 12:42:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52600 "EHLO
+        id S239161AbiHKQnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 12:43:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239285AbiHKQlO (ORCPT
+        with ESMTP id S239650AbiHKQmF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 12:41:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C0F8EA61DC
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 09:13:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660234429;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Kvn+70I7yPIly7NIcpI+E4BYwfh3vfPaXmRAy92AF5w=;
-        b=hVTN7i0QMKFBh392bac4jgfDb9v6Stf77skSImDft/H2S9/YrAmTxie6y+yysl3hue34rX
-        D7vxaR3YmB3QBPB8v7/q/gafzHMI/KYJYff/osB3qs64VorXQWGuLXU0Fvi+AGgk1cAgjk
-        aDWQpi0nGivaYsrkGwxgC+HCzwkYqk0=
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
- [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-660-GKQMlPldOKq3pJ_IvPSDHA-1; Thu, 11 Aug 2022 12:13:48 -0400
-X-MC-Unique: GKQMlPldOKq3pJ_IvPSDHA-1
-Received: by mail-il1-f200.google.com with SMTP id x7-20020a056e021ca700b002ded2e6331aso13023929ill.20
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 09:13:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=Kvn+70I7yPIly7NIcpI+E4BYwfh3vfPaXmRAy92AF5w=;
-        b=cczcbIcih1Oc2hhZ5G7QkoPklNPPYzk2khBqf5fPcWY14Q7rNZiRGl7t2/cLfN92Hl
-         YKBmCIw9fFs4L8LlLsI9fw/8auejIdOkwrENCmJbzcVRduhERuIj2SjTCX08Fqkztisp
-         4GU9NzMSbIMJStE+FsqZ8N9+EwUfQBK4N1JyHrBnGdgSU3oUDlvBLo6J1LfUCpmNN9TG
-         dikcuxH785qSxADkt5BZMybRoq7/6TDcVkUMe1nypavtTXVgx5rA9VFqzPNuCUXBHx6D
-         1auPEUewD/N3f6JAMR41Z6aCeHtkYC0yEjOAtBH9vFTETGjcBk50NV8uFS/rRVP5deMP
-         cuoA==
-X-Gm-Message-State: ACgBeo384bJTAFqZwuy7CPJwJKJv5CEtG7NzxUeBvXDctLYSlqfMk9gq
-        HdwfiHbEKC4N7u2uaHHYoP27Oc8FYRiZURjLXyF2lKwDMLPoEzFjdT8M+/WhudRUQMv2hDWOzxC
-        V6yxZmP6hTIksNnDoNLo+qTG8
-X-Received: by 2002:a92:ce50:0:b0:2dd:dc8e:1f36 with SMTP id a16-20020a92ce50000000b002dddc8e1f36mr16218642ilr.34.1660234425789;
-        Thu, 11 Aug 2022 09:13:45 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4ZzxcH25ORg0vfYxNfi+ta3V6GDOQvV28uQeT5mwGBGdlqyFRzS44blQE276L9QlyIzt5Fvg==
-X-Received: by 2002:a92:ce50:0:b0:2dd:dc8e:1f36 with SMTP id a16-20020a92ce50000000b002dddc8e1f36mr16218626ilr.34.1660234425555;
-        Thu, 11 Aug 2022 09:13:45 -0700 (PDT)
-Received: from localhost.localdomain (bras-base-aurron9127w-grc-35-70-27-3-10.dsl.bell.ca. [70.27.3.10])
-        by smtp.gmail.com with ESMTPSA id t1-20020a92ca81000000b002dd1c3c5c46sm3415429ilo.73.2022.08.11.09.13.44
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Thu, 11 Aug 2022 09:13:45 -0700 (PDT)
-From:   Peter Xu <peterx@redhat.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     Hugh Dickins <hughd@google.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Alistair Popple <apopple@nvidia.com>, peterx@redhat.com,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Andi Kleen <andi.kleen@intel.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: [PATCH v4 7/7] mm/swap: Cache swap migration A/D bits support
-Date:   Thu, 11 Aug 2022 12:13:31 -0400
-Message-Id: <20220811161331.37055-8-peterx@redhat.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220811161331.37055-1-peterx@redhat.com>
-References: <20220811161331.37055-1-peterx@redhat.com>
+        Thu, 11 Aug 2022 12:42:05 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8085A99D9
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 09:14:48 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27BCX9TS030774;
+        Thu, 11 Aug 2022 16:14:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=g3+7davjr+f7XTT9TBchXsCipf6jhjEdgQ2yAB8QNoU=;
+ b=R1Fdp8s55X01KYAbEp416GBUMMZ4rNGbpCTG35sk47cWsAJHInz9hxdhl+iePRzH1rDv
+ 9dlBibJMvmWARk1Pe8iE3Yb+xFZQJHJmbVcesaPgoqaA1H0h3dJlcP5ZkJTPaETEH96Y
+ acWcCX17vAlluMB2Kq58093ChqogtbVr5zsbefo2LSnuqe9fnAhzJdeV+TZokiHUJ12d
+ x2c11MCw3r9BjgPSFUkDHfS+c5cmi7yTYYcs04lJ3ve/I6IXadhc7YGMbxivMPIFygOq
+ WO4Xw7ggEeTWkpYdihyb2vsr19BTCh8cShH0IwLcosr4whF5xLox4fNhzzLis8XvDaIk Cg== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hv95yw023-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 11 Aug 2022 16:14:31 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27BGEVm2003446
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 11 Aug 2022 16:14:31 GMT
+Received: from [10.216.5.168] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Thu, 11 Aug
+ 2022 09:14:28 -0700
+Message-ID: <425df8db-d358-c1d7-820c-fc0485aa2721@quicinc.com>
+Date:   Thu, 11 Aug 2022 21:43:48 +0530
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v5] devcoredump : Serialize devcd_del work
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>,
+        Johannes Berg <johannes@sipsolutions.net>
+CC:     <gregkh@linuxfoundation.org>, <tglx@linutronix.de>,
+        <sboyd@kernel.org>, <rafael@kernel.org>,
+        lkml <linux-kernel@vger.kernel.org>
+References: <1653660220-19197-1-git-send-email-quic_mojha@quicinc.com>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <1653660220-19197-1-git-send-email-quic_mojha@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: EZBNRprGkYE3FGmRagi2An6NmveRMJWP
+X-Proofpoint-GUID: EZBNRprGkYE3FGmRagi2An6NmveRMJWP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-11_11,2022-08-11_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 clxscore=1011 adultscore=0 bulkscore=0 impostorscore=0
+ suspectscore=0 mlxlogscore=999 priorityscore=1501 spamscore=0 mlxscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208110054
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,95 +81,224 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce a variable swap_migration_ad_supported to cache whether the arch
-supports swap migration A/D bits.
+Hi Johannes/Kees,
 
-Here one thing to mention is that SWP_MIG_TOTAL_BITS will internally
-reference the other macro MAX_PHYSMEM_BITS, which is a function call on
-x86 (constant on all the rest of archs).
+Sorry for reminding on it again.
+Any hope of this one to get into devcoredump ?
 
-It's safe to reference it in swapfile_init() because when reaching here
-we're already during initcalls level 4 so we must have initialized 5-level
-pgtable for x86_64 (right after early_identify_cpu() finishes).
+-Mukesh
 
-- start_kernel
-  - setup_arch
-    - early_cpu_init
-      - get_cpu_cap --> fetch from CPUID (including X86_FEATURE_LA57)
-      - early_identify_cpu --> clear X86_FEATURE_LA57 (if early lvl5 not enabled (USE_EARLY_PGTABLE_L5))
-  - arch_call_rest_init
-    - rest_init
-      - kernel_init
-        - kernel_init_freeable
-          - do_basic_setup
-            - do_initcalls --> calls swapfile_init() (initcall level 4)
 
-This should slightly speed up the migration swap entry handlings.
-
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
- include/linux/swapfile.h | 2 ++
- include/linux/swapops.h  | 7 +------
- mm/swapfile.c            | 8 ++++++++
- 3 files changed, 11 insertions(+), 6 deletions(-)
-
-diff --git a/include/linux/swapfile.h b/include/linux/swapfile.h
-index 165e0bd04862..2fbcc9afd814 100644
---- a/include/linux/swapfile.h
-+++ b/include/linux/swapfile.h
-@@ -10,5 +10,7 @@ extern struct swap_info_struct *swap_info[];
- extern unsigned long generic_max_swapfile_size(void);
- /* Maximum swapfile size supported for the arch (not inclusive). */
- extern unsigned long swapfile_maximum_size;
-+/* Whether swap migration entry supports storing A/D bits for the arch */
-+extern bool swap_migration_ad_supported;
- 
- #endif /* _LINUX_SWAPFILE_H */
-diff --git a/include/linux/swapops.h b/include/linux/swapops.h
-index f25b566643f1..dbf9df854124 100644
---- a/include/linux/swapops.h
-+++ b/include/linux/swapops.h
-@@ -301,13 +301,8 @@ static inline swp_entry_t make_writable_migration_entry(pgoff_t offset)
-  */
- static inline bool migration_entry_supports_ad(void)
- {
--	/*
--	 * max_swapfile_size() returns the max supported swp-offset plus 1.
--	 * We can support the migration A/D bits iff the pfn swap entry has
--	 * the offset large enough to cover all of them (PFN, A & D bits).
--	 */
- #ifdef CONFIG_SWAP
--	return swapfile_maximum_size >= (1UL << SWP_MIG_TOTAL_BITS);
-+	return swap_migration_ad_supported;
- #else  /* CONFIG_SWAP */
- 	return false;
- #endif	/* CONFIG_SWAP */
-diff --git a/mm/swapfile.c b/mm/swapfile.c
-index 3cc64399df44..263b19e693cf 100644
---- a/mm/swapfile.c
-+++ b/mm/swapfile.c
-@@ -64,6 +64,9 @@ EXPORT_SYMBOL_GPL(nr_swap_pages);
- long total_swap_pages;
- static int least_priority = -1;
- unsigned long swapfile_maximum_size;
-+#ifdef CONFIG_MIGRATION
-+bool swap_migration_ad_supported;
-+#endif	/* CONFIG_MIGRATION */
- 
- static const char Bad_file[] = "Bad swap file entry ";
- static const char Unused_file[] = "Unused swap file entry ";
-@@ -3680,6 +3683,11 @@ static int __init swapfile_init(void)
- 
- 	swapfile_maximum_size = arch_max_swapfile_size();
- 
-+#ifdef CONFIG_MIGRATION
-+	if (swapfile_maximum_size >= (1UL << SWP_MIG_TOTAL_BITS))
-+		swap_migration_ad_supported = true;
-+#endif	/* CONFIG_MIGRATION */
-+
- 	return 0;
- }
- subsys_initcall(swapfile_init);
--- 
-2.32.0
-
+On 5/27/2022 7:33 PM, Mukesh Ojha wrote:
+> In following scenario(diagram), when one thread X running dev_coredumpm()
+> adds devcd device to the framework which sends uevent notification to
+> userspace and another thread Y reads this uevent and call to
+> devcd_data_write() which eventually try to delete the queued timer that
+> is not initialized/queued yet.
+> 
+> So, debug object reports some warning and in the meantime, timer is
+> initialized and queued from X path. and from Y path, it gets reinitialized
+> again and timer->entry.pprev=NULL and try_to_grab_pending() stucks.
+> 
+> To fix this, introduce mutex and a boolean flag to serialize the behaviour.
+> 
+>   	cpu0(X)			                cpu1(Y)
+> 
+>      dev_coredump() uevent sent to user space
+>      device_add()  ======================> user space process Y reads the
+>                                            uevents writes to devcd fd
+>                                            which results into writes to
+> 
+>                                           devcd_data_write()
+>                                             mod_delayed_work()
+>                                               try_to_grab_pending()
+>                                                 del_timer()
+>                                                   debug_assert_init()
+>     INIT_DELAYED_WORK()
+>     schedule_delayed_work()
+>                                                     debug_object_fixup()
+>                                                       timer_fixup_assert_init()
+>                                                         timer_setup()
+>                                                           do_init_timer()
+>                                                         /*
+>                                                          Above call reinitializes
+>                                                          the timer to
+>                                                          timer->entry.pprev=NULL
+>                                                          and this will be checked
+>                                                          later in timer_pending() call.
+>                                                         */
+>                                                   timer_pending()
+>                                                    !hlist_unhashed_lockless(&timer->entry)
+>                                                      !h->pprev
+>                                                  /*
+>                                                    del_timer() checks h->pprev and finds
+>                                                    it to be NULL due to which
+>                                                    try_to_grab_pending() stucks.
+>                                                  */
+> 
+> Link: https://lore.kernel.org/lkml/2e1f81e2-428c-f11f-ce92-eb11048cb271@quicinc.com/
+> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
+> ---
+> v4->v5:
+>   - Rebased it.
+> 
+> v3->v4:
+>   - flg variable renamed to delete_work.
+> 
+> v2->v3:
+>   Addressed comments from gregkh
+>   - Wrapped the commit text and corrected the alignment.
+>   - Described the reason to introduce new variables.
+>   - Restored the blank line.
+>   - rename the del_wk_queued to flg.
+>   Addressed comments from tglx
+>   - Added a comment which explains the race which looks obvious however
+>     would not occur between disabled_store and devcd_del work.
+> 
+> 
+> v1->v2:
+>   - Added del_wk_queued flag to serialize the race between devcd_data_write()
+>     and disabled_store() => devcd_free().
+>   drivers/base/devcoredump.c | 83 ++++++++++++++++++++++++++++++++++++++++++++--
+>   1 file changed, 81 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/base/devcoredump.c b/drivers/base/devcoredump.c
+> index f4d794d..1c06781 100644
+> --- a/drivers/base/devcoredump.c
+> +++ b/drivers/base/devcoredump.c
+> @@ -25,6 +25,47 @@ struct devcd_entry {
+>   	struct device devcd_dev;
+>   	void *data;
+>   	size_t datalen;
+> +	/*
+> +	 * Here, mutex is required to serialize the calls to del_wk work between
+> +	 * user/kernel space which happens when devcd is added with device_add()
+> +	 * and that sends uevent to user space. User space reads the uevents,
+> +	 * and calls to devcd_data_write() which try to modify the work which is
+> +	 * not even initialized/queued from devcoredump.
+> +	 *
+> +	 *
+> +	 *
+> +	 *        cpu0(X)                                 cpu1(Y)
+> +	 *
+> +	 *        dev_coredump() uevent sent to user space
+> +	 *        device_add()  ======================> user space process Y reads the
+> +	 *                                              uevents writes to devcd fd
+> +	 *                                              which results into writes to
+> +	 *
+> +	 *                                             devcd_data_write()
+> +	 *                                               mod_delayed_work()
+> +	 *                                                 try_to_grab_pending()
+> +	 *                                                   del_timer()
+> +	 *                                                     debug_assert_init()
+> +	 *       INIT_DELAYED_WORK()
+> +	 *       schedule_delayed_work()
+> +	 *
+> +	 *
+> +	 * Also, mutex alone would not be enough to avoid scheduling of
+> +	 * del_wk work after it get flush from a call to devcd_free()
+> +	 * mentioned as below.
+> +	 *
+> +	 *	disabled_store()
+> +	 *        devcd_free()
+> +	 *          mutex_lock()             devcd_data_write()
+> +	 *          flush_delayed_work()
+> +	 *          mutex_unlock()
+> +	 *                                   mutex_lock()
+> +	 *                                   mod_delayed_work()
+> +	 *                                   mutex_unlock()
+> +	 * So, delete_work flag is required.
+> +	 */
+> +	struct mutex mutex;
+> +	bool delete_work;
+>   	struct module *owner;
+>   	ssize_t (*read)(char *buffer, loff_t offset, size_t count,
+>   			void *data, size_t datalen);
+> @@ -84,7 +125,12 @@ static ssize_t devcd_data_write(struct file *filp, struct kobject *kobj,
+>   	struct device *dev = kobj_to_dev(kobj);
+>   	struct devcd_entry *devcd = dev_to_devcd(dev);
+>   
+> -	mod_delayed_work(system_wq, &devcd->del_wk, 0);
+> +	mutex_lock(&devcd->mutex);
+> +	if (!devcd->delete_work) {
+> +		devcd->delete_work = true;
+> +		mod_delayed_work(system_wq, &devcd->del_wk, 0);
+> +	}
+> +	mutex_unlock(&devcd->mutex);
+>   
+>   	return count;
+>   }
+> @@ -112,7 +158,12 @@ static int devcd_free(struct device *dev, void *data)
+>   {
+>   	struct devcd_entry *devcd = dev_to_devcd(dev);
+>   
+> +	mutex_lock(&devcd->mutex);
+> +	if (!devcd->delete_work)
+> +		devcd->delete_work = true;
+> +
+>   	flush_delayed_work(&devcd->del_wk);
+> +	mutex_unlock(&devcd->mutex);
+>   	return 0;
+>   }
+>   
+> @@ -122,6 +173,30 @@ static ssize_t disabled_show(struct class *class, struct class_attribute *attr,
+>   	return sysfs_emit(buf, "%d\n", devcd_disabled);
+>   }
+>   
+> +/*
+> + *
+> + *	disabled_store()                                	worker()
+> + *	 class_for_each_device(&devcd_class,
+> + *		NULL, NULL, devcd_free)
+> + *         ...
+> + *         ...
+> + *	   while ((dev = class_dev_iter_next(&iter))
+> + *                                                             devcd_del()
+> + *                                                               device_del()
+> + *                                                                 put_device() <- last reference
+> + *             error = fn(dev, data)                           devcd_dev_release()
+> + *             devcd_free(dev, data)                           kfree(devcd)
+> + *             mutex_lock(&devcd->mutex);
+> + *
+> + *
+> + * In the above diagram, It looks like disabled_store() would be racing with parallely
+> + * running devcd_del() and result in memory abort while acquiring devcd->mutex which
+> + * is called after kfree of devcd memory  after dropping its last reference with
+> + * put_device(). However, this will not happens as fn(dev, data) runs
+> + * with its own reference to device via klist_node so it is not its last reference.
+> + * so, above situation would not occur.
+> + */
+> +
+>   static ssize_t disabled_store(struct class *class, struct class_attribute *attr,
+>   			      const char *buf, size_t count)
+>   {
+> @@ -278,13 +353,16 @@ void dev_coredumpm(struct device *dev, struct module *owner,
+>   	devcd->read = read;
+>   	devcd->free = free;
+>   	devcd->failing_dev = get_device(dev);
+> +	devcd->delete_work = false;
+>   
+> +	mutex_init(&devcd->mutex);
+>   	device_initialize(&devcd->devcd_dev);
+>   
+>   	dev_set_name(&devcd->devcd_dev, "devcd%d",
+>   		     atomic_inc_return(&devcd_count));
+>   	devcd->devcd_dev.class = &devcd_class;
+>   
+> +	mutex_lock(&devcd->mutex);
+>   	if (device_add(&devcd->devcd_dev))
+>   		goto put_device;
+>   
+> @@ -301,10 +379,11 @@ void dev_coredumpm(struct device *dev, struct module *owner,
+>   
+>   	INIT_DELAYED_WORK(&devcd->del_wk, devcd_del);
+>   	schedule_delayed_work(&devcd->del_wk, DEVCD_TIMEOUT);
+> -
+> +	mutex_unlock(&devcd->mutex);
+>   	return;
+>    put_device:
+>   	put_device(&devcd->devcd_dev);
+> +	mutex_unlock(&devcd->mutex);
+>    put_module:
+>   	module_put(owner);
+>    free:

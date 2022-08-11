@@ -2,308 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC6D858F8F6
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 10:23:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 705A758F8F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 10:23:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233400AbiHKIX0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 04:23:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58084 "EHLO
+        id S234451AbiHKIXg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 04:23:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234394AbiHKIXY (ORCPT
+        with ESMTP id S234316AbiHKIXc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 04:23:24 -0400
-Received: from forward105j.mail.yandex.net (forward105j.mail.yandex.net [5.45.198.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76B926715A
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 01:23:19 -0700 (PDT)
-Received: from forward502j.mail.yandex.net (forward502j.mail.yandex.net [IPv6:2a02:6b8:0:801:2::112])
-        by forward105j.mail.yandex.net (Yandex) with ESMTP id 3CBEA4EC8E7E;
-        Thu, 11 Aug 2022 11:23:17 +0300 (MSK)
-Received: from myt5-ca5ec8faf378.qloud-c.yandex.net (myt5-ca5ec8faf378.qloud-c.yandex.net [IPv6:2a02:6b8:c12:2514:0:640:ca5e:c8fa])
-        by forward502j.mail.yandex.net (Yandex) with ESMTP id 58CA91121660;
-        Thu, 11 Aug 2022 11:23:11 +0300 (MSK)
-Received: by myt5-ca5ec8faf378.qloud-c.yandex.net (smtp/Yandex) with ESMTPSA id IswyNOuXR0-N5iW18LY;
-        Thu, 11 Aug 2022 11:23:09 +0300
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (Client certificate not present)
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maquefel.me; s=mail; t=1660206190;
-        bh=rZvkAnRgFuIGmVLfU2EdMsDzDf3zUw3Dpp3B3RWQkLs=;
-        h=Cc:Message-ID:Subject:Date:References:To:From:In-Reply-To;
-        b=AwaIkaEaQ71adi5y5BQN9OMuCdVOjMG9Cen7fgwsTpmrHbLWzmNrDfVCstj3YFeSC
-         MHwkImLJGpXQlu7snsqzAfiMSrCb2fxSsQsIegLrfMhdedrXdmou7Kvxw/ypCmNKPg
-         Fapj2UPvckyaxZ4gxyfzraG0lBchocNsQO2oDdjk=
-Authentication-Results: myt5-ca5ec8faf378.qloud-c.yandex.net; dkim=pass header.i=@maquefel.me
-Date:   Thu, 11 Aug 2022 11:23:03 +0300
-From:   Nikita Shubin <nikita.shubin@maquefel.me>
-To:     Mayuresh Chitale <mchitale@ventanamicro.com>
-Cc:     linux@yadro.com, Genevieve Chan <genevieve.chan@starfivetech.com>,
-        =?UTF-8?B?Sm/Do28gTcOhcmlv?= Domingos 
-        <joao.mario@tecnico.ulisboa.pt>,
-        Nikita Shubin <n.shubin@yadro.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Kautuk Consul <kconsul@ventanamicro.com>
-Subject: Re: [PATCH v5] perf arch events: riscv sbi firmware std event files
-Message-ID: <20220811112303.4e5f0566@redslave.neermore.group>
-In-Reply-To: <18c8e9c74955c08fdbd631a35c51b30f3cff3cd3.camel@ventanamicro.com>
-References: <20220628114625.166665-1-nikita.shubin@maquefel.me>
-        <20220628114625.166665-4-nikita.shubin@maquefel.me>
-        <18c8e9c74955c08fdbd631a35c51b30f3cff3cd3.camel@ventanamicro.com>
-X-Mailer: Claws Mail 3.17.7 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Thu, 11 Aug 2022 04:23:32 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECAB6B161;
+        Thu, 11 Aug 2022 01:23:30 -0700 (PDT)
+Received: from [192.168.0.2] (ip5f5aea52.dynamic.kabel-deutschland.de [95.90.234.82])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 01C1361EA192C;
+        Thu, 11 Aug 2022 10:23:26 +0200 (CEST)
+Content-Type: multipart/mixed; boundary="------------N1wXLFsF1u2GW66ii3eT0OJh"
+Message-ID: <52c87d91-422d-fca0-4dd5-bbaa559c81b6@molgen.mpg.de>
+Date:   Thu, 11 Aug 2022 10:23:26 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.1
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+Cc:     Wang Yating <yating.wang@intel.com>,
+        Christoph Jechlitschek <christoph.jechlitschek@intel.com>,
+        Hao Yao <hao.yao@intel.com>, Andy Yeh <andy.yeh@intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Bingbu Cao <bingbu.cao@intel.com>,
+        Tianshu Qiu <tian.shu.qiu@intel.com>,
+        linux-media@vger.kernel.org, Mark Pearson <markpearson@lenovo.com>,
+        Dell.Client.Kernel@dell.com, linux-kernel@vger.kernel.org,
+        Guenter Roeck <groeck@google.com>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Andy Whitcroft <apw@canonical.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Christian Schaller <cschalle@redhat.com>,
+        Wouter Bolsterlee <wouter@bolsterl.ee>,
+        Miguel Palhas <mpalhas@gmail.com>, it+linux-media@molgen.mpg.de
+Subject: Missing MIPI IPU6 camera driver for Intel Alder Lake laptops
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Mayuresh!
+This is a multi-part message in MIME format.
+--------------N1wXLFsF1u2GW66ii3eT0OJh
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, 10 Aug 2022 20:26:18 +0530
-Mayuresh Chitale <mchitale@ventanamicro.com> wrote:
+[Cc: folks from IPU6 external driver, IPU3 maintainers, Dell, Lenovo, 
+Chromium, Canonical/Ubuntu, Red Hat]
 
-> On Tue, 2022-06-28 at 14:45 +0300, Nikita Shubin wrote:
-> > From: Nikita Shubin <n.shubin@yadro.com>
-> > 
-> > Firmware events are defined by "RISC-V Supervisor Binary Interface
-> > Specification", which means they should be always available as long
-> > as
-> > firmware supports >= 0.3.0 SBI.
-> > 
-> > Expose them to arch std events, so they can be reused by particular
-> > PMU bindings.
-> > 
-> > Signed-off-by: Nikita Shubin <n.shubin@yadro.com>
-> > ---
-> > v4->v5:
-> > - changed EventCode to ConfigCode, as 63 bit exceeds event code
-> > format
-> > ---
-> >  .../arch/riscv/riscv-sbi-firmware.json        | 134
-> > ++++++++++++++++++
-> >  1 file changed, 134 insertions(+)
-> >  create mode 100644 tools/perf/pmu-events/arch/riscv/riscv-sbi-
-> > firmware.json
-> > 
-> > diff --git
-> > a/tools/perf/pmu-events/arch/riscv/riscv-sbi-firmware.json
-> > b/tools/perf/pmu-events/arch/riscv/riscv-sbi-firmware.json new file
-> > mode 100644 index 000000000000..b9d305f1ada8
-> > --- /dev/null
-> > +++ b/tools/perf/pmu-events/arch/riscv/riscv-sbi-firmware.json
-> > @@ -0,0 +1,134 @@
-> > +[
-> > +  {
-> > +    "PublicDescription": "Misaligned load trap",
-> > +    "ConfigCode": "0x8000000000000000",
-> > +    "EventName": "FW_MISALIGNED_LOAD",
-> > +    "BriefDescription": "Misaligned load trap event"
-> > +  },
-> > +  {
-> > +    "PublicDescription": "Misaligned store trap",
-> > +    "ConfigCode": "0x8000000000000001",
-> > +    "EventName": "FW_MISALIGNED_STORE",
-> > +    "BriefDescription": "Misaligned store trap event"
-> > +  },
-> > +  {
-> > +    "PublicDescription": "Load access trap",
-> > +    "ConfigCode": "0x8000000000000002",
-> > +    "EventName": "FW_ACCESS_LOAD",
-> > +    "BriefDescription": "Load access trap event"
-> > +  },
-> > +  {
-> > +    "PublicDescription": "Store access trap",
-> > +    "ConfigCode": "0x8000000000000003",
-> > +    "EventName": "FW_ACCESS_STORE",
-> > +    "BriefDescription": "Store access trap event"
-> > +  },
-> > +  {
-> > +    "PublicDescription": "Illegal instruction trap",
-> > +    "ConfigCode": "0x8000000000000004",
-> > +    "EventName": "FW_ILLEGAL_INSN",
-> > +    "BriefDescription": "Illegal instruction trap event"
-> > +  },
-> > +  {
-> > +    "PublicDescription": "Set timer event",
-> > +    "ConfigCode": "0x8000000000000005",
-> > +    "EventName": "FW_SET_TIMER",
-> > +    "BriefDescription": "Set timer event"
-> > +  },
-> > +  {
-> > +    "PublicDescription": "Sent IPI to other HART event",
-> > +    "ConfigCode": "0x8000000000000006",
-> > +    "EventName": "FW_IPI_SENT",
-> > +    "BriefDescription": "Sent IPI to other HART event"
-> > +  },
-> > +  {
-> > +    "PublicDescription": "Received IPI from other HART event",
-> > +    "ConfigCode": "0x8000000000000007",
-> > +    "EventName": "FW_IPI_RECEIVED",
-> > +    "BriefDescription": "Received IPI from other HART event"
-> > +  },
-> > +  {
-> > +    "PublicDescription": "Sent FENCE.I request to other HART
-> > event",
-> > +    "ConfigCode": "0x8000000000000008",
-> > +    "EventName": "FW_FENCE_I_SENT",
-> > +    "BriefDescription": "Sent FENCE.I request to other HART event"
-> > +  },
-> > +  {
-> > +    "PublicDescription": "Received FENCE.I request from other HART
-> > event",
-> > +    "ConfigCode": "0x8000000000000009",
-> > +    "EventName": "FW_FENCE_I_RECEIVED",
-> > +    "BriefDescription": "Received FENCE.I request from other HART
-> > event"
-> > +  },
-> > +  {
-> > +    "PublicDescription": "Sent SFENCE.VMA request to other HART
-> > event",
-> > +    "ConfigCode": "0x80000000000000a",
-> > +    "EventName": "FW_SFENCE_VMA_SENT",
-> > +    "BriefDescription": "Sent SFENCE.VMA request to other HART
-> > event"
-> > +  },
-> > +  {
-> > +    "PublicDescription": "Received SFENCE.VMA request from other
-> > HART event",
-> > +    "ConfigCode": "0x800000000000000b",
-> > +    "EventName": "FW_SFENCE_VMA_RECEIVED",
-> > +    "BriefDescription": "Received SFENCE.VMA request from other
-> > HART event"
-> > +  },
-> > +  {
-> > +    "PublicDescription": "Sent SFENCE.VMA with ASID request to
-> > other HART event",
-> > +    "ConfigCode": "0x800000000000000c",
-> > +    "EventName": "FW_SFENCE_VMA_RECEIVED",
-> > +    "BriefDescription": "Sent SFENCE.VMA with ASID request to other
-> > HART event"
-> > +  },
-> > +  {
-> > +    "PublicDescription": "Received SFENCE.VMA with ASID request
-> > from other HART event",
-> > +    "ConfigCode": "0x800000000000000d",
-> > +    "EventName": "FW_SFENCE_VMA_ASID_RECEIVED",
-> > +    "BriefDescription": "Received SFENCE.VMA with ASID request from
-> > other HART event"
-> > +  },
-> > +  {
-> > +    "PublicDescription": "Sent HFENCE.GVMA request to other HART
-> > event",
-> > +    "ConfigCode": "0x800000000000000e",
-> > +    "EventName": "FW_HFENCE_GVMA_SENT",
-> > +    "BriefDescription": "Sent HFENCE.GVMA request to other HART
-> > event"
-> > +  },
-> > +  {
-> > +    "PublicDescription": "Received HFENCE.GVMA request from other
-> > HART event",
-> > +    "ConfigCode": "0x800000000000000f",
-> > +    "EventName": "FW_HFENCE_GVMA_RECEIVED",
-> > +    "BriefDescription": "Received HFENCE.GVMA request from other
-> > HART event"
-> > +  },
-> > +  {
-> > +    "PublicDescription": "Sent HFENCE.GVMA with VMID request to
-> > other HART event",
-> > +    "ConfigCode": "0x8000000000000010",
-> > +    "EventName": "FW_HFENCE_GVMA_VMID_SENT",
-> > +    "BriefDescription": "Sent HFENCE.GVMA with VMID request to
-> > other HART event"
-> > +  },
-> > +  {
-> > +    "PublicDescription": "Received HFENCE.GVMA with VMID request
-> > from other HART event",
-> > +    "ConfigCode": "0x8000000000000011",
-> > +    "EventName": "FW_HFENCE_GVMA_VMID_RECEIVED",
-> > +    "BriefDescription": "Received HFENCE.GVMA with VMID request
-> > from other HART event"
-> > +  },
-> > +  {
-> > +    "PublicDescription": "Sent HFENCE.VVMA request to other HART
-> > event",
-> > +    "ConfigCode": "0x8000000000000012",
-> > +    "EventName": "FW_HFENCE_VVMA_SENT",
-> > +    "BriefDescription": "Sent HFENCE.VVMA request to other HART
-> > event"
-> > +  },
-> > +  {
-> > +    "PublicDescription": "Received HFENCE.VVMA request from other
-> > HART event",
-> > +    "ConfigCode": "0x8000000000000013",
-> > +    "EventName": "FW_HFENCE_VVMA_RECEIVED",
-> > +    "BriefDescription": "Received HFENCE.VVMA request from other
-> > HART event"
-> > +  },
-> > +  {
-> > +    "PublicDescription": "Sent HFENCE.VVMA with ASID request to
-> > other HART event",
-> > +    "ConfigCode": "0x8000000000000014",
-> > +    "EventName": "FW_HFENCE_VVMA_ASID_SENT",
-> > +    "BriefDescription": "Sent HFENCE.VVMA with ASID request to
-> > other HART event"
-> > +  },
-> > +  {
-> > +    "PublicDescription": "Received HFENCE.VVMA with ASID request
-> > from other HART event",
-> > +    "ConfigCode": "0x8000000000000015",
-> > +    "EventName": "FW_HFENCE_VVMA_ASID_RECEIVED",
-> > +    "BriefDescription": "Received HFENCE.VVMA with ASID request
-> > from other HART event"
-> > +  }
-> > +]  
+Dear Greg,
+
+
+I am writing you, because I remember you – at least – were active 
+several years ago in getting good upstream driver support into the Linux 
+kernel.
+
+It looks like the driver for the MIPI IPU6 camera of Intel Alder Lake 
+based laptops, for example, Lenovo ThinkPad X1 Carbon and Dell XPS 13 
+9315/9320, is not in the upstream Linux kernel.
+
+With Ubuntu’s OEM image pre-installed by Dell, and on Google Chromebooks 
+the camera is supposedly working [1]. There is a GitHub project with a 
+repository for the Linux kernel patches [2], but the patches – as 
+expected, and known from other external drivers, and Android drivers – 
+do not build against all Linux kernel versions [3]. A request to 
+upstream the drivers was opened at the end of March [4], and got the 
+reply below in July:
+
+> Intel is not ready yet to provide technical support to various Linux
+> distro and all OEM devices at this moment with Intel IPU6 github.
 > 
-> When testing with perf using firmware events we saw this error: 
-> WARNING: event 'N/A' not valid (bits 59 of config '80000000000000a'
-> not supported by kernel)!
-> 
-> It looks it is due to a typo and applying the below patch resolved the
-> issue for us.
+> Intel is supporting Dell laptop and their MIPI camera functionality
+> on Ubuntu with release/integration support from Canonical. If you are
+> using Dell devices, please refer to the devices listed in this link.
+> (https://wiki.ubuntu.com/Dell) You can learn the latest updates from
+> the installation guide.
+The patches were integrated into ChromiumOS’ Linux kernel tree – for 
+specific version, like 5.15 [5], and the same for Ubuntu 22.04 with 
+Linux 5.15 – only in June [6]. A lot of that (redundant) work seems to 
+be done by the Intel developers involved also in the GitHub project.
 
-Thanks for catching this - indeed this is a correct fix.
+In the last seven or so years Linux upstream driver support worked well 
+for me – especially with Intel hardware –, so I wanted to make you (and 
+others) aware of the situation, and hope, that you could do something 
+about the situation. With the current situation I can only recommend to 
+FLOSS users to *not* buy these devices.
 
-> 
-> Tested-by: Kautuk Consul <kconsul@ventanamicro.com>
 
-Thank you for testing!
+Kind regards,
+
+Paul
 
 
-Yours,
-Nikita Shubin.
+PS: The proprietary firmware is also not in the linux-firmware 
+repository [7], and the user space packages [8] are also not packaged 
+yet for some distributions like Debian.
 
-> 
-> diff --git a/tools/perf/pmu-events/arch/riscv/riscv-sbi-firmware.json
-> b/tools/perf/pmu-events/arch/riscv/riscv-sbi-firmware.json
-> index b9d305f1ada8..a9939823b14b 100644
-> --- a/tools/perf/pmu-events/arch/riscv/riscv-sbi-firmware.json
-> +++ b/tools/perf/pmu-events/arch/riscv/riscv-sbi-firmware.json
-> @@ -61,7 +61,7 @@
->    },
->    {
->      "PublicDescription": "Sent SFENCE.VMA request to other HART
-> event",
-> -    "ConfigCode": "0x80000000000000a",
-> +    "ConfigCode": "0x800000000000000a",
->      "EventName": "FW_SFENCE_VMA_SENT",
->      "BriefDescription": "Sent SFENCE.VMA request to other HART event"
->    },
-> 
-> 
-> 
+PPS: VA-API support also does not work [9].
 
+[1]: https://ubuntu.com/certified/202203-30070
+[2]: https://github.com/intel/ipu6-drivers
+[3]: https://github.com/intel/ipu6-drivers/issues/13
+[4]: https://github.com/intel/ipu6-drivers/issues/22
+[5]: 
+https://chromium-review.googlesource.com/c/chromiumos/third_party/kernel/+/3034663
+[6]: 
+https://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/linux/+git/jammy/log/drivers/media/pci/intel
+[7]: https://bugs.launchpad.net/ubuntu/+source/linux-firmware/+bug/1955383
+[8]: 
+https://launchpad.net/~oem-solutions-group/+archive/ubuntu/intel-ipu6/+packages
+[9]: https://github.com/intel/media-driver/issues/1371
+--------------N1wXLFsF1u2GW66ii3eT0OJh
+Content-Type: text/plain; charset=UTF-8; name="lspci-nn.txt"
+Content-Disposition: attachment; filename="lspci-nn.txt"
+Content-Transfer-Encoding: base64
+
+JCBsc3BjaSAtbm4KMDA6MDAuMCBIb3N0IGJyaWRnZSBbMDYwMF06IEludGVsIENvcnBvcmF0
+aW9uIERldmljZSBbODA4Njo0NjAyXSAocmV2IDA2KQowMDowMi4wIFZHQSBjb21wYXRpYmxl
+IGNvbnRyb2xsZXIgWzAzMDBdOiBJbnRlbCBDb3Jwb3JhdGlvbiBBbGRlciBMYWtlLVVQNCBH
+VDIgW0lyaXMgWGUgR3JhcGhpY3NdIFs4MDg2OjQ2YWFdIChyZXYgMGMpCjAwOjA0LjAgU2ln
+bmFsIHByb2Nlc3NpbmcgY29udHJvbGxlciBbMTE4MF06IEludGVsIENvcnBvcmF0aW9uIEFs
+ZGVyIExha2UgSW5ub3ZhdGlvbiBQbGF0Zm9ybSBGcmFtZXdvcmsgUHJvY2Vzc29yIFBhcnRp
+Y2lwYW50IFs4MDg2OjQ2MWRdIChyZXYgMDYpCjAwOjA1LjAgTXVsdGltZWRpYSBjb250cm9s
+bGVyIFswNDgwXTogSW50ZWwgQ29ycG9yYXRpb24gRGV2aWNlIFs4MDg2OjQ2NWRdIChyZXYg
+MDYpCjAwOjA2LjAgUENJIGJyaWRnZSBbMDYwNF06IEludGVsIENvcnBvcmF0aW9uIDEydGgg
+R2VuIENvcmUgUHJvY2Vzc29yIFBDSSBFeHByZXNzIHg0IENvbnRyb2xsZXIgIzAgWzgwODY6
+NDY0ZF0gKHJldiAwNikKMDA6MDcuMCBQQ0kgYnJpZGdlIFswNjA0XTogSW50ZWwgQ29ycG9y
+YXRpb24gQWxkZXIgTGFrZS1QIFRodW5kZXJib2x0IDQgUENJIEV4cHJlc3MgUm9vdCBQb3J0
+ICMwIFs4MDg2OjQ2NmVdIChyZXYgMDYpCjAwOjA3LjEgUENJIGJyaWRnZSBbMDYwNF06IElu
+dGVsIENvcnBvcmF0aW9uIEFsZGVyIExha2UtUCBUaHVuZGVyYm9sdCA0IFBDSSBFeHByZXNz
+IFJvb3QgUG9ydCAjMSBbODA4Njo0NjNmXSAocmV2IDA2KQowMDowOC4wIFN5c3RlbSBwZXJp
+cGhlcmFsIFswODgwXTogSW50ZWwgQ29ycG9yYXRpb24gMTJ0aCBHZW4gQ29yZSBQcm9jZXNz
+b3IgR2F1c3NpYW4gJiBOZXVyYWwgQWNjZWxlcmF0b3IgWzgwODY6NDY0Zl0gKHJldiAwNikK
+MDA6MGQuMCBVU0IgY29udHJvbGxlciBbMGMwM106IEludGVsIENvcnBvcmF0aW9uIEFsZGVy
+IExha2UtUCBUaHVuZGVyYm9sdCA0IFVTQiBDb250cm9sbGVyIFs4MDg2OjQ2MWVdIChyZXYg
+MDYpCjAwOjBkLjIgVVNCIGNvbnRyb2xsZXIgWzBjMDNdOiBJbnRlbCBDb3Jwb3JhdGlvbiBB
+bGRlciBMYWtlLVAgVGh1bmRlcmJvbHQgNCBOSEkgIzAgWzgwODY6NDYzZV0gKHJldiAwNikK
+MDA6MTIuMCBTZXJpYWwgY29udHJvbGxlciBbMDcwMF06IEludGVsIENvcnBvcmF0aW9uIERl
+dmljZSBbODA4Njo1MWZjXSAocmV2IDAxKQowMDoxNC4wIFVTQiBjb250cm9sbGVyIFswYzAz
+XTogSW50ZWwgQ29ycG9yYXRpb24gQWxkZXIgTGFrZSBQQ0ggVVNCIDMuMiB4SENJIEhvc3Qg
+Q29udHJvbGxlciBbODA4Njo1MWVkXSAocmV2IDAxKQowMDoxNC4yIFJBTSBtZW1vcnkgWzA1
+MDBdOiBJbnRlbCBDb3Jwb3JhdGlvbiBBbGRlciBMYWtlIFBDSCBTaGFyZWQgU1JBTSBbODA4
+Njo1MWVmXSAocmV2IDAxKQowMDoxNC4zIE5ldHdvcmsgY29udHJvbGxlciBbMDI4MF06IElu
+dGVsIENvcnBvcmF0aW9uIEFsZGVyIExha2UtUCBQQ0ggQ05WaSBXaUZpIFs4MDg2OjUxZjBd
+IChyZXYgMDEpCjAwOjE1LjAgU2VyaWFsIGJ1cyBjb250cm9sbGVyIFswYzgwXTogSW50ZWwg
+Q29ycG9yYXRpb24gQWxkZXIgTGFrZSBQQ0ggU2VyaWFsIElPIEkyQyBDb250cm9sbGVyICMw
+IFs4MDg2OjUxZThdIChyZXYgMDEpCjAwOjE1LjEgU2VyaWFsIGJ1cyBjb250cm9sbGVyIFsw
+YzgwXTogSW50ZWwgQ29ycG9yYXRpb24gQWxkZXIgTGFrZSBQQ0ggU2VyaWFsIElPIEkyQyBD
+b250cm9sbGVyICMxIFs4MDg2OjUxZTldIChyZXYgMDEpCjAwOjE2LjAgQ29tbXVuaWNhdGlv
+biBjb250cm9sbGVyIFswNzgwXTogSW50ZWwgQ29ycG9yYXRpb24gQWxkZXIgTGFrZSBQQ0gg
+SEVDSSBDb250cm9sbGVyIFs4MDg2OjUxZTBdIChyZXYgMDEpCjAwOjFlLjAgQ29tbXVuaWNh
+dGlvbiBjb250cm9sbGVyIFswNzgwXTogSW50ZWwgQ29ycG9yYXRpb24gQWxkZXIgTGFrZSBQ
+Q0ggVUFSVCAjMCBbODA4Njo1MWE4XSAocmV2IDAxKQowMDoxZS4yIFNlcmlhbCBidXMgY29u
+dHJvbGxlciBbMGM4MF06IEludGVsIENvcnBvcmF0aW9uIERldmljZSBbODA4Njo1MWFhXSAo
+cmV2IDAxKQowMDoxZS4zIFNlcmlhbCBidXMgY29udHJvbGxlciBbMGM4MF06IEludGVsIENv
+cnBvcmF0aW9uIERldmljZSBbODA4Njo1MWFiXSAocmV2IDAxKQowMDoxZi4wIElTQSBicmlk
+Z2UgWzA2MDFdOiBJbnRlbCBDb3Jwb3JhdGlvbiBEZXZpY2UgWzgwODY6NTE4N10gKHJldiAw
+MSkKMDA6MWYuMyBNdWx0aW1lZGlhIGF1ZGlvIGNvbnRyb2xsZXIgWzA0MDFdOiBJbnRlbCBD
+b3Jwb3JhdGlvbiBEZXZpY2UgWzgwODY6NTFjY10gKHJldiAwMSkKMDA6MWYuNCBTTUJ1cyBb
+MGMwNV06IEludGVsIENvcnBvcmF0aW9uIEFsZGVyIExha2UgUENILVAgU01CdXMgSG9zdCBD
+b250cm9sbGVyIFs4MDg2OjUxYTNdIChyZXYgMDEpCjAwOjFmLjUgU2VyaWFsIGJ1cyBjb250
+cm9sbGVyIFswYzgwXTogSW50ZWwgQ29ycG9yYXRpb24gQWxkZXIgTGFrZS1QIFBDSCBTUEkg
+Q29udHJvbGxlciBbODA4Njo1MWE0XSAocmV2IDAxKQowMTowMC4wIE5vbi1Wb2xhdGlsZSBt
+ZW1vcnkgY29udHJvbGxlciBbMDEwOF06IFBoaXNvbiBFbGVjdHJvbmljcyBDb3Jwb3JhdGlv
+biBEZXZpY2UgWzE5ODc6NTAxOV0gKHJldiAwMSkK
+
+--------------N1wXLFsF1u2GW66ii3eT0OJh--

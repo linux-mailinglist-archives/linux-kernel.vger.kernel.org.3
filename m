@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C6A8590378
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 18:28:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A9CE590400
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 18:29:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238138AbiHKQ1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 12:27:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49726 "EHLO
+        id S238319AbiHKQ3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 12:29:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238377AbiHKQ0M (ORCPT
+        with ESMTP id S238306AbiHKQ1F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 12:26:12 -0400
+        Thu, 11 Aug 2022 12:27:05 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7602A405B;
-        Thu, 11 Aug 2022 09:07:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 663CF9F192;
+        Thu, 11 Aug 2022 09:08:30 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 613E7613F8;
-        Thu, 11 Aug 2022 16:07:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94BAEC433C1;
-        Thu, 11 Aug 2022 16:07:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 05168612F0;
+        Thu, 11 Aug 2022 16:08:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C4A9C433C1;
+        Thu, 11 Aug 2022 16:08:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660234046;
-        bh=7QoczvgOuOfMe4Jd+WK4SX4WdFG16qmwH7KOQtIynuU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=uVZHGAwTaYEUuMVQ9Bw5yPZjVShkv34lmZOmZSFsBQZ9Zi1g6zK4SzNlKMJDMchAp
-         8dDx9FbJtN/O2k0MbWpD9y/JdZX0ReYTCv5fWieVVzAHmdEh2CoXiLElf6VhJGvejO
-         9DN9jsi6ING+cHCIhrtmtLtQM4VXKX65pvweWYvZhk/hJiSFypjPPITOl0OnT3mIV0
-         NVRSn8fv1kerfMkqpDyQK/QuU4HZwW9FWQBcrejy0/STsrSKQPDslfRLoRp792x8RR
-         jyStYLOLzLzvyjHxKTEsa11+233qJR7rk4SG0SjGu5dkcMsBjjA1ruYG5QTGy6Obqt
-         2G5M8U/CsZf4g==
-Date:   Thu, 11 Aug 2022 11:07:25 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Will McVicker <willmcvicker@google.com>
-Cc:     Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>, kernel-team@android.com,
-        Vidya Sagar <vidyas@nvidia.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v3 2/2] PCI: dwc: add support for 64-bit MSI target
- address
-Message-ID: <20220811160725.GA1526733@bhelgaas>
+        s=k20201202; t=1660234109;
+        bh=45+YsP0xL7+ZOaRuNdItW2YXHQez1xUpc1k9kr6omPM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=O3wmqHEbzZ2QwvMmXXyA1SDqkhoNZ+ocjNkkPs5bNwoH5GLxuBe7AeYG+Sz3bZqsf
+         9e+QxyR5gwbZk/hx1NwAPUXugUW15s3UdzkaMP70vmROx79lDv8Y6y+9aipv/kS3sc
+         Ee1jb+jmPpF1y+jEyPYo9uEjAqib87yRhAPl9H6R2oeZm9IkUewrUiZcbEqDckQwEd
+         1+dO8D8P7PctXGyBDy3ygDuEZOjZwv0ipkPwt88+kbzBhSVPZeiFGylQ4way/QQXy3
+         zqHNzYVmSxYDHc3fncCq7dMPtFlfIFdL16FkwCEywolhbVkth/YsqYontJE8Siw+P8
+         BPwIowxssd1Kw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Borislav Petkov <bp@suse.de>, Randy Dunlap <rdunlap@infradead.org>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        dri-devel@lists.freedesktop.org,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 01/25] drm/r128: Fix undefined behavior due to shift overflowing the constant
+Date:   Thu, 11 Aug 2022 12:07:56 -0400
+Message-Id: <20220811160826.1541971-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220810231445.2242126-3-willmcvicker@google.com>
+Content-Type: text/plain; charset=UTF-8
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -60,57 +60,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No need to rush the versions (I see v1 on 8/9, v2 and v3 on 8/10).
+From: Borislav Petkov <bp@suse.de>
 
-But if/when you update this, capitalize the subject lines
-("PCI: dwc: Add support ...") to match previous history.
+[ Upstream commit 6556551f8848f98eff356c8aacae42c8dd65b2df ]
 
-On Wed, Aug 10, 2022 at 11:14:44PM +0000, Will McVicker wrote:
-> Since not all devices require a 32-bit MSI address, add support to the
-> PCIe host driver to allow setting the DMA mask to 64-bits. This allows
-> kernels to disable ZONE_DMA32 and bounce buffering (swiotlb) without
-> risking not being able to get a 32-bit address during DMA allocation.
-> Basically, in the slim chance that there are no 32-bit allocations
-> available, the current PCIe host driver will fail to allocate the
-> msi_msg page due to a DMA address overflow (seen in [1]).
+Fix:
 
-> With this patch, the PCIe driver can advertise 64-bit support via
-> it's MSI capabilities to hint to the PCIe host driver to set the DMA
-> mask to 64-bits.
+  drivers/gpu/drm/r128/r128_cce.c: In function ‘r128_do_init_cce’:
+  drivers/gpu/drm/r128/r128_cce.c:417:2: error: case label does not reduce to an integer constant
+    case R128_PM4_64BM_64VCBM_64INDBM:
+    ^~~~
+  drivers/gpu/drm/r128/r128_cce.c:418:2: error: case label does not reduce to an integer constant
+    case R128_PM4_64PIO_64VCPIO_64INDPIO:
+    ^~~~
 
-s/via it's/via its/
+See https://lore.kernel.org/r/YkwQ6%2BtIH8GQpuct@zn.tnic for the gory
+details as to why it triggers with older gccs only.
 
-I'm not quite sure what this sentence is saying.  I think it's
-actually the *device* (not the PCIe driver) that advertises 64-bit
-support in its MSI capability.
+Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Cc: David Airlie <airlied@linux.ie>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: Alex Deucher <alexander.deucher@amd.com>
+Cc: dri-devel@lists.freedesktop.org
+Signed-off-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220405151517.29753-5-bp@alien8.de
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/gpu/drm/r128/r128_drv.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-> +u16 dw_pcie_msi_capabilities(struct dw_pcie *pci)
-> +{
-> +	u8 offset;
-> +
-> +	offset = dw_pcie_find_capability(pci, PCI_CAP_ID_MSI);
-> +	return dw_pcie_readw_dbi(pci, offset + PCI_MSI_FLAGS);
-> +}
-> +EXPORT_SYMBOL_GPL(dw_pcie_msi_capabilities);
+diff --git a/drivers/gpu/drm/r128/r128_drv.h b/drivers/gpu/drm/r128/r128_drv.h
+index ba8c30ed91d1..9a9f2279408b 100644
+--- a/drivers/gpu/drm/r128/r128_drv.h
++++ b/drivers/gpu/drm/r128/r128_drv.h
+@@ -299,8 +299,8 @@ extern long r128_compat_ioctl(struct file *filp, unsigned int cmd,
+ #	define R128_PM4_64PIO_128INDBM		(5  << 28)
+ #	define R128_PM4_64BM_128INDBM		(6  << 28)
+ #	define R128_PM4_64PIO_64VCBM_64INDBM	(7  << 28)
+-#	define R128_PM4_64BM_64VCBM_64INDBM	(8  << 28)
+-#	define R128_PM4_64PIO_64VCPIO_64INDPIO	(15 << 28)
++#	define R128_PM4_64BM_64VCBM_64INDBM	(8U  << 28)
++#	define R128_PM4_64PIO_64VCPIO_64INDPIO	(15U << 28)
+ #	define R128_PM4_BUFFER_CNTL_NOUPDATE	(1  << 27)
+ 
+ #define R128_PM4_BUFFER_WM_CNTL		0x0708
+-- 
+2.35.1
 
-Why does this need to be exported?  CONFIG_PCIE_DW and
-CONFIG_PCIE_DW_HOST are both bool, so I don't see any callers from
-modules.
-
-I see there are some other functions in pcie-designware.c that are
-exported, but I'm a little dubious about those, too.  There are
-several DWC drivers that are tristate (PCI_DRA7XX, PCI_EXYNOS, etc),
-but they select PCIE_DW_HOST and PCIE_DW, which are bool.  I guess
-this means the DWC core code gets built-in while the dra7xx, exynos,
-etc code is a module.
-
-If we want these to be modules, it would make more sense to me to have
-the module include both the DWC core code and the specific driver.
-I.e., the DWC core code would not be statically included at all, and
-the dra7xx module would contain DWC core and dra7xx, the exynos module
-would contain DWC core and exynos, etc.
-
-Maybe Kconfig isn't expressive enough for that?  I don't know Kconfig
-well enough.
-
-Bjorn

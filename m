@@ -2,40 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18DAD58F7F0
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 08:51:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 646DD58F7F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 08:57:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233882AbiHKGvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 02:51:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59780 "EHLO
+        id S234207AbiHKG4t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 02:56:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233400AbiHKGvL (ORCPT
+        with ESMTP id S234002AbiHKG4r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 02:51:11 -0400
-Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 043A515715
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 23:51:08 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id 253001E80D32;
-        Thu, 11 Aug 2022 14:49:06 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id 8scMk5p_aKB5; Thu, 11 Aug 2022 14:49:03 +0800 (CST)
-Received: from localhost.localdomain (unknown [219.141.250.2])
-        (Authenticated sender: zhoujie@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 542771E80CE3;
-        Thu, 11 Aug 2022 14:49:03 +0800 (CST)
-From:   Zhou jie <zhoujie@nfschina.com>
-To:     agk@redhat.com, snitzer@kernel.org, dm-devel@redhat.com
-Cc:     linux-kernel@vger.kernel.org, kernel@nfschina.com,
-        Zhou jie <zhoujie@nfschina.com>
-Subject: [PATCH] md:Remove unnecessary void* type casting 
-Date:   Thu, 11 Aug 2022 14:51:02 +0800
-Message-Id: <20220811065102.4697-1-zhoujie@nfschina.com>
-X-Mailer: git-send-email 2.18.2
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
+        Thu, 11 Aug 2022 02:56:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303468B9AB
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 23:56:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BF365614A9
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 06:56:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18EE6C433C1;
+        Thu, 11 Aug 2022 06:56:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660201006;
+        bh=3lbT0SKGFyFWI9FlYZ6Y6Au0OcaPPMn5rU6PK0F/11w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=bqQbIN4hZHmG8tkhecnQjgPlsSdYnBWIjtlgcTbIcXPtVmANE4Mg2HuqQ+uAKCt/q
+         H3jEIxcnFLNcLq0zjyUo4Vua/7qSQhcdXEKiwG/BrSlMCVUdCv95kT/X4Y7g1uhl7Z
+         Bv1skw/eCFlGPRHX5hjH2lm+AP69WOdSdK11WXG3rBw2vXhwtrwJjK1rvFrZcwKyYM
+         jjijrhI6Vlh+eEV+0JbLcOZQ3cn9na45cmowJPSN0wtMBb4WXkZF4+OvWzTQ7EeQRr
+         5NIBf0AmKIQ9CeV3cDqQGMaAE9/6Fyf0UCVa/RMA2WvEauKyIKkchsTCxIbwqU/Iyb
+         1NbZ7sz9ipxPg==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1oM27W-002HkE-Vr;
+        Thu, 11 Aug 2022 07:56:43 +0100
+Date:   Thu, 11 Aug 2022 07:56:33 +0100
+Message-ID: <87lervb74u.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     WANG Xuerui <kernel@xen0n.name>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        loongarch@lists.linux.dev, Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] LoongArch: Fix the !CONFIG_SMP build for irqchip drivers
+In-Reply-To: <1359c52d-5194-7306-0e76-cde97b5aa31c@xen0n.name>
+References: <20220810103156.1214996-1-chenhuacai@loongson.cn>
+        <f92fc4f34784217206b53a3709538d5c@kernel.org>
+        <CAAhV-H7DbvjEcms9Y81t_=WyDnKu5vuB4x7g7vU3f9CUhZykHQ@mail.gmail.com>
+        <1359c52d-5194-7306-0e76-cde97b5aa31c@xen0n.name>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: kernel@xen0n.name, chenhuacai@kernel.org, chenhuacai@loongson.cn, tglx@linutronix.de, loongarch@lists.linux.dev, lixuefeng@loongson.cn, guoren@kernel.org, jiaxun.yang@flygoat.com, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,34 +74,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-remove unnecessary void* type casting
+On Thu, 11 Aug 2022 01:58:15 +0100,
+WANG Xuerui <kernel@xen0n.name> wrote:
+> 
+> On 8/10/22 23:38, Huacai Chen wrote:
+> 
+> > Hi, Marc,
+> > 
+> > On Wed, Aug 10, 2022 at 7:01 PM Marc Zyngier <maz@kernel.org> wrote:
+> >> On 2022-08-10 11:31, Huacai Chen wrote:
+> >>> 1, Guard get_ipi_irq() in CONFIG_SMP;
+> >>> 2, Define cpu_logical_map() for the EIOINTC driver;
+> >>> 3, Make eiointc_set_irq_affinity() return early for !CONFIG_SMP.
+> >>> 
+> >>> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> >> Frankly, the real question is why do you even bother? As far as
+> >> I can tell, LoongArch has no UP system.
+> >> 
+> >> arm64 crossed that bridge a long time ago, and we never looked
+> >> back, because these systems hardly exist.
+> >> 
+> >> I'd rather you simply have a CONFIG_SMP always set to 'y', and
+> >> be done with it forever.
+> > LoongArch also has low-end processors (even LoongArch64). Though we
+> > haven't translate all documents at
+> > https://loongson.github.io/LoongArch-Documentation/ in time, there are
+> > currently 4 LoongArch64 processors: Loongson-2K500 (single-core),
+> > Loongon-2K1000 (dual-core), Loongson-3A5000 (quad-core) and
+> > Loongson-3C5000 (16-core). So we indeed need a UP configuration.
+> > Thanks.
+> 
+> I remember seeing an alternatives mechanism in the works for
+> LoongArch. If such alternatives mechanism is to be upstreamed in short
+> order, why make SMP one more build-time time option that developers
+> have to decide upon? It's not like SMP code would break, or run with
+> unacceptable overhead, on UP systems AFAIK, so it's probably better to
+> not preemptively support so many *possibilities* that haven't been
+> realized so the *current* maintainability suffers. Practically one
+> can't buy the LoongArch 2K line of products anywhere right now, and
+> the few companies developing for it are likely not using upstream
+> kernels anyway, so it's not like we can't wait either.
 
-Signed-off-by: Zhou jie <zhoujie@nfschina.com>
----
- drivers/md/dm-verity-fec.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+And that's exactly my point. Yes, it is always possible to build a UP
+system. But is it worth *maintaining* a configuration option for this?
+I seriously doubt it.
 
-diff --git a/drivers/md/dm-verity-fec.c b/drivers/md/dm-verity-fec.c
-index cea2b3789736..3f19fd89cf98 100644
---- a/drivers/md/dm-verity-fec.c
-+++ b/drivers/md/dm-verity-fec.c
-@@ -567,14 +567,14 @@ void verity_fec_dtr(struct dm_verity *v)
- 
- static void *fec_rs_alloc(gfp_t gfp_mask, void *pool_data)
- {
--	struct dm_verity *v = (struct dm_verity *)pool_data;
-+	struct dm_verity *v = pool_data;
- 
- 	return init_rs_gfp(8, 0x11d, 0, 1, v->fec->roots, gfp_mask);
- }
- 
- static void fec_rs_free(void *element, void *pool_data)
- {
--	struct rs_control *rs = (struct rs_control *)element;
-+	struct rs_control *rs = element;
- 
- 	if (rs)
- 		free_rs(rs);
+My advise is to stick to SMP only for now (it will run just fine on a
+UP machine), and only if upstream users find it completely
+unacceptable should a !SMP option be introduced, or make it a runtime
+decision (32bit ARM has had SMP_ON_UP support for a long time).
+
+	M.
+
 -- 
-2.18.2
-
+Without deviation from the norm, progress is not possible.

@@ -2,81 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A70B58FFAB
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 17:32:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81CD4590011
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 17:37:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235961AbiHKPcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 11:32:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48054 "EHLO
+        id S236047AbiHKPhC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 11:37:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235882AbiHKPcA (ORCPT
+        with ESMTP id S236005AbiHKPgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 11:32:00 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D64E99276
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 08:30:58 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id bv3so21734810wrb.5
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 08:30:58 -0700 (PDT)
+        Thu, 11 Aug 2022 11:36:10 -0400
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20CDD9DF83
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 08:33:15 -0700 (PDT)
+Received: by mail-vs1-xe36.google.com with SMTP id j2so18657298vsp.1
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 08:33:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=9LdlmQyOWQmNUkI2XSzFvRVcY0yH+3vXNaOXUWwwOG4=;
-        b=eV6FwIVuQpB9dHkFnLwSKjT4FEK0Dhbo6bQOrKzw9FkfJkh5Oa/iuWccmmSpSzWe97
-         42QbvmI8RqNNXVaHyDhu7vGFqpBEV+2F2HRrL2nr1elvXGTuS9XooJwD3YJ5E94OV8Tx
-         MJkOkq6sZcpSukalpkstesF6L8viUq+OGxS5No+nWxyhPkC1EaMvRFwSnwZhfpx2HNQ6
-         pF1bm0WsUfnBUf7xNmroMUFR9I7rg4M+ynn/WE/selpTONdzHKxccsUsCXJBd7xBz8Ap
-         l+jAyYMMVg/OTe3TxF5I+9x9UR/flsUnsTz7D297O2Mh2UtG5HB3xzLO8t2t8ayyPy2i
-         G22w==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=Dvm3ia13p7LjxVkMgvy5ZlGi63NJFPIo0HdPXDl6r38=;
+        b=P86ZlgbVWwFgMpdgFk8WYZNaMX5S2zQBu0r3xeKlJrUx9xcd0EspmOClhF4+LmfHP/
+         VpYlXjX6HGYq91PMJz6kyVt6P2NcaFGtff5INQHJVY8TdO2XbiYgnU30dBuNu+DEhnFb
+         MGk/Ae4zjhDyybuBYiPJSG9N4fXvAggP4PRpleAWat9V4Pz2tOqEn61KTQ4JDFKoK/n+
+         kMCyZ+1ZwJg/GdMqW4FcYyAlzzsicoigj3z+Blkd8kb/QbfKtUkCKV4RuJVysCPHbAu6
+         e7PEqQvTzKY2F4+xncFhXuDpJpBQCq3iJnineXp2APH2fuuicWLOYELADimLDJTP0IaO
+         ePdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=9LdlmQyOWQmNUkI2XSzFvRVcY0yH+3vXNaOXUWwwOG4=;
-        b=UbrtcquS0bmA44mjubx+C3lyKdyKbLszHzML4xqfYnp8p3+6RC9uoWHe3nXkvJ0JxU
-         rPCmsiNF734sco467yPpcIqoYwRnV9fDU0aWRLs+n6BBSxRxiP9dq2wr1kwVAqXPLAAv
-         NcVETt9lge97gn8uy88UsF0OQfG2pZgIM1X56QPY0Z1EX9qgoFY3eOLqU97+3JzUTHiD
-         SISV8pOwVQUmEVjbFX/cyQNJgrrai2dyutDmHn/UATTj32yjftbL/5iXlvvzETsrWEoy
-         Vfl8TJXjzbtv6gEh/9WkB/Vv0da9HcdOBFpeHVaC5iSVklXp/8sAqaj8VC1ohyjIpYn6
-         n0tw==
-X-Gm-Message-State: ACgBeo1SC+vV9+yVeh9bSiM/xX0Etlri4MlglW+yBU6feUO0xEBsQ9k0
-        Pws1xKiegIf77Y+decMVMNg=
-X-Google-Smtp-Source: AA6agR5M9utedSYDnsS5LO6FAtzaxLGA2AV5HP+vrf8nPzln6D1eAiA97OrCyHA9QEQ+h+6JgnjaQA==
-X-Received: by 2002:a5d:5989:0:b0:221:7c34:3943 with SMTP id n9-20020a5d5989000000b002217c343943mr15731861wri.441.1660231856621;
-        Thu, 11 Aug 2022 08:30:56 -0700 (PDT)
-Received: from localhost.localdomain (host-79-27-108-198.retail.telecomitalia.it. [79.27.108.198])
-        by smtp.gmail.com with ESMTPSA id m7-20020a056000008700b00222ed7ea203sm9805502wrx.100.2022.08.11.08.30.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Aug 2022 08:30:55 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        John Harrison <John.C.Harrison@Intel.com>,
-        Matt Roper <matthew.d.roper@intel.com>,
-        Matthew Brost <matthew.brost@intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Subject: [PATCH 3/3] drm/i915/gem: Replace kmap() with kmap_local_page()
-Date:   Thu, 11 Aug 2022 17:30:41 +0200
-Message-Id: <20220811153041.12795-4-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220811153041.12795-1-fmdefrancesco@gmail.com>
-References: <20220811153041.12795-1-fmdefrancesco@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=Dvm3ia13p7LjxVkMgvy5ZlGi63NJFPIo0HdPXDl6r38=;
+        b=lLu8ShVDApTQMNQn2YdTHXvT3vg5GtW9pO7WLZ0rmUt9EqTZ5f+35AOVzOba+o2rE5
+         AtArQffn7xO9VjtPIDlSdaSzmAhYHPf4TO62/zhQTXtPO0qH1fkEB3pf47sJJlL4TLvN
+         tf2NUdQy7SRbK5bRD8lfs5zxvoCFBZKzz6Uko6D86/5lI1GfRJRwnLsUq3+RnZ8BfUu3
+         Y97w7v8PltcIWm1FwLP1bQEOjSEKtXH3DViI7CqdLJd8zQRTl9qh8Tc3aVUv/OeQbi68
+         rb92uK5awmJHFCQXLE6H6+WDaV4DxNoNimVfWo8qU/ZuK+XkDyxkTohJBAN9Eg+UBkVE
+         bzog==
+X-Gm-Message-State: ACgBeo0Xe95WXN5Jss2fJph/PNGz+TtrmQ1AkDnV/7umE/vdgp9fOE2d
+        ChHC9fPH0vEyAVAKZ84Cuy8QEfpwu+BqYG+rZFV0rK7jVGI=
+X-Google-Smtp-Source: AA6agR6MaSMlLxw/gmTas3OsiCNaI1xxiwkk+27SEdqJM09NamKo62hVu8XKvL4tnvchgXB2RPjhWIBWy9L/kfPfSI0=
+X-Received: by 2002:a05:6102:3ec7:b0:356:cbdf:122d with SMTP id
+ n7-20020a0561023ec700b00356cbdf122dmr13430514vsv.9.1660231994065; Thu, 11 Aug
+ 2022 08:33:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20220810210656.2799243-1-eranian@google.com> <0267c94e-7989-ca92-4175-d820d1d63a0c@linux.intel.com>
+ <CABPqkBSD5xg=sEkWU01RQ5+aj1X1dtzt2e7FbZBzrcE8dxqM=A@mail.gmail.com>
+ <48297c1e-6e44-53f1-da7d-4437ed87cf6f@linux.intel.com> <CABPqkBSUkUTXxS4PwDXYwvTCZ-abY41qyedRGFVoWE9ERtmwsQ@mail.gmail.com>
+In-Reply-To: <CABPqkBSUkUTXxS4PwDXYwvTCZ-abY41qyedRGFVoWE9ERtmwsQ@mail.gmail.com>
+From:   Stephane Eranian <eranian@google.com>
+Date:   Thu, 11 Aug 2022 18:33:02 +0300
+Message-ID: <CABPqkBRKpUOEwhbu+YsGTx=bWu6DaeTxcCkcKbx5tkCONnJnRw@mail.gmail.com>
+Subject: Re: [PATCH] perf/x86/intel/lbr: fix branch type encoding
+To:     "Liang, Kan" <kan.liang@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, peterz@infradead.org,
+        kan.liang@intel.com, ak@linux.intel.com, acme@redhat.com,
+        namhyung@kernel.org, irogers@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,94 +70,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kmap() is being deprecated in favor of kmap_local_page().
+On Thu, Aug 11, 2022 at 6:28 PM Stephane Eranian <eranian@google.com> wrote:
+>
+> On Thu, Aug 11, 2022 at 5:42 PM Liang, Kan <kan.liang@linux.intel.com> wrote:
+> >
+> >
+> >
+> > On 2022-08-11 10:17 a.m., Stephane Eranian wrote:
+> > > On Thu, Aug 11, 2022 at 3:23 PM Liang, Kan <kan.liang@linux.intel.com> wrote:
+> > >>
+> > >>
+> > >>
+> > >> On 2022-08-10 5:06 p.m., Stephane Eranian wrote:
+> > >>> With architected LBR, the procesosr can record the type of each sampled taken
+> > >>> branch. The type is encoded in 4-bit field in the LBR_INFO MSR of each entry.
+> > >>>
+> > >>> The branch type must then extracted and saved in the perf_branch_entry in the
+> > >>> perf_events sampling buffer. With the current code, the raw Intel encoding of
+> > >>> the branch is exported to user tools.
+> > >>
+> > >> In the intel_pmu_lbr_filter(), the raw encoding will be converted into
+> > >> the X86_BR_* format via arch_lbr_br_type_map[]. Then the
+> > >> common_branch_type() will convert the X86_BR_* format to the generic
+> > >> PERF_BR_* type and expose to user tools.
+> > >>
+> > >> I double check the existing arch_lbr_br_type_map[] and branch_map[].
+> > >> They should generate the same PERF_BR_* type as your arch_lbr_type_map[].
+> > >>
+> > >> Is there a test case which I can use to reproduce the problem?
+> > >>
+> > > I was doing a simple:
+> > > $ perf record -b -e cpu/event=0xc4/ ....
+> > > $ perf report -D
+> > > Looking at the LBR information and the BR type, many entries has no branch type.
+> > > What I see is a function where you do: e->type = get_lbr_br_type() and
+> > > that is what
+> > > is then saved in the buffer. Unless I am missing a later patch.
+> > >
+> >
+> > To get the LBR type, the save_type filter option must be applied. See
+> > 60f83fa6341d ("perf record: Create a new option save_type in
+> > --branch-filter").
+> >
+> That seems overly complicated. I don't recall having to pass a new option
+> to get the LBR latency. It showed up automatically. So why for branch_type?
+>
+> > The -b only include the ANY option. Maybe we should extend the -b option
+> > to ANY|SAVE_TYPE.
+> >
+> Ok, that explains it then. I think we need to simplify.
+>
+In fact, I don't see a case where you would not benefit from the branch type.
+Furthermore, not having the branch type DOES NOT save any space in the
+branch record (given we have a reserved field). So I think I prefer not having
+to specify yet another cmdline option to get the branch type. In fact, if you do
+not pass the option, then perf report -D reports some bogus branch types, i.e.,
+not all entries have empty types.
 
-There are two main problems with kmap(): (1) It comes with an overhead as
-mapping space is restricted and protected by a global lock for
-synchronization and (2) it also requires global TLB invalidation when the
-kmap’s pool wraps and it might block when the mapping space is fully
-utilized until a slot becomes available.
 
-With kmap_local_page() the mappings are per thread, CPU local, can take
-page faults, and can be called from any context (including interrupts).
-It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
-the tasks can be preempted and, when they are scheduled to run again, the
-kernel virtual addresses are restored and are still valid.
-
-Since its use in i915/gem is safe everywhere, it should be preferred.
-
-Therefore, replace kmap() with kmap_local_page() in i915/gem.
-
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
- drivers/gpu/drm/i915/gem/i915_gem_shmem.c          | 6 ++----
- drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c | 8 ++++----
- 2 files changed, 6 insertions(+), 8 deletions(-)
-
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_shmem.c b/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
-index 4eed3dd90ba8..2bc6ab9964ff 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_shmem.c
-@@ -640,16 +640,14 @@ i915_gem_object_create_shmem_from_data(struct drm_i915_private *dev_priv,
- 	do {
- 		unsigned int len = min_t(typeof(size), size, PAGE_SIZE);
- 		struct page *page;
--		void *pgdata, *vaddr;
-+		void *pgdata;
- 
- 		err = aops->write_begin(file, file->f_mapping, offset, len,
- 					&page, &pgdata);
- 		if (err < 0)
- 			goto fail;
- 
--		vaddr = kmap(page);
--		memcpy(vaddr, data, len);
--		kunmap(page);
-+		memcpy_to_page(page, 0, data, len);
- 
- 		err = aops->write_end(file, file->f_mapping, offset, len, len,
- 				      page, pgdata);
-diff --git a/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c b/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c
-index 3ced9948a331..bb25b50b5688 100644
---- a/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c
-+++ b/drivers/gpu/drm/i915/gem/selftests/i915_gem_mman.c
-@@ -153,7 +153,7 @@ static int check_partial_mapping(struct drm_i915_gem_object *obj,
- 	intel_gt_flush_ggtt_writes(to_gt(i915));
- 
- 	p = i915_gem_object_get_page(obj, offset >> PAGE_SHIFT);
--	cpu = kmap(p) + offset_in_page(offset);
-+	cpu = kmap_local_page(p) + offset_in_page(offset);
- 	drm_clflush_virt_range(cpu, sizeof(*cpu));
- 	if (*cpu != (u32)page) {
- 		pr_err("Partial view for %lu [%u] (offset=%llu, size=%u [%llu, row size %u], fence=%d, tiling=%d, stride=%d) misalignment, expected write to page (%llu + %u [0x%llx]) of 0x%x, found 0x%x\n",
-@@ -171,7 +171,7 @@ static int check_partial_mapping(struct drm_i915_gem_object *obj,
- 	}
- 	*cpu = 0;
- 	drm_clflush_virt_range(cpu, sizeof(*cpu));
--	kunmap(p);
-+	kunmap_local(cpu);
- 
- out:
- 	i915_gem_object_lock(obj, NULL);
-@@ -249,7 +249,7 @@ static int check_partial_mappings(struct drm_i915_gem_object *obj,
- 		intel_gt_flush_ggtt_writes(to_gt(i915));
- 
- 		p = i915_gem_object_get_page(obj, offset >> PAGE_SHIFT);
--		cpu = kmap(p) + offset_in_page(offset);
-+		cpu = kmap_local_page(p) + offset_in_page(offset);
- 		drm_clflush_virt_range(cpu, sizeof(*cpu));
- 		if (*cpu != (u32)page) {
- 			pr_err("Partial view for %lu [%u] (offset=%llu, size=%u [%llu, row size %u], fence=%d, tiling=%d, stride=%d) misalignment, expected write to page (%llu + %u [0x%llx]) of 0x%x, found 0x%x\n",
-@@ -267,7 +267,7 @@ static int check_partial_mappings(struct drm_i915_gem_object *obj,
- 		}
- 		*cpu = 0;
- 		drm_clflush_virt_range(cpu, sizeof(*cpu));
--		kunmap(p);
-+		kunmap_local(cpu);
- 		if (err)
- 			return err;
- 
--- 
-2.37.1
-
+> > >
+> > >> Thanks,
+> > >> Kan
+> > >>
+> > >>> Yet tools, such as perf, expected the
+> > >>> branch type to be encoded using perf_events branch type enum
+> > >>> (see tools/perf/util/branch.c). As a result of the discrepancy, the output of
+> > >>> perf report -D shows bogus branch types.
+> > >>>
+> > >>> Fix the problem by converting the Intel raw encoding into the perf_events
+> > >>> branch type enum values. With that in place and with no changes to the tools,
+> > >>> the branch types are now reported properly.
+> > >>>
+> > >>> Signed-off-by: Stephane Eranian <eranian@google.com>
+> > >>> ---
+> > >>>  arch/x86/events/intel/lbr.c | 35 ++++++++++++++++++++++++++++++++---
+> > >>>  1 file changed, 32 insertions(+), 3 deletions(-)
+> > >>>
+> > >>> diff --git a/arch/x86/events/intel/lbr.c b/arch/x86/events/intel/lbr.c
+> > >>> index 4f70fb6c2c1e..ef63d4d46b50 100644
+> > >>> --- a/arch/x86/events/intel/lbr.c
+> > >>> +++ b/arch/x86/events/intel/lbr.c
+> > >>> @@ -894,9 +894,23 @@ static DEFINE_STATIC_KEY_FALSE(x86_lbr_mispred);
+> > >>>  static DEFINE_STATIC_KEY_FALSE(x86_lbr_cycles);
+> > >>>  static DEFINE_STATIC_KEY_FALSE(x86_lbr_type);
+> > >>>
+> > >>> -static __always_inline int get_lbr_br_type(u64 info)
+> > >>> +/*
+> > >>> + * Array index encodes IA32_LBR_x_INFO Branch Type Encodings
+> > >>> + * as per Intel SDM Vol3b Branch Types section
+> > >>> + */
+> > >>> +static const int arch_lbr_type_map[]={
+> > >>> +     [0] = PERF_BR_COND,
+> > >>> +     [1] = PERF_BR_IND,
+> > >>> +     [2] = PERF_BR_UNCOND,
+> > >>> +     [3] = PERF_BR_IND_CALL,
+> > >>> +     [4] = PERF_BR_CALL,
+> > >>> +     [5] = PERF_BR_RET,
+> > >>> +};
+> > >>> +#define ARCH_LBR_TYPE_COUNT ARRAY_SIZE(arch_lbr_type_map)
+> > >>> +
+> > >>> +static __always_inline u16 get_lbr_br_type(u64 info)
+> > >>>  {
+> > >>> -     int type = 0;
+> > >>> +     u16 type = 0;
+> > >>>
+> > >>>       if (static_branch_likely(&x86_lbr_type))
+> > >>>               type = (info & LBR_INFO_BR_TYPE) >> LBR_INFO_BR_TYPE_OFFSET;
+> > >>> @@ -904,6 +918,21 @@ static __always_inline int get_lbr_br_type(u64 info)
+> > >>>       return type;
+> > >>>  }
+> > >>>
+> > >>> +/*
+> > >>> + * The kernel cannot expose raw Intel branch type encodings because they are
+> > >>> + * not generic. Instead, the function below  maps the encoding to the
+> > >>> + * perf_events user visible branch types.
+> > >>> + */
+> > >>> +static __always_inline int get_lbr_br_type_mapping(u64 info)
+> > >>> +{
+> > >>> +     if (static_branch_likely(&x86_lbr_type)) {
+> > >>> +             u16 raw_type = get_lbr_br_type(info);
+> > >>> +             if (raw_type < ARCH_LBR_TYPE_COUNT)
+> > >>> +                     return arch_lbr_type_map[raw_type];
+> > >>> +     }
+> > >>> +     return PERF_BR_UNKNOWN;
+> > >>> +}
+> > >>> +
+> > >>>  static __always_inline bool get_lbr_mispred(u64 info)
+> > >>>  {
+> > >>>       bool mispred = 0;
+> > >>> @@ -957,7 +986,7 @@ static void intel_pmu_store_lbr(struct cpu_hw_events *cpuc,
+> > >>>               e->in_tx        = !!(info & LBR_INFO_IN_TX);
+> > >>>               e->abort        = !!(info & LBR_INFO_ABORT);
+> > >>>               e->cycles       = get_lbr_cycles(info);
+> > >>> -             e->type         = get_lbr_br_type(info);
+> > >>> +             e->type         = get_lbr_br_type_mapping(info);
+> > >>>       }
+> > >>>
+> > >>>       cpuc->lbr_stack.nr = i;

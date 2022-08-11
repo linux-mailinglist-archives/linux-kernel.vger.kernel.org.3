@@ -2,137 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A161E59087D
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 00:02:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5C92590880
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 00:04:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236321AbiHKWCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 18:02:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42986 "EHLO
+        id S236352AbiHKWEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 18:04:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236246AbiHKWCF (ORCPT
+        with ESMTP id S235284AbiHKWEd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 18:02:05 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2278567C9B;
-        Thu, 11 Aug 2022 15:02:03 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 9942C5C005E;
-        Thu, 11 Aug 2022 18:02:01 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Thu, 11 Aug 2022 18:02:01 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1660255321; x=
-        1660341721; bh=CTZyQu3k2T4ygetTKcwPn3NWnNrR4oMoRyDyOnzTuKk=; b=p
-        JXlaIsTzR3RliCOqfus13+e4Mw5GdwEzUtdCgETjH7tCHCuoojoQjiiBbJlQGEHQ
-        +DrYuEUM9trb5reHKBY0N1WqRTxfaGfDk0kkWQQezXC6KGrQOQTLt2cc8AKKhrXb
-        g5qiGCSSgb5KJxQKsfBctVNM8N+UjO/WdsGt37o1TSXKophZHQPOd+WF/mqQh8sK
-        qNPbsV9cKT1RsAdfLDQhRH97Vvz7YQ0hQHv6bK3uaNhiuh05QOifu7ICbM9OORoI
-        vFMh/h0+0IB11ilXad9kDhX0KLg2Pk6QjWtxEnO7xazXLEaLsf1Hh3QHycuQCOCK
-        TPse55UkdICxDp4v1qJEA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1660255321; x=
-        1660341721; bh=CTZyQu3k2T4ygetTKcwPn3NWnNrR4oMoRyDyOnzTuKk=; b=A
-        YnrfKvRehig5zjxHamNNXXl/LSZYPvSj3loCapKsFK60JBxRqY1s/XLKvLkrfz8q
-        bjpHiDptsCguKnMbqc06waPX+tZNrzlBLOZl2i8FoV6+Z7r2OMimYxcc3ZuUecND
-        PDXRD9uc17lFNPSx00dfczc1kb81yNQPLb9Q9Pdv5i61hmbw96rnKLN5F6BDz72z
-        PxftOR/vDJuKePK+R6ns3zrfRVe6mr4CRumug3ku0HdDYSJn+Wb/D/KHCA9Uya1L
-        g1NTdlNhZSkj3sTJTiKf0OK5w0bSI0DDO2+eLCfpe0f1Rr7g8ojzfev4Q0eDeRFO
-        uI6f6rs7oWm+20kr1dpmw==
-X-ME-Sender: <xms:WXz1YjjXGEr5NWN1FyDWKptOktiGCLfyr3c2fCCCfunWqtMOZOb-sg>
-    <xme:WXz1YgAPhh1jqe1014656hDUzvNPc-0dEAES0jse4PYn8EXtUhNWMpR2pKdDJORBo
-    0NQfpp1jIINhensm9E>
-X-ME-Received: <xmr:WXz1YjG77s4BpoqMX0F4_yoPHF4C9PyxcuO12v5o1EgGGvTZ6OWWlweH91MfA7UE-blEQQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeghedgtdehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkffuhffvveffjghftgfgfgggsehtqhertddtreejnecuhfhrohhmpefnuhhk
-    vgculfhonhgvshcuoehluhhkvgeslhhjohhnvghsrdguvghvqeenucggtffrrghtthgvrh
-    hnpeekfeffueejveeujeeugeelleehtdegvdeludektddtfffhieefledvudehfeejieen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehluhhkvg
-    eslhhjohhnvghsrdguvghv
-X-ME-Proxy: <xmx:WXz1YgQm4-sx7vJVUhU-LFQwomGc1cBNJaJe6jTcoXT-8nTRwiP3gw>
-    <xmx:WXz1YgyM0kOaC36wy9IWDOEWWsmklJkBPnFL8n1WF97u6g06z-5GJg>
-    <xmx:WXz1Ym4Fbw7ag1JDflznlDc8LdbLipobE0HDs8RCyxMIymVGxV8MfQ>
-    <xmx:WXz1Ys9qPdGlCfjTo3hhFGbwRntUJnyk46_9XQ03bJAzkPzBlaqlmA>
-Feedback-ID: i5ec1447f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 11 Aug 2022 18:01:59 -0400 (EDT)
-Message-ID: <9ed62983bd03ed26cdb4399dd69b4096e8711fa9.camel@ljones.dev>
-Subject: Re: [PATCH v3 6/6] asus-wmi: Support the hardware GPU MUX on some
- laptops
-From:   Luke Jones <luke@ljones.dev>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     andy.shevchenko@gmail.com, pobrn@protonmail.com, pavel@ucw.cz,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Fri, 12 Aug 2022 10:01:51 +1200
-In-Reply-To: <7365d41a-1475-118c-96a8-6ab927bda5b7@redhat.com>
-References: <20220809025054.1626339-1-luke@ljones.dev>
-         <20220809025054.1626339-7-luke@ljones.dev>
-         <7365d41a-1475-118c-96a8-6ab927bda5b7@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (by Flathub.org) 
+        Thu, 11 Aug 2022 18:04:33 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E243B94EF3;
+        Thu, 11 Aug 2022 15:04:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=Wq45TFbP2AKILUBXx++bf06XJdFtfjvXV9u0Ru13Lv4=; b=hZeoY/QMps6s+T3DAxj6Mj86EK
+        i74PHci6KNWl9D0ZgPLqENS/3Bp8QnaNbHGtG+Y72pwDAxqxp0rFLe7vgM0pwzngnGlN8vY1Kfew+
+        wdIQujnP2TvdMuUaQ8M5RTB8aolPgp5oTcpz9xxql7c5PKcphUTGSimpVhRb7YmIIUhWn4peQu41B
+        2ml9drJ+JjfC/q1fTk0DBjtJriR16FK6I3ZxQSgsdCXbdWen5wZW/ZArsHmhTZeLhA3GQnVc5addF
+        oAtv+Vha6CcgsEp2dR+/JO1hLde+3rpVJHaOzxjSxZ/hE6LsvObUxGb4QvfvFhPytdvpJuyfUgbbY
+        VWmcEzEQ==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1oMGHz-003ZFe-0R;
+        Thu, 11 Aug 2022 22:04:27 +0000
+Date:   Thu, 11 Aug 2022 23:04:26 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Matthew Wilcox <willy@infradead.org>
+Subject: Re: [GIT PULL] Ceph updates for 5.20-rc1
+Message-ID: <YvV86p5DjBLjjXHo@ZenIV>
+References: <20220811152446.281723-1-idryomov@gmail.com>
+ <CAHk-=wifgq59uru6xDB=nY-1p6aQ-1YB8nVhW7T-N2ctK3m1gw@mail.gmail.com>
+ <CAOi1vP9BSi-65of-8D0BA1_DC0eVD_TQcWkhrGJwaXw_skhHFQ@mail.gmail.com>
+ <5d0b0367a5e28ec5b1f3b995c7792ff9a5cbcbd4.camel@kernel.org>
+ <YvVzHQ5DVaPAvw26@ZenIV>
+ <72a93a2c8910c3615bba7c093c66c18b1a6a2696.camel@kernel.org>
+ <YvV2zfT0XbgwHGe/@ZenIV>
+ <CAHk-=wgYnAPiGsh7H4BS_E1aMM46PdSGg8YqFhi2SpGw+Ac_PQ@mail.gmail.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wgYnAPiGsh7H4BS_E1aMM46PdSGg8YqFhi2SpGw+Ac_PQ@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hans,
+On Thu, Aug 11, 2022 at 02:52:26PM -0700, Linus Torvalds wrote:
+> On Thu, Aug 11, 2022 at 2:38 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
+> >
+> > Exporting the functionality?  Sure, no problem.  Uninlining that one...
+> > I suspect that it's OK, but I'd like to see profiling data; it's not
+> > as if it would be hard to return to having it inlined, obviously.
+> 
+> The only case where I think it might matter is in __d_lookup(), and
+> it's probably not measurable.
+> 
+> Yes, __d_lookup() does matter, but it only matters once you've fallen
+> out of RCU mode, and at that point the cost of the function call is
+> likely in the noise.
+> 
+> I don't particularly like how it's inside that dentry hash chain loop,
+> but realistically by then we've already done a function call for the
+> dentry lock spinlock, so that loop already has to deal with it.
 
-On Thu, 2022-08-11 at 15:53 +0200, Hans de Goede wrote:
-> Hi,
->=20
-> On 8/9/22 04:50, Luke D. Jones wrote:
-> > Support the hardware GPU MUX switch available on some models. This
-> > switch can toggle the MUX between:
-> >=20
-> > - 0, Dedicated mode
-> > - 1, Optimus mode
-> >=20
-> > Optimus mode is the regular iGPU + dGPU available, while dedicated
-> > mode switches the system to have only the dGPU available.
-> >=20
-> > Signed-off-by: Luke D. Jones <luke@ljones.dev>
->=20
-> I see that you have replied to this that it needs more work.
->=20
-> Besides it needing more work, ideally this should hook into
-> the existing vga-switcheroo mechanism for this. Can you take
-> a look at that please?
->=20
-> I think this might be the first non GPU driver doing vga-
-> switcheroo stuff. So this may be something to discuss
-> on the dri-devel list.
-
-I'm not sure how this would work. In typical ASUS fashion they do non-
-standard stuff. This switch is a basic toggle that requires a reboot to
-enable after writing to the ACPI method, after reboot the dGPU becomes
-the only visible GPU on the system and (this GPU) can not be suspended.
-
-In short: it toggles the laptop from discrete-only mode, and optimus
-mode, requiring a reboot to switch.
-
-From what I understand of switcheroo it is more to manage having dual
-(or more) GPU available during runtime, and manage the power states,
-offload etc.
-
-I have a vastly improved patch for this prepared now. Because of how
-the actual feature works (and the above explanation) it must be under
-the asus-nb-wmi sysfs (next to the dgpu_disable and egpu_enable toggles
-which are also unusual and non-standard work-arounds of Windows
-issues).
-
-Kind regards,
-Luke.
+FWIW, I wonder if we should do
+	if (READ_ONCE(dentry->d_parent) != parent)
+		continue;
+before grabbing ->d_lock (and repeat the check after grabbing it,
+of course).  It's OK from correctness POV - we are OK with false
+negatives from __d_lookup() if concurrent rename happens.  And
+it just might be a sufficiently large performance win...

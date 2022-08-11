@@ -2,368 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE07058F82B
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 09:13:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6B8E58F82D
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 09:14:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234005AbiHKHNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 03:13:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50532 "EHLO
+        id S234107AbiHKHOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 03:14:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbiHKHNv (ORCPT
+        with ESMTP id S234022AbiHKHO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 03:13:51 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3B48E451;
-        Thu, 11 Aug 2022 00:13:49 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id uj29so32078596ejc.0;
-        Thu, 11 Aug 2022 00:13:49 -0700 (PDT)
+        Thu, 11 Aug 2022 03:14:29 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C6F8F942;
+        Thu, 11 Aug 2022 00:14:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1660202065; x=1691738065;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=rWsza1y2XxUEpNUuQe/z5RJot8RCMc2B8/MDK67ZNAQ=;
+  b=hHNMx6gT1eKiUKeybRMA7FHBWmAl+0ZHjxnn3OOsR49P7Q5bmxZqNjHS
+   RmcdNOOkCK+ovoUStjIDaiaU372Rd/gwUL1L+UmtE6ZyH9iuLqA1zbOX8
+   lYc1BCsSSqEWoj96B150qQKGG5XYDdsAuv3+W+T4EgVyh36Dc05gdzvsh
+   PAq6ny5igTykQgEJvqFDI3ZhJIxtv0qd5BKgm5We/sTEpsjsosoISJOZ3
+   TWb7H9Zy2H7qHRN6IfoBQsgu5wr4Wq08GP9QJ+A1G0MoSZpmkcFPW5c8W
+   JMpC9vkK12IoyQULkkXU9CCyGx80LHERomW2RhA5r/znEByuPItYCpHQb
+   A==;
+X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
+   d="scan'208";a="108555449"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 Aug 2022 00:14:24 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.17; Thu, 11 Aug 2022 00:14:22 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28 via Frontend Transport; Thu, 11 Aug 2022 00:14:21 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WyOPN7ZJejbulFkw7uAE0Cbknp2VJPVbSPZBrM1l2irFf4dbDRTLq6IZThvK4Rk7xr10DhGxIwl1mvrLIf8wUmD5EnaOB1+/uULUqNHWjm7K6yLf4l7gkOl+XwW1fb59KPbG9P39YWmT1dNNEPyWXj3o7p2H8moT1Qr2qQd8S3DmWU48RGPBa/Qssd87nU4PlWzynzqqlV3YxdJUkV1bUB6Oj1lXfgyQ3mA2Qt7qX0ZlISyUM9mJYSoBXBvPlcC6BILjtdl6a1rCx52ZysJ3tREBu1AKdwWjSGaLBvnbvuVuclLwf3EDH9l0wx3Z+ZPHkCFzmD9gFzyuaMbOAgFqZA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rWsza1y2XxUEpNUuQe/z5RJot8RCMc2B8/MDK67ZNAQ=;
+ b=cHJ6XkOeo7jkB/KtOp02Hs1bu9RRui5fivOpS+iucOdas7+Sl8gsyfvuPFtkkk5mkYN//cb7bm9Kb0K2DOtkf9VgT4CSXPCcmggjNeIV8ETs6KzVA7Udg3AnACg8mtm4h0M8vGYOkNXrAxLTFgUAAS+88kDye/RFAfJ6ijPwzUif7J8ZgFviSKFhZVxQ+bp4+2jUvEExB8rEhcLM46SuabWDU7F9K/ubuf7Vy9YZf4hxKWJxNx82Mk1atYm6YPLCf09a4tWgv1v/3X8g+LnXpwuKXTCsUui/w1H//pEtxwIyf1kCbqLV4ShgymlSnQ/6zs+2Qm6eI7PdjXmf6mFykQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=7xLmChUbR+sbQTU3eoxUwM1fyr+o1U5qC9sWeD1/mPc=;
-        b=bbWAhOiep8Wld6q4bDTLSbrUyOY5g8WqKycPZz03Ow58K+wDOvrzzytV8x6y8m5I4H
-         GDiEWl+hejalcsujFBzlDG9xn4ej6GMfMp+f5El35MeCabzDStYXzBcHW8gX5xhIDwrZ
-         x4HhzIZR3JFKRZiC1DGRhoXXETDwfKJRzgZ9bqNGfQGvDfIdVtH+lRjyUmoolkKfY6J5
-         2KGMPhxqsOKnIpE+rKhq0wngGP/RDK6DJC2b16WCnrNFizN4mCkBYIJbUDvVPplYVydj
-         65llJKcB7/hrGuubaasJe8sUUwX2RsOpm3dBLy3KtO0tzv2axrBul65Fiym3/WhltzwE
-         beBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=7xLmChUbR+sbQTU3eoxUwM1fyr+o1U5qC9sWeD1/mPc=;
-        b=D6Y0kDz80JFq2jq+jLFwZbHaMqqC9dlcMQKyknoL7fcwrzKXruE1KCJT08SaXcOGPd
-         SjlcXz13xcIvbhE6oGSdue94KRSIc/DUvfMLCdmp8Sh76tgHWXnfuzplOKAoNnMuOMtu
-         nXZ91g3qw2c71hdhPcGhwl8AcxgH0SxhRYGIp7myZPbFprIobktU2rNLLMQfinf9xsjS
-         kSWUQ6U55ZFOJS4BI+Nb2520KZpmhQCG2NB7QU9z+njho0nao2ZwgBkaKXcszDbpzIyo
-         Kgb/5AFz/DjG9kZTl/rm3K+du1REereX5/5/5Jko3su/i/0LZlloW49beq0h+Hx3xlrM
-         N6wg==
-X-Gm-Message-State: ACgBeo3ZiDW+wO0ocdxRVt6I3Mgt/bvrJB0hbMAbjQ4Y7hk/2khjqlpz
-        UYcd+o0CvyqPQ/wpG6Q/NHQ=
-X-Google-Smtp-Source: AA6agR7GD0q8OsfhqzQwuGsXOKWBclQAb128JqH7qr++nP/TkAFqCRn7FW8RklyLMJ9W6D2mD2NP7A==
-X-Received: by 2002:a17:907:6e17:b0:731:2426:f606 with SMTP id sd23-20020a1709076e1700b007312426f606mr17346600ejc.162.1660202028207;
-        Thu, 11 Aug 2022 00:13:48 -0700 (PDT)
-Received: from gmail.com (195-38-113-148.pool.digikabel.hu. [195.38.113.148])
-        by smtp.gmail.com with ESMTPSA id d5-20020a170906304500b007262b9f7120sm3157407ejd.167.2022.08.11.00.13.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Aug 2022 00:13:47 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Thu, 11 Aug 2022 09:13:45 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, stable@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Peter Xu <peterx@redhat.com>, Hugh Dickins <hughd@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>
-Subject: [PATCH] sched/all: Change BUG_ON() instances to WARN_ON()
-Message-ID: <YvSsKcAXISmshtHo@gmail.com>
-References: <20220808073232.8808-1-david@redhat.com>
- <CAHk-=wiEAH+ojSpAgx_Ep=NKPWHU8AdO3V56BXcCsU97oYJ1EA@mail.gmail.com>
- <1a48d71d-41ee-bf39-80d2-0102f4fe9ccb@redhat.com>
- <CAHk-=wg40EAZofO16Eviaj7mfqDhZ2gVEbvfsMf6gYzspRjYvw@mail.gmail.com>
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rWsza1y2XxUEpNUuQe/z5RJot8RCMc2B8/MDK67ZNAQ=;
+ b=myREo8x6OEtE2nm+noCy3M23bclJnwirKKTcwdsxgY8w56Wp/DujIydb8EYsFMikWIiNSZ2C/+mx5C7+uiYusKFBM/YuwSa71qIAFGXQkgoVWl9Ghm81CK/rixiul+pIK92aGjAMCrrt0zjuZVnjT+i+omKccNKEElrFC0a8tBs=
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
+ by MWHPR1101MB2223.namprd11.prod.outlook.com (2603:10b6:301:54::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.17; Thu, 11 Aug
+ 2022 07:14:16 +0000
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::ac89:75cd:26e0:51c3]) by CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::ac89:75cd:26e0:51c3%8]) with mapi id 15.20.5525.011; Thu, 11 Aug 2022
+ 07:14:15 +0000
+From:   <Conor.Dooley@microchip.com>
+To:     <lukas.bulwahn@gmail.com>, <Daire.McNamara@microchip.com>,
+        <linux-riscv@lists.infradead.org>, <wsa@kernel.org>,
+        <arnd@arndb.de>
+CC:     <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] MAINTAINERS: rectify entry for RISC-V/MICROCHIP POLARFIRE
+ SOC SUPPORT
+Thread-Topic: [PATCH] MAINTAINERS: rectify entry for RISC-V/MICROCHIP
+ POLARFIRE SOC SUPPORT
+Thread-Index: AQHYrVDAFjo5LcJuaEKmHCoveAZVwa2pSTkA
+Date:   Thu, 11 Aug 2022 07:14:15 +0000
+Message-ID: <47742925-2d0d-7313-f811-aa17e35ce81a@microchip.com>
+References: <20220811070506.12252-1-lukas.bulwahn@gmail.com>
+In-Reply-To: <20220811070506.12252-1-lukas.bulwahn@gmail.com>
+Accept-Language: en-IE, en-US
+Content-Language: en-IE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: c691f28d-c1bc-47a3-390d-08da7b6919b0
+x-ms-traffictypediagnostic: MWHPR1101MB2223:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: KWa6voCmP9ChdyVxaJc50rOfwmr2tBvVnOxGqmUrO87uM3a0LM5HzTTNihX+SiJ0GJW0Uq1IxkMvluyoYCKEhH50autJdC1Vc2WGrOjt0D8VZYmfpKFYdQ4z1HkKJwc2An8XgzO9wKB/KkBuuzz08CbwQNiZ+DAGr3Oy+cHKBryIRljM6WbQgvi43ufXFR01JRUseGB1T3fckMylH7JFXxtLdFZpZTucqhwfz3/sCuIPPrlGPTtH5GWHvdOuSvJeen50ULYn7KtRWaSNT9DynJ+sWahND/xlY2WUaXysyEL9kgShSz4VHtXL7hZmsCMhcrgMd3aS1CrZelXow0bmPHiVEO5PJpbR6NYXKRTHueFMdg2SLZo4AYfyocArvi0rGCHXb3AZjaPBvdWSXv8E0oViECULj0A/Pgf5WhjLSsE0OLJkNcf6scxdo506gmcdnupx8JcwitflslNv/s6J6QhtzkcYnPh+z1vdlQViCmQNL+SnwX/LtzHBnfBTWlv6R9LSq/64dlo6pRegX52CBjlzF8KPuW02p4XAjfH4BNm5CFK/Pg/ujT/Gy47tNDhBvg2/Bxu6NJLtq2nDhuK/iF2+J9ckOtALOnI8KWo3Utv5oedmiKEB/ql0bkJNkWfeoDaYFYTTxnJzLKNRsXzTISxDVxfpcPo7O1QTUYr77+9VBm+Lfj02DkcLWrIk2iHEFC0dxgy/DZNdgVz7OJnfLI7KypHGvoujAKzTVJQ3m/Y6KWTKVbXLk9Cg9f0Hsy/JoR6mPKHRyEy6oWA+gx2XzgCaOblDszkmSU1v5ZG5KikSD/bJI9HGQOfGTtE04xJjsbxBe1LYsoqGRkQ25S0LNX4oGDDL7X5oJEyPQy/DN4FodSUBMXSeJslc0Gp8XUAj
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(366004)(396003)(376002)(39860400002)(346002)(136003)(38100700002)(91956017)(31696002)(86362001)(316002)(122000001)(66556008)(66476007)(66446008)(64756008)(8676002)(4326008)(66946007)(5660300002)(8936002)(38070700005)(76116006)(6486002)(478600001)(83380400001)(53546011)(6506007)(6512007)(26005)(186003)(41300700001)(2616005)(54906003)(110136005)(71200400001)(36756003)(31686004)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OU10M3VBdTJEVGRRZTVrbERCb0NTNWJMa29tVXBkeCttL0liNFJ4OXA1R2FX?=
+ =?utf-8?B?bHVWQlhUN3VFV3BON24wZXdMRTlJb2pNcWlLY1Qxc0pQbUJNMnZhclBldWIr?=
+ =?utf-8?B?VGNFMTlUa29IeUxva2M2RUJqTDJPbnlISHlaMmNVRFg1c0RoaTlwaUpXT0tF?=
+ =?utf-8?B?S2s4aW5DVGJGWDVsU3BQSFQwbVluSUV0dHppeFF3ZUNVaHF1Q1hBS1ZXcE1Q?=
+ =?utf-8?B?aCtwZ25JMUY2Rk9WY1pFaGRoWHpKQ2RBWUJoVUVvcm8wbWdwYjBUa3hUOTBj?=
+ =?utf-8?B?TGtFRHhmMS9veDV2aGRDOFZ6aVhpRjBFdVhjV2tvWlFSRWJRQjNqL2VrTVNt?=
+ =?utf-8?B?SlUvZnNaaEd0bU1kcUJvTUp1ZmlPaGtGdzBsM2MwQmFhaUlnZ0I3OExEOFVK?=
+ =?utf-8?B?RnhIVE9CNUVodW5wV3BTMlBrS3JOd0hhYlcrSjJBVGNydFRqek1ndktTSlpK?=
+ =?utf-8?B?V1gxWWh3ZWF1MnF4UFRsKzBBNlM3b0NRc1NyQmdxWEpJSTFtajVPYWpQTWNi?=
+ =?utf-8?B?MUduQW5FTkR4ZTNNRWNPalJDVXY2RW1GUVhIZ0VPWjhEU2JPWFYzOVpad2x3?=
+ =?utf-8?B?N3lDcllWcHlGU2pSTTlBQlZLS3NKOVFnb25qOGZLUkhsbzdpQy9lSkkzSFdN?=
+ =?utf-8?B?M0x6R2FtRVV0QThaVmxpMEtVRlBpZDlDZ0JZK1loSTN6eU5UWjh3d3V2ZkV5?=
+ =?utf-8?B?QzdmM1hUMW9pc2NPWVJsNHRzbWdiZ3ZnTEdra3A4dEY1YWhORGdXa0JweTZk?=
+ =?utf-8?B?T1daUTRodUlhWG55UzBtcDYvU0hQYjBvc3RYN0hpeDFDMmdHK29qdUVZYU9I?=
+ =?utf-8?B?VWZySXJpbnBrOHBESHUvcXBWRUpLcEJTK0ZRbTJnc0Vkb0hRUnZkd3lDR1Bs?=
+ =?utf-8?B?ZTdNcTh1VjMzV2V4SzhPTjl1dlYwRnpqd1grejRLSUdaUWZGaTZvRzc3U1Az?=
+ =?utf-8?B?WnphT0J6WDgrc2VsdmZxL2p0djFHUjhDS0s4TERGWDZxdGxHcUV6cFJyYVow?=
+ =?utf-8?B?bnFQbkxkdDBjcXhkYTJSVjNvYVhWTGw2eTcwU1I5RzBtMXllYjZqZGYzM2VJ?=
+ =?utf-8?B?Q0NLTm9GK0Y1UDR3MzRmVXo5ZmhWajcvSjIvcWdBU25pMmsvY1BNUkFkVndC?=
+ =?utf-8?B?a1hVSUlkYVZaTTk5eC8yb3VqZnc4TUl4eFl3YndVa2NhdVE5MDdlS1lIWGhK?=
+ =?utf-8?B?TWx1Wkp3OFN2R2NoUm5iNmswMjZOMDZWVXV4RGhaelFEU0dFZWg1dUN1Qk9X?=
+ =?utf-8?B?QlhkbXlHUnpkeXVGM0I4SEx4NXNPS0ViakF2SjAxVGFzdTErSVUyTDA0UDhY?=
+ =?utf-8?B?VnRsSGZvS0hwV0lqUmVQZzdGQVBTdCtXU3NNbU8xM3pSOEZyaS9yVlVoNmhS?=
+ =?utf-8?B?SVZYT2lWVkNwN1YyY09rTzRrVG5LcWtVby85WVovT1B5OFhMamtEcDlyQTEx?=
+ =?utf-8?B?L0hiV2pUVGRrV0xrQ1pMK1BsYzFoZXFpaXIvUmJBVUxmYmpWOXd4SlJmU3lM?=
+ =?utf-8?B?ZzI1R0NHSitSU0d0ZGU5bElzZENkZXVXcU1CUEZ2cGo0TkhpbGJTRWdaUVJB?=
+ =?utf-8?B?TCt6ZE80a2hOcW1JekE5empkVDlrbS81alNiRTRST1VpNHFud0x4eDRRUmh5?=
+ =?utf-8?B?QUQ4YWE4YWxpMWtHTEZVYUZ0b0NMam0zQWgxa0EzampZYlE3a1VUYkt0cHdl?=
+ =?utf-8?B?dC9kMUMwVzh1czMyZU1WTmxtSDdpOXVnWHYrQjRDbGk2bk9tTHk1d3ltbmZh?=
+ =?utf-8?B?VzNOVXpmYTRabkVWcU5UV3FaQmN5cGpocWlOaDZUOCthalV0cXdyaHVUMjUz?=
+ =?utf-8?B?RHZVb2NhUS9JTCtPWWNscWhxeXcySHZZc1hsMEdNdloxZ05yTlFDVCtSS01n?=
+ =?utf-8?B?aVZHOU5EKzUyMVFabUt3Wld4QmdCZVRZUTIxNW5KaFlLYU1RQWJBQm8zUnpE?=
+ =?utf-8?B?QkVlNjFjOWdLSmZvUE1CeGxFcm1WUnNQV2lqQ1ByeWNKdCtTMTQyMGlRZDFT?=
+ =?utf-8?B?TzZyZFA3eWw5Q2dNaEJBU2NFbUozbnpWaXlaZUxhSlB5clVPQytuM05KUTFD?=
+ =?utf-8?B?Y2xPMWJya1FTbEducm4yVzB6MnQvSnl0QVU2Z1d4Sm9TZXMwNnUyK0Y2UVNN?=
+ =?utf-8?Q?+Q7pg5zm+8kbLZS8KI7SfCLcb?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <3F32FDCA522A1F479451A0F4FA92BA52@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wg40EAZofO16Eviaj7mfqDhZ2gVEbvfsMf6gYzspRjYvw@mail.gmail.com>
-X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c691f28d-c1bc-47a3-390d-08da7b6919b0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Aug 2022 07:14:15.8639
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: g+kXYK9G3VDLi8HkEUIXaSd0BbUlSOwuD2xgsAJH4E1EWR6BKciPGma9B7zQIUeLvFFlDZVoEwI2Khfaw4YFaiEW8m6dzA2H5qgFQIxBtLk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1101MB2223
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-* Linus Torvalds <torvalds@linux-foundation.org> wrote:
-
-> I just tried to find a valid BUG_ON() that would make me go "yeah, that's 
-> actually worth it", and couldn't really find one. Yeah, there are several 
-> ones in the scheduler that make me go "ok, if that triggers, the machine 
-> is dead anyway", so in that sense there are certainly BUG_ON()s that 
-> don't _hurt_.
-
-That's a mostly accidental, historical accumulation of BUG_ON()s - I 
-believe we can change all of them to WARN_ON() via the patch below.
-
-As far as the scheduler is concerned, we don't need any BUG_ON()s.
-
-[ This assumes that printk() itself is atomic and non-recursive wrt. the 
-  scheduler in these code paths ... ]
-
-Thanks,
-
-	Ingo
-
-===============>
-From: Ingo Molnar <mingo@kernel.org>
-Date: Thu, 11 Aug 2022 08:54:52 +0200
-Subject: [PATCH] sched/all: Change BUG_ON() instances to WARN_ON()
-
-There's no good reason to crash a user's system with a BUG_ON(),
-chances are high that they'll never even see the crash message on
-Xorg, and it won't make it into the syslog either.
-
-By using a WARN_ON() we at least give the user a chance to report
-any bugs triggered here - instead of getting silent hangs.
-
-None of these WARN_ON()s are supposed to trigger, ever - so we ignore
-cases where a NULL check is done via a BUG_ON() and we let a NULL
-pointer through after a WARN_ON().
-
-There's one exception: WARN_ON() arguments with side-effects,
-such as locking - in this case we use the return value of the
-WARN_ON(), such as in:
-
- -       BUG_ON(!lock_task_sighand(p, &flags));
- +       if (WARN_ON(!lock_task_sighand(p, &flags)))
- +               return;
-
-Signed-off-by: Ingo Molnar <mingo@kernel.org>
----
- kernel/sched/autogroup.c |  3 ++-
- kernel/sched/core.c      |  2 +-
- kernel/sched/cpupri.c    |  2 +-
- kernel/sched/deadline.c  | 26 +++++++++++++-------------
- kernel/sched/fair.c      | 10 +++++-----
- kernel/sched/rt.c        |  2 +-
- kernel/sched/sched.h     |  6 +++---
- 7 files changed, 26 insertions(+), 25 deletions(-)
-
-diff --git a/kernel/sched/autogroup.c b/kernel/sched/autogroup.c
-index 4ebaf97f7bd8..13f6b6da35a0 100644
---- a/kernel/sched/autogroup.c
-+++ b/kernel/sched/autogroup.c
-@@ -161,7 +161,8 @@ autogroup_move_group(struct task_struct *p, struct autogroup *ag)
- 	struct task_struct *t;
- 	unsigned long flags;
- 
--	BUG_ON(!lock_task_sighand(p, &flags));
-+	if (WARN_ON(!lock_task_sighand(p, &flags)))
-+		return;
- 
- 	prev = p->signal->autogroup;
- 	if (prev == ag) {
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index d3d61cbb6b3c..f84206bf42cd 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -2328,7 +2328,7 @@ static struct rq *move_queued_task(struct rq *rq, struct rq_flags *rf,
- 	rq = cpu_rq(new_cpu);
- 
- 	rq_lock(rq, rf);
--	BUG_ON(task_cpu(p) != new_cpu);
-+	WARN_ON(task_cpu(p) != new_cpu);
- 	activate_task(rq, p, 0);
- 	check_preempt_curr(rq, p, 0);
- 
-diff --git a/kernel/sched/cpupri.c b/kernel/sched/cpupri.c
-index fa9ce9d83683..9f719e4ea081 100644
---- a/kernel/sched/cpupri.c
-+++ b/kernel/sched/cpupri.c
-@@ -147,7 +147,7 @@ int cpupri_find_fitness(struct cpupri *cp, struct task_struct *p,
- 	int task_pri = convert_prio(p->prio);
- 	int idx, cpu;
- 
--	BUG_ON(task_pri >= CPUPRI_NR_PRIORITIES);
-+	WARN_ON(task_pri >= CPUPRI_NR_PRIORITIES);
- 
- 	for (idx = 0; idx < task_pri; idx++) {
- 
-diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
-index 1d9c90958baa..fb234077c317 100644
---- a/kernel/sched/deadline.c
-+++ b/kernel/sched/deadline.c
-@@ -310,7 +310,7 @@ static void dl_change_utilization(struct task_struct *p, u64 new_bw)
- {
- 	struct rq *rq;
- 
--	BUG_ON(p->dl.flags & SCHED_FLAG_SUGOV);
-+	WARN_ON(p->dl.flags & SCHED_FLAG_SUGOV);
- 
- 	if (task_on_rq_queued(p))
- 		return;
-@@ -607,7 +607,7 @@ static void enqueue_pushable_dl_task(struct rq *rq, struct task_struct *p)
- {
- 	struct rb_node *leftmost;
- 
--	BUG_ON(!RB_EMPTY_NODE(&p->pushable_dl_tasks));
-+	WARN_ON(!RB_EMPTY_NODE(&p->pushable_dl_tasks));
- 
- 	leftmost = rb_add_cached(&p->pushable_dl_tasks,
- 				 &rq->dl.pushable_dl_tasks_root,
-@@ -684,7 +684,7 @@ static struct rq *dl_task_offline_migration(struct rq *rq, struct task_struct *p
- 			 * Failed to find any suitable CPU.
- 			 * The task will never come back!
- 			 */
--			BUG_ON(dl_bandwidth_enabled());
-+			WARN_ON(dl_bandwidth_enabled());
- 
- 			/*
- 			 * If admission control is disabled we
-@@ -830,7 +830,7 @@ static void replenish_dl_entity(struct sched_dl_entity *dl_se)
- 	struct dl_rq *dl_rq = dl_rq_of_se(dl_se);
- 	struct rq *rq = rq_of_dl_rq(dl_rq);
- 
--	BUG_ON(pi_of(dl_se)->dl_runtime <= 0);
-+	WARN_ON(pi_of(dl_se)->dl_runtime <= 0);
- 
- 	/*
- 	 * This could be the case for a !-dl task that is boosted.
-@@ -1616,7 +1616,7 @@ static void __enqueue_dl_entity(struct sched_dl_entity *dl_se)
- {
- 	struct dl_rq *dl_rq = dl_rq_of_se(dl_se);
- 
--	BUG_ON(!RB_EMPTY_NODE(&dl_se->rb_node));
-+	WARN_ON(!RB_EMPTY_NODE(&dl_se->rb_node));
- 
- 	rb_add_cached(&dl_se->rb_node, &dl_rq->root, __dl_less);
- 
-@@ -1640,7 +1640,7 @@ static void __dequeue_dl_entity(struct sched_dl_entity *dl_se)
- static void
- enqueue_dl_entity(struct sched_dl_entity *dl_se, int flags)
- {
--	BUG_ON(on_dl_rq(dl_se));
-+	WARN_ON(on_dl_rq(dl_se));
- 
- 	update_stats_enqueue_dl(dl_rq_of_se(dl_se), dl_se, flags);
- 
-@@ -2017,7 +2017,7 @@ static struct task_struct *pick_task_dl(struct rq *rq)
- 		return NULL;
- 
- 	dl_se = pick_next_dl_entity(dl_rq);
--	BUG_ON(!dl_se);
-+	WARN_ON(!dl_se);
- 	p = dl_task_of(dl_se);
- 
- 	return p;
-@@ -2277,12 +2277,12 @@ static struct task_struct *pick_next_pushable_dl_task(struct rq *rq)
- 
- 	p = __node_2_pdl(rb_first_cached(&rq->dl.pushable_dl_tasks_root));
- 
--	BUG_ON(rq->cpu != task_cpu(p));
--	BUG_ON(task_current(rq, p));
--	BUG_ON(p->nr_cpus_allowed <= 1);
-+	WARN_ON(rq->cpu != task_cpu(p));
-+	WARN_ON(task_current(rq, p));
-+	WARN_ON(p->nr_cpus_allowed <= 1);
- 
--	BUG_ON(!task_on_rq_queued(p));
--	BUG_ON(!dl_task(p));
-+	WARN_ON(!task_on_rq_queued(p));
-+	WARN_ON(!dl_task(p));
- 
- 	return p;
- }
-@@ -2492,7 +2492,7 @@ static void set_cpus_allowed_dl(struct task_struct *p,
- 	struct root_domain *src_rd;
- 	struct rq *rq;
- 
--	BUG_ON(!dl_task(p));
-+	WARN_ON(!dl_task(p));
- 
- 	rq = task_rq(p);
- 	src_rd = rq->rd;
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index da388657d5ac..00c01b3232b9 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -2600,7 +2600,7 @@ static void task_numa_group(struct task_struct *p, int cpupid, int flags,
- 	if (!join)
- 		return;
- 
--	BUG_ON(irqs_disabled());
-+	WARN_ON(irqs_disabled());
- 	double_lock_irq(&my_grp->lock, &grp->lock);
- 
- 	for (i = 0; i < NR_NUMA_HINT_FAULT_STATS * nr_node_ids; i++) {
-@@ -7279,7 +7279,7 @@ static void check_preempt_wakeup(struct rq *rq, struct task_struct *p, int wake_
- 		return;
- 
- 	find_matching_se(&se, &pse);
--	BUG_ON(!pse);
-+	WARN_ON(!pse);
- 
- 	cse_is_idle = se_is_idle(se);
- 	pse_is_idle = se_is_idle(pse);
-@@ -8159,7 +8159,7 @@ static void attach_task(struct rq *rq, struct task_struct *p)
- {
- 	lockdep_assert_rq_held(rq);
- 
--	BUG_ON(task_rq(p) != rq);
-+	WARN_ON(task_rq(p) != rq);
- 	activate_task(rq, p, ENQUEUE_NOCLOCK);
- 	check_preempt_curr(rq, p, 0);
- }
-@@ -10134,7 +10134,7 @@ static int load_balance(int this_cpu, struct rq *this_rq,
- 		goto out_balanced;
- 	}
- 
--	BUG_ON(busiest == env.dst_rq);
-+	WARN_ON(busiest == env.dst_rq);
- 
- 	schedstat_add(sd->lb_imbalance[idle], env.imbalance);
- 
-@@ -10430,7 +10430,7 @@ static int active_load_balance_cpu_stop(void *data)
- 	 * we need to fix it. Originally reported by
- 	 * Bjorn Helgaas on a 128-CPU setup.
- 	 */
--	BUG_ON(busiest_rq == target_rq);
-+	WARN_ON(busiest_rq == target_rq);
- 
- 	/* Search for an sd spanning us and the target CPU. */
- 	rcu_read_lock();
-diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
-index 054b6711e961..acf9f5ce0c4a 100644
---- a/kernel/sched/rt.c
-+++ b/kernel/sched/rt.c
-@@ -843,7 +843,7 @@ static void __disable_runtime(struct rq *rq)
- 		 * We cannot be left wanting - that would mean some runtime
- 		 * leaked out of the system.
- 		 */
--		BUG_ON(want);
-+		WARN_ON(want);
- balanced:
- 		/*
- 		 * Disable all the borrow logic by pretending we have inf
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index b0bf2287dd9d..8e5df3bc3483 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -2699,8 +2699,8 @@ static inline void double_rq_lock(struct rq *rq1, struct rq *rq2)
- 	__acquires(rq1->lock)
- 	__acquires(rq2->lock)
- {
--	BUG_ON(!irqs_disabled());
--	BUG_ON(rq1 != rq2);
-+	WARN_ON(!irqs_disabled());
-+	WARN_ON(rq1 != rq2);
- 	raw_spin_rq_lock(rq1);
- 	__acquire(rq2->lock);	/* Fake it out ;) */
- 	double_rq_clock_clear_update(rq1, rq2);
-@@ -2716,7 +2716,7 @@ static inline void double_rq_unlock(struct rq *rq1, struct rq *rq2)
- 	__releases(rq1->lock)
- 	__releases(rq2->lock)
- {
--	BUG_ON(rq1 != rq2);
-+	WARN_ON(rq1 != rq2);
- 	raw_spin_rq_unlock(rq1);
- 	__release(rq2->lock);
- }
+T24gMTEvMDgvMjAyMiAwODowNSwgTHVrYXMgQnVsd2FobiB3cm90ZToNCj4gRVhURVJOQUwgRU1B
+SUw6IERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3Uga25v
+dyB0aGUgY29udGVudCBpcyBzYWZlDQo+IA0KPiBDb21taXQgM2NiZDY3Mzg0Njc3ICgiTUFJTlRB
+SU5FUlM6IGFkZCB0aGUgUG9sYXJmaXJlIFNvQydzIGkyYyBkcml2ZXIiKQ0KPiBhZGRzIHRoZSBm
+aWxlIGVudHJ5IGZvciBkcml2ZXJzL2kyYy9idXNzZXMvaTJjLW1pY3JvY2hpcC1jb3JlLmMsIGJ1
+dCB0aGUNCj4gZmlsZSBpcyBhY3R1YWxseSBuYW1lZCBkcml2ZXJzL2kyYy9idXNzZXMvaTJjLW1p
+Y3JvY2hpcC1jb3JlaTJjLmMuDQo+IA0KPiBSZXBhaXIgdGhpcyBmaWxlIHJlZmVyZW5jZSBpbiBS
+SVNDLVYvTUlDUk9DSElQIFBPTEFSRklSRSBTT0MgU1VQUE9SVC4NCj4gDQo+IFNpZ25lZC1vZmYt
+Ynk6IEx1a2FzIEJ1bHdhaG4gPGx1a2FzLmJ1bHdhaG5AZ21haWwuY29tPg0KPiAtLS0NCj4gQ29u
+b3IsIHBsZWFzZSBhY2suDQoNCkZGUy4uLiBTaWxseSBtaXN0YWtlIGZyb20gbWUgdGhlcmUsIGtl
+ZXAgZ2V0dGluZyBjYXVnaHQgb3V0IGJ5DQp0aGUgbWFpbnRhaW5lcnMgZW50cmllcyB3aGVuIEkg
+ZG8gYW4gaW50ZXItdmVyc2lvbiByZW5hbWUuDQpJcyB0aGVyZSBzb21ldGhpbmcgSSBjYW4gYWRk
+IHRvIG15IGJ1aWxkIHNjcmlwdHMsIG90aGVyIHRoYW4gdGhlDQpnZXRfbWFpbnRhaW5lciBzZWxm
+dGVzdCB0byBjYXRjaCB0aGVzZT8NClRoYW5rcyBMdWthcy4NCg0KQWNrZWQtYnk6IENvbm9yIERv
+b2xleSA8Y29ub3IuZG9vbGV5QG1pY3JvY2hpcC5jb20+DQoNCj4gDQo+IEFybmQsIHBsZWFzZSBw
+aWNrIHRoaXMgbWlub3Igbm9uLXVyZ2VudCBjbGVhbi11cCBwYXRjaC4NCj4gDQo+ICAgTUFJTlRB
+SU5FUlMgfCAyICstDQo+ICAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0
+aW9uKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvTUFJTlRBSU5FUlMgYi9NQUlOVEFJTkVSUw0KPiBp
+bmRleCA5MjAzZWZlZGVhMWUuLjc5N2ZkZTdlMTgyMSAxMDA2NDQNCj4gLS0tIGEvTUFJTlRBSU5F
+UlMNCj4gKysrIGIvTUFJTlRBSU5FUlMNCj4gQEAgLTE3NTQ0LDcgKzE3NTQ0LDcgQEAgRjogICAg
+ICBEb2N1bWVudGF0aW9uL2RldmljZXRyZWUvYmluZGluZ3MvdXNiL21pY3JvY2hpcCxtcGZzLW11
+c2IueWFtbA0KPiAgIEY6ICAgICBhcmNoL3Jpc2N2L2Jvb3QvZHRzL21pY3JvY2hpcC8NCj4gICBG
+OiAgICAgZHJpdmVycy9jaGFyL2h3X3JhbmRvbS9tcGZzLXJuZy5jDQo+ICAgRjogICAgIGRyaXZl
+cnMvY2xrL21pY3JvY2hpcC9jbGstbXBmcy5jDQo+IC1GOiAgICAgZHJpdmVycy9pMmMvYnVzc2Vz
+L2kyYy1taWNyb2NoaXAtY29yZS5jDQo+ICtGOiAgICAgZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1t
+aWNyb2NoaXAtY29yZWkyYy5jDQo+ICAgRjogICAgIGRyaXZlcnMvbWFpbGJveC9tYWlsYm94LW1w
+ZnMuYw0KPiAgIEY6ICAgICBkcml2ZXJzL3BjaS9jb250cm9sbGVyL3BjaWUtbWljcm9jaGlwLWhv
+c3QuYw0KPiAgIEY6ICAgICBkcml2ZXJzL3J0Yy9ydGMtbXBmcy5jDQo+IC0tDQo+IDIuMTcuMQ0K
+PiANCg0K

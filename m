@@ -2,73 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A24958F50C
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 02:02:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7710858F511
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 02:09:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232009AbiHKACA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 20:02:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53920 "EHLO
+        id S232783AbiHKAJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 20:09:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231499AbiHKAB6 (ORCPT
+        with ESMTP id S232515AbiHKAJE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 20:01:58 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7495E4D4CC
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 17:01:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660176117; x=1691712117;
-  h=message-id:date:mime-version:to:cc:references:from:
-   subject:in-reply-to:content-transfer-encoding;
-  bh=VIuh6HmQhaogAgt/cXp0prTG59cnR7hCc4YBw8Besag=;
-  b=hH2t8s6mi6qQOvGNHNaKKbZwhbjeuo/IhUE6EaB21qLh89f+6D7ZZlk6
-   w6iNr3KGf9Z426PacgGj0PYnTTBtOz85lVVK707hkjqmJbasIhhyCcodG
-   sOkh4RUJ5JmxsssZVljfmrpp5QyDwMC3r8iomm1l3j0ETa6Xuaf0YRk6y
-   bKi5wW/vokXEhNebsiYTtRkN7rJFZk1omw3ar+sPadU8fLizyFmuFyr+t
-   dqt+lvHQM7P5DJ74svoxAM1EMAsBU19UtHGrizXZhQkf3hs6s0gocuc/Q
-   Dcqwm8w+VvKqqU2yDTf6cAhpmlaPji80am/t5Df8ckrEiEk57URgNcXNe
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="377513219"
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="377513219"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 17:01:57 -0700
-X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
-   d="scan'208";a="933097690"
-Received: from sarava2x-mobl1.gar.corp.intel.com (HELO [10.254.67.234]) ([10.254.67.234])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 17:01:56 -0700
-Message-ID: <1d81ef6a-7505-fc13-ecbf-f3ca7a6fbfce@linux.intel.com>
-Date:   Wed, 10 Aug 2022 17:01:55 -0700
+        Wed, 10 Aug 2022 20:09:04 -0400
+Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7752E7FE75
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 17:09:03 -0700 (PDT)
+Received: by mail-oi1-x22f.google.com with SMTP id p132so19582551oif.9
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 17:09:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:from:to:cc;
+        bh=C16lQ11m+Fol+4L80u44mbuXPnmczf0UX1lY5QRXlHs=;
+        b=lnof+J9e73sWWV2P76DkdnT/flxhdLwzk6IjqWOzztc2OWwFBmRuRmO2scHgZk3CBq
+         GRV169KOmILKU6IlpvWyXSKDwR7qOjbfJwa2NoYWM/DdvVcl/tQTqR2YaOqa4BF3SFQ9
+         7NAdg4han2f2MPvoMjGoseen/7yjFmViBjY5U=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:x-gm-message-state:from:to:cc;
+        bh=C16lQ11m+Fol+4L80u44mbuXPnmczf0UX1lY5QRXlHs=;
+        b=BO/RLV0eNcDcv28AcEGzszZoZm3i/V1zog2N0QsVuk38p8RienI5Miaykh3HjdRVA7
+         rA0lhBSzWhIcZgDkOFzomcsgBopshI8C48cukaKb2BlFInu42ksxNCpd7vW0ibdmPpeo
+         CjPF4febbbs6JkmnrIPgRF0fBknHJYcJKbCi+8xXzi6USrq3WoqiD2791+3VmzCM1mGB
+         CO2BD8Pw3ap39Vjr2Bgsip6sZ/ui1qTDjIPSFgYB+IALw4kDATmyyzyKm6GTtnv9izaC
+         iuVWudwin+EiY6QKMWXQH4aC8KRKIVMFazlUBP2LDeaAhF+5fE6Mz1/KjikwYbUni7x7
+         EeAQ==
+X-Gm-Message-State: ACgBeo3zAMWe3tBxi9On+RH9txHj5o2SwIQcBvo1NdAjQN2PT/O5u3vP
+        sSgXorMHu9NVSNnibbgyjI6U12k9KPMeNkUt/SyTEA==
+X-Google-Smtp-Source: AA6agR7F6LqzTmmYZL1w8+YTn3rn4S/SBFkTvVsA8yDgkZNAItYJ9GAkZkPgvUPtLX/4083aPvTD7sMBZqfcFrz/tj4=
+X-Received: by 2002:a05:6808:1389:b0:33a:bd16:c4e4 with SMTP id
+ c9-20020a056808138900b0033abd16c4e4mr2311696oiw.0.1660176542614; Wed, 10 Aug
+ 2022 17:09:02 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 10 Aug 2022 19:09:02 -0500
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Content-Language: en-US
-To:     Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "Shutemov, Kirill" <kirill.shutemov@intel.com>,
-        "Huang, Kai" <kai.huang@intel.com>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, linux-kernel@vger.kernel.org,
-        "Gomez Iglesias, Antonio" <antonio.gomez.iglesias@intel.com>,
-        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-References: <20220809234000.783284-1-daniel.sneddon@linux.intel.com>
- <d6ffb489-7024-ff74-bd2f-d1e06573bb82@intel.com>
- <238ea612-5a25-9323-b31f-0a14493db2f7@linux.intel.com>
- <d4bcb22e-224c-d256-cb93-3ff6ed89a7d0@intel.com>
- <341ea6e9-d8f3-ee7a-6794-67408abbf047@linux.intel.com> <87r11nu52l.ffs@tglx>
- <83a0d220-1872-caba-4e7e-b6a366655cf2@linux.intel.com>
- <ba80b303-31bf-d44a-b05d-5c0f83038798@intel.com>
- <bff78ad9-57d8-ca82-cc75-0b7e5024116d@linux.intel.com>
- <9888a920-37b8-9a1f-b887-6630492955c6@intel.com>
-From:   Daniel Sneddon <daniel.sneddon@linux.intel.com>
-Subject: Re: [PATCH] x86/apic: Don't disable x2APIC if locked
-In-Reply-To: <9888a920-37b8-9a1f-b887-6630492955c6@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <dbda8bce-2890-e5e3-4052-073a52eb06a6@quicinc.com>
+References: <1660159551-13828-1-git-send-email-quic_khsieh@quicinc.com>
+ <CAE-0n533SUb3Bg=pR8Fhwo-M5qLWiti4nzLR-rSGVAsrXgEYNQ@mail.gmail.com> <dbda8bce-2890-e5e3-4052-073a52eb06a6@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Wed, 10 Aug 2022 19:09:02 -0500
+Message-ID: <CAE-0n51NyrP8CikcK_3wj4EEsurmmSZ4RY3pLhJJmkY2_8wNZw@mail.gmail.com>
+Subject: Re: [PATCH v3] drm/msm/dp: check hpd_state before push idle pattern
+ at dp_bridge_disable()
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
+        airlied@linux.ie, bjorn.andersson@linaro.org, daniel@ffwll.ch,
+        dianders@chromium.org, dmitry.baryshkov@linaro.org,
+        robdclark@gmail.com, sean@poorly.run, vkoul@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_aravindh@quicinc.com,
+        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,26 +73,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/10/22 16:44, Dave Hansen wrote:
-> On 8/10/22 16:38, Daniel Sneddon wrote:
->>>
->>> config INTEL_TDX_GUEST
->>>         bool "Intel TDX (Trust Domain Extensions) - Guest Support"
->>>         depends on X86_64 && CPU_SUP_INTEL
->>>         depends on X86_X2APIC
->> So I got some more input.  SPR and newer will lock the APIC.  
-> 
-> Could you get a _little_ more clarity on this, please?  Exactly how and
-> when will it be locked?  What does the BIOS writer's guide say?  Will
-> there be an explicit x2APIC lock option?  Or, will it be implicitly
-> locked when SGX or TDX is enabled?
-The BIOS doesn't explicitly lock the APIC.  The APIC will be locked if X2APIC
-mode is enabled when the BIOS does an MCHECK.  X2APIC mode will be enabled if
-SGX or TDX are enabled.  So when exactly does the BIOS do an MCHECK?  That I'll
-have to get clarification on.
-> 
->> Older products will get a ucode update, but that ucode update won't
->> include the APIClock.  So, on non-SPR parts do we still want to make
->> SGX depend on X2APIC?
-> Yes.  It's a small price to pay.
+Quoting Kuogee Hsieh (2022-08-10 16:57:51)
+>
+> On 8/10/2022 3:22 PM, Stephen Boyd wrote:
+> > Quoting Kuogee Hsieh (2022-08-10 12:25:51)
+> >> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> >> index b36f8b6..678289a 100644
+> >> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> >> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> >> @@ -1729,10 +1729,20 @@ void dp_bridge_disable(struct drm_bridge *drm_bridge)
+> >>          struct msm_dp_bridge *dp_bridge = to_dp_bridge(drm_bridge);
+> >>          struct msm_dp *dp = dp_bridge->dp_display;
+> >>          struct dp_display_private *dp_display;
+> >> +       u32 state;
+> >>
+> >>          dp_display = container_of(dp, struct dp_display_private, dp_display);
+> >>
+> >> +       mutex_lock(&dp_display->event_mutex);
+> >> +
+> >> +       state = dp_display->hpd_state;
+> >> +       if (state != ST_DISCONNECT_PENDING && state != ST_CONNECTED) {
+> > It's concerning that we have to check this at all. Are we still
+> > interjecting into the disable path when the cable is disconnected?
+>
+> yes,
+>
+> The problem is not from cable disconnected.
+>
+> There is a corner case that this function is called at drm shutdown
+> (drm_release).
+>
+> At that time, mainlink is not enabled, hence dp_ctrl_push_idle() will
+> cause system crash.
 
+The mainlink is only disabled when the cable is disconnected though?
+
+Let me put it this way, if we have to check that the state is
+"connected" or "disconnected pending" in the disable path then there's
+an issue where this driver is being called in unexpected ways. This
+driver is fighting the drm core each time there's a state check. We
+really need to get rid of the state tracking entirely, and make sure
+that the drm core is calling into the driver at the right time, i.e.
+bridge disable is only called when the mainlink is enabled, etc.

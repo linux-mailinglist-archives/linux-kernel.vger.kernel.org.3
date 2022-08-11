@@ -2,50 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B3C558F852
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 09:29:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26B4858F85A
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 09:29:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234262AbiHKH3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 03:29:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34764 "EHLO
+        id S234359AbiHKH3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 03:29:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234096AbiHKH3g (ORCPT
+        with ESMTP id S234247AbiHKH3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 03:29:36 -0400
+        Thu, 11 Aug 2022 03:29:37 -0400
 Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA57A923E4
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 00:29:34 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id u5-20020a6b4905000000b00681e48dbd92so9353926iob.21
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 00:29:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EEF4923EB
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 00:29:35 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id i20-20020a5d88d4000000b0067d13ffbe8cso9364688iol.22
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 00:29:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc;
-        bh=/yFaxytgIiHOx+Ic1bXKL9Gku4rs+KBs+4RebWW1Oqw=;
-        b=xDAQ/o2tSs+F1BnC18PQ2vInZDNYkVekrUFX4B+pJADcaJ2s8VW5FJAGcy+eWhl3Hs
-         j+JoI/eJOZNtazo7GbPtWY4x2RGAICY2QgD4BsHg2SUu+ld0rThZuRWC5zyZa1pCxC+E
-         jxP5P8Qx5Qqpf1ojSnnO6H5EdOZMrMw/4NrrytYbl0pTC1qW4DRj44g0kcYW9pLiAsQY
-         Xm2rbA9J76XyWWniVesYaM1npLBveDUlP8Jeg26bMntH7eCvBEMUseZK6NTzogCVyGq9
-         gbnIzom5ILj+H/ln7b3DF2nQQGg9troh+RGZjLo1uxb5lmZOZZQrjCtnHqLakxhw3qJE
-         PvNw==
-X-Gm-Message-State: ACgBeo3cy0GSZ7n2SGgUif7px6qYUtRb/oheFUTSl31eDPRn+pOFG/b1
-        Tg2JnOhlP0sjcNnjvaQT9JlbfVG+QO0Me+y4ZkNayXlBQ5tk
-X-Google-Smtp-Source: AA6agR7QbnPgAxXbogoW+LXkYs4SKak5h1QOV8pgP/Zin+yh77BCgv+f6lsxKS//KxEqEm+vnHrYFnVoKMHRvqjsVHv0ArtJw6Fy
+        bh=R8kRDpyv1KxLfdIZhodJDLBZ48C/DQoHZuuLF1/xG3w=;
+        b=8KKRV6GLKhqceqBemHAng6nclQkUsW6pGhjRAqwOg9SHBSKSGSR62umyFfbOMOKHAL
+         wVutKuxiH2IUtKPSH/W/ej17tNgyujbGnadkklclWShg2YNIu7r+0pjvOvkaRinpr5Ok
+         gPgRjzNazBKwHneKkPSfUyrA3QaJn9vetMwztYJJRd0aA2A7GpA6dA0JNTO7hwY3MYbD
+         ZstIXMWbAmCc83SrDHTAyWi1nB6D9J+30xYGGgTWNci9ue+P9EoVt5/++Rv1Uk6iKggL
+         bZ/MPFa2+k2pk3o9lQXgPSQAd8IddwEoWdWnvQlQ+1hIZ8sOWLgEUhBnFYbWtX8lEyqI
+         973A==
+X-Gm-Message-State: ACgBeo02dsupVfHAo+lYNzMlHxrqIYymohhXFy5wJTDFxb/6xIbonHiB
+        jZvgC1PYD4Qi2zwBg8rQ/Hq5TEXbkED/0Ox82rcf7W1VV+i4
+X-Google-Smtp-Source: AA6agR7L1DUjhU6F02s7AAt5sji6PtqXhx0b5pUdphzTPinmukU0FSYeGyQ2f6yixWmrnIjWMVWbP6Oy0XOovVCZUMBtMwb4ke+B
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1bad:b0:2dd:bc59:5078 with SMTP id
- n13-20020a056e021bad00b002ddbc595078mr14145282ili.19.1660202974204; Thu, 11
+X-Received: by 2002:a5d:8b8c:0:b0:67b:8779:753b with SMTP id
+ p12-20020a5d8b8c000000b0067b8779753bmr12954415iol.57.1660202974446; Thu, 11
  Aug 2022 00:29:34 -0700 (PDT)
 Date:   Thu, 11 Aug 2022 00:29:34 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000885cee05e5f2204e@google.com>
-Subject: [syzbot] linux-next boot error: general protection fault in netdev_queue_update_kobjects
-From:   syzbot <syzbot+cf0ad9bc61d1fa5ef614@syzkaller.appspotmail.com>
-To:     atenart@kernel.org, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, linux-kernel@vger.kernel.org,
-        linux-next@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com
+Message-ID: <0000000000008c0ba505e5f22066@google.com>
+Subject: [syzbot] linux-next boot error: BUG: unable to handle kernel paging
+ request in kernel_execve
+From:   syzbot <syzbot+3250d9c8925ef29e975f@syzkaller.appspotmail.com>
+To:     ebiederm@xmission.com, keescook@chromium.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-next@vger.kernel.org,
+        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com,
+        viro@zeniv.linux.org.uk
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -63,133 +64,84 @@ syzbot found the following issue on:
 
 HEAD commit:    bc6c6584ffb2 Add linux-next specific files for 20220810
 git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=1518dbbb080000
+console output: https://syzkaller.appspot.com/x/log.txt?x=115034c3080000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=5784be4315a4403b
-dashboard link: https://syzkaller.appspot.com/bug?extid=cf0ad9bc61d1fa5ef614
+dashboard link: https://syzkaller.appspot.com/bug?extid=3250d9c8925ef29e975f
 compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+cf0ad9bc61d1fa5ef614@syzkaller.appspotmail.com
+Reported-by: syzbot+3250d9c8925ef29e975f@syzkaller.appspotmail.com
 
-input: Sleep Button as /devices/LNXSYSTM:00/LNXSLPBN:00/input/input1
-ACPI: button: Sleep Button [SLPF]
-ACPI: \_SB_.LNKC: Enabled at IRQ 11
-virtio-pci 0000:00:03.0: virtio_pci: leaving for legacy driver
-ACPI: \_SB_.LNKD: Enabled at IRQ 10
-virtio-pci 0000:00:04.0: virtio_pci: leaving for legacy driver
-ACPI: \_SB_.LNKB: Enabled at IRQ 10
-virtio-pci 0000:00:06.0: virtio_pci: leaving for legacy driver
-virtio-pci 0000:00:07.0: virtio_pci: leaving for legacy driver
-N_HDLC line discipline registered with maxframe=4096
-Serial: 8250/16550 driver, 4 ports, IRQ sharing enabled
-00:03: ttyS0 at I/O 0x3f8 (irq = 4, base_baud = 115200) is a 16550A
-00:04: ttyS1 at I/O 0x2f8 (irq = 3, base_baud = 115200) is a 16550A
-00:05: ttyS2 at I/O 0x3e8 (irq = 6, base_baud = 115200) is a 16550A
-00:06: ttyS3 at I/O 0x2e8 (irq = 7, base_baud = 115200) is a 16550A
-Non-volatile memory driver v1.3
-Linux agpgart interface v0.103
-ACPI: bus type drm_connector registered
-[drm] Initialized vgem 1.0.0 20120112 for vgem on minor 0
-[drm] Initialized vkms 1.0.0 20180514 for vkms on minor 1
-Console: switching to colour frame buffer device 128x48
-platform vkms: [drm] fb0: vkmsdrmfb frame buffer device
-usbcore: registered new interface driver udl
-brd: module loaded
-loop: module loaded
-zram: Added device: zram0
-null_blk: disk nullb0 created
-null_blk: module loaded
-Guest personality initialized and is inactive
-VMCI host device registered (name=vmci, major=10, minor=120)
-Initialized host personality
-usbcore: registered new interface driver rtsx_usb
-usbcore: registered new interface driver viperboard
-usbcore: registered new interface driver dln2
-usbcore: registered new interface driver pn533_usb
-nfcsim 0.2 initialized
-usbcore: registered new interface driver port100
-usbcore: registered new interface driver nfcmrvl
-Loading iSCSI transport class v2.0-870.
-scsi host0: Virtio SCSI HBA
-st: Version 20160209, fixed bufsize 32768, s/g segs 256
-Rounding down aligned max_sectors from 4294967295 to 4294967288
-db_root: cannot open: /etc/target
-slram: not enough parameters.
-ftl_cs: FTL header not found.
-wireguard: WireGuard 1.0.0 loaded. See www.wireguard.com for information.
-wireguard: Copyright (C) 2015-2019 Jason A. Donenfeld <Jason@zx2c4.com>. All Rights Reserved.
-eql: Equalizer2002: Simon Janes (simon@ncm.com) and David S. Miller (davem@redhat.com)
-MACsec IEEE 802.1AE
-tun: Universal TUN/TAP device driver, 1.6
-general protection fault, probably for non-canonical address 0xffff000000000800: 0000 [#1] PREEMPT SMP KASAN
-KASAN: maybe wild-memory-access in range [0xfff8200000004000-0xfff8200000004007]
-CPU: 0 PID: 1 Comm: swapper/0 Not tainted 5.19.0-next-20220810-syzkaller #0
+BUG: unable to handle page fault for address: ffffdc0000000000
+#PF: supervisor read access in kernel mode
+#PF: error_code(0x0000) - not-present page
+PGD 11826067 P4D 11826067 PUD 0 
+Oops: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 1100 Comm: kworker/u4:5 Not tainted 5.19.0-next-20220810-syzkaller #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-RIP: 0010:freelist_dereference mm/slub.c:347 [inline]
-RIP: 0010:get_freepointer mm/slub.c:354 [inline]
-RIP: 0010:get_freepointer_safe mm/slub.c:368 [inline]
-RIP: 0010:slab_alloc_node mm/slub.c:3211 [inline]
-RIP: 0010:slab_alloc mm/slub.c:3251 [inline]
-RIP: 0010:kmem_cache_alloc_trace+0x164/0x3e0 mm/slub.c:3282
-Code: 8b 51 08 48 8b 01 48 83 79 10 00 48 89 44 24 08 0f 84 bf 01 00 00 48 85 c0 0f 84 b6 01 00 00 48 8b 7d 00 8b 4d 28 40 f6 c7 0f <48> 8b 1c 08 0f 85 c2 01 00 00 48 8d 4a 08 65 48 0f c7 0f 0f 94 c0
-RSP: 0000:ffffc90000067810 EFLAGS: 00010246
-RAX: ffff000000000000 RBX: 0000000000000000 RCX: 0000000000000800
-RDX: 0000000000002d18 RSI: 0000000000000dc0 RDI: 000000000003dce0
-RBP: ffff888011842140 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000000
-R13: 0000000000000dc0 R14: 0000000000000a20 R15: 0000000000000dc0
+RIP: 0010:strnlen+0x3b/0x70 lib/string.c:504
+Code: 74 3c 48 bb 00 00 00 00 00 fc ff df 49 89 fc 48 89 f8 eb 09 48 83 c0 01 48 39 e8 74 1e 48 89 c2 48 89 c1 48 c1 ea 03 83 e1 07 <0f> b6 14 1a 38 ca 7f 04 84 d2 75 11 80 38 00 75 d9 4c 29 e0 48 83
+RSP: 0000:ffffc90005c5fe10 EFLAGS: 00010246
+RAX: ffff000000000000 RBX: dffffc0000000000 RCX: 0000000000000000
+RDX: 1fffe00000000000 RSI: 0000000000020000 RDI: ffff000000000000
+RBP: ffff000000020000 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000006 R11: 0000000000000000 R12: ffff000000000000
+R13: ffff88814764cc00 R14: ffff000000000000 R15: ffff88814764cc00
 FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
 CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffff88823ffff000 CR3: 000000000bc8e000 CR4: 00000000003506f0
+CR2: ffffdc0000000000 CR3: 000000000bc8e000 CR4: 00000000003506f0
 DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
 DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 Call Trace:
  <TASK>
- kmalloc include/linux/slab.h:600 [inline]
- kzalloc include/linux/slab.h:733 [inline]
- kobject_uevent_env+0x230/0x1640 lib/kobject_uevent.c:524
- netdev_queue_add_kobject net/core/net-sysfs.c:1677 [inline]
- netdev_queue_update_kobjects+0x3d1/0x4e0 net/core/net-sysfs.c:1718
- register_queue_kobjects net/core/net-sysfs.c:1779 [inline]
- netdev_register_kobject+0x330/0x400 net/core/net-sysfs.c:2019
- register_netdevice+0xe01/0x1680 net/core/dev.c:10070
- virtnet_probe+0x1378/0x2f30 drivers/net/virtio_net.c:3923
- virtio_dev_probe+0x577/0x870 drivers/virtio/virtio.c:305
- call_driver_probe drivers/base/dd.c:530 [inline]
- really_probe+0x249/0xb90 drivers/base/dd.c:609
- __driver_probe_device+0x1df/0x4d0 drivers/base/dd.c:748
- driver_probe_device+0x4c/0x1a0 drivers/base/dd.c:778
- __driver_attach+0x223/0x550 drivers/base/dd.c:1150
- bus_for_each_dev+0x147/0x1d0 drivers/base/bus.c:301
- bus_add_driver+0x4c9/0x640 drivers/base/bus.c:618
- driver_register+0x220/0x3a0 drivers/base/driver.c:240
- virtio_net_driver_init+0x93/0xd2 drivers/net/virtio_net.c:4102
- do_one_initcall+0xfe/0x650 init/main.c:1299
- do_initcall_level init/main.c:1374 [inline]
- do_initcalls init/main.c:1390 [inline]
- do_basic_setup init/main.c:1409 [inline]
- kernel_init_freeable+0x6b1/0x73a init/main.c:1616
- kernel_init+0x1a/0x1d0 init/main.c:1505
+ strnlen include/linux/fortify-string.h:119 [inline]
+ copy_string_kernel+0x26/0x250 fs/exec.c:616
+ copy_strings_kernel+0xb3/0x190 fs/exec.c:655
+ kernel_execve+0x377/0x500 fs/exec.c:1998
+ call_usermodehelper_exec_async+0x2e3/0x580 kernel/umh.c:112
  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
  </TASK>
 Modules linked in:
+CR2: ffffdc0000000000
+---[ end trace 0000000000000000 ]---
+RIP: 0010:strnlen+0x3b/0x70 lib/string.c:504
+Code: 74 3c 48 bb 00 00 00 00 00 fc ff df 49 89 fc 48 89 f8 eb 09 48 83 c0 01 48 39 e8 74 1e 48 89 c2 48 89 c1 48 c1 ea 03 83 e1 07 <0f> b6 14 1a 38 ca 7f 04 84 d2 75 11 80 38 00 75 d9 4c 29 e0 48 83
+RSP: 0000:ffffc90005c5fe10 EFLAGS: 00010246
+RAX: ffff000000000000 RBX: dffffc0000000000 RCX: 0000000000000000
+RDX: 1fffe00000000000 RSI: 0000000000020000 RDI: ffff000000000000
+RBP: ffff000000020000 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000006 R11: 0000000000000000 R12: ffff000000000000
+R13: ffff88814764cc00 R14: ffff000000000000 R15: ffff88814764cc00
+FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffdc0000000000 CR3: 000000000bc8e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 ----------------
 Code disassembly (best guess):
-   0:	8b 51 08             	mov    0x8(%rcx),%edx
-   3:	48 8b 01             	mov    (%rcx),%rax
-   6:	48 83 79 10 00       	cmpq   $0x0,0x10(%rcx)
-   b:	48 89 44 24 08       	mov    %rax,0x8(%rsp)
-  10:	0f 84 bf 01 00 00    	je     0x1d5
-  16:	48 85 c0             	test   %rax,%rax
-  19:	0f 84 b6 01 00 00    	je     0x1d5
-  1f:	48 8b 7d 00          	mov    0x0(%rbp),%rdi
-  23:	8b 4d 28             	mov    0x28(%rbp),%ecx
-  26:	40 f6 c7 0f          	test   $0xf,%dil
-* 2a:	48 8b 1c 08          	mov    (%rax,%rcx,1),%rbx <-- trapping instruction
-  2e:	0f 85 c2 01 00 00    	jne    0x1f6
-  34:	48 8d 4a 08          	lea    0x8(%rdx),%rcx
-  38:	65 48 0f c7 0f       	cmpxchg16b %gs:(%rdi)
-  3d:	0f 94 c0             	sete   %al
+   0:	74 3c                	je     0x3e
+   2:	48 bb 00 00 00 00 00 	movabs $0xdffffc0000000000,%rbx
+   9:	fc ff df
+   c:	49 89 fc             	mov    %rdi,%r12
+   f:	48 89 f8             	mov    %rdi,%rax
+  12:	eb 09                	jmp    0x1d
+  14:	48 83 c0 01          	add    $0x1,%rax
+  18:	48 39 e8             	cmp    %rbp,%rax
+  1b:	74 1e                	je     0x3b
+  1d:	48 89 c2             	mov    %rax,%rdx
+  20:	48 89 c1             	mov    %rax,%rcx
+  23:	48 c1 ea 03          	shr    $0x3,%rdx
+  27:	83 e1 07             	and    $0x7,%ecx
+* 2a:	0f b6 14 1a          	movzbl (%rdx,%rbx,1),%edx <-- trapping instruction
+  2e:	38 ca                	cmp    %cl,%dl
+  30:	7f 04                	jg     0x36
+  32:	84 d2                	test   %dl,%dl
+  34:	75 11                	jne    0x47
+  36:	80 38 00             	cmpb   $0x0,(%rax)
+  39:	75 d9                	jne    0x14
+  3b:	4c 29 e0             	sub    %r12,%rax
+  3e:	48                   	rex.W
+  3f:	83                   	.byte 0x83
 
 
 ---

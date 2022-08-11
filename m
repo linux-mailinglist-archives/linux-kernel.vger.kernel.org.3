@@ -2,157 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CA3758FD24
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 15:13:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4035E58FD32
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 15:16:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235536AbiHKNNt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 09:13:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55058 "EHLO
+        id S235081AbiHKNQO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 09:16:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235044AbiHKNNq (ORCPT
+        with ESMTP id S234394AbiHKNQK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 09:13:46 -0400
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B9073300
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 06:13:42 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20220811131335euoutp01fd529e67be5b1fc31d7ca5ae5beeff9e~KTJUd4tHG0372503725euoutp01L
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 13:13:35 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20220811131335euoutp01fd529e67be5b1fc31d7ca5ae5beeff9e~KTJUd4tHG0372503725euoutp01L
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1660223616;
-        bh=wVDcnmo85JOb/Wc3AoxiDTuKIhlC43tBAXn1wDhKCaY=;
-        h=Date:Subject:To:CC:From:In-Reply-To:References:From;
-        b=vgBsGsEu4Un7u+QLyMfg/KBYT3OjKzD0fKTIWaJ6pEXPI8AYmDF1unMvIFh0dONW0
-         AQSv/5Cs53vhpHKUbzA138vJf5lN5bTl5XUEGsiG26MILwb7c8Qm0hthJVyIiyDHe1
-         JtkbITsxRX8FYutshQAbAMexNWVEWoEhX+PjYWWU=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20220811131335eucas1p242dba0f0e0c88975262e8c23b160356f~KTJUFxrcB2271122711eucas1p2u;
-        Thu, 11 Aug 2022 13:13:35 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id C7.B0.10067.F7005F26; Thu, 11
-        Aug 2022 14:13:35 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20220811131335eucas1p25e679d6235436c7c5667ae643564b30f~KTJTkZ9os3176231762eucas1p2a;
-        Thu, 11 Aug 2022 13:13:35 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20220811131334eusmtrp2a1e02cccf7cfd18e8e53d72ffda981c4~KTJTjbneG2687626876eusmtrp2E;
-        Thu, 11 Aug 2022 13:13:34 +0000 (GMT)
-X-AuditID: cbfec7f4-dd7ff70000002753-45-62f5007f1b69
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms1.samsung.com (EUCPMTA) with SMTP id B0.83.09095.E7005F26; Thu, 11
-        Aug 2022 14:13:34 +0100 (BST)
-Received: from CAMSVWEXC01.scsc.local (unknown [106.1.227.71]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20220811131334eusmtip239fdf39b6646965cc9b55507ec32d343~KTJTXGUVV0541005410eusmtip2L;
-        Thu, 11 Aug 2022 13:13:34 +0000 (GMT)
-Received: from [192.168.8.130] (106.210.248.43) by CAMSVWEXC01.scsc.local
-        (2002:6a01:e347::6a01:e347) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Thu, 11 Aug 2022 14:13:32 +0100
-Message-ID: <5512a55d-8852-db6d-6a54-9b8bb3cf2e96@samsung.com>
-Date:   Thu, 11 Aug 2022 15:13:31 +0200
+        Thu, 11 Aug 2022 09:16:10 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA03C5A3E8
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 06:16:09 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27BCJet5012200;
+        Thu, 11 Aug 2022 13:16:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=ZSJevoEo0/gXYnJN6XjQELpSgkgJvag66N3XNH5+np8=;
+ b=eNrvVSmPJjnMAjj6NcoM8JOJP+Gp+Wj+Clh6KsQBZimzXS480vBqwAzEu6YfV4jfsCDz
+ HA0HKHnaX4DZmL6OwXKaIkDhQ3nswadjNQi04XIq6L6k4fjgEY45V1paW8psICmBw3IS
+ JCcCgoDRiAXtZxZ/Ypfc+8gTHHNhpLW79ju28ldKqPwgItaC2uq6omIQAJTAf2G1pyy7
+ qUCG3VTUUHX63RSnbdoRKU3+CHSm7AsS/r25E7flC7qXnjEgggvRKQBvoePhTLBqFTSK
+ inrowKTTLgTw7gxj1sEpmAJpBeaT357eP9kFZEFcJ3o6+AxzbhTMXWMoXtj1ZPqYz2a6 PQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3huwr8x45a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 11 Aug 2022 13:16:01 +0000
+Received: from pps.filterd (NALASPPMTA03.qualcomm.com [127.0.0.1])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 27BDG0nt028457;
+        Thu, 11 Aug 2022 13:16:00 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 3hshck9bbe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 11 Aug 2022 13:16:00 +0000
+Received: from NALASPPMTA03.qualcomm.com (NALASPPMTA03.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27BDFDVH028134;
+        Thu, 11 Aug 2022 13:16:00 GMT
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 27BDG0aV028451
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 11 Aug 2022 13:16:00 +0000
+Received: from hu-charante-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.22; Thu, 11 Aug 2022 06:15:56 -0700
+From:   Charan Teja Kalla <quic_charante@quicinc.com>
+To:     <akpm@linux-foundation.org>, <david@redhat.com>, <vbabka@suse.cz>,
+        <quic_pkondeti@quicinc.com>, <minchan@kernel.org>
+CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        Charan Teja Kalla <quic_charante@quicinc.com>
+Subject: [PATCH V2] mm/cma_debug: show complete cma name in debugfs directories
+Date:   Thu, 11 Aug 2022 18:45:29 +0530
+Message-ID: <1660223729-22461-1-git-send-email-quic_charante@quicinc.com>
+X-Mailer: git-send-email 2.7.4
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
-        Thunderbird/91.11.0
-Subject: Re: [PATCH v9 03/13] block: allow blk-zoned devices to have
- non-power-of-2 zone size
-Content-Language: en-US
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        <Johannes.Thumshirn@wdc.com>, <snitzer@kernel.org>,
-        <axboe@kernel.dk>, <agk@redhat.com>, <hch@lst.de>
-CC:     <dm-devel@redhat.com>, <matias.bjorling@wdc.com>,
-        <gost.dev@samsung.com>, <linux-kernel@vger.kernel.org>,
-        <pankydev8@gmail.com>, <jaegeuk@kernel.org>, <hare@suse.de>,
-        <linux-block@vger.kernel.org>, <linux-nvme@lists.infradead.org>,
-        <bvanassche@acm.org>, Luis Chamberlain <mcgrof@kernel.org>
-From:   Pankaj Raghav <p.raghav@samsung.com>
-In-Reply-To: <d7343e70-cbfa-4163-a78e-963fbf3bb38c@opensource.wdc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [106.210.248.43]
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-        CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrGKsWRmVeSWpSXmKPExsWy7djPc7r1DF+TDOZtlbNYf+oYs8Xqu/1s
-        FtM+/GS2+H32PLPF3nezWS32LJrEZLFy9VEmiyfrZzFb/O26x2Sx95a2xeVdc9gs5i97ym4x
-        oe0rs8WNCU8ZLdbcfMpiceKWtIOAx+Ur3h47Z91l97h8ttRj06pONo/NS+o9dt9sYPPY2Xqf
-        1eP9vqtAodPVHp83yXm0H+hmCuCO4rJJSc3JLEst0rdL4Mo4tf8le0Eje8XfOW1MDYyXWbsY
-        OTkkBEwkDn/cyd7FyMUhJLCCUWLNs+nMEM4XRom5i79CZT4zSpybNI8JpmXWy98sEInljBIb
-        Vn9mhat6/aEJqn8Xo8T8cz/AtvAK2EksuPqbHcRmEVCVeLFjJxNEXFDi5MwnLCC2qECkxJrd
-        Z8FqhAXiJd4v+AVmMwuIS9x6Mp8JZKiIwAKgDQsawdYxC6xjktj7vImxi5GDg01AS6KxE6yB
-        U8BN4n3vFSaIZk2J1u2/oQbJS2x/O4cZpFxCQEli4wR+iHdqJdYeOwP2p4TAK06JQ/172CAS
-        LhKfnkyF+llY4tXxLewQtozE/53zoeLVEk9v/GaGaG5hlOjfuZ4NYoG1RN+ZHIgaR4mDJz6w
-        QoT5JG68FYQ4h09i0rbpzBMYVWchBcUsJC/PQvLBLCQfLGBkWcUonlpanJueWmyUl1quV5yY
-        W1yal66XnJ+7iRGYFE//O/5lB+PyVx/1DjEycTAeYpTgYFYS4S1b9DlJiDclsbIqtSg/vqg0
-        J7X4EKM0B4uSOG9y5oZEIYH0xJLU7NTUgtQimCwTB6dUAxPP9YOmEezPYnl49b4cENZ0e9ex
-        cmds/XKZqxUZqk+2R1x/d6dLPKLc3KnCWOv20WWJfZdazf/4vYtrm3J1X2HoYyf7ix9YFBk2
-        x/tXe3xf6Pz23f5gieeZc1SWSTqzHzESvH/uWX91EWNU9ISCAEfbW2d0b87+5l3I1jSNYyt/
-        NDuL44p31+6xJm8V273BuTWK2/ZWlZC8i7+udLKu3OZz5ovjl31btHK7fUr5LRdfxsXxauUN
-        Cge2JD9dW+juw6t7QuF92ToTB9c70zsvBxcLVGh/9j/tU3s9zy4gUqLg4/yeY/+3Jd+5ZyuZ
-        dXPB4kSRaRO9sn4EfL6b/oeJ9Ui5awf7pYlqee/X/TyToMRSnJFoqMVcVJwIADviSVL5AwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprFKsWRmVeSWpSXmKPExsVy+t/xe7p1DF+TDPbdMLVYf+oYs8Xqu/1s
-        FtM+/GS2+H32PLPF3nezWS32LJrEZLFy9VEmiyfrZzFb/O26x2Sx95a2xeVdc9gs5i97ym4x
-        oe0rs8WNCU8ZLdbcfMpiceKWtIOAx+Ur3h47Z91l97h8ttRj06pONo/NS+o9dt9sYPPY2Xqf
-        1eP9vqtAodPVHp83yXm0H+hmCuCO0rMpyi8tSVXIyC8usVWKNrQw0jO0tNAzMrHUMzQ2j7Uy
-        MlXSt7NJSc3JLEst0rdL0Ms4tf8le0Eje8XfOW1MDYyXWbsYOTkkBEwkZr38zdLFyMUhJLCU
-        UaLlVzNUQkbi05WP7BC2sMSfa11sEEUfGSW2vNvCCuHsYpSYd2A2I0gVr4CdxIKrv8E6WARU
-        JV7s2MkEEReUODnzCQuILSoQKfFwWRNYXFggXuL9gl9g9cwC4hK3nsxnAhkqIrCAUeL1gkaw
-        DcwC65gkHvVNB7tJSOA3o8T6z7pdjBwcbAJaEo2dYM2cAm4S73uvMEEM0pRo3f4baqi8xPa3
-        c5hByiUElCQ2TuCH+KZW4tX93YwTGEVnITlvFpIzZiGZNAvJpAWMLKsYRVJLi3PTc4sN9YoT
-        c4tL89L1kvNzNzECE8m2Yz8372Cc9+qj3iFGJg7GQ4wSHMxKIrxliz4nCfGmJFZWpRblxxeV
-        5qQWH2I0BYbRRGYp0eR8YCrLK4k3NDMwNTQxszQwtTQzVhLn9SzoSBQSSE8sSc1OTS1ILYLp
-        Y+LglGpg4ua0aQ+J11fhUgvMLTjzdkbYV+mXywz7hHeuDp5+/Azv0mZe1p2xrx7subKS14/7
-        ncGVwFgBntVPRes8dQ+JHm0SDFh4Ylv706ORuiw104vXiz+TPb7SYeey+p7i/z4zNj3Yrd6t
-        ZPK63pF312TDm7EWLrebnYXLxVwsrht5l8rkzG+ewLftkJEUF/MSt8N5/cIaelLNbbUc/Ebm
-        yi1cvduSDRdmHam5vjjeSv2t7MmbCnM/zO0svtFk1Z95hjlfa8XVT29S+UxKQrvTXxp63633
-        7+cV2VOc98mkek1p1tdpLROWmnH+9d5V9HHh9zVZxZ8YT5Y3vdRatE238zKzfTSXz7tdTo9F
-        6rR/MiixFGckGmoxFxUnAgCWd3/orQMAAA==
-X-CMS-MailID: 20220811131335eucas1p25e679d6235436c7c5667ae643564b30f
-X-Msg-Generator: CA
-X-RootMTR: 20220803094805eucas1p1c68ba40d319331c2c34059f966ba2d83
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20220803094805eucas1p1c68ba40d319331c2c34059f966ba2d83
-References: <20220803094801.177490-1-p.raghav@samsung.com>
-        <CGME20220803094805eucas1p1c68ba40d319331c2c34059f966ba2d83@eucas1p1.samsung.com>
-        <20220803094801.177490-4-p.raghav@samsung.com>
-        <d7343e70-cbfa-4163-a78e-963fbf3bb38c@opensource.wdc.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: vs4fy44rX8cWr3rocS8MD_j03MkYzMnG
+X-Proofpoint-ORIG-GUID: vs4fy44rX8cWr3rocS8MD_j03MkYzMnG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-11_10,2022-08-11_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ impostorscore=0 adultscore=0 suspectscore=0 spamscore=0 clxscore=1015
+ priorityscore=1501 mlxscore=0 phishscore=0 mlxlogscore=482 bulkscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208110042
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->>  static inline bool disk_zone_is_seq(struct gendisk *disk, sector_t sector)
->>  {
->>  	if (!blk_queue_is_zoned(disk->queue))
->> @@ -753,6 +777,12 @@ static inline unsigned int disk_zone_no(struct gendisk *disk, sector_t sector)
->>  {
->>  	return 0;
->>  }
->> +
->> +static inline bool bdev_is_zone_start(struct block_device *bdev, sector_t sec)
->> +{
->> +	return false;
->> +}
-> 
-> Is this one really necessary ? Any caller of this would also depend on
-> CONFIG_BLK_DEV_ZONED and not compiled if not enabled. So there should be no
-> callers of this for the !CONFIG_BLK_DEV_ZONED case.
-> 
-We are using it in dm-table.c in device_area_is_invalid() function. So
-it can be called without being compiled with CONFIG_BLK_DEV_ZONED like
-bdev_is_zoned() in dm-table.c.
->> +
->>  static inline unsigned int bdev_max_open_zones(struct block_device *bdev)
->>  {
->>  	return 0;
-> 
-> 
+Currently only 12 characters of the cma name is being used as the debug
+directories where as the cma name can be of length CMA_MAX_NAME(=64)
+characters. One side problem with this is having 2 cma's with first
+common 12 characters would end up in trying to create directories with
+same name and fails with -EEXIST thus can limit cma debug functionality.
+
+The 'cma-' prefix is used initially where cma areas don't have any names
+and are represented by simple integer values. Since now each cma would
+be having its own name, drop 'cma-' prefix for the cma debug directories
+as they are clearly evident that they are for cma debug through creating
+them in /sys/kernel/debug/cma/ path.
+
+Signed-off-by: Charan Teja Kalla <quic_charante@quicinc.com>
+---
+V2:
+ o Updated the cma_debugfs.rst documentation.
+Vl:
+ o https://lore.kernel.org/all/1660152485-17684-1-git-send-email-quic_charante@quicinc.com/
+
+ Documentation/admin-guide/mm/cma_debugfs.rst | 10 +++++-----
+ mm/cma_debug.c                               |  5 +----
+ 2 files changed, 6 insertions(+), 9 deletions(-)
+
+diff --git a/Documentation/admin-guide/mm/cma_debugfs.rst b/Documentation/admin-guide/mm/cma_debugfs.rst
+index 4e06ffa..7367e62 100644
+--- a/Documentation/admin-guide/mm/cma_debugfs.rst
++++ b/Documentation/admin-guide/mm/cma_debugfs.rst
+@@ -5,10 +5,10 @@ CMA Debugfs Interface
+ The CMA debugfs interface is useful to retrieve basic information out of the
+ different CMA areas and to test allocation/release in each of the areas.
+ 
+-Each CMA zone represents a directory under <debugfs>/cma/, indexed by the
+-kernel's CMA index. So the first CMA zone would be:
++Each CMA area represents a directory under <debugfs>/cma/, represented by
++its CMA name like below:
+ 
+-	<debugfs>/cma/cma-0
++	<debugfs>/cma/<cma_name>
+ 
+ The structure of the files created under that directory is as follows:
+ 
+@@ -18,8 +18,8 @@ The structure of the files created under that directory is as follows:
+  - [RO] bitmap: The bitmap of page states in the zone.
+  - [WO] alloc: Allocate N pages from that CMA area. For example::
+ 
+-	echo 5 > <debugfs>/cma/cma-2/alloc
++	echo 5 > <debugfs>/cma/<cma_name>/alloc
+ 
+-would try to allocate 5 pages from the cma-2 area.
++would try to allocate 5 pages from the 'cma_name' area.
+ 
+  - [WO] free: Free N pages from that CMA area, similar to the above.
+diff --git a/mm/cma_debug.c b/mm/cma_debug.c
+index 2e77049..602fff8 100644
+--- a/mm/cma_debug.c
++++ b/mm/cma_debug.c
+@@ -163,11 +163,8 @@ DEFINE_DEBUGFS_ATTRIBUTE(cma_alloc_fops, NULL, cma_alloc_write, "%llu\n");
+ static void cma_debugfs_add_one(struct cma *cma, struct dentry *root_dentry)
+ {
+ 	struct dentry *tmp;
+-	char name[16];
+ 
+-	scnprintf(name, sizeof(name), "cma-%s", cma->name);
+-
+-	tmp = debugfs_create_dir(name, root_dentry);
++	tmp = debugfs_create_dir(cma->name, root_dentry);
+ 
+ 	debugfs_create_file("alloc", 0200, tmp, cma, &cma_alloc_fops);
+ 	debugfs_create_file("free", 0200, tmp, cma, &cma_free_fops);
+-- 
+2.7.4
+

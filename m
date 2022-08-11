@@ -2,199 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6883C58F64C
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 05:11:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F28D58F655
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 05:15:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233946AbiHKDLF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 23:11:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60036 "EHLO
+        id S233803AbiHKDPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 23:15:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233939AbiHKDLA (ORCPT
+        with ESMTP id S231667AbiHKDPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 23:11:00 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F49E75
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 20:10:58 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id x5so4999682qtv.9
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 20:10:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=rmxwVf7t1PNS4e5hrhApn9dN42pWVfDKUXBNKpe7GPE=;
-        b=OGIBZRTW1fN4NXGw414nvGJRbKag3aHq5Ziu4qj/DGZNt+s5Td7HX3QR6lPSb6HADc
-         Datb70J9zakU4jgz+wRg4rl/IL4md+mq9H5HvaQpBOs3NQRm8bGlH75ErXDOvcIO6khE
-         i/82PC2UyjnyduP6ecqJZpxSlRs2h+HRWC3QWdUSm3H0q5TRmo6jonEialdxv7o+UsJB
-         k0Gpp6P5KZ2AjuOSl20G3N3QYh7HHV2UI8Xr7wAFsIWsHT4qicKzKPqa/cgWbNygpWoW
-         5Newq4k5GZxGmuf8H0VKL3dOlxtYdNQANQ3AdU5I/0oigyJ5bIPJclNfjuRFFPM9aTQS
-         mafA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=rmxwVf7t1PNS4e5hrhApn9dN42pWVfDKUXBNKpe7GPE=;
-        b=3xLNh6/7TtMEQ1m4fS0/iDKKgWVUtnPUe6XK9xUupCQ2/59cl+hf65yzYtnkdu8zRK
-         bXMuUmFX+/URVYlHty4m/+ZEHGP+UJnWOosD99Qw/4L1cKMMaq7g0FeHy9ptuznejN28
-         UNe/djr+VBldkEmrWX6J3gFb7q0RPIe+AhNqB25LqI5i0jRWfWTE5lAVFfqabvwB2vMj
-         /aExdUtPH53YM3q/yqz329dsHAd9Kiw3FDs1S1cWCrr9kuU8cKEe4EMzsiV0ya2+Z8Rg
-         7EB98ikjOn80aWpa27heD+/hR4QLcMOtNdB3hqgIS9fiHmP5owOjb1CBTj08/veaYNri
-         gWPg==
-X-Gm-Message-State: ACgBeo3VSdlH0HJ+Z8s8vYpL4kNPzi0bXk9IJZUQFIN1nqPgQR7vFaGb
-        jXrXxG3QsNqTapqeLabDW6hxJLict/u8tJRZamAUgg==
-X-Google-Smtp-Source: AA6agR5uQwVDamlVJyjCUGZqvGIkRQ8eaoHoIvbB4CcDt9dlXFjB2eiGntIxzgE+9KZja1ke5pi07dzP5x3i+WE2irI=
-X-Received: by 2002:ac8:57d2:0:b0:343:6785:a2e5 with SMTP id
- w18-20020ac857d2000000b003436785a2e5mr314856qta.299.1660187457913; Wed, 10
- Aug 2022 20:10:57 -0700 (PDT)
+        Wed, 10 Aug 2022 23:15:16 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404DC103D;
+        Wed, 10 Aug 2022 20:15:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660187712; x=1691723712;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=eG7pE1AkaxRu/I4Nox6vSigWlWaHMWgrs2p/ibYV4j8=;
+  b=T53/AKhWJ9ytkKPTpH6Xgj7VTTY7WtpS0KO1WB7S16A1d6i0P7Za/u2k
+   dAVWcsiJDZ63G9H4aUkemPkAFWqQTIOSTPHZEey5/+8aFy8BZuEH37sRK
+   tgcUsRmsMZPJbVwxXMDUNZF0G5YvjD9JJpPLu+ysJsQaiYM8Edn7gUejI
+   8SUX6f0CE/b1O+LnwbvH4dQVyLohIgXrgPEekglFeCY0NQwvz00plhC9W
+   TNjAoX5XcWu3nG6aSs+BjFZqXMRnVSTj//DgzZ/1KFjrX21ryWX5/Di+7
+   iZHZiv935j36kQzG/AXUYusTI3OgVmmqIQ/FL9Ku99I58tUCmGOM++A8b
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10435"; a="292037276"
+X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
+   d="scan'208";a="292037276"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 20:15:11 -0700
+X-IronPort-AV: E=Sophos;i="5.93,228,1654585200"; 
+   d="scan'208";a="665180068"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.249.169.32]) ([10.249.169.32])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2022 20:15:09 -0700
+Message-ID: <b19f28ac-07e0-2bd2-1b2e-abf7373b0960@linux.intel.com>
+Date:   Thu, 11 Aug 2022 11:15:07 +0800
 MIME-Version: 1.0
-References: <20220805214821.1058337-1-haoluo@google.com> <20220805214821.1058337-5-haoluo@google.com>
- <CAEf4BzZHf89Ds8nQWFCH00fKs9-9GkJ0d+Hrp-LkMCDUP_td0A@mail.gmail.com>
- <CA+khW7hUVOkHBO3dhRze2_VKZuxD-LuNQdO3nHUkLCYmuuR6eg@mail.gmail.com>
- <20220809162325.hwgvys5n3rivuz7a@MacBook-Pro-3.local.dhcp.thefacebook.com> <CA+khW7j0kzP+W_Qgsim52J+HeR27XJcyMk73Hq93tsmNzT7q6w@mail.gmail.com>
-In-Reply-To: <CA+khW7j0kzP+W_Qgsim52J+HeR27XJcyMk73Hq93tsmNzT7q6w@mail.gmail.com>
-From:   Hao Luo <haoluo@google.com>
-Date:   Wed, 10 Aug 2022 20:10:47 -0700
-Message-ID: <CA+khW7j1Ni_PfvsGisUpUgFtgg=f_qEUVd1VUmocn6L3=kndhw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v7 4/8] bpf: Introduce cgroup iter
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        cgroups@vger.kernel.org, netdev@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Michal Koutny <mkoutny@suse.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        David Rientjes <rientjes@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Yosry Ahmed <yosryahmed@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH v8 013/103] KVM: TDX: Define TDX architectural definitions
+To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>
+References: <cover.1659854790.git.isaku.yamahata@intel.com>
+ <f6bbcf4fb65a3de2ee7d4b2baa2965e24b0ede90.1659854790.git.isaku.yamahata@intel.com>
+From:   Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <f6bbcf4fb65a3de2ee7d4b2baa2965e24b0ede90.1659854790.git.isaku.yamahata@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 9, 2022 at 11:38 AM Hao Luo <haoluo@google.com> wrote:
->
-> On Tue, Aug 9, 2022 at 9:23 AM Alexei Starovoitov
-> <alexei.starovoitov@gmail.com> wrote:
-> >
-> > On Mon, Aug 08, 2022 at 05:56:57PM -0700, Hao Luo wrote:
-> > > On Mon, Aug 8, 2022 at 5:19 PM Andrii Nakryiko
-> > > <andrii.nakryiko@gmail.com> wrote:
-> > > >
-> > > > On Fri, Aug 5, 2022 at 2:49 PM Hao Luo <haoluo@google.com> wrote:
-> > > > >
-> > > > > Cgroup_iter is a type of bpf_iter. It walks over cgroups in four modes:
-> > > > >
-> > > > >  - walking a cgroup's descendants in pre-order.
-> > > > >  - walking a cgroup's descendants in post-order.
-> > > > >  - walking a cgroup's ancestors.
-> > > > >  - process only the given cgroup.
-> > > > >
-> [...]
-> > > > > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> > > > > index 59a217ca2dfd..4d758b2e70d6 100644
-> > > > > --- a/include/uapi/linux/bpf.h
-> > > > > +++ b/include/uapi/linux/bpf.h
-> > > > > @@ -87,10 +87,37 @@ struct bpf_cgroup_storage_key {
-> > > > >         __u32   attach_type;            /* program attach type (enum bpf_attach_type) */
-> > > > >  };
-> > > > >
-> > > > > +enum bpf_iter_order {
-> > > > > +       BPF_ITER_ORDER_DEFAULT = 0,     /* default order. */
-> > > >
-> > > > why is this default order necessary? It just adds confusion (I had to
-> > > > look up source code to know what is default order). I might have
-> > > > missed some discussion, so if there is some very good reason, then
-> > > > please document this in commit message. But I'd rather not do some
-> > > > magical default order instead. We can set 0 to mean invalid and error
-> > > > out, or just do SELF as the very first value (and if user forgot to
-> > > > specify more fancy mode, they hopefully will quickly discover this in
-> > > > their testing).
-> > > >
-> > >
-> > > PRE/POST/UP are tree-specific orders. SELF applies on all iters and
-> > > yields only a single object. How does task_iter express a non-self
-> > > order? By non-self, I mean something like "I don't care about the
-> > > order, just scan _all_ the objects". And this "don't care" order, IMO,
-> > > may be the common case. I don't think everyone cares about walking
-> > > order for tasks. The DEFAULT is intentionally put at the first value,
-> > > so that if users don't care about order, they don't have to specify
-> > > this field.
-> > >
-> > > If that sounds valid, maybe using "UNSPEC" instead of "DEFAULT" is better?
-> >
-> > I agree with Andrii.
-> > This:
-> > +       if (order == BPF_ITER_ORDER_DEFAULT)
-> > +               order = BPF_ITER_DESCENDANTS_PRE;
-> >
-> > looks like an arbitrary choice.
-> > imo
-> > BPF_ITER_DESCENDANTS_PRE = 0,
-> > would have been more obvious. No need to dig into definition of "default".
-> >
-> > UNSPEC = 0
-> > is fine too if we want user to always be conscious about the order
-> > and the kernel will error if that field is not initialized.
-> > That would be my preference, since it will match the rest of uapi/bpf.h
-> >
->
-> Sounds good. In the next version, will use
->
-> enum bpf_iter_order {
->         BPF_ITER_ORDER_UNSPEC = 0,
->         BPF_ITER_SELF_ONLY,             /* process only a single object. */
->         BPF_ITER_DESCENDANTS_PRE,       /* walk descendants in pre-order. */
->         BPF_ITER_DESCENDANTS_POST,      /* walk descendants in post-order. */
->         BPF_ITER_ANCESTORS_UP,          /* walk ancestors upward. */
-> };
->
 
-Sigh, I find that having UNSPEC=0 and erroring out when seeing UNSPEC
-doesn't work. Basically, if we have a non-iter prog and a cgroup_iter
-prog written in the same source file, I can't use
-bpf_object__attach_skeleton to attach them. Because the default
-prog_attach_fn for iter initializes `order` to 0 (that is, UNSPEC),
-which is going to be rejected by the kernel. In order to make
-bpf_object__attach_skeleton work on cgroup_iter, I think I need to use
-the following
+On 2022/8/8 6:00, isaku.yamahata@intel.com wrote:
+> From: Isaku Yamahata <isaku.yamahata@intel.com>
+>
+> Define architectural definitions for KVM to issue the TDX SEAMCALLs.
+>
+> Structures and values that are architecturally defined in the TDX module
+> specifications the chapter of ABI Reference.
+>
+> Co-developed-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>   arch/x86/kvm/vmx/tdx_arch.h | 157 ++++++++++++++++++++++++++++++++++++
+>   1 file changed, 157 insertions(+)
+>   create mode 100644 arch/x86/kvm/vmx/tdx_arch.h
+>
+> diff --git a/arch/x86/kvm/vmx/tdx_arch.h b/arch/x86/kvm/vmx/tdx_arch.h
+> new file mode 100644
+> index 000000000000..94258056d742
+> --- /dev/null
+> +++ b/arch/x86/kvm/vmx/tdx_arch.h
+> @@ -0,0 +1,157 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/* architectural constants/data definitions for TDX SEAMCALLs */
+> +
+> +#ifndef __KVM_X86_TDX_ARCH_H
+> +#define __KVM_X86_TDX_ARCH_H
+> +
+> +#include <linux/types.h>
+> +
+> +/*
+> + * TDX SEAMCALL API function leaves
+> + */
+> +#define TDH_VP_ENTER			0
+> +#define TDH_MNG_ADDCX			1
+> +#define TDH_MEM_PAGE_ADD		2
+> +#define TDH_MEM_SEPT_ADD		3
+> +#define TDH_VP_ADDCX			4
+> +#define TDH_MEM_PAGE_RELOCATE		5
+> +#define TDH_MEM_PAGE_AUG		6
+> +#define TDH_MEM_RANGE_BLOCK		7
+> +#define TDH_MNG_KEY_CONFIG		8
+> +#define TDH_MNG_CREATE			9
+> +#define TDH_VP_CREATE			10
+> +#define TDH_MNG_RD			11
+> +#define TDH_MR_EXTEND			16
+> +#define TDH_MR_FINALIZE			17
+> +#define TDH_VP_FLUSH			18
+> +#define TDH_MNG_VPFLUSHDONE		19
+> +#define TDH_MNG_KEY_FREEID		20
+> +#define TDH_MNG_INIT			21
+> +#define TDH_VP_INIT			22
+> +#define TDH_VP_RD			26
+> +#define TDH_MNG_KEY_RECLAIMID		27
+> +#define TDH_PHYMEM_PAGE_RECLAIM		28
+> +#define TDH_MEM_PAGE_REMOVE		29
+> +#define TDH_MEM_SEPT_REMOVE		30
+> +#define TDH_MEM_TRACK			38
+> +#define TDH_MEM_RANGE_UNBLOCK		39
+> +#define TDH_PHYMEM_CACHE_WB		40
+> +#define TDH_PHYMEM_PAGE_WBINVD		41
+> +#define TDH_VP_WR			43
+> +#define TDH_SYS_LP_SHUTDOWN		44
+> +
+> +#define TDG_VP_VMCALL_GET_TD_VM_CALL_INFO		0x10000
+> +#define TDG_VP_VMCALL_MAP_GPA				0x10001
+> +#define TDG_VP_VMCALL_GET_QUOTE				0x10002
+> +#define TDG_VP_VMCALL_REPORT_FATAL_ERROR		0x10003
+> +#define TDG_VP_VMCALL_SETUP_EVENT_NOTIFY_INTERRUPT	0x10004
+> +
+> +/* TDX control structure (TDR/TDCS/TDVPS) field access codes */
+> +#define TDX_NON_ARCH			BIT_ULL(63)
+> +#define TDX_CLASS_SHIFT			56
+> +#define TDX_FIELD_MASK			GENMASK_ULL(31, 0)
+> +
+> +#define __BUILD_TDX_FIELD(non_arch, class, field)	\
+> +	(((non_arch) ? TDX_NON_ARCH : 0) |		\
+> +	 ((u64)(class) << TDX_CLASS_SHIFT) |		\
+> +	 ((u64)(field) & TDX_FIELD_MASK))
+> +
+> +#define BUILD_TDX_FIELD(class, field)			\
+> +	__BUILD_TDX_FIELD(false, (class), (field))
+> +
+> +#define BUILD_TDX_FIELD_NON_ARCH(class, field)		\
+> +	__BUILD_TDX_FIELD(true, (class), (field))
+> +
+> +
+> +/* @field is the VMCS field encoding */
+> +#define TDVPS_VMCS(field)		BUILD_TDX_FIELD(0, (field))
+> +
+> +enum tdx_guest_other_state {
+> +	TD_VCPU_STATE_DETAILS_NON_ARCH = 0x100,
+> +};
+> +
+> +union tdx_vcpu_state_details {
+> +	struct {
+> +		u64 vmxip	: 1;
+> +		u64 reserved	: 63;
+> +	};
+> +	u64 full;
+> +};
+> +
+> +/* @field is any of enum tdx_guest_other_state */
+> +#define TDVPS_STATE(field)		BUILD_TDX_FIELD(17, (field))
+> +#define TDVPS_STATE_NON_ARCH(field)	BUILD_TDX_FIELD_NON_ARCH(17, (field))
+> +
+> +/* Management class fields */
+> +enum tdx_guest_management {
 
-enum bpf_iter_order {
-        BPF_ITER_DESCENDANTS_PRE,       /* walk descendants in pre-order. */
-        BPF_ITER_DESCENDANTS_POST,      /* walk descendants in post-order. */
-        BPF_ITER_ANCESTORS_UP,          /* walk ancestors upward. */
-        BPF_ITER_SELF_ONLY,             /* process only a single object. */
-};
+More accurate to use tdx_vcpu_management?
 
-So that when calling bpf_object__attach_skeleton() on cgroup_iter, a
-link can be generated and the generated link defaults to pre-order
-walk on the whole hierarchy. Is there a better solution?
 
-> and explicitly list the values acceptable by cgroup_iter, error out if
-> UNSPEC is detected.
->
-> Also, following Andrii's comments, will change BPF_ITER_SELF to
-> BPF_ITER_SELF_ONLY, which does seem a little bit explicit in
-> comparison.
->
-> > I applied the first 3 patches to ease respin.
->
-> Thanks! This helps!
->
-> > Thanks!
+> +	TD_VCPU_PEND_NMI = 11,
+> +};
+> +
+> +/* @field is any of enum tdx_guest_management */
+> +#define TDVPS_MANAGEMENT(field)		BUILD_TDX_FIELD(32, (field))
+> +
+> +enum tdx_tdcs_execution_control {
+> +	TD_TDCS_EXEC_TSC_OFFSET = 10,
+> +};
+> +
+> +/* @field is any of enum tdx_tdcs_execution_control */
+> +#define TDCS_EXEC(field)		BUILD_TDX_FIELD(17, (field))
+> +
+> +#define TDX_EXTENDMR_CHUNKSIZE		256
+> +
+> +struct tdx_cpuid_value {
+> +	u32 eax;
+> +	u32 ebx;
+> +	u32 ecx;
+> +	u32 edx;
+> +} __packed;
+> +
+> +#define TDX_TD_ATTRIBUTE_DEBUG		BIT_ULL(0)
+> +#define TDX_TD_ATTRIBUTE_PKS		BIT_ULL(30)
+> +#define TDX_TD_ATTRIBUTE_KL		BIT_ULL(31)
+> +#define TDX_TD_ATTRIBUTE_PERFMON	BIT_ULL(63)
+> +
+> +/*
+> + * TD_PARAMS is provided as an input to TDH_MNG_INIT, the size of which is 1024B.
+> + */
+> +struct td_params {
+> +	u64 attributes;
+> +	u64 xfam;
+> +	u32 max_vcpus;
+> +	u32 reserved0;
+> +
+> +	u64 eptp_controls;
+> +	u64 exec_controls;
+> +	u16 tsc_frequency;
+> +	u8  reserved1[38];
+> +
+> +	u64 mrconfigid[6];
+> +	u64 mrowner[6];
+> +	u64 mrownerconfig[6];
+> +	u64 reserved2[4];
+> +
+> +	union {
+> +		struct tdx_cpuid_value cpuid_values[0];
+> +		u8 reserved3[768];
+> +	};
+> +} __packed __aligned(1024);
+> +
+> +/*
+> + * Guest uses MAX_PA for GPAW when set.
+> + * 0: GPA.SHARED bit is GPA[47]
+> + * 1: GPA.SHARED bit is GPA[51]
+> + */
+> +#define TDX_EXEC_CONTROL_MAX_GPAW      BIT_ULL(0)
+> +
+> +/*
+> + * TDX requires the frequency to be defined in units of 25MHz, which is the
+> + * frequency of the core crystal clock on TDX-capable platforms, i.e. the TDX
+> + * module can only program frequencies that are multiples of 25MHz.  The
+> + * frequency must be between 100mhz and 10ghz (inclusive).
+> + */
+> +#define TDX_TSC_KHZ_TO_25MHZ(tsc_in_khz)	((tsc_in_khz) / (25 * 1000))
+> +#define TDX_TSC_25MHZ_TO_KHZ(tsc_in_25mhz)	((tsc_in_25mhz) * (25 * 1000))
+> +#define TDX_MIN_TSC_FREQUENCY_KHZ		(100 * 1000)
+> +#define TDX_MAX_TSC_FREQUENCY_KHZ		(10 * 1000 * 1000)
+> +
+> +#endif /* __KVM_X86_TDX_ARCH_H */

@@ -2,121 +2,257 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A04858FEAA
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 16:59:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5894258FEAE
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 17:01:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235388AbiHKO7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 10:59:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45390 "EHLO
+        id S235417AbiHKPBZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 11:01:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234066AbiHKO7o (ORCPT
+        with ESMTP id S234066AbiHKPBX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 10:59:44 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5922A6F549
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 07:59:43 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b9854329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:9854:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E43F51EC064A;
-        Thu, 11 Aug 2022 16:59:37 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1660229978;
+        Thu, 11 Aug 2022 11:01:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C2FEE019
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 08:01:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660230081;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=GeFK2lgYVqxhWRQuhMQEmc/VC301WwhF62rP4d0xu88=;
-        b=dLaL7GWuRmMHmcxfVxRhTvwSphjJdZG7TKtQK58CjRFYOl36RMjQHxj4vpia0fve4YMh4P
-        PTrMVIuBgYHgyrZWD9Xsw/TzDkaijJ+9x9JuW4tQbTWfvU/RjHRmWvZZKdTSdOrjBJY+Yz
-        MPcDNn0Iwh6W7fNwr04lh6xokt5FTcI=
-Date:   Thu, 11 Aug 2022 16:59:33 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, David Howells <dhowells@redhat.com>,
-        Jan Beulich <JBeulich@suse.com>,
-        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
-        Joe Perches <joe@perches.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>
-Subject: Re: [RESEND PATCH v4 1/2] x86/asm/bitops: ffs: use __builtin_ffs to
- evaluate constant expressions
-Message-ID: <YvUZVYxbOMcZtR5G@zn.tnic>
-References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
- <20220723151521.51451-1-mailhol.vincent@wanadoo.fr>
- <20220723151521.51451-2-mailhol.vincent@wanadoo.fr>
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XatOoqy1kloo+8/8ON6RPBD/1hsnqJ37T+E0u/+44gw=;
+        b=U1cflkDzQjeIgE6jFD5SzzwAXhWvpC6W7zUvvO3gbAj/rtAEYuq+1JUWzDWg0csfLVc3+J
+        F7JYWFNLEb7g2TbXFnCeUb5SqFRNoABoigoycpYZ/kRSroU9+8VQEinOQrCBz8TKDANu+p
+        VgrbinaRCQE0NDqPS6vhauf9CZBN5/U=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-552-gTLRn6dxOv-HGKzsU6GYGA-1; Thu, 11 Aug 2022 11:01:19 -0400
+X-MC-Unique: gTLRn6dxOv-HGKzsU6GYGA-1
+Received: by mail-ed1-f70.google.com with SMTP id w5-20020a05640234c500b0043dda025648so11051040edc.8
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 08:01:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=XatOoqy1kloo+8/8ON6RPBD/1hsnqJ37T+E0u/+44gw=;
+        b=cYAkhXSb4NDyZctHkS1zcYjRUB5iX6a0TLkLSQhLtK9U5RcP2QMZs8jAC2w9EeQ7a3
+         fHIl9BWIJI2SKQE69CtIYNVPQzNkKVTirsKGlSi6ZwId3SduoiGbASb0WnEfEN7n2tYj
+         9Uya8JBweeZhO7uX7RFZDL8h7TudNgCKqdb0ZII6C28zY15A5jOo7Po1VumBrkVnl/Ci
+         xyl41zv6DxgcNsNvWDHl7luuqxEf9qNmwwGv5d6lz+GW07VORli6Lxey0YUO65tFa8dS
+         WAP4dHdf79r7ymCV2giZfjlRUYu2ypsRirQd3H6ALnSLD/PO8LOdX1AL+zeC+Nl0iFx+
+         jZfA==
+X-Gm-Message-State: ACgBeo04jpE0Jw3lUXIE9TKw4fvbmeZD2+MEbsEgKLfrSgnuSELVPt2O
+        MiZ/sMWIz+Zps9FoTMevlxPUPszkXzAy2iK4ejUFLsOdaAGC+7sxv1sXBVRdQ8pILf7GFvvRDLw
+        Ns/I+V4qwktlcNMySF6Fb3yJC
+X-Received: by 2002:a17:906:8a63:b0:730:9e5c:b456 with SMTP id hy3-20020a1709068a6300b007309e5cb456mr23611713ejc.571.1660230078539;
+        Thu, 11 Aug 2022 08:01:18 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6bpuPGafJ4RMWsMMpJ582Vk9xLkZ4cfPW0qAws5sX8IpU8vAS9bb+qoVNPrC2tx6DWfhIi0A==
+X-Received: by 2002:a17:906:8a63:b0:730:9e5c:b456 with SMTP id hy3-20020a1709068a6300b007309e5cb456mr23611689ejc.571.1660230078258;
+        Thu, 11 Aug 2022 08:01:18 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id gn19-20020a1709070d1300b007307e7df83bsm3588081ejc.21.2022.08.11.08.01.17
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Aug 2022 08:01:17 -0700 (PDT)
+Message-ID: <f1ad35f6-acdf-0fc8-1ee1-99bd8c7a5e77@redhat.com>
+Date:   Thu, 11 Aug 2022 17:01:16 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220723151521.51451-2-mailhol.vincent@wanadoo.fr>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v3 1/6] asus-wmi: Implement TUF laptop keyboard RGB
+ control
+Content-Language: en-US
+To:     Luke Jones <luke@ljones.dev>, Pavel Machek <pavel@ucw.cz>
+Cc:     andy.shevchenko@gmail.com, pobrn@protonmail.com,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220809025054.1626339-1-luke@ljones.dev>
+ <20220809025054.1626339-2-luke@ljones.dev> <20220809105031.GA4971@duo.ucw.cz>
+ <fcc7b7eb29abc1ac9053bce02fd9f705e5f06b0b.camel@ljones.dev>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <fcc7b7eb29abc1ac9053bce02fd9f705e5f06b0b.camel@ljones.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Jul 24, 2022 at 12:15:20AM +0900, Vincent Mailhol wrote:
-> For x86_64, the current ffs() implementation does not produce
-> optimized code when called with a constant expression. On the
-> contrary, the __builtin_ffs() function of both GCC and clang is able
-> to simplify the expression into a single instruction.
+Hi,
+
+On 8/10/22 06:44, Luke Jones wrote:
+> Hi Pavel, Andy, Hans,
 > 
-> * Example *
+>>>>>>>>> +               /*
+>>>>>>>>> +                * asus::kbd_backlight still controls a
+>>>>>>>>> base > > > > > > 3-level backlight and when
+>>>>>>>>> +                * it is on 0, the RGB is not visible
+>>>>>>>>> at all. > > > > RGB > > should be treated as
+>>>>>>>>> +                * an additional step.
+>>>>>>>>> +                */
+>>>>>
+>>>>> Ouch. Lets not do that? If rgb interface is available, hide the
+>>>>> 3
+>>>>> level one, or something.
+>>>>>
 > 
-> Let's consider two dummy functions foo() and bar() as below:
+> I really don't think this is safe or sensible. There are some laptops
+> that default the 3-stage method to off, and this means that the LEDs
+> will not show regardless of multicolor brightness.
 > 
-> | #include <linux/bitops.h>
-> | #define CONST 0x01000000
-
-Those code examples you can simply indent with two spaces.
-
-> In both examples, we clearly see the benefit of using __builtin_ffs()
-
-Who's "we"?
-
-Please use passive voice in your commit message: no "we" or "I", etc,
-and describe your changes in imperative mood.
-
-> instead of the kernel's asm implementation for constant expressions.
 > 
-> However, for non constant expressions, the ffs() asm version of the
-> kernel remains better for x86_64 because, contrary to GCC, it doesn't
-> emit the CMOV assembly instruction, c.f. [1] (noticeably, clang is
-> able optimize out the CMOV call).
 > 
-> This patch uses the __builtin_constant_p() to select between the
+>>>>>>>>> +               mc_cdev->led_cdev.name =   > > > > > >
+>>>>>>>>> "asus::multicolour::kbd_backlight";
+>>>>>
+>>>>> Make this "rgb:kbd_backlight" or "inputX:rgb:kbd_backligh" and
+>>>>> document it in Documentation/leds/well-known-leds.txt.
+> 
+> Will do.
+> 
+> -- 4 hours later --
+> 
+> I've spent a lot of time working on this now. I don't think multicolor
+> LED is suitable for use with the way these keyboards work.
+> 
+> The biggest issue is related to the brightness setting.
+> 1. If the ASUS_WMI_DEVID_KBD_BACKLIGHT method defaults to 0 on boot
+> then RGB is not visible
 
-Avoid having "This patch" or "This commit" in the commit message. It is
-tautologically useless.
+Note to others following this thread I asked Luke to clarify this
+a bit in an unrelated 1:1 conversation we were having:
 
-Also, do
+On 8/10/22 23:45, Luke Jones wrote:
+> On 8/10/22, Hans de Goede wrote:
+>> I plan to go through all the asus-wmi stuff you've posted tomorrow,
+>> so I'll reply to this then. One thing which is not entirely
+>> clear to me is that:
+>>
+>> 1. If I understand you correctly the laptops
+>> with the RGB keyboards have both the old mono-color
+>> "asus::kbd_backlight"
+>> as well as a new RGB interface and these somehow interact with each
+>> other, do I understand that correctly?
+> 
+> Yes, and that is the problem. The "mono" switch takes precedence.
+> 
+>> 2. If yes, then can you explain the interaction in a bit more detail,
+>> I see you say someting along the lines of the RGB controls only
+>> working when the old mono-color "asus::kbd_backlight" brightness
+>> is set to 3 (which is its max brightness) ?
+> 
+> Adjusting this changes the overall keyboard brightness. So if this is
+> at 1, and all RGB is at 255, then when you switch 2, 3, the overall
+> brightness increases.
+> 
+>> 3. So what happens e.g. if writing 2 to the old mono-color
+>> "asus::kbd_backlight" brightness after setting some RGB values ?
+> 
+> If the brightness was 3, then the overall brightness decreases.
+> If it was at 1, then it increases.
 
-$ git grep 'This patch' Documentation/process
+I see, so the old (still present) mono-color "asus::kbd_backlight"
+brightness works as a master brightness control and the rgb values
+in the ASUS_WMI_DEVID_TUF_RGB_MODE WMI set commands are really
+just to set the color.
 
-for more details.
+And I guess that the Fn + whatever kbd brightness hotkey also still
+modifies the old mono-color "asus::kbd_backlight"? Which means that
+the "asus::kbd_backlight" device is also the device on which the
+led_classdev_notify_brightness_hw_changed is done as you mention
+below.
 
-> kernel's ffs() and the __builtin_ffs() depending on whether the
-> argument is constant or not.
+(continued below.
 
-In general, you don't have to say what the patch does - that should be
-visible from the diff. The more important part is the *why*. And that
-you do.
+> I worked around this by setting it to "3" by default in module if
+> ASUS_WMI_DEVID_TUF_RGB_MODE is found. And added a check in the button
+> events to adjust multicolor brightness (+/- 17). This works but now I
+> can't do led notify (led_classdev_notify_brightness_hw_changed).
+> 
+> 2. Pattern trigger can't be used for these keyboard modes as the modes
+> are done entirely in hardware via a single switch in the complete
+> command packet.
+> 
+> I don't see any way forward with this, and looking at the complexity I
+> don't have time either.
+> 
+> 3. Nodes everywhere..
+> 
+> To fully control control these keyboards there are two WMI methods, one
+> for mode/rgb, one for power-state. Splitting each of these parameters
+> out to individual nodes with sensible naming and expectations gives:
 
-Rest looks ok.
+<snip>
 
-Thx.
+> Quite frankly I would rather use the method I had in the first patch I
+> submitted where mode and state had two nodes each,
+> - keyboard_rgb_mode, WO = "n n n n n n"
+> - keyboard_rgb_mode_index, output = "save/apply, mode, r, g, b, speed"
+> - keyboard_rgb_state, WO = "n n n n n"
+> - keyboard_rgb_state_index, output = "save/apply, boot, awake, sleep,
+> keyboard"
+> 
+> A big benefit of this structure is that not being able to read settings
+> back from the keyboard (not possible!) becomes a non-issue because
+> users have to write a full input, not partial, and it will apply right
+> away.
 
--- 
-Regards/Gruss,
-    Boris.
+Right to me this not being able to read back the values shows that
+the firmware API here really is not suitable for doing a more
+fancy "nice" / standard sysfs API on top.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Since we cannot read back any of the r, g, b, mode or speed values
+we would need to pick defaults and then setting any of them would
+override the actual values the hw is using for the others, which
+is really not a good thing to do.
+
+So that only leaves something akin to keyboard_rgb_mode[_index] +
+keyboard_rgb_state[_index] which sets all values at once, mirroring
+the limited WMI API as a good option here, I agree with you on this.
+
+Sorry Pavel, I know you don't like custom sysfs attributes
+being added to LED class devices, but I have to agree with Luke
+that there really is not a good way to deal with this here and
+we did try!
+
+Only request I have for the next version wrt the decision to
+circle all the way back to having:
+
+> - keyboard_rgb_mode, WO = "n n n n n n"
+> - keyboard_rgb_mode_index, output = "save/apply, mode, r, g, b, speed"
+> - keyboard_rgb_state, WO = "n n n n n"
+> - keyboard_rgb_state_index, output = "save/apply, boot, awake, sleep,
+
+Is please put these new attributes under the:
+/sys/class/leds/asus::kbd_backlight
+
+Using the led_class_device.groups member as discussed before, now
+that we have decided to drop the multicolor LED stuff that should
+work :)
+
+Although maybe Pavel prefers to have the new sysfs attributes
+under /sys/bus/platform/devices/asus-nb-wmi/ instead since they
+are non standard.
+
+Pavel, to me having these under /sys/class/leds/asus::kbd_backlight
+seems more logical. But since there are non-standard and since
+there already is a bunch of asus-wmi sysfs API under
+/sys/bus/platform/devices/asus-nb-wmi/ putting them there if you
+prefer that is fine with me too. So what do you prefer ?
+
+> Hans, Andy, can I please revert back to the node + _index pairs taking
+> an array input. Everything will be cleaner and simpler.
+
+Ack, see above. Thank you for at least trying to use the multi-color
+LED API. 
+
+Regards,
+
+Hans
+

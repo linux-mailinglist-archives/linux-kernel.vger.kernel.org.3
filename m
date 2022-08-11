@@ -2,139 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB42359070E
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 21:41:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15CAB590714
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 21:44:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235761AbiHKTls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 15:41:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52872 "EHLO
+        id S235881AbiHKTon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 15:44:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234698AbiHKTlq (ORCPT
+        with ESMTP id S231131AbiHKTol (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 15:41:46 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4341B95AD1
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 12:41:45 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id w14so17769364plp.9
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 12:41:45 -0700 (PDT)
+        Thu, 11 Aug 2022 15:44:41 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 801B39AFA2
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 12:44:40 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id k26so35284024ejx.5
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 12:44:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=FTvV+r4SxFTcnoWh01bKEFwjf+Gpnp38zT+sxZWWUUM=;
-        b=kvYz6HUUDvbG0h7v8a4t4DEYCK7c5eq9K3pXYJCLg9Ny64+dzzVhzf8tyZEEoQlCQE
-         fn3m1TAVzJcw+3oCn/C9AXuJW5wUby8TRE2ssPQ2MbiyLxl2vpWxQzz1Ew78hWs7cnVG
-         LoPbkfS7d6PwjOybPfjUF24h7tdPmD2MBuwtjkBrtfw33ShzqljOhJTfedZkjUiNL1uk
-         4MuX2izHAVRz0p6cawvIqvu48X2huz9jyJDOJFjJhHRJgENcgElE5ztflFHmTgOYHTS9
-         /QhLWkED1JW896elvU2ufc7BVClks1I8iPpPGbBugLLcgmBDhkqThkDWRxLPZWWM7SN3
-         VUWA==
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc;
+        bh=gTeX9fcMILulN/R2lCkK6WL9eh85Yf+eJQ1WCtejHFA=;
+        b=pfmqsGOW1yd/2SpYx6MnOQ59nJkYq79lmlSGGxtLi6fR49hKJD/9UEOBfvSinksTad
+         xNTlYZbiZkoXA/7VG9FiPjCuBSR/rb+sxQE8fULw93DndRDEuF8HqrQI3TwxjfbX341p
+         R1r2/5prEd6rFOeoHT1C4HT0B1sOqa2lUSS/6e3rkvKKP/6cSV2Rf0mdVXiOro+nDK55
+         NLtReVmtAeK2IAPFBQX9vYeDsowJYtliONMz5UryxcWO/EGtwxsyuXyeOLi9RY04+DTr
+         q1nSWUSNWtXxsMzW1atfXbgxROsNZHuEj4Ft18XynznVbKSWlcgTJPrulys+Wze6i11+
+         5qgg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=FTvV+r4SxFTcnoWh01bKEFwjf+Gpnp38zT+sxZWWUUM=;
-        b=uD58sf6335npeQcuO50G48VFuRZma7bCrrvZKS/+UPaB578cYO3Z4w+vSy2m3xCU11
-         l++hruU7Hwns7tYMOP67fymgIdyeqEq4MCFv1h9z2wbLe6KcFQc1QylogpAXGGZKbvJR
-         v2KOgliQ5w78pWKZmh9WakB4scYqAE4fY1KWlmxIr+tjr2JRrMD3t3H5SvQjUUKrTvX6
-         JEpA3FXXYueJzBcEE6+ckeP1XUeHvDzGzHIlLLKQLs7NT7veXOatfSQAV1RvDZanYXzY
-         hP80hDMqBYzeBbgA0ZJZt7C/dEfLszwdDp0spyhwVi2qUG0c490h6TGKNeXrKfZYix16
-         x6qg==
-X-Gm-Message-State: ACgBeo3AVleBqfanlUm7ArqtR/0sp5wzaA8f8TUfTZIpEYj7TSVjPiLq
-        l3DEDpFo0/KgiWty9Uz71z5WYg==
-X-Google-Smtp-Source: AA6agR4ZzMi8yCe2GmWkNjY/xLNXCNUJi+1T7JQUYJfvWciCxoXZ+4zfVV7IB6MVrEFiaUWsM0x3WQ==
-X-Received: by 2002:a17:903:2309:b0:16f:784:ea5c with SMTP id d9-20020a170903230900b0016f0784ea5cmr736811plh.100.1660246904618;
-        Thu, 11 Aug 2022 12:41:44 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id i128-20020a626d86000000b005281d926733sm50192pfc.199.2022.08.11.12.41.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Aug 2022 12:41:44 -0700 (PDT)
-Date:   Thu, 11 Aug 2022 19:41:40 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Linux MM Mailing List <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>
-Subject: Re: [PATCH v2 2/3] kvm: Add new pfn error KVM_PFN_ERR_SIGPENDING
-Message-ID: <YvVbdFEhNKJUXVDB@google.com>
-References: <20220721000318.93522-1-peterx@redhat.com>
- <20220721000318.93522-3-peterx@redhat.com>
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=gTeX9fcMILulN/R2lCkK6WL9eh85Yf+eJQ1WCtejHFA=;
+        b=QomT3Z8XnHJjH99jEnzxLf7YNppCA2oYNupbfzcMpiWBhfumaYLahbS71mrrGrH+k1
+         LyzGfEaANEfgf2dRFg6HSgOvLnBSk1iF87F1sR+4V158ieOMpL8suBPCc9E2DiF8e+ND
+         BYcTqspZPA3WE+jISffKAGMXnSp6H0cIW5jmE6fY2o2dTAYLyiaM+l9pDGaw0+jkpBqT
+         L3QygssNtzFR0k5HAM/fJnXNDRUsdk8ZerxhA/+HkPWasThTsbPg39Pefo49T7Z2GUEI
+         7EdXbX2ReTese3EUfJuWiYT5QVyT1lisbj277lzniLMs+cVfPZRode0O7g4tr4fp1Pa5
+         kR4g==
+X-Gm-Message-State: ACgBeo3DbSAcdIDNOA4UIR6Q8CEjuiQ24Gd2a6g/+EfD54E/rEsrCW53
+        h9TH9QcNcXZkKyy3ES38tv/q50rFwTOcbAFKEMI=
+X-Google-Smtp-Source: AA6agR5z1MTDDJMb7hNbPIyyPYOMl17R/63UDKZqIwaDxTADEXpFfF9EXggVB22A5CV+boPtZsou3MeUThJChlPOTyY=
+X-Received: by 2002:a17:907:a218:b0:734:ca71:966e with SMTP id
+ qp24-20020a170907a21800b00734ca71966emr426371ejc.480.1660247079111; Thu, 11
+ Aug 2022 12:44:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220721000318.93522-3-peterx@redhat.com>
-X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Sender: mr.mostafa.ahmed899@gmail.com
+Received: by 2002:a50:3442:0:0:0:0:0 with HTTP; Thu, 11 Aug 2022 12:44:38
+ -0700 (PDT)
+From:   Miss Amanda Kipkalya <amandakipk@gmail.com>
+Date:   Thu, 11 Aug 2022 21:44:38 +0200
+X-Google-Sender-Auth: OJXLf4QSMUWi_BJ_yTFsaH3xw94
+Message-ID: <CAMBkNG1R9RidkpvHE6qtNdDT-FXNYkCaHrBKFPAVXyi6GX0eFw@mail.gmail.com>
+Subject: Re: Re
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.1 required=5.0 tests=BAYES_95,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_HK_NAME_FM_MR_MRS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2a00:1450:4864:20:0:0:0:633 listed in]
+        [list.dnswl.org]
+        *  3.0 BAYES_95 BODY: Bayes spam probability is 95 to 99%
+        *      [score: 0.9635]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [mr.mostafa.ahmed899[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [mr.mostafa.ahmed899[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  0.0 T_HK_NAME_FM_MR_MRS No description available.
+        *  3.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 20, 2022, Peter Xu wrote:
-> Add one new PFN error type to show when we got interrupted when fetching
+Hello Dear
 
-s/we/KVM
+How are you doing I hope all is well. My name is Miss Amanda Kipkalya
+Kones, I am 24 years old, I am a girl. Please i have a business
+proposal that is why am seeking for your help because of my present
+condition and I have the Mind you could be a good person, I think, and
+there are good people who can appreciate the value of friendship. I
+will tell you more about me as soon as I hear from you, well I will
+say that my mind convinced me that you may be the true person to help
+me out in this my present condition i am now in a refugee camp in
+Burkina Faso.
 
-> the PFN due to signal pending.
-> 
-> This prepares KVM to be able to respond to SIGUSR1 (for QEMU that's the
-> SIGIPI) even during e.g. handling an userfaultfd page fault.
-> 
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-> ---
->  include/linux/kvm_host.h | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index 83cf7fd842e0..06a5b17d3679 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -96,6 +96,7 @@
->  #define KVM_PFN_ERR_FAULT	(KVM_PFN_ERR_MASK)
->  #define KVM_PFN_ERR_HWPOISON	(KVM_PFN_ERR_MASK + 1)
->  #define KVM_PFN_ERR_RO_FAULT	(KVM_PFN_ERR_MASK + 2)
-> +#define KVM_PFN_ERR_SIGPENDING	(KVM_PFN_ERR_MASK + 3)
->  
->  /*
->   * error pfns indicate that the gfn is in slot but faild to
-> @@ -106,6 +107,16 @@ static inline bool is_error_pfn(kvm_pfn_t pfn)
->  	return !!(pfn & KVM_PFN_ERR_MASK);
->  }
->  
-> +/*
-> + * When KVM_PFN_ERR_SIGPENDING returned, it means we're interrupted during
-> + * fetching the PFN (a signal might have arrived), we may want to retry at
+Please reply me back for more confidential discussions about me and my
+proposal okay, i am living now in a refugee camp, here is my WhatsApp
+number +226 55641872 and you can also call me direct call on the phone
+number as well, I will be waiting to hear from you,
 
-Please avoid "we".  Tthe first "we're" can refer to KVM and/or the kernel,
-whereas the second is a weird mix of KVM and userspace (KVM exits to userspace,
-but it's userspace's decision whether or not to retry).
-
-Easiest thing is to avoid the "we" entirely and not speculate on what may happen.
-E.g.
-
- /*
-  * KVM_PFN_ERR_SIGPENDING indicates that fetching the PFN was interrupted by a
-  * pending signal.  Note, the signal may or may not be fatal.
-  */
-
-> + * some later point and kick the userspace to handle the signal.
-> + */
-> +static inline bool is_sigpending_pfn(kvm_pfn_t pfn)
-> +{
-> +	return pfn == KVM_PFN_ERR_SIGPENDING;
-> +}
-> +
->  /*
->   * error_noslot pfns indicate that the gfn can not be
->   * translated to pfn - it is not in slot or failed to
-> -- 
-> 2.32.0
-> 
+Kisses and warmest regards
+Yours,
+Miss Amanda Kipkalya Kones.

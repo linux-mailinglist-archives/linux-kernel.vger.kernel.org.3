@@ -2,71 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A711A58F5D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 04:23:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC2B158F5D8
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 Aug 2022 04:24:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233751AbiHKCXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 Aug 2022 22:23:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44730 "EHLO
+        id S233758AbiHKCYB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 Aug 2022 22:24:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233743AbiHKCXc (ORCPT
+        with ESMTP id S233269AbiHKCX7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 Aug 2022 22:23:32 -0400
-Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A157188DD1
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 19:23:27 -0700 (PDT)
-Received: by mail-qk1-x72d.google.com with SMTP id t11so1829402qkt.6
-        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 19:23:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=KeCtfJVGipygRLI4b2K/87eW4TfAIQBTxBLgAlvv57E=;
-        b=XlT8SMVpqRixhv9RUiLUONNOpM0V4QREHr9wR0M3Gu8njAL5HK2ZHjLcT4xuZ+aIWp
-         NNJ/k6NH2PhQpQrR6RNp//YWhGF5VSyNKknwQKxHCxDOTnEbqaxUOlRMqRiEXMPXSGDH
-         s7nhvvgWXrqtv2YooI33AFmqGeR2V9Js0MBsc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=KeCtfJVGipygRLI4b2K/87eW4TfAIQBTxBLgAlvv57E=;
-        b=MpXftOpSWrHi1BEQbCD1lT3dsCAuoYD4LmiN2lMtZsV4gfioKVjSABe8yafWSCg/NO
-         HGwsHdA7D9G77+Hs9N1ne5alzhuTxA2L3U34XCKwSWwwsVBI2p4htvssw+ly0mdJ/GjN
-         aiWlg6t6B/cYvKml46IYSK7Lvt+upRwaqBzr/wmog915Dgn2PK+THO8898v5jDje/hYJ
-         uzY2Bn+gMbSp6hzZAggb/qZ4dXIKZHk0Gc7KU2Ald+9mhouiF4Hdae8bAVes80wtD5a9
-         HGMPvOLc8w7YqIKtf/G/PJaMHdvEDs6EsYwlpsMiIz46dNyOC27zMBhWXRSTmPJKj2Mu
-         iPYQ==
-X-Gm-Message-State: ACgBeo3f8VAdA29niaDloPRu4iYWdRVPxmiC/lHWu9O64b/c1+ij+uUp
-        cuMBjAx9k8XZcxIy0Rli34yiDHm4rC0L0A==
-X-Google-Smtp-Source: AA6agR6/554YftGgl4/zNuuoj6JeA7z++IJojImf7c63cJx7/nqpF0XLCLo0oG8SqKHTg40yH7hiAA==
-X-Received: by 2002:a05:620a:1a26:b0:6b5:cd80:a627 with SMTP id bk38-20020a05620a1a2600b006b5cd80a627mr23301150qkb.145.1660184606537;
-        Wed, 10 Aug 2022 19:23:26 -0700 (PDT)
-Received: from [10.0.0.40] (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
-        by smtp.gmail.com with ESMTPSA id m7-20020a05622a054700b0031ea864d3b2sm976134qtx.30.2022.08.10.19.23.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 Aug 2022 19:23:26 -0700 (PDT)
-Message-ID: <308db02b-b56d-2df1-ee33-7f66e6a85f63@joelfernandes.org>
-Date:   Wed, 10 Aug 2022 22:23:23 -0400
+        Wed, 10 Aug 2022 22:23:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0C5AD88DCD
+        for <linux-kernel@vger.kernel.org>; Wed, 10 Aug 2022 19:23:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660184637;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=BKmemLUUo0rjZIwwGoGKA+UOMDOAhP06FgZjL5gzzjM=;
+        b=OBFeZM1Plrm2HSToqpA50vxOLINGl9SWMKg05VTyTAXvX1rH8FIgkgun3xAgTgKRGVh3sm
+        GTdIxjqLsuOfeWM9bVHrflI0kZs68FdZ221+CFKgQgGv/eApUTT5oOE5d7/wLQUar+UMD+
+        mMORj2yFKM4HgErM8B7DMB+1Xbfrd8s=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-624-o7Vy4HsZPIGNxeI4VYO2mA-1; Wed, 10 Aug 2022 22:23:54 -0400
+X-MC-Unique: o7Vy4HsZPIGNxeI4VYO2mA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 9451918812C5;
+        Thu, 11 Aug 2022 02:23:53 +0000 (UTC)
+Received: from madcap2.tricolour.ca (unknown [10.22.48.5])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id CEEBD2166B26;
+        Thu, 11 Aug 2022 02:23:51 +0000 (UTC)
+Date:   Wed, 10 Aug 2022 22:23:49 -0400
+From:   Richard Guy Briggs <rgb@redhat.com>
+To:     Steve Grubb <sgrubb@redhat.com>
+Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@parisplace.org>, Jan Kara <jack@suse.cz>,
+        Amir Goldstein <amir73il@gmail.com>
+Subject: Re: [PATCH v4 4/4] fanotify,audit: deliver fan_info as a hex-encoded
+ string
+Message-ID: <YvRoNSL0snBY87/b@madcap2.tricolour.ca>
+References: <cover.1659996830.git.rgb@redhat.com>
+ <2d8159cec4392029dabfc39b55ac5fbd0faa9fbd.1659996830.git.rgb@redhat.com>
+ <5623945.DvuYhMxLoT@x2>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.2
-Subject: Re: [PATCH v3 resend 0/6] Implement call_rcu_lazy() and miscellaneous
- fixes
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org
-Cc:     rushikesh.s.kadam@intel.com, urezki@gmail.com,
-        neeraj.iitr10@gmail.com, frederic@kernel.org, paulmck@kernel.org,
-        rostedt@goodmis.org, rcu@vger.kernel.org
-References: <20220809034517.3867176-1-joel@joelfernandes.org>
-From:   Joel Fernandes <joel@joelfernandes.org>
-In-Reply-To: <20220809034517.3867176-1-joel@joelfernandes.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5623945.DvuYhMxLoT@x2>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,77 +66,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2022-08-10 15:15, Steve Grubb wrote:
+> Hell Richard,
 
+That's quite an introduction!  ;-)
 
-On 8/8/2022 11:45 PM, Joel Fernandes (Google) wrote:
-> Just a refresh of v3 with one additional debug patch. v3's cover letter is here:
->  https://lore.kernel.org/all/20220713213237.1596225-1-joel@joelfernandes.org/
+> On Tuesday, August 9, 2022 1:22:55 PM EDT Richard Guy Briggs wrote:
+> > Currently the only type of fanotify info that is defined is an audit
+> > rule number, but convert it to hex encoding to future-proof the field.
+> > 
+> > Sample record:
+> >   type=FANOTIFY msg=audit(1659730979.839:284): resp=1 fan_type=0
+> > fan_info=3F
 > 
-> I just started working on this again while I have some time during paternity
-> leave ;-) So I thought I'll just send it out again. No other changes other
-> than that 1 debug patch I added on the top.
+> I compiled a new kernel and run old user space on this. The above event is 
+> exactly what I see in my audit logs. Why the fan_info=3F? I really would have 
+> expected 0. What if the actual rule number was 63? I think this will work 
+> better to leave everything 0 with old user space.
+
+Well, if it is to be consistently hex encoded, that corresponds to "?"
+if it is to be interpreted as a string.  Since the fan_type is 0,
+fan_info would be invalid, so a value of 0 would be entirely reasonable,
+hex encoded to fan_info=00.  It could also be hex encoded to the string
+"(none)".  If you wanted "0" for fan_type=FAN_RESPONSE_INFO_AUDIT_RULE,
+that would be fan_info=30 if it were interpreted as a string, or
+arguably 3F for an integer of rule (decimal) 63.  Ultimately, fan_type
+should determine how fan_info's hex encoded value should be interpreted.
+
+But ultimately, the point of this patch is to hex encode the fan_info
+field value.
+
+> -Steve
+>  
+> > Suggested-by: Paul Moore <paul@paul-moore.com>
+> > Signed-off-by: Richard Guy Briggs <rgb@redhat.com>
+> > ---
+> >  kernel/auditsc.c | 28 +++++++++++++++++++++-------
+> >  1 file changed, 21 insertions(+), 7 deletions(-)
+> > 
+> > diff --git a/kernel/auditsc.c b/kernel/auditsc.c
+> > index f000fec52360..0f747015c577 100644
+> > --- a/kernel/auditsc.c
+> > +++ b/kernel/auditsc.c
+> > @@ -2908,22 +2908,36 @@ void __audit_fanotify(u32 response, size_t len,
+> > char *buf)
+> > 
+> >  	if (!(len && buf)) {
+> >  		audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
+> > -			  "resp=%u fan_type=0 fan_info=?", response);
+> > +			  "resp=%u fan_type=0 fan_info=3F", response); /* "?" */
+> >  		return;
+> >  	}
+> >  	while (c >= sizeof(struct fanotify_response_info_header)) {
+> > +		struct audit_context *ctx = audit_context();
+> > +		struct audit_buffer *ab;
+> > +
+> >  		friar = (struct fanotify_response_info_audit_rule *)buf;
+> >  		switch (friar->hdr.type) {
+> >  		case FAN_RESPONSE_INFO_AUDIT_RULE:
+> >  			if (friar->hdr.len < sizeof(*friar)) {
+> > -				audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
+> > -					  "resp=%u fan_type=%u fan_info=(incomplete)",
+> > -					  response, friar->hdr.type);
+> > +				ab = audit_log_start(ctx, GFP_KERNEL, AUDIT_FANOTIFY);
+> > +				if (ab) {
+> > +					audit_log_format(ab, "resp=%u fan_type=%u fan_info=",
+> > +							 response, friar-
+> >hdr.type);
+> > +#define INCOMPLETE "(incomplete)"
+> > +					audit_log_n_hex(ab, INCOMPLETE, sizeof(INCOMPLETE));
+> > +					audit_log_end(ab);
+> > +				}
+> >  				return;
+> >  			}
+> > -			audit_log(audit_context(), GFP_KERNEL, AUDIT_FANOTIFY,
+> > -				  "resp=%u fan_type=%u fan_info=%u",
+> > -				  response, friar->hdr.type, friar->audit_rule);
+> > +			ab = audit_log_start(ctx, GFP_KERNEL, AUDIT_FANOTIFY);
+> > +			if (ab) {
+> > +				audit_log_format(ab, "resp=%u fan_type=%u fan_info=",
+> > +						 response, friar->hdr.type);
+> > +				audit_log_n_hex(ab, (char *)&friar->audit_rule,
+> > +						sizeof(friar->audit_rule));
+> > +				audit_log_end(ab);
+> > +
+> > +			}
+> >  		}
+> >  		c -= friar->hdr.len;
+> >  		ib += friar->hdr.len;
 > 
-> Next I am going to go refine the power results as mentioned in Paul's comments
-> on the last cover letter.
-
-Side note: Here is another big selling point for call_rcu_lazy().
-Instead of _lazy(), if you just increased jiffies_till_first_fqs, and
-slowed *all* call_rcu() down to achieve the same effect, that would
-affect percpu refcounters switching to atomic-mode, for example.
-
-They switch to atomic mode by calling __percpu_ref_switch_mode() which
-is called by percpu_ref_switch_to_atomic_sync().
-
-This will slow this call down for the full lazy duration which will slow
-down suspend in blk_pre_runtime_suspend().
-
-This is why, we cannot assume call_rcu() users will mostly just want to
-free memory. There could be cases just like this, and just blanket slow
-down of call_rcu() might bite at unexpected times.
-
-I am going to add this as a selling point for selective lazyfication
-(hey I get to invent words while I'm inventing new features), to my
-cover letter and slides.
-
- - Joel
-
-
-
 > 
-> Joel Fernandes (Google) (5):
-> rcu: Introduce call_rcu_lazy() API implementation
-> rcuscale: Add laziness and kfree tests
-> fs: Move call_rcu() to call_rcu_lazy() in some paths
-> rcutorture: Add test code for call_rcu_lazy()
-> debug: Toggle lazy at runtime and change flush jiffies
 > 
-> Vineeth Pillai (1):
-> rcu: shrinker for lazy rcu
 > 
-> fs/dcache.c                                   |   4 +-
-> fs/eventpoll.c                                |   2 +-
-> fs/file_table.c                               |   2 +-
-> fs/inode.c                                    |   2 +-
-> include/linux/rcu_segcblist.h                 |   1 +
-> include/linux/rcupdate.h                      |   6 +
-> include/linux/sched/sysctl.h                  |   3 +
-> kernel/rcu/Kconfig                            |   8 +
-> kernel/rcu/rcu.h                              |  12 +
-> kernel/rcu/rcu_segcblist.c                    |  15 +-
-> kernel/rcu/rcu_segcblist.h                    |  20 +-
-> kernel/rcu/rcuscale.c                         |  74 +++++-
-> kernel/rcu/rcutorture.c                       |  60 ++++-
-> kernel/rcu/tree.c                             | 131 ++++++----
-> kernel/rcu/tree.h                             |  10 +-
-> kernel/rcu/tree_nocb.h                        | 246 +++++++++++++++---
-> kernel/sysctl.c                               |  17 ++
-> .../selftests/rcutorture/configs/rcu/CFLIST   |   1 +
-> .../selftests/rcutorture/configs/rcu/TREE11   |  18 ++
-> .../rcutorture/configs/rcu/TREE11.boot        |   8 +
-> 20 files changed, 536 insertions(+), 104 deletions(-)
-> create mode 100644 tools/testing/selftests/rcutorture/configs/rcu/TREE11
-> create mode 100644 tools/testing/selftests/rcutorture/configs/rcu/TREE11.boot
-> 
-> --
-> 2.37.1.559.g78731f0fdb-goog
-> 
+
+- RGB
+
+--
+Richard Guy Briggs <rgb@redhat.com>
+Sr. S/W Engineer, Kernel Security, Base Operating Systems
+Remote, Ottawa, Red Hat Canada
+IRC: rgb, SunRaycer
+Voice: +1.647.777.2635, Internal: (81) 32635
+

@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8BA2591788
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 01:10:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8EAA591786
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 01:10:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236480AbiHLXKJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 19:10:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45622 "EHLO
+        id S237653AbiHLXKP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 19:10:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235143AbiHLXKB (ORCPT
+        with ESMTP id S234474AbiHLXKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 19:10:01 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7D79BB7A
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 16:10:00 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id s15-20020a5b044f000000b00680c4eb89f1so1795817ybp.7
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 16:10:00 -0700 (PDT)
+        Fri, 12 Aug 2022 19:10:05 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D43CA9C20E
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 16:10:02 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-31f46b4759bso18622377b3.0
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 16:10:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc;
-        bh=YiyvC5KcLJL9/nnX+SFeTIrRtpkkdHYbCWBdgzmu8kY=;
-        b=Da16TEv/4coRpuTFpJa27ZXTP77mj0yprgQil4DtOi02L2ulStByB/BXJn1UgSQSt2
-         ijc4vnzrQBDCVUlDRA6+lVypjyyZzeJqPXE+CyLmPMyLq00MgQM2ZrG4SYrw3I4Tr9Kg
-         SF7DXRuh2OEB3Xwd9ZbjQhQYZsIosAlNNfpIesLnV6z6D/kOhbFp1j2t1H+UmtK2z6e5
-         ffyNv5Slc693/I/rscqd/qOlaGRqqONonCgtcvoinKGuoE4W0Jr4gyc8MhPJv4/jQ7fD
-         Kzz2xVxdwSZqU9Un0j3QpcETvKwqaEdQYXMMzieTf9FuHf7WoMcIvEFQ4KCWCZ5T7TqW
-         sdrw==
+        bh=kPWsuFqycsY/yXV7nCgwsjWW6XxROqmLrLkaSuTFd4g=;
+        b=rxjmjQpKDzS7G0C+9MAaUX4sdS40WxnORu9wsxkeSrzBbIrDyTkkvDdpH9Q4fDq8rv
+         1FOwsDUFhyxtnNTlFm6bk8FTSLFgIBQ165feaBrjBbixMZJwjPDgJ0CJj5Voqz+MkcQS
+         OFgBH5grTkKZLqcw2VK454e2fsMWDO0JnCawPq2l1SUWr6xLR5EgVvfwE8fckI/afazp
+         eqxmT0m8FcGQhtrYM4PiGWk3w7id6oFmXcUnSOtSY9RELqp668za8mOdYexpauzIhvId
+         N/VBFb8oVV+dICkKxaQSjifY+Noxt1g+iTpl/iNknx39MS5junx0m4Esj/91UL3vvegX
+         T50g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc;
-        bh=YiyvC5KcLJL9/nnX+SFeTIrRtpkkdHYbCWBdgzmu8kY=;
-        b=P1s6k+HKnB5vsukfPq4D08i9yRIf3VFdvKYJnZMxgs4Lj55sZO2gviNjk/32+6SP3O
-         seUNTiXvQNyPs4rF7CSU9S/N2AHUE8HLO/wnyo4YURGOTfCx9IHKM1NX+ME45icr5tfU
-         ezvvIV9MQ+qopvf2hjHvjOJcAvyhqa3WI8wk6qApFdDt6Ofr042//8wPpdBxzvcTh23S
-         moQZ2zuL2gMXJOmBrQaaHWnQNOpvc/59iuAqQkmQNmCVewOc23fvNHsDafynlt6WYHWy
-         iiy+GGnDPN7SyQMVfidawkwoNqyHBKB2HKof7f3Jvwu2v+xsJB0aL/gsg8hq8mzpkXrl
-         VP4Q==
-X-Gm-Message-State: ACgBeo2AHFTbOYAt4SzKBx9yojb8Lk7vlM5re7IYXcBurUfV4YdPeVto
-        I8haCq6NC8rW3+Gs1QgRFuZ+EmwokZvk
-X-Google-Smtp-Source: AA6agR5gweXDu/o9LyYcK9Rge043hhUd0+JgvYx1OMtiTLDz0icypzu5szu4NIxcrgHjRFsQXIapBAxkT+5f
+        bh=kPWsuFqycsY/yXV7nCgwsjWW6XxROqmLrLkaSuTFd4g=;
+        b=YfyQGBEEjQzvpgzGd/tNKqqyAzExJ3Pw67NRvFwXVr3DyqLiilAk9qMpRSY0O/w9us
+         ByYCNySX62gpds4u/irsD3HKdOYQG68t/qTZfkuRM+vlmEGYMFYd4EkUw7Ym2VFWeYwo
+         l3TvyGEyWM8bA553O77m49UoUmY3IdHGrQg2MZXGFF5GcbdATb1wDwFeaB40Nolu0r3r
+         6QGttLNzwILUJaUauDjSZ4KSd2NeD80aOPyx+unR3cZxwsnHtPeTLrMxmKDvTRUYZepx
+         PYbyaTCmyaiYWtOIEKW4j3n+bq+owbFUs4GQoDiTM9GpmUZQjUt75GE8lfrxAIWCGbd7
+         5j/A==
+X-Gm-Message-State: ACgBeo36kWRS+BUSweo3OgEjDtRaMQ5Irp22bnmBnzwbKP3CA1dQB8g7
+        S5vkDDJrGH/iqEgYuQDRvSZn61ffxgF4
+X-Google-Smtp-Source: AA6agR4VKEloBEmRShMw7+2nW0kl6o1FN+BGq8FKr+/u4UHKzqmgJpZpOlb1g2Fk8WRnCpI/DvA74SydZdIy
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:d668:2937:8218:c5ec])
- (user=irogers job=sendgmr) by 2002:a81:144f:0:b0:31f:43ce:de37 with SMTP id
- 76-20020a81144f000000b0031f43cede37mr5830739ywu.142.1660345799751; Fri, 12
- Aug 2022 16:09:59 -0700 (PDT)
-Date:   Fri, 12 Aug 2022 16:09:37 -0700
+ (user=irogers job=sendgmr) by 2002:a81:1016:0:b0:31e:63f8:483d with SMTP id
+ 22-20020a811016000000b0031e63f8483dmr5606640ywq.199.1660345802166; Fri, 12
+ Aug 2022 16:10:02 -0700 (PDT)
+Date:   Fri, 12 Aug 2022 16:09:38 -0700
 In-Reply-To: <20220812230949.683239-1-irogers@google.com>
-Message-Id: <20220812230949.683239-3-irogers@google.com>
+Message-Id: <20220812230949.683239-4-irogers@google.com>
 Mime-Version: 1.0
 References: <20220812230949.683239-1-irogers@google.com>
 X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH v5 02/14] perf jevents: Remove the type/version variables
+Subject: [PATCH v5 03/14] perf jevents: Provide path to json file on error
 From:   Ian Rogers <irogers@google.com>
 To:     John Garry <john.garry@huawei.com>, Will Deacon <will@kernel.org>,
         James Clark <james.clark@arm.com>,
@@ -78,116 +78,39 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pmu_events_map has a type variable that is always initialized to "core"
-and a version variable that is never read. Remove these from the API as
-it is straightforward to add them back when necessary.
+If a JSONDecoderError or similar is raised then it is useful to know the
+path. Print this and then raise the exception agan.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/pmu-events/empty-pmu-events.c | 4 ----
- tools/perf/pmu-events/jevents.py         | 6 ------
- tools/perf/pmu-events/pmu-events.h       | 2 --
- tools/perf/tests/expand-cgroup.c         | 2 --
- tools/perf/tests/parse-metric.c          | 2 --
- 5 files changed, 16 deletions(-)
+ tools/perf/pmu-events/jevents.py | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/tools/perf/pmu-events/empty-pmu-events.c b/tools/perf/pmu-events/empty-pmu-events.c
-index d8cf9283e486..4182a986f505 100644
---- a/tools/perf/pmu-events/empty-pmu-events.c
-+++ b/tools/perf/pmu-events/empty-pmu-events.c
-@@ -112,15 +112,11 @@ const struct pmu_events_map pmu_events_map[] = {
- 	{
- 		.arch = "testarch",
- 		.cpuid = "testcpu",
--		.version = "v1",
--		.type = "core",
- 		.table = pme_test_soc_cpu,
- 	},
- 	{
- 		.arch = 0,
- 		.cpuid = 0,
--		.version = 0,
--		.type = 0,
- 		.table = 0,
- 	},
- };
 diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
-index b49a0dd946b7..8e8462cb359b 100755
+index 8e8462cb359b..31936eafa9ff 100755
 --- a/tools/perf/pmu-events/jevents.py
 +++ b/tools/perf/pmu-events/jevents.py
-@@ -313,8 +313,6 @@ def print_mapping_table(archs: Sequence[str]) -> None:
-       _args.output_file.write("""{
- \t.arch = "testarch",
- \t.cpuid = "testcpu",
--\t.version = "v1",
--\t.type = "core",
- \t.table = pme_test_soc_cpu,
- },
- """)
-@@ -330,8 +328,6 @@ def print_mapping_table(archs: Sequence[str]) -> None:
-             _args.output_file.write(f"""{{
- \t.arch = "{arch}",
- \t.cpuid = "{cpuid}",
--\t.version = "{row[1]}",
--\t.type = "{row[3]}",
- \t.table = {tblname}
- }},
- """)
-@@ -340,8 +336,6 @@ def print_mapping_table(archs: Sequence[str]) -> None:
-   _args.output_file.write("""{
- \t.arch = 0,
- \t.cpuid = 0,
--\t.version = 0,
--\t.type = 0,
- \t.table = 0,
- }
- };
-diff --git a/tools/perf/pmu-events/pmu-events.h b/tools/perf/pmu-events/pmu-events.h
-index 7a360792635f..a491b117c8ac 100644
---- a/tools/perf/pmu-events/pmu-events.h
-+++ b/tools/perf/pmu-events/pmu-events.h
-@@ -40,8 +40,6 @@ struct pmu_event {
- struct pmu_events_map {
- 	const char *arch;
- 	const char *cpuid;
--	const char *version;
--	const char *type;		/* core, uncore etc */
- 	const struct pmu_event *table;
- };
+@@ -225,7 +225,12 @@ class JsonEvent:
  
-diff --git a/tools/perf/tests/expand-cgroup.c b/tools/perf/tests/expand-cgroup.c
-index dfefe5b60eb2..dc4038f997d7 100644
---- a/tools/perf/tests/expand-cgroup.c
-+++ b/tools/perf/tests/expand-cgroup.c
-@@ -197,8 +197,6 @@ static int expand_metric_events(void)
- 	};
- 	const struct pmu_events_map ev_map = {
- 		.cpuid		= "test",
--		.version	= "1",
--		.type		= "core",
- 		.table		= pme_test,
- 	};
+ def read_json_events(path: str) -> Sequence[JsonEvent]:
+   """Read json events from the specified file."""
+-  return json.load(open(path), object_hook=lambda d: JsonEvent(d))
++
++  try:
++    return json.load(open(path), object_hook=lambda d: JsonEvent(d))
++  except BaseException as err:
++    print(f"Exception processing {path}")
++    raise
  
-diff --git a/tools/perf/tests/parse-metric.c b/tools/perf/tests/parse-metric.c
-index 07b6f4ec024f..1b811a26f4ee 100644
---- a/tools/perf/tests/parse-metric.c
-+++ b/tools/perf/tests/parse-metric.c
-@@ -81,8 +81,6 @@ static struct pmu_event pme_test[] = {
  
- static const struct pmu_events_map map = {
- 	.cpuid		= "test",
--	.version	= "1",
--	.type		= "core",
- 	.table		= pme_test,
- };
- 
+ def preprocess_arch_std_files(archpath: str) -> None:
 -- 
 2.37.1.595.g718a3a8f04-goog
 

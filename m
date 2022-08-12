@@ -2,96 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB505591082
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 14:09:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD960591084
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 14:09:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238145AbiHLMJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 08:09:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50056 "EHLO
+        id S233867AbiHLMJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 08:09:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237976AbiHLMJU (ORCPT
+        with ESMTP id S238359AbiHLMJp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 08:09:20 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9DBCB0291
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 05:09:18 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id z2so1104809edc.1
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 05:09:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc;
-        bh=yQJnAvxwwDIRShMc7gbItPdruUOcVO91CwwmlkjdBV4=;
-        b=FcCofm1FhUVT0y+mEgvBIoj3n6cKnIgxHtk1mcvHSoL8hXoct5dx6RIf+e7jeVG/ga
-         P6HVJyoEFjyO4lQWI5qIZ/NvFlK11FTWq21WH/DQ84Y6kBpywVaHbDgpY1s11se3uFTQ
-         9E2zq3OLJGG2UEnA6EYPwyPSawIejNt2OpnLIj/i50L+Tb8XD33UAl8b2YyXTjrGndHy
-         xVwAD7/yf2GEU1MIxFjG+0aePMu2GZFrWaivMd5oifBegAjEeRMuqfxcej3ZSvVX/eCb
-         oNcLN/kWqj7fXgBV91fW2FI/ZWZFqbGd5FDt45cQYngC8KUOzledBlLgK7IGcVJfXm5+
-         tSyQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc;
-        bh=yQJnAvxwwDIRShMc7gbItPdruUOcVO91CwwmlkjdBV4=;
-        b=YQcNOkEVG3k6AI8dTzTRs46bIUp3k3T58gtB+m1IVaznjLhqUibue45WrxDPOc2sNB
-         fkMCMfuCwVoip4ZRgDIGM9bG9GFCQtXcy6uO5Yc3lYzIgWNSA0lB0TrZE8bSZe/yAEN7
-         gVakFS2h4z5N7cg8fCm2gd6ecF7abbWyPMArHKAuMsVy3HdonQ7lXvZf7jcMA/m5MUU4
-         dZQb2CxNOlXNYahYlUiVaOa4b492LMdV0IZ1b1O5FrIXColDeSo20oSr6J/6a2GgSavv
-         WjJr+dSdxlai28QXldXo+9nh9vu+1byCBTbcNRe+6ZNdu/TmNkzh0XferTiZTT6VPZaf
-         cvrQ==
-X-Gm-Message-State: ACgBeo37CCzbVNpoc7BJ8GxBU4SheoXC6ShexIhl2Cd186ndctF7x0fj
-        w/f19lgoHh6TaCQ3Ds7ocOxAfQ==
-X-Google-Smtp-Source: AA6agR5lbyjU78E5dz6FNsDcA7i+JaI7LaU/jSttjLi0tz6iRhI5F4cxhULTI7Be88sUI04Zo6w84Q==
-X-Received: by 2002:a05:6402:50cb:b0:440:87d4:3ad2 with SMTP id h11-20020a05640250cb00b0044087d43ad2mr3317546edb.219.1660306157306;
-        Fri, 12 Aug 2022 05:09:17 -0700 (PDT)
-Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id o11-20020a170906768b00b00730af3346d6sm715698ejm.212.2022.08.12.05.09.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 05:09:16 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 12 Aug 2022 14:09:15 +0200
-Message-Id: <CM41EUB650GB.YO1J30NYO5NU@otso>
-Cc:     <~postmarketos/upstreaming@lists.sr.ht>,
-        <phone-devel@vger.kernel.org>, "Andy Gross" <agross@kernel.org>,
-        "Bjorn Andersson" <bjorn.andersson@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 5/5] arm64: dts: qcom: sm6350: Add interconnect
- support
-From:   "Luca Weiss" <luca.weiss@fairphone.com>
-To:     "Luca Weiss" <luca.weiss@fairphone.com>,
-        <linux-arm-msm@vger.kernel.org>
-X-Mailer: aerc 0.11.0
-References: <20220525144404.200390-1-luca.weiss@fairphone.com>
- <20220525144404.200390-6-luca.weiss@fairphone.com>
-In-Reply-To: <20220525144404.200390-6-luca.weiss@fairphone.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Fri, 12 Aug 2022 08:09:45 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F024B0293
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 05:09:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660306184; x=1691842184;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=06DGROnmmHYe42BnYcF+ZxsPUNuOOsIs6pH7L/g5i9E=;
+  b=KtsxtaRoG0y83NPw488qCEoNqNzxpjHKGuERb2Zh3i+l8c/enwmo+FGM
+   pe4LRfvwTKGy5sIPTW+DgkCu4CDD9u91rrOZOcJHpUks2KxUDY47M6FqG
+   L4oLw1KqlddhnW84ee8XTCY0dg2aDc1XgRo0Eif3DTfyC/6Ae0dXNfWIi
+   hW6Y8SHf9F6vuij9AJ93MMB7C2iBX5ppQ2pUpqxf9pkjPUZocLCMJVu+k
+   gwG3QCmfwKo6rC5oXOkXu4UdWXH2+3h1JRrmGcSR42FcRoGn+8A3Xisqg
+   ka8SD9NAaa7HOTT6/ISQUDVWP9mLAp0OgLXMswqCcq0yqoXW6meGbYo04
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10436"; a="291581781"
+X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
+   d="scan'208";a="291581781"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 05:09:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
+   d="scan'208";a="582065431"
+Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 12 Aug 2022 05:09:41 -0700
+Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oMTTw-0000Up-2H;
+        Fri, 12 Aug 2022 12:09:40 +0000
+Date:   Fri, 12 Aug 2022 20:09:29 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: arch/arm/mach-mvebu/pmsu.c:145:9: sparse: sparse: incorrect type in
+ argument 1 (different address spaces)
+Message-ID: <202208121906.8R3iBMLM-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
+Hi Arnd,
 
-On Wed May 25, 2022 at 4:44 PM CEST, Luca Weiss wrote:
-> Add all the different NoC providers that are found in SM6350 and
-> populate different nodes that use the interconnect properties.
->
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+First bad commit (maybe != root cause):
 
-The other patches (1-4) from this series have been merged into torvalds'
-repo already, so just this one is missing from 5.20/6.0.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   7ebfc85e2cd7b08f518b526173e9a33b56b3913b
+commit: 09f6b27d5ddd9ad0ec096d1b0f8decdacc70f0f8 ARM: dove: multiplatform support
+date:   4 months ago
+config: arm-randconfig-s051-20220811 (https://download.01.org/0day-ci/archive/20220812/202208121906.8R3iBMLM-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=09f6b27d5ddd9ad0ec096d1b0f8decdacc70f0f8
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 09f6b27d5ddd9ad0ec096d1b0f8decdacc70f0f8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mach-mvebu/ drivers/soc/bcm/brcmstb/pm/ drivers/soc/ti/
 
-Could you please pick it up for the next merge window if everything's
-alright with it?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Regards
-Luca
+sparse warnings: (new ones prefixed by >>)
+>> arch/arm/mach-mvebu/pmsu.c:145:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *[assigned] sram_virt_base @@
+   arch/arm/mach-mvebu/pmsu.c:145:9: sparse:     expected void const *
+   arch/arm/mach-mvebu/pmsu.c:145:9: sparse:     got void [noderef] __iomem *[assigned] sram_virt_base
+>> arch/arm/mach-mvebu/pmsu.c:145:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *[assigned] sram_virt_base @@
+   arch/arm/mach-mvebu/pmsu.c:145:9: sparse:     expected void const *
+   arch/arm/mach-mvebu/pmsu.c:145:9: sparse:     got void [noderef] __iomem *[assigned] sram_virt_base
+   arch/arm/mach-mvebu/pmsu.c:145:9: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got void [noderef] __iomem *[assigned] sram_virt_base @@
+   arch/arm/mach-mvebu/pmsu.c:145:9: sparse:     expected void *
+   arch/arm/mach-mvebu/pmsu.c:145:9: sparse:     got void [noderef] __iomem *[assigned] sram_virt_base
+--
+>> drivers/soc/ti/knav_dma.c:539:31: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   drivers/soc/ti/knav_dma.c:539:31: sparse:     expected void [noderef] __iomem *
+   drivers/soc/ti/knav_dma.c:539:31: sparse:     got void *
+--
+>> drivers/soc/bcm/brcmstb/pm/pm-arm.c:366:16: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *static [assigned] [toplevel] boot_sram @@
+   drivers/soc/bcm/brcmstb/pm/pm-arm.c:366:16: sparse:     expected void const *
+   drivers/soc/bcm/brcmstb/pm/pm-arm.c:366:16: sparse:     got void [noderef] __iomem *static [assigned] [toplevel] boot_sram
+>> drivers/soc/bcm/brcmstb/pm/pm-arm.c:366:16: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const * @@     got void [noderef] __iomem *static [assigned] [toplevel] boot_sram @@
+   drivers/soc/bcm/brcmstb/pm/pm-arm.c:366:16: sparse:     expected void const *
+   drivers/soc/bcm/brcmstb/pm/pm-arm.c:366:16: sparse:     got void [noderef] __iomem *static [assigned] [toplevel] boot_sram
+>> drivers/soc/bcm/brcmstb/pm/pm-arm.c:366:16: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void * @@     got void [noderef] __iomem *static [assigned] [toplevel] boot_sram @@
+   drivers/soc/bcm/brcmstb/pm/pm-arm.c:366:16: sparse:     expected void *
+   drivers/soc/bcm/brcmstb/pm/pm-arm.c:366:16: sparse:     got void [noderef] __iomem *static [assigned] [toplevel] boot_sram
+>> drivers/soc/bcm/brcmstb/pm/pm-arm.c:660:31: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   drivers/soc/bcm/brcmstb/pm/pm-arm.c:660:31: sparse:     expected void [noderef] __iomem *
+   drivers/soc/bcm/brcmstb/pm/pm-arm.c:660:31: sparse:     got void *
+
+vim +145 arch/arm/mach-mvebu/pmsu.c
+
+3076cc58c95809 Gregory CLEMENT 2014-07-23  121  
+3076cc58c95809 Gregory CLEMENT 2014-07-23  122  /*
+3076cc58c95809 Gregory CLEMENT 2014-07-23  123   * This function sets up the boot address workaround needed for SMP
+3076cc58c95809 Gregory CLEMENT 2014-07-23  124   * boot on Armada 375 Z1 and cpuidle on Armada 370. It unmaps the
+3076cc58c95809 Gregory CLEMENT 2014-07-23  125   * BootROM Mbus window, and instead remaps a crypto SRAM into which a
+3076cc58c95809 Gregory CLEMENT 2014-07-23  126   * custom piece of code is copied to replace the problematic BootROM.
+3076cc58c95809 Gregory CLEMENT 2014-07-23  127   */
+3076cc58c95809 Gregory CLEMENT 2014-07-23  128  int mvebu_setup_boot_addr_wa(unsigned int crypto_eng_target,
+3076cc58c95809 Gregory CLEMENT 2014-07-23  129  			     unsigned int crypto_eng_attribute,
+3076cc58c95809 Gregory CLEMENT 2014-07-23  130  			     phys_addr_t resume_addr_reg)
+3076cc58c95809 Gregory CLEMENT 2014-07-23  131  {
+3076cc58c95809 Gregory CLEMENT 2014-07-23  132  	void __iomem *sram_virt_base;
+d0d378ff451a66 Ethan Tuttle    2018-06-19  133  	u32 code_len = mvebu_boot_wa_end - mvebu_boot_wa_start;
+3076cc58c95809 Gregory CLEMENT 2014-07-23  134  
+3076cc58c95809 Gregory CLEMENT 2014-07-23  135  	mvebu_mbus_del_window(BOOTROM_BASE, BOOTROM_SIZE);
+3076cc58c95809 Gregory CLEMENT 2014-07-23  136  	mvebu_mbus_add_window_by_id(crypto_eng_target, crypto_eng_attribute,
+3076cc58c95809 Gregory CLEMENT 2014-07-23  137  				    SRAM_PHYS_BASE, SZ_64K);
+3076cc58c95809 Gregory CLEMENT 2014-07-23  138  
+3076cc58c95809 Gregory CLEMENT 2014-07-23  139  	sram_virt_base = ioremap(SRAM_PHYS_BASE, SZ_64K);
+3076cc58c95809 Gregory CLEMENT 2014-07-23  140  	if (!sram_virt_base) {
+3076cc58c95809 Gregory CLEMENT 2014-07-23  141  		pr_err("Unable to map SRAM to setup the boot address WA\n");
+3076cc58c95809 Gregory CLEMENT 2014-07-23  142  		return -ENOMEM;
+3076cc58c95809 Gregory CLEMENT 2014-07-23  143  	}
+3076cc58c95809 Gregory CLEMENT 2014-07-23  144  
+3076cc58c95809 Gregory CLEMENT 2014-07-23 @145  	memcpy(sram_virt_base, &mvebu_boot_wa_start, code_len);
+3076cc58c95809 Gregory CLEMENT 2014-07-23  146  
+3076cc58c95809 Gregory CLEMENT 2014-07-23  147  	/*
+3076cc58c95809 Gregory CLEMENT 2014-07-23  148  	 * The last word of the code copied in SRAM must contain the
+3076cc58c95809 Gregory CLEMENT 2014-07-23  149  	 * physical base address of the PMSU register. We
+3076cc58c95809 Gregory CLEMENT 2014-07-23  150  	 * intentionally store this address in the native endianness
+3076cc58c95809 Gregory CLEMENT 2014-07-23  151  	 * of the system.
+3076cc58c95809 Gregory CLEMENT 2014-07-23  152  	 */
+3076cc58c95809 Gregory CLEMENT 2014-07-23  153  	__raw_writel((unsigned long)resume_addr_reg,
+3076cc58c95809 Gregory CLEMENT 2014-07-23  154  		     sram_virt_base + code_len - 4);
+3076cc58c95809 Gregory CLEMENT 2014-07-23  155  
+3076cc58c95809 Gregory CLEMENT 2014-07-23  156  	iounmap(sram_virt_base);
+3076cc58c95809 Gregory CLEMENT 2014-07-23  157  
+3076cc58c95809 Gregory CLEMENT 2014-07-23  158  	return 0;
+3076cc58c95809 Gregory CLEMENT 2014-07-23  159  }
+3076cc58c95809 Gregory CLEMENT 2014-07-23  160  
+
+:::::: The code at line 145 was first introduced by commit
+:::::: 3076cc58c958090ad50acf50fc855845e3462523 ARM: mvebu: add a common function for the boot address work around
+
+:::::: TO: Gregory CLEMENT <gregory.clement@free-electrons.com>
+:::::: CC: Jason Cooper <jason@lakedaemon.net>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

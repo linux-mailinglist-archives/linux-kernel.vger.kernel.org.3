@@ -2,114 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF7AE590E56
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 11:46:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0F88590E5B
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 11:47:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237933AbiHLJq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 05:46:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33996 "EHLO
+        id S237470AbiHLJrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 05:47:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232876AbiHLJqU (ORCPT
+        with ESMTP id S232876AbiHLJrQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 05:46:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 66F5BA4B0D
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 02:46:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660297578;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2c/iImSQTA02RBtmBVV2RGW771GUr2pXHiaSO81S20w=;
-        b=IHmORjdK92XMIvtpgDkxRLhynwSIMUrcXWet14jLOWw11hFUs1Pgh6YqTUmF0vgzC5Acx1
-        o6Z3hZGSmT6lBOKm27yBfk7gzSIv6ie3Y9slGv12aFy0DVBu9FqpEZHGdP0+019z/gubTK
-        EHKHcM86F4/tRJbheEf7C8VnFIRaKxU=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-211-2Wxmoo5wOzabgm-izal5tA-1; Fri, 12 Aug 2022 05:46:15 -0400
-X-MC-Unique: 2Wxmoo5wOzabgm-izal5tA-1
-Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 29815811E75;
-        Fri, 12 Aug 2022 09:46:14 +0000 (UTC)
-Received: from localhost (ovpn-12-160.pek2.redhat.com [10.72.12.160])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E44A42166B26;
-        Fri, 12 Aug 2022 09:46:12 +0000 (UTC)
-Date:   Fri, 12 Aug 2022 17:46:09 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Eric DeVolder <eric.devolder@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
-        sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
-        boris.ostrovsky@oracle.com
-Subject: Re: [PATCH v10 1/8] crash: introduce arch/*/asm/crash.h
-Message-ID: <YvYhYdV6F2zH4o3X@MiWiFi-R3L-srv>
-References: <20220721181747.1640-1-eric.devolder@oracle.com>
- <20220721181747.1640-2-eric.devolder@oracle.com>
- <YvCCOY+mRshu1tHi@MiWiFi-R3L-srv>
- <52d40562-ee6f-bb89-6d21-2d6baf67053d@oracle.com>
+        Fri, 12 Aug 2022 05:47:16 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D71B1321;
+        Fri, 12 Aug 2022 02:47:14 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTPS id 9093080E1;
+        Fri, 12 Aug 2022 09:40:29 +0000 (UTC)
+Date:   Fri, 12 Aug 2022 12:47:12 +0300
+From:   Tony Lindgren <tony@atomide.com>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, Abel Vesa <abel.vesa@linaro.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        John Stultz <jstultz@google.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: Re: [PATCH v1 9/9] of: property: Simplify of_link_to_phandle()
+Message-ID: <YvYhoGdemyKEx++d@atomide.com>
+References: <20220810060040.321697-1-saravanak@google.com>
+ <20220810060040.321697-10-saravanak@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <52d40562-ee6f-bb89-6d21-2d6baf67053d@oracle.com>
-X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220810060040.321697-10-saravanak@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/08/22 at 10:18am, Eric DeVolder wrote:
-> 
-> 
-> On 8/7/22 22:25, Baoquan He wrote:
-> > Hi Eric,
-> > 
-> > On 07/21/22 at 02:17pm, Eric DeVolder wrote:
-> > > The use of __weak is being eliminated within kexec sources.
-> > > The technique uses macros mapped onto inline functions in
-> > > order to replace __weak.
-> > > 
-> > > This patchset was using __weak and so in order to replace
-> > > __weak, this patch introduces arch/*/asm/crash.h, patterned
-> > > after how kexec is moving away from __weak and to the macro
-> > > definitions.
-> > 
-> > Are you going to replace __weak in kexec of arll ARCHes? I don't see
-> > your point why all these empty header files are introduced. Wondering
-> > what's impacted if not adding these empty files?
-> 
-> Hi Baoquan,
-> In this patchset, to file include/linux/crash_core.h I added the line #include <asm/crash.h>.
-> I patterned this after how include/linux/kexec.h does #include <asm/kexec.h>.
+Hi,
 
-I am sorry, Eric, it looks not so good. I understand you want to pattern
-asm/kexe.h, but we need consider reality. Introducing a dozen of empty
-header file and not being able to tell when they will be filled doesn't
-make sense.
+* Saravana Kannan <saravanak@google.com> [220810 05:54]:
+> The driver core now:
+> - Has the parent device of a supplier pick up the consumers if the
+>   supplier never has a device created for it.
+> - Ignores a supplier if the supplier has no parent device and will never
+>   be probed by a driver
+> 
+> And already prevents creating a device link with the consumer as a
+> supplier of a parent.
+> 
+> So, we no longer need to find the "compatible" node of the supplier or
+> do any other checks in of_link_to_phandle(). We simply need to make sure
+> that the supplier is available in DT.
 
-Includig <asm/crash.h> where needed is much simpler. I doubt if your way
-can pass other reviewers' line. Can you reconsider?
+This patch fixes booting for me, so it should be applied as a fix and
+tagged with:
 
-diff --git a/kernel/crash_core.c b/kernel/crash_core.c
-index 77f5f3591760..b0577bdcc491 100644
---- a/kernel/crash_core.c
-+++ b/kernel/crash_core.c
-@@ -15,6 +15,7 @@
- 
- #include <asm/page.h>
- #include <asm/sections.h>
-+#include <asm/crash.h>
- 
- #include <crypto/sha1.h>
+Fixes: 5a46079a9645 ("PM: domains: Delete usage of driver_deferred_probe_check_state()")
+
+If there are dependencies to the other patches in this series, it might
+make sense to revert commit 5a46079a9645 instead.
+
+Anyways, thanks for fixing the issue, for this patch:
+
+Reviewed-by: Tony Lindgren <tony@atomide.com>
+Tested-by: Tony Lindgren <tony@atomide.com>
+
+For the process, looks like the earlier series got merged despite the
+issues reported. And we had non-booting Linux next for at least some SoCs
+for weeks. And now we are about to have a non-booting -rc1 unless things
+get fixed fast. Annoying glitches, sigh..
+
+Regards,
+
+Tony
 

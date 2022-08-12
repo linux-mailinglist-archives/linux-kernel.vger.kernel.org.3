@@ -2,105 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52982590F04
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 12:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2593D590EFA
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 12:14:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238103AbiHLKQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 06:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42432 "EHLO
+        id S237919AbiHLKOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 06:14:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35266 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238196AbiHLKQX (ORCPT
+        with ESMTP id S238308AbiHLKOX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 06:16:23 -0400
-Received: from mail.nfschina.com (unknown [IPv6:2400:dd01:100f:2:72e2:84ff:fe10:5f45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0A3DF99B54;
-        Fri, 12 Aug 2022 03:16:23 -0700 (PDT)
-Received: from localhost (unknown [127.0.0.1])
-        by mail.nfschina.com (Postfix) with ESMTP id CA5111E80D97;
-        Fri, 12 Aug 2022 18:14:10 +0800 (CST)
-X-Virus-Scanned: amavisd-new at test.com
-Received: from mail.nfschina.com ([127.0.0.1])
-        by localhost (mail.nfschina.com [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id YwshXdvHvhXI; Fri, 12 Aug 2022 18:14:08 +0800 (CST)
-Received: from localhost.localdomain (unknown [219.141.250.2])
-        (Authenticated sender: kunyu@nfschina.com)
-        by mail.nfschina.com (Postfix) with ESMTPA id 111361E80D95;
-        Fri, 12 Aug 2022 18:14:08 +0800 (CST)
-From:   Li kunyu <kunyu@nfschina.com>
-To:     pbonzini@redhat.com
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Li kunyu <kunyu@nfschina.com>
-Subject: [PATCH 2/5] kvm/kvm_main: remove unnecessary (void*) conversions
-Date:   Fri, 12 Aug 2022 18:16:20 +0800
-Message-Id: <20220812101620.8124-1-kunyu@nfschina.com>
-X-Mailer: git-send-email 2.18.2
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Fri, 12 Aug 2022 06:14:23 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9CE3ABD76;
+        Fri, 12 Aug 2022 03:13:42 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 1B84F5C0162;
+        Fri, 12 Aug 2022 06:13:40 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Fri, 12 Aug 2022 06:13:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1660299220; x=1660385620; bh=zE
+        POgXch4RnjNYE4POh1BRcOpzKpo4IjzZ+TAEzqKUc=; b=k+ZLIdoG9wrMDEGlfA
+        c9djB+sYDhM/K8ns4HF8xToVmTu6BIbIBgNRxE4ogwjmC1Du8NlJs5YMvrRPK7s5
+        /hg76wobZJKzWEqbp7NGYH3F8paDa7L3MvHtC+QH/dqFFAyDk1KvkkROTIFzyHc5
+        clwzEHx7H40jB8z0I1S1G4YQRt28Aq+3+cKkgvlmMgZZazct8BarCCNOWZgTNrQH
+        qUPAQsyseZkG+7m93jcw6BtZasPzwwYyMYbK0ZzZLAqyY3BfsrJuQLmqgo046EB4
+        WnPqf4zdiNo/WSdGwZlmybTedWZ5p9t5jsIu6ozm3BOcUn9zDqlIA0qHW6Ao1InE
+        rzxw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660299220; x=1660385620; bh=zEPOgXch4RnjNYE4POh1BRcOpzKp
+        o4IjzZ+TAEzqKUc=; b=JXF8YA2G2KUv3m6D77HAn6ksFPepbUbd15JuCdAIxWol
+        eGwqNYj1fl6xtuJ5ZVDJ5wNkWLP+xLwoBdX0zoXpbm7dry75JJuKsXD50b1iVqKn
+        zdzeTVrRY8Ia9xm43DGNHZQ/wxYLvRrwcgpksU1dK8brSc5UkaDnoFjVfE5akN7u
+        XNRho3wZUKH1dkB7pUZSRC7naA+qF3eTcKyr1GsD1KzeRn2mOqNmDTSjwR08QihW
+        EGUJmPC4zggXTConaycBamJRS+/wh9z/qQL+5rnGtcnXMizOYqDzOS/gAyqB92fC
+        gjj8rVg7PgEW/jPui9fgM4RaJlloHDQD2ota7aO7Uw==
+X-ME-Sender: <xms:0yf2YjUidQPnmNygUlNK3a3P4ldclFXhebKFLLhUpliEcCo52IEd3w>
+    <xme:0yf2YrlKbXx5f4QiyhovPkxOS7uDLUc_fDE2x17rsQSqApa2V5OOSsZeTC2Z2qI_C
+    50dNhc-03zgt1NWKhs>
+X-ME-Received: <xmr:0yf2YvZel3PNhsPtrT9t-8spVe4elSKRLuWiGfbOA8Ra2QImTmPK_rcRjAacpPCRKQkUgQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegiedgvdehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucenucfjughrpeffhffvvefukfhfgggtuggjsehttd
+    dttddttddvnecuhfhrohhmpedfmfhirhhilhhlucetrdcuufhhuhhtvghmohhvfdcuoehk
+    ihhrihhllhesshhhuhhtvghmohhvrdhnrghmvgeqnecuggftrfgrthhtvghrnhephfeige
+    fhtdefhedtfedthefghedutddvueehtedttdehjeeukeejgeeuiedvkedtnecuvehluhhs
+    thgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepkhhirhhilhhlsehshh
+    huthgvmhhovhdrnhgrmhgv
+X-ME-Proxy: <xmx:0yf2YuXeb1qj12vACU70iPBxwwxqohcdVJw9d43PFDnL0Fn5vxB_xA>
+    <xmx:0yf2YtlpQ1E1a9K00SXTK3uf2x3IoEg73mZ28oM4-N1gGAAZ-NFEXg>
+    <xmx:0yf2Yrejv22MCpDiFSdjGyNEwXmg7-IxDV4jGfno50Jg9nYrdfcJlA>
+    <xmx:1Cf2Yix5liigdlgPJj6bhZPTjCLlDD9xB_QsRGDMb5RYbpBucrQ_fA>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 12 Aug 2022 06:13:39 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 03205104A31; Fri, 12 Aug 2022 13:16:39 +0300 (+03)
+Date:   Fri, 12 Aug 2022 13:16:39 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: State of the Page (August 2022)
+Message-ID: <20220812101639.ijonnx7zeus7h2hn@box.shutemov.name>
+References: <YvV1KTyzZ+Jrtj9x@casper.infradead.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YvV1KTyzZ+Jrtj9x@casper.infradead.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-remove unnecessary void* type castings.
+On Thu, Aug 11, 2022 at 10:31:21PM +0100, Matthew Wilcox wrote:
+> ==============================
+> State Of The Page, August 2022
+> ==============================
+> 
+> I thought I'd write down where we are with struct page and where
+> we're going, just to make sure we're all (still?) pulling in a similar
+> direction.
+> 
+> Destination
+> ===========
+> 
+> For some users, the size of struct page is simply too large.  At 64
+> bytes per 4KiB page, memmap occupies 1.6% of memory.  If we can get
+> struct page down to an 8 byte tagged pointer, it will be 0.2% of memory,
+> which is an acceptable overhead.
 
-Signed-off-by: Li kunyu <kunyu@nfschina.com>
----
- virt/kvm/kvm_main.c | 12 +++++-------
- 1 file changed, 5 insertions(+), 7 deletions(-)
+Right. This is attractive. But it brings cost of indirection.
 
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 1b9700160eb1..80f7934c1f59 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -3839,7 +3839,7 @@ static int create_vcpu_fd(struct kvm_vcpu *vcpu)
- #ifdef __KVM_HAVE_ARCH_VCPU_DEBUGFS
- static int vcpu_get_pid(void *data, u64 *val)
- {
--	struct kvm_vcpu *vcpu = (struct kvm_vcpu *) data;
-+	struct kvm_vcpu *vcpu = data;
- 	*val = pid_nr(rcu_access_pointer(vcpu->pid));
- 	return 0;
- }
-@@ -5396,8 +5396,7 @@ static int kvm_debugfs_open(struct inode *inode, struct file *file,
- 			   int (*get)(void *, u64 *), int (*set)(void *, u64),
- 			   const char *fmt)
- {
--	struct kvm_stat_data *stat_data = (struct kvm_stat_data *)
--					  inode->i_private;
-+	struct kvm_stat_data *stat_data = inode->i_private;
- 
- 	/*
- 	 * The debugfs files are a reference to the kvm struct which
-@@ -5420,8 +5419,7 @@ static int kvm_debugfs_open(struct inode *inode, struct file *file,
- 
- static int kvm_debugfs_release(struct inode *inode, struct file *file)
- {
--	struct kvm_stat_data *stat_data = (struct kvm_stat_data *)
--					  inode->i_private;
-+	struct kvm_stat_data *stat_data = inode->i_private;
- 
- 	simple_attr_release(inode, file);
- 	kvm_put_kvm(stat_data->kvm);
-@@ -5470,7 +5468,7 @@ static int kvm_clear_stat_per_vcpu(struct kvm *kvm, size_t offset)
- static int kvm_stat_data_get(void *data, u64 *val)
- {
- 	int r = -EFAULT;
--	struct kvm_stat_data *stat_data = (struct kvm_stat_data *)data;
-+	struct kvm_stat_data *stat_data = data;
- 
- 	switch (stat_data->kind) {
- 	case KVM_STAT_VM:
-@@ -5489,7 +5487,7 @@ static int kvm_stat_data_get(void *data, u64 *val)
- static int kvm_stat_data_clear(void *data, u64 val)
- {
- 	int r = -EFAULT;
--	struct kvm_stat_data *stat_data = (struct kvm_stat_data *)data;
-+	struct kvm_stat_data *stat_data = data;
- 
- 	if (val)
- 		return -EINVAL;
+It can be especially painful for physical memory scanning. I guess we can
+derive some info from memdesc type itself, like if it can be movable. But
+still looks like an expensive change.
+
+Do you have any estimation on how much CPU time we will pay to reduce
+memory (and cache) overhead? RAM size tend to grow faster than IPC.
+We need to make sure it is the right direction.
+
+>    struct page {
+>       unsigned long mem_desc;
+>    };
+> 
+> Types of memdesc
+> ----------------
+> 
+> This is very much subject to change as new users present themselves.
+> Here are the current ones in-plan:
+> 
+>  - Undescribed.  Instead of the rest of the word being a pointer,
+>    there are 2^28 subtypes available:
+>    - Unmappable.  Typically device drivers allocating private memory.
+>    - Reserved.  These pages are not allocatable.
+>    - HWPoison
+>    - Offline (eg balloon)
+>    - Guard (see debug_pagealloc)
+>  - Slab
+>  - Anon Folio
+>  - File Folio
+>  - Buddy (ie free -- also for PCP?)
+>  - Page Table
+>  - Vmalloc
+>  - Net Pool
+>  - Zsmalloc
+>  - Z3Fold
+>  - Mappable.  Typically device drivers mapping memory to userspace
+> 
+> That implies 4 bits needed for the tag, so all memdesc allocations
+> must be 16-byte aligned.  That is not an undue burden.  Memdescs
+> must also be TYPESAFE_BY_RCU if they are mappable to userspace or
+> can be stored in a file's address_space.
+> 
+> It may be worth distinguishing between vmalloc-mappable and
+> vmalloc-unmappable to prevent some things being mapped to userspace
+> inadvertently.
+
+Given that memdesc represents Slab too, how do we allocate them?
+
+> 
+> Contents of a memdesc
+> ---------------------
+> 
+> At least initially, the first word of a memdesc must be identical to the
+> current page flags.  That allows various functions (eg set_page_dirty())
+> to work on any kind of page without needing to know whether it's a device
+> driver page, a vmalloc page, anon or file folio.
+> 
+> Similarly, both anon and file folios must have the list_head in the
+> same place so they can be placed on the same LRU list.  Whether anon
+> and file folios become separate types is still unclear to me.
+> 
+> Mappable
+> --------
+> 
+> All pages mapped to userspace must have:
+> 
+>  - A refcount
+>  - A mapcount
+> 
+> Preferably in the same place in the memdesc so we can handle them without
+> having separate cases for each type of memdesc.  It would be nice to have
+> a pincount as well, but that's already an optional feature.
+> 
+> I propose:
+> 
+>    struct mappable {
+>        unsigned long flags;	/* contains dirty flag */
+>        atomic_t _refcount;
+>        atomic_t _mapcount;
+>    };
+> 
+>    struct folio {
+>       union {
+>          unsigned long flags;
+>          struct mappable m;
+>       };
+>       ...
+>    };
+
+Hm. How does lockless page cache lookup would look like in this case?
+
+Currently it relies on get_page_unless_zero() and to keep it work there's
+should be guarantee that nothing else is allocated where mappable memdesc
+was before. Would it require some RCU tricks on memdesc free?
+
 -- 
-2.18.2
-
+  Kiryl Shutsemau / Kirill A. Shutemov

@@ -2,70 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA101590AB8
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 05:28:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38073590ABC
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 05:30:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236976AbiHLD2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 23:28:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57458 "EHLO
+        id S236151AbiHLDaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 23:30:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236968AbiHLD2b (ORCPT
+        with ESMTP id S229594AbiHLD34 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 23:28:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3723AA3D55;
-        Thu, 11 Aug 2022 20:28:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 11 Aug 2022 23:29:56 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67DB3A3D57
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 20:29:55 -0700 (PDT)
+Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 862F3B82316;
-        Fri, 12 Aug 2022 03:28:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B5FCC433B5;
-        Fri, 12 Aug 2022 03:28:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660274906;
-        bh=T7UnrmMmraBDFs8VzxkTjmBbnKGDsLEGu8IaBCyu3zA=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Vuy3UZAX9EFj/j97h2woBTDRHntBLFn/BrN2q2SFAp93l+E6LCzWJzMmQBL6FHzkq
-         zZUFoGRv9//DVGU+Y50MPSI+AlC4ZvCXNX5j3fpLjwoAR7C9TkOsXNkvTAdvUXJTJl
-         yU13E6+Vywt7o4MePa1TQyHoJCgo4bvsdrQeSE+dWbdMzqtkE+wmXD8JmlnCx4wG4j
-         Nx2QF1+V/3li2IE9aaeL7ULQeou8vchiZbvk7ApoAsxfyb8BK6pE3xtX1LpmrHcfFp
-         SDn81fp0M0kdXhefTihdarAqiZ7M9EecPiDRoxoK0e8mj5AQS8eAjg46q0n4KCYJkE
-         LACZOgER9kGzA==
-Received: by mail-vs1-f44.google.com with SMTP id b124so20111894vsc.9;
-        Thu, 11 Aug 2022 20:28:26 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2e7iiuGw0tp9j9sm5cG5idWHMK13bD+RxFMqs/zZ+HXEvdc+tc
-        KKutr7x5i/lpwS+gMxBTm+8FTEqZriezS3YWiio=
-X-Google-Smtp-Source: AA6agR5Eo7w7PcJkogroYiNkNxr2WdrF5a21kMXEJrsdEh0ccnnJ4RHRaa0Nf/PkpsOyMdAKe1wl3JGzEDLS8QHupsc=
-X-Received: by 2002:a67:d59e:0:b0:38a:a3c2:9ee with SMTP id
- m30-20020a67d59e000000b0038aa3c209eemr1163385vsj.78.1660274905147; Thu, 11
- Aug 2022 20:28:25 -0700 (PDT)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 4DCB03F13F
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 03:29:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1660274993;
+        bh=lY1KV5n+d5ZpFbygaAz+OcIJE9BFkKwpGeAuYVt7yJc=;
+        h=From:To:cc:Subject:In-reply-to:References:MIME-Version:
+         Content-Type:Date:Message-ID;
+        b=eVvfFj3129ffd6gqcMhTohCf98/mir1bng2QHFXsFeE2EEa4Bjr+8gJTotn76t2Cn
+         nkgCRy8PUv3swS8MBQsMily1StkQAfs1/RIbdyodOIY1wRTr8bo855rGi/jgY5qAPt
+         FXeR/socOCnAUtdhUhp9vmlwRystNsAXhLfdb58sPYcExCMQjO2c4wZNCdNf/KvM7H
+         SqPnWJ1R2FxrF5RWxs7iLIV1quzYCmjcWWUeE/Kwzg7LFhH8OUG9C2HipKHughHUD9
+         KHDhFy7GzYmHJoKEcw0fvemUmor2B67oUtY650/45W1fwOvrh1VGijiOwTeyOULGlg
+         sQ9UcFSCYy6Lw==
+Received: by mail-pj1-f71.google.com with SMTP id jx17-20020a17090b46d100b001f33b230098so9359697pjb.7
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 20:29:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:content-transfer-encoding:content-id:mime-version
+         :comments:references:in-reply-to:subject:cc:to:from
+         :x-gm-message-state:from:to:cc;
+        bh=lY1KV5n+d5ZpFbygaAz+OcIJE9BFkKwpGeAuYVt7yJc=;
+        b=1DU/KIKGk712dMmFAkJIHEyCVo9i5ROnSr5rZliPmeq8Iizi1U3nHaMAAl5Ei44noK
+         q7TUijylQfO3Gwci2UbquZguO1kKlBkQjQPSCv7mGQ7qhRe3sIfVeGZ2L2rml0t9jGGw
+         EiSexm/1pxPgMc7uQR4rfEs3P4+GLOmJ2Tysd9vPI8iciI6xN1AaekaTYJpJJoZ3nftt
+         fRUq7ckLscsC1zWtrmwUum4Fs33aZb453CDilMhsTGjfjfoYypEoHuk9r0P8o75KlPhu
+         fTbepzyPnYdgU84pWz9z2/9t9KN6AYQBU4SLGKqJuKoOVUP17ynNF2INUQnBCsURUik0
+         z2UQ==
+X-Gm-Message-State: ACgBeo3Hd9NGPhBG68bvLspLrlYQEK7AnSfFYYEGiF7hX1Ab7WVKxGTw
+        PlFngEmRGDOBCwE4f1w0GKAK+8hwa7IReiRdcoiSi1JYH1bghhZeeENAKLP0VgHyd26fNnh1FmR
+        J2VeTQGmoJydJkrbABLBdEANxsdcNSWwxXCx/INeoDw==
+X-Received: by 2002:a17:902:8b86:b0:170:d739:9a35 with SMTP id ay6-20020a1709028b8600b00170d7399a35mr2118810plb.35.1660274989364;
+        Thu, 11 Aug 2022 20:29:49 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5ZcN5tzJ9ceO68Lj9niDNDPtdHQUSTEps4e4+GC16mdOfmTiQNYrKo2eCELu0bCfYN2VYGmQ==
+X-Received: by 2002:a17:902:8b86:b0:170:d739:9a35 with SMTP id ay6-20020a1709028b8600b00170d7399a35mr2118799plb.35.1660274989125;
+        Thu, 11 Aug 2022 20:29:49 -0700 (PDT)
+Received: from famine.localdomain ([50.125.80.157])
+        by smtp.gmail.com with ESMTPSA id j4-20020a170902758400b0016d62ba5665sm434360pll.254.2022.08.11.20.29.48
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 11 Aug 2022 20:29:48 -0700 (PDT)
+Received: by famine.localdomain (Postfix, from userid 1000)
+        id 3FFA96119B; Thu, 11 Aug 2022 20:29:48 -0700 (PDT)
+Received: from famine (localhost [127.0.0.1])
+        by famine.localdomain (Postfix) with ESMTP id 391939FA79;
+        Thu, 11 Aug 2022 20:29:48 -0700 (PDT)
+From:   Jay Vosburgh <jay.vosburgh@canonical.com>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+cc:     vfalico@gmail.com, andy@greyhouse.net, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] bonding: return -ENOMEM on rlb_initialize() allocation failure
+In-reply-to: <20220812032059.64572-1-jiapeng.chong@linux.alibaba.com>
+References: <20220812032059.64572-1-jiapeng.chong@linux.alibaba.com>
+Comments: In-reply-to Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+   message dated "Fri, 12 Aug 2022 11:20:59 +0800."
+X-Mailer: MH-E 8.6+git; nmh 1.6; Emacs 29.0.50
 MIME-Version: 1.0
-References: <CAHk-=wgrz5BBk=rCz7W28Fj_o02s0Xi0OEQ3H1uQgOdFvHgx0w@mail.gmail.com>
- <61d77412-af1a-5b00-9754-f156b1c63a74@gmail.com> <20220812023950.GF373960@MiWiFi-R3L-srv>
-In-Reply-To: <20220812023950.GF373960@MiWiFi-R3L-srv>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Fri, 12 Aug 2022 11:28:12 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7tCsyyNgDJWE5qDCXadF+V6k3GtZtf_yLVj6BZiPND2Q@mail.gmail.com>
-Message-ID: <CAAhV-H7tCsyyNgDJWE5qDCXadF+V6k3GtZtf_yLVj6BZiPND2Q@mail.gmail.com>
-Subject: Re: [RESEND] Please consider name next Linux release "I love Linux"
- (Re: Linux 5.19)
-To:     Baoquan He <bhe@redhat.com>
-Cc:     Zhang Boyang <zhangboyang.id@gmail.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-next <linux-next@vger.kernel.org>, song@kernel.org,
-        wei.liu@kernel.org, jszhang@kernel.org,
-        Guo Ren <guoren@kernel.org>, xiang@kernel.org, chao@kernel.org,
-        ming.lei@redhat.com, Waiman Long <longman@redhat.com>,
-        wqu@suse.com, yhs@fb.com, haoluo@google.com, decui@microsoft.com,
-        Yanteng Si <siyanteng@loongson.cn>,
-        Dave Young <dyoung@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <1826.1660274988.1@famine>
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Date:   Thu, 11 Aug 2022 20:29:48 -0700
+Message-ID: <1827.1660274988@famine>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,80 +91,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, all,
+Jiapeng Chong <jiapeng.chong@linux.alibaba.com> wrote:
 
-On Fri, Aug 12, 2022 at 10:40 AM Baoquan He <bhe@redhat.com> wrote:
->
-> Hi Boyang,
->
-> On 08/11/22 at 10:02pm, Zhang Boyang wrote:
-> > Hi,
-> >
-> > On 2022/8/1 05:43, Linus Torvalds wrote:
-> > > (*) I'll likely call it 6.0 since I'm starting to worry about getting
-> > > confused by big numbers again.
-> >
-> > Could you please consider name the next Linux release (5.20 or 6.0) "I =
-love
-> > linux" ? The number "5.20" is a wordplay in Chinese, which means "I lov=
-e
-> > you" [1], thus "Linux 5.20" can be read as "I love Linux" in Chinese.
-> >
-> > Even if next kernel version is 6.0, I think it's probably a good idea f=
-or
-> > both Chinese-speakers and non-Chinese speakers to express our love to L=
-inux
-> > Kernel.
->
-> Interesting idea, LOL.
->
-> Yes, 520 means 'I love you' in chinese since it has the similar pronuncia=
-tion
-> with '=E6=88=91=E7=88=B1=E4=BD=A0'. I even don't remember since when May =
-20th becomes another
-> holiday similar to Valentine's day in China. While I have complicated fee=
-ling
-> about 520. It means on each May 20th, I also need prepare gift for my wif=
-e. I
-> am not a romantic person, preparing gift to lover is always a torture to =
-me.
-> So almost each May 20th day, Valentine's day, double seventh festival whi=
-ch is
-> a traditional Valentine's day, I will become nervous, and it ends up
-> with a satisfactory gift, or a bunch of flower and a digital red envelope=
- with
-> 520=EF=BF=A5 and then complainment and blame in next two weeks.
->
-> So, for naming next release as '5.20', I will vote for it w/o hesitance. =
-No need
-> to prepare gift, and can express our love to Linux kernel, it sounds
-> awesome.
->
-> Meanwhile, I would remind people to take it easy. Whether the suggestion
-> is accepted or not, it doesn't impact the fact that linux may have
-> become part of our life, not just our work, considering many kernel devel=
-opers
-> are workoing form home. But if you have boasted to your girlfriend
-> or wife, and want to take this as a gift to her, you should try harder to
-> convince Linus.
->
-> Thanks
-> Baoquan
-Frankly, I agree with Boyang and Baoquan. :)
+>drivers/net/bonding/bond_alb.c:861 rlb_initialize() warn: returning -1 in=
+stead of -ENOMEM is sloppy.
 
-Huacai
+	I'll disagree; the return value is only ever tested for being
+non-zero.
+
+	-J
+
+>Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=3D1896
+>Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+>Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+>---
+> drivers/net/bonding/bond_alb.c | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> >
-> > The name of Linux kernel release has a long history of play-on-words [2=
-].
-> > For example, 5.15 is named "Trick or Treat" and 5.17 is named "Superb O=
-wl".
-> >
-> > [1] https://en.wikipedia.org/wiki/Chinese_Internet_slang
-> >
-> > [2] https://en.wikipedia.org/wiki/Linux_kernel_version_history
-> >
-> > Thanks and regards,
-> > Zhang Boyang
-> >
+>diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_al=
+b.c
+>index 60cb9a0225aa..96cb4404b3c7 100644
+>--- a/drivers/net/bonding/bond_alb.c
+>+++ b/drivers/net/bonding/bond_alb.c
+>@@ -858,7 +858,7 @@ static int rlb_initialize(struct bonding *bond)
+> =
+
+> 	new_hashtbl =3D kmalloc(size, GFP_KERNEL);
+> 	if (!new_hashtbl)
+>-		return -1;
+>+		return -ENOMEM;
+> =
+
+> 	spin_lock_bh(&bond->mode_lock);
+> =
+
+>-- =
+
+>2.20.1.7.g153144c
 >
+
+---
+	-Jay Vosburgh, jay.vosburgh@canonical.com

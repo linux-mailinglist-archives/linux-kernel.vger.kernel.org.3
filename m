@@ -2,53 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3C16591064
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 13:53:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 102BB591049
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 13:45:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238340AbiHLLxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 07:53:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36288 "EHLO
+        id S237505AbiHLLpz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 07:45:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238324AbiHLLxk (ORCPT
+        with ESMTP id S238206AbiHLLpZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 07:53:40 -0400
-Received: from smtp.smtpout.orange.fr (smtp08.smtpout.orange.fr [80.12.242.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E861AF0CB
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 04:53:37 -0700 (PDT)
-Received: from YC20090004.ad.ts.tri-ad.global ([109.190.253.11])
-        by smtp.orange.fr with ESMTPA
-        id MT5eouHcQeT4cMT6uoVeU2; Fri, 12 Aug 2022 13:46:06 +0200
-X-ME-Helo: YC20090004.ad.ts.tri-ad.global
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Fri, 12 Aug 2022 13:46:06 +0200
-X-ME-IP: 109.190.253.11
-From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, David Howells <dhowells@redhat.com>,
-        Jan Beulich <JBeulich@suse.com>,
-        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
-        Joe Perches <joe@perches.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v5 2/2] x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to evaluate constant expressions
-Date:   Fri, 12 Aug 2022 20:44:38 +0900
-Message-Id: <20220812114438.1574-3-mailhol.vincent@wanadoo.fr>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220812114438.1574-1-mailhol.vincent@wanadoo.fr>
-References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
- <20220812114438.1574-1-mailhol.vincent@wanadoo.fr>
+        Fri, 12 Aug 2022 07:45:25 -0400
+Received: from mx1.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE05AFAF2;
+        Fri, 12 Aug 2022 04:44:49 -0700 (PDT)
+Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 261F361EA1929;
+        Fri, 12 Aug 2022 13:44:45 +0200 (CEST)
+Message-ID: <f0a6f8cc-e8a5-ff72-b8f0-ed25fcf03b47@molgen.mpg.de>
+Date:   Fri, 12 Aug 2022 13:44:44 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: mainline build failure due to 332f1795ca20 ("Bluetooth: L2CAP:
+ Fix l2cap_global_chan_by_psm regression")
+Content-Language: en-US
+To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Cc:     torvalds@linux-foundation.org, Jakub Kicinski <kuba@kernel.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>
+References: <YvY4xdZEWAPosFdJ@debian>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <YvY4xdZEWAPosFdJ@debian>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,116 +54,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__ffs(x) is equivalent to (unsigned long)__builtin_ctzl(x) and ffz(x)
-is equivalent to (unsigned long)__builtin_ctzl(~x). Because
-__builting_ctzl() returns an int, a cast to (unsigned long) is
-necessary to avoid potential warnings on implicit casts.
+Dear Sudip,
 
-For x86_64, the current __ffs() and ffz() implementations do not
-produce optimized code when called with a constant expression. On the
-contrary, the __builtin_ctzl() folds into a single instruction.
 
-However, for non constant expressions, the __ffs() and ffz() asm
-versions of the kernel remains slightly better than the code produced
-by GCC (it produces a useless instruction to clear eax).
+Am 12.08.22 um 13:25 schrieb Sudip Mukherjee (Codethink):
 
-Use __builtin_constant_p() to select between the kernel's
-__ffs()/ffz() and the __builtin_ctzl() depending on whether the
-argument is constant or not.
+> The latest mainline kernel branch fails to build csky and mips allmodconfig
+> with gcc-12.
+> 
+> mips error is:
+> 
+> In function 'memcmp',
+>      inlined from 'bacmp' at ./include/net/bluetooth/bluetooth.h:347:9,
+>      inlined from 'l2cap_global_chan_by_psm' at net/bluetooth/l2cap_core.c:2003:15:
+> ./include/linux/fortify-string.h:44:33: error: '__builtin_memcmp' specified bound 6 exceeds source size 0 [-Werror=stringop-overread]
+>     44 | #define __underlying_memcmp     __builtin_memcmp
+>        |                                 ^
+> ./include/linux/fortify-string.h:420:16: note: in expansion of macro '__underlying_memcmp'
+>    420 |         return __underlying_memcmp(p, q, size);
+>        |                ^~~~~~~~~~~~~~~~~~~
+> In function 'memcmp',
+>      inlined from 'bacmp' at ./include/net/bluetooth/bluetooth.h:347:9,
+>      inlined from 'l2cap_global_chan_by_psm' at net/bluetooth/l2cap_core.c:2004:15:
+> ./include/linux/fortify-string.h:44:33: error: '__builtin_memcmp' specified bound 6 exceeds source size 0 [-Werror=stringop-overread]
+>     44 | #define __underlying_memcmp     __builtin_memcmp
+>        |                                 ^
+> ./include/linux/fortify-string.h:420:16: note: in expansion of macro '__underlying_memcmp'
+>    420 |         return __underlying_memcmp(p, q, size);
+>        |                ^~~~~~~~~~~~~~~~~~~
+> 
+> 
+> csky error is:
+> 
+> In file included from net/bluetooth/l2cap_core.c:37:
+> In function 'bacmp',
+>      inlined from 'l2cap_global_chan_by_psm' at net/bluetooth/l2cap_core.c:2003:15:
+> ./include/net/bluetooth/bluetooth.h:347:16: error: 'memcmp' specified bound 6 exceeds source size 0 [-Werror=stringop-overread]
+>    347 |         return memcmp(ba1, ba2, sizeof(bdaddr_t));
+>        |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> In function 'bacmp',
+>      inlined from 'l2cap_global_chan_by_psm' at net/bluetooth/l2cap_core.c:2004:15:
+> ./include/net/bluetooth/bluetooth.h:347:16: error: 'memcmp' specified bound 6 exceeds source size 0 [-Werror=stringop-overread]
+>    347 |         return memcmp(ba1, ba2, sizeof(bdaddr_t));
+>        |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> 
+> 
+> git bisect pointed to 332f1795ca20 ("Bluetooth: L2CAP: Fix l2cap_global_chan_by_psm regression").
+> And, reverting that commit has fixed the build failure.
+> 
+> Already reported at https://lore.kernel.org/lkml/YvVQEDs75pxSgxjM@debian/
+> and Jacub is looking at a fix, but this is just my usual build failure
+> mail of mainline branch for Linus's information.
 
-** Statistics **
+Does *[PATCH] Bluetooth: L2CAP: Elide a string overflow warning* [1] fix it?
 
-On a allyesconfig, before...:
 
-  $ objdump -d vmlinux.o | grep tzcnt | wc -l
-  3607
+Kind regards,
 
-...and after:
+Paul
 
-  $ objdump -d vmlinux.o | grep tzcnt | wc -l
-  2600
 
-So, roughly 27.9% of the calls to either __ffs() or ffz() were using
-constant expressions and could be optimized out.
+PS:
 
-(tests done on linux v5.18-rc5 x86_64 using GCC 11.2.1)
+> --
+> Regards
+> Sudip
 
-Note: on x86_64, the asm bsf instruction produces tzcnt when used with
-the ret prefix (which explain the use of `grep tzcnt' instead of `grep
-bsf' in above benchmark). c.f. [1]
+Only if you care, your signature delimiter is missing a trailing space [2].
 
-[1] commit e26a44a2d618 ("x86: Use REP BSF unconditionally")
-Link: http://lkml.kernel.org/r/5058741E020000780009C014@nat28.tlf.novell.com
 
-Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
-Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
----
- arch/x86/include/asm/bitops.h | 38 ++++++++++++++++++++++-------------
- 1 file changed, 24 insertions(+), 14 deletions(-)
-
-diff --git a/arch/x86/include/asm/bitops.h b/arch/x86/include/asm/bitops.h
-index 6ed979547086..bd49aef87ab6 100644
---- a/arch/x86/include/asm/bitops.h
-+++ b/arch/x86/include/asm/bitops.h
-@@ -224,13 +224,7 @@ static __always_inline bool variable_test_bit(long nr, volatile const unsigned l
- 	 ? constant_test_bit((nr), (addr))	\
- 	 : variable_test_bit((nr), (addr)))
- 
--/**
-- * __ffs - find first set bit in word
-- * @word: The word to search
-- *
-- * Undefined if no bit exists, so code should check against 0 first.
-- */
--static __always_inline unsigned long __ffs(unsigned long word)
-+static __always_inline unsigned long variable___ffs(unsigned long word)
- {
- 	asm("rep; bsf %1,%0"
- 		: "=r" (word)
-@@ -238,13 +232,18 @@ static __always_inline unsigned long __ffs(unsigned long word)
- 	return word;
- }
- 
--/**
-- * ffz - find first zero bit in word
-- * @word: The word to search
-- *
-- * Undefined if no zero exists, so code should check against ~0UL first.
-- */
--static __always_inline unsigned long ffz(unsigned long word)
-+/**
-+ * __ffs - find first set bit in word
-+ * @word: The word to search
-+ *
-+ * Undefined if no bit exists, so code should check against 0 first.
-+ */
-+#define __ffs(word)				\
-+	(__builtin_constant_p(word) ?		\
-+	 (unsigned long)__builtin_ctzl(word) :	\
-+	 variable___ffs(word))
-+
-+static __always_inline unsigned long variable_ffz(unsigned long word)
- {
- 	asm("rep; bsf %1,%0"
- 		: "=r" (word)
-@@ -252,6 +251,17 @@ static __always_inline unsigned long ffz(unsigned long word)
- 	return word;
- }
- 
-+/**
-+ * ffz - find first zero bit in word
-+ * @word: The word to search
-+ *
-+ * Undefined if no zero exists, so code should check against ~0UL first.
-+ */
-+#define ffz(word)				\
-+	(__builtin_constant_p(word) ?		\
-+	 (unsigned long)__builtin_ctzl(~word) :	\
-+	 variable_ffz(word))
-+
- /*
-  * __fls: find last set bit in word
-  * @word: The word to search
--- 
-2.35.1
-
+[1]: 
+https://lore.kernel.org/linux-bluetooth/20220812055249.8037-1-palmer@rivosinc.com/T/#t
+[2]: https://en.wikipedia.org/wiki/Signature_block#Standard_delimiter

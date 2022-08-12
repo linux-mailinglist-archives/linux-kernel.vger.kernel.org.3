@@ -2,129 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CC29590DB5
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 10:48:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5544F590DB1
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 10:48:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237675AbiHLIs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 04:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33348 "EHLO
+        id S237652AbiHLIsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 04:48:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237663AbiHLIsV (ORCPT
+        with ESMTP id S237603AbiHLIsM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 04:48:21 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 522C3A9249;
-        Fri, 12 Aug 2022 01:48:19 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id o15so466631yba.10;
-        Fri, 12 Aug 2022 01:48:19 -0700 (PDT)
+        Fri, 12 Aug 2022 04:48:12 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC690A8CED
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 01:48:10 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id j3so341955ljo.0
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 01:48:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=4I92zgcv4n8w6lK9XsPEI5EU0ua+RWFqnkrokUkZU2w=;
-        b=H3f2qqlsaamrBpS5t6cnxf3Eh7Iq3XUFK/xRzSB98BuNIGIq3D3nh8HXa8Uu+VjfGv
-         QS17G6MWk7DP+zcm3T3Z6w04NqiBVSJE/8+n+4pu5s1linOMO1wViTis/drCBVSvLJ/e
-         T89uTOpf3HBo56BhcjmLRP4Fmr+Sl9xzM95bdLL69iuVMvmNLVmuVRC7JrVWOZ3PuMCL
-         jz62zPMegSjZCze0BtEV0kfA7+4VHfAdUKRt30nq8u+JivsL6SChPlnNT0nNv5HqqfsL
-         SjhMN7jP4AEAotWzPMdcV87j66bOfzEGJXIcvrMuW6Ux5Ze3aad69R5F1MXdJRNygP3/
-         7P+A==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=CLzs8Hfa3KztE9SRqcc09r7QXqKpqOZdSYJ4jIsJilg=;
+        b=xCFevfLM2/cMx2cP9QD81k3j/lVrK7HfRCBNvCrxz7RRLT4UB6TiIMGQh6ieXvEEUb
+         8kbrWE3m44cFQhMqAglVryI/tOU2C9y4att8xgsDFCS2u5IO5Uj58XmwWA9qFhONt0nu
+         0QguXU9K8MxTlPxkOq7fOgd9ugsbD6YH9ehPPQDOuMF/QbkPrfYyTdXp2cbayMDagKki
+         GN3GkD+TGMU/dqxSuBAduniGOCZ0D3pQXBIQGdHzm8NpeMq2D9veDrm7PjVEG7B1kJqB
+         nDh0Zi8oDixzPWF1y46OdSvBe/kbsxpS181gs4RuCf1IqoZFXuntHWDYFP7whCXpr1UD
+         N9Ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=4I92zgcv4n8w6lK9XsPEI5EU0ua+RWFqnkrokUkZU2w=;
-        b=hTIp0CcheGsGH/SU/ZH6Xv8GcoN8VsFuaMBQ1Ne6Tuwf13iX9YtfbL9VY5TaSn/sqW
-         22bHobzmCL2a8Q0GtwchoviMLydzBVtk+OUWr3RrPReN3iLbpnwC8yRBtom02KwkSIaA
-         28sc6WTjdkVOtuxPZvY2kiD+Wtf6OsljfeJDljzMF2Wsy8SAnw6o6Quan5o/yMs4QNsb
-         guINUkSVRM18yufxpZWALwM4DtG8bF6i8dD7qqG6tGDecf4D+XJGQmCTkVySZQamyr3u
-         rlZz657M+NlTg/IyAni2d8xfJvVTy0NN7E77+zNyKAwICweVI0MnEtKnq0WzO5/zxyK0
-         Ohvw==
-X-Gm-Message-State: ACgBeo2hQKutyinX4SWqVV7+VFG6qeVrAeVcyKBdT3qZcUbV3TiFUFFO
-        3tGUgzbc59gfy3LNrqH8zDSEZMYV9Ptk+KWXrRY=
-X-Google-Smtp-Source: AA6agR7/vJuDkmtonOa8FQfnIkjYadN9f5zG+FYERnqxpM99984CpFK8fa4djMvczhY5Z0pz+WsE7bcob0ars2CKzOc=
-X-Received: by 2002:a25:4689:0:b0:671:6d4f:c974 with SMTP id
- t131-20020a254689000000b006716d4fc974mr2643125yba.354.1660294098593; Fri, 12
- Aug 2022 01:48:18 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=CLzs8Hfa3KztE9SRqcc09r7QXqKpqOZdSYJ4jIsJilg=;
+        b=YgkP4t9c90/R5J9oq2P48kYQcQ+ijaa4/W0thQ5u570diKGeKTGUDk0AG9EtNWHe/K
+         xvjMe1Kg2Itv/p7l59WrdAQgOFzPyzHgWOwmTQ1OwR7dAihiesiB8dde3ica9h9KnhZm
+         7y41pd1vFtdKHTKVv0OOQahB/7NjAqEZzk9AijeKrFgUzCrhFQfJrY0wmafrfPuKgxsw
+         +g2QhbwAIUM/pt2LZlpBuviDx/r8rvGz6hUvP7idH7xL/hobsZI2tz4KXAgkB4wsxtjb
+         ecvedIc644Jyx5WmeV/GAmkr8b/RjA/uWEprrR5AavxlGvrD7TZaLJHAJsB8Rf/c15/K
+         1FnA==
+X-Gm-Message-State: ACgBeo0cm/k6mLnSv3yoyGpd269zDYHgT+vFvwWgpYRWxsfY9zpS5QcX
+        wy2CRSVZ4S4bfC9Vc4JykRbhBw==
+X-Google-Smtp-Source: AA6agR4xHcNtBpe7saYoDXeMcEiTyaLBTd5Lxd8rdt6uwe2LTrvjTgNcL/mjitGy12LaGZQJryPJXA==
+X-Received: by 2002:a2e:918d:0:b0:25e:c884:6a96 with SMTP id f13-20020a2e918d000000b0025ec8846a96mr904692ljg.157.1660294089278;
+        Fri, 12 Aug 2022 01:48:09 -0700 (PDT)
+Received: from [192.168.1.39] ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id t2-20020a056512208200b0047f72bf3c32sm140709lfr.77.2022.08.12.01.48.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Aug 2022 01:48:08 -0700 (PDT)
+Message-ID: <e49dd22b-ebd8-609f-f181-8feae65e631c@linaro.org>
+Date:   Fri, 12 Aug 2022 11:48:04 +0300
 MIME-Version: 1.0
-References: <20220726174525.620-1-prabhakar.mahadev-lad.rj@bp.renesas.com> <20220727153738.GA2696116-robh@kernel.org>
-In-Reply-To: <20220727153738.GA2696116-robh@kernel.org>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Fri, 12 Aug 2022 09:47:50 +0100
-Message-ID: <CA+V-a8t2LJ1qSsJWK4S-434cLfp0AuqkSKLjk7VgtwrMrNr2SA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: clock: renesas,rzg2l: Document RZ/Five SoC
-To:     Rob Herring <robh@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v2 5/9] clk: samsung: exynos850: Implement CMU_AUD domain
+Content-Language: en-US
+To:     Sam Protsenko <semen.protsenko@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>
+Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        David Virag <virag.david003@gmail.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        linux-clk <linux-clk@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+References: <20220809113323.29965-1-semen.protsenko@linaro.org>
+ <20220809113323.29965-6-semen.protsenko@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220809113323.29965-6-semen.protsenko@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+On 09/08/2022 14:33, Sam Protsenko wrote:
+> CMU_AUD clock domain provides clocks for ABOX IP-core (audio subsystem).
+> According to Exynos850 TRM, CMU_AUD generates Cortex-A32 clock, bus
+> clock and audio clocks for BLK_AUD.
+> 
+> This patch adds next clocks:
+>   - bus clocks in CMU_TOP needed for CMU_AUD
+>   - all internal CMU_AUD clocks
+>   - leaf clocks for Cortex-A32, Speedy FM, UAIF0..UAIF6 (Unified Audio
+>     Interface), CNT (counter), ABOX IP-core, ASB (Asynchronous Bridge),
+>     DAP (Debug Access Port), I2S Codec MCLK, D_TZPC (TrustZone
+>     Protection Controller), GPIO, PPMU (Platform Performance Monitoring
+>     Unit), SysMMU, SysReg and WDT
+> 
+> ABOX clock was marked as CLK_IGNORE_UNUSED, as system hangs on boot
+> otherwise. Once ABOX driver is implemented, maybe it can be handled
+> there instead.
+> 
+> Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
 
-Thank you for the review.
 
-On Wed, Jul 27, 2022 at 4:37 PM Rob Herring <robh@kernel.org> wrote:
->
-> On Tue, Jul 26, 2022 at 06:45:25PM +0100, Lad Prabhakar wrote:
-> > The CPG block on the RZ/Five SoC is almost identical to one found on the
-> > RZ/G2UL SoC. "renesas,r9a07g043-cpg" compatible string will be used on
-> > the RZ/Five SoC so to make this clear, update the comment to include
-> > RZ/Five SoC.
->
-> It's either the same part or it isn't. 'almost identical' doesn't sound
-> like the former. Unless it's the former, it's a nak for me.
->
-It's the latter.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> Litering the drivers with #ifdef CONFIG_ARM64/CONFIG_RISCV is not great
-> either. That's not great for compile coverage and they have nothing to
-> do with the architecture.
->
-Geert any thoughts?
 
-Cheers,
-Prabhakar
-
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > ---
-> > Note the driver changes [0] have been already queued for v5.20.
-> >
-> > [0] https://patchwork.kernel.org/project/linux-renesas-soc/cover/
-> > 20220622181723.13033-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
-> > ---
-> >  Documentation/devicetree/bindings/clock/renesas,rzg2l-cpg.yaml | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/Documentation/devicetree/bindings/clock/renesas,rzg2l-cpg.yaml b/Documentation/devicetree/bindings/clock/renesas,rzg2l-cpg.yaml
-> > index d036675e0779..487f74cdc749 100644
-> > --- a/Documentation/devicetree/bindings/clock/renesas,rzg2l-cpg.yaml
-> > +++ b/Documentation/devicetree/bindings/clock/renesas,rzg2l-cpg.yaml
-> > @@ -24,7 +24,7 @@ description: |
-> >  properties:
-> >    compatible:
-> >      enum:
-> > -      - renesas,r9a07g043-cpg # RZ/G2UL{Type-1,Type-2}
-> > +      - renesas,r9a07g043-cpg # RZ/G2UL{Type-1,Type-2} and RZ/Five
-> >        - renesas,r9a07g044-cpg # RZ/G2{L,LC}
-> >        - renesas,r9a07g054-cpg # RZ/V2L
-> >        - renesas,r9a09g011-cpg # RZ/V2M
-> > --
-> > 2.17.1
-> >
-> >
+Best regards,
+Krzysztof

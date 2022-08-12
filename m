@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65603591454
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 18:54:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A139591451
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 18:54:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239421AbiHLQxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 12:53:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52736 "EHLO
+        id S239436AbiHLQx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 12:53:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239398AbiHLQxF (ORCPT
+        with ESMTP id S239399AbiHLQxG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 12:53:05 -0400
+        Fri, 12 Aug 2022 12:53:06 -0400
 Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC608ACA12;
-        Fri, 12 Aug 2022 09:52:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CE24AF0C9;
+        Fri, 12 Aug 2022 09:53:05 -0700 (PDT)
 Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id 2A11C5FD0A;
-        Fri, 12 Aug 2022 19:52:57 +0300 (MSK)
+        by mail.sberdevices.ru (Postfix) with ESMTP id 659D25FD0C;
+        Fri, 12 Aug 2022 19:52:58 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1660323177;
-        bh=oibksYrmp8+cmV76Bmyg6glyKiwiaHuhHP5Cf1Ebjxg=;
+        s=mail; t=1660323178;
+        bh=bT3dFp5MzD46j/1XA/ZxsG4fdU9e/Xi1qpgLMC8LesI=;
         h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=i07pppQ6y/aragU2jdKWRvc+w2snpI8Ahvmp/HIFotDgrGdG8c+lCusfzt+SkgGHL
-         +5ONep24efdrss0K7uHznNJJkfoeC9MmK3m7gMVDDXYbN37BAQeWJIuR6uNcHoOJm+
-         kl/BfSsGsNtIWmsPbiFzLtOAWVEQ5PUOu7C2fTEPrUzxORrk/IWGUnX/EOTkRJowu0
-         X8D+tr0Wv2cK2C17O2t3O5x5O8VedWfFtyPFzOacOqqY1Rktq4HKujgrF4mdYMFNxF
-         4qcv/Gq5eNMLS2B4dlmB47PQxbS6ZJYieiu9VY5OqnYULzARWXmoWeQ0lax6iBbzRg
-         EDHIOMDUVeyQg==
-Received: from S-MS-EXCH02.sberdevices.ru (S-MS-EXCH02.sberdevices.ru [172.16.1.5])
+        b=K48HBsBnKBygRJoOgcj7hMzgMhT50uA2d7O+drPvM1F54W7J7haUJNWQ9WBZM+qr4
+         WSQRIYET28xWgd2kPFwpnbqpdhEqCHV2G0sQH0+8q979r3kURqjQn4ZFyu7Sx/vfjb
+         Q0dvIjJkBEKxZG88GTl1SDwijSaBYsS0/0oD3g/TKJA/9sFIEO3kGoHh4OiWFFC3FP
+         ejN/LI8IFdW+l+ZY0yhUSzEkvRCsDyuEmenfxB4WIVcAc+C+rxf1FUpZpHoeYUTz8/
+         z0IUccsCAy4gwNJW85XHUcGBXiUMthlwaNTOoC7tqmlgcSepzy0paLlKBvb1n5rbKN
+         wHX9t5AzD1jbA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
         by mail.sberdevices.ru (Postfix) with ESMTP;
-        Fri, 12 Aug 2022 19:52:57 +0300 (MSK)
+        Fri, 12 Aug 2022 19:52:58 +0300 (MSK)
 From:   Dmitry Rokosov <DDRokosov@sberdevices.ru>
 To:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
         "jic23@kernel.org" <jic23@kernel.org>,
@@ -54,12 +54,15 @@ CC:     "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
         kernel <kernel@sberdevices.ru>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Dmitry Rokosov <DDRokosov@sberdevices.ru>
-Subject: [PATCH v5 3/7] iio: accel: adxl345: use HZ macro from units.h
-Thread-Topic: [PATCH v5 3/7] iio: accel: adxl345: use HZ macro from units.h
-Thread-Index: AQHYrmvn+yd0HsMjbk2UK1PjZ2KMUA==
-Date:   Fri, 12 Aug 2022 16:52:27 +0000
-Message-ID: <20220812165243.22177-4-ddrokosov@sberdevices.ru>
+        Dmitry Rokosov <DDRokosov@sberdevices.ru>,
+        Rob Herring <robh@kernel.org>
+Subject: [PATCH v5 5/7] dt-bindings: vendor-prefixes: add MEMSensing
+ Microsystems Co., Ltd.
+Thread-Topic: [PATCH v5 5/7] dt-bindings: vendor-prefixes: add MEMSensing
+ Microsystems Co., Ltd.
+Thread-Index: AQHYrmvop6w9e21/okSZUuurAffs8g==
+Date:   Fri, 12 Aug 2022 16:52:28 +0000
+Message-ID: <20220812165243.22177-6-ddrokosov@sberdevices.ru>
 References: <20220812165243.22177-1-ddrokosov@sberdevices.ru>
 In-Reply-To: <20220812165243.22177-1-ddrokosov@sberdevices.ru>
 Accept-Language: ru-RU, en-US
@@ -86,54 +89,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove duplicated definition of NHZ_PER_HZ, because it's available in
-the units.h as NANOHZ_PER_HZ.
+MEMSensing Microsystems (Suzhou, China) Co., Ltd. operates as a micro
+electromechanical system technology company which produces micro
+electromechanical system microphones and sensors.
+MEMSensing Microsystems (Suzhou, China) Co., Ltd. applies its products
+in consumer electronics, industrial control, medical electronics
+and automotive, and other fields.
 
 Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Acked-by: Rob Herring <robh@kernel.org>
 ---
- drivers/iio/accel/adxl345_core.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/iio/accel/adxl345_core.c b/drivers/iio/accel/adxl345_c=
-ore.c
-index 370bfec1275a..1919e0089c11 100644
---- a/drivers/iio/accel/adxl345_core.c
-+++ b/drivers/iio/accel/adxl345_core.c
-@@ -10,6 +10,7 @@
- #include <linux/module.h>
- #include <linux/property.h>
- #include <linux/regmap.h>
-+#include <linux/units.h>
-=20
- #include <linux/iio/iio.h>
- #include <linux/iio/sysfs.h>
-@@ -32,7 +33,6 @@
-=20
- #define ADXL345_BW_RATE			GENMASK(3, 0)
- #define ADXL345_BASE_RATE_NANO_HZ	97656250LL
--#define NHZ_PER_HZ			1000000000LL
-=20
- #define ADXL345_POWER_CTL_MEASURE	BIT(3)
- #define ADXL345_POWER_CTL_STANDBY	0x00
-@@ -139,7 +139,7 @@ static int adxl345_read_raw(struct iio_dev *indio_dev,
-=20
- 		samp_freq_nhz =3D ADXL345_BASE_RATE_NANO_HZ <<
- 				(regval & ADXL345_BW_RATE);
--		*val =3D div_s64_rem(samp_freq_nhz, NHZ_PER_HZ, val2);
-+		*val =3D div_s64_rem(samp_freq_nhz, NANOHZ_PER_HZ, val2);
-=20
- 		return IIO_VAL_INT_PLUS_NANO;
- 	}
-@@ -164,7 +164,8 @@ static int adxl345_write_raw(struct iio_dev *indio_dev,
- 				    ADXL345_REG_OFS_AXIS(chan->address),
- 				    val / 4);
- 	case IIO_CHAN_INFO_SAMP_FREQ:
--		n =3D div_s64(val * NHZ_PER_HZ + val2, ADXL345_BASE_RATE_NANO_HZ);
-+		n =3D div_s64(val * NANOHZ_PER_HZ + val2,
-+			    ADXL345_BASE_RATE_NANO_HZ);
-=20
- 		return regmap_update_bits(data->regmap, ADXL345_REG_BW_RATE,
- 					  ADXL345_BW_RATE,
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Docum=
+entation/devicetree/bindings/vendor-prefixes.yaml
+index 0496773a3c4d..404b40eac011 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -761,6 +761,8 @@ patternProperties:
+     description: MELFAS Inc.
+   "^mellanox,.*":
+     description: Mellanox Technologies
++  "^memsensing,.*":
++    description: MEMSensing Microsystems Co., Ltd.
+   "^memsic,.*":
+     description: MEMSIC Inc.
+   "^menlo,.*":
 --=20
 2.36.0

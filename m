@@ -2,151 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 744B959104B
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 13:46:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19AD4591061
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 13:52:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235863AbiHLLqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 07:46:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55272 "EHLO
+        id S238302AbiHLLws (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 07:52:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238129AbiHLLp6 (ORCPT
+        with ESMTP id S238282AbiHLLwp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 07:45:58 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB687823E
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 04:45:56 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id t5so998727edc.11
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 04:45:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=lBY6DQi6FykxVe21cRnJ3K9NDKKdbB0Pl4sf77sX8eE=;
-        b=hEjR4hhlo09U+rFvOaIUyy1fST0RdqNFtl4gqoQoLH7cX9018o1ZLrGoxSdqvulzwc
-         yCkU5kjdI7TQKtFX/dWR97FqQfBZBCGsDZV3ymV3KS6Wdl3mtTPtOe4FIhGmrUs78bsS
-         4IKSdKq6/PWQLMU1iklyaC4KtAfXqVhJWuNJt6JBY0nQBvVvVztEz7ecmYX6jv/YImKJ
-         txazqCGko8mu5u6GYyTWOG1tRRhrduXZ/C7/K1u8I6GQBulDc+GQkv6b91tA/VpRJqnc
-         Qt8U5+rXndNdAtBtitQECwFcNteFLxeZZ3CSD+6oDnj24C1SXgwJ0yaNt6L+EL17aAw7
-         MPmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=lBY6DQi6FykxVe21cRnJ3K9NDKKdbB0Pl4sf77sX8eE=;
-        b=083KyhOFwzg7XxbBb1TsGu048tNUDI6IXUENhEeARkElC9Ie6/Pp8EC+9XvYkF5HTg
-         CLdVVWDTAYwPNUTfX13BJx5Vh9r52ddGcvvnKgS5YYh9Ns17ZrvzQ1CL5tUf54As0f4l
-         qylC5yMrGGHPZfbQYq5xoZyH3XWUCj6wV1gDQyuySqdJ6RKwrX7z3JWCQwRQqh2szRke
-         MjRAGR+K61TM46Xl9iiEYiJ7R18yu1GIEzMgkNT3wSQWgO2Jjvupe3J9oV9/FXlmim02
-         wDef87cNYxeI0Zd+poa0GxlDRFFgzSY1Wq4xrU3hiIqFmDZW6O7/MnJMG3PTwsOk/bv6
-         tDVQ==
-X-Gm-Message-State: ACgBeo1qwF1hgLie4yE1dZoMFSF2CGsasNJydtsQMdeSrwl0AYnXBt6b
-        FtzaTqfjPvDmTerX8dFVKYPRlw==
-X-Google-Smtp-Source: AA6agR7kE5n5oNGAukxfrM9RV45DiF3xaT+dMFX9yohTJ4tmofsIEqX4YuoTfA86E2m/C0i03+thdw==
-X-Received: by 2002:a05:6402:5024:b0:440:e4ad:f7b6 with SMTP id p36-20020a056402502400b00440e4adf7b6mr3318507eda.358.1660304754897;
-        Fri, 12 Aug 2022 04:45:54 -0700 (PDT)
-Received: from otso.arnhem.chello.nl (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id jx27-20020a170907761b00b0072b55713daesm720790ejc.56.2022.08.12.04.45.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Aug 2022 04:45:54 -0700 (PDT)
-From:   Luca Weiss <luca.weiss@fairphone.com>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] arm64: dts: qcom: pm6350: add temp sensor and thermal zone config
-Date:   Fri, 12 Aug 2022 13:44:22 +0200
-Message-Id: <20220812114421.1195044-1-luca.weiss@fairphone.com>
-X-Mailer: git-send-email 2.37.1
+        Fri, 12 Aug 2022 07:52:45 -0400
+X-Greylist: delayed 450 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 12 Aug 2022 04:52:43 PDT
+Received: from smtp.smtpout.orange.fr (smtp-26.smtpout.orange.fr [80.12.242.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 96918AE9E0
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 04:52:43 -0700 (PDT)
+Received: from YC20090004.ad.ts.tri-ad.global ([109.190.253.11])
+        by smtp.orange.fr with ESMTPA
+        id MT5eouHcQeT4cMT5zoVeNO; Fri, 12 Aug 2022 13:45:10 +0200
+X-ME-Helo: YC20090004.ad.ts.tri-ad.global
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Fri, 12 Aug 2022 13:45:10 +0200
+X-ME-IP: 109.190.253.11
+From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, David Howells <dhowells@redhat.com>,
+        Jan Beulich <JBeulich@suse.com>,
+        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
+        Joe Perches <joe@perches.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v5 0/2] x86/asm/bitops: optimize ff{s,z} functions for constant expressions
+Date:   Fri, 12 Aug 2022 20:44:36 +0900
+Message-Id: <20220812114438.1574-1-mailhol.vincent@wanadoo.fr>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
+References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add temp-alarm device tree node and a default configuration for the
-corresponding thermal zone for this PMIC. Temperatures are based on
-downstream values.
+The compilers provide some builtin expression equivalent to the ffs(),
+__ffs() and ffz() functions of the kernel. The kernel uses optimized
+assembly which produces better code than the builtin
+functions. However, such assembly code can not be folded when used
+with constant expressions.
 
-Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
----
-With this config I'm getting this in dmesg, not sure if it's a warning
-that should be solved or just an informative warning.
+This series relies on __builtin_constant_p to select the optimal solution:
 
-[    0.268256] spmi-temp-alarm c440000.spmi:pmic@0:temp-alarm@2400: No ADC is configured and critical temperature is above the maximum stage 2 threshold of 140 C! Configuring stage 2 shutdown at 140 C.
+  * use kernel assembly for non constant expressions
 
-As far as I can tell, based on downstream dts this PMIC doesn't have an
-ADC.
+  * use compiler's __builtin function for constant expressions.
 
- arch/arm64/boot/dts/qcom/pm6350.dtsi | 38 ++++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/pm6350.dtsi b/arch/arm64/boot/dts/qcom/pm6350.dtsi
-index c5d85064562b..1d24189680ea 100644
---- a/arch/arm64/boot/dts/qcom/pm6350.dtsi
-+++ b/arch/arm64/boot/dts/qcom/pm6350.dtsi
-@@ -5,6 +5,37 @@
- 
- #include <dt-bindings/spmi/spmi.h>
- 
-+/ {
-+	thermal-zones {
-+		pm6350-thermal {
-+			polling-delay-passive = <100>;
-+			polling-delay = <0>;
-+
-+			thermal-sensors = <&pm6350_temp>;
-+
-+			trips {
-+				trip0 {
-+					temperature = <95000>;
-+					hysteresis = <0>;
-+					type = "passive";
-+				};
-+
-+				trip1 {
-+					temperature = <115000>;
-+					hysteresis = <0>;
-+					type = "hot";
-+				};
-+
-+				trip2 {
-+					temperature = <145000>;
-+					hysteresis = <0>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+	};
-+};
-+
- &spmi_bus {
- 	pmic@0 {
- 		compatible = "qcom,pm6350", "qcom,spmi-pmic";
-@@ -35,6 +66,13 @@ pm6350_resin: resin {
- 			};
- 		};
- 
-+		pm6350_temp: temp-alarm@2400 {
-+			compatible = "qcom,spmi-temp-alarm";
-+			reg = <0x2400>;
-+			interrupts = <0x0 0x24 0x0 IRQ_TYPE_EDGE_BOTH>;
-+			#thermal-sensor-cells = <0>;
-+		};
-+
- 		pm6350_gpios: gpios@c000 {
- 			compatible = "qcom,pm6350-gpio";
- 			reg = <0xc000>;
+** Statistics **
+
+Patch 1/2 optimizes 26.7% of ffs() calls and patch 2/2 optimizes 27.9%
+of __ffs() and ffz() calls (details of the calculation in each patch).
+
+
+** Changelog **
+
+v4 -> v5:
+
+  * (no changes on code, only commit comment was modified)
+
+  * Rewrite the commit log:
+    - Use two spaces instead of `| ' to indent code snippets.
+    - Do not use `we'.
+    - Do not use `this patch' in the commit description. Instead,
+      use imperative tone.
+  Link: https://lore.kernel.org/all/YvUZVYxbOMcZtR5G@zn.tnic/
+
+
+v3 -> v4:
+
+  * (no changes on code, only commit comment was modified)
+
+  * Remove note and link to Nick's message in patch 1/2, c.f.:
+  Link: https://lore.kernel.org/all/CAKwvOdnnDaiJcV1gr9vV+ya-jWxx7+2KJNTDThyFctVDOgt9zQ@mail.gmail.com/
+
+  * Add Reviewed-by: Nick Desaulniers <ndesaulniers@google.com> tag in
+    patch 2/2.
+
+
+v2 -> v3:
+
+  * Redacted out the instructions after ret and before next function
+    in the assembly output.
+
+  * Added a note and a link to Nick's message on the constant
+    propagation missed-optimization in clang:
+    Link: https://lore.kernel.org/all/CAKwvOdnH_gYv4qRN9pKY7jNTQK95xNeH1w1KZJJmvCkh8xJLBg@mail.gmail.com/
+
+  * Fix copy/paste typo in statistics of patch 1/2. Number of
+    occurences before patches are 1081 and not 3607 (percentage
+    reduction of 26.7% remains correct)
+
+  * Rename the functions as follow:
+    - __varible_ffs() -> variable___ffs()
+    - __variable_ffz() -> variable_ffz()
+
+  * Add Reviewed-by: Nick Desaulniers <ndesaulniers@google.com> tag in
+    patch 1/2.
+
+Vincent Mailhol (2):
+  x86/asm/bitops: ffs: use __builtin_ffs to evaluate constant
+    expressions
+  x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to evaluate constant
+    expressions
+
+ arch/x86/include/asm/bitops.h | 64 +++++++++++++++++++++--------------
+ 1 file changed, 38 insertions(+), 26 deletions(-)
+
 -- 
-2.37.1
+2.35.1
 

@@ -2,91 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E804F59153D
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 20:07:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF6E591546
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 20:09:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237992AbiHLSHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 14:07:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44270 "EHLO
+        id S239246AbiHLSJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 14:09:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233770AbiHLSHo (ORCPT
+        with ESMTP id S236842AbiHLSJh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 14:07:44 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBE5CB2863;
-        Fri, 12 Aug 2022 11:07:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660327660; x=1691863660;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=oNcyKLO9UI+rsw1981C2DTLKPsPQSX6QWQM+cMyCFe4=;
-  b=GmwjX6ZW3FJ6gVyrAXo4eFu1TB6hR3rgKbGmuvUcjEAOwodqTUDNpywB
-   LZx2qOQAOeA5GEVaL4m/GsyxuPfx+37euNPRXX8d/pXZiVxIqGqnaqxm/
-   0fr8CTEAIqtUBwA80xz1UrdJBs+y9D3EWxCxXfuRaG1umYYGhhcypxLWu
-   /x1UuWyqogx4/R2EevDU3KdVTkC1ORUOkAcFfnE+5wgHMtTiTSzysaz3R
-   pKQtxFjgo+h6qHyLTTzIRLI6alZl8FDZU0AOZDVYwZOy4AsYhGI6deVeG
-   d+ZaC2/tihvwaukwHt7gl1lV+IB5EfYj4+OCQToZppb0z2gmcH926Tw7d
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="292921391"
-X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="292921391"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 11:07:22 -0700
-X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="582180066"
-Received: from mmeng-mobl2.amr.corp.intel.com (HELO kcaccard-desk.amr.corp.intel.com) ([10.209.105.65])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 11:07:20 -0700
-From:   Kristen Carlson Accardi <kristen@linux.intel.com>
-To:     linux-kernel@vger.kernel.org, Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Kristen Carlson Accardi <kristen@linux.intel.com>,
-        linux-sgx@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH v2] selftests/sgx: Ignore OpenSSL 3.0 deprecated functions warning
-Date:   Fri, 12 Aug 2022 11:07:13 -0700
-Message-Id: <20220812180714.566257-1-kristen@linux.intel.com>
-X-Mailer: git-send-email 2.36.1
+        Fri, 12 Aug 2022 14:09:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43FA1B287D;
+        Fri, 12 Aug 2022 11:09:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CD03E6175D;
+        Fri, 12 Aug 2022 18:09:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 373CCC433D6;
+        Fri, 12 Aug 2022 18:09:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660327775;
+        bh=1eSXvEZnukSKTGZe7faWqcL1475O0ngKFVeI9su/VAw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Hn4q3fEUQCsyyZm+CYqMeKikc96Jq4GliVXAfnoz6Ngc5A4ivDXPz8RX4xTigNaLy
+         cfDLuqLz3Oh45DkhjDAYCjCSUZ2A8TaPGJu7IHt8nSBrP1iucbaz4z4FqOqbAU8vvc
+         UustajZhWF4WcQtQrpxSyjFOz9YPHXioH6B/PLKly2+kR8i3OhGg8i480TQJ0bM/3y
+         J5Dd87Va0YkfIM0DDWZC9PkfmEuImBIPfabqvSuAgCEAOnvYd8FQhwz7JzRqxcRlQP
+         ixfdIIQ6hqAI+Hh++guZX3sQpQyasqrn3R4ZEFHFTCdGDqrXUS921ILWc1pXOVq1kI
+         UWTLa7HNQeG9Q==
+Received: by mail-vs1-f42.google.com with SMTP id v128so1550224vsb.10;
+        Fri, 12 Aug 2022 11:09:35 -0700 (PDT)
+X-Gm-Message-State: ACgBeo2gjFhq9jFjkdWVd/X9GkkfQlG6j3w4Hntff7aE55A+ETlMeOGo
+        E539ZCxrcbsHy0jquQYsNi3wlx9dryV9xnz+Bw==
+X-Google-Smtp-Source: AA6agR6gAxDp5EROI0oYJQFMogqYJdz05fwV9p3hLUFxkUsgWcC2eUmq8Ku3c8UFTfaktZD96oZzFoCpWskHhruVGz8=
+X-Received: by 2002:a67:c08f:0:b0:38a:8c1c:45aa with SMTP id
+ x15-20020a67c08f000000b0038a8c1c45aamr2280715vsi.85.1660327774173; Fri, 12
+ Aug 2022 11:09:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220812174420.2706827-1-khilman@baylibre.com>
+In-Reply-To: <20220812174420.2706827-1-khilman@baylibre.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Fri, 12 Aug 2022 12:09:22 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+DDPTYodAk-TKs61AUpdYhocWq+EoRGgVwgc1hz5gk0A@mail.gmail.com>
+Message-ID: <CAL_Jsq+DDPTYodAk-TKs61AUpdYhocWq+EoRGgVwgc1hz5gk0A@mail.gmail.com>
+Subject: Re: [PATCH] of: irq: Export of_msi_get_domain
+To:     Kevin Hilman <khilman@baylibre.com>
+Cc:     Frank Rowand <frowand.list@gmail.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?P=C3=A9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-omap@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-OpenSSL 3.0 deprecates some of the functions used in the SGX
-selftests, causing build errors on new distros. For now ignore
-the warnings until support for the functions is no longer
-available and mark FIXME so that it can be clear this should
-be removed at some point.
+On Fri, Aug 12, 2022 at 11:44 AM Kevin Hilman <khilman@baylibre.com> wrote:
+>
+> From: Matthias Brugger <matthias.bgg@gmail.com>
+>
+> Export of_mis_get_domain to enable it for users from outside.
 
-Signed-off-by: Kristen Carlson Accardi <kristen@linux.intel.com>
----
- tools/testing/selftests/sgx/sigstruct.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+typo
 
-diff --git a/tools/testing/selftests/sgx/sigstruct.c b/tools/testing/selftests/sgx/sigstruct.c
-index 50c5ab1aa6fa..a07896a46364 100644
---- a/tools/testing/selftests/sgx/sigstruct.c
-+++ b/tools/testing/selftests/sgx/sigstruct.c
-@@ -17,6 +17,12 @@
- #include "defines.h"
- #include "main.h"
- 
-+/*
-+ * FIXME: OpenSSL 3.0 has deprecated some functions. For now just ignore
-+ * the warnings.
-+ */
-+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-+
- struct q1q2_ctx {
- 	BN_CTX *bn_ctx;
- 	BIGNUM *m;
--- 
-2.36.1
+>
+> Signed-off-by: Matthias Brugger <mbrugger@suse.com>
+> Acked-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Peter Ujfalusi <peter.ujfalusi@ti.com>
+> Link: https://lore.kernel.org/r/20200122104723.16955-1-peter.ujfalusi@ti.com
+> Signed-off-by: Kevin Hilman <khilman@baylibre.com>
+> ---
+> Peter tried to resurrect this in 2020 (c.f. Link tag in log) but it
+> didn't work.  Here's one more attempt.  I need this enable building
+> some TI DMA drivers as modules.
 
+Then apply this with that enabling. I've already acked it (which keeps
+it out of my queue, so drop that if you want to ensure I see it).
+
+Rob

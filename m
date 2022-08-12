@@ -2,99 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0F88590E5B
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 11:47:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CAA1590E5D
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 11:47:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237470AbiHLJrS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 05:47:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34512 "EHLO
+        id S237673AbiHLJrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 05:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232876AbiHLJrQ (ORCPT
+        with ESMTP id S237493AbiHLJrY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 05:47:16 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D71B1321;
-        Fri, 12 Aug 2022 02:47:14 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id 9093080E1;
-        Fri, 12 Aug 2022 09:40:29 +0000 (UTC)
-Date:   Fri, 12 Aug 2022 12:47:12 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, Abel Vesa <abel.vesa@linaro.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        John Stultz <jstultz@google.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v1 9/9] of: property: Simplify of_link_to_phandle()
-Message-ID: <YvYhoGdemyKEx++d@atomide.com>
-References: <20220810060040.321697-1-saravanak@google.com>
- <20220810060040.321697-10-saravanak@google.com>
+        Fri, 12 Aug 2022 05:47:24 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1D5AA4D2
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 02:47:23 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id a9so606460lfm.12
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 02:47:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=DywEXydriB9RHQfiUoHdykArQLV4TBJt7mtn5YtjZoE=;
+        b=LwBHdnO1aRo+0D4D+H6G/KpkkhcLYKCY5twp4lafcbV2iNbBewTSuDHWAicBUVyZ6k
+         XD8W67AyOXCddFyRPbPFxX2NebnYA8KEpp5Bv1Uh9wvmz3oLqEDa6EGVrbCQmkmAdSUr
+         EGjZXkJ2DQHVf2RSr3780Kkzyl1edtbSVocJT6VzGItAQ6VoQ+9Z+gaRbWBDXkp1YsBz
+         JevUOIXgRV99bgu4/HsyvOTB7UNcUJ1vMtw9ObV0ZAadxCMhg/p12YxZ5xKeVDbCtuY+
+         2w0sy1R7C0exFVZAMQp1oHgeQ3MBNp6OdxY5twq70XNaD7QKfqQqwY6cZ5LNxMH01tpc
+         1O9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=DywEXydriB9RHQfiUoHdykArQLV4TBJt7mtn5YtjZoE=;
+        b=QDEuLNKsDcKhFCTDAmPTlzSsSTf8I++PV2RNbohDeZZCKFz52331GdYpW9wcetBavp
+         yU/GZKfGmFofxWLikKLSgM7LxbqsyXV2RJJBDkZDSzcZntnRmHnmItmfySs3LxC7qsUD
+         uEGX5QueLTYY4JRU8OKQbNiDzh1nH8zG1/EGe+5vHwThmSB8/8XBndRc4b+ILs0KjuKz
+         wFtjrJM6YWkeZxYhnfQIhH3guqrlIcgX2a+nmI8WPD8BuMj+DyeO4DgSzZfMP4BZ1YsD
+         mmlx7D2bVo3BdDMJ0XAzsjeiQkwpBQAwgJxrYupmQ7HCVyoVk8sFEBKj0ZYOrUIbmbaG
+         551Q==
+X-Gm-Message-State: ACgBeo2Bnbeaz2tyLMd4GShZh6otFAdeAdMzy5JAblRSMNUTpxuoqOnF
+        SmOp9gWPZvQTUa3EHx0SUi2rzw==
+X-Google-Smtp-Source: AA6agR7eHNAVuLG1Tzwad6XCZn0/j6CytzXhWajS9DLvUg5eG94lCgboTQKVISVSGSj5oeRbZaww8g==
+X-Received: by 2002:a05:6512:3fa8:b0:48c:ffd1:625d with SMTP id x40-20020a0565123fa800b0048cffd1625dmr925593lfa.251.1660297641606;
+        Fri, 12 Aug 2022 02:47:21 -0700 (PDT)
+Received: from [192.168.1.39] ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id bf31-20020a2eaa1f000000b0025e496dad47sm295617ljb.26.2022.08.12.02.47.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Aug 2022 02:47:21 -0700 (PDT)
+Message-ID: <8962b7ed-a21c-0b7f-7a6d-5db3db84e4cb@linaro.org>
+Date:   Fri, 12 Aug 2022 12:47:17 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220810060040.321697-10-saravanak@google.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v4 2/2] arm64: dts: imx8mp-msc-sm2s: Add device trees for
+ MSC SM2S-IMX8PLUS SoM and carrier board
+Content-Language: en-US
+To:     Martyn Welch <martyn.welch@collabora.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Cc:     kernel@collabora.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20220812084120.376042-1-martyn.welch@collabora.com>
+ <20220812084120.376042-2-martyn.welch@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220812084120.376042-2-martyn.welch@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-* Saravana Kannan <saravanak@google.com> [220810 05:54]:
-> The driver core now:
-> - Has the parent device of a supplier pick up the consumers if the
->   supplier never has a device created for it.
-> - Ignores a supplier if the supplier has no parent device and will never
->   be probed by a driver
+On 12/08/2022 11:41, Martyn Welch wrote:
+> Add device trees for one of a number of MSC's (parent company, Avnet)
+> variants of the SM2S-IMX8PLUS system on module along with the compatible
+> SM2S-SK-AL-EP1 carrier board. As the name suggests, this family of SoMs use
+> the NXP i.MX8MP SoC and provide the SMARC module interface.
 > 
-> And already prevents creating a device link with the consumer as a
-> supplier of a parent.
+> Signed-off-by: Martyn Welch <martyn.welch@collabora.com>
+> ---
 > 
-> So, we no longer need to find the "compatible" node of the supplier or
-> do any other checks in of_link_to_phandle(). We simply need to make sure
-> that the supplier is available in DT.
+> Changes in v2
+>   - Added compatibles
+>   - Removed underscores from node names
+>   - Make node names more generic
+>   - Reorder properties
+>   - Fix issues found by dtbs_check in these files
+> 
+> Changes in v3:
+>   - Switched to avnet vendor string in compatibles
+>   - Corrected patch description
+> 
+> Changes in v4:
+>   - Switched from phy-reset-gpios to reset-gpios, removing duplication
+>   - Removed unneeded sdma1 node
+> 
+>  arch/arm64/boot/dts/freescale/Makefile        |   1 +
+>  .../freescale/imx8mp-msc-sm2s-14N0600E.dts    |  72 ++
+>  .../dts/freescale/imx8mp-msc-sm2s-ep1.dts     |  53 ++
+>  .../boot/dts/freescale/imx8mp-msc-sm2s.dtsi   | 812 ++++++++++++++++++
+>  4 files changed, 938 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-14N0600E.dts
+>  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-ep1.dts
+>  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s.dtsi
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+> index 8bf7f7ecebaa..139c8b95c9c9 100644
+> --- a/arch/arm64/boot/dts/freescale/Makefile
+> +++ b/arch/arm64/boot/dts/freescale/Makefile
+> @@ -83,6 +83,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mn-venice-gw7902.dtb
+>  dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk2.dtb
+>  dtb-$(CONFIG_ARCH_MXC) += imx8mp-evk.dtb
+>  dtb-$(CONFIG_ARCH_MXC) += imx8mp-icore-mx8mp-edimm2.2.dtb
+> +dtb-$(CONFIG_ARCH_MXC) += imx8mp-msc-sm2s-ep1.dtb
+>  dtb-$(CONFIG_ARCH_MXC) += imx8mp-phyboard-pollux-rdk.dtb
+>  dtb-$(CONFIG_ARCH_MXC) += imx8mp-tqma8mpql-mba8mpxl.dtb
+>  dtb-$(CONFIG_ARCH_MXC) += imx8mp-venice-gw74xx.dtb
+> diff --git a/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-14N0600E.dts b/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-14N0600E.dts
+> new file mode 100644
+> index 000000000000..9e976e8baaee
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-14N0600E.dts
+> @@ -0,0 +1,72 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2022 Avnet Embedded GmbH
+> + */
+> +/dts-v1/;
+> +
+> +#include "imx8mp-msc-sm2s.dtsi"
+> +
+> +/ {
+> +	model = "MSC SM2S-IMX8PLUS-QC6-14N0600E SoM";
+> +	compatible = "avnet,sm2s-imx8mp-14N0600E", "avnet,sm2s-imx8mp",
+> +		     "fsl,imx8mp";
 
-This patch fixes booting for me, so it should be applied as a fix and
-tagged with:
+This does not match your bindings. Please test your DTS.
 
-Fixes: 5a46079a9645 ("PM: domains: Delete usage of driver_deferred_probe_check_state()")
-
-If there are dependencies to the other patches in this series, it might
-make sense to revert commit 5a46079a9645 instead.
-
-Anyways, thanks for fixing the issue, for this patch:
-
-Reviewed-by: Tony Lindgren <tony@atomide.com>
-Tested-by: Tony Lindgren <tony@atomide.com>
-
-For the process, looks like the earlier series got merged despite the
-issues reported. And we had non-booting Linux next for at least some SoCs
-for weeks. And now we are about to have a non-booting -rc1 unless things
-get fixed fast. Annoying glitches, sigh..
-
-Regards,
-
-Tony
-
+Best regards,
+Krzysztof

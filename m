@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63AEA591402
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 18:38:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76AAC5913FF
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 18:38:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239114AbiHLQiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 12:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38082 "EHLO
+        id S239326AbiHLQiY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 12:38:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238656AbiHLQiI (ORCPT
+        with ESMTP id S238686AbiHLQiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 12:38:08 -0400
+        Fri, 12 Aug 2022 12:38:12 -0400
 Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D551AABF2A;
-        Fri, 12 Aug 2022 09:38:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1E1AFADD;
+        Fri, 12 Aug 2022 09:38:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660322286; x=1691858286;
+  t=1660322290; x=1691858290;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=NUyQpSQ+bGRYNVMYb0DJKJiMv8VBcicLoCZ/INNs+rE=;
-  b=EH+3kezdI0bVzq4z2chqDwwmF3SzvzgjdxFfqxAXmHHEHAI3lQwoMWIZ
-   9jdEfz69UnKmXrGLr5aiuf9TdgIMDL9n7zc36IXJhuWAH4KsHJh3Fgny3
-   1kq3qVawFaJKMkrWesf8e80neR50EYiqqNZQUJx47D3AuoQucWMaTb3G4
-   qFVXoPCgIbTcv2gqL3dl9FVUgdbVZSfIh0YlR0bOpcc0BLpJ3ecqV30ny
-   XfuXxxUc7qsD9fEvaGugBKCpj9HQ87ufkVoxGs37k4lJXJbK+FH3uZ3OZ
-   onkcLg85FEdmKj50BLpdLv6cZWXtQBrpGJueZmRD7WOpjeZlcFyo3p4Uc
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="377921603"
+  bh=FXhHY9F8CVZbUQIObny6oo4+dxtgtHGRwk2KLIQG24s=;
+  b=gJbzkaddBlOcFR0IuNmr+2LaGh6KCJzE4pE8esDwspq6i9acPAESvml0
+   JUe+BGxEfEHl00x01wv0/bLYLkoXT85U2/nIiiw65WEmQCQbnOXth5W2u
+   5y1RotWsXfQD8ZwiO3GDb4OZv/UcyGuZzL+O8pz2i1gLv0EoqQr6P/W36
+   cDTCLVkkgDtx2TztY2+i9LGCZSaDbWzh/5pL/j4OH63MicaqtioYIDuQL
+   L01X/jQ2cDpliyV9qN/f3GpgcfEdqa+h/7ESr3vyAYgSzgOQuQ/lm2MtK
+   tlIURhUYpVPC/0xEj7zf1zQMvn17KpP2Rjogltp+1qn8A4PLAz4/IW5Wo
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="377921617"
 X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="377921603"
+   d="scan'208";a="377921617"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 09:38:06 -0700
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 09:38:10 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="782012297"
+   d="scan'208";a="782012306"
 Received: from power-sh.sh.intel.com ([10.239.183.122])
-  by orsmga005.jf.intel.com with ESMTP; 12 Aug 2022 09:38:03 -0700
+  by orsmga005.jf.intel.com with ESMTP; 12 Aug 2022 09:38:06 -0700
 From:   Zhang Rui <rui.zhang@intel.com>
 To:     linux-kernel@vger.kernel.org, x86@kernel.org,
         linux-hwmon@vger.kernel.org
@@ -45,9 +45,9 @@ Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
         dave.hansen@linux.intel.com, hpa@zytor.com, corbet@lwn.net,
         fenghua.yu@intel.com, jdelvare@suse.com, linux@roeck-us.net,
         len.brown@intel.com, rui.zhang@intel.com
-Subject: [PATCH 3/7] hwmon/coretemp: Handle large core id value
-Date:   Sat, 13 Aug 2022 00:41:40 +0800
-Message-Id: <20220812164144.30829-4-rui.zhang@intel.com>
+Subject: [PATCH 4/7] x86/topology: Fix max_siblings calculation
+Date:   Sat, 13 Aug 2022 00:41:41 +0800
+Message-Id: <20220812164144.30829-5-rui.zhang@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220812164144.30829-1-rui.zhang@intel.com>
 References: <20220812164144.30829-1-rui.zhang@intel.com>
@@ -61,163 +61,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The coretemp driver supports up to a hard-coded limit of 128 cores.
+The max siblings value returned by CPUID.1F SMT level EBX differs among
+CPUs on Intel Hybrid platforms like ADL-S/P.
+It returns 2 for Pcore CPUs which have HT sibling and 1 for Ecore CPUs
+which do not.
 
-Today, the driver can not support a core with an id above that limit.
-Yet, the encoding of core_id's is arbitrary (BIOS APIC-id) and so they
-may be sparse and they may be large.
+Today, CPUID SMT level EBX sets the global variable smp_num_siblings.
+Thus, smp_num_siblings is overridden to different values based on the CPU
+Pcore/Ecore enumeration order.
 
-Update the driver to map arbitrary core_id numbers into appropriate
-array indexes so that 128 cores can be supported, no matter the encoding
-of core_ids's.
+For example,
 
-Acked-by: Len Brown <len.brown@intel.com>
+[    0.201005] detect_extended_topology: CPU APICID 0x0, smp_num_siblings 2, x86_max_cores 10
+[    0.201117] start_kernel->check_bugs->cpu_smt_check_topology: smp_num_siblings 2
+...
+[    0.010146] detect_extended_topology: CPU APICID 0x8, smp_num_siblings 2, x86_max_cores 10
+...
+[    0.010146] detect_extended_topology: CPU APICID 0x39, smp_num_siblings 2, x86_max_cores 10
+[    0.010146] detect_extended_topology: CPU APICID 0x48, smp_num_siblings 1, x86_max_cores 20
+...
+[    0.010146] detect_extended_topology: CPU APICID 0x4e, smp_num_siblings 1, x86_max_cores 20
+[    2.583800] sched_set_itmt_core_prio: smp_num_siblings 1
+
+This inconsistency brings several potential issues:
+1. some kernel configuration like cpu_smt_control, as set in
+   start_kernel()->check_bugs()->cpu_smt_check_topology(), depends on
+   smp_num_siblings set by cpu0.
+   It is pure luck that all the current hybrid platforms use Pcore as cpu0
+   and hide this problem.
+2. some per CPU data like cpuinfo_x86.x86_max_cores that depends on
+   smp_num_siblings becomes inconsistent and bogus.
+3. the final smp_num_siblings value after boot depends on the last CPU
+   enumerated, which could either be Pcore or Ecore CPU.
+
+The solution is to use CPUID EAX bits_shift to get the maximum number of
+addressable logical processors, and use this to determin max siblings.
+Because:
+1. the CPUID EAX bits_shift values are consistent among CPUs as far as
+   observed.
+2. some code already uses smp_num_siblings value to isolate the SMT ID
+   bits in APIC-ID, like apic_id_is_primary_thread().
+
+Suggested-and-reviewed-by: Len Brown <len.brown@intel.com>
 Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 ---
- drivers/hwmon/coretemp.c | 55 +++++++++++++++++++++++++++++-----------
- 1 file changed, 40 insertions(+), 15 deletions(-)
+ arch/x86/kernel/cpu/topology.c | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/hwmon/coretemp.c b/drivers/hwmon/coretemp.c
-index ccf0af5b988a..3f0f7d7612ae 100644
---- a/drivers/hwmon/coretemp.c
-+++ b/drivers/hwmon/coretemp.c
-@@ -46,9 +46,6 @@ MODULE_PARM_DESC(tjmax, "TjMax value in degrees Celsius");
- #define TOTAL_ATTRS		(MAX_CORE_ATTRS + 1)
- #define MAX_CORE_DATA		(NUM_REAL_CORES + BASE_SYSFS_ATTR_NO)
+diff --git a/arch/x86/kernel/cpu/topology.c b/arch/x86/kernel/cpu/topology.c
+index 5e868b62a7c4..2a88f2fa5756 100644
+--- a/arch/x86/kernel/cpu/topology.c
++++ b/arch/x86/kernel/cpu/topology.c
+@@ -23,7 +23,12 @@
  
--#define TO_CORE_ID(cpu)		(cpu_data(cpu).cpu_core_id)
--#define TO_ATTR_NO(cpu)		(TO_CORE_ID(cpu) + BASE_SYSFS_ATTR_NO)
--
- #ifdef CONFIG_SMP
- #define for_each_sibling(i, cpu) \
- 	for_each_cpu(i, topology_sibling_cpumask(cpu))
-@@ -91,6 +88,8 @@ struct temp_data {
- struct platform_data {
- 	struct device		*hwmon_dev;
- 	u16			pkg_id;
-+	u16			cpu_map[NUM_REAL_CORES];
-+	struct ida		ida;
- 	struct cpumask		cpumask;
- 	struct temp_data	*core_data[MAX_CORE_DATA];
- 	struct device_attribute name_attr;
-@@ -441,7 +440,7 @@ static struct temp_data *init_temp_data(unsigned int cpu, int pkg_flag)
- 							MSR_IA32_THERM_STATUS;
- 	tdata->is_pkg_data = pkg_flag;
- 	tdata->cpu = cpu;
--	tdata->cpu_core_id = TO_CORE_ID(cpu);
-+	tdata->cpu_core_id = topology_core_id(cpu);
- 	tdata->attr_size = MAX_CORE_ATTRS;
- 	mutex_init(&tdata->update_lock);
- 	return tdata;
-@@ -454,7 +453,7 @@ static int create_core_data(struct platform_device *pdev, unsigned int cpu,
- 	struct platform_data *pdata = platform_get_drvdata(pdev);
- 	struct cpuinfo_x86 *c = &cpu_data(cpu);
- 	u32 eax, edx;
--	int err, attr_no;
-+	int err, index, attr_no;
- 
- 	/*
- 	 * Find attr number for sysfs:
-@@ -462,14 +461,26 @@ static int create_core_data(struct platform_device *pdev, unsigned int cpu,
- 	 * The attr number is always core id + 2
- 	 * The Pkgtemp will always show up as temp1_*, if available
- 	 */
--	attr_no = pkg_flag ? PKG_SYSFS_ATTR_NO : TO_ATTR_NO(cpu);
-+	if (pkg_flag)
-+		attr_no = PKG_SYSFS_ATTR_NO;
-+	else {
-+		index = ida_alloc(&pdata->ida, GFP_KERNEL);
-+		if (index < 0)
-+			return index;
-+		pdata->cpu_map[index] = topology_core_id(cpu);
-+		attr_no = index + BASE_SYSFS_ATTR_NO;
-+	}
- 
--	if (attr_no > MAX_CORE_DATA - 1)
--		return -ERANGE;
-+	if (attr_no > MAX_CORE_DATA - 1) {
-+		err = -ERANGE;
-+		goto ida_free;
-+	}
- 
- 	tdata = init_temp_data(cpu, pkg_flag);
--	if (!tdata)
--		return -ENOMEM;
-+	if (!tdata) {
-+		err = -ENOMEM;
-+		goto ida_free;
-+	}
- 
- 	/* Test if we can access the status register */
- 	err = rdmsr_safe_on_cpu(cpu, tdata->status_reg, &eax, &edx);
-@@ -505,6 +516,9 @@ static int create_core_data(struct platform_device *pdev, unsigned int cpu,
- exit_free:
- 	pdata->core_data[attr_no] = NULL;
- 	kfree(tdata);
-+ida_free:
-+	if (!pkg_flag)
-+		ida_free(&pdata->ida, index);
- 	return err;
- }
- 
-@@ -524,6 +538,8 @@ static void coretemp_remove_core(struct platform_data *pdata, int indx)
- 
- 	kfree(pdata->core_data[indx]);
- 	pdata->core_data[indx] = NULL;
+ #define LEAFB_SUBTYPE(ecx)		(((ecx) >> 8) & 0xff)
+ #define BITS_SHIFT_NEXT_LEVEL(eax)	((eax) & 0x1f)
+-#define LEVEL_MAX_SIBLINGS(ebx)		((ebx) & 0xffff)
 +
-+	ida_free(&pdata->ida, indx - BASE_SYSFS_ATTR_NO);
- }
++/*
++ * Use EAX bit_shift to calculate the maximum number of addressable logical
++ * processors sharing the current level.
++ */
++#define LEVEL_MAX_SIBLINGS(eax)		(1 << BITS_SHIFT_NEXT_LEVEL(eax))
  
- static int coretemp_probe(struct platform_device *pdev)
-@@ -537,6 +553,7 @@ static int coretemp_probe(struct platform_device *pdev)
- 		return -ENOMEM;
- 
- 	pdata->pkg_id = pdev->id;
-+	ida_init(&pdata->ida);
- 	platform_set_drvdata(pdev, pdata);
- 
- 	pdata->hwmon_dev = devm_hwmon_device_register_with_groups(dev, DRVNAME,
-@@ -553,6 +570,7 @@ static int coretemp_remove(struct platform_device *pdev)
- 		if (pdata->core_data[i])
- 			coretemp_remove_core(pdata, i);
- 
-+	ida_destroy(&pdata->ida);
+ unsigned int __max_die_per_package __read_mostly = 1;
+ EXPORT_SYMBOL(__max_die_per_package);
+@@ -79,7 +84,7 @@ int detect_extended_topology_early(struct cpuinfo_x86 *c)
+ 	 * initial apic id, which also represents 32-bit extended x2apic id.
+ 	 */
+ 	c->initial_apicid = edx;
+-	smp_num_siblings = LEVEL_MAX_SIBLINGS(ebx);
++	smp_num_siblings = LEVEL_MAX_SIBLINGS(eax);
+ #endif
  	return 0;
  }
+@@ -109,9 +114,9 @@ int detect_extended_topology(struct cpuinfo_x86 *c)
+ 	 */
+ 	cpuid_count(leaf, SMT_LEVEL, &eax, &ebx, &ecx, &edx);
+ 	c->initial_apicid = edx;
+-	core_level_siblings = smp_num_siblings = LEVEL_MAX_SIBLINGS(ebx);
++	core_level_siblings = smp_num_siblings = LEVEL_MAX_SIBLINGS(eax);
+ 	core_plus_mask_width = ht_mask_width = BITS_SHIFT_NEXT_LEVEL(eax);
+-	die_level_siblings = LEVEL_MAX_SIBLINGS(ebx);
++	die_level_siblings = LEVEL_MAX_SIBLINGS(eax);
+ 	pkg_mask_width = die_plus_mask_width = BITS_SHIFT_NEXT_LEVEL(eax);
  
-@@ -647,7 +665,7 @@ static int coretemp_cpu_offline(unsigned int cpu)
- 	struct platform_device *pdev = coretemp_get_pdev(cpu);
- 	struct platform_data *pd;
- 	struct temp_data *tdata;
--	int indx, target;
-+	int i, indx = -1, target;
+ 	sub_index = 1;
+@@ -122,14 +127,14 @@ int detect_extended_topology(struct cpuinfo_x86 *c)
+ 		 * Check for the Core type in the implemented sub leaves.
+ 		 */
+ 		if (LEAFB_SUBTYPE(ecx) == CORE_TYPE) {
+-			core_level_siblings = LEVEL_MAX_SIBLINGS(ebx);
++			core_level_siblings = LEVEL_MAX_SIBLINGS(eax);
+ 			core_plus_mask_width = BITS_SHIFT_NEXT_LEVEL(eax);
+ 			die_level_siblings = core_level_siblings;
+ 			die_plus_mask_width = BITS_SHIFT_NEXT_LEVEL(eax);
+ 		}
+ 		if (LEAFB_SUBTYPE(ecx) == DIE_TYPE) {
+ 			die_level_present = true;
+-			die_level_siblings = LEVEL_MAX_SIBLINGS(ebx);
++			die_level_siblings = LEVEL_MAX_SIBLINGS(eax);
+ 			die_plus_mask_width = BITS_SHIFT_NEXT_LEVEL(eax);
+ 		}
  
- 	/*
- 	 * Don't execute this on suspend as the device remove locks
-@@ -660,12 +678,19 @@ static int coretemp_cpu_offline(unsigned int cpu)
- 	if (!pdev)
- 		return 0;
- 
--	/* The core id is too big, just return */
--	indx = TO_ATTR_NO(cpu);
--	if (indx > MAX_CORE_DATA - 1)
-+	pd = platform_get_drvdata(pdev);
-+
-+	for (i = 0; i < NUM_REAL_CORES; i++) {
-+		if (pd->cpu_map[i] == topology_core_id(cpu)) {
-+			indx = i + BASE_SYSFS_ATTR_NO;
-+			break;
-+		}
-+	}
-+
-+	/* Too many cores and this core is not pupolated, just return */
-+	if (indx < 0)
- 		return 0;
- 
--	pd = platform_get_drvdata(pdev);
- 	tdata = pd->core_data[indx];
- 
- 	cpumask_clear_cpu(cpu, &pd->cpumask);
 -- 
 2.34.1
 

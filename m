@@ -2,146 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC38A59146D
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 18:56:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4C2459145B
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 18:55:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239460AbiHLQ4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 12:56:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57968 "EHLO
+        id S229664AbiHLQzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 12:55:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239445AbiHLQ4O (ORCPT
+        with ESMTP id S229464AbiHLQy7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 12:56:14 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19BC9915C8;
-        Fri, 12 Aug 2022 09:56:13 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27CD99OO032242;
-        Fri, 12 Aug 2022 16:56:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=cR/SR3jHszk4FG8AtIMhq7yghDcGFP0FMJ04Z+3s3QU=;
- b=X1gpfvwrfm2oSAbtDl1leJpOFI/QYZQJfo46YFKqIdgQAW10UaQIwN3AaW+lYvQ5X+J6
- CwoBx4g4IdPbLsGjb7qcdEv2iK3qKJLTKOE/6qghlEa4oLmpIsVCDwskszBSg7G4MPPV
- oCM2j0qEL0s0A7uUk6V7Kxy8XiYikH43WNsvKR2qvSnGoG4Q/M1fW1IZhGWIz7fwTFia
- z0CizHnbnSqlrxWVa3bHO0D03OpxvhfRb4tow6vVceuMEsYf4KKSG7OlS4w/zgybbbW+
- 76PW5yHNvMK5GPzLGycoIKYwFJ4iZjYD6JV90HSjy2VmNuikunAFyqg7p0VruE/hc73g 1g== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hwh7cj532-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 Aug 2022 16:56:08 +0000
-Received: from pps.filterd (NALASPPMTA03.qualcomm.com [127.0.0.1])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 27CGu7es027449;
-        Fri, 12 Aug 2022 16:56:07 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 3hshcke1gd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 Aug 2022 16:56:07 +0000
-Received: from NALASPPMTA03.qualcomm.com (NALASPPMTA03.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27CGu7Ke027441;
-        Fri, 12 Aug 2022 16:56:07 GMT
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 27CGu7qC027440
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 Aug 2022 16:56:07 +0000
-Received: from hu-ppareek-blr.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Fri, 12 Aug 2022 09:56:03 -0700
-From:   Parikshit Pareek <quic_ppareek@quicinc.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Andrew Halaney <ahalaney@redhat.com>,
-        Parikshit Pareek <quic_ppareek@quicinc.com>
-Subject: [PATCH v3 3/3] arm64: dts: qcom: introduce sa8540p-ride dts
-Date:   Fri, 12 Aug 2022 22:24:53 +0530
-Message-ID: <20220812165453.11608-4-quic_ppareek@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20220812165453.11608-1-quic_ppareek@quicinc.com>
-References: <20220812165453.11608-1-quic_ppareek@quicinc.com>
+        Fri, 12 Aug 2022 12:54:59 -0400
+Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACF5B07DA;
+        Fri, 12 Aug 2022 09:54:59 -0700 (PDT)
+Received: by mail-il1-f180.google.com with SMTP id z13so755751ilq.9;
+        Fri, 12 Aug 2022 09:54:59 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=fRm+MK443iv+bWqysNNlWEdx5OQMpvKZbcU7Wh8UXuE=;
+        b=0h6S05Hx7CJjzexBNhziPCTLQdJkIC0j0zQpgqgTXb62uhMEULKJlePz/DmXmPFSQY
+         Jm/steKaS2nz64CdFoO3hlRupQEOkm7CFt+5+zy5V19ryUZPsD+cy7yjuv7zvmWYZ7I1
+         mwocLGY6PnOGn35rbLDSR++QNRebT1DbDMEmTg/xLNgH0IM1GDTEsImSDZvG+D+V2Vsc
+         0U8fNuSBR+hVi1Zo3wqL4mHylRu4Kt/GHwYvW7PC6RD05Z8UnYWnsbQBsbrb3Kmj0oVN
+         hzztvMPhXLSUxOg2h+209mOVerifzs+alrQ8cNX84c1k7+CmO8c8tej7H8hbogDYpZi9
+         nO4g==
+X-Gm-Message-State: ACgBeo3hPiuZD5ZX/Fh7bm2W3aQmIHl9zZBjFCOyAjfW7SmUkQOeLtTk
+        IvFDzTWSdVAbL1jUG10xZw==
+X-Google-Smtp-Source: AA6agR6tiAMmjfHF8/Q9cMoh1KscSKGBxd6+ZvSHYQseYcfmbrN92lYw48Pzhq+xNnC/wejeACiZbA==
+X-Received: by 2002:a05:6e02:148c:b0:2de:c3b:91d with SMTP id n12-20020a056e02148c00b002de0c3b091dmr2342165ilk.95.1660323298542;
+        Fri, 12 Aug 2022 09:54:58 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id o4-20020a927304000000b002e4c8200225sm141783ilc.39.2022.08.12.09.54.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Aug 2022 09:54:58 -0700 (PDT)
+Received: (nullmailer pid 315561 invoked by uid 1000);
+        Fri, 12 Aug 2022 16:54:55 -0000
+Date:   Fri, 12 Aug 2022 10:54:55 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Michael Hennerich <Michael.Hennerich@analog.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Pavel Machek <pavel@ucw.cz>,
+        Tim Harvey <tharvey@gateworks.com>, Lee Jones <lee@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>, Andrew Davis <afd@ti.com>,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-fbdev@vger.kernel.org, linux-leds@vger.kernel.org,
+        netdev@vger.kernel.org, linux-pm@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: Re: [PATCH v2 0/5] iio/hwmon/mfd/leds/net/power/ASoC: dt-bindings:
+ few stale maintainers cleanup
+Message-ID: <20220812165455.GA315443-robh@kernel.org>
+References: <20220809162752.10186-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: CfMke6GeR5i0XH-mkemufPtIyY2ym7fO
-X-Proofpoint-ORIG-GUID: CfMke6GeR5i0XH-mkemufPtIyY2ym7fO
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-12_10,2022-08-11_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- priorityscore=1501 impostorscore=0 suspectscore=0 phishscore=0
- adultscore=0 malwarescore=0 spamscore=0 clxscore=1015 mlxscore=0
- mlxlogscore=698 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2207270000 definitions=main-2208120045
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220809162752.10186-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Create new dts file specific for Qdrive board based on sa8540p chipset.
-Introduce common dtsi file sa8295p-adp.dtsi, to be included for adp and
-Qdrive board.
+On Tue, Aug 09, 2022 at 07:27:47PM +0300, Krzysztof Kozlowski wrote:
+> Hi,
+> 
+> Changes since v1
+> ================
+> 1. Patch #5: Drop also Ricardo Rivera-Matos and assign TI bindings to Andrew Davis
+> 2. Add acks.
+> 
+> A question
+> ==========
+> 
+> Several of the bindings here had only one maintainer and history does not
+> always point to a new one (although I did not perform extensive digging). I
+> added subsystem maintainer, because dtschema requires an entry with valid email address.
+> 
+> This is not the best choice as simply subsystem maintainer might not have the
+> actual device (or its datasheets or any interest in it).
+> 
+> Maybe we could add some "orphaned" entry in such case?
 
-This is quite similar to SA8295 ADP development board. Main differences
-are related to connectors, and interface cards, like USB external ports,
-ethernet-switch, and PCIe switch etc.
+It would need to be obvious to not use for a new binding.
 
-Signed-off-by: Parikshit Pareek <quic_ppareek@quicinc.com>
----
- arch/arm64/boot/dts/qcom/Makefile             |  1 +
- arch/arm64/boot/dts/qcom/sa8540p-adp-ride.dts | 15 +++++++++++++++
- 2 files changed, 16 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/sa8540p-adp-ride.dts
+> 
+> Best regards,
+> Krzysztof
+> 
+> Krzysztof Kozlowski (5):
+>   dt-bindings: iio: Drop Joachim Eastwood
+>   dt-bindings: iio: Drop Bogdan Pricop
+>   dt-bindings: Drop Beniamin Bia and Stefan Popa
+>   dt-bindings: Drop Robert Jones
+>   dt-bindings: Drop Dan Murphy and Ricardo Rivera-Matos
 
-diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
-index 1d86a33de528..6175889160e5 100644
---- a/arch/arm64/boot/dts/qcom/Makefile
-+++ b/arch/arm64/boot/dts/qcom/Makefile
-@@ -51,6 +51,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= qcs404-evb-4000.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= qrb5165-rb5.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sa8155p-adp.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sa8295p-adp.dtb
-+dtb-$(CONFIG_ARCH_QCOM)	+= sa8540p-adp-ride.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-idp.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-coachz-r1.dtb
- dtb-$(CONFIG_ARCH_QCOM)	+= sc7180-trogdor-coachz-r1-lte.dtb
-diff --git a/arch/arm64/boot/dts/qcom/sa8540p-adp-ride.dts b/arch/arm64/boot/dts/qcom/sa8540p-adp-ride.dts
-new file mode 100644
-index 000000000000..4922ffae553f
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/sa8540p-adp-ride.dts
-@@ -0,0 +1,15 @@
-+// SPDX-License-Identifier: BSD-3-Clause
-+/*
-+ * Copyright (c) 2021, The Linux Foundation. All rights reserved.
-+ * Copyright (c) 2022, Linaro Limited
-+ * Copyright (c) 2022, Qualcomm Innovation Center, Inc. All rights reserved.
-+ */
-+
-+/dts-v1/;
-+
-+#include "sa8540p-adp.dtsi"
-+
-+/ {
-+	model = "Qualcomm SA8540 ADP";
-+	compatible = "qcom,sa8540p-adp-ride", "qcom,sa8540p";
-+};
--- 
-2.17.1
+Series applied for 6.0-rc1.
 
+Rob

@@ -2,69 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6096B5914C4
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 19:25:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E50435914C6
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 19:28:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239337AbiHLRZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 13:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59632 "EHLO
+        id S239354AbiHLR1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 13:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239329AbiHLRZk (ORCPT
+        with ESMTP id S239329AbiHLR1Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 13:25:40 -0400
-Received: from finn.localdomain (finn.gateworks.com [108.161.129.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93FF25286;
-        Fri, 12 Aug 2022 10:25:36 -0700 (PDT)
-Received: from 068-189-091-139.biz.spectrum.com ([68.189.91.139] helo=tharvey.pdc.gateworks.com)
-        by finn.localdomain with esmtp (Exim 4.93)
-        (envelope-from <tharvey@gateworks.com>)
-        id 1oMYPY-00FqKM-Ve; Fri, 12 Aug 2022 17:25:29 +0000
-From:   Tim Harvey <tharvey@gateworks.com>
-To:     Shawn Guo <shawnguo@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Tim Harvey <tharvey@gateworks.com>
-Subject: [PATCH] arm64: dts: imx8mm-venice-gw7902: fix UART1 CTS
-Date:   Fri, 12 Aug 2022 10:25:26 -0700
-Message-Id: <20220812172526.14516-1-tharvey@gateworks.com>
-X-Mailer: git-send-email 2.25.1
+        Fri, 12 Aug 2022 13:27:25 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6824BB24AE
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 10:27:24 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id i14so3135860ejg.6
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 10:27:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=ChOW1PQzKsYV5AuJvIO5rrdP9iRv4CAXA2GkbHvGLP8=;
+        b=AcuJfCLjjk/3yWDj6vISld0k0uJ+mzaUGVzwSXP5TW12cs+txfc9d62ah873KGN1h9
+         S9JB3+nbjF5MOah9t/4LendfkWFi9hj208a455CsFjsib04F5n9fiE0jaUacbeVLavPM
+         k5Mi2DA6Wwvrd99Zd1zwv/yXnVQ3ZozTK8JSs=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=ChOW1PQzKsYV5AuJvIO5rrdP9iRv4CAXA2GkbHvGLP8=;
+        b=NY5cDLuqdWBbxVTc9RkGbPg5116GPbBfjO0eJuM9ieOSwnQagkeUHVhzSVMytjeuc1
+         C+MxwjMsler/B9y7cdOuY2Cy+5n1N9AAEEgwnt/zhsGgdk6FyrkrMvWOvA6hGv2dEkXd
+         krdSta69OAG6VICdpdI+9E0Cwt9jpWV/9xqnYuVRyMuHBEN065O3vVUU/K/ts6o/nx/Y
+         DaLrLXvKf5Tr/3YBMtOpTRLJnR3/woGCnAmEr5FEiifrgdfa0zQ89HXgZYR4qyyo7VdW
+         aOZXmkIPwn9lIS1tgaZc0fsniLDQg/rYO9Usfq4jnlS3JCjDGqDfEI5oUldZU6JxZpJC
+         7FEw==
+X-Gm-Message-State: ACgBeo0iMxoMJGktZo8ZvI+oGUKMZi1aoCyWE86BgYeojhfEVnQwlSZY
+        CXQh13iXLbHycDbbQGoRhkxGLFkXYquuOeqX
+X-Google-Smtp-Source: AA6agR5VK7Tw8SGUPvh9IEaxNYTyc//5d2GKEBSnXo/y7SCAFke+PAPPJvVb1aBYWojqwMuPoeMl3A==
+X-Received: by 2002:a17:907:2816:b0:733:c08:fe6c with SMTP id eb22-20020a170907281600b007330c08fe6cmr3276041ejc.325.1660325242624;
+        Fri, 12 Aug 2022 10:27:22 -0700 (PDT)
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com. [209.85.221.49])
+        by smtp.gmail.com with ESMTPSA id y18-20020a170906471200b00711edab7622sm998997ejq.40.2022.08.12.10.27.20
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Aug 2022 10:27:20 -0700 (PDT)
+Received: by mail-wr1-f49.google.com with SMTP id q30so1867527wra.11
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 10:27:20 -0700 (PDT)
+X-Received: by 2002:a5d:56cf:0:b0:21e:ce64:afe7 with SMTP id
+ m15-20020a5d56cf000000b0021ece64afe7mr2686887wrw.281.1660325240290; Fri, 12
+ Aug 2022 10:27:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220811153632.0ce73f72.alex.williamson@redhat.com>
+ <CAHk-=wgfqqMMQG+woPEpAOyn8FkMQDqxq6k0OLKajZNGa7Jsfg@mail.gmail.com> <YvaGrD94Ttd8lGWi@nvidia.com>
+In-Reply-To: <YvaGrD94Ttd8lGWi@nvidia.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 12 Aug 2022 10:27:04 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whXbDkQQUjF1mLPoMkhbJpv1jQtsazWwDGMF9vw1tx+vA@mail.gmail.com>
+Message-ID: <CAHk-=whXbDkQQUjF1mLPoMkhbJpv1jQtsazWwDGMF9vw1tx+vA@mail.gmail.com>
+Subject: Re: [GIT PULL] VFIO updates for v6.0-rc1 (part 2)
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Alex Williamson <alex.williamson@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+Content-Type: multipart/mixed; boundary="00000000000029088505e60e9807"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Configure the correct GPIO for UART1 CTS.
+--00000000000029088505e60e9807
+Content-Type: text/plain; charset="UTF-8"
 
-Signed-off-by: Tim Harvey <tharvey@gateworks.com>
----
- arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri, Aug 12, 2022 at 9:58 AM Jason Gunthorpe <jgg@nvidia.com> wrote:
+>
+> I think this is partly a historical artifact because each of the files
+> in the directory are compiling to actual kernel modules so the file
+> name has to have vfio_ in it to fit into the global module namespace.
+>
+> Now, there is no reason I can see for all these files to be different
+> modules, but that is how it is, and because we have some module
+> parameters changing it is API breaking..
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts
-index 407ab4592b4c..6692e55df752 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts
-@@ -651,7 +651,7 @@ &uart1 {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_uart1>, <&pinctrl_uart1_gpio>;
- 	rts-gpios = <&gpio4 10 GPIO_ACTIVE_LOW>;
--	cts-gpios = <&gpio4 11 GPIO_ACTIVE_LOW>;
-+	cts-gpios = <&gpio4 24 GPIO_ACTIVE_LOW>;
- 	uart-has-rtscts;
- 	status = "okay";
- };
--- 
-2.25.1
+Oh, the module name issue is absolutely real.
 
+But we actually have good tools for that in the kernel build system,
+because we've had that issue for so long, and because it's not at all
+uncommon that one single kernel module needs to be built up from
+multiple different object files.
+
+I guess it does require an extra lines in the Makefile. Maybe we could
+improve on that, but that extra line does end up having real
+advantages in that it makes for a lot of flexibility (see below).
+
+Attached is a truly *stupid* patch just to show the concept. I
+literally just picked one vfio file at random to convert. The point
+being that this approach
+
+ (a) makes it very easy to have the file naming you like
+
+ (b) makes it *very* easy to have common helper libraries that get
+linked into the modules
+
+ (c) also means that it's now basically trivial to split any of these
+drivers into multiple files, exactly because the file name isn't tied
+to the module name
+
+where that extra line is exactly what makes (b) and (c) so trivial.
+
+Now, don't get me wrong: this patch is *not* meant to be a "please do
+this". If people really like the current odd file naming policy, it's
+really not a lot of skin off my nose.
+
+So the attached patch is literally meant to be a "look, if you want to
+do this, it's really this simple".
+
+And you can easily do it one driver at a time, possibly when  you have
+a "oops, this one driver is getting a bit large, so I'd like to split
+it up".
+
+Also, it should go without mention that I've not actually *tested*
+this patch. I did do a full build, and that full build results in a
+vfio_iommu_type1.ko module as expected, but there might be something I
+overlooked.
+
+There's also some build overhead from the indirection, but hey, what
+else is new. Our Makefiles are actually quite powerful, but they do
+make 'GNU make' spend a *lot* of time doing various string tricks.
+
+                    Linus
+
+--00000000000029088505e60e9807
+Content-Type: text/x-patch; charset="US-ASCII"; name="patch.diff"
+Content-Disposition: attachment; filename="patch.diff"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l6qqrda10>
+X-Attachment-Id: f_l6qqrda10
+
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvdmZpby9NYWtlZmlsZSBiL2RyaXZlcnMvdmZpby9NYWtlZmls
+ZQppbmRleCAxYTMyMzU3NTkyZTMuLjQxZWQ1MjhjNzU4NyAxMDA2NDQKLS0tIGEvZHJpdmVycy92
+ZmlvL01ha2VmaWxlCisrKyBiL2RyaXZlcnMvdmZpby9NYWtlZmlsZQpAQCAtMyw2ICszLDggQEAg
+dmZpb192aXJxZmQteSA6PSB2aXJxZmQubwogCiB2ZmlvLXkgKz0gdmZpb19tYWluLm8KIAordmZp
+b19pb21tdV90eXBlMS15ID0gaW9tbXVfdHlwZTEubworCiBvYmotJChDT05GSUdfVkZJTykgKz0g
+dmZpby5vCiBvYmotJChDT05GSUdfVkZJT19WSVJRRkQpICs9IHZmaW9fdmlycWZkLm8KIG9iai0k
+KENPTkZJR19WRklPX0lPTU1VX1RZUEUxKSArPSB2ZmlvX2lvbW11X3R5cGUxLm8KZGlmZiAtLWdp
+dCBhL2RyaXZlcnMvdmZpby92ZmlvX2lvbW11X3R5cGUxLmMgYi9kcml2ZXJzL3ZmaW8vaW9tbXVf
+dHlwZTEuYwpzaW1pbGFyaXR5IGluZGV4IDEwMCUKcmVuYW1lIGZyb20gZHJpdmVycy92ZmlvL3Zm
+aW9faW9tbXVfdHlwZTEuYwpyZW5hbWUgdG8gZHJpdmVycy92ZmlvL2lvbW11X3R5cGUxLmMK
+--00000000000029088505e60e9807--

@@ -2,103 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1387591122
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 15:04:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5AE7591126
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 15:05:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238879AbiHLNEA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 09:04:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50844 "EHLO
+        id S238889AbiHLNFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 09:05:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237763AbiHLNDm (ORCPT
+        with ESMTP id S238911AbiHLNFB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 09:03:42 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F4124BC2
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 06:03:38 -0700 (PDT)
-Received: from zn.tnic (p200300ea971b98b3329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971b:98b3:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0B4AF1EC054C;
-        Fri, 12 Aug 2022 15:03:33 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1660309413;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=rxVLkbvNBovfojpBImP7y+g3dx0vMBlRsKjLna4naQc=;
-        b=YB48Q+9PKC7TayFIL/Rda/07y5czDrfWi0t1pm0NuddPJBaykm0wpz63l6N3+ATOxCDk9X
-        iaE9a6hFhNnH7Jd93pl26FKUzEyddFL+h09JG0kENcigpkx3xFLjA+j9G7wTM3kt1tHJef
-        7oAIsQgumVOcOuq1TdDKDbIiupBhD7c=
-Date:   Fri, 12 Aug 2022 15:03:28 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v2 1/2] x86/sev: Put PSC struct on the stack in prep for
- unaccepted memory support
-Message-ID: <YvZPoEm6PSeoflAz@zn.tnic>
-References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
- <cover.1659978985.git.thomas.lendacky@amd.com>
- <21d5d55640ee1c5d66501b9398858b6a6bd6546f.1659978985.git.thomas.lendacky@amd.com>
+        Fri, 12 Aug 2022 09:05:01 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A8B25286;
+        Fri, 12 Aug 2022 06:04:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1660309494;
+        bh=06l3Wte8wdiSSGj0aHo67hrlpwYHCPc676SVq7b2IrY=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=dMS/7m44xvqdOCQXeH0xV2GlkEj3lK/uJxPWJ5qHdLzsgJVu43a3D7mV4RAbCdZVf
+         sSobltOLkcEl3e0HFU9A3I7Gx2TpPlzGMyKDO+lJFMjhlofscqQ2PvynoBCA+HknVh
+         uixn45kaOpYJ6WIgw4aWicwmQtfLGljk0qnpbuuw=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from rechner-desktop.digi.box ([155.133.221.219]) by mail.gmx.net
+ (mrgmx104 [212.227.17.168]) with ESMTPSA (Nemesis) id
+ 1M8ygY-1oGRvc0uc2-0064WZ; Fri, 12 Aug 2022 15:04:54 +0200
+From:   Stefan Mahr <dac922@gmx.de>
+To:     Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, Stefan Mahr <dac922@gmx.de>
+Subject: [PATCH] net: sfp: reset fault retry counter on successful reinitialisation
+Date:   Fri, 12 Aug 2022 15:04:38 +0200
+Message-Id: <20220812130438.140434-1-dac922@gmx.de>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <21d5d55640ee1c5d66501b9398858b6a6bd6546f.1659978985.git.thomas.lendacky@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:GYNukLpfifw2ESKUJ/NQQnqdpgNA3p4JJWk8ULJJzBtfIKmv4JM
+ gTFX0xnVYG7GXwdInCammt8smr4z6yL5BOGubEAFtmJifLCDyzP5hIWnbyFDePP7yIbIrpq
+ p4nGlsUAMu/DJ82Fvs1huMTw/CwBH4Yk55bM9hvV1WRIWLj3DAw0kVZPnCUnlHp1xLPHSgv
+ OwPGtce8q10yfZBnFSrZg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:MgvpOeo0Cc4=:urU2W4Vn84GiGVRf7IbFeY
+ T4Gnmk6I7mNIuXkw8u/XQ3hHb0rvNMJoGP/MGpMUkQGB29U8UlKfyiu5vxTXHWn/YKeegZ4Xk
+ 5ZBieWsBwgikqfiL//k301igGSvQ7tfG64sDvLTm33jC+4UzlCScg6Xyn7LOIuxO6N1G1Ljev
+ CxPaWB6kqmMBilpDB4RkDgaHnSjuxfOdyUwhMsoGXiT1K3CD9CpZhYd/WFHogdMX/oDaUQQ5M
+ 2Y5XXoi9jhUWDbVSvRuLiSqe5GkVfRqarQfNVbMb5cXHCej8t5pYFiBnvChU23LoTDBwvXqM3
+ 4Yl14Hz3t+8YGIfazD4u9pZQ552OZnT9tmm2CQNxsm6sEJStDnw9FaQL96ilWWFJH7+kgPwIS
+ 184UVhNyHEujaqKfoF8N+VbhKo2SQ0CrmGRrWiQr8K8AryLc4iz+5l0V8sEw0RB/Lwp3pRDXk
+ wi127fA8F3mcameuI+TfjLKjwNJ+96gwhWhfO3Ed8o3ICkgG3PQR7QXl/1mR45+YOPVUJNYF1
+ fqj+0b1mtKTavgZFRxblk1q4s3bQUTdFWxa03qAgJhLRclV2MhxxDkenQVQ3O6PSxNAXv8V0w
+ 7lm3pKkwTD6izJkYJ0O6pbKFzxzhCF0qsHnbQKwl304uwOW605SS5S8E55pyj5/pZVmdSTmuG
+ uEZgV8RQ0nyEcOlUC9Jxn6t0U+/2bqzy+SPUSFvvwMOyJklpZ24W2u3FlHqSa7YlosWv74t0p
+ /FgeJHBGCYM32o+tlGYXjULLOfdI7yhGPuRE4I1u+LWNP1Ik2p93rWN6wg/Itv7C1dM0g3is4
+ RMmRZ1Sm7dppbI08APTY/Jy4RPlkDr2RyB5QnXgEbCyMKYPMPX6QuLEGHsIv5n3BOFajjBsi7
+ adrIIkq/Cv7wT3KLPxH16sG1YjmRdOZyKg6Jr5tlMmfrduKGEPyDmIfLR+1GMoxUtBe7gpB7T
+ i8sOosgiPHJtjSXN1hUV3cPlx0o/AbmPNkp7LCXoZg9ZozK/mrlg4PrbMfueA4wVRkG0Y7F2k
+ P/wLUFOvOsqpBmt+3LxIhyvhv1AD8oYB4ue5m3rVSkiqs+/bz9iz/7Gph1u58ikKHGhFXAByQ
+ M4ZVhU/DagXh2jrqBr5SDZ35o7kyaGk7+4sapFuw+BUGqnymrlIbmOI5w==
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 08, 2022 at 12:16:24PM -0500, Tom Lendacky wrote:
-> In advance of providing support for unaccepted memory, switch from using
-> kmalloc() for allocating the Page State Change (PSC) structure to using a
-> local variable that lives on the stack. This is needed to avoid a possible
-> recursive call into set_pages_state() if the kmalloc() call requires
-> (more) memory to be accepted, which would result in a hang.
+This patch resets the fault retry counter to the default value, if the
+module reinitialisation was successful. Otherwise without resetting
+the counter, five (N_FAULT/N_FAULT_INIT) single TX_FAULT events will
+deactivate the module persistently.
 
-I don't understand: kmalloc() allocates memory which is unaccepted?
+In case the reinitialisation was not successful after five retries,
+the module is still being deactivated.
 
-> The current size of the PSC struct is 2,032 bytes. To make the struct more
-> stack friendly, reduce the number of PSC entries from 253 down to 64,
-> resulting in a size of 520 bytes. This is a nice compromise on struct size
-> and total PSC requests.
+Signed-off-by: Stefan Mahr <dac922@gmx.de>
+=2D--
+ drivers/net/phy/sfp.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Why can't you simply allocate that one PSC page once at boot, accept the
-memory for it and use it throughout? Under locking, ofc, if multiple PSC
-calls need to happen in parallel...
+diff --git a/drivers/net/phy/sfp.c b/drivers/net/phy/sfp.c
+index 63f90fe9a4d2..a8d7a713222a 100644
+=2D-- a/drivers/net/phy/sfp.c
++++ b/drivers/net/phy/sfp.c
+@@ -2263,6 +2263,9 @@ static void sfp_sm_main(struct sfp *sfp, unsigned in=
+t event)
+ 		} else if (event =3D=3D SFP_E_TIMEOUT || event =3D=3D SFP_E_TX_CLEAR) {
+ 			dev_info(sfp->dev, "module transmit fault recovered\n");
+ 			sfp_sm_link_check_los(sfp);
++
++			/* Reset the fault retry count */
++			sfp->sm_fault_retries =3D N_FAULT;
+ 		}
+ 		break;
 
-Instead of limiting the PSC req size.
+=2D-
+2.25.1
 
-> @@ -1254,6 +1260,8 @@ void setup_ghcb(void)
->  		if (cc_platform_has(CC_ATTR_GUEST_SEV_SNP))
->  			snp_register_per_cpu_ghcb();
->  
-> +		ghcb_percpu_ready = true;
-
-You know how I can't stand those random boolean vars stating something
-has been initialized?
-
-Can't you at least use some field in struct ghcb.reserved_1[] or so
-which the spec can provide to OS use so that FW doesn't touch it?
-
-And then stick a "percpu_ready" bit there.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette

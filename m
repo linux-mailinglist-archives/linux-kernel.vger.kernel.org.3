@@ -2,122 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32A48590CDE
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 09:52:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DEA0590CE1
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 09:53:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237615AbiHLHwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 03:52:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56558 "EHLO
+        id S237625AbiHLHxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 03:53:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237613AbiHLHwT (ORCPT
+        with ESMTP id S236480AbiHLHxB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 03:52:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BEF92A6C21
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 00:52:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660290737;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fVtXl6guGCe3kM32qFWNzJUFzVgfQUPoss26g6AXaJw=;
-        b=IIJ3IgR5mPlhF/fX7kbF71Y5cH1WR+70QgxO6V8fB0Gs7g+rWchcSsfnEXX5aby7x9W+9S
-        rTnRGmXjkWOpX++TcuTVVXw+bIAPuBhI/uDt/mr8czAPmUxdk+Ltmn7GTBqqOn3u0XS3FG
-        Ppt40iq32M7XXrw8vj2biYso6GWgLhM=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-495-Kph7HiB1MBaJCRgLKMsYog-1; Fri, 12 Aug 2022 03:52:16 -0400
-X-MC-Unique: Kph7HiB1MBaJCRgLKMsYog-1
-Received: by mail-ed1-f72.google.com with SMTP id s21-20020a056402521500b00440e91f30easo186334edd.7
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 00:52:16 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=fVtXl6guGCe3kM32qFWNzJUFzVgfQUPoss26g6AXaJw=;
-        b=1XfN3iIU2anvbfOcSgUSj7wySOHj78wG5nPBR90MxxiO1TcQSOp3tPsT4KjelFVXlf
-         6DBoPq/YqU6jeaCorxdHfETMgNB+6nSlTbDNk+9Noy8OXQ8A2KAYAEvbM0s6iBwauW5S
-         LTA/kyJ6fn4ujzR0mUZKg4kHIf36uncpHzxEl9GE3pM0N6RCUs9hTNlZsr1qYiKs2pNP
-         OsxEGnYQJCJM0Nwe0RtQaKZtHxosbSxT6JrOofAJ7s9d3p2Ue09JXO7MsljdafKEzXpH
-         u+CcpcZ9BVbeCfwdJUlnroLAnoZ0JYLzRJvNJV4/LFsyBipD+hUHtSpVGeHUAWjaLA/f
-         eCQQ==
-X-Gm-Message-State: ACgBeo0x9wCgichm3UFsXEZdRlTMV8hL+hzPpU/qygoC4k2nueFQbPqm
-        zTK8VCvvQRJPTW2Ha5rQYjMD5Th11TZn/ijqwnxfI1s/C9PV8OTao457BUM5k5n7me9BOvRQ9VC
-        pI5dFi5wkQfRpYvENcZT8xPiw
-X-Received: by 2002:a05:6402:3594:b0:440:5036:ec6b with SMTP id y20-20020a056402359400b004405036ec6bmr2547539edc.117.1660290735395;
-        Fri, 12 Aug 2022 00:52:15 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR6jpYqgU5GkQLhb5qOrI6rt7uC1GzLZSrZ2cscxHoxOfV3Gep9jfMJd0MvY1nn+qKIIC3qq8w==
-X-Received: by 2002:a05:6402:3594:b0:440:5036:ec6b with SMTP id y20-20020a056402359400b004405036ec6bmr2547497edc.117.1660290735175;
-        Fri, 12 Aug 2022 00:52:15 -0700 (PDT)
-Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
-        by smtp.googlemail.com with ESMTPSA id 24-20020a170906301800b007313a25e56esm513102ejz.29.2022.08.12.00.52.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 00:52:14 -0700 (PDT)
-Message-ID: <959fedce-aada-50e4-ce8d-a842d18439fa@redhat.com>
-Date:   Fri, 12 Aug 2022 09:52:13 +0200
+        Fri, 12 Aug 2022 03:53:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4F1A6C21;
+        Fri, 12 Aug 2022 00:53:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A56B4B82379;
+        Fri, 12 Aug 2022 07:52:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04642C433D6;
+        Fri, 12 Aug 2022 07:52:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660290777;
+        bh=f0o0pMxtVzQm3Qr+b9Pp02UbmH5a+lA4Mfcvlcflx4g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oaRzvcMubjodHew41yHRJzH21zJDe+uUZPjdSgI9JtP8+O2jAFD8pKuhHcwCodcSS
+         36rgmtjZ/o9wDrloFKlPssCwcxqHQkJVsJp3W5zIvapjfRO/7IL5yRqWzhQyn88bUz
+         gk9p7z7DDv/vKRMaGHe3MY3q4aGz3mUSV6H5HMvjc3VttwoIhni56WbdIVpfjD1JCI
+         dM06Wef15Mnbtc4uz1u3+/9vE9DWO9QeRcltVK/PemFj7Z9Yhzjz25tGMvlar3O9o7
+         dpA3JvYJeXFzGq+10ehmJ6thSxXfkJ+WlTUs1v9t39X92+8klg2wG5D9i6I6U5UXw+
+         sREOdhRjNUJRw==
+Date:   Fri, 12 Aug 2022 09:52:50 +0200
+From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Jianmin Lv <lvjianmin@loongson.cn>, guohanjun@huawei.com,
+        sudeep.holla@arm.com, rafael@kernel.org, lenb@kernel.org,
+        robert.moore@intel.com, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Subject: Re: [PATCH V2 1/2] ACPI / scan: Support multiple dma windows with
+ different offsets
+Message-ID: <YvYG0i0XJSlwP1Wb@lpieralisi>
+References: <1659684674-40612-1-git-send-email-lvjianmin@loongson.cn>
+ <1659684674-40612-2-git-send-email-lvjianmin@loongson.cn>
+ <c43edf84-c93d-e695-e3db-4592cdc8a3d1@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v2 1/7] perf/x86/core: Update x86_pmu.pebs_capable for
- ICELAKE_{X,D}
-Content-Language: en-US
-To:     Like Xu <like.xu.linux@gmail.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Jim Mattson <jmattson@google.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Kan Liang <kan.liang@linux.intel.com>,
-        Peter Zijlstra <peterz@infradead.org>
-References: <20220721103549.49543-1-likexu@tencent.com>
- <20220721103549.49543-2-likexu@tencent.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20220721103549.49543-2-likexu@tencent.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c43edf84-c93d-e695-e3db-4592cdc8a3d1@arm.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/21/22 12:35, Like Xu wrote:
-> From: Like Xu <likexu@tencent.com>
-> 
-> Ice Lake microarchitecture with EPT-Friendly PEBS capability also support
-> the Extended feature, which means that all counters (both fixed function
-> and general purpose counters) can be used for PEBS events.
-> 
-> Update x86_pmu.pebs_capable like SPR to apply PEBS_ALL semantics.
-> 
-> Cc: Kan Liang <kan.liang@linux.intel.com>
-> Fixes: fb358e0b811e ("perf/x86/intel: Add EPT-Friendly PEBS for Ice Lake Server")
-> Signed-off-by: Like Xu <likexu@tencent.com>
-> ---
->   arch/x86/events/intel/core.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
-> index 4e9b7af9cc45..e46fd496187b 100644
-> --- a/arch/x86/events/intel/core.c
-> +++ b/arch/x86/events/intel/core.c
-> @@ -6239,6 +6239,7 @@ __init int intel_pmu_init(void)
->   	case INTEL_FAM6_ICELAKE_X:
->   	case INTEL_FAM6_ICELAKE_D:
->   		x86_pmu.pebs_ept = 1;
-> +		x86_pmu.pebs_capable = ~0ULL;
->   		pmem = true;
->   		fallthrough;
->   	case INTEL_FAM6_ICELAKE_L:
+On Fri, Aug 05, 2022 at 01:46:07PM +0100, Robin Murphy wrote:
 
-Peter, can you please ack this (you were not CCed on this KVM series but 
-this patch is really perf core)?
+[...]
 
-Thanks,
+> > -int acpi_dma_get_range(struct device *dev, u64 *dma_addr, u64 *offset,
+> > -		       u64 *size)
+> > +int acpi_dma_get_range(struct device *dev, const struct bus_dma_region **map)
+> >   {
+> >   	struct acpi_device *adev;
+> >   	LIST_HEAD(list);
+> >   	struct resource_entry *rentry;
+> >   	int ret;
+> >   	struct device *dma_dev = dev;
+> > -	u64 len, dma_start = U64_MAX, dma_end = 0, dma_offset = 0;
+> > +	int num_ranges = 0;
+> > +	struct bus_dma_region *r;
+> >   	/*
+> >   	 * Walk the device tree chasing an ACPI companion with a _DMA
+> > @@ -1525,31 +1526,31 @@ int acpi_dma_get_range(struct device *dev, u64 *dma_addr, u64 *offset,
+> >   	ret = acpi_dev_get_dma_resources(adev, &list);
+> >   	if (ret > 0) {
+> > +		list_for_each_entry(rentry, &list, node)
+> > +			num_ranges++;
+> 
+> We already have the number of resources in ret.
+> 
+> Looking at this, I also now wonder if we're doing the right thing if the
+> object is present but contains no resources. The spec isn't clear whether
+> that's even really valid, but if it is, is it meaningful? It seems we'd
+> currently consider an empty object equivalent to no object, but if anything
+> it should perhaps be interpreted as the opposite, i.e. that no DMA is
+> possible because the bus does not decode any ranges. Is anyone more familiar
+> with the intent of the spec here?
 
-Paolo
+I think we are currently considering no object differently from an
+empty object, since for no object we would return -ENODEV in
+acpi_dma_get_range(), we would not even get to parsing the resources
+(and return 0) and we would fall back to checking IORT to gather the
+DMA address space size.
 
+I think you are right, we should change the behaviour if an object
+is present but it has no resources though, by reading the specs an
+empty _DMA object implies no DMA is possible and that's not what
+we are doing at the moment (hopefully there is no firmware out
+there with such a set-up but there is only one way to discover it).
+
+This behavioural change should be a separate patch obviously for
+bisectability (and a possible revert).
+
+Lorenzo
+
+> Thanks,
+> Robin.
+> 
+> > +
+> > +		r = kcalloc(num_ranges + 1, sizeof(*r), GFP_KERNEL);
+> > +		if (!r) {
+> > +			ret = -ENOMEM;
+> > +			goto out;
+> > +		}
+> > +
+> > +		*map = r;
+> > +
+> >   		list_for_each_entry(rentry, &list, node) {
+> > -			if (dma_offset && rentry->offset != dma_offset) {
+> > +			if (rentry->res->start >= rentry->res->end) {
+> >   				ret = -EINVAL;
+> > -				dev_warn(dma_dev, "Can't handle multiple windows with different offsets\n");
+> > +				dev_dbg(dma_dev, "Invalid DMA regions configuration\n");
+> >   				goto out;
+> >   			}
+> > -			dma_offset = rentry->offset;
+> > -
+> > -			/* Take lower and upper limits */
+> > -			if (rentry->res->start < dma_start)
+> > -				dma_start = rentry->res->start;
+> > -			if (rentry->res->end > dma_end)
+> > -				dma_end = rentry->res->end;
+> > -		}
+> > -		if (dma_start >= dma_end) {
+> > -			ret = -EINVAL;
+> > -			dev_dbg(dma_dev, "Invalid DMA regions configuration\n");
+> > -			goto out;
+> > +			r->cpu_start = rentry->res->start;
+> > +			r->dma_start = rentry->res->start - rentry->offset;
+> > +			r->size = rentry->res->end - rentry->res->start + 1;
+> > +			r->offset = rentry->offset;
+> > +			r++;
+> >   		}
+> > -		*dma_addr = dma_start - dma_offset;
+> > -		len = dma_end - dma_start;
+> > -		*size = max(len, len + 1);
+> > -		*offset = dma_offset;
+> >   	}
+> >    out:
+> >   	acpi_dev_free_resource_list(&list);
+> > @@ -1639,20 +1640,19 @@ int acpi_dma_configure_id(struct device *dev, enum dev_dma_attr attr,
+> >   			  const u32 *input_id)
+> >   {
+> >   	const struct iommu_ops *iommu;
+> > -	u64 dma_addr = 0, size = 0;
+> >   	if (attr == DEV_DMA_NOT_SUPPORTED) {
+> >   		set_dma_ops(dev, &dma_dummy_ops);
+> >   		return 0;
+> >   	}
+> > -	acpi_arch_dma_setup(dev, &dma_addr, &size);
+> > +	acpi_arch_dma_setup(dev);
+> >   	iommu = acpi_iommu_configure_id(dev, input_id);
+> >   	if (PTR_ERR(iommu) == -EPROBE_DEFER)
+> >   		return -EPROBE_DEFER;
+> > -	arch_setup_dma_ops(dev, dma_addr, size,
+> > +	arch_setup_dma_ops(dev, 0, U64_MAX,
+> >   				iommu, attr == DEV_DMA_COHERENT);
+> >   	return 0;
+> > diff --git a/include/acpi/acpi_bus.h b/include/acpi/acpi_bus.h
+> > index 0dc1ea0b..e106073 100644
+> > --- a/include/acpi/acpi_bus.h
+> > +++ b/include/acpi/acpi_bus.h
+> > @@ -611,8 +611,7 @@ struct acpi_pci_root {
+> >   int acpi_iommu_fwspec_init(struct device *dev, u32 id,
+> >   			   struct fwnode_handle *fwnode,
+> >   			   const struct iommu_ops *ops);
+> > -int acpi_dma_get_range(struct device *dev, u64 *dma_addr, u64 *offset,
+> > -		       u64 *size);
+> > +int acpi_dma_get_range(struct device *dev, const struct bus_dma_region **map);
+> >   int acpi_dma_configure_id(struct device *dev, enum dev_dma_attr attr,
+> >   			   const u32 *input_id);
+> >   static inline int acpi_dma_configure(struct device *dev,
+> > diff --git a/include/linux/acpi.h b/include/linux/acpi.h
+> > index 44975c1..34e0545 100644
+> > --- a/include/linux/acpi.h
+> > +++ b/include/linux/acpi.h
+> > @@ -280,12 +280,12 @@ int acpi_table_parse_madt(enum acpi_madt_type id,
+> >   #ifdef CONFIG_ARM64
+> >   void acpi_numa_gicc_affinity_init(struct acpi_srat_gicc_affinity *pa);
+> > -void acpi_arch_dma_setup(struct device *dev, u64 *dma_addr, u64 *dma_size);
+> > +void acpi_arch_dma_setup(struct device *dev);
+> >   #else
+> >   static inline void
+> >   acpi_numa_gicc_affinity_init(struct acpi_srat_gicc_affinity *pa) { }
+> >   static inline void
+> > -acpi_arch_dma_setup(struct device *dev, u64 *dma_addr, u64 *dma_size) { }
+> > +acpi_arch_dma_setup(struct device *dev) { }
+> >   #endif
+> >   int acpi_numa_memory_affinity_init (struct acpi_srat_mem_affinity *ma);
+> > @@ -974,8 +974,7 @@ static inline enum dev_dma_attr acpi_get_dma_attr(struct acpi_device *adev)
+> >   	return DEV_DMA_NOT_SUPPORTED;
+> >   }
+> > -static inline int acpi_dma_get_range(struct device *dev, u64 *dma_addr,
+> > -				     u64 *offset, u64 *size)
+> > +static inline int acpi_dma_get_range(struct device *dev, const struct bus_dma_region **map)
+> >   {
+> >   	return -ENODEV;
+> >   }

@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7300590D07
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 09:56:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02C3C590D0B
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 09:56:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237729AbiHLH4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 03:56:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60886 "EHLO
+        id S237741AbiHLH41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 03:56:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237674AbiHLH4L (ORCPT
+        with ESMTP id S237675AbiHLH4L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 12 Aug 2022 03:56:11 -0400
 Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0118A9AF99;
-        Fri, 12 Aug 2022 00:56:10 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 63E5E5C00E4;
-        Fri, 12 Aug 2022 03:56:09 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D8CB98D35;
+        Fri, 12 Aug 2022 00:56:11 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 70CEF5C017C;
+        Fri, 12 Aug 2022 03:56:10 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute1.internal (MEProxy); Fri, 12 Aug 2022 03:56:09 -0400
+  by compute2.internal (MEProxy); Fri, 12 Aug 2022 03:56:10 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1660290969; x=1660377369; bh=C8
-        3k0zYFtHbw8K7oTUWFJgU6C0PSTg2NOklbCSj4b78=; b=moKEoI7fuhgxU+xG+9
-        ZzkzD3scCETDgLCE8uj4p/9uxXdnbjglHeAvzNer9BvSEayBwboYge+HWbemB/Hb
-        Bxt+MfDrW/7Da8AeBXKVY7oESYO3h63ldW1GAf/mpC6zFs+1eg8NIm2mM7+/2Zb4
-        1RGifN4gSCPiDSZx4YyHWsMzgZomjgF6dm16j6JjNYKIjvFFrwpNOvKGwRHfIUwe
-        tuV+r4gFxhTwXeLv063pgNWRKdzuNWh7fLvNBPyIuN6WIPI4iR/g9d0J90fIxIVS
-        5PYgmlLg0nk7lDHzIPkHXHyFqBR9Z90Ana/nwoDspMCKqyhHOL9rogIQWUc+1CLp
-        gIzw==
+        :subject:subject:to:to; s=fm2; t=1660290970; x=1660377370; bh=hq
+        hnld67pDLmyX1tJBCi+H9QPo25a/aBfduzgY06UlA=; b=g6f4x6qYl0ol4Uo73U
+        oQ1EA7uAAc7lhfWNtUgZ8vP25tu//0EmbOqBthrKnL3fPVXALOOB4VnQqc0H4KTy
+        YOfX1tNQ0hqaIMy1GJh/6GC4YV8Evv0/mWVq4rJoJCOGCcTmKheMf1kQMa48ZA+H
+        1KNeESjvf7RerQ/q8b/vpzoYCl/DGATIvPqkdmCUvNqzIan+Mx58+5fn2vyuAaiD
+        TwjqHx5EIZGooFnnmc2F0eODIOmo7rtOqV5HnoxfmlpRxWACmnMerXz7holWDFhP
+        REUrKrKU4w7MsGuIeIxuljyCtHmhKtd9C3x4AVmHFjTSpIDaCjPoPa1OKWM0e5GE
+        8STQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1660290969; x=1660377369; bh=C83k0zYFtHbw8
-        K7oTUWFJgU6C0PSTg2NOklbCSj4b78=; b=IbN+YSOH03n9UNkR2knEefGALM7I9
-        98ti2IGb6HYFtkqeCRFU38IVxD22NV5aDZOxuJOEQ40mBeWHOsgeGLzpbb4LipIg
-        J+dJjlBRvEKiljiYcUzOntuVByDaBorIHjrk6kVezL/saqChifagCGn7UkF7BPET
-        uum7t0JC5g1cjzpiPuN+IX0c1CINUTqg0Eg2rD+/73wFzoCjhjx5ZtrV/RkDNGHZ
-        X0kd2s/OqUFgPJicUIP31ZPTCQE+KfJfdW5L6UffdOhLhr4JsKZD8sw1FtSEH5o3
-        CJQLhIpNme69ZzB7P6GuEaIAfzazAscIEUr9Y19AUa0gH5mrIvwuo/IqA==
-X-ME-Sender: <xms:mQf2YqtsFbC0Ywzz2TvW97_0dhixuK_6xLKvxTJ_yi0Oxh1xRxpX7Q>
-    <xme:mQf2YvcCW_gOwNmZj8PcLCj8SOrcfmXIC4Br45YppfIQO5ncBxOQWtBFtcVUmh2IU
-    Tloeoe1SjONwIyykQ>
-X-ME-Received: <xmr:mQf2YlyFfmgemIZSxQ7xsPvCclE_YAZXt4P_7cO2_JMmEPzXDmCThY_rvAR9PO9aOLYCST7SnR4J1Ycq2E5SRsgNKqfwkpVX6VqnxkFK5gGAT6VBSHMiHAOTUrUnbsXOS673Yg>
+        :x-sasl-enc; s=fm1; t=1660290970; x=1660377370; bh=hqhnld67pDLmy
+        X1tJBCi+H9QPo25a/aBfduzgY06UlA=; b=QHiN/6EXtWLDEwii71eNzW6SySZx3
+        g87zxAntgceKO3w8dV3R60kdyJhLyIKjWwbpUWZwt10u4bjy0RnnvN/9cuqgsBVN
+        MLI8HgCZHrWcUgfsADKwgR4x0jCE9EiR1epOWLJ/vemiQP4bQMMylSX7DI2hWE+w
+        eAkQMC+qLXYo6wiMu9dh3zYFE3G/FZAV20tE+WlzExaBn7TQReD15QqhngcNLmqK
+        WOe8RhPaTiYstWwQKTLmUSzakmsQiI+4GW2sBj3p3uvu5/ud2Ic4kSH2FRP7RZUv
+        Q5vRxke/M+JYf4KLsATwNFdjfYRhDN7AviNM02fPG4y9D1yvH+kN7ZKLA==
+X-ME-Sender: <xms:mgf2YqhyOBA59n4vBPOaCS-sfdcYMzaBxrowDnaOvqRks_zZZQrEyA>
+    <xme:mgf2YrDd4UmDUdcM9hTaJpAS0GEB2dwln36vgicW_MIAT5_aIMic4MQECBufjsiSN
+    iHa72_WqgGmzVJ4pw>
+X-ME-Received: <xmr:mgf2YiHc91d9SIamysnrvMf3hi2Jn1C0jFGoCRikHI9QXzWOBqKEp6DdpPn6a6OtVPL8re-Ko_3qHCPsC1gVaTrc_bPcBiyF9wNKeEQm8A6yDmA77q2NWMeW-yefKzN82vxmvA>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeghedguddvjecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
     enucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefurghm
     uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
     ggtffrrghtthgvrhhnpedukeetueduhedtleetvefguddvvdejhfefudelgfduveeggeeh
-    gfdufeeitdevteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    gfdufeeitdevteenucevlhhushhtvghrufhiiigvpedvnecurfgrrhgrmhepmhgrihhlfh
     hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:mQf2YlPcYicktf9ADSK2L2L-DJ750riyNUiJOQ6mB46biSZsDG8hFw>
-    <xmx:mQf2Yq8l0unsItoGRNfy19d0jOiZe2AwBDB5bMGcboQkay4GVr0WKw>
-    <xmx:mQf2YtXhj1w1nRTVHSl8WGi3yaSbFaYdFxLS2ZFKm3jQWENiUZvVAw>
-    <xmx:mQf2YuVjxeTP9Z7QTFZ4yruRpdYI8k9e_wQpJdPz2MuZytEBvRbctA>
+X-ME-Proxy: <xmx:mgf2YjTMnfU6aoJn9dR1UB_MjUc02F9KGSbRNo22L0ZH01w9ZTyFQg>
+    <xmx:mgf2Ynxu2u3DmbgEvwtNsU5vVpJKa1VzYpUUYSWszPDe2wgBDEFdXQ>
+    <xmx:mgf2Yh4Pe2jqzYjYsDvvL-9UIWjxhpqb4-9r_eu5kUTwTN9p1R297g>
+    <xmx:mgf2YsKtwV7aCenttmbiIlvWt5hIfm-4YH8NmmaqtJ_TOgyajOekBw>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 12 Aug 2022 03:56:08 -0400 (EDT)
+ 12 Aug 2022 03:56:09 -0400 (EDT)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Kishon Vijay Abraham I <kishon@ti.com>,
         Vinod Koul <vkoul@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
@@ -75,9 +75,9 @@ Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-phy@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: [PATCH 3/8] arm64: dts: allwinner: a64: Add DPHY interrupt
-Date:   Fri, 12 Aug 2022 02:55:58 -0500
-Message-Id: <20220812075603.59375-4-samuel@sholland.org>
+Subject: [PATCH 4/8] dt-bindings: sun6i-a31-mipi-dphy: Add the A100 DPHY variant
+Date:   Fri, 12 Aug 2022 02:55:59 -0500
+Message-Id: <20220812075603.59375-5-samuel@sholland.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220812075603.59375-1-samuel@sholland.org>
 References: <20220812075603.59375-1-samuel@sholland.org>
@@ -93,27 +93,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DPHY has an interrupt line which is shared with the DSI controller.
+A100 features an updated DPHY, which moves PLL control inside the DPHY
+register space. (Previously PLL-MIPI was controlled from the CCU. This
+does not affect the "clocks" property because the link between PLL-MIPI
+and the DPHY was never represented in the devicetree.) It also requires
+a modified analog power-on sequence. Finally, the new DPHY adds support
+for operating as an LVDS PHY. D1 uses this same variant.
 
-Fixes: 16c8ff571a16 ("arm64: dts: allwinner: a64: Add MIPI DSI pipeline")
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
 
- arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+ .../bindings/phy/allwinner,sun6i-a31-mipi-dphy.yaml           | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi b/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi
-index 77b5349f6087..62f45f71ec65 100644
---- a/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi
-+++ b/arch/arm64/boot/dts/allwinner/sun50i-a64.dtsi
-@@ -1199,6 +1199,7 @@ dphy: d-phy@1ca1000 {
- 			compatible = "allwinner,sun50i-a64-mipi-dphy",
- 				     "allwinner,sun6i-a31-mipi-dphy";
- 			reg = <0x01ca1000 0x1000>;
-+			interrupts = <GIC_SPI 89 IRQ_TYPE_LEVEL_HIGH>;
- 			clocks = <&ccu CLK_BUS_MIPI_DSI>,
- 				 <&ccu CLK_DSI_DPHY>;
- 			clock-names = "bus", "mod";
+diff --git a/Documentation/devicetree/bindings/phy/allwinner,sun6i-a31-mipi-dphy.yaml b/Documentation/devicetree/bindings/phy/allwinner,sun6i-a31-mipi-dphy.yaml
+index cf49bd99b3e2..b88c4b52af7d 100644
+--- a/Documentation/devicetree/bindings/phy/allwinner,sun6i-a31-mipi-dphy.yaml
++++ b/Documentation/devicetree/bindings/phy/allwinner,sun6i-a31-mipi-dphy.yaml
+@@ -17,9 +17,13 @@ properties:
+   compatible:
+     oneOf:
+       - const: allwinner,sun6i-a31-mipi-dphy
++      - const: allwinner,sun50i-a100-mipi-dphy
+       - items:
+           - const: allwinner,sun50i-a64-mipi-dphy
+           - const: allwinner,sun6i-a31-mipi-dphy
++      - items:
++          - const: allwinner,sun20i-d1-mipi-dphy
++          - const: allwinner,sun50i-a100-mipi-dphy
+ 
+   reg:
+     maxItems: 1
 -- 
 2.35.1
 

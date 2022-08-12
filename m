@@ -2,102 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AED759112E
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 15:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B898D591131
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 15:08:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238204AbiHLNHI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 09:07:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55018 "EHLO
+        id S238591AbiHLNIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 09:08:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231637AbiHLNHF (ORCPT
+        with ESMTP id S231698AbiHLNIg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 09:07:05 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23D685A86;
-        Fri, 12 Aug 2022 06:07:02 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27CAU5rU016140;
-        Fri, 12 Aug 2022 08:06:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=PODMain02222019;
- bh=I9klxWCl20GzOsgSo6Cjo6h4lDJXRQZ68eRcuQxCfKE=;
- b=o3UT8W665PB+2d68TT8kwsfsJOUJ1xJo/3ApAz3kHXTM+Yx7ZmlVGpBBzbPQPwm8bG03
- 4z4bYsb4IGPCkXr9j1hvX+36qzq1EzCtYSheUpqD/QYOp++kIdUyMtQnrMGMPszVfBqT
- 2hjoReYezghjthaMrj+VtH9mxIgoaPJ4SDxbsYQxfE6smzTFTiMlkv8E5XpXlzulYH8D
- OaXnG08/dw2O0oG7H1NigtB7s8dX5sZd15HnJljlNcFOWwnb2L6/TqQQcA42bFePO4KH
- gXiFGKKo06DON5bl0NIKp3S6Rd0swy6oKjEVNEZSnTIPKqE04Vbwx8AqwsAi7urKP/cq 7Q== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3huwr3m0ar-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 Aug 2022 08:06:52 -0500
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.9; Fri, 12 Aug
- 2022 08:06:50 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.9 via Frontend
- Transport; Fri, 12 Aug 2022 08:06:50 -0500
-Received: from sbinding-cirrus-dsktp2.ad.cirrus.com (unknown [198.90.202.160])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 88D8245D;
-        Fri, 12 Aug 2022 13:06:49 +0000 (UTC)
-From:   Stefan Binding <sbinding@opensource.cirrus.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>
-CC:     <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <patches@opensource.cirrus.com>,
-        Stefan Binding <sbinding@opensource.cirrus.com>
-Subject: [PATCH v1] ACPI: Property: Fix type detection of unified integer reading functions
-Date:   Fri, 12 Aug 2022 14:06:45 +0100
-Message-ID: <20220812130645.14710-1-sbinding@opensource.cirrus.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 12 Aug 2022 09:08:36 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9B7B89931
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 06:08:34 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id bs25so1176765wrb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 06:08:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:from:to:cc;
+        bh=nE/YksI/TrTd0HJkGRCbsxN0/Q7VNi+G+yHlFaV4rdg=;
+        b=cx+88nfu9Bq4Xhw4QJlzINSAm53bc1vafAFJIcLT8QLNnYQuz07AaolI2SMsGslLj2
+         aFNlpzPwnD7eoHQypdh6JldNBT0pPMtmVw/rrK/ZwlHwHjJTU+UkHa6Afd84rM9XY8mr
+         X0k9FyTmgHaYRLyYDHnPx9bm71tEz+XzBsgfmWMV6X5dAnkyxrMadPV9TNL2+gdnFyGz
+         qajW7ZQ3+H38K870C62QQpbz6SD34M/I80mFT1cs1anx+OEApDL7R48Ozp+96kBxpHN6
+         Olx2e70wiACUnf31/3awuT8nK7JStJPbixPCCt/aOFlioSZ4IOvftpBKcY6A/B2NL51d
+         A6Uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:message-id:in-reply-to:date:references
+         :subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=nE/YksI/TrTd0HJkGRCbsxN0/Q7VNi+G+yHlFaV4rdg=;
+        b=3y02m2To+20x8yEIB1AByY4NrbQ3XmhmPgDNhfPNDwLe8v+1qNI9XpHOgRba3LPsH7
+         aiLa/vCmlRv26JWlEPuqPyFNJmOxxSsp6q8iZLVzntyFpnoUQgMhunqo6c1hsZrE4cio
+         FT1n6b20SjmvkYckRK1pJUJi+ShdQdnlkpSAYZXoAVgbop9gx4GR+PjumnpZnhx2L1Uk
+         eBvDJaa3/p0Kz79zbWb5iPsPJsZJlfhSN4HaQOrfzYnqQ2HgKCxk68WN95CQDIsJMYGr
+         chaiO4jLb5XpZdgQ6W8KorjE9a//tXvHEst/lg/vFijhm5SWdrcqF1yH+Ib/0X5/PAZc
+         Sbrg==
+X-Gm-Message-State: ACgBeo3vvkfWfxzLDzykvd+tyI8wnQPHrdHby3XImTpBmr7yciE552M8
+        FhE5mq5X4/7cf+kHBjGnytQrNw==
+X-Google-Smtp-Source: AA6agR4IM6yACIzgVOhZNfMvn4VAPSBXozEbqHJmfIgFAN7W1HE5KRpQ3mocYJWa0z1wOOyorucoHQ==
+X-Received: by 2002:adf:dc87:0:b0:21e:ecad:a6bc with SMTP id r7-20020adfdc87000000b0021eecada6bcmr2098755wrj.218.1660309713144;
+        Fri, 12 Aug 2022 06:08:33 -0700 (PDT)
+Received: from localhost ([109.180.234.208])
+        by smtp.gmail.com with ESMTPSA id q25-20020a1ce919000000b003a3170a7af9sm2878102wmc.4.2022.08.12.06.08.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Aug 2022 06:08:32 -0700 (PDT)
+From:   Punit Agrawal <punit.agrawal@bytedance.com>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v1 2/5] ACPI: scan: Rename acpi_bus_get_parent() and
+ rearrange it
+References: <12036348.O9o76ZdvQC@kreacher> <2252770.ElGaqSPkdT@kreacher>
+Date:   Fri, 12 Aug 2022 14:08:31 +0100
+In-Reply-To: <2252770.ElGaqSPkdT@kreacher> (Rafael J. Wysocki's message of
+        "Wed, 10 Aug 2022 18:15:24 +0200")
+Message-ID: <87edxlk3sg.fsf@stealth>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-GUID: dwkhdVRx1rycG4nIQXZuNbNXOgWGMA_J
-X-Proofpoint-ORIG-GUID: dwkhdVRx1rycG4nIQXZuNbNXOgWGMA_J
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current code expects the type of the value to be an integer type,
-instead the value passed to the macro is a pointer.
-Ensure the size comparison uses the correct pointer type to choose the
-max value, instead of using the integer type.
+"Rafael J. Wysocki" <rjw@rjwysocki.net> writes:
 
-Fixes: 923044133367 ("ACPI: property: Unify integer value reading functions")
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> The acpi_bus_get_parent() name doesn't really reflect the
+> purpose of the function so change it to a more accurate
+> acpi_find_parent_acpi_dev().
+>
+> While at it, rearrange the code inside that function the make it
 
-Signed-off-by: Stefan Binding <sbinding@opensource.cirrus.com>
----
- drivers/acpi/property.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Typo:                                                  to
 
-diff --git a/drivers/acpi/property.c b/drivers/acpi/property.c
-index 7b3ad8ed2f4e..b1d4a8db89df 100644
---- a/drivers/acpi/property.c
-+++ b/drivers/acpi/property.c
-@@ -1043,10 +1043,10 @@ static int acpi_data_prop_read_single(const struct acpi_device_data *data,
- 				break;					\
- 			}						\
- 			if (__items[i].integer.value > _Generic(__val,	\
--								u8: U8_MAX, \
--								u16: U16_MAX, \
--								u32: U32_MAX, \
--								u64: U64_MAX, \
-+								u8 *: U8_MAX, \
-+								u16 *: U16_MAX, \
-+								u32 *: U32_MAX, \
-+								u64 *: U64_MAX, \
- 								default: 0U)) { \
- 				ret = -EOVERFLOW;			\
- 				break;					\
--- 
-2.34.1
-
+> easier to read.
+>
+> No intentional functional impact.
+>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/acpi/scan.c |   24 ++++++++++++++----------
+>  1 file changed, 14 insertions(+), 10 deletions(-)
+>
+> Index: linux-pm/drivers/acpi/scan.c
+> ===================================================================
+> --- linux-pm.orig/drivers/acpi/scan.c
+> +++ linux-pm/drivers/acpi/scan.c
+> @@ -816,10 +816,9 @@ static const char * const acpi_honor_dep
+>  	NULL
+>  };
+>  
+> -static struct acpi_device *acpi_bus_get_parent(acpi_handle handle)
+> +static struct acpi_device *acpi_find_parent_acpi_dev(acpi_handle handle)
+>  {
+> -	struct acpi_device *device;
+> -	acpi_status status;
+> +	struct acpi_device *adev;
+>  
+>  	/*
+>  	 * Fixed hardware devices do not appear in the namespace and do not
+> @@ -830,13 +829,18 @@ static struct acpi_device *acpi_bus_get_
+>  		return acpi_root;
+>  
+>  	do {
+> -		status = acpi_get_parent(handle, &handle);
+> -		if (ACPI_FAILURE(status))
+> -			return status == AE_NULL_ENTRY ? NULL : acpi_root;
+> +		acpi_status status;
+>  
+> -		device = acpi_fetch_acpi_dev(handle);
+> -	} while (!device);
+> -	return device;
+> +		status = acpi_get_parent(handle, &handle);
+> +		if (ACPI_FAILURE(status)) {
+> +			if (status != AE_NULL_ENTRY)
+> +				return acpi_root;
+> +
+> +			return NULL;
+> +		}
+> +		adev = acpi_fetch_acpi_dev(handle);
+> +	} while (!adev);
+> +	return adev;
+>  }
+>  
+>  acpi_status
+> @@ -1777,7 +1781,7 @@ void acpi_init_device_object(struct acpi
+>  	INIT_LIST_HEAD(&device->pnp.ids);
+>  	device->device_type = type;
+>  	device->handle = handle;
+> -	device->parent = acpi_bus_get_parent(handle);
+> +	device->parent = acpi_find_parent_acpi_dev(handle);
+>  	fwnode_init(&device->fwnode, &acpi_device_fwnode_ops);
+>  	acpi_set_device_status(device, ACPI_STA_DEFAULT);
+>  	acpi_device_get_busid(device);

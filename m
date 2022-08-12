@@ -2,159 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39767590D99
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 10:44:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5350A590D92
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 10:43:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237475AbiHLIoS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 04:44:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55812 "EHLO
+        id S237413AbiHLInh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 04:43:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237127AbiHLIoO (ORCPT
+        with ESMTP id S237127AbiHLIne (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 04:44:14 -0400
-Received: from vm3.sequanux.org (static.55.155.9.5.clients.your-server.de [5.9.155.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D126CA8965;
-        Fri, 12 Aug 2022 01:44:12 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by vm3.sequanux.org (Postfix) with ESMTP id EBDD2108095;
-        Fri, 12 Aug 2022 10:43:53 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at vm3.sequanux.org
-Received: from vm3.sequanux.org ([127.0.0.1])
-        by localhost (vm3.sequanux.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id ryt02m_ZlS5e; Fri, 12 Aug 2022 10:43:14 +0200 (CEST)
-Received: from localhost (softwrestling.org [95.216.36.37])
-        by vm3.sequanux.org (Postfix) with ESMTPSA id 06647108752;
-        Fri, 12 Aug 2022 10:43:13 +0200 (CEST)
-Date:   Fri, 12 Aug 2022 10:43:03 +0200
-From:   simon.guinot@sequanux.org
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Pavel Machek <pavel@ucw.cz>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lee Jones <lee@kernel.org>, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        Sheng-Yuan Huang <syhuang3@nuvoton.com>,
-        Tasanakorn Phaipool <tasanakorn@gmail.com>
-Subject: Re: [PATCH v3 1/4] gpio-f7188x: Add GPIO support for Nuvoton NCT6116
-Message-ID: <YvYSl2FpOGnqZfTZ@76cbfcf04d45>
-References: <20220811153908.31283-1-henning.schild@siemens.com>
- <20220811153908.31283-2-henning.schild@siemens.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ouneLSNkbbKTFRML"
-Content-Disposition: inline
-In-Reply-To: <20220811153908.31283-2-henning.schild@siemens.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 12 Aug 2022 04:43:34 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58453A8965
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 01:43:33 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id o3so210414ple.5
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 01:43:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=synaptics-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc;
+        bh=kSOdIAVCbyX9fuxNC7baT+98A2d4xsZwipDvwGnvTy0=;
+        b=aEbZShG5Y3lbDu+DLWdpyUYtmNqOYHXWFc6tgJqOb7mQrVFMz0vQ85FAbYLqwjChN6
+         1idsPtCTYjfRP31AHj1YysUV31ar/IW1D1SQYY3XLNcq8rg2nf0T6DPKW/RoCNiSBbxP
+         Fl5Y70C+NhQL8OqFojargP942sz3k7+YZZNIdjeK4jHiWztS4qkhBIVzQBPk5rbg7kbU
+         5lgXgxYEalqleQM8ZoHbZSH3lcEN+EhgkDZmkS/CyZOLasnPJpoK/xSBHbtJeocC8kQ3
+         /jBWVdGl8wpSEBBAVTtyiB6F9LiiXqUvc1TNT+ZAlh1Qq2VdYLTXba8LOXo3YZxLaelz
+         QDIw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=kSOdIAVCbyX9fuxNC7baT+98A2d4xsZwipDvwGnvTy0=;
+        b=Kbem9lmNFDCgb5TeS6H9S318SurS8kRlMkZu7K4tn7HEkxCVwYjff44yNLPMeRDmQr
+         4i60gUh73XdaCFbItqr6SMcnZyYIviVX0wW2FowgAuH5awW+29LcTUAeCWAEcZEY1dNR
+         oKkyc9fYZ11AtFvWDmxcBsgaFM/XhXV5531Ffztyr58lm+RwK9qL+ZFR2VUsRybegLHj
+         NX0j+9a+0bSLbVCZbTv4IdcfJE2Tz/Xox45bTptjPJLgz2Y/5lichV8RQ9OfRVWB6tLb
+         05FZ2UpC8J54JGaQkbHbGeJZ3SKfsm2zIDOwIz4ZhvFxIf2QM/d3puxTzKQsGsOXlEnq
+         6j0g==
+X-Gm-Message-State: ACgBeo3lZOyp8DEsI1+UkLtLyXnRKPKRe5seyRtc5G3PbwZd0cSQGvom
+        FWaaDilEKU37LaE1RiRdlOiP5g==
+X-Google-Smtp-Source: AA6agR7z8YQui3JABeyn+3bgCDEkfOwapvyU/Z9HgLYIpxH82uIX+gv3/YemeMH3k/pk+pvhC9nkNQ==
+X-Received: by 2002:a17:902:bf46:b0:170:aedd:e866 with SMTP id u6-20020a170902bf4600b00170aedde866mr3045368pls.21.1660293812870;
+        Fri, 12 Aug 2022 01:43:32 -0700 (PDT)
+Received: from localhost.localdomain ([63.222.17.38])
+        by smtp.gmail.com with ESMTPSA id a128-20020a636686000000b004114cc062f0sm907954pgc.65.2022.08.12.01.43.29
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 12 Aug 2022 01:43:32 -0700 (PDT)
+From:   margeyang <marge.yang@synaptics.corp-partner.google.com>
+To:     dmitry.torokhov@gmail.com, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hdegoede@redhat.com,
+        benjamin.tissoires@redhat.com
+Cc:     marge.yang@tw.synaptics.com, derek.cheng@tw.synaptics.com,
+        vincent.huang@tw.synaptics.com,
+        Marge Yang <marge.yang@synaptics.corp-partner.google.com>
+Subject: [PATCH V2] Input: synaptics-rmi4 - filter incomplete relative packet.
+Date:   Fri, 12 Aug 2022 16:43:25 +0800
+Message-Id: <1660293805-16053-1-git-send-email-marge.yang@synaptics.corp-partner.google.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Marge Yang <marge.yang@synaptics.corp-partner.google.com>
 
---ouneLSNkbbKTFRML
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+RMI4 F03 supports the Stick function,
+it's designed to support relative packet.
+This patch supports the following case.
+When relative packet can't be reported completely,
+it may miss one byte or two byte.
+New Synaptics firmware will report PARITY error.
+When timeout error or parity error happens,
+RMI4 driver will sends 0xFE command and
+ask FW to Re-send stick packet again.
 
-On Thu, Aug 11, 2022 at 05:39:05PM +0200, Henning Schild wrote:
-> Add GPIO support for Nuvoton NCT6116 chip. Nuvoton SuperIO chips are
-> very similar to the ones from Fintek. In other subsystems they also
-> share drivers and are called a family of drivers.
->=20
-> For the GPIO subsystem the only difference is that the direction bit is
-> reversed and that there is only one data bit per pin. On the SuperIO
-> level the logical device is another one.
->=20
-> Signed-off-by: Henning Schild <henning.schild@siemens.com>
-> ---
->  drivers/gpio/gpio-f7188x.c | 71 +++++++++++++++++++++++++++-----------
->  1 file changed, 51 insertions(+), 20 deletions(-)
->=20
-> diff --git a/drivers/gpio/gpio-f7188x.c b/drivers/gpio/gpio-f7188x.c
-> index 18a3147f5a42..7b05ecc611e9 100644
-> --- a/drivers/gpio/gpio-f7188x.c
-> +++ b/drivers/gpio/gpio-f7188x.c
-> @@ -1,6 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0-or-later
->  /*
->   * GPIO driver for Fintek Super-I/O F71869, F71869A, F71882, F71889 and =
-F81866
-> + * and Nuvoton Super-I/O NCT6116D
->   *
->   * Copyright (C) 2010-2013 LaCie
->   *
-> @@ -22,13 +23,12 @@
->  #define SIO_LDSEL		0x07	/* Logical device select */
->  #define SIO_DEVID		0x20	/* Device ID (2 bytes) */
->  #define SIO_DEVREV		0x22	/* Device revision */
-> -#define SIO_MANID		0x23	/* Fintek ID (2 bytes) */
-> =20
-> -#define SIO_LD_GPIO		0x06	/* GPIO logical device */
->  #define SIO_UNLOCK_KEY		0x87	/* Key to enable Super-I/O */
->  #define SIO_LOCK_KEY		0xAA	/* Key to disable Super-I/O */
-> =20
-> -#define SIO_FINTEK_ID		0x1934	/* Manufacturer ID */
-> +#define SIO_LD_GPIO_FINTEK	0x06	/* GPIO logical device */
-> +#define SIO_LD_GPIO_NUVOTON	0x07	/* GPIO logical device */
+Signed-off-by: Marge Yang<marge.yang@synaptics.corp-partner.google.com>
+---
+ drivers/input/rmi4/rmi_f03.c | 83 ++++++++++++++++++++++++++++++++++--
+ 1 file changed, 79 insertions(+), 4 deletions(-)
 
-Please indulge me and add a new line here.
+diff --git a/drivers/input/rmi4/rmi_f03.c b/drivers/input/rmi4/rmi_f03.c
+index c194b1664b10..56b3e1129b51 100644
+--- a/drivers/input/rmi4/rmi_f03.c
++++ b/drivers/input/rmi4/rmi_f03.c
+@@ -23,8 +23,12 @@
+ #define RMI_F03_BYTES_PER_DEVICE_SHIFT	4
+ #define RMI_F03_QUEUE_LENGTH		0x0F
+ 
++#define RMI_F03_RESET_STYK		0xFE
++
+ #define PSMOUSE_OOB_EXTRA_BTNS		0x01
+ 
++#define RELATIVE_PACKET_SIZE		3
++
+ struct f03_data {
+ 	struct rmi_function *fn;
+ 
+@@ -33,6 +37,11 @@ struct f03_data {
+ 
+ 	unsigned int overwrite_buttons;
+ 
++	int iwritecommandcounter;
++	unsigned int ipacketindex;
++	unsigned int serio_flagsArry[RELATIVE_PACKET_SIZE];
++	u8 ob_dataArry[RELATIVE_PACKET_SIZE];
++
+ 	u8 device_count;
+ 	u8 rx_queue_length;
+ };
+@@ -87,7 +96,7 @@ static int rmi_f03_pt_write(struct serio *id, unsigned char val)
+ 			__func__, error);
+ 		return error;
+ 	}
+-
++	f03->iwritecommandcounter++;
+ 	return 0;
+ }
+ 
+@@ -106,7 +115,8 @@ static int rmi_f03_initialize(struct f03_data *f03)
+ 		dev_err(dev, "Failed to read query register (%d).\n", error);
+ 		return error;
+ 	}
+-
++	f03->iwritecommandcounter = 0;
++	f03->ipacketindex = 0;
+ 	f03->device_count = query1 & RMI_F03_DEVICE_COUNT;
+ 	bytes_per_device = (query1 >> RMI_F03_BYTES_PER_DEVICE_SHIFT) &
+ 				RMI_F03_BYTES_PER_DEVICE;
+@@ -284,6 +294,22 @@ static irqreturn_t rmi_f03_attention(int irq, void *ctx)
+ 		ob_data = obs[i + RMI_F03_OB_DATA_OFFSET];
+ 		serio_flags = 0;
+ 
++		if (ob_status & (RMI_F03_OB_FLAG_TIMEOUT | RMI_F03_OB_FLAG_PARITY)) {
++			//  Send resend command to stick when timeout or parity error.
++			//  Driver can receive the last stick packet.
++
++			error = rmi_write(f03->fn->rmi_dev, f03->fn->fd.data_base_addr,
++			 RMI_F03_RESET_STYK);
++			if (error) {
++				dev_err(&f03->fn->dev,
++					"%s: Failed to rmi_write to F03 TX register (%d).\n",
++					__func__, error);
++				return error;
++			}
++			f03->ipacketindex = 0;
++			break;
++		}
++
+ 		if (!(ob_status & RMI_F03_RX_DATA_OFB))
+ 			continue;
+ 
+@@ -298,9 +324,58 @@ static irqreturn_t rmi_f03_attention(int irq, void *ctx)
+ 			serio_flags & SERIO_TIMEOUT ?  'Y' : 'N',
+ 			serio_flags & SERIO_PARITY ? 'Y' : 'N');
+ 
+-		serio_interrupt(f03->serio, ob_data, serio_flags);
++		if (f03->iwritecommandcounter > 0) {
++			// Read Acknowledge Byte after writing the PS2 command.
++			// It is not trackpoint data.
++			serio_interrupt(f03->serio, ob_data, serio_flags);
++
++		} else {
++			//   The relative-mode PS/2 packet format is as follows:
++			//
++			//              bit position            position (as array of bytes)
++			//     7   6   5   4   3   2   1   0
++			//   =================================+
++			//    Yov Xov DY8 DX8  1   M   R   L  | DATA[0]
++			//                DX[7:0]             | DATA[1]
++			//                DY[7:0]             | DATA[2]
++			//   =================================+
++			//		Yov: Y overflow
++			//    Xov: X overflow
++			if ((f03->ipacketindex == 0) && (ob_data & ((BIT(7)|BIT(6))))) {
++				dev_err(&f03->fn->dev,
++				"%s: X or Y is overflow. (%x)\n",
++				__func__, ob_data);
++				goto exit;
++			} else if ((f03->ipacketindex == 0) && !(ob_data & BIT(3))) {
++				dev_err(&f03->fn->dev,
++				"%s: New BIT 3 is not 1 for the first byte\n",
++				__func__);
++				goto exit;
++			} else {
++				if (f03->ipacketindex >= RELATIVE_PACKET_SIZE)
++					f03->ipacketindex = 0;
++
++				f03->ob_dataArry[f03->ipacketindex] = ob_data;
++				f03->serio_flagsArry[f03->ipacketindex] = serio_flags;
++				f03->ipacketindex++;
++
++				if (f03->ipacketindex == RELATIVE_PACKET_SIZE)	{
++					serio_interrupt(f03->serio, f03->ob_dataArry[0],
++					 f03->serio_flagsArry[0]);
++					serio_interrupt(f03->serio, f03->ob_dataArry[1],
++					 f03->serio_flagsArry[1]);
++					serio_interrupt(f03->serio, f03->ob_dataArry[2],
++					 f03->serio_flagsArry[2]);
++					f03->ipacketindex = 0;
++				}
++			}
++		}
++	}
++exit:
++	if (f03->iwritecommandcounter > 0) {
++		f03->ipacketindex = 0;
++		f03->iwritecommandcounter = f03->iwritecommandcounter - 1;
+ 	}
+-
+ 	return IRQ_HANDLED;
+ }
+ 
+-- 
+2.22.0.windows.1
 
->  #define SIO_F71869_ID		0x0814	/* F71869 chipset ID */
->  #define SIO_F71869A_ID		0x1007	/* F71869A chipset ID */
->  #define SIO_F71882_ID		0x0541	/* F71882 chipset ID */
-> @@ -37,7 +37,7 @@
->  #define SIO_F81866_ID		0x1010	/* F81866 chipset ID */
->  #define SIO_F81804_ID		0x1502  /* F81804 chipset ID, same for f81966 */
->  #define SIO_F81865_ID		0x0704	/* F81865 chipset ID */
-> -
-> +#define SIO_NCT6116D_ID		0xD283  /* NCT6116D chipset ID */
-> =20
-
-=2E.. snip ...
-
-> @@ -485,12 +516,8 @@ static int __init f7188x_find(int addr, struct f7188=
-x_sio *sio)
->  		return err;
-> =20
->  	err =3D -ENODEV;
-> -	devid =3D superio_inw(addr, SIO_MANID);
-> -	if (devid !=3D SIO_FINTEK_ID) {
-> -		pr_debug(DRVNAME ": Not a Fintek device at 0x%08x\n", addr);
-> -		goto err;
-> -	}
-
-Sorry for missing that at my first review. You can't remove this block
-of code. This driver is poking around on the I2C bus, which is not
-great. So we want to make sure as much as possible that we are speaking
-to the right device.
-
-Simon
-
---ouneLSNkbbKTFRML
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEXW8DgovlR3VS5hA0zyg/RDPmszoFAmL2EpMACgkQzyg/RDPm
-szouqQ//Xm9sagJ+5NtJYyyq5s/U5oK5vxLAExQHpoto22qUjrB2E/30aiJt5v4N
-XzoV9Iqya8fOGFJeIwXwhKmoKdX/LW3XyOGK5Wp3jlBVsOw+551T6A6PxW2hH6SZ
-5+2CkgOw3+PoCs5XAN4eU33k4uii31D8vtR0fGtQ0HvrtuPWjtNTawaXH2JFVC5h
-kBZF+o7vUYIv6RJJf1O3zQL9uWPtJl6QuHmLVw9+AfW0ndQjFWzpgxCcvb29VS9g
-sjGlgqyDLeoDODxP+0plqFa/Pb4n74Mi/Xlv9ygRT7xtc2Cz4U4VFaZqvo31yQ83
-ogbwvsR+SW3KaB/GS4wPVg5ogYUmVLo+46HIvaiMxW61/GWYDUH5EE5T62EWOdMw
-B4+/FwUiZ6DMOvsSgHkkIztNswBMjZrOPPoYkrqs1thV0rXDQUzPXhJGTFGY8glw
-iDlF+FcQzBsxKQ3AAtLFAs4gNaPa1tNYcNhgneXpA2pv5c57GSmkJ15hEkwWO0qs
-p+shGzwecgkE3g1pKz+QoxGNtZBte4K+d2HpI67XxPi9W4/Fh8T3u3TeKVazXDN/
-uudFsjYx31Njb/mDe6AbAgfo1TZF0xajk8PTjR+gMq94Y78cK2nxwKa486OqHVRw
-IEosfhp62UPWz6faNf1r/mkbC78NdVm5xFHkamv2PprSVGI6Dw0=
-=gt73
------END PGP SIGNATURE-----
-
---ouneLSNkbbKTFRML--

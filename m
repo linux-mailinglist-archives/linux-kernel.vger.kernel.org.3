@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CA6A591380
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 18:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 481F859137A
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 18:07:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239098AbiHLQGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 12:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59744 "EHLO
+        id S239162AbiHLQGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 12:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239120AbiHLQF4 (ORCPT
+        with ESMTP id S235840AbiHLQF5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 12:05:56 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C55025E91
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 09:05:51 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id z187so1297394pfb.12
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 09:05:51 -0700 (PDT)
+        Fri, 12 Aug 2022 12:05:57 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48D115A8A5
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 09:05:55 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id t22-20020a17090a449600b001f617f2bf3eso7762253pjg.0
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 09:05:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=dabbelt-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:from:to:cc;
-        bh=C0NfVtlKSN6PMsmJrdH2Fi9EUkzlYnUeg4k/WErs1Xo=;
-        b=6UV++lGqGy36NE0EqI6NNWwguz3qfdVk6Pnck1UQyzt/0ueKRyEZdUIwt86nSM6gCz
-         0pkHaaeyFWfjjHJxwK/Qi72pP3oPPbVu5YHMzB0SzEqPUZDUhR5dk0Xk43snWxO7636N
-         RFV2y6nkLbusouY0WO5/0l4mHVv9TfjISSIP/H+dxIM1quV9fbXsiLdU7W54I8ey/qFA
-         5jZPF6pzmWeA33Ek91qsXITyJ+nDf96EWbg0w6ltsCBjPtfDMvzTNLn5Vyi2+OdVuTGA
-         uDzfnaQjjGinT+IgHsXFSgxe12tkmuVvJz3Ua7QNG1yF0mnSC2DYf/PvvpQ0pcrQQ0Bs
-         m9pg==
+        bh=4OVNFUuImLLig/MGlX7vlR8weBzwek79DqD1BdLgOpk=;
+        b=hXdOxhnDhpBegqyCoNLEwbn81PWOhosp82gYxw3LUcdKmADMMMEvM8eJldJcSFhZE1
+         Z5dRCKke8PHj6jXb6TPIVae6NpQ54/qQzufcn2nzN6JWSGimbxBPyyA3bGN8+bDHuiuZ
+         XeAUdTST31jiYPcDve/nvcp4PlPjwnuX1fRImN+0pZMoqzp8SCqekeFVGnfAmKBcO8QB
+         UFLnIEZBmQQb9imQ/6qGNY70F1h+1Af98cCgt6qB3FyZg7H6g15ROmRG4ayeCxXeN5o4
+         vsFV5z50xf4BA2JPkDedx2vUoU2OOV0wrXqo2euDhmmMzobdlIeqJdzg6N/L0GOrN72k
+         mIeg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:to:from:cc
          :in-reply-to:subject:date:x-gm-message-state:from:to:cc;
-        bh=C0NfVtlKSN6PMsmJrdH2Fi9EUkzlYnUeg4k/WErs1Xo=;
-        b=p+iA8mk3YYtA5Tf8iOA9p7zAURHaNFXCqbmJVL0LorLRJ8svC7/ER4FwtwheqH9x8s
-         El6Mee9617TW0WVzqUAtAevdDoBGCS/yAmUULHYijH+zdST+9Sx91Q39gSaGTApByvN0
-         mhI51xfMT9/aPSSFZouX2asDIBBB3E2OlbCuvVY3v81F1OvkK2Xb+1fCvk8vVzWKS7F7
-         x0QdqFYlyaUdRsjYWdOdKaCDrTmYuZMiRnNOuOQBHNBp7DXJNlkUSiwmGGpg8e9xYqCi
-         3ks59/OubuEXiEFjP8RpDYif6qIAMCv9G6JLhXdYOhrQ2IwR6jfy20Srxrhil3nBDPWZ
-         7OUA==
-X-Gm-Message-State: ACgBeo0YjxpfdiSDV3a4ppGmcRoEXSOdCv23kndyzxg7FZouzWesc101
-        C6Yq9oFIVbdQr1+6IOs36Vq2nA==
-X-Google-Smtp-Source: AA6agR4S9XpYvbA/fz7rPv9idS7/YDN29Rs94Aze7kadnaIqAbCM4vvU3Rfi/m3PVZKUVH/jGPqsxA==
-X-Received: by 2002:a63:d014:0:b0:41a:13b3:69d9 with SMTP id z20-20020a63d014000000b0041a13b369d9mr3628210pgf.202.1660320350647;
-        Fri, 12 Aug 2022 09:05:50 -0700 (PDT)
+        bh=4OVNFUuImLLig/MGlX7vlR8weBzwek79DqD1BdLgOpk=;
+        b=Ezf5S7Cn9dY49Jw1Mbn6hlcz23bAZB4nunvpitmPaoWQACC1T/MCjtGSeqIOierMT6
+         alp85pPBWouT6nd6WqEEeklms9DTY1i9p3ukNacnTDGQaJR/fBLeKIJumgJTcBElA6tU
+         M0Q9snfipuU4U9JpoWPj5Vld/hGdxLuYGdqsgGI/RAObfb6avyfm9gDdIFa335Kg7Aju
+         K7UvH7VMB1xCD9EqnQCONWfxUYHUNppHyOPHGI08XJXAldFMfmeulk1vBYzF/6OEqNiE
+         f5wkMtewhlF6k+gTyNkkUmS3XGtW/fKz6mljVTEcUKYBxA3JDm/Shx/b2z/Z+/Tq32T5
+         jwcA==
+X-Gm-Message-State: ACgBeo1DOAGYaY707rl9+D/HJCJItLTvZ6+npSWHhN0ZlR+bdRCIUNn4
+        FD8pym/QTgO+C/J/xFstuquHiQ==
+X-Google-Smtp-Source: AA6agR5/COUTRoAh0UyVgQkf61YCv93x/r8lJgd5f8JFsaDvoPs//RQJEaMQhT8zl7lBJEwuv/cQgQ==
+X-Received: by 2002:a17:90b:1e42:b0:1f3:297c:c65c with SMTP id pi2-20020a17090b1e4200b001f3297cc65cmr4993940pjb.208.1660320354716;
+        Fri, 12 Aug 2022 09:05:54 -0700 (PDT)
 Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
-        by smtp.gmail.com with ESMTPSA id m14-20020a170902bb8e00b0016e8178aa9csm1898824pls.210.2022.08.12.09.05.50
+        by smtp.gmail.com with ESMTPSA id f6-20020a170902684600b0016d01c133e1sm1885809pln.248.2022.08.12.09.05.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Aug 2022 09:05:50 -0700 (PDT)
-Date:   Fri, 12 Aug 2022 09:05:50 -0700 (PDT)
-X-Google-Original-Date: Fri, 12 Aug 2022 07:48:30 PDT (-0700)
-Subject:     Re: [PATCH v7 0/4] Add Sstc extension support
-In-Reply-To: <CAAhSdy2mb6wyqy0NAn9BcTWKMYEc0Z4zU3s3j7oNqBz6eDQ9sg@mail.gmail.com>
-CC:     Atish Patra <atishp@rivosinc.com>, linux-kernel@vger.kernel.org,
-        aou@eecs.berkeley.edu, atishp@atishpatra.org,
-        daniel.lezcano@linaro.org, guoren@kernel.org, heiko@sntech.de,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, pbonzini@redhat.com,
+        Fri, 12 Aug 2022 09:05:54 -0700 (PDT)
+Date:   Fri, 12 Aug 2022 09:05:54 -0700 (PDT)
+X-Google-Original-Date: Fri, 12 Aug 2022 09:00:14 PDT (-0700)
+Subject:     Re: [PATCH v4] dt-bindings: gpio: sifive: add gpio-line-names
+In-Reply-To: <20220803155539.800766-1-mail@conchuod.ie>
+CC:     linus.walleij@linaro.org, brgl@bgdev.pl, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
         Paul Walmsley <paul.walmsley@sifive.com>,
-        Rob Herring <robh@kernel.org>, tglx@linutronix.de,
-        research_trasio@irq.a4lg.com, wefu@redhat.com
+        aou@eecs.berkeley.edu, conor.dooley@microchip.com,
+        atulkhare@rivosinc.com, sagar.kadam@sifive.com,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
 From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     anup@brainfault.org
-Message-ID: <mhng-46ca461a-d874-48b3-8761-b5bf6af7ce1b@palmer-mbp2014>
+To:     mail@conchuod.ie
+Message-ID: <mhng-5813099c-bd9f-4122-aec9-44adb5d280f5@palmer-mbp2014>
 Mime-Version: 1.0 (MHng)
 Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
@@ -75,127 +75,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 11 Aug 2022 20:28:08 PDT (-0700), anup@brainfault.org wrote:
-> Hi Palmer,
+On Wed, 03 Aug 2022 08:55:40 PDT (-0700), mail@conchuod.ie wrote:
+> From: Atul Khare <atulkhare@rivosinc.com>
 >
-> On Fri, Aug 12, 2022 at 3:19 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
->>
->> On Fri, 22 Jul 2022 21:47:06 PDT (-0700), anup@brainfault.org wrote:
->> > Hi Palmer,
->> >
->> > On Fri, Jul 22, 2022 at 10:20 PM Atish Patra <atishp@rivosinc.com> wrote:
->> >>
->> >> This series implements Sstc extension support which was ratified recently.
->> >> Before the Sstc extension, an SBI call is necessary to generate timer
->> >> interrupts as only M-mode have access to the timecompare registers. Thus,
->> >> there is significant latency to generate timer interrupts at kernel.
->> >> For virtualized enviornments, its even worse as the KVM handles the SBI call
->> >> and uses a software timer to emulate the timecomapre register.
->> >>
->> >> Sstc extension solves both these problems by defining a stimecmp/vstimecmp
->> >> at supervisor (host/guest) level. It allows kernel to program a timer and
->> >> recieve interrupt without supervisor execution enviornment (M-mode/HS mode)
->> >> intervention.
->> >>
->> >> KVM directly updates the vstimecmp as well if the guest kernel invokes the SBI
->> >> call instead of updating stimecmp directly. This is required because KVM will
->> >> enable sstc extension if the hardware supports it unless the VMM explicitly
->> >> disables it for that guest. The hardware is expected to compare the
->> >> vstimecmp at every cycle if sstc is enabled and any stale value in vstimecmp
->> >> will lead to spurious timer interrupts. This also helps maintaining the
->> >> backward compatibility with older kernels.
->> >>
->> >> Similary, the M-mode firmware(OpenSBI) uses stimecmp for older kernel
->> >> without sstc support as STIP bit in mip is read only for hardware with sstc.
->> >>
->> >> The PATCH 1 & 2 enables the basic infrastructure around Sstc extension while
->> >> PATCH 3 lets kernel use the Sstc extension if it is available in hardware.
->> >> PATCH 4 implements the Sstc extension in KVM.
->> >>
->> >> This series has been tested on Qemu(RV32 & RV64) with additional patches in
->> >> Qemu[2]. This series can also be found at [3].
->> >>
->> >> Changes from v6->v7:
->> >> 1. Fixed a compilation error reported by 0-day bot.
->> >>
->> >> Changes from v5->v6:
->> >> 1. Moved SSTC extension enum below SVPBMT.
->> >>
->> >> Changes from v4->v5:
->> >> 1. Added RB tag.
->> >> 2. Changed the pr-format.
->> >> 3. Rebased on 5.19-rc7 and kvm-queue.
->> >> 4. Moved the henvcfg modification from hardware enable to vcpu_load.
->> >>
->> >> Changes from v3->v4:
->> >> 1. Rebased on 5.18-rc6
->> >> 2. Unified vstimemp & next_cycles.
->> >> 3. Addressed comments in PATCH 3 & 4.
->> >>
->> >> Changes from v2->v3:
->> >> 1. Dropped unrelated KVM fixes from this series.
->> >> 2. Rebased on 5.18-rc3.
->> >>
->> >> Changes from v1->v2:
->> >> 1. Separate the static key from kvm usage
->> >> 2. Makde the sstc specific static key local to the driver/clocksource
->> >> 3. Moved the vstimecmp update code to the vcpu_timer
->> >> 4. Used function pointers instead of static key to invoke vstimecmp vs
->> >>    hrtimer at the run time. This will help in future for migration of vms
->> >>    from/to sstc enabled hardware to non-sstc enabled hardware.
->> >> 5. Unified the vstimer & timer to 1 timer as only one of them will be used
->> >>    at runtime.
->> >>
->> >> [1] https://drive.google.com/file/d/1m84Re2yK8m_vbW7TspvevCDR82MOBaSX/view
->> >> [2] https://github.com/atishp04/qemu/tree/sstc_v6
->> >> [3] https://github.com/atishp04/linux/tree/sstc_v7
->> >>
->> >> Atish Patra (4):
->> >> RISC-V: Add SSTC extension CSR details
->> >> RISC-V: Enable sstc extension parsing from DT
->> >> RISC-V: Prefer sstc extension if available
->> >> RISC-V: KVM: Support sstc extension
->> >
->> > The PATCH4 is dependent on the KVM patches in queue for 5.20.
->> >
->> > I suggest you take PATCH1, PATCH2 and PATCH3. I will send
->> > PATCH4 in second batch/PR for 5.20 assuming you will send the
->> > first three patches in your first PR for 5.20
->> >
->> > Does this sound okay to you ?
->>
->> Sorry for being slow here, I just merged the non-KVM ones onto
->> riscv/for-next.  LMK if you want me to try and sort out the KVM bits,
->> the branch base is at palmer/riscv-sstc assuming that's easier for you
->> to just merge in locally.
+> Fix device tree schema validation messages like 'gpio-line-names'
+> does not match any of the regexes: 'pinctrl-[0-9]+' From schema: ...
+> sifive,gpio.yaml'.
 >
-> The KVM RISC-V changes for 5.20 are already merged in Linus's master
-> so please go ahead and merge the KVM Sstc patch (i.e. PATCH4 of this
-> series) in riscv/for-next with "Acked-by: Anup Patel <anup@brainfault.org>"
+> The bindings were missing the gpio-line-names element, which was
+> causing the dt-schema checker to trip-up.
+>
+> Acked-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Atul Khare <atulkhare@rivosinc.com>
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+> Changes since v3[0]:
+> - Dropped patch 1 & the now unneeded cover letter
+> - Added Rob's Ack
+> - Changed the patch title to include the subsystem
+>
+> 0 - https://lore.kernel.org/all/20220726170725.3245278-3-mail@conchuod.ie/
+> ---
+>  Documentation/devicetree/bindings/gpio/sifive,gpio.yaml | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/gpio/sifive,gpio.yaml b/Documentation/devicetree/bindings/gpio/sifive,gpio.yaml
+> index 939e31c48081..fc095646adea 100644
+> --- a/Documentation/devicetree/bindings/gpio/sifive,gpio.yaml
+> +++ b/Documentation/devicetree/bindings/gpio/sifive,gpio.yaml
+> @@ -46,6 +46,10 @@ properties:
+>      maximum: 32
+>      default: 16
+>
+> +  gpio-line-names:
+> +    minItems: 1
+> +    maxItems: 32
+> +
+>    gpio-controller: true
+>
+>  required:
 
-OK, I just put it on for-next.  Thanks!
-
->
-> Thanks,
-> Anup
->
->>
->> >
->> > Regards,
->> > Anup
->> >
->> >>
->> >> arch/riscv/include/asm/csr.h            |   5 +
->> >> arch/riscv/include/asm/hwcap.h          |   1 +
->> >> arch/riscv/include/asm/kvm_vcpu_timer.h |   7 ++
->> >> arch/riscv/include/uapi/asm/kvm.h       |   1 +
->> >> arch/riscv/kernel/cpu.c                 |   1 +
->> >> arch/riscv/kernel/cpufeature.c          |   1 +
->> >> arch/riscv/kvm/vcpu.c                   |   8 +-
->> >> arch/riscv/kvm/vcpu_timer.c             | 144 +++++++++++++++++++++++-
->> >> drivers/clocksource/timer-riscv.c       |  25 +++-
->> >> 9 files changed, 185 insertions(+), 8 deletions(-)
->> >>
->> >> --
->> >> 2.25.1
->> >>
+Thanks, this is on for-next.

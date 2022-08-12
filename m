@@ -2,149 +2,336 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 967255909B3
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 02:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AA295909CA
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 03:21:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236086AbiHLA4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 20:56:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44924 "EHLO
+        id S235625AbiHLBU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 21:20:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234273AbiHLA4R (ORCPT
+        with ESMTP id S229524AbiHLBUz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 20:56:17 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47CBB9AFE7
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 17:56:16 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id q16so18536809pgq.6
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 17:56:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc;
-        bh=4tM10fzN8O9NGMymRYpYKK+6dgSWKL31dP1iscggUuM=;
-        b=qDGyWHAVohAWH43cmQ7Ex2iLjlWnFhWB3gw7UN/lHvMDHc54VyGs7bkGnHD/FAk2bO
-         0YAS1FNu9oXVtOP+yxqoFUFTOYCDNsfm6BWeCrW6LCY2eUmFGY0wy7wdBaXogbYtY04L
-         RRocHQva12/tHRmJWzBkjovJxvsz3FVmqiO/kskEJoIrUf+re+VXTb6EHorHB4wl8WSU
-         h1aZUkQ8nNG/vgjqTsayoMdczqtLY+uiF7O77zsjxWgPy/4J0uyC+pQ2lHhd00NdRXiq
-         wC/2GPrufGn84Mo7YwGwa7pRKNQSQW/+wQ6t8UsuChex/O4z5qmNT+UGpkP8qRCNgtAH
-         mGoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc;
-        bh=4tM10fzN8O9NGMymRYpYKK+6dgSWKL31dP1iscggUuM=;
-        b=J8OiQo5Gy1FXkwsJJ47OZlHDgoQ2gJWeef+S4cRMDBrSV0co3S+H1bY4lFanCbinzO
-         B5wpkPPE6dUBu9AgdHXmO2ogk7o18DDWDy2ht9AuUCYDMnLDsSeoUzyb9/LUp0liP8az
-         zBCEo850W89qjPoGnvheMqGBXbwN5nhVE1ncE11fWWFN1fHWJmtDZsM2F5lUZioEj+ak
-         t+bcLnF94Yk8t8GqMqaaTx9eFA8B3uKPEdzLdb1hRaDqNm4RarwxWJA5G5Y4HDdsWUZe
-         7jT5/LsAFy03LntxokqA8c5DG8myDzgXhGWIZfIYPdddbc5PEJlNW044GXE+rgEEj3uG
-         cC0w==
-X-Gm-Message-State: ACgBeo219RC6hOsVc2NQwqpzpajuyi1N2jVhtMhxH91oyZxeFjagJFMG
-        uGcX29x8XoyNnhFtKDhlg1k=
-X-Google-Smtp-Source: AA6agR4g5Um5S4DkE5wmpr5pLgsRKSJozlV0CcV8hWKUUEzbLsWjza571Xe7TcDvSQjQ3liC0UHNeQ==
-X-Received: by 2002:a63:1751:0:b0:41c:daad:4ad5 with SMTP id 17-20020a631751000000b0041cdaad4ad5mr1246237pgx.226.1660265775616;
-        Thu, 11 Aug 2022 17:56:15 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i14-20020a654d0e000000b0041d043200fdsm341277pgt.28.2022.08.11.17.56.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Aug 2022 17:56:14 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <baa22854-1286-5f63-c537-a6d3d5c12f76@roeck-us.net>
-Date:   Thu, 11 Aug 2022 17:56:13 -0700
+        Thu, 11 Aug 2022 21:20:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F226589
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 18:20:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 17647615D3
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 01:20:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 547FCC433C1;
+        Fri, 12 Aug 2022 01:20:51 +0000 (UTC)
+Message-ID: <426dd540-aeb7-a86e-fd5e-a4cde57d0ffb@oppo.com>
+Date:   Fri, 12 Aug 2022 09:20:47 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v1] driver core: Don't probe devices after
- bus_type.match() probe deferral
+Subject: Re: [PATCH v2] f2fs: iostat: support accounting compressed IO
 Content-Language: en-US
-To:     "Isaac J. Manjarres" <isaacmanjarres@google.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Russell King <rmk+kernel@arm.linux.org.uk>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     kernel-team@android.com, linux-kernel@vger.kernel.org
-References: <20220811190747.797081-1-isaacmanjarres@google.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20220811190747.797081-1-isaacmanjarres@google.com>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>
+References: <20220807104940.4233-1-chao@kernel.org>
+From:   Chao Yu <chao.yu@oppo.com>
+In-Reply-To: <20220807104940.4233-1-chao@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/11/22 12:07, Isaac J. Manjarres wrote:
-> Both __device_attach_driver() and __driver_attach() check the return
-> code of the bus_type.match() function to see if the device needs to be
-> added to the deferred probe list. After adding the device to the list,
-> the logic attempts to bind the device to the driver anyway, as if the
-> device had matched with the driver, which is not correct.
-> 
-> If __device_attach_driver() detects that the device in question is not
-> ready to match with a driver on the bus, then it doesn't make sense for
-> the device to attempt to bind with the current driver or continue
-> attempting to match with any of the other drivers on the bus. So, update
-> the logic in __device_attach_driver() to reflect this.
-> 
-> If __driver_attach() detects that a driver tried to match with a device
-> that is not ready to match yet, then the driver should not attempt to bind
-> with the device. However, the driver can still attempt to match and bind
-> with other devices on the bus, as drivers can be bound to multiple
-> devices. So, update the logic in __driver_attach() to reflect this.
-> 
-> Fixes: 656b8035b0ee ("ARM: 8524/1: driver cohandle -EPROBE_DEFER from bus_type.match()")
-> Reported-by: Guenter Roeck <linux@roeck-us.net>
-> Signed-off-by: Isaac J. Manjarres <isaacmanjarres@google.com>
+Jaegeuk,
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+Any comments on this patch?
 
+On 2022/8/7 18:49, Chao Yu wrote:
+> From: Chao Yu <chao.yu@oppo.com>
+> 
+> Previously, we supported to account FS_CDATA_READ_IO type IO only,
+> in this patch, it adds to account more type IO for compressed file:
+> - APP_BUFFERED_CDATA_IO
+> - APP_MAPPED_CDATA_IO
+> - FS_CDATA_IO
+> - APP_BUFFERED_CDATA_READ_IO
+> - APP_MAPPED_CDATA_READ_IO
+> 
+> Signed-off-by: Chao Yu <chao.yu@oppo.com>
 > ---
->   drivers/base/dd.c | 10 ++++++++++
->   1 file changed, 10 insertions(+)
+> v2:
+> - fix to update write count of compressed blocks correctly.
+>   fs/f2fs/f2fs.h              |  5 ++++
+>   fs/f2fs/file.c              | 27 ++++++++++++++++----
+>   fs/f2fs/iostat.c            | 50 ++++++++++++++++++++++---------------
+>   fs/f2fs/segment.c           |  2 ++
+>   include/trace/events/f2fs.h | 24 ++++++++++++++----
+>   5 files changed, 78 insertions(+), 30 deletions(-)
 > 
-> 
-> Guenter,
-> 
-> Thanks for testing this patch out. Can you please add your "Tested-by"?
-> 
-> --Isaac
-> 
-> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-> index 70f79fc71539..90b31fb141a5 100644
-> --- a/drivers/base/dd.c
-> +++ b/drivers/base/dd.c
-> @@ -881,6 +881,11 @@ static int __device_attach_driver(struct device_driver *drv, void *_data)
->   		dev_dbg(dev, "Device match requests probe deferral\n");
->   		dev->can_match = true;
->   		driver_deferred_probe_add(dev);
-> +		/*
-> +		 * Device can't match with a driver right now, so don't attempt
-> +		 * to match or bind with other drivers on the bus.
-> +		 */
-> +		return ret;
->   	} else if (ret < 0) {
->   		dev_dbg(dev, "Bus failed to match device: %d\n", ret);
->   		return ret;
-> @@ -1120,6 +1125,11 @@ static int __driver_attach(struct device *dev, void *data)
->   		dev_dbg(dev, "Device match requests probe deferral\n");
->   		dev->can_match = true;
->   		driver_deferred_probe_add(dev);
-> +		/*
-> +		 * Driver could not match with device, but may match with
-> +		 * another device on the bus.
-> +		 */
-> +		return 0;
->   	} else if (ret < 0) {
->   		dev_dbg(dev, "Bus failed to match device: %d\n", ret);
->   		return ret;
-
+> diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
+> index eddfd35eadb6..a015935b55dd 100644
+> --- a/fs/f2fs/f2fs.h
+> +++ b/fs/f2fs/f2fs.h
+> @@ -1158,7 +1158,10 @@ enum iostat_type {
+>   	APP_BUFFERED_IO,		/* app buffered write IOs */
+>   	APP_WRITE_IO,			/* app write IOs */
+>   	APP_MAPPED_IO,			/* app mapped IOs */
+> +	APP_BUFFERED_CDATA_IO,		/* app buffered write IOs on compressed file */
+> +	APP_MAPPED_CDATA_IO,		/* app mapped write IOs on compressed file */
+>   	FS_DATA_IO,			/* data IOs from kworker/fsync/reclaimer */
+> +	FS_CDATA_IO,			/* data IOs from kworker/fsync/reclaimer on compressed file */
+>   	FS_NODE_IO,			/* node IOs from kworker/fsync/reclaimer */
+>   	FS_META_IO,			/* meta IOs from kworker/reclaimer */
+>   	FS_GC_DATA_IO,			/* data IOs from forground gc */
+> @@ -1172,6 +1175,8 @@ enum iostat_type {
+>   	APP_BUFFERED_READ_IO,		/* app buffered read IOs */
+>   	APP_READ_IO,			/* app read IOs */
+>   	APP_MAPPED_READ_IO,		/* app mapped read IOs */
+> +	APP_BUFFERED_CDATA_READ_IO,	/* app buffered read IOs on compressed file  */
+> +	APP_MAPPED_CDATA_READ_IO,	/* app mapped read IOs on compressed file  */
+>   	FS_DATA_READ_IO,		/* data read IOs */
+>   	FS_GDATA_READ_IO,		/* data read IOs from background gc */
+>   	FS_CDATA_READ_IO,		/* compressed data read IOs */
+> diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
+> index 24f5b02c78e7..bd45464001b6 100644
+> --- a/fs/f2fs/file.c
+> +++ b/fs/f2fs/file.c
+> @@ -42,9 +42,14 @@ static vm_fault_t f2fs_filemap_fault(struct vm_fault *vmf)
+>   	vm_fault_t ret;
+>   
+>   	ret = filemap_fault(vmf);
+> -	if (!ret)
+> -		f2fs_update_iostat(F2FS_I_SB(inode), APP_MAPPED_READ_IO,
+> +	if (!ret) {
+> +		struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+> +
+> +		f2fs_update_iostat(sbi, APP_MAPPED_READ_IO, F2FS_BLKSIZE);
+> +		if (f2fs_compressed_file(inode))
+> +			f2fs_update_iostat(sbi, APP_MAPPED_CDATA_READ_IO,
+>   							F2FS_BLKSIZE);
+> +	}
+>   
+>   	trace_f2fs_filemap_fault(inode, vmf->pgoff, (unsigned long)ret);
+>   
+> @@ -155,6 +160,8 @@ static vm_fault_t f2fs_vm_page_mkwrite(struct vm_fault *vmf)
+>   		SetPageUptodate(page);
+>   
+>   	f2fs_update_iostat(sbi, APP_MAPPED_IO, F2FS_BLKSIZE);
+> +	if (f2fs_compressed_file(inode))
+> +		f2fs_update_iostat(sbi, APP_MAPPED_CDATA_IO, F2FS_BLKSIZE);
+>   	f2fs_update_time(sbi, REQ_TIME);
+>   
+>   	trace_f2fs_vm_page_mkwrite(page, DATA);
+> @@ -4306,8 +4313,14 @@ static ssize_t f2fs_file_read_iter(struct kiocb *iocb, struct iov_iter *to)
+>   		ret = f2fs_dio_read_iter(iocb, to);
+>   	} else {
+>   		ret = filemap_read(iocb, to, 0);
+> -		if (ret > 0)
+> -			f2fs_update_iostat(F2FS_I_SB(inode), APP_BUFFERED_READ_IO, ret);
+> +		if (ret > 0) {
+> +			struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+> +
+> +			f2fs_update_iostat(sbi, APP_BUFFERED_READ_IO, ret);
+> +			if (f2fs_compressed_file(inode))
+> +				f2fs_update_iostat(sbi,
+> +					APP_BUFFERED_CDATA_READ_IO, ret);
+> +		}
+>   	}
+>   	if (trace_f2fs_dataread_end_enabled())
+>   		trace_f2fs_dataread_end(inode, pos, ret);
+> @@ -4423,8 +4436,12 @@ static ssize_t f2fs_buffered_write_iter(struct kiocb *iocb,
+>   	current->backing_dev_info = NULL;
+>   
+>   	if (ret > 0) {
+> +		struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
+> +
+>   		iocb->ki_pos += ret;
+> -		f2fs_update_iostat(F2FS_I_SB(inode), APP_BUFFERED_IO, ret);
+> +		f2fs_update_iostat(sbi, APP_BUFFERED_IO, ret);
+> +		if (f2fs_compressed_file(inode))
+> +			f2fs_update_iostat(sbi, APP_BUFFERED_CDATA_IO, ret);
+>   	}
+>   	return ret;
+>   }
+> diff --git a/fs/f2fs/iostat.c b/fs/f2fs/iostat.c
+> index d84c5f6cc09d..b46a6c65d8fd 100644
+> --- a/fs/f2fs/iostat.c
+> +++ b/fs/f2fs/iostat.c
+> @@ -31,55 +31,65 @@ int __maybe_unused iostat_info_seq_show(struct seq_file *seq, void *offset)
+>   
+>   	/* print app write IOs */
+>   	seq_puts(seq, "[WRITE]\n");
+> -	seq_printf(seq, "app buffered:	%-16llu\n",
+> +	seq_printf(seq, "app buffered data:	%-16llu\n",
+>   				sbi->rw_iostat[APP_BUFFERED_IO]);
+> -	seq_printf(seq, "app direct:	%-16llu\n",
+> +	seq_printf(seq, "app direct data:	%-16llu\n",
+>   				sbi->rw_iostat[APP_DIRECT_IO]);
+> -	seq_printf(seq, "app mapped:	%-16llu\n",
+> +	seq_printf(seq, "app mapped data:	%-16llu\n",
+>   				sbi->rw_iostat[APP_MAPPED_IO]);
+> +	seq_printf(seq, "app buffered cdata:	%-16llu\n",
+> +				sbi->rw_iostat[APP_BUFFERED_CDATA_IO]);
+> +	seq_printf(seq, "app mapped cdata:	%-16llu\n",
+> +				sbi->rw_iostat[APP_MAPPED_CDATA_IO]);
+>   
+>   	/* print fs write IOs */
+> -	seq_printf(seq, "fs data:	%-16llu\n",
+> +	seq_printf(seq, "fs data:		%-16llu\n",
+>   				sbi->rw_iostat[FS_DATA_IO]);
+> -	seq_printf(seq, "fs node:	%-16llu\n",
+> +	seq_printf(seq, "fs cdata:		%-16llu\n",
+> +				sbi->rw_iostat[FS_CDATA_IO]);
+> +	seq_printf(seq, "fs node:		%-16llu\n",
+>   				sbi->rw_iostat[FS_NODE_IO]);
+> -	seq_printf(seq, "fs meta:	%-16llu\n",
+> +	seq_printf(seq, "fs meta:		%-16llu\n",
+>   				sbi->rw_iostat[FS_META_IO]);
+> -	seq_printf(seq, "fs gc data:	%-16llu\n",
+> +	seq_printf(seq, "fs gc data:		%-16llu\n",
+>   				sbi->rw_iostat[FS_GC_DATA_IO]);
+> -	seq_printf(seq, "fs gc node:	%-16llu\n",
+> +	seq_printf(seq, "fs gc node:		%-16llu\n",
+>   				sbi->rw_iostat[FS_GC_NODE_IO]);
+> -	seq_printf(seq, "fs cp data:	%-16llu\n",
+> +	seq_printf(seq, "fs cp data:		%-16llu\n",
+>   				sbi->rw_iostat[FS_CP_DATA_IO]);
+> -	seq_printf(seq, "fs cp node:	%-16llu\n",
+> +	seq_printf(seq, "fs cp node:		%-16llu\n",
+>   				sbi->rw_iostat[FS_CP_NODE_IO]);
+> -	seq_printf(seq, "fs cp meta:	%-16llu\n",
+> +	seq_printf(seq, "fs cp meta:		%-16llu\n",
+>   				sbi->rw_iostat[FS_CP_META_IO]);
+>   
+>   	/* print app read IOs */
+>   	seq_puts(seq, "[READ]\n");
+> -	seq_printf(seq, "app buffered:	%-16llu\n",
+> +	seq_printf(seq, "app buffered data:	%-16llu\n",
+>   				sbi->rw_iostat[APP_BUFFERED_READ_IO]);
+> -	seq_printf(seq, "app direct:	%-16llu\n",
+> +	seq_printf(seq, "app direct data:	%-16llu\n",
+>   				sbi->rw_iostat[APP_DIRECT_READ_IO]);
+> -	seq_printf(seq, "app mapped:	%-16llu\n",
+> +	seq_printf(seq, "app mapped data:	%-16llu\n",
+>   				sbi->rw_iostat[APP_MAPPED_READ_IO]);
+> +	seq_printf(seq, "app buffered cdata:	%-16llu\n",
+> +				sbi->rw_iostat[APP_BUFFERED_CDATA_READ_IO]);
+> +	seq_printf(seq, "app mapped cdata:	%-16llu\n",
+> +				sbi->rw_iostat[APP_MAPPED_CDATA_READ_IO]);
+>   
+>   	/* print fs read IOs */
+> -	seq_printf(seq, "fs data:	%-16llu\n",
+> +	seq_printf(seq, "fs data:		%-16llu\n",
+>   				sbi->rw_iostat[FS_DATA_READ_IO]);
+> -	seq_printf(seq, "fs gc data:	%-16llu\n",
+> +	seq_printf(seq, "fs gc data:		%-16llu\n",
+>   				sbi->rw_iostat[FS_GDATA_READ_IO]);
+> -	seq_printf(seq, "fs compr_data:	%-16llu\n",
+> +	seq_printf(seq, "fs cdata:		%-16llu\n",
+>   				sbi->rw_iostat[FS_CDATA_READ_IO]);
+> -	seq_printf(seq, "fs node:	%-16llu\n",
+> +	seq_printf(seq, "fs node:		%-16llu\n",
+>   				sbi->rw_iostat[FS_NODE_READ_IO]);
+> -	seq_printf(seq, "fs meta:	%-16llu\n",
+> +	seq_printf(seq, "fs meta:		%-16llu\n",
+>   				sbi->rw_iostat[FS_META_READ_IO]);
+>   
+>   	/* print other IOs */
+>   	seq_puts(seq, "[OTHER]\n");
+> -	seq_printf(seq, "fs discard:	%-16llu\n",
+> +	seq_printf(seq, "fs discard:		%-16llu\n",
+>   				sbi->rw_iostat[FS_DISCARD]);
+>   
+>   	return 0;
+> diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
+> index 72ce00ebcede..07cd162d268d 100644
+> --- a/fs/f2fs/segment.c
+> +++ b/fs/f2fs/segment.c
+> @@ -3413,6 +3413,8 @@ void f2fs_outplace_write_data(struct dnode_of_data *dn,
+>   	f2fs_update_data_blkaddr(dn, fio->new_blkaddr);
+>   
+>   	f2fs_update_iostat(sbi, fio->io_type, F2FS_BLKSIZE);
+> +	if (f2fs_compressed_file(dn->inode) && fio->io_type == FS_DATA_IO)
+> +		f2fs_update_iostat(sbi, FS_CDATA_IO, F2FS_BLKSIZE);
+>   }
+>   
+>   int f2fs_inplace_write_data(struct f2fs_io_info *fio)
+> diff --git a/include/trace/events/f2fs.h b/include/trace/events/f2fs.h
+> index 513e889ef8aa..e395442502e8 100644
+> --- a/include/trace/events/f2fs.h
+> +++ b/include/trace/events/f2fs.h
+> @@ -1823,7 +1823,10 @@ TRACE_EVENT(f2fs_iostat,
+>   		__field(unsigned long long,	app_bio)
+>   		__field(unsigned long long,	app_wio)
+>   		__field(unsigned long long,	app_mio)
+> +		__field(unsigned long long,	app_bcdio)
+> +		__field(unsigned long long,	app_mcdio)
+>   		__field(unsigned long long,	fs_dio)
+> +		__field(unsigned long long,	fs_cdio)
+>   		__field(unsigned long long,	fs_nio)
+>   		__field(unsigned long long,	fs_mio)
+>   		__field(unsigned long long,	fs_gc_dio)
+> @@ -1835,6 +1838,8 @@ TRACE_EVENT(f2fs_iostat,
+>   		__field(unsigned long long,	app_brio)
+>   		__field(unsigned long long,	app_rio)
+>   		__field(unsigned long long,	app_mrio)
+> +		__field(unsigned long long,	app_bcrio)
+> +		__field(unsigned long long,	app_mcrio)
+>   		__field(unsigned long long,	fs_drio)
+>   		__field(unsigned long long,	fs_gdrio)
+>   		__field(unsigned long long,	fs_cdrio)
+> @@ -1849,7 +1854,10 @@ TRACE_EVENT(f2fs_iostat,
+>   		__entry->app_bio	= iostat[APP_BUFFERED_IO];
+>   		__entry->app_wio	= iostat[APP_WRITE_IO];
+>   		__entry->app_mio	= iostat[APP_MAPPED_IO];
+> +		__entry->app_bcdio	= iostat[APP_BUFFERED_CDATA_IO];
+> +		__entry->app_mcdio	= iostat[APP_MAPPED_CDATA_IO];
+>   		__entry->fs_dio		= iostat[FS_DATA_IO];
+> +		__entry->fs_cdio	= iostat[FS_CDATA_IO];
+>   		__entry->fs_nio		= iostat[FS_NODE_IO];
+>   		__entry->fs_mio		= iostat[FS_META_IO];
+>   		__entry->fs_gc_dio	= iostat[FS_GC_DATA_IO];
+> @@ -1861,6 +1869,8 @@ TRACE_EVENT(f2fs_iostat,
+>   		__entry->app_brio	= iostat[APP_BUFFERED_READ_IO];
+>   		__entry->app_rio	= iostat[APP_READ_IO];
+>   		__entry->app_mrio	= iostat[APP_MAPPED_READ_IO];
+> +		__entry->app_bcrio	= iostat[APP_BUFFERED_CDATA_READ_IO];
+> +		__entry->app_mcrio	= iostat[APP_MAPPED_CDATA_READ_IO];
+>   		__entry->fs_drio	= iostat[FS_DATA_READ_IO];
+>   		__entry->fs_gdrio	= iostat[FS_GDATA_READ_IO];
+>   		__entry->fs_cdrio	= iostat[FS_CDATA_READ_IO];
+> @@ -1870,20 +1880,24 @@ TRACE_EVENT(f2fs_iostat,
+>   	),
+>   
+>   	TP_printk("dev = (%d,%d), "
+> -		"app [write=%llu (direct=%llu, buffered=%llu), mapped=%llu], "
+> -		"fs [data=%llu, node=%llu, meta=%llu, discard=%llu], "
+> +		"app [write=%llu (direct=%llu, buffered=%llu), mapped=%llu, "
+> +		"compr(buffered=%llu, mapped=%llu)], "
+> +		"fs [data=%llu, cdata=%llu, node=%llu, meta=%llu, discard=%llu], "
+>   		"gc [data=%llu, node=%llu], "
+>   		"cp [data=%llu, node=%llu, meta=%llu], "
+>   		"app [read=%llu (direct=%llu, buffered=%llu), mapped=%llu], "
+> -		"fs [data=%llu, (gc_data=%llu, compr_data=%llu), "
+> +		"compr(buffered=%llu, mapped=%llu)], "
+> +		"fs [data=%llu, (gc_data=%llu, cdata=%llu), "
+>   		"node=%llu, meta=%llu]",
+>   		show_dev(__entry->dev), __entry->app_wio, __entry->app_dio,
+> -		__entry->app_bio, __entry->app_mio, __entry->fs_dio,
+> +		__entry->app_bio, __entry->app_mio, __entry->app_bcdio,
+> +		__entry->app_mcdio, __entry->fs_dio, __entry->fs_cdio,
+>   		__entry->fs_nio, __entry->fs_mio, __entry->fs_discard,
+>   		__entry->fs_gc_dio, __entry->fs_gc_nio, __entry->fs_cp_dio,
+>   		__entry->fs_cp_nio, __entry->fs_cp_mio,
+>   		__entry->app_rio, __entry->app_drio, __entry->app_brio,
+> -		__entry->app_mrio, __entry->fs_drio, __entry->fs_gdrio,
+> +		__entry->app_mrio, __entry->app_bcrio, __entry->app_mcrio,
+> +		__entry->fs_drio, __entry->fs_gdrio,
+>   		__entry->fs_cdrio, __entry->fs_nrio, __entry->fs_mrio)
+>   );
+>   

@@ -2,98 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23182590FD1
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 12:57:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4202F590FDA
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 12:59:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238095AbiHLK5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 06:57:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36906 "EHLO
+        id S238376AbiHLK6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 06:58:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237446AbiHLK5A (ORCPT
+        with ESMTP id S232003AbiHLK6r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 06:57:00 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F3FAA3CE
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 03:56:58 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id f20so837069lfc.10
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 03:56:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=mChUjQTtXHpc2A+QlFmH2j/MWN0EZMkc2lSHpOXeQrA=;
-        b=Y9ftosvW+/lXOfo2DHn/iOKLY+DKnzGTJ/du2uR/xcqHW5eEuf/MhEfhmLloPHjwCO
-         oBbJry4O8PjVfaJ5FODDfz5T+LNbcxuJs5Gd0cZfk1nKVp8go/D2FeOtJU+2sXQ3rJLv
-         NDSu+WYXb0U/rhC1Ph+3m/FOizpJlCkHFVx5wsNrFRYQ3UkbZpmeNGHh8sIoAnLenkh+
-         vndZxXrtL+c/XXlsiLfZSyuiYiQ0KKvZJLZJgwiuvEr8HjkHJSwgAJa2LemBKUlEWxtd
-         xISOy5mUZ7ESoOE8vzF8bHvZ0mY+jnuLvpJC3CsD/hI21t4DKdjdnRBgIcmxkgPQcgQU
-         a5IQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=mChUjQTtXHpc2A+QlFmH2j/MWN0EZMkc2lSHpOXeQrA=;
-        b=4p0r1TPjIpjK6w0vs7gbw6ev1kNb8Y88Z/d47FhPPWiy0yG5dB1Wp1IZAUwLn+Sgge
-         arKQRIF/Qi7PN9GgH7gOmNvchX/i4wzgAL8j6BBffeljUynaMAzRor17SbOJkl43Es3T
-         TxER6Wsx4R+pySFD9FnRw1hBfO5/FS5MyY42eDL8EYy1j+IDGEDnAcgasvN6R6pPaamw
-         Kk+wT5YwNNpoW/2lH6iP6QZfF2sGmWSBzneSYCFVCa2m8sCKC9J87G2gccmM1hfDJif5
-         ZyUpYCVz6OazufXT9KnpmXzqVeRawo9tpxYYAZ0/NzTaVnOP5mLTVIOwj7ouLrHOpSYM
-         LVfg==
-X-Gm-Message-State: ACgBeo1D4dbX4cR+8ASGvnKDEGhzx76AFd8aNED/6NJ/RpmFvXtu4YfP
-        8tep+px0WpXZp+8KBye0eO/raw==
-X-Google-Smtp-Source: AA6agR4c+dqcuuneKDezG2XNuToIgmi+wQmcMT9vCnGaJvx1lSq90f0pUvfTgcx6kKuGrwL9SZQRYA==
-X-Received: by 2002:a05:6512:3fa8:b0:48c:ffd1:625d with SMTP id x40-20020a0565123fa800b0048cffd1625dmr998883lfa.251.1660301817252;
-        Fri, 12 Aug 2022 03:56:57 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id f7-20020a056512360700b0048b0f2dc35asm178317lfs.75.2022.08.12.03.56.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 03:56:56 -0700 (PDT)
-Message-ID: <3a26be5c-04c5-cd67-1154-dfd7d99fb5d0@linaro.org>
-Date:   Fri, 12 Aug 2022 13:56:50 +0300
+        Fri, 12 Aug 2022 06:58:47 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB12ACA10;
+        Fri, 12 Aug 2022 03:58:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660301925; x=1691837925;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pf+Ur3Mk1CkKkMyfVrI4PlDfV4MGfMJmTcIeuz/L5cE=;
+  b=IypEzPVtvSY1FFJB8d9rFbOYOQVnPLhR498Ac99GEecBxOK74W+1mZZO
+   4THeVQdf9KoyRj8qcU8m09YI9E3xA5BoLrkIdVHyxk2EaFkYNeNuLg4hE
+   MRUcKJMhRRV53resMsm5cxgYk2AwSlar1tO/mYR9eaUz/rucB+wxvAzaS
+   HJObVkbLsWZSXGR41jUc/umJIRqTV/PWBmNZtzajoP18yvPH8wEl80R+p
+   syz8kAVMouDsxQrHfLLwr1wuWFC/R9undS8Ak33xRo9EpjP2cXsBCb6JE
+   QfNKzQZfU54pegLpVJAxWwn8EqcTJgA47VrxMsklc/enRe0DNQVyv26yF
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10436"; a="292367141"
+X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
+   d="scan'208";a="292367141"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 03:58:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
+   d="scan'208";a="748159622"
+Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 12 Aug 2022 03:58:40 -0700
+Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oMSND-0000S7-1V;
+        Fri, 12 Aug 2022 10:58:39 +0000
+Date:   Fri, 12 Aug 2022 18:58:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jia He <justin.he@arm.com>, Ard Biesheuvel <ardb@kernel.org>,
+        Len Brown <lenb@kernel.org>, James Morse <james.morse@arm.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Robert Richter <rric@kernel.org>,
+        Robert Moore <robert.moore@intel.com>
+Cc:     kbuild-all@lists.01.org, linux-media@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-edac@vger.kernel.org, devel@acpica.org,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>, linux-efi@vger.kernel.org,
+        nd@arm.com, toshi.kani@hpe.com, Jia He <justin.he@arm.com>,
+        stable@kernel.org
+Subject: Re: [PATCH 2/2] EDAC/ghes: Modularize ghes_edac driver to remove the
+ dependency on ghes
+Message-ID: <202208121802.AQBiO8LK-lkp@intel.com>
+References: <20220811091713.10427-3-justin.he@arm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v3 0/1] Mediatek MT6366 Regulator patch
-Content-Language: en-US
-To:     Zhiyong Tao <zhiyong.tao@mediatek.com>, lee.jones@linaro.org,
-        robh+dt@kernel.org, matthias.bgg@gmail.com, lgirdwood@gmail.com,
-        broonie@kernel.org, eddie.huang@mediatek.com, a.zummo@towertech.it,
-        alexandre.belloni@bootlin.com, fshao@chromium.org
-Cc:     sen.chu@mediatek.com, hui.liu@mediatek.com,
-        allen-kh.cheng@mediatek.com, hsin-hsiung.wang@mediatek.com,
-        sean.wang@mediatek.com, macpaul.lin@mediatek.com,
-        wen.su@mediatek.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-References: <20220812092901.6429-1-zhiyong.tao@mediatek.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220812092901.6429-1-zhiyong.tao@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220811091713.10427-3-justin.he@arm.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/08/2022 12:29, Zhiyong Tao wrote:
-> Add mt6366 binding documentation
-> 
-> Changes in patch v3:
-> 1)change patch title
+Hi Jia,
 
-Where is the driver?
+Thank you for the patch! Perhaps something to improve:
 
-Don't ignore feedback:
-https://lore.kernel.org/all/YuJsDI8rqkHuysIT@sirena.org.uk/
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on ras/edac-for-next efi/next linus/master v5.19 next-20220812]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Best regards,
-Krzysztof
+url:    https://github.com/intel-lab-lkp/linux/commits/Jia-He/Modularize-ghes_edac-driver/20220811-171953
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+config: x86_64-randconfig-s022 (https://download.01.org/0day-ci/archive/20220812/202208121802.AQBiO8LK-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce:
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/9cf68330d4fa626e09c8cbc3be9910751e94508c
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Jia-He/Modularize-ghes_edac-driver/20220811-171953
+        git checkout 9cf68330d4fa626e09c8cbc3be9910751e94508c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/acpi/apei/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+sparse warnings: (new ones prefixed by >>)
+>> drivers/acpi/apei/ghes.c:97:1: sparse: sparse: symbol 'ghes_report_chain' was not declared. Should it be static?
+   drivers/acpi/apei/ghes.c:733:25: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/acpi/apei/ghes.c:733:25: sparse:    struct ghes_estatus_cache [noderef] __rcu *
+   drivers/acpi/apei/ghes.c:733:25: sparse:    struct ghes_estatus_cache *
+   drivers/acpi/apei/ghes.c:813:25: sparse: sparse: incompatible types in comparison expression (different address spaces):
+   drivers/acpi/apei/ghes.c:813:25: sparse:    struct ghes_estatus_cache [noderef] __rcu *
+   drivers/acpi/apei/ghes.c:813:25: sparse:    struct ghes_estatus_cache *
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

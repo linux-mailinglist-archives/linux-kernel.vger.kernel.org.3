@@ -2,79 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 726D4590EB0
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 12:06:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5D9E590EB3
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 12:07:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237293AbiHLKGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 06:06:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56154 "EHLO
+        id S237910AbiHLKH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 06:07:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235949AbiHLKGe (ORCPT
+        with ESMTP id S237460AbiHLKH0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 06:06:34 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC447AC3F
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 03:06:32 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id z6so682876lfu.9
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 03:06:32 -0700 (PDT)
+        Fri, 12 Aug 2022 06:07:26 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01963832CD
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 03:07:25 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id u1so705658lfq.4
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 03:07:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=azcV9dUXGLyvJ1HXCFQoiPwl4R9cCXQpr4RG4L7Q6lg=;
-        b=dIG2Kf/ZtELw49VJpK+5sIi7pN0IcACaYc9R1dGcXjyTAFWRnXKUVatGx7jwn7I2g+
-         5WZthg9JH1FPpw35LSFKs+heVsW9Wa90ysn3lR5pxhm9LwrTfigv48SjYjfnvoYpz+NH
-         6f9gvK+Nw+bz8O5LpdrTM7NDOhSliLul9bYglUO9/f+5uAzfAasvoSPYzHBIkNBZbklK
-         s03yX2Qc+t/KsTrbrj8iI4oP6/CNG01UdybTA355UkjVY0u8CfSHTjKPmGWK/wn9VOpi
-         qcl/g3Kp6pCuxfG01+3Nt3Zcy5cdPdEl1t+u9Vt6EuRyR2umLJrp+04XMmS0QKx6E5yl
-         nHxA==
+        bh=pGicgmrkVGpAXVpWBOOwVqoHRpuAuKtD+Wqhn/gpirk=;
+        b=MN1hOu0MvGFfVSNI3SZCMYZgGjhChvjodGSJYoVCvE2Vlkb/G85d1rwBzHEKFU7BoE
+         HNrF5VHtjbtSbVBlPWmrHGCzPLPHjYt5HXG7uLbVxTyFZwP0AzOHLXjZFICp8YmJprtC
+         gX30SbRsIPIu632N0gevqC3jhBV22xnq7p5vafKxI8sgjHiquWCcPgq61ao8BCM1ZRLy
+         fvl11FVIenCL2nYausoYZ3BTaXnAxZX5ZEy3RgIbsRCcA6U2BI3JgqfEKFq/6OYBXH2P
+         5IFQbe3/FiF9ph2qjFSK3Nc7prxcUEQrUR7BsYX/1ybOnFr7KYWEB/B3O4KvuP/4zQSt
+         qtQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=azcV9dUXGLyvJ1HXCFQoiPwl4R9cCXQpr4RG4L7Q6lg=;
-        b=lzx/VzT7zau4se7+xHe08ZLNKkLTWDtcymxHBSaeRFDbrCUa1xfQ7yi+6m7TQvqLvh
-         Bw1P5IW97vj57R2AwBMLUVXqri4RPdkbVh3wx5cIFUomfDCupIYpou0JeGf6D0RQxuHL
-         eXGOvc+I6SooeEVBYoHG8TBa2ph3m/C/7WXZ4tPYkdY7YKBiw3JAoqTGhnJNg+WPCBx0
-         X6R3xDy0hgctGgG+ajkErhZAHqWnsDiI2FUlealqMfo18qppaxqUedsABzsdXXerobDL
-         3dSskIxv7lAD8ihIW0zjYqs5dyjjPXP4C0m2Ep2OjregyzECnM69iKfCXATA8yw17TPS
-         yrZw==
-X-Gm-Message-State: ACgBeo0zVJZg5Eq1f/lFb1iDB68AsoxCAJyrWZ1aDyjUekRu80qQBP09
-        36PdvRTaX439nc4R9k9oXsgSgg==
-X-Google-Smtp-Source: AA6agR6JKxA0NhGbseGy7N3sH5d8PuTIZDW8lB7MYEIYhdenJTipcSBK6J4XoMJ2hVVvH29Ktsjwuw==
-X-Received: by 2002:ac2:4f03:0:b0:48a:6061:bd8e with SMTP id k3-20020ac24f03000000b0048a6061bd8emr1146671lfr.647.1660298791278;
-        Fri, 12 Aug 2022 03:06:31 -0700 (PDT)
+        bh=pGicgmrkVGpAXVpWBOOwVqoHRpuAuKtD+Wqhn/gpirk=;
+        b=2zm4G2xFMktqVige1vTN2+iwCvLK8tr0YQHMlqVm0n2FootdZ9GkjEc3zDA8y8fFlS
+         NJS9wwToRx9H3f05HJSHQ8s6KHE439NApt5q0YvfnZnJBYjZVCgpalkoDA0PWCr48bHI
+         piVFNQzKcF34ruw0gKM3nEKru3Lvwbcadtegj7q5jmQ3s+2vGjopLapBgasqxGp9cEb1
+         SNIZmOYDSRw1ATDARoZimBFDFjPveg3B+IR8BTEKVbeJpWoHoER2CYaqHTRsbU7Kiwf+
+         GFYhQUQek2pyk7hdnwaSuWoB1biB89BzN1rK6+hshunUkHx4zEp4RvVPeRgGyTdfOGKd
+         hXQg==
+X-Gm-Message-State: ACgBeo3ZEF+2m8LuE+DJeF9aS/YFkAS+H+jDOwAcWsYKB5h69irZG9yb
+        sTmwi2X3emcX00ZP24cCUSt44w==
+X-Google-Smtp-Source: AA6agR7MhLzXhxFMHxvkBaYUjtFOzy1aQfTD91gtSyNkxDgILHvzPNc3FZ2NiCEPl+DJXfmXSUF4vg==
+X-Received: by 2002:ac2:44bc:0:b0:48a:eb48:6b78 with SMTP id c28-20020ac244bc000000b0048aeb486b78mr1152514lfm.326.1660298842630;
+        Fri, 12 Aug 2022 03:07:22 -0700 (PDT)
 Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id p4-20020a19f004000000b0048a98b7bad3sm157586lfc.197.2022.08.12.03.06.28
+        by smtp.gmail.com with ESMTPSA id u28-20020ac251dc000000b0048a7c162bbesm155510lfm.279.2022.08.12.03.07.17
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 03:06:30 -0700 (PDT)
-Message-ID: <5c187887-c458-8b51-c510-60143d325972@linaro.org>
-Date:   Fri, 12 Aug 2022 13:06:26 +0300
+        Fri, 12 Aug 2022 03:07:22 -0700 (PDT)
+Message-ID: <a21c4d34-81b2-cdc5-133e-7c7d2c0657f6@linaro.org>
+Date:   Fri, 12 Aug 2022 13:07:16 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
-Subject: Re: [PATCH 3/3] arm64: dts: qcom: sm6350: Add GPI DMA nodes
+Subject: Re: [PATCH 3/4] dt-bindings: PCI: microchip,pcie-host: fix incorrect
+ child node name
 Content-Language: en-US
-To:     Luca Weiss <luca.weiss@fairphone.com>,
-        linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220812082721.1125759-1-luca.weiss@fairphone.com>
- <20220812082721.1125759-4-luca.weiss@fairphone.com>
+To:     Conor.Dooley@microchip.com, mail@conchuod.ie,
+        Daire.McNamara@microchip.com, bhelgaas@google.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        paul.walmsley@sifive.com, greentime.hu@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, lpieralisi@kernel.org
+Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+References: <20220811203306.179744-1-mail@conchuod.ie>
+ <20220811203306.179744-4-mail@conchuod.ie>
+ <721ccb76-c162-30ee-68cc-3316a2d62554@linaro.org>
+ <272557c5-3e30-a873-40af-16a65c3043b2@microchip.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220812082721.1125759-4-luca.weiss@fairphone.com>
+In-Reply-To: <272557c5-3e30-a873-40af-16a65c3043b2@microchip.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,17 +83,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/08/2022 11:27, Luca Weiss wrote:
-> Add nodes for the gpi_dma0 and gpi_dma1 which are (optionally) used for
-> various i2c busses based on the qup firmware configuration.
+On 12/08/2022 10:55, Conor.Dooley@microchip.com wrote:
+> On 12/08/2022 08:42, Krzysztof Kozlowski wrote:
+>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+>>
+>> On 11/08/2022 23:33, Conor Dooley wrote:
+>>> From: Conor Dooley <conor.dooley@microchip.com>
+>>>
+>>> v2022.08 of dt-schema improved checking of unevaluatedProperties, and
+>>> exposed a previously unseen warning for the PCIe controller's interrupt
+>>> controller node name:
+>>>
+>>> arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dtb: pcie@2000000000: Unevaluated properties are not allowed ('clock-names', 'clocks', 'legacy-interrupt-controller', 'microchip,axi-m-atr0' were unexpected)
+>>>          From schema: Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
+>>>
+>>> Make the property in the binding match the node name actually used in
+>>> the dts.
+>>>
+>>> Fixes: dcd49679fb3a ("dt-bindings: PCI: Fix 'unevaluatedProperties' warnings")
+>>> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+>>> ---
+>>> This is another one Rob where I feel like I'm doing the wrong thing.
+>>> The Linux driver gets the child node without using the name, but
+>>> another OS etc could in theory (or reality), right?
+>>
+>> Yes and we had such cases when renaming device nodes caused regression.
+>> My interpretation is that node name is not part of ABI, so anyone
+>> depending on it made a mistake and they need to fix their stuff. I think
+>> actually that is really poor coding and poor solution to parse device
+>> node names and expect specific name.
+>>
+>> Other folks interpretation is that we never break the users of kernel,
+>> regardless what is documented in the ABI... so it depends. :)
+>>
+>> Here however it is not a device node name, but a property name (although
+>> still a node). Bindings require these to be specific, thus such name is
+>> a part of ABI.
 > 
-> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> ---
->  arch/arm64/boot/dts/qcom/sm6350.dtsi | 59 ++++++++++++++++++++++++++++
->  1 file changed, 59 insertions(+)
+> Yup, pretty much aligned to my thoughts on this.
+> 
+>> For your case, I wonder why it was called "legacy-interrupt-controller"
+>> in the first place? Node names - also for properties - should be
+>> generic, so generic name is just "interrupt-controller".
+> 
+> I don't know. It's what we had in our internal tree prior to upstreaming.
+> "We" don't rely on the name for the Linux driver, so I am not really that
+> bothered if we change the binding or the dts.
 
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Then I propose to change the name in DTS.
 
 Best regards,
 Krzysztof

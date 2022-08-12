@@ -2,159 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC3D8590B9B
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 07:48:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDCFF590BA0
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 07:55:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235266AbiHLFsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 01:48:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52610 "EHLO
+        id S237019AbiHLFyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 01:54:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbiHLFsg (ORCPT
+        with ESMTP id S236848AbiHLFyw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 01:48:36 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAF31A3D5E
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 22:48:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660283315; x=1691819315;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=bhi9ULzUm8P4QX4guIXDUZ2lGpf10YGb7VD5BUWJwkc=;
-  b=BWs4fCLnAwImHRu8RqRrf296BgZU14ByYAdKf3zgqxJNz7Ufx7oURf+v
-   GHyx+Vun4hzHvhrUoYizkCn4ouSj7tzyx+EiNKi73Oi0nRv7cVfw/GE7f
-   n27xyu6psi787K20I1/3TByD88+Thexhn/2so7Laj7AMX/wmAXzbiXmYm
-   TaKC7+kpO/S/phreqsNy5vkX8dE4Ci+S3M1YE8Wul6T+XFUFlW1IfTMWg
-   FjGF+13AWuYJbUSvVWatHsqI+fu55DeLjs+KOu2cfVsO5Kq/NTpieD77T
-   nXa3iKjrwdTuAOYe0ZkTLKDBZA2aGx+gfrA/EXEcpEtNoc4ysT++Xi/Ph
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10436"; a="274583678"
-X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
-   d="scan'208";a="274583678"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 22:48:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
-   d="scan'208";a="732123550"
-Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 11 Aug 2022 22:48:33 -0700
-Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oMNX7-0000DD-0N;
-        Fri, 12 Aug 2022 05:48:33 +0000
-Date:   Fri, 12 Aug 2022 13:47:38 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-Subject: drivers/pci/controller/pci-mvebu.c:437:17: sparse: sparse:
- restricted __le16 degrades to integer
-Message-ID: <202208121357.vIqsdlc1-lkp@intel.com>
+        Fri, 12 Aug 2022 01:54:52 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19E48A222C
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 22:54:51 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id 17so9443174pli.0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 22:54:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20210112.gappssmtp.com; s=20210112;
+        h=to:from:cc:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:to:cc;
+        bh=HEmnO6gKg/Ny8un1UXhsJJIoNDtb7QUrGLbN/Rj+U2s=;
+        b=S6h2JsqkYWxvS7jC1PPYrCoWtVa1c7jhqkVfdgVTRawsQeU2o7qd8syCitbKL3Igry
+         a2vspnYwiX6atjvhYOj/vgZm9OOs8OD2WVJ/uQMFT1JSzXM/f6+wpg5tjONYx5mXVrYk
+         QMx5u3F0tiwy+Pgj/g0dpXjvsnBKPsStW07oA+hI2mlUWmshJ9YYA8VYd58ZYpT9Sff+
+         soe+nCeH5MvE3QIats2gqq3natPebdib/4PCZ+ZVA3LIKmcaYBq9+ZZ0aGOcCufe2Zbk
+         1agEwVe66MkKDSIryjo+6X+jlL2BoyUqn4gP4pMrGcv3ahE2DIJVIeuNibm5w0pb9rjy
+         ysqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:cc:content-transfer-encoding:mime-version:message-id:date
+         :subject:x-gm-message-state:from:to:cc;
+        bh=HEmnO6gKg/Ny8un1UXhsJJIoNDtb7QUrGLbN/Rj+U2s=;
+        b=VYt7B1OFelR5ZeSX6jHKSfiUei162ligK+eJ+nIKWLPXgFMFspxHGQj5Gz8B8T02rg
+         SpV4p8AIdC/1QwqMm6Db0FU4mytgJH/wn1Ay2v9lr+SwdJ03xCUvUuhj30KD5fNHE3p/
+         CTekscJWlaMHJMy3upL9EE1qNyPOFgGs/knBtUDVltnGm/8dJ6eX0Asd2KQZpMoTkLSa
+         RpEyRFltZvdFOZvf6GMEHeo22muHwKeVjpyTR1O4NipznXS6z17gPdGCvDRkiVQxHAwb
+         69QI/G99KD2krWFyDyhMFw+fHlptPL9iobbja4czODRjD0dwJ7a65dtnWGg2HTe02YuR
+         9Tgw==
+X-Gm-Message-State: ACgBeo2JM/MMVy5pK39oQLxLIMmTEI8KuvUbe0dzlj/OATGFBo6vOw78
+        SX/SvD7HqnKd6iZaxivBMOBOYlkUjVa1Rw==
+X-Google-Smtp-Source: AA6agR6wDPIXSDkF+CszeF/rMBh6TQvpmXARS1enqN+Ysw0cl5HOZUKV33pVKo+76S2g+k+swpD2Cg==
+X-Received: by 2002:a17:902:b607:b0:170:c7fc:388a with SMTP id b7-20020a170902b60700b00170c7fc388amr2474205pls.29.1660283690611;
+        Thu, 11 Aug 2022 22:54:50 -0700 (PDT)
+Received: from localhost (76-210-143-223.lightspeed.sntcca.sbcglobal.net. [76.210.143.223])
+        by smtp.gmail.com with ESMTPSA id z185-20020a6333c2000000b0041aeb36088asm659096pgz.16.2022.08.11.22.54.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Aug 2022 22:54:50 -0700 (PDT)
+Subject: [PATCH] Bluetooth: L2CAP: Elide a string overflow warning
+Date:   Thu, 11 Aug 2022 22:52:49 -0700
+Message-Id: <20220812055249.8037-1-palmer@rivosinc.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Cc:     luiz.dentz@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux@rivosinc.com,
+        Palmer Dabbelt <palmer@rivosinc.com>
+From:   Palmer Dabbelt <palmer@rivosinc.com>
+To:     marcel@holtmann.org, johan.hedberg@gmail.com
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Pali,
+From: Palmer Dabbelt <palmer@rivosinc.com>
 
-First bad commit (maybe != root cause):
+Without this I get a string op warning related to copying from a
+possibly NULL pointer.  I think the warning is spurious, but it's
+tripping up allmodconfig.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   7ebfc85e2cd7b08f518b526173e9a33b56b3913b
-commit: 0746ae1be12177ebda0666eefa82583cbaeeefd6 PCI: mvebu: Add support for compiling driver as module
-date:   7 months ago
-config: arm-randconfig-s051-20220811 (https://download.01.org/0day-ci/archive/20220812/202208121357.vIqsdlc1-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=0746ae1be12177ebda0666eefa82583cbaeeefd6
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 0746ae1be12177ebda0666eefa82583cbaeeefd6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mach-mvebu/ drivers/pci/controller/ drivers/soc/bcm/brcmstb/pm/ drivers/soc/ti/
+In file included from /scratch/merges/ko-linux-next/linux/include/linux/string.h:253,
+                 from /scratch/merges/ko-linux-next/linux/include/linux/bitmap.h:11,
+                 from /scratch/merges/ko-linux-next/linux/include/linux/cpumask.h:12,
+                 from /scratch/merges/ko-linux-next/linux/include/linux/mm_types_task.h:14,
+                 from /scratch/merges/ko-linux-next/linux/include/linux/mm_types.h:5,
+                 from /scratch/merges/ko-linux-next/linux/include/linux/buildid.h:5,
+                 from /scratch/merges/ko-linux-next/linux/include/linux/module.h:14,
+                 from /scratch/merges/ko-linux-next/linux/net/bluetooth/l2cap_core.c:31:
+In function 'memcmp',
+    inlined from 'bacmp' at /scratch/merges/ko-linux-next/linux/include/net/bluetooth/bluetooth.h:347:9,
+    inlined from 'l2cap_global_chan_by_psm' at /scratch/merges/ko-linux-next/linux/net/bluetooth/l2cap_core.c:2003:15:
+/scratch/merges/ko-linux-next/linux/include/linux/fortify-string.h:44:33: error: '__builtin_memcmp' specified bound 6 exceeds source size 0 [-Werror=stringop-overread]
+   44 | #define __underlying_memcmp     __builtin_memcmp
+      |                                 ^
+/scratch/merges/ko-linux-next/linux/include/linux/fortify-string.h:420:16: note: in expansion of macro '__underlying_memcmp'
+  420 |         return __underlying_memcmp(p, q, size);
+      |                ^~~~~~~~~~~~~~~~~~~
+In function 'memcmp',
+    inlined from 'bacmp' at /scratch/merges/ko-linux-next/linux/include/net/bluetooth/bluetooth.h:347:9,
+    inlined from 'l2cap_global_chan_by_psm' at /scratch/merges/ko-linux-next/linux/net/bluetooth/l2cap_core.c:2004:15:
+/scratch/merges/ko-linux-next/linux/include/linux/fortify-string.h:44:33: error: '__builtin_memcmp' specified bound 6 exceeds source size 0 [-Werror=stringop-overread]
+   44 | #define __underlying_memcmp     __builtin_memcmp
+      |                                 ^
+/scratch/merges/ko-linux-next/linux/include/linux/fortify-string.h:420:16: note: in expansion of macro '__underlying_memcmp'
+  420 |         return __underlying_memcmp(p, q, size);
+      |                ^~~~~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Palmer Dabbelt <palmer@rivosinc.com>
+---
+ net/bluetooth/l2cap_core.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/pci/controller/pci-mvebu.c:437:17: sparse: sparse: restricted __le16 degrades to integer
-   drivers/pci/controller/pci-mvebu.c:437:38: sparse: sparse: restricted __le16 degrades to integer
-   drivers/pci/controller/pci-mvebu.c:455:30: sparse: sparse: restricted __le16 degrades to integer
-   drivers/pci/controller/pci-mvebu.c:458:31: sparse: sparse: restricted __le16 degrades to integer
-   drivers/pci/controller/pci-mvebu.c:472:17: sparse: sparse: restricted __le16 degrades to integer
-   drivers/pci/controller/pci-mvebu.c:472:34: sparse: sparse: restricted __le16 degrades to integer
-   drivers/pci/controller/pci-mvebu.c:482:30: sparse: sparse: restricted __le16 degrades to integer
-   drivers/pci/controller/pci-mvebu.c:483:31: sparse: sparse: restricted __le16 degrades to integer
-   drivers/pci/controller/pci-mvebu.c:727:29: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le16 [usertype] vendor @@     got int @@
-   drivers/pci/controller/pci-mvebu.c:727:29: sparse:     expected restricted __le16 [usertype] vendor
-   drivers/pci/controller/pci-mvebu.c:727:29: sparse:     got int
-   drivers/pci/controller/pci-mvebu.c:728:29: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le16 [usertype] device @@     got unsigned int @@
-   drivers/pci/controller/pci-mvebu.c:728:29: sparse:     expected restricted __le16 [usertype] device
-   drivers/pci/controller/pci-mvebu.c:728:29: sparse:     got unsigned int
-   drivers/pci/controller/pci-mvebu.c:729:37: sparse: sparse: incorrect type in assignment (different base types) @@     expected restricted __le32 [usertype] class_revision @@     got unsigned int @@
-   drivers/pci/controller/pci-mvebu.c:729:37: sparse:     expected restricted __le32 [usertype] class_revision
-   drivers/pci/controller/pci-mvebu.c:729:37: sparse:     got unsigned int
-
-vim +437 drivers/pci/controller/pci-mvebu.c
-
-d9bf28e2650fe3 drivers/pci/host/pci-mvebu.c       Jason Gunthorpe  2016-12-12  429  
-e7a01876729c3e drivers/pci/controller/pci-mvebu.c Pali Rohár       2021-11-25  430  static int mvebu_pcie_handle_iobase_change(struct mvebu_pcie_port *port)
-45361a4fe44641 drivers/pci/host/pci-mvebu.c       Thomas Petazzoni 2013-05-16  431  {
-d9bf28e2650fe3 drivers/pci/host/pci-mvebu.c       Jason Gunthorpe  2016-12-12  432  	struct mvebu_pcie_window desired = {};
-1f08673eef1236 drivers/pci/controller/pci-mvebu.c Thomas Petazzoni 2018-10-18  433  	struct pci_bridge_emul_conf *conf = &port->bridge.conf;
-45361a4fe44641 drivers/pci/host/pci-mvebu.c       Thomas Petazzoni 2013-05-16  434  
-45361a4fe44641 drivers/pci/host/pci-mvebu.c       Thomas Petazzoni 2013-05-16  435  	/* Are the new iobase/iolimit values invalid? */
-1f08673eef1236 drivers/pci/controller/pci-mvebu.c Thomas Petazzoni 2018-10-18  436  	if (conf->iolimit < conf->iobase ||
-e7a01876729c3e drivers/pci/controller/pci-mvebu.c Pali Rohár       2021-11-25 @437  	    conf->iolimitupper < conf->iobaseupper)
-e7a01876729c3e drivers/pci/controller/pci-mvebu.c Pali Rohár       2021-11-25  438  		return mvebu_pcie_set_window(port, port->io_target, port->io_attr,
-d9bf28e2650fe3 drivers/pci/host/pci-mvebu.c       Jason Gunthorpe  2016-12-12  439  					     &desired, &port->iowin);
-45361a4fe44641 drivers/pci/host/pci-mvebu.c       Thomas Petazzoni 2013-05-16  440  
-641e674d6c0f97 drivers/pci/host/pci-mvebu.c       Jason Gunthorpe  2013-11-26  441  	if (!mvebu_has_ioport(port)) {
-641e674d6c0f97 drivers/pci/host/pci-mvebu.c       Jason Gunthorpe  2013-11-26  442  		dev_WARN(&port->pcie->pdev->dev,
-641e674d6c0f97 drivers/pci/host/pci-mvebu.c       Jason Gunthorpe  2013-11-26  443  			 "Attempt to set IO when IO is disabled\n");
-e7a01876729c3e drivers/pci/controller/pci-mvebu.c Pali Rohár       2021-11-25  444  		return -EOPNOTSUPP;
-641e674d6c0f97 drivers/pci/host/pci-mvebu.c       Jason Gunthorpe  2013-11-26  445  	}
-641e674d6c0f97 drivers/pci/host/pci-mvebu.c       Jason Gunthorpe  2013-11-26  446  
-45361a4fe44641 drivers/pci/host/pci-mvebu.c       Thomas Petazzoni 2013-05-16  447  	/*
-45361a4fe44641 drivers/pci/host/pci-mvebu.c       Thomas Petazzoni 2013-05-16  448  	 * We read the PCI-to-PCI bridge emulated registers, and
-45361a4fe44641 drivers/pci/host/pci-mvebu.c       Thomas Petazzoni 2013-05-16  449  	 * calculate the base address and size of the address decoding
-45361a4fe44641 drivers/pci/host/pci-mvebu.c       Thomas Petazzoni 2013-05-16  450  	 * window to setup, according to the PCI-to-PCI bridge
-45361a4fe44641 drivers/pci/host/pci-mvebu.c       Thomas Petazzoni 2013-05-16  451  	 * specifications. iobase is the bus address, port->iowin_base
-45361a4fe44641 drivers/pci/host/pci-mvebu.c       Thomas Petazzoni 2013-05-16  452  	 * is the CPU address.
-45361a4fe44641 drivers/pci/host/pci-mvebu.c       Thomas Petazzoni 2013-05-16  453  	 */
-1f08673eef1236 drivers/pci/controller/pci-mvebu.c Thomas Petazzoni 2018-10-18  454  	desired.remap = ((conf->iobase & 0xF0) << 8) |
-1f08673eef1236 drivers/pci/controller/pci-mvebu.c Thomas Petazzoni 2018-10-18  455  			(conf->iobaseupper << 16);
-d9bf28e2650fe3 drivers/pci/host/pci-mvebu.c       Jason Gunthorpe  2016-12-12  456  	desired.base = port->pcie->io.start + desired.remap;
-1f08673eef1236 drivers/pci/controller/pci-mvebu.c Thomas Petazzoni 2018-10-18  457  	desired.size = ((0xFFF | ((conf->iolimit & 0xF0) << 8) |
-1f08673eef1236 drivers/pci/controller/pci-mvebu.c Thomas Petazzoni 2018-10-18  458  			 (conf->iolimitupper << 16)) -
-d9bf28e2650fe3 drivers/pci/host/pci-mvebu.c       Jason Gunthorpe  2016-12-12  459  			desired.remap) +
-d9bf28e2650fe3 drivers/pci/host/pci-mvebu.c       Jason Gunthorpe  2016-12-12  460  		       1;
-45361a4fe44641 drivers/pci/host/pci-mvebu.c       Thomas Petazzoni 2013-05-16  461  
-e7a01876729c3e drivers/pci/controller/pci-mvebu.c Pali Rohár       2021-11-25  462  	return mvebu_pcie_set_window(port, port->io_target, port->io_attr, &desired,
-d9bf28e2650fe3 drivers/pci/host/pci-mvebu.c       Jason Gunthorpe  2016-12-12  463  				     &port->iowin);
-45361a4fe44641 drivers/pci/host/pci-mvebu.c       Thomas Petazzoni 2013-05-16  464  }
-45361a4fe44641 drivers/pci/host/pci-mvebu.c       Thomas Petazzoni 2013-05-16  465  
-
-:::::: The code at line 437 was first introduced by commit
-:::::: e7a01876729c3e650c5f6ee446b71a309d1c55ab PCI: mvebu: Propagate errors when updating PCI_IO_BASE and PCI_MEM_BASE registers
-
-:::::: TO: Pali Rohár <pali@kernel.org>
-:::::: CC: Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>
-
+diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
+index cbe0cae73434..be7f47e52119 100644
+--- a/net/bluetooth/l2cap_core.c
++++ b/net/bluetooth/l2cap_core.c
+@@ -2000,11 +2000,13 @@ static struct l2cap_chan *l2cap_global_chan_by_psm(int state, __le16 psm,
+ 			}
+ 
+ 			/* Closest match */
+-			src_any = !bacmp(&c->src, BDADDR_ANY);
+-			dst_any = !bacmp(&c->dst, BDADDR_ANY);
+-			if ((src_match && dst_any) || (src_any && dst_match) ||
+-			    (src_any && dst_any))
+-				c1 = c;
++			if (c) {
++				src_any = !bacmp(&c->src, BDADDR_ANY);
++				dst_any = !bacmp(&c->dst, BDADDR_ANY);
++				if ((src_match && dst_any) || (src_any && dst_match) ||
++				    (src_any && dst_any))
++					c1 = c;
++			}
+ 		}
+ 	}
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.34.1
+

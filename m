@@ -2,93 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89A6D59159A
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 20:44:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC6A859159D
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 20:45:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239400AbiHLSof (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 14:44:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44766 "EHLO
+        id S232822AbiHLSpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 14:45:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239369AbiHLSoc (ORCPT
+        with ESMTP id S234923AbiHLSpj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 14:44:32 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C6CB4408
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 11:44:30 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id q7-20020a17090a7a8700b001f300db8677so1653806pjf.5
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 11:44:30 -0700 (PDT)
+        Fri, 12 Aug 2022 14:45:39 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A875417051
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 11:45:38 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id o3-20020a17090a0a0300b001f7649cd317so9150228pjo.0
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 11:45:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc;
-        bh=Jwz3JqA8E4VLI4fm3m0tXIUfFR+R/+giNaaOoAPVjoE=;
-        b=scv94rzjTNbgITmmQH3RiWc35UVRfOskfK9mOBJ3Fe9p1cWAuHq3mFLLCp1tcPL3ej
-         eHFnHjXjMtQ2AuvYO/2RjldsUrNkkVm42q7g4rg5kGir3Keq3ckwp+D05itvJppbKq5h
-         yfSKz2zoDMtcurnDZEiUOAYbFf6UX/gN6GsQWRs4wX2Yuj19Caqg5t4z6mP4TEjeJJZ2
-         UvJa1e2R4+eyc/bVSzyBZt3DT4tik22vdr9AsU1xCfZX0988xRTVRL1doMJdJsivrdKE
-         gLW1xKDuhzRUKWDS8weuy+bLrQYl1wSg/twcCLNR9UPXViR20LDG9iHljXQxltw9iGlP
-         UmMw==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=EsyzVUQW3lhq8PbIpm+iMiCgj6eBjplWp2G/k27ML9c=;
+        b=lwmwMFDeg573WZwqyjRAzteMIgokt2V8ryD597LyJwUT2wsXbXpLyCl6o0XVaaPKlu
+         VLbf4K+sm2GmB51znjagi/AXR/RsSGRs+ORlfjqVeSXqtbCaV77YQAgm75OEzEq+mgm/
+         lAUtJxyL7z4DA+JAESVdWlr40z9dsx1JPDbZQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=Jwz3JqA8E4VLI4fm3m0tXIUfFR+R/+giNaaOoAPVjoE=;
-        b=UlPlTKn3mia9FJ1TBKIKs9emr3olsETIzbsXaxyRa5H9rlurs4Ohl8hsAxFO6eGazu
-         PhnF1szghwNZ+lSMJDfgaw/YConHJHg10A3owbtO8HA833PrALjcMIodA5IvcB657iGF
-         4njpJt1Sun0R1HWSbnoN7URNvcMY8krKbXvBCiI8vFCtQBNNEDTFbWuyVjDRfd+JOJA5
-         0v/shOxkL0h+kwdXSOg+emgSampBxV1KBGw5PXyyJVwGJv/sA7yv0hlcQP4blciNM6Np
-         eEvi45RLk1iGP/iFwEwaW2XC17ZBnnX0SxocTDexLOMBqr0jOwOnzC5Stv2+aMb6kQZu
-         5KQA==
-X-Gm-Message-State: ACgBeo1j9FjKPgKRZIgGoHfbpYWt1lVvgdKnjFHvokqHUXf7j/CySHIV
-        6cSeBgGgbD1RgqFVTFiVeSb+qQ==
-X-Google-Smtp-Source: AA6agR6o1q7JATkXSumgeEUJRB6X0YWlJ6SXRpkm2KPKcZbXqyEExH+p6Vaj89McpgGUQciCA1GidQ==
-X-Received: by 2002:a17:902:ce90:b0:16e:f7c3:c478 with SMTP id f16-20020a170902ce9000b0016ef7c3c478mr5284938plg.82.1660329870008;
-        Fri, 12 Aug 2022 11:44:30 -0700 (PDT)
-Received: from hermes.local (204-195-120-218.wavecable.com. [204.195.120.218])
-        by smtp.gmail.com with ESMTPSA id i16-20020a056a00225000b0052e9cee1f5fsm1933037pfu.29.2022.08.12.11.44.29
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=EsyzVUQW3lhq8PbIpm+iMiCgj6eBjplWp2G/k27ML9c=;
+        b=aB0sJSJg0Nc43+VB8VBL1+go0Jco88sGbLdXQambFdRC71f+a1u5fE2SBQucbX3qrF
+         ZIwTAtO0J5fdCXfH1k+xIXMJDT381In2N3y/N4GNX4VGGhtMx+Nqw52DiayHpJt6XhUp
+         p9ZDhn2FtX4mlWgQr3Vv/+5NThMpDfjj7t4qeJTcJCBJtDaeleui3yHZ36RTIZXZP0UC
+         Rtm7Od9SWOWubUBvE8UBt2oX5ZujQtXfYQzXcPlXy7u0DesfaQ2Gaxh/YVC7kF6HNUA3
+         zOln+EBeVWr3eQouiHnvFDx2+JOzH2aJnWxDvHUb3wRGoJCWjbQkJogDNdYKMYm1gtZ1
+         cnsQ==
+X-Gm-Message-State: ACgBeo0ZelhSq7rViBBGKyPYn/RS5AET8W0aqKZoUUo7A04ZQqC5ckZq
+        gxIyCFz3kdbVnwny6YIczpGoIQ==
+X-Google-Smtp-Source: AA6agR48xHogCuZSvWQIVxaaZq+M/JOYoLiUJolsdt3Y1iss2UZsRE019KovrKanKfS5CEKWVQ6WCQ==
+X-Received: by 2002:a17:90b:3805:b0:1f4:ebfe:558b with SMTP id mq5-20020a17090b380500b001f4ebfe558bmr15283844pjb.48.1660329938127;
+        Fri, 12 Aug 2022 11:45:38 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id y12-20020a170903010c00b0016db51ca7dfsm2080847plc.15.2022.08.12.11.45.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Aug 2022 11:44:29 -0700 (PDT)
-Date:   Fri, 12 Aug 2022 11:44:27 -0700
-From:   Stephen Hemminger <stephen@networkplumber.org>
-To:     Sergey Ryazanov <ryazanov.s.a@gmail.com>
-Cc:     Antonio Quartulli <antonio@openvpn.net>, netdev@vger.kernel.org,
-        David Miller <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [RFC v2] net: introduce OpenVPN Data Channel Offload (ovpn-dco)
-Message-ID: <20220812114427.05f7393a@hermes.local>
-In-Reply-To: <CAHNKnsQnHAdxC-XhC9RP-cFp0d-E4YGb+7ie3WymXVL9N-QS6A@mail.gmail.com>
-References: <20220719014704.21346-2-antonio@openvpn.net>
-        <20220803153152.11189-1-antonio@openvpn.net>
-        <CAHNKnsQnHAdxC-XhC9RP-cFp0d-E4YGb+7ie3WymXVL9N-QS6A@mail.gmail.com>
+        Fri, 12 Aug 2022 11:45:37 -0700 (PDT)
+Date:   Fri, 12 Aug 2022 11:45:36 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     ira.weiny@intel.com
+Cc:     syzbot+3250d9c8925ef29e975f@syzkaller.appspotmail.com,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        ebiederm@xmission.com, viro@zeniv.linux.org.uk,
+        sfr@canb.auug.org.au, syzkaller-bugs@googlegroups.com,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fs/exec: Test patch for syzkaller crash
+Message-ID: <202208121144.E9E5EE9E@keescook>
+References: <20220812000919.408614-1-ira.weiny@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220812000919.408614-1-ira.weiny@intel.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 12 Aug 2022 21:34:33 +0300
-Sergey Ryazanov <ryazanov.s.a@gmail.com> wrote:
-
-> What is the purpose of creating and destroying interfaces via RTNL,
-> but performing all other operations using the dedicated netlink
-> protocol?
+On Thu, Aug 11, 2022 at 05:09:19PM -0700, ira.weiny@intel.com wrote:
+> From: Ira Weiny <ira.weiny@intel.com>
 > 
-> RTNL interface usually implemented for some standalone interface
-> types, e.g. VLAN, GRE, etc. Here we need a userspace application
-> anyway to be able to use the network device to forward traffic, and
-> the module implements the dedicated GENL protocol. So why not just
-> introduce OVPN_CMD_NEW_IFACE and OVPN_CMD_DEL_IFACE commands to the
-> GENL interface? It looks like this will simplify the userspace part by
-> using the single GENL interface for any management operations.
+> Kees reported that it looked like the kmap_local_page() conversion in
+> fs/exec.c was causing a crash with the syzkaller.[1]
+> 
+> At first glance it appeared this was due to the lack of pagefaults not
+> being disabled as was done by kmap_atomic().
+> 
+> Unfortunately, after deeper investigation we don't see how this is a
+> problem.  The crash does not appear to be happening in the
+> memcpy_to_page() call.[2]
+> 
+> For testing, add back pagefault disable in copy_string_kernel() to see
+> if it makes syzkaller happy.  If so more investigation will need to be
+> done to understand exactly what is happening.
+> 
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c6e8e36c6ae4b11bed5643317afb66b6c3cadba8
+> [2] https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/fs/exec.c?id=40d43a7507e1547dd45cb02af2e40d897c591870#n616
+> 
+> Cc: Kees Cook <keescook@chromium.org>
+> Reported-by: syzbot+3250d9c8925ef29e975f@syzkaller.appspotmail.com
+> Signed-off-by: Ira Weiny <ira.weiny@intel.com>
 
-RTNL is netlink. The standard way to create network devices should
-be available with newlink message as in:
+Thanks for spinning this. As noted in the other thread, I'm going to
+wait and see if the crashes return. It looks like it may have been an
+unrelated problem that got fix in -next (no crashes for a day now...)
 
- # ip link add dev myvpn type ovpn <options>
+But we'll have this in our back pocket if we need it. :)
+
+-Kees
+
+-- 
+Kees Cook

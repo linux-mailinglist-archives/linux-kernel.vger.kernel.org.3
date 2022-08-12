@@ -2,108 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0BA45911C0
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 15:55:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9239D5911C2
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 15:58:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238094AbiHLNzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 09:55:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41448 "EHLO
+        id S238426AbiHLN5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 09:57:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237138AbiHLNy5 (ORCPT
+        with ESMTP id S229760AbiHLN51 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 09:54:57 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74919A9257
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 06:54:55 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id l4so1269532wrm.13
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 06:54:55 -0700 (PDT)
+        Fri, 12 Aug 2022 09:57:27 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51119925D
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 06:57:26 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id k26so2175942ejx.5
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 06:57:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=jM7EPdzO3/8UIbNc27Sgu5Ssc7D/JbAU5jUdYrnh1RQ=;
-        b=j8Sp0Ny1AUyYQrQLBjWgLArXRjmzPu1lvmcKL+902eFWGt+x+95FkQ+LUAsRGB/lG9
-         Dsd23JA6G0mporl2ukXShKbHFJXlIMyXriCwpi96pWky/eRqATdJp79iylWXQJGFpu9S
-         xi+1UOTIuWDsawV/wl8Dto08G4ACp7h0YnyyjQPSXFK+U1fOlYPha14ooMsaX20r7lCm
-         bpMNJ0Cuqi8z9Q9OwkQszpmVmR4TjAun/1/WWNu7V1kR1ByiV66W7m6jqDWkR+dh6V/z
-         K9XUY1oS+Z8W3lx4hTsBrNot3HvxxwnQizqulHzAO+bfX7BrES7mig84NrV3S9AG12v1
-         0SRw==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=UqdfMBk3FFh1oCjqYXyPvd30eogbRofxBEUHJL5KgK0=;
+        b=UIOZDYkytCcVwuVC8i6ZqFPz3l3zhM5EVr/20mUsnh5cx2mTXPpvRc2c9jbYUYLQZc
+         AfvSHtrRT4r02XTsO7bSI2mD76VkFeItd+jLH9Z5Bu9CiTgdy1XBIPsmF5BDjZ/LU0lu
+         7Ig+56xv16be3+gJepLICuA9ONSyc0ohcRaAhACdwfjuzDt2GWJPa9bBqShHOasgyIOR
+         MI8kMIu+bqS1lpN0XYYe9ibALCmU3r5EPNRUZPTygDHk+oJN/qr+XvbL9W+LPfbWRZ2T
+         HJENOPnMWurAw0bnBfgCFi/0BUcytm/DBBK8oXE2CbTbLqfzYDt0PL8uRon/+hsmMtOF
+         Aiyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=jM7EPdzO3/8UIbNc27Sgu5Ssc7D/JbAU5jUdYrnh1RQ=;
-        b=L33gOI2+6nG5HwIThWGL28+oeR5dg1knu6NnJR8eK7n/s+fZx7pGcxZNMqIracKd+9
-         6KOjuoO+A9NMeGTzq92zFkdib7c5ed7CIsZx3m/LmadHDubHgw89MCmp0wOcFteTK1cp
-         qmBTt1L1xzA7sI8o3WjRnxt1zRvnFAsQTSd2L8lAc5hU9/f+sHxguUHPszuqDQfTMSSZ
-         kdW9ffemtiePnSQPtnSTj/ROj54v3BWWbTlLNy/4ItoMrUaHIQ3Q0OFioNauLVESQ4Wu
-         6dh8a9N4oW4ChjOmSLb56MdN3CxfOaN5dNrnM+6FgWaOwnXgUCvZNGKCtSTE1ctlTSDs
-         ZxfA==
-X-Gm-Message-State: ACgBeo3gnBApeMXkoLjwQMZU47wp+ovbh3r8PgOWI1hunek/Dhpqe/9L
-        bu9aesnOP7WCD4fQ9nzGxA2G0g==
-X-Google-Smtp-Source: AA6agR5Kf8LT3vuuSyA8RzNo0c2gUbzfKa5DRzkQ/uyCoMf8X9uhFvLsN0rMwuIy/15RvIrWqifSIQ==
-X-Received: by 2002:a05:6000:1acd:b0:220:62c2:bc29 with SMTP id i13-20020a0560001acd00b0022062c2bc29mr2199687wry.620.1660312493881;
-        Fri, 12 Aug 2022 06:54:53 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id bo22-20020a056000069600b0021d80f53324sm2164032wrb.7.2022.08.12.06.54.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 06:54:53 -0700 (PDT)
-Message-ID: <c0c5b306-9fd5-1048-ba08-044d292cbf7a@linaro.org>
-Date:   Fri, 12 Aug 2022 15:54:52 +0200
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=UqdfMBk3FFh1oCjqYXyPvd30eogbRofxBEUHJL5KgK0=;
+        b=2ZAox4hFKbWLpajot7u8GIAeSWDOqh3xSHltzkgJjR7ZagwaFWCkLa+jV0fuPEsAdK
+         XlTdcEAK3Lw8+BXFVTj1uvs8pZN0I7nfxTeX3Tix85z9DaqpJ07hhGQu3GmD95TnpDpA
+         MQH1/hTo1iq0pWLDAIbBNoOE7gGGrZ8oWcuCA2BM7rfFymhQBXiO08zWIGNu9zsM4fVE
+         SRTuPLCF2l5ICn7lrcxKd515wo3Nl+lWaUYRTIksNPgAl0FeamqsO24lqz6VjfW50WMk
+         D2jHnVvyhB1DGvfDLuZpioD6ujFv7lbIamYNQiFTdxj4EYyTfcX1IAf2tGNj21Lok0q6
+         jR3w==
+X-Gm-Message-State: ACgBeo0BzRPFMb8rxtI9B0mP+psDg7peSMGC8WhrMA7Bdg8Zhn2PCp4Y
+        yUH0BBqPmQUSu0iMJJ0NLKaxKgGYBVRh3uiksXI=
+X-Google-Smtp-Source: AA6agR5b6JHS11XaB1VLJdcr0UpOBC3SruahBqfEW7BjMgwF9FOhR6nIAQ4vdwbn4/nulbrITJlNjfSVctyZMKCpMUQ=
+X-Received: by 2002:a17:907:d9e:b0:731:1a5:8c68 with SMTP id
+ go30-20020a1709070d9e00b0073101a58c68mr2816133ejc.365.1660312645159; Fri, 12
+ Aug 2022 06:57:25 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] thermal/core: Fix lockdep_assert() warning
-Content-Language: en-US
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     rafael@kernel.org, krzk@kernel.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        amitk@kernel.org, linux-samsung-soc@vger.kernel.org
-References: <f1fb1d84-85de-f3c5-0212-fcf0e9c0ccd2@samsung.com>
- <CGME20220812131216eucas1p266cfd4e51b59fc3cf8056474a6910094@eucas1p2.samsung.com>
- <20220812131202.1331238-1-daniel.lezcano@linaro.org>
- <ab708272-efe0-343e-2dfc-299187126a2a@samsung.com>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <ab708272-efe0-343e-2dfc-299187126a2a@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+References: <20220812132124.2053673-1-dzm91@hust.edu.cn> <YvZYmprZ1NiMkynp@kroah.com>
+In-Reply-To: <YvZYmprZ1NiMkynp@kroah.com>
+From:   Dongliang Mu <mudongliangabcd@gmail.com>
+Date:   Fri, 12 Aug 2022 21:56:46 +0800
+Message-ID: <CAD-N9QWU_tcnHMtP3iWcQogSWwDET4nhK5AQKDbh2KJQzwfF9A@mail.gmail.com>
+Subject: Re: [PATCH] drivers: binderfs: fix memory leak in binderfs_fill_super
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Dongliang Mu <dzm91@hust.edu.cn>,
+        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Carlos Llamas <cmllamas@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        syzkaller <syzkaller@googlegroups.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/08/2022 15:34, Marek Szyprowski wrote:
-> On 12.08.2022 15:12, Daniel Lezcano wrote:
->> The function thermal_zone_device_is_enabled() must be called with the
->> thermal zone lock held. In the resume path, it is called without.
->>
->> As the thermal_zone_device_is_enabled() is also checked in
->> thermal_zone_device_update(), do the check in resume() function is
->> pointless, except for saving an extra initialization which does not
->> hurt if it is done in all the cases.
->>
->> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> 
-> This fixes the warning I've reported. Feel free to add:
-> 
-> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> 
-> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
+On Fri, Aug 12, 2022 at 9:41 PM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Fri, Aug 12, 2022 at 09:21:24PM +0800, Dongliang Mu wrote:
+> > From: Dongliang Mu <mudongliangabcd@gmail.com>
+> >
+> > In binderfs_fill_super, if s_root is not successfully initialized by
+> > d_make_root, the previous allocated s_sb_info will not be freed since
+> > generic_shutdown_super first checks if sb->s_root and then does
+> > put_super operation. The put_super operation calls binderfs_put_super
+> > to deallocate s_sb_info and put ipc_ns. This will lead to memory leak
+> > in binderfs_fill_super.
+> >
+> > Fix this by invoking binderfs_put_super at error sites before s_root
+> > is successfully initialized.
+> >
+> > Fixes: 095cf502b31e ("binderfs: port to new mount api")
+> > Reported-by: syzkaller <syzkaller@googlegroups.com>
+>
+> Where is the specific syzkaller link for this report?  It would be good
+> to reference it so it can be properly checked.
+>
+> Also, how did you test this change?
 
-Great, thanks for testing
+I found this memory leak in my local syzkaller, and there is no any
+syzbot report about this crash, therefore I use such a Reported-by to
+indicate.
 
+Although my local syzkaller does generate any reproducer, this bug can
+be triggered by injecting faults at new_inode and d_make_root (i.e.,
+between s_sb_info allocation and code after d_make_root).
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+>
+> > Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+> > ---
+> >  drivers/android/binderfs.c | 8 ++++++--
+> >  1 file changed, 6 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/android/binderfs.c b/drivers/android/binderfs.c
+> > index 588d753a7a19..20f5bc77495f 100644
+> > --- a/drivers/android/binderfs.c
+> > +++ b/drivers/android/binderfs.c
+> > @@ -710,8 +710,10 @@ static int binderfs_fill_super(struct super_block *sb, struct fs_context *fc)
+> >       info->mount_opts.stats_mode = ctx->stats_mode;
+> >
+> >       inode = new_inode(sb);
+> > -     if (!inode)
+> > +     if (!inode) {
+> > +             binderfs_put_super(sb);
+> >               return -ENOMEM;
+> > +     }
+> >
+> >       inode->i_ino = FIRST_INODE;
+> >       inode->i_fop = &simple_dir_operations;
+> > @@ -721,8 +723,10 @@ static int binderfs_fill_super(struct super_block *sb, struct fs_context *fc)
+> >       set_nlink(inode, 2);
+> >
+> >       sb->s_root = d_make_root(inode);
+> > -     if (!sb->s_root)
+> > +     if (!sb->s_root) {
+> > +             binderfs_put_super(sb);
+> >               return -ENOMEM;
+> > +     }
+>
+> How did you test this change to verify that you are not now just leaking
+> memory?  It looks to me like you just changed one problem for another
+> one :(
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+As mentioned above, I just tested my change by injecting faults at
+new_inode and d_make_root.
+
+Can you explain more about "changed one problem for another one"? I
+don't quite understand this statement.
+
+>
+> Please always be very very careful when making these types of changes,
+> and verify and test that they are correct.
+>
+> thanks,
+>
+> greg k-h

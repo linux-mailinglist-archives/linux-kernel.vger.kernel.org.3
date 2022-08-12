@@ -2,185 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30A8159162F
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 22:12:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4E6E591638
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 22:28:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236146AbiHLUME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 16:12:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40048 "EHLO
+        id S233439AbiHLU1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 16:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234491AbiHLUL6 (ORCPT
+        with ESMTP id S229704AbiHLU1A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 16:11:58 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 135F5B5152;
-        Fri, 12 Aug 2022 13:11:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660335117; x=1691871117;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=U7VKJ/YR4r6dt1TIieIa50ZssYXbZQFLKweTbIbNLBI=;
-  b=CCa3dMjjMxcQM3b/9Aq3lAK5xISjDDTpIYiEunC7yL+k5umAwSPBnnoC
-   Hm4BhnxWYRPGOkeBo/Qs25+nsvjWoLTz4O9e5W+2NmC0MQC5tEDmoW7Wo
-   CpmvWnIJpfQO84OROVtm5N7x8iv2e3dCqftDz9Q4mPSXLnl0e09p/IzqW
-   DCUtuQOlnkcGO26FjApGigrbbdOJdZutUotb4ngRKLIvy7ZqEPmOvduQz
-   Mx0L10F4s3m3fe1brSrCDIUvtK0Ab5HdInmCK6gkJXd7dsDRkYsOsJqxj
-   J7HK5Qq5RuM7DfkVrqYdjketnDdXnlmhAKsODvjj96K/vqZA+tTFX/ock
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="289248638"
-X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="289248638"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 13:11:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="748312267"
-Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 12 Aug 2022 13:11:54 -0700
-Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oMb0b-0000tF-1q;
-        Fri, 12 Aug 2022 20:11:53 +0000
-Date:   Sat, 13 Aug 2022 04:11:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        wenqingliu0120@gmail.com, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>,
-        Baokun Li <libaokun1@huawei.com>
-Subject: Re: [PATCH v3] ext4: fix bug in extents parsing when eh_entries == 0
- and eh_depth > 0
-Message-ID: <202208130421.BZpzWWRK-lkp@intel.com>
-References: <20220812141329.9501-1-lhenriques@suse.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+        Fri, 12 Aug 2022 16:27:00 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2041.outbound.protection.outlook.com [40.107.92.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C617985BD
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 13:26:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=E2bhvjrG8cz2hYEs7XTCvKUFcGvytbifmrMiLOnwsLQM44YT4ENeXMBOHSPCNwQQa2+le+T+i4wclOVzTIPnjBQ1RIoVqF0GqqTVzGELUkxFA2ltXQYr8EQNc9flsRIjGlNuSoBRgfc/ElPyC3DuWNaguqCg5KHh0KmUL91lWtVHRHsv1pUIwaC/8jTEfyPyVkGftxp+WJ/8prGAXyi5FazBjnNLA6JhW7yZDpXr10+Q7e0SunqVTqobYx68Ii/vz3FRfkBXYgHIkHAIqPsW4xNHRpzMNDAIA0Hz8mQuwcyfiUgwbCCxo77nBKaMCxJzghZzJyrj390hkFEl8hPn0w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=c7a+7IJCSCFUPHtB3/MC60OqR2m+JcLGRX91/AxADAw=;
+ b=WqmKMVkNjl4ZhnrHJ1CXJhPp1xFwGdxpFq8fv45q3B31PhqjJQawE4H3vj43734CLRITxEJ2AOFVimpLUgWmRn4unXFj+BTNl8Jo9LQntBPnFWtcGJskvTJgbxvUmxzUqGSIwJigQCjAcL7amPun0v18aY/v1PvFKaj8fGZQgyo2xwv0dr2ncLkBepqxqvkCqAbQJPoTCzSll4JutBT/uM608/UUoR2liz/aEuVFKLFu7YZF51zYr8oaC4ul+2fT386nyfx6Mqr0/11yKE5hzAAqBNgs9wuTwd7NZn0UZoRS69Y6zPPTv+D2SucdLhqCGJ6w7ATywS86znUYcc55IQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=c7a+7IJCSCFUPHtB3/MC60OqR2m+JcLGRX91/AxADAw=;
+ b=hPLlvp/tV9T2j+fSudQo2wupV/NjPD8zJ9wGaEwX9dCXPal2irKlVxYTu0s3nLMsSAspCKUXraEhAl7kHfJW03J6GxiBquKF3OefN72B4L/7VbaUWWjgHPZo3Nx5ZIYNTpwMfl8gtszM1aVHHs3g1NnAsd/+qOW3G8PwoKDenpk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN9PR12MB5115.namprd12.prod.outlook.com (2603:10b6:408:118::14)
+ by MN2PR12MB3277.namprd12.prod.outlook.com (2603:10b6:208:103::28) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.17; Fri, 12 Aug
+ 2022 20:26:49 +0000
+Received: from BN9PR12MB5115.namprd12.prod.outlook.com
+ ([fe80::406d:afb5:d2d7:8115]) by BN9PR12MB5115.namprd12.prod.outlook.com
+ ([fe80::406d:afb5:d2d7:8115%5]) with mapi id 15.20.5504.025; Fri, 12 Aug 2022
+ 20:26:49 +0000
+Message-ID: <82233e68-106f-39e9-b20d-7794eb7a8933@amd.com>
+Date:   Fri, 12 Aug 2022 16:26:47 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     Dave Airlie <airlied@gmail.com>, Philip Yang <Philip.Yang@amd.com>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>
+From:   Felix Kuehling <felix.kuehling@amd.com>
+Subject: Selecting CPUs for queuing work on
+Organization: AMD Inc.
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220812141329.9501-1-lhenriques@suse.de>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-ClientProxiedBy: CH2PR07CA0034.namprd07.prod.outlook.com
+ (2603:10b6:610:20::47) To BN9PR12MB5115.namprd12.prod.outlook.com
+ (2603:10b6:408:118::14)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 4654ff8d-42bb-44ee-548b-08da7ca0fbd5
+X-MS-TrafficTypeDiagnostic: MN2PR12MB3277:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NWpvROhs6QDpY8UKEA6MDRqMkcIv7AvKUBFS9s/2BT6nMcA6GQiJWP9yHDZMcno67zGvfs1IvcXXBreQfU4dVQtCtK1unDpP2r0FgC/5N15LKnAMfq7BTTlF8HL7zsKHtj+OcuCVuG3OvjH2CCh8KtUfv9NCPWmDxjztjwccd/Yfpjb9dNjml9Fz1+CcQ2DK+XTaDL1dEUyBHTAEYEutzgIRGWNTVMa7+1z1NK4mYMURZJLWNVENNHWk2JAXPOlx3Ws6RGAWC9XKUYv4Ix63xK0OGPrRom1ga7vhsFIxlz22t3zHjuTIXKBEFymAPy6fgidhBaBdhrJx/ZLywOEpHllrAmmMa4VUGSeEblcGsOstDz79D2YIjI25+ntccykQ+KKK8GUbPdl1Sa26YoI2+cm4gMHF4u5y4R38n6dLxYFNqcPrA6Abw1ExdP8yspBG6YcMT/dmvKpb0Gi0hvW+79Fj4eFsb6CwUQa5PaQV6z5goXm4//1Yge69g1rh2wYWDeihK+RnBShypbedxQPtkear2qapmBedE/EVDlUGm3XYAK/F9el7BjwKUOKTr/DMzLjR/EtXdpgIamzxOigcph+vjaMb5PoB79jIKu1IFjOk0LfcMXHL4dWpH/bhdW9CsV1udrwMSjBclkAmCPS9AuQNJwsCQ32a5EZnNO9VnsejbmaJIujQwb37lu/l/R3XPni9EH56CO76RUSrfMScXVe5UmNoC07C9KAo8T87WxQwrwjUsUvNNwtAxM4n6vBrq5XTDbWa/v6LqW0O+E3u3IeM2vFOl9JMiNEn9Ikv3Yno1GJuFp75ZpdDsc0rzJ021cNuTIa3gfgF1pjQSxYOhWIDgi9C8ryR4OuNcC07vWe0ToQXd8C1YwStdBrdpjI/
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5115.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(346002)(396003)(39860400002)(366004)(41300700001)(316002)(31696002)(6512007)(26005)(36756003)(6506007)(36916002)(478600001)(40140700001)(6486002)(31686004)(2616005)(84970400001)(186003)(86362001)(966005)(8676002)(66476007)(66556008)(110136005)(54906003)(66946007)(4326008)(38100700002)(5660300002)(2906002)(44832011)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?czE1Z3RJSlNrcWhoRmg3YzBuSVBMT2t2REUvSFlFbjFjTlZzNUdhaHhCZ3oz?=
+ =?utf-8?B?NVFUTjJ2cUtCNExDaVlVUk91THk4T3d2eFJwR2FiMkYvQmFMNmFBSzZZWG1w?=
+ =?utf-8?B?QXVrTS9tRXh5dmU2WUZTa29UL3psTWVhQ3k5TVVRQmx3S2ZEODdNTXVtWjFh?=
+ =?utf-8?B?bVRFamprTXVndXRueU9Cb1VUak5TKzVueWJlQW1XelVaNUFCS3hPV3dSNjVG?=
+ =?utf-8?B?Y1pxL2Z3VEVzbW55Sk9RMG1YY05aWFZ5c0tVQlpSQ2pTTC9BbzU5QXJaalIz?=
+ =?utf-8?B?ejAzaS9zUjk0S0ZYellkZFEzd2JLOVhBazNlR3lqNzBHUWlxbktQMHNXK3FY?=
+ =?utf-8?B?UTVrTGhEQlBvcE12aUo3Q0x3YlNIcmIxOVJ6cXNTdC8rOGs4VW0yYWdKZTBp?=
+ =?utf-8?B?RGdVOXdPcDJwb2xmUDZkSVZzOEhzK2ZDUGUvaXVOWTlrdWZ4WDZVaTRZOWN0?=
+ =?utf-8?B?d1F5Ti9Xa1ZNZU1GMDQ1S1c5cFhsQWJrc2NIUEdxR2c2WEc1cmhFTGFXRElI?=
+ =?utf-8?B?S2RNWkZBZyt6VVhZRXJReDY5Z2YvWmJZUDZHZnVKVVYyOU04eVJkV2ZFVWtp?=
+ =?utf-8?B?ZncyVlU2TUJtVFF1a0l1R0J6RW40Q2NEcWd4QXNXYyt6U2Y0bEhGS2dhbmR5?=
+ =?utf-8?B?cGw1Y2g4TVRieFh0UGk4bnpaVVM3eGc4N3NkNDFGSE5FL0xwMmhRZjFMWWl0?=
+ =?utf-8?B?dDZ3OHFFTVJIRGpLSHpGd1F2bFVLVmJ2c0VhdURtQTFLdGxaZThodVA4Vmg5?=
+ =?utf-8?B?ODRsVlIzVU16YW9PQ1ZhMHBnOHRxa2NhcGljSmNRY2lBc3BRdllZM3pSZnU4?=
+ =?utf-8?B?YVpXWTJ1TGlzQ1RIV1dBbXRCcldwTUZIUmVNYndpNGc1TS9RRnEwVWJ3elBk?=
+ =?utf-8?B?bVY1a05jQmorMTVwOXZoMkhvOWNweGdqdFZxOGRudEJ0WDAySGdtSlF2TjJ1?=
+ =?utf-8?B?ZnA2aUM3a2syTWRRNllwZzlMZ2d1cFd2aHE4WTlFenZTTEtvbUlrVEhmaTA2?=
+ =?utf-8?B?VGdpb2lIZlpYUlFTWktjTWJUVy9GMnJuTnlqVDRJYlRyeTJOTXc1SlNLY2VY?=
+ =?utf-8?B?eko0bFBVc1ErSlhyMDIySFRUZFlMTWZVS1FHdjM4T3d1QWRtcXY4ZmNuaU1r?=
+ =?utf-8?B?c2hDeU4vUUxTRjlHRSt5Z1g3YktjazBHalZRYmJlRjcrNDJldWlhcFpFYWwr?=
+ =?utf-8?B?Yk9nYUZSZS9BcjFaaGV5NDhQdTVDeisva2ZBTU5zSmFvbXNmR0FwUWo5eG02?=
+ =?utf-8?B?cFpVN3M3UE0zZ3JIMFdXb1BxUnJoUTJ4anJpSkoyZWFhbnRJWFJGRlArQjlV?=
+ =?utf-8?B?bS9XT2tkNmdCOHNKUjlONlZneEZ3ckI5ZkU2R1E4REF2aDFxNGZKQmUwL2Iw?=
+ =?utf-8?B?N29oYTZVb0hPY3B1WU04ZWttNWw1R0hvclhEWVBSaVBMbjZReERTR2lzalN2?=
+ =?utf-8?B?SVRPMkllbjBWMTNFYjNQNGxvMGc2REc5UitDYjdMckZlTEV1Vkl3c05SMTRY?=
+ =?utf-8?B?YWJjVlF1NkhyYVp4WHBNa0pGQUlpT3VpY1ZIWjFRSVVCOVhOK0NZQVB6SEd0?=
+ =?utf-8?B?UDRhZVpwcmV5M3ZzWS8zbGNiT2JKM2hjQ1dHVFloUCtFbXQ2Nk9xZzF2bXhi?=
+ =?utf-8?B?Z2tzVExMVEZjRVB6NFZZeVh3dFFMQm1pSU1hMy9WZWlWdUt3U3RiZUhzNWRX?=
+ =?utf-8?B?SVFoVUtRQzBEMkZTT3JlNVpKUlQzNXIxakM0RW50dkVJZkIzSnBINjFpNEln?=
+ =?utf-8?B?MlR5Zm5qS08xMmQrUFg3bndOcGFFb09ORzh4UmpQUWxoZGVDOWFiY2MwZm5J?=
+ =?utf-8?B?T0RJdjNpTnZtSHlvNXpkcVZFTlBScWJ3R2RCTlBzcUVUSmdCc0FialphS0p3?=
+ =?utf-8?B?Z2dRM3BxU1BrWEVNM2VmN2NsNXpUOXBxYXFxcWhNSStrZ1AwdFNFUU53T1py?=
+ =?utf-8?B?bENOSmNETmFGMFlqbUVLVHQ2R255OTdNd2twbFo0dnEzWndCSU1HUUZSS3d0?=
+ =?utf-8?B?RGNZVnJMSmU1ZDZsZmh0Y0hZajVIUktxc3BmUXZNbWhRRk5pWGsxREJIdWM4?=
+ =?utf-8?B?SllUc0xERGNpeVJBY1Q4eVg5S2ZINisxcG5aUVBUa1ZsbTJLK2ZZR1Z3dDIr?=
+ =?utf-8?Q?Am3Eit8nl3E5kPGm1cfNlZeGg?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4654ff8d-42bb-44ee-548b-08da7ca0fbd5
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5115.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Aug 2022 20:26:48.8958
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: QknAz3+smBCzniEfc2pdu8PZBG3+9MtqhtxC0teGEias8H3BVeh1JfsmrZ8+R44ZERRNZsRmFDslGDU0bGNing==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3277
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi "Luís,
+Hi workqueue maintainers,
 
-Thank you for the patch! Yet something to improve:
+In the KFD (amdgpu) driver we found a need to schedule bottom half 
+interrupt handlers on CPU cores different from the one where the 
+top-half interrupt handler runs to avoid the interrupt handler stalling 
+the bottom half in extreme scenarios. See my latest patch that tries to 
+use a different hyperthread on the same CPU core, or falls back to a 
+different core in the same NUMA node if that fails: 
+https://lore.kernel.org/all/20220811190433.1213179-1-Felix.Kuehling@amd.com/
 
-[auto build test ERROR on tytso-ext4/dev]
-[also build test ERROR on linus/master v5.19 next-20220812]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Dave pointed out that the driver may not be the best place to implement 
+such logic and suggested that we should have an abstraction, maybe in 
+the workqueue code. Do you feel this is something that could or should 
+be provided by the core workqueue code? Or maybe some other place?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Lu-s-Henriques/ext4-fix-bug-in-extents-parsing-when-eh_entries-0-and-eh_depth-0/20220812-221443
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git dev
-config: arm64-buildonly-randconfig-r002-20220812 (https://download.01.org/0day-ci/archive/20220813/202208130421.BZpzWWRK-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/ef3617646de6e939d29961099c7c8adcaa0d9fd9
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Lu-s-Henriques/ext4-fix-bug-in-extents-parsing-when-eh_entries-0-and-eh_depth-0/20220812-221443
-        git checkout ef3617646de6e939d29961099c7c8adcaa0d9fd9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash fs/ext4/
+Thank you,
+ Â  Felix
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> fs/ext4/extents.c:463:41: error: use of undeclared identifier 'eh_depth'; did you mean 'ext_depth'?
-           if (unlikely((eh->eh_entries == 0) && (eh_depth > 0))) {
-                                                  ^~~~~~~~
-                                                  ext_depth
-   include/linux/compiler.h:78:42: note: expanded from macro 'unlikely'
-   # define unlikely(x)    __builtin_expect(!!(x), 0)
-                                               ^
-   fs/ext4/ext4_extents.h:192:30: note: 'ext_depth' declared here
-   static inline unsigned short ext_depth(struct inode *inode)
-                                ^
-   1 error generated.
-
-
-vim +463 fs/ext4/extents.c
-
-   434	
-   435	static int __ext4_ext_check(const char *function, unsigned int line,
-   436				    struct inode *inode, struct ext4_extent_header *eh,
-   437				    int depth, ext4_fsblk_t pblk, ext4_lblk_t lblk)
-   438	{
-   439		const char *error_msg;
-   440		int max = 0, err = -EFSCORRUPTED;
-   441	
-   442		if (unlikely(eh->eh_magic != EXT4_EXT_MAGIC)) {
-   443			error_msg = "invalid magic";
-   444			goto corrupted;
-   445		}
-   446		if (unlikely(le16_to_cpu(eh->eh_depth) != depth)) {
-   447			error_msg = "unexpected eh_depth";
-   448			goto corrupted;
-   449		}
-   450		if (unlikely(eh->eh_max == 0)) {
-   451			error_msg = "invalid eh_max";
-   452			goto corrupted;
-   453		}
-   454		max = ext4_ext_max_entries(inode, depth);
-   455		if (unlikely(le16_to_cpu(eh->eh_max) > max)) {
-   456			error_msg = "too large eh_max";
-   457			goto corrupted;
-   458		}
-   459		if (unlikely(le16_to_cpu(eh->eh_entries) > le16_to_cpu(eh->eh_max))) {
-   460			error_msg = "invalid eh_entries";
-   461			goto corrupted;
-   462		}
- > 463		if (unlikely((eh->eh_entries == 0) && (eh_depth > 0))) {
-   464			error_msg = "eh_entries is 0 but eh_depth is > 0";
-   465			goto corrupted;
-   466		}
-   467		if (!ext4_valid_extent_entries(inode, eh, lblk, &pblk, depth)) {
-   468			error_msg = "invalid extent entries";
-   469			goto corrupted;
-   470		}
-   471		if (unlikely(depth > 32)) {
-   472			error_msg = "too large eh_depth";
-   473			goto corrupted;
-   474		}
-   475		/* Verify checksum on non-root extent tree nodes */
-   476		if (ext_depth(inode) != depth &&
-   477		    !ext4_extent_block_csum_verify(inode, eh)) {
-   478			error_msg = "extent tree corrupted";
-   479			err = -EFSBADCRC;
-   480			goto corrupted;
-   481		}
-   482		return 0;
-   483	
-   484	corrupted:
-   485		ext4_error_inode_err(inode, function, line, 0, -err,
-   486				     "pblk %llu bad header/extent: %s - magic %x, "
-   487				     "entries %u, max %u(%u), depth %u(%u)",
-   488				     (unsigned long long) pblk, error_msg,
-   489				     le16_to_cpu(eh->eh_magic),
-   490				     le16_to_cpu(eh->eh_entries),
-   491				     le16_to_cpu(eh->eh_max),
-   492				     max, le16_to_cpu(eh->eh_depth), depth);
-   493		return err;
-   494	}
-   495	
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+F e l i x   K u e h l i n g
+PMTS Software Development Engineer | Linux Compute Kernel
+1 Commerce Valley Dr. East, Markham, ON L3T 7X6 Canada
+(O) +1(289)695-1597
+     _     _   _   _____   _____
+    / \   | \ / | |  _  \  \ _  |
+   / A \  | \M/ | | |D) )  /|_| |
+  /_/ \_\ |_| |_| |_____/ |__/ \|   facebook.com/AMD | amd.com
+

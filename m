@@ -2,86 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EE62590AA5
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 05:24:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 035EF590AAF
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 05:25:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236868AbiHLDXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 23:23:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
+        id S236999AbiHLDYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 23:24:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235689AbiHLDXN (ORCPT
+        with ESMTP id S237085AbiHLDYT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 23:23:13 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A71A3475;
-        Thu, 11 Aug 2022 20:23:12 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id g5so31098602ybg.11;
-        Thu, 11 Aug 2022 20:23:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=eZSj7ETI+iuiscrTI6+l4FTa1GjyXd9wkrgxBXiniks=;
-        b=kmfXn4pWniW5YaVUVmQJRgxp4P0vztk0rDkk1n7MkgohYDbPwkWOylHKvStBaBM9He
-         nuWiA3vqkXRP8uAMY0i8pk+iWIMhbQOk30vBCCfvJ5ST57loqYXGamTyzI39CVZ3KNQj
-         btt0hmkINxeGbiCJNHUioE2xMhMDpi5dTA0nbtJHOpvZKWL3Q0+kVV31FLZAbb+d7izr
-         Jb7YStTIoXHSacjYfBNshQ1s+ovjPWdzLCj9n2LLgwY8VS4G6viqqHDJ53rTGMHkFeDA
-         ESQ7NrtFBXOTzWes/2l2LpdXWdxSCpdyBz1RTC1hOOnxVYCqEkImdZDhkAhO9NM8Qml0
-         NjNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=eZSj7ETI+iuiscrTI6+l4FTa1GjyXd9wkrgxBXiniks=;
-        b=VNLmfHLmHs6PERWGvcm9kDawf7M9rVH6CBPYD9qzvIfJe4Z5ewu95fTNbcBsg21ZXh
-         fyEB7WJHX1DazykgvpZGnbK90knn5j2tw4QdlO80mLSWQ60f8HWF3xTvegQOKdu+TgGp
-         ziUfVyqgZG7PU1xhRnS5xh/GApEYbOVHlhcJvISE5myajIgfY5nQDIaJR98eFumOLBGP
-         D3Ow675uvzSI2unn5F4BaLaBAuwjwXku+87Rk5pstAzuIVbz3gjtubivELXw1en/lF8O
-         AZg9naQNsJ5guyUgi+vT0WmKp08evFnjSArlmOImFTy/PXVFpzZuUm3CYvCVdxAEV+9d
-         kG4Q==
-X-Gm-Message-State: ACgBeo3+gmuF9sw3lLyMHjQF62QMvvrUv5RyHzzovezEgTtHfPIpAuRD
-        +XFeg0tNoC+zFMzNoo6VyyQotvn/HDRyXv4ulbs=
-X-Google-Smtp-Source: AA6agR6+0FuRGI5TkiB4BlZTULVdxm6BPysYRXCjl1Lvw21aXjGFDJcxkUrwkO1xgExZUY+iSDkf0QG3Iz/sfn/N41A=
-X-Received: by 2002:a25:d658:0:b0:67b:37ca:dc04 with SMTP id
- n85-20020a25d658000000b0067b37cadc04mr1944514ybg.431.1660274591570; Thu, 11
- Aug 2022 20:23:11 -0700 (PDT)
+        Thu, 11 Aug 2022 23:24:19 -0400
+Received: from out199-9.us.a.mail.aliyun.com (out199-9.us.a.mail.aliyun.com [47.90.199.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F667A3D44;
+        Thu, 11 Aug 2022 20:23:52 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R151e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=xianting.tian@linux.alibaba.com;NM=1;PH=DS;RN=22;SR=0;TI=SMTPD_---0VM04yDW_1660274624;
+Received: from B-LB6YLVDL-0141.local(mailfrom:xianting.tian@linux.alibaba.com fp:SMTPD_---0VM04yDW_1660274624)
+          by smtp.aliyun-inc.com;
+          Fri, 12 Aug 2022 11:23:45 +0800
+Subject: Re: [PATCH V6 0/6] RISC-V fixups to work with crash tool
+To:     Palmer Dabbelt <palmer@dabbelt.com>, Conor.Dooley@microchip.com
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>, aou@eecs.berkeley.edu,
+        anup@brainfault.org, heiko@sntech.de, guoren@kernel.org,
+        mick@ics.forth.gr, alexandre.ghiti@canonical.com, bhe@redhat.com,
+        vgoyal@redhat.com, dyoung@redhat.com, corbet@lwn.net,
+        Conor.Dooley@microchip.com, kexec@lists.infradead.org,
+        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, crash-utility@redhat.com,
+        heinrich.schuchardt@canonical.com, k-hagio-ab@nec.com,
+        hschauhan@nulltrace.org, yixun.lan@gmail.com
+References: <mhng-f5fdaa37-e99a-4214-a297-ec81f0fed0c1@palmer-mbp2014>
+From:   Xianting Tian <xianting.tian@linux.alibaba.com>
+Message-ID: <f4f82b84-d224-ed8d-d54d-a55f2eddeb31@linux.alibaba.com>
+Date:   Fri, 12 Aug 2022 11:23:43 +0800
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:78.0)
+ Gecko/20100101 Thunderbird/78.14.0
 MIME-Version: 1.0
-References: <7aab2990-9c57-2456-b08d-299ae96ac919@apertussolutions.com>
- <CAELHeEfZ-feZnexp7Gx3VAJPerENcoO1Uccbe3xxUX95jvLUdA@mail.gmail.com>
- <b1e7b545-8e66-5dc0-ff5a-9f69d1751a5f@apertussolutions.com>
- <CAELHeEcEN=4YrPJROvzHoOiqqe5Bk0f8pDCZDnQ6aS=2LdwNow@mail.gmail.com>
- <f09fe749-e139-db6a-b2ad-45db76da04ae@apertussolutions.com>
- <CAELHeEe5H8BNf8K22XRm3hXf=_imHBnf-MHcFYvPCXX7GYkt4w@mail.gmail.com>
- <203110bb-b70b-b4f1-9453-46136659f84c@apertussolutions.com>
- <CAELHeEe2CiTXfMf3OYu3bzc_kH=rs4qzC-4XQL12AM=Nq8Csjw@mail.gmail.com>
- <20220810174638.GA7906@srcf.ucam.org> <CAELHeEdNgYCh_kQwWpEc4aXw-YL-KGrAeDCL-VaG3ChFs6LNVw@mail.gmail.com>
- <20220811182502.GA32433@srcf.ucam.org>
-In-Reply-To: <20220811182502.GA32433@srcf.ucam.org>
-From:   Brendan Trotter <btrotter@gmail.com>
-Date:   Fri, 12 Aug 2022 12:52:58 +0930
-Message-ID: <CAELHeEcfHSXewFCywsYeN_g8Q_BNG+4tP-QENO5QBw8Dj91yMA@mail.gmail.com>
-Subject: Re: Linux DRTM on UEFI platforms
-To:     Matthew Garrett <mjg59@srcf.ucam.org>
-Cc:     The development of GNU GRUB <grub-devel@gnu.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Daniel Kiper <daniel.kiper@oracle.com>,
-        Alec Brown <alec.r.brown@oracle.com>,
-        Kanth Ghatraju <kanth.ghatraju@oracle.com>,
-        Ross Philipson <ross.philipson@oracle.com>,
-        "piotr.krol@3mdeb.com" <piotr.krol@3mdeb.com>,
-        "krystian.hebel@3mdeb.com" <krystian.hebel@3mdeb.com>,
-        "persaur@gmail.com" <persaur@gmail.com>,
-        "Yoder, Stuart" <stuart.yoder@arm.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        "michal.zygowski@3mdeb.com" <michal.zygowski@3mdeb.com>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        "lukasz@hawrylko.pl" <lukasz@hawrylko.pl>,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        James Morris <jmorris@namei.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <mhng-f5fdaa37-e99a-4214-a297-ec81f0fed0c1@palmer-mbp2014>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,59 +50,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Fri, Aug 12, 2022 at 3:55 AM Matthew Garrett <mjg59@srcf.ucam.org> wrote:
-> On Thu, Aug 11, 2022 at 07:25:58PM +0930, Brendan Trotter wrote:
-> > On Thu, Aug 11, 2022 at 3:16 AM Matthew Garrett <mjg59@srcf.ucam.org> wrote:
-> > > The kernel has no way to know this - *any* code you've run before
-> > > performing a measurement could tamper with the kernel such that it
-> > > believes it's fine. This is just as true in DRTM as it is in SRTM. But
-> > > you know what the expected measurements should be, so you're able to
-> > > either seal secrets to those PCR values or rely on remote attestation.
-> >
-> > In this scenario the kernel has no idea what the measurement should
-> > be, it only knows the measurement that a potentially malicious boot
-> > loader felt like giving the kernel previously (e.g. when the kernel
-> > was installed).
+在 2022/8/12 上午12:17, Palmer Dabbelt 写道:
+> On Thu, 11 Aug 2022 00:41:44 PDT (-0700), 
+> xianting.tian@linux.alibaba.com wrote:
+>> I ever sent the patch 1 in the link:
+>> https://patchwork.kernel.org/project/linux-riscv/patch/20220708073150.352830-3-xianting.tian@linux.alibaba.com/ 
+>>
+>> And patch 2,3 in the link:
+>> https://patchwork.kernel.org/project/linux-riscv/patch/20220714113300.367854-2-xianting.tian@linux.alibaba.com/ 
+>>
+>> https://patchwork.kernel.org/project/linux-riscv/patch/20220714113300.367854-3-xianting.tian@linux.alibaba.com/ 
+>>
+>>
+>> This patch set just put these patches together, and with three new 
+>> patch 4, 5, 6.
+>> these six patches are the fixups for machine_kexec, kernel mode PC 
+>> for vmcore
+>> and improvements for vmcoreinfo, memory layout dump and fixup 
+>> schedule out issue
+>> in machine_crash_shutdown().
+>>
+>> The main changes in the six patchs as below,
+>> Patch 1: Fixup use of smp_processor_id() in preemptible context, to 
+>> cleanup
+>>          the console prints.
+>> Patch 2: Fixup to get correct kernel mode PC for kernel mode regs for 
+>> vmcore.
+>> Patch 3: Fixup schedule out issue in machine_crash_shutdown()
+>> Patch 4: Add modules to virtual kernel memory layout dump.
+>> Patch 5: Add VM layout, va bits, ram base to vmcoreinfo, which can 
+>> simplify
+>>          the development of crash tool as ARM64 already did
+>>          (arch/arm64/kernel/crash_core.c).
+>> Patch 6: Updates vmcoreinfo.rst for vmcoreinfo export for RISCV64.
+>>
+>> With these six patches(patch 2 is must), crash tool can work well to 
+>> analyze
+>> a vmcore. The patches for crash tool for RISCV64 is in the link:
+>> https://lore.kernel.org/linux-riscv/20220801043040.2003264-1-xianting.tian@linux.alibaba.com/ 
+>>
+>>
+>> ------
+>> Changes v1 -> v2:
+>>   1, remove the patch "Add a fast call path of crash_kexec()" from 
+>> this series
+>>      of patches, as it already applied to riscv git.
+>> https://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git/commit/?h=for-next&id=3f1901110a89b0e2e13adb2ac8d1a7102879ea98
+>>   2, add 'Reviewed-by' based on the comments of v1.
+>> Changes v2 -> v3:
+>>   use "riscv" instead of "riscv64" in patch 5 subject line.
+>> Changes v3 -> v4:
+>>   use "riscv" instead of "riscv64" in the summary of patch 5 subject 
+>> line.
+>> Changes v4 -> v5:
+>>   add a new patch "RISC-V: Fixup schedule out issue in 
+>> machine_crash_shutdown()"
+>> Changes v5 -> v6:
+>>   1, move "fixup" patches to the start of the patch set.
+>>   2, change patch 1, 2, 6's subject to make it tell more what it's 
+>> about.
+>>   3, add Fixes for patch 3.
+>>   4, adjuest the changes format for patch 6.
+>>
+>>
+>> Xianting Tian (6):
+>>   RISC-V: kexec: Fixup use of smp_processor_id() in preemptible context
+>>   RISC-V: Fixup get incorrect user mode PC for kernel mode regs
+>>   RISC-V: Fixup schedule out issue in machine_crash_shutdown()
+>>   RISC-V: Add modules to virtual kernel memory layout dump
+>>   RISC-V: Add arch_crash_save_vmcoreinfo support
+>>   Documentation: kdump: describe VMCOREINFO export for RISCV64
+>>
+>>  .../admin-guide/kdump/vmcoreinfo.rst          | 31 +++++++++++++++++++
+>>  arch/riscv/kernel/Makefile                    |  1 +
+>>  arch/riscv/kernel/crash_core.c                | 29 +++++++++++++++++
+>>  arch/riscv/kernel/crash_save_regs.S           |  2 +-
+>>  arch/riscv/kernel/machine_kexec.c             | 28 ++++++++++++++---
+>>  arch/riscv/mm/init.c                          |  4 +++
+>>  6 files changed, 89 insertions(+), 6 deletions(-)
+>>  create mode 100644 arch/riscv/kernel/crash_core.c
 >
-> Even if the kernel has an idea of what the measurement should be, it has
-> no way to verify that what it believes to be true is true - any
-> malicious code could simply have modified the kernel to believe that
-> anything it asks the TPM returns the "correct" answer.
+> Thank.  I've taken the first 4 onto for-next, which is still targeted 
+> for 5.20, as they're fixes.  I'm not opposed to taking the 
+> documentation patch for this cycle as well, it just needs some 
+> going-over as the wording looks very odd (or at least it does to me 
+> right now, maybe I'm just still half asleep).  Patch 5 is a new 
+> feature, and given that it's being spun during the merge window it's 
+> too late.
 
-Right. To achieve the best possible security; you'd need Secure Boot
-to ensure that the kernel itself wasn't modified, and then the kernel
-establishes a dynamic root of trust itself.
+Thank you Palmer, Conor.
+I saw patch 5,6 already merged to Palmer's riscv-crash branch,
+https://git.kernel.org/pub/scm/linux/kernel/git/palmer/linux.git/log/?h=riscv-crash
+Looking forward to be merged to 6.1(?). thanks.
 
-Anything involving a boot loader (e.g. Secure Boot ensure's boot
-loader wasn't modified, then boot loader ensure's kernel wasn't
-modified, then ....) increases the attack surface for no benefit.
-
-> > > Measurements are not opaque objects. If you're not able to reconstruct
-> > > the expected measurement then you're doing it wrong.
-> >
-> > OK; so to detect if boot loader has always given kernel a bad/forged
-> > measurement; the kernel repeats all of the steps involved in creating
-> > the measurement itself exactly the same as the boot loader should have
-> > (but might not have) so that kernel can compare a "known
-> > good/trustworthy" measurement with the useless measurement that the
-> > boot loader created for no sane reason whatsoever?
->
-> No, some external agent does. Code running on the local machine can
-> never determine whether the machine is trustworthy.
-
-This part of the conversation evolved from "there's no way for kernel
-to detect a MiTM boot loader (that provides a bad/forged
-measurement)".
-
-I'm not convinced an external agent can detect "bad/forged
-measurement" either. E.g. if a MiTM boot loader always provided a
-bad/forged measurement the external agent won't detect it (as the
-measurement always matches the expected measurement), and then if the
-MiTM boot loader is replaced by a good/honest boot loader the external
-agent will decide that the good/honest boot loader is malicious
-because its measurement doesn't match the expected bad/forged
-measurement.
-
-- Brendan

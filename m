@@ -2,164 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A771591174
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 15:31:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3116059118E
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 15:33:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238900AbiHLNbk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 09:31:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50204 "EHLO
+        id S238922AbiHLNdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 09:33:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238921AbiHLNbe (ORCPT
+        with ESMTP id S236938AbiHLNdc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 09:31:34 -0400
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B27D69BB47
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 06:31:33 -0700 (PDT)
-Received: by mail-qv1-f44.google.com with SMTP id l18so577305qvt.13
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 06:31:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=6vlKlfYZ8UUr42Z0Ey6Sidm4mVEyWELk9h2eYr+jvz0=;
-        b=5ooE0NP3Pi2x3r8cbFR2iCLxijwbxFGy4N7CwcBrnIlIdRH2wTvaYu3clOhgqwo5zS
-         Gjrck2F5H/PqdQkD7auVoDA2wSzGiwvxCyOICteaLqMY5bZrPX6cPPXn34HWPRWzhXBe
-         h2MQKv3Noe0188yzx5uQQdj2SBdtYeeOD7z04G2UBAn0bQVAe79AeaKotVXmq6cX826r
-         nBL8Td72zywpd9Rxo1nWqvBfBPx02umkLVqMhJQGnqxdCbQPUy9867o3KXryy6xusFLt
-         yHBfqMNzkOy5nptVnMq4qvwWnD7eP4cUZWICKWGJ956UhkzqPnQkpXUAs0GR2AkQ2M9Y
-         mt3g==
-X-Gm-Message-State: ACgBeo2FjOHskTojWtR8eu68IaVeUZw/xoYA0tOW+BzpCXcZ/7aicvUb
-        a5nb7hkLtAASPLDGDmDWrybk0z3oZA27OA==
-X-Google-Smtp-Source: AA6agR7rKr+SX3sG/xMlpCd60VV4lknD+Emfe5TFYXdJTTeEvRVj0l7rVzuOV3ppAnzXejqTSThQtg==
-X-Received: by 2002:a05:6214:20ad:b0:478:a967:560 with SMTP id 13-20020a05621420ad00b00478a9670560mr3527001qvd.58.1660311092357;
-        Fri, 12 Aug 2022 06:31:32 -0700 (PDT)
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
-        by smtp.gmail.com with ESMTPSA id a8-20020ac86108000000b003435bb7fe9csm1621443qtm.78.2022.08.12.06.31.30
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 06:31:31 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-31f445bd486so9787427b3.13
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 06:31:30 -0700 (PDT)
-X-Received: by 2002:a81:1204:0:b0:322:7000:4ecb with SMTP id
- 4-20020a811204000000b0032270004ecbmr3814535yws.47.1660311090509; Fri, 12 Aug
- 2022 06:31:30 -0700 (PDT)
+        Fri, 12 Aug 2022 09:33:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A3129C511;
+        Fri, 12 Aug 2022 06:33:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9AD79617DE;
+        Fri, 12 Aug 2022 13:33:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA303C433C1;
+        Fri, 12 Aug 2022 13:33:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660311211;
+        bh=1TUNb6pLvX4Ox7av4dvhHf3hf1X4XZbP46KvovBUTMQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PGdIcLBa6/0bQfxW3EV5SAw845qCnwCh1tjY0MsPHESoWDmFv5A53ro8uVwbqKs1A
+         GxbATL5x59vTFinZgbUVt5UG5+pwnYP3pupthUmQE9E/YoyOuAHQ0Ve9uPrdCFUlnY
+         omqdFWAoHdw/415g4pXJtQMHYvOXBFo4BTli6Ik+bgwp48tN4ozEVXkdU/D8r5j5LS
+         EzinzM1BWio0Qrfrg8HiY61rgxBr+wuyH5z5xUvnAbdTkr8VzexOxC+AZLbZAI0JEs
+         tnVfm+++JW70TpauWYs1oq/J/IOUL2KkgIBAfrouo6jEfc6F64agmlGpvqQk+Wi86z
+         GQP27t9+gz6Dg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 453724035A; Fri, 12 Aug 2022 10:33:28 -0300 (-03)
+Date:   Fri, 12 Aug 2022 10:33:28 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Sandipan Das <sandipan.das@amd.com>
+Cc:     Jiri Olsa <olsajiri@gmail.com>, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, x86@kernel.org,
+        peterz@infradead.org, bp@alien8.de, namhyung@kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, dave.hansen@linux.intel.com,
+        like.xu.linux@gmail.com, eranian@google.com,
+        ananth.narayan@amd.com, ravi.bangoria@amd.com,
+        santosh.shukla@amd.com
+Subject: Re: [PATCH 2/4] tools headers x86: Sync msr-index.h with kernel
+ sources
+Message-ID: <YvZWqAPc3lg0CvsN@kernel.org>
+References: <cover.1660217326.git.sandipan.das@amd.com>
+ <ffb9a9f0aa46a4339bb61282e26810112700ae97.1660217326.git.sandipan.das@amd.com>
+ <YvYQQr5VenglbpWM@krava>
+ <94f483f5-c541-2a1e-87f6-a4105c30a045@amd.com>
 MIME-Version: 1.0
-References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech> <20220728-rpi-analog-tv-properties-v1-34-3d53ae722097@cerno.tech>
-In-Reply-To: <20220728-rpi-analog-tv-properties-v1-34-3d53ae722097@cerno.tech>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 12 Aug 2022 15:31:19 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXizN9OgXgxwdFc1gpnhZof-SZrCH8PczEiJrtYpB62Ow@mail.gmail.com>
-Message-ID: <CAMuHMdXizN9OgXgxwdFc1gpnhZof-SZrCH8PczEiJrtYpB62Ow@mail.gmail.com>
-Subject: Re: [PATCH v1 34/35] drm/modes: Introduce the tv_mode property as a
- command-line option
-To:     Maxime Ripard <maxime@cerno.tech>
-Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        =?UTF-8?Q?Noralf_Tr=C3=B8nnes?= <noralf@tronnes.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        linux-sunxi@lists.linux.dev,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Phil Elwell <phil@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        "open list:ARM/Amlogic Meson..." <linux-amlogic@lists.infradead.org>,
-        DRI Development <dri-devel@lists.freedesktop.org>,
-        Dom Cobley <dom@raspberrypi.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <94f483f5-c541-2a1e-87f6-a4105c30a045@amd.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maxime,
+Em Fri, Aug 12, 2022 at 02:33:46PM +0530, Sandipan Das escreveu:
+> Hi Jiri,
+> 
+> On 8/12/2022 2:03 PM, Jiri Olsa wrote:
+> > On Thu, Aug 11, 2022 at 06:16:47PM +0530, Sandipan Das wrote:
+> >> Sync msr-index.h with the kernel sources by adding the new AMD Last Branch
+> >> Record Extension Version 2 (LbrExtV2) MSRs.
+> >>
+> >> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
+> >> ---
+> >>  tools/arch/x86/include/asm/msr-index.h | 5 +++++
+> >>  1 file changed, 5 insertions(+)
+> >>
+> >> diff --git a/tools/arch/x86/include/asm/msr-index.h b/tools/arch/x86/include/asm/msr-index.h
+> >> index cc615be27a54..7f9eaf497947 100644
+> >> --- a/tools/arch/x86/include/asm/msr-index.h
+> >> +++ b/tools/arch/x86/include/asm/msr-index.h
+> >> @@ -574,6 +574,9 @@
+> >>  #define MSR_AMD64_PERF_CNTR_GLOBAL_CTL		0xc0000301
+> >>  #define MSR_AMD64_PERF_CNTR_GLOBAL_STATUS_CLR	0xc0000302
+> >>  
+> >> +/* AMD Last Branch Record MSRs */
+> >> +#define MSR_AMD64_LBR_SELECT			0xc000010e
+> > 
+> > curious do we actualy use this in tools somewhere?
+> > 
+> > jirka
+> > 
+> 
+> Commit 9dde6cadb92b ("tools arch x86: Sync the msr-index.h copy with the kernel sources")
+> from Arnaldo says that adding these new MSR definitions in the tools headers allows the
+> beautification scripts to pick up new entries which can be used for filtering MSR access
+> traces.
 
-On Fri, Jul 29, 2022 at 6:37 PM Maxime Ripard <maxime@cerno.tech> wrote:
-> Our new tv mode option allows to specify the TV mode from a property.
-> However, it can still be useful, for example to avoid any boot time
-> artifact, to set that property directly from the kernel command line.
->
-> Let's add some code to allow it, and some unit tests to exercise that code.
->
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+Right, in this specific case that header should be moved to
+tools/perf/trace/beauty/include/, as it is only used to harvest new MSRs
+by:
 
-Thanks for your patch!
+⬢[acme@toolbox perf]$ tools/perf/trace/beauty/tracepoints/x86_msr.sh  | wc -l
+328
+⬢[acme@toolbox perf]$ tools/perf/trace/beauty/tracepoints/x86_msr.sh  | head
+static const char *x86_MSRs[] = {
+	[0x00000000] = "IA32_P5_MC_ADDR",
+	[0x00000001] = "IA32_P5_MC_TYPE",
+	[0x00000010] = "IA32_TSC",
+	[0x00000017] = "IA32_PLATFORM_ID",
+	[0x0000001b] = "IA32_APICBASE",
+	[0x00000020] = "KNC_PERFCTR0",
+	[0x00000021] = "KNC_PERFCTR1",
+	[0x00000028] = "KNC_EVNTSEL0",
+	[0x00000029] = "KNC_EVNTSEL1",
+⬢[acme@toolbox perf]$
 
-> --- a/drivers/gpu/drm/drm_modes.c
-> +++ b/drivers/gpu/drm/drm_modes.c
-> @@ -1677,6 +1677,80 @@ static int drm_mode_parse_panel_orientation(const char *delim,
->         return 0;
->  }
->
-> +#define TV_OPTION_EQUAL(value, len, option) \
-> +       ((strlen(option) == len) && !strncmp(value, option, len))
-> +
-> +static int drm_mode_parse_tv_mode(const char *delim,
-> +                                 struct drm_cmdline_mode *mode)
-> +{
-> +       const char *value;
-> +       unsigned int len;
-> +
-> +       if (*delim != '=')
-> +               return -EINVAL;
-> +
-> +       value = delim + 1;
-> +       delim = strchr(value, ',');
-> +       if (!delim)
-> +               delim = value + strlen(value);
-> +
-> +       len = delim - value;
-> +       if (TV_OPTION_EQUAL(value, len, "NTSC-443"))
-> +               mode->tv_mode = DRM_MODE_TV_NORM_NTSC_443;
-> +       else if (TV_OPTION_EQUAL(value, len, "NTSC-J"))
-> +               mode->tv_mode = DRM_MODE_TV_NORM_NTSC_J;
-> +       else if (TV_OPTION_EQUAL(value, len, "NTSC-M"))
-> +               mode->tv_mode = DRM_MODE_TV_NORM_NTSC_M;
+Other headers we have copies from the kernel may be used both for
+harvesting non-enum enumerations like those to pretty print and use in
+tracepoint filter expressions in 'perf trace', and in building perf on
+older systems.
 
-[...]
+The preferred way is for kernel developers not to update the copies when
+they add new stuff to the original file, so that perf developers have
+the opportunity of checking if the new original file in the kernel don't
+break the scripts in tools/perf/, or if the new additions are note
+matched by regexps in the perf/tools/trace/beauty/ extraction scripts.
 
-You already have the array tv_norm_values[] from "[PATCH v1 05/35]
-drm/connector: Add TV standard property". Can't you export that, and
-loop over that array instead?
+But kernel developers are welcome to update it iif they do these checks
+themselves, at the very least do a 'make -C tools/perf' to check if it
+builds before/after the update.
 
-> +       else if (TV_OPTION_EQUAL(value, len, "HD480I"))
-> +               mode->tv_mode = DRM_MODE_TV_NORM_HD480I;
-> +       else if (TV_OPTION_EQUAL(value, len, "HD480P"))
-> +               mode->tv_mode = DRM_MODE_TV_NORM_HD480P;
-> +       else if (TV_OPTION_EQUAL(value, len, "HD576I"))
-> +               mode->tv_mode = DRM_MODE_TV_NORM_HD576I;
-> +       else if (TV_OPTION_EQUAL(value, len, "HD576P"))
-> +               mode->tv_mode = DRM_MODE_TV_NORM_HD576P;
-> +       else if (TV_OPTION_EQUAL(value, len, "HD720P"))
-> +               mode->tv_mode = DRM_MODE_TV_NORM_HD720P;
-> +       else if (TV_OPTION_EQUAL(value, len, "HD1080I"))
-> +               mode->tv_mode = DRM_MODE_TV_NORM_HD1080I;
+- Arnaldo
+ 
+> E.g. one can trace the hardware LBR branch filter bits getting written to the LBR_SELECT
+> MSR while recording branches.
+> 
+> $ perf record -j any,u true
+> $ perf record -j any_call,u true
+> 
+> $ sudo perf trace -e msr:write_msr/max-stack=32/ --filter="msr == AMD64_LBR_SELECT"
+> 
+> [...]
+> 224568.130 perf/9093 msr:write_msr(msr: AMD64_LBR_SELECT, val: 1)
+>                                        do_trace_write_msr ([kernel.kallsyms])
+>                                        do_trace_write_msr ([kernel.kallsyms])
+>                                        native_write_msr ([kernel.kallsyms])
+>                                        amd_pmu_lbr_enable_all ([kernel.kallsyms])
+>                                        amd_pmu_v2_enable_all ([kernel.kallsyms])
+>                                        x86_pmu_enable ([kernel.kallsyms])
+>                                        ctx_resched ([kernel.kallsyms])
+>                                        perf_event_exec ([kernel.kallsyms])
+>                                        begin_new_exec ([kernel.kallsyms])
+>                                        load_elf_binary ([kernel.kallsyms])
+>                                        bprm_execve ([kernel.kallsyms])
+>                                        do_execveat_common.isra.0 ([kernel.kallsyms])
+>                                        __x64_sys_execve ([kernel.kallsyms])
+>                                        do_syscall_64 ([kernel.kallsyms])
+>                                        entry_SYSCALL_64 ([kernel.kallsyms])
+>                                        execve (/usr/lib/x86_64-linux-gnu/libc.so.6)
+> [...]
+> 302748.439 perf/9126 msr:write_msr(msr: AMD64_LBR_SELECT, val: 229)
+>                                        do_trace_write_msr ([kernel.kallsyms])
+>                                        do_trace_write_msr ([kernel.kallsyms])
+>                                        native_write_msr ([kernel.kallsyms])
+>                                        amd_pmu_lbr_enable_all ([kernel.kallsyms])
+>                                        amd_pmu_v2_enable_all ([kernel.kallsyms])
+>                                        x86_pmu_enable ([kernel.kallsyms])
+>                                        ctx_resched ([kernel.kallsyms])
+>                                        perf_event_exec ([kernel.kallsyms])
+>                                        begin_new_exec ([kernel.kallsyms])
+>                                        load_elf_binary ([kernel.kallsyms])
+>                                        bprm_execve ([kernel.kallsyms])
+>                                        do_execveat_common.isra.0 ([kernel.kallsyms])
+>                                        __x64_sys_execve ([kernel.kallsyms])
+>                                        do_syscall_64 ([kernel.kallsyms])
+>                                        entry_SYSCALL_64 ([kernel.kallsyms])
+>                                        execve (/usr/lib/x86_64-linux-gnu/libc.so.6)
+> [...]
+> 
+> I can add this example to the commit message in the next revision.
+> 
+> 
+> - Sandipan
 
-The names in tv_norm_values[] use lower-case, while you use upper-case
-here.
+-- 
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+- Arnaldo

@@ -2,119 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 434B7590B51
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 06:50:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECDA8590B53
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 06:52:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231742AbiHLEto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 00:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34778 "EHLO
+        id S236013AbiHLEwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 00:52:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbiHLEtm (ORCPT
+        with ESMTP id S229519AbiHLEwH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 00:49:42 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB35FA2867
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 21:49:41 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id 24so2431400pgr.7
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 21:49:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=WJS72dvtFXYi5pD5mzwuxGTEk9o9IeYNQbFa82DCy4I=;
-        b=I8WudUyA1q1tagwtAJVmfs5vhMa7SoVIqm98l0muF354WAhWTSA95ysV9PwSPn1HO0
-         2vzbqZSPPL+T3Tg5T7DaqzigK1d+UZZ9uwBu8uHgechYY/v/aoR208ukXenG6ptImbnn
-         aD9Jnsyaot4975dWL6psH1elmG8irCn+Taa+fwWlK0j3Dpfc5gdXBBfLubHNG16P/RzU
-         uD5iEYfMhEpx6L4RQowQYcERuYXhBiT6orIc+yVjFCnwpY0C3pKbxFXBw2NHsOVaTvg+
-         fAHkL2V8foGTH7/DQpTnAOQE4oG/U+bceCiZdD4CvZ2NxL1BGUEZfZO1Ucp0TkV19KZf
-         2YSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=WJS72dvtFXYi5pD5mzwuxGTEk9o9IeYNQbFa82DCy4I=;
-        b=RxID+uS9871uFkixC6d5oFGPBS9OE5Q34o9svEMCqiFU4XtO9D6WsnQlO2OZI4r1dv
-         G2lDxF17A6Tjc+lRiX1WNsbTBi8K4TYv8BR0q/8v+cOu9dEOwewMfieV+2UQFqFRcBEL
-         VSAw61qkD/pRs+s5ME32YxkBqR1hX59ydE0vnPILERVbvVwi+cpoBwypJrKd684ubpMR
-         ngqNmZdnHtMZqCn3OqGApWtKtFxapFUWnGQfxjE7L3VWu+dQl+JS3nEibk1nTYTv2btu
-         JmrCgNzvV8h7zYkAM6qELoeHdL+/TUJ/Nwh/MuDA5FrbvLwjWE43G5EnMLMysq3LKIBg
-         UQeg==
-X-Gm-Message-State: ACgBeo04PN+ubLFJkFAZKNcsUg7agRKKMjkLRuH6C6B51WYWGLFD/dpZ
-        fm+itQsyHwJDZek9mSGR4zQFh/1NR7h5EN4DGIE=
-X-Google-Smtp-Source: AA6agR5bFW7pAjTlEOLEk3Bp1wmhqunho3EPofhv7GPByJMJHAK281Akfe2ACVLhG45c8zcsWyY0zF3StLaFOeQ9qnM=
-X-Received: by 2002:a62:6347:0:b0:531:c5a7:b209 with SMTP id
- x68-20020a626347000000b00531c5a7b209mr2336023pfb.60.1660279781406; Thu, 11
- Aug 2022 21:49:41 -0700 (PDT)
+        Fri, 12 Aug 2022 00:52:07 -0400
+Received: from smtp.smtpout.orange.fr (smtp04.smtpout.orange.fr [80.12.242.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 513DC11A1A
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 21:52:05 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id MMeQoMXpzAOp2MMeRohJUk; Fri, 12 Aug 2022 06:52:03 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Fri, 12 Aug 2022 06:52:03 +0200
+X-ME-IP: 90.11.190.129
+Message-ID: <f5210302-13b4-a9a2-8b69-469f7d68e370@wanadoo.fr>
+Date:   Fri, 12 Aug 2022 06:52:02 +0200
 MIME-Version: 1.0
-References: <20220801173155.92008-1-ryncsn@gmail.com> <20220811160739.ea6b0f9c2912317c49287cda@linux-foundation.org>
-In-Reply-To: <20220811160739.ea6b0f9c2912317c49287cda@linux-foundation.org>
-From:   Kairui Song <ryncsn@gmail.com>
-Date:   Fri, 12 Aug 2022 12:49:29 +0800
-Message-ID: <CAMgjq7CebYhwgUzBV9tGENEfVMxPMS4qVXvRx=sVQOEAUbq_mA@mail.gmail.com>
-Subject: Re: [PATCH] mm/util: reduce stack usage of folio_mapcount
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Matthew Wilcox <willy@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] scsi: target: Save a few cycles in
+ 'transport_lookup_[cmd|tmr]_lun()'
+Content-Language: en-US
+To:     martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+References: <e4a21bc607c39935cb98d4825cd63ba349820550.1635974637.git.christophe.jaillet@wanadoo.fr>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <e4a21bc607c39935cb98d4825cd63ba349820550.1635974637.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Andrew Morton <akpm@linux-foundation.org> =E4=BA=8E2022=E5=B9=B48=E6=9C=881=
-2=E6=97=A5=E5=91=A8=E4=BA=94 07:07=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Tue,  2 Aug 2022 01:31:55 +0800 Kairui Song <ryncsn@gmail.com> wrote:
->
-> > From: Kairui Song <kasong@tencent.com>
-> >
-> > folio_entire_mapcount will call PageHeadHuge which is a function call,
-> > and blocks the compiler from recognizing this redundant load.
->
-> Did you mean folio_test_hugetlb() rather than folio_entire_mapcount()?
+Le 03/11/2021 à 22:24, Christophe JAILLET a écrit :
+> Use 'percpu_ref_tryget_live_rcu()' instead of 'percpu_ref_tryget_live()' to
+> save a few cycles when it is known that the rcu lock is already
+> taken/released.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+>   drivers/target/target_core_device.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/target/target_core_device.c b/drivers/target/target_core_device.c
+> index 44bb380e7390..bfd5d5606522 100644
+> --- a/drivers/target/target_core_device.c
+> +++ b/drivers/target/target_core_device.c
+> @@ -77,7 +77,7 @@ transport_lookup_cmd_lun(struct se_cmd *se_cmd)
+>   
+>   		se_lun = rcu_dereference(deve->se_lun);
+>   
+> -		if (!percpu_ref_tryget_live(&se_lun->lun_ref)) {
+> +		if (!percpu_ref_tryget_live_rcu(&se_lun->lun_ref)) {
+>   			se_lun = NULL;
+>   			goto out_unlock;
+>   		}
+> @@ -154,7 +154,7 @@ int transport_lookup_tmr_lun(struct se_cmd *se_cmd)
+>   	if (deve) {
+>   		se_lun = rcu_dereference(deve->se_lun);
+>   
+> -		if (!percpu_ref_tryget_live(&se_lun->lun_ref)) {
+> +		if (!percpu_ref_tryget_live_rcu(&se_lun->lun_ref)) {
+>   			se_lun = NULL;
+>   			goto out_unlock;
+>   		}
 
-Thanks for checking out this patch, and Yes, it's folio_test_hugetlb,
-my mistake...
+Hi,
+gentle reminder.
 
->
->
-> > After rearranging the code, stack usage is dropped from 32 to 24, and
-> > the function size is smaller (tested on GCC 12):
-> >
-> > Before:
-> > Stack usage:
-> > mm/util.c:845:5:folio_mapcount  32      static
-> > Size:
-> > 0000000000000ea0 00000000000000c7 T folio_mapcount
-> >
-> > After:
-> > Stack usage:
-> > mm/util.c:845:5:folio_mapcount  24      static
-> > Size:
-> > 0000000000000ea0 00000000000000b0 T folio_mapcount
-> >
-> > ...
-> >
-> > @@ -850,10 +850,10 @@ int folio_mapcount(struct folio *folio)
-> >               return atomic_read(&folio->_mapcount) + 1;
-> >
-> >       compound =3D folio_entire_mapcount(folio);
-> > -     nr =3D folio_nr_pages(folio);
-> >       if (folio_test_hugetlb(folio))
-> >               return compound;
-> >       ret =3D compound;
-> > +     nr =3D folio_nr_pages(folio);
-> >       for (i =3D 0; i < nr; i++)
-> >               ret +=3D atomic_read(&folio_page(folio, i)->_mapcount) + =
-1;
-> >       /* File pages has compound_mapcount included in _mapcount */
-> > --
-> > 2.35.2
+Is this patch useful?
+When I first posted it, percpu_ref_tryget_live_rcu() was really new.
+Now it is part of linux since 5.16.
 
-Is the rest of the patch a valid fix? Should I send V2?
+Saving a few cycles in a function with "lookup" in its name looks always 
+good to me.
+
+CJ

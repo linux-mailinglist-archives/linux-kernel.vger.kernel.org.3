@@ -2,262 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B0DF590B84
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 07:33:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3721590B86
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 07:34:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236919AbiHLFdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 01:33:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39604 "EHLO
+        id S236940AbiHLFeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 01:34:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234432AbiHLFdF (ORCPT
+        with ESMTP id S234164AbiHLFea (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 01:33:05 -0400
-Received: from smtp.smtpout.orange.fr (smtp-21.smtpout.orange.fr [80.12.242.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E3DA0275
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 22:33:01 -0700 (PDT)
-Received: from [192.168.1.18] ([90.11.190.129])
-        by smtp.orange.fr with ESMTPA
-        id MNHyo5KHrKOP1MNHzoioqr; Fri, 12 Aug 2022 07:32:59 +0200
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Fri, 12 Aug 2022 07:32:59 +0200
-X-ME-IP: 90.11.190.129
-Message-ID: <080f3e2b-af7b-0ac0-1716-a33da73290e4@wanadoo.fr>
-Date:   Fri, 12 Aug 2022 07:32:54 +0200
+        Fri, 12 Aug 2022 01:34:30 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C2FA0259
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 22:34:29 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id j6so71116qkl.10
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 22:34:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=caCCypVCkkPwtyuZfjcpcNl53GHIrW+l2NO11GLmyxM=;
+        b=MlvvCFjI4vAOgJApqcOpCVCnfzROg4g0phC8A4+nJbDRctVUBA5Tc7wNoqivDanYCu
+         OLDL+cVJaPqhbUmJ338eul/ympcArE/tvPpTs707t56QoTZC571HZ6Kx9QyIR8CnU7kF
+         Q36bKvHhzxkSVwdRuacdrIY8KEeCJi7eaFP441b7s9VVSrBFXjxSwOZKZvleUotkAlYN
+         ijwrobL6c1f6zRdf2NftnGCsDuuWWjUhBIZo9co5FSVav4Anqe/mCItlVBuU+bnPUz24
+         oz7mMmeUusFuTLAYqExe0hs+lrfMTjnflxiw6NzIWKv7XNGMXaP6ZnjxVrqGP9CdSxMS
+         ilgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=caCCypVCkkPwtyuZfjcpcNl53GHIrW+l2NO11GLmyxM=;
+        b=IWEtjjSpMcG8lqeek7SSxVyk+iaVpLX4g6NZJsbG/qEgQ0VkmagH+J60L5A/PzSB/c
+         4KtKItNVMKMRp5W5q7zoQe7hK0ZYoCZedyIcrMF4puIrr6OLN7M508gbWLTCxOMCyuGj
+         A3jNNaRyl87x+xtkgx/PlslH+l52x4W6gevoqyyFdN2jz+FCt7g1Ohtgu7XDUvrO1Mlv
+         uHe4yn3Ie6xElqs1gwHVkA+JWSWBHGd8mjHR+eJGwqG0mUB+HRYtQkpRAJ85sB/2OFNn
+         OAgBBVBsZNswaDyKyoOUmMOtWGdeNL0t4Rf4UR6xo+IZpQxFpSk9nBS2Rb5GeoBGfI0P
+         RQqQ==
+X-Gm-Message-State: ACgBeo1CPnhN5gPsLYHJaI+bB8uE/3qcjwhWy/OlZQtJ9rZbbLU+POdS
+        L6zfZnnaAkr1l+SawoiDuHXxJyaUr24=
+X-Google-Smtp-Source: AA6agR5KJDgMkSd/4Fc/xSzcXD4wXBkUryYD0ohy3AqwhNKbphvGk/iGVdAEHnrU9ro0+BtzZ0/lrQ==
+X-Received: by 2002:a05:620a:372c:b0:6b6:133e:1f4b with SMTP id de44-20020a05620a372c00b006b6133e1f4bmr1738472qkb.358.1660282468186;
+        Thu, 11 Aug 2022 22:34:28 -0700 (PDT)
+Received: from localhost ([12.97.180.36])
+        by smtp.gmail.com with ESMTPSA id n11-20020ac85a0b000000b00342eff84177sm1112505qta.29.2022.08.11.22.34.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Aug 2022 22:34:28 -0700 (PDT)
+From:   Yury Norov <yury.norov@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Yury Norov <yury.norov@gmail.com>,
+        kernel test robot <lkp@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>
+Subject: [PATCH] radix-tree: replace gfp.h inclusion with gfp_types.h
+Date:   Thu, 11 Aug 2022 22:34:25 -0700
+Message-Id: <20220812053425.2499799-1-yury.norov@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 7/8] remoteproc: qcom: Add support for memory sandbox
-Content-Language: fr
-To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
-        linux-remoteproc@vger.kernel.org, agross@kernel.org,
-        bjorn.andersson@linaro.org, lgirdwood@gmail.com,
-        broonie@kernel.org, robh+dt@kernel.org, quic_plai@quicinc.com,
-        bgoswami@quicinc.com, perex@perex.cz, tiwai@suse.com,
-        srinivas.kandagatla@linaro.org, quic_rohkumar@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        swboyd@chromium.org, judyhsiao@chromium.org,
-        devicetree@vger.kernel.org
-References: <1660117558-21829-1-git-send-email-quic_srivasam@quicinc.com>
- <1660117558-21829-8-git-send-email-quic_srivasam@quicinc.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <1660117558-21829-8-git-send-email-quic_srivasam@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 10/08/2022 à 09:45, Srinivasa Rao Mandadapu a écrit :
-> Update pil driver with SMMU mapping for allowing authorised
-> memory access to ADSP firmware, by reading required memory
-> regions either from device tree file or from resource table
-> embedded in ADSP binary header.
-> 
+Radix tree header includes gfp.h for __GFP_BITS_SHIFT only. Now we
+have gfp_types.h for this.
 
-Hi,
+Fixes powerpc allmodconfig build:
+   In file included from include/linux/nodemask.h:97,
+                    from include/linux/mmzone.h:17,
+                    from include/linux/gfp.h:7,
+                    from include/linux/radix-tree.h:12,
+                    from include/linux/idr.h:15,
+                    from include/linux/kernfs.h:12,
+                    from include/linux/sysfs.h:16,
+                    from include/linux/kobject.h:20,
+                    from include/linux/pci.h:35,
+                    from arch/powerpc/kernel/prom_init.c:24:
+   include/linux/random.h: In function 'add_latent_entropy':
+>> include/linux/random.h:25:46: error: 'latent_entropy' undeclared (first use in this function); did you mean 'add_latent_entropy'?
+      25 |         add_device_randomness((const void *)&latent_entropy, sizeof(latent_entropy));
+         |                                              ^~~~~~~~~~~~~~
+         |                                              add_latent_entropy
+   include/linux/random.h:25:46: note: each undeclared identifier is reported only once for each function it appears in
 
-comments below about error handling paths that look incomplete to me.
+Reported-by: kernel test robot <lkp@intel.com>
+CC: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+CC: Andrew Morton <akpm@linux-foundation.org>
+CC: Jason A. Donenfeld <Jason@zx2c4.com>
+Signed-off-by: Yury Norov <yury.norov@gmail.com>
+---
+ include/linux/radix-tree.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Just my 2c.
-
-> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-> ---
-> Changes since V2:
-> 	-- Replace platform_bus_type with adsp->dev->bus.
-> 	-- Use API of_parse_phandle_with_args() instead of of_parse_phandle_with_fixed_args().
-> 	-- Replace adsp->is_wpss with adsp->is_adsp.
-> 	-- Update error handling in adsp_start().
-> 
->   drivers/remoteproc/qcom_q6v5_adsp.c | 107 +++++++++++++++++++++++++++++++++++-
->   1 file changed, 105 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/remoteproc/qcom_q6v5_adsp.c b/drivers/remoteproc/qcom_q6v5_adsp.c
-> index f2945bf..b9cafe2 100644
-> --- a/drivers/remoteproc/qcom_q6v5_adsp.c
-> +++ b/drivers/remoteproc/qcom_q6v5_adsp.c
-> @@ -9,6 +9,7 @@
->   #include <linux/firmware.h>
->   #include <linux/interrupt.h>
->   #include <linux/io.h>
-> +#include <linux/iommu.h>
->   #include <linux/iopoll.h>
->   #include <linux/kernel.h>
->   #include <linux/mfd/syscon.h>
-> @@ -48,6 +49,8 @@
->   #define LPASS_PWR_ON_REG		0x10
->   #define LPASS_HALTREQ_REG		0x0
->   
-> +#define SID_MASK_DEFAULT        0xF
-> +
->   #define QDSP6SS_XO_CBCR		0x38
->   #define QDSP6SS_CORE_CBCR	0x20
->   #define QDSP6SS_SLEEP_CBCR	0x3c
-> @@ -78,7 +81,7 @@ struct adsp_pil_data {
->   struct qcom_adsp {
->   	struct device *dev;
->   	struct rproc *rproc;
-> -
-> +	struct iommu_domain *iommu_dom;
->   	struct qcom_q6v5 q6v5;
->   
->   	struct clk *xo;
-> @@ -333,6 +336,94 @@ static int adsp_load(struct rproc *rproc, const struct firmware *fw)
->   	return 0;
->   }
->   
-> +static int adsp_map_smmu(struct qcom_adsp *adsp, struct rproc *rproc)
-> +{
-> +	struct of_phandle_args args;
-> +	struct fw_rsc_devmem *rsc_fw;
-> +	struct fw_rsc_hdr *hdr;
-> +	const __be32 *prop;
-> +	long long sid;
-> +	unsigned long mem_phys;
-> +	unsigned long iova;
-> +	unsigned int mem_size;
-> +	unsigned int flag;
-> +	unsigned int len;
-> +	int access_level;
-> +	int offset;
-> +	int ret;
-> +	int rc;
-> +	int i;
-> +
-> +	rc = of_parse_phandle_with_args(adsp->dev->of_node, "iommus", "#iommu-cells", 0, &args);
-> +	if (rc < 0)
-> +		sid = -1;
-> +	else
-> +		sid = args.args[0] & SID_MASK_DEFAULT;
-> +
-> +	adsp->iommu_dom = iommu_domain_alloc(adsp->dev->bus);
-> +	if (!adsp->iommu_dom) {
-> +		dev_err(adsp->dev, "failed to allocate iommu domain\n");
-> +		return -ENOMEM;
-> +	}
-> +
-> +	ret = iommu_attach_device(adsp->iommu_dom, adsp->dev);
-> +	if (ret) {
-> +		dev_err(adsp->dev, "could not attach device ret = %d\n", ret);
-
-iommu_domain_free() or error handling path (see below)?
-
-> +		return -EBUSY;
-> +	}
-> +
-> +	/* Add SID configuration for ADSP Firmware to SMMU */
-> +	adsp->mem_phys =  adsp->mem_phys | (sid << 32);
-> +
-> +	ret = iommu_map(adsp->iommu_dom, adsp->mem_phys, adsp->mem_phys,
-> +			adsp->mem_size,	IOMMU_READ | IOMMU_WRITE);
-> +	if (ret) {
-> +		dev_err(adsp->dev, "Unable to map ADSP Physical Memory\n");
-
-iommu_domain_free() or error handling path (see below)?
-
-> +		return ret;
-> +	}
-> +
-> +	prop = of_get_property(adsp->dev->of_node, "qcom,adsp-memory-regions", &len);
-> +	if (prop) {
-> +		len /= sizeof(__be32);
-> +		for (i = 0; i < len; i++) {
-> +			iova = be32_to_cpu(prop[i++]);
-> +			mem_phys = be32_to_cpu(prop[i++]);
-> +			mem_size = be32_to_cpu(prop[i++]);
-> +			access_level = be32_to_cpu(prop[i]);
-> +
-> +			if (access_level)
-> +				flag = IOMMU_READ | IOMMU_WRITE;
-> +			else
-> +				flag = IOMMU_READ;
-> +
-> +			ret = iommu_map(adsp->iommu_dom, iova, mem_phys, mem_size, flag);
-> +			if (ret) {
-> +				dev_err(adsp->dev, "failed to map addr = %p mem_size = %x\n",
-> +						&(mem_phys), mem_size);
-> +				return ret;
-
-Should there be an error handling path to undo iommu_domain_alloc() and 
-iommu_map() above.
-Same for iommu_map() already done in the loop.
-
-> +			}
-> +		}
-> +	} else {
-> +		if (!rproc->table_ptr)
-> +			return 0;
-> +
-> +		for (i = 0; i < rproc->table_ptr->num; i++) {
-> +			offset = rproc->table_ptr->offset[i];
-> +			hdr = (void *)rproc->table_ptr + offset;
-> +			rsc_fw = (struct fw_rsc_devmem *)hdr + sizeof(*hdr);
-> +
-> +			ret = iommu_map(rproc->domain, rsc_fw->da, rsc_fw->pa,
-> +						rsc_fw->len, rsc_fw->flags);
-> +			if (ret) {
-> +				pr_err("%s; unable to map adsp memory address\n", __func__);
-> +				return ret;
-
-Same comment.
-
-> +			}
-> +		}
-> +	}
-> +	return 0;
-> +}
-> +
-> +
->   static int adsp_start(struct rproc *rproc)
->   {
->   	struct qcom_adsp *adsp = (struct qcom_adsp *)rproc->priv;
-> @@ -343,9 +434,16 @@ static int adsp_start(struct rproc *rproc)
->   	if (ret)
->   		return ret;
->   
-> +	if (adsp->is_adsp_sb_needed) {
-> +		ret = adsp_map_smmu(adsp, rproc);
-> +		if (ret) {
-> +			dev_err(adsp->dev, "ADSP smmu mapping failed\n");
-> +			goto disable_irqs;
-> +		}
-> +	}
->   	ret = clk_prepare_enable(adsp->xo);
->   	if (ret)
-> -		goto disable_irqs;
-> +		goto adsp_smmu_unmap;
->   
->   	ret = qcom_rproc_pds_enable(adsp, adsp->proxy_pds,
->   				    adsp->proxy_pd_count);
-> @@ -401,6 +499,11 @@ static int adsp_start(struct rproc *rproc)
->   	qcom_rproc_pds_disable(adsp, adsp->proxy_pds, adsp->proxy_pd_count);
->   disable_xo_clk:
->   	clk_disable_unprepare(adsp->xo);
-> +adsp_smmu_unmap:
-> +	if (adsp->is_adsp_sb_needed) {
-> +		iommu_unmap(adsp->iommu_dom, adsp->mem_phys, adsp->mem_size);
-> +		iommu_domain_free(adsp->iommu_dom);
-
-Hi,
-
-Do the iommu_map() in the for loops of adsp_map_smmu() also need some 
-iommu_unmap() here?
-
-Maybe introducing a adsp_unmap_smmu() would simplify the release of 
-resources.
-
-Does the same resource release makes sense in adsp_stop() or somewhere else?
-
-CJ
-
-
-> +	}
->   disable_irqs:
->   	qcom_q6v5_unprepare(&adsp->q6v5);
->   
+diff --git a/include/linux/radix-tree.h b/include/linux/radix-tree.h
+index f7c1d21c2f39..eae67015ce51 100644
+--- a/include/linux/radix-tree.h
++++ b/include/linux/radix-tree.h
+@@ -9,7 +9,7 @@
+ #define _LINUX_RADIX_TREE_H
+ 
+ #include <linux/bitops.h>
+-#include <linux/gfp.h>
++#include <linux/gfp_types.h>
+ #include <linux/list.h>
+ #include <linux/lockdep.h>
+ #include <linux/math.h>
+-- 
+2.34.1
 

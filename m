@@ -2,116 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4833B59105B
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 13:51:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4CB059106A
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 13:55:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235923AbiHLLvC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 07:51:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33546 "EHLO
+        id S238357AbiHLLz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 07:55:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238328AbiHLLuj (ORCPT
+        with ESMTP id S236391AbiHLLz0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 07:50:39 -0400
-Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8E992BC1
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 04:50:36 -0700 (PDT)
-Received: from fsav315.sakura.ne.jp (fsav315.sakura.ne.jp [153.120.85.146])
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 27CBoYAR007767;
-        Fri, 12 Aug 2022 20:50:34 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Received: from www262.sakura.ne.jp (202.181.97.72)
- by fsav315.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav315.sakura.ne.jp);
- Fri, 12 Aug 2022 20:50:34 +0900 (JST)
-X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav315.sakura.ne.jp)
-Received: from [192.168.1.9] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
-        (authenticated bits=0)
-        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 27CBoYAP007762
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
-        Fri, 12 Aug 2022 20:50:34 +0900 (JST)
-        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
-Message-ID: <62860a46-f6c0-9735-c76f-162a294720a2@I-love.SAKURA.ne.jp>
-Date:   Fri, 12 Aug 2022 20:50:33 +0900
+        Fri, 12 Aug 2022 07:55:26 -0400
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E039913D25
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 04:55:24 -0700 (PDT)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-31f41584236so7610997b3.5
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 04:55:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=PNBikb0xhnt9Fd0jSSfSSfR2sxz3CzKFgt8jDKr0/dw=;
+        b=lcUo442ghrp/dS1Q0h7zM135PL6rH+C4IpSqejJVhX0NsF2xPlMMf7Q1JMh0eR+b3I
+         wCOBDIW86dnxUVzhS+u/IX2LcN5RMovhf6S9y6PC0tIgGbroVCS8pQlOMVkfOwHKa7TT
+         VtLqvzYBP5wR33sgCk/ckYp4UwAb6axmKBjR26viS++M1wgKWmjXGVBVIRCk5GDinReT
+         SrFISwDEIUfs5yX/fHaF3DWWLA65Nkm4uQ0AFhM9SQBFtg/W6klR5hjxsDI/XYWjVuXu
+         rppgFtBUIvEv3sWU3dS4LHS5HzcPwxLc9d0Oio2RIxtcLC86r0YE0gwaNaeRU1GTzcJr
+         1Aow==
+X-Gm-Message-State: ACgBeo0JfshLWVxerXMoTHZGdQma0+/SKxD3px6RSClVGlVT2JK6tBon
+        dP9AsJ2w/2LbW4WS/l/ULxphZQe61FQjWjTayB6rsJ6Sf5cjhQFy
+X-Google-Smtp-Source: AA6agR5mr6Qg2/yIsE9vf+WvDD+w6wxmNJ+ViiqI3LaJ4g0funJYgF5sa8xR3gFlg+YxXSNd2uwbYac6mnjauNeJJQk=
+X-Received: by 2002:a81:11c2:0:b0:31f:5a44:c0b7 with SMTP id
+ 185-20020a8111c2000000b0031f5a44c0b7mr3537115ywr.518.1660305324059; Fri, 12
+ Aug 2022 04:55:24 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH] locking/lockdep: add debug_show_all_lock_holders()
-Content-Language: en-US
-To:     Waiman Long <longman@redhat.com>,
+References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
+ <20220723151521.51451-1-mailhol.vincent@wanadoo.fr> <20220723151521.51451-2-mailhol.vincent@wanadoo.fr>
+ <YvUZVYxbOMcZtR5G@zn.tnic>
+In-Reply-To: <YvUZVYxbOMcZtR5G@zn.tnic>
+From:   Vincent MAILHOL <mailhol.vincent@wanadoo.fr>
+Date:   Fri, 12 Aug 2022 20:55:11 +0900
+Message-ID: <CAMZ6Rq+k-5PKesdW7z9DdDMUNSKQR-c1qmQADvJ6VKZA2CM8nw@mail.gmail.com>
+Subject: Re: [RESEND PATCH v4 1/2] x86/asm/bitops: ffs: use __builtin_ffs to
+ evaluate constant expressions
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, x86@kernel.org,
         Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Shaokun Zhang <zhangshaokun@hisilicon.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Petr Mladek <pmladek@suse.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Xiaoming Ni <nixiaoming@huawei.com>,
-        John Ogness <john.ogness@linutronix.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        syzkaller-bugs <syzkaller-bugs@googlegroups.com>
-References: <82af40cc-bf85-2b53-b8f9-dfc12e66a781@I-love.SAKURA.ne.jp>
- <60867fd6-f6c1-cdd3-d355-073d26588d0e@redhat.com>
-From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
-In-Reply-To: <60867fd6-f6c1-cdd3-d355-073d26588d0e@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, David Howells <dhowells@redhat.com>,
+        Jan Beulich <JBeulich@suse.com>,
+        Christophe Jaillet <christophe.jaillet@wanadoo.fr>,
+        Joe Perches <joe@perches.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/08/11 20:32, Tetsuo Handa wrote:
-> I wish that lockdep continues tracking locks even after something went
-> wrong (i.e. debug_locks remains 1), for recently I sometimes encounter
-> problems that disable lockdep during boot stage.
+Hi Borislav,
+
+On Thu. 11 Aug 2022 at 23:59, Borislav Petkov <bp@alien8.de> wrote:
+> On Sun, Jul 24, 2022 at 12:15:20AM +0900, Vincent Mailhol wrote:
+> > For x86_64, the current ffs() implementation does not produce
+> > optimized code when called with a constant expression. On the
+> > contrary, the __builtin_ffs() function of both GCC and clang is able
+> > to simplify the expression into a single instruction.
+> >
+> > * Example *
+> >
+> > Let's consider two dummy functions foo() and bar() as below:
+> >
+> > | #include <linux/bitops.h>
+> > | #define CONST 0x01000000
 >
-> It would be noisy to report possibility of e.g. circular locking dependency
-> every time due to keeping debug_locks enabled. But tracking locks even
-> after something went wrong will help debug_show_all_lock_holders() to
-> survive problems during boot stage.
-
-I forgot to write. I'm not expecting lockdep to report the same problem forever.
-Reporting possibility of each problem pattern (e.g. circular locking dependency)
-up to once, by using cmpxchg() inside reporting functions that call printk(),
-would be enough.
-
-I'm expecting lockdep to continue working without calling printk() even after
-one of problem patterns (e.g. circular locking dependency) was printk()ed, so that
-debug_show_all_locks()/debug_show_all_lock_holders() can call printk() when needed.
-
+> Those code examples you can simply indent with two spaces.
 >
-> Changing debug_locks behavior is a future patch. For now, this patch alone
-> will help debugging Greg's usb.git#usb-testing tree which is generating
-> many "INFO: task hung in" reports.
+> > In both examples, we clearly see the benefit of using __builtin_ffs()
 >
+> Who's "we"?
+>
+> Please use passive voice in your commit message: no "we" or "I", etc,
+> and describe your changes in imperative mood.
+>
+> > instead of the kernel's asm implementation for constant expressions.
+> >
+> > However, for non constant expressions, the ffs() asm version of the
+> > kernel remains better for x86_64 because, contrary to GCC, it doesn't
+> > emit the CMOV assembly instruction, c.f. [1] (noticeably, clang is
+> > able optimize out the CMOV call).
+> >
+> > This patch uses the __builtin_constant_p() to select between the
+>
+> Avoid having "This patch" or "This commit" in the commit message. It is
+> tautologically useless.
+>
+> Also, do
+>
+> $ git grep 'This patch' Documentation/process
+>
+> for more details.
+>
+> > kernel's ffs() and the __builtin_ffs() depending on whether the
+> > argument is constant or not.
+>
+> In general, you don't have to say what the patch does - that should be
+> visible from the diff. The more important part is the *why*. And that
+> you do.
+>
+> Rest looks ok.
+
+Thank you for the review!
+I addressed all your comments and sent a v5:
+https://lore.kernel.org/all/20220812114438.1574-1-mailhol.vincent@wanadoo.fr/
 
 
-
-On 2022/08/12 4:00, Waiman Long wrote:
-> 
-> BTW, this function will produce much more verbose output. Typically how many line
-> of debug outputs are going to be dumped to the console by calling this function?
-
-Regarding amount of output, I can't estimate lines printed because it depends on how
-many threads are holding locks. Thus, here are some examples obtained by this patch.
-
-  https://syzkaller.appspot.com/text?tag=CrashReport&x=17c78aba080000
-  https://syzkaller.appspot.com/text?tag=CrashReport&x=13219e6b080000
-  https://syzkaller.appspot.com/text?tag=CrashReport&x=166c402d080000
-  https://syzkaller.appspot.com/text?tag=CrashReport&x=15c6ff73080000
-
-We can introduce flags like panic_printk variable in kernel/panic.c if amount of
-output (or latency by output) turns out to be a problem.
-
-I guess that the most significant switch would be console_verbose() in
-check_hung_task() which forces synchronous output (causing latency problem
-if there are many lines to output). If printk() messages are not printed to
-consoles, latency by debug_show_all_lock_holders() will be negligible.
-
+Yours sincerely,
+Vincent Mailhol

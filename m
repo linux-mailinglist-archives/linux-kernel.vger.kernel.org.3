@@ -2,106 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65D4D591115
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 14:55:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAE80591118
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 14:55:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238334AbiHLMzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 08:55:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41140 "EHLO
+        id S238717AbiHLMzV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 08:55:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232082AbiHLMzC (ORCPT
+        with ESMTP id S238341AbiHLMzP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 08:55:02 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF8DAB40C
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 05:55:01 -0700 (PDT)
-Date:   Fri, 12 Aug 2022 12:54:57 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1660308899;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=c6iK031Q/w7O2dMNGO39P6U/sBtfl3ACcZLNK118kcE=;
-        b=3GFZT+U+sfUjCyWT1eOmqp9Ojgs+8SaslagRPsplsvhwJVkzj8cRPSxkVFdoNRj2uHTW5i
-        roYlhqrNt4nLDRcJT+HZ1qCf3s/iHX6e7+NU01isjq7q8x3KMr6/FigYsGqcwSGUrg6hT/
-        E6tPvnw6n68/tFHoxeD5Z1uCu+n+2vCTDtMcn+QGOpfq/zcvnVx0x7LLXDg3Lpu9MAgaFl
-        Z9O8ztNBtxsX1BQV8fKCryOE0BmXkWHtb1NXeB0hIMkgRUVFlSCSMjpqr1UuUB0KHlSmvp
-        3RIskkcvEEuq/pC9Lgd+FHD3wde4W9S3IywIOQSwnUplmRn7H1SDxquxFah/sg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1660308899;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=c6iK031Q/w7O2dMNGO39P6U/sBtfl3ACcZLNK118kcE=;
-        b=NHJs/HGyj93/0nT/Gw0wnhHVOsIxf6mc/EzvON2i8pekcjMPivt8wjyTNidoQSm4RrC2w9
-        N83fCYnzVmobPsAA==
-From:   "irqchip-bot for Christophe JAILLET" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-kernel@vger.kernel.org
-Subject: [irqchip: irq/irqchip-fixes] irqchip/loongson-liointc: Fix an error
- handling path in liointc_init()
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Marc Zyngier <maz@kernel.org>, tglx@linutronix.de
-In-Reply-To: =?utf-8?q?=3C1a6d74ab70712279023aa7bdbd31bd3aec103bc0=2E16593?=
- =?utf-8?q?82063=2Egit=2Echristophe=2Ejaillet=40wanadoo=2Efr=3E?=
-References: =?utf-8?q?=3C1a6d74ab70712279023aa7bdbd31bd3aec103bc0=2E165938?=
- =?utf-8?q?2063=2Egit=2Echristophe=2Ejaillet=40wanadoo=2Efr=3E?=
+        Fri, 12 Aug 2022 08:55:15 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA70F11
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 05:55:13 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id h28so867251pfq.11
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 05:55:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=VDtjYdN7YuCCQGXtkzjt2mpUoG4oHymLw4QsZRtpGcA=;
+        b=ZtiRlWNWkaU6Z2PXLHlk7ssDMikKDrLfWic9VYlZ2oIT92okEaAuGOPtfI3BG4z/zv
+         Y0BULC7cG0h8Uy5jqa0KizQK7v9HJxL3apfawcsDCmR0KeBp8NGeyASaLZ5kpG0pb2O5
+         AtIMj9qxIDvTmv/5SnwCqBQZDEZJARqx41RkgRm8iirYcFxLtpQt04GAYEhGRQGyETEd
+         0fO7r2QGf5XxFjXa3CiPHlHurY2r6Crf9BhwKZ/5TLQBJQCF8Hgdtk1k5ddLSQraCSfn
+         HAFypiKWrrbT969zpXcZEVE5bFC8gFgQQxKMLR7JHIaeUOFe6IPlyZpvs+ITSi4JAWSc
+         CxDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=VDtjYdN7YuCCQGXtkzjt2mpUoG4oHymLw4QsZRtpGcA=;
+        b=yp2PPwSk68FD8ZIntpaVoweQcHao5SlrSrbY6Qcc8ocW+Z0E5d573+S99tguK/bvQN
+         hhG8xmk7gZfhCmj1pzsEy/5/vATRd6GmO9uUMPQXxkopaB/TSHDHEiuv3QGHZmdUc7RN
+         5U387VaYwOe/cQjLsMQrjHtz8kxZ6bEP/AxwJEmIxxC8lJg9x2xRQjJeIYEBFLo/KEnC
+         cbTFzLEFdAXkp44WqBYKNiKG+5tDOcm+1r1/Or7zytKnA+nNY4sBaXHgB9r/N3xanqr4
+         x4fjWH9CFoMmOcr4V5qLwbsxS7Bw0UBQXNYXpX5zDcY3goFQT+UyGBeX/DGbXusJQ6jq
+         RtRA==
+X-Gm-Message-State: ACgBeo3H82I6D9MSeEFk4y6SiW+JqC/K/u/eXbi3niEnJmj3giVdaNkK
+        KhB/+VtCYVIiybD738yeMG5REjWeQKCyLgBbL2vMSvGBx9zgvw==
+X-Google-Smtp-Source: AA6agR6g/ED6xi1uJYMOVfwr91Ky1x6MgRmKOFDBj2xqQ4zFX5QIer8237YskBzHZ2KBjjdKP6b/EXeWMLs7/+N3zLo=
+X-Received: by 2002:a05:6a00:1352:b0:52f:bc83:c93e with SMTP id
+ k18-20020a056a00135200b0052fbc83c93emr3489635pfu.45.1660308912604; Fri, 12
+ Aug 2022 05:55:12 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <166030889787.401.669462867278419781.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20220812092901.6429-1-zhiyong.tao@mediatek.com>
+ <20220812092901.6429-2-zhiyong.tao@mediatek.com> <cbe761af-5011-83a2-0509-2b3c4fe0a79c@linaro.org>
+ <4a49b619deb5453749a47874377cad6a36a9a054.camel@mediatek.com>
+In-Reply-To: <4a49b619deb5453749a47874377cad6a36a9a054.camel@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Date:   Fri, 12 Aug 2022 15:55:01 +0300
+Message-ID: <CAGE=qrohYZ6f9bbEuYfF=2Rz21nbW_8ho3rBQmHt1D+kQG2-jA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/1] regulator: dt-bindings: mediatek: add mt6366
+To:     "zhiyong.tao" <zhiyong.tao@mediatek.com>
+Cc:     lee.jones@linaro.org, robh+dt@kernel.org, matthias.bgg@gmail.com,
+        lgirdwood@gmail.com, broonie@kernel.org, eddie.huang@mediatek.com,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        fshao@chromium.org, sen.chu@mediatek.com, hui.liu@mediatek.com,
+        allen-kh.cheng@mediatek.com, hsin-hsiung.wang@mediatek.com,
+        sean.wang@mediatek.com, macpaul.lin@mediatek.com,
+        wen.su@mediatek.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the irq/irqchip-fixes branch of irqchip:
+On Fri, 12 Aug 2022 at 15:52, zhiyong.tao <zhiyong.tao@mediatek.com> wrote:
+>
+> On Fri, 2022-08-12 at 13:55 +0300, Krzysztof Kozlowski wrote:
+> > On 12/08/2022 12:29, Zhiyong Tao wrote:
+> > > Add mt6366 regulator document
+> > >
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    const: mediatek,mt6366-regulator
+> > > +
+> > > +  regulators:
+> > > +    type: object
+> > > +    description: List of regulators and its properties
+> > > +
+> > > +    patternProperties:
+> > > +      "^buck-
+> > > v(dram1|core|coresshub|proc11|proc12|gpu|s2|modem|s1)$":
+> > > +        type: object
+> > > +        $ref: regulator.yaml#
+> > > +        unevaluatedProperties: false
+> > > +
+> > > +      "^ldo-v(dram2|sim1|ibr|rf12|usb|camio|camd|cn18|fe28)$":
+> > > +        type: object
+> > > +        $ref: regulator.yaml#
+> >
+> > You miss unevaluatedProperties in most of the places.
+>
+> Hi Krzysztof,
+>    Thanks for your suggestion,
+>    Do you mean that all places should have the unevaluatedProperties
+> Properties ?
 
-Commit-ID:     a9084d888fbaaed65ded56f11d052cf8b04519a5
-Gitweb:        https://git.kernel.org/pub/scm/linux/kernel/git/maz/arm-platforms/a9084d888fbaaed65ded56f11d052cf8b04519a5
-Author:        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-AuthorDate:    Mon, 01 Aug 2022 21:28:07 +02:00
-Committer:     Marc Zyngier <maz@kernel.org>
-CommitterDate: Fri, 12 Aug 2022 13:47:21 +01:00
+Yes. You put it in some of the places which does not really make sense...
 
-irqchip/loongson-liointc: Fix an error handling path in liointc_init()
-
-All errors lead to the error handling path, except the one dealing
-with "reg-names" in DT.
-
-Fix it and release some resources before returning if this test fails.
-
-Fixes: 0858ed035a85 ("irqchip/loongson-liointc: Add ACPI init support")
-Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-[maz: fix commit message]
-Signed-off-by: Marc Zyngier <maz@kernel.org>
-Link: https://lore.kernel.org/r/1a6d74ab70712279023aa7bdbd31bd3aec103bc0.1659382063.git.christophe.jaillet@wanadoo.fr
----
- drivers/irqchip/irq-loongson-liointc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/irqchip/irq-loongson-liointc.c b/drivers/irqchip/irq-loongson-liointc.c
-index acd1a4b..0da8716 100644
---- a/drivers/irqchip/irq-loongson-liointc.c
-+++ b/drivers/irqchip/irq-loongson-liointc.c
-@@ -207,7 +207,7 @@ static int liointc_init(phys_addr_t addr, unsigned long size, int revision,
- 					"reg-names", core_reg_names[i]);
- 
- 			if (index < 0)
--				return -EINVAL;
-+				goto out_iounmap;
- 
- 			priv->core_isr[i] = of_iomap(node, index);
- 		}
+Best regards,
+Krzysztof

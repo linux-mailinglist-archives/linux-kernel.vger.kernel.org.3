@@ -2,162 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7222D591783
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 01:08:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AB99591785
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 01:10:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234033AbiHLXIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 19:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44740 "EHLO
+        id S234501AbiHLXJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 19:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiHLXID (ORCPT
+        with ESMTP id S229507AbiHLXJ4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 19:08:03 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512AA9BB47;
-        Fri, 12 Aug 2022 16:08:02 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id s5-20020a17090a13c500b001f4da9ffe5fso9566112pjf.5;
-        Fri, 12 Aug 2022 16:08:02 -0700 (PDT)
+        Fri, 12 Aug 2022 19:09:56 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE6A9AFD6
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 16:09:54 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-31f58599ad3so18401737b3.20
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 16:09:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc;
-        bh=MA77FB22CsHjZrR6X2vQKOC69kqSwrUYcyvN+zo/RVo=;
-        b=pO5Pmo10KGjGEHIDsDFW62WViUHSjMtROTW9Kr1CGUvRC/iefwJ9lZ91D4fveTkkzY
-         v52dvpIzsbZwj9c6WKJ7hlkJCjetGBtgHmTjkgWbxzWuKo9LXzuR15CDCNSPPV9YxfIH
-         ahNy6D/Ol9DsKRP51GI8i5L/RgWwEy0YGV1EtN81aTnVIlQWgvEc9CvOUjus/eHGy1m4
-         CMZfP9vwfd+CY/tD6zX6LVwVurGVhl/9oDc8ibs94PigZdDHV3xg1HoxwRn1FcwW9ULj
-         wL90ht3fE9x00aihUVPjdF0d31uXoq/lchwTtXC7TL1uHORGi9j3MnVAkz4sRJCS7Dn2
-         OjSQ==
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=xXzpXjvRspHe6EqAJ0peWZDoMV+SEU1E7aT46p0dEiM=;
+        b=TyWfgnmLLl7dTdjM1raYv8gMUESt6Aj574QPgYwVLf2vMvMgGeRBcHTn4a+F28Zysm
+         8+lFUYM0uTOu7+ZQHwVJLB9Q/lxTCzNZpN0Y7GhNNxsY2h+fOkEmLbE8y2pb38FbhiOb
+         laHlPAo7l3JePG3RZcReoLMrHc9eLpLdqZ/Yqa8c2k895dazcC3w31dIHJg9FoHh8WkC
+         Bx/EuVlH4SbyeofrDsTqVQVM5gs8WX+QhE1rzKNKVgwXx6ey6B74iZjoSBFHKj+rl9M+
+         EuxyyDdzqcAczAAb5Mj5p5QdIRbDsg0A42yTkz6ui/7K8LZ01ncIH/72NV/G+EewbS0i
+         H8Pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=MA77FB22CsHjZrR6X2vQKOC69kqSwrUYcyvN+zo/RVo=;
-        b=BkvoDkq+YgcpLan1Y4xMuevVc0KHpxrfZ13MM4qRaWJvKtsF1Nf0P/NkpqEyYYqSAZ
-         eusnJ2GLcgb1YJo7AGzhCvn4Z4h3JsUel460nTXJR7u7piD+HRPbiTZ0f3Zm+UUlniO1
-         SOFh5YRoXfDn15pt/5NV9V+2763DJvgrnf7tWNmV9Mfxk/5SqIz9cgLxgsFG2dNRIezi
-         nbg5gYyz9qnR/KRl+dNfopVblJMSEzKgFpK0RDubtMmHWRsR08VJY4MtSDr/ImWz50HQ
-         aO4bjgrTxbWLUDc0fyPD6BNWnhIK+ZilCkT0Oi5gZTIsIWzXYWi0/llgV8MAmFizjGAj
-         z31Q==
-X-Gm-Message-State: ACgBeo0ROCcqp57T4YMQHae6G5WKxyfNL9bHFi1uT9zT4yxrllTg50kl
-        TDMIfQkg9r0Y9/5Z+JIC3iTW24abDmQ=
-X-Google-Smtp-Source: AA6agR5MjNtajWKEUmawCaSFcb7nYBg8H+bVqaG6S5LwHkulS7A09v24Zr2yFtqiDrtb2qZ5oNogag==
-X-Received: by 2002:a17:90b:1e0f:b0:1f5:37f5:159c with SMTP id pg15-20020a17090b1e0f00b001f537f5159cmr6389785pjb.189.1660345681801;
-        Fri, 12 Aug 2022 16:08:01 -0700 (PDT)
-Received: from localhost ([74.211.107.8])
-        by smtp.gmail.com with ESMTPSA id q16-20020aa79830000000b0052d36feb7fcsm2132748pfl.198.2022.08.12.16.08.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Aug 2022 16:08:01 -0700 (PDT)
-Date:   Sat, 13 Aug 2022 07:07:58 +0800
-From:   Yao Yuan <yaoyuan0329os@gmail.com>
-To:     Jim Mattson <jmattson@google.com>
-Cc:     Yuan Yao <yuan.yao@linux.intel.com>, Yuan Yao <yuan.yao@intel.com>,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Jon Cargille <jcargill@google.com>,
-        Peter Shier <pshier@google.com>,
-        Oliver Upton <oupton@google.com>
-Subject: Re: [PATCH 1/1] kvm: nVMX: Checks "VMCS shadowing" with VMCS link
- pointer for non-root mode VM{READ,WRITE}
-Message-ID: <20220812230758.bkpukdocsflxxrru@sapienza>
-References: <20220812014706.43409-1-yuan.yao@intel.com>
- <20220812020206.foknky4hghgsadby@yy-desk-7060>
- <CALMp9eRejAUVzFOsASBc-Md8KUeS1mzqOm9WCJ9dBFkc_NeOJg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CALMp9eRejAUVzFOsASBc-Md8KUeS1mzqOm9WCJ9dBFkc_NeOJg@mail.gmail.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=xXzpXjvRspHe6EqAJ0peWZDoMV+SEU1E7aT46p0dEiM=;
+        b=mLvewQOFng/DrZkmqY+168t0C+/TynR3C7feDIENNXNQy9onroS6JzWBgj2YPf9Kwk
+         7vO7fEuzVCu0yKe2BQbfGKlsqWRMCAWfe7blEvu3GVRzaSPXLh3jWCrg+tWG8+VQrMT/
+         t+fUIV8UoDV44H7Qj17nQsJlynUyac3IWdpUxMDmfsJZDTqHf9ZAOH9lVYKXn0LkEoyA
+         9HNr4SQX2ZzjzQvCJDUmfR7rVoVhk1b/DzoBgJe/xZWyAaEMf2mh8G5v4Oyij4yHTufu
+         KCIPhGaIxG8F87IAi9Qn5GnbEeqoWCniymqT70HXVcGdI2f4mkj/MJ8KdYOhZvQiTZfJ
+         dgIA==
+X-Gm-Message-State: ACgBeo281RAenmvicaWMRWNIGM/bPK5oPztiJ7g1F7jlRu3khOFAJyMQ
+        pLOX6XWG8gt4J8fv4ldR13CBBJ9lSIBw
+X-Google-Smtp-Source: AA6agR4LutrHhrE6oQnlgGroLFarxMNNHW2HnxKZNw5B1WQq0kn0vV42MbXicpOjvjfxnhUeBm9qhm7Ooqzc
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:d668:2937:8218:c5ec])
+ (user=irogers job=sendgmr) by 2002:a25:230d:0:b0:677:116d:afdb with SMTP id
+ j13-20020a25230d000000b00677116dafdbmr5100760ybj.551.1660345793786; Fri, 12
+ Aug 2022 16:09:53 -0700 (PDT)
+Date:   Fri, 12 Aug 2022 16:09:35 -0700
+Message-Id: <20220812230949.683239-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
+Subject: [PATCH v5 00/14] Compress the pmu_event tables
+From:   Ian Rogers <irogers@google.com>
+To:     John Garry <john.garry@huawei.com>, Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-perf-users@vger.kernel.org
+Cc:     Stephane Eranian <eranian@google.com>,
+        Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 12, 2022 at 12:33:05PM -0700, Jim Mattson wrote:
-> On Thu, Aug 11, 2022 at 7:02 PM Yuan Yao <yuan.yao@linux.intel.com> wrote:
-> >
-> > On Fri, Aug 12, 2022 at 09:47:06AM +0800, Yuan Yao wrote:
-> > > Add checking to VMCS12's "VMCS shadowing", make sure the checking of
-> > > VMCS12's vmcs_link_pointer for non-root mode VM{READ,WRITE} happens
-> > > only if VMCS12's "VMCS shadowing" is 1.
-> > >
-> > > SDM says that for non-root mode the VMCS's "VMCS shadowing" must be 1
-> > > (and the corresponding bits in VMREAD/VMWRITE bitmap must be 0) when
-> > > condition checking of [B] is reached(please refer [A]), which means
-> > > checking to VMCS link pointer for non-root mode VM{READ,WRITE} should
-> > > happen only when "VMCS shadowing" = 1.
-> > >
-> > > Description from SDM Vol3(April 2022) Chapter 30.3 VMREAD/VMWRITE:
-> > >
-> > > IF (not in VMX operation)
-> > >    or (CR0.PE = 0)
-> > >    or (RFLAGS.VM = 1)
-> > >    or (IA32_EFER.LMA = 1 and CS.L = 0)
-> > > THEN #UD;
-> > > ELSIF in VMX non-root operation
-> > >       AND (“VMCS shadowing” is 0 OR
-> > >            source operand sets bits in range 63:15 OR
-> > >            VMREAD bit corresponding to bits 14:0 of source
-> > >            operand is 1)  <------[A]
-> > > THEN VMexit;
-> > > ELSIF CPL > 0
-> > > THEN #GP(0);
-> > > ELSIF (in VMX root operation AND current-VMCS pointer is not valid) OR
-> > >       (in VMX non-root operation AND VMCS link pointer is not valid)
-> > > THEN VMfailInvalid;  <------ [B]
-> > > ...
-> > >
-> > > Fixes: dd2d6042b7f4 ("kvm: nVMX: VMWRITE checks VMCS-link pointer before VMCS field")
-> > > Signed-off-by: Yuan Yao <yuan.yao@intel.com>
-> > > ---
-> > >  arch/x86/kvm/vmx/nested.c | 2 ++
-> > >  1 file changed, 2 insertions(+)
-> > >
-> > > diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-> > > index ddd4367d4826..30685be54c5d 100644
-> > > --- a/arch/x86/kvm/vmx/nested.c
-> > > +++ b/arch/x86/kvm/vmx/nested.c
-> > > @@ -5123,6 +5123,7 @@ static int handle_vmread(struct kvm_vcpu *vcpu)
-> > >                */
-> > >               if (vmx->nested.current_vmptr == INVALID_GPA ||
-> > >                   (is_guest_mode(vcpu) &&
-> > > +                  nested_cpu_has_shadow_vmcs(vcpu) &&
-> >
-> > Oops, should be "nested_cpu_has_shadow_vmcs(get_vmcs12(vcpu))".
-> >
-> > >                    get_vmcs12(vcpu)->vmcs_link_pointer == INVALID_GPA))
-> > >                       return nested_vmx_failInvalid(vcpu);
-> > >
-> > > @@ -5233,6 +5234,7 @@ static int handle_vmwrite(struct kvm_vcpu *vcpu)
-> > >        */
-> > >       if (vmx->nested.current_vmptr == INVALID_GPA ||
-> > >           (is_guest_mode(vcpu) &&
-> > > +          nested_cpu_has_shadow_vmcs(vcpu) &&
-> >
-> > Ditto.
-> >
-> > >            get_vmcs12(vcpu)->vmcs_link_pointer == INVALID_GPA))
-> > >               return nested_vmx_failInvalid(vcpu);
-> > >
-> > > --
->
-> These checks are redundant, aren't they?
->
-> That is, nested_vmx_exit_handled_vmcs_access() has already checked
-> nested_cpu_has_shadow_vmcs(vmcs12).
+jevents.py creates a number of large arrays from the json events. The
+arrays contain pointers to strings that need relocating. The
+relocations have file size, run time and memory costs. These changes
+refactor the pmu_events API so that the storage of the pmu_event
+struct isn't exposed. The format is then changed to an offset within a
+combined big string, with adjacent pmu_event struct variables being
+next to each other in the string separated by \0 - meaning only the
+first variable of the struct needs its offset recording.
 
-Ah, you're right it does there.
+Some related fixes are contained with the patches. The architecture
+jevents.py creates tables for can now be set by the JEVENTS_ARCH make
+variable, with a new 'all' that generates the events and metrics for
+all architectures.
 
-That means in L0 we handle this for vmcs12 which has shadow VMCS
-setting and the corresponding bit in the bitmap is 0(so no vmexit to
-L1 and the read/write should from/to vmcs12's shadow vmcs, we handle
-this here to emulate this), so we don't need to check the shdaow VMCS
-setting here again. Is this the right understanding ?
+An example of the improvement to the file size on x86 is:
+no jevents - the same 19,788,464bytes
+x86 jevents - ~16.7% file size saving 23,744,288bytes vs 28,502,632bytes
+all jevents - ~19.5% file size saving 24,469,056bytes vs 30,379,920bytes
+default build options plus NO_LIBBFD=1.
+
+I originally suggested fixing this problem in:
+https://lore.kernel.org/linux-perf-users/CAP-5=fVB8G4bdb9T=FncRTh9oBVKCS=+=eowAO+YSgAhab+Dtg@mail.gmail.com/
+
+v5. Renamed two functions to be more inline with the code and added
+    extra commit message detail on the event sorting order as
+    suggested by John Garry <john.garry@huawei.com>.
+v4. Fixed an issue with the empty-pmu-events.c spotted by John Garry
+    <john.garry@huawei.com>.
+v3. Fix an ARM build issue with a missed weak symbol. Perform some
+    pytype clean up.
+v2. Split the substring folding optimization to its own patch and
+    comment tweaks as suggested by Namhyung Kim
+    <namhyung@kernel.org>. Recompute the file size savings with the
+    latest json events and metrics.
+
+Ian Rogers (14):
+  perf jevent: Add an 'all' architecture argument
+  perf jevents: Remove the type/version variables
+  perf jevents: Provide path to json file on error
+  perf jevents: Sort json files entries
+  perf pmu-events: Hide pmu_sys_event_tables
+  perf pmu-events: Avoid passing pmu_events_map
+  perf pmu-events: Hide pmu_events_map
+  perf test: Use full metric resolution
+  perf pmu-events: Move test events/metrics to json
+  perf pmu-events: Don't assume pmu_event is an array
+  perf pmu-events: Hide the pmu_events
+  perf metrics: Copy entire pmu_event in find metric
+  perf jevents: Compress the pmu_events_table
+  perf jevents: Fold strings optimization
+
+ tools/perf/arch/arm64/util/pmu.c              |   4 +-
+ .../arch/test/test_soc/cpu/metrics.json       |  64 +++
+ tools/perf/pmu-events/empty-pmu-events.c      | 204 +++++++-
+ tools/perf/pmu-events/jevents.py              | 478 +++++++++++++++---
+ tools/perf/pmu-events/pmu-events.h            |  40 +-
+ tools/perf/tests/expand-cgroup.c              |  25 +-
+ tools/perf/tests/parse-metric.c               |  77 +--
+ tools/perf/tests/pmu-events.c                 | 466 +++++++----------
+ tools/perf/util/metricgroup.c                 | 275 ++++++----
+ tools/perf/util/metricgroup.h                 |   5 +-
+ tools/perf/util/pmu.c                         | 139 ++---
+ tools/perf/util/pmu.h                         |  10 +-
+ tools/perf/util/s390-sample-raw.c             |  50 +-
+ 13 files changed, 1131 insertions(+), 706 deletions(-)
+ create mode 100644 tools/perf/pmu-events/arch/test/test_soc/cpu/metrics.json
+
+-- 
+2.37.1.595.g718a3a8f04-goog
+

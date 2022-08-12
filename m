@@ -2,222 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8DD3591755
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 00:26:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D125559174F
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 00:26:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237553AbiHLW0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 18:26:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39766 "EHLO
+        id S235582AbiHLW0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 18:26:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237164AbiHLWZs (ORCPT
+        with ESMTP id S237439AbiHLWZk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 18:25:48 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC80B11C3D;
-        Fri, 12 Aug 2022 15:25:42 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 266D85C00D7;
-        Fri, 12 Aug 2022 18:25:42 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Fri, 12 Aug 2022 18:25:42 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
-        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1660343142; x=1660429542; bh=eZ
-        uPw2SQFgh1mWTwJWJZNQBE+LeJoM1X4oFRjAj7Xew=; b=bt29gbav/Md945DtqI
-        NKESz2gvizfztEqqqcc6KvSyAxea1sLRRqnKNQ0QBWFTZa9iunvc/lsdceL5oSlW
-        Zf018+F82GiyD1JgD32jC3ItTZBwUqPHA13reby86f/KDtkRzaiSx+kVZ1VVDF8t
-        VWvwIb2RJWqVoz3fzMTWdEeQDHw2wejvmwQJm5AUL6LO96GYtFiSma2SCn0IFj3p
-        2PQTgjLtrV4j5hXC+6cvVJsp4RvQ1ziyooRepxGuFAzbkO9M4aTVQqjHSU+K6xuv
-        I4Z03qXWr/tWqRTCgrMBAnLhr3uoPz2qCFLN5gLwPtDS2JkbJJX5hd3rdqCg2/x2
-        MQrA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1660343142; x=1660429542; bh=eZuPw2SQFgh1m
-        WTwJWJZNQBE+LeJoM1X4oFRjAj7Xew=; b=ThqxP7tIA/GcOg4lWiq0ofmyUjfVm
-        NPl2QpzmQ4aS/+q7Aevovgpj52H6qNAfV3YCiYmiDOjB9h2RdHm76Egej1lylJiH
-        JuDcVLc0GuDtOjMPfrlC88PnlQRbrImNvRaf6bsZKpvWkgKoOL/ehCEfbEI69NRT
-        oGKETpSrYHtN42cC5cBXfkJ8dqyCCC0bno+sn4bl/Cb2KCfS5mksmgp7JDhxm7WD
-        3/d2rNX0erU1cuROFre7+xfKtpqi5IGvy6a48Ehy4+sSM2z9EkFuQWQpm+w+Kncl
-        pgVCSXpZ+aEIqg7jceEARrGy2vLmll5v32Vj4PsYRNrzMU+R8mUDBohAQ==
-X-ME-Sender: <xms:ZdP2YppUUBc_as_DgNOVj1d3gfByOboCuElKV8hguYufg0ae8kATuw>
-    <xme:ZdP2Yrp9JOvJK9R26U9fLzxdhaAGq6UCJP643qh7Ysxr_bQ7ENROHIK4yCd5hX7vW
-    2khLf7SZVR6KHc5Tdw>
-X-ME-Received: <xmr:ZdP2YmP8VhLc4GetHzZsI8kj0EFKuULjjlCL74B-003Tu90BMWT0dkMLPmxj>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegjedgtdelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
-    ertdertddtnecuhfhrohhmpedfnfhukhgvucffrdculfhonhgvshdfuceolhhukhgvsehl
-    jhhonhgvshdruggvvheqnecuggftrfgrthhtvghrnhepgfetfedugfetudeuheetjefhue
-    fggfelleetvdevtefhueeujeefvdegleevhefgnecuvehluhhsthgvrhfuihiivgepuden
-    ucfrrghrrghmpehmrghilhhfrhhomheplhhukhgvsehljhhonhgvshdruggvvh
-X-ME-Proxy: <xmx:ZtP2Yk7U8b8dwCnuCjesg-QunxFG8Pqz5_2Dc_YYsWoxZkRI_8_L7A>
-    <xmx:ZtP2Yo494ZbZ3Evu_j4k3UQ5xt4JDjgX_mED4ZG7CDobhsKIdLBT1Q>
-    <xmx:ZtP2YshlA_9ywQAXUe2OhEMA6Jy2qfcP3XJlTQMJ6WwVAS77iuGDDQ>
-    <xmx:ZtP2YoEulSwvBXbB_PZRpxXDnaO-haUEHoLhqE3KVbWJq2Q3S4286w>
-Feedback-ID: i5ec1447f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 12 Aug 2022 18:25:39 -0400 (EDT)
-From:   "Luke D. Jones" <luke@ljones.dev>
-To:     hdegoede@redhat.com
-Cc:     markgross@kernel.org, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org, "Luke D. Jones" <luke@ljones.dev>
-Subject: [PATCH 6/6] asus-wmi: Refactor panel_od attribute
-Date:   Sat, 13 Aug 2022 10:25:09 +1200
-Message-Id: <20220812222509.292692-7-luke@ljones.dev>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220812222509.292692-1-luke@ljones.dev>
-References: <20220812222509.292692-1-luke@ljones.dev>
+        Fri, 12 Aug 2022 18:25:40 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2139712D0B;
+        Fri, 12 Aug 2022 15:25:38 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id u24so1837140qku.2;
+        Fri, 12 Aug 2022 15:25:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=22h/M/V860IplmghhOOIgt/faKZklILiFH5PQHaZGuQ=;
+        b=bV9JUvVE2HdIowfvyhODwSprmEzqvEvIWJkWCX8mGzO6O6Mb1X9tyyTDSJkEV3J9kv
+         kcqGPhbxTK5TKWHzG6ebBjnWGzzLcWZncl3zl3ODqWLTsFDspWHUzX06bIROnZ8g2lDS
+         gDlBDvInrqAmpk6V+6S9n9WXvQeahiUbo+RB6ZxCY5WgaRydlEb/+VqaYbiHMb2IZB/1
+         4tFvrZAA2ikeutY2/agaLhtNF3zHs+ah7eKPInVxsGcw6zPVj3Oeksz0icXkV3vGhktC
+         cQ83UZrwaYGnilwnF4VaJhvGeRxBKN/8FnY5XPQnmMqGw+OzdV8Xgl1xLxsMlX3LCcgZ
+         /jXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=22h/M/V860IplmghhOOIgt/faKZklILiFH5PQHaZGuQ=;
+        b=GZQ7Q1phPgLaMkawfdH+m99Z/wEkUYTtCbaUFYdPCbB8alJxz320bLwS+2gKOe24M7
+         q5pzaLGzGrWyU+9dvb0grebTfShtmJadt7H7/926vd9dnuXOV6aCQ9At+Y8jejzK/mWl
+         6hIgXPQ5e8uKkCyfc9jbZqYh+jZcdDIGD5tu81JxQcFfSpzakxgD+NVkR75PVhG19Xpr
+         RncgleF+rZ7n7eUfStEOybkedZP3lbO/FZ/ol55PL0Z6N6Pcnl0M1JUeRixKaYOYwJzu
+         GAqyBCSTpL9uTNSSYypPExj6mZJwaIE4ZAGznYaRLfFuNluDvdkk1FvPTxDRIgZEnATU
+         MH2Q==
+X-Gm-Message-State: ACgBeo3rIvEDLad7yg1CsAp5kPt7egfqgTt0EB2n3N78XYlWRj1VRYhp
+        dzKE8zMUC2Rw9JD/Y+HNYeJkDbgBzlw=
+X-Google-Smtp-Source: AA6agR4sfKig+81R21IHRCKMPg1+J43EyxVKJ0AjLE7V76UMtM0QABWO3kvjmalmekrTXtUjv3gzOQ==
+X-Received: by 2002:a37:88c3:0:b0:6b9:53c7:75e4 with SMTP id k186-20020a3788c3000000b006b953c775e4mr4299661qkd.532.1660343136819;
+        Fri, 12 Aug 2022 15:25:36 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id f17-20020a05620a409100b006b942ae928bsm2788878qko.71.2022.08.12.15.25.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Aug 2022 15:25:36 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org (moderated list:BROADCOM BCM7XXX
+        ARM ARCHITECTURE),
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS)
+Subject: [PATCH v5 0/3] Add Broadcom STB memory controller driver
+Date:   Fri, 12 Aug 2022 15:25:30 -0700
+Message-Id: <20220812222533.2428033-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The settings for these attributes can be read from the device, this
-is now done instead of reading a stored value from module. The stored
-value is also removed.
+Hi Krzysztof,
 
-This means the simpler asus_wmi_dev_is_present() can be used in
-*_check_present() - it is not an error for these methods to be
-missing.
+This small patch series adds basic support for controlling self-refresh
+power down on Broadcom STB memory controllers. We might be able to
+contribute more features to the memory controller driver in the future
+like accurate reporting of the memory type, timings, and possibly some
+performance counters.
 
-The _write() functions have their bodies shifted in to *_store()
-which simplifies things further.
+Changes in v5:
 
-Signed-off-by: Luke D. Jones <luke@ljones.dev>
----
- drivers/platform/x86/asus-wmi.c | 74 +++++++++++----------------------
- 1 file changed, 25 insertions(+), 49 deletions(-)
+- use DEFINE_SIMPLE_PM_OPS() to avoid keeping the __maybe_unused
 
-diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
-index 87b042fac1ce..b2595a2d1b0a 100644
---- a/drivers/platform/x86/asus-wmi.c
-+++ b/drivers/platform/x86/asus-wmi.c
-@@ -245,7 +245,6 @@ struct asus_wmi {
- 	bool battery_rsoc_available;
- 
- 	bool panel_overdrive_available;
--	bool panel_overdrive;
- 
- 	struct hotplug_slot hotplug_slot;
- 	struct mutex hotplug_lock;
-@@ -1475,48 +1474,10 @@ static int asus_wmi_rfkill_init(struct asus_wmi *asus)
- /* Panel Overdrive ************************************************************/
- static int panel_od_check_present(struct asus_wmi *asus)
- {
--	u32 result;
--	int err;
--
- 	asus->panel_overdrive_available = false;
- 
--	err = asus_wmi_get_devstate(asus, ASUS_WMI_DEVID_PANEL_OD, &result);
--	if (err) {
--		if (err == -ENODEV)
--			return 0;
--		return err;
--	}
--
--	if (result & ASUS_WMI_DSTS_PRESENCE_BIT) {
-+	if (asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_PANEL_OD))
- 		asus->panel_overdrive_available = true;
--		asus->panel_overdrive = result & ASUS_WMI_DSTS_STATUS_BIT;
--	}
--
--	return 0;
--}
--
--static int panel_od_write(struct asus_wmi *asus)
--{
--	u32 retval;
--	u8 value;
--	int err;
--
--	/* Don't rely on type conversion */
--	value = asus->panel_overdrive ? 1 : 0;
--
--	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_PANEL_OD, value, &retval);
--
--	if (err) {
--		pr_warn("Failed to set panel overdrive: %d\n", err);
--		return err;
--	}
--
--	if (retval > 1) {
--		pr_warn("Failed to set panel overdrive (retval): 0x%x\n", retval);
--		return -EIO;
--	}
--
--	sysfs_notify(&asus->platform_device->dev.kobj, NULL, "panel_od");
- 
- 	return 0;
- }
-@@ -1525,32 +1486,47 @@ static ssize_t panel_od_show(struct device *dev,
- 				   struct device_attribute *attr, char *buf)
- {
- 	struct asus_wmi *asus = dev_get_drvdata(dev);
-+	int result;
- 
--	return sysfs_emit(buf, "%d\n", asus->panel_overdrive);
-+	result = asus_wmi_get_devstate_simple(asus, ASUS_WMI_DEVID_PANEL_OD);
-+	if (result < 0)
-+		return result;
-+
-+	return sysfs_emit(buf, "%d\n", result);
- }
- 
- static ssize_t panel_od_store(struct device *dev,
- 				    struct device_attribute *attr,
- 				    const char *buf, size_t count)
- {
--	bool overdrive;
--	int result;
-+	int result, err;
-+	u32 overdrive;
- 
- 	struct asus_wmi *asus = dev_get_drvdata(dev);
- 
--	result = kstrtobool(buf, &overdrive);
-+	result = kstrtou32(buf, 10, &overdrive);
- 	if (result)
- 		return result;
- 
--	asus->panel_overdrive = overdrive;
--	result = panel_od_write(asus);
-+	if (overdrive > 1)
-+		return -EINVAL;
- 
--	if (result)
--		return result;
-+	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_PANEL_OD, overdrive, &result);
-+
-+	if (err) {
-+		pr_warn("Failed to set panel overdrive: %d\n", err);
-+		return err;
-+	}
-+
-+	if (result > 1) {
-+		pr_warn("Failed to set panel overdrive (result): 0x%x\n", result);
-+		return -EIO;
-+	}
-+
-+	sysfs_notify(&asus->platform_device->dev.kobj, NULL, "panel_od");
- 
- 	return count;
- }
--
- static DEVICE_ATTR_RW(panel_od);
- 
- /* Quirks *********************************************************************/
+Changes in v4:
+
+- drop unnecessary owner assignment for the platform_driver
+- use pm_ptr() as directed
+
+Changes in v3:
+
+- made 'frequency' property optional to avoid introducing warnings for
+  existing BMIPS and BCM7445 DTS files
+- updated sysfs document to use a shorter and universal path
+
+Changes in v2:
+
+- merged the v1 first two patches
+- added a sysfs document describing attributes exposed
+- addressed feedback from Krzysztof regarding style and API usage
+
+Florian Fainelli (3):
+  dt-bindings: memory-controller: Document Broadcom STB MEMC
+  Documentation: sysfs: Document Broadcom STB memc sysfs knobs
+  memory: Add Broadcom STB memory controller driver
+
+ .../ABI/testing/sysfs-platform-brcmstb-memc   |  15 +
+ .../bindings/arm/bcm/brcm,brcmstb.txt         |  11 +-
+ .../brcm,brcmstb-memc-ddr.yaml                |  52 +++
+ drivers/memory/Kconfig                        |   9 +
+ drivers/memory/Makefile                       |   1 +
+ drivers/memory/brcmstb_memc.c                 | 301 ++++++++++++++++++
+ 6 files changed, 380 insertions(+), 9 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-platform-brcmstb-memc
+ create mode 100644 Documentation/devicetree/bindings/memory-controllers/brcm,brcmstb-memc-ddr.yaml
+ create mode 100644 drivers/memory/brcmstb_memc.c
+
 -- 
-2.37.1
+2.25.1
 

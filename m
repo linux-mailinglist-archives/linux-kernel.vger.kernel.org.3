@@ -2,107 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D9B75915ED
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 21:25:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CA1F5915F4
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 21:28:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236173AbiHLTZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 15:25:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53832 "EHLO
+        id S237414AbiHLT13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 15:27:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231237AbiHLTZO (ORCPT
+        with ESMTP id S236041AbiHLT1Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 15:25:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC892B8;
-        Fri, 12 Aug 2022 12:25:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 822C361786;
-        Fri, 12 Aug 2022 19:25:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76DD6C433D6;
-        Fri, 12 Aug 2022 19:25:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660332310;
-        bh=0+lCa3Lw/uI704NKn0CRHe4OSa4UTxWw50oFGOX9HPg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=fubw96tYs+TNoIY57YLdw2X/9/wamLfGw6T4Gp5DcLWcTXIsu8xSztR2sQMLD9+6d
-         mrpfYAlDqgJjpSgfA1LhdpgShoWZYAUB8+Rq4Daia6Qz7xRYdserWqUvN4ojoh/OAV
-         X1TOkfA8t+rj9JItHxJcU97eS0GHWdptXHZZDAiaowp2+zmSfc/vFB0yd9j10qIg4j
-         xz406CH15OzHuDdgPXpM5J0foB9+khbHrLmtOhpc2Iu3H1VK5BWi2B/Cjejin4Nk4s
-         jDepratPaH6Lo5SNUw81L6ewXjUXpREXL7y67MDEkPG5QBYfAQ8ftLu9GNK06+8IAD
-         1H0izDxAH92Aw==
-Date:   Fri, 12 Aug 2022 12:25:09 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Siddh Raman Pant <code@siddh.me>
-Cc:     "Greg KH" <gregkh@linuxfoundation.org>,
-        "johannes berg" <johannes@sipsolutions.net>,
-        "david s. miller" <davem@davemloft.net>,
-        "eric dumazet" <edumazet@google.com>,
-        "paolo abeni" <pabeni@redhat.com>,
-        "netdev" <netdev@vger.kernel.org>,
-        "syzbot+6cb476b7c69916a0caca" 
-        <syzbot+6cb476b7c69916a0caca@syzkaller.appspotmail.com>,
-        "linux-wireless" <linux-wireless@vger.kernel.org>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        "syzbot+f9acff9bf08a845f225d" 
-        <syzbot+f9acff9bf08a845f225d@syzkaller.appspotmail.com>,
-        "syzbot+9250865a55539d384347" 
-        <syzbot+9250865a55539d384347@syzkaller.appspotmail.com>,
-        "linux-kernel-mentees" 
-        <linux-kernel-mentees@lists.linuxfoundation.org>
-Subject: Re: [PATCH v2] wifi: cfg80211: Fix UAF in ieee80211_scan_rx()
-Message-ID: <20220812122509.281f0536@kernel.org>
-In-Reply-To: <18292e1dcd8.2359a549180213.8185874405406307019@siddh.me>
-References: <20220726123921.29664-1-code@siddh.me>
-        <18291779771.584fa6ab156295.3990923778713440655@siddh.me>
-        <YvZEfnjGIpH6XjsD@kroah.com>
-        <18292791718.88f48d22175003.6675210189148271554@siddh.me>
-        <YvZxfpY4JUqvsOG5@kroah.com>
-        <18292e1dcd8.2359a549180213.8185874405406307019@siddh.me>
+        Fri, 12 Aug 2022 15:27:25 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F6BB08AD
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 12:27:24 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id j5so2184180oih.6
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 12:27:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=RFQCcD+o7jwAXDtp4U1/kPCj0a6x0GtskgYZEyvj9NE=;
+        b=VN5AtKQ/0zk7x64khzHNWqzjm0YpR7+d4JF2kbafdw/v3J3hYRIdcNzqJ8FPF4RhUs
+         QxLkUT7lD4USFVw1hxOGVaETi0LiAOQ7Se5IDMBtHLQrqUhWO9QFA1vmg/sR7Jva4mUN
+         bXy3mS5hSvGH8qcmVfFGwtUzPTOuRVmUxe35w4vwvoeQRrC2muArkWZIRADALVts/l9C
+         r0DlbDCVBXh4HDqzsk0LtHtUdWg1S2ZSvpJr8uxePjMrBacUFb0muvGa4vGkooI5euss
+         QoKyMZdVvCNs8rQQAH6gfCe3pffgGNcqP5ZaavIFXTBtopeW3+iI8Oi2RHV4K9kHIxKw
+         ADXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=RFQCcD+o7jwAXDtp4U1/kPCj0a6x0GtskgYZEyvj9NE=;
+        b=HXEqY+Do0lyoP7uItWWKludpd8pHfnVSesVgNbBiBHs5xw3OJ38DjYBLqlN5vpJOk8
+         kWOToANyfn9qI/WfKZ9tnGD8OL3bAq8gd2nEarl9/RPucQTs34bj6PmHgk9IeMQ/wUp4
+         AsWY6DyieOEZfYafh5Sfa47VJ1j621ELh9VPmBb8i+QV0xbzFgO15M4TJALOWStcN/vM
+         XzmDHJueihV/SivzyB4034lm3TeR2aS0YcqYaDPLxggUFcVlRWAeGggNVk2XQx6BMorL
+         inSrDD1tFv8IV9r7cjcgpFJVlXJiT6hiFbS5XSPv7xkhl3Lb8KKtrOb5rtDNqRAFtGp2
+         Xn7A==
+X-Gm-Message-State: ACgBeo2tMHkRI/VXfET8PAL9Wohu1dEkho+6Rrk82yjnsV4Fs98IxXFt
+        0KwjG1ed+cQ3D/BitNG2CZWsMMjChXMwjIxY/9CX0w==
+X-Google-Smtp-Source: AA6agR6UTYEA+QjXIoZYrda4A+K5joJ6JqfQgfoRbqeFCe5cFOm100RmivhhsKSDVQ65QXNMpukAivi55f0ZGzlLtNY=
+X-Received: by 2002:a05:6808:150f:b0:343:3202:91cf with SMTP id
+ u15-20020a056808150f00b00343320291cfmr5737538oiw.112.1660332443800; Fri, 12
+ Aug 2022 12:27:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220812014706.43409-1-yuan.yao@intel.com> <20220812020206.foknky4hghgsadby@yy-desk-7060>
+In-Reply-To: <20220812020206.foknky4hghgsadby@yy-desk-7060>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Fri, 12 Aug 2022 12:27:12 -0700
+Message-ID: <CALMp9eSj3SMRkSzgFcFit1up7T8-Wmu7u3ePMVfkqty6CtR6kA@mail.gmail.com>
+Subject: Re: [PATCH 1/1] kvm: nVMX: Checks "VMCS shadowing" with VMCS link
+ pointer for non-root mode VM{READ,WRITE}
+To:     Yuan Yao <yuan.yao@linux.intel.com>
+Cc:     Yuan Yao <yuan.yao@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Jon Cargille <jcargill@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 12 Aug 2022 21:57:31 +0530 Siddh Raman Pant wrote:
-> On Fri, 12 Aug 2022 20:57:58 +0530  Greg KH  wrote:
-> > rcu just delays freeing of an object, you might just be delaying the
-> > race condition.  Just moving a single object to be freed with rcu feels
-> > very odd if you don't have another reference somewhere.  
-> 
-> As mentioned in patch message, in net/mac80211/scan.c, we have:
->         void ieee80211_scan_rx(struct ieee80211_local *local, struct sk_buff *skb)
->         {
->                 ...
->                 scan_req = rcu_dereference(local->scan_req);
->                 sched_scan_req = rcu_dereference(local->sched_scan_req);
-> 
->                 if (scan_req)
->                         scan_req_flags = scan_req->flags;
->                 ...
->         }
-> 
-> So scan_req is probably supposed to be protected by RCU.
-> 
-> Also, in ieee80211_local's definition at net/mac80211/ieee80211_i.h, we have:
->         struct cfg80211_scan_request __rcu *scan_req;
-> 
-> Thus, scan_req is indeed supposed to be protected by RCU, which this patch
-> addresses by adding a RCU head to the type's struct, and using kfree_rcu().
-> 
-> The above snippet is where the UAF happens (you can refer to syzkaller's log),
-> because __cfg80211_scan_done() is called and frees the pointer.
-
-Similarly to Greg, I'm not very familiar with the code base but one
-sure way to move things forward would be to point out a commit which
-broke things and put it in a Fixes tag. Much easier to validate a fix
-by looking at where things went wrong.
+On Thu, Aug 11, 2022 at 7:02 PM Yuan Yao <yuan.yao@linux.intel.com> wrote:
+>
+> On Fri, Aug 12, 2022 at 09:47:06AM +0800, Yuan Yao wrote:
+> > Add checking to VMCS12's "VMCS shadowing", make sure the checking of
+> > VMCS12's vmcs_link_pointer for non-root mode VM{READ,WRITE} happens
+> > only if VMCS12's "VMCS shadowing" is 1.
+> >
+> > SDM says that for non-root mode the VMCS's "VMCS shadowing" must be 1
+> > (and the corresponding bits in VMREAD/VMWRITE bitmap must be 0) when
+> > condition checking of [B] is reached(please refer [A]), which means
+> > checking to VMCS link pointer for non-root mode VM{READ,WRITE} should
+> > happen only when "VMCS shadowing" =3D 1.
+> >
+> > Description from SDM Vol3(April 2022) Chapter 30.3 VMREAD/VMWRITE:
+> >
+> > IF (not in VMX operation)
+> >    or (CR0.PE =3D 0)
+> >    or (RFLAGS.VM =3D 1)
+> >    or (IA32_EFER.LMA =3D 1 and CS.L =3D 0)
+> > THEN #UD;
+> > ELSIF in VMX non-root operation
+> >       AND (=E2=80=9CVMCS shadowing=E2=80=9D is 0 OR
+> >            source operand sets bits in range 63:15 OR
+> >            VMREAD bit corresponding to bits 14:0 of source
+> >            operand is 1)  <------[A]
+> > THEN VMexit;
+> > ELSIF CPL > 0
+> > THEN #GP(0);
+> > ELSIF (in VMX root operation AND current-VMCS pointer is not valid) OR
+> >       (in VMX non-root operation AND VMCS link pointer is not valid)
+> > THEN VMfailInvalid;  <------ [B]
+> > ...
+> >
+> > Fixes: dd2d6042b7f4 ("kvm: nVMX: VMWRITE checks VMCS-link pointer befor=
+e VMCS field")
+> > Signed-off-by: Yuan Yao <yuan.yao@intel.com>
+> > ---
+> >  arch/x86/kvm/vmx/nested.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+> > index ddd4367d4826..30685be54c5d 100644
+> > --- a/arch/x86/kvm/vmx/nested.c
+> > +++ b/arch/x86/kvm/vmx/nested.c
+> > @@ -5123,6 +5123,7 @@ static int handle_vmread(struct kvm_vcpu *vcpu)
+> >                */
+> >               if (vmx->nested.current_vmptr =3D=3D INVALID_GPA ||
+> >                   (is_guest_mode(vcpu) &&
+> > +                  nested_cpu_has_shadow_vmcs(vcpu) &&
+>
+> Oops, should be "nested_cpu_has_shadow_vmcs(get_vmcs12(vcpu))".
+>
+> >                    get_vmcs12(vcpu)->vmcs_link_pointer =3D=3D INVALID_G=
+PA))
+> >                       return nested_vmx_failInvalid(vcpu);
+> >
+> > @@ -5233,6 +5234,7 @@ static int handle_vmwrite(struct kvm_vcpu *vcpu)
+> >        */
+> >       if (vmx->nested.current_vmptr =3D=3D INVALID_GPA ||
+> >           (is_guest_mode(vcpu) &&
+> > +          nested_cpu_has_shadow_vmcs(vcpu) &&
+>
+> Ditto.
+>
+> >            get_vmcs12(vcpu)->vmcs_link_pointer =3D=3D INVALID_GPA))
+> >               return nested_vmx_failInvalid(vcpu);
+> >
+> > --
+> > 2.27.0
+> >

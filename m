@@ -2,72 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 585DA59174B
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 00:26:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76389591752
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 00:26:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237680AbiHLWZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 18:25:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39658 "EHLO
+        id S237243AbiHLW0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 18:26:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237198AbiHLWZi (ORCPT
+        with ESMTP id S237670AbiHLWZm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 18:25:38 -0400
+        Fri, 12 Aug 2022 18:25:42 -0400
 Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1990613CC9;
-        Fri, 12 Aug 2022 15:25:36 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EAB9165A1;
+        Fri, 12 Aug 2022 15:25:39 -0700 (PDT)
 Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 61B105C00D7;
-        Fri, 12 Aug 2022 18:25:35 -0400 (EDT)
+        by mailout.nyi.internal (Postfix) with ESMTP id D23C05C00D7;
+        Fri, 12 Aug 2022 18:25:38 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Fri, 12 Aug 2022 18:25:35 -0400
+  by compute5.internal (MEProxy); Fri, 12 Aug 2022 18:25:38 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
         :cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1660343135; x=1660429535; bh=rI
-        emY+VOAQgq3T+nOuejCbzaVBU7MiBaAFixMtxCVDE=; b=VTABD5QQCIuAbP0ZEy
-        CQl5OOSVILc5fcAjH/Fh7pBGojIWWMSOGs2pzuObWvT2I0sk/clIsL7ev6PuJp3R
-        4FC3SipH4LJ8BXx/cwnHhAaCb+Odfq5/VdVWU5UQugOlaHXKCCkwWwHVHjCu9jtS
-        doSdDc/hlsZ57Op1d9BvR+e3Kkw900YLsG5l9+OqvuO1FDgccnunvjG7ZlCncM1t
-        WYZt81Dh2KXIaG8grTHO/3rMiSl03ZMAqyLwkqIqxMmJPHpQErIK6TEJuBUDVNYX
-        IQ2XwCupToI9Si/tdeQHAjxsG6ajiKUgeGZec7klIJbBBJBEsACHlowrr2NwgmaG
-        yOOw==
+        :subject:subject:to:to; s=fm2; t=1660343138; x=1660429538; bh=QP
+        RBJNcjcaoF0UH+AoGMng9AecsIOHPCAQZk3jqaN58=; b=O4cN9Z9+zaSipDLRYj
+        CkyGWQPVbDWeCgX/JW4y6OGKFz8AI5cGc6ZC9YaYVjc0gG/Or3921E3iBZ8aF/vh
+        xX9m+IaebcDqcoVdcfm7G8IHlu5NTXAhp9udVGUWsRd2wuFA5at2it8nDQ6tOJDe
+        qrd8PTFgiJt/NEgV32FM9GyL6qVD8O4+UwbSlDopummb7jhO0F1GaaaUz0pFfZED
+        R0NA8z5Xz2KbB4EcJ1JQkeyLT1iB8Wr/Iz2RlGliYjH38ki2na/Dxbbr9NA7csl6
+        4SQg4m7dt6jwleWTNt4ShmFmv0k1qopF+RvH6g6JJ1gfHPslk5uee+Q2BvOA3xgW
+        rpng==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1660343135; x=1660429535; bh=rIemY+VOAQgq3
-        T+nOuejCbzaVBU7MiBaAFixMtxCVDE=; b=V37o8u5bIdtNeFw7gN2YFHBwKM6rY
-        QezqvLtZia49Z1ZoA8E+1YGrI5JhQZNelC7wcUOJ9NtB3KusWMHgCFbxoBEocos5
-        54GMIuTsYxarn84wPyfBxK2ALTK7NiO2X6NcXNTAJEJTHdJTPoTN2h09Iz5kS+Vr
-        csW9GEA2dmQ0dzEPo27GPGOEu+ATBNQRba/k17a85VLWNMVOuPfkrR7MbgRSufBW
-        lgwyn3ZXLwjvmB5U83m5jXQcbccudZA0Y7Ur22XCZko8jZ+VJnj/m1w39Od/sK3W
-        G2D9pKqHRedj2U3Mz7miBQDy8SJAX33n3X59uCkaagkoFoikQeKdSA34A==
-X-ME-Sender: <xms:X9P2YlEtHRetX3xF0NmTPndrDtd3B2rtZt9t2_zhVmVcAZqf85eYlQ>
-    <xme:X9P2YqUtxVqeWePgbfQs3xoOJ-BnQDl0GxLh8ApJS_E00KXLtipCFAl-uWa83hpjC
-    EKwIWDQNFyc-Sznsxc>
-X-ME-Received: <xmr:X9P2YnIFc-6zXN2Ey7ZPr_b_IYa2tbSzU6I049PkDdNVLxus_6OLau2Rh0Lm>
+        :x-sasl-enc; s=fm1; t=1660343138; x=1660429538; bh=QPRBJNcjcaoF0
+        UH+AoGMng9AecsIOHPCAQZk3jqaN58=; b=kPLJCpUUt715ZpTvAagsu7mqQWTG5
+        7u6ddKzbyuZnIbpOpEcog2CxRCeV1+VQWMTzZm8poB6emcqFxDmUacV5gjtavPLe
+        tG2ZDAn5UzuIfomv3dG1LL1egKjni017UeKgxTpP9N1fAMfq9TC+NzSAEWAqaKWA
+        8M10vvA60i/p296kbQXqaHvJVYvIsmvmBeuUti2g3xwKKpZH0HXm9VZ3aGcnt1z0
+        i38XfPONGUo98Yju2YeZ5E7D0Npy9uS50vKoA/nyCYlmsl/BGe5KCUjPrdHtUarU
+        NZhNiXoT/DgKD0PJGka4ehFNY0Baj1BXiLBRo1Aubm27rY4NAuV96JBfA==
+X-ME-Sender: <xms:YtP2YtvDPhKO7_2ML2fmtMDw5PfpMZRBC_4zsjIMimwujgj3JSDsvQ>
+    <xme:YtP2YmdCiujhXwsh-qs7q-xuj4BshYStQcr8C5sEwJ5O1-gQwl0M27W_gxUBw_j_4
+    QstPO_j4dNxQVKXNVY>
+X-ME-Received: <xmr:YtP2Ygwo27pjVgm0rC-yywPgY24G0ISlg-kHEQMCys2rKJ2_DX0dXHACQrAG>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegjedgtdelucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
     ertdertddtnecuhfhrohhmpedfnfhukhgvucffrdculfhonhgvshdfuceolhhukhgvsehl
     jhhonhgvshdruggvvheqnecuggftrfgrthhtvghrnhepgfetfedugfetudeuheetjefhue
-    fggfelleetvdevtefhueeujeefvdegleevhefgnecuvehluhhsthgvrhfuihiivgepuden
+    fggfelleetvdevtefhueeujeefvdegleevhefgnecuvehluhhsthgvrhfuihiivgepvden
     ucfrrghrrghmpehmrghilhhfrhhomheplhhukhgvsehljhhonhgvshdruggvvh
-X-ME-Proxy: <xmx:X9P2YrEp2QP_ZxTlM49x6p9L5s6QR09w9Tx9UrybXUzLmKWivOE2MA>
-    <xmx:X9P2YrWKW-ijtZsz6MsXb8G__G6ZSF27lSqqIcOQ_SZ3LO7my5-q5A>
-    <xmx:X9P2YmNJW4Pv6U5b-w2SBP1AqvIwhyjLtUn2O4dsyPzO5yk99RLEQw>
-    <xmx:X9P2YohZ5wLIlfZfd_VVPcoBxNpqlJ60qkzfcMuDIbhvDnBrPWZfow>
+X-ME-Proxy: <xmx:YtP2YkNBPg22DFYjCTX4aeclxS40_vfVu0bt_psenlPeu28Ed5Jzkg>
+    <xmx:YtP2Yt-_KxLR9a15QrIRJuDTFyg3va7-Mpe66_yz8OX-0CY3sy-pLQ>
+    <xmx:YtP2YkWofc9AKX28SEhYObnK-M-lOrARoYN8gU5edCfe09hUaGJelw>
+    <xmx:YtP2YvJJ1XzwGvK8QAsRlHyOliQE_a78fUT2YjTy-6lerFnACXK3pw>
 Feedback-ID: i5ec1447f:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 12 Aug 2022 18:25:32 -0400 (EDT)
+ 12 Aug 2022 18:25:35 -0400 (EDT)
 From:   "Luke D. Jones" <luke@ljones.dev>
 To:     hdegoede@redhat.com
 Cc:     markgross@kernel.org, platform-driver-x86@vger.kernel.org,
         linux-kernel@vger.kernel.org, "Luke D. Jones" <luke@ljones.dev>
-Subject: [PATCH 4/6] asus-wmi: Refactor disable_gpu attribute
-Date:   Sat, 13 Aug 2022 10:25:07 +1200
-Message-Id: <20220812222509.292692-5-luke@ljones.dev>
+Subject: [PATCH 5/6] asus-wmi: Refactor egpu_enable attribute
+Date:   Sat, 13 Aug 2022 10:25:08 +1200
+Message-Id: <20220812222509.292692-6-luke@ljones.dev>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220812222509.292692-1-luke@ljones.dev>
 References: <20220812222509.292692-1-luke@ljones.dev>
@@ -96,31 +96,34 @@ which simplifies things further.
 
 Signed-off-by: Luke D. Jones <luke@ljones.dev>
 ---
- drivers/platform/x86/asus-wmi.c | 73 +++++++++++----------------------
- 1 file changed, 24 insertions(+), 49 deletions(-)
+ drivers/platform/x86/asus-wmi.c | 84 ++++++++++-----------------------
+ 1 file changed, 26 insertions(+), 58 deletions(-)
 
 diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
-index 0e7fbed8a50d..a72ecc4e33b7 100644
+index a72ecc4e33b7..87b042fac1ce 100644
 --- a/drivers/platform/x86/asus-wmi.c
 +++ b/drivers/platform/x86/asus-wmi.c
-@@ -232,7 +232,6 @@ struct asus_wmi {
- 	bool egpu_enable;
+@@ -228,9 +228,7 @@ struct asus_wmi {
+ 	u8 fan_boost_mode_mask;
+ 	u8 fan_boost_mode;
  
+-	bool egpu_enable_available; // 0 = enable
+-	bool egpu_enable;
+-
++	bool egpu_enable_available;
  	bool dgpu_disable_available;
--	bool dgpu_disable;
  
  	bool throttle_thermal_policy_available;
- 	u8 throttle_thermal_policy_mode;
-@@ -562,47 +561,10 @@ static void lid_flip_tablet_mode_get_state(struct asus_wmi *asus)
- /* dGPU ********************************************************************/
- static int dgpu_disable_check_present(struct asus_wmi *asus)
+@@ -624,48 +622,10 @@ static DEVICE_ATTR_RW(dgpu_disable);
+ /* eGPU ********************************************************************/
+ static int egpu_enable_check_present(struct asus_wmi *asus)
  {
 -	u32 result;
 -	int err;
 -
- 	asus->dgpu_disable_available = false;
+ 	asus->egpu_enable_available = false;
  
--	err = asus_wmi_get_devstate(asus, ASUS_WMI_DEVID_DGPU, &result);
+-	err = asus_wmi_get_devstate(asus, ASUS_WMI_DEVID_EGPU, &result);
 -	if (err) {
 -		if (err == -ENODEV)
 -			return 0;
@@ -128,96 +131,103 @@ index 0e7fbed8a50d..a72ecc4e33b7 100644
 -	}
 -
 -	if (result & ASUS_WMI_DSTS_PRESENCE_BIT) {
-+	if (asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_DGPU))
- 		asus->dgpu_disable_available = true;
--		asus->dgpu_disable = result & ASUS_WMI_DSTS_STATUS_BIT;
++	if (asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_EGPU))
+ 		asus->egpu_enable_available = true;
+-		asus->egpu_enable = result & ASUS_WMI_DSTS_STATUS_BIT;
 -	}
 -
 -	return 0;
 -}
 -
--static int dgpu_disable_write(struct asus_wmi *asus)
+-static int egpu_enable_write(struct asus_wmi *asus)
 -{
 -	u32 retval;
 -	u8 value;
 -	int err;
 -
 -	/* Don't rely on type conversion */
--	value = asus->dgpu_disable ? 1 : 0;
+-	value = asus->egpu_enable ? 1 : 0;
 -
--	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_DGPU, value, &retval);
+-	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_EGPU, value, &retval);
+-
 -	if (err) {
--		pr_warn("Failed to set dgpu disable: %d\n", err);
+-		pr_warn("Failed to set egpu disable: %d\n", err);
 -		return err;
 -	}
 -
 -	if (retval > 1) {
--		pr_warn("Failed to set dgpu disable (retval): 0x%x\n", retval);
+-		pr_warn("Failed to set egpu disable (retval): 0x%x\n", retval);
 -		return -EIO;
 -	}
 -
--	sysfs_notify(&asus->platform_device->dev.kobj, NULL, "dgpu_disable");
+-	sysfs_notify(&asus->platform_device->dev.kobj, NULL, "egpu_enable");
  
  	return 0;
  }
-@@ -611,9 +573,13 @@ static ssize_t dgpu_disable_show(struct device *dev,
+@@ -674,9 +634,13 @@ static ssize_t egpu_enable_show(struct device *dev,
  				   struct device_attribute *attr, char *buf)
  {
  	struct asus_wmi *asus = dev_get_drvdata(dev);
--	u8 mode = asus->dgpu_disable;
+-	bool mode = asus->egpu_enable;
 +	int result;
- 
--	return sysfs_emit(buf, "%d\n", mode);
-+	result = asus_wmi_get_devstate_simple(asus, ASUS_WMI_DEVID_DGPU);
++
++	result = asus_wmi_get_devstate_simple(asus, ASUS_WMI_DEVID_EGPU);
 +	if (result < 0)
 +		return result;
-+
+ 
+-	return sysfs_emit(buf, "%d\n", mode);
 +	return sysfs_emit(buf, "%d\n", result);
  }
  
- /*
-@@ -626,24 +592,33 @@ static ssize_t dgpu_disable_store(struct device *dev,
+ /* The ACPI call to enable the eGPU also disables the internal dGPU */
+@@ -684,29 +648,33 @@ static ssize_t egpu_enable_store(struct device *dev,
  				    struct device_attribute *attr,
  				    const char *buf, size_t count)
  {
--	bool disable;
+-	bool enable;
 -	int result;
 +	int result, err;
-+	u32 disable;
++	u32 enable;
  
  	struct asus_wmi *asus = dev_get_drvdata(dev);
  
--	result = kstrtobool(buf, &disable);
-+	result = kstrtou32(buf, 10, &disable);
- 	if (result)
- 		return result;
- 
--	asus->dgpu_disable = disable;
-+	if (disable > 1)
-+		return -EINVAL;
- 
--	result = dgpu_disable_write(asus);
+-	result = kstrtobool(buf, &enable);
 -	if (result)
 -		return result;
-+	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_DGPU, disable, &result);
++	err = kstrtou32(buf, 10, &enable);
++	if (err)
++		return err;
+ 
+-	asus->egpu_enable = enable;
++	if (enable > 1)
++		return -EINVAL;
+ 
+-	result = egpu_enable_write(asus);
+-	if (result)
+-		return result;
++	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_EGPU, enable, &result);
 +	if (err) {
-+		pr_warn("Failed to set dgpu disable: %d\n", err);
++		pr_warn("Failed to set egpu disable: %d\n", err);
 +		return err;
 +	}
-+
+ 
+-	/* Ensure that the kernel status of dgpu is updated */
+-	result = dgpu_disable_check_present(asus);
+-	if (result)
+-		return result;
 +	if (result > 1) {
-+		pr_warn("Failed to set dgpu disable (result): 0x%x\n", result);
++		pr_warn("Failed to set egpu disable (retval): 0x%x\n", result);
 +		return -EIO;
 +	}
 +
-+	sysfs_notify(&asus->platform_device->dev.kobj, NULL, "dgpu_disable");
++	sysfs_notify(&asus->platform_device->dev.kobj, NULL, "egpu_enable");
  
  	return count;
  }
 -
- static DEVICE_ATTR_RW(dgpu_disable);
+ static DEVICE_ATTR_RW(egpu_enable);
  
- /* eGPU ********************************************************************/
+ /* Battery ********************************************************************/
 -- 
 2.37.1
 

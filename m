@@ -2,176 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 130DC590E43
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 11:39:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 30D77590E46
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 11:41:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237580AbiHLJjw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 05:39:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54290 "EHLO
+        id S237477AbiHLJlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 05:41:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232592AbiHLJju (ORCPT
+        with ESMTP id S229942AbiHLJlB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 05:39:50 -0400
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 914CBAA3E7;
-        Fri, 12 Aug 2022 02:39:48 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4M3zBP1txvz6S30k;
-        Fri, 12 Aug 2022 17:38:21 +0800 (CST)
-Received: from [10.174.176.103] (unknown [10.174.176.103])
-        by APP1 (Coremail) with SMTP id cCh0CgAXHuveH_Zijez0AA--.39747S2;
-        Fri, 12 Aug 2022 17:39:43 +0800 (CST)
-Message-ID: <90e4f8ef-36af-02b6-3204-f68896af0ae9@huaweicloud.com>
-Date:   Fri, 12 Aug 2022 17:39:42 +0800
+        Fri, 12 Aug 2022 05:41:01 -0400
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B63C26F571
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 02:41:00 -0700 (PDT)
+Received: by mail-ej1-f52.google.com with SMTP id y13so1056637ejp.13
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 02:41:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=SDU6eJ9jqxKJGVdNe7phaO+u1XVdpyUB36/gamPBeE4=;
+        b=naV5wG041j30HnfdVQdJwtvC4GoJ+URYkmGna0aYDzBYcXXm7PV3Tt82/8pZdm5oWt
+         hZA4aXChdo5qawzs7QHqqho7GKj9YUNq4k8I6SK6+Yt4TR6jB1Bv04YR6KBm78emMwFC
+         1HqpbFBwjFCI7n4OtO40k0wO6jRlRbAuJQM76ckNNtMm3DLok2oOxHU1k+HoWG+rYK5e
+         cnTHMKOY+4ObRmrrLUmN/hlwPec0Wi/RIsVLuz/m3lvSE87XL2haX2P6AUy5gxEk+SrH
+         9jrI1oWZVfsQhpOQaAa85K7LLuBQaQWfU6e06clz3ZbfyCyEqUaTb8sPQudW45Ge25uC
+         06Sw==
+X-Gm-Message-State: ACgBeo1RhyAZrL4AWX6jNY2/kMjnQfd+OTy86diSBxCWeJnWtTCGWWRN
+        /JX5v36MpB5YUmYqDEM3eXs=
+X-Google-Smtp-Source: AA6agR6yp8EhyZ/kEQafv6W+jji4vrY+cmuoWsi9P/PHSJnKTZJe30zwitzSij6ZwXSuGIvQmVRiFA==
+X-Received: by 2002:a17:907:762f:b0:730:95d9:9955 with SMTP id jy15-20020a170907762f00b0073095d99955mr2076982ejc.505.1660297259332;
+        Fri, 12 Aug 2022 02:40:59 -0700 (PDT)
+Received: from localhost (fwdproxy-cln-007.fbsv.net. [2a03:2880:31ff:7::face:b00c])
+        by smtp.gmail.com with ESMTPSA id r9-20020a1709061ba900b00730c3923a2csm627784ejg.11.2022.08.12.02.40.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Aug 2022 02:40:58 -0700 (PDT)
+From:   Breno Leitao <leitao@debian.org>
+To:     arnd@arndb.de, gregkh@linuxfoundation.org
+Cc:     scott.branden@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
+        linux-kernel@vger.kernel.org, Kernel-team@fb.com
+Subject: [RESEND PATCH] misc: bcm-vk: Specify the minimum number of IRQ vecs
+Date:   Fri, 12 Aug 2022 02:40:11 -0700
+Message-Id: <20220812094011.4064729-1-leitao@debian.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <e416c587-d3cc-947a-7336-2c1954e2e432@broadcom.com>
+References: <e416c587-d3cc-947a-7336-2c1954e2e432@broadcom.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Subject: Re: Question: consult patch
-From:   "zhangwensheng (E)" <zhangwensheng@huaweicloud.com>
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        Lee Jones <lee@kernel.org>, yi.zhang@huawei.com
-Reply-To: zhangwensheng@huaweicloud.com, zhangwensheng@huaweicloud.com
-References: <420a6c4a-e526-4e8b-d5bd-563c40aa94e1@huaweicloud.com>
- <YvXo1uCFA57t89Nv@infradead.org>
- <902a45fe-1117-3f6a-b7b1-9b155e5dd984@huaweicloud.com>
- <YvYAmmaJgvydex4p@google.com>
- <f179ff36-e511-1bad-078f-71b8b19d404e@huaweicloud.com>
-In-Reply-To: <f179ff36-e511-1bad-078f-71b8b19d404e@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cCh0CgAXHuveH_Zijez0AA--.39747S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxZF17WF15XFWxCF45Cr45Jrb_yoWrXw15pF
-        WrJF1ayrW8Jr48Kay7tr1UXFyjyr12qw1rXryfJFy8Jrn0gw1a9F4xXr1j9F18Ar4kJr48
-        tFy5JrZrZryUAaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UE-erUUUUU=
-X-CM-SenderInfo: x2kd0wpzhq2xhhqjqx5xdzvxpfor3voofrz/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-thanks for your reply!
+During bcm_vk_probe(), pci_alloc_irq_vectors() is called passing the
+number of IRQ vectors as 1, but, later, check how many IRQ vectors it
+got, and fails if it is smaller than VK_MSIX_IRQ_MIN_REQ.
 
-在 2022/8/12 15:38, zhangwensheng (E) 写道:
-> Hi Lee
->
-> I'm sorry I didn't fully understand you. did you mean the CVE
-> was caused by a commit which was applied to an internal kernel
-> version?  What commitment can be displayed? and I know that
-> mainline do not have the problem because of some code refactoring,
-> But are there any problems with some other stable branches?
->
-> thank you very much!
-> Wensheng
->
-> 在 2022/8/12 15:26, Lee Jones 写道:
->> On Fri, 12 Aug 2022, zhangwensheng (E) wrote:
->>
->>> Hi
->>>
->>> In CVE list last week, there is a new cve reported in asop 4.14 like 
->>> below:
->>> Reference link: 
->>> https://lore.kernel.org/all/CAODzB9rgMexvLjE=WuTm+SN8SfUggaZgWG-aBcy6cotppju6mw@mail.gmail.com/T/
->>>
->>> ---
->>> CVE-2022-20158: mm: backing-dev: Take a reference to the bdi in use to
->>> prevent UAF
->>>
->>> CVSS v3 score is not assigned.
->>>
->>> AOSP kernel 4.14 contains following 2 patches.
->>> - 69e8f03c5ced3e4e6fb4181f4dac185104e3420b ("mm: backing-dev: Take a
->>> reference to the bdi in use to prevent UAF")
->>> - 80d91b86a199798ee2321a0ab0f09e6e12764678 ("fs: explicitly unregister
->>> per-superblock BDIs")
->>>
->>> The first commit 69e8f03("mm: backing-dev: Take a reference to the bdi
->>> in use to prevent UAF") is not merged in the mainline and stable
->>> kernels.
->>> Commit 80d91b8 was merged in 5.16-rc1(commit hash is
->>> 0b3ea0926afb8dde70cfab00316ae0a70b93a7cc) which requires commit
->>> c6fd3ac ("mm: export bdi_unregister") that exports symbol of
->>> bdi_unregister().
->>>
->>> Fixed status
->>> mainline: [0b3ea0926afb8dde70cfab00316ae0a70b93a7cc]
->>> ---
->>>
->>> As mentioned above, patch 69e8f03c5ced ("mm: backing-dev: Take a
->>> reference to the bdi in use to prevent UAF") in asop 4.14 can fix
->>> a null dereference problem, form my analysis, may like below:
->>>
->>> blk_cleanup_queue
->>>      blk_put_queue
->>>          kobject_put(&q->kobj)
->>>                  blk_release_queue
->>>                      blk_exit_queue
->>>                          bdi_put
->>>                              release_bdi  // bdi -> null
->>> del_gendisk
->>>      bdi_unregister(disk->queue->backing_dev_info) // null -> reference
->>>
->>>  From my analysis, In asop 4.14 kernel, in loop_remove function, 
->>> there is
->>> such a timing that executing "blk_cleanup_queue" first and then
->>> "del_gendisk".
->>> but because of the refcnt of queue will add by hte line
->>> "WARN_ON_ONCE(!blk_get_queue(disk->queue));" in "device_add_disk", 
->>> which may
->>> not result in "bdi_put" releasing bdi  in "blk_cleanup_queue".
->>>
->>> I'm not sure where the problem is, so I want to ask Lee Jones who 
->>> sent this
->>> patch
->>> for clarification.
->>>
->>> Thanks!
->>>
->>> Wensheng
->>>
->>> 在 2022/8/12 13:44, Christoph Hellwig 写道:
->>>> On Fri, Aug 12, 2022 at 11:34:59AM +0800, zhangwensheng (E) wrote:
->>>>> Hi Lee ：
->>>>>       I saw your patch because of CVE-2022-20158, the patch like 
->>>>> below:
->>>>>
->>>>> ---
->>>>>       mm: backing-dev: Take a reference to the bdi in use to 
->>>>> prevent UAF
->>>> I can't see that patch anywhere, and I've not seen an bug report 
->>>> for it.
->>>>
->>>>>       Because of a distinct lack of locking and/or reference taking,
->>>>>       blk_cleanup_queue() puts the final taken reference to the 
->>>>> bdi, which
->>>> .. and blk_cleanup_queue also is gone upstream.
->>>>
->>>> What am I missing?
->> The issue reported in the aforementioned CVE was caused by a commit
->> which was applied to an internal, device specific repository. One
->> that has never existed in Mainline.  I failed to reproduce the KASAN
->> report in any upstream or stable tree without the offending patch
->> applied.  The issue was fixed in all affected internal trees.
->>
->
-> .
+The most appropriated way to do it is setting the 'min_vecs' param as
+VK_MSIX_IRQ_MIN_REQ, instead of one. pci_alloc_irq_vectors() should
+know the requirements when called.
+
+The test was done by just loading this module on a machine with a
+Valkyrie offload engine hardware.
+
+Signed-off-by: Breno Leitao <leitao@debian.org>
+Acked-by: Scott Branden <scott.branden@broadcom.com>
+---
+ drivers/misc/bcm-vk/bcm_vk_dev.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/misc/bcm-vk/bcm_vk_dev.c b/drivers/misc/bcm-vk/bcm_vk_dev.c
+index a3a82ebbc699..d4a96137728d 100644
+--- a/drivers/misc/bcm-vk/bcm_vk_dev.c
++++ b/drivers/misc/bcm-vk/bcm_vk_dev.c
+@@ -1339,7 +1339,7 @@ static int bcm_vk_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	pci_set_drvdata(pdev, vk);
+ 
+ 	irq = pci_alloc_irq_vectors(pdev,
+-				    1,
++				    VK_MSIX_IRQ_MIN_REQ,
+ 				    VK_MSIX_IRQ_MAX,
+ 				    PCI_IRQ_MSI | PCI_IRQ_MSIX);
+ 
+-- 
+2.30.2
 

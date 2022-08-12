@@ -2,144 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CA1F5915F4
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 21:28:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E8535915F7
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 21:29:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237414AbiHLT13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 15:27:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56498 "EHLO
+        id S233779AbiHLT2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 15:28:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236041AbiHLT1Z (ORCPT
+        with ESMTP id S237455AbiHLT2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 15:27:25 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0F6BB08AD
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 12:27:24 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id j5so2184180oih.6
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 12:27:24 -0700 (PDT)
+        Fri, 12 Aug 2022 15:28:22 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10ED1B08AD
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 12:28:21 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id u1so2586533lfq.4
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 12:28:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=RFQCcD+o7jwAXDtp4U1/kPCj0a6x0GtskgYZEyvj9NE=;
-        b=VN5AtKQ/0zk7x64khzHNWqzjm0YpR7+d4JF2kbafdw/v3J3hYRIdcNzqJ8FPF4RhUs
-         QxLkUT7lD4USFVw1hxOGVaETi0LiAOQ7Se5IDMBtHLQrqUhWO9QFA1vmg/sR7Jva4mUN
-         bXy3mS5hSvGH8qcmVfFGwtUzPTOuRVmUxe35w4vwvoeQRrC2muArkWZIRADALVts/l9C
-         r0DlbDCVBXh4HDqzsk0LtHtUdWg1S2ZSvpJr8uxePjMrBacUFb0muvGa4vGkooI5euss
-         QoKyMZdVvCNs8rQQAH6gfCe3pffgGNcqP5ZaavIFXTBtopeW3+iI8Oi2RHV4K9kHIxKw
-         ADXw==
+        d=kudzu-us.20210112.gappssmtp.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=WmUtPVXDzYYViofItgm5OWBWBvLbosAnVrRqXx4fzYg=;
+        b=2OV8PHEgsh0BJ5akjEDeqMXgSBv3lwpcGO9G5PjBy08miozmpeXKh75fG9k6rxrbWY
+         F86FbNj3txn9ys2fmeriUzcpI2z2hEL/wYym7Xo5drjG3rKHuLFz1JdqktIzlYNrpSCe
+         yMk/AzWYrgF8MqYY9jv6huCp9EgVzd+K2WQccCp7xucTrnnMeQIgq6M+aua3NCIIBSPB
+         3ikS1DlidVuk8HjkT8bfem9J08Kle7B1xn2JIl2G8NaVLTrkOoHs/fY9A198AVjXWAuf
+         pwFYrAVd+Iupxqr3wnx8o4xREWLamHDikpX/NvObOYzoAMy8pFkx3QHJkt/GngwId5h+
+         w+QQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=RFQCcD+o7jwAXDtp4U1/kPCj0a6x0GtskgYZEyvj9NE=;
-        b=HXEqY+Do0lyoP7uItWWKludpd8pHfnVSesVgNbBiBHs5xw3OJ38DjYBLqlN5vpJOk8
-         kWOToANyfn9qI/WfKZ9tnGD8OL3bAq8gd2nEarl9/RPucQTs34bj6PmHgk9IeMQ/wUp4
-         AsWY6DyieOEZfYafh5Sfa47VJ1j621ELh9VPmBb8i+QV0xbzFgO15M4TJALOWStcN/vM
-         XzmDHJueihV/SivzyB4034lm3TeR2aS0YcqYaDPLxggUFcVlRWAeGggNVk2XQx6BMorL
-         inSrDD1tFv8IV9r7cjcgpFJVlXJiT6hiFbS5XSPv7xkhl3Lb8KKtrOb5rtDNqRAFtGp2
-         Xn7A==
-X-Gm-Message-State: ACgBeo2tMHkRI/VXfET8PAL9Wohu1dEkho+6Rrk82yjnsV4Fs98IxXFt
-        0KwjG1ed+cQ3D/BitNG2CZWsMMjChXMwjIxY/9CX0w==
-X-Google-Smtp-Source: AA6agR6UTYEA+QjXIoZYrda4A+K5joJ6JqfQgfoRbqeFCe5cFOm100RmivhhsKSDVQ65QXNMpukAivi55f0ZGzlLtNY=
-X-Received: by 2002:a05:6808:150f:b0:343:3202:91cf with SMTP id
- u15-20020a056808150f00b00343320291cfmr5737538oiw.112.1660332443800; Fri, 12
- Aug 2022 12:27:23 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=WmUtPVXDzYYViofItgm5OWBWBvLbosAnVrRqXx4fzYg=;
+        b=4viuu+sd+6kxjEW8Qui6wKzKc3aurz41lOg5q7KSrtfVsKPSMaXMxouyz7lJhOzCZT
+         vOa6B2My3219XYMnbWBzz2jRO6uAmGaY6mmOBJ32Yo4jP4eVID0TMfqt2sFWa7V8UDnx
+         zwhTTZFatWYlHweJa1QDDnFUCnze5lTwp8Cr3v+yS5CqoRj1HxJTdUTyPNRx4USL7jKu
+         zGVU2wOoJquFEenWs0+jwv4B1IvvtSoumv/jiDBlu3xj7LvFOQcbvir3Lco/kThUF6L2
+         tysalgM2cmf+DZFUIjt2XFmT3VCRFDEJhOotVvn1f5KDdlHpvu2+28DfLgDiNl62Krzx
+         1Y3Q==
+X-Gm-Message-State: ACgBeo0CIYoj4CCmgoH/wy0k2gvNNA+v8BGpM2U9+2vDh0JZ9Er+t+CV
+        nf4NM9bx0PwnPZIhczUqMSsUY6/FzqvpDWQMo3uoPg==
+X-Google-Smtp-Source: AA6agR5E8qo2iM9exMW3SiYuxVnODbdG1EDkqjmcZGLxU36XqU0w6V0nGASn7tM9/yFp1PEAYkGVx4FhfZU5ed54eAE=
+X-Received: by 2002:a05:6512:e8b:b0:48a:d7f8:a102 with SMTP id
+ bi11-20020a0565120e8b00b0048ad7f8a102mr1610719lfb.60.1660332499310; Fri, 12
+ Aug 2022 12:28:19 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220812014706.43409-1-yuan.yao@intel.com> <20220812020206.foknky4hghgsadby@yy-desk-7060>
-In-Reply-To: <20220812020206.foknky4hghgsadby@yy-desk-7060>
-From:   Jim Mattson <jmattson@google.com>
-Date:   Fri, 12 Aug 2022 12:27:12 -0700
-Message-ID: <CALMp9eSj3SMRkSzgFcFit1up7T8-Wmu7u3ePMVfkqty6CtR6kA@mail.gmail.com>
-Subject: Re: [PATCH 1/1] kvm: nVMX: Checks "VMCS shadowing" with VMCS link
- pointer for non-root mode VM{READ,WRITE}
-To:     Yuan Yao <yuan.yao@linux.intel.com>
-Cc:     Yuan Yao <yuan.yao@intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Jon Cargille <jcargill@google.com>,
-        Peter Shier <pshier@google.com>,
-        Oliver Upton <oupton@google.com>
+References: <YvZgJ4IGEG8levOA@kudzu.us> <20220812192124.GA1678588@bhelgaas>
+In-Reply-To: <20220812192124.GA1678588@bhelgaas>
+From:   Jon Mason <jdmason@kudzu.us>
+Date:   Fri, 12 Aug 2022 15:28:05 -0400
+Message-ID: <CAPoiz9wzCSRtxZ404BpLM-SA0Mv3OAZwJopreiH84ZuE1rVJKg@mail.gmail.com>
+Subject: Re: [PATCH v3] PCI: endpoint: pci-epf-vntb: reduce several globals to statics
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Tom Rix <trix@redhat.com>, kishon@ti.com, lpieralisi@kernel.org,
+        kw@linux.com, bhelgaas@google.com, Frank.Li@nxp.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 7:02 PM Yuan Yao <yuan.yao@linux.intel.com> wrote:
+On Fri, Aug 12, 2022 at 3:21 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
 >
-> On Fri, Aug 12, 2022 at 09:47:06AM +0800, Yuan Yao wrote:
-> > Add checking to VMCS12's "VMCS shadowing", make sure the checking of
-> > VMCS12's vmcs_link_pointer for non-root mode VM{READ,WRITE} happens
-> > only if VMCS12's "VMCS shadowing" is 1.
+> On Fri, Aug 12, 2022 at 10:13:59AM -0400, Jon Mason wrote:
+> > On Tue, Jul 12, 2022 at 03:05:27PM -0500, Bjorn Helgaas wrote:
+> > > Handled via Jon, I guess?
+> > >
+> > > I'm unclear on the future direction of pci-epf-vntb.c.  Jon, are you
+> > > signing up to maintain this?  MAINTAINERS doesn't seem to reflect
+> > > that, even in next-20220712, so you're not being copied on everything.
+> > >
+> > > If you are planning to merge and maintain this file, it would be
+> > > helpful to me if you acknowledge patches you merge so I know to ignore
+> > > them.
 > >
-> > SDM says that for non-root mode the VMCS's "VMCS shadowing" must be 1
-> > (and the corresponding bits in VMREAD/VMWRITE bitmap must be 0) when
-> > condition checking of [B] is reached(please refer [A]), which means
-> > checking to VMCS link pointer for non-root mode VM{READ,WRITE} should
-> > happen only when "VMCS shadowing" =3D 1.
-> >
-> > Description from SDM Vol3(April 2022) Chapter 30.3 VMREAD/VMWRITE:
-> >
-> > IF (not in VMX operation)
-> >    or (CR0.PE =3D 0)
-> >    or (RFLAGS.VM =3D 1)
-> >    or (IA32_EFER.LMA =3D 1 and CS.L =3D 0)
-> > THEN #UD;
-> > ELSIF in VMX non-root operation
-> >       AND (=E2=80=9CVMCS shadowing=E2=80=9D is 0 OR
-> >            source operand sets bits in range 63:15 OR
-> >            VMREAD bit corresponding to bits 14:0 of source
-> >            operand is 1)  <------[A]
-> > THEN VMexit;
-> > ELSIF CPL > 0
-> > THEN #GP(0);
-> > ELSIF (in VMX root operation AND current-VMCS pointer is not valid) OR
-> >       (in VMX non-root operation AND VMCS link pointer is not valid)
-> > THEN VMfailInvalid;  <------ [B]
-> > ...
-> >
-> > Fixes: dd2d6042b7f4 ("kvm: nVMX: VMWRITE checks VMCS-link pointer befor=
-e VMCS field")
-> > Signed-off-by: Yuan Yao <yuan.yao@intel.com>
-> > ---
-> >  arch/x86/kvm/vmx/nested.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-> > index ddd4367d4826..30685be54c5d 100644
-> > --- a/arch/x86/kvm/vmx/nested.c
-> > +++ b/arch/x86/kvm/vmx/nested.c
-> > @@ -5123,6 +5123,7 @@ static int handle_vmread(struct kvm_vcpu *vcpu)
-> >                */
-> >               if (vmx->nested.current_vmptr =3D=3D INVALID_GPA ||
-> >                   (is_guest_mode(vcpu) &&
-> > +                  nested_cpu_has_shadow_vmcs(vcpu) &&
+> > I massively dropped the ball on all the EPF stuff.  I appologize profusely.
 >
-> Oops, should be "nested_cpu_has_shadow_vmcs(get_vmcs12(vcpu))".
+> No worries, sounds like you're getting everything sorted out :)
 >
-> >                    get_vmcs12(vcpu)->vmcs_link_pointer =3D=3D INVALID_G=
-PA))
-> >                       return nested_vmx_failInvalid(vcpu);
-> >
-> > @@ -5233,6 +5234,7 @@ static int handle_vmwrite(struct kvm_vcpu *vcpu)
-> >        */
-> >       if (vmx->nested.current_vmptr =3D=3D INVALID_GPA ||
-> >           (is_guest_mode(vcpu) &&
-> > +          nested_cpu_has_shadow_vmcs(vcpu) &&
+> > I'm pulling it into my ntb tree bcause of the patch dependencies.  If
+> > you want me to own this stuff because it has ntb in it, then I can do
+> > a matainers entry to reflect it.  My assumption is that because it is
+> > under the drivers/pci umbrella it is yours (unless you want me to own
+> > it).  100% defer to your decision.
 >
-> Ditto.
+> This patch dependency thing feels like a one-time or at least unusual
+> situation.  Unless it becomes a problem, I think it makes sense to
+> keep the drivers/pci umbrella instead of carving bits out of the
+> middle.
 >
-> >            get_vmcs12(vcpu)->vmcs_link_pointer =3D=3D INVALID_GPA))
-> >               return nested_vmx_failInvalid(vcpu);
-> >
-> > --
-> > 2.27.0
-> >
+> Even if I continue to merge everything under drivers/pci, maybe we
+> should consider an update like this just so you get cc'd on updates to
+> these files?
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 08a5d70ceef9..5bafe7e8c2b2 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -14466,6 +14466,7 @@ W:      https://github.com/jonmason/ntb/wiki
+>  T:     git git://github.com/jonmason/ntb.git
+>  F:     drivers/net/ntb_netdev.c
+>  F:     drivers/ntb/
+> +F:     drivers/pci/endpoint/functions/pci-epf-*ntb.c
+>  F:     include/linux/ntb.h
+>  F:     include/linux/ntb_transport.h
+>  F:     tools/testing/selftests/ntb/
+
+Works for me.  I can do a patch to add this line to maintainers, send
+it to the people on this thread, and pull it into my pending pull
+request.
+
+Thanks,
+Jon

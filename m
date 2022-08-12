@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D48AC591446
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 18:53:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28882591447
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 18:53:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236322AbiHLQxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 12:53:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52732 "EHLO
+        id S238991AbiHLQxP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 12:53:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239118AbiHLQxF (ORCPT
+        with ESMTP id S239396AbiHLQxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 12 Aug 2022 12:53:05 -0400
 Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8E8AACA05;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C83ACA0E;
         Fri, 12 Aug 2022 09:52:58 -0700 (PDT)
 Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mail.sberdevices.ru (Postfix) with ESMTP id 839F05FD08;
+        by mail.sberdevices.ru (Postfix) with ESMTP id B96655FD09;
         Fri, 12 Aug 2022 19:52:55 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
         s=mail; t=1660323175;
-        bh=kNxXhkdr74OhUzWIPaRNsxTjWoPYvj2BCzIs18HaIVo=;
+        bh=bBzOl1ozVTghtx6a1x8+yHWmy394M9SjIp1tfXubAc0=;
         h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
-        b=DEuwsuKrK0IUE/fmPNRTH7bHheRw7wS1s8L53Sl+UjpBa6xdpAZDmjbGMxb036Bdg
-         6B+OkILYFXRLmIUsWzdAjaZvEaH2ml6PrpeMLzix2uxqipqsHh7rTYiQdJjK2LvQvl
-         /4wicZ3i/UGvJQEPLJ5c1CN268hOkIuHzy9N+vVueef4hFb0oVnyE6Latp82+nXWaC
-         +qzwpgKE4n++0A3IP4zaSbyjv0pefOO0x6Kb8Q8IYRJ6Oniy9lMaXPluDjvZeu0m9/
-         Zq4xhUnuB79fGjCUsGffGWayE9lQC8U/HqgFu9PMAv7yNMFfU99YXvBnG0tNmndf+J
-         37/2h7PcJNwtw==
+        b=bsRIUY5V9mKHcl6TvhnxrkHLjXbYBiGSNaM8v3QYUrJhtEk+fGOLOw7kRWodYcMLX
+         eMQ0e5jWmHYMv7Ou4fE85YoyOHW1qoKpugmwnOISJEETAl+yjaSO4hXbm7xA7WuiNG
+         1sUE4ky8GOcEoDMf2r6mBzPazOzzItqcCAblcyjEMrY6wfMflaM6O7MGQxoNKJHDLl
+         mjHZajna10f6H7KJQ7Dtsobdsa69aHI6+3ltRJ2oTeRX2In9qbXTibl6OvEBL49R/R
+         Rh70SG8ql4deMwtdFoW9fN3s+NA8JJ6B4WbwNgo3gNJiA8oyofCd8URG9vOP49xHxP
+         L/qrQ5Zwhh9sA==
 Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
         by mail.sberdevices.ru (Postfix) with ESMTP;
         Fri, 12 Aug 2022 19:52:55 +0300 (MSK)
@@ -55,11 +55,11 @@ CC:     "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
         "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         Dmitry Rokosov <DDRokosov@sberdevices.ru>
-Subject: [PATCH v5 1/7] lib/string_helpers: Add str_read_write() helper
-Thread-Topic: [PATCH v5 1/7] lib/string_helpers: Add str_read_write() helper
-Thread-Index: AQHYrmvlXLMGJM4ctk2gw8SerH637Q==
-Date:   Fri, 12 Aug 2022 16:52:25 +0000
-Message-ID: <20220812165243.22177-2-ddrokosov@sberdevices.ru>
+Subject: [PATCH v5 2/7] units: complement the set of Hz units
+Thread-Topic: [PATCH v5 2/7] units: complement the set of Hz units
+Thread-Index: AQHYrmvmE6n+ZChG30GdF46x+XWXgw==
+Date:   Fri, 12 Aug 2022 16:52:26 +0000
+Message-ID: <20220812165243.22177-3-ddrokosov@sberdevices.ru>
 References: <20220812165243.22177-1-ddrokosov@sberdevices.ru>
 In-Reply-To: <20220812165243.22177-1-ddrokosov@sberdevices.ru>
 Accept-Language: ru-RU, en-US
@@ -86,30 +86,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Currently, Hz units do not have milli, micro and nano Hz coefficients.
+Some drivers (IIO especially) use their analogues to calculate
+appropriate Hz values. This patch includes them to units.h definitions,
+so they can be used from different kernel places.
 
-Add str_read_write() helper to return 'read' or 'write' string literal.
-
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
 ---
- include/linux/string_helpers.h | 5 +++++
- 1 file changed, 5 insertions(+)
+ include/linux/units.h | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/include/linux/string_helpers.h b/include/linux/string_helpers.=
-h
-index 4d72258d42fd..9e22cd78f3b8 100644
---- a/include/linux/string_helpers.h
-+++ b/include/linux/string_helpers.h
-@@ -126,4 +126,9 @@ static inline const char *str_enabled_disabled(bool v)
- 	return v ? "enabled" : "disabled";
- }
+diff --git a/include/linux/units.h b/include/linux/units.h
+index 681fc652e3d7..2793a41e73a2 100644
+--- a/include/linux/units.h
++++ b/include/linux/units.h
+@@ -20,6 +20,9 @@
+ #define PICO	1000000000000ULL
+ #define FEMTO	1000000000000000ULL
 =20
-+static inline const char *str_read_write(bool v)
-+{
-+	return v ? "read" : "write";
-+}
-+
- #endif
++#define NANOHZ_PER_HZ		1000000000UL
++#define MICROHZ_PER_HZ		1000000UL
++#define MILLIHZ_PER_HZ		1000UL
+ #define HZ_PER_KHZ		1000UL
+ #define KHZ_PER_MHZ		1000UL
+ #define HZ_PER_MHZ		1000000UL
 --=20
 2.36.0

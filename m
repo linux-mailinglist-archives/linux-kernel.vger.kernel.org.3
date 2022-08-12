@@ -2,138 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A80EA591521
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 19:58:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3884E591526
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 19:59:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238417AbiHLR6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 13:58:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33888 "EHLO
+        id S232434AbiHLR7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 13:59:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231526AbiHLR6D (ORCPT
+        with ESMTP id S234019AbiHLR7d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 13:58:03 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DD4B2859;
-        Fri, 12 Aug 2022 10:58:02 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id h13so1955855wrf.6;
-        Fri, 12 Aug 2022 10:58:02 -0700 (PDT)
+        Fri, 12 Aug 2022 13:59:33 -0400
+Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C319EB285C
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 10:59:31 -0700 (PDT)
+Received: by mail-oi1-x235.google.com with SMTP id w196so1929333oiw.10
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 10:59:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=w8rPxxUwax5JSBYc+MunKfzJoBwcTejD8FTqXrjwB9Q=;
-        b=ZwbNXCMdTWEOw1KTNDeKg360UJPG1HCsisp9+uIXW+AigUK7JmFTPhWn7FWmgINCpT
-         rY7PLkCGfIgguc5MJ32GWWbMwoRGbrciy52PmMX1/5lfI+D30PYnOCwwVfBKBtPaUO/j
-         jYYLJn+GgsmN4Sun3E86Ttf/CyJOHKdJX0obiuUQjFrYu9dJaoyFzwwcqIuPBGKsMxPe
-         M72hExseMtt+PHjI93iQSBcrxtHFZL/mjeY81Pz5VAWFt9PzKIBklpHqsfs4HOpWlXKp
-         1568kstFdwaTNQgqRboZuJDIWBp5MvvF5h0Q7MacN0YSXLEmyowtVOQpKpMF/mqMtWQ3
-         dQyw==
+        d=toxicpanda-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=wx/ERrMm2Bc5z30Jh0fJguExB7AP6Vqb6sZ78FbzlIc=;
+        b=12w+EJB/sEwbLd/xs/CAahxStbaWmmBiZ7/6sAa+6CdJU6cAoJDIcIQxxGnUkjjaQM
+         0dzpodgbSDalE87E63cYL5a30A4zzFWgCYThxsuvujt9OsBO029gJ1VNywAuml4DWEeF
+         cnwybzvzR5T7Ds3PfcKN/Yu9v8olhe2ltwd449JZ0eEK7UTkueSsPsp3474kso5SrwHJ
+         kzjWvd/0nsFNv18juyeNMLzuLL7RLqlru6ncMhITBKEKslrDmby3/WAbTig1hS1KNX6/
+         iBGHNHHMTs7uTXOrse9MG1P6FCYAV2AzapLDR4W7xWlAd5/SzMQL339eUI1985/YtYp8
+         Ntng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=w8rPxxUwax5JSBYc+MunKfzJoBwcTejD8FTqXrjwB9Q=;
-        b=D14ZPtlzlq8c7e+6mQJOgk8oUVYy9cc9vIVSzKd4gEbgaO852DMrMsDOxA4o8NOIlO
-         oNUq/1WKBfV3z6UgyYd8Vc2agud904zDIqPJUSWhD8kt6LeHOztAx/oZHjI2C0wxSp8z
-         7tY/0Jnfi8+3YMy+tCdB2wYM0Bss+ocVDntlwZAQtzi/3+XWSCXKO+TzgK/HjIs5eRP5
-         zJb14VBHMZdNpDkxN5r/rEeOnRiP1UE/hJHZ6nh3KmJgB8ZEk1DMSZroFshLx654Nkl1
-         kXxebbO63ETqJ/rSzl5K7Ld5vzKAUEpVz7CCH8NCv5dI9JrEz5Ogl27KaEcQzc76hWdE
-         EwAw==
-X-Gm-Message-State: ACgBeo0vutrv3g2Q/YvFDBCMTk0gIuwhQiGaC1OZTLh3KZR88FKrUOcT
-        GBD0O9DkOFd8lsuM9ylRK7X6WmtZLj0=
-X-Google-Smtp-Source: AA6agR5BpjeASKsLrsRErii9wRhEEOlS5DHluRVxLpyj5mSQJt2UYcFvMbrTkLZMSIXhaY7aQVzWcA==
-X-Received: by 2002:a5d:5848:0:b0:222:c8cd:288 with SMTP id i8-20020a5d5848000000b00222c8cd0288mr2788260wrf.34.1660327081009;
-        Fri, 12 Aug 2022 10:58:01 -0700 (PDT)
-Received: from localhost.localdomain (host-79-53-105-123.retail.telecomitalia.it. [79.53.105.123])
-        by smtp.gmail.com with ESMTPSA id c3-20020adffb03000000b002206236ab3dsm129831wrr.3.2022.08.12.10.57.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Aug 2022 10:57:59 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Nirmoy Das <nirmoy.das@amd.com>,
-        Jonathan Kim <jonathan.kim@amd.com>,
-        Philip Yang <Philip.Yang@amd.com>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Zack Rusin <zackr@vmware.com>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        Ira Weiny <ira.weiny@intel.com>
-Subject: [PATCH] drm/amd/amdgpu: Replace kmap() with kmap_local_page()
-Date:   Fri, 12 Aug 2022 19:57:53 +0200
-Message-Id: <20220812175753.22926-1-fmdefrancesco@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=wx/ERrMm2Bc5z30Jh0fJguExB7AP6Vqb6sZ78FbzlIc=;
+        b=dO5tWhhc7RVLWx2g4JaSGjk91BOkhoRHG2Dl1M6JuiVtYhiiOwqZM+AQns8t3SH2m2
+         0AfIBvuPHB9bmOz8No0MYa1w9d2P8uXe16K+tyL8YHCZnrBLseQ4aKrMOAoCGY5VzTeR
+         ECErOvA35sXfTjLO3u1tvXCoy8j1CRk1ZBx+a9YYAIOvuHkZ/ef7FYQxeCSRRlJFuqUu
+         c4mx/1l5UcZl8XKEVTTDYW4FaBqZeOfhxSr4g5UKSuGidRe3wYlAbKOR7BZNqFyi7geH
+         7O2nIIilSXHDI6BFWqK5y5sVfmrI632omTt5h+2tXX4t5Z7rL7+O9e6rYVe5jZl/RCfB
+         yy3Q==
+X-Gm-Message-State: ACgBeo0E1L9XLTHPkS/+O4yy4WQSHB2adhMnhgkk0/bGs2RqzB0Ozxzc
+        DVmincV4fzrcvuvTz3ZsC12k6600XhG0oXG0yRLVCw==
+X-Google-Smtp-Source: AA6agR4H/4HEp5HiQ3K7eMQPJk/D2MqeGwsNgF263hHmfAZK8ZjNFpJcVSGRNt8i/L2ebhOBPa9x8Ov2gn1R7NNPLpI=
+X-Received: by 2002:aca:a913:0:b0:343:fe9:951a with SMTP id
+ s19-20020acaa913000000b003430fe9951amr6118000oie.94.1660327170882; Fri, 12
+ Aug 2022 10:59:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <e38aa76d-6034-4dde-8624-df1745bb17fc@www.fastmail.com>
+ <YvPvghdv6lzVRm/S@localhost.localdomain> <2220d403-e443-4e60-b7c3-d149e402c13e@www.fastmail.com>
+ <cb1521d5-8b07-48d8-8b88-ca078828cf69@www.fastmail.com> <ad78a32c-7790-4e21-be9f-81c5848a4953@www.fastmail.com>
+ <e36fe80f-a33b-4750-b593-3108ba169611@www.fastmail.com>
+In-Reply-To: <e36fe80f-a33b-4750-b593-3108ba169611@www.fastmail.com>
+From:   Josef Bacik <josef@toxicpanda.com>
+Date:   Fri, 12 Aug 2022 13:59:19 -0400
+Message-ID: <CAEzrpqe3rRTvH=s+-aXTtupn-XaCxe0=KUe_iQfEyHWp-pXb5w@mail.gmail.com>
+Subject: Re: stalling IO regression since linux 5.12, through 5.18
+To:     Chris Murphy <lists@colorremedies.com>
+Cc:     Paolo Valente <paolo.valente@linaro.org>,
+        Btrfs BTRFS <linux-btrfs@vger.kernel.org>,
+        Linux-RAID <linux-raid@vger.kernel.org>,
+        linux-block <linux-block@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,SUSPICIOUS_RECIPS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kmap() is being deprecated in favor of kmap_local_page().
+On Fri, Aug 12, 2022 at 12:05 PM Chris Murphy <lists@colorremedies.com> wro=
+te:
+>
+>
+>
+> On Wed, Aug 10, 2022, at 3:34 PM, Chris Murphy wrote:
+> > Booted with cgroup_disable=3Dio, and confirmed cat
+> > /sys/fs/cgroup/cgroup.controllers does not list io.
+>
+> The problem still reproduces with the cgroup IO controller disabled.
+>
+> On a whim, I decided to switch the IO scheduler from Fedora's default bfq=
+ for rotating drives to mq-deadline. The problem does not reproduce for 15+=
+ hours, which is not 100% conclusive but probably 99% conclusive. I then sw=
+itched live while running the workload to bfq on all eight drives, and with=
+in 10 minutes the system cratered, all new commands just hang. Load average=
+ goes to triple digits, i/o wait increasing, i/o pressure for the workload =
+tasks to 100%, and IO completely stalls to zero. I was able to switch only =
+two of the drive queues back to mq-deadline and then lost responsivness in =
+that shell and had to issue sysrq+b...
+>
+> Before that I was able to extra sysrq+w and sysrq+t.
+> https://drive.google.com/file/d/16hdQjyBnuzzQIhiQT6fQdE0nkRQJj7EI/view?us=
+p=3Dsharing
+>
+> I can't tell if this is a bfq bug, or if there's some negative interactio=
+n between bfq and scsi or megaraid_sas. Obviously it's rare because otherwi=
+se people would have been falling over this much sooner. But at this point =
+there's strong correlation that it's bfq related and is a kernel regression=
+ that's been around since 5.12.0 through 5.18.0, and I suspect also 5.19.0 =
+but it's being partly masked by other improvements.
 
-There are two main problems with kmap(): (1) It comes with an overhead as
-mapping space is restricted and protected by a global lock for
-synchronization and (2) it also requires global TLB invalidation when the
-kmap’s pool wraps and it might block when the mapping space is fully
-utilized until a slot becomes available.
+This matches observations we've had internally (inside Facebook) as
+well as my continual integration performance testing.  It should
+probably be looked into by the BFQ guys as it was working previously.
+Thanks,
 
-With kmap_local_page() the mappings are per thread, CPU local, can take
-page faults, and can be called from any context (including interrupts).
-It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
-the tasks can be preempted and, when they are scheduled to run again, the
-kernel virtual addresses are restored and are still valid.
-
-Since its use in amdgpu/amdgpu_ttm.c is safe, it should be preferred.
-
-Therefore, replace kmap() with kmap_local_page() in amdgpu/amdgpu_ttm.c.
-
-Suggested-by: Ira Weiny <ira.weiny@intel.com>
-Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-index 3b4c19412625..c11657b5915f 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-@@ -2301,9 +2301,9 @@ static ssize_t amdgpu_iomem_read(struct file *f, char __user *buf,
- 		if (p->mapping != adev->mman.bdev.dev_mapping)
- 			return -EPERM;
- 
--		ptr = kmap(p);
-+		ptr = kmap_local_page(p);
- 		r = copy_to_user(buf, ptr + off, bytes);
--		kunmap(p);
-+		kunmap_local(ptr);
- 		if (r)
- 			return -EFAULT;
- 
-@@ -2352,9 +2352,9 @@ static ssize_t amdgpu_iomem_write(struct file *f, const char __user *buf,
- 		if (p->mapping != adev->mman.bdev.dev_mapping)
- 			return -EPERM;
- 
--		ptr = kmap(p);
-+		ptr = kmap_local_page(p);
- 		r = copy_from_user(ptr + off, buf, bytes);
--		kunmap(p);
-+		kunmap_local(ptr);
- 		if (r)
- 			return -EFAULT;
- 
--- 
-2.37.1
-
+Josef

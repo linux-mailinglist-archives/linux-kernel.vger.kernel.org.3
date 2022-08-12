@@ -2,136 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B5E5910D2
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 14:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 283DF5910D5
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 14:37:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237926AbiHLMgk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 08:36:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51370 "EHLO
+        id S234053AbiHLMgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 08:36:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237472AbiHLMgj (ORCPT
+        with ESMTP id S237927AbiHLMgv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 08:36:39 -0400
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CA41A0259
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 05:36:36 -0700 (PDT)
-Received: by mail-vs1-xe34.google.com with SMTP id c3so648195vsc.6
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 05:36:36 -0700 (PDT)
+        Fri, 12 Aug 2022 08:36:51 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C17F8A50C1
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 05:36:49 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id l21so833296ljj.2
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 05:36:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=O6llZjz916kr3/4GBc6iVNzZiFC/Zr060/Yj38d12js=;
-        b=YGjUxVC/qz3HPVaxeDzBzYHlVqNLt6RJ5F9ItloKWXzWnnI9/MmOEAmhzytYYUehWb
-         h7EpbFp8PpGO37viHcMFJCWEe0/kEcA35jUP92VQwxw2mcovAC1Y46LAKi2zQj1mHA1I
-         IvSaDmF6rimwod4kWDowrskOK8Tr4pFsc/7ZRNhHs2SZskf15TaNEI+S0GBTmPRjdCPy
-         8Vw8vrI/tJ2QSCzyjLl00Om78JuIB1piwLplcb95f5WAnMjDA9HJc0G1emJ1mQwdUgcC
-         tot3J+MTymr9NutitLYM3WhGJgQqWoKVZSErRKMOa2KIQlNpChqxExgN4dmJcmknkAjA
-         T4Zw==
+        bh=2Tr6s6oL+tsJZTa2fS1ZrFcsPmdVMztbv0oSJXbRlXA=;
+        b=FwnpfPvU0mr6T2+sNySqjij72Ea3ibh6EfoI4nRmF2+EnuB4vPoGgl0XCl9+/I8zJS
+         MeusBGqCgyx77QPPt26Y3P4E/yihI+MwKoWf5sMolOoUivOpBqkomTiOAPAkkOqEVWDx
+         /dauYc/ZSD2Div6Im4iBUaka1PSIzemPTCy8FcbYoVK7T83VgCxVNrWWO7c2i6b0mMOZ
+         E+rsvY/NK8O12PrSuXu9u7eMBeq5bB07/2fipqaqPbYDYPmle8p5r8BRGpWUPSPtf4vn
+         SWgLg3IzHEoSm9nf3QXfyo7tFWzSFBf6theP2tmI8W8UyD1LTOjXR4xryxU0o/KJ8dLK
+         DW2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=O6llZjz916kr3/4GBc6iVNzZiFC/Zr060/Yj38d12js=;
-        b=ZbP+OSJeofs5+sEcwkS9rP+oxBOt3PiiLZVqoEbUseGobL74z2uFMZ8S1MiOBcKlrX
-         b7EVFfpKWxHGmokK9B6XFcpT9wUAiR7OFfnA9uArX9/h/bmSnl5a04x/nL/AJd0NyqlB
-         RsNEyvAftfag9bfQhOPTD1cfDVb80rzdU3Q4+FMQ6YB14iGjbtnqnqmf9TMbDTphe++H
-         jVIa+xRNHa+tWosJce4ZBUVvZumL8uomTFNcgEDMwo2xGY+yyHWXD+pZtLmpXbGU+ENa
-         X/14P/9WuqmKoHqgd4Eg7Sel3ZhGUNOd1xXiVz5S5zidXvjKhlcQjgD7JbW1SVx4BR+o
-         kjug==
-X-Gm-Message-State: ACgBeo2rStNXuFzqCRYX+Pvj1LIPWYnvpznjt6Dd0SWl+MlghI/npxce
-        XRBOTDpquPzKfpnK/2Evt7cMKcx2tctlQg==
-X-Google-Smtp-Source: AA6agR55Ww9WZWxXef6+yPYU8XXvvlAQk6+qyLaJ9O19hLC6D7fIjiq4vuYXZcM+CMkJ5yZVw/HZaw==
-X-Received: by 2002:a17:902:c602:b0:170:bf85:8ccb with SMTP id r2-20020a170902c60200b00170bf858ccbmr3702642plr.38.1660307784103;
-        Fri, 12 Aug 2022 05:36:24 -0700 (PDT)
-Received: from [10.70.253.98] ([139.177.225.246])
-        by smtp.gmail.com with ESMTPSA id 125-20020a620683000000b0052d3ea78858sm1479149pfg.127.2022.08.12.05.36.19
+        bh=2Tr6s6oL+tsJZTa2fS1ZrFcsPmdVMztbv0oSJXbRlXA=;
+        b=y7qYEfqSC/ykJPj1UJqE4tEXWW7wGxKz9HWkdObPmcsU021zXvf/YQ1/y+qDQwgC4L
+         LavtHuwJU6uGtn/W0MlR5gKgBgTMLFHk0Uj3Yrc/M8YLjmU02v0dQs0N0tkga4vnATYC
+         HB/8nhuulmQiCE/hJTT5G+mW/rWKguZ4c11Bjk0jogfJ799lnRGVCc/r5j4LL4hxCkoQ
+         0BpQXbH8IznaHLTlwfuk3Rv9aGzxQwqWQ5e/n9tDy5ak2AoFRedzjHyVHGHsj/0fVboX
+         ygMrlcyepVMHqTkVysJMRyPyXx+VemuBcyxBAASR/CL2hDwZ0QG9m7AaV845KOOOmPi4
+         GLQw==
+X-Gm-Message-State: ACgBeo0pSgUxW4b8aQWVlPNdM358ZLDgzhtjR98a0C+n3iaZs9SIIpsX
+        urplEWLQgGT4iGpcjjHzrohC+g==
+X-Google-Smtp-Source: AA6agR78QUiU7vpTO8Aqve0sIQhhsaLLDdk1wAfRnsgtfOx1KMpbzpIIP5CArpfpjrSkQ97qI8rOgA==
+X-Received: by 2002:a2e:712:0:b0:25e:c39b:45cf with SMTP id 18-20020a2e0712000000b0025ec39b45cfmr1196685ljh.511.1660307807962;
+        Fri, 12 Aug 2022 05:36:47 -0700 (PDT)
+Received: from [192.168.1.39] ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id f14-20020a05651232ce00b0048b2a5a65d0sm198830lfg.256.2022.08.12.05.36.44
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 05:36:23 -0700 (PDT)
-Message-ID: <5ce118b3-bf3b-d9a4-004c-a5a355984b0f@bytedance.com>
-Date:   Fri, 12 Aug 2022 20:36:17 +0800
+        Fri, 12 Aug 2022 05:36:47 -0700 (PDT)
+Message-ID: <01021dde-106c-5660-ea96-a8b8fd89ad50@linaro.org>
+Date:   Fri, 12 Aug 2022 15:36:43 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.1.0
-Subject: Re: [PATCH v2 09/10] sched/psi: per-cgroup PSI stats
- disable/re-enable interface
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH net 1/2] dt: ar803x: Document disable-hibernation property
 Content-Language: en-US
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-Cc:     hannes@cmpxchg.org, tj@kernel.org, corbet@lwn.net,
-        surenb@google.com, mingo@redhat.com, peterz@infradead.org,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        songmuchun@bytedance.com
-References: <20220808110341.15799-1-zhouchengming@bytedance.com>
- <20220808110341.15799-10-zhouchengming@bytedance.com>
- <YvYoFNDMdg6mdFbU@blackbook>
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-In-Reply-To: <YvYoFNDMdg6mdFbU@blackbook>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Wei Fang <wei.fang@nxp.com>, "andrew@lunn.ch" <andrew@lunn.ch>,
+        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220812145009.1229094-1-wei.fang@nxp.com>
+ <20220812145009.1229094-2-wei.fang@nxp.com>
+ <0cd22a17-3171-b572-65fb-e9d3def60133@linaro.org>
+ <DB9PR04MB81060AF4890DEA9E2378940288679@DB9PR04MB8106.eurprd04.prod.outlook.com>
+ <14cf568e-d7ee-886e-5122-69b2e58b8717@linaro.org>
+ <YvY7Vjtj+WV3BI59@shell.armlinux.org.uk>
+ <4cf8d73e-9f14-fe8d-d6e2-551920c1f29e@linaro.org>
+ <YvZH9avGaZ3z5B5H@shell.armlinux.org.uk>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <YvZH9avGaZ3z5B5H@shell.armlinux.org.uk>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/8/12 18:14, Michal Koutný wrote:
-> Hello Chengming.
+On 12/08/2022 15:30, Russell King (Oracle) wrote:
+> On Fri, Aug 12, 2022 at 03:04:41PM +0300, Krzysztof Kozlowski wrote:
+>> I did not propose a property to enable hibernation. The property must
+>> describe hardware, so this piece is missing, regardless whether the
+>> logic in the driver is "enable" or "disable".
+>>
+>> The hardware property for example is: "broken foo, so hibernation should
+>> be disabled" or "engineer forgot to wire cables, so hibernation won't
+>> work"...
 > 
-> On Mon, Aug 08, 2022 at 07:03:40PM +0800, Chengming Zhou <zhouchengming@bytedance.com> wrote:
->> diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
->> index dd84e34bc051..ade40506ab80 100644
->> --- a/Documentation/admin-guide/cgroup-v2.rst
->> +++ b/Documentation/admin-guide/cgroup-v2.rst
->> @@ -968,6 +968,13 @@ All cgroup core files are prefixed with "cgroup."
->>  	killing cgroups is a process directed operation, i.e. it affects
->>  	the whole thread-group.
->>  
->> +  cgroup.psi
->> +	A read-write single value file that allowed values are "0" and "1".
->> +	The default is "1".
->> +
->> +	Writing "0" to the file will disable the cgroup PSI stats accounting.
->> +	Writing "1" to the file will re-enable the cgroup PSI stats accounting.
->> +
+> From the problem description, the PHY itself isn't broken. The stmmac
+> hardware doesn't reset properly when the clock from the PHY is stopped.
+
+There is nothing like that in the property name or property description.
+Again - DT is not for describing driver behavior or driver policy.
+
+> That could hardly be described as "broken" - it's quite common for
+> hardware specifications to state that clocks must be running for the
+> hardware to operate correctly.
 > 
-> I'd suggest explaining here explicitely, this control attribute is not
-> hierarchical (i.e. PSI accounting in a cgroup does not affect accounting
-> in descendants and doesn't need pass enablement via ancestors from
-> root). And the purpose that it "saves" cycles (where).
+> This is a matter of configuring the hardware to inter-operate correctly.
+> Isn't that the whole purpose of DT?
+> 
+> So, nothing is broken. Nothing has forgotten to be wired. It's a matter
+> of properly configuring the hardware. Just the same as selecting the
+> correct interface mode to connect two devices together.
 
-Thanks for the suggestion and explanation!
+I just gave you two examples what could be written, don't need to stick
+them. You can use some real one...
 
-Could you help take a look if there is anything to improve?
-
-
---- a/Documentation/admin-guide/cgroup-v2.rst
-+++ b/Documentation/admin-guide/cgroup-v2.rst
-@@ -968,6 +968,23 @@ All cgroup core files are prefixed with "cgroup."
-        killing cgroups is a process directed operation, i.e. it affects
-        the whole thread-group.
-
-+  cgroup.pressure
-+       A read-write single value file that allowed values are "0" and "1".
-+       The default is "1".
-+
-+       Writing "0" to the file will disable the cgroup PSI accounting.
-+       Writing "1" to the file will re-enable the cgroup PSI accounting.
-+
-+       This control attribute is not hierarchical, so disable or enable PSI
-+       accounting in a cgroup does not affect PSI accounting in descendants
-+       and doesn't need pass enablement via ancestors from root.
-+
-+       The reason this control attribute exists is that PSI accounts stalls for
-+       each cgroup separately and aggregates it at each level of the hierarchy.
-+       This may cause non-negligible overhead for some workloads when under
-+       deep level of the hierarchy, in which case this control attribute can
-+       be used to disable PSI accounting in the cgroups.
-+
+Best regards,
+Krzysztof

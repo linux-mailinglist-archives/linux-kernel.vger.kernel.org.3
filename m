@@ -2,227 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4ED4059133A
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 17:45:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33B8559133B
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 17:45:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237707AbiHLPo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 11:44:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39938 "EHLO
+        id S238458AbiHLPph (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 11:45:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232527AbiHLPo4 (ORCPT
+        with ESMTP id S232527AbiHLPpf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 11:44:56 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0031A14033;
-        Fri, 12 Aug 2022 08:44:53 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 05F8F240005;
-        Fri, 12 Aug 2022 15:44:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1660319092;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=lZZtxYz1Cc+N1tGcnhkF8Otamt97G4kK1n7rfV4yOKE=;
-        b=GccBA4QJL3GBTAJATV/HNkN8QDxv39YfpFjnDs5ZvRPU3hPriecH6m7iilNauuCTkRKWjC
-        lNgopn93m+3ZVXquGDlixuBCwkGesPWxFTCKJKMqX322pqijsrl5Sp2Zvt6af60MpWlJoV
-        mkFXQB3nDBFurHu3RzviqI2XGuvil+RNTp+p/aeJLv63t93CMgwqWz0ySjzJD3W8Qs6gRs
-        0yylKisfgEHCLWiFXSr9dJeBg35F1ER6Y4tFW4SEMRIr0aENeRUf24uDZcMu1nxmZ1yPy4
-        TNTDVfHr5F5HUduK3yNsSek6Xgpq1G7KyGh2Jjr7iBiiL/cnjHfQdZdGJW7E4A==
-Date:   Fri, 12 Aug 2022 17:44:51 +0200
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] RTC for 6.0
-Message-ID: <YvZ1cz2TBIuyZ0md@mail.local>
+        Fri, 12 Aug 2022 11:45:35 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C73642AFF;
+        Fri, 12 Aug 2022 08:45:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net;
+        s=badeba3b8450; t=1660319127;
+        bh=w0NYj5A+TUnMhvnQe3ByTeL621CrZYXF3bjfm9j7Dz8=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=RJ/L9FvDMUr+NJlQ4d+i2rxUzrn7iqt0wWxMLUlFQ9WTsbW77LFBDb7f1NVwmgLWB
+         ntd5T4cER8J6YqWaCHCkYNOe+PfgNRAmiolzBEASzs8grJoZSDNAZ1qH5oMwYURaOI
+         JYMvh0vpWdlUz+WSnO9xDDfTOHstDK8L6Fl8AOTA=
+X-UI-Sender-Class: 01bb95c1-4bf8-414a-932a-4f6e2808ef9c
+Received: from [192.168.2.10] ([155.133.221.219]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MDQic-1oC2jZ0qow-00ATFI; Fri, 12
+ Aug 2022 17:45:27 +0200
+Message-ID: <97b0e7ff-c099-c921-a283-43098d683781@gmx.de>
+Date:   Fri, 12 Aug 2022 17:45:26 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] net: sfp: reset fault retry counter on successful
+ reinitialisation
+Content-Language: en-CA
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220812130438.140434-1-dac922@gmx.de>
+ <YvZswfC/JhkWmyBj@shell.armlinux.org.uk>
+From:   Stefan Mahr <dac922@gmx.de>
+In-Reply-To: <YvZswfC/JhkWmyBj@shell.armlinux.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:I4qX4G9toiYHXbKcgn3DtX+KDc5a0WCkPqtpRIs4lnvc+JDGrBO
+ /9NJa47dBGy47NxiaW1yBicECEg9zhPrlsdLwx4PQjOh1ZziNShUR9kDfxd0O07CbEqGAs4
+ vy8unNlSUhBdUwd+4ZGrh59QgwJZtVkw2sqIU/Lkeu50oFV8rEEOgXFIQ6pzuHCYGhKvrLw
+ UlZy0lRSN18qDUimnShdg==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:YSUK/ymvG5M=:NwvKlbV38xYCEvz5qLXhxq
+ 6TyCh2nO7ZPorxy86qYa78rNQGmHoIDSzudJ/wV60I3jkkbPy6aIpjhLdi5Vv0IvdKMzw3mr1
+ K4u/ODBB+N71NZ5RxnSJPuw0uMKwXx0fIv3mhJo/aiWn2Lo1C+okeVecQGolJGoh4qF99Piiw
+ B05w/+t0dEannfxuUkTqs5RayXMZ0YNKThZthflL/cMaHAzAkac9D00/hGp5Uuoym1o8DZVMV
+ 6+pJmiK8aJgqXIrG5QDh57AimuzqMCwXn5NlOjzcvB5O3khK5PMBA8h28QARzyZZfX05XzMLi
+ ePAnbQDUZviEDu0ABkzRMSpXFqiw6VRMvHNhS3+zLVLsaI5in9jBxiFHsTkrFiXDF/Yo5FUjj
+ NfrYCsHCMqybjBBoZM5IX74TObooHMB+kNhb4yxDt7F2lkibzWD8opYTAzyXY6qrhGkheCGvM
+ sprae7nFFbNfeBfD6dP405M7g8XGxdpg1iPj+/lP+T/y6+Bm4/LSm8IGwpIaQMkPNgLmuCrs6
+ ACWw1qCXHFUYQC8qkw1MssRKVWhO9ETDGojcZ3yx2PsFTD+18US5YClBvPQjBulDQP8KKteYo
+ GlvvfWW5zr0+DgoZbzkhz4zxt/XUSiHtUfUOrWDS0Tpm8U/Of+RpFW6qRt66ozxro4f2+2DG4
+ YwcLC5nd3S7yBaqyz0UGomAf/06t79oErxC/+APDC6h3dUbFHnKDXGivVNZrAtpmCy32CYc7x
+ 3ZBjPxiqsEMOcbGP1NpnfgBr7cX/YgHBYW9n+JfyD9oW5G/Se+RMmUyKk4S3/R4U8BdCl1SgU
+ KNHPXvLk0l2TcUfHxpurPEWzQnZl7Xu8M+/1vMm7/ogF71XwKaUHVShgPBn/Mvw6WvopKxKg6
+ +M7unLFEImWfyZXWaXaUo7BWXPUux5W4aSxx28JiPvKETpjcflPh8/AHqDUHmOjpIF48tQJKP
+ PhKuX/NtqUfsofqeEYq2AavkScNl7QCdWGFBxLh1kFq3snyJ63PE0uq6NijYwFM3ccfp4nJL2
+ 8Jnx+d8d1S/6K4y59LZIlMuOusCW/kwFGLf5von+/NQsB+zQ5+ozYk6xg2077p5/lWkrnEDzX
+ LdDp2VuFaM9NgnMvEAYfNsg6MJuNeiG7Pl7DHlvbwbcvo+SdrQNdn6ZxQ==
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Linus,
+> On Fri, Aug 12, 2022 at 03:04:38PM +0200, Stefan Mahr wrote:
+>> This patch resets the fault retry counter to the default value, if the
+>> module reinitialisation was successful. Otherwise without resetting
+>> the counter, five (N_FAULT/N_FAULT_INIT) single TX_FAULT events will
+>> deactivate the module persistently.
+>
+> This is intentional - if a module keeps asserting its TX_FAULT status,
+> then there is something wrong with it, and for an optical module it
+> means that the laser is overloading (producing more output than it
+> should.) That is a safety issue.
 
-Here is the RTC subsystem pull request for 6.0. There is a know add/add
-merge conflict in MAINTAINERS that is easy to solve.
+Yes, this behaviour is not changed by the patch. When TX_FAULT is true
+persistently for 5 retries, the module will still be disabled.
 
-Three new drivers this cycle are making the bulk of the changes.
+>
+> So, if the module keeps indicating that its laser is misbehaving the
+> only right thing to do is to shut it down permanently, and have
+> someone investigate.
+>
+> What issue are you seeing that needs a different behaviour?
+>
 
-The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
+In my case two different SFP modules (1000Base-BX) indicate short
+TX_FAULT events for less than one second and only one per week -
+sometimes more, sometimes less. So the idea was to reset the counter if
+reinitialisation was successful, so rare single TX_FAULT events can be
+ignored.
 
-  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-6.0
-
-for you to fetch changes up to 03c4cd6f89e074a51e289eb9129ac646f0f2bd29:
-
-  rtc: spear: set range max (2022-08-09 00:56:41 +0200)
-
-----------------------------------------------------------------
-RTC for 6.0
-
-New drivers:
- - Microchip PolarFire
- - Nuvoton NCT3018Y
- - TI K3 RTC
-
-Subsystem:
- - Replace flush_scheduled_work() with flush_work()
- - Remove deprecated ida_simple_get()/ida_simple_remove() calls
-
-Drivers:
- - use simple i2c probe where possible
- - sun6i: add R329 support
- - zynqmp: add calibration support
- - vr41xx: remove unused driver
-
-----------------------------------------------------------------
-Ahmad Fatoum (3):
-      rtc: rv8803: factor out existing register initialization to function
-      rtc: rv8803: initialize registers on post-probe voltage loss
-      rtc: rv8803: re-initialize all Epson RX8803 registers on voltage loss
-
-Alexander Stein (1):
-      dt-bindings: rtc: nxp,pcf85063: Convert to DT schema
-
-Alexandre Belloni (1):
-      rtc: zynqmp: initialize fract_tick
-
-Allen-KH Cheng (1):
-      dt-bindings: rtc: mediatek: add mt6358 and mt6366 compatible
-
-Conor Dooley (2):
-      rtc: Add driver for Microchip PolarFire SoC
-      MAINTAINERS: add PolarFire SoC's RTC
-
-Icenowy Zheng (1):
-      rtc: sun6i: add support for R329 RTC
-
-Mateusz Jończyk (1):
-      rtc: mc146818-lib: reduce RTC_UIP polling period
-
-Mathew McBride (1):
-      rtc: rx8025: fix 12/24 hour mode detection on RX-8035
-
-Mia Lin (2):
-      dt-bindings: rtc: nuvoton: add NCT3018Y Real Time Clock
-      rtc: Add NCT3018Y real time clock driver
-
-Nishanth Menon (2):
-      dt-bindings: rtc: Add TI K3 RTC description
-      rtc: Introduce ti-k3-rtc
-
-Quentin Schulz (1):
-      rtc: isl1208: do not advertise update interrupt feature if no interrupt specified
-
-Rafael J. Wysocki (1):
-      rtc: rtc-cmos: Do not check ACPI_FADT_LOW_POWER_S0
-
-Rob Herring (1):
-      dt-bindings: rtc: microcrystal,rv3032: Add missing type to 'trickle-voltage-millivolt'
-
-Satya Priya (1):
-      dt-bindings: rtc: qcom-pm8xxx-rtc: Update the maintainers section
-
-Srinivas Neeli (3):
-      dt-bindings: rtc: zynqmp: Add clock information
-      rtc: zynqmp: Updated calibration value
-      rtc: zynqmp: Add calibration set and get support
-
-Stephen Kitt (1):
-      rtc: use simple i2c probe
-
-Tetsuo Handa (2):
-      rtc: Replace flush_scheduled_work() with flush_work().
-      rtc: Remove unused rtc_dev_exit().
-
-Thomas Bogendoerfer (1):
-      rtc: vr41xx: remove driver
-
-Tom Rix (1):
-      rtc: mpfs: remove 'pending' variable from mpfs_rtc_wakeup_irq_handler()
-
-Uwe Kleine-König (1):
-      rtc: cros-ec: Only warn once in .remove() about notifier_chain problems
-
-Yang Yingliang (1):
-      rtc: rv8803: fix missing unlock on error in rv8803_set_time()
-
-Zeng Jingxiang (1):
-      rtc: spear: set range max
-
-keliu (1):
-      rtc: Directly use ida_alloc()/free()
-
- .../bindings/rtc/microcrystal,rv3032.yaml          |   1 +
- .../devicetree/bindings/rtc/nuvoton,nct3018y.yaml  |  45 ++
- .../devicetree/bindings/rtc/nxp,pcf85063.txt       |  32 -
- .../devicetree/bindings/rtc/nxp,pcf85063.yaml      |  92 +++
- .../devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml   |   2 +-
- .../devicetree/bindings/rtc/rtc-mt6397.txt         |   2 +
- .../devicetree/bindings/rtc/ti,k3-rtc.yaml         |  62 ++
- .../devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml   |  12 +-
- MAINTAINERS                                        |   3 +
- drivers/rtc/Kconfig                                |  41 +-
- drivers/rtc/Makefile                               |   4 +-
- drivers/rtc/class.c                                |   6 +-
- drivers/rtc/dev.c                                  |   8 +-
- drivers/rtc/rtc-ab-b5ze-s3.c                       |   5 +-
- drivers/rtc/rtc-ab-eoz9.c                          |   5 +-
- drivers/rtc/rtc-bq32k.c                            |   5 +-
- drivers/rtc/rtc-cmos.c                             |   3 -
- drivers/rtc/rtc-core.h                             |   5 -
- drivers/rtc/rtc-cros-ec.c                          |   4 +-
- drivers/rtc/rtc-ds1374.c                           |   5 +-
- drivers/rtc/rtc-ds1672.c                           |   5 +-
- drivers/rtc/rtc-ds3232.c                           |   5 +-
- drivers/rtc/rtc-em3027.c                           |   5 +-
- drivers/rtc/rtc-fm3130.c                           |   5 +-
- drivers/rtc/rtc-hym8563.c                          |   5 +-
- drivers/rtc/rtc-isl12022.c                         |   5 +-
- drivers/rtc/rtc-isl1208.c                          |  10 +-
- drivers/rtc/rtc-max6900.c                          |   5 +-
- drivers/rtc/rtc-mc146818-lib.c                     |   8 +-
- drivers/rtc/rtc-mpfs.c                             | 323 ++++++++++
- drivers/rtc/rtc-nct3018y.c                         | 553 +++++++++++++++++
- drivers/rtc/rtc-pcf8523.c                          |   5 +-
- drivers/rtc/rtc-pcf85363.c                         |   5 +-
- drivers/rtc/rtc-pcf8563.c                          |   5 +-
- drivers/rtc/rtc-pcf8583.c                          |   5 +-
- drivers/rtc/rtc-rv3029c2.c                         |   5 +-
- drivers/rtc/rtc-rv8803.c                           |  98 ++-
- drivers/rtc/rtc-rx6110.c                           |   5 +-
- drivers/rtc/rtc-rx8025.c                           |  22 +-
- drivers/rtc/rtc-rx8581.c                           |   5 +-
- drivers/rtc/rtc-s35390a.c                          |   5 +-
- drivers/rtc/rtc-sd3078.c                           |   5 +-
- drivers/rtc/rtc-spear.c                            |   2 +-
- drivers/rtc/rtc-sun6i.c                            |   2 +
- drivers/rtc/rtc-ti-k3.c                            | 680 +++++++++++++++++++++
- drivers/rtc/rtc-vr41xx.c                           | 363 -----------
- drivers/rtc/rtc-x1205.c                            |   5 +-
- drivers/rtc/rtc-zynqmp.c                           | 115 +++-
- 48 files changed, 2063 insertions(+), 540 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/rtc/nuvoton,nct3018y.yaml
- delete mode 100644 Documentation/devicetree/bindings/rtc/nxp,pcf85063.txt
- create mode 100644 Documentation/devicetree/bindings/rtc/nxp,pcf85063.yaml
- create mode 100644 Documentation/devicetree/bindings/rtc/ti,k3-rtc.yaml
- create mode 100644 drivers/rtc/rtc-mpfs.c
- create mode 100644 drivers/rtc/rtc-nct3018y.c
- create mode 100644 drivers/rtc/rtc-ti-k3.c
- delete mode 100644 drivers/rtc/rtc-vr41xx.c
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+However, you are right: If a module reports TX_FAULT several times,
+something serious may be wrong.

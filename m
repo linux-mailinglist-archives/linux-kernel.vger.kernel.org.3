@@ -2,83 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C066C59158F
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 20:41:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B308591598
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 20:44:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236176AbiHLSlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 14:41:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43046 "EHLO
+        id S239360AbiHLSo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 14:44:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230498AbiHLSlo (ORCPT
+        with ESMTP id S238721AbiHLSoY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 14:41:44 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81BD0AE9D2
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 11:41:33 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id u3so2432829lfk.8
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 11:41:33 -0700 (PDT)
+        Fri, 12 Aug 2022 14:44:24 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 125EEB3B34
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 11:44:23 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id s5-20020a17090a13c500b001f4da9ffe5fso9083877pjf.5
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 11:44:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=AVMExjC/PZ+IN90kCT2j4IDPkufVZOCe6pOQAghuGnM=;
-        b=kNStvDU4SbWI3BtJsp7e0HJyLYsswIgEe6Q48/DACT6mca2ExpeOlccGEneA2kTZ16
-         HXHY39V4qcYbCX9Rc8ro9lGLMVijTzNRqlPpRXs40v7YfjmTPxQPwh8DUacWqXaZGjm6
-         aw9Jf57kGHjCUxnWw6cN7mhWPKhv3PnN2tSCv7iw5chP9U6spmuWnkdTLr/byFdp9zLA
-         UpYHYHlo1fwGZcWUWXwgdUUK0JVAA9yDieXtPUxCIz/+ADJzqf21Ap3RaeUxnAQqqMqE
-         EHozSiOHy4ulFAUpT1XMYAzHWbFjVALkMN4LQGfUIzoBdpaCmgV9kC7RWtW2R9ZA81Ex
-         tfeQ==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=L2TciKx1WlWZUXIBx3BZfiDv3QIF+HKgV/k31Rn9huY=;
+        b=jQOhU4/QHuS3o93vFsm50IV+cq38CYO6JOw/Jif8m4Lx4eOz+PJKsvM+Ym8ZyDrJ/a
+         12qL368nG8+XLHaEk4H1NLdZ4flevHmP6wLGKlQlRM1mpFXqQVSClglcwMP8ahcSuipX
+         cVSkhe+ZBEGTCpJd2O0E29jvp7Gtm8trBwRIU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=AVMExjC/PZ+IN90kCT2j4IDPkufVZOCe6pOQAghuGnM=;
-        b=icSoqo2F9GSGVWRe2C90Q3Kma/jWTsZL+4PTvvveRC8US/rR2u/4j6yJ/YwvqtbIUi
-         Ga28J7lGLdRLd5SQNUPvHrNs2FpnrXA2qkk6UYJK9egJnQY04MD8Sq0fpqKMaH2lNnrr
-         /W7INH/r7M8XbBDdHSosWpBciW6O3KrqjO+DAVbSNNtxS2v727aR1BdvVe/rTjPX2yOD
-         8rAhK78z3sjiD8j4FZD7Yy9T3TFPtVgfQSBStkocucRZAE+gknJ0Ev+YVr4evem7STX7
-         +KP8OtzhwcWNihlCUUPnhc97ywNwU0pBVJKn1nf0FBH6GU7ezIgsubEk7uTcPMPnguGs
-         ZUZg==
-X-Gm-Message-State: ACgBeo2FX/Ul6BtA9K8dXP2CBErG+At9xZUa3Ah/4BXxeajONY5tvLk1
-        gV/yEVm+kF52YUnFdWO4uoK63w==
-X-Google-Smtp-Source: AA6agR5TGMC3pAxFYMqF0pg6wHiqcx21KuEoRtHiCPRcFUtj3sn7nZUcoZK1Ent4J6EwV596ZAGq6Q==
-X-Received: by 2002:a05:6512:12c9:b0:48b:3e0f:7a79 with SMTP id p9-20020a05651212c900b0048b3e0f7a79mr1772348lfg.52.1660329691834;
-        Fri, 12 Aug 2022 11:41:31 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id n26-20020a05651203fa00b0048b0526070fsm300281lfq.71.2022.08.12.11.41.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 11:41:31 -0700 (PDT)
-Message-ID: <c51c360e-a73f-9333-ffa1-3461de29f41f@linaro.org>
-Date:   Fri, 12 Aug 2022 21:41:22 +0300
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=L2TciKx1WlWZUXIBx3BZfiDv3QIF+HKgV/k31Rn9huY=;
+        b=gQPouQqLXWN84dKHmmB9z6rkc3Jlsp7hMiJZ+fhmjVHvhEbkRHHmPXi2wgJ+PpQsec
+         ASVL18P+d0etjI4WgwypjjoMY/34n4ZIkUsdXRh2mVRHwZrNzA9IAy0sEHI1rD3wca7I
+         hMhihlpqGPGWSCJmRTRXY67MJNPmHOVB3ARGvF/J7yZ6NX1MIMNFmY+IRakNEdI0hgN5
+         1br7/ev5lY4hFN13s5WSwdBn+2mAymtwdjH6YneN0Qp8v+/9dFMFjPo4qz0kNSA/7wNH
+         PJ4zsisxh4nNfXll3LgBiHUWFL8cQfTE66m+TNuGuk9zYDr3bn631z8SkY4rcZxkTyi5
+         yHxA==
+X-Gm-Message-State: ACgBeo3Gd9S2dq4urLIkoFLkrza4apmswKI08zO30QIn8NSj4EnasOWq
+        cNf6xgzAssZV8MhO0ythxeLRUA==
+X-Google-Smtp-Source: AA6agR5WSvcFgKv2uKPXKT0DjScHXffhB2fOu7jYvSJHq8Skop1Bd+xq7Z2ahtA73Qn4kTjEukIDLw==
+X-Received: by 2002:a17:902:f787:b0:16a:1e2b:e97 with SMTP id q7-20020a170902f78700b0016a1e2b0e97mr5174519pln.27.1660329862540;
+        Fri, 12 Aug 2022 11:44:22 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id u5-20020a62d445000000b0052895642037sm1932056pfl.139.2022.08.12.11.44.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Aug 2022 11:44:21 -0700 (PDT)
+Date:   Fri, 12 Aug 2022 11:44:20 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Ira Weiny <ira.weiny@intel.com>,
+        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        ebiederm@xmission.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-next@vger.kernel.org, sfr@canb.auug.org.au,
+        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk,
+        syzbot <syzbot+3250d9c8925ef29e975f@syzkaller.appspotmail.com>
+Subject: Re: [syzbot] linux-next boot error: BUG: unable to handle kernel
+ paging request in kernel_execve
+Message-ID: <202208121143.C014AEF0AA@keescook>
+References: <0000000000008c0ba505e5f22066@google.com>
+ <202208110830.8F528D6737@keescook>
+ <YvU+0UHrn9Ab4rR8@iweiny-desk3>
+ <YvVPtuel8NMmiTKk@iweiny-desk3>
+ <202208111356.97951D32@keescook>
+ <YvWaqhLGsBp9ynIq@iweiny-desk3>
+ <CACT4Y+bBNJsFobK28impL5bPGE9meQt-RE6xyDF=yxsmcR8ySw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v3 3/3] memory: Add Broadcom STB memory controller driver
-Content-Language: en-US
-To:     Florian Fainelli <f.fainelli@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-References: <20220801220931.181531-1-f.fainelli@gmail.com>
- <20220801220931.181531-4-f.fainelli@gmail.com>
- <26ad247d-a4b3-4051-b8d9-505c09b76f6b@linaro.org>
- <375eac04-dbfd-080a-3003-cae3eda1f42b@gmail.com>
- <fa283e3c-5b96-b0a4-95c5-a7230d16d8ca@linaro.org>
- <ec06e9c6-f475-fe19-9046-d57a6168e72b@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ec06e9c6-f475-fe19-9046-d57a6168e72b@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACT4Y+bBNJsFobK28impL5bPGE9meQt-RE6xyDF=yxsmcR8ySw@mail.gmail.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -87,32 +79,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/08/2022 20:52, Florian Fainelli wrote:
+On Fri, Aug 12, 2022 at 11:29:44AM +0200, Dmitry Vyukov wrote:
+> On Fri, 12 Aug 2022 at 02:11, Ira Weiny <ira.weiny@intel.com> wrote:
+> >
+> > On Thu, Aug 11, 2022 at 02:00:59PM -0700, Kees Cook wrote:
+> > > On Thu, Aug 11, 2022 at 11:51:34AM -0700, Ira Weiny wrote:
+> > > > On Thu, Aug 11, 2022 at 10:39:29AM -0700, Ira wrote:
+> > > > > On Thu, Aug 11, 2022 at 08:33:16AM -0700, Kees Cook wrote:
+> > > > > > Hi Fabio,
+> > > > > >
+> > > > > > It seems likely that the kmap change[1] might be causing this crash. Is
+> > > > > > there a boot-time setup race between kmap being available and early umh
+> > > > > > usage?
+> > > > >
+> > > > > I don't see how this is a setup problem with the config reported here.
+> > > > >
+> > > > > CONFIG_64BIT=y
+> > > > >
+> > > > > ...and HIGHMEM is not set.
+> > > > > ...and PREEMPT_RT is not set.
+> > > > >
+> > > > > So the kmap_local_page() call in that stack should be a page_address() only.
+> > > > >
+> > > > > I think the issue must be some sort of race which was being prevented because
+> > > > > of the preemption and/or pagefault disable built into kmap_atomic().
+> > > > >
+> > > > > Is this reproducable?
+> > > > >
+> > > > > The hunk below will surely fix it but I think the pagefault_disable() is
+> > > > > the only thing that is required.  It would be nice to test it.
+> > > >
+> > > > Fabio and I discussed this.  And he also mentioned that pagefault_disable() is
+> > > > all that is required.
+> > >
+> > > Okay, sounds good.
+> > >
+> > > > Do we have a way to test this?
+> > >
+> > > It doesn't look like syzbot has a reproducer yet, so its patch testing
+> > > system[1] will not work. But if you can send me a patch, I could land it
+> > > in -next and we could see if the reproduction frequency drops to zero.
+> > > (Looking at the dashboard, it's seen 2 crashes, most recently 8 hours
+> > > ago.)
+> >
+> > Patch sent.
+> >
+> > https://lore.kernel.org/lkml/20220812000919.408614-1-ira.weiny@intel.com/
 
->>> unless you also implied enclosing those functions under an #if
->>> IS_ENABLED(CONFIG_PM) or something which is IMHO less preferable.
->>
->> Are you sure you added also pm_ptr()? I don't see such warnings with W=1
->> and final object does not have the functions (for a different driver but
->> same principle).
+Thank you!
+
+> >
+> > But I'm more confused after looking at this again.
 > 
-> Yes I am sure I added pm_ptr() see the v4 I just submitted. I don't see 
-> how the compiler cannot warn about the functions being unused the day 
-> they stop being referenced by the pm_ops structure which is eliminated?
+> There is splat of random crashes in linux-next happened at the same time:
+> 
+> https://groups.google.com/g/syzkaller-bugs/search?q=%22linux-next%20boot%20error%3A%22
+> 
+> There are 10 different crashes in completely random places.
+> I would assume they have the same root cause, some silent memory
+> corruption or something similar.
 
-I don't have the answer how it exactly works (or which gcc version
-introduced it), but I tested it and the functions were not present in
-the object file, thus of course no warnings.
+Yeah, I noticed the crashes stopped "on their own", so I think I'll
+wait a bit more, and if it start back up, we can try Ira's patch, though
+I'd agree with the assessment that it looks like it shouldn't be needed.
 
-The driver change I am referring to is:
-https://lore.kernel.org/all/20220808174107.38676-15-paul@crapouillou.net/
+-Kees
 
-I think the only difference against your v4 is:
-DEFINE_SIMPLE_DEV_PM_OPS
-and lack of __maybe_unused on the functions.
-
-The DEFINE_SIMPLE_DEV_PM_OPS itself adds __maybe_unused for !CONFIG_PM
-case, but I don't think it is relevant.
-
-Best regards,
-Krzysztof
+-- 
+Kees Cook

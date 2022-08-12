@@ -2,309 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0037E590D0C
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 09:56:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD93E590D10
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 09:58:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237762AbiHLH4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 03:56:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32826 "EHLO
+        id S237668AbiHLH6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 03:58:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237705AbiHLH4Q (ORCPT
+        with ESMTP id S237168AbiHLH6D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 03:56:16 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D173B99B45;
-        Fri, 12 Aug 2022 00:56:15 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 40FAB5C0115;
-        Fri, 12 Aug 2022 03:56:15 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Fri, 12 Aug 2022 03:56:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1660290975; x=1660377375; bh=Bf
-        V3swjxdx5USfEaE1XeMwxBAoZADIoLTz1F96t9hyc=; b=mvhlbbw8hqnin7iWcj
-        j9ayN8AKVFxbvvsBfnJBdUZWQAb11a1GmPy9ygUUVF4sQE63XL/2TCBSCBL3FnCE
-        a9chhyqZZVKXpMIVEXrL/c85vV8RCDkNlJZ79PkTNs3dB7nppYAPeLzBNqxP8NfS
-        YOZ5xZhzRiSlBGhFY1v2fM2Gd8VuGltI2v4oIEh8/uIRZ0YV8dHLxeSkSZ4FXzAM
-        glPfRvYyxR1156ZM5CgaKZPDkOS6lD4mPp0pykdeRnfAIzWwuG/7wvodsBFym6c8
-        ZX5K1cFUt6kqQKeVIaKsTlLcdiQe9HS2b1zyV6OhBgHFEZ3snQ6CJ46AUoht3nyE
-        oV8Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1660290975; x=1660377375; bh=BfV3swjxdx5US
-        fEaE1XeMwxBAoZADIoLTz1F96t9hyc=; b=fydXvwbHgZ4JtYaMqdaUC89RBeCOQ
-        beUbmsCp0snlosi4OFRwCMKNgQ/6oTgtVtSyUW2Z0pojGiwRiqzAwH9Z0nMyzq4q
-        y/fkFbVkrm6vMgTaxZBdZi/2MtvM2TGo+YjqCqOd1g+sftai7WNwUa/CzYCmP4EB
-        QSE48HYvGCmMJQuaWn3rm6YzlapENStfBp+G+UOefGF9DGXPRNfcThux1ejFQv6q
-        jT5CUXjsbaufZ6cZyaTvTPA3hbWEnosfqn9iYGodrsrTEQB7wtXWy/2aKvBi4aSb
-        MghntvjpJyv5iBI8sAVSGHhZu+UTmZHlN9XGg24uALIDCT3u767dAc1Yg==
-X-ME-Sender: <xms:nwf2YsTcidG-5ff6Qdq2jvqYlzlaxJne6QTV3XdDBTnaAYOgbPkccg>
-    <xme:nwf2YpwzsdjLeLNMfgVRC33fAbsp5xFsPFEQwHuo_f06OIIrFIEJQPYewfKWqxOxM
-    lwOqHrsUyCyv6Qxig>
-X-ME-Received: <xmr:nwf2Yp15AUvG5oQhg3F-UxzM8vwUEx7yYlgdlJOLYMIb7WkmMnvK5rubA04__VmlE10IE_BAQTFy7VFmV6xjfitQ_uaBuE8pbEtqWwxnzNIM5OgtuJCdDMUWpG3RercE4NHJig>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeghedguddvjecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefurghm
-    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpedukeetueduhedtleetvefguddvvdejhfefudelgfduveeggeeh
-    gfdufeeitdevteenucevlhhushhtvghrufhiiigvpeehnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:nwf2YgBCg8qO0B-6xul1HMAcq3XMc4uX_XmPpH-hsOP0xg6h62z3Mw>
-    <xmx:nwf2YljecjsV57Qf1EuePOCacz2Q9qfBgM6i5b5L_SW5Y3awWOFsEA>
-    <xmx:nwf2YspXsk3XEoFPtMSXg4GAc9v9nLKF0MQgTjOd6F1XA3PxVnXWpA>
-    <xmx:nwf2Yl5ei5AYU0joqZubc-zmHzfJ3cYiAm2tEQ15hov7Qx7QxpdZJg>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 12 Aug 2022 03:56:14 -0400 (EDT)
-From:   Samuel Holland <samuel@sholland.org>
-To:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: [PATCH 8/8] phy: allwinner: phy-sun6i-mipi-dphy: Add the A100 DPHY variant
-Date:   Fri, 12 Aug 2022 02:56:03 -0500
-Message-Id: <20220812075603.59375-9-samuel@sholland.org>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20220812075603.59375-1-samuel@sholland.org>
-References: <20220812075603.59375-1-samuel@sholland.org>
+        Fri, 12 Aug 2022 03:58:03 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83CCEA74DE;
+        Fri, 12 Aug 2022 00:58:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1660291081; x=1691827081;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=zQPduV14rsd8V1MhWV9w2wUeAYTFJAQNyA1itKFZpO4=;
+  b=jyGTdvOp8qwa2ZhTkuip9Js4umdO9VRx6e4VgKRDvs7oUa7VFdGJc9N/
+   N15aNGv4Scd429NxzLLqWwH0UfdOXTCoxoAzsWfvB2G2vmfcqfcMgsY/d
+   BCmGEnrU1qsdhfEnOjHdayorcXqKCTYaXZjGzcaGAIlaRuBZtiJK1kxnc
+   g6LMih/3IkEzPVpnRfh2Q2RycRG8xzZ/qSIfhzo+Coc6J8sm47Jisr4Cl
+   jS8gwuFdPOhPTQTFKngy1cLAduflwnnf/CJ4a/4pKeqlR3l1ef+CZIyi0
+   gFdkc6ojfHg0JRklInODM1rOja8RF4R8x/hgOHbsDJeDSEYsb6n+2AU/2
+   g==;
+X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
+   d="scan'208";a="186187893"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Aug 2022 00:58:00 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.28; Fri, 12 Aug 2022 00:57:59 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.72) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.17 via Frontend
+ Transport; Fri, 12 Aug 2022 00:57:59 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gHX+8/HUfVGZ+arrsBxSZprhGrilEZ11bG73f4rLy5ASW7RLjTNU+N76z3NCNJJrVhU7Z51x9A5WDP/7YUfOZa+MJkNgBZyXF0IKskJUuRZX73MrN0a1atAWNJYb+oS5jIDKOulbzg+Yu0U3wPiovFQtMTk430JTbRh6M1NtPs83tKmRG33VVgmTX12roLI+KLzfKydxXIkobW50rjnlOXSdrjfIgthr8Rqtb7ivESC8TnIAIXMyS9V9AOUlEqr4HrhJEVF4cAkV8YnP3mxLHNg3wKTfvHyZlYKe+XIAlj+HSidzw4vmFsvfOkZDDmmvOUdjPav737LN6haFLUWzGg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zQPduV14rsd8V1MhWV9w2wUeAYTFJAQNyA1itKFZpO4=;
+ b=aYMZ6OLnNJhzqsNIdUzLcKKPEr+HNdl1O7Q05Dmzs1mVsvKjEY54Vcw4ZBESPiDmTtpg0+qkR/w/yKpVGLgfSNIRUd7X9D6P6k4GhDqPB7+QFfPwQJMKK7Adit5K7qZki2+OF2r9iXFz+/NpUvMBOkt0HwqPxLzG2KaGW5RjLTJJCfQMj/fqpOghOzkKYKWEuer8b332GzsSOo9ABAQw1AJ4nWSqYW/dW1n5V9DGLJDc+cr8Q7scscyBzTo2DL2cJh9zWSJUU0y2yhO0WRnani7dO5DxmB6ctEPEYlXJKk/YBgB7ahdFAA4B0FyfXODcnBhLyjmwYvfqD+gVOzPCFQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zQPduV14rsd8V1MhWV9w2wUeAYTFJAQNyA1itKFZpO4=;
+ b=Dr+SYP1oaA/u9khnSQzDUdrKwjAtc4sBMBL8Bz1faysG/FNapgHXAoz9S1/jsU9TKeSmJ230kn6I+tKYZrkv9FLbcZ3JLsP8xDgDPLoWMSfYfyUNIe2LrE/Z9liI0hG7YVxNQr5myMsrjvawXwuw5h5iOBIEld+dsk/DYpzxyII=
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
+ by CO6PR11MB5635.namprd11.prod.outlook.com (2603:10b6:5:35f::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.10; Fri, 12 Aug
+ 2022 07:57:53 +0000
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::ac89:75cd:26e0:51c3]) by CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::ac89:75cd:26e0:51c3%8]) with mapi id 15.20.5525.011; Fri, 12 Aug 2022
+ 07:57:53 +0000
+From:   <Conor.Dooley@microchip.com>
+To:     <krzysztof.kozlowski@linaro.org>, <mail@conchuod.ie>,
+        <Daire.McNamara@microchip.com>, <bhelgaas@google.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <paul.walmsley@sifive.com>, <greentime.hu@sifive.com>,
+        <palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
+        <lpieralisi@kernel.org>
+CC:     <linux-pci@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH 1/4] dt-bindings: PCI: fu740-pci: fix missing clock-names
+Thread-Topic: [PATCH 1/4] dt-bindings: PCI: fu740-pci: fix missing clock-names
+Thread-Index: AQHYrcGlXfP4O+KmiU+P5lKvf6cyY62q4HMAgAAGagA=
+Date:   Fri, 12 Aug 2022 07:57:53 +0000
+Message-ID: <2e74b67d-eef3-8900-ead9-8be7b07b2585@microchip.com>
+References: <20220811203306.179744-1-mail@conchuod.ie>
+ <20220811203306.179744-2-mail@conchuod.ie>
+ <f636ad9d-5e9c-f703-221a-3c09f31ed105@linaro.org>
+In-Reply-To: <f636ad9d-5e9c-f703-221a-3c09f31ed105@linaro.org>
+Accept-Language: en-IE, en-US
+Content-Language: en-IE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: d89d5166-45dd-417a-e5e8-08da7c385c8b
+x-ms-traffictypediagnostic: CO6PR11MB5635:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: lGBXTG7o/9uXQTXiY0gFSeKlaNhkfwqKt8901nPUM+p+YBqKDuutK1tvJkFkPDrXmTYzzDwkoblvZjQIJ9grPQ8YDnJxLuTnxvoBKQv90kSsG6LO++/1UrQOyRlmCGMPHklMVloGPlnVnBTLVwz4EEvUlqlvcM1kfvHkN0WYO+5mfGcrJVct5hN7Imse0Q0FrYdM2VUI0n08FTwLoqVgfqiER5oOpOI63yesljKSduH0fsYJFyIBGfP5vbZ5MLAs3ZmpmBtkK7ibLei3rSXm8H+OVYn1RV+Nhyd7xPwSs2IgFW7CodXDPpdKarIpRWBDRaZ/YR6PNAYfOXWIN0kkuOyB20FUO8fnKd5dfm32KB3D80OZ1CEZGDLKAeH5cOb8uW4ULrAVA9PXeawigIFwuEZOu39ua0k53h/JF/9EJDHT5KHXUxQ0w00hwx0gfrNO5CZEc6uUwM+Uy707BBch2HKH9T6GVuTimRG2g8R0rOd/laL1L/fYdA6A6EoPHo0pnlkfyn+fARxlo+OxIgNzGgcM65ExO7G3pN6Jyi4KeEMTxshrhjmEScPnkxHl4QKm/6P6JogOnM1JB8YO304DR9iQZuyz4ceLvQl5f37ThUoEoPM90aOaKLf1XpJy2DRmIGRbn3298qZYtumgClwAjPkUIk7j24QVRkELklxAhTNspYW4wl8foyZA1etI6633y81HADT35sBq2Y5dGvklLStBq9zkhZUPJ/vmxAw5AKYX4DPKotf4KovgYeryTCpuWXlYuGqWlAkQukyITCsSivRFTFfHnWvOTB1k8ltDu9gdEF4hwnTtIfiJcKiezynj/c4d2qb8D0B3+nIli1WcRT0GNKJP1uTxF4q4rI22gCxeceeNs/6UdXoZmbbrtmawy0joYoYbX+b+Z3jU9YimHg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(376002)(346002)(366004)(39860400002)(136003)(6486002)(36756003)(6506007)(478600001)(31696002)(86362001)(186003)(41300700001)(38070700005)(6512007)(31686004)(2616005)(53546011)(71200400001)(26005)(83380400001)(64756008)(8676002)(66946007)(91956017)(54906003)(66446008)(66556008)(76116006)(4326008)(316002)(66476007)(122000001)(921005)(7416002)(5660300002)(8936002)(38100700002)(2906002)(110136005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?TTZueklYT1V3NjZPdzVjb1N0NkdCSFhleDRyRUxRUEpLb0FBZU5DRW1MVm9R?=
+ =?utf-8?B?Sk01Ui9CVWtIcUhuZnJtZDFzWC80T0VVR0E0WUJuR1dEZ2JRRUc1dXV1eVRE?=
+ =?utf-8?B?T09oL2ljUzNxM2F3S3JaUUkraytBM1E2QU5wZEdvNDlLNVVpTWtxVCsxRGxY?=
+ =?utf-8?B?VVJFOVU2c3ZMc3B2RWUzbzRGZzQ1MDZ2V3JHeDFieTJVdTAyZWxZY05PUmZB?=
+ =?utf-8?B?elcxUERhSk4zWE9FVjZQejBrZTAwL29Ia29EUERxY200S1VVSkhOQkkyY1N0?=
+ =?utf-8?B?M09DUm9zbUU0NFBPTllQV2VvREtXd29lWnF5STZ2NFd2ck1Vb2lpbStWb21T?=
+ =?utf-8?B?b0tVYm5JWklFMG9DSWNTRk1mZU01SlV2b29qYmtMSWJqRUlicVpZYUJhdHgz?=
+ =?utf-8?B?MFVPTDVHSFJyWDdLc3dKNkxnZEZzN3J6ZVdwL3IwQlFvc212VDZaa04rSEI5?=
+ =?utf-8?B?dGZWZmRhbHAxa2V6cjFKblhLSjFxTnZFUmNVZEVVbnJINXhMZFFYNjZHOC9U?=
+ =?utf-8?B?VUVBb2kzVEFWdVRpVlZ3NFh3UmNGSFMwOW9BRHVVNWtKMUtTblUwR2pRaDZq?=
+ =?utf-8?B?YXQvUFpxOVVkZ0FMMDZwTWNYcTN4T2hoaWlMam8xeUJlSjZXd1lZU2ZDSHhZ?=
+ =?utf-8?B?d0VZdktQNkNrV3oyTVBRaG9pb1llbTA5RytGbVE5YlIwaHZoRXJjK2FDY3dQ?=
+ =?utf-8?B?V3dKajA3NHlSUVY5aWVYSGNtcWcvN2pKS2oxeUtiRUgzVEF5dXRqZTlLTU1a?=
+ =?utf-8?B?TXdIMVpLa0d3UzU1WHo0ZXZQMkpIRmdtTmM1RUtqRlc1RWhmZDV4VXRMZUxM?=
+ =?utf-8?B?emdBNGVWeHJWQUdBUzB5Mm1OSnhadmFDSHNQMTZ6eTQ3eFRyU2JHZGNXL1lE?=
+ =?utf-8?B?bDNiaEpWWWlEY2xjV2l6WXpVRHY4U2tSdW5LMjY5UVFDeG1PckNhOFVRMUJ1?=
+ =?utf-8?B?SUFaSlVQTVJsREJONW5HUk0rbTZBbVA0LzFHZnByS0RBZUlCenUyTUJmZ0Vm?=
+ =?utf-8?B?UTVSbzFsMTF5dmRxNEJRNHVOQ1l1V3d5ODgwY2hpZUI5K3J1dXpTVHJ2YUxy?=
+ =?utf-8?B?RnNmcXJUdFZvMm9qQkJuQ1ZhbnIwRkNaak5EOHVOUkUzdkRwUFFVY3R4blF6?=
+ =?utf-8?B?UnJYMkQ2dmJ3Rk5DemlQcytYNHhGR1lkMGF5cHI2ZW5tVHg4cTMzTkdBZ1d6?=
+ =?utf-8?B?VzRpMHZ6VzFtZkRyaWtSTUJ1R1dLVHJBVXhnV2FXczdreUFudldROFRBNzVv?=
+ =?utf-8?B?KzFPWExyMU1PeFNSTThFT3Q3cXJVWFVjeDZ6WXB5Uzljc1o1WlYyd2I1TE5Q?=
+ =?utf-8?B?MHErYm5WRVFZL2pvME9MNWRVKzF6djhVaU5Bd2hBSDI0MHpBc2tmWlpEM3BI?=
+ =?utf-8?B?VXUrYWRKcFNCR0RWWGZlSFZXMERwOEFpU0gxbFduNmFjb2UzbzI3M1N4UkFj?=
+ =?utf-8?B?T1ROcnYwdVBMbWtrKytxUSs1a1l1a3V3Z05leUxJcDlISjJCMlI2a05BWUhq?=
+ =?utf-8?B?NmYzR2VaZmlJajJNZURIRVVQUmI5emJVRG1qNlE5UEpmZTI4bXFSclpuQlJl?=
+ =?utf-8?B?T0I3ZXZsK2dsVm5HKzZkQWRDR05TbWg0NHVHUVhYNENNSWo2Rk15TzdUb0Jm?=
+ =?utf-8?B?QldYSFAyNkNscWRpeHQ0OUdKVHlGcDR5bTduS3FtbnpZU1FFcHQ4MUJPdVpG?=
+ =?utf-8?B?cGZtR3pZNDJnN1hhd2U5SGtTZU9WbVdLYkF4V1BvZFJpWjJoQ09mV0RiQUc4?=
+ =?utf-8?B?MUJmUFZNRmo5K3RuVXpyS0NTaFIzWHg5VmRPbmdYcEw5ZzNrbHp6VzNWRHNL?=
+ =?utf-8?B?UDlHVHMwOUJqWC9qT0ZaTENabFY4TGtRamRHWVNMMXlvWWYvdS9idWQ3SjNT?=
+ =?utf-8?B?aVZ6akk0alB4S09mUUJCS214YjFKVEJEdHUvTk9MQXNmMDU3cDhXSTNGeXdu?=
+ =?utf-8?B?U2Q5dTc4ZnJ3T3BGSm5WM3ZKd3ZsZG1vZS9mem9yTVZYUHYxNG1sOTA2WEVt?=
+ =?utf-8?B?MjhWV1diNER0SkxYMWV1bU9CdWZadVd2cUp6K0lQQWtpVWVQNTR0NmxJc1Ju?=
+ =?utf-8?B?eXVkbHY5YWkxWXNPZU1NMko4cjVzZVkwMkQ3eVhkWm1laUM5eWJCL0R1Wlkr?=
+ =?utf-8?Q?DaFJYrTeUDpfd9M2iolzae1Z6?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <0A786E069F4CF0499B2D13C44AF8F85C@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d89d5166-45dd-417a-e5e8-08da7c385c8b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Aug 2022 07:57:53.8562
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: R4X3v8ITfJ7PYvFUJoL1JaTpGf4NsNdSG9Af01EERKjcaVo1o8kEKMtD/jNTeWeIUkfXONJNAanXy/j83k9GIg4k9+/1JieDk64mAIE3yv4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR11MB5635
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A100 features an updated DPHY, which moves PLL control inside the DPHY
-register space (previously the PLL was controlled from the CCU). It also
-requires a modified analog power-on sequence. This "combo PHY" can also
-be used as an LVDS PHY, but that is not yet supported by the driver.
-
-Signed-off-by: Samuel Holland <samuel@sholland.org>
----
-
- drivers/phy/allwinner/phy-sun6i-mipi-dphy.c | 143 +++++++++++++++++++-
- 1 file changed, 142 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/phy/allwinner/phy-sun6i-mipi-dphy.c b/drivers/phy/allwinner/phy-sun6i-mipi-dphy.c
-index 6a1993c434e8..9911c4a5c318 100644
---- a/drivers/phy/allwinner/phy-sun6i-mipi-dphy.c
-+++ b/drivers/phy/allwinner/phy-sun6i-mipi-dphy.c
-@@ -70,11 +70,19 @@
- 
- #define SUN6I_DPHY_ANA0_REG		0x4c
- #define SUN6I_DPHY_ANA0_REG_PWS			BIT(31)
-+#define SUN6I_DPHY_ANA0_REG_PWEND		BIT(30)
-+#define SUN6I_DPHY_ANA0_REG_PWENC		BIT(29)
- #define SUN6I_DPHY_ANA0_REG_DMPC		BIT(28)
- #define SUN6I_DPHY_ANA0_REG_DMPD(n)		(((n) & 0xf) << 24)
-+#define SUN6I_DPHY_ANA0_REG_SRXDT(n)		(((n) & 0xf) << 20)
-+#define SUN6I_DPHY_ANA0_REG_SRXCK(n)		(((n) & 0xf) << 16)
-+#define SUN6I_DPHY_ANA0_REG_SDIV2		BIT(15)
- #define SUN6I_DPHY_ANA0_REG_SLV(n)		(((n) & 7) << 12)
- #define SUN6I_DPHY_ANA0_REG_DEN(n)		(((n) & 0xf) << 8)
-+#define SUN6I_DPHY_ANA0_REG_PLR(n)		(((n) & 0xf) << 4)
- #define SUN6I_DPHY_ANA0_REG_SFB(n)		(((n) & 3) << 2)
-+#define SUN6I_DPHY_ANA0_REG_RSD			BIT(1)
-+#define SUN6I_DPHY_ANA0_REG_SELSCK		BIT(0)
- 
- #define SUN6I_DPHY_ANA1_REG		0x50
- #define SUN6I_DPHY_ANA1_REG_VTTMODE		BIT(31)
-@@ -97,8 +105,13 @@
- #define SUN6I_DPHY_ANA3_EN_LDOR			BIT(18)
- 
- #define SUN6I_DPHY_ANA4_REG		0x5c
-+#define SUN6I_DPHY_ANA4_REG_EN_MIPI		BIT(31)
-+#define SUN6I_DPHY_ANA4_REG_EN_COMTEST		BIT(30)
-+#define SUN6I_DPHY_ANA4_REG_COMTEST(n)		(((n) & 3) << 28)
-+#define SUN6I_DPHY_ANA4_REG_IB(n)		(((n) & 3) << 25)
- #define SUN6I_DPHY_ANA4_REG_DMPLVC		BIT(24)
- #define SUN6I_DPHY_ANA4_REG_DMPLVD(n)		(((n) & 0xf) << 20)
-+#define SUN6I_DPHY_ANA4_REG_VTT_SET(n)		(((n) & 0x7) << 17)
- #define SUN6I_DPHY_ANA4_REG_CKDV(n)		(((n) & 0x1f) << 12)
- #define SUN6I_DPHY_ANA4_REG_TMSC(n)		(((n) & 3) << 10)
- #define SUN6I_DPHY_ANA4_REG_TMSD(n)		(((n) & 3) << 8)
-@@ -109,6 +122,56 @@
- 
- #define SUN6I_DPHY_DBG5_REG		0xf4
- 
-+#define SUN50I_DPHY_TX_SLEW_REG0	0xf8
-+#define SUN50I_DPHY_TX_SLEW_REG1	0xfc
-+#define SUN50I_DPHY_TX_SLEW_REG2	0x100
-+
-+#define SUN50I_DPHY_PLL_REG0		0x104
-+#define SUN50I_DPHY_PLL_REG0_CP36_EN		BIT(23)
-+#define SUN50I_DPHY_PLL_REG0_LDO_EN		BIT(22)
-+#define SUN50I_DPHY_PLL_REG0_EN_LVS		BIT(21)
-+#define SUN50I_DPHY_PLL_REG0_PLL_EN		BIT(20)
-+#define SUN50I_DPHY_PLL_REG0_P(n)		(((n) & 0xf) << 16)
-+#define SUN50I_DPHY_PLL_REG0_N(n)		(((n) & 0xff) << 8)
-+#define SUN50I_DPHY_PLL_REG0_NDET		BIT(7)
-+#define SUN50I_DPHY_PLL_REG0_TDIV		BIT(6)
-+#define SUN50I_DPHY_PLL_REG0_M0(n)		(((n) & 3) << 4)
-+#define SUN50I_DPHY_PLL_REG0_M1(n)		((n) & 0xf)
-+
-+#define SUN50I_DPHY_PLL_REG1		0x108
-+#define SUN50I_DPHY_PLL_REG1_UNLOCK_MDSEL(n)	(((n) & 3) << 14)
-+#define SUN50I_DPHY_PLL_REG1_LOCKMDSEL		BIT(13)
-+#define SUN50I_DPHY_PLL_REG1_LOCKDET_EN		BIT(12)
-+#define SUN50I_DPHY_PLL_REG1_VSETA(n)		(((n) & 0x7) << 9)
-+#define SUN50I_DPHY_PLL_REG1_VSETD(n)		(((n) & 0x7) << 6)
-+#define SUN50I_DPHY_PLL_REG1_LPF_SW		BIT(5)
-+#define SUN50I_DPHY_PLL_REG1_ICP_SEL(n)		(((n) & 3) << 3)
-+#define SUN50I_DPHY_PLL_REG1_ATEST_SEL(n)	(((n) & 3) << 1)
-+#define SUN50I_DPHY_PLL_REG1_TEST_EN		BIT(0)
-+
-+#define SUN50I_DPHY_PLL_REG2		0x10c
-+#define SUN50I_DPHY_PLL_REG2_SDM_EN		BIT(31)
-+#define SUN50I_DPHY_PLL_REG2_FF_EN		BIT(30)
-+#define SUN50I_DPHY_PLL_REG2_SS_EN		BIT(29)
-+#define SUN50I_DPHY_PLL_REG2_SS_FRAC(n)		(((n) & 0x1ff) << 20)
-+#define SUN50I_DPHY_PLL_REG2_SS_INT(n)		(((n) & 0xff) << 12)
-+#define SUN50I_DPHY_PLL_REG2_FRAC(n)		((n) & 0xfff)
-+
-+#define SUN50I_COMBO_PHY_REG0		0x110
-+#define SUN50I_COMBO_PHY_REG0_EN_TEST_COMBOLDO	BIT(5)
-+#define SUN50I_COMBO_PHY_REG0_EN_TEST_0P8	BIT(4)
-+#define SUN50I_COMBO_PHY_REG0_EN_MIPI		BIT(3)
-+#define SUN50I_COMBO_PHY_REG0_EN_LVDS		BIT(2)
-+#define SUN50I_COMBO_PHY_REG0_EN_COMBOLDO	BIT(1)
-+#define SUN50I_COMBO_PHY_REG0_EN_CP		BIT(0)
-+
-+#define SUN50I_COMBO_PHY_REG1		0x114
-+#define SUN50I_COMBO_PHY_REG2_REG_VREF1P6(n)	(((n) & 0x7) << 4)
-+#define SUN50I_COMBO_PHY_REG2_REG_VREF0P8(n)	((n) & 0x7)
-+
-+#define SUN50I_COMBO_PHY_REG2		0x118
-+#define SUN50I_COMBO_PHY_REG2_HS_STOP_DLY(n)	((n) & 0xff)
-+
- enum sun6i_dphy_direction {
- 	SUN6I_DPHY_DIRECTION_TX,
- 	SUN6I_DPHY_DIRECTION_RX,
-@@ -196,6 +259,76 @@ static void sun6i_a31_mipi_dphy_tx_power_on(struct sun6i_dphy *dphy)
- 	udelay(1);
- }
- 
-+static void sun50i_a100_mipi_dphy_tx_power_on(struct sun6i_dphy *dphy)
-+{
-+	unsigned long mipi_symbol_rate = dphy->config.hs_clk_rate;
-+	unsigned int div, n;
-+
-+	regmap_write(dphy->regs, SUN6I_DPHY_ANA4_REG,
-+		     SUN6I_DPHY_ANA4_REG_IB(2) |
-+		     SUN6I_DPHY_ANA4_REG_DMPLVD(4) |
-+		     SUN6I_DPHY_ANA4_REG_VTT_SET(3) |
-+		     SUN6I_DPHY_ANA4_REG_CKDV(3) |
-+		     SUN6I_DPHY_ANA4_REG_TMSD(1) |
-+		     SUN6I_DPHY_ANA4_REG_TMSC(1) |
-+		     SUN6I_DPHY_ANA4_REG_TXPUSD(2) |
-+		     SUN6I_DPHY_ANA4_REG_TXPUSC(3) |
-+		     SUN6I_DPHY_ANA4_REG_TXDNSD(2) |
-+		     SUN6I_DPHY_ANA4_REG_TXDNSC(3));
-+
-+	regmap_update_bits(dphy->regs, SUN6I_DPHY_ANA2_REG,
-+			   SUN6I_DPHY_ANA2_EN_CK_CPU,
-+			   SUN6I_DPHY_ANA2_EN_CK_CPU);
-+
-+	regmap_update_bits(dphy->regs, SUN6I_DPHY_ANA2_REG,
-+			   SUN6I_DPHY_ANA2_REG_ENIB,
-+			   SUN6I_DPHY_ANA2_REG_ENIB);
-+
-+	regmap_write(dphy->regs, SUN6I_DPHY_ANA3_REG,
-+		     SUN6I_DPHY_ANA3_EN_LDOR |
-+		     SUN6I_DPHY_ANA3_EN_LDOC |
-+		     SUN6I_DPHY_ANA3_EN_LDOD);
-+
-+	regmap_write(dphy->regs, SUN6I_DPHY_ANA0_REG,
-+		     SUN6I_DPHY_ANA0_REG_PLR(4) |
-+		     SUN6I_DPHY_ANA0_REG_SFB(1));
-+
-+	regmap_write(dphy->regs, SUN50I_COMBO_PHY_REG0,
-+		     SUN50I_COMBO_PHY_REG0_EN_CP);
-+
-+	/* Choose a divider to limit the VCO frequency to around 2 GHz. */
-+	div = 16 >> order_base_2(DIV_ROUND_UP(mipi_symbol_rate, 264000000));
-+	n = mipi_symbol_rate * div / 24000000;
-+
-+	regmap_write(dphy->regs, SUN50I_DPHY_PLL_REG0,
-+		     SUN50I_DPHY_PLL_REG0_CP36_EN |
-+		     SUN50I_DPHY_PLL_REG0_LDO_EN |
-+		     SUN50I_DPHY_PLL_REG0_EN_LVS |
-+		     SUN50I_DPHY_PLL_REG0_PLL_EN |
-+		     SUN50I_DPHY_PLL_REG0_NDET |
-+		     SUN50I_DPHY_PLL_REG0_P((div - 1) % 8) |
-+		     SUN50I_DPHY_PLL_REG0_N(n) |
-+		     SUN50I_DPHY_PLL_REG0_M0((div - 1) / 8) |
-+		     SUN50I_DPHY_PLL_REG0_M1(2));
-+
-+	/* Disable sigma-delta modulation. */
-+	regmap_write(dphy->regs, SUN50I_DPHY_PLL_REG2, 0);
-+
-+	regmap_update_bits(dphy->regs, SUN6I_DPHY_ANA4_REG,
-+			   SUN6I_DPHY_ANA4_REG_EN_MIPI,
-+			   SUN6I_DPHY_ANA4_REG_EN_MIPI);
-+
-+	regmap_update_bits(dphy->regs, SUN50I_COMBO_PHY_REG0,
-+			   SUN50I_COMBO_PHY_REG0_EN_MIPI |
-+			   SUN50I_COMBO_PHY_REG0_EN_COMBOLDO,
-+			   SUN50I_COMBO_PHY_REG0_EN_MIPI |
-+			   SUN50I_COMBO_PHY_REG0_EN_COMBOLDO);
-+
-+	regmap_write(dphy->regs, SUN50I_COMBO_PHY_REG2,
-+		     SUN50I_COMBO_PHY_REG2_HS_STOP_DLY(20));
-+	udelay(1);
-+}
-+
- static int sun6i_dphy_tx_power_on(struct sun6i_dphy *dphy)
- {
- 	u8 lanes_mask = GENMASK(dphy->config.lanes - 1, 0);
-@@ -408,7 +541,7 @@ static const struct regmap_config sun6i_dphy_regmap_config = {
- 	.reg_bits	= 32,
- 	.val_bits	= 32,
- 	.reg_stride	= 4,
--	.max_register	= SUN6I_DPHY_DBG5_REG,
-+	.max_register	= SUN50I_COMBO_PHY_REG2,
- 	.name		= "mipi-dphy",
- };
- 
-@@ -483,11 +616,19 @@ static const struct sun6i_dphy_variant sun6i_a31_mipi_dphy_variant = {
- 	.supports_rx	= true,
- };
- 
-+static const struct sun6i_dphy_variant sun50i_a100_mipi_dphy_variant = {
-+	.tx_power_on	= sun50i_a100_mipi_dphy_tx_power_on,
-+};
-+
- static const struct of_device_id sun6i_dphy_of_table[] = {
- 	{
- 		.compatible	= "allwinner,sun6i-a31-mipi-dphy",
- 		.data		= &sun6i_a31_mipi_dphy_variant,
- 	},
-+	{
-+		.compatible	= "allwinner,sun50i-a100-mipi-dphy",
-+		.data		= &sun50i_a100_mipi_dphy_variant,
-+	},
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, sun6i_dphy_of_table);
--- 
-2.35.1
-
+T24gMTIvMDgvMjAyMiAwODozNCwgS3J6eXN6dG9mIEtvemxvd3NraSB3cm90ZToNCj4gRVhURVJO
+QUwgRU1BSUw6IERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5
+b3Uga25vdyB0aGUgY29udGVudCBpcyBzYWZlDQo+IA0KPiBPbiAxMS8wOC8yMDIyIDIzOjMzLCBD
+b25vciBEb29sZXkgd3JvdGU6DQo+PiBGcm9tOiBDb25vciBEb29sZXkgPGNvbm9yLmRvb2xleUBt
+aWNyb2NoaXAuY29tPg0KPj4NCj4+IFRoZSBjb21taXQgaW4gdGhlIGZpeGVzIHRhZyByZW1vdmVk
+IHRoZSBjbG9jay1uYW1lcyBwcm9wZXJ0eSBmcm9tIHRoZQ0KPiANCj4gSW5zdGVhZDoNCj4gVGhl
+IGNvbW1pdCBiOTIyMjViMDM0YzAgKCJkdC1iaW5kaW5nczogUENJOiBkZXNpZ253YXJlOiBGaXgN
+Cj4gJ3VuZXZhbHVhdGVkUHJvcGVydGllcycgd2FybmluZ3MiKS4uLi4NCj4gDQo+PiBTaUZpdmUg
+RlU3NDAgUENJIENvbnRyb2xsZXIgZHQtYmluZGluZywNCj4gDQo+IE5vLCBpdCBkaWQgbm90IGRv
+IGl0Li4uIEF0IGxlYXN0IEkgY2Fubm90IHNlZSBpdC4gV2hlcmUgaXMgdGhlIHJlbW92YWwNCj4g
+ZXhhY3RseSBpbiB0aGF0IHBhdGNoPyBUaGUgY29tbWl0IHJlbW92ZWQgY2xvY2stbmFtZXMgZnJv
+bSByZXF1aXJlZCwgbm90DQo+IGZyb20gcHJvcGVydGllcy4NCg0KSSByZXdyb3RlIHRoZSBjb21t
+bWl0IG1lc3NhZ2UgMyB0aW1lcyBhcyBJIHdlbnQgYmFjayBhbmQgZm9ydGggb24gdGhlDQoicmln
+aHQiIGNoYW5nZSB0byBtYWtlLCBwcm9iIGp1c3QgYWRkZWQgdGhlIHdyb25nIGZpeGVzIHRhZyB0
+byBhIGNvcHkNCnBhc3RlIG9mIHRoZSBvcmlnaW5hbCBtZXNzYWdlLg0KVGhhbmtzLA0KQ29ub3Iu
+DQoNCj4gDQo+ICAgYnV0IGl0IHdhcyBhbHJlYWR5IGluIHRoZSBkdHMNCj4+IGZvciB0aGUgRlU3
+NDAuIGR0YnNfY2hlY2sgd2FzIG5vdCBhYmxlIHRvIHBpY2sgdXAgb24gdGhpcyBhdCB0aGUgdGlt
+ZQ0KPj4gYnV0IHYyMDIyLjA4IG9mIGR0LXNjaGVtYSBub3cgY2FuOg0KPj4NCj4+IGFyY2gvcmlz
+Y3YvYm9vdC9kdHMvc2lmaXZlL2hpZml2ZS11bm1hdGNoZWQtYTAwLmR0YjogcGNpZUBlMDAwMDAw
+MDA6IFVuZXZhbHVhdGVkIHByb3BlcnRpZXMgYXJlIG5vdCBhbGxvd2VkICgnY2xvY2stbmFtZXMn
+IHdhcyB1bmV4cGVjdGVkKQ0KPj4gICAgICAgICAgRnJvbSBzY2hlbWE6IGxpbnV4L0RvY3VtZW50
+YXRpb24vZGV2aWNldHJlZS9iaW5kaW5ncy9wY2kvc2lmaXZlLGZ1NzQwLXBjaWUueWFtbA0KPj4N
+Cj4+IFRoZSBMaW51eCBkcml2ZXIgZG9lcyBub3QgdXNlIHRoaXMgcHJvcGVydHksIGJ1dCBvdXRz
+aWRlIG9mIHRoZSBrZXJuZWwNCj4+IHRoaXMgcHJvcGVydHkgbWF5IGhhdmUgdXNlcnMuIFJlLWFk
+ZCB0aGUgcHJvcGVydHkgYW5kIGl0cyAiY2xvY2tzIg0KPj4gZGVwZW5kZW5jeS4NCj4+DQo+IA0K
+PiANCj4gQmVzdCByZWdhcmRzLA0KPiBLcnp5c3p0b2YNCg0K

@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E60E1591183
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 15:32:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 101EC59115F
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 15:27:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238911AbiHLNcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 09:32:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51174 "EHLO
+        id S238126AbiHLN1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 09:27:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238896AbiHLNcU (ORCPT
+        with ESMTP id S232434AbiHLN1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 09:32:20 -0400
-Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com [209.85.217.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 611919AFCD
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 06:32:19 -0700 (PDT)
-Received: by mail-vs1-f45.google.com with SMTP id 67so810270vsv.2
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 06:32:19 -0700 (PDT)
+        Fri, 12 Aug 2022 09:27:33 -0400
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 001129676C
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 06:27:32 -0700 (PDT)
+Received: by mail-qv1-f45.google.com with SMTP id h8so586074qvs.6
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 06:27:32 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=OXdSHuVG78f8K6rpNcMaWPwy/pvmJ+nqUgx8dG2xzfs=;
-        b=K1soJI4r2/RDWqg2Fashs/x5heF18hY/NkA2TIHO58NjoaQ+cAiocx5dpY/d01+f69
-         3kjfJgqT2IKCSSSSlCrhLJRf/sF9zQFm7xYCHfitVysc3i7PURBMzAC24OS9fAX1OjC9
-         DPHI5C/qNgh04yugToovM8nEjO+NjL2VLXw7GPT3XAXf5ocn1+nm6FB7vPhSIc2nhO6V
-         iow+OOPQQdG3hlqVBMooqkrdWe4w1m9cZ5ew5cZJOV3n/9Scx/Z2wEb+lz68xc5LR3Lu
-         5pYlXslYXjG+dJ8Kpt/nuYrnM+8hl54RUdTyE3eao19zMOfVcUVW6odWtotDMBYKiKYi
-         wQDg==
-X-Gm-Message-State: ACgBeo3aFuweQDvnBs/cMOqxRBabgo8koOhAxGlkk7p7eJ67q5rvWett
-        ksHMZLgVkDi4nADAiagiuDReUUkyNX+kzQ==
-X-Google-Smtp-Source: AA6agR56WE75UR3CSWzCY93jzKN6GGXCSAcERY+4ZX7RuIHGJgGVxnzojaB4bxGkRjYpLZgoBFT9Fw==
-X-Received: by 2002:a05:6102:2223:b0:32d:2ae1:412 with SMTP id d3-20020a056102222300b0032d2ae10412mr1901446vsb.6.1660311138174;
-        Fri, 12 Aug 2022 06:32:18 -0700 (PDT)
-Received: from mail-ua1-f41.google.com (mail-ua1-f41.google.com. [209.85.222.41])
-        by smtp.gmail.com with ESMTPSA id f28-20020ab0101c000000b00384d3ce037dsm1510008uab.4.2022.08.12.06.32.17
+        bh=aaWmraAyVdsxzOKXcrqOwgi0BA7kWyk0fbcE3gB04Gk=;
+        b=CnJS18zm7gCJ3LpQ39+SgwHq25pNeqJqiwKAf+ZUZNwEn61CCKWLv5GpNfG1GhOCu5
+         PaPmCoKHt5Q8ekT35I+ikm6a+VA3/jAXGto0Wr6MVFPFOto2R5ayBgTlCJ3gBTgWzHPR
+         jSXUt7cVbYQxHYVsfHib9TwD68CclXGrS5yzrVW7JRgYDexcrK2O7GQluTQjAnOcktDg
+         QjWjWS9r5+hl7LKy582Jl7bX60TBW9JCgIOc3SXD+MAOEe/NYcViiRxJCOfrvjae2tZt
+         3z4iGU5GC3G86buXdS0qApaQQ+Pwkr4foaHiafr7tHY+p5Sm34dT/a3DXJB7+uYk6Are
+         sZVw==
+X-Gm-Message-State: ACgBeo0qjeFB/7ad4jojsytCJjCrJ6dCjc6GaBHEem4ecWFypC/F5u4O
+        C0oJejGlXUdStjYDU8V++Satw1zjV93oNQ==
+X-Google-Smtp-Source: AA6agR5i+Auu6+lH3znbuIoD8uHAKWY65wkkgvZxbWToqvwfEyYnZZssR+BsLLU+DH60cdKjl7lIsg==
+X-Received: by 2002:ad4:5be4:0:b0:47b:4bdd:b1c7 with SMTP id k4-20020ad45be4000000b0047b4bddb1c7mr3460252qvc.64.1660310851743;
+        Fri, 12 Aug 2022 06:27:31 -0700 (PDT)
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
+        by smtp.gmail.com with ESMTPSA id k20-20020ac84754000000b003435f947d9fsm1706037qtp.74.2022.08.12.06.27.29
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 06:32:17 -0700 (PDT)
-Received: by mail-ua1-f41.google.com with SMTP id f10so315835uap.2
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 06:32:17 -0700 (PDT)
-X-Received: by 2002:a5b:6c1:0:b0:669:a7c3:4c33 with SMTP id
- r1-20020a5b06c1000000b00669a7c34c33mr3307653ybq.543.1660310750947; Fri, 12
- Aug 2022 06:25:50 -0700 (PDT)
+        Fri, 12 Aug 2022 06:27:30 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id g5so1445386ybg.11
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 06:27:29 -0700 (PDT)
+X-Received: by 2002:a25:da0b:0:b0:67a:7fb6:8ae with SMTP id
+ n11-20020a25da0b000000b0067a7fb608aemr3414026ybf.89.1660310848820; Fri, 12
+ Aug 2022 06:27:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech> <20220728-rpi-analog-tv-properties-v1-7-3d53ae722097@cerno.tech>
-In-Reply-To: <20220728-rpi-analog-tv-properties-v1-7-3d53ae722097@cerno.tech>
+References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech> <20220728-rpi-analog-tv-properties-v1-9-3d53ae722097@cerno.tech>
+In-Reply-To: <20220728-rpi-analog-tv-properties-v1-9-3d53ae722097@cerno.tech>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 12 Aug 2022 15:25:39 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWa9soLHSvmxWqjKAO93WhViww6GZiC9qh0RccVENPRYw@mail.gmail.com>
-Message-ID: <CAMuHMdWa9soLHSvmxWqjKAO93WhViww6GZiC9qh0RccVENPRYw@mail.gmail.com>
-Subject: Re: [PATCH v1 07/35] drm/modes: Only consider bpp and refresh before options
+Date:   Fri, 12 Aug 2022 15:27:17 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUiMEybnhgxgBXh1Cbv6syVe9iVU=sb17zHM72R8A2Dew@mail.gmail.com>
+Message-ID: <CAMuHMdUiMEybnhgxgBXh1Cbv6syVe9iVU=sb17zHM72R8A2Dew@mail.gmail.com>
+Subject: Re: [PATCH v1 09/35] drm/modes: Move named modes parsing to a
+ separate function
 To:     Maxime Ripard <maxime@cerno.tech>
 Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
@@ -88,61 +89,90 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hi Maxime,
 
-On Fri, Jul 29, 2022 at 6:35 PM Maxime Ripard <maxime@cerno.tech> wrote:
-> Some video= options might have a value that contains a dash. However, the
-> command line parsing mode considers all dashes as the separator between the
-> mode and the bpp count.
->
-> Let's rework the parsing code a bit to only consider a dash as the bpp
-> separator if it before a comma, the options separator.
->
-> A follow-up patch will add a unit-test for this once such an option is
-> introduced.
+On Fri, Jul 29, 2022 at 6:36 PM Maxime Ripard <maxime@cerno.tech> wrote:
+> The current construction of the named mode parsing doesn't allow to extend
+> it easily. Let's move it to a separate function so we can add more
+> parameters and modes.
 >
 > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
 
-Thanks for your patch!
-
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Thanks for your patch, which looks similar to my "[PATCH v2 2/5]
+drm/modes: Extract drm_mode_parse_cmdline_named_mode()"
+(https://lore.kernel.org/dri-devel/1371554419ae63cb54c2a377db0c1016fcf200bb.1657788997.git.geert@linux-m68k.org
+;-)
 
 > --- a/drivers/gpu/drm/drm_modes.c
 > +++ b/drivers/gpu/drm/drm_modes.c
-> @@ -1819,20 +1819,22 @@ bool drm_mode_parse_command_line_for_connector(const char *mode_option,
+> @@ -1773,6 +1773,28 @@ static const char * const drm_named_modes_whitelist[] = {
+>         "PAL",
+>  };
 >
->         name = mode_option;
->
-> +       /* Locate the start of named options */
-> +       options_ptr = strchr(name, ',');
-> +       if (options_ptr)
-> +               options_off = options_ptr - name;
-> +       else
-> +               options_off = strlen(name);
+> +static bool drm_mode_parse_cmdline_named_mode(const char *name,
+> +                                             unsigned int name_end,
+> +                                             struct drm_cmdline_mode *cmdline_mode)
+> +{
+> +       unsigned int i;
 > +
->         /* Try to locate the bpp and refresh specifiers, if any */
-> -       bpp_ptr = strchr(name, '-');
-> +       bpp_ptr = strnchr(name, options_off, '-');
+> +       for (i = 0; i < ARRAY_SIZE(drm_named_modes_whitelist); i++) {
+> +               int ret;
+> +
+> +               ret = str_has_prefix(name, drm_named_modes_whitelist[i]);
+> +               if (ret != name_end)
+> +                       continue;
+> +
+> +               strcpy(cmdline_mode->name, drm_named_modes_whitelist[i]);
+> +               cmdline_mode->specified = true;
+> +
+> +               return true;
+> +       }
+> +
+> +       return false;
 
-Probably you still want to add a check that the next character
-is actually a digit, cfr. my "[PATCH v2 5/5] drm/modes:
-parse_cmdline: Add support for named modes containing dashes"
-(https://lore.kernel.org/dri-devel/2eb205da88c3cb19ddf04d167ece4e16a330948b.1657788997.git.geert@linux-m68k.org)?
+What's the point in returning a value, if it is never checked?
+Just make this function return void?
 
->         if (bpp_ptr)
->                 bpp_off = bpp_ptr - name;
+> +}
+> +
+>  /**
+>   * drm_mode_parse_command_line_for_connector - parse command line modeline for connector
+>   * @mode_option: optional per connector mode option
+> @@ -1848,18 +1870,14 @@ bool drm_mode_parse_command_line_for_connector(const char *mode_option,
+>                 parse_extras = true;
+>         }
 >
-> -       refresh_ptr = strchr(name, '@');
-> +       refresh_ptr = strnchr(name, options_off, '@');
->         if (refresh_ptr)
->                 refresh_off = refresh_ptr - name;
+> -       /* First check for a named mode */
+> -       for (i = 0; i < ARRAY_SIZE(drm_named_modes_whitelist); i++) {
+> -               ret = str_has_prefix(name, drm_named_modes_whitelist[i]);
+> -               if (ret == mode_end) {
+> -                       if (refresh_ptr)
+> -                               return false; /* named + refresh is invalid */
+> +       /*
+> +        * Having a mode that starts by a letter (and thus is named) and
+> +        * an at-sign (used to specify a refresh rate) is disallowed.
+> +        */
+> +       if (!isdigit(name[0]) && refresh_ptr)
+
+This condition may have to be relaxed, if we want to support e.g.
+"hd720p@50", cfr. my comments on "[PATCH v1 05/35] drm/connector:
+Add TV standard property".
+
+> +               return false;
 >
-> -       /* Locate the start of named options */
-> -       options_ptr = strchr(name, ',');
-> -       if (options_ptr)
-> -               options_off = options_ptr - name;
-> -
->         /* Locate the end of the name / resolution, and parse it */
->         if (bpp_ptr) {
->                 mode_end = bpp_off;
+> -                       strcpy(mode->name, drm_named_modes_whitelist[i]);
+> -                       mode->specified = true;
+> -                       break;
+> -               }
+> -       }
+> +       drm_mode_parse_cmdline_named_mode(name, mode_end, mode);
+
+This call needs to be conditional on mode_end being non-zero, cfr. my
+patch "[PATCH v2 1/5] drm/modes: parse_cmdline: Handle empty mode name
+part" (https://lore.kernel.org/dri-devel/302d0737539daa2053134e8f24fdf37e3d939e1e.1657788997.git.geert@linux-m68k.org).
+
+>
+>         /* No named mode? Check for a normal mode argument, e.g. 1024x768 */
+>         if (!mode->specified && isdigit(name[0])) {
+
 
 Gr{oetje,eeting}s,
 

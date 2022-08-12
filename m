@@ -2,106 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80487590AEA
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 06:06:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 966BE590AF1
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 06:09:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236755AbiHLEFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 00:05:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59706 "EHLO
+        id S236786AbiHLEJv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 00:09:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230271AbiHLEFt (ORCPT
+        with ESMTP id S230271AbiHLEJs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 00:05:49 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D01CD8E9AC
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 21:05:48 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id p14-20020a17090a74ce00b001f4d04492faso6960953pjl.4
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 21:05:48 -0700 (PDT)
+        Fri, 12 Aug 2022 00:09:48 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE92A0302;
+        Thu, 11 Aug 2022 21:09:47 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id g5so31201274ybg.11;
+        Thu, 11 Aug 2022 21:09:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=DmoyVSWXIDjWkDxD/535JqvNJLgG0ANofKgHtTi6tF0=;
-        b=O8MvQcTfJgsSvxWkirUafK7Bh78DV5u3hBoBq3oc3JcYJo4pe4lUT4MNc97fBsEqUi
-         aFmG1Z3hgKBODhGhMXoIZO6XlC8B1SAugGqY1xXfe1H87/cnD8E5xC7Wo2zTqTcsxiaC
-         WUyhQgHRb+IelY0S2pzjWA5NFQFIc3HPfi5yg/OoUf9gGGPzSPM2lqOL0rjezrGLyWvG
-         0sUOaH6MBfUsomr4jQQVayG03E1rki774FmLMCHEm8yQO7WchkoBu4uKzdbZTbEMUSQ2
-         nynJ8MhfWO7vr68l/0I7GJ5RVbL1kWPveebTlrq9dswSjjSNuZ3Z6GGwn98GzHmII4nz
-         xdeg==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=VElpo/hJHfw2RvZvud8eiJu3fb0VVkH8EWFL092LbyM=;
+        b=blP25JnLo2TmHjHag2bR+teBEK87Mz7SHz967KGBmFf1p5xgNeulgtkLNaOZsvHcFj
+         QTk4BI80mvvcE3TIP29g7aY4kmQ2qzqwYi98tdOyIcC9kPFx894zioqG/H5KiYSsm11b
+         1vOiScZd46PL3CMmNCrAhbxDa0dElvnru66liMq8I7HbUnqTWSibq9LDSmmxNh5AjdHp
+         jW4QKqsb5GiJX3ivYl19mwURClKJAgisYLz2AkCKMnyDPKfMmzC9vuByhCuFMtubmnUM
+         tEvwW/AK9qAKyhe2AAgc4blnry8Ish4U7kal/2L8VJL7cx3q1k5yffy9/pBPbnNcgDGy
+         +cXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=DmoyVSWXIDjWkDxD/535JqvNJLgG0ANofKgHtTi6tF0=;
-        b=kIIyRmyl7TM5ExZFf6s3wB6trNL6Nr5kWGOQ0i6PP6mOMyzv2mSBXCQNvDG1gUVl+F
-         V52uz1wg4nG0ID3lTfPAP8U44Wmy2IWZ6GxzSlAYO6bKxfqbWxP5mkB6LmiTDSQen6W5
-         nUP5Drl7rPvNzQNcqPqtg8LzbNuOdJzuwV9udZaoLe3uRR6/SbBV/7B1bRC9Q1IDtWSn
-         4p9In1a+ltaL30sZOT1oh8NvyU3lO11v6NQVvZTNFUgmDe2gJdZg697fnA2FEzkVHWTn
-         Tt4/2Yo/6IgY0FusJEiN0SgdSutaPgAzWn+q7xsgrdCINajV+yP0R5TPoLdvaVyUWfVw
-         l95Q==
-X-Gm-Message-State: ACgBeo1+7oAZ07fXbkM2YtteJCtQuJOWA/5jxAUz8WZjcnyIgKEDjndy
-        Cl7T07YNTHpcLSGUvPQVpafNQ4yIZy+s7A==
-X-Google-Smtp-Source: AA6agR67PVkH2ZYPw4wvqs0B15TlDcQddT+dSsclrta1f5iFHLvGhbe9cJmamOHtST0r5/zQ1ThWow==
-X-Received: by 2002:a17:903:1c7:b0:16f:1228:f632 with SMTP id e7-20020a17090301c700b0016f1228f632mr2218461plh.65.1660277148355;
-        Thu, 11 Aug 2022 21:05:48 -0700 (PDT)
-Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id 14-20020a17090a190e00b001eff36b1f2asm576609pjg.0.2022.08.11.21.05.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Aug 2022 21:05:47 -0700 (PDT)
-Date:   Fri, 12 Aug 2022 09:35:45 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Lukasz Luba <lukasz.luba@arm.com>
-Cc:     linux-kernel@vger.kernel.org, rafael@kernel.org,
-        linux-pm@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: check only freq_table in __resolve_freq()
-Message-ID: <20220812040545.gcmyjjpqfup3bo5u@vireshk-i7>
-References: <20220811165408.23027-1-lukasz.luba@arm.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=VElpo/hJHfw2RvZvud8eiJu3fb0VVkH8EWFL092LbyM=;
+        b=DqcRAAKJGZWl2phrrHPrTgrRy7tveR+2T17ngEJbZcGxGrmau6+HGbaWKiG72a6gTN
+         m8zX4cibP4auDY3KhLoGKWUwTrnd81+YIXbnYkuNZivow2n4fgegOEbc5to+vfaWpkXi
+         7pgG5FVq1cKknSe3SS9S/E5K4AGXeueBStPIFwGsx5XqvkADapSll/YyPv7dZihgIiej
+         aix4cTeYHeD7FyLyd5DxCPdORMTthntsq5xsZ+x1TEz7qRzILNP8vjVvS3mvN9wzfgBU
+         JfgZsWiPaZnXQvw2Tk2MDUEDyahR6bT0ULeYJyP+3eTf/+sb3jv3NBz19WoU99CiiUvH
+         g06g==
+X-Gm-Message-State: ACgBeo1ZysUrCmCVhW0WUp7iGNl4U1HmE7U/B9Q95mtbQOFlrMy0T66f
+        AjUgrrWfk5Q0eHipkS7Atfj81iR9Z9dMNRN1aaE=
+X-Google-Smtp-Source: AA6agR7aS8A13CrYgjl8GiA4yxSMSh8285o1W6Z9Itk2qso727yl4VcHZ225ZGHVW28V8MpIdpTrAfpF1lIigRh3rhI=
+X-Received: by 2002:a25:da13:0:b0:672:6a10:a033 with SMTP id
+ n19-20020a25da13000000b006726a10a033mr2082818ybf.617.1660277386448; Thu, 11
+ Aug 2022 21:09:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220811165408.23027-1-lukasz.luba@arm.com>
+References: <YvVQEDs75pxSgxjM@debian> <20220811124637.4cdb84f1@kernel.org>
+In-Reply-To: <20220811124637.4cdb84f1@kernel.org>
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+Date:   Fri, 12 Aug 2022 05:09:10 +0100
+Message-ID: <CADVatmPQxgQoQ5o_9PhRphekhnmjndq2jd+0yXnDc1OuUphdpA@mail.gmail.com>
+Subject: Re: build failure of next-20220811 due to 332f1795ca20 ("Bluetooth:
+ L2CAP: Fix l2cap_global_chan_by_psm regression")
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        netdev <netdev@vger.kernel.org>, linux-bluetooth@vger.kernel.org,
+        linux-next <linux-next@vger.kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips <linux-mips@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11-08-22, 17:54, Lukasz Luba wrote:
-> The there is no need to check if the cpufreq driver implements callback
+On Thu, Aug 11, 2022 at 8:46 PM Jakub Kicinski <kuba@kernel.org> wrote:
+>
+> On Thu, 11 Aug 2022 19:53:04 +0100 Sudip Mukherjee (Codethink) wrote:
+> > Not sure if it has been reported, builds of csky and mips allmodconfig
+> > failed to build next-20220811 with gcc-12.
+>
+> I can't repro with the cross compiler from kernel.org.
+> Can you test something like this?
 
-s/The there/There/
+With this patch I get new failure:
 
-> cpufreq_driver::target_index. The logic in the __resolve_freq uses
-> the frequency table available in the policy. It doesn't matter if the
-> driver provides 'target_index' or 'target' callback. It just has to
-> populate the 'policy->freq_table'.
-> 
-> Thus, check only frequency table during the frequency resolving call.
-> 
-> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
-> ---
->  drivers/cpufreq/cpufreq.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 7820c4e74289..69b3d61852ac 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -532,7 +532,7 @@ static unsigned int __resolve_freq(struct cpufreq_policy *policy,
->  
->  	target_freq = clamp_val(target_freq, policy->min, policy->max);
->  
-> -	if (!cpufreq_driver->target_index)
-> +	if (!policy->freq_table)
->  		return target_freq;
->  
->  	idx = cpufreq_frequency_table_target(policy, target_freq, relation);
+In file included from net/bluetooth/l2cap_core.c:37:
+./include/net/bluetooth/bluetooth.h: In function 'ba_is_any':
+./include/net/bluetooth/bluetooth.h:346:16: error: returning 'void *'
+from a function with return type 'int' makes integer from pointer
+without a cast [-Werror=int-conversion]
+  346 |         return memchr_inv(ba, sizeof(*ba), 0);
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+So for a quick test, I modified it a little (just a typecast) which worked.
+
+diff --git a/include/net/bluetooth/bluetooth.h
+b/include/net/bluetooth/bluetooth.h
+index e72f3b247b5e..19bdd2520070 100644
+--- a/include/net/bluetooth/bluetooth.h
++++ b/include/net/bluetooth/bluetooth.h
+@@ -341,6 +341,11 @@ static inline bool bdaddr_type_is_le(u8 type)
+ #define BDADDR_ANY  (&(bdaddr_t) {{0, 0, 0, 0, 0, 0}})
+ #define BDADDR_NONE (&(bdaddr_t) {{0xff, 0xff, 0xff, 0xff, 0xff, 0xff}})
+
++static inline int ba_is_any(const bdaddr_t *ba)
++{
++       return (int) memchr_inv(ba, sizeof(*ba), 0);
++}
++
+ /* Copy, swap, convert BD Address */
+ static inline int bacmp(const bdaddr_t *ba1, const bdaddr_t *ba2)
+ {
+diff --git a/net/bluetooth/l2cap_core.c b/net/bluetooth/l2cap_core.c
+index cbe0cae73434..67c5d923bc6c 100644
+--- a/net/bluetooth/l2cap_core.c
++++ b/net/bluetooth/l2cap_core.c
+@@ -2000,8 +2000,8 @@ static struct l2cap_chan
+*l2cap_global_chan_by_psm(int state, __le16 psm,
+                        }
+
+                        /* Closest match */
+-                       src_any = !bacmp(&c->src, BDADDR_ANY);
+-                       dst_any = !bacmp(&c->dst, BDADDR_ANY);
++                       src_any = !ba_is_any(&c->src);
++                       dst_any = !ba_is_any(&c->dst);
+                        if ((src_match && dst_any) || (src_any && dst_match) ||
+                            (src_any && dst_any))
+                                c1 = c;
+
+
 
 -- 
-viresh
+Regards
+Sudip

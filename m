@@ -2,112 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C86559179B
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 01:25:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 044F859179F
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 01:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237856AbiHLXWr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 19:22:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59488 "EHLO
+        id S235384AbiHLX0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 19:26:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232561AbiHLXWl (ORCPT
+        with ESMTP id S229507AbiHLX0F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 19:22:41 -0400
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C5EA3478;
-        Fri, 12 Aug 2022 16:22:39 -0700 (PDT)
-Received: from [127.0.0.1] ([73.223.250.219])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 27CNLclP771159
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Fri, 12 Aug 2022 16:21:39 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 27CNLclP771159
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2022080501; t=1660346502;
-        bh=a9ddSviliS23TcDabYjsFwvn9niNE8rduQteZQoYXyc=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=Q4m6p7cmO1JH9bpaMR0s5IdhftlYiBd37ns40oMzBHvKqO4OJLwb1k0D/4cueNjJD
-         fC+DA2UQ0/V1/bOT4v9PTrzwhxnmg+XzPZ2qb6j+vidqIHsA7nNTpokYqUyHqnGf5I
-         XiWmupArPOwFXE8R4x9rTDVLRoXoV1CSLdwf5HL8g6iQLL8w8xG+Aw/8s6V+z2/QWL
-         mHU4X69K2x5aFb1YuCsJSvXNCCTK9068S29ZoYfXDYeLUiRAi9qfwuwunqibefUPDp
-         CFqxAyyCWy5qHdqLPCo15C9FcNjkU9SXyJcFfLumAsG+zS6myyg4VrA8RfHGdaGBCL
-         77XvyLayu1eQw==
-Date:   Fri, 12 Aug 2022 16:21:36 -0700
-From:   "H. Peter Anvin" <hpa@zytor.com>
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        Linux Documentation List <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm Mailing List <linux-arm-kernel@lists.infradead.org>,
-        Linux-Arch <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH] gpio: Allow user to customise maximum number of GPIOs
-User-Agent: K-9 Mail for Android
-In-Reply-To: <CAHp75VfFQe3Ce-Si1sax8CCG1-rq+Y=8JhwH=82d3XgytCAmOQ@mail.gmail.com>
-References: <f31b818cf8d682de61c74b133beffcc8a8202478.1660041358.git.christophe.leroy@csgroup.eu> <C1886F9A-1799-4E3D-9153-579D31488695@zytor.com> <CAHp75VfFQe3Ce-Si1sax8CCG1-rq+Y=8JhwH=82d3XgytCAmOQ@mail.gmail.com>
-Message-ID: <B4A6C65C-1480-4D20-9A0C-D97BEABC838F@zytor.com>
+        Fri, 12 Aug 2022 19:26:05 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B77CC95AC9
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 16:26:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660346761; x=1691882761;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=l/yhGx3WeYS9o9opm7MAKF4+svHia934rmoTbkLOp9I=;
+  b=c5XqW7DaEGdGERVjySO9vLZdP2/GsmDov4P4o05qXRyejLGIMHG8syDX
+   M7/b/3xaP74e+KktDdzFoKwYvedc1YB3qDZNmFaQqs5DBxYM2sBvjK5zb
+   S3oi85/XIS7q9uMo90JLvztYVsAmCPa9dgKjNFj7khMUduFlbM6l5NNdD
+   x9ocvrKkpojVp5z1nTbEF4SlrgXFraVZIeUqmrl/ojRM3SOPZsUZNC6zd
+   Oxaeqg1zDgfUzzG1Ev9MEfqR5yt+cyTkMIY04ofMSyR2//lrc6hn9bVu6
+   Y48WHOXWRh1ARr7RbHe8WFFrfGbVR1UfgmWskkZqBNYANFtqIRBvQpuob
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="289275777"
+X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
+   d="scan'208";a="289275777"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 16:26:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
+   d="scan'208";a="609406137"
+Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 12 Aug 2022 16:26:00 -0700
+Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oMe2R-000143-1p;
+        Fri, 12 Aug 2022 23:25:59 +0000
+Date:   Sat, 13 Aug 2022 07:25:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: xillybus_of.c:undefined reference to `devm_platform_ioremap_resource'
+Message-ID: <202208130714.vBT1t33p-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On August 12, 2022 2:58:36 PM PDT, Andy Shevchenko <andy=2Eshevchenko@gmail=
-=2Ecom> wrote:
->On Thu, Aug 11, 2022 at 11:12 PM H=2E Peter Anvin <hpa@zytor=2Ecom> wrote=
-:
->>
->> On August 9, 2022 3:40:38 AM PDT, Christophe Leroy <christophe=2Eleroy@=
-csgroup=2Eeu> wrote:
->> >At the time being, the default maximum number of GPIOs is set to 512
->> >and can only get customised via an architecture specific
->> >CONFIG_ARCH_NR_GPIO=2E
->> >
->> >The maximum number of GPIOs might be dependent on the number of
->> >interface boards and is somewhat independent of architecture=2E
->> >
->> >Allow the user to select that maximum number outside of any
->> >architecture configuration=2E To enable that, re-define a
->> >core CONFIG_ARCH_NR_GPIO for architectures which don't already
->> >define one=2E Guard it with a new hidden CONFIG_ARCH_HAS_NR_GPIO=2E
->> >
->> >Only two architectures will need CONFIG_ARCH_HAS_NR_GPIO: x86 and arm=
-=2E
->> >
->> >On arm, do like x86 and set 512 as the default instead of 0, that
->> >allows simplifying the logic in asm-generic/gpio=2Eh
->
->=2E=2E=2E
->
->> This seems very odd to me=2E GPIOs can be, and often are, attached to p=
-eripheral buses which means that the *same system* can have anything from n=
-one to thousands of gpios =2E=2E
->
->Basically this setting should give us a *minimum* GPIO lines that are
->present on the system=2E And that is perfectly SoC dependent=2E The real
->issue is that the GPIO framework has these global arrays that (still?)
->can't be initialized from the heap due to too early initialization (is
->it the true reason?)=2E
->
+Hi Herbert,
 
-Ok that makes more sense=2E=2E=2E but in that case, it would also be good =
-to reclaim excess storage that turns out to not be needed=2E
+FYI, the error/warning still remains.
 
-I am a bit skeptical, though =E2=80=93 we get basic memory allocation very=
- early=2E
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   4a9350597aff50bbd0f4b80ccf49d2e02d1111f5
+commit: a1315dcb7b6a7d3a78df848eed5b331a4b3ec28a hwrng: ks-sa - Add dependency on IOMEM and OF
+date:   1 year, 8 months ago
+config: s390-randconfig-r044-20220812 (https://download.01.org/0day-ci/archive/20220813/202208130714.vBT1t33p-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a1315dcb7b6a7d3a78df848eed5b331a4b3ec28a
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout a1315dcb7b6a7d3a78df848eed5b331a4b3ec28a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   s390-linux-ld: drivers/irqchip/irq-al-fic.o: in function `al_fic_init_dt':
+   irq-al-fic.c:(.init.text+0x3a): undefined reference to `of_iomap'
+   s390-linux-ld: irq-al-fic.c:(.init.text+0x3bc): undefined reference to `iounmap'
+   s390-linux-ld: drivers/irqchip/irq-imx-intmux.o: in function `imx_intmux_probe':
+   irq-imx-intmux.c:(.text+0x59c): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/phy/marvell/phy-mvebu-a3700-utmi.o: in function `mvebu_a3700_utmi_phy_probe':
+   phy-mvebu-a3700-utmi.c:(.text+0x158): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/clk/clk-fixed-mmio.o: in function `fixed_mmio_clk_setup':
+   clk-fixed-mmio.c:(.text+0x94): undefined reference to `of_iomap'
+   s390-linux-ld: clk-fixed-mmio.c:(.text+0xc2): undefined reference to `iounmap'
+   s390-linux-ld: drivers/soc/fsl/dpaa2-console.o: in function `dpaa2_console_close':
+   dpaa2-console.c:(.text+0x88): undefined reference to `iounmap'
+   s390-linux-ld: drivers/soc/fsl/dpaa2-console.o: in function `dpaa2_console_probe':
+   dpaa2-console.c:(.text+0x22a): undefined reference to `of_address_to_resource'
+   s390-linux-ld: drivers/soc/fsl/dpaa2-console.o: in function `dpaa2_generic_console_open.constprop.0':
+   dpaa2-console.c:(.text+0x33e): undefined reference to `ioremap'
+   s390-linux-ld: dpaa2-console.c:(.text+0x39e): undefined reference to `iounmap'
+   s390-linux-ld: dpaa2-console.c:(.text+0x3ba): undefined reference to `ioremap'
+   s390-linux-ld: dpaa2-console.c:(.text+0x496): undefined reference to `iounmap'
+   s390-linux-ld: drivers/char/hw_random/exynos-trng.o: in function `exynos_trng_probe':
+   exynos-trng.c:(.text+0x40c): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/char/hw_random/meson-rng.o: in function `meson_rng_probe':
+   meson-rng.c:(.text+0x104): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/char/hw_random/mtk-rng.o: in function `mtk_rng_probe':
+   mtk-rng.c:(.text+0x4a6): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/char/hw_random/npcm-rng.o: in function `npcm_rng_probe':
+   npcm-rng.c:(.text+0x39c): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/char/xillybus/xillybus_of.o: in function `xilly_drv_probe':
+>> xillybus_of.c:(.text+0x222): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/mfd/sun6i-prcm.o: in function `sun6i_prcm_probe':
+   sun6i-prcm.c:(.text+0xba): undefined reference to `mfd_add_devices'
+   s390-linux-ld: drivers/pcmcia/cistpl.o: in function `set_cis_map':
+   cistpl.c:(.text+0x3fe): undefined reference to `ioremap'
+   s390-linux-ld: cistpl.c:(.text+0x480): undefined reference to `iounmap'
+   s390-linux-ld: cistpl.c:(.text+0x4e8): undefined reference to `iounmap'
+   s390-linux-ld: cistpl.c:(.text+0x518): undefined reference to `ioremap'
+   s390-linux-ld: drivers/pcmcia/cistpl.o: in function `release_cis_mem':
+   cistpl.c:(.text+0x1c78): undefined reference to `iounmap'
+   s390-linux-ld: drivers/media/rc/ir-hix5hd2.o: in function `hix5hd2_ir_probe':
+   ir-hix5hd2.c:(.text+0x4e4): undefined reference to `devm_ioremap_resource'
+   s390-linux-ld: drivers/watchdog/sirfsoc_wdt.o: in function `sirfsoc_wdt_probe':
+   sirfsoc_wdt.c:(.text+0x1b0): undefined reference to `devm_platform_ioremap_resource'
+   s390-linux-ld: drivers/clocksource/timer-of.o: in function `timer_of_init':
+   timer-of.c:(.init.text+0x112): undefined reference to `of_iomap'
+   s390-linux-ld: timer-of.c:(.init.text+0x57e): undefined reference to `iounmap'
+   s390-linux-ld: drivers/clocksource/timer-of.o: in function `timer_of_cleanup':
+   timer-of.c:(.init.text+0x686): undefined reference to `iounmap'
+   s390-linux-ld: drivers/clocksource/timer-microchip-pit64b.o: in function `mchp_pit64b_dt_init_timer':
+   timer-microchip-pit64b.c:(.init.text+0x1d6): undefined reference to `of_iomap'
+   s390-linux-ld: timer-microchip-pit64b.c:(.init.text+0x78c): undefined reference to `iounmap'
+
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for MFD_SUN6I_PRCM
+   Depends on [n]: HAS_IOMEM [=n] && (ARCH_SUNXI || COMPILE_TEST [=y])
+   Selected by [y]:
+   - CLK_SUNXI_PRCM_SUN6I [=y] && COMMON_CLK [=y] && CLK_SUNXI [=y]
+   - CLK_SUNXI_PRCM_SUN8I [=y] && COMMON_CLK [=y] && CLK_SUNXI [=y]
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

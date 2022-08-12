@@ -2,136 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EABE5912D9
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 17:19:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D658B5912DA
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 17:20:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237451AbiHLPTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 11:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42186 "EHLO
+        id S237569AbiHLPU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 11:20:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232082AbiHLPTl (ORCPT
+        with ESMTP id S237666AbiHLPUX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 11:19:41 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57556ABF3D
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 08:19:40 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id z187so1194808pfb.12
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 08:19:40 -0700 (PDT)
+        Fri, 12 Aug 2022 11:20:23 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 166D1B16
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 08:20:21 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id kb8so2583377ejc.4
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 08:20:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc;
-        bh=AFUOARZXq1xWqbjN64AF0sbE84lot9hyotvLNNmb9xo=;
-        b=lbfmZHxwT4t3Yg5iuKcXAmksiLh2khCTE6SCy9nbrfz7thwsCx4jqmx1dA0pt8NM+0
-         hkV/NZSiUwmo3uIDEzzFEwnZfkn6sm8zaPTgDv+/YJL1yIVldDCVOkUShJGkvME6817e
-         M8AdGomQ1Rsv29+xVkBNKFPtDhEqYGvVMWTkNJRs3htsvxdN7PcufjI2R5DY6nB+4QyX
-         vZBvFqWshwKdNy70WHcBVRO8e3gE/NtzpBtpOIcks5tk3tII3Up7K+6Zrf2RiVf/XIYY
-         Qy6pYPpxrCsoaDJ4ZS1B6EazViNOElpOcdOmsGSRv5097Mk/l7e0In0lwf+2UDgzCn58
-         awbg==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=rtQ2oj7YSn/gbh3jMKvBJQDThusJmtQ8+ZqWZmJSXcA=;
+        b=aI3Lgtkys5nGO/IzF9hKpacnqblRSZ8BULX6iKtqVwXw96On7EY67hsUqnsnARm10O
+         Qm+9INAzLurLw622ZfF469LHTkzda70y2lZJcjwLQnhd414+DYtIzAj1q6TreKowJVpv
+         0eTf8DmRj6TinmoH6LyrFol8JN/VltD0DHeoQe+gCQKB/Us4iaVKIARt4CPPJYLUlgD+
+         IboMJnrrITy4Fjyn73tjxDTO6nFsDz/Hvk9Yz8h9Hx3QbNZMX9fsLmKPYTZTKQgb039i
+         0p44nD+lDO1yCaJrdRGjODCmxpaRookG4rUw/d7+ZzUTNop02aT2A46uF/eEVRlXkFBc
+         s+Tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc;
-        bh=AFUOARZXq1xWqbjN64AF0sbE84lot9hyotvLNNmb9xo=;
-        b=7w/G2w1Xgxtc6f8hsqHm7cnkdgK8jVVBU8SejjxUIGNrWk3PXihq+4yjJZ7YwpNjWo
-         8LkawLXDrx1kqS+liD9hBn0teadtyDM8TXv1F1G4bKj9vVNFThc6iMEezEbddSAj8O+5
-         KDpPgj5eR7PkVCAZNMaL0lPMOaYeBpAKYr717K3tTK0+E7zGBiNkSwsKZeOVppgSc+MS
-         g65mB4sCDDWmcIDVysY23B6Q32txhFtnzi4yirQSsbZUg8+ia6dj+e/uJukg+suxyflY
-         cBbhWyJyhnckuCucg8DWzvCeAbILblTtuSW6Z+WlgBLK1qfiinHZ8rwEfg8RahgwDvfz
-         CViA==
-X-Gm-Message-State: ACgBeo01e5m4kwn62r3LdBY4+bHBDQ7/W4ZYtJ0RI7mSBdDQdRSKt8BO
-        QcjZ0SSwnA7yRgVTmanc/O4=
-X-Google-Smtp-Source: AA6agR4fx9z1Dt/jeLstctGLZVxbkMNmRJB3bcHfON55/30Qgmma3WWiyip1M9Vg/50p6CJBc9YRIg==
-X-Received: by 2002:a63:e102:0:b0:41b:3901:990e with SMTP id z2-20020a63e102000000b0041b3901990emr3433200pgh.107.1660317579709;
-        Fri, 12 Aug 2022 08:19:39 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m17-20020a17090a7f9100b001f8c532b93dsm1323151pjl.15.2022.08.12.08.19.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 08:19:38 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <adf3818b-1f40-ec59-e227-f474773b0033@roeck-us.net>
-Date:   Fri, 12 Aug 2022 08:19:35 -0700
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=rtQ2oj7YSn/gbh3jMKvBJQDThusJmtQ8+ZqWZmJSXcA=;
+        b=w/HAIgUsr8rozp9Z/TZGL2BdCPztAv//4wp2eLoXxAjgitt4r+HeanDqxJo4Bidw3z
+         IwO28HFBpc0ub6XwYAw4pDwttw0/U8gOoAe2sy4EAghzmyfXmzJv41mCtwyKFMFhGIXv
+         Y71UVWVGfj6sp56uWf+Mx3+9zbPAVg2ea8NFd3Qwfo2T+kMegM6k4CX/N0Sw92cZq9bp
+         anE/yz7rq2V15n53V1I2cKMS9YyKdAfOMutM6eGt7yIets1dGsF0iWANcCoMUIvhK0MM
+         NNn1w7w5dOXWaqTtBfrt0jgBHm8lQ74dY/DdKjpog7zpdKn7ED4eAQPLjiZmRumd79tX
+         kwTQ==
+X-Gm-Message-State: ACgBeo0j4XRyFkZxhCd5z3BhTgD4h1w13MPGE9QfwwOdTW6AapLj1tTU
+        tS3bmVRrZGC2sAHeXUiaMd1X8A==
+X-Google-Smtp-Source: AA6agR63EJQsWA71K1V6fzcjfi7FR6X9gMKdVMyzigLyDpWASNPHDzfJrpwYA4KNxpl2dwBuNQXp+Q==
+X-Received: by 2002:a17:907:75e7:b0:730:bc2f:b26a with SMTP id jz7-20020a17090775e700b00730bc2fb26amr2964073ejc.738.1660317619472;
+        Fri, 12 Aug 2022 08:20:19 -0700 (PDT)
+Received: from leoy-huanghe ([104.245.96.132])
+        by smtp.gmail.com with ESMTPSA id a5-20020a17090680c500b00734b2169222sm873749ejx.186.2022.08.12.08.20.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Aug 2022 08:20:19 -0700 (PDT)
+Date:   Fri, 12 Aug 2022 23:20:10 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        John Garry <john.garry@huawei.com>,
+        Will Deacon <will@kernel.org>,
+        James Clark <james.clark@arm.com>,
+        German Gomez <german.gomez@arm.com>,
+        Ali Saidi <alisaidi@amazon.com>, Joe Mario <jmario@redhat.com>,
+        Adam Li <adam.li@amperecomputing.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v5 00/17] perf c2c: Support data source and display for
+ Arm64
+Message-ID: <20220812152010.GA74978@leoy-huanghe>
+References: <20220604042820.2270916-1-leo.yan@linaro.org>
+ <YvO0nAZ1znppjKjZ@kernel.org>
+ <20220811064122.GA860078@leoy-huanghe.lan>
+ <YvZK20NEoIQATSH/@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v6] amba: Remove deferred device addition
-Content-Language: en-US
-To:     Isaac Manjarres <isaacmanjarres@google.com>
-Cc:     Saravana Kannan <saravanak@google.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@armlinux.org.uk, kernel-team@android.com,
-        linux-kernel@vger.kernel.org
-References: <0c6ef9a3-bbb1-9f1c-7f00-ceb05589594e@roeck-us.net>
- <CAGETcx8yKqEthtyd8Zb=mqMBNp1TPRXbQOoFp+OxeCoXnTs2kw@mail.gmail.com>
- <1196e002-c07d-44fd-b07a-aa5ae446ea0b@roeck-us.net>
- <YvQnbq2RhMOElQE3@google.com>
- <225747de-4348-58b3-19be-8b14356ab3a0@roeck-us.net>
- <CAGETcx895=9wPF+jnUfiycJ0k8d1S3BA0HLz42nCegtMBeo3LQ@mail.gmail.com>
- <971799be-8c15-fc81-ec71-bbca6483207d@roeck-us.net>
- <YvUzpSAQDktDPRbR@google.com> <YvVWEIn8veGL9Psa@google.com>
- <20220811195234.GA4018948@roeck-us.net> <YvXhJRlHN9OAIA5l@google.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <YvXhJRlHN9OAIA5l@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YvZK20NEoIQATSH/@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/11/22 22:12, Isaac Manjarres wrote:
-> On Thu, Aug 11, 2022 at 12:55:08PM -0700, Guenter Roeck wrote:
->>
->> Ah, it must be triggered by one of the configuration options I have enabled
->> on top of versatile_defconfig. Sorry, I should have checked. Please try
->> with the configuration below.
->>
->> Guenter
-> 
-> Thanks for sharing your config options; I was able to reproduce the
-> crash after copying your config options to my repository :) The
-> following changes fixed the problem for me. Can you please give them a
-> try on your end to see if they work for you too?
-> 
-> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-> index 90b31fb141a5..0315bc2853ef 100644
-> --- a/drivers/base/dd.c
-> +++ b/drivers/base/dd.c
-> @@ -1117,7 +1117,9 @@ static int __driver_attach(struct device *dev, void *data)
->           * is an error.
->           */
-> 
-> +       device_lock(dev);
->          ret = driver_match_device(drv, dev);
-> +       device_unlock(dev);
->          if (ret == 0) {
->                  /* no match */
->                  return 0;
-> 
-> 
-> Thanks,
-> Isaac
+On Fri, Aug 12, 2022 at 09:43:07AM -0300, Arnaldo Carvalho de Melo wrote:
 
-The original test passes, but I now see other boot failures with other emulations.
-I don't know yet if it is due to your changes or due to something else. I'll do
-more testing and let you know.
+[...]
 
-Guenter
+> > One question: should I later continue to upstream the first patch for
+> > syncing the kernel header perf_event.h after Peter.Z comes back?
+> 
+> yes, and we may have to backtrack and find some other way to implement
+> this if he is opposed, as he in the past didn't like
+> perf_event_attr.type namespace being used by userspace only records such
+> as PERF_RECORD_FINISHED_ROUND, PERF_RECORD_COMPRESSED, etc.
+> 
+> In this case its different, I think its ok as we already have
+> PERF_MEM_SNOOPX_FWD and PERF_MEM_SNOOPX_PEER probably will be emitted by
+> the some of the architectures, from the kernel, right?
+
+Yes, as I know x86 generates memory samples from kernel, and SNOOPX_PEER
+can be a useful snooping flag for other archs.
+
+As a last resort if SNOOPX_PEER is rejected, we can rollback to use
+existed flag (like reusing PERF_MEM_SNOOPX_FWD), though this would be
+ambiguous for expressing the memory operations on Arm64.
+
+Thanks,
+Leo

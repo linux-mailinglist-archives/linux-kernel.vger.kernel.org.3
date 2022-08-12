@@ -2,141 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2E40590C19
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 08:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6022590C23
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 08:54:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236941AbiHLGrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 02:47:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50808 "EHLO
+        id S236747AbiHLGyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 02:54:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231698AbiHLGrs (ORCPT
+        with ESMTP id S229552AbiHLGyS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 02:47:48 -0400
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0573FA573D
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 23:47:48 -0700 (PDT)
-Received: by mail-vs1-xe29.google.com with SMTP id q15so20521588vsr.0
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 23:47:47 -0700 (PDT)
+        Fri, 12 Aug 2022 02:54:18 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DE6BA5988
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 23:54:17 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id w5so144931lfq.5
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 23:54:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=62jXssQzwbkQ8Rmc1tx8vX5eCwUzcdRISHw/EF4b6zM=;
-        b=njM+fpykYrXCTza8q/0vYz5xtoWf+ioQhQxNl8tlxQcrWVbiwi6q8OxFbsDCr/yDU4
-         jqVKkGkR9xntwwvsJSNXoDpb7d0srEdQfyU1uL6NLID4Pv/sTp1A7ZiNWd++Ty0bm1zh
-         9NKHccYi7PEoQnHdWHdd17pbED5tQCWzUUu5UurIPc/iwqrynY4kC1RlUVecsHZLNB/W
-         1d00w5RH6Ne33/LuUAK44OeHyhb5zgPkVKzPfkXEbtDCqDi74hKuLTlnshrmT59WsoQ6
-         B4ecCyukzezdcYuzY5cE+VrNIODl/Ap5VwAsDlvAnTvidXKfMFelwmAxM1nRHYAvEqMf
-         9nhg==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=t3EERWAoHc/0sJzUnWIG/VXJqbeUHXe35Iq8kCfIwJ8=;
+        b=H0Rll6qOqs0V2BmA7/rXq8aEvL568CpvV8lKQ3Rn5KRJjcfJsvnHeU6JN6ie3e+jQb
+         KqVSjL28MvNTNAeD+f9a7p92RM33993ChXnC30O2V4iPLa4A0OpxfXLo6VnZD5mVX8j9
+         /mMs1KTE0M5xc5WVU0k7fH5YQbXIq4fBoNpYtztfLhZSob7Gk0NpSsvY9YNaagKTiGwM
+         I9EcusoqsELsaNje/phNRiMzW2n/gsxSKDzrAhAbT3hRUa8n5dP4+yPB2DKjvPF9yX6S
+         VR67nq/yClD4vERkuYuOmMD9YpDMf1R7iQqS3gt/3m2V+g6B3KzEgh87FPpqJAw6wbYc
+         Hzvg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=62jXssQzwbkQ8Rmc1tx8vX5eCwUzcdRISHw/EF4b6zM=;
-        b=qsdcGh7UsxrH0WmvOjOmoj6qomijekc9m3upW8kIsK8zPVAKDSPaylG5pSfDuHUzmP
-         rfZ2Lwx7xNraCb1zy7U0f5TbU1bfM9ukgUjOR6MhEtXA2oIah4R9qMopnxNqVQ0e9acG
-         J03iW2Gk1d37uLzOGy6YMxBgZloQwcsLqNLGBOecA3wdc+QuiLY4I99VKSorAYD8Y1nw
-         pVH9PUzgk89agFMGNFH3q4WEnfIbTOwEqWN2y1QheGNGLY5aC5QimuOgZvQBfFEyKHhd
-         0U1JTuq8rNx0vVQ8HtKiJsjyzGpQMvOyfqEo708Ap/UTW/gs1e5o407UimSUzB1nzadO
-         CjPw==
-X-Gm-Message-State: ACgBeo0GP6r66vCCuPfv6DIppnLINmMEmDjGteEj1tDx8MnmWo1vrhFv
-        FBoIZdcVxUhkvTJkl1hqtbgNZFN44UjBNyeMVFcVFA==
-X-Google-Smtp-Source: AA6agR6bmcSrP/3/JdOUhQzh48KeeHhgXsCC9wAF7H36hpVQ7CZ7oheYdMwjv9v6yQ9Kn69y/OIJFRSb+PjddLr1l6Q=
-X-Received: by 2002:a67:fdce:0:b0:388:485c:889c with SMTP id
- l14-20020a67fdce000000b00388485c889cmr1145672vsq.38.1660286867085; Thu, 11
- Aug 2022 23:47:47 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=t3EERWAoHc/0sJzUnWIG/VXJqbeUHXe35Iq8kCfIwJ8=;
+        b=flf07/ppUlYq5lKCF/EWZAQH+uCyAwJr8wGZ4qz007aq4+6yu6omtotarDn06RTrO3
+         oYrKMEAw25caxhMUEJ83QsDROSwYE1U/hei5N1viNtikhn+2dwyxHpJRop6QOZER6/qt
+         v9SiNDR1o+503fKzygkngMXg2qJqJFOE5f2mnvOVwE7cixbAicizIKWJaxNsWnDi48I1
+         s4jDy7FoW0272P0YoJsa82MbH1tcIRskPFkuJ3VSsOLMv4Fsn+vJ1Vm5/k/j+P3t7JB5
+         6s9Lp9aFEynWcZUHAzNHZc5W9eBBLO69O7xBj1sPNwU46NHsNfdZYKiv+/O/LQOXmejP
+         qXhA==
+X-Gm-Message-State: ACgBeo2X3x4c4Ehb1nvjQ3MfptBC7MyH2dPLY7ddHo+2E9qLA276N+vy
+        98nDkQ2i2BnuMXru5PCwUcsNbQ==
+X-Google-Smtp-Source: AA6agR6TWxarEea/EB4pqn9N8km5hXjJnqltHNgS5yLpYpMOPAOSyNuQ9fhHFdZxk7o0iINjK3m8vw==
+X-Received: by 2002:a05:6512:ac3:b0:48a:fa85:7b20 with SMTP id n3-20020a0565120ac300b0048afa857b20mr801551lfu.340.1660287255892;
+        Thu, 11 Aug 2022 23:54:15 -0700 (PDT)
+Received: from [192.168.1.39] ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id q30-20020ac2511e000000b0048dacaa8c36sm107895lfb.149.2022.08.11.23.54.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Aug 2022 23:54:15 -0700 (PDT)
+Message-ID: <40261b95-637a-1304-2e06-8c8ff7fc377b@linaro.org>
+Date:   Fri, 12 Aug 2022 09:54:11 +0300
 MIME-Version: 1.0
-References: <20220810234056.2494993-1-npache@redhat.com>
-In-Reply-To: <20220810234056.2494993-1-npache@redhat.com>
-From:   David Gow <davidgow@google.com>
-Date:   Fri, 12 Aug 2022 14:47:36 +0800
-Message-ID: <CABVgOS=rew6uJz_8xYtx5CmTTGraCZMocMyxfpAKOVPah_kAKQ@mail.gmail.com>
-Subject: Re: [PATCH] kunit: fix Kconfig for build-in tests USB4 and Nitro Enclaves
-To:     Nico Pache <npache@redhat.com>
-Cc:     KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>, alcioa@amazon.com,
-        lexnv@amazon.com, Andra Paraschiv <andraprs@amazon.com>,
-        YehezkelShB@gmail.com,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        michael.jamet@intel.com, andreas.noever@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 1/2] dt-bindings: power: supply: Add Richtek RT9471
+ battery charger
+Content-Language: en-US
+To:     ChiYuan Huang <u0084500@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        =?UTF-8?B?5ri45a2Q6aao?= <alina_yu@richtek.com>,
+        cy_huang <cy_huang@richtek.com>, alinayu829@gmail.com,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>
+References: <1660225318-4063-1-git-send-email-u0084500@gmail.com>
+ <1660225318-4063-2-git-send-email-u0084500@gmail.com>
+ <3cae9d60-4012-1dfd-abd9-4d0b9379e6bb@linaro.org>
+ <CADiBU3_depGDZtiyizU3MB939A3oH1uTWzTMyruUy0z=u6BZkQ@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CADiBU3_depGDZtiyizU3MB939A3oH1uTWzTMyruUy0z=u6BZkQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 7:41 AM Nico Pache <npache@redhat.com> wrote:
->
-> Both the USB4 and Nitro Enclaves KUNIT tests are now able to be compiled
-> if KUNIT is compiled as a module. This leads to issues if KUNIT is being
-> packaged separately from the core kernel and when KUNIT is run baremetal
-> without the required driver compiled into the kernel.
->
-> Fixes: 635dcd16844b ("thunderbolt: test: Use kunit_test_suite() macro")
-> Fixes: fe5be808fa6c ("nitro_enclaves: test: Use kunit_test_suite() macro")
-> Signed-off-by: Nico Pache <npache@redhat.com>
-> ---
+On 12/08/2022 04:32, ChiYuan Huang wrote:
+> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> 於 2022年8月11日 週四 晚上10:12寫道：
+>>
+>> On 11/08/2022 16:41, cy_huang wrote:
+>>> From: ChiYuan Huang <cy_huang@richtek.com>
+>>>
+>>> Add bindings for the Richtek RT9471 I2C controlled battery charger.
+>>>
+>>
+>> Thank you for your patch. There is something to discuss/improve.
+>>
+>>> +properties:
+>>> +  compatible:
+>>> +    const: richtek,rt9471
+>>> +
+>>> +  reg:
+>>> +    maxItems: 1
+>>> +
+>>> +  ceb-gpios:
+>>> +    maxItems: 1
+>>
+>> This looks not standard, so please provide a description.
+> It's the external 'charge enable' pin that's used to control battery charging.
+> The priority is higher than the register 'CHG_EN' control.
+> In the word, 'b' means it's reverse logic, low to allow charging, high
+> to force disable charging.
 
-This is okay by me, though it's worth noting that this will stop these
-tests from building when CONFIG_KUNIT=m, so that the modules being
-tested will still load when CONFIG_KUNIT=m was enabled, but the
-kunit.ko file is missing.
+Isn't this standard enable-gpios property?
 
-So if you're relying on being able to run these tests with
-CONFIG_KUNIT=m, you'll want to NACK this one.
+> 
+> description:
+>   External charge enable pin that can force control not to charge the battery.
+>   Low to allow charging, high to disable charging.
+> 
+>>
+>>> +
+>>> +  wakeup-source: true
+>>> +
+>>> +  interrupts:
+>>> +    maxItems: 1
+>>> +
+>>> +  interrupt-controller: true
+>>> +
+>>> +  "#interrupt-cells":
+>>> +    const: 1
+>>
+>> Why a charger driver is a interrupt-controller?
+> There're 32 nested IRQs from RT9471.
+> The original thought is to make the user easy to bind the interrupt
+> into their driver.
 
-There's one comment below, but otherwise (assuming the USB4 and
-nitro_enclaves folks are okay with this tradeoff):
-Reviewed-by: David Gow <davidgow@google.com>
+Bindings are not related to the driver but to hardware...
 
-Cheers,
--- David
+> 
+> For charger driver, does it mean legacy IRQ handler is more preferred?
 
->  drivers/thunderbolt/Kconfig         | 3 +--
->  drivers/virt/nitro_enclaves/Kconfig | 2 +-
->  2 files changed, 2 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/thunderbolt/Kconfig b/drivers/thunderbolt/Kconfig
-> index e76a6c173637..f12d0a3ee3e2 100644
-> --- a/drivers/thunderbolt/Kconfig
-> +++ b/drivers/thunderbolt/Kconfig
-> @@ -29,8 +29,7 @@ config USB4_DEBUGFS_WRITE
->
->  config USB4_KUNIT_TEST
->         bool "KUnit tests" if !KUNIT_ALL_TESTS
-> -       depends on (USB4=m || KUNIT=y)
-> -       depends on KUNIT
-> +       depends on USB4 && KUNIT=y
+Who is the consumer of these interrupts? Can you show the DTS with the
+interrupt consumer?
 
-"USB4 &&" shouldn't be necessary here: this opption is already under
-USB4, IIRC...
+>>
+>>> +
+>>> +  usb-otg-vbus-regulator:
+>>> +    type: object
+>>> +    unevaluatedProperties: false
+>>> +    $ref: /schemas/regulator/regulator.yaml#
+>>> +
+>>> +required:
+>>> +  - compatible
+>>> +  - reg
+>>> +  - wakeup-source
+>>> +  - interrupts
+>>> +  - interrupt-controller
+>>> +  - "#interrupt-cells"
+>>> +
+>>> +additionalProperties: false
+>>> +
+>>> +examples:
+>>> +  - |
+>>> +    #include <dt-bindings/interrupt-controller/irq.h>
+>>> +    i2c {
+>>> +      #address-cells = <1>;
+>>> +      #size-cells = <0>;
+>>> +
+>>> +      charger@53 {
+>>> +        compatible = "richtek,rt9471";
+>>> +        reg = <0x53>;
+>>> +        ceb-gpios = <&gpio26 1 0>;
+>>
+>> Isn't the last value a GPIO flag? If yes, use appropriate define.
+> I already specify GPIOD_OUT_LOW in the gpiod_request flag.
 
->         default KUNIT_ALL_TESTS
->
->  config USB4_DMA_TEST
-> diff --git a/drivers/virt/nitro_enclaves/Kconfig b/drivers/virt/nitro_enclaves/Kconfig
-> index ce91add81401..dc4d25c26256 100644
-> --- a/drivers/virt/nitro_enclaves/Kconfig
-> +++ b/drivers/virt/nitro_enclaves/Kconfig
-> @@ -17,7 +17,7 @@ config NITRO_ENCLAVES
->
->  config NITRO_ENCLAVES_MISC_DEV_TEST
->         bool "Tests for the misc device functionality of the Nitro Enclaves" if !KUNIT_ALL_TESTS
-> -       depends on NITRO_ENCLAVES && KUNIT
-> +       depends on NITRO_ENCLAVES && KUNIT=y
->         default KUNIT_ALL_TESTS
->         help
->           Enable KUnit tests for the misc device functionality of the Nitro
-> --
-> 2.36.1
->
+It is not related to the DTS. Anyway writing "low" for a meaning of high
+is not correct usually...
+
+> Do I need to convert the gpio request code to GPIOD_OUT_HIGH,
+> and specify here as GPIO_ACTIVE_LOW?
+
+You need to properly describe the hardware. The polarity of logical
+signal is defined by DTS, not by driver. It does not make sense to do it
+in driver. What if on some board the signal is inverted?
+
+Best regards,
+Krzysztof

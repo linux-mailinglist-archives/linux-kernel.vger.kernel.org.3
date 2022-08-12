@@ -2,135 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCDC1590DFF
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 11:22:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0742590DFC
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 11:21:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237915AbiHLJWn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 05:22:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36368 "EHLO
+        id S237909AbiHLJVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 05:21:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiHLJWk (ORCPT
+        with ESMTP id S230293AbiHLJVq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 05:22:40 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42741A347B
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 02:22:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660296160; x=1691832160;
-  h=date:from:to:cc:subject:message-id:mime-version:
-   content-transfer-encoding;
-  bh=wK4nFMJHMdVAATrGJ7K8fXP3aVe9nk4rsvj9chrhzG8=;
-  b=V3T9HnpdhFF1MIzJuFhlENQ9LQpQq92WdSQRKpSHFPx0+sU2UmoapeWx
-   u3kMt5XMrujZ5HlqwM9ThvDVwsTnNlbpJ581wBzgKn/VwFF/7obwxvHj8
-   8IAUJXJmLuJdTzECLHUx06n3WJire0ZYFPINLdGMSUOMoVFylp/S1XMwQ
-   fprE/e+gE3cIP+m9tQwWn7jpMVCIT1XzVXHubWllGaZ4I0KSQmwf/E6xw
-   4rhb9xDL3GixT1C39H7Vfu3bMcZ5aRk5ytOWJnTm7FEeVIGRb/w+WgD6Z
-   Oxn1QU05OEVirC31XYuChFQ/PpMXHuxotTg+GYE43u9tha/xE4EkSu64h
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10436"; a="271944036"
-X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
-   d="scan'208";a="271944036"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 02:22:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
-   d="scan'208";a="582022474"
-Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 12 Aug 2022 02:22:38 -0700
-Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oMQsH-0000OF-2r;
-        Fri, 12 Aug 2022 09:22:37 +0000
-Date:   Fri, 12 Aug 2022 17:22:05 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>
-Subject: [gustavoars:totally-untested/remaining-fam0] BUILD SUCCESS
- b0684d2f714f4ae515c283697c48d14e3ccef21b
-Message-ID: <62f61bbd.gN27O8Cbl8z5VxS9%lkp@intel.com>
-User-Agent: Heirloom mailx 12.5 6/20/10
+        Fri, 12 Aug 2022 05:21:46 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0240A347B;
+        Fri, 12 Aug 2022 02:21:44 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 655581F924;
+        Fri, 12 Aug 2022 09:21:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1660296103; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=voPFxsueMeDDO9g9PxJff2XDO4Y129r5tBsuJySfB9c=;
+        b=2QWChunj+2gm2tDWSX/2fBLWfM2Lr9wuQ85K7Paxel8P67JmP946yulVIRu/gCN3j/7LWU
+        485WRSlEi3Bv87laCC/1OEisz/9w0GbSvxDNNDLX+mmWBF4hsA8XudedGXlUbJ86c3shU1
+        eloTG8kZLvFCpkMLEKLBnHr3heEb8KU=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1660296103;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=voPFxsueMeDDO9g9PxJff2XDO4Y129r5tBsuJySfB9c=;
+        b=K/3gjHvcUALLi7588j2R/faOpw7Wt/ZjmqC67E16oiViIj9jeJRSP5GGkOK7W2trMzBtG7
+        x3b3AHWaD5TVe6CA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C5AAE13AAE;
+        Fri, 12 Aug 2022 09:21:42 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id L5xYLaYb9mIZPQAAMHmgww
+        (envelope-from <lhenriques@suse.de>); Fri, 12 Aug 2022 09:21:42 +0000
+Received: from localhost (brahms.olymp [local])
+        by brahms.olymp (OpenSMTPD) with ESMTPA id 2ddfc29e;
+        Fri, 12 Aug 2022 09:22:29 +0000 (UTC)
+Date:   Fri, 12 Aug 2022 10:22:29 +0100
+From:   =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>
+To:     Baokun Li <libaokun1@huawei.com>
+Cc:     Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        wenqingliu0120@gmail.com, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, "zhangyi (F)" <yi.zhang@huawei.com>,
+        yebin10@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+Subject: Re: [PATCH] ext4: fix bug in extents parsing when number of entries
+ in header is zero
+Message-ID: <YvYb1fgvGmdDRmKd@suse.de>
+References: <bug-215941-13602@https.bugzilla.kernel.org/>
+ <20220805140025.26295-1-lhenriques@suse.de>
+ <e10617e8-1a21-a046-8256-66ffc6500ae9@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e10617e8-1a21-a046-8256-66ffc6500ae9@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git totally-untested/remaining-fam0
-branch HEAD: b0684d2f714f4ae515c283697c48d14e3ccef21b  totally-untested: remaining zero-length arrays in structs in next-20220811
+On Fri, Aug 12, 2022 at 10:33:20AM +0800, Baokun Li wrote:
+> 在 2022/8/5 22:00, Luís Henriques 写道:
+...
+> > This bug is easily reproducible using the filesystem image provided --
+> > it's just a matter of mounting it and run:
+> > 
+> >      $ cat /mnt/foo/bar/xattr
+> 
+> Hi Luís,
+> yeah, that's a good catch!
+> > Anyway, I hope my analysis of the bug is correct -- the root cause seems
+> > to be an extent header with an invalid value for in eh_entries, which will
+> > later cause the BUG_ON().
+> > 
+> > Cheers,
+> > --
+> > Luís
+> But there's a little bit of a deviation in your understanding of the
+> problem,
+> so the patch doesn't look good.
+> The issue is caused by the contradiction between eh_entries and eh_depth.
 
-elapsed time: 719m
+Ah! This makes a lot of sense and I can confirm this is exactly what
+happens in both bugzilla images.  Thanks a lot for your feedback!
 
-configs tested: 53
-configs skipped: 2
+> Therefore, we need to check the contradiction instead of adding a judgment
+> to ext4_ext_binsearch_idx.
+> So the right fix is to add a check to __ext4_ext_check like:
+> 
+> diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
+> index c148bb97b527..2dfd35f727cb 100644
+> --- a/fs/ext4/extents.c
+> +++ b/fs/ext4/extents.c
+> @@ -460,6 +460,10 @@ static int __ext4_ext_check(const char *function,
+> unsigned int line,
+>                 error_msg = "invalid eh_entries";
+>                 goto corrupted;
+>         }
+> +       if (unlikely((eh->eh_entries == 0) && (depth > 0))) {
+> +               error_msg = "contradictory eh_entries and eh_depth";
+> +               goto corrupted;
+> +       }
+>         if (!ext4_valid_extent_entries(inode, eh, lblk, &pblk, depth)) {
+>                 error_msg = "invalid extent entries";
+>                 goto corrupted;
+> 
+> In this way, we can fix this issue and check for header exceptions before
+> calling ext4_ext_binsearch_idx.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Awesome, I'll send out v2 with the suggested change.  It makes sense to
+have this check and it should fix both bugs.
 
-gcc tested configs:
-um                             i386_defconfig
-um                           x86_64_defconfig
-i386                          randconfig-a001
-i386                          randconfig-a003
-i386                          randconfig-a005
-i386                                defconfig
-arm                                 defconfig
-arc                  randconfig-r043-20220811
-arm                              allyesconfig
-x86_64                        randconfig-a002
-x86_64                        randconfig-a013
-x86_64                        randconfig-a011
-m68k                             allyesconfig
-i386                             allyesconfig
-x86_64                              defconfig
-x86_64                        randconfig-a006
-i386                          randconfig-a014
-x86_64                        randconfig-a015
-arm64                            allyesconfig
-x86_64                           rhel-8.3-kvm
-powerpc                           allnoconfig
-x86_64                        randconfig-a004
-x86_64                               rhel-8.3
-m68k                             allmodconfig
-x86_64                    rhel-8.3-kselftests
-x86_64                           allyesconfig
-i386                          randconfig-a012
-arc                              allyesconfig
-x86_64                           rhel-8.3-syz
-i386                          randconfig-a016
-x86_64                          rhel-8.3-func
-alpha                            allyesconfig
-x86_64                         rhel-8.3-kunit
-sh                               allmodconfig
-mips                             allyesconfig
-powerpc                          allmodconfig
-ia64                             allmodconfig
+On the other hand, I still wonder wether the extra check in my original
+patch is correct or not.  I spent a good amount of time trying to find out
+if eh_entries can be 0 at that point (in ext4_ext_binsearch_idx()) and
+couldn't find a situation where it could.  And running the fstests with
+that check didn't show any problem.  But yeah, my understanding of the
+whole code is far from perfect.
 
-clang tested configs:
-i386                          randconfig-a002
-i386                          randconfig-a004
-i386                          randconfig-a006
-hexagon              randconfig-r045-20220811
-hexagon              randconfig-r041-20220811
-riscv                randconfig-r042-20220811
-i386                          randconfig-a013
-x86_64                        randconfig-a014
-s390                 randconfig-r044-20220811
-x86_64                        randconfig-a012
-x86_64                        randconfig-a001
-x86_64                        randconfig-a016
-x86_64                        randconfig-a003
-i386                          randconfig-a011
-x86_64                        randconfig-a005
-i386                          randconfig-a015
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Cheers,
+--
+Luís

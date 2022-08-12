@@ -2,149 +2,309 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1FEA59110C
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 14:50:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC88A591114
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 14:53:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238541AbiHLMuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 08:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34024 "EHLO
+        id S234809AbiHLMxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 08:53:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238412AbiHLMuk (ORCPT
+        with ESMTP id S238508AbiHLMxh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 08:50:40 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7CCE91093;
-        Fri, 12 Aug 2022 05:50:37 -0700 (PDT)
-Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4M43Np56DRzlWBM;
-        Fri, 12 Aug 2022 20:47:38 +0800 (CST)
-Received: from [10.174.177.174] (10.174.177.174) by
- dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 12 Aug 2022 20:50:34 +0800
-Message-ID: <e32464ec-4c5b-dcad-cfe3-93727dab5f5b@huawei.com>
-Date:   Fri, 12 Aug 2022 20:50:34 +0800
+        Fri, 12 Aug 2022 08:53:37 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EF92AB40C;
+        Fri, 12 Aug 2022 05:53:35 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27C7sgDW013721;
+        Fri, 12 Aug 2022 12:52:55 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=QIQw8N9pfAoMaGvQJw2uwrPY3A883n5OBfawHuG2BtY=;
+ b=X2W8UShGULgw0mEHQK97tTMoBhqP/oAV/T80VPMjl4FwZbFf6+L1FEoAktGZxo5MmCYx
+ mhUC8f18pqjaepMSKOvhJZWOpRB4WTSBV0QQY4mEEQ5stqflymWA1CFjscJEu8L18KtG
+ runJ91E1LJEKoQnEa7CuW1TodvuzFQf5eIgKt6BzybBOVOS7HQkkXjmFJqu5+n3fYwnm
+ /0eV+c5NXObPuFiWnK5SHxUbrjhj+o1ZvbIkyUJmhLn5LRlnM40Ei7iMWNwzE5pJqrxF
+ zv1tLPnt9uzSTJcZNAXi7G9E7+HTQjGCRN7LzIsbZb08h4bb80Kr9zROmbt0Hkmtdzgh 1g== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hwe0j9tbh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 12 Aug 2022 12:52:55 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27CCqssK026603
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 12 Aug 2022 12:52:54 GMT
+Received: from [10.216.36.84] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Fri, 12 Aug
+ 2022 05:52:48 -0700
+Message-ID: <3bebd711-f4b7-989a-2b26-40086875fc0d@quicinc.com>
+Date:   Fri, 12 Aug 2022 18:22:45 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v2] ext4: fix bug in extents parsing when eh_entries == 0
- and eh_depth > 0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 7/8] remoteproc: qcom: Add support for memory sandbox
 Content-Language: en-US
-To:     =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>
-CC:     <wenqingliu0120@gmail.com>, <linux-ext4@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        "zhangyi (F)" <yi.zhang@huawei.com>, <yebin10@huawei.com>,
-        "yukuai (C)" <yukuai3@huawei.com>, Baokun Li <libaokun1@huawei.com>
-References: <20220812105347.2251-1-lhenriques@suse.de>
-From:   Baokun Li <libaokun1@huawei.com>
-In-Reply-To: <20220812105347.2251-1-lhenriques@suse.de>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        <linux-remoteproc@vger.kernel.org>, <agross@kernel.org>,
+        <bjorn.andersson@linaro.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <robh+dt@kernel.org>,
+        <quic_plai@quicinc.com>, <bgoswami@quicinc.com>, <perex@perex.cz>,
+        <tiwai@suse.com>, <srinivas.kandagatla@linaro.org>,
+        <quic_rohkumar@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <swboyd@chromium.org>,
+        <judyhsiao@chromium.org>, <devicetree@vger.kernel.org>
+References: <1660117558-21829-1-git-send-email-quic_srivasam@quicinc.com>
+ <1660117558-21829-8-git-send-email-quic_srivasam@quicinc.com>
+ <080f3e2b-af7b-0ac0-1716-a33da73290e4@wanadoo.fr>
+From:   Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Organization: Qualcomm
+In-Reply-To: <080f3e2b-af7b-0ac0-1716-a33da73290e4@wanadoo.fr>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.177.174]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpeml500021.china.huawei.com (7.185.36.21)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 0sfbGlqcObvifIvAGxbRYuAfxgsa4fPH
+X-Proofpoint-ORIG-GUID: 0sfbGlqcObvifIvAGxbRYuAfxgsa4fPH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-12_08,2022-08-11_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxlogscore=999
+ impostorscore=0 phishscore=0 mlxscore=0 lowpriorityscore=0 spamscore=0
+ priorityscore=1501 bulkscore=0 adultscore=0 suspectscore=0 malwarescore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
+ definitions=main-2208120035
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Luís,
 
-On 8/12/2022 6:53 PM, Luís Henriques wrote:
-> When walking through an inode extents, the ext4_ext_binsearch_idx() function
-> assumes that the extent header has been previously validated.  However, there
-> are no checks that verify that the number of entries (eh->eh_entries) is
-> non-zero when depth is > 0.  And this will lead to problems because the
-> EXT_FIRST_INDEX() and EXT_LAST_INDEX() will return garbage and result in this:
+On 8/12/2022 11:02 AM, Christophe JAILLET wrote:
+Thanks for your time Christophe!!!
+> Le 10/08/2022 à 09:45, Srinivasa Rao Mandadapu a écrit :
+>> Update pil driver with SMMU mapping for allowing authorised
+>> memory access to ADSP firmware, by reading required memory
+>> regions either from device tree file or from resource table
+>> embedded in ADSP binary header.
+>>
 >
-> [  135.245946] ------------[ cut here ]------------
-> [  135.247579] kernel BUG at fs/ext4/extents.c:2258!
-> [  135.249045] invalid opcode: 0000 [#1] PREEMPT SMP
-> [  135.250320] CPU: 2 PID: 238 Comm: tmp118 Not tainted 5.19.0-rc8+ #4
-> [  135.252067] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.15.0-0-g2dd4b9b-rebuilt.opensuse.org 04/01/2014
-> [  135.255065] RIP: 0010:ext4_ext_map_blocks+0xc20/0xcb0
-> [  135.256475] Code:
-> [  135.261433] RSP: 0018:ffffc900005939f8 EFLAGS: 00010246
-> [  135.262847] RAX: 0000000000000024 RBX: ffffc90000593b70 RCX: 0000000000000023
-> [  135.264765] RDX: ffff8880038e5f10 RSI: 0000000000000003 RDI: ffff8880046e922c
-> [  135.266670] RBP: ffff8880046e9348 R08: 0000000000000001 R09: ffff888002ca580c
-> [  135.268576] R10: 0000000000002602 R11: 0000000000000000 R12: 0000000000000024
-> [  135.270477] R13: 0000000000000000 R14: 0000000000000024 R15: 0000000000000000
-> [  135.272394] FS:  00007fdabdc56740(0000) GS:ffff88807dd00000(0000) knlGS:0000000000000000
-> [  135.274510] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [  135.276075] CR2: 00007ffc26bd4f00 CR3: 0000000006261004 CR4: 0000000000170ea0
-> [  135.277952] Call Trace:
-> [  135.278635]  <TASK>
-> [  135.279247]  ? preempt_count_add+0x6d/0xa0
-> [  135.280358]  ? percpu_counter_add_batch+0x55/0xb0
-> [  135.281612]  ? _raw_read_unlock+0x18/0x30
-> [  135.282704]  ext4_map_blocks+0x294/0x5a0
-> [  135.283745]  ? xa_load+0x6f/0xa0
-> [  135.284562]  ext4_mpage_readpages+0x3d6/0x770
-> [  135.285646]  read_pages+0x67/0x1d0
-> [  135.286492]  ? folio_add_lru+0x51/0x80
-> [  135.287441]  page_cache_ra_unbounded+0x124/0x170
-> [  135.288510]  filemap_get_pages+0x23d/0x5a0
-> [  135.289457]  ? path_openat+0xa72/0xdd0
-> [  135.290332]  filemap_read+0xbf/0x300
-> [  135.291158]  ? _raw_spin_lock_irqsave+0x17/0x40
-> [  135.292192]  new_sync_read+0x103/0x170
-> [  135.293014]  vfs_read+0x15d/0x180
-> [  135.293745]  ksys_read+0xa1/0xe0
-> [  135.294461]  do_syscall_64+0x3c/0x80
-> [  135.295284]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> Hi,
 >
-> This patch simply adds an extra check in __ext4_ext_check(), verifying that
-> eh_entries is not 0 when eh_depth is > 0.
+> comments below about error handling paths that look incomplete to me.
 >
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=215941
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216283
-> Cc: Baokun Li <libaokun1@huawei.com>
-> Signed-off-by: Luís Henriques <lhenriques@suse.de>
-> ---
->   fs/ext4/extents.c | 5 +++++
->   1 file changed, 5 insertions(+)
+> Just my 2c.
 >
-> Hi!
+>> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+>> ---
+>> Changes since V2:
+>>     -- Replace platform_bus_type with adsp->dev->bus.
+>>     -- Use API of_parse_phandle_with_args() instead of 
+>> of_parse_phandle_with_fixed_args().
+>>     -- Replace adsp->is_wpss with adsp->is_adsp.
+>>     -- Update error handling in adsp_start().
+>>
+>>   drivers/remoteproc/qcom_q6v5_adsp.c | 107 
+>> +++++++++++++++++++++++++++++++++++-
+>>   1 file changed, 105 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/drivers/remoteproc/qcom_q6v5_adsp.c 
+>> b/drivers/remoteproc/qcom_q6v5_adsp.c
+>> index f2945bf..b9cafe2 100644
+>> --- a/drivers/remoteproc/qcom_q6v5_adsp.c
+>> +++ b/drivers/remoteproc/qcom_q6v5_adsp.c
+>> @@ -9,6 +9,7 @@
+>>   #include <linux/firmware.h>
+>>   #include <linux/interrupt.h>
+>>   #include <linux/io.h>
+>> +#include <linux/iommu.h>
+>>   #include <linux/iopoll.h>
+>>   #include <linux/kernel.h>
+>>   #include <linux/mfd/syscon.h>
+>> @@ -48,6 +49,8 @@
+>>   #define LPASS_PWR_ON_REG        0x10
+>>   #define LPASS_HALTREQ_REG        0x0
+>>   +#define SID_MASK_DEFAULT        0xF
+>> +
+>>   #define QDSP6SS_XO_CBCR        0x38
+>>   #define QDSP6SS_CORE_CBCR    0x20
+>>   #define QDSP6SS_SLEEP_CBCR    0x3c
+>> @@ -78,7 +81,7 @@ struct adsp_pil_data {
+>>   struct qcom_adsp {
+>>       struct device *dev;
+>>       struct rproc *rproc;
+>> -
+>> +    struct iommu_domain *iommu_dom;
+>>       struct qcom_q6v5 q6v5;
+>>         struct clk *xo;
+>> @@ -333,6 +336,94 @@ static int adsp_load(struct rproc *rproc, const 
+>> struct firmware *fw)
+>>       return 0;
+>>   }
+>>   +static int adsp_map_smmu(struct qcom_adsp *adsp, struct rproc *rproc)
+>> +{
+>> +    struct of_phandle_args args;
+>> +    struct fw_rsc_devmem *rsc_fw;
+>> +    struct fw_rsc_hdr *hdr;
+>> +    const __be32 *prop;
+>> +    long long sid;
+>> +    unsigned long mem_phys;
+>> +    unsigned long iova;
+>> +    unsigned int mem_size;
+>> +    unsigned int flag;
+>> +    unsigned int len;
+>> +    int access_level;
+>> +    int offset;
+>> +    int ret;
+>> +    int rc;
+>> +    int i;
+>> +
+>> +    rc = of_parse_phandle_with_args(adsp->dev->of_node, "iommus", 
+>> "#iommu-cells", 0, &args);
+>> +    if (rc < 0)
+>> +        sid = -1;
+>> +    else
+>> +        sid = args.args[0] & SID_MASK_DEFAULT;
+>> +
+>> +    adsp->iommu_dom = iommu_domain_alloc(adsp->dev->bus);
+>> +    if (!adsp->iommu_dom) {
+>> +        dev_err(adsp->dev, "failed to allocate iommu domain\n");
+>> +        return -ENOMEM;
+>> +    }
+>> +
+>> +    ret = iommu_attach_device(adsp->iommu_dom, adsp->dev);
+>> +    if (ret) {
+>> +        dev_err(adsp->dev, "could not attach device ret = %d\n", ret);
 >
-> Baokun's feedback showed me that I had a partial understanding of the
-> problem.  Thus, I'm sending v2 which pretty much uses Baokun's suggestion
-> and simplifies the solution.  I've also added the link to the 2nd bugzilla
-> to the commit text.
+> iommu_domain_free() or error handling path (see below)?
 >
-> Cheers,
-> --
-> Luís
+>> +        return -EBUSY;
+>> +    }
+>> +
+>> +    /* Add SID configuration for ADSP Firmware to SMMU */
+>> +    adsp->mem_phys =  adsp->mem_phys | (sid << 32);
+>> +
+>> +    ret = iommu_map(adsp->iommu_dom, adsp->mem_phys, adsp->mem_phys,
+>> +            adsp->mem_size,    IOMMU_READ | IOMMU_WRITE);
+>> +    if (ret) {
+>> +        dev_err(adsp->dev, "Unable to map ADSP Physical Memory\n");
 >
-> diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
-> index 53cfe2c681c4..a5457ac1999c 100644
-> --- a/fs/ext4/extents.c
-> +++ b/fs/ext4/extents.c
-> @@ -460,6 +460,11 @@ static int __ext4_ext_check(const char *function, unsigned int line,
->   		error_msg = "invalid eh_entries";
->   		goto corrupted;
->   	}
-> +	if (unlikely((le16_to_cpu(eh->eh_entries) == 0) &&
-> +		     (le16_to_cpu(eh->eh_depth > 0)))) {
-
-The parentheses are misplaced, and le16_to_cpu is not needed here.
-
-> +		error_msg = "eh_entries is 0 but eh_depth is > 0";
-> +		goto corrupted;
-> +	}
->   	if (!ext4_valid_extent_entries(inode, eh, lblk, &pblk, depth)) {
->   		error_msg = "invalid extent entries";
->   		goto corrupted;
-> .
-
--- 
-With Best Regards,
-Baokun Li
-
+> iommu_domain_free() or error handling path (see below)?
+Okay. Will update accordingly!!!
+>
+>> +        return ret;
+>> +    }
+>> +
+>> +    prop = of_get_property(adsp->dev->of_node, 
+>> "qcom,adsp-memory-regions", &len);
+>> +    if (prop) {
+>> +        len /= sizeof(__be32);
+>> +        for (i = 0; i < len; i++) {
+>> +            iova = be32_to_cpu(prop[i++]);
+>> +            mem_phys = be32_to_cpu(prop[i++]);
+>> +            mem_size = be32_to_cpu(prop[i++]);
+>> +            access_level = be32_to_cpu(prop[i]);
+>> +
+>> +            if (access_level)
+>> +                flag = IOMMU_READ | IOMMU_WRITE;
+>> +            else
+>> +                flag = IOMMU_READ;
+>> +
+>> +            ret = iommu_map(adsp->iommu_dom, iova, mem_phys, 
+>> mem_size, flag);
+>> +            if (ret) {
+>> +                dev_err(adsp->dev, "failed to map addr = %p mem_size 
+>> = %x\n",
+>> +                        &(mem_phys), mem_size);
+>> +                return ret;
+>
+> Should there be an error handling path to undo iommu_domain_alloc() 
+> and iommu_map() above.
+> Same for iommu_map() already done in the loop.
+Okay. Will update accordingly!!!
+>
+>> +            }
+>> +        }
+>> +    } else {
+>> +        if (!rproc->table_ptr)
+>> +            return 0;
+>> +
+>> +        for (i = 0; i < rproc->table_ptr->num; i++) {
+>> +            offset = rproc->table_ptr->offset[i];
+>> +            hdr = (void *)rproc->table_ptr + offset;
+>> +            rsc_fw = (struct fw_rsc_devmem *)hdr + sizeof(*hdr);
+>> +
+>> +            ret = iommu_map(rproc->domain, rsc_fw->da, rsc_fw->pa,
+>> +                        rsc_fw->len, rsc_fw->flags);
+>> +            if (ret) {
+>> +                pr_err("%s; unable to map adsp memory address\n", 
+>> __func__);
+>> +                return ret;
+>
+> Same comment.
+Okay.
+>
+>> +            }
+>> +        }
+>> +    }
+>> +    return 0;
+>> +}
+>> +
+>> +
+>>   static int adsp_start(struct rproc *rproc)
+>>   {
+>>       struct qcom_adsp *adsp = (struct qcom_adsp *)rproc->priv;
+>> @@ -343,9 +434,16 @@ static int adsp_start(struct rproc *rproc)
+>>       if (ret)
+>>           return ret;
+>>   +    if (adsp->is_adsp_sb_needed) {
+>> +        ret = adsp_map_smmu(adsp, rproc);
+>> +        if (ret) {
+>> +            dev_err(adsp->dev, "ADSP smmu mapping failed\n");
+>> +            goto disable_irqs;
+>> +        }
+>> +    }
+>>       ret = clk_prepare_enable(adsp->xo);
+>>       if (ret)
+>> -        goto disable_irqs;
+>> +        goto adsp_smmu_unmap;
+>>         ret = qcom_rproc_pds_enable(adsp, adsp->proxy_pds,
+>>                       adsp->proxy_pd_count);
+>> @@ -401,6 +499,11 @@ static int adsp_start(struct rproc *rproc)
+>>       qcom_rproc_pds_disable(adsp, adsp->proxy_pds, 
+>> adsp->proxy_pd_count);
+>>   disable_xo_clk:
+>>       clk_disable_unprepare(adsp->xo);
+>> +adsp_smmu_unmap:
+>> +    if (adsp->is_adsp_sb_needed) {
+>> +        iommu_unmap(adsp->iommu_dom, adsp->mem_phys, adsp->mem_size);
+>> +        iommu_domain_free(adsp->iommu_dom);
+>
+> Hi,
+>
+> Do the iommu_map() in the for loops of adsp_map_smmu() also need some 
+> iommu_unmap() here?
+>
+> Maybe introducing a adsp_unmap_smmu() would simplify the release of 
+> resources.
+>
+> Does the same resource release makes sense in adsp_stop() or somewhere 
+> else?
+>
+> CJ
+>
+Okay. Will update accordingly!!!
+>
+>> +    }
+>>   disable_irqs:
+>>       qcom_q6v5_unprepare(&adsp->q6v5);
+>

@@ -2,133 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9720B591090
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 14:12:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 238DE591099
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 14:12:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238460AbiHLML4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 08:11:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54398 "EHLO
+        id S238587AbiHLMMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 08:12:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238457AbiHLMLY (ORCPT
+        with ESMTP id S238618AbiHLMMS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 08:11:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1531D24949
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 05:11:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DCA35B80502
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 12:11:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70047C433C1;
-        Fri, 12 Aug 2022 12:11:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660306275;
-        bh=dAqrv2yaE8n/OaYLt/qwzXO195DO7zq6Y4b0SYUBhWM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QFNECSV7jB51nrYS8PmwZ1+Atn6MI8t/Rw0UNUueKKAidPgJQdlN8I7OsmfsQKwQ0
-         EeN/eAyFva27XYXdGR/jtp4LFGGqBBVAnN5PVl4a7ujPCRuutld6tjgO4TSbB4UYqU
-         y7NtIzXMBdlNcMbimU3iY2rKamx5fSxjIS43K97AsrTiPbgp/iKEXd2mzTr0+Xeq+P
-         WJmfRrXQQGPm1D66+LTGsBng3VBswfv2W21nKMTTnQs94ZzS+d018LbCZqwkZDeNIR
-         h8tq8phyccXTTzlSwlspZzFyVqlSKcVpVJOyiX6i2e7xVzErifso48pAkjZYIowqjc
-         aDbUINWNxtbiw==
-Date:   Fri, 12 Aug 2022 13:11:10 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Kevin Lu <luminlong@139.com>
-Cc:     linux-kernel@vger.kernel.org, shenghao-ding@ti.com, kevin-lu@ti.com
-Subject: Re: [PATCH 1/1] drivers: Add kcontrol
-Message-ID: <YvZDXivnmHc3pSkw@sirena.org.uk>
-References: <20220812031816.6529-1-luminlong@139.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="BaiKfGlomJePEhOj"
-Content-Disposition: inline
-In-Reply-To: <20220812031816.6529-1-luminlong@139.com>
-X-Cookie: No foreign coins.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 12 Aug 2022 08:12:18 -0400
+Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C862CE1E;
+        Fri, 12 Aug 2022 05:12:13 -0700 (PDT)
+X-UUID: 85f2f4f3783f44cdbc51399c0128896a-20220812
+X-CPASD-INFO: 588139735cd7453caf1f82e1554a33df@fohyUWBrZWNhg6aDg3h-nYGXYZZoXoW
+        Ad29UkWFjkIaVgnxsTV5qXFWCgGpQYWNdYlV3fGtQYmBgZFB5i4Jyj1RgXmCCVHSTgHdyWGFhaQ==
+X-CLOUD-ID: 588139735cd7453caf1f82e1554a33df
+X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:184.
+        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:157.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
+        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-
+        5,AUF:0,DUF:2250,ACD:47,DCD:47,SL:0,EISP:0,AG:0,CFC:0.364,CFSR:0.072,UAT:0,RA
+        F:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,E
+        AF:0,CID:-5.0,VERSION:2.3.17
+X-CPASD-ID: 85f2f4f3783f44cdbc51399c0128896a-20220812
+X-CPASD-BLOCK: 1000
+X-CPASD-STAGE: 1
+X-UUID: 85f2f4f3783f44cdbc51399c0128896a-20220812
+X-User: huanglei@kylinos.cn
+Received: from localhost.localdomain [(116.128.244.169)] by mailgw
+        (envelope-from <huanglei@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 1122621435; Fri, 12 Aug 2022 20:12:09 +0800
+From:   huanglei <huanglei@kylinos.cn>
+To:     laurent.pinchart@ideasonboard.com
+Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, huanglei <huanglei@kylinos.cn>
+Subject: [PATCH] media: uvcvideo: limit power line control for Sonix Technology
+Date:   Fri, 12 Aug 2022 20:12:02 +0800
+Message-Id: <20220812121202.1971-1-huanglei@kylinos.cn>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        RDNS_DYNAMIC,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The device does not implement the power line control correctly. Add a
+corresponding control mapping override.
 
---BaiKfGlomJePEhOj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Bus 003 Device 003: ID 3277:0072 Sonix Technology Co., Ltd. USB 2.0 Camera
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.00
+  bDeviceClass          239 Miscellaneous Device
+  bDeviceSubClass         2
+  bDeviceProtocol         1 Interface Association
+  bMaxPacketSize0        64
+  idVendor           0x3277
+  idProduct          0x0072
+  bcdDevice            1.00
+  iManufacturer           2 Sonix Technology Co., Ltd.
+  iProduct                1 USB 2.0 Camera
+  iSerial                 3 REV0001
+  bNumConfigurations      1
 
-On Fri, Aug 12, 2022 at 11:18:16AM +0800, Kevin Lu wrote:
-> Add a new kcontrol for phase calib
->=20
-> Signed-off-by: Kevin Lu <luminlong@139.com>
+Signed-off-by: huanglei <huanglei@kylinos.cn>
+---
+ drivers/media/usb/uvc/uvc_driver.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Please submit patches using subject lines reflecting the style for the
-subsystem, this makes it easier for people to identify relevant patches.
-Look at what existing commits in the area you're changing are doing and
-make sure your subject lines visually resemble what they're doing.
-There's no need to resubmit to fix this alone.
+diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
+index 9c05776f11d1..48f4d755a584 100644
+--- a/drivers/media/usb/uvc/uvc_driver.c
++++ b/drivers/media/usb/uvc/uvc_driver.c
+@@ -3282,6 +3282,14 @@ static const struct usb_device_id uvc_ids[] = {
+ 	  .bInterfaceSubClass	= 1,
+ 	  .bInterfaceProtocol	= 0,
+ 	  .driver_info		= UVC_INFO_META(V4L2_META_FMT_D4XX) },
++	/* Sonix Technology USB 2.0 Camera */
++	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
++				| USB_DEVICE_ID_MATCH_INT_INFO,
++	  .idVendor		= 0x3277,
++	  .idProduct		= 0x0072,
++	  .bInterfaceClass	= USB_CLASS_VENDOR_SPEC,
++	  .bInterfaceSubClass	= 1,
++	  .bInterfaceProtocol	= 0 },
+ 	/* Generic USB Video Class */
+ 	{ USB_INTERFACE_INFO(USB_CLASS_VIDEO, 1, UVC_PC_PROTOCOL_UNDEFINED) },
+ 	{ USB_INTERFACE_INFO(USB_CLASS_VIDEO, 1, UVC_PC_PROTOCOL_15) },
+-- 
+2.17.1
 
-> +static const char * const phase_calib_switch[] =3D {
-> +	"Disable",
-> +	"Enable"
-> +};
-> +
-> +static const struct soc_enum phase_calib_enum[] =3D {
-> +	SOC_ENUM_SINGLE_EXT(ARRAY_SIZE(phase_calib_switch), phase_calib_switch),
-> +};
 
-To repeat this is a simple on/off control and should be a normal Switch,
-not an enum.
-
-> +static int adcx140_phase_calib_get(struct snd_kcontrol *Kcontrol,
-> +	struct snd_ctl_elem_value *Value)
-
-*Please* follow the kernel coding style for variable names.  It's good
-that you've taken out the hungarian notation but the caps are also bad.
-
-> +static int adcx140_phase_calib_put(struct snd_kcontrol *Kcontrol,
-> +	struct snd_ctl_elem_value *Value)
-> +{
-> +	struct snd_soc_component *codec
-> +		=3D snd_soc_kcontrol_component(Kcontrol);
-> +	struct adcx140_priv *adcx140 =3D snd_soc_component_get_drvdata(codec);
-> +
-> +	adcx140->phase_calib_on =3D Value->value.integer.value[0] ? true : fals=
-e;
-> +
-> +	return 0;
-> +}
-
-To repeat my previous comments:
-
-| This should return 1 if the value changes, the mixer-test selftest will
-| check for this and a number of other issues - you should ensure your
-| driver passes that cleanly.
-
-Please don't ignore review comments, people are generally making them
-for a reason and are likely to have the same concerns if issues remain
-unaddressed.  Having to repeat the same comments can get repetitive and
-make people question the value of time spent reviewing.  If you disagree
-with the review comments that's fine but you need to reply and discuss
-your concerns so that the reviewer can understand your decisions.
-
---BaiKfGlomJePEhOj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmL2Q14ACgkQJNaLcl1U
-h9C9Tgf+OxhHQQ7BBiUYYqx6R+yxBRS8hxSijM/QRXYM5f01/Rp4JCc3UbYlmFSu
-3YG9a+3yaBKd6BPc43Q0n1ATLYHYa1cVqTO2leNQrAWYf/bSMZr2MDCRpUcs226v
-yRUysEBy460Shtcz4X/eLfmEME7bzkTdJmerOObTx7Ur7LrMOWT99j8OUb82fT23
-L5TExT03v61dcIB8T7XM5o8eryGbbJWM5iMGJXi5WKZxANhWeY1eWX+yMOrphlgz
-xauHWTagWwYxX1HhMLomnS8JR7WnlbFQRz4KbTwcDiwDBPOkzCnmZgunlurMPpr/
-ioxB03rECYmjYmUDABDXH2+Hen5I7g==
-=Cf+k
------END PGP SIGNATURE-----
-
---BaiKfGlomJePEhOj--
+No virus found
+		Checked by Hillstone Network AntiVirus

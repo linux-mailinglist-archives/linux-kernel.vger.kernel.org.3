@@ -2,161 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0E43590CA3
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 09:39:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEC8C590CA7
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 09:40:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237397AbiHLHjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 03:39:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42346 "EHLO
+        id S237121AbiHLHka (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 03:40:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235746AbiHLHjE (ORCPT
+        with ESMTP id S237118AbiHLHkZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 03:39:04 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04B72A61C8;
-        Fri, 12 Aug 2022 00:39:01 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4M3wWH1M2WzlBss;
-        Fri, 12 Aug 2022 15:37:47 +0800 (CST)
-Received: from [10.174.176.103] (unknown [10.174.176.103])
-        by APP2 (Coremail) with SMTP id Syh0CgAnX7uQA_ZiXtz+AA--.19929S2;
-        Fri, 12 Aug 2022 15:38:57 +0800 (CST)
-Message-ID: <f179ff36-e511-1bad-078f-71b8b19d404e@huaweicloud.com>
-Date:   Fri, 12 Aug 2022 15:38:55 +0800
+        Fri, 12 Aug 2022 03:40:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B43F928709
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 00:40:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660290023;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VzyQdT5cmtTht8IqFKMXiM9jaigfovrsBI7GWxuwi5g=;
+        b=Ua4m4apeKIyBSosisrxkEknr0b4+8yjw1q/+z3HOlmnLjmvF+zhEZoU+xUa/bfOqjN9j2s
+        zmN17MiosoAsTc2TvmudS977rQCmd/ZnDCLH4LoyWirwO9X4z1oIVqmKE4wj02EKzpsCxV
+        WpLtebktcwg/pPzqQ/KehJg/3Bw1TGo=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-377-3ayUF0oJNdCdbCPOIMzF8g-1; Fri, 12 Aug 2022 03:40:22 -0400
+X-MC-Unique: 3ayUF0oJNdCdbCPOIMzF8g-1
+Received: by mail-ed1-f71.google.com with SMTP id x20-20020a05640226d400b0043d50aadf3fso153955edd.23
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 00:40:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=VzyQdT5cmtTht8IqFKMXiM9jaigfovrsBI7GWxuwi5g=;
+        b=jAhODn6KBoAdBx3bqT0wEhpmARhznNjdIxtvtCglZOls9/0JG9d2DySsyVXtr4KKMe
+         POd1w4HvwP8tSP1UBxsPBDPe7K37Q7Hpn2alAGD7lp7CLMZ1InR9Bka6sXqB52iqn5PO
+         n+VctUEDyN2Xq/bsvajWxxenC3lTp5emf+t6J7q51iA/z/iRxM9AONOkEIeFhmdadeRU
+         z+RXzaYuK7lVKR4Sf1DwpGQBx0WQXy8OAK/wRZIaFCTvPabitk4NZtc/MoJNrzTI5dyw
+         3jxNigQ3cTO2HDWaG/yl58mHjs9h8V0soORvCjjIPYbfol3gHJp9l6JsGPktcKuH6enL
+         kdaA==
+X-Gm-Message-State: ACgBeo2mQhYP+Z04rem7HXr1AFTNbuYR7Enjt8u4BplggqTQRzjBr0Xt
+        gESLlToDir/GsuAI4DsjkKOMSNNMvi/TZG1Qhv9oGFKhSH6jcukZ4Wv3KfnMyG2XQabsv4JKmc6
+        Cseps8Y/mKcCV1ILpSGUd7s4g
+X-Received: by 2002:a17:907:6d8c:b0:731:6c60:eced with SMTP id sb12-20020a1709076d8c00b007316c60ecedmr1908923ejc.266.1660290021446;
+        Fri, 12 Aug 2022 00:40:21 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4+bs0ZA+sprvMn0/Ivf+3NRpmtrSL/ddfi5tjpVofxW6oWzVLkn3yetOTpHRI1HpZv21KQlQ==
+X-Received: by 2002:a17:907:6d8c:b0:731:6c60:eced with SMTP id sb12-20020a1709076d8c00b007316c60ecedmr1908903ejc.266.1660290021233;
+        Fri, 12 Aug 2022 00:40:21 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
+        by smtp.googlemail.com with ESMTPSA id a26-20020a17090682da00b006ff0b457cdasm507155ejy.53.2022.08.12.00.40.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Aug 2022 00:40:20 -0700 (PDT)
+Message-ID: <d858ba66-422b-2bce-dafe-bc6586803e5f@redhat.com>
+Date:   Fri, 12 Aug 2022 09:40:19 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.4.1
-Reply-To: zhangwensheng@huaweicloud.com
-Subject: Re: Question: consult patch
-To:     Lee Jones <lee.jones@linaro.org>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        Lee Jones <lee@kernel.org>
-References: <420a6c4a-e526-4e8b-d5bd-563c40aa94e1@huaweicloud.com>
- <YvXo1uCFA57t89Nv@infradead.org>
- <902a45fe-1117-3f6a-b7b1-9b155e5dd984@huaweicloud.com>
- <YvYAmmaJgvydex4p@google.com>
-From:   "zhangwensheng (E)" <zhangwensheng@huaweicloud.com>
-In-Reply-To: <YvYAmmaJgvydex4p@google.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH next 0/2] Documentation: KVM:
+ KVM_CAP_VM_DISABLE_NX_HUGE_PAGES documentation fixes
+Content-Language: en-US
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     linux-doc@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
+        kvm@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220811063601.195105-1-pbonzini@redhat.com>
+ <1db2a0cd-bef1-213c-a411-3d39d378743a@gmail.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <1db2a0cd-bef1-213c-a411-3d39d378743a@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgAnX7uQA_ZiXtz+AA--.19929S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxXrWkZF4DAF4fKFyxXFW8JFb_yoWrJFyxpF
-        WrtF13ArW8Jr48Gay7Jr1UJa4jyw12q34rJr93JFykXw1Ygw1S9F4xWr1j9F1UCrWkJr48
-        tF15JrsFv34UAaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6r1S6rWUM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x
-        0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG
-        6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFV
-        Cjc4AY6r1j6r4UM4x0Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij
-        64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-        8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE
-        2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42
-        xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-        c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UE-erUUUUU=
-X-CM-SenderInfo: x2kd0wpzhq2xhhqjqx5xdzvxpfor3voofrz/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lee
+On 8/11/22 15:30, Bagas Sanjaya wrote:
+> On 8/11/22 13:36, Paolo Bonzini wrote:
+>> Queued, thanks.
+>>
+>> Paolo
+>>
+>>
+> 
+> Thanks for picking this up. However, Stephen noted that the issue is
+> already showed up on mainline [1]. Maybe this series should be queued
+> for 6.0 release (as -rc fixes), right?
 
-I'm sorry I didn't fully understand you. did you mean the CVE
-was caused by a commit which was applied to an internal kernel
-version?  What commitment can be displayed? and I know that
-mainline do not have the problem because of some code refactoring,
-But are there any problems with some other stable branches?
+Yes, it's in Linus's tree already.  Thanks for replying to Stephen.
 
-thank you very much!
-Wensheng
-
-在 2022/8/12 15:26, Lee Jones 写道:
-> On Fri, 12 Aug 2022, zhangwensheng (E) wrote:
->
->> Hi
->>
->> In CVE list last week, there is a new cve reported in asop 4.14 like below:
->> Reference link: https://lore.kernel.org/all/CAODzB9rgMexvLjE=WuTm+SN8SfUggaZgWG-aBcy6cotppju6mw@mail.gmail.com/T/
->>
->> ---
->> CVE-2022-20158: mm: backing-dev: Take a reference to the bdi in use to
->> prevent UAF
->>
->> CVSS v3 score is not assigned.
->>
->> AOSP kernel 4.14 contains following 2 patches.
->> - 69e8f03c5ced3e4e6fb4181f4dac185104e3420b ("mm: backing-dev: Take a
->> reference to the bdi in use to prevent UAF")
->> - 80d91b86a199798ee2321a0ab0f09e6e12764678 ("fs: explicitly unregister
->> per-superblock BDIs")
->>
->> The first commit 69e8f03("mm: backing-dev: Take a reference to the bdi
->> in use to prevent UAF") is not merged in the mainline and stable
->> kernels.
->> Commit 80d91b8 was merged in 5.16-rc1(commit hash is
->> 0b3ea0926afb8dde70cfab00316ae0a70b93a7cc) which requires commit
->> c6fd3ac ("mm: export bdi_unregister") that exports symbol of
->> bdi_unregister().
->>
->> Fixed status
->> mainline: [0b3ea0926afb8dde70cfab00316ae0a70b93a7cc]
->> ---
->>
->> As mentioned above, patch 69e8f03c5ced ("mm: backing-dev: Take a
->> reference to the bdi in use to prevent UAF") in asop 4.14 can fix
->> a null dereference problem, form my analysis, may like below:
->>
->> blk_cleanup_queue
->>      blk_put_queue
->>          kobject_put(&q->kobj)
->>                  blk_release_queue
->>                      blk_exit_queue
->>                          bdi_put
->>                              release_bdi  // bdi -> null
->> del_gendisk
->>      bdi_unregister(disk->queue->backing_dev_info) // null -> reference
->>
->>  From my analysis, In asop 4.14 kernel, in loop_remove function, there is
->> such a timing that executing "blk_cleanup_queue" first and then
->> "del_gendisk".
->> but because of the refcnt of queue will add by hte line
->> "WARN_ON_ONCE(!blk_get_queue(disk->queue));" in "device_add_disk", which may
->> not result in "bdi_put" releasing bdi  in "blk_cleanup_queue".
->>
->> I'm not sure where the problem is, so I want to ask Lee Jones who sent this
->> patch
->> for clarification.
->>
->> Thanks!
->>
->> Wensheng
->>
->> 在 2022/8/12 13:44, Christoph Hellwig 写道:
->>> On Fri, Aug 12, 2022 at 11:34:59AM +0800, zhangwensheng (E) wrote:
->>>> Hi Lee ：
->>>>       I saw your patch because of CVE-2022-20158, the patch like below:
->>>>
->>>> ---
->>>>       mm: backing-dev: Take a reference to the bdi in use to prevent UAF
->>> I can't see that patch anywhere, and I've not seen an bug report for it.
->>>
->>>>       Because of a distinct lack of locking and/or reference taking,
->>>>       blk_cleanup_queue() puts the final taken reference to the bdi, which
->>> .. and blk_cleanup_queue also is gone upstream.
->>>
->>> What am I missing?
-> The issue reported in the aforementioned CVE was caused by a commit
-> which was applied to an internal, device specific repository.  One
-> that has never existed in Mainline.  I failed to reproduce the KASAN
-> report in any upstream or stable tree without the offending patch
-> applied.  The issue was fixed in all affected internal trees.
->
+Paolo
 

@@ -2,82 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19F775914D5
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 19:32:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97E625914DE
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 19:35:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239455AbiHLRcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 13:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36990 "EHLO
+        id S237935AbiHLRfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 13:35:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239431AbiHLRbe (ORCPT
+        with ESMTP id S239019AbiHLRev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 13:31:34 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58CB6A74CD
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 10:31:33 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id r17so2193419lfm.11
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 10:31:33 -0700 (PDT)
+        Fri, 12 Aug 2022 13:34:51 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03120B2742
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 10:34:50 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id w5so2237479lfq.5
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 10:34:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=8Llqo+r9efOowzppOOXTWM2b5KiuPYf4RI8IVMa09Tw=;
-        b=KNOp8OlAG3doZ95s3o3Gds3Y40M5Oh62mR5wjPnEYDDnsPRq7QFWMz0U5iWJk5uifW
-         l8GoY0N0bgbMCSF9H+mnxaYtnlkF1C8VfLs8+CcHV4D1F9ZUyg622xwKqQ+33VAyd8P+
-         inb4XdvTs+MbU8tAnU107B3aUvlfO/uBeyKJlpMv291LG5j0i23DkliGQmnEYy0RSQY8
-         za12hMWt2Qp4XavjFVucxCYKnU1i51ap1qVOdjGq3fYYRahJQNqto4XYIZesTngM+r2P
-         sd/ULg/83t+5M74aIYga2UZOkXFgLv9pm8cc2vSJdtNWZ1Y7MVVvgQ5ABK8moEQ3dShv
-         HaJQ==
+        bh=8uJrZnBn1qDS0BGSkvxlFm5HObaIuT1JmBT6UeEISI8=;
+        b=dD/l6ku6zx+XntXFItFTEmnxjPOh7xtO3PzebTKXoERAY1KFzerpHTEurH/U4cPCXb
+         ipfYy5EaEV0JyN03x7oTT61kxAKNBaZr1a7axIXirT15PlVeqEkW2WejjdeGoRwu12Jd
+         cfTEjZ83j/Ji3CUvh/6DJO6IyZvjEfw/6vRqfn+eXw+1PfayDDYpIMxI8d7U7nFsbhNP
+         9ykOxvFLQJPG6sXY0zHmVad1ZF3BUKg6TmYvurO307xK2E10kYzBD31vCYz9ZfmOzkSz
+         QtFDytLh2ChjbupEchtXx9JyOBj+SpBax51xiSLhLi9cPbP+XkCpAeY1lojB6zrMBQMK
+         EXVQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=8Llqo+r9efOowzppOOXTWM2b5KiuPYf4RI8IVMa09Tw=;
-        b=Icve7whsXHWFBA4YOcWlm1Y6te9rAKmNLY+j5TbBN9FuK4N9wrT3D6R2MLG3OA3bII
-         lXIMfXK9YNiKvZ50Cl3AXBpTIuFLHCcv4HRExpYo6EvDx73lH5U8T7lj6hfC0adRjHte
-         teurl1vl6XeM3XBOXgVm0r3xQzV8t35Fs317dIjTOp1eS7LInrIchDCuRbS257Gm2jZ4
-         osMJpZ87e2OsoCCuKha/XTQq0Rs7wBU2ePofzNd5Nzhtgmgsk1F3R7WT9y9GiEbApuO+
-         qaQk9FpoE+ZJ9JXStk5LTV+L5gEtgEynWMWKxFXROczzV+ymMWyE9DYqJXubjzbTxk7m
-         nvMQ==
-X-Gm-Message-State: ACgBeo3Z4nnxpa0+1COlnyli/SVJYMzpieJrmZCkhcmm8ifpg/cO1y0R
-        BjnDUrtY6t810NMeeu2/p1jqpgUFyU9Q16h/
-X-Google-Smtp-Source: AA6agR5wXLatv7lGYoSregWjcNyIXNXrVIKR9kFnXnweVgFDoDavVE8qYMr7kpVHe8z4S0i0LIn0JA==
-X-Received: by 2002:a05:6512:3f03:b0:48a:98a:c1ad with SMTP id y3-20020a0565123f0300b0048a098ac1admr1670712lfa.518.1660325491656;
-        Fri, 12 Aug 2022 10:31:31 -0700 (PDT)
+        bh=8uJrZnBn1qDS0BGSkvxlFm5HObaIuT1JmBT6UeEISI8=;
+        b=ZMijE1hmcXlZ5RWfI/1kVKo+1zpiM7slKyq2qJ+qG6pfH57N0yT180rQRmqPX//+0A
+         lrUod8yNhPPi0QDm7Oq0kP0Azg8rwz/zsD4QXKRlut683lnUWVSNg3exvTEbvSmvWXQc
+         lU1XN+zNdTzMfb0d4BUNJ5WMBcABBEQW9pFPY7QwTsQg6Jrd10dpQ+4VmAKMzJxwHCOT
+         1HlFDeN2CpJkqU98oXrLTKnbPoAc9BBxsscP8E+1oJ0VLqIwEL7SLQ4xllTF2lcXsOxF
+         m/EE3boxbF69T62u31j4hwP06TUsxOC64E4i91G6hA+yPOGnvXhYfMJtCRC4fiNUug0/
+         dI4Q==
+X-Gm-Message-State: ACgBeo1JbFsPv+E1N7lEI9sEHJtu4F+BdOIX95N3h9sZwmXeQKQInK4l
+        NMkWfU0Bc4brLUZI4EMVnryapQ==
+X-Google-Smtp-Source: AA6agR5Z4imJ8rDIGTv8h4bUGbzdx3ZYA2/ooRuEuRvdv3ZFUEbAWfC+5GfEzPnGdhWxpAtv0dv/yQ==
+X-Received: by 2002:a05:6512:3ca1:b0:48a:fe06:f772 with SMTP id h33-20020a0565123ca100b0048afe06f772mr1667457lfv.80.1660325688321;
+        Fri, 12 Aug 2022 10:34:48 -0700 (PDT)
 Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id d20-20020ac25454000000b0048af3c315efsm276082lfn.191.2022.08.12.10.31.29
+        by smtp.gmail.com with ESMTPSA id z18-20020ac25df2000000b0048ad3d1a058sm282580lfq.52.2022.08.12.10.34.43
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 10:31:30 -0700 (PDT)
-Message-ID: <993a4559-c9f4-c6e2-8854-d2018180fd6a@linaro.org>
-Date:   Fri, 12 Aug 2022 20:31:27 +0300
+        Fri, 12 Aug 2022 10:34:47 -0700 (PDT)
+Message-ID: <1715a053-ae68-ea70-b13f-3d25f2354c00@linaro.org>
+Date:   Fri, 12 Aug 2022 20:34:41 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
-Subject: Re: [PATCH v4 2/2] arm64: dts: imx8mp-msc-sm2s: Add device trees for
- MSC SM2S-IMX8PLUS SoM and carrier board
+Subject: Re: [PATCH v2] dt-bindings: leds: Expand LED_COLOR_ID definitions
 Content-Language: en-US
-To:     Martyn Welch <martyn.welch@collabora.com>,
+To:     Olliver Schinagl <oliver@schinagl.nl>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     kernel@collabora.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20220812084120.376042-1-martyn.welch@collabora.com>
- <20220812084120.376042-2-martyn.welch@collabora.com>
- <8962b7ed-a21c-0b7f-7a6d-5db3db84e4cb@linaro.org>
- <65a094d5d03ad8f7b35196c9dff6ffc6cf0ea151.camel@collabora.com>
- <15ddd798-873e-d90d-11e9-c6dd46ca03f4@linaro.org>
- <c874e1db8526bfa915baca1f0bb28d0c5f5a1feb.camel@collabora.com>
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Baolin Wang <baolin.wang@linaro.org>,
+        Daniel Mack <daniel@zonque.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Oleh Kravchenko <oleg@kaa.org.ua>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Simon Shields <simon@lineageos.org>,
+        Olliver Schinagl <oliver+list@schinagl.nl>,
+        devicetree@vger.kernel.org,
+        linux-kernel <linux-kernel@vger.kernel.org>
+References: <7c688821-140b-4b05-651b-337f602dc1fe@schinagl.nl>
+ <6ec9eaa1-2bc2-a32f-6685-4a2a645a5a59@schinagl.nl>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <c874e1db8526bfa915baca1f0bb28d0c5f5a1feb.camel@collabora.com>
+In-Reply-To: <6ec9eaa1-2bc2-a32f-6685-4a2a645a5a59@schinagl.nl>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -88,29 +86,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/08/2022 18:03, Martyn Welch wrote:
-> The tests threw quite a few errors that seemed to be related to the
-> imx8mp.dtsi. The only ones that seemed to be related to the files I've
-> created seem to be the result of including optional pins in the pin
-> muxing, which need to be there AFAIK, but seem to be resulting in
-> warnings from the tool.
+On 12/08/2022 17:31, Olliver Schinagl wrote:
+> In commit 853a78a7d6c7 (dt-bindings: leds: Add LED_COLOR_ID definitions,
+> 
+> Sun Jun 9 20:19:04 2019 +0200) the most basic color definitions where
+> added. However, there's a little more very common LED colors.
 
-Your DTS defined three compatibles which were not documented by the
-bindings change, therefore I expect the warning from schema.
+You have messed up commit msg.
 
-To be sure, I just run it and it is clearly visible:
+Also please do not attach new patches to some old threads. It buries
+them deep and makes inbox check not easy.
 
-/home/krzk/dev/linux/linux/out/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-14N0600E.dtb:
-/: compatible: 'oneOf' conditional failed, one must be fixed:
+> 
+> While the documentation states 'add what is missing', engineers tend to
+> be lazy and will just use what currently exists. So this patch will take
+> (a) list from online retailers [0], [1], [2] and use the common LED 
+> colors from
 
-	['avnet,sm2s-imx8mp-14N0600E', 'avnet,sm2s-imx8mp', 'fsl,imx8mp'] is
-too long
-
-	['avnet,sm2s-imx8mp-14N0600E', 'avnet,sm2s-imx8mp', 'fsl,imx8mp'] is
-too short
+Wrap the description.
 
 
-It's not possible to miss it, it's the biggest warning...
+> there, this being reasonable as this is what is currently available to 
+> purchase.
 
+
+> 
+> Note, that LIME seems to be the modern take to 'Yellow-green' or
+> 'Yellowish-green' from some older datasheets.
+> 
+> [0]: https://www.digikey.com/en/products/filter/led-lighting-color/125
+> [1]: 
+> https://eu.mouser.com/c/optoelectronics/led-lighting/led-emitters/standard-leds-smd
+> [2]: 
+> https://nl.farnell.com/en-NL/c/optoelectronics-displays/led-products/standard-single-colour-leds-under-75ma
+> 
+> Signed-off-by: Olliver Schinagl <oliver@schinagl.nl>
+> ---
+> 
+> Changes since v1: Unbreak existing definitions.
+> 
+>   include/dt-bindings/leds/common.h | 28 ++++++++++++++++------------
+>   1 file changed, 16 insertions(+), 12 deletions(-)
+> 
+> diff --git a/include/dt-bindings/leds/common.h 
+> b/include/dt-bindings/leds/common.h
+> index 3be89a7c20a9..04bf94523ea3 100644
+> --- a/include/dt-bindings/leds/common.h
+> +++ b/include/dt-bindings/leds/common.h
+> @@ -22,18 +22,22 @@
+>   #define LEDS_BOOST_FIXED    2
+> 
+>   /* Standard LED colors */
+> -#define LED_COLOR_ID_WHITE    0
+> -#define LED_COLOR_ID_RED    1
+> -#define LED_COLOR_ID_GREEN    2
+> -#define LED_COLOR_ID_BLUE    3
+> -#define LED_COLOR_ID_AMBER    4
+> -#define LED_COLOR_ID_VIOLET    5
+> -#define LED_COLOR_ID_YELLOW    6
+> -#define LED_COLOR_ID_IR        7
+> -#define LED_COLOR_ID_MULTI    8    /* For multicolor LEDs */
+> -#define LED_COLOR_ID_RGB    9    /* For multicolor LEDs that can do 
+> arbitrary color,
+
+Also messed up patch. I have doubts that it applies.
+
+> -                       so this would include RGBW and similar */
+> -#define LED_COLOR_ID_MAX    10
+> +#define LED_COLOR_ID_WHITE      0
 Best regards,
 Krzysztof

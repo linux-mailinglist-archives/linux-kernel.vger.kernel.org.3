@@ -2,104 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F26E25913EF
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 18:34:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 861AA5913F4
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 18:36:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238734AbiHLQeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 12:34:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33946 "EHLO
+        id S239353AbiHLQf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 12:35:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236015AbiHLQeC (ORCPT
+        with ESMTP id S236015AbiHLQfz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 12:34:02 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9657A14004;
-        Fri, 12 Aug 2022 09:34:01 -0700 (PDT)
-Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M48Pr4dSCz682NF;
-        Sat, 13 Aug 2022 00:33:52 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 12 Aug 2022 18:33:59 +0200
-Received: from [10.48.157.254] (10.48.157.254) by
- lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 12 Aug 2022 17:33:58 +0100
-Message-ID: <34bdd9a8-26bf-95b0-ed62-a6af5db05654@huawei.com>
-Date:   Fri, 12 Aug 2022 17:33:57 +0100
+        Fri, 12 Aug 2022 12:35:55 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 776CF1F62D
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 09:35:54 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id i14so2915009ejg.6
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 09:35:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=PhJG6bBOCkvyTjU2NcpvtIl0Bn94VJLHdY/CNTDx92c=;
+        b=A0zopqIFjMTW4LHzcxx7Kgim0jgeE1PHu1MzJPGzrmEGVqIyHVf4olgYQvI/zgqkqg
+         NkeEGgSheDwg61Jnhu1y5RwwnHybQJGN/2AMmcJbtEpHsNsf0peok5GdgvQoBhxaPNUs
+         Bmlag/RZqX1KjE9J/4TB+lbCnIfJ/X1osMBGM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=PhJG6bBOCkvyTjU2NcpvtIl0Bn94VJLHdY/CNTDx92c=;
+        b=E9oBnFAD8/xAK4Ec95spTijYEMHZFU2GysW/4ImGVxhL+tzJsQ02m68wAhxgwsetG0
+         Q8BOzwiMUB6vWJB62YJLfiA0Qy0c2UAUcxn7TsePiL9kZaFe6VJEw1amZu8a2Lr1dt4e
+         B/ZJ+4pmXX4iEkGZBw6fysauTqhN+k4qGQOcz2ATXeEtNVSkvaAM7M64E6Tigu82SlNc
+         QUpqVW46Q8y8MDLV6jp5K9BSW8UFjpN6NrqyuryKgvBMTw/sUQa10trt5743ZBng4BGm
+         9dfvak9AYaD9uLcHS2b/WwxpBS/OuibvLohc8nuL9ysHfbaKIhWaZ81fRuhwW5zZRZqn
+         JO6Q==
+X-Gm-Message-State: ACgBeo13RoklRuEgizH+ovwzAKGkU5UUQqJT/xYrPPv/bQbOrejk4SD0
+        1ZKLlYZ5ZeZAOmjJlr6XTApQJlhLQU6azUUV
+X-Google-Smtp-Source: AA6agR6yK4vzK3gyL3/cjpqOqjOttsX0mZoeAwgw54J+D0OPntVCA+2dtj5YK8/0hgewssqIAleoeA==
+X-Received: by 2002:a17:907:6d91:b0:731:39eb:c00a with SMTP id sb17-20020a1709076d9100b0073139ebc00amr3201491ejc.6.1660322152763;
+        Fri, 12 Aug 2022 09:35:52 -0700 (PDT)
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com. [209.85.221.53])
+        by smtp.gmail.com with ESMTPSA id q3-20020a17090676c300b00722e4bab163sm945465ejn.200.2022.08.12.09.35.51
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Aug 2022 09:35:51 -0700 (PDT)
+Received: by mail-wr1-f53.google.com with SMTP id l22so1747980wrz.7
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 09:35:51 -0700 (PDT)
+X-Received: by 2002:a05:6000:1888:b0:222:ca41:dc26 with SMTP id
+ a8-20020a056000188800b00222ca41dc26mr2492830wri.442.1660322150722; Fri, 12
+ Aug 2022 09:35:50 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [PATCH 0/6] libsas and drivers: NCQ error handling
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
-        <jinpu.wang@cloud.ionos.com>, <yangxingui@huawei.com>,
-        <chenxiang66@hisilicon.com>, <hare@suse.de>
-CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1658489049-232850-1-git-send-email-john.garry@huawei.com>
- <d2e27cb7-d90a-2f0a-1848-e1ec8faf7899@opensource.wdc.com>
- <437abe43-7ddd-6f49-9386-d8ed04c659bf@huawei.com>
- <15bfd5e0-7fcd-fdee-a546-7720b55eb108@opensource.wdc.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <15bfd5e0-7fcd-fdee-a546-7720b55eb108@opensource.wdc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.48.157.254]
-X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220811153632.0ce73f72.alex.williamson@redhat.com>
+In-Reply-To: <20220811153632.0ce73f72.alex.williamson@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 12 Aug 2022 09:35:34 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgfqqMMQG+woPEpAOyn8FkMQDqxq6k0OLKajZNGa7Jsfg@mail.gmail.com>
+Message-ID: <CAHk-=wgfqqMMQG+woPEpAOyn8FkMQDqxq6k0OLKajZNGa7Jsfg@mail.gmail.com>
+Subject: Re: [GIT PULL] VFIO updates for v6.0-rc1 (part 2)
+To:     Alex Williamson <alex.williamson@redhat.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/08/2022 16:39, Damien Le Moal wrote:
->> For this specific test we don't seem to run a hardreset after the
->> autopsy, but we do seem to be getting an NCQ error. That's interesting.
->>
->> We have noticed this scenario for hisi_sas NCQ error, whereby the
->> autopsy decided a reset is not required or useful, such as a medium
->> error. Anyway the pm8001 driver relies on the reset being run always for
->> the NCQ error. So I am thinking of tweaking sas_ata_link_abort() as follows:
->>
->> void sas_ata_link_abort(struct domain_device *device)
->> {
->> 	struct ata_port *ap = device->sata_dev.ap;
->> 	struct ata_link *link = &ap->link;
->>
->> 	link->eh_info.err_mask |= AC_ERR_DEV;
->> +	link->eh_info.action |= ATA_EH_RESET;
->> 	ata_link_abort(link);
->> }
->>
->> This should force a reset.
-> This is an unaligned write to a sequential write required zone on SMR. So
-> definitely not worth a reset. Forcing hard resetting the link for such error is
-> an overkill. I think it is better to let ata_link_abort() -> ... -> scsi & ata
-> EH decide on the disposition.
+On Thu, Aug 11, 2022 at 2:36 PM Alex Williamson
+<alex.williamson@redhat.com> wrote:
+>
+>  - Rename vfio source file to more easily allow additional source
+>    files in the upcoming development cycles (Jason Gunthorpe)
+>
+> ----------------------------------------------------------------
+> Jason Gunthorpe (1):
+>       vfio: Move vfio.c to vfio_main.c
+>
+>  drivers/vfio/Makefile                | 2 ++
+>  drivers/vfio/{vfio.c => vfio_main.c} | 0
 
-Do you know if this triggered the pm8001 IO_XFER_ERROR_ABORTED_NCQ_MODE 
-  error?
+Guys, why do you do this ludicrously redundant file naming?
 
-If I do not set ATA_EH_RESET then I need to trust that libata will 
-always decide to do the reset for pm8001 IO_XFER_ERROR_ABORTED_NCQ_MODE 
-error. That is because it is in the reset that I send the pm8001 "abort 
-all" command - I could not find a better place for it.
+The directory is called "vfio".
 
-> 
-> Note that patch 3 did not apply cleanly to the current Linus tree. So a rebase
-> for the series is needed.
-> 
+Why is every file in it called "vfio_xyzzy.c"?
 
-That might be just git am, which always seems temperamental. The patches 
-still apply from cherry-pick'ing for me. Anyway, I'll send a new version 
-next week.
+This is a bad pattern, and I don't understand why you do this and
+continue to just make it worse.
 
-Thanks,
-John
+We don't have "drivers/block/block_floppy.c".
 
+We don't have "kernel/kernel_exit.c".
+
+And then when somebody finally points out that "vfio/vfio.c" is kind
+of silly and bad naming practice because it doesn't say what the file
+is all about, instead of realizing what the problem is, you just
+continue the same broken pattern.
+
+Is vfio the only subsystem that does this? No. We have the same odd
+pattern in "drivers/leds/leds-xyzzy.c" and a few other subsystems, and
+I don't understand it there either.
+
+I don't care that much, because I never touch those files, but if I
+did, I would have complained long ago about how auto-complete of
+filenames is broken because of that silly non-unique and pointless
+prefix that is just repeated mindlessly over and over again.
+
+So I've pulled this, since hey, "maintainer preference" and me not
+really having a lot of reason to *care*, but when I get this kind of
+pure rename pull request, I just have to pipe up about how silly and
+pointless the new name seems to be.
+
+Am I the only one that just uses auto-complete for everything when I'm
+off editing files in a terminal?
+
+And if you don't use autocomplete, and actually type things out fully,
+doesn't that double redundant 'vtio' bother you even *more*?
+
+I'm just confused and wondering about this all, since it seems so *odd*.
+
+It's like people have entirely missed what the point of using
+directories to give you a hierarchy of things is all about..
+
+               Linus

@@ -2,71 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EB54590C8A
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 09:28:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6ADF590C98
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 09:35:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237373AbiHLH2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 03:28:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59686 "EHLO
+        id S233593AbiHLHe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 03:34:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237358AbiHLH2G (ORCPT
+        with ESMTP id S231848AbiHLHez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 03:28:06 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D8ABA5C62
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 00:28:05 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id r17so207798lfm.11
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 00:28:05 -0700 (PDT)
+        Fri, 12 Aug 2022 03:34:55 -0400
+Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3827A61C6
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 00:34:52 -0700 (PDT)
+Received: by mail-lj1-x229.google.com with SMTP id by6so134594ljb.11
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 00:34:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=bhgmVIMSR6aro90bfc2C/db0hRKG+K1TQjCAcAiHupc=;
-        b=eIQyE6pAux7feSR/IdAkk/Xi7++Szw8nwQarhE8q7DVBWNYQ4Pn9pON6SljdEO5Z9r
-         k0CwQTzAQ5WwNSgMb3Xrhhw1E6/p7a58ynGrAr9HOrVkeYdpIABSZSv4blgwVtkCwAzy
-         qjoytJGtdhH7qNg1PlwzO9fnxmJZyy9KImhaXLEMP8G5BQHupljeBMYJylOEHCaL16sB
-         sxzIrWVR+bz1GFf6wy/BX+klwk6ATI1/0D5qNKnZE7Lf2moeqZOah7apTmoRXS7iJ5NL
-         mtNcTjQaDk8X88x5DYIeth2NvYY7NRd7KeqD+rh41+1BCSzGUQgvl1l0gUKElnKoswex
-         bO4g==
+        bh=/0za9YUjlCWR21SNkhMiDN3IDAZyQAT6AQCAzmrddpE=;
+        b=VVrjuOUNW/QU9Hyq7AfSOklgFQwWn6UP6bxTIRkljjoWCpC8QQLG9DC0P/t1Oll7mL
+         kzTOzeEaUrvcGu/3YoXWafwJlEUumZAELskM1pAYKtQsFAW3CQQv8Utl6uLjJ933ATii
+         e4V/vTszQiTuYATPbenDeaWd1TKFpa7GP1ra0QgapKOW6gSjw+q/J9jdAErQczA1KCvt
+         /z7jVeVK/iMdP6S/ct64eiKm/cWReCD6aBvTUozAb1KMH4e0QudMAxz2XxFMW9Uvkcp8
+         rUKrS+g9jTpKaoP7rgYriKkkMlUHUFz3ivGkmqmgO8YHeZf7fvPqVEwkIRJclCqm9VzK
+         8CDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=bhgmVIMSR6aro90bfc2C/db0hRKG+K1TQjCAcAiHupc=;
-        b=iQX4Ov240PKRlnSQ03BXEHUWQSxFlh+tlp/f+s0cNQIzT7o5vTnViZJZ1NKNUNoPck
-         lE9rBTHkYbV1i/9dKhXjtiRssbqURmiu3jPuPbQAURLKaZE2E28G9kTPV5FZNNGwP/px
-         rQO1rF6ycvDt4Z+P/onxkcPcSk0NsgSb9CZRz1IECOjPqr3gAztsEoLoEINccLaLxjBm
-         ZoYi4GLoIoLBMhN6y7KE6cBE52+aWx+neE1DSSRFqJ0M2eIQi1Tlxf1Ugbv/TLZVKVaU
-         kgONxvw4wpNIizYOINafApLIUBPelD0b9nxjCX25qUJor9lzajeL3WFaO10yOfZQ2P3+
-         0Pkg==
-X-Gm-Message-State: ACgBeo2tHVzpu8rfFQkJoQL2fbfvWKyfVOpTfF5E3tzdiM10ahBXIfcu
-        LA52//bdeKrNnNSKQmdtK3hswg==
-X-Google-Smtp-Source: AA6agR7MHpcoF/FPKb8X8c5DMwQ/zAw+IycliLWcWOxcmjaENKaOXZ6i6JvtLLTs5eo+Tcf0nKBS5A==
-X-Received: by 2002:a05:6512:3d09:b0:48b:9512:ade3 with SMTP id d9-20020a0565123d0900b0048b9512ade3mr951083lfv.390.1660289283758;
-        Fri, 12 Aug 2022 00:28:03 -0700 (PDT)
+        bh=/0za9YUjlCWR21SNkhMiDN3IDAZyQAT6AQCAzmrddpE=;
+        b=QY8/618cpX+xdQt/dDLNhmX3PDt+5C2L8Bm3lGp5IqBO8VFItCXmjJy9x352+pNDSt
+         S2JWXzgaZCqrOu2mOY0rZqxGqYIlPGuSJndPFslsm3h8RQeni1Qba9/3X9Dz6yZMn2fn
+         bDk2pzG73aMnpcQYKDfh2twzSihOeuFFVcFtOwMcJfVuKA/AOf89FNfoqv8TfakPdU81
+         QhUBs/wOUSc/zmxp/n6GWC8sV7G2DqNtb9xzrQE7rGuuhC0v6bBOECUlJU5NOG5UyBUS
+         NTliW5afwvzYdJsgeS4q7yI5+rgW6OENwiLEI1RQkThgvOdpXD+3SYC7jBxUsFXe5Igj
+         1JIA==
+X-Gm-Message-State: ACgBeo3gTDo9vqBXT0usKMyswWWpPSE6Z2rnqJKojL2d7ivlCeoj9HRF
+        YXiixp1tOBKG6EB33TDO7pO6vA==
+X-Google-Smtp-Source: AA6agR6znqORoYJxRfGm+Kmi2onxatlXLgKKjqviuP7ROeF5zZKHdK1k0rlZjV8xnPXrXDRmjs5bWQ==
+X-Received: by 2002:a2e:3515:0:b0:25e:7139:345f with SMTP id z21-20020a2e3515000000b0025e7139345fmr773042ljz.129.1660289691141;
+        Fri, 12 Aug 2022 00:34:51 -0700 (PDT)
 Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id r13-20020a056512102d00b0048af464559esm110538lfr.293.2022.08.12.00.27.47
+        by smtp.gmail.com with ESMTPSA id 11-20020a05651c128b00b0025e4a8a8038sm258775ljc.88.2022.08.12.00.34.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 00:28:02 -0700 (PDT)
-Message-ID: <0cd22a17-3171-b572-65fb-e9d3def60133@linaro.org>
-Date:   Fri, 12 Aug 2022 10:27:46 +0300
+        Fri, 12 Aug 2022 00:34:50 -0700 (PDT)
+Message-ID: <f636ad9d-5e9c-f703-221a-3c09f31ed105@linaro.org>
+Date:   Fri, 12 Aug 2022 10:34:40 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
-Subject: Re: [PATCH net 1/2] dt: ar803x: Document disable-hibernation property
+Subject: Re: [PATCH 1/4] dt-bindings: PCI: fu740-pci: fix missing clock-names
 Content-Language: en-US
-To:     wei.fang@nxp.com, andrew@lunn.ch, hkallweit1@gmail.com,
-        linux@armlinux.org.uk, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, f.fainelli@gmail.com,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220812145009.1229094-1-wei.fang@nxp.com>
- <20220812145009.1229094-2-wei.fang@nxp.com>
+To:     Conor Dooley <mail@conchuod.ie>,
+        Daire McNamara <daire.mcnamara@microchip.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Conor Dooley <conor.dooley@microchip.com>
+Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+References: <20220811203306.179744-1-mail@conchuod.ie>
+ <20220811203306.179744-2-mail@conchuod.ie>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220812145009.1229094-2-wei.fang@nxp.com>
+In-Reply-To: <20220811203306.179744-2-mail@conchuod.ie>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,43 +86,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/08/2022 17:50, wei.fang@nxp.com wrote:
-> From: Wei Fang <wei.fang@nxp.com>
+On 11/08/2022 23:33, Conor Dooley wrote:
+> From: Conor Dooley <conor.dooley@microchip.com>
+> 
+> The commit in the fixes tag removed the clock-names property from the
+
+Instead:
+The commit b92225b034c0 ("dt-bindings: PCI: designware: Fix
+'unevaluatedProperties' warnings")....
+
+> SiFive FU740 PCI Controller dt-binding,
+
+No, it did not do it... At least I cannot see it. Where is the removal
+exactly in that patch? The commit removed clock-names from required, not
+from properties.
+
+ but it was already in the dts
+> for the FU740. dtbs_check was not able to pick up on this at the time
+> but v2022.08 of dt-schema now can:
+> 
+> arch/riscv/boot/dts/sifive/hifive-unmatched-a00.dtb: pcie@e00000000: Unevaluated properties are not allowed ('clock-names' was unexpected)
+>         From schema: linux/Documentation/devicetree/bindings/pci/sifive,fu740-pcie.yaml
+> 
+> The Linux driver does not use this property, but outside of the kernel
+> this property may have users. Re-add the property and its "clocks"
+> dependency.
 > 
 
-Please use subject prefix matching subsystem.
-
-> The hibernation mode of Atheros AR803x PHYs is default enabled.
-> When the cable is unplugged, the PHY will enter hibernation
-> mode and the PHY clock does down. For some MACs, it needs the
-> clock to support it's logic. For instance, stmmac needs the PHY
-> inputs clock is present for software reset completion. Therefore,
-> It is reasonable to add a DT property to disable hibernation mode.
-> 
-> Signed-off-by: Wei Fang <wei.fang@nxp.com>
-> ---
->  Documentation/devicetree/bindings/net/qca,ar803x.yaml | 6 ++++++
->  1 file changed, 6 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/qca,ar803x.yaml b/Documentation/devicetree/bindings/net/qca,ar803x.yaml
-> index b3d4013b7ca6..d08431d79b83 100644
-> --- a/Documentation/devicetree/bindings/net/qca,ar803x.yaml
-> +++ b/Documentation/devicetree/bindings/net/qca,ar803x.yaml
-> @@ -40,6 +40,12 @@ properties:
->        Only supported on the AR8031.
->      type: boolean
->  
-> +  qca,disable-hibernation:
-> +    description: |
-> +    If set, the PHY will not enter hibernation mode when the cable is
-> +    unplugged.
-
-Wrong indentation. Did you test the bindings?
-
-Unfortunately the property describes driver behavior not hardware, so it
-is not suitable for DT. Instead describe the hardware
-characteristics/features/bugs/constraints. Not driver behavior. Both in
-property name and property description.
 
 Best regards,
 Krzysztof

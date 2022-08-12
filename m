@@ -2,205 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D0775911B1
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 15:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C13D25911B5
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 15:49:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239053AbiHLNmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 09:42:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60108 "EHLO
+        id S237874AbiHLNt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 09:49:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239051AbiHLNmn (ORCPT
+        with ESMTP id S237117AbiHLNtX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 09:42:43 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB8F19FA8F
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 06:42:42 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id w15so1001227ljw.1
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 06:42:42 -0700 (PDT)
+        Fri, 12 Aug 2022 09:49:23 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52584A50E5
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 06:49:20 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id x21so1425607edd.3
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 06:49:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=E4Pg30doPvdVeGQvtCtboZjqaFRUOqRz10bPbmMhTH0=;
-        b=k2WP5Q8EiXoM0UV+CAz2nOK4C9X9xG99qfdfJUJ6Szswwpp7yQuhrDkAO8M3RmdMqP
-         z5V0tzoIbjICD+6IgxXk6TUL5CvugAkJIMO13vZ0TvjkBbXrGTv5/e0d+qLUbOujwJDQ
-         wJb0cGjzVXHL//fx0EnLVdhHichHIsJR0lF0taLrrJJXl5tQJoyR8+DIDqs/YomAs5AV
-         BywXICwyIv3NWSvwciddJf0oVjYbrIDMPQsmyBZi/Z+5lQl80iZ34Xpb0BeYuNWrWWFc
-         A4T3zNVmlvGlo1ZSyg96nlXUcQFdR1AugMh34YKkIETdyHGqApKLHx7NS1DM/yycG4JO
-         Jizg==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=7AFiTG5TAXnB5fvKCQf+++SXrQCe+l505NPj1becQ5c=;
+        b=jCnxehuYeSEg1Bm3oVBS7KAsoXbC4hrLuDdUs9sIjOdLeKDUnNGJHzhCTDBuFxrx0V
+         NvvBEt8C6sEWWrdV8FhV5816gW8j8MoNPP0I8jCt2Gvv+Uf3QvroZ4F5IzHA0FL6ATxj
+         4MjPKr7YHsa+lQBZdABoGhJceirzjr6VZrhT5ZhYGGogNs7laJ5W57iYfxviFpHE7cdU
+         g4219lS9EgcvYR7babmOPuDQPFzXZ6Q/Pk5CDDAiz7KcEKigyupZVlgRNaW/Cm1v3Mif
+         c9VdzX1a0d+8L2gn1wk9HsGAeUpob85NgQueeQkNtIo1LCdorT9TnH8lrPb6xjfrSGMa
+         iHkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=E4Pg30doPvdVeGQvtCtboZjqaFRUOqRz10bPbmMhTH0=;
-        b=fZ8wctrYWFT+gD49PXdXwyrACAn7ToGEzVr4DkP9z0jznpMclnCMd6Y+LcR8cqog9p
-         KRTuDOr8ekiTFk6ypg9eaLPh46g4fmoo6W8B1RCuwTOKoxH+exi07kOGo0mm6aISnmLM
-         gwzdPd2/6OOwSz2dfHu9iU8xqeJx+8MWA7fIEMw5aIAB7uglqmG8/W8pp6tZ/CdAemY8
-         lJbC4rtxIsR8oguiZX1tEYze+DZGYf/tNkZMcEeF29bdcZwqkRRUWlfvlokjKzwhoHTe
-         Kl9i0TrF26mT9dvocjmo7h6zEtZxULO7nh/SvL7hy8iTcwdwRU+zTMgHmduAoBQipnz+
-         et7w==
-X-Gm-Message-State: ACgBeo2TSfuliq9yGHMNci6Onc9ill3anyX4T3wzJVVIrWvIbl/6klj1
-        wIYS81foHx5oqyn9hcfXXszUdg==
-X-Google-Smtp-Source: AA6agR5WKO4cNO5LSwR4p7rSjt3eXEu9RHC8dN/CpQFXoYBWuJHzEo5d6g/ieTaaW4mi6XPqHcxmdQ==
-X-Received: by 2002:a05:651c:1241:b0:25d:5484:75d3 with SMTP id h1-20020a05651c124100b0025d548475d3mr1278012ljh.45.1660311761060;
-        Fri, 12 Aug 2022 06:42:41 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id 18-20020a2eb952000000b0025ec44d1371sm365108ljs.80.2022.08.12.06.42.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 06:42:40 -0700 (PDT)
-Message-ID: <15ddd798-873e-d90d-11e9-c6dd46ca03f4@linaro.org>
-Date:   Fri, 12 Aug 2022 16:42:36 +0300
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=7AFiTG5TAXnB5fvKCQf+++SXrQCe+l505NPj1becQ5c=;
+        b=rn66t6zZXz2nXA/bJ6jmcAlJNigY8u7SSs3JMpN1UmLP5tyBddfv/Y08zA1lSnn+KL
+         MIs9cXSGyLV8zfWC+WRvCeENb/bHv2SocMTdEsvUjq/I7ulQeF+IgvlYS+nNqZjsqRuC
+         IFU65F3D1K6GaNuRjfz0YTlltmU4/AZPOgloFbEWs0oZ4qIu2ndxRR5KurrkziTvU3M+
+         Fb18nymYC7/ZBFJo4d0Ru2GTBTA+6SZU//WOd160M8hYHkQx448YVOHMJToT0A17taw/
+         vGIKNfs7jnGfAEtRclxLMgz54s/29BWA/kSUMxTVlD0r1HDyrn6zSQAqz0Ur1j84QBlF
+         y/Sw==
+X-Gm-Message-State: ACgBeo2pz2mXAjN29mVkhSc8cArZSLrr0M2tIPSIdCLAX+AvJj6lzUS4
+        f5R2LBr7FYEF1uu0wwsXDLlUxbwUcvyGbe9CR1Kb9rgI
+X-Google-Smtp-Source: AA6agR4VtibhFUH/ds8v9YejB0qbw6TefHdMOit3eiELmgq02Gvf77Rl81V0dmPpWbb6J2DbEAoVheUzb4Pca85IHZY=
+X-Received: by 2002:a05:6402:268a:b0:43e:84d:c5cc with SMTP id
+ w10-20020a056402268a00b0043e084dc5ccmr3731031edd.372.1660312158755; Fri, 12
+ Aug 2022 06:49:18 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v4 2/2] arm64: dts: imx8mp-msc-sm2s: Add device trees for
- MSC SM2S-IMX8PLUS SoM and carrier board
-Content-Language: en-US
-To:     Martyn Welch <martyn.welch@collabora.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     kernel@collabora.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20220812084120.376042-1-martyn.welch@collabora.com>
- <20220812084120.376042-2-martyn.welch@collabora.com>
- <8962b7ed-a21c-0b7f-7a6d-5db3db84e4cb@linaro.org>
- <65a094d5d03ad8f7b35196c9dff6ffc6cf0ea151.camel@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <65a094d5d03ad8f7b35196c9dff6ffc6cf0ea151.camel@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20220812132124.2053673-1-dzm91@hust.edu.cn> <20220812134138.gpu7274yahlvr6hr@wittgenstein>
+In-Reply-To: <20220812134138.gpu7274yahlvr6hr@wittgenstein>
+From:   Dongliang Mu <mudongliangabcd@gmail.com>
+Date:   Fri, 12 Aug 2022 21:48:40 +0800
+Message-ID: <CAD-N9QWSwoLw9nvaQieUCPZoAYXyNTymUVOzKOTUOfC38FkXnA@mail.gmail.com>
+Subject: Re: [PATCH] drivers: binderfs: fix memory leak in binderfs_fill_super
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Dongliang Mu <dzm91@hust.edu.cn>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Carlos Llamas <cmllamas@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        syzkaller <syzkaller@googlegroups.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/08/2022 14:35, Martyn Welch wrote:
-> On Fri, 2022-08-12 at 12:47 +0300, Krzysztof Kozlowski wrote:
->> On 12/08/2022 11:41, Martyn Welch wrote:
->>> Add device trees for one of a number of MSC's (parent company,
->>> Avnet)
->>> variants of the SM2S-IMX8PLUS system on module along with the
->>> compatible
->>> SM2S-SK-AL-EP1 carrier board. As the name suggests, this family of
->>> SoMs use
->>> the NXP i.MX8MP SoC and provide the SMARC module interface.
->>>
->>> Signed-off-by: Martyn Welch <martyn.welch@collabora.com>
->>> ---
->>>
->>> Changes in v2
->>>   - Added compatibles
->>>   - Removed underscores from node names
->>>   - Make node names more generic
->>>   - Reorder properties
->>>   - Fix issues found by dtbs_check in these files
->>>
->>> Changes in v3:
->>>   - Switched to avnet vendor string in compatibles
->>>   - Corrected patch description
->>>
->>> Changes in v4:
->>>   - Switched from phy-reset-gpios to reset-gpios, removing
->>> duplication
->>>   - Removed unneeded sdma1 node
->>>
->>>  arch/arm64/boot/dts/freescale/Makefile        |   1 +
->>>  .../freescale/imx8mp-msc-sm2s-14N0600E.dts    |  72 ++
->>>  .../dts/freescale/imx8mp-msc-sm2s-ep1.dts     |  53 ++
->>>  .../boot/dts/freescale/imx8mp-msc-sm2s.dtsi   | 812
->>> ++++++++++++++++++
->>>  4 files changed, 938 insertions(+)
->>>  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-
->>> 14N0600E.dts
->>>  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-
->>> ep1.dts
->>>  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-msc-
->>> sm2s.dtsi
->>>
->>> diff --git a/arch/arm64/boot/dts/freescale/Makefile
->>> b/arch/arm64/boot/dts/freescale/Makefile
->>> index 8bf7f7ecebaa..139c8b95c9c9 100644
->>> --- a/arch/arm64/boot/dts/freescale/Makefile
->>> +++ b/arch/arm64/boot/dts/freescale/Makefile
->>> @@ -83,6 +83,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mn-venice-
->>> gw7902.dtb
->>>  dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk2.dtb
->>>  dtb-$(CONFIG_ARCH_MXC) += imx8mp-evk.dtb
->>>  dtb-$(CONFIG_ARCH_MXC) += imx8mp-icore-mx8mp-edimm2.2.dtb
->>> +dtb-$(CONFIG_ARCH_MXC) += imx8mp-msc-sm2s-ep1.dtb
->>>  dtb-$(CONFIG_ARCH_MXC) += imx8mp-phyboard-pollux-rdk.dtb
->>>  dtb-$(CONFIG_ARCH_MXC) += imx8mp-tqma8mpql-mba8mpxl.dtb
->>>  dtb-$(CONFIG_ARCH_MXC) += imx8mp-venice-gw74xx.dtb
->>> diff --git a/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-
->>> 14N0600E.dts b/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-
->>> 14N0600E.dts
->>> new file mode 100644
->>> index 000000000000..9e976e8baaee
->>> --- /dev/null
->>> +++ b/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-14N0600E.dts
->>> @@ -0,0 +1,72 @@
->>> +// SPDX-License-Identifier: GPL-2.0
->>> +/*
->>> + * Copyright (C) 2022 Avnet Embedded GmbH
->>> + */
->>> +/dts-v1/;
->>> +
->>> +#include "imx8mp-msc-sm2s.dtsi"
->>> +
->>> +/ {
->>> +       model = "MSC SM2S-IMX8PLUS-QC6-14N0600E SoM";
->>> +       compatible = "avnet,sm2s-imx8mp-14N0600E", "avnet,sm2s-
->>> imx8mp",
->>> +                    "fsl,imx8mp";
->>
->> This does not match your bindings. Please test your DTS.
->>
-> 
-> Hi Krzysztof,
-> 
-> I'm not sure I follow. This is the DTS for the SoM. 
+On Fri, Aug 12, 2022 at 9:41 PM Christian Brauner <brauner@kernel.org> wrote:
+>
+> On Fri, Aug 12, 2022 at 09:21:24PM +0800, Dongliang Mu wrote:
+> > From: Dongliang Mu <mudongliangabcd@gmail.com>
+> >
+> > In binderfs_fill_super, if s_root is not successfully initialized by
+> > d_make_root, the previous allocated s_sb_info will not be freed since
+> > generic_shutdown_super first checks if sb->s_root and then does
+> > put_super operation. The put_super operation calls binderfs_put_super
+> > to deallocate s_sb_info and put ipc_ns. This will lead to memory leak
+> > in binderfs_fill_super.
+> >
+> > Fix this by invoking binderfs_put_super at error sites before s_root
+> > is successfully initialized.
+> >
+> > Fixes: 095cf502b31e ("binderfs: port to new mount api")
+> > Reported-by: syzkaller <syzkaller@googlegroups.com>
+> > Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+> > ---
+>
+> Seems right but where's the full syzbot link to the issue?
+> Also, wouldn't (untested) sm like the below be better?:
 
-SoMs usually do not have DTSes because they cannot be run on their own.
-SoMs almost always require a baseboard/carrier. Therefore this should
-not be DTS, but that was not my comment.
+I originally would like to change the order to object initialization,
+but I am not sure if they can be exchanged since many *_fill_super are
+ended with d_make_root.
 
-> The only way I can
-> test the SoM at the moment is on combination with the "EP1" carrier
-> board. 
+If you are sure about this exchange, I can resubmit a v2 patch.
 
-... so you basically say it cannot be a DTS.
-
-> That has been tested. The strings match those specified in the
-> bindings unless I'm being blind to something.
-
-Test the DTS - make dtbs_check (there are several
-variations/arguments/helpers):
-Documentation/devicetree/bindings/writing-schema.rst
-
-> 
-> I guess I can build the DTB for just the SoM 
-
-But you just did it, didn't you? This is a DTS.
-
-> and boot with that or
-> thinking about it, rename this as a .dtsi, given that it's unlikely
-> that anyone is going to have a carrier barebones enough that it could
-> be considered just the SoM?
-
-Anyway, I wanted DT bindings tests for DTS. Not actual tests on
-hardware, because the compatibles do not matter in that aspect.
-
-Best regards,
-Krzysztof
+>
+> diff --git a/drivers/android/binderfs.c b/drivers/android/binderfs.c
+> index 588d753a7a19..4582b043d21e 100644
+> --- a/drivers/android/binderfs.c
+> +++ b/drivers/android/binderfs.c
+> @@ -692,6 +692,15 @@ static int binderfs_fill_super(struct super_block *sb, struct fs_context *fc)
+>         sb->s_magic = BINDERFS_SUPER_MAGIC;
+>         sb->s_op = &binderfs_super_ops;
+>         sb->s_time_gran = 1;
+> +       sb->s_fs_info = NULL;
+> +
+> +       inode = new_inode(sb);
+> +       if (!inode)
+> +               return -ENOMEM;
+> +
+> +       sb->s_root = d_make_root(inode);
+> +       if (!sb->s_root)
+> +               return -ENOMEM;
+>
+>         sb->s_fs_info = kzalloc(sizeof(struct binderfs_info), GFP_KERNEL);
+>         if (!sb->s_fs_info)
+> @@ -709,10 +718,6 @@ static int binderfs_fill_super(struct super_block *sb, struct fs_context *fc)
+>         info->mount_opts.max = ctx->max;
+>         info->mount_opts.stats_mode = ctx->stats_mode;
+>
+> -       inode = new_inode(sb);
+> -       if (!inode)
+> -               return -ENOMEM;
+> -
+>         inode->i_ino = FIRST_INODE;
+>         inode->i_fop = &simple_dir_operations;
+>         inode->i_mode = S_IFDIR | 0755;
+> @@ -720,10 +725,6 @@ static int binderfs_fill_super(struct super_block *sb, struct fs_context *fc)
+>         inode->i_op = &binderfs_dir_inode_operations;
+>         set_nlink(inode, 2);
+>
+> -       sb->s_root = d_make_root(inode);
+> -       if (!sb->s_root)
+> -               return -ENOMEM;
+> -
+>         ret = binderfs_binder_ctl_create(sb);
+>         if (ret)
+>                 return ret;
+>
+> >  drivers/android/binderfs.c | 8 ++++++--
+> >  1 file changed, 6 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/android/binderfs.c b/drivers/android/binderfs.c
+> > index 588d753a7a19..20f5bc77495f 100644
+> > --- a/drivers/android/binderfs.c
+> > +++ b/drivers/android/binderfs.c
+> > @@ -710,8 +710,10 @@ static int binderfs_fill_super(struct super_block *sb, struct fs_context *fc)
+> >       info->mount_opts.stats_mode = ctx->stats_mode;
+> >
+> >       inode = new_inode(sb);
+> > -     if (!inode)
+> > +     if (!inode) {
+> > +             binderfs_put_super(sb);
+> >               return -ENOMEM;
+> > +     }
+> >
+> >       inode->i_ino = FIRST_INODE;
+> >       inode->i_fop = &simple_dir_operations;
+> > @@ -721,8 +723,10 @@ static int binderfs_fill_super(struct super_block *sb, struct fs_context *fc)
+> >       set_nlink(inode, 2);
+> >
+> >       sb->s_root = d_make_root(inode);
+> > -     if (!sb->s_root)
+> > +     if (!sb->s_root) {
+> > +             binderfs_put_super(sb);
+> >               return -ENOMEM;
+> > +     }
+> >
+> >       ret = binderfs_binder_ctl_create(sb);
+> >       if (ret)
+> > --
+> > 2.25.1
+> >

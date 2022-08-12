@@ -2,102 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 238DE591099
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 14:12:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91B715910A9
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 14:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238587AbiHLMMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 08:12:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55982 "EHLO
+        id S238625AbiHLMQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 08:16:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238618AbiHLMMS (ORCPT
+        with ESMTP id S237181AbiHLMQJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 08:12:18 -0400
-Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21C862CE1E;
-        Fri, 12 Aug 2022 05:12:13 -0700 (PDT)
-X-UUID: 85f2f4f3783f44cdbc51399c0128896a-20220812
-X-CPASD-INFO: 588139735cd7453caf1f82e1554a33df@fohyUWBrZWNhg6aDg3h-nYGXYZZoXoW
-        Ad29UkWFjkIaVgnxsTV5qXFWCgGpQYWNdYlV3fGtQYmBgZFB5i4Jyj1RgXmCCVHSTgHdyWGFhaQ==
-X-CLOUD-ID: 588139735cd7453caf1f82e1554a33df
-X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:0.0,URL:-5,TVAL:184.
-        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:0.0,CUTS:157.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
-        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:0.0,CFOB:0.0,SPC:0,SIG:-
-        5,AUF:0,DUF:2250,ACD:47,DCD:47,SL:0,EISP:0,AG:0,CFC:0.364,CFSR:0.072,UAT:0,RA
-        F:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0,E
-        AF:0,CID:-5.0,VERSION:2.3.17
-X-CPASD-ID: 85f2f4f3783f44cdbc51399c0128896a-20220812
-X-CPASD-BLOCK: 1000
-X-CPASD-STAGE: 1
-X-UUID: 85f2f4f3783f44cdbc51399c0128896a-20220812
-X-User: huanglei@kylinos.cn
-Received: from localhost.localdomain [(116.128.244.169)] by mailgw
-        (envelope-from <huanglei@kylinos.cn>)
-        (Generic MTA)
-        with ESMTP id 1122621435; Fri, 12 Aug 2022 20:12:09 +0800
-From:   huanglei <huanglei@kylinos.cn>
-To:     laurent.pinchart@ideasonboard.com
-Cc:     mchehab@kernel.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, huanglei <huanglei@kylinos.cn>
-Subject: [PATCH] media: uvcvideo: limit power line control for Sonix Technology
-Date:   Fri, 12 Aug 2022 20:12:02 +0800
-Message-Id: <20220812121202.1971-1-huanglei@kylinos.cn>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        RDNS_DYNAMIC,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,
-        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
+        Fri, 12 Aug 2022 08:16:09 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1708F97D46;
+        Fri, 12 Aug 2022 05:16:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 11F02CE1BA4;
+        Fri, 12 Aug 2022 12:16:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B793FC433D6;
+        Fri, 12 Aug 2022 12:16:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660306561;
+        bh=cDPXyw+0tZdATJeb97wbb8Q8vKGfySScZQ9VpUoFvk0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=paLTCH++EckJIU4uEojjfTmtYcEz3socVkzqTh4eohsbCA1/+4U1k/vNZQXLA8q6c
+         N7V78szUNV3pGj+bZbfpXYCD6er1jiC8xkZ2H8cmEZoE0xDdyM5d/he57JEHbwQJO8
+         OyR0Dmf1/TQQ4gy2er5Jav380HFrCA2HDJMOBXw8=
+Date:   Fri, 12 Aug 2022 14:15:58 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Siddh Raman Pant <code@siddh.me>
+Cc:     Johannes Berg <johannes@sipsolutions.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        netdev <netdev@vger.kernel.org>,
+        syzbot+6cb476b7c69916a0caca 
+        <syzbot+6cb476b7c69916a0caca@syzkaller.appspotmail.com>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>,
+        syzbot+f9acff9bf08a845f225d 
+        <syzbot+f9acff9bf08a845f225d@syzkaller.appspotmail.com>,
+        syzbot+9250865a55539d384347 
+        <syzbot+9250865a55539d384347@syzkaller.appspotmail.com>,
+        linux-kernel-mentees 
+        <linux-kernel-mentees@lists.linuxfoundation.org>
+Subject: Re: [PATCH v2] wifi: cfg80211: Fix UAF in ieee80211_scan_rx()
+Message-ID: <YvZEfnjGIpH6XjsD@kroah.com>
+References: <20220726123921.29664-1-code@siddh.me>
+ <18291779771.584fa6ab156295.3990923778713440655@siddh.me>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <18291779771.584fa6ab156295.3990923778713440655@siddh.me>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The device does not implement the power line control correctly. Add a
-corresponding control mapping override.
+On Fri, Aug 12, 2022 at 03:21:50PM +0530, Siddh Raman Pant via Linux-kernel-mentees wrote:
+> On Tue, 26 Jul 2022 18:09:21 +0530  Siddh Raman Pant  wrote:
+> > ieee80211_scan_rx() tries to access scan_req->flags after a null check
+> > (see line 303 of mac80211/scan.c), but ___cfg80211_scan_done() uses
+> > kfree() on the scan_req (see line 991 of wireless/scan.c).
+> > 
+> > This results in a UAF.
+> > 
+> > ieee80211_scan_rx() is called inside a RCU read-critical section
+> > initiated by ieee80211_rx_napi() (see line 5044 of mac80211/rx.c).
+> > 
+> > Thus, add an rcu_head to the scan_req struct, so that we can use
+> > kfree_rcu() instead of kfree() and thus not free during the critical
+> > section.
+> > 
+> > We can clear the pointer before freeing here, since scan_req is
+> > accessed using rcu_dereference().
+> > 
+> > Bug report (3): https://syzkaller.appspot.com/bug?extid=f9acff9bf08a845f225d
+> > Reported-by: syzbot+f9acff9bf08a845f225d@syzkaller.appspotmail.com
+> > Reported-by: syzbot+6cb476b7c69916a0caca@syzkaller.appspotmail.com
+> > Reported-by: syzbot+9250865a55539d384347@syzkaller.appspotmail.com
+> > 
+> > Signed-off-by: Siddh Raman Pant code@siddh.me>
+> > ---
+> > Changes since v1 as requested:
+> > - Fixed commit heading and better commit message.
+> > - Clear pointer before freeing.
+> > 
+> >  include/net/cfg80211.h | 2 ++
+> >  net/wireless/scan.c    | 2 +-
+> >  2 files changed, 3 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/include/net/cfg80211.h b/include/net/cfg80211.h
+> > index 80f41446b1f0..7e0b448c4cdb 100644
+> > --- a/include/net/cfg80211.h
+> > +++ b/include/net/cfg80211.h
+> > @@ -2368,6 +2368,7 @@ struct cfg80211_scan_6ghz_params {
+> >   * @n_6ghz_params: number of 6 GHz params
+> >   * @scan_6ghz_params: 6 GHz params
+> >   * @bssid: BSSID to scan for (most commonly, the wildcard BSSID)
+> > + * @rcu_head: (internal) RCU head to use for freeing
+> >   */
+> >  struct cfg80211_scan_request {
+> >  	struct cfg80211_ssid *ssids;
+> > @@ -2397,6 +2398,7 @@ struct cfg80211_scan_request {
+> >  	bool scan_6ghz;
+> >  	u32 n_6ghz_params;
+> >  	struct cfg80211_scan_6ghz_params *scan_6ghz_params;
+> > +	struct rcu_head rcu_head;
+> >  
+> >  	/* keep last */
+> >  	struct ieee80211_channel *channels[];
+> > diff --git a/net/wireless/scan.c b/net/wireless/scan.c
+> > index 6d82bd9eaf8c..6cf58fe6dea0 100644
+> > --- a/net/wireless/scan.c
+> > +++ b/net/wireless/scan.c
+> > @@ -988,8 +988,8 @@ void ___cfg80211_scan_done(struct cfg80211_registered_device *rdev,
+> >  	kfree(rdev->int_scan_req);
+> >  	rdev->int_scan_req = NULL;
+> >  
+> > -	kfree(rdev->scan_req);
+> >  	rdev->scan_req = NULL;
+> > +	kfree_rcu(rdev_req, rcu_head);
+> >  
+> >  	if (!send_message)
+> >  		rdev->scan_msg = msg;
+> > -- 
+> > 2.35.1
+> > 
+> 
+> Hello,
+> 
+> Probably the above quoted patch was missed, which can be found on
+> https://lore.kernel.org/linux-wireless/20220726123921.29664-1-code@siddh.me/
+> 
+> This patch was posted more than 2 weeks ago, with changes as requested.
+> 
+> With the merge window almost ending, may I request for another look at
+> this patch?
 
-Bus 003 Device 003: ID 3277:0072 Sonix Technology Co., Ltd. USB 2.0 Camera
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               2.00
-  bDeviceClass          239 Miscellaneous Device
-  bDeviceSubClass         2
-  bDeviceProtocol         1 Interface Association
-  bMaxPacketSize0        64
-  idVendor           0x3277
-  idProduct          0x0072
-  bcdDevice            1.00
-  iManufacturer           2 Sonix Technology Co., Ltd.
-  iProduct                1 USB 2.0 Camera
-  iSerial                 3 REV0001
-  bNumConfigurations      1
+The merge window is for new features to be added, bugfixes can be merged
+at any point in time, but most maintainers close their trees until after
+the merge window is closed before accepting new fixes, like this one.
 
-Signed-off-by: huanglei <huanglei@kylinos.cn>
----
- drivers/media/usb/uvc/uvc_driver.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+So just relax, wait another week or so, and if there's no response,
+resend it then.
 
-diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-index 9c05776f11d1..48f4d755a584 100644
---- a/drivers/media/usb/uvc/uvc_driver.c
-+++ b/drivers/media/usb/uvc/uvc_driver.c
-@@ -3282,6 +3282,14 @@ static const struct usb_device_id uvc_ids[] = {
- 	  .bInterfaceSubClass	= 1,
- 	  .bInterfaceProtocol	= 0,
- 	  .driver_info		= UVC_INFO_META(V4L2_META_FMT_D4XX) },
-+	/* Sonix Technology USB 2.0 Camera */
-+	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
-+				| USB_DEVICE_ID_MATCH_INT_INFO,
-+	  .idVendor		= 0x3277,
-+	  .idProduct		= 0x0072,
-+	  .bInterfaceClass	= USB_CLASS_VENDOR_SPEC,
-+	  .bInterfaceSubClass	= 1,
-+	  .bInterfaceProtocol	= 0 },
- 	/* Generic USB Video Class */
- 	{ USB_INTERFACE_INFO(USB_CLASS_VIDEO, 1, UVC_PC_PROTOCOL_UNDEFINED) },
- 	{ USB_INTERFACE_INFO(USB_CLASS_VIDEO, 1, UVC_PC_PROTOCOL_15) },
--- 
-2.17.1
+Personally, this patch seems very incorrect, but hey, I'm not the wifi
+subsystem maintainer :)
 
+thanks,
 
-No virus found
-		Checked by Hillstone Network AntiVirus
+greg k-h

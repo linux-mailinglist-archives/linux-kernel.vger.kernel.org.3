@@ -2,100 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E12C95912C3
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 17:15:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F2B25912D3
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 17:16:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238851AbiHLPOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 11:14:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35130 "EHLO
+        id S238965AbiHLPPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 11:15:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238785AbiHLPN7 (ORCPT
+        with ESMTP id S239189AbiHLPO6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 11:13:59 -0400
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA5D4A7A80;
-        Fri, 12 Aug 2022 08:13:57 -0700 (PDT)
-Received: by mail-io1-f51.google.com with SMTP id r5so1029106iod.10;
-        Fri, 12 Aug 2022 08:13:57 -0700 (PDT)
+        Fri, 12 Aug 2022 11:14:58 -0400
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D67A7A81;
+        Fri, 12 Aug 2022 08:14:57 -0700 (PDT)
+Received: by mail-wr1-f54.google.com with SMTP id l22so1522314wrz.7;
+        Fri, 12 Aug 2022 08:14:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=message-id:date:subject:references:in-reply-to:cc:to:from
-         :x-gm-message-state:from:to:cc;
-        bh=+gnS23mSZkFSRCfkxdCiT8D1lZEPwBiVeiXPhatZCZ4=;
-        b=d52qyPc31Wa84oGVIzvGheJQeI+dksihim5QOh10Rip8fI+fRUqRtsT/Je4oLYMRpt
-         ruPZ3Wd/a+HVC3v4PKFGqgOPIZAuLrP/IhT9Hq3K117vmFgB2DtZrXrzye2ttdmsiJ/W
-         UIjfGMIvQwFo8mcaXKD7/61dKX/a8yOS0BwJOjxUZVhOrn0mmesOoxlxcepNH3sky0ho
-         wZ4ngmCyZKyplW0VlBB84s6SeRERg+Y2axE8HJW5WhXbVO6z8C4W1DHKjpxNZFhbagEr
-         8jwrR6jkXA5HXR5XzzEBzbEUynHjmxtTKdXj37jQYZD6U2I3ealOlvmiNu73xR3wblNF
-         MojQ==
-X-Gm-Message-State: ACgBeo3vYKirGIT2nLEEJRlmoA6sGlkowDT6jV+7zniA6tJe4EzvNeJY
-        XvLaphDKtfgBrrxdamvDDg==
-X-Google-Smtp-Source: AA6agR6d9iIReWiEm6VWqwmm0FzN4hPDYtj7eb+Orodkp8VoIY0qJFoUq8spBIFr2C6pFlessr3vyw==
-X-Received: by 2002:a05:6638:1386:b0:342:8d69:71c2 with SMTP id w6-20020a056638138600b003428d6971c2mr2041161jad.315.1660317236960;
-        Fri, 12 Aug 2022 08:13:56 -0700 (PDT)
-Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id q13-20020a0566022f0d00b00681b6e20a82sm1041171iow.46.2022.08.12.08.13.55
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=EoiVDV1BpkQyac6N0M+0zVwSj3WK1AdJP/ntOJZkbiI=;
+        b=y+C6TXoGy+311Sk25HndUdD8oAFpkGvgecJybzjCxB2DZEJQOrZkmUmsuPiqCI7MYK
+         nSygq/qCXeJkAetWuNZmVuqOLpfhIkZiyi0PUksGqaPvRgPGMfD10an0EY1LnHsiXQo3
+         O3MX5M+fD8ovdchs7GRBFr/RjXfv9rE6CclRf8ZPdwZZaUuagAc1rHUclt2hzaABqtgV
+         0DxTl0Fku6UTlBwX4KzWQb/yr0gAf2i6NiI1nzzKmlpxYe/1XLlsSFgdZ9rMt22tu9qo
+         66s+eu6aVCvbHc7D2a0LxigsTFTjugt752viL8GosJrhBi95OmTwhQLQb8GaCWykYqH+
+         4V5w==
+X-Gm-Message-State: ACgBeo3nSzT4v8Au/HSgM27ms/en+vyPUdFXUwwqxZ0TRMQD9/M4YbuF
+        uRzVSSMdxMhAvLRLVTR7DZDdfh1pZ9g=
+X-Google-Smtp-Source: AA6agR67pF4bd0Gg+R7FFH9Fs1c0QAkU7YjmSu0wWkZPvc1aU+z3yNTU4l0akoiHi1cnVXOTwkrsNw==
+X-Received: by 2002:a05:6000:18a3:b0:21f:d6a4:1aec with SMTP id b3-20020a05600018a300b0021fd6a41aecmr2444780wri.468.1660317296338;
+        Fri, 12 Aug 2022 08:14:56 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id h41-20020a05600c49a900b003a5260b8392sm3938969wmp.23.2022.08.12.08.14.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Aug 2022 08:13:56 -0700 (PDT)
-Received: (nullmailer pid 168978 invoked by uid 1000);
-        Fri, 12 Aug 2022 15:13:53 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     cy_huang <u0084500@gmail.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org, linux-kernel@vger.kernel.org,
-        alina_yu@richtek.com, sre@kernel.org, devicetree@vger.kernel.org,
-        alinayu829@gmail.com, robh+dt@kernel.org, linux-pm@vger.kernel.org,
-        cy_huang@richtek.com
-In-Reply-To: <1660225318-4063-2-git-send-email-u0084500@gmail.com>
-References: <1660225318-4063-1-git-send-email-u0084500@gmail.com> <1660225318-4063-2-git-send-email-u0084500@gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: power: supply: Add Richtek RT9471 battery charger
-Date:   Fri, 12 Aug 2022 09:13:53 -0600
-Message-Id: <1660317233.429908.168977.nullmailer@robh.at.kernel.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+        Fri, 12 Aug 2022 08:14:56 -0700 (PDT)
+Date:   Fri, 12 Aug 2022 15:14:54 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc:     Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Mark Brown <broonie@kernel.org>,
+        Andreas Noever <andreas.noever@gmail.com>,
+        Michael Jamet <michael.jamet@intel.com>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Yehezkel Bernat <YehezkelShB@gmail.com>,
+        linux-hyperv@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [PATCH v1 5/5][RFT] ACPI: Drop parent field from struct
+ acpi_device
+Message-ID: <20220812151454.fqt2gknsoqjco4mz@liuwe-devbox-debian-v2>
+References: <12036348.O9o76ZdvQC@kreacher>
+ <2196460.iZASKD2KPV@kreacher>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2196460.iZASKD2KPV@kreacher>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 11 Aug 2022 21:41:57 +0800, cy_huang wrote:
-> From: ChiYuan Huang <cy_huang@richtek.com>
+On Wed, Aug 10, 2022 at 06:23:05PM +0200, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> Add bindings for the Richtek RT9471 I2C controlled battery charger.
+> The parent field in struct acpi_device is, in fact, redundant,
+> because the dev.parent field in it effectively points to the same
+> object and it is used by the driver core.
 > 
-> Co-developed-by: Alina Yu <alina_yu@richtek.com>
-> Signed-off-by: Alina Yu <alina_yu@richtek.com>
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> Accordingly, the parent field can be dropped from struct acpi_device
+> and for this purpose define acpi_dev_parent() to retrieve the parent
+> struct acpi_device pointer from the dev.parent field in struct
+> acpi_device.  Next, update all of the users of the parent field
+> in struct acpi_device to use acpi_dev_parent() instead of it and
+> drop it.
+> 
+> While at it, drop the ACPI_IS_ROOT_DEVICE() macro that is only used
+> in one place in a confusing way.
+> 
+> No intentional functional impact.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
->  .../bindings/power/supply/richtek,rt9471.yaml      | 78 ++++++++++++++++++++++
->  1 file changed, 78 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/supply/richtek,rt9471.yaml
 > 
+> I may have missed some places where adev->parent is used directly, so
+> if that's happened, please let me know (I'm assuming that 0-day will
+> pick up this patch and run it through all of the relevant configs
+> anyway).
+> 
+> ---
+[...]
+>  drivers/hv/vmbus_drv.c       |    3 ++-
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
-
-yamllint warnings/errors:
-
-dtschema/dtc warnings/errors:
-/builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/supply/richtek,rt9471.example.dtb: charger@53: usb-otg-vbus-regulator: Unevaluated properties are not allowed ('regulator-compatible' was unexpected)
-	From schema: /builds/robherring/linux-dt-review/Documentation/devicetree/bindings/power/supply/richtek,rt9471.yaml
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/patch/
-
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit.
-
+Acked-by: Wei Liu <wei.liu@kernel.org>

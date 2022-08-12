@@ -2,85 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3A04590969
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 02:01:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E17859096D
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 02:03:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236209AbiHLABr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 20:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59482 "EHLO
+        id S236385AbiHLADn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 20:03:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231131AbiHLABn (ORCPT
+        with ESMTP id S231131AbiHLADl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 20:01:43 -0400
-Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B775DD9F;
-        Thu, 11 Aug 2022 17:01:41 -0700 (PDT)
-Received: by mail-qv1-f45.google.com with SMTP id u10so2248004qvp.12;
-        Thu, 11 Aug 2022 17:01:41 -0700 (PDT)
+        Thu, 11 Aug 2022 20:03:41 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 867839D8FC
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 17:03:39 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id m12-20020a170902db0c00b0016f89376ad3so12115329plx.0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 17:03:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=NjDM8JLM74YS1NI+sefOO7qbdLfxup7nyPkDPlwTFEQ=;
+        b=gwNOp7+iOFiJp8c6mY0PEoMT01QxrdtE2gYNKN5/hXlz0gW40jYcKCcC8slvXX7umA
+         WHuDF4+3W7sNbldeGy8EOBg+lURhF6STgh/ELrwPy6Poa4M9RDWJiTFzCwWnm+YA21WE
+         KPoTR9eAgfCOA6mxttFAqgb9fVHcVgpMNrExmVJQBf8YNLxRyECvnx1gzC86Y12LqZnl
+         wa502iNJHE5YOIzTglS96NVWXdnWvUXBET64nWSX7/g1xGgU7chBO8cxJwb9OKmulokK
+         54zfLbM1XbbO2w1znzsC+SK/22OAjQAyGGjdeXeoKB6J0nT5ySl2BXXs80+Cel2WL/ok
+         5l7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=RQIMUXvQu1lrFisl+YhKEKIwxD9ItSNLTQ1u6o78Tyc=;
-        b=lUtDTSXBjiaxm2j9W7XrBWS0x4As18mcZoOYkm/Hm5bjX/CFFs/f2BJuwJC6DoSaEl
-         9yM+aHjmMWlR1x4TU1HAVykbDXyFzHWVHg6FwEGC4FL9WMCdIOgV/eInkJpUwzlpE0Z8
-         GNrHz+nsW05sPB0CRbni+zugroA9bifvSAH8ABGtJiEmZkYcKN6KxdEfnKYYVFcv6Yfx
-         zR/ZAR/2QeRFq25aHMd8MAvhBBcHc3DVXnXpP3ENskm9FMaesiVzv55cHancFWDyfr8N
-         aa2x/6JYGd4FO5Nl8+gov6FNvTntUymyp7klI2vkPtYXblDy72qraiEOmqxUqwK7XGAu
-         LX+Q==
-X-Gm-Message-State: ACgBeo3ARjjFf08TUP1zivzrB10+0yGXtKwbDG62DR/Wpzdh1syJMhPG
-        9Tl7VxvNts9lr1PeRg+Jkhs=
-X-Google-Smtp-Source: AA6agR77MaoWHkH7Ba8WiEn+C7E8WupGslIKgYWsa6ECOFNdOrt04jjR5jPGqCxtlZ1Do7KGnozd5g==
-X-Received: by 2002:a05:6214:21af:b0:476:cd63:f5d3 with SMTP id t15-20020a05621421af00b00476cd63f5d3mr1450508qvc.60.1660262500739;
-        Thu, 11 Aug 2022 17:01:40 -0700 (PDT)
-Received: from maniforge.dhcp.thefacebook.com ([2620:10d:c091:480::bfe0])
-        by smtp.gmail.com with ESMTPSA id a7-20020a05622a02c700b003430cbb0006sm646272qtx.1.2022.08.11.17.01.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Aug 2022 17:01:40 -0700 (PDT)
-Date:   Thu, 11 Aug 2022 19:01:38 -0500
-From:   David Vernet <void@manifault.com>
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, john.fastabend@gmail.com, martin.lau@linux.dev,
-        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
-        haoluo@google.com, jolsa@kernel.org, tj@kernel.org,
-        joannelkoong@gmail.com, linux-kernel@vger.kernel.org,
-        Kernel-team@fb.com
-Subject: Re: [PATCH 3/5] bpf: Add bpf_user_ringbuf_drain() helper
-Message-ID: <YvWYYhHfvEQ34wEv@maniforge.dhcp.thefacebook.com>
-References: <20220808155341.2479054-1-void@manifault.com>
- <20220808155341.2479054-3-void@manifault.com>
- <CAEf4BzZ-m-AUX+1+CGr7nMxMDnT=fjkn8DP9nP21Uts1y7fMyg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAEf4BzZ-m-AUX+1+CGr7nMxMDnT=fjkn8DP9nP21Uts1y7fMyg@mail.gmail.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=NjDM8JLM74YS1NI+sefOO7qbdLfxup7nyPkDPlwTFEQ=;
+        b=j8/LP3ClqX6svR3ElP1QJr7C7ekLPliPefrIUIe/yA+IxPvRtdIoi9sZ/ewTltKNcK
+         YbTHYJdC7wAAYSDY19m2zROv3vLcOl3O2n6kXQ8a4xoLEHMA8TI8HyI29E6pvY4crOsW
+         5Ty8Trpj6gd7ciAXMxdjEQy8tp8xyYh86Lg9OquEGUaOty6tbz9d3ztZMVpJH16T95wb
+         0/os8nhGTclAFjj81rS5+26+LBM7aIj5OyfEDYbSM13a1VrJCq/gPErnuV6vXmaaWRJ7
+         P23MXID4wPON6U2oSWO2BvpKM2VSa+gHBBs/9NO7Ep3hrZeh/EOBqQA/XhTiTjD380BZ
+         WN9Q==
+X-Gm-Message-State: ACgBeo0szh4jNBUvHnLpDEo1tNlxA4ug8ysH73wBnN9uj/yix4Q6lccm
+        IPDcDBWEEbgdGJb0x3B1wNq28JMPAt/05Pz/8Gw=
+X-Google-Smtp-Source: AA6agR44n5f5uOUpCBLHPQ2Ufh5YI3Q4OSyRaNmFb4BMKpLrDG+6+Kxx8nX+TwPpiA0tZPJumjiQ1Mj/Bq0sUoLVnxU=
+X-Received: from wmcvicker.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5ebe])
+ (user=willmcvicker job=sendgmr) by 2002:a17:902:d584:b0:170:8ebf:2048 with
+ SMTP id k4-20020a170902d58400b001708ebf2048mr1590630plh.113.1660262619041;
+ Thu, 11 Aug 2022 17:03:39 -0700 (PDT)
+Date:   Fri, 12 Aug 2022 00:03:24 +0000
+Message-Id: <20220812000327.3154251-1-willmcvicker@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.559.g78731f0fdb-goog
+Subject: [PATCH v4 0/2] PCI: dwc: Add support for 64-bit MSI target addresses
+From:   Will McVicker <willmcvicker@google.com>
+To:     Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        "=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?=" <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Will McVicker <willmcvicker@google.com>
+Cc:     kernel-team@android.com, Vidya Sagar <vidyas@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-8.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        USER_IN_DEF_DKIM_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 04:22:43PM -0700, Andrii Nakryiko wrote:
-> On Mon, Aug 8, 2022 at 8:54 AM David Vernet <void@manifault.com> wrote:
-> >
-> > Now that we have a BPF_MAP_TYPE_USER_RINGBUF map type, we need to add a
-> > helper function that allows BPF programs to drain samples from the ring
-> > buffer, and invoke a callback for each. This patch adds a new
-> > bpf_user_ringbuf_drain() helper that provides this abstraction.
-> >
-> > In order to support this, we needed to also add a new PTR_TO_DYNPTR
-> > register type to reflect a dynptr that was allocated by a helper function
-> > and passed to a BPF program. The verifier currently only supports
-> > PTR_TO_DYNPTR registers that are also DYNPTR_TYPE_LOCAL and MEM_ALLOC.
-> 
-> This commit message is a bit too laconic. There is a lot of
-> implications of various parts of this patch, it would be great to
-> highlight most important ones. Please consider elaborating a bit more.
+Hi All,
 
-Not a problem, I'll do this in v3.
+I've updated the series to address the review comments. Refer to the v4
+history below for the changes. Please take a look and thanks again for the
+reviews!
+
+Regards,
+Will
+
+Will McVicker (2):
+  PCI: dwc: Drop dependency on ZONE_DMA32
+  PCI: dwc: Add support for 64-bit MSI target address
+
+v4:
+ * Updated commit descriptions.
+ * Renamed msi_64b -> msi_64bit.
+ * Dropped msi_64bit ternary use.
+ * Dropped export of dw_pcie_msi_capabilities.
+
+v3:
+  * Switched to a managed DMA allocation.
+  * Simplified the DMA allocation cleanup.
+  * Dropped msi_page from struct dw_pcie_rp.
+  * Allocating a u64 instead of a full page.
+
+v2:
+  * Fixed build error caught by kernel test robot
+  * Fixed error handling reported by Isaac Manjarres
+
+ .../pci/controller/dwc/pcie-designware-host.c | 42 +++++++++----------
+ drivers/pci/controller/dwc/pcie-designware.c  |  8 ++++
+ drivers/pci/controller/dwc/pcie-designware.h  |  2 +-
+ 3 files changed, 28 insertions(+), 24 deletions(-)
+
+
+base-commit: 2ae08b36c06ea8df73a79f6b80ff7964e006e9e3
+-- 
+2.37.1.559.g78731f0fdb-goog
+

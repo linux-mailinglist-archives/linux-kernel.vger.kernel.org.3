@@ -2,58 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02BE0590BB5
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 08:00:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FB56590BB8
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 08:02:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237124AbiHLGAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 02:00:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34894 "EHLO
+        id S237149AbiHLGCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 02:02:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237050AbiHLF77 (ORCPT
+        with ESMTP id S237140AbiHLGCW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 01:59:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0E6BA4053;
-        Thu, 11 Aug 2022 22:59:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9F556B82368;
-        Fri, 12 Aug 2022 05:59:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C79AAC433C1;
-        Fri, 12 Aug 2022 05:59:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660283996;
-        bh=D+ySA4unPGJQAklQXAJt4uixwoAh+InIUtaelnM8bGs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=bT7SIxwnvwgmaw/q7kAJ13cbwES9DzRFH7rsEyu+eeCC4f/UnWL37gOPKt0e7cgNW
-         Yur4pt2QxsWFkkFmT5o7tO0eBAsKiCOFKrTGkyWHATGpFsOm2Zf7n8R4/QtCM71sz4
-         Ar/zpMpcgmdu7LwsHrpulGrvg4KPBCxB03/t9HbKDFsdytcAYyQgfHu1W+RohDIIGf
-         N2gwUyn89VQg8twkc60FR/yG2eJBN+rSQZJZFSKfekzcaUI8EulWCkHtdtWdJGvlBV
-         Ra+BK7IC8gW2sOqF7/nYaYxu/sBMWL42eKTIspPJUi7BzP7sOo5IKtaG/5uVL08YKw
-         6+NWicYMfvk0Q==
-Message-ID: <e874a457-48a1-c9b5-3cd9-ead270103335@kernel.org>
-Date:   Fri, 12 Aug 2022 13:59:52 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4] scsi: support packing multi-segment in UNMAP command
-Content-Language: en-US
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Bart Van Assche <bvanassche@acm.org>
-Cc:     jejb@linux.ibm.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hch@infradead.org
-References: <20220616013617.2284341-1-chao@kernel.org>
- <yq1wndgnj4i.fsf@ca-mkp.ca.oracle.com>
- <a15badd3-b9db-929f-1dc2-863fbff03992@acm.org>
- <yq1r11mmdpi.fsf@ca-mkp.ca.oracle.com>
-From:   Chao Yu <chao@kernel.org>
-In-Reply-To: <yq1r11mmdpi.fsf@ca-mkp.ca.oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        Fri, 12 Aug 2022 02:02:22 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F009346DBE
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 23:02:20 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id s206so21401pgs.3
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 23:02:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc;
+        bh=LGB0WFClYhcqqe+YL7LSXVJfO1SXGUU9W/Gp8VSqST4=;
+        b=Q49esEubX0ROqAm9EfEJiMjDXGIKOSdrQ+32dsHJAMyc7cO3cIFgclS3aTKmpJdi4j
+         Ei4mQ+QIMU/oMd9+Fmf9+s4IH2yoBmiGWV4FipurmPbMYNJv7tDomANzDmdBgmdFFD7C
+         xCzyE1TqJcAmmve7sHdhYaVnPUlSc/VL8orkGPQmmsBQ/1zlxKBI6EDoHfH9tsi0rnLK
+         GEKF9OQILyRW/lbRLahujxk5y2LkfkigoF+NO5R1LxDgEdYU5QdNa0+XAc9QcFo5CcmN
+         Z3jU9hX0UNXTFTm4RD/Oyu8LoNZjRgJEF2RRJxUnRzu9ILrMIYCLJfzHC6gJXQ7NQ/ga
+         nsGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=LGB0WFClYhcqqe+YL7LSXVJfO1SXGUU9W/Gp8VSqST4=;
+        b=T/tJWU0uF+f9/Uj4lJjZpeOOd2nzeJw4KurruKgd+vAbU55LbNniI6bZd6ymJ/zh2l
+         WiV96wKB/+chDjJKZqzxoMlrOEKw04XwBwpfVlvxlhYQKK40NvR57E4WolNg0RkWRBhT
+         xBeQKVrUbEWbgOAD+gOVoOYnGHWOuELioGwi0bmMV+SIuxOqcOv+zuQPQec9UpdgsI1z
+         6YE3EVLct0QMSTsHe0R169bOCGU1LnybYuckyilHhkZAgGIyuJmqV7c1JDfh9dLDNU6p
+         LHBJstwZuFUfEeELLh5X9f1bNhYAd6waFT8wQz6wLpiUZyJwdwTUXNnhn+S6PbOgXMNS
+         4weg==
+X-Gm-Message-State: ACgBeo3oZ+fsbQm7u7apT7oi8sj818tZd9b2UAqSywIaOQ5W1m5NEbxI
+        Lj95W+d7xvgyq5sk5eaPPxFtpmaJS+U=
+X-Google-Smtp-Source: AA6agR5rBczvnAzYLabH3mHMNCmt0pTO71n0M2QUKwFWtNWRVx2VFRqIHJQafTFPqUGunw0wo6WvDg==
+X-Received: by 2002:aa7:8289:0:b0:52c:e97c:dbe4 with SMTP id s9-20020aa78289000000b0052ce97cdbe4mr2461650pfm.49.1660284140428;
+        Thu, 11 Aug 2022 23:02:20 -0700 (PDT)
+Received: from localhost.localdomain ([156.236.96.165])
+        by smtp.gmail.com with ESMTPSA id l16-20020a170902f69000b001708b189c4asm740020plg.137.2022.08.11.23.02.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Aug 2022 23:02:20 -0700 (PDT)
+From:   Yue Hu <zbestahu@gmail.com>
+X-Google-Original-From: Yue Hu <huyue2@coolpad.com>
+To:     xiang@kernel.org, chao@kernel.org
+Cc:     linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        huyue2@coolpad.com, zhangwen@coolpad.com
+Subject: [PATCH] erofs: avoid the potentially wrong m_plen for big pcluster
+Date:   Fri, 12 Aug 2022 14:01:50 +0800
+Message-Id: <20220812060150.8510-1-huyue2@coolpad.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,21 +65,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Martin,
+Actually, 'compressedlcs' stores compressed block count rather than
+lcluster count. Therefore, the number of bits for shifting the count
+should be 'LOG_BLOCK_SIZE' rather than 'lclusterbits' although current
+lcluster size is 4K. The value of 'm_plen' will be wrong once we enable
+the non 4K-sized lcluster.
 
-On 2022/8/12 9:53, Martin K. Petersen wrote:
-> 
-> Bart,
-> 
->> Have you already had the chance to test this patch? We would like to
->> use this functionality in Android.
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/mkp/linux.git/log/?h=5.20/discovery
-> 
-> Had to drop the series from 5.20/6.0 due to a couple of reported
-> regressions. Will try again for 6.1.
+Signed-off-by: Yue Hu <huyue2@coolpad.com>
+---
+ fs/erofs/zmap.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-Could you please provider details of regression reports, let me check them
-as well.
+diff --git a/fs/erofs/zmap.c b/fs/erofs/zmap.c
+index 572f0b8151ba..d58549ca1df9 100644
+--- a/fs/erofs/zmap.c
++++ b/fs/erofs/zmap.c
+@@ -141,7 +141,7 @@ struct z_erofs_maprecorder {
+ 	u8  type, headtype;
+ 	u16 clusterofs;
+ 	u16 delta[2];
+-	erofs_blk_t pblk, compressedlcs;
++	erofs_blk_t pblk, compressedblks;
+ 	erofs_off_t nextpackoff;
+ };
+ 
+@@ -192,7 +192,7 @@ static int legacy_load_cluster_from_disk(struct z_erofs_maprecorder *m,
+ 				DBG_BUGON(1);
+ 				return -EFSCORRUPTED;
+ 			}
+-			m->compressedlcs = m->delta[0] &
++			m->compressedblks = m->delta[0] &
+ 				~Z_EROFS_VLE_DI_D0_CBLKCNT;
+ 			m->delta[0] = 1;
+ 		}
+@@ -293,7 +293,7 @@ static int unpack_compacted_index(struct z_erofs_maprecorder *m,
+ 				DBG_BUGON(1);
+ 				return -EFSCORRUPTED;
+ 			}
+-			m->compressedlcs = lo & ~Z_EROFS_VLE_DI_D0_CBLKCNT;
++			m->compressedblks = lo & ~Z_EROFS_VLE_DI_D0_CBLKCNT;
+ 			m->delta[0] = 1;
+ 			return 0;
+ 		} else if (i + 1 != (int)vcnt) {
+@@ -497,7 +497,7 @@ static int z_erofs_get_extent_compressedlen(struct z_erofs_maprecorder *m,
+ 		return 0;
+ 	}
+ 	lcn = m->lcn + 1;
+-	if (m->compressedlcs)
++	if (m->compressedblks)
+ 		goto out;
+ 
+ 	err = z_erofs_load_cluster_from_disk(m, lcn, false);
+@@ -506,7 +506,7 @@ static int z_erofs_get_extent_compressedlen(struct z_erofs_maprecorder *m,
+ 
+ 	/*
+ 	 * If the 1st NONHEAD lcluster has already been handled initially w/o
+-	 * valid compressedlcs, which means at least it mustn't be CBLKCNT, or
++	 * valid compressedblks, which means at least it mustn't be CBLKCNT, or
+ 	 * an internal implemenatation error is detected.
+ 	 *
+ 	 * The following code can also handle it properly anyway, but let's
+@@ -523,12 +523,12 @@ static int z_erofs_get_extent_compressedlen(struct z_erofs_maprecorder *m,
+ 		 * if the 1st NONHEAD lcluster is actually PLAIN or HEAD type
+ 		 * rather than CBLKCNT, it's a 1 lcluster-sized pcluster.
+ 		 */
+-		m->compressedlcs = 1;
++		m->compressedblks = 1 << (lclusterbits - LOG_BLOCK_SIZE);
+ 		break;
+ 	case Z_EROFS_VLE_CLUSTER_TYPE_NONHEAD:
+ 		if (m->delta[0] != 1)
+ 			goto err_bonus_cblkcnt;
+-		if (m->compressedlcs)
++		if (m->compressedblks)
+ 			break;
+ 		fallthrough;
+ 	default:
+@@ -539,7 +539,7 @@ static int z_erofs_get_extent_compressedlen(struct z_erofs_maprecorder *m,
+ 		return -EFSCORRUPTED;
+ 	}
+ out:
+-	map->m_plen = (u64)m->compressedlcs << lclusterbits;
++	map->m_plen = (u64)m->compressedblks << LOG_BLOCK_SIZE;
+ 	return 0;
+ err_bonus_cblkcnt:
+ 	erofs_err(m->inode->i_sb,
+-- 
+2.17.1
 
-Thanks,

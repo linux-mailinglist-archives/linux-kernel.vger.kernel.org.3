@@ -2,152 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91FDB590CDD
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 09:52:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 32A48590CDE
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 09:52:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237611AbiHLHwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 03:52:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56508 "EHLO
+        id S237615AbiHLHwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 03:52:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237399AbiHLHwP (ORCPT
+        with ESMTP id S237613AbiHLHwT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 03:52:15 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF1CA6C2C
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 00:52:14 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id bx38so173083ljb.10
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 00:52:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=Y1FgwE1S0sZxGVZfKzOP1495FUieOVb1Ijht3ICAFkg=;
-        b=mL0W5VC6YSoWJdmliy79TMTZKdBE0ndlkNHtLaGGwh6t3xDn+H2ok9auBHCeQ88/Pr
-         akeMAs/sbQxBsK39m3xjJHHbOo9x6yrGvlspQtODqTOgqChqdD1hKHnANPOhSTLnm00N
-         I7n/2QBlBqTZ+PBv4evi+qLwiJos6vXDlo8lmnSoajfFbooNbIXyWsIlBGu9hjERgQgc
-         QNt9VSW65T9PvyuMsZ17SkJBTzyXmqZkxIP1Y23gHfdCDPUI/sX0dvDVOFjE3qgRvQDO
-         dr8x/65eK7Yfl7khzi00d7fI15M5Gdm+HZ3zc9Q9OYpqKXmSFFrsiGwbsCCaY98pCNBC
-         lf4w==
+        Fri, 12 Aug 2022 03:52:19 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BEF92A6C21
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 00:52:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660290737;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fVtXl6guGCe3kM32qFWNzJUFzVgfQUPoss26g6AXaJw=;
+        b=IIJ3IgR5mPlhF/fX7kbF71Y5cH1WR+70QgxO6V8fB0Gs7g+rWchcSsfnEXX5aby7x9W+9S
+        rTnRGmXjkWOpX++TcuTVVXw+bIAPuBhI/uDt/mr8czAPmUxdk+Ltmn7GTBqqOn3u0XS3FG
+        Ppt40iq32M7XXrw8vj2biYso6GWgLhM=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-495-Kph7HiB1MBaJCRgLKMsYog-1; Fri, 12 Aug 2022 03:52:16 -0400
+X-MC-Unique: Kph7HiB1MBaJCRgLKMsYog-1
+Received: by mail-ed1-f72.google.com with SMTP id s21-20020a056402521500b00440e91f30easo186334edd.7
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 00:52:16 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=Y1FgwE1S0sZxGVZfKzOP1495FUieOVb1Ijht3ICAFkg=;
-        b=F9fp8YbBdeVn7wQ62u6SkiKr3SwM/ueZ0kGrhbb4D/TweVVCsn0EIXIIJUpFCEjOzJ
-         DBGs4Wk3eCZCC4tfllYAM++MBJC5Bo9xtISM4niM7eYRAo6qWedwpYkMZX0xDeYK7Jvg
-         WjgMxyC7/FWRXNozsmFBIo4gl7SawtWsnqhs+mdBUaWkaxAZgjc2FycvNUd3XWCNTkbQ
-         FCZdWqA/pRc2qQBaWzoZarj4icUqDQySOQC8IUFnaoQ/kFX2tc7+ZgEcfE7Kw45OBzqx
-         A4VMML0FceS/RY1ny2JPb2wNQuS0EkPauMDZBT7f+xb4rsi03eWLlR8Sk8ZYBI+RNxW8
-         ZN3w==
-X-Gm-Message-State: ACgBeo1CPr+cP/qljy438BXnLSF1wvDN77Ys6qcFkD8U2I+HMGCLffKY
-        DdaGu0/fv+32FW6yp5rNBtAjrg==
-X-Google-Smtp-Source: AA6agR7ieagGDwa45zL3pLJwwj3Fc73INAw9s0I68eA2wdC3N+LrYS0gii7eVHf8+1bD5EKhkVFLpQ==
-X-Received: by 2002:a2e:bd89:0:b0:25a:9386:75d0 with SMTP id o9-20020a2ebd89000000b0025a938675d0mr866830ljq.431.1660290732392;
-        Fri, 12 Aug 2022 00:52:12 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id i27-20020ac25b5b000000b0048b18fb378fsm124440lfp.119.2022.08.12.00.52.04
+        bh=fVtXl6guGCe3kM32qFWNzJUFzVgfQUPoss26g6AXaJw=;
+        b=1XfN3iIU2anvbfOcSgUSj7wySOHj78wG5nPBR90MxxiO1TcQSOp3tPsT4KjelFVXlf
+         6DBoPq/YqU6jeaCorxdHfETMgNB+6nSlTbDNk+9Noy8OXQ8A2KAYAEvbM0s6iBwauW5S
+         LTA/kyJ6fn4ujzR0mUZKg4kHIf36uncpHzxEl9GE3pM0N6RCUs9hTNlZsr1qYiKs2pNP
+         OsxEGnYQJCJM0Nwe0RtQaKZtHxosbSxT6JrOofAJ7s9d3p2Ue09JXO7MsljdafKEzXpH
+         u+CcpcZ9BVbeCfwdJUlnroLAnoZ0JYLzRJvNJV4/LFsyBipD+hUHtSpVGeHUAWjaLA/f
+         eCQQ==
+X-Gm-Message-State: ACgBeo0x9wCgichm3UFsXEZdRlTMV8hL+hzPpU/qygoC4k2nueFQbPqm
+        zTK8VCvvQRJPTW2Ha5rQYjMD5Th11TZn/ijqwnxfI1s/C9PV8OTao457BUM5k5n7me9BOvRQ9VC
+        pI5dFi5wkQfRpYvENcZT8xPiw
+X-Received: by 2002:a05:6402:3594:b0:440:5036:ec6b with SMTP id y20-20020a056402359400b004405036ec6bmr2547539edc.117.1660290735395;
+        Fri, 12 Aug 2022 00:52:15 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR6jpYqgU5GkQLhb5qOrI6rt7uC1GzLZSrZ2cscxHoxOfV3Gep9jfMJd0MvY1nn+qKIIC3qq8w==
+X-Received: by 2002:a05:6402:3594:b0:440:5036:ec6b with SMTP id y20-20020a056402359400b004405036ec6bmr2547497edc.117.1660290735175;
+        Fri, 12 Aug 2022 00:52:15 -0700 (PDT)
+Received: from ?IPV6:2001:b07:6468:f312:1c09:f536:3de6:228c? ([2001:b07:6468:f312:1c09:f536:3de6:228c])
+        by smtp.googlemail.com with ESMTPSA id 24-20020a170906301800b007313a25e56esm513102ejz.29.2022.08.12.00.52.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 00:52:11 -0700 (PDT)
-Message-ID: <edf3da1b-79dc-4e09-8d3e-73aca09e847f@linaro.org>
-Date:   Fri, 12 Aug 2022 10:52:02 +0300
+        Fri, 12 Aug 2022 00:52:14 -0700 (PDT)
+Message-ID: <959fedce-aada-50e4-ce8d-a842d18439fa@redhat.com>
+Date:   Fri, 12 Aug 2022 09:52:13 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.12.0
-Subject: Re: [PATCH 4/4] dt-bindings: PCI: microchip,pcie-host: fix missing
- address translation property
+Subject: Re: [PATCH v2 1/7] perf/x86/core: Update x86_pmu.pebs_capable for
+ ICELAKE_{X,D}
 Content-Language: en-US
-To:     Conor Dooley <mail@conchuod.ie>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>
-Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-References: <20220811203306.179744-1-mail@conchuod.ie>
- <20220811203306.179744-5-mail@conchuod.ie>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220811203306.179744-5-mail@conchuod.ie>
-Content-Type: text/plain; charset=UTF-8
+To:     Like Xu <like.xu.linux@gmail.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Jim Mattson <jmattson@google.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Kan Liang <kan.liang@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>
+References: <20220721103549.49543-1-likexu@tencent.com>
+ <20220721103549.49543-2-likexu@tencent.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20220721103549.49543-2-likexu@tencent.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/08/2022 23:33, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
+On 7/21/22 12:35, Like Xu wrote:
+> From: Like Xu <likexu@tencent.com>
 > 
-> When the PCI controller node was added to the PolarFire SoC dtsi,
-> dt-schema was not able to detect the presence of some undocumented
-> properties due to how it handled unevaluatedProperties. v2022.08
-> introduces better validation, producing the following error:
+> Ice Lake microarchitecture with EPT-Friendly PEBS capability also support
+> the Extended feature, which means that all counters (both fixed function
+> and general purpose counters) can be used for PEBS events.
 > 
-> arch/riscv/boot/dts/microchip/mpfs-polarberry.dtb: pcie@2000000000: Unevaluated properties are not allowed ('clock-names', 'microchip,axi-m-atr0' were unexpected)
->         From schema: Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
+> Update x86_pmu.pebs_capable like SPR to apply PEBS_ALL semantics.
 > 
-> Fixes: 528a5b1f2556 ("riscv: dts: microchip: add new peripherals to icicle kit device tree")
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> Cc: Kan Liang <kan.liang@linux.intel.com>
+> Fixes: fb358e0b811e ("perf/x86/intel: Add EPT-Friendly PEBS for Ice Lake Server")
+> Signed-off-by: Like Xu <likexu@tencent.com>
 > ---
-> I feel like there's a pretty good chance that this is not the way this
-> should have been done and the property should be marked as deprecated
-> but I don't know enough about PCI to answer that.
-
-It seems bindings were added incomplete and now based on DTS (which did
-not match bindings), we keep adding "missing" properties. I don't think
-it is good. It creates a precedence where someone might intentionally
-sneak limited bindings (without controversial property) and later claim
-"I forgot to include foo,bar".
-
-Therefore the property should pass review just like it is newly added
-property.
-
-> ---
->  .../devicetree/bindings/pci/microchip,pcie-host.yaml  | 11 +++++++++++
->  1 file changed, 11 insertions(+)
+>   arch/x86/events/intel/core.c | 1 +
+>   1 file changed, 1 insertion(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml b/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
-> index 9b123bcd034c..9ac34b33c4b2 100644
-> --- a/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
-> +++ b/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
-> @@ -71,6 +71,17 @@ properties:
->    msi-parent:
->      description: MSI controller the device is capable of using.
->  
-> +  microchip,axi-m-atr0:
+> diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+> index 4e9b7af9cc45..e46fd496187b 100644
+> --- a/arch/x86/events/intel/core.c
+> +++ b/arch/x86/events/intel/core.c
+> @@ -6239,6 +6239,7 @@ __init int intel_pmu_init(void)
+>   	case INTEL_FAM6_ICELAKE_X:
+>   	case INTEL_FAM6_ICELAKE_D:
+>   		x86_pmu.pebs_ept = 1;
+> +		x86_pmu.pebs_capable = ~0ULL;
+>   		pmem = true;
+>   		fallthrough;
+>   	case INTEL_FAM6_ICELAKE_L:
 
-Name is not helping. If it is offset, add such suffix (see
-brcm,iproc-pcie.yaml).
+Peter, can you please ack this (you were not CCed on this KVM series but 
+this patch is really perf core)?
 
-Unfortunately I don't know PCIe good enough to judge whether the
-property makes any sense or some other ranges-style should be used.
+Thanks,
 
-> +    description: |
-> +      Depending on the FPGA bitstream, the AXIM address translation table in the
-> +      PCIe controllers bridge layer may need to be configured. Use this property
-> +      to set the address offset. For more information, see Section 1.3.3,
-> +      "PCIe/AXI4 Address Translation" of the PolarFire SoC PCIe User Guide:
-> +      https://www.microsemi.com/document-portal/doc_download/1245812-polarfire-fpga-and-polarfire-soc-fpga-pci-express-user-guide
-> +    $ref: /schemas/types.yaml#/definitions/uint32-matrix
-> +    minItems: 2
+Paolo
 
-minItems should not be needed, but you should instead describe the items
-in the matrix.
-
-> +    maxItems: 2
-
-
-Best regards,
-Krzysztof

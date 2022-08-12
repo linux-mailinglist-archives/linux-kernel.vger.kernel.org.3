@@ -2,111 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5358590AD5
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 05:44:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82674590AD9
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 05:49:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236736AbiHLDn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 23:43:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43266 "EHLO
+        id S236501AbiHLDs7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 23:48:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233668AbiHLDn4 (ORCPT
+        with ESMTP id S232527AbiHLDsw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 23:43:56 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4505A4E85D;
-        Thu, 11 Aug 2022 20:43:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660275835; x=1691811835;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=G7EWEWn+e0D+6PSc/7cEd7OI0+k/W+9AAEuBQz8vlds=;
-  b=SU/eCHcCC5plEZTpB8I9rIynlYzCJ1c6KESDTZyrQmvo1XR/R3uwRT7v
-   AYIytQCSVRJAFy0n9G6UjBkEWAa8bQDjY1j2zFvbJH1m2balNTEUe/vMb
-   584thTOa3caq2TSzakEWb6dOiDpK+7clZQvc235JP/zpXsiWrPCRbkpmP
-   ywaUSOfOWJTQc6/n/x1kCCEoaQU9gLc2JlaaajJxJ68m8mzR+dlk7qf9i
-   J12w+X7L9DA2sHDkWA3NgFZmoQQw1lYZfzZWAbcj6IgJfqVPY/TpNX5b1
-   rP9HbMDz6UHQBcZ/nadFS6F5tmS/sdbh60ASdh5cGmhpExKuKVuOmWOgG
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10436"; a="292777640"
-X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
-   d="scan'208";a="292777640"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 20:43:54 -0700
-X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
-   d="scan'208";a="665662478"
-Received: from jzhou16-mobl2.ccr.corp.intel.com (HELO [10.254.214.221]) ([10.254.214.221])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 20:43:52 -0700
-Message-ID: <ed90e585-d5e8-15b6-6285-67ecc53f05ca@linux.intel.com>
-Date:   Fri, 12 Aug 2022 11:43:50 +0800
+        Thu, 11 Aug 2022 23:48:52 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFEDA98596;
+        Thu, 11 Aug 2022 20:48:50 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id h21-20020a17090aa89500b001f31a61b91dso7207875pjq.4;
+        Thu, 11 Aug 2022 20:48:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:from:to:cc;
+        bh=Ncu1JcFDmP0VMNE6i7v1fZbIY+FxdJgQnM3J2QjmWgs=;
+        b=Ypn7cJoqgMe/lhhnMj5T9n/eTbkRlnTbnjka7yqT3Tvzf7yzdPu5yMxGDcoX/qRrKT
+         Pw6LrtsexG1vcl9742zh7fd7Ct96qI6b5GuqdlsP6Bimsw6j9K2OqOTNFuDvn6hhQBkw
+         NQhTzE0t8yRDgBPZQhZ29t/H/pwZTzlLdrgG8tFlY9vakZnh8jNQMONLNUw/Wt7Tqgr8
+         NR7aCWdfbBcmKre82f7uxrpJGq0dyMUA1KvAo7F4bWk7uAGUFoKGkwS9zBTljvg1IgPc
+         u7MO+qBGybbj5/smjfoi+WpyMZ72vxXuPgBUF4dxkqC6Uj31QjLhJLmW/tvWc5mEvL6g
+         UBMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:subject:cc
+         :to:from:date:message-id:x-gm-message-state:from:to:cc;
+        bh=Ncu1JcFDmP0VMNE6i7v1fZbIY+FxdJgQnM3J2QjmWgs=;
+        b=RqgmeoM8S6vwAJQJwOKSF0ASDFjfoM1IbDBM8NkXgOVWXBPqDQnToe7oCOpqxGT/3g
+         k4apdB7HG8ZMHbAiWn2dVxq7TPvKmcoNGx8kgdDD9cWD23Dun1jTFY7b7jjgW0sDSLtI
+         iXQ/UriocpSedEn2HKfDCXap9rPEuJ3eFPVBIB/C42+4eHxWlqnFUeCCMApG7SvSsq34
+         rWxEXekMLjLIzt8Rg1XCXgD8dpBbk2c1pWmgNd9Lonafo4tKGq7lX6ydr/WPZ/9cnrk1
+         hFCPAr95MYdEwRHtdz6DYEw/hwoxxx5u1bk+u53X7s9hpFHoQwn4smS0JSpMk8hxYnGH
+         x3eg==
+X-Gm-Message-State: ACgBeo0bcJin2mmf7lOqE0Vqh0UnI4kOnDJF2PmVc+cDnr8cBS9xTTXT
+        5KjSz1v6hxytYkgrKQSCrnA=
+X-Google-Smtp-Source: AA6agR7tG68qxm8iVn7MwS6oTFLxbFhoOUQZx/VUFxjNUxV6llWl3UelpbyoxkDoyAzbHxKL8FThfw==
+X-Received: by 2002:a17:90b:2c13:b0:1f3:359a:c7d5 with SMTP id rv19-20020a17090b2c1300b001f3359ac7d5mr2215720pjb.72.1660276130330;
+        Thu, 11 Aug 2022 20:48:50 -0700 (PDT)
+Received: from localhost ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id 200-20020a6216d1000000b005289fad1bbesm499655pfw.94.2022.08.11.20.48.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Aug 2022 20:48:49 -0700 (PDT)
+Message-ID: <62f5cda1.620a0220.7697b.1387@mx.google.com>
+X-Google-Original-Message-ID: <20220812034848.GA29715@cgel.zte@gmail.com>
+Date:   Fri, 12 Aug 2022 03:48:48 +0000
+From:   CGEL <cgel.zte@gmail.com>
+To:     Joonsoo Kim <js1304@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>, mm-commits@vger.kernel.org,
+        Matthew Wilcox <willy@infradead.org>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        David Hildenbrand <david@redhat.com>, corbet@lwn.net,
+        bsingharora@gmail.com, yang.yang29@zte.com.cn,
+        Andrew Morton <akpm@linux-foundation.org>
+Subject: Re: + filemap-make-the-accounting-of-thrashing-more-consistent.patch
+ added to mm-unstable branch
+References: <20220811215204.64911C433D6@smtp.kernel.org>
+ <CAAmzW4MV4rqZsSkbUO385jiijMnLzW1i7U9DaikL-T4H8Pje=A@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Cc:     baolu.lu@linux.intel.com, iommu@lists.linux.dev,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Tian <kevin.tian@intel.com>, Wen Jin <wen.jin@intel.com>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 1/1] iommu/vt-d: Fix kdump kernels boot failure with
- scalable mode
-Content-Language: en-US
-To:     Jerry Snitselaar <jsnitsel@redhat.com>
-References: <20220808034612.1691470-1-baolu.lu@linux.intel.com>
- <20220808162146.jrykclf5ez4o7j2t@cantor>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20220808162146.jrykclf5ez4o7j2t@cantor>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAmzW4MV4rqZsSkbUO385jiijMnLzW1i7U9DaikL-T4H8Pje=A@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jerry,
+We have discussed related question before. See:
+https://lore.kernel.org/all/Yio17pXawRuuVJFO@cmpxchg.org/
+The problem is that there is no suitable place to measure pagecache thrashing
+in fs level likes swap_readpage(). We have to measure it in folio_wait_bit_common().
 
-On 2022/8/9 00:21, Jerry Snitselaar wrote:
-> On Mon, Aug 08, 2022 at 11:46:12AM +0800, Lu Baolu wrote:
->> The translation table copying code for kdump kernels is currently based
->> on the extended root/context entry formats of ECS mode defined in older
->> VT-d v2.5, and doesn't handle the scalable mode formats. This causes
->> the kexec capture kernel boot failure with DMAR faults if the IOMMU was
->> enabled in scalable mode by the previous kernel.
->>
->> The ECS mode has already been deprecated by the VT-d spec since v3.0 and
->> Intel IOMMU driver doesn't support this mode as there's no real hardware
->> implementation. Hence this converts ECS checking in copying table code
->> into scalable mode.
->>
->> The existing copying code consumes a bit in the context entry as a mark
->> of copied entry. This marker needs to work for the old format as well as
->> for extended context entries. It's hard to find such a bit for both
->> legacy and scalable mode context entries. This replaces it with a per-
->> IOMMU bitmap.
->>
->> Fixes: 7373a8cc38197 ("iommu/vt-d: Setup context and enable RID2PASID support")
->> Cc:stable@vger.kernel.org
->> Reported-by: Jerry Snitselaar<jsnitsel@redhat.com>
->> Tested-by: Wen Jin<wen.jin@intel.com>
->> Signed-off-by: Lu Baolu<baolu.lu@linux.intel.com>
->> ---
-> I did a quick test last night, and it was able to harvest the vmcore,
-> and boot back up. Before you mentioned part of the issue being that it
-> couldn't get to the PGTT field in the pasid table entry. Was that not
-> the case, 
+If we measure swap thrashing just in swap_readpage(), we will miss pagecache
+thrashing. If we measure swap thrashing in swap_readpage(), and measure 
+pagecache thrashing in folio_wait_bit_common(), it will be rerpeated calculation.
 
-It is the case from IOMMU hardware point of view.
+So this patch is not perfect and it works. If one day we solve the problem of
+measure thrashing in folio_wait_bit_common(), we may improve this patch correspond.
 
-> or is it looking at the old kernel pasid dir entries and
-> table entries through the pasid dir pointer in the copied context
-> entry?
-
-Yes. It reuses the pasid table in old kernel and replaces it until the
-new device driver takes over and starts the first DMA operation.
-
-Best regards,
-baolu
+Thanks.

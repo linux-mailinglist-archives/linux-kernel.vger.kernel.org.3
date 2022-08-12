@@ -2,75 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 152DC590C53
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 09:13:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B537B590C56
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 09:14:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237102AbiHLHNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 03:13:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46178 "EHLO
+        id S237153AbiHLHOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 03:14:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233593AbiHLHNV (ORCPT
+        with ESMTP id S237127AbiHLHOn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 03:13:21 -0400
-Received: from relay12.mail.gandi.net (relay12.mail.gandi.net [IPv6:2001:4b98:dc4:8::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F9562B26A;
-        Fri, 12 Aug 2022 00:13:20 -0700 (PDT)
-Received: from booty (unknown [37.160.128.155])
-        (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 87BF620000C;
-        Fri, 12 Aug 2022 07:13:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1660288398;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=IF44qkqwISS+cbqH8Zu5IxJgzrG6pqiUPQgrbZxxoqM=;
-        b=FGFazt4YnYKQGcLph0AXHdT7t9K+o8QdwwKKIDhxNlzW26TwzmqVwkozivpMGlMxe7GAnW
-        EsGvghVcbVf18pxqyQ87vOTPaWOchnI/TiQZ9++WgeC3I35OuJ2KfONMWweYdObdOpZhXH
-        onMMUzYISuRfnh1+9DjkerLewfGX/kNkwpH4Q+UwSUmshdgwSNuBWJzRM4rrDB2pjJ+k+N
-        wESmfc+p4UXvFPg4L+XTkZLQtpFZUI0E6L0Fb3ezOJLtYDUncjJ7kBvOzAtps8dMhOvCs8
-        s0EjQwDdqrCaFar5UmAlaRXQb2b5C/sJwEGtzZ0jc50baTIjvHZ0aL7xoRBC4g==
-Date:   Fri, 12 Aug 2022 09:13:15 +0200
-From:   Luca Ceresoli <luca.ceresoli@bootlin.com>
-To:     Wolfram Sang <wsa@kernel.org>
-Cc:     linux-doc@vger.kernel.org, linux-i2c@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 8/9] docs: i2c: i2c-sysfs: improve wording
-Message-ID: <20220812091315.2838b273@booty>
-In-Reply-To: <YvVzQMvjb89kiNLZ@shikoro>
-References: <20220808141708.1021103-1-luca.ceresoli@bootlin.com>
-        <20220808141708.1021103-9-luca.ceresoli@bootlin.com>
-        <YvVxE9jLNJZ0NWtd@shikoro>
-        <YvVzQMvjb89kiNLZ@shikoro>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Fri, 12 Aug 2022 03:14:43 -0400
+Received: from smtp.smtpout.orange.fr (smtp-16.smtpout.orange.fr [80.12.242.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4105531DEA
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 00:14:39 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id MOsNovEvhsfCIMOsNocAyy; Fri, 12 Aug 2022 09:14:37 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Fri, 12 Aug 2022 09:14:37 +0200
+X-ME-IP: 90.11.190.129
+Message-ID: <7c3dda38-d741-8f5e-a034-b4678ed79fc0@wanadoo.fr>
+Date:   Fri, 12 Aug 2022 09:14:35 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] bonding: return -ENOMEM on rlb_initialize() allocation
+ failure
+Content-Language: en-US
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        j.vosburgh@gmail.com
+Cc:     vfalico@gmail.com, andy@greyhouse.net, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+References: <20220812032059.64572-1-jiapeng.chong@linux.alibaba.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220812032059.64572-1-jiapeng.chong@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wolfram,
-
-On Thu, 11 Aug 2022 23:23:12 +0200
-Wolfram Sang <wsa@kernel.org> wrote:
-
-> > Does 'confusion' have a plural? I think singular is better here.  
+Le 12/08/2022 à 05:20, Jiapeng Chong a écrit :
+> drivers/net/bonding/bond_alb.c:861 rlb_initialize() warn: returning -1 instead of -ENOMEM is sloppy.
 > 
-> I took the liberty to fix it myself so we can have the patch in rc1
-> already. I hope this is fine with you.
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=1896
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+>   drivers/net/bonding/bond_alb.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/bonding/bond_alb.c b/drivers/net/bonding/bond_alb.c
+> index 60cb9a0225aa..96cb4404b3c7 100644
+> --- a/drivers/net/bonding/bond_alb.c
+> +++ b/drivers/net/bonding/bond_alb.c
+> @@ -858,7 +858,7 @@ static int rlb_initialize(struct bonding *bond)
+>   
+>   	new_hashtbl = kmalloc(size, GFP_KERNEL);
+>   	if (!new_hashtbl)
+> -		return -1;
+> +		return -ENOMEM;
+>   
+>   	spin_lock_bh(&bond->mode_lock);
+>   
 
-Sure, thank you!
+Hi,
 
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Nit: if of any use, the only call chain leads to [1]:
+bond_open()
+--> bond_alb_initialize()
+   --> rlb_initialize()
+
+So, the error in bond_open() could be changed to ret instead of a hard 
+coded -ENOMEM.
+
+Just my 2c,
+
+
+Other than that, for what it worth,
+Reviewed-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+
+CJ
+
+[1]: 
+https://elixir.bootlin.com/linux/v5.19/source/drivers/net/bonding/bond_main.c#L4163

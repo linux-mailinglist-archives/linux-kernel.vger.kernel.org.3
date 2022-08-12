@@ -2,72 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76389591752
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 00:26:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A8DD3591755
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 00:26:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237243AbiHLW0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 18:26:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39888 "EHLO
+        id S237553AbiHLW0T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 18:26:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237670AbiHLWZm (ORCPT
+        with ESMTP id S237164AbiHLWZs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 18:25:42 -0400
+        Fri, 12 Aug 2022 18:25:48 -0400
 Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EAB9165A1;
-        Fri, 12 Aug 2022 15:25:39 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id D23C05C00D7;
-        Fri, 12 Aug 2022 18:25:38 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC80B11C3D;
+        Fri, 12 Aug 2022 15:25:42 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 266D85C00D7;
+        Fri, 12 Aug 2022 18:25:42 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Fri, 12 Aug 2022 18:25:38 -0400
+  by compute4.internal (MEProxy); Fri, 12 Aug 2022 18:25:42 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
         :cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1660343138; x=1660429538; bh=QP
-        RBJNcjcaoF0UH+AoGMng9AecsIOHPCAQZk3jqaN58=; b=O4cN9Z9+zaSipDLRYj
-        CkyGWQPVbDWeCgX/JW4y6OGKFz8AI5cGc6ZC9YaYVjc0gG/Or3921E3iBZ8aF/vh
-        xX9m+IaebcDqcoVdcfm7G8IHlu5NTXAhp9udVGUWsRd2wuFA5at2it8nDQ6tOJDe
-        qrd8PTFgiJt/NEgV32FM9GyL6qVD8O4+UwbSlDopummb7jhO0F1GaaaUz0pFfZED
-        R0NA8z5Xz2KbB4EcJ1JQkeyLT1iB8Wr/Iz2RlGliYjH38ki2na/Dxbbr9NA7csl6
-        4SQg4m7dt6jwleWTNt4ShmFmv0k1qopF+RvH6g6JJ1gfHPslk5uee+Q2BvOA3xgW
-        rpng==
+        :subject:subject:to:to; s=fm2; t=1660343142; x=1660429542; bh=eZ
+        uPw2SQFgh1mWTwJWJZNQBE+LeJoM1X4oFRjAj7Xew=; b=bt29gbav/Md945DtqI
+        NKESz2gvizfztEqqqcc6KvSyAxea1sLRRqnKNQ0QBWFTZa9iunvc/lsdceL5oSlW
+        Zf018+F82GiyD1JgD32jC3ItTZBwUqPHA13reby86f/KDtkRzaiSx+kVZ1VVDF8t
+        VWvwIb2RJWqVoz3fzMTWdEeQDHw2wejvmwQJm5AUL6LO96GYtFiSma2SCn0IFj3p
+        2PQTgjLtrV4j5hXC+6cvVJsp4RvQ1ziyooRepxGuFAzbkO9M4aTVQqjHSU+K6xuv
+        I4Z03qXWr/tWqRTCgrMBAnLhr3uoPz2qCFLN5gLwPtDS2JkbJJX5hd3rdqCg2/x2
+        MQrA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1660343138; x=1660429538; bh=QPRBJNcjcaoF0
-        UH+AoGMng9AecsIOHPCAQZk3jqaN58=; b=kPLJCpUUt715ZpTvAagsu7mqQWTG5
-        7u6ddKzbyuZnIbpOpEcog2CxRCeV1+VQWMTzZm8poB6emcqFxDmUacV5gjtavPLe
-        tG2ZDAn5UzuIfomv3dG1LL1egKjni017UeKgxTpP9N1fAMfq9TC+NzSAEWAqaKWA
-        8M10vvA60i/p296kbQXqaHvJVYvIsmvmBeuUti2g3xwKKpZH0HXm9VZ3aGcnt1z0
-        i38XfPONGUo98Yju2YeZ5E7D0Npy9uS50vKoA/nyCYlmsl/BGe5KCUjPrdHtUarU
-        NZhNiXoT/DgKD0PJGka4ehFNY0Baj1BXiLBRo1Aubm27rY4NAuV96JBfA==
-X-ME-Sender: <xms:YtP2YtvDPhKO7_2ML2fmtMDw5PfpMZRBC_4zsjIMimwujgj3JSDsvQ>
-    <xme:YtP2YmdCiujhXwsh-qs7q-xuj4BshYStQcr8C5sEwJ5O1-gQwl0M27W_gxUBw_j_4
-    QstPO_j4dNxQVKXNVY>
-X-ME-Received: <xmr:YtP2Ygwo27pjVgm0rC-yywPgY24G0ISlg-kHEQMCys2rKJ2_DX0dXHACQrAG>
+        :x-sasl-enc; s=fm1; t=1660343142; x=1660429542; bh=eZuPw2SQFgh1m
+        WTwJWJZNQBE+LeJoM1X4oFRjAj7Xew=; b=ThqxP7tIA/GcOg4lWiq0ofmyUjfVm
+        NPl2QpzmQ4aS/+q7Aevovgpj52H6qNAfV3YCiYmiDOjB9h2RdHm76Egej1lylJiH
+        JuDcVLc0GuDtOjMPfrlC88PnlQRbrImNvRaf6bsZKpvWkgKoOL/ehCEfbEI69NRT
+        oGKETpSrYHtN42cC5cBXfkJ8dqyCCC0bno+sn4bl/Cb2KCfS5mksmgp7JDhxm7WD
+        3/d2rNX0erU1cuROFre7+xfKtpqi5IGvy6a48Ehy4+sSM2z9EkFuQWQpm+w+Kncl
+        pgVCSXpZ+aEIqg7jceEARrGy2vLmll5v32Vj4PsYRNrzMU+R8mUDBohAQ==
+X-ME-Sender: <xms:ZdP2YppUUBc_as_DgNOVj1d3gfByOboCuElKV8hguYufg0ae8kATuw>
+    <xme:ZdP2Yrp9JOvJK9R26U9fLzxdhaAGq6UCJP643qh7Ysxr_bQ7ENROHIK4yCd5hX7vW
+    2khLf7SZVR6KHc5Tdw>
+X-ME-Received: <xmr:ZdP2YmP8VhLc4GetHzZsI8kj0EFKuULjjlCL74B-003Tu90BMWT0dkMLPmxj>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegjedgtdelucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffojghfggfgsedtke
     ertdertddtnecuhfhrohhmpedfnfhukhgvucffrdculfhonhgvshdfuceolhhukhgvsehl
     jhhonhgvshdruggvvheqnecuggftrfgrthhtvghrnhepgfetfedugfetudeuheetjefhue
-    fggfelleetvdevtefhueeujeefvdegleevhefgnecuvehluhhsthgvrhfuihiivgepvden
+    fggfelleetvdevtefhueeujeefvdegleevhefgnecuvehluhhsthgvrhfuihiivgepuden
     ucfrrghrrghmpehmrghilhhfrhhomheplhhukhgvsehljhhonhgvshdruggvvh
-X-ME-Proxy: <xmx:YtP2YkNBPg22DFYjCTX4aeclxS40_vfVu0bt_psenlPeu28Ed5Jzkg>
-    <xmx:YtP2Yt-_KxLR9a15QrIRJuDTFyg3va7-Mpe66_yz8OX-0CY3sy-pLQ>
-    <xmx:YtP2YkWofc9AKX28SEhYObnK-M-lOrARoYN8gU5edCfe09hUaGJelw>
-    <xmx:YtP2YvJJ1XzwGvK8QAsRlHyOliQE_a78fUT2YjTy-6lerFnACXK3pw>
+X-ME-Proxy: <xmx:ZtP2Yk7U8b8dwCnuCjesg-QunxFG8Pqz5_2Dc_YYsWoxZkRI_8_L7A>
+    <xmx:ZtP2Yo494ZbZ3Evu_j4k3UQ5xt4JDjgX_mED4ZG7CDobhsKIdLBT1Q>
+    <xmx:ZtP2YshlA_9ywQAXUe2OhEMA6Jy2qfcP3XJlTQMJ6WwVAS77iuGDDQ>
+    <xmx:ZtP2YoEulSwvBXbB_PZRpxXDnaO-haUEHoLhqE3KVbWJq2Q3S4286w>
 Feedback-ID: i5ec1447f:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 12 Aug 2022 18:25:35 -0400 (EDT)
+ 12 Aug 2022 18:25:39 -0400 (EDT)
 From:   "Luke D. Jones" <luke@ljones.dev>
 To:     hdegoede@redhat.com
 Cc:     markgross@kernel.org, platform-driver-x86@vger.kernel.org,
         linux-kernel@vger.kernel.org, "Luke D. Jones" <luke@ljones.dev>
-Subject: [PATCH 5/6] asus-wmi: Refactor egpu_enable attribute
-Date:   Sat, 13 Aug 2022 10:25:08 +1200
-Message-Id: <20220812222509.292692-6-luke@ljones.dev>
+Subject: [PATCH 6/6] asus-wmi: Refactor panel_od attribute
+Date:   Sat, 13 Aug 2022 10:25:09 +1200
+Message-Id: <20220812222509.292692-7-luke@ljones.dev>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220812222509.292692-1-luke@ljones.dev>
 References: <20220812222509.292692-1-luke@ljones.dev>
@@ -96,34 +96,31 @@ which simplifies things further.
 
 Signed-off-by: Luke D. Jones <luke@ljones.dev>
 ---
- drivers/platform/x86/asus-wmi.c | 84 ++++++++++-----------------------
- 1 file changed, 26 insertions(+), 58 deletions(-)
+ drivers/platform/x86/asus-wmi.c | 74 +++++++++++----------------------
+ 1 file changed, 25 insertions(+), 49 deletions(-)
 
 diff --git a/drivers/platform/x86/asus-wmi.c b/drivers/platform/x86/asus-wmi.c
-index a72ecc4e33b7..87b042fac1ce 100644
+index 87b042fac1ce..b2595a2d1b0a 100644
 --- a/drivers/platform/x86/asus-wmi.c
 +++ b/drivers/platform/x86/asus-wmi.c
-@@ -228,9 +228,7 @@ struct asus_wmi {
- 	u8 fan_boost_mode_mask;
- 	u8 fan_boost_mode;
+@@ -245,7 +245,6 @@ struct asus_wmi {
+ 	bool battery_rsoc_available;
  
--	bool egpu_enable_available; // 0 = enable
--	bool egpu_enable;
--
-+	bool egpu_enable_available;
- 	bool dgpu_disable_available;
+ 	bool panel_overdrive_available;
+-	bool panel_overdrive;
  
- 	bool throttle_thermal_policy_available;
-@@ -624,48 +622,10 @@ static DEVICE_ATTR_RW(dgpu_disable);
- /* eGPU ********************************************************************/
- static int egpu_enable_check_present(struct asus_wmi *asus)
+ 	struct hotplug_slot hotplug_slot;
+ 	struct mutex hotplug_lock;
+@@ -1475,48 +1474,10 @@ static int asus_wmi_rfkill_init(struct asus_wmi *asus)
+ /* Panel Overdrive ************************************************************/
+ static int panel_od_check_present(struct asus_wmi *asus)
  {
 -	u32 result;
 -	int err;
 -
- 	asus->egpu_enable_available = false;
+ 	asus->panel_overdrive_available = false;
  
--	err = asus_wmi_get_devstate(asus, ASUS_WMI_DEVID_EGPU, &result);
+-	err = asus_wmi_get_devstate(asus, ASUS_WMI_DEVID_PANEL_OD, &result);
 -	if (err) {
 -		if (err == -ENODEV)
 -			return 0;
@@ -131,103 +128,96 @@ index a72ecc4e33b7..87b042fac1ce 100644
 -	}
 -
 -	if (result & ASUS_WMI_DSTS_PRESENCE_BIT) {
-+	if (asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_EGPU))
- 		asus->egpu_enable_available = true;
--		asus->egpu_enable = result & ASUS_WMI_DSTS_STATUS_BIT;
++	if (asus_wmi_dev_is_present(asus, ASUS_WMI_DEVID_PANEL_OD))
+ 		asus->panel_overdrive_available = true;
+-		asus->panel_overdrive = result & ASUS_WMI_DSTS_STATUS_BIT;
 -	}
 -
 -	return 0;
 -}
 -
--static int egpu_enable_write(struct asus_wmi *asus)
+-static int panel_od_write(struct asus_wmi *asus)
 -{
 -	u32 retval;
 -	u8 value;
 -	int err;
 -
 -	/* Don't rely on type conversion */
--	value = asus->egpu_enable ? 1 : 0;
+-	value = asus->panel_overdrive ? 1 : 0;
 -
--	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_EGPU, value, &retval);
+-	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_PANEL_OD, value, &retval);
 -
 -	if (err) {
--		pr_warn("Failed to set egpu disable: %d\n", err);
+-		pr_warn("Failed to set panel overdrive: %d\n", err);
 -		return err;
 -	}
 -
 -	if (retval > 1) {
--		pr_warn("Failed to set egpu disable (retval): 0x%x\n", retval);
+-		pr_warn("Failed to set panel overdrive (retval): 0x%x\n", retval);
 -		return -EIO;
 -	}
 -
--	sysfs_notify(&asus->platform_device->dev.kobj, NULL, "egpu_enable");
+-	sysfs_notify(&asus->platform_device->dev.kobj, NULL, "panel_od");
  
  	return 0;
  }
-@@ -674,9 +634,13 @@ static ssize_t egpu_enable_show(struct device *dev,
+@@ -1525,32 +1486,47 @@ static ssize_t panel_od_show(struct device *dev,
  				   struct device_attribute *attr, char *buf)
  {
  	struct asus_wmi *asus = dev_get_drvdata(dev);
--	bool mode = asus->egpu_enable;
 +	int result;
-+
-+	result = asus_wmi_get_devstate_simple(asus, ASUS_WMI_DEVID_EGPU);
+ 
+-	return sysfs_emit(buf, "%d\n", asus->panel_overdrive);
++	result = asus_wmi_get_devstate_simple(asus, ASUS_WMI_DEVID_PANEL_OD);
 +	if (result < 0)
 +		return result;
- 
--	return sysfs_emit(buf, "%d\n", mode);
++
 +	return sysfs_emit(buf, "%d\n", result);
  }
  
- /* The ACPI call to enable the eGPU also disables the internal dGPU */
-@@ -684,29 +648,33 @@ static ssize_t egpu_enable_store(struct device *dev,
+ static ssize_t panel_od_store(struct device *dev,
  				    struct device_attribute *attr,
  				    const char *buf, size_t count)
  {
--	bool enable;
+-	bool overdrive;
 -	int result;
 +	int result, err;
-+	u32 enable;
++	u32 overdrive;
  
  	struct asus_wmi *asus = dev_get_drvdata(dev);
  
--	result = kstrtobool(buf, &enable);
--	if (result)
--		return result;
-+	err = kstrtou32(buf, 10, &enable);
-+	if (err)
-+		return err;
+-	result = kstrtobool(buf, &overdrive);
++	result = kstrtou32(buf, 10, &overdrive);
+ 	if (result)
+ 		return result;
  
--	asus->egpu_enable = enable;
-+	if (enable > 1)
+-	asus->panel_overdrive = overdrive;
+-	result = panel_od_write(asus);
++	if (overdrive > 1)
 +		return -EINVAL;
  
--	result = egpu_enable_write(asus);
 -	if (result)
 -		return result;
-+	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_EGPU, enable, &result);
++	err = asus_wmi_set_devstate(ASUS_WMI_DEVID_PANEL_OD, overdrive, &result);
++
 +	if (err) {
-+		pr_warn("Failed to set egpu disable: %d\n", err);
++		pr_warn("Failed to set panel overdrive: %d\n", err);
 +		return err;
 +	}
- 
--	/* Ensure that the kernel status of dgpu is updated */
--	result = dgpu_disable_check_present(asus);
--	if (result)
--		return result;
++
 +	if (result > 1) {
-+		pr_warn("Failed to set egpu disable (retval): 0x%x\n", result);
++		pr_warn("Failed to set panel overdrive (result): 0x%x\n", result);
 +		return -EIO;
 +	}
 +
-+	sysfs_notify(&asus->platform_device->dev.kobj, NULL, "egpu_enable");
++	sysfs_notify(&asus->platform_device->dev.kobj, NULL, "panel_od");
  
  	return count;
  }
 -
- static DEVICE_ATTR_RW(egpu_enable);
+ static DEVICE_ATTR_RW(panel_od);
  
- /* Battery ********************************************************************/
+ /* Quirks *********************************************************************/
 -- 
 2.37.1
 

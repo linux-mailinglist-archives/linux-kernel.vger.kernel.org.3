@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB995914BA
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 19:18:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 910CF5914B8
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 19:17:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239278AbiHLRSG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 13:18:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53376 "EHLO
+        id S236938AbiHLRRs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 13:17:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231250AbiHLRSD (ORCPT
+        with ESMTP id S231250AbiHLRRp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 13:18:03 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B111DB1BB1;
-        Fri, 12 Aug 2022 10:18:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660324682; x=1691860682;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=yAUb1g8BPPCo00CwCVUUCW/MEhmxy2A/zFgeWAZglu4=;
-  b=YNhocms2E/VMypvzbV9aaGfFEd7JinWt7YgzPuhbJctfbA0gM5kWWwc7
-   lDMHhkaxjlO/gsKLYjy0aNxJ1cNB6iMOvXXNHhajK3MzF6bKR1pW9eFwd
-   K1S4kmCM6ZUPMtL5EBspm89kcCWFBytdXMU4G41ywDJfC0If0+4LqS4NE
-   uGwh9EM0SHhyO4GwYPbYINGnofxcnVcu1zYiabezT7CzrZ6K9dnOyBDxd
-   sO+9TKuUHvif86468fkmiEpPo4B5AOAcBMFVlVCI1AytAcXHM5AtX3vYu
-   2JZ8QyHZswsYoyl6h+3AIVsZUFxkVNC0SCmmRsXB0SGLRsaFiPIGIY5uX
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="278593618"
-X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="278593618"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 10:17:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="748258212"
-Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 12 Aug 2022 10:17:50 -0700
-Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oMYI9-0000m3-1Z;
-        Fri, 12 Aug 2022 17:17:49 +0000
-Date:   Sat, 13 Aug 2022 01:17:27 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>, rafael@kernel.org
-Cc:     kbuild-all@lists.01.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Amit Kucheria <amitk@kernel.org>
-Subject: Re: [PATCH v2 26/26] thermal/drivers/intel: Use generic
- thermal_zone_get_trip() function
-Message-ID: <202208130155.HquqN8f2-lkp@intel.com>
-References: <20220809220436.711020-27-daniel.lezcano@linaro.org>
+        Fri, 12 Aug 2022 13:17:45 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32D28B1BAF;
+        Fri, 12 Aug 2022 10:17:44 -0700 (PDT)
+Received: from fraeml707-chm.china.huawei.com (unknown [172.18.147.207])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M49H26jFGz67Mkv;
+        Sat, 13 Aug 2022 01:13:02 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml707-chm.china.huawei.com (10.206.15.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 12 Aug 2022 19:17:41 +0200
+Received: from [10.48.157.254] (10.48.157.254) by
+ lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 12 Aug 2022 18:17:40 +0100
+Message-ID: <fd2b1dbe-8482-cb89-2568-4909db1239b0@huawei.com>
+Date:   Fri, 12 Aug 2022 18:17:39 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220809220436.711020-27-daniel.lezcano@linaro.org>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [ata] 0568e61225: stress-ng.copy-file.ops_per_sec -15.0%
+ regression
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Oliver Sang <oliver.sang@intel.com>
+CC:     Christoph Hellwig <hch@lst.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Linux Memory Management List" <linux-mm@kvack.org>,
+        <linux-ide@vger.kernel.org>, <lkp@lists.01.org>, <lkp@intel.com>,
+        <ying.huang@intel.com>, <feng.tang@intel.com>,
+        <zhengjun.xing@linux.intel.com>, <fengwei.yin@intel.com>
+References: <YuzPMMnnY739Tnit@xsang-OptiPlex-9020>
+ <1f498d4a-f93f-ceb4-b713-753196e5e08d@opensource.wdc.com>
+ <3451fa5a-6229-073f-ae18-0c232cd48ed5@huawei.com>
+ <e4106ffa-3842-45c0-9756-5226cfcfa17d@opensource.wdc.com>
+ <YvXeuCAK780OuJPz@xsang-OptiPlex-9020>
+ <2e9cf5a6-c043-5ccf-e363-097c6c941891@huawei.com>
+ <4642848c-a386-d6a0-6255-8b16800e0548@opensource.wdc.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <4642848c-a386-d6a0-6255-8b16800e0548@opensource.wdc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.48.157.254]
+X-ClientProxiedBy: lhrpeml100002.china.huawei.com (7.191.160.241) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,37 +66,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+On 12/08/2022 16:41, Damien Le Moal wrote:
+>>> we noticed the commit is already in mainline now, and in our tests, there is
+>>> still similar regression and also on other platforms.
+>>> could you guide us how to check "which host driver is being used for this
+>>> test"? hope to supply some useful information.
+>>>
+>> For me, a complete kernel log may help.
+> I had a look yesterday with my test rig. I did not see any difference in the
+> default max_sectors_kb values for various drives between 5.18 and 5.19 (current
+> linus tree). The test machine has 2 AHCI adapters: Intel and Marvell. Both use
+> the regular AHCI driver. I have another rig with different ATA adapters but it
+> is powered down and I am traveling... So cannot test that right now.
+> 
 
-I love your patch! Yet something to improve:
+FWIW, on QEMU I get a difference for IDE disk for ata_piix host.
 
-[auto build test ERROR on next-20220809]
-[cannot apply to rafael-pm/thermal tegra/for-next linus/master v5.19 v5.19-rc8 v5.19-rc7 v5.19]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Interestingly ata dev max_sectors kb also gets capped from 32MB (LBA48) 
+-> 256KB due to swiotlb max mapping size. (It would be capped by shost 
+default max sectors 512KB without that swiotlb limit). I assume capping 
+due to swiotlb limit is not occuring on Oliver's machine.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Lezcano/Rework-the-trip-points-creation/20220810-060933
-base:    6c8f479764ebe2848589de3249743ea552ed2495
-config: x86_64-rhel-8.3-kselftests (https://download.01.org/0day-ci/archive/20220813/202208130155.HquqN8f2-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/b38db2fe0562e475bb6240a64e6f6156352d41d1
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Daniel-Lezcano/Rework-the-trip-points-creation/20220810-060933
-        git checkout b38db2fe0562e475bb6240a64e6f6156352d41d1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
+thanks,
+John
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "thermal_zone_device_register_with_trips" [drivers/thermal/intel/x86_pkg_temp_thermal.ko] undefined!
-ERROR: modpost: "thermal_zone_device_register_with_trips" [drivers/platform/x86/acerhdf.ko] undefined!
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+[    1.497233] ata7: found unknown device (class 0)
+[    1.498341] ata7.00: ATA-7: QEMU HARDDISK, 2.5+, max UDMA/100
+[    1.499030] ata7.00: 209716 sectors, multi 16: LBA48
+[    1.623795] ata2: SATA link down (SStatus 0 SControl 300)
+[    1.624633] ata1: SATA link down (SStatus 0 SControl 300)
+[    1.633395] ata6: SATA link down (SStatus 0 SControl 300)
+[    1.634200] ata5: SATA link down (SStatus 0 SControl 300)
+[    1.635094] ata4: SATA link down (SStatus 0 SControl 300)
+[    1.635887] ata3: SATA link down (SStatus 0 SControl 300)
+[    1.636748] scsi 6:0:0:0: Direct-Access     ATA      QEMU HARDDISK 
+  2.5+ PQ: 0 ANSI: 5
+[    1.641298] sd 6:0:0:0: [sda] 209716 512-byte logical blocks: (107 
+MB/102 MiB)
+[    1.642188] sd 6:0:0:0: [sda] Write Protect is off
+[    1.642770] sd 6:0:0:0: [sda] Mode Sense: 00 3a 00 00
+[    1.642783] sd 6:0:0:0: [sda] Write cache: enabled, read cache: 
+enabled, doesn't support DPO or FUA
+[    1.644149] sd 6:0:0:0: [sda] Preferred minimum I/O size 512 bytes
+[    1.645142] sd 6:0:0:0: Attached scsi generic sg0 type 0
+[    1.655145] sd 6:0:0:0: [sda] Attached SCSI disk

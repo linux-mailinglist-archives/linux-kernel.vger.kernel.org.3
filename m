@@ -2,153 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59771590B45
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 06:35:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28300590B48
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 06:36:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236608AbiHLEfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 00:35:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51792 "EHLO
+        id S236923AbiHLEge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 00:36:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236269AbiHLEf1 (ORCPT
+        with ESMTP id S236269AbiHLEgc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 00:35:27 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37DF58B6B
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 21:35:24 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-3246910dac3so191590257b3.12
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 21:35:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=m/u0OQNcK6WLQ8YRwiHl6NaU06ssTUJCYuMG15+ZS1k=;
-        b=w3omfvsy9ZZIm8gFmEWlECrda6oZMt1vsZZQNNa7vA6YNhBRRfenX1dnMcRD7XxU8k
-         5/I12jbJ+Kmw6PvZ2i9e4weOcxpl30w4qfWoe2AIiQAH4tqvzERwmWH93byasedP1NRH
-         K0sgJRHdGRYPXyop74jnRos7N4WoFkuq+Yn9w2YjTdSzY3b5n04Q3cczBpwTGKERCrhr
-         yfV2UPPyrywDcNGH7gtc9xI7cr43PftaQY8V/6M/Xh9Ab52KofQD03q3muGqrcQEnCvo
-         pubG/ynkx4TMvQMHGiHyG5OvWKgbRVLGFshW5KhzePVEeCZ2EnA/dzvk29dRPwilyWzM
-         KABw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=m/u0OQNcK6WLQ8YRwiHl6NaU06ssTUJCYuMG15+ZS1k=;
-        b=ixfWAhRLkkTY0N6n/fnCx/63KV1D79OWK2kgwLKl9Uq6DvinjoO+t+PsAJOoVsEOgb
-         pkjvcEeti3hFKtzWknlUB83EueXNyD5kHlcMXjYsev3OFBYONJzWjrtdFXk3H3nt5oB+
-         6rs3LmqWPDrCYcX1k1zAAXF3itpNV5opCl0xBPQJIf0Zy7sLXeRMWaG6mu1ZArVprbsY
-         7LkrYG1ylWzpGFViG3Szz0vwDZWpDdni7Ta1eyxUHltXQ4YJzsbDsJf555GX7dIzttUj
-         5PWrcw2BUrRjhkN9+TDGadyQl6YbYgsnt+5j8nk4pms2vjv+6Zr/GAoVKlbkW2oGj/De
-         mNQw==
-X-Gm-Message-State: ACgBeo214xXfcJ46Ucb0/qxYqrOz2gYtPnTj2RFwhlaZK75GACrZAJkM
-        ey/7rgyVqZEf4nlS4XPiRk2bFa2kfOSa/SFELDD0TQreGOgFNw==
-X-Google-Smtp-Source: AA6agR5Pdd3iB2032+2rT25Yjp4RON2rJ1jN2byswnxfUC4cUX18fpGQ7WkZ/GY+xY3EQg3B/kDr1Cb0O6OMdTP0Y30=
-X-Received: by 2002:a81:1ec4:0:b0:31d:e31f:1b6e with SMTP id
- e187-20020a811ec4000000b0031de31f1b6emr2294072ywe.11.1660278924132; Thu, 11
- Aug 2022 21:35:24 -0700 (PDT)
+        Fri, 12 Aug 2022 00:36:32 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA7D90812;
+        Thu, 11 Aug 2022 21:36:29 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 27C4a93T002653;
+        Thu, 11 Aug 2022 23:36:09 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1660278969;
+        bh=rxFKTwMGkyTFRaVUJXNHx4g7Bh4686ASvFuE6UEmTcY=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=TvwUIMpdzKDHFRiVmpGW8fcgGULYcyRpuzfucv1Jw46NXZigCWdcyissD4AbF7b8F
+         G0QlJK8z6sQvymG322ggJvlqmGTycbAZSGMaf2ed1YTm5g4GYUx5IQ0ymI2CxQ/DXR
+         3UK/5Xfn8lI7ATuyveDhUcjOMISvUTkoRgcTK8uk=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 27C4a9dh023830
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 11 Aug 2022 23:36:09 -0500
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Thu, 11
+ Aug 2022 23:36:09 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Thu, 11 Aug 2022 23:36:09 -0500
+Received: from [10.24.69.79] (ileax41-snat.itg.ti.com [10.172.224.153])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 27C4a5R0003462;
+        Thu, 11 Aug 2022 23:36:06 -0500
+Message-ID: <ed3554bc-af62-78ce-a3eb-ff5f27ade6a2@ti.com>
+Date:   Fri, 12 Aug 2022 10:06:05 +0530
 MIME-Version: 1.0
-References: <1642587791-13222-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
- <1642587791-13222-4-git-send-email-ivo.g.dimitrov.75@gmail.com>
- <5b6d3e7f-c638-fdc7-5080-44d34abed610@ideasonboard.com> <a3ed3a2c-86ce-1c85-e8aa-c08b54ad1a43@gmail.com>
-In-Reply-To: <a3ed3a2c-86ce-1c85-e8aa-c08b54ad1a43@gmail.com>
-From:   Yongqin Liu <yongqin.liu@linaro.org>
-Date:   Fri, 12 Aug 2022 12:35:12 +0800
-Message-ID: <CAMSo37XdZSZUHLWJj373DdtOBA9=uD8SJ7ywWCYF2pU1i4cB_g@mail.gmail.com>
-Subject: Re: [PATCH 3/3] drm: omapdrm: Do no allocate non-scanout GEMs through DMM/TILER
-To:     Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-Cc:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, tomba@kernel.org,
-        airlied@linux.ie, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
-        merlijn@wizzup.org, tony@atomide.com,
-        "Bajjuri, Praneeth" <praneeth@ti.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v2 net-next] net: ethernet: ti: davinci_mdio: Add
+ workaround for errata i2329
+Content-Language: en-US
+To:     Andrew Lunn <andrew@lunn.ch>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <linux-omap@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <kishon@ti.com>,
+        <vigneshr@ti.com>
+References: <20220810111345.31200-1-r-gunasekaran@ti.com>
+ <YvRNpAdG7/edUEc+@lunn.ch> <9d17ab9f-1679-4af1-f85c-a538cb330d7b@ti.com>
+ <YvT8ovgHz2j7yOQP@lunn.ch>
+From:   Ravi Gunasekaran <r-gunasekaran@ti.com>
+In-Reply-To: <YvT8ovgHz2j7yOQP@lunn.ch>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Ivaylo, Tomi
 
-We have one X15 Android AOSP master build, it could not have the home
-screen displayed
-on the hdmi monitor connected with this change, with the following
-message printed on the serial console
-    [  607.404205] omapdrm omapdrm.0: Failed to setup plane plane-0
-    [  607.410522] omapdrm omapdrm.0: Failed to setup plane plane-1
-    [  607.416381] omapdrm omapdrm.0: Failed to setup plane plane-2
-    [  607.422088] omapdrm omapdrm.0: Failed to setup plane plane-3
+>> There is atleast one device sh_eth, which is not configured for autosuspend
+>> but uses the bit bang core in sh_mdiobb_read() and invokes regular runtime
+>> PM functions.
+> 
+> And that is the point of moving it into the core. It would of just
+> worked for you.
+> 
+> If you don't feel comfortable with making this unconditional, please
+> put runtime pm enabled version of mdiobb_read/mdiobb_write() in the
+> core and swap sh_eth and any other drivers to using them.
+> 
 
-   # for details, please check the link here: http://ix.io/47m1
+sh_eth is not configured for autosuspend and uses only pm_runtime_put().
+davinci_mdio is configured for autosuspend and it must invoke 
+pm_runtime_mark_last_busy() before calling pm_runtime_put_autosuspend().
+So it looks like, there needs to be a runtime PM version of 
+mdiobb_read/mdiobb_write() for each pm_runtime_put_*(). As of now, it's 
+only sh_eth which is currently using runtime PM and davinci_mdio would 
+be the next one. So at least in this case, two variants of 
+mdiobb_read/mdiobb_write() could be added at the moment. By checking 
+against the dev->power.use_autosuspend flag, it is possible to support 
+both via a single version.
 
-It will work with home screen displayed on the hdmi monitor if this
-change is reverted.
+That being said, I'm quite inclined towards the existing implementation, 
+where drivers can have wrappers written around 
+mdiobb_read/mdiobb_write(). But I might be failing to see the broader 
+picture. If having multiple runtime PM versions of 
+mdiobb_read/mdiobb_write() benefits many other future drivers, then I 
+will go ahead and add the variant(s) in the bitbang core.
 
-Is this the broken problem you talked about here?
+Please provide your views on this. Your inputs on the next course of 
+action would be helpful.
 
-And could you please give some suggestions on how to have the x15
-Android build work with this change?
-
-Thanks,
-Yongqin Liu
-On Thu, 17 Feb 2022 at 23:29, Ivaylo Dimitrov
-<ivo.g.dimitrov.75@gmail.com> wrote:
->
->
->
-> On 17.02.22 =D0=B3. 14:46 =D1=87., Tomi Valkeinen wrote:
-> > Hi,
-> >
-> > On 19/01/2022 12:23, Ivaylo Dimitrov wrote:
-> >> On devices with DMM, all allocations are done through either DMM or
-> >> TILER.
-> >> DMM/TILER being a limited resource means that such allocations will st=
-art
-> >> to fail before actual free memory is exhausted. What is even worse is
-> >> that
-> >> with time DMM/TILER space gets fragmented to the point that even if we
-> >> have
-> >> enough free DMM/TILER space and free memory, allocation fails because
-> >> there
-> >> is no big enough free block in DMM/TILER space.
-> >>
-> >> Such failures can be easily observed with OMAP xorg DDX, for example -
-> >> starting few GUI applications (so buffers for their windows are
-> >> allocated)
-> >> and then rotating landscape<->portrait while closing and opening new
-> >> windows soon results in allocation failures.
-> >>
-> >> Fix that by mapping buffers through DMM/TILER only when really needed,
-> >> like, for scanout buffers.
-> >
-> > Doesn't this break users that get a buffer from omapdrm and expect it t=
-o
-> > be contiguous?
-> >
->
-> If you mean dumb buffer, then no, this does not break users as dumb
-> buffers are allocated as scanout:
->
-> https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/omapdrm/om=
-ap_gem.c#L603
->
-> If you mean omap_bo allocated buffers, then if users want
-> linear(scanout) buffer, then they request it explicitly by passing
-> OMAP_BO_SCANOUT.
->
-> Ivo
-
-
-
---=20
-Best Regards,
-Yongqin Liu
----------------------------------------------------------------
-#mailing list
-linaro-android@lists.linaro.org
-http://lists.linaro.org/mailman/listinfo/linaro-android
+-- 
+Regards,
+Ravi

@@ -2,64 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26341591317
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 17:33:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2EEA59131E
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 17:34:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237853AbiHLPdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 11:33:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56798 "EHLO
+        id S238152AbiHLPeE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 11:34:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237168AbiHLPdc (ORCPT
+        with ESMTP id S229664AbiHLPeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 11:33:32 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF4E4816A4;
-        Fri, 12 Aug 2022 08:33:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7ABC6B8246D;
-        Fri, 12 Aug 2022 15:33:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 295FDC433C1;
-        Fri, 12 Aug 2022 15:33:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660318409;
-        bh=YymeiL+WDfDKCoj1tmnKtG9kNBYdc1gBFHeYC0V+36Q=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=K8V0UPAN+767lxx0acYoJqE+0nqYT8S/28FkXA+2dhyHIkj0cmlwGFdW8HOgKhZ/3
-         rZn4L6q/ry3Ncn0qo8FCf2hP5BF6D+MltiC7F19CTg5CyaNh028dy2xo2oJDKWBm6t
-         u9IseS5Ausd5jty8iasPLw3M+mioKnPZuwZNxVPC3kDAwCBRF+ekMlq+EhEBBDxvbV
-         mjUofxNQbWe55E/Sqhy4zODtvgRORcTxT67pdRInsW6xv1Avj206NzxxbjgwQ2f2Zy
-         WoLm4Toj83jjA8zGklaTvQldMELaB1a9x7wgukXXag6lTGCj6yUeTiauHia38asQjC
-         qvBn07Y1iUrUQ==
-Received: by mail-ua1-f47.google.com with SMTP id f15so434947uao.12;
-        Fri, 12 Aug 2022 08:33:29 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2HoIPn5yDqW8w5oN92ft9RW58d2zG4sy2fwLLVl8DkAdrnJTtY
-        VmsDAvAjE7cajGE/fUpBHCXXIJQxH4qxPT0LGA==
-X-Google-Smtp-Source: AA6agR66vMv23MxHlhU/il+hwIYBXtv92JhHAY7m+89EGlZ5dlwcJwMP0buqMazwUiLaB7y24s6RjJRmgxBq8ONC6fs=
-X-Received: by 2002:ab0:2505:0:b0:384:cc62:9a75 with SMTP id
- j5-20020ab02505000000b00384cc629a75mr2089792uan.36.1660318408105; Fri, 12 Aug
- 2022 08:33:28 -0700 (PDT)
+        Fri, 12 Aug 2022 11:34:02 -0400
+Received: from mailout-taastrup.gigahost.dk (mailout-taastrup.gigahost.dk [46.183.139.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AB4F491F8;
+        Fri, 12 Aug 2022 08:34:00 -0700 (PDT)
+Received: from mailout.gigahost.dk (mailout.gigahost.dk [89.186.169.112])
+        by mailout-taastrup.gigahost.dk (Postfix) with ESMTP id 6265F1884D2E;
+        Fri, 12 Aug 2022 15:33:58 +0000 (UTC)
+Received: from smtp.gigahost.dk (smtp.gigahost.dk [89.186.169.109])
+        by mailout.gigahost.dk (Postfix) with ESMTP id 5798525032B7;
+        Fri, 12 Aug 2022 15:33:58 +0000 (UTC)
+Received: by smtp.gigahost.dk (Postfix, from userid 1000)
+        id 4A623A1A0051; Fri, 12 Aug 2022 15:33:58 +0000 (UTC)
+X-Screener-Id: 413d8c6ce5bf6eab4824d0abaab02863e8e3f662
 MIME-Version: 1.0
-References: <20220811203151.179258-1-mail@conchuod.ie>
-In-Reply-To: <20220811203151.179258-1-mail@conchuod.ie>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Fri, 12 Aug 2022 09:33:17 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqLOGLZD6vrNPqDUqYypkz8xoCPJ4DA4JF-BrG=WHWPurw@mail.gmail.com>
-Message-ID: <CAL_JsqLOGLZD6vrNPqDUqYypkz8xoCPJ4DA4JF-BrG=WHWPurw@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: mmc: cdns: add card-detect-delay property
-To:     Conor Dooley <mail@conchuod.ie>
-Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        Piotr Sroka <piotrs@cadence.com>, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org,
-        Conor Dooley <conor.dooley@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Date:   Fri, 12 Aug 2022 17:33:58 +0200
+From:   netdev@kapio-technology.com
+To:     Ido Schimmel <idosch@nvidia.com>
+Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
+        Ivan Vecera <ivecera@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
+ flag to drivers
+In-Reply-To: <YvTn847P/Ga3Ulb0@shredder>
+References: <20220708115624.rrjzjtidlhcqczjv@skbuf>
+ <723e2995314b41ff323272536ef27341@kapio-technology.com>
+ <YsqPWK67U0+Iw2Ru@shredder>
+ <d3f674dc6b4f92f2fda3601685c78ced@kapio-technology.com>
+ <Ys69DiAwT0Md+6ai@shredder>
+ <79683d9cf122e22b66b5da3bbbb0ee1f@kapio-technology.com>
+ <YvIm+OvXvxbH6POv@shredder>
+ <6c6fe135ce7b5b118289dc370135b0d3@kapio-technology.com>
+ <YvNcitNnyFxTw8bs@shredder>
+ <2491232d5c017d94ca3213197a3fb283@kapio-technology.com>
+ <YvTn847P/Ga3Ulb0@shredder>
+User-Agent: Gigahost Webmail
+Message-ID: <a36d6891ce8e961c24987a424b6d7b66@kapio-technology.com>
+X-Sender: netdev@kapio-technology.com
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,22 +71,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 2:32 PM Conor Dooley <mail@conchuod.ie> wrote:
->
-> From: Conor Dooley <conor.dooley@microchip.com>
->
-> Upgrading dt-schema to v2022.08 brings with it better handling of
-> unevaluatedProperties, exposing a previously undetected missing
-> property in the cadence sdhci dt-binding:
-> arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dtb: mmc@20008000: Unevaluated properties are not allowed ('card-detect-delay' was unexpected)
->         From schema: Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
->
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
-> Should this have a fixes tag? If anything, it'd be
-> Fixes: 84723eec251d ("dt-bindings: mmc: cdns: document Microchip MPFS MMC/SDHCI controller")
-> but idk.
+On 2022-08-11 13:28, Ido Schimmel wrote:
+>> >
+>> > I'm talking about roaming, not forwarding. Let's say you have a locked
+>> > entry with MAC X pointing to port Y. Now you get a packet with SMAC X
+>> > from port Z which is unlocked. Will the FDB entry roam to port Z? I
+>> > think it should, but at least in current implementation it seems that
+>> > the "locked" flag will not be reset and having locked entries pointing
+>> > to an unlocked port looks like a bug.
+>> >
 
-No, the common property 'cd-debounce-delay-ms' should be used instead.
-
-Rob
+Yes, now I have tried to test with a case like this using the bridge and 
+have verified the locked entry pointing to an unlocked port, which I 
+agree seems to be a bug, which I will get fixed.

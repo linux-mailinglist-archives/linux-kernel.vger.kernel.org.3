@@ -2,134 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E84559123C
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 16:32:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7347C59123D
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 16:32:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238360AbiHLOcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 10:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51900 "EHLO
+        id S238173AbiHLOch (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 10:32:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237689AbiHLOcA (ORCPT
+        with ESMTP id S229664AbiHLOcd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 10:32:00 -0400
-Received: from 7of9.schinagl.nl (7of9.connected.by.freedominter.net [185.238.129.13])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 146CC1CB10;
-        Fri, 12 Aug 2022 07:31:58 -0700 (PDT)
-Received: from [10.2.12.24] (unknown [10.2.12.24])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        Fri, 12 Aug 2022 10:32:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54007901B1
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 07:32:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by 7of9.schinagl.nl (Postfix) with ESMTPSA id 8257118639E5;
-        Fri, 12 Aug 2022 16:31:55 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=schinagl.nl; s=7of9;
-        t=1660314715; bh=D6RB9U1iKUoe2tUrXz01h0DPHQCF1eWpqhyWVKhnHA4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=P+n1Gnhl5UkCsJv6vHQRKHEZ91RhLOSySaxtS5GJTBk4v4M5baXPKsFDK9OA21+NU
-         aL0Aa/w5UHpDdLMJ1sZ/Jo0C5iyMkb9/Yj/10rF+1jWO93hQbwoksKGLzvY2/wvTQS
-         86DHZ9ZluQ0BjbSRI9rWzTk/ofqIoLa1VEnxquBg=
-Message-ID: <6ec9eaa1-2bc2-a32f-6685-4a2a645a5a59@schinagl.nl>
-Date:   Fri, 12 Aug 2022 16:31:55 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: [PATCH v2] dt-bindings: leds: Expand LED_COLOR_ID definitions
-Content-Language: nl
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Baolin Wang <baolin.wang@linaro.org>,
-        Daniel Mack <daniel@zonque.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Oleh Kravchenko <oleg@kaa.org.ua>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Simon Shields <simon@lineageos.org>,
-        Olliver Schinagl <oliver+list@schinagl.nl>,
-        devicetree@vger.kernel.org,
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E278F60B3D
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 14:32:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9C96C433C1;
+        Fri, 12 Aug 2022 14:32:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660314751;
+        bh=/rqqYC6tk7WxEyqeuTVLmmFiz/8xN6QAqZLGMUp+wTM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=z8UAxovAeKkD/UvhTS1dZAqysq7Hj8/ptOwtPyUkSqqRKJRgmLymHLPPPxpf5x/9H
+         gk9tfEkHXBVaXhKahZIvBJXpZxsbyIOiFuJv74N8eCF1uf36763N4fiqs3PZbTYMv1
+         a3tQ/MhZ2k+M9rLa0SdFZmzio7oOhezZjmD6pQI8=
+Date:   Fri, 12 Aug 2022 16:32:28 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
+        Dongliang Mu <dzm91@hust.edu.cn>,
+        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Carlos Llamas <cmllamas@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        syzkaller <syzkaller@googlegroups.com>,
         linux-kernel <linux-kernel@vger.kernel.org>
-References: <7c688821-140b-4b05-651b-337f602dc1fe@schinagl.nl>
-From:   Olliver Schinagl <oliver@schinagl.nl>
-In-Reply-To: <7c688821-140b-4b05-651b-337f602dc1fe@schinagl.nl>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] drivers: binderfs: fix memory leak in binderfs_fill_super
+Message-ID: <YvZkfPak2UMSc1tS@kroah.com>
+References: <20220812132124.2053673-1-dzm91@hust.edu.cn>
+ <YvZYmprZ1NiMkynp@kroah.com>
+ <CAD-N9QWU_tcnHMtP3iWcQogSWwDET4nhK5AQKDbh2KJQzwfF9A@mail.gmail.com>
+ <YvZfEwFL7GSHEzs8@kroah.com>
+ <20220812142423.33wnvnjg6v2h2m3y@wittgenstein>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220812142423.33wnvnjg6v2h2m3y@wittgenstein>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In commit 853a78a7d6c7 (dt-bindings: leds: Add LED_COLOR_ID definitions,
+On Fri, Aug 12, 2022 at 04:24:23PM +0200, Christian Brauner wrote:
+> On Fri, Aug 12, 2022 at 04:09:23PM +0200, Greg Kroah-Hartman wrote:
+> > On Fri, Aug 12, 2022 at 09:56:46PM +0800, Dongliang Mu wrote:
+> > > On Fri, Aug 12, 2022 at 9:41 PM Greg Kroah-Hartman
+> > > <gregkh@linuxfoundation.org> wrote:
+> > > >
+> > > > On Fri, Aug 12, 2022 at 09:21:24PM +0800, Dongliang Mu wrote:
+> > > > > From: Dongliang Mu <mudongliangabcd@gmail.com>
+> > > > >
+> > > > > In binderfs_fill_super, if s_root is not successfully initialized by
+> > > > > d_make_root, the previous allocated s_sb_info will not be freed since
+> > > > > generic_shutdown_super first checks if sb->s_root and then does
+> > > > > put_super operation. The put_super operation calls binderfs_put_super
+> > > > > to deallocate s_sb_info and put ipc_ns. This will lead to memory leak
+> > > > > in binderfs_fill_super.
+> > > > >
+> > > > > Fix this by invoking binderfs_put_super at error sites before s_root
+> > > > > is successfully initialized.
+> > > > >
+> > > > > Fixes: 095cf502b31e ("binderfs: port to new mount api")
+> > > > > Reported-by: syzkaller <syzkaller@googlegroups.com>
+> > > >
+> > > > Where is the specific syzkaller link for this report?  It would be good
+> > > > to reference it so it can be properly checked.
+> > > >
+> > > > Also, how did you test this change?
+> > > 
+> > > I found this memory leak in my local syzkaller, and there is no any
+> > > syzbot report about this crash, therefore I use such a Reported-by to
+> > > indicate.
+> > > 
+> > > Although my local syzkaller does generate any reproducer, this bug can
+> > > be triggered by injecting faults at new_inode and d_make_root (i.e.,
+> > > between s_sb_info allocation and code after d_make_root).
+> > > 
+> > > >
+> > > > > Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+> > > > > ---
+> > > > >  drivers/android/binderfs.c | 8 ++++++--
+> > > > >  1 file changed, 6 insertions(+), 2 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/android/binderfs.c b/drivers/android/binderfs.c
+> > > > > index 588d753a7a19..20f5bc77495f 100644
+> > > > > --- a/drivers/android/binderfs.c
+> > > > > +++ b/drivers/android/binderfs.c
+> > > > > @@ -710,8 +710,10 @@ static int binderfs_fill_super(struct super_block *sb, struct fs_context *fc)
+> > > > >       info->mount_opts.stats_mode = ctx->stats_mode;
+> > > > >
+> > > > >       inode = new_inode(sb);
+> > > > > -     if (!inode)
+> > > > > +     if (!inode) {
+> > > > > +             binderfs_put_super(sb);
+> > > > >               return -ENOMEM;
+> > > > > +     }
+> > > > >
+> > > > >       inode->i_ino = FIRST_INODE;
+> > > > >       inode->i_fop = &simple_dir_operations;
+> > > > > @@ -721,8 +723,10 @@ static int binderfs_fill_super(struct super_block *sb, struct fs_context *fc)
+> > > > >       set_nlink(inode, 2);
+> > > > >
+> > > > >       sb->s_root = d_make_root(inode);
+> > > > > -     if (!sb->s_root)
+> > > > > +     if (!sb->s_root) {
+> > > > > +             binderfs_put_super(sb);
+> > > > >               return -ENOMEM;
+> > > > > +     }
+> > > >
+> > > > How did you test this change to verify that you are not now just leaking
+> > > > memory?  It looks to me like you just changed one problem for another
+> > > > one :(
+> > > 
+> > > As mentioned above, I just tested my change by injecting faults at
+> > > new_inode and d_make_root.
+> > > 
+> > > Can you explain more about "changed one problem for another one"? I
+> > > don't quite understand this statement.
+> > 
+> > I think you are leaking memory in at least your second change here,
+> > possibly the first, I didn't look at the code very closely.
+> 
+> It's a bit tricky to follow but d_make_root() always consumes the inode.
+> On success via d_instantiate() and on failure via iput(). So when
+> d_make_root() has been called the inode is off limits. And as soon as
+> d_make_root() has returned successfully we're guaranteed that
+> sb->s_fs_info is cleaned up if a ->put_super() method has been defined.
+> Just fyi.
 
-Sun Jun 9 20:19:04 2019 +0200) the most basic color definitions where
-added. However, there's a little more very common LED colors.
+Ah, thanks, that wasn't obvious at all.
 
-While the documentation states 'add what is missing', engineers tend to
-be lazy and will just use what currently exists. So this patch will take
-(a) list from online retailers [0], [1], [2] and use the common LED 
-colors from
-there, this being reasonable as this is what is currently available to 
-purchase.
-
-Note, that LIME seems to be the modern take to 'Yellow-green' or
-'Yellowish-green' from some older datasheets.
-
-[0]: https://www.digikey.com/en/products/filter/led-lighting-color/125
-[1]: 
-https://eu.mouser.com/c/optoelectronics/led-lighting/led-emitters/standard-leds-smd
-[2]: 
-https://nl.farnell.com/en-NL/c/optoelectronics-displays/led-products/standard-single-colour-leds-under-75ma
-
-Signed-off-by: Olliver Schinagl <oliver@schinagl.nl>
----
-
-Changes since v1: Unbreak existing definitions.
-
-  include/dt-bindings/leds/common.h | 28 ++++++++++++++++------------
-  1 file changed, 16 insertions(+), 12 deletions(-)
-
-diff --git a/include/dt-bindings/leds/common.h 
-b/include/dt-bindings/leds/common.h
-index 3be89a7c20a9..04bf94523ea3 100644
---- a/include/dt-bindings/leds/common.h
-+++ b/include/dt-bindings/leds/common.h
-@@ -22,18 +22,22 @@
-  #define LEDS_BOOST_FIXED    2
-
-  /* Standard LED colors */
--#define LED_COLOR_ID_WHITE    0
--#define LED_COLOR_ID_RED    1
--#define LED_COLOR_ID_GREEN    2
--#define LED_COLOR_ID_BLUE    3
--#define LED_COLOR_ID_AMBER    4
--#define LED_COLOR_ID_VIOLET    5
--#define LED_COLOR_ID_YELLOW    6
--#define LED_COLOR_ID_IR        7
--#define LED_COLOR_ID_MULTI    8    /* For multicolor LEDs */
--#define LED_COLOR_ID_RGB    9    /* For multicolor LEDs that can do 
-arbitrary color,
--                       so this would include RGBW and similar */
--#define LED_COLOR_ID_MAX    10
-+#define LED_COLOR_ID_WHITE      0
-+#define LED_COLOR_ID_RED        1
-+#define LED_COLOR_ID_GREEN      2
-+#define LED_COLOR_ID_BLUE       3
-+#define LED_COLOR_ID_AMBER      4
-+#define LED_COLOR_ID_VIOLET     5
-+#define LED_COLOR_ID_YELLOW     6
-+#define LED_COLOR_ID_IR         7
-+#define LED_COLOR_ID_MULTI      8 /* For multicolor LEDs */
-+#define LED_COLOR_ID_RGB        9 /* For multicolor LEDs that can do 
-arbitrary color, including RGBW etc. */
-+#define LED_COLOR_ID_PUPRPLE   10
-+#define LED_COLOR_ID_ORANGE    11
-+#define LED_COLOR_ID_PINK      12
-+#define LED_COLOR_ID_CYAN      13
-+#define LED_COLOR_ID_LIME      14
-+#define LED_COLOR_ID_MAX       15
-
-  /* Standard LED functions */
-  /* Keyboard LEDs, usually it would be input4::capslock etc. */
--- 
-2.37.1
-
+greg k-h

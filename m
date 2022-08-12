@@ -2,119 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E8535915F7
+	by mail.lfdr.de (Postfix) with ESMTP id E62D25915F8
 	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 21:29:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233779AbiHLT2e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 15:28:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57160 "EHLO
+        id S234221AbiHLT2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 15:28:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237455AbiHLT2W (ORCPT
+        with ESMTP id S238120AbiHLT2X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 15:28:22 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10ED1B08AD
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 12:28:21 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id u1so2586533lfq.4
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 12:28:20 -0700 (PDT)
+        Fri, 12 Aug 2022 15:28:23 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB2EB08AC;
+        Fri, 12 Aug 2022 12:28:23 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id p8so1536771plq.13;
+        Fri, 12 Aug 2022 12:28:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kudzu-us.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=WmUtPVXDzYYViofItgm5OWBWBvLbosAnVrRqXx4fzYg=;
-        b=2OV8PHEgsh0BJ5akjEDeqMXgSBv3lwpcGO9G5PjBy08miozmpeXKh75fG9k6rxrbWY
-         F86FbNj3txn9ys2fmeriUzcpI2z2hEL/wYym7Xo5drjG3rKHuLFz1JdqktIzlYNrpSCe
-         yMk/AzWYrgF8MqYY9jv6huCp9EgVzd+K2WQccCp7xucTrnnMeQIgq6M+aua3NCIIBSPB
-         3ikS1DlidVuk8HjkT8bfem9J08Kle7B1xn2JIl2G8NaVLTrkOoHs/fY9A198AVjXWAuf
-         pwFYrAVd+Iupxqr3wnx8o4xREWLamHDikpX/NvObOYzoAMy8pFkx3QHJkt/GngwId5h+
-         w+QQ==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=IaNDAdEa8hgXhA9slqB1hEbULevRfy/CuIByo7fB7oY=;
+        b=HLSm97rrOLYJkzPX2w6QgFUDvZAlVyraM1Cdtc6CnudfXDGFGGSC6oP9jpu1K5FU9y
+         jr9ifGkldw6NkuannS9dSFrNzyYUzifTOx83mmUeATi0/1yzcjnKoUJQQCYdGNPqITB7
+         B78KVzOFbVwHSu9HOeACSLpEpQsTA3KXkmMzCOga9JsEGadJfEjdsGuDIWWKtpKtpC58
+         YHRYgvxX5YcqeedHn1YHQZn6d0HqRABlOr7PbKRecywam6pic7QV9bsgLV4ZtlTXWhD+
+         uuMwPWLT+NK87kyzdj6ytGOTT1wIgnO3hcUJUPSnPx+5WpyUfpjxwww4ARJGRVw5Rn54
+         KQeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=WmUtPVXDzYYViofItgm5OWBWBvLbosAnVrRqXx4fzYg=;
-        b=4viuu+sd+6kxjEW8Qui6wKzKc3aurz41lOg5q7KSrtfVsKPSMaXMxouyz7lJhOzCZT
-         vOa6B2My3219XYMnbWBzz2jRO6uAmGaY6mmOBJ32Yo4jP4eVID0TMfqt2sFWa7V8UDnx
-         zwhTTZFatWYlHweJa1QDDnFUCnze5lTwp8Cr3v+yS5CqoRj1HxJTdUTyPNRx4USL7jKu
-         zGVU2wOoJquFEenWs0+jwv4B1IvvtSoumv/jiDBlu3xj7LvFOQcbvir3Lco/kThUF6L2
-         tysalgM2cmf+DZFUIjt2XFmT3VCRFDEJhOotVvn1f5KDdlHpvu2+28DfLgDiNl62Krzx
-         1Y3Q==
-X-Gm-Message-State: ACgBeo0CIYoj4CCmgoH/wy0k2gvNNA+v8BGpM2U9+2vDh0JZ9Er+t+CV
-        nf4NM9bx0PwnPZIhczUqMSsUY6/FzqvpDWQMo3uoPg==
-X-Google-Smtp-Source: AA6agR5E8qo2iM9exMW3SiYuxVnODbdG1EDkqjmcZGLxU36XqU0w6V0nGASn7tM9/yFp1PEAYkGVx4FhfZU5ed54eAE=
-X-Received: by 2002:a05:6512:e8b:b0:48a:d7f8:a102 with SMTP id
- bi11-20020a0565120e8b00b0048ad7f8a102mr1610719lfb.60.1660332499310; Fri, 12
- Aug 2022 12:28:19 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=IaNDAdEa8hgXhA9slqB1hEbULevRfy/CuIByo7fB7oY=;
+        b=qBawCP+eRSHxWEx4HS0YIq6Qvpb2iN3ZOp9QYmIyTTOOthKFIZyh0jltqvnOlTi/Mh
+         jx1s2L61MIAJ85iuSicrH6ZuzKzITOxmeLWT50mJ2HYFK6Dbk4zjUKyiW2duuS20JGgA
+         9t5URMsBefWoWszlVTVaPtCkZEXMsJvAlmfW3xKDSFgeCjJ4UJKAxlgtDZ6svw2sI+ie
+         pG+W41Mr8PnzGnTGXSZnxUhszDW/Fxn9lElDLeZdbxuJepfvqZBz0Xns0K8Xe7N66Jwy
+         XmyxjZmlp0mTIWq85yUIwNTC8dpWSB8Ste4XazxvPaYc1DpPMKZe1cnSVkc19TLbFCjQ
+         HLTA==
+X-Gm-Message-State: ACgBeo2JMHSgehhkl9rYm3mx2LCGe/ABNmmAy+1h2YEBkk+nmigCyvLg
+        UnqUX8if3KqSk58Ny7lrMtE=
+X-Google-Smtp-Source: AA6agR7Y6iCDD7AR93KBVw18z7gK/7WjC04/p/OasvAPHPOCIhX6lGMi+tKOCzhW72UlXFqTP/Qz7A==
+X-Received: by 2002:a17:902:d484:b0:171:3cbc:7c6 with SMTP id c4-20020a170902d48400b001713cbc07c6mr5423597plg.85.1660332502216;
+        Fri, 12 Aug 2022 12:28:22 -0700 (PDT)
+Received: from google.com ([2620:15c:202:201:eb15:868d:43:d73a])
+        by smtp.gmail.com with ESMTPSA id b4-20020a6567c4000000b0040dd052ab11sm1691136pgs.58.2022.08.12.12.28.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Aug 2022 12:28:21 -0700 (PDT)
+Date:   Fri, 12 Aug 2022 12:28:18 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     margeyang <marge.yang@synaptics.corp-partner.google.com>
+Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hdegoede@redhat.com, benjamin.tissoires@redhat.com,
+        marge.yang@tw.synaptics.com, derek.cheng@tw.synaptics.com,
+        vincent.huang@tw.synaptics.com
+Subject: Re: [PATCH V2] Input: synaptics-rmi4 - filter incomplete relative
+ packet.
+Message-ID: <Yvap0uh1U81gqy6J@google.com>
+References: <1660293805-16053-1-git-send-email-marge.yang@synaptics.corp-partner.google.com>
 MIME-Version: 1.0
-References: <YvZgJ4IGEG8levOA@kudzu.us> <20220812192124.GA1678588@bhelgaas>
-In-Reply-To: <20220812192124.GA1678588@bhelgaas>
-From:   Jon Mason <jdmason@kudzu.us>
-Date:   Fri, 12 Aug 2022 15:28:05 -0400
-Message-ID: <CAPoiz9wzCSRtxZ404BpLM-SA0Mv3OAZwJopreiH84ZuE1rVJKg@mail.gmail.com>
-Subject: Re: [PATCH v3] PCI: endpoint: pci-epf-vntb: reduce several globals to statics
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Tom Rix <trix@redhat.com>, kishon@ti.com, lpieralisi@kernel.org,
-        kw@linux.com, bhelgaas@google.com, Frank.Li@nxp.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1660293805-16053-1-git-send-email-marge.yang@synaptics.corp-partner.google.com>
+X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 12, 2022 at 3:21 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
->
-> On Fri, Aug 12, 2022 at 10:13:59AM -0400, Jon Mason wrote:
-> > On Tue, Jul 12, 2022 at 03:05:27PM -0500, Bjorn Helgaas wrote:
-> > > Handled via Jon, I guess?
-> > >
-> > > I'm unclear on the future direction of pci-epf-vntb.c.  Jon, are you
-> > > signing up to maintain this?  MAINTAINERS doesn't seem to reflect
-> > > that, even in next-20220712, so you're not being copied on everything.
-> > >
-> > > If you are planning to merge and maintain this file, it would be
-> > > helpful to me if you acknowledge patches you merge so I know to ignore
-> > > them.
-> >
-> > I massively dropped the ball on all the EPF stuff.  I appologize profusely.
->
-> No worries, sounds like you're getting everything sorted out :)
->
-> > I'm pulling it into my ntb tree bcause of the patch dependencies.  If
-> > you want me to own this stuff because it has ntb in it, then I can do
-> > a matainers entry to reflect it.  My assumption is that because it is
-> > under the drivers/pci umbrella it is yours (unless you want me to own
-> > it).  100% defer to your decision.
->
-> This patch dependency thing feels like a one-time or at least unusual
-> situation.  Unless it becomes a problem, I think it makes sense to
-> keep the drivers/pci umbrella instead of carving bits out of the
-> middle.
->
-> Even if I continue to merge everything under drivers/pci, maybe we
-> should consider an update like this just so you get cc'd on updates to
-> these files?
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 08a5d70ceef9..5bafe7e8c2b2 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -14466,6 +14466,7 @@ W:      https://github.com/jonmason/ntb/wiki
->  T:     git git://github.com/jonmason/ntb.git
->  F:     drivers/net/ntb_netdev.c
->  F:     drivers/ntb/
-> +F:     drivers/pci/endpoint/functions/pci-epf-*ntb.c
->  F:     include/linux/ntb.h
->  F:     include/linux/ntb_transport.h
->  F:     tools/testing/selftests/ntb/
+Hi Marge,
 
-Works for me.  I can do a patch to add this line to maintainers, send
-it to the people on this thread, and pull it into my pending pull
-request.
+On Fri, Aug 12, 2022 at 04:43:25PM +0800, margeyang wrote:
+> From: Marge Yang <marge.yang@synaptics.corp-partner.google.com>
+> 
+> RMI4 F03 supports the Stick function,
+> it's designed to support relative packet.
+> This patch supports the following case.
+> When relative packet can't be reported completely,
+> it may miss one byte or two byte.
+> New Synaptics firmware will report PARITY error.
+> When timeout error or parity error happens,
+> RMI4 driver will sends 0xFE command and
+> ask FW to Re-send stick packet again.
 
-Thanks,
-Jon
+My understanding is that F03 is intended to be a pass-through mechanism
+for PS/2-compatible devices. In that spirit all protocol handling and
+validation should happen in psmouse driver that attaches to a serio port
+provided by F03.
+
+Historically we did not pay attention to parity and frame errors for
+PS/2 mice/touchpads (and for keyboards on x86) but we coudl add such
+code there. Do we actually observe this with RMI devices? Can RMI
+firmware handle this better instead?
+
+Thanks.
+
+-- 
+Dmitry

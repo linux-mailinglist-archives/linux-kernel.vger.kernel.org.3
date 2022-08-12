@@ -2,58 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44FF45913F8
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 18:38:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7A6759140D
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 18:39:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236532AbiHLQhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 12:37:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37600 "EHLO
+        id S238563AbiHLQjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 12:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiHLQhv (ORCPT
+        with ESMTP id S237116AbiHLQix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 12:37:51 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E970492F7D
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 09:37:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660322270; x=1691858270;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=/dzpJIgS93EYpfAA9mCXa3iE1jUztbDyfSdrEPy+a0Y=;
-  b=ATHJ7H69y3GpCz9oEEErORlLKC5hHj0NCZWKKXG3YsdmfODgP8MhlihX
-   U7+VvR/vLepDkYLI2o2FGi/SDhtUM23Kdde+k6Dg4pS/JoPKFKdv1gDlj
-   fnKYoPziccFbMSJ5OjKw1nnjPtQicK0Jk5ieAA8ZsGcPJzi0tQc644RMe
-   lUMb8roFsAcCprX2q54eNgugT+jYkGzYgypwIPRvKv2s/cUb2ughndqjV
-   uBE/d2vmRwVeqi1RUnS3/QI2+TPyRRw5EtgW2enXa3ao/RN7mctNxeu+D
-   ar0GRwz4km3aYPMJWyIXKTqigfKBZrT0jLANJPduJW9wmtMH1JMD3CESw
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="290382922"
-X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="290382922"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 09:37:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="609305555"
-Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 12 Aug 2022 09:37:49 -0700
-Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oMXfQ-0000kh-2g;
-        Fri, 12 Aug 2022 16:37:48 +0000
-Date:   Sat, 13 Aug 2022 00:36:54 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [kbusch:io_uring/dma-register-v2 7/8] io_uring/io_uring.c:3791:45:
- error: passing argument 2 of 'file_dma_map' from incompatible pointer type
-Message-ID: <202208130039.jwwRVomj-lkp@intel.com>
+        Fri, 12 Aug 2022 12:38:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 653B7AFAE5;
+        Fri, 12 Aug 2022 09:38:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0A066B824B2;
+        Fri, 12 Aug 2022 16:38:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4672C433D6;
+        Fri, 12 Aug 2022 16:38:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660322313;
+        bh=q+LQGQUDWTwgah/gHIGUKH/VSzB98ablADDbuzvDZew=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=DaWfyfIjuUHxEV2ogd6+ttE+sjHKaNy/CpzeQu2kKXiByXZtLyfbgWldxhXJ/2U2S
+         Mm15hB/ij+11BP33sLB4uDevAUdrG4Dn1jnS53teKqKL+u/XTtN5UjW5FWxSATqaEU
+         EMfUSgxB0/w69QQjg/nwWEEtJ1yCV5LrYDHbjh8nMmNj1umFDxurSuQGuirllt2dXR
+         Zh152+ky7Ieb7P3Ui2VVzYq8BEibo5AuA+gvDWjUzbA8G9TeWK88DizEIAOcnSH2yg
+         7bfPwpygUbUOySn1VQBaF59L/MevHwggsjMij13vynpIY6iK2CDU65KLchE1Yrc35k
+         lKu8StzsQmrmw==
+Received: by mail-vk1-f171.google.com with SMTP id s194so740757vka.2;
+        Fri, 12 Aug 2022 09:38:33 -0700 (PDT)
+X-Gm-Message-State: ACgBeo3VTPB4CDo9KI2N2yEul35WUmskTMX0oJsUEEx48MUniRNXWBnX
+        u1Gg5pq+p/85gFx6QszoLxtahzuCYrVb464Zow==
+X-Google-Smtp-Source: AA6agR5bOtmCd8QV+awVagZr3ZgQKPegm1dDNeB255ytg7BB2YmuwcapMNgNnSGw+9tCavOS9vEWjSKZJ0ko4+hwT+4=
+X-Received: by 2002:a05:6122:4f9:b0:377:f03a:23df with SMTP id
+ s25-20020a05612204f900b00377f03a23dfmr2294192vkf.19.1660322312625; Fri, 12
+ Aug 2022 09:38:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220811203151.179258-1-mail@conchuod.ie> <CAL_JsqLOGLZD6vrNPqDUqYypkz8xoCPJ4DA4JF-BrG=WHWPurw@mail.gmail.com>
+ <46c51365-b4a5-9666-bc3a-24ff833d8fb2@microchip.com>
+In-Reply-To: <46c51365-b4a5-9666-bc3a-24ff833d8fb2@microchip.com>
+From:   Rob Herring <robh+dt@kernel.org>
+Date:   Fri, 12 Aug 2022 10:38:21 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqKZ2N7rTb0Fm0Y8CjN8XrTkBsu2uU_TFfhU0iwjSz5row@mail.gmail.com>
+Message-ID: <CAL_JsqKZ2N7rTb0Fm0Y8CjN8XrTkBsu2uU_TFfhU0iwjSz5row@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: mmc: cdns: add card-detect-delay property
+To:     Conor.Dooley@microchip.com
+Cc:     mail@conchuod.ie, ulf.hansson@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, yamada.masahiro@socionext.com,
+        piotrs@cadence.com, linux-mmc@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,105 +66,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git io_uring/dma-register-v2
-head:   c86a9580d33ff9bf90c685f452b66b929f1dc5fe
-commit: ba3ab9f0c82ae764b7da4cb7e8df548439b2ec72 [7/8] io_uring: add support for dma pre-mapping
-config: sh-randconfig-c043-20220811 (https://download.01.org/0day-ci/archive/20220813/202208130039.jwwRVomj-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git/commit/?id=ba3ab9f0c82ae764b7da4cb7e8df548439b2ec72
-        git remote add kbusch https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git
-        git fetch --no-tags kbusch io_uring/dma-register-v2
-        git checkout ba3ab9f0c82ae764b7da4cb7e8df548439b2ec72
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash
+On Fri, Aug 12, 2022 at 9:46 AM <Conor.Dooley@microchip.com> wrote:
+>
+> On 12/08/2022 16:33, Rob Herring wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
+> >
+> > On Thu, Aug 11, 2022 at 2:32 PM Conor Dooley <mail@conchuod.ie> wrote:
+> >>
+> >> From: Conor Dooley <conor.dooley@microchip.com>
+> >>
+> >> Upgrading dt-schema to v2022.08 brings with it better handling of
+> >> unevaluatedProperties, exposing a previously undetected missing
+> >> property in the cadence sdhci dt-binding:
+> >> arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dtb: mmc@20008000: Unevaluated properties are not allowed ('card-detect-delay' was unexpected)
+> >>         From schema: Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
+> >>
+> >> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> >> ---
+> >> Should this have a fixes tag? If anything, it'd be
+> >> Fixes: 84723eec251d ("dt-bindings: mmc: cdns: document Microchip MPFS MMC/SDHCI controller")
+> >> but idk.
+> >
+> > No, the common property 'cd-debounce-delay-ms' should be used instead.
+>
+> So it's a case of "what's in the dts is wrong so it needs to change"?
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Yes.
 
-All errors (new ones prefixed by >>):
+> For the future, where is the line drawn between "don't break the dts"
+> & "don't use bad properties"?
 
-   In file included from include/uapi/linux/aio_abi.h:31,
-                    from include/linux/syscalls.h:77,
-                    from io_uring/io_uring.c:45:
-   include/linux/fs.h:3610:60: warning: 'struct bio_vec' declared inside parameter list will not be visible outside of this definition or declaration
-    3610 | static inline void *file_dma_map(struct file *file, struct bio_vec *bvec,
-         |                                                            ^~~~~~~
-   io_uring/io_uring.c: In function '__io_submit_flush_completions':
-   io_uring/io_uring.c:1183:40: warning: variable 'prev' set but not used [-Wunused-but-set-variable]
-    1183 |         struct io_wq_work_node *node, *prev;
-         |                                        ^~~~
-   io_uring/io_uring.c: In function 'io_register_map_buffers':
->> io_uring/io_uring.c:3791:45: error: passing argument 2 of 'file_dma_map' from incompatible pointer type [-Werror=incompatible-pointer-types]
-    3791 |                 tag = file_dma_map(file, imu->bvec, imu->nr_bvecs);
-         |                                          ~~~^~~~~~
-         |                                             |
-         |                                             struct bio_vec *
-   include/linux/fs.h:3610:69: note: expected 'struct bio_vec *' but argument is of type 'struct bio_vec *'
-    3610 | static inline void *file_dma_map(struct file *file, struct bio_vec *bvec,
-         |                                                     ~~~~~~~~~~~~~~~~^~~~
-   cc1: some warnings being treated as errors
+Depends...
 
+> Only if the property has consumers?
+> I don't mind, just want to get it right next time ;)
 
-vim +/file_dma_map +3791 io_uring/io_uring.c
+In this case, there shouldn't be any compatibility issues because the
+mmc core has supported the common property longer than the dts
+existed. If that was not the case, then we'd probably be stuck with
+the property in the dts file. That still depends on usage in the
+kernel or elsewhere, in dts files, stability of the platform support,
+etc.
 
-  3758	
-  3759	static int io_register_map_buffers(struct io_ring_ctx *ctx, void __user *arg)
-  3760	{
-  3761		struct io_uring_map_buffers map;
-  3762		struct io_fixed_file *file_slot;
-  3763		struct file *file;
-  3764		int ret, i;
-  3765	
-  3766		if (!capable(CAP_SYS_ADMIN))
-  3767			return -EPERM;
-  3768	
-  3769		ret = get_map_range(ctx, &map, arg);
-  3770		if (ret < 0)
-  3771			return ret;
-  3772	
-  3773		file_slot = io_fixed_file_slot(&ctx->file_table,
-  3774				array_index_nospec(map.fd, ctx->nr_user_files));
-  3775		if (!file_slot->file_ptr)
-  3776			return -EBADF;
-  3777	
-  3778		file = io_file_from_fixed(file_slot);
-  3779		if (!(file->f_flags & O_DIRECT))
-  3780			return -EOPNOTSUPP;
-  3781	
-  3782		for (i = map.buf_start; i < map.buf_end; i++) {
-  3783			struct io_mapped_ubuf *imu = ctx->user_bufs[i];
-  3784			void *tag;
-  3785	
-  3786			if (imu->dma_tag) {
-  3787				ret = -EBUSY;
-  3788				goto err;
-  3789			}
-  3790	
-> 3791			tag = file_dma_map(file, imu->bvec, imu->nr_bvecs);
-  3792			if (IS_ERR(tag)) {
-  3793				ret = PTR_ERR(tag);
-  3794				goto err;
-  3795			}
-  3796	
-  3797			imu->dma_tag = tag;
-  3798			imu->dma_file = file;
-  3799		}
-  3800	
-  3801		return 0;
-  3802	err:
-  3803		while (--i >= map.buf_start) {
-  3804			struct io_mapped_ubuf *imu = ctx->user_bufs[i];
-  3805	
-  3806			io_dma_unmap(imu);
-  3807		}
-  3808		return ret;
-  3809	}
-  3810	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Rob

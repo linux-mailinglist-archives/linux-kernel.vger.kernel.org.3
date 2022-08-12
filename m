@@ -2,71 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FEB8590EF5
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 12:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 68FA8590EF8
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 12:14:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238270AbiHLKOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 06:14:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35094 "EHLO
+        id S238187AbiHLKOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 06:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236759AbiHLKNc (ORCPT
+        with ESMTP id S238170AbiHLKOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 06:13:32 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C37AB4D6
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 03:12:48 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id l22so675677wrz.7
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 03:12:48 -0700 (PDT)
+        Fri, 12 Aug 2022 06:14:11 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B53B3AB4E8
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 03:13:18 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id w15so507405ljw.1
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 03:13:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=VEs6wZWakwgBJ6Ig58MPDjM5leVr1a+Cx/UKYTT/e8E=;
-        b=GIKk+3qBSEL6EfjmSjrHeH5Ma5mGoIpw2bysICq5lXUJ6ybITVz9FnUftGajDg55rr
-         kARbo48b82RDZ0Prna2NsbdMl9dMUjpq0clLT3PanQZy9v5xTCuuxMiQMFNYUuVEN/E1
-         WzFvKyE3lnF2PkGRnSjTH0GU4UkPzLMOKZVaPmlLI2pSWsvwpEwoRYkIuv7n2RzOOage
-         LCJ5AX64QYoG64hzg4ryy4svmna7gPnun5qHjGYB+LizPIt9aJt2eTfND0D4XOg8byW+
-         droCVyWVo5BNGJPgvVUbmP1YZVQE9fxqXnld2IGKVW3Q2u27jVHAKvnuHVJBrVdrjzx3
-         r6hQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=8cLhmbUzxjFPeEqNnxegdJhRMYmiHcGmozP5wffiZTU=;
+        b=WTxdbpatl/Nddz+PTuVRR73SuOXowEQtLmLFxwXWr5GSYU+ztSACZWVLaK2vzxj6m2
+         3NdwSnjEIuzz6QdV1sGNd+PZwhsw0kp2vd8OV4FBs95Ubiv1gkcyN7+g+cGKDByb+dwc
+         VQaz4lcgk7eb4C/9zl9ZYT0SHgo4br4IhFxpnqSl4UJ9dKefLYB9Ro0WwChQc7roJYiv
+         qtr4ZjKf0hvB8pl/KDFx1/0QTUUnNrZUeTJYA9rnIsSID56uY/KMzHsCWv4uyxdt/0Z3
+         w+mbvhDGrfZt2gPg0v9ElyCXUE5wVb/a+Etr7VCnn3ncEwUWWctATPiZqmDsJPyv+BLB
+         mg+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=VEs6wZWakwgBJ6Ig58MPDjM5leVr1a+Cx/UKYTT/e8E=;
-        b=27LCeBjQ9Z6CXqEW4LEPmqdU0AFkoKpNPeBazuE0ekqUGK54FA51U2l7DRNCvQvjMq
-         uMV7p3p91VUP7ony9f15jTDLYfQJ5/knhRn8ofEaF79BrvjW2wgqU2Lld/RXBd74B6ot
-         FeAQhvsRFlM96zYgl6uVDgQtgkf8hSCnyyyy0gkAvgk+k3q6VuElfpvBLPSc5DisaCRD
-         P8r0DRMFb5u0+8ZKbT8HiB+s9jGjG8YJzR5UQv3GoeaGSfAEfGUlqfZbVU92d2hppOy7
-         h/mwK/EBCu3/GIfTHxJl0IsbfkSz3cT+lQG8yGQFzZGgSJEkJontjK3saNqLaLbr/lCU
-         tkUQ==
-X-Gm-Message-State: ACgBeo1fv1YAJo85B47cgGAKO0UhpDbD0gc9MvHceylI/F4camdGXtoD
-        J3KKUBw19q1byDn9jcy3QpIYQg==
-X-Google-Smtp-Source: AA6agR7gDJATgg6ukxbMjsQmjBn9A+7ptvHxjH7kebGR6YnZiBHSm5UwYxpex2Dx8I2kOJsxvObd2g==
-X-Received: by 2002:adf:eb8e:0:b0:223:a1f6:26b2 with SMTP id t14-20020adfeb8e000000b00223a1f626b2mr1428160wrn.216.1660299167448;
-        Fri, 12 Aug 2022 03:12:47 -0700 (PDT)
-Received: from hackbox.lan ([94.52.112.99])
-        by smtp.gmail.com with ESMTPSA id e25-20020a05600c219900b003a541d893desm2193204wme.38.2022.08.12.03.12.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Aug 2022 03:12:46 -0700 (PDT)
-From:   Abel Vesa <abel.vesa@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Maulik Shah <quic_mkshah@quicinc.com>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: [PATCH v2 4/4] dt-bindings: soc: qcom: stats: Document SDM845 compatible
-Date:   Fri, 12 Aug 2022 13:12:40 +0300
-Message-Id: <20220812101240.1869605-4-abel.vesa@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220812101240.1869605-1-abel.vesa@linaro.org>
-References: <20220812101240.1869605-1-abel.vesa@linaro.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=8cLhmbUzxjFPeEqNnxegdJhRMYmiHcGmozP5wffiZTU=;
+        b=MTZp+pZwmY+9a6r3zgy0KIw+2QiRsL9sHdkFJgp6PXZIxqMDj1GUSd3JrMwkS/+Ri6
+         nB+KtGlKYoW/YBXdYoYVLqXOEJrbSDkkFtZM8B13tN/h9zNKbJy3Ql2+Fp/kXo6utfm1
+         wgLLtCoYM7pzUFEL/waH4QDLaLMkk5ACC/EPKR9mqIKx8yP33O6wtbs4Z3qpr9h+jmjQ
+         S/Ya+In0JWxeXOo6QLbIrtKn54IqhiuqXHxkpqA9kFljfXaBs4kiMgbp9R9OxKiLu6ed
+         3bCqk9o7Gh2y3frjybtS3yvpFd/GEaiQekBouN4isnB1fBojZRJa+opFrOjMankVitEK
+         /c9g==
+X-Gm-Message-State: ACgBeo2Vg2hdeFkoBQQFC3HUzVbA/0JBUU1bNVsx29g0D7BwCngTniaq
+        0tNNuQFNkbXC+SN8QnNEpwVsWA==
+X-Google-Smtp-Source: AA6agR7naJ9emf9TqWnh8kwp04vlKy5jAdUnOcyWakfGln360Wqaak0cNUSE0V2nXvLtaxyZjCuJ0Q==
+X-Received: by 2002:a2e:b8d3:0:b0:25f:e94d:10ae with SMTP id s19-20020a2eb8d3000000b0025fe94d10aemr897828ljp.331.1660299197072;
+        Fri, 12 Aug 2022 03:13:17 -0700 (PDT)
+Received: from [192.168.1.39] ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id e7-20020a05651c038700b0025df04af0f0sm305398ljp.51.2022.08.12.03.13.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Aug 2022 03:13:16 -0700 (PDT)
+Message-ID: <c2991370-b55f-c782-d62c-f9c667e40389@linaro.org>
+Date:   Fri, 12 Aug 2022 13:13:10 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 6/6] i2c: imx-lpi2c: handle IPG clock
+Content-Language: en-US
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, aisheng.dong@nxp.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        xiaoning.wang@nxp.com, Peng Fan <peng.fan@nxp.com>
+References: <20220812043424.4078034-1-peng.fan@oss.nxp.com>
+ <20220812043424.4078034-7-peng.fan@oss.nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220812043424.4078034-7-peng.fan@oss.nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,34 +80,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SDM845 is a special case compared to the other platforms that use RPMh
-stats, since it only has 2 stats (aosd and cxsd), while the others have
-a 3rd one (ddr).
+On 12/08/2022 07:34, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> The LPI2C controller needs both PER and IPG clock to work, but current
+> driver only supports PER clock. This patch add IPG clock.
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  drivers/i2c/busses/i2c-imx-lpi2c.c | 41 ++++++++++++++++++++++--------
+>  1 file changed, 31 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/i2c/busses/i2c-imx-lpi2c.c b/drivers/i2c/busses/i2c-imx-lpi2c.c
+> index 8b9ba055c418..f43ad1ae8627 100644
+> --- a/drivers/i2c/busses/i2c-imx-lpi2c.c
+> +++ b/drivers/i2c/busses/i2c-imx-lpi2c.c
+> @@ -94,7 +94,8 @@ enum lpi2c_imx_pincfg {
+>  
+>  struct lpi2c_imx_struct {
+>  	struct i2c_adapter	adapter;
+> -	struct clk		*clk;
+> +	struct clk		*clk_per;
+> +	struct clk		*clk_ipg;
+>  	void __iomem		*base;
+>  	__u8			*rx_buf;
+>  	__u8			*tx_buf;
+> @@ -207,7 +208,7 @@ static int lpi2c_imx_config(struct lpi2c_imx_struct *lpi2c_imx)
+>  
+>  	lpi2c_imx_set_mode(lpi2c_imx);
+>  
+> -	clk_rate = clk_get_rate(lpi2c_imx->clk);
+> +	clk_rate = clk_get_rate(lpi2c_imx->clk_per);
+>  	if (lpi2c_imx->mode == HS || lpi2c_imx->mode == ULTRA_FAST)
+>  		filt = 0;
+>  	else
+> @@ -561,10 +562,16 @@ static int lpi2c_imx_probe(struct platform_device *pdev)
+>  	strlcpy(lpi2c_imx->adapter.name, pdev->name,
+>  		sizeof(lpi2c_imx->adapter.name));
+>  
+> -	lpi2c_imx->clk = devm_clk_get(&pdev->dev, NULL);
+> -	if (IS_ERR(lpi2c_imx->clk)) {
+> +	lpi2c_imx->clk_per = devm_clk_get(&pdev->dev, "per");
+> +	if (IS_ERR(lpi2c_imx->clk_per)) {
+>  		dev_err(&pdev->dev, "can't get I2C peripheral clock\n");
+> -		return PTR_ERR(lpi2c_imx->clk);
+> +		return PTR_ERR(lpi2c_imx->clk_per);
+> +	}
+> +
+> +	lpi2c_imx->clk_ipg = devm_clk_get(&pdev->dev, "ipg");
+> +	if (IS_ERR(lpi2c_imx->clk_ipg)) {
+> +		dev_err(&pdev->dev, "can't get I2C ipg clock\n");
+> +		return PTR_ERR(lpi2c_imx->clk_ipg);
+>  	}
 
-So in order for the driver to use the dedicated stats config, we added
-the SDM845 dedicated compatible, which we document here.
+You just broke all DTS...
 
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
----
-
-Changed qcom,rpmh-stats-sdm845 to qcom,sdm845-rpmh-stats, as suggested
-by Krzysztof.
-
- Documentation/devicetree/bindings/soc/qcom/qcom-stats.yaml | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom-stats.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom-stats.yaml
-index 473adca4e973..48eda4d0d391 100644
---- a/Documentation/devicetree/bindings/soc/qcom/qcom-stats.yaml
-+++ b/Documentation/devicetree/bindings/soc/qcom/qcom-stats.yaml
-@@ -20,6 +20,7 @@ properties:
-   compatible:
-     enum:
-       - qcom,rpmh-stats
-+      - qcom,sdm845-rpmh-stats
-       - qcom,rpm-stats
-       # For older RPM firmware versions with fixed offset for the sleep stats
-       - qcom,apq8084-rpm-stats
--- 
-2.34.1
-
+Best regards,
+Krzysztof

@@ -2,65 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1129E590BD3
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 08:08:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E77C3590BD6
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 08:10:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236387AbiHLGIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 02:08:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46134 "EHLO
+        id S236869AbiHLGKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 02:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235319AbiHLGIl (ORCPT
+        with ESMTP id S234931AbiHLGKC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 02:08:41 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D792CA4B2F
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 23:08:39 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id e8-20020a17090a280800b001f2fef7886eso16329pjd.3
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 23:08:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=NCnhv/pEtaSBg9KIMYsJIwv7lSODCZztiNlzGMGUZ8Y=;
-        b=aDS02WJdXoQC143tgj0melrqXUgyvbrHHE4veytzxZcs6hJWZ4p74lpt8BUNbfJycM
-         GM0SbqBvEQ+MocPZbYHzAmOM7uMpdDtfx7B7gshPpYRo7BSX6QeBbxXH/F6tRzstoXOP
-         Hq4YqwHMXAN3y7YN81WjpiH4XShsd0D+4ncyGd5jdK8rawjojFI1G1FkxH/bPy+WuZI0
-         3orDNesOSve0KTyzbJZ0m9wTPCS8SQLVoBNGZSRlDfp9qeLTdtqkGr8JVPChRNlh1ysn
-         UtLQBAgFp1AvLbElP1y8UwT6Jt8J3bvSMIfo4BG8RQ8TdMM4qq6kTHc1KGbXVGpWmh/E
-         MNKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=NCnhv/pEtaSBg9KIMYsJIwv7lSODCZztiNlzGMGUZ8Y=;
-        b=KyRumCUS1hs2p4Ux3ABR2+BfRzN/A3jB4vLYM3TfiTGoQLB/wxEp+PlksHs3wJbhih
-         Q9TuCLh1tIBdWZ5o54hnqyQUmA7cyM/wkLGIhhuLRQFmY13GTi0MLLM3l8zePBY3SUSs
-         vwQV1gbsV2Bq//fYPoTVhi6vTCCIxam3uPCkACTgCBdPzV6cTSl4d04HrgZYoozOALiB
-         vu8qYQgLLLvlwmlK839WtBhNtwVogMMQh0mJPsMDYMwY2EGKzt9HJnVkiENGe7XLf3Hd
-         +PtMYFXLAg3qq/w8r7Cicy4CY7/KrSujYRO7Hsd74n7DmEwfnYbyEtn0hkrE/J5UZO37
-         m/Cg==
-X-Gm-Message-State: ACgBeo1orrZXx9OUuz2xeR0gDve3f65ZsqtDPQ3pz1noeadfQUhTWZYu
-        hqhbs8V9Rc+Sdk2XNdC+9UCAPf2jv6lS65BP60fFqw==
-X-Google-Smtp-Source: AA6agR7Xt4qn1yBLEPFZTYt/U7/0q/yFxy7kIlS7Q+rgxokejkk2oPVoC6/9viPfXENo6HDPfVYCT4phxhutqB/fmNE=
-X-Received: by 2002:a17:90b:1d86:b0:1f7:31c6:1cce with SMTP id
- pf6-20020a17090b1d8600b001f731c61ccemr2595669pjb.192.1660284519440; Thu, 11
- Aug 2022 23:08:39 -0700 (PDT)
+        Fri, 12 Aug 2022 02:10:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B17D3A4B2F;
+        Thu, 11 Aug 2022 23:10:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 2F721B81A6B;
+        Fri, 12 Aug 2022 06:10:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AFACC433C1;
+        Fri, 12 Aug 2022 06:09:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660284598;
+        bh=8sV3XZOg58DpG6LIkEH130HfyjeZTPgBQd2AwBSjxwI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OcfHnH9qRK3vponWPY9s9bHFoHxiz60ojylon1FIGI5uXm6pBZPPhra71d3Zxr72F
+         vHEDalz9cXMB8o2HAtw/pRHp1H4E5OHxWflCpAxV9sgrtC4NoT2eWyW6C+3ufmKQkJ
+         /bptqaQHLnlP9R49xdU2ygOrndH1soH/TsSVBtg4=
+Date:   Fri, 12 Aug 2022 08:09:55 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Manish Mandlik <mmandlik@google.com>
+Cc:     Johannes Berg <johannes@sipsolutions.net>,
+        Arend van Spriel <aspriel@gmail.com>, marcel@holtmann.org,
+        luiz.dentz@gmail.com, Dan Williams <dan.j.williams@intel.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-bluetooth@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        chromeos-bluetooth-upstreaming@chromium.org,
+        Won Chung <wonchung@google.com>,
+        Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 1/5] sysfs: Add attribute info for
+ /sys/devices/.../coredump_disabled
+Message-ID: <YvXusxxBZ+cHvzqz@kroah.com>
+References: <20220810085753.v5.1.I5622b2a92dca4d2703a0f747e24f3ef19303e6df@changeid>
+ <bfc5f964d8dadd6378f2da5b3b6ef4bc9fb847c2.camel@sipsolutions.net>
+ <YvPbGms7bzFuWTJg@kroah.com>
+ <CAGPPCLAV=mnMcteCnqFT5zdbWdZuFQRv6-oxC3qAnLh8_8H61Q@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220725080240.106619-1-jsd@semihalf.com> <d2be49af-71e4-978b-fe00-8b8fca6f80b5@linux.intel.com>
-In-Reply-To: <d2be49af-71e4-978b-fe00-8b8fca6f80b5@linux.intel.com>
-From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
-Date:   Fri, 12 Aug 2022 08:08:28 +0200
-Message-ID: <CAOtMz3OR7LspGvXUo-KWNk=1+nYXDAPZy1YV-WtCOL_ihaVyEw@mail.gmail.com>
-Subject: Re: [PATCH] i2c: designware: Introduce cooldown timer to AMDPSP driver
-To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
-        wsa@kernel.org, rrangel@chromium.org, mw@semihalf.com,
-        upstream@semihalf.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAGPPCLAV=mnMcteCnqFT5zdbWdZuFQRv6-oxC3qAnLh8_8H61Q@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -69,81 +64,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-wt., 9 sie 2022 o 14:05 Jarkko Nikula <jarkko.nikula@linux.intel.com>
-napisa=C5=82(a):
->
-> Hi
->
-> Sorry the delay, this slipped through my eyes during vacation. Couple
-> minor comments below.
->
-> On 7/25/22 11:02, Jan Dabros wrote:
-> > In order to optimize performance, limit amount of back and forth
-> > transactions between x86 and PSP. This is done by introduction of
-> > cooldown period - that is window in which x86 isn't releasing the bus
-> > immediately after each I2C transaction.
+On Thu, Aug 11, 2022 at 04:21:54PM -0700, Manish Mandlik wrote:
+> On Wed, Aug 10, 2022 at 9:21 AM Greg Kroah-Hartman <
+> gregkh@linuxfoundation.org> wrote:
+> 
+> > On Wed, Aug 10, 2022 at 06:03:37PM +0200, Johannes Berg wrote:
+> > > On Wed, 2022-08-10 at 09:00 -0700, Manish Mandlik wrote:
+> > > > This patch adds the specification for
+> > /sys/devices/.../coredump_disabled
+> > > > attribute which allows the userspace to enable/disable devcoredump for
+> > a
+> > > > particular device and drivers can use it to enable/disable
+> > functionality
+> > > > accordingly. It is available when the CONFIG_DEV_COREDUMP is enabled
+> > and
+> > > > driver has implemented the .coredump() callback.
+> > > >
+> > >
+> > > It would be nice to say _why_? What problem does this solve? You could
+> > > just create the dump and discard it, instead, for example?
 > >
-> > In order to protect PSP from being starved while waiting for
-> > arbitration, after a programmed time bus is automatically released by a
-> > deferred function.
+> > Agreed, I do not understand the need for this at all.
 > >
-> > Signed-off-by: Jan Dabros <jsd@semihalf.com>
-> > ---
-> >   drivers/i2c/busses/i2c-designware-amdpsp.c | 68 +++++++++++++++++----=
--
-> >   1 file changed, 53 insertions(+), 15 deletions(-)
-> >
-> > diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/b=
-usses/i2c-designware-amdpsp.c
-> > index b624356c945f..2e1bb5ae72c3 100644
-> > --- a/drivers/i2c/busses/i2c-designware-amdpsp.c
-> > +++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
-> > @@ -6,6 +6,7 @@
-> >   #include <linux/io-64-nonatomic-lo-hi.h>
-> >   #include <linux/psp-sev.h>
-> >   #include <linux/types.h>
-> > +#include <linux/workqueue.h>
-> >
-> >   #include <asm/msr.h>
-> >
-> > @@ -15,6 +16,8 @@
-> >   #define PSP_MBOX_OFFSET             0x10570
-> >   #define PSP_CMD_TIMEOUT_US  (500 * USEC_PER_MSEC)
-> >
-> > +#define PSP_I2C_COOLDOWN_TIME_MS 100
-> > +
->
-> "cooldown" distract me thinking thermal management. Would semaphore
-> reservation time/timer fit better?
+> 
+> The existing /sys/class/devcoredump/disabled (devcd) switch has two
+> limitations - it disables dev_coredump for everyone who's using it;
 
-Yes, it makes sense. I will change this here and in the commit message
-to "semaphore reservation timer".
+Which is good and is the design of the thing.
 
->
-> > +static void release_bus_now(void)
-> > +static void psp_release_i2c_bus_deferred(struct work_struct *work)
-> > +static DECLARE_DELAYED_WORK(release_queue, psp_release_i2c_bus_deferre=
-d);
-> > +
->
-> I'd use the same namespace here. Perhaps _now can be dropped from the
-> name since the release_bus and release_bus_deferred are near to each
-> other and _deferred variant implies it's called after timeout.
+> and
+> drivers don't have visibility if devcd is disabled or not, so, the
+> dev_coredump API simply lets drivers collect the coredump from a device but
+> then later discards it if devcd is disabled.
 
-Right, release_bus_now -> release_bus.
+Why would a driver care?
 
->
-> > +     /*
-> > +      * Send a release command to PSP if the cooldown timeout elapsed =
-but x86 still
-> > +      * owns the ctrlr.
-> > +      */
->
-> Replace "ctrlr" -> "control" here since then it doesn't lead to think
-> is't some technical object like register etc.
+> Now that there are more subsystems using the base dev_coredump API, having
+> a granular control will make it easier to selectively disable dev_coredump
+> only for a particular device. For ChromeOS, this is useful to allow drivers
+> to develop coredump functionality and deploy it without affecting other
+> drivers with stable devcoredump implementations (example, we've had some
+> devcoredumps that take 12s to run and we only want to enable it on test
+> builds because it has lots of PII). The drivers can use this flag to
+> refrain from collecting or triggering coredump when undesirable.
 
-This is about "controller" not "control", but I think your comment is
-still applicable.
+This feels odd.  You have various out-of-tree drivers that take too long
+when they crash to make a dump and it causes some unknown issue
+elsewhere?
 
-Best Regards,
-Jan
+I don't really understand, sorry.
+
+If you need something for development of a system, that's one thing, but
+this feels like you are adding fine-grained tweaks that no one in a real
+system would ever use.
+
+What is broken with the current system of "on/off" that does not work
+for you now?  Why would a normal user only want to turn this on for one
+driver and not another?
+
+thanks,
+
+greg k-h

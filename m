@@ -2,166 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C2F9590A26
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 04:09:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 433FD590A2B
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 04:13:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236688AbiHLCJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 22:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46684 "EHLO
+        id S235890AbiHLCN2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 22:13:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235684AbiHLCJC (ORCPT
+        with ESMTP id S235268AbiHLCNX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 22:09:02 -0400
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D7F7A2203;
-        Thu, 11 Aug 2022 19:09:01 -0700 (PDT)
-Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27BN6hLV023129;
-        Fri, 12 Aug 2022 02:08:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=to : cc : subject :
- from : message-id : references : date : in-reply-to : content-type :
- mime-version; s=corp-2022-7-12;
- bh=s2LDErmebp4ZDspyNlgMFqIAGao6srNyRv6AcBXp/Pc=;
- b=Vs8jMkTSMM5P8IDje11u3HO90y5FsohbshVS1U/ZsNybhbenCvWXmk5B137xXdI5Mjk9
- ptvsX6uZ2t1Nj5omxNLIGacV7XIRAgkFgfcbFGful4LgqTdk33BlhpjjQH0/mRdq3my+
- c6mDDXiTp81vdeGgCURENtl1Lt3qZSzgchVNHEz4CWnfOsN0Fe2wFwxjvA/5Y7svt0Wr
- 0fooVdS/zq05XZ0Rccs45OjB9m3zZxX3RF4/6FWxJf+yHQqMHXtpE2ifw+IxBlIatyyc
- olJTYHXjEYwKFt8QPcqyPMHMSfDIIuybeYd4qXjKaoN6aUUXdtq18fLxSk5OneTk8Y17 dA== 
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3huwqj67m7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 12 Aug 2022 02:08:54 +0000
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 27C0bO6g023770;
-        Fri, 12 Aug 2022 02:08:53 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2168.outbound.protection.outlook.com [104.47.58.168])
-        by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3huwqhqam4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 12 Aug 2022 02:08:53 +0000
+        Thu, 11 Aug 2022 22:13:23 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2051.outbound.protection.outlook.com [40.107.92.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56ADA223E
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 19:13:22 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KlNbRTvDgVVqXPK6spZNpAbijIreU0ZZF5oyQfdvOYEC+4booPSULsxVDfrsEQJclqcIdeeORTGLMCZ+GDF5LrezT2Ye386mAj5DPcwNhF3/uq7nymTwubxPtEw5Xcpb/dHFMRnqEsI3uFYxXTsqE4WxyHpoRy3AwtyVAB2ExfpMDevXtm0DsxYicg70FqIWV5xxOwiFfThGjang03oWR8ls3sd3B9yLqRlaVT5U8bBnz9zi346O54HX012GEwqN4wwqSAD3gkUde797B3o9LwukNtUegVFtu1gKcWpDGCoYCmV+vj7s68aVdY8RWxtwXMhZ5qfvxM3mH4JvMv0VWw==
+ b=NlxUQuUHPTfAQXt87WeEuy8yiwlJ0K0szr+ekoCOg+clcVrRu1L2utbf4wjW8LLnx/F/L8nPDEuNFSHxmomktAgLwWWdOwWiB209y16PR32xMjXHju6qTHaD7hq0N1PZBGj4UPaQxln/7BBQvQymq6mWfnE9RdvXNF7hv2JjZki7mn6VHIeKh5KGZL/JLPYRoZRrNjMdqwr9ZGIlKQNLne+eXA73IX6i39Rcc7Uz1YcX0WZC8gWorpPlvjplOqfqb+QvGzGFUpMkQl0jCOw19gp1XxA6ydvdQmDcfswNfdNcEcE7QIE4yGHSfWyKLNiUK31p02SUTCzwHa1sH2vJ1g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=s2LDErmebp4ZDspyNlgMFqIAGao6srNyRv6AcBXp/Pc=;
- b=ls24EuoeaaJZ+d575zvPrZzoohE6lfrBT/HYYU7Ap22KvhR9DUmCStyH4IkwVdyzp9yf0HaVB+oaJMCtODnP2vM80qDJzK++Wu3lwND9SxWOuNsOh7GKUFsHhukavzgFrO44gIhGKjaY6FK4Cw2IgoPplhuTYuj8FdvD2qGlT+kxVH7IT4Hv9eX0z9k4M1f1XnqR/majdFlsIxhzVXquC55V/HMi1A/XhDsmWq20VWn32rszjYgeBRDsIiYtEH1DekNA0wzrIaGVv1HMuXKsLX342auUhXW/2l1h4KeS5wiAMMG8wJz7stOvaOgTw5toza7BM2W1tS9YqyMKK+mn6A==
+ bh=76IQdPubhMWITmpzgq+05WjE3ITgDSyIf3LKiC1ibmU=;
+ b=jBf60yD1+PuMLbyDNfAaZuGB/1Xg3HAA+8fghioEJqVBmO+2Pqg676oOTd6VAsC39JONZZ/uG2iejfN3Gck/wWocruz8MbNXglvYJ5Np/wyMopPipUr/HM+k0pXLzDW15aqqo0J2Beh1Bn3OF8ih52w4THwP01mS/LwUHEsUFHAqiFQKJ1bESNJxIHUULmzf0ZLB73M5akDmbbQk1SEjuTPiUV8/sAw+vn9qnW6Q0uqSqjGgfBKAtUjWSQgTI3PMfNK5KUYDYW6KM/4Ktg8WH/Xo95PqjKu55HggqZcqQGGIJF3aVIKVGJbfPhcQo79dx3qA1+FE1L3P0a9ryhRsgg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=s2LDErmebp4ZDspyNlgMFqIAGao6srNyRv6AcBXp/Pc=;
- b=SPHEg+FPSlh4uNEUPd52jp60lxW/ZVT/tsJmEZj3xASRuTGfdxs7mLUQ0adJSZzQ3ztFSUNiASn8Nv2xnJEo+ZdBi0i9Xa0QhajEFUMv+bKNBXU8iop/5CThWd3zQBm0GGu7WcjMTNfmXnYa+T/7zDynK/0Cps91TVrtLVfyxfc=
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com (2603:10b6:510:3d::12)
- by CY4PR1001MB2327.namprd10.prod.outlook.com (2603:10b6:910:43::26) with
+ bh=76IQdPubhMWITmpzgq+05WjE3ITgDSyIf3LKiC1ibmU=;
+ b=RsuRrj4F1s0/uA3qA1+/nVfNxbuhlo/gKY826xlpuRIZ4STdy4+NsxJ39O5mqPYhj1w8VNaLpDSCGY9FRwEJi1n8RRVWSAfk/CByA6598ZpGodKOY+a/AGYtwYe19Ie7Goma4a+b57rHrMV20iSlHf0LoJDljsW1eUEZwutWIcJwVV/8EEH8hTXHlxUABxYWU4m6i+RXetV7FAvXSDLbMjxaN+PHP6uZwpkg+FpDFzcu8uO2LoOyCZP7/03S+TvC/Oqk9rXFsYn3i2rCvwlppVqQktTQIoN3KYgc9MeK0YT5JFutezV5A9ZYLNt16H1vmS6VHkG7La3P622usqw9mw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
+ by PH0PR12MB7080.namprd12.prod.outlook.com (2603:10b6:510:21d::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14; Fri, 12 Aug
- 2022 02:08:51 +0000
-Received: from PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::89a7:ad8f:3077:f3c0]) by PH0PR10MB4759.namprd10.prod.outlook.com
- ([fe80::89a7:ad8f:3077:f3c0%8]) with mapi id 15.20.5525.010; Fri, 12 Aug 2022
- 02:08:50 +0000
-To:     Kiwoong Kim <kwmad.kim@samsung.com>
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alim.akhtar@samsung.com, avri.altman@wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, beanhuo@micron.com,
-        adrian.hunter@intel.com, sc.suh@samsung.com, hy50.seo@samsung.com,
-        sh425.lee@samsung.com, bhoon95.kim@samsung.com
-Subject: Re: [PATCH v2] scsi: ufs: enable link lost interrupt
-From:   "Martin K. Petersen" <martin.petersen@oracle.com>
-Organization: Oracle Corporation
-Message-ID: <yq18rnumd2w.fsf@ca-mkp.ca.oracle.com>
-References: <CGME20220802014552epcas2p236519c03464ab32d9a877887710b1c10@epcas2p2.samsung.com>
-        <1659404551-160958-1-git-send-email-kwmad.kim@samsung.com>
-Date:   Thu, 11 Aug 2022 22:08:46 -0400
-In-Reply-To: <1659404551-160958-1-git-send-email-kwmad.kim@samsung.com>
-        (Kiwoong Kim's message of "Tue, 2 Aug 2022 10:42:31 +0900")
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.22; Fri, 12 Aug
+ 2022 02:13:19 +0000
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::eca6:a4a7:e2b2:27e7]) by BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::eca6:a4a7:e2b2:27e7%5]) with mapi id 15.20.5504.025; Fri, 12 Aug 2022
+ 02:13:19 +0000
+From:   Alistair Popple <apopple@nvidia.com>
+To:     linux-mm@kvack.org, akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org,
+        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        David Hildenbrand <david@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Alistair Popple <apopple@nvidia.com>
+Subject: [PATCH v4 1/2] mm/gup.c: Don't pass gup_flags to check_and_migrate_movable_pages()
+Date:   Fri, 12 Aug 2022 12:13:08 +1000
+Message-Id: <487960bf67c7273ff5606c76f73bb51271bc7b90.1660269441.git-series.apopple@nvidia.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: DM6PR18CA0013.namprd18.prod.outlook.com
- (2603:10b6:5:15b::26) To PH0PR10MB4759.namprd10.prod.outlook.com
- (2603:10b6:510:3d::12)
+X-ClientProxiedBy: BYAPR01CA0072.prod.exchangelabs.com (2603:10b6:a03:94::49)
+ To BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 7bcdb1c9-5caf-4541-a8fb-08da7c07995c
-X-MS-TrafficTypeDiagnostic: CY4PR1001MB2327:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4efa3f19-3662-4f26-b234-08da7c08396b
+X-MS-TrafficTypeDiagnostic: PH0PR12MB7080:EE_
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tNDuBfw3oCBBmTYryONyRgeBe8ynYnhnYiiXRe/xSaWElUQ9CmDN61y36wt7m4OIWZUm7m2dpWMuCiFPsa4s+LOOw6X9p5LZ1RooHCCrPh6S/spr86kOfnJIChdq4As0tDcStBzHvSsWtcZHgbJTb8wVvt6TVapbLByShcwAbPlcP8EOb6jPnHnAPD4fDBjU2bqzrGCZdVJMizUonMbKN3LhkEAY6NpLhPJ5Rvue1L5A789S2DmxJlwU+/BC+7sZzgKUnYwFpQbRu+GMG33fJPpAaw2T2A7Su5YIlU+y9jc9evgLrsNfX3Pl6Dbg/d9L8auS3vHTxazHN7AKboKIQ9tPaZwTnjZDKRFhXFzH2LHk8ZOPNVeXYET1n5baHu3irmCWLObSo0ODrRiExkEaWT7YPf8XvQmE7yJq/G/xVWr8zeykn4/5+iLaYyyaWYLCukxlb2fHOt5Axz7g2Du9scszfmEKsxkl+V0MUH1AJ1GatOq68kvxBeBcARPvSgE3pqEk+f3WgxYvexkU2FMK0IpnM5wKev9VkcGPpR5MBcDBSrKJsAymNWp2FDHcEGsSXAZBx4DrSAIxWT73DieNGVkRiPx/RYz5LaY9YS2jCFesakIKMSRM/iDCGBXms1KhA69ulYO/6MmJARAw9z399MleQfs4TvuloVbiX4Ul4n9OpPUTpxN6rfJD+kCkuzftoTQ5q1L3u8P5lNVn6v76BQvqohuV2DGLM/hkSy7iULRhDCD2PtlaXMa8kxSAAEELDivTMay0GMVljmeRp6ApzXjalY61olWW51XcvuFXd3DW/u5cLLdNuoEYlflg4N1S
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB4759.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(376002)(136003)(346002)(39860400002)(366004)(396003)(41300700001)(86362001)(478600001)(6512007)(6506007)(26005)(6666004)(52116002)(36916002)(6486002)(186003)(5660300002)(4326008)(66556008)(66476007)(316002)(66946007)(8676002)(6916009)(38350700002)(38100700002)(2906002)(4744005)(7416002)(8936002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: CJRm16v0BSlOmCIxdyJgKOfVGv/q7yd7F5TG2w0IDC6aNPEgJX9ewY+ajlY1lwacy3tMlKifxS7f4qRoqbmNejVV58Q/YCK4Baqyh0RYNyAOkPyg/zoJzCJRaqCIntxiyMjX0elsJxoPfW3PXnWUI4SDZNIoJ1kDWS7BzeLXEa6KAtnYjnXJHZnR7NW1ru7nWKDxwnJmO2hp6VN9kYXZZwWxj2nYH5W6JyQ+AYJ5tc5HSd0UAqa4gd7e0LuYLbo+kutA7+nQSNfDZ22BerQFdwT5O94zoMy0tbntscaOY8ZRU5r3bzDZHNWDPpsDCTl+Hh3gTXz7E5lgQeUb9iF+OR97MPw15prtTuro/gQJU7DAgDEoZdJ47B/uPfpt4aN0pj4BUDLNaUQZqzDBdgxa0B+E/eiqenW+0UOioukAC7w91zO3laFHGn0aG3QCxMeZOGEtTQem/qd9gCa8eVjXmveq738FfyDlXINy0HkrcCu+bLV3IzFjY3lxHp9ZwAMy62MTsW3CcCeGA9FCPnI0rPAQDTbevlLw1wmG7pmNOTXIQOXuqMSEt1EQJIGnY+V1rW5aNAIkigR75DbVfSlqpvZfYkgxs3kccbpfYIfY60Ro+NgTbYkfaST8xLq17NYNqCYbeEH+t4H6LzI2hDSOGMQAiD00g4G5ciTpScGrRPZ7LurYiIfQT9fup/cPJYHz2zKmA1r3EKNOoD0XzguiiN2imaqZFFP3/EGSR6DcdtlnfQVb4Pzdj34uyvQ+onBz
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(346002)(366004)(136003)(39860400002)(376002)(186003)(86362001)(6666004)(107886003)(6512007)(26005)(38100700002)(6506007)(2906002)(36756003)(83380400001)(478600001)(6486002)(7416002)(66946007)(8936002)(66476007)(66556008)(316002)(4326008)(2616005)(8676002)(5660300002)(54906003)(41300700001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?XREEkwntYpIgS2IrDy4x9Xq3t8mmreuq4OiH9Q3MDcqusspTJPhddPyJrG9R?=
- =?us-ascii?Q?sz+5E7+OuElkIxxDCkNK8Fqp7EkhRXlndU8pLP6GkPr3SxAL9YB7SJtEvgq/?=
- =?us-ascii?Q?uUC+Yl+CI9IfKh3FcV76OYMe9iR8wYacjhkLbqj5znlxcMQp+MYCmbOdYhQr?=
- =?us-ascii?Q?ilUL/d4EbW25uBBQb6NU2wcrI3M0jM/+I5DgSmDpoXGap75isLfnWtGd9+Yp?=
- =?us-ascii?Q?b7ntLbeQZjP2qpmcvJhME03iNhDI2EeKpirZN9AqJXWND5b7Z/uUzM1Kpo65?=
- =?us-ascii?Q?DNdxFXqmPqiTJfi/iAljPeRNGKrIHkUzgBvM3/m/hIcTxE0WZ7/boMrwXRcT?=
- =?us-ascii?Q?hUXPOves/fZAAbJH9EoWWr0sf2oZMEjVbteh78ZPj9dkYOaiX96qjKiH3zr4?=
- =?us-ascii?Q?tS2UvJB8Rb5n9VXAiTvlIh4hPvGai9L1ByoShmyhhv71vBnj1xLG2VHPZ5Q7?=
- =?us-ascii?Q?469gM5S8HdfIHMtZh9TEkT2OiQR18CBG9pyhXE9Bu5ppy1KDJnUy4WCO4Hc4?=
- =?us-ascii?Q?uv1rF+kALv8FVE+W2cTP9QtkfKysNd89frPmHrwnLBQalsCApxjxWTsomDfr?=
- =?us-ascii?Q?FXn9B32az2YfuYgY5WEmnpwyCmIqizl9zBlN2nGtanFuyQgmttEyokMOisCP?=
- =?us-ascii?Q?pl6wprzoM4QT/T1xJ7rf+b7dw1zIEWrewQiFIP28yDR5PBXf2RlB1+ViN0X4?=
- =?us-ascii?Q?Vja6dwdgYQbW2uimM1JUisug9kI/il97vr6tYnAE1iM35PK5hqvMIAgX797z?=
- =?us-ascii?Q?IkM8HpGJ319TVsnGFcvBQsOqDLXXslGfRod5RnowVxLOzXYtoW0GNzkEJUzG?=
- =?us-ascii?Q?o5QHya6r4khQVWSf3ErNipQlyWhRAnqNS/SGAaav2ZivU3HaMCMVLjg9S7GN?=
- =?us-ascii?Q?zpkz38sQBKvIaaF10TG7L3yiPsFZlHVV2Ws84dTgj199DxrNPRx1fKJxQDr/?=
- =?us-ascii?Q?EvIw/OpiRhsn/bvCT9x3iUKKUbcFG5NshojThyHFzRQFBU1h9F+NuZfHnmCA?=
- =?us-ascii?Q?sdEhqP8g3xCJ7w6BBgaEoGCnjJCyA36IGI3wGVSsPgSdVNJSG3RL36BQ19I0?=
- =?us-ascii?Q?LaK4Or9qIJNfRo0SetlM1zhq35wsT2811m+6RKhI22MvZyWg5VvzYSo/2Aoj?=
- =?us-ascii?Q?vOhyapbRvTynSQ04YKsSqb4k6nkd9+YiP0BAO2+MDpYczEn8DXbUmKrRgkW0?=
- =?us-ascii?Q?wen9auxrarVoVTNFp9Nv6fcxiljtOOUBNavVRiXL0tZPVTP+WQjK8hRFM3tr?=
- =?us-ascii?Q?qR04UStBWKIX6X8gbbjVZQ50lTq6syAo5+HY51ni4C9CUfv4GvGqYn45mE+O?=
- =?us-ascii?Q?b3dH7mjxcFPGgTK9Ykb2ptBMpljXFKp1eb0psgydtYlhyC4vIynQuoHuaJOE?=
- =?us-ascii?Q?c7X0b5V6K40WKoukKH3u+OCxY4eq1/K3a591P8BSnym5/pgvImHOVUOOxRe9?=
- =?us-ascii?Q?/1AMwWjgbTBzFq+2W9JhR3PIwCyrJAz7xn4WpODu11I7NUOYEqwyaNfBzb/0?=
- =?us-ascii?Q?7xA2zipRpKvoo3wW3O+M9b1f+GXbFselhBtLPDp+l0ZIhd+4ReGReeIOnEX4?=
- =?us-ascii?Q?4BVk9xcIFMs0WCBvKTLMVhLNr+jBkxpeM7O48tW1z4eOxVTMWnuFywrlVPaL?=
- =?us-ascii?Q?ng=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7bcdb1c9-5caf-4541-a8fb-08da7c07995c
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB4759.namprd10.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PfQnMyF3gt1v0ElSBgHDsz4BzqNtxcRRGVJYnfl6caaJpwqjwinmJyy1jZLF?=
+ =?us-ascii?Q?o+zZ3m81FgN10Ljlvm5xUrwLq2j03fcz3wCUe9fcoaRg7Gtk+EGvZo0deBog?=
+ =?us-ascii?Q?sMeqCVt3TBjd+eEGRrKcuMOGYdWrHuHfFT5uOiPdFRTbjgEyfxr1aS0VQa4O?=
+ =?us-ascii?Q?HahypoCilSLyUpmi9lD//QzEPe5nsBlU1P++ILlfbBh04Q9l6GGHeRBWojS+?=
+ =?us-ascii?Q?uknw+1vxdJfFkhDxf8/mnXaWw7n2rVx/igUFo+Vb6NbKMpZQYxTLmhGxBDP4?=
+ =?us-ascii?Q?9vpzRM5ZgR5lQ0q6cOCqNAkmiT3UfbdcAf7iUEk7/t3VJMaCCdZ2I99TIgTw?=
+ =?us-ascii?Q?t23Ue+EfSm8pQQBW8VbwPIOH8dX0w9VK9ijGsL6pzbPh3xfE22alOH1N4Xxu?=
+ =?us-ascii?Q?Kd8Pd4cPeKUsYPLCMBiXO19nuU1XDDdOrTTWEstmX3knGpLEseQMTfZROPeU?=
+ =?us-ascii?Q?cMCgA44j92JtQEmPMYIMvpKeFUKYrPngLlAAaB/sd/TTisYl3G6I48JkC0k1?=
+ =?us-ascii?Q?ZNSG+FFDvR7gUZKhcfIrhJZo7so4niLyoIjTtKW76OAL89R5sIuMsv8ckJGE?=
+ =?us-ascii?Q?t+MkmUWfMb+rsd/fvSozcjtrG4e5qT7HkNK1G8qbILCxholocce12f5QYh06?=
+ =?us-ascii?Q?xVHWJVc5iLv5ICFXn3ChShETef9Ps5hA4C33bhqf+U1Q9YEIEm6RO6ntrc41?=
+ =?us-ascii?Q?eZ3DqWBov//vD0uqMozx4LthEz+bNMpgRuNRdTSYim+B6SVpLlQcGuMSFBzJ?=
+ =?us-ascii?Q?2kJnJg7nAIjx1k+65Gs+TETPgKEnHsUqP31nbF1cYFu9ssRgz78ru8rSIf5x?=
+ =?us-ascii?Q?CGvhgXsbSMu923SclUQysaJTqA4mlub4hXmLdFCs4cpsc/Xl4UyZfg+XTG1s?=
+ =?us-ascii?Q?sS4IjUpMt0B6RiGEImVpGO1MHXz/T1ZYachB/QDKk6HUrzMa5j0QO023sRzR?=
+ =?us-ascii?Q?pxpSmcRcj3VWY+9eouDq5TzqQAUrOdtAUH4TZ9ZahQtC4ITzK81uM9YXxi1y?=
+ =?us-ascii?Q?KILVLzxEbEJ7iMcGWe13GxoTuBsEokwbWn/fxKLi8pbZA0QFflEQHDvxpcxB?=
+ =?us-ascii?Q?bnyxGSd8o0acB2jkNIFtO2gMIjpoVNxaYXhvpIdxeOvpOFJnREIb6V7UYXXy?=
+ =?us-ascii?Q?z6j0feLyDtNP7ln8Kw8gBu20+/w8RJ6aTaao1Cj5YCObgVm3gYXf9xBrWUT0?=
+ =?us-ascii?Q?7do4AM9KWpUZkPvBa7gZvkyJd/NnyJFfGmDgH8tBjrbBhIL13EQG3y9ly5da?=
+ =?us-ascii?Q?BPuy0tLu2olb2nxVE7HEVf14kRdRad6lAMyDwbaFKnNC6DwGdZ2JF/FPfWv/?=
+ =?us-ascii?Q?Z6+GZV7FZlROU1opZGHuld71xN8D5KDKgy36spumGQdcMTcprCMZoqj/i58x?=
+ =?us-ascii?Q?paPjmz7UmYypu2chC6StApPj1mcsZilHM9hq8p8bVm1yNDnnhyf+9mC/xDjo?=
+ =?us-ascii?Q?fF4xbzihHEDriaG3GyUpNTsqn1LBXG0aPUNJdko9v2eLfEnlrUc4aqLwDH1I?=
+ =?us-ascii?Q?2mcfC/mohUWcWHLQ1F5FYQDQw40VdKGIQyPGwfODhrqYvkK+P48LkUOmp/gn?=
+ =?us-ascii?Q?sSNhBvSeEC/5mmP6UCJidEG9nXQy6UnrNkRQo3uJ?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4efa3f19-3662-4f26-b234-08da7c08396b
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Aug 2022 02:08:50.7822
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Aug 2022 02:13:19.4100
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: sZzC5t2udahODnvCKtpKwIORT0IkiU7SnCW8NHbBHx4U3M1TDN8G4Dz5BxhmsJQzQIxUY4Y4V2H60NRsxKH0psxEv2oEuCoUC6E2oXCMqAY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1001MB2327
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-12_02,2022-08-11_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 spamscore=0
- suspectscore=0 adultscore=0 phishscore=0 mlxscore=0 bulkscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208120005
-X-Proofpoint-ORIG-GUID: LOPQN6VKTnqUQuHHL4FY11PzvxT0Wnc7
-X-Proofpoint-GUID: LOPQN6VKTnqUQuHHL4FY11PzvxT0Wnc7
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: tuPUU6JNl4d3asujeZPeCACiS/aXyHsNyzPMPKkGuDvohLIq7OHvAiYjtbbkhNfvhYODZLaJsXexS+sOlIdKWg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7080
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+gup_flags is passed to check_and_migrate_movable_pages() so that it can
+call either put_page() or unpin_user_page() to drop the page reference.
+However check_and_migrate_movable_pages() is only called for
+FOLL_LONGTERM, which implies FOLL_PIN so there is no need to pass
+gup_flags.
 
-Kiwoong,
+Signed-off-by: Alistair Popple <apopple@nvidia.com>
+Reviewed-by: David Hildenbrand <david@redhat.com>
+Reviewed-by: John Hubbard <jhubbard@nvidia.com>
 
-> v1 -> v2: add a fixes tag
+---
 
-Version commentary needs to go after the patch description separated by
-a triple dash.
+Changes for v3:
 
-> Link lost is treated as fatal error with the patch c99b9b2
+ - Move WARN_ON() out of loop
+---
+ mm/gup.c | 23 ++++++++++-------------
+ 1 file changed, 10 insertions(+), 13 deletions(-)
 
-Commit hashes need to be 12 characters long.
+diff --git a/mm/gup.c b/mm/gup.c
+index c6d060d..a2baa8b 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -1907,8 +1907,7 @@ struct page *get_dump_page(unsigned long addr)
+  * Return negative error if migration fails.
+  */
+ static long check_and_migrate_movable_pages(unsigned long nr_pages,
+-					    struct page **pages,
+-					    unsigned int gup_flags)
++					    struct page **pages)
+ {
+ 	unsigned long isolation_error_count = 0, i;
+ 	struct folio *prev_folio = NULL;
+@@ -1941,10 +1940,8 @@ static long check_and_migrate_movable_pages(unsigned long nr_pages,
+ 			 * Migration will fail if the page is pinned, so convert
+ 			 * the pin on the source page to a normal reference.
+ 			 */
+-			if (gup_flags & FOLL_PIN) {
+-				get_page(&folio->page);
+-				unpin_user_page(&folio->page);
+-			}
++			get_page(&folio->page);
++			unpin_user_page(&folio->page);
+ 
+ 			ret = migrate_device_coherent_page(&folio->page);
+ 			if (ret)
+@@ -1998,10 +1995,7 @@ static long check_and_migrate_movable_pages(unsigned long nr_pages,
+ 		if (!pages[i])
+ 			continue;
+ 
+-		if (gup_flags & FOLL_PIN)
+-			unpin_user_page(pages[i]);
+-		else
+-			put_page(pages[i]);
++		unpin_user_page(pages[i]);
+ 	}
+ 
+ 	if (!list_empty(&movable_page_list)) {
+@@ -2023,8 +2017,7 @@ static long check_and_migrate_movable_pages(unsigned long nr_pages,
+ }
+ #else
+ static long check_and_migrate_movable_pages(unsigned long nr_pages,
+-					    struct page **pages,
+-					    unsigned int gup_flags)
++					    struct page **pages)
+ {
+ 	return nr_pages;
+ }
+@@ -2047,13 +2040,17 @@ static long __gup_longterm_locked(struct mm_struct *mm,
+ 	if (!(gup_flags & FOLL_LONGTERM))
+ 		return __get_user_pages_locked(mm, start, nr_pages, pages, vmas,
+ 					       NULL, gup_flags);
++	/* check_and_migrate_movable_pages() assumes pages have been pinned. */
++	if (WARN_ON(!(gup_flags & FOLL_PIN)))
++		return -EINVAL;
+ 	flags = memalloc_pin_save();
+ 	do {
+ 		rc = __get_user_pages_locked(mm, start, nr_pages, pages, vmas,
+ 					     NULL, gup_flags);
+ 		if (rc <= 0)
+ 			break;
+-		rc = check_and_migrate_movable_pages(rc, pages, gup_flags);
++
++		rc = check_and_migrate_movable_pages(rc, pages);
+ 	} while (!rc);
+ 	memalloc_pin_restore(flags);
+ 
 
-I fixed these up and applied to 5.20/scsi-staging.
-
+base-commit: 360614c01f81f48a89d8b13f8fa69c3ae0a1f5c7
 -- 
-Martin K. Petersen	Oracle Linux Engineering
+git-series 0.9.1

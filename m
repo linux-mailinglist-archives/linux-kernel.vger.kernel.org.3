@@ -2,99 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4781F590BCE
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 08:06:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1129E590BD3
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 08:08:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237122AbiHLGGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 02:06:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44502 "EHLO
+        id S236387AbiHLGIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 02:08:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237227AbiHLGGf (ORCPT
+        with ESMTP id S235319AbiHLGIl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 02:06:35 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D5476EF3E
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 23:06:32 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id x10so18830891plb.3
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 23:06:32 -0700 (PDT)
+        Fri, 12 Aug 2022 02:08:41 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D792CA4B2F
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 23:08:39 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id e8-20020a17090a280800b001f2fef7886eso16329pjd.3
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 23:08:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=VqoFvV/TO3y1CIA8M9e5O4ow47FeHucL7PxBzpxC/0w=;
-        b=mKRxW8AwG1tdS59Wf/Elqzf3p25sXPbEOn6JDBVfSRhFX9wUnbgYiTbo+lXonc240o
-         rTtya6SO0govok7Muu5+ZjLd1o15igqYMoXp/h7kk2DhYPy+GzexbSUNc1kFWL8DvSwO
-         u9FoV95XKQUsIV7jYC+49Ji20uojO6hBCrCRf0cXPMiIsprTmiBvkw/WqqyHha338ZV6
-         yMjcSCSE2DcA0IWDfMstCIrKd8xTyD0hjOdjud30W4xpWRfiLjhLcsFieNTu8YO45evG
-         tzvzba42CpWlJGUWpHCRwXP0pB2CsJZyU0Tex6UkJsWvCex1G2UGRKEvoIckizfu0TYU
-         b1Gg==
+        d=semihalf.com; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=NCnhv/pEtaSBg9KIMYsJIwv7lSODCZztiNlzGMGUZ8Y=;
+        b=aDS02WJdXoQC143tgj0melrqXUgyvbrHHE4veytzxZcs6hJWZ4p74lpt8BUNbfJycM
+         GM0SbqBvEQ+MocPZbYHzAmOM7uMpdDtfx7B7gshPpYRo7BSX6QeBbxXH/F6tRzstoXOP
+         Hq4YqwHMXAN3y7YN81WjpiH4XShsd0D+4ncyGd5jdK8rawjojFI1G1FkxH/bPy+WuZI0
+         3orDNesOSve0KTyzbJZ0m9wTPCS8SQLVoBNGZSRlDfp9qeLTdtqkGr8JVPChRNlh1ysn
+         UtLQBAgFp1AvLbElP1y8UwT6Jt8J3bvSMIfo4BG8RQ8TdMM4qq6kTHc1KGbXVGpWmh/E
+         MNKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=VqoFvV/TO3y1CIA8M9e5O4ow47FeHucL7PxBzpxC/0w=;
-        b=PnTbrHUddsyT1Yro9yO8slAkLzYf8/iRRaL4yXId+62sW5mBaCp3lrOfIpmNWwag69
-         Ar+l6/z5FQcuDkDixLcZM9kxGOAOe2dODpXiQ/aofmZrUS+f5egyOP/HR2uq1VD0VEoT
-         TFW+Bze7RysqvLUReYjqjZ/JlFMwyDVY8iuU+wkxywxjHI5isS4klkioiOGa3z4TP4gl
-         BN8dFTH/kaS8gsLn4L6lEWwpL9mjJbVUTP5TTWwDCxbXvIncHGUra46o8RIeIKzYxYPP
-         hCjaFSbcSgyv/Fb9Tx6GM6oBFO8zgVED5k4IiUT7uZ6/LPea4iLOU5x0Kpx2X64B6ObN
-         Vqkg==
-X-Gm-Message-State: ACgBeo3F1eTO7o++rMjy54SK10F2GjbJZpdU4wIPaoYuYsrnq5XY+dIx
-        v2ygm6nYZU0eojZoME4E5Cec
-X-Google-Smtp-Source: AA6agR79kBzPpdItXrm5o7hoNp8/lQiqeQ5b6uD41yUqGYXm5Y3AB1dkTIUMNBm5keXRO0PV30EdGQ==
-X-Received: by 2002:a17:90a:b00b:b0:1f1:6023:dacd with SMTP id x11-20020a17090ab00b00b001f16023dacdmr11951185pjq.184.1660284392390;
-        Thu, 11 Aug 2022 23:06:32 -0700 (PDT)
-Received: from localhost.localdomain ([59.92.103.103])
-        by smtp.gmail.com with ESMTPSA id f4-20020a170902684400b0016c4147e48asm732395pln.219.2022.08.11.23.06.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Aug 2022 23:06:32 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     bjorn.andersson@linaro.org, bp@alien8.de, mchehab@kernel.org
-Cc:     james.morse@arm.com, rric@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-edac@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_tsoni@quicinc.com,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v2 3/3] MAINTAINERS: Add myself as the maintainer for qcom_edac driver
-Date:   Fri, 12 Aug 2022 11:36:02 +0530
-Message-Id: <20220812060602.7672-4-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220812060602.7672-1-manivannan.sadhasivam@linaro.org>
-References: <20220812060602.7672-1-manivannan.sadhasivam@linaro.org>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=NCnhv/pEtaSBg9KIMYsJIwv7lSODCZztiNlzGMGUZ8Y=;
+        b=KyRumCUS1hs2p4Ux3ABR2+BfRzN/A3jB4vLYM3TfiTGoQLB/wxEp+PlksHs3wJbhih
+         Q9TuCLh1tIBdWZ5o54hnqyQUmA7cyM/wkLGIhhuLRQFmY13GTi0MLLM3l8zePBY3SUSs
+         vwQV1gbsV2Bq//fYPoTVhi6vTCCIxam3uPCkACTgCBdPzV6cTSl4d04HrgZYoozOALiB
+         vu8qYQgLLLvlwmlK839WtBhNtwVogMMQh0mJPsMDYMwY2EGKzt9HJnVkiENGe7XLf3Hd
+         +PtMYFXLAg3qq/w8r7Cicy4CY7/KrSujYRO7Hsd74n7DmEwfnYbyEtn0hkrE/J5UZO37
+         m/Cg==
+X-Gm-Message-State: ACgBeo1orrZXx9OUuz2xeR0gDve3f65ZsqtDPQ3pz1noeadfQUhTWZYu
+        hqhbs8V9Rc+Sdk2XNdC+9UCAPf2jv6lS65BP60fFqw==
+X-Google-Smtp-Source: AA6agR7Xt4qn1yBLEPFZTYt/U7/0q/yFxy7kIlS7Q+rgxokejkk2oPVoC6/9viPfXENo6HDPfVYCT4phxhutqB/fmNE=
+X-Received: by 2002:a17:90b:1d86:b0:1f7:31c6:1cce with SMTP id
+ pf6-20020a17090b1d8600b001f731c61ccemr2595669pjb.192.1660284519440; Thu, 11
+ Aug 2022 23:08:39 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+References: <20220725080240.106619-1-jsd@semihalf.com> <d2be49af-71e4-978b-fe00-8b8fca6f80b5@linux.intel.com>
+In-Reply-To: <d2be49af-71e4-978b-fe00-8b8fca6f80b5@linux.intel.com>
+From:   =?UTF-8?B?SmFuIETEhWJyb8Wb?= <jsd@semihalf.com>
+Date:   Fri, 12 Aug 2022 08:08:28 +0200
+Message-ID: <CAOtMz3OR7LspGvXUo-KWNk=1+nYXDAPZy1YV-WtCOL_ihaVyEw@mail.gmail.com>
+Subject: Re: [PATCH] i2c: designware: Introduce cooldown timer to AMDPSP driver
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        andriy.shevchenko@linux.intel.com, mika.westerberg@linux.intel.com,
+        wsa@kernel.org, rrangel@chromium.org, mw@semihalf.com,
+        upstream@semihalf.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current maintainers have left Qualcomm and their email addresses were
-bouncing. Since I couldn't get hold of them now, I'm volunteering myself
-to maintain this driver.
+wt., 9 sie 2022 o 14:05 Jarkko Nikula <jarkko.nikula@linux.intel.com>
+napisa=C5=82(a):
+>
+> Hi
+>
+> Sorry the delay, this slipped through my eyes during vacation. Couple
+> minor comments below.
+>
+> On 7/25/22 11:02, Jan Dabros wrote:
+> > In order to optimize performance, limit amount of back and forth
+> > transactions between x86 and PSP. This is done by introduction of
+> > cooldown period - that is window in which x86 isn't releasing the bus
+> > immediately after each I2C transaction.
+> >
+> > In order to protect PSP from being starved while waiting for
+> > arbitration, after a programmed time bus is automatically released by a
+> > deferred function.
+> >
+> > Signed-off-by: Jan Dabros <jsd@semihalf.com>
+> > ---
+> >   drivers/i2c/busses/i2c-designware-amdpsp.c | 68 +++++++++++++++++----=
+-
+> >   1 file changed, 53 insertions(+), 15 deletions(-)
+> >
+> > diff --git a/drivers/i2c/busses/i2c-designware-amdpsp.c b/drivers/i2c/b=
+usses/i2c-designware-amdpsp.c
+> > index b624356c945f..2e1bb5ae72c3 100644
+> > --- a/drivers/i2c/busses/i2c-designware-amdpsp.c
+> > +++ b/drivers/i2c/busses/i2c-designware-amdpsp.c
+> > @@ -6,6 +6,7 @@
+> >   #include <linux/io-64-nonatomic-lo-hi.h>
+> >   #include <linux/psp-sev.h>
+> >   #include <linux/types.h>
+> > +#include <linux/workqueue.h>
+> >
+> >   #include <asm/msr.h>
+> >
+> > @@ -15,6 +16,8 @@
+> >   #define PSP_MBOX_OFFSET             0x10570
+> >   #define PSP_CMD_TIMEOUT_US  (500 * USEC_PER_MSEC)
+> >
+> > +#define PSP_I2C_COOLDOWN_TIME_MS 100
+> > +
+>
+> "cooldown" distract me thinking thermal management. Would semaphore
+> reservation time/timer fit better?
 
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- MAINTAINERS | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Yes, it makes sense. I will change this here and in the commit message
+to "semaphore reservation timer".
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 491c7842419a..775f81644bfc 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -7143,8 +7143,7 @@ S:	Maintained
- F:	drivers/edac/pnd2_edac.[ch]
- 
- EDAC-QCOM
--M:	Channagoud Kadabi <ckadabi@codeaurora.org>
--M:	Venkata Narendra Kumar Gutta <vnkgutta@codeaurora.org>
-+M:	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
- L:	linux-arm-msm@vger.kernel.org
- L:	linux-edac@vger.kernel.org
- S:	Maintained
--- 
-2.25.1
+>
+> > +static void release_bus_now(void)
+> > +static void psp_release_i2c_bus_deferred(struct work_struct *work)
+> > +static DECLARE_DELAYED_WORK(release_queue, psp_release_i2c_bus_deferre=
+d);
+> > +
+>
+> I'd use the same namespace here. Perhaps _now can be dropped from the
+> name since the release_bus and release_bus_deferred are near to each
+> other and _deferred variant implies it's called after timeout.
 
+Right, release_bus_now -> release_bus.
+
+>
+> > +     /*
+> > +      * Send a release command to PSP if the cooldown timeout elapsed =
+but x86 still
+> > +      * owns the ctrlr.
+> > +      */
+>
+> Replace "ctrlr" -> "control" here since then it doesn't lead to think
+> is't some technical object like register etc.
+
+This is about "controller" not "control", but I think your comment is
+still applicable.
+
+Best Regards,
+Jan

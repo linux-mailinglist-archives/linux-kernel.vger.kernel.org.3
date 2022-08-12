@@ -2,125 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3A9E590B62
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 06:58:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C681D590B64
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 06:59:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236656AbiHLE6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 00:58:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42932 "EHLO
+        id S236795AbiHLE6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 00:58:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234259AbiHLE5u (ORCPT
+        with ESMTP id S234259AbiHLE6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 00:57:50 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC01979DC
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 21:57:48 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id i14so99755ejg.6
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 21:57:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ionos.com; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=esCwiaYMyxPm/0WM1CWCnpWQTYpwGXFmhJ7X2Uu3/Yw=;
-        b=JONVOUJyQDPrSdFLQKezRHZn0cp7/xVwESrOSFkwCyzegHoJlMH9SrHVAAyyVAOnMF
-         E7mLuuSB1vKmcfJNNcFSxEZuTAo6BghXLL/OpaDMscy9y4LE4INDNTVcTT8BISaWhSm8
-         yXU0nbrZTVOTL70bcgHgJOIUxBHXtXqAHwyOl0hF28kSfGin/QdbXOASmgE0b9rrhOWQ
-         RlF8bs2/vL08Qkvu9DQuWJ9Q83eLHUSG/ZYA3xb7guXdbvHGGIo0fm/MBwU48lxCKFID
-         1m60ntbTzGAor8NagR1I/WzxPqBKhFVNf6bwrimZ21eJTyG4z4YNIku66YO0s1yi/+UM
-         OYXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=esCwiaYMyxPm/0WM1CWCnpWQTYpwGXFmhJ7X2Uu3/Yw=;
-        b=khgJZx4wQJBoOTdNz0r8HxTQPbZKyyIdfhi9mO68YQ11R30iywHUwqudRoVrRYl5g+
-         oYQ5RxJIVQ4RT0Bzcgf6GuQaj4fKjKlZOhPaYXNcfLrlFqTjVPSpLqj3AA7WvLF6j0SD
-         cohhv9oljPwhnmUoiQbiDpVTXwLHKYlr9h4lkUWdafaqnA7QcVWhmh37Z9vVOii3uLt3
-         y4iUxnMHFyaFPGuf9PZiN/jy4SDHE+tLNjLp0g3ZTMBmXIn21vKxlDUKmMzddkq0JwA8
-         5cVKGYoDXESZ6S2boWKGMTiqxC5a2eZ5S8N+YTQLcnx/6UjcDcVcit2VsOutBPs3S+T6
-         qlTA==
-X-Gm-Message-State: ACgBeo2I7iQzS7fknK5gH/4Fdia0i7lUG7WogxPfHWLhCTUwhfiq5Iy4
-        KOtkHG1b0XfkvMM1mgXp4VIgaIQs5Eqh13kmZlQh6g==
-X-Google-Smtp-Source: AA6agR470OyVHzqds4bFdjKNCgWVMFNHfGSWvdl3gh6dNrGtXRPkPR8GBoj2tyRgsTBlmUFU9ZBQM9KdU0GWgNHJz7E=
-X-Received: by 2002:a17:906:d0d0:b0:730:9352:7484 with SMTP id
- bq16-20020a170906d0d000b0073093527484mr1546202ejb.70.1660280266721; Thu, 11
- Aug 2022 21:57:46 -0700 (PDT)
+        Fri, 12 Aug 2022 00:58:49 -0400
+Received: from smtp.smtpout.orange.fr (smtp08.smtpout.orange.fr [80.12.242.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5D85979EE
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 21:58:48 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id MMkwoiWPCbJVVMMkwoGkN2; Fri, 12 Aug 2022 06:58:47 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Fri, 12 Aug 2022 06:58:47 +0200
+X-ME-IP: 90.11.190.129
+Message-ID: <6754c5ec-7b89-0393-659b-5c0487a70138@wanadoo.fr>
+Date:   Fri, 12 Aug 2022 06:58:45 +0200
 MIME-Version: 1.0
-References: <1658489049-232850-1-git-send-email-john.garry@huawei.com>
-In-Reply-To: <1658489049-232850-1-git-send-email-john.garry@huawei.com>
-From:   Jinpu Wang <jinpu.wang@ionos.com>
-Date:   Fri, 12 Aug 2022 06:57:35 +0200
-Message-ID: <CAMGffEky_UeLbEBKWEMjuJ6B6QFuj08uOuUMZK9Qwt+1Gxxqug@mail.gmail.com>
-Subject: Re: [PATCH 0/6] libsas and drivers: NCQ error handling
-To:     John Garry <john.garry@huawei.com>
-Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
-        jinpu.wang@ionos.com, damien.lemoal@opensource.wdc.com,
-        yangxingui@huawei.com, chenxiang66@hisilicon.com, hare@suse.de,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] mm/mremap_pages: Save a few cycles in 'get_dev_pagemap()'
+Content-Language: fr
+To:     akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org
+References: <b4a47154877853cc64be3a35dcfd594d40cc2bce.1635975283.git.christophe.jaillet@wanadoo.fr>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <b4a47154877853cc64be3a35dcfd594d40cc2bce.1635975283.git.christophe.jaillet@wanadoo.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Jul 22, 2022 at 1:30 PM John Garry <john.garry@huawei.com> wrote:
->
-> As reported in [0], the pm8001 driver NCQ error handling more or less
-> duplicates what libata does in link error handling, as follows:
-> - abort all commands
-> - do autopsy with read log ext 10 command
-> - reset the target to recover
->
-> Indeed for the hisi_sas driver we want to add similar handling for NCQ
-> errors.
->
-> This series add a new libsas API - sas_ata_link_abort() - to handle host
-> NCQ errors, and fixes up pm8001 and hisi_sas drivers to use it. As
-> mentioned in the pm8001 changeover patch, I would prefer a better place to
-> locate the SATA ABORT command (rather that nexus reset callback).
->
-> I would appreciate some testing of the pm8001 change as the read log ext10
-> command mostly hangs on my arm64 machine - these arm64 hangs are a known
-> issue.
->
-> Finally with these changes we can make the libsas task alloc/free APIs
-> private, which they should always have been.
->
-> Based on v5.19-rc6
->
-> [0] https://lore.kernel.org/linux-scsi/8fb3b093-55f0-1fab-81f4-e8519810a978@huawei.com/
->
-> John Garry (5):
->   scsi: pm8001: Modify task abort handling for SATA task
->   scsi: libsas: Add sas_ata_link_abort()
->   scsi: pm8001: Use sas_ata_link_abort() to handle NCQ errors
->   scsi: hisi_sas: Don't issue ATA softreset in hisi_sas_abort_task()
->   scsi: libsas: Make sas_{alloc, alloc_slow, free}_task() private
->
-> Xingui Yang (1):
->   scsi: hisi_sas: Add SATA_DISK_ERR bit handling for v3 hw
->
->  drivers/scsi/hisi_sas/hisi_sas_main.c  |   5 +-
->  drivers/scsi/hisi_sas/hisi_sas_v3_hw.c |  22 ++-
->  drivers/scsi/libsas/sas_ata.c          |  10 ++
->  drivers/scsi/libsas/sas_init.c         |   3 -
->  drivers/scsi/libsas/sas_internal.h     |   4 +
->  drivers/scsi/pm8001/pm8001_hwi.c       | 194 +++++++------------------
->  drivers/scsi/pm8001/pm8001_sas.c       |  13 ++
->  drivers/scsi/pm8001/pm8001_sas.h       |   8 +-
->  drivers/scsi/pm8001/pm80xx_hwi.c       | 177 ++--------------------
->  include/scsi/libsas.h                  |   4 -
->  include/scsi/sas_ata.h                 |   5 +
->  11 files changed, 132 insertions(+), 313 deletions(-)
+Le 03/11/2021 à 22:35, Christophe JAILLET a écrit :
+> Use 'percpu_ref_tryget_live_rcu()' instead of 'percpu_ref_tryget_live()' to
+> save a few cycles when it is known that the rcu lock is already
+> taken/released.
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+>   mm/memremap.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/mm/memremap.c b/mm/memremap.c
+> index 84de22c14567..012e8d23d365 100644
+> --- a/mm/memremap.c
+> +++ b/mm/memremap.c
+> @@ -506,7 +506,7 @@ struct dev_pagemap *get_dev_pagemap(unsigned long pfn,
+>   	/* fall back to slow path lookup */
+>   	rcu_read_lock();
+>   	pgmap = xa_load(&pgmap_array, PHYS_PFN(phys));
+> -	if (pgmap && !percpu_ref_tryget_live(pgmap->ref))
+> +	if (pgmap && !percpu_ref_tryget_live_rcu(pgmap->ref))
+>   		pgmap = NULL;
+>   	rcu_read_unlock();
+>   
 
-Thank! John and Damien,
-for pm80xx.
-Acked-by: Jack Wang <jinpu.wang@ionos.com>
-> --
-> 2.35.3
->
+Hi,
+gentle reminder.
+
+Is this patch useful?
+When I first posted it, percpu_ref_tryget_live_rcu() was really new.
+Now it is part of linux since 5.16.
+
+CJ

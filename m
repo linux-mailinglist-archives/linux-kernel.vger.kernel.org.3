@@ -2,108 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EC9B590DE3
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 11:08:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03E21590DE5
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 11:10:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237509AbiHLJIX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 05:08:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51826 "EHLO
+        id S237400AbiHLJKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 05:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231586AbiHLJIV (ORCPT
+        with ESMTP id S231586AbiHLJKO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 05:08:21 -0400
-Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D766EA723D;
-        Fri, 12 Aug 2022 02:08:20 -0700 (PDT)
-Received: by mail-qt1-f180.google.com with SMTP id h4so320322qtj.11;
-        Fri, 12 Aug 2022 02:08:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=ESERLkLG3l6qeYhdj3kGjg5yZs+39sPAfuNqaDJii3o=;
-        b=y7Gsc1ZAtT6g09ReXTrPkPL9YjjsSLBAaPQcHWR4L+zaRnvU3S3Bs/xvpYLBsPc7la
-         AkW92CIL2URuIK/pZ8XBQeHnxNXlU0Hiidk6UhD2MCvihWRsHR34KfD8KODSjfACRn9D
-         iVzEOJkI06F4SITC8CXaGoCXfx7GOe3g+r8glozX7JFFjxuNRNhpv34SlBJuoQ5q/+WJ
-         jl02QEDyrygBUUaezxdU951RMT54EUVDbK9Zpt9oNpqXb7jkBqoWil+8m16LPygcQf04
-         h5gZF2GwRf7h3fLPiylVShzt9KJeV3P9/pLk0VcQdazTHVbmlmb4X0q8uolS0AMP77rI
-         uJNQ==
-X-Gm-Message-State: ACgBeo24Ouldul2q6hLij/5YAgSrCnypdtIJ3BgmfsVP3pJaoqCBZiSd
-        6AkdAeEx98Oo9aO96eLj2J5m3HM8Zo6FTw==
-X-Google-Smtp-Source: AA6agR6LoVrmrzg0XIwzkFerXt0mANGUHbterUUfp/R5IqCJx77WEJjAv2JNJ1zCi/S4jH6Q9cLD5w==
-X-Received: by 2002:a05:622a:8e:b0:31f:371f:e6a1 with SMTP id o14-20020a05622a008e00b0031f371fe6a1mr2658605qtw.565.1660295299921;
-        Fri, 12 Aug 2022 02:08:19 -0700 (PDT)
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
-        by smtp.gmail.com with ESMTPSA id o2-20020ac86982000000b0033a5048464fsm1329513qtq.11.2022.08.12.02.08.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 02:08:19 -0700 (PDT)
-Received: by mail-yb1-f178.google.com with SMTP id 204so574967yba.1;
-        Fri, 12 Aug 2022 02:08:19 -0700 (PDT)
-X-Received: by 2002:a25:880f:0:b0:67c:2727:7e3c with SMTP id
- c15-20020a25880f000000b0067c27277e3cmr2679433ybl.36.1660295299180; Fri, 12
- Aug 2022 02:08:19 -0700 (PDT)
+        Fri, 12 Aug 2022 05:10:14 -0400
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A4AE2611E;
+        Fri, 12 Aug 2022 02:10:10 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R881e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045170;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VM17qn1_1660295406;
+Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VM17qn1_1660295406)
+          by smtp.aliyun-inc.com;
+          Fri, 12 Aug 2022 17:10:07 +0800
+From:   Jingbo Xu <jefflexu@linux.alibaba.com>
+To:     dhowells@redhat.com, linux-cachefs@redhat.com
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        Jingbo Xu <jefflexu@linux.alibaba.com>
+Subject: [PATCH] cachefiles: support multiple daemons
+Date:   Fri, 12 Aug 2022 17:10:05 +0800
+Message-Id: <20220812091005.65540-1-jefflexu@linux.alibaba.com>
+X-Mailer: git-send-email 2.24.4
 MIME-Version: 1.0
-References: <20220726175315.1147-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-In-Reply-To: <20220726175315.1147-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 12 Aug 2022 11:08:07 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWOL75DNP9NWfFpe4FkT56=p1e5qh7tfOy+hn=u9xeg=w@mail.gmail.com>
-Message-ID: <CAMuHMdWOL75DNP9NWfFpe4FkT56=p1e5qh7tfOy+hn=u9xeg=w@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: pinctrl: renesas: Document RZ/Five SoC
-To:     Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linux-Renesas <linux-renesas-soc@vger.kernel.org>,
-        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Prabhakar <prabhakar.csengg@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Jul 26, 2022 at 7:53 PM Lad Prabhakar
-<prabhakar.mahadev-lad.rj@bp.renesas.com> wrote:
-> RZ/Five SoC is pin compatible with RZ/G2UL (Type 1) SoC. This patch
-> updates the comment to include RZ/Five SoC so that we make it clear
-> "renesas,r9a07g043-pinctrl" compatible string will be used for RZ/Five
-> SoC.
->
-> Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+Currently CacheFiles can work in either the original mode caching for
+network filesystems, or on-demand mode for container scenarios. Due to
+the limit of singleton daemon, these two modes can not co-exist.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-i.e. will queue in renesas-pinctrl-for-v6.1.
+The current implementation can already work well in multiple daemon
+mode. This patch only removes the explicit limitation, and thus enabling
+the multiple daemon mdoe.
 
-> --- a/Documentation/devicetree/bindings/pinctrl/renesas,rzg2l-pinctrl.yaml
-> +++ b/Documentation/devicetree/bindings/pinctrl/renesas,rzg2l-pinctrl.yaml
-> @@ -23,7 +23,7 @@ properties:
->      oneOf:
->        - items:
->            - enum:
-> -              - renesas,r9a07g043-pinctrl # RZ/G2UL{Type-1,Type-2}
-> +              - renesas,r9a07g043-pinctrl # RZ/G2UL{Type-1,Type-2} and RZ/Five
->                - renesas,r9a07g044-pinctrl # RZ/G2{L,LC}
->
->        - items:
+Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
+---
+PS:
+Currently all filessytems using fscache (including network filesystems
+and erofs) call fscache_acquire_volume() with @cache_name is NULL, and
+thus they will be bound to the first registered cache. In this case, if
+the first registered cache is in the original mode, mounting erofs will
+fail since the boudn cache is not in on-demand mode.
 
-Gr{oetje,eeting}s,
+This can be fixed by specifying the name of the cache to be bound when
+calling fscache_acquire_volume(). Or adds a flag field to
+fscache_acquire_volume(), specifying if the caller wants to bind a cache
+in on-demand mode or not.
 
-                        Geert
+---
+ fs/cachefiles/daemon.c | 11 +----------
+ 1 file changed, 1 insertion(+), 10 deletions(-)
 
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+diff --git a/fs/cachefiles/daemon.c b/fs/cachefiles/daemon.c
+index aa4efcabb5e3..a4f70516d250 100644
+--- a/fs/cachefiles/daemon.c
++++ b/fs/cachefiles/daemon.c
+@@ -44,8 +44,6 @@ static int cachefiles_daemon_tag(struct cachefiles_cache *, char *);
+ static int cachefiles_daemon_bind(struct cachefiles_cache *, char *);
+ static void cachefiles_daemon_unbind(struct cachefiles_cache *);
+ 
+-static unsigned long cachefiles_open;
+-
+ const struct file_operations cachefiles_daemon_fops = {
+ 	.owner		= THIS_MODULE,
+ 	.open		= cachefiles_daemon_open,
+@@ -95,16 +93,10 @@ static int cachefiles_daemon_open(struct inode *inode, struct file *file)
+ 	if (!capable(CAP_SYS_ADMIN))
+ 		return -EPERM;
+ 
+-	/* the cachefiles device may only be open once at a time */
+-	if (xchg(&cachefiles_open, 1) == 1)
+-		return -EBUSY;
+-
+ 	/* allocate a cache record */
+ 	cache = kzalloc(sizeof(struct cachefiles_cache), GFP_KERNEL);
+-	if (!cache) {
+-		cachefiles_open = 0;
++	if (!cache)
+ 		return -ENOMEM;
+-	}
+ 
+ 	mutex_init(&cache->daemon_mutex);
+ 	init_waitqueue_head(&cache->daemon_pollwq);
+@@ -169,7 +161,6 @@ void cachefiles_put_unbind_pincount(struct cachefiles_cache *cache)
+ {
+ 	if (refcount_dec_and_test(&cache->unbind_pincount)) {
+ 		cachefiles_daemon_unbind(cache);
+-		cachefiles_open = 0;
+ 		kfree(cache);
+ 	}
+ }
+-- 
+2.24.4
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds

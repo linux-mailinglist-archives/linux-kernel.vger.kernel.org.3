@@ -2,72 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8EF1590D7B
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 10:38:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A917590D80
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 10:39:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237209AbiHLIhy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 04:37:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48308 "EHLO
+        id S237134AbiHLIi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 04:38:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbiHLIhw (ORCPT
+        with ESMTP id S233656AbiHLIiX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 04:37:52 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0703B1D30E;
-        Fri, 12 Aug 2022 01:37:50 -0700 (PDT)
+        Fri, 12 Aug 2022 04:38:23 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F236B1D30E
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 01:38:22 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id A7BB95D8BE;
-        Fri, 12 Aug 2022 08:37:49 +0000 (UTC)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 9C5375D8C1;
+        Fri, 12 Aug 2022 08:38:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1660293469; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1660293501; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=UbmWpFkpApDPJOHvAwjNrdzDRvMZrYyTIHiHM42vPww=;
-        b=r4YpmcWb6e8hNA4kkJ6h/6/JAuunNt6riec/xa/pEUFUWOtTBN8B9fX4BhVDANh3A8j8n4
-        tcPrMocXWNMKVui0g+IE7wB3HgMx8YbKqPPWG03M0CbZJQ0W2rn5i4/zcLdclGbVN3mg04
-        hgFqCQXvHfMftY2xZgT62iDX8FcIT/Y=
+        bh=kV1UzYIZx69PN5iFgfhSXyDtj/XNGOwO+E2oqRdSLB0=;
+        b=gfp6NkLdUbrvQNINTunx+CdJPWZ1t/IT3FQQcc9GniJMHYCfy9/eYN8VAHHBGZpcj18J0k
+        Rge0dQZ6ob7RHJcbzm+uBD7s/x698RVTVZ0MOXF5wlls5i8Btw9cCWHQAtsmbTkYwLmQWJ
+        8QY61seQF1U0+cihv297LUUIsitP5mA=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4980D13305;
-        Fri, 12 Aug 2022 08:37:49 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7084513305;
+        Fri, 12 Aug 2022 08:38:21 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id tuibDl0R9mLaKQAAMHmgww
-        (envelope-from <jgross@suse.com>); Fri, 12 Aug 2022 08:37:49 +0000
-Message-ID: <95f56cca-473f-98fa-86a0-b8bad120755a@suse.com>
-Date:   Fri, 12 Aug 2022 10:37:48 +0200
+        id a+vpGX0R9mIYKgAAMHmgww
+        (envelope-from <jgross@suse.com>); Fri, 12 Aug 2022 08:38:21 +0000
+Message-ID: <e0796434-08dd-4027-bca2-cb56f801ae7a@suse.com>
+Date:   Fri, 12 Aug 2022 10:38:20 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH 4/4] MAINTAINERS: add xen config fragments to XEN
- HYPERVISOR sections
+Subject: Re: [PATCH] xen/pciback: Fix comment typo
 Content-Language: en-US
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        xen-devel@lists.xenproject.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H . Peter Anvin" <hpa@zytor.com>, kernel-janitors@vger.kernel.org,
+To:     Jason Wang <wangborong@cdjrlc.com>, oleksandr_tyshchenko@epam.com
+Cc:     sstabellini@kernel.org, xen-devel@lists.xenproject.org,
         linux-kernel@vger.kernel.org
-References: <20220810050712.9539-1-lukas.bulwahn@gmail.com>
- <20220810050712.9539-5-lukas.bulwahn@gmail.com>
+References: <20220811120918.17961-1-wangborong@cdjrlc.com>
 From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20220810050712.9539-5-lukas.bulwahn@gmail.com>
+In-Reply-To: <20220811120918.17961-1-wangborong@cdjrlc.com>
 Content-Type: multipart/signed; micalg=pgp-sha256;
  protocol="application/pgp-signature";
- boundary="------------Lcfd6Qatd7zQu01u2KUUv53A"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+ boundary="------------cQjZJI1HhfMMmCvzSghYt6x3"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -75,39 +66,31 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------Lcfd6Qatd7zQu01u2KUUv53A
-Content-Type: multipart/mixed; boundary="------------9j0VkncW8znW7JGdM43kmIKm";
+--------------cQjZJI1HhfMMmCvzSghYt6x3
+Content-Type: multipart/mixed; boundary="------------l7vOvYX0w8dv0wq7c7NxyknY";
  protected-headers="v1"
 From: Juergen Gross <jgross@suse.com>
-To: Lukas Bulwahn <lukas.bulwahn@gmail.com>,
- Boris Ostrovsky <boris.ostrovsky@oracle.com>,
- Stefano Stabellini <sstabellini@kernel.org>,
- Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
- xen-devel@lists.xenproject.org
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
- kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-ID: <95f56cca-473f-98fa-86a0-b8bad120755a@suse.com>
-Subject: Re: [PATCH 4/4] MAINTAINERS: add xen config fragments to XEN
- HYPERVISOR sections
-References: <20220810050712.9539-1-lukas.bulwahn@gmail.com>
- <20220810050712.9539-5-lukas.bulwahn@gmail.com>
-In-Reply-To: <20220810050712.9539-5-lukas.bulwahn@gmail.com>
+To: Jason Wang <wangborong@cdjrlc.com>, oleksandr_tyshchenko@epam.com
+Cc: sstabellini@kernel.org, xen-devel@lists.xenproject.org,
+ linux-kernel@vger.kernel.org
+Message-ID: <e0796434-08dd-4027-bca2-cb56f801ae7a@suse.com>
+Subject: Re: [PATCH] xen/pciback: Fix comment typo
+References: <20220811120918.17961-1-wangborong@cdjrlc.com>
+In-Reply-To: <20220811120918.17961-1-wangborong@cdjrlc.com>
 
---------------9j0VkncW8znW7JGdM43kmIKm
-Content-Type: multipart/mixed; boundary="------------aaC30w5mOpNnrvMAtlksEXPX"
+--------------l7vOvYX0w8dv0wq7c7NxyknY
+Content-Type: multipart/mixed; boundary="------------3D0uXZfg3pUrj61LN0IDM3Zq"
 
---------------aaC30w5mOpNnrvMAtlksEXPX
+--------------3D0uXZfg3pUrj61LN0IDM3Zq
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: base64
 
-T24gMTAuMDguMjIgMDc6MDcsIEx1a2FzIEJ1bHdhaG4gd3JvdGU6DQo+IE1ha2UgY2hhbmdl
-cyB0byB0aGUgeGVuIGNvbmZpZyBmcmFnbWVudHMgcmVhY2ggdGhlIFhFTiBIWVBFUlZJU09S
-DQo+IG1haW50YWluZXJzIGFuZCBtYWlsaW5nIGxpc3QuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5
-OiBMdWthcyBCdWx3YWhuIDxsdWthcy5idWx3YWhuQGdtYWlsLmNvbT4NCg0KUmV2aWV3ZWQt
-Ynk6IEp1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT4NCg0KDQpKdWVyZ2VuDQo=
---------------aaC30w5mOpNnrvMAtlksEXPX
+T24gMTEuMDguMjIgMTQ6MDksIEphc29uIFdhbmcgd3JvdGU6DQo+IFRoZSBkb3VibGUgYHRo
+ZScgaXMgZHVwbGljYXRlZCBpbiB0aGUgY29tbWVudCwgcmVtb3ZlIG9uZS4NCj4gDQo+IFNp
+Z25lZC1vZmYtYnk6IEphc29uIFdhbmcgPHdhbmdib3JvbmdAY2RqcmxjLmNvbT4NCg0KUmV2
+aWV3ZWQtYnk6IEp1ZXJnZW4gR3Jvc3MgPGpncm9zc0BzdXNlLmNvbT4NCg0KDQpKdWVyZ2Vu
+DQo=
+--------------3D0uXZfg3pUrj61LN0IDM3Zq
 Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
 Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
 Content-Description: OpenPGP public key
@@ -165,24 +148,24 @@ jR/i1DG86lem3iBDXzXsZDn8R38=3D
 =3D2wuH
 -----END PGP PUBLIC KEY BLOCK-----
 
---------------aaC30w5mOpNnrvMAtlksEXPX--
+--------------3D0uXZfg3pUrj61LN0IDM3Zq--
 
---------------9j0VkncW8znW7JGdM43kmIKm--
+--------------l7vOvYX0w8dv0wq7c7NxyknY--
 
---------------Lcfd6Qatd7zQu01u2KUUv53A
+--------------cQjZJI1HhfMMmCvzSghYt6x3
 Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="OpenPGP_signature"
 
 -----BEGIN PGP SIGNATURE-----
 
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmL2EVwFAwAAAAAACgkQsN6d1ii/Ey9B
-Gwf6As95iY1E1ir/y4X1OTe0Gw/ch4BeRoNjTjKmzRuGEUtU20bHCUOfor3nSEmBV3fjz94nedz4
-bwncAbHyRayQd8E3o7RjFdUroQwaOi+O+2REPinkm5LBQ3mtpuoqOMjaTWAoeGnZX5ya5jGmvb2o
-rBoMq2EVdcN4Z4FjTyskY9pOO4f0S6aGz2VcsO+RloKdKs6DhINMMcHedj+fRHQXe9d7xCcXam+m
-26L/cnTiOxQPziyra7a6WWLhheZhZYNerMjsRMBzeS50maJHc6oaa3TqkgLDyOAZkaHIhw2rZaWY
-BAAR1San9dcMoVvTeBtz4EkF96/TpYUDe12ur7ih9g==
-=MKNj
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmL2EX0FAwAAAAAACgkQsN6d1ii/Ey9Z
+RAf8CnRHO/iiG/CpxnSMmi+IP28dSfLliv2h7FD4URwh7QQrfzwaYmm/bMqMEdZjdrFOfogEpfVI
+kmO16o05H6qDRAZOwmzFNDURurX5jsKxt9YiSrJyQnSGoCvXMd3AsruWx99nxjAZU13+jmuwdMCk
+kjR/2eJ1LiZUFbtKON67g+62EtS8oOPKl2zPKe3fDUQtZSFAcN31sRKhoPTyypDgQg96ThX0PoFB
+jownA9UK88zhlRZMBwMuzZixOGP9UwSoPGr9jh7HtsEfeIcB3KvaKQ6DjegqbIlKLI20lWoZsScK
+7bVgvUw2gr0ekP/jHZa7U3EIG8wmiBTxzg+5DgE4DQ==
+=UWzH
 -----END PGP SIGNATURE-----
 
---------------Lcfd6Qatd7zQu01u2KUUv53A--
+--------------cQjZJI1HhfMMmCvzSghYt6x3--

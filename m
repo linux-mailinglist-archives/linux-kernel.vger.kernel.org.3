@@ -2,113 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 206BB590A4D
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 04:33:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D73D590A4F
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 04:33:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236810AbiHLCdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 22:33:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40488 "EHLO
+        id S236843AbiHLCdZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 22:33:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235200AbiHLCdF (ORCPT
+        with ESMTP id S235200AbiHLCdX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 22:33:05 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 127C248E85
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 19:33:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660271584; x=1691807584;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=M24ylaQ7N07IlXWcFaN8JMuQq6Bs6bvLHfGnyour5i0=;
-  b=m8UAeEUEDb1RNK54S1hDgpWeEMCs5LLm64FezbgRIWCfkO+CRyQN4rs2
-   WwL2vTbRCgyvfC0vjQGW8kA0L8KGlaKY/7+uaVD9hewqpsy/1rhKn4kZl
-   HnnAYBc7pWm/XPhms2EPk3xQwFjSe7DT3F4LX3z9rsgA3whHDoD1IGldJ
-   nzulXV3ptGrM9SceXPA8SbW+71vB9kPqSgI3mjvGsKQgAZk7JGokkwdyY
-   anFFvvsWr5axvUBHa6zrR2/XUMk9BJ2ttvHFnVbw8vALKhQChTuSueVD5
-   O/H9dQbKSITg8WJrNxtYoGOZ6gWzcgjF8AQSAqdOUsZfEVZv45pYcux0B
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10436"; a="292769553"
-X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
-   d="scan'208";a="292769553"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 19:33:02 -0700
-X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
-   d="scan'208";a="556369687"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 19:32:59 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Minchan Kim <minchan@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Andi Kleen <andi.kleen@intel.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>
-Subject: Re: [PATCH v3 5/7] mm: Remember young/dirty bit for page migrations
-References: <20220809220100.20033-1-peterx@redhat.com>
-        <20220809220100.20033-6-peterx@redhat.com>
-        <YvUeB0jc6clz59z5@xz-m1.local>
-Date:   Fri, 12 Aug 2022 10:32:48 +0800
-In-Reply-To: <YvUeB0jc6clz59z5@xz-m1.local> (Peter Xu's message of "Thu, 11
-        Aug 2022 11:19:35 -0400")
-Message-ID: <87pmh6dwdr.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Thu, 11 Aug 2022 22:33:23 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8033C9E136;
+        Thu, 11 Aug 2022 19:33:22 -0700 (PDT)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.57])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4M3nhH0kWRz1M8fd;
+        Fri, 12 Aug 2022 10:30:07 +0800 (CST)
+Received: from [10.174.177.174] (10.174.177.174) by
+ dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 12 Aug 2022 10:33:20 +0800
+Message-ID: <e10617e8-1a21-a046-8256-66ffc6500ae9@huawei.com>
+Date:   Fri, 12 Aug 2022 10:33:20 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.1
+From:   Baokun Li <libaokun1@huawei.com>
+Subject: Re: [PATCH] ext4: fix bug in extents parsing when number of entries
+ in header is zero
+To:     =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>
+CC:     <wenqingliu0120@gmail.com>, <linux-ext4@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        "zhangyi (F)" <yi.zhang@huawei.com>, <yebin10@huawei.com>,
+        "yukuai (C)" <yukuai3@huawei.com>, Baokun Li <libaokun1@huawei.com>
+References: <bug-215941-13602@https.bugzilla.kernel.org/>
+ <20220805140025.26295-1-lhenriques@suse.de>
+In-Reply-To: <20220805140025.26295-1-lhenriques@suse.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.174]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500021.china.huawei.com (7.185.36.21)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Peter Xu <peterx@redhat.com> writes:
+在 2022/8/5 22:00, Luís Henriques 写道:
+> When walking through an inode extents, the ext4_ext_binsearch_idx() function
+> assumes that the extent header has been previously validated.  However,
+> there are no checks that verify that the number of entries (eh->eh_entries)
+> is non-zero.  And this will lead to problems because the EXT_FIRST_INDEX()
+> and EXT_LAST_INDEX() will return garbage and result in this:
+>
+> [  135.245946] ------------[ cut here ]------------
+> [  135.247579] kernel BUG at fs/ext4/extents.c:2258!
+> [  135.249045] invalid opcode: 0000 [#1] PREEMPT SMP
+> [  135.250320] CPU: 2 PID: 238 Comm: tmp118 Not tainted 5.19.0-rc8+ #4
+> [  135.252067] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.15.0-0-g2dd4b9b-rebuilt.opensuse.org 04/01/2014
+> [  135.255065] RIP: 0010:ext4_ext_map_blocks+0xc20/0xcb0
+> [  135.256475] Code:
+> [  135.261433] RSP: 0018:ffffc900005939f8 EFLAGS: 00010246
+> [  135.262847] RAX: 0000000000000024 RBX: ffffc90000593b70 RCX: 0000000000000023
+> [  135.264765] RDX: ffff8880038e5f10 RSI: 0000000000000003 RDI: ffff8880046e922c
+> [  135.266670] RBP: ffff8880046e9348 R08: 0000000000000001 R09: ffff888002ca580c
+> [  135.268576] R10: 0000000000002602 R11: 0000000000000000 R12: 0000000000000024
+> [  135.270477] R13: 0000000000000000 R14: 0000000000000024 R15: 0000000000000000
+> [  135.272394] FS:  00007fdabdc56740(0000) GS:ffff88807dd00000(0000) knlGS:0000000000000000
+> [  135.274510] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [  135.276075] CR2: 00007ffc26bd4f00 CR3: 0000000006261004 CR4: 0000000000170ea0
+> [  135.277952] Call Trace:
+> [  135.278635]  <TASK>
+> [  135.279247]  ? preempt_count_add+0x6d/0xa0
+> [  135.280358]  ? percpu_counter_add_batch+0x55/0xb0
+> [  135.281612]  ? _raw_read_unlock+0x18/0x30
+> [  135.282704]  ext4_map_blocks+0x294/0x5a0
+> [  135.283745]  ? xa_load+0x6f/0xa0
+> [  135.284562]  ext4_mpage_readpages+0x3d6/0x770
+> [  135.285646]  read_pages+0x67/0x1d0
+> [  135.286492]  ? folio_add_lru+0x51/0x80
+> [  135.287441]  page_cache_ra_unbounded+0x124/0x170
+> [  135.288510]  filemap_get_pages+0x23d/0x5a0
+> [  135.289457]  ? path_openat+0xa72/0xdd0
+> [  135.290332]  filemap_read+0xbf/0x300
+> [  135.291158]  ? _raw_spin_lock_irqsave+0x17/0x40
+> [  135.292192]  new_sync_read+0x103/0x170
+> [  135.293014]  vfs_read+0x15d/0x180
+> [  135.293745]  ksys_read+0xa1/0xe0
+> [  135.294461]  do_syscall_64+0x3c/0x80
+> [  135.295284]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+>
+> Unfortunately, __ext4_ext_check() only verifies that eh->eh_entries doesn't
+> exceed eh->eh_max.  And since an empty leaf seems to be a valid value in
+> same cases, adding this extra check there isn't an option.
+>
+> This patch simply adds the check directly in ext4_ext_binsearch_idx() and
+> propagates this error so that the kernel doesn't hit this BUG_ON() in
+> ext4_ext_determine_hole().
+>
+> Link:https://bugzilla.kernel.org/show_bug.cgi?id=215941
+> Signed-off-by: Luís Henriques<lhenriques@suse.de>
+> ---
+>   fs/ext4/extents.c | 13 ++++++++++---
+>   1 file changed, 10 insertions(+), 3 deletions(-)
+>
+> Hi!
+>
+> This bug is easily reproducible using the filesystem image provided --
+> it's just a matter of mounting it and run:
+>
+>      $ cat /mnt/foo/bar/xattr
 
-> On Tue, Aug 09, 2022 at 06:00:58PM -0400, Peter Xu wrote:
->> diff --git a/mm/migrate_device.c b/mm/migrate_device.c
->> index 27fb37d65476..699f821b8443 100644
->> --- a/mm/migrate_device.c
->> +++ b/mm/migrate_device.c
->> @@ -221,6 +221,10 @@ static int migrate_vma_collect_pmd(pmd_t *pmdp,
->>  			else
->>  				entry = make_readable_migration_entry(
->>  							page_to_pfn(page));
->> +			if (pte_young(pte))
->> +				entry = make_migration_entry_young(entry);
->> +			if (pte_dirty(pte))
->> +				entry = make_migration_entry_dirty(entry);
->>  			swp_pte = swp_entry_to_pte(entry);
->>  			if (pte_present(pte)) {
->>  				if (pte_soft_dirty(pte))
+Hi Luís,
+yeah, that's a good catch!
+> Anyway, I hope my analysis of the bug is correct -- the root cause seems
+> to be an extent header with an invalid value for in eh_entries, which will
+> later cause the BUG_ON().
 >
-> This change needs to be wrapped with pte_present() at least..
->
-> I also just noticed that this change probably won't help anyway because:
->
->   (1) When ram->device, the pte will finally be replaced with a device
->       private entry, and device private entry does not yet support A/D, it
->       means A/D will be dropped again,
->
->   (2) When device->ram, we are missing information on either A/D bits, or
->       even if device private entries start to suport A/D, it's still not
->       clear whether we should take device read/write into considerations
->       too on the page A/D bits to be accurate.
->
-> I think I'll probably keep the code there for completeness, but I think it
-> won't really help much until more things are done.
+> Cheers,
+> --
+> Luís
+But there's a little bit of a deviation in your understanding of the 
+problem,
+so the patch doesn't look good.
+The issue is caused by the contradiction between eh_entries and eh_depth.
+Therefore, we need to check the contradiction instead of adding a 
+judgment to ext4_ext_binsearch_idx.
+So the right fix is to add a check to __ext4_ext_check like:
 
-It appears that there are more issues.  Between "pte = *ptep" and pte
-clear, CPU may set A/D bit in PTE, so we may need to update pte when
-clearing PTE.  And I don't find the TLB is flushed in some cases after
-PTE is cleared.
+diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
+index c148bb97b527..2dfd35f727cb 100644
+--- a/fs/ext4/extents.c
++++ b/fs/ext4/extents.c
+@@ -460,6 +460,10 @@ static int __ext4_ext_check(const char *function, 
+unsigned int line,
+                 error_msg = "invalid eh_entries";
+                 goto corrupted;
+         }
++       if (unlikely((eh->eh_entries == 0) && (depth > 0))) {
++               error_msg = "contradictory eh_entries and eh_depth";
++               goto corrupted;
++       }
+         if (!ext4_valid_extent_entries(inode, eh, lblk, &pblk, depth)) {
+                 error_msg = "invalid extent entries";
+                 goto corrupted;
 
-Best Regards,
-Huang, Ying
+In this way, we can fix this issue and check for header exceptions 
+before calling ext4_ext_binsearch_idx.
+
+Thanks!
+-- 
+With Best Regards,
+Baokun Li
+

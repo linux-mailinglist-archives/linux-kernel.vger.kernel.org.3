@@ -2,74 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4C2459145B
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 18:55:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09E7A591468
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 18:56:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbiHLQzD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 12:55:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54940 "EHLO
+        id S239152AbiHLQ4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 12:56:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiHLQy7 (ORCPT
+        with ESMTP id S238551AbiHLQ4G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 12:54:59 -0400
-Received: from mail-il1-f180.google.com (mail-il1-f180.google.com [209.85.166.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ACF5B07DA;
-        Fri, 12 Aug 2022 09:54:59 -0700 (PDT)
-Received: by mail-il1-f180.google.com with SMTP id z13so755751ilq.9;
-        Fri, 12 Aug 2022 09:54:59 -0700 (PDT)
+        Fri, 12 Aug 2022 12:56:06 -0400
+Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4652C37FAD;
+        Fri, 12 Aug 2022 09:56:05 -0700 (PDT)
+Received: by mail-io1-f49.google.com with SMTP id i84so1255758ioa.6;
+        Fri, 12 Aug 2022 09:56:05 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=fRm+MK443iv+bWqysNNlWEdx5OQMpvKZbcU7Wh8UXuE=;
-        b=0h6S05Hx7CJjzexBNhziPCTLQdJkIC0j0zQpgqgTXb62uhMEULKJlePz/DmXmPFSQY
-         Jm/steKaS2nz64CdFoO3hlRupQEOkm7CFt+5+zy5V19ryUZPsD+cy7yjuv7zvmWYZ7I1
-         mwocLGY6PnOGn35rbLDSR++QNRebT1DbDMEmTg/xLNgH0IM1GDTEsImSDZvG+D+V2Vsc
-         0U8fNuSBR+hVi1Zo3wqL4mHylRu4Kt/GHwYvW7PC6RD05Z8UnYWnsbQBsbrb3Kmj0oVN
-         hzztvMPhXLSUxOg2h+209mOVerifzs+alrQ8cNX84c1k7+CmO8c8tej7H8hbogDYpZi9
-         nO4g==
-X-Gm-Message-State: ACgBeo3hPiuZD5ZX/Fh7bm2W3aQmIHl9zZBjFCOyAjfW7SmUkQOeLtTk
-        IvFDzTWSdVAbL1jUG10xZw==
-X-Google-Smtp-Source: AA6agR6tiAMmjfHF8/Q9cMoh1KscSKGBxd6+ZvSHYQseYcfmbrN92lYw48Pzhq+xNnC/wejeACiZbA==
-X-Received: by 2002:a05:6e02:148c:b0:2de:c3b:91d with SMTP id n12-20020a056e02148c00b002de0c3b091dmr2342165ilk.95.1660323298542;
-        Fri, 12 Aug 2022 09:54:58 -0700 (PDT)
+        bh=lA3f3otAT+iFQtPwg3K/WfF7yz98PPxitrFwV9W2g10=;
+        b=m14Tso7rFtjsOjjDaIOL3sKQphBYMiZjLjROXu6CJQZGpG28ncFAg1kUW4m8CHTipa
+         SzCVlxbWSCnj13McDxPG81pKQtLUXNxXqkPfLrauQ8UaEsYabU2hHCio7sBg4q90jX02
+         zvji2oOtwmXfLYfHF5o0esHfjkC8MuTI7SiydEcTAgSN+CzcHB8pRuUBZyvrhQqlX143
+         YHX5ihJwdmLDX5AihljqRzyPGFJAM9TWmTIXQH2cuC7VlG543zL+mFOTmtLf6vIcdBKP
+         1b4tlWB5VHjpFNO2N0NoTRgciwHo8KbZ5DlAKzzHdhr7Ev6gB02ANhdbTApVgYEDgE56
+         CXEw==
+X-Gm-Message-State: ACgBeo00WsfLCsUtlzXHPMF+i3h23KDnthX+wcvIcz10M6TGcnHW960/
+        jfuNmFlTeTQxDsh3FXDppQ==
+X-Google-Smtp-Source: AA6agR53ym77b2F1XAcoznh/2AR8P2rUYI8OEORisaCv7oueGq+oRS+W6sU+MQqeAu6IWP9MJSYfpw==
+X-Received: by 2002:a05:6602:2d0d:b0:684:9906:9fd with SMTP id c13-20020a0566022d0d00b00684990609fdmr1918800iow.86.1660323364503;
+        Fri, 12 Aug 2022 09:56:04 -0700 (PDT)
 Received: from robh.at.kernel.org ([64.188.179.248])
-        by smtp.gmail.com with ESMTPSA id o4-20020a927304000000b002e4c8200225sm141783ilc.39.2022.08.12.09.54.56
+        by smtp.gmail.com with ESMTPSA id z16-20020a05663822b000b003427170b558sm87140jas.57.2022.08.12.09.56.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Aug 2022 09:54:58 -0700 (PDT)
-Received: (nullmailer pid 315561 invoked by uid 1000);
-        Fri, 12 Aug 2022 16:54:55 -0000
-Date:   Fri, 12 Aug 2022 10:54:55 -0600
+        Fri, 12 Aug 2022 09:56:03 -0700 (PDT)
+Received: (nullmailer pid 317289 invoked by uid 1000);
+        Fri, 12 Aug 2022 16:56:02 -0000
+Date:   Fri, 12 Aug 2022 10:56:02 -0600
 From:   Rob Herring <robh@kernel.org>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
+Cc:     Guenter Roeck <groeck@chromium.org>,
+        Benson Leung <bleung@chromium.org>,
+        linux-kernel@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Pavel Machek <pavel@ucw.cz>,
-        Tim Harvey <tharvey@gateworks.com>, Lee Jones <lee@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Sebastian Reichel <sre@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>, Andrew Davis <afd@ti.com>,
-        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-fbdev@vger.kernel.org, linux-leds@vger.kernel.org,
-        netdev@vger.kernel.org, linux-pm@vger.kernel.org,
-        alsa-devel@alsa-project.org
-Subject: Re: [PATCH v2 0/5] iio/hwmon/mfd/leds/net/power/ASoC: dt-bindings:
- few stale maintainers cleanup
-Message-ID: <20220812165455.GA315443-robh@kernel.org>
-References: <20220809162752.10186-1-krzysztof.kozlowski@linaro.org>
+        chrome-platform@lists.linux.dev, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Prashant Malani <pmalani@chromium.org>
+Subject: Re: [PATCH v2] dt-bindings: chrome: google,cros-ec-typec: restrict
+ allowed properties
+Message-ID: <20220812165602.GA317229-robh@kernel.org>
+References: <20220811062245.4316-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220809162752.10186-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220811062245.4316-1-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
@@ -81,39 +69,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 09, 2022 at 07:27:47PM +0300, Krzysztof Kozlowski wrote:
-> Hi,
+On Thu, 11 Aug 2022 09:22:45 +0300, Krzysztof Kozlowski wrote:
+> Describe exactly what properties are allowed in Google Chrome OS EC Type
+> C port, so the schema can properly validate the DTS.  Existing DTS
+> defines always connectors with unit addresses, not a sole "connector"
+> child.
 > 
-> Changes since v1
-> ================
-> 1. Patch #5: Drop also Ricardo Rivera-Matos and assign TI bindings to Andrew Davis
-> 2. Add acks.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Acked-by: Prashant Malani <pmalani@chromium.org>
 > 
-> A question
-> ==========
+> ---
 > 
-> Several of the bindings here had only one maintainer and history does not
-> always point to a new one (although I did not perform extensive digging). I
-> added subsystem maintainer, because dtschema requires an entry with valid email address.
+> Cc: Bjorn Andersson <bjorn.andersson@linaro.org>
 > 
-> This is not the best choice as simply subsystem maintainer might not have the
-> actual device (or its datasheets or any interest in it).
+> Changes since v1:
+> 1. Correct subject prefix
+> ---
+>  .../bindings/chrome/google,cros-ec-typec.yaml     | 15 +++++++++++++--
+>  1 file changed, 13 insertions(+), 2 deletions(-)
 > 
-> Maybe we could add some "orphaned" entry in such case?
 
-It would need to be obvious to not use for a new binding.
-
-> 
-> Best regards,
-> Krzysztof
-> 
-> Krzysztof Kozlowski (5):
->   dt-bindings: iio: Drop Joachim Eastwood
->   dt-bindings: iio: Drop Bogdan Pricop
->   dt-bindings: Drop Beniamin Bia and Stefan Popa
->   dt-bindings: Drop Robert Jones
->   dt-bindings: Drop Dan Murphy and Ricardo Rivera-Matos
-
-Series applied for 6.0-rc1.
-
-Rob
+Applied, thanks!

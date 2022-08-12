@@ -2,134 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF672590D87
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 10:41:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92E54590D6A
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 10:33:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237304AbiHLIkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 04:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50098 "EHLO
+        id S235079AbiHLIdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 04:33:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237326AbiHLIkQ (ORCPT
+        with ESMTP id S229552AbiHLIdM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 04:40:16 -0400
-X-Greylist: delayed 505 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 12 Aug 2022 01:40:14 PDT
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D0DBEA;
-        Fri, 12 Aug 2022 01:40:13 -0700 (PDT)
-Date:   Fri, 12 Aug 2022 10:31:44 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=t-8ch.de; s=mail;
-        t=1660293104; bh=wDg6UBM71uMikyiOtiwiJmqJ+yurtqkNI7534WQKogc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EF2OL4H9HtMyHEQNDskMDUjBotKdr9ltPIbv3ExUgVX74avgOuxmBWaGcYnKECaJ3
-         WTovhYZdVbXcuc8sHuH692VXTO+NJFw6auxnhVhunDOIhwNxo6Jji7PHnUxFffgqyI
-         9tbMjcotTk3+XO+M626axEhFu52fcWmGGcVDvPBM=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>
-To:     Hans de Goede <hdegoede@redhat.com>
-Cc:     Luke Jones <luke@ljones.dev>, andy.shevchenko@gmail.com,
-        pobrn@protonmail.com, pavel@ucw.cz,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 6/6] asus-wmi: Support the hardware GPU MUX on some
- laptops
-Message-ID: <0239b3bb-d9cb-4549-9e9e-006923b61634@t-8ch.de>
-References: <20220809025054.1626339-1-luke@ljones.dev>
- <20220809025054.1626339-7-luke@ljones.dev>
- <7365d41a-1475-118c-96a8-6ab927bda5b7@redhat.com>
- <9ed62983bd03ed26cdb4399dd69b4096e8711fa9.camel@ljones.dev>
- <b287e98a-7880-5979-94a4-38715d448de4@redhat.com>
+        Fri, 12 Aug 2022 04:33:12 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 743629DB55;
+        Fri, 12 Aug 2022 01:33:11 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id fy5so838932ejc.3;
+        Fri, 12 Aug 2022 01:33:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc;
+        bh=0mFuBwdVPqFlV7N56fSA5adSdmVH4jP4hL7xdmNu1TE=;
+        b=pS5SodMoU4hQS4XknHVjinNRjg577EauBYA6bS5qrDsjfMvBJvYU21NvSHcjUOBVPS
+         612iHeuvowrJW9LiJ5jXaZPZC5MJ4jchKgXxq6vJte8QSlI/Xi2dLNoQd3WqefxWLCJN
+         BxdF6/o0jab2c2P2IVGxMcXlpYeCm4gRjhZTkr9HRhgGz8Ez2IW1lBOgDUTdl6FU+kBD
+         Ox6vBglTUlQvT5PxIlvHBbqRWzmXYuStvL7U6Br1F9wcRz7+y22Yxs7PwRk7X/1lPVm2
+         P3BtctD056FcgzakKCLlvZOmKHkOvH1fD61L4SL+ECnH1qq/8MAaXE+wtYdzrKSPVhjt
+         5Z4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc;
+        bh=0mFuBwdVPqFlV7N56fSA5adSdmVH4jP4hL7xdmNu1TE=;
+        b=TIdeTdx333GWTm6kFut3AG8CpXu5+vkVSIlsdB6TrR/uNCdWcQe5KwxUuK/wCkQFxl
+         aiijykmatuALeSkdA5CllmoV/L4IThUGs+y37xh9odIhSads97BnD+DE0aNViKX0QN74
+         KH+9PUhRWEScLtliTy9taLtRjmauymgTn0ayJBm/yIxV0HPLvWLkoP8kZnsG+U+d0qKa
+         9D1bWcENTvsJ8HLdaXBuOQjMugYWG8M1AaYUKUyzvv1ABrp7APQaUp5h4Sa35uRDKfmI
+         vs41MmG4HB0H6x4saHbNjmmJ0yRKlfqZMzRHUG55cJ6iwKDDDeqf+wQDDLCFTMdRSjBV
+         zgRw==
+X-Gm-Message-State: ACgBeo1zWBC1xadl1tJLc4u3EzZZZ9H9MiYN5idJH86eKwVNmJahxz6X
+        aRpQQi3/ARPYfmfCbCxbV4M=
+X-Google-Smtp-Source: AA6agR5S4uhyQ3nI0Nn/eQye9nDWyDILAYvxeXbLOBdagee4RU0xBAuPKCS25E29hPDFJj6Jesoy4w==
+X-Received: by 2002:a17:907:6e08:b0:731:83a3:58b6 with SMTP id sd8-20020a1709076e0800b0073183a358b6mr2027569ejc.12.1660293189500;
+        Fri, 12 Aug 2022 01:33:09 -0700 (PDT)
+Received: from krava ([193.85.244.190])
+        by smtp.gmail.com with ESMTPSA id m17-20020a1709066d1100b007305b8aa36bsm538022ejr.157.2022.08.12.01.33.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Aug 2022 01:33:08 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Fri, 12 Aug 2022 10:33:06 +0200
+To:     Sandipan Das <sandipan.das@amd.com>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        x86@kernel.org, peterz@infradead.org, bp@alien8.de,
+        acme@kernel.org, namhyung@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, dave.hansen@linux.intel.com,
+        like.xu.linux@gmail.com, eranian@google.com,
+        ananth.narayan@amd.com, ravi.bangoria@amd.com,
+        santosh.shukla@amd.com
+Subject: Re: [PATCH 2/4] tools headers x86: Sync msr-index.h with kernel
+ sources
+Message-ID: <YvYQQr5VenglbpWM@krava>
+References: <cover.1660217326.git.sandipan.das@amd.com>
+ <ffb9a9f0aa46a4339bb61282e26810112700ae97.1660217326.git.sandipan.das@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b287e98a-7880-5979-94a4-38715d448de4@redhat.com>
-Jabber-ID: thomas@t-8ch.de
-X-Accept: text/plain, text/html;q=0.2, text/*;q=0.1
-X-Accept-Language: en-us, en;q=0.8, de-de;q=0.7, de;q=0.6
+In-Reply-To: <ffb9a9f0aa46a4339bb61282e26810112700ae97.1660217326.git.sandipan.das@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Aug 11, 2022 at 06:16:47PM +0530, Sandipan Das wrote:
+> Sync msr-index.h with the kernel sources by adding the new AMD Last Branch
+> Record Extension Version 2 (LbrExtV2) MSRs.
+> 
+> Signed-off-by: Sandipan Das <sandipan.das@amd.com>
+> ---
+>  tools/arch/x86/include/asm/msr-index.h | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/tools/arch/x86/include/asm/msr-index.h b/tools/arch/x86/include/asm/msr-index.h
+> index cc615be27a54..7f9eaf497947 100644
+> --- a/tools/arch/x86/include/asm/msr-index.h
+> +++ b/tools/arch/x86/include/asm/msr-index.h
+> @@ -574,6 +574,9 @@
+>  #define MSR_AMD64_PERF_CNTR_GLOBAL_CTL		0xc0000301
+>  #define MSR_AMD64_PERF_CNTR_GLOBAL_STATUS_CLR	0xc0000302
+>  
+> +/* AMD Last Branch Record MSRs */
+> +#define MSR_AMD64_LBR_SELECT			0xc000010e
 
-On 2022-08-12 09:59+0200, Hans de Goede wrote:
-> Date: Fri, 12 Aug 2022 09:59:29 +0200
-> From: Hans de Goede <hdegoede@redhat.com>
-> To: Luke Jones <luke@ljones.dev>
-> Cc: andy.shevchenko@gmail.com, pobrn@protonmail.com, pavel@ucw.cz,
->  platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-> Subject: Re: [PATCH v3 6/6] asus-wmi: Support the hardware GPU MUX on some
->  laptops
-> User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
->  Thunderbird/91.12.0
-> 
-> Hi,
-> 
-> On 8/12/22 00:01, Luke Jones wrote:
-> > Hi Hans,
-> > 
-> > On Thu, 2022-08-11 at 15:53 +0200, Hans de Goede wrote:
-> >> Hi,
-> >>
-> >> On 8/9/22 04:50, Luke D. Jones wrote:
-> >>> Support the hardware GPU MUX switch available on some models. This
-> >>> switch can toggle the MUX between:
-> >>>
-> >>> - 0, Dedicated mode
-> >>> - 1, Optimus mode
-> >>>
-> >>> Optimus mode is the regular iGPU + dGPU available, while dedicated
-> >>> mode switches the system to have only the dGPU available.
-> >>>
-> >>> Signed-off-by: Luke D. Jones <luke@ljones.dev>
-> >>
-> >> I see that you have replied to this that it needs more work.
-> >>
-> >> Besides it needing more work, ideally this should hook into
-> >> the existing vga-switcheroo mechanism for this. Can you take
-> >> a look at that please?
-> >>
-> >> I think this might be the first non GPU driver doing vga-
-> >> switcheroo stuff. So this may be something to discuss
-> >> on the dri-devel list.
-> > 
-> > I'm not sure how this would work. In typical ASUS fashion they do non-
-> > standard stuff. This switch is a basic toggle that requires a reboot to
-> > enable after writing to the ACPI method, after reboot the dGPU becomes
-> > the only visible GPU on the system and (this GPU) can not be suspended.
-> > 
-> > In short: it toggles the laptop from discrete-only mode, and optimus
-> > mode, requiring a reboot to switch.
-> > 
-> > From what I understand of switcheroo it is more to manage having dual
-> > (or more) GPU available during runtime, and manage the power states,
-> > offload etc.
-> 
-> Right, I did not realize this requires a reboot, that would be
-> something to mention in the Documentation bits accompanying the patch.
-> 
-> This is also a reason why it is good to have the docs update in
-> the same patch as adding the functionality, because the docs may
-> help with reviewing.
-> 
-> Anyways I agree that if this requires a reboot then using
-> the vga switcheroo stuff is not applicable. So we can just go with
-> a simple(ish) asus-wmi sysfs attribute.
+curious do we actualy use this in tools somewhere?
 
-Would this not fit the existing "firmware-attributes" class?
-It even has a flag to signal that a reboot is required after an attribute has
-been changed.
+jirka
 
-Maybe it is overkill to use it only for this, though.
-
-> > I have a vastly improved patch for this prepared now. Because of how
-> > the actual feature works (and the above explanation) it must be under
-> > the asus-nb-wmi sysfs (next to the dgpu_disable and egpu_enable toggles
-> > which are also unusual and non-standard work-arounds of Windows
-> > issues).
+> +
+>  /* Fam 17h MSRs */
+>  #define MSR_F17H_IRPERF			0xc00000e9
+>  
+> @@ -745,6 +748,8 @@
+>  #define MSR_AMD_DBG_EXTN_CFG		0xc000010f
+>  #define MSR_AMD_SAMP_BR_FROM		0xc0010300
+>  
+> +#define DBG_EXTN_CFG_LBRV2EN		BIT_ULL(6)
+> +
+>  #define MSR_IA32_MPERF			0x000000e7
+>  #define MSR_IA32_APERF			0x000000e8
+>  
+> -- 
+> 2.34.1
 > 
-> Ack, sounds good.
-
-Thomas

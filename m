@@ -2,60 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 172F65909FF
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 03:48:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22E8E590A02
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 03:50:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236419AbiHLBru (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 21:47:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58318 "EHLO
+        id S236483AbiHLBu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 21:50:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233914AbiHLBrs (ORCPT
+        with ESMTP id S229516AbiHLBuY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 21:47:48 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A982A063C;
-        Thu, 11 Aug 2022 18:47:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660268867; x=1691804867;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=dmCQu5n9kOHYzH3uYzvtW2dglSnokVqA7rtZWKM7xZs=;
-  b=HR2qpYtCzIPOMxunTUXJKBLVq9OdsykszCupVZ+rvQXwvR6xdMV7f+GX
-   a8OGXMNZ6wlx+zHm4+mf18PXiucE9NbvRS+uXeawFY6yLfHw7czHg9jJw
-   MjqMGKiRORSUX90ANF8gBsHFDBZPIHikEhJilNRaIJjU9jJoU23ZNKDpV
-   pJn/dS3VThS4PjrgS7qDYSBsakNhVMksN2NVTy9S2HKY7R5Uq7fBKwp7J
-   wZjCT+3118AHtV7DNhb02XfhhZZ7gEVmR5I2PO0bjVH+93krzC9FFVnMU
-   Dq+oBFcOq6kasKxaCPsbMmMPZDPrC5VcLawn+axFw1qjrqRcG1PCTeKYX
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10436"; a="271273574"
-X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
-   d="scan'208";a="271273574"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 18:47:46 -0700
-X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
-   d="scan'208";a="933543044"
-Received: from sqa-gate.sh.intel.com (HELO localhost.tsp.org) ([10.239.48.212])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 18:47:44 -0700
-From:   Yuan Yao <yuan.yao@intel.com>
-To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        Jon Cargille <jcargill@google.com>,
-        Peter Shier <pshier@google.com>,
-        Oliver Upton <oupton@google.com>,
-        Yuan Yao <yuan.yao@linux.intel.com>
-Subject: [PATCH 1/1] kvm: nVMX: Checks "VMCS shadowing" with VMCS link pointer for non-root mode VM{READ,WRITE}
-Date:   Fri, 12 Aug 2022 09:47:06 +0800
-Message-Id: <20220812014706.43409-1-yuan.yao@intel.com>
-X-Mailer: git-send-email 2.27.0
+        Thu, 11 Aug 2022 21:50:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C48CE0E8
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 18:50:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9FC42B8224C
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 01:50:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C17C3C433C1;
+        Fri, 12 Aug 2022 01:50:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660269020;
+        bh=9Gj1fVPo/TfV2UndXuyWK4XY3oW/T50N15LkHtMwRko=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=c9lpFMEFdPFB4OL4LCtMIBVOOLaAlrM9in8lyM8qbZ5cQDmtOWosi1IgNP+owfjl6
+         8ennE8/ac5BDgAtillJwQvrXmUNqD81EMT+N/O6dgRfgOliFkO8euiLWYOkAhcejGN
+         XR5HeKxoejkuv8mQSefdUFU7eWf+Q77RQycL3+yr7Lzi+ZLdMS0vRM9Zlb4XVM/myU
+         LAL8cnD+iFCjYQ+iMVA9Jc+CI4x6NmDdQoMo3QjNsjoqghH8qLPFaPEknPVbQ/ya9+
+         gLrSjWcVPn3EgnXfjrMtzeKzVARt9FrFry77oUTxqHMtZgKgqnoDzS1e9GVwDSmBPI
+         o6L2iMjohrSEg==
+From:   SeongJae Park <sj@kernel.org>
+To:     Zeng Jingxiang <zengjx95@gmail.com>
+Cc:     sj@kernel.org, akpm@linux-foundation.org, damon@lists.linux.dev,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Zeng Jingxiang <linuszeng@tencent.com>
+Subject: Re: [PATCH] mm/damon: remove dead code in damon_lru_sort_enabled_store()
+Date:   Fri, 12 Aug 2022 01:50:18 +0000
+Message-Id: <20220812015018.115955-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220812012459.481215-1-zengjx95@gmail.com>
+References: 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,62 +55,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add checking to VMCS12's "VMCS shadowing", make sure the checking of
-VMCS12's vmcs_link_pointer for non-root mode VM{READ,WRITE} happens
-only if VMCS12's "VMCS shadowing" is 1.
+Hi Zeng,
 
-SDM says that for non-root mode the VMCS's "VMCS shadowing" must be 1
-(and the corresponding bits in VMREAD/VMWRITE bitmap must be 0) when
-condition checking of [B] is reached(please refer [A]), which means
-checking to VMCS link pointer for non-root mode VM{READ,WRITE} should
-happen only when "VMCS shadowing" = 1.
+On Fri, 12 Aug 2022 09:24:59 +0800 Zeng Jingxiang <zengjx95@gmail.com> wrote:
 
-Description from SDM Vol3(April 2022) Chapter 30.3 VMREAD/VMWRITE:
+> From: Zeng Jingxiang <linuszeng@tencent.com>
+> 
+> The variable damon_lru_sort_initialized is always true, causing the
+> corresponding conditional expression cannot be executed.
+> 
+> Assigning true to damon_lru_sort_initialized here
+> 544         damon_lru_sort_initialized = true;
 
-IF (not in VMX operation)
-   or (CR0.PE = 0)
-   or (RFLAGS.VM = 1)
-   or (IA32_EFER.LMA = 1 and CS.L = 0)
-THEN #UD;
-ELSIF in VMX non-root operation
-      AND (“VMCS shadowing” is 0 OR
-           source operand sets bits in range 63:15 OR
-           VMREAD bit corresponding to bits 14:0 of source
-           operand is 1)  <------[A]
-THEN VMexit;
-ELSIF CPL > 0
-THEN #GP(0);
-ELSIF (in VMX root operation AND current-VMCS pointer is not valid) OR
-      (in VMX non-root operation AND VMCS link pointer is not valid)
-THEN VMfailInvalid;  <------ [B]
-...
+Before the assignment, the variable is set 'false'.
 
-Fixes: dd2d6042b7f4 ("kvm: nVMX: VMWRITE checks VMCS-link pointer before VMCS field")
-Signed-off-by: Yuan Yao <yuan.yao@intel.com>
----
- arch/x86/kvm/vmx/nested.c | 2 ++
- 1 file changed, 2 insertions(+)
+> 
+> The value of damon_lru_sort_initialized is always true.
+> As a result, the following expression cannot be executed.
+> 
+> 463         if (!damon_lru_sort_initialized)
+> 464                 return rc;
 
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index ddd4367d4826..30685be54c5d 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -5123,6 +5123,7 @@ static int handle_vmread(struct kvm_vcpu *vcpu)
- 		 */
- 		if (vmx->nested.current_vmptr == INVALID_GPA ||
- 		    (is_guest_mode(vcpu) &&
-+		     nested_cpu_has_shadow_vmcs(vcpu) &&
- 		     get_vmcs12(vcpu)->vmcs_link_pointer == INVALID_GPA))
- 			return nested_vmx_failInvalid(vcpu);
- 
-@@ -5233,6 +5234,7 @@ static int handle_vmwrite(struct kvm_vcpu *vcpu)
- 	 */
- 	if (vmx->nested.current_vmptr == INVALID_GPA ||
- 	    (is_guest_mode(vcpu) &&
-+	     nested_cpu_has_shadow_vmcs(vcpu) &&
- 	     get_vmcs12(vcpu)->vmcs_link_pointer == INVALID_GPA))
- 		return nested_vmx_failInvalid(vcpu);
- 
--- 
-2.27.0
+If this code is executed before the assignment, the expression can be executed.
 
+Actually, there was a bug due to the absence of the variable.  You may refer to
+that for the detail:
+https://lore.kernel.org/damon/20220604192222.1488-1-sj@kernel.org/T/#t
+
+
+Thanks,
+SJ
+
+[...]

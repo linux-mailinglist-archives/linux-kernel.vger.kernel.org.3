@@ -2,153 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CAA1590E5D
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 11:47:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10360590E6F
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 11:50:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237673AbiHLJrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 05:47:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34712 "EHLO
+        id S236539AbiHLJuS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 05:50:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237493AbiHLJrY (ORCPT
+        with ESMTP id S229966AbiHLJuQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 05:47:24 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E1D5AA4D2
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 02:47:23 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id a9so606460lfm.12
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 02:47:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=DywEXydriB9RHQfiUoHdykArQLV4TBJt7mtn5YtjZoE=;
-        b=LwBHdnO1aRo+0D4D+H6G/KpkkhcLYKCY5twp4lafcbV2iNbBewTSuDHWAicBUVyZ6k
-         XD8W67AyOXCddFyRPbPFxX2NebnYA8KEpp5Bv1Uh9wvmz3oLqEDa6EGVrbCQmkmAdSUr
-         EGjZXkJ2DQHVf2RSr3780Kkzyl1edtbSVocJT6VzGItAQ6VoQ+9Z+gaRbWBDXkp1YsBz
-         JevUOIXgRV99bgu4/HsyvOTB7UNcUJ1vMtw9ObV0ZAadxCMhg/p12YxZ5xKeVDbCtuY+
-         2w0sy1R7C0exFVZAMQp1oHgeQ3MBNp6OdxY5twq70XNaD7QKfqQqwY6cZ5LNxMH01tpc
-         1O9w==
+        Fri, 12 Aug 2022 05:50:16 -0400
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C79DAB9F
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 02:50:14 -0700 (PDT)
+Received: by mail-ej1-f47.google.com with SMTP id j8so1114890ejx.9
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 02:50:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=DywEXydriB9RHQfiUoHdykArQLV4TBJt7mtn5YtjZoE=;
-        b=QDEuLNKsDcKhFCTDAmPTlzSsSTf8I++PV2RNbohDeZZCKFz52331GdYpW9wcetBavp
-         yU/GZKfGmFofxWLikKLSgM7LxbqsyXV2RJJBDkZDSzcZntnRmHnmItmfySs3LxC7qsUD
-         uEGX5QueLTYY4JRU8OKQbNiDzh1nH8zG1/EGe+5vHwThmSB8/8XBndRc4b+ILs0KjuKz
-         wFtjrJM6YWkeZxYhnfQIhH3guqrlIcgX2a+nmI8WPD8BuMj+DyeO4DgSzZfMP4BZ1YsD
-         mmlx7D2bVo3BdDMJ0XAzsjeiQkwpBQAwgJxrYupmQ7HCVyoVk8sFEBKj0ZYOrUIbmbaG
-         551Q==
-X-Gm-Message-State: ACgBeo2Bnbeaz2tyLMd4GShZh6otFAdeAdMzy5JAblRSMNUTpxuoqOnF
-        SmOp9gWPZvQTUa3EHx0SUi2rzw==
-X-Google-Smtp-Source: AA6agR7eHNAVuLG1Tzwad6XCZn0/j6CytzXhWajS9DLvUg5eG94lCgboTQKVISVSGSj5oeRbZaww8g==
-X-Received: by 2002:a05:6512:3fa8:b0:48c:ffd1:625d with SMTP id x40-20020a0565123fa800b0048cffd1625dmr925593lfa.251.1660297641606;
-        Fri, 12 Aug 2022 02:47:21 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id bf31-20020a2eaa1f000000b0025e496dad47sm295617ljb.26.2022.08.12.02.47.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 02:47:21 -0700 (PDT)
-Message-ID: <8962b7ed-a21c-0b7f-7a6d-5db3db84e4cb@linaro.org>
-Date:   Fri, 12 Aug 2022 12:47:17 +0300
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=HGfWnaevDnjU3IQ3+RdJwKSR3tW/9GSGc+g+aLgic7o=;
+        b=e+nYWqDOcx3R3vb+I1PaX2heh5HFdwHqVQ32tRDEZB5dQqDyazrhEq0do+92HwDrrd
+         2XLqpUp0UZqR1eP3MU70H2g2mjNdJFH6bmBcoKjsm327ujDgAXlal9eZHdTTTb4Akwbc
+         C/dPrbQPoiHlSh08Oz/OYY/k/LF8U6coV+7xdrixCFMtOqGNacocvs30BEKsvU1jg2XW
+         jnMyC//tAhQdHKXAjrUFxHpQR7DWmDnhwseWixkRKqVFVbbXovWqtJOLkljZhz3IQ2nB
+         +0Z1S+TcFdsQ9FYt4mnrJrA2YmGXONTw3gFBzNo9SgEIHtKgMukUz1SIa0aVNKcZ+FIc
+         G5bA==
+X-Gm-Message-State: ACgBeo1thQfnNW8Ja2sB4LFc9+ogj+UbJsaFFL5A06DbzLLvcw3rB36C
+        buJkkKgWekvpo2v3gz0Arb4=
+X-Google-Smtp-Source: AA6agR6lMAS0qN9ddYs4JHDbW9YbKlkyvXYWVM8+kmSqDly1XGEGeh+g56gcdRVmxbD8IU2MSXA5nw==
+X-Received: by 2002:a17:906:5d13:b0:733:10e:b957 with SMTP id g19-20020a1709065d1300b00733010eb957mr2147676ejt.452.1660297813246;
+        Fri, 12 Aug 2022 02:50:13 -0700 (PDT)
+Received: from localhost (fwdproxy-cln-020.fbsv.net. [2a03:2880:31ff:14::face:b00c])
+        by smtp.gmail.com with ESMTPSA id e8-20020a17090681c800b0072b8fbc9be1sm595537ejx.187.2022.08.12.02.50.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Aug 2022 02:50:12 -0700 (PDT)
+From:   Breno Leitao <leitao@debian.org>
+To:     arnd@arndb.de, gregkh@linuxfoundation.org
+Cc:     scott.branden@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
+        linux-kernel@vger.kernel.org, Kernel-team@fb.com
+Subject: [RESEND PATCH] misc: bcm_vk: Remove usage of deprecated functions
+Date:   Fri, 12 Aug 2022 02:47:17 -0700
+Message-Id: <20220812094717.4097179-1-leitao@debian.org>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <612446a2-5a22-a349-35fc-47f34792b504@broadcom.com>
+References: <612446a2-5a22-a349-35fc-47f34792b504@broadcom.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v4 2/2] arm64: dts: imx8mp-msc-sm2s: Add device trees for
- MSC SM2S-IMX8PLUS SoM and carrier board
-Content-Language: en-US
-To:     Martyn Welch <martyn.welch@collabora.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     kernel@collabora.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20220812084120.376042-1-martyn.welch@collabora.com>
- <20220812084120.376042-2-martyn.welch@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220812084120.376042-2-martyn.welch@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/08/2022 11:41, Martyn Welch wrote:
-> Add device trees for one of a number of MSC's (parent company, Avnet)
-> variants of the SM2S-IMX8PLUS system on module along with the compatible
-> SM2S-SK-AL-EP1 carrier board. As the name suggests, this family of SoMs use
-> the NXP i.MX8MP SoC and provide the SMARC module interface.
-> 
-> Signed-off-by: Martyn Welch <martyn.welch@collabora.com>
-> ---
-> 
-> Changes in v2
->   - Added compatibles
->   - Removed underscores from node names
->   - Make node names more generic
->   - Reorder properties
->   - Fix issues found by dtbs_check in these files
-> 
-> Changes in v3:
->   - Switched to avnet vendor string in compatibles
->   - Corrected patch description
-> 
-> Changes in v4:
->   - Switched from phy-reset-gpios to reset-gpios, removing duplication
->   - Removed unneeded sdma1 node
-> 
->  arch/arm64/boot/dts/freescale/Makefile        |   1 +
->  .../freescale/imx8mp-msc-sm2s-14N0600E.dts    |  72 ++
->  .../dts/freescale/imx8mp-msc-sm2s-ep1.dts     |  53 ++
->  .../boot/dts/freescale/imx8mp-msc-sm2s.dtsi   | 812 ++++++++++++++++++
->  4 files changed, 938 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-14N0600E.dts
->  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-ep1.dts
->  create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s.dtsi
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-> index 8bf7f7ecebaa..139c8b95c9c9 100644
-> --- a/arch/arm64/boot/dts/freescale/Makefile
-> +++ b/arch/arm64/boot/dts/freescale/Makefile
-> @@ -83,6 +83,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mn-venice-gw7902.dtb
->  dtb-$(CONFIG_ARCH_MXC) += imx8mp-dhcom-pdk2.dtb
->  dtb-$(CONFIG_ARCH_MXC) += imx8mp-evk.dtb
->  dtb-$(CONFIG_ARCH_MXC) += imx8mp-icore-mx8mp-edimm2.2.dtb
-> +dtb-$(CONFIG_ARCH_MXC) += imx8mp-msc-sm2s-ep1.dtb
->  dtb-$(CONFIG_ARCH_MXC) += imx8mp-phyboard-pollux-rdk.dtb
->  dtb-$(CONFIG_ARCH_MXC) += imx8mp-tqma8mpql-mba8mpxl.dtb
->  dtb-$(CONFIG_ARCH_MXC) += imx8mp-venice-gw74xx.dtb
-> diff --git a/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-14N0600E.dts b/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-14N0600E.dts
-> new file mode 100644
-> index 000000000000..9e976e8baaee
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-14N0600E.dts
-> @@ -0,0 +1,72 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2022 Avnet Embedded GmbH
-> + */
-> +/dts-v1/;
-> +
-> +#include "imx8mp-msc-sm2s.dtsi"
-> +
-> +/ {
-> +	model = "MSC SM2S-IMX8PLUS-QC6-14N0600E SoM";
-> +	compatible = "avnet,sm2s-imx8mp-14N0600E", "avnet,sm2s-imx8mp",
-> +		     "fsl,imx8mp";
+ida_simple_get() and ida_simple_remove() functions are deprecated now.
+These functions were replaced by ida_alloc() and ida_free()
+respectively. This patch modernize bcm_vk to use the replacement
+functions.
 
-This does not match your bindings. Please test your DTS.
+Signed-off-by: Breno Leitao <leitao@debian.org>
+Acked-by: Scott Branden <scott.branden@broadcom.com>
+---
+ drivers/misc/bcm-vk/bcm_vk_dev.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/misc/bcm-vk/bcm_vk_dev.c b/drivers/misc/bcm-vk/bcm_vk_dev.c
+index a16b99bdaa13..a3a82ebbc699 100644
+--- a/drivers/misc/bcm-vk/bcm_vk_dev.c
++++ b/drivers/misc/bcm-vk/bcm_vk_dev.c
+@@ -1401,7 +1401,7 @@ static int bcm_vk_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 		bcm_vk_tty_set_irq_enabled(vk, i);
+ 	}
+ 
+-	id = ida_simple_get(&bcm_vk_ida, 0, 0, GFP_KERNEL);
++	id = ida_alloc(&bcm_vk_ida, GFP_KERNEL);
+ 	if (id < 0) {
+ 		err = id;
+ 		dev_err(dev, "unable to get id\n");
+@@ -1500,7 +1500,7 @@ static int bcm_vk_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
+ 	misc_device->name = NULL;
+ 
+ err_ida_remove:
+-	ida_simple_remove(&bcm_vk_ida, id);
++	ida_free(&bcm_vk_ida, id);
+ 
+ err_irq:
+ 	for (i = 0; i < vk->num_irqs; i++)
+@@ -1573,7 +1573,7 @@ static void bcm_vk_remove(struct pci_dev *pdev)
+ 	if (misc_device->name) {
+ 		misc_deregister(misc_device);
+ 		kfree(misc_device->name);
+-		ida_simple_remove(&bcm_vk_ida, vk->devid);
++		ida_free(&bcm_vk_ida, vk->devid);
+ 	}
+ 	for (i = 0; i < vk->num_irqs; i++)
+ 		devm_free_irq(&pdev->dev, pci_irq_vector(pdev, i), vk);
+-- 
+2.30.2
+

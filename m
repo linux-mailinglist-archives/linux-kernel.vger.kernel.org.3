@@ -2,147 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 811A15911F8
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 16:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DF145911F4
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 16:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238645AbiHLOMv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 10:12:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33512 "EHLO
+        id S239150AbiHLOOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 10:14:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239031AbiHLOMs (ORCPT
+        with ESMTP id S239132AbiHLON7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 10:12:48 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D60117A9C;
-        Fri, 12 Aug 2022 07:12:46 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 4DFA41F93E;
-        Fri, 12 Aug 2022 14:12:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1660313565; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=orx0gU5XjtXTeLL+wu1bGYrutnbNzbrK9E3FTi+mTho=;
-        b=UyM/sksTfmPE5UWVg+TpkcdQ7CTap6D8o1oZsiDyGZUpWzYbic4CeYYWQFSAxY7NuuDMSI
-        EIGJmrW8XWEJT9jbkiDZKPH5cWE/FOSR1SbAyscxl92qLN0YrEMkwrgZFZ61ijDKxTYv4B
-        b+ZgOVAW8/mOIKsHOeNLNrmAbvMiCIM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1660313565;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=orx0gU5XjtXTeLL+wu1bGYrutnbNzbrK9E3FTi+mTho=;
-        b=NVAjWmqAZ3y53uOlhC8yHbWTlHmlzrMQwbokOVv9UTcMqyuKoL48Zg2725hrtEXwdHhKLN
-        7q9ibfEUN3yYP2BQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CA9FA13AAE;
-        Fri, 12 Aug 2022 14:12:44 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ebeoLtxf9mL3QQAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Fri, 12 Aug 2022 14:12:44 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id dde857b1;
-        Fri, 12 Aug 2022 14:13:30 +0000 (UTC)
-From:   =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
-To:     Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>
-Cc:     wenqingliu0120@gmail.com, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>,
-        Baokun Li <libaokun1@huawei.com>
-Subject: [PATCH v3] ext4: fix bug in extents parsing when eh_entries == 0 and eh_depth > 0
-Date:   Fri, 12 Aug 2022 15:13:29 +0100
-Message-Id: <20220812141329.9501-1-lhenriques@suse.de>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+        Fri, 12 Aug 2022 10:13:59 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 783B21F2F4
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 07:13:57 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id z16so1331995wrh.12
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 07:13:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=jrtc27.com; s=gmail.jrtc27.user;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc;
+        bh=E4JPtvsTDamtMFqwau0g/GY/W4zUAlwh1hRHFDce25k=;
+        b=c6nHRRoj/+2Dqa1s2A5U+L2edwSBxY52Lr7JUJnYsSn+M/jIlR7yUrl8oIztURxFPG
+         MdvxQIxbF5PrXWzBHT8SuEHPKHYfZ7EfS+SDza250wY6DrPKVvL4jQyFUSiiBbarWBOo
+         Ur422oX44qtxqPDFZEsg+naMASIjpODyOe0nQx2DDYx18ddjO4s6DdF60LoaK0/WO3sl
+         bikkX8BezC6vTqt2eRac6vilxae1ORVubzVVCFLhSJJZ0DykBkWLC1UAgf4Jync5wJQm
+         zwM6VqEMhjNMRawBwrU7PZ48jv1Y+91aQoRj9lyIOf7VkyEbeRIf1nj3gEopb3JsviKr
+         CWDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc;
+        bh=E4JPtvsTDamtMFqwau0g/GY/W4zUAlwh1hRHFDce25k=;
+        b=yErA8hQcXgJv+/Hc8tSU+5X7yJpwiZ7SIqXigOV2d17j80VkYT6AeTcXv1393O7Kq5
+         JuDkdrILu1eKGPGozMk8fiLOuPuZ/RLrQDOZ9vaZLPq8dWAyqGw4+shLEsJz6ky1FxHH
+         e3ZZsA2QEHigdNOfqqANIzlr7iF24YwdX1AoqKI7LGCtR/122m9VCWXB3XJyN00FqsDg
+         7NSXuADYqz9T05NiOE7RrZHjDtjiZm0WTOlQTvz44HO7+HGQY6+lUue04CYhfRaUrULx
+         m23SveqO7yjl8n5YfisEhTTOzeawlV9lYDrzdwXEthJQa+rNVMDL/Y5fVH9xT4K4t+a4
+         Ioag==
+X-Gm-Message-State: ACgBeo0rs72TJ/6Z1edOhP8Q050Me2ltIuqOqFrxp7c2spTirXXz9CBY
+        oUrN3k/vwi4V3N48Iuaxd5hoSg==
+X-Google-Smtp-Source: AA6agR4CRKUeJvXj9MfeYDX1d2OqDrZn9NbmbzCxoJBiRuZRrRhMvwNKsxx0TCWg9VxF4XAwAmreIA==
+X-Received: by 2002:a05:6000:c1:b0:220:5c10:5c51 with SMTP id q1-20020a05600000c100b002205c105c51mr2181769wrx.668.1660313635838;
+        Fri, 12 Aug 2022 07:13:55 -0700 (PDT)
+Received: from smtpclient.apple (global-5-141.n-2.net.cam.ac.uk. [131.111.5.141])
+        by smtp.gmail.com with ESMTPSA id r13-20020a5d494d000000b0021e4f595590sm2001393wrs.28.2022.08.12.07.13.54
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 12 Aug 2022 07:13:54 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.80.82.1.1\))
+Subject: Re: [PATCH] perf: riscv: fix broken build due to struct redefinition
+From:   Jessica Clarke <jrtc27@jrtc27.com>
+In-Reply-To: <20220812135119.1648940-1-conor.dooley@microchip.com>
+Date:   Fri, 12 Aug 2022 15:13:54 +0100
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Anup Patel <anup@brainfault.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <2055040C-D443-47FD-B6E2-C4C6B3E600B4@jrtc27.com>
+References: <20220812135119.1648940-1-conor.dooley@microchip.com>
+To:     Conor Dooley <conor.dooley@microchip.com>
+X-Mailer: Apple Mail (2.3696.80.82.1.1)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When walking through an inode extents, the ext4_ext_binsearch_idx() function
-assumes that the extent header has been previously validated.  However, there
-are no checks that verify that the number of entries (eh->eh_entries) is
-non-zero when depth is > 0.  And this will lead to problems because the
-EXT_FIRST_INDEX() and EXT_LAST_INDEX() will return garbage and result in this:
+On 12 Aug 2022, at 14:51, Conor Dooley <conor.dooley@microchip.com> =
+wrote:
+>=20
+> Building riscv/for-next produces following error:
+> drivers/perf/riscv_pmu_sbi.c:44:7: error: redefinition of =
+'sbi_pmu_ctr_info'
+> union sbi_pmu_ctr_info {
+>      ^
+> arch/riscv/include/asm/sbi.h:125:7: note: previous definition is here
+> union sbi_pmu_ctr_info {
+>=20
+> This appears to have been caused by a merge conflict resolution =
+between
+> riscv/for-next & riscv/fixes, causing the struct define not being
 
-[  135.245946] ------------[ cut here ]------------
-[  135.247579] kernel BUG at fs/ext4/extents.c:2258!
-[  135.249045] invalid opcode: 0000 [#1] PREEMPT SMP
-[  135.250320] CPU: 2 PID: 238 Comm: tmp118 Not tainted 5.19.0-rc8+ #4
-[  135.252067] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.15.0-0-g2dd4b9b-rebuilt.opensuse.org 04/01/2014
-[  135.255065] RIP: 0010:ext4_ext_map_blocks+0xc20/0xcb0
-[  135.256475] Code:
-[  135.261433] RSP: 0018:ffffc900005939f8 EFLAGS: 00010246
-[  135.262847] RAX: 0000000000000024 RBX: ffffc90000593b70 RCX: 0000000000000023
-[  135.264765] RDX: ffff8880038e5f10 RSI: 0000000000000003 RDI: ffff8880046e922c
-[  135.266670] RBP: ffff8880046e9348 R08: 0000000000000001 R09: ffff888002ca580c
-[  135.268576] R10: 0000000000002602 R11: 0000000000000000 R12: 0000000000000024
-[  135.270477] R13: 0000000000000000 R14: 0000000000000024 R15: 0000000000000000
-[  135.272394] FS:  00007fdabdc56740(0000) GS:ffff88807dd00000(0000) knlGS:0000000000000000
-[  135.274510] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  135.276075] CR2: 00007ffc26bd4f00 CR3: 0000000006261004 CR4: 0000000000170ea0
-[  135.277952] Call Trace:
-[  135.278635]  <TASK>
-[  135.279247]  ? preempt_count_add+0x6d/0xa0
-[  135.280358]  ? percpu_counter_add_batch+0x55/0xb0
-[  135.281612]  ? _raw_read_unlock+0x18/0x30
-[  135.282704]  ext4_map_blocks+0x294/0x5a0
-[  135.283745]  ? xa_load+0x6f/0xa0
-[  135.284562]  ext4_mpage_readpages+0x3d6/0x770
-[  135.285646]  read_pages+0x67/0x1d0
-[  135.286492]  ? folio_add_lru+0x51/0x80
-[  135.287441]  page_cache_ra_unbounded+0x124/0x170
-[  135.288510]  filemap_get_pages+0x23d/0x5a0
-[  135.289457]  ? path_openat+0xa72/0xdd0
-[  135.290332]  filemap_read+0xbf/0x300
-[  135.291158]  ? _raw_spin_lock_irqsave+0x17/0x40
-[  135.292192]  new_sync_read+0x103/0x170
-[  135.293014]  vfs_read+0x15d/0x180
-[  135.293745]  ksys_read+0xa1/0xe0
-[  135.294461]  do_syscall_64+0x3c/0x80
-[  135.295284]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+union, not struct
 
-This patch simply adds an extra check in __ext4_ext_check(), verifying that
-eh_entries is not 0 when eh_depth is > 0.
+Jess
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215941
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216283
-Cc: Baokun Li <libaokun1@huawei.com>
-Signed-off-by: Luís Henriques <lhenriques@suse.de>
----
- fs/ext4/extents.c | 4 ++++
- 1 file changed, 4 insertions(+)
+> properly moved to its header.
+>=20
+> Fixes: 9a7ccac63f9c ("perf: riscv_pmu{,_sbi}: Miscallenous improvement =
+& fixes")
+> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+> drivers/perf/riscv_pmu_sbi.c | 14 --------------
+> 1 file changed, 14 deletions(-)
+>=20
+> diff --git a/drivers/perf/riscv_pmu_sbi.c =
+b/drivers/perf/riscv_pmu_sbi.c
+> index e7c6fecbf061..6f6681bbfd36 100644
+> --- a/drivers/perf/riscv_pmu_sbi.c
+> +++ b/drivers/perf/riscv_pmu_sbi.c
+> @@ -41,20 +41,6 @@ static const struct attribute_group =
+*riscv_pmu_attr_groups[] =3D {
+> 	NULL,
+> };
+>=20
+> -union sbi_pmu_ctr_info {
+> -	unsigned long value;
+> -	struct {
+> -		unsigned long csr:12;
+> -		unsigned long width:6;
+> -#if __riscv_xlen =3D=3D 32
+> -		unsigned long reserved:13;
+> -#else
+> -		unsigned long reserved:45;
+> -#endif
+> -		unsigned long type:1;
+> -	};
+> -};
+> -
+> /*
+>  * RISC-V doesn't have hetergenous harts yet. This need to be part of
+>  * per_cpu in case of harts with different pmu counters
+> --=20
+> 2.36.1
+>=20
+>=20
+> _______________________________________________
+> linux-riscv mailing list
+> linux-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-riscv
 
-Changes since v2:
-- Dropped usage of le16_to_cpu() because we're comparing values against 0
-- Use 'depth' instead of 'eh->eh_depth' because we've checked earlier that
-  both have the same value.
-
-diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
-index c148bb97b527..2654fe46a1ea 100644
---- a/fs/ext4/extents.c
-+++ b/fs/ext4/extents.c
-@@ -460,6 +460,10 @@ static int __ext4_ext_check(const char *function, unsigned int line,
- 		error_msg = "invalid eh_entries";
- 		goto corrupted;
- 	}
-+	if (unlikely((eh->eh_entries == 0) && (eh_depth > 0))) {
-+		error_msg = "eh_entries is 0 but eh_depth is > 0";
-+		goto corrupted;
-+	}
- 	if (!ext4_valid_extent_entries(inode, eh, lblk, &pblk, depth)) {
- 		error_msg = "invalid extent entries";
- 		goto corrupted;

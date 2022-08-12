@@ -2,64 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 223C9590ED2
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 12:11:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 534C6590ED5
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 12:12:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237603AbiHLKLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 06:11:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33478 "EHLO
+        id S237191AbiHLKLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 06:11:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236883AbiHLKLK (ORCPT
+        with ESMTP id S238009AbiHLKLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 06:11:10 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1294F1572C
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 03:11:09 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id a8so570251pjg.5
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 03:11:09 -0700 (PDT)
+        Fri, 12 Aug 2022 06:11:22 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A08BAB1AD;
+        Fri, 12 Aug 2022 03:11:21 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id u3so701251lfk.8;
+        Fri, 12 Aug 2022 03:11:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=aYgtpe2qKchqYAVeaGiRPsk+O8CEAY4+LBGWObOMEO0=;
-        b=Xuiun91BGib/zGfk8+xs/x42MxJnyZVMMGYUsQSaU70f3rzjFyRUvo3ep6P2yD3O8M
-         erT+nwafT8sNELNBpih76eDx+wI5kRBqmDpGtu7p4yw5zUzEalosFQbHocoyTm3HELTc
-         jP0gSfo+d/WOTxfoUZlDdft2/BkiJICBz0+0EemLlQg5Moh3nHW0nvUok6+CoOn0D1cV
-         6k+sUe5Usd91nnc2ogQKcE8JvTbu1w/W+KtPbEkB9bsQTPPnXS/foTOAn9Sbr5WXcmei
-         P9ol9ggHPExmzkcJq8Hl6HjVK87NPEUYmZQPoxncdoXmEMKlNyMjVDt2QreEwsZzkUJY
-         vsUA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=aLFMMy8sY7JakSoVwJi7F7tkYJbV0p0vrNiVSXwI33Q=;
+        b=g3fQSUdZRhNr/Lh1HQZu8MtvXU5V43uZ3QtsGL/7TNjEpRexPInHyQ/FTUVcyYirYK
+         PjZspZUtTwlNNIeoRZzMQry0I4PcRmA4YSqtL5zWHuAejyExLQiBSGJ0ddkoOOKlT8wQ
+         1x0Q/8cEiH6ZgrLMaE2A9Ne/Zn82Kj+a2UHJoxHLCvVzCSlHHSoPtMbGbw/S+bB1Di+R
+         M3XqxOWErbXyqfzUQ8YaqzAMzM+Ku6dgrnMcHKN9BvWBmbY2wN1LjoRglG3nWers6eMs
+         qYoy24HbrClTD2pX2ni9qbfSV9TfbGYaHDJX+YkqWufG5u/3TA2W2f2RgnMJle4wxPCJ
+         6i/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=aYgtpe2qKchqYAVeaGiRPsk+O8CEAY4+LBGWObOMEO0=;
-        b=PiyZKupOBW3/AGJBGFxHURFdrAufQZm8thCkcKgRQhDAlshEaU3o1+GQVQRTxTydwY
-         ae8UpLkeTy9bD93JwpLV0pgQhpRsOTiQKJUeqvbE5XIboWb2K5JKobyfxmlDlsagYdD6
-         /qjt59wUbcJ/ynEgf56XNN57X5RSiYpO5GG4T/emr6ghn2ODAolt4czN6N5Kr6LRVSJf
-         hRixL1RdnL76vnLtxL8k83AB059+iAyW/P9P6+hNVjlJi1GuekRiHWmrBP8JHVfUSbEh
-         5oMG/lF2/tT0ITv1DeFQzK0MZPlBANbwLnstXHEHLTN6mLtRJe8xSCWF7pKuXQ70GsyR
-         OKPQ==
-X-Gm-Message-State: ACgBeo0quLgMOFeOK3jyVVz+mOwUvMLmqfN7DefXmeh+jEoUNYc4TGWl
-        RCR5RlRy6DrhlYO0vbh6iIw=
-X-Google-Smtp-Source: AA6agR4Q7sWDYiFEdIaeHOgye9LDGjiiTXSD+0nlr16pHDJZFMeVUlzOS/Yui26vYMrKOvjTRkhPpg==
-X-Received: by 2002:a17:902:e54c:b0:171:4b29:d1e with SMTP id n12-20020a170902e54c00b001714b290d1emr3327280plf.39.1660299068440;
-        Fri, 12 Aug 2022 03:11:08 -0700 (PDT)
-Received: from localhost.localdomain ([193.203.214.57])
-        by smtp.gmail.com with ESMTPSA id 20-20020a621814000000b0052a297324cbsm1215561pfy.41.2022.08.12.03.11.06
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=aLFMMy8sY7JakSoVwJi7F7tkYJbV0p0vrNiVSXwI33Q=;
+        b=wsuUwTpYBsfV3+KdwLN4oSI7DRxFrUqj7iqijZJeJhMBDpKgJKlD3L9VeOjyosX9a4
+         c/B6USBGcDFQJoGLKJvl4pDZ61QxD8ILPNzrGYFM5Dsb6c7lqSFzHFG6UNCk6qBBcsv5
+         sVQ+/YpwVO+UjQV8dWSayJX36s67mbmEoyY0L6Yt/jwBITs3AgCHMufSSJaK/Hb8tR/W
+         GUc8bqFqQtPyI+PZfCk+VE1gNox1jLAEHVfNS2FdwOBkBXqlNp3oZpVfLkOaa3EaPidb
+         GEHr6tArjGf+p121ub3Esum9ukA6ELNZKgU1aaIN/bKJRZPsXliq0mJYUkmbYDbEs5KW
+         3sVA==
+X-Gm-Message-State: ACgBeo1Um2tW1O7fVdIw33kNYUPx2PjIrdT611ad1cxoukHDtNiYhWFU
+        Y/rrQrOrqKFHI1SeTfsaOvsXb7DM9imriA==
+X-Google-Smtp-Source: AA6agR7oahz66TXK+4xNXwJ7WBweepHiLx1X956pR6Ll0CKUFsU/T6iafnKR0xdF0fNekUNxKpZZ6A==
+X-Received: by 2002:a05:6512:12c5:b0:48c:df54:a41a with SMTP id p5-20020a05651212c500b0048cdf54a41amr987403lfg.464.1660299079802;
+        Fri, 12 Aug 2022 03:11:19 -0700 (PDT)
+Received: from fedora ([213.255.186.46])
+        by smtp.gmail.com with ESMTPSA id v4-20020a05651203a400b0048b17ecee71sm154675lfp.302.2022.08.12.03.11.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Aug 2022 03:11:07 -0700 (PDT)
-From:   cgel.zte@gmail.com
-X-Google-Original-From: xu.xin16@zte.com.cn
-To:     akpm@linux-foundation.org, willy@infradead.org
-Cc:     hughd@google.com, izik.eidus@ravellosystems.com,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        xu.xin16@zte.com.cn
-Subject: [PATCH v2 0/5] propose auto-run mode of ksm and its tests
-Date:   Fri, 12 Aug 2022 10:11:02 +0000
-Message-Id: <20220812101102.41422-1-xu.xin16@zte.com.cn>
-X-Mailer: git-send-email 2.25.1
+        Fri, 12 Aug 2022 03:11:19 -0700 (PDT)
+Date:   Fri, 12 Aug 2022 13:11:16 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 4/7] clk: cdce925: simplify using
+ devm_regulator_get_enable()
+Message-ID: <18255e2d364e19d4a4ba6c6329892a7a77c92ecd.1660292316.git.mazziesaccount@gmail.com>
+References: <cover.1660292316.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="7YgUNn3cJXMVqVHU"
+Content-Disposition: inline
+In-Reply-To: <cover.1660292316.git.mazziesaccount@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -70,76 +74,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xu xin <xu.xin16@zte.com.cn>
 
-The following patch series bring a NEW running state "auto mode". In
-traditional KSM, whether ksmd works scanning and merging or not
-depends on the sysfs klob ksm_run.
+--7YgUNn3cJXMVqVHU
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Most of time, letting ksmd run is not very much needed, for example,
-when memory is sufficient, because it increases the delays of COW for
-user applications and also consume extra cpu resource. Besides, the fixed
-pages_to_scan is not always good. When there are a lot of same pages,
-the default pages_to_scan makes ksmd so slow to merge them.
+Simplify the driver using devm_regulator_get_enable() instead of
+open-coding the devm_add_action_or_reset().
 
-The four patches try to optimize the above two points with a auto mode.
-It's a lightweight optimization to KSM, not like uksm or pksm and so on.
+A (minor?) functional change is that we don't print an error in case of a
+deferred probe. Now we also print the error no matter which of the
+involved calls caused the failure.
 
-The tests show:
-	The convergence time of merging time of auto-mode reduces can low to
-	HALF of normal-mode. The cpu consumption of auto-mode also get less
-	than normal-mode.
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
-There are two type of TEST which have different shape of samepage areas.
-One is full-samepages vm areas, and the other is sparse-samepage areas.
-Both of the madvise area'size are 300MB.
+---
+RFCv1 =3D> v2:
+- No changes
+---
+ drivers/clk/clk-cdce925.c | 21 ++++-----------------
+ 1 file changed, 4 insertions(+), 17 deletions(-)
 
-Here is test log:
-****************** TEST 1 ******************
-Now the shape of memory area is full-samepages:
-[xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx]
+diff --git a/drivers/clk/clk-cdce925.c b/drivers/clk/clk-cdce925.c
+index ef9a2d44e40c..6350682f7e6d 100644
+--- a/drivers/clk/clk-cdce925.c
++++ b/drivers/clk/clk-cdce925.c
+@@ -603,28 +603,15 @@ of_clk_cdce925_get(struct of_phandle_args *clkspec, v=
+oid *_data)
+ 	return &data->clk[idx].hw;
+ }
+=20
+-static void cdce925_regulator_disable(void *regulator)
+-{
+-	regulator_disable(regulator);
+-}
+-
+ static int cdce925_regulator_enable(struct device *dev, const char *name)
+ {
+-	struct regulator *regulator;
+ 	int err;
+=20
+-	regulator =3D devm_regulator_get(dev, name);
+-	if (IS_ERR(regulator))
+-		return PTR_ERR(regulator);
+-
+-	err =3D regulator_enable(regulator);
+-	if (err) {
+-		dev_err(dev, "Failed to enable %s: %d\n", name, err);
+-		return err;
+-	}
++	err =3D devm_regulator_get_enable(dev, name);
++	if (err)
++		dev_err_probe(dev, err, "Failed to enable %s:\n", name);
+=20
+-	return devm_add_action_or_reset(dev, cdce925_regulator_disable,
+-					regulator);
++	return err;
+ }
+=20
+ /* The CDCE925 uses a funky way to read/write registers. Bulk mode is
+--=20
+2.37.1
 
-Start to test normal-run ksmd...
-ksm current cpu total slice: 15274
-ksm normal-run's merging time: 45.596018 seconds
-ksm current cpu total slice: 16370
-Start to test auto-run ksmd...
-ksm auto-run's merging time: 17.599391 seconds
-ksm current cpu total slice: 16488
 
-****************** TEST 2 ******************
-Now the shape of memory area is sparse-samepages:
-[xx]          [xx]          [xx]   
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
 
-Start to test normal-run ksmd...
-ksm current cpu total slice: 16532
-ksm normal-run's merging time: 21.625451 seconds
-ksm current cpu total slice: 16833
-Start to test auto-run ksmd...
-ksm auto-run's merging time: 17.684379 seconds
-ksm current cpu total slice: 16950
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
 
-Change log
-==========
-for v2:
-	1. We adjust the scan-enhanced algorithm, abstract its implementation
-	into a single function, which is clearer and smoother.
-	2. Add tests of auto-mode of ksm to verify the effectiveness.
+--7YgUNn3cJXMVqVHU
+Content-Type: application/pgp-signature; name="signature.asc"
 
-xu xin (5):
-  ksm: add a auto-run mode of ksm
-  ksm: implement scan-enhanced algorithm
-  ksm: let ksmd auto-work with memory threshold
-  ksm: show ksmd status for auto mode
-  ksm: add tests of ksm auto mode
+-----BEGIN PGP SIGNATURE-----
 
- mm/ksm.c                                   | 250 ++++++++++++++++++-
- tools/testing/selftests/vm/.gitignore      |   1 +
- tools/testing/selftests/vm/Makefile        |   1 +
- tools/testing/selftests/vm/test-ksm-auto.c | 273 +++++++++++++++++++++
- 4 files changed, 519 insertions(+), 6 deletions(-)
- create mode 100644 tools/testing/selftests/vm/test-ksm-auto.c
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmL2J0MACgkQeFA3/03a
+ocVv2QgAo/YlNOW1HA2mG+CxYq7xFKcBzQbPKj/51C44Hv7PuOZ9qYKQl2y0ALO2
+W9nyE1+wXsUrxSpRSh3RR84zgGGTiTVoZcSwjvgWhsd/DFQRRM+tYwdVCvCxuHK9
+eAAEN+/nNjDmsBlWtCP/6+3ET6F5AyOvkqw9MFQK1qS9UxErBIT9PESsvFNcPv9z
+fmvywKBtskYFk1KKsVEJcg1Fjj01MsV7IjagPW9O25cXGLtWAoi54Zr7TpnWrMw/
+335TVbgmXr0NKguxFMGICeYv8lIsO2fEycNIEazSjI//t4UebsJUK1Ah/RFOwFBA
+OZUe74M3LJAT+rE9WV/YV2RYnAYhBA==
+=ZUnt
+-----END PGP SIGNATURE-----
 
--- 
-2.25.1
-
+--7YgUNn3cJXMVqVHU--

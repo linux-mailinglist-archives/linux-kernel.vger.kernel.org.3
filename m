@@ -2,24 +2,23 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AB7F5914C1
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 19:23:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6096B5914C4
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 19:25:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239298AbiHLRXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 13:23:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57658 "EHLO
+        id S239337AbiHLRZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 13:25:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237992AbiHLRXv (ORCPT
+        with ESMTP id S239329AbiHLRZk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 13:23:51 -0400
-X-Greylist: delayed 159 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 12 Aug 2022 10:23:51 PDT
+        Fri, 12 Aug 2022 13:25:40 -0400
 Received: from finn.localdomain (finn.gateworks.com [108.161.129.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB8BB248F;
-        Fri, 12 Aug 2022 10:23:51 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C93FF25286;
+        Fri, 12 Aug 2022 10:25:36 -0700 (PDT)
 Received: from 068-189-091-139.biz.spectrum.com ([68.189.91.139] helo=tharvey.pdc.gateworks.com)
         by finn.localdomain with esmtp (Exim 4.93)
         (envelope-from <tharvey@gateworks.com>)
-        id 1oMYNk-00FqJz-8Q; Fri, 12 Aug 2022 17:23:36 +0000
+        id 1oMYPY-00FqKM-Ve; Fri, 12 Aug 2022 17:25:29 +0000
 From:   Tim Harvey <tharvey@gateworks.com>
 To:     Shawn Guo <shawnguo@kernel.org>,
         Fabio Estevam <festevam@gmail.com>,
@@ -31,9 +30,9 @@ To:     Shawn Guo <shawnguo@kernel.org>,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
 Cc:     Tim Harvey <tharvey@gateworks.com>
-Subject: [PATCH] arm64: dts: imx8mm-venice-gw7903: add digital I/O ctl gpios
-Date:   Fri, 12 Aug 2022 10:23:34 -0700
-Message-Id: <20220812172334.14171-1-tharvey@gateworks.com>
+Subject: [PATCH] arm64: dts: imx8mm-venice-gw7902: fix UART1 CTS
+Date:   Fri, 12 Aug 2022 10:25:26 -0700
+Message-Id: <20220812172526.14516-1-tharvey@gateworks.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -46,36 +45,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The GW7903-C revision introduced two additional GPIO's for controlling
-the digital I/O direction. Add them.
+Configure the correct GPIO for UART1 CTS.
 
 Signed-off-by: Tim Harvey <tharvey@gateworks.com>
 ---
- arch/arm64/boot/dts/freescale/imx8mm-venice-gw7903.dts | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7903.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7903.dts
-index a7dae9bd4c11..1b69ac0e12b0 100644
---- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7903.dts
-+++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7903.dts
-@@ -250,7 +250,7 @@ &gpio1 {
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts
+index 407ab4592b4c..6692e55df752 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts
++++ b/arch/arm64/boot/dts/freescale/imx8mm-venice-gw7902.dts
+@@ -651,7 +651,7 @@ &uart1 {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_uart1>, <&pinctrl_uart1_gpio>;
+ 	rts-gpios = <&gpio4 10 GPIO_ACTIVE_LOW>;
+-	cts-gpios = <&gpio4 11 GPIO_ACTIVE_LOW>;
++	cts-gpios = <&gpio4 24 GPIO_ACTIVE_LOW>;
+ 	uart-has-rtscts;
+ 	status = "okay";
  };
- 
- &gpio2 {
--	gpio-line-names = "dig2_in", "dig2_out#", "", "", "", "", "", "",
-+	gpio-line-names = "dig2_in", "dig2_out#", "dig2_ctl", "", "", "", "dig1_ctl", "",
- 		"dig1_out#", "dig1_in", "", "", "", "", "", "",
- 		"", "", "", "", "", "", "", "",
- 		"", "", "", "", "", "", "", "";
-@@ -630,6 +630,8 @@ MX8MM_IOMUXC_GPIO1_IO11_GPIO1_IO11	0x40000041 /* RS485# */
- 			MX8MM_IOMUXC_GPIO1_IO12_GPIO1_IO12	0x40000041 /* RS232# */
- 			MX8MM_IOMUXC_SD1_DATA7_GPIO2_IO9	0x40000041 /* DIG1_IN */
- 			MX8MM_IOMUXC_SD1_DATA6_GPIO2_IO8	0x40000041 /* DIG1_OUT */
-+			MX8MM_IOMUXC_SD1_DATA4_GPIO2_IO6	0x40000041 /* DIG1_CTL */
-+			MX8MM_IOMUXC_SD1_DATA0_GPIO2_IO2	0x40000041 /* DIG2_CTL */
- 			MX8MM_IOMUXC_SD1_CLK_GPIO2_IO0		0x40000041 /* DIG2_IN */
- 			MX8MM_IOMUXC_SD1_CMD_GPIO2_IO1		0x40000041 /* DIG2_OUT */
- 			MX8MM_IOMUXC_ECSPI1_MOSI_GPIO5_IO7	0x40000041 /* SIM1DET# */
 -- 
 2.25.1
 

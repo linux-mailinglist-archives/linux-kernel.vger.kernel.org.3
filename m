@@ -2,77 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF51F591608
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 21:41:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6620E59160A
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 21:42:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236712AbiHLTlu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 15:41:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39940 "EHLO
+        id S237160AbiHLTmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 15:42:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236062AbiHLTlr (ORCPT
+        with ESMTP id S236027AbiHLTmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 15:41:47 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E81F3B284C
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 12:41:46 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id l4so2169214wrm.13
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 12:41:46 -0700 (PDT)
+        Fri, 12 Aug 2022 15:42:07 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33795B284C
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 12:42:07 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id cr9so1518462qtb.13
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 12:42:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc;
-        bh=Iq/5xRoUiwhIFx5/vJDa4DTExyHthpSWn/1B/QHBuX8=;
-        b=kPsTgBeX9cktKrXNkL/lPRmjzfAy4L6XD79mQmQG95/00rEk+ceM3GIn4BgNva38hg
-         amUDp2pkk6KTBKklZzBmhq3a833FiUIfLr68tYN8bqJ73UZbCacqTMmc1q41irSUPPHv
-         AhHuuw+LV+MiPtKSneGmZ6qWXS+1E7a/8hgazVTRHxk5jcSjaguDUBylbsrgybIH685R
-         0hA3gK1l7201GHKEBLPIC6zeZzBqqL1Eu3/V529Q2pR6EjALlleAzg15z/+dBhpKNs/7
-         xZfFKycaDbcDdlL/Ivv88WYV0K+poyzmg7JTSWHk7IsjkmRHzZqz0SP2qGp3bZ+ZsVLL
-         opwQ==
+        d=kudzu-us.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=tRvDJSqP2PRIMIWloi0K1M5QOTLV+IKtWluTnY+gDdk=;
+        b=ne8tXHS9XvFbtCPNTt4EzOKXPeOXPayChGUIi0O59otgNNRh9hOvuyIoWuZorZKyHv
+         Cx7+EyMWJXUQcAOT2DLbJsV63zOs/uLKTtN6cHa40wFglhAzDCSreSR6Xx+drHLTj6qb
+         BUGGbbVEu0laNe60mMgy58Av1pISjznYnbJc0h5u8JmQsbDCnAcKSnLf38ain7txGs0a
+         VDYQbllmvWLlM8/h0GugU3g+t3LDl3SXlI71LigR8HWnMlkwY4Pp4I2IOB5GHCVV2oZa
+         RUaoCvK9oVpjStRCUI4bRnQoPUgE8KjnUszbC7Ft8jNHedvdtrC7Nd4N4wTdzuofOeK/
+         NCfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc;
-        bh=Iq/5xRoUiwhIFx5/vJDa4DTExyHthpSWn/1B/QHBuX8=;
-        b=p+bvwF6RzgGMVXNhaGoQFxGCUuouKVcAU0UuPlVt9hjQj+U+iz4c6LhZ2EeA02FuzV
-         W3/dZ6iHF3UD8ltHCIzA6WwMtA0+xqeC91A2/uHv/p1uVM1MHWqYdp1ABJezUxVDw19S
-         CL8aRMeV76TkHo+NvxPKRzGZk127yU6XtCUERUlKAaN7CwW6dw1upAO9WaH5dnhQ2ZIa
-         I4xKeMRhAitchsteNXUZYbRqRPzzJL0vA2poGE1tCZ6mDdl29xCMRtL7cfgaW7F11A4A
-         gNgg2W+UE5g6MqEFXB5aqOr9+wK+/Di1uXoX+iRTaJxgttz2GC2dJImi5yqGyTuoZvFu
-         lTTg==
-X-Gm-Message-State: ACgBeo1GM+3t1EgNY8p4WiweHF7F0W7dirc6pt4rAqSi4IrCWokWNcjB
-        r+0BIvmuI5FnV7XMJPsg0/L9AnVJU9QgnfL23sQ=
-X-Google-Smtp-Source: AA6agR6x8ZPS33iAOgnu0Fc+ZWMdxOzvR4UNIdN9rN7SItiJdCgqQRnZcoqtuA5Q5vjzl9hwIbmQRg==
-X-Received: by 2002:a05:6000:10d1:b0:220:5c89:50e5 with SMTP id b17-20020a05600010d100b002205c8950e5mr2999111wrx.335.1660333305255;
-        Fri, 12 Aug 2022 12:41:45 -0700 (PDT)
-Received: from localhost ([84.255.184.228])
-        by smtp.gmail.com with ESMTPSA id q8-20020a05600c2e4800b003a3561d4f3fsm384771wmf.43.2022.08.12.12.41.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 12:41:44 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 12 Aug 2022 22:41:35 +0300
-Message-Id: <CM4B165JCMGL.1LA0ST6YL7QAS@Arch-Desktop>
-To:     "Starke, Daniel" <daniel.starke@siemens.com>
-Cc:     "jirislaby@kernel.org" <jirislaby@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kernel-mentees@lists.linuxfoundation.org" 
-        <linux-kernel-mentees@lists.linuxfoundation.org>,
-        "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
-        "paskripkin@gmail.com" <paskripkin@gmail.com>,
-        "syzbot+e3563f0c94e188366dbb@syzkaller.appspotmail.com" 
-        <syzbot+e3563f0c94e188366dbb@syzkaller.appspotmail.com>,
-        "Greg KH" <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH] tty: n_gsm: fix missing assignment of gsm->receive() in
- gsmld_attach_gsm()
-From:   "Mazin Al Haddad" <mazinalhaddad05@gmail.com>
-X-Mailer: aerc 0.11.0-85-g6b1afc3ae3d8
-References: <DB9PR10MB58813E33D3516BAB526156B1E0659@DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM>
-In-Reply-To: <DB9PR10MB58813E33D3516BAB526156B1E0659@DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM>
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=tRvDJSqP2PRIMIWloi0K1M5QOTLV+IKtWluTnY+gDdk=;
+        b=Aj605fHmBw+tOPNaoX0AbzTbeZkPyvM8PS4DZzPHZ+DAutMWGef7GetYn9uqyHaoK7
+         j19bDpHz2VN/EShDylPBHQrrXqwEbBDOIPKfJsND/DK0E1pyzwNsSH8nzY8um4e6dGTV
+         e0bvA33eKwX/SHeYdMY5KG7M7TZKK4SOK2Sr4fJvWBB9KlitP5UHBbP8a8wOHArxV3FE
+         4jifPYTJnIZ+KvIVVHSRxfDAjAm4deyjrIXspkJ7A4e2NCt4lKwHJ9qTeDHSlJgSroAX
+         JIPEQP3sg+amMI6FGX3VszpnM04swvgCQD20PfFtIoRQR8kfe1OF9R20nWa9WfPpwyOj
+         nP+w==
+X-Gm-Message-State: ACgBeo1He0VECS9qtEEBQ8QdJ/nAGOvxbXbhUvi3jJ853Mok//uKq+fy
+        z9vMLbKTtyWQ9+LieSK1mCkmkg==
+X-Google-Smtp-Source: AA6agR7KSWAqy9lWStTxVCzxXSLzRWMvDTYS2r4i3Gl1z15R1bxmL/BA95zCBx68zG4qMYnlsxLpeg==
+X-Received: by 2002:ac8:5793:0:b0:342:ea28:742f with SMTP id v19-20020ac85793000000b00342ea28742fmr5017715qta.177.1660333326262;
+        Fri, 12 Aug 2022 12:42:06 -0700 (PDT)
+Received: from localhost ([2605:a601:a608:5600::59])
+        by smtp.gmail.com with ESMTPSA id m20-20020ac84454000000b00342fc6a8e25sm2213257qtn.50.2022.08.12.12.42.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Aug 2022 12:42:05 -0700 (PDT)
+From:   Jon Mason <jdmason@kudzu.us>
+To:     ntb@lists.linux.dev
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, Frank.Li@nxp.com,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] MAINTAINERS: add PCI Endpoint NTB drivers to NTB files
+Date:   Fri, 12 Aug 2022 15:42:05 -0400
+Message-Id: <20220812194205.388967-1-jdmason@kudzu.us>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,23 +67,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed Aug 10, 2022 at 12:08 PM +03, Starke, Daniel wrote:
-> > Fix this by setting the gsm->receive() function when the line=20
-> > discipline is being attached to the terminal device, inside=20
-> > gsmld_attach_gsm(). This will guarantee that the function is assigned=
-=20
-> > and a call to TIOCSTI, which calls gsmld_receive_buf(), will not
-> > reference a null pointer.
->
-> In my opinion there are only two possible ways to fix this:
-> a) Move the gsm->receive initialization from gsm_activate_mux() to
-> gsmld_attach_gsm().
-> b) Avoid calling gsm->receive in gsmld_receive_buf() if not initialized.
->
-> The current code might assume that gsm->receive is only called after MUX
-> activation. Therefore, variant a) may break the code in other places.
-> I see no need to initialize gsm->receive in gsm_activate_mux() and
-> gsmld_attach_gsm().
+The PCI Endpoint NTB drivers are under the NTB umbrella.  Add an entry
+there to allow for notification of changes for it.
 
-Thanks for the feedback! I will send a v2 patch that implements a check
-shortly.=20
+Signed-off-by: Jon Mason <jdmason@kudzu.us>
+---
+ MAINTAINERS | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 64379c699903..47e9f86bd712 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -14254,6 +14254,7 @@ W:	https://github.com/jonmason/ntb/wiki
+ T:	git git://github.com/jonmason/ntb.git
+ F:	drivers/net/ntb_netdev.c
+ F:	drivers/ntb/
++F:	drivers/pci/endpoint/functions/pci-epf-*ntb.c
+ F:	include/linux/ntb.h
+ F:	include/linux/ntb_transport.h
+ F:	tools/testing/selftests/ntb/
+-- 
+2.30.2
+

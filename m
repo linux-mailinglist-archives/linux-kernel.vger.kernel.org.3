@@ -2,52 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04D40591497
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 19:04:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A89E159149B
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 19:05:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239376AbiHLREa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 13:04:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41214 "EHLO
+        id S239468AbiHLREh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 13:04:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238785AbiHLRE1 (ORCPT
+        with ESMTP id S239385AbiHLREd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 13:04:27 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE40B14E1
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 10:04:26 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id i12-20020a056e021d0c00b002df2d676974so943659ila.5
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 10:04:26 -0700 (PDT)
+        Fri, 12 Aug 2022 13:04:33 -0400
+Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F074FB14E1;
+        Fri, 12 Aug 2022 10:04:31 -0700 (PDT)
+Received: by mail-io1-f52.google.com with SMTP id z145so1270481iof.9;
+        Fri, 12 Aug 2022 10:04:31 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=OucfZo6bVXb/CmNvLXiX7ZiXfaSuQBZNkZAXzjRTZBU=;
-        b=VG8mX6RoiNgA4jAqBIn4xlV0OlWh+Kp0QFFxBheW7mT1xllOJm79+7scIedKc5ktEw
-         sDdSfzVea10j9wrH8dODg5frdU9iRG3Gs261qvvTHk+14NF70wIizWfpAdBD2/DsSK0+
-         EXAGe+QAKuBiw2ZXnR8Bumxs+sFgJfDsiB5xmgPnCWCVG88fSQwr88Y/jN2N9ShWHfiV
-         9p0VKmspFGYzxBGP7hLpK6KoefDYyvDSQqgIo+dkznOCVOfSMW09dGXRQgLBMYSUBt5x
-         DPO88L4dA5BiTQoS9BEyisd6oFhNAp3BpmvHWhdG4EQLlTCXGXWHcCvw0sqCfuPb+ly+
-         3sWw==
-X-Gm-Message-State: ACgBeo2XWVCT3bjI6eWhiWAYbrovJVKbS05mOkD7zDUeFoh+mlCd2mTK
-        arpiW0UiLdhAOTN1EWD5wJKLLBhmdFFrUHxr/+W9HkXFkauI
-X-Google-Smtp-Source: AA6agR5HWmeytSdzRgCgeULhsaPpv91UfKL6B8MwYexprhotbMy5bkGj4e3ws5EVzW2GuZhBp7h8YINzcUmzrNzO0KTy32T3c1+V
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=9EVAY3341uRLDeQR3qbIaskvaBL1Vga+F7BkTtexRf0=;
+        b=1Cup51pWqdAnzuD9uoCmwq6WUJqayn4R+94p1q7XLw5uLYqWLYl53oQKfdzOgP6qUB
+         n/638Es5U/WiK1apxhysx7RDznyhKQn7MSmoDbachBFW1xv7XFuGjeOOlRx6YJ2kL5lK
+         0/f88H4l+gO32ffLISsXGRJGiNqrfuLyWwlKsoxuW1vYLKfdtVaxR+kQ8ix7YYlpf20z
+         Vt2OT6tuCt4vS/6LvPitOFXSJLPLaHUN/JRRaiXW6Kctau2g66pMSfsNgfjTJDeHJuFE
+         RZnrU2kXCCQIK6LkAf8i6JaO0Ne2X2jVdZGEgG93FTEz/Y+OIKunMYpvTwQ7ZqwpoGly
+         1naA==
+X-Gm-Message-State: ACgBeo2OocGITP5u3V4QduT7YQ/uLieeXenUxGNQ6ASl3UHuS7ERwHnX
+        0rdtjvxH/zcVjWJobt3rvqenp3y1Vg==
+X-Google-Smtp-Source: AA6agR5v+3t0CqUnOx6AXsLMKMAa3BpiCFpKQyZHTgEWg9cMTJhmIuX1LrV/APLXcVPbjp0A9Vsnxg==
+X-Received: by 2002:a02:a141:0:b0:343:58ce:4d7f with SMTP id m1-20020a02a141000000b0034358ce4d7fmr2341486jah.223.1660323871161;
+        Fri, 12 Aug 2022 10:04:31 -0700 (PDT)
+Received: from robh.at.kernel.org ([64.188.179.248])
+        by smtp.gmail.com with ESMTPSA id e47-20020a026d6f000000b003434de98f1asm99893jaf.28.2022.08.12.10.04.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Aug 2022 10:04:30 -0700 (PDT)
+Received: (nullmailer pid 329197 invoked by uid 1000);
+        Fri, 12 Aug 2022 17:04:28 -0000
+Date:   Fri, 12 Aug 2022 11:04:28 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, Vaishnav Achath <vaishnav.a@ti.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] spi: dt-bindings: Drop Pratyush Yadav
+Message-ID: <20220812170428.GA328905-robh@kernel.org>
+References: <20220811063826.7620-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:595:b0:343:3759:b245 with SMTP id
- a21-20020a056638059500b003433759b245mr2448450jar.180.1660323866068; Fri, 12
- Aug 2022 10:04:26 -0700 (PDT)
-Date:   Fri, 12 Aug 2022 10:04:26 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000003fcafc05e60e466e@google.com>
-Subject: [syzbot] memory leak in netlink_policy_dump_add_policy
-From:   syzbot <syzbot+dc54d9ba8153b216cae0@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220811063826.7620-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,64 +64,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Thu, 11 Aug 2022 09:38:26 +0300, Krzysztof Kozlowski wrote:
+> Emails to Pratyush Yadav bounce ("550 Invalid recipient").  Generic SPI
+> properties should be maintained by subsystem maintainer (Mark).  Add
+> recent contributor Vaishnav Achath to the Cadence SPI bindings.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Vaishnav Achath, are you ok with that?
+> ---
+>  .../devicetree/bindings/spi/cdns,qspi-nor-peripheral-props.yaml | 2 +-
+>  Documentation/devicetree/bindings/spi/cdns,qspi-nor.yaml        | 2 +-
+>  Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
+> 
 
-syzbot found the following issue on:
-
-HEAD commit:    4e23eeebb2e5 Merge tag 'bitmap-6.0-rc1' of https://github...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=165f4f6a080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3a433c7a2539f51c
-dashboard link: https://syzkaller.appspot.com/bug?extid=dc54d9ba8153b216cae0
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1443be71080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11e5918e080000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+dc54d9ba8153b216cae0@syzkaller.appspotmail.com
-
-executing program
-executing program
-executing program
-BUG: memory leak
-unreferenced object 0xffff888113093f00 (size 192):
-  comm "syz-executor228", pid 3636, jiffies 4294947950 (age 12.750s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 0a 00 00 00 00 00 00 00  ................
-    40 53 fd 84 ff ff ff ff 40 01 00 00 00 00 00 00  @S......@.......
-  backtrace:
-    [<ffffffff83a0e378>] kmalloc include/linux/slab.h:600 [inline]
-    [<ffffffff83a0e378>] kzalloc include/linux/slab.h:733 [inline]
-    [<ffffffff83a0e378>] alloc_state net/netlink/policy.c:104 [inline]
-    [<ffffffff83a0e378>] netlink_policy_dump_add_policy+0x198/0x1f0 net/netlink/policy.c:135
-    [<ffffffff83a0d78d>] ctrl_dumppolicy_start+0x15d/0x290 net/netlink/genetlink.c:1173
-    [<ffffffff83a0abf8>] genl_start+0x148/0x210 net/netlink/genetlink.c:596
-    [<ffffffff83a0756a>] __netlink_dump_start+0x20a/0x440 net/netlink/af_netlink.c:2370
-    [<ffffffff83a0a38e>] genl_family_rcv_msg_dumpit+0x15e/0x190 net/netlink/genetlink.c:678
-    [<ffffffff83a0b1d5>] genl_family_rcv_msg net/netlink/genetlink.c:772 [inline]
-    [<ffffffff83a0b1d5>] genl_rcv_msg+0x225/0x2c0 net/netlink/genetlink.c:792
-    [<ffffffff83a09807>] netlink_rcv_skb+0x87/0x1d0 net/netlink/af_netlink.c:2501
-    [<ffffffff83a0a214>] genl_rcv+0x24/0x40 net/netlink/genetlink.c:803
-    [<ffffffff83a08977>] netlink_unicast_kernel net/netlink/af_netlink.c:1319 [inline]
-    [<ffffffff83a08977>] netlink_unicast+0x397/0x4c0 net/netlink/af_netlink.c:1345
-    [<ffffffff83a08e36>] netlink_sendmsg+0x396/0x710 net/netlink/af_netlink.c:1921
-    [<ffffffff8385aea6>] sock_sendmsg_nosec net/socket.c:714 [inline]
-    [<ffffffff8385aea6>] sock_sendmsg+0x56/0x80 net/socket.c:734
-    [<ffffffff8385b40c>] ____sys_sendmsg+0x36c/0x390 net/socket.c:2482
-    [<ffffffff8385fd08>] ___sys_sendmsg+0xa8/0x110 net/socket.c:2536
-    [<ffffffff8385fe98>] __sys_sendmsg+0x88/0x100 net/socket.c:2565
-    [<ffffffff845d8535>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff845d8535>] do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84600087>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Acked-by: Rob Herring <robh@kernel.org>

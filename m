@@ -2,444 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF988590C42
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 09:06:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05B59590C47
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 09:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236888AbiHLHGs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 03:06:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39488 "EHLO
+        id S237146AbiHLHHe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 03:07:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237222AbiHLHGc (ORCPT
+        with ESMTP id S236378AbiHLHH3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 03:06:32 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4FF74E18
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 00:06:31 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4M3vnV0jBwzGpJq;
-        Fri, 12 Aug 2022 15:05:02 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 12 Aug 2022 15:06:29 +0800
-Received: from localhost.localdomain (10.175.112.125) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 12 Aug 2022 15:06:27 +0800
-From:   Tong Tiangen <tongtiangen@huawei.com>
-To:     Mark Rutland <mark.rutland@arm.com>,
-        James Morse <james.morse@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>, <x86@kernel.org>,
-        "H . Peter Anvin" <hpa@zytor.com>
-CC:     <linuxppc-dev@lists.ozlabs.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Xie XiuQi <xiexiuqi@huawei.com>,
-        Guohanjun <guohanjun@huawei.com>,
-        Tong Tiangen <tongtiangen@huawei.com>
-Subject: [PATCH -next v7 4/4] arm64: add cow to machine check safe
-Date:   Fri, 12 Aug 2022 07:05:57 +0000
-Message-ID: <20220812070557.1028499-5-tongtiangen@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20220812070557.1028499-1-tongtiangen@huawei.com>
-References: <20220812070557.1028499-1-tongtiangen@huawei.com>
+        Fri, 12 Aug 2022 03:07:29 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1119B95AC3
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 00:07:26 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 6613A1FDD6;
+        Fri, 12 Aug 2022 07:07:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1660288045; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=NpRoRt9oCsrbPdkhbPyBHdGh1078Vs1r57A/qJxLgf0=;
+        b=bPs7EqTEuAvyrD9uNUdGHh+Plh9hCw+x7dR+jGW6GAA/3+tHiv5FsSacWYkZBX2MPccCRX
+        KfklPk5FGdUVgoR57yrraWV/Oie5pNDW2mszEbLL+EWcs9PEeG+oLWhs6m0gEozOH2rcuv
+        IG4J4Y8GbegPf/jjgc/+i9pvhMX3/QM=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 455D013AAE;
+        Fri, 12 Aug 2022 07:07:25 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Ddq2Di389WLcfQAAMHmgww
+        (envelope-from <mhocko@suse.com>); Fri, 12 Aug 2022 07:07:25 +0000
+Date:   Fri, 12 Aug 2022 09:07:24 +0200
+From:   Michal Hocko <mhocko@suse.com>
+To:     Abel Wu <wuyun.abel@bytedance.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Muchun Song <songmuchun@bytedance.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Wei Yang <richard.weiyang@linux.alibaba.com>
+Subject: Re: [PATCH v2] mm/mempolicy: fix lock contention on mems_allowed
+Message-ID: <YvX8LB7WFBfAjeps@dhcp22.suse.cz>
+References: <20220811124157.74888-1-wuyun.abel@bytedance.com>
+ <YvUM7KaJaY+xnN2Y@dhcp22.suse.cz>
+ <YvUOCTlk7HSgJkdY@dhcp22.suse.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.112.125]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YvUOCTlk7HSgJkdY@dhcp22.suse.cz>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the cow(copy on write) processing, the data of the user process is
-copied, when hardware memory error is encountered during copy, only the
-relevant processes are affected, so killing the user process and isolate
-the user page with hardware memory errors is a more reasonable choice than
-kernel panic.
+On Thu 11-08-22 16:11:23, Michal Hocko wrote:
+> fix the lkml address (fat fingers, sorry)
+> 
+> On Thu 11-08-22 16:06:37, Michal Hocko wrote:
+> > [Cc Wei Yang who is author of 78b132e9bae9]
+> > 
+> > On Thu 11-08-22 20:41:57, Abel Wu wrote:
+> > > The mems_allowed field can be modified by other tasks, so it isn't
+> > > safe to access it with alloc_lock unlocked even in the current
+> > > process context.
+> > > 
+> > > Say there are two tasks: A from cpusetA is performing set_mempolicy(2),
+> > > and B is changing cpusetA's cpuset.mems:
+> > > 
+> > >   A (set_mempolicy)		B (echo xx > cpuset.mems)
+> > >   -------------------------------------------------------
+> > >   pol = mpol_new();
+> > > 				update_tasks_nodemask(cpusetA) {
+> > > 				  foreach t in cpusetA {
+> > > 				    cpuset_change_task_nodemask(t) {
+> > >   mpol_set_nodemask(pol) {
+> > > 				      task_lock(t); // t could be A
+> > >     new = f(A->mems_allowed);
+> > > 				      update t->mems_allowed;
+> > >     pol.create(pol, new);
+> > > 				      task_unlock(t);
+> > >   }
+> > > 				    }
+> > > 				  }
+> > > 				}
+> > >   task_lock(A);
+> > >   A->mempolicy = pol;
+> > >   task_unlock(A);
+> > > 
+> > > In this case A's pol->nodes is computed by old mems_allowed, and could
+> > > be inconsistent with A's new mems_allowed.
+> > 
+> > Just to clarify. With an unfortunate timing and those two nodemasks
+> > overlap the end user effect could be a premature OOM because some nodes
+> > wouldn't be considered, right?
+> > 
+> > > While it is different when replacing vmas' policy: the pol->nodes is
+> > > gone wild only when current_cpuset_is_being_rebound():
+> > > 
+> > >   A (mbind)			B (echo xx > cpuset.mems)
+> > >   -------------------------------------------------------
+> > >   pol = mpol_new();
+> > >   mmap_write_lock(A->mm);
+> > > 				cpuset_being_rebound = cpusetA;
+> > > 				update_tasks_nodemask(cpusetA) {
+> > > 				  foreach t in cpusetA {
+> > > 				    cpuset_change_task_nodemask(t) {
+> > >   mpol_set_nodemask(pol) {
+> > > 				      task_lock(t); // t could be A
+> > >     mask = f(A->mems_allowed);
+> > > 				      update t->mems_allowed;
+> > >     pol.create(pol, mask);
+> > > 				      task_unlock(t);
+> > >   }
+> > > 				    }
+> > >   foreach v in A->mm {
+> > >     if (cpuset_being_rebound == cpusetA)
+> > >       pol.rebind(pol, cpuset.mems);
+> > >     v->vma_policy = pol;
+> > >   }
+> > >   mmap_write_unlock(A->mm);
+> > > 				    mmap_write_lock(t->mm);
+> > > 				    mpol_rebind_mm(t->mm);
+> > > 				    mmap_write_unlock(t->mm);
+> > > 				  }
+> > > 				}
+> > > 				cpuset_being_rebound = NULL;
+> > > 
+> > > In this case, the cpuset.mems, which has already done updating, is
+> > > finally used for calculating pol->nodes, rather than A->mems_allowed.
+> > > So it is OK to call mpol_set_nodemask() with alloc_lock unlocked when
+> > > doing mbind(2).
+> > > 
+> > > Fixes: 78b132e9bae9 ("mm/mempolicy: remove or narrow the lock on current")
+> > > Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
+> > 
+> > The fix looks correct.
 
-Add new helper copy_page_mc() which provide a page copy implementation with
-machine check safe. At present, only used in cow. In future, we can expand
-more scenes. As long as the consequences of page copy failure are not
-fatal(eg: only affect user process), we can use this helper.
+Forgot
+Acked-by: Michal Hocko <mhocko@suse.com>
 
-The copy_page_mc() in copy_page_mc.S is largely borrows from copy_page()
-in copy_page.S and the main difference is copy_page_mc() add extable entry
-to every load/store insn to support machine check safe. largely to keep the
-patch simple. If needed those optimizations can be folded in.
+> > 
+> > > ---
+> > >  mm/mempolicy.c | 4 +++-
+> > >  1 file changed, 3 insertions(+), 1 deletion(-)
+> > > 
+> > > diff --git a/mm/mempolicy.c b/mm/mempolicy.c
+> > > index d39b01fd52fe..61e4e6f5cfe8 100644
+> > > --- a/mm/mempolicy.c
+> > > +++ b/mm/mempolicy.c
+> > > @@ -855,12 +855,14 @@ static long do_set_mempolicy(unsigned short mode, unsigned short flags,
+> > >  		goto out;
+> > >  	}
+> > >  
+> > > +	task_lock(current);
+> > >  	ret = mpol_set_nodemask(new, nodes, scratch);
+> > >  	if (ret) {
+> > > +		task_unlock(current);
+> > >  		mpol_put(new);
+> > >  		goto out;
+> > >  	}
+> > > -	task_lock(current);
+> > > +
+> > >  	old = current->mempolicy;
+> > >  	current->mempolicy = new;
+> > >  	if (new && new->mode == MPOL_INTERLEAVE)
+> > > -- 
+> > > 2.31.1
+> > 
+> > -- 
+> > Michal Hocko
+> > SUSE Labs
+> 
+> -- 
+> Michal Hocko
+> SUSE Labs
 
-Add new extable type EX_TYPE_COPY_PAGE_MC which used in copy_page_mc().
-
-Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
----
- arch/arm64/include/asm/asm-extable.h |  5 ++
- arch/arm64/include/asm/assembler.h   |  4 ++
- arch/arm64/include/asm/mte.h         |  4 ++
- arch/arm64/include/asm/page.h        | 10 ++++
- arch/arm64/lib/Makefile              |  2 +
- arch/arm64/lib/copy_page_mc.S        | 82 ++++++++++++++++++++++++++++
- arch/arm64/lib/mte.S                 | 19 +++++++
- arch/arm64/mm/copypage.c             | 37 +++++++++++--
- arch/arm64/mm/extable.c              |  9 +++
- include/linux/highmem.h              |  8 +++
- mm/memory.c                          |  2 +-
- 11 files changed, 176 insertions(+), 6 deletions(-)
- create mode 100644 arch/arm64/lib/copy_page_mc.S
-
-diff --git a/arch/arm64/include/asm/asm-extable.h b/arch/arm64/include/asm/asm-extable.h
-index 980d1dd8e1a3..969e2848ca13 100644
---- a/arch/arm64/include/asm/asm-extable.h
-+++ b/arch/arm64/include/asm/asm-extable.h
-@@ -10,6 +10,7 @@
- #define EX_TYPE_UACCESS_ERR_ZERO	2
- #define EX_TYPE_KACCESS_ERR_ZERO	3
- #define EX_TYPE_LOAD_UNALIGNED_ZEROPAD	4
-+#define EX_TYPE_COPY_PAGE_MC		5
- 
- /* Data fields for EX_TYPE_UACCESS_ERR_ZERO */
- #define EX_DATA_REG_ERR_SHIFT	0
-@@ -59,6 +60,10 @@
- 	_ASM_EXTABLE_UACCESS(\insn, \fixup)
- 	.endm
- 
-+	.macro          _asm_extable_copy_page_mc, insn, fixup
-+	__ASM_EXTABLE_RAW(\insn, \fixup, EX_TYPE_COPY_PAGE_MC, 0)
-+	.endm
-+
- /*
-  * Create an exception table entry for `insn` if `fixup` is provided. Otherwise
-  * do nothing.
-diff --git a/arch/arm64/include/asm/assembler.h b/arch/arm64/include/asm/assembler.h
-index 5846145be523..5ac8fe2fdc29 100644
---- a/arch/arm64/include/asm/assembler.h
-+++ b/arch/arm64/include/asm/assembler.h
-@@ -168,6 +168,10 @@ lr	.req	x30		// link register
- #define CPU_LE(code...) code
- #endif
- 
-+#define CPY_MC(l, x...)		\
-+9999:   x;			\
-+	_asm_extable_copy_page_mc    9999b, l
-+
- /*
-  * Define a macro that constructs a 64-bit value by concatenating two
-  * 32-bit registers. Note that on big endian systems the order of the
-diff --git a/arch/arm64/include/asm/mte.h b/arch/arm64/include/asm/mte.h
-index aa523591a44e..b8129f64cfea 100644
---- a/arch/arm64/include/asm/mte.h
-+++ b/arch/arm64/include/asm/mte.h
-@@ -40,6 +40,7 @@ void mte_free_tag_storage(char *storage);
- void mte_zero_clear_page_tags(void *addr);
- void mte_sync_tags(pte_t old_pte, pte_t pte);
- void mte_copy_page_tags(void *kto, const void *kfrom);
-+void mte_copy_page_tags_mc(void *kto, const void *kfrom);
- void mte_thread_init_user(void);
- void mte_thread_switch(struct task_struct *next);
- void mte_suspend_enter(void);
-@@ -63,6 +64,9 @@ static inline void mte_sync_tags(pte_t old_pte, pte_t pte)
- static inline void mte_copy_page_tags(void *kto, const void *kfrom)
- {
- }
-+static inline void mte_copy_page_tags_mc(void *kto, const void *kfrom)
-+{
-+}
- static inline void mte_thread_init_user(void)
- {
- }
-diff --git a/arch/arm64/include/asm/page.h b/arch/arm64/include/asm/page.h
-index 993a27ea6f54..832571a7dddb 100644
---- a/arch/arm64/include/asm/page.h
-+++ b/arch/arm64/include/asm/page.h
-@@ -29,6 +29,16 @@ void copy_user_highpage(struct page *to, struct page *from,
- void copy_highpage(struct page *to, struct page *from);
- #define __HAVE_ARCH_COPY_HIGHPAGE
- 
-+#ifdef CONFIG_ARCH_HAS_COPY_MC
-+extern void copy_page_mc(void *to, const void *from);
-+void copy_highpage_mc(struct page *to, struct page *from);
-+#define __HAVE_ARCH_COPY_HIGHPAGE_MC
-+
-+void copy_user_highpage_mc(struct page *to, struct page *from,
-+		unsigned long vaddr, struct vm_area_struct *vma);
-+#define __HAVE_ARCH_COPY_USER_HIGHPAGE_MC
-+#endif
-+
- struct page *alloc_zeroed_user_highpage_movable(struct vm_area_struct *vma,
- 						unsigned long vaddr);
- #define __HAVE_ARCH_ALLOC_ZEROED_USER_HIGHPAGE_MOVABLE
-diff --git a/arch/arm64/lib/Makefile b/arch/arm64/lib/Makefile
-index 29490be2546b..0d9f292ef68a 100644
---- a/arch/arm64/lib/Makefile
-+++ b/arch/arm64/lib/Makefile
-@@ -15,6 +15,8 @@ endif
- 
- lib-$(CONFIG_ARCH_HAS_UACCESS_FLUSHCACHE) += uaccess_flushcache.o
- 
-+lib-$(CONFIG_ARCH_HAS_COPY_MC) += copy_page_mc.o
-+
- obj-$(CONFIG_CRC32) += crc32.o
- 
- obj-$(CONFIG_FUNCTION_ERROR_INJECTION) += error-inject.o
-diff --git a/arch/arm64/lib/copy_page_mc.S b/arch/arm64/lib/copy_page_mc.S
-new file mode 100644
-index 000000000000..65fcad1dd7c8
---- /dev/null
-+++ b/arch/arm64/lib/copy_page_mc.S
-@@ -0,0 +1,82 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Copyright (C) 2012 ARM Ltd.
-+ */
-+
-+#include <linux/linkage.h>
-+#include <linux/const.h>
-+#include <asm/assembler.h>
-+#include <asm/page.h>
-+#include <asm/cpufeature.h>
-+#include <asm/alternative.h>
-+#include <asm/asm-extable.h>
-+
-+/*
-+ * Copy a page from src to dest (both are page aligned) with machine check
-+ *
-+ * Parameters:
-+ *	x0 - dest
-+ *	x1 - src
-+ */
-+SYM_FUNC_START(__pi_copy_page_mc)
-+alternative_if ARM64_HAS_NO_HW_PREFETCH
-+	// Prefetch three cache lines ahead.
-+	prfm	pldl1strm, [x1, #128]
-+	prfm	pldl1strm, [x1, #256]
-+	prfm	pldl1strm, [x1, #384]
-+alternative_else_nop_endif
-+
-+CPY_MC(9998f, ldp	x2, x3, [x1])
-+CPY_MC(9998f, ldp	x4, x5, [x1, #16])
-+CPY_MC(9998f, ldp	x6, x7, [x1, #32])
-+CPY_MC(9998f, ldp	x8, x9, [x1, #48])
-+CPY_MC(9998f, ldp	x10, x11, [x1, #64])
-+CPY_MC(9998f, ldp	x12, x13, [x1, #80])
-+CPY_MC(9998f, ldp	x14, x15, [x1, #96])
-+CPY_MC(9998f, ldp	x16, x17, [x1, #112])
-+
-+	add	x0, x0, #256
-+	add	x1, x1, #128
-+1:
-+	tst	x0, #(PAGE_SIZE - 1)
-+
-+alternative_if ARM64_HAS_NO_HW_PREFETCH
-+	prfm	pldl1strm, [x1, #384]
-+alternative_else_nop_endif
-+
-+CPY_MC(9998f, stnp	x2, x3, [x0, #-256])
-+CPY_MC(9998f, ldp	x2, x3, [x1])
-+CPY_MC(9998f, stnp	x4, x5, [x0, #16 - 256])
-+CPY_MC(9998f, ldp	x4, x5, [x1, #16])
-+CPY_MC(9998f, stnp	x6, x7, [x0, #32 - 256])
-+CPY_MC(9998f, ldp	x6, x7, [x1, #32])
-+CPY_MC(9998f, stnp	x8, x9, [x0, #48 - 256])
-+CPY_MC(9998f, ldp	x8, x9, [x1, #48])
-+CPY_MC(9998f, stnp	x10, x11, [x0, #64 - 256])
-+CPY_MC(9998f, ldp	x10, x11, [x1, #64])
-+CPY_MC(9998f, stnp	x12, x13, [x0, #80 - 256])
-+CPY_MC(9998f, ldp	x12, x13, [x1, #80])
-+CPY_MC(9998f, stnp	x14, x15, [x0, #96 - 256])
-+CPY_MC(9998f, ldp	x14, x15, [x1, #96])
-+CPY_MC(9998f, stnp	x16, x17, [x0, #112 - 256])
-+CPY_MC(9998f, ldp	x16, x17, [x1, #112])
-+
-+	add	x0, x0, #128
-+	add	x1, x1, #128
-+
-+	b.ne	1b
-+
-+CPY_MC(9998f, stnp	x2, x3, [x0, #-256])
-+CPY_MC(9998f, stnp	x4, x5, [x0, #16 - 256])
-+CPY_MC(9998f, stnp	x6, x7, [x0, #32 - 256])
-+CPY_MC(9998f, stnp	x8, x9, [x0, #48 - 256])
-+CPY_MC(9998f, stnp	x10, x11, [x0, #64 - 256])
-+CPY_MC(9998f, stnp	x12, x13, [x0, #80 - 256])
-+CPY_MC(9998f, stnp	x14, x15, [x0, #96 - 256])
-+CPY_MC(9998f, stnp	x16, x17, [x0, #112 - 256])
-+
-+9998:	ret
-+
-+SYM_FUNC_END(__pi_copy_page_mc)
-+SYM_FUNC_ALIAS(copy_page_mc, __pi_copy_page_mc)
-+EXPORT_SYMBOL(copy_page_mc)
-diff --git a/arch/arm64/lib/mte.S b/arch/arm64/lib/mte.S
-index 1b7c93ae7e63..b587d4929dac 100644
---- a/arch/arm64/lib/mte.S
-+++ b/arch/arm64/lib/mte.S
-@@ -80,6 +80,25 @@ SYM_FUNC_START(mte_copy_page_tags)
- 	ret
- SYM_FUNC_END(mte_copy_page_tags)
- 
-+/*
-+ * Copy the tags from the source page to the destination one wiht machine check safe
-+ *   x0 - address of the destination page
-+ *   x1 - address of the source page
-+ */
-+SYM_FUNC_START(mte_copy_page_tags_mc)
-+	mov	x2, x0
-+	mov	x3, x1
-+	multitag_transfer_size x5, x6
-+1:
-+CPY_MC(2f, ldgm	x4, [x3])
-+	stgm	x4, [x2]
-+	add	x2, x2, x5
-+	add	x3, x3, x5
-+	tst	x2, #(PAGE_SIZE - 1)
-+	b.ne	1b
-+2:	ret
-+SYM_FUNC_END(mte_copy_page_tags_mc)
-+
- /*
-  * Read tags from a user buffer (one tag per byte) and set the corresponding
-  * tags at the given kernel address. Used by PTRACE_POKEMTETAGS.
-diff --git a/arch/arm64/mm/copypage.c b/arch/arm64/mm/copypage.c
-index 24913271e898..7c1705c5e9d5 100644
---- a/arch/arm64/mm/copypage.c
-+++ b/arch/arm64/mm/copypage.c
-@@ -14,17 +14,24 @@
- #include <asm/cpufeature.h>
- #include <asm/mte.h>
- 
-+static void do_mte(struct page *to, struct page *from, void *kto, void *kfrom, bool mc)
-+{
-+	if (system_supports_mte() && test_bit(PG_mte_tagged, &from->flags)) {
-+		set_bit(PG_mte_tagged, &to->flags);
-+		if (mc)
-+			mte_copy_page_tags_mc(kto, kfrom);
-+		else
-+			mte_copy_page_tags(kto, kfrom);
-+	}
-+}
-+
- void copy_highpage(struct page *to, struct page *from)
- {
- 	void *kto = page_address(to);
- 	void *kfrom = page_address(from);
- 
- 	copy_page(kto, kfrom);
--
--	if (system_supports_mte() && test_bit(PG_mte_tagged, &from->flags)) {
--		set_bit(PG_mte_tagged, &to->flags);
--		mte_copy_page_tags(kto, kfrom);
--	}
-+	do_mte(to, from, kto, kfrom, false);
- }
- EXPORT_SYMBOL(copy_highpage);
- 
-@@ -35,3 +42,23 @@ void copy_user_highpage(struct page *to, struct page *from,
- 	flush_dcache_page(to);
- }
- EXPORT_SYMBOL_GPL(copy_user_highpage);
-+
-+#ifdef CONFIG_ARCH_HAS_COPY_MC
-+void copy_highpage_mc(struct page *to, struct page *from)
-+{
-+	void *kto = page_address(to);
-+	void *kfrom = page_address(from);
-+
-+	copy_page_mc(kto, kfrom);
-+	do_mte(to, from, kto, kfrom, true);
-+}
-+EXPORT_SYMBOL(copy_highpage_mc);
-+
-+void copy_user_highpage_mc(struct page *to, struct page *from,
-+			unsigned long vaddr, struct vm_area_struct *vma)
-+{
-+	copy_highpage_mc(to, from);
-+	flush_dcache_page(to);
-+}
-+EXPORT_SYMBOL_GPL(copy_user_highpage_mc);
-+#endif
-diff --git a/arch/arm64/mm/extable.c b/arch/arm64/mm/extable.c
-index 28ec35e3d210..b986333a3100 100644
---- a/arch/arm64/mm/extable.c
-+++ b/arch/arm64/mm/extable.c
-@@ -16,6 +16,13 @@ get_ex_fixup(const struct exception_table_entry *ex)
- 	return ((unsigned long)&ex->fixup + ex->fixup);
- }
- 
-+static bool ex_handler_fixup(const struct exception_table_entry *ex,
-+			     struct pt_regs *regs)
-+{
-+	regs->pc = get_ex_fixup(ex);
-+	return true;
-+}
-+
- static bool ex_handler_uaccess_err_zero(const struct exception_table_entry *ex,
- 					struct pt_regs *regs)
- {
-@@ -88,6 +95,8 @@ bool fixup_exception_mc(struct pt_regs *regs)
- 	switch (ex->type) {
- 	case EX_TYPE_UACCESS_ERR_ZERO:
- 		return ex_handler_uaccess_err_zero(ex, regs);
-+	case EX_TYPE_COPY_PAGE_MC:
-+		return ex_handler_fixup(ex, regs);
- 	}
- 
- 	return false;
-diff --git a/include/linux/highmem.h b/include/linux/highmem.h
-index 25679035ca28..dbb44d7de88a 100644
---- a/include/linux/highmem.h
-+++ b/include/linux/highmem.h
-@@ -317,6 +317,10 @@ static inline void copy_user_highpage(struct page *to, struct page *from,
- 
- #endif
- 
-+#ifndef __HAVE_ARCH_COPY_USER_HIGHPAGE_MC
-+#define copy_user_highpage_mc copy_user_highpage
-+#endif
-+
- #ifndef __HAVE_ARCH_COPY_HIGHPAGE
- 
- static inline void copy_highpage(struct page *to, struct page *from)
-@@ -332,6 +336,10 @@ static inline void copy_highpage(struct page *to, struct page *from)
- 
- #endif
- 
-+#ifndef __HAVE_ARCH_COPY_HIGHPAGE_MC
-+#define copy_highpage_mc copy_highpage
-+#endif
-+
- static inline void memcpy_page(struct page *dst_page, size_t dst_off,
- 			       struct page *src_page, size_t src_off,
- 			       size_t len)
-diff --git a/mm/memory.c b/mm/memory.c
-index bd8e7e79be99..4851f9ad5be2 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -2853,7 +2853,7 @@ static inline bool __wp_page_copy_user(struct page *dst, struct page *src,
- 	unsigned long addr = vmf->address;
- 
- 	if (likely(src)) {
--		copy_user_highpage(dst, src, addr, vma);
-+		copy_user_highpage_mc(dst, src, addr, vma);
- 		return true;
- 	}
- 
 -- 
-2.25.1
-
+Michal Hocko
+SUSE Labs

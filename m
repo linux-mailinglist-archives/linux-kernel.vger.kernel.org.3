@@ -2,130 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4346591002
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 13:26:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DE5F591006
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 13:27:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229793AbiHLL0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 07:26:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60476 "EHLO
+        id S231822AbiHLL0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 07:26:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbiHLL0T (ORCPT
+        with ESMTP id S236892AbiHLL0b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 07:26:19 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 574DE99B4E;
-        Fri, 12 Aug 2022 04:26:18 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id q30so863412wra.11;
-        Fri, 12 Aug 2022 04:26:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc;
-        bh=NS1OUkBRpuKhR6yWcTwhKigYA9ow76MHMrDf1FScipw=;
-        b=R2nxGvhV1Fbw9jVtIaWt2cpoNKtI/unGQkXrrIysEkkPzVE26xCSRFEfBN82TYuFnJ
-         3w+3U5k4kaM7xZT7AtNkg+oC88n5zzFmvmuFg0tZs/1MFQj+lRs3BN2FwFKBb93L6ia8
-         Mf6Z7u9A7mwjuYCFcLjYgDjOfRA+yK48AUgSGY3QAp/gbH2DC/UmggToMq+8xovqkrxv
-         tF8xxBBZ4/AcoIVBkHI1CihfI9hAqQnuBDhRTVTmlu2kO4BgK0bUVBaLBphXfUFpzezQ
-         1gNeOZsrMXXmbfKtLI4q2qF1K0nkxr3sM+RcWmWrl35CEUR2Ptk6HlhKIo1Qxvpzb8Nk
-         rrOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=NS1OUkBRpuKhR6yWcTwhKigYA9ow76MHMrDf1FScipw=;
-        b=JQ54H0HTpzWFnJ9ujaJCPfzDQIuvJDa4OWM4x3w2RZ7+AZOgOVUxgXTTVqJvzaG2LN
-         0Yul2N1SBRVQzWolbL9+zpDjaxayWUe/bEVAridLXm48sdSlQSt09oEcaL7Q2+1FCihB
-         Ptfqufq1ZUCIep+XGovgBGpU3hId/V+pdyw8HGBneE/urOKb8HS9bpKPWiaztYRFWC5K
-         NVipzA9Vx5mEoyesK+Au8if1n+pXf/KoL3VLvG9SpIcQ24TahS8k34LCBLMyt0NoYvI1
-         tHRE4Hvy6ZwMtH0ga+0qUvBph3yU8sV8apgaL3NuLhJ+F0Xb/PoO2PHQxm/uz0iXFOaQ
-         OAYA==
-X-Gm-Message-State: ACgBeo3FceJLz2elrtBQBQWQ6PzoQoVWTiVmCUiBAQ0Zns98DiKUsV0B
-        r3urB2fr5DESF4qQkLUYfgiq5hor1iyEQg==
-X-Google-Smtp-Source: AA6agR71+hyYopHQ/rhLgXKVkQrptn96W8kowcyfqiGrDc4pjvRog9dx7XKIf6UgIQSY3/PzX1gQrg==
-X-Received: by 2002:a05:6000:1283:b0:21f:168f:4796 with SMTP id f3-20020a056000128300b0021f168f4796mr1974369wrx.615.1660303576728;
-        Fri, 12 Aug 2022 04:26:16 -0700 (PDT)
-Received: from debian ([2402:3a80:a6c:8d8d:8b73:352a:a34a:c91d])
-        by smtp.gmail.com with ESMTPSA id l21-20020a05600c4f1500b003a4bb3f9bc6sm1392485wmq.41.2022.08.12.04.26.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Aug 2022 04:26:16 -0700 (PDT)
-Date:   Fri, 12 Aug 2022 12:25:57 +0100
-From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
-To:     torvalds@linux-foundation.org, Jakub Kicinski <kuba@kernel.org>
-Cc:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: mainline build failure due to 332f1795ca20 ("Bluetooth: L2CAP: Fix
- l2cap_global_chan_by_psm regression")
-Message-ID: <YvY4xdZEWAPosFdJ@debian>
+        Fri, 12 Aug 2022 07:26:31 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F13A61F1;
+        Fri, 12 Aug 2022 04:26:26 -0700 (PDT)
+Received: from [192.168.2.145] (unknown [109.252.119.13])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8EDBD6601B04;
+        Fri, 12 Aug 2022 12:26:23 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1660303584;
+        bh=DK6TRuS6zCBas+STc8GXghXWZmvWUra5WnCpn7bnBRU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kwGcZvK+LAI524k5q5R/PwDzJxfS/Q/RJI7iuaApfr+BS/wAwhZD4RG+tdTt8WHzo
+         3AjQP85aIf5bqBsBWtVvkJcIIMQIon3uHrwtFcMgOBB/i8IFAWwfX5Rh5FAXht7UXL
+         pddvxbm/Jf944r2ZaypZe29AZESZ5uez7/8GWnnjkQOL3nWAdccPVdxX3YlWh9sexa
+         94eVl4UqD2kTZB5viS5LWF3WA7R+6QLWNN/rs6+XFUDKoPHv2XcVLOpRxVuxjsUMZT
+         0EbLQaNZ/NDaZUFiSb18ieoGYSb/fFeBLcy65N7KzEIrsXwx+2cI94Ym0gMSGxImsh
+         gz9d0QN0/2ABA==
+Message-ID: <73b51dde-689f-64ce-a1c8-0d7c84a2ed66@collabora.com>
+Date:   Fri, 12 Aug 2022 14:26:20 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v8 2/2] drm/gem: Don't map imported GEMs
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
+Cc:     David Airlie <airlied@linux.ie>, Gerd Hoffmann <kraxel@redhat.com>,
+        Gurchetan Singh <gurchetansingh@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        "open list:VIRTIO GPU DRIVER" 
+        <virtualization@lists.linux-foundation.org>,
+        linux-tegra@vger.kernel.org, Dmitry Osipenko <digetx@gmail.com>,
+        kernel@collabora.com, Daniel Vetter <daniel@ffwll.ch>
+References: <20220701090240.1896131-1-dmitry.osipenko@collabora.com>
+ <20220701090240.1896131-3-dmitry.osipenko@collabora.com>
+ <2bb95e80-b60a-36c0-76c8-a06833032c77@amd.com>
+ <CAF6AEGtqPeF1DjmBKgzWK39Yi81YiNjTjDNn85TKx7uwicFTSA@mail.gmail.com>
+ <2a646ce4-c2ec-3b11-77a0-cc720afd6fe1@collabora.com>
+ <YvOav/vF2awVWIu0@phenom.ffwll.local>
+ <CAF6AEGvfAJgwBe4+sK0gAkZ++MwH9x4=698C8XSnmfYNMFZqfA@mail.gmail.com>
+ <9674d00e-c0d6-ceba-feab-5dc475bda694@collabora.com>
+ <CAF6AEGv1cVC9ZNMwpwFOki5CrwD3kSAHM9EUFZGWY-y5zcQsCg@mail.gmail.com>
+ <fc019528-7ec7-9e5b-1b6d-c44da14346cf@collabora.com>
+ <CAF6AEGv8zSd0fEYB9hd2QOyTt53gFSQoL8JdZtCvtCdYfMfB2Q@mail.gmail.com>
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <CAF6AEGv8zSd0fEYB9hd2QOyTt53gFSQoL8JdZtCvtCdYfMfB2Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All,
+On 8/11/22 02:19, Rob Clark wrote:
+> On Wed, Aug 10, 2022 at 3:23 PM Dmitry Osipenko
+> <dmitry.osipenko@collabora.com> wrote:
+>>
+>> On 8/11/22 01:03, Rob Clark wrote:
+>>> On Wed, Aug 10, 2022 at 12:26 PM Dmitry Osipenko
+>>> <dmitry.osipenko@collabora.com> wrote:
+>>>>
+>>>> On 8/10/22 18:08, Rob Clark wrote:
+>>>>> On Wed, Aug 10, 2022 at 4:47 AM Daniel Vetter <daniel@ffwll.ch> wrote:
+>>>>>>
+>>>>>> On Wed, Jul 06, 2022 at 10:02:07AM +0300, Dmitry Osipenko wrote:
+>>>>>>> On 7/6/22 00:48, Rob Clark wrote:
+>>>>>>>> On Tue, Jul 5, 2022 at 4:51 AM Christian König <christian.koenig@amd.com> wrote:
+>>>>>>>>>
+>>>>>>>>> Am 01.07.22 um 11:02 schrieb Dmitry Osipenko:
+>>>>>>>>>> Drivers that use drm_gem_mmap() and drm_gem_mmap_obj() helpers don't
+>>>>>>>>>> handle imported dma-bufs properly, which results in mapping of something
+>>>>>>>>>> else than the imported dma-buf. On NVIDIA Tegra we get a hard lockup when
+>>>>>>>>>> userspace writes to the memory mapping of a dma-buf that was imported into
+>>>>>>>>>> Tegra's DRM GEM.
+>>>>>>>>>>
+>>>>>>>>>> Majority of DRM drivers prohibit mapping of the imported GEM objects.
+>>>>>>>>>> Mapping of imported GEMs require special care from userspace since it
+>>>>>>>>>> should sync dma-buf because mapping coherency of the exporter device may
+>>>>>>>>>> not match the DRM device. Let's prohibit the mapping for all DRM drivers
+>>>>>>>>>> for consistency.
+>>>>>>>>>>
+>>>>>>>>>> Suggested-by: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+>>>>>>>>>> Signed-off-by: Dmitry Osipenko <dmitry.osipenko@collabora.com>
+>>>>>>>>>
+>>>>>>>>> I'm pretty sure that this is the right approach, but it's certainly more
+>>>>>>>>> than possible that somebody abused this already.
+>>>>>>>>
+>>>>>>>> I suspect that this is abused if you run deqp cts on android.. ie. all
+>>>>>>>> winsys buffers are dma-buf imports from gralloc.  And then when you
+>>>>>>>> hit readpix...
+>>>>>>>>
+>>>>>>>> You might only hit this in scenarios with separate gpu and display (or
+>>>>>>>> dGPU+iGPU) because self-imports are handled differently in
+>>>>>>>> drm_gem_prime_import_dev().. and maybe not in cases where you end up
+>>>>>>>> with a blit from tiled/compressed to linear.. maybe that narrows the
+>>>>>>>> scope enough to just fix it in userspace?
+>>>>>>>
+>>>>>>> Given that that only drivers which use DRM-SHMEM potentially could've
+>>>>>>> map imported dma-bufs (Panfrost, Lima) and they already don't allow to
+>>>>>>> do that, I think we're good.
+>>>>>>
+>>>>>> So can I have an ack from Rob here or are there still questions that this
+>>>>>> might go boom?
+>>>>>>
+>>>>>> Dmitry, since you have a bunch of patches merged now I think would also be
+>>>>>> good to get commit rights so you can drive this more yourself. I've asked
+>>>>>> Daniel Stone to help you out with getting that.
+>>>>>
+>>>>> I *think* we'd be ok with this on msm, mostly just by dumb luck.
+>>>>> Because the dma-buf's we import will be self-import.  I'm less sure
+>>>>> about panfrost (src/panfrost/lib/pan_bo.c doesn't seem to have a
+>>>>> special path for imported dma-bufs either, and in that case they won't
+>>>>> be self-imports.. but I guess no one has tried to run android cts on
+>>>>> panfrost).
+>>>>
+>>>> The last time I tried to mmap dma-buf imported to Panfrost didn't work
+>>>> because Panfrost didn't implement something needed for that. I'll need
+>>>> to take a look again because can't recall what it was.
+Upd: I re-checked Panfrost using today's linux-next and mapping of
+imported dma-buf works, I mapped imported buf from video decoder.
+Apparently previously I had some local kernel change that broke the mapping.
 
-The latest mainline kernel branch fails to build csky and mips allmodconfig
-with gcc-12.
+>>>>> What about something less drastic to start, like (apologies for
+>>>>> hand-edited patch):
+>>>>>
+>>>>> diff --git a/drivers/gpu/drm/drm_gem.c b/drivers/gpu/drm/drm_gem.c
+>>>>> index 86d670c71286..fc9ec42fa0ab 100644
+>>>>> --- a/drivers/gpu/drm/drm_gem.c
+>>>>> +++ b/drivers/gpu/drm/drm_gem.c
+>>>>> @@ -1034,6 +1034,10 @@ int drm_gem_mmap_obj(struct drm_gem_object
+>>>>> *obj, unsigned long obj_size,
+>>>>>  {
+>>>>>         int ret;
+>>>>>
+>>>>> +       WARN_ON_ONCE(obj->import_attach);
+>>>>
+>>>> This will hang NVIDIA Tegra, which is what this patch fixed initially.
+>>>> If neither of upstream DRM drivers need to map imported dma-bufs and
+>>>> never needed, then why do we need this?
+>>>
+>>> oh, tegra isn't using shmem helpers?  I assumed it was.  Well my point
+>>> was to make a more targeted fail on tegra, and a WARN_ON for everyone
+>>> else to make it clear that what they are doing is undefined behavior.
+>>> Because so far existing userspace (or well, panfrost and freedreno at
+>>> least, those are the two I know or checked) don't make special cases
+>>> for mmap'ing against the dmabuf fd against the dmabuf fd instead of
+>>> the drm device fd.
+>>
+>> It's not clear to me what bad Android does form yours comments. Does it
+>> export dma-buf from GPU and then import it to GPU? If yes, then DRM core
+>> has a check for the self-importing [1].
+>>
+>> [1]
+>> https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/drm_prime.c#L918
+>>
+>> If you're meaning something else, then please explain in a more details.
+> 
+> So, android/gralloc allocates buffers externally to the driver and
+> imports them into driver.  (And that seems to not just be window
+> surfaces, but in cases random textures, etc)
+> 
+> In the normal case these should be allocated from drm/msm so it should
+> hit [1].. this is the "dumb luck" I mentioned earlier.  But I'm not
+> confident enough to say that there is no other case.
+> 
+>>
+>>> I *think* it should work out that we don't hit this path with
+>>> freedreno but on android I can't really guarantee or prove it.  So
+>>> your patch would potentially break existing working userspace.  Maybe
+>>> it is userspace that isn't portable (but OTOH it isn't like you are
+>>> going to be using freedreno on tegra).  So why don't you go for a more
+>>> targeted fix that only returns an error on hw where this is
+>>> problematic?
+>>
+>> That's what the first versions of the patch did and Christian suggested
+>> that it's not a good approach. In fact it should be not only Tegra that
+>> has a broken dma-buf mapping, but apparently OMAP driver too.
+> 
+> Hmm, I guess I'm a bit more conservative when it comes to potentially
+> breaking userspace.
 
-mips error is:
+If such userspace exists, then of course the mapping should continue to
+work. Still will be great to know what that userpsace is.
 
-In function 'memcmp',
-    inlined from 'bacmp' at ./include/net/bluetooth/bluetooth.h:347:9,
-    inlined from 'l2cap_global_chan_by_psm' at net/bluetooth/l2cap_core.c:2003:15:
-./include/linux/fortify-string.h:44:33: error: '__builtin_memcmp' specified bound 6 exceeds source size 0 [-Werror=stringop-overread]
-   44 | #define __underlying_memcmp     __builtin_memcmp
-      |                                 ^
-./include/linux/fortify-string.h:420:16: note: in expansion of macro '__underlying_memcmp'
-  420 |         return __underlying_memcmp(p, q, size);
-      |                ^~~~~~~~~~~~~~~~~~~
-In function 'memcmp',
-    inlined from 'bacmp' at ./include/net/bluetooth/bluetooth.h:347:9,
-    inlined from 'l2cap_global_chan_by_psm' at net/bluetooth/l2cap_core.c:2004:15:
-./include/linux/fortify-string.h:44:33: error: '__builtin_memcmp' specified bound 6 exceeds source size 0 [-Werror=stringop-overread]
-   44 | #define __underlying_memcmp     __builtin_memcmp
-      |                                 ^
-./include/linux/fortify-string.h:420:16: note: in expansion of macro '__underlying_memcmp'
-  420 |         return __underlying_memcmp(p, q, size);
-      |                ^~~~~~~~~~~~~~~~~~~
+Alright, let's keep the dma-buf mapping as-is for now. I'll fix just the
+Tegra driver then.
 
-
-csky error is:
-
-In file included from net/bluetooth/l2cap_core.c:37:
-In function 'bacmp',
-    inlined from 'l2cap_global_chan_by_psm' at net/bluetooth/l2cap_core.c:2003:15:
-./include/net/bluetooth/bluetooth.h:347:16: error: 'memcmp' specified bound 6 exceeds source size 0 [-Werror=stringop-overread]
-  347 |         return memcmp(ba1, ba2, sizeof(bdaddr_t));
-      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-In function 'bacmp',
-    inlined from 'l2cap_global_chan_by_psm' at net/bluetooth/l2cap_core.c:2004:15:
-./include/net/bluetooth/bluetooth.h:347:16: error: 'memcmp' specified bound 6 exceeds source size 0 [-Werror=stringop-overread]
-  347 |         return memcmp(ba1, ba2, sizeof(bdaddr_t));
-      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-git bisect pointed to 332f1795ca20 ("Bluetooth: L2CAP: Fix l2cap_global_chan_by_psm regression").
-And, reverting that commit has fixed the build failure.
-
-Already reported at https://lore.kernel.org/lkml/YvVQEDs75pxSgxjM@debian/
-and Jacub is looking at a fix, but this is just my usual build failure
-mail of mainline branch for Linus's information.
-
-
---
-Regards
-Sudip
+-- 
+Best regards,
+Dmitry

@@ -2,203 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CB1C5913E8
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 18:32:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F26E25913EF
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 18:34:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239345AbiHLQcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 12:32:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32832 "EHLO
+        id S238734AbiHLQeG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 12:34:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236015AbiHLQcV (ORCPT
+        with ESMTP id S236015AbiHLQeC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 12:32:21 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D41614004;
-        Fri, 12 Aug 2022 09:32:20 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id c20so1143959qtw.8;
-        Fri, 12 Aug 2022 09:32:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=cNGrR3RyPsi1qg212lkUW9pPCHtk24ontw8JUS/4MTI=;
-        b=bonu48aD/aC/n0nC9OTKaC1aGAdcvxtnzQs2y4FRiobC32MQAwO+TpcTkf4OKpii9c
-         Sue+3UKkZ4pbWTgD/e69hTI3N+43ingZHxovFwr8hLfDBcgEBkJ9eSNL8ZBRo9cCAZ8F
-         DewFTmAp/qbcGQU5xUSP/+BHetSFENIaTxcca4d4UbpaZql+gjCWpAgNumg7wActQvQb
-         6u4fA6C3BNnT02WFTYErDV6gXzbJzU25I4zuPJEokCBdtZvq+t1qghCVv71Bpi4cXU2x
-         DgVkyt97kd0iSmOTNbWu2faz9ke5cfVmsHiF6q8OBrJnY7Lu3MPRD98TiMXK8YAhtot+
-         31dA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=cNGrR3RyPsi1qg212lkUW9pPCHtk24ontw8JUS/4MTI=;
-        b=0RyyUYnmfbLwwDD/wIeWDdJ5WPfkSXyL/nlPjIBo5HeHuZ393eBoPIeMTndRgbZu/I
-         tzY9ws4wWf8a32dk4Hd9vUVBXBAMYEHFVFR/2u4thAHRAPFJT3KPY+3Q7XHGRQsj6+Bc
-         nRTaHImvYQNKrRC29mQj/g8DUtVR17YmqCM2OHIAYqaJwCHBm6/2Adzo28tVhoABKTgc
-         n9OPxxdtlDKVLmlyn5GDfnttq82W+SjMTaUq0MnTtzlYUH888a7/gnwL0PQAfaNgQeZY
-         S3CQUJLvsOFVe05UhrAdLrNFSrfBaChzixNDiMbxWY77S74AR2Dz5fTEwvFxiGzM/sQB
-         nFaQ==
-X-Gm-Message-State: ACgBeo2yOGe0mn1Z0onGqBU5UYyBrskK+bBhTuPAAqt/JKgzCEqJBk1z
-        tPcODEPVNbvXLYysqwl/3D5VBzn9Rrs=
-X-Google-Smtp-Source: AA6agR6Z1ODU4ne5NnxfFxhYi/JwhieX8HzrzxvkFVFBYZcil2ZZ2spnUfSjTAHl2+yTUyQEnz0F3Q==
-X-Received: by 2002:a05:622a:1b9e:b0:31f:2417:895d with SMTP id bp30-20020a05622a1b9e00b0031f2417895dmr4451109qtb.184.1660321939473;
-        Fri, 12 Aug 2022 09:32:19 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id bq18-20020a05620a469200b006b59ddb4bc5sm2020023qkb.84.2022.08.12.09.32.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 09:32:18 -0700 (PDT)
-Message-ID: <8c21e530-8e8f-ce2a-239e-9d3a354996cf@gmail.com>
-Date:   Fri, 12 Aug 2022 09:32:15 -0700
+        Fri, 12 Aug 2022 12:34:02 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9657A14004;
+        Fri, 12 Aug 2022 09:34:01 -0700 (PDT)
+Received: from fraeml711-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M48Pr4dSCz682NF;
+        Sat, 13 Aug 2022 00:33:52 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml711-chm.china.huawei.com (10.206.15.60) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 12 Aug 2022 18:33:59 +0200
+Received: from [10.48.157.254] (10.48.157.254) by
+ lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 12 Aug 2022 17:33:58 +0100
+Message-ID: <34bdd9a8-26bf-95b0-ed62-a6af5db05654@huawei.com>
+Date:   Fri, 12 Aug 2022 17:33:57 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH net] net: phy: Warn about incorrect mdio_bus_phy_resume()
- state
-Content-Language: en-US
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        netdev@vger.kernel.org,
-        Steve Glendinning <steve.glendinning@shawell.net>
-Cc:     opendmb@gmail.com, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20220801233403.258871-1-f.fainelli@gmail.com>
- <CGME20220812111948eucas1p2bf97e7f4558eb024f419346367a87b45@eucas1p2.samsung.com>
- <27016cc0-f228-748b-ea03-800dda4e5f0c@samsung.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <27016cc0-f228-748b-ea03-800dda4e5f0c@samsung.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [PATCH 0/6] libsas and drivers: NCQ error handling
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <jinpu.wang@cloud.ionos.com>, <yangxingui@huawei.com>,
+        <chenxiang66@hisilicon.com>, <hare@suse.de>
+CC:     <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1658489049-232850-1-git-send-email-john.garry@huawei.com>
+ <d2e27cb7-d90a-2f0a-1848-e1ec8faf7899@opensource.wdc.com>
+ <437abe43-7ddd-6f49-9386-d8ed04c659bf@huawei.com>
+ <15bfd5e0-7fcd-fdee-a546-7720b55eb108@opensource.wdc.com>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <15bfd5e0-7fcd-fdee-a546-7720b55eb108@opensource.wdc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.48.157.254]
+X-ClientProxiedBy: lhrpeml100003.china.huawei.com (7.191.160.210) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/12/22 04:19, Marek Szyprowski wrote:
-> Hi All,
-> 
-> On 02.08.2022 01:34, Florian Fainelli wrote:
->> Calling mdio_bus_phy_resume() with neither the PHY state machine set to
->> PHY_HALTED nor phydev->mac_managed_pm set to true is a good indication
->> that we can produce a race condition looking like this:
+On 12/08/2022 16:39, Damien Le Moal wrote:
+>> For this specific test we don't seem to run a hardreset after the
+>> autopsy, but we do seem to be getting an NCQ error. That's interesting.
 >>
->> CPU0						CPU1
->> bcmgenet_resume
->>    -> phy_resume
->>      -> phy_init_hw
->>    -> phy_start
->>      -> phy_resume
->>                                                   phy_start_aneg()
->> mdio_bus_phy_resume
->>    -> phy_resume
->>       -> phy_write(..., BMCR_RESET)
->>        -> usleep()                                  -> phy_read()
+>> We have noticed this scenario for hisi_sas NCQ error, whereby the
+>> autopsy decided a reset is not required or useful, such as a medium
+>> error. Anyway the pm8001 driver relies on the reset being run always for
+>> the NCQ error. So I am thinking of tweaking sas_ata_link_abort() as follows:
 >>
->> with the phy_resume() function triggering a PHY behavior that might have
->> to be worked around with (see bf8bfc4336f7 ("net: phy: broadcom: Fix
->> brcm_fet_config_init()") for instance) that ultimately leads to an error
->> reading from the PHY.
+>> void sas_ata_link_abort(struct domain_device *device)
+>> {
+>> 	struct ata_port *ap = device->sata_dev.ap;
+>> 	struct ata_link *link = &ap->link;
 >>
->> Fixes: fba863b81604 ("net: phy: make PHY PM ops a no-op if MAC driver manages PHY PM")
->> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
+>> 	link->eh_info.err_mask |= AC_ERR_DEV;
+>> +	link->eh_info.action |= ATA_EH_RESET;
+>> 	ata_link_abort(link);
+>> }
+>>
+>> This should force a reset.
+> This is an unaligned write to a sequential write required zone on SMR. So
+> definitely not worth a reset. Forcing hard resetting the link for such error is
+> an overkill. I think it is better to let ata_link_abort() -> ... -> scsi & ata
+> EH decide on the disposition.
+
+Do you know if this triggered the pm8001 IO_XFER_ERROR_ABORTED_NCQ_MODE 
+  error?
+
+If I do not set ATA_EH_RESET then I need to trust that libata will 
+always decide to do the reset for pm8001 IO_XFER_ERROR_ABORTED_NCQ_MODE 
+error. That is because it is in the reset that I send the pm8001 "abort 
+all" command - I could not find a better place for it.
+
 > 
-> This patch, as probably intended, triggers a warning during system
-> suspend/resume cycle in the SMSC911x driver. I've observed it on ARM
-> Juno R1 board on the kernel compiled from next-202208010:
+> Note that patch 3 did not apply cleanly to the current Linus tree. So a rebase
+> for the series is needed.
 > 
->    ------------[ cut here ]------------
->    WARNING: CPU: 1 PID: 398 at drivers/net/phy/phy_device.c:323
-> mdio_bus_phy_resume+0x34/0xc8
->    Modules linked in: smsc911x cpufreq_powersave cpufreq_conservative
-> crct10dif_ce ip_tables x_tables ipv6 [last unloaded: smsc911x]
->    CPU: 1 PID: 398 Comm: rtcwake Not tainted 5.19.0+ #940
->    Hardware name: ARM Juno development board (r1) (DT)
->    pstate: 80000005 (Nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->    pc : mdio_bus_phy_resume+0x34/0xc8
->    lr : dpm_run_callback+0x74/0x350
->    ...
->    Call trace:
->     mdio_bus_phy_resume+0x34/0xc8
->     dpm_run_callback+0x74/0x350
->     device_resume+0xb8/0x258
->     dpm_resume+0x120/0x4a8
->     dpm_resume_end+0x14/0x28
->     suspend_devices_and_enter+0x164/0xa60
->     pm_suspend+0x25c/0x3a8
->     state_store+0x84/0x108
->     kobj_attr_store+0x14/0x28
->     sysfs_kf_write+0x60/0x70
->     kernfs_fop_write_iter+0x124/0x1a8
->     new_sync_write+0xd0/0x190
->     vfs_write+0x208/0x478
->     ksys_write+0x64/0xf0
->     __arm64_sys_write+0x14/0x20
->     invoke_syscall+0x40/0xf8
->     el0_svc_common.constprop.3+0x8c/0x120
->     do_el0_svc+0x28/0xc8
->     el0_svc+0x48/0xd0
->     el0t_64_sync_handler+0x94/0xb8
->     el0t_64_sync+0x15c/0x160
->    irq event stamp: 24406
->    hardirqs last  enabled at (24405): [<ffff8000090c4734>]
-> _raw_spin_unlock_irqrestore+0x8c/0x90
->    hardirqs last disabled at (24406): [<ffff8000090b3164>] el1_dbg+0x24/0x88
->    softirqs last  enabled at (24144): [<ffff800008010488>] _stext+0x488/0x5cc
->    softirqs last disabled at (24139): [<ffff80000809bf98>]
-> irq_exit_rcu+0x168/0x1a8
->    ---[ end trace 0000000000000000 ]---
-> 
-> I hope the above information will help fixing the driver.
 
-Yes this is catching an actual issue in the driver in that the PHY state 
-machine is still running while the system is trying to suspend. We could 
-go about fixing it in a different number of ways, though I believe this 
-one is probably correct enough to work and fix the warning:
+That might be just git am, which always seems temperamental. The patches 
+still apply from cherry-pick'ing for me. Anyway, I'll send a new version 
+next week.
 
-diff --git a/drivers/net/ethernet/smsc/smsc911x.c 
-b/drivers/net/ethernet/smsc/smsc911x.c
-index 3bf20211cceb..e9c0668a4dc0 100644
---- a/drivers/net/ethernet/smsc/smsc911x.c
-+++ b/drivers/net/ethernet/smsc/smsc911x.c
-@@ -1037,6 +1037,8 @@ static int smsc911x_mii_probe(struct net_device *dev)
-                 return ret;
-         }
+Thanks,
+John
 
-+       /* Indicate that the MAC is responsible for managing PHY PM */
-+       phydev->mac_managed_pm = true;
-         phy_attached_info(phydev);
-
-         phy_set_max_speed(phydev, SPEED_100);
-@@ -2587,6 +2589,8 @@ static int smsc911x_suspend(struct device *dev)
-         if (netif_running(ndev)) {
-                 netif_stop_queue(ndev);
-                 netif_device_detach(ndev);
-+               if (!device_may_wakeup(dev))
-+                       phy_suspend(dev->phydev);
-         }
-
-         /* enable wake on LAN, energy detection and the external PME
-@@ -2628,6 +2632,8 @@ static int smsc911x_resume(struct device *dev)
-         if (netif_running(ndev)) {
-                 netif_device_attach(ndev);
-                 netif_start_queue(ndev);
-+               if (!device_may_wakeup(dev))
-+                       phy_resume(dev->phydev);
-         }
-
-         return 0;
-
--- 
-Florian

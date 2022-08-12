@@ -2,143 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 760DF590C9D
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 09:35:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1ACB590CA0
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 09:37:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237377AbiHLHfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 03:35:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38984 "EHLO
+        id S237388AbiHLHhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 03:37:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237388AbiHLHft (ORCPT
+        with ESMTP id S236987AbiHLHhI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 03:35:49 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74C3054655
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 00:35:48 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id w15so167912ljw.1
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 00:35:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=crf/lK1s1ldsW0Tw+pD5ZUVc6HtWvvcIF4KEVSHKYCs=;
-        b=MfvFWerjwE77AMLPjqKIegxdoqhOqfeQHdlO/9wkZV8Ij6ZLgc2ol2zQPgQeWsj/cb
-         73haqi/mTZaglW2d9895VCaJISlsrujvoqxmq0cOEDO7VkYXH6VUxmVTO4BoILtdY5vE
-         UempconjzeH7i57ydpUcpD0RQ06+algfRdpTwWNf9x0xGVA1VtARrXXCiE60EHpSua3T
-         isrJnW182uUbzmoNuVyGYw5kQ43DIkENrudblAvGJi2l5Hib86Dd9CqUlmbW1TaP7Jet
-         TtxSbGSn6SfZNs/6oUI5PcdaZGBAqhrvTc3jQW181cTTgirqhvd30CEL2iHTqAP9kF7t
-         sBew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=crf/lK1s1ldsW0Tw+pD5ZUVc6HtWvvcIF4KEVSHKYCs=;
-        b=XZZQh2LNQqYqVM0ebF6RFYh3SZVePRQL4Pwy5cwhqcEaUqwVyGLDQ/KJtPuBDUg8/7
-         JQxZhMBixZ0n6mEAVe412mdS8Y6WBLIngUfixgv7bef0reivVmhugdKyyfb1CF5j9/Vh
-         i0R0SUPtsESVps4Yn7A3tjLzWWFQrJnw1xg/IAEax/xPHgFPTqY2gXjHpkeuClGohMwu
-         8M9xh7hAQPIicyWFmJpsat56AgSLG0tvKuiqaKqMI5d6r7d0eybb+4t5LLyPq7P8Cgef
-         zASSvIzO6x3tIJfJQMTC25OuWoWwRsfaMyP1c2HN583b78Be7nvhBo9oxKdhg+ZGj0Kd
-         hLJQ==
-X-Gm-Message-State: ACgBeo21fB8VR7yHAb/dsjGBKxn52Rch+Vh4P6BMAxaZs2g1FO2PMSTk
-        iZGQOJeitZV6GhvCvQlL4uRzBw==
-X-Google-Smtp-Source: AA6agR4psy2iVI6/fRchmfquS+bif8PW2q7V1EgYmOZnqcSeinMvmGjxODB1u3SfgOJboPsudN4f0w==
-X-Received: by 2002:a2e:bf16:0:b0:25f:f90a:b856 with SMTP id c22-20020a2ebf16000000b0025ff90ab856mr866672ljr.473.1660289746838;
-        Fri, 12 Aug 2022 00:35:46 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id p2-20020a05651211e200b0048af60faabcsm118423lfs.131.2022.08.12.00.35.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 00:35:46 -0700 (PDT)
-Message-ID: <99b5bddb-4a09-a3ac-e01b-d0ae624ad2f8@linaro.org>
-Date:   Fri, 12 Aug 2022 10:35:39 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 2/4] dt-bindings: PCI: microchip,pcie-host: fix missing
- clocks properties
-Content-Language: en-US
-To:     Conor Dooley <mail@conchuod.ie>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        Fri, 12 Aug 2022 03:37:08 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 544AE9E13C;
+        Fri, 12 Aug 2022 00:37:07 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id B98575C0185;
+        Fri, 12 Aug 2022 03:37:04 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Fri, 12 Aug 2022 03:37:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm2; t=1660289824; x=1660376224; bh=0vomSWUYgz25cq0M/5SuumlfH
+        1NhqVcmcXAH78BG0Ro=; b=CSCNL4vjOfBWUBIKzMHLUdL5JO72UJcw5KFlg/69j
+        CF5KU+84gaRWu0+rTWpVH6NduN5x/MAA0b8mzT7BAu+4P504QpDIILGG10Uj9mYQ
+        mdGsTfqHPqEZYGmTTLjQyLuuqps7TzaQqttMGtYAz+sxO1IfLWe3OOpLex5VizKf
+        zGqB+CDYHOh4yKniX7Muv78ELx71ihGCD1Ah7YOqtHkZOSBuUnQmdVEiH/BP/uRA
+        dPsEfCn1a83wPwsNFxQvezOJKTnGhGbtPTJs317ktf/25MViiaTpkQJtkyGxZN++
+        s2Enhe5t/TjrnFHfs1w+qbef4NJOxXuaZxA5Hg3pTvbmg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1660289824; x=1660376224; bh=0vomSWUYgz25cq0M/5SuumlfH1NhqVcmcXA
+        H78BG0Ro=; b=f9h1J5ARtHOZZVRwp2sHuWrsT22gk5MWMwe2V7JK/RB33DSSmvc
+        8LsAPI59jG7eviCgsbd/wUGrmtpQzVw3Y1S0Q+bDo8wNjFiAw+RuzZriauO2mf5v
+        8k5sFJj/d4rvJkqQqKwcXM5+Fhmsl6SexiojDe+LzRXUl2krEHCQxc5rDf2t5GGv
+        5YofMLj9KqE6sjshEIY/wf4Fe1REBnE3V+GZrzamefoS8V6/b8ULgFzSj8HU2BtH
+        xQgSMTEQ0Lua266bJXmDAiy/Tfb/4VGcuflIaK2J/umwKErYH+1x68eAKe2BlCLL
+        aPBvrAAWtRH/fZDVP226C3LcvqGV1C0+Emg==
+X-ME-Sender: <xms:IAP2YoiprmhceXYihmGNyokxR2u5bP7m4xu63M4hZaeAtpiSq4q_4A>
+    <xme:IAP2YhB7BAC0E3Bg_Mre68J5GVDZMtnx7zUexUd7AZfxh0jJ3vNuVJI3v7ddq1dck
+    uJptI0bTfY0hCnXlw>
+X-ME-Received: <xmr:IAP2YgEemVKtLl3JziUzXnc1TCan_9_jFB-QUTNI3DOZuy5wqscUF6W11p7s3-23asyNTfDZucfP0TIEnYFJYNUpOHQkBZjpXHUsuPxgDWPgntf72iXs6TstPdXTzdX7l8YXDA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeghedguddvvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgv
+    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
+    frrghtthgvrhhnpeekveelhfejueelleetvdejvdeffeetgeelheeujeffhefgffefkeeh
+    hffhkeekgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:IAP2YpQY9ofEqq7c6NrJ0gi3rv-PZ3CI7ccDRlu_paY48e9qX4tjtw>
+    <xmx:IAP2YlwzkTq5TtKGzMkiGP9ZrVJuSuoQ50MjXXR1qn_fGjCL0Df4VQ>
+    <xmx:IAP2Yn4irgWWHCp8oDUVPtl1TJsG4JrI60dkPTug07019q8nxhn4Jg>
+    <xmx:IAP2Yr7QKe2bW58vetWDAUcgVy9ACiOo5M-H09QqEsnp_PuamCBfAw>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 12 Aug 2022 03:37:03 -0400 (EDT)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>
-Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-References: <20220811203306.179744-1-mail@conchuod.ie>
- <20220811203306.179744-3-mail@conchuod.ie>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220811203306.179744-3-mail@conchuod.ie>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: [PATCH] dt-bindings: display: sun4i: Add D1 TCONs to conditionals
+Date:   Fri, 12 Aug 2022 02:37:02 -0500
+Message-Id: <20220812073702.57618-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/08/2022 23:33, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> Upgrading dt-schema to v2022.08 reveals unevaluatedProperties issues
-> that were not previously visible, such as the missing clocks and
-> clock-names properties for PolarFire SoC's PCI controller:
-> arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dtb: pcie@2000000000: Unevaluated properties are not allowed ('clock-names', 'clocks', 'legacy-interrupt-controller', 'microchip,axi-m-atr0' were unexpected)
->         From schema: Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
-> 
-> The clocks are required to enable interfaces between the FPGA fabric
-> and the core complex, so add them to the binding.
-> 
-> Fixes: 6ee6c89aac35 ("dt-bindings: PCI: microchip: Add Microchip PolarFire host binding")
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
->  .../bindings/pci/microchip,pcie-host.yaml     | 25 +++++++++++++++++++
->  1 file changed, 25 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml b/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
-> index edb4f81253c8..2a2166f09e2c 100644
-> --- a/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
-> +++ b/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
-> @@ -25,6 +25,31 @@ properties:
->        - const: cfg
->        - const: apb
->  
-> +  clocks:
-> +    description:
-> +      Fabric Interface Controllers, FICs, are the interface between the FPGA
-> +      fabric and the core complex on PolarFire SoC. The FICs require two clocks,
-> +      one from each side of the interface. The "FIC clocks" described by this
-> +      property are on the core complex side & communication through a FIC is not
-> +      possible unless it's corresponding clock is enabled. A clock must be
-> +      enabled for each of the interfaces the root port is connected through.
-> +    minItems: 1
-> +    items:
-> +      - description: FIC0's clock
-> +      - description: FIC1's clock
-> +      - description: FIC2's clock
-> +      - description: FIC3's clock
-> +
-> +  clock-names:
-> +    items:
-> +      enum:
-> +        - fic0
-> +        - fic1
-> +        - fic2
-> +        - fic3
-> +    minItems: 1
-> +    maxItems: 4
+When adding the D1 TCON bindings, I missed the conditional blocks that
+restrict the binding for TCON LCD vs TCON TV hardware. Add the D1 TCON
+variants to the appropriate blocks for DE2 TCON LCDs and TCON TVs.
 
-No need for maxItems.
+Fixes: ae5a5d26c15c ("dt-bindings: display: Add D1 display engine compatibles")
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
 
-Best regards,
-Krzysztof
+ .../devicetree/bindings/display/allwinner,sun4i-a10-tcon.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/display/allwinner,sun4i-a10-tcon.yaml b/Documentation/devicetree/bindings/display/allwinner,sun4i-a10-tcon.yaml
+index 4a92a4c7dcd7..f8168986a0a9 100644
+--- a/Documentation/devicetree/bindings/display/allwinner,sun4i-a10-tcon.yaml
++++ b/Documentation/devicetree/bindings/display/allwinner,sun4i-a10-tcon.yaml
+@@ -224,43 +224,45 @@ allOf:
+             - const: ahb
+             - const: tcon-ch0
+             - const: lvds-alt
+ 
+   - if:
+       properties:
+         compatible:
+           contains:
+             enum:
+               - allwinner,sun8i-a83t-tcon-lcd
+               - allwinner,sun8i-v3s-tcon
+               - allwinner,sun9i-a80-tcon-lcd
++              - allwinner,sun20i-d1-tcon-lcd
+ 
+     then:
+       properties:
+         clocks:
+           minItems: 2
+ 
+         clock-names:
+           items:
+             - const: ahb
+             - const: tcon-ch0
+ 
+   - if:
+       properties:
+         compatible:
+           contains:
+             enum:
+               - allwinner,sun8i-a83t-tcon-tv
+               - allwinner,sun8i-r40-tcon-tv
+               - allwinner,sun9i-a80-tcon-tv
++              - allwinner,sun20i-d1-tcon-tv
+ 
+     then:
+       properties:
+         clocks:
+           minItems: 2
+ 
+         clock-names:
+           items:
+             - const: ahb
+             - const: tcon-ch1
+ 
+   - if:
+@@ -269,40 +271,42 @@ allOf:
+           contains:
+             enum:
+               - allwinner,sun5i-a13-tcon
+               - allwinner,sun6i-a31-tcon
+               - allwinner,sun6i-a31s-tcon
+               - allwinner,sun7i-a20-tcon
+               - allwinner,sun8i-a23-tcon
+               - allwinner,sun8i-a33-tcon
+               - allwinner,sun8i-v3s-tcon
+               - allwinner,sun9i-a80-tcon-lcd
+               - allwinner,sun4i-a10-tcon
+               - allwinner,sun8i-a83t-tcon-lcd
++              - allwinner,sun20i-d1-tcon-lcd
+ 
+     then:
+       required:
+         - "#clock-cells"
+         - clock-output-names
+ 
+   - if:
+       properties:
+         compatible:
+           contains:
+             enum:
+               - allwinner,sun6i-a31-tcon
+               - allwinner,sun6i-a31s-tcon
+               - allwinner,sun8i-a23-tcon
+               - allwinner,sun8i-a33-tcon
+               - allwinner,sun8i-a83t-tcon-lcd
++              - allwinner,sun20i-d1-tcon-lcd
+ 
+     then:
+       properties:
+         resets:
+           minItems: 2
+ 
+         reset-names:
+           items:
+             - const: lcd
+             - const: lvds
+ 
+   - if:
+-- 
+2.35.1
+

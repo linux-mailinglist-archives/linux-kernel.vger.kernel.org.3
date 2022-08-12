@@ -2,107 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91EA7590E05
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 11:27:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6666A590E0D
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 11:29:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237050AbiHLJ1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 05:27:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40720 "EHLO
+        id S237773AbiHLJ3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 05:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230379AbiHLJ1h (ORCPT
+        with ESMTP id S230379AbiHLJ3Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 05:27:37 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22563A5998
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 02:27:36 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id q9-20020a17090a2dc900b001f58bcaca95so7819928pjm.3
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 02:27:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=LzSEVyCY0rVcjjfGUaDS5CrDNhUakD7W6pkaedXCK3M=;
-        b=oCrlkqT6QEgaGNjRK3uXf1a3edsqWHkyeNSIJ7B7AZlUTVJz0vJFXLsg9PDYbD9PQ0
-         zPYv1dWvc67zKrHY/O4Ygj/axQvYTd04weKewgFQMty1Cc6yHY/GNr/nyP/EKngQqiZE
-         d4vAKaJ5seUIQ9hdGKGurZYmfi0quA8+aAycI0/Ey5IAHd8U6jVOI9k5Fyn8YEhAy1zE
-         soaKHveguOvXckf/kra51veFM0eD0MOAAh2ijzPHM1lvVvmziI+irgm7o8pARCPtr3He
-         YFI0j7nwHc2TYI8YDmi2DajVxRC52TVYVjzly0wie+KkstHxh5ooH1chAZ6GAOW9p242
-         7o5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=LzSEVyCY0rVcjjfGUaDS5CrDNhUakD7W6pkaedXCK3M=;
-        b=KDNF1I6IF8kneOcg3StcfUWXVRJJE6cJQlox1pq53Y4P7JxN7mfb8PDZIxTkKTk+dK
-         /ATjloDRkgkU+Kqx30QNPKMfYBVu3gF07T5kIgwzsJ34JdoiZXv+RRyS8N1aACzoE6ua
-         reEnmUG97QhfU+onIbrqYTDBbYSbovf947u8ohTmepRdhAtuFGkLpPOm2tAEcq2JbRtF
-         GO0grM/H4uYGPek0vtlwgRy+BhsOcX2C68DGrtCBo3X8ex9yErYy/5VEwvdr880+ADZ4
-         bzmuJiUKoZptltaXqSBWMufmYzlhzv90BhrSfABDQkGUrHR6NQqRip88TgNRprHN0Ehw
-         2kSQ==
-X-Gm-Message-State: ACgBeo2kWy+RcWNS7T20p993D/MzrdD1Ikntpi7eILRmljoavjo9FZV4
-        sm7TTMreizLzMSluaeiidBYHqg==
-X-Google-Smtp-Source: AA6agR548JNzF0k/wghBss2w8gS+i/8K9JWBwwU3cusnYsQeQ9eKg4O8qjzNC9Jjm3/R7fWU64098A==
-X-Received: by 2002:a17:903:11cf:b0:171:afc7:8936 with SMTP id q15-20020a17090311cf00b00171afc78936mr1017395plh.95.1660296455618;
-        Fri, 12 Aug 2022 02:27:35 -0700 (PDT)
-Received: from [10.2.223.68] ([61.120.150.75])
-        by smtp.gmail.com with ESMTPSA id w3-20020a170902d10300b0016d9b94ddfasm1181771plw.145.2022.08.12.02.27.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 02:27:35 -0700 (PDT)
-Message-ID: <1e24242e-bb37-e15f-906a-abe5cd865a98@bytedance.com>
-Date:   Fri, 12 Aug 2022 17:27:29 +0800
+        Fri, 12 Aug 2022 05:29:16 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A997EA598A;
+        Fri, 12 Aug 2022 02:29:10 -0700 (PDT)
+X-UUID: cf0a2a42a8674b0080b450e633f2c9f3-20220812
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=njLuTkbdipKmSw0XWHLdaUkq+1a52QY2MIrUxhRqVRM=;
+        b=h4iIhPN09eTYha+QffQwjjPfZjZk+UlL8ptdVTK+NRNRx6zSfO+ifzsNpBmvl0vdGOP2TKyCvxtKc+anXKyAexWGVxvMz+Rcco6mKCnAuRSWQbCdRLv9tXQPQasJ6sNGbD4S459LtW4HnkKpkgW2zwCGHlFeec34UeZdrrMBU60=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.9,REQID:79563882-6d71-4d08-953c-52889e0ba645,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Release
+        _Ham,ACTION:release,TS:100
+X-CID-INFO: VERSION:1.1.9,REQID:79563882-6d71-4d08-953c-52889e0ba645,OB:0,LOB:
+        0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS98
+        1B3D,ACTION:quarantine,TS:100
+X-CID-META: VersionHash:3d8acc9,CLOUDID:0fe8a1ae-9535-44a6-aa9b-7f62b79b6ff6,C
+        OID:d54f29b5932d,Recheck:0,SF:28|17|19|48,TC:nil,Content:0,EDM:-3,IP:nil,U
+        RL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: cf0a2a42a8674b0080b450e633f2c9f3-20220812
+Received: from mtkcas11.mediatek.inc [(172.21.101.40)] by mailgw01.mediatek.com
+        (envelope-from <zhiyong.tao@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 249976722; Fri, 12 Aug 2022 17:29:05 +0800
+Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 12 Aug 2022 17:29:03 +0800
+Received: from localhost.localdomain (10.17.3.154) by mtkmbs11n2.mediatek.inc
+ (172.21.101.73) with Microsoft SMTP Server id 15.2.792.15 via Frontend
+ Transport; Fri, 12 Aug 2022 17:29:02 +0800
+From:   Zhiyong Tao <zhiyong.tao@mediatek.com>
+To:     <lee.jones@linaro.org>, <robh+dt@kernel.org>,
+        <matthias.bgg@gmail.com>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <eddie.huang@mediatek.com>,
+        <a.zummo@towertech.it>, <alexandre.belloni@bootlin.com>,
+        <fshao@chromium.org>
+CC:     <sen.chu@mediatek.com>, <hui.liu@mediatek.com>,
+        <allen-kh.cheng@mediatek.com>, <zhiyong.tao@mediatek.com>,
+        <hsin-hsiung.wang@mediatek.com>, <sean.wang@mediatek.com>,
+        <macpaul.lin@mediatek.com>, <wen.su@mediatek.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-rtc@vger.kernel.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>
+Subject: [PATCH v3 0/1] Mediatek MT6366 Regulator patch 
+Date:   Fri, 12 Aug 2022 17:29:00 +0800
+Message-ID: <20220812092901.6429-1-zhiyong.tao@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.1.0
-Subject: Re: [External] Re: [PATCH v3] PCI/ERR: Use pcie_aer_is_native() to
- judge whether OS owns AER
-Content-Language: en-US
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     ruscur@russell.cc, oohall@gmail.com, bhelgaas@google.com,
-        lukas@wunner.de, jan.kiszka@siemens.com, stuart.w.hayes@gmail.com,
-        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220727035334.9997-1-chenzhuo.1@bytedance.com>
- <b5c746db-f6a0-d89e-6db5-e4a206c9237a@linux.intel.com>
- <cfd44d9c-453b-e498-2630-9057947cf3cd@bytedance.com>
- <b54b068b-fe9a-8609-3e9f-170579affc27@bytedance.com>
- <6056c6cc-9861-9c29-8e36-48e0dd36c702@linux.intel.com>
-From:   Zhuo Chen <chenzhuo.1@bytedance.com>
-In-Reply-To: <6056c6cc-9861-9c29-8e36-48e0dd36c702@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add mt6366 binding documentation
+
+Changes in patch v3:
+1)change patch title
+2)change "regulator.yaml#" to regulator.yaml#
+3)remove regulator-name
+4)fix 4 space for DTS example
+
+Changes in patch v2:
+1)fix patch title description.
+2)fix patch maintainer description.
+3)won't cc to srv_heupstream@mediatek.com
+4)fix patch commit message description.
+5)add properties node and compatible
+6)put "unevaluatedProperties: false" after $ref
+7)remove underscores in node names.
+8)change Filename to "mediatek,mt6366-regulator.yaml"
+
+Zhiyong Tao (1):
+  regulator: dt-bindings: mediatek: add mt6366
+
+ .../regulator/mediatek,mt6366-regulator.yaml  | 287 ++++++++++++++++++
+ 1 file changed, 287 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/regulator/mediatek,mt6366-regulator.yaml
+
+--
+2.18.0
 
 
-On 8/3/22 6:18 AM, Sathyanarayanan Kuppuswamy wrote:
-> 
-> 
-> On 7/27/22 2:37 AM, Zhuo Chen wrote:
->>>
->> Do you mean changing "if ((host->native_aer || pcie_ports_native) && aer)" into "if (pcie_aer_is_native(dev) && aer)" ?
->> I thought changing into "if (pcie_aer_is_native(dev))" before.
->>
->> One another doubt. Not every pci device support aer. When dev->aer_cap is NULL and root->aer_cap is not NULL in aer_root_reset(), pcie_aer_is_native() will return false and OS cannot operate root register. It's different from just using "(host->native_aer || pcie_ports_native)".
->>
->> Or we can change "if ((host->native_aer || pcie_ports_native) && aer)" into "if (pcie_aer_is_native(root))". But in this way, argument NULL pointer check should be added in pcie_aer_is_native().
-> 
-> Looking into it again, I think it is better to leave it as it is. Please ignore my comment.
-> 
-
-Thanks! Is there anything else to improve and what's next for
-the patch v3 ?
-
--- 
-Thanks,
-Zhuo Chen

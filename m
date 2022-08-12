@@ -2,54 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A302591015
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 13:33:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEDD9591018
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 13:33:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236141AbiHLLdK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 07:33:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37912 "EHLO
+        id S237221AbiHLLdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 07:33:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiHLLdH (ORCPT
+        with ESMTP id S236894AbiHLLdU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 07:33:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 454C7ADCCE;
-        Fri, 12 Aug 2022 04:33:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C6C63616D9;
-        Fri, 12 Aug 2022 11:33:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9D13C433D7;
-        Fri, 12 Aug 2022 11:33:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660303986;
-        bh=4pxvzoeARritwSA7t5/xds/KLSaUDZC3mc4bIbfFMMU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TyZvwqDODPH1OA6HSRGl1wTO4a9tCG8z4Xggb5pWwT/Bs7VeDxbi4rr5+3TJCUXse
-         UPXrYqe2XPJ6BxBkDDh2c+8HL0e+qK/lgApfoZiRLxf7IcY73rcxX65Wxs/fln30Uh
-         hnew1iYPXfYHNmn+lgcPyXMI/h9M2FAFqDh9vmLNWW0ts/P4xtQjCie4mape+WZtBq
-         2ebL4jgo9z1jp8b/dtdxfJyUi2EtiME6Y9FhHzudEdnrhdo6jTbbghhUtnz2R47Eu1
-         dcgNJDVDbfERfScTrZ7E1sabAQ2mn01rfHSFuEy9ZnOha3LcCbVSDdO6qCjFRAF3Bj
-         kSWXZitpqnDLA==
-Date:   Fri, 12 Aug 2022 12:32:59 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xiaoning.wang@nxp.com,
-        Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH 1/2] dt-bindings: lpspi: add dmas property
-Message-ID: <YvY6a9SiFzAx5M2n@sirena.org.uk>
-References: <20220812073452.45763-1-peng.fan@oss.nxp.com>
+        Fri, 12 Aug 2022 07:33:20 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF1ECAE9F3;
+        Fri, 12 Aug 2022 04:33:19 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4M41gd1vHYzlW1W;
+        Fri, 12 Aug 2022 19:30:21 +0800 (CST)
+Received: from kwepemm600007.china.huawei.com (7.193.23.208) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 12 Aug 2022 19:33:17 +0800
+Received: from DESKTOP-8RFUVS3.china.huawei.com (10.174.185.179) by
+ kwepemm600007.china.huawei.com (7.193.23.208) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 12 Aug 2022 19:33:16 +0800
+From:   Zenghui Yu <yuzenghui@huawei.com>
+To:     <linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <rafael@kernel.org>, <lenb@kernel.org>,
+        <wanghaibin.wang@huawei.com>, Zenghui Yu <yuzenghui@huawei.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: [PATCH] ACPI: property: Fix mis-use of _Generic()
+Date:   Fri, 12 Aug 2022 19:33:08 +0800
+Message-ID: <20220812113308.1772-1-yuzenghui@huawei.com>
+X-Mailer: git-send-email 2.23.0.windows.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tSFccgfutfxwui54"
-Content-Disposition: inline
-In-Reply-To: <20220812073452.45763-1-peng.fan@oss.nxp.com>
-X-Cookie: No foreign coins.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.185.179]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemm600007.china.huawei.com (7.193.23.208)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,36 +51,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+It looks wrong to pass __val as the control-expression of _Generic() which
+will always return 0U this way and acpi_copy_property_array_uint() is
+likely to return -EOVERFLOW error whilst it actually doesn't.
 
---tSFccgfutfxwui54
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Use __val[i] to match the given type list.
 
-On Fri, Aug 12, 2022 at 03:34:51PM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
->=20
-> The LPSPI has dma capability, so add dma property.
+Fixes: 923044133367 ("ACPI: property: Unify integer value reading functions")
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
+Signed-off-by: Zenghui Yu <yuzenghui@huawei.com>
+---
+ drivers/acpi/property.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Please submit patches using subject lines reflecting the style for the
-subsystem, this makes it easier for people to identify relevant patches.
-Look at what existing commits in the area you're changing are doing and
-make sure your subject lines visually resemble what they're doing.
-There's no need to resubmit to fix this alone.
+diff --git a/drivers/acpi/property.c b/drivers/acpi/property.c
+index 7b3ad8ed2f4e..1ededa618a88 100644
+--- a/drivers/acpi/property.c
++++ b/drivers/acpi/property.c
+@@ -1042,7 +1042,7 @@ static int acpi_data_prop_read_single(const struct acpi_device_data *data,
+ 				ret = -EPROTO;				\
+ 				break;					\
+ 			}						\
+-			if (__items[i].integer.value > _Generic(__val,	\
++			if (__items[i].integer.value > _Generic(__val[i], \
+ 								u8: U8_MAX, \
+ 								u16: U16_MAX, \
+ 								u32: U32_MAX, \
+-- 
+2.33.0
 
---tSFccgfutfxwui54
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmL2OmsACgkQJNaLcl1U
-h9AZIQf+PG4laPB+WUPIuqs6cmZr4n5FkU6dT2b2omVeJG0RhPuj6j3/ZjEN7skW
-5LILVD2sQbxTFZiVmUqWmTdFw8gt8p/hTzoEEDS8pZqczdiDymAxsMg5BmI8aO6Y
-J277FvQcbDjdBv/G8LEhvw2MhEwcU2tpLM/w5VM5QGEEvtH43y+ZZg6LIj+yaqPT
-bluDMhENWSIynNA58Y9yIb5UYo8xtlUkntpNwDYlFX9PS2SLVrxpPW12i9dMod6J
-J1pcM/JO55exKvgmkHPypQAyZWVzilheZBgBoMidr9IvecAPah1snMYuvc+jFSuQ
-5mu2MZ+D3h/CP9mJc9UjVjOMyfKNNw==
-=AYh+
------END PGP SIGNATURE-----
-
---tSFccgfutfxwui54--

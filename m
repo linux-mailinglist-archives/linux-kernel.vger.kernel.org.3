@@ -2,82 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E132591516
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 19:53:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A80EA591521
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 19:58:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238006AbiHLRw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 13:52:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58802 "EHLO
+        id S238417AbiHLR6L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 13:58:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbiHLRw5 (ORCPT
+        with ESMTP id S231526AbiHLR6D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 13:52:57 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9110060E1;
-        Fri, 12 Aug 2022 10:52:56 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id a12so448807qkk.7;
-        Fri, 12 Aug 2022 10:52:56 -0700 (PDT)
+        Fri, 12 Aug 2022 13:58:03 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84DD4B2859;
+        Fri, 12 Aug 2022 10:58:02 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id h13so1955855wrf.6;
+        Fri, 12 Aug 2022 10:58:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=hTbq319S2HqQfUvndHpgKaA8H0ceRNDXupwwPdukCdQ=;
-        b=Ctco/O6u6/JrwISnAd8hrYNtPb/a/VDmUpBts4Voy050o7YASgw0wquCcH4ReUj96B
-         JtrmT659rZseW76eZX1HTQcxVHQlDywx/44yC658maQMatxamLNzglBmQS1KbanrUQ8H
-         L4QjRAt6Gv0CDm92uzO7uSREJ7hYF/o0cIjsYjB2pcXsRVpKPe8qsoRkfJjnJYqNsVRb
-         wxDdvgNoB5XDRuqq8yYBQIgq8Rc7mDdRLpmY14Xb+MP63UbQaXZ2eGJl9AS/uj28ggdb
-         aqhvgGmnuzeWpg7DRfau7R4Nv6H5u8UCJ1yKGxPKrPm7yVjcTkR6T5yjFpBx4w0Bbd6B
-         hopQ==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=w8rPxxUwax5JSBYc+MunKfzJoBwcTejD8FTqXrjwB9Q=;
+        b=ZwbNXCMdTWEOw1KTNDeKg360UJPG1HCsisp9+uIXW+AigUK7JmFTPhWn7FWmgINCpT
+         rY7PLkCGfIgguc5MJ32GWWbMwoRGbrciy52PmMX1/5lfI+D30PYnOCwwVfBKBtPaUO/j
+         jYYLJn+GgsmN4Sun3E86Ttf/CyJOHKdJX0obiuUQjFrYu9dJaoyFzwwcqIuPBGKsMxPe
+         M72hExseMtt+PHjI93iQSBcrxtHFZL/mjeY81Pz5VAWFt9PzKIBklpHqsfs4HOpWlXKp
+         1568kstFdwaTNQgqRboZuJDIWBp5MvvF5h0Q7MacN0YSXLEmyowtVOQpKpMF/mqMtWQ3
+         dQyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=hTbq319S2HqQfUvndHpgKaA8H0ceRNDXupwwPdukCdQ=;
-        b=Bf4R8AatqKdzNHsoJDV5J2To8zcNTNcjrKq5qk41A1wQpPiYwefZo74VEuio1Wx7XO
-         T99vePwH0oT+SY/TfONG6f2/iFFdWNKIa0zDliM7LUPkD7OTlay7iq+uH74GDuSbh7Zh
-         KhLivRg3MubrxkGWpR1DLGvPIX6mhCJ78Gk7e20oi0MtQF8L1pRGOQn1ioHYcKfw5BdQ
-         +JSEQYqyCvsDv0VgPgB9ibVR3Vyn0Lu2Vd28Aw9zTSNaVmkldHO1IbCOUWi4lZzHoxc/
-         NuMdfFu2FTLCyjUSQXvEg7sFKcGRHGpvwePdN6VwyvXMmJ5CUPAOrLb0Kz4z6Q8v9J80
-         X3rA==
-X-Gm-Message-State: ACgBeo2G0D6uQv80wF8Wk3hnzUA1FuHiHqwuU4EVxpgtWUGoHZbzk+w5
-        ym0VGychBJo8t0C7oUSV7Ic=
-X-Google-Smtp-Source: AA6agR4z+Xj0gOJv1Vdjzm9SnL5FTuExSao834rEtNsBpX4uar0ThkQZ6iTE7N0Cng8AzdEOIdfzEw==
-X-Received: by 2002:a05:620a:4914:b0:6b9:5ae8:3f9d with SMTP id ed20-20020a05620a491400b006b95ae83f9dmr3783735qkb.335.1660326775684;
-        Fri, 12 Aug 2022 10:52:55 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id t6-20020a05620a450600b006b9c355ed75sm2197406qkp.70.2022.08.12.10.52.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 10:52:55 -0700 (PDT)
-Message-ID: <ec06e9c6-f475-fe19-9046-d57a6168e72b@gmail.com>
-Date:   Fri, 12 Aug 2022 10:52:50 -0700
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=w8rPxxUwax5JSBYc+MunKfzJoBwcTejD8FTqXrjwB9Q=;
+        b=D14ZPtlzlq8c7e+6mQJOgk8oUVYy9cc9vIVSzKd4gEbgaO852DMrMsDOxA4o8NOIlO
+         oNUq/1WKBfV3z6UgyYd8Vc2agud904zDIqPJUSWhD8kt6LeHOztAx/oZHjI2C0wxSp8z
+         7tY/0Jnfi8+3YMy+tCdB2wYM0Bss+ocVDntlwZAQtzi/3+XWSCXKO+TzgK/HjIs5eRP5
+         zJb14VBHMZdNpDkxN5r/rEeOnRiP1UE/hJHZ6nh3KmJgB8ZEk1DMSZroFshLx654Nkl1
+         kXxebbO63ETqJ/rSzl5K7Ld5vzKAUEpVz7CCH8NCv5dI9JrEz5Ogl27KaEcQzc76hWdE
+         EwAw==
+X-Gm-Message-State: ACgBeo0vutrv3g2Q/YvFDBCMTk0gIuwhQiGaC1OZTLh3KZR88FKrUOcT
+        GBD0O9DkOFd8lsuM9ylRK7X6WmtZLj0=
+X-Google-Smtp-Source: AA6agR5BpjeASKsLrsRErii9wRhEEOlS5DHluRVxLpyj5mSQJt2UYcFvMbrTkLZMSIXhaY7aQVzWcA==
+X-Received: by 2002:a5d:5848:0:b0:222:c8cd:288 with SMTP id i8-20020a5d5848000000b00222c8cd0288mr2788260wrf.34.1660327081009;
+        Fri, 12 Aug 2022 10:58:01 -0700 (PDT)
+Received: from localhost.localdomain (host-79-53-105-123.retail.telecomitalia.it. [79.53.105.123])
+        by smtp.gmail.com with ESMTPSA id c3-20020adffb03000000b002206236ab3dsm129831wrr.3.2022.08.12.10.57.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Aug 2022 10:57:59 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Nirmoy Das <nirmoy.das@amd.com>,
+        Jonathan Kim <jonathan.kim@amd.com>,
+        Philip Yang <Philip.Yang@amd.com>,
+        Matthew Auld <matthew.auld@intel.com>,
+        Zack Rusin <zackr@vmware.com>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org
+Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: [PATCH] drm/amd/amdgpu: Replace kmap() with kmap_local_page()
+Date:   Fri, 12 Aug 2022 19:57:53 +0200
+Message-Id: <20220812175753.22926-1-fmdefrancesco@gmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v3 3/3] memory: Add Broadcom STB memory controller driver
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org
-Cc:     Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-References: <20220801220931.181531-1-f.fainelli@gmail.com>
- <20220801220931.181531-4-f.fainelli@gmail.com>
- <26ad247d-a4b3-4051-b8d9-505c09b76f6b@linaro.org>
- <375eac04-dbfd-080a-3003-cae3eda1f42b@gmail.com>
- <fa283e3c-5b96-b0a4-95c5-a7230d16d8ca@linaro.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <fa283e3c-5b96-b0a4-95c5-a7230d16d8ca@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -86,66 +82,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/12/22 10:36, Krzysztof Kozlowski wrote:
-> On 12/08/2022 20:29, Florian Fainelli wrote:
->> On 8/9/22 02:58, Krzysztof Kozlowski wrote:
->>> On 02/08/2022 01:09, Florian Fainelli wrote:
->>>> Add support for configuring the Self Refresh Power Down (SRPD)
->>>> inactivity timeout on Broadcom STB chips. This is used to conserve power
->>>> when the DRAM activity is reduced.
->>>>
->>>
->>>
->>>> +static int __maybe_unused brcmstb_memc_resume(struct device *dev)
->>>> +{
->>>> +	struct brcmstb_memc *memc = dev_get_drvdata(dev);
->>>> +
->>>> +	if (memc->timeout_cycles == 0)
->>>> +		return 0;
->>>> +
->>>> +	return brcmstb_memc_srpd_config(memc, memc->timeout_cycles);
->>>> +}
->>>> +
->>>> +static SIMPLE_DEV_PM_OPS(brcmstb_memc_pm_ops, brcmstb_memc_suspend,
->>>> +			 brcmstb_memc_resume);
->>>> +
->>>> +static struct platform_driver brcmstb_memc_driver = {
->>>> +	.probe = brcmstb_memc_probe,
->>>> +	.remove = brcmstb_memc_remove,
->>>> +	.driver = {
->>>> +		.name		= "brcmstb_memc",
->>>> +		.owner		= THIS_MODULE,
->>>
->>> No need, run coccinelle.
->>>
->>>> +		.of_match_table	= brcmstb_memc_of_match,
->>>> +		.pm		= &brcmstb_memc_pm_ops,
->>>
->>> Shouldn't this be pm_ptr()? and then no need for __maybe_unused in
->>> brcmstb_memc_resume/suspend.
->>
->> How can one can remove __maybe_unused without causing a warning for the
->> CONFIG_PM=n case, not that I needed to build to convince myself, but
->> still did anyway:
->>
->> drivers/memory/brcmstb_memc.c:275:12: warning: 'brcmstb_memc_resume'
->> defined but not used [-Wunused-function]
->>    static int brcmstb_memc_resume(struct device *dev)
->>               ^~~~~~~~~~~~~~~~~~~
->> drivers/memory/brcmstb_memc.c:252:12: warning: 'brcmstb_memc_suspend'
->> defined but not used [-Wunused-function]
->>    static int brcmstb_memc_suspend(struct device *dev)
->>               ^~~~~~~~~~~~~~~~~~~~
->>
->> unless you also implied enclosing those functions under an #if
->> IS_ENABLED(CONFIG_PM) or something which is IMHO less preferable.
-> 
-> Are you sure you added also pm_ptr()? I don't see such warnings with W=1
-> and final object does not have the functions (for a different driver but
-> same principle).
+kmap() is being deprecated in favor of kmap_local_page().
 
-Yes I am sure I added pm_ptr() see the v4 I just submitted. I don't see 
-how the compiler cannot warn about the functions being unused the day 
-they stop being referenced by the pm_ops structure which is eliminated?
+There are two main problems with kmap(): (1) It comes with an overhead as
+mapping space is restricted and protected by a global lock for
+synchronization and (2) it also requires global TLB invalidation when the
+kmap’s pool wraps and it might block when the mapping space is fully
+utilized until a slot becomes available.
+
+With kmap_local_page() the mappings are per thread, CPU local, can take
+page faults, and can be called from any context (including interrupts).
+It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
+the tasks can be preempted and, when they are scheduled to run again, the
+kernel virtual addresses are restored and are still valid.
+
+Since its use in amdgpu/amdgpu_ttm.c is safe, it should be preferred.
+
+Therefore, replace kmap() with kmap_local_page() in amdgpu/amdgpu_ttm.c.
+
+Suggested-by: Ira Weiny <ira.weiny@intel.com>
+Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+index 3b4c19412625..c11657b5915f 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
+@@ -2301,9 +2301,9 @@ static ssize_t amdgpu_iomem_read(struct file *f, char __user *buf,
+ 		if (p->mapping != adev->mman.bdev.dev_mapping)
+ 			return -EPERM;
+ 
+-		ptr = kmap(p);
++		ptr = kmap_local_page(p);
+ 		r = copy_to_user(buf, ptr + off, bytes);
+-		kunmap(p);
++		kunmap_local(ptr);
+ 		if (r)
+ 			return -EFAULT;
+ 
+@@ -2352,9 +2352,9 @@ static ssize_t amdgpu_iomem_write(struct file *f, const char __user *buf,
+ 		if (p->mapping != adev->mman.bdev.dev_mapping)
+ 			return -EPERM;
+ 
+-		ptr = kmap(p);
++		ptr = kmap_local_page(p);
+ 		r = copy_from_user(ptr + off, buf, bytes);
+-		kunmap(p);
++		kunmap_local(ptr);
+ 		if (r)
+ 			return -EFAULT;
+ 
 -- 
-Florian
+2.37.1
+

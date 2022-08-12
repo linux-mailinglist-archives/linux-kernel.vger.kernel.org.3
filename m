@@ -2,76 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7CA8590E55
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 11:46:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CF7AE590E56
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 11:46:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237533AbiHLJqG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 05:46:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33640 "EHLO
+        id S237933AbiHLJq0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 05:46:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232876AbiHLJqD (ORCPT
+        with ESMTP id S232876AbiHLJqU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 05:46:03 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED63E5D0EB
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 02:46:01 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id z20so441142ljq.3
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 02:46:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=HnIwDlX/JVtrallIUFUhoxgC7/rC4uW7G6kTzn+y9Kc=;
-        b=fRrc83dABxCIedBFCkJR4KrcJ6EsoBjay0O9ApFu02EC/3pSx1DI5FWhHts4mCxlGy
-         5+iV6+XPfv2zGCzwA5gR/q79wjifndv/4Ut9jFVdMDhTfErbxq4NcPjwPPIVfNfUF2rT
-         u/nhZmfeNJzFry2PMuA1JFjp9Dfdr1jcObsSYkzEUsJf9/s2xGriaheByd8ayp1RmLXh
-         Pqa5K4i7T/UWbNcSPytTFiRUf76zq/e82FvCYMh7rUszghrIMLifPFBmhowYF8smPPv0
-         0p4DMylY277cSCt0CVMmUp22qgW53MdH42oZB6doErBIuYcgCxpXE4msd85XLorXcgoI
-         mixA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=HnIwDlX/JVtrallIUFUhoxgC7/rC4uW7G6kTzn+y9Kc=;
-        b=UIZqpGzZOlpVPbUFNTYfw++i0EkNcgSYsMFQtf56FJSBOg1RbA416hdCYxGQJLajUZ
-         6EIYzPtDv9Hp1w4tQoP9HYlUrvNm1bU7n7yk3IK+ra8JsE/v6l2MsnaHczvqhWyT07Nu
-         8DXCF0aFSljY7MGmOoI/3pY4liDXLqQtz06msOsF9tzFSx9+moh+MJB2xYcmimI99rjC
-         h8z6JsjuZl1lCdAvph43msqOaILIEID5oZsOxnR5La2pyEQsx1CP4dC1A8AOD/+rCdNR
-         YKJrJojWjPbhqA9PtBRilavP/foTan6aeIbKNQ1n/9SyjwC1n5z/uUqXRqSIZ+PM6CSh
-         KIBw==
-X-Gm-Message-State: ACgBeo0WtzUFVKNuIrPwuWbdwj1pUyMazZmPE3JVO7emgXHfGAdCrNbo
-        iLdCXO1or24d6m5SB2wv/ukZmI5vK5S/UvxV
-X-Google-Smtp-Source: AA6agR5nsQJw3hCnA/C5NhEoOLK+EQ1boJ+MFa4vGfmppLxUjoXGmYFFuol9O/BdFML65udzNfGzkQ==
-X-Received: by 2002:a2e:7e02:0:b0:25f:f8fa:53bb with SMTP id z2-20020a2e7e02000000b0025ff8fa53bbmr941575ljc.6.1660297560279;
-        Fri, 12 Aug 2022 02:46:00 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id z23-20020a195057000000b0048b08f0c4e9sm152554lfj.176.2022.08.12.02.45.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 02:45:59 -0700 (PDT)
-Message-ID: <8fafda4e-cb4d-1e89-cd26-1778c84841b2@linaro.org>
-Date:   Fri, 12 Aug 2022 12:45:56 +0300
+        Fri, 12 Aug 2022 05:46:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 66F5BA4B0D
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 02:46:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660297578;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2c/iImSQTA02RBtmBVV2RGW771GUr2pXHiaSO81S20w=;
+        b=IHmORjdK92XMIvtpgDkxRLhynwSIMUrcXWet14jLOWw11hFUs1Pgh6YqTUmF0vgzC5Acx1
+        o6Z3hZGSmT6lBOKm27yBfk7gzSIv6ie3Y9slGv12aFy0DVBu9FqpEZHGdP0+019z/gubTK
+        EHKHcM86F4/tRJbheEf7C8VnFIRaKxU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-211-2Wxmoo5wOzabgm-izal5tA-1; Fri, 12 Aug 2022 05:46:15 -0400
+X-MC-Unique: 2Wxmoo5wOzabgm-izal5tA-1
+Received: from smtp.corp.redhat.com (int-mx06.intmail.prod.int.rdu2.redhat.com [10.11.54.6])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 29815811E75;
+        Fri, 12 Aug 2022 09:46:14 +0000 (UTC)
+Received: from localhost (ovpn-12-160.pek2.redhat.com [10.72.12.160])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E44A42166B26;
+        Fri, 12 Aug 2022 09:46:12 +0000 (UTC)
+Date:   Fri, 12 Aug 2022 17:46:09 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Eric DeVolder <eric.devolder@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
+        boris.ostrovsky@oracle.com
+Subject: Re: [PATCH v10 1/8] crash: introduce arch/*/asm/crash.h
+Message-ID: <YvYhYdV6F2zH4o3X@MiWiFi-R3L-srv>
+References: <20220721181747.1640-1-eric.devolder@oracle.com>
+ <20220721181747.1640-2-eric.devolder@oracle.com>
+ <YvCCOY+mRshu1tHi@MiWiFi-R3L-srv>
+ <52d40562-ee6f-bb89-6d21-2d6baf67053d@oracle.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v4 1/2] dt-bindings: arm: fsl: Add MSC SM2S-IMX8PLUS SoM
- and SM2-MB-EP1 Carrier
-Content-Language: en-US
-To:     Martyn Welch <martyn.welch@collabora.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>, Li Yang <leoyang.li@nxp.com>
-Cc:     kernel@collabora.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20220812084120.376042-1-martyn.welch@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220812084120.376042-1-martyn.welch@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <52d40562-ee6f-bb89-6d21-2d6baf67053d@oracle.com>
+X-Scanned-By: MIMEDefang 2.78 on 10.11.54.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,16 +69,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/08/2022 11:41, Martyn Welch wrote:
-> Add DT compatible strings for a combination of the 14N0600E variant of
-> the Avnet (MSC branded) SM2S-IMX8PLUS SoM on it's own and in combination
-> with the SM2-MB-EP1 carrier board.
+On 08/08/22 at 10:18am, Eric DeVolder wrote:
 > 
-> Signed-off-by: Martyn Welch <martyn.welch@collabora.com>
+> 
+> On 8/7/22 22:25, Baoquan He wrote:
+> > Hi Eric,
+> > 
+> > On 07/21/22 at 02:17pm, Eric DeVolder wrote:
+> > > The use of __weak is being eliminated within kexec sources.
+> > > The technique uses macros mapped onto inline functions in
+> > > order to replace __weak.
+> > > 
+> > > This patchset was using __weak and so in order to replace
+> > > __weak, this patch introduces arch/*/asm/crash.h, patterned
+> > > after how kexec is moving away from __weak and to the macro
+> > > definitions.
+> > 
+> > Are you going to replace __weak in kexec of arll ARCHes? I don't see
+> > your point why all these empty header files are introduced. Wondering
+> > what's impacted if not adding these empty files?
+> 
+> Hi Baoquan,
+> In this patchset, to file include/linux/crash_core.h I added the line #include <asm/crash.h>.
+> I patterned this after how include/linux/kexec.h does #include <asm/kexec.h>.
 
+I am sorry, Eric, it looks not so good. I understand you want to pattern
+asm/kexe.h, but we need consider reality. Introducing a dozen of empty
+header file and not being able to tell when they will be filled doesn't
+make sense.
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Includig <asm/crash.h> where needed is much simpler. I doubt if your way
+can pass other reviewers' line. Can you reconsider?
 
+diff --git a/kernel/crash_core.c b/kernel/crash_core.c
+index 77f5f3591760..b0577bdcc491 100644
+--- a/kernel/crash_core.c
++++ b/kernel/crash_core.c
+@@ -15,6 +15,7 @@
+ 
+ #include <asm/page.h>
+ #include <asm/sections.h>
++#include <asm/crash.h>
+ 
+ #include <crypto/sha1.h>
 
-Best regards,
-Krzysztof

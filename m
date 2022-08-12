@@ -2,132 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 861AA5913F4
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 18:36:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44FF45913F8
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 18:38:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239353AbiHLQf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 12:35:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35608 "EHLO
+        id S236532AbiHLQhx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 12:37:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236015AbiHLQfz (ORCPT
+        with ESMTP id S229464AbiHLQhv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 12:35:55 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 776CF1F62D
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 09:35:54 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id i14so2915009ejg.6
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 09:35:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=PhJG6bBOCkvyTjU2NcpvtIl0Bn94VJLHdY/CNTDx92c=;
-        b=A0zopqIFjMTW4LHzcxx7Kgim0jgeE1PHu1MzJPGzrmEGVqIyHVf4olgYQvI/zgqkqg
-         NkeEGgSheDwg61Jnhu1y5RwwnHybQJGN/2AMmcJbtEpHsNsf0peok5GdgvQoBhxaPNUs
-         Bmlag/RZqX1KjE9J/4TB+lbCnIfJ/X1osMBGM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=PhJG6bBOCkvyTjU2NcpvtIl0Bn94VJLHdY/CNTDx92c=;
-        b=E9oBnFAD8/xAK4Ec95spTijYEMHZFU2GysW/4ImGVxhL+tzJsQ02m68wAhxgwsetG0
-         Q8BOzwiMUB6vWJB62YJLfiA0Qy0c2UAUcxn7TsePiL9kZaFe6VJEw1amZu8a2Lr1dt4e
-         B/ZJ+4pmXX4iEkGZBw6fysauTqhN+k4qGQOcz2ATXeEtNVSkvaAM7M64E6Tigu82SlNc
-         QUpqVW46Q8y8MDLV6jp5K9BSW8UFjpN6NrqyuryKgvBMTw/sUQa10trt5743ZBng4BGm
-         9dfvak9AYaD9uLcHS2b/WwxpBS/OuibvLohc8nuL9ysHfbaKIhWaZ81fRuhwW5zZRZqn
-         JO6Q==
-X-Gm-Message-State: ACgBeo13RoklRuEgizH+ovwzAKGkU5UUQqJT/xYrPPv/bQbOrejk4SD0
-        1ZKLlYZ5ZeZAOmjJlr6XTApQJlhLQU6azUUV
-X-Google-Smtp-Source: AA6agR6yK4vzK3gyL3/cjpqOqjOttsX0mZoeAwgw54J+D0OPntVCA+2dtj5YK8/0hgewssqIAleoeA==
-X-Received: by 2002:a17:907:6d91:b0:731:39eb:c00a with SMTP id sb17-20020a1709076d9100b0073139ebc00amr3201491ejc.6.1660322152763;
-        Fri, 12 Aug 2022 09:35:52 -0700 (PDT)
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com. [209.85.221.53])
-        by smtp.gmail.com with ESMTPSA id q3-20020a17090676c300b00722e4bab163sm945465ejn.200.2022.08.12.09.35.51
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 09:35:51 -0700 (PDT)
-Received: by mail-wr1-f53.google.com with SMTP id l22so1747980wrz.7
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 09:35:51 -0700 (PDT)
-X-Received: by 2002:a05:6000:1888:b0:222:ca41:dc26 with SMTP id
- a8-20020a056000188800b00222ca41dc26mr2492830wri.442.1660322150722; Fri, 12
- Aug 2022 09:35:50 -0700 (PDT)
+        Fri, 12 Aug 2022 12:37:51 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E970492F7D
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 09:37:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660322270; x=1691858270;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=/dzpJIgS93EYpfAA9mCXa3iE1jUztbDyfSdrEPy+a0Y=;
+  b=ATHJ7H69y3GpCz9oEEErORlLKC5hHj0NCZWKKXG3YsdmfODgP8MhlihX
+   U7+VvR/vLepDkYLI2o2FGi/SDhtUM23Kdde+k6Dg4pS/JoPKFKdv1gDlj
+   fnKYoPziccFbMSJ5OjKw1nnjPtQicK0Jk5ieAA8ZsGcPJzi0tQc644RMe
+   lUMb8roFsAcCprX2q54eNgugT+jYkGzYgypwIPRvKv2s/cUb2ughndqjV
+   uBE/d2vmRwVeqi1RUnS3/QI2+TPyRRw5EtgW2enXa3ao/RN7mctNxeu+D
+   ar0GRwz4km3aYPMJWyIXKTqigfKBZrT0jLANJPduJW9wmtMH1JMD3CESw
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="290382922"
+X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
+   d="scan'208";a="290382922"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 09:37:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
+   d="scan'208";a="609305555"
+Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 12 Aug 2022 09:37:49 -0700
+Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oMXfQ-0000kh-2g;
+        Fri, 12 Aug 2022 16:37:48 +0000
+Date:   Sat, 13 Aug 2022 00:36:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Keith Busch <kbusch@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [kbusch:io_uring/dma-register-v2 7/8] io_uring/io_uring.c:3791:45:
+ error: passing argument 2 of 'file_dma_map' from incompatible pointer type
+Message-ID: <202208130039.jwwRVomj-lkp@intel.com>
 MIME-Version: 1.0
-References: <20220811153632.0ce73f72.alex.williamson@redhat.com>
-In-Reply-To: <20220811153632.0ce73f72.alex.williamson@redhat.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 12 Aug 2022 09:35:34 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgfqqMMQG+woPEpAOyn8FkMQDqxq6k0OLKajZNGa7Jsfg@mail.gmail.com>
-Message-ID: <CAHk-=wgfqqMMQG+woPEpAOyn8FkMQDqxq6k0OLKajZNGa7Jsfg@mail.gmail.com>
-Subject: Re: [GIT PULL] VFIO updates for v6.0-rc1 (part 2)
-To:     Alex Williamson <alex.williamson@redhat.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Jason Gunthorpe <jgg@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 2:36 PM Alex Williamson
-<alex.williamson@redhat.com> wrote:
->
->  - Rename vfio source file to more easily allow additional source
->    files in the upcoming development cycles (Jason Gunthorpe)
->
-> ----------------------------------------------------------------
-> Jason Gunthorpe (1):
->       vfio: Move vfio.c to vfio_main.c
->
->  drivers/vfio/Makefile                | 2 ++
->  drivers/vfio/{vfio.c => vfio_main.c} | 0
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git io_uring/dma-register-v2
+head:   c86a9580d33ff9bf90c685f452b66b929f1dc5fe
+commit: ba3ab9f0c82ae764b7da4cb7e8df548439b2ec72 [7/8] io_uring: add support for dma pre-mapping
+config: sh-randconfig-c043-20220811 (https://download.01.org/0day-ci/archive/20220813/202208130039.jwwRVomj-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git/commit/?id=ba3ab9f0c82ae764b7da4cb7e8df548439b2ec72
+        git remote add kbusch https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git
+        git fetch --no-tags kbusch io_uring/dma-register-v2
+        git checkout ba3ab9f0c82ae764b7da4cb7e8df548439b2ec72
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash
 
-Guys, why do you do this ludicrously redundant file naming?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-The directory is called "vfio".
+All errors (new ones prefixed by >>):
 
-Why is every file in it called "vfio_xyzzy.c"?
+   In file included from include/uapi/linux/aio_abi.h:31,
+                    from include/linux/syscalls.h:77,
+                    from io_uring/io_uring.c:45:
+   include/linux/fs.h:3610:60: warning: 'struct bio_vec' declared inside parameter list will not be visible outside of this definition or declaration
+    3610 | static inline void *file_dma_map(struct file *file, struct bio_vec *bvec,
+         |                                                            ^~~~~~~
+   io_uring/io_uring.c: In function '__io_submit_flush_completions':
+   io_uring/io_uring.c:1183:40: warning: variable 'prev' set but not used [-Wunused-but-set-variable]
+    1183 |         struct io_wq_work_node *node, *prev;
+         |                                        ^~~~
+   io_uring/io_uring.c: In function 'io_register_map_buffers':
+>> io_uring/io_uring.c:3791:45: error: passing argument 2 of 'file_dma_map' from incompatible pointer type [-Werror=incompatible-pointer-types]
+    3791 |                 tag = file_dma_map(file, imu->bvec, imu->nr_bvecs);
+         |                                          ~~~^~~~~~
+         |                                             |
+         |                                             struct bio_vec *
+   include/linux/fs.h:3610:69: note: expected 'struct bio_vec *' but argument is of type 'struct bio_vec *'
+    3610 | static inline void *file_dma_map(struct file *file, struct bio_vec *bvec,
+         |                                                     ~~~~~~~~~~~~~~~~^~~~
+   cc1: some warnings being treated as errors
 
-This is a bad pattern, and I don't understand why you do this and
-continue to just make it worse.
 
-We don't have "drivers/block/block_floppy.c".
+vim +/file_dma_map +3791 io_uring/io_uring.c
 
-We don't have "kernel/kernel_exit.c".
+  3758	
+  3759	static int io_register_map_buffers(struct io_ring_ctx *ctx, void __user *arg)
+  3760	{
+  3761		struct io_uring_map_buffers map;
+  3762		struct io_fixed_file *file_slot;
+  3763		struct file *file;
+  3764		int ret, i;
+  3765	
+  3766		if (!capable(CAP_SYS_ADMIN))
+  3767			return -EPERM;
+  3768	
+  3769		ret = get_map_range(ctx, &map, arg);
+  3770		if (ret < 0)
+  3771			return ret;
+  3772	
+  3773		file_slot = io_fixed_file_slot(&ctx->file_table,
+  3774				array_index_nospec(map.fd, ctx->nr_user_files));
+  3775		if (!file_slot->file_ptr)
+  3776			return -EBADF;
+  3777	
+  3778		file = io_file_from_fixed(file_slot);
+  3779		if (!(file->f_flags & O_DIRECT))
+  3780			return -EOPNOTSUPP;
+  3781	
+  3782		for (i = map.buf_start; i < map.buf_end; i++) {
+  3783			struct io_mapped_ubuf *imu = ctx->user_bufs[i];
+  3784			void *tag;
+  3785	
+  3786			if (imu->dma_tag) {
+  3787				ret = -EBUSY;
+  3788				goto err;
+  3789			}
+  3790	
+> 3791			tag = file_dma_map(file, imu->bvec, imu->nr_bvecs);
+  3792			if (IS_ERR(tag)) {
+  3793				ret = PTR_ERR(tag);
+  3794				goto err;
+  3795			}
+  3796	
+  3797			imu->dma_tag = tag;
+  3798			imu->dma_file = file;
+  3799		}
+  3800	
+  3801		return 0;
+  3802	err:
+  3803		while (--i >= map.buf_start) {
+  3804			struct io_mapped_ubuf *imu = ctx->user_bufs[i];
+  3805	
+  3806			io_dma_unmap(imu);
+  3807		}
+  3808		return ret;
+  3809	}
+  3810	
 
-And then when somebody finally points out that "vfio/vfio.c" is kind
-of silly and bad naming practice because it doesn't say what the file
-is all about, instead of realizing what the problem is, you just
-continue the same broken pattern.
-
-Is vfio the only subsystem that does this? No. We have the same odd
-pattern in "drivers/leds/leds-xyzzy.c" and a few other subsystems, and
-I don't understand it there either.
-
-I don't care that much, because I never touch those files, but if I
-did, I would have complained long ago about how auto-complete of
-filenames is broken because of that silly non-unique and pointless
-prefix that is just repeated mindlessly over and over again.
-
-So I've pulled this, since hey, "maintainer preference" and me not
-really having a lot of reason to *care*, but when I get this kind of
-pure rename pull request, I just have to pipe up about how silly and
-pointless the new name seems to be.
-
-Am I the only one that just uses auto-complete for everything when I'm
-off editing files in a terminal?
-
-And if you don't use autocomplete, and actually type things out fully,
-doesn't that double redundant 'vtio' bother you even *more*?
-
-I'm just confused and wondering about this all, since it seems so *odd*.
-
-It's like people have entirely missed what the point of using
-directories to give you a hierarchy of things is all about..
-
-               Linus
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,158 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69AAD591000
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 13:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4346591002
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 13:26:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233977AbiHLLZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 07:25:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59558 "EHLO
+        id S229793AbiHLL0W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 07:26:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232206AbiHLLZu (ORCPT
+        with ESMTP id S229664AbiHLL0T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 07:25:50 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA162C100
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 04:25:49 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id c17so953303lfb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 04:25:49 -0700 (PDT)
+        Fri, 12 Aug 2022 07:26:19 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 574DE99B4E;
+        Fri, 12 Aug 2022 04:26:18 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id q30so863412wra.11;
+        Fri, 12 Aug 2022 04:26:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc;
-        bh=CicaxzhBFo0KPREhpr4TXcueTsn2K/vZuDdXuzYsKWU=;
-        b=ZSjkS3G57jOr2ZUgBUg647LpswyGyUyOyxiv0qFWeuWeUxKsfjmjUXDseiTfsQeItA
-         C7ge0PECV1KDT/YzTpu722jyDhSyTkdFC9Tz1gGtysf3KxHqSztEfFLFt2lBu7DmBQo4
-         is0MZePlBzlABtDsifedY/+Z3wAkjtKPZ+7kvVg62lftbaHeyB2zFH0GKgXkK/osYma0
-         KMRoFx5V+/YgxcE2CHqMv/q1MXffwjHDhg7RRANtqkqntp+ZcsYIkO2B6lSFUrO0jcxl
-         nUp2kC2MVEEazP4SXMIreFRMBeyz+1HSNrbsCona9am1KL+dpyWbCzXSVezdHj/fIpqp
-         rNCA==
+        bh=NS1OUkBRpuKhR6yWcTwhKigYA9ow76MHMrDf1FScipw=;
+        b=R2nxGvhV1Fbw9jVtIaWt2cpoNKtI/unGQkXrrIysEkkPzVE26xCSRFEfBN82TYuFnJ
+         3w+3U5k4kaM7xZT7AtNkg+oC88n5zzFmvmuFg0tZs/1MFQj+lRs3BN2FwFKBb93L6ia8
+         Mf6Z7u9A7mwjuYCFcLjYgDjOfRA+yK48AUgSGY3QAp/gbH2DC/UmggToMq+8xovqkrxv
+         tF8xxBBZ4/AcoIVBkHI1CihfI9hAqQnuBDhRTVTmlu2kO4BgK0bUVBaLBphXfUFpzezQ
+         1gNeOZsrMXXmbfKtLI4q2qF1K0nkxr3sM+RcWmWrl35CEUR2Ptk6HlhKIo1Qxvpzb8Nk
+         rrOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc;
-        bh=CicaxzhBFo0KPREhpr4TXcueTsn2K/vZuDdXuzYsKWU=;
-        b=Fg4KazbqC7QlQ9UYPVsegUBcLiFTqLw0ilmMMY6Wp68Wla53DNWmI/Qfi/y8A0CbO6
-         WCFXKo9+rDVIgBK29KmUfAbZGJ68ry4jfaGUFreuroktGHbDyuyVCz3YDO28vqJ51S6f
-         OwFqmxM5fopQbicHOC9Xpi5bDX+48fGt6kDC+NJctHIqWKhorrHM62HX0ZEw8afn+m8V
-         YNOJiFjvRxGNqr5cGRdbaIhXja6xIyOw5wWrZZgga8IuhwXL0GA0EGU2L+WtpRtkundi
-         9N/eZXtFtX16vs4OseoKBkDXYj3pYr4DcP8b2ujfndFL2eQGuXWWnoVltK413tA0jwed
-         Y3cQ==
-X-Gm-Message-State: ACgBeo3vIB0rW2AmEtEtRsHyDbUmfTXmkycwaG9BlhOsnuv9xjn1QC4Y
-        c0z4dOTrEe0n8RT67scn2yRTJA==
-X-Google-Smtp-Source: AA6agR7nbIA1W9kvuTBrsjatx+y+trLViCt2NS014KwbWMIhl7WPsCOj2Q0c6fDtZvYCVRpwve0F1w==
-X-Received: by 2002:ac2:4f03:0:b0:48a:6061:bd8e with SMTP id k3-20020ac24f03000000b0048a6061bd8emr1247397lfr.647.1660303548058;
-        Fri, 12 Aug 2022 04:25:48 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id b20-20020a196714000000b0048a9a756763sm188699lfc.19.2022.08.12.04.25.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 04:25:47 -0700 (PDT)
-Message-ID: <14cf568e-d7ee-886e-5122-69b2e58b8717@linaro.org>
-Date:   Fri, 12 Aug 2022 14:25:42 +0300
+        bh=NS1OUkBRpuKhR6yWcTwhKigYA9ow76MHMrDf1FScipw=;
+        b=JQ54H0HTpzWFnJ9ujaJCPfzDQIuvJDa4OWM4x3w2RZ7+AZOgOVUxgXTTVqJvzaG2LN
+         0Yul2N1SBRVQzWolbL9+zpDjaxayWUe/bEVAridLXm48sdSlQSt09oEcaL7Q2+1FCihB
+         Ptfqufq1ZUCIep+XGovgBGpU3hId/V+pdyw8HGBneE/urOKb8HS9bpKPWiaztYRFWC5K
+         NVipzA9Vx5mEoyesK+Au8if1n+pXf/KoL3VLvG9SpIcQ24TahS8k34LCBLMyt0NoYvI1
+         tHRE4Hvy6ZwMtH0ga+0qUvBph3yU8sV8apgaL3NuLhJ+F0Xb/PoO2PHQxm/uz0iXFOaQ
+         OAYA==
+X-Gm-Message-State: ACgBeo3FceJLz2elrtBQBQWQ6PzoQoVWTiVmCUiBAQ0Zns98DiKUsV0B
+        r3urB2fr5DESF4qQkLUYfgiq5hor1iyEQg==
+X-Google-Smtp-Source: AA6agR71+hyYopHQ/rhLgXKVkQrptn96W8kowcyfqiGrDc4pjvRog9dx7XKIf6UgIQSY3/PzX1gQrg==
+X-Received: by 2002:a05:6000:1283:b0:21f:168f:4796 with SMTP id f3-20020a056000128300b0021f168f4796mr1974369wrx.615.1660303576728;
+        Fri, 12 Aug 2022 04:26:16 -0700 (PDT)
+Received: from debian ([2402:3a80:a6c:8d8d:8b73:352a:a34a:c91d])
+        by smtp.gmail.com with ESMTPSA id l21-20020a05600c4f1500b003a4bb3f9bc6sm1392485wmq.41.2022.08.12.04.26.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Aug 2022 04:26:16 -0700 (PDT)
+Date:   Fri, 12 Aug 2022 12:25:57 +0100
+From:   "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>
+To:     torvalds@linux-foundation.org, Jakub Kicinski <kuba@kernel.org>
+Cc:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: mainline build failure due to 332f1795ca20 ("Bluetooth: L2CAP: Fix
+ l2cap_global_chan_by_psm regression")
+Message-ID: <YvY4xdZEWAPosFdJ@debian>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH net 1/2] dt: ar803x: Document disable-hibernation property
-Content-Language: en-US
-To:     Wei Fang <wei.fang@nxp.com>, "andrew@lunn.ch" <andrew@lunn.ch>,
-        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
-        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20220812145009.1229094-1-wei.fang@nxp.com>
- <20220812145009.1229094-2-wei.fang@nxp.com>
- <0cd22a17-3171-b572-65fb-e9d3def60133@linaro.org>
- <DB9PR04MB81060AF4890DEA9E2378940288679@DB9PR04MB8106.eurprd04.prod.outlook.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <DB9PR04MB81060AF4890DEA9E2378940288679@DB9PR04MB8106.eurprd04.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/08/2022 12:02, Wei Fang wrote:
-> 
-> 
->> -----Original Message-----
->> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Sent: 2022年8月12日 15:28
->> To: Wei Fang <wei.fang@nxp.com>; andrew@lunn.ch; hkallweit1@gmail.com;
->> linux@armlinux.org.uk; davem@davemloft.net; edumazet@google.com;
->> kuba@kernel.org; pabeni@redhat.com; robh+dt@kernel.org;
->> krzysztof.kozlowski+dt@linaro.org; f.fainelli@gmail.com;
->> netdev@vger.kernel.org; devicetree@vger.kernel.org;
->> linux-kernel@vger.kernel.org
->> Subject: Re: [PATCH net 1/2] dt: ar803x: Document disable-hibernation
->> property
->>
->> On 12/08/2022 17:50, wei.fang@nxp.com wrote:
->>> From: Wei Fang <wei.fang@nxp.com>
->>>
->>
->> Please use subject prefix matching subsystem.
->>
-> Ok, I'll add the subject prefix.
-> 
->>> The hibernation mode of Atheros AR803x PHYs is default enabled.
->>> When the cable is unplugged, the PHY will enter hibernation mode and
->>> the PHY clock does down. For some MACs, it needs the clock to support
->>> it's logic. For instance, stmmac needs the PHY inputs clock is present
->>> for software reset completion. Therefore, It is reasonable to add a DT
->>> property to disable hibernation mode.
->>>
->>> Signed-off-by: Wei Fang <wei.fang@nxp.com>
->>> ---
->>>  Documentation/devicetree/bindings/net/qca,ar803x.yaml | 6 ++++++
->>>  1 file changed, 6 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/net/qca,ar803x.yaml
->>> b/Documentation/devicetree/bindings/net/qca,ar803x.yaml
->>> index b3d4013b7ca6..d08431d79b83 100644
->>> --- a/Documentation/devicetree/bindings/net/qca,ar803x.yaml
->>> +++ b/Documentation/devicetree/bindings/net/qca,ar803x.yaml
->>> @@ -40,6 +40,12 @@ properties:
->>>        Only supported on the AR8031.
->>>      type: boolean
->>>
->>> +  qca,disable-hibernation:
->>> +    description: |
->>> +    If set, the PHY will not enter hibernation mode when the cable is
->>> +    unplugged.
->>
->> Wrong indentation. Did you test the bindings?
->>
-> Sorry, I just checked the patch and forgot to check the dt-bindings.
-> 
->> Unfortunately the property describes driver behavior not hardware, so it is not
->> suitable for DT. Instead describe the hardware
->> characteristics/features/bugs/constraints. Not driver behavior. Both in property
->> name and property description.
->>
-> Thanks for your review and feedback. Actually, the hibernation mode is a feature of hardware, I will modify the property name and description to be more in line with the requirements of the DT property. 
+Hi All,
 
-hibernation is a feature, but 'disable-hibernation' is not. DTS
-describes the hardware, not policy or driver bejhvior. Why disabling
-hibernation is a property of hardware? How you described, it's not,
-therefore either property is not for DT or it has to be phrased
-correctly to describe the hardware.
+The latest mainline kernel branch fails to build csky and mips allmodconfig
+with gcc-12.
 
-Best regards,
-Krzysztof
+mips error is:
+
+In function 'memcmp',
+    inlined from 'bacmp' at ./include/net/bluetooth/bluetooth.h:347:9,
+    inlined from 'l2cap_global_chan_by_psm' at net/bluetooth/l2cap_core.c:2003:15:
+./include/linux/fortify-string.h:44:33: error: '__builtin_memcmp' specified bound 6 exceeds source size 0 [-Werror=stringop-overread]
+   44 | #define __underlying_memcmp     __builtin_memcmp
+      |                                 ^
+./include/linux/fortify-string.h:420:16: note: in expansion of macro '__underlying_memcmp'
+  420 |         return __underlying_memcmp(p, q, size);
+      |                ^~~~~~~~~~~~~~~~~~~
+In function 'memcmp',
+    inlined from 'bacmp' at ./include/net/bluetooth/bluetooth.h:347:9,
+    inlined from 'l2cap_global_chan_by_psm' at net/bluetooth/l2cap_core.c:2004:15:
+./include/linux/fortify-string.h:44:33: error: '__builtin_memcmp' specified bound 6 exceeds source size 0 [-Werror=stringop-overread]
+   44 | #define __underlying_memcmp     __builtin_memcmp
+      |                                 ^
+./include/linux/fortify-string.h:420:16: note: in expansion of macro '__underlying_memcmp'
+  420 |         return __underlying_memcmp(p, q, size);
+      |                ^~~~~~~~~~~~~~~~~~~
+
+
+csky error is:
+
+In file included from net/bluetooth/l2cap_core.c:37:
+In function 'bacmp',
+    inlined from 'l2cap_global_chan_by_psm' at net/bluetooth/l2cap_core.c:2003:15:
+./include/net/bluetooth/bluetooth.h:347:16: error: 'memcmp' specified bound 6 exceeds source size 0 [-Werror=stringop-overread]
+  347 |         return memcmp(ba1, ba2, sizeof(bdaddr_t));
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+In function 'bacmp',
+    inlined from 'l2cap_global_chan_by_psm' at net/bluetooth/l2cap_core.c:2004:15:
+./include/net/bluetooth/bluetooth.h:347:16: error: 'memcmp' specified bound 6 exceeds source size 0 [-Werror=stringop-overread]
+  347 |         return memcmp(ba1, ba2, sizeof(bdaddr_t));
+      |                ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+git bisect pointed to 332f1795ca20 ("Bluetooth: L2CAP: Fix l2cap_global_chan_by_psm regression").
+And, reverting that commit has fixed the build failure.
+
+Already reported at https://lore.kernel.org/lkml/YvVQEDs75pxSgxjM@debian/
+and Jacub is looking at a fix, but this is just my usual build failure
+mail of mainline branch for Linus's information.
+
+
+--
+Regards
+Sudip

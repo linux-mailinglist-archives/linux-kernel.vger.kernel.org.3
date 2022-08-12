@@ -2,64 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B5E3591299
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 17:04:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1180859129A
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 17:05:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237982AbiHLPDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 11:03:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53324 "EHLO
+        id S238240AbiHLPEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 11:04:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232014AbiHLPDv (ORCPT
+        with ESMTP id S232014AbiHLPEw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 11:03:51 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39144A8951;
-        Fri, 12 Aug 2022 08:03:50 -0700 (PDT)
-Received: from [IPv6:2a00:23c6:c311:3401:fef:5a97:8fe5:76f7] (unknown [IPv6:2a00:23c6:c311:3401:fef:5a97:8fe5:76f7])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: martyn)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id F26176601B73;
-        Fri, 12 Aug 2022 16:03:47 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1660316628;
-        bh=dul6JUV+8R9Il0SQB903G/KY1Z76+8VAvx5PJ+nj0gA=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=XTmEwcKEut+nE3WJmE963kM3yk9LdhWc1is2fdinOqovqync1qWH3MzOktCemsDxd
-         MLnAMu++hiSlfh/tDt9UjlNYU6H1QCPe0D+KBd5VuEX03rqGuHvXVNMCXtEr+jYSOG
-         WuoOwdzpQszgNni886Zu8XMzVYlJoXCsSyw52X/sSuvQL+sG2rGWtbMQZsbNLK0gqp
-         XqaXyIWAht0sSyserbsU4T6euqj1KWdRPshFmeZE4ssD63oongh6gaGtXDEl4VPPwI
-         ANuNeHDtRb1RHYCQ4YYMPYUxGKdGgDUZqStXXw1iRkUJvTSoHTn+wPIwTTOexUkm9P
-         h3U4X5mmu+13Q==
-Message-ID: <c874e1db8526bfa915baca1f0bb28d0c5f5a1feb.camel@collabora.com>
-Subject: Re: [PATCH v4 2/2] arm64: dts: imx8mp-msc-sm2s: Add device trees
- for MSC SM2S-IMX8PLUS SoM and carrier board
-From:   Martyn Welch <martyn.welch@collabora.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>
-Cc:     kernel@collabora.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Date:   Fri, 12 Aug 2022 16:03:46 +0100
-In-Reply-To: <15ddd798-873e-d90d-11e9-c6dd46ca03f4@linaro.org>
-References: <20220812084120.376042-1-martyn.welch@collabora.com>
-         <20220812084120.376042-2-martyn.welch@collabora.com>
-         <8962b7ed-a21c-0b7f-7a6d-5db3db84e4cb@linaro.org>
-         <65a094d5d03ad8f7b35196c9dff6ffc6cf0ea151.camel@collabora.com>
-         <15ddd798-873e-d90d-11e9-c6dd46ca03f4@linaro.org>
-Organization: Collabora Ltd.
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.3-2 
+        Fri, 12 Aug 2022 11:04:52 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C587A895A
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 08:04:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660316691; x=1691852691;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=xtqehn2jqKyu0+Re9kL0AWZ6gXaqxuj5FPfav9EaBmo=;
+  b=CMa4z+Uq5NOgEmSUZFjCk4A7cBoZ0AsSDYXZyOymNfwn8cGvGMmUKKSb
+   ttj06mnudjaUKE0/CEx+AY1HLEMOpPb5eh9sswFd14COpMQncMu3KKAvN
+   ccm/PBTvskNrMfbWXuHIX9nDvlrZTYS3d9uUxYAkB6xh0l/duSia0luzK
+   NtBDkCVVNY94PN2hPYrDVg65t0cgMHCUpoZwqp4h76AZ1zi9rCrQaVEVv
+   lah9iFtpkoGIzPryoE7BheL7vVNW2Qy+4PccIShvBsAGyKH2lYpLv1GtT
+   bJJKalz0JCQUMC/3qr/dbeyWu9PfOmHKrdsC/dU9Ex5HjTT3LfQBdwtT0
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="292405063"
+X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
+   d="scan'208";a="292405063"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 08:04:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
+   d="scan'208";a="748218850"
+Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
+  by fmsmga001.fm.intel.com with ESMTP; 12 Aug 2022 08:04:46 -0700
+Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oMWDO-0000fD-0u;
+        Fri, 12 Aug 2022 15:04:46 +0000
+Date:   Fri, 12 Aug 2022 23:04:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: [gustavoars:totally-untested/remaining-fam0 2/2]
+ ./usr/include/linux/netfilter_bridge/ebtables.h:163:26: warning: field
+ 'target' with variable sized type 'struct ebt_entry_target' not at the end
+ of a struct or class is a GNU extension
+Message-ID: <202208122201.SveGt1yt-lkp@intel.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,156 +65,156 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2022-08-12 at 16:42 +0300, Krzysztof Kozlowski wrote:
-> On 12/08/2022 14:35, Martyn Welch wrote:
-> > On Fri, 2022-08-12 at 12:47 +0300, Krzysztof Kozlowski wrote:
-> > > On 12/08/2022 11:41, Martyn Welch wrote:
-> > > > Add device trees for one of a number of MSC's (parent company,
-> > > > Avnet)
-> > > > variants of the SM2S-IMX8PLUS system on module along with the
-> > > > compatible
-> > > > SM2S-SK-AL-EP1 carrier board. As the name suggests, this family
-> > > > of
-> > > > SoMs use
-> > > > the NXP i.MX8MP SoC and provide the SMARC module interface.
-> > > >=20
-> > > > Signed-off-by: Martyn Welch <martyn.welch@collabora.com>
-> > > > ---
-> > > >=20
-> > > > Changes in v2
-> > > > =C2=A0 - Added compatibles
-> > > > =C2=A0 - Removed underscores from node names
-> > > > =C2=A0 - Make node names more generic
-> > > > =C2=A0 - Reorder properties
-> > > > =C2=A0 - Fix issues found by dtbs_check in these files
-> > > >=20
-> > > > Changes in v3:
-> > > > =C2=A0 - Switched to avnet vendor string in compatibles
-> > > > =C2=A0 - Corrected patch description
-> > > >=20
-> > > > Changes in v4:
-> > > > =C2=A0 - Switched from phy-reset-gpios to reset-gpios, removing
-> > > > duplication
-> > > > =C2=A0 - Removed unneeded sdma1 node
-> > > >=20
-> > > > =C2=A0arch/arm64/boot/dts/freescale/Makefile=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 1 +
-> > > > =C2=A0.../freescale/imx8mp-msc-sm2s-14N0600E.dts=C2=A0=C2=A0=C2=A0 =
-|=C2=A0 72 ++
-> > > > =C2=A0.../dts/freescale/imx8mp-msc-sm2s-ep1.dts=C2=A0=C2=A0=C2=A0=
-=C2=A0 |=C2=A0 53 ++
-> > > > =C2=A0.../boot/dts/freescale/imx8mp-msc-sm2s.dtsi=C2=A0=C2=A0 | 812
-> > > > ++++++++++++++++++
-> > > > =C2=A04 files changed, 938 insertions(+)
-> > > > =C2=A0create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-msc-
-> > > > sm2s-
-> > > > 14N0600E.dts
-> > > > =C2=A0create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-msc-
-> > > > sm2s-
-> > > > ep1.dts
-> > > > =C2=A0create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-msc-
-> > > > sm2s.dtsi
-> > > >=20
-> > > > diff --git a/arch/arm64/boot/dts/freescale/Makefile
-> > > > b/arch/arm64/boot/dts/freescale/Makefile
-> > > > index 8bf7f7ecebaa..139c8b95c9c9 100644
-> > > > --- a/arch/arm64/boot/dts/freescale/Makefile
-> > > > +++ b/arch/arm64/boot/dts/freescale/Makefile
-> > > > @@ -83,6 +83,7 @@ dtb-$(CONFIG_ARCH_MXC) +=3D imx8mn-venice-
-> > > > gw7902.dtb
-> > > > =C2=A0dtb-$(CONFIG_ARCH_MXC) +=3D imx8mp-dhcom-pdk2.dtb
-> > > > =C2=A0dtb-$(CONFIG_ARCH_MXC) +=3D imx8mp-evk.dtb
-> > > > =C2=A0dtb-$(CONFIG_ARCH_MXC) +=3D imx8mp-icore-mx8mp-edimm2.2.dtb
-> > > > +dtb-$(CONFIG_ARCH_MXC) +=3D imx8mp-msc-sm2s-ep1.dtb
-> > > > =C2=A0dtb-$(CONFIG_ARCH_MXC) +=3D imx8mp-phyboard-pollux-rdk.dtb
-> > > > =C2=A0dtb-$(CONFIG_ARCH_MXC) +=3D imx8mp-tqma8mpql-mba8mpxl.dtb
-> > > > =C2=A0dtb-$(CONFIG_ARCH_MXC) +=3D imx8mp-venice-gw74xx.dtb
-> > > > diff --git a/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-
-> > > > 14N0600E.dts b/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-
-> > > > 14N0600E.dts
-> > > > new file mode 100644
-> > > > index 000000000000..9e976e8baaee
-> > > > --- /dev/null
-> > > > +++ b/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-
-> > > > 14N0600E.dts
-> > > > @@ -0,0 +1,72 @@
-> > > > +// SPDX-License-Identifier: GPL-2.0
-> > > > +/*
-> > > > + * Copyright (C) 2022 Avnet Embedded GmbH
-> > > > + */
-> > > > +/dts-v1/;
-> > > > +
-> > > > +#include "imx8mp-msc-sm2s.dtsi"
-> > > > +
-> > > > +/ {
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0model =3D "MSC SM2S-IMX8=
-PLUS-QC6-14N0600E SoM";
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0compatible =3D "avnet,sm=
-2s-imx8mp-14N0600E", "avnet,sm2s-
-> > > > imx8mp",
-> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 "fsl,imx8mp";
-> > >=20
-> > > This does not match your bindings. Please test your DTS.
-> > >=20
-> >=20
-> > Hi Krzysztof,
-> >=20
-> > I'm not sure I follow. This is the DTS for the SoM.=20
->=20
-> SoMs usually do not have DTSes because they cannot be run on their
-> own.
-> SoMs almost always require a baseboard/carrier. Therefore this should
-> not be DTS, but that was not my comment.
->=20
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git totally-untested/remaining-fam0
+head:   b0684d2f714f4ae515c283697c48d14e3ccef21b
+commit: b0684d2f714f4ae515c283697c48d14e3ccef21b [2/2] totally-untested: remaining zero-length arrays in structs in next-20220811
+config: i386-randconfig-a004 (https://download.01.org/0day-ci/archive/20220812/202208122201.SveGt1yt-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git/commit/?id=b0684d2f714f4ae515c283697c48d14e3ccef21b
+        git remote add gustavoars https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git
+        git fetch --no-tags gustavoars totally-untested/remaining-fam0
+        git checkout b0684d2f714f4ae515c283697c48d14e3ccef21b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-OK, so does making this as dtsi resolve the issue for you? I assume as
-a dtsi I would also need to remove the model and compatible?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> > The only way I can
-> > test the SoM at the moment is on combination with the "EP1" carrier
-> > board.=20
->=20
-> ... so you basically say it cannot be a DTS.
->=20
-> > That has been tested. The strings match those specified in the
-> > bindings unless I'm being blind to something.
->=20
-> Test the DTS - make dtbs_check (there are several
-> variations/arguments/helpers):
-> Documentation/devicetree/bindings/writing-schema.rst
->=20
+All warnings (new ones prefixed by >>):
 
-Yep, ran that.
+   In file included from <built-in>:1:
+>> ./usr/include/linux/netfilter_bridge/ebtables.h:163:26: warning: field 'target' with variable sized type 'struct ebt_entry_target' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           struct ebt_entry_target target;
+                                   ^
+   1 warning generated.
+--
+   In file included from <built-in>:1:
+>> ./usr/include/linux/netfilter/x_tables.h:66:25: warning: field 'target' with variable sized type 'struct xt_entry_target' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           struct xt_entry_target target;
+                                  ^
+   ./usr/include/linux/netfilter/x_tables.h:71:25: warning: field 'target' with variable sized type 'struct xt_entry_target' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           struct xt_entry_target target;
+                                  ^
+   2 warnings generated.
+--
+   In file included from <built-in>:1:
+   In file included from ./usr/include/rdma/ib_user_ioctl_verbs.h:38:
+>> usr/include/rdma/ib_user_verbs.h:436:34: warning: field 'base' with variable sized type 'struct ib_uverbs_create_cq_resp' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           struct ib_uverbs_create_cq_resp base;
+                                           ^
+>> usr/include/rdma/ib_user_verbs.h:644:34: warning: field 'base' with variable sized type 'struct ib_uverbs_create_qp_resp' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           struct ib_uverbs_create_qp_resp base;
+                                           ^
+>> usr/include/rdma/ib_user_verbs.h:740:29: warning: field 'base' with variable sized type 'struct ib_uverbs_modify_qp' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           struct ib_uverbs_modify_qp base;
+                                      ^
+>> usr/include/rdma/ib_user_verbs.h:916:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_eth::(anonymous at usr/include/rdma/ib_user_verbs.h:916:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> usr/include/rdma/ib_user_verbs.h:938:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_ipv4::(anonymous at usr/include/rdma/ib_user_verbs.h:938:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> usr/include/rdma/ib_user_verbs.h:956:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_tcp_udp::(anonymous at usr/include/rdma/ib_user_verbs.h:956:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> usr/include/rdma/ib_user_verbs.h:979:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_ipv6::(anonymous at usr/include/rdma/ib_user_verbs.h:979:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> usr/include/rdma/ib_user_verbs.h:992:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_action_tag::(anonymous at usr/include/rdma/ib_user_verbs.h:992:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> usr/include/rdma/ib_user_verbs.h:1016:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_action_handle::(anonymous at usr/include/rdma/ib_user_verbs.h:1016:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> usr/include/rdma/ib_user_verbs.h:1029:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_action_count::(anonymous at usr/include/rdma/ib_user_verbs.h:1029:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> usr/include/rdma/ib_user_verbs.h:1046:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_tunnel::(anonymous at usr/include/rdma/ib_user_verbs.h:1046:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> usr/include/rdma/ib_user_verbs.h:1064:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_esp::(anonymous at usr/include/rdma/ib_user_verbs.h:1064:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> usr/include/rdma/ib_user_verbs.h:1091:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_gre::(anonymous at usr/include/rdma/ib_user_verbs.h:1091:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> usr/include/rdma/ib_user_verbs.h:1114:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_mpls::(anonymous at usr/include/rdma/ib_user_verbs.h:1114:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+   14 warnings generated.
+--
+   In file included from <built-in>:1:
+>> ./usr/include/rdma/ib_user_verbs.h:436:34: warning: field 'base' with variable sized type 'struct ib_uverbs_create_cq_resp' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           struct ib_uverbs_create_cq_resp base;
+                                           ^
+>> ./usr/include/rdma/ib_user_verbs.h:644:34: warning: field 'base' with variable sized type 'struct ib_uverbs_create_qp_resp' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           struct ib_uverbs_create_qp_resp base;
+                                           ^
+>> ./usr/include/rdma/ib_user_verbs.h:740:29: warning: field 'base' with variable sized type 'struct ib_uverbs_modify_qp' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           struct ib_uverbs_modify_qp base;
+                                      ^
+>> ./usr/include/rdma/ib_user_verbs.h:916:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_eth::(anonymous at ./usr/include/rdma/ib_user_verbs.h:916:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> ./usr/include/rdma/ib_user_verbs.h:938:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_ipv4::(anonymous at ./usr/include/rdma/ib_user_verbs.h:938:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> ./usr/include/rdma/ib_user_verbs.h:956:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_tcp_udp::(anonymous at ./usr/include/rdma/ib_user_verbs.h:956:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> ./usr/include/rdma/ib_user_verbs.h:979:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_ipv6::(anonymous at ./usr/include/rdma/ib_user_verbs.h:979:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> ./usr/include/rdma/ib_user_verbs.h:992:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_action_tag::(anonymous at ./usr/include/rdma/ib_user_verbs.h:992:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> ./usr/include/rdma/ib_user_verbs.h:1016:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_action_handle::(anonymous at ./usr/include/rdma/ib_user_verbs.h:1016:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> ./usr/include/rdma/ib_user_verbs.h:1029:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_action_count::(anonymous at ./usr/include/rdma/ib_user_verbs.h:1029:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> ./usr/include/rdma/ib_user_verbs.h:1046:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_tunnel::(anonymous at ./usr/include/rdma/ib_user_verbs.h:1046:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> ./usr/include/rdma/ib_user_verbs.h:1064:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_esp::(anonymous at ./usr/include/rdma/ib_user_verbs.h:1064:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> ./usr/include/rdma/ib_user_verbs.h:1091:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_gre::(anonymous at ./usr/include/rdma/ib_user_verbs.h:1091:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+>> ./usr/include/rdma/ib_user_verbs.h:1114:2: warning: field '' with variable sized type 'union ib_uverbs_flow_spec_mpls::(anonymous at ./usr/include/rdma/ib_user_verbs.h:1114:2)' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           union {
+           ^
+   14 warnings generated.
+--
+   In file included from <built-in>:1:
+   In file included from ./usr/include/linux/netfilter_ipv6/ip6_tables.h:24:
+   usr/include/linux/netfilter/x_tables.h:66:25: warning: field 'target' with variable sized type 'struct xt_entry_target' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           struct xt_entry_target target;
+                                  ^
+   usr/include/linux/netfilter/x_tables.h:71:25: warning: field 'target' with variable sized type 'struct xt_entry_target' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           struct xt_entry_target target;
+                                  ^
+   In file included from <built-in>:1:
+>> ./usr/include/linux/netfilter_ipv6/ip6_tables.h:131:20: warning: field 'entry' with variable sized type 'struct ip6t_entry' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           struct ip6t_entry entry;
+                             ^
+   ./usr/include/linux/netfilter_ipv6/ip6_tables.h:136:20: warning: field 'entry' with variable sized type 'struct ip6t_entry' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           struct ip6t_entry entry;
+                             ^
+   4 warnings generated.
+--
+   In file included from <built-in>:1:
+>> ./usr/include/linux/seg6_hmac.h:12:17: warning: field 'tlvhdr' with variable sized type 'struct sr6_tlv' not at the end of a struct or class is a GNU extension [-Wgnu-variable-sized-type-not-at-end]
+           struct sr6_tlv tlvhdr;
+                          ^
+   1 warning generated.
 
-> >=20
-> > I guess I can build the DTB for just the SoM=20
->=20
-> But you just did it, didn't you? This is a DTS.
->=20
-
-As you can see from the patch, I didn't add that file directly to the
-Makefile, so dtbs_check didn't check it directly.
-
-> >=20
-> > and boot with that or
-> > thinking about it, rename this as a .dtsi, given that it's unlikely
-> > that anyone is going to have a carrier barebones enough that it
-> > could
-> > be considered just the SoM?
->=20
-> Anyway, I wanted DT bindings tests for DTS. Not actual tests on
-> hardware, because the compatibles do not matter in that aspect.
->=20
-
-The tests threw quite a few errors that seemed to be related to the
-imx8mp.dtsi. The only ones that seemed to be related to the files I've
-created seem to be the result of including optional pins in the pin
-muxing, which need to be there AFAIK, but seem to be resulting in
-warnings from the tool.
-
-Martyn
-
-> Best regards,
-> Krzysztof
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

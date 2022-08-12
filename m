@@ -2,145 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40ACB5915FC
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 21:31:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F00525915FF
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 21:33:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235730AbiHLTa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 15:30:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59152 "EHLO
+        id S236206AbiHLTdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 15:33:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234475AbiHLTa5 (ORCPT
+        with ESMTP id S230433AbiHLTdR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 15:30:57 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3058D9926A
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 12:30:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660332656; x=1691868656;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=GlbJXtp1pQ/j4T73SprLl7OSfQKxTVMN6a3ZI775+EA=;
-  b=BdqGG+W0Cc+8lXYCnvIdTVg7M1Fi0+SuNhAEP6jsDJYPYOo9mH2bg01V
-   IpErTKcfCzxvttMCxJiL9G5/TS6eqcBQQOA1HNV/AsxSf314RgPB9tlVX
-   XV5nPHtgLTfPoexl7gChhc4ks6eerZBz/fvIAIXgNWWXr/RPa+eq3k5mG
-   6Frv2RQySb3HY8KMixUv/V1JaMeKYP+0Tg0tcqS7wagh59zmqBt8840Rn
-   Vx2d7s20fvBfobuCV48AB6GkFo3HJzcC6euAfyIrNq4pelOCYswEyKNpR
-   KEA7bsAY3Bg2SnShB5GaZ5D26pQcSal9W0q8Pty4LQjW+w6jSVfL4yWA3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="355679513"
-X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="355679513"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 12:30:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="695370860"
-Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by FMSMGA003.fm.intel.com with ESMTP; 12 Aug 2022 12:30:53 -0700
-Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oMaMu-0000rZ-2y;
-        Fri, 12 Aug 2022 19:30:52 +0000
-Date:   Sat, 13 Aug 2022 03:30:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     xiakaixu1987@gmail.com, sj@kernel.org, akpm@linux-foundation.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        damon@lists.linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Kaixu Xia <kaixuxia@tencent.com>
-Subject: Re: [PATCH] mm/damon/core: simplify the parameter passing for region
- split operation
-Message-ID: <202208130308.8rYWTL9U-lkp@intel.com>
-References: <1660290073-26347-1-git-send-email-kaixuxia@tencent.com>
+        Fri, 12 Aug 2022 15:33:17 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 985B2B0B3E
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 12:33:16 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id q39-20020a056830442700b0063889adc0ddso292188otv.1
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 12:33:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=pyCzP0WJ+v7YYl7i0GdEcJsuc5xybpRZaZrTHBnUyuI=;
+        b=tjBxXmKuFTbo/X5C0AifdNg85hQbAM5FOzw7DFgL9vEIH0+EFxcG2KUUxhswBHH0RJ
+         AxCBrTV2u74aJ1qjAwWd4l+TbydCdbBAL4YSXWaBntv8f3NaJPz/ykssjHULMNPf3BLK
+         1Gz+eE3jKkZFObGHsDXG6tQKqedsUiEpEhIrdt8nUeoXDHd1wWZ6gpWNhHJTD237nA5R
+         ESMg/BtmQvp6kSM2e3D6zGTgo7NgIvwg7xP+6ISs8N2nJxOncgmPZQOkaxzM0KcwdreB
+         5q+A6A4tDa6vK8LK2+QDrt1vf1RZWewf80LKxMOksOEIbvZHF70DzTenT8LjOvQuuQKj
+         g2Hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=pyCzP0WJ+v7YYl7i0GdEcJsuc5xybpRZaZrTHBnUyuI=;
+        b=CIQN/nkorJXQM/Rk5581qjSwDIdksmfS9FXoKnAgpz1Uq0oe8O9L+ESJcKe8x6j6aO
+         vLaUKY8Oh9EtvlNpVgCtw+IVSclgEGUNsFEW4ZHypAQR8xpKCcCWQV0qmrvKmedpwcH5
+         WbDTAYo7dYiH+BtnE5MpSY1kSl3bSm8adcXQYQraPaVbcHDmFL2uR6Op/E9uAqvrSI3b
+         loAwSaOGB1Edx7icjunI86E1s4333GpSLk8ST7ci+ymlRkhCcf23PYkKvHPIXH+lrrdc
+         L9CalZmZJRdh1WWL4HbNZofTpcEvCoKLpJBWssWch4LxArz++Dyn7Z6vRLZhjJdaR50m
+         BdZg==
+X-Gm-Message-State: ACgBeo2op7OcBerqGFMRGSQ72C/BOxQE1rdpRrZV2DeDltYIEMuQjQpN
+        8Ep1Jky/V7xtyWdocUuwJ6UoibEcbYk/cTxH1TMY/Q==
+X-Google-Smtp-Source: AA6agR4q5K+d+SumrFuiYTU4yOXlMwxRoORIsQLNRB++Mt2hVl9TwB5nW6XFmnhTrVWMiVw9uD19XytcSSZtjHa9cOw=
+X-Received: by 2002:a9d:6517:0:b0:636:a8e7:4e86 with SMTP id
+ i23-20020a9d6517000000b00636a8e74e86mr2104096otl.367.1660332795744; Fri, 12
+ Aug 2022 12:33:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1660290073-26347-1-git-send-email-kaixuxia@tencent.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220812014706.43409-1-yuan.yao@intel.com> <20220812020206.foknky4hghgsadby@yy-desk-7060>
+In-Reply-To: <20220812020206.foknky4hghgsadby@yy-desk-7060>
+From:   Jim Mattson <jmattson@google.com>
+Date:   Fri, 12 Aug 2022 12:33:05 -0700
+Message-ID: <CALMp9eRejAUVzFOsASBc-Md8KUeS1mzqOm9WCJ9dBFkc_NeOJg@mail.gmail.com>
+Subject: Re: [PATCH 1/1] kvm: nVMX: Checks "VMCS shadowing" with VMCS link
+ pointer for non-root mode VM{READ,WRITE}
+To:     Yuan Yao <yuan.yao@linux.intel.com>
+Cc:     Yuan Yao <yuan.yao@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Jon Cargille <jcargill@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, Aug 11, 2022 at 7:02 PM Yuan Yao <yuan.yao@linux.intel.com> wrote:
+>
+> On Fri, Aug 12, 2022 at 09:47:06AM +0800, Yuan Yao wrote:
+> > Add checking to VMCS12's "VMCS shadowing", make sure the checking of
+> > VMCS12's vmcs_link_pointer for non-root mode VM{READ,WRITE} happens
+> > only if VMCS12's "VMCS shadowing" is 1.
+> >
+> > SDM says that for non-root mode the VMCS's "VMCS shadowing" must be 1
+> > (and the corresponding bits in VMREAD/VMWRITE bitmap must be 0) when
+> > condition checking of [B] is reached(please refer [A]), which means
+> > checking to VMCS link pointer for non-root mode VM{READ,WRITE} should
+> > happen only when "VMCS shadowing" =3D 1.
+> >
+> > Description from SDM Vol3(April 2022) Chapter 30.3 VMREAD/VMWRITE:
+> >
+> > IF (not in VMX operation)
+> >    or (CR0.PE =3D 0)
+> >    or (RFLAGS.VM =3D 1)
+> >    or (IA32_EFER.LMA =3D 1 and CS.L =3D 0)
+> > THEN #UD;
+> > ELSIF in VMX non-root operation
+> >       AND (=E2=80=9CVMCS shadowing=E2=80=9D is 0 OR
+> >            source operand sets bits in range 63:15 OR
+> >            VMREAD bit corresponding to bits 14:0 of source
+> >            operand is 1)  <------[A]
+> > THEN VMexit;
+> > ELSIF CPL > 0
+> > THEN #GP(0);
+> > ELSIF (in VMX root operation AND current-VMCS pointer is not valid) OR
+> >       (in VMX non-root operation AND VMCS link pointer is not valid)
+> > THEN VMfailInvalid;  <------ [B]
+> > ...
+> >
+> > Fixes: dd2d6042b7f4 ("kvm: nVMX: VMWRITE checks VMCS-link pointer befor=
+e VMCS field")
+> > Signed-off-by: Yuan Yao <yuan.yao@intel.com>
+> > ---
+> >  arch/x86/kvm/vmx/nested.c | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
+> > index ddd4367d4826..30685be54c5d 100644
+> > --- a/arch/x86/kvm/vmx/nested.c
+> > +++ b/arch/x86/kvm/vmx/nested.c
+> > @@ -5123,6 +5123,7 @@ static int handle_vmread(struct kvm_vcpu *vcpu)
+> >                */
+> >               if (vmx->nested.current_vmptr =3D=3D INVALID_GPA ||
+> >                   (is_guest_mode(vcpu) &&
+> > +                  nested_cpu_has_shadow_vmcs(vcpu) &&
+>
+> Oops, should be "nested_cpu_has_shadow_vmcs(get_vmcs12(vcpu))".
+>
+> >                    get_vmcs12(vcpu)->vmcs_link_pointer =3D=3D INVALID_G=
+PA))
+> >                       return nested_vmx_failInvalid(vcpu);
+> >
+> > @@ -5233,6 +5234,7 @@ static int handle_vmwrite(struct kvm_vcpu *vcpu)
+> >        */
+> >       if (vmx->nested.current_vmptr =3D=3D INVALID_GPA ||
+> >           (is_guest_mode(vcpu) &&
+> > +          nested_cpu_has_shadow_vmcs(vcpu) &&
+>
+> Ditto.
+>
+> >            get_vmcs12(vcpu)->vmcs_link_pointer =3D=3D INVALID_GPA))
+> >               return nested_vmx_failInvalid(vcpu);
+> >
+> > --
 
-Thank you for the patch! Yet something to improve:
+These checks are redundant, aren't they?
 
-[auto build test ERROR on akpm-mm/mm-everything]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/xiakaixu1987-gmail-com/mm-damon-core-simplify-the-parameter-passing-for-region-split-operation/20220812-154316
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-config: hexagon-randconfig-r045-20220812 (https://download.01.org/0day-ci/archive/20220813/202208130308.8rYWTL9U-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/26b7d93b0f64c71d6d324a4a37d85641b55eaec2
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review xiakaixu1987-gmail-com/mm-damon-core-simplify-the-parameter-passing-for-region-split-operation/20220812-154316
-        git checkout 26b7d93b0f64c71d6d324a4a37d85641b55eaec2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from mm/damon/core.c:1218:
->> mm/damon/core-test.h:129:33: error: too many arguments to function call, expected 3, have 4
-           damon_split_region_at(c, t, r, 25);
-           ~~~~~~~~~~~~~~~~~~~~~          ^~
-   mm/damon/core.c:930:13: note: 'damon_split_region_at' declared here
-   static void damon_split_region_at(struct damon_target *t,
-               ^
-   In file included from mm/damon/core.c:1218:
-   mm/damon/core-test.h:222:31: error: too many arguments to function call, expected 2, have 3
-           damon_split_regions_of(c, t, 2);
-           ~~~~~~~~~~~~~~~~~~~~~~       ^
-   mm/damon/core.c:948:13: note: 'damon_split_regions_of' declared here
-   static void damon_split_regions_of(struct damon_target *t, int nr_subs)
-               ^
-   In file included from mm/damon/core.c:1218:
-   mm/damon/core-test.h:229:31: error: too many arguments to function call, expected 2, have 3
-           damon_split_regions_of(c, t, 4);
-           ~~~~~~~~~~~~~~~~~~~~~~       ^
-   mm/damon/core.c:948:13: note: 'damon_split_regions_of' declared here
-   static void damon_split_regions_of(struct damon_target *t, int nr_subs)
-               ^
-   3 errors generated.
-
-
-vim +129 mm/damon/core-test.h
-
-17ccae8bb5c928 SeongJae Park 2021-09-07  119  
-17ccae8bb5c928 SeongJae Park 2021-09-07  120  static void damon_test_split_at(struct kunit *test)
-17ccae8bb5c928 SeongJae Park 2021-09-07  121  {
-17ccae8bb5c928 SeongJae Park 2021-09-07  122  	struct damon_ctx *c = damon_new_ctx();
-17ccae8bb5c928 SeongJae Park 2021-09-07  123  	struct damon_target *t;
-17ccae8bb5c928 SeongJae Park 2021-09-07  124  	struct damon_region *r;
-17ccae8bb5c928 SeongJae Park 2021-09-07  125  
-1971bd630452e9 SeongJae Park 2022-03-22  126  	t = damon_new_target();
-17ccae8bb5c928 SeongJae Park 2021-09-07  127  	r = damon_new_region(0, 100);
-17ccae8bb5c928 SeongJae Park 2021-09-07  128  	damon_add_region(r, t);
-17ccae8bb5c928 SeongJae Park 2021-09-07 @129  	damon_split_region_at(c, t, r, 25);
-17ccae8bb5c928 SeongJae Park 2021-09-07  130  	KUNIT_EXPECT_EQ(test, r->ar.start, 0ul);
-17ccae8bb5c928 SeongJae Park 2021-09-07  131  	KUNIT_EXPECT_EQ(test, r->ar.end, 25ul);
-17ccae8bb5c928 SeongJae Park 2021-09-07  132  
-17ccae8bb5c928 SeongJae Park 2021-09-07  133  	r = damon_next_region(r);
-17ccae8bb5c928 SeongJae Park 2021-09-07  134  	KUNIT_EXPECT_EQ(test, r->ar.start, 25ul);
-17ccae8bb5c928 SeongJae Park 2021-09-07  135  	KUNIT_EXPECT_EQ(test, r->ar.end, 100ul);
-17ccae8bb5c928 SeongJae Park 2021-09-07  136  
-17ccae8bb5c928 SeongJae Park 2021-09-07  137  	damon_free_target(t);
-17ccae8bb5c928 SeongJae Park 2021-09-07  138  	damon_destroy_ctx(c);
-17ccae8bb5c928 SeongJae Park 2021-09-07  139  }
-17ccae8bb5c928 SeongJae Park 2021-09-07  140  
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+That is, nested_vmx_exit_handled_vmcs_access() has already checked
+nested_cpu_has_shadow_vmcs(vmcs12).

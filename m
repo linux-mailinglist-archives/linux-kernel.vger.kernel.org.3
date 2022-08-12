@@ -2,70 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F1985910E0
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 14:40:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3D8A59110F
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 14:51:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237923AbiHLMkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 08:40:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55036 "EHLO
+        id S238801AbiHLMvZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 08:51:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234719AbiHLMkg (ORCPT
+        with ESMTP id S238670AbiHLMvW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 08:40:36 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B48EA7ABC
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 05:40:35 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id y141so851166pfb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 05:40:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=s3Kp5U/VqVuXGiRK973FMZHaRwO0ydhDLvBsgwOJLzA=;
-        b=gLZsBiTTLEPVy2cmiA3Pwmxne/zs8SA1JDvPET37cNfShVVdR4C9eT2XTlOE/P/tss
-         jRAVksKlRd3vS9kBOvGs2qpbgb1ijPxjVN2brh+pdtHi/8TU5Kr+Br0VD9GkT9IkLJDb
-         DF2B4vwV0WhpfSSs/j0ehgRaEog8cd0gFzBWROL+2P3/MpviuVKN+KRVQtiO/DlUlSnu
-         4XQ4+35mi269Ptxvpt3cqokzQnYPHfM3+QrKJirYutFmq3oFYxsYTGGm2DGlSZVSu7TQ
-         1BQxqzoReT/ITmn+Ck6gxfg1PLOPTvEGh2XpW9XeZboXboeEG0ShuXV4i8Oe/xwUgYTe
-         T5NQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=s3Kp5U/VqVuXGiRK973FMZHaRwO0ydhDLvBsgwOJLzA=;
-        b=y2yq0S2XW4o4eRns2nB/9yzcv4DkZHkPXyv3Uemsysz9WIF6gOFw5Jhl3TaNS6aTnR
-         DUb0MrgeXhw6HK0eELRVBHh/fr2KCYhasH2gxuYyjdeaBeVg0536ttviGJM7CGPEv4gZ
-         joztLokgjy12uT6WAqreXQlH/rd/S82UXufH9zktqFGt3idNC+VIR28pHAMu9ezFO0AS
-         +UK9Lk4VBEqKQxWSIK6/AIWOkGPDmXaL2qr8375aYdCoaKm/NdQWo9bEGzNRu9MdQKAf
-         0hYw5YTi3XuDaTQ4cLTEKzYqTT/bVYoYgjXkN4Pv47jznH8LDYd9tiw+l7cSZDZPqBSM
-         M9KA==
-X-Gm-Message-State: ACgBeo2s8v1F0sq0vOT09TG1908LZPEX5h3cfD+NmUsGL3RLLj0gLOqg
-        jzhBtvDgB06KiYvHVYcbiygRUQ==
-X-Google-Smtp-Source: AA6agR45hdm0gHtQS1u4JLDnGlQnpfrE9Vhym1N9TiwMCG31vlAKdrRpslpiENNjFvZsFscXGyl94g==
-X-Received: by 2002:a63:565c:0:b0:41d:17e1:32f with SMTP id g28-20020a63565c000000b0041d17e1032fmr2943973pgm.445.1660308034832;
-        Fri, 12 Aug 2022 05:40:34 -0700 (PDT)
-Received: from [192.168.1.100] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id y9-20020a17090a134900b001f766b6a879sm5249203pjf.44.2022.08.12.05.40.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 05:40:34 -0700 (PDT)
-Message-ID: <330468da-a778-6cfc-ce46-a62566d71c8d@kernel.dk>
-Date:   Fri, 12 Aug 2022 06:40:32 -0600
+        Fri, 12 Aug 2022 08:51:22 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354E89DB45
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 05:51:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660308682; x=1691844682;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=pLT/JhLRJVT6Hx+fXKzxWkT0IVl2IJGUlJL/FYAB+og=;
+  b=DEteU5CIXr66XytrHZRf8l5VT2odZwp1GNKgVDRRStfqgEVjqKhNSRfd
+   8HJh4nEZgETN3113psSwitP4E7zXcaWrbX5kMsrJ0NyRo+6/MUgrxW0tI
+   xNor30Zn1n/NvcrtEhsxE5XtND1zXhEwYSRsXuBrNIrm8N0IbPHSQCLDV
+   4b6oXpUxPizlVkICU4IFyK12h7XHzv8ERiLnRFZYpq+Bd5/t2iXn+aZlw
+   42qPSHKTBNfk+Fxi2ymZoQidZSOnYaWJHIPkNh6LYGV53l2x9MOOKxkzI
+   v/FfO6gYXJZZ9kEj4z9h0DbzCqW+j1bStlCrPf+dSbIedV1lac0qqpUr3
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="292381164"
+X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
+   d="scan'208";a="292381164"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 05:51:21 -0700
+X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
+   d="scan'208";a="556506169"
+Received: from pkruijer-mobl.ger.corp.intel.com (HELO [10.249.41.102]) ([10.249.41.102])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 05:51:16 -0700
+Message-ID: <4fe4853d-a446-1f72-2f32-f63eb6733adc@linux.intel.com>
+Date:   Fri, 12 Aug 2022 14:41:09 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH] blk-mq: move bio merge attempt to blk_mq_submit_bio()
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Firefox/91.0 Thunderbird/91.11.0
+Subject: Re: [PATCH] ASoC: Intel: sof_rt5682: Add support for
+ jsl_rt5682_rt1019
 Content-Language: en-US
-To:     Chengming Zhou <zhouchengming@bytedance.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220812083944.79616-1-zhouchengming@bytedance.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20220812083944.79616-1-zhouchengming@bytedance.com>
+To:     Sean Hong <sean.hong@quanta.corp-partner.google.com>,
+        perex@perex.cz, tiwai@suse.com
+Cc:     cezary.rojewski@intel.com, liam.r.girdwood@linux.intel.com,
+        peter.ujfalusi@linux.intel.com, yung-chuan.liao@linux.intel.com,
+        ranjani.sridharan@linux.intel.com, kai.vehmanen@linux.intel.com,
+        broonie@kernel.org, brent.lu@intel.com, yong.zhi@intel.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+References: <20220812114804.550809-1-sean.hong@quanta.corp-partner.google.com>
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+In-Reply-To: <20220812114804.550809-1-sean.hong@quanta.corp-partner.google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,18 +67,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/12/22 2:39 AM, Chengming Zhou wrote:
-> We will try to get request from cache before alloc request, in
-> both cases will first attempt bio merge.
-> 
-> This patch move this common part to blk_mq_submit_bio(), which
-> simplify the code and avoid passing in the pointer of bio.
 
-I don't think this will work. If we get a cached request, then we
-know we have a reference to the queue. If you swap these around,
-then that's no longer the case and we can have a use-after-free if
-the queue goes away.
+>  static const struct snd_soc_acpi_codecs mx98360a_spk = {
+>  	.num_codecs = 1,
+>  	.codecs = {"MX98360A"}
+> @@ -78,6 +83,14 @@ struct snd_soc_acpi_mach snd_soc_acpi_intel_jsl_machines[] = {
+>  		.quirk_data = &mx98360a_spk,
+>  		.sof_tplg_filename = "sof-jsl-rt5682-mx98360a.tplg",
+>  	},
+> +	{
+> +		.comp_ids = &rt5682_rt5682s_hp,
+> +		.drv_name = "jsl_rt5682_rt1019",
+> +		.sof_fw_filename = "sof-jsl.ri",
+> +		.machine_quirk = snd_soc_acpi_codec_list,
+> +		.quirk_data = &rt1019p_spk,
+> +		.sof_tplg_filename = "sof-jsl-rt5682-rt1015.tplg",
 
--- 
-Jens Axboe
+this patch adds support for the rt1019, the line above looks like a
+copy-paste mistake.
 
+We shouldn't use the same topology files for different platforms, it's
+not good maintenance-wise and since we store default values for some
+controls it's really not a good idea.
+
+Please use a unique string such as sof-jsl-rt5682-rt1019.tplg, thanks.
+
+> +	},
+>  	{
+>  		.id = "10134242",
+>  		.drv_name = "jsl_cs4242_mx98360a",

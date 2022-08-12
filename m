@@ -2,137 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD0ED5916BE
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 23:34:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BD265916C5
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 23:39:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233698AbiHLVeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 17:34:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51036 "EHLO
+        id S235878AbiHLVjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 17:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230445AbiHLVeA (ORCPT
+        with ESMTP id S230445AbiHLVjl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 17:34:00 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8B29E2DC
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 14:33:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660340039; x=1691876039;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=reTgJ5fV2vfj/2OMjhMaKSNOZpIJX0kYO6SiIyfzfks=;
-  b=Ejm+Yx4J5AVjGMe66XgHMe2ZpqzOnISwkOzDbRxCwDP58rqnL7e6dY/1
-   JjaIaV18o9x8+OnnDc+81Zl9r7HT48Muv9ZpMFbvutiQHJvmpWde8sfda
-   Z61z0HXgjxklmX09Lousfxf5Q6WF9RtB28q4qLAXNRD4LKVADuwCVLn/K
-   gr8tXJ6wxC3eC6rI+Ak6hb4wctn6H9QUiIN6wy4NER7UW6y0L3xlM/Md6
-   wueXhXcGNxu2yhXCqGlyYYjXhvS0k4rF178heeBmR4PwVy3ASmGgNyvdo
-   r7JfhK+jiD86HkJOeM9h0QUvjuDBPmtDPYcBkl0k9yByvoK+YsQ6VVLr5
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="355699125"
-X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="355699125"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 14:33:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="606053922"
-Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 12 Aug 2022 14:33:57 -0700
-Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oMcI1-0000yd-02;
-        Fri, 12 Aug 2022 21:33:57 +0000
-Date:   Sat, 13 Aug 2022 05:33:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jiri Pirko <jiri@nvidia.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [jpirko-mlxsw:jiri_devel_devlink_locking 33/40]
- drivers/net/ethernet/pensando/ionic/ionic_devlink.c:93:69: error: expected
- ')' before ';' token
-Message-ID: <202208130548.6SBXNgLQ-lkp@intel.com>
+        Fri, 12 Aug 2022 17:39:41 -0400
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 718AA9F1BE;
+        Fri, 12 Aug 2022 14:39:40 -0700 (PDT)
+Received: from toolbox.int.toradex.com ([81.221.243.92]) by mrelay.perfora.net
+ (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0LaVlh-1nfLDD35Rf-00mMKb;
+ Fri, 12 Aug 2022 23:39:13 +0200
+From:   Marcel Ziswiler <marcel@ziswiler.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Olof Johansson <olof@lixom.net>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/2] arm64: dts: freescale: verdin-imx8mm/p: fix atmel_mxt_ts reset polarity
+Date:   Fri, 12 Aug 2022 23:39:03 +0200
+Message-Id: <20220812213905.216065-1-marcel@ziswiler.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:BvH86vIzHnF0Ev4yFtzt0ehaInOmIA51RxXGpGnqroqThlI+wKn
+ HxeOrStKIPnchO3aXszf0pLsRZs5aybBKemSwIddaO7D/uoy6c+Y1vPRTOOGtiHcDBK856U
+ yRecUMKM/8u7FVjPJKR9pBrsVlz2lcy7t4He/4Nc7ccaMUlsygVqhuRKiVxKMy2FOg4oApr
+ EiExLrqu7BEZZanjiCdeQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:rMhfLbtZ3fc=:x/xuQtTJqRNgBT7ShyTz+S
+ SwZw8VAZ7RZWq7yeIwCwYQtdwYIL1BVZuzHI6xWFRuXTZJxfKLsGi3ro18JEVaIKRc9OJ719f
+ KSeQjnm8SK41YWMGWJkPFfEYRlYwgOPLjRgcgHl/vk5/bOJ2qpn96qLabmQ4AhKXFCx88XEGG
+ dWrRWnN8i6MIcvGL3os5R73cL+ewfzhv5HNgn8U3WEp0VCeUAaYc50AOfROn89ibzvvCQYGOD
+ 8aSvQ1q38CVjrCKdiT/WdKIjCqAld0cjHADg5i0XTOekcJvM5Du/aM9vEJ8CDQFCVj5sNVnUd
+ RneKeO7VisKYrmUqg78Ju4kk3LIhLC2DlJcF50UHLge+yG6ttoBeqDlt5tmNu42tnngdVrjSQ
+ E2Zp60yil5VbFzg0Y9/D2F+xBR6Zi7I3kINUM9BuWC6ejP+y3g6jT9MGBUHX1ug2OBMMVcdLW
+ f96hjm4e7D4qKr2hONoRSza1RlSLUo/CuUitawwUNMT/yoqZ+2US6hdrUEmzyNxz2e7iJLByv
+ 4Bq08P+el7MOiLd8Td7PkFu/bRLlwSbfm5jQ3MHVvXgrFppPtojZj/xEjVywN7DR+OD/WwFfw
+ PmNCYyVJiF8M87aX0kLbgw30Du+F4ND7RPMZhDqaBkvZY68QQbkPyPdwDvBPNOBlUmqrQhknt
+ tkrdUmbD3eqbXuU7orh8CVlolL+8cgvlIMLGhMc0mAac9KRSHOvN9Xh/qwgSNOYAYtHWezMAr
+ dMOhg0tziu7QNl3E5nzRy3/1p5Tgc1rT94E6nGLPZBi/+gIK3Qvw5+GPMHM=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/jpirko/linux_mlxsw jiri_devel_devlink_locking
-head:   3752df45a64c94afd110eeb956cd9adaeec586c1
-commit: 95a8f1859e438effd49d5c1ae7828e87b8471180 [33/40] net: make drivers to use SET_NETDEV_DEVLINK_PORT to set devlink_port
-config: x86_64-randconfig-a002 (https://download.01.org/0day-ci/archive/20220813/202208130548.6SBXNgLQ-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/jpirko/linux_mlxsw/commit/95a8f1859e438effd49d5c1ae7828e87b8471180
-        git remote add jpirko-mlxsw https://github.com/jpirko/linux_mlxsw
-        git fetch --no-tags jpirko-mlxsw jiri_devel_devlink_locking
-        git checkout 95a8f1859e438effd49d5c1ae7828e87b8471180
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/ethernet/pensando/ionic/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/net/ethernet/pensando/ionic/ionic_devlink.c:5:
-   drivers/net/ethernet/pensando/ionic/ionic_devlink.c: In function 'ionic_devlink_register':
-   include/linux/netdevice.h:2348:1: error: expected ';' before ')' token
-    2348 | )}
-         | ^
-   drivers/net/ethernet/pensando/ionic/ionic_devlink.c:93:9: note: in expansion of macro 'SET_NETDEV_DEVLINK_PORT'
-      93 |         SET_NETDEV_DEVLINK_PORT(ionic->lif->netdev, &ionic->dl_port);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/netdevice.h:2348:1: error: expected statement before ')' token
-    2348 | )}
-         | ^
-   drivers/net/ethernet/pensando/ionic/ionic_devlink.c:93:9: note: in expansion of macro 'SET_NETDEV_DEVLINK_PORT'
-      93 |         SET_NETDEV_DEVLINK_PORT(ionic->lif->netdev, &ionic->dl_port);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~
->> drivers/net/ethernet/pensando/ionic/ionic_devlink.c:93:69: error: expected ')' before ';' token
-      93 |         SET_NETDEV_DEVLINK_PORT(ionic->lif->netdev, &ionic->dl_port);
-         |                                                                     ^
->> drivers/net/ethernet/pensando/ionic/ionic_devlink.c:95:18: error: expected ';' before '}' token
-      95 |         return 0;
-         |                  ^
-         |                  ;
-      96 | }
-         | ~                 
-   drivers/net/ethernet/pensando/ionic/ionic_devlink.c:96:1: error: control reaches end of non-void function [-Werror=return-type]
-      96 | }
-         | ^
-   cc1: some warnings being treated as errors
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
 
-vim +93 drivers/net/ethernet/pensando/ionic/ionic_devlink.c
+Unfortunately, I was not aware of this reset GPIO polarity fix when
+I submitted initial support. Let us correct this oversight. Thanks!
 
-    78	
-    79	int ionic_devlink_register(struct ionic *ionic)
-    80	{
-    81		struct devlink *dl = priv_to_devlink(ionic);
-    82		struct devlink_port_attrs attrs = {};
-    83		int err;
-    84	
-    85		attrs.flavour = DEVLINK_PORT_FLAVOUR_PHYSICAL;
-    86		devlink_port_attrs_set(&ionic->dl_port, &attrs);
-    87		err = devlink_port_register(dl, &ionic->dl_port, 0);
-    88		if (err) {
-    89			dev_err(ionic->dev, "devlink_port_register failed: %d\n", err);
-    90			return err;
-    91		}
-    92	
-  > 93		SET_NETDEV_DEVLINK_PORT(ionic->lif->netdev, &ionic->dl_port);
-    94		devlink_register(dl);
-  > 95		return 0;
-    96	}
-    97	
+
+Marcel Ziswiler (2):
+  arm64: dts: freescale: verdin-imx8mm: fix atmel_mxt_ts reset polarity
+  arm64: dts: freescale: verdin-imx8mp: fix atmel_mxt_ts reset polarity
+
+ arch/arm64/boot/dts/freescale/imx8mm-verdin.dtsi | 2 +-
+ arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.36.1
+

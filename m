@@ -2,155 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 933F6590FB4
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 12:53:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 859EB590FC4
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 12:55:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232506AbiHLKxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 06:53:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59836 "EHLO
+        id S234090AbiHLKzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 06:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229664AbiHLKxF (ORCPT
+        with ESMTP id S229942AbiHLKzU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 06:53:05 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31A689BB4C;
-        Fri, 12 Aug 2022 03:53:04 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D727E3F795;
-        Fri, 12 Aug 2022 10:53:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1660301582; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ksMK+v7c9pFYj4V3LWZUwU7PmRNjkBHqL7qOAp0N0NQ=;
-        b=ktx0oOds6rrv8vfXHZttNxW9m5jJvHfvSgid++5zVjK0ht4eB7ozePe3o09Asck2Z9OAD1
-        1TQEr5I/rkGorT82OVxT7ShQI0qOYZxDftXDSaKKjrliM1pD+f95vyq4XA9+NdlUtS6uzj
-        yOi1fSxmRK53x1q4umF0Fnyo/DjYFVo=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1660301582;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ksMK+v7c9pFYj4V3LWZUwU7PmRNjkBHqL7qOAp0N0NQ=;
-        b=2iRH7sJthwiI2W+spiWLPPxnVwovM/kUmtDfJoMACCfLBaDGWkFGBppie+2YYP8taU66zl
-        fFEhBT7FtN0eX8Cw==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5A5F713305;
-        Fri, 12 Aug 2022 10:53:02 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id NFwhEw4x9mKnZgAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Fri, 12 Aug 2022 10:53:02 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id f69ccade;
-        Fri, 12 Aug 2022 10:53:48 +0000 (UTC)
-From:   =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>
-To:     Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>
-Cc:     wenqingliu0120@gmail.com, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?q?Lu=C3=ADs=20Henriques?= <lhenriques@suse.de>,
-        Baokun Li <libaokun1@huawei.com>
-Subject: [PATCH v2] ext4: fix bug in extents parsing when eh_entries == 0 and eh_depth > 0
-Date:   Fri, 12 Aug 2022 11:53:47 +0100
-Message-Id: <20220812105347.2251-1-lhenriques@suse.de>
+        Fri, 12 Aug 2022 06:55:20 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB35DF44
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 03:55:18 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id a9so818368lfm.12
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 03:55:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=aaNl+ijT1LjwDfHOCxRP8aD4iO5jOkHMfS/PbY8NG5o=;
+        b=vxyPj+cWREDjzPfHlMEI4ETGGS++oBpkkT/Z8ItZIeGbY/auOJ9VffjXi3vILLOXOD
+         Mo4fOrJX19n83rdKW55y3kMoxJXPsW3VNDMufG/BYD9YgGQXmwHnmVezKLYcSGjilxPr
+         uTtUnjgaFRPTeCuer2xpXcUcR4Iw1HiDwKfM5sin/m7ISRpv1gn7LOs3dkOCFjorV73C
+         ICUKRGn9+UdbtjCNfViIond8iPgwL+QYjeZNWrAKBWo1QSEULnQppVROKOfORzgCTplG
+         9Igbk9lj21TDOx4yUz2dBCthY4WnoQWvta6ymrNWlz2t6jYvzUu865fqNAfTrbZsVquO
+         Ms0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=aaNl+ijT1LjwDfHOCxRP8aD4iO5jOkHMfS/PbY8NG5o=;
+        b=q5I/rARL56lmo9cqrAYwOZh8xoBlYBYKxqZFDjKTrtgxU5nXcvUjS2jcPyVxenGpNT
+         fnN6g3IhEdYS4BHY+2pZuPpOuQ9JfWsprZLI6X8oItXJC1djniVZn/55TwMrCTzZmfCe
+         tw5rYkWAmt9HN8Fl3iSwebJhOix3a6jZ5QT1gybX5lovhyc8nDvgpmTnmwOH3V/CYtaC
+         0+oVtU+SATkXSGv/Yt49BqhklMNw9ztW7GGeXU4eQoFKKAJ2USARzfkqUvebJPCoxMEF
+         yeMAai4ZxBuUzi08xeChghiZy7wSKVxNR33EWaQCJus07MZsyvfD05+yAlrcV4JJM6eF
+         qhmg==
+X-Gm-Message-State: ACgBeo3y+XXA7nixnyHmtvSsizNjO2XM1j7xVjRRgOyPKGWvkkZvutie
+        TjJh2BfItlKxUy/xDW0YVUvrLQ==
+X-Google-Smtp-Source: AA6agR6nxVAvP/ztJ9CWdcMb5byQai/Ut0mSg3vYquS5IM5ugPUQ8jhyJXPddJBUAd9gQCzcpJbNfA==
+X-Received: by 2002:a05:6512:2313:b0:48a:e615:289b with SMTP id o19-20020a056512231300b0048ae615289bmr1069198lfu.201.1660301716964;
+        Fri, 12 Aug 2022 03:55:16 -0700 (PDT)
+Received: from [192.168.1.39] ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id l9-20020a056512110900b0048af3154456sm173419lfg.146.2022.08.12.03.55.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Aug 2022 03:55:16 -0700 (PDT)
+Message-ID: <cbe761af-5011-83a2-0509-2b3c4fe0a79c@linaro.org>
+Date:   Fri, 12 Aug 2022 13:55:10 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v3 1/1] regulator: dt-bindings: mediatek: add mt6366
+Content-Language: en-US
+To:     Zhiyong Tao <zhiyong.tao@mediatek.com>, lee.jones@linaro.org,
+        robh+dt@kernel.org, matthias.bgg@gmail.com, lgirdwood@gmail.com,
+        broonie@kernel.org, eddie.huang@mediatek.com, a.zummo@towertech.it,
+        alexandre.belloni@bootlin.com, fshao@chromium.org
+Cc:     sen.chu@mediatek.com, hui.liu@mediatek.com,
+        allen-kh.cheng@mediatek.com, hsin-hsiung.wang@mediatek.com,
+        sean.wang@mediatek.com, macpaul.lin@mediatek.com,
+        wen.su@mediatek.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-rtc@vger.kernel.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20220812092901.6429-1-zhiyong.tao@mediatek.com>
+ <20220812092901.6429-2-zhiyong.tao@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220812092901.6429-2-zhiyong.tao@mediatek.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When walking through an inode extents, the ext4_ext_binsearch_idx() function
-assumes that the extent header has been previously validated.  However, there
-are no checks that verify that the number of entries (eh->eh_entries) is
-non-zero when depth is > 0.  And this will lead to problems because the
-EXT_FIRST_INDEX() and EXT_LAST_INDEX() will return garbage and result in this:
+On 12/08/2022 12:29, Zhiyong Tao wrote:
+> Add mt6366 regulator document
+> 
 
-[  135.245946] ------------[ cut here ]------------
-[  135.247579] kernel BUG at fs/ext4/extents.c:2258!
-[  135.249045] invalid opcode: 0000 [#1] PREEMPT SMP
-[  135.250320] CPU: 2 PID: 238 Comm: tmp118 Not tainted 5.19.0-rc8+ #4
-[  135.252067] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.15.0-0-g2dd4b9b-rebuilt.opensuse.org 04/01/2014
-[  135.255065] RIP: 0010:ext4_ext_map_blocks+0xc20/0xcb0
-[  135.256475] Code:
-[  135.261433] RSP: 0018:ffffc900005939f8 EFLAGS: 00010246
-[  135.262847] RAX: 0000000000000024 RBX: ffffc90000593b70 RCX: 0000000000000023
-[  135.264765] RDX: ffff8880038e5f10 RSI: 0000000000000003 RDI: ffff8880046e922c
-[  135.266670] RBP: ffff8880046e9348 R08: 0000000000000001 R09: ffff888002ca580c
-[  135.268576] R10: 0000000000002602 R11: 0000000000000000 R12: 0000000000000024
-[  135.270477] R13: 0000000000000000 R14: 0000000000000024 R15: 0000000000000000
-[  135.272394] FS:  00007fdabdc56740(0000) GS:ffff88807dd00000(0000) knlGS:0000000000000000
-[  135.274510] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[  135.276075] CR2: 00007ffc26bd4f00 CR3: 0000000006261004 CR4: 0000000000170ea0
-[  135.277952] Call Trace:
-[  135.278635]  <TASK>
-[  135.279247]  ? preempt_count_add+0x6d/0xa0
-[  135.280358]  ? percpu_counter_add_batch+0x55/0xb0
-[  135.281612]  ? _raw_read_unlock+0x18/0x30
-[  135.282704]  ext4_map_blocks+0x294/0x5a0
-[  135.283745]  ? xa_load+0x6f/0xa0
-[  135.284562]  ext4_mpage_readpages+0x3d6/0x770
-[  135.285646]  read_pages+0x67/0x1d0
-[  135.286492]  ? folio_add_lru+0x51/0x80
-[  135.287441]  page_cache_ra_unbounded+0x124/0x170
-[  135.288510]  filemap_get_pages+0x23d/0x5a0
-[  135.289457]  ? path_openat+0xa72/0xdd0
-[  135.290332]  filemap_read+0xbf/0x300
-[  135.291158]  ? _raw_spin_lock_irqsave+0x17/0x40
-[  135.292192]  new_sync_read+0x103/0x170
-[  135.293014]  vfs_read+0x15d/0x180
-[  135.293745]  ksys_read+0xa1/0xe0
-[  135.294461]  do_syscall_64+0x3c/0x80
-[  135.295284]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+> +
+> +properties:
+> +  compatible:
+> +    const: mediatek,mt6366-regulator
+> +
+> +  regulators:
+> +    type: object
+> +    description: List of regulators and its properties
+> +
+> +    patternProperties:
+> +      "^buck-v(dram1|core|coresshub|proc11|proc12|gpu|s2|modem|s1)$":
+> +        type: object
+> +        $ref: regulator.yaml#
+> +        unevaluatedProperties: false
+> +
+> +      "^ldo-v(dram2|sim1|ibr|rf12|usb|camio|camd|cn18|fe28)$":
+> +        type: object
+> +        $ref: regulator.yaml#
 
-This patch simply adds an extra check in __ext4_ext_check(), verifying that
-eh_entries is not 0 when eh_depth is > 0.
+You miss unevaluatedProperties in most of the places.
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215941
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216283
-Cc: Baokun Li <libaokun1@huawei.com>
-Signed-off-by: Luís Henriques <lhenriques@suse.de>
----
- fs/ext4/extents.c | 5 +++++
- 1 file changed, 5 insertions(+)
 
-Hi!
-
-Baokun's feedback showed me that I had a partial understanding of the
-problem.  Thus, I'm sending v2 which pretty much uses Baokun's suggestion
-and simplifies the solution.  I've also added the link to the 2nd bugzilla
-to the commit text.
-
-Cheers,
---
-Luís
-
-diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
-index 53cfe2c681c4..a5457ac1999c 100644
---- a/fs/ext4/extents.c
-+++ b/fs/ext4/extents.c
-@@ -460,6 +460,11 @@ static int __ext4_ext_check(const char *function, unsigned int line,
- 		error_msg = "invalid eh_entries";
- 		goto corrupted;
- 	}
-+	if (unlikely((le16_to_cpu(eh->eh_entries) == 0) &&
-+		     (le16_to_cpu(eh->eh_depth > 0)))) {
-+		error_msg = "eh_entries is 0 but eh_depth is > 0";
-+		goto corrupted;
-+	}
- 	if (!ext4_valid_extent_entries(inode, eh, lblk, &pblk, depth)) {
- 		error_msg = "invalid extent entries";
- 		goto corrupted;
+Best regards,
+Krzysztof

@@ -2,167 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 534C6590ED5
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 12:12:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 019F8590ED8
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 12:12:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237191AbiHLKLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 06:11:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34008 "EHLO
+        id S237440AbiHLKMC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 06:12:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238009AbiHLKLW (ORCPT
+        with ESMTP id S238061AbiHLKLi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 06:11:22 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A08BAB1AD;
-        Fri, 12 Aug 2022 03:11:21 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id u3so701251lfk.8;
-        Fri, 12 Aug 2022 03:11:21 -0700 (PDT)
+        Fri, 12 Aug 2022 06:11:38 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FAFAB1B0
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 03:11:32 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id w5so720528lfq.5
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 03:11:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=aLFMMy8sY7JakSoVwJi7F7tkYJbV0p0vrNiVSXwI33Q=;
-        b=g3fQSUdZRhNr/Lh1HQZu8MtvXU5V43uZ3QtsGL/7TNjEpRexPInHyQ/FTUVcyYirYK
-         PjZspZUtTwlNNIeoRZzMQry0I4PcRmA4YSqtL5zWHuAejyExLQiBSGJ0ddkoOOKlT8wQ
-         1x0Q/8cEiH6ZgrLMaE2A9Ne/Zn82Kj+a2UHJoxHLCvVzCSlHHSoPtMbGbw/S+bB1Di+R
-         M3XqxOWErbXyqfzUQ8YaqzAMzM+Ku6dgrnMcHKN9BvWBmbY2wN1LjoRglG3nWers6eMs
-         qYoy24HbrClTD2pX2ni9qbfSV9TfbGYaHDJX+YkqWufG5u/3TA2W2f2RgnMJle4wxPCJ
-         6i/w==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=Efu/CGbKWLuL1Oe01pB0RYSwFNW/cJjMMoDyXY2YB+8=;
+        b=UovoUapPrLkcqnkkaewW2fA9sa7b0agJjyYN2uN2fyGJ/+5GXbV5mfm3DhIrXDv+TY
+         bpYDRc4LEA+jkTWpDhNcFyZMxQhAN0XQorBeXLN/sxLMTBpm6fD2h9CNWCxvbhosu5Ew
+         aQC8zR0DyaqoF+R6W1hrq3QUX+gGInRKpZIfpm+D1/pJxjKEvPMzQi89IqXkx0j+h/UV
+         paWLdEDGCJ67sHBITh361Z6JVAR6cgDyKNUneB0HY8ZCqN/xl+qMt3yxHMET8g4vGPWn
+         BQhc3GuptxmB3HdG+FlU105IEyDOmtk4o3ehXiqfu3DVnrbFKhe9yVl/OxwY0Iy06dkm
+         f1VA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=aLFMMy8sY7JakSoVwJi7F7tkYJbV0p0vrNiVSXwI33Q=;
-        b=wsuUwTpYBsfV3+KdwLN4oSI7DRxFrUqj7iqijZJeJhMBDpKgJKlD3L9VeOjyosX9a4
-         c/B6USBGcDFQJoGLKJvl4pDZ61QxD8ILPNzrGYFM5Dsb6c7lqSFzHFG6UNCk6qBBcsv5
-         sVQ+/YpwVO+UjQV8dWSayJX36s67mbmEoyY0L6Yt/jwBITs3AgCHMufSSJaK/Hb8tR/W
-         GUc8bqFqQtPyI+PZfCk+VE1gNox1jLAEHVfNS2FdwOBkBXqlNp3oZpVfLkOaa3EaPidb
-         GEHr6tArjGf+p121ub3Esum9ukA6ELNZKgU1aaIN/bKJRZPsXliq0mJYUkmbYDbEs5KW
-         3sVA==
-X-Gm-Message-State: ACgBeo1Um2tW1O7fVdIw33kNYUPx2PjIrdT611ad1cxoukHDtNiYhWFU
-        Y/rrQrOrqKFHI1SeTfsaOvsXb7DM9imriA==
-X-Google-Smtp-Source: AA6agR7oahz66TXK+4xNXwJ7WBweepHiLx1X956pR6Ll0CKUFsU/T6iafnKR0xdF0fNekUNxKpZZ6A==
-X-Received: by 2002:a05:6512:12c5:b0:48c:df54:a41a with SMTP id p5-20020a05651212c500b0048cdf54a41amr987403lfg.464.1660299079802;
-        Fri, 12 Aug 2022 03:11:19 -0700 (PDT)
-Received: from fedora ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id v4-20020a05651203a400b0048b17ecee71sm154675lfp.302.2022.08.12.03.11.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Aug 2022 03:11:19 -0700 (PDT)
-Date:   Fri, 12 Aug 2022 13:11:16 +0300
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/7] clk: cdce925: simplify using
- devm_regulator_get_enable()
-Message-ID: <18255e2d364e19d4a4ba6c6329892a7a77c92ecd.1660292316.git.mazziesaccount@gmail.com>
-References: <cover.1660292316.git.mazziesaccount@gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=Efu/CGbKWLuL1Oe01pB0RYSwFNW/cJjMMoDyXY2YB+8=;
+        b=qrz+3wq18kd+AzcMrJM1hPUN00xlA/o3hPvta5TJzaJvW+1l8hTeDJcOo3llcdFuyl
+         av6dXTYf4N8diQz0RQQKCs9b3/lTYRlcU36UkwJWNLhJKuicTzPCwTnPFjWCSfDoZz83
+         HjmHiU9cxA7WGbdxr6ADY3t/kVeXwXvpVkG0H/aYnVId1uxhxGdhlUuSuvdYmvFRxIgc
+         ECz2adU+9SM5S9avLZ/QQhbIlQOSsLFax52Hp+Kxl2OANMGqHK0X5dZiDwMO4kpcJ7kI
+         k3ZBA3FohwjS7htm2aINF71O+UsH9csNeWj6qR0hAeuzEETUQ9/lEVkGRy7cumR9ILnK
+         kQaw==
+X-Gm-Message-State: ACgBeo0IrOSuS3+JHE23mnJ+p2xEsDGXMV2zSJzYBWdqNTVPKBMEl1wr
+        1XpZ0SaPi7y6xj8ZQJNxBlWNYA==
+X-Google-Smtp-Source: AA6agR6OCwgKtAvaUtyDKb4jwrDWlW1JbYl8B3jrWJdzx5BDw4hWWiPHrUmCEc3VuMH3EXpbXKwoyw==
+X-Received: by 2002:a05:6512:3050:b0:48c:e580:4421 with SMTP id b16-20020a056512305000b0048ce5804421mr1129450lfb.34.1660299090986;
+        Fri, 12 Aug 2022 03:11:30 -0700 (PDT)
+Received: from [192.168.1.39] ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id 25-20020ac25f59000000b0048b05882c28sm157345lfz.271.2022.08.12.03.11.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Aug 2022 03:11:30 -0700 (PDT)
+Message-ID: <1153cb3a-4f1c-5a54-cd3d-13a1ca9992e9@linaro.org>
+Date:   Fri, 12 Aug 2022 13:11:26 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="7YgUNn3cJXMVqVHU"
-Content-Disposition: inline
-In-Reply-To: <cover.1660292316.git.mazziesaccount@gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 1/6] dt-bindings: i2c: i2c-imx-lpi2c: add ipg clk
+Content-Language: en-US
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, aisheng.dong@nxp.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        shawnguo@kernel.org, s.hauer@pengutronix.de
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        xiaoning.wang@nxp.com, Peng Fan <peng.fan@nxp.com>
+References: <20220812043424.4078034-1-peng.fan@oss.nxp.com>
+ <20220812043424.4078034-2-peng.fan@oss.nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220812043424.4078034-2-peng.fan@oss.nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
---7YgUNn3cJXMVqVHU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Simplify the driver using devm_regulator_get_enable() instead of
-open-coding the devm_add_action_or_reset().
-
-A (minor?) functional change is that we don't print an error in case of a
-deferred probe. Now we also print the error no matter which of the
-involved calls caused the failure.
-
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-
----
-RFCv1 =3D> v2:
-- No changes
----
- drivers/clk/clk-cdce925.c | 21 ++++-----------------
- 1 file changed, 4 insertions(+), 17 deletions(-)
-
-diff --git a/drivers/clk/clk-cdce925.c b/drivers/clk/clk-cdce925.c
-index ef9a2d44e40c..6350682f7e6d 100644
---- a/drivers/clk/clk-cdce925.c
-+++ b/drivers/clk/clk-cdce925.c
-@@ -603,28 +603,15 @@ of_clk_cdce925_get(struct of_phandle_args *clkspec, v=
-oid *_data)
- 	return &data->clk[idx].hw;
- }
-=20
--static void cdce925_regulator_disable(void *regulator)
--{
--	regulator_disable(regulator);
--}
--
- static int cdce925_regulator_enable(struct device *dev, const char *name)
- {
--	struct regulator *regulator;
- 	int err;
-=20
--	regulator =3D devm_regulator_get(dev, name);
--	if (IS_ERR(regulator))
--		return PTR_ERR(regulator);
--
--	err =3D regulator_enable(regulator);
--	if (err) {
--		dev_err(dev, "Failed to enable %s: %d\n", name, err);
--		return err;
--	}
-+	err =3D devm_regulator_get_enable(dev, name);
-+	if (err)
-+		dev_err_probe(dev, err, "Failed to enable %s:\n", name);
-=20
--	return devm_add_action_or_reset(dev, cdce925_regulator_disable,
--					regulator);
-+	return err;
- }
-=20
- /* The CDCE925 uses a funky way to read/write registers. Bulk mode is
---=20
-2.37.1
+On 12/08/2022 07:34, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> i.MX LPI2C actually requires dual clock: per clock and ipg clock, so add
+> both.
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  Documentation/devicetree/bindings/i2c/i2c-imx-lpi2c.yaml | 9 ++++++---
 
 
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---7YgUNn3cJXMVqVHU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmL2J0MACgkQeFA3/03a
-ocVv2QgAo/YlNOW1HA2mG+CxYq7xFKcBzQbPKj/51C44Hv7PuOZ9qYKQl2y0ALO2
-W9nyE1+wXsUrxSpRSh3RR84zgGGTiTVoZcSwjvgWhsd/DFQRRM+tYwdVCvCxuHK9
-eAAEN+/nNjDmsBlWtCP/6+3ET6F5AyOvkqw9MFQK1qS9UxErBIT9PESsvFNcPv9z
-fmvywKBtskYFk1KKsVEJcg1Fjj01MsV7IjagPW9O25cXGLtWAoi54Zr7TpnWrMw/
-335TVbgmXr0NKguxFMGICeYv8lIsO2fEycNIEazSjI//t4UebsJUK1Ah/RFOwFBA
-OZUe74M3LJAT+rE9WV/YV2RYnAYhBA==
-=ZUnt
------END PGP SIGNATURE-----
-
---7YgUNn3cJXMVqVHU--
+Best regards,
+Krzysztof

@@ -2,74 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB58590CE4
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 09:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57D16590CE6
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 09:53:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237636AbiHLHx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 03:53:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57492 "EHLO
+        id S237645AbiHLHxb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 03:53:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236480AbiHLHxV (ORCPT
+        with ESMTP id S236480AbiHLHx2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 03:53:21 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE3AA721D
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 00:53:20 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id a9so272441lfm.12
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 00:53:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=ip78SsBx57ju3DRdHsIt5n1DmT2pQVDaLo3LS2FuFCg=;
-        b=H/PTzsPEaYJyQoh5RXzNFAqF+MM/cYZVjHLghf26kZOV/T5L9auYLNSZx4kNMg3748
-         2painSyq9r/zDvFicwaScAS2EMc9/cA1ePa2YUXS5ChHzoVOL0g66EnQgQEbyjwNiCZm
-         PhtYAU7XarKCB2DUmhwR+sIY7860CxDmnnrCerFEPnAdO/JmPLAvudYGYeaBQnVMbZIZ
-         EAV+3hgMotEEqUxljVwBK43jhHg1AeWeJc7flAPWgBW9eVYt25PLKtNPtHT/+YpU6YZN
-         l3yD97jviITaRGEhvqKwg4OONqHAoQ9/OGp11JSPhkROBLws4UPQxbELjETaAFRZnKX3
-         5DFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=ip78SsBx57ju3DRdHsIt5n1DmT2pQVDaLo3LS2FuFCg=;
-        b=AQ7SLnwUH846Tw0anDlckGuGzHIZxX9V70oJD8+hkQB3GN0PkNdWL2u+kcr3TwZ/7b
-         h2Xp0s6OjocAuur6tPrnx1TPxVojtewkCeO9L8TxOA3u3VHPdZXXjp2nvlAV4xVt0YNa
-         vPtHBZqB7Z18ec9mPbGVTsZbPAT9Kg0AlOx0Sn4XD9Bt/42o/oqnI/zCIL732D03LqkF
-         VYhUyvuZUDnjS4PZzHjpUwx1QWvyTILC2cpym3Wo31LaBXcmEBuakpwB3UBXy5bD0+c1
-         gqk741MIH8CVL6cPItwHCEifupIGSG8P6H9fQ7FPkFDbMDyvssJLyPuJfU0Pz66JWMd8
-         eczQ==
-X-Gm-Message-State: ACgBeo1IFz9CEFkLk3iehyqLZmx+wR7zI4OgoVPHrqEBJGQucvkn/JC+
-        eqTsrJRcbQ+n5IEg3lGaOijI2w==
-X-Google-Smtp-Source: AA6agR6xx5G8Pl2PcS76eyLfa+iZnFOmptumXiFgLxGagYIFUe7zQOfe7bzKBthYs4SSTW/nzYarTQ==
-X-Received: by 2002:ac2:4f03:0:b0:481:5092:ec8f with SMTP id k3-20020ac24f03000000b004815092ec8fmr955302lfr.35.1660290798913;
-        Fri, 12 Aug 2022 00:53:18 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id x25-20020a056512131900b0048a83ab2d32sm131704lfu.0.2022.08.12.00.53.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 00:53:18 -0700 (PDT)
-Message-ID: <90b2dd81-e037-5109-3b31-0efd8e65c1d6@linaro.org>
-Date:   Fri, 12 Aug 2022 10:53:14 +0300
+        Fri, 12 Aug 2022 03:53:28 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B5FA721E;
+        Fri, 12 Aug 2022 00:53:23 -0700 (PDT)
+X-UUID: 32d70552f3984b9eb0471fe447add870-20220812
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=4h8pJ2DKLxVCS5J3QoilhwJF0fUMj4gWuIsoPrZPKMA=;
+        b=OVDxWKk9vFU15CuVqRNpSrlngitUq0dgTq7sz2huy7vWqlE1IxWe1lte892zsC/X9DSF+axG99lqSyOBfaUDuV1eyIRUtDRNAy0Z3fbQPykD8gP57NZ0egm+mGpRbXyAe7Y2FK5EUMqt6PyR+GXMcj+BARtQGjW5ywov4Na06HE=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.9,REQID:2ee0ce42-0f46-42e8-a41f-c7c0dc9483f0,OB:0,LO
+        B:0,IP:0,URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_H
+        am,ACTION:release,TS:0
+X-CID-META: VersionHash:3d8acc9,CLOUDID:6e47789c-da39-4e3b-a854-56c7d2111b46,C
+        OID:IGNORED,Recheck:0,SF:nil,TC:nil,Content:-5,EDM:-3,IP:nil,URL:0,File:ni
+        l,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 32d70552f3984b9eb0471fe447add870-20220812
+Received: from mtkexhb02.mediatek.inc [(172.21.101.103)] by mailgw01.mediatek.com
+        (envelope-from <miles.chen@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-SHA384 256/256)
+        with ESMTP id 1587919333; Fri, 12 Aug 2022 15:53:16 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.186) by
+ mtkmbs10n1.mediatek.inc (172.21.101.34) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Fri, 12 Aug 2022 15:53:15 +0800
+Received: from mtkswgap22.mediatek.inc (172.21.77.33) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Fri, 12 Aug 2022 15:53:15 +0800
+From:   Miles Chen <miles.chen@mediatek.com>
+To:     <linus.walleij@linaro.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <sre@kernel.org>, <trix@redhat.com>
+Subject: Re: [PATCH] power: supply: ab8500: remove unused static local variable
+Date:   Fri, 12 Aug 2022 15:53:15 +0800
+Message-ID: <1660290795-612-1-git-send-email-miles.chen@mediatek.com>
+X-Mailer: git-send-email 1.7.9.5
+In-Reply-To: <CACRpkdafsWC4VM4c623Q2prkG4uaQPpY0fUkM0wbmWqM0J4TFQ@mail.gmail.com>
+References: <CACRpkdafsWC4VM4c623Q2prkG4uaQPpY0fUkM0wbmWqM0J4TFQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 1/2] dt-bindings: lpspi: add dmas property
-Content-Language: en-US
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, broonie@kernel.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     xiaoning.wang@nxp.com, Peng Fan <peng.fan@nxp.com>
-References: <20220812073452.45763-1-peng.fan@oss.nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220812073452.45763-1-peng.fan@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
+X-MTK:  N
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,17 +61,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/08/2022 10:34, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> The LPSPI has dma capability, so add dma property.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
+>> cpp_check reports
+>> [drivers/power/supply/ab8500_chargalg.c:493]: (style) Variable 'ab8500_chargalg_ex_ac_enable_toggle' is assigned a value that is never used.
+>>
+>> From inspection, this variable is never used. So remove it.
+>>
+>> Fixes: 6c50a08d9dd3 ("power: supply: ab8500: Drop external charger leftovers")
+>> Signed-off-by: Tom Rix <trix@redhat.com>
+>
+>Thanks Tom!
+>Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+>
+>Yours,
+>Linus Walleij
 
+Hi Sebastian,
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+It looks like that this patch is not in linux-next 20220812
+and I can still observe this build error with ARCH=arm, defconfig=allyesconfig.
 
+Would you pick up this fix, please?
 
-Best regards,
-Krzysztof
+Thanks,
+Miles

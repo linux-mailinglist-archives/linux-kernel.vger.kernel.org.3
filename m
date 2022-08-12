@@ -2,165 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34E015911F7
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 16:14:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D6775911FB
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 16:14:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237363AbiHLOMj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 10:12:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33236 "EHLO
+        id S239116AbiHLONw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 10:13:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238115AbiHLOMf (ORCPT
+        with ESMTP id S239031AbiHLONs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 10:12:35 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2071.outbound.protection.outlook.com [40.107.243.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF34864F4
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 07:12:34 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IcDsf1MREiZBhVoxtBGIOGyvjXxCwoe8jx+PdPeyA4BSoBqJMW4geX53LBwa1uz+BsbwI2qayH0AfhxYLaj3fwGLE6kzn81BO8DgqxBrY3/bnHx9/RmXKosiHRJ+jICJ2eY30BdE0jlg8f8FDZ6pMQfQyrEvBpYXC+w3COjMtkn52cBUG9E2N2MdpIGcIs3YUrIv/KV6OVknHMH1EfeSHrUnaKq4391xwfE73PKHziQGoOlOEZo0UUUONjtQ5zIeA+f16u8xnASTnnxFwmfKVTSuqmu1+bra+sr8zcsRbtQ9ojCdeExCg5rKDLET0pV6jJchS0GISBrxCR9m+7wPJA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qq+xN+TlqBaYiJO7RC1L/lS6E9HwOy8jO1ZH2OoJXhM=;
- b=LPQ/E7bxPJdMesqNVXhq+2FO/X7vqRKDKJSQhMuLpQtP6BiW4GTIpowgkd02B3Zw9ie9p/onJp5No9HdX2iZ2P7zoEhniszZi265SOW9zxwOL5Yl8ycaczg9sfCBzHpiS7x1xsAqA/f6zub0hBCktzI4U9tcF8A1qqbV2ja18vfxxcZfZ6l4DrzW2sBxdtv8bPL1KYOzOnXaZ9b5FSuV3odVaDQR03/fHLwDrZd2YfUabTD4f6e7z3vSnmQRShtJA1+JcB/q2/DXwYVrpxU8L7E8Jtbg6Zb4btik91FSfnCff1LkkXJNqfBqRQvxMkNdITvIpt93+4AMkn+E9X2quQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qq+xN+TlqBaYiJO7RC1L/lS6E9HwOy8jO1ZH2OoJXhM=;
- b=XSgL99SA8Zrm8zotJnuUL5fwe7gl0LfOkusv60NKmaZnqTGMWWy9Q9d+VoFTNZLoYAIhYZhl4C5f8SNSWwWYdmFGeFZOvVjOnC0NVvqAB6k+T+GuoPSNP8SXD1GQpcK9oJRq2m+Br2Bj6XH92CYvTuXIKhWdzvlf5l2XgsswhU4vrkF5O5OGMLq3kSms+G3jOKQbXB2o0Vn/CMQTMnEI9JkmMmhYMTE0F9pjQ/dWpKGXi/2NXlVBPZ7vKQrgjfn+zT2UDmSeG7n39UVcXeDADM4hnJGprztRiOCas83P0sCHc9/q9MxM4xWF87GGL07x1n4Xqc/AE9d8kYvihyH5HQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com (2603:10b6:208:1d5::15)
- by DM6PR12MB4716.namprd12.prod.outlook.com (2603:10b6:5:34::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14; Fri, 12 Aug
- 2022 14:12:33 +0000
-Received: from MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::462:7fe:f04f:d0d5]) by MN2PR12MB4192.namprd12.prod.outlook.com
- ([fe80::462:7fe:f04f:d0d5%6]) with mapi id 15.20.5525.011; Fri, 12 Aug 2022
- 14:12:33 +0000
-Date:   Fri, 12 Aug 2022 11:12:31 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Robin Murphy <robin.murphy@arm.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Kevin Tian <kevin.tian@intel.com>
-Subject: Re: drivers/vfio/vfio_iommu_type1.c:2147:35: warning: cast to
- smaller integer type 'enum iommu_cap' from 'void *'
-Message-ID: <YvZfz9z/TGzuzvDQ@nvidia.com>
-References: <202208101119.7unZx9dJ-lkp@intel.com>
+        Fri, 12 Aug 2022 10:13:48 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC7018E1E
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 07:13:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660313627; x=1691849627;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=22YQUqkc0i/CvWkkdtsS780mUlph5ByO4MPEPu5nFgg=;
+  b=Bly8+8RX0SFdNP3Aogv2ieRMPsBlzg/ttqlV4Drb9PmKAbjG5wCBlUx+
+   g/HMZRUoalnug5nKr0lcSxsSK3PpADS3RE5b3J7LbnWPYHopB3iK7tUu6
+   GqqaZGU6UNPDKTd862t+Sj8gS50HanO+LcFFn8ip8nb5Ly02YX3UoVtrn
+   PMa7ratDcFWhR2qGNXHkv46AWVr5HLmJh33vpxE1M1bZ4K5r7n0G7EKpJ
+   rtJQ3Qp/W72QtQBJf2Lj1gTxENqwSkNi+NVLMAXXO+HRebjLPg8g2pVEK
+   N//KGo0JloN0LIO0mVCgFxleyLsbZwf2gm+TwJPhDoVTdsHDS2ndvIjj3
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="353343625"
+X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
+   d="scan'208";a="353343625"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 07:13:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
+   d="scan'208";a="634654362"
+Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
+  by orsmga008.jf.intel.com with ESMTP; 12 Aug 2022 07:13:45 -0700
+Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oMVQ0-0000bz-23;
+        Fri, 12 Aug 2022 14:13:44 +0000
+Date:   Fri, 12 Aug 2022 22:12:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: block/blk-map.c:254:16: warning: variable 'added' set but not used
+Message-ID: <202208122209.qe4Bg8hH-lkp@intel.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202208101119.7unZx9dJ-lkp@intel.com>
-X-ClientProxiedBy: MN2PR16CA0051.namprd16.prod.outlook.com
- (2603:10b6:208:234::20) To MN2PR12MB4192.namprd12.prod.outlook.com
- (2603:10b6:208:1d5::15)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 556bcfb5-4bb2-42eb-bf6e-08da7c6cb316
-X-MS-TrafficTypeDiagnostic: DM6PR12MB4716:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: JrmTp1HE0a+DvcELxrKwd5PHkHRfAf5A8bJ+h5x0s1AgW7bN7lOCz6ROl7AVpVSQTG8iREc9+vIt3kJAVkxnO+GoXsFgOh7D1pEOIJy6H0GUk4fRbjW7h03qWjLkuOuS4aqt5H9jhLFB7nrjwvGqmfTrtBLeETcTANfMsxm2nNVuCQMTJUsEr0dXjJisZsx052qvZaHyMrO7UKIRA1WobdV8lX589pAZQ0BbatHhZuc0rVrIN2rqwYnWFzld73vHQfpTloJ5YS3aCHoBNITPbs1afihHG1/fmnYtNooZwrsAwiJZYzbDKKv49affFh7lCdwGQEoaSyL86aPqaa1gS0OUqxHOc0x8tpXptazHA9m5RvdnBTcQGOIswZ+sAxrafD93JWkh8y3khvGR744+QaJ8ngVH6ND7D4a95H/7xdopzVYk7a3r7FnDTSZAagpku38lTdzNM6pWcFozKvY7IPzBiui2ixmMcKuWsGaZJoViifC0y6fGOB1ePQYuu+O7hsED/bY8yMRgXQpLLkGfXwoP+9sIRLxD2JMs+MpcIMstXndkwt2BrIPnwraXLdmu+x5LWR8sACmlbj7Csv4Uc4nAzS5a+LEaBrGiavyTpVzgzzJj9r5fchk4D2c159nHKy0Kn8j4vHymC9VYEbzPMe3zPshYL45NmAjRe4/KUXYNf8B5qY+jBFJTcETs4dNXgNpa+5TXpPS4rKikL4Jdedk7doz8vPIRPRkutIVEFSlYSsgQhJz+NIE66YXLDi+pcNJAAXG5tyg5ao55tdMTQQe2MNbtYdQGiZouG+ZyCJd33aqR7qvcDOT9UeBnzKo9qurVsRXAVb5iEeMzTSWspnXikRDklrxGXSOahJnoQOE=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4192.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(346002)(396003)(39860400002)(376002)(366004)(136003)(26005)(38100700002)(83380400001)(86362001)(2906002)(6512007)(6506007)(36756003)(6916009)(316002)(54906003)(6486002)(966005)(8936002)(41300700001)(5660300002)(8676002)(4326008)(186003)(2616005)(478600001)(66946007)(66476007)(66556008);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?iPEX/1SzBh/xT9yiOpxgHkY4eK5Qig90bgSqmSTt0cRMyXYdB3w41Ai7vfDI?=
- =?us-ascii?Q?aDqmvlrJBzxomd25iWDw2fXXyiULhu3kv+cFShOXU8antcgUPgrA5c92gnxE?=
- =?us-ascii?Q?SlFT9JknfP5zOxdMY6HlHphUU0O8b9OYq2Uv0s9H1/BTFcV0raPgEwVCCft/?=
- =?us-ascii?Q?Wr066qykikO+NvHjYdL9P4cMQmePrraIXf9uMETsD9mpT1KAhsrg78XzopKn?=
- =?us-ascii?Q?53fHBSW9vDdDGSt4MPuj0o1V5SCvvMGTp1Hro9pJ2WJ4l9lfkqwHoo8ZuHZf?=
- =?us-ascii?Q?cD/LHoyiaYwx+SZdJc2xrolYvpa+Mtxxdq5qZTNuGWcTquRnl2AVRG8t4jKu?=
- =?us-ascii?Q?hLADxDO+tVXDeZRgDQxfFLtFHiiOsNBZdOtUucDgk7slrxoEjcdSh6cNbkH5?=
- =?us-ascii?Q?682cfJEvkssvROKCLT7iA7lflj+26D+wywO+TvyuIcIe34d+6xaYSu5/Sx22?=
- =?us-ascii?Q?/nBMS+0GCzBNVl2PqYvkB1U6zphc51SbGoELiFnWUlfMLas9GK8uh3oI5H4c?=
- =?us-ascii?Q?gxpEslbpkGU8BqIimmVaHqjujNPL/vwrMsDAxNskiDx/kpwLko/7LM4fD6YN?=
- =?us-ascii?Q?7w7mGBQ2pkf1CVHvuC2jD90r7mmMS8b02xNEGM0Bv4OjyW9XindhtJ/UKBVg?=
- =?us-ascii?Q?JuyCSChHIq1ou56qNm7tvfhV+pO1LGfSE1BVPodckMo9JeIo+IYFZNh2SzBz?=
- =?us-ascii?Q?YzVY0R9+rEXI4jzlmAZ9O5mZMwJDZnpL6+h7lTsqobhZvgfAaLJOyGHVXGW5?=
- =?us-ascii?Q?0dcREUnPo8rvDc99ObPbA+OMza9+XAznOx7aXCu8KuX4IUDRklxUboLl4qoF?=
- =?us-ascii?Q?cZv34qjB74fciI+Sw0w3TjrWuiDFVu7TnLWnbtOL7PTKgQf9El2MhqfCwIDW?=
- =?us-ascii?Q?+cNEObic+X7os5HYu1vYp9hvoH+XpQxm0oZqqzN+IrtroBtjgyn2r0fOkuqF?=
- =?us-ascii?Q?Fi4NQGAFyP/aDcR21suSt8XKhNj9al+7IAit30d7cfKQU070gJXqbMXxRHWm?=
- =?us-ascii?Q?DrUXbfUFRyrjHjYoKxcYLlLOY8Mt7W6VZXS3kqbf9hbD9vk7vs3tqvluOiQx?=
- =?us-ascii?Q?qZ5frYzIlj0Ca/+LlUzZd15U2SG1BDYrgB1WkO2ihOOB7hHN/YBwKE3cFxX6?=
- =?us-ascii?Q?5KreDaLl7+pU87DHX5HvmXKD4zoEAelq9UCm65RB4+0gw7oF6O9Nu+Ff2tRn?=
- =?us-ascii?Q?CNSBMQryUwkw4E9xuVrNFmWt9GQivf3icFExGQrVtkqtru7gjVSHB6k92Ijr?=
- =?us-ascii?Q?4vrIZR3SO69DmLvusmkpSPkRe9zmDcDbXJi85Q/Q9UaGtio6Q35WutWIJYJU?=
- =?us-ascii?Q?OILEnHeDuwaZPI/LK3o5BhYicWKkAWYOb09MX/ZrxsRho7vREtJJs4RbNpEP?=
- =?us-ascii?Q?80SnbmkkET5T8+gjJ7+GI1ij3DjaQ2gUvMOC56469BVBqBHK5MB1ihs+yV8O?=
- =?us-ascii?Q?kYOrWjI/gQr5ZmiFtpHFvMQtend6CXpeDLEUiRc/HecR+w2Uv+f1NQE+Uw1a?=
- =?us-ascii?Q?yfjco21x3jnncTaG7zafCvMC6zgK/u1XANSKZsFdLRKxbwQmrmdaXVa3zPT7?=
- =?us-ascii?Q?1FuzN/lRuUh/2WKikwkt4yHX8cqJADCbdzoFUDvc?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 556bcfb5-4bb2-42eb-bf6e-08da7c6cb316
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4192.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Aug 2022 14:12:33.0520
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: yj1B1r7xBLfDlt+5y3zQVAJmpzX4gjk6y+Mj13rkdSYUuqP2RVaJox7bWaO0LJes
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4716
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Aug 10, 2022 at 11:25:15AM +0800, kernel test robot wrote:
-> Hi Robin,
-> 
-> FYI, the error/warning still remains.
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-> head:   d4252071b97d2027d246f6a82cbee4d52f618b47
-> commit: eed20c782aea57b7efb42af2905dc381268b21e9 vfio/type1: Simplify bus_type determination
-> date:   6 weeks ago
-> config: arm64-randconfig-r034-20220810 (https://download.01.org/0day-ci/archive/20220810/202208101119.7unZx9dJ-lkp@intel.com/config)
-> compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-> reproduce (this is a W=1 build):
->         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
->         chmod +x ~/bin/make.cross
->         # install arm64 cross compiling tool for clang build
->         # apt-get install binutils-aarch64-linux-gnu
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=eed20c782aea57b7efb42af2905dc381268b21e9
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout eed20c782aea57b7efb42af2905dc381268b21e9
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/vfio/
-> 
-> If you fix the issue, kindly add following tag where applicable
-> Reported-by: kernel test robot <lkp@intel.com>
-> 
-> All warnings (new ones prefixed by >>):
-> 
-> >> drivers/vfio/vfio_iommu_type1.c:2147:35: warning: cast to smaller integer type 'enum iommu_cap' from 'void *' [-Wvoid-pointer-to-enum-cast]
->            return device_iommu_capable(dev, (enum iommu_cap)data);
->                                             ^~~~~~~~~~~~~~~~~~~~
->    1 warning generated.
-> 
-> 
-> vim +2147 drivers/vfio/vfio_iommu_type1.c
-> 
->   2143	
->   2144	/* Redundantly walks non-present capabilities to simplify caller */
->   2145	static int vfio_iommu_device_capable(struct device *dev, void *data)
->   2146	{
-> > 2147		return device_iommu_capable(dev, (enum iommu_cap)data);
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   7ebfc85e2cd7b08f518b526173e9a33b56b3913b
+commit: 480cb846c27bda4e14d98a45a9f50c250f38f266 block: convert to advancing variants of iov_iter_get_pages{,_alloc}()
+date:   4 days ago
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220812/202208122209.qe4Bg8hH-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=480cb846c27bda4e14d98a45a9f50c250f38f266
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 480cb846c27bda4e14d98a45a9f50c250f38f266
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
 
-This wants to be written as
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-   return device_iommu_capable(dev, (uintptr_t)data);
+All warnings (new ones prefixed by >>):
 
-Jason
+>> block/blk-map.c:254:16: warning: variable 'added' set but not used [-Wunused-but-set-variable]
+                   size_t offs, added = 0;
+                                ^
+   1 warning generated.
+
+
+vim +/added +254 block/blk-map.c
+
+130879f1ee0e25 Christoph Hellwig 2020-03-27  233  
+7589ad6729d6a7 Christoph Hellwig 2020-08-27  234  static int bio_map_user_iov(struct request *rq, struct iov_iter *iter,
+7589ad6729d6a7 Christoph Hellwig 2020-08-27  235  		gfp_t gfp_mask)
+130879f1ee0e25 Christoph Hellwig 2020-03-27  236  {
+7589ad6729d6a7 Christoph Hellwig 2020-08-27  237  	unsigned int max_sectors = queue_max_hw_sectors(rq->q);
+066ff571011d84 Christoph Hellwig 2022-04-06  238  	unsigned int nr_vecs = iov_iter_npages(iter, BIO_MAX_VECS);
+393bb12e00580a Christoph Hellwig 2021-03-31  239  	struct bio *bio;
+130879f1ee0e25 Christoph Hellwig 2020-03-27  240  	int ret;
+7589ad6729d6a7 Christoph Hellwig 2020-08-27  241  	int j;
+130879f1ee0e25 Christoph Hellwig 2020-03-27  242  
+130879f1ee0e25 Christoph Hellwig 2020-03-27  243  	if (!iov_iter_count(iter))
+7589ad6729d6a7 Christoph Hellwig 2020-08-27  244  		return -EINVAL;
+130879f1ee0e25 Christoph Hellwig 2020-03-27  245  
+066ff571011d84 Christoph Hellwig 2022-04-06  246  	bio = bio_kmalloc(nr_vecs, gfp_mask);
+130879f1ee0e25 Christoph Hellwig 2020-03-27  247  	if (!bio)
+7589ad6729d6a7 Christoph Hellwig 2020-08-27  248  		return -ENOMEM;
+066ff571011d84 Christoph Hellwig 2022-04-06  249  	bio_init(bio, NULL, bio->bi_inline_vecs, nr_vecs, req_op(rq));
+130879f1ee0e25 Christoph Hellwig 2020-03-27  250  
+130879f1ee0e25 Christoph Hellwig 2020-03-27  251  	while (iov_iter_count(iter)) {
+130879f1ee0e25 Christoph Hellwig 2020-03-27  252  		struct page **pages;
+130879f1ee0e25 Christoph Hellwig 2020-03-27  253  		ssize_t bytes;
+130879f1ee0e25 Christoph Hellwig 2020-03-27 @254  		size_t offs, added = 0;
+130879f1ee0e25 Christoph Hellwig 2020-03-27  255  		int npages;
+130879f1ee0e25 Christoph Hellwig 2020-03-27  256  
+480cb846c27bda Al Viro           2022-06-09  257  		bytes = iov_iter_get_pages_alloc2(iter, &pages, LONG_MAX, &offs);
+130879f1ee0e25 Christoph Hellwig 2020-03-27  258  		if (unlikely(bytes <= 0)) {
+130879f1ee0e25 Christoph Hellwig 2020-03-27  259  			ret = bytes ? bytes : -EFAULT;
+130879f1ee0e25 Christoph Hellwig 2020-03-27  260  			goto out_unmap;
+130879f1ee0e25 Christoph Hellwig 2020-03-27  261  		}
+130879f1ee0e25 Christoph Hellwig 2020-03-27  262  
+130879f1ee0e25 Christoph Hellwig 2020-03-27  263  		npages = DIV_ROUND_UP(offs + bytes, PAGE_SIZE);
+130879f1ee0e25 Christoph Hellwig 2020-03-27  264  
+7ab89db9790172 Michal Orzel      2022-04-23  265  		if (unlikely(offs & queue_dma_alignment(rq->q)))
+130879f1ee0e25 Christoph Hellwig 2020-03-27  266  			j = 0;
+7ab89db9790172 Michal Orzel      2022-04-23  267  		else {
+130879f1ee0e25 Christoph Hellwig 2020-03-27  268  			for (j = 0; j < npages; j++) {
+130879f1ee0e25 Christoph Hellwig 2020-03-27  269  				struct page *page = pages[j];
+130879f1ee0e25 Christoph Hellwig 2020-03-27  270  				unsigned int n = PAGE_SIZE - offs;
+130879f1ee0e25 Christoph Hellwig 2020-03-27  271  				bool same_page = false;
+130879f1ee0e25 Christoph Hellwig 2020-03-27  272  
+130879f1ee0e25 Christoph Hellwig 2020-03-27  273  				if (n > bytes)
+130879f1ee0e25 Christoph Hellwig 2020-03-27  274  					n = bytes;
+130879f1ee0e25 Christoph Hellwig 2020-03-27  275  
+7589ad6729d6a7 Christoph Hellwig 2020-08-27  276  				if (!bio_add_hw_page(rq->q, bio, page, n, offs,
+e4581105771b35 Christoph Hellwig 2020-05-12  277  						     max_sectors, &same_page)) {
+130879f1ee0e25 Christoph Hellwig 2020-03-27  278  					if (same_page)
+130879f1ee0e25 Christoph Hellwig 2020-03-27  279  						put_page(page);
+130879f1ee0e25 Christoph Hellwig 2020-03-27  280  					break;
+130879f1ee0e25 Christoph Hellwig 2020-03-27  281  				}
+130879f1ee0e25 Christoph Hellwig 2020-03-27  282  
+130879f1ee0e25 Christoph Hellwig 2020-03-27  283  				added += n;
+130879f1ee0e25 Christoph Hellwig 2020-03-27  284  				bytes -= n;
+130879f1ee0e25 Christoph Hellwig 2020-03-27  285  				offs = 0;
+130879f1ee0e25 Christoph Hellwig 2020-03-27  286  			}
+130879f1ee0e25 Christoph Hellwig 2020-03-27  287  		}
+130879f1ee0e25 Christoph Hellwig 2020-03-27  288  		/*
+130879f1ee0e25 Christoph Hellwig 2020-03-27  289  		 * release the pages we didn't map into the bio, if any
+130879f1ee0e25 Christoph Hellwig 2020-03-27  290  		 */
+130879f1ee0e25 Christoph Hellwig 2020-03-27  291  		while (j < npages)
+130879f1ee0e25 Christoph Hellwig 2020-03-27  292  			put_page(pages[j++]);
+130879f1ee0e25 Christoph Hellwig 2020-03-27  293  		kvfree(pages);
+130879f1ee0e25 Christoph Hellwig 2020-03-27  294  		/* couldn't stuff something into bio? */
+480cb846c27bda Al Viro           2022-06-09  295  		if (bytes) {
+480cb846c27bda Al Viro           2022-06-09  296  			iov_iter_revert(iter, bytes);
+130879f1ee0e25 Christoph Hellwig 2020-03-27  297  			break;
+130879f1ee0e25 Christoph Hellwig 2020-03-27  298  		}
+480cb846c27bda Al Viro           2022-06-09  299  	}
+130879f1ee0e25 Christoph Hellwig 2020-03-27  300  
+393bb12e00580a Christoph Hellwig 2021-03-31  301  	ret = blk_rq_append_bio(rq, bio);
+7589ad6729d6a7 Christoph Hellwig 2020-08-27  302  	if (ret)
+393bb12e00580a Christoph Hellwig 2021-03-31  303  		goto out_unmap;
+7589ad6729d6a7 Christoph Hellwig 2020-08-27  304  	return 0;
+7589ad6729d6a7 Christoph Hellwig 2020-08-27  305  
+130879f1ee0e25 Christoph Hellwig 2020-03-27  306   out_unmap:
+130879f1ee0e25 Christoph Hellwig 2020-03-27  307  	bio_release_pages(bio, false);
+066ff571011d84 Christoph Hellwig 2022-04-06  308  	bio_uninit(bio);
+066ff571011d84 Christoph Hellwig 2022-04-06  309  	kfree(bio);
+7589ad6729d6a7 Christoph Hellwig 2020-08-27  310  	return ret;
+130879f1ee0e25 Christoph Hellwig 2020-03-27  311  }
+130879f1ee0e25 Christoph Hellwig 2020-03-27  312  
+
+:::::: The code at line 254 was first introduced by commit
+:::::: 130879f1ee0e25b0391b8c78b3baac6fe41f4d38 block: move bio_map_* to blk-map.c
+
+:::::: TO: Christoph Hellwig <hch@lst.de>
+:::::: CC: Jens Axboe <axboe@kernel.dk>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

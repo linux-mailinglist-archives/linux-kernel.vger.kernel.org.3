@@ -2,47 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 200FF590F88
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 12:33:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA4D2590F8B
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 12:33:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238589AbiHLKdI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 06:33:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38518 "EHLO
+        id S238607AbiHLKdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 06:33:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238572AbiHLKdG (ORCPT
+        with ESMTP id S238328AbiHLKdo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 06:33:06 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9A1C75FA8;
-        Fri, 12 Aug 2022 03:33:05 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2D0A6106F;
-        Fri, 12 Aug 2022 03:33:06 -0700 (PDT)
-Received: from [10.57.12.42] (unknown [10.57.12.42])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2051B3F70D;
-        Fri, 12 Aug 2022 03:33:03 -0700 (PDT)
-Message-ID: <3096bb82-62e6-bc9f-1600-fb58d6826302@arm.com>
-Date:   Fri, 12 Aug 2022 11:32:59 +0100
+        Fri, 12 Aug 2022 06:33:44 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4318AA721D;
+        Fri, 12 Aug 2022 03:33:43 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-31e7ca45091so6010907b3.3;
+        Fri, 12 Aug 2022 03:33:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=UxBtbERKRh6ik9gzCjPNzlllpU4KxVBTC6cNbI4+dXA=;
+        b=LawWhrTfx1q4KHMfhSlSvd/0gmio1DmqKNElQy5yd08bWUdj0hFLVyGRfX8kvjc1Xb
+         5cDn89Ue5RGBAaSoe6f76D5zoQZxFjIGyUQZLqgB/wdtc8zMPNwIE2AS79QWiC4CK+CP
+         O15bUcPZfzo7q1Dv80ZyxUxl4zbX/iuJUTtAUnYxT67foaDGQ43k1pMjuYp0Y/C7L5QG
+         Bu1fPvdcKkyv6hTb9ti9OM1p0iU1a7hrvJ8YuuJspN+jqwz55rc7UjZmt6YXazYqmCQ+
+         bGAYjAQmmHc/5IiEd6M0TyrUv54rSiZRkyzdrF9Zwc2O59wpjIyebHvvhAMlZXQBCQeq
+         SQug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=UxBtbERKRh6ik9gzCjPNzlllpU4KxVBTC6cNbI4+dXA=;
+        b=roR15rgo2o/chAYh1Ox+krWzxRdhiJR4sgNHDi4k5iv4j+3G9wF/DI9ewjh/YltAYc
+         5SnKZArsEwG31OYW2i+tFA+Yw2u6jxDPrsLHmyK0w5XxuztD5HZfkyIXd6ZTpbm2/VuJ
+         S+I2gSzhSpwZ9L5UHNUHyvrttGWVzipsGYUV70yQ9rQWhoU5yj72T3N38WhC5/szwTtl
+         Dr497P8hm+lTjGH074dx+0VXMrrb4t9HMXk/syIW4ziM/y8lXjMcJSwRO8gjNBMNDd67
+         cQeyb8GvcOI/MzuBa93JR3G8XMUaQgCJkcztiaLjAXuOfoNyCNs8bc9h4W+Ct7l3v8my
+         XQ3Q==
+X-Gm-Message-State: ACgBeo09+fNbo48WckWt0e4HryjGX3Vr5lEffVlfYyK7EZDFO4Cw3O5r
+        bdBixN09QHA2o9LbzJjsYo9W/EhpcY42H2Vt5hk=
+X-Google-Smtp-Source: AA6agR4An6m0htG1a8vO9yYMul4FjxPrN1j/kQAfemDJpmPKdlnnzZZTUnBZqPfRukXwqEgd170A+PfuFMtIU8hkkAk=
+X-Received: by 2002:a81:bc8:0:b0:32a:17d3:d189 with SMTP id
+ 191-20020a810bc8000000b0032a17d3d189mr3228899ywl.401.1660300422392; Fri, 12
+ Aug 2022 03:33:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] PCI: mvebu: Fix endianity when accessing pci emul bridge
- members
-Content-Language: en-GB
-To:     =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-References: <20220812094058.16141-1-pali@kernel.org>
-From:   Robin Murphy <robin.murphy@arm.com>
-In-Reply-To: <20220812094058.16141-1-pali@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20220812094438.18291-1-lukas.bulwahn@gmail.com> <20220812100238.GM3438@kadam>
+In-Reply-To: <20220812100238.GM3438@kadam>
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Fri, 12 Aug 2022 12:33:31 +0200
+Message-ID: <CAKXUXMxLuViULgrgP89uBNvbUYcWFiohgWD=LXkifCGTT1WYFQ@mail.gmail.com>
+Subject: Re: [PATCH] wifi: mac80211: clean up a needless assignment in ieee80211_sta_activate_link()
+To:     Dan Carpenter <dan.carpenter@oracle.com>
+Cc:     Johannes Berg <johannes@sipsolutions.net>,
+        linux-wireless <linux-wireless@vger.kernel.org>,
+        kernel-janitors <kernel-janitors@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,68 +68,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-08-12 10:40, Pali Rohár wrote:
-> PCI emul bridge members iolimitupper, iobaseupper, memlimit and membase are
-> of type __le16, so correctly access these members via le16_to_cpu() macros.
-> 
-> Fixes: 4ded69473adb ("PCI: mvebu: Propagate errors when updating PCI_IO_BASE and PCI_MEM_BASE registers")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Pali Rohár <pali@kernel.org>
-> ---
->   drivers/pci/controller/pci-mvebu.c | 12 ++++++------
->   1 file changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
-> index c1ffdb06c971..00ea0836b81a 100644
-> --- a/drivers/pci/controller/pci-mvebu.c
-> +++ b/drivers/pci/controller/pci-mvebu.c
-> @@ -523,7 +523,7 @@ static int mvebu_pcie_handle_iobase_change(struct mvebu_pcie_port *port)
->   
->   	/* Are the new iobase/iolimit values invalid? */
->   	if (conf->iolimit < conf->iobase ||
-> -	    conf->iolimitupper < conf->iobaseupper)
-> +	    le16_to_cpu(conf->iolimitupper) < le16_to_cpu(conf->iobaseupper))
->   		return mvebu_pcie_set_window(port, port->io_target, port->io_attr,
->   					     &desired, &port->iowin);
->   
-> @@ -535,10 +535,10 @@ static int mvebu_pcie_handle_iobase_change(struct mvebu_pcie_port *port)
->   	 * is the CPU address.
->   	 */
->   	desired.remap = ((conf->iobase & 0xF0) << 8) |
-> -			(conf->iobaseupper << 16);
-> +			le16_to_cpu(conf->iobaseupper << 16);
+On Fri, Aug 12, 2022 at 12:02 PM Dan Carpenter <dan.carpenter@oracle.com> wrote:
+>
+> On Fri, Aug 12, 2022 at 11:44:38AM +0200, Lukas Bulwahn wrote:
+> > Commit 177577dbd223 ("wifi: mac80211: sta_info: fix link_sta insertion")
+> > makes ieee80211_sta_activate_link() return 0 in the 'hash' label case.
+> > Hence, setting ret in the !test_sta_flag(...) branch to zero is not needed
+> > anymore and can be dropped.
+> >
+> > Remove a needless assignment.
+> >
+> > No functional change. No change in object code.
+> >
+> > Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> > ---
+> >  net/mac80211/sta_info.c | 1 -
+> >  1 file changed, 1 deletion(-)
+> >
+> > diff --git a/net/mac80211/sta_info.c b/net/mac80211/sta_info.c
+> > index cb23da9aff1e..492c7a29d797 100644
+> > --- a/net/mac80211/sta_info.c
+> > +++ b/net/mac80211/sta_info.c
+> > @@ -2778,7 +2778,6 @@ int ieee80211_sta_activate_link(struct sta_info *sta, unsigned int link_id)
+> >       sta->sta.valid_links = new_links;
+> >
+> >       if (!test_sta_flag(sta, WLAN_STA_INSERTED)) {
+> > -             ret = 0;
+> >               goto hash;
+> >       }
+>
+> Please, remove the {} as well.
+>
 
-This will always give 0, even when natively LE.
+Thanks for the pointer, Dan! I need to remember that for the future; I
+did expect checkpatch to warn me of such a stylistic pattern, but it
+seems that it does not. So I just need to have an eye on that.
 
->   	desired.base = port->pcie->io.start + desired.remap;
->   	desired.size = ((0xFFF | ((conf->iolimit & 0xF0) << 8) |
-> -			 (conf->iolimitupper << 16)) -
-> +			 le16_to_cpu(conf->iolimitupper << 16)) -
+Patch v2 sent out:
+https://lore.kernel.org/lkml/20220812103126.25308-1-lukas.bulwahn@gmail.com/
 
-Similarly here.
-
-Robin.
-
->   			desired.remap) +
->   		       1;
->   
-> @@ -552,7 +552,7 @@ static int mvebu_pcie_handle_membase_change(struct mvebu_pcie_port *port)
->   	struct pci_bridge_emul_conf *conf = &port->bridge.conf;
->   
->   	/* Are the new membase/memlimit values invalid? */
-> -	if (conf->memlimit < conf->membase)
-> +	if (le16_to_cpu(conf->memlimit) < le16_to_cpu(conf->membase))
->   		return mvebu_pcie_set_window(port, port->mem_target, port->mem_attr,
->   					     &desired, &port->memwin);
->   
-> @@ -562,8 +562,8 @@ static int mvebu_pcie_handle_membase_change(struct mvebu_pcie_port *port)
->   	 * window to setup, according to the PCI-to-PCI bridge
->   	 * specifications.
->   	 */
-> -	desired.base = ((conf->membase & 0xFFF0) << 16);
-> -	desired.size = (((conf->memlimit & 0xFFF0) << 16) | 0xFFFFF) -
-> +	desired.base = ((le16_to_cpu(conf->membase) & 0xFFF0) << 16);
-> +	desired.size = (((le16_to_cpu(conf->memlimit) & 0xFFF0) << 16) | 0xFFFFF) -
->   		       desired.base + 1;
->   
->   	return mvebu_pcie_set_window(port, port->mem_target, port->mem_attr, &desired,
+Lukas

@@ -2,143 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8BCA590CAB
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 09:42:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 319C7590CAE
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 09:43:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237092AbiHLHmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 03:42:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45716 "EHLO
+        id S237433AbiHLHnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 03:43:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236078AbiHLHml (ORCPT
+        with ESMTP id S236078AbiHLHm7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 03:42:41 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCC69A5738
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 00:42:39 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id x10so171068ljq.4
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 00:42:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=sBayUxRV4uPcA67ScjufKHzSC2Zb9c963r0CFb87BtI=;
-        b=ZxmhqxbLyYEKBoaek1kELjS9zWam3584fB7+hC/D/yOL5VIzNTYK2p+l0hnDNec9la
-         PwxLpp7lD6asWrVMYpbxrj8CbVyUjv+NVMDvJQ01IIQ3ojDKu3SMAzbB9PvJGAfK3fCK
-         lkPqvEEQ8nOZyQOfiBSseOBQ7ZNyvByQ1xgfkWez5dbQam9X0jF7DEuJvdUItPIMj2D2
-         8ZDjhhQJFeNyqQOi02JzoFx5Kx2hfyqAuoAih/KeJAK3t/ha771sLC3pi1DeUhwxVRiF
-         9/iQ6NkHA47vsEsZ2Tl7BU0G13wAuZtxRxVCb6yhix5INR8JKJEsY1rHWI+KVd/0i0pu
-         9dSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=sBayUxRV4uPcA67ScjufKHzSC2Zb9c963r0CFb87BtI=;
-        b=dkTOSCTkLb8Hqx8dku+cFiu5xZ0HlFruDBMCCEGH/pJR1gCBMUamGvsiDSiT3b7wmz
-         uI2YGq9m67R/o9Gfozx9iTe1sG1d/WfI7a0IJd90Pw1QSD7ym2jJ2rms2lIGeFdcQcCc
-         yRxBO8/GecTyCGw0huTVCU1c2DRhrnjCdo9GQavJgLUDAF6B920Wrw8iPQnmC3CT7bmv
-         tKrmdMYkTquGAIW29g7VrcvD2E6IFoFybstl7R3JVX+zIWhDhdTklosC2e/qHD0oK1k7
-         Q1z94PW7MoBrzHasbHTYH6JhOcl4YCAj4tQmJeFYYCfRnrbf18zcTrLx17UDQ2KTtWss
-         PbRA==
-X-Gm-Message-State: ACgBeo1rgUcfLOyhNB/6hHZ1HMjv88n6GL8TM2BHiYdpgM2lcZPy1rvG
-        xVdpJOUTkMIrWsQ+ToEuUuG/cA6f+2rR7tD1
-X-Google-Smtp-Source: AA6agR5MQ83Hq/A33QupzFIOLxPxAA89VBM9ILO2jMHCQZcILllbnmG9wAY/i+GQ4ZHqX8XArqLi1Q==
-X-Received: by 2002:a2e:9941:0:b0:247:dce8:b0ec with SMTP id r1-20020a2e9941000000b00247dce8b0ecmr871902ljj.404.1660290158243;
-        Fri, 12 Aug 2022 00:42:38 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id b19-20020a056512071300b0048b16fb79a0sm118602lfs.214.2022.08.12.00.42.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 00:42:37 -0700 (PDT)
-Message-ID: <721ccb76-c162-30ee-68cc-3316a2d62554@linaro.org>
-Date:   Fri, 12 Aug 2022 10:42:28 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 3/4] dt-bindings: PCI: microchip,pcie-host: fix incorrect
- child node name
-Content-Language: en-US
-To:     Conor Dooley <mail@conchuod.ie>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
+        Fri, 12 Aug 2022 03:42:59 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2460BA5C7A;
+        Fri, 12 Aug 2022 00:42:59 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 84FE75C0162;
+        Fri, 12 Aug 2022 03:42:58 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Fri, 12 Aug 2022 03:42:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm2; t=1660290178; x=1660376578; bh=sEqATm0wVZd4GFSPGrPKNfMfo
+        m+92qSRyi/XXJHwM1s=; b=aeBVoIsHbD45G6B2CSXU/+fJbfPj6LzUteE+SGT3r
+        urv+m1IDsRbX9YJJDBkkg9qfT/fKl8h4/Nw0c7RI9waZavC2Zcr3bS7PKMPBet5q
+        Lc6ENhGbDyZjgilTRxYsTmsZsR1UROCiARJuuNLHcAMjtBjMshtv7mMJMoTWi+5h
+        Xq+KgG1BDfzdtbcVMcd6El9EBfVrAPkO0dSev0HDxeUSr2rROHEGSF9V6lDNjYhT
+        UIPHo8iO3OvaBS4oDbpKannB3q9aPFSHEQffek9wNQRSTQn8jiSD0xGrkbuI6PBp
+        332uFSbEt+eLEL6qNvGat3Xk9CREPQQNjCO830tYjiIdA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1660290178; x=1660376578; bh=sEqATm0wVZd4GFSPGrPKNfMfom+92qSRyi/
+        XXJHwM1s=; b=GY1vSeir5ajF1syvZuLHsaWDIyXnjG2u+a5LHIy+0ICG5rpB3tP
+        Ku2pKsrtfIXv9XjXezMfRVLrgNAyO5h2iQGW8Td7z09qd/93rQ+rDM3Hr8uWmXCX
+        N5WdXeaBkQ5iEUuZvJu/5D8DngGzFstcvKEnP7+cxSMMOLR2ralBv+IEApKCQis0
+        V1a2tF4SzCm2fYlvAz9iKmCvcY5rTHRksnkGPhIkXXPTEBp03Cdk4b5rlPXyqYmr
+        /UhlOxN2zDVFh5qDHFexe2f3iyvMLXOcK87MY/XhO+VPXOuRjjHnOuhS8FG4q44M
+        nI6jMCSu8LSNK5owaFyy/qXgoO8jM0fLVig==
+X-ME-Sender: <xms:ggT2YrVxdsxffic8WE0sF0HJGB__LdGX1uw1CrVRQ4_bJzF98WFUTQ>
+    <xme:ggT2YjkkaYmjVCF865taabHe-2QPUNifwFrIto563OBDxeJZcQV0-pyiNf18YC5ig
+    BdKkjC6PwYvHoaoNw>
+X-ME-Received: <xmr:ggT2Ynb6O8IGrf2Nilr_3ivTSYyBCJvXL8IfPWs2PIhLH9KgqB6lpMBNlS7fBi7bsNgwO3_yem6DSflVNCFyLw0IDURcQG8WlhqISVH_spKbVeUz7tdJQb7PhavhsSXHkALUGg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdeghedguddvhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefurghmuhgv
+    lhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenucggtf
+    frrghtthgvrhhnpeekveelhfejueelleetvdejvdeffeetgeelheeujeffhefgffefkeeh
+    hffhkeekgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
+    hmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
+X-ME-Proxy: <xmx:ggT2YmUUOxSk46kfSLU_DMCI7xFLyIIuvxmHc75RmQEHFU_RNtU6Kw>
+    <xmx:ggT2Ylkx2lCDoBnG_EvzaDqavatBbiT1o4wVdoqHp-XHqRXIcAFs_A>
+    <xmx:ggT2YjeVL6IvleKt4_apCQm4DA2tSXw6crTDh5gkfFPcaIwViOu3tA>
+    <xmx:ggT2Yo9ibAE-IQeu7C5tStgXJgXoDeEIt_Jwj4a1rWIe67msC_caCQ>
+Feedback-ID: i0ad843c9:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 12 Aug 2022 03:42:57 -0400 (EDT)
+From:   Samuel Holland <samuel@sholland.org>
+To:     Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Maxime Ripard <mripard@kernel.org>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@linux.ie>,
+        Jagan Teki <jagan@amarulasolutions.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Conor Dooley <conor.dooley@microchip.com>
-Cc:     linux-pci@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-References: <20220811203306.179744-1-mail@conchuod.ie>
- <20220811203306.179744-4-mail@conchuod.ie>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220811203306.179744-4-mail@conchuod.ie>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: [PATCH 0/4] drm/sun4i: dsi: Support the A100/D1 controller variant
+Date:   Fri, 12 Aug 2022 02:42:52 -0500
+Message-Id: <20220812074257.58254-1-samuel@sholland.org>
+X-Mailer: git-send-email 2.35.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/08/2022 23:33, Conor Dooley wrote:
-> From: Conor Dooley <conor.dooley@microchip.com>
-> 
-> v2022.08 of dt-schema improved checking of unevaluatedProperties, and
-> exposed a previously unseen warning for the PCIe controller's interrupt
-> controller node name:
-> 
-> arch/riscv/boot/dts/microchip/mpfs-icicle-kit.dtb: pcie@2000000000: Unevaluated properties are not allowed ('clock-names', 'clocks', 'legacy-interrupt-controller', 'microchip,axi-m-atr0' were unexpected)
->         From schema: Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
-> 
-> Make the property in the binding match the node name actually used in
-> the dts.
-> 
-> Fixes: dcd49679fb3a ("dt-bindings: PCI: Fix 'unevaluatedProperties' warnings")
-> Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
-> ---
-> This is another one Rob where I feel like I'm doing the wrong thing.
-> The Linux driver gets the child node without using the name, but
-> another OS etc could in theory (or reality), right?
+This series adds support for the digital part of the DSI controller
+found in the A100 and D1 SoCs (plus T7, which is not supported by
+mainline Linux). There are two changes to the hardware integration:
+  1) the module clock routes through the TCON TOP, and
+  2) the separate I/O domain is removed.
 
-Yes and we had such cases when renaming device nodes caused regression.
-My interpretation is that node name is not part of ABI, so anyone
-depending on it made a mistake and they need to fix their stuff. I think
-actually that is really poor coding and poor solution to parse device
-node names and expect specific name.
+The actual register interface appears to be the same as before. The
+register definitions in the D1 BSP exactly match the A64 BSP.
 
-Other folks interpretation is that we never break the users of kernel,
-regardless what is documented in the ABI... so it depends. :)
+The BSP describes this as the "40nm" DSI controller variant. There is
+also a "28nm" variant with a different register interface; that one is
+found in a different subset of SoCs (V5 and A50).
 
-Here however it is not a device node name, but a property name (although
-still a node). Bindings require these to be specific, thus such name is
-a part of ABI.
-
-For your case, I wonder why it was called "legacy-interrupt-controller"
-in the first place? Node names - also for properties - should be
-generic, so generic name is just "interrupt-controller".
-
-> ---
->  .../devicetree/bindings/pci/microchip,pcie-host.yaml          | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml b/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
-> index 2a2166f09e2c..9b123bcd034c 100644
-> --- a/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
-> +++ b/Documentation/devicetree/bindings/pci/microchip,pcie-host.yaml
-> @@ -71,7 +71,7 @@ properties:
->    msi-parent:
->      description: MSI controller the device is capable of using.
->  
-> -  interrupt-controller:
-> +  legacy-interrupt-controller:
+A100/D1 also come with an updated DPHY, described by the BSP as a
+"combo" PHY, which is now also used for LVDS channel 0. (LVDS and DSI
+share the same pins on Port D.) Since that is a different subsystem,
+I am sending that as a separate series.
 
 
-Best regards,
-Krzysztof
+Samuel Holland (4):
+  dt-bindings: display: sun6i-dsi: Fix clock conditional
+  dt-bindings: display: sun6i-dsi: Add the A100 variant
+  drm/sun4i: dsi: Add a variant structure
+  drm/sun4i: dsi: Add the A100 variant
+
+ .../display/allwinner,sun6i-a31-mipi-dsi.yaml | 30 +++++++---
+ drivers/gpu/drm/sun4i/sun6i_mipi_dsi.c        | 58 +++++++++++++------
+ drivers/gpu/drm/sun4i/sun6i_mipi_dsi.h        |  7 +++
+ 3 files changed, 69 insertions(+), 26 deletions(-)
+
+-- 
+2.35.1
+

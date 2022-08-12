@@ -2,104 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B76385911DC
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 16:06:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2A355911DA
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 16:06:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239010AbiHLOF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 10:05:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52438 "EHLO
+        id S238836AbiHLOFx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 10:05:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52396 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238897AbiHLOFw (ORCPT
+        with ESMTP id S238360AbiHLOFu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 10:05:52 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECBD828722
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 07:05:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3938EB82439
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 14:05:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69D60C433C1;
-        Fri, 12 Aug 2022 14:05:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660313148;
-        bh=L6s/3V+2RDSqXqOMABgXGLBrmMH6VzcuNjpEgd5MJBk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TKWGf6OgnJ8rk3ranVglnmL9dUgrcCMg99d3LsNTEgL7a2uvNpv4fCP+ONUiAuzfN
-         9jfTB2XbZfJYO3fLpG4bC5Go9CgNHl50OKxJQZ5XI0NgMNqAGoSTssdLpPimbMqxiu
-         U4/qhfyQuoYKAqIZF6c/eV28SrPSs+6WEvg2p5khqnvEE/kCe3OHdVM5LX4I3/FTB6
-         P06TWh5Mo6dEdjZEZ1sNLbE7H3IVVuNFSbxAcRNGXNAoPKg3lc5Z2ZvQ6wtHrJsEzg
-         tg7Lt1gv91RYZh3EqHpBPU/a7hsTYlgvmX40mgbJr2r8pZWMulXevHExxmCNgToIeY
-         xU80TZUzxDBlw==
-Date:   Fri, 12 Aug 2022 15:05:40 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Syed Saba kareem <Syed.SabaKareem@amd.com>
-Cc:     alsa-devel@alsa-project.org, Vijendar.Mukunda@amd.com,
-        Basavaraj.Hiregoudar@amd.com, Sunil-kumar.Dommati@amd.com,
-        mario.limonciello@amd.com, Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Lucas Tanure <tanureal@opensource.cirrus.com>,
-        Julian Braha <julianbraha@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Bard Liao <bard.liao@intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 10/13] ASoC: amd: enable Pink Sardine acp6.2 drivers build
-Message-ID: <YvZeNDg++YwEsgdI@sirena.org.uk>
-References: <20220812120731.788052-1-Syed.SabaKareem@amd.com>
- <20220812120731.788052-11-Syed.SabaKareem@amd.com>
+        Fri, 12 Aug 2022 10:05:50 -0400
+Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A64A28722
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 07:05:49 -0700 (PDT)
+Received: by mail-qk1-x72f.google.com with SMTP id w27so748537qki.5
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 07:05:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kudzu-us.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=3Fi1VTtDFgyZAXD5ict/NicDWj9+d/F9avdnvytM5Yo=;
+        b=CqKUxs9HWvgk5EACnCWAc4IABQ81zQ5HxyhhzOwel9K82MNYA5ZpimTG2n/G/CZoj6
+         2biBPqLvZGzKN2QgBG2PshKuMmlgoUKalrEXqoJiew9yNntYLZEydSpxMikj9pMOOJys
+         XkRg28HFxcvZt+BJ/xCbkaKj3xS8nheYn78igbl1YBwN6BI7jV3Pb9uIZEHaHSu6e7TJ
+         FtRUyZe27glwYb/yHjMHO1+kfD2xl6BCSDpP+RcBVWff/GaeKp90oupVNBtu/VY7oJi3
+         8aItvPHy5I1E36ul/9VLB5dM9uGH9wLmJT/Mr4T7l15k40Ep82PClCmYUGEVGTd26Ba3
+         kAhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=3Fi1VTtDFgyZAXD5ict/NicDWj9+d/F9avdnvytM5Yo=;
+        b=exMGQklrm1m4McSSOhsMaWs33+H7RHudF9zZLBILuER+eyLegpx1TKCfxYtZTadgN0
+         YkYziz7l5Bdznv+jQw3KwytZLOqFEd91VEWdIK76ZLrXKpvAGjtMAeGB7PnOMK9hwFAJ
+         ak89L1msQ5YT4jxFvl6Wv5BEecPNHDy3KnGQpgsFnnA0pK9nt3SO0sqKMXXa7e5DGlR/
+         no9DIzI3TJBG2kx87KedPDhyiUhMINfiTkID94bALNS56SDuEutIsV0988tkRQhk3j1I
+         ERab1OOEqRYkx7/iKToXIkc8XPwT1gyTwLhcO60YxudAjMo3WPZTB+srcG0DvCudQZDg
+         Q92Q==
+X-Gm-Message-State: ACgBeo21GkylEuMNHiaPxPa29KB2ff/N2t7nILBkaM3W2u/mJzHYY5cT
+        DKo2q71zb+wNWVYlzaK8BO38Xw==
+X-Google-Smtp-Source: AA6agR6rVO/mlp2whKyQ+m6Evhgl5o+7HirB+451gg9nOuhJ3xNjn898fYAaT1rtyGmDyk6Q4LMiEA==
+X-Received: by 2002:a37:a853:0:b0:6ba:ceba:9656 with SMTP id r80-20020a37a853000000b006baceba9656mr1704225qke.466.1660313148548;
+        Fri, 12 Aug 2022 07:05:48 -0700 (PDT)
+Received: from kudzu.us ([2605:a601:a608:5600::59])
+        by smtp.gmail.com with ESMTPSA id h5-20020a05620a400500b006b615cd8c13sm1173685qko.106.2022.08.12.07.05.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Aug 2022 07:05:48 -0700 (PDT)
+Date:   Fri, 12 Aug 2022 10:05:46 -0400
+From:   Jon Mason <jdmason@kudzu.us>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Colin Ian King <colin.i.king@gmail.com>,
+        Kishon Vijay Abraham I <kishon@ti.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Frank Li <Frank.Li@nxp.com>, linux-pci@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH][next] NTB: EPF: set pointer addr to null using NULL
+ rather than 0
+Message-ID: <YvZeOkd1wrdYJXqs@kudzu.us>
+References: <20220623165709.77229-1-colin.i.king@gmail.com>
+ <20220627202858.GA1776067@bhelgaas>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Ho5JmIyVDF+a7B7s"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220812120731.788052-11-Syed.SabaKareem@amd.com>
-X-Cookie: No foreign coins.
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220627202858.GA1776067@bhelgaas>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Jun 27, 2022 at 03:28:58PM -0500, Bjorn Helgaas wrote:
+> On Thu, Jun 23, 2022 at 05:57:09PM +0100, Colin Ian King wrote:
+> > The pointer addr is being set to null using 0. Use NULL instead.
+> > 
+> > Cleans up sparse warning:
+> > warning: Using plain integer as NULL pointer
+> 
+> Another one for Jon; fixes this commit:
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=ff32fac00d97
+> 
+> > Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> > ---
+> >  drivers/pci/endpoint/functions/pci-epf-vntb.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/pci/endpoint/functions/pci-epf-vntb.c b/drivers/pci/endpoint/functions/pci-epf-vntb.c
+> > index ebf7e243eefa..fb31c868af6a 100644
+> > --- a/drivers/pci/endpoint/functions/pci-epf-vntb.c
+> > +++ b/drivers/pci/endpoint/functions/pci-epf-vntb.c
+> > @@ -605,7 +605,7 @@ static int epf_ntb_mw_bar_init(struct epf_ntb *ntb)
+> >  
+> >  		ntb->epf->bar[barno].barno = barno;
+> >  		ntb->epf->bar[barno].size = size;
+> > -		ntb->epf->bar[barno].addr = 0;
+> > +		ntb->epf->bar[barno].addr = NULL;
+> >  		ntb->epf->bar[barno].phys_addr = 0;
+> >  		ntb->epf->bar[barno].flags |= upper_32_bits(size) ?
+> >  				PCI_BASE_ADDRESS_MEM_TYPE_64 :
+> > -- 
+> > 2.35.3
+> > 
 
---Ho5JmIyVDF+a7B7s
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Sorry for the extremely long delay in response.  This series is in my
+ntb branch and will be in my pull request for v5.20 which should be
+going out later today.
 
-On Fri, Aug 12, 2022 at 05:37:28PM +0530, Syed Saba kareem wrote:
-
-> +config SND_SOC_AMD_PS
-> +        tristate "AMD Audio Coprocessor-v6.2 Pink Sardine support"
-> +        depends on X86 && PCI
-
-Could this be
-
-	depends on X86 || COMPILE_TEST
-	depends on PCI
-
-to improve build coverage?
-
---Ho5JmIyVDF+a7B7s
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmL2XjQACgkQJNaLcl1U
-h9A40gf/Y3kAtYJe9AfxmEWCRlcGJIgx5gfE0NqOS0ki0Gb+Za0kDH0Trmk3SYVx
-zA+g2WX4B3+vU3pXcejOfqWyskeClXTBwhPsoeZDY8QvmKmI5NGWGkpbnR5UahrY
-DwaJE96SfO0bnlGUa6OXQsTf9qvs18UYkJq4mzbfScHRxxHgmjMsq4dF1QvfwFji
-pHzLKovxE9mCtE3DErpQJQNvo5ZHS4+zVZxbPL1kUlWFiy1TEkuEqwM3UdnK/pgG
-y9MwfrziAblT3NOhN6fgMdBNWEI+jLs/XXlwhfBmFSA1ekP1fZKrOL7zFSh9aE8Q
-tBXNDR+y4RWfHQC1+GDfww2g9VRsQw==
-=RyBW
------END PGP SIGNATURE-----
-
---Ho5JmIyVDF+a7B7s--
+Thanks,
+Jon

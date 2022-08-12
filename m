@@ -2,125 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 689C4590EBC
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 12:08:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F04C6590EC5
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 12:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237384AbiHLKIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 06:08:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57950 "EHLO
+        id S237700AbiHLKJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 06:09:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237117AbiHLKIf (ORCPT
+        with ESMTP id S236734AbiHLKJ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 06:08:35 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 864D0A6C26
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 03:08:33 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id d14so668036lfl.13
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 03:08:33 -0700 (PDT)
+        Fri, 12 Aug 2022 06:09:29 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BBD7A8CEB;
+        Fri, 12 Aug 2022 03:09:28 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id z25so721460lfr.2;
+        Fri, 12 Aug 2022 03:09:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=XiuPovkOS+97bdIezfgaSELX7apRbPfn23zXTyCPRYk=;
-        b=WK+XalqL9DhlZk4XXCNjIasm1v6PShzJ0j1k6NNDg2OA/sTrwKqxKyOeR30qVU8KSm
-         oB6RcyAI+rgp/qomDS50vXsRvpgGMU8hYFCIKZ3rfvns7CeJy2kHl5nUhkq1YWlyvy27
-         cvJnc0yE450p5CX/WPDXWB4MfItwVfRLOwl3ssTIJXwq977JkU3V7JMXU4eLy/Ci12Qz
-         r+M3dyeG4GbLhWugWVKe+0EYYXQUNTT8CrLnzFgZwYk0ZEaw2xK4AxdnaXwoNqV/KM3o
-         i62cojAHPISkcXI02zlCcfMeFmW2uytivQyJBlzVmi+Lc29iczuX09DG6ucdy0IJXNf8
-         Bvcw==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=yuAKn5slzZuEhtPm1LsezhtP3pivs5CCHH3xY7WDuVQ=;
+        b=bY3a2ss7fDRzPC2k43zDwqSVkA56ODbouc/Mh4zivAGhRzzZE0J3tJIe4H888Enb+s
+         xmSBomn3yZpqHIyyC9R+EPw4jJo7oslGkIosXdGkptn4Bt3U3NkYXbKLWJFSA4AT4z2W
+         Xzf/RNoxKtJYgKfOFXAZ8GJ+cRyJWev8k4O+EAd8KpRgtZSoT0xuE/LALlxK81Ozsowv
+         uDIlkI9/MmrzBmW0dnsWKiixPMXEdGjuIntvRpM9lIFAM+8IHitt0pVq1lSnmC0yCgvV
+         11ZrCffi2v6AibbzxHR5URpXRBWu+uCY2ZaHyFAWgUhTJGEDQlWMh85QCOXX8Zz4MeDY
+         /gbA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=XiuPovkOS+97bdIezfgaSELX7apRbPfn23zXTyCPRYk=;
-        b=aaqmtawbgIeNC3g9WDDDvxanoOcuCAErCQMhIyQHpwUK6zJkYkam03oRuQsiW0zg77
-         F5JgJZi3ZOpHyIHzv4Y4G0t7FX3/ZR61xHvR/ECDgTZiX96vIsHqBljrks5fMdbOPCrb
-         AdbXlk7sRLt00vfs6Ee/FJXnlVFTPUGg3Ap2s7dJW9HfxwoRewnHO9gymd+NBU/RO8VD
-         7ClmIQJ4VerMhx8HAL1K6x3sNto6YzuXQJ6Dwg4/INZFAoYLzW6dGYDuL/t70WiQ/Jdo
-         Xy35AQ68kr20xMHDZhVYmoHXgqiEOPEVrkq5tL/eeyrANrJ8U25nULSsRTv+4bryURdj
-         gdmQ==
-X-Gm-Message-State: ACgBeo0NaTWa1nx4G2x3k4G5CiHvAxmYhWWtz1Zy191nG06Boc1or1cx
-        t6P6WjN4oZTsU7W59whVHU+OLg==
-X-Google-Smtp-Source: AA6agR4LZIMe34S+FTwy2eQTrI+Qal/bV+LtzQk8TenlMIk3y8r8aBndkPCQ4cyu0M3CJBKoNOY/ZA==
-X-Received: by 2002:a05:6512:3e07:b0:48b:131:616 with SMTP id i7-20020a0565123e0700b0048b01310616mr1154422lfv.475.1660298911903;
-        Fri, 12 Aug 2022 03:08:31 -0700 (PDT)
-Received: from [192.168.1.39] ([83.146.140.105])
-        by smtp.gmail.com with ESMTPSA id z19-20020a05651c11d300b0025dfd2f66d6sm303951ljo.95.2022.08.12.03.08.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 03:08:31 -0700 (PDT)
-Message-ID: <f64a1e5e-d2be-68d7-9bca-de03de6ddbfa@linaro.org>
-Date:   Fri, 12 Aug 2022 13:08:27 +0300
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=yuAKn5slzZuEhtPm1LsezhtP3pivs5CCHH3xY7WDuVQ=;
+        b=pg6nk4f3T+1pfKCEgn/TCffJUfwExpqCBK03GVxZn29VuKiQbpjVL6ED1ec1h4VrCP
+         Me4ZTDgNVi6MMjy+186f+LYIgCICwONpUNOxpsf9Kpj6Z1p91SvdRQUxm6RA2r+4+nO4
+         nSiX0e36IzOO65HwDT8teJ628wX42pdSZH0O09nXAvIKaBflp+WKeMtnyIYaXWwzQoxU
+         Ualp/ii9xiY8MNmvIdzEVBEMGkT1p1tgiBIQNrc3b+1qSJmsfRY1C/xDjaEqoRPu2QgW
+         QFE3H3T050/cR1UFhqJNNIdLEtdgCRNSbc5H734IqU38kPLXIKfZvwbJoNf6/hC79btb
+         0QiA==
+X-Gm-Message-State: ACgBeo2ym966XURmOzQ8Je4U22Hz6Kzabcrlfm+twTfKfr5VdDcC5m8W
+        hnrgUe/9Ip4FhkWrLINaDqM=
+X-Google-Smtp-Source: AA6agR615W7kd9vT2AUcBZx3elPnt+50MwFv4xr43ufV0vRP94aIGxI1HACvs/SH5Oh+6FhoIDBMtQ==
+X-Received: by 2002:a05:6512:139d:b0:48d:3e4:6802 with SMTP id p29-20020a056512139d00b0048d03e46802mr983209lfa.424.1660298966644;
+        Fri, 12 Aug 2022 03:09:26 -0700 (PDT)
+Received: from fedora ([213.255.186.46])
+        by smtp.gmail.com with ESMTPSA id u10-20020a05651220ca00b0048b0bf9f4bfsm160695lfr.140.2022.08.12.03.09.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Aug 2022 03:09:25 -0700 (PDT)
+Date:   Fri, 12 Aug 2022 13:09:03 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Jonathan Corbet <corbet@lwn.net>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Alexandru Ardelean <aardelean@deviqon.com>,
+        Peter Rosin <peda@axentia.se>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/7] docs: devres: regulator: Add missing devm_* functions
+ to devres.rst
+Message-ID: <5efc0c90342b0a0ef3322b8fc1472b84cfc0eb45.1660292316.git.mazziesaccount@gmail.com>
+References: <cover.1660292316.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH 4/7] arm64: dts: imx93: add blk ctrl node
-Content-Language: en-US
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-References: <20220812074609.53131-1-peng.fan@oss.nxp.com>
- <20220812074609.53131-5-peng.fan@oss.nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20220812074609.53131-5-peng.fan@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="wQt+00N+A/DYJkCw"
+Content-Disposition: inline
+In-Reply-To: <cover.1660292316.git.mazziesaccount@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/08/2022 10:46, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
-> 
-> Add i.MX93 BLK CTRL MIX node
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  arch/arm64/boot/dts/freescale/imx93.dtsi | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx93.dtsi b/arch/arm64/boot/dts/freescale/imx93.dtsi
-> index dd76472ced46..55f396723adb 100644
-> --- a/arch/arm64/boot/dts/freescale/imx93.dtsi
-> +++ b/arch/arm64/boot/dts/freescale/imx93.dtsi
-> @@ -112,6 +112,11 @@ aips1: bus@44000000 {
->  			#size-cells = <1>;
->  			ranges;
->  
-> +			anomix_ns_gpr: blk-ctrl-ns-anomix@44210000 {
 
-Node names should be generic.
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+--wQt+00N+A/DYJkCw
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> +				compatible = "syscon";
+A few managed regulator functions were missing from the API list.
 
-No, syscon alone is not allowed.
+Add missing functions.
 
-> +				reg = <0x44210000 0x1000>;
-> +			};
-> +
->  			mu1: mailbox@44230000 {
->  				compatible = "fsl,imx93-mu", "fsl,imx8ulp-mu";
->  				reg = <0x44230000 0x10000>;
-> @@ -174,6 +179,11 @@ aips2: bus@42000000 {
->  			#size-cells = <1>;
->  			ranges;
->  
-> +			wakeupmix_gpr: blk-ctrl-wakeupmix@42420000 {
-> +				compatible = "syscon";
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
-Ditto
+---
+RFCv1 =3D> v2:
+- No changes
+
+This one is actually a documentation fix which adds existing APIs to the
+list. I guess this patch is good for being merged independently from the
+rest of the series.
+---
+ Documentation/driver-api/driver-model/devres.rst | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/Documentation/driver-api/driver-model/devres.rst b/Documentati=
+on/driver-api/driver-model/devres.rst
+index 2d39967bafcc..271d1eb2234b 100644
+--- a/Documentation/driver-api/driver-model/devres.rst
++++ b/Documentation/driver-api/driver-model/devres.rst
+@@ -406,10 +406,17 @@ PWM
+   devm_fwnode_pwm_get()
+=20
+ REGULATOR
++  devm_regulator_bulk_register_supply_alias()
+   devm_regulator_bulk_get()
+   devm_regulator_get()
++  devm_regulator_get_exclusive()
++  devm_regulator_get_optional()
++  devm_regulator_irq_helper()
+   devm_regulator_put()
+   devm_regulator_register()
++  devm_regulator_register_notifier()
++  devm_regulator_register_supply_alias()
++  devm_regulator_unregister_notifier()
+=20
+ RESET
+   devm_reset_control_get()
+--=20
+2.37.1
 
 
-Best regards,
-Krzysztof
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
+
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
+
+--wQt+00N+A/DYJkCw
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmL2Jr8ACgkQeFA3/03a
+ocXdkggAhZ5XSYLhVfVt8rPclxoH54IJ1sSVH8uiR1UkwWAR3bfg6ql8HfNaSuR0
+frdTUki174UogGNj7mnoA+XGwRq4o+a8TQuzRGCkf/x6dQFPK6ElvxkEBTLFfXPT
+UXw1SPfNuq1I5CxaugCDZdnBlI5DampIh5uNwl6bai1VNrArwI0KqUTTWMECXIRS
+GDmAYNIgM90IyXnVvlDpk79tBbqCn/ZLow+bVGUX6hI2f4Nloh0Z97WJFwoI2X6/
+8tXRb5Rp6T4upFI0G1PgdoToGPkNZej9o/EOlpm1KbS/DKcyxEgU5Uo95GnTwW1P
+4w51sAt7IkDjNFC9tBw7h8dVxZiFYw==
+=Y1jp
+-----END PGP SIGNATURE-----
+
+--wQt+00N+A/DYJkCw--

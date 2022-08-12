@@ -2,380 +2,357 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB79A590F1E
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 12:19:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A4DC590F4B
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 12:21:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237922AbiHLKTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 06:19:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47124 "EHLO
+        id S238437AbiHLKV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 06:21:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233226AbiHLKTN (ORCPT
+        with ESMTP id S238778AbiHLKVH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 06:19:13 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519CDAB429
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 03:19:11 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4M401l2GDwz1M8h6;
-        Fri, 12 Aug 2022 18:15:55 +0800 (CST)
-Received: from kwepemm600017.china.huawei.com (7.193.23.234) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 12 Aug 2022 18:19:09 +0800
-Received: from [10.174.179.234] (10.174.179.234) by
- kwepemm600017.china.huawei.com (7.193.23.234) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Fri, 12 Aug 2022 18:19:08 +0800
-Message-ID: <531eca0c-cff3-d5e7-3a80-a554d19c7ee4@huawei.com>
-Date:   Fri, 12 Aug 2022 18:19:07 +0800
+        Fri, 12 Aug 2022 06:21:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2750D62D3;
+        Fri, 12 Aug 2022 03:21:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B0C53B823D2;
+        Fri, 12 Aug 2022 10:21:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD535C433D7;
+        Fri, 12 Aug 2022 10:20:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660299659;
+        bh=NVQ9pm884AYZwMhL7h5OVjO4qszHxNUuJ+1wER4FQ3w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EKjxCG4mA9zNJCvuGxbu6peqzR+4ROwtuwM9BnLdlW5VYeAOz/vq4mnvA7g9zcXNq
+         bCzG13+WuN78/7hjuBDzbx+gH5eDDAOHQArtQX7nm57PjfbkxI1+BGICyh3N5qCAMs
+         GsA3SlL3UxqO74wN9V8CbRyq6yO3DWs+Cgevx52uj429AySm9M0T5qWQ9TzIozCmpa
+         o68yV3K8PUIkpn/ybCgf9gn54wiaIwraUxf7gD+Mch3Px2ZDU9Iuk8QaWHn1Ir61Gu
+         OFL3yJKycMv/efhL21HiYaaXxd83vDAs2TQG8uKzy9IbnKFhSmS8Rp9iJI8myz++vz
+         DaSYEL2EYyzAQ==
+Date:   Fri, 12 Aug 2022 12:20:52 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Vasily Averin <vvs@openvz.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tejun Heo <tj@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Hugh Dickins <hughd@google.com>, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Johannes Weiner <hannes@cmpxchg.org>, kernel@openvz.org
+Subject: Re: [RFC PATCH] kernfs: enable per-inode limits for all xattr types
+Message-ID: <20220812102052.adiqtlsxx273t7wk@wittgenstein>
+References: <b816f58a-ce25-c079-c6b3-a3406df246f9@openvz.org>
+ <8ace5255-ce23-0a05-2d50-1455dd68acb6@openvz.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.8.0
-Subject: Re: [PATCH -next] riscv: extable: add new extable type
- EX_TYPE_KACCESS_ERR_ZERO support
-To:     <Conor.Dooley@microchip.com>, <paul.walmsley@sifive.com>,
-        <palmer@dabbelt.com>, <palmer@rivosinc.com>,
-        <aou@eecs.berkeley.edu>
-CC:     <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <wangkefeng.wang@huawei.com>, <guohanjun@huawei.com>
-References: <20220812085212.1525820-1-tongtiangen@huawei.com>
- <3f663baf-45a1-0bf0-cad9-a4c269b0b3d4@microchip.com>
-From:   Tong Tiangen <tongtiangen@huawei.com>
-In-Reply-To: <3f663baf-45a1-0bf0-cad9-a4c269b0b3d4@microchip.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.179.234]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600017.china.huawei.com (7.193.23.234)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <8ace5255-ce23-0a05-2d50-1455dd68acb6@openvz.org>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-在 2022/8/12 16:58, Conor.Dooley@microchip.com 写道:
-> On 12/08/2022 09:52, Tong Tiangen wrote:
->> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->>
->> Currently, The extable type EX_TYPE_UACCESS_ERR_ZERO is used by
->> __get/put_kernel_nofault(), but those helpers are not uaccess type, so we
->> add a new extable type EX_TYPE_KACCESS_ERR_ZERO which can be used by
->> __get/put_kernel_no_fault().
->>
->> Also change the name of __get/put_user_nocheck to __get/put_mem_nocheck
->> to make it conform to its use situation (not only used in uaccess).
+On Thu, Aug 11, 2022 at 07:58:46AM +0300, Vasily Averin wrote:
+> Currently it's possible to create a huge number of xattr per inode,
+> and I would like to add USER-like restrcition to all xattr types.
 > 
-> Is there a reason why this should not be a different patch?
-> Thanks,
-> Conor.
-
-Oh, my fault, this modification should be split.
-Thanks,
-Tong.
-
+> I've prepared RFC patch and would like to discuss it.
 > 
->>
->> Signed-off-by: Tong Tiangen <tongtiangen@huawei.com>
->> ---
->>    arch/riscv/include/asm/asm-extable.h |  12 ++
->>    arch/riscv/include/asm/uaccess.h     | 160 +++++++++++++--------------
->>    2 files changed, 92 insertions(+), 80 deletions(-)
->>
->> diff --git a/arch/riscv/include/asm/asm-extable.h b/arch/riscv/include/asm/asm-extable.h
->> index 14be0673f5b5..73c70098a9c8 100644
->> --- a/arch/riscv/include/asm/asm-extable.h
->> +++ b/arch/riscv/include/asm/asm-extable.h
->> @@ -6,6 +6,7 @@
->>    #define EX_TYPE_FIXUP                  1
->>    #define EX_TYPE_BPF                    2
->>    #define EX_TYPE_UACCESS_ERR_ZERO       3
->> +#define EX_TYPE_KACCESS_ERR_ZERO       4
->>
->>    #ifdef __ASSEMBLY__
->>
->> @@ -57,9 +58,20 @@
->>                               EX_DATA_REG(ZERO, zero)                     \
->>                             ")")
->>
->> +#define _ASM_EXTABLE_KACCESS_ERR_ZERO(insn, fixup, err, zero)          \
->> +       __DEFINE_ASM_GPR_NUMS                                           \
->> +       __ASM_EXTABLE_RAW(#insn, #fixup,                                \
->> +                         __stringify(EX_TYPE_KACCESS_ERR_ZERO),        \
->> +                         "("                                           \
->> +                           EX_DATA_REG(ERR, err) " | "                 \
->> +                           EX_DATA_REG(ZERO, zero)                     \
->> +                         ")")
->> +
->>    #define _ASM_EXTABLE_UACCESS_ERR(insn, fixup, err)                     \
->>           _ASM_EXTABLE_UACCESS_ERR_ZERO(insn, fixup, err, zero)
->>
->> +#define _ASM_EXTABLE_KACCESS_ERR(insn, fixup, err)                     \
->> +       _ASM_EXTABLE_KACCESS_ERR_ZERO(insn, fixup, err, zero)
->>    #endif /* __ASSEMBLY__ */
->>
->>    #endif /* __ASM_ASM_EXTABLE_H */
->> diff --git a/arch/riscv/include/asm/uaccess.h b/arch/riscv/include/asm/uaccess.h
->> index 855450bed9f5..5372f3f1e3f6 100644
->> --- a/arch/riscv/include/asm/uaccess.h
->> +++ b/arch/riscv/include/asm/uaccess.h
->> @@ -50,62 +50,62 @@
->>     * call.
->>     */
->>
->> -#define __get_user_asm(insn, x, ptr, err)                      \
->> -do {                                                           \
->> -       __typeof__(x) __x;                                      \
->> -       __asm__ __volatile__ (                                  \
->> -               "1:\n"                                          \
->> -               "       " insn " %1, %2\n"                      \
->> -               "2:\n"                                          \
->> -               _ASM_EXTABLE_UACCESS_ERR_ZERO(1b, 2b, %0, %1)   \
->> -               : "+r" (err), "=&r" (__x)                       \
->> -               : "m" (*(ptr)));                                \
->> -       (x) = __x;                                              \
->> +#define __get_mem_asm(insn, x, ptr, err, type)                         \
->> +do {                                                                   \
->> +       __typeof__(x) __x;                                              \
->> +       __asm__ __volatile__ (                                          \
->> +               "1:\n"                                                  \
->> +               "       " insn " %1, %2\n"                              \
->> +               "2:\n"                                                  \
->> +               _ASM_EXTABLE_##type##ACCESS_ERR_ZERO(1b, 2b, %0, %1)    \
->> +               : "+r" (err), "=&r" (__x)                               \
->> +               : "m" (*(ptr)));                                        \
->> +       (x) = __x;                                                      \
->>    } while (0)
->>
->>    #ifdef CONFIG_64BIT
->> -#define __get_user_8(x, ptr, err) \
->> -       __get_user_asm("ld", x, ptr, err)
->> +#define __get_mem_8(x, ptr, err, type) \
->> +       __get_mem_asm("ld", x, ptr, err, type)
->>    #else /* !CONFIG_64BIT */
->> -#define __get_user_8(x, ptr, err)                              \
->> -do {                                                           \
->> -       u32 __user *__ptr = (u32 __user *)(ptr);                \
->> -       u32 __lo, __hi;                                         \
->> -       __asm__ __volatile__ (                                  \
->> -               "1:\n"                                          \
->> -               "       lw %1, %3\n"                            \
->> -               "2:\n"                                          \
->> -               "       lw %2, %4\n"                            \
->> -               "3:\n"                                          \
->> -               _ASM_EXTABLE_UACCESS_ERR_ZERO(1b, 3b, %0, %1)   \
->> -               _ASM_EXTABLE_UACCESS_ERR_ZERO(2b, 3b, %0, %1)   \
->> -               : "+r" (err), "=&r" (__lo), "=r" (__hi)         \
->> -               : "m" (__ptr[__LSW]), "m" (__ptr[__MSW]));      \
->> -       if (err)                                                \
->> -               __hi = 0;                                       \
->> -       (x) = (__typeof__(x))((__typeof__((x)-(x)))(            \
->> -               (((u64)__hi << 32) | __lo)));                   \
->> +#define __get_mem_8(x, ptr, err, type)                                 \
->> +do {                                                                   \
->> +       u32 __user *__ptr = (u32 __user *)(ptr);                        \
->> +       u32 __lo, __hi;                                                 \
->> +       __asm__ __volatile__ (                                          \
->> +               "1:\n"                                                  \
->> +               "       lw %1, %3\n"                                    \
->> +               "2:\n"                                                  \
->> +               "       lw %2, %4\n"                                    \
->> +               "3:\n"                                                  \
->> +               _ASM_EXTABLE_##type##ACCESS_ERR_ZERO(1b, 3b, %0, %1)    \
->> +               _ASM_EXTABLE_##type##ACCESS_ERR_ZERO(2b, 3b, %0, %1)    \
->> +               : "+r" (err), "=&r" (__lo), "=r" (__hi)                 \
->> +               : "m" (__ptr[__LSW]), "m" (__ptr[__MSW]));              \
->> +       if (err)                                                        \
->> +               __hi = 0;                                               \
->> +       (x) = (__typeof__(x))((__typeof__((x)-(x)))(                    \
->> +               (((u64)__hi << 32) | __lo)));                           \
->>    } while (0)
->>    #endif /* CONFIG_64BIT */
->>
->> -#define __get_user_nocheck(x, __gu_ptr, __gu_err)              \
->> -do {                                                           \
->> -       switch (sizeof(*__gu_ptr)) {                            \
->> -       case 1:                                                 \
->> -               __get_user_asm("lb", (x), __gu_ptr, __gu_err);  \
->> -               break;                                          \
->> -       case 2:                                                 \
->> -               __get_user_asm("lh", (x), __gu_ptr, __gu_err);  \
->> -               break;                                          \
->> -       case 4:                                                 \
->> -               __get_user_asm("lw", (x), __gu_ptr, __gu_err);  \
->> -               break;                                          \
->> -       case 8:                                                 \
->> -               __get_user_8((x), __gu_ptr, __gu_err);  \
->> -               break;                                          \
->> -       default:                                                \
->> -               BUILD_BUG();                                    \
->> -       }                                                       \
->> +#define __get_mem_nocheck(x, __gu_ptr, __gu_err, type)                 \
->> +do {                                                                   \
->> +       switch (sizeof(*__gu_ptr)) {                                    \
->> +       case 1:                                                         \
->> +               __get_mem_asm("lb", (x), __gu_ptr, __gu_err, type);     \
->> +               break;                                                  \
->> +       case 2:                                                         \
->> +               __get_mem_asm("lh", (x), __gu_ptr, __gu_err, type);     \
->> +               break;                                                  \
->> +       case 4:                                                         \
->> +               __get_mem_asm("lw", (x), __gu_ptr, __gu_err, type);     \
->> +               break;                                                  \
->> +       case 8:                                                         \
->> +               __get_mem_8((x), __gu_ptr, __gu_err, type);             \
->> +               break;                                                  \
->> +       default:                                                        \
->> +               BUILD_BUG();                                            \
->> +       }                                                               \
->>    } while (0)
->>
->>    /**
->> @@ -136,7 +136,7 @@ do {                                                                \
->>           __chk_user_ptr(__gu_ptr);                               \
->>                                                                   \
->>           __enable_user_access();                                 \
->> -       __get_user_nocheck(x, __gu_ptr, __gu_err);              \
->> +       __get_mem_nocheck(x, __gu_ptr, __gu_err, U);            \
->>           __disable_user_access();                                \
->>                                                                   \
->>           __gu_err;                                               \
->> @@ -163,28 +163,28 @@ do {                                                              \
->>    ({                                                             \
->>           const __typeof__(*(ptr)) __user *__p = (ptr);           \
->>           might_fault();                                          \
->> -       access_ok(__p, sizeof(*__p)) ?          \
->> +       access_ok(__p, sizeof(*__p)) ?                          \
->>                   __get_user((x), __p) :                          \
->>                   ((x) = 0, -EFAULT);                             \
->>    })
->>
->> -#define __put_user_asm(insn, x, ptr, err)                      \
->> +#define __put_mem_asm(insn, x, ptr, err, type)                 \
->>    do {                                                           \
->>           __typeof__(*(ptr)) __x = x;                             \
->>           __asm__ __volatile__ (                                  \
->>                   "1:\n"                                          \
->>                   "       " insn " %z2, %1\n"                     \
->>                   "2:\n"                                          \
->> -               _ASM_EXTABLE_UACCESS_ERR(1b, 2b, %0)            \
->> +               _ASM_EXTABLE_##type##ACCESS_ERR(1b, 2b, %0)     \
->>                   : "+r" (err), "=m" (*(ptr))                     \
->>                   : "rJ" (__x));                                  \
->>    } while (0)
->>
->>    #ifdef CONFIG_64BIT
->> -#define __put_user_8(x, ptr, err) \
->> -       __put_user_asm("sd", x, ptr, err)
->> +#define __put_mem_8(x, ptr, err, type) \
->> +       __put_mem_asm("sd", x, ptr, err, type)
->>    #else /* !CONFIG_64BIT */
->> -#define __put_user_8(x, ptr, err)                              \
->> +#define __put_mem_8(x, ptr, err, type)                         \
->>    do {                                                           \
->>           u32 __user *__ptr = (u32 __user *)(ptr);                \
->>           u64 __x = (__typeof__((x)-(x)))(x);                     \
->> @@ -194,8 +194,8 @@ do {                                                                \
->>                   "2:\n"                                          \
->>                   "       sw %z4, %2\n"                           \
->>                   "3:\n"                                          \
->> -               _ASM_EXTABLE_UACCESS_ERR(1b, 3b, %0)            \
->> -               _ASM_EXTABLE_UACCESS_ERR(2b, 3b, %0)            \
->> +               _ASM_EXTABLE_##type##ACCESS_ERR(1b, 3b, %0)     \
->> +               _ASM_EXTABLE_##type##ACCESS_ERR(2b, 3b, %0)     \
->>                   : "+r" (err),                                   \
->>                           "=m" (__ptr[__LSW]),                    \
->>                           "=m" (__ptr[__MSW])                     \
->> @@ -203,24 +203,24 @@ do {                                                              \
->>    } while (0)
->>    #endif /* CONFIG_64BIT */
->>
->> -#define __put_user_nocheck(x, __gu_ptr, __pu_err)                                      \
->> -do {                                                           \
->> -       switch (sizeof(*__gu_ptr)) {                            \
->> -       case 1:                                                 \
->> -               __put_user_asm("sb", (x), __gu_ptr, __pu_err);  \
->> -               break;                                          \
->> -       case 2:                                                 \
->> -               __put_user_asm("sh", (x), __gu_ptr, __pu_err);  \
->> -               break;                                          \
->> -       case 4:                                                 \
->> -               __put_user_asm("sw", (x), __gu_ptr, __pu_err);  \
->> -               break;                                          \
->> -       case 8:                                                 \
->> -               __put_user_8((x), __gu_ptr, __pu_err);  \
->> -               break;                                          \
->> -       default:                                                \
->> -               BUILD_BUG();                                    \
->> -       }                                                       \
->> +#define __put_mem_nocheck(x, __gu_ptr, __pu_err, type)                 \
->> +do {                                                                   \
->> +       switch (sizeof(*__gu_ptr)) {                                    \
->> +       case 1:                                                         \
->> +               __put_mem_asm("sb", (x), __gu_ptr, __pu_err, type);     \
->> +               break;                                                  \
->> +       case 2:                                                         \
->> +               __put_mem_asm("sh", (x), __gu_ptr, __pu_err, type);     \
->> +               break;                                                  \
->> +       case 4:                                                         \
->> +               __put_mem_asm("sw", (x), __gu_ptr, __pu_err, type);     \
->> +               break;                                                  \
->> +       case 8:                                                         \
->> +               __put_mem_8((x), __gu_ptr, __pu_err, type);             \
->> +               break;                                                  \
->> +       default:                                                        \
->> +               BUILD_BUG();                                            \
->> +       }                                                               \
->>    } while (0)
->>
->>    /**
->> @@ -253,7 +253,7 @@ do {                                                                \
->>           __chk_user_ptr(__gu_ptr);                               \
->>                                                                   \
->>           __enable_user_access();                                 \
->> -       __put_user_nocheck(__val, __gu_ptr, __pu_err);          \
->> +       __put_mem_nocheck(__val, __gu_ptr, __pu_err, U);        \
->>           __disable_user_access();                                \
->>                                                                   \
->>           __pu_err;                                               \
->> @@ -279,7 +279,7 @@ do {                                                                \
->>    ({                                                             \
->>           __typeof__(*(ptr)) __user *__p = (ptr);                 \
->>           might_fault();                                          \
->> -       access_ok(__p, sizeof(*__p)) ?          \
->> +       access_ok(__p, sizeof(*__p)) ?                          \
->>                   __put_user((x), __p) :                          \
->>                   -EFAULT;                                        \
->>    })
->> @@ -321,7 +321,7 @@ unsigned long __must_check clear_user(void __user *to, unsigned long n)
->>    do {                                                                   \
->>           long __kr_err;                                                  \
->>                                                                           \
->> -       __get_user_nocheck(*((type *)(dst)), (type *)(src), __kr_err);  \
->> +       __get_mem_nocheck(*((type *)(dst)), (type *)(src), __kr_err, K);\
->>           if (unlikely(__kr_err))                                         \
->>                   goto err_label;                                         \
->>    } while (0)
->> @@ -330,7 +330,7 @@ do {                                                                        \
->>    do {                                                                   \
->>           long __kr_err;                                                  \
->>                                                                           \
->> -       __put_user_nocheck(*((type *)(src)), (type *)(dst), __kr_err);  \
->> +       __put_mem_nocheck(*((type *)(src)), (type *)(dst), __kr_err, K);\
->>           if (unlikely(__kr_err))                                         \
->>                   goto err_label;                                         \
->>    } while (0)
->> --
->> 2.25.1
->>
->>
->> _______________________________________________
->> linux-riscv mailing list
->> linux-riscv@lists.infradead.org
->> http://lists.infradead.org/mailman/listinfo/linux-riscv
+> This patch moves counters calculations into simple_xattr_set,
+> under simple_xattrs spinlock. This allows to replace atomic counters
+> used currently for USER xattr to ints.
 > 
+> To keep current behaviour for USER xattr I keep current limits
+> and counters and add separated limits and counters for all another
+> xattr types. However I would like to merge these limits and counters
+> together, because it simplifies the code even more.
+> Could someone please clarify if this is acceptable?
+> 
+> Signed-off-by: Vasily Averin <vvs@openvz.org>
+> ---
+
+Hey Vasily,
+
+Fyi, this patch doesn't seem to apply cleanly to anything from v5.17 up
+until current master. It's a bit unfortunate that it's the middle of the
+merge window so ideally you'd resend once the merge window closes on top
+of v5.20-rc1.
+
+A few questions below.
+
+>  fs/kernfs/inode.c           | 67 ++-----------------------------------
+>  fs/kernfs/kernfs-internal.h |  2 --
+>  fs/xattr.c                  | 56 +++++++++++++++++++------------
+>  include/linux/kernfs.h      |  2 ++
+>  include/linux/xattr.h       | 11 ++++--
+>  mm/shmem.c                  | 29 +++++++---------
+>  6 files changed, 61 insertions(+), 106 deletions(-)
+> 
+> diff --git a/fs/kernfs/inode.c b/fs/kernfs/inode.c
+> index 3d783d80f5da..7cfdda41fc89 100644
+> --- a/fs/kernfs/inode.c
+> +++ b/fs/kernfs/inode.c
+> @@ -47,8 +47,6 @@ static struct kernfs_iattrs *__kernfs_iattrs(struct kernfs_node *kn, int alloc)
+>  	kn->iattr->ia_ctime = kn->iattr->ia_atime;
+>  
+>  	simple_xattrs_init(&kn->iattr->xattrs);
+> -	atomic_set(&kn->iattr->nr_user_xattrs, 0);
+> -	atomic_set(&kn->iattr->user_xattr_size, 0);
+>  out_unlock:
+>  	ret = kn->iattr;
+>  	mutex_unlock(&iattr_mutex);
+> @@ -314,7 +312,7 @@ int kernfs_xattr_set(struct kernfs_node *kn, const char *name,
+>  	if (!attrs)
+>  		return -ENOMEM;
+>  
+> -	return simple_xattr_set(&attrs->xattrs, name, value, size, flags, NULL);
+> +	return simple_xattr_set(&attrs->xattrs, name, value, size, flags);
+>  }
+>  
+>  static int kernfs_vfs_xattr_get(const struct xattr_handler *handler,
+> @@ -339,61 +337,6 @@ static int kernfs_vfs_xattr_set(const struct xattr_handler *handler,
+>  	return kernfs_xattr_set(kn, name, value, size, flags);
+>  }
+>  
+> -static int kernfs_vfs_user_xattr_add(struct kernfs_node *kn,
+> -				     const char *full_name,
+> -				     struct simple_xattrs *xattrs,
+> -				     const void *value, size_t size, int flags)
+> -{
+> -	atomic_t *sz = &kn->iattr->user_xattr_size;
+> -	atomic_t *nr = &kn->iattr->nr_user_xattrs;
+> -	ssize_t removed_size;
+> -	int ret;
+> -
+> -	if (atomic_inc_return(nr) > KERNFS_MAX_USER_XATTRS) {
+> -		ret = -ENOSPC;
+> -		goto dec_count_out;
+> -	}
+> -
+> -	if (atomic_add_return(size, sz) > KERNFS_USER_XATTR_SIZE_LIMIT) {
+> -		ret = -ENOSPC;
+> -		goto dec_size_out;
+> -	}
+> -
+> -	ret = simple_xattr_set(xattrs, full_name, value, size, flags,
+> -			       &removed_size);
+> -
+> -	if (!ret && removed_size >= 0)
+> -		size = removed_size;
+> -	else if (!ret)
+> -		return 0;
+> -dec_size_out:
+> -	atomic_sub(size, sz);
+> -dec_count_out:
+> -	atomic_dec(nr);
+> -	return ret;
+> -}
+> -
+> -static int kernfs_vfs_user_xattr_rm(struct kernfs_node *kn,
+> -				    const char *full_name,
+> -				    struct simple_xattrs *xattrs,
+> -				    const void *value, size_t size, int flags)
+> -{
+> -	atomic_t *sz = &kn->iattr->user_xattr_size;
+> -	atomic_t *nr = &kn->iattr->nr_user_xattrs;
+> -	ssize_t removed_size;
+> -	int ret;
+> -
+> -	ret = simple_xattr_set(xattrs, full_name, value, size, flags,
+> -			       &removed_size);
+> -
+> -	if (removed_size >= 0) {
+> -		atomic_sub(removed_size, sz);
+> -		atomic_dec(nr);
+> -	}
+> -
+> -	return ret;
+> -}
+> -
+>  static int kernfs_vfs_user_xattr_set(const struct xattr_handler *handler,
+>  				     struct user_namespace *mnt_userns,
+>  				     struct dentry *unused, struct inode *inode,
+> @@ -411,13 +354,7 @@ static int kernfs_vfs_user_xattr_set(const struct xattr_handler *handler,
+>  	if (!attrs)
+>  		return -ENOMEM;
+>  
+> -	if (value)
+> -		return kernfs_vfs_user_xattr_add(kn, full_name, &attrs->xattrs,
+> -						 value, size, flags);
+> -	else
+> -		return kernfs_vfs_user_xattr_rm(kn, full_name, &attrs->xattrs,
+> -						value, size, flags);
+> -
+> +	return simple_xattr_set(&attrs->xattrs, full_name, value, size, flags);
+>  }
+>  
+>  static const struct xattr_handler kernfs_trusted_xattr_handler = {
+> diff --git a/fs/kernfs/kernfs-internal.h b/fs/kernfs/kernfs-internal.h
+> index eeaa779b929c..a2b89bd48c9d 100644
+> --- a/fs/kernfs/kernfs-internal.h
+> +++ b/fs/kernfs/kernfs-internal.h
+> @@ -27,8 +27,6 @@ struct kernfs_iattrs {
+>  	struct timespec64	ia_ctime;
+>  
+>  	struct simple_xattrs	xattrs;
+> -	atomic_t		nr_user_xattrs;
+> -	atomic_t		user_xattr_size;
+>  };
+>  
+>  struct kernfs_root {
+> diff --git a/fs/xattr.c b/fs/xattr.c
+> index b4875514a3ee..de4a2efc7fa4 100644
+> --- a/fs/xattr.c
+> +++ b/fs/xattr.c
+> @@ -1037,6 +1037,11 @@ int simple_xattr_get(struct simple_xattrs *xattrs, const char *name,
+>  	return ret;
+>  }
+>  
+> +static bool xattr_is_user(const char *name)
+> +{
+> +	return !strncmp(name, XATTR_USER_PREFIX, XATTR_USER_PREFIX_LEN);
+> +}
+> +
+>  /**
+>   * simple_xattr_set - xattr SET operation for in-memory/pseudo filesystems
+>   * @xattrs: target simple_xattr list
+> @@ -1053,16 +1058,17 @@ int simple_xattr_get(struct simple_xattrs *xattrs, const char *name,
+>   * Returns 0 on success, -errno on failure.
+>   */
+>  int simple_xattr_set(struct simple_xattrs *xattrs, const char *name,
+> -		     const void *value, size_t size, int flags,
+> -		     ssize_t *removed_size)
+> +		     const void *value, size_t size, int flags)
+>  {
+>  	struct simple_xattr *xattr;
+>  	struct simple_xattr *new_xattr = NULL;
+> +	bool is_user_xattr = false;
+> +	int *sz = &xattrs->xattr_size;
+> +	int *nr = &xattrs->nr_xattrs;
+> +	int sz_limit = KERNFS_XATTR_SIZE_LIMIT;
+> +	int nr_limit = KERNFS_MAX_XATTRS;
+>  	int err = 0;
+>  
+> -	if (removed_size)
+> -		*removed_size = -1;
+> -
+>  	/* value == NULL means remove */
+>  	if (value) {
+>  		new_xattr = simple_xattr_alloc(value, size);
+> @@ -1076,6 +1082,14 @@ int simple_xattr_set(struct simple_xattrs *xattrs, const char *name,
+>  		}
+>  	}
+>  
+> +	is_user_xattr = xattr_is_user(name);
+> +	if (is_user_xattr) {
+> +		sz = &xattrs->user_xattr_size;
+> +		nr = &xattrs->nr_user_xattrs;
+> +		sz_limit = KERNFS_USER_XATTR_SIZE_LIMIT;
+> +		nr_limit = KERNFS_MAX_USER_XATTRS;
+> +	}
+> +
+>  	spin_lock(&xattrs->lock);
+>  	list_for_each_entry(xattr, &xattrs->head, list) {
+>  		if (!strcmp(name, xattr->name)) {
+> @@ -1083,13 +1097,19 @@ int simple_xattr_set(struct simple_xattrs *xattrs, const char *name,
+>  				xattr = new_xattr;
+>  				err = -EEXIST;
+>  			} else if (new_xattr) {
+> -				list_replace(&xattr->list, &new_xattr->list);
+> -				if (removed_size)
+> -					*removed_size = xattr->size;
+> +				int delta = new_xattr->size - xattr->size;
+> +
+> +				if (*sz + delta > sz_limit) {
+> +					xattr = new_xattr;
+> +					err = -ENOSPC;
+> +				} else {
+> +					*sz += delta;
+> +					list_replace(&xattr->list, &new_xattr->list);
+> +				}
+>  			} else {
+> +				*sz -= xattr->size;
+> +				(*nr)--;
+>  				list_del(&xattr->list);
+> -				if (removed_size)
+> -					*removed_size = xattr->size;
+>  			}
+>  			goto out;
+>  		}
+> @@ -1096,7 +1117,12 @@ int simple_xattr_set(struct simple_xattrs *xattrs, const char *name,
+>  	if (flags & XATTR_REPLACE) {
+>  		xattr = new_xattr;
+>  		err = -ENODATA;
+> +	} else if ((*sz + new_xattr->size > sz_limit) || (*nr == nr_limit)) {
+> +		xattr = new_xattr;
+> +		err = -ENOSPC;
+>  	} else {
+> +		*sz += new_xattr->size;
+> +		(*nr)++;
+>  		list_add(&new_xattr->list, &xattrs->head);
+>  		xattr = NULL;
+>  	}
+> @@ -1172,14 +1197,3 @@ ssize_t simple_xattr_list(struct inode *inode, struct simple_xattrs *xattrs,
+>  
+>  	return err ? err : size - remaining_size;
+>  }
+> -
+> -/*
+> - * Adds an extended attribute to the list
+> - */
+> -void simple_xattr_list_add(struct simple_xattrs *xattrs,
+> -			   struct simple_xattr *new_xattr)
+
+You should also remove the function from the header.
+
+> -{
+> -	spin_lock(&xattrs->lock);
+> -	list_add(&new_xattr->list, &xattrs->head);
+> -	spin_unlock(&xattrs->lock);
+> -}
+> diff --git a/include/linux/kernfs.h b/include/linux/kernfs.h
+> index e2ae15a6225e..1972beb0d7b9 100644
+> --- a/include/linux/kernfs.h
+> +++ b/include/linux/kernfs.h
+> @@ -44,6 +44,8 @@ enum kernfs_node_type {
+>  #define KERNFS_FLAG_MASK		~KERNFS_TYPE_MASK
+>  #define KERNFS_MAX_USER_XATTRS		128
+>  #define KERNFS_USER_XATTR_SIZE_LIMIT	(128 << 10)
+> +#define KERNFS_MAX_XATTRS		128
+> +#define KERNFS_XATTR_SIZE_LIMIT		(128 << 10)
+
+So iiuc, for tmpfs this is effectively a per-inode limit of 128 xattrs
+and 128 user xattrs; nr_inodes * 256. I honestly have no idea if there
+are legimitate use-cases to want more. But there's at least a remote
+chance that this might break someone.
+
+Apart from
+
+> Currently it's possible to create a huge number of xattr per inode,
+
+what exactly is this limit protecting against? In other words, the
+commit message misses the motivation for the patch.
+(The original thread it was spun out of was so scattered I honestly
+don't have time to dig through it currently. So it'd be great if this
+patch expanded on that a bit.)
+
+I'd also prefer to see a summary of what filesystems are affected by
+this change. Afaict, the patchset doesn't change anything for kernfs
+users such as cgroup{1,2} so it should only be tmpfs and potential
+future users of the simple_xattr_* api.
+
+Sidenote: While looking at this I found out that cgroup{1,2} supports
+e.g. security.capability to be set on say cpu.stat or similar files.
+That seems very strange to me.

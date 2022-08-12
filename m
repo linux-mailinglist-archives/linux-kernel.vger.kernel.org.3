@@ -2,303 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C63F5916AA
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 23:15:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C46E5916B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 23:24:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234295AbiHLVO7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 17:14:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36708 "EHLO
+        id S230461AbiHLVYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 17:24:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232200AbiHLVO5 (ORCPT
+        with ESMTP id S231424AbiHLVYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 17:14:57 -0400
-Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C9BB16599
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 14:14:53 -0700 (PDT)
-Received: (wp-smtpd smtp.tlen.pl 3701 invoked from network); 12 Aug 2022 23:14:48 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
-          t=1660338889; bh=felEuMQG3TpPkG90OlnCvkO3MCmK1jpTb7bLda+6Yow=;
-          h=Subject:To:Cc:From;
-          b=dqd3kq4LDJMG4qe9rnlEQxnnXgPFFfkfCqmRXqP4FN8xQlrCm8Af9UdxWGgQ0M6SG
-           MWWsfoCC+StaDnBWBfaPWBeQ6dYP2n3vjvYUD2ZQqUOkH1B12n/4p0dl3yuS6OaZO2
-           Qde5DjulF9ng9k2+5UPGe3TJPAsKmZKaF8NCH2SY=
-Received: from aaem85.neoplus.adsl.tpnet.pl (HELO [192.168.1.22]) (mat.jonczyk@o2.pl@[83.4.116.85])
-          (envelope-sender <mat.jonczyk@o2.pl>)
-          by smtp.tlen.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <yazen.ghannam@amd.com>; 12 Aug 2022 23:14:48 +0200
-Message-ID: <7c8e34c8-f12d-e7e4-b6bc-4867824865ea@o2.pl>
-Date:   Fri, 12 Aug 2022 23:14:44 +0200
+        Fri, 12 Aug 2022 17:24:00 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C95B275C
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 14:23:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660339439; x=1691875439;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=E5wH/HDtGvZxjOWsBANoq8k/TU0gaAbz6fHXCwRwwN0=;
+  b=IMOn0/I1jpCHYtbXJFIjw/szdvS7o7kGbm/rQmmbDGsQQZ7QHFTpxuwX
+   mMNLX3dZlCxvgSPcmsL+PCgHIttOIRgwhXi+0LA9yQ/psXHFwcAN8YO/c
+   /90bdhHvfXdWFt3zNtLY2M/tp4A9v+4B7Thi57Ckva80EUQEZzvCDtqy2
+   d6QemRMqzoClg6NTrUTIYPSf/Q29qCTAYk+tHqXTxC5/5Kbi6sDAM1AoI
+   9/tKekeUrT4YfmtroANLtGC5MIvD1Vsq2zhU0epMfQciERBNbvcC5hVWX
+   QjbXu96qytm7MaqqbMjohqyfp293aiLa4eLkDJmmz/i4M5UGBbZ/FDeJA
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="292486296"
+X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
+   d="scan'208";a="292486296"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 14:23:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
+   d="scan'208";a="606049905"
+Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 12 Aug 2022 14:23:57 -0700
+Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oMc8K-0000xT-1g;
+        Fri, 12 Aug 2022 21:23:56 +0000
+Date:   Sat, 13 Aug 2022 05:23:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Justin M. Forbes" <jforbes@fedoraproject.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Jason A. Donenfeld" <zx2c4@kernel.org>
+Subject: [stable:linux-5.15.y 6874/9027] arch/arm/include/asm/xor.h:60:3:
+ error: write to reserved register 'R7'
+Message-ID: <202208130550.28NTRtkj-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH] x86/MCE/AMD: Decrement threshold_bank refcount when
- removing threshold blocks
-Content-Language: en-GB
-To:     Yazen Ghannam <yazen.ghannam@amd.com>, linux-edac@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, tony.luck@intel.com, x86@kernel.org,
-        Smita.KoralahalliChannabasappa@amd.com, mpatocka@redhat.com,
-        gregkh@linuxfoundation.org
-References: <20220614174346.3648305-1-yazen.ghannam@amd.com>
-From:   =?UTF-8?Q?Mateusz_Jo=c5=84czyk?= <mat.jonczyk@o2.pl>
-In-Reply-To: <20220614174346.3648305-1-yazen.ghannam@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-WP-MailID: b204b02620e9beb10dace10d344ab1f9
-X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 000000A [MWNU]                               
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-W dniu 14.06.2022 o 19:43, Yazen Ghannam pisze:
-> AMD systems from Family 10h to 16h share MCA bank 4 across multiple CPUs.
-> Therefore, the threshold_bank structure for bank 4, and its threshold_block
-> structures, will be initialized once at boot time. And the kobject for the
-> shared bank will be added to each of the CPUs that share it. Furthermore,
-> the threshold_blocks for the shared bank will be added again to the bank's
-> kobject. These additions will increase the refcount for the bank's kobject.
->
-> For example, a shared bank with two blocks and shared across two CPUs will
-> be set up like this:
->
-[snip]
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
+head:   7217df81279835a7aee62a07aabb7b8fb8c766f2
+commit: e16cc79b0f916069de223bdb567fa0bc2ccd18a5 [6874/9027] lib/crypto: add prompts back to crypto libraries
+config: arm-randconfig-r021-20220812 (https://download.01.org/0day-ci/archive/20220813/202208130550.28NTRtkj-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=e16cc79b0f916069de223bdb567fa0bc2ccd18a5
+        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+        git fetch --no-tags stable linux-5.15.y
+        git checkout e16cc79b0f916069de223bdb567fa0bc2ccd18a5
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-Hello,
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-The problem this patch solves (multiple warnings with stacktraces on suspend)
-also affects me, on a tri-core old AMD Phenom II X3 720 processor.
+All errors (new ones prefixed by >>):
 
-I have done some further debugging by adding printks to the code and to me it seems that your diagnosis
-was correct. In the dmesg I can see:
-
-[   66.094076] ACPI: PM: Preparing to enter system sleep state S3
-[   66.510378] ACPI: PM: Saving platform NVS memory
-[   66.510718] Disabling non-boot CPUs ...
-[   66.511043] mce: ENTER mce_threshold_remove_device(cpu = 1)
-[   66.511046] mce: ENTER __threshold_remove_device(); numbanks=6
-[   66.511048] mce: ENTER threshold_remove_bank(bank name = northbridge, bank->cpus = 3, bank->shared = 1)
-[   66.511049] mce: ENTER __threshold_remove_blocks(bank name = northbridge, bank->cpus = 2, bank->shared = 1)
-[   66.511060] mce: EXIT __threshold_remove_blocks()
-[   66.511061] mce: threshold_remove_bank: EXIT after __threshold_remove_blocks()
-[   66.511062] mce: EXIT __threshold_remove_device()
-[   66.511063] mce: EXIT mce_threshold_remove_device(cpu = 1)
-[   66.512247] smpboot: CPU 1 is now offline
-[   66.513915] mce: ENTER mce_threshold_remove_device(cpu = 2)
-[   66.513919] mce: ENTER __threshold_remove_device(); numbanks=6
-[   66.513922] mce: ENTER threshold_remove_bank(bank name = northbridge, bank->cpus = 2, bank->shared = 1)
-[   66.513925] mce: ENTER __threshold_remove_blocks(bank name = northbridge, bank->cpus = 1, bank->shared = 1)
-[   66.513929] ------------[ cut here ]------------
-[   66.513930] kernfs: can not remove 'threshold_limit', no directory
-[... stacktrace]
-[   66.514246] kernfs: can not remove 'error_count', no directory
-[...]
-[   66.514485] kernfs: can not remove 'interrupt_enable', no directory
-[...]
-[   66.514719] kernfs: can not remove 'threshold_limit', no directory
-[...]
-[   66.514951] kernfs: can not remove 'error_count', no directory
-[...]
-[   66.515183] kernfs: can not remove 'interrupt_enable', no directory
-[...]
-[   66.515412] ---[ end trace 0000000000000000 ]---
-[   66.515414] mce: EXIT __threshold_remove_blocks()
-[   66.515415] mce: threshold_remove_bank: EXIT after __threshold_remove_blocks()
-[   66.515417] mce: EXIT __threshold_remove_device()
-[   66.515418] mce: EXIT mce_threshold_remove_device(cpu = 2)
-[   66.516669] smpboot: CPU 2 is now offline
+   In file included from crypto/xor.c:17:
+>> arch/arm/include/asm/xor.h:60:3: error: write to reserved register 'R7'
+                   GET_BLOCK_4(p1);
+                   ^
+   arch/arm/include/asm/xor.h:20:10: note: expanded from macro 'GET_BLOCK_4'
+           __asm__("ldmia  %0, {%1, %2, %3, %4}" \
+                   ^
+   arch/arm/include/asm/xor.h:62:3: error: write to reserved register 'R7'
+                   PUT_BLOCK_4(p1);
+                   ^
+   arch/arm/include/asm/xor.h:42:23: note: expanded from macro 'PUT_BLOCK_4'
+           __asm__ __volatile__("stmia     %0!, {%2, %3, %4, %5}" \
+                                ^
+   arch/arm/include/asm/xor.h:81:3: error: write to reserved register 'R7'
+                   GET_BLOCK_4(p1);
+                   ^
+   arch/arm/include/asm/xor.h:20:10: note: expanded from macro 'GET_BLOCK_4'
+           __asm__("ldmia  %0, {%1, %2, %3, %4}" \
+                   ^
+   arch/arm/include/asm/xor.h:84:3: error: write to reserved register 'R7'
+                   PUT_BLOCK_4(p1);
+                   ^
+   arch/arm/include/asm/xor.h:42:23: note: expanded from macro 'PUT_BLOCK_4'
+           __asm__ __volatile__("stmia     %0!, {%2, %3, %4, %5}" \
+                                ^
+   4 errors generated.
 
 
-> Fixes: 7f99cb5e6039 ("x86/CPU/AMD: Use default_groups in kobj_type")
-> Signed-off-by: Yazen Ghannam <yazen.ghannam@amd.com>
-> Tested-by: Mikulas Patocka <mpatocka@redhat.com>
-> Cc: stable@vger.kernel.org
-> Link: https://lore.kernel.org/r/alpine.LRH.2.02.2205301145540.25840@file01.intranet.prod.int.rdu2.redhat.com
-> ---
->  arch/x86/kernel/cpu/mce/amd.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-> index 2b7ee4a6c6ba..680b75d23a03 100644
-> --- a/arch/x86/kernel/cpu/mce/amd.c
-> +++ b/arch/x86/kernel/cpu/mce/amd.c
-> @@ -1260,10 +1260,10 @@ static void __threshold_remove_blocks(struct threshold_bank *b)
->  	struct threshold_block *pos = NULL;
->  	struct threshold_block *tmp = NULL;
->  
-> -	kobject_del(b->kobj);
-> +	kobject_put(b->kobj);
->  
->  	list_for_each_entry_safe(pos, tmp, &b->blocks->miscj, miscj)
-> -		kobject_del(&pos->kobj);
-> +		kobject_put(b->kobj);
+vim +/R7 +60 arch/arm/include/asm/xor.h
 
-Shouldn't there be "kobject_put(&pos->kobj)" here instead?
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  13  
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  14  #define GET_BLOCK_2(dst) \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  15  	__asm__("ldmia	%0, {%1, %2}" \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  16  		: "=r" (dst), "=r" (a1), "=r" (a2) \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  17  		: "0" (dst))
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  18  
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  19  #define GET_BLOCK_4(dst) \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  20  	__asm__("ldmia	%0, {%1, %2, %3, %4}" \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  21  		: "=r" (dst), "=r" (a1), "=r" (a2), "=r" (a3), "=r" (a4) \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  22  		: "0" (dst))
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  23  
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  24  #define XOR_BLOCK_2(src) \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  25  	__asm__("ldmia	%0!, {%1, %2}" \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  26  		: "=r" (src), "=r" (b1), "=r" (b2) \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  27  		: "0" (src)); \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  28  	__XOR(a1, b1); __XOR(a2, b2);
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  29  
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  30  #define XOR_BLOCK_4(src) \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  31  	__asm__("ldmia	%0!, {%1, %2, %3, %4}" \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  32  		: "=r" (src), "=r" (b1), "=r" (b2), "=r" (b3), "=r" (b4) \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  33  		: "0" (src)); \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  34  	__XOR(a1, b1); __XOR(a2, b2); __XOR(a3, b3); __XOR(a4, b4)
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  35  
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  36  #define PUT_BLOCK_2(dst) \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  37  	__asm__ __volatile__("stmia	%0!, {%2, %3}" \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  38  		: "=r" (dst) \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  39  		: "0" (dst), "r" (a1), "r" (a2))
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  40  
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  41  #define PUT_BLOCK_4(dst) \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  42  	__asm__ __volatile__("stmia	%0!, {%2, %3, %4, %5}" \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  43  		: "=r" (dst) \
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  44  		: "0" (dst), "r" (a1), "r" (a2), "r" (a3), "r" (a4))
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  45  
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  46  static void
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  47  xor_arm4regs_2(unsigned long bytes, unsigned long *p1, unsigned long *p2)
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  48  {
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  49  	unsigned int lines = bytes / sizeof(unsigned long) / 4;
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  50  	register unsigned int a1 __asm__("r4");
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  51  	register unsigned int a2 __asm__("r5");
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  52  	register unsigned int a3 __asm__("r6");
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  53  	register unsigned int a4 __asm__("r7");
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  54  	register unsigned int b1 __asm__("r8");
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  55  	register unsigned int b2 __asm__("r9");
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  56  	register unsigned int b3 __asm__("ip");
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  57  	register unsigned int b4 __asm__("lr");
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  58  
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  59  	do {
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16 @60  		GET_BLOCK_4(p1);
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  61  		XOR_BLOCK_4(p2);
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  62  		PUT_BLOCK_4(p1);
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  63  	} while (--lines);
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  64  }
+^1da177e4c3f41 include/asm-arm/xor.h Linus Torvalds 2005-04-16  65  
 
-Also, it seems to me that "kobject_put(b->kobj);" before the loop may be relocated after
-the loop - so that the refcounts on the child objects are decreased first, then the refcount on the parent
-object.
+:::::: The code at line 60 was first introduced by commit
+:::::: 1da177e4c3f41524e886b7f1b8a0c1fc7321cac2 Linux-2.6.12-rc2
 
-Additionally, shouldn't there be a call to "kobject_put(&b->blocks->kobj);" in __threshold_remove_blocks()?
-From what I understand, b->blocks is a list head, so we need to decrease the refcount on it too.
+:::::: TO: Linus Torvalds <torvalds@ppc970.osdl.org>
+:::::: CC: Linus Torvalds <torvalds@ppc970.osdl.org>
 
-After these changes, the __threshold_remove_blocks() function looks very similar to deallocate_threshold_blocks()
-function just above it.
-
->  }
->  
->  static void threshold_remove_bank(struct threshold_bank *bank)
-
-Thank you for your work.
-
-Greetings,
-
-Mateusz
-
-
----------------------
-
-commit 39df75c672d9620a2967f993befedabb36b2616d
-Author: Mateusz Jończyk <mat.jonczyk@o2.pl>
-Date:   Fri Aug 12 20:21:46 2022 +0200
-
-    x86/mce/amd: debugging messages
-
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 1c87501e0fa3..10c37c0599e1 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -1238,6 +1238,10 @@ static int threshold_create_bank(struct threshold_bank **bp, unsigned int cpu,
- 
- static void threshold_block_release(struct kobject *kobj)
- {
-+    struct threshold_block *block = to_block(kobj);
-+
-+    pr_warn("threshold_block_release(block = %u, bank = %u, cpu = %u)\n",
-+        block->block, block->bank, block->cpu);
-     kfree(to_block(kobj));
- }
- 
-@@ -1245,12 +1249,19 @@ static void deallocate_threshold_blocks(struct threshold_bank *bank)
- {
-     struct threshold_block *pos, *tmp;
- 
-+    pr_warn("ENTER deallocate_threshold_blocks(bank name = %s, bank->cpus = %u, bank->shared = %d)\n",
-+        kobject_name(bank->kobj),
-+        refcount_read(&bank->cpus),
-+        bank->shared);
-+
-     list_for_each_entry_safe(pos, tmp, &bank->blocks->miscj, miscj) {
-         list_del(&pos->miscj);
-         kobject_put(&pos->kobj);
-     }
- 
-     kobject_put(&bank->blocks->kobj);
-+
-+    pr_warn("EXIT deallocate_threshold_blocks()\n");
- }
- 
- static void __threshold_remove_blocks(struct threshold_bank *b)
-@@ -1258,24 +1269,40 @@ static void __threshold_remove_blocks(struct threshold_bank *b)
-     struct threshold_block *pos = NULL;
-     struct threshold_block *tmp = NULL;
- 
-+    pr_warn("ENTER __threshold_remove_blocks(bank name = %s, bank->cpus = %u, bank->shared = %d)\n",
-+        kobject_name(b->kobj),
-+        refcount_read(&b->cpus),
-+        b->shared);
-+
-     kobject_del(b->kobj);
- 
-     list_for_each_entry_safe(pos, tmp, &b->blocks->miscj, miscj)
-         kobject_del(&pos->kobj);
-+
-+    pr_warn("EXIT __threshold_remove_blocks()\n");
- }
- 
- static void threshold_remove_bank(struct threshold_bank *bank)
- {
-     struct amd_northbridge *nb;
-+    pr_warn("ENTER threshold_remove_bank(bank name = %s, bank->cpus = %u, bank->shared = %d)\n",
-+        kobject_name(bank->kobj),
-+        refcount_read(&bank->cpus),
-+        bank->shared);
- 
--    if (!bank->blocks)
-+    if (!bank->blocks) {
-+        pr_warn("threshold_remove_bank: bank->blocks == NULL\n");
-         goto out_free;
-+        }
- 
--    if (!bank->shared)
-+    if (!bank->shared) {
-+        pr_warn("threshold_remove_bank: bank->shared == NULL\n");
-         goto out_dealloc;
-+        }
- 
-     if (!refcount_dec_and_test(&bank->cpus)) {
-         __threshold_remove_blocks(bank);
-+        pr_warn("threshold_remove_bank: EXIT after __threshold_remove_blocks()\n");
-         return;
-     } else {
-         /*
-@@ -1283,6 +1310,7 @@ static void threshold_remove_bank(struct threshold_bank *bank)
-          * away, remove that bank now.
-          */
-         nb = node_to_amd_nb(topology_die_id(smp_processor_id()));
-+        pr_warn("threshold_remove_bank: setting nb->bank4 = NULL\n");
-         nb->bank4 = NULL;
-     }
- 
-@@ -1292,12 +1320,16 @@ static void threshold_remove_bank(struct threshold_bank *bank)
- out_free:
-     kobject_put(bank->kobj);
-     kfree(bank);
-+
-+    pr_warn("EXIT threshold_remove_bank(); \n");
- }
- 
- static void __threshold_remove_device(struct threshold_bank **bp)
- {
-     unsigned int bank, numbanks = this_cpu_read(mce_num_banks);
- 
-+    pr_warn("ENTER __threshold_remove_device(); numbanks=%u\n", numbanks);
-+
-     for (bank = 0; bank < numbanks; bank++) {
-         if (!bp[bank])
-             continue;
-@@ -1306,14 +1338,19 @@ static void __threshold_remove_device(struct threshold_bank **bp)
-         bp[bank] = NULL;
-     }
-     kfree(bp);
-+    pr_warn("EXIT __threshold_remove_device()\n");
- }
- 
- int mce_threshold_remove_device(unsigned int cpu)
- {
-     struct threshold_bank **bp = this_cpu_read(threshold_banks);
- 
--    if (!bp)
-+    pr_warn("ENTER mce_threshold_remove_device(cpu = %u)\n", cpu);
-+
-+    if (!bp) {
-+        pr_warn("EXIT mce_threshold_remove_device(cpu = %u): bp == NULL\n", cpu);
-         return 0;
-+    }
- 
-     /*
-      * Clear the pointer before cleaning up, so that the interrupt won't
-@@ -1322,6 +1359,8 @@ int mce_threshold_remove_device(unsigned int cpu)
-     this_cpu_write(threshold_banks, NULL);
- 
-     __threshold_remove_device(bp);
-+
-+    pr_warn("EXIT mce_threshold_remove_device(cpu = %u)\n", cpu);
-     return 0;
- }
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

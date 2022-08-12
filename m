@@ -2,237 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B793E590EC1
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 12:08:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 689C4590EBC
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 12:08:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238036AbiHLKIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 06:08:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58074 "EHLO
+        id S237384AbiHLKIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 06:08:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237117AbiHLKIm (ORCPT
+        with ESMTP id S237117AbiHLKIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 06:08:42 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDA9CA6C26;
-        Fri, 12 Aug 2022 03:08:40 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id j3so518602ljo.0;
-        Fri, 12 Aug 2022 03:08:40 -0700 (PDT)
+        Fri, 12 Aug 2022 06:08:35 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 864D0A6C26
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 03:08:33 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id d14so668036lfl.13
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 03:08:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc;
-        bh=Lmz4Vp5Brwa2cnS1Itqbq4P7WlJbdn5Ij99xtrfTr8M=;
-        b=iEyjjw4/6LOvsqXXLJfKSDsKCPFS1lsCd3GFjln5BRbpEVK+IxPLTm7rcyG93QIZk+
-         88yi8KH6gvXJDvAT2iJmEEgic6e5xx0q1DKAArQr6IsDtfmi59kqWYa2UGaGfXS3VSaK
-         Ue1RRivzkHWRRntJf8Nj3UygycU591g7FvDbXXPISHrJl0pSI+iaxhQbKbKFIDo009Nx
-         YRbrQ96bnjJ32m+mQlKOnmdnhn9CdHqdOUXvvoSlLCe1vmnHBmTBp6k2Z+fdg9MFNnzG
-         j1uItRCaZ/Xq/eonFgQcwhzRDK2O+3EbVyX7YZw1+qPPUoViEfraU5/ALcyhG2omF8g+
-         Zsbw==
+        bh=XiuPovkOS+97bdIezfgaSELX7apRbPfn23zXTyCPRYk=;
+        b=WK+XalqL9DhlZk4XXCNjIasm1v6PShzJ0j1k6NNDg2OA/sTrwKqxKyOeR30qVU8KSm
+         oB6RcyAI+rgp/qomDS50vXsRvpgGMU8hYFCIKZ3rfvns7CeJy2kHl5nUhkq1YWlyvy27
+         cvJnc0yE450p5CX/WPDXWB4MfItwVfRLOwl3ssTIJXwq977JkU3V7JMXU4eLy/Ci12Qz
+         r+M3dyeG4GbLhWugWVKe+0EYYXQUNTT8CrLnzFgZwYk0ZEaw2xK4AxdnaXwoNqV/KM3o
+         i62cojAHPISkcXI02zlCcfMeFmW2uytivQyJBlzVmi+Lc29iczuX09DG6ucdy0IJXNf8
+         Bvcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc;
-        bh=Lmz4Vp5Brwa2cnS1Itqbq4P7WlJbdn5Ij99xtrfTr8M=;
-        b=scFRtmceAkTfJuf6YYgppAv7E88MgG3LVamnh2HDuGHT7WUqkCegxkJB9/AQJMs7w6
-         SIfDEDhOu3/1RaTCMOw/w3tO7iz6SVqejkVHYKiMdKEf4X9TmyXipx/GmEjsptQp0ri5
-         sy+KiclDtLDb0jBe0Mn/SXMZji9H2bLvYnG6/iRtCh4OKY/jitFn79VeTobD78i4/G+m
-         hEvDhYe34J9DQ4Fv2XxeGsiWbwJfh+Xr1Y/oxaEciVzxTP9BVhdfUKRgCyUutiQHl1n5
-         bPrD05zaXDAf0BgJI6dk+xQ8ogc/Xqgi4fDbDd6TnWID/ccAySA3EDS5TCr9fL5bcrZL
-         P/8Q==
-X-Gm-Message-State: ACgBeo32DCwA++mQXqQhJNiCkuHp8tyWKX1ROIvBqCKY0hfi/DUbXLS6
-        LGffRPxIhc9t8c5i/d1F0f07Ihynbc154w==
-X-Google-Smtp-Source: AA6agR48G+sAfnTk456AdMmoWmwqiUxwIqWZm+aCORAI6x+9Wf6EMIhQ9lCGq1KjCDmWMsEc4se5Fg==
-X-Received: by 2002:a2e:7311:0:b0:25e:c66f:2be0 with SMTP id o17-20020a2e7311000000b0025ec66f2be0mr908055ljc.100.1660298919064;
-        Fri, 12 Aug 2022 03:08:39 -0700 (PDT)
-Received: from fedora ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id k2-20020ac24562000000b0048a79e3dd6csm165585lfm.26.2022.08.12.03.08.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Aug 2022 03:08:38 -0700 (PDT)
-Date:   Fri, 12 Aug 2022 13:08:17 +0300
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alexandru Ardelean <aardelean@deviqon.com>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
-        linux-iio@vger.kernel.org
-Subject: [PATCH v2 0/7] Devm helpers for regulator get and enable
-Message-ID: <cover.1660292316.git.mazziesaccount@gmail.com>
+        bh=XiuPovkOS+97bdIezfgaSELX7apRbPfn23zXTyCPRYk=;
+        b=aaqmtawbgIeNC3g9WDDDvxanoOcuCAErCQMhIyQHpwUK6zJkYkam03oRuQsiW0zg77
+         F5JgJZi3ZOpHyIHzv4Y4G0t7FX3/ZR61xHvR/ECDgTZiX96vIsHqBljrks5fMdbOPCrb
+         AdbXlk7sRLt00vfs6Ee/FJXnlVFTPUGg3Ap2s7dJW9HfxwoRewnHO9gymd+NBU/RO8VD
+         7ClmIQJ4VerMhx8HAL1K6x3sNto6YzuXQJ6Dwg4/INZFAoYLzW6dGYDuL/t70WiQ/Jdo
+         Xy35AQ68kr20xMHDZhVYmoHXgqiEOPEVrkq5tL/eeyrANrJ8U25nULSsRTv+4bryURdj
+         gdmQ==
+X-Gm-Message-State: ACgBeo0NaTWa1nx4G2x3k4G5CiHvAxmYhWWtz1Zy191nG06Boc1or1cx
+        t6P6WjN4oZTsU7W59whVHU+OLg==
+X-Google-Smtp-Source: AA6agR4LZIMe34S+FTwy2eQTrI+Qal/bV+LtzQk8TenlMIk3y8r8aBndkPCQ4cyu0M3CJBKoNOY/ZA==
+X-Received: by 2002:a05:6512:3e07:b0:48b:131:616 with SMTP id i7-20020a0565123e0700b0048b01310616mr1154422lfv.475.1660298911903;
+        Fri, 12 Aug 2022 03:08:31 -0700 (PDT)
+Received: from [192.168.1.39] ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id z19-20020a05651c11d300b0025dfd2f66d6sm303951ljo.95.2022.08.12.03.08.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Aug 2022 03:08:31 -0700 (PDT)
+Message-ID: <f64a1e5e-d2be-68d7-9bca-de03de6ddbfa@linaro.org>
+Date:   Fri, 12 Aug 2022 13:08:27 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="THWirS5KE0K9xFXH"
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 4/7] arm64: dts: imx93: add blk ctrl node
+Content-Language: en-US
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de
+Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+References: <20220812074609.53131-1-peng.fan@oss.nxp.com>
+ <20220812074609.53131-5-peng.fan@oss.nxp.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20220812074609.53131-5-peng.fan@oss.nxp.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 12/08/2022 10:46, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+> 
+> Add i.MX93 BLK CTRL MIX node
+> 
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
+>  arch/arm64/boot/dts/freescale/imx93.dtsi | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/freescale/imx93.dtsi b/arch/arm64/boot/dts/freescale/imx93.dtsi
+> index dd76472ced46..55f396723adb 100644
+> --- a/arch/arm64/boot/dts/freescale/imx93.dtsi
+> +++ b/arch/arm64/boot/dts/freescale/imx93.dtsi
+> @@ -112,6 +112,11 @@ aips1: bus@44000000 {
+>  			#size-cells = <1>;
+>  			ranges;
+>  
+> +			anomix_ns_gpr: blk-ctrl-ns-anomix@44210000 {
 
---THWirS5KE0K9xFXH
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Node names should be generic.
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
 
-Devm helpers for regulator get and enable
+> +				compatible = "syscon";
 
-First patch in the series is actually just a simple documentation fix
-which could be taken in as it is now.
+No, syscon alone is not allowed.
 
-A few* drivers seem to use pattern demonstrated by pseudocode:
+> +				reg = <0x44210000 0x1000>;
+> +			};
+> +
+>  			mu1: mailbox@44230000 {
+>  				compatible = "fsl,imx93-mu", "fsl,imx8ulp-mu";
+>  				reg = <0x44230000 0x10000>;
+> @@ -174,6 +179,11 @@ aips2: bus@42000000 {
+>  			#size-cells = <1>;
+>  			ranges;
+>  
+> +			wakeupmix_gpr: blk-ctrl-wakeupmix@42420000 {
+> +				compatible = "syscon";
 
-- devm_regulator_get()
-- regulator_enable()
-- devm_add_action_or_reset(regulator_disable())
-
-Introducing devm helpers for this pattern would remove bunch of code from
-drivers. Typically following:
-
-- replace 3 calls (devm_regulator_get[_optional](), regulator_enable(),
-  devm_add_action_or_reset()) with just one
-  (devm_regulator_get_enable[_optional]()).
-- drop disable callback.
-- remove stored pointer to struct regulator - which can lead to problem
-  when an devm action for regulator_disable is used.
-
-I believe this simplifies things by removing some dublicated code.
-
-The suggested managed 'get_enable' APIs do not return the pointer to
-regulators for user because any call to regulator_disable()
-(or regulator_enable()) may easily lead to regulator enable count imbalance
-upon device detach. (Eg, if someone calls regulator_disable() and the
-device is then detached before user has re-enabled the regulator). Not
-returning the pointer to obtained regulator to caller is a good hint that
-the enable/disable should not be manually handled when these APIs are used.
-
-OTOH, not returning the pointer reduces the use-cases by not allowing
-the consumers to perform other regulator actions. For example request the
-voltages. A few drivers which used the "get, enable,
-devm_action_to_disable" did also query the voltages. The API does not suit
-needs of such users.
-
-This series reowrks only a few drivers as I am short of time. So, there is
-still plenty of fish in the sea for people who like to improve the code
-(or count the beans ;]).
-
-Finally - most of the converted drivers have not been tested (other than
-compile-tested) due to lack of HW. All reviews and testing is _highly_
-appreciated (as always!).
-
-Revision history:
-
-RFCv1 =3D> v2:
-	- Add devm_regulator_bulk_get_enable() and
-	  devm_regulator_bulk_put()
-	- Convert a couple of drivers to use the new
-	  devm_regulator_bulk_get_enable().
-	- Squash all IIO patches into one.
-
-Patch 1:
-	Fix docmentation (devres API list) for regulator APIs
-Patch 2:
-	The new devm helpers.
-Patch 3:
-	Add new devm-helper APIs to docs.
-Patch 4:
-	simplified CLK driver(s)
-Patch 5:
-	simplified GPU driver(s)
-Patch 6:
-	simplified hwmon driver(s)
-Patch 7:
-	simplified IIO driver(s)
-
----
-
-Matti Vaittinen (7):
-  docs: devres: regulator: Add missing devm_* functions to devres.rst
-  regulator: Add devm helpers for get and enable
-  docs: devres: regulator: Add new get_enable functions to devres.rst
-  clk: cdce925: simplify using devm_regulator_get_enable()
-  gpu: drm: simplify drivers using devm_regulator_*get_enable*()
-  hwmon: lm90: simplify using devm_regulator_get_enable()
-  iio: Simplify drivers using devm_regulator_*get_enable()
-
- .../driver-api/driver-model/devres.rst        |  11 ++
- drivers/clk/clk-cdce925.c                     |  21 +--
- drivers/gpu/drm/bridge/sii902x.c              |  22 +--
- drivers/gpu/drm/meson/meson_dw_hdmi.c         |  23 +--
- drivers/hwmon/lm90.c                          |  21 +--
- drivers/iio/adc/ad7192.c                      |  15 +-
- drivers/iio/dac/ltc2688.c                     |  23 +--
- drivers/iio/gyro/bmg160_core.c                |  24 +--
- drivers/iio/imu/st_lsm6dsx/st_lsm6dsx.h       |   2 -
- drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c  |  30 +---
- drivers/regulator/devres.c                    | 164 ++++++++++++++++++
- include/linux/regulator/consumer.h            |  27 +++
- 12 files changed, 227 insertions(+), 156 deletions(-)
-
---=20
-2.37.1
+Ditto
 
 
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---THWirS5KE0K9xFXH
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmL2JpAACgkQeFA3/03a
-ocUSNQgAuAnEh7oW1oRPo5wLIiymBTMRDGKLvapsGYq8bT8IiRWVR/NN37Qd9GHU
-VgE85GmmR24A+GFaR7q+L+mQWvDaumb+BgzGbPbeXnm5Dveh1vORzNhM6TvAgGCM
-VpCgwcMRbSzCGEiYEvHcp5tiZ5Np7fUSmSuLz30BMES+TDdENIMbxGWb4Qa1pG3o
-/5DaGsNxfF2H/5tdaH4S8t9MSKBvCXn4BmrIAEjCVRGZj9+2kSMb8cwNnrp9RBES
-aePeoFBXuq8yiDwtJZn4vkzSle448d+Sg/VqDI0CFD/DBCa1/TAhQmuUM0f17KSD
-wsLBh7G8SRracLoYB+zXLFT7fBaIHg==
-=AV00
------END PGP SIGNATURE-----
-
---THWirS5KE0K9xFXH--
+Best regards,
+Krzysztof

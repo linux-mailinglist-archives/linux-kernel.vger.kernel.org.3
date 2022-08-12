@@ -2,301 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D74C059110D
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 14:51:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B1FEA59110C
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 14:50:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238707AbiHLMuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 08:50:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34848 "EHLO
+        id S238541AbiHLMuu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 08:50:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238860AbiHLMuq (ORCPT
+        with ESMTP id S238412AbiHLMuk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 08:50:46 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6933CFC
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 05:50:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660308645; x=1691844645;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=P/fAt24DxFqvPoyPLU5c9Y/VeDiAMJeVyGR8ot4zoAA=;
-  b=e5tKovhy2d3LHOUXRKK0YOLSWXISMfxfDTkWpk5R/pyFZPA7IxKrK01z
-   KyAearuS6KyEIxswY+Gwr4yPuPQd6bkXAD7lHY/xtHH4+i+YDhtSNVQee
-   LcnEOE/Jp6Qf2o/5oS5nTLxzMmXMcsD2dRcwD27lJm3GgPnnF/nQa2N3T
-   9HRvGC5eyJhjYPyjC4w3h5h28zs89wLCsVZIF7DZ3HZj1s3OdNgAWYpdD
-   eNPO+il7NIg/Q4SDTDjmJal1FIUgYkzVbwDEP7/RSwYC9q0eTOssp/TBz
-   FcZZKScp5TkVOiwqX8ezo/OQmuY4On5Ck6XNY6m7Ew15fQBKTswKWg9gf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10436"; a="291586666"
-X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
-   d="scan'208";a="291586666"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 05:50:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
-   d="scan'208";a="605905926"
-Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 12 Aug 2022 05:50:42 -0700
-Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oMU7d-0000Wk-1z;
-        Fri, 12 Aug 2022 12:50:41 +0000
-Date:   Fri, 12 Aug 2022 20:50:21 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     xiakaixu1987@gmail.com, sj@kernel.org, akpm@linux-foundation.org
-Cc:     kbuild-all@lists.01.org, damon@lists.linux.dev, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Kaixu Xia <kaixuxia@tencent.com>
-Subject: Re: [PATCH] mm/damon/core: simplify the parameter passing for region
- split operation
-Message-ID: <202208122001.69lQAxjD-lkp@intel.com>
-References: <1660290073-26347-1-git-send-email-kaixuxia@tencent.com>
+        Fri, 12 Aug 2022 08:50:40 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7CCE91093;
+        Fri, 12 Aug 2022 05:50:37 -0700 (PDT)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4M43Np56DRzlWBM;
+        Fri, 12 Aug 2022 20:47:38 +0800 (CST)
+Received: from [10.174.177.174] (10.174.177.174) by
+ dggpeml500021.china.huawei.com (7.185.36.21) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 12 Aug 2022 20:50:34 +0800
+Message-ID: <e32464ec-4c5b-dcad-cfe3-93727dab5f5b@huawei.com>
+Date:   Fri, 12 Aug 2022 20:50:34 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1660290073-26347-1-git-send-email-kaixuxia@tencent.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH v2] ext4: fix bug in extents parsing when eh_entries == 0
+ and eh_depth > 0
+Content-Language: en-US
+To:     =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>
+CC:     <wenqingliu0120@gmail.com>, <linux-ext4@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        "zhangyi (F)" <yi.zhang@huawei.com>, <yebin10@huawei.com>,
+        "yukuai (C)" <yukuai3@huawei.com>, Baokun Li <libaokun1@huawei.com>
+References: <20220812105347.2251-1-lhenriques@suse.de>
+From:   Baokun Li <libaokun1@huawei.com>
+In-Reply-To: <20220812105347.2251-1-lhenriques@suse.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.177.174]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpeml500021.china.huawei.com (7.185.36.21)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Luís,
 
-Thank you for the patch! Yet something to improve:
+On 8/12/2022 6:53 PM, Luís Henriques wrote:
+> When walking through an inode extents, the ext4_ext_binsearch_idx() function
+> assumes that the extent header has been previously validated.  However, there
+> are no checks that verify that the number of entries (eh->eh_entries) is
+> non-zero when depth is > 0.  And this will lead to problems because the
+> EXT_FIRST_INDEX() and EXT_LAST_INDEX() will return garbage and result in this:
+>
+> [  135.245946] ------------[ cut here ]------------
+> [  135.247579] kernel BUG at fs/ext4/extents.c:2258!
+> [  135.249045] invalid opcode: 0000 [#1] PREEMPT SMP
+> [  135.250320] CPU: 2 PID: 238 Comm: tmp118 Not tainted 5.19.0-rc8+ #4
+> [  135.252067] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS rel-1.15.0-0-g2dd4b9b-rebuilt.opensuse.org 04/01/2014
+> [  135.255065] RIP: 0010:ext4_ext_map_blocks+0xc20/0xcb0
+> [  135.256475] Code:
+> [  135.261433] RSP: 0018:ffffc900005939f8 EFLAGS: 00010246
+> [  135.262847] RAX: 0000000000000024 RBX: ffffc90000593b70 RCX: 0000000000000023
+> [  135.264765] RDX: ffff8880038e5f10 RSI: 0000000000000003 RDI: ffff8880046e922c
+> [  135.266670] RBP: ffff8880046e9348 R08: 0000000000000001 R09: ffff888002ca580c
+> [  135.268576] R10: 0000000000002602 R11: 0000000000000000 R12: 0000000000000024
+> [  135.270477] R13: 0000000000000000 R14: 0000000000000024 R15: 0000000000000000
+> [  135.272394] FS:  00007fdabdc56740(0000) GS:ffff88807dd00000(0000) knlGS:0000000000000000
+> [  135.274510] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [  135.276075] CR2: 00007ffc26bd4f00 CR3: 0000000006261004 CR4: 0000000000170ea0
+> [  135.277952] Call Trace:
+> [  135.278635]  <TASK>
+> [  135.279247]  ? preempt_count_add+0x6d/0xa0
+> [  135.280358]  ? percpu_counter_add_batch+0x55/0xb0
+> [  135.281612]  ? _raw_read_unlock+0x18/0x30
+> [  135.282704]  ext4_map_blocks+0x294/0x5a0
+> [  135.283745]  ? xa_load+0x6f/0xa0
+> [  135.284562]  ext4_mpage_readpages+0x3d6/0x770
+> [  135.285646]  read_pages+0x67/0x1d0
+> [  135.286492]  ? folio_add_lru+0x51/0x80
+> [  135.287441]  page_cache_ra_unbounded+0x124/0x170
+> [  135.288510]  filemap_get_pages+0x23d/0x5a0
+> [  135.289457]  ? path_openat+0xa72/0xdd0
+> [  135.290332]  filemap_read+0xbf/0x300
+> [  135.291158]  ? _raw_spin_lock_irqsave+0x17/0x40
+> [  135.292192]  new_sync_read+0x103/0x170
+> [  135.293014]  vfs_read+0x15d/0x180
+> [  135.293745]  ksys_read+0xa1/0xe0
+> [  135.294461]  do_syscall_64+0x3c/0x80
+> [  135.295284]  entry_SYSCALL_64_after_hwframe+0x46/0xb0
+>
+> This patch simply adds an extra check in __ext4_ext_check(), verifying that
+> eh_entries is not 0 when eh_depth is > 0.
+>
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=215941
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216283
+> Cc: Baokun Li <libaokun1@huawei.com>
+> Signed-off-by: Luís Henriques <lhenriques@suse.de>
+> ---
+>   fs/ext4/extents.c | 5 +++++
+>   1 file changed, 5 insertions(+)
+>
+> Hi!
+>
+> Baokun's feedback showed me that I had a partial understanding of the
+> problem.  Thus, I'm sending v2 which pretty much uses Baokun's suggestion
+> and simplifies the solution.  I've also added the link to the 2nd bugzilla
+> to the commit text.
+>
+> Cheers,
+> --
+> Luís
+>
+> diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
+> index 53cfe2c681c4..a5457ac1999c 100644
+> --- a/fs/ext4/extents.c
+> +++ b/fs/ext4/extents.c
+> @@ -460,6 +460,11 @@ static int __ext4_ext_check(const char *function, unsigned int line,
+>   		error_msg = "invalid eh_entries";
+>   		goto corrupted;
+>   	}
+> +	if (unlikely((le16_to_cpu(eh->eh_entries) == 0) &&
+> +		     (le16_to_cpu(eh->eh_depth > 0)))) {
 
-[auto build test ERROR on akpm-mm/mm-everything]
+The parentheses are misplaced, and le16_to_cpu is not needed here.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/xiakaixu1987-gmail-com/mm-damon-core-simplify-the-parameter-passing-for-region-split-operation/20220812-154316
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220812/202208122001.69lQAxjD-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/26b7d93b0f64c71d6d324a4a37d85641b55eaec2
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review xiakaixu1987-gmail-com/mm-damon-core-simplify-the-parameter-passing-for-region-split-operation/20220812-154316
-        git checkout 26b7d93b0f64c71d6d324a4a37d85641b55eaec2
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   In file included from mm/damon/core.c:1218:
-   mm/damon/core-test.h: In function 'damon_test_split_at':
->> mm/damon/core-test.h:129:31: error: passing argument 1 of 'damon_split_region_at' from incompatible pointer type [-Werror=incompatible-pointer-types]
-     129 |         damon_split_region_at(c, t, r, 25);
-         |                               ^
-         |                               |
-         |                               struct damon_ctx *
-   mm/damon/core.c:930:56: note: expected 'struct damon_target *' but argument is of type 'struct damon_ctx *'
-     930 | static void damon_split_region_at(struct damon_target *t,
-         |                                   ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from mm/damon/core.c:1218:
-   mm/damon/core-test.h:129:34: error: passing argument 2 of 'damon_split_region_at' from incompatible pointer type [-Werror=incompatible-pointer-types]
-     129 |         damon_split_region_at(c, t, r, 25);
-         |                                  ^
-         |                                  |
-         |                                  struct damon_target *
-   mm/damon/core.c:931:56: note: expected 'struct damon_region *' but argument is of type 'struct damon_target *'
-     931 |                                   struct damon_region *r, unsigned long sz_r)
-         |                                   ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from mm/damon/core.c:1218:
-   mm/damon/core-test.h:129:37: warning: passing argument 3 of 'damon_split_region_at' makes integer from pointer without a cast [-Wint-conversion]
-     129 |         damon_split_region_at(c, t, r, 25);
-         |                                     ^
-         |                                     |
-         |                                     struct damon_region *
-   mm/damon/core.c:931:73: note: expected 'long unsigned int' but argument is of type 'struct damon_region *'
-     931 |                                   struct damon_region *r, unsigned long sz_r)
-         |                                                           ~~~~~~~~~~~~~~^~~~
-   In file included from mm/damon/core.c:1218:
->> mm/damon/core-test.h:129:9: error: too many arguments to function 'damon_split_region_at'
-     129 |         damon_split_region_at(c, t, r, 25);
-         |         ^~~~~~~~~~~~~~~~~~~~~
-   mm/damon/core.c:930:13: note: declared here
-     930 | static void damon_split_region_at(struct damon_target *t,
-         |             ^~~~~~~~~~~~~~~~~~~~~
-   In file included from mm/damon/core.c:1218:
-   mm/damon/core-test.h: In function 'damon_test_split_regions_of':
->> mm/damon/core-test.h:222:32: error: passing argument 1 of 'damon_split_regions_of' from incompatible pointer type [-Werror=incompatible-pointer-types]
-     222 |         damon_split_regions_of(c, t, 2);
-         |                                ^
-         |                                |
-         |                                struct damon_ctx *
-   mm/damon/core.c:948:57: note: expected 'struct damon_target *' but argument is of type 'struct damon_ctx *'
-     948 | static void damon_split_regions_of(struct damon_target *t, int nr_subs)
-         |                                    ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from mm/damon/core.c:1218:
-   mm/damon/core-test.h:222:35: warning: passing argument 2 of 'damon_split_regions_of' makes integer from pointer without a cast [-Wint-conversion]
-     222 |         damon_split_regions_of(c, t, 2);
-         |                                   ^
-         |                                   |
-         |                                   struct damon_target *
-   mm/damon/core.c:948:64: note: expected 'int' but argument is of type 'struct damon_target *'
-     948 | static void damon_split_regions_of(struct damon_target *t, int nr_subs)
-         |                                                            ~~~~^~~~~~~
-   In file included from mm/damon/core.c:1218:
->> mm/damon/core-test.h:222:9: error: too many arguments to function 'damon_split_regions_of'
-     222 |         damon_split_regions_of(c, t, 2);
-         |         ^~~~~~~~~~~~~~~~~~~~~~
-   mm/damon/core.c:948:13: note: declared here
-     948 | static void damon_split_regions_of(struct damon_target *t, int nr_subs)
-         |             ^~~~~~~~~~~~~~~~~~~~~~
-   In file included from mm/damon/core.c:1218:
-   mm/damon/core-test.h:229:32: error: passing argument 1 of 'damon_split_regions_of' from incompatible pointer type [-Werror=incompatible-pointer-types]
-     229 |         damon_split_regions_of(c, t, 4);
-         |                                ^
-         |                                |
-         |                                struct damon_ctx *
-   mm/damon/core.c:948:57: note: expected 'struct damon_target *' but argument is of type 'struct damon_ctx *'
-     948 | static void damon_split_regions_of(struct damon_target *t, int nr_subs)
-         |                                    ~~~~~~~~~~~~~~~~~~~~~^
-   In file included from mm/damon/core.c:1218:
-   mm/damon/core-test.h:229:35: warning: passing argument 2 of 'damon_split_regions_of' makes integer from pointer without a cast [-Wint-conversion]
-     229 |         damon_split_regions_of(c, t, 4);
-         |                                   ^
-         |                                   |
-         |                                   struct damon_target *
-   mm/damon/core.c:948:64: note: expected 'int' but argument is of type 'struct damon_target *'
-     948 | static void damon_split_regions_of(struct damon_target *t, int nr_subs)
-         |                                                            ~~~~^~~~~~~
-   In file included from mm/damon/core.c:1218:
-   mm/damon/core-test.h:229:9: error: too many arguments to function 'damon_split_regions_of'
-     229 |         damon_split_regions_of(c, t, 4);
-         |         ^~~~~~~~~~~~~~~~~~~~~~
-   mm/damon/core.c:948:13: note: declared here
-     948 | static void damon_split_regions_of(struct damon_target *t, int nr_subs)
-         |             ^~~~~~~~~~~~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +/damon_split_region_at +129 mm/damon/core-test.h
-
-17ccae8bb5c928 SeongJae Park 2021-09-07  119  
-17ccae8bb5c928 SeongJae Park 2021-09-07  120  static void damon_test_split_at(struct kunit *test)
-17ccae8bb5c928 SeongJae Park 2021-09-07  121  {
-17ccae8bb5c928 SeongJae Park 2021-09-07  122  	struct damon_ctx *c = damon_new_ctx();
-17ccae8bb5c928 SeongJae Park 2021-09-07  123  	struct damon_target *t;
-17ccae8bb5c928 SeongJae Park 2021-09-07  124  	struct damon_region *r;
-17ccae8bb5c928 SeongJae Park 2021-09-07  125  
-1971bd630452e9 SeongJae Park 2022-03-22  126  	t = damon_new_target();
-17ccae8bb5c928 SeongJae Park 2021-09-07  127  	r = damon_new_region(0, 100);
-17ccae8bb5c928 SeongJae Park 2021-09-07  128  	damon_add_region(r, t);
-17ccae8bb5c928 SeongJae Park 2021-09-07 @129  	damon_split_region_at(c, t, r, 25);
-17ccae8bb5c928 SeongJae Park 2021-09-07  130  	KUNIT_EXPECT_EQ(test, r->ar.start, 0ul);
-17ccae8bb5c928 SeongJae Park 2021-09-07  131  	KUNIT_EXPECT_EQ(test, r->ar.end, 25ul);
-17ccae8bb5c928 SeongJae Park 2021-09-07  132  
-17ccae8bb5c928 SeongJae Park 2021-09-07  133  	r = damon_next_region(r);
-17ccae8bb5c928 SeongJae Park 2021-09-07  134  	KUNIT_EXPECT_EQ(test, r->ar.start, 25ul);
-17ccae8bb5c928 SeongJae Park 2021-09-07  135  	KUNIT_EXPECT_EQ(test, r->ar.end, 100ul);
-17ccae8bb5c928 SeongJae Park 2021-09-07  136  
-17ccae8bb5c928 SeongJae Park 2021-09-07  137  	damon_free_target(t);
-17ccae8bb5c928 SeongJae Park 2021-09-07  138  	damon_destroy_ctx(c);
-17ccae8bb5c928 SeongJae Park 2021-09-07  139  }
-17ccae8bb5c928 SeongJae Park 2021-09-07  140  
-17ccae8bb5c928 SeongJae Park 2021-09-07  141  static void damon_test_merge_two(struct kunit *test)
-17ccae8bb5c928 SeongJae Park 2021-09-07  142  {
-17ccae8bb5c928 SeongJae Park 2021-09-07  143  	struct damon_target *t;
-17ccae8bb5c928 SeongJae Park 2021-09-07  144  	struct damon_region *r, *r2, *r3;
-17ccae8bb5c928 SeongJae Park 2021-09-07  145  	int i;
-17ccae8bb5c928 SeongJae Park 2021-09-07  146  
-1971bd630452e9 SeongJae Park 2022-03-22  147  	t = damon_new_target();
-17ccae8bb5c928 SeongJae Park 2021-09-07  148  	r = damon_new_region(0, 100);
-17ccae8bb5c928 SeongJae Park 2021-09-07  149  	r->nr_accesses = 10;
-17ccae8bb5c928 SeongJae Park 2021-09-07  150  	damon_add_region(r, t);
-17ccae8bb5c928 SeongJae Park 2021-09-07  151  	r2 = damon_new_region(100, 300);
-17ccae8bb5c928 SeongJae Park 2021-09-07  152  	r2->nr_accesses = 20;
-17ccae8bb5c928 SeongJae Park 2021-09-07  153  	damon_add_region(r2, t);
-17ccae8bb5c928 SeongJae Park 2021-09-07  154  
-17ccae8bb5c928 SeongJae Park 2021-09-07  155  	damon_merge_two_regions(t, r, r2);
-17ccae8bb5c928 SeongJae Park 2021-09-07  156  	KUNIT_EXPECT_EQ(test, r->ar.start, 0ul);
-17ccae8bb5c928 SeongJae Park 2021-09-07  157  	KUNIT_EXPECT_EQ(test, r->ar.end, 300ul);
-17ccae8bb5c928 SeongJae Park 2021-09-07  158  	KUNIT_EXPECT_EQ(test, r->nr_accesses, 16u);
-17ccae8bb5c928 SeongJae Park 2021-09-07  159  
-17ccae8bb5c928 SeongJae Park 2021-09-07  160  	i = 0;
-17ccae8bb5c928 SeongJae Park 2021-09-07  161  	damon_for_each_region(r3, t) {
-17ccae8bb5c928 SeongJae Park 2021-09-07  162  		KUNIT_EXPECT_PTR_EQ(test, r, r3);
-17ccae8bb5c928 SeongJae Park 2021-09-07  163  		i++;
-17ccae8bb5c928 SeongJae Park 2021-09-07  164  	}
-17ccae8bb5c928 SeongJae Park 2021-09-07  165  	KUNIT_EXPECT_EQ(test, i, 1);
-17ccae8bb5c928 SeongJae Park 2021-09-07  166  
-17ccae8bb5c928 SeongJae Park 2021-09-07  167  	damon_free_target(t);
-17ccae8bb5c928 SeongJae Park 2021-09-07  168  }
-17ccae8bb5c928 SeongJae Park 2021-09-07  169  
-17ccae8bb5c928 SeongJae Park 2021-09-07  170  static struct damon_region *__nth_region_of(struct damon_target *t, int idx)
-17ccae8bb5c928 SeongJae Park 2021-09-07  171  {
-17ccae8bb5c928 SeongJae Park 2021-09-07  172  	struct damon_region *r;
-17ccae8bb5c928 SeongJae Park 2021-09-07  173  	unsigned int i = 0;
-17ccae8bb5c928 SeongJae Park 2021-09-07  174  
-17ccae8bb5c928 SeongJae Park 2021-09-07  175  	damon_for_each_region(r, t) {
-17ccae8bb5c928 SeongJae Park 2021-09-07  176  		if (i++ == idx)
-17ccae8bb5c928 SeongJae Park 2021-09-07  177  			return r;
-17ccae8bb5c928 SeongJae Park 2021-09-07  178  	}
-17ccae8bb5c928 SeongJae Park 2021-09-07  179  
-17ccae8bb5c928 SeongJae Park 2021-09-07  180  	return NULL;
-17ccae8bb5c928 SeongJae Park 2021-09-07  181  }
-17ccae8bb5c928 SeongJae Park 2021-09-07  182  
-17ccae8bb5c928 SeongJae Park 2021-09-07  183  static void damon_test_merge_regions_of(struct kunit *test)
-17ccae8bb5c928 SeongJae Park 2021-09-07  184  {
-17ccae8bb5c928 SeongJae Park 2021-09-07  185  	struct damon_target *t;
-17ccae8bb5c928 SeongJae Park 2021-09-07  186  	struct damon_region *r;
-17ccae8bb5c928 SeongJae Park 2021-09-07  187  	unsigned long sa[] = {0, 100, 114, 122, 130, 156, 170, 184};
-17ccae8bb5c928 SeongJae Park 2021-09-07  188  	unsigned long ea[] = {100, 112, 122, 130, 156, 170, 184, 230};
-17ccae8bb5c928 SeongJae Park 2021-09-07  189  	unsigned int nrs[] = {0, 0, 10, 10, 20, 30, 1, 2};
-17ccae8bb5c928 SeongJae Park 2021-09-07  190  
-17ccae8bb5c928 SeongJae Park 2021-09-07  191  	unsigned long saddrs[] = {0, 114, 130, 156, 170};
-17ccae8bb5c928 SeongJae Park 2021-09-07  192  	unsigned long eaddrs[] = {112, 130, 156, 170, 230};
-17ccae8bb5c928 SeongJae Park 2021-09-07  193  	int i;
-17ccae8bb5c928 SeongJae Park 2021-09-07  194  
-1971bd630452e9 SeongJae Park 2022-03-22  195  	t = damon_new_target();
-17ccae8bb5c928 SeongJae Park 2021-09-07  196  	for (i = 0; i < ARRAY_SIZE(sa); i++) {
-17ccae8bb5c928 SeongJae Park 2021-09-07  197  		r = damon_new_region(sa[i], ea[i]);
-17ccae8bb5c928 SeongJae Park 2021-09-07  198  		r->nr_accesses = nrs[i];
-17ccae8bb5c928 SeongJae Park 2021-09-07  199  		damon_add_region(r, t);
-17ccae8bb5c928 SeongJae Park 2021-09-07  200  	}
-17ccae8bb5c928 SeongJae Park 2021-09-07  201  
-17ccae8bb5c928 SeongJae Park 2021-09-07  202  	damon_merge_regions_of(t, 9, 9999);
-17ccae8bb5c928 SeongJae Park 2021-09-07  203  	/* 0-112, 114-130, 130-156, 156-170 */
-17ccae8bb5c928 SeongJae Park 2021-09-07  204  	KUNIT_EXPECT_EQ(test, damon_nr_regions(t), 5u);
-17ccae8bb5c928 SeongJae Park 2021-09-07  205  	for (i = 0; i < 5; i++) {
-17ccae8bb5c928 SeongJae Park 2021-09-07  206  		r = __nth_region_of(t, i);
-17ccae8bb5c928 SeongJae Park 2021-09-07  207  		KUNIT_EXPECT_EQ(test, r->ar.start, saddrs[i]);
-17ccae8bb5c928 SeongJae Park 2021-09-07  208  		KUNIT_EXPECT_EQ(test, r->ar.end, eaddrs[i]);
-17ccae8bb5c928 SeongJae Park 2021-09-07  209  	}
-17ccae8bb5c928 SeongJae Park 2021-09-07  210  	damon_free_target(t);
-17ccae8bb5c928 SeongJae Park 2021-09-07  211  }
-17ccae8bb5c928 SeongJae Park 2021-09-07  212  
-17ccae8bb5c928 SeongJae Park 2021-09-07  213  static void damon_test_split_regions_of(struct kunit *test)
-17ccae8bb5c928 SeongJae Park 2021-09-07  214  {
-17ccae8bb5c928 SeongJae Park 2021-09-07  215  	struct damon_ctx *c = damon_new_ctx();
-17ccae8bb5c928 SeongJae Park 2021-09-07  216  	struct damon_target *t;
-17ccae8bb5c928 SeongJae Park 2021-09-07  217  	struct damon_region *r;
-17ccae8bb5c928 SeongJae Park 2021-09-07  218  
-1971bd630452e9 SeongJae Park 2022-03-22  219  	t = damon_new_target();
-17ccae8bb5c928 SeongJae Park 2021-09-07  220  	r = damon_new_region(0, 22);
-17ccae8bb5c928 SeongJae Park 2021-09-07  221  	damon_add_region(r, t);
-17ccae8bb5c928 SeongJae Park 2021-09-07 @222  	damon_split_regions_of(c, t, 2);
-2e014660b3e4b7 SeongJae Park 2021-10-28  223  	KUNIT_EXPECT_LE(test, damon_nr_regions(t), 2u);
-17ccae8bb5c928 SeongJae Park 2021-09-07  224  	damon_free_target(t);
-17ccae8bb5c928 SeongJae Park 2021-09-07  225  
-1971bd630452e9 SeongJae Park 2022-03-22  226  	t = damon_new_target();
-17ccae8bb5c928 SeongJae Park 2021-09-07  227  	r = damon_new_region(0, 220);
-17ccae8bb5c928 SeongJae Park 2021-09-07  228  	damon_add_region(r, t);
-17ccae8bb5c928 SeongJae Park 2021-09-07  229  	damon_split_regions_of(c, t, 4);
-2e014660b3e4b7 SeongJae Park 2021-10-28  230  	KUNIT_EXPECT_LE(test, damon_nr_regions(t), 4u);
-17ccae8bb5c928 SeongJae Park 2021-09-07  231  	damon_free_target(t);
-17ccae8bb5c928 SeongJae Park 2021-09-07  232  	damon_destroy_ctx(c);
-17ccae8bb5c928 SeongJae Park 2021-09-07  233  }
-17ccae8bb5c928 SeongJae Park 2021-09-07  234  
+> +		error_msg = "eh_entries is 0 but eh_depth is > 0";
+> +		goto corrupted;
+> +	}
+>   	if (!ext4_valid_extent_entries(inode, eh, lblk, &pblk, depth)) {
+>   		error_msg = "invalid extent entries";
+>   		goto corrupted;
+> .
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+With Best Regards,
+Baokun Li
+

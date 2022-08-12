@@ -2,105 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B334959114B
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 15:21:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A3CA59114D
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 15:23:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238314AbiHLNVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 09:21:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39120 "EHLO
+        id S238388AbiHLNXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 09:23:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230105AbiHLNVq (ORCPT
+        with ESMTP id S238569AbiHLNXc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 09:21:46 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 659DC6554D
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 06:21:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660310505; x=1691846505;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=eCKWbymhNzifUYzZxAhoCbx2DRrRb2h8+g0Au8fUQR8=;
-  b=iNISRtNj4UYQQfsGg28dsPQgTx71zA6BIsqRpfBqPRIWjoiJOVmRYDXg
-   6u5ttBZzUY2KX1LFjNtm57C6aU06Md7eYX5GDBcdlvXJTWsqj1eEq2fQX
-   z7A4HG0j7O4BLGxqmEj0Wk6ZKNPOw7Gt8gkjIctIjx8E2UoxuyUJFf2yS
-   CPlSqi41Wa2/Jw/yxuxI2SrleDb0C24pTXpMtQNOPqOF0MXWvOsF8J01b
-   u5FLUeI0NVILFo6wtN+MnlcBPMuEIuUzp6I4EuhcQHsu5SS9eG/Cxy1bo
-   8CW9ykPCBcAkvb5gXXo2ZSlv4C2aQ99hhxHNovyX5OP8RCOjwQyEL64RZ
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="317562712"
-X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="317562712"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 06:21:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="748194133"
-Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by fmsmga001.fm.intel.com with ESMTP; 12 Aug 2022 06:21:43 -0700
-Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oMUbe-0000YF-32;
-        Fri, 12 Aug 2022 13:21:42 +0000
-Date:   Fri, 12 Aug 2022 21:21:33 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Gustavo A. R. Silva" <gustavoars@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        "Gustavo A. R. Silva" <gustavo@embeddedor.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: [gustavoars:totally-untested/remaining-fam0 1/2]
- sound/pci/hda/patch_hdmi.c:232:5: error: flexible array member 'bytes' in a
- union is not allowed
-Message-ID: <202208122119.FT6MKKrV-lkp@intel.com>
+        Fri, 12 Aug 2022 09:23:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A4A390C6A;
+        Fri, 12 Aug 2022 06:23:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EB610617C0;
+        Fri, 12 Aug 2022 13:23:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3215BC433D7;
+        Fri, 12 Aug 2022 13:23:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660310609;
+        bh=/lv88xp2oA1PzTLyJc6dBD17FKmwoXzEzmWpFb15WwI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mCM2NIjtRzkX8nwXyl1wy6yZCBtMTB5loKmfwDCQFawv7062SOm2uWBZlgwMiag7N
+         sNk2TOs+Z6O4IBSKD69xlcYbTX1yOnlELS/uEv+TPQcWiJCwVoCJM0pMeR6DwfNUb1
+         cDR4xvgiuLS4lQF7bQXSpAfkRGeG9KR59bxDBe7F8apJIlK9RgnJjuRWF3HdJK2p3U
+         ABez2PcWTUE07lKz4bnYvY0fegMGmRcHYqWfHNAk4G6F85PY/EM3ee7ZmsaMyAPT40
+         UqfLoVeLG3k9p1iD0Wjn+kfyHWHc71V/OcC3pIHhthTGUx4PDNBs9wycJjlW7k4/kY
+         3hhKXMhjD3eCA==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 0CBF64035A; Fri, 12 Aug 2022 10:23:26 -0300 (-03)
+Date:   Fri, 12 Aug 2022 10:23:25 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Martin =?utf-8?B?TGnFoWth?= <mliska@suse.cz>
+Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH] perf: fix coding style in build-id.c
+Message-ID: <YvZUTbEjvSLbUJQQ@kernel.org>
+References: <2983e2e0-6850-ad59-79d8-efe83b22cffe@suse.cz>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2983e2e0-6850-ad59-79d8-efe83b22cffe@suse.cz>
+X-Url:  http://acmel.wordpress.com
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git totally-untested/remaining-fam0
-head:   b0684d2f714f4ae515c283697c48d14e3ccef21b
-commit: 9b8e2a44bb97e6316a5d268f9812543e2f6f1d44 [1/2] totally-untested: remaining zero-length arrays in unions in next-20220811
-config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220812/202208122119.FT6MKKrV-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git/commit/?id=9b8e2a44bb97e6316a5d268f9812543e2f6f1d44
-        git remote add gustavoars https://git.kernel.org/pub/scm/linux/kernel/git/gustavoars/linux.git
-        git fetch --no-tags gustavoars totally-untested/remaining-fam0
-        git checkout 9b8e2a44bb97e6316a5d268f9812543e2f6f1d44
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash sound/pci/hda/
+Em Fri, Aug 12, 2022 at 01:42:56PM +0200, Martin Liška escreveu:
+> Use tabs instead of 8 spaces for the indentation.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Thanks, applied.
 
-All errors (new ones prefixed by >>):
-
->> sound/pci/hda/patch_hdmi.c:232:5: error: flexible array member 'bytes' in a union is not allowed
-           u8 bytes[];
-              ^
-   1 error generated.
+- Arnaldo
 
 
-vim +/bytes +232 sound/pci/hda/patch_hdmi.c
-
-   228	
-   229	union audio_infoframe {
-   230		struct hdmi_audio_infoframe hdmi;
-   231		struct dp_audio_infoframe dp;
- > 232		u8 bytes[];
-   233	};
-   234	
+> Signed-off-by: Martin Liska <mliska@suse.cz>
+> ---
+>  tools/perf/util/build-id.c | 22 +++++++++++-----------
+>  1 file changed, 11 insertions(+), 11 deletions(-)
+> 
+> diff --git a/tools/perf/util/build-id.c b/tools/perf/util/build-id.c
+> index 9e176146eb10..0cc68cdd84c8 100644
+> --- a/tools/perf/util/build-id.c
+> +++ b/tools/perf/util/build-id.c
+> @@ -652,17 +652,17 @@ static char *build_id_cache__find_debug(const char *sbuild_id,
+>  	nsinfo__mountns_exit(&nsc);
+>  
+>  #ifdef HAVE_DEBUGINFOD_SUPPORT
+> -        if (realname == NULL) {
+> -                debuginfod_client* c = debuginfod_begin();
+> -                if (c != NULL) {
+> -                        int fd = debuginfod_find_debuginfo(c,
+> -                                                           (const unsigned char*)sbuild_id, 0,
+> -                                                           &realname);
+> -                        if (fd >= 0)
+> -                                close(fd); /* retaining reference by realname */
+> -                        debuginfod_end(c);
+> -                }
+> -        }
+> +	if (realname == NULL) {
+> +		debuginfod_client* c = debuginfod_begin();
+> +		if (c != NULL) {
+> +			int fd = debuginfod_find_debuginfo(c,
+> +					(const unsigned char*)sbuild_id, 0,
+> +					&realname);
+> +			if (fd >= 0)
+> +				close(fd); /* retaining reference by realname */
+> +			debuginfod_end(c);
+> +		}
+> +	}
+>  #endif
+>  
+>  out:
+> -- 
+> 2.37.1
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+
+- Arnaldo

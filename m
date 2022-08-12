@@ -2,223 +2,461 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EFFB5913C7
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 18:16:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2E625913CF
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 18:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239293AbiHLQQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 12:16:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44534 "EHLO
+        id S239295AbiHLQVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 12:21:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239303AbiHLQPs (ORCPT
+        with ESMTP id S238752AbiHLQVK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 12:15:48 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BA0474E2E
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 09:15:47 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id q184so1665366oif.1
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 09:15:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=iq2hcZPHI3Hrq/fm3tMLVtBr5GF48yxMqfYK/cB1PhY=;
-        b=o0dj5FntgMy+byGnZkkNQ4sg4gY/lBnmYFWtidXFfMA4zZQFoBd2U9uzlWnRuwG2OQ
-         A9f+Irj4kgZXD8+zKqcfNrI3V+3/5Js9Hsa57VknTD59tNzfUcSe8HXZtPZQJo7nuqo6
-         rpZ3vZlDvcxlA3r9iCX//xIzsYuL4RDcBOLKUTa9yV85xERBYql+3l5HqBh64pSXmC5P
-         yfpJdyYqdSjEKXjVpnzkCPwM76RXYAlLwq9iebjvfMquYQrvzwpAHvLqJCmNdB0amXVL
-         JvCpbwnhnvFLLiXSSuL/KMiYGHsodN/EwyOr9tjSrikdiMxXE/wM3oPDOj8+el4Lads1
-         HFKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=iq2hcZPHI3Hrq/fm3tMLVtBr5GF48yxMqfYK/cB1PhY=;
-        b=WF+UsE4tBbuSIqSyahPvshVHrEkpQTV4CI9xDLc2nA4bZ5CRFeA5hJvjOPmLLE8rJD
-         xIMsPd1uCpa5QXje5q9JT2h3HoKn3bR2kkXPOq3jooOYSXQLNajrziBxs853kNF8C5Pf
-         OtCCcpUzz2AUtScUN4tYsRvMt0nu4woKtblbxWFl4NV1vewYmc/3+JRH9/r09friAT/X
-         hVWJfB3nIuEhqHE4UFv6REv2AuT/eIXYhukLQmno+yI2dFP2za3ShwPhUMBvW4cbvwvi
-         tXMa5tljeYQ8fdQde2Q+tFhaVpihh9JnMHiwJ+fiEbfvB5XlJnJusBF9HEE9TlC0CZq6
-         kcuw==
-X-Gm-Message-State: ACgBeo0ip9q76v2av+h1krvMUsZAYkr1zuCMhLm2gymnrybl+BcFfJDz
-        tibsznWo8KamldLPd9xNx13Gnb5tauEIBnN7dCg7
-X-Google-Smtp-Source: AA6agR7JBAm4uU28EoNN//quCJhB+KgCD82SUYyenq9RiWi0bW+37wZy7HlsM79TxASMbUP+1L34v6ZaShZSd0/q8eE=
-X-Received: by 2002:a05:6808:10d4:b0:33a:baf0:338c with SMTP id
- s20-20020a05680810d400b0033abaf0338cmr2004967ois.4.1660320946197; Fri, 12 Aug
- 2022 09:15:46 -0700 (PDT)
+        Fri, 12 Aug 2022 12:21:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38BFC1BEBB;
+        Fri, 12 Aug 2022 09:21:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B972A6158A;
+        Fri, 12 Aug 2022 16:21:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18956C433D7;
+        Fri, 12 Aug 2022 16:21:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660321267;
+        bh=uwSsvk9I8xqPqVVOTirSSvksHNTdiD3VsTzW8SiwOfU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=f2gE+GQ30nEgvZpjqySuw4ex2CVOsjuHxcWGqC4ovQkCFczNb5P8qw+BAAAB0nNO5
+         zS6BSdlIVZmExPS5Mn5WQGWp0ELkj3HUa61Nn4NveKPCTE1jBHGbPlDs51yw9DoXx1
+         t3/BUnEcfi7kr3rWdpRuaFrELbw0Cb4u7xR9ghCA8HB7D+6YRJx0xbvcDfhc5UWlXi
+         XsJ01LcJWltvadCUV5pjy1AFWXnv8086TFVNDTrRRqfCPvzxr5G85wzhpZcaE9ittg
+         b2i3I4F9pUOMWEbpP2oja0k6KIu8LqP4af2w6rF3mCFOmnk4PUozz0kJaNom0/TwSM
+         gNcw/n6+fbzmw==
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-116c7286aaaso1434247fac.11;
+        Fri, 12 Aug 2022 09:21:07 -0700 (PDT)
+X-Gm-Message-State: ACgBeo2sOty+1LqguK6yURCC+DW9mq42lZNziF9rrAlE8jRnZkWDZUXW
+        Q7KwwGsppt9Mu9wkhEixGcYpuXccV8yPYbyy1r4=
+X-Google-Smtp-Source: AA6agR7yx2gRGSq/GSDiOFYGtk9pFNUZ6uUcuia1oJmjyhWg0Eo7jYA4yMzIWx+mq55d1HAlRarFz3l3pTZ1z/8OKQI=
+X-Received: by 2002:a05:6870:42cb:b0:10f:530:308 with SMTP id
+ z11-20020a05687042cb00b0010f05300308mr2127349oah.294.1660321266114; Fri, 12
+ Aug 2022 09:21:06 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220810234056.2494993-1-npache@redhat.com> <CABVgOSmUgkeuKKS_UYMOTUE4vARLpw--j77J9=zAkk5Zr30N9g@mail.gmail.com>
- <CAA1CXcBjf411E7gCbTfowpOmas-ykuVCyn1B4oAua_VKxMkOCg@mail.gmail.com> <CABVgOSk74DvJsizPB+=UZ7sgw88_=7D6bBtHCEOWgpgWytKJeQ@mail.gmail.com>
-In-Reply-To: <CABVgOSk74DvJsizPB+=UZ7sgw88_=7D6bBtHCEOWgpgWytKJeQ@mail.gmail.com>
-From:   Joe Fradley <joefradley@google.com>
-Date:   Fri, 12 Aug 2022 09:15:35 -0700
-Message-ID: <CAF-60z3x+4BaSE-K+92hz9MxQ+87i8T1fg6q+7eiD867jPCJwQ@mail.gmail.com>
-Subject: Re: [PATCH] kunit: fix Kconfig for build-in tests USB4 and Nitro Enclaves
-To:     David Gow <davidgow@google.com>
-Cc:     Nico Pache <npache@redhat.com>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        USB list <linux-usb@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>, alcioa@amazon.com,
-        lexnv@amazon.com, Andra Paraschiv <andraprs@amazon.com>,
-        YehezkelShB@gmail.com,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        michael.jamet@intel.com, andreas.noever@gmail.com
+References: <20220812144233.132960-1-bingjingc@synology.com> <20220812144233.132960-2-bingjingc@synology.com>
+In-Reply-To: <20220812144233.132960-2-bingjingc@synology.com>
+From:   Filipe Manana <fdmanana@kernel.org>
+Date:   Fri, 12 Aug 2022 17:20:29 +0100
+X-Gmail-Original-Message-ID: <CAL3q7H6wXw-MfDCeyHRLQEV=dCdY-mJsAU=1uGJzfLUeS5sZ_Q@mail.gmail.com>
+Message-ID: <CAL3q7H6wXw-MfDCeyHRLQEV=dCdY-mJsAU=1uGJzfLUeS5sZ_Q@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] btrfs: send: refactor get_inode_info()
+To:     bingjingc <bingjingc@synology.com>
+Cc:     josef@toxicpanda.com, dsterba@suse.com, clm@fb.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        robbieko@synology.com, bxxxjxxg@gmail.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 11:43 PM David Gow <davidgow@google.com> wrote:
+On Fri, Aug 12, 2022 at 3:42 PM bingjingc <bingjingc@synology.com> wrote:
 >
-> (+joefradley@google.com to comment on what Android is doing here)
+> From: BingJing Chang <bingjingc@synology.com>
 >
-> On Thu, Aug 11, 2022 at 8:44 PM Nico Pache <npache@redhat.com> wrote:
-> >
-> > On Wed, Aug 10, 2022 at 8:20 PM David Gow <davidgow@google.com> wrote:
-> > >
-> > > On Thu, Aug 11, 2022 at 7:41 AM Nico Pache <npache@redhat.com> wrote:
-> > > >
-> > > > Both the USB4 and Nitro Enclaves KUNIT tests are now able to be compiled
-> > > > if KUNIT is compiled as a module. This leads to issues if KUNIT is being
-> > > > packaged separately from the core kernel and when KUNIT is run baremetal
-> > > > without the required driver compiled into the kernel.
-> > > >
-> > > > Fixes: 635dcd16844b ("thunderbolt: test: Use kunit_test_suite() macro")
-> > > > Fixes: fe5be808fa6c ("nitro_enclaves: test: Use kunit_test_suite() macro")
-> > > > Signed-off-by: Nico Pache <npache@redhat.com>
-> > > > ---
-> > >
-> > > Hmm... I'm not quite sure I understand the case that's broken here. Is it:
-> > > - KUnit is built as a module (CONFIG_KUNIT=m)
-> > > - USB4/nitro_enclaves are also built as modules, with the test enabled.
-> > > - The kunit module is not available at runtime, so neither driver
-> > > module can load (due to missing kunit dependencies)
-> > Exactly, except the issue is also when the USB/NE=y not just when they
-> > are modules. This is currently creating an issue with our build system
-> > during the depmod stage and has been preventing us from generating
-> > Fedora builds.
-> .
-> Yeah: there's a nasty tradeoff here in that having these depend on
-> KUNIT=y does (obviously) mean that it's not possible to run these
-> tests with KUNIT=m. I'd agree that being able to ruin some tests is
-> better than none, but there are quite a lot of tests which are doing
-> the same sort of tricks as USB4/nitro_enclaves to embed tests in the
-> same module as the code being tested. In particular, I think apparmor
-> is doing something similar, and the incoming AMDGPU tests also build
-> all of the tests into amdgpu.ko. If we require KUNIT=y for these,
-> we're leaving a lot of tests on the table for KUNIT=m cases, which
-> would otherwise work.
+> Refactor get_inode_info() to populate all wanted fields on an output
+> structure. Besides, also introduce a helper function called
+> get_inode_gen(), which is majorly used.
 >
-> The ideal solution would be to split the tests for these systems out
-> into their own separate modules, but that's often quite tricky due to
-> the sheer number of otherwise internal symbols which need exporting.
->
-> > >
-> > > If so, that's not a case (i.e., the kunit.ko module being unavailable
-> > > if it was built) we've tried to support thus far. I guess a de-facto
-> > > rule for supporting it would be to depend on KUNIT=y for any KUnit
-> > > tests which are built into the same module as the driver they're
-> > > testing.
-> > Yeah, although it's not been a case you've been trying to support, it
-> > has been working so far :) This has been the case (built-in tests
-> > utilizing 'depends on KUNIT=y') since we began supporting KUNIT in our
-> > testing infrastructure and it would be nice to keep that as a de-facto
-> > rule :)
->
-> Okay: let's try to stick with that for now, then (unless there are any
-> objections from the people working on those particular tests), and
-> look to either reinstate it if we find a better way of dealing with
-> the missing/disabled kunit.ko case, or the tests can be split into a
-> separate module. Personally, I don't expect we'll get either of those
-> working in the short-term, but it's definitely a problem we'll have to
-> confront more eventually.
->
-> In the meantime, I think the KUnit position on this will be to note
-> this as a consequence of building KUnit tests into bigger modules, and
-> leave the final decision up to the maintainers of those
-> subsystems/tests. This may result in there being some tests you have
-> to explicitly disable (rather than being able to use KUNIT_ALL_TESTS)
-> if an important module decides that they really want their tests to
-> run when KUNIT=m (which may not happen, we'll see...)
->
-> > >
-> > > Alternatively, maybe we could do some horrible hacks to compile stub
-> > > versions of various KUnit assertion symbols in unconditionally, which
-> > > forward to the real ones if KUnit is available.
-> > >
-> > > (Personally, I'd love it if we could get rid of CONFIG_KUNIT=m
-> > > altogether, and it's actually broken right at the moment[1]. There are
-> > > still some cases (unloading / reloading KUnit with different filter
-> > > options) which require it, though.)
-> > Personally I'd hate to see KUNIT=m go as that is how we have been able
-> > to support running Kunit tests so far.
-> >
-> > A little background on how we utilize Kunit. We build with KUNIT=m and
-> > KUNIT_ALL_TESTS=m and run the tests baremetal.
-> > Our build system creates 3 packages (kernel, kernel-modules, and
-> > kernel-modules-internal), this allows us to ship the kernel and its
-> > modules, while also isolating packages that we dont want to ship
-> > outside of QE and developers. We then have our own infrastructure in
-> > place to run and collect the output of these tests in our pipelined
-> > environments. We dont utilize UML because we dont support that feature
-> > in RHEL.
-> >
-> > Fedora uses this same methodology for running KUNIT, so we are
-> > frequently running kunit on an 'upstream' variant.
-> >
-> > I'm not sure how many organizations are supporting continuous KUNIT
-> > testing, or how they are achieving it, but dropping module support
-> > would prevent us from doing the CI testing we have in place.
-> >
-> > Cheers!
-> > -- Nico
->
-> Fair enough -- we definitely won't get rid of it unless there's a
-> replacement which works as well if not better.
->
-> The reason it's tempting to get rid of KUNIT=m is simply that there's
-> a chunk of KUnit code which needs to be built-in, even if the rest of
-> it is in a module. So a kernel with KUNIT=m still has a fair bit of
-> the overhead of KUNIT=y, and this is likely to get more significant as
-> more such features land (e.g., static stubbing:
-> https://lore.kernel.org/lkml/20220318021314.3225240-2-davidgow@google.com/
-> ).
->
-> Traditionally, our expectation has been that a separate, KUnit-enabled
-> kernel config / build makes sense, as that allows the
-> release/production build to run without any testing-related overheads
-> at all. That being said, I know Android are looking to enable KUnit in
-> all GKI builds, and to implement a separate kunit.enable option to
-> effectively "disable" it at runtime. This doesn't remove all of the
-> overhead, but does allow KUnit to always be present without the risk
-> of compromising the integrity of the running kernel by running tests
-> in production.
+> Reviewed-by: Robbie Ko <robbieko@synology.com>
+> Signed-off-by: BingJing Chang <bingjingc@synology.com>
 
-Like David mentioned, internally for GKI we have KUNIT=y with running
-built-in tests permanently disabled and only allowing module test
-execution if a kernel command line option (kunit.enable) is set. I
-hope to have an upstream patch of this for review soon. If you're
-willing to have the extra KUnit overhead in your production build,
-this could be an option for you as well.
+Reviewed-by: Filipe Manana <fdmanana@suse.com>
 
+Looks good, thanks.
+
+> ---
+>  fs/btrfs/send.c | 154 +++++++++++++++++++++++++-----------------------
+>  1 file changed, 79 insertions(+), 75 deletions(-)
 >
-> Regardless of whether any of those seem interesting to you, we won't
-> be getting rid of KUNIT=m in the short-term (and definitely will be
-> supporting individual test modules, even if we later want to have the
-> core executor built-in).
+> diff --git a/fs/btrfs/send.c b/fs/btrfs/send.c
+> index e7671afcee4f..f8d77a33b9b7 100644
+> --- a/fs/btrfs/send.c
+> +++ b/fs/btrfs/send.c
+> @@ -842,17 +842,31 @@ static int send_rmdir(struct send_ctx *sctx, struct fs_path *path)
+>         return ret;
+>  }
 >
-> One other note is that KUNIT=m is actually broken right at the moment:
-> the fix is here:
-> https://patchwork.kernel.org/project/linux-kselftest/patch/20220713005221.1926290-1-davidgow@google.com/
+> +struct btrfs_inode_info {
+> +       u64 size;
+> +       u64 gen;
+> +       u64 mode;
+> +       u64 uid;
+> +       u64 gid;
+> +       u64 rdev;
+> +       u64 attr;
+> +};
+> +
+>  /*
+>   * Helper function to retrieve some fields from an inode item.
+>   */
+> -static int __get_inode_info(struct btrfs_root *root, struct btrfs_path *path,
+> -                         u64 ino, u64 *size, u64 *gen, u64 *mode, u64 *uid,
+> -                         u64 *gid, u64 *rdev, u64 *fileattr)
+> +static int get_inode_info(struct btrfs_root *root, u64 ino,
+> +                         struct btrfs_inode_info *info)
+>  {
+>         int ret;
+> +       struct btrfs_path *path;
+>         struct btrfs_inode_item *ii;
+>         struct btrfs_key key;
 >
-> Cheers,
-> -- David
+> +       path = alloc_path_for_send();
+> +       if (!path)
+> +               return -ENOMEM;
+> +
+>         key.objectid = ino;
+>         key.type = BTRFS_INODE_ITEM_KEY;
+>         key.offset = 0;
+> @@ -860,47 +874,42 @@ static int __get_inode_info(struct btrfs_root *root, struct btrfs_path *path,
+>         if (ret) {
+>                 if (ret > 0)
+>                         ret = -ENOENT;
+> -               return ret;
+> +               goto out;
+>         }
+>
+> +       if (!info)
+> +               goto out;
+> +
+>         ii = btrfs_item_ptr(path->nodes[0], path->slots[0],
+>                         struct btrfs_inode_item);
+> -       if (size)
+> -               *size = btrfs_inode_size(path->nodes[0], ii);
+> -       if (gen)
+> -               *gen = btrfs_inode_generation(path->nodes[0], ii);
+> -       if (mode)
+> -               *mode = btrfs_inode_mode(path->nodes[0], ii);
+> -       if (uid)
+> -               *uid = btrfs_inode_uid(path->nodes[0], ii);
+> -       if (gid)
+> -               *gid = btrfs_inode_gid(path->nodes[0], ii);
+> -       if (rdev)
+> -               *rdev = btrfs_inode_rdev(path->nodes[0], ii);
+> +       info->size = btrfs_inode_size(path->nodes[0], ii);
+> +       info->gen = btrfs_inode_generation(path->nodes[0], ii);
+> +       info->mode = btrfs_inode_mode(path->nodes[0], ii);
+> +       info->uid = btrfs_inode_uid(path->nodes[0], ii);
+> +       info->gid = btrfs_inode_gid(path->nodes[0], ii);
+> +       info->rdev = btrfs_inode_rdev(path->nodes[0], ii);
+>         /*
+>          * Transfer the unchanged u64 value of btrfs_inode_item::flags, that's
+>          * otherwise logically split to 32/32 parts.
+>          */
+> -       if (fileattr)
+> -               *fileattr = btrfs_inode_flags(path->nodes[0], ii);
+> +       info->attr = btrfs_inode_flags(path->nodes[0], ii);
+>
+> +out:
+> +       btrfs_free_path(path);
+>         return ret;
+>  }
+>
+> -static int get_inode_info(struct btrfs_root *root,
+> -                         u64 ino, u64 *size, u64 *gen,
+> -                         u64 *mode, u64 *uid, u64 *gid,
+> -                         u64 *rdev, u64 *fileattr)
+> +static int get_inode_gen(struct btrfs_root *root, u64 ino, u64 *gen)
+>  {
+> -       struct btrfs_path *path;
+>         int ret;
+> +       struct btrfs_inode_info info;
+>
+> -       path = alloc_path_for_send();
+> -       if (!path)
+> -               return -ENOMEM;
+> -       ret = __get_inode_info(root, path, ino, size, gen, mode, uid, gid,
+> -                              rdev, fileattr);
+> -       btrfs_free_path(path);
+> +       if (!gen)
+> +               return -EPERM;
+> +
+> +       ret = get_inode_info(root, ino, &info);
+> +       if (!ret)
+> +               *gen = info.gen;
+>         return ret;
+>  }
+>
+> @@ -1644,8 +1653,7 @@ static int get_cur_inode_state(struct send_ctx *sctx, u64 ino, u64 gen)
+>         u64 left_gen;
+>         u64 right_gen;
+>
+> -       ret = get_inode_info(sctx->send_root, ino, NULL, &left_gen, NULL, NULL,
+> -                       NULL, NULL, NULL);
+> +       ret = get_inode_gen(sctx->send_root, ino, &left_gen);
+>         if (ret < 0 && ret != -ENOENT)
+>                 goto out;
+>         left_ret = ret;
+> @@ -1653,8 +1661,7 @@ static int get_cur_inode_state(struct send_ctx *sctx, u64 ino, u64 gen)
+>         if (!sctx->parent_root) {
+>                 right_ret = -ENOENT;
+>         } else {
+> -               ret = get_inode_info(sctx->parent_root, ino, NULL, &right_gen,
+> -                               NULL, NULL, NULL, NULL, NULL);
+> +               ret = get_inode_gen(sctx->parent_root, ino, &right_gen);
+>                 if (ret < 0 && ret != -ENOENT)
+>                         goto out;
+>                 right_ret = ret;
+> @@ -1816,8 +1823,7 @@ static int get_first_ref(struct btrfs_root *root, u64 ino,
+>         btrfs_release_path(path);
+>
+>         if (dir_gen) {
+> -               ret = get_inode_info(root, parent_dir, NULL, dir_gen, NULL,
+> -                                    NULL, NULL, NULL, NULL);
+> +               ret = get_inode_gen(root, parent_dir, dir_gen);
+>                 if (ret < 0)
+>                         goto out;
+>         }
+> @@ -1874,6 +1880,7 @@ static int will_overwrite_ref(struct send_ctx *sctx, u64 dir, u64 dir_gen,
+>         int ret = 0;
+>         u64 gen;
+>         u64 other_inode = 0;
+> +       struct btrfs_inode_info info;
+>
+>         if (!sctx->parent_root)
+>                 goto out;
+> @@ -1888,8 +1895,7 @@ static int will_overwrite_ref(struct send_ctx *sctx, u64 dir, u64 dir_gen,
+>          * and we can just unlink this entry.
+>          */
+>         if (sctx->parent_root && dir != BTRFS_FIRST_FREE_OBJECTID) {
+> -               ret = get_inode_info(sctx->parent_root, dir, NULL, &gen, NULL,
+> -                                    NULL, NULL, NULL, NULL);
+> +               ret = get_inode_gen(sctx->parent_root, dir, &gen);
+>                 if (ret < 0 && ret != -ENOENT)
+>                         goto out;
+>                 if (ret) {
+> @@ -1916,13 +1922,14 @@ static int will_overwrite_ref(struct send_ctx *sctx, u64 dir, u64 dir_gen,
+>          */
+>         if (other_inode > sctx->send_progress ||
+>             is_waiting_for_move(sctx, other_inode)) {
+> -               ret = get_inode_info(sctx->parent_root, other_inode, NULL,
+> -                               who_gen, who_mode, NULL, NULL, NULL, NULL);
+> +               ret = get_inode_info(sctx->parent_root, other_inode, &info);
+>                 if (ret < 0)
+>                         goto out;
+>
+>                 ret = 1;
+>                 *who_ino = other_inode;
+> +               *who_gen = info.gen;
+> +               *who_mode = info.mode;
+>         } else {
+>                 ret = 0;
+>         }
+> @@ -1955,8 +1962,7 @@ static int did_overwrite_ref(struct send_ctx *sctx,
+>                 goto out;
+>
+>         if (dir != BTRFS_FIRST_FREE_OBJECTID) {
+> -               ret = get_inode_info(sctx->send_root, dir, NULL, &gen, NULL,
+> -                                    NULL, NULL, NULL, NULL);
+> +               ret = get_inode_gen(sctx->send_root, dir, &gen);
+>                 if (ret < 0 && ret != -ENOENT)
+>                         goto out;
+>                 if (ret) {
+> @@ -1978,8 +1984,7 @@ static int did_overwrite_ref(struct send_ctx *sctx,
+>                 goto out;
+>         }
+>
+> -       ret = get_inode_info(sctx->send_root, ow_inode, NULL, &gen, NULL, NULL,
+> -                       NULL, NULL, NULL);
+> +       ret = get_inode_gen(sctx->send_root, ow_inode, &gen);
+>         if (ret < 0)
+>                 goto out;
+>
+> @@ -2645,6 +2650,7 @@ static int send_create_inode(struct send_ctx *sctx, u64 ino)
+>         int ret = 0;
+>         struct fs_path *p;
+>         int cmd;
+> +       struct btrfs_inode_info info;
+>         u64 gen;
+>         u64 mode;
+>         u64 rdev;
+> @@ -2656,10 +2662,12 @@ static int send_create_inode(struct send_ctx *sctx, u64 ino)
+>                 return -ENOMEM;
+>
+>         if (ino != sctx->cur_ino) {
+> -               ret = get_inode_info(sctx->send_root, ino, NULL, &gen, &mode,
+> -                                    NULL, NULL, &rdev, NULL);
+> +               ret = get_inode_info(sctx->send_root, ino, &info);
+>                 if (ret < 0)
+>                         goto out;
+> +               gen = info.gen;
+> +               mode = info.mode;
+> +               rdev = info.rdev;
+>         } else {
+>                 gen = sctx->cur_inode_gen;
+>                 mode = sctx->cur_inode_mode;
+> @@ -3359,8 +3367,7 @@ static int apply_dir_move(struct send_ctx *sctx, struct pending_dir_move *pm)
+>                 /*
+>                  * The parent inode might have been deleted in the send snapshot
+>                  */
+> -               ret = get_inode_info(sctx->send_root, cur->dir, NULL,
+> -                                    NULL, NULL, NULL, NULL, NULL, NULL);
+> +               ret = get_inode_info(sctx->send_root, cur->dir, NULL);
+>                 if (ret == -ENOENT) {
+>                         ret = 0;
+>                         continue;
+> @@ -3534,12 +3541,10 @@ static int wait_for_dest_dir_move(struct send_ctx *sctx,
+>                 goto out;
+>         }
+>
+> -       ret = get_inode_info(sctx->parent_root, di_key.objectid, NULL,
+> -                            &left_gen, NULL, NULL, NULL, NULL, NULL);
+> +       ret = get_inode_gen(sctx->parent_root, di_key.objectid, &left_gen);
+>         if (ret < 0)
+>                 goto out;
+> -       ret = get_inode_info(sctx->send_root, di_key.objectid, NULL,
+> -                            &right_gen, NULL, NULL, NULL, NULL, NULL);
+> +       ret = get_inode_gen(sctx->send_root, di_key.objectid, &right_gen);
+>         if (ret < 0) {
+>                 if (ret == -ENOENT)
+>                         ret = 0;
+> @@ -3669,8 +3674,7 @@ static int is_ancestor(struct btrfs_root *root,
+>                                 cur_offset = item_size;
+>                         }
+>
+> -                       ret = get_inode_info(root, parent, NULL, &parent_gen,
+> -                                            NULL, NULL, NULL, NULL, NULL);
+> +                       ret = get_inode_gen(root, parent, &parent_gen);
+>                         if (ret < 0)
+>                                 goto out;
+>                         ret = check_ino_in_path(root, ino1, ino1_gen,
+> @@ -3760,9 +3764,8 @@ static int wait_for_parent_move(struct send_ctx *sctx,
+>                      memcmp(path_before->start, path_after->start, len1))) {
+>                         u64 parent_ino_gen;
+>
+> -                       ret = get_inode_info(sctx->parent_root, ino, NULL,
+> -                                            &parent_ino_gen, NULL, NULL, NULL,
+> -                                            NULL, NULL);
+> +                       ret = get_inode_gen(sctx->parent_root, ino,
+> +                                           &parent_ino_gen);
+>                         if (ret < 0)
+>                                 goto out;
+>                         if (ino_gen == parent_ino_gen) {
+> @@ -4441,8 +4444,7 @@ static int record_new_ref_if_needed(int num, u64 dir, int index,
+>         struct recorded_ref *ref;
+>         u64 dir_gen;
+>
+> -       ret = get_inode_info(sctx->send_root, dir, NULL, &dir_gen, NULL,
+> -                            NULL, NULL, NULL, NULL);
+> +       ret = get_inode_gen(sctx->send_root, dir, &dir_gen);
+>         if (ret < 0)
+>                 goto out;
+>
+> @@ -4472,8 +4474,7 @@ static int record_deleted_ref_if_needed(int num, u64 dir, int index,
+>         struct recorded_ref *ref;
+>         u64 dir_gen;
+>
+> -       ret = get_inode_info(sctx->parent_root, dir, NULL, &dir_gen, NULL,
+> -                            NULL, NULL, NULL, NULL);
+> +       ret = get_inode_gen(sctx->parent_root, dir, &dir_gen);
+>         if (ret < 0)
+>                 goto out;
+>
+> @@ -5056,8 +5057,7 @@ static int send_clone(struct send_ctx *sctx,
+>         TLV_PUT_PATH(sctx, BTRFS_SEND_A_PATH, p);
+>
+>         if (clone_root->root == sctx->send_root) {
+> -               ret = get_inode_info(sctx->send_root, clone_root->ino, NULL,
+> -                               &gen, NULL, NULL, NULL, NULL, NULL);
+> +               ret = get_inode_gen(sctx->send_root, clone_root->ino, &gen);
+>                 if (ret < 0)
+>                         goto out;
+>                 ret = get_cur_path(sctx, clone_root->ino, gen, p);
+> @@ -5536,6 +5536,7 @@ static int clone_range(struct send_ctx *sctx, struct btrfs_path *dst_path,
+>         struct btrfs_path *path;
+>         struct btrfs_key key;
+>         int ret;
+> +       struct btrfs_inode_info info;
+>         u64 clone_src_i_size = 0;
+>
+>         /*
+> @@ -5565,12 +5566,11 @@ static int clone_range(struct send_ctx *sctx, struct btrfs_path *dst_path,
+>          * There are inodes that have extents that lie behind its i_size. Don't
+>          * accept clones from these extents.
+>          */
+> -       ret = __get_inode_info(clone_root->root, path, clone_root->ino,
+> -                              &clone_src_i_size, NULL, NULL, NULL, NULL, NULL,
+> -                              NULL);
+> +       ret = get_inode_info(clone_root->root, clone_root->ino, &info);
+>         btrfs_release_path(path);
+>         if (ret < 0)
+>                 goto out;
+> +       clone_src_i_size = info.size;
+>
+>         /*
+>          * We can't send a clone operation for the entire range if we find
+> @@ -6259,6 +6259,7 @@ static int process_recorded_refs_if_needed(struct send_ctx *sctx, int at_end,
+>  static int finish_inode_if_needed(struct send_ctx *sctx, int at_end)
+>  {
+>         int ret = 0;
+> +       struct btrfs_inode_info info;
+>         u64 left_mode;
+>         u64 left_uid;
+>         u64 left_gid;
+> @@ -6301,11 +6302,13 @@ static int finish_inode_if_needed(struct send_ctx *sctx, int at_end)
+>                 goto out;
+>         if (!at_end && sctx->cmp_key->objectid == sctx->cur_ino)
+>                 goto out;
+> -
+> -       ret = get_inode_info(sctx->send_root, sctx->cur_ino, NULL, NULL,
+> -                       &left_mode, &left_uid, &left_gid, NULL, &left_fileattr);
+> +       ret = get_inode_info(sctx->send_root, sctx->cur_ino, &info);
+>         if (ret < 0)
+>                 goto out;
+> +       left_mode = info.mode;
+> +       left_uid = info.uid;
+> +       left_gid = info.gid;
+> +       left_fileattr = info.attr;
+>
+>         if (!sctx->parent_root || sctx->cur_inode_new) {
+>                 need_chown = 1;
+> @@ -6316,11 +6319,14 @@ static int finish_inode_if_needed(struct send_ctx *sctx, int at_end)
+>         } else {
+>                 u64 old_size;
+>
+> -               ret = get_inode_info(sctx->parent_root, sctx->cur_ino,
+> -                               &old_size, NULL, &right_mode, &right_uid,
+> -                               &right_gid, NULL, &right_fileattr);
+> +               ret = get_inode_info(sctx->parent_root, sctx->cur_ino, &info);
+>                 if (ret < 0)
+>                         goto out;
+> +               old_size = info.size;
+> +               right_mode = info.mode;
+> +               right_uid = info.uid;
+> +               right_gid = info.gid;
+> +               right_fileattr = info.attr;
+>
+>                 if (left_uid != right_uid || left_gid != right_gid)
+>                         need_chown = 1;
+> @@ -6790,13 +6796,11 @@ static int dir_changed(struct send_ctx *sctx, u64 dir)
+>         u64 orig_gen, new_gen;
+>         int ret;
+>
+> -       ret = get_inode_info(sctx->send_root, dir, NULL, &new_gen, NULL, NULL,
+> -                            NULL, NULL, NULL);
+> +       ret = get_inode_gen(sctx->send_root, dir, &new_gen);
+>         if (ret)
+>                 return ret;
+>
+> -       ret = get_inode_info(sctx->parent_root, dir, NULL, &orig_gen, NULL,
+> -                            NULL, NULL, NULL, NULL);
+> +       ret = get_inode_gen(sctx->parent_root, dir, &orig_gen);
+>         if (ret)
+>                 return ret;
+>
+> --
+> 2.37.1
+>

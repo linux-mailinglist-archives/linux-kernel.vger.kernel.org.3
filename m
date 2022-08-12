@@ -2,137 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5648F590B4B
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 06:41:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 434B7590B51
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 06:50:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235762AbiHLElP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 00:41:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57352 "EHLO
+        id S231742AbiHLEto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 00:49:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231742AbiHLElN (ORCPT
+        with ESMTP id S229519AbiHLEtm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 00:41:13 -0400
-Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F01379EE4
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 21:41:12 -0700 (PDT)
-Received: from [127.0.0.1] ([73.223.250.219])
-        (authenticated bits=0)
-        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 27C4eOWF628540
-        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-        Thu, 11 Aug 2022 21:40:25 -0700
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 27C4eOWF628540
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-        s=2022080501; t=1660279227;
-        bh=3MaO937nM5p102I50w1EdHgkb+4tICTrGMo6IMrNWYA=;
-        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
-        b=ODghmVhRm/82SQORJ3bDP3ohrD+ai5DdyVoGr2mSVIxcfN1fwuvzIFw9IW4zZ2IV9
-         dX+u8LpDZCm3qMf7QFJ5P70OwqjdvJdP5Xn+evIMLoZtG34X/64vBSReFp+5SixBNp
-         4fopC3Gg4mYz+u4myvcZXy23p7S8VVwCjrQF5g3cC+iiM+uYusYqrfutrX4ImO7aRf
-         HBUkrMDthxqxiZDZthEMmKRoROh9HZxm3nYcEYQohkIIXPZ1T3fDCqTFm1of2y06gq
-         qErtrYLzEPPGZyrHfnGFUWqU/eSDo96nczoBPD5dRd82k7SAN4xf7Lxri2rxHAxJdV
-         s7vhZy1d7JZkg==
-Date:   Thu, 11 Aug 2022 21:40:23 -0700
-From:   "H. Peter Anvin" <hpa@zytor.com>
-To:     Sean Christopherson <seanjc@google.com>
-CC:     Adam Dunlap <acdunlap@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Ben Dooks <ben-linux@fluff.org>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, Jacob Xu <jacobhxu@google.com>,
-        Alper Gun <alpergun@google.com>, Marc Orr <marcorr@google.com>
-Subject: Re: [PATCH] x86/asm: Force native_apic_mem_read to use mov
-User-Agent: K-9 Mail for Android
-In-Reply-To: <YvVgfx+hah/V+r5n@google.com>
-References: <20220811180010.3067457-1-acdunlap@google.com> <YvVYDn1JODiu6hKK@google.com> <AB38B5DA-D3AC-4568-A8DD-FC281DDE261A@zytor.com> <YvVgfx+hah/V+r5n@google.com>
-Message-ID: <0D6A1E49-F21B-42AA-BBBF-13BFC308BB1E@zytor.com>
+        Fri, 12 Aug 2022 00:49:42 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB35FA2867
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 21:49:41 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 24so2431400pgr.7
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 21:49:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=WJS72dvtFXYi5pD5mzwuxGTEk9o9IeYNQbFa82DCy4I=;
+        b=I8WudUyA1q1tagwtAJVmfs5vhMa7SoVIqm98l0muF354WAhWTSA95ysV9PwSPn1HO0
+         2vzbqZSPPL+T3Tg5T7DaqzigK1d+UZZ9uwBu8uHgechYY/v/aoR208ukXenG6ptImbnn
+         aD9Jnsyaot4975dWL6psH1elmG8irCn+Taa+fwWlK0j3Dpfc5gdXBBfLubHNG16P/RzU
+         uD5iEYfMhEpx6L4RQowQYcERuYXhBiT6orIc+yVjFCnwpY0C3pKbxFXBw2NHsOVaTvg+
+         fAHkL2V8foGTH7/DQpTnAOQE4oG/U+bceCiZdD4CvZ2NxL1BGUEZfZO1Ucp0TkV19KZf
+         2YSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=WJS72dvtFXYi5pD5mzwuxGTEk9o9IeYNQbFa82DCy4I=;
+        b=RxID+uS9871uFkixC6d5oFGPBS9OE5Q34o9svEMCqiFU4XtO9D6WsnQlO2OZI4r1dv
+         G2lDxF17A6Tjc+lRiX1WNsbTBi8K4TYv8BR0q/8v+cOu9dEOwewMfieV+2UQFqFRcBEL
+         VSAw61qkD/pRs+s5ME32YxkBqR1hX59ydE0vnPILERVbvVwi+cpoBwypJrKd684ubpMR
+         ngqNmZdnHtMZqCn3OqGApWtKtFxapFUWnGQfxjE7L3VWu+dQl+JS3nEibk1nTYTv2btu
+         JmrCgNzvV8h7zYkAM6qELoeHdL+/TUJ/Nwh/MuDA5FrbvLwjWE43G5EnMLMysq3LKIBg
+         UQeg==
+X-Gm-Message-State: ACgBeo04PN+ubLFJkFAZKNcsUg7agRKKMjkLRuH6C6B51WYWGLFD/dpZ
+        fm+itQsyHwJDZek9mSGR4zQFh/1NR7h5EN4DGIE=
+X-Google-Smtp-Source: AA6agR5bFW7pAjTlEOLEk3Bp1wmhqunho3EPofhv7GPByJMJHAK281Akfe2ACVLhG45c8zcsWyY0zF3StLaFOeQ9qnM=
+X-Received: by 2002:a62:6347:0:b0:531:c5a7:b209 with SMTP id
+ x68-20020a626347000000b00531c5a7b209mr2336023pfb.60.1660279781406; Thu, 11
+ Aug 2022 21:49:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
+References: <20220801173155.92008-1-ryncsn@gmail.com> <20220811160739.ea6b0f9c2912317c49287cda@linux-foundation.org>
+In-Reply-To: <20220811160739.ea6b0f9c2912317c49287cda@linux-foundation.org>
+From:   Kairui Song <ryncsn@gmail.com>
+Date:   Fri, 12 Aug 2022 12:49:29 +0800
+Message-ID: <CAMgjq7CebYhwgUzBV9tGENEfVMxPMS4qVXvRx=sVQOEAUbq_mA@mail.gmail.com>
+Subject: Re: [PATCH] mm/util: reduce stack usage of folio_mapcount
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Matthew Wilcox <willy@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On August 11, 2022 1:03:11 PM PDT, Sean Christopherson <seanjc@google=2Ecom=
-> wrote:
->On Thu, Aug 11, 2022, H=2E Peter Anvin wrote:
->> On August 11, 2022 12:27:10 PM PDT, Sean Christopherson <seanjc@google=
-=2Ecom> wrote:
->> >On Thu, Aug 11, 2022, Adam Dunlap wrote:
->> >> Previously, when compiled with clang, native_apic_mem_read gets inli=
-ned
->> >> into __xapic_wait_icr_idle and optimized to a testl instruction=2E W=
-hen
->> >> run in a VM with SEV-ES enabled, it attempts to emulate this
->> >> instruction, but the emulator does not support it=2E Instead, use in=
-line
->> >> assembly to force native_apic_mem_read to use the mov instruction wh=
-ich
->> >> is supported by the emulator=2E
->> >>=20
->> >> Signed-off-by: Adam Dunlap <acdunlap@google=2Ecom>
->> >> Reviewed-by: Marc Orr <marcorr@google=2Ecom>
->> >> Reviewed-by: Jacob Xu <jacobhxu@google=2Ecom>
->> >> ---
->> >>  arch/x86/include/asm/apic=2Eh | 13 ++++++++++++-
->> >>  1 file changed, 12 insertions(+), 1 deletion(-)
->> >>=20
->> >> diff --git a/arch/x86/include/asm/apic=2Eh b/arch/x86/include/asm/ap=
-ic=2Eh
->> >> index 3415321c8240=2E=2E281db79e76a9 100644
->> >> --- a/arch/x86/include/asm/apic=2Eh
->> >> +++ b/arch/x86/include/asm/apic=2Eh
->> >> @@ -109,7 +109,18 @@ static inline void native_apic_mem_write(u32 re=
-g, u32 v)
->> >> =20
->> >>  static inline u32 native_apic_mem_read(u32 reg)
->> >>  {
->> >> -	return *((volatile u32 *)(APIC_BASE + reg));
->> >> +	volatile u32 *addr =3D (volatile u32 *)(APIC_BASE + reg);
->> >> +	u32 out;
->> >> +
->> >> +	/*
->> >> +	 * Functionally, what we want to do is simply return *addr=2E Howe=
-ver,
->> >> +	 * this accesses an MMIO which may need to be emulated in some cas=
-es=2E
->> >> +	 * The emulator doesn't necessarily support all instructions, so w=
-e
->> >> +	 * force the read from addr to use a mov instruction=2E
->> >> +	 */
->> >> +	asm_inline("movl %1, %0" : "=3Dr"(out) : "m"(*addr));
->> >> +
->> >> +	return out;
->> >
->> >Can't this just be:
->> >
->> >	return readl((void __iomem *)(APIC_BASE + reg));
->>=20
->> The very point of the patch is to force a specific instruction sequence=
-=2E
+Andrew Morton <akpm@linux-foundation.org> =E4=BA=8E2022=E5=B9=B48=E6=9C=881=
+2=E6=97=A5=E5=91=A8=E4=BA=94 07:07=E5=86=99=E9=81=93=EF=BC=9A
 >
->Yes, and that specific emulator-friendly instruction also has to be force=
-d for all
->of the core x86 read/write MMIO helpers=2E  And it's also possible for MM=
-IO read/write
->to be enlightened to skip the MOV and go straight to #VMGEXIT, i=2Ee=2E t=
-he xAPIC code
->shouldn't assume MOV is the best/only option (ignoring the handling of th=
-e P54C
->erratum in the write path)=2E
+> On Tue,  2 Aug 2022 01:31:55 +0800 Kairui Song <ryncsn@gmail.com> wrote:
+>
+> > From: Kairui Song <kasong@tencent.com>
+> >
+> > folio_entire_mapcount will call PageHeadHuge which is a function call,
+> > and blocks the compiler from recognizing this redundant load.
+>
+> Did you mean folio_test_hugetlb() rather than folio_entire_mapcount()?
 
-That's not reasonable=2E=2E=2E but xAPIC is "special" enough=2E
+Thanks for checking out this patch, and Yes, it's folio_test_hugetlb,
+my mistake...
+
+>
+>
+> > After rearranging the code, stack usage is dropped from 32 to 24, and
+> > the function size is smaller (tested on GCC 12):
+> >
+> > Before:
+> > Stack usage:
+> > mm/util.c:845:5:folio_mapcount  32      static
+> > Size:
+> > 0000000000000ea0 00000000000000c7 T folio_mapcount
+> >
+> > After:
+> > Stack usage:
+> > mm/util.c:845:5:folio_mapcount  24      static
+> > Size:
+> > 0000000000000ea0 00000000000000b0 T folio_mapcount
+> >
+> > ...
+> >
+> > @@ -850,10 +850,10 @@ int folio_mapcount(struct folio *folio)
+> >               return atomic_read(&folio->_mapcount) + 1;
+> >
+> >       compound =3D folio_entire_mapcount(folio);
+> > -     nr =3D folio_nr_pages(folio);
+> >       if (folio_test_hugetlb(folio))
+> >               return compound;
+> >       ret =3D compound;
+> > +     nr =3D folio_nr_pages(folio);
+> >       for (i =3D 0; i < nr; i++)
+> >               ret +=3D atomic_read(&folio_page(folio, i)->_mapcount) + =
+1;
+> >       /* File pages has compound_mapcount included in _mapcount */
+> > --
+> > 2.35.2
+
+Is the rest of the patch a valid fix? Should I send V2?

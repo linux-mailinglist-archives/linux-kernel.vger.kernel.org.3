@@ -2,156 +2,310 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4E6E591638
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 22:28:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7B8559163D
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 22:28:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233439AbiHLU1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 16:27:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50774 "EHLO
+        id S233881AbiHLU2L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 16:28:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbiHLU1A (ORCPT
+        with ESMTP id S230445AbiHLU2I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 16:27:00 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2041.outbound.protection.outlook.com [40.107.92.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C617985BD
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 13:26:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=E2bhvjrG8cz2hYEs7XTCvKUFcGvytbifmrMiLOnwsLQM44YT4ENeXMBOHSPCNwQQa2+le+T+i4wclOVzTIPnjBQ1RIoVqF0GqqTVzGELUkxFA2ltXQYr8EQNc9flsRIjGlNuSoBRgfc/ElPyC3DuWNaguqCg5KHh0KmUL91lWtVHRHsv1pUIwaC/8jTEfyPyVkGftxp+WJ/8prGAXyi5FazBjnNLA6JhW7yZDpXr10+Q7e0SunqVTqobYx68Ii/vz3FRfkBXYgHIkHAIqPsW4xNHRpzMNDAIA0Hz8mQuwcyfiUgwbCCxo77nBKaMCxJzghZzJyrj390hkFEl8hPn0w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=c7a+7IJCSCFUPHtB3/MC60OqR2m+JcLGRX91/AxADAw=;
- b=WqmKMVkNjl4ZhnrHJ1CXJhPp1xFwGdxpFq8fv45q3B31PhqjJQawE4H3vj43734CLRITxEJ2AOFVimpLUgWmRn4unXFj+BTNl8Jo9LQntBPnFWtcGJskvTJgbxvUmxzUqGSIwJigQCjAcL7amPun0v18aY/v1PvFKaj8fGZQgyo2xwv0dr2ncLkBepqxqvkCqAbQJPoTCzSll4JutBT/uM608/UUoR2liz/aEuVFKLFu7YZF51zYr8oaC4ul+2fT386nyfx6Mqr0/11yKE5hzAAqBNgs9wuTwd7NZn0UZoRS69Y6zPPTv+D2SucdLhqCGJ6w7ATywS86znUYcc55IQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=c7a+7IJCSCFUPHtB3/MC60OqR2m+JcLGRX91/AxADAw=;
- b=hPLlvp/tV9T2j+fSudQo2wupV/NjPD8zJ9wGaEwX9dCXPal2irKlVxYTu0s3nLMsSAspCKUXraEhAl7kHfJW03J6GxiBquKF3OefN72B4L/7VbaUWWjgHPZo3Nx5ZIYNTpwMfl8gtszM1aVHHs3g1NnAsd/+qOW3G8PwoKDenpk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com (2603:10b6:408:118::14)
- by MN2PR12MB3277.namprd12.prod.outlook.com (2603:10b6:208:103::28) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.17; Fri, 12 Aug
- 2022 20:26:49 +0000
-Received: from BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::406d:afb5:d2d7:8115]) by BN9PR12MB5115.namprd12.prod.outlook.com
- ([fe80::406d:afb5:d2d7:8115%5]) with mapi id 15.20.5504.025; Fri, 12 Aug 2022
- 20:26:49 +0000
-Message-ID: <82233e68-106f-39e9-b20d-7794eb7a8933@amd.com>
-Date:   Fri, 12 Aug 2022 16:26:47 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     Dave Airlie <airlied@gmail.com>, Philip Yang <Philip.Yang@amd.com>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>
-From:   Felix Kuehling <felix.kuehling@amd.com>
-Subject: Selecting CPUs for queuing work on
-Organization: AMD Inc.
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: CH2PR07CA0034.namprd07.prod.outlook.com
- (2603:10b6:610:20::47) To BN9PR12MB5115.namprd12.prod.outlook.com
- (2603:10b6:408:118::14)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 4654ff8d-42bb-44ee-548b-08da7ca0fbd5
-X-MS-TrafficTypeDiagnostic: MN2PR12MB3277:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NWpvROhs6QDpY8UKEA6MDRqMkcIv7AvKUBFS9s/2BT6nMcA6GQiJWP9yHDZMcno67zGvfs1IvcXXBreQfU4dVQtCtK1unDpP2r0FgC/5N15LKnAMfq7BTTlF8HL7zsKHtj+OcuCVuG3OvjH2CCh8KtUfv9NCPWmDxjztjwccd/Yfpjb9dNjml9Fz1+CcQ2DK+XTaDL1dEUyBHTAEYEutzgIRGWNTVMa7+1z1NK4mYMURZJLWNVENNHWk2JAXPOlx3Ws6RGAWC9XKUYv4Ix63xK0OGPrRom1ga7vhsFIxlz22t3zHjuTIXKBEFymAPy6fgidhBaBdhrJx/ZLywOEpHllrAmmMa4VUGSeEblcGsOstDz79D2YIjI25+ntccykQ+KKK8GUbPdl1Sa26YoI2+cm4gMHF4u5y4R38n6dLxYFNqcPrA6Abw1ExdP8yspBG6YcMT/dmvKpb0Gi0hvW+79Fj4eFsb6CwUQa5PaQV6z5goXm4//1Yge69g1rh2wYWDeihK+RnBShypbedxQPtkear2qapmBedE/EVDlUGm3XYAK/F9el7BjwKUOKTr/DMzLjR/EtXdpgIamzxOigcph+vjaMb5PoB79jIKu1IFjOk0LfcMXHL4dWpH/bhdW9CsV1udrwMSjBclkAmCPS9AuQNJwsCQ32a5EZnNO9VnsejbmaJIujQwb37lu/l/R3XPni9EH56CO76RUSrfMScXVe5UmNoC07C9KAo8T87WxQwrwjUsUvNNwtAxM4n6vBrq5XTDbWa/v6LqW0O+E3u3IeM2vFOl9JMiNEn9Ikv3Yno1GJuFp75ZpdDsc0rzJ021cNuTIa3gfgF1pjQSxYOhWIDgi9C8ryR4OuNcC07vWe0ToQXd8C1YwStdBrdpjI/
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR12MB5115.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(376002)(136003)(346002)(396003)(39860400002)(366004)(41300700001)(316002)(31696002)(6512007)(26005)(36756003)(6506007)(36916002)(478600001)(40140700001)(6486002)(31686004)(2616005)(84970400001)(186003)(86362001)(966005)(8676002)(66476007)(66556008)(110136005)(54906003)(66946007)(4326008)(38100700002)(5660300002)(2906002)(44832011)(8936002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?czE1Z3RJSlNrcWhoRmg3YzBuSVBMT2t2REUvSFlFbjFjTlZzNUdhaHhCZ3oz?=
- =?utf-8?B?NVFUTjJ2cUtCNExDaVlVUk91THk4T3d2eFJwR2FiMkYvQmFMNmFBSzZZWG1w?=
- =?utf-8?B?QXVrTS9tRXh5dmU2WUZTa29UL3psTWVhQ3k5TVVRQmx3S2ZEODdNTXVtWjFh?=
- =?utf-8?B?bVRFamprTXVndXRueU9Cb1VUak5TKzVueWJlQW1XelVaNUFCS3hPV3dSNjVG?=
- =?utf-8?B?Y1pxL2Z3VEVzbW55Sk9RMG1YY05aWFZ5c0tVQlpSQ2pTTC9BbzU5QXJaalIz?=
- =?utf-8?B?ejAzaS9zUjk0S0ZYellkZFEzd2JLOVhBazNlR3lqNzBHUWlxbktQMHNXK3FY?=
- =?utf-8?B?UTVrTGhEQlBvcE12aUo3Q0x3YlNIcmIxOVJ6cXNTdC8rOGs4VW0yYWdKZTBp?=
- =?utf-8?B?RGdVOXdPcDJwb2xmUDZkSVZzOEhzK2ZDUGUvaXVOWTlrdWZ4WDZVaTRZOWN0?=
- =?utf-8?B?d1F5Ti9Xa1ZNZU1GMDQ1S1c5cFhsQWJrc2NIUEdxR2c2WEc1cmhFTGFXRElI?=
- =?utf-8?B?S2RNWkZBZyt6VVhZRXJReDY5Z2YvWmJZUDZHZnVKVVYyOU04eVJkV2ZFVWtp?=
- =?utf-8?B?ZncyVlU2TUJtVFF1a0l1R0J6RW40Q2NEcWd4QXNXYyt6U2Y0bEhGS2dhbmR5?=
- =?utf-8?B?cGw1Y2g4TVRieFh0UGk4bnpaVVM3eGc4N3NkNDFGSE5FL0xwMmhRZjFMWWl0?=
- =?utf-8?B?dDZ3OHFFTVJIRGpLSHpGd1F2bFVLVmJ2c0VhdURtQTFLdGxaZThodVA4Vmg5?=
- =?utf-8?B?ODRsVlIzVU16YW9PQ1ZhMHBnOHRxa2NhcGljSmNRY2lBc3BRdllZM3pSZnU4?=
- =?utf-8?B?YVpXWTJ1TGlzQ1RIV1dBbXRCcldwTUZIUmVNYndpNGc1TS9RRnEwVWJ3elBk?=
- =?utf-8?B?bVY1a05jQmorMTVwOXZoMkhvOWNweGdqdFZxOGRudEJ0WDAySGdtSlF2TjJ1?=
- =?utf-8?B?ZnA2aUM3a2syTWRRNllwZzlMZ2d1cFd2aHE4WTlFenZTTEtvbUlrVEhmaTA2?=
- =?utf-8?B?VGdpb2lIZlpYUlFTWktjTWJUVy9GMnJuTnlqVDRJYlRyeTJOTXc1SlNLY2VY?=
- =?utf-8?B?eko0bFBVc1ErSlhyMDIySFRUZFlMTWZVS1FHdjM4T3d1QWRtcXY4ZmNuaU1r?=
- =?utf-8?B?c2hDeU4vUUxTRjlHRSt5Z1g3YktjazBHalZRYmJlRjcrNDJldWlhcFpFYWwr?=
- =?utf-8?B?Yk9nYUZSZS9BcjFaaGV5NDhQdTVDeisva2ZBTU5zSmFvbXNmR0FwUWo5eG02?=
- =?utf-8?B?cFpVN3M3UE0zZ3JIMFdXb1BxUnJoUTJ4anJpSkoyZWFhbnRJWFJGRlArQjlV?=
- =?utf-8?B?bS9XT2tkNmdCOHNKUjlONlZneEZ3ckI5ZkU2R1E4REF2aDFxNGZKQmUwL2Iw?=
- =?utf-8?B?N29oYTZVb0hPY3B1WU04ZWttNWw1R0hvclhEWVBSaVBMbjZReERTR2lzalN2?=
- =?utf-8?B?SVRPMkllbjBWMTNFYjNQNGxvMGc2REc5UitDYjdMckZlTEV1Vkl3c05SMTRY?=
- =?utf-8?B?YWJjVlF1NkhyYVp4WHBNa0pGQUlpT3VpY1ZIWjFRSVVCOVhOK0NZQVB6SEd0?=
- =?utf-8?B?UDRhZVpwcmV5M3ZzWS8zbGNiT2JKM2hjQ1dHVFloUCtFbXQ2Nk9xZzF2bXhi?=
- =?utf-8?B?Z2tzVExMVEZjRVB6NFZZeVh3dFFMQm1pSU1hMy9WZWlWdUt3U3RiZUhzNWRX?=
- =?utf-8?B?SVFoVUtRQzBEMkZTT3JlNVpKUlQzNXIxakM0RW50dkVJZkIzSnBINjFpNEln?=
- =?utf-8?B?MlR5Zm5qS08xMmQrUFg3bndOcGFFb09ORzh4UmpQUWxoZGVDOWFiY2MwZm5J?=
- =?utf-8?B?T0RJdjNpTnZtSHlvNXpkcVZFTlBScWJ3R2RCTlBzcUVUSmdCc0FialphS0p3?=
- =?utf-8?B?Z2dRM3BxU1BrWEVNM2VmN2NsNXpUOXBxYXFxcWhNSStrZ1AwdFNFUU53T1py?=
- =?utf-8?B?bENOSmNETmFGMFlqbUVLVHQ2R255OTdNd2twbFo0dnEzWndCSU1HUUZSS3d0?=
- =?utf-8?B?RGNZVnJMSmU1ZDZsZmh0Y0hZajVIUktxc3BmUXZNbWhRRk5pWGsxREJIdWM4?=
- =?utf-8?B?SllUc0xERGNpeVJBY1Q4eVg5S2ZINisxcG5aUVBUa1ZsbTJLK2ZZR1Z3dDIr?=
- =?utf-8?Q?Am3Eit8nl3E5kPGm1cfNlZeGg?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4654ff8d-42bb-44ee-548b-08da7ca0fbd5
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR12MB5115.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Aug 2022 20:26:48.8958
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: QknAz3+smBCzniEfc2pdu8PZBG3+9MtqhtxC0teGEias8H3BVeh1JfsmrZ8+R44ZERRNZsRmFDslGDU0bGNing==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB3277
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 12 Aug 2022 16:28:08 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72228A1D5E
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 13:28:06 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id j11-20020a05690212cb00b006454988d225so1566061ybu.10
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 13:28:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=y7zyZQpyvwcyrgKQBb7tjr8haOvA6ugjNFKM7h72Cu0=;
+        b=VRTWj8gcht5FdlW2h03vk6MO0i/KKxVvSc+OhyeQUvNmJATUkS3Zo4C3LALOS70zUH
+         +0FHI/IfeBuTVuU7GXnsA3J9XpPwsdqh1iS1aqE94dK38AEC+E2TKWFEiyallg5k97Ig
+         AUp2N9cC/qAaIKMQ0x5C5wcAQtGwxfWt5AS+EFoNNUZUJDthc1QuQxzysJ5v4cI2lAM6
+         SiQVPx6QJKF9y+tQ5r9TQ1qz0EscJiZ5Wrbz3Q1k0oGfXqtDNnlx7ymDJmXDR6UfBvch
+         Juu0QKLeWDfFAJZ2mKG4PHYXfSOV/X6n4z45a7Vn6IayOHgqSzteyYQ2yhoZy7ZlCmS4
+         6Wcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=y7zyZQpyvwcyrgKQBb7tjr8haOvA6ugjNFKM7h72Cu0=;
+        b=PAz9FHUf6vYMNOKxIkCnSzIW0l/rJptxmd6OyovChlikjrOrF+OwR7B6p04SgvLpLl
+         6rQ/Q3VCr3DEztuWzhI5UoGWwHx87O10137dhoqP0BHCAaxv7fXmFG/n2WXZnEpbwka/
+         hsrMls0dei7de18C5btqVqDx74g4lsy1SumEe8i1Pcb7cGw7pP/bjUiMeLf8IVHibkXV
+         40LfNpWJ6OxO+Pv2WgiU4X4kgB9wJt/FiwlYpCbd+yCHbIiJkVsOfwgxeFd2K7NtWGIu
+         MaAZGpw8/s1DWKa3/0ygTMWPiu4q+SK06Dws9214KSkr1mHLkccUbeYs4CCXpVDAzbeg
+         oHGQ==
+X-Gm-Message-State: ACgBeo3FPioE3rzwWUd18bZBALYgXMUJRiJxQM8LY6OgAwQmyokZGpho
+        M4J3iRwudE3JFzxxqUhKUcfnrI0iQM5dniI2AEh2o1JmWHqWkizLbiUkURR4/bouJWVX537gDD+
+        KZGBp8uH5T2ibprBkrL0cVzLDWb0A5sN971vxpVZt278D+AEM6R9Uz9Qz4kp/feWwtXUZ7w==
+X-Google-Smtp-Source: AA6agR6M2bGeyiIwnjT76vuGf9CRnKkoBAbsu9gZGIuR37Vazxim7ayx9Qvx7ti2V1+kSuWbL7zWU9B2d+A=
+X-Received: from haoluo.svl.corp.google.com ([2620:15c:2d4:203:da3d:b609:da67:694a])
+ (user=haoluo job=sendgmr) by 2002:a0d:d70c:0:b0:31f:5bbc:de13 with SMTP id
+ z12-20020a0dd70c000000b0031f5bbcde13mr5240628ywd.397.1660336085648; Fri, 12
+ Aug 2022 13:28:05 -0700 (PDT)
+Date:   Fri, 12 Aug 2022 13:27:57 -0700
+Message-Id: <20220812202802.3774257-1-haoluo@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
+Subject: [PATCH bpf-next v8 0/5] bpf: rstat: cgroup hierarchical stats
+From:   Hao Luo <haoluo@google.com>
+To:     linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        cgroups@vger.kernel.org, netdev@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Michal Koutny <mkoutny@suse.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        David Rientjes <rientjes@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Hao Luo <haoluo@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi workqueue maintainers,
+This patch series allows for using bpf to collect hierarchical cgroup
+stats efficiently by integrating with the rstat framework. The rstat
+framework provides an efficient way to collect cgroup stats percpu and
+propagate them through the cgroup hierarchy.
 
-In the KFD (amdgpu) driver we found a need to schedule bottom half 
-interrupt handlers on CPU cores different from the one where the 
-top-half interrupt handler runs to avoid the interrupt handler stalling 
-the bottom half in extreme scenarios. See my latest patch that tries to 
-use a different hyperthread on the same CPU core, or falls back to a 
-different core in the same NUMA node if that fails: 
-https://lore.kernel.org/all/20220811190433.1213179-1-Felix.Kuehling@amd.com/
+The stats are exposed to userspace in textual form by reading files in
+bpffs, similar to cgroupfs stats by using a cgroup_iter program.
+cgroup_iter is a type of bpf_iter. It walks over cgroups in four modes:
+- walking a cgroup's descendants in pre-order.
+- walking a cgroup's descendants in post-order.
+- walking a cgroup's ancestors.
+- process only a single object.
 
-Dave pointed out that the driver may not be the best place to implement 
-such logic and suggested that we should have an abstraction, maybe in 
-the workqueue code. Do you feel this is something that could or should 
-be provided by the core workqueue code? Or maybe some other place?
+When attaching cgroup_iter, one needs to set a cgroup to the iter_link
+created from attaching. This cgroup can be passed either as a file
+descriptor or a cgroup id. That cgroup serves as the starting point of
+the walk.
 
-Thank you,
-   Felix
+One can also terminate the walk early by returning 1 from the iter
+program.
 
+Note that because walking cgroup hierarchy holds cgroup_mutex, the iter
+program is called with cgroup_mutex held.
+
+** Background on rstat for stats collection **
+(I am using a subscriber analogy that is not commonly used)
+
+The rstat framework maintains a tree of cgroups that have updates and
+which cpus have updates. A subscriber to the rstat framework maintains
+their own stats. The framework is used to tell the subscriber when
+and what to flush, for the most efficient stats propagation. The
+workflow is as follows:
+
+- When a subscriber updates a cgroup on a cpu, it informs the rstat
+  framework by calling cgroup_rstat_updated(cgrp, cpu).
+
+- When a subscriber wants to read some stats for a cgroup, it asks
+  the rstat framework to initiate a stats flush (propagation) by calling
+  cgroup_rstat_flush(cgrp).
+
+- When the rstat framework initiates a flush, it makes callbacks to
+  subscribers to aggregate stats on cpus that have updates, and
+  propagate updates to their parent.
+
+Currently, the main subscribers to the rstat framework are cgroup
+subsystems (e.g. memory, block). This patch series allow bpf programs to
+become subscribers as well.
+
+Patches in this series are organized as follows:
+* Patches 1-2 introduce cgroup_iter prog, and a selftest.
+* Patches 3-5 allow bpf programs to integrate with rstat by adding the
+  necessary hook points and kfunc. A comprehensive selftest that
+  demonstrates the entire workflow for using bpf and rstat to
+  efficiently collect and output cgroup stats is added.
+
+---
+Changelog:
+v7 -> v8:
+- Removed the confusing BPF_ITER_DEFAULT (Andrii)
+- s/SELF/SELF_ONLY/g
+- Fixed typo (e.g. outputing) (Andrii)
+- Use "descendants_pre", "descendants_post" etc. instead of "pre",
+  "post" (Andrii)
+
+v6 -> v7:
+- Updated commit/comments in cgroup_iter for read() behavior (Yonghong)
+- Extracted BPF_ITER_SELF and other options out of cgroup_iter, so
+  that they can be used in other iters. Also renamed them. (Andrii)
+- Supports both cgroup_fd and cgroup_id when specifying target cgroup.
+  (Andrii)
+- Avoided using macro for formatting expected output in cgroup_iter
+  selftest. (Andrii)
+- Applied 'static' on all vars and functions in cgroup_iter selftest.
+  (Andrii)
+- Fixed broken buf reading in cgroup_iter selftest. (Andrii)
+- Switched to use bpf_link__destroy() unconditionally. (Andrii)
+- Removed 'volatile' for non-const global vars in selftests. (Andrii)
+- Started using bpf_core_enum_value() to get memory_cgrp_id. (Andrii)
+
+v5 -> v6:
+- Rebased on bpf-next
+- Tidy up cgroup_hierarchical_stats test (Andrii)
+  * 'static' and 'inline'
+  * avoid using libbpf_get_error()
+  * string literals of cgroup paths.
+- Rename patch 8/8 to 'selftests/bpf' (Yonghong)
+- Fix cgroup_iter comments (e.g. PAGE_SIZE and uapi) (Yonghong)
+- Make sure further read() returns OK after previous read() finished
+  properly (Yonghong)
+- Release cgroup_mutex before the last call of show() (Kumar)
+
+v4 -> v5:
+- Rebased on top of new kfunc flags infrastructure, updated patch 1 and
+  patch 6 accordingly.
+- Added docs for sleepable kfuncs.
+
+v3 -> v4:
+- cgroup_iter:
+  * reorder fields in bpf_link_info to avoid break uapi (Yonghong)
+  * comment the behavior when cgroup_fd=0 (Yonghong)
+  * comment on the limit of number of cgroups supported by cgroup_iter.
+    (Yonghong)
+- cgroup_hierarchical_stats selftest:
+  * Do not return -1 if stats are not found (causes overflow in userspace).
+  * Check if child process failed to join cgroup.
+  * Make buf and path arrays in get_cgroup_vmscan_delay() static.
+  * Increase the test map sizes to accomodate cgroups that are not
+    created by the test.
+
+v2 -> v3:
+- cgroup_iter:
+  * Added conditional compilation of cgroup_iter.c in kernel/bpf/Makefile
+    (kernel test) and dropped the !CONFIG_CGROUP patch.
+  * Added validation of traversal_order when attaching (Yonghong).
+  * Fixed previous wording "two modes" to "three modes" (Yonghong).
+  * Fixed the btf_dump selftest broken by this patch (Yonghong).
+  * Fixed ctx_arg_info[0] to use "PTR_TO_BTF_ID_OR_NULL" instead of
+    "PTR_TO_BTF_ID", because the "cgroup" pointer passed to iter prog can
+     be null.
+- Use __diag_push to eliminate __weak noinline warning in
+  bpf_rstat_flush().
+- cgroup_hierarchical_stats selftest:
+  * Added write_cgroup_file_parent() helper.
+  * Added error handling for failed map updates.
+  * Added null check for cgroup in vmscan_flush.
+  * Fixed the signature of vmscan_[start/end].
+  * Correctly return error code when attaching trace programs fail.
+  * Make sure all links are destroyed correctly and not leaking in
+    cgroup_hierarchical_stats selftest.
+  * Use memory.reclaim instead of memory.high as a more reliable way to
+    invoke reclaim.
+  * Eliminated sleeps, the test now runs faster.
+
+v1 -> v2:
+- Redesign of cgroup_iter from v1, based on Alexei's idea [1]:
+  * supports walking cgroup subtree.
+  * supports walking ancestors of a cgroup. (Andrii)
+  * supports terminating the walk early.
+  * uses fd instead of cgroup_id as parameter for iter_link. Using fd is
+    a convention in bpf.
+  * gets cgroup's ref at attach time and deref at detach.
+  * brought back cgroup1 support for cgroup_iter.
+- Squashed the patches adding the rstat flush hook points and kfuncs
+  (Tejun).
+- Added a comment explaining why bpf_rstat_flush() needs to be weak
+  (Tejun).
+- Updated the final selftest with the new cgroup_iter design.
+- Changed CHECKs in the selftest with ASSERTs (Yonghong, Andrii).
+- Removed empty line at the end of the selftest (Yonghong).
+- Renamed test files to cgroup_hierarchical_stats.c.
+- Reordered CGROUP_PATH params order to match struct declaration
+  in the selftest (Michal).
+- Removed memory_subsys_enabled() and made sure memcg controller
+  enablement checks make sense and are documented (Michal).
+
+
+RFC v2 -> v1:
+- Instead of introducing a new program type for rstat flushing, add an
+  empty hook point, bpf_rstat_flush(), and use fentry bpf programs to
+  attach to it and flush bpf stats.
+- Instead of using helpers, use kfuncs for rstat functions.
+- These changes simplify the patchset greatly, with minimal changes to
+  uapi.
+
+RFC v1 -> RFC v2:
+- Instead of rstat flush programs attach to subsystems, they now attach
+  to rstat (global flushers, not per-subsystem), based on discussions
+  with Tejun. The first patch is entirely rewritten.
+- Pass cgroup pointers to rstat flushers instead of cgroup ids. This is
+  much more flexibility and less likely to need a uapi update later.
+- rstat helpers are now only defined if CGROUP_CONFIG.
+- Most of the code is now only defined if CGROUP_CONFIG and
+  CONFIG_BPF_SYSCALL.
+- Move rstat helper protos from bpf_base_func_proto() to
+  tracing_prog_func_proto().
+- rstat helpers argument (cgroup pointer) is now ARG_PTR_TO_BTF_ID, not
+  ARG_ANYTHING.
+- Rewrote the selftest to use the cgroup helpers.
+- Dropped bpf_map_lookup_percpu_elem (already added by Feng).
+- Dropped patch to support cgroup v1 for cgroup_iter.
+- Dropped patch to define some cgroup_put() when !CONFIG_CGROUP. The
+  code that calls it is no longer compiled when !CONFIG_CGROUP.
+
+cgroup_iter was originally introduced in a different patch series[2].
+Hao and I agreed that it fits better as part of this series.
+RFC v1 of this patch series had the following changes from [2]:
+- Getting the cgroup's reference at the time at attaching, instead of
+  at the time when iterating. (Yonghong)
+- Remove .init_seq_private and .fini_seq_private callbacks for
+  cgroup_iter. They are not needed now. (Yonghong)
+
+[1] https://lore.kernel.org/bpf/20220520221919.jnqgv52k4ajlgzcl@MBP-98dd607d3435.dhcp.thefacebook.com/
+[2] https://lore.kernel.org/lkml/20220225234339.2386398-9-haoluo@google.com/
+
+Hao Luo (2):
+  bpf: Introduce cgroup iter
+  selftests/bpf: Test cgroup_iter.
+
+Yosry Ahmed (3):
+  cgroup: bpf: enable bpf programs to integrate with rstat
+  selftests/bpf: extend cgroup helpers
+  selftests/bpf: add a selftest for cgroup hierarchical stats collection
+
+ include/linux/bpf.h                           |   8 +
+ include/uapi/linux/bpf.h                      |  35 ++
+ kernel/bpf/Makefile                           |   3 +
+ kernel/bpf/cgroup_iter.c                      | 283 ++++++++++++++
+ kernel/cgroup/rstat.c                         |  48 +++
+ tools/include/uapi/linux/bpf.h                |  35 ++
+ tools/testing/selftests/bpf/cgroup_helpers.c  | 202 ++++++++--
+ tools/testing/selftests/bpf/cgroup_helpers.h  |  19 +-
+ .../selftests/bpf/prog_tests/btf_dump.c       |   4 +-
+ .../prog_tests/cgroup_hierarchical_stats.c    | 358 ++++++++++++++++++
+ .../selftests/bpf/prog_tests/cgroup_iter.c    | 224 +++++++++++
+ tools/testing/selftests/bpf/progs/bpf_iter.h  |   7 +
+ .../bpf/progs/cgroup_hierarchical_stats.c     | 226 +++++++++++
+ .../testing/selftests/bpf/progs/cgroup_iter.c |  39 ++
+ 14 files changed, 1442 insertions(+), 49 deletions(-)
+ create mode 100644 kernel/bpf/cgroup_iter.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_hierarchical_stats.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_iter.c
+ create mode 100644 tools/testing/selftests/bpf/progs/cgroup_hierarchical_stats.c
+ create mode 100644 tools/testing/selftests/bpf/progs/cgroup_iter.c
 
 -- 
-F e l i x   K u e h l i n g
-PMTS Software Development Engineer | Linux Compute Kernel
-1 Commerce Valley Dr. East, Markham, ON L3T 7X6 Canada
-(O) +1(289)695-1597
-     _     _   _   _____   _____
-    / \   | \ / | |  _  \  \ _  |
-   / A \  | \M/ | | |D) )  /|_| |
-  /_/ \_\ |_| |_| |_____/ |__/ \|   facebook.com/AMD | amd.com
+2.37.1.595.g718a3a8f04-goog
 

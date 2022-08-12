@@ -2,191 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45E45590AB7
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 05:28:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA101590AB8
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 05:28:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236832AbiHLD21 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 Aug 2022 23:28:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57312 "EHLO
+        id S236976AbiHLD2k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 Aug 2022 23:28:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236933AbiHLD2X (ORCPT
+        with ESMTP id S236968AbiHLD2b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 Aug 2022 23:28:23 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2657EA3D57
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 20:28:21 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id 199so31146179ybl.9
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 20:28:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=5txKBL9+M/Zh/dEDyh3BLW8jRi75RWSJvozBNKtl85E=;
-        b=069qPl4HFPR0BVUbNN8/t9ULIjKgDGN+8+CIKeDRlyn4Z+0BQMeAv8HLyr2A7uIRMb
-         DTYyFkBXttWNlERDv0W8QMV1+bSExeumK9pdf0jHiZfbRynKQnBG9s0d7RlLJHd9aiRe
-         V7KvazQurjutLxWB47wmRBBwJKc8RKAAWu7TOFfuTkT/VVs4ZyDqETACThuIqDowB6+u
-         OuwKcHBEpO1RhREZmY/f8xagDfdIZ2XjI2CXXbGDavFNvDT0QZxexWLjp40toZ0GM99l
-         VbaSvjoN6AzQn3P/HPXVwIFSAqMjXpDn9L85C+ak1vBLfpizvif3CJnbj7jMP78cxK2N
-         hhTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=5txKBL9+M/Zh/dEDyh3BLW8jRi75RWSJvozBNKtl85E=;
-        b=sjNTpSmaEBOboGiTgFfJ2/qpnenZsp64HvaBaZL2NPND3bo2T5P5/tuxeVSjYFPYSH
-         hWITMXbjZAMzglpw0mdaG4gwoxhmiRyXX04qz/eFN5d177JvhGB1/jDCzK03dsetHdDr
-         M60MOrJIfZVrE31G7P6pr/Wih1A7Z7m1bM8n0P4AFaXEx5+flTcw1yl+hE3vhB1ngIV0
-         f1xxj1F5x/yjdNS4U+zOeE03Hm9UjlXo2PINcJ6o5+TWZmuMm1UJw+d/ufootOwO2Cfc
-         V0jOEnqrlmQLc1ytI0Sund5orFQcsKUfjrvUgyLIZQ4xoNS55OEXxB8LnaOKU0Xog2iL
-         r7yA==
-X-Gm-Message-State: ACgBeo2SyCTl1cBP5Fxz2GwH9NTELa7wQmoE5SahMQZyh5NmZqVMtbjc
-        ihXT+/l+mZNtdR9OsLEp9YrJu6KvI01GW8OWRElxDQ==
-X-Google-Smtp-Source: AA6agR4o4Q1raUDav8FjGV2/LTFTH8wCa9D0izlQi+GGHZVaPYYuLtkY9Pi5KQaJP1cxq2efa3eXLJ3HQqEv4F5kcsA=
-X-Received: by 2002:a5b:b49:0:b0:67c:cf0:4565 with SMTP id b9-20020a5b0b49000000b0067c0cf04565mr1934978ybr.442.1660274900107;
- Thu, 11 Aug 2022 20:28:20 -0700 (PDT)
+        Thu, 11 Aug 2022 23:28:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3723AA3D55;
+        Thu, 11 Aug 2022 20:28:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 862F3B82316;
+        Fri, 12 Aug 2022 03:28:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B5FCC433B5;
+        Fri, 12 Aug 2022 03:28:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660274906;
+        bh=T7UnrmMmraBDFs8VzxkTjmBbnKGDsLEGu8IaBCyu3zA=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=Vuy3UZAX9EFj/j97h2woBTDRHntBLFn/BrN2q2SFAp93l+E6LCzWJzMmQBL6FHzkq
+         zZUFoGRv9//DVGU+Y50MPSI+AlC4ZvCXNX5j3fpLjwoAR7C9TkOsXNkvTAdvUXJTJl
+         yU13E6+Vywt7o4MePa1TQyHoJCgo4bvsdrQeSE+dWbdMzqtkE+wmXD8JmlnCx4wG4j
+         Nx2QF1+V/3li2IE9aaeL7ULQeou8vchiZbvk7ApoAsxfyb8BK6pE3xtX1LpmrHcfFp
+         SDn81fp0M0kdXhefTihdarAqiZ7M9EecPiDRoxoK0e8mj5AQS8eAjg46q0n4KCYJkE
+         LACZOgER9kGzA==
+Received: by mail-vs1-f44.google.com with SMTP id b124so20111894vsc.9;
+        Thu, 11 Aug 2022 20:28:26 -0700 (PDT)
+X-Gm-Message-State: ACgBeo2e7iiuGw0tp9j9sm5cG5idWHMK13bD+RxFMqs/zZ+HXEvdc+tc
+        KKutr7x5i/lpwS+gMxBTm+8FTEqZriezS3YWiio=
+X-Google-Smtp-Source: AA6agR5Eo7w7PcJkogroYiNkNxr2WdrF5a21kMXEJrsdEh0ccnnJ4RHRaa0Nf/PkpsOyMdAKe1wl3JGzEDLS8QHupsc=
+X-Received: by 2002:a67:d59e:0:b0:38a:a3c2:9ee with SMTP id
+ m30-20020a67d59e000000b0038aa3c209eemr1163385vsj.78.1660274905147; Thu, 11
+ Aug 2022 20:28:25 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAAhSdy2UDwZYK+EaKHPXLxyKUMv-OX02EdaBDBgjNF0jdDJ7xQ@mail.gmail.com>
- <mhng-368a1ddb-43d3-4d61-934b-3916c63005d4@palmer-ri-x1c9>
-In-Reply-To: <mhng-368a1ddb-43d3-4d61-934b-3916c63005d4@palmer-ri-x1c9>
-From:   Anup Patel <anup@brainfault.org>
-Date:   Fri, 12 Aug 2022 08:58:08 +0530
-Message-ID: <CAAhSdy2mb6wyqy0NAn9BcTWKMYEc0Z4zU3s3j7oNqBz6eDQ9sg@mail.gmail.com>
-Subject: Re: [PATCH v7 0/4] Add Sstc extension support
-To:     Palmer Dabbelt <palmer@dabbelt.com>
-Cc:     Atish Patra <atishp@rivosinc.com>, linux-kernel@vger.kernel.org,
-        aou@eecs.berkeley.edu, atishp@atishpatra.org,
-        daniel.lezcano@linaro.org, guoren@kernel.org, heiko@sntech.de,
-        kvm-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-riscv@lists.infradead.org, pbonzini@redhat.com,
-        Paul Walmsley <paul.walmsley@sifive.com>, robh@kernel.org,
-        tglx@linutronix.de, research_trasio@irq.a4lg.com, wefu@redhat.com
+References: <CAHk-=wgrz5BBk=rCz7W28Fj_o02s0Xi0OEQ3H1uQgOdFvHgx0w@mail.gmail.com>
+ <61d77412-af1a-5b00-9754-f156b1c63a74@gmail.com> <20220812023950.GF373960@MiWiFi-R3L-srv>
+In-Reply-To: <20220812023950.GF373960@MiWiFi-R3L-srv>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Fri, 12 Aug 2022 11:28:12 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7tCsyyNgDJWE5qDCXadF+V6k3GtZtf_yLVj6BZiPND2Q@mail.gmail.com>
+Message-ID: <CAAhV-H7tCsyyNgDJWE5qDCXadF+V6k3GtZtf_yLVj6BZiPND2Q@mail.gmail.com>
+Subject: Re: [RESEND] Please consider name next Linux release "I love Linux"
+ (Re: Linux 5.19)
+To:     Baoquan He <bhe@redhat.com>
+Cc:     Zhang Boyang <zhangboyang.id@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-next <linux-next@vger.kernel.org>, song@kernel.org,
+        wei.liu@kernel.org, jszhang@kernel.org,
+        Guo Ren <guoren@kernel.org>, xiang@kernel.org, chao@kernel.org,
+        ming.lei@redhat.com, Waiman Long <longman@redhat.com>,
+        wqu@suse.com, yhs@fb.com, haoluo@google.com, decui@microsoft.com,
+        Yanteng Si <siyanteng@loongson.cn>,
+        Dave Young <dyoung@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Palmer,
+Hi, all,
 
-On Fri, Aug 12, 2022 at 3:19 AM Palmer Dabbelt <palmer@dabbelt.com> wrote:
+On Fri, Aug 12, 2022 at 10:40 AM Baoquan He <bhe@redhat.com> wrote:
 >
-> On Fri, 22 Jul 2022 21:47:06 PDT (-0700), anup@brainfault.org wrote:
-> > Hi Palmer,
-> >
-> > On Fri, Jul 22, 2022 at 10:20 PM Atish Patra <atishp@rivosinc.com> wrote:
-> >>
-> >> This series implements Sstc extension support which was ratified recently.
-> >> Before the Sstc extension, an SBI call is necessary to generate timer
-> >> interrupts as only M-mode have access to the timecompare registers. Thus,
-> >> there is significant latency to generate timer interrupts at kernel.
-> >> For virtualized enviornments, its even worse as the KVM handles the SBI call
-> >> and uses a software timer to emulate the timecomapre register.
-> >>
-> >> Sstc extension solves both these problems by defining a stimecmp/vstimecmp
-> >> at supervisor (host/guest) level. It allows kernel to program a timer and
-> >> recieve interrupt without supervisor execution enviornment (M-mode/HS mode)
-> >> intervention.
-> >>
-> >> KVM directly updates the vstimecmp as well if the guest kernel invokes the SBI
-> >> call instead of updating stimecmp directly. This is required because KVM will
-> >> enable sstc extension if the hardware supports it unless the VMM explicitly
-> >> disables it for that guest. The hardware is expected to compare the
-> >> vstimecmp at every cycle if sstc is enabled and any stale value in vstimecmp
-> >> will lead to spurious timer interrupts. This also helps maintaining the
-> >> backward compatibility with older kernels.
-> >>
-> >> Similary, the M-mode firmware(OpenSBI) uses stimecmp for older kernel
-> >> without sstc support as STIP bit in mip is read only for hardware with sstc.
-> >>
-> >> The PATCH 1 & 2 enables the basic infrastructure around Sstc extension while
-> >> PATCH 3 lets kernel use the Sstc extension if it is available in hardware.
-> >> PATCH 4 implements the Sstc extension in KVM.
-> >>
-> >> This series has been tested on Qemu(RV32 & RV64) with additional patches in
-> >> Qemu[2]. This series can also be found at [3].
-> >>
-> >> Changes from v6->v7:
-> >> 1. Fixed a compilation error reported by 0-day bot.
-> >>
-> >> Changes from v5->v6:
-> >> 1. Moved SSTC extension enum below SVPBMT.
-> >>
-> >> Changes from v4->v5:
-> >> 1. Added RB tag.
-> >> 2. Changed the pr-format.
-> >> 3. Rebased on 5.19-rc7 and kvm-queue.
-> >> 4. Moved the henvcfg modification from hardware enable to vcpu_load.
-> >>
-> >> Changes from v3->v4:
-> >> 1. Rebased on 5.18-rc6
-> >> 2. Unified vstimemp & next_cycles.
-> >> 3. Addressed comments in PATCH 3 & 4.
-> >>
-> >> Changes from v2->v3:
-> >> 1. Dropped unrelated KVM fixes from this series.
-> >> 2. Rebased on 5.18-rc3.
-> >>
-> >> Changes from v1->v2:
-> >> 1. Separate the static key from kvm usage
-> >> 2. Makde the sstc specific static key local to the driver/clocksource
-> >> 3. Moved the vstimecmp update code to the vcpu_timer
-> >> 4. Used function pointers instead of static key to invoke vstimecmp vs
-> >>    hrtimer at the run time. This will help in future for migration of vms
-> >>    from/to sstc enabled hardware to non-sstc enabled hardware.
-> >> 5. Unified the vstimer & timer to 1 timer as only one of them will be used
-> >>    at runtime.
-> >>
-> >> [1] https://drive.google.com/file/d/1m84Re2yK8m_vbW7TspvevCDR82MOBaSX/view
-> >> [2] https://github.com/atishp04/qemu/tree/sstc_v6
-> >> [3] https://github.com/atishp04/linux/tree/sstc_v7
-> >>
-> >> Atish Patra (4):
-> >> RISC-V: Add SSTC extension CSR details
-> >> RISC-V: Enable sstc extension parsing from DT
-> >> RISC-V: Prefer sstc extension if available
-> >> RISC-V: KVM: Support sstc extension
-> >
-> > The PATCH4 is dependent on the KVM patches in queue for 5.20.
-> >
-> > I suggest you take PATCH1, PATCH2 and PATCH3. I will send
-> > PATCH4 in second batch/PR for 5.20 assuming you will send the
-> > first three patches in your first PR for 5.20
-> >
-> > Does this sound okay to you ?
+> Hi Boyang,
 >
-> Sorry for being slow here, I just merged the non-KVM ones onto
-> riscv/for-next.  LMK if you want me to try and sort out the KVM bits,
-> the branch base is at palmer/riscv-sstc assuming that's easier for you
-> to just merge in locally.
+> On 08/11/22 at 10:02pm, Zhang Boyang wrote:
+> > Hi,
+> >
+> > On 2022/8/1 05:43, Linus Torvalds wrote:
+> > > (*) I'll likely call it 6.0 since I'm starting to worry about getting
+> > > confused by big numbers again.
+> >
+> > Could you please consider name the next Linux release (5.20 or 6.0) "I =
+love
+> > linux" ? The number "5.20" is a wordplay in Chinese, which means "I lov=
+e
+> > you" [1], thus "Linux 5.20" can be read as "I love Linux" in Chinese.
+> >
+> > Even if next kernel version is 6.0, I think it's probably a good idea f=
+or
+> > both Chinese-speakers and non-Chinese speakers to express our love to L=
+inux
+> > Kernel.
+>
+> Interesting idea, LOL.
+>
+> Yes, 520 means 'I love you' in chinese since it has the similar pronuncia=
+tion
+> with '=E6=88=91=E7=88=B1=E4=BD=A0'. I even don't remember since when May =
+20th becomes another
+> holiday similar to Valentine's day in China. While I have complicated fee=
+ling
+> about 520. It means on each May 20th, I also need prepare gift for my wif=
+e. I
+> am not a romantic person, preparing gift to lover is always a torture to =
+me.
+> So almost each May 20th day, Valentine's day, double seventh festival whi=
+ch is
+> a traditional Valentine's day, I will become nervous, and it ends up
+> with a satisfactory gift, or a bunch of flower and a digital red envelope=
+ with
+> 520=EF=BF=A5 and then complainment and blame in next two weeks.
+>
+> So, for naming next release as '5.20', I will vote for it w/o hesitance. =
+No need
+> to prepare gift, and can express our love to Linux kernel, it sounds
+> awesome.
+>
+> Meanwhile, I would remind people to take it easy. Whether the suggestion
+> is accepted or not, it doesn't impact the fact that linux may have
+> become part of our life, not just our work, considering many kernel devel=
+opers
+> are workoing form home. But if you have boasted to your girlfriend
+> or wife, and want to take this as a gift to her, you should try harder to
+> convince Linus.
+>
+> Thanks
+> Baoquan
+Frankly, I agree with Boyang and Baoquan. :)
 
-The KVM RISC-V changes for 5.20 are already merged in Linus's master
-so please go ahead and merge the KVM Sstc patch (i.e. PATCH4 of this
-series) in riscv/for-next with "Acked-by: Anup Patel <anup@brainfault.org>"
-
-Thanks,
-Anup
-
+Huacai
 >
 > >
-> > Regards,
-> > Anup
+> > The name of Linux kernel release has a long history of play-on-words [2=
+].
+> > For example, 5.15 is named "Trick or Treat" and 5.17 is named "Superb O=
+wl".
 > >
-> >>
-> >> arch/riscv/include/asm/csr.h            |   5 +
-> >> arch/riscv/include/asm/hwcap.h          |   1 +
-> >> arch/riscv/include/asm/kvm_vcpu_timer.h |   7 ++
-> >> arch/riscv/include/uapi/asm/kvm.h       |   1 +
-> >> arch/riscv/kernel/cpu.c                 |   1 +
-> >> arch/riscv/kernel/cpufeature.c          |   1 +
-> >> arch/riscv/kvm/vcpu.c                   |   8 +-
-> >> arch/riscv/kvm/vcpu_timer.c             | 144 +++++++++++++++++++++++-
-> >> drivers/clocksource/timer-riscv.c       |  25 +++-
-> >> 9 files changed, 185 insertions(+), 8 deletions(-)
-> >>
-> >> --
-> >> 2.25.1
-> >>
+> > [1] https://en.wikipedia.org/wiki/Chinese_Internet_slang
+> >
+> > [2] https://en.wikipedia.org/wiki/Linux_kernel_version_history
+> >
+> > Thanks and regards,
+> > Zhang Boyang
+> >
+>

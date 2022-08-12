@@ -2,167 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DFA059101F
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 13:34:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B9E3591027
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 13:35:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237291AbiHLLeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 07:34:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38626 "EHLO
+        id S237390AbiHLLfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 07:35:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231627AbiHLLeI (ORCPT
+        with ESMTP id S231627AbiHLLfR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 07:34:08 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59990AE9F3;
-        Fri, 12 Aug 2022 04:34:07 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id i14so1546105ejg.6;
-        Fri, 12 Aug 2022 04:34:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=2maBmCwKBmigg6muaEXXhf/Ng5GHmKY483ELQvBK7bw=;
-        b=WzmVA6wJmViKgJcjJ28fwTes4+4nkLVN3Mx6n7aAByQjaF1kqlO8c/DkZzzNbQ5PMJ
-         Q6QRifhtEywKPW0BRycraqPgJbNNV4Fkr0BDi9NwSjofj+/eExHcmIHXfmWBqj8nEM+V
-         SJ6yUML0yO8yFd9lLsoNczBtQtybcTMT4WUr1ptuUKBS3/Rda9YC3hjAtXIBeNWzrfQv
-         8awekeP8HdFvSg9RwEt6hfJjxWj4IHX4MucvbIt4QDscDPd/6Xe/c8eYLuCx5yo9ewIX
-         pCKNLJxEdZn4+tUGCfNxm+c1cgbj7a+b8mhWZ+qT9Wu2+c+9oyIWqC1lkYhae0HgqZSg
-         TC0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=2maBmCwKBmigg6muaEXXhf/Ng5GHmKY483ELQvBK7bw=;
-        b=HtOTqfpVgGZB0YfPVKTRsiZ3gcNHF4Z69p5FoBOpfGT1Za4F7mRswRcFAlihpMctKv
-         a0Egsq7l/MMAxN2+NpzDJ/3VUSzbfLtecxRW3oAspfsd2UHEdmUXXjH4A3xwG57YORit
-         JvOyAWHstK5mICRDXnREStJIhPACjUFI1qrPO3oEamMQExT1UWSWfDNBcgtf+gLQ/1su
-         u2t6yjNFPkYH+O+o9bKzb44WzemHWWvgRSPCjJ3/BzgtQDuyMMKmcx0UARWieUExpjZa
-         Tcw2hms5QIfXzjiEizX140yGbnC5gdQzgPz3Ej5ncZUK4u17T8bEFAowcT5an+HOJepB
-         zfYw==
-X-Gm-Message-State: ACgBeo2iKt3GI50L7GhgfyhNgjYElW6Hu8z6SAghtY5HNuoN+UJY/yTz
-        10DGu+0Hy8c6PaP4+PkWQZA=
-X-Google-Smtp-Source: AA6agR7yLrz2JyTe8JHAoaW31lDloNP6q9ah/gkL0Xj0JLrU44S+nATJXnQ7Xvnv8KPuB3tTB73pJw==
-X-Received: by 2002:a17:906:eeca:b0:730:6880:c397 with SMTP id wu10-20020a170906eeca00b007306880c397mr2352637ejb.593.1660304045907;
-        Fri, 12 Aug 2022 04:34:05 -0700 (PDT)
-Received: from [192.168.178.21] (p57b0bd9f.dip0.t-ipconnect.de. [87.176.189.159])
-        by smtp.gmail.com with ESMTPSA id jj23-20020a170907985700b0073151ce7726sm696022ejc.100.2022.08.12.04.34.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 Aug 2022 04:34:05 -0700 (PDT)
-Message-ID: <93484389-1f79-b364-700f-60769fc5f8a5@gmail.com>
-Date:   Fri, 12 Aug 2022 13:34:02 +0200
+        Fri, 12 Aug 2022 07:35:17 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 944E4E56;
+        Fri, 12 Aug 2022 04:35:13 -0700 (PDT)
+Received: from [IPv6:2a00:23c6:c311:3401:fef:5a97:8fe5:76f7] (unknown [IPv6:2a00:23c6:c311:3401:fef:5a97:8fe5:76f7])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: martyn)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0FCEC6601B04;
+        Fri, 12 Aug 2022 12:35:12 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1660304112;
+        bh=5jsSqwmgaBJoXJIhLpg1hsJ98A6dREL+lVU6AW01xOY=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=SAOEZI4XWtG7gCmUggZGTqjqDQ41+XpnTqiTwU2viM+HCm2eVWv7lVzbfhCAvrzdc
+         E/3vQkEd/gJRpweNQ3cEFvTE3ZbPDKaStNxnIm3+4Z74BKmfo5dmAsi/bHcwBaYXgS
+         apzYQsbaGwaIaAnfb4H/nWW3JCZWAPgZ0OcYelmY+dmnzj1B8Xch7j7NMLDsQEyU22
+         40j7yxUjCFbvmrOeGLx5nFzAvg32Fc9CZ7sDrZ2MeVchuIAFZGbWb7X9J4kD71XZjX
+         9Gb1Jfz3bQVApkCGopmwXaDT8zrAJ+N/5PdN2q/mWGt6R5unPdhC+R9NHdyiraBGbg
+         zeah7aRI0M/Vg==
+Message-ID: <65a094d5d03ad8f7b35196c9dff6ffc6cf0ea151.camel@collabora.com>
+Subject: Re: [PATCH v4 2/2] arm64: dts: imx8mp-msc-sm2s: Add device trees
+ for MSC SM2S-IMX8PLUS SoM and carrier board
+From:   Martyn Welch <martyn.welch@collabora.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>
+Cc:     kernel@collabora.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Date:   Fri, 12 Aug 2022 12:35:09 +0100
+In-Reply-To: <8962b7ed-a21c-0b7f-7a6d-5db3db84e4cb@linaro.org>
+References: <20220812084120.376042-1-martyn.welch@collabora.com>
+         <20220812084120.376042-2-martyn.welch@collabora.com>
+         <8962b7ed-a21c-0b7f-7a6d-5db3db84e4cb@linaro.org>
+Organization: Collabora Ltd.
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.3-2 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [Linaro-mm-sig] [PATCH v2 3/5] dma-buf: Move all dma-bufs to
- dynamic locking specification
-Content-Language: en-US
-To:     Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org,
-        spice-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Clark <robdclark@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>
-References: <20220725151839.31622-1-dmitry.osipenko@collabora.com>
- <20220725151839.31622-4-dmitry.osipenko@collabora.com>
- <6c8bded9-1809-608f-749a-5ee28b852d32@gmail.com>
- <562fbacf-3673-ff3c-23a1-124284b4456c@collabora.com>
- <87724722-b9f3-a016-c25c-4b0415f2c37f@amd.com>
- <0863cafa-c252-e194-3d23-ef640941e36e@collabora.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>
-In-Reply-To: <0863cafa-c252-e194-3d23-ef640941e36e@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 2022-08-12 at 12:47 +0300, Krzysztof Kozlowski wrote:
+> On 12/08/2022 11:41, Martyn Welch wrote:
+> > Add device trees for one of a number of MSC's (parent company,
+> > Avnet)
+> > variants of the SM2S-IMX8PLUS system on module along with the
+> > compatible
+> > SM2S-SK-AL-EP1 carrier board. As the name suggests, this family of
+> > SoMs use
+> > the NXP i.MX8MP SoC and provide the SMARC module interface.
+> >=20
+> > Signed-off-by: Martyn Welch <martyn.welch@collabora.com>
+> > ---
+> >=20
+> > Changes in v2
+> > =C2=A0 - Added compatibles
+> > =C2=A0 - Removed underscores from node names
+> > =C2=A0 - Make node names more generic
+> > =C2=A0 - Reorder properties
+> > =C2=A0 - Fix issues found by dtbs_check in these files
+> >=20
+> > Changes in v3:
+> > =C2=A0 - Switched to avnet vendor string in compatibles
+> > =C2=A0 - Corrected patch description
+> >=20
+> > Changes in v4:
+> > =C2=A0 - Switched from phy-reset-gpios to reset-gpios, removing
+> > duplication
+> > =C2=A0 - Removed unneeded sdma1 node
+> >=20
+> > =C2=A0arch/arm64/boot/dts/freescale/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 1 +
+> > =C2=A0.../freescale/imx8mp-msc-sm2s-14N0600E.dts=C2=A0=C2=A0=C2=A0 |=C2=
+=A0 72 ++
+> > =C2=A0.../dts/freescale/imx8mp-msc-sm2s-ep1.dts=C2=A0=C2=A0=C2=A0=C2=A0=
+ |=C2=A0 53 ++
+> > =C2=A0.../boot/dts/freescale/imx8mp-msc-sm2s.dtsi=C2=A0=C2=A0 | 812
+> > ++++++++++++++++++
+> > =C2=A04 files changed, 938 insertions(+)
+> > =C2=A0create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-
+> > 14N0600E.dts
+> > =C2=A0create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-
+> > ep1.dts
+> > =C2=A0create mode 100644 arch/arm64/boot/dts/freescale/imx8mp-msc-
+> > sm2s.dtsi
+> >=20
+> > diff --git a/arch/arm64/boot/dts/freescale/Makefile
+> > b/arch/arm64/boot/dts/freescale/Makefile
+> > index 8bf7f7ecebaa..139c8b95c9c9 100644
+> > --- a/arch/arm64/boot/dts/freescale/Makefile
+> > +++ b/arch/arm64/boot/dts/freescale/Makefile
+> > @@ -83,6 +83,7 @@ dtb-$(CONFIG_ARCH_MXC) +=3D imx8mn-venice-
+> > gw7902.dtb
+> > =C2=A0dtb-$(CONFIG_ARCH_MXC) +=3D imx8mp-dhcom-pdk2.dtb
+> > =C2=A0dtb-$(CONFIG_ARCH_MXC) +=3D imx8mp-evk.dtb
+> > =C2=A0dtb-$(CONFIG_ARCH_MXC) +=3D imx8mp-icore-mx8mp-edimm2.2.dtb
+> > +dtb-$(CONFIG_ARCH_MXC) +=3D imx8mp-msc-sm2s-ep1.dtb
+> > =C2=A0dtb-$(CONFIG_ARCH_MXC) +=3D imx8mp-phyboard-pollux-rdk.dtb
+> > =C2=A0dtb-$(CONFIG_ARCH_MXC) +=3D imx8mp-tqma8mpql-mba8mpxl.dtb
+> > =C2=A0dtb-$(CONFIG_ARCH_MXC) +=3D imx8mp-venice-gw74xx.dtb
+> > diff --git a/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-
+> > 14N0600E.dts b/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-
+> > 14N0600E.dts
+> > new file mode 100644
+> > index 000000000000..9e976e8baaee
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/freescale/imx8mp-msc-sm2s-14N0600E.dts
+> > @@ -0,0 +1,72 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Copyright (C) 2022 Avnet Embedded GmbH
+> > + */
+> > +/dts-v1/;
+> > +
+> > +#include "imx8mp-msc-sm2s.dtsi"
+> > +
+> > +/ {
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0model =3D "MSC SM2S-IMX8PLUS=
+-QC6-14N0600E SoM";
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0compatible =3D "avnet,sm2s-i=
+mx8mp-14N0600E", "avnet,sm2s-
+> > imx8mp",
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 "fsl,imx8mp";
+>=20
+> This does not match your bindings. Please test your DTS.
+>=20
 
+Hi Krzysztof,
 
-Am 10.08.22 um 20:53 schrieb Dmitry Osipenko:
-> On 8/10/22 21:25, Christian König wrote:
->> Am 10.08.22 um 19:49 schrieb Dmitry Osipenko:
->>> On 8/10/22 14:30, Christian König wrote:
->>>> Am 25.07.22 um 17:18 schrieb Dmitry Osipenko:
->>>>> This patch moves the non-dynamic dma-buf users over to the dynamic
->>>>> locking specification. The strict locking convention prevents deadlock
->>>>> situation for dma-buf importers and exporters.
->>>>>
->>>>> Previously the "unlocked" versions of the dma-buf API functions weren't
->>>>> taking the reservation lock and this patch makes them to take the lock.
->>>>>
->>>>> Intel and AMD GPU drivers already were mapping imported dma-bufs under
->>>>> the held lock, hence the "locked" variant of the functions are added
->>>>> for them and the drivers are updated to use the "locked" versions.
->>>> In general "Yes, please", but that won't be that easy.
->>>>
->>>> You not only need to change amdgpu and i915, but all drivers
->>>> implementing the map_dma_buf(), unmap_dma_buf() callbacks.
->>>>
->>>> Auditing all that code is a huge bunch of work.
->>> Hm, neither of drivers take the resv lock in map_dma_buf/unmap_dma_buf.
->>> It's easy to audit them all and I did it. So either I'm missing
->>> something or it doesn't take much time to check them all. Am I really
->>> missing something?
->> Ok, so this is only changing map/unmap now?
-> It also vmap/vunmap and attach/detach: In the previous patch I added the
-> _unlocked postfix to the func names and in this patch I made them all to
-> actually take the lock.
+I'm not sure I follow. This is the DTS for the SoM. The only way I can
+test the SoM at the moment is on combination with the "EP1" carrier
+board. That has been tested. The strings match those specified in the
+bindings unless I'm being blind to something.
 
+I guess I can build the DTB for just the SoM and boot with that or
+thinking about it, rename this as a .dtsi, given that it's unlikely
+that anyone is going to have a carrier barebones enough that it could
+be considered just the SoM?
 
-Take your patch "[PATCH v2 2/5] drm/gem: Take reservation lock for 
-vmap/vunmap operations" as a blueprint on how to approach it.
+Martyn
 
-E.g. one callback at a time and then document the result in the end.
-
-Regards,
-Christian.
-
->
->> In this case please separate this from the documentation change.
-> I'll factor out the doc in the v3.
->
->> I would also drop the _locked postfix from the function name, just
->> having _unlocked on all functions which are supposed to be called with
->> the lock held should be sufficient.
-> Noted for the v3.
->
->> Thanks for looking into this,
->> Christian.
-> Thank you for the review.
->
+> Best regards,
+> Krzysztof
 

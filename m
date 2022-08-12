@@ -2,461 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2E625913CF
+	by mail.lfdr.de (Postfix) with ESMTP id 77FD55913CE
 	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 18:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239295AbiHLQVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 12:21:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49150 "EHLO
+        id S239165AbiHLQVM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 12:21:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238752AbiHLQVK (ORCPT
+        with ESMTP id S237138AbiHLQVJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 12:21:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38BFC1BEBB;
-        Fri, 12 Aug 2022 09:21:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B972A6158A;
-        Fri, 12 Aug 2022 16:21:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18956C433D7;
-        Fri, 12 Aug 2022 16:21:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660321267;
-        bh=uwSsvk9I8xqPqVVOTirSSvksHNTdiD3VsTzW8SiwOfU=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=f2gE+GQ30nEgvZpjqySuw4ex2CVOsjuHxcWGqC4ovQkCFczNb5P8qw+BAAAB0nNO5
-         zS6BSdlIVZmExPS5Mn5WQGWp0ELkj3HUa61Nn4NveKPCTE1jBHGbPlDs51yw9DoXx1
-         t3/BUnEcfi7kr3rWdpRuaFrELbw0Cb4u7xR9ghCA8HB7D+6YRJx0xbvcDfhc5UWlXi
-         XsJ01LcJWltvadCUV5pjy1AFWXnv8086TFVNDTrRRqfCPvzxr5G85wzhpZcaE9ittg
-         b2i3I4F9pUOMWEbpP2oja0k6KIu8LqP4af2w6rF3mCFOmnk4PUozz0kJaNom0/TwSM
-         gNcw/n6+fbzmw==
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-116c7286aaaso1434247fac.11;
-        Fri, 12 Aug 2022 09:21:07 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2sOty+1LqguK6yURCC+DW9mq42lZNziF9rrAlE8jRnZkWDZUXW
-        Q7KwwGsppt9Mu9wkhEixGcYpuXccV8yPYbyy1r4=
-X-Google-Smtp-Source: AA6agR7yx2gRGSq/GSDiOFYGtk9pFNUZ6uUcuia1oJmjyhWg0Eo7jYA4yMzIWx+mq55d1HAlRarFz3l3pTZ1z/8OKQI=
-X-Received: by 2002:a05:6870:42cb:b0:10f:530:308 with SMTP id
- z11-20020a05687042cb00b0010f05300308mr2127349oah.294.1660321266114; Fri, 12
- Aug 2022 09:21:06 -0700 (PDT)
+        Fri, 12 Aug 2022 12:21:09 -0400
+Received: from mail-qv1-f45.google.com (mail-qv1-f45.google.com [209.85.219.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBE46A4A5;
+        Fri, 12 Aug 2022 09:21:05 -0700 (PDT)
+Received: by mail-qv1-f45.google.com with SMTP id d1so984155qvs.0;
+        Fri, 12 Aug 2022 09:21:05 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=9OfqdCuCD+UHa5XcQtfGcHPlewQVHBoItXj9iDTx07U=;
+        b=eN5ZJpE/aJiYenhpIbXugD1iCuui1hI4excylgfsdztoOGgAvIudDKqlvOjYagNkJd
+         0Ke7/txIw6D1EdezXkazuZV9Si+2BaWCNlq5sI2ivd/fLI0flPHR5390bff0XXv84rbZ
+         KyWY3P2pZ5yaKAxx5N56QXc2ubwhJJlfEz8Kose6hujfazrv5rQguS/FE0Seu+K8CdX0
+         mlFVWhiF/9AQnNUG4mkefNBRF3mpfTAQK8EYdTo/6/O8TIpCl2Si5O3t23X/qr21qH9l
+         5WLoh/5Ffb+ftxBNmpArSsbAH8JcBR6CLEzOfkwXIxMQAlD+jLVn8jEp28PNo0Tvy4bH
+         UAjw==
+X-Gm-Message-State: ACgBeo0hlUVkPzNYZKdQJRkhsk9MlJRk5KNc5b9geAkrOqCD1BFhu5Yt
+        h7jVlGHBA+SePgCbiZPWH/A=
+X-Google-Smtp-Source: AA6agR7Sa3C/LHf+RQuDW7RRH8XzGb3vvnkmOVwBO+STOObVOemEXGttCIQOIPg1O639hfixD4BNew==
+X-Received: by 2002:a0c:ab17:0:b0:474:8a27:ed53 with SMTP id h23-20020a0cab17000000b004748a27ed53mr4089040qvb.56.1660321264457;
+        Fri, 12 Aug 2022 09:21:04 -0700 (PDT)
+Received: from maniforge.dhcp.thefacebook.com ([2620:10d:c091:480::9c4])
+        by smtp.gmail.com with ESMTPSA id 20-20020a370914000000b006b8d1914504sm1880095qkj.22.2022.08.12.09.21.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Aug 2022 09:21:04 -0700 (PDT)
+Date:   Fri, 12 Aug 2022 11:21:01 -0500
+From:   David Vernet <void@manifault.com>
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
+        andrii@kernel.org, john.fastabend@gmail.com, martin.lau@linux.dev,
+        song@kernel.org, yhs@fb.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, tj@kernel.org,
+        joannelkoong@gmail.com, linux-kernel@vger.kernel.org,
+        Kernel-team@fb.com
+Subject: Re: [PATCH 2/5] bpf: Define new BPF_MAP_TYPE_USER_RINGBUF map type
+Message-ID: <YvZ97XQNRvvA00Xx@maniforge.dhcp.thefacebook.com>
+References: <20220808155341.2479054-1-void@manifault.com>
+ <20220808155341.2479054-2-void@manifault.com>
+ <CAEf4BzbGEQ9rMHBaiex2wPEB2cOMXFNydpPUutko6P7UCK-UyQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220812144233.132960-1-bingjingc@synology.com> <20220812144233.132960-2-bingjingc@synology.com>
-In-Reply-To: <20220812144233.132960-2-bingjingc@synology.com>
-From:   Filipe Manana <fdmanana@kernel.org>
-Date:   Fri, 12 Aug 2022 17:20:29 +0100
-X-Gmail-Original-Message-ID: <CAL3q7H6wXw-MfDCeyHRLQEV=dCdY-mJsAU=1uGJzfLUeS5sZ_Q@mail.gmail.com>
-Message-ID: <CAL3q7H6wXw-MfDCeyHRLQEV=dCdY-mJsAU=1uGJzfLUeS5sZ_Q@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] btrfs: send: refactor get_inode_info()
-To:     bingjingc <bingjingc@synology.com>
-Cc:     josef@toxicpanda.com, dsterba@suse.com, clm@fb.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        robbieko@synology.com, bxxxjxxg@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEf4BzbGEQ9rMHBaiex2wPEB2cOMXFNydpPUutko6P7UCK-UyQ@mail.gmail.com>
+User-Agent: Mutt/2.2.7 (2022-08-07)
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 12, 2022 at 3:42 PM bingjingc <bingjingc@synology.com> wrote:
->
-> From: BingJing Chang <bingjingc@synology.com>
->
-> Refactor get_inode_info() to populate all wanted fields on an output
-> structure. Besides, also introduce a helper function called
-> get_inode_gen(), which is majorly used.
->
-> Reviewed-by: Robbie Ko <robbieko@synology.com>
-> Signed-off-by: BingJing Chang <bingjingc@synology.com>
+On Thu, Aug 11, 2022 at 04:22:50PM -0700, Andrii Nakryiko wrote:
+> On Mon, Aug 8, 2022 at 8:54 AM David Vernet <void@manifault.com> wrote:
+> >
+> > We want to support a ringbuf map type where samples are published from
+> > user-space to BPF programs. BPF currently supports a kernel -> user-space
+> > circular ringbuffer via the BPF_MAP_TYPE_RINGBUF map type. We'll need to
+> > define a new map type for user-space -> kernel, as none of the helpers
+> > exported for BPF_MAP_TYPE_RINGBUF will apply to a user-space producer
+> > ringbuffer, and we'll want to add one or more helper functions that would
+> > not apply for a kernel-producer ringbuffer.
+> >
+> > This patch therefore adds a new BPF_MAP_TYPE_USER_RINGBUF map type
+> > definition. The map type is useless in its current form, as there is no way
+> > to access or use it for anything until we add more BPF helpers. A follow-on
+> > patch will therefore add a new helper function that allows BPF programs to
+> > run callbacks on samples that are published to the ringbuffer.
+> >
+> > Signed-off-by: David Vernet <void@manifault.com>
+> > ---
+> >  include/linux/bpf_types.h      |  1 +
+> >  include/uapi/linux/bpf.h       |  1 +
+> >  kernel/bpf/ringbuf.c           | 70 +++++++++++++++++++++++++++++-----
+> >  kernel/bpf/verifier.c          |  3 ++
+> >  tools/include/uapi/linux/bpf.h |  1 +
+> >  tools/lib/bpf/libbpf.c         |  1 +
+> >  6 files changed, 68 insertions(+), 9 deletions(-)
+> >
+> 
+> [...]
+> 
+> >
+> > -static int ringbuf_map_mmap(struct bpf_map *map, struct vm_area_struct *vma)
+> > +static int ringbuf_map_mmap(struct bpf_map *map, struct vm_area_struct *vma,
+> > +                           bool kernel_producer)
+> >  {
+> >         struct bpf_ringbuf_map *rb_map;
+> >
+> >         rb_map = container_of(map, struct bpf_ringbuf_map, map);
+> >
+> >         if (vma->vm_flags & VM_WRITE) {
+> > -               /* allow writable mapping for the consumer_pos only */
+> > -               if (vma->vm_pgoff != 0 || vma->vm_end - vma->vm_start != PAGE_SIZE)
+> > +               if (kernel_producer) {
+> > +                       /* allow writable mapping for the consumer_pos only */
+> > +                       if (vma->vm_pgoff != 0 || vma->vm_end - vma->vm_start != PAGE_SIZE)
+> > +                               return -EPERM;
+> > +               /* For user ringbufs, disallow writable mappings to the
+> > +                * consumer pointer, and allow writable mappings to both the
+> > +                * producer position, and the ring buffer data itself.
+> > +                */
+> > +               } else if (vma->vm_pgoff == 0)
+> >                         return -EPERM;
+> 
+> the asymmetrical use of {} in one if branch and not using them in
+> another is extremely confusing, please don't do that
 
-Reviewed-by: Filipe Manana <fdmanana@suse.com>
+Ah, sorry, I misread the style guide and thought this was stipulated there,
+but I now see that it's explicitly stated that you should include a brace
+if only one branch is in a single statement. I'll fix this (by splitting
+these into their own implementations, as mentioned below).
 
-Looks good, thanks.
+> the way you put big comment inside the wrong if branch also throws me
+> off, maybe move it before return -EPERM instead with proper
+> indentation?
 
-> ---
->  fs/btrfs/send.c | 154 +++++++++++++++++++++++++-----------------------
->  1 file changed, 79 insertions(+), 75 deletions(-)
->
-> diff --git a/fs/btrfs/send.c b/fs/btrfs/send.c
-> index e7671afcee4f..f8d77a33b9b7 100644
-> --- a/fs/btrfs/send.c
-> +++ b/fs/btrfs/send.c
-> @@ -842,17 +842,31 @@ static int send_rmdir(struct send_ctx *sctx, struct fs_path *path)
->         return ret;
->  }
->
-> +struct btrfs_inode_info {
-> +       u64 size;
-> +       u64 gen;
-> +       u64 mode;
-> +       u64 uid;
-> +       u64 gid;
-> +       u64 rdev;
-> +       u64 attr;
-> +};
-> +
->  /*
->   * Helper function to retrieve some fields from an inode item.
->   */
-> -static int __get_inode_info(struct btrfs_root *root, struct btrfs_path *path,
-> -                         u64 ino, u64 *size, u64 *gen, u64 *mode, u64 *uid,
-> -                         u64 *gid, u64 *rdev, u64 *fileattr)
-> +static int get_inode_info(struct btrfs_root *root, u64 ino,
-> +                         struct btrfs_inode_info *info)
->  {
->         int ret;
-> +       struct btrfs_path *path;
->         struct btrfs_inode_item *ii;
->         struct btrfs_key key;
->
-> +       path = alloc_path_for_send();
-> +       if (!path)
-> +               return -ENOMEM;
-> +
->         key.objectid = ino;
->         key.type = BTRFS_INODE_ITEM_KEY;
->         key.offset = 0;
-> @@ -860,47 +874,42 @@ static int __get_inode_info(struct btrfs_root *root, struct btrfs_path *path,
->         if (ret) {
->                 if (ret > 0)
->                         ret = -ENOENT;
-> -               return ret;
-> +               goto out;
->         }
->
-> +       if (!info)
-> +               goto out;
-> +
->         ii = btrfs_item_ptr(path->nodes[0], path->slots[0],
->                         struct btrfs_inode_item);
-> -       if (size)
-> -               *size = btrfs_inode_size(path->nodes[0], ii);
-> -       if (gen)
-> -               *gen = btrfs_inode_generation(path->nodes[0], ii);
-> -       if (mode)
-> -               *mode = btrfs_inode_mode(path->nodes[0], ii);
-> -       if (uid)
-> -               *uid = btrfs_inode_uid(path->nodes[0], ii);
-> -       if (gid)
-> -               *gid = btrfs_inode_gid(path->nodes[0], ii);
-> -       if (rdev)
-> -               *rdev = btrfs_inode_rdev(path->nodes[0], ii);
-> +       info->size = btrfs_inode_size(path->nodes[0], ii);
-> +       info->gen = btrfs_inode_generation(path->nodes[0], ii);
-> +       info->mode = btrfs_inode_mode(path->nodes[0], ii);
-> +       info->uid = btrfs_inode_uid(path->nodes[0], ii);
-> +       info->gid = btrfs_inode_gid(path->nodes[0], ii);
-> +       info->rdev = btrfs_inode_rdev(path->nodes[0], ii);
->         /*
->          * Transfer the unchanged u64 value of btrfs_inode_item::flags, that's
->          * otherwise logically split to 32/32 parts.
->          */
-> -       if (fileattr)
-> -               *fileattr = btrfs_inode_flags(path->nodes[0], ii);
-> +       info->attr = btrfs_inode_flags(path->nodes[0], ii);
->
-> +out:
-> +       btrfs_free_path(path);
->         return ret;
->  }
->
-> -static int get_inode_info(struct btrfs_root *root,
-> -                         u64 ino, u64 *size, u64 *gen,
-> -                         u64 *mode, u64 *uid, u64 *gid,
-> -                         u64 *rdev, u64 *fileattr)
-> +static int get_inode_gen(struct btrfs_root *root, u64 ino, u64 *gen)
->  {
-> -       struct btrfs_path *path;
->         int ret;
-> +       struct btrfs_inode_info info;
->
-> -       path = alloc_path_for_send();
-> -       if (!path)
-> -               return -ENOMEM;
-> -       ret = __get_inode_info(root, path, ino, size, gen, mode, uid, gid,
-> -                              rdev, fileattr);
-> -       btrfs_free_path(path);
-> +       if (!gen)
-> +               return -EPERM;
-> +
-> +       ret = get_inode_info(root, ino, &info);
-> +       if (!ret)
-> +               *gen = info.gen;
->         return ret;
->  }
->
-> @@ -1644,8 +1653,7 @@ static int get_cur_inode_state(struct send_ctx *sctx, u64 ino, u64 gen)
->         u64 left_gen;
->         u64 right_gen;
->
-> -       ret = get_inode_info(sctx->send_root, ino, NULL, &left_gen, NULL, NULL,
-> -                       NULL, NULL, NULL);
-> +       ret = get_inode_gen(sctx->send_root, ino, &left_gen);
->         if (ret < 0 && ret != -ENOENT)
->                 goto out;
->         left_ret = ret;
-> @@ -1653,8 +1661,7 @@ static int get_cur_inode_state(struct send_ctx *sctx, u64 ino, u64 gen)
->         if (!sctx->parent_root) {
->                 right_ret = -ENOENT;
->         } else {
-> -               ret = get_inode_info(sctx->parent_root, ino, NULL, &right_gen,
-> -                               NULL, NULL, NULL, NULL, NULL);
-> +               ret = get_inode_gen(sctx->parent_root, ino, &right_gen);
->                 if (ret < 0 && ret != -ENOENT)
->                         goto out;
->                 right_ret = ret;
-> @@ -1816,8 +1823,7 @@ static int get_first_ref(struct btrfs_root *root, u64 ino,
->         btrfs_release_path(path);
->
->         if (dir_gen) {
-> -               ret = get_inode_info(root, parent_dir, NULL, dir_gen, NULL,
-> -                                    NULL, NULL, NULL, NULL);
-> +               ret = get_inode_gen(root, parent_dir, dir_gen);
->                 if (ret < 0)
->                         goto out;
->         }
-> @@ -1874,6 +1880,7 @@ static int will_overwrite_ref(struct send_ctx *sctx, u64 dir, u64 dir_gen,
->         int ret = 0;
->         u64 gen;
->         u64 other_inode = 0;
-> +       struct btrfs_inode_info info;
->
->         if (!sctx->parent_root)
->                 goto out;
-> @@ -1888,8 +1895,7 @@ static int will_overwrite_ref(struct send_ctx *sctx, u64 dir, u64 dir_gen,
->          * and we can just unlink this entry.
->          */
->         if (sctx->parent_root && dir != BTRFS_FIRST_FREE_OBJECTID) {
-> -               ret = get_inode_info(sctx->parent_root, dir, NULL, &gen, NULL,
-> -                                    NULL, NULL, NULL, NULL);
-> +               ret = get_inode_gen(sctx->parent_root, dir, &gen);
->                 if (ret < 0 && ret != -ENOENT)
->                         goto out;
->                 if (ret) {
-> @@ -1916,13 +1922,14 @@ static int will_overwrite_ref(struct send_ctx *sctx, u64 dir, u64 dir_gen,
->          */
->         if (other_inode > sctx->send_progress ||
->             is_waiting_for_move(sctx, other_inode)) {
-> -               ret = get_inode_info(sctx->parent_root, other_inode, NULL,
-> -                               who_gen, who_mode, NULL, NULL, NULL, NULL);
-> +               ret = get_inode_info(sctx->parent_root, other_inode, &info);
->                 if (ret < 0)
->                         goto out;
->
->                 ret = 1;
->                 *who_ino = other_inode;
-> +               *who_gen = info.gen;
-> +               *who_mode = info.mode;
->         } else {
->                 ret = 0;
->         }
-> @@ -1955,8 +1962,7 @@ static int did_overwrite_ref(struct send_ctx *sctx,
->                 goto out;
->
->         if (dir != BTRFS_FIRST_FREE_OBJECTID) {
-> -               ret = get_inode_info(sctx->send_root, dir, NULL, &gen, NULL,
-> -                                    NULL, NULL, NULL, NULL);
-> +               ret = get_inode_gen(sctx->send_root, dir, &gen);
->                 if (ret < 0 && ret != -ENOENT)
->                         goto out;
->                 if (ret) {
-> @@ -1978,8 +1984,7 @@ static int did_overwrite_ref(struct send_ctx *sctx,
->                 goto out;
->         }
->
-> -       ret = get_inode_info(sctx->send_root, ow_inode, NULL, &gen, NULL, NULL,
-> -                       NULL, NULL, NULL);
-> +       ret = get_inode_gen(sctx->send_root, ow_inode, &gen);
->         if (ret < 0)
->                 goto out;
->
-> @@ -2645,6 +2650,7 @@ static int send_create_inode(struct send_ctx *sctx, u64 ino)
->         int ret = 0;
->         struct fs_path *p;
->         int cmd;
-> +       struct btrfs_inode_info info;
->         u64 gen;
->         u64 mode;
->         u64 rdev;
-> @@ -2656,10 +2662,12 @@ static int send_create_inode(struct send_ctx *sctx, u64 ino)
->                 return -ENOMEM;
->
->         if (ino != sctx->cur_ino) {
-> -               ret = get_inode_info(sctx->send_root, ino, NULL, &gen, &mode,
-> -                                    NULL, NULL, &rdev, NULL);
-> +               ret = get_inode_info(sctx->send_root, ino, &info);
->                 if (ret < 0)
->                         goto out;
-> +               gen = info.gen;
-> +               mode = info.mode;
-> +               rdev = info.rdev;
->         } else {
->                 gen = sctx->cur_inode_gen;
->                 mode = sctx->cur_inode_mode;
-> @@ -3359,8 +3367,7 @@ static int apply_dir_move(struct send_ctx *sctx, struct pending_dir_move *pm)
->                 /*
->                  * The parent inode might have been deleted in the send snapshot
->                  */
-> -               ret = get_inode_info(sctx->send_root, cur->dir, NULL,
-> -                                    NULL, NULL, NULL, NULL, NULL, NULL);
-> +               ret = get_inode_info(sctx->send_root, cur->dir, NULL);
->                 if (ret == -ENOENT) {
->                         ret = 0;
->                         continue;
-> @@ -3534,12 +3541,10 @@ static int wait_for_dest_dir_move(struct send_ctx *sctx,
->                 goto out;
->         }
->
-> -       ret = get_inode_info(sctx->parent_root, di_key.objectid, NULL,
-> -                            &left_gen, NULL, NULL, NULL, NULL, NULL);
-> +       ret = get_inode_gen(sctx->parent_root, di_key.objectid, &left_gen);
->         if (ret < 0)
->                 goto out;
-> -       ret = get_inode_info(sctx->send_root, di_key.objectid, NULL,
-> -                            &right_gen, NULL, NULL, NULL, NULL, NULL);
-> +       ret = get_inode_gen(sctx->send_root, di_key.objectid, &right_gen);
->         if (ret < 0) {
->                 if (ret == -ENOENT)
->                         ret = 0;
-> @@ -3669,8 +3674,7 @@ static int is_ancestor(struct btrfs_root *root,
->                                 cur_offset = item_size;
->                         }
->
-> -                       ret = get_inode_info(root, parent, NULL, &parent_gen,
-> -                                            NULL, NULL, NULL, NULL, NULL);
-> +                       ret = get_inode_gen(root, parent, &parent_gen);
->                         if (ret < 0)
->                                 goto out;
->                         ret = check_ino_in_path(root, ino1, ino1_gen,
-> @@ -3760,9 +3764,8 @@ static int wait_for_parent_move(struct send_ctx *sctx,
->                      memcmp(path_before->start, path_after->start, len1))) {
->                         u64 parent_ino_gen;
->
-> -                       ret = get_inode_info(sctx->parent_root, ino, NULL,
-> -                                            &parent_ino_gen, NULL, NULL, NULL,
-> -                                            NULL, NULL);
-> +                       ret = get_inode_gen(sctx->parent_root, ino,
-> +                                           &parent_ino_gen);
->                         if (ret < 0)
->                                 goto out;
->                         if (ino_gen == parent_ino_gen) {
-> @@ -4441,8 +4444,7 @@ static int record_new_ref_if_needed(int num, u64 dir, int index,
->         struct recorded_ref *ref;
->         u64 dir_gen;
->
-> -       ret = get_inode_info(sctx->send_root, dir, NULL, &dir_gen, NULL,
-> -                            NULL, NULL, NULL, NULL);
-> +       ret = get_inode_gen(sctx->send_root, dir, &dir_gen);
->         if (ret < 0)
->                 goto out;
->
-> @@ -4472,8 +4474,7 @@ static int record_deleted_ref_if_needed(int num, u64 dir, int index,
->         struct recorded_ref *ref;
->         u64 dir_gen;
->
-> -       ret = get_inode_info(sctx->parent_root, dir, NULL, &dir_gen, NULL,
-> -                            NULL, NULL, NULL, NULL);
-> +       ret = get_inode_gen(sctx->parent_root, dir, &dir_gen);
->         if (ret < 0)
->                 goto out;
->
-> @@ -5056,8 +5057,7 @@ static int send_clone(struct send_ctx *sctx,
->         TLV_PUT_PATH(sctx, BTRFS_SEND_A_PATH, p);
->
->         if (clone_root->root == sctx->send_root) {
-> -               ret = get_inode_info(sctx->send_root, clone_root->ino, NULL,
-> -                               &gen, NULL, NULL, NULL, NULL, NULL);
-> +               ret = get_inode_gen(sctx->send_root, clone_root->ino, &gen);
->                 if (ret < 0)
->                         goto out;
->                 ret = get_cur_path(sctx, clone_root->ino, gen, p);
-> @@ -5536,6 +5536,7 @@ static int clone_range(struct send_ctx *sctx, struct btrfs_path *dst_path,
->         struct btrfs_path *path;
->         struct btrfs_key key;
->         int ret;
-> +       struct btrfs_inode_info info;
->         u64 clone_src_i_size = 0;
->
->         /*
-> @@ -5565,12 +5566,11 @@ static int clone_range(struct send_ctx *sctx, struct btrfs_path *dst_path,
->          * There are inodes that have extents that lie behind its i_size. Don't
->          * accept clones from these extents.
->          */
-> -       ret = __get_inode_info(clone_root->root, path, clone_root->ino,
-> -                              &clone_src_i_size, NULL, NULL, NULL, NULL, NULL,
-> -                              NULL);
-> +       ret = get_inode_info(clone_root->root, clone_root->ino, &info);
->         btrfs_release_path(path);
->         if (ret < 0)
->                 goto out;
-> +       clone_src_i_size = info.size;
->
->         /*
->          * We can't send a clone operation for the entire range if we find
-> @@ -6259,6 +6259,7 @@ static int process_recorded_refs_if_needed(struct send_ctx *sctx, int at_end,
->  static int finish_inode_if_needed(struct send_ctx *sctx, int at_end)
->  {
->         int ret = 0;
-> +       struct btrfs_inode_info info;
->         u64 left_mode;
->         u64 left_uid;
->         u64 left_gid;
-> @@ -6301,11 +6302,13 @@ static int finish_inode_if_needed(struct send_ctx *sctx, int at_end)
->                 goto out;
->         if (!at_end && sctx->cmp_key->objectid == sctx->cur_ino)
->                 goto out;
-> -
-> -       ret = get_inode_info(sctx->send_root, sctx->cur_ino, NULL, NULL,
-> -                       &left_mode, &left_uid, &left_gid, NULL, &left_fileattr);
-> +       ret = get_inode_info(sctx->send_root, sctx->cur_ino, &info);
->         if (ret < 0)
->                 goto out;
-> +       left_mode = info.mode;
-> +       left_uid = info.uid;
-> +       left_gid = info.gid;
-> +       left_fileattr = info.attr;
->
->         if (!sctx->parent_root || sctx->cur_inode_new) {
->                 need_chown = 1;
-> @@ -6316,11 +6319,14 @@ static int finish_inode_if_needed(struct send_ctx *sctx, int at_end)
->         } else {
->                 u64 old_size;
->
-> -               ret = get_inode_info(sctx->parent_root, sctx->cur_ino,
-> -                               &old_size, NULL, &right_mode, &right_uid,
-> -                               &right_gid, NULL, &right_fileattr);
-> +               ret = get_inode_info(sctx->parent_root, sctx->cur_ino, &info);
->                 if (ret < 0)
->                         goto out;
-> +               old_size = info.size;
-> +               right_mode = info.mode;
-> +               right_uid = info.uid;
-> +               right_gid = info.gid;
-> +               right_fileattr = info.attr;
->
->                 if (left_uid != right_uid || left_gid != right_gid)
->                         need_chown = 1;
-> @@ -6790,13 +6796,11 @@ static int dir_changed(struct send_ctx *sctx, u64 dir)
->         u64 orig_gen, new_gen;
->         int ret;
->
-> -       ret = get_inode_info(sctx->send_root, dir, NULL, &new_gen, NULL, NULL,
-> -                            NULL, NULL, NULL);
-> +       ret = get_inode_gen(sctx->send_root, dir, &new_gen);
->         if (ret)
->                 return ret;
->
-> -       ret = get_inode_info(sctx->parent_root, dir, NULL, &orig_gen, NULL,
-> -                            NULL, NULL, NULL, NULL);
-> +       ret = get_inode_gen(sctx->parent_root, dir, &orig_gen);
->         if (ret)
->                 return ret;
->
-> --
-> 2.37.1
->
+Yeah, fair enough.
+
+> sorry for nitpicks, but I've been stuck for a few minutes trying to
+> figure out what exactly is happening here :)
+
+Not a problem at all, sorry for the less-than-readable code.
+
+> >         } else {
+> >                 vma->vm_flags &= ~VM_MAYWRITE;
+> > @@ -242,6 +271,16 @@ static int ringbuf_map_mmap(struct bpf_map *map, struct vm_area_struct *vma)
+> >                                    vma->vm_pgoff + RINGBUF_PGOFF);
+> >  }
+> >
+> > +static int ringbuf_map_mmap_kern(struct bpf_map *map, struct vm_area_struct *vma)
+> > +{
+> > +       return ringbuf_map_mmap(map, vma, true);
+> > +}
+> > +
+> > +static int ringbuf_map_mmap_user(struct bpf_map *map, struct vm_area_struct *vma)
+> > +{
+> > +       return ringbuf_map_mmap(map, vma, false);
+> > +}
+> 
+> I wouldn't mind if you just have two separate implementations of
+> ringbuf_map_mmap for _kern and _user cases, tbh, probably would be
+> clearer as well
+
+Yeah, I can do this. I was trying to avoid any copy-pasta at all cost, but
+I think it's doing more harm than good. I'll just split them into totally
+separate implementations.
+
+> > +
+> >  static unsigned long ringbuf_avail_data_sz(struct bpf_ringbuf *rb)
+> >  {
+> >         unsigned long cons_pos, prod_pos;
+> > @@ -269,7 +308,7 @@ const struct bpf_map_ops ringbuf_map_ops = {
+> >         .map_meta_equal = bpf_map_meta_equal,
+> >         .map_alloc = ringbuf_map_alloc,
+> >         .map_free = ringbuf_map_free,
+> > -       .map_mmap = ringbuf_map_mmap,
+> > +       .map_mmap = ringbuf_map_mmap_kern,
+> >         .map_poll = ringbuf_map_poll,
+> >         .map_lookup_elem = ringbuf_map_lookup_elem,
+> >         .map_update_elem = ringbuf_map_update_elem,
+> > @@ -278,6 +317,19 @@ const struct bpf_map_ops ringbuf_map_ops = {
+> >         .map_btf_id = &ringbuf_map_btf_ids[0],
+> >  };
+> >
+> 
+> [...]

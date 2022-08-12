@@ -2,194 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20F28590E14
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 11:30:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 003B2590E19
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 11:31:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237959AbiHLJaB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 05:30:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42476 "EHLO
+        id S237971AbiHLJbg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 05:31:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236848AbiHLJ37 (ORCPT
+        with ESMTP id S231700AbiHLJbd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 05:29:59 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ABF3A598A
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 02:29:58 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id bx38so383961ljb.10
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 02:29:58 -0700 (PDT)
+        Fri, 12 Aug 2022 05:31:33 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C6C911462
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 02:31:32 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id k6-20020a05600c1c8600b003a54ecc62f6so241751wms.5
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 02:31:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=92ou/u14nlAhRLAjyH+K5VTnxlst6DGZsroJdwVOovQ=;
-        b=BYUOxr06BCh8L+j+0kdrblTLsfOAc/S1qPRVrIOUjSIteDptTVgc3VdOuPlNx8LkCE
-         7HL2VOP0xS7+FoFkFpGkV/2J62IDmuPMsY3+3zCsuSBJ/or6VNQAAOTVXj3RMINn3H7L
-         VL2qIe3Z2mCX6vXter3C+GKO0XkjbhdppPRoRdPMKvVHG0EFp1ff508s8QqKCEQ8960l
-         FGCxlwJNlnJRYyrpBQZdIr55z5UyDM3M/yL4Rfxr8HH5vIuvKOUaNXEcZ7cFA9GvA4wj
-         egjarR98yKRN6RZPLnyEmnljddhDPuWpMH5ffg9hGkG034uwDBRtap6niExmB3h+RrUj
-         VAbQ==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc;
+        bh=J8tlT7YO8qB4sKSoN7y2Ao83eWRyyP4+ue99CI5WF2c=;
+        b=Mj1bqzrYJljq9jpWElDlhgRYBpwuM895f5L3urP7d/Yhb1lJB3+WMCVOOP9snIQ1I1
+         fRCJup6PrtoMIQP/p00dYKrbZJJoo6WkeMr99arp0WsK7VrBLBPakclpx59hcC41PgvA
+         aY1eFPkMQOS9iuFf1ZX5mU/Ij4iN88zKqQVQoqrWjWbEMNcMsBR54Me6rIqsLOrjPIpC
+         s96hxaM0fsy3mEiSnrwRGQDZUCU19iAmQz1o/TyjTc1G5QcjDZK08kRxb/Iaf1ZPW7xC
+         9EJG7WLxxtLuTBZRs1vw1eKCyyAFSa/XrvCGN50dE6Fb1GHVE0zCcF9cfaDoEjECrRkl
+         dePw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=92ou/u14nlAhRLAjyH+K5VTnxlst6DGZsroJdwVOovQ=;
-        b=BeAe6yqzwNDlzEQunuDMJfnUGzt1HMD8qAUsa+iCbaFmltZaBaD9OQamgNa55dta8v
-         pgU6k8NJFMeAeVn72l4TtHiEPweyzxbaCVIUSBa4OKKD6PgQcDuma4Lm7V2T3t6D5c8+
-         3HdNUnF+hxx9qqGdIKn7LBSiU1rdEhlfVk1FxiLp5Zh+2++1QrYUYHPBl9Cb2/54zOHQ
-         nCvFd4FI2oWUa5mDZCQKHYArNQg66IL9YrYVi8Viwdwnby68Kt64GvVqbw+d0vlO6kVr
-         NNXaZnTnI9BtMBIt5swHto3O3UPhAYeA53J1A5Aa0cAU/R32fQJ9wCt1g4lGsAIBldRQ
-         J6tQ==
-X-Gm-Message-State: ACgBeo1MLg/w7iDwM3FgXeF0juzOg4CJjUoYbLnVxCaPmiJ8r2YzrJ2a
-        iKiwgzofKRCgVavHuaMlacHJmF+qvp7tMFEUJPccww==
-X-Google-Smtp-Source: AA6agR6tYzV/IQQ/OxLEjd+jk1f2ZSvYtf5ruKBh0ui0nUtixe61EgEuG7yugxxBKG9qC5S4CehK8y+rA0CaaMZcuSc=
-X-Received: by 2002:a2e:a5ca:0:b0:25e:1c49:70f4 with SMTP id
- n10-20020a2ea5ca000000b0025e1c4970f4mr988263ljp.4.1660296596373; Fri, 12 Aug
- 2022 02:29:56 -0700 (PDT)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=J8tlT7YO8qB4sKSoN7y2Ao83eWRyyP4+ue99CI5WF2c=;
+        b=OihuiYYFFdlniKIy7P1sZYd5W+amcRsyn43oYFRthnZpBFlA7m9psiOP+O2luk6Uau
+         XN7BLOgmerlitWwjrP+DM0w1GG6aim8DtRfcZNdJw1b0HU7/22M5SMZjyhXjRbbxGRtB
+         ws95pRFmQeMZuwk6W5EStdb7rf7/C+CzZPWDPQRBvpSetVc4klTlx0Qo+qd+PK43NFHa
+         +2TmKRWO+V8AktdACS5rCInEjYLTlMd4NKhbXH4VgfTk91Wvfl8kYgIJPwJcQaiIHP0K
+         7yIYTikO1Rz0WSJhWa0MtOLTnoKWe703iYRr79kuCwtOHAl/bh620BGvpOj1FqIVGHum
+         GENw==
+X-Gm-Message-State: ACgBeo3r2+h/Vo1nu5cIofvGqx8LCCr/xuUjqP0R36pkVSNranCPsYfl
+        Ns4vJEkcB5Dy1UlxwcatFd9HYcNoda3atw==
+X-Google-Smtp-Source: AA6agR4svBtdz0KcIJWb67jGlv7KKb+EtZMjysnq9ybCXnrYz2Uujk60Mq4F0rOTL7+QP5Mjb+BzxA==
+X-Received: by 2002:a05:600c:1c28:b0:3a5:3e18:3e with SMTP id j40-20020a05600c1c2800b003a53e18003emr8021062wms.203.1660296680528;
+        Fri, 12 Aug 2022 02:31:20 -0700 (PDT)
+Received: from google.com (cpc155339-bagu17-2-0-cust87.1-3.cable.virginm.net. [86.27.177.88])
+        by smtp.gmail.com with ESMTPSA id o36-20020a05600c512400b003a5317f07b4sm10016930wms.37.2022.08.12.02.31.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Aug 2022 02:31:20 -0700 (PDT)
+Date:   Fri, 12 Aug 2022 10:31:18 +0100
+From:   Lee Jones <lee.jones@linaro.org>
+To:     "zhangwensheng (E)" <zhangwensheng@huaweicloud.com>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        Lee Jones <lee@kernel.org>
+Subject: Re: Question: consult patch
+Message-ID: <YvYd5hG0RFK4uf6L@google.com>
+References: <420a6c4a-e526-4e8b-d5bd-563c40aa94e1@huaweicloud.com>
+ <YvXo1uCFA57t89Nv@infradead.org>
+ <902a45fe-1117-3f6a-b7b1-9b155e5dd984@huaweicloud.com>
+ <YvYAmmaJgvydex4p@google.com>
+ <f179ff36-e511-1bad-078f-71b8b19d404e@huaweicloud.com>
 MIME-Version: 1.0
-References: <0000000000008c0ba505e5f22066@google.com> <202208110830.8F528D6737@keescook>
- <YvU+0UHrn9Ab4rR8@iweiny-desk3> <YvVPtuel8NMmiTKk@iweiny-desk3>
- <202208111356.97951D32@keescook> <YvWaqhLGsBp9ynIq@iweiny-desk3>
-In-Reply-To: <YvWaqhLGsBp9ynIq@iweiny-desk3>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Fri, 12 Aug 2022 11:29:44 +0200
-Message-ID: <CACT4Y+bBNJsFobK28impL5bPGE9meQt-RE6xyDF=yxsmcR8ySw@mail.gmail.com>
-Subject: Re: [syzbot] linux-next boot error: BUG: unable to handle kernel
- paging request in kernel_execve
-To:     Ira Weiny <ira.weiny@intel.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        ebiederm@xmission.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-next@vger.kernel.org, sfr@canb.auug.org.au,
-        syzkaller-bugs@googlegroups.com, viro@zeniv.linux.org.uk,
-        syzbot <syzbot+3250d9c8925ef29e975f@syzkaller.appspotmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f179ff36-e511-1bad-078f-71b8b19d404e@huaweicloud.com>
+X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 12 Aug 2022 at 02:11, Ira Weiny <ira.weiny@intel.com> wrote:
->
-> On Thu, Aug 11, 2022 at 02:00:59PM -0700, Kees Cook wrote:
-> > On Thu, Aug 11, 2022 at 11:51:34AM -0700, Ira Weiny wrote:
-> > > On Thu, Aug 11, 2022 at 10:39:29AM -0700, Ira wrote:
-> > > > On Thu, Aug 11, 2022 at 08:33:16AM -0700, Kees Cook wrote:
-> > > > > Hi Fabio,
-> > > > >
-> > > > > It seems likely that the kmap change[1] might be causing this crash. Is
-> > > > > there a boot-time setup race between kmap being available and early umh
-> > > > > usage?
-> > > >
-> > > > I don't see how this is a setup problem with the config reported here.
-> > > >
-> > > > CONFIG_64BIT=y
-> > > >
-> > > > ...and HIGHMEM is not set.
-> > > > ...and PREEMPT_RT is not set.
-> > > >
-> > > > So the kmap_local_page() call in that stack should be a page_address() only.
-> > > >
-> > > > I think the issue must be some sort of race which was being prevented because
-> > > > of the preemption and/or pagefault disable built into kmap_atomic().
-> > > >
-> > > > Is this reproducable?
-> > > >
-> > > > The hunk below will surely fix it but I think the pagefault_disable() is
-> > > > the only thing that is required.  It would be nice to test it.
-> > >
-> > > Fabio and I discussed this.  And he also mentioned that pagefault_disable() is
-> > > all that is required.
-> >
-> > Okay, sounds good.
-> >
-> > > Do we have a way to test this?
-> >
-> > It doesn't look like syzbot has a reproducer yet, so its patch testing
-> > system[1] will not work. But if you can send me a patch, I could land it
-> > in -next and we could see if the reproduction frequency drops to zero.
-> > (Looking at the dashboard, it's seen 2 crashes, most recently 8 hours
-> > ago.)
->
-> Patch sent.
->
-> https://lore.kernel.org/lkml/20220812000919.408614-1-ira.weiny@intel.com/
->
-> But I'm more confused after looking at this again.
+> thank you very much!
 
-There is splat of random crashes in linux-next happened at the same time:
+Please refrain from top-posting.
 
-https://groups.google.com/g/syzkaller-bugs/search?q=%22linux-next%20boot%20error%3A%22
+> 在 2022/8/12 15:26, Lee Jones 写道:
+> > On Fri, 12 Aug 2022, zhangwensheng (E) wrote:
+> > 
+> > > Hi
+> > > 
+> > > In CVE list last week, there is a new cve reported in asop 4.14 like below:
+> > > Reference link: https://lore.kernel.org/all/CAODzB9rgMexvLjE=WuTm+SN8SfUggaZgWG-aBcy6cotppju6mw@mail.gmail.com/T/
+> > > 
+> > > ---
+> > > CVE-2022-20158: mm: backing-dev: Take a reference to the bdi in use to
+> > > prevent UAF
+> > > 
+> > > CVSS v3 score is not assigned.
+> > > 
+> > > AOSP kernel 4.14 contains following 2 patches.
+> > > - 69e8f03c5ced3e4e6fb4181f4dac185104e3420b ("mm: backing-dev: Take a
+> > > reference to the bdi in use to prevent UAF")
+> > > - 80d91b86a199798ee2321a0ab0f09e6e12764678 ("fs: explicitly unregister
+> > > per-superblock BDIs")
+> > > 
+> > > The first commit 69e8f03("mm: backing-dev: Take a reference to the bdi
+> > > in use to prevent UAF") is not merged in the mainline and stable
+> > > kernels.
+> > > Commit 80d91b8 was merged in 5.16-rc1(commit hash is
+> > > 0b3ea0926afb8dde70cfab00316ae0a70b93a7cc) which requires commit
+> > > c6fd3ac ("mm: export bdi_unregister") that exports symbol of
+> > > bdi_unregister().
+> > > 
+> > > Fixed status
+> > > mainline: [0b3ea0926afb8dde70cfab00316ae0a70b93a7cc]
+> > > ---
+> > > 
+> > > As mentioned above, patch 69e8f03c5ced ("mm: backing-dev: Take a
+> > > reference to the bdi in use to prevent UAF") in asop 4.14 can fix
+> > > a null dereference problem, form my analysis, may like below:
+> > > 
+> > > blk_cleanup_queue
+> > >      blk_put_queue
+> > >          kobject_put(&q->kobj)
+> > >                  blk_release_queue
+> > >                      blk_exit_queue
+> > >                          bdi_put
+> > >                              release_bdi  // bdi -> null
+> > > del_gendisk
+> > >      bdi_unregister(disk->queue->backing_dev_info) // null -> reference
+> > > 
+> > >  From my analysis, In asop 4.14 kernel, in loop_remove function, there is
+> > > such a timing that executing "blk_cleanup_queue" first and then
+> > > "del_gendisk".
+> > > but because of the refcnt of queue will add by hte line
+> > > "WARN_ON_ONCE(!blk_get_queue(disk->queue));" in "device_add_disk", which may
+> > > not result in "bdi_put" releasing bdi  in "blk_cleanup_queue".
+> > > 
+> > > I'm not sure where the problem is, so I want to ask Lee Jones who sent this
+> > > patch
+> > > for clarification.
+> > > 
+> > > Thanks!
+> > > 
+> > > Wensheng
+> > > 
+> > > 在 2022/8/12 13:44, Christoph Hellwig 写道:
+> > > > On Fri, Aug 12, 2022 at 11:34:59AM +0800, zhangwensheng (E) wrote:
+> > > > > Hi Lee ：
+> > > > >       I saw your patch because of CVE-2022-20158, the patch like below:
+> > > > > 
+> > > > > ---
+> > > > >       mm: backing-dev: Take a reference to the bdi in use to prevent UAF
+> > > > I can't see that patch anywhere, and I've not seen an bug report for it.
+> > > > 
+> > > > >       Because of a distinct lack of locking and/or reference taking,
+> > > > >       blk_cleanup_queue() puts the final taken reference to the bdi, which
+> > > > .. and blk_cleanup_queue also is gone upstream.
+> > > > 
+> > > > What am I missing?
+> > The issue reported in the aforementioned CVE was caused by a commit
+> > which was applied to an internal, device specific repository.  One
+> > that has never existed in Mainline.  I failed to reproduce the KASAN
+> > report in any upstream or stable tree without the offending patch
+> > applied.  The issue was fixed in all affected internal trees.
+> 
+> I'm sorry I didn't fully understand you. did you mean the CVE
+> was caused by a commit which was applied to an internal kernel
+> version?  What commitment can be displayed? and I know that
+> mainline do not have the problem because of some code refactoring,
+> But are there any problems with some other stable branches?
 
-There are 10 different crashes in completely random places.
-I would assume they have the same root cause, some silent memory
-corruption or something similar.
+Yes, CVE-2022-20158 pertains to an issue on an internal repo.
 
+Mainline and Stable were unaffected.
 
-
-
-> > [1] https://github.com/google/syzkaller/blob/master/docs/syzbot.md#testing-patches
-> >
-> > > > > > syzbot found the following issue on:
-> > > > > >
-> > > > > > HEAD commit:    bc6c6584ffb2 Add linux-next specific files for 20220810
-> > > > > > git tree:       linux-next
-> > > > > > console output: https://syzkaller.appspot.com/x/log.txt?x=115034c3080000
-> > > > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=5784be4315a4403b
-> > > > > > dashboard link: https://syzkaller.appspot.com/bug?extid=3250d9c8925ef29e975f
-> > > > > > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > > > > >
-> > > > > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > > > > Reported-by: syzbot+3250d9c8925ef29e975f@syzkaller.appspotmail.com
-> > > > > >
-> > > > > > BUG: unable to handle page fault for address: ffffdc0000000000
-> > > > > > #PF: supervisor read access in kernel mode
-> > > > > > #PF: error_code(0x0000) - not-present page
-> > > > > > PGD 11826067 P4D 11826067 PUD 0
-> > > > > > Oops: 0000 [#1] PREEMPT SMP KASAN
-> > > > > > CPU: 0 PID: 1100 Comm: kworker/u4:5 Not tainted 5.19.0-next-20220810-syzkaller #0
-> > > > > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-> > > > > > RIP: 0010:strnlen+0x3b/0x70 lib/string.c:504
-> > > > > > Code: 74 3c 48 bb 00 00 00 00 00 fc ff df 49 89 fc 48 89 f8 eb 09 48 83 c0 01 48 39 e8 74 1e 48 89 c2 48 89 c1 48 c1 ea 03 83 e1 07 <0f> b6 14 1a 38 ca 7f 04 84 d2 75 11 80 38 00 75 d9 4c 29 e0 48 83
-> > > > > > RSP: 0000:ffffc90005c5fe10 EFLAGS: 00010246
-> > > > > > RAX: ffff000000000000 RBX: dffffc0000000000 RCX: 0000000000000000
-> > > > > > RDX: 1fffe00000000000 RSI: 0000000000020000 RDI: ffff000000000000
-> > > > > > RBP: ffff000000020000 R08: 0000000000000005 R09: 0000000000000000
-> > > > > > R10: 0000000000000006 R11: 0000000000000000 R12: ffff000000000000
-> > > > > > R13: ffff88814764cc00 R14: ffff000000000000 R15: ffff88814764cc00
-> > > > > > FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-> > > > > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > > > > CR2: ffffdc0000000000 CR3: 000000000bc8e000 CR4: 00000000003506f0
-> > > > > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > > > > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > > > > > Call Trace:
-> > > > > >  <TASK>
-> > > > > >  strnlen include/linux/fortify-string.h:119 [inline]
-> > > > > >  copy_string_kernel+0x26/0x250 fs/exec.c:616
-> > > > > >  copy_strings_kernel+0xb3/0x190 fs/exec.c:655
-> > > > > >  kernel_execve+0x377/0x500 fs/exec.c:1998
-> > > > > >  call_usermodehelper_exec_async+0x2e3/0x580 kernel/umh.c:112
-> > > > > >  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-> > > > > >  </TASK>
-> > > [...]
-> > > > > > ---
-> > > > > > This report is generated by a bot. It may contain errors.
-> > > > > > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > > > > > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> > > > > >
-> > > > > > syzbot will keep track of this issue. See:
-> > > > > > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> >
-> > --
-> > Kees Cook
->
-> --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/YvWaqhLGsBp9ynIq%40iweiny-desk3.
+-- 
+DEPRECATED: Please use lee@kernel.org

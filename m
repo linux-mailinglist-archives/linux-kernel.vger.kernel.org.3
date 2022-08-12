@@ -2,106 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6134B590B7F
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 07:27:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B0DF590B84
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 07:33:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236903AbiHLF1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 01:27:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36638 "EHLO
+        id S236919AbiHLFdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 01:33:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236270AbiHLF1h (ORCPT
+        with ESMTP id S234432AbiHLFdF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 01:27:37 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0F8A0274;
-        Thu, 11 Aug 2022 22:27:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660282056; x=1691818056;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aD66a3tlUSHNk9f+LMWfIXawj2d8pgOYlU8yPhvZhyU=;
-  b=ODgj4mUt+jPWKjqYHAmrc57fc7Au6RCRsG69z4u/FaGQYJM7+h1MrDip
-   kM/3aZ6Lt7hlOYokEfHf91H5uZg7g6Pt3FPO7L/ZYHT/aXF7Hr854f37h
-   F1g8/rUrgYvTElf9jKjAV5FsV5VcZt6zkV+f5T+8NcDU8d6NAOPzP/9Gh
-   r65DNUzlFYgKQvxNL+UhYxI8UAYPWr97YBzTJ7huxNeMG3btNyaTxNVRm
-   ntGh5guIcCUq8JJI18XP0S/ZbXWqIs1IWtT+T/hQWaKXcicQIgF5Qo8Gm
-   N4jD36XYaAlMq1ZXzcESjTW/Hrw+5xoylclm0kZG3yIJ/kJFZLLhnw1Tl
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10436"; a="278475234"
-X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
-   d="scan'208";a="278475234"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2022 22:27:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,231,1654585200"; 
-   d="scan'208";a="556407140"
-Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 11 Aug 2022 22:27:33 -0700
-Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oMNCm-0000CU-2a;
-        Fri, 12 Aug 2022 05:27:32 +0000
-Date:   Fri, 12 Aug 2022 13:27:13 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Olivier Masse <olivier.masse@nxp.com>, jens.wiklander@linaro.org,
-        sumit.garg@linaro.org, sumit.semwal@linaro.org,
-        christian.koenig@amd.com, op-tee@lists.trustedfirmware.org,
-        linaro-mm-sig@lists.linaro.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org
-Cc:     kbuild-all@lists.01.org, clement.faure@nxp.com,
-        olivier.masse@nxp.com
-Subject: Re: [PATCH 1/1] tee: new ioctl to a register tee_shm from a dmabuf
- file descriptor
-Message-ID: <202208121326.FWVAzlch-lkp@intel.com>
-References: <20220811135637.6332-2-olivier.masse@nxp.com>
+        Fri, 12 Aug 2022 01:33:05 -0400
+Received: from smtp.smtpout.orange.fr (smtp-21.smtpout.orange.fr [80.12.242.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E3DA0275
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 22:33:01 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id MNHyo5KHrKOP1MNHzoioqr; Fri, 12 Aug 2022 07:32:59 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Fri, 12 Aug 2022 07:32:59 +0200
+X-ME-IP: 90.11.190.129
+Message-ID: <080f3e2b-af7b-0ac0-1716-a33da73290e4@wanadoo.fr>
+Date:   Fri, 12 Aug 2022 07:32:54 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220811135637.6332-2-olivier.masse@nxp.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 7/8] remoteproc: qcom: Add support for memory sandbox
+Content-Language: fr
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        linux-remoteproc@vger.kernel.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, lgirdwood@gmail.com,
+        broonie@kernel.org, robh+dt@kernel.org, quic_plai@quicinc.com,
+        bgoswami@quicinc.com, perex@perex.cz, tiwai@suse.com,
+        srinivas.kandagatla@linaro.org, quic_rohkumar@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        swboyd@chromium.org, judyhsiao@chromium.org,
+        devicetree@vger.kernel.org
+References: <1660117558-21829-1-git-send-email-quic_srivasam@quicinc.com>
+ <1660117558-21829-8-git-send-email-quic_srivasam@quicinc.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <1660117558-21829-8-git-send-email-quic_srivasam@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Olivier,
+Le 10/08/2022 à 09:45, Srinivasa Rao Mandadapu a écrit :
+> Update pil driver with SMMU mapping for allowing authorised
+> memory access to ADSP firmware, by reading required memory
+> regions either from device tree file or from resource table
+> embedded in ADSP binary header.
+> 
 
-Thank you for the patch! Yet something to improve:
+Hi,
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on drm-tip/drm-tip linus/master v5.19 next-20220811]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+comments below about error handling paths that look incomplete to me.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Olivier-Masse/tee-Add-tee_shm_register_fd/20220811-220012
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-config: i386-allyesconfig (https://download.01.org/0day-ci/archive/20220812/202208121326.FWVAzlch-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/2e8827973f200fdfe64366bec5a57686086f4672
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Olivier-Masse/tee-Add-tee_shm_register_fd/20220811-220012
-        git checkout 2e8827973f200fdfe64366bec5a57686086f4672
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash
+Just my 2c.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+> ---
+> Changes since V2:
+> 	-- Replace platform_bus_type with adsp->dev->bus.
+> 	-- Use API of_parse_phandle_with_args() instead of of_parse_phandle_with_fixed_args().
+> 	-- Replace adsp->is_wpss with adsp->is_adsp.
+> 	-- Update error handling in adsp_start().
+> 
+>   drivers/remoteproc/qcom_q6v5_adsp.c | 107 +++++++++++++++++++++++++++++++++++-
+>   1 file changed, 105 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/remoteproc/qcom_q6v5_adsp.c b/drivers/remoteproc/qcom_q6v5_adsp.c
+> index f2945bf..b9cafe2 100644
+> --- a/drivers/remoteproc/qcom_q6v5_adsp.c
+> +++ b/drivers/remoteproc/qcom_q6v5_adsp.c
+> @@ -9,6 +9,7 @@
+>   #include <linux/firmware.h>
+>   #include <linux/interrupt.h>
+>   #include <linux/io.h>
+> +#include <linux/iommu.h>
+>   #include <linux/iopoll.h>
+>   #include <linux/kernel.h>
+>   #include <linux/mfd/syscon.h>
+> @@ -48,6 +49,8 @@
+>   #define LPASS_PWR_ON_REG		0x10
+>   #define LPASS_HALTREQ_REG		0x0
+>   
+> +#define SID_MASK_DEFAULT        0xF
+> +
+>   #define QDSP6SS_XO_CBCR		0x38
+>   #define QDSP6SS_CORE_CBCR	0x20
+>   #define QDSP6SS_SLEEP_CBCR	0x3c
+> @@ -78,7 +81,7 @@ struct adsp_pil_data {
+>   struct qcom_adsp {
+>   	struct device *dev;
+>   	struct rproc *rproc;
+> -
+> +	struct iommu_domain *iommu_dom;
+>   	struct qcom_q6v5 q6v5;
+>   
+>   	struct clk *xo;
+> @@ -333,6 +336,94 @@ static int adsp_load(struct rproc *rproc, const struct firmware *fw)
+>   	return 0;
+>   }
+>   
+> +static int adsp_map_smmu(struct qcom_adsp *adsp, struct rproc *rproc)
+> +{
+> +	struct of_phandle_args args;
+> +	struct fw_rsc_devmem *rsc_fw;
+> +	struct fw_rsc_hdr *hdr;
+> +	const __be32 *prop;
+> +	long long sid;
+> +	unsigned long mem_phys;
+> +	unsigned long iova;
+> +	unsigned int mem_size;
+> +	unsigned int flag;
+> +	unsigned int len;
+> +	int access_level;
+> +	int offset;
+> +	int ret;
+> +	int rc;
+> +	int i;
+> +
+> +	rc = of_parse_phandle_with_args(adsp->dev->of_node, "iommus", "#iommu-cells", 0, &args);
+> +	if (rc < 0)
+> +		sid = -1;
+> +	else
+> +		sid = args.args[0] & SID_MASK_DEFAULT;
+> +
+> +	adsp->iommu_dom = iommu_domain_alloc(adsp->dev->bus);
+> +	if (!adsp->iommu_dom) {
+> +		dev_err(adsp->dev, "failed to allocate iommu domain\n");
+> +		return -ENOMEM;
+> +	}
+> +
+> +	ret = iommu_attach_device(adsp->iommu_dom, adsp->dev);
+> +	if (ret) {
+> +		dev_err(adsp->dev, "could not attach device ret = %d\n", ret);
 
-All errors (new ones prefixed by >>):
+iommu_domain_free() or error handling path (see below)?
 
-   In file included from <command-line>:
->> ./usr/include/linux/tee.h:136:13: error: expected declaration specifiers or '...' before numeric constant
-     136 | } __aligned(8);
-         |             ^
+> +		return -EBUSY;
+> +	}
+> +
+> +	/* Add SID configuration for ADSP Firmware to SMMU */
+> +	adsp->mem_phys =  adsp->mem_phys | (sid << 32);
+> +
+> +	ret = iommu_map(adsp->iommu_dom, adsp->mem_phys, adsp->mem_phys,
+> +			adsp->mem_size,	IOMMU_READ | IOMMU_WRITE);
+> +	if (ret) {
+> +		dev_err(adsp->dev, "Unable to map ADSP Physical Memory\n");
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+iommu_domain_free() or error handling path (see below)?
+
+> +		return ret;
+> +	}
+> +
+> +	prop = of_get_property(adsp->dev->of_node, "qcom,adsp-memory-regions", &len);
+> +	if (prop) {
+> +		len /= sizeof(__be32);
+> +		for (i = 0; i < len; i++) {
+> +			iova = be32_to_cpu(prop[i++]);
+> +			mem_phys = be32_to_cpu(prop[i++]);
+> +			mem_size = be32_to_cpu(prop[i++]);
+> +			access_level = be32_to_cpu(prop[i]);
+> +
+> +			if (access_level)
+> +				flag = IOMMU_READ | IOMMU_WRITE;
+> +			else
+> +				flag = IOMMU_READ;
+> +
+> +			ret = iommu_map(adsp->iommu_dom, iova, mem_phys, mem_size, flag);
+> +			if (ret) {
+> +				dev_err(adsp->dev, "failed to map addr = %p mem_size = %x\n",
+> +						&(mem_phys), mem_size);
+> +				return ret;
+
+Should there be an error handling path to undo iommu_domain_alloc() and 
+iommu_map() above.
+Same for iommu_map() already done in the loop.
+
+> +			}
+> +		}
+> +	} else {
+> +		if (!rproc->table_ptr)
+> +			return 0;
+> +
+> +		for (i = 0; i < rproc->table_ptr->num; i++) {
+> +			offset = rproc->table_ptr->offset[i];
+> +			hdr = (void *)rproc->table_ptr + offset;
+> +			rsc_fw = (struct fw_rsc_devmem *)hdr + sizeof(*hdr);
+> +
+> +			ret = iommu_map(rproc->domain, rsc_fw->da, rsc_fw->pa,
+> +						rsc_fw->len, rsc_fw->flags);
+> +			if (ret) {
+> +				pr_err("%s; unable to map adsp memory address\n", __func__);
+> +				return ret;
+
+Same comment.
+
+> +			}
+> +		}
+> +	}
+> +	return 0;
+> +}
+> +
+> +
+>   static int adsp_start(struct rproc *rproc)
+>   {
+>   	struct qcom_adsp *adsp = (struct qcom_adsp *)rproc->priv;
+> @@ -343,9 +434,16 @@ static int adsp_start(struct rproc *rproc)
+>   	if (ret)
+>   		return ret;
+>   
+> +	if (adsp->is_adsp_sb_needed) {
+> +		ret = adsp_map_smmu(adsp, rproc);
+> +		if (ret) {
+> +			dev_err(adsp->dev, "ADSP smmu mapping failed\n");
+> +			goto disable_irqs;
+> +		}
+> +	}
+>   	ret = clk_prepare_enable(adsp->xo);
+>   	if (ret)
+> -		goto disable_irqs;
+> +		goto adsp_smmu_unmap;
+>   
+>   	ret = qcom_rproc_pds_enable(adsp, adsp->proxy_pds,
+>   				    adsp->proxy_pd_count);
+> @@ -401,6 +499,11 @@ static int adsp_start(struct rproc *rproc)
+>   	qcom_rproc_pds_disable(adsp, adsp->proxy_pds, adsp->proxy_pd_count);
+>   disable_xo_clk:
+>   	clk_disable_unprepare(adsp->xo);
+> +adsp_smmu_unmap:
+> +	if (adsp->is_adsp_sb_needed) {
+> +		iommu_unmap(adsp->iommu_dom, adsp->mem_phys, adsp->mem_size);
+> +		iommu_domain_free(adsp->iommu_dom);
+
+Hi,
+
+Do the iommu_map() in the for loops of adsp_map_smmu() also need some 
+iommu_unmap() here?
+
+Maybe introducing a adsp_unmap_smmu() would simplify the release of 
+resources.
+
+Does the same resource release makes sense in adsp_stop() or somewhere else?
+
+CJ
+
+
+> +	}
+>   disable_irqs:
+>   	qcom_q6v5_unprepare(&adsp->q6v5);
+>   
+

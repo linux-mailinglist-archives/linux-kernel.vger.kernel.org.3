@@ -2,107 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2733D5916C7
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 23:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64BD75916CA
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 23:43:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235951AbiHLVjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 17:39:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55608 "EHLO
+        id S230433AbiHLVnO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 17:43:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234256AbiHLVjl (ORCPT
+        with ESMTP id S233784AbiHLVnM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 17:39:41 -0400
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DFF9FAB4;
-        Fri, 12 Aug 2022 14:39:40 -0700 (PDT)
-Received: from toolbox.int.toradex.com ([81.221.243.92]) by mrelay.perfora.net
- (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0Lg24j-1nc3Qa0vil-00pda5;
- Fri, 12 Aug 2022 23:39:19 +0200
-From:   Marcel Ziswiler <marcel@ziswiler.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Marcel Ziswiler <marcel.ziswiler@toradex.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Francesco Dolcini <francesco.dolcini@toradex.com>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Olof Johansson <olof@lixom.net>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Philippe Schenker <philippe.schenker@toradex.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/2] arm64: dts: freescale: verdin-imx8mp: fix atmel_mxt_ts reset polarity
-Date:   Fri, 12 Aug 2022 23:39:05 +0200
-Message-Id: <20220812213905.216065-3-marcel@ziswiler.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220812213905.216065-1-marcel@ziswiler.com>
-References: <20220812213905.216065-1-marcel@ziswiler.com>
+        Fri, 12 Aug 2022 17:43:12 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 121DEB07E2
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 14:43:10 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id 17so1833679pli.0
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 14:43:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=HsCUQ8j36I4b68/toXmGXuF2hsPiyYP9smjWccI2rQk=;
+        b=T8edxcRXD18BsL1RTMjGrj5n5dQsaZ4ojGAmMwVXKsYJdht7fJ7wztz/lJ1kLjnRrU
+         6Q7c32Y6LN1DE3ooBXiX1OUl6mf/pVEtG+KgbRHbR6NKEp0cSOrtaM+jq500rZ+KzukA
+         mc/wTkGgq4u9MKsQT0i919rJABVE6il55R8QLPNON59KLiyPH0abZHeRnsixJqjlZz74
+         P1pnhPNaFVgWLAU+ZB+dW7vmVM7yHyVBv3Z4Ldo9oUzYBcC34Z8ZXJTo29AtuInBURZU
+         nEx3PPBKtG0g1ceLACYgAXiP6itMQ9oIL1UEEjnecWNcY+pVJiNV/pMKYRyNMh++rqv+
+         CmOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=HsCUQ8j36I4b68/toXmGXuF2hsPiyYP9smjWccI2rQk=;
+        b=56dTKwI4rBtqpmwmwioXb9W9QxyXQALAtiy8vCopIJwNYHKCVi6syI83Z18/Q8sgS6
+         8mPWpUgia8BSnCBqoK1/aJfw1CRtMD/3qoswikKuHsSezo3LOAWsybUFWioTCWLbMLyj
+         CY67hyOk39LHICliEk6hNMxFVwbi3VAmOxPay4p/jOJDBCSESV0hNDfbraLfdC0CBGqc
+         QtnhvzLmPps2/+eXDw8VZ6x5YXB08SzHjRIHRjhBxtqNrZZNcDA7WXcuHCA6MW4V4xwv
+         BJspG1J0757vcHNU0NnwbotenowMNBsY4fOtRw1tlSk7F7lxqBBSGuANsS7wPfi1jWol
+         G5hQ==
+X-Gm-Message-State: ACgBeo2H4O5ytQ4R4D9fYjhDfm5TzEFo3vGfl2pF1sBL11k1T1+vDCI4
+        jIPJUBk7X7FWyWx78fLzQDknFxn6OI8=
+X-Google-Smtp-Source: AA6agR4Fgetd/4HyBb1xn64ltu8RG1s/lBb7ckWrb3o9x7Qa3INFkzW5TI9HPOMXY2FYziGwhUfswQ==
+X-Received: by 2002:a17:90a:d70f:b0:1f3:290b:c8f6 with SMTP id y15-20020a17090ad70f00b001f3290bc8f6mr15857826pju.190.1660340589426;
+        Fri, 12 Aug 2022 14:43:09 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:aae])
+        by smtp.gmail.com with ESMTPSA id g23-20020a63e617000000b0041cd2417c66sm1762561pgh.18.2022.08.12.14.43.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Aug 2022 14:43:08 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Fri, 12 Aug 2022 11:43:07 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Felix Kuehling <felix.kuehling@amd.com>
+Cc:     Philip Yang <Philip.Yang@amd.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>,
+        Maling list - DRI developers 
+        <dri-devel@lists.freedesktop.org>, Dave Airlie <airlied@gmail.com>
+Subject: Re: Selecting CPUs for queuing work on
+Message-ID: <YvbJa/6UvSswf8ve@slm.duckdns.org>
+References: <82233e68-106f-39e9-b20d-7794eb7a8933@amd.com>
+ <Yva4g3V2jAP0NKcY@slm.duckdns.org>
+ <5256fc4b-437b-f7fb-55b6-abab091e0182@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:S17GK/XSAzYGodzyvabz4JvWX5PFty20mLQHnNRLhhhX3R/50kM
- kx5z78l5QyxQe05X8UziHJvzkfjj7yFjpPdT0bTnkH+mRSxSkql99sjjusfvOKaqokr594k
- /uzh8UkqhAYdfbUqIA1AdqVy9B81kxT15EtQnt5DszdVlRjmyD96kp0KyfMCt8ZXYzqze7a
- H5rgJ98JIKtkU1QHfsy8w==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:S3tfj6Zh64s=:D/v5w1R7ecM6UlodKj8xI2
- LNrCZhTkpwezc+Tkf3cY9jE4Ak5nysJCRy1wTVZjxQHP0CrtgsGXiT6VpXCPNt4PqaKnYUt8E
- 3A0pURDKoX5ZWS1GkJd0jIETn/faLXAA+t+sBwFsnt4HB+ca6VseCjQsKSIzgvjRQKeQsfxAO
- wWxOif/M833EZDEFHOjou8NWdAdYhw4dBov4T0IbUdXyLfRLkSUvPsQl9Nyp0/YAxAagK05X3
- nrkTuPvaSMFfocrgvPZjle3MAipPpiBTeNiho0steKqHz/pQ18NeIAPRVymxIfE5btXRIwm+T
- COcean+6gR3/vKbDchJa8MZS75weKSAwOc2+FxsDwjt57WHx9JProcIUBJX/LRM1pthzWR/6y
- GD3f2gJ6PrNh4OnHPexRJV50lKe9mxzx6f0zrRAh4kBXgZIPq9eZqqQgH+/VQeB77bvvlMuCJ
- Upb2Ge1AiBTm/XycTWH0OEc+/5VPoe/hKPPK5KOGdxPLQsWR2pqK1J3LrPigriVFTxaM84PaG
- 3+EsSewsRen0QrQpb3PAmz+9fmZ+tJsSdyN4ZmDBvYPr/Gan6W3ghRBH0sckrfaKZ8h8JPzE1
- axD1gOmr7kYj4Pg+puhwhCfplq9+PUtadrpzWobMznvNC/Myq4g95XYZn5JBpIzqJ/NZ5kcaX
- OrdXCbZ0aM9PR+nSS1X4sE8r34qrzWn9qWuFMRFPGiwGWfFWiDb96Fs5vtbUDFYj7ZoifvrZw
- Cptn2iZlRbBRV69VXnkOqvEuke6IriGr8fk5AHZgTNaEPzWZQD7cE6YmxIs=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5256fc4b-437b-f7fb-55b6-abab091e0182@amd.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+Hello,
 
-Fix reset GPIO polarity in-line with the following commit feedaacdadfc
-("Input: atmel_mxt_ts - fix up inverted RESET handler").
+On Fri, Aug 12, 2022 at 04:54:04PM -0400, Felix Kuehling wrote:
+> In principle, I think IRQ routing to CPUs can change dynamically with
+> irqbalance.
 
-Fixes: a39ed23bdf6e ("arm64: dts: freescale: add initial support for verdin imx8m plus")
-Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+I wonder whether this is something which should be exposed to userland
+rather than trying to do dynamically in the kernel and let irqbalance or
+whatever deal with it. People use irq affinity to steer these handlings to
+specfic CPUs and the usual expectation is that the bottom half handling is
+gonna take place on the same cpu usually through softirq. It's kinda awkard
+to have this secondary assignment happening implicitly.
 
----
+> What we need is kind of the opposite of WQ_UNBOUND. As I understand it,
+> WQ_UNBOUND can schedule anywhere to maximize concurrency. What we need is to
+> schedule to very specific, predictable CPUs. We only have one work item per
+> GPU that processes all the interrupts in order, so we don't need the
+> concurrency of WQ_UNBOUND.
 
- arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Each WQ_UNBOUND workqueue has a cpumask associated with it and the cpumask
+can be changed dynamically, so it can be used for sth like this, but I'm not
+yet convinced that's the right thing to do.
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
-index c5987bdbb383..1c74c6a19449 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
-@@ -628,7 +628,7 @@ atmel_mxt_ts_mezzanine: touch-mezzanine@4a {
- 		interrupts = <5 IRQ_TYPE_EDGE_FALLING>;
- 		reg = <0x4a>;
- 		/* Verdin GPIO_2 (SODIMM 208) */
--		reset-gpios = <&gpio1 1 GPIO_ACTIVE_HIGH>;
-+		reset-gpios = <&gpio1 1 GPIO_ACTIVE_LOW>;
- 		status = "disabled";
- 	};
- };
-@@ -705,7 +705,7 @@ atmel_mxt_ts: touch@4a {
- 		pinctrl-0 = <&pinctrl_gpio_9_dsi>, <&pinctrl_i2s_2_bclk_touch_reset>;
- 		reg = <0x4a>;
- 		/* Verdin I2S_2_BCLK (TOUCH_RESET#, SODIMM 42) */
--		reset-gpios = <&gpio5 0 GPIO_ACTIVE_HIGH>;
-+		reset-gpios = <&gpio5 0 GPIO_ACTIVE_LOW>;
- 		status = "disabled";
- 	};
- 
+Thanks.
+
 -- 
-2.36.1
-
+tejun

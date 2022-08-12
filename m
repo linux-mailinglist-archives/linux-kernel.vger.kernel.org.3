@@ -2,178 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9315B590FE5
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 13:13:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBC78590FE7
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 13:14:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236734AbiHLLNO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 07:13:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49862 "EHLO
+        id S237229AbiHLLNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 07:13:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230293AbiHLLNL (ORCPT
+        with ESMTP id S234039AbiHLLN1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 07:13:11 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2056.outbound.protection.outlook.com [40.107.92.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE223A50EF
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 04:13:10 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WHmmSw2caYY4agOYrrHw+CfGiRQr69S+nzVI/P5PZoLZ7OGREa2nFmWFU/6DYf6IF481e+mC2GMHfC70b9HwbzFF6/gyhVa9lQhWYZsdrahjJ/bq+IjNxL+X3BtD6j+gUbha5gmyTjKGQmdgo+fJcTd+Fr47+DCmzf8B4aqyBJdH2QLSHP75BD+Kq3XaEOI3zIsrKgSr/W44RXVqTQtdNj+3pRJCeSM9EIjp0BGt1LCqgABqYJf86GGWEtlSvSfSYbHumDc0DMOH2DusMVBq/NioggjUaG9RG6T/EcGVJ6gmfifZ7lIug/NZASL19uUg7aIO2Y5v4vWsHMsGxULP6Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+r1sr3YBpcktqgueix3X0grbtz2BoGsiHxUIc2NeDsI=;
- b=k1ev4D4ck1Ww2hL7taApcMAG+U7zIoyTcQ9dZnH5Jcb7+k5VvtmBuamy8fOy4gZ2WropcbPe0n2Of+HKL9Dpb/OtMg/YxZ4PhhKuW5Lnn2yP/X8agCpIY5xDH/wizWJ6L9lza1tFY95ha4MwkoWfXqEJ1HF7AC6meU2kExCcJRYwu+bFJa1FXCUkySXvCwBJVqUl7h5J3Je3c7D1QRfM6SNu5Tq7uWF9lXk7hBclGPKM27uvGHuwU459l+2LGIuTatyfmetMfVKu75iYRtn9/+EPLIGk6Vh2JNXDi7nRl6+6MzEJ/UggO/T0BU1kmwTJxd5ZY1s1gB93vvE+Onl/MQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+r1sr3YBpcktqgueix3X0grbtz2BoGsiHxUIc2NeDsI=;
- b=tijI9ii8MTYw+xwIIy8+aA707BENB87CEcjepo6OGbYsT2dCT6wT6UcXzKbKix87B7Hi4F4ibh/6hmOLVw1aM60I2lCxqxAbrQy5AJK6S3RuREZZuAYXQLKEfFU5i17pqHTKCf6FJyWurcb9demArSl1Kirydaai4XeraeJuGzo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by CY4PR12MB1831.namprd12.prod.outlook.com (2603:10b6:903:128::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.16; Fri, 12 Aug
- 2022 11:13:07 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::905:1701:3b51:7e39]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::905:1701:3b51:7e39%2]) with mapi id 15.20.5504.020; Fri, 12 Aug 2022
- 11:13:06 +0000
-Message-ID: <f750ab62-7deb-21a1-753e-1ee838386265@amd.com>
-Date:   Fri, 12 Aug 2022 13:12:59 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] drm/amdgpu: remove useless condition in
- amdgpu_job_stop_all_jobs_on_sched()
-Content-Language: en-US
-To:     Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Andrey Strachuk <strochuk@ispras.ru>,
-        Alex Deucher <alexander.deucher@amd.com>
-Cc:     "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        Melissa Wen <mwen@igalia.com>,
-        Guchun Chen <guchun.chen@amd.com>,
-        Surbhi Kakarya <surbhi.kakarya@amd.com>,
-        Jack Zhang <Jack.Zhang1@amd.com>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, ldv-project@linuxtesting.org
-References: <20220719103954.6737-1-strochuk@ispras.ru>
- <fac8ce6e-6f5f-598d-35cc-7bf01ac90f30@amd.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <fac8ce6e-6f5f-598d-35cc-7bf01ac90f30@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: AS9PR06CA0137.eurprd06.prod.outlook.com
- (2603:10a6:20b:467::29) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Fri, 12 Aug 2022 07:13:27 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90FF7A50FF;
+        Fri, 12 Aug 2022 04:13:25 -0700 (PDT)
+Received: from fraeml740-chm.china.huawei.com (unknown [172.18.147.206])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M41Hw6dQ3z67xgN;
+        Fri, 12 Aug 2022 19:13:16 +0800 (CST)
+Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
+ fraeml740-chm.china.huawei.com (10.206.15.221) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 12 Aug 2022 13:13:23 +0200
+Received: from [10.48.157.254] (10.48.157.254) by
+ lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Fri, 12 Aug 2022 12:13:21 +0100
+Message-ID: <2e9cf5a6-c043-5ccf-e363-097c6c941891@huawei.com>
+Date:   Fri, 12 Aug 2022 12:13:20 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 0b641b37-3c03-40cd-7de1-08da7c53a1cd
-X-MS-TrafficTypeDiagnostic: CY4PR12MB1831:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: h69yE+RjhM0XQdQD1H3Azwom7ij0Uq2NEkHN7Jm6fD15B8jISioY1AgaNrxUsCWOA7q80cbVX1IhjJQ7Owv7CqEk8Yy+T9n9TBQwv6mitpcNcWh+SGQB6tfLna5XUBr6YZS3I9YjkyqtAeXfSm5c2asDa546RCsHzaZp+vWyxIzBZtLnI6W/X38QHeIs7BsW0nCAZK4cope9OPgsDh0VdZi18rTu/gZU7+6KdPV6XqR4Fe7MxA3gpnZTBKIIT+2YsPPt6+x+ASOcpG9ZoWeBG1BJMUpGVcsazVAnHI69l7BZGKJXY4skqsFg9j5dyqn3HCkGTwYU0vaPELEip0ht9eB5hur9rIu3LHQrfWxVbp+X0N7TYPPPVJkiAyFyEejc1IqQ4kHiOZENkoPvD8WzosqTPkXLJQjhDKro/ubCh5NK1Q+gMcRKf5Fj/I82o2OCMDXW34LZAwrkkVIEMHoLmvVvyE36aKxqlbmRpHcstHBIqSkmIx6g2kPfdOQeZR9ApA3ci4gmEaEAYmVycIfD+OEkfftHGL31XRhKUn5lLK/04blFAfCliDUBzeXUMbdD6hQjPtVChOLDuCBX8gR2Rn3HkTFAm+zsp0u+kQOz5Zx3CdWjFN8CPRQHeoI+3OYrtPiCqu83FZZnxwOCfYma7rIG67VvyVI1Q0ViK6Ti49XKrY8nEbm80FlD7AKx0TypM1sNKndXr9pLklOxD/zBdTTzEz7HFKG6SW2nfT/b2kYkBThnqNKeKWlLn0wcqxL3Zf7d4fJQrNTqN1cth5/DrkPnsiC7rTMTtZwVqjhWmgZyDFilV6NZUQnLnQXOk1ekoxGYapzlpBn8KoqNh3OT1g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(396003)(366004)(136003)(376002)(346002)(53546011)(2616005)(186003)(54906003)(41300700001)(6666004)(26005)(110136005)(6512007)(316002)(31696002)(6486002)(86362001)(478600001)(6506007)(6636002)(38100700002)(83380400001)(2906002)(4326008)(8676002)(5660300002)(66946007)(66556008)(66476007)(31686004)(8936002)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?emFqK0dGamV2cW9KSm9vYXZ4U044R1F3SU5ocmxQRXV6VWFtQUYyTGwxK3Vs?=
- =?utf-8?B?dGJFOHQyNUY5OHRTUlpZVDU3blVESkx0QkxFMy94UW96b21nQkJNR2N1QVVs?=
- =?utf-8?B?eWEyL3pxd3ZFcHJWVmxSRkNYejN2UzlhK2FDbjUzTVM4N3VhQmNzdDNBWTNn?=
- =?utf-8?B?V255Y0hFaWhkcTRHL2w1bnNaamxCVEJtWDFyMmtuTXI3QUt4QXlrcU9LYUdB?=
- =?utf-8?B?eFZJSWo5MFcvajVGUVFaMmllamZWQlo1a2dOOTk2ZXgrK00yMmhPTzcyWnhV?=
- =?utf-8?B?Q0FqbEw5T2JpWld3QUx0dUNURjFIQjVvTGZ4S0wvUnRBNnFlajNwdGdnSzAy?=
- =?utf-8?B?QllMTW5vZTVsZXBvTkZlZEdlRUJTTUFvVkRldi93TlRtUjFRSU96UmhrOVdL?=
- =?utf-8?B?S2VrbU9MR1hBZFhCdXRkOHl4SkpyS1MxMklCL1Y5aHJKbTdUTWNFcFJGVkx2?=
- =?utf-8?B?SCtHanl6QWZQbkJJMlEra1hBREYxbTl2cmI1YndUVUF5bWVVWHcrQlVINDU3?=
- =?utf-8?B?Q01HMVRtWTc3dFlwZ25meGtQK3NqNDNEY2UyaDJKKzhyMVYxbkoyTjVPMXBR?=
- =?utf-8?B?cnFIWHFVS2diQi9LZTlxY1QrQWtSOElSM29GSTFFMTI2L1A4NlJSZHhmRm9Q?=
- =?utf-8?B?ellLTENmakNpcjJlc25jdDRka1F0aURnaDhacnVoV3JWR2N5alNuRkQ5Nlgr?=
- =?utf-8?B?dXRQNlhJcFliemtINkN6aTN2UWZMTFM4eG1kWTFxMW83WEh1M1U0R2hRUC9u?=
- =?utf-8?B?OW1CL0xMd3pja1h4bUF2dnU5eDdsR1VhK3lXeU5tSUhtRDE1RVNJM0VvQ1pp?=
- =?utf-8?B?MU9WNldXbE42NUwxenpmNkRlL0FPMkloQlBwMXNjSEkzWGpYQjNPWXBhWFNm?=
- =?utf-8?B?dXl3UVQ5STJQMzJsd0FzbDlndDdvcHNxTjBYRHd4dGlSN053ak5DUUtlVEdj?=
- =?utf-8?B?dWtXOThwNXlIajRLK2RaV1BXTktOZ05IVHdDVXM2anNVeTc4ZCtFcEJ1V0Y4?=
- =?utf-8?B?NVRtQlVDNWhsS0hHcm4vZ2F0OTFWVmZzakVYcC9qT2pWcG5lcGkrWG53T1Jk?=
- =?utf-8?B?VzRRMUJCZHZLdXJSTTdJSm9mYmFlV1pjKzVwNFE3dUdQZnZZcElZZ2FOVzBM?=
- =?utf-8?B?SDVxa0swZkNvdzFKZDJNQWtOdHVyQVhWR3lmME02eWovOTZsRGIwWVg2M2Ja?=
- =?utf-8?B?RVorZ3VzTnFuLzZzL0p6RlhtK0dORVBSSkY1eWY3cmR6N1c4cUc1OTBzc2c5?=
- =?utf-8?B?Qkt0T0tRd05RanB2eTdHZ1dYQ3dzb0RWWng0RFpsUG5hOXJKeGM0RVJqMU5X?=
- =?utf-8?B?Z3UzbWkzZThXWEQ2U2FaQnNUc0w3VGhoeSsxb1hZRTkzTEZSNzFmS3ZBd0ls?=
- =?utf-8?B?T012aFZOUVJTUUNOTFpHam9WK2dWVWo5cEtVUjNBeXpycmo0Njc1amhYWHgx?=
- =?utf-8?B?eUI3dnVobEpZcHk4MkxFT0JjUVBneHlkVFM4enlHUi9laFNxUlRDbWNnV0Jo?=
- =?utf-8?B?V01uSVQ4dmNXVEw3MnloNEdUM1VUQXRCSUNrcnNoQVl3ekpDUlJPb2VjNlpL?=
- =?utf-8?B?VzBacmhYeFZ5VkFGVWdpdDlydDhUMGNEQktvajFwZDE5QWZjRlRRdGZvUTBr?=
- =?utf-8?B?ZDMrazlrWVR4d2tmaFhkZTUyUDNOcVh4RFUzdTFDc1JXUTk3VEN0aWpGN1Nn?=
- =?utf-8?B?U1ZTcEdQNE52Q1FoU2w4UnpWSlh0R2M0aGJkNVpZUVpuWWdJa2sraHZTL3JS?=
- =?utf-8?B?NVF6bFdrUW44QktSa3ZOU2dYYllxZnFFeTgrbVdvZmZ1UHdmak1mU2NKNjNR?=
- =?utf-8?B?ZVRybWd0aXlpSlJBQldBYXpDcU1tKzFFNTNaK3RRSHpUY3FkS2FqUzJZNzBy?=
- =?utf-8?B?ajZzam00dElsNml6blJDM3R0MjN4V25hUW12Y2JuTzFuYnpBNy82WUdhdDFU?=
- =?utf-8?B?UmNzZDFMcUhNVFp5UE5CZGR4NEdmSytZT2g0M2FDK0JwRUw1c1hwREpEaGhh?=
- =?utf-8?B?MjcvMFNFZFl3L0x1dDJOY2NaMnBkcFhtdFZMNVNxNDFmb2syY0h1MHgzOE1O?=
- =?utf-8?B?UlcwQ3ZGcENkRFZ0b0JFSUpNaEpMbFRZZWNXMlk2Q0Y5VmZoL1Zjb3ZweHA0?=
- =?utf-8?Q?r3MXh23DwGMQ2oPqxceq241YO?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0b641b37-3c03-40cd-7de1-08da7c53a1cd
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Aug 2022 11:13:06.8043
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: oH2NzpPxptp6o2Kd56++0CPVMyNWHbaTwTJbuNb9ShhCVTE9LTkMmyUJ6udu8KMA
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR12MB1831
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.1
+Subject: Re: [ata] 0568e61225: stress-ng.copy-file.ops_per_sec -15.0%
+ regression
+To:     Oliver Sang <oliver.sang@intel.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+CC:     Christoph Hellwig <hch@lst.de>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "Linux Memory Management List" <linux-mm@kvack.org>,
+        <linux-ide@vger.kernel.org>, <lkp@lists.01.org>, <lkp@intel.com>,
+        <ying.huang@intel.com>, <feng.tang@intel.com>,
+        <zhengjun.xing@linux.intel.com>, <fengwei.yin@intel.com>
+References: <YuzPMMnnY739Tnit@xsang-OptiPlex-9020>
+ <1f498d4a-f93f-ceb4-b713-753196e5e08d@opensource.wdc.com>
+ <3451fa5a-6229-073f-ae18-0c232cd48ed5@huawei.com>
+ <e4106ffa-3842-45c0-9756-5226cfcfa17d@opensource.wdc.com>
+ <YvXeuCAK780OuJPz@xsang-OptiPlex-9020>
+From:   John Garry <john.garry@huawei.com>
+In-Reply-To: <YvXeuCAK780OuJPz@xsang-OptiPlex-9020>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.48.157.254]
+X-ClientProxiedBy: lhrpeml500005.china.huawei.com (7.191.163.240) To
+ lhrpeml500003.china.huawei.com (7.191.162.67)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-@Alex was that one already picked up?
+On 12/08/2022 06:01, Oliver Sang wrote:
+> hi, Damien Le Moal,
+> 
+> On Tue, Aug 09, 2022 at 07:55:53AM -0700, Damien Le Moal wrote:
+>> On 2022/08/09 2:58, John Garry wrote:
+>>> On 08/08/2022 15:52, Damien Le Moal wrote:
+>>>> On 2022/08/05 1:05, kernel test robot wrote:
+>>>>>
+>>>>>
+>>>>> Greeting,
+>>>>>
+>>>>> FYI, we noticed a -15.0% regression of stress-ng.copy-file.ops_per_sec due to commit:
+>>>>>
+>>>>>
+>>>>> commit: 0568e6122574dcc1aded2979cd0245038efe22b6 ("ata: libata-scsi: cap ata_device->max_sectors according to shost->max_sectors")
+>>>>> https://git.kernel.org/cgit/linux/kernel/git/next/linux-next.git master
+>>>>>
+>>>>> in testcase: stress-ng
+>>>>> on test machine: 96 threads 2 sockets Ice Lake with 256G memory
+>>>>> with following parameters:
+>>>>>
+>>>>> 	nr_threads: 10%
+>>>>> 	disk: 1HDD
+>>>>> 	testtime: 60s
+>>>>> 	fs: f2fs
+>>>>> 	class: filesystem
+>>>>> 	test: copy-file
+>>>>> 	cpufreq_governor: performance
+>>>>> 	ucode: 0xb000280
+>>>>
+>>>> Without knowing what the device adapter is, hard to say where the problem is. I
+>>>> suspect that with the patch applied, we may be ending up with a small default
+>>>> max_sectors value, causing overhead due to more commands than necessary.
+>>>>
+>>>> Will check what I see with my test rig.
+>>>
+>>> As far as I can see, this patch should not make a difference unless the
+>>> ATA shost driver is setting the max_sectors value unnecessarily low.
+>>
+>> That is my hunch too, hence my question about which host driver is being used
+>> for this test... That is not apparent from the problem report.
+> 
+> we noticed the commit is already in mainline now, and in our tests, there is
+> still similar regression and also on other platforms.
+> could you guide us how to check "which host driver is being used for this
+> test"? hope to supply some useful information.
+> 
 
-Am 25.07.22 um 18:40 schrieb Andrey Grodzovsky:
-> Reviewed-by: Andrey Grodzovsky <andrey.grodzovsky@amd.com>
->
-> Andrey
->
-> On 2022-07-19 06:39, Andrey Strachuk wrote:
->> Local variable 'rq' is initialized by an address
->> of field of drm_sched_job, so it does not make
->> sense to compare 'rq' with NULL.
+For me, a complete kernel log may help.
+
 >>
->> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+>>>
+>>>>
+>>>>>
+>>>>>
+>>>>>
+>>>>>
+>>>>> If you fix the issue, kindly add following tag
+>>>>> Reported-by: kernel test robot <oliver.sang@intel.com>
+>>>>>
+>>>>>
+>>>>> Details are as below:
+>>>>> -------------------------------------------------------------------------------------------------->
+>>>>>
+>>>>>
+>>>>> To reproduce:
+>>>>>
+>>>>>           git clone https://github.com/intel/lkp-tests.git
+>>>>>           cd lkp-tests
+>>>>>           sudo bin/lkp install job.yaml           # job file is attached in this email
+>>>>>           bin/lkp split-job --compatible job.yaml # generate the yaml file for lkp run
+>>>>>           sudo bin/lkp run generated-yaml-file
+>>>>>
+>>>>>           # if come across any failure that blocks the test,
+>>>>>           # please remove ~/.lkp and /lkp dir to run from a clean state.
+>>>>>
+>>>>> =========================================================================================
+>>>>> class/compiler/cpufreq_governor/disk/fs/kconfig/nr_threads/rootfs/tbox_group/test/testcase/testtime/ucode:
+>>>>>     filesystem/gcc-11/performance/1HDD/f2fs/x86_64-rhel-8.3/10%/debian-11.1-x86_64-20220510.cgz/lkp-icl-2sp1/copy-file/stress-ng/60s/0xb000280
+>>>>>
+>>>>> commit:
+>>>>>     4cbfca5f77 ("scsi: scsi_transport_sas: cap shost opt_sectors according to DMA optimal limit")
+>>>>>     0568e61225 ("ata: libata-scsi: cap ata_device->max_sectors according to shost->max_sectors")
+>>>>>
+>>>>> 4cbfca5f7750520f 0568e6122574dcc1aded2979cd0
+>>>>> ---------------- ---------------------------
+>>>>>            %stddev     %change         %stddev
+>>>>>                \          |                \
+>>>>>         1627           -14.9%       1385        stress-ng.copy-file.ops
+>>>>>        27.01           -15.0%      22.96        stress-ng.copy-file.ops_per_sec
+>>>>>      8935079           -11.9%    7870629        stress-ng.time.file_system_outputs
+>>>>>        14.88 ±  5%     -31.8%      10.14 ±  3%  stress-ng.time.percent_of_cpu_this_job_got
+>>>>>        50912           -14.7%      43413        vmstat.io.bo
+>>>>>        93.78            +1.4%      95.10        iostat.cpu.idle
+>>>>>         3.89           -31.6%       2.66        iostat.cpu.iowait
+>>>>>         4.01            -1.3        2.74        mpstat.cpu.all.iowait%
+>>>>>         0.23 ±  9%      -0.1        0.17 ± 11%  mpstat.cpu.all.sys%
+>>>>>         1.66 ± 37%      -1.2        0.51 ± 55%  perf-profile.calltrace.cycles-pp.f2fs_write_end.generic_perform_write.f2fs_buffered_write_iter.f2fs_file_write_iter.do_iter_readv_writev
+>>>>>         1.66 ± 37%      -1.1        0.59 ± 25%  perf-profile.children.cycles-pp.f2fs_write_end
+>>>>>         1.51 ± 40%      -1.1        0.45 ± 26%  perf-profile.children.cycles-pp.f2fs_dirty_data_folio
+>>>>>         1.21 ± 49%      -1.0        0.23 ± 33%  perf-profile.children.cycles-pp.f2fs_update_dirty_folio
+>>>>>         0.88 ± 56%      -0.8        0.04 ±111%  perf-profile.children.cycles-pp.native_queued_spin_lock_slowpath
+>>>>>         0.14 ± 26%      +0.1        0.25 ± 28%  perf-profile.children.cycles-pp.page_cache_ra_unbounded
+>>>>>         0.88 ± 56%      -0.8        0.04 ±112%  perf-profile.self.cycles-pp.native_queued_spin_lock_slowpath
+>>>>>      3164876 ±  9%     -20.2%    2524713 ±  7%  perf-stat.i.cache-misses
+>>>>>    4.087e+08            -4.6%  3.899e+08        perf-stat.i.dTLB-loads
+>>>>>       313050 ± 10%     -18.4%     255410 ±  6%  perf-stat.i.node-loads
+>>>>>       972573 ±  9%     -16.4%     812873 ±  6%  perf-stat.i.node-stores
+>>>>>      3114748 ±  9%     -20.2%    2484807 ±  7%  perf-stat.ps.cache-misses
+>>>>>    4.022e+08            -4.6%  3.837e+08        perf-stat.ps.dTLB-loads
+>>>>>       308178 ± 10%     -18.4%     251418 ±  6%  perf-stat.ps.node-loads
+>>>>>       956996 ±  9%     -16.4%     799948 ±  6%  perf-stat.ps.node-stores
+>>>>>       358486            -8.3%     328694        proc-vmstat.nr_active_file
+>>>>>      1121620           -11.9%     987816        proc-vmstat.nr_dirtied
+>>>>>       179906            -6.7%     167912        proc-vmstat.nr_dirty
+>>>>>      1151201            -1.7%    1131322        proc-vmstat.nr_file_pages
+>>>>>       100181            +9.9%     110078 ±  2%  proc-vmstat.nr_inactive_file
+>>>>>       846362           -14.6%     722471        proc-vmstat.nr_written
+>>>>>       358486            -8.3%     328694        proc-vmstat.nr_zone_active_file
+>>>>>       100181            +9.9%     110078 ±  2%  proc-vmstat.nr_zone_inactive_file
+>>>>>       180668            -6.8%     168456        proc-vmstat.nr_zone_write_pending
+>>>>>       556469            -3.5%     536985        proc-vmstat.pgactivate
+>>>>>      3385454           -14.6%    2889953        proc-vmstat.pgpgout
+>>>>>
+>>>>>
+>>>>>
+>>>>>
+>>>>> Disclaimer:
+>>>>> Results have been estimated based on internal Intel analysis and are provided
+>>>>> for informational purposes only. Any difference in system hardware or software
+>>>>> design or configuration may affect actual performance.
+>>>>>
+>>>>>
+>>>>
+>>>>
+>>>
 >>
->> Signed-off-by: Andrey Strachuk <strochuk@ispras.ru>
->> Fixes: 7c6e68c777f1 ("drm/amdgpu: Avoid HW GPU reset for RAS.")
->> ---
->>   drivers/gpu/drm/amd/amdgpu/amdgpu_job.c | 4 ----
->>   1 file changed, 4 deletions(-)
 >>
->> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_job.c 
->> b/drivers/gpu/drm/amd/amdgpu/amdgpu_job.c
->> index 67f66f2f1809..600401f2a98f 100644
->> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_job.c
->> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_job.c
->> @@ -285,10 +285,6 @@ void amdgpu_job_stop_all_jobs_on_sched(struct 
->> drm_gpu_scheduler *sched)
->>       /* Signal all jobs not yet scheduled */
->>       for (i = DRM_SCHED_PRIORITY_COUNT - 1; i >= 
->> DRM_SCHED_PRIORITY_MIN; i--) {
->>           struct drm_sched_rq *rq = &sched->sched_rq[i];
->> -
->> -        if (!rq)
->> -            continue;
->> -
->>           spin_lock(&rq->lock);
->>           list_for_each_entry(s_entity, &rq->entities, list) {
->>               while ((s_job = 
->> to_drm_sched_job(spsc_queue_pop(&s_entity->job_queue)))) {
+>> -- 
+>> Damien Le Moal
+>> Western Digital Research
+> .
 

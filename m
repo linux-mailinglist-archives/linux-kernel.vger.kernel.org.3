@@ -2,124 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53710591737
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 00:19:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1163259173B
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 00:23:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235572AbiHLWTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 18:19:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60972 "EHLO
+        id S236681AbiHLWXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 18:23:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233876AbiHLWTR (ORCPT
+        with ESMTP id S230201AbiHLWXG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 18:19:17 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FE41B56DD;
-        Fri, 12 Aug 2022 15:19:16 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 13666320090B;
-        Fri, 12 Aug 2022 18:19:11 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Fri, 12 Aug 2022 18:19:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1660342751; x=
-        1660429151; bh=NVr5DzIN9NKJQUZlYZVN75R1jb8BrZu1TnV/2szNqjE=; b=m
-        I5vUYZij+qXU/ROI+66uPkBL619Mef1RJBFZ+3rmE4kOSiCWpAi00+Q6sZh9VHvW
-        qou+IMBWADBUCAKpyWsMEP7l2I1bD3ZusX7EzqZW1ynrre7TCK9LK+Nt1g97hv2B
-        RjtvFUEj33b4MN5F/PJpHbFtNQc2x5/rK+B0VlhYVJfRK/OVArMRzrs9lMF4ZWBz
-        krH23CWJkFVxh7fzNa75Y8EvnXMYbC52XoH6oRpZf4JRU6QXexBAmBxWH1/jLfi7
-        ROdEARNOtsYwm8vCIkFqxw6kk6A51nIG9/o+JOBEAxy5Vg6SkMB4RGkpZUro2W2m
-        /6ovzConFN92Jx94AHcQw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1660342751; x=
-        1660429151; bh=NVr5DzIN9NKJQUZlYZVN75R1jb8BrZu1TnV/2szNqjE=; b=3
-        w2I2KtneyJRrNU/zU6nBp2HhOXWu2ohfygEjjVkPQ13+u7lCFfZSjbs015YnDvMd
-        CUbjdaDO+KA4sc1Q1pgzBpLrGX4BNT5CJGymH6FrrcSHdtWD+qWDeq/2N1sEFIOZ
-        n3aZ8c4D3bC48TpgJQMExeNpZsf1/Fb/B8t0eGaGZOJo1kVhasXKYCqIAaL1favL
-        Ilej5dQPIAHs5L4mzv5Icf+beYBok/3urMO0N2pIOnYBcHD5xNGl+5kpaTQyZJ9I
-        ngKLUscSiXnSe8jva6HP4cVGx818dfZGGHHbhEN6l9nsE2rEfbxHzd+PkSZMaF33
-        rlyTHMgmILospVnGZXfyQ==
-X-ME-Sender: <xms:3tH2Yncjry_pDlR5oP1yGLk1Ps59m1m5YugvR3AGnHaK8iNEr2BJeg>
-    <xme:3tH2YtMfGdOOLYv3P0nF_UkMQXZMafbD86E65beOWJYwtUKWsjmi089YXMPNNDrHQ
-    J4aG0Wbyhprsq90NQ>
-X-ME-Received: <xmr:3tH2Ygh3Lrzmpqax50VdLw-8ZNdfayoD5O8KIacFCmNyN0MerbMBzqUcj6kx6h5HFZFQXPYY3BcAIm2lfVfV8ll4z1dAB88-eGg-cuQoYcgPPYYZlLBPkLD6NQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegjedgtdekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepuffvvehfhffkffgfgggjtgfgsehtjeertddtfeejnecuhfhrohhmpefurghm
-    uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpefftdevkedvgeekueeutefgteffieelvedukeeuhfehledvhfei
-    tdehudfhudehhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:3tH2Yo9K_c6QrdiWmmZVkCK52HZaXRFSfHMIFcP5kemqa43LN69x3g>
-    <xmx:3tH2Yjv97Kxp0a_cp9bEDaQjLT208DtQ2wvXTuBJ_lRKDr4up83Bvg>
-    <xmx:3tH2YnFwtan-9303L_NzLLViZLKHOlFngP9HgzbI4rSCJ4aVYXPThw>
-    <xmx:39H2YjFT5MFvRIsHyQBkGpvfvyygQeSFHRwAbrLugi7MP2STqKGiYA>
-Feedback-ID: i0ad843c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 12 Aug 2022 18:19:10 -0400 (EDT)
-Subject: Re: [PATCH 1/8] dt-bindings: sun6i-a31-mipi-dphy: Add the interrupts
- property
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Vinod Koul <vkoul@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Maxime Ripard <mripard@kernel.org>
-Cc:     Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Ripard <maxime@cerno.tech>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-sunxi@lists.linux.dev
-References: <20220812075603.59375-1-samuel@sholland.org>
- <20220812075603.59375-2-samuel@sholland.org>
- <c85ec3a3-fa6e-aa71-a847-22062b9683e9@linaro.org>
-From:   Samuel Holland <samuel@sholland.org>
-Message-ID: <0d2bf232-8aa6-2dc1-121d-f0439bfd7b54@sholland.org>
-Date:   Fri, 12 Aug 2022 17:19:09 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
- Thunderbird/68.6.0
+        Fri, 12 Aug 2022 18:23:06 -0400
+Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6312311456;
+        Fri, 12 Aug 2022 15:23:05 -0700 (PDT)
+Received: by mail-qk1-x731.google.com with SMTP id a12so950441qkk.7;
+        Fri, 12 Aug 2022 15:23:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=sW9hnKe3PhL/Umb988XscvuO/sNSE1um1bW+MnXhWus=;
+        b=J5FtUxwOJSF75TAcrJRoMnQtXL5c7loYkQCFP1u3P6IwwcrI06PVP5haZ1yXX+UgkR
+         CzgrkA2RPKKBX2DX/idC49STf/d/0x29dESCYsr7Gzh3fHWnnWr9+ddnhXWeBaTQl7u2
+         EGgzH+w5WNTUpdqIZaWQTEH/IxsQAIbJWrY0oGt+76QXSveZJUiytlu6CiaocAFcYYHx
+         urvUjygl+fYsUxlO2yP4NoteQCcV+LsTI5ei7iovq0+6lWv12S1SjNZcCxYNBwW1A9KB
+         OZszwh077kL4sJBM8tsuH4DnX+BhHQUaWoO7gyMvNgLnVwdSzeJhu+7NLVio4L1kYFat
+         Ob5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=sW9hnKe3PhL/Umb988XscvuO/sNSE1um1bW+MnXhWus=;
+        b=sAInmIk2jFUhsC+EE1zW9fc/twbgLMlkF8wLueqwoJ87ziTTU/4jXe8PffZUlfELhV
+         LjkFnshEu+HL9hL0bk84zi6RTL5KecIHo88NZgd2o/lsi0PnKJjimsepyfpKPNxhfXiU
+         hf1tRbp3iDw6DRWUO8iHO7DT9SPP9dND5jfkuEs9NFarWUnJZj0Dw6yGx6AaHPCKiish
+         tw86ng10IeM/UW8LrcOWBPxv3iw9CO39FUceM3mIltNEuH3yhBme32j0Rk+J0pUJnTcd
+         5w0BjtCYxEHC+uuvUWXbHk4IL6T6jRcX6k9iNCUZdAcHffhP69EB5WVv9ruZnmpqMK7w
+         40zQ==
+X-Gm-Message-State: ACgBeo00Mt2I0CCj2eG+Ob32ecy3W/lMem4KMMu41AbOG5t1o0r1edvM
+        umGzk2nge/73ACoT/4OiUPA=
+X-Google-Smtp-Source: AA6agR73OgaSYcBb88BYiZ0fBxAC6nCOw2FRiSsESxntACfgwGjaVSC8g+jLMOBhRgJTwLjzwhbuug==
+X-Received: by 2002:a05:620a:461e:b0:6b5:f9b9:5f70 with SMTP id br30-20020a05620a461e00b006b5f9b95f70mr4542519qkb.631.1660342984353;
+        Fri, 12 Aug 2022 15:23:04 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id bn12-20020a05622a1dcc00b0031eb5648b86sm2524908qtb.41.2022.08.12.15.22.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Aug 2022 15:23:03 -0700 (PDT)
+Message-ID: <90d37d6e-52df-149e-5691-ae7a91521482@gmail.com>
+Date:   Fri, 12 Aug 2022 15:22:54 -0700
 MIME-Version: 1.0
-In-Reply-To: <c85ec3a3-fa6e-aa71-a847-22062b9683e9@linaro.org>
-Content-Type: text/plain; charset=utf-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v3 3/3] memory: Add Broadcom STB memory controller driver
 Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>
+References: <20220801220931.181531-1-f.fainelli@gmail.com>
+ <20220801220931.181531-4-f.fainelli@gmail.com>
+ <26ad247d-a4b3-4051-b8d9-505c09b76f6b@linaro.org>
+ <375eac04-dbfd-080a-3003-cae3eda1f42b@gmail.com>
+ <fa283e3c-5b96-b0a4-95c5-a7230d16d8ca@linaro.org>
+ <ec06e9c6-f475-fe19-9046-d57a6168e72b@gmail.com>
+ <c51c360e-a73f-9333-ffa1-3461de29f41f@linaro.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <c51c360e-a73f-9333-ffa1-3461de29f41f@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/12/22 5:45 AM, Krzysztof Kozlowski wrote:
-> On 12/08/2022 10:55, Samuel Holland wrote:
->> The sun6i DPHY can generate several interrupts, mostly for reporting
->> error conditions, but also for detecting BTA and UPLS sequences.
->> Document this capability in order to accurately describe the hardware.
->>
->> The DPHY has no interrupt number provided in the vendor documentation
->> because its interrupt line is shared with the DSI controller.
->>
->> Fixes: c25b84c00826 ("dt-bindings: display: Convert Allwinner DSI to a schema")
+On 8/12/22 11:41, Krzysztof Kozlowski wrote:
+> On 12/08/2022 20:52, Florian Fainelli wrote:
 > 
-> I don't understand what is being fixed in that commit. That commit did
-> not have interrupts in D-PHY, so what was broken by it?
+>>>> unless you also implied enclosing those functions under an #if
+>>>> IS_ENABLED(CONFIG_PM) or something which is IMHO less preferable.
+>>>
+>>> Are you sure you added also pm_ptr()? I don't see such warnings with W=1
+>>> and final object does not have the functions (for a different driver but
+>>> same principle).
+>>
+>> Yes I am sure I added pm_ptr() see the v4 I just submitted. I don't see
+>> how the compiler cannot warn about the functions being unused the day
+>> they stop being referenced by the pm_ops structure which is eliminated?
 > 
-> The Fixes tag annotates the commit which introduced a bug.
+> I don't have the answer how it exactly works (or which gcc version
+> introduced it), but I tested it and the functions were not present in
+> the object file, thus of course no warnings.
+> 
+> The driver change I am referring to is:
+> https://lore.kernel.org/all/20220808174107.38676-15-paul@crapouillou.net/
+> 
+> I think the only difference against your v4 is:
+> DEFINE_SIMPLE_DEV_PM_OPS
+> and lack of __maybe_unused on the functions.
+> 
+> The DEFINE_SIMPLE_DEV_PM_OPS itself adds __maybe_unused for !CONFIG_PM
+> case, but I don't think it is relevant.
 
-The binding had a bug because it did not accurately describe the hardware. If
-you don't think this warrants a Fixes tag, I can remove it. Or are you
-suggesting that the Fixes tag should instead reference the commit adding the
-original .txt binding?
+It definitively is relevant here. SIMPLE_DEV_PM_OPS without 
+__maybe_unused results in the following pre-processed code:
 
-Regards,
-Samuel
+static int brcmstb_memc_suspend(struct device *dev)
+{
+  struct brcmstb_memc *memc = dev_get_drvdata(dev);
+  void *cfg = memc->ddr_ctrl + memc->srpd_offset;
+  u32 val;
+
+  if (memc->timeout_cycles == 0)
+   return 0;
+
+
+
+
+
+
+  val = ({ u32 __r = (( __u32)(__le32)(( __le32) __raw_readl(cfg))); 
+__r; });
+  val &= ~((((1UL))) << (16));
+  __raw_writel(( u32) (( __le32)(__u32)(val)),cfg);
+
+  (void)({ u32 __r = (( __u32)(__le32)(( __le32) __raw_readl(cfg))); 
+__r; });
+
+  return 0;
+}
+
+static int brcmstb_memc_resume(struct device *dev)
+{
+  struct brcmstb_memc *memc = dev_get_drvdata(dev);
+
+  if (memc->timeout_cycles == 0)
+   return 0;
+
+  return brcmstb_memc_srpd_config(memc, memc->timeout_cycles);
+}
+
+static const struct dev_pm_ops __attribute__((__unused__)) 
+brcmstb_memc_pm_ops = { }
+                         ;
+
+static struct platform_driver brcmstb_memc_driver = {
+  .probe = brcmstb_memc_probe,
+  .remove = brcmstb_memc_remove,
+  .driver = {
+   .name = "brcmstb_memc",
+   .of_match_table = brcmstb_memc_of_match,
+   .pm = ((1) ? ((&brcmstb_memc_pm_ops)) : ((void *)0)),
+  },
+};
+
+Now with DEFINE_SIMPLE_PM_OPS, we get the following instead:
+
+static const struct dev_pm_ops brcmstb_memc_pm_ops = { .suspend = ((0) ? 
+((brcmstb_memc_suspend)) : ((void *)0)), .resume = ((0) ? 
+((brcmstb_memc_resume)) : ((void *)0)), .freeze = ((0) ? 
+((brcmstb_memc_suspend)) : ((void *)0)), .thaw = ((0) ? 
+((brcmstb_memc_resume)) : ((void *)0)), .poweroff = ((0) ? 
+((brcmstb_memc_suspend)) : ((void *)0)), .restore = ((0) ? 
+((brcmstb_memc_resume)) : ((void *)0)), .runtime_suspend = ((void *)0), 
+.runtime_resume = ((void *)0), .runtime_idle = ((void *)0), }
+                         ;
+
+static struct platform_driver brcmstb_memc_driver = {
+  .probe = brcmstb_memc_probe,
+  .remove = brcmstb_memc_remove,
+  .driver = {
+   .name = "brcmstb_memc",
+   .of_match_table = brcmstb_memc_of_match,
+   .pm = ((1) ? ((&brcmstb_memc_pm_ops)) : ((void *)0)),
+  },
+};
+
+so we will continue to reference the functions, but eventually we will 
+eliminate those at the optimization stage by figuring out that this is 
+dead code, therefore it can be eliminated. Note that in both cases the 
+object does not contain brcmstb_memc_{resume,suspend} which makes sense 
+because the warnings are generated at the time the code is processed, 
+and the dead code elimination at one of the optimization stages.
+
+I can spin a v5 with DEFINE_SIMPLE_PM_OPS if you prefer to get rid of 
+the __maybe_unused.
+-- 
+Florian

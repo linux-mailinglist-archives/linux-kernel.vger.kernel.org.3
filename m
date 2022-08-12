@@ -2,145 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90DC6591051
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 13:46:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58965591057
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 13:48:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238176AbiHLLqf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 07:46:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56646 "EHLO
+        id S237535AbiHLLsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 07:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238127AbiHLLqb (ORCPT
+        with ESMTP id S235923AbiHLLsP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 07:46:31 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E47A88DF1;
-        Fri, 12 Aug 2022 04:46:28 -0700 (PDT)
-Received: from [192.168.2.145] (unknown [109.252.119.13])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BD19E66016F2;
-        Fri, 12 Aug 2022 12:46:23 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1660304786;
-        bh=C5rdDWAQ0gULbYpYsWO6A2mmdZ/uxYEqrEknr4MoOf8=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=f3cXPfNXtZHtoSYE1rfxtQ30MUhUVhGrG/NArO1c7kQB8/Xy+FmlqaaOTXT5gVdlP
-         JQXrT9UtGLSc+oBaf/E/efq95t8eHa3wW8rsdseitQlUvtaI4DwUh/ptuZTZ+7D4oa
-         7gYb8ygLDMwAttTQiJt/HYS3piyRQe36Z1IpIZJqOFl16YT77Eqw1UGF1vppI4t/Vf
-         GlTMr5So6lTOFJQj6bSYwIN6RamDBXBlbOMkDkPHaJHbuvpX0ALyNVMapf4xI3a4LC
-         uDEbP9wEVI4gkRbHJNZkFWXDO04u0wVdnPFCF2dEImetIe9dBjI0qKFkC2Wjrvs/O9
-         MpZiQvPIhyRKg==
-Message-ID: <b7bc8c98-d613-a50d-454c-06ca76d707e1@collabora.com>
-Date:   Fri, 12 Aug 2022 14:46:20 +0300
+        Fri, 12 Aug 2022 07:48:15 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F22C1AFAE2
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 04:48:12 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id e8-20020a17090a280800b001f2fef7886eso679196pjd.3
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 04:48:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=quanta-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=1WPdo9M+Sx6XTbFXOZ/AtUfevOxtbqvZ35Od/wJosKk=;
+        b=z7o6YDD1kXTK8o/DG7hkIWs3Z8hy7Yo6SjbLpSvIWfUN4EG+Ch1bZ3ZBpz6v7RBpud
+         y36XNext6pDcS1uCMdAZqOzQxBc9V1FfdE7xmc6CIonPd1wxpgRn2GSZMY/IUbblmFZ4
+         6E+y+Z5m71GgwfbcNAB42ohiR5R5VoFRgJ8Nn1EPz1NOMpww7sJi8q182alt/1Ql2Ik1
+         VGOme+UfJy4285EOw2UvJkVBeOvhcGF4EOQucHIjQlQPxUtotN6BctQaVa6WdfLShiHD
+         qmzgFgOGBzNT4F2yPczyhmDuye8ZkLRgeKYTLLiPYFyY3Y1EyRmPmuB2F9bj7C1UiBoK
+         2fvg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=1WPdo9M+Sx6XTbFXOZ/AtUfevOxtbqvZ35Od/wJosKk=;
+        b=WYNB0bJpUk4HB5Lz/4hiXxJDxSp3qSd3/+pu6QZ7T5jv51nXTVBKZsfLHNzM/o+Qxg
+         hIDNnxRYgv3tRgHs3yvWwj+3qKCWIvJMukGJyNjDoejeBUUMWexT0baLXW8G58k6YxJY
+         HP2wKR800lBOGrOhNPQbnPLnR78zUK5tblSWpQ/MTo4dIZ1AhlNKXFUIozajCD8WMAwB
+         SL4cGo4tyJtX1thpG0QkHTJAe4MrdrxOxLQUxydcOtOwK8V34WJge8Nr/n2zqmYyIhgV
+         zavuD9IRZPoDVB4lRu7Nkb7jvUKOsryewbflJSbO61izFD8FrwccKablZ7SIf69FhBgo
+         Frtw==
+X-Gm-Message-State: ACgBeo3JMckxvxSOEStC8g1+7/kBi44rwwb9mo1OkDA9yNk/SyBAAZa6
+        HVeMhq8Y2V4teQCFobfNMmwFFw==
+X-Google-Smtp-Source: AA6agR7d1ezsS3nvkyhQ1bVhlUpxExz65NeFOzJabTp4+B2vJE68BRef/AbGYGLCukUi5Cc1rnwPrA==
+X-Received: by 2002:a17:90b:394:b0:1f5:90a1:acf0 with SMTP id ga20-20020a17090b039400b001f590a1acf0mr13458944pjb.40.1660304892505;
+        Fri, 12 Aug 2022 04:48:12 -0700 (PDT)
+Received: from sean-biuld-server.itotolink.net (1-34-200-211.hinet-ip.hinet.net. [1.34.200.211])
+        by smtp.gmail.com with ESMTPSA id z6-20020a1709027e8600b0016d7afee272sm1499378pla.153.2022.08.12.04.48.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Aug 2022 04:48:12 -0700 (PDT)
+From:   Sean Hong <sean.hong@quanta.corp-partner.google.com>
+To:     perex@perex.cz, tiwai@suse.com
+Cc:     cezary.rojewski@intel.com, pierre-louis.bossart@linux.intel.com,
+        liam.r.girdwood@linux.intel.com, peter.ujfalusi@linux.intel.com,
+        yung-chuan.liao@linux.intel.com, ranjani.sridharan@linux.intel.com,
+        kai.vehmanen@linux.intel.com, broonie@kernel.org,
+        brent.lu@intel.com, yong.zhi@intel.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Sean Hong <sean.hong@quanta.corp-partner.google.com>
+Subject: [PATCH] ASoC: Intel: sof_rt5682: Add support for jsl_rt5682_rt1019
+Date:   Fri, 12 Aug 2022 19:48:04 +0800
+Message-Id: <20220812114804.550809-1-sean.hong@quanta.corp-partner.google.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [Linaro-mm-sig] [PATCH v2 3/5] dma-buf: Move all dma-bufs to
- dynamic locking specification
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <ckoenig.leichtzumerken@gmail.com>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org,
-        spice-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, David Airlie <airlied@linux.ie>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tomeu Vizoso <tomeu.vizoso@collabora.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Rob Clark <robdclark@gmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Tomasz Figa <tfiga@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        =?UTF-8?Q?Thomas_Hellstr=c3=b6m?= <thomas_os@shipmail.org>
-References: <20220725151839.31622-1-dmitry.osipenko@collabora.com>
- <20220725151839.31622-4-dmitry.osipenko@collabora.com>
- <6c8bded9-1809-608f-749a-5ee28b852d32@gmail.com>
- <562fbacf-3673-ff3c-23a1-124284b4456c@collabora.com>
- <87724722-b9f3-a016-c25c-4b0415f2c37f@amd.com>
- <0863cafa-c252-e194-3d23-ef640941e36e@collabora.com>
- <93484389-1f79-b364-700f-60769fc5f8a5@gmail.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <93484389-1f79-b364-700f-60769fc5f8a5@gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/12/22 14:34, Christian König wrote:
-> 
-> 
-> Am 10.08.22 um 20:53 schrieb Dmitry Osipenko:
->> On 8/10/22 21:25, Christian König wrote:
->>> Am 10.08.22 um 19:49 schrieb Dmitry Osipenko:
->>>> On 8/10/22 14:30, Christian König wrote:
->>>>> Am 25.07.22 um 17:18 schrieb Dmitry Osipenko:
->>>>>> This patch moves the non-dynamic dma-buf users over to the dynamic
->>>>>> locking specification. The strict locking convention prevents
->>>>>> deadlock
->>>>>> situation for dma-buf importers and exporters.
->>>>>>
->>>>>> Previously the "unlocked" versions of the dma-buf API functions
->>>>>> weren't
->>>>>> taking the reservation lock and this patch makes them to take the
->>>>>> lock.
->>>>>>
->>>>>> Intel and AMD GPU drivers already were mapping imported dma-bufs
->>>>>> under
->>>>>> the held lock, hence the "locked" variant of the functions are added
->>>>>> for them and the drivers are updated to use the "locked" versions.
->>>>> In general "Yes, please", but that won't be that easy.
->>>>>
->>>>> You not only need to change amdgpu and i915, but all drivers
->>>>> implementing the map_dma_buf(), unmap_dma_buf() callbacks.
->>>>>
->>>>> Auditing all that code is a huge bunch of work.
->>>> Hm, neither of drivers take the resv lock in map_dma_buf/unmap_dma_buf.
->>>> It's easy to audit them all and I did it. So either I'm missing
->>>> something or it doesn't take much time to check them all. Am I really
->>>> missing something?
->>> Ok, so this is only changing map/unmap now?
->> It also vmap/vunmap and attach/detach: In the previous patch I added the
->> _unlocked postfix to the func names and in this patch I made them all to
->> actually take the lock.
-> 
-> 
-> Take your patch "[PATCH v2 2/5] drm/gem: Take reservation lock for
-> vmap/vunmap operations" as a blueprint on how to approach it.
-> 
-> E.g. one callback at a time and then document the result in the end.
+This patch adds the driver data for rt5682s on SSP0 for ADL platform
 
-Yeah, I'll do it for v3. I'm vaguely recalling that there was a problem
-when I wanted to split this patch in the past, but don't remember what
-it was.. maybe that problem is gone now, will see :)
+Signed-off-by: Sean Hong <sean.hong@quanta.corp-partner.google.com>
+---
+ sound/soc/intel/boards/sof_rt5682.c               |  9 +++++++++
+ sound/soc/intel/common/soc-acpi-intel-jsl-match.c | 13 +++++++++++++
+ 2 files changed, 22 insertions(+)
 
+diff --git a/sound/soc/intel/boards/sof_rt5682.c b/sound/soc/intel/boards/sof_rt5682.c
+index 045965312245b..3a840f3a9f5d2 100644
+--- a/sound/soc/intel/boards/sof_rt5682.c
++++ b/sound/soc/intel/boards/sof_rt5682.c
+@@ -1100,6 +1100,15 @@ static const struct platform_device_id board_ids[] = {
+ 					SOF_RT5682_SSP_AMP(1) |
+ 					SOF_RT5682_NUM_HDMIDEV(4)),
+ 	},
++	{
++		.name = "jsl_rt5682_rt1019",
++		.driver_data = (kernel_ulong_t)(SOF_RT5682_MCLK_EN |
++					SOF_RT5682_MCLK_24MHZ |
++					SOF_RT5682_SSP_CODEC(0) |
++					SOF_SPEAKER_AMP_PRESENT |
++					SOF_RT1019_SPEAKER_AMP_PRESENT |
++					SOF_RT5682_SSP_AMP(1)),
++	},
+ 	{ }
+ };
+ MODULE_DEVICE_TABLE(platform, board_ids);
+diff --git a/sound/soc/intel/common/soc-acpi-intel-jsl-match.c b/sound/soc/intel/common/soc-acpi-intel-jsl-match.c
+index b95c4b2cda947..139d2468f5f70 100644
+--- a/sound/soc/intel/common/soc-acpi-intel-jsl-match.c
++++ b/sound/soc/intel/common/soc-acpi-intel-jsl-match.c
+@@ -29,6 +29,11 @@ static const struct snd_soc_acpi_codecs rt1015p_spk = {
+ 	.codecs = {"RTL1015"}
+ };
+ 
++static struct snd_soc_acpi_codecs rt1019p_spk = {
++	.num_codecs = 1,
++	.codecs = {"RTL1019"}
++}
++
+ static const struct snd_soc_acpi_codecs mx98360a_spk = {
+ 	.num_codecs = 1,
+ 	.codecs = {"MX98360A"}
+@@ -78,6 +83,14 @@ struct snd_soc_acpi_mach snd_soc_acpi_intel_jsl_machines[] = {
+ 		.quirk_data = &mx98360a_spk,
+ 		.sof_tplg_filename = "sof-jsl-rt5682-mx98360a.tplg",
+ 	},
++	{
++		.comp_ids = &rt5682_rt5682s_hp,
++		.drv_name = "jsl_rt5682_rt1019",
++		.sof_fw_filename = "sof-jsl.ri",
++		.machine_quirk = snd_soc_acpi_codec_list,
++		.quirk_data = &rt1019p_spk,
++		.sof_tplg_filename = "sof-jsl-rt5682-rt1015.tplg",
++	},
+ 	{
+ 		.id = "10134242",
+ 		.drv_name = "jsl_cs4242_mx98360a",
 -- 
-Best regards,
-Dmitry
+2.25.1
+

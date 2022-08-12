@@ -2,94 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30D77590E46
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 11:41:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4920D590E49
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 11:41:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237477AbiHLJlE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 05:41:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56486 "EHLO
+        id S237333AbiHLJlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 05:41:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbiHLJlB (ORCPT
+        with ESMTP id S229942AbiHLJlW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 05:41:01 -0400
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B63C26F571
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 02:41:00 -0700 (PDT)
-Received: by mail-ej1-f52.google.com with SMTP id y13so1056637ejp.13
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 02:41:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=SDU6eJ9jqxKJGVdNe7phaO+u1XVdpyUB36/gamPBeE4=;
-        b=naV5wG041j30HnfdVQdJwtvC4GoJ+URYkmGna0aYDzBYcXXm7PV3Tt82/8pZdm5oWt
-         hZA4aXChdo5qawzs7QHqqho7GKj9YUNq4k8I6SK6+Yt4TR6jB1Bv04YR6KBm78emMwFC
-         1HqpbFBwjFCI7n4OtO40k0wO6jRlRbAuJQM76ckNNtMm3DLok2oOxHU1k+HoWG+rYK5e
-         cnTHMKOY+4ObRmrrLUmN/hlwPec0Wi/RIsVLuz/m3lvSE87XL2haX2P6AUy5gxEk+SrH
-         9jrI1oWZVfsQhpOQaAa85K7LLuBQaQWfU6e06clz3ZbfyCyEqUaTb8sPQudW45Ge25uC
-         06Sw==
-X-Gm-Message-State: ACgBeo1RhyAZrL4AWX6jNY2/kMjnQfd+OTy86diSBxCWeJnWtTCGWWRN
-        /JX5v36MpB5YUmYqDEM3eXs=
-X-Google-Smtp-Source: AA6agR6yp8EhyZ/kEQafv6W+jji4vrY+cmuoWsi9P/PHSJnKTZJe30zwitzSij6ZwXSuGIvQmVRiFA==
-X-Received: by 2002:a17:907:762f:b0:730:95d9:9955 with SMTP id jy15-20020a170907762f00b0073095d99955mr2076982ejc.505.1660297259332;
-        Fri, 12 Aug 2022 02:40:59 -0700 (PDT)
-Received: from localhost (fwdproxy-cln-007.fbsv.net. [2a03:2880:31ff:7::face:b00c])
-        by smtp.gmail.com with ESMTPSA id r9-20020a1709061ba900b00730c3923a2csm627784ejg.11.2022.08.12.02.40.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Aug 2022 02:40:58 -0700 (PDT)
-From:   Breno Leitao <leitao@debian.org>
-To:     arnd@arndb.de, gregkh@linuxfoundation.org
-Cc:     scott.branden@broadcom.com, bcm-kernel-feedback-list@broadcom.com,
-        linux-kernel@vger.kernel.org, Kernel-team@fb.com
-Subject: [RESEND PATCH] misc: bcm-vk: Specify the minimum number of IRQ vecs
-Date:   Fri, 12 Aug 2022 02:40:11 -0700
-Message-Id: <20220812094011.4064729-1-leitao@debian.org>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <e416c587-d3cc-947a-7336-2c1954e2e432@broadcom.com>
-References: <e416c587-d3cc-947a-7336-2c1954e2e432@broadcom.com>
+        Fri, 12 Aug 2022 05:41:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD80F832C1;
+        Fri, 12 Aug 2022 02:41:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 88855B82381;
+        Fri, 12 Aug 2022 09:41:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 065F7C433C1;
+        Fri, 12 Aug 2022 09:41:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660297279;
+        bh=55Efb2gdzPjhW+qOIM5Dyr4neXhJPdJKwm88KVCVi50=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mvbs34zQ+bawuchqVsh6v9z0FLxlCScGVfyftyUSFVrxxxKKdmVobpjOisREaxnIK
+         Y0IBKU9aHHcdj397eDM4ZR7e5l2ivB3TgOcO1wweWv16K2wy+CqBrKdbu98RDFl1nF
+         J/n68PgZQIEl2TEG4Q9Dc8UuC01BCM74V4vz+xGgr7WS7lv6PjsR4rgmwCJTi04whQ
+         JbigfVIEXzSLWYMwcGOZgECeV73s3TwMglkGKzJA8WppfyWPICSWXcj3TKEcPE5Z/2
+         hqc5+n0K9AzT6PP6VXQXxKt1svQ8DhIr5PNzuAdDfiwsIPNtnkYCmR1rhqRcAeQkCp
+         GUULC9xVN37rA==
+Received: by pali.im (Postfix)
+        id 396B09CF; Fri, 12 Aug 2022 11:41:16 +0200 (CEST)
+From:   =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>
+To:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] PCI: mvebu: Fix endianity when accessing pci emul bridge members
+Date:   Fri, 12 Aug 2022 11:40:58 +0200
+Message-Id: <20220812094058.16141-1-pali@kernel.org>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-During bcm_vk_probe(), pci_alloc_irq_vectors() is called passing the
-number of IRQ vectors as 1, but, later, check how many IRQ vectors it
-got, and fails if it is smaller than VK_MSIX_IRQ_MIN_REQ.
+PCI emul bridge members iolimitupper, iobaseupper, memlimit and membase are
+of type __le16, so correctly access these members via le16_to_cpu() macros.
 
-The most appropriated way to do it is setting the 'min_vecs' param as
-VK_MSIX_IRQ_MIN_REQ, instead of one. pci_alloc_irq_vectors() should
-know the requirements when called.
-
-The test was done by just loading this module on a machine with a
-Valkyrie offload engine hardware.
-
-Signed-off-by: Breno Leitao <leitao@debian.org>
-Acked-by: Scott Branden <scott.branden@broadcom.com>
+Fixes: 4ded69473adb ("PCI: mvebu: Propagate errors when updating PCI_IO_BASE and PCI_MEM_BASE registers")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Pali Rohár <pali@kernel.org>
 ---
- drivers/misc/bcm-vk/bcm_vk_dev.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/pci/controller/pci-mvebu.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/misc/bcm-vk/bcm_vk_dev.c b/drivers/misc/bcm-vk/bcm_vk_dev.c
-index a3a82ebbc699..d4a96137728d 100644
---- a/drivers/misc/bcm-vk/bcm_vk_dev.c
-+++ b/drivers/misc/bcm-vk/bcm_vk_dev.c
-@@ -1339,7 +1339,7 @@ static int bcm_vk_probe(struct pci_dev *pdev, const struct pci_device_id *ent)
- 	pci_set_drvdata(pdev, vk);
+diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
+index c1ffdb06c971..00ea0836b81a 100644
+--- a/drivers/pci/controller/pci-mvebu.c
++++ b/drivers/pci/controller/pci-mvebu.c
+@@ -523,7 +523,7 @@ static int mvebu_pcie_handle_iobase_change(struct mvebu_pcie_port *port)
  
- 	irq = pci_alloc_irq_vectors(pdev,
--				    1,
-+				    VK_MSIX_IRQ_MIN_REQ,
- 				    VK_MSIX_IRQ_MAX,
- 				    PCI_IRQ_MSI | PCI_IRQ_MSIX);
+ 	/* Are the new iobase/iolimit values invalid? */
+ 	if (conf->iolimit < conf->iobase ||
+-	    conf->iolimitupper < conf->iobaseupper)
++	    le16_to_cpu(conf->iolimitupper) < le16_to_cpu(conf->iobaseupper))
+ 		return mvebu_pcie_set_window(port, port->io_target, port->io_attr,
+ 					     &desired, &port->iowin);
  
+@@ -535,10 +535,10 @@ static int mvebu_pcie_handle_iobase_change(struct mvebu_pcie_port *port)
+ 	 * is the CPU address.
+ 	 */
+ 	desired.remap = ((conf->iobase & 0xF0) << 8) |
+-			(conf->iobaseupper << 16);
++			le16_to_cpu(conf->iobaseupper << 16);
+ 	desired.base = port->pcie->io.start + desired.remap;
+ 	desired.size = ((0xFFF | ((conf->iolimit & 0xF0) << 8) |
+-			 (conf->iolimitupper << 16)) -
++			 le16_to_cpu(conf->iolimitupper << 16)) -
+ 			desired.remap) +
+ 		       1;
+ 
+@@ -552,7 +552,7 @@ static int mvebu_pcie_handle_membase_change(struct mvebu_pcie_port *port)
+ 	struct pci_bridge_emul_conf *conf = &port->bridge.conf;
+ 
+ 	/* Are the new membase/memlimit values invalid? */
+-	if (conf->memlimit < conf->membase)
++	if (le16_to_cpu(conf->memlimit) < le16_to_cpu(conf->membase))
+ 		return mvebu_pcie_set_window(port, port->mem_target, port->mem_attr,
+ 					     &desired, &port->memwin);
+ 
+@@ -562,8 +562,8 @@ static int mvebu_pcie_handle_membase_change(struct mvebu_pcie_port *port)
+ 	 * window to setup, according to the PCI-to-PCI bridge
+ 	 * specifications.
+ 	 */
+-	desired.base = ((conf->membase & 0xFFF0) << 16);
+-	desired.size = (((conf->memlimit & 0xFFF0) << 16) | 0xFFFFF) -
++	desired.base = ((le16_to_cpu(conf->membase) & 0xFFF0) << 16);
++	desired.size = (((le16_to_cpu(conf->memlimit) & 0xFFF0) << 16) | 0xFFFFF) -
+ 		       desired.base + 1;
+ 
+ 	return mvebu_pcie_set_window(port, port->mem_target, port->mem_attr, &desired,
 -- 
-2.30.2
+2.20.1
 

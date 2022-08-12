@@ -2,287 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A15BD591337
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 17:43:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ED4059133A
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 17:45:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237841AbiHLPn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 11:43:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37880 "EHLO
+        id S237707AbiHLPo5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 11:44:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238734AbiHLPnF (ORCPT
+        with ESMTP id S232527AbiHLPo4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 11:43:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 852B62873F
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 08:43:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660318983;
+        Fri, 12 Aug 2022 11:44:56 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0031A14033;
+        Fri, 12 Aug 2022 08:44:53 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 05F8F240005;
+        Fri, 12 Aug 2022 15:44:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1660319092;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding;
-        bh=dU06y8+WFEqxVVNCdptk9Tc9JwQCiUowOye+07FhZZk=;
-        b=Phvmmu4IRo183WwvUm5pv40uMCS5Q6BpRro/fRgQf489FhZS22pXdOSTHvUIEzNO7mNKzW
-        LQ+CDSYSfNM3NxUfeHtNhO9tiGIECMyYDP6aQ1ZCvzs8cliJrPqm3UZ6OV4zmrHcmN2ULt
-        tu03zyj6EapJNF/yhLCY7eF7Xy3Y+H4=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-230-wnSa_g4TNRmIdm6fVbnuMw-1; Fri, 12 Aug 2022 11:42:59 -0400
-X-MC-Unique: wnSa_g4TNRmIdm6fVbnuMw-1
-Received: by mail-wm1-f72.google.com with SMTP id h65-20020a1c2144000000b003a30cae106cso4448411wmh.8
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 08:42:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=dU06y8+WFEqxVVNCdptk9Tc9JwQCiUowOye+07FhZZk=;
-        b=kCvjqFaZMkUsDGeg1etU6YDS5dsV1ZdQGN51WAnkYBCqG/RQLxMPZguGUD3ufYphz8
-         JXAmfTjfwEPDGWHDajSxcg4K/BUa1X/q1meAS+E06B4ckxz4yN9xowqagVw6nisLiiHV
-         Anv9Xz+P4VgLZzTsJLOumO7XgaQ4Fbk/bNIWCzQVXxktc0EjzBelsDb6VctBXZESBRly
-         EGqLncdoKncO81Ys2yasRVAHiso2nIOUsSF11AAbT84jBw+MyFmUIu1bzfLlxfiaz2Ae
-         BjbRJ/a2J7oVTC+r+eHrtGKIKakeBqmIpK4PwPLIjgjFm82m2ShSONGvERXynTOBbr4l
-         /WiQ==
-X-Gm-Message-State: ACgBeo3LnrOn5F0+RptnorXbwDkqXakPQy4ZK4iqyur4uIdPjJjZsQPl
-        S6SQQDlKeunZY7ErhadpankKW5APMpxf3kP6/xXV384tLj0BhHRooTXkraBkdUZ6xcb7C/QTGDr
-        ubzXKPAc08gmQ9iHmHJBFXwUO
-X-Received: by 2002:a05:6000:1888:b0:222:c96d:862f with SMTP id a8-20020a056000188800b00222c96d862fmr2441139wri.706.1660318978288;
-        Fri, 12 Aug 2022 08:42:58 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4eX4UTrlOMsC6tsiDzrk0RxUAoIqtKyE9JwEfcKp7sOMME89M6xJltrqsn3/+oIEuf2mbBGw==
-X-Received: by 2002:a05:6000:1888:b0:222:c96d:862f with SMTP id a8-20020a056000188800b00222c96d862fmr2441121wri.706.1660318977953;
-        Fri, 12 Aug 2022 08:42:57 -0700 (PDT)
-Received: from redhat.com ([2.52.152.113])
-        by smtp.gmail.com with ESMTPSA id n18-20020a7bc5d2000000b003a0375c4f73sm3124129wmk.44.2022.08.12.08.42.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Aug 2022 08:42:57 -0700 (PDT)
-Date:   Fri, 12 Aug 2022 11:42:50 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
+        bh=lZZtxYz1Cc+N1tGcnhkF8Otamt97G4kK1n7rfV4yOKE=;
+        b=GccBA4QJL3GBTAJATV/HNkN8QDxv39YfpFjnDs5ZvRPU3hPriecH6m7iilNauuCTkRKWjC
+        lNgopn93m+3ZVXquGDlixuBCwkGesPWxFTCKJKMqX322pqijsrl5Sp2Zvt6af60MpWlJoV
+        mkFXQB3nDBFurHu3RzviqI2XGuvil+RNTp+p/aeJLv63t93CMgwqWz0ySjzJD3W8Qs6gRs
+        0yylKisfgEHCLWiFXSr9dJeBg35F1ER6Y4tFW4SEMRIr0aENeRUf24uDZcMu1nxmZ1yPy4
+        TNTDVfHr5F5HUduK3yNsSek6Xgpq1G7KyGh2Jjr7iBiiL/cnjHfQdZdGJW7E4A==
+Date:   Fri, 12 Aug 2022 17:44:51 +0200
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
 To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alvaro.karsz@solid-run.com, colin.i.king@gmail.com,
-        colin.king@intel.com, dan.carpenter@oracle.com, david@redhat.com,
-        elic@nvidia.com, eperezma@redhat.com, gautam.dawar@xilinx.com,
-        gshan@redhat.com, hdegoede@redhat.com, hulkci@huawei.com,
-        jasowang@redhat.com, jiaming@nfschina.com,
-        kangjie.xu@linux.alibaba.com, lingshan.zhu@intel.com,
-        liubo03@inspur.com, michael.christie@oracle.com, mst@redhat.com,
-        pankaj.gupta@amd.com, peng.fan@nxp.com, quic_mingxue@quicinc.com,
-        robin.murphy@arm.com, sgarzare@redhat.com, suwan.kim027@gmail.com,
-        syoshida@redhat.com, xieyongji@bytedance.com,
-        xuanzhuo@linux.alibaba.com, xuqiang36@huawei.com
-Subject: [GIT PULL] virtio: fatures, fixes
-Message-ID: <20220812114250-mutt-send-email-mst@kernel.org>
+Cc:     linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] RTC for 6.0
+Message-ID: <YvZ1cz2TBIuyZ0md@mail.local>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Mutt-Fcc: =sent
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit 3d7cb6b04c3f3115719235cc6866b10326de34cd:
+Hello Linus,
 
-  Linux 5.19 (2022-07-31 14:03:01 -0700)
+Here is the RTC subsystem pull request for 6.0. There is a know add/add
+merge conflict in MAINTAINERS that is easy to solve.
+
+Three new drivers this cycle are making the bulk of the changes.
+
+The following changes since commit f2906aa863381afb0015a9eb7fefad885d4e5a56:
+
+  Linux 5.19-rc1 (2022-06-05 17:18:54 -0700)
 
 are available in the Git repository at:
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
+  git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux.git tags/rtc-6.0
 
-for you to fetch changes up to 93e530d2a1c4c0fcce45e01ae6c5c6287a08d3e3:
+for you to fetch changes up to 03c4cd6f89e074a51e289eb9129ac646f0f2bd29:
 
-  vdpa/mlx5: Fix possible uninitialized return value (2022-08-11 10:00:36 -0400)
-
-----------------------------------------------------------------
-virtio: fatures, fixes
-
-A huge patchset supporting vq resize using the
-new vq reset capability.
-Features, fixes, cleanups all over the place.
-
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
+  rtc: spear: set range max (2022-08-09 00:56:41 +0200)
 
 ----------------------------------------------------------------
-Alvaro Karsz (1):
-      net: virtio_net: notifications coalescing support
+RTC for 6.0
 
-Bo Liu (3):
-      virtio: Check dev_set_name() return value
-      vhost-vdpa: Call ida_simple_remove() when failed
-      virtio_vdpa: support the arg sizes of find_vqs()
+New drivers:
+ - Microchip PolarFire
+ - Nuvoton NCT3018Y
+ - TI K3 RTC
 
-Colin Ian King (1):
-      vDPA/ifcvf: remove duplicated assignment to pointer cfg
+Subsystem:
+ - Replace flush_scheduled_work() with flush_work()
+ - Remove deprecated ida_simple_get()/ida_simple_remove() calls
 
-David Hildenbrand (1):
-      drivers/virtio: Clarify CONFIG_VIRTIO_MEM for unsupported architectures
+Drivers:
+ - use simple i2c probe where possible
+ - sun6i: add R329 support
+ - zynqmp: add calibration support
+ - vr41xx: remove unused driver
 
-Eli Cohen (3):
-      vdpa/mlx5: Implement susupend virtqueue callback
-      vdpa/mlx5: Support different address spaces for control and data
-      vdpa/mlx5: Fix possible uninitialized return value
+----------------------------------------------------------------
+Ahmad Fatoum (3):
+      rtc: rv8803: factor out existing register initialization to function
+      rtc: rv8803: initialize registers on post-probe voltage loss
+      rtc: rv8803: re-initialize all Epson RX8803 registers on voltage loss
 
-Eugenio Pérez (4):
-      vdpa: Add suspend operation
-      vhost-vdpa: introduce SUSPEND backend feature bit
-      vhost-vdpa: uAPI to suspend the device
-      vdpa_sim: Implement suspend vdpa op
+Alexander Stein (1):
+      dt-bindings: rtc: nxp,pcf85063: Convert to DT schema
 
-Jason Wang (2):
-      virtio_pmem: initialize provider_data through nd_region_desc
-      virtio_pmem: set device ready in probe()
+Alexandre Belloni (1):
+      rtc: zynqmp: initialize fract_tick
 
-Michael S. Tsirkin (1):
-      virtio: VIRTIO_HARDEN_NOTIFICATION is broken
+Allen-KH Cheng (1):
+      dt-bindings: rtc: mediatek: add mt6358 and mt6366 compatible
 
-Mike Christie (2):
-      vhost-scsi: Fix max number of virtqueues
-      vhost scsi: Allow user to control num virtqueues
+Conor Dooley (2):
+      rtc: Add driver for Microchip PolarFire SoC
+      MAINTAINERS: add PolarFire SoC's RTC
 
-Minghao Xue (2):
-      dt-bindings: virtio: mmio: add optional wakeup-source property
-      virtio_mmio: add support to set IRQ of a virtio device as wakeup source
+Icenowy Zheng (1):
+      rtc: sun6i: add support for R329 RTC
 
-Robin Murphy (1):
-      vdpa: Use device_iommu_capable()
+Mateusz Jończyk (1):
+      rtc: mc146818-lib: reduce RTC_UIP polling period
 
-Shigeru Yoshida (1):
-      virtio-blk: Avoid use-after-free on suspend/resume
+Mathew McBride (1):
+      rtc: rx8025: fix 12/24 hour mode detection on RX-8035
 
-Stefano Garzarella (11):
-      vringh: iterate on iotlb_translate to handle large translations
-      vdpa_sim_blk: use dev_dbg() to print errors
-      vdpa_sim_blk: limit the number of request handled per batch
-      vdpa_sim_blk: call vringh_complete_iotlb() also in the error path
-      vdpa_sim_blk: set number of address spaces and virtqueue groups
-      vdpa_sim: use max_iotlb_entries as a limit in vhost_iotlb_init
-      tools/virtio: fix build
-      vdpa_sim_blk: check if sector is 0 for commands other than read or write
-      vdpa_sim_blk: make vdpasim_blk_check_range usable by other requests
-      vdpa_sim_blk: add support for VIRTIO_BLK_T_FLUSH
-      vdpa_sim_blk: add support for discard and write-zeroes
+Mia Lin (2):
+      dt-bindings: rtc: nuvoton: add NCT3018Y Real Time Clock
+      rtc: Add NCT3018Y real time clock driver
 
-Xie Yongji (5):
-      vduse: Remove unnecessary spin lock protection
-      vduse: Use memcpy_{to,from}_page() in do_bounce()
-      vduse: Support using userspace pages as bounce buffer
-      vduse: Support registering userspace memory for IOVA regions
-      vduse: Support querying information of IOVA regions
+Nishanth Menon (2):
+      dt-bindings: rtc: Add TI K3 RTC description
+      rtc: Introduce ti-k3-rtc
 
-Xu Qiang (1):
-      vdpa/mlx5: Use eth_broadcast_addr() to assign broadcast address
+Quentin Schulz (1):
+      rtc: isl1208: do not advertise update interrupt feature if no interrupt specified
 
-Xuan Zhuo (44):
-      remoteproc: rename len of rpoc_vring to num
-      virtio_ring: remove the arg vq of vring_alloc_desc_extra()
-      virtio: record the maximum queue num supported by the device.
-      virtio: struct virtio_config_ops add callbacks for queue_reset
-      virtio_ring: update the document of the virtqueue_detach_unused_buf for queue reset
-      virtio_ring: extract the logic of freeing vring
-      virtio_ring: split vring_virtqueue
-      virtio_ring: introduce virtqueue_init()
-      virtio_ring: split: stop __vring_new_virtqueue as export symbol
-      virtio_ring: split: __vring_new_virtqueue() accept struct vring_virtqueue_split
-      virtio_ring: split: introduce vring_free_split()
-      virtio_ring: split: extract the logic of alloc queue
-      virtio_ring: split: extract the logic of alloc state and extra
-      virtio_ring: split: extract the logic of vring init
-      virtio_ring: split: extract the logic of attach vring
-      virtio_ring: split: introduce virtqueue_reinit_split()
-      virtio_ring: split: reserve vring_align, may_reduce_num
-      virtio_ring: split: introduce virtqueue_resize_split()
-      virtio_ring: packed: introduce vring_free_packed
-      virtio_ring: packed: extract the logic of alloc queue
-      virtio_ring: packed: extract the logic of alloc state and extra
-      virtio_ring: packed: extract the logic of vring init
-      virtio_ring: packed: extract the logic of attach vring
-      virtio_ring: packed: introduce virtqueue_reinit_packed()
-      virtio_ring: packed: introduce virtqueue_resize_packed()
-      virtio_ring: introduce virtqueue_resize()
-      virtio_pci: struct virtio_pci_common_cfg add queue_notify_data
-      virtio: allow to unbreak/break virtqueue individually
-      virtio: queue_reset: add VIRTIO_F_RING_RESET
-      virtio_ring: struct virtqueue introduce reset
-      virtio_pci: struct virtio_pci_common_cfg add queue_reset
-      virtio_pci: introduce helper to get/set queue reset
-      virtio_pci: extract the logic of active vq for modern pci
-      virtio_pci: support VIRTIO_F_RING_RESET
-      virtio: find_vqs() add arg sizes
-      virtio_pci: support the arg sizes of find_vqs()
-      virtio_mmio: support the arg sizes of find_vqs()
-      virtio: add helper virtio_find_vqs_ctx_size()
-      virtio_net: set the default max ring size by find_vqs()
-      virtio_net: get ringparam by virtqueue_get_vring_max_size()
-      virtio_net: split free_unused_bufs()
-      virtio_net: support rx queue resize
-      virtio_net: support tx queue resize
-      virtio_net: support set_ringparam
+Rafael J. Wysocki (1):
+      rtc: rtc-cmos: Do not check ACPI_FADT_LOW_POWER_S0
 
-Zhang Jiaming (1):
-      vdpa: ifcvf: Fix spelling mistake in comments
+Rob Herring (1):
+      dt-bindings: rtc: microcrystal,rv3032: Add missing type to 'trickle-voltage-millivolt'
 
-Zhu Lingshan (4):
-      vDPA/ifcvf: get_config_size should return a value no greater than dev implementation
-      vDPA/ifcvf: support userspace to query features and MQ of a management device
-      vDPA: !FEATURES_OK should not block querying device config space
-      vDPA: fix 'cast to restricted le16' warnings in vdpa.c
+Satya Priya (1):
+      dt-bindings: rtc: qcom-pm8xxx-rtc: Update the maintainers section
 
- Documentation/devicetree/bindings/virtio/mmio.yaml |   4 +
- arch/um/drivers/virtio_uml.c                       |   3 +-
- drivers/block/virtio_blk.c                         |  24 +-
- drivers/net/virtio_net.c                           | 325 +++++++-
- drivers/nvdimm/virtio_pmem.c                       |   9 +-
- drivers/platform/mellanox/mlxbf-tmfifo.c           |   3 +
- drivers/remoteproc/remoteproc_core.c               |   4 +-
- drivers/remoteproc/remoteproc_virtio.c             |  13 +-
- drivers/s390/virtio/virtio_ccw.c                   |   4 +
- drivers/vdpa/ifcvf/ifcvf_base.c                    |  14 +-
- drivers/vdpa/ifcvf/ifcvf_base.h                    |   2 +
- drivers/vdpa/ifcvf/ifcvf_main.c                    | 144 ++--
- drivers/vdpa/mlx5/core/mlx5_vdpa.h                 |  11 +
- drivers/vdpa/mlx5/net/mlx5_vnet.c                  | 175 ++++-
- drivers/vdpa/vdpa.c                                |  14 +-
- drivers/vdpa/vdpa_sim/vdpa_sim.c                   |  18 +-
- drivers/vdpa/vdpa_sim/vdpa_sim.h                   |   1 +
- drivers/vdpa/vdpa_sim/vdpa_sim_blk.c               | 176 ++++-
- drivers/vdpa/vdpa_sim/vdpa_sim_net.c               |   3 +
- drivers/vdpa/vdpa_user/iova_domain.c               | 102 ++-
- drivers/vdpa/vdpa_user/iova_domain.h               |   8 +
- drivers/vdpa/vdpa_user/vduse_dev.c                 | 180 +++++
- drivers/vhost/scsi.c                               |  85 ++-
- drivers/vhost/vdpa.c                               |  38 +-
- drivers/vhost/vringh.c                             |  78 +-
- drivers/virtio/Kconfig                             |  11 +-
- drivers/virtio/virtio.c                            |   4 +-
- drivers/virtio/virtio_mmio.c                       |  14 +-
- drivers/virtio/virtio_pci_common.c                 |  32 +-
- drivers/virtio/virtio_pci_common.h                 |   3 +-
- drivers/virtio/virtio_pci_legacy.c                 |   8 +-
- drivers/virtio/virtio_pci_modern.c                 | 153 +++-
- drivers/virtio/virtio_pci_modern_dev.c             |  39 +
- drivers/virtio/virtio_ring.c                       | 814 +++++++++++++++------
- drivers/virtio/virtio_vdpa.c                       |  18 +-
- include/linux/mlx5/mlx5_ifc_vdpa.h                 |   8 +
- include/linux/remoteproc.h                         |   4 +-
- include/linux/vdpa.h                               |   4 +
- include/linux/virtio.h                             |  10 +
- include/linux/virtio_config.h                      |  40 +-
- include/linux/virtio_pci_modern.h                  |   9 +
- include/linux/virtio_ring.h                        |  10 -
- include/uapi/linux/vduse.h                         |  47 ++
- include/uapi/linux/vhost.h                         |   9 +
- include/uapi/linux/vhost_types.h                   |   2 +
- include/uapi/linux/virtio_config.h                 |   7 +-
- include/uapi/linux/virtio_net.h                    |  34 +-
- include/uapi/linux/virtio_pci.h                    |   2 +
- tools/virtio/linux/kernel.h                        |   2 +-
- tools/virtio/linux/vringh.h                        |   1 +
- tools/virtio/virtio_test.c                         |   4 +-
- 51 files changed, 2171 insertions(+), 556 deletions(-)
+Srinivas Neeli (3):
+      dt-bindings: rtc: zynqmp: Add clock information
+      rtc: zynqmp: Updated calibration value
+      rtc: zynqmp: Add calibration set and get support
 
+Stephen Kitt (1):
+      rtc: use simple i2c probe
+
+Tetsuo Handa (2):
+      rtc: Replace flush_scheduled_work() with flush_work().
+      rtc: Remove unused rtc_dev_exit().
+
+Thomas Bogendoerfer (1):
+      rtc: vr41xx: remove driver
+
+Tom Rix (1):
+      rtc: mpfs: remove 'pending' variable from mpfs_rtc_wakeup_irq_handler()
+
+Uwe Kleine-König (1):
+      rtc: cros-ec: Only warn once in .remove() about notifier_chain problems
+
+Yang Yingliang (1):
+      rtc: rv8803: fix missing unlock on error in rv8803_set_time()
+
+Zeng Jingxiang (1):
+      rtc: spear: set range max
+
+keliu (1):
+      rtc: Directly use ida_alloc()/free()
+
+ .../bindings/rtc/microcrystal,rv3032.yaml          |   1 +
+ .../devicetree/bindings/rtc/nuvoton,nct3018y.yaml  |  45 ++
+ .../devicetree/bindings/rtc/nxp,pcf85063.txt       |  32 -
+ .../devicetree/bindings/rtc/nxp,pcf85063.yaml      |  92 +++
+ .../devicetree/bindings/rtc/qcom-pm8xxx-rtc.yaml   |   2 +-
+ .../devicetree/bindings/rtc/rtc-mt6397.txt         |   2 +
+ .../devicetree/bindings/rtc/ti,k3-rtc.yaml         |  62 ++
+ .../devicetree/bindings/rtc/xlnx,zynqmp-rtc.yaml   |  12 +-
+ MAINTAINERS                                        |   3 +
+ drivers/rtc/Kconfig                                |  41 +-
+ drivers/rtc/Makefile                               |   4 +-
+ drivers/rtc/class.c                                |   6 +-
+ drivers/rtc/dev.c                                  |   8 +-
+ drivers/rtc/rtc-ab-b5ze-s3.c                       |   5 +-
+ drivers/rtc/rtc-ab-eoz9.c                          |   5 +-
+ drivers/rtc/rtc-bq32k.c                            |   5 +-
+ drivers/rtc/rtc-cmos.c                             |   3 -
+ drivers/rtc/rtc-core.h                             |   5 -
+ drivers/rtc/rtc-cros-ec.c                          |   4 +-
+ drivers/rtc/rtc-ds1374.c                           |   5 +-
+ drivers/rtc/rtc-ds1672.c                           |   5 +-
+ drivers/rtc/rtc-ds3232.c                           |   5 +-
+ drivers/rtc/rtc-em3027.c                           |   5 +-
+ drivers/rtc/rtc-fm3130.c                           |   5 +-
+ drivers/rtc/rtc-hym8563.c                          |   5 +-
+ drivers/rtc/rtc-isl12022.c                         |   5 +-
+ drivers/rtc/rtc-isl1208.c                          |  10 +-
+ drivers/rtc/rtc-max6900.c                          |   5 +-
+ drivers/rtc/rtc-mc146818-lib.c                     |   8 +-
+ drivers/rtc/rtc-mpfs.c                             | 323 ++++++++++
+ drivers/rtc/rtc-nct3018y.c                         | 553 +++++++++++++++++
+ drivers/rtc/rtc-pcf8523.c                          |   5 +-
+ drivers/rtc/rtc-pcf85363.c                         |   5 +-
+ drivers/rtc/rtc-pcf8563.c                          |   5 +-
+ drivers/rtc/rtc-pcf8583.c                          |   5 +-
+ drivers/rtc/rtc-rv3029c2.c                         |   5 +-
+ drivers/rtc/rtc-rv8803.c                           |  98 ++-
+ drivers/rtc/rtc-rx6110.c                           |   5 +-
+ drivers/rtc/rtc-rx8025.c                           |  22 +-
+ drivers/rtc/rtc-rx8581.c                           |   5 +-
+ drivers/rtc/rtc-s35390a.c                          |   5 +-
+ drivers/rtc/rtc-sd3078.c                           |   5 +-
+ drivers/rtc/rtc-spear.c                            |   2 +-
+ drivers/rtc/rtc-sun6i.c                            |   2 +
+ drivers/rtc/rtc-ti-k3.c                            | 680 +++++++++++++++++++++
+ drivers/rtc/rtc-vr41xx.c                           | 363 -----------
+ drivers/rtc/rtc-x1205.c                            |   5 +-
+ drivers/rtc/rtc-zynqmp.c                           | 115 +++-
+ 48 files changed, 2063 insertions(+), 540 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/rtc/nuvoton,nct3018y.yaml
+ delete mode 100644 Documentation/devicetree/bindings/rtc/nxp,pcf85063.txt
+ create mode 100644 Documentation/devicetree/bindings/rtc/nxp,pcf85063.yaml
+ create mode 100644 Documentation/devicetree/bindings/rtc/ti,k3-rtc.yaml
+ create mode 100644 drivers/rtc/rtc-mpfs.c
+ create mode 100644 drivers/rtc/rtc-nct3018y.c
+ create mode 100644 drivers/rtc/rtc-ti-k3.c
+ delete mode 100644 drivers/rtc/rtc-vr41xx.c
+
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com

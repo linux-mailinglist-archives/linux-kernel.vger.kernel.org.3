@@ -2,214 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51906591280
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 16:51:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FD44591283
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 16:54:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238275AbiHLOvs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 10:51:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43748 "EHLO
+        id S238479AbiHLOyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 10:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbiHLOvq (ORCPT
+        with ESMTP id S234450AbiHLOyw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 10:51:46 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2059.outbound.protection.outlook.com [40.107.244.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51139F1B2
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 07:51:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BSYgzEUk4uy5VHnUWoWRbyjIdqUvkO1y5RSRcaqmjNu+YZaEo0/IHgi372DzQLaJ+HfY06z3vi5/gHxYrJ/gL0dbil8W3zE5KIx/MsTDFFjLJi5f48nfCU99GZPLYkePFMr6iQJTcTOi+PbcqgYHz8NodhftrWbBifEkfYq9PiwRUK+WHzq4wtyiQuOPyxl/4SNI7bQdsM9wlkt7Ndjm3M/GVDvi1KAcqq27PLjFFJcuCWfVdSU6NdtDieIZyshqrnzF3mB8WwpGNeJKuMPYlbD6yxiqvrNp1Mvb4VgHUPBm6WbKPoKSTHw5R3G5lvpW4kbMdvlUOFFX3N833VeZZg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yH4R4fnpUMUR0tNj3uL4WTRL6FGD/vmAKkUQj+2sr0A=;
- b=LvuhceZ+IC2qXIbfzz8WLFCdw+IhzKgK4Sh5IocExoPWjhgsHUuGy7jmtQd66K2Xu2RMjOLeWpWGAWbbxflTDnDy1dtoFhDPNs8QpL7qT1rebZDabPjqcOqk/5G6aLic9cPhqn+CHexhWwWQZyygf80naRdaDhYrGIUIqzgCO2iS7W03CdGzaZRRAl7jzNj5bwILRMqdHviogpOpAd2Xb0/f0ha3BUgJV8YV0ALI+0fAhQ+izEX+QWU0A5AmDsDWvQQoRo6NJVdJKVe/0IqURM7SUOYIA/wgz8Vnptn4DJPrQ0jeFI8pQo62+kZKDbxHucA67J0+m0+ltqf3eqgx2w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yH4R4fnpUMUR0tNj3uL4WTRL6FGD/vmAKkUQj+2sr0A=;
- b=C8Amb6Im0hKjzslDngAtmMW+qKGd17UM138UymbBM3zBfaP6BaFqBb2EjvH0o78zc0DiaCE51xll5trxoyl09xhQQOMJnYg7Abe9TQMRTuYQWrFNeFYlHQws3bAWHdsw9x87H/OH4j3YAkDpQhSV9WmYHwbFsvoDaWgzvsQicgg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
- by SA0PR12MB4480.namprd12.prod.outlook.com (2603:10b6:806:99::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14; Fri, 12 Aug
- 2022 14:51:43 +0000
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::1dac:1301:78a3:c0d0]) by DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::1dac:1301:78a3:c0d0%6]) with mapi id 15.20.5525.011; Fri, 12 Aug 2022
- 14:51:43 +0000
-Message-ID: <fc48ce75-7a4c-4804-92ce-71f63c2db5ea@amd.com>
-Date:   Fri, 12 Aug 2022 09:51:41 -0500
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 1/2] x86/sev: Put PSC struct on the stack in prep for
- unaccepted memory support
-Content-Language: en-US
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
- <cover.1659978985.git.thomas.lendacky@amd.com>
- <21d5d55640ee1c5d66501b9398858b6a6bd6546f.1659978985.git.thomas.lendacky@amd.com>
- <YvZPoEm6PSeoflAz@zn.tnic> <6d9d433f-779d-7531-02b5-382796acceef@amd.com>
- <YvZkpYRfrgPLLoJV@zn.tnic>
-From:   Tom Lendacky <thomas.lendacky@amd.com>
-In-Reply-To: <YvZkpYRfrgPLLoJV@zn.tnic>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA0PR11CA0085.namprd11.prod.outlook.com
- (2603:10b6:806:d2::30) To DM4PR12MB5229.namprd12.prod.outlook.com
- (2603:10b6:5:398::12)
+        Fri, 12 Aug 2022 10:54:52 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80E5AA1D77;
+        Fri, 12 Aug 2022 07:54:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660316090; x=1691852090;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=omkE3NQsYWGVI5ohyEwid1FFrhnD+QvscZYysRHXkes=;
+  b=KW9ox1H7xyToi61IZpGfWJfc4QXLBxZAMSsIbJq9TMH0IFJ8cuall/Af
+   0FMW0WdNQC8dLaPOrMi/uqnJTc8GGBy0oERhhccsBI6xZ3orUTvVm2WAs
+   5Rn0UIHR+b915Ze9AlzkaBGBdssuEeZRd/ETc31tebeUxxcLOl7ierGCo
+   XKMRdFlj5xYjzvEHvAIfR3F/ToDoxHbV6T5fnX9VPKmkWEIlJiYS8pZsE
+   TnXC5EwK7ybW3uIx4a3Qt2ojmjILEwAoNqnT5lzsQ481EL07uEEta3nbe
+   Upmg1lKECog7x/YEUSdERGyq1bX7RDh3m+fhOa7VwfOaS0aVDmM8leQ8y
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="292874066"
+X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
+   d="scan'208";a="292874066"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 07:54:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
+   d="scan'208";a="605935187"
+Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
+  by orsmga002.jf.intel.com with ESMTP; 12 Aug 2022 07:54:46 -0700
+Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oMW3i-0000ed-08;
+        Fri, 12 Aug 2022 14:54:46 +0000
+Date:   Fri, 12 Aug 2022 22:54:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Yuan Yao <yuan.yao@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Jon Cargille <jcargill@google.com>,
+        Peter Shier <pshier@google.com>,
+        Oliver Upton <oupton@google.com>,
+        Yuan Yao <yuan.yao@linux.intel.com>
+Subject: Re: [PATCH 1/1] kvm: nVMX: Checks "VMCS shadowing" with VMCS link
+ pointer for non-root mode VM{READ,WRITE}
+Message-ID: <202208122237.cw837245-lkp@intel.com>
+References: <20220812014706.43409-1-yuan.yao@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 86df1af8-77d4-417b-ab69-08da7c722c10
-X-MS-TrafficTypeDiagnostic: SA0PR12MB4480:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 4Rmlie1uLk5JHPRkSd+GibEjIJ5w0O1ntMsRMVyrs3ZYYasVKceNZ43e6exqXixfnCzHmprMAUSRvoLzAGVG1IFm9H6fg/UMmRUvpGdOI/Ug2LsbLbWn/LUAyQ8hbNb3ddPVExsPXQSfoHLEaHKa62Qi+GZ/eAFmeNxVYk8oWE8DVq1EC05wmNYdZmUM0imSCi3tjT4l6zOmvfAUgGikcHGB4eBarSHA92ZCqBWTiwm3po0jTYKa5+/P0JRKtzqjj35J409qBUUO29pjfKF+SNuB41akArkfFHydnT2HsI+hD4z83QCumEMsBvI1lngMpZOsLjkijl/L/YgZctTGdqXCDv7bj0J/tEXnTS1zQ3HWoOjjgoT/iHzL5BPbmInQFqdRq03ZnwciEm5/w711CYCYYMT4SzhNBM4nAjc/LV0OsRnrsxsL39uiusGUXT6uqMU6Xbptjw8MqlUh//Ht9ocMbV1uiQoZuwHXFI/4GxmSaekQzBj2+0SiAAlTdegfLi+Mfp0G2tSVkkrB3SLHjq4y3DcUXxChVleg/2xyTJ0r7Ghn2zhSArx9+IMPDa31Kh/KETKaQ25HAX12Q/gzleybJ/jfnAizhg+dSE9gMlyw/qI//yEOShxB99+UjJslo6rT6VD7YeCfaT1GAs3e/Rs6CIFZpxwTw/cWi+LMdHHzbSZmOINjxpqd30SafrzRe27vH3wpsOJACPFtjTAyn7qz4Puxc6Gj4QBbDrqNtCbK3lb3c3rxgMw01PW3H0xXkEf9sJU1rYqy4Hm92bKIvtQiioq7qQ3IulNqDF5IYb0BW2IbiITjiP5jxfntYL/P1p0oi3ErzMYGvAJ2Kn3aBF5hJ0m9evjNNtkOV7aKaZrTkyg+/URRn/+/wJ92LjeIZaeoEQNyDGXGAWd92wS/PA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(376002)(39860400002)(346002)(396003)(366004)(31686004)(38100700002)(26005)(53546011)(6506007)(6512007)(186003)(2616005)(83380400001)(316002)(66476007)(66946007)(66556008)(4326008)(8676002)(41300700001)(54906003)(6916009)(478600001)(6486002)(966005)(86362001)(31696002)(7416002)(36756003)(8936002)(5660300002)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OEkrOGNiRjNIaU9US3hCRWdrOEtjWDdLTzZGZmtQU3AreG1IbkVSOU1uYWls?=
- =?utf-8?B?UEY2RkFTampUT3Uvc090U01sWGtoUkw5VUxvL05odytKemtueFhnYm5SclNv?=
- =?utf-8?B?UjhlSWE2cTdFa1ljVWdRMjBQeG9HZER1Y2VzZDcxUndQSTM0K0RzcHBXMisv?=
- =?utf-8?B?azRpMnluRCtBTzdpZkpLYVRUQlVJemxnZVYyYS9BcDZjRjdNWSsweXk4Z1Ni?=
- =?utf-8?B?NmN1Q0lOc0FBa3NvY2pHZ3pDZjhiNjJSWkFWQWFGY3l2bGZhaDFoaEdrSEhx?=
- =?utf-8?B?Tk1sM2dicjVwdnNZVXpXU0NQZFpoQk9VR05iTTQrb2RvTUdMb0NDZHhXYUpK?=
- =?utf-8?B?SHhSNElBUFNhdjhnVEV4QzJXSkpQK3pqSFJNdWtOWldKc24ybGxVVWJHNDQ4?=
- =?utf-8?B?am1IMUhoVHZ6VXdncFBZZDQ1d0p0eVBZejZTMkYwMHpjL041WCtOUks2azN4?=
- =?utf-8?B?RVNnNi9kem83b2lwL1VvZ3ZTZkFoR1Bxbk9uWUlXdk9QWXN0bW9nN3lIYkhw?=
- =?utf-8?B?VTI2bDg4TkxubzFxOFNFakx6VTF2VzUwWFhaMEJ5cHNZa3llODZkbDRiNzRy?=
- =?utf-8?B?WkdXNnN2N2I5TVpXWURXbDFQMWp6U2tmeittcE41Vno0c1N0TU5Wb2JaOENp?=
- =?utf-8?B?ZjZ5aDZUU3lFbUlDM00xay9kYjJUc1hsTXFmRDkyUkRXRFBzNmNtenVMS01w?=
- =?utf-8?B?WkpyQ1JFdWlPSmZMZXNOL3g5RWNYZjFHQ21qdW5Hd1dDcm1iNjltRThxWlFX?=
- =?utf-8?B?M0o1S2FpeHJSZ3pXbUM1MHFnajljQlIzanVJci9DY3NqdjVVNm5vSHMxaXo0?=
- =?utf-8?B?ZjhXbUxrVlEyY1d6SGU5SmkwY0VNWnNxbTA0bk5BSFRUQnZKazAvOFM2VTBS?=
- =?utf-8?B?blI5dHNORXliRTBXeHFGdm9ld3hDd2JJZWN2N1krWnhwZWtvemRoZHYvM2VR?=
- =?utf-8?B?THVxT1ByamJNKzFSSkNRRWNpRjZCTWtnQkVGcis0M2EwV00rVkRhOHpJdldP?=
- =?utf-8?B?WERpUjFhREpDN1dXSXBOMnZWcGY3RzR3YTBFTnhURDFPVmdLeUVXL3Q2WkZk?=
- =?utf-8?B?eldUTzFNOUkvNFVKMmxnOGpMOTJTOGRGSHI5dkt6WWRGdHpNcWw3bHhoT1FJ?=
- =?utf-8?B?ZDJjTEpjUDJROUtRUWh3c0hTdzZETnNvMEpFM2N3eTNSN3FTRzNIQmM2bktt?=
- =?utf-8?B?NmZyUSsxdWE4cGtTVExlTXA5N3VKeHd6RGl0SG5nNTY2cUUzWWJQZDZHVmdP?=
- =?utf-8?B?TXRRemRHT0IybkZLN1hjeFp5WUJVZCtmOThpSkhhMHZyVml4dCt4cFVNYVhT?=
- =?utf-8?B?akRJaUI5YnIvSFpIL0U1c3BXa0lZd3Zrc0FtTFphZXBvMHJuRUgzYjJEWk05?=
- =?utf-8?B?T20xYTVGM1pwOWJ4TUkvVmUzay9TNm41eDFRUGJSMGhEUWd4eDlEa1pZUi85?=
- =?utf-8?B?cFVjWkwwMFJPc2NNbW5CdE1tbTRYUlRNOHlpTzVCTzVWUlQ5SGhXU1hVaUgx?=
- =?utf-8?B?c1BqWEZ6Q3o0UXlPZVRxS28reFRuOXJtMnh6YzNBdG1QYi9EenRwSmVMc3BQ?=
- =?utf-8?B?a2VOWVlMOUxwd2lscUF6WHlXVG52S0RWQTBHckV6UlVZcFA1bjY5YkFHWGpx?=
- =?utf-8?B?OXBRT1Z0WVllaHVBb2VQazhkc1QvemUwekl1NjhmY3puUEpZcFUxVHV4YStp?=
- =?utf-8?B?RGlVbmExdGxPdUNkVjltM2J2clV3WXRBVnZ5WGFoRjFnVHZjRXNNVW5uVHYy?=
- =?utf-8?B?ZWNHTmhYN3UvM2VPemFoTitkcjUrUEZVbDJQM0VQRkNuSlBZa2diaGlZMnFO?=
- =?utf-8?B?V1lESXdBMWJiTFRxMldvVnZGZWRLVDI0VXVxdk1wVFl6SkZZVGcxS0FsbU9X?=
- =?utf-8?B?NGs5MWhvTVBNdDBtek1ndDdjSUxCTHFDOG8ybVJLTnczU21hQVk2ZDh0UjNz?=
- =?utf-8?B?aDNSVXRqMEgvRkVQLytIb2xwUjlKTVZncWZJaVhyQm5ub0tjQVpDV2MzanpK?=
- =?utf-8?B?Mzd2Wnd5S1drUVdlQ05wcHhaeU9tMXZ4RzlqaVltOVlZdWRlQVVTWVcvaXF2?=
- =?utf-8?B?SEYvdWZ4UDIydS9qMHNuUDc2dThuY3M4bTRITUVKUnRNSWoraHRwTUhhVUs3?=
- =?utf-8?Q?B3OM5NSvnwnrmHJbKFU/6yak6?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 86df1af8-77d4-417b-ab69-08da7c722c10
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Aug 2022 14:51:43.5002
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 72Qjhw5NUdX0jLuxsaffuX4/0ejqs9t2Wbyqn3oqOlOlOD8grFnlfLxrGJn9/aw4JqPku1aTDYEJrw5hcGltyQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4480
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220812014706.43409-1-yuan.yao@intel.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/12/22 09:33, Borislav Petkov wrote:
-> On Fri, Aug 12, 2022 at 09:11:25AM -0500, Tom Lendacky wrote:
->> There was a whole discussion on this
-> 
-> Pointer to it?
+Hi Yuan,
 
-It starts here: 
-https://lore.kernel.org/lkml/658c455c40e8950cb046dd885dd19dc1c52d060a.1659103274.git.thomas.lendacky@amd.com/
+Thank you for the patch! Yet something to improve:
 
-> 
->> and I would prefer to keep the ability to parallelize PSC without
->> locking.
-> 
-> So smaller, on-stack PSC but lockless is still better than a bigger one
-> but with synchronized accesses to it?
-> 
->> Well when we don't know which GHCB is in use, using that reserved area in
->> the GHCB doesn't help.
-> 
-> What do you mean?
-> 
-> The one which you read with
-> 
-> 	data = this_cpu_read(runtime_data);
+[auto build test ERROR on kvm/queue]
+[also build test ERROR on mst-vhost/linux-next linus/master v5.19 next-20220812]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Memory acceptance is called before the per-CPU GHCBs have been allocated
-and so you would be actually be using early boot GHCB. And that is decided
-based on the #VC handler that is invoked - but in this case we're not
-coming through the #VC handler to accept memory.
+url:    https://github.com/intel-lab-lkp/linux/commits/Yuan-Yao/kvm-nVMX-Checks-VMCS-shadowing-with-VMCS-link-pointer-for-non-root-mode-VM-READ-WRITE/20220812-095001
+base:   https://git.kernel.org/pub/scm/virt/kvm/kvm.git queue
+config: i386-randconfig-a011 (https://download.01.org/0day-ci/archive/20220812/202208122237.cw837245-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/b15f3d4cd8e8f9cf2db64711234ca27ac74142b2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Yuan-Yao/kvm-nVMX-Checks-VMCS-shadowing-with-VMCS-link-pointer-for-non-root-mode-VM-READ-WRITE/20220812-095001
+        git checkout b15f3d4cd8e8f9cf2db64711234ca27ac74142b2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/
 
-> 
-> in snp_register_per_cpu_ghcb() is the one you register.
-> 
->> Also, I don't want to update the GHCB specification for a single bit
->> that is only required because of the way Linux went about establishing
->> the GHCB usage.
-> 
-> Linux?
-> 
-> You mean, you did it this way: 885689e47dfa1499b756a07237eb645234d93cf9
-> 
-> :-)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Well Joerg re-worked all that quite a bit. And with the SNP support, the
-added requirement of registering the GHCB changed which GHCB could be
-used. So even when the per-CPU GHCB is allocated, it can't be used until
-it is registered, which depends on when the #VC handler is changed from
-the boot #VC handler to the runtime #VC handler.
+All errors (new ones prefixed by >>):
 
-> 
-> "The runtime handler needs one GHCB per-CPU. Set them up and map them
-> unencrypted."
-> 
-> Why does that handler need one GHCB per CPU?
+>> arch/x86/kvm/vmx/nested.c:5126:35: error: incompatible pointer types passing 'struct kvm_vcpu *' to parameter of type 'struct vmcs12 *' [-Werror,-Wincompatible-pointer-types]
+                        nested_cpu_has_shadow_vmcs(vcpu) &&
+                                                   ^~~~
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+   arch/x86/kvm/vmx/nested.h:215:62: note: passing argument to parameter 'vmcs12' here
+   static inline bool nested_cpu_has_shadow_vmcs(struct vmcs12 *vmcs12)
+                                                                ^
+>> arch/x86/kvm/vmx/nested.c:5126:35: error: incompatible pointer types passing 'struct kvm_vcpu *' to parameter of type 'struct vmcs12 *' [-Werror,-Wincompatible-pointer-types]
+                        nested_cpu_has_shadow_vmcs(vcpu) &&
+                                                   ^~~~
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                               ^~~~
+   arch/x86/kvm/vmx/nested.h:215:62: note: passing argument to parameter 'vmcs12' here
+   static inline bool nested_cpu_has_shadow_vmcs(struct vmcs12 *vmcs12)
+                                                                ^
+>> arch/x86/kvm/vmx/nested.c:5126:35: error: incompatible pointer types passing 'struct kvm_vcpu *' to parameter of type 'struct vmcs12 *' [-Werror,-Wincompatible-pointer-types]
+                        nested_cpu_has_shadow_vmcs(vcpu) &&
+                                                   ^~~~
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                                                        ^~~~
+   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
+           (cond) ?                                        \
+            ^~~~
+   arch/x86/kvm/vmx/nested.h:215:62: note: passing argument to parameter 'vmcs12' here
+   static inline bool nested_cpu_has_shadow_vmcs(struct vmcs12 *vmcs12)
+                                                                ^
+   arch/x86/kvm/vmx/nested.c:5237:34: error: incompatible pointer types passing 'struct kvm_vcpu *' to parameter of type 'struct vmcs12 *' [-Werror,-Wincompatible-pointer-types]
+                nested_cpu_has_shadow_vmcs(vcpu) &&
+                                           ^~~~
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:52: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                      ^~~~
+   arch/x86/kvm/vmx/nested.h:215:62: note: passing argument to parameter 'vmcs12' here
+   static inline bool nested_cpu_has_shadow_vmcs(struct vmcs12 *vmcs12)
+                                                                ^
+   arch/x86/kvm/vmx/nested.c:5237:34: error: incompatible pointer types passing 'struct kvm_vcpu *' to parameter of type 'struct vmcs12 *' [-Werror,-Wincompatible-pointer-types]
+                nested_cpu_has_shadow_vmcs(vcpu) &&
+                                           ^~~~
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:61: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                               ^~~~
+   arch/x86/kvm/vmx/nested.h:215:62: note: passing argument to parameter 'vmcs12' here
+   static inline bool nested_cpu_has_shadow_vmcs(struct vmcs12 *vmcs12)
+                                                                ^
+   arch/x86/kvm/vmx/nested.c:5237:34: error: incompatible pointer types passing 'struct kvm_vcpu *' to parameter of type 'struct vmcs12 *' [-Werror,-Wincompatible-pointer-types]
+                nested_cpu_has_shadow_vmcs(vcpu) &&
+                                           ^~~~
+   include/linux/compiler.h:56:47: note: expanded from macro 'if'
+   #define if(cond, ...) if ( __trace_if_var( !!(cond , ## __VA_ARGS__) ) )
+                                                 ^~~~
+   include/linux/compiler.h:58:86: note: expanded from macro '__trace_if_var'
+   #define __trace_if_var(cond) (__builtin_constant_p(cond) ? (cond) : __trace_if_value(cond))
+                                                                                        ^~~~
+   include/linux/compiler.h:69:3: note: expanded from macro '__trace_if_value'
+           (cond) ?                                        \
+            ^~~~
+   arch/x86/kvm/vmx/nested.h:215:62: note: passing argument to parameter 'vmcs12' here
+   static inline bool nested_cpu_has_shadow_vmcs(struct vmcs12 *vmcs12)
+                                                                ^
+   6 errors generated.
 
-Each vCPU can be handling a #VC and you don't want to be serializing on a
-single GHCB.
 
-Thanks,
-Tom
+vim +5126 arch/x86/kvm/vmx/nested.c
 
-> 
-> As to the field, I was thinking along the lines of
-> 
-> 	struct ghcb.vendor_flags
-> 
-> field which each virt vendor can use however they like.
-> 
-> It might be overkill but a random bool ain't pretty either. Especially
-> if those things start getting added for all kinds of other things.
-> 
-> If anything, you could make this a single u64 sev_flags which can at
-> least collect all that gunk in one variable ... at least...
-> 
-> Thx.
-> 
+  5098	
+  5099	static int handle_vmread(struct kvm_vcpu *vcpu)
+  5100	{
+  5101		struct vmcs12 *vmcs12 = is_guest_mode(vcpu) ? get_shadow_vmcs12(vcpu)
+  5102							    : get_vmcs12(vcpu);
+  5103		unsigned long exit_qualification = vmx_get_exit_qual(vcpu);
+  5104		u32 instr_info = vmcs_read32(VMX_INSTRUCTION_INFO);
+  5105		struct vcpu_vmx *vmx = to_vmx(vcpu);
+  5106		struct x86_exception e;
+  5107		unsigned long field;
+  5108		u64 value;
+  5109		gva_t gva = 0;
+  5110		short offset;
+  5111		int len, r;
+  5112	
+  5113		if (!nested_vmx_check_permission(vcpu))
+  5114			return 1;
+  5115	
+  5116		/* Decode instruction info and find the field to read */
+  5117		field = kvm_register_read(vcpu, (((instr_info) >> 28) & 0xf));
+  5118	
+  5119		if (!evmptr_is_valid(vmx->nested.hv_evmcs_vmptr)) {
+  5120			/*
+  5121			 * In VMX non-root operation, when the VMCS-link pointer is INVALID_GPA,
+  5122			 * any VMREAD sets the ALU flags for VMfailInvalid.
+  5123			 */
+  5124			if (vmx->nested.current_vmptr == INVALID_GPA ||
+  5125			    (is_guest_mode(vcpu) &&
+> 5126			     nested_cpu_has_shadow_vmcs(vcpu) &&
+  5127			     get_vmcs12(vcpu)->vmcs_link_pointer == INVALID_GPA))
+  5128				return nested_vmx_failInvalid(vcpu);
+  5129	
+  5130			offset = get_vmcs12_field_offset(field);
+  5131			if (offset < 0)
+  5132				return nested_vmx_fail(vcpu, VMXERR_UNSUPPORTED_VMCS_COMPONENT);
+  5133	
+  5134			if (!is_guest_mode(vcpu) && is_vmcs12_ext_field(field))
+  5135				copy_vmcs02_to_vmcs12_rare(vcpu, vmcs12);
+  5136	
+  5137			/* Read the field, zero-extended to a u64 value */
+  5138			value = vmcs12_read_any(vmcs12, field, offset);
+  5139		} else {
+  5140			/*
+  5141			 * Hyper-V TLFS (as of 6.0b) explicitly states, that while an
+  5142			 * enlightened VMCS is active VMREAD/VMWRITE instructions are
+  5143			 * unsupported. Unfortunately, certain versions of Windows 11
+  5144			 * don't comply with this requirement which is not enforced in
+  5145			 * genuine Hyper-V. Allow VMREAD from an enlightened VMCS as a
+  5146			 * workaround, as misbehaving guests will panic on VM-Fail.
+  5147			 * Note, enlightened VMCS is incompatible with shadow VMCS so
+  5148			 * all VMREADs from L2 should go to L1.
+  5149			 */
+  5150			if (WARN_ON_ONCE(is_guest_mode(vcpu)))
+  5151				return nested_vmx_failInvalid(vcpu);
+  5152	
+  5153			offset = evmcs_field_offset(field, NULL);
+  5154			if (offset < 0)
+  5155				return nested_vmx_fail(vcpu, VMXERR_UNSUPPORTED_VMCS_COMPONENT);
+  5156	
+  5157			/* Read the field, zero-extended to a u64 value */
+  5158			value = evmcs_read_any(vmx->nested.hv_evmcs, field, offset);
+  5159		}
+  5160	
+  5161		/*
+  5162		 * Now copy part of this value to register or memory, as requested.
+  5163		 * Note that the number of bits actually copied is 32 or 64 depending
+  5164		 * on the guest's mode (32 or 64 bit), not on the given field's length.
+  5165		 */
+  5166		if (instr_info & BIT(10)) {
+  5167			kvm_register_write(vcpu, (((instr_info) >> 3) & 0xf), value);
+  5168		} else {
+  5169			len = is_64_bit_mode(vcpu) ? 8 : 4;
+  5170			if (get_vmx_mem_address(vcpu, exit_qualification,
+  5171						instr_info, true, len, &gva))
+  5172				return 1;
+  5173			/* _system ok, nested_vmx_check_permission has verified cpl=0 */
+  5174			r = kvm_write_guest_virt_system(vcpu, gva, &value, len, &e);
+  5175			if (r != X86EMUL_CONTINUE)
+  5176				return kvm_handle_memory_failure(vcpu, r, &e);
+  5177		}
+  5178	
+  5179		return nested_vmx_succeed(vcpu);
+  5180	}
+  5181	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

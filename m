@@ -2,103 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E62D25915F8
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 21:29:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 40ACB5915FC
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 21:31:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234221AbiHLT2g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 15:28:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57190 "EHLO
+        id S235730AbiHLTa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 15:30:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238120AbiHLT2X (ORCPT
+        with ESMTP id S234475AbiHLTa5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 15:28:23 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB2EB08AC;
-        Fri, 12 Aug 2022 12:28:23 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id p8so1536771plq.13;
-        Fri, 12 Aug 2022 12:28:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=IaNDAdEa8hgXhA9slqB1hEbULevRfy/CuIByo7fB7oY=;
-        b=HLSm97rrOLYJkzPX2w6QgFUDvZAlVyraM1Cdtc6CnudfXDGFGGSC6oP9jpu1K5FU9y
-         jr9ifGkldw6NkuannS9dSFrNzyYUzifTOx83mmUeATi0/1yzcjnKoUJQQCYdGNPqITB7
-         B78KVzOFbVwHSu9HOeACSLpEpQsTA3KXkmMzCOga9JsEGadJfEjdsGuDIWWKtpKtpC58
-         YHRYgvxX5YcqeedHn1YHQZn6d0HqRABlOr7PbKRecywam6pic7QV9bsgLV4ZtlTXWhD+
-         uuMwPWLT+NK87kyzdj6ytGOTT1wIgnO3hcUJUPSnPx+5WpyUfpjxwww4ARJGRVw5Rn54
-         KQeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=IaNDAdEa8hgXhA9slqB1hEbULevRfy/CuIByo7fB7oY=;
-        b=qBawCP+eRSHxWEx4HS0YIq6Qvpb2iN3ZOp9QYmIyTTOOthKFIZyh0jltqvnOlTi/Mh
-         jx1s2L61MIAJ85iuSicrH6ZuzKzITOxmeLWT50mJ2HYFK6Dbk4zjUKyiW2duuS20JGgA
-         9t5URMsBefWoWszlVTVaPtCkZEXMsJvAlmfW3xKDSFgeCjJ4UJKAxlgtDZ6svw2sI+ie
-         pG+W41Mr8PnzGnTGXSZnxUhszDW/Fxn9lElDLeZdbxuJepfvqZBz0Xns0K8Xe7N66Jwy
-         XmyxjZmlp0mTIWq85yUIwNTC8dpWSB8Ste4XazxvPaYc1DpPMKZe1cnSVkc19TLbFCjQ
-         HLTA==
-X-Gm-Message-State: ACgBeo2JMHSgehhkl9rYm3mx2LCGe/ABNmmAy+1h2YEBkk+nmigCyvLg
-        UnqUX8if3KqSk58Ny7lrMtE=
-X-Google-Smtp-Source: AA6agR7Y6iCDD7AR93KBVw18z7gK/7WjC04/p/OasvAPHPOCIhX6lGMi+tKOCzhW72UlXFqTP/Qz7A==
-X-Received: by 2002:a17:902:d484:b0:171:3cbc:7c6 with SMTP id c4-20020a170902d48400b001713cbc07c6mr5423597plg.85.1660332502216;
-        Fri, 12 Aug 2022 12:28:22 -0700 (PDT)
-Received: from google.com ([2620:15c:202:201:eb15:868d:43:d73a])
-        by smtp.gmail.com with ESMTPSA id b4-20020a6567c4000000b0040dd052ab11sm1691136pgs.58.2022.08.12.12.28.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Aug 2022 12:28:21 -0700 (PDT)
-Date:   Fri, 12 Aug 2022 12:28:18 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     margeyang <marge.yang@synaptics.corp-partner.google.com>
-Cc:     linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hdegoede@redhat.com, benjamin.tissoires@redhat.com,
-        marge.yang@tw.synaptics.com, derek.cheng@tw.synaptics.com,
-        vincent.huang@tw.synaptics.com
-Subject: Re: [PATCH V2] Input: synaptics-rmi4 - filter incomplete relative
- packet.
-Message-ID: <Yvap0uh1U81gqy6J@google.com>
-References: <1660293805-16053-1-git-send-email-marge.yang@synaptics.corp-partner.google.com>
+        Fri, 12 Aug 2022 15:30:57 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3058D9926A
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 12:30:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660332656; x=1691868656;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=GlbJXtp1pQ/j4T73SprLl7OSfQKxTVMN6a3ZI775+EA=;
+  b=BdqGG+W0Cc+8lXYCnvIdTVg7M1Fi0+SuNhAEP6jsDJYPYOo9mH2bg01V
+   IpErTKcfCzxvttMCxJiL9G5/TS6eqcBQQOA1HNV/AsxSf314RgPB9tlVX
+   XV5nPHtgLTfPoexl7gChhc4ks6eerZBz/fvIAIXgNWWXr/RPa+eq3k5mG
+   6Frv2RQySb3HY8KMixUv/V1JaMeKYP+0Tg0tcqS7wagh59zmqBt8840Rn
+   Vx2d7s20fvBfobuCV48AB6GkFo3HJzcC6euAfyIrNq4pelOCYswEyKNpR
+   KEA7bsAY3Bg2SnShB5GaZ5D26pQcSal9W0q8Pty4LQjW+w6jSVfL4yWA3
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="355679513"
+X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
+   d="scan'208";a="355679513"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 12:30:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
+   d="scan'208";a="695370860"
+Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 12 Aug 2022 12:30:53 -0700
+Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oMaMu-0000rZ-2y;
+        Fri, 12 Aug 2022 19:30:52 +0000
+Date:   Sat, 13 Aug 2022 03:30:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     xiakaixu1987@gmail.com, sj@kernel.org, akpm@linux-foundation.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Kaixu Xia <kaixuxia@tencent.com>
+Subject: Re: [PATCH] mm/damon/core: simplify the parameter passing for region
+ split operation
+Message-ID: <202208130308.8rYWTL9U-lkp@intel.com>
+References: <1660290073-26347-1-git-send-email-kaixuxia@tencent.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1660293805-16053-1-git-send-email-marge.yang@synaptics.corp-partner.google.com>
-X-Spam-Status: No, score=1.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <1660290073-26347-1-git-send-email-kaixuxia@tencent.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marge,
+Hi,
 
-On Fri, Aug 12, 2022 at 04:43:25PM +0800, margeyang wrote:
-> From: Marge Yang <marge.yang@synaptics.corp-partner.google.com>
-> 
-> RMI4 F03 supports the Stick function,
-> it's designed to support relative packet.
-> This patch supports the following case.
-> When relative packet can't be reported completely,
-> it may miss one byte or two byte.
-> New Synaptics firmware will report PARITY error.
-> When timeout error or parity error happens,
-> RMI4 driver will sends 0xFE command and
-> ask FW to Re-send stick packet again.
+Thank you for the patch! Yet something to improve:
 
-My understanding is that F03 is intended to be a pass-through mechanism
-for PS/2-compatible devices. In that spirit all protocol handling and
-validation should happen in psmouse driver that attaches to a serio port
-provided by F03.
+[auto build test ERROR on akpm-mm/mm-everything]
 
-Historically we did not pay attention to parity and frame errors for
-PS/2 mice/touchpads (and for keyboards on x86) but we coudl add such
-code there. Do we actually observe this with RMI devices? Can RMI
-firmware handle this better instead?
+url:    https://github.com/intel-lab-lkp/linux/commits/xiakaixu1987-gmail-com/mm-damon-core-simplify-the-parameter-passing-for-region-split-operation/20220812-154316
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+config: hexagon-randconfig-r045-20220812 (https://download.01.org/0day-ci/archive/20220813/202208130308.8rYWTL9U-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/26b7d93b0f64c71d6d324a4a37d85641b55eaec2
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review xiakaixu1987-gmail-com/mm-damon-core-simplify-the-parameter-passing-for-region-split-operation/20220812-154316
+        git checkout 26b7d93b0f64c71d6d324a4a37d85641b55eaec2
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-Thanks.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   In file included from mm/damon/core.c:1218:
+>> mm/damon/core-test.h:129:33: error: too many arguments to function call, expected 3, have 4
+           damon_split_region_at(c, t, r, 25);
+           ~~~~~~~~~~~~~~~~~~~~~          ^~
+   mm/damon/core.c:930:13: note: 'damon_split_region_at' declared here
+   static void damon_split_region_at(struct damon_target *t,
+               ^
+   In file included from mm/damon/core.c:1218:
+   mm/damon/core-test.h:222:31: error: too many arguments to function call, expected 2, have 3
+           damon_split_regions_of(c, t, 2);
+           ~~~~~~~~~~~~~~~~~~~~~~       ^
+   mm/damon/core.c:948:13: note: 'damon_split_regions_of' declared here
+   static void damon_split_regions_of(struct damon_target *t, int nr_subs)
+               ^
+   In file included from mm/damon/core.c:1218:
+   mm/damon/core-test.h:229:31: error: too many arguments to function call, expected 2, have 3
+           damon_split_regions_of(c, t, 4);
+           ~~~~~~~~~~~~~~~~~~~~~~       ^
+   mm/damon/core.c:948:13: note: 'damon_split_regions_of' declared here
+   static void damon_split_regions_of(struct damon_target *t, int nr_subs)
+               ^
+   3 errors generated.
+
+
+vim +129 mm/damon/core-test.h
+
+17ccae8bb5c928 SeongJae Park 2021-09-07  119  
+17ccae8bb5c928 SeongJae Park 2021-09-07  120  static void damon_test_split_at(struct kunit *test)
+17ccae8bb5c928 SeongJae Park 2021-09-07  121  {
+17ccae8bb5c928 SeongJae Park 2021-09-07  122  	struct damon_ctx *c = damon_new_ctx();
+17ccae8bb5c928 SeongJae Park 2021-09-07  123  	struct damon_target *t;
+17ccae8bb5c928 SeongJae Park 2021-09-07  124  	struct damon_region *r;
+17ccae8bb5c928 SeongJae Park 2021-09-07  125  
+1971bd630452e9 SeongJae Park 2022-03-22  126  	t = damon_new_target();
+17ccae8bb5c928 SeongJae Park 2021-09-07  127  	r = damon_new_region(0, 100);
+17ccae8bb5c928 SeongJae Park 2021-09-07  128  	damon_add_region(r, t);
+17ccae8bb5c928 SeongJae Park 2021-09-07 @129  	damon_split_region_at(c, t, r, 25);
+17ccae8bb5c928 SeongJae Park 2021-09-07  130  	KUNIT_EXPECT_EQ(test, r->ar.start, 0ul);
+17ccae8bb5c928 SeongJae Park 2021-09-07  131  	KUNIT_EXPECT_EQ(test, r->ar.end, 25ul);
+17ccae8bb5c928 SeongJae Park 2021-09-07  132  
+17ccae8bb5c928 SeongJae Park 2021-09-07  133  	r = damon_next_region(r);
+17ccae8bb5c928 SeongJae Park 2021-09-07  134  	KUNIT_EXPECT_EQ(test, r->ar.start, 25ul);
+17ccae8bb5c928 SeongJae Park 2021-09-07  135  	KUNIT_EXPECT_EQ(test, r->ar.end, 100ul);
+17ccae8bb5c928 SeongJae Park 2021-09-07  136  
+17ccae8bb5c928 SeongJae Park 2021-09-07  137  	damon_free_target(t);
+17ccae8bb5c928 SeongJae Park 2021-09-07  138  	damon_destroy_ctx(c);
+17ccae8bb5c928 SeongJae Park 2021-09-07  139  }
+17ccae8bb5c928 SeongJae Park 2021-09-07  140  
 
 -- 
-Dmitry
+0-DAY CI Kernel Test Service
+https://01.org/lkp

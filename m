@@ -2,157 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9239D5911C2
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 15:58:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F32D5911C8
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 16:00:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238426AbiHLN5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 09:57:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43920 "EHLO
+        id S238562AbiHLN6w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 09:58:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbiHLN51 (ORCPT
+        with ESMTP id S232791AbiHLN6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 09:57:27 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51119925D
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 06:57:26 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id k26so2175942ejx.5
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 06:57:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=UqdfMBk3FFh1oCjqYXyPvd30eogbRofxBEUHJL5KgK0=;
-        b=UIOZDYkytCcVwuVC8i6ZqFPz3l3zhM5EVr/20mUsnh5cx2mTXPpvRc2c9jbYUYLQZc
-         AfvSHtrRT4r02XTsO7bSI2mD76VkFeItd+jLH9Z5Bu9CiTgdy1XBIPsmF5BDjZ/LU0lu
-         7Ig+56xv16be3+gJepLICuA9ONSyc0ohcRaAhACdwfjuzDt2GWJPa9bBqShHOasgyIOR
-         MI8kMIu+bqS1lpN0XYYe9ibALCmU3r5EPNRUZPTygDHk+oJN/qr+XvbL9W+LPfbWRZ2T
-         HJENOPnMWurAw0bnBfgCFi/0BUcytm/DBBK8oXE2CbTbLqfzYDt0PL8uRon/+hsmMtOF
-         Aiyg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=UqdfMBk3FFh1oCjqYXyPvd30eogbRofxBEUHJL5KgK0=;
-        b=2ZAox4hFKbWLpajot7u8GIAeSWDOqh3xSHltzkgJjR7ZagwaFWCkLa+jV0fuPEsAdK
-         XlTdcEAK3Lw8+BXFVTj1uvs8pZN0I7nfxTeX3Tix85z9DaqpJ07hhGQu3GmD95TnpDpA
-         MQH1/hTo1iq0pWLDAIbBNoOE7gGGrZ8oWcuCA2BM7rfFymhQBXiO08zWIGNu9zsM4fVE
-         SRTuPLCF2l5ICn7lrcxKd515wo3Nl+lWaUYRTIksNPgAl0FeamqsO24lqz6VjfW50WMk
-         D2jHnVvyhB1DGvfDLuZpioD6ujFv7lbIamYNQiFTdxj4EYyTfcX1IAf2tGNj21Lok0q6
-         jR3w==
-X-Gm-Message-State: ACgBeo0BzRPFMb8rxtI9B0mP+psDg7peSMGC8WhrMA7Bdg8Zhn2PCp4Y
-        yUH0BBqPmQUSu0iMJJ0NLKaxKgGYBVRh3uiksXI=
-X-Google-Smtp-Source: AA6agR5b6JHS11XaB1VLJdcr0UpOBC3SruahBqfEW7BjMgwF9FOhR6nIAQ4vdwbn4/nulbrITJlNjfSVctyZMKCpMUQ=
-X-Received: by 2002:a17:907:d9e:b0:731:1a5:8c68 with SMTP id
- go30-20020a1709070d9e00b0073101a58c68mr2816133ejc.365.1660312645159; Fri, 12
- Aug 2022 06:57:25 -0700 (PDT)
+        Fri, 12 Aug 2022 09:58:48 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3C6A50E1;
+        Fri, 12 Aug 2022 06:58:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 57482B8243A;
+        Fri, 12 Aug 2022 13:58:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5901C433C1;
+        Fri, 12 Aug 2022 13:58:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660312725;
+        bh=xh5J5TASioRfOeCFMDXvtupuSBvJ7WbXoTGn877mnnY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=NCCsa0p2UBi6sZpooriV0YmzPMP5tTpKco8A5NLhoBTJwVW5Ys06UitalfBCRzCa7
+         Wf+lUQ04QeKe4hzMr7T/Hx2nIpY4opUsL/hnt4d3jQMlGiAw9yEMvKtjtMAOYSG9Xc
+         DIuNRGfFEbQaoIYuegJK4pTG0HAiH26rdtJFYP0rdZMApBM25cRbzyqeiYtOqycgZx
+         BH/NLpIncOQj206IkvdXakmL4df/QYb+HfEoKx/V7E9YWPLVlwhdUqN5QVETI6BTSS
+         xXIMED9PznDBup60i/dfBLyl1JQlywVzb7xAt3Q5XxTst6IIfWnV9D18L25iCkDg3q
+         qAcy/NtPGzVjA==
+Received: by pali.im (Postfix)
+        id B34BC9CF; Fri, 12 Aug 2022 15:58:41 +0200 (CEST)
+Date:   Fri, 12 Aug 2022 15:58:41 +0200
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Robin Murphy <robin.murphy@arm.com>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] PCI: mvebu: Fix endianity when accessing pci emul bridge
+ members
+Message-ID: <20220812135841.uhmdkpvjok574ijf@pali>
+References: <20220812094058.16141-1-pali@kernel.org>
+ <3096bb82-62e6-bc9f-1600-fb58d6826302@arm.com>
 MIME-Version: 1.0
-References: <20220812132124.2053673-1-dzm91@hust.edu.cn> <YvZYmprZ1NiMkynp@kroah.com>
-In-Reply-To: <YvZYmprZ1NiMkynp@kroah.com>
-From:   Dongliang Mu <mudongliangabcd@gmail.com>
-Date:   Fri, 12 Aug 2022 21:56:46 +0800
-Message-ID: <CAD-N9QWU_tcnHMtP3iWcQogSWwDET4nhK5AQKDbh2KJQzwfF9A@mail.gmail.com>
-Subject: Re: [PATCH] drivers: binderfs: fix memory leak in binderfs_fill_super
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Dongliang Mu <dzm91@hust.edu.cn>,
-        =?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Carlos Llamas <cmllamas@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        syzkaller <syzkaller@googlegroups.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3096bb82-62e6-bc9f-1600-fb58d6826302@arm.com>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 12, 2022 at 9:41 PM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Fri, Aug 12, 2022 at 09:21:24PM +0800, Dongliang Mu wrote:
-> > From: Dongliang Mu <mudongliangabcd@gmail.com>
-> >
-> > In binderfs_fill_super, if s_root is not successfully initialized by
-> > d_make_root, the previous allocated s_sb_info will not be freed since
-> > generic_shutdown_super first checks if sb->s_root and then does
-> > put_super operation. The put_super operation calls binderfs_put_super
-> > to deallocate s_sb_info and put ipc_ns. This will lead to memory leak
-> > in binderfs_fill_super.
-> >
-> > Fix this by invoking binderfs_put_super at error sites before s_root
-> > is successfully initialized.
-> >
-> > Fixes: 095cf502b31e ("binderfs: port to new mount api")
-> > Reported-by: syzkaller <syzkaller@googlegroups.com>
->
-> Where is the specific syzkaller link for this report?  It would be good
-> to reference it so it can be properly checked.
->
-> Also, how did you test this change?
-
-I found this memory leak in my local syzkaller, and there is no any
-syzbot report about this crash, therefore I use such a Reported-by to
-indicate.
-
-Although my local syzkaller does generate any reproducer, this bug can
-be triggered by injecting faults at new_inode and d_make_root (i.e.,
-between s_sb_info allocation and code after d_make_root).
-
->
-> > Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+On Friday 12 August 2022 11:32:59 Robin Murphy wrote:
+> On 2022-08-12 10:40, Pali Rohár wrote:
+> > PCI emul bridge members iolimitupper, iobaseupper, memlimit and membase are
+> > of type __le16, so correctly access these members via le16_to_cpu() macros.
+> > 
+> > Fixes: 4ded69473adb ("PCI: mvebu: Propagate errors when updating PCI_IO_BASE and PCI_MEM_BASE registers")
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: Pali Rohár <pali@kernel.org>
 > > ---
-> >  drivers/android/binderfs.c | 8 ++++++--
-> >  1 file changed, 6 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/android/binderfs.c b/drivers/android/binderfs.c
-> > index 588d753a7a19..20f5bc77495f 100644
-> > --- a/drivers/android/binderfs.c
-> > +++ b/drivers/android/binderfs.c
-> > @@ -710,8 +710,10 @@ static int binderfs_fill_super(struct super_block *sb, struct fs_context *fc)
-> >       info->mount_opts.stats_mode = ctx->stats_mode;
-> >
-> >       inode = new_inode(sb);
-> > -     if (!inode)
-> > +     if (!inode) {
-> > +             binderfs_put_super(sb);
-> >               return -ENOMEM;
-> > +     }
-> >
-> >       inode->i_ino = FIRST_INODE;
-> >       inode->i_fop = &simple_dir_operations;
-> > @@ -721,8 +723,10 @@ static int binderfs_fill_super(struct super_block *sb, struct fs_context *fc)
-> >       set_nlink(inode, 2);
-> >
-> >       sb->s_root = d_make_root(inode);
-> > -     if (!sb->s_root)
-> > +     if (!sb->s_root) {
-> > +             binderfs_put_super(sb);
-> >               return -ENOMEM;
-> > +     }
->
-> How did you test this change to verify that you are not now just leaking
-> memory?  It looks to me like you just changed one problem for another
-> one :(
+> >   drivers/pci/controller/pci-mvebu.c | 12 ++++++------
+> >   1 file changed, 6 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/drivers/pci/controller/pci-mvebu.c b/drivers/pci/controller/pci-mvebu.c
+> > index c1ffdb06c971..00ea0836b81a 100644
+> > --- a/drivers/pci/controller/pci-mvebu.c
+> > +++ b/drivers/pci/controller/pci-mvebu.c
+> > @@ -523,7 +523,7 @@ static int mvebu_pcie_handle_iobase_change(struct mvebu_pcie_port *port)
+> >   	/* Are the new iobase/iolimit values invalid? */
+> >   	if (conf->iolimit < conf->iobase ||
+> > -	    conf->iolimitupper < conf->iobaseupper)
+> > +	    le16_to_cpu(conf->iolimitupper) < le16_to_cpu(conf->iobaseupper))
+> >   		return mvebu_pcie_set_window(port, port->io_target, port->io_attr,
+> >   					     &desired, &port->iowin);
+> > @@ -535,10 +535,10 @@ static int mvebu_pcie_handle_iobase_change(struct mvebu_pcie_port *port)
+> >   	 * is the CPU address.
+> >   	 */
+> >   	desired.remap = ((conf->iobase & 0xF0) << 8) |
+> > -			(conf->iobaseupper << 16);
+> > +			le16_to_cpu(conf->iobaseupper << 16);
+> 
+> This will always give 0, even when natively LE.
 
-As mentioned above, I just tested my change by injecting faults at
-new_inode and d_make_root.
+You are right, I overlooked it and I put closing parenthesis at wrong
+place. Bit shifting should be applied after le to cpu conversion. I will
+fix it in V2.
 
-Can you explain more about "changed one problem for another one"? I
-don't quite understand this statement.
-
->
-> Please always be very very careful when making these types of changes,
-> and verify and test that they are correct.
->
-> thanks,
->
-> greg k-h
+> >   	desired.base = port->pcie->io.start + desired.remap;
+> >   	desired.size = ((0xFFF | ((conf->iolimit & 0xF0) << 8) |
+> > -			 (conf->iolimitupper << 16)) -
+> > +			 le16_to_cpu(conf->iolimitupper << 16)) -
+> 
+> Similarly here.
+> 
+> Robin.
+> 
+> >   			desired.remap) +
+> >   		       1;
+> > @@ -552,7 +552,7 @@ static int mvebu_pcie_handle_membase_change(struct mvebu_pcie_port *port)
+> >   	struct pci_bridge_emul_conf *conf = &port->bridge.conf;
+> >   	/* Are the new membase/memlimit values invalid? */
+> > -	if (conf->memlimit < conf->membase)
+> > +	if (le16_to_cpu(conf->memlimit) < le16_to_cpu(conf->membase))
+> >   		return mvebu_pcie_set_window(port, port->mem_target, port->mem_attr,
+> >   					     &desired, &port->memwin);
+> > @@ -562,8 +562,8 @@ static int mvebu_pcie_handle_membase_change(struct mvebu_pcie_port *port)
+> >   	 * window to setup, according to the PCI-to-PCI bridge
+> >   	 * specifications.
+> >   	 */
+> > -	desired.base = ((conf->membase & 0xFFF0) << 16);
+> > -	desired.size = (((conf->memlimit & 0xFFF0) << 16) | 0xFFFFF) -
+> > +	desired.base = ((le16_to_cpu(conf->membase) & 0xFFF0) << 16);
+> > +	desired.size = (((le16_to_cpu(conf->memlimit) & 0xFFF0) << 16) | 0xFFFFF) -
+> >   		       desired.base + 1;
+> >   	return mvebu_pcie_set_window(port, port->mem_target, port->mem_attr, &desired,

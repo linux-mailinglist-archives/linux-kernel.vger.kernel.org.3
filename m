@@ -2,75 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF543590EE5
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 12:12:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5861590EE4
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 12:12:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238199AbiHLKMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 06:12:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35484 "EHLO
+        id S238188AbiHLKMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 06:12:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238186AbiHLKMP (ORCPT
+        with ESMTP id S238176AbiHLKMP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 12 Aug 2022 06:12:15 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52FC7AB43C;
-        Fri, 12 Aug 2022 03:12:10 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id u1so721174lfq.4;
-        Fri, 12 Aug 2022 03:12:09 -0700 (PDT)
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1FAAAB432
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 03:12:07 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id f192so545264pfa.9
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 03:12:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=DeD431ghxLD17wCgiWSV6MzDX9uBGSE2qzGxwjVq9ao=;
-        b=FVLMV6OrkixVc9xqZyTFxZ6fDC4wdgglZqQWmPC0gadPUxdsibc8yAymFp/f9fZ6qo
-         MA9WYi0FCl4LVSjs+akVCpLHqNirqxOnQyyrA8WdaJKt0AJPDOSBzL3uNrv5y5IRIDEg
-         QdA/skH1xWk/JYe924m+6Id0qZwQCGcmH2y62OkGuLJhglzcIQ8VwVmJ3/xNqCyJ5HVI
-         a7sPayaWEvmjpvPzgJySMbEV/OKPejNwCbT5X+aswGPfGZHuJXadw13LlIHAKC/3dnR4
-         kc6Nq3ruIInwKR4khTznbYKAwMqiTRzzPLhbQoityr3PiyIxEWuE6GRJ8nW4A2P3NYIz
-         H/yw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=3RiuHL8cuPFNRdOQLrbL2ARJQLP3txMsqxB/DqBpHYo=;
+        b=PO+YfNP7KvjF2zdmrmg/gzcou8Nbp4XOJlJjIiqFLzBP2VVWJK4AujsgLDH3VUlo41
+         xuxdRdR1edLV2Oixgvzo/tOfW6ht3FHrXcrb0KPTEu9xVgySElv0RJzAtXuwC+DDOAIi
+         21Zl59qjzNZUvkVy/dFUGG1qkbMPxjfNe++YhnttjiOdl8WZf77H3BRopKPYKfc/x7UU
+         732zYyCXLdqk63zY3974mToWDa13wP/rKKl2X+hpiDCLqpHiboKmEotx26W8+146voUV
+         5zm1r+XfHr1NYw7FgeOVDG701wh4B+fOu1ybyI3kKcFgKOewsk4VTJR++CKRUcVy5yFc
+         tHhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=DeD431ghxLD17wCgiWSV6MzDX9uBGSE2qzGxwjVq9ao=;
-        b=K5f2oh68l8mk8aY+FDKgbFWYbavoTZVcMhO1/4tiRWFw0SMwNluaNFDZ/TpxCq7Ran
-         /FQ17Ho2OvtwuULmvHMoa2FSdBXXnV1rHyaoRqvPAf5G7CrR7wBBg5VNtL9LsvfZsmq0
-         ykywDmZX0xrs+LdjGbdyDIENwkV7K3JJSLZAbOY3cHDTpgujcAfrwTyu0+ACJS33EW4c
-         FlHDuWFY4pHSFbc+UYEUQMALPOs1I1H7dEX/ax06SPAjvlfAedmhrqISQOvf/9p1IwKA
-         4RK8EEbVvqPt7zHgIPNvpCGy8C2+pe+se6sIOVDKmGXQB6UM6vIOBUkLgWVCIXncPSWt
-         3obQ==
-X-Gm-Message-State: ACgBeo0OuYr+pVeOEgLJ/T8DeRsDkW5gORJgaTkg8Zc7yfqHfJN/i/hI
-        JH3sse+GBdzRkfo6kCOxYza1DhCuh+4+ew==
-X-Google-Smtp-Source: AA6agR7u7LbwWwJWt0KfxYKaZu/OiJn6LdLRjYedua1UfKa+8e1lE1IF9M/JPZzPYRHAmmjt7OQ4fA==
-X-Received: by 2002:a19:5e49:0:b0:48a:7697:ddb1 with SMTP id z9-20020a195e49000000b0048a7697ddb1mr1085776lfi.323.1660299128266;
-        Fri, 12 Aug 2022 03:12:08 -0700 (PDT)
-Received: from fedora ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id 10-20020ac2484a000000b0048af7e58c9dsm156345lfy.278.2022.08.12.03.12.06
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=3RiuHL8cuPFNRdOQLrbL2ARJQLP3txMsqxB/DqBpHYo=;
+        b=WRz9kgS/rdZ0IXNRYXaapEZVkFsDtTNIG/EHrLIQa315zUbHLozT8FN0+kQ3JnSVfg
+         YwLIRarTblegVmxigbFlWvKM6hhcvfBIM+YGYqj0wRIgR9JNFxzSnbypk+dWyZ8lvvFn
+         f3iIFKMZ6/LPp6xHfzeRzP6Sw3VWjiD4LcCicvUxxu/E2ZTj2CWUBvDUzcick/Geccp3
+         grGQYuTNA849qSDd34yW8ifvppMGI6LRid4JsUL8jckUCxmpHn7SIQYqxdvRsdmNhiV+
+         kq9kYle7iPhSZtbo4NIt+msGjgXB3qfP2QYZC5uDcF5fQATccilg72h5HRUuhgc2hR5S
+         JvtA==
+X-Gm-Message-State: ACgBeo0BBX+yso3GTUG553114lfm4UHjeQnIZZvh1E9k3OmwIN9eWlQX
+        OeulI0+/q+0vo8wgTNipjpE=
+X-Google-Smtp-Source: AA6agR7Fd93QkM030LuiG9mHSEbbXsNDiHX6pJcZ8w61nSyMQdFIuvFz43JGwYRt9ZJeuAcXovAWyg==
+X-Received: by 2002:a05:6a00:17a8:b0:52e:6e3e:9ff with SMTP id s40-20020a056a0017a800b0052e6e3e09ffmr3217306pfg.42.1660299127293;
+        Fri, 12 Aug 2022 03:12:07 -0700 (PDT)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id mp2-20020a17090b190200b001f319e9b9e5sm5134115pjb.16.2022.08.12.03.12.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Fri, 12 Aug 2022 03:12:06 -0700 (PDT)
-Date:   Fri, 12 Aug 2022 13:12:02 +0300
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
-Cc:     Alexandru Tachici <alexandru.tachici@analog.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Miaoqian Lin <linmq006@gmail.com>, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 7/7] iio: Simplify drivers using
- devm_regulator_*get_enable()
-Message-ID: <13bb483e1f3ee003ca3a6949e27eee7f505e047d.1660292316.git.mazziesaccount@gmail.com>
-References: <cover.1660292316.git.mazziesaccount@gmail.com>
+From:   cgel.zte@gmail.com
+X-Google-Original-From: xu.xin16@zte.com.cn
+To:     akpm@linux-foundation.org, willy@infradead.org
+Cc:     hughd@google.com, izik.eidus@ravellosystems.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        xu.xin16@zte.com.cn, CGEL <cgel.zte@gmail.com>
+Subject: [PATCH v2 2/5] ksm: implement scan-enhanced algorithm
+Date:   Fri, 12 Aug 2022 10:12:02 +0000
+Message-Id: <20220812101202.41533-1-xu.xin16@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220812101102.41422-1-xu.xin16@zte.com.cn>
+References: <20220812101102.41422-1-xu.xin16@zte.com.cn>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="SnNffchV/nAgRcji"
-Content-Disposition: inline
-In-Reply-To: <cover.1660292316.git.mazziesaccount@gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -81,311 +72,183 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: xu xin <xu.xin16@zte.com.cn>
 
---SnNffchV/nAgRcji
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Implement the scan-enhanced algorithm of auto mode. In this algorithm,
+after every time of scanning, if new ksm pages are obtained, it will
+double pages_to_scan for the next scanning until the general
+multiplying factor is not less than max_scanning_factor. If no new ksm
+pages are obtained, then reset pages_to_scan to the default value.
 
-adc/ad7192:
-Use devm_regulator_get_enable() instead of open coded get, enable,
-add-action-to-disable-at-detach - pattern. Also drop the seemingly unused
-struct member 'dvdd'.
+We add the sysfs klob of max_scanning_factor to limit scanning factor's
+excessive growth.
 
-dac/ltc2688:
-gyro/bmg160_core:
-Use devm_regulator_bulk_get_enable() instead of open coded bulk-get,
-bulk-enable, add-action-to-disable-at-detach - pattern.
-
-imu/st_lsm6dsx:
-Use devm_regulator_bulk_get_enable() instead of open coded bulk-get,
-bulk-enable, add-action-to-disable-at-detach - pattern.
-
-A functional change (which seems like a bugfix) is that if
-regulator_bulk_get fails, the enable is not attempted.
-
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-
+Signed-off-by: CGEL <cgel.zte@gmail.com>
+Signed-off-by: xu xin <xu.xin16@zte.com.cn>
 ---
-RFCv1 =3D> v2:
-Squashed all IIO changes to one patch. Added use of
-devm_regulator_bulk_get_enable().
+ mm/ksm.c | 100 +++++++++++++++++++++++++++++++++++++++++++++++++++++--
+ 1 file changed, 98 insertions(+), 2 deletions(-)
 
-Please note - this is only compile-tested due to the lack of HW. Careful
-review and testing is _highly_ appreciated.
----
- drivers/iio/adc/ad7192.c                     | 15 ++--------
- drivers/iio/dac/ltc2688.c                    | 23 ++-------------
- drivers/iio/gyro/bmg160_core.c               | 24 ++--------------
- drivers/iio/imu/st_lsm6dsx/st_lsm6dsx.h      |  2 --
- drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c | 30 ++++----------------
- 5 files changed, 13 insertions(+), 81 deletions(-)
-
-diff --git a/drivers/iio/adc/ad7192.c b/drivers/iio/adc/ad7192.c
-index d71977be7d22..8a52c0dec3f9 100644
---- a/drivers/iio/adc/ad7192.c
-+++ b/drivers/iio/adc/ad7192.c
-@@ -177,7 +177,6 @@ struct ad7192_chip_info {
- struct ad7192_state {
- 	const struct ad7192_chip_info	*chip_info;
- 	struct regulator		*avdd;
--	struct regulator		*dvdd;
- 	struct clk			*mclk;
- 	u16				int_vref_mv;
- 	u32				fclk;
-@@ -1015,19 +1014,9 @@ static int ad7192_probe(struct spi_device *spi)
- 	if (ret)
- 		return ret;
-=20
--	st->dvdd =3D devm_regulator_get(&spi->dev, "dvdd");
--	if (IS_ERR(st->dvdd))
--		return PTR_ERR(st->dvdd);
--
--	ret =3D regulator_enable(st->dvdd);
--	if (ret) {
--		dev_err(&spi->dev, "Failed to enable specified DVdd supply\n");
--		return ret;
--	}
--
--	ret =3D devm_add_action_or_reset(&spi->dev, ad7192_reg_disable, st->dvdd);
-+	ret =3D devm_regulator_get_enable(&spi->dev, "dvdd");
- 	if (ret)
--		return ret;
-+		return dev_err_probe(&spi->dev, ret, "Failed to enable specified DVdd su=
-pply\n");
-=20
- 	ret =3D regulator_get_voltage(st->avdd);
- 	if (ret < 0) {
-diff --git a/drivers/iio/dac/ltc2688.c b/drivers/iio/dac/ltc2688.c
-index 937b0d25a11c..1abc88cd99f9 100644
---- a/drivers/iio/dac/ltc2688.c
-+++ b/drivers/iio/dac/ltc2688.c
-@@ -84,7 +84,6 @@ struct ltc2688_chan {
- struct ltc2688_state {
- 	struct spi_device *spi;
- 	struct regmap *regmap;
--	struct regulator_bulk_data regulators[2];
- 	struct ltc2688_chan channels[LTC2688_DAC_CHANNELS];
- 	struct iio_chan_spec *iio_chan;
- 	/* lock to protect against multiple access to the device and shared data =
-*/
-@@ -902,13 +901,6 @@ static int ltc2688_setup(struct ltc2688_state *st, str=
-uct regulator *vref)
- 			       LTC2688_CONFIG_EXT_REF);
- }
-=20
--static void ltc2688_disable_regulators(void *data)
--{
--	struct ltc2688_state *st =3D data;
--
--	regulator_bulk_disable(ARRAY_SIZE(st->regulators), st->regulators);
--}
--
- static void ltc2688_disable_regulator(void *regulator)
- {
- 	regulator_disable(regulator);
-@@ -970,6 +962,7 @@ static int ltc2688_probe(struct spi_device *spi)
- 	struct regulator *vref_reg;
- 	struct device *dev =3D &spi->dev;
- 	int ret;
-+	static const char * const regulators[] =3D {"vcc", "iovcc"};
-=20
- 	indio_dev =3D devm_iio_device_alloc(dev, sizeof(*st));
- 	if (!indio_dev)
-@@ -988,21 +981,11 @@ static int ltc2688_probe(struct spi_device *spi)
- 		return dev_err_probe(dev, PTR_ERR(st->regmap),
- 				     "Failed to init regmap");
-=20
--	st->regulators[0].supply =3D "vcc";
--	st->regulators[1].supply =3D "iovcc";
--	ret =3D devm_regulator_bulk_get(dev, ARRAY_SIZE(st->regulators),
--				      st->regulators);
--	if (ret)
--		return dev_err_probe(dev, ret, "Failed to get regulators\n");
--
--	ret =3D regulator_bulk_enable(ARRAY_SIZE(st->regulators), st->regulators);
-+	ret =3D devm_regulator_bulk_get_enable(dev, ARRAY_SIZE(regulators),
-+					     regulators);
- 	if (ret)
- 		return dev_err_probe(dev, ret, "Failed to enable regulators\n");
-=20
--	ret =3D devm_add_action_or_reset(dev, ltc2688_disable_regulators, st);
--	if (ret)
--		return ret;
--
- 	vref_reg =3D devm_regulator_get_optional(dev, "vref");
- 	if (IS_ERR(vref_reg)) {
- 		if (PTR_ERR(vref_reg) !=3D -ENODEV)
-diff --git a/drivers/iio/gyro/bmg160_core.c b/drivers/iio/gyro/bmg160_core.c
-index 81a6d09788bd..acfabac645b6 100644
---- a/drivers/iio/gyro/bmg160_core.c
-+++ b/drivers/iio/gyro/bmg160_core.c
-@@ -93,7 +93,6 @@
-=20
- struct bmg160_data {
- 	struct regmap *regmap;
--	struct regulator_bulk_data regulators[2];
- 	struct iio_trigger *dready_trig;
- 	struct iio_trigger *motion_trig;
- 	struct iio_mount_matrix orientation;
-@@ -1067,19 +1066,13 @@ static const char *bmg160_match_acpi_device(struct =
-device *dev)
- 	return dev_name(dev);
- }
-=20
--static void bmg160_disable_regulators(void *d)
--{
--	struct bmg160_data *data =3D d;
--
--	regulator_bulk_disable(ARRAY_SIZE(data->regulators), data->regulators);
--}
--
- int bmg160_core_probe(struct device *dev, struct regmap *regmap, int irq,
- 		      const char *name)
- {
- 	struct bmg160_data *data;
- 	struct iio_dev *indio_dev;
- 	int ret;
-+	static const char * const regulators[] =3D {"vdd", "vddio"};
-=20
- 	indio_dev =3D devm_iio_device_alloc(dev, sizeof(*data));
- 	if (!indio_dev)
-@@ -1090,22 +1083,11 @@ int bmg160_core_probe(struct device *dev, struct re=
-gmap *regmap, int irq,
- 	data->irq =3D irq;
- 	data->regmap =3D regmap;
-=20
--	data->regulators[0].supply =3D "vdd";
--	data->regulators[1].supply =3D "vddio";
--	ret =3D devm_regulator_bulk_get(dev, ARRAY_SIZE(data->regulators),
--				      data->regulators);
-+	ret =3D devm_regulator_bulk_get_enable(dev, ARRAY_SIZE(regulators),
-+					     regulators);
- 	if (ret)
- 		return dev_err_probe(dev, ret, "Failed to get regulators\n");
-=20
--	ret =3D regulator_bulk_enable(ARRAY_SIZE(data->regulators),
--				    data->regulators);
--	if (ret)
--		return ret;
--
--	ret =3D devm_add_action_or_reset(dev, bmg160_disable_regulators, data);
--	if (ret)
--		return ret;
--
- 	ret =3D iio_read_mount_matrix(dev, &data->orientation);
- 	if (ret)
- 		return ret;
-diff --git a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx.h b/drivers/iio/imu/st_l=
-sm6dsx/st_lsm6dsx.h
-index a86dd29a4738..03238c64c777 100644
---- a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx.h
-+++ b/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx.h
-@@ -372,7 +372,6 @@ struct st_lsm6dsx_sensor {
-  * struct st_lsm6dsx_hw - ST IMU MEMS hw instance
-  * @dev: Pointer to instance of struct device (I2C or SPI).
-  * @regmap: Register map of the device.
-- * @regulators: VDD/VDDIO voltage regulators.
-  * @irq: Device interrupt line (I2C or SPI).
-  * @fifo_lock: Mutex to prevent concurrent access to the hw FIFO.
-  * @conf_lock: Mutex to prevent concurrent FIFO configuration update.
-@@ -395,7 +394,6 @@ struct st_lsm6dsx_sensor {
- struct st_lsm6dsx_hw {
- 	struct device *dev;
- 	struct regmap *regmap;
--	struct regulator_bulk_data regulators[2];
- 	int irq;
-=20
- 	struct mutex fifo_lock;
-diff --git a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c b/drivers/iio/imu=
-/st_lsm6dsx/st_lsm6dsx_core.c
-index 910397716833..7b40f6b58834 100644
---- a/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c
-+++ b/drivers/iio/imu/st_lsm6dsx/st_lsm6dsx_core.c
-@@ -2172,36 +2172,20 @@ static int st_lsm6dsx_irq_setup(struct st_lsm6dsx_h=
-w *hw)
-=20
- static int st_lsm6dsx_init_regulators(struct device *dev)
- {
--	struct st_lsm6dsx_hw *hw =3D dev_get_drvdata(dev);
- 	int err;
--
- 	/* vdd-vddio power regulators */
--	hw->regulators[0].supply =3D "vdd";
--	hw->regulators[1].supply =3D "vddio";
--	err =3D devm_regulator_bulk_get(dev, ARRAY_SIZE(hw->regulators),
--				      hw->regulators);
--	if (err)
--		return dev_err_probe(dev, err, "failed to get regulators\n");
-+	static const char * const regulators[] =3D {"vdd", "vddio"};
-=20
--	err =3D regulator_bulk_enable(ARRAY_SIZE(hw->regulators),
--				    hw->regulators);
--	if (err) {
--		dev_err(dev, "failed to enable regulators: %d\n", err);
--		return err;
--	}
-+	err =3D devm_regulator_bulk_get_enable(dev, ARRAY_SIZE(regulators),
-+					     regulators);
-+	if (err)
-+		return dev_err_probe(dev, err, "failed to enable regulators\n");
-=20
- 	msleep(50);
-=20
+diff --git a/mm/ksm.c b/mm/ksm.c
+index c80d908221a4..f416f168a6da 100644
+--- a/mm/ksm.c
++++ b/mm/ksm.c
+@@ -131,6 +131,10 @@ struct mm_slot {
+  * @address: the next address inside that to be scanned
+  * @rmap_list: link to the next rmap to be scanned in the rmap_list
+  * @seqnr: count of completed full scans (needed when removing unstable node)
++ * @new_ksmpages: count of the new merged KSM pages in the current scanning
++ *	              of mm_lists (cleared after every turn of ksm_do_scan() ends)
++ * @prev_ksmpages: the record of the new merged KSM pages in the last turn of
++ *	               scanning by ksm_do_scan().
+  *
+  * There is only the one ksm_scan instance of this cursor structure.
+  */
+@@ -139,6 +143,8 @@ struct ksm_scan {
+ 	unsigned long address;
+ 	struct rmap_item **rmap_list;
+ 	unsigned long seqnr;
++	unsigned long new_ksmpages;
++	unsigned long prev_ksmpages;
+ };
+ 
+ /**
+@@ -277,6 +283,19 @@ static unsigned int zero_checksum __read_mostly;
+ /* Whether to merge empty (zeroed) pages with actual zero pages */
+ static bool ksm_use_zero_pages __read_mostly;
+ 
++/*
++ * Work in auto-mode.
++ * The multiplicative factor of pages_to_scan.
++ * Real pages to scan equals to the product of scanning_factor
++ * and pages_to_scan
++ */
++#define INIT_SCANNING_FACTOR	1
++static unsigned int scanning_factor = INIT_SCANNING_FACTOR;
++
++/* The upper limit of scanning_factor */
++#define DEFAULT_MAX_SCANNING_FACTOR	16
++static unsigned int max_scanning_factor	= DEFAULT_MAX_SCANNING_FACTOR;
++
+ #ifdef CONFIG_NUMA
+ /* Zeroed when merging across nodes is not allowed */
+ static unsigned int ksm_merge_across_nodes = 1;
+@@ -2031,6 +2050,8 @@ static void stable_tree_append(struct rmap_item *rmap_item,
+ 	rmap_item->address |= STABLE_FLAG;
+ 	hlist_add_head(&rmap_item->hlist, &stable_node->hlist);
+ 
++	ksm_scan.new_ksmpages++;
++
+ 	if (rmap_item->hlist.next)
+ 		ksm_pages_sharing++;
+ 	else
+@@ -2422,6 +2443,41 @@ static int ksmd_should_run(void)
  	return 0;
  }
-=20
--static void st_lsm6dsx_chip_uninit(void *data)
--{
--	struct st_lsm6dsx_hw *hw =3D data;
--
--	regulator_bulk_disable(ARRAY_SIZE(hw->regulators), hw->regulators);
--}
--
- int st_lsm6dsx_probe(struct device *dev, int irq, int hw_id,
- 		     struct regmap *regmap)
+ 
++/*
++ * Work in auto mode, the scan-enhanced algorithm.
++ * current_factor: the current scanning_factor.
++ * return: the scanning_factor caculated by scan-enhanced algorithm.
++ */
++static unsigned int scan_enhanced_algorithm(unsigned int current_factor)
++{
++	unsigned int next_factor;
++	unsigned int max, min;
++
++	/*
++	 * The calculation is divied into three cases as follows:
++	 *
++	 * Case 1: when new_ksmpages > prev_ksmpages * 1/2, get the
++	 *         next factor by double the current factor.
++	 * Case 2: when 0 < new_ksmpages < prev_ksmpages * 1/2, keep
++	 *         the factor unchanged.
++	 * Case 3: when new_ksmpages equals 0, then get the next
++	 *         factor by halfing the current factor.
++	 */
++	max = READ_ONCE(max_scanning_factor);
++	min = INIT_SCANNING_FACTOR;
++	if (ksm_scan.new_ksmpages * 2 > ksm_scan.prev_ksmpages) {
++		next_factor = current_factor << 1; /* Doubling */
++		if (next_factor > max)
++			next_factor = max;
++	} else if (ksm_scan.new_ksmpages == 0) {
++		next_factor = current_factor >> 1; /* Halfing */
++		next_factor = next_factor < min ? min : next_factor;
++	} else
++		next_factor = current_factor;
++
++	return next_factor;
++}
++
+ static int ksm_scan_thread(void *nothing)
  {
-@@ -2225,10 +2209,6 @@ int st_lsm6dsx_probe(struct device *dev, int irq, in=
-t hw_id,
- 	if (err)
- 		return err;
-=20
--	err =3D devm_add_action_or_reset(dev, st_lsm6dsx_chip_uninit, hw);
--	if (err)
--		return err;
--
- 	hw->buff =3D devm_kzalloc(dev, ST_LSM6DSX_BUFF_SIZE, GFP_KERNEL);
- 	if (!hw->buff)
- 		return -ENOMEM;
---=20
-2.37.1
+ 	unsigned int sleep_ms;
+@@ -2432,8 +2488,19 @@ static int ksm_scan_thread(void *nothing)
+ 	while (!kthread_should_stop()) {
+ 		mutex_lock(&ksm_thread_mutex);
+ 		wait_while_offlining();
+-		if (ksmd_should_run())
+-			ksm_do_scan(ksm_thread_pages_to_scan);
++		if (ksmd_should_run()) {
++			if (ksm_run & KSM_RUN_AUTO) {
++				ksm_do_scan(ksm_thread_pages_to_scan * scanning_factor);
++
++				scanning_factor = scan_enhanced_algorithm(scanning_factor);
++				/*
++				 * Reset ksm_scan.new_ksmpages after
++				 * updating scanning_factor by scan_enhanced_algorithm.
++				 */
++				ksm_scan.new_ksmpages = 0;
++			} else
++				ksm_do_scan(ksm_thread_pages_to_scan);
++		}
+ 		mutex_unlock(&ksm_thread_mutex);
+ 
+ 		try_to_freeze();
+@@ -2904,6 +2971,34 @@ static ssize_t pages_to_scan_store(struct kobject *kobj,
+ }
+ KSM_ATTR(pages_to_scan);
+ 
++static ssize_t max_scanning_factor_show(struct kobject *kobj,
++						struct kobj_attribute *attr, char *buf)
++{
++	return sysfs_emit(buf, "%u\n", max_scanning_factor);
++}
++
++static ssize_t max_scanning_factor_store(struct kobject *kobj,
++								struct kobj_attribute *attr,
++								const char *buf, size_t count)
++{
++		unsigned int value, max;
++		int err;
++
++		err = kstrtouint(buf, 10, &value);
++		if (err)
++			return -EINVAL;
++
++		max = totalram_pages() / ksm_thread_pages_to_scan;
++
++		if (value < 1 && value > max)
++			return -EINVAL;
++
++		max_scanning_factor = value;
++
++		return count;
++}
++KSM_ATTR(max_scanning_factor);
++
+ static ssize_t run_show(struct kobject *kobj, struct kobj_attribute *attr,
+ 			char *buf)
+ {
+@@ -3161,6 +3256,7 @@ KSM_ATTR_RO(full_scans);
+ static struct attribute *ksm_attrs[] = {
+ 	&sleep_millisecs_attr.attr,
+ 	&pages_to_scan_attr.attr,
++	&max_scanning_factor_attr.attr,
+ 	&run_attr.attr,
+ 	&pages_shared_attr.attr,
+ 	&pages_sharing_attr.attr,
+-- 
+2.25.1
 
-
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---SnNffchV/nAgRcji
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmL2J3IACgkQeFA3/03a
-ocW2Ugf9GtyiWREszLlcfd7XlOiqb0aI8GXb9PRuL4pev4jWGaTsClRml6uKBlVw
-RQKfdrZrBrjfWhO6Ack3P5avUozowABn6AIyxR3iWldnFH7jF4/UAr6Q6LaRurMM
-N9WkwgAFi86+ZGxbdM7r24liigHd2ltZnt8OQ0FEQSyFyvu/9Co7UrJ3eWdOYNmm
-QKS+EJZTMC2TpSI0dLgVH6F9p3M53RN55hTwq4dNN/RKyLlmcq3xUHP+mfjDsoRa
-4y7k6xHFU5ZTDWOq/PLjHTLjUCEGPv69ry0ezJ+JunAXwlq8q9B9w3Z+T9v5scBk
-C2H0r3mup7RobLyOxbv7Q4rDeYG25w==
-=xFzp
------END PGP SIGNATURE-----
-
---SnNffchV/nAgRcji--

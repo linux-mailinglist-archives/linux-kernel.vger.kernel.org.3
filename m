@@ -2,125 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDF77591030
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 13:40:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F45591031
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 13:41:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236186AbiHLLkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 07:40:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44852 "EHLO
+        id S237598AbiHLLkz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 07:40:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231627AbiHLLkQ (ORCPT
+        with ESMTP id S237568AbiHLLkw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 07:40:16 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB5B1034;
-        Fri, 12 Aug 2022 04:40:14 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id w3so1013413edc.2;
-        Fri, 12 Aug 2022 04:40:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=1UkHTX9tiW35gZea892hMns6ALsK+5bsA3v9NBWFhv0=;
-        b=JOkB70tvBMjf320dpziZwTnu91uxqkaRe3wmyXAHPxu9+FyhQQZIsj4ojtOAoZ+zxX
-         FGnzgEWx/oNPC5IFDB5VpOQlEFtRpiL9E4z1H4TZggUv6XVjmi6uZqmGtmAnpxjPH43R
-         e2+3zk3rdrzMYqNnAe9dhnAMAuW3GPVcYABWK3PSd3aGv1BMsd/kypCTtoNvoP8LC7rQ
-         T0Xi0OAeDZjFzT85Gxyz09WW6cX+Ot7CvYv+F/KW+MIfcxx1MFXMiyBBp4mnU4rYtXc7
-         SNrZzQzZpTDhoUB3eUzGqwkPiAl93eo5SIEIQGamvULsTqS0oAaaeNlCRJckoR3SZwJu
-         CL0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=1UkHTX9tiW35gZea892hMns6ALsK+5bsA3v9NBWFhv0=;
-        b=qc6QMxqE1xQ38LoKcd+ncyclOZTpJ8vobjxR6W14X2wB9d53J1OwWg2VRv/0X6sy9w
-         n7zia9Cs5MyoyghiBqaEXhOAiIg4PwCd3LEUJymkhUX66HJNMer6VA0kd/ZqoaC3bzwb
-         h06hMUPQQl4dFHqAl1UTbMZpJAJd5HfddnfWBty14r8kZbfKYystbJ6kK1F9ze2QQxks
-         2FUSkQHQtuQHBokmQr6htaUdVknP+2KGzMbVgqLL27YsP2d0yKaB5DEcCxWApKGePFcl
-         hZ5dL7HXO/APJ+0iW2MwHX5L7Ic5wNYa4arfIJJq0R0pe4emH01aMTkkaErlu9t/mZMv
-         fd2A==
-X-Gm-Message-State: ACgBeo2ju+bvV/Ce/Yv5L5z9cL2WIh/DcsVEK/pi9D/esnpmAoGI4xxW
-        nnj+FrBJsSIeXD+7ewQ7NaF9bgIVPJEjdQ==
-X-Google-Smtp-Source: AA6agR6G4HBLrUVRhrAxhmeuwLJ+ZkJK+M9dKyapjdHIrP7Yhk64u75T6A/1ujJADCVDM0TuJ6xmlw==
-X-Received: by 2002:a05:6402:3689:b0:43e:43d6:6039 with SMTP id ej9-20020a056402368900b0043e43d66039mr3250463edb.341.1660304412828;
-        Fri, 12 Aug 2022 04:40:12 -0700 (PDT)
-Received: from fedora.. (188-167-140-93.dynamic.chello.sk. [188.167.140.93])
-        by smtp.gmail.com with ESMTPSA id t19-20020a05640203d300b0043bbf79b3ebsm1223741edw.54.2022.08.12.04.40.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Aug 2022 04:40:11 -0700 (PDT)
-From:   Wim Van Boven <wimvanboven@gmail.com>
-To:     linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     wimvanboven@gmail.com, Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Subject: [PATCH] drivers/bluetooth: add vendor and device id for liteon WCN685x device
-Date:   Fri, 12 Aug 2022 13:38:23 +0200
-Message-Id: <20220812113824.13168-1-wimvanboven@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Fri, 12 Aug 2022 07:40:52 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0DC97515;
+        Fri, 12 Aug 2022 04:40:51 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 049F338DC2;
+        Fri, 12 Aug 2022 11:40:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1660304450; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=HQHcR/65qc9BFscIU2dqNOjOuZde0RnfC+dbzIUXaEk=;
+        b=k7W1ODFC0AmW6x1An6PXRz1phIhcSl2sFGTdc2N1mMjS0M1h6fch/Z+wViY5hFAAaNm0MV
+        GCOqpzsYKZ8932d5F7ROJjLvoq661ib9tPxHcmvN520DypYlJibudzfeg9cG1ucBtHO5uF
+        rIOMRQ5K6N4QdAnLLcygBR1qlAb5pcg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1660304450;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=HQHcR/65qc9BFscIU2dqNOjOuZde0RnfC+dbzIUXaEk=;
+        b=vrtsSdQTYkKCt92Qt/KVUQKTg9/x6Ry9cwm2+kSiS4+3BYhfoBq7yrTXvvVyY9NVWGRTR0
+        j4mQiVWQOU8IvaDA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id E2B8A13AAE;
+        Fri, 12 Aug 2022 11:40:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 0AJjNkE89mKGewAAMHmgww
+        (envelope-from <mliska@suse.cz>); Fri, 12 Aug 2022 11:40:49 +0000
+Message-ID: <8e00eda1-4de0-2c44-ce67-d4df48ac1f7c@suse.cz>
+Date:   Fri, 12 Aug 2022 13:40:49 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+From:   =?UTF-8?Q?Martin_Li=c5=a1ka?= <mliska@suse.cz>
+Subject: [PATCH] perf record: improve error message of -p not_existing_pid
+To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Content-Language: en-US
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T:  Bus=01 Lev=01 Prnt=01 Port=02 Cnt=01 Dev#=  2 Spd=12   MxCh= 0
-D:  Ver= 1.10 Cls=e0(wlcon) Sub=01 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=04ca ProdID=3a24 Rev= 0.01
-C:* #Ifs= 2 Cfg#= 1 Atr=e0 MxPwr=100mA
-I:* If#= 0 Alt= 0 #EPs= 3 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=1ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS=  64 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS=  64 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=   0 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=   0 Ivl=1ms
-I:  If#= 1 Alt= 1 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=   9 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=   9 Ivl=1ms
-I:  If#= 1 Alt= 2 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  17 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  17 Ivl=1ms
-I:  If#= 1 Alt= 3 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  25 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  25 Ivl=1ms
-I:  If#= 1 Alt= 4 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  33 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  33 Ivl=1ms
-I:  If#= 1 Alt= 5 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  49 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  49 Ivl=1ms
-I:  If#= 1 Alt= 6 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  63 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  63 Ivl=1ms
-I:  If#= 1 Alt= 7 #EPs= 2 Cls=e0(wlcon) Sub=01 Prot=01 Driver=btusb
-E:  Ad=83(I) Atr=01(Isoc) MxPS=  65 Ivl=1ms
-E:  Ad=03(O) Atr=01(Isoc) MxPS=  65 Ivl=1ms
+When one uses -p $not_existing_pid, the output of --help is printed:
 
-Signed-off-by: Wim Van Boven <wimvanboven@gmail.com>
+$ perf record -p 123456789 2>&1 | head -n3
+
+ Usage: perf record [<options>] [<command>]
+    or: perf record [<options>] -- <command> [<options>]
+
+Let's change it something similar what perf top -p $not_existing_pid
+prints:
+
+$ ./perf top -p 123456789 --stdio
+Error:
+Couldn't create thread/CPU maps: No such process
+
+Newly suggested error message:
+
+$ ./perf record -p 123456789
+Couldn't create thread/CPU maps: No such process
+
+Signed-off-by: Martin Liska <mliska@suse.cz>
 ---
- drivers/bluetooth/btusb.c | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/perf/builtin-record.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-index 15caa6469538..abb5721990ac 100644
---- a/drivers/bluetooth/btusb.c
-+++ b/drivers/bluetooth/btusb.c
-@@ -316,6 +316,9 @@ static const struct usb_device_id blacklist_table[] = {
- 	{ USB_DEVICE(0x0489, 0xe0d0), .driver_info = BTUSB_QCA_WCN6855 |
- 						     BTUSB_WIDEBAND_SPEECH |
- 						     BTUSB_VALID_LE_STATES },
-+	{ USB_DEVICE(0x04ca, 0x3a24), .driver_info = BTUSB_QCA_WCN6855 |
-+						     BTUSB_WIDEBAND_SPEECH |
-+						     BTUSB_VALID_LE_STATES },
+diff --git a/tools/perf/builtin-record.c b/tools/perf/builtin-record.c
+index cf5c5379ceaa..4713f0f3a6cf 100644
+--- a/tools/perf/builtin-record.c
++++ b/tools/perf/builtin-record.c
+@@ -3996,8 +3996,15 @@ int cmd_record(int argc, const char **argv)
+ 		arch__add_leaf_frame_record_opts(&rec->opts);
  
- 	/* QCA WCN785x chipset */
- 	{ USB_DEVICE(0x0cf3, 0xe700), .driver_info = BTUSB_QCA_WCN6855 |
+ 	err = -ENOMEM;
+-	if (evlist__create_maps(rec->evlist, &rec->opts.target) < 0)
+-		usage_with_options(record_usage, record_options);
++	if (evlist__create_maps(rec->evlist, &rec->opts.target) < 0) {
++		if (rec->opts.target.pid != NULL) {
++			pr_err("Couldn't create thread/CPU maps: %s\n",
++				errno == ENOENT ? "No such process" : str_error_r(errno, errbuf, sizeof(errbuf)));
++			goto out;
++		}
++		else
++			usage_with_options(record_usage, record_options);
++	}
+ 
+ 	err = auxtrace_record__options(rec->itr, rec->evlist, &rec->opts);
+ 	if (err)
 -- 
 2.37.1
 

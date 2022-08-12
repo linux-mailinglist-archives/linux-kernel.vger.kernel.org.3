@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7495591063
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 13:53:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3C16591064
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 13:53:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238317AbiHLLxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 07:53:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36090 "EHLO
+        id S238340AbiHLLxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 07:53:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237442AbiHLLxK (ORCPT
+        with ESMTP id S238324AbiHLLxk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 07:53:10 -0400
-Received: from smtp.smtpout.orange.fr (smtp09.smtpout.orange.fr [80.12.242.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C0751AE9DD
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 04:53:09 -0700 (PDT)
+        Fri, 12 Aug 2022 07:53:40 -0400
+Received: from smtp.smtpout.orange.fr (smtp08.smtpout.orange.fr [80.12.242.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E861AF0CB
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 04:53:37 -0700 (PDT)
 Received: from YC20090004.ad.ts.tri-ad.global ([109.190.253.11])
         by smtp.orange.fr with ESMTPA
-        id MT5eouHcQeT4cMT6MoVeQP; Fri, 12 Aug 2022 13:45:36 +0200
+        id MT5eouHcQeT4cMT6uoVeU2; Fri, 12 Aug 2022 13:46:06 +0200
 X-ME-Helo: YC20090004.ad.ts.tri-ad.global
 X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Fri, 12 Aug 2022 13:45:36 +0200
+X-ME-Date: Fri, 12 Aug 2022 13:46:06 +0200
 X-ME-IP: 109.190.253.11
 From:   Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 To:     Borislav Petkov <bp@alien8.de>
@@ -38,9 +38,9 @@ Cc:     Nick Desaulniers <ndesaulniers@google.com>,
         Joe Perches <joe@perches.com>,
         Josh Poimboeuf <jpoimboe@kernel.org>,
         Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: [PATCH v5 1/2] x86/asm/bitops: ffs: use __builtin_ffs to evaluate constant expressions
-Date:   Fri, 12 Aug 2022 20:44:37 +0900
-Message-Id: <20220812114438.1574-2-mailhol.vincent@wanadoo.fr>
+Subject: [PATCH v5 2/2] x86/asm/bitops: __ffs,ffz: use __builtin_ctzl to evaluate constant expressions
+Date:   Fri, 12 Aug 2022 20:44:38 +0900
+Message-Id: <20220812114438.1574-3-mailhol.vincent@wanadoo.fr>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220812114438.1574-1-mailhol.vincent@wanadoo.fr>
 References: <20220511160319.1045812-1-mailhol.vincent@wanadoo.fr>
@@ -56,142 +56,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For x86_64, the current ffs() implementation does not produce
-optimized code when called with a constant expression. On the
-contrary, the __builtin_ffs() function of both GCC and clang is able
-to fold the expression into a single instruction.
+__ffs(x) is equivalent to (unsigned long)__builtin_ctzl(x) and ffz(x)
+is equivalent to (unsigned long)__builtin_ctzl(~x). Because
+__builting_ctzl() returns an int, a cast to (unsigned long) is
+necessary to avoid potential warnings on implicit casts.
 
-** Example **
+For x86_64, the current __ffs() and ffz() implementations do not
+produce optimized code when called with a constant expression. On the
+contrary, the __builtin_ctzl() folds into a single instruction.
 
-Let's consider two dummy functions foo() and bar() as below:
+However, for non constant expressions, the __ffs() and ffz() asm
+versions of the kernel remains slightly better than the code produced
+by GCC (it produces a useless instruction to clear eax).
 
-  #include <linux/bitops.h>
-  #define CONST 0x01000000
-
-  unsigned int foo(void)
-  {
-  	return ffs(CONST);
-  }
-
-  unsigned int bar(void)
-  {
-  	return __builtin_ffs(CONST);
-  }
-
-GCC would produce below assembly code:
-
-  0000000000000000 <foo>:
-     0:	ba 00 00 00 01       	mov    $0x1000000,%edx
-     5:	b8 ff ff ff ff       	mov    $0xffffffff,%eax
-     a:	0f bc c2             	bsf    %edx,%eax
-     d:	83 c0 01             	add    $0x1,%eax
-    10:	c3                   	ret
-  <Instructions after ret and before next function were redacted>
-
-  0000000000000020 <bar>:
-    20:	b8 19 00 00 00       	mov    $0x19,%eax
-    25:	c3                   	ret
-
-And clang would produce:
-
-  0000000000000000 <foo>:
-     0:	b8 ff ff ff ff       	mov    $0xffffffff,%eax
-     5:	0f bc 05 00 00 00 00 	bsf    0x0(%rip),%eax        # c <foo+0xc>
-     c:	83 c0 01             	add    $0x1,%eax
-     f:	c3                   	ret
-
-  0000000000000010 <bar>:
-    10:	b8 19 00 00 00       	mov    $0x19,%eax
-    15:	c3                   	ret
-
-Both examples clearly demonstrate the benefit of using __builtin_ffs()
-instead of the kernel's asm implementation for constant expressions.
-
-However, for non constant expressions, the ffs() asm version of the
-kernel remains better for x86_64 because, contrary to GCC, it doesn't
-emit the CMOV assembly instruction, c.f. [1] (noticeably, clang is
-able optimize out the CMOV call).
-
-Use __builtin_constant_p() to select between the kernel's ffs() and
-the __builtin_ffs() depending on whether the argument is constant or
-not.
-
-As a side benefit, replacing the ffs() function declaration by a macro
-also removes below -Wshadow warning:
-
-  ./arch/x86/include/asm/bitops.h:283:28: warning: declaration of 'ffs' shadows a built-in function [-Wshadow]
-    283 | static __always_inline int ffs(int x)
+Use __builtin_constant_p() to select between the kernel's
+__ffs()/ffz() and the __builtin_ctzl() depending on whether the
+argument is constant or not.
 
 ** Statistics **
 
 On a allyesconfig, before...:
 
-  $ objdump -d vmlinux.o | grep bsf | wc -l
-  1081
+  $ objdump -d vmlinux.o | grep tzcnt | wc -l
+  3607
 
 ...and after:
 
-  $ objdump -d vmlinux.o | grep bsf | wc -l
-  792
+  $ objdump -d vmlinux.o | grep tzcnt | wc -l
+  2600
 
-So, roughly 26.7% of the calls to ffs() were using constant
-expressions and could be optimized out.
+So, roughly 27.9% of the calls to either __ffs() or ffz() were using
+constant expressions and could be optimized out.
 
 (tests done on linux v5.18-rc5 x86_64 using GCC 11.2.1)
 
-[1] commit ca3d30cc02f7 ("x86_64, asm: Optimise fls(), ffs() and fls64()")
-Link: http://lkml.kernel.org/r/20111213145654.14362.39868.stgit@warthog.procyon.org.uk
+Note: on x86_64, the asm bsf instruction produces tzcnt when used with
+the ret prefix (which explain the use of `grep tzcnt' instead of `grep
+bsf' in above benchmark). c.f. [1]
+
+[1] commit e26a44a2d618 ("x86: Use REP BSF unconditionally")
+Link: http://lkml.kernel.org/r/5058741E020000780009C014@nat28.tlf.novell.com
 
 Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 Signed-off-by: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
 ---
- arch/x86/include/asm/bitops.h | 26 ++++++++++++++------------
- 1 file changed, 14 insertions(+), 12 deletions(-)
+ arch/x86/include/asm/bitops.h | 38 ++++++++++++++++++++++-------------
+ 1 file changed, 24 insertions(+), 14 deletions(-)
 
 diff --git a/arch/x86/include/asm/bitops.h b/arch/x86/include/asm/bitops.h
-index a288ecd230ab..6ed979547086 100644
+index 6ed979547086..bd49aef87ab6 100644
 --- a/arch/x86/include/asm/bitops.h
 +++ b/arch/x86/include/asm/bitops.h
-@@ -269,18 +269,7 @@ static __always_inline unsigned long __fls(unsigned long word)
- #undef ADDR
+@@ -224,13 +224,7 @@ static __always_inline bool variable_test_bit(long nr, volatile const unsigned l
+ 	 ? constant_test_bit((nr), (addr))	\
+ 	 : variable_test_bit((nr), (addr)))
  
- #ifdef __KERNEL__
 -/**
-- * ffs - find first set bit in word
-- * @x: the word to search
+- * __ffs - find first set bit in word
+- * @word: The word to search
 - *
-- * This is defined the same way as the libc and compiler builtin ffs
-- * routines, therefore differs in spirit from the other bitops.
-- *
-- * ffs(value) returns 0 if value is 0 or the position of the first
-- * set bit if value is nonzero. The first (least significant) bit
-- * is at position 1.
+- * Undefined if no bit exists, so code should check against 0 first.
 - */
--static __always_inline int ffs(int x)
-+static __always_inline int variable_ffs(int x)
+-static __always_inline unsigned long __ffs(unsigned long word)
++static __always_inline unsigned long variable___ffs(unsigned long word)
  {
- 	int r;
+ 	asm("rep; bsf %1,%0"
+ 		: "=r" (word)
+@@ -238,13 +232,18 @@ static __always_inline unsigned long __ffs(unsigned long word)
+ 	return word;
+ }
  
-@@ -310,6 +299,19 @@ static __always_inline int ffs(int x)
- 	return r + 1;
+-/**
+- * ffz - find first zero bit in word
+- * @word: The word to search
+- *
+- * Undefined if no zero exists, so code should check against ~0UL first.
+- */
+-static __always_inline unsigned long ffz(unsigned long word)
++/**
++ * __ffs - find first set bit in word
++ * @word: The word to search
++ *
++ * Undefined if no bit exists, so code should check against 0 first.
++ */
++#define __ffs(word)				\
++	(__builtin_constant_p(word) ?		\
++	 (unsigned long)__builtin_ctzl(word) :	\
++	 variable___ffs(word))
++
++static __always_inline unsigned long variable_ffz(unsigned long word)
+ {
+ 	asm("rep; bsf %1,%0"
+ 		: "=r" (word)
+@@ -252,6 +251,17 @@ static __always_inline unsigned long ffz(unsigned long word)
+ 	return word;
  }
  
 +/**
-+ * ffs - find first set bit in word
-+ * @x: the word to search
++ * ffz - find first zero bit in word
++ * @word: The word to search
 + *
-+ * This is defined the same way as the libc and compiler builtin ffs
-+ * routines, therefore differs in spirit from the other bitops.
-+ *
-+ * ffs(value) returns 0 if value is 0 or the position of the first
-+ * set bit if value is nonzero. The first (least significant) bit
-+ * is at position 1.
++ * Undefined if no zero exists, so code should check against ~0UL first.
 + */
-+#define ffs(x) (__builtin_constant_p(x) ? __builtin_ffs(x) : variable_ffs(x))
++#define ffz(word)				\
++	(__builtin_constant_p(word) ?		\
++	 (unsigned long)__builtin_ctzl(~word) :	\
++	 variable_ffz(word))
 +
- /**
-  * fls - find last set bit in word
-  * @x: the word to search
+ /*
+  * __fls: find last set bit in word
+  * @word: The word to search
 -- 
 2.35.1
 

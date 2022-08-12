@@ -2,75 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77867591585
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 20:35:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BA72591586
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 20:35:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239312AbiHLSfd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 14:35:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37328 "EHLO
+        id S239373AbiHLSfm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 14:35:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239289AbiHLSf2 (ORCPT
+        with ESMTP id S239331AbiHLSfh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 14:35:28 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0276631345
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 11:35:27 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id s15-20020a5b044f000000b00680c4eb89f1so1316456ybp.7
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 11:35:26 -0700 (PDT)
+        Fri, 12 Aug 2022 14:35:37 -0400
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132017D7B4
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 11:35:36 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-32a8e40e2dcso13466147b3.23
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 11:35:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc;
-        bh=Tb/TR0D6+TZRh/xClS3B2006d7nEi2kvzg0PMDr41zU=;
-        b=KIghjEhyq/uIEoA7hzxjHhXLoqudiVh4T6m4iV1J2c3fc55bZphi7EKB/TpFkXOqXQ
-         faOb1XHILmMqgqAmbtc8yyI/hQowyxK+dKydpikpEZycSxHUryf7rXRSujoIWYiQEZGU
-         mjwcT3XbvILiUetjMLaSrR7jioVy+UEsVk3wtFtdEgyUo7gceVjULI0IkP5sSXvkzvsI
-         ZSEXjbbFjpbWw5UyRn7RPqXWfq0V+FX1js0+oghrkMoyer5wm195HOxfdIW1poBoeiVg
-         1qRxbN4wyrI3125UQZfUJD0aMsn7Z6Cn4SBGKpiKS5DEt3lQoTP+t06zvMX5F2octugZ
-         +8lA==
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc;
+        bh=UlTdzT2bx0chOWv9FqUt/dE8vlZ3og2Lke/cZeyX+qs=;
+        b=koXLHaKUzQkEYo2iYmqdTgJu30nqzbtSY1D0ksWnP0AuVZ9RJ4GJuTiQgWczVB8gQI
+         jbhxQfT2C07uF2ZqgFvYiYlJ1AKRT/nL0i8toy8B85i8F7RyKq3dTqVXv7lS0UmIo3FA
+         Iwb/tD0NIgHbLDkKTqBJrWtnkEyKe0TUVr+lb8bowzpxtgR4vOpZH7KmQEHJzmFYbF3U
+         ywWEz7ar+CDnSHRFWMJmKnnjn2wdJ745WMqIJ2FKJRXej1F3rNoYkd8W07cT2Pb7Axlc
+         H+p3Ibqt14f0+2Y6scf+OLYFRmWk81JplNpzlwk4q86b9GF3Hk93sMvPFUn+rH6Mb625
+         o8XA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc;
-        bh=Tb/TR0D6+TZRh/xClS3B2006d7nEi2kvzg0PMDr41zU=;
-        b=Jn8RsMVr+YHhE8FiFOHJf07VhbgHX1Pq861Yh2a1RMSAkGXQg72TEy/hCBCW6t0ZrU
-         fRudzqXynVNSkdI9NfYLLNAXss2rOFxu3MlaYOgH1wSmTDJJFgVZflfoE9TaKtqEZqiu
-         0mwoa43+BojeinsLGBNj1/9jBGHRQY4lScB81uHprxJc3HRCgQcdiXl7KfYJAX7VP6TC
-         NQ5HLHGqvvP5wSw6gTqGcGd69DPwCN1tbHr1eQTvfahAo6gL+2HYi5j7aUYKHlDr54vF
-         iZL0HzxgU51nTGAfVXp34pjC65LQMzKKYL4p8X7AOzgh9IDtCM/R+/zxP3gYQ32IQwKD
-         HWhw==
-X-Gm-Message-State: ACgBeo3+f83364qlNipg3FBXLeGR7SE42S5zVjeJIwC2DjKCKDeK/IR6
-        k3qOhwFjoqpkZ5Epx8kUDEp92PoCOEuC6g==
-X-Google-Smtp-Source: AA6agR7MVw6eGihEXYg3t88QaXWHs6AKeaTDDCWkXOHbSefgFAjKbrQSw+ldMMN4sYHzIbVkKO0X/Ph4mdFH7w==
-X-Received: from acdunlap03.bve.corp.google.com ([2620:15c:29:203:1024:e472:db0f:a5f3])
- (user=acdunlap job=sendgmr) by 2002:a25:408a:0:b0:677:3543:ca4e with SMTP id
- n132-20020a25408a000000b006773543ca4emr4642131yba.164.1660329326241; Fri, 12
- Aug 2022 11:35:26 -0700 (PDT)
-Date:   Fri, 12 Aug 2022 11:35:01 -0700
-In-Reply-To: <CAMBK9=b1ALFYOB1iTUW7BHgq=sg=x9t8sTnC5YgQ5bePF+UvNg@mail.gmail.com>
-Message-Id: <20220812183501.3555820-1-acdunlap@google.com>
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc;
+        bh=UlTdzT2bx0chOWv9FqUt/dE8vlZ3og2Lke/cZeyX+qs=;
+        b=2QWN5/2cHgQTfz3YwbTWIFZqQQSyrpGATvoMSg+maehj9Mo2rkanM2wNtdhDBQTl23
+         kWsksf2CwrS5xQgeZ/AzZYMUxw1jeFc9Yi9esGJqCK7bkypIyk3hZPMQvxhJuEXDMWU1
+         2vpVSn4detNsnLd51Jm2PQhiSzBah9RdIad59132MDmZXH5umdZLfqbGmknIBfvtQXuh
+         vuKhAjP9UZETbKhesL1MQX6XnRt59xFd1wjiYI/5J0XtDblLzT7BjSxguYkVg3K7C8yS
+         ZM1KeNm4WpV+FpE8h9pKk7570MOD4F0BeuGiBJqTfKPMVdi80IeORaz1eQLrmpsqL7x1
+         MLnw==
+X-Gm-Message-State: ACgBeo1e36Wa+MFLvAgchPbcWmO17FvHmJYEeWK9PxpsDXj5iPJC7y36
+        YWNfvTVu20bLDL2xrD8VZutnH50=
+X-Google-Smtp-Source: AA6agR7nxZI/yeeTAOnlyrib2eDoMEH/VyQGZLdJYeS5XToyz/0tiarZnE/XVGpKxyxZeXAm8YViKaU=
+X-Received: from pcc-desktop.svl.corp.google.com ([2620:15c:2ce:200:def9:ef59:f5b5:f65b])
+ (user=pcc job=sendgmr) by 2002:a81:4ccf:0:b0:32f:cccf:cef7 with SMTP id
+ z198-20020a814ccf000000b0032fcccfcef7mr1479908ywa.191.1660329335377; Fri, 12
+ Aug 2022 11:35:35 -0700 (PDT)
+Date:   Fri, 12 Aug 2022 11:35:30 -0700
+Message-Id: <20220812183530.2261795-1-pcc@google.com>
 Mime-Version: 1.0
-References: <CAMBK9=b1ALFYOB1iTUW7BHgq=sg=x9t8sTnC5YgQ5bePF+UvNg@mail.gmail.com>
 X-Mailer: git-send-email 2.37.1.595.g718a3a8f04-goog
-Subject: [PATCH v2] x86/asm: Force native_apic_mem_read to use mov
-From:   Adam Dunlap <acdunlap@google.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Adam Dunlap <acdunlap@google.com>,
-        Ben Dooks <ben-linux@fluff.org>, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Cc:     Jacob Xu <jacobhxu@google.com>, Alper Gun <alpergun@google.com>,
-        Marc Orr <marcorr@google.com>
+Subject: [PATCH] arm64: translate register values to physical addresses in
+ kernel panics
+From:   Peter Collingbourne <pcc@google.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     Peter Collingbourne <pcc@google.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -82,41 +68,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Previously, when compiled with clang, native_apic_mem_read gets inlined
-into __xapic_wait_icr_idle and optimized to a testl instruction. When
-run in a VM with SEV-ES enabled, it attempts to emulate this
-instruction, but the emulator does not support it. Instead, use inline
-assembly to force native_apic_mem_read to use the mov instruction which
-is supported by the emulator.
+When debugging a kernel panic it is sometimes useful to know the physical
+address of any virtual addresses stored in registers. Therefore, pass
+all register values through AT S1E1R and print the resulting PAR_EL1
+value next to the register.
 
-Signed-off-by: Adam Dunlap <acdunlap@google.com>
+Signed-off-by: Peter Collingbourne <pcc@google.com>
+Link: https://linux-review.googlesource.com/id/I7c6be65f27052da57088ff58b463fdbe2394f43c
 ---
-V1 -> V2: Replaced asm with readl function which does the same thing
+Not sure if this should land in this form (I imagine there could be
+all kinds of parsers that are expecting the existing format) but
+maybe behind an option. Let me know what you think.
 
- arch/x86/include/asm/apic.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/arm64/kernel/process.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/include/asm/apic.h b/arch/x86/include/asm/apic.h
-index 3415321c8240..b4c9034aa073 100644
---- a/arch/x86/include/asm/apic.h
-+++ b/arch/x86/include/asm/apic.h
-@@ -12,6 +12,7 @@
- #include <asm/mpspec.h>
- #include <asm/msr.h>
- #include <asm/hardirq.h>
-+#include <asm/io.h>
- 
- #define ARCH_APICTIMER_STOPS_ON_C3	1
- 
-@@ -109,7 +110,7 @@ static inline void native_apic_mem_write(u32 reg, u32 v)
- 
- static inline u32 native_apic_mem_read(u32 reg)
- {
--	return *((volatile u32 *)(APIC_BASE + reg));
-+	return readl((void __iomem *)(APIC_BASE + reg));
+diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
+index 92bcc1768f0b..8b5f8c2c8abf 100644
+--- a/arch/arm64/kernel/process.c
++++ b/arch/arm64/kernel/process.c
+@@ -197,6 +197,18 @@ static void print_pstate(struct pt_regs *regs)
+ 	}
  }
  
- extern void native_apic_wait_icr_idle(void);
++static unsigned long at(unsigned long addr)
++{
++	unsigned long pa;
++
++	__asm__ __volatile__("at s1e1r, %1\n"
++			     "mrs %0, par_el1\n"
++			     : "=r"(pa)
++			     : "r"(addr)
++			     : "memory");
++	return pa;
++}
++
+ void __show_regs(struct pt_regs *regs)
+ {
+ 	int i, top_reg;
+@@ -231,10 +243,10 @@ void __show_regs(struct pt_regs *regs)
+ 	i = top_reg;
+ 
+ 	while (i >= 0) {
+-		printk("x%-2d: %016llx", i, regs->regs[i]);
++		printk("x%-2d: %016llx (%016llx)", i, regs->regs[i], at(regs->regs[i]));
+ 
+ 		while (i-- % 3)
+-			pr_cont(" x%-2d: %016llx", i, regs->regs[i]);
++			pr_cont(" x%-2d: %016llx (%016llx)", i, regs->regs[i], at(regs->regs[i]));
+ 
+ 		pr_cont("\n");
+ 	}
 -- 
-2.37.1.559.g78731f0fdb-goog
+2.37.1.595.g718a3a8f04-goog
 

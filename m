@@ -2,128 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F22795914AE
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 19:15:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C834C5914B3
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 19:15:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235464AbiHLROz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 13:14:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48936 "EHLO
+        id S239299AbiHLRPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 13:15:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234019AbiHLROw (ORCPT
+        with ESMTP id S234019AbiHLRPe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 13:14:52 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30173A8CC9;
-        Fri, 12 Aug 2022 10:14:52 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27CHBmTa017251;
-        Fri, 12 Aug 2022 17:14:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- subject : to : cc : references : from : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=UAruYGVa4NvslEz2npXzYbxALbCA++AXRFo8FeFH4Hw=;
- b=EK9ni+ZTueZABWJ1xRiAqrDAeeXOa3xWddmkJN90KglKsrIwzzkUMPvuK//Mbm1a3gnB
- qZLfFnGdGFotcpK7Stw/qdb+KKQYTBw2/LvNmcX9FcDqGdwroRj4wrwwFx4vysovRXKk
- ASg+j7RRiz3zCew9W9FeGR2fTJsomE9ftCpNO0DdOeMX+iZOAGXz+n0YgXTYX+XJ/nqM
- Iq3hOK5AfucScfDrjgwgVKL4maXw5UeQs47OWb5RKQjMqlx8uKPiNvVU1EJcwfpCDd+0
- PlNxJ0iWgGb05h8sf530KTvOvMDv0GcK4nKmvgqIF4IMusxW2RNOKGIyJflIEhPnG/Ve Ng== 
-Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hwu220232-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 Aug 2022 17:14:40 +0000
-Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
-        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27CH6qfE011956;
-        Fri, 12 Aug 2022 17:14:39 GMT
-Received: from b01cxnp23033.gho.pok.ibm.com (b01cxnp23033.gho.pok.ibm.com [9.57.198.28])
-        by ppma05wdc.us.ibm.com with ESMTP id 3hvcmrnx5e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 Aug 2022 17:14:39 +0000
-Received: from b01ledav001.gho.pok.ibm.com (b01ledav001.gho.pok.ibm.com [9.57.199.106])
-        by b01cxnp23033.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27CHEcoe60424560
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 12 Aug 2022 17:14:38 GMT
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id C33752805C;
-        Fri, 12 Aug 2022 17:14:38 +0000 (GMT)
-Received: from b01ledav001.gho.pok.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 9EF9B28058;
-        Fri, 12 Aug 2022 17:14:38 +0000 (GMT)
-Received: from [9.47.158.152] (unknown [9.47.158.152])
-        by b01ledav001.gho.pok.ibm.com (Postfix) with ESMTP;
-        Fri, 12 Aug 2022 17:14:38 +0000 (GMT)
-Message-ID: <935988a4-c245-7cb1-4e14-bc99d39220a1@linux.ibm.com>
-Date:   Fri, 12 Aug 2022 13:14:38 -0400
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v7 3/6] x86/kexec: Carry forward IMA measurement log on
- kexec
+        Fri, 12 Aug 2022 13:15:34 -0400
+Received: from mail.sberdevices.ru (mail.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A7F76A4B6;
+        Fri, 12 Aug 2022 10:15:32 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mail.sberdevices.ru (Postfix) with ESMTP id C74905FD07;
+        Fri, 12 Aug 2022 20:15:30 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1660324530;
+        bh=eWXwqhgdPV1eTqKNnJQ+Ha5K6D1MKORyyBt4mURjNrM=;
+        h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version;
+        b=HxwwIYCzaqSnF3otq8qXX6bd095sQtfpl9hVBF0XApCRm/XHNyHePuYll5ruLa57t
+         dvhJY/Zfwx4Ag3PPbJ6oQv3vPHn20M9IYXoKCx7JYTVo5MTurpV0qKtjHC0geMq7xC
+         Br2ETjqfXVzs2tnyHBUXlhaP76sxz+Eh/zPa2LqOJO86MXiMfP8r5Z6sGYArd3cwSF
+         AkpcH7qZ0sItcBiza1/VgfBzotanjjUKIFUbA3fDDn/IEyPHoGqjKdO5RBSWZP5SLv
+         0kQFjF6rBRB3L3RT457bTBkJmVLSupCveJ+krDDjms8ZDl29EU0Qsj2XBwK0xe9u5/
+         aElLADejzqOzw==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mail.sberdevices.ru (Postfix) with ESMTP;
+        Fri, 12 Aug 2022 20:15:30 +0300 (MSK)
+From:   Dmitry Rokosov <DDRokosov@sberdevices.ru>
+To:     "andriy.shevchenko@linux.intel.com" 
+        <andriy.shevchenko@linux.intel.com>,
+        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>
+CC:     "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "jic23@kernel.org" <jic23@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
+        "stano.jakubek@gmail.com" <stano.jakubek@gmail.com>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "stephan@gerhold.net" <stephan@gerhold.net>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "wsa@kernel.org" <wsa@kernel.org>,
+        "lars@metafoo.de" <lars@metafoo.de>,
+        "Michael.Hennerich@analog.com" <Michael.Hennerich@analog.com>,
+        "jbhayana@google.com" <jbhayana@google.com>,
+        "lucas.demarchi@intel.com" <lucas.demarchi@intel.com>,
+        "jani.nikula@intel.com" <jani.nikula@intel.com>,
+        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
+        kernel <kernel@sberdevices.ru>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v5 1/7] lib/string_helpers: Add str_read_write() helper
+Thread-Topic: [PATCH v5 1/7] lib/string_helpers: Add str_read_write() helper
+Thread-Index: AQHYrmvlXLMGJM4ctk2gw8SerH637a2rTxcA
+Date:   Fri, 12 Aug 2022 17:15:00 +0000
+Message-ID: <20220812171526.anjszroov76z4hrt@CAB-WSD-L081021.sigma.sbrf.ru>
+References: <20220812165243.22177-1-ddrokosov@sberdevices.ru>
+ <20220812165243.22177-2-ddrokosov@sberdevices.ru>
+In-Reply-To: <20220812165243.22177-2-ddrokosov@sberdevices.ru>
+Accept-Language: ru-RU, en-US
 Content-Language: en-US
-To:     Borislav Petkov <bp@suse.de>
-Cc:     kexec@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, nayna@linux.ibm.com,
-        nasastry@in.ibm.com, mpe@ellerman.id.au,
-        Jonathan McDowell <noodles@fb.com>,
-        Mimi Zohar <zohar@linux.ibm.com>
-References: <20220812164305.2056641-1-stefanb@linux.ibm.com>
- <20220812164305.2056641-4-stefanb@linux.ibm.com> <YvaJc7bQjz61Y1jj@zn.tnic>
-From:   Stefan Berger <stefanb@linux.ibm.com>
-In-Reply-To: <YvaJc7bQjz61Y1jj@zn.tnic>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: TlIACgSDS3X7lmgztrMtjqsgpTFaGqT0
-X-Proofpoint-GUID: TlIACgSDS3X7lmgztrMtjqsgpTFaGqT0
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.16.1.12]
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <CD67D4ABED2DDE43A341CCD57C13E484@sberdevices.ru>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-12_10,2022-08-11_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- lowpriorityscore=0 impostorscore=0 mlxscore=0 phishscore=0 clxscore=1015
- mlxlogscore=999 bulkscore=0 priorityscore=1501 spamscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2207270000
- definitions=main-2208120045
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2022/08/12 13:28:00 #20103614
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello Andy,
 
+Please be informed, I've patched commit msg a little bit, replaced
+'retun' misstyping to 'return'.
 
-On 8/12/22 13:10, Borislav Petkov wrote:
-> On Fri, Aug 12, 2022 at 12:43:02PM -0400, Stefan Berger wrote:
->> From: Jonathan McDowell <noodles@fb.com>
->>
->> On kexec file load, the Integrity Measurement Architecture (IMA)
->> subsystem may verify the IMA signature of the kernel and initramfs, and
->> measure it. The command line parameters passed to the kernel in the
->> kexec call may also be measured by IMA.
->>
->> A remote attestation service can verify a TPM quote based on the TPM
->> event log, the IMA measurement list and the TPM PCR data. This can
->> be achieved only if the IMA measurement log is carried over from the
->> current kernel to the next kernel across the kexec call.
->>
->> PowerPC and ARM64 both achieve this using device tree with a
->> "linux,ima-kexec-buffer" node. x86 platforms generally don't make use of
->> device tree, so use the setup_data mechanism to pass the IMA buffer to
->> the new kernel.
->>
->> Signed-off-by: Jonathan McDowell <noodles@fb.com>
->> Signed-off-by: Borislav Petkov <bp@suse.de>
->> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com> # IMA function definitions
->> Link: https://lore.kernel.org/r/YmKyvlF3my1yWTvK@noodles-fedora-PC23Y6EG
-> 
-> Is there any particular reason to keep sending a patch which is already
-> upstream?
-> 
+On Fri, Aug 12, 2022 at 04:52:25PM +0000, Dmitry Rokosov wrote:
+> From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+>=20
+> Add str_read_write() helper to return 'read' or 'write' string literal.
+>=20
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> ---
+>  include/linux/string_helpers.h | 5 +++++
+>  1 file changed, 5 insertions(+)
+>=20
+> diff --git a/include/linux/string_helpers.h b/include/linux/string_helper=
+s.h
+> index 4d72258d42fd..9e22cd78f3b8 100644
+> --- a/include/linux/string_helpers.h
+> +++ b/include/linux/string_helpers.h
+> @@ -126,4 +126,9 @@ static inline const char *str_enabled_disabled(bool v=
+)
+>  	return v ? "enabled" : "disabled";
+>  }
+> =20
+> +static inline const char *str_read_write(bool v)
+> +{
+> +	return v ? "read" : "write";
+> +}
+> +
+>  #endif
+> --=20
+> 2.36.0
 
-Yes, so this series can be tested by krobot. I only based this series on 
-5.19 so far, so if it's upstreamed since then it will go missing next 
-time when I base  it on 5.20-rc1 or so.
+--=20
+Thank you,
+Dmitry=

@@ -2,224 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C107590FF9
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 13:23:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69AAD591000
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 13:26:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236378AbiHLLXR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 07:23:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57194 "EHLO
+        id S233977AbiHLLZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 07:25:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbiHLLXO (ORCPT
+        with ESMTP id S232206AbiHLLZu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 07:23:14 -0400
-Received: from vm3.sequanux.org (static.55.155.9.5.clients.your-server.de [5.9.155.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 75EE5AB18C;
-        Fri, 12 Aug 2022 04:23:12 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by vm3.sequanux.org (Postfix) with ESMTP id 35A4510870E;
-        Fri, 12 Aug 2022 13:22:53 +0200 (CEST)
-X-Virus-Scanned: Debian amavisd-new at vm3.sequanux.org
-Received: from vm3.sequanux.org ([127.0.0.1])
-        by localhost (vm3.sequanux.org [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id aZrfRB6Rd3nX; Fri, 12 Aug 2022 13:22:18 +0200 (CEST)
-Received: from localhost (softwrestling.org [95.216.36.37])
-        by vm3.sequanux.org (Postfix) with ESMTPSA id 3EF2F108095;
-        Fri, 12 Aug 2022 13:22:18 +0200 (CEST)
-Date:   Fri, 12 Aug 2022 13:22:04 +0200
-From:   simon.guinot@sequanux.org
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Pavel Machek <pavel@ucw.cz>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lee Jones <lee@kernel.org>, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        Sheng-Yuan Huang <syhuang3@nuvoton.com>,
-        Tasanakorn Phaipool <tasanakorn@gmail.com>
-Subject: Re: [PATCH v3 1/4] gpio-f7188x: Add GPIO support for Nuvoton NCT6116
-Message-ID: <YvY33D9YLm7/g14N@76cbfcf04d45>
-References: <20220811153908.31283-1-henning.schild@siemens.com>
- <20220811153908.31283-2-henning.schild@siemens.com>
- <YvYSl2FpOGnqZfTZ@76cbfcf04d45>
- <20220812122312.7f6f6a30@md1za8fc.ad001.siemens.net>
+        Fri, 12 Aug 2022 07:25:50 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBA162C100
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 04:25:49 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id c17so953303lfb.3
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 04:25:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=CicaxzhBFo0KPREhpr4TXcueTsn2K/vZuDdXuzYsKWU=;
+        b=ZSjkS3G57jOr2ZUgBUg647LpswyGyUyOyxiv0qFWeuWeUxKsfjmjUXDseiTfsQeItA
+         C7ge0PECV1KDT/YzTpu722jyDhSyTkdFC9Tz1gGtysf3KxHqSztEfFLFt2lBu7DmBQo4
+         is0MZePlBzlABtDsifedY/+Z3wAkjtKPZ+7kvVg62lftbaHeyB2zFH0GKgXkK/osYma0
+         KMRoFx5V+/YgxcE2CHqMv/q1MXffwjHDhg7RRANtqkqntp+ZcsYIkO2B6lSFUrO0jcxl
+         nUp2kC2MVEEazP4SXMIreFRMBeyz+1HSNrbsCona9am1KL+dpyWbCzXSVezdHj/fIpqp
+         rNCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=CicaxzhBFo0KPREhpr4TXcueTsn2K/vZuDdXuzYsKWU=;
+        b=Fg4KazbqC7QlQ9UYPVsegUBcLiFTqLw0ilmMMY6Wp68Wla53DNWmI/Qfi/y8A0CbO6
+         WCFXKo9+rDVIgBK29KmUfAbZGJ68ry4jfaGUFreuroktGHbDyuyVCz3YDO28vqJ51S6f
+         OwFqmxM5fopQbicHOC9Xpi5bDX+48fGt6kDC+NJctHIqWKhorrHM62HX0ZEw8afn+m8V
+         YNOJiFjvRxGNqr5cGRdbaIhXja6xIyOw5wWrZZgga8IuhwXL0GA0EGU2L+WtpRtkundi
+         9N/eZXtFtX16vs4OseoKBkDXYj3pYr4DcP8b2ujfndFL2eQGuXWWnoVltK413tA0jwed
+         Y3cQ==
+X-Gm-Message-State: ACgBeo3vIB0rW2AmEtEtRsHyDbUmfTXmkycwaG9BlhOsnuv9xjn1QC4Y
+        c0z4dOTrEe0n8RT67scn2yRTJA==
+X-Google-Smtp-Source: AA6agR7nbIA1W9kvuTBrsjatx+y+trLViCt2NS014KwbWMIhl7WPsCOj2Q0c6fDtZvYCVRpwve0F1w==
+X-Received: by 2002:ac2:4f03:0:b0:48a:6061:bd8e with SMTP id k3-20020ac24f03000000b0048a6061bd8emr1247397lfr.647.1660303548058;
+        Fri, 12 Aug 2022 04:25:48 -0700 (PDT)
+Received: from [192.168.1.39] ([83.146.140.105])
+        by smtp.gmail.com with ESMTPSA id b20-20020a196714000000b0048a9a756763sm188699lfc.19.2022.08.12.04.25.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Aug 2022 04:25:47 -0700 (PDT)
+Message-ID: <14cf568e-d7ee-886e-5122-69b2e58b8717@linaro.org>
+Date:   Fri, 12 Aug 2022 14:25:42 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="RQ3Ccdp0krxtdoiT"
-Content-Disposition: inline
-In-Reply-To: <20220812122312.7f6f6a30@md1za8fc.ad001.siemens.net>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH net 1/2] dt: ar803x: Document disable-hibernation property
+Content-Language: en-US
+To:     Wei Fang <wei.fang@nxp.com>, "andrew@lunn.ch" <andrew@lunn.ch>,
+        "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20220812145009.1229094-1-wei.fang@nxp.com>
+ <20220812145009.1229094-2-wei.fang@nxp.com>
+ <0cd22a17-3171-b572-65fb-e9d3def60133@linaro.org>
+ <DB9PR04MB81060AF4890DEA9E2378940288679@DB9PR04MB8106.eurprd04.prod.outlook.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <DB9PR04MB81060AF4890DEA9E2378940288679@DB9PR04MB8106.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 12/08/2022 12:02, Wei Fang wrote:
+> 
+> 
+>> -----Original Message-----
+>> From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> Sent: 2022年8月12日 15:28
+>> To: Wei Fang <wei.fang@nxp.com>; andrew@lunn.ch; hkallweit1@gmail.com;
+>> linux@armlinux.org.uk; davem@davemloft.net; edumazet@google.com;
+>> kuba@kernel.org; pabeni@redhat.com; robh+dt@kernel.org;
+>> krzysztof.kozlowski+dt@linaro.org; f.fainelli@gmail.com;
+>> netdev@vger.kernel.org; devicetree@vger.kernel.org;
+>> linux-kernel@vger.kernel.org
+>> Subject: Re: [PATCH net 1/2] dt: ar803x: Document disable-hibernation
+>> property
+>>
+>> On 12/08/2022 17:50, wei.fang@nxp.com wrote:
+>>> From: Wei Fang <wei.fang@nxp.com>
+>>>
+>>
+>> Please use subject prefix matching subsystem.
+>>
+> Ok, I'll add the subject prefix.
+> 
+>>> The hibernation mode of Atheros AR803x PHYs is default enabled.
+>>> When the cable is unplugged, the PHY will enter hibernation mode and
+>>> the PHY clock does down. For some MACs, it needs the clock to support
+>>> it's logic. For instance, stmmac needs the PHY inputs clock is present
+>>> for software reset completion. Therefore, It is reasonable to add a DT
+>>> property to disable hibernation mode.
+>>>
+>>> Signed-off-by: Wei Fang <wei.fang@nxp.com>
+>>> ---
+>>>  Documentation/devicetree/bindings/net/qca,ar803x.yaml | 6 ++++++
+>>>  1 file changed, 6 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/net/qca,ar803x.yaml
+>>> b/Documentation/devicetree/bindings/net/qca,ar803x.yaml
+>>> index b3d4013b7ca6..d08431d79b83 100644
+>>> --- a/Documentation/devicetree/bindings/net/qca,ar803x.yaml
+>>> +++ b/Documentation/devicetree/bindings/net/qca,ar803x.yaml
+>>> @@ -40,6 +40,12 @@ properties:
+>>>        Only supported on the AR8031.
+>>>      type: boolean
+>>>
+>>> +  qca,disable-hibernation:
+>>> +    description: |
+>>> +    If set, the PHY will not enter hibernation mode when the cable is
+>>> +    unplugged.
+>>
+>> Wrong indentation. Did you test the bindings?
+>>
+> Sorry, I just checked the patch and forgot to check the dt-bindings.
+> 
+>> Unfortunately the property describes driver behavior not hardware, so it is not
+>> suitable for DT. Instead describe the hardware
+>> characteristics/features/bugs/constraints. Not driver behavior. Both in property
+>> name and property description.
+>>
+> Thanks for your review and feedback. Actually, the hibernation mode is a feature of hardware, I will modify the property name and description to be more in line with the requirements of the DT property. 
 
---RQ3Ccdp0krxtdoiT
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+hibernation is a feature, but 'disable-hibernation' is not. DTS
+describes the hardware, not policy or driver bejhvior. Why disabling
+hibernation is a property of hardware? How you described, it's not,
+therefore either property is not for DT or it has to be phrased
+correctly to describe the hardware.
 
-On Fri, Aug 12, 2022 at 12:23:12PM +0200, Henning Schild wrote:
-> Am Fri, 12 Aug 2022 10:43:03 +0200
-> schrieb simon.guinot@sequanux.org:
->=20
-> > On Thu, Aug 11, 2022 at 05:39:05PM +0200, Henning Schild wrote:
-> > > Add GPIO support for Nuvoton NCT6116 chip. Nuvoton SuperIO chips are
-> > > very similar to the ones from Fintek. In other subsystems they also
-> > > share drivers and are called a family of drivers.
-> > >=20
-> > > For the GPIO subsystem the only difference is that the direction
-> > > bit is reversed and that there is only one data bit per pin. On the
-> > > SuperIO level the logical device is another one.
-> > >=20
-> > > Signed-off-by: Henning Schild <henning.schild@siemens.com>
-> > > ---
-> > >  drivers/gpio/gpio-f7188x.c | 71
-> > > +++++++++++++++++++++++++++----------- 1 file changed, 51
-> > > insertions(+), 20 deletions(-)
-> > >=20
-> > > diff --git a/drivers/gpio/gpio-f7188x.c b/drivers/gpio/gpio-f7188x.c
-> > > index 18a3147f5a42..7b05ecc611e9 100644
-> > > --- a/drivers/gpio/gpio-f7188x.c
-> > > +++ b/drivers/gpio/gpio-f7188x.c
-> > > @@ -1,6 +1,7 @@
-> > >  // SPDX-License-Identifier: GPL-2.0-or-later
-> > >  /*
-> > >   * GPIO driver for Fintek Super-I/O F71869, F71869A, F71882,
-> > > F71889 and F81866
-> > > + * and Nuvoton Super-I/O NCT6116D
-> > >   *
-> > >   * Copyright (C) 2010-2013 LaCie
-> > >   *
-> > > @@ -22,13 +23,12 @@
-> > >  #define SIO_LDSEL		0x07	/* Logical device
-> > > select */ #define SIO_DEVID		0x20	/* Device ID
-> > > (2 bytes) */ #define SIO_DEVREV		0x22	/*
-> > > Device revision */ -#define SIO_MANID		0x23	/*
-> > > Fintek ID (2 bytes) */=20
-> > > -#define SIO_LD_GPIO		0x06	/* GPIO logical
-> > > device */ #define SIO_UNLOCK_KEY		0x87	/* Key
-> > > to enable Super-I/O */ #define SIO_LOCK_KEY
-> > > 0xAA	/* Key to disable Super-I/O */=20
-> > > -#define SIO_FINTEK_ID		0x1934	/* Manufacturer
-> > > ID */ +#define SIO_LD_GPIO_FINTEK	0x06	/* GPIO
-> > > logical device */ +#define SIO_LD_GPIO_NUVOTON	0x07
-> > > /* GPIO logical device */ =20
-> >=20
-> > Please indulge me and add a new line here.
->=20
-> Mhh ... how about you write exactly how you would like to have that
-> define block. So we do not have taste issues in the next round.
-
-Sure. Considering the manufacturer IDs you have to keep and add, I would
-go with your original approach (i.e. a section per manufacturer). But
-I would add extra new lines and comments and use a sligthly different
-namming for the LD_GPIO definitions.
-
-/*
- * Super-I/O registers
- */
-#define SIO_LDSEL               0x07    /* Logical device select */
-#define SIO_DEVID               0x20    /* Device ID (2 bytes) */
-#define SIO_DEVREV              0x22    /* Device revision */
-#define SIO_MANID               0x23    /* Fintek ID (2 bytes) */
-
-#define SIO_UNLOCK_KEY          0x87    /* Key to enable Super-I/O */
-#define SIO_LOCK_KEY            0xAA    /* Key to disable Super-I/O */
-
-/*
- * Fintek devices.
- */
-#define SIO_FINTEK_ID           0x1934  /* Manufacturer ID */
-
-#define SIO_F71869_ID           0x0814  /* F71869 chipset ID */
-#define SIO_F71869A_ID          0x1007  /* F71869A chipset ID */
-#define SIO_F71882_ID           0x0541  /* F71882 chipset ID */
-#define SIO_F71889_ID           0x0909  /* F71889 chipset ID */
-#define SIO_F71889A_ID          0x1005  /* F71889A chipset ID */
-#define SIO_F81866_ID           0x1010  /* F81866 chipset ID */
-#define SIO_F81804_ID           0x1502  /* F81804 chipset ID, same for
-					   f81966 */=20
-#define SIO_F81865_ID           0x0704  /* F81865 chipset ID */
-
-#define SIO_FINTEK_LD_GPIO      0x06    /* GPIO logical device */
-
-/*
- * Nuvoton devices.
- */
-#define SIO_NUVOTON_ID          0xXXXX  /* Manufacturer ID */
-
-#define SIO_NCT6116D_ID         0xD283  /* NCT6116D chipset ID */
-
-#define SIO_NUVOTON_LD_GPIO     0x07    /* GPIO logical device */
-
-Please, note it is not only a matter of taste. New lines and comments
-are really helping the reader. Also, note that I am not asking for this
-change, only suggesting it.
-
->=20
-> > >  #define SIO_F71869_ID		0x0814	/* F71869
-> > > chipset ID */ #define SIO_F71869A_ID		0x1007
-> > > /* F71869A chipset ID */ #define SIO_F71882_ID
-> > > 0x0541	/* F71882 chipset ID */ @@ -37,7 +37,7 @@
-> > >  #define SIO_F81866_ID		0x1010	/* F81866
-> > > chipset ID */ #define SIO_F81804_ID		0x1502  /*
-> > > F81804 chipset ID, same for f81966 */ #define SIO_F81865_ID
-> > > 	0x0704	/* F81865 chipset ID */ -
-> > > +#define SIO_NCT6116D_ID		0xD283  /* NCT6116D chipset
-> > > ID */=20
-> >=20
-> > ... snip ...
-> >=20
-> > > @@ -485,12 +516,8 @@ static int __init f7188x_find(int addr, struct
-> > > f7188x_sio *sio) return err;
-> > > =20
-> > >  	err =3D -ENODEV;
-> > > -	devid =3D superio_inw(addr, SIO_MANID);
-> > > -	if (devid !=3D SIO_FINTEK_ID) {
-> > > -		pr_debug(DRVNAME ": Not a Fintek device at
-> > > 0x%08x\n", addr);
-> > > -		goto err;
-> > > -	} =20
-> >=20
-> > Sorry for missing that at my first review. You can't remove this block
-> > of code. This driver is poking around on the I2C bus, which is not
-> > great. So we want to make sure as much as possible that we are
-> > speaking to the right device.
->=20
-> Ok fair enough, we can make that more conservative and match the two
-> manufacturers and also make sure that not one can bring a chip id that
-> the other one uses for another chip.
-> A v4 is coming earliest in 1.5 weeks.
-
-Great. Thanks for your patience.
-
-Simon
-
---RQ3Ccdp0krxtdoiT
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEXW8DgovlR3VS5hA0zyg/RDPmszoFAmL2N9gACgkQzyg/RDPm
-szqZTg//e8pEkZZf7L8/wEm++Bk+yryevEpajEUNI+9XkxG87MM8N160eoqEuX68
-K1HzGyDHl9CAeLfyTNAbUVKt7bTqudVsZnO4S9hMh4RZDCHjDeASrVdXIJXEK+mm
-PyDkKINJIv4w7uCQdlEum+vH70Y5bq3JBG0MA5AQhxeD3ZMcIFML4tZlvTZR3f70
-4SSjC3I4zXgU8yXJ9kQdzCZOnGi0itOSQ6MDUtNscJHjPZih8vbBGaHoPv18eeRX
-dchh+bpuzHTZPy51WYLAixeepTP1HRbM5MqYrW+hAf93mRFs5oS4yBj94UlH+5oa
-3VV3K/Br6T2nwIuBqHuiRTNaOZ+EUcdncL43/l7zW5EeVPO2SRBoVrG41G0BAa4O
-iZPVJO3tjkPxWsbOPbCwXDzXoCHCM9jnZHNxSzvdtzQpwCrxW0tzItvOA0HanCOi
-oygJfSqF0Fx+KDVKxvDbi/Io/Ec+oSvFe6NAxc3Ptdptydj2MTBj5KMN1uW98v4w
-HkWtSHxR8+HH/Bw2e11n5Ihtj4EK9L1UAhmJ886bKECpmTDkPvNGvFSxd4MJOCif
-UMhRMaSQysGE7YDbHr4SHouHyVmP3CDt9frHbbNNCVfli4vGJLU4iEkMvTjhlH7Y
-pWJhVRBdmrQI6pW1IKs693wYoLpEhknOCWswEJqEqPxT5G2Xt/g=
-=Zi5Z
------END PGP SIGNATURE-----
-
---RQ3Ccdp0krxtdoiT--
+Best regards,
+Krzysztof

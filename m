@@ -2,153 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FB56590BB8
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 08:02:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 591D1590BE0
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 08:21:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237149AbiHLGCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 02:02:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40314 "EHLO
+        id S237025AbiHLGVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 02:21:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237140AbiHLGCW (ORCPT
+        with ESMTP id S229524AbiHLGVL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 02:02:22 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F009346DBE
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 23:02:20 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id s206so21401pgs.3
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 23:02:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=message-id:date:subject:cc:to:from:from:to:cc;
-        bh=LGB0WFClYhcqqe+YL7LSXVJfO1SXGUU9W/Gp8VSqST4=;
-        b=Q49esEubX0ROqAm9EfEJiMjDXGIKOSdrQ+32dsHJAMyc7cO3cIFgclS3aTKmpJdi4j
-         Ei4mQ+QIMU/oMd9+Fmf9+s4IH2yoBmiGWV4FipurmPbMYNJv7tDomANzDmdBgmdFFD7C
-         xCzyE1TqJcAmmve7sHdhYaVnPUlSc/VL8orkGPQmmsBQ/1zlxKBI6EDoHfH9tsi0rnLK
-         GEKF9OQILyRW/lbRLahujxk5y2LkfkigoF+NO5R1LxDgEdYU5QdNa0+XAc9QcFo5CcmN
-         Z3jU9hX0UNXTFTm4RD/Oyu8LoNZjRgJEF2RRJxUnRzu9ILrMIYCLJfzHC6gJXQ7NQ/ga
-         nsGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=LGB0WFClYhcqqe+YL7LSXVJfO1SXGUU9W/Gp8VSqST4=;
-        b=T/tJWU0uF+f9/Uj4lJjZpeOOd2nzeJw4KurruKgd+vAbU55LbNniI6bZd6ymJ/zh2l
-         WiV96wKB/+chDjJKZqzxoMlrOEKw04XwBwpfVlvxlhYQKK40NvR57E4WolNg0RkWRBhT
-         xBeQKVrUbEWbgOAD+gOVoOYnGHWOuELioGwi0bmMV+SIuxOqcOv+zuQPQec9UpdgsI1z
-         6YE3EVLct0QMSTsHe0R169bOCGU1LnybYuckyilHhkZAgGIyuJmqV7c1JDfh9dLDNU6p
-         LHBJstwZuFUfEeELLh5X9f1bNhYAd6waFT8wQz6wLpiUZyJwdwTUXNnhn+S6PbOgXMNS
-         4weg==
-X-Gm-Message-State: ACgBeo3oZ+fsbQm7u7apT7oi8sj818tZd9b2UAqSywIaOQ5W1m5NEbxI
-        Lj95W+d7xvgyq5sk5eaPPxFtpmaJS+U=
-X-Google-Smtp-Source: AA6agR5rBczvnAzYLabH3mHMNCmt0pTO71n0M2QUKwFWtNWRVx2VFRqIHJQafTFPqUGunw0wo6WvDg==
-X-Received: by 2002:aa7:8289:0:b0:52c:e97c:dbe4 with SMTP id s9-20020aa78289000000b0052ce97cdbe4mr2461650pfm.49.1660284140428;
-        Thu, 11 Aug 2022 23:02:20 -0700 (PDT)
-Received: from localhost.localdomain ([156.236.96.165])
-        by smtp.gmail.com with ESMTPSA id l16-20020a170902f69000b001708b189c4asm740020plg.137.2022.08.11.23.02.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 Aug 2022 23:02:20 -0700 (PDT)
-From:   Yue Hu <zbestahu@gmail.com>
-X-Google-Original-From: Yue Hu <huyue2@coolpad.com>
-To:     xiang@kernel.org, chao@kernel.org
-Cc:     linux-erofs@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        huyue2@coolpad.com, zhangwen@coolpad.com
-Subject: [PATCH] erofs: avoid the potentially wrong m_plen for big pcluster
-Date:   Fri, 12 Aug 2022 14:01:50 +0800
-Message-Id: <20220812060150.8510-1-huyue2@coolpad.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 12 Aug 2022 02:21:11 -0400
+Received: from mail-m965.mail.126.com (mail-m965.mail.126.com [123.126.96.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 73E383AB1A;
+        Thu, 11 Aug 2022 23:21:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=JGPSn
+        sJUeHGrj1k5i6Iut36C0p2uCQrpqlgvRnQxyYQ=; b=GZahsZSYES4Mhj+GgczGy
+        hCWQZTGRlvAuvvMNUGNLobjyxOWkDJYngequwSKRgePB7FRJpFcuhH2o1/hdJf6e
+        yvWox7IgoptrLaC8gEANBn24WN2Ih5SMIJdAmlMvwCkOtheSQelfKyUOzJeX1jd8
+        Gz+QNDwVKioY7naN61gbq8=
+Received: from localhost.localdomain (unknown [39.99.236.58])
+        by smtp10 (Coremail) with SMTP id NuRpCgC3U4FGy_Vi57sbAA--.20935S2;
+        Fri, 12 Aug 2022 11:38:47 +0800 (CST)
+From:   Hongbin Wang <wh_bin@126.com>
+To:     davem@davemloft.net
+Cc:     yoshfuji@linux-ipv6.org, dsahern@kernel.org, edumazet@google.com,
+        sahern@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] ip6_tunnel: Fix the type of functions
+Date:   Thu, 11 Aug 2022 23:38:33 -0400
+Message-Id: <20220812033833.1872176-1-wh_bin@126.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: NuRpCgC3U4FGy_Vi57sbAA--.20935S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Cry8WF48CFy3WF4kAFyfCrg_yoW8tFWxpF
+        15Ca18KF45Xw4DWF1Utr1kAry3KF42y34xX3WfGa4rK3ZrJw4rtF1Iq34kWF4YyFyfGFWf
+        ZF15tr17Kr48Zr7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UGtCcUUUUU=
+X-Originating-IP: [39.99.236.58]
+X-CM-SenderInfo: xzkbuxbq6rjloofrz/1tbi7gdboltC-N+5FwAAsE
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Actually, 'compressedlcs' stores compressed block count rather than
-lcluster count. Therefore, the number of bits for shifting the count
-should be 'LOG_BLOCK_SIZE' rather than 'lclusterbits' although current
-lcluster size is 4K. The value of 'm_plen' will be wrong once we enable
-the non 4K-sized lcluster.
+Functions ip6_tnl_change, ip6_tnl_update and ip6_tnl0_update do always
+return 0, change the type of functions to void.
 
-Signed-off-by: Yue Hu <huyue2@coolpad.com>
+Signed-off-by: Hongbin Wang <wh_bin@126.com>
 ---
- fs/erofs/zmap.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ net/ipv6/ip6_tunnel.c | 19 ++++++++-----------
+ 1 file changed, 8 insertions(+), 11 deletions(-)
 
-diff --git a/fs/erofs/zmap.c b/fs/erofs/zmap.c
-index 572f0b8151ba..d58549ca1df9 100644
---- a/fs/erofs/zmap.c
-+++ b/fs/erofs/zmap.c
-@@ -141,7 +141,7 @@ struct z_erofs_maprecorder {
- 	u8  type, headtype;
- 	u16 clusterofs;
- 	u16 delta[2];
--	erofs_blk_t pblk, compressedlcs;
-+	erofs_blk_t pblk, compressedblks;
- 	erofs_off_t nextpackoff;
- };
+diff --git a/net/ipv6/ip6_tunnel.c b/net/ipv6/ip6_tunnel.c
+index 3fda5634578c..79c6a827dea9 100644
+--- a/net/ipv6/ip6_tunnel.c
++++ b/net/ipv6/ip6_tunnel.c
+@@ -1517,7 +1517,7 @@ static void ip6_tnl_link_config(struct ip6_tnl *t)
+  *   ip6_tnl_change() updates the tunnel parameters
+  **/
  
-@@ -192,7 +192,7 @@ static int legacy_load_cluster_from_disk(struct z_erofs_maprecorder *m,
- 				DBG_BUGON(1);
- 				return -EFSCORRUPTED;
- 			}
--			m->compressedlcs = m->delta[0] &
-+			m->compressedblks = m->delta[0] &
- 				~Z_EROFS_VLE_DI_D0_CBLKCNT;
- 			m->delta[0] = 1;
+-static int
++static void
+ ip6_tnl_change(struct ip6_tnl *t, const struct __ip6_tnl_parm *p)
+ {
+ 	t->parms.laddr = p->laddr;
+@@ -1531,29 +1531,25 @@ ip6_tnl_change(struct ip6_tnl *t, const struct __ip6_tnl_parm *p)
+ 	t->parms.fwmark = p->fwmark;
+ 	dst_cache_reset(&t->dst_cache);
+ 	ip6_tnl_link_config(t);
+-	return 0;
+ }
+ 
+-static int ip6_tnl_update(struct ip6_tnl *t, struct __ip6_tnl_parm *p)
++static void ip6_tnl_update(struct ip6_tnl *t, struct __ip6_tnl_parm *p)
+ {
+ 	struct net *net = t->net;
+ 	struct ip6_tnl_net *ip6n = net_generic(net, ip6_tnl_net_id);
+-	int err;
+ 
+ 	ip6_tnl_unlink(ip6n, t);
+ 	synchronize_net();
+-	err = ip6_tnl_change(t, p);
++	ip6_tnl_change(t, p);
+ 	ip6_tnl_link(ip6n, t);
+ 	netdev_state_change(t->dev);
+-	return err;
+ }
+ 
+-static int ip6_tnl0_update(struct ip6_tnl *t, struct __ip6_tnl_parm *p)
++static void ip6_tnl0_update(struct ip6_tnl *t, struct __ip6_tnl_parm *p)
+ {
+ 	/* for default tnl0 device allow to change only the proto */
+ 	t->parms.proto = p->proto;
+ 	netdev_state_change(t->dev);
+-	return 0;
+ }
+ 
+ static void
+@@ -1667,9 +1663,9 @@ ip6_tnl_siocdevprivate(struct net_device *dev, struct ifreq *ifr,
+ 			} else
+ 				t = netdev_priv(dev);
+ 			if (dev == ip6n->fb_tnl_dev)
+-				err = ip6_tnl0_update(t, &p1);
++				ip6_tnl0_update(t, &p1);
+ 			else
+-				err = ip6_tnl_update(t, &p1);
++				ip6_tnl_update(t, &p1);
  		}
-@@ -293,7 +293,7 @@ static int unpack_compacted_index(struct z_erofs_maprecorder *m,
- 				DBG_BUGON(1);
- 				return -EFSCORRUPTED;
- 			}
--			m->compressedlcs = lo & ~Z_EROFS_VLE_DI_D0_CBLKCNT;
-+			m->compressedblks = lo & ~Z_EROFS_VLE_DI_D0_CBLKCNT;
- 			m->delta[0] = 1;
- 			return 0;
- 		} else if (i + 1 != (int)vcnt) {
-@@ -497,7 +497,7 @@ static int z_erofs_get_extent_compressedlen(struct z_erofs_maprecorder *m,
- 		return 0;
- 	}
- 	lcn = m->lcn + 1;
--	if (m->compressedlcs)
-+	if (m->compressedblks)
- 		goto out;
+ 		if (!IS_ERR(t)) {
+ 			err = 0;
+@@ -2091,7 +2087,8 @@ static int ip6_tnl_changelink(struct net_device *dev, struct nlattr *tb[],
+ 	} else
+ 		t = netdev_priv(dev);
  
- 	err = z_erofs_load_cluster_from_disk(m, lcn, false);
-@@ -506,7 +506,7 @@ static int z_erofs_get_extent_compressedlen(struct z_erofs_maprecorder *m,
+-	return ip6_tnl_update(t, &p);
++	ip6_tnl_update(t, &p);
++	return 0;
+ }
  
- 	/*
- 	 * If the 1st NONHEAD lcluster has already been handled initially w/o
--	 * valid compressedlcs, which means at least it mustn't be CBLKCNT, or
-+	 * valid compressedblks, which means at least it mustn't be CBLKCNT, or
- 	 * an internal implemenatation error is detected.
- 	 *
- 	 * The following code can also handle it properly anyway, but let's
-@@ -523,12 +523,12 @@ static int z_erofs_get_extent_compressedlen(struct z_erofs_maprecorder *m,
- 		 * if the 1st NONHEAD lcluster is actually PLAIN or HEAD type
- 		 * rather than CBLKCNT, it's a 1 lcluster-sized pcluster.
- 		 */
--		m->compressedlcs = 1;
-+		m->compressedblks = 1 << (lclusterbits - LOG_BLOCK_SIZE);
- 		break;
- 	case Z_EROFS_VLE_CLUSTER_TYPE_NONHEAD:
- 		if (m->delta[0] != 1)
- 			goto err_bonus_cblkcnt;
--		if (m->compressedlcs)
-+		if (m->compressedblks)
- 			break;
- 		fallthrough;
- 	default:
-@@ -539,7 +539,7 @@ static int z_erofs_get_extent_compressedlen(struct z_erofs_maprecorder *m,
- 		return -EFSCORRUPTED;
- 	}
- out:
--	map->m_plen = (u64)m->compressedlcs << lclusterbits;
-+	map->m_plen = (u64)m->compressedblks << LOG_BLOCK_SIZE;
- 	return 0;
- err_bonus_cblkcnt:
- 	erofs_err(m->inode->i_sb,
+ static void ip6_tnl_dellink(struct net_device *dev, struct list_head *head)
 -- 
-2.17.1
+2.25.1
 

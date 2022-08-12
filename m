@@ -2,240 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C487D590B6F
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 07:19:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 12561590B72
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 07:23:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236873AbiHLFRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 01:17:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57538 "EHLO
+        id S236440AbiHLFX3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 01:23:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbiHLFRf (ORCPT
+        with ESMTP id S229877AbiHLFX1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 01:17:35 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B92A79F74F
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 22:17:34 -0700 (PDT)
-Received: from pps.filterd (m0187473.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27C59ljA016231;
-        Fri, 12 Aug 2022 05:17:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : in-reply-to : references : date : message-id : mime-version :
- content-type; s=pp1; bh=131XI9ovrZitKqkC7KwlSKSEJrUNTkpNLUvP93QYz6Y=;
- b=gduafzJmtrWC+HAHESBQZEtRu9impveEf7j7GJOunJJ88R5766MU7aGYD8Es1/5PxhlZ
- vy5EZa0+P24drxXxXvYCydNcYotyLq8ghxOrdzT0bTH0Pq712BPxW0xzm6dH8/GeZPzx
- MuDdBECHcxCBzUwSpB/fsU3AJUwMfwKkUKg1+nRfj0FjX2kxMZJ7wOnv7crBfuYmE4Gi
- TGesQUlGN2c0x9M8YavaHfSBiXRPFsQWxSQDUfsK/srRqmXsViAlf2X48Ft71Qt2ZfCF
- U47n4X5SSgkKNn6h0eVGIMTs6amHyTkmuLpNzLYrd9YYOgokCaSoZ831gaV0uJndIrLY HA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hwg2p0p7g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 Aug 2022 05:17:05 +0000
-Received: from m0187473.ppops.net (m0187473.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 27C5A7vh019491;
-        Fri, 12 Aug 2022 05:17:05 GMT
-Received: from ppma03wdc.us.ibm.com (ba.79.3fa9.ip4.static.sl-reverse.com [169.63.121.186])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3hwg2p0p6y-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 Aug 2022 05:17:05 +0000
-Received: from pps.filterd (ppma03wdc.us.ibm.com [127.0.0.1])
-        by ppma03wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 27C5D7si016861;
-        Fri, 12 Aug 2022 05:17:04 GMT
-Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
-        by ppma03wdc.us.ibm.com with ESMTP id 3huww6f7wu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 Aug 2022 05:17:04 +0000
-Received: from b03ledav005.gho.boulder.ibm.com (b03ledav005.gho.boulder.ibm.com [9.17.130.236])
-        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 27C5H3v066126324
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Fri, 12 Aug 2022 05:17:03 GMT
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2E965BE056;
-        Fri, 12 Aug 2022 05:17:03 +0000 (GMT)
-Received: from b03ledav005.gho.boulder.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 42218BE051;
-        Fri, 12 Aug 2022 05:17:00 +0000 (GMT)
-Received: from skywalker.linux.ibm.com (unknown [9.43.116.179])
-        by b03ledav005.gho.boulder.ibm.com (Postfix) with ESMTP;
-        Fri, 12 Aug 2022 05:16:59 +0000 (GMT)
-X-Mailer: emacs 29.0.50 (via feedmail 11-beta-1 I)
-From:   "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>
-To:     Yury Norov <yury.norov@gmail.com>, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        linuxppc-dev@lists.ozlabs.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     Yury Norov <yury.norov@gmail.com>
-Subject: Re: [RESEND PATCH 2/2] lib/nodemask: inline next_node_in() and
- node_random()
-In-Reply-To: <20220723214537.2054208-3-yury.norov@gmail.com>
-References: <20220723214537.2054208-1-yury.norov@gmail.com>
- <20220723214537.2054208-3-yury.norov@gmail.com>
-Date:   Fri, 12 Aug 2022 10:46:57 +0530
-Message-ID: <87o7wqkpme.fsf@linux.ibm.com>
-MIME-Version: 1.0
+        Fri, 12 Aug 2022 01:23:27 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2044.outbound.protection.outlook.com [40.107.94.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4E3DA00E4
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 22:23:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Dvy5oBudKnOBiROLKC1x/8Reg59+CaNY4IpKZQAZSGDVRYtN2hkwTFqmJQ4py9+IGK16D+gIhrgi0qsKaCJa4Q/ropfu7+PuDozxpHCT7zXIUwJBlwuQY5cYQi9DW49AR5Yp+crPwsLTJn6HzF3elYDInaE+XOCKgrKA1i4O1kEk0oHsxfSdUQYb0upbqgtc7VaKuBUtJzPoVUBYkVB0MJXFtMf9qLK7cupOfCtEx9hZWLZeHmhvTKW/3xishSxKjpC6IIvlAlXOiBmMOsHSfZ/ZG8dUFImsmyD+AYPNp9FiaaqRABy5n8JL/ObLq3jYupEIYD/h7yti5NPEF7hrLQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=51rvVXCforVG/VV+jnIVuOgd23Hpr3PwEdWaoS4K4Ag=;
+ b=PTPt+wTpDUSpwP2bldMCKH4yyt1/aWuT+4hzf0sDIvVFgwvDUnxYad95ckafB7tr0dAduHbPNbKiZ8mGf5apSt3e+vprYTnOxBYjZ4LWU4Gvk3G6S2zuO72cN3dkGDBvIWLHjDYVJtk1MZV99+nm+ZtFmQqujeSPO9OdwStCHgHaMhDT3YNNSpOvp14y/GctGHNUPSDKozfOHrQ7D/1P754xUdvjd3MHZbZvMfXEkCITzhFQjsaH0GjjUe8tc8sib1rZuktw7+z4jw0B+g9ojHpZvG0J3tdVYtQ7Nj4IHJkwm0oIFYZMrQNIV7tyxUgtBUNJsdE03P23lw/dZ5H0Sg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=51rvVXCforVG/VV+jnIVuOgd23Hpr3PwEdWaoS4K4Ag=;
+ b=WyOup/eT8jSp0HsvOo8t4CDibuFbMl7zXDqHLiwS7USFBzqrTeprs67kcgSdly0UNs38C+j0C/XJQj4oN3+NgP4s/vLKe2vSZqWveRoFJGCzntnK0nFbD/8zTV9DvzuofDwT/OzJC9mKmtUO5k5r0J3RtAs23dhWvhBiRO85K1MEK5555WxLKxT/UMtXlhywOF7xFShKOirHz1MPk15lgQpAmc+6s6G3wjB06X1AoDqicL2gymZiIVwQdseo01QEjJDkifnSdMxoOaeYRuwlPplmYLHplnFFBEcIazop5SjWaXqUU+mg2q3Wvgpv9Y/5f23N0D1YooypguhBTjUjMQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com (2603:10b6:a03:134::26)
+ by DM6PR12MB3978.namprd12.prod.outlook.com (2603:10b6:5:1c5::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.10; Fri, 12 Aug
+ 2022 05:23:22 +0000
+Received: from BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::eca6:a4a7:e2b2:27e7]) by BYAPR12MB3176.namprd12.prod.outlook.com
+ ([fe80::eca6:a4a7:e2b2:27e7%5]) with mapi id 15.20.5504.025; Fri, 12 Aug 2022
+ 05:23:22 +0000
+From:   Alistair Popple <apopple@nvidia.com>
+To:     linux-mm@kvack.org, akpm@linux-foundation.org
+Cc:     linux-kernel@vger.kernel.org,
+        "Sierra Guiza, Alejandro (Alex)" <alex.sierra@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        David Hildenbrand <david@redhat.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, Ben Skeggs <bskeggs@redhat.com>,
+        Logan Gunthorpe <logang@deltatee.com>, linuxram@us.ibm.com,
+        paulus@ozlabs.org, Alistair Popple <apopple@nvidia.com>,
+        Peter Xu <peterx@redhat.com>
+Subject: [PATCH 1/2] mm/migrate_device.c: Copy pte dirty bit to page
+Date:   Fri, 12 Aug 2022 15:22:30 +1000
+Message-Id: <a9daea363991c023d0364be22a762405b6c6f5c4.1660281458.git-series.apopple@nvidia.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: cWUuknHOZVTa5K0zwF78-zCcvprFdnaK
-X-Proofpoint-ORIG-GUID: 9teZ_uOpdBiVgc_xxIGvvxtT4kK5ekKt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-12_04,2022-08-11_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- malwarescore=0 phishscore=0 priorityscore=1501 bulkscore=0 suspectscore=0
- clxscore=1011 adultscore=0 lowpriorityscore=0 spamscore=0 impostorscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208120014
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: SJ0PR05CA0125.namprd05.prod.outlook.com
+ (2603:10b6:a03:33d::10) To BYAPR12MB3176.namprd12.prod.outlook.com
+ (2603:10b6:a03:134::26)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 1c049e8a-ea4d-4c64-9c17-08da7c22c646
+X-MS-TrafficTypeDiagnostic: DM6PR12MB3978:EE_
+X-LD-Processed: 43083d15-7273-40c1-b7db-39efd9ccc17a,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SEqxDmnTGkCMcmXruL2YwA3gFXLqkbLkJlU3S2HPk+1mKgakGYz0hUdlcCfj19RmX4X32nFRsylqHDFZIzo+dfbuWaYYqQcsptsrKlhVlv5C/qrZkDXa/YWIGXY/91DHeNE6ewiDYxq3V+cgA1HRyLhxsUp5Wv17UL6lCyVxNM9bCV6hLSb7ig+DPzs2VxmZdFsbOx3h9OSR6otIvRd+XqiTNI3dFpuzHCDtC/660UGlucj/CZA/ycC/sPyityWsGTKH8EPdcbQx6X3tdsl1lNNcMhl2YVgykqaSHzbpnrnXyMe2W9faavnIKncBoWiI8gnttj6wz0Pkr3w8fizFS+QtL/TevYmrgEKT+KLHjrzLV+82qBe2HA+G9vLrj+zfcr6Q32TPIw7/X2XM8eGT9+2IktoR3tVflme6URMpEsLsFZ3plfT9Ad/whE4YMhhf05Ct+vNAdEWZO92Qy20R3JeZjid7wJY+uSPND4eNB6/GDH+meh7MHVW21CMjvFjl5fitdB5wroEjVtFshLqHpP+qmC0VLevEaDy3iqcvWxkCJXkXUnOa1aJt0KPx3INNfm6KmhzX4ykOZ8Qd9Rc7y2ydlU3OVM5TwnJDtei621MD1P2e19kS77X/HHoESeUO3VuLLGQC7UMNgQCTtaPnQLVo4NypW3wwCkfnrwE5mrh+JxwZCmKeCCE4vwgaUlQxBGfgMEuI8Yd+DRexlJwSDbRXBWjZvzva5CPSUau/MDmqG8STBjNltUHENXa0h9T65/h6pJFE37fX8XMiz6AfvwldPz2wau5B82+0ImukwhI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3176.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(396003)(39860400002)(376002)(136003)(366004)(346002)(5660300002)(6666004)(6506007)(41300700001)(26005)(6512007)(8936002)(86362001)(66946007)(316002)(54906003)(478600001)(66476007)(6486002)(66556008)(4326008)(8676002)(2906002)(36756003)(186003)(83380400001)(7416002)(2616005)(38100700002)(14143004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?p6v+vMlQXzvaJbQolEmbNflt4yfX7aFofHGyhM++QGIFQeaIFv7CSciF+P3u?=
+ =?us-ascii?Q?3/7O7ziuxvxVfCuYTqXL19KrrRsa13UV+lVsIylGzc/Ierly5iB/gM/wEDwz?=
+ =?us-ascii?Q?QmdYnuspGpLYI1hrg2+x8u+QzS8ndOiETC29HpHHpcUAR48neThnCGgHXIfu?=
+ =?us-ascii?Q?YYoJDCxBMtCmKO5i6BcaJrYSYkTGqbhbLGDybC7TJZmPwnBFreGPa7NF358f?=
+ =?us-ascii?Q?6rnYos3Hx4NEBuWKz09bKhjT+zMHig0VRJJUGjOoI8Cddf8tbcen3BRIu/Wm?=
+ =?us-ascii?Q?z+syZn970WEVDbPEKlq2GI0YnvJTe2Gu+uVvD3IVBcyQwPu4tGPryAg2HpLH?=
+ =?us-ascii?Q?MMc7fnZRkkdapz3jPUE/aPZpcYeucu3Bs9s9xCwWxGvs4L11IXwMIPiDhR+W?=
+ =?us-ascii?Q?HKIwSwvOLXJSOOlUEcqvIJN5HjVRA6zfmPsU0oDWPhTc3leMOHCkA6vV8/eH?=
+ =?us-ascii?Q?r9el79EPHORm8acRpttSZsyA+Zl/OrWjURpll/GnTNpRrUSPYUa7GWkHZthB?=
+ =?us-ascii?Q?n3QaJcsPi3PHUNnFwWQxaIMjDHTA9Rz3sn9ckIqyNioZmHTEAIfrHq9b2fYO?=
+ =?us-ascii?Q?IXhNc0o9X+gfObi7PiUNDma6nG7BNVbmzD5Xe58d+9UMKtqg/2dcBFekIcdS?=
+ =?us-ascii?Q?i5PVmB15yZtRH3OCCv3yBQ4Pgy1chcoNJrDScv7SI1W1x82/WJJwCNeEU0Y8?=
+ =?us-ascii?Q?EC2xOUQC3Z8uvebUCCvMC8ZjraiwIM/xZX+V05ty22MpgSjU0AOOyJH3FN4Q?=
+ =?us-ascii?Q?Cb/D2sqQ7MoTpfBn9pF5sJgPqT8O9YuYPh1CxtgB06lw+J6Kpq7Fp8GPWfx3?=
+ =?us-ascii?Q?COvH61zFCUOjhjq1iYzaUK1FniZY60THAqjV3rPvQFKB7pcC4MY8kN5PSLps?=
+ =?us-ascii?Q?qSX7lcuuOqq/poOHhqjzwMctiOKEQCevC1kPJpxbaf72buE3IS4A2btkVtdY?=
+ =?us-ascii?Q?Q65NhPjalvEPWo21IsP7ukWJMjmz3aLEp2zD4u3xkLyjiOQacOTMwJJ7eu7G?=
+ =?us-ascii?Q?zuywhUWsdQ8aJH2SswS78h2Vc99KKJM7Cit83xBKD9yJHO4gbOV3j1L73img?=
+ =?us-ascii?Q?evEymKZn1EAUQaxiQ0UtalDN64ujhxKgxjalofZtEgr1qUk7vR78t6QB3dDy?=
+ =?us-ascii?Q?n6INJorN+aVF4v92WM56N2L8suD4fGv8DusI8w4z65xOzDlysB/90HMBh29L?=
+ =?us-ascii?Q?QZ8Rp3UlP5aa8ZWUAM5FSCf9Sw6EcWzvtkj+b46GrYxPzhF18C7hjbBb9Ddf?=
+ =?us-ascii?Q?MYy8WslNPCA1iofcr9tsrMnhAAvA6vUrVfpj8hAm7/H2lAnOug+pPQQs8A6Q?=
+ =?us-ascii?Q?RyOKiP/R8Zk23aSqnk8YI6wajWOG1npuUxE7XLJrHkkU5HdlrFavaGNyvnlw?=
+ =?us-ascii?Q?wCvOYfmo7Vsu3fe7fjke0ZI6S4rPce3XlWK7FGCHFrvaQzbQbQ2hlebsAEyU?=
+ =?us-ascii?Q?CV4ZVQ+niPqzG0tGEPYBurTKHQeLAcZ2C8xHj0oa21SnTMctYZBBuu4VxbZy?=
+ =?us-ascii?Q?KPw/3M0I3yruqfrajQF0G6VATcuue2eJbHQ1T8hHGIqvN+EkkwBxhx1t1/ha?=
+ =?us-ascii?Q?Cl8yxfNpNb1EAMJUCFKoQsqbg04kLe15rYsCDxT6?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1c049e8a-ea4d-4c64-9c17-08da7c22c646
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3176.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Aug 2022 05:23:22.4532
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FojY0PWVXMMSgYG5XSWloU6ebwTYWyYRbS+oPpTh6qg5GvFfFM8e4lzn7255JF2EDXpXjkupyi7dVACL1tcpIA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB3978
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Yury Norov <yury.norov@gmail.com> writes:
+migrate_vma_setup() has a fast path in migrate_vma_collect_pmd() that
+installs migration entries directly if it can lock the migrating page.
+When removing a dirty pte the dirty bit is supposed to be carried over
+to the underlying page to prevent it being lost.
 
-> The functions are pretty thin wrappers around find_bit engine, and
-> keeping them in c-file prevents compiler from small_const_nbits()
-> optimization, which must take place for all systems with MAX_NUMNODES
-> less than BITS_PER_LONG (default is 16 for me).
->
-> Moving them to header file doesn't blow up the kernel size:
-> add/remove: 1/2 grow/shrink: 9/5 up/down: 968/-88 (880)
->
-> CC: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> CC: Rasmus Villemoes <linux@rasmusvillemoes.dk>
-> Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> ---
->  MAINTAINERS              |  1 -
->  include/linux/nodemask.h | 27 ++++++++++++++++++++++-----
->  lib/Makefile             |  2 +-
->  lib/nodemask.c           | 30 ------------------------------
->  4 files changed, 23 insertions(+), 37 deletions(-)
->  delete mode 100644 lib/nodemask.c
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 7c0b8f28aa25..19c8d0ef1177 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -3540,7 +3540,6 @@ F:	lib/bitmap.c
->  F:	lib/cpumask.c
->  F:	lib/find_bit.c
->  F:	lib/find_bit_benchmark.c
-> -F:	lib/nodemask.c
->  F:	lib/test_bitmap.c
->  F:	tools/include/linux/bitmap.h
->  F:	tools/include/linux/find.h
-> diff --git a/include/linux/nodemask.h b/include/linux/nodemask.h
-> index 0f233b76c9ce..48ebe4007955 100644
-> --- a/include/linux/nodemask.h
-> +++ b/include/linux/nodemask.h
-> @@ -94,6 +94,7 @@
->  #include <linux/bitmap.h>
->  #include <linux/minmax.h>
->  #include <linux/numa.h>
-> +#include <linux/random.h>
->  
->  typedef struct { DECLARE_BITMAP(bits, MAX_NUMNODES); } nodemask_t;
->  extern nodemask_t _unused_nodemask_arg_;
-> @@ -276,7 +277,14 @@ static inline unsigned int __next_node(int n, const nodemask_t *srcp)
->   * the first node in src if needed.  Returns MAX_NUMNODES if src is empty.
->   */
->  #define next_node_in(n, src) __next_node_in((n), &(src))
-> -unsigned int __next_node_in(int node, const nodemask_t *srcp);
-> +static inline unsigned int __next_node_in(int node, const nodemask_t *srcp)
-> +{
-> +	unsigned int ret = __next_node(node, srcp);
-> +
-> +	if (ret == MAX_NUMNODES)
-> +		ret = __first_node(srcp);
-> +	return ret;
-> +}
->  
->  static inline void init_nodemask_of_node(nodemask_t *mask, int node)
->  {
-> @@ -493,14 +501,23 @@ static inline int num_node_state(enum node_states state)
->  
->  #endif
->  
-> +/*
-> + * Return the bit number of a random bit set in the nodemask.
-> + * (returns NUMA_NO_NODE if nodemask is empty)
-> + */
-> +static inline int node_random(const nodemask_t *maskp)
-> +{
->  #if defined(CONFIG_NUMA) && (MAX_NUMNODES > 1)
-> -extern int node_random(const nodemask_t *maskp);
-> +	int w, bit = NUMA_NO_NODE;
-> +
-> +	w = nodes_weight(*maskp);
-> +	if (w)
-> +		bit = find_nth_bit(maskp->bits, MAX_NUMNODES, get_random_int() % w);
-> +	return bit;
->  #else
-> -static inline int node_random(const nodemask_t *mask)
-> -{
->  	return 0;
-> -}
->  #endif
-> +}
->  
->  #define node_online_map 	node_states[N_ONLINE]
->  #define node_possible_map 	node_states[N_POSSIBLE]
-> diff --git a/lib/Makefile b/lib/Makefile
-> index f99bf61f8bbc..731cea0342d1 100644
-> --- a/lib/Makefile
-> +++ b/lib/Makefile
-> @@ -33,7 +33,7 @@ lib-y := ctype.o string.o vsprintf.o cmdline.o \
->  	 flex_proportions.o ratelimit.o show_mem.o \
->  	 is_single_threaded.o plist.o decompress.o kobject_uevent.o \
->  	 earlycpio.o seq_buf.o siphash.o dec_and_lock.o \
-> -	 nmi_backtrace.o nodemask.o win_minmax.o memcat_p.o \
-> +	 nmi_backtrace.o win_minmax.o memcat_p.o \
->  	 buildid.o
->  
->  lib-$(CONFIG_PRINTK) += dump_stack.o
-> diff --git a/lib/nodemask.c b/lib/nodemask.c
-> deleted file mode 100644
-> index 7dad4ce8ff59..000000000000
-> --- a/lib/nodemask.c
-> +++ /dev/null
-> @@ -1,30 +0,0 @@
-> -// SPDX-License-Identifier: GPL-2.0
-> -#include <linux/nodemask.h>
-> -#include <linux/module.h>
-> -#include <linux/random.h>
-> -
-> -unsigned int __next_node_in(int node, const nodemask_t *srcp)
-> -{
-> -	unsigned int ret = __next_node(node, srcp);
-> -
-> -	if (ret == MAX_NUMNODES)
-> -		ret = __first_node(srcp);
-> -	return ret;
-> -}
-> -EXPORT_SYMBOL(__next_node_in);
-> -
-> -#ifdef CONFIG_NUMA
-> -/*
-> - * Return the bit number of a random bit set in the nodemask.
-> - * (returns NUMA_NO_NODE if nodemask is empty)
-> - */
-> -int node_random(const nodemask_t *maskp)
-> -{
-> -	int w, bit = NUMA_NO_NODE;
-> -
-> -	w = nodes_weight(*maskp);
-> -	if (w)
-> -		bit = find_nth_bit(maskp->bits, MAX_NUMNODES, get_random_int() % w);
-> -	return bit;
-> -}
-> -#endif
-> -- 
-> 2.34.1
+Currently migrate_vma_*() can only be used for private anonymous
+mappings. That means loss of the dirty bit usually doesn't result in
+data loss because these pages are typically not file-backed. However
+pages may be backed by swap storage which can result in data loss if an
+attempt is made to migrate a dirty page that doesn't yet have the
+PageDirty flag set.
 
-The patch that got merged (36d4b36b69590fed99356a4426c940a253a93800) still have lib/nodemask.c
+In this case migration will fail due to unexpected references but the
+dirty pte bit will be lost. If the page is subsequently reclaimed data
+won't be written back to swap storage as it is considered uptodate,
+resulting in data loss if the page is subsequently accessed.
+
+Prevent this by copying the dirty bit to the page when removing the pte
+to match what try_to_migrate_one() does.
+
+Signed-off-by: Alistair Popple <apopple@nvidia.com>
+Reported-by: Peter Xu <peterx@redhat.com>
+---
+ mm/migrate_device.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/mm/migrate_device.c b/mm/migrate_device.c
+index 27fb37d..d38f8a6 100644
+--- a/mm/migrate_device.c
++++ b/mm/migrate_device.c
+@@ -7,6 +7,7 @@
+ #include <linux/export.h>
+ #include <linux/memremap.h>
+ #include <linux/migrate.h>
++#include <linux/mm.h>
+ #include <linux/mm_inline.h>
+ #include <linux/mmu_notifier.h>
+ #include <linux/oom.h>
+@@ -211,6 +212,10 @@ static int migrate_vma_collect_pmd(pmd_t *pmdp,
+ 
+ 			migrate->cpages++;
+ 
++			/* Set the dirty flag on the folio now the pte is gone. */
++			if (pte_dirty(pte))
++				folio_mark_dirty(page_folio(page));
++
+ 			/* Setup special migration page table entry */
+ 			if (mpfn & MIGRATE_PFN_WRITE)
+ 				entry = make_writable_migration_entry(
+
+base-commit: ffcf9c5700e49c0aee42dcba9a12ba21338e8136
+-- 
+git-series 0.9.1

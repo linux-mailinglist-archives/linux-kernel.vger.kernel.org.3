@@ -2,78 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0742590DFC
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 11:21:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 91EA7590E05
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 11:27:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237909AbiHLJVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 05:21:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35490 "EHLO
+        id S237050AbiHLJ1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 05:27:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230293AbiHLJVq (ORCPT
+        with ESMTP id S230379AbiHLJ1h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 05:21:46 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0240A347B;
-        Fri, 12 Aug 2022 02:21:44 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 655581F924;
-        Fri, 12 Aug 2022 09:21:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1660296103; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=voPFxsueMeDDO9g9PxJff2XDO4Y129r5tBsuJySfB9c=;
-        b=2QWChunj+2gm2tDWSX/2fBLWfM2Lr9wuQ85K7Paxel8P67JmP946yulVIRu/gCN3j/7LWU
-        485WRSlEi3Bv87laCC/1OEisz/9w0GbSvxDNNDLX+mmWBF4hsA8XudedGXlUbJ86c3shU1
-        eloTG8kZLvFCpkMLEKLBnHr3heEb8KU=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1660296103;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=voPFxsueMeDDO9g9PxJff2XDO4Y129r5tBsuJySfB9c=;
-        b=K/3gjHvcUALLi7588j2R/faOpw7Wt/ZjmqC67E16oiViIj9jeJRSP5GGkOK7W2trMzBtG7
-        x3b3AHWaD5TVe6CA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C5AAE13AAE;
-        Fri, 12 Aug 2022 09:21:42 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id L5xYLaYb9mIZPQAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Fri, 12 Aug 2022 09:21:42 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id 2ddfc29e;
-        Fri, 12 Aug 2022 09:22:29 +0000 (UTC)
-Date:   Fri, 12 Aug 2022 10:22:29 +0100
-From:   =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>
-To:     Baokun Li <libaokun1@huawei.com>
-Cc:     Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        wenqingliu0120@gmail.com, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, "zhangyi (F)" <yi.zhang@huawei.com>,
-        yebin10@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-Subject: Re: [PATCH] ext4: fix bug in extents parsing when number of entries
- in header is zero
-Message-ID: <YvYb1fgvGmdDRmKd@suse.de>
-References: <bug-215941-13602@https.bugzilla.kernel.org/>
- <20220805140025.26295-1-lhenriques@suse.de>
- <e10617e8-1a21-a046-8256-66ffc6500ae9@huawei.com>
+        Fri, 12 Aug 2022 05:27:37 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22563A5998
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 02:27:36 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id q9-20020a17090a2dc900b001f58bcaca95so7819928pjm.3
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 02:27:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=LzSEVyCY0rVcjjfGUaDS5CrDNhUakD7W6pkaedXCK3M=;
+        b=oCrlkqT6QEgaGNjRK3uXf1a3edsqWHkyeNSIJ7B7AZlUTVJz0vJFXLsg9PDYbD9PQ0
+         zPYv1dWvc67zKrHY/O4Ygj/axQvYTd04weKewgFQMty1Cc6yHY/GNr/nyP/EKngQqiZE
+         d4vAKaJ5seUIQ9hdGKGurZYmfi0quA8+aAycI0/Ey5IAHd8U6jVOI9k5Fyn8YEhAy1zE
+         soaKHveguOvXckf/kra51veFM0eD0MOAAh2ijzPHM1lvVvmziI+irgm7o8pARCPtr3He
+         YFI0j7nwHc2TYI8YDmi2DajVxRC52TVYVjzly0wie+KkstHxh5ooH1chAZ6GAOW9p242
+         7o5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=LzSEVyCY0rVcjjfGUaDS5CrDNhUakD7W6pkaedXCK3M=;
+        b=KDNF1I6IF8kneOcg3StcfUWXVRJJE6cJQlox1pq53Y4P7JxN7mfb8PDZIxTkKTk+dK
+         /ATjloDRkgkU+Kqx30QNPKMfYBVu3gF07T5kIgwzsJ34JdoiZXv+RRyS8N1aACzoE6ua
+         reEnmUG97QhfU+onIbrqYTDBbYSbovf947u8ohTmepRdhAtuFGkLpPOm2tAEcq2JbRtF
+         GO0grM/H4uYGPek0vtlwgRy+BhsOcX2C68DGrtCBo3X8ex9yErYy/5VEwvdr880+ADZ4
+         bzmuJiUKoZptltaXqSBWMufmYzlhzv90BhrSfABDQkGUrHR6NQqRip88TgNRprHN0Ehw
+         2kSQ==
+X-Gm-Message-State: ACgBeo2kWy+RcWNS7T20p993D/MzrdD1Ikntpi7eILRmljoavjo9FZV4
+        sm7TTMreizLzMSluaeiidBYHqg==
+X-Google-Smtp-Source: AA6agR548JNzF0k/wghBss2w8gS+i/8K9JWBwwU3cusnYsQeQ9eKg4O8qjzNC9Jjm3/R7fWU64098A==
+X-Received: by 2002:a17:903:11cf:b0:171:afc7:8936 with SMTP id q15-20020a17090311cf00b00171afc78936mr1017395plh.95.1660296455618;
+        Fri, 12 Aug 2022 02:27:35 -0700 (PDT)
+Received: from [10.2.223.68] ([61.120.150.75])
+        by smtp.gmail.com with ESMTPSA id w3-20020a170902d10300b0016d9b94ddfasm1181771plw.145.2022.08.12.02.27.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Aug 2022 02:27:35 -0700 (PDT)
+Message-ID: <1e24242e-bb37-e15f-906a-abe5cd865a98@bytedance.com>
+Date:   Fri, 12 Aug 2022 17:27:29 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.1.0
+Subject: Re: [External] Re: [PATCH v3] PCI/ERR: Use pcie_aer_is_native() to
+ judge whether OS owns AER
+Content-Language: en-US
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     ruscur@russell.cc, oohall@gmail.com, bhelgaas@google.com,
+        lukas@wunner.de, jan.kiszka@siemens.com, stuart.w.hayes@gmail.com,
+        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220727035334.9997-1-chenzhuo.1@bytedance.com>
+ <b5c746db-f6a0-d89e-6db5-e4a206c9237a@linux.intel.com>
+ <cfd44d9c-453b-e498-2630-9057947cf3cd@bytedance.com>
+ <b54b068b-fe9a-8609-3e9f-170579affc27@bytedance.com>
+ <6056c6cc-9861-9c29-8e36-48e0dd36c702@linux.intel.com>
+From:   Zhuo Chen <chenzhuo.1@bytedance.com>
+In-Reply-To: <6056c6cc-9861-9c29-8e36-48e0dd36c702@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <e10617e8-1a21-a046-8256-66ffc6500ae9@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,65 +83,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 12, 2022 at 10:33:20AM +0800, Baokun Li wrote:
-> 在 2022/8/5 22:00, Luís Henriques 写道:
-...
-> > This bug is easily reproducible using the filesystem image provided --
-> > it's just a matter of mounting it and run:
-> > 
-> >      $ cat /mnt/foo/bar/xattr
+
+
+On 8/3/22 6:18 AM, Sathyanarayanan Kuppuswamy wrote:
 > 
-> Hi Luís,
-> yeah, that's a good catch!
-> > Anyway, I hope my analysis of the bug is correct -- the root cause seems
-> > to be an extent header with an invalid value for in eh_entries, which will
-> > later cause the BUG_ON().
-> > 
-> > Cheers,
-> > --
-> > Luís
-> But there's a little bit of a deviation in your understanding of the
-> problem,
-> so the patch doesn't look good.
-> The issue is caused by the contradiction between eh_entries and eh_depth.
-
-Ah! This makes a lot of sense and I can confirm this is exactly what
-happens in both bugzilla images.  Thanks a lot for your feedback!
-
-> Therefore, we need to check the contradiction instead of adding a judgment
-> to ext4_ext_binsearch_idx.
-> So the right fix is to add a check to __ext4_ext_check like:
 > 
-> diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
-> index c148bb97b527..2dfd35f727cb 100644
-> --- a/fs/ext4/extents.c
-> +++ b/fs/ext4/extents.c
-> @@ -460,6 +460,10 @@ static int __ext4_ext_check(const char *function,
-> unsigned int line,
->                 error_msg = "invalid eh_entries";
->                 goto corrupted;
->         }
-> +       if (unlikely((eh->eh_entries == 0) && (depth > 0))) {
-> +               error_msg = "contradictory eh_entries and eh_depth";
-> +               goto corrupted;
-> +       }
->         if (!ext4_valid_extent_entries(inode, eh, lblk, &pblk, depth)) {
->                 error_msg = "invalid extent entries";
->                 goto corrupted;
+> On 7/27/22 2:37 AM, Zhuo Chen wrote:
+>>>
+>> Do you mean changing "if ((host->native_aer || pcie_ports_native) && aer)" into "if (pcie_aer_is_native(dev) && aer)" ?
+>> I thought changing into "if (pcie_aer_is_native(dev))" before.
+>>
+>> One another doubt. Not every pci device support aer. When dev->aer_cap is NULL and root->aer_cap is not NULL in aer_root_reset(), pcie_aer_is_native() will return false and OS cannot operate root register. It's different from just using "(host->native_aer || pcie_ports_native)".
+>>
+>> Or we can change "if ((host->native_aer || pcie_ports_native) && aer)" into "if (pcie_aer_is_native(root))". But in this way, argument NULL pointer check should be added in pcie_aer_is_native().
 > 
-> In this way, we can fix this issue and check for header exceptions before
-> calling ext4_ext_binsearch_idx.
+> Looking into it again, I think it is better to leave it as it is. Please ignore my comment.
+> 
 
-Awesome, I'll send out v2 with the suggested change.  It makes sense to
-have this check and it should fix both bugs.
+Thanks! Is there anything else to improve and what's next for
+the patch v3 ?
 
-On the other hand, I still wonder wether the extra check in my original
-patch is correct or not.  I spent a good amount of time trying to find out
-if eh_entries can be 0 at that point (in ext4_ext_binsearch_idx()) and
-couldn't find a situation where it could.  And running the fstests with
-that check didn't show any problem.  But yeah, my understanding of the
-whole code is far from perfect.
-
-Cheers,
---
-Luís
+-- 
+Thanks,
+Zhuo Chen

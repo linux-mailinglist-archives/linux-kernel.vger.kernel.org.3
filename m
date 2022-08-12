@@ -2,76 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01109591148
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 15:21:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9267359114C
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 15:23:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236007AbiHLNUq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 09:20:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37478 "EHLO
+        id S238578AbiHLNXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 09:23:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230105AbiHLNUm (ORCPT
+        with ESMTP id S230105AbiHLNX3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 09:20:42 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6271F647FF;
-        Fri, 12 Aug 2022 06:20:41 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 5CC5F220D3;
-        Fri, 12 Aug 2022 13:19:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1660310341; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UrV/CZutnVEuheBmsrDfoz1xY5zNxwT4oWMG9XvH6gk=;
-        b=KgUG1FKhKBPOvlLn8+vTzPK00V9OCRXKg9lALwp7603QkynsCRtw8HXhP6vQX49o0J2rGc
-        FgaXSYPo4AbIaQNtRccVcS3yquKQi9bXDNtngTSPXtj19K+B6k32E4fmC1DfnO1W5zo104
-        8wQbwC6itiClUAtSHH5UOXHTO+1HYgg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1660310341;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UrV/CZutnVEuheBmsrDfoz1xY5zNxwT4oWMG9XvH6gk=;
-        b=f4d7mKy1ZXZ9Oom35Wu+jwErlJxCpaQwmRELqLNcYhrYziydneG/fGXeEEM86ra6qvlu/l
-        xGB7YVuvjac05MBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id C336E13305;
-        Fri, 12 Aug 2022 13:19:00 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id RUWXLERT9mIrKQAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Fri, 12 Aug 2022 13:19:00 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id 32d91cd2;
-        Fri, 12 Aug 2022 13:19:47 +0000 (UTC)
-Date:   Fri, 12 Aug 2022 14:19:47 +0100
-From:   =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>
-To:     Baokun Li <libaokun1@huawei.com>
-Cc:     Theodore Ts'o <tytso@mit.edu>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        wenqingliu0120@gmail.com, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, "zhangyi (F)" <yi.zhang@huawei.com>,
-        yebin10@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-Subject: Re: [PATCH v2] ext4: fix bug in extents parsing when eh_entries == 0
- and eh_depth > 0
-Message-ID: <YvZTcxF2DdtVEybn@suse.de>
-References: <20220812105347.2251-1-lhenriques@suse.de>
- <e32464ec-4c5b-dcad-cfe3-93727dab5f5b@huawei.com>
+        Fri, 12 Aug 2022 09:23:29 -0400
+Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0165390C68
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 06:23:26 -0700 (PDT)
+Received: from localhost.localdomain ([222.20.126.44])
+        (user=dzm91@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 27CDLQdu023627-27CDLQdx023627
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NO);
+        Fri, 12 Aug 2022 21:21:32 +0800
+From:   Dongliang Mu <dzm91@hust.edu.cn>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Carlos Llamas <cmllamas@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Kees Cook <keescook@chromium.org>
+Cc:     Dongliang Mu <mudongliangabcd@gmail.com>,
+        syzkaller <syzkaller@googlegroups.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drivers: binderfs: fix memory leak in binderfs_fill_super
+Date:   Fri, 12 Aug 2022 21:21:24 +0800
+Message-Id: <20220812132124.2053673-1-dzm91@hust.edu.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <e32464ec-4c5b-dcad-cfe3-93727dab5f5b@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+X-FEAS-AUTH-USER: dzm91@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,60 +49,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Baokun!
+From: Dongliang Mu <mudongliangabcd@gmail.com>
 
-On Fri, Aug 12, 2022 at 08:50:34PM +0800, Baokun Li wrote:
-> Hi Luís,
-...
-> > diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
-> > index 53cfe2c681c4..a5457ac1999c 100644
-> > --- a/fs/ext4/extents.c
-> > +++ b/fs/ext4/extents.c
-> > @@ -460,6 +460,11 @@ static int __ext4_ext_check(const char *function, unsigned int line,
-> >   		error_msg = "invalid eh_entries";
-> >   		goto corrupted;
-> >   	}
-> > +	if (unlikely((le16_to_cpu(eh->eh_entries) == 0) &&
-> > +		     (le16_to_cpu(eh->eh_depth > 0)))) {
-> 
-> The parentheses are misplaced,
+In binderfs_fill_super, if s_root is not successfully initialized by
+d_make_root, the previous allocated s_sb_info will not be freed since
+generic_shutdown_super first checks if sb->s_root and then does
+put_super operation. The put_super operation calls binderfs_put_super
+to deallocate s_sb_info and put ipc_ns. This will lead to memory leak
+in binderfs_fill_super.
 
-I'm not sure I understand what you mean.  I want to have
+Fix this by invoking binderfs_put_super at error sites before s_root
+is successfully initialized.
 
-	if (unlikely((CONDITION A) && (CONDITION B))) {
-		/* ... */
-	}
+Fixes: 095cf502b31e ("binderfs: port to new mount api")
+Reported-by: syzkaller <syzkaller@googlegroups.com>
+Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+---
+ drivers/android/binderfs.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
-so they look correct.  Or is that a matter of style/alignment?  (Which
-checkpatch.pl doesn't complains about, by the way.)
-
->and le16_to_cpu is not needed here.
-
-OK, I guess that, since both conditions do a comparison against '0', the
-le16_to_cpu() can be dropped.  And, if the parentheses problem you
-mentioned above is a style problem, dropping it will also solve it because
-that statement will become
-
-	if (unlikely((eh->eh_entries == 0) && (eh->eh_depth > 0))) {
-		/* ... */
-	}
-
-And once again, thanks for your review!
-
-Cheers,
+diff --git a/drivers/android/binderfs.c b/drivers/android/binderfs.c
+index 588d753a7a19..20f5bc77495f 100644
+--- a/drivers/android/binderfs.c
++++ b/drivers/android/binderfs.c
+@@ -710,8 +710,10 @@ static int binderfs_fill_super(struct super_block *sb, struct fs_context *fc)
+ 	info->mount_opts.stats_mode = ctx->stats_mode;
+ 
+ 	inode = new_inode(sb);
+-	if (!inode)
++	if (!inode) {
++		binderfs_put_super(sb);
+ 		return -ENOMEM;
++	}
+ 
+ 	inode->i_ino = FIRST_INODE;
+ 	inode->i_fop = &simple_dir_operations;
+@@ -721,8 +723,10 @@ static int binderfs_fill_super(struct super_block *sb, struct fs_context *fc)
+ 	set_nlink(inode, 2);
+ 
+ 	sb->s_root = d_make_root(inode);
+-	if (!sb->s_root)
++	if (!sb->s_root) {
++		binderfs_put_super(sb);
+ 		return -ENOMEM;
++	}
+ 
+ 	ret = binderfs_binder_ctl_create(sb);
+ 	if (ret)
 -- 
-Luís
+2.25.1
 
-> 
-> > +		error_msg = "eh_entries is 0 but eh_depth is > 0";
-> > +		goto corrupted;
-> > +	}
-> >   	if (!ext4_valid_extent_entries(inode, eh, lblk, &pblk, depth)) {
-> >   		error_msg = "invalid extent entries";
-> >   		goto corrupted;
-> > .
-> 
-> -- 
-> With Best Regards,
-> Baokun Li
-> 

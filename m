@@ -2,177 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C4C35911EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 16:09:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DDF95911EC
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 16:09:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239087AbiHLOHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 10:07:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54658 "EHLO
+        id S239104AbiHLOJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 10:09:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239095AbiHLOHF (ORCPT
+        with ESMTP id S237287AbiHLOJa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 10:07:05 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0EB8E450
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 07:07:00 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id a4so810406qto.10
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 07:07:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kudzu-us.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=o4cCmpae5Idf9m29hglIkfFTnBFWQVCZxl7mM3GbfcU=;
-        b=B3yaLfs9Wy7dodnPS67DfPjojKeP/JGGel7gsgyzSoXI8lwU3k3smrdy/iqw0vpBmt
-         naTNFw3+feF9dkb2/Sd4AjglFJoIxWleV54qkIjmBHMeJ6LSTgOIzRIiPAFVBlr5gC59
-         v+kozDyx9Sav+v5z9Cu0dUSH0tbGISETEOOwWHQt7v0lmzXIlxJ2ni1D4uxIaJ7hbL9b
-         YV9vRtbsR8zhz1K3THK38vdRKmxtOO9/sC0/VnXEJr/bQ422VJ1GiDSsHI+RNVQzC0+Z
-         +vO9g3L7ZLS36fdcBURDgnAUKaKM4rqHOF3VQZUb2ADaT54MBg0Z6DfHkYF48X6YD7NK
-         TP8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=o4cCmpae5Idf9m29hglIkfFTnBFWQVCZxl7mM3GbfcU=;
-        b=ljdStvB75njJAJefNYaYJHsmPyFoJm/Zm272jdUgTi92aCarh32URcpgw18mBwHJRv
-         YCZz3W1J0iXp3qoO9LQlqGp4MXsgLTKUHZRf5UUFpNjjAUet9DvyTNw9BCWAhb5ogDYt
-         4CkdtLRlO9j+C6b3XhKhBbUuyK1vYYmtezYFEH6U1Xq52tFpGuBf69VSeKX4Z6bjD9uh
-         h85+eK0XMKKen9UL6luYYsla3BfGnGFj3wnnHaHl1Wsobat83SPxL0+iH7aZAeW76yvn
-         4e+2sEVaAY3Apjwq2omkyS2gGJa4oBAe4qKjX5PWONxotREijWyrO9Q2gKrOZnp3PMZi
-         MigA==
-X-Gm-Message-State: ACgBeo0LKJmLAWE5rL4W8CKCdCyakBBWseJBC6SiM3PSxa17Tr5g/t5b
-        QrP5U3okXWFj1FwQIV2HP30kvg==
-X-Google-Smtp-Source: AA6agR4YuIPl4rmACKJQ36o7TO+IeIUSBODJJr3K7YFMV9Zrpd9l7IJHYIgIYA5RCSIb4R/ZZ4vlhg==
-X-Received: by 2002:ac8:5f4c:0:b0:320:795c:b414 with SMTP id y12-20020ac85f4c000000b00320795cb414mr3754593qta.302.1660313219471;
-        Fri, 12 Aug 2022 07:06:59 -0700 (PDT)
-Received: from kudzu.us ([2605:a601:a608:5600::59])
-        by smtp.gmail.com with ESMTPSA id i21-20020a05620a249500b006b8fb2a1145sm1830463qkn.124.2022.08.12.07.06.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Aug 2022 07:06:58 -0700 (PDT)
-Date:   Fri, 12 Aug 2022 10:06:57 -0400
-From:   Jon Mason <jdmason@kudzu.us>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Yang Yingliang <yangyingliang@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        Frank.Li@nxp.com, kishon@ti.com, lpieralisi@kernel.org,
-        kw@linux.com, bhelgaas@google.com
-Subject: Re: [PATCH -next v2] PCI: endpoint: pci-epf-vntb: fix error handle
- in epf_ntb_mw_bar_init()
-Message-ID: <YvZegcACgf5vKTB1@kudzu.us>
-References: <20220625021516.431473-1-yangyingliang@huawei.com>
- <20220627202704.GA1775928@bhelgaas>
+        Fri, 12 Aug 2022 10:09:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AAF8AB06A
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 07:09:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BD8CFB82435
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 14:09:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE8FEC433C1;
+        Fri, 12 Aug 2022 14:09:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660313366;
+        bh=P/YwCx8KIlvJImMMOI4qn/OI5pBpHMATs70bdyoQlGs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=W+vjPIgCvQjaedRp7HML66QeZ5xUX/j0pimp06TbIoGxywEZL8lNIzCE0Ldnt5ORc
+         73JPwMiLoCd5P1qH7isVQgKtY3xX4l+OaBV+Gb+3UIIx75VkiyikcFR32Z2kbbjt2Z
+         Bu6DnyCkoDhsjUFrU3hF35r51OGgvATbx4/7kuCg=
+Date:   Fri, 12 Aug 2022 16:09:23 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Dongliang Mu <mudongliangabcd@gmail.com>
+Cc:     Dongliang Mu <dzm91@hust.edu.cn>,
+        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
+        Todd Kjos <tkjos@android.com>,
+        Martijn Coenen <maco@android.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Carlos Llamas <cmllamas@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        syzkaller <syzkaller@googlegroups.com>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] drivers: binderfs: fix memory leak in binderfs_fill_super
+Message-ID: <YvZfEwFL7GSHEzs8@kroah.com>
+References: <20220812132124.2053673-1-dzm91@hust.edu.cn>
+ <YvZYmprZ1NiMkynp@kroah.com>
+ <CAD-N9QWU_tcnHMtP3iWcQogSWwDET4nhK5AQKDbh2KJQzwfF9A@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220627202704.GA1775928@bhelgaas>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAD-N9QWU_tcnHMtP3iWcQogSWwDET4nhK5AQKDbh2KJQzwfF9A@mail.gmail.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jun 27, 2022 at 03:27:04PM -0500, Bjorn Helgaas wrote:
-> On Sat, Jun 25, 2022 at 10:15:16AM +0800, Yang Yingliang wrote:
-> > In error case of epf_ntb_mw_bar_init(), memory window BARs should be
-> > cleared, so add 'num_mws' parameter in epf_ntb_mw_bar_clear() and
-> > calling it in error path to clear the BARs. Also add missing error
-> > code when pci_epc_mem_alloc_addr() fails.
+On Fri, Aug 12, 2022 at 09:56:46PM +0800, Dongliang Mu wrote:
+> On Fri, Aug 12, 2022 at 9:41 PM Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Fri, Aug 12, 2022 at 09:21:24PM +0800, Dongliang Mu wrote:
+> > > From: Dongliang Mu <mudongliangabcd@gmail.com>
+> > >
+> > > In binderfs_fill_super, if s_root is not successfully initialized by
+> > > d_make_root, the previous allocated s_sb_info will not be freed since
+> > > generic_shutdown_super first checks if sb->s_root and then does
+> > > put_super operation. The put_super operation calls binderfs_put_super
+> > > to deallocate s_sb_info and put ipc_ns. This will lead to memory leak
+> > > in binderfs_fill_super.
+> > >
+> > > Fix this by invoking binderfs_put_super at error sites before s_root
+> > > is successfully initialized.
+> > >
+> > > Fixes: 095cf502b31e ("binderfs: port to new mount api")
+> > > Reported-by: syzkaller <syzkaller@googlegroups.com>
+> >
+> > Where is the specific syzkaller link for this report?  It would be good
+> > to reference it so it can be properly checked.
+> >
+> > Also, how did you test this change?
 > 
-> Another one for Jon, since ff32fac00d97 appeared in -next via his
-> tree
+> I found this memory leak in my local syzkaller, and there is no any
+> syzbot report about this crash, therefore I use such a Reported-by to
+> indicate.
 > 
-> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?id=ff32fac00d97
-
-Sorry for the extremely long delay in response.  This series is in my
-ntb branch and will be in my pull request for v5.20 which should be
-going out later today.
-
-Thanks,
-Jon
-
+> Although my local syzkaller does generate any reproducer, this bug can
+> be triggered by injecting faults at new_inode and d_make_root (i.e.,
+> between s_sb_info allocation and code after d_make_root).
 > 
-> > Fixes: ff32fac00d97 ("NTB: EPF: support NTB transfer between PCI RC and EP connection")
-> > Reported-by: Hulk Robot <hulkci@huawei.com>
-> > Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
-> > ---
-> > v2:
-> >   add error label err_set_bar and move pci_epc_clear_bar() to it
-> > ---
-> >  drivers/pci/endpoint/functions/pci-epf-vntb.c | 20 ++++++++++++++-----
-> >  1 file changed, 15 insertions(+), 5 deletions(-)
-> > 
-> > diff --git a/drivers/pci/endpoint/functions/pci-epf-vntb.c b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> > index ebf7e243eefa..ee9fee167d48 100644
-> > --- a/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> > +++ b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> > @@ -567,6 +567,8 @@ static int epf_ntb_db_bar_init(struct epf_ntb *ntb)
-> >  	return -1;
-> >  }
-> >  
-> > +static void epf_ntb_mw_bar_clear(struct epf_ntb *ntb, int num_mws);
-> > +
-> >  /**
-> >   * epf_ntb_db_bar_clear() - Clear doorbell BAR and free memory
-> >   *   allocated in peers outbound address space
-> > @@ -625,13 +627,21 @@ static int epf_ntb_mw_bar_init(struct epf_ntb *ntb)
-> >  							      &ntb->vpci_mw_phy[i],
-> >  							      size);
-> >  		if (!ntb->vpci_mw_addr[i]) {
-> > +			ret = -ENOMEM;
-> >  			dev_err(dev, "Failed to allocate source address\n");
-> > -			goto err_alloc_mem;
-> > +			goto err_set_bar;
-> >  		}
-> >  	}
-> >  
-> >  	return ret;
-> > +
-> > +err_set_bar:
-> > +	pci_epc_clear_bar(ntb->epf->epc,
-> > +			  ntb->epf->func_no,
-> > +			  ntb->epf->vfunc_no,
-> > +			  &ntb->epf->bar[barno]);
-> >  err_alloc_mem:
-> > +	epf_ntb_mw_bar_clear(ntb, i);
-> >  	return ret;
-> >  }
-> >  
-> > @@ -640,12 +650,12 @@ static int epf_ntb_mw_bar_init(struct epf_ntb *ntb)
-> >   * @ntb: NTB device that facilitates communication between HOST and vHOST
-> >   *
-> >   */
-> > -static void epf_ntb_mw_bar_clear(struct epf_ntb *ntb)
-> > +static void epf_ntb_mw_bar_clear(struct epf_ntb *ntb, int num_mws)
-> >  {
-> >  	enum pci_barno barno;
-> >  	int i;
-> >  
-> > -	for (i = 0; i < ntb->num_mws; i++) {
-> > +	for (i = 0; i < num_mws; i++) {
-> >  		barno = ntb->epf_ntb_bar[BAR_MW0 + i];
-> >  		pci_epc_clear_bar(ntb->epf->epc,
-> >  				  ntb->epf->func_no,
-> > @@ -774,7 +784,7 @@ static int epf_ntb_epc_init(struct epf_ntb *ntb)
-> >  	return 0;
-> >  
-> >  err_write_header:
-> > -	epf_ntb_mw_bar_clear(ntb);
-> > +	epf_ntb_mw_bar_clear(ntb, ntb->num_mws);
-> >  err_mw_bar_init:
-> >  	epf_ntb_db_bar_clear(ntb);
-> >  err_db_bar_init:
-> > @@ -794,7 +804,7 @@ static int epf_ntb_epc_init(struct epf_ntb *ntb)
-> >  static void epf_ntb_epc_cleanup(struct epf_ntb *ntb)
-> >  {
-> >  	epf_ntb_db_bar_clear(ntb);
-> > -	epf_ntb_mw_bar_clear(ntb);
-> > +	epf_ntb_mw_bar_clear(ntb, ntb->num_mws);
-> >  }
-> >  
-> >  #define EPF_NTB_R(_name)						\
-> > -- 
-> > 2.25.1
-> > 
+> >
+> > > Signed-off-by: Dongliang Mu <mudongliangabcd@gmail.com>
+> > > ---
+> > >  drivers/android/binderfs.c | 8 ++++++--
+> > >  1 file changed, 6 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/drivers/android/binderfs.c b/drivers/android/binderfs.c
+> > > index 588d753a7a19..20f5bc77495f 100644
+> > > --- a/drivers/android/binderfs.c
+> > > +++ b/drivers/android/binderfs.c
+> > > @@ -710,8 +710,10 @@ static int binderfs_fill_super(struct super_block *sb, struct fs_context *fc)
+> > >       info->mount_opts.stats_mode = ctx->stats_mode;
+> > >
+> > >       inode = new_inode(sb);
+> > > -     if (!inode)
+> > > +     if (!inode) {
+> > > +             binderfs_put_super(sb);
+> > >               return -ENOMEM;
+> > > +     }
+> > >
+> > >       inode->i_ino = FIRST_INODE;
+> > >       inode->i_fop = &simple_dir_operations;
+> > > @@ -721,8 +723,10 @@ static int binderfs_fill_super(struct super_block *sb, struct fs_context *fc)
+> > >       set_nlink(inode, 2);
+> > >
+> > >       sb->s_root = d_make_root(inode);
+> > > -     if (!sb->s_root)
+> > > +     if (!sb->s_root) {
+> > > +             binderfs_put_super(sb);
+> > >               return -ENOMEM;
+> > > +     }
+> >
+> > How did you test this change to verify that you are not now just leaking
+> > memory?  It looks to me like you just changed one problem for another
+> > one :(
+> 
+> As mentioned above, I just tested my change by injecting faults at
+> new_inode and d_make_root.
+> 
+> Can you explain more about "changed one problem for another one"? I
+> don't quite understand this statement.
+
+I think you are leaking memory in at least your second change here,
+possibly the first, I didn't look at the code very closely.
+
+So please verify that you do not add problems when trying to remove
+them.
+
+Also, really, in a normal system, this path is impossible to hit.
+
+thanks,
+
+greg k-h

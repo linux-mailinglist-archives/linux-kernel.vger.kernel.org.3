@@ -2,49 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B8235915E2
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 21:21:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9B75915ED
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 21:25:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234816AbiHLTVc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 15:21:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52160 "EHLO
+        id S236173AbiHLTZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 15:25:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230433AbiHLTVa (ORCPT
+        with ESMTP id S231237AbiHLTZO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 15:21:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D33298C82;
-        Fri, 12 Aug 2022 12:21:29 -0700 (PDT)
+        Fri, 12 Aug 2022 15:25:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC892B8;
+        Fri, 12 Aug 2022 12:25:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0E2F0B82530;
-        Fri, 12 Aug 2022 19:21:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E11EC433D6;
-        Fri, 12 Aug 2022 19:21:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 822C361786;
+        Fri, 12 Aug 2022 19:25:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76DD6C433D6;
+        Fri, 12 Aug 2022 19:25:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660332086;
-        bh=DiulluXt2MGJ4B28v5CxKTvpqUlkZV1FWnX/0fmxOh0=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=GwvHUA4Uw0X9HQ7p2auCnj43eK+w6HaKvWncKQ49YJeCbMYpl0aRLfXJhnjI6yAdT
-         fFybfVinHyDu5gvKPcnIn4IPlssxNdC4i7YqM3izrcwH/2kAXqqJQPTm8qH7jrzD5c
-         BZd3gqDrw5UFOUAy1gLnRFC313W3gh+dfiQ+CehE18H9y0PraCO88IRiu1daCyziac
-         kydUokbuUpBrrYk2/xrTV+JaXOJ7lw7bjQliR9n71iYOdt5Gj9UOXh3ImyKh+7vkxD
-         9dfKi+/x5IRO35G9cJ6Jf7MosvVGit5GYZzNvjzBLq71hycPZZ++U3XdXMvwyYIqQY
-         hHrDqB85dV1+g==
-Date:   Fri, 12 Aug 2022 14:21:24 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Jon Mason <jdmason@kudzu.us>
-Cc:     Tom Rix <trix@redhat.com>, kishon@ti.com, lpieralisi@kernel.org,
-        kw@linux.com, bhelgaas@google.com, Frank.Li@nxp.com,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] PCI: endpoint: pci-epf-vntb: reduce several globals
- to statics
-Message-ID: <20220812192124.GA1678588@bhelgaas>
+        s=k20201202; t=1660332310;
+        bh=0+lCa3Lw/uI704NKn0CRHe4OSa4UTxWw50oFGOX9HPg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=fubw96tYs+TNoIY57YLdw2X/9/wamLfGw6T4Gp5DcLWcTXIsu8xSztR2sQMLD9+6d
+         mrpfYAlDqgJjpSgfA1LhdpgShoWZYAUB8+Rq4Daia6Qz7xRYdserWqUvN4ojoh/OAV
+         X1TOkfA8t+rj9JItHxJcU97eS0GHWdptXHZZDAiaowp2+zmSfc/vFB0yd9j10qIg4j
+         xz406CH15OzHuDdgPXpM5J0foB9+khbHrLmtOhpc2Iu3H1VK5BWi2B/Cjejin4Nk4s
+         jDepratPaH6Lo5SNUw81L6ewXjUXpREXL7y67MDEkPG5QBYfAQ8ftLu9GNK06+8IAD
+         1H0izDxAH92Aw==
+Date:   Fri, 12 Aug 2022 12:25:09 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Siddh Raman Pant <code@siddh.me>
+Cc:     "Greg KH" <gregkh@linuxfoundation.org>,
+        "johannes berg" <johannes@sipsolutions.net>,
+        "david s. miller" <davem@davemloft.net>,
+        "eric dumazet" <edumazet@google.com>,
+        "paolo abeni" <pabeni@redhat.com>,
+        "netdev" <netdev@vger.kernel.org>,
+        "syzbot+6cb476b7c69916a0caca" 
+        <syzbot+6cb476b7c69916a0caca@syzkaller.appspotmail.com>,
+        "linux-wireless" <linux-wireless@vger.kernel.org>,
+        "linux-kernel" <linux-kernel@vger.kernel.org>,
+        "syzbot+f9acff9bf08a845f225d" 
+        <syzbot+f9acff9bf08a845f225d@syzkaller.appspotmail.com>,
+        "syzbot+9250865a55539d384347" 
+        <syzbot+9250865a55539d384347@syzkaller.appspotmail.com>,
+        "linux-kernel-mentees" 
+        <linux-kernel-mentees@lists.linuxfoundation.org>
+Subject: Re: [PATCH v2] wifi: cfg80211: Fix UAF in ieee80211_scan_rx()
+Message-ID: <20220812122509.281f0536@kernel.org>
+In-Reply-To: <18292e1dcd8.2359a549180213.8185874405406307019@siddh.me>
+References: <20220726123921.29664-1-code@siddh.me>
+        <18291779771.584fa6ab156295.3990923778713440655@siddh.me>
+        <YvZEfnjGIpH6XjsD@kroah.com>
+        <18292791718.88f48d22175003.6675210189148271554@siddh.me>
+        <YvZxfpY4JUqvsOG5@kroah.com>
+        <18292e1dcd8.2359a549180213.8185874405406307019@siddh.me>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YvZgJ4IGEG8levOA@kudzu.us>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -55,46 +73,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 12, 2022 at 10:13:59AM -0400, Jon Mason wrote:
-> On Tue, Jul 12, 2022 at 03:05:27PM -0500, Bjorn Helgaas wrote:
-> > Handled via Jon, I guess?
-> > 
-> > I'm unclear on the future direction of pci-epf-vntb.c.  Jon, are you
-> > signing up to maintain this?  MAINTAINERS doesn't seem to reflect
-> > that, even in next-20220712, so you're not being copied on everything.
-> > 
-> > If you are planning to merge and maintain this file, it would be
-> > helpful to me if you acknowledge patches you merge so I know to ignore
-> > them.
+On Fri, 12 Aug 2022 21:57:31 +0530 Siddh Raman Pant wrote:
+> On Fri, 12 Aug 2022 20:57:58 +0530  Greg KH  wrote:
+> > rcu just delays freeing of an object, you might just be delaying the
+> > race condition.  Just moving a single object to be freed with rcu feels
+> > very odd if you don't have another reference somewhere.  
 > 
-> I massively dropped the ball on all the EPF stuff.  I appologize profusely.
+> As mentioned in patch message, in net/mac80211/scan.c, we have:
+>         void ieee80211_scan_rx(struct ieee80211_local *local, struct sk_buff *skb)
+>         {
+>                 ...
+>                 scan_req = rcu_dereference(local->scan_req);
+>                 sched_scan_req = rcu_dereference(local->sched_scan_req);
+> 
+>                 if (scan_req)
+>                         scan_req_flags = scan_req->flags;
+>                 ...
+>         }
+> 
+> So scan_req is probably supposed to be protected by RCU.
+> 
+> Also, in ieee80211_local's definition at net/mac80211/ieee80211_i.h, we have:
+>         struct cfg80211_scan_request __rcu *scan_req;
+> 
+> Thus, scan_req is indeed supposed to be protected by RCU, which this patch
+> addresses by adding a RCU head to the type's struct, and using kfree_rcu().
+> 
+> The above snippet is where the UAF happens (you can refer to syzkaller's log),
+> because __cfg80211_scan_done() is called and frees the pointer.
 
-No worries, sounds like you're getting everything sorted out :)
-
-> I'm pulling it into my ntb tree bcause of the patch dependencies.  If
-> you want me to own this stuff because it has ntb in it, then I can do
-> a matainers entry to reflect it.  My assumption is that because it is
-> under the drivers/pci umbrella it is yours (unless you want me to own
-> it).  100% defer to your decision.
-
-This patch dependency thing feels like a one-time or at least unusual
-situation.  Unless it becomes a problem, I think it makes sense to
-keep the drivers/pci umbrella instead of carving bits out of the
-middle.
-
-Even if I continue to merge everything under drivers/pci, maybe we
-should consider an update like this just so you get cc'd on updates to
-these files?
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 08a5d70ceef9..5bafe7e8c2b2 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -14466,6 +14466,7 @@ W:	https://github.com/jonmason/ntb/wiki
- T:	git git://github.com/jonmason/ntb.git
- F:	drivers/net/ntb_netdev.c
- F:	drivers/ntb/
-+F:	drivers/pci/endpoint/functions/pci-epf-*ntb.c
- F:	include/linux/ntb.h
- F:	include/linux/ntb_transport.h
- F:	tools/testing/selftests/ntb/
+Similarly to Greg, I'm not very familiar with the code base but one
+sure way to move things forward would be to point out a commit which
+broke things and put it in a Fixes tag. Much easier to validate a fix
+by looking at where things went wrong.

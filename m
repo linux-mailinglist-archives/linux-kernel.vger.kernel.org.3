@@ -2,140 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9518591278
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 16:48:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A91859127A
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 16:48:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237637AbiHLOsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 10:48:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40720 "EHLO
+        id S238061AbiHLOs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 10:48:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232082AbiHLOsM (ORCPT
+        with ESMTP id S237826AbiHLOs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 10:48:12 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 965F298D09
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 07:48:11 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 047E532007F0;
-        Fri, 12 Aug 2022 10:48:09 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Fri, 12 Aug 2022 10:48:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=aj.id.au; h=cc
-        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm3; t=1660315689; x=1660402089; bh=nFAyZba+rUSSpa4dMw5jpMYFE
-        bkfzVnF4ksUNlmVM3A=; b=aBWH05Od0HQ74QiuPgre2ttFPk/yRPqxtG7J3wILw
-        pN9tIc6SYBKLJjQ6KHnvN18/vLLxbNhfDuaEUw+4Vj29AxsLDMOf+s5LGZPmOvdY
-        K0tEsG2JW/ITmwGyIRngtZiHkYjao0cug5P+tDPlUn4pTD/anny5mIdAh3gaEJOq
-        sXcwIyY0/Nay1ajcFPpHMN3qGT48oXkEkoFkiSOCHvejBTBMKhjjSVeTy5wTEUke
-        gReJsmeJPDisCQr4N7ObzUl/KEFJqBa3D9qD3AP/I2fd9tm7L0LfMcFuPWzs6rSe
-        wDNOCG3f1SnqbmewhS1FzyV/p+BTSnuDN8TdNySipohBQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1660315689; x=1660402089; bh=nFAyZba+rUSSpa4dMw5jpMYFEbkfzVnF4ks
-        UNlmVM3A=; b=BihLiXC4PtN2SfU+VBV4DM4mEGnvTGkeAlF76WFLDpPtsdd6EyW
-        e37t73EA8IFPtt3fToOOP+B/ifL4pxW9mDcVzHonzNgLr33xrvY6qMlH7lrYaK9i
-        mSCg7OtX4wdzNtWiC2HJeSNv8b+LHwus+ZyQz1CG7ctYzz9Q4cA6Xkwsu9aIWBin
-        5iyyveb1gQUWPlncAJZjadHrXvRqSwhDYqd1bG2zlwSL+7MNxD290cqWXcVKy9J8
-        teZQDNLC/l+zbEZVPuSvrV0aTLbbnCp7NnTxJBQDuCzqbZ0gBm5a3JOCUDvqfV5f
-        8NWdUYnmmIefT41RTs9uDzXZPb8H4V0aUjw==
-X-ME-Sender: <xms:KGj2YhGpHq2WIrq7pE725XRiIoCZuPX54xRzi2tLqVvtG7iikGyE-w>
-    <xme:KGj2YmVelSMbeOLBszGJHZvx_j8xIk1zEkiDmSirizDm8MEUHlGH6wf_EbxdNG9lx
-    VyEg0KOd87nXpowuQ>
-X-ME-Received: <xmr:KGj2YjJH5Ou5yStvqlggt-3S3VPopiDVqGkaU3UvtJont5VMnoETjhPeFiXp47p5MIIbl9pQsT94gh5XWiJTCHJjy3CJipVCHoNWDbR8-sdcgSiNd40Z_8tNxbSLtEehX88>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegiedgkeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
-    ertddtnecuhfhrohhmpeetnhgurhgvficulfgvfhhfvghrhicuoegrnhgurhgvfiesrghj
-    rdhiugdrrghuqeenucggtffrrghtthgvrhhnpefhfefghfdtteehvddufefgtdelfeehge
-    ekvddthfehgedvkeevvddutdehgeefieenucevlhhushhtvghrufhiiigvpedtnecurfgr
-    rhgrmhepmhgrihhlfhhrohhmpegrnhgurhgvfiesrghjrdhiugdrrghu
-X-ME-Proxy: <xmx:KGj2YnGoJMsaWvT6ybbpz7J_NwW1p2UPp55Jkc6ri5GLO5h8Dl1fqw>
-    <xmx:KGj2YnUCYfC1CLewAtzjPcceTe6yPk9DYzGxXV4dBvh-zinJel4LlQ>
-    <xmx:KGj2YiPGRbwDLiLwb-4PJMzLr7vyvceKoXb7jG0z5vn0yuS2f4SoDA>
-    <xmx:KWj2Ytd-LzVJnPfa4mOq4QVSvWXfHt3jFAsYW6FPwB_XzLWRruUe_Q>
-Feedback-ID: idfb84289:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 12 Aug 2022 10:48:05 -0400 (EDT)
-From:   Andrew Jeffery <andrew@aj.id.au>
-To:     openipmi-developer@lists.sourceforge.net
-Cc:     minyard@acm.org, joel@jms.id.au,
-        linux-arm-kernel@lists.infradead.org,
-        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        openbmc@lists.ozlabs.org
-Subject: [PATCH] ipmi: kcs: Poll OBF briefly to reduce OBE latency
-Date:   Sat, 13 Aug 2022 00:17:41 +0930
-Message-Id: <20220812144741.240315-1-andrew@aj.id.au>
-X-Mailer: git-send-email 2.34.1
+        Fri, 12 Aug 2022 10:48:27 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E497ABD4A
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 07:48:25 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 24so971909pgr.7
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 07:48:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=tmJm+SpCPyDqJ1lshIA1ETszu0sVt5hUjFD5g/2kg50=;
+        b=aJ+9o9HQcipIlVWgIit02PLYCSWZQby4S9kcexl1KVoRbd5IYGKzIN29a15kXcl3tH
+         kQLYYNSlzNAl1v02d7rPkfua47JAO3GOBNKFzUxavCTsZEeK1OYRR3BdVs4jJNmVoAoH
+         kNPqKF4KotAOzRhuCPRWLuFYoYVXZBp8OpCvop4KzhGmsXmUsZJNDBb316UO1IPRE2PV
+         o9sLm46JHvpK9rCWnkoSbovI/tG5xatcI24KnR2pt8q6nKRhLBxTbVHhauUr4NBYONjI
+         LI3kHQ//6JXOfOrrskh9QahS+X8WZUrfsr3TJ76YFK3ff1+5HijxA00HyJ/6XB/wd4ut
+         gYLg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=tmJm+SpCPyDqJ1lshIA1ETszu0sVt5hUjFD5g/2kg50=;
+        b=C57lbcjof1KEWJv96yW/jhjPi5edBDW4UqHNc80M7UUZVzsHgi49HJ85AMtWqtj6I9
+         sCRElP+4PB9NYSsFeKKD5MGt2dtQrpwH+7hd6AnqTj9A0M7UGTO+MtkNlWOrDD2pOkoh
+         pZ223+V+0VXlNo9wBV/XarN8xjAIiQbGLxIrLrN0f6TLI86+kLQ/JkOH1g5froVpP+M8
+         k9WVpEpaP63Nrs0yLP/waUIBNTaYdMXoZgezmAey3hZAQlweEMkOSZaOo/4B9rxRBkbI
+         m9rXGCZTehG5nfZgz0+KmRNo2nkhunbPJW0F5tgJDUhd7/Bre3nddVWgFVr4FKB6N9S7
+         S+Zg==
+X-Gm-Message-State: ACgBeo1La6astXdhadeKmJSjoZ2hBKYgRBPM+dVFMIidz3DwD+OWheQQ
+        o83f6MNpgRGlD9tyYFaEZJ54NYZWcRJPxg==
+X-Google-Smtp-Source: AA6agR6GZCf3r5KmUJM1S3uTXeEKj1oUGGU+qcmom++g7ekrhliqaeUv0A+Xqdt1Ba4yqQaLzwQyZw==
+X-Received: by 2002:a63:2dc5:0:b0:423:1abf:d0b3 with SMTP id t188-20020a632dc5000000b004231abfd0b3mr28018pgt.211.1660315704696;
+        Fri, 12 Aug 2022 07:48:24 -0700 (PDT)
+Received: from [10.4.217.209] ([139.177.225.231])
+        by smtp.gmail.com with ESMTPSA id u13-20020a170903124d00b0016db6bd77f4sm1898601plh.117.2022.08.12.07.48.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 Aug 2022 07:48:24 -0700 (PDT)
+Message-ID: <686b645c-c4e1-357f-7c57-b961a1feeda0@bytedance.com>
+Date:   Fri, 12 Aug 2022 22:48:20 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.1.0
+Subject: Re: [PATCH] blk-mq: move bio merge attempt to blk_mq_submit_bio()
+Content-Language: en-US
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220812083944.79616-1-zhouchengming@bytedance.com>
+ <330468da-a778-6cfc-ce46-a62566d71c8d@kernel.dk>
+From:   Chengming Zhou <zhouchengming@bytedance.com>
+In-Reply-To: <330468da-a778-6cfc-ce46-a62566d71c8d@kernel.dk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ASPEED KCS devices don't provide a BMC-side interrupt for the host
-reading the output data register (ODR). The act of the host reading ODR
-clears the output buffer full (OBF) flag in the status register (STR),
-informing the BMC it can transmit a subsequent byte.
+On 2022/8/12 20:40, Jens Axboe wrote:
+> On 8/12/22 2:39 AM, Chengming Zhou wrote:
+>> We will try to get request from cache before alloc request, in
+>> both cases will first attempt bio merge.
+>>
+>> This patch move this common part to blk_mq_submit_bio(), which
+>> simplify the code and avoid passing in the pointer of bio.
+> 
+> I don't think this will work. If we get a cached request, then we
+> know we have a reference to the queue. If you swap these around,
+> then that's no longer the case and we can have a use-after-free if
+> the queue goes away.
+> 
 
-On the BMC side the KCS client must enable the OBE event *and* perform a
-subsequent read of STR anyway to avoid races - the polling provides a
-window for the host to read ODR if data was freshly written while
-minimising BMC-side latency.
-
-Signed-off-by: Andrew Jeffery <andrew@aj.id.au>
----
- drivers/char/ipmi/kcs_bmc_aspeed.c | 24 +++++++++++++++++++++---
- 1 file changed, 21 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/char/ipmi/kcs_bmc_aspeed.c b/drivers/char/ipmi/kcs_bmc_aspeed.c
-index cdc88cde1e9a..417e5a3ccfae 100644
---- a/drivers/char/ipmi/kcs_bmc_aspeed.c
-+++ b/drivers/char/ipmi/kcs_bmc_aspeed.c
-@@ -399,13 +399,31 @@ static void aspeed_kcs_check_obe(struct timer_list *timer)
- static void aspeed_kcs_irq_mask_update(struct kcs_bmc_device *kcs_bmc, u8 mask, u8 state)
- {
- 	struct aspeed_kcs_bmc *priv = to_aspeed_kcs_bmc(kcs_bmc);
-+	int rc;
-+	u8 str;
- 
- 	/* We don't have an OBE IRQ, emulate it */
- 	if (mask & KCS_BMC_EVENT_TYPE_OBE) {
--		if (KCS_BMC_EVENT_TYPE_OBE & state)
--			mod_timer(&priv->obe.timer, jiffies + OBE_POLL_PERIOD);
--		else
-+		if (KCS_BMC_EVENT_TYPE_OBE & state) {
-+			/*
-+			 * Given we don't have an OBE IRQ, delay by polling briefly to see if we can
-+			 * observe such an event before returning to the caller. This is not
-+			 * incorrect because OBF may have already become clear before enabling the
-+			 * IRQ if we had one, under which circumstance no event will be propagated
-+			 * anyway.
-+			 *
-+			 * The onus is on the client to perform a race-free check that it hasn't
-+			 * missed the event.
-+			 */
-+			rc = read_poll_timeout_atomic(aspeed_kcs_inb, str,
-+						      !(str & KCS_BMC_STR_OBF), 1, 100, false,
-+						      &priv->kcs_bmc, priv->kcs_bmc.ioreg.str);
-+			/* Time for the slow path? */
-+			if (rc == -ETIMEDOUT)
-+				mod_timer(&priv->obe.timer, jiffies + OBE_POLL_PERIOD);
-+		} else {
- 			del_timer(&priv->obe.timer);
-+		}
- 	}
- 
- 	if (mask & KCS_BMC_EVENT_TYPE_IBF) {
--- 
-2.34.1
-
+Sorry, thanks for your reply!

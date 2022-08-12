@@ -2,102 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 776FC591654
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 22:31:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE9BF591662
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 22:41:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235293AbiHLUbH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 16:31:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55766 "EHLO
+        id S236303AbiHLUkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 16:40:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230445AbiHLUbE (ORCPT
+        with ESMTP id S234712AbiHLUkF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 16:31:04 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1A7998580
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 13:31:01 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id r22so1684643pgm.5
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 13:31:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=VQTwmgbULdrb/KYHoxgQ4q38dOU+h7WsozErL3JrEuw=;
-        b=X703rBkC0IpOWzSdmX19HRJnHxncorPjeyOlJcX7XiqrCAwAqMqLdQ+LGcEvvDEXXP
-         LRGN86VIyhtMLGcrESY4Ct+LGaKzvaqTRZluZaKAuphqLii+4WFeTB5vsTvBsMvpGAkY
-         QXHRTY1//Qu2UnWttyUX2mcOW0RGCWNYXEv7eHTgDXtyhh9F5pa8asIAktebOlHYkpug
-         h6ZBgJMH1SlEkz93X8zs6oqaZHCB4qn3sZ1V9rIFijM0SyZpDB4SwUTaSBZlEKP6xc2J
-         k/jcyc59NdVQJw9iJshUbK5sbozNGe1EpA0PizlXesUeLKGXnVbGMgfGFLisbTf31+BZ
-         YweQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=VQTwmgbULdrb/KYHoxgQ4q38dOU+h7WsozErL3JrEuw=;
-        b=vllcOIriorMsjgtSOLDiZUjRHCyrid5vawxkLgO6EN42KeKHwaAITFzPxhcc5PmC4C
-         4b2QAhhUl7LQ3VEWySf08I0/wfMyA8DsDgveIbdplP3e8BdDneMYC7Ge9ubqTttLEiZ3
-         8GhKR0Rls0lPRshU/nXjmzgNNFagSEBr1S6oHv0hKw35rt+D+Ju4gHyMv+4LxKM8VUqD
-         pFAnAwEqnXkS9K42X5bv5531rmaJaXlkZe08lsBLsNrUO9+Quf68k7O13IFHx9haZyic
-         1ClkTZHYUS9orO7pCRleG4mQtD35nbSWXlIoRUpzHYWxO3z2AvQ6E2Pv9+7QkJo0oJV9
-         XKng==
-X-Gm-Message-State: ACgBeo1AvxNX3vMMXKfS1oAvzwWCWR50XR9Xi4Lt+SDoOPgTSkd1SRRZ
-        hKT98N6eZpfUJ3gqMlRqPvsuM7sIDuY=
-X-Google-Smtp-Source: AA6agR6qCqB6ar2BvdhYE1UpaOUZa1ZEXPztDmeiWKjfV6e0r8jXmpLjHrMIjHHDJhTwIj3RMy0UCg==
-X-Received: by 2002:a05:6a00:23c1:b0:52e:28f5:4e13 with SMTP id g1-20020a056a0023c100b0052e28f54e13mr5492191pfc.20.1660336261014;
-        Fri, 12 Aug 2022 13:31:01 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:aae])
-        by smtp.gmail.com with ESMTPSA id z127-20020a623385000000b0052d432b4cc0sm2031289pfz.33.2022.08.12.13.31.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Aug 2022 13:31:00 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Fri, 12 Aug 2022 10:30:59 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Felix Kuehling <felix.kuehling@amd.com>
-Cc:     Lai Jiangshan <jiangshanlai@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Dave Airlie <airlied@gmail.com>,
-        Philip Yang <Philip.Yang@amd.com>,
-        Maling list - DRI developers 
-        <dri-devel@lists.freedesktop.org>,
-        "amd-gfx@lists.freedesktop.org" <amd-gfx@lists.freedesktop.org>
-Subject: Re: Selecting CPUs for queuing work on
-Message-ID: <Yva4g3V2jAP0NKcY@slm.duckdns.org>
-References: <82233e68-106f-39e9-b20d-7794eb7a8933@amd.com>
+        Fri, 12 Aug 2022 16:40:05 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 844B9B516F
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 13:40:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660336803;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=4KXlLuvPMlmAiB57wJLNoz/8ss1kELM0mUamUap4RRE=;
+        b=IAZTRe6H2rCL0d87SvloLTrg+8xzl3l/nQvZf0mVQlsQJhOFTy4+dVXiqEbsVdIlikdbZk
+        HgguXr+HRMUBB/vHDhcf+u99tjI/ydtbYsPfoLHjNZ+aoouDyHm/SR3ohDhVpu4TfrVyjz
+        qunAgqXCmkgxaxS0A84IMlD4TbjCoA8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-468-OCJOeQOLPDyX1YvobL4xxQ-1; Fri, 12 Aug 2022 16:39:58 -0400
+X-MC-Unique: OCJOeQOLPDyX1YvobL4xxQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A4F95380407F;
+        Fri, 12 Aug 2022 20:39:57 +0000 (UTC)
+Received: from llong.com (unknown [10.22.32.88])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 62416C15BA6;
+        Fri, 12 Aug 2022 20:39:56 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Will Deacon <will@kernel.org>
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH v3 0/3] sched, cgroup/cpuset: Keep user set cpus affinity
+Date:   Fri, 12 Aug 2022 16:39:26 -0400
+Message-Id: <20220812203929.364341-1-longman@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <82233e68-106f-39e9-b20d-7794eb7a8933@amd.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.8
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 12, 2022 at 04:26:47PM -0400, Felix Kuehling wrote:
-> Hi workqueue maintainers,
-> 
-> In the KFD (amdgpu) driver we found a need to schedule bottom half interrupt
-> handlers on CPU cores different from the one where the top-half interrupt
-> handler runs to avoid the interrupt handler stalling the bottom half in
-> extreme scenarios. See my latest patch that tries to use a different
-> hyperthread on the same CPU core, or falls back to a different core in the
-> same NUMA node if that fails:
-> https://lore.kernel.org/all/20220811190433.1213179-1-Felix.Kuehling@amd.com/
-> 
-> Dave pointed out that the driver may not be the best place to implement such
-> logic and suggested that we should have an abstraction, maybe in the
-> workqueue code. Do you feel this is something that could or should be
-> provided by the core workqueue code? Or maybe some other place?
+v3:
+ - Attach a new patch 2 to introduce a copy_user_cpus_mask() to copy
+   out user masks with lock protection & use it in patch 3.
+v2:
+ - Rework the v1 patch by extending the semantics of user_cpus_ptr to
+   store user set cpus affinity and keeping to it as much as possible.
 
-I'm not necessarily against it. I guess it can be a flag on an unbound wq.
-Do the interrupts move across different CPUs tho? ie. why does this need to
-be a dynamic decision?
+The user_cpus_ptr field is added by commit b90ca8badbd1 ("sched:
+Introduce task_struct::user_cpus_ptr to track requested affinity")
+which uses it narrowly to allow keeping cpus affinity intact with
+asymmetric cpu setup.
 
-Thanks.
+This patchset extends user_cpus_ptr to store user set cpus affinity via
+sched_setaffinity() API. With that information avaiable, it will enable
+cpuset to keep cpus afinity as close to what the user wants as possible
+within the cpu list constraint of the current cpuset. Otherwise some
+change to the cpuset hierarchy may reset the cpumask of the tasks in
+the affected cpusets to the default cpuset value even if those tasks
+have cpus affinity explicitly set by the users before.
+
+It also means that once sched_setaffinity() is called, user_cpus_ptr
+will remain allocated until the task exits.
+
+Waiman Long (3):
+  sched: Use user_cpus_ptr for saving user provided cpumask in
+    sched_setaffinity()
+  sched: Provide copy_user_cpus_mask() to copy out user mask
+  cgroup/cpuset: Keep user set cpus affinity
+
+ include/linux/sched.h  |  2 +
+ kernel/cgroup/cpuset.c | 28 ++++++++++++-
+ kernel/sched/core.c    | 89 ++++++++++++++++++++++++++++++++----------
+ kernel/sched/sched.h   |  1 -
+ 4 files changed, 97 insertions(+), 23 deletions(-)
 
 -- 
-tejun
+2.31.1
+

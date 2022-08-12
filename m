@@ -2,270 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFF86590B89
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 07:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2014590B8C
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 Aug 2022 07:36:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236878AbiHLFfp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 01:35:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41870 "EHLO
+        id S237011AbiHLFf6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 01:35:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230422AbiHLFfl (ORCPT
+        with ESMTP id S230422AbiHLFfs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 01:35:41 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9622A6AA05
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 22:35:39 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-32a09b909f6so714407b3.0
-        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 22:35:39 -0700 (PDT)
+        Fri, 12 Aug 2022 01:35:48 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B6C74DFA
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 22:35:47 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id 130so25484pfv.13
+        for <linux-kernel@vger.kernel.org>; Thu, 11 Aug 2022 22:35:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=5vwcQReAFikjQnzpSfbkCAycRcrywZUDKw8D4hnhPIg=;
-        b=TZi5p5Ld3tBdJ3PbLP+lvU0ZX02K09Pd1zn6gRObVmnQh5H7YsgwOOjwz6aciA++Iv
-         4dRmJ/dzJDCF6U566vI5MjVrCgt/BsmqysotNX0eRRonwO+sESQ40e114wgA/OIZqsVZ
-         4ycQQpGWDu9ly9cl9GN16uQ4yvfB5IYf8eIS2e3VomKZ3F4tvM72ZbsXx+X4U5mC+p0c
-         2M3k+3ab49pAilfrLd5kTrYw9MXY4l0yi6OzEhM1RmEpjSE1KsnbwwGkciEvmiP1AbVw
-         MGlxJPE+MBCId65ErSthB4YkdAHy6jnzGQzBw59amKkIdLxau2LcGBMR90ZpA6rWxbdv
-         9uLQ==
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc;
+        bh=JGnD3l9t4SkK48ITST5G9Acthlp2sOgptI0b4WEHZr4=;
+        b=HvbTScr18fV1zTYfyM7LcIPhZVpK4f8i4MOC2xIoldmIw9qLjWgrjvzmXHFyREPFLX
+         eCr27APqcbRFW2lMknyaje3WlCld4GgahZYAFFkbHptL0JqXMhHG6hUXupvYk46RCJz+
+         pPyKo6beBZFHgeXPLiElikFL23Pb7hnJwJETEA14sAbfm+ujtgCA/dqU8+keHRsk6yfE
+         XqAUkSzwBdp5cgzlXAEgsS54VBKbZ5gX6MfnXb87d5OirO1Mm55DU+9twmgpMwgOLzIC
+         vgW64hEsEHZFJ7BwKgjQByQp9/EY4gM2pImBDrSKw82tcswI8HaT/qwYnCvHujSOvibT
+         oKPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=5vwcQReAFikjQnzpSfbkCAycRcrywZUDKw8D4hnhPIg=;
-        b=aQTjCjN7KppnA7G+Ur8U2MzwOGMjPQIvteV7t0hzYyateUgW/AKXnH0WTe6w73hVnW
-         OIoWLs5Jds8LIJSF5x1KaypjF93BNJMD5/qu/MoPI4g8Ashgvm2D9eNGdZ6zcFmcLWga
-         IWyQ1gYhSQJsD/ymiq4NfAgqz9ENFfsGbOJ3cXIjZApOmaIa2/tN16Wi7wxKhBUWO/GI
-         QOqh6lJkIDsu2L6mk6KRes7Gq+Otv02Zp++PlJeiYAlHyny9kYQnWOB1M/kG4Fh+0+Dg
-         3jiUlkujhVH3moSPRS1tI3dwnLMtBN7FgtLKxw99b5C59CArpvYsBgOKga+kI3F/FxEm
-         G7vg==
-X-Gm-Message-State: ACgBeo3xHQSu1BNcKg+ZmpgPZomtQ+ADvSYzW+rYvh/FXLybgopzze8Z
-        cVKSDahFB1GG07mZgBy16ysUrrRH0OlbRaGX45vpWw==
-X-Google-Smtp-Source: AA6agR7e+9CEuRYGCPvYyNrgfLxEj1GTVFuCiRZY2Z+mVzWZx88pDtHRRG7DBuIgQmc5wlVt9K+90SLWnNUsJg4CeF8=
-X-Received: by 2002:a0d:c745:0:b0:324:8800:f63d with SMTP id
- j66-20020a0dc745000000b003248800f63dmr2463417ywd.106.1660282538824; Thu, 11
- Aug 2022 22:35:38 -0700 (PDT)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc;
+        bh=JGnD3l9t4SkK48ITST5G9Acthlp2sOgptI0b4WEHZr4=;
+        b=Aiq6IOBISBQAk1sKSdDib78gdbb41c5J/v7O59ccQ4zfqcYfQZAkvLFcmaIzy9H9c7
+         jr/hGH0TZ1EnBMDBowi9vXaOevtksexslyN2RGe1WkBff/DsZq9hZ2nL731vaZJ+yDAB
+         DrkGFvk/HlRPbGdBVAzzgoa7e1AZLg3kZLzREaje20sbVpbUEYz/zD13y2PiZz+PlkCr
+         cbOsSUQIJwXD80v81+DuRt+lhLnSk6owyM9N6l/KKRXT8Y9RHYRjQcjEWbhKpMFaVeFv
+         33O3d8s7y+NWvwpr9NCT9+Tu1T7V8V0kkNz+TMrmPACs/7JsEo6reuY4vijuqUSt+biw
+         PQ9Q==
+X-Gm-Message-State: ACgBeo0ktyaaLY3+7HWZm7WCNN40J1lrmpkPA+KWaV1VkPym0zgbKRDo
+        kD+ARwSEuLiyqH1baUeOzvs7
+X-Google-Smtp-Source: AA6agR6QKykT59/PsxCYm9H7RCEKDXN+emk2X2xl3Y+/vwPcq7Shj96oy/11FSIXJdyQo6aenYxg1g==
+X-Received: by 2002:a05:6a00:1a49:b0:52d:4ad7:3bea with SMTP id h9-20020a056a001a4900b0052d4ad73beamr2168009pfv.66.1660282546657;
+        Thu, 11 Aug 2022 22:35:46 -0700 (PDT)
+Received: from thinkpad ([59.92.103.103])
+        by smtp.gmail.com with ESMTPSA id d7-20020a170903230700b0016efc27ca98sm672477plh.169.2022.08.11.22.35.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Aug 2022 22:35:46 -0700 (PDT)
+Date:   Fri, 12 Aug 2022 11:05:40 +0530
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     Trilok Soni <quic_tsoni@quicinc.com>
+Cc:     Borislav Petkov <bp@alien8.de>, bjorn.andersson@linaro.org,
+        mchehab@kernel.org, james.morse@arm.com, rric@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-edac@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] Fix crash when using Qcom LLCC/EDAC drivers
+Message-ID: <20220812053540.GA4956@thinkpad>
+References: <20220811100924.79505-1-manivannan.sadhasivam@linaro.org>
+ <YvTehUOIqJGqXgXY@zn.tnic>
+ <YvTfqg0q/8kIMY91@zn.tnic>
+ <20220811112032.GB29799@workstation>
+ <YvTo8tE3DaHifrSp@zn.tnic>
+ <20220811115334.GC29799@workstation>
+ <20220811115711.GD29799@workstation>
+ <343d1491-49a0-ea38-1b65-dc2bdfb4726d@quicinc.com>
 MIME-Version: 1.0
-References: <20211225063151.2110878-1-nikita.yoush@cogentembedded.com> <5WJ88R.LXNASHJRBDGL1@crapouillou.net>
-In-Reply-To: <5WJ88R.LXNASHJRBDGL1@crapouillou.net>
-From:   Yongqin Liu <yongqin.liu@linaro.org>
-Date:   Fri, 12 Aug 2022 13:35:27 +0800
-Message-ID: <CAMSo37We74tpPd_XSdum++SKUopLU5xiLK1peh6mGKA8jYnCrA@mail.gmail.com>
-Subject: Re: [PATCH] drm/bridge_connector: enable HPD by default if supported
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        "Bajjuri, Praneeth" <praneeth@ti.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <343d1491-49a0-ea38-1b65-dc2bdfb4726d@quicinc.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Nikita, All
+On Thu, Aug 11, 2022 at 09:08:14AM -0700, Trilok Soni wrote:
+> Hello Mani,
+> 
+> On 8/11/2022 4:57 AM, Manivannan Sadhasivam wrote:
+> > Clipped the bouncing email addresses...
+> > 
+> > On Thu, Aug 11, 2022 at 05:23:34PM +0530, Manivannan Sadhasivam wrote:
+> > > On Thu, Aug 11, 2022 at 01:33:06PM +0200, Borislav Petkov wrote:
+> > > > On Thu, Aug 11, 2022 at 04:50:32PM +0530, Manivannan Sadhasivam wrote:
+> > > > > I know get_maintainer.pl :) But the problem is, Qualcomm recently
+> > > > > switched their email domain from codeaurora.org to quicinc.com.
+> > > > 
+> > > > Great:
+> > > > 
+> > > > $ git grep codeaurora.org MAINTAINERS | wc -l
+> > > > 5
+> > > > 
+> > > 
+> > > Yep! Most of the active developers have already changed their domains in
+> > > MAINTAINERS file. But the left ones are either not actively maintained
+> > > (yeah bad) or the maintainers have left Qualcomm.
+> > > 
+> > > > ;-\
+> > > > 
+> > > > > So even if I use the maintainers codeaurora domain now, they will
+> > > > > bounce.
+> > > > 
+> > > > Hmm, so the mails I sent with codeaurora on Cc didn't bounce back - I
+> > > > got only the quicinc bounces. That doesn't mean that codeaurora actually
+> > > > gets delivered...
+> > > > 
+> > > 
+> > > Not sure why. It was supposed to bounce. But could be that Qualcomm IT
+> > > decided to not bounce anymore since they have got enough complaints from
+> > > developers ;)
+> > > 
+> > 
+> > Okay, seems to be bouncing for me:
+> > 
+> > The response from the remote server was:
+> > 585 5.1.1 <ckadabi@codeaurora.org>: Recipient address rejected: undeliverable address: No such user here.
+> > 585 5.1.1 <vnkgutta@codeaurora.org>: Recipient address rejected: undeliverable address: No such user here.
+> 
+> It is ok if someone from Linaro team becomes the maintainer for this driver.
+> 
 
-We have one X15 Android build based on the android mainline kernel,
-and it failed to boot with this change because of one kernel panic.
-And it would boot to the home  screen if this change is reverted.
-
-Could you please help have a look and give suggestions on what should
-be done next
-to work with this change?
-
-The kernel panic  is something like the following, for details please
-check the link here: http://ix.io/47mc
-[   38.784301] Internal error: : 1211 [#2] PREEMPT SMP ARM
-[   38.784301] Modules linked in:
-[   38.788940] Kernel panic - not syncing: Fatal exception in interrupt
-[   38.794189]  snd_soc_omap_hdmi ti_tpd12s015 pvrsrvkm(O)
-display_connector omap_wdt omap_aes_driver ti_vpe ti_vpdma ti_csc
-ti_sc v4l2_mem2mem videobuf2_dma_contig omap_sham rtc_omap
-snd_soc_tlv320aic3x_i2c snd_soc_tlv320aic3x at24 rtc_palmas omap_des
-omap_crypto libdes crypto_engine rtc_ds1307 omap_hdq wire phy_gmii_sel
-ahci_platform libahci_platform libahci libata scsi_mod bsg scsi_common
-snd_soc_simple_card snd_soc_simple_card_utils
-[   38.842315] CPU: 1 PID: 454 Comm: vsync Tainted: G      D W  O
-5.19.0-02213-g3aeacdb764a2 #1
-[   38.851226] Hardware name: Generic DRA74X (Flattened Device Tree)
-[   38.857360] PC is at dispc_write_irqenable+0x1c/0x38
-[   38.862335] LR is at omap_irq_enable_vblank+0xbc/0xd8
-[   38.867431] pc : [<c0948e04>]    lr : [<c0939e9c>]    psr: 60080093
-[   38.873718] sp : ea281d40  ip : 00000000  fp : c3ae3008
-[   38.878967] r10: 00000000  r9 : c3a89cb8  r8 : 60080093
-[   38.884216] r7 : c398f000  r6 : 0812d64c  r5 : c398f000  r4 : c398f184
-[   38.890777] r3 : e6137018  r2 : 0812d64c  r1 : 0812d64c  r0 : c3846000
-[   38.897338] Flags: nZCv  IRQs off  FIQs on  Mode SVC_32  ISA ARM
-Segment user
-[   38.904571] Control: 30c5387d  Table: 84e801c0  DAC: 55555555
-[   38.910339] Register r0 information: slab kmalloc-8k start c3846000
-pointer offset 0 size 8192
-[   38.919006] Register r1 information: non-paged memory
-[   38.924102] Register r2 information: non-paged memory
-[   38.929168] Register r3 information: 0-page vmalloc region starting
-at 0xe6137000 allocated at __devm_ioremap_resource+0x108/0x1f0
-[   38.940979] Register r4 information: slab kmalloc-512 start
-c398f000 pointer offset 388 size 512
-[   38.949829] Register r5 information: slab kmalloc-512 start
-c398f000 pointer offset 0 size 512
-[   38.958496] Register r6 information: non-paged memory
-[   38.963562] Register r7 information: slab kmalloc-512 start
-c398f000 pointer offset 0 size 512
-[   38.972229] Register r8 information: non-paged memory
-[   38.977294] Register r9 information: slab kmalloc-1k start c3a89c00
-pointer offset 184 size 1024
-[   38.986145] Register r10 information: NULL pointer
-[   38.990966] Register r11 information: slab kmalloc-2k start
-c3ae3000 pointer offset 8 size 2048
-[   38.999725] Register r12 information: NULL pointer
-[   39.004547] Process vsync (pid: 454, stack limit =3D 0xd381b509)
-[   39.010406] Stack: (0xea281d40 to 0xea282000)
-[   39.014770] 1d40: 00000000 00010000 c398fb0c 00000000 c3a89c00
-00000000 c398fa40 c0913a98
-[   39.022979] 1d60: c191b239 c5f7ea80 00000000 00010000 c398fa40
-c398fa80 c3a89c00 00000000
-[   39.031219] 1d80: 20080013 c3a89cbc 00000000 c091397c c5f7e800
-c39d0280 00000001 c557ff00
-[   39.039428] 1da0: c398fa40 ea281e68 c5f8a300 00000001 ffffffea
-c3a89c00 c3ae3008 c09150f0
-[   39.047637] 1dc0: 00000000 00000000 00000000 00000000 01140657
-ea281e68 ffffffff 00000001
-[   39.055847] 1de0: 00000000 c39d0000 00000000 00000000 693113f4
-00000010 fffffff3 c5f8a300
-[   39.064086] 1e00: c3a89c00 c0914f88 ea281e68 00000010 c5f8a300
-c08ef2b0 00000000 693113f4
-[   39.072296] 1e20: b44fb158 ea281e68 00000010 c0914f88 ea281e68
-c5f21840 c5f8a300 c08ef53c
-[   39.080505] 1e40: 0000e200 00000001 c1364999 00000000 00000010
-b44fb158 c010643a 0000003a
-[   39.088745] 1e60: c10730ac 00000000 00000001 00000001 00000000
-00000000 00000000 00000000
-[   39.096954] 1e80: 00000000 00000000 00000000 00000000 00000000
-00000000 00000000 00000000
-[   39.105163] 1ea0: 00000000 00000000 00000000 00000000 00000000
-00000000 00000000 00000000
-[   39.113372] 1ec0: 00000000 00000000 00000000 00000000 00000000
-00000000 00000000 00000000
-[   39.121612] 1ee0: 00000000 00000000 693113f4 c5f21840 c3c00a20
-ea281f60 0000000c b44fb158
-[   39.129821] 1f00: c5f21841 00000036 c010643a c048c1c4 ea281f48
-c0f24c4c c02fa044 00000000
-[   39.138031] 1f20: 00000000 00000000 693113f4 c5f7e800 60080013
-ffffffff ea281f94 c0200b9c
-[   39.146240] 1f40: c5f7e800 30c5387d ea281f58 c0f25138 c02001f0
-30c5387d 00000000 c0200bb4
-[   39.154449] 1f60: 0000000c c010643a b44fb158 b44fb124 b4647348
-b44fb158 0000000c 00000036
-[   39.162689] 1f80: 693113f4 b4647348 b44fb158 0000000c 00000036
-c0200298 c5f7e800 00000036
-[   39.170898] 1fa0: 00000000 c0200060 b4647348 b44fb158 0000000c
-c010643a b44fb158 b44fb124
-[   39.179107] 1fc0: b4647348 b44fb158 0000000c 00000036 b44fb128
-c010643a beb2aaa8 00000000
-[   39.187316] 1fe0: 00000078 b44fb110 b5f8301b b5fb7ce4 80080010
-0000000c 00000000 00000000
-[   39.195556]  dispc_write_irqenable from omap_irq_enable_vblank+0xbc/0xd8
-[   39.202301]  omap_irq_enable_vblank from drm_vblank_enable+0x8c/0x184
-[   39.208770]  drm_vblank_enable from drm_vblank_get+0x7c/0x10c
-[   39.214538]  drm_vblank_get from drm_wait_vblank_ioctl+0x168/0x4b8
-[   39.220764]  drm_wait_vblank_ioctl from drm_ioctl_kernel+0xe8/0x154
-[   39.227050]  drm_ioctl_kernel from drm_ioctl+0x220/0x36c
-[   39.232391]  drm_ioctl from sys_ioctl+0xbe4/0xc54
-[   39.237121]  sys_ioctl from ret_fast_syscall+0x0/0x4c
-[   39.242218] Exception stack(0xea281fa8 to 0xea281ff0)
-[   39.247283] 1fa0:                   b4647348 b44fb158 0000000c
-c010643a b44fb158 b44fb124
-[   39.255493] 1fc0: b4647348 b44fb158 0000000c 00000036 b44fb128
-c010643a beb2aaa8 00000000
-[   39.263702] 1fe0: 00000078 b44fb110 b5f8301b b5fb7ce4
-[   39.268798] Code: e5903004 e1c12002 e2833018 e5832000 (e5902004)
-[   39.274902] ---[ end trace 0000000000000000 ]---
-[   39.279541] Rebooting in 5 seconds..
+Thanks Trilok for the confirmation! I'll add myself as the maintainer.
 
 Thanks,
-Yongqin Liu
-On Sat, 5 Mar 2022 at 04:05, Paul Cercueil <paul@crapouillou.net> wrote:
->
-> Hi Nikita,
->
-> Le sam., d=C3=A9c. 25 2021 at 09:31:51 +0300, Nikita Yushchenko
-> <nikita.yoush@cogentembedded.com> a =C3=A9crit :
-> > Hotplug events reported by bridge drivers over drm_bridge_hpd_notify()
-> > get ignored unless somebody calls drm_bridge_hpd_enable(). When the
-> > connector for the bridge is bridge_connector, such a call is done from
-> > drm_bridge_connector_enable_hpd().
-> >
-> > However drm_bridge_connector_enable_hpd() is never called on init
-> > paths,
-> > documentation suggests that it is intended for suspend/resume paths.
-> >
-> > In result, once encoders are switched to bridge_connector,
-> > bridge-detected HPD stops working.
-> >
-> > This patch adds a call to that API on init path.
-> >
-> > This fixes HDMI HPD with rcar-du + adv7513 case when adv7513 reports
-> > HPD
-> > events via interrupts.
-> >
-> > Fixes: c24110a8fd09 ("drm: rcar-du: Use drm_bridge_connector_init()
-> > helper")
-> > Signed-off-by: Nikita Yushchenko <nikita.yoush@cogentembedded.com>
->
-> Merged to drm-misc-next.
->
-> Thanks!
->
-> Cheers,
-> -Paul
->
-> > ---
-> >  drivers/gpu/drm/drm_bridge_connector.c | 4 +++-
-> >  1 file changed, 3 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/gpu/drm/drm_bridge_connector.c
-> > b/drivers/gpu/drm/drm_bridge_connector.c
-> > index 791379816837..4f20137ef21d 100644
-> > --- a/drivers/gpu/drm/drm_bridge_connector.c
-> > +++ b/drivers/gpu/drm/drm_bridge_connector.c
-> > @@ -369,8 +369,10 @@ struct drm_connector
-> > *drm_bridge_connector_init(struct drm_device *drm,
-> >                                   connector_type, ddc);
-> >       drm_connector_helper_add(connector,
-> > &drm_bridge_connector_helper_funcs);
-> >
-> > -     if (bridge_connector->bridge_hpd)
-> > +     if (bridge_connector->bridge_hpd) {
-> >               connector->polled =3D DRM_CONNECTOR_POLL_HPD;
-> > +             drm_bridge_connector_enable_hpd(connector);
-> > +     }
-> >       else if (bridge_connector->bridge_detect)
-> >               connector->polled =3D DRM_CONNECTOR_POLL_CONNECT
-> >                                 | DRM_CONNECTOR_POLL_DISCONNECT;
-> > --
-> > 2.30.2
->
->
+Mani
 
+> ---Trilok Soni
 
---=20
-Best Regards,
-Yongqin Liu
----------------------------------------------------------------
-#mailing list
-linaro-android@lists.linaro.org
-http://lists.linaro.org/mailman/listinfo/linaro-android
+-- 
+மணிவண்ணன் சதாசிவம்

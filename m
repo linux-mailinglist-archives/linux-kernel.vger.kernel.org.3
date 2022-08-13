@@ -2,101 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6751591C51
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 20:40:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66B60591C59
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 20:54:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240078AbiHMSgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 14:36:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42842 "EHLO
+        id S239661AbiHMSx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 14:53:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239831AbiHMSgc (ORCPT
+        with ESMTP id S231308AbiHMSx4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 14:36:32 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC5C10572;
-        Sat, 13 Aug 2022 11:36:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660415791; x=1691951791;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=v/wd8gBJ21x02UoZbhiGTliLmxIYh7jO083LnUvBs5A=;
-  b=HbjAPesSX4DUehOH/TPK4oRmqOYaJX/axQ5g9gRsgaexGzzLVZY9vQAy
-   Dp8zOSpNMUqZM6s14nNTf8U4DmD2WEtMSc12qZgJoIpsrhYmBZbyWz+iR
-   maW5VFBsRlr6hiOlb+a+qtXVhsEXrYWRVO3piF/tpa0w6KtDCPvh41tcm
-   k2KxblJKe7G8JQSWsFud2zVggDT7JzJ/88ynbqIzBR1bWGc8GhTqOxrQA
-   rEeRdJUEKeLv6MTo++VnwkWHEDQh9S09h/6W5hbNRYAC3P3Y6mvknvnB2
-   2kcWvnzFgIdG9kc+Q4rX4UbKR7jDd3K9/rRx5GjrmfmlrozIiC4vFfcsX
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="272163135"
-X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
-   d="scan'208";a="272163135"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 11:36:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
-   d="scan'208";a="609552126"
-Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by fmsmga007.fm.intel.com with ESMTP; 13 Aug 2022 11:36:27 -0700
-Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oMvzn-0001zD-0J;
-        Sat, 13 Aug 2022 18:36:27 +0000
-Date:   Sun, 14 Aug 2022 02:35:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     jeffxu@google.com, skhan@linuxfoundation.org
-Cc:     kbuild-all@lists.01.org, akpm@linux-foundation.org,
-        dmitry.torokhov@gmail.com, dverkamp@chromium.org, hughd@google.com,
-        jeffxu@google.com, jorgelo@chromium.org, keescook@chromium.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, mnissler@chromium.org, jannh@google.com,
-        Jeff Xu <jeffxu@chromium.org>
-Subject: Re: [PATCH v2 5/5] sysctl: add support for mfd_noexec
-Message-ID: <202208140256.CLDuIPhh-lkp@intel.com>
-References: <20220805222126.142525-6-jeffxu@google.com>
+        Sat, 13 Aug 2022 14:53:56 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1670E13F09
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 11:53:55 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 202so3378463pgc.8
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 11:53:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=yocom-org.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=ogTKxn7gTffibaoNZi5K6LKCMlrCzImpFtSY9mf4kPA=;
+        b=h9DNdvK3pGgonlcqCpcn9R+2+Tqofh3UlKp4j5hsLumvXUTrqZoHh4JDj7jv0ou+nq
+         qMRfz6UD2otLo4GvBSPNsNaiRltSDAKXdVvyglIf3sexzv1ROyZFC98iNnjEpPlk30mw
+         jItnzVqwEFUgO5uqPMQrVXA+BPIt8yVFg4xN9jEhP/p1leNetIZkM6X3qkXQ3TjqzkYb
+         nzxK1jOBRi/BohWUwS51AoyBbgtDPnFs++p4Oja2CggYLBkTHzv/BS+NxCRL7RcVCIlp
+         U9GKAiXHxHf7NYW9bGsthmfsfpvEyS/NJx2kTjRBgZvLoqTvgAka4Dw5v1kEwWHBh+Hq
+         VdOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=ogTKxn7gTffibaoNZi5K6LKCMlrCzImpFtSY9mf4kPA=;
+        b=xMecz6ituN4YpijBeZgBNMICrlpIWd6f3kXWMqTJivGnqMVYYykBjt96OrXehFCTCU
+         QRO+0rL3wrJqK2cHfpqhlRXBhgwmIJbwfTgfnvfIUyZHQqGlwQxf1/nr5qnZE10FKB8X
+         1Z+CK8DcDGqS4t+lR5xN3i1+X6mx8qyYt04pp/vVs/rEEOrWDWnYynHY/ObUHI6Zu3KC
+         qpK4OQ8iuURmWfWpWJaqgrubj2o8pDW57gV+pjkLgvT3Ajb0MejGqw2EfkGzOvdV640a
+         ObGM20vEtfAvyr4LIx9gdGhqjgq3T90vH0a6vFvleP7Jlueo5RLurEtAiXLHFofolb1p
+         Nv2A==
+X-Gm-Message-State: ACgBeo2QbjvwbFMn5Kb5V9tbEijmXYCsUOMP423j0RWwZtY0NB8QHQwe
+        IKelyALMCkeI5kEmTlZUVQG8aA==
+X-Google-Smtp-Source: AA6agR4iT8oUqaaXbfwj70Kf4V2bMH7FXexRAIe7Bf1T6eIQU+EhAts5F20rrZoKor5+UFSTMZeMfA==
+X-Received: by 2002:a63:450:0:b0:41e:1bbc:37b6 with SMTP id 77-20020a630450000000b0041e1bbc37b6mr7626541pge.327.1660416834547;
+        Sat, 13 Aug 2022 11:53:54 -0700 (PDT)
+Received: from localhost.localdomain ([2601:600:a07f:e6ac::1c])
+        by smtp.gmail.com with ESMTPSA id fs1-20020a17090af28100b001f246f2a423sm1972183pjb.17.2022.08.13.11.53.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 13 Aug 2022 11:53:54 -0700 (PDT)
+From:   Nate Yocom <nate@yocom.org>
+To:     dmitry.torokhov@gmail.com
+Cc:     nate@yocom.org, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hadess@hadess.net
+Subject: [PATCH v3 0/3] Input: joystick: xpad: Add X-Box Adaptive Controller support
+Date:   Sat, 13 Aug 2022 11:53:40 -0700
+Message-Id: <20220813185343.2306-1-nate@yocom.org>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220805222126.142525-6-jeffxu@google.com>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Adds support for the X-Box Adaptive Controller, which is protocol
+compatible with the XTYPE_XBOXONE support in the driver with two deltas:
 
-Thank you for the patch! Yet something to improve:
+ - The X-Box button sets 0x02 as its activation ID, where others set
+   0x01
+ - The controller has an additional "Layer" button with 4 active states,
+   which this change maps to an Axis control with 4 possible values
 
-[auto build test ERROR on 9e2f40233670c70c25e0681cb66d50d1e2742829]
+Patch series adds device to the supported table, adds support for the
+Layer button, and adds support for the X-Box button as distinct changes.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/jeffxu-google-com/mm-memfd-MFD_NOEXEC-for-memfd_create/20220806-062430
-base:   9e2f40233670c70c25e0681cb66d50d1e2742829
-config: csky-allnoconfig (https://download.01.org/0day-ci/archive/20220814/202208140256.CLDuIPhh-lkp@intel.com/config)
-compiler: csky-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/e71897c778df5381c6d1ca858ae096a557a08a2a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review jeffxu-google-com/mm-memfd-MFD_NOEXEC-for-memfd_create/20220806-062430
-        git checkout e71897c778df5381c6d1ca858ae096a557a08a2a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=csky SHELL=/bin/bash
+Signed-off-by: Nate Yocom <nate@yocom.org>
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Nate Yocom (3):
+  Input: joystick: xpad: Add X-Box Adaptive Controller support
+  Input: joystick: xpad: Add X-Box Adaptive Controller Layer button
+  Input: joystick: xpad: Add X-Box Adaptive Controller XBox button
 
-All errors (new ones prefixed by >>):
+ v2: Fix warning Reported-by: kernel test robot <lkp@intel.com>
+ v3: Break into multi-part and remove VID/PID check for XBox button
 
->> csky-linux-ld: kernel/sysctl.o:(.data+0x398): undefined reference to `sysctl_mfd_noexec_scope'
->> csky-linux-ld: kernel/sysctl.o:(.data+0x3a8): undefined reference to `mfd_noexec_dointvec_minmax'
+ drivers/input/joystick/xpad.c | 15 ++++++++++++++-
+ 1 file changed, 14 insertions(+), 1 deletion(-)
 
+
+base-commit: 15205c2829ca2cbb5ece5ceaafe1171a8470e62b
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.30.2
+

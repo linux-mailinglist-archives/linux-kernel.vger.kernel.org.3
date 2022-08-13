@@ -2,111 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B20D8591C6D
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 21:43:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B83AF591C94
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 22:27:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236482AbiHMTmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 15:42:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57654 "EHLO
+        id S239578AbiHMU1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 16:27:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230460AbiHMTmf (ORCPT
+        with ESMTP id S238225AbiHMU1d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 15:42:35 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D91ADF3E
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 12:42:33 -0700 (PDT)
-Received: from zn.tnic (p2e55d27b.dip0.t-ipconnect.de [46.85.210.123])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 28A241EC0674;
-        Sat, 13 Aug 2022 21:42:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1660419748;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=ZBaCHodZtQdoAxEcaFO06NCvHc0MdEgcdLsNN8F00i4=;
-        b=VszxltkJd00ofa9SoHDpxDgAX6nJWdGuqRy7SdOA+HigNK2oZCFEVg8DPzssk6KtFdx8SF
-        I7eDowNI09Jd8jSWJyiTC8DBlDawyq5eSNKiafvwdFN2I0Kw8QvD+HEz32RdZt6b+KoSxQ
-        SVzVa3APC6kb3lMe1HJzsx0UlLKr3hg=
-Date:   Sat, 13 Aug 2022 21:40:14 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Tom Lendacky <thomas.lendacky@amd.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill@shutemov.name>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v2 1/2] x86/sev: Put PSC struct on the stack in prep for
- unaccepted memory support
-Message-ID: <Yvf+HnofHZ3rZ+yL@zn.tnic>
-References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
- <cover.1659978985.git.thomas.lendacky@amd.com>
- <21d5d55640ee1c5d66501b9398858b6a6bd6546f.1659978985.git.thomas.lendacky@amd.com>
- <YvZPoEm6PSeoflAz@zn.tnic>
- <6d9d433f-779d-7531-02b5-382796acceef@amd.com>
- <YvZkpYRfrgPLLoJV@zn.tnic>
- <fc48ce75-7a4c-4804-92ce-71f63c2db5ea@amd.com>
+        Sat, 13 Aug 2022 16:27:33 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DDAB240BC
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 13:27:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660422452; x=1691958452;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1Zm4RKO8C2kEUmxyXI4UzeZ0jyWp5NSnCmzsRL2OFGw=;
+  b=eOmCv/kX3z5oen9W/LItxrBlTMLQZah5IzoC9Mt4c/3M7jjt6LgtOhWt
+   nwiI77qNw212HTkWKr1S/dRVGwM1hxVXg+7IYX0bKkzXLKRutMyM3mtj0
+   616D1bXcO+dz0pLvyk0LpLUjnlHoeSrW6Rj/PJhHnE5Al2oBIJBCicgoE
+   3cNSv9bX8S8d9JJ7hiUCfIhzgeVImwzOT5Yc4rnZfCl4CgkSwgIg/oAsR
+   oe8JXL9GsgU5zUVfTp9YPd+k3rsdsxml23ZQyA3aCy4IsIaLaAKMjbeCs
+   UMFmfc7hZGYQ7P1Kr93DJ1Szn1QIwnWjakALOD0N6zGqcp/0DvTBfN4X0
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="290529281"
+X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
+   d="scan'208";a="290529281"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 13:27:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
+   d="scan'208";a="732551986"
+Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 13 Aug 2022 13:27:30 -0700
+Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oMxjF-00024x-1X;
+        Sat, 13 Aug 2022 20:27:29 +0000
+Date:   Sun, 14 Aug 2022 04:27:11 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Koba Ko <koba.ko@canonical.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Alex Deucher <alexander.deucher@amd.com>
+Subject: drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c:1744:18:
+ error: invalid use of undefined type 'struct cpuinfo_x86'
+Message-ID: <202208140449.QuPTilYq-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fc48ce75-7a4c-4804-92ce-71f63c2db5ea@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 12, 2022 at 09:51:41AM -0500, Tom Lendacky wrote:
-> On 8/12/22 09:33, Borislav Petkov wrote:
-> > On Fri, Aug 12, 2022 at 09:11:25AM -0500, Tom Lendacky wrote:
-> > > There was a whole discussion on this
-> > 
-> > Pointer to it?
-> 
-> It starts here: https://lore.kernel.org/lkml/658c455c40e8950cb046dd885dd19dc1c52d060a.1659103274.git.thomas.lendacky@amd.com/
+Hi Koba,
 
-So how come none of the rationale for the on-stack decision vs a single
-buffer with a spinlock protection hasn't made it to this patch?
+FYI, the error/warning still remains.
 
-We need to have the reason why this thing is changed documented
-somewhere.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   69dac8e431af26173ca0a1ebc87054e01c585bcc
+commit: b3dc549986eb7b38eba4a144e979dc93f386751f drm/amdgpu: Disable PCIE_DPM on Intel RKL Platform
+date:   12 months ago
+config: um-allyesconfig (https://download.01.org/0day-ci/archive/20220814/202208140449.QuPTilYq-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b3dc549986eb7b38eba4a144e979dc93f386751f
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout b3dc549986eb7b38eba4a144e979dc93f386751f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=um SHELL=/bin/bash
 
-> > So smaller, on-stack PSC but lockless is still better than a bigger one
-> > but with synchronized accesses to it?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-That thing.
+All errors (new ones prefixed by >>):
 
-That decision for on-stack buffer needs explaining why.
+   In file included from arch/x86/um/asm/processor.h:41,
+                    from include/linux/spinlock_up.h:8,
+                    from include/linux/spinlock.h:92,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:6,
+                    from include/linux/slab.h:15,
+                    from drivers/gpu/drm/amd/amdgpu/../pm/inc/pp_debug.h:35,
+                    from drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c:23:
+   drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c: In function 'intel_core_rkl_chk':
+   arch/um/include/asm/processor-generic.h:104:19: error: called object is not a function or function pointer
+     104 | #define cpu_data (&boot_cpu_data)
+         |                  ~^~~~~~~~~~~~~~~
+   drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c:1742:34: note: in expansion of macro 'cpu_data'
+    1742 |         struct cpuinfo_x86 *c = &cpu_data(0);
+         |                                  ^~~~~~~~
+>> drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c:1744:18: error: invalid use of undefined type 'struct cpuinfo_x86'
+    1744 |         return (c->x86 == 6 && c->x86_model == INTEL_FAM6_ROCKETLAKE);
+         |                  ^~
+   drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c:1744:33: error: invalid use of undefined type 'struct cpuinfo_x86'
+    1744 |         return (c->x86 == 6 && c->x86_model == INTEL_FAM6_ROCKETLAKE);
+         |                                 ^~
+   drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c:1748:1: error: control reaches end of non-void function [-Werror=return-type]
+    1748 | }
+         | ^
+   cc1: some warnings being treated as errors
 
-> > > Well when we don't know which GHCB is in use, using that reserved area in
-> > > the GHCB doesn't help.
-> > 
-> > What do you mean?
-> > 
-> > The one which you read with
-> > 
-> > 	data = this_cpu_read(runtime_data);
-> 
-> Memory acceptance is called before the per-CPU GHCBs have been allocated
-> and so you would be actually be using early boot GHCB. And that is decided
-> based on the #VC handler that is invoked - but in this case we're not
-> coming through the #VC handler to accept memory.
 
-But then ghcb_percpu_ready needs to be a per-CPU variable too! Because
-it is set right after snp_register_per_cpu_ghcb() which works on the
-*per-CPU* GHCB.
+vim +1744 drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c
+
+  1738	
+  1739	static bool intel_core_rkl_chk(void)
+  1740	{
+  1741	#if IS_ENABLED(CONFIG_X86_64)
+  1742		struct cpuinfo_x86 *c = &cpu_data(0);
+  1743	
+> 1744		return (c->x86 == 6 && c->x86_model == INTEL_FAM6_ROCKETLAKE);
+  1745	#else
+  1746		return false;
+  1747	#endif
+  1748	}
+  1749	
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+0-DAY CI Kernel Test Service
+https://01.org/lkp

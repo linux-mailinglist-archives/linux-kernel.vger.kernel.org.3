@@ -2,107 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E86FD591847
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 04:01:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBC01591848
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 04:05:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235683AbiHMCBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 22:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40428 "EHLO
+        id S235508AbiHMCFs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 22:05:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229966AbiHMCA5 (ORCPT
+        with ESMTP id S229966AbiHMCFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 22:00:57 -0400
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB1FE1834A
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 19:00:56 -0700 (PDT)
-Received: by mail-vs1-xe2c.google.com with SMTP id q190so2445463vsb.7
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 19:00:56 -0700 (PDT)
+        Fri, 12 Aug 2022 22:05:46 -0400
+Received: from smtp-fw-80007.amazon.com (smtp-fw-80007.amazon.com [99.78.197.218])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC7D1AF3A
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 19:05:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
-        bh=2ER2WW01ET2wH1WV2jGlyhputEhjwKA2tNpxchjmONE=;
-        b=LoedegDK+k2nwaRsWDZwWY9HJ1IdAdwIMTKIstwkBfKP5rsWZlBy2loxOgT1waUfbz
-         0xVF5GmTfXl4jPAchXaABldl78KXKfRC7ap1771LXSt3gPgpGGLVS1eJprvW/Yxt7LhD
-         d0uEupLi2krD4xYq8hK1pjg1qgsrF7MQt280ABJ1iT6MrcE8ZLSYsXDW0JCUWfUz8k9W
-         dMMqgp2RTU6+FX1cjHZkWCvNwgQ1RZbf09YZQlbWPn0S1uM8r49U/yiD5mR+CvM9ubUw
-         o8bkmFIyvdGytX6rYNkV4hFuvnMCLb5aWUR3ZJ89GxMHyNkx201Rt4ard8xBewi/otht
-         biBA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=2ER2WW01ET2wH1WV2jGlyhputEhjwKA2tNpxchjmONE=;
-        b=I9evwliQvtTH7t5/LOtce1RtIEuC+cfXqJt0+Y6/IYXGhACNi80EALfG65Q3CKZOkI
-         R9MBVzu9v5IZtXZIIrPnl7zQcGLUOMcTM+7gzoPPMFGfzZscOYnCV0fJfH1LEqhBnSsD
-         Mu3QQ0M2Dp2BILG1okUCrniIpCzZFJWybdgyW0cYKDAwQUUwzKmIl7wDfxlv756LWmBy
-         oMG1hEI6PiGjtJpWPT0eW/5WELz9/o9oIYvNDxUPKpBGCKcJ+bacyQwL0I0Ecm+rsS0A
-         O1o/sJciPEhVIDXlANmUOQRyYQpfLNI3LsfzmhqWJYKWp+P54DupkZUFq6HsTV1K46kL
-         /8TQ==
-X-Gm-Message-State: ACgBeo33nd3ORCe+YBUttS5hL81EO+ZVcgXLmwY0OVGVfyvVxTvB4kcO
-        XrYQbzMen6K5jk+aFgfvipPxUVaxeg4MhUGYXlQ=
-X-Google-Smtp-Source: AA6agR7XKJ4XKZd6hVh5vfd2bXX9J8Hd75xJk2rQIp5KZLWaUkUtyqHmM4xjoHHKkOkDNxp73EFHMdkBvEDZpkRnoLU=
-X-Received: by 2002:a67:cc0e:0:b0:388:9471:6d06 with SMTP id
- q14-20020a67cc0e000000b0038894716d06mr3033956vsl.16.1660356055483; Fri, 12
- Aug 2022 19:00:55 -0700 (PDT)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1660356342; x=1691892342;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=u+bP30fJ33KrAgqj+HDTqaEwe2gf4Mp7T/G8GiUB6IU=;
+  b=XaC7DL7lBEZNdtdCAch0sc2XlDteluf+p7XOU3cbQ67B1OUlySr+22cB
+   2I/XWFNgTCLQ/uIY1dMRbvD3pDuRinjntqM8ZVPN4AAgxHbC1ChXYWPlS
+   v8gX1sALtCTzG2ah8uN0t8cc4hSdFyHKuJVSEM2H2Yksm6Mwdjy9IeWNw
+   8=;
+X-IronPort-AV: E=Sophos;i="5.93,233,1654560000"; 
+   d="scan'208";a="118842856"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-iad-1d-7a21ed79.us-east-1.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80007.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 02:05:27 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
+        by email-inbound-relay-iad-1d-7a21ed79.us-east-1.amazon.com (Postfix) with ESMTPS id 840A1331C76;
+        Sat, 13 Aug 2022 02:05:24 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.38; Sat, 13 Aug 2022 02:05:23 +0000
+Received: from 88665a182662.ant.amazon.com (10.43.160.55) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.9;
+ Sat, 13 Aug 2022 02:05:20 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
+        Anil S Keshavamurthy <anil.s.keshavamurthy@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Wang Nan <wangnan0@huawei.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Kuniyuki Iwashima <kuni1840@gmail.com>,
+        <linux-kernel@vger.kernel.org>,
+        Ayushman Dutta <ayudutta@amazon.com>
+Subject: [PATCH] kprobes: Don't call disarm_kprobe() for disabled kprobes.
+Date:   Fri, 12 Aug 2022 19:05:09 -0700
+Message-ID: <20220813020509.90805-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Received: by 2002:a59:1b0b:0:b0:2de:2b7:c0a0 with HTTP; Fri, 12 Aug 2022
- 19:00:55 -0700 (PDT)
-Reply-To: drlisa575@gmail.com
-From:   Dr lisawilliams <arsenavakov09@gmail.com>
-Date:   Sat, 13 Aug 2022 04:00:55 +0200
-Message-ID: <CABCg1q4vcsFzz46KBoc1nQgKMzQghqo7TMJyWGPtd-W3Sx1BwA@mail.gmail.com>
-Subject: Hi Dear,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:e2c listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [arsenavakov09[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [arsenavakov09[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [drlisa575[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.43.160.55]
+X-ClientProxiedBy: EX13D03UWC002.ant.amazon.com (10.43.162.160) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dear,
+The assumption in __disable_kprobe() is wrong, and it could try to disarm
+an already disarmed kprobe and fire the WARN_ONCE() below. [0]  We can
+easily reproduce this issue.
 
-My name is Dr Lisa Williams from the United States.I am a French and
-American nationality (dual) living in the U.S and sometimes in France
-for Work Purpose.
+1. Write 0 to /sys/kernel/debug/kprobes/enabled.
 
-I hope you consider my friend request. I will share some of my pics
-and more details about myself when I get your response.
+  # echo 0 > /sys/kernel/debug/kprobes/enabled
 
-Thanks
-With love
-Lisa
+2. Run execsnoop.  At this time, one kprobe is disabled.
+
+  # /usr/share/bcc/tools/execsnoop &
+  [1] 2460
+  PCOMM            PID    PPID   RET ARGS
+
+  # cat /sys/kernel/debug/kprobes/list
+  ffffffff91345650  r  __x64_sys_execve+0x0    [FTRACE]
+  ffffffff91345650  k  __x64_sys_execve+0x0    [DISABLED][FTRACE]
+
+3. Write 1 to /sys/kernel/debug/kprobes/enabled, which changes
+   kprobes_all_disarmed to false but does not arm the disabled kprobe.
+
+  # echo 1 > /sys/kernel/debug/kprobes/enabled
+
+  # cat /sys/kernel/debug/kprobes/list
+  ffffffff91345650  r  __x64_sys_execve+0x0    [FTRACE]
+  ffffffff91345650  k  __x64_sys_execve+0x0    [DISABLED][FTRACE]
+
+4. Kill execsnoop, when __disable_kprobe() calls disarm_kprobe() for the
+   disabled kprobe and hits the WARN_ONCE() in __disarm_kprobe_ftrace().
+
+  # fg
+  /usr/share/bcc/tools/execsnoop
+  ^C
+
+Actually, WARN_ONCE() is fired twice, and __unregister_kprobe_top() misses
+some cleanups and leaves the aggregated kprobe in the hash table.  Then,
+__unregister_trace_kprobe() initialises tk->rp.kp.list and creates an
+infinite loop like this.
+
+  aggregated kprobe.list -> kprobe.list -.
+                                     ^    |
+                                     '.__.'
+
+In this situation, these commands fall into the infinite loop and result
+in RCU stall or soft lockup.
+
+  cat /sys/kernel/debug/kprobes/list : show_kprobe_addr() enters into the
+                                       infinite loop with RCU.
+
+  /usr/share/bcc/tools/execsnoop : warn_kprobe_rereg() holds kprobe_mutex,
+                                   and __get_valid_kprobe() is stuck in
+				   the loop.
+
+To avoid the issue, make sure we don't call disarm_kprobe() for disabled
+kprobes.
+
+[0]
+Failed to disarm kprobe-ftrace at __x64_sys_execve+0x0/0x40 (error -2)
+WARNING: CPU: 6 PID: 2460 at kernel/kprobes.c:1130 __disarm_kprobe_ftrace.isra.19 (kernel/kprobes.c:1129)
+Modules linked in: ena
+CPU: 6 PID: 2460 Comm: execsnoop Not tainted 5.19.0+ #28
+Hardware name: Amazon EC2 c5.2xlarge/, BIOS 1.0 10/16/2017
+RIP: 0010:__disarm_kprobe_ftrace.isra.19 (kernel/kprobes.c:1129)
+Code: 24 8b 02 eb c1 80 3d c4 83 f2 01 00 75 d4 48 8b 75 00 89 c2 48 c7 c7 90 fa 0f 92 89 04 24 c6 05 ab 83 01 e8 e4 94 f0 ff <0f> 0b 8b 04 24 eb b1 89 c6 48 c7 c7 60 fa 0f 92 89 04 24 e8 cc 94
+RSP: 0018:ffff9e6ec154bd98 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: ffffffff930f7b00 RCX: 0000000000000001
+RDX: 0000000080000001 RSI: ffffffff921461c5 RDI: 00000000ffffffff
+RBP: ffff89c504286da8 R08: 0000000000000000 R09: c0000000fffeffff
+R10: 0000000000000000 R11: ffff9e6ec154bc28 R12: ffff89c502394e40
+R13: ffff89c502394c00 R14: ffff9e6ec154bc00 R15: 0000000000000000
+FS:  00007fe800398740(0000) GS:ffff89c812d80000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000000c00057f010 CR3: 0000000103b54006 CR4: 00000000007706e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+PKRU: 55555554
+Call Trace:
+<TASK>
+ __disable_kprobe (kernel/kprobes.c:1716)
+ disable_kprobe (kernel/kprobes.c:2392)
+ __disable_trace_kprobe (kernel/trace/trace_kprobe.c:340)
+ disable_trace_kprobe (kernel/trace/trace_kprobe.c:429)
+ perf_trace_event_unreg.isra.2 (./include/linux/tracepoint.h:93 kernel/trace/trace_event_perf.c:168)
+ perf_kprobe_destroy (kernel/trace/trace_event_perf.c:295)
+ _free_event (kernel/events/core.c:4971)
+ perf_event_release_kernel (kernel/events/core.c:5176)
+ perf_release (kernel/events/core.c:5186)
+ __fput (fs/file_table.c:321)
+ task_work_run (./include/linux/sched.h:2056 (discriminator 1) kernel/task_work.c:179 (discriminator 1))
+ exit_to_user_mode_prepare (./include/linux/resume_user_mode.h:49 kernel/entry/common.c:169 kernel/entry/common.c:201)
+ syscall_exit_to_user_mode (./arch/x86/include/asm/jump_label.h:55 ./arch/x86/include/asm/nospec-branch.h:384 ./arch/x86/include/asm/entry-common.h:94 kernel/entry/common.c:133 kernel/entry/common.c:296)
+ do_syscall_64 (arch/x86/entry/common.c:87)
+ entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:120)
+RIP: 0033:0x7fe7ff210654
+Code: 15 79 89 20 00 f7 d8 64 89 02 48 c7 c0 ff ff ff ff eb be 0f 1f 00 8b 05 9a cd 20 00 48 63 ff 85 c0 75 11 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 3a f3 c3 48 83 ec 18 48 89 7c 24 08 e8 34 fc
+RSP: 002b:00007ffdbd1d3538 EFLAGS: 00000246 ORIG_RAX: 0000000000000003
+RAX: 0000000000000000 RBX: 0000000000000008 RCX: 00007fe7ff210654
+RDX: 0000000000000000 RSI: 0000000000002401 RDI: 0000000000000008
+RBP: 0000000000000000 R08: 94ae31d6fda838a4 R0900007fe8001c9d30
+R10: 00007ffdbd1d34b0 R11: 0000000000000246 R12: 00007ffdbd1d3600
+R13: 0000000000000000 R14: fffffffffffffffc R15: 00007ffdbd1d3560
+</TASK>
+
+Fixes: 69d54b916d83 ("kprobes: makes kprobes/enabled works correctly for optimized kprobes.")
+Reported-by: Ayushman Dutta <ayudutta@amazon.com>
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+---
+ kernel/kprobes.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/kernel/kprobes.c b/kernel/kprobes.c
+index 80697e5e03e4..08350e35aba2 100644
+--- a/kernel/kprobes.c
++++ b/kernel/kprobes.c
+@@ -1707,11 +1707,12 @@ static struct kprobe *__disable_kprobe(struct kprobe *p)
+ 		/* Try to disarm and disable this/parent probe */
+ 		if (p == orig_p || aggr_kprobe_disabled(orig_p)) {
+ 			/*
+-			 * If 'kprobes_all_disarmed' is set, 'orig_p'
+-			 * should have already been disarmed, so
+-			 * skip unneed disarming process.
++			 * Don't be lazy here.  Even if 'kprobes_all_disarmed'
++			 * is false, 'orig_p' might not have been armed yet.
++			 * Note arm_all_kprobes() __tries__ to arm all kprobes
++			 * on the best effort basis.
+ 			 */
+-			if (!kprobes_all_disarmed) {
++			if (!kprobes_all_disarmed && !kprobe_disabled(orig_p)) {
+ 				ret = disarm_kprobe(orig_p, true);
+ 				if (ret) {
+ 					p->flags &= ~KPROBE_FLAG_DISABLED;
+-- 
+2.30.2
+

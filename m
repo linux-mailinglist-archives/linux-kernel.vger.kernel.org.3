@@ -2,106 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE18F591BE4
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 18:05:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09983591BE5
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 18:06:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239983AbiHMQFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 12:05:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50176 "EHLO
+        id S239991AbiHMQFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 12:05:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239715AbiHMQF1 (ORCPT
+        with ESMTP id S239984AbiHMQFr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 12:05:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EDEBBE36
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 09:05:25 -0700 (PDT)
+        Sat, 13 Aug 2022 12:05:47 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DAEFD10F
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 09:05:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4394EB80916
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 16:05:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBFF3C433C1;
-        Sat, 13 Aug 2022 16:05:21 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 082A0B80916
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 16:05:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04721C433C1;
+        Sat, 13 Aug 2022 16:05:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660406722;
-        bh=3g9RQwus4TjJnSLEmDO7GO8w4lhwGY5MWBNfeGUrI14=;
-        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
-        b=W9kybO589bVAfO/ZnsMgs4mwe1pNcnCvm8SPmje6pKRcHyn8kr5CjFZ19P19Hxj/l
-         Av6jZqd7bjaifI17Er5C2xGOVOOkya7Y5MCbNBppA94EnuoZwIkV31tkPlDTvhzfXv
-         Tpp8UJqdJhSlVNI9hrbRhvOAodDZyndpwcRTD1/6SIyPSAm214WeC60MqYvmtHzmyc
-         yZvM4fGo/OTDpaz6FJiAyLF5+LbA+ShCCQsCqg/H80JitRxer84fR4vLstIvE/yJS1
-         mxpWKi3o2l+H6R78vVkvl8frP9DauNd7hgZg0NsISKQyTu4qB+2JtfxXAOUetSfeOS
-         RBvODzM/650Gg==
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailauth.nyi.internal (Postfix) with ESMTP id CB83A27C005A;
-        Sat, 13 Aug 2022 12:05:20 -0400 (EDT)
-Received: from imap48 ([10.202.2.98])
-  by compute2.internal (MEProxy); Sat, 13 Aug 2022 12:05:20 -0400
-X-ME-Sender: <xms:wMv3Yh1znTFOlpPKRQXsFsX0gbQh_RkV1b-kLRRUvVbQr6AlAq5IZg>
-    <xme:wMv3YoEtKCJ70L7KpOgNKT50af-yNGCo_PVCuFAj12suYKJQAwAkBuljC7VTuIEzF
-    kQmiuOZeIU9t3CL7eI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegkedgleelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
-    nhguhicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenuc
-    ggtffrrghtthgvrhhnpeduveffvdegvdefhfegjeejlefgtdffueekudfgkeduvdetvddu
-    ieeluefgjeeggfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudduiedu
-    keehieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgvlhdrohhrgheslhhinh
-    hugidrlhhuthhordhush
-X-ME-Proxy: <xmx:wMv3Yh6eSWyZepVnU6ZzOhKtIyjlm-JuAUVTDDVDEu_7tABQEHiFSw>
-    <xmx:wMv3Yu2y8kvttoCDlkJouXGwn-w1WnxG7XgU-_L1RcKirCbjUpMlEg>
-    <xmx:wMv3YkHh1hdCZdkLL1eKipSaJXM7F4eDCgJN2rSatQqYJbtbpw2cZQ>
-    <xmx:wMv3Ynb5fDEj8dsYNQuRpGtjpogyHyKlFlRkH267crqDACrgSGeToQ>
-Feedback-ID: ieff94742:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 1B36831A0063; Sat, 13 Aug 2022 12:05:20 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-841-g7899e99a45-fm-20220811.002-g7899e99a
-Mime-Version: 1.0
-Message-Id: <f2cf11d3-c2f8-4add-ab58-19a4844be361@www.fastmail.com>
-In-Reply-To: <073c5a97-272c-c5a0-19f2-c3f14f916c72@intel.com>
-References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
- <20220614120231.48165-11-kirill.shutemov@linux.intel.com>
- <Yt/ANO5usdV+JSSW@zn.tnic> <80cc204b-a24f-684f-ec66-1361b69cae39@intel.com>
- <073c5a97-272c-c5a0-19f2-c3f14f916c72@intel.com>
-Date:   Sat, 13 Aug 2022 09:04:58 -0700
-From:   "Andy Lutomirski" <luto@kernel.org>
-To:     "Dave Hansen" <dave.hansen@intel.com>,
-        "Borislav Petkov" <bp@alien8.de>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     "Sean Christopherson" <seanjc@google.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Joerg Roedel" <jroedel@suse.de>,
-        "Ard Biesheuvel" <ardb@kernel.org>,
-        "Andi Kleen" <ak@linux.intel.com>,
-        "Sathyanarayanan Kuppuswamy" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "David Rientjes" <rientjes@google.com>,
-        "Vlastimil Babka" <vbabka@suse.cz>,
-        "Tom Lendacky" <thomas.lendacky@amd.com>,
-        "Thomas Gleixner" <tglx@linutronix.de>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        "Paolo Bonzini" <pbonzini@redhat.com>,
-        "Ingo Molnar" <mingo@redhat.com>,
-        "Varad Gautam" <varad.gautam@suse.com>,
-        "Dario Faggioli" <dfaggioli@suse.com>,
-        "Mike Rapoport" <rppt@kernel.org>,
-        "David Hildenbrand" <david@redhat.com>,
-        "Marcelo Henrique Cerri" <marcelo.cerri@canonical.com>,
-        tim.gardner@canonical.com, khalid.elmously@canonical.com,
-        philip.cox@canonical.com,
-        "the arch/x86 maintainers" <x86@kernel.org>, linux-mm@kvack.org,
-        linux-coco@lists.linux.dev, linux-efi@vger.kernel.org,
-        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCHv7 10/14] x86/mm: Avoid load_unaligned_zeropad() stepping into
- unaccepted memory
-Content-Type: text/plain;charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+        s=k20201202; t=1660406742;
+        bh=4J42o8wzYgxh688G1hCQTDBxBmpRo7DCqxyEvYQsMKM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JxA/z4nk2WIvM4oapN2esQkxdftt7fFkLIkWpDqOBI/yVQm0WQASGNbXrbL0E3jNp
+         XmzCxsJ/ZFzkxSfO7x4VXzfSLUHJ38ZWkU84yJcSf7mvhhZImPtfC983YsjhJYwF3x
+         8hZKijx8Il2fDL29dcsqti05BaalGpU6G4+Q7OueByKpGKqJViCA3cynHGpdmNCvsL
+         cG6Uba59DtdJtwbjO6eCWy/FCsSsyfPOR7OpRF1hTcx4mvvsq1T+M8IHHxHYYEooDZ
+         gHCx2UHwZ4+ciRCvKqOerQPyN9CDNVMYi/eX2utpGMaSpnfIOdWCgZjSqmYobG1OW6
+         wmcZOAkBDGehw==
+Date:   Sat, 13 Aug 2022 19:05:26 +0300
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Cc:     Aaron Lu <aaron.lu@intel.com>, Dave Hansen <dave.hansen@intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Song Liu <song@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [RFC PATCH 0/4] x86/mm/cpa: merge small mappings whenever
+ possible
+Message-ID: <YvfLxuflw2ctHFWF@kernel.org>
+References: <20220808145649.2261258-1-aaron.lu@intel.com>
+ <YvSKpCWhAz+2Y220@ip-172-31-24-42.ap-northeast-1.compute.internal>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YvSKpCWhAz+2Y220@ip-172-31-24-42.ap-northeast-1.compute.internal>
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -109,52 +58,130 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Aaron,
 
+On Thu, Aug 11, 2022 at 04:50:44AM +0000, Hyeonggon Yoo wrote:
+> On Mon, Aug 08, 2022 at 10:56:45PM +0800, Aaron Lu wrote:
+> > This is an early RFC. While all reviews are welcome, reviewing this code
+> > now will be a waste of time for the x86 subsystem maintainers. I would,
+> > however, appreciate a preliminary review from the folks on the to and cc
+> > list. I'm posting it to the list in case anyone else is interested in
+> > seeing this early version.
+> > 
+> 
+> Hello Aaron!
+> 
+> +Cc Mike Rapoport, who has been same problem. [1]
 
-On Wed, Aug 3, 2022, at 7:02 AM, Dave Hansen wrote:
-> On 8/2/22 16:46, Dave Hansen wrote:
->> To sum it all up, I'm not happy with the complexity of the page
->> acceptance code either but I'm not sure that it's bad tradeoff compar=
-ed
->> to greater #VE complexity or fragility.
->>=20
->> Does anyone think we should go back and really reconsider this?
->
-> One other thing I remembered as I re-read my write up on this.
->
-> In the "new" mode, guests never get #VE's for unaccepted memory.  They
-> just exit to the host and can never be reentered.  They must be killed.
->
-> In the "old" mode, I _believe_ that the guest always gets a #VE for
-> non-EPT-present memory.  The #VE is basically the same no matter if the
-> page is unaccepted or if the host goes out and makes a
-> previously-accepted page non-present.
->
-> One really nasty implication of this "old" mode is that the host can
-> remove *accepted* pages that are used in the syscall gap.  That means
-> that the #VE handler would need to be of the paranoid variety which
-> opens up all kinds of other fun.
->
->  * "Old" - #VE's can happen in the syscall gap
->  * "New" - #VE's happen at better-defined times.  Unexpected ones are
->    fatal.
->
-> There's a third option which I proposed but doesn't yet exist.  The TDX
-> module _could_ separate the behavior of unaccepted memory #VE's and
-> host-induced #VEs.  This way, we could use load_unaligned_zeropad() wi=
-th
-> impunity and handle it in the #VE handler.  At the same time, the host
-> would not be allowed to remove accepted memory and cause problems in t=
-he
-> syscall gap.  Kinda the best of both worlds.
->
-> But, I'm not sure how valuable that would be now that we have the
-> (admittedly squirrelly) code to avoid load_unaligned_zeropad() #VE's.
+Thanks Hyeonggon!
+ 
+> There is also LPC discussion (with different approach on this problem)
+> [2], [4]
+> 
+> and performance measurement when all pages are 4K/2M. [3]
+> 
+> [1] https://lore.kernel.org/linux-mm/20220127085608.306306-1-rppt@kernel.org/
+> [2] https://www.youtube.com/watch?v=egC7ZK4pcnQ
+> [3] https://lpc.events/event/11/contributions/1127/attachments/922/1792/LPC21%20Direct%20map%20management%20.pdf
+> [4] https://lwn.net/Articles/894557/
+> 
+> > Dave Hansen: I need your ack before this goes to the maintainers.
+> > 
+> > Here it goes:
+> > 
+> > On x86_64, Linux has direct mapping of almost all physical memory. For
+> > performance reasons, this mapping is usually set as large page like 2M
+> > or 1G per hardware's capability with read, write and non-execute
+> > protection.
+> > 
+> > There are cases where some pages have to change their protection to RO
+> > and eXecutable, like pages that host module code or bpf prog. When these
+> > pages' protection are changed, the corresponding large mapping that
+> > cover these pages will have to be splitted into 4K first and then
+> > individual 4k page's protection changed accordingly, i.e. unaffected
+> > pages keep their original protection as RW and NX while affected pages'
+> > protection changed to RO and X.
+> > 
+> > There is a problem due to this split: the large mapping will remain
+> > splitted even after the affected pages' protection are changed back to
+> > RW and NX, like when the module is unloaded or bpf progs are freed.
+> > After system runs a long time, there can be more and more large mapping
+> > being splitted, causing more and more dTLB misses and overall system
+> > performance getting hurt[1].
+> > 
+> > For this reason, people tried some techniques to reduce the harm of
+> > large mapping beling splitted, like bpf_prog_pack[2] which packs
+> > multiple bpf progs into a single page instead of allocating and changing
+> > one page's protection for each bpf prog. This approach made large
+> > mapping split happen much fewer.
+> > 
+> > This patchset addresses this problem in another way: it merges
+> > splitted mappings back to a large mapping when protections of all entries
+> > of the splitted small mapping page table become same again, e.g. when the
+> > page whose protection was changed to RO+X now has its protection changed
+> > back to RW+NX due to reasons like module unload, bpf prog free, etc. and
+> > all other entries' protection are also RW+NX.
+> >
+> 
+> I tried very similar approach few months ago (for toy implementation) [5],
+> and the biggest obstacle to this approach was: you need to be extremely sure
+> that the page->nr_same_prot is ALWAYS correct.
+> 
+> For example, in arch/x86/include/asm/kfence.h [6], it clears and set
+> _PAGE_PRESENT without going through CPA, which can simply break the count.
+> 
+> [5] https://github.com/hygoni/linux/tree/merge-mapping-v1r3
+> [6] https://elixir.bootlin.com/linux/latest/source/arch/x86/include/asm/kfence.h#L56
+> 
+> I think we may need to hook set_pte/set_pmd/etc and use proper
+> synchronization primitives when changing init_mm's page table to go
+> further on this approach.
+> 
+> > One final note is, with features like bpf_prog_pack etc., there can be
+> > much fewer large mapping split IIUC; also, this patchset can not help
+> > when the page which has its protection changed keeps in use. So my take
+> > on this large mapping split problem is: to get the most value of keeping
+> > large mapping intact, features like bpf_prog_pack is important. This
+> > patchset can help to further reduce large mapping split when in use page
+> > that has special protection set finally gets released.
 
-How would that be implemented?  It would need to track which GPAs *were*=
- accepted across a host-induced unmap/remap cycle. This would involve pr=
-eventing the host from ever completely removing a secure EPT table witho=
-ut the guest=E2=80=99s help, right?
+I'm not sure automatic collapse of large pages in the direct map will
+actually trigger frequently. 
 
-Admittedly this would IMO be better behavior. Is it practical to impleme=
-nt?
+Consider for example pages allocated for modules, that have adjusted
+protection bits. This pages could be scattered all over and even when they
+are freed, chances there will be a contiguous 2M chunk are quite low...
+
+I believe that to reduce the fragmentation of the direct map the 4K pages
+with changed protection should be allocated from a cache of large pages, as
+I did on older version of secretmem or as Rick implemented in his vmalloc
+and PKS series.
+
+Then CPA may provide a method for explicitly collapsing a large page, so
+that such cache can call this method when an entire large page becomes
+free.
+
+> > [1]: http://lkml.kernel.org/r/CAPhsuW4eAm9QrAxhZMJu-bmvHnjWjuw86gFZzTHRaMEaeFhAxw@mail.gmail.com
+> > [2]: https://lore.kernel.org/lkml/20220204185742.271030-1-song@kernel.org/
+> > 
+> > Aaron Lu (4):
+> >   x86/mm/cpa: restore global bit when page is present
+> >   x86/mm/cpa: merge splitted direct mapping when possible
+> >   x86/mm/cpa: add merge event counter
+> >   x86/mm/cpa: add a test interface to split direct map
+> > 
+> >  arch/x86/mm/pat/set_memory.c  | 411 +++++++++++++++++++++++++++++++++-
+> >  include/linux/mm_types.h      |   6 +
+> >  include/linux/page-flags.h    |   6 +
+> >  include/linux/vm_event_item.h |   2 +
+> >  mm/vmstat.c                   |   2 +
+> >  5 files changed, 420 insertions(+), 7 deletions(-)
+> > 
+> > -- 
+> > 2.37.1
+> > 
+> > 
+
+-- 
+Sincerely yours,
+Mike.

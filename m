@@ -2,57 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F508591C4C
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 20:36:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6751591C51
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 20:40:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239975AbiHMSgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 14:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42800 "EHLO
+        id S240078AbiHMSgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 14:36:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239428AbiHMSga (ORCPT
+        with ESMTP id S239831AbiHMSgc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 14:36:30 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB4C10572
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 11:36:29 -0700 (PDT)
+        Sat, 13 Aug 2022 14:36:32 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FC5C10572;
+        Sat, 13 Aug 2022 11:36:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660415789; x=1691951789;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=z9vmo3oouOg13TEelcgv+Ek1MmzLAcDcfCyaj5ae2hg=;
-  b=j7/IGJXZDxRt4BehcvG3JeQVGvTBKytlg4L5pnDiszTi6sqWSCCKuybR
-   2CyM4InFjszzo3NOQ0FckD5jtwHgd0KxGs2PKkV7SzmLs+E0HYiZ8Yv7J
-   RTL9dDtRTSuZeL99uiCNLQNvEV4Q+cq6HyYtJS54cVqBLp0RgYzHCrHx8
-   C2SvLar0JmpBIta4cOsm5oct+DKHlT1p5Cu0oYb+yvxjbU2vTYo12HOr0
-   t+cd3Jj6/m+ur8jGQ6xaOamapVZi5taTZLGDX5jzSoDqC/15RXA9FxfQV
-   QkEDLpNcgm7go6ybpIU0Wdz9P9mOL5nO0xArHG6hsoW9FHegeml/Ct56o
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="378060861"
+  t=1660415791; x=1691951791;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=v/wd8gBJ21x02UoZbhiGTliLmxIYh7jO083LnUvBs5A=;
+  b=HbjAPesSX4DUehOH/TPK4oRmqOYaJX/axQ5g9gRsgaexGzzLVZY9vQAy
+   Dp8zOSpNMUqZM6s14nNTf8U4DmD2WEtMSc12qZgJoIpsrhYmBZbyWz+iR
+   maW5VFBsRlr6hiOlb+a+qtXVhsEXrYWRVO3piF/tpa0w6KtDCPvh41tcm
+   k2KxblJKe7G8JQSWsFud2zVggDT7JzJ/88ynbqIzBR1bWGc8GhTqOxrQA
+   rEeRdJUEKeLv6MTo++VnwkWHEDQh9S09h/6W5hbNRYAC3P3Y6mvknvnB2
+   2kcWvnzFgIdG9kc+Q4rX4UbKR7jDd3K9/rRx5GjrmfmlrozIiC4vFfcsX
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="272163135"
 X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
-   d="scan'208";a="378060861"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 11:36:29 -0700
+   d="scan'208";a="272163135"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 11:36:31 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
-   d="scan'208";a="635018771"
+   d="scan'208";a="609552126"
 Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by orsmga008.jf.intel.com with ESMTP; 13 Aug 2022 11:36:27 -0700
+  by fmsmga007.fm.intel.com with ESMTP; 13 Aug 2022 11:36:27 -0700
 Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oMvzn-0001zF-0O;
+        id 1oMvzn-0001zD-0J;
         Sat, 13 Aug 2022 18:36:27 +0000
-Date:   Sun, 14 Aug 2022 02:35:27 +0800
+Date:   Sun, 14 Aug 2022 02:35:29 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [andersson:wip/sc8280xp-next-20220720-nonworking-gpu 9/143]
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1535:37: warning: unused
- variable 'sc8280xp_regdma'
-Message-ID: <202208140224.llj1D2O5-lkp@intel.com>
+To:     jeffxu@google.com, skhan@linuxfoundation.org
+Cc:     kbuild-all@lists.01.org, akpm@linux-foundation.org,
+        dmitry.torokhov@gmail.com, dverkamp@chromium.org, hughd@google.com,
+        jeffxu@google.com, jorgelo@chromium.org, keescook@chromium.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, mnissler@chromium.org, jannh@google.com,
+        Jeff Xu <jeffxu@chromium.org>
+Subject: Re: [PATCH v2 5/5] sysctl: add support for mfd_noexec
+Message-ID: <202208140256.CLDuIPhh-lkp@intel.com>
+References: <20220805222126.142525-6-jeffxu@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20220805222126.142525-6-jeffxu@google.com>
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -63,46 +68,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://github.com/andersson/kernel wip/sc8280xp-next-20220720-nonworking-gpu
-head:   50749fc985b5eb2036a6139b10182a05e42ce4b0
-commit: 4dc0d00149b8260bcbe5fd583b44ff1b1bbac3cd [9/143] drm/msm/dpu: Introduce sc8280xp
-config: arm-defconfig (https://download.01.org/0day-ci/archive/20220814/202208140224.llj1D2O5-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 3329cec2f79185bafd678f310fafadba2a8c76d2)
+Hi,
+
+Thank you for the patch! Yet something to improve:
+
+[auto build test ERROR on 9e2f40233670c70c25e0681cb66d50d1e2742829]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/jeffxu-google-com/mm-memfd-MFD_NOEXEC-for-memfd_create/20220806-062430
+base:   9e2f40233670c70c25e0681cb66d50d1e2742829
+config: csky-allnoconfig (https://download.01.org/0day-ci/archive/20220814/202208140256.CLDuIPhh-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 12.1.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/andersson/kernel/commit/4dc0d00149b8260bcbe5fd583b44ff1b1bbac3cd
-        git remote add andersson https://github.com/andersson/kernel
-        git fetch --no-tags andersson wip/sc8280xp-next-20220720-nonworking-gpu
-        git checkout 4dc0d00149b8260bcbe5fd583b44ff1b1bbac3cd
+        # https://github.com/intel-lab-lkp/linux/commit/e71897c778df5381c6d1ca858ae096a557a08a2a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review jeffxu-google-com/mm-memfd-MFD_NOEXEC-for-memfd_create/20220806-062430
+        git checkout e71897c778df5381c6d1ca858ae096a557a08a2a
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/gpu/drm/msm/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=csky SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
-All warnings (new ones prefixed by >>):
+All errors (new ones prefixed by >>):
 
->> drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c:1535:37: warning: unused variable 'sc8280xp_regdma' [-Wunused-const-variable]
-   static const struct dpu_reg_dma_cfg sc8280xp_regdma = {
-                                       ^
-   1 warning generated.
-
-
-vim +/sc8280xp_regdma +1535 drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-
-  1534	
-> 1535	static const struct dpu_reg_dma_cfg sc8280xp_regdma = {
-  1536		.base = 0x0,
-  1537		.version = 0x00020000,
-  1538		.trigger_sel_off = 0x119c,
-  1539		.xin_id = 7,
-  1540		.clk_ctrl = DPU_CLK_CTRL_REG_DMA,
-  1541	};
-  1542	
+>> csky-linux-ld: kernel/sysctl.o:(.data+0x398): undefined reference to `sysctl_mfd_noexec_scope'
+>> csky-linux-ld: kernel/sysctl.o:(.data+0x3a8): undefined reference to `mfd_noexec_dointvec_minmax'
 
 -- 
 0-DAY CI Kernel Test Service

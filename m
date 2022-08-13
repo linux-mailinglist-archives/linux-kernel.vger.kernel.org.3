@@ -2,116 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 525905918D4
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 06:35:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C82505918D7
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 06:38:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237168AbiHMEf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 00:35:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36738 "EHLO
+        id S237449AbiHMEif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 00:38:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231424AbiHMEfW (ORCPT
+        with ESMTP id S231424AbiHMEid (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 00:35:22 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 620FA6472;
-        Fri, 12 Aug 2022 21:35:19 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id y1so2318848plb.2;
-        Fri, 12 Aug 2022 21:35:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=VUHCQwlaRdPYc5+96fH2AK8O9hMSpZvPcuLwqBAO7GQ=;
-        b=DbqPITAh6lgQPvO8iRa3uqHjy37oFWqdIFpqX5YpaTeFSa9gvbfPa8ouyMvutd/LuW
-         ka2BMZndXfiNWXfow9ffrQt2nFRaSV/9YFfeii7/IHng9yehzW/yZ297A2N1C6RfU+ES
-         gP6LngMgBEL1JkSigxeKsJQysiofWZ8/etpZ9MY4uEFuTFSHqdlVL+jJ6bfj0Z3tqynK
-         yb4oIbwmRKsf8Ki1eaBFEGKXcYM6hrSfRqOJjNJqY9pg9yocPUKxr85qAzee0zUi6lyO
-         WgOZZ7KBVGUbxOEwDEEof2WCWLeokyTkWD2mvkkQgqYl8iPWfdGnjzWzlElMvOMFwMZ4
-         xpXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=VUHCQwlaRdPYc5+96fH2AK8O9hMSpZvPcuLwqBAO7GQ=;
-        b=bqtwLqfmwjMDf+Zlo3ln2I+yO0HFywftoIkqjIxLOkAAPQqeK8AiKlmdKo+XQ+HHEz
-         4rnbG4T/WXr/DhQVZAPWKbqrnZEYSrOqDd7SmTHOCHuSQHPk4s/wBznBr2MSafvGAA5+
-         gnYVh4wNmOjWbUXf9L0zpRfFBX3qWWYdI6eQguU3c/HI8OM+N3N0yoCvS3VcyFC3s3v6
-         QsHG+6mkxLGn4flk+rQVMixxb1NpPTQyKhFbWuN+Y0z4x19iqR7s0S90PSrCW/acrjTb
-         33voNkMygwDlmkq9W21MBGcUMXwl9i4qxZJw6/enrzoVgLwojyqkIOnIA3Iqhk25BHbO
-         bHaw==
-X-Gm-Message-State: ACgBeo0lON3ZtiNDNAmfNoo+llJ/lO9aAtyJu/wLttQf42XjOmwYYuQb
-        UiabOQOdTYbTAqB7ZuRuzqQ=
-X-Google-Smtp-Source: AA6agR5E1/zUPIeHYwRmzswCgIOXoJuOjoKcs89aA7ZQycOVw8pfa7Exlb/hyVvFnRNXjExarmZJ8A==
-X-Received: by 2002:a17:90b:1c8e:b0:1f7:5250:7b44 with SMTP id oo14-20020a17090b1c8e00b001f752507b44mr17176314pjb.212.1660365318895;
-        Fri, 12 Aug 2022 21:35:18 -0700 (PDT)
-Received: from localhost.localdomain ([223.212.58.71])
-        by smtp.gmail.com with ESMTPSA id y6-20020aa793c6000000b0052e2a1edab8sm2479425pff.24.2022.08.12.21.35.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Aug 2022 21:35:18 -0700 (PDT)
-From:   Yuntao Wang <ytcoode@gmail.com>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, wireguard@lists.zx2c4.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yuntao Wang <ytcoode@gmail.com>
-Subject: [PATCH] wireguard: send/receive: update function names in comments
-Date:   Sat, 13 Aug 2022 12:35:08 +0800
-Message-Id: <20220813043508.128996-1-ytcoode@gmail.com>
-X-Mailer: git-send-email 2.37.1
+        Sat, 13 Aug 2022 00:38:33 -0400
+Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 600E72871A;
+        Fri, 12 Aug 2022 21:38:32 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 0FF403200921;
+        Sat, 13 Aug 2022 00:38:30 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute2.internal (MEProxy); Sat, 13 Aug 2022 00:38:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=undef.tools; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm1; t=1660365510; x=1660451910; bh=HEcNfg4CwiBsfqODwObieSZgI
+        suTV3ZpAgRuL6VBTtg=; b=NwE54rizUgYGRU5kE4pbEMAx3ul6uR36YOFRkj3sO
+        fMW2AM6rnp39EraZBCnBPm42Ymq2xEOnVmM8MaqjxCdN2qbv/WBSGM0GGTIrtT24
+        j/V/8AtDtH4H+WN2Bcp994gkAsDKlWpPGAHKuSyZR0MbqLIJQCMAW3LrLg9yNLnt
+        u3WK1MBt71/E+tIR9EfHvogHJwg1o0D1XusW9P3peOPkMUkFNH94W6ALBgsI8Ils
+        U2mX2vnx47z6FIx8Hb0xn1T0HZNp6+bWo3g/NcA0yPOv3OhBofNaTefWlzxyR/MD
+        3TifbectHtm5RweOr4Cv+WNapn1WGpdy5xYBgefH/YQAw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1660365510; x=1660451910; bh=HEcNfg4CwiBsfqODwObieSZgIsuTV3ZpAgR
+        uL6VBTtg=; b=OhHgQzE/QUcnvt8UPLuOF2ZHlwaCVdeFZ7Bx1r+w9L4rFx4Ezqb
+        Y34KrqtSVZPcjcc9xDFrxcFEIuxpaGDsR+Wrb42bwGMffG1hNWDRdx1KgTB+CBb7
+        b4tjiPkuyPJw3bQ6I5NfBXNJrFbWJvCsA/mSjRCHl1CubUoTTqi+BnrV7WLXyZE0
+        J/O7MkR17kdkP2Xab4Ddy3NbP0/qpIpG5leCy6O1FkNo1ivrTvO2x4Ov/6CElxJs
+        X+YL5cmclPYfDIUa89Q7xoZq5WcmbJYeJjJBoVsWrIWlFwsDA2ST28JyPWFrjZXL
+        r0y/tUuiP8MI3109/lUall7r9ASWP2mvTYA==
+X-ME-Sender: <xms:xSr3YnhYk5WE9Q8kZexRKMNCcrRPPs3Ef9qW2IKyPmYsm-lpaPXdtA>
+    <xme:xSr3YkCXzvfiqmsP0wgQqdqVO4c-wWc2zk8WGjVUufKHMp7dCzri9ytc5mP5dpMUX
+    8qF33AmaZH8Yu09EXo>
+X-ME-Received: <xmr:xSr3YnE-OgUuD_SEi1QqjgD7PlQvNlMFIoMWW5HVMOVqZQETx7aALEh4T7uM3dyFCQH4NbmXcg4slgxh6lZ9qwbve4U6mKnbQBsUfEOCKcTBFUeJY-eG5PEQtA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegjedgkeejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepkhgvrhhnvghl
+    sehunhguvghfrdhtohholhhsnecuggftrfgrthhtvghrnheptddtieehgefgveegkefghe
+    ekgeelkeejleelkeejueejkedtkeetfefghfektdeunecuvehluhhsthgvrhfuihiivgep
+    tdenucfrrghrrghmpehmrghilhhfrhhomhepkhgvrhhnvghlsehunhguvghfrdhtohholh
+    hs
+X-ME-Proxy: <xmx:xir3YkSI9WA7s-ARKSn7rWSS-n5QDFuDlwht6o5JX_o5aLTiwEaDmg>
+    <xmx:xir3Ykzh67NkWRbrHePCTM90GjU5BJbFnMdiJGuv_ru3Unn5bzF4qw>
+    <xmx:xir3Yq7Rz6Jrqv1GSQKI5gK0szjJ430kOKiP0sCw25dMm5PAW6_wTg>
+    <xmx:xir3YrnL5-JXfp796yqk-SofX5opsl8f-cTrKtOUcIlzBIHV7swKdg>
+Feedback-ID: id76147eb:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 13 Aug 2022 00:38:27 -0400 (EDT)
+From:   kernel@undef.tools
+To:     Bastien Nocera <hadess@hadess.net>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Ondrej Jirman <megi@xff.cz>,
+        Jarrah Gosbell <kernel@undef.tools>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     phone-devel@vger.kernel.org
+Subject: [PATCH] Input: goodix: Add compatible string for GT1158
+Date:   Sat, 13 Aug 2022 04:38:21 +0000
+Message-Id: <20220813043821.9981-1-kernel@undef.tools>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The functions packet_send_queued_handshakes() and
-packet_process_queued_handshake_packets() were renamed to
-wg_packet_handshake_send_worker() and wg_packet_handshake_receive_worker()
-respectively, but the comments referring to them were not updated
-accordingly, let's fix it.
+From: Jarrah Gosbell <kernel@undef.tools>
 
-Signed-off-by: Yuntao Wang <ytcoode@gmail.com>
+Add compatible string for GT1158 missing from the previous patch.
+
+Fixes:	425fe4709c76 ("Input: goodix - add support for GT1158")
+Signed-off-by: Jarrah Gosbell <kernel@undef.tools>
 ---
- drivers/net/wireguard/receive.c | 2 +-
- drivers/net/wireguard/send.c    | 4 ++--
- 2 files changed, 3 insertions(+), 3 deletions(-)
+ drivers/input/touchscreen/goodix.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/wireguard/receive.c b/drivers/net/wireguard/receive.c
-index 7135d51d2d87..5b9cd1841390 100644
---- a/drivers/net/wireguard/receive.c
-+++ b/drivers/net/wireguard/receive.c
-@@ -566,7 +566,7 @@ void wg_packet_receive(struct wg_device *wg, struct sk_buff *skb)
- 		}
- 		atomic_inc(&wg->handshake_queue_len);
- 		cpu = wg_cpumask_next_online(&wg->handshake_queue.last_cpu);
--		/* Queues up a call to packet_process_queued_handshake_packets(skb): */
-+		/* Queues up a call to wg_packet_handshake_receive_worker(skb): */
- 		queue_work_on(cpu, wg->handshake_receive_wq,
- 			      &per_cpu_ptr(wg->handshake_queue.worker, cpu)->work);
- 		break;
-diff --git a/drivers/net/wireguard/send.c b/drivers/net/wireguard/send.c
-index 5368f7c35b4b..15202c2e91a8 100644
---- a/drivers/net/wireguard/send.c
-+++ b/drivers/net/wireguard/send.c
-@@ -69,8 +69,8 @@ void wg_packet_send_queued_handshake_initiation(struct wg_peer *peer,
- 		goto out;
- 
- 	wg_peer_get(peer);
--	/* Queues up calling packet_send_queued_handshakes(peer), where we do a
--	 * peer_put(peer) after:
-+	/* Queues up calling wg_packet_handshake_send_worker(peer), where we do
-+	 * a wg_peer_put(peer) after:
- 	 */
- 	if (!queue_work(peer->device->handshake_send_wq,
- 			&peer->transmit_handshake_work))
+diff --git a/drivers/input/touchscreen/goodix.c b/drivers/input/touchscreen/goodix.c
+index 3974cb63708f..995169701f13 100644
+--- a/drivers/input/touchscreen/goodix.c
++++ b/drivers/input/touchscreen/goodix.c
+@@ -1557,6 +1557,7 @@ MODULE_DEVICE_TABLE(acpi, goodix_acpi_match);
+ #ifdef CONFIG_OF
+ static const struct of_device_id goodix_of_match[] = {
+ 	{ .compatible = "goodix,gt1151" },
++	{ .compatible = "goodix,gt1158" },
+ 	{ .compatible = "goodix,gt5663" },
+ 	{ .compatible = "goodix,gt5688" },
+ 	{ .compatible = "goodix,gt911" },
 -- 
-2.37.1
+2.35.1
 

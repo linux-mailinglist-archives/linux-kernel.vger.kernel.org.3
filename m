@@ -2,96 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 858E1591AD2
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 16:04:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89627591ADB
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 16:17:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239545AbiHMOEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 10:04:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35506 "EHLO
+        id S239554AbiHMORs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 10:17:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239472AbiHMOEH (ORCPT
+        with ESMTP id S239445AbiHMORq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 10:04:07 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B2E713F32
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 07:04:06 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id x9so3394798ljj.13
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 07:04:06 -0700 (PDT)
+        Sat, 13 Aug 2022 10:17:46 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1448B1C909
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 07:17:45 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id q16so3037443pgq.6
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 07:17:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=semihalf.com; s=google;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc;
-        bh=qyCH1Xo3YO20trnPHb9qoKkPoh3odrsC9eN4HgrltUw=;
-        b=pSjJl9nWWTwf30szirsqzHpUBwAT4x3UZvhP0LsmCQk5oPk2gCWtyKyw7etOt1IYj+
-         B4IXN9FAv7NcHFX2MvF4MWy6MIad0C54UZ+W96jFFi/3UVco/0Yrns3GXb5JIdA74BUn
-         rvohWFIy1n1T3aRJVh5QhOrhzafYQePE/PgVpGFaOUsflOM3NhiIMjW6/HzYKTwE2hrq
-         vvur8llMkR0wo2oFUT3PWlj+CQWyOgcoLu1o152c5dzf6YgdHwMvj4Oa8z4EnFd2k0sI
-         PfwCw1QvZ3ZEeMDMXtEh1mlmRYPS+YHLWrgcs160//0Uhyyi5V+obpdHan8wNTsMAAh1
-         BzDg==
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=+E0k8hootfoswIfOh4pYh7kOzDD2ZwZBXauTpEBfTNY=;
+        b=PckzpwNDmR1DPo9Tpu8HXT3zfLGDm/6xPpFz292MntKjHxmXhueXCyOCsfLR1/UCTp
+         7PFJC1waq+WOLonucIStJGiwR9/MjuvG5PXxN6gJGZTe667GwG31fovL4+zOab40bmnt
+         0EyJPyXbwOfGlLW1SNy/OkfrFYszG4MqPf/vjvF8xELi2knDZxJuzbbo4Un/ZYAHePQE
+         14jEioSIZMQSk7WLOeYXIUQlwKFhUGPz3iDaDywHYIo2Lgl14zmE5mkumy/agVh4LsfE
+         Q8c8jYl6p2pMhRwiuUmOpf/b4yV03vzDaH81aQu9j0ItEuEZQQOW1d5Spr0RUe48aZ9h
+         H9Kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:in-reply-to:mime-version
-         :user-agent:date:message-id:from:references:cc:to:subject
-         :x-gm-message-state:from:to:cc;
-        bh=qyCH1Xo3YO20trnPHb9qoKkPoh3odrsC9eN4HgrltUw=;
-        b=3KdDZ2xWj9Xbe4tZx9ccIYKZNB748ysAOglkZW+7DSRtHf++WC9470uS7GC6PdufnM
-         ktrPremuaZ/IESJoQDb1aZ84rRe/RvvdJDA2gQzlI9ugsGlvIpcEldqFeVwZJdOURFfX
-         nAhfk+qVFRp77WjJs8KAVIzbsUjmDiAxsgmlSHaD0bcPx8lXOZEdEZrF2UlD+58O7QCa
-         rk8Gopq+/jSWE4uVVmuq4yu2Rni+ZLE7CZ9ScA05qc71FtZVnWHDF3YbQC7gRI/C7Ijr
-         cu3hw0qBmnQahaSb34Wy6REBIOGQBiMc4DLg7cUXJOzXcwZYq/wVyyOxRKGzjpMkHflY
-         pV1w==
-X-Gm-Message-State: ACgBeo38863oZLoDTmNGnto92CJjMsnOR+LNrcRaANZ+6nOhkqg51BUr
-        cyh2Rr8TPaEq65Xh5sGx3HyxkQ==
-X-Google-Smtp-Source: AA6agR5VxsPrML+qpTqW2rw4vgpk7nmQXlRpcrdzJOBbwoJsnBmFxEP9T1qSfVEidE7fMp/9En26gQ==
-X-Received: by 2002:a2e:bcc5:0:b0:261:737a:1d1f with SMTP id z5-20020a2ebcc5000000b00261737a1d1fmr2121381ljp.418.1660399444627;
-        Sat, 13 Aug 2022 07:04:04 -0700 (PDT)
-Received: from ?IPv6:2a02:a31b:33d:9c00:463a:87e3:44fc:2b2f? ([2a02:a31b:33d:9c00:463a:87e3:44fc:2b2f])
-        by smtp.gmail.com with ESMTPSA id h6-20020a2ea486000000b0025e57b40009sm767472lji.89.2022.08.13.07.04.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 13 Aug 2022 07:04:03 -0700 (PDT)
-Subject: Re: [PATCH v2 0/5] KVM: Fix oneshot interrupts forwarding
-To:     "Liu, Rong L" <rong.l.liu@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>
-Cc:     "Dong, Eddie" <eddie.dong@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Tomasz Nowicki <tn@semihalf.com>,
-        Grzegorz Jaszczyk <jaz@semihalf.com>,
-        "upstream@semihalf.com" <upstream@semihalf.com>,
-        Dmitry Torokhov <dtor@google.com>
-References: <20220805193919.1470653-1-dmy@semihalf.com>
- <BL0PR11MB30429034B6D59253AF22BCE08A639@BL0PR11MB3042.namprd11.prod.outlook.com>
- <c5d8f537-5695-42f0-88a9-de80e21f5f4c@semihalf.com>
- <BL0PR11MB304213273FA9FAC4EBC70FF88A629@BL0PR11MB3042.namprd11.prod.outlook.com>
- <ef9ffbde-445e-f00f-23c1-27e23b6cca4f@semihalf.com>
- <87o7wsbngz.wl-maz@kernel.org>
- <8ff76b5e-ae28-70c8-2ec5-01662874fb15@redhat.com>
- <87r11ouu9y.wl-maz@kernel.org>
- <72e40c17-e5cd-1ffd-9a38-00b47e1cbd8e@semihalf.com>
- <d8704ffa-8d9e-2261-1bcf-1b402f955fad@redhat.com>
- <MW3PR11MB4554AAFB43FA6B0B612150D9C7649@MW3PR11MB4554.namprd11.prod.outlook.com>
-From:   Dmytro Maluka <dmy@semihalf.com>
-Message-ID: <f843fa85-41ce-bf45-d1d7-69341dea2939@semihalf.com>
-Date:   Sat, 13 Aug 2022 16:04:01 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.13.0
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=+E0k8hootfoswIfOh4pYh7kOzDD2ZwZBXauTpEBfTNY=;
+        b=0XqjWWAezwa2XBGIyThAm03I1eUMtybVWdCvj9oQfM4GGkdXnxPT4eaeJosjz0gVVx
+         CC8X8tr/GH7ZDX/0NZnoQTx1pnzITR4TXg0hfelzL3t/SOGUczZHkeZ8hTnFmFp4L435
+         azZyY58C5HqdIzk3H0MtSVCk3yI1JYbSAS4wdTWTMlEaWDQIvbmKdrNHqZeX0EikhaiY
+         iR4fLOqfSpD436NZnz9/jyxEUJ6lLFYDeqE4xOzNeQLaq/t0+JxpbKuw6vrq8UN69CjC
+         DLonFeeYvPwAa6gO+vR4UeZEdmn0a8Ho3uodfzYxdeRryJWVWi02zQwsqF3NZQGQwrUg
+         rv4w==
+X-Gm-Message-State: ACgBeo1ASzQf+vX/cn0CgsvA9vszPkVJP7Bn+KNiq6lJd0xb70d0QAYs
+        dUiiM8P9sPZKQ5GpQsDwCWAFDrkPdvV9wakv
+X-Google-Smtp-Source: AA6agR6YNktXnQb8y//5O6cLR57gk7hHZamYnXgwIbZ7rcEmRfRZk3gLbXljY1sGNWjqR5W1QNxqYA==
+X-Received: by 2002:a63:c1f:0:b0:41a:9b73:a89e with SMTP id b31-20020a630c1f000000b0041a9b73a89emr6897036pgl.342.1660400264394;
+        Sat, 13 Aug 2022 07:17:44 -0700 (PDT)
+Received: from leoy-huanghe.lan (n058152048222.netvigator.com. [58.152.48.222])
+        by smtp.gmail.com with ESMTPSA id z6-20020a170903018600b0016d2db82962sm3808367plg.16.2022.08.13.07.17.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 13 Aug 2022 07:17:43 -0700 (PDT)
+Date:   Sat, 13 Aug 2022 22:17:39 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     carsten.haitzler@foss.arm.com, linux-kernel@vger.kernel.org,
+        coresight@lists.linaro.org, suzuki.poulose@arm.com,
+        mathieu.poirier@linaro.org, mike.leach@linaro.org,
+        linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH v7 00/14] perf: test: Add trace data quality tests for
+ CoreSight
+Message-ID: <20220813141739.GB687527@leoy-huanghe.lan>
+References: <20220812121641.336465-1-carsten.haitzler@foss.arm.com>
+ <Yvaj2ukXV+SLIBR0@kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <MW3PR11MB4554AAFB43FA6B0B612150D9C7649@MW3PR11MB4554.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=utf-8
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Yvaj2ukXV+SLIBR0@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -100,105 +74,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rong,
-
-On 8/12/22 12:40 AM, Liu, Rong L wrote:
-> Hi Paolo and Dmytro,
+On Fri, Aug 12, 2022 at 04:02:50PM -0300, Arnaldo Carvalho de Melo wrote:
+> Em Fri, Aug 12, 2022 at 01:16:27PM +0100, carsten.haitzler@foss.arm.com escreveu:
+> > From: Carsten Haitzler <carsten.haitzler@arm.com>
+> > 
+> > This is a prelude to adding more tests to shell tests and in order to
+> > support putting those tests into subdirectories, I need to change the
+> > test code that scans/finds and runs them.
+> > 
+> > To support subdirs I have to recurse so it's time to refactor the code to
+> > allow this and centralize the shell script finding into one location and
+> > only one single scan that builds a list of all the found tests in memory
+> > instead of it being duplicated in 3 places.
+> > 
+> > This code also optimizes things like knowing the max width of desciption
+> > strings (as we can do that while we scan instead of a whole new pass
+> > of opening files). It also more cleanly filters scripts to see only
+> > *.sh files thus skipping random other files in directories like *~
+> > backup files, other random junk/data files that may appear and the
+> > scripts must be executable to make the cut (this ensures the script
+> > lib dir is not seen as scripts to run). This avoids perf test running
+> > previous older versions of test scripts that are editor backup files
+> > as well as skipping perf.data files that may appear and so on.
+> > 
+> > Signed-off-by: Carsten Haitzler <carsten.haitzler@arm.com>
 > 
->> -----Original Message-----
->> From: Paolo Bonzini <pbonzini@redhat.com>
->> Sent: Wednesday, August 10, 2022 11:48 PM
->> To: Dmytro Maluka <dmy@semihalf.com>; Marc Zyngier
->> <maz@kernel.org>; eric.auger@redhat.com
->> Cc: Dong, Eddie <eddie.dong@intel.com>; Christopherson,, Sean
->> <seanjc@google.com>; kvm@vger.kernel.org; Thomas Gleixner
->> <tglx@linutronix.de>; Ingo Molnar <mingo@redhat.com>; Borislav
->> Petkov <bp@alien8.de>; Dave Hansen <dave.hansen@linux.intel.com>;
->> x86@kernel.org; H. Peter Anvin <hpa@zytor.com>; linux-
->> kernel@vger.kernel.org; Alex Williamson <alex.williamson@redhat.com>;
->> Liu, Rong L <rong.l.liu@intel.com>; Zhenyu Wang
->> <zhenyuw@linux.intel.com>; Tomasz Nowicki <tn@semihalf.com>;
->> Grzegorz Jaszczyk <jaz@semihalf.com>; upstream@semihalf.com;
->> Dmitry Torokhov <dtor@google.com>
->> Subject: Re: [PATCH v2 0/5] KVM: Fix oneshot interrupts forwarding
->>
->> On 8/10/22 19:02, Dmytro Maluka wrote:
->>>      1. If vEOI happens for a masked vIRQ, notify resamplefd as usual,
->>>         but also remember this vIRQ as, let's call it, "pending oneshot".
->>>
-> 
-> This is the part always confuses me.   In x86 case, for level triggered
-> interrupt, even if it is not oneshot, there is still "unmask" and the unmask
-> happens in the same sequence as in oneshot interrupt, just timing is different. 
->  So are you going to differentiate oneshot from "normal" level triggered
-> interrupt or not?   And there is any situation that vEOI happens for an unmasked
-> vIRQ?
+> Leo, can you please check if your previous Reviewed-by tags stand for
+> this new version?
 
-We were already talking about it in [1] and before. It still seems to me
-that your statement is wrong and that with x86 ioapic, "normal"
-level-triggered interrupts normally stay unmasked all the time, and only
-EOI is used for interrupt completion. To double-confirm that, I was once
-tracing KVM's ioapic_write_indirect() and confirmed that it's not called
-when Linux guest is handling a "normal" level-triggered interrupt.
+Yeah, after applied this patch series on the repo:
+https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git, branch perf/core;
+it has merging conflict for the patch 03 "perf test: Add build infra for perf
+test tools for CoreSight tests".  It's good to rebase this patch set on the
+latest perf/core branch.
 
-However, it seems that even if you were right and for normal interrupts
-an EOI was always followed by an unmask, this proposal would still work
-correctly. 
+I compared patch set v5 and v7, confirmed the my comments have been addressed
+in v7.  Carsten also has updated patches' author address, it is same with the
+address used in SoB, this is the right thing to do (Sorry I missed that).
 
-> 
->  > >      2. A new physical IRQ is immediately generated, so the vIRQ is
->>>         properly set as pending.
->>>
-> 
-> I am not sure this is always the case.  For example, a device may not raise a
-> new interrupt until it is notified that "done reading" - by device driver
-> writing to a register or something when device driver finishes reading data.  So
-> how do you handle this situation?
+I tested this patch set on my Juno board and observed a regression related with
+CTI driver, the regression is not relevant with this patch set, I have
+reported it on CoreSight mailing list.  This will be investigated separatly.
 
-Right, the device will not raise new interrupts, but also it will not
-lower the currently pending interrupt until "done reading". Precisely
-for this reason the host will receive a new interrupt immediately after
-vfio unmasks the physical IRQ.
+When played these test cases, I observed a failure for below case; but when I
+re-run the case again and it passed.
 
-It's also possible that the driver will notify "done reading" quite
-early, so the device will lower the interrupt before vfio unmasks it, so
-no new physical interrupt will be generated, - and that is fine too,
-since it means that the physical IRQ is no longer pending, so we don't
-need to notify KVM to set the virtual IRQ status to "pending".
+  # ./perf test -v 78
+   78: CoreSight / Thread Loop 10 Threads - Check TID                  :
+  --- start ---
+  test child forked, pid 6233
+  [ perf record: Woken up 1 times to write data ]
+  [ perf record: Captured and wrote 0.380 MB ./perf-thread_loop-check-tid-10th.data ]
+  Thread IDs  6242 6242 6242 6242 6242 6242 6242 6242 not found in perf AUX data
+  test child finished with -1
+  ---- end ----
+  CoreSight / Thread Loop 10 Threads - Check TID: FAILED!
 
-> 
->>>      3. After the vIRQ is unmasked by the guest, check and find out that
->>>         it is not just pending but also "pending oneshot", so don't
->>>         deliver it to a vCPU. Instead, immediately notify resamplefd once
->>>         again.
->>>
-> 
-> Does this mean the change of vfio code also?  That seems the case: vfio seems
-> keeping its own internal "state" whether the irq is enabled or not.
+You could see the perf data file is abnormally small (0.380 MiB), it should be
+an issue for perf cs-etm record.  I don't think this is an issue for the test
+case itself, we need to look at this issue later.
 
-I don't quite get why would it require changing vfio. Could you
-elaborate?
+So with fixing the merging conflict:
 
-[1] https://lore.kernel.org/kvm/9054d9f9-f41e-05c7-ce8d-628a6c827c40@semihalf.com/
+Tested-by: Leo Yan <leo.yan@linaro.org>
+Reviewed-by: Leo Yan <leo.yan@linaro.org>
+
+These test cases are for trace data quality, I'd like wait a bit for Mike's
+green light since he has much better understanding.
 
 Thanks,
-Dmytro
-
-> 
-> Thanks,
-> 
-> Rong
->>> In other words, don't avoid extra physical interrupts in the host
->>> (rather, use those extra interrupts for properly updating the pending
->>> state of the vIRQ) but avoid propagating those extra interrupts to the
->>> guest.
->>>
->>> Does this sound reasonable to you?
->>
->> Yeah, this makes sense and it lets the resamplefd set the "pending"
->> status in the vGIC.  It still has the issue that the interrupt can
->> remain pending in the guest for longer than it's pending on the host,
->> but that can't be fixed?
->>
->> Paolo
-> 
+Leo

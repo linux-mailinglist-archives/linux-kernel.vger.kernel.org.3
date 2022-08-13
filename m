@@ -2,62 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 305F359186A
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 04:58:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DD1D59186E
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 05:09:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236152AbiHMC61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 22:58:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52614 "EHLO
+        id S230201AbiHMDIe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 23:08:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbiHMC6Y (ORCPT
+        with ESMTP id S232374AbiHMDIb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 22:58:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88D59DB74;
-        Fri, 12 Aug 2022 19:58:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 69674B82574;
-        Sat, 13 Aug 2022 02:58:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 106F5C43142;
-        Sat, 13 Aug 2022 02:58:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660359501;
-        bh=S+ptBClyQvqTPLvZgFl34sQO5hs8nfDxmaVbp3iNtt4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=t6U8vYJgigU1+NGns1yuARmMiNXoz6yZtGEGP4mIeLgRgbvnzEQzPzx8BjVg28RV+
-         qRlAdCx+vhUq1TFEgGpfD0fsOYq+cZKH7AUmnZAfmrukOuzyTM7R5A/9C03t5AUDs0
-         EnJl3K7THiQ12KGeEYUJaXQyRw/bqnyTz2SySQmX7D5BEbDvTOQG+wH708ZnbCe6yR
-         eYkjTCkcjoPqxUGiCFNHz1j+h0/YLQ/p7tFI1jMk0V4lnT//Xx48FYSBfX+sat7mwi
-         1XwLKea28vJtOCyPwqBL8eSE5UTixonnKBpmaOAlo3/v4swrxp5KX/Wds34jipjeNY
-         +roDmhKgNcSfw==
-Received: by mail-vs1-f45.google.com with SMTP id 66so2522613vse.4;
-        Fri, 12 Aug 2022 19:58:20 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2dQm1qKAcpvx3mMyAsDEGFkSdAI54z27mQElwt1gonNLphIIL6
-        Gufr2XKh5M2udJhPu/sAJ/IPlPHQoxy1ur7j5F4=
-X-Google-Smtp-Source: AA6agR621z8UmCKNvKEH07aD82KjSz+RoZz5UfOHXhJ6RkIgDmig1UHkK8QImoc4Y3clYfyPqUPL5qq5HxlH25yg1Jk=
-X-Received: by 2002:a67:e288:0:b0:388:b41d:1654 with SMTP id
- g8-20020a67e288000000b00388b41d1654mr3044272vsf.70.1660359499868; Fri, 12 Aug
- 2022 19:58:19 -0700 (PDT)
+        Fri, 12 Aug 2022 23:08:31 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0832601
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 20:08:29 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id w19so4834678ejc.7
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 20:08:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=FOjkNd1xVbJqVfY8UU3UGqnX4Y9P4jNlc+hF+lbTxj8=;
+        b=CGqOaiP0INUys49T9Soj1g/hXp8XrX3vKSK9EDxc+qSSPlrTDokeZpmJjOfOg/VEhy
+         Ddosef03tn79JDqtphwXUwNzxzNm2Gn17PW3452sIqf65rPIwufbxHwZI46blovZjrRY
+         8ZxB1XBp0k3dQMKFoEUxlkZwbG9Wyw5AaZqdD6Z4rHLEHLnlCHTaipss5tbuSxTf+bEc
+         EXhzyNUkWXnahKPZoiKKl5Wvkc9UCkrUfsTRgCGPlIuu9bKp9Swrn+6Jg3R7accoFrgC
+         SP280fkjw3lfEBy8tgzPZSitwgg/1o/UYI1OyoV7ulsWpGTcs9Pc3iGq+viHiV5ksaFI
+         Bzng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=FOjkNd1xVbJqVfY8UU3UGqnX4Y9P4jNlc+hF+lbTxj8=;
+        b=jATFWeLwlAcXMNY/MGUTQ8QnPrpJwNNR1byAUFOdvZuq+f1F41aXFQ9wVEnrieQ0lT
+         zEHPGj8MrkCIwmKACQ5KgjU+/0+FqFWXz78X4C/2TczV3JTP6Sq3gP2N9n6BJ4WcHAm0
+         t1LgbYL0rBMVd/HSXk6aQsiGNYL5qSAZr/JsAq1Fd+E+7R0/dVGbpPXIKI+mZs9wHAI7
+         UgKeFbvTLIYNz6MJRBs2se8PeZ40wUiul7UwAOXmJWsv7ZGHRBTVstASigdvx8Cfx78+
+         btorEdiaRhOtKc4F5e+rN+HcN89ms2nR4PL8qmYwqIdESaVZ8eBuuK6XnboEctcxLzbK
+         8gQQ==
+X-Gm-Message-State: ACgBeo19tYZwcsAkq7Clzq+e340sym2Xc/vj3DG4QvVeqfA1L0c5VAWG
+        KoX4e1TgNBgdlUZWfvElv5Ykyw==
+X-Google-Smtp-Source: AA6agR4rpMYubzwMwCgXF+kZTc7AFFRuwGRLRj5ZQm649WyeBGV8FRlpJUJ/JwwIu/iX98SWDjExDQ==
+X-Received: by 2002:a17:907:60c7:b0:731:2be4:f72d with SMTP id hv7-20020a17090760c700b007312be4f72dmr4329113ejc.639.1660360107980;
+        Fri, 12 Aug 2022 20:08:27 -0700 (PDT)
+Received: from leoy-huanghe ([104.245.96.132])
+        by smtp.gmail.com with ESMTPSA id z7-20020a170906d00700b00726c0e63b94sm1415941ejy.27.2022.08.12.20.08.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 Aug 2022 20:08:27 -0700 (PDT)
+Date:   Sat, 13 Aug 2022 11:08:22 +0800
+From:   Leo Yan <leo.yan@linaro.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org
+Subject: Re: [PATCH 2/2] perf test: Introduce script for java symbol testing
+Message-ID: <20220813030822.GE74978@leoy-huanghe>
+References: <20220806033434.121908-1-leo.yan@linaro.org>
+ <20220806033434.121908-3-leo.yan@linaro.org>
+ <YvauX7u69u9AeID/@kernel.org>
+ <CAP-5=fUJxMz0C61Y1qwptc+M6rT=J3ztvguB+9bJBaQrYEQZ3w@mail.gmail.com>
 MIME-Version: 1.0
-References: <20220812072403.3075518-1-chenhuacai@loongson.cn> <CAHk-=wgopYkkZxSTCZGP783868VjoyGALMRst_nceA3aH-TW6Q@mail.gmail.com>
-In-Reply-To: <CAHk-=wgopYkkZxSTCZGP783868VjoyGALMRst_nceA3aH-TW6Q@mail.gmail.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Sat, 13 Aug 2022 10:58:07 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H5k-9L1tM4yu4uoNAEB=cadWw3x4OqnJ1eVbncAkMDjfw@mail.gmail.com>
-Message-ID: <CAAhV-H5k-9L1tM4yu4uoNAEB=cadWw3x4OqnJ1eVbncAkMDjfw@mail.gmail.com>
-Subject: Re: [GIT PULL] LoongArch changes for v5.20
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Huacai Chen <chenhuacai@loongson.cn>,
-        Arnd Bergmann <arnd@arndb.de>, loongarch@lists.linux.dev,
-        linux-arch <linux-arch@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>, Guo Ren <guoren@kernel.org>,
-        Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAP-5=fUJxMz0C61Y1qwptc+M6rT=J3ztvguB+9bJBaQrYEQZ3w@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,22 +79,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Linus,
+On Fri, Aug 12, 2022 at 02:08:43PM -0700, Ian Rogers wrote:
 
-On Sat, Aug 13, 2022 at 12:47 AM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Fri, Aug 12, 2022 at 12:24 AM Huacai Chen <chenhuacai@loongson.cn> wrote:
+[...]
+
+> > > +if [ -e "$PWD/tools/perf/libperf-jvmti.so" ]; then
+> > > +     LIBJVMTI=$PWD/tools/perf/libperf-jvmti.so
 > >
-> > Note: There is a conflict in arch/loongarch/include/asm/irq.h but can
-> > be fixed simply (just remove both lines from the irqchip tree and the
-> > loongarch tree).
->
-> Hmm. I don't see any conflict, so I assume there is something else in
-> linux-next that I haven't yet gotten.
-Yes, the conflict will happen when merge the irqchip-fixes tree.
+> >
+> > Will this only work if we do a:
+> >
+> > make -C tools/perf
 
-Huacai
->
->              Linus
->
+Yes, I think so.
+
+> >
+> > ?
+> 
+> Perhaps, I'm not sure on the correct way to detect the install location.
+> The only similar example I know of is:
+> https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/tests/builtin-test.c?h=perf/core#n308
+
+Yes, I refered the code in this link.
+
+If user works under Linux source folder, the test will search lib in
+the folder $LINUX or $LINUX/tools/perf; and it searchs the installed
+libperf-jvmti.so in the folder "$PREFIX/lib64" or "$PREFIX/lib".
+
+I think I can add a more path for searching system lib (e.g. the
+libperf-jvmti.so is under /usr/lib/linux-tools-xxx/):
+
+  elif [ -e "/usr/lib/linux-tools-$(uname -a | awk '{ print $3 }' | sed -r 's/-generic//')/libperf-jvmti.so" ]; then
+       LIBJVMTI= /usr/lib/linux-tools-$(uname -a | awk '{ print $3 }' | sed -r 's/-generic//')/libperf-jvmti.so
+
+> > +elif [ -e "$PWD/libperf-jvmti.so" ]; then
+> > > +     LIBJVMTI=$PWD/libperf-jvmti.so
+> > > +elif [ -e "$PREFIX/lib64/libperf-jvmti.so" ]; then
+> > > +     LIBJVMTI=$PREFIX/lib64/libperf-jvmti.so
+> > > +elif [ -e "$PREFIX/lib/libperf-jvmti.so" ]; then
+> > > +     LIBJVMTI=$PREFIX/lib/libperf-jvmti.so
+> > > +else
+> > > +     echo "Fail to find libperf-jvmti.so"
+> > > +     exit 1
+> >
+> 
+> JVMTI is a build option so this should probably be "exit 2" for skip.
+
+Sure, will fix.
+
+Thanks,
+Leo

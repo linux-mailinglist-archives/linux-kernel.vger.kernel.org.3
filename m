@@ -2,56 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ED455919E8
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 12:45:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14ED85919EE
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 12:48:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239182AbiHMKpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 06:45:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55194 "EHLO
+        id S239331AbiHMKst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 06:48:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237459AbiHMKpA (ORCPT
+        with ESMTP id S238945AbiHMKsj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 06:45:00 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CCFC27FEF;
-        Sat, 13 Aug 2022 03:44:59 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id i14so5828887ejg.6;
-        Sat, 13 Aug 2022 03:44:59 -0700 (PDT)
+        Sat, 13 Aug 2022 06:48:39 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80CC93AB34;
+        Sat, 13 Aug 2022 03:48:38 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id dc19so5821096ejb.12;
+        Sat, 13 Aug 2022 03:48:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc;
-        bh=faMMpjPtybNNka6ejfIMqU3qok+o9ew7dmDnWKZzcxI=;
-        b=LZzCv7O/9t7QRNgysw6SJUSx/6UOGD6zErpTiMgH9KadClkfazwBt8sDqG+UIcy32m
-         W8oiR0PeJ6USfPWKK6DO2xlKU1CFP4+qXNRN+qJGopKgydPoEh1IGlN2Gw838fDB+wEn
-         sSFQumJmmco/hPJp93QPCNp3mbVqg6v9Snfsq5iqSXCEAaRKq2gKejCdSmNoalM8rYC5
-         lIR1FnQjGab3Z6j/9lUUwtDbqiiAnzrciE1CnxMBQejdE+qCxyc+PDIcyxqImUQ04S7X
-         wlTn2/LlRDmItqS/gCtZfG7yQQmfiClHAoliQ1pxDxRCLpJEI08/nPNum/YJDnQy10Pp
-         YcUA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc;
+        bh=mMWgQnVhxyKG7itB8lVZQwS2syLLp6WBoeNq+Oay1xY=;
+        b=ZKPgQ4mxaY6YwrzzNZFxzYe72YJVNF8lEUtStRtdapl4QnuFuUvesb910Z3T1ZfFs7
+         HAGgulQ/yWNHqrJGmd1r5rQCU2RMZrzMQ4CfEMOmPXyLykk3JTWhssMQ0fEA0xJbzxmY
+         Sf8/739aU4qH0O+5WtXnB1pS6uVkRkRHpRVCLvqZYaGGrM23EbdFO22eSIRcPvT8ObJG
+         8kv6swFgbmLRpfaPugi3BadXAr5Pz88oVzVzbN+HnmmHB5rBEg7F6gMzAEXZd8tCtUYm
+         QKrvDgATDMj6/lRlgHjW43OH4/RZC/BDTiMNCc1r6K7f8dQEABVUhzU+C1TjFREKymr+
+         DaJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc;
-        bh=faMMpjPtybNNka6ejfIMqU3qok+o9ew7dmDnWKZzcxI=;
-        b=XercUSLQmN9NSmDI9I34BkZcpE0SXt40GBDde4hBuVFCjVYiYR+TFyR4mzMqrNfjiF
-         wdqf6mueUZyX7tesWSz3e8U7vYy05iqYc6sT753bMGe95v9q3x+nUDhtjykWA8xMYctZ
-         8S/khLY7aUncZHcU9/L6Ub+lC1OPey7lZVqERkZOG78PPcZyFhTG3u04nIq/FLYrBCqX
-         oO9pnn+SiLz4u4LvQiaXZ+bXjOizfaZfU4rypLfYjLtSBQxn/5rHg7/b30nCAY3JUHJc
-         i31yRKcSvjcrPp0LLi+o4jU40jWKH8By/IlHLqWUfaTlt1bj+ggd6xxw0UPwXbJvcYzS
-         6POg==
-X-Gm-Message-State: ACgBeo07iex2BQjIb5tjr5yxMtYzTTM/s4TobfUs0qHsrqf7WljjymSz
-        pch+QsUq16UVdJcmAjdPDXg=
-X-Google-Smtp-Source: AA6agR7ss9Oz8AT3rch6AhUFv4plkkAY3KML0Lov2Xmuj2pQ9rFSmS3I7EPe8V/wubIes8HrptdkfA==
-X-Received: by 2002:a17:907:60c8:b0:730:9efe:ecbd with SMTP id hv8-20020a17090760c800b007309efeecbdmr5065262ejc.90.1660387497734;
-        Sat, 13 Aug 2022 03:44:57 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
+        bh=mMWgQnVhxyKG7itB8lVZQwS2syLLp6WBoeNq+Oay1xY=;
+        b=fVK9jN3sTK4VaId8YI0o3Y2OiTXQcg1k1ftvrXc11GOwJ0YFwnko+9iAMiDAmggvif
+         J18ayHY7aXd69ZyGoMmOW7k7mZaY/dAhO4WK5MU4J4Pw+0eh+k5uYEKex2z7Z/PW3kDW
+         baPrzLxaANuNJA2Skw1rFAj20MdSFJJbDdNpIoSFI916fbds8+Qje5Ihffw92/jD8Jkn
+         Zbr0VpwJxIHHKkopl1RzbgH9RCE5CFBf+gBmZ2dACDk7ovRkYlYjeQfJesMGfVMBxLyE
+         aSZn1i29kEKmZnFR482/0s0/4PCGFdxN/EZOybXOUS2nHzoFUav7gNYQdm+z9rrNmFPU
+         bvFw==
+X-Gm-Message-State: ACgBeo12kmiATKxnuWERWzU6erNGDsbSkAy9GLW/3kb2bfsOd/4gVmZu
+        ZCYtjD+ZdapwD/aNZNF+Ua0=
+X-Google-Smtp-Source: AA6agR42RFziShLmuVcrMSrxYhxU9/TeAw/SX9/7q8bSPbdWwMxFMsnU7Xdm8UhOhj8QCnVt+FeOmA==
+X-Received: by 2002:a17:907:a056:b0:730:ce15:842d with SMTP id gz22-20020a170907a05600b00730ce15842dmr5184843ejc.275.1660387717009;
+        Sat, 13 Aug 2022 03:48:37 -0700 (PDT)
 Received: from gmail.com (84-236-113-143.pool.digikabel.hu. [84.236.113.143])
-        by smtp.gmail.com with ESMTPSA id b10-20020a0564021f0a00b0043df40e4cfdsm2802356edb.35.2022.08.13.03.44.56
+        by smtp.gmail.com with ESMTPSA id p22-20020a056402045600b00435a62d35b5sm2828661edw.45.2022.08.13.03.48.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Aug 2022 03:44:57 -0700 (PDT)
+        Sat, 13 Aug 2022 03:48:36 -0700 (PDT)
 Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Sat, 13 Aug 2022 12:44:55 +0200
+Date:   Sat, 13 Aug 2022 12:48:34 +0200
 From:   Ingo Molnar <mingo@kernel.org>
 To:     Zhang Rui <rui.zhang@intel.com>
 Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
@@ -59,14 +57,14 @@ Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
         bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
         corbet@lwn.net, fenghua.yu@intel.com, jdelvare@suse.com,
         linux@roeck-us.net, len.brown@intel.com
-Subject: Re: [PATCH 0/7] x86/topology: Improve CPUID.1F handling
-Message-ID: <YveAp8W3zZliQXrq@gmail.com>
+Subject: Re: [PATCH 3/7] hwmon/coretemp: Handle large core id value
+Message-ID: <YveBgsVINyKjXW9g@gmail.com>
 References: <20220812164144.30829-1-rui.zhang@intel.com>
+ <20220812164144.30829-4-rui.zhang@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220812164144.30829-1-rui.zhang@intel.com>
+In-Reply-To: <20220812164144.30829-4-rui.zhang@intel.com>
 X-Spam-Status: No, score=1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
@@ -82,35 +80,45 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 * Zhang Rui <rui.zhang@intel.com> wrote:
 
-> On Intel AlderLake-N platforms where there are Ecores only, the Ecore
-> Module topology is enumerated via CPUID.1F Module level, which has not
-> been supported by Linux kernel yet.
+> The coretemp driver supports up to a hard-coded limit of 128 cores.
 > 
-> This exposes two issues in current CPUID.1F handling code.
-> 1. Linux interprets the Module id bits as package id and erroneously
->    reports a multi module system as a multi-package system.
-> 2. Linux excludes the unknown Module id bits from the core_id, and results
->    in duplicate core_id’s shown in a package after the first issue solved.
+> Today, the driver can not support a core with an id above that limit.
+> Yet, the encoding of core_id's is arbitrary (BIOS APIC-id) and so they
+> may be sparse and they may be large.
 > 
-> Plus that, a third problem is observed on Intel Hybrid ADL-S/P platforms.
-> The return value of CPUID.1F SMT level EBX (number of siblings) differs on
-> Pcore CPUs and Ecore CPUs, and results in inconsistent smp_num_siblings
-> value based on the Pcore/Ecore CPU enumeration order. This could bring
-> some potential issues although we have not observed any functionalities
-> issues so far.
-> 
-> Patch 1/7 and 2/7 fix the first two issues. And at the same time, it
-> reveals a reality that the core_id could be sparse on platforms with
-> CPUID.1F support.
-> Patch 3/7 improves coretemp driver code to be able to handle sparse core
-> id, which is the only driver that uses core_id as array index and run on
-> platforms with CPUID.1F support.
-> 
-> Patch 4/7 to 7/7 propose a fix for the third problem and update the
-> related Documents.
+> Update the driver to map arbitrary core_id numbers into appropriate
+> array indexes so that 128 cores can be supported, no matter the encoding
+> of core_ids's.
 
-Yeah, so patch 3/7 probably needs to come first - otherwise there's a 
-window for bisection breakage.
+Please capitalize 'ID' consistently throughout the series.
+
+> -	attr_no = pkg_flag ? PKG_SYSFS_ATTR_NO : TO_ATTR_NO(cpu);
+> +	if (pkg_flag)
+> +		attr_no = PKG_SYSFS_ATTR_NO;
+> +	else {
+> +		index = ida_alloc(&pdata->ida, GFP_KERNEL);
+> +		if (index < 0)
+> +			return index;
+> +		pdata->cpu_map[index] = topology_core_id(cpu);
+> +		attr_no = index + BASE_SYSFS_ATTR_NO;
+> +	}
+
+Unbalanced curly braces.
+
+> -	int err, attr_no;
+> +	int err, index, attr_no;
+
+So it's 'index' here.
+
+> @@ -524,6 +538,8 @@ static void coretemp_remove_core(struct platform_data *pdata, int indx)
+
+But 'indx' here.
+
+> -	int indx, target;
+> +	int i, indx = -1, target;
+
+And 'indx' again. Did we run out of the letter 'e'? Either use 'index' 
+naming consistently, or 'idx' if it has to be abbreviated.
 
 Thanks,
 

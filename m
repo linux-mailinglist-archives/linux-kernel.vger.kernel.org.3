@@ -2,96 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14629591D1C
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 01:10:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 64BB6591D23
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 01:23:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229596AbiHMXKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 19:10:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57964 "EHLO
+        id S229836AbiHMXXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 19:23:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiHMXKr (ORCPT
+        with ESMTP id S229643AbiHMXXa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 19:10:47 -0400
-Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E996CE13;
-        Sat, 13 Aug 2022 16:10:45 -0700 (PDT)
-Received: from localhost.localdomain (133-32-182-133.west.xps.vectant.ne.jp [133.32.182.133]) (authenticated)
-        by conuserg-12.nifty.com with ESMTP id 27DN9Uaa027502;
-        Sun, 14 Aug 2022 08:09:31 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 27DN9Uaa027502
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1660432171;
-        bh=ahg1CMgPdBccimZ2s74hcE1OLQP4DgFeRxW/1pJsvtg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=LpRXBB6SwH4T3kDcZrLDEPp6JtAAoWiYGrMgrZNzccriJCwlxW66J40Xido/hKp7e
-         C4z7JsryglMXEhdlpuBOgqOYww6qkDVq0eIEeZ7PI7sYZfhWwFQyvHQu0RgpOKtEKX
-         BZWZpyiBPuo2L+LAiErHHgWMcIU0mWIjP3s8JDupxdJWRsEQOsqDb/kllIVPEXKnvd
-         r5IkcGVI7y04jQC4LHmy5C71pAG3rMv0YBs2H91fOyMIYKty7GUfOV+iLXgdHh+0FD
-         xIDnYJQ8I1jsyG6C+36Jq4i/SI0xVBL3NbKDyT9Cl+DaGutYdKFrIpVAfSeKkQ5w7Q
-         hX5290dw5AGkA==
-X-Nifty-SrcIP: [133.32.182.133]
-From:   Masahiro Yamada <masahiroy@kernel.org>
-To:     linux-kbuild@vger.kernel.org
-Cc:     Masahiro Yamada <masahiroy@kernel.org>,
-        Michal Marek <michal.lkml@markovi.net>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] kbuild: fix the modules order between drivers and libs
-Date:   Sun, 14 Aug 2022 08:09:28 +0900
-Message-Id: <20220813230928.1260981-1-masahiroy@kernel.org>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Sat, 13 Aug 2022 19:23:30 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 416FF883E4;
+        Sat, 13 Aug 2022 16:23:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DCFC4B800E2;
+        Sat, 13 Aug 2022 23:23:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03C87C433D6;
+        Sat, 13 Aug 2022 23:23:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1660433006;
+        bh=ysFtNkgWmL61tA/vu1l6V4vTgJfiMC+3pvDXK+Y2NCo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=faAZbMVOwLQHfw3hBgJv5a3v56W681DVzOI55UQpHQq+Pac+jtYmOphgd2KVIffEQ
+         G9j0bOGPW2JVcN6E0bQBkOUFnVsTsmkvPpRH/V1OPtr+0pWl+h8Hvlpb62Md6mSFHw
+         1aCs8GRY+7pq7mRyznOvXgRLg67x7O1Z4B+xeLHY=
+Date:   Sat, 13 Aug 2022 16:23:25 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     cgel.zte@gmail.com
+Cc:     bsingharora@gmail.com, iamjoonsoo.kim@lge.com, mingo@redhat.com,
+        bristot@redhat.com, vschneid@redhat.com, willy@infradead.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, Yang Yang <yang.yang29@zte.com.cn>,
+        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
+        wangyong <wang.yong12@zte.com.cn>
+Subject: Re: [PATCH 1/2] delayacct: support re-entrance detection of
+ thrashing accounting
+Message-Id: <20220813162325.57bb5d703d0063d717dc47e9@linux-foundation.org>
+In-Reply-To: <20220813074108.58196-1-yang.yang29@zte.com.cn>
+References: <20220813074108.58196-1-yang.yang29@zte.com.cn>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit b2c885549122 ("kbuild: update modules.order only when contained
-modules are updated") accidentally changed the modules order.
+On Sat, 13 Aug 2022 07:41:09 +0000 cgel.zte@gmail.com wrote:
 
-Prior to that commit, the modules order was determined based on
-vmlinux-dirs, which lists core-y/m, drivers-y/m, libs-y/m, in this order.
+> From: Yang Yang <yang.yang29@zte.com.cn>
+> 
+> Once upon a time, we only support accounting thrashing of page cache.
+> Then Joonsoo introduced workingset detection for anonymous pages and
+> we gained the ability to account thrashing of them[1].
+> 
+> For page cache thrashing accounting, there is no suitable place to do
+> it in fs level likes swap_readpage(). So we have to do it in
+> folio_wait_bit_common().
+> 
+> Then for anonymous pages thrashing accounting, we have to do it in
+> both swap_readpage() and folio_wait_bit_common(). This likes PSI,
+> so we should let thrashing accounting supports re-entrance detection.
+> 
+> This patch is to prepare complete thrashing accounting, and is based
+> on patch "filemap: make the accounting of thrashing more consistent".
+> 
+> -static inline void delayacct_thrashing_start(void)
+> +static inline void delayacct_thrashing_start(unsigned long *flags)
 
-Now, subdir-modorder lists them in a different order: core-y/m, libs-y/m,
-drivers-y/m.
+I don't think that `flags' is a very descriptive name.  It might be
+anything.  
 
-Presumably, there was no practical issue because the modules in drivers
-and libs are orthogonal, but there is no reason to have this distortion.
+> --- a/include/linux/sched.h
+> +++ b/include/linux/sched.h
+> @@ -943,6 +943,10 @@ struct task_struct {
+>  #ifdef	CONFIG_CPU_SUP_INTEL
+>  	unsigned			reported_split_lock:1;
+>  #endif
+> +#ifdef CONFIG_TASK_DELAY_ACCT
+> +	/* delay due to memory thrashing */
+> +	unsigned                        in_thrashing:1;
+> +#endif
 
-Get back to the original order.
+OK, saving space in the task_struct is good.
 
-Fixes: b2c885549122 ("kbuild: update modules.order only when contained modules are updated")
-Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
----
+>  	unsigned long			atomic_flags; /* Flags requiring atomic access. */
+>  
+> diff --git a/kernel/delayacct.c b/kernel/delayacct.c
+> index 164ed9ef77a3..a5916196022f 100644
+> --- a/kernel/delayacct.c
+> +++ b/kernel/delayacct.c
+> @@ -214,13 +214,22 @@ void __delayacct_freepages_end(void)
+>  		      &current->delays->freepages_count);
+>  }
+>  
+> -void __delayacct_thrashing_start(void)
+> +void __delayacct_thrashing_start(unsigned long *flags)
+>  {
+> +	*flags = current->in_thrashing;
+> +	if (*flags)
+> +		return;
 
- Makefile | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+Can't we rename `flags' to `in_thrashing' throughout?
 
-diff --git a/Makefile b/Makefile
-index 5f5c43a52455..c4e06e8020f1 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1113,13 +1113,11 @@ vmlinux-alldirs	:= $(sort $(vmlinux-dirs) Documentation \
- 		     $(patsubst %/,%,$(filter %/, $(core-) \
- 			$(drivers-) $(libs-))))
- 
--subdir-modorder := $(addsuffix modules.order,$(filter %/, \
--			$(core-y) $(core-m) $(libs-y) $(libs-m) \
--			$(drivers-y) $(drivers-m)))
--
- build-dirs	:= $(vmlinux-dirs)
- clean-dirs	:= $(vmlinux-alldirs)
- 
-+subdir-modorder := $(addsuffix /modules.order, $(build-dirs))
-+
- # Externally visible symbols (used by link-vmlinux.sh)
- KBUILD_VMLINUX_OBJS := $(head-y) $(patsubst %/,%/built-in.a, $(core-y))
- KBUILD_VMLINUX_OBJS += $(addsuffix built-in.a, $(filter %/, $(libs-y)))
--- 
-2.34.1
+And may as well give it type `bool'.  And convert that bool to/from the
+bitfield when moving it in and out of the task_struct with
+
+	*in_thrashing = !!current->in_thrashing;
+
+	current->in_thrashing = (in_thrashing != 0);
+
 

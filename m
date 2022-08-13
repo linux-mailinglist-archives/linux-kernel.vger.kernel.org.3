@@ -2,175 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69C6B5917B7
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 02:02:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E51715917C7
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 02:26:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236404AbiHMACc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 20:02:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33244 "EHLO
+        id S232373AbiHMAYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 20:24:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232950AbiHMAC3 (ORCPT
+        with ESMTP id S229617AbiHMAYs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 20:02:29 -0400
-Received: from crane.ash.relay.mailchannels.net (crane.ash.relay.mailchannels.net [23.83.222.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51EC682859
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 17:02:25 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 155C1121429
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 00:02:22 +0000 (UTC)
-Received: from pdx1-sub0-mail-a304.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id B0230121D41
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 00:02:21 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1660348941; a=rsa-sha256;
-        cv=none;
-        b=181nFGYMrJeFifC2hirBOKNoOYMjojdF1JgsvKxf2cEAAC5JXnX8NG0yb9zURbCi9bKeDQ
-        xISveRmGVS5I+Fg2SrTVGsy/ZCVgG3pVI1Ypmbz8Bens+wx8VMscmp2blYlGF4mAIpVCmS
-        X9ptf5FgOWuBv+g4icrlYpyZXURYODHXvZG4017cEVOdQiETbHkujFhiwhEDYwbt0IGILy
-        RRtNNiL76atxiSxh8fglhIkXynQZdfYMWugFrBJfc5RzdAY+bps1MNHnK0UP5KHsLjiM1v
-        cDF63soXlq7WbWQkSnFGVnsqk1wQY6/tfTphgMTfWQg49tbfFeoC0CbZizKIlQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1660348941;
+        Fri, 12 Aug 2022 20:24:48 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4A7CDA3D60
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 17:24:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660350284;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=KGaBVS8gSer1bvv93JlfF8uSuMQ+TPpS4Qvmn7fs+FQ=;
-        b=QsPo/Iq/0McB2gLsOac+2syO5F296yXMl30cm5V83URWcVE4i4XzUsx8wDt+3QCn5CAFRp
-        pifK9iey1mPszTqO4Yi0jjE8GwoEymOJgT207BZ1zTxj6XFNLyvB0Fe7ZugpaNgmSkqsS6
-        uUWLStiZrCsDugfBbUdUZ4tvnhhGjYae9vFxbfrEMwvWNx51Cj+b9CXDimGCPHFICMgOT/
-        j4hZWDjHZX2VXB5b6IbMdrbBFkJ2Ji1FRf15tmNFuIzAOC0EjPR/DLp6khE4ezzaAqDhHA
-        bHD1ppRP7Gzx9Q6SjMM5XIdIpQLSyzK+HxhbXo7uvGi40Q/oNPGSMOOgogTXrQ==
-ARC-Authentication-Results: i=1;
-        rspamd-7c478d8c66-rbs6k;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MailChannels-Auth-Id: dreamhost
-X-Coil-Trade: 0c4366c12a92d520_1660348941937_1497495729
-X-MC-Loop-Signature: 1660348941937:61849340
-X-MC-Ingress-Time: 1660348941936
-Received: from pdx1-sub0-mail-a304.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.124.238.80 (trex/6.7.1);
-        Sat, 13 Aug 2022 00:02:21 +0000
-Received: from kmjvbox (unknown [98.42.138.125])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=D+F48GZrNmKWUhdl+zaXl1w6N+t4Zw3HE18peH9oyp0=;
+        b=Jt+QW/KIZbAwkWpxZNJV7j2dAgTMiJhvmlZvg7YxsiXyIQTiixK4qn//dO1nAWfzDGj9Ns
+        qFnxR9v2ryNb6jqNsIEbYSIBSh2bK8yFepqLw6PeBOcD1YPu+HfQNzD+HuW5GotBvC5XNt
+        WKtkQBoWSAKZBgak+ulfjrG4X+F1Hbs=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-609-BCAHucJXNv2sttbzvrBPPQ-1; Fri, 12 Aug 2022 20:24:40 -0400
+X-MC-Unique: BCAHucJXNv2sttbzvrBPPQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: kjlx@templeofstupid.com)
-        by pdx1-sub0-mail-a304.dreamhost.com (Postfix) with ESMTPSA id 4M4LMK2h51zRT
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 17:02:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
-        s=dreamhost; t=1660348941;
-        bh=KGaBVS8gSer1bvv93JlfF8uSuMQ+TPpS4Qvmn7fs+FQ=;
-        h=Date:From:To:Subject:Content-Type;
-        b=jWBswiW2TDl3sY4FkUtlL/vjAVSzlw1HA/S00a0dzqTwfNZdTUYWY+it2jNu7QaA4
-         NPMnJbLljgbPiaU7UWJNanAN8Qjr30bzFiTEPHqW5ghde6m7CeWiT/fltjaxN/12q/
-         71igvrArOVDzKYaYonCZ7zJlI4dOulJe2q2dv/Kg=
-Received: from johansen (uid 1000)
-        (envelope-from kjlx@templeofstupid.com)
-        id e00ce
-        by kmjvbox (DragonFly Mail Agent v0.12);
-        Fri, 12 Aug 2022 17:02:20 -0700
-Date:   Fri, 12 Aug 2022 17:02:20 -0700
-From:   Krister Johansen <kjlx@templeofstupid.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        David Reaver <me@davidreaver.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] tracing: fix a WARN from trace_event_dyn_put_ref
-Message-ID: <4e43a4eece5f382d1636397fb3c0208f2afe81fc.1660347763.git.kjlx@templeofstupid.com>
-References: <cover.1660347763.git.kjlx@templeofstupid.com>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1564B3C0219A;
+        Sat, 13 Aug 2022 00:24:39 +0000 (UTC)
+Received: from localhost (ovpn-12-29.pek2.redhat.com [10.72.12.29])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id F3593403178;
+        Sat, 13 Aug 2022 00:24:37 +0000 (UTC)
+Date:   Sat, 13 Aug 2022 08:24:35 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Eric DeVolder <eric.devolder@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
+        boris.ostrovsky@oracle.com
+Subject: Re: [PATCH v10 1/8] crash: introduce arch/*/asm/crash.h
+Message-ID: <YvbvQ5+cmExVNaGE@MiWiFi-R3L-srv>
+References: <20220721181747.1640-1-eric.devolder@oracle.com>
+ <20220721181747.1640-2-eric.devolder@oracle.com>
+ <YvCCOY+mRshu1tHi@MiWiFi-R3L-srv>
+ <52d40562-ee6f-bb89-6d21-2d6baf67053d@oracle.com>
+ <YvYhYdV6F2zH4o3X@MiWiFi-R3L-srv>
+ <2b44bbd1-6e6f-40d1-73ac-19348d1ef48a@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1660347763.git.kjlx@templeofstupid.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <2b44bbd1-6e6f-40d1-73ac-19348d1ef48a@oracle.com>
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The code in perf_trace_init takes a reference on a trace_event_call that is
-looked up as part of the function call.  If perf_trace_event_int fails,
-however, perf_trace_event_unreg can decrement that refcount from underneath
-perf_trace_init.  This means that in some failure cases, perf_trace_init
-can trigger the WARN in trace_dynevent.c which attempts to guard against
-zero reference counts going negative.
+On 08/12/22 at 04:23pm, Eric DeVolder wrote:
+> 
+> 
+> On 8/12/22 04:46, Baoquan He wrote:
+> > On 08/08/22 at 10:18am, Eric DeVolder wrote:
+> > > 
+> > > 
+> > > On 8/7/22 22:25, Baoquan He wrote:
+> > > > Hi Eric,
+> > > > 
+> > > > On 07/21/22 at 02:17pm, Eric DeVolder wrote:
+> > > > > The use of __weak is being eliminated within kexec sources.
+> > > > > The technique uses macros mapped onto inline functions in
+> > > > > order to replace __weak.
+> > > > > 
+> > > > > This patchset was using __weak and so in order to replace
+> > > > > __weak, this patch introduces arch/*/asm/crash.h, patterned
+> > > > > after how kexec is moving away from __weak and to the macro
+> > > > > definitions.
+> > > > 
+> > > > Are you going to replace __weak in kexec of arll ARCHes? I don't see
+> > > > your point why all these empty header files are introduced. Wondering
+> > > > what's impacted if not adding these empty files?
+> > > 
+> > > Hi Baoquan,
+> > > In this patchset, to file include/linux/crash_core.h I added the line #include <asm/crash.h>.
+> > > I patterned this after how include/linux/kexec.h does #include <asm/kexec.h>.
+> > 
+> > I am sorry, Eric, it looks not so good. I understand you want to pattern
+> > asm/kexe.h, but we need consider reality. Introducing a dozen of empty
+> > header file and not being able to tell when they will be filled doesn't
+> > make sense.
+> > 
+> > Includig <asm/crash.h> where needed is much simpler. I doubt if your way
+> > can pass other reviewers' line. Can you reconsider?
+> 
+> If I include <asm/crash.h> where needed, which is kernel/crash_core.c, then
+> the other archs will fail build if that file doesn't exist. A couple of
+> options, which do you think is better to pursue?
+> 
+> - use asm/kexec.h instead of asm/crash.h; it appears all the architectures
+> already have this file in place
+> 
+> - go ahead and put the appropriate crash macros/inline functions into each
+> arch asm/crash.h so that the files are not just empty, and leave the use of
+> asm/crash.h
 
-The author can reproduce this problem readily by running perf record in a
-loop against a series of uprobes with no other users.  Killing the record
-process before it can finish its setup is enough to trigger this warn
-within a few seconds.
+I think we can do this in two steps.
 
-This patch leaves the behavior in perf_trace_event_unreg unchanged, but
-moves most of the code in that function to perf_trace_event_cleanup.  The
-unreg function retains the ability to drop the refcount on the tp_event,
-but cleanup does not.  This modification is based upon the observation that
-all of the other callers of perf_trace_event_init don't bother with
-manipulating a reference count on the tp_events that they create.  For
-those callers, the trace_event_put_ref was already a no-op.
+Firstly, make do with asm/kexec.h since all other ARCHes put crash related stuff
+into asm/kexec.h, except of x86. 
 
-Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
-Reviewed-by: David Reaver <me@davidreaver.com>
-Fixes: 1d18538e6a092 "tracing: Have dynamic events have a ref counter"
-CC: stable@vger.kernel.org # 5.15, 5.18, 5.19
----
- kernel/trace/trace_event_perf.c | 14 ++++++++++----
- 1 file changed, 10 insertions(+), 4 deletions(-)
+Secondly, clean up to put those crash marco/inline functions into
+asm/crash.h.
 
-diff --git a/kernel/trace/trace_event_perf.c b/kernel/trace/trace_event_perf.c
-index a114549720d6..7762bfd268cd 100644
---- a/kernel/trace/trace_event_perf.c
-+++ b/kernel/trace/trace_event_perf.c
-@@ -151,13 +151,13 @@ static int perf_trace_event_reg(struct trace_event_call *tp_event,
- 	return ret;
- }
- 
--static void perf_trace_event_unreg(struct perf_event *p_event)
-+static void perf_trace_event_cleanup(struct perf_event *p_event)
- {
- 	struct trace_event_call *tp_event = p_event->tp_event;
- 	int i;
- 
- 	if (--tp_event->perf_refcount > 0)
--		goto out;
-+		return;
- 
- 	tp_event->class->reg(tp_event, TRACE_REG_PERF_UNREGISTER, NULL);
- 
-@@ -176,7 +176,13 @@ static void perf_trace_event_unreg(struct perf_event *p_event)
- 			perf_trace_buf[i] = NULL;
- 		}
- 	}
--out:
-+}
-+
-+static void perf_trace_event_unreg(struct perf_event *p_event)
-+{
-+	struct trace_event_call *tp_event = p_event->tp_event;
-+
-+	perf_trace_event_cleanup(p_event);
- 	trace_event_put_ref(tp_event);
- }
- 
-@@ -207,7 +213,7 @@ static int perf_trace_event_init(struct trace_event_call *tp_event,
- 
- 	ret = perf_trace_event_open(p_event);
- 	if (ret) {
--		perf_trace_event_unreg(p_event);
-+		perf_trace_event_cleanup(p_event);
- 		return ret;
- 	}
- 
--- 
-2.25.1
+The 2nd step can be done in a independent patchset. What do you think?
 

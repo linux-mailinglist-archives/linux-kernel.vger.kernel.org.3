@@ -2,106 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 608DA591C96
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 22:28:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2857591C9A
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 22:42:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239644AbiHMU2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 16:28:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57906 "EHLO
+        id S238225AbiHMUmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 16:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239628AbiHMU2A (ORCPT
+        with ESMTP id S233786AbiHMUmO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 16:28:00 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05347248DD
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 13:27:59 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a7so7371286ejp.2
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 13:27:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=oRpYei+SmJcP8P910pdqSqQpbCLQB5yTd8wkGHmweb0=;
-        b=LrAc11OhRwNceo3Fj0qtfaTLLCaTq4uavay9GA4096z/3cohl0CX/3887l6Fi54g+Y
-         BmetoIl6GUBLCUrN4l7jXhOPQCIVdzSwpr7PSRpGumvtkMDAXIWj+xRrzcWzTeHhlyIU
-         YzCXKSe7o3/2K5mvl0EahIaGdMBkoXBVmUJLI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=oRpYei+SmJcP8P910pdqSqQpbCLQB5yTd8wkGHmweb0=;
-        b=JIsdDx6BSxN+6Hvcn6qzpHQXYdiUifBiCLaVxB4C0R3MV79QAuamrM78vGsChguCmq
-         r7iUHmmn3It2HEcHG7nRcdU3ifYZJ+alpVtgLctmOl/V6RUS96G2BZpwvkTMSVduDlxw
-         83ibyIqaXrCjpA41aAQD+DGkKA2w5EgOpWx+/8+/nz3FPTiwf8yTJ6cLCuyAxqon36a3
-         +M+LD8FcPsyH30RtL2Sun60SGHxLCe/GHDj/1geqfhWE7koKXHibpAJW/23RRheg9Jog
-         ORVtD1FVqHuVENJ7uUPsqbBRPD1BpWR0Ua4XeQLK2/tLMvoS5A5OnQ/5v55pijFisiBH
-         Xwww==
-X-Gm-Message-State: ACgBeo2cgsc+dZBQIgilUGqhbVHu/AJFvRdDSH6pO/OAwI1AEmi7RQWn
-        mN3giVxvZeYqvHsJ5ZplAsjnEw+uBDKcViJm
-X-Google-Smtp-Source: AA6agR5IVU96hQTku9RPoUk4gP3hm++EIKMzMa32U1fL+K8QSrYuwHwlNLVCj8Ia78Lm+taDvw5IPQ==
-X-Received: by 2002:a17:906:847c:b0:730:b6a0:e0d with SMTP id hx28-20020a170906847c00b00730b6a00e0dmr6439080ejc.126.1660422477239;
-        Sat, 13 Aug 2022 13:27:57 -0700 (PDT)
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
-        by smtp.gmail.com with ESMTPSA id h23-20020a50cdd7000000b0043d3e06519fsm3532875edj.57.2022.08.13.13.27.56
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 13 Aug 2022 13:27:56 -0700 (PDT)
-Received: by mail-wr1-f45.google.com with SMTP id n4so4629259wrp.10
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 13:27:56 -0700 (PDT)
-X-Received: by 2002:a05:6000:1888:b0:222:ca41:dc26 with SMTP id
- a8-20020a056000188800b00222ca41dc26mr4727954wri.442.1660422476300; Sat, 13
- Aug 2022 13:27:56 -0700 (PDT)
+        Sat, 13 Aug 2022 16:42:14 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [185.16.172.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8E5DF7;
+        Sat, 13 Aug 2022 13:42:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=uYG/3bvDD/aIehieTFZ6RQ90evcA+hq/P9eGFj7ektU=; b=sPT9KSEuVrHDMAVEIZtCH3z/ea
+        Efhhe9C5+KN+bkt1/UMwIznj6BAn/49heyXOtd4dUDjjtlNtO9sJG+AeeAsW3bG/cmKIKfn43Buay
+        yTD2cfuGzTxl3Qu3Ir5JJ9YKTiH+DUzi0vVJrXYzmbIt5530viG0BMEzYWFOVdklzKDQ=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1oMxxN-00DFHc-NK; Sat, 13 Aug 2022 22:42:05 +0200
+Date:   Sat, 13 Aug 2022 22:42:05 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Oleksij Rempel <o.rempel@pengutronix.de>
+Cc:     Woojung Huh <woojung.huh@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        UNGLinuxDriver@microchip.com, Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
+        Jakub Kicinski <kuba@kernel.org>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH net-next v1 07/10] net: dsa: microchip: warn about not
+ supported synclko properties on KSZ9893 chips
+Message-ID: <YvgMnfSkEeD8jwIG@lunn.ch>
+References: <20220729130346.2961889-1-o.rempel@pengutronix.de>
+ <20220729130346.2961889-8-o.rempel@pengutronix.de>
+ <20220802113633.73rxlb2kmihivwpx@skbuf>
+ <20220805115601.GB10667@pengutronix.de>
+ <20220805134234.ps4qfjiachzm7jv4@skbuf>
+ <20220813143215.GA12534@pengutronix.de>
+ <Yve/MSMc/4klJPFL@lunn.ch>
+ <20220813161850.GB12534@pengutronix.de>
 MIME-Version: 1.0
-References: <Yvd8L0qIbLarxrOQ@gmail.com> <YvfQUGLGY7cfZ9gf@zn.tnic>
-In-Reply-To: <YvfQUGLGY7cfZ9gf@zn.tnic>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 13 Aug 2022 13:27:40 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wi+K-LQ121sPbsQonja3Sx-_kXZc6ntauUC2=JPsUrC+g@mail.gmail.com>
-Message-ID: <CAHk-=wi+K-LQ121sPbsQonja3Sx-_kXZc6ntauUC2=JPsUrC+g@mail.gmail.com>
-Subject: Re: [GIT PULL] timer fixes
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>, x86-ml <x86@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220813161850.GB12534@pengutronix.de>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 13, 2022 at 9:25 AM Borislav Petkov <bp@alien8.de> wrote:
->
-> That task_struct.sighand is marked __rcu and thus noderef and sparse
-> complains:
+On Sat, Aug 13, 2022 at 06:18:50PM +0200, Oleksij Rempel wrote:
+> On Sat, Aug 13, 2022 at 05:11:45PM +0200, Andrew Lunn wrote:
+> > On Sat, Aug 13, 2022 at 04:32:15PM +0200, Oleksij Rempel wrote:
+> > > On Fri, Aug 05, 2022 at 04:42:34PM +0300, Vladimir Oltean wrote:
+> > > > On Fri, Aug 05, 2022 at 01:56:01PM +0200, Oleksij Rempel wrote:
+> > > > > Hm, if we will have any random not support OF property in the switch
+> > > > > node. We won't be able to warn about it anyway. So, if it is present
+> > > > > but not supported, we will just ignore it.
+> > > > > 
+> > > > > I'll drop this patch.
+> > > > 
+> > > > To continue, I think the right way to go about this is to edit the
+> > > > dt-schema to say that these properties are only applicable to certain
+> > > > compatible strings, rather than for all. Then due to the
+> > > > "unevaluatedProperties: false", you'd get the warnings you want, at
+> > > > validation time.
+> > > 
+> > > Hm, with "unevaluatedProperties: false" i have no warnings. Even if I
+> > > create examples with random strings as properties. Are there some new
+> > > json libraries i should use?
+> > 
+> > Try
+> > 
+> > additionalProperties: False
+> 
+> Yes, it works. But in this case I'll do more changes. Just wont to make
+> sure I do not fix not broken things.
 
-I think that RCU marking is misleading.
+I've been working on converting some old SoCs bindings from .txt to
+.yaml. My observations is that the yaml is sometimes more restrictive
+than what the drivers actually imposes. So you might need to change
+perfectly working .dts files to get it warning free. Or you just
+accept the warnings and move on. At lot will depend on the number of
+warnings and how easy it is to see real problems mixed in with
+warnings you never intend to fix.
 
-Doing a
+       Andrew
 
-        git grep -e '->sighand'
-
-shows that we basically never treat that as some kind of RCU pointer.
-
-Adding a
-
-        grep -i rcu
-
-to the above shows that we have a couple of places that do this
-carefully, but they are the exception rather than the rule.
-
-I think the issue is that "current->sighand" is always safe (and that
-"me->sighand" is the same thing), and that sighand has RCU-delayed
-freeing so that __lock_task_sighand() can safely try to take the lock
-of another process' sighand.
-
-And we have no real way to explain to sparse that *some* cases are
-fine, others are not and need the sighand lock (after that careful
-__lock_task_sighand thing).
-
-              Linus

@@ -2,63 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52BD9591968
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 10:21:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C382359196F
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 10:33:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238157AbiHMIVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 04:21:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60602 "EHLO
+        id S237791AbiHMIdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 04:33:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiHMIVT (ORCPT
+        with ESMTP id S229507AbiHMIdQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 04:21:19 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D6C933360;
-        Sat, 13 Aug 2022 01:21:16 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so2775364pjf.2;
-        Sat, 13 Aug 2022 01:21:16 -0700 (PDT)
+        Sat, 13 Aug 2022 04:33:16 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63A716B64F;
+        Sat, 13 Aug 2022 01:33:15 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id l4so3392858wrm.13;
+        Sat, 13 Aug 2022 01:33:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc;
-        bh=8J2yQzwToOaPX464zrF30DjQn1+095iGEYHxU+cVWDs=;
-        b=OX4FXqRRqM8h+6sJ2eEVVjT5JlCSlIQGjkiBH9sSOKKMP8PWj6LrWes0P+kq7HK7LR
-         11Rn33m7Vb929Qq3zkKw0ZejzTbHu6ZLsM+vCqYpOZvbtNEiSITLmBhByiXMTQ/67Ekz
-         7IlVoVumINUUZMUmJB3rt995T6gZ0T1mj5fi+cGMz9o8DYIPINIpxlZ/o+YZFRu83cI7
-         VssKJek8Wb6LZLEtVEP0carPAuR7+pp4vRL3UkL9+VGYs9+VF78/goOrT1ZTZCxFgE3X
-         GWtwgtLhQFiX+Wt1jRAE9ERaBrqpoEPlBi0Ma5YJxMrVMnUSnzcf1k+pqlUUF441CC9q
-         z83w==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=XGEs78t61pwV6z3o8igEPiG1BYLAhumLfK2vsVLOvIA=;
+        b=Au8c358uhsjusyM1DYBsBAk6XpkgxHtNdF0Mo4H7rpPFZfeua78wPKIT82gnkdWiL6
+         3pcRhBfcMF1EjOoaW6sWed78nJ/oAnJuGfRo6uERH7iy5aWvlnBcOJ9G/1ElexJh5D8M
+         V7wmotx1ITh6LXVnlaOtjwst/hdEPtkonvzrZGxBJE4R2x8tYYSicvB/J6/Kbq+amqbk
+         6Z4W8yBc17YQI6igVOrqHojnX2e0n0ESqtIQUpQURHrNycd8v1eagV0D0sWx0YF+7rl7
+         jbs62XVPFg8XSqpxXXCcw7dbTQg6Lxp4I07099QSA09x8DSbGmhaPE0IYGV7HraLV8Ag
+         Pj5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc;
-        bh=8J2yQzwToOaPX464zrF30DjQn1+095iGEYHxU+cVWDs=;
-        b=hUnrHM/KEwbWSVzSI6WOauoS6qPnuLpUPz5f6jtAIs+YwzPsBUNUawPfz8mNQlu2z4
-         NIurDZzlSIlWvleMalz8Fb7//2zF7azbEMPbIN91Cex337GLpJ9j4VkjGeFcq2DvFBFb
-         08ZE/29fpKoKBJAGp37cPazofxkhEaTojAke1Uj/LzCeyVrXtnAIwInFutr2EaeO9+Sc
-         HoK3WPdta4AhPDPBBCDYGC9a/0Oil9E0qwHIlLyMzQK9AReVesmPEOjYNEHgQxqtxi8P
-         7Hx1YhkTnegPufGW0gkmgSaliWglnr4Pn+c6KMz9a3tj0IMl3V4gHifBKI9XsHnsFaHX
-         Ty/w==
-X-Gm-Message-State: ACgBeo14HQXjFkVvaY+ZBpjkYyB4RsbEcAt+zHvtjS952pWAjZu4ebLo
-        I+dUAUEdLJCOLn2wkX7739I=
-X-Google-Smtp-Source: AA6agR4GB8X04N2F7C9JZIAvHIs5zpN+gvaTfqq4HgCuIxREwmwnry3zz89g7npVAHYfUYYiKl1oZQ==
-X-Received: by 2002:a17:903:22d0:b0:16f:7754:1e99 with SMTP id y16-20020a17090322d000b0016f77541e99mr7360793plg.150.1660378875776;
-        Sat, 13 Aug 2022 01:21:15 -0700 (PDT)
-Received: from autolfshost ([2409:4041:2d12:e5fd:fa7e:5407:87c6:7072])
-        by smtp.gmail.com with ESMTPSA id l8-20020a17090a4d4800b001f4dd3b7d7fsm1080636pjh.9.2022.08.13.01.21.11
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=XGEs78t61pwV6z3o8igEPiG1BYLAhumLfK2vsVLOvIA=;
+        b=emcMdgs/z9uw4L2llMlQrweM+UpVeeLx8ATjoSZTBrkWDAATFV7Ej+UX4KtrkGq7CS
+         JhxcyQac7Lre8xIWV2N+RRgX5JtQYqG4qRDidvV8KnhUCRev2BIK/aMx3lT4W7kTvGbS
+         aexH+VADmzNG5/ZKRSLwrQTj75Kmqf+qxTiN8AE3+ydnblpU4TK/KFQ2/KMGF/EgwVnk
+         W3ofzX+bASRTjGnlXVu6RUK94Cvh7MSAyoW6Q8cZRqvTnWPQNM+9dcm1eAijwK/Xqg/Y
+         lWiyRQKYhYUEDmvUFKgIsspQ/sqhnRxI5iwVqWs5kXAdjWnsUiu+vRvbCuJYZ6VDx8IS
+         BYfg==
+X-Gm-Message-State: ACgBeo3nCemsiRBHjv2LrWDvtiy9UOQ9W0mJQ1BFc4FyZkN6+dztdPcy
+        vmpZhZjyRp4Zzq3ehUbm5XjNLw0wrqk=
+X-Google-Smtp-Source: AA6agR5/Uen48okuYlyJMikWEFJDJ47YA4XkvLJ/qnLoWqk+4jNv47jTLJHr3RNKjp+insaSa9wJcg==
+X-Received: by 2002:adf:e542:0:b0:21e:c148:3ef2 with SMTP id z2-20020adfe542000000b0021ec1483ef2mr3912848wrm.533.1660379593822;
+        Sat, 13 Aug 2022 01:33:13 -0700 (PDT)
+Received: from localhost.localdomain ([105.235.129.49])
+        by smtp.gmail.com with ESMTPSA id a3-20020a05600c224300b003a54109a6a0sm2142267wmm.3.2022.08.13.01.33.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Aug 2022 01:21:15 -0700 (PDT)
-Date:   Sat, 13 Aug 2022 13:50:48 +0530
-From:   Anup K Parikh <parikhanupk.foss@gmail.com>
-To:     bigeasy@linutronix.de, mcgrof@kernel.org, xiubli@redhat.com,
-        akpm@linux-foundation.org, jlayton@kernel.org,
-        skhan@linuxfoundation.org
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Subject: [PATCH] Doc fix for dget_dlock and dget
-Message-ID: <Yvde4NryqBnZesTI@autolfshost>
+        Sat, 13 Aug 2022 01:33:13 -0700 (PDT)
+From:   Yassine Oudjana <yassine.oudjana@gmail.com>
+X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>
+Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
+        Yassine Oudjana <yassine.oudjana@gmail.com>,
+        Rex-BC Chen <rex-bc.chen@mediatek.com>,
+        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] clk: mediatek: gate: Export mtk_clk_register_gates_with_dev
+Date:   Sat, 13 Aug 2022 09:32:49 +0100
+Message-Id: <20220813083249.45427-1-y.oudjana@protonmail.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -69,63 +79,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-dcache header:
+From: Yassine Oudjana <y.oudjana@protonmail.com>
 
-1. Remove a warning for dget_dlock
+This allows it to be used in drivers built as modules.
 
-2. Add a similar comment for dget and
-   mention the difference between dget and dget_dlock
-   as suggested by Mr. Randy Dunlap
-   Link: https://lore.kernel.org/all/29708eb3-ff1e-411e-cf84-7aa9af765603@infradead.org/
-
-Signed-off-by: Anup K Parikh <parikhanupk.foss@gmail.com>
+Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
+Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
- include/linux/dcache.h | 24 +++++++++++++++++++-----
- 1 file changed, 19 insertions(+), 5 deletions(-)
+This patch was originally part of a series, and is sent alone now since
+it doesn't depend on the rest of it and can be applied directly:
+https://lore.kernel.org/linux-clk/20220519134728.456643-1-y.oudjana@protonmail.com/
 
-diff --git a/include/linux/dcache.h b/include/linux/dcache.h
-index 92c78ed02..aa473b6bf 100644
---- a/include/linux/dcache.h
-+++ b/include/linux/dcache.h
-@@ -299,12 +299,15 @@ extern char *dentry_path(const struct dentry *, char *, int);
- /* Allocation counts.. */
+ drivers/clk/mediatek/clk-gate.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/clk/mediatek/clk-gate.c b/drivers/clk/mediatek/clk-gate.c
+index 421806236228..0c867136e49d 100644
+--- a/drivers/clk/mediatek/clk-gate.c
++++ b/drivers/clk/mediatek/clk-gate.c
+@@ -261,6 +261,7 @@ int mtk_clk_register_gates_with_dev(struct device_node *node,
  
- /**
-- *	dget, dget_dlock -	get a reference to a dentry
-- *	@dentry: dentry to get a reference to
-+ * dget_dlock - get a reference to a dentry
-+ * @dentry: dentry to get a reference to
-  *
-- *	Given a dentry or %NULL pointer increment the reference count
-- *	if appropriate and return the dentry. A dentry will not be 
-- *	destroyed when it has references.
-+ * Given a dentry or %NULL pointer increment the reference count
-+ * if appropriate and return the dentry. A dentry will not be
-+ * destroyed when it has references.
-+ *
-+ * The reference count increment in this function is not atomic.
-+ * Consider dget() if atomicity is required.
-  */
- static inline struct dentry *dget_dlock(struct dentry *dentry)
- {
-@@ -313,6 +316,17 @@ static inline struct dentry *dget_dlock(struct dentry *dentry)
- 	return dentry;
+ 	return PTR_ERR(hw);
  }
++EXPORT_SYMBOL_GPL(mtk_clk_register_gates_with_dev);
  
-+/**
-+ * dget - get a reference to a dentry
-+ * @dentry: dentry to get a reference to
-+ *
-+ * Given a dentry or %NULL pointer increment the reference count
-+ * if appropriate and return the dentry. A dentry will not be
-+ * destroyed when it has references.
-+ *
-+ * This function atomically increments the reference count.
-+ * Consider dget_dlock() if atomicity is not required or manually managed.
-+ */
- static inline struct dentry *dget(struct dentry *dentry)
- {
- 	if (dentry)
+ int mtk_clk_register_gates(struct device_node *node,
+ 			   const struct mtk_gate *clks, int num,
 -- 
-2.35.1
+2.37.1
 

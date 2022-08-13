@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F01CE5917F1
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 03:09:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 675DD5917F2
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 03:09:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237218AbiHMBI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 21:08:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55292 "EHLO
+        id S237471AbiHMBI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 21:08:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiHMBIz (ORCPT
+        with ESMTP id S237399AbiHMBI6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 21:08:55 -0400
+        Fri, 12 Aug 2022 21:08:58 -0400
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B1F73304
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 18:08:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B837373304
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 18:08:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660352934; x=1691888934;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=HLunQmAbfM6k9dfCw48hXixZNPl2EXujtQCvIYiaJmU=;
-  b=ZqWVUvm9RbJ5bnZU302o4wjdC3dKbxEsH41VYzIl8m8qRu14aZOe4VjU
-   RxnIQe2XJnF75GhRQKCdxp/abVSTbRrv/2+pP3iqugryKj7CSbr6e2UCC
-   67UXksHx09aLaOi3ZtgZeB43yi2ugVPN6qc40FgpqOJ8Rpp5Wovwg4VDJ
-   Q12lR2B00Y7WgjI+trAknyja7XQmNFvmubpE02gwe3fnKtl6S0XEreFOV
-   dyWMxbHsujas2WIHbHINTatKZyIu/I3vTyxZT41HbO7cfmicRAJMQEeKU
-   94upukslYzg9SG/tY3725I2AMClwVACQ6PWu8IPtyREFTTnJLEv4S3vcx
+  t=1660352937; x=1691888937;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=Zi/lCjUXpkF6B8O4jozC9jJ60/Hc8bXroWDXph0b3Rk=;
+  b=AWYrgkwdwqh+Te1oqwBBwk5+9RyG5cWoqSg/FL+2lXoh/+Sqblcs5RGE
+   q6lI5qd/ZwUaRIDIcBy757pAiIcuyyr42BZftsHnZ0ZXO7ql0Niqb7xHP
+   +p55qeq2P6reSvKtMSn4isjYmn/v2aoeVbn+Sla6DjPmu7sFYq3cGuskT
+   ySCcfBQqKSwdcI/OE+wKYuhX/ygPk2G/tVZ8gxzJNlIlGUScCXdS4lguN
+   Voj1N904uyCKsSqFsdHv0crHqWEnpavcGzoP7VlZUNOTUibrCWkUMiCPj
+   LnmZnFyfLyEDE/dVADfFhVBO6svcvhtdlAUrA6PjBBBuqYP8LSrSbceD6
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="271488701"
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="271488706"
 X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="271488701"
+   d="scan'208";a="271488706"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 18:08:54 -0700
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 18:08:57 -0700
 X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="666038320"
+   d="scan'208";a="666038333"
 Received: from akoska-mobl1.ger.corp.intel.com (HELO hades.ger.corp.intel.com) ([10.252.36.156])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 18:08:51 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 18:08:54 -0700
 From:   Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
 To:     intel-gfx@lists.freedesktop.org
 Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
@@ -45,10 +45,12 @@ Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
         jani.nikula@intel.com, nirmoy.das@intel.com, airlied@linux.ie,
         daniel@ffwll.ch, andi.shyti@linux.intel.com,
         andrzej.hajda@intel.com
-Subject: [PATCH v6 0/8] Fixes integer overflow or integer truncation issues in page lookups, ttm place configuration and scatterlist creation
-Date:   Sat, 13 Aug 2022 04:08:49 +0300
-Message-Id: <20220813010857.4043956-1-gwan-gyeong.mun@intel.com>
+Subject: [PATCH v6 1/8] overflow: Move and add few utility macros into overflow
+Date:   Sat, 13 Aug 2022 04:08:50 +0300
+Message-Id: <20220813010857.4043956-2-gwan-gyeong.mun@intel.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20220813010857.4043956-1-gwan-gyeong.mun@intel.com>
+References: <20220813010857.4043956-1-gwan-gyeong.mun@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -62,81 +64,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series fixes integer overflow or integer truncation issues in
-page lookups, ttm place configuration and scatterlist creation, etc.
-We need to check that we avoid integer overflows when looking up a page,
-and so fix all the instances where we have mistakenly used a plain integer
-instead of a more suitable long.
-And there is an impedance mismatch between the scatterlist API using
-unsigned int and our memory/page accounting in unsigned long. That is we
-may try to create a scatterlist for a large object that overflows returning
-a small table into which we try to fit very many pages. As the object size
-is under the control of userspace, we have to be prudent and catch the
-conversion errors. To catch the implicit truncation as we switch from
-unsigned long into the scatterlist's unsigned int, we use our overflows_type
-check and report E2BIG prior to the operation. This is already used in
-our create ioctls to indicate if the uABI request is simply too large for
-the backing store. 
-And ttm place also has the same problem with scatterlist creation,
-and we fix the integer truncation problem with the way approached by
-scatterlist creation.
-And It corrects the error code to return -E2BIG when creating gem objects
-using ttm or shmem, if the size is too large in each case.
-In order to provide a common macro, it moves and adds a few utility macros
-into overflow/util_macros header
+It moves overflows_type utility macro into overflow header from i915_utils
+header. The overflows_type can be used to catch the truncation between data
+types. And it adds safe_conversion() macro which performs a type conversion
+(cast) of an source value into a new variable, checking that the
+destination is large enough to hold the source value. And the functionality
+of overflows_type has been improved to handle the signbit.
+The is_unsigned_type macro has been added to check the sign bit of the
+built-in type.
 
-v6: Move macro addition location so that it can be used by other than drm subsystem (Jani, Mauro, Andi)
-    Fix to follow general use case for GEM_BUG_ON(). (Jani)
-v5: Fix an alignment to match open parenthesis
-    Fix macros to be enclosed in parentheses for complex values
-    Fix too long line warning
-v4: Fix build warnins that reported by kernel test robot. (kernel test robot <lkp@intel.com>)
-    Add kernel-doc markups to the kAPI functions and macros (Mauoro)
-v3: Modify overflows_type() macro to consider signed data types and
-	add is_type_unsigned() macro (Mauro)
-    Make not use the same macro name on a function. (Mauro)
-    For kernel-doc, macros and functions are handled in the same namespace,
-    the same macro name on a function prevents ever adding documentation for it.
-    Not to change execution inside a macro. (Mauro)
-    Fix the problem that safe_conversion() macro always returns true (G.G)
-    Add safe_conversion_gem_bug_on() macro and remove temporal SAFE_CONVERSION() macro. (G.G.)
+v3: Add is_type_unsigned() macro (Mauro)
+    Modify overflows_type() macro to consider signed data types (Mauro)
+    Fix the problem that safe_conversion() macro always returns true
+v4: Fix kernel-doc markups
+v6: Move macro addition location so that it can be used by other than drm
+    subsystem (Jani, Mauro, Andi)
+    Change is_type_unsigned to is_unsigned_type to have the same name form
+    as is_signed_type macro
 
-Chris Wilson (3):
-  drm/i915/gem: Typecheck page lookups
-  drm/i915: Check for integer truncation on scatterlist creation
-  drm/i915: Remove truncation warning for large objects
+Signed-off-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+Cc: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+Cc: Matthew Auld <matthew.auld@intel.com>
+Cc: Nirmoy Das <nirmoy.das@intel.com>
+Cc: Jani Nikula <jani.nikula@intel.com>
+Cc: Andi Shyti <andi.shyti@linux.intel.com>
+Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org> (v5)
+---
+ drivers/gpu/drm/i915/i915_utils.h |  5 +--
+ include/linux/overflow.h          | 54 +++++++++++++++++++++++++++++++
+ 2 files changed, 55 insertions(+), 4 deletions(-)
 
-Gwan-gyeong Mun (5):
-  overflow: Move and add few utility macros into overflow
-  util_macros: Add exact_type macro to catch type mis-match while
-    compiling
-  drm/i915: Check for integer truncation on the configuration of ttm
-    place
-  drm/i915: Check if the size is too big while creating shmem file
-  drm/i915: Use error code as -E2BIG when the size of gem ttm object is
-    too large
-
- drivers/gpu/drm/i915/gem/i915_gem_internal.c  |   6 +-
- drivers/gpu/drm/i915/gem/i915_gem_object.c    |   7 +-
- drivers/gpu/drm/i915/gem/i915_gem_object.h    | 303 +++++++++++++++---
- drivers/gpu/drm/i915/gem/i915_gem_pages.c     |  27 +-
- drivers/gpu/drm/i915/gem/i915_gem_phys.c      |   4 +
- drivers/gpu/drm/i915/gem/i915_gem_shmem.c     |  19 +-
- drivers/gpu/drm/i915/gem/i915_gem_ttm.c       |  23 +-
- drivers/gpu/drm/i915/gem/i915_gem_userptr.c   |   5 +-
- .../drm/i915/gem/selftests/i915_gem_context.c |  12 +-
- .../drm/i915/gem/selftests/i915_gem_mman.c    |   8 +-
- .../drm/i915/gem/selftests/i915_gem_object.c  |   8 +-
- drivers/gpu/drm/i915/gvt/dmabuf.c             |   9 +-
- drivers/gpu/drm/i915/i915_gem.c               |  18 +-
- drivers/gpu/drm/i915/i915_scatterlist.h       |  11 +
- drivers/gpu/drm/i915/i915_utils.h             |   6 +-
- drivers/gpu/drm/i915/i915_vma.c               |   8 +-
- drivers/gpu/drm/i915/intel_region_ttm.c       |  22 +-
- include/linux/overflow.h                      |  54 ++++
- include/linux/util_macros.h                   |  25 ++
- 19 files changed, 482 insertions(+), 93 deletions(-)
-
+diff --git a/drivers/gpu/drm/i915/i915_utils.h b/drivers/gpu/drm/i915/i915_utils.h
+index c10d68cdc3ca..eb0ded23fa9c 100644
+--- a/drivers/gpu/drm/i915/i915_utils.h
++++ b/drivers/gpu/drm/i915/i915_utils.h
+@@ -32,6 +32,7 @@
+ #include <linux/types.h>
+ #include <linux/workqueue.h>
+ #include <linux/sched/clock.h>
++#include <linux/overflow.h>
+ 
+ #ifdef CONFIG_X86
+ #include <asm/hypervisor.h>
+@@ -111,10 +112,6 @@ bool i915_error_injected(void);
+ #define range_overflows_end_t(type, start, size, max) \
+ 	range_overflows_end((type)(start), (type)(size), (type)(max))
+ 
+-/* Note we don't consider signbits :| */
+-#define overflows_type(x, T) \
+-	(sizeof(x) > sizeof(T) && (x) >> BITS_PER_TYPE(T))
+-
+ #define ptr_mask_bits(ptr, n) ({					\
+ 	unsigned long __v = (unsigned long)(ptr);			\
+ 	(typeof(ptr))(__v & -BIT(n));					\
+diff --git a/include/linux/overflow.h b/include/linux/overflow.h
+index f1221d11f8e5..462a03454377 100644
+--- a/include/linux/overflow.h
++++ b/include/linux/overflow.h
+@@ -35,6 +35,60 @@
+ #define type_max(T) ((T)((__type_half_max(T) - 1) + __type_half_max(T)))
+ #define type_min(T) ((T)((T)-type_max(T)-(T)1))
+ 
++/**
++ * is_unsigned_type - helper for checking data type which is an unsigned data
++ * type or not
++ * @x: The data type to check
++ *
++ * Returns:
++ * True if the data type is an unsigned data type, false otherwise.
++ */
++#define is_unsigned_type(x) ((typeof(x))-1 >= (typeof(x))0)
++
++/**
++ * overflows_type - helper for checking the truncation between data types
++ * @x: Source for overflow type comparison
++ * @T: Destination for overflow type comparison
++ *
++ * It compares the values and size of each data type between the first and
++ * second argument to check whether truncation can occur when assigning the
++ * first argument to the variable of the second argument.
++ * Source and Destination can be used with or without sign bit.
++ * Composite data structures such as union and structure are not considered.
++ * Enum data types are not considered.
++ * Floating point data types are not considered.
++ *
++ * Returns:
++ * True if truncation can occur, false otherwise.
++ */
++#define overflows_type(x, T) \
++	(is_unsigned_type(x) ? \
++		is_unsigned_type(T) ? \
++			(sizeof(x) > sizeof(T) && (x) >> BITS_PER_TYPE(T)) ? 1 : 0 \
++			: (sizeof(x) >= sizeof(T) && (x) >> (BITS_PER_TYPE(T) - 1)) ? 1 : 0 \
++	: is_unsigned_type(T) ? \
++		((x) < 0) ? 1 : (sizeof(x) > sizeof(T) && (x) >> BITS_PER_TYPE(T)) ? 1 : 0 \
++		: (sizeof(x) > sizeof(T)) ? \
++			((x) < 0) ? (((x) * -1) >> BITS_PER_TYPE(T)) ? 1 : 0 \
++				: ((x) >> BITS_PER_TYPE(T)) ? 1 : 0 \
++			: 0)
++
++/**
++ * safe_conversion - perform a type conversion (cast) of an source value into
++ * a new variable, checking that the destination is large enough to hold the
++ * source value.
++ * @ptr: Destination pointer address
++ * @value: Source value
++ *
++ * Returns:
++ * If the value would overflow the destination, it returns false.
++ */
++#define safe_conversion(ptr, value) ({ \
++	typeof(value) __v = (value); \
++	typeof(ptr) __ptr = (ptr); \
++	overflows_type(__v, *__ptr) ? 0 : ((*__ptr = (typeof(*__ptr))__v), 1); \
++})
++
+ /*
+  * Avoids triggering -Wtype-limits compilation warning,
+  * while using unsigned data types to check a < 0.
 -- 
 2.34.1
 

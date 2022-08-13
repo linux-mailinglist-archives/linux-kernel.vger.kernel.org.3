@@ -2,164 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21412591A9C
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 15:28:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 57E20591AA7
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 15:37:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239484AbiHMN2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 09:28:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35136 "EHLO
+        id S239494AbiHMNhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 09:37:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236032AbiHMN2V (ORCPT
+        with ESMTP id S235278AbiHMNg6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 09:28:21 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D08865C9DD
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 06:28:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660397300; x=1691933300;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=O7TMSMc7Im2oFJqOaKBU2evDfeI/VG+bME46kcyJ8aI=;
-  b=ZIrAR0Q04OzOkqIvJK46LRHix2WGDm2p/GbIDl4dsLnE09J8cxF8KbW6
-   Yn4G5jAzgSYwiYrTtRzx9zGONLaWgmQTvMtIVCyT/1ikArwDIZNI6wUTR
-   aoUmDpDLK2R4TUIOaL3LteggoGz/J6Ql3yNPiSussPsCvUeKljFmySss6
-   Z4wxl0fHMXrzmgfwgfAxFidMVdEj7V0GDfQ5IKDEadiVM7M3JSyqpfRlq
-   Fx0ZitUHbdJwJQA6Latp0hgUcF+Wtx0vsL81uq6wPH7omkpiloe5IOO1c
-   qhLvLm/PYaSL4K6os6FvbSO9IdLd9A9ZWTfJ4h7CnXXH7rp1n2V5gqhgA
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="278707748"
-X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
-   d="scan'208";a="278707748"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 06:28:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
-   d="scan'208";a="556818371"
-Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 13 Aug 2022 06:28:19 -0700
-Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oMrBa-0001hb-1e;
-        Sat, 13 Aug 2022 13:28:18 +0000
-Date:   Sat, 13 Aug 2022 21:27:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [kbusch:io_uring/dma-register-v3 8/8] drivers/nvme/host/pci.c:927:3:
- warning: variable 'i' is uninitialized when used here
-Message-ID: <202208132135.rC8V9p1b-lkp@intel.com>
+        Sat, 13 Aug 2022 09:36:58 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC1FFB7C1;
+        Sat, 13 Aug 2022 06:36:57 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id z2so4362545edc.1;
+        Sat, 13 Aug 2022 06:36:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=AKVBfO32rmZq1r8Xc6WkO9jk42SoifdEhyas0O7uhTs=;
+        b=UdYffYR5Uny5GwXXCuOgQYee354sCFqcXWa8z7kGVw5IRH/AsBzPh3vXxLy4J9F18F
+         +WT6wBUCx2Vtmirlt3mJ+Q2rMV2lujZ+TcoXk0LVC1fsy/JcHD8V3Yx+WVx1nWJ6cnFf
+         78v+kx7JV0b5Luaz5QjVH7z+PC9tYnreYMHc2flMcZvlHaYGNdv4LOnXZlCvuhM2AUhr
+         Fl4ES1oH9dUPEdbDnf5aGteXKSb+dHbqcbPOkmfDkeTJ/kdccMspkmqU9QMBJmFZNU8W
+         SpxOBWj7oeWuysx7qEvgQsMeolLYfFZjUq5UCJhlOjpngmGLWOHteJSwUvNUZ3lPisw3
+         HclQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=AKVBfO32rmZq1r8Xc6WkO9jk42SoifdEhyas0O7uhTs=;
+        b=1let7A/Sdl1bAt/8H8MK3vAQNkh0DPJi9kNuSNOcq8fHkOkYsUP1WI4QY0ysi9CtIx
+         z5ECxwUZT/L1W68o+UGS0VA8V6SkTKztw/8GjRR7mVpy6PVQ2BupP9xs2Bu2w0Za5gqK
+         QKguhXF9RCXAAXFHddoQX4mUceKbPTQMtzt/vUhsN1nC4Q/N+jTAzW8uJwFL/UJfML1u
+         52Ea1HWhVDpFnRzFJEaXPMaNEs6ImDCHJv9bwDqQN13Wd3mjiULVP6g/QAP2+KFKUKwi
+         v4arIKe8YTQdUitsDgPCIkHZ5UNR+xpSl9NieN74f0aZfCdN0zurXfQET5Svtzyvv/Tg
+         O0Jg==
+X-Gm-Message-State: ACgBeo3RNc1FabayiOs8QIVbqUs2LMC0aPKz4FcE25vhsdu813xGYQlh
+        GGwzIe6cRhanUN0ddkNvH9o=
+X-Google-Smtp-Source: AA6agR6YHmhuU6n1HU6pRDZIWiUpUQGG2w90iwTEUs1ezspDX/TPu4VgLorkbgMHhQ4p/0u7Tm1uRg==
+X-Received: by 2002:aa7:c9c2:0:b0:440:b458:9403 with SMTP id i2-20020aa7c9c2000000b00440b4589403mr7604816edt.132.1660397816004;
+        Sat, 13 Aug 2022 06:36:56 -0700 (PDT)
+Received: from opensuse.localnet (host-79-53-105-123.retail.telecomitalia.it. [79.53.105.123])
+        by smtp.gmail.com with ESMTPSA id w22-20020a17090633d600b0072b33e91f96sm1875765eja.190.2022.08.13.06.36.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 13 Aug 2022 06:36:54 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Eric Biederman <ebiederm@xmission.com>,
+        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>
+Subject: Re: [PATCH v2] fs: Replace kmap{,_atomic}() with kmap_local_page()
+Date:   Sat, 13 Aug 2022 15:36:53 +0200
+Message-ID: <8143586.NyiUUSuA9g@opensuse>
+In-Reply-To: <20220803182856.28246-1-fmdefrancesco@gmail.com>
+References: <20220803182856.28246-1-fmdefrancesco@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git io_uring/dma-register-v3
-head:   e1c6d38d05e532b3aaf12a5ab8707929bcdc1180
-commit: e1c6d38d05e532b3aaf12a5ab8707929bcdc1180 [8/8] nvme-pci: implement dma_map support
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20220813/202208132135.rC8V9p1b-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 26dd42705c2af0b8f6e5d6cdb32c9bd5ed9524eb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git/commit/?id=e1c6d38d05e532b3aaf12a5ab8707929bcdc1180
-        git remote add kbusch https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git
-        git fetch --no-tags kbusch io_uring/dma-register-v3
-        git checkout e1c6d38d05e532b3aaf12a5ab8707929bcdc1180
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/nvme/host/
+On mercoled=C3=AC 3 agosto 2022 20:28:56 CEST Fabio M. De Francesco wrote:
+> The use of kmap() and kmap_atomic() are being deprecated in favor of
+> kmap_local_page().
+>=20
+> There are two main problems with kmap(): (1) It comes with an overhead as
+> mapping space is restricted and protected by a global lock for
+> synchronization and (2) it also requires global TLB invalidation when the
+> kmap=E2=80=99s pool wraps and it might block when the mapping space is fu=
+lly
+> utilized until a slot becomes available.
+>=20
+> With kmap_local_page() the mappings are per thread, CPU local, can take
+> page faults, and can be called from any context (including interrupts).
+> It is faster than kmap() in kernels with HIGHMEM enabled. Furthermore,
+> the tasks can be preempted and, when they are scheduled to run again, the
+> kernel virtual addresses are restored and are still valid.
+>=20
+> Since the use of kmap_local_page() in exec.c is safe, it should be
+> preferred everywhere in exec.c.
+>=20
+> As said, since kmap_local_page() can be also called from atomic context,
+> and since remove_arg_zero() doesn't (and shouldn't ever) rely on an
+> implicit preempt_disable(), this function can also safely replace
+> kmap_atomic().
+>=20
+> Therefore, replace kmap() and kmap_atomic() with kmap_local_page() in
+> fs/exec.c.
+>=20
+> Tested with xfstests on a QEMU/KVM x86_32 VM, 6GB RAM, booting a kernel
+> with HIGHMEM64GB enabled.
+>=20
+> Cc: Eric W. Biederman <ebiederm@xmission.com>
+> Suggested-by: Ira Weiny <ira.weiny@intel.com>
+> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+> Signed-off-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
+> ---
+>=20
+> v1->v2: Added more information to the commit log to address some
+> objections expressed by Eric W. Biederman[1] in reply to v1. No changes
+> have been made to the code. Forwarded a tag from Ira Weiny (thanks!).
+>=20
+> [1]
+> https://lore.kernel.org/lkml/8735fmqcfz.fsf@email.froward.int.ebiederm.or=
+g/
+>
+>  fs/exec.c | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
+>=20
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Hi Kees,
 
-All warnings (new ones prefixed by >>):
+After that thread about the report from Syzbot, and the subsequent discussi=
+on,=20
+I noticed that you didn't yet take this other patch for exec.c.
 
->> drivers/nvme/host/pci.c:927:3: warning: variable 'i' is uninitialized when used here [-Wuninitialized]
-                   i += last_prp;
-                   ^
-   drivers/nvme/host/pci.c:892:7: note: initialize the variable 'i' to silence this warning
-           int i;
-                ^
-                 = 0
-   1 warning generated.
+I suppose that the two patches would better go out together. So I'm writing=
+=20
+for sending a gentle ping.
+
+As I said, no changes have been made to the code with respect to v1 (which =
+I=20
+submitted in June). However, later I thought that adding more information=20
+might have helped reviewers and maintainers to better understand the why of=
+=20
+this patch.
+
+Thanks,
+
+=46abio
+=20
 
 
-vim +/i +927 drivers/nvme/host/pci.c
 
-   883	
-   884	static blk_status_t nvme_premapped_slow(struct nvme_dev *dev,
-   885					struct request *req,  struct nvme_iod *iod,
-   886					struct nvme_dma_mapping *mapping, int nprps)
-   887	{
-   888		struct dma_pool *pool;
-   889		dma_addr_t prp_dma;
-   890		__le64 *prp_list;
-   891		void **list;
-   892		int i;
-   893	
-   894		iod->sg = mempool_alloc(dev->iod_mempool, GFP_ATOMIC);
-   895		if (!iod->sg)
-   896			return BLK_STS_RESOURCE;
-   897	
-   898		if (nprps <= (256 / 8)) {
-   899			pool = dev->prp_small_pool;
-   900			iod->npages = 0;
-   901		} else {
-   902			pool = dev->prp_page_pool;
-   903			iod->npages = 1;
-   904		}
-   905	
-   906		prp_list = dma_pool_alloc(pool, GFP_ATOMIC, &prp_dma);
-   907		if (!prp_list) {
-   908			iod->npages = -1;
-   909			goto out_free_sg;
-   910		}
-   911	
-   912		list = nvme_pci_iod_list(req);
-   913		list[0] = prp_list;
-   914		iod->first_dma = prp_dma;
-   915	
-   916		for (;;) {
-   917			dma_addr_t next_prp_dma;
-   918			__le64 *next_prp_list;
-   919	
-   920			if (nprps <= last_prp + 1) {
-   921				memcpy(prp_list, &mapping->prps[i], nprps * 8);
-   922				break;
-   923			}
-   924	
-   925			memcpy(prp_list, &mapping->prps[i], NVME_CTRL_PAGE_SIZE - 8);
-   926			nprps -= last_prp;
- > 927			i += last_prp;
-   928	
-   929			next_prp_list = dma_pool_alloc(pool, GFP_ATOMIC, &next_prp_dma);
-   930			if (!next_prp_list)
-   931				goto free_prps;
-   932	
-   933			prp_list[last_prp] = cpu_to_le64(next_prp_dma);
-   934			prp_list = next_prp_list;
-   935			prp_dma = next_prp_dma;
-   936			list[iod->npages++] = prp_list;
-   937		}
-   938		return BLK_STS_OK;
-   939	
-   940	free_prps:
-   941		nvme_free_prps(dev, req);
-   942	out_free_sg:
-   943		mempool_free(iod->sg, dev->iod_mempool);
-   944		return BLK_STS_RESOURCE;
-   945	}
-   946	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

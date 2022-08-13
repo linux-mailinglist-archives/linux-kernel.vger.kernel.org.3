@@ -2,178 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83CB15919B2
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 11:53:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9127E5919B5
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 12:00:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234125AbiHMJxV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 05:53:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44798 "EHLO
+        id S236207AbiHMJ7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 05:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiHMJxT (ORCPT
+        with ESMTP id S229507AbiHMJ7w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 05:53:19 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C3187646F;
-        Sat, 13 Aug 2022 02:53:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660384398; x=1691920398;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OamMQmkw1kw/qgC1ToQfGGYK5wCJuB1mv86EUB851PE=;
-  b=QH1WsiawuHZZ3SX4ZexhqUUZs5TMHQq4vPmWqLLWv3NXS0EGh8yf73S6
-   VxEFxq6jtKUnvtmdNbUrwC0h6fM7Ylug5Z/hXamO9jC1K4bQkj8G3Q7ZL
-   Ndv9ngrHvb0uxcTIU5i0LQdV3ejIxEtDG7CLc0SnKhqZz9xiUJxv7koBb
-   t+fh0TZ/4BRBhiula5WqTFiUNfvj3KGKZBIwBLsbwlcY07dHFo5UICWBn
-   ea0cu/VyjqCA++jRerz4nWJm6Ftz+XV5oLKK/lHHSnAx22tYfCnPvxAt0
-   yNInB6IqmnEdB5xHRt2/s58Bqi2Wmiklpy0o6o3Yp45Wq+ov+yy03YmNM
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="292537612"
-X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="292537612"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 02:53:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="582354751"
-Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 13 Aug 2022 02:53:14 -0700
-Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oMnpR-0001Xd-36;
-        Sat, 13 Aug 2022 09:53:13 +0000
-Date:   Sat, 13 Aug 2022 17:53:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Mike Leach <mike.leach@linaro.org>, coresight@lists.linaro.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     kbuild-all@lists.01.org, mathieu.poirier@linaro.org,
-        suzuki.poulose@arm.com, peterz@infradead.org, mingo@redhat.com,
-        acme@kernel.org, linux-perf-users@vger.kernel.org,
-        leo.yan@linaro.org, quic_jinlmao@quicinc.com,
-        Mike Leach <mike.leach@linaro.org>
-Subject: Re: [PATCH v3 05/13] coresight: etm3x: Update ETM3 driver to use
- Trace ID API
-Message-ID: <202208131723.4WupJz5f-lkp@intel.com>
-References: <20220809223401.24599-6-mike.leach@linaro.org>
+        Sat, 13 Aug 2022 05:59:52 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6966F8B9BB;
+        Sat, 13 Aug 2022 02:59:50 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4M4bZC6TTXzmVLW;
+        Sat, 13 Aug 2022 17:57:39 +0800 (CST)
+Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 13 Aug 2022 17:59:47 +0800
+Received: from localhost.localdomain (10.67.164.66) by
+ dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.24; Sat, 13 Aug 2022 17:59:47 +0800
+From:   Yang Shen <shenyang39@huawei.com>
+To:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>
+CC:     <linux-kernel@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
+        <wangzhou1@hisilicon.com>, <liulongfang@huawei.com>
+Subject: [PATCH] crypto: hisilicon/zip - optimization for performance
+Date:   Sat, 13 Aug 2022 17:57:52 +0800
+Message-ID: <20220813095752.39941-1-shenyang39@huawei.com>
+X-Mailer: git-send-email 2.24.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220809223401.24599-6-mike.leach@linaro.org>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.164.66]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mike,
+1.Remove some useless steps during doing requests.
+2.Adjust the possibility of branch prediction.
 
-I love your patch! Perhaps something to improve:
+Signed-off-by: Yang Shen <shenyang39@huawei.com>
+---
+ drivers/crypto/hisilicon/zip/zip_crypto.c | 27 +++++++++++------------
+ 1 file changed, 13 insertions(+), 14 deletions(-)
 
-[auto build test WARNING on acme/perf/core]
-[also build test WARNING on tip/perf/core atorgue-stm32/stm32-next linus/master v5.19 next-20220812]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Mike-Leach/coresight-Add-new-API-to-allocate-trace-source-ID-values/20220810-063940
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git perf/core
-config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20220813/202208131723.4WupJz5f-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/48c9bb1ba00758132c4523dba423071440723ccd
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Mike-Leach/coresight-Add-new-API-to-allocate-trace-source-ID-values/20220810-063940
-        git checkout 48c9bb1ba00758132c4523dba423071440723ccd
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/hwtracing/coresight/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> drivers/hwtracing/coresight/coresight-etm3x-core.c:509:44: warning: 'struct etmv4_drvdata' declared inside parameter list will not be visible outside of this definition or declaration
-     509 | static int etm_set_current_trace_id(struct etmv4_drvdata *drvdata)
-         |                                            ^~~~~~~~~~~~~
-   drivers/hwtracing/coresight/coresight-etm3x-core.c: In function 'etm_set_current_trace_id':
-   drivers/hwtracing/coresight/coresight-etm3x-core.c:517:58: error: invalid use of undefined type 'struct etmv4_drvdata'
-     517 |         trace_id = coresight_trace_id_read_cpu_id(drvdata->cpu);
-         |                                                          ^~
-   drivers/hwtracing/coresight/coresight-etm3x-core.c:519:24: error: invalid use of undefined type 'struct etmv4_drvdata'
-     519 |                 drvdata->traceid = (u8)trace_id;
-         |                        ^~
-   In file included from include/linux/device.h:15,
-                    from drivers/hwtracing/coresight/coresight-etm3x-core.c:12:
-   drivers/hwtracing/coresight/coresight-etm3x-core.c:523:25: error: invalid use of undefined type 'struct etmv4_drvdata'
-     523 |         dev_err(&drvdata->csdev->dev, "Failed to set trace ID for %s on CPU%d\n",
-         |                         ^~
-   include/linux/dev_printk.h:110:25: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                         ^~~
-   drivers/hwtracing/coresight/coresight-etm3x-core.c:523:9: note: in expansion of macro 'dev_err'
-     523 |         dev_err(&drvdata->csdev->dev, "Failed to set trace ID for %s on CPU%d\n",
-         |         ^~~~~~~
-   drivers/hwtracing/coresight/coresight-etm3x-core.c:524:34: error: invalid use of undefined type 'struct etmv4_drvdata'
-     524 |                 dev_name(&drvdata->csdev->dev), drvdata->cpu);
-         |                                  ^~
-   include/linux/dev_printk.h:110:37: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                                     ^~~~~~~~~~~
-   drivers/hwtracing/coresight/coresight-etm3x-core.c:523:9: note: in expansion of macro 'dev_err'
-     523 |         dev_err(&drvdata->csdev->dev, "Failed to set trace ID for %s on CPU%d\n",
-         |         ^~~~~~~
-   drivers/hwtracing/coresight/coresight-etm3x-core.c:524:56: error: invalid use of undefined type 'struct etmv4_drvdata'
-     524 |                 dev_name(&drvdata->csdev->dev), drvdata->cpu);
-         |                                                        ^~
-   include/linux/dev_printk.h:110:37: note: in definition of macro 'dev_printk_index_wrap'
-     110 |                 _p_func(dev, fmt, ##__VA_ARGS__);                       \
-         |                                     ^~~~~~~~~~~
-   drivers/hwtracing/coresight/coresight-etm3x-core.c:523:9: note: in expansion of macro 'dev_err'
-     523 |         dev_err(&drvdata->csdev->dev, "Failed to set trace ID for %s on CPU%d\n",
-         |         ^~~~~~~
-   drivers/hwtracing/coresight/coresight-etm3x-core.c: In function 'etm_enable_perf':
-   drivers/hwtracing/coresight/coresight-etm3x-core.c:547:40: error: passing argument 1 of 'etm_set_current_trace_id' from incompatible pointer type [-Werror=incompatible-pointer-types]
-     547 |         ret = etm_set_current_trace_id(drvdata);
-         |                                        ^~~~~~~
-         |                                        |
-         |                                        struct etm_drvdata *
-   drivers/hwtracing/coresight/coresight-etm3x-core.c:509:59: note: expected 'struct etmv4_drvdata *' but argument is of type 'struct etm_drvdata *'
-     509 | static int etm_set_current_trace_id(struct etmv4_drvdata *drvdata)
-         |                                     ~~~~~~~~~~~~~~~~~~~~~~^~~~~~~
-   cc1: some warnings being treated as errors
-
-
-vim +509 drivers/hwtracing/coresight/coresight-etm3x-core.c
-
-   508	
- > 509	static int etm_set_current_trace_id(struct etmv4_drvdata *drvdata)
-   510	{
-   511		int trace_id;
-   512	
-   513		/*
-   514		 * Set the currently allocated trace ID - perf allocates IDs
-   515		 * as part of setup_aux for all CPUs it may use.
-   516		 */
-   517		trace_id = coresight_trace_id_read_cpu_id(drvdata->cpu);
-   518		if (IS_VALID_ID(trace_id)) {
-   519			drvdata->traceid = (u8)trace_id;
-   520			return 0;
-   521		}
-   522	
-   523		dev_err(&drvdata->csdev->dev, "Failed to set trace ID for %s on CPU%d\n",
-   524			dev_name(&drvdata->csdev->dev), drvdata->cpu);
-   525	
-   526		return -EINVAL;
-   527	}
-   528	
-
+diff --git a/drivers/crypto/hisilicon/zip/zip_crypto.c b/drivers/crypto/hisilicon/zip/zip_crypto.c
+index ad35434a3fdb..12b6d86c54d7 100644
+--- a/drivers/crypto/hisilicon/zip/zip_crypto.c
++++ b/drivers/crypto/hisilicon/zip/zip_crypto.c
+@@ -183,7 +183,7 @@ static int add_comp_head(struct scatterlist *dst, u8 req_type)
+ 	int ret;
+ 
+ 	ret = sg_copy_from_buffer(dst, sg_nents(dst), head, head_size);
+-	if (ret != head_size) {
++	if (unlikely(ret != head_size)) {
+ 		pr_err("the head size of buffer is wrong (%d)!\n", ret);
+ 		return -ENOMEM;
+ 	}
+@@ -193,11 +193,11 @@ static int add_comp_head(struct scatterlist *dst, u8 req_type)
+ 
+ static int get_comp_head_size(struct acomp_req *acomp_req, u8 req_type)
+ {
+-	if (!acomp_req->src || !acomp_req->slen)
++	if (unlikely(!acomp_req->src || !acomp_req->slen))
+ 		return -EINVAL;
+ 
+-	if (req_type == HZIP_ALG_TYPE_GZIP &&
+-	    acomp_req->slen < GZIP_HEAD_FEXTRA_SHIFT)
++	if (unlikely(req_type == HZIP_ALG_TYPE_GZIP &&
++		     acomp_req->slen < GZIP_HEAD_FEXTRA_SHIFT))
+ 		return -EINVAL;
+ 
+ 	switch (req_type) {
+@@ -230,6 +230,8 @@ static struct hisi_zip_req *hisi_zip_create_req(struct acomp_req *req,
+ 	}
+ 	set_bit(req_id, req_q->req_bitmap);
+ 
++	write_unlock(&req_q->req_lock);
++
+ 	req_cache = q + req_id;
+ 	req_cache->req_id = req_id;
+ 	req_cache->req = req;
+@@ -242,8 +244,6 @@ static struct hisi_zip_req *hisi_zip_create_req(struct acomp_req *req,
+ 		req_cache->dskip = 0;
+ 	}
+ 
+-	write_unlock(&req_q->req_lock);
+-
+ 	return req_cache;
+ }
+ 
+@@ -254,7 +254,6 @@ static void hisi_zip_remove_req(struct hisi_zip_qp_ctx *qp_ctx,
+ 
+ 	write_lock(&req_q->req_lock);
+ 	clear_bit(req->req_id, req_q->req_bitmap);
+-	memset(req, 0, sizeof(struct hisi_zip_req));
+ 	write_unlock(&req_q->req_lock);
+ }
+ 
+@@ -339,7 +338,7 @@ static int hisi_zip_do_work(struct hisi_zip_req *req,
+ 	struct hisi_zip_sqe zip_sqe;
+ 	int ret;
+ 
+-	if (!a_req->src || !a_req->slen || !a_req->dst || !a_req->dlen)
++	if (unlikely(!a_req->src || !a_req->slen || !a_req->dst || !a_req->dlen))
+ 		return -EINVAL;
+ 
+ 	req->hw_src = hisi_acc_sg_buf_map_to_hw_sgl(dev, a_req->src, pool,
+@@ -365,7 +364,7 @@ static int hisi_zip_do_work(struct hisi_zip_req *req,
+ 	/* send command to start a task */
+ 	atomic64_inc(&dfx->send_cnt);
+ 	ret = hisi_qp_send(qp, &zip_sqe);
+-	if (ret < 0) {
++	if (unlikely(ret < 0)) {
+ 		atomic64_inc(&dfx->send_busy_cnt);
+ 		ret = -EAGAIN;
+ 		dev_dbg_ratelimited(dev, "failed to send request!\n");
+@@ -417,7 +416,7 @@ static void hisi_zip_acomp_cb(struct hisi_qp *qp, void *data)
+ 
+ 	atomic64_inc(&dfx->recv_cnt);
+ 	status = ops->get_status(sqe);
+-	if (status != 0 && status != HZIP_NC_ERR) {
++	if (unlikely(status != 0 && status != HZIP_NC_ERR)) {
+ 		dev_err(dev, "%scompress fail in qp%u: %u, output: %u\n",
+ 			(qp->alg_type == 0) ? "" : "de", qp->qp_id, status,
+ 			sqe->produced);
+@@ -450,7 +449,7 @@ static int hisi_zip_acompress(struct acomp_req *acomp_req)
+ 
+ 	/* let's output compression head now */
+ 	head_size = add_comp_head(acomp_req->dst, qp_ctx->qp->req_type);
+-	if (head_size < 0) {
++	if (unlikely(head_size < 0)) {
+ 		dev_err_ratelimited(dev, "failed to add comp head (%d)!\n",
+ 				    head_size);
+ 		return head_size;
+@@ -461,7 +460,7 @@ static int hisi_zip_acompress(struct acomp_req *acomp_req)
+ 		return PTR_ERR(req);
+ 
+ 	ret = hisi_zip_do_work(req, qp_ctx);
+-	if (ret != -EINPROGRESS) {
++	if (unlikely(ret != -EINPROGRESS)) {
+ 		dev_info_ratelimited(dev, "failed to do compress (%d)!\n", ret);
+ 		hisi_zip_remove_req(qp_ctx, req);
+ 	}
+@@ -478,7 +477,7 @@ static int hisi_zip_adecompress(struct acomp_req *acomp_req)
+ 	int head_size, ret;
+ 
+ 	head_size = get_comp_head_size(acomp_req, qp_ctx->qp->req_type);
+-	if (head_size < 0) {
++	if (unlikely(head_size < 0)) {
+ 		dev_err_ratelimited(dev, "failed to get comp head size (%d)!\n",
+ 				    head_size);
+ 		return head_size;
+@@ -489,7 +488,7 @@ static int hisi_zip_adecompress(struct acomp_req *acomp_req)
+ 		return PTR_ERR(req);
+ 
+ 	ret = hisi_zip_do_work(req, qp_ctx);
+-	if (ret != -EINPROGRESS) {
++	if (unlikely(ret != -EINPROGRESS)) {
+ 		dev_info_ratelimited(dev, "failed to do decompress (%d)!\n",
+ 				     ret);
+ 		hisi_zip_remove_req(qp_ctx, req);
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.24.0
+

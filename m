@@ -2,179 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFD81591B14
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 16:40:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BE46591B27
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 16:52:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239748AbiHMOkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 10:40:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33926 "EHLO
+        id S239051AbiHMOwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 10:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239664AbiHMOkH (ORCPT
+        with ESMTP id S235340AbiHMOwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 10:40:07 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFD474D167;
-        Sat, 13 Aug 2022 07:40:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4CF9960E33;
-        Sat, 13 Aug 2022 14:40:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D045C4347C;
-        Sat, 13 Aug 2022 14:40:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660401605;
-        bh=cVZcYIHDNrfFmz5lZEkio36QgYhvpZyfIpasn+gq2B4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=d7GEBcFs4e9AhHEaoc0dkK7UYUj4Uu5B0nQL1phENWSfZEcm5fsMaxA14Gspklc1O
-         VTvc5UXFU+R1P+6+jD2LdHQDk5PaqFMjTOLyBqQTCNT/LE1lZ22/LsZJ8jPYpbOpBF
-         M7zCgUc9je89JXas4MI49bX1cNTOOqCrA0qoDnGRWKx1921oj3I+IOR42BM4u+V3ZQ
-         NBQh5YjbdcP1xagdcjRtasVKDe6osh15G0gMNq8b7mq3hsm1XkfBrau5jKnS7t/Yb2
-         OcoGhD1STm52QBXvLuOmupDTCnj24fiILbAHO02nEbbKGzx12COrYa1d2GA5KUYgsf
-         yiOOFPWqIC5zA==
-Date:   Sat, 13 Aug 2022 15:50:34 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Lee Jones <lee.jones@linaro.org>, linux-kernel@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        linux-pm <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH v2 00/30] mfd: Remove #ifdef guards for PM functions
-Message-ID: <20220813155034.22fba538@jic23-huawei>
-In-Reply-To: <20220808174107.38676-1-paul@crapouillou.net>
-References: <20220808174107.38676-1-paul@crapouillou.net>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Sat, 13 Aug 2022 10:52:42 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02564BF77;
+        Sat, 13 Aug 2022 07:52:41 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id fy5so6490708ejc.3;
+        Sat, 13 Aug 2022 07:52:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=WMmwkK4k5xPlUVcqJ30C1LHbz/Q/KZcpo7vE9zUN3TE=;
+        b=nRKXeZ7L14mSyhcdUmyRgBqlsZ6lXxai61d/wQCo+vg4gsXvll6mhWyDXK671GhYEV
+         nqGV5+OVXixFCrDwNldbGT6Vr/H/8GrZCeiDKMv1EOyPWWckJQetpsl2BQJNYxy/CJrE
+         vYhPsYIe3rng1dG9cfgEbYtJ7YspLc4jNEYn2Xb48yLk1moz9AJUXv54UZud8iJFv721
+         +WxG6SY1DvWQGSGSxvjnbs5w13Q4J1pnqQiqnkLzcVu0GRySLRhQWxFtqmrC0kSavLow
+         JBmqGkp7Cl/qruzlKA/jg8T0Bt1VwR3Yom53S9RnyJHoTeZfsQiOO+2VWquT8z55peyO
+         4kxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=WMmwkK4k5xPlUVcqJ30C1LHbz/Q/KZcpo7vE9zUN3TE=;
+        b=dblzCyiLeW+2ylVvUVUgMQ7rHjk7oacXxqQnv9CmbTr08I5jbJvY9D8un+Aj/qhMJI
+         /FsiF1rquW5PZ58WQzvLVnumXvX1u3MNVx5rE+BdFCMLekPJ4jZBTDcE1AxDgHDIL0SL
+         7iSnMxu271BNz8MEAdyYCBewc87u4cDxekAxxGGDoHFIULdoF1rxyuh3Sl4wHChxR2in
+         QjpQWolJwb6dyKAzbZnQMauv/IcQsJUdjCNUvr46RSr0/gao6I7F0oMpLJolaZviQO3S
+         gKhS9kGf3uKGHBSAf8ZvH/nSiDLcE1ajGw4jWNTnDYwIo3w1lZlrifQa8TbID1eIuM1O
+         FOHw==
+X-Gm-Message-State: ACgBeo1UvfVdbyEtwZdFKfG7zMeM8rNxNG9JpknoPN08EFO1drGrtN85
+        nIlI1s50qnL+rlRtqQJNFXeQMa8rRteE6YeRM+XzZRJj
+X-Google-Smtp-Source: AA6agR5fuk8Stg8kIwgCTgU+5Y0tz0E0mj6Ap6bzWqblG6xmzKl5Y6/VjZF0bD7C0EZkxkY0+XU3cxp7UJVeokeXKJM=
+X-Received: by 2002:a17:906:9f2a:b0:730:bc30:da30 with SMTP id
+ fy42-20020a1709069f2a00b00730bc30da30mr5747794ejc.763.1660402360218; Sat, 13
+ Aug 2022 07:52:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1660225318-4063-1-git-send-email-u0084500@gmail.com>
+ <1660225318-4063-2-git-send-email-u0084500@gmail.com> <3cae9d60-4012-1dfd-abd9-4d0b9379e6bb@linaro.org>
+ <CADiBU3_depGDZtiyizU3MB939A3oH1uTWzTMyruUy0z=u6BZkQ@mail.gmail.com>
+ <40261b95-637a-1304-2e06-8c8ff7fc377b@linaro.org> <CADiBU38+9sR1r20=YWt-9s2+u7maHH+1VudCnV1-0+F4jYKdQQ@mail.gmail.com>
+ <CADiBU3_Jt6n6tm=oVvjk5vsoEAneH7t-37S6skepA6v6bVVYUw@mail.gmail.com> <f2a664be-71e9-7a26-2f0c-5f654d9cb3cb@linaro.org>
+In-Reply-To: <f2a664be-71e9-7a26-2f0c-5f654d9cb3cb@linaro.org>
+From:   ChiYuan Huang <u0084500@gmail.com>
+Date:   Sat, 13 Aug 2022 22:52:29 +0800
+Message-ID: <CADiBU3-bKGhW2Yy13svNUykqW+WN3VS6LftWMU0rMeCc+fMySg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] dt-bindings: power: supply: Add Richtek RT9471
+ battery charger
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sebastian Reichel <sre@kernel.org>,
+        =?UTF-8?B?5ri45a2Q6aao?= <alina_yu@richtek.com>,
+        cy_huang <cy_huang@richtek.com>, alinayu829@gmail.com,
+        Linux PM <linux-pm@vger.kernel.org>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  8 Aug 2022 19:40:37 +0200
-Paul Cercueil <paul@crapouillou.net> wrote:
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> =E6=96=BC 2022=E5=B9=
+=B48=E6=9C=8813=E6=97=A5 =E9=80=B1=E5=85=AD =E5=87=8C=E6=99=A82:53=E5=AF=AB=
+=E9=81=93=EF=BC=9A
+>
+> On 12/08/2022 19:05, ChiYuan Huang wrote:
+> >> It's the same usage like as TI charger.
+> >>>>
+> >>>> For charger driver, does it mean legacy IRQ handler is more preferre=
+d?
+> >>>
+> >>> Who is the consumer of these interrupts? Can you show the DTS with th=
+e
+> >>> interrupt consumer?
+> >>>
+> > Sorry, I forget to reply this question.
+> > Some battery driver may need to know the 'full', 'recharge' , 'ieoc' st=
+atus.
+> > The usage will  be like as below
+> >
+> > battery {
+> >   interrupts-extended =3D <&rt9471_chg 2 0>, <&rt9471_chg 3 0>, &(rt947=
+1_chg 5 0>;
+> >   interrupt-names =3D "chg-done", "chg-recharge", "chg-ieoc";
+> > };
+> >
+> > Some gauge HW needs this information to enhance the battery capacity ac=
+curacy.
+>
+> Other supply stack pieces do it via supplies (supplied to/from in
+> include/linux/power_supply.h) and reporting power_supply_changed().
+>
+> With such explanation, your device is an interrupt source, but it is not
+> an interrupt controller. If your device is interrupt controller, it
+> means someone routes the interrupt line to your device. Physical line.
+>
+Yap, sure. And so on, just use the SW power supply chain to do this
+kind of event notification.
+To remove it, it doesn't affect the internal interrupt request inside
+the driver.
+Just cannot be used for the outer driver to request the events directly.
 
-> Hi Lee,
-> 
-> Here's my revised patchset updated from the feedback I got in V1.
-> This one is based on the current mfd-next-5.20.
-> 
-> I updated the PM macros in <linux/pm.h> and <linux/pm_runtime.h>, to
-> make them more versatile. They now allow to conditionally export
-> arbitrary dev_pm_ops structures. This is used in the "arizona" driver
-> for instance, which has "noirq" callbacks.
-> 
-> I Cc'd Jonathan, whom might be interested by the PM patch to convert the
-> IIO drivers to the new PM macros. Lee, if this patchset gets merged to
-> the MFD tree, could you then create an immutable branch for Jonathan?
-
-That would be much appreciated. Ideally the immutable branch would just
-contain patch 1.  If it doesn't work out that way I can always pick up
-the half dozen cases that would use the new infrastructure next cycle.
-
-Thanks!
-
-Jonathan
-> 
-> Changes:
-> - [01/30] is new and adds the reworked PM macros.
-> - [12/30] now only modifies intel_soc_pmic_core.c since Andy updated
->           the other file.
-> - [21/30] uses the new EXPORT_GPL_DEV_PM_OPS() macro instead of the
->           trickery that was used before.
-> - [26/30] removes a CONFIG_PM wrapper around fields in private struct
-> - [27/30] removes a duplicated "const".
-> - [30/30] is new, and updates the intel-lpss driver.
-> - All patches: Reworded the last paragraph, hide the Cc's, remove
->                the Cc to Bartlomiej's email address.
-> 
-> Cheers,
-> -Paul
-> 
-> Paul Cercueil (30):
->   pm: Improve EXPORT_*_DEV_PM_OPS macros
->   mfd: 88pm80x: Remove #ifdef guards for PM related functions
->   mfd: aat2870: Remove #ifdef guards for PM related functions
->   mfd: adp5520: Remove #ifdef guards for PM related functions
->   mfd: max8925-i2c: Remove #ifdef guards for PM related functions
->   mfd: mt6397-irq: Remove #ifdef guards for PM related functions
->   mfd: pcf50633: Remove #ifdef guards for PM related functions
->   mfd: rc5t583-irq: Remove #ifdef guards for PM related functions
->   mfd: stpmic1: Remove #ifdef guards for PM related functions
->   mfd: ucb1x00: Remove #ifdef guards for PM related functions
->   mfd: 88pm860x: Remove #ifdef guards for PM related functions
->   mfd: intel_soc_pmic: Remove #ifdef guards for PM related functions
->   mfd: mcp-sa11x0: Remove #ifdef guards for PM related functions
->   mfd: sec: Remove #ifdef guards for PM related functions
->   mfd: sm501: Remove #ifdef guards for PM related functions
->   mfd: tc6387xb: Remove #ifdef guards for PM related functions
->   mfd: tps6586x: Remove #ifdef guards for PM related functions
->   mfd: wm8994: Remove #ifdef guards for PM related functions
->   mfd: max77620: Remove #ifdef guards for PM related functions
->   mfd: t7l66xb: Remove #ifdef guards for PM related functions
->   mfd: arizona: Remove #ifdef guards for PM related functions
->   mfd: max14577: Remove #ifdef guards for PM related functions
->   mfd: max77686: Remove #ifdef guards for PM related functions
->   mfd: motorola-cpcap: Remove #ifdef guards for PM related functions
->   mfd: sprd-sc27xx: Remove #ifdef guards for PM related functions
->   mfd: stmfx: Remove #ifdef guards for PM related functions
->   mfd: stmpe: Remove #ifdef guards for PM related functions
->   mfd: tc3589x: Remove #ifdef guards for PM related functions
->   mfd: tc6393xb: Remove #ifdef guards for PM related functions
->   mfd: intel-lpss: Remove #ifdef guards for PM related functions
-> 
->  drivers/mfd/88pm800.c             |  2 +-
->  drivers/mfd/88pm805.c             |  2 +-
->  drivers/mfd/88pm80x.c             |  5 +----
->  drivers/mfd/88pm860x-core.c       |  6 ++---
->  drivers/mfd/aat2870-core.c        |  8 +++----
->  drivers/mfd/adp5520.c             |  6 ++---
->  drivers/mfd/arizona-core.c        | 19 ++++++----------
->  drivers/mfd/arizona-i2c.c         |  2 +-
->  drivers/mfd/arizona-spi.c         |  2 +-
->  drivers/mfd/intel-lpss-acpi.c     |  4 +---
->  drivers/mfd/intel-lpss-pci.c      |  4 +---
->  drivers/mfd/intel-lpss.c          | 15 ++++++++-----
->  drivers/mfd/intel-lpss.h          | 28 +----------------------
->  drivers/mfd/intel_soc_pmic_core.c |  8 +++----
->  drivers/mfd/max14577.c            |  6 ++---
->  drivers/mfd/max77620.c            |  9 +++-----
->  drivers/mfd/max77686.c            |  6 ++---
->  drivers/mfd/max8925-i2c.c         |  7 +++---
->  drivers/mfd/mcp-sa11x0.c          |  6 +----
->  drivers/mfd/motorola-cpcap.c      |  6 ++---
->  drivers/mfd/mt6397-irq.c          |  6 +----
->  drivers/mfd/pcf50633-core.c       | 22 +-----------------
->  drivers/mfd/pcf50633-irq.c        | 13 ++++++-----
->  drivers/mfd/rc5t583-irq.c         |  7 ++----
->  drivers/mfd/sec-core.c            |  7 +++---
->  drivers/mfd/sm501.c               | 10 ++-------
->  drivers/mfd/sprd-sc27xx-spi.c     |  7 +++---
->  drivers/mfd/stmfx.c               |  6 ++---
->  drivers/mfd/stmpe-i2c.c           |  4 +---
->  drivers/mfd/stmpe-spi.c           |  4 +---
->  drivers/mfd/stmpe.c               |  8 ++-----
->  drivers/mfd/stpmic1.c             |  6 ++---
->  drivers/mfd/t7l66xb.c             |  9 ++------
->  drivers/mfd/tc3589x.c             |  7 +++---
->  drivers/mfd/tc6387xb.c            |  9 ++------
->  drivers/mfd/tc6393xb.c            |  9 ++------
->  drivers/mfd/tps6586x.c            |  6 +----
->  drivers/mfd/ucb1x00-core.c        |  7 +++---
->  drivers/mfd/wm8994-core.c         |  6 ++---
->  include/linux/mfd/pcf50633/core.h |  6 ++---
->  include/linux/mfd/stmfx.h         |  2 --
->  include/linux/pm.h                | 37 +++++++++++++++++++------------
->  include/linux/pm_runtime.h        | 20 ++++++++++-------
->  43 files changed, 127 insertions(+), 242 deletions(-)
-> 
-> ---
-> Cc: Jonathan Cameron <jic23@kernel.org>
-> Cc: Rafael J. Wysocki <rafael@kernel.org>
-> Cc: linux-pm <linux-pm@vger.kernel.org>
-
+If so, I think 'interrupt-controller' and even '#interrupt-cells' need
+to be removed.
+OK?
+> Best regards,
+> Krzysztof

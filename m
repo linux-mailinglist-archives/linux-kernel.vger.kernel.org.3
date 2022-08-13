@@ -2,81 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AF17591C39
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 20:15:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7D7E591C3B
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 20:16:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239951AbiHMSOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 14:14:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55214 "EHLO
+        id S239880AbiHMSQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 14:16:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239730AbiHMSOv (ORCPT
+        with ESMTP id S239428AbiHMSQl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 14:14:51 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A7760DB;
-        Sat, 13 Aug 2022 11:14:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 9F844CE000E;
-        Sat, 13 Aug 2022 18:14:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B626EC433C1;
-        Sat, 13 Aug 2022 18:14:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660414486;
-        bh=+yiqdsU0Imf8eqgPn2U6dRNCCevyfDmOyoyNnODKtSg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KfvYUJa7ti/QD7RdrXS/V1jmPUuhPiVTAA30oDrErlD81iMH3gP9lCRXgsDXn/tnC
-         RqSRW0MOFfnCfi/D0Vvg+KFt+/jxD3sUsDtPoNp8VZeZUS0dDcG5ziYr5ucFThjFST
-         uFRZaxd4b+Jc7YPiKEDsPip/XbSER822vE9rlYdX1Rqt0zRHljbNgl0093V6fIG7dh
-         HRClc0r68wQ1UjY9DVjlccro2JAJaeGM44E5E/mkuUW2hadtRR9RbKnL+n6+o4seD8
-         H2V1PWFOW/hTClDaDXg3ptH1IdkIC7vIYGkR9YysKZAiMxqs1zZ9GuvjKBnBqSxdPy
-         BK8suhXQNlKXw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 2A82C4035A; Sat, 13 Aug 2022 15:14:44 -0300 (-03)
-Date:   Sat, 13 Aug 2022 15:14:44 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Leo Yan <leo.yan@linaro.org>
-Cc:     carsten.haitzler@foss.arm.com, linux-kernel@vger.kernel.org,
-        coresight@lists.linaro.org, suzuki.poulose@arm.com,
-        mathieu.poirier@linaro.org, mike.leach@linaro.org,
-        linux-perf-users@vger.kernel.org
-Subject: Re: [PATCH v7 00/14] perf: test: Add trace data quality tests for
- CoreSight
-Message-ID: <YvfqFF/l07BCpZRJ@kernel.org>
-References: <20220812121641.336465-1-carsten.haitzler@foss.arm.com>
- <Yvaj2ukXV+SLIBR0@kernel.org>
- <20220813141739.GB687527@leoy-huanghe.lan>
- <YvfpCnZ30tKFBfG+@kernel.org>
- <YvfpS+Lc/cI8BCg2@kernel.org>
+        Sat, 13 Aug 2022 14:16:41 -0400
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A3B645C;
+        Sat, 13 Aug 2022 11:16:39 -0700 (PDT)
+Received: by mail-pj1-f50.google.com with SMTP id h21-20020a17090aa89500b001f31a61b91dso11061133pjq.4;
+        Sat, 13 Aug 2022 11:16:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=AmRTB/8gR2ig8PJCGq+w2ZIymDcFBpWMH5rqLXrLQn4=;
+        b=JMtVM4ynZ7hKejPYxodRZ4RpccUzJBYB+X+2VQpzaABJNA3DA7BMrVJUUyB+M+uFtk
+         P1be/l861D4OMa+gffj33PjRqCOZReKy2FMBJep3xAFXdl6cSjqMhRDbDmQa2IhZk84O
+         xEStOgwkPhKMh212k6dqwxZic4I3JxbNDEmRcMx4agKp8vpOqxSJmQ7nltW3NKk9vJeP
+         nqAsVdMlFgB0beoUdwnzbiyXWtJaDKrIuGp/kvXErUTG2BbgUfK6VIeknR/8cV4ogara
+         2hx9RC9sM4oG4Q5XcG69oxnEznNyPJB3Ij85Cb96jBtG1kkhUJ3ab4Pe9juxbAuCBErq
+         z5rQ==
+X-Gm-Message-State: ACgBeo3lgsfaAznJK/APvGbNCW2itgBKtTzfYhRd/1tXPuNp4MSzPZD2
+        iTKLvFjBC2/avUqKeKgmEiuMffsceHz5xg==
+X-Google-Smtp-Source: AA6agR5wQaJRK0e7xQm9qfm5QxyEBBSxIl2hjDwXZPh/g0UE2k/bZWhgmYX7mgkf4jyndvNnGQFXOg==
+X-Received: by 2002:a17:90a:b007:b0:1f1:d31e:4914 with SMTP id x7-20020a17090ab00700b001f1d31e4914mr19876174pjq.36.1660414599266;
+        Sat, 13 Aug 2022 11:16:39 -0700 (PDT)
+Received: from rocinante (fpd11144dd.ap.nuro.jp. [209.17.68.221])
+        by smtp.gmail.com with ESMTPSA id t7-20020a634607000000b0041b5b929664sm3250038pga.24.2022.08.13.11.16.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 13 Aug 2022 11:16:38 -0700 (PDT)
+Date:   Sun, 14 Aug 2022 03:16:33 +0900
+From:   Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+To:     Zhuo Chen <chenzhuo.1@bytedance.com>
+Cc:     ruscur@russell.cc, oohall@gmail.com, bhelgaas@google.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, lukas@wunner.de,
+        jan.kiszka@siemens.com, stuart.w.hayes@gmail.com,
+        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] PCI/ERR: Use pcie_aer_is_native() to judge whether OS
+ owns AER
+Message-ID: <YvfqgWB9h+7Xj1tH@rocinante>
+References: <20220802040830.28514-1-chenzhuo.1@bytedance.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <YvfpS+Lc/cI8BCg2@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220802040830.28514-1-chenzhuo.1@bytedance.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Sat, Aug 13, 2022 at 03:11:23PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Patch failed at 0003 perf test: Add build infra for perf test tools for CoreSight tests
-> hint: Use 'git am --show-current-patch=diff' to see the failed patch
-> When you have resolved this problem, run "git am --continue".
-> If you prefer to skip this patch, run "git am --skip" instead.
-> To restore the original branch and stop patching, run "git am --abort".
-> ⬢[acme@toolbox perf]$
+Hello Zhuo,
+
+> Use pcie_aer_is_native() in place of "host->native_aer ||
+> pcie_ports_native" to judge whether OS has native control of AER
+> in aer_root_reset() and pcie_do_recovery().
 > 
-> Fixing...
+> Replace "dev->aer_cap && (pcie_ports_native || host->native_aer)" in
+> get_port_device_capability() with pcie_aer_is_native(), which has no
+> functional changes.
+> 
+> Signed-off-by: Zhuo Chen <chenzhuo.1@bytedance.com>
+> ---
+> Changelog:
+> v4:
+> - Use pcie_aer_is_native() instead in aer_root_reset().
+> v3:
+> - Simplify why we use pcie_aer_is_native().
+> - Revert modification of pci_aer_clear_nonfatal_status() and comments.
+> v2:
+> - Add details and note in commit log.
+[...]
 
-So, the first patch is merged, I now have to do the test builds to get
-what I have out to Linus, which will probably closed the merge window
-tomorrow, we can continue after that.
+A similar change has been proposed in the past, and back then, Bjorn had
+a few questions and concerns.  Have a look at the entire discussion:
 
-- Arnaldo
+  https://lore.kernel.org/linux-pci/1612490648-44817-1-git-send-email-tanxiaofei@huawei.com/
+
+If you think that the proposed changes are fine and can address some of
+Bjorn's concerns, then it would be great.
+
+Thank you in advance!
+
+	Krzysztof

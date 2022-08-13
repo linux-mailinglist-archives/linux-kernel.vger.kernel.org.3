@@ -2,241 +2,381 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5957591C0D
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 18:57:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2349591C0E
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 18:57:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240038AbiHMQ4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 12:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57606 "EHLO
+        id S240042AbiHMQ5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 12:57:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239810AbiHMQ4v (ORCPT
+        with ESMTP id S239712AbiHMQ5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 12:56:51 -0400
-Received: from sonic313-19.consmr.mail.gq1.yahoo.com (sonic313-19.consmr.mail.gq1.yahoo.com [98.137.65.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334A82C67B
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 09:56:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netscape.net; s=a2048; t=1660409809; bh=QRQBPbaJj2JGJe+PhZxZ66B9bo7GJ0cjESR5eyJpCvU=; h=Date:From:Subject:To:Cc:References:In-Reply-To:From:Subject:Reply-To; b=hytzFYTpa9PgpMH6rZ9sGrwc/r7N0xW6ezurFyh5z9CrY3cimzqLcKCLaKjQyHy6G8Y3uiNkC+jJMEKq6Pq7YOaPy5Uo7dSXqIbvbFAel17Udl3HxZg7M0o1bbP6Soz65qeGl2PTp2WNF0e47KpkddlI1Srmh6lwF1sODjDdAwj++xA+yIFC+f13uSJJLbXErjpSUdGGz59RBXnWMdqJYsnfMvGFVrYVzTh7sSqHE/yViYcsNtbg7tYDykb2oTnKyXOWZmikKtqcrderry3CZP7Nlkc99STBcHlaa7gkMYItWfZpB350t1oQNHmRhQUss2dPW6c1eJsSEyD2di3fIg==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1660409809; bh=yQZ3P0IsqeiiA0dZkrTD1G4Z78sLpvW9+sAwKLNlpvB=; h=X-Sonic-MF:Date:From:Subject:To:From:Subject; b=a5qeST9hBIrEJHEpCcI5wrk6ei/TujAmWFR98I8nTh14/LvpB4fLfCOVnv2H4rgiIUQxR5sXNjDaDT80+M8SpCuTimq8s5opyEQZmZWYeDC6wZLFQxUZ7jxQadr7K35YldC2GtOlqdl+6T5QbCQs+eUmYc/GbPb7TS1G4p2suMAtNl812eG988wICOKWH9VBlD+lLa6/D9xk2NAtJUSPkiVutsQPA7p1D/F+sUc8CmwaDThIyMNem8lBN52SOgCENgf29DT+D/zBcKwtoEZ31IoJiCDhxtahQnLaZUPkhTaOu/B1B2zls4TbmwCpvu+aNQO2Uj/AFAlpyMJgx+KkUQ==
-X-YMail-OSG: OQbhtbUVM1nOQ6jnLdzPWPN_bd55lZ6LHInmMNByAOaV9HSItHoQ4qvwJwUcttV
- e4nvHeMobRWrL6nfaT4j9cGFc3_RMhHDalf7gYxESiRItX8_OrhCoWBbU6_ymUvXd5p7__URF5ng
- yFs6KLjWCd80YYOhC_86sEqobjQx1BGnNj3YoR6sgQSgEQqDazeRyB1zzaUAl2Gvhtm3Cn6Z8Eu.
- nM80Z9mA.id7WyziYqSwJZv2KwBQURjqUb1G2T3KooAz8SaCpHv_lSXxyPcWNZLwg16IfxvImTLp
- pNJJVsJMGEsBKolSZXO1nHLMCIJf7f27y.THOmF9pp0C0WsDFvurksxhjwG59OC1qlnWV_BQBNqp
- JTEzoPLbwSAZRdxGzUYf0wwh_je8FJZ7bDtgVXM_vzSX33AuBqwkBp.ynCimUY7w4XLxo4PQ.jQq
- 499348bto4OXTUCVBSAS04ONUhRT.cnjJC2TtC0BdUgXbGKzfSs0w.sT.u9.k145TBWLFr3BRvHy
- W5j3Vv07Y.pjn9U6p7nSWXx2jPeDqf5qfKIJbOZqtaNFX5FNi7k8NO1EBQFZcERbsLdFaHol5VpI
- rHElfW_LNljI08YXxvLBxGOo_A_.5LYCYeBUTr_C3v9OoKM6bXKtl0PK5EfNEFTbVDyoinZH.bU8
- bEzgC4IOHSx.CWhYFTaCP6d6ubFm2WdW42iT97zkV_QFwQHWNE7zhJe7KfxHPE17S.3t_hMvcKRz
- dA2RFP5DvXTbzID8wuonj7mHyf1zkCAgihEu_G8VyubEqzxUueB18F17y8vBhLfyk6hywdgiIS_N
- wyaW2zXbt5cmfbt_BK1CJS7_k5FR21KMQSqKrrQcPArlGX5ksjOyLjXtZbtUbfEZ5i.AxQnTuFGe
- DPZWpM0yc9wUy9ox62kzxk0i32Fuix5jLlgCQ2nQDKV60Tgp0nUPYtHAM3db6xb.M.5zBDZkTh9S
- HpqUgqNeEIrkHIufi8637tUFf_71sM0pdRSZgH0IpcmpDkeGt8VVm04nWSsyunc5DDCoNQvyeruT
- wO0BFroXfxjHxMKJDG3jGjBt6KJ6uFIBQdnz_tVGzmYGlA0l8VQCB0wmA8RujoBr.usio41fCVG7
- .WZicdRm9KNCzl0xKZxwm_7eM8WrV7a7_YxcgIMjv.B.P_kV65xvhdc2__aitiMuyA5XRD0Y63m3
- fV7Cpi_UJRnAg8VohVoL651fIB7T6SsKIVcIRxBfuGljyEWw_U2t6BalpfAYAizKZhAT4z2nTtan
- uAneSEyPKnU8rGqdLTsnVSU_Bdjwwhhtwjr5ldOaTsKGMYs7DdtTfgmV7dBo3TzGQc8dO8D8hbmM
- NQidk.u8wN0qKnV_eu7AoA9Hn1ErYqWCkB_u.0hnqJIIQLU.xN.s185Utg92ydmz3y6i2ljAFB.L
- UTTN6xAnsuhNJmh2JEIxmLIlPDaygMSAa0oCFxARvpwc88gKpKIPSQCHMJ_F0W7ZFHePQIv8UQgj
- w_NJU.9YsCGpYuNDbBgb3RHOUnXgGKpiA94xWxJOKpFzIhlLa1RLAozyme.0fjmel9YW_ISVfiVy
- dMBb.GyEv3nnnYDj.D7g1fx.2xRfr7Mln33gS.l0c.0Ch79fRCfH.6MpvzK0Mr3a3GJlMpLVQO6q
- xPs.v6_A4l4vebg.Q8gtS8ARaxBY79VpRVl2H8x7yBZ17.aKRYYxdPl3RC0KsSvfG79O5xwovIlT
- 5MQJszRy_XfoEfi6FqukEbEM0cteDTMroAfyi7O8yN4YlM22U7wlQk0JtQe94DxeeH_aYQI71uQj
- ydAWwOOget9fH8Ki5x0j_14mPGSmpecmG6Cog3XLuN_rVWtwPoCSpVeHJ2tGVyxatlmq9Kbrr999
- phWg.9aqXeRK815s4_8zPtNRwZms8RmBeFUDhQaSQusMXbFg9v0wZwnW4jMVa0RuqutpI0jmmbkh
- gapL48O.v7LtPPBVByeJXIt.IQNBAqDHyiz2qG0NGEt0pSkx0hHT5QFMAc.iquwfBTvi9mZnoap9
- 4LFP6YBlJ8x3FyDCrC_x3eDmoGov.JVfemXWRc60zxAvSj7vrazhUXcIg2aZz0d_Ug59JLbNJQGr
- a0jPVt9sIILfX7MlwcqhxVnuSRqPy8Pw22lpRcu44oLRlfuJ83X0Gqv7uu.Ti4Bx3da5NASYuW5A
- Lcs_Fk3.Vc5sMk6urzZn0PgThmydksH7f2WLpi1G4Ks0Ui6YE6954K3BOkpiV.UJvA4zsNhdIIxK
- BdBLb7UygVYN1O7h16PCUlwOmWC76Z9Lxvy8lMiXYbNhCwK1zOcQF9OLjW1OR9HcuATM8JJpSEF.
- 6._m8e4umqWdXYoBRCv3GesC5y7Rv1FTkjic-
-X-Sonic-MF: <brchuckz@aim.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic313.consmr.mail.gq1.yahoo.com with HTTP; Sat, 13 Aug 2022 16:56:49 +0000
-Received: by hermes--production-ne1-6649c47445-tz6bb (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 66f3ba59478f3bc107a9b6db1aef8ef8;
-          Sat, 13 Aug 2022 16:56:46 +0000 (UTC)
-Message-ID: <d838264a-bcd0-29e2-3b23-5427ee0ee041@netscape.net>
-Date:   Sat, 13 Aug 2022 12:56:44 -0400
+        Sat, 13 Aug 2022 12:57:12 -0400
+Received: from mail.nearlyone.de (mail.nearlyone.de [46.163.114.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECF32D1C2;
+        Sat, 13 Aug 2022 09:57:10 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id AA4A45DF3C;
+        Sat, 13 Aug 2022 18:57:06 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=monom.org; s=dkim;
+        t=1660409828; h=from:subject:date:message-id:to:mime-version:content-type:
+         content-transfer-encoding; bh=oWe3XaBKG7sQ/K2RGyuBHDy0vDbjP+dVmq4ESm5+oP4=;
+        b=mHRhWcCOZnkKlxl0MmnMNe4KQvweb2ITcyX574w6xoD92xzTnS9jKkQP5dp5YLF7FTfUWE
+        AC2206CIgHm0gDFTEMAEZCrtXxiJCTjgsq9HgHRseJB1MaLEC7yXe+ymB2OmVbLm25Frvs
+        hy/RVH0xKGFhvjwapQdEWe7BkEs2qt09ck3Sr852rZXh4Z0gZK6bmSauJE1xII3gLEbk0q
+        ZbCRy2HteoLXTBt2iFoLs/xw23C86e8CcUlNlqXbXY+EW6lWn1SFp377zlmsI8WiwZWNHk
+        1tOYjbHkoG1bgpVcApd7WzXHlQKW/gK850KMWtiS+aXfGnsOXfPT01utlG4UGQ==
+Date:   Sat, 13 Aug 2022 18:57:05 +0200
+From:   Daniel Wagner <wagi@monom.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        John Kacur <jkacur@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Clark Williams <williams@redhat.com>,
+        Pavel Machek <pavel@denx.de>
+Subject: [ANNOUNCE] 4.19.255-rt113
+Message-ID: <166040972522.12165.12921192851414170729@beryllium.lan>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-From:   Chuck Zmudzinski <brchuckz@netscape.net>
-Subject: Re: PING [PATCH 3/3] x86: decouple pat and mtrr handling
-To:     Borislav Petkov <bp@alien8.de>, Juergen Gross <jgross@suse.com>,
-        Thorsten Leemhuis <regressions@leemhuis.info>,
-        Jan Beulich <jbeulich@suse.com>
-Cc:     xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        regressions@lists.linux.dev
-References: <20220715142549.25223-1-jgross@suse.com>
- <20220715142549.25223-4-jgross@suse.com> <YtbKf51S4lTaziKm@zn.tnic>
-Content-Language: en-US
-In-Reply-To: <YtbKf51S4lTaziKm@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.20531 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.aol
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/19/22 11:15 AM, Borislav Petkov wrote:
-> On Fri, Jul 15, 2022 at 04:25:49PM +0200, Juergen Gross wrote:
-> > Today PAT is usable only with MTRR being active, with some nasty tweaks
-> > to make PAT usable when running as Xen PV guest, which doesn't support
-> > MTRR.
-> > 
-> > The reason for this coupling is, that both, PAT MSR changes and MTRR
-> > changes, require a similar sequence and so full PAT support was added
-> > using the already available MTRR handling.
-> > 
-> > Xen PV PAT handling can work without MTRR, as it just needs to consume
-> > the PAT MSR setting done by the hypervisor without the ability and need
-> > to change it. This in turn has resulted in a convoluted initialization
-> > sequence and wrong decisions regarding cache mode availability due to
-> > misguiding PAT availability flags.
-> > 
-> > Fix all of that by allowing to use PAT without MTRR and by adding an
-> > environment dependent PAT init function.
->
-> Aha, there's the explanation I was looking for.
->
-> > diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-> > index 0a1bd14f7966..3edfb779dab5 100644
-> > --- a/arch/x86/kernel/cpu/common.c
-> > +++ b/arch/x86/kernel/cpu/common.c
-> > @@ -2408,8 +2408,8 @@ void __init cache_bp_init(void)
-> >  {
-> >  	if (IS_ENABLED(CONFIG_MTRR))
-> >  		mtrr_bp_init();
-> > -	else
-> > -		pat_disable("PAT support disabled because CONFIG_MTRR is disabled in the kernel.");
-> > +
-> > +	pat_cpu_init();
-> >  }
-> >  
-> >  void cache_ap_init(void)
-> > @@ -2417,7 +2417,8 @@ void cache_ap_init(void)
-> >  	if (cache_aps_delayed_init)
-> >  		return;
-> >  
-> > -	mtrr_ap_init();
-> > +	if (!mtrr_ap_init())
-> > +		pat_ap_init_nomtrr();
-> >  }
->
-> So I'm reading this as: if it couldn't init AP's MTRRs, init its PAT.
->
-> But currently, the code sets the MTRRs for the delayed case or when the
-> CPU is not online by doing ->set_all and in there it sets first MTRRs
-> and then PAT.
->
-> I think the code above should simply try the two things, one after the
-> other, independently from one another.
->
-> And I see you've added another stomp machine call for PAT only.
->
-> Now, what I think the design of all this should be, is:
->
-> you have a bunch of things you need to do at each point:
->
-> * cache_ap_init
->
-> * cache_aps_init
->
-> * ...
->
-> Now, in each those, you look at whether PAT or MTRR is supported and you
-> do only those which are supported.
->
-> Also, the rendezvous handler should do:
->
-> 	if MTRR:
-> 		do MTRR specific stuff
->
-> 	if PAT:
-> 		do PAT specific stuff
->
-> This way you have clean definitions of what needs to happen when and you
-> also do *only* the things that the platform supports, by keeping the
-> proper order of operations - I believe MTRRs first and then PAT.
->
-> This way we'll get rid of that crazy maze of who calls what and when.
->
-> But first we need to define those points where stuff needs to happen and
-> then for each point define what stuff needs to happen.
->
-> How does that sound?
->
-> Thx.
->
+Hello RT-list!
 
-Hi Thorsten,
+I'm pleased to announce the 4.19.255-rt113 stable release.
 
-IMHO, silence here is unacceptable given that this is supposed to
-be fixing a regression and not just adding a new feature or
-re-working the code in a case where there is no regression.
+This is just an update to the latest stable release. No RT specific
+changes.
 
-The regression was first reported on May 4, 2022, now over
-three months ago:
+You can get this release via the git tree at:
 
-https://lore.kernel.org/regressions/YnHK1Z3o99eMXsVK@mail-itl/
+  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
 
-Why has Juergen not at least responded in some way to the
-comments that Boris has made here? Why has Boris not
-pinged Juergen by now, which is almost four weeks after his
-comment and over three months from the first report of the
-regression? IMHO, both Juergen and Boris are not treating
-this with the priority of a regression fix. At the very least,
-they should reaffirm their commitment to fix the regression
-in a timely manner or explain what factors demand that the
-Linus regression rule be set aside in this case.
+  branch: v4.19-rt
+  Head SHA1: 3f10b93e91ead8aefa01758391b230b8a306e389
 
-There are valid reasons to delay a fix, but in all the discussion
-of the various patches that have been proposed to fix this
-regression, no maintainer has yet given a clear and reasonable
-explanation for why this is not getting a higher priority from the
-developers.
+Or to build 4.19.255-rt113 directly, the following patches should be applied:
 
-Some developers, (Dave, Luto, and Peter) have ignored a fix
-proposed by Jan Beulich as you pointed out in an earlier message
-to Jan Beulich here:
+  https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.19.tar.xz
 
-https://lore.kernel.org/lkml/4c8c9d4c-1c6b-8e9f-fa47-918a64898a28@leemhuis.info/
+  https://www.kernel.org/pub/linux/kernel/v4.x/patch-4.19.255.xz
 
-To his credit, Jan Beulich replied to your message in a reasonable
-manner but he also could not explain why Dave, Luto, and Peter
-ignored Jan's patch and remain silent in the discussion of the possible
-fixes for this regression. I note also that the original report of the
-regression identified a specific commit that also fixes the regression
-if that bad commit is reverted, and that commit is also mentioned in
-the aforementioned message to Jan about his proposed fix. It is a commit
-that lives in the i915 Intel GPU/DRM driver, commit bdd8b6c98239, and
-my testing confirms the regression can also be fixed by reverting
-bdd8b6c98239 instead of applying Jan Beulich's patch that was the
-subject of the aforementioned message from you to Jan Beulich where
-you also expressed your dissatisfaction with the silence of some
-developers (Dave, Lotu, and Peter) when there is a regression that needs
-fixing.
+  https://www.kernel.org/pub/linux/kernel/projects/rt/4.19/older/patch-4.19.255-rt113.patch.xz
 
-Why their silence? In that same message, you pondered that it might
-be necessary to bring this matter to Linus' attention. The developers'
-silence makes me think this regression is a regression the developers
-do not want to fix. And that would be a clear violation of the Linux
-regression rule if it were true. So, Thorsten, I think it is time for you to
-elevate this to Linus if the developers do not clearly explain why they
-are ignoring this again.
+Signing key fingerprint:
 
-Best regards,
+  5BF6 7BC5 0826 72CA BB45  ACAE 587C 5ECA 5D0A 306C
 
-Chuck
+All keys used for the above files and repositories can be found on the
+following git repository:
+
+   git://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git
+
+Enjoy!
+Daniel
+
+Changes from v4.19.252-rt112:
+---
+
+Alexander Aring (1):
+      dlm: fix pending remove if msg allocation fails
+
+Andrea Mayer (3):
+      seg6: fix skb checksum evaluation in SRH encapsulation/insertion
+      seg6: fix skb checksum in SRv6 End.B6 and End.B6.Encaps behaviors
+      seg6: bpf: fix skb checksum in bpf_push_seg6_encap()
+
+Ard Biesheuvel (2):
+      ARM: 9214/1: alignment: advance IT state after emulating Thumb instruction
+      ARM: 9209/1: Spectre-BHB: avoid pr_info() every time a CPU comes out of idle
+
+Ben Dooks (1):
+      riscv: add as-options for modules with assembly compontents
+
+Benjamin Tissoires (2):
+      HID: multitouch: simplify the application retrieval
+      HID: multitouch: add support for the Smart Tech panel
+
+Chanho Park (1):
+      tty: serial: samsung_tty: set dma burst_size to 1
+
+Charles Keepax (1):
+      ASoC: wm5110: Fix DRE control
+
+ChenXiaoSong (1):
+      ntfs: fix use-after-free in ntfs_ucsncmp()
+
+Daniel Sneddon (1):
+      x86/speculation: Add RSB VM Exit protections
+
+Daniel Wagner (2):
+      Merge tag 'v4.19.255' into v4.19-rt
+      Linux 4.19.255-rt113
+
+Demi Marie Obenour (1):
+      xen/gntdev: Ignore failure to unmap INVALID_GRANT_HANDLE
+
+Dmitry Osipenko (1):
+      ARM: 9213/1: Print message about disabled Spectre workarounds only once
+
+Duoming Zhou (1):
+      sctp: fix sleep in atomic context bug in timer handlers
+
+Eric Dumazet (1):
+      bpf: Make sure mac_header was set before using it
+
+Florian Westphal (2):
+      netfilter: br_netfilter: do not skip all hooks with 0 priority
+      netfilter: nf_queue: do not allow packet truncation below transport header offset
+
+Francesco Dolcini (1):
+      ASoC: sgtl5000: Fix noise on shutdown/remove
+
+GUO Zihua (1):
+      ima: remove the IMA_TEMPLATE Kconfig option
+
+Gabriel Fernandez (1):
+      ARM: dts: stm32: use the correct clock source for CEC on stm32mp151
+
+Greg Kroah-Hartman (4):
+      Linux 4.19.253
+      Linux 4.19.254
+      ARM: crypto: comment out gcc warning that breaks clang builds
+      Linux 4.19.255
+
+Hangyu Hua (2):
+      net: tipc: fix possible refcount leak in tipc_sk_create()
+      xfrm: xfrm_policy: fix a possible double xfrm_pols_put() in xfrm_bundle_lookup()
+
+Harald Freudenberger (1):
+      s390/archrandom: prevent CPACF trng invocations in interrupt context
+
+Hristo Venev (1):
+      be2net: Fix buffer overflow in be_get_module_eeprom
+
+Ilpo Järvinen (2):
+      serial: stm32: Clear prev values before setting RTS delays
+      serial: pl011: UPSTAT_AUTORTS requires .throttle/unthrottle
+
+Jason A. Donenfeld (1):
+      Revert "Revert "char/random: silence a lockdep splat with printk()""
+
+Jeffrey Hugo (4):
+      PCI: hv: Fix multi-MSI to allow more than one MSI vector
+      PCI: hv: Fix hv_arch_irq_unmask() for multi-MSI
+      PCI: hv: Reuse existing IRTE allocation in compose_msi_msg()
+      PCI: hv: Fix interrupt mapping for multi-MSI
+
+Jianglei Nie (1):
+      net: sfp: fix memory leak in sfp_probe()
+
+Jiri Slaby (5):
+      tty: drivers/tty/, stop using tty_schedule_flip()
+      tty: the rest, stop using tty_schedule_flip()
+      tty: drop tty_schedule_flip()
+      tty: extract tty_flip_buffer_commit() from tty_flip_buffer_push()
+      tty: use new tty_insert_flip_string_and_push_buffer() in pty_write()
+
+Jose Alonso (1):
+      net: usb: ax88179_178a needs FLAG_SEND_ZLP
+
+Juergen Gross (2):
+      xen/netback: avoid entering xenvif_rx_next_skb() with an empty rx queue
+      x86: Clear .brk area at early boot
+
+Junxiao Chang (1):
+      net: stmmac: fix dma queue left shift overflow issue
+
+Jyri Sarha (1):
+      drm/tilcdc: Remove obsolete crtc_mode_valid() hack
+
+Kai-Heng Feng (1):
+      platform/x86: hp-wmi: Ignore Sanitization Mode event
+
+Kris Bahnsen (1):
+      ARM: dts: imx6qdl-ts7970: Fix ngpio typo and count
+
+Kuniyuki Iwashima (43):
+      inetpeer: Fix data-races around sysctl.
+      net: Fix data-races around sysctl_mem.
+      cipso: Fix data-races around sysctl.
+      icmp: Fix data-races around sysctl.
+      icmp: Fix a data-race around sysctl_icmp_ratelimit.
+      icmp: Fix a data-race around sysctl_icmp_ratemask.
+      ipv4: Fix data-races around sysctl_ip_dynaddr.
+      ip: Fix data-races around sysctl_ip_fwd_use_pmtu.
+      ip: Fix data-races around sysctl_ip_nonlocal_bind.
+      ip: Fix a data-race around sysctl_fwmark_reflect.
+      tcp/dccp: Fix a data-race around sysctl_tcp_fwmark_accept.
+      tcp: Fix data-races around sysctl_tcp_mtu_probing.
+      tcp: Fix a data-race around sysctl_tcp_probe_threshold.
+      tcp: Fix a data-race around sysctl_tcp_probe_interval.
+      igmp: Fix data-races around sysctl_igmp_llm_reports.
+      igmp: Fix a data-race around sysctl_igmp_max_memberships.
+      tcp: Fix data-races around sysctl_tcp_reordering.
+      tcp: Fix data-races around some timeout sysctl knobs.
+      tcp: Fix a data-race around sysctl_tcp_notsent_lowat.
+      tcp: Fix a data-race around sysctl_tcp_tw_reuse.
+      tcp: Fix data-races around sysctl_tcp_fastopen.
+      tcp: Fix a data-race around sysctl_tcp_early_retrans.
+      tcp: Fix data-races around sysctl_tcp_recovery.
+      tcp: Fix a data-race around sysctl_tcp_thin_linear_timeouts.
+      tcp: Fix data-races around sysctl_tcp_slow_start_after_idle.
+      tcp: Fix a data-race around sysctl_tcp_retrans_collapse.
+      tcp: Fix a data-race around sysctl_tcp_stdurg.
+      tcp: Fix a data-race around sysctl_tcp_rfc1337.
+      tcp: Fix data-races around sysctl_tcp_max_reordering.
+      tcp: Fix data-races around sysctl_tcp_dsack.
+      tcp: Fix a data-race around sysctl_tcp_app_win.
+      tcp: Fix a data-race around sysctl_tcp_adv_win_scale.
+      tcp: Fix a data-race around sysctl_tcp_frto.
+      tcp: Fix a data-race around sysctl_tcp_nometrics_save.
+      tcp: Fix a data-race around sysctl_tcp_challenge_ack_limit.
+      net: ping6: Fix memleak in ipv6_renew_options().
+      igmp: Fix data-races around sysctl_igmp_qrv.
+      tcp: Fix a data-race around sysctl_tcp_min_tso_segs.
+      tcp: Fix a data-race around sysctl_tcp_min_rtt_wlen.
+      tcp: Fix a data-race around sysctl_tcp_autocorking.
+      tcp: Fix a data-race around sysctl_tcp_invalid_ratelimit.
+      tcp: Fix a data-race around sysctl_tcp_comp_sack_delay_ns.
+      tcp: Fix a data-race around sysctl_tcp_comp_sack_nr.
+
+Leo Yan (1):
+      perf symbol: Correct address for bss symbols
+
+Liang He (3):
+      cpufreq: pmac32-cpufreq: Fix refcount leak bug
+      scsi: ufs: host: Hold reference returned by of_parse_phandle()
+      net: sungem_phy: Add of_node_put() for reference returned by of_get_parent()
+
+Linus Torvalds (1):
+      signal handling: don't use BUG_ON() for debugging
+
+Linyu Yuan (1):
+      usb: typec: add missing uevent when partner support PD
+
+Lucien Buchmann (1):
+      USB: serial: ftdi_sio: add Belimo device ids
+
+Luiz Augusto von Dentz (8):
+      Bluetooth: Add bt_skb_sendmsg helper
+      Bluetooth: Add bt_skb_sendmmsg helper
+      Bluetooth: SCO: Replace use of memcpy_from_msg with bt_skb_sendmsg
+      Bluetooth: RFCOMM: Replace use of memcpy_from_msg with bt_skb_sendmmsg
+      Bluetooth: Fix passing NULL to PTR_ERR
+      Bluetooth: SCO: Fix sco_send_frame returning skb->len
+      Bluetooth: Fix bt_skb_sendmmsg not allocating partial chunks
+      Bluetooth: L2CAP: Fix use-after-free caused by l2cap_chan_put
+
+Marc Kleine-Budde (1):
+      can: m_can: m_can_tx_handler(): fix use after free of skb
+
+Mark Brown (1):
+      ASoC: ops: Fix off by one in range control validation
+
+Meng Tang (3):
+      ALSA: hda - Add fixup for Dell Latitidue E5430
+      ALSA: hda/conexant: Apply quirk for another HP ProDesk 600 G3 model
+      ALSA: hda/realtek - Fix headset mic problem for a HP machine with alc221
+
+Miaoqian Lin (1):
+      power/reset: arm-versatile: Fix refcount leak in versatile_reboot_probe
+
+Michael Walle (1):
+      NFC: nxp-nci: don't print header length mismatch on i2c error
+
+Michal Maloszewski (1):
+      i40e: Fix interface init with MSI interrupts (no MSI-X)
+
+Michal Suchanek (1):
+      ARM: dts: sunxi: Fix SPI NOR campatible on Orange Pi Zero
+
+Mikael Wikström (1):
+      HID: multitouch: Lenovo X1 Tablet Gen3 trackpoint and buttons
+
+Ming Lei (1):
+      scsi: core: Fix race between handling STS_RESOURCE and completion
+
+Ning Qiang (1):
+      macintosh/adb: fix oob read in do_adb_query() function
+
+Pali Rohár (1):
+      serial: mvebu-uart: correctly report configured baudrate value
+
+Pawan Gupta (1):
+      x86/speculation: Add LFENCE to RSB fill sequence
+
+Peter Zijlstra (1):
+      perf/core: Fix data race between perf_event_set_output() and perf_mmap_close()
+
+Robert Hancock (1):
+      i2c: cadence: Change large transfer count reset logic to be unconditional
+
+Ryusuke Konishi (1):
+      nilfs2: fix incorrect masking of permission flags for symlinks
+
+Stafford Horne (1):
+      irqchip: or1k-pic: Undefine mask_ack for level triggered hardware
+
+Stephan Gerhold (2):
+      virtio_mmio: Add missing PM calls to freeze/restore
+      virtio_mmio: Restore guest page size on resume
+
+Steven Rostedt (Google) (1):
+      net: sock: tracing: Fix sock_exceed_buf_limit not to dereference stale pointer
+
+Takashi Iwai (1):
+      ALSA: memalloc: Align buffer allocations in page size
+
+Tariq Toukan (1):
+      net/tls: Fix race in TLS device down flow
+
+Tejun Heo (1):
+      cgroup: Use separate src/dst nodes when preloading css_sets for migration
+
+Thinh Nguyen (1):
+      usb: dwc3: gadget: Fix event pending check
+
+Tony Fischetti (1):
+      HID: add ALWAYS_POLL quirk to lenovo pixart mouse
+
+Wang Cheng (1):
+      mm/mempolicy: fix uninit-value in mpol_rebind_policy()
+
+Wei Mingzhi (1):
+      mt7601u: add USB device ID for some versions of XiaoDu WiFi Dongle.
+
+Werner Sembach (2):
+      ACPI: video: Force backlight native for some TongFang devices
+      ACPI: video: Shortening quirk list by identifying Clevo by board_name only
+
+William Dean (1):
+      pinctrl: ralink: Check for null return of devm_kcalloc
+
+Xiaomeng Tong (1):
+      tilcdc: tilcdc_external: fix an incorrect NULL check on list iterator
+
+Xin Long (1):
+      Documentation: fix sctp_wmem in ip-sysctl.rst
+
+Yi Yang (1):
+      serial: 8250: fix return error code in serial8250_request_std_resource()
+
+Zheng Yejian (1):
+      tracing/histograms: Fix memory leak problem
+
+Íñigo Huguet (2):
+      sfc: fix use after free when disabling sriov
+      sfc: fix kernel panic when creating VF

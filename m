@@ -2,68 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DFD75919BA
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 12:01:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D20E5919BE
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 12:04:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238958AbiHMKBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 06:01:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52466 "EHLO
+        id S239004AbiHMKEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 06:04:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238856AbiHMKB0 (ORCPT
+        with ESMTP id S238659AbiHMKET (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 06:01:26 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75ACE7678
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 03:01:24 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id o3-20020a17090a0a0300b001f7649cd317so10421109pjo.0
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 03:01:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=rXjZq7TyJRpGA36wuNWeax0N/DTCuezFM2I6n+kaOFc=;
-        b=uludQ0lLYxsMsamFFMGEAF4NjuSBTl68G7b7d5T0Xyrr1vKPHVnSigosbzHsNWpJ6c
-         lnun7Gx5kbIHOBuPvWXq/znBa6WjZh6uG+avVo3AtMmdq8io6sddwwKHRAkQ+S7vq2eN
-         A/Pou91K9q3DcouiBrvJRDkTzd6GtgxnNDt8HTi3XXlHiDBoI8FYWGvak7noJLaoqHQq
-         fjvj83QfEkS3s38zh/DRL/tHYz901CKghNoqoIKn/mRAvXgvIcKvb+ZW8emMfm5MZGyo
-         /s3fYXOxL8Y5m0xY4qz7twAk94MjBZulAuxffst0EQEGfOfw0c7eEVh5Dc+njTqxPd9U
-         MnPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=rXjZq7TyJRpGA36wuNWeax0N/DTCuezFM2I6n+kaOFc=;
-        b=SNezUE/2gX6xBZ6gO4S0Pg+N27cu4rrOuo5zLdTKeYQ143ybYPftnXvwPmz5hgNIE9
-         yxmnodRe0umoG0T/f4DCE2nNVAKfQnTayqqQNRNnqlAD1uIDKXjCUShplXHs0W2eiQ7/
-         /LgeTwxhNjKJBanAeg2iA88wV4AhAfJR8zrh1lrQwVv72Qiw76oKzn6LL0CVI/NnepEJ
-         +d2L7/rqHUvicZ5Tc/03FzwNo8cqp0Ju4sNY+pjoN0yVHYqItIu2GXT6s5EFXYZ8bSrb
-         fyEx48CAGqXQVNO/Ik6mFfq2yac5m7rdYy7MGe9dVNjsmMfdovnmI5TtGTWpMsmtxkuB
-         297g==
-X-Gm-Message-State: ACgBeo0vc2t1cvMKIOOeYCNqzH7NlmzgKvsgDvggDewZR1NIomNp/4Ox
-        oWZT3lQcFpME145QfYwkmc3xqtofQk/H32yaeIvXuw==
-X-Google-Smtp-Source: AA6agR6APTL3EkQhR9XXVJ4cdNRgW1zCMot4F0nMgyVJDj6msnWklnLNGrD42dX8QV/lT+YbFRlDfGnOgAuMQ+FfteY=
-X-Received: by 2002:a17:902:8683:b0:171:3114:7678 with SMTP id
- g3-20020a170902868300b0017131147678mr7861379plo.172.1660384883745; Sat, 13
- Aug 2022 03:01:23 -0700 (PDT)
+        Sat, 13 Aug 2022 06:04:19 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18696B1C8;
+        Sat, 13 Aug 2022 03:04:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660385059; x=1691921059;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Sx0SSML7cg2bVL2w/xbWJw6733DiD1Fcno0ewbF4vbI=;
+  b=HxHW4T15KDruGk11FntwhvcI9X6tu8+T5C7BmLcQA3KUs7E5ooS4yyAb
+   ei6L1hVDf8le7IwPp9tvioWeIj1DYMVU/zgfhsLiLv3Wis0dQ0YIowmWJ
+   1cfexE5C6STIyGSo65JrqpAKs85zyv3qFeMWAK9TpHSs0SeI4NbXeUWlu
+   +iTMs1ftEKgSs3urUzLb+omtJWsBdOneeGHzWl5HOIZxkbbtCqOgMHmNy
+   x/vKzXDBhjW/mbUrI/gEoHY6+zHlsdJYBol1rg90dO//ni9V44sxXmLfa
+   /e7TImLDG302MybA9ahnM75/ULi3uy5Kk1XUVen9kvXw91XFPELxIkREg
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="289312154"
+X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
+   d="scan'208";a="289312154"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 03:04:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
+   d="scan'208";a="851807988"
+Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 13 Aug 2022 03:04:14 -0700
+Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oMo06-0001YP-0p;
+        Sat, 13 Aug 2022 10:04:14 +0000
+Date:   Sat, 13 Aug 2022 18:03:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>,
+        linux-remoteproc@vger.kernel.org, agross@kernel.org,
+        bjorn.andersson@linaro.org, lgirdwood@gmail.com,
+        broonie@kernel.org, robh+dt@kernel.org, quic_plai@quicinc.com,
+        bgoswami@quicinc.com, perex@perex.cz, tiwai@suse.com,
+        srinivas.kandagatla@linaro.org, quic_rohkumar@quicinc.com,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        swboyd@chromium.org, judyhsiao@chromium.org,
+        devicetree@vger.kernel.org
+Cc:     kbuild-all@lists.01.org,
+        Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
+Subject: Re: [PATCH v4 6/7] remoteproc: qcom: Add support for memory sandbox
+Message-ID: <202208131734.HEn8peGd-lkp@intel.com>
+References: <1660308466-410-7-git-send-email-quic_srivasam@quicinc.com>
 MIME-Version: 1.0
-References: <a459363217b1847c0f206a5dbdf181cb21cf3d0c.1659557290.git.guillaume.tucker@collabora.com>
-In-Reply-To: <a459363217b1847c0f206a5dbdf181cb21cf3d0c.1659557290.git.guillaume.tucker@collabora.com>
-From:   Anders Roxell <anders.roxell@linaro.org>
-Date:   Sat, 13 Aug 2022 12:01:12 +0200
-Message-ID: <CADYN=9JM1nnjC9LypHqrz7JJjbZLpm8rArDUy4zgYYrajErBnA@mail.gmail.com>
-Subject: Re: [PATCH] selftests/landlock: fix broken include of linux/landlock.h
-To:     Guillaume Tucker <guillaume.tucker@collabora.com>
-Cc:     Guillaume <guillaume.tucker@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
-        Tim.Bird@sony.com, kernel@collabora.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1660308466-410-7-git-send-email-quic_srivasam@quicinc.com>
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,94 +72,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 3 Aug 2022 at 22:14, Guillaume Tucker
-<guillaume.tucker@collabora.com> wrote:
->
-> Revert part of the earlier changes to fix the kselftest build when
-> using a sub-directory from the top of the tree as this broke the
-> landlock test build as a side-effect when building with "make -C
-> tools/testing/selftests/landlock".
->
-> Reported-by: Micka=C3=ABl Sala=C3=BCn <mic@digikod.net>
-> Fixes: a917dd94b832 ("selftests/landlock: drop deprecated headers depende=
-ncy")
-> Fixes: f2745dc0ba3d ("selftests: stop using KSFT_KHDR_INSTALL")
-> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
+Hi Srinivasa,
 
-Building with this patch doesn't work, it gives this output:
-make[3]: Entering directory
-'/home/anders/src/kernel/next/tools/testing/selftests/landlock'
-make[3]: Leaving directory
-'/home/anders/src/kernel/next/tools/testing/selftests/landlock'
-make[3]: *** No rule to make target
-'/home/anders/.cache/tuxmake/builds/78/build/kselftest/landlock/base_test',
-needed by 'all'.  Stop.
+Thank you for the patch! Perhaps something to improve:
 
-I'm building like this:
-tuxmake --runtime podman --target-arch x86_64 --toolchain gcc-12
---kconfig defconfig kselftest
+[auto build test WARNING on remoteproc/rproc-next]
+[also build test WARNING on linus/master v5.19 next-20220812]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-which translates into this make command:
-make --silent --keep-going --jobs=3D32
-O=3D/home/anders/.cache/tuxmake/builds/78/build
-INSTALL_PATH=3D/home/anders/.cache/tuxmake/builds/78/build/kselftest_instal=
-l
-ARCH=3Dx86_64 CROSS_COMPILE=3Dx86_64-linux-gnu- kselftest-install
+url:    https://github.com/intel-lab-lkp/linux/commits/Srinivasa-Rao-Mandadapu/Update-ADSP-pil-loader-for-SC7280-platform/20220812-205239
+base:   git://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux.git rproc-next
+config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20220813/202208131734.HEn8peGd-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/1d330f9a7446932416d55d93ebba00e3d16bbef9
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Srinivasa-Rao-Mandadapu/Update-ADSP-pil-loader-for-SC7280-platform/20220812-205239
+        git checkout 1d330f9a7446932416d55d93ebba00e3d16bbef9
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/remoteproc/
 
-building without this patch works, see below:
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-make[3]: Entering directory
-'/home/anders/src/kernel/next/tools/testing/selftests/landlock'
-x86_64-linux-gnu-gcc -Wall -O2 -isystem
-/home/anders/.cache/tuxmake/builds/77/build/usr/include    base_test.c
- -o /home/anders/.cache/tuxmake/builds/77/build/kselftest/landlock/base_tes=
-t
--lcap
-x86_64-linux-gnu-gcc -Wall -O2 -isystem
-/home/anders/.cache/tuxmake/builds/77/build/usr/include    fs_test.c
--o /home/anders/.cache/tuxmake/builds/77/build/kselftest/landlock/fs_test
--lcap
-x86_64-linux-gnu-gcc -Wall -O2 -isystem
-/home/anders/.cache/tuxmake/builds/77/build/usr/include
-ptrace_test.c  -o
-/home/anders/.cache/tuxmake/builds/77/build/kselftest/landlock/ptrace_test
--lcap
-x86_64-linux-gnu-gcc -Wall -O2 -isystem
-/home/anders/.cache/tuxmake/builds/77/build/usr/include    true.c  -o
-/home/anders/.cache/tuxmake/builds/77/build/kselftest/landlock/true
--static
-make[3]: Leaving directory
-'/home/anders/src/kernel/next/tools/testing/selftests/landlock'
+All warnings (new ones prefixed by >>):
 
-Cheers,
-Anders
+   drivers/remoteproc/qcom_q6v5_adsp.c: In function 'adsp_of_unmap_smmu':
+>> drivers/remoteproc/qcom_q6v5_adsp.c:343:13: warning: variable 'access_level' set but not used [-Wunused-but-set-variable]
+     343 |         int access_level;
+         |             ^~~~~~~~~~~~
+>> drivers/remoteproc/qcom_q6v5_adsp.c:340:23: warning: variable 'mem_phys' set but not used [-Wunused-but-set-variable]
+     340 |         unsigned long mem_phys;
+         |                       ^~~~~~~~
 
-> ---
->  tools/testing/selftests/landlock/Makefile | 7 +++++--
->  1 file changed, 5 insertions(+), 2 deletions(-)
->
-> diff --git a/tools/testing/selftests/landlock/Makefile b/tools/testing/se=
-lftests/landlock/Makefile
-> index a6959df28eb0..02868ac3bc71 100644
-> --- a/tools/testing/selftests/landlock/Makefile
-> +++ b/tools/testing/selftests/landlock/Makefile
-> @@ -9,10 +9,13 @@ TEST_GEN_PROGS :=3D $(src_test:.c=3D)
->  TEST_GEN_PROGS_EXTENDED :=3D true
->
->  OVERRIDE_TARGETS :=3D 1
-> +top_srcdir :=3D ../../../..
->  include ../lib.mk
->
-> +khdr_dir =3D $(top_srcdir)/usr/include
-> +
->  $(OUTPUT)/true: true.c
->         $(LINK.c) $< $(LDLIBS) -o $@ -static
->
-> -$(OUTPUT)/%_test: %_test.c ../kselftest_harness.h common.h
-> -       $(LINK.c) $< $(LDLIBS) -o $@ -lcap
-> +$(OUTPUT)/%_test: %_test.c $(khdr_dir)/linux/landlock.h ../kselftest_har=
-ness.h common.h
-> +       $(LINK.c) $< $(LDLIBS) -o $@ -lcap -I$(khdr_dir)
-> --
-> 2.30.2
->
+
+vim +/access_level +343 drivers/remoteproc/qcom_q6v5_adsp.c
+
+   337	
+   338	static void adsp_of_unmap_smmu(struct iommu_domain *iommu_dom, const __be32 *prop, int len)
+   339	{
+ > 340		unsigned long mem_phys;
+   341		unsigned long iova;
+   342		unsigned int mem_size;
+ > 343		int access_level;
+   344		int i;
+   345	
+   346		for (i = 0; i < len; i++) {
+   347			iova = be32_to_cpu(prop[i++]);
+   348			mem_phys = be32_to_cpu(prop[i++]);
+   349			mem_size = be32_to_cpu(prop[i++]);
+   350			access_level = be32_to_cpu(prop[i]);
+   351			iommu_unmap(iommu_dom, iova, mem_size);
+   352		}
+   353	}
+   354	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

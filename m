@@ -2,123 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64BB6591D23
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 01:23:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7BED591D24
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 01:27:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbiHMXXd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 19:23:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43246 "EHLO
+        id S239672AbiHMX1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 19:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbiHMXXa (ORCPT
+        with ESMTP id S229825AbiHMX1p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 19:23:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 416FF883E4;
-        Sat, 13 Aug 2022 16:23:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sat, 13 Aug 2022 19:27:45 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE2489834
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 16:27:42 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DCFC4B800E2;
-        Sat, 13 Aug 2022 23:23:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03C87C433D6;
-        Sat, 13 Aug 2022 23:23:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1660433006;
-        bh=ysFtNkgWmL61tA/vu1l6V4vTgJfiMC+3pvDXK+Y2NCo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=faAZbMVOwLQHfw3hBgJv5a3v56W681DVzOI55UQpHQq+Pac+jtYmOphgd2KVIffEQ
-         G9j0bOGPW2JVcN6E0bQBkOUFnVsTsmkvPpRH/V1OPtr+0pWl+h8Hvlpb62Md6mSFHw
-         1aCs8GRY+7pq7mRyznOvXgRLg67x7O1Z4B+xeLHY=
-Date:   Sat, 13 Aug 2022 16:23:25 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     cgel.zte@gmail.com
-Cc:     bsingharora@gmail.com, iamjoonsoo.kim@lge.com, mingo@redhat.com,
-        bristot@redhat.com, vschneid@redhat.com, willy@infradead.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, Yang Yang <yang.yang29@zte.com.cn>,
-        Ran Xiaokai <ran.xiaokai@zte.com.cn>,
-        wangyong <wang.yong12@zte.com.cn>
-Subject: Re: [PATCH 1/2] delayacct: support re-entrance detection of
- thrashing accounting
-Message-Id: <20220813162325.57bb5d703d0063d717dc47e9@linux-foundation.org>
-In-Reply-To: <20220813074108.58196-1-yang.yang29@zte.com.cn>
-References: <20220813074108.58196-1-yang.yang29@zte.com.cn>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-redhat-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M4xXr5zhKz4x7X;
+        Sun, 14 Aug 2022 09:27:40 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1660433261;
+        bh=3bMlnbRQz38t2Byc7ysO1exjnYukUjyd4Vns0CgnFpo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=nreNZxcW1pAzZmg9kAm6s+7+A3xMa6q+RTayh70SgYI8/Abjn96KSfP7DH0xOyHuU
+         U0G7CVaYSr3ODkxQqcbcd9r63N9hS2eGhOgtBQo/q/EZ5Fz+3E77ux4hICUNCvPHKm
+         1dXx6Drc9wFdC6tbF9VgKsRDQq81e4HJgvcw7r46TLlAOqeLzbO3YTWsPCqPqqsgBi
+         /Q0IWsu9khhbcH2uMwoXbnSUl4Z7x011SwzYep8uTt3FiueMbnaa/5+dvKF7y+a2wQ
+         qUr9g9Xuq7OWz0vTBuFpLGtGZoUNaONfvkM5PeRc5eQnfswWVrQpcYxJEnsgWneYhZ
+         m58KufsLdMVqQ==
+From:   mpe@ellerman.id.au
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     christophe.leroy@csgroup.eu, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, naveen.n.rao@linux.vnet.ibm.com,
+        ndesaulniers@google.com, ruscur@russell.cc
+Subject: [GIT PULL] Please pull powerpc/linux.git powerpc-6.0-2 tag
+Date:   Sun, 14 Aug 2022 09:27:37 +1000
+Message-ID: <87czd3d8ra.fsf@mpe.ellerman.id.au>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 13 Aug 2022 07:41:09 +0000 cgel.zte@gmail.com wrote:
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
 
-> From: Yang Yang <yang.yang29@zte.com.cn>
-> 
-> Once upon a time, we only support accounting thrashing of page cache.
-> Then Joonsoo introduced workingset detection for anonymous pages and
-> we gained the ability to account thrashing of them[1].
-> 
-> For page cache thrashing accounting, there is no suitable place to do
-> it in fs level likes swap_readpage(). So we have to do it in
-> folio_wait_bit_common().
-> 
-> Then for anonymous pages thrashing accounting, we have to do it in
-> both swap_readpage() and folio_wait_bit_common(). This likes PSI,
-> so we should let thrashing accounting supports re-entrance detection.
-> 
-> This patch is to prepare complete thrashing accounting, and is based
-> on patch "filemap: make the accounting of thrashing more consistent".
-> 
-> -static inline void delayacct_thrashing_start(void)
-> +static inline void delayacct_thrashing_start(unsigned long *flags)
+Hi Linus,
 
-I don't think that `flags' is a very descriptive name.  It might be
-anything.  
+Please pull some powerpc fixes for 6.0:
 
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -943,6 +943,10 @@ struct task_struct {
->  #ifdef	CONFIG_CPU_SUP_INTEL
->  	unsigned			reported_split_lock:1;
->  #endif
-> +#ifdef CONFIG_TASK_DELAY_ACCT
-> +	/* delay due to memory thrashing */
-> +	unsigned                        in_thrashing:1;
-> +#endif
+The following changes since commit cae4199f9319f42534ee2e2e4aadf183b9bb7f73:
 
-OK, saving space in the task_struct is good.
+  Merge tag 'powerpc-6.0-1' of git://git.kernel.org/pub/scm/linux/kernel/gi=
+t/powerpc/linux (2022-08-06 16:38:17 -0700)
 
->  	unsigned long			atomic_flags; /* Flags requiring atomic access. */
->  
-> diff --git a/kernel/delayacct.c b/kernel/delayacct.c
-> index 164ed9ef77a3..a5916196022f 100644
-> --- a/kernel/delayacct.c
-> +++ b/kernel/delayacct.c
-> @@ -214,13 +214,22 @@ void __delayacct_freepages_end(void)
->  		      &current->delays->freepages_count);
->  }
->  
-> -void __delayacct_thrashing_start(void)
-> +void __delayacct_thrashing_start(unsigned long *flags)
->  {
-> +	*flags = current->in_thrashing;
-> +	if (*flags)
-> +		return;
+are available in the git repository at:
 
-Can't we rename `flags' to `in_thrashing' throughout?
+  https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/po=
+werpc-6.0-2
 
-And may as well give it type `bool'.  And convert that bool to/from the
-bitfield when moving it in and out of the task_struct with
+for you to fetch changes up to 83ee9f23763a432a4077bf20624ee35de87bce99:
 
-	*in_thrashing = !!current->in_thrashing;
+  powerpc/kexec: Fix build failure from uninitialised variable (2022-08-10 =
+15:55:20 +1000)
 
-	current->in_thrashing = (in_thrashing != 0);
+- ------------------------------------------------------------------
+powerpc fixes for 6.0 #2
+
+ - Ensure we never emit lwarx with EH=3D1 on 32-bit, because some 32-bit CP=
+Us trap on it
+   rather than ignoring it as they should.
+
+ - Fix ftrace when building with clang, which was broken by some refactorin=
+g.
+
+ - A couple of other minor fixes.
+
+Thanks to: Christophe Leroy, Naveen N. Rao, Nick Desaulniers, Ondrej Mosnac=
+ek, Pali Roh=C3=A1r,
+Russell Currey Segher Boessenkool.
+
+- ------------------------------------------------------------------
+Christophe Leroy (4):
+      powerpc: Fix eh field when calling lwarx on PPC32
+      powerpc: Don't hide eh field of lwarx behind a macro
+      powerpc: Make eh value more explicit when using lwarx
+      powerpc/ppc-opcode: Fix PPC_RAW_TW()
+
+Naveen N. Rao (1):
+      powerpc64/ftrace: Fix ftrace for clang builds
+
+Russell Currey (1):
+      powerpc/kexec: Fix build failure from uninitialised variable
 
 
+ arch/powerpc/include/asm/atomic.h          |  5 +++--
+ arch/powerpc/include/asm/bitops.h          |  4 ++--
+ arch/powerpc/include/asm/ppc-opcode.h      | 13 ++-----------
+ arch/powerpc/include/asm/simple_spinlock.h | 15 +++++++++------
+ arch/powerpc/kernel/trace/ftrace.c         |  8 ++++----
+ arch/powerpc/kexec/file_load_64.c          | 10 +++++-----
+ 6 files changed, 25 insertions(+), 30 deletions(-)
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEJFGtCPCthwEv2Y/bUevqPMjhpYAFAmL4MxcACgkQUevqPMjh
+pYAbQg//Y2KdKueTxPGMVN2/jCSDU6QEcCfZzmGWuCSQgdC1ufsf4hc8Maao0wOa
+nX2FzVF5F23MJM0oOtgdmC0p4QADSsR6OP3E0sST2snXBQf+FQPtIp4kjzCYP1zi
+x9paoBV1cBS54DI8bpdzp5FRLqmxxQ4PKM7iru6VYOC9EOZuwvg71W/+s90racdW
+J9Igz6yleFp2YsJYUWZNTNk7qJ9J5dhTRNrEK0MyOAmrcwXhQAq4QU6WqV3upUMa
+i4w8yqIi4e+dkRk1YjuZUVyqi7HgUE27gzH2yZT2w1SNMjodydv5P2ghgRP75s7y
+V4l/iuqfeWtw8tfEHzl+0rw3twhe1Y54ay4uFSfUOI2m9u6dJjjnXDJUai/vyytX
+CT4cRow8HP5eIULuj5jFrgPjkH1sBRUBdXVwZrDTOrynKXiEC5nbNTE5LTjbvYzj
+snzMRM8jEZpG/t1wA5tmGgMson37260qo/aqX9wIIEc0LhhJZdvMr7RD6pnX1D6I
+88mI/zxmitJU9bENQyenAOZn7Y6ybXBv8tEvHBr/xq0jKL0O7MKsdim4fUUZa7p/
+yAUwnMb88fbg10M5xWybbDJ2Ej4x+KD4pbWVN80qvApG6z85hbeRZVqx8JX0qS78
+TZMIWs4qPNwH/P8SM0Ez+/5kXxzkN6S0UXs99ViCxtYEIskWv4g=3D
+=3DnY/A
+-----END PGP SIGNATURE-----

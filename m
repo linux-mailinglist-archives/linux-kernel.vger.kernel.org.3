@@ -2,118 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4449591A86
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 15:15:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46A4E591A8A
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 15:17:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239457AbiHMNPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 09:15:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52808 "EHLO
+        id S239482AbiHMNR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 09:17:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235278AbiHMNPb (ORCPT
+        with ESMTP id S239463AbiHMNRX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 09:15:31 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 758AF1E3C3
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 06:15:27 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id l64so2983276pge.0
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 06:15:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=NOVF3cxn2Ri4x7HZo2XH8zAToMyNEkNqssFkJS3Mqok=;
-        b=fo0R6i5xMVYrHmk0aMK56No9uNXQICwOCaH2EdVQ9e26VfuQ15FpgCfmnft7Ijdd9O
-         ZObpHyWvrZ9X19qrUWjMufvZZA4R4sMMZ0vwXB5zhKOxn57HSIOKCJHoXbRegcUWPjHJ
-         MUj7HP/nbw0jkM6WI+aWHq9Hjt68Cg6pDkOEMC/zR+ocwgJrRiRYGyVFanhnmO0UNYRb
-         kApOl2ZiSazW0AEwju5YCfveledXA4q45NoRueHsmDn2qxIh7jbcoHgVYlp/fsChZwDQ
-         Kcuakz696nBOP8DavByhMZFU1+Qa/JF7scKIIyZyvOt4sJQ40eXNWOgHbpfIxwAd3See
-         SHJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=NOVF3cxn2Ri4x7HZo2XH8zAToMyNEkNqssFkJS3Mqok=;
-        b=V/kLw3qNo5uHOEVvWw6JyzXdhjwp5LTVzxgY2NLc3ofEsvNmLE9PgHiiipK2ErC6YY
-         Tg6ay2HRt4Q5HwAWj6DwjsQU65zNaMJvWl6X9xZKnbDhutobjJXjF+4VA4g65rtmgyXx
-         ZLCFfsv4FL0WlDXLJQl83rHR4WEpOg5cdW4zN681wyMSVr+T1HcMALIJo1q4Dh1TGKOk
-         fNmUOL8W/gXNIJeM0ws1mCy9VTXAZg0If4pIM4yhyjedvmnAwRJ3g3X7B3qA71bris1C
-         BgaIgS6cZ+/BKHYAk9YsEKZFizkXGEXAoswgoL3Gi4bmp/7CueB45lqxxFmwS1x3lA2q
-         g/xQ==
-X-Gm-Message-State: ACgBeo0KT1zigDsLhfWgDhcwrNOXiuteftNyq7N9fxVkZdwCWwrhxD4z
-        gzyUYM0ALpSaU66IMXlXjHk=
-X-Google-Smtp-Source: AA6agR5LtjhsBKdIGS2E4yqtSOcgjZBm18RZyQ33RxP3LIFIarQTFLk3fb8LYNZ0Q2/cZHcCzxsrMg==
-X-Received: by 2002:a05:6a00:10d3:b0:4fe:5d:75c8 with SMTP id d19-20020a056a0010d300b004fe005d75c8mr8525693pfu.6.1660396526799;
-        Sat, 13 Aug 2022 06:15:26 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id a25-20020aa794b9000000b00532649b67bfsm3331095pfl.84.2022.08.13.06.15.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Aug 2022 06:15:25 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 13 Aug 2022 06:15:23 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Yury Norov <yury.norov@gmail.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Arnd Bergmann <arnd@arndb.de>, David Gow <davidgow@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Isabella Basso <isabbasso@riseup.net>,
-        Kees Cook <keescook@chromium.org>,
-        Keith Busch <kbusch@kernel.org>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Marco Elver <elver@google.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@redhat.com>
-Subject: Re: [PATCH 5/5] lib/nodemask: inline next_node_in() and node_random()
-Message-ID: <20220813131523.GA2787704@roeck-us.net>
-References: <20220711044711.466822-1-yury.norov@gmail.com>
- <20220711044711.466822-6-yury.norov@gmail.com>
- <20220729034638.GA2276915@roeck-us.net>
+        Sat, 13 Aug 2022 09:17:23 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086222CE22
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 06:17:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660396641; x=1691932641;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ZzyeZeMQf7LcT0PLpclDV8yTfhZqkaLAgZc3+RUTD6w=;
+  b=kgzYWhJydOsoOhUJWS+pKfo+5Wi0MsBWzGtWIBC9zUcSFZmXUAsaiSPn
+   FsDh/5IraGb+5X5xe78gVRrOpFKsqbc2OZmDQW565txerdvn607wWxaLz
+   KbWPHjIVf4p1irU5cjoFDMUFTEvuu4lklxUehqn/wA2BaPbgj4gg2HXaG
+   2x9fxyK/lDpoFxarl1BAQJDNCDMl0ZdAMuj9v6hjqULUwCAGTUfhSxWMM
+   rTjJf2YS7yzWost/R3WRw8fhhRYbctkLFyyVw2kz0z9fNJxrua4A7TGu6
+   iSpMKuRCVhyuAnsa9k7eOLw8fEJ334Z8nsrBTBFCXJ63X8+Z2rnl/T0Uy
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="292547655"
+X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
+   d="scan'208";a="292547655"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 06:17:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
+   d="scan'208";a="609511854"
+Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 13 Aug 2022 06:17:19 -0700
+Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oMr0w-0001hD-19;
+        Sat, 13 Aug 2022 13:17:18 +0000
+Date:   Sat, 13 Aug 2022 21:16:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Keith Busch <kbusch@kernel.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [kbusch:io_uring/dma-register-v3 8/8]
+ drivers/nvme/host/pci.c:1920:34: warning: left shift count >= width of type
+Message-ID: <202208132117.LrIKYDQx-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220729034638.GA2276915@roeck-us.net>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 28, 2022 at 08:46:40PM -0700, Guenter Roeck wrote:
-> On Sun, Jul 10, 2022 at 09:47:11PM -0700, Yury Norov wrote:
-> > The functions are pretty thin wrappers around find_bit engine, and
-> > keeping them in c-file prevents compiler from small_const_nbits()
-> > optimization, which must take place for all systems with MAX_NUMNODES
-> > less than BITS_PER_LONG (default is 16 for me).
-> > 
-> > Moving them in header file doesn't blow up the kernel size:
-> > add/remove: 1/2 grow/shrink: 9/5 up/down: 968/-88 (880)
-> > 
-> > Signed-off-by: Yury Norov <yury.norov@gmail.com>
-> 
-> This patch results in
-> 
-> Building powerpc:allmodconfig ... failed
-> --------------
-> Error log:
-> In file included from include/linux/nodemask.h:97,
->                  from include/linux/sched.h:22,
->                  from include/linux/sched/mm.h:7,
->                  from arch/powerpc/lib/feature-fixups.c:16:
-> include/linux/random.h: In function 'add_latent_entropy':
-> include/linux/random.h:25:46: error: 'latent_entropy' undeclared
-> 
-> and many more similar errors when trying to compile ppc:allmodconfig.
-> 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git io_uring/dma-register-v3
+head:   e1c6d38d05e532b3aaf12a5ab8707929bcdc1180
+commit: e1c6d38d05e532b3aaf12a5ab8707929bcdc1180 [8/8] nvme-pci: implement dma_map support
+config: ia64-buildonly-randconfig-r004-20220804 (https://download.01.org/0day-ci/archive/20220813/202208132117.LrIKYDQx-lkp@intel.com/config)
+compiler: ia64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git/commit/?id=e1c6d38d05e532b3aaf12a5ab8707929bcdc1180
+        git remote add kbusch https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git
+        git fetch --no-tags kbusch io_uring/dma-register-v3
+        git checkout e1c6d38d05e532b3aaf12a5ab8707929bcdc1180
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=ia64 SHELL=/bin/bash drivers/nvme/host/
 
-As a follow-up on this: The problem is still seen and now made it
-into the mainline kernel.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-Guenter
+All warnings (new ones prefixed by >>):
+
+   In file included from arch/ia64/include/asm/pgtable.h:153,
+                    from include/linux/pgtable.h:6,
+                    from arch/ia64/include/asm/uaccess.h:40,
+                    from include/linux/uaccess.h:11,
+                    from include/linux/sched/task.h:11,
+                    from include/linux/sched/signal.h:9,
+                    from include/linux/rcuwait.h:6,
+                    from include/linux/percpu-rwsem.h:7,
+                    from include/linux/fs.h:33,
+                    from include/linux/highmem.h:5,
+                    from include/linux/bvec.h:10,
+                    from include/linux/blk_types.h:10,
+                    from include/linux/blkdev.h:9,
+                    from drivers/nvme/host/pci.c:10:
+   arch/ia64/include/asm/mmu_context.h: In function 'reload_context':
+   arch/ia64/include/asm/mmu_context.h:127:48: warning: variable 'old_rr4' set but not used [-Wunused-but-set-variable]
+     127 |         unsigned long rr0, rr1, rr2, rr3, rr4, old_rr4;
+         |                                                ^~~~~~~
+   drivers/nvme/host/pci.c: In function 'nvme_pci_dma_map':
+>> drivers/nvme/host/pci.c:1920:34: warning: left shift count >= width of type [-Wshift-count-overflow]
+    1920 |         const int nvme_pages = 1 << (PAGE_SIZE - NVME_CTRL_PAGE_SIZE);
+         |                                  ^~
+   drivers/nvme/host/pci.c: In function 'nvme_pci_dma_unmap':
+   drivers/nvme/host/pci.c:2000:34: warning: left shift count >= width of type [-Wshift-count-overflow]
+    2000 |         const int nvme_pages = 1 << (PAGE_SIZE - NVME_CTRL_PAGE_SIZE);
+         |                                  ^~
+
+
+vim +1920 drivers/nvme/host/pci.c
+
+  1912	
+  1913	#ifdef CONFIG_HAS_DMA
+  1914	/*
+  1915	 * Important: bvec must be describing a virtually contiguous buffer.
+  1916	 */
+  1917	static void *nvme_pci_dma_map(struct request_queue *q,
+  1918				       struct bio_vec *bvec, int nr_vecs)
+  1919	{
+> 1920		const int nvme_pages = 1 << (PAGE_SIZE - NVME_CTRL_PAGE_SIZE);
+  1921		struct nvme_ns *ns = q->queuedata;
+  1922		struct nvme_dev *dev = to_nvme_dev(ns->ctrl);
+  1923		struct nvme_dma_mapping *mapping;
+  1924		int i, j, k, size, ppv, ret = -ENOMEM;
+  1925	
+  1926		if (!nr_vecs)
+  1927			return ERR_PTR(-EINVAL);
+  1928	
+  1929		mapping = kzalloc(sizeof(*mapping), GFP_KERNEL);
+  1930		if (!mapping)
+  1931			return ERR_PTR(-ENOMEM);
+  1932	
+  1933		mapping->nr_pages = nr_vecs * nvme_pages;
+  1934		size = sizeof(*mapping->prps) * mapping->nr_pages;
+  1935		mapping->prps = dma_alloc_coherent(dev->dev, size,
+  1936					&mapping->prp_dma_addr, GFP_KERNEL);
+  1937		if (!mapping->prps)
+  1938			goto free_mapping;
+  1939	
+  1940		mapping->needs_sync = false;
+  1941		for (i = 0, k = 0; i < nr_vecs; i++) {
+  1942			struct bio_vec *bv = bvec + i;
+  1943			dma_addr_t dma_addr;
+  1944	
+  1945			ppv = nvme_pages;
+  1946			if (i == 0) {
+  1947				mapping->offset = bv->bv_offset;
+  1948				ppv -= mapping->offset >> NVME_CTRL_PAGE_SHIFT;
+  1949			} else if (bv->bv_offset) {
+  1950				ret = -EINVAL;
+  1951				goto err;
+  1952			}
+  1953	
+  1954			if (bv->bv_offset + bv->bv_len != PAGE_SIZE &&
+  1955			    i < nr_vecs - 1) {
+  1956				ret = -EINVAL;
+  1957				goto err;
+  1958			}
+  1959	
+  1960			dma_addr = dma_map_bvec(dev->dev, bv, 0, 0);
+  1961			if (dma_mapping_error(dev->dev, dma_addr)) {
+  1962				ret = -EIO;
+  1963				goto err;
+  1964			}
+  1965	
+  1966			if (i == 0)
+  1967				dma_addr -= mapping->offset;
+  1968	
+  1969			if (dma_need_sync(dev->dev, dma_addr))
+  1970				mapping->needs_sync = true;
+  1971	
+  1972			for (j = 0; j < ppv; j++)
+  1973				mapping->prps[k++] = cpu_to_le64(dma_addr +
+  1974							j * NVME_CTRL_PAGE_SIZE);
+  1975		}
+  1976	
+  1977		get_device(dev->dev);
+  1978		return mapping;
+  1979	
+  1980	err:
+  1981		for (i = 0; i < k; i += ppv) {
+  1982			__u64 dma_addr = le64_to_cpu(mapping->prps[i]);
+  1983			ppv = nvme_pages;
+  1984	
+  1985			if (i == 0)
+  1986				ppv -= mapping->offset >> NVME_CTRL_PAGE_SHIFT;
+  1987			dma_unmap_page(dev->dev, dma_addr,
+  1988				       PAGE_SIZE - offset_in_page(dma_addr), 0);
+  1989		}
+  1990	
+  1991		dma_free_coherent(dev->dev, size, (void *)mapping->prps,
+  1992				  mapping->prp_dma_addr);
+  1993	free_mapping:
+  1994		kfree(mapping);
+  1995		return ERR_PTR(ret);
+  1996	}
+  1997	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

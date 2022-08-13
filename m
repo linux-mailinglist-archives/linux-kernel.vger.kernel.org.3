@@ -2,129 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E51715917C7
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 02:26:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC9495917C9
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 02:28:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232373AbiHMAYu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 20:24:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48022 "EHLO
+        id S234919AbiHMA2H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 20:28:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbiHMAYs (ORCPT
+        with ESMTP id S229617AbiHMA2G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 20:24:48 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4A7CDA3D60
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 17:24:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660350284;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=D+F48GZrNmKWUhdl+zaXl1w6N+t4Zw3HE18peH9oyp0=;
-        b=Jt+QW/KIZbAwkWpxZNJV7j2dAgTMiJhvmlZvg7YxsiXyIQTiixK4qn//dO1nAWfzDGj9Ns
-        qFnxR9v2ryNb6jqNsIEbYSIBSh2bK8yFepqLw6PeBOcD1YPu+HfQNzD+HuW5GotBvC5XNt
-        WKtkQBoWSAKZBgak+ulfjrG4X+F1Hbs=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-609-BCAHucJXNv2sttbzvrBPPQ-1; Fri, 12 Aug 2022 20:24:40 -0400
-X-MC-Unique: BCAHucJXNv2sttbzvrBPPQ-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1564B3C0219A;
-        Sat, 13 Aug 2022 00:24:39 +0000 (UTC)
-Received: from localhost (ovpn-12-29.pek2.redhat.com [10.72.12.29])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id F3593403178;
-        Sat, 13 Aug 2022 00:24:37 +0000 (UTC)
-Date:   Sat, 13 Aug 2022 08:24:35 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Eric DeVolder <eric.devolder@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
-        sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
-        boris.ostrovsky@oracle.com
-Subject: Re: [PATCH v10 1/8] crash: introduce arch/*/asm/crash.h
-Message-ID: <YvbvQ5+cmExVNaGE@MiWiFi-R3L-srv>
-References: <20220721181747.1640-1-eric.devolder@oracle.com>
- <20220721181747.1640-2-eric.devolder@oracle.com>
- <YvCCOY+mRshu1tHi@MiWiFi-R3L-srv>
- <52d40562-ee6f-bb89-6d21-2d6baf67053d@oracle.com>
- <YvYhYdV6F2zH4o3X@MiWiFi-R3L-srv>
- <2b44bbd1-6e6f-40d1-73ac-19348d1ef48a@oracle.com>
+        Fri, 12 Aug 2022 20:28:06 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C7B69F773;
+        Fri, 12 Aug 2022 17:28:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660350485; x=1691886485;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=frBjoWGV9rUb+TpkBoZ5wYyBHHGTi0Jle2u0kUeBPvM=;
+  b=oJU1k7BSj6niYjg243IXxltcPiSTgu+8jJXpgkQ5Kx2AZyKXdXyUvyPz
+   it3rklqR4upx7BrgUaFlBrmMTlXbcgGt9ukSzzhTIpSJSMud89Q71QAL+
+   GR3yA8T7NfbxUe3KNUS3KrOK6/+YBo3eSK9C3HpXwzqvBzo8rvt192Zm5
+   vfAqJBjPfxYxWhyEBLaYHJFibqqKWk2p5DFMdP40G7xTXENtNsYs9Av10
+   /KPHrZmJWEZ23qhtTapPe80xYIqHEOgj0X1yQrDiON2+oGNHhvtjrxqSR
+   2eKgYiPR9W/Z503yXbzMVIUrpj01bpbzDqpP1k1gsHbcJtXAi6BO/NS3z
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="292508101"
+X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
+   d="scan'208";a="292508101"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 17:28:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
+   d="scan'208";a="639075429"
+Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 12 Aug 2022 17:28:01 -0700
+Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oMf0S-00016Z-1T;
+        Sat, 13 Aug 2022 00:28:00 +0000
+Date:   Sat, 13 Aug 2022 08:27:00 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiucheng Xu <jiucheng.xu@amlogic.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, devicetree@vger.kernel.org
+Cc:     kbuild-all@lists.01.org, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Will Deacon <will@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Chris Healy <cphealy@gmail.com>,
+        Jiucheng Xu <jiucheng.xu@amlogic.com>
+Subject: Re: [PATCH v4 2/4] docs/perf: Add documentation for the Amlogic G12
+ DDR PMU
+Message-ID: <202208130847.EyX7NzAD-lkp@intel.com>
+References: <20220805071426.2598818-2-jiucheng.xu@amlogic.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2b44bbd1-6e6f-40d1-73ac-19348d1ef48a@oracle.com>
-X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220805071426.2598818-2-jiucheng.xu@amlogic.com>
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/12/22 at 04:23pm, Eric DeVolder wrote:
-> 
-> 
-> On 8/12/22 04:46, Baoquan He wrote:
-> > On 08/08/22 at 10:18am, Eric DeVolder wrote:
-> > > 
-> > > 
-> > > On 8/7/22 22:25, Baoquan He wrote:
-> > > > Hi Eric,
-> > > > 
-> > > > On 07/21/22 at 02:17pm, Eric DeVolder wrote:
-> > > > > The use of __weak is being eliminated within kexec sources.
-> > > > > The technique uses macros mapped onto inline functions in
-> > > > > order to replace __weak.
-> > > > > 
-> > > > > This patchset was using __weak and so in order to replace
-> > > > > __weak, this patch introduces arch/*/asm/crash.h, patterned
-> > > > > after how kexec is moving away from __weak and to the macro
-> > > > > definitions.
-> > > > 
-> > > > Are you going to replace __weak in kexec of arll ARCHes? I don't see
-> > > > your point why all these empty header files are introduced. Wondering
-> > > > what's impacted if not adding these empty files?
-> > > 
-> > > Hi Baoquan,
-> > > In this patchset, to file include/linux/crash_core.h I added the line #include <asm/crash.h>.
-> > > I patterned this after how include/linux/kexec.h does #include <asm/kexec.h>.
-> > 
-> > I am sorry, Eric, it looks not so good. I understand you want to pattern
-> > asm/kexe.h, but we need consider reality. Introducing a dozen of empty
-> > header file and not being able to tell when they will be filled doesn't
-> > make sense.
-> > 
-> > Includig <asm/crash.h> where needed is much simpler. I doubt if your way
-> > can pass other reviewers' line. Can you reconsider?
-> 
-> If I include <asm/crash.h> where needed, which is kernel/crash_core.c, then
-> the other archs will fail build if that file doesn't exist. A couple of
-> options, which do you think is better to pursue?
-> 
-> - use asm/kexec.h instead of asm/crash.h; it appears all the architectures
-> already have this file in place
-> 
-> - go ahead and put the appropriate crash macros/inline functions into each
-> arch asm/crash.h so that the files are not just empty, and leave the use of
-> asm/crash.h
+Hi Jiucheng,
 
-I think we can do this in two steps.
+I love your patch! Perhaps something to improve:
 
-Firstly, make do with asm/kexec.h since all other ARCHes put crash related stuff
-into asm/kexec.h, except of x86. 
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on arm/for-next arm64/for-next/core clk/clk-next kvmarm/next rockchip/for-next shawnguo/for-next soc/for-next linus/master v5.19 next-20220812]
+[cannot apply to xilinx-xlnx/master keystone/next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Secondly, clean up to put those crash marco/inline functions into
-asm/crash.h.
+url:    https://github.com/intel-lab-lkp/linux/commits/Jiucheng-Xu/perf-amlogic-Add-support-for-Amlogic-meson-G12-SoC-DDR-PMU-driver/20220805-151704
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+reproduce: make htmldocs
 
-The 2nd step can be done in a independent patchset. What do you think?
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
+All warnings (new ones prefixed by >>):
+
+>> Documentation/admin-guide/perf/meson-ddr-pmu.rst: WARNING: document isn't included in any toctree
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

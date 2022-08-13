@@ -2,294 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A8E6591BF3
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 18:13:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35D34591BF5
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 18:14:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239865AbiHMQNd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 12:13:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56610 "EHLO
+        id S240022AbiHMQOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 12:14:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240013AbiHMQN2 (ORCPT
+        with ESMTP id S239677AbiHMQON (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 12:13:28 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C8E7F5BA
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 09:13:26 -0700 (PDT)
+        Sat, 13 Aug 2022 12:14:13 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62FECF5B1
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 09:14:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660407206; x=1691943206;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1yrstnfDk5KgWdIT6bKwxKR4lbPL+BI8TOdYfG49N3Y=;
-  b=WldNzZxCaoC8cm4jaiw0VbOEUi7p5HC6iKQ0Z8012mZtvNqfRoMtvCgL
-   CHCFn+yQk1WwTvFaPcyoHX9nJqGmm7syvAFDX5l9OSJqnVNOa+lUjtDJn
-   Yy41JWbqehHCfsPZ9bXeiHorUdRPGqPb2iZPLsb/pogV4HkE4+IRfGTKK
-   o2+xzDGJ423GhIXNzM3EiwZdDJfxXSaP4U7DtkzhOQrkOCv25cxbHWYuI
-   Oy1aL1yXxP3M9MEi7oxa+bYegFx8lLuvtsGxCA2TYTTZPqzqtQS3LpNuJ
-   sZwBzKzr8Xu9+zAFmaUlWwQ4eTNYdyfLCrmJPp8VqHwxvJuBNruNYRob5
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="278717824"
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1660407252; x=1691943252;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=DpPLFh7zeZbmQYpt+A8J6d1FwvqRSRRNuiETtXvd/nk=;
+  b=oCZETtCWw6ME/yDMokUWxw51CpqSZZKCVgVxivx4xRpebtTWQr2xCgDN
+   Icz34v3x9lDgRp09BmftMiRDvhVVoXYQrpLxNHhbEfYT0gvnWa9VZ2xLR
+   AqWhlBLGRc1JGZfkY1S8D798Q9XUwXTBt5G5wS/91WottJt2HMvT5lR0Z
+   81K7T6kZJNWWMVZDeXnqlXWan+thbNo1s7Ae5BK1eyuzsWmals6CBAgzz
+   4MK0Tj5Wio+yuRhSORUpMxZ+R6NC6VyRHovdp5tLrHm9UmeRmrORpJUIL
+   KfDfEvoygqt/W2ak6nLCedshTNTcj4DCbYLE6qGGMPcd4Gj1bGE62W4H3
+   Q==;
 X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
-   d="scan'208";a="278717824"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 09:13:26 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
-   d="scan'208";a="602782977"
-Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 13 Aug 2022 09:13:24 -0700
-Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oMtlL-0001rD-1h;
-        Sat, 13 Aug 2022 16:13:23 +0000
-Date:   Sun, 14 Aug 2022 00:12:41 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Thadeu Lima de Souza Cascardo <cascardo@canonical.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, Thomas Gleixner <tglx@linutronix.de>
-Subject: [tip:timers/urgent 3/3] fs/exec.c:1307:26: sparse: sparse: incorrect
- type in argument 1 (different address spaces)
-Message-ID: <202208140040.MMi4z6Ek-lkp@intel.com>
+   d="scan'208";a="176120074"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Aug 2022 09:14:11 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Sat, 13 Aug 2022 09:14:11 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12 via Frontend Transport; Sat, 13 Aug 2022 09:14:10 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=JThnFgU/515PITOytcVpKHK346V0Fv0hjXPps9vFGzBOwdoxRjCrEIT+Ces+yMXG86RVc/c7BDUi/J6NWXJEgYAdKDD0GGwFUsCiJXVnQMBy9LGB/nRu6LHuGNYdlxdImCKJvXRN9Hlb3MFc+g7t1ymBh+ZXXomvy239peO3d6GBt0StWFgVzWspS+d8LLbcdwzI0jQD984oB0I2UHpOlspvj7alimocSHwBDFdr0J8KVIglh25B2P1wDDH0o30L7e/n8QXklrEDEf/5IZXdTwB/N8qA4CG03768PvTRkV1qrXXG5wplzrRUYkGOunonzMrBdQFW/DZkvc0UHpS4Wg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DpPLFh7zeZbmQYpt+A8J6d1FwvqRSRRNuiETtXvd/nk=;
+ b=P01hlGf3X2t7Ga0eV25kPndoaZB/d6TtdHgm1588ciiN1XPos3xYuw91XLX6krnD3pKfMMz3d77Hdu7lLjH1YPyWsNSr9jUWIaa51ZpFRqXCUl2bcgtIZAvwwc3t4pqJ5ZkT/LMntGsfskjKIyCTenl+kzb3vBvpvj5Gk9zP0L10h8vJGp83J5yk/fHlyeHw96++uO8quzz/vsmEHUp0Qn0O9nZZ6cBXy8Bhcugoj5FxuVkjQLzCu+HztvgZM/krgVDwsFUgIfeSrRWy5KAWd+jv8DqyfMvDQfa/IFNIn+KKvsBQbWjuEf3lt7YZz4DcLqSAWSC0MN5BT0CLtqmWwg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DpPLFh7zeZbmQYpt+A8J6d1FwvqRSRRNuiETtXvd/nk=;
+ b=uJTHlbJsy1mMxZyogQ1Jv1BC9Tg9TjdaiaHLccGaLkyHTkSUg/xyvtA3Sj3Vz7GMnUYUYo9wC0ewLD5cFUhFzVUoiOWVVb2q2tJc/mMfD0Z0Xjlg7ggD3huMHAmk8Law4O3i7tcoGIOP3ELg1VxV/yTVXb21FjPL/a6P3knrSXs=
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
+ by CH2PR11MB4246.namprd11.prod.outlook.com (2603:10b6:610:40::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.16; Sat, 13 Aug
+ 2022 16:14:00 +0000
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::ac89:75cd:26e0:51c3]) by CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::ac89:75cd:26e0:51c3%8]) with mapi id 15.20.5525.011; Sat, 13 Aug 2022
+ 16:13:59 +0000
+From:   <Conor.Dooley@microchip.com>
+To:     <tangmin@cdjrlc.com>, <anton@tuxera.com>
+CC:     <linux-ntfs-dev@lists.sourceforge.net>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] treewide: Unneeded semicolon
+Thread-Topic: [PATCH] treewide: Unneeded semicolon
+Thread-Index: AQHYry7nzB4UD5NYqUqbcdmjxpk/1a2tAQWA
+Date:   Sat, 13 Aug 2022 16:13:59 +0000
+Message-ID: <687da07e-ad0a-dd47-5f54-27f55e2d9b96@microchip.com>
+References: <20220813160723.5769-1-tangmin@cdjrlc.com>
+In-Reply-To: <20220813160723.5769-1-tangmin@cdjrlc.com>
+Accept-Language: en-IE, en-US
+Content-Language: en-IE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 3d7eb23b-8116-4b92-f642-08da7d46d4d2
+x-ms-traffictypediagnostic: CH2PR11MB4246:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: oPdiwbU5Rl4Xki5aeDx57sDQKx47bn5O2DlGTpTKAEtTuSh0DZPZwZwEY9Gakaw3WkpjqZB6X3mmYfCYe1iTULKjhnMMO1o4CLVt3OUtuU1bXbfWj5f5rm84hrJSKIvibHId0mn8nuD6LjbqYugCwOto44N0EVzrNEJJE9RR5N3ZHbenCkzfgoi7n1QbsMg+lxkdHY0DIfiZhrscTmr8Lcl9+T2n5omF8RQPmGiK3DVPthI7sBCDgF46J88SrnPlPgVfz9QJEKLEwSCSqLqniSGuS+VagKrPEwjcypvcvHnI2xZdQo0vwXFOR3frU39ieRKYJTtdrFC1eq4N+GlJ6Cb/iQSL1xRubpRHMGsVRIfYReFVFw+PmGwj38CHRY/8pVr9gyIzquBRMIwfu1GDTw9wn4aX/GjlDjXf1Te22xALNcpCeZw8kzxYOL940FiKcafo8xhWthJuqD5SoFpZYyIRWkTG9EgDjyt52HUoQCgvnARcajp9oGvBfjKmaENc/WVJBUcGslHlyU3E/KPma5L92OhDQW8Gi9NmJouT+6cbw+VLye/eTjDLwWFMCKWsRpB4rxzDOGdh6AEv63WZlEkwHHNYqivkVUxLmDSwEajknEvtk/clt4Ip8hEnBRliFetOYDC6NAMXns8J2+FuA+TEBshqg27/vD5IwK4dgHmEQ9MK1MuOin+9E4WgXSQR4+ulFj2XEpjNuVhVlWm++v/CZgOndS7FOfQ4TR5c2jWacYGCV72xbcv7grSKrhqRPACVlszKhMrSO/EAPsE0gw9LnDcgLz8AGTs9eb6DYDOLZPHA73Jj6A9U7cx/IQklb3IHIuSiWDUH8MjLtEZkI4PBC1FsLcKLkM3eZKEFD+U=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(136003)(376002)(366004)(39850400004)(396003)(346002)(8936002)(5660300002)(316002)(110136005)(4744005)(31686004)(54906003)(36756003)(2906002)(2616005)(6486002)(478600001)(26005)(53546011)(6512007)(6506007)(71200400001)(41300700001)(4326008)(86362001)(38100700002)(83380400001)(31696002)(66556008)(64756008)(66946007)(91956017)(76116006)(66476007)(66446008)(186003)(122000001)(38070700005)(8676002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?dXZJNGJ3d2kzVkg0VHhRWkErYUlDUDd1dkVuQ0tFTWpENFMwaExXK2ltMm1a?=
+ =?utf-8?B?NTN4WVVTMmg2Rm9lanZXWEc1SEJhZXVOQlpNU3doSklYR3JvUitZVlJDbG5B?=
+ =?utf-8?B?dkIyd0FzVHNOU2s0QmIrVGNwZU1GeFZ1RUZvMm5rcWFMYXAzMTVKNnBGNTVX?=
+ =?utf-8?B?K3dVQUFiNUxDbXAyNUpWaUJiSXNXdVZvY3hQMTNteGNSbEFsRGF4eVZjUGlI?=
+ =?utf-8?B?THQ2VHhtQUdoRTVMV3R2Q2lTNGhYNzNaZVB3S1Zoa0hKbjNvaWh0NEVIUWJN?=
+ =?utf-8?B?OVlYSzN5OTlFWFVHSllXeUNkSTlDWVlXSm1KRHdnV0JzMmV5eFZRaEFrNUht?=
+ =?utf-8?B?ZytoR3RpRmo2YlJ4TXBmT0xEL2x3cVNBSDk0WFNKNXN0UkRodkVmdjFzbjIy?=
+ =?utf-8?B?NU1UWUsrdnBRMVZjSzQ2RWc0NmpWWCtkUHFHSEhBVjJ1RkNJcjJWczhoelN6?=
+ =?utf-8?B?V0FtRmt0QVBSMENjOVpJbFNKU2lZZnZyY2VqN1ZQckIvZytWODdmckQ0Wi80?=
+ =?utf-8?B?WnlOT2JTWS9qUDFSWnVreExCQUp6dFZaUGhmd2ZxY3J2eFMwWkhuZGdRTE40?=
+ =?utf-8?B?SEYzeXhuV1B1NHZpUzUzQlFVbWR3dzBDSlhZcDhTVE85OElqRkZWRjBBdkwx?=
+ =?utf-8?B?TXhoQTFWN3dTdi9SME9vTHNOdjJYSm5icy9xL0hlbFVML09HbXRqMStIN1U5?=
+ =?utf-8?B?bjVPdUxocXcwNVNnUUJQTjBPSXZvSzRPMjNBZ2VxdkRDTDFzMnFzMmRvVS9C?=
+ =?utf-8?B?V0dybzY1eWxkUkp5MGhoajU5NDFGVXY5Y01CdTk1YkNkZGloVnViWmZqKzBB?=
+ =?utf-8?B?MkNycVVZVlB0QStqTzZlUlRObWh2dGQyQXB5VWFwOCttVmF1Z01lZmVNOENI?=
+ =?utf-8?B?cWVCYVdYVEZQNnRVSXNUY1NvQm1ldEF1b0diZ0s2SUg5YitUYmFxV21WOFRy?=
+ =?utf-8?B?bk9xTkFjVk1sajRoSEhEZFpYclp4SmNQRGxqTCswQmEyb2pCUVNacHUvK1F6?=
+ =?utf-8?B?ZUxHa05tc05TcGFxODg3aitjdWxjMkErdTJVOTgvdERJeTNpYXdsaWFCd2Zk?=
+ =?utf-8?B?Wk53dCs2U2pYU0xnMVdRcU5YV0RjTk52K1RHMW0zM05STnJSOFZXbEZYbCsw?=
+ =?utf-8?B?am9EcEhVeUF1U0tEVlEzaXY1Y1M4bS9STmhaZDZxOHFHSVp6Y2c2RW0raExp?=
+ =?utf-8?B?bjdJSEI0QUlkaTQ2SDFxT1U5UGZzYWVTMUxjd0J0S0IrVWlYSjh5M0lXOTc1?=
+ =?utf-8?B?eEgrdk5UcStRSy8wTGtDLzFibXVBMzA4djMyUTRUVHVPNWM2bzI1QVJBYnlQ?=
+ =?utf-8?B?S01FYzMxUThTTDZQbHovWGc0bHVQbFNmb3NROXk4dWoyUkNIUVBYUHhtYU9O?=
+ =?utf-8?B?VUNZbWJwa1hLMHlCYTNCb1NXVjA5cndUdEg2SzJtM0NUTlNCTmEvK2Qra1o1?=
+ =?utf-8?B?TmQrL0kvbzgrYWRvQm8xSnlYRG5jMzBaZ1F3MDJFQlZuaSttdUlmUmhrMVB6?=
+ =?utf-8?B?OW53V1VxWWVhRlRUbktBbzdGTXhWSTVDZzdLSitkL1NBSlhVYjZjWG8zZVV2?=
+ =?utf-8?B?WEJocnpsaU5VTVFYeVB6cHk3ZnpyTkNTdno4UGk5TXZCanl4RUJnMTM1LzF2?=
+ =?utf-8?B?bmxnNWd1OVlzb2U0d3pBSTlDOHZGK1J4ZVhtbnVEV0JzbTBBYmNtdWlpZURC?=
+ =?utf-8?B?K3I4M1RwSW9LQVNieE16Y0lOMW9JcWtvUVIzME9FdTBMVmFoRWJHSjlRbW11?=
+ =?utf-8?B?UzRTRlJTRkExN3FyVlFVbjVSbi92R2J0SUtkNjZNelZnMFA5b1dVcU9JUHp5?=
+ =?utf-8?B?WFQxdWRnSGs3Q0V5VytlbEZsREhyLzlud21tL3dTQlFiazhsSVl2RldkeUZM?=
+ =?utf-8?B?R2x3eEg1eFpBWkVuNTd3bzNQN2NZSVJzeEtxeTBYc2pBMTlKSURvN2hQSWdF?=
+ =?utf-8?B?aGVBaVJnd3JHL3BZL1dVbk1wd1FRT01CaXhjSjdZSE1SbDhOKytjZzh2ZEk5?=
+ =?utf-8?B?MDZhVG8vd2tuMDdIaEhvMTN5NXBJRi8ydTd6M05tckpoUU5ZNHBpWTRCdE9T?=
+ =?utf-8?B?aWdFQnVhQnNZeW1QUG8xbnNGNDRhWGkzVkpDSC9VQjVNRGNmUHEwZVc0NTRs?=
+ =?utf-8?Q?ZoKGvqsTJeV2gLahlYXEhZlhe?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <C0EA8AE074E25941AFA1115DF81FB8CD@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3d7eb23b-8116-4b92-f642-08da7d46d4d2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Aug 2022 16:13:59.7655
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: FZj0quMunmo4f4yJCo9dEgv0KYzxGGVAe2mSaZVzPVDrRXdYXU4pu6BKDgC1vt4ZMBz10+DUju/iSiHB6NXWfDQwBS9GhN2yjpxyWiBNR24=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR11MB4246
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/urgent
-head:   e362359ace6f87c201531872486ff295df306d13
-commit: e362359ace6f87c201531872486ff295df306d13 [3/3] posix-cpu-timers: Cleanup CPU timers before freeing them during exec
-config: arc-randconfig-s033-20220811 (https://download.01.org/0day-ci/archive/20220814/202208140040.MMi4z6Ek-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=e362359ace6f87c201531872486ff295df306d13
-        git remote add tip https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
-        git fetch --no-tags tip timers/urgent
-        git checkout e362359ace6f87c201531872486ff295df306d13
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arc SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-sparse warnings: (new ones prefixed by >>)
-   fs/exec.c:422:31: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected char const [noderef] __user * @@     got void * @@
-   fs/exec.c:422:31: sparse:     expected char const [noderef] __user *
-   fs/exec.c:422:31: sparse:     got void *
-   fs/exec.c:1051:48: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct sighand_struct *oldsighand @@     got struct sighand_struct [noderef] __rcu *sighand @@
-   fs/exec.c:1051:48: sparse:     expected struct sighand_struct *oldsighand
-   fs/exec.c:1051:48: sparse:     got struct sighand_struct [noderef] __rcu *sighand
-   fs/exec.c:1158:56: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected struct task_struct *parent @@     got struct task_struct [noderef] __rcu *parent @@
-   fs/exec.c:1158:56: sparse:     expected struct task_struct *parent
-   fs/exec.c:1158:56: sparse:     got struct task_struct [noderef] __rcu *parent
-   fs/exec.c:1193:47: sparse: sparse: incorrect type in initializer (different address spaces) @@     expected struct sighand_struct *oldsighand @@     got struct sighand_struct [noderef] __rcu *sighand @@
-   fs/exec.c:1193:47: sparse:     expected struct sighand_struct *oldsighand
-   fs/exec.c:1193:47: sparse:     got struct sighand_struct [noderef] __rcu *sighand
->> fs/exec.c:1307:26: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   fs/exec.c:1307:26: sparse:     expected struct spinlock [usertype] *lock
-   fs/exec.c:1307:26: sparse:     got struct spinlock [noderef] __rcu *
-   fs/exec.c:1309:28: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock @@     got struct spinlock [noderef] __rcu * @@
-   fs/exec.c:1309:28: sparse:     expected struct spinlock [usertype] *lock
-   fs/exec.c:1309:28: sparse:     got struct spinlock [noderef] __rcu *
-   fs/exec.c:1766:70: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct task_struct *tsk @@     got struct task_struct [noderef] __rcu *parent @@
-   fs/exec.c:1766:70: sparse:     expected struct task_struct *tsk
-   fs/exec.c:1766:70: sparse:     got struct task_struct [noderef] __rcu *parent
-   fs/exec.c: note: in included file (through arch/arc/include/asm/irqflags.h, include/linux/irqflags.h, arch/arc/include/asm/smp.h, ...):
-   arch/arc/include/asm/irqflags-arcv2.h:80:31: sparse: sparse: undefined identifier '__builtin_arc_lr'
-   arch/arc/include/asm/irqflags-arcv2.h:83:17: sparse: sparse: undefined identifier '__builtin_arc_sr'
-   fs/exec.c: note: in included file (through arch/arc/include/asm/mmu.h, include/linux/mm_types.h, include/linux/mmzone.h, ...):
-   arch/arc/include/asm/mmu-arcv2.h:89:9: sparse: sparse: undefined identifier '__builtin_arc_sr'
-   arch/arc/include/asm/mmu-arcv2.h:82:9: sparse: sparse: undefined identifier '__builtin_arc_sr'
-
-vim +1307 fs/exec.c
-
-  1243	
-  1244	/*
-  1245	 * Calling this is the point of no return. None of the failures will be
-  1246	 * seen by userspace since either the process is already taking a fatal
-  1247	 * signal (via de_thread() or coredump), or will have SEGV raised
-  1248	 * (after exec_mmap()) by search_binary_handler (see below).
-  1249	 */
-  1250	int begin_new_exec(struct linux_binprm * bprm)
-  1251	{
-  1252		struct task_struct *me = current;
-  1253		int retval;
-  1254	
-  1255		/* Once we are committed compute the creds */
-  1256		retval = bprm_creds_from_file(bprm);
-  1257		if (retval)
-  1258			return retval;
-  1259	
-  1260		/*
-  1261		 * Ensure all future errors are fatal.
-  1262		 */
-  1263		bprm->point_of_no_return = true;
-  1264	
-  1265		/*
-  1266		 * Make this the only thread in the thread group.
-  1267		 */
-  1268		retval = de_thread(me);
-  1269		if (retval)
-  1270			goto out;
-  1271	
-  1272		/*
-  1273		 * Cancel any io_uring activity across execve
-  1274		 */
-  1275		io_uring_task_cancel();
-  1276	
-  1277		/* Ensure the files table is not shared. */
-  1278		retval = unshare_files();
-  1279		if (retval)
-  1280			goto out;
-  1281	
-  1282		/*
-  1283		 * Must be called _before_ exec_mmap() as bprm->mm is
-  1284		 * not visible until then. This also enables the update
-  1285		 * to be lockless.
-  1286		 */
-  1287		retval = set_mm_exe_file(bprm->mm, bprm->file);
-  1288		if (retval)
-  1289			goto out;
-  1290	
-  1291		/* If the binary is not readable then enforce mm->dumpable=0 */
-  1292		would_dump(bprm, bprm->file);
-  1293		if (bprm->have_execfd)
-  1294			would_dump(bprm, bprm->executable);
-  1295	
-  1296		/*
-  1297		 * Release all of the old mmap stuff
-  1298		 */
-  1299		acct_arg_size(bprm, 0);
-  1300		retval = exec_mmap(bprm->mm);
-  1301		if (retval)
-  1302			goto out;
-  1303	
-  1304		bprm->mm = NULL;
-  1305	
-  1306	#ifdef CONFIG_POSIX_TIMERS
-> 1307		spin_lock_irq(&me->sighand->siglock);
-  1308		posix_cpu_timers_exit(me);
-  1309		spin_unlock_irq(&me->sighand->siglock);
-  1310		exit_itimers(me);
-  1311		flush_itimer_signals();
-  1312	#endif
-  1313	
-  1314		/*
-  1315		 * Make the signal table private.
-  1316		 */
-  1317		retval = unshare_sighand(me);
-  1318		if (retval)
-  1319			goto out_unlock;
-  1320	
-  1321		me->flags &= ~(PF_RANDOMIZE | PF_FORKNOEXEC |
-  1322						PF_NOFREEZE | PF_NO_SETAFFINITY);
-  1323		flush_thread();
-  1324		me->personality &= ~bprm->per_clear;
-  1325	
-  1326		clear_syscall_work_syscall_user_dispatch(me);
-  1327	
-  1328		/*
-  1329		 * We have to apply CLOEXEC before we change whether the process is
-  1330		 * dumpable (in setup_new_exec) to avoid a race with a process in userspace
-  1331		 * trying to access the should-be-closed file descriptors of a process
-  1332		 * undergoing exec(2).
-  1333		 */
-  1334		do_close_on_exec(me->files);
-  1335	
-  1336		if (bprm->secureexec) {
-  1337			/* Make sure parent cannot signal privileged process. */
-  1338			me->pdeath_signal = 0;
-  1339	
-  1340			/*
-  1341			 * For secureexec, reset the stack limit to sane default to
-  1342			 * avoid bad behavior from the prior rlimits. This has to
-  1343			 * happen before arch_pick_mmap_layout(), which examines
-  1344			 * RLIMIT_STACK, but after the point of no return to avoid
-  1345			 * needing to clean up the change on failure.
-  1346			 */
-  1347			if (bprm->rlim_stack.rlim_cur > _STK_LIM)
-  1348				bprm->rlim_stack.rlim_cur = _STK_LIM;
-  1349		}
-  1350	
-  1351		me->sas_ss_sp = me->sas_ss_size = 0;
-  1352	
-  1353		/*
-  1354		 * Figure out dumpability. Note that this checking only of current
-  1355		 * is wrong, but userspace depends on it. This should be testing
-  1356		 * bprm->secureexec instead.
-  1357		 */
-  1358		if (bprm->interp_flags & BINPRM_FLAGS_ENFORCE_NONDUMP ||
-  1359		    !(uid_eq(current_euid(), current_uid()) &&
-  1360		      gid_eq(current_egid(), current_gid())))
-  1361			set_dumpable(current->mm, suid_dumpable);
-  1362		else
-  1363			set_dumpable(current->mm, SUID_DUMP_USER);
-  1364	
-  1365		perf_event_exec();
-  1366		__set_task_comm(me, kbasename(bprm->filename), true);
-  1367	
-  1368		/* An exec changes our domain. We are no longer part of the thread
-  1369		   group */
-  1370		WRITE_ONCE(me->self_exec_id, me->self_exec_id + 1);
-  1371		flush_signal_handlers(me, 0);
-  1372	
-  1373		retval = set_cred_ucounts(bprm->cred);
-  1374		if (retval < 0)
-  1375			goto out_unlock;
-  1376	
-  1377		/*
-  1378		 * install the new credentials for this executable
-  1379		 */
-  1380		security_bprm_committing_creds(bprm);
-  1381	
-  1382		commit_creds(bprm->cred);
-  1383		bprm->cred = NULL;
-  1384	
-  1385		/*
-  1386		 * Disable monitoring for regular users
-  1387		 * when executing setuid binaries. Must
-  1388		 * wait until new credentials are committed
-  1389		 * by commit_creds() above
-  1390		 */
-  1391		if (get_dumpable(me->mm) != SUID_DUMP_USER)
-  1392			perf_event_exit_task(me);
-  1393		/*
-  1394		 * cred_guard_mutex must be held at least to this point to prevent
-  1395		 * ptrace_attach() from altering our determination of the task's
-  1396		 * credentials; any time after this it may be unlocked.
-  1397		 */
-  1398		security_bprm_committed_creds(bprm);
-  1399	
-  1400		/* Pass the opened binary to the interpreter. */
-  1401		if (bprm->have_execfd) {
-  1402			retval = get_unused_fd_flags(0);
-  1403			if (retval < 0)
-  1404				goto out_unlock;
-  1405			fd_install(retval, bprm->executable);
-  1406			bprm->executable = NULL;
-  1407			bprm->execfd = retval;
-  1408		}
-  1409		return 0;
-  1410	
-  1411	out_unlock:
-  1412		up_write(&me->signal->exec_update_lock);
-  1413	out:
-  1414		return retval;
-  1415	}
-  1416	EXPORT_SYMBOL(begin_new_exec);
-  1417	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+T24gMTMvMDgvMjAyMiAxNzowNywgbWluIHRhbmcgd3JvdGU6DQo+IFtQQVRDSF0gdHJlZXdpZGU6
+IFVubmVlZGVkIHNlbWljb2xvbg0KDQpIZXksIHlvdSBtaWdodCB3YW50IHRvIGNoZWNrIHdoYXRl
+dmVyIHNjcmlwdCB5b3UncmUgdXNpbmcgdG8NCmdlbmVyYXRlIHRoZXNlIGNvbW1pdHMuIEEgc2lu
+Z2xlIGxpbmUgY2hhbmdlIGluIGEgZmlsZSBpc24ndA0KZXhhY3RseSB0cmVld2lkZS4uLg0KDQo+
+IFRoZXJlIGlzIG5vIHNlbWljb2xvbiBhZnRlciAnfScgaW4gbGluZSAxNjE1Lg0KDQpUaGlzIGRv
+ZXNuJ3QgcmVhbGx5IG1ha2UgbXVjaCBzZW5zZSwgbWF5YmU6DQoiUmVtb3ZlIHVuZWVkZWQgc2Vt
+aWNvbG9uIGFmdGVyLi4uIg0KVGhhbmtzLA0KQ29ub3IuDQoNCj4gDQo+IFNpZ25lZC1vZmYtYnk6
+IG1pbiB0YW5nIDx0YW5nbWluQGNkanJsYy5jb20+DQo+IC0tLQ0KPiAgZnMvbnRmcy9zdXBlci5j
+IHwgMiArLQ0KPiAgMSBmaWxlIGNoYW5nZWQsIDEgaW5zZXJ0aW9uKCspLCAxIGRlbGV0aW9uKC0p
+DQo+IA0KPiBkaWZmIC0tZ2l0IGEvZnMvbnRmcy9zdXBlci5jIGIvZnMvbnRmcy9zdXBlci5jDQo+
+IGluZGV4IDVhZThkZTA5YjI3MS4uZDY2M2I0OWRmODRlIDEwMDY0NA0KPiAtLS0gYS9mcy9udGZz
+L3N1cGVyLmMNCj4gKysrIGIvZnMvbnRmcy9zdXBlci5jDQo+IEBAIC0xNjEyLDcgKzE2MTIsNyBA
+QCBzdGF0aWMgYm9vbCBsb2FkX2FuZF9pbml0X2F0dHJkZWYobnRmc192b2x1bWUgKnZvbCkNCj4g
+IAkJbWVtY3B5KCh1OCopdm9sLT5hdHRyZGVmICsgKGluZGV4KysgPDwgUEFHRV9TSElGVCksDQo+
+ICAJCQkJcGFnZV9hZGRyZXNzKHBhZ2UpLCBzaXplKTsNCj4gIAkJbnRmc191bm1hcF9wYWdlKHBh
+Z2UpOw0KPiAtCX07DQo+ICsJfQ0KPiAgCWlmIChzaXplID09IFBBR0VfU0laRSkgew0KPiAgCQlz
+aXplID0gaV9zaXplICYgflBBR0VfTUFTSzsNCj4gIAkJaWYgKHNpemUpDQo=

@@ -2,150 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CB7959187D
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 05:46:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB78B591888
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 06:10:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233926AbiHMDqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 23:46:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56174 "EHLO
+        id S234518AbiHMEJs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 00:09:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229760AbiHMDqB (ORCPT
+        with ESMTP id S229760AbiHMEJq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 23:46:01 -0400
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F2941EC77
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 20:46:00 -0700 (PDT)
-Received: by mail-qt1-x836.google.com with SMTP id h21so2145366qta.3
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 20:46:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kudzu-us.20210112.gappssmtp.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :from:to:cc;
-        bh=wSz2jLwt8XGZiBsTeXMm2hepCeFx2oOvn4Pac4I1m2M=;
-        b=VRp8Vv4SQsePAIYL8QWq4sigSUk09jY8sCa0snfh1NGNPMb+HJQwrNlk3cY7SCOxyK
-         ji6zYb06uM6L0YLoXGch/UpPgXNmmJ1+r2+QSWn1UV2JyZn6OBxskc4zjgZClMjHpgGk
-         sxdlJzYku5/AdLyMVskDPqYaQ8drvHJg96G8u0jzJV76/TQIUFaTE2myRrf0plyNdo3u
-         D9p63OO0cTOzG+147/6h+VsRM+eyJSuyPSab3u7oxmmeESFPRmNaSTtwowZ0xLhfQLn5
-         MBwiB+Q9zNINq3Y+bkM2V1iekbUM7lIUp1VApSriDxzfCpi4OHhxIeyeMNpwl+QWtHh3
-         BABw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc;
-        bh=wSz2jLwt8XGZiBsTeXMm2hepCeFx2oOvn4Pac4I1m2M=;
-        b=JeQkh2N0W1sSc8178Xg7erzxyVAi45PMbiqL3jYaHH2VT0BzvyNvIsXapA/ncuBPrF
-         k3YKZD+r9zi8iJUc3LQyMrMJsVv02mJeqQgyNOwtb+TgsL55FKyqUKrbYsubNRdBtRH+
-         btepejueCLG8Ej5+n1GjQEcCvIeaabBvAIvXkyPq3hkTRw+Ou3HlMx67Ls1enKio6Znc
-         ZS8jZVFGawQBcXAjRCWg2DzrDknyZBRLzYnBY3mUmvS+EuiuZU6W6gZcxkhxZsnjSAq9
-         liJ0CSWxD1V6Lbmyl0rr8W8d15p+KLArNyWcd2GO2f0B2sW/GKv7D3uPqpj0MbsdKJHV
-         MSLw==
-X-Gm-Message-State: ACgBeo29uJ93NyCRr/lrON0az5NBkQ6BLe+2INUmvRmr1VMqOu6kHnS5
-        lYvlnTFXeRiTHJpOmfI4jlTHCbPy0FLBpflGzjg=
-X-Google-Smtp-Source: AA6agR5jQxe8ti/vYxtVNZuu5vJf2+8CVfcm0UY+ARA/2Ij3c97dnrT4w03swk0XefjfmlcTP5SoGw==
-X-Received: by 2002:a05:622a:24b:b0:343:4f6c:7bee with SMTP id c11-20020a05622a024b00b003434f6c7beemr6208191qtx.637.1660362359612;
-        Fri, 12 Aug 2022 20:45:59 -0700 (PDT)
-Received: from localhost ([2605:a601:a608:5600::59])
-        by smtp.gmail.com with ESMTPSA id f4-20020a05620a280400b006b905e003a4sm3186732qkp.135.2022.08.12.20.45.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 Aug 2022 20:45:59 -0700 (PDT)
-From:   Jon Mason <jdmason@kudzu.us>
-X-Google-Original-From: Jon Mason <jdm@athena.kudzu.us>
-Date:   Fri, 12 Aug 2022 23:45:58 -0400
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, ntb@lists.linux.dev
-Subject: [GIT PULL] NTB patches for v5.20
-Message-ID: <YvcedivdOTR1dsik@athena.kudzu.us>
+        Sat, 13 Aug 2022 00:09:46 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4628F97D50;
+        Fri, 12 Aug 2022 21:09:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660363785; x=1691899785;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=YtnxD0BBwfe5HOnm9g9khCNeUtirSIklccPuLDL3HPI=;
+  b=fEBKa8rsncW5kP/2qke+mOh59N1mX0q3XPOaSFvDPl2GoXTem3rIln9U
+   mftLMuw2Msyxfr1nXSLdjhhJkkOsohgM8avAX+kaaWVRcNcNc6Glf3LaR
+   qTT+eUJaEONEfFNEW83Z96PyFSzHGjxGFqUjkjRUv2gnRQ7iG+QwTYKQT
+   eYWTky8WN3oGqtD2lCtZ1EJjqOlLk2vcGP2buF9RjDM9OLR1trAVQJG4h
+   4n9cjKOGVwjsmM2O9gNi8WlJ+fHmKenG//IsogbfdEz4gIV+Xic7ZMLpS
+   8lJhQSXgrTo7IgJ0y70tC9Qrm7x3zRs481F+67t/MLdzmSZGxN3eabH2d
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="378015768"
+X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
+   d="scan'208";a="378015768"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 21:09:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
+   d="scan'208";a="782153066"
+Received: from unknown (HELO localhost.localdomain) ([10.226.216.116])
+  by orsmga005.jf.intel.com with ESMTP; 12 Aug 2022 21:09:42 -0700
+From:   niravkumar.l.rabara@intel.com
+To:     Mark Brown <broonie@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        niravkumar.l.rabara@intel.com
+Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] spi: cadence-quadspi: Disable irqs during indirect reads
+Date:   Sat, 13 Aug 2022 12:09:28 +0800
+Message-Id: <20220813040928.1353077-1-niravkumar.l.rabara@intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Linus,
-Here are a number of patches for v5.20.  Included in them is PCI
-Endpoint NTB, which received a number of fixes while in linux-next, as
-well as a number of other bug fixes.  Please consider pulling them.
+From: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
 
-Thanks,
-Jon
+On architecture where reading the SRAM is slower than the pace at
+controller fills it, with interrupt enabled while reading from
+SRAM FIFO causes unwanted interrupt storm to CPU.
 
+The inner "bytes to read" loop never exits and waits for the completion
+so it is enough to only enable the watermark interrupt when we
+are out of bytes to read, which only happens when we start the
+transfer (waiting for the FIFO to fill up initially) if the SRAM
+is slow.
 
+So only using read watermark interrupt, as the current implementation
+doesn't utilize the SRAM full and indirect complete read interrupt.
+And disable all the read interrupts while reading from SRAM.
 
-The following changes since commit 3d7cb6b04c3f3115719235cc6866b10326de34cd:
+Signed-off-by: Niravkumar L Rabara <niravkumar.l.rabara@intel.com>
+---
+ drivers/spi/spi-cadence-quadspi.c | 32 ++++++++++++++++++++++++++++---
+ 1 file changed, 29 insertions(+), 3 deletions(-)
 
-  Linux 5.19 (2022-07-31 14:03:01 -0700)
+diff --git a/drivers/spi/spi-cadence-quadspi.c b/drivers/spi/spi-cadence-quadspi.c
+index 72b1a5a2298c..75a3cdb84fba 100644
+--- a/drivers/spi/spi-cadence-quadspi.c
++++ b/drivers/spi/spi-cadence-quadspi.c
+@@ -39,6 +39,7 @@
+ #define CQSPI_DISABLE_DAC_MODE		BIT(1)
+ #define CQSPI_SUPPORT_EXTERNAL_DMA	BIT(2)
+ #define CQSPI_NO_SUPPORT_WR_COMPLETION	BIT(3)
++#define CQSPI_SLOW_SRAM		BIT(4)
+ 
+ /* Capabilities */
+ #define CQSPI_SUPPORTS_OCTAL		BIT(0)
+@@ -87,6 +88,7 @@ struct cqspi_st {
+ 	bool			use_dma_read;
+ 	u32			pd_dev_id;
+ 	bool			wr_completion;
++	bool			slow_sram;
+ };
+ 
+ struct cqspi_driver_platdata {
+@@ -333,7 +335,10 @@ static irqreturn_t cqspi_irq_handler(int this_irq, void *dev)
+ 		}
+ 	}
+ 
+-	irq_status &= CQSPI_IRQ_MASK_RD | CQSPI_IRQ_MASK_WR;
++	else if (!cqspi->slow_sram)
++		irq_status &= CQSPI_IRQ_MASK_RD | CQSPI_IRQ_MASK_WR;
++	else
++		irq_status &= CQSPI_REG_IRQ_WATERMARK | CQSPI_IRQ_MASK_WR;
+ 
+ 	if (irq_status)
+ 		complete(&cqspi->transfer_complete);
+@@ -673,7 +678,18 @@ static int cqspi_indirect_read_execute(struct cqspi_flash_pdata *f_pdata,
+ 	/* Clear all interrupts. */
+ 	writel(CQSPI_IRQ_STATUS_MASK, reg_base + CQSPI_REG_IRQSTATUS);
+ 
+-	writel(CQSPI_IRQ_MASK_RD, reg_base + CQSPI_REG_IRQMASK);
++	/*
++	 * On SoCFPGA platform reading the SRAM is slow due to
++	 * hardware limitation and causing read interrupt storm to CPU,
++	 * so enabling only watermark interrupt to disable all read
++	 * interrupts later as we want to run "bytes to read" loop with
++	 * all the read interrupts disabled for max performance.
++	 */
++
++	if (!cqspi->slow_sram)
++		writel(CQSPI_IRQ_MASK_RD, reg_base + CQSPI_REG_IRQMASK);
++	else
++		writel(CQSPI_REG_IRQ_WATERMARK, reg_base + CQSPI_REG_IRQMASK);
+ 
+ 	reinit_completion(&cqspi->transfer_complete);
+ 	writel(CQSPI_REG_INDIRECTRD_START_MASK,
+@@ -684,6 +700,13 @@ static int cqspi_indirect_read_execute(struct cqspi_flash_pdata *f_pdata,
+ 						 msecs_to_jiffies(CQSPI_READ_TIMEOUT_MS)))
+ 			ret = -ETIMEDOUT;
+ 
++		/*
++		 * Disable all read interrupts until
++		 * we are out of "bytes to read"
++		 */
++		if (cqspi->slow_sram)
++			writel(0x0, reg_base + CQSPI_REG_IRQMASK);
++
+ 		bytes_to_read = cqspi_get_rd_sram_level(cqspi);
+ 
+ 		if (ret && bytes_to_read == 0) {
+@@ -715,8 +738,11 @@ static int cqspi_indirect_read_execute(struct cqspi_flash_pdata *f_pdata,
+ 			bytes_to_read = cqspi_get_rd_sram_level(cqspi);
+ 		}
+ 
+-		if (remaining > 0)
++		if (remaining > 0) {
+ 			reinit_completion(&cqspi->transfer_complete);
++			if (cqspi->slow_sram)
++				writel(CQSPI_REG_IRQ_WATERMARK, reg_base + CQSPI_REG_IRQMASK);
++		}
+ 	}
+ 
+ 	/* Check indirect done status */
+-- 
+2.25.1
 
-are available in the Git repository at:
-
-  https://github.com/jonmason/ntb tags/ntb-5.20
-
-for you to fetch changes up to e4fe2a2fc423cb51bfd36c14f95f3ca1d279ca92:
-
-  MAINTAINERS: add PCI Endpoint NTB drivers to NTB files (2022-08-12 16:00:59 -0400)
-
-----------------------------------------------------------------
-Fix of heap data and clang warnings, support for a new Intel NTB device,
-and NTB EndPoint Function (EPF) support and the various fixes from that
-being in -next for Linux v5.20
-
-----------------------------------------------------------------
-Bagas Sanjaya (2):
-      Documentation: PCI: Use code-block block for scratchpad registers diagram
-      Documentation: PCI: extend subheading underline for "lspci output" section
-
-Colin Ian King (1):
-      NTB: EPF: set pointer addr to null using NULL rather than 0
-
-Dan Carpenter (3):
-      NTB: ntb_tool: uninitialized heap data in tool_fn_write()
-      NTB: EPF: Fix error code in epf_ntb_bind()
-      NTB: EPF: Tidy up some bounds checks
-
-Dave Jiang (1):
-      ntb: intel: add GNR support for Intel PCIe gen5 NTB
-
-Frank Li (4):
-      PCI: designware-ep: Allow pci_epc_set_bar() update inbound map address
-      NTB: epf: Allow more flexibility in the memory BAR map method
-      PCI: endpoint: Support NTB transfer between RC and EP
-      Documentation: PCI: Add specification for the PCI vNTB function device
-
-Jon Mason (1):
-      MAINTAINERS: add PCI Endpoint NTB drivers to NTB files
-
-Justin Stitt (1):
-      ntb: idt: fix clang -Wformat warnings
-
-Ren Zhijie (1):
-      PCI: endpoint: Fix Kconfig dependency
-
-Tom Rix (1):
-      PCI: endpoint: pci-epf-vntb: reduce several globals to statics
-
-Yang Yingliang (1):
-      PCI: endpoint: pci-epf-vntb: fix error handle in epf_ntb_mw_bar_init()
-
- Documentation/PCI/endpoint/index.rst             |    2 +
- Documentation/PCI/endpoint/pci-vntb-function.rst |  129 ++
- Documentation/PCI/endpoint/pci-vntb-howto.rst    |  167 +++
- MAINTAINERS                                      |    1 +
- drivers/ntb/hw/epf/ntb_hw_epf.c                  |   48 +-
- drivers/ntb/hw/idt/ntb_hw_idt.c                  |    6 +-
- drivers/ntb/hw/intel/ntb_hw_gen1.c               |   12 +-
- drivers/ntb/hw/intel/ntb_hw_gen4.c               |    2 +-
- drivers/ntb/hw/intel/ntb_hw_intel.h              |    7 +
- drivers/ntb/test/ntb_tool.c                      |    8 +-
- drivers/pci/controller/dwc/pcie-designware-ep.c  |   10 +-
- drivers/pci/endpoint/functions/Kconfig           |   12 +
- drivers/pci/endpoint/functions/Makefile          |    1 +
- drivers/pci/endpoint/functions/pci-epf-vntb.c    | 1442 ++++++++++++++++++++++
- 14 files changed, 1822 insertions(+), 25 deletions(-)
- create mode 100644 Documentation/PCI/endpoint/pci-vntb-function.rst
- create mode 100644 Documentation/PCI/endpoint/pci-vntb-howto.rst
- create mode 100644 drivers/pci/endpoint/functions/pci-epf-vntb.c

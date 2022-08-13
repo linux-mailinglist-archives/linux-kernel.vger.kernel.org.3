@@ -2,58 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C40DB591B8D
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 17:42:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2595A591B8F
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 17:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239821AbiHMPm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 11:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54694 "EHLO
+        id S239833AbiHMPmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 11:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239621AbiHMPmY (ORCPT
+        with ESMTP id S239835AbiHMPmn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 11:42:24 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B80092AE19
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 08:42:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660405343; x=1691941343;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=VB/PcJMaVCoLLAmK7NLDHktq+XG2Uv/dpCQjBWs76r4=;
-  b=WLxKp9/vhApzHo/uecWB6dnWwoj6+FFnjszJHXKECdeecd4+FJsBx+WD
-   IA6mWhuW2kOGQkmeL5i6VDuFF9JovwcCnKRa08eZodhsu8n0WDstQQnGW
-   LvNWXmzZFhSgyL7WIY/Sr8QKYgHlKvxQ9YbdMgRnxezqtWsaA9VsYj3r5
-   8QDLWV9RhIl+yUHyx6BD1LdIG0P3+IDO+iDzCr7xBwG2BGhEP0jJhkpnf
-   5GcL+IpVlBEm8Qgk3qpziyHqGTaq3jl1w8D/B1wFHG6N/4/yuZwbRfkhG
-   1e3p/RIIfOXF5F13gh6Rnp4ppP6l65ksxZjDmeuEpmqnnVSj0yr++DmM1
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="353503191"
-X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
-   d="scan'208";a="353503191"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 08:42:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
-   d="scan'208";a="582408332"
-Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 13 Aug 2022 08:42:22 -0700
-Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oMtHJ-0001ov-1c;
-        Sat, 13 Aug 2022 15:42:21 +0000
-Date:   Sat, 13 Aug 2022 23:42:01 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Keith Busch <kbusch@kernel.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: [kbusch:io_uring/dma-register-v3 7/8] io_uring/io_uring.c:3791:45:
- error: passing argument 2 of 'file_dma_map' from incompatible pointer type
-Message-ID: <202208132330.PC5BGFCf-lkp@intel.com>
+        Sat, 13 Aug 2022 11:42:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0CBF2B1A9;
+        Sat, 13 Aug 2022 08:42:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 512BB60ED5;
+        Sat, 13 Aug 2022 15:42:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0F61C433C1;
+        Sat, 13 Aug 2022 15:42:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660405359;
+        bh=BbzZODyb1pf8b8cbccDz5DrfY4BrAZboveA10mzxo/0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=l/LWI2H4QEtJLoOeSCUuGIcrVIXsaMQrFXH1IBhSs/uelt1JLJWqcwWRLZZzNuU0L
+         +PlB9biNuAiRF7LPPKUoTyUWuL+SOhWsGCZswMc3m55b6W4WLEbfgKcWyA7UDH4zIY
+         oWDNFwY8xhsZaURbyBTRSjFSFbPiYpdNB6IPpOYE3Vr2dOt7gB+gIWv3GX6iSGSY4T
+         ETYnDSWApFqVNeOGZoqmmIfDilrdkEz1E6cBMcBrrYn+ajsfmJESkpG4uM45Mo4rVl
+         P4LmnrZwjJMSZuLUGfwp3PFC/6Cml4Mk0nbkU2efntPVU0srp8Fxcqn/2GPqn6f71g
+         nuqbB2NDl8sKA==
+Date:   Sat, 13 Aug 2022 17:42:27 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>,
+        Bartosz Golaszewski <brgl@bgdev.pl>
+Subject: [PULL REQUEST] i2c-for-5.20-part2
+Message-ID: <YvfGY2qnl2YXrUgX@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="4NrrYtAf6bYih70P"
 Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,105 +58,172 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git io_uring/dma-register-v3
-head:   e1c6d38d05e532b3aaf12a5ab8707929bcdc1180
-commit: bb54dc361fec200988cb7f0a32cea77db3a7e6fe [7/8] io_uring: add support for dma pre-mapping
-config: m68k-buildonly-randconfig-r001-20220804 (https://download.01.org/0day-ci/archive/20220813/202208132330.PC5BGFCf-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git/commit/?id=bb54dc361fec200988cb7f0a32cea77db3a7e6fe
-        git remote add kbusch https://git.kernel.org/pub/scm/linux/kernel/git/kbusch/linux.git
-        git fetch --no-tags kbusch io_uring/dma-register-v3
-        git checkout bb54dc361fec200988cb7f0a32cea77db3a7e6fe
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+--4NrrYtAf6bYih70P
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-All errors (new ones prefixed by >>):
+The following changes since commit ffcf9c5700e49c0aee42dcba9a12ba21338e8136:
 
-   In file included from include/uapi/linux/aio_abi.h:31,
-                    from include/linux/syscalls.h:77,
-                    from io_uring/io_uring.c:45:
-   include/linux/fs.h:3610:60: warning: 'struct bio_vec' declared inside parameter list will not be visible outside of this definition or declaration
-    3610 | static inline void *file_dma_map(struct file *file, struct bio_vec *bvec,
-         |                                                            ^~~~~~~
-   io_uring/io_uring.c: In function '__io_submit_flush_completions':
-   io_uring/io_uring.c:1183:40: warning: variable 'prev' set but not used [-Wunused-but-set-variable]
-    1183 |         struct io_wq_work_node *node, *prev;
-         |                                        ^~~~
-   io_uring/io_uring.c: In function 'io_register_map_buffers':
->> io_uring/io_uring.c:3791:45: error: passing argument 2 of 'file_dma_map' from incompatible pointer type [-Werror=incompatible-pointer-types]
-    3791 |                 tag = file_dma_map(file, imu->bvec, imu->nr_bvecs);
-         |                                          ~~~^~~~~~
-         |                                             |
-         |                                             struct bio_vec *
-   include/linux/fs.h:3610:69: note: expected 'struct bio_vec *' but argument is of type 'struct bio_vec *'
-    3610 | static inline void *file_dma_map(struct file *file, struct bio_vec *bvec,
-         |                                                     ~~~~~~~~~~~~~~~~^~~~
-   cc1: some warnings being treated as errors
+  x86: link vdso and boot with -z noexecstack --no-warn-rwx-segments (2022-08-10 18:30:09 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-5.20-part2
+
+for you to fetch changes up to fe99b819487dba848cddd3d4bf4beb8e653d7e9c:
+
+  docs: i2c: i2c-sysfs: fix hyperlinks (2022-08-11 23:25:05 +0200)
+
+----------------------------------------------------------------
+* two driver fixes for issues introduced this cycle
+* one trivial driver improvement regarding ACPI
+* more DTS conversion and additions
+* documentation updates
+* subsystem-wide move from strlcpy to strscpy
+
+----------------------------------------------------------------
+Chris Pringle (1):
+      i2c: kempld: Support ACPI I2C device declaration
+
+Conor Dooley (1):
+      i2c: microchip-corei2c: fix erroneous late ack send
+
+Kewei Xu (2):
+      dt-bindings: i2c: update bindings for mt8188 soc
+      i2c: mediatek: add i2c compatible for MT8188
+
+Krzysztof Kozlowski (1):
+      dt-bindings: i2c: qcom,i2c-cci: convert to dtschema
+
+Luca Ceresoli (7):
+      docs: i2c: i2c-protocol: update introductory paragraph
+      docs: i2c: i2c-protocol,smbus-protocol: remove nonsense words
+      docs: i2c: i2c-protocol: remove unused legend items
+      docs: i2c: smbus-protocol: improve DataLow/DataHigh definition
+      docs: i2c: instantiating-devices: add syntax coloring to dts and C blocks
+      docs: i2c: i2c-sysfs: improve wording
+      docs: i2c: i2c-sysfs: fix hyperlinks
+
+Robin Reckmann (1):
+      i2c: qcom-geni: Fix GPI DMA buffer sync-back
+
+Wolfram Sang (2):
+      i2c: move drivers from strlcpy to strscpy
+      i2c: move core from strlcpy to strscpy
 
 
-vim +/file_dma_map +3791 io_uring/io_uring.c
+with much appreciated quality assurance from
+----------------------------------------------------------------
+AngeloGioacchino Del Regno (1):
+      (Rev.) i2c: mediatek: add i2c compatible for MT8188
 
-  3758	
-  3759	static int io_register_map_buffers(struct io_ring_ctx *ctx, void __user *arg)
-  3760	{
-  3761		struct io_uring_map_buffers map;
-  3762		struct io_fixed_file *file_slot;
-  3763		struct file *file;
-  3764		int ret, i;
-  3765	
-  3766		if (!capable(CAP_SYS_ADMIN))
-  3767			return -EPERM;
-  3768	
-  3769		ret = get_map_range(ctx, &map, arg);
-  3770		if (ret < 0)
-  3771			return ret;
-  3772	
-  3773		file_slot = io_fixed_file_slot(&ctx->file_table,
-  3774				array_index_nospec(map.fd, ctx->nr_user_files));
-  3775		if (!file_slot->file_ptr)
-  3776			return -EBADF;
-  3777	
-  3778		file = io_file_from_fixed(file_slot);
-  3779		if (!(file->f_flags & O_DIRECT))
-  3780			return -EOPNOTSUPP;
-  3781	
-  3782		for (i = map.buf_start; i < map.buf_end; i++) {
-  3783			struct io_mapped_ubuf *imu = ctx->user_bufs[i];
-  3784			void *tag;
-  3785	
-  3786			if (imu->dma_tag) {
-  3787				ret = -EBUSY;
-  3788				goto err;
-  3789			}
-  3790	
-> 3791			tag = file_dma_map(file, imu->bvec, imu->nr_bvecs);
-  3792			if (IS_ERR(tag)) {
-  3793				ret = PTR_ERR(tag);
-  3794				goto err;
-  3795			}
-  3796	
-  3797			imu->dma_tag = tag;
-  3798			imu->dma_file = file;
-  3799		}
-  3800	
-  3801		return 0;
-  3802	err:
-  3803		while (--i >= map.buf_start) {
-  3804			struct io_mapped_ubuf *imu = ctx->user_bufs[i];
-  3805	
-  3806			io_dma_unmap(imu);
-  3807		}
-  3808		return ret;
-  3809	}
-  3810	
+Bagas Sanjaya (1):
+      (Rev.) docs: i2c: smbus-protocol: improve DataLow/DataHigh definition
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Caleb Connolly (1):
+      (Test) i2c: qcom-geni: Fix GPI DMA buffer sync-back
+
+Konrad Dybcio (1):
+      (Rev.) i2c: qcom-geni: Fix GPI DMA buffer sync-back
+
+Lewis Hanly (1):
+      (Test) i2c: microchip-corei2c: fix erroneous late ack send
+
+Luca Weiss (1):
+      (Test) i2c: qcom-geni: Fix GPI DMA buffer sync-back
+
+Matthias Brugger (1):
+      (Rev.) dt-bindings: i2c: update bindings for mt8188 soc
+
+Qii Wang (2):
+      (Rev.) i2c: mediatek: add i2c compatible for MT8188
+      (Rev.) dt-bindings: i2c: update bindings for mt8188 soc
+
+Rob Herring (1):
+      (Rev.) dt-bindings: i2c: qcom,i2c-cci: convert to dtschema
+
+ .../devicetree/bindings/i2c/i2c-mt65xx.yaml        |   1 +
+ .../devicetree/bindings/i2c/i2c-qcom-cci.txt       |  96 --------
+ .../devicetree/bindings/i2c/qcom,i2c-cci.yaml      | 242 +++++++++++++++++++++
+ Documentation/i2c/i2c-protocol.rst                 |  11 +-
+ Documentation/i2c/i2c-sysfs.rst                    |  24 +-
+ Documentation/i2c/instantiating-devices.rst        |  16 +-
+ Documentation/i2c/smbus-protocol.rst               |   6 +-
+ MAINTAINERS                                        |   2 +-
+ drivers/i2c/busses/i2c-altera.c                    |   2 +-
+ drivers/i2c/busses/i2c-aspeed.c                    |   2 +-
+ drivers/i2c/busses/i2c-au1550.c                    |   2 +-
+ drivers/i2c/busses/i2c-axxia.c                     |   2 +-
+ drivers/i2c/busses/i2c-bcm-kona.c                  |   2 +-
+ drivers/i2c/busses/i2c-brcmstb.c                   |   2 +-
+ drivers/i2c/busses/i2c-cbus-gpio.c                 |   2 +-
+ drivers/i2c/busses/i2c-cht-wc.c                    |   2 +-
+ drivers/i2c/busses/i2c-cros-ec-tunnel.c            |   2 +-
+ drivers/i2c/busses/i2c-davinci.c                   |   2 +-
+ drivers/i2c/busses/i2c-digicolor.c                 |   2 +-
+ drivers/i2c/busses/i2c-eg20t.c                     |   2 +-
+ drivers/i2c/busses/i2c-emev2.c                     |   2 +-
+ drivers/i2c/busses/i2c-exynos5.c                   |   2 +-
+ drivers/i2c/busses/i2c-gpio.c                      |   2 +-
+ drivers/i2c/busses/i2c-highlander.c                |   2 +-
+ drivers/i2c/busses/i2c-hix5hd2.c                   |   2 +-
+ drivers/i2c/busses/i2c-i801.c                      |   4 +-
+ drivers/i2c/busses/i2c-ibm_iic.c                   |   2 +-
+ drivers/i2c/busses/i2c-icy.c                       |   2 +-
+ drivers/i2c/busses/i2c-imx-lpi2c.c                 |   2 +-
+ drivers/i2c/busses/i2c-kempld.c                    |   1 +
+ drivers/i2c/busses/i2c-lpc2k.c                     |   2 +-
+ drivers/i2c/busses/i2c-meson.c                     |   2 +-
+ drivers/i2c/busses/i2c-microchip-corei2c.c         |   2 +-
+ drivers/i2c/busses/i2c-mt65xx.c                    |  45 +++-
+ drivers/i2c/busses/i2c-mt7621.c                    |   2 +-
+ drivers/i2c/busses/i2c-mv64xxx.c                   |   2 +-
+ drivers/i2c/busses/i2c-mxs.c                       |   2 +-
+ drivers/i2c/busses/i2c-nvidia-gpu.c                |   2 +-
+ drivers/i2c/busses/i2c-omap.c                      |   2 +-
+ drivers/i2c/busses/i2c-opal.c                      |   4 +-
+ drivers/i2c/busses/i2c-parport.c                   |   2 +-
+ drivers/i2c/busses/i2c-pxa.c                       |   2 +-
+ drivers/i2c/busses/i2c-qcom-geni.c                 |   7 +-
+ drivers/i2c/busses/i2c-qup.c                       |   2 +-
+ drivers/i2c/busses/i2c-rcar.c                      |   2 +-
+ drivers/i2c/busses/i2c-riic.c                      |   2 +-
+ drivers/i2c/busses/i2c-rk3x.c                      |   2 +-
+ drivers/i2c/busses/i2c-s3c2410.c                   |   2 +-
+ drivers/i2c/busses/i2c-sh_mobile.c                 |   2 +-
+ drivers/i2c/busses/i2c-simtec.c                    |   2 +-
+ drivers/i2c/busses/i2c-taos-evm.c                  |   2 +-
+ drivers/i2c/busses/i2c-tegra-bpmp.c                |   2 +-
+ drivers/i2c/busses/i2c-tegra.c                     |   2 +-
+ drivers/i2c/busses/i2c-uniphier-f.c                |   2 +-
+ drivers/i2c/busses/i2c-uniphier.c                  |   2 +-
+ drivers/i2c/busses/i2c-versatile.c                 |   2 +-
+ drivers/i2c/busses/i2c-wmt.c                       |   2 +-
+ drivers/i2c/i2c-core-base.c                        |   2 +-
+ drivers/i2c/i2c-smbus.c                            |   2 +-
+ 59 files changed, 370 insertions(+), 181 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-qcom-cci.txt
+ create mode 100644 Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
+
+--4NrrYtAf6bYih70P
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmL3xmMACgkQFA3kzBSg
+KbZ7Xw//c0/XgVl2+BpduIx49HDGc29u0QWc5i3eaj5PLLEYJfIfZglpEkhVaftA
++O8CLC/y+d7U+XUEzlNuD3xNHqIPR9dlvgH09vbBzAXmdC4gedOjQCLst7lT3gmI
+0OQMP9gUIkjAEZ8LwVXQr1vr1tspacioxVRTAPhkhrGrxGtWgnB1o4YiuZlXMMcB
+pB6GbX/w+vUa0KXzbkT0Ynw1zpbi1BLSgsCyFFBL47OULNiUZ+yPd3CiHHp9aQBJ
+Tv4pfD84QFolhpCyD1wW3BE3HvvDVJOzf9Dxe+CMpBRv5GL7o/DTi6HaziCzSZy9
+3exvaWFNNm36BJrmu3hsYr9UWdjL3jTTNGzJPN5kzzL0kVRk1k8yWmGfcIWqXaXd
+UIb3c32Z4yNZ1EFjqglxs3qDd9SMDcBoM+M1ecLcxDdYYFd9mC//ZLu0Yfx4qVDV
+M2RrVwIQ7AAaEILDzzrlJ0j9KU9sSrgjKCWqJ3oYEgmYwAKH08J8hhSW10guS7ca
+wRPBxdEvQMIccgP2j9TDW2Iwijc1Vz6Y2O9u7EbnyfpIDpjyVan2iyfx+KY74W7a
+ba1oI3qrS0gLbdc/yneXYLUhaK0w6o+Nrsv6uz7baBxkurDLZGYRKjeyF9t5e3Qy
+a2VzjIl1cK7oAXhDWPZSngBQ92F1a0tdFB1u/UpCePcMbZrLNOE=
+=Vtqy
+-----END PGP SIGNATURE-----
+
+--4NrrYtAf6bYih70P--

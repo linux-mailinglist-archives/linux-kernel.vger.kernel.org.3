@@ -2,214 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85254591C9E
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 22:46:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E637591CA0
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 22:48:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237328AbiHMUqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 16:46:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48326 "EHLO
+        id S239986AbiHMUsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 16:48:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233786AbiHMUp7 (ORCPT
+        with ESMTP id S239877AbiHMUsI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 16:45:59 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67BF6B1F2;
-        Sat, 13 Aug 2022 13:45:57 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id kb8so7402720ejc.4;
-        Sat, 13 Aug 2022 13:45:57 -0700 (PDT)
+        Sat, 13 Aug 2022 16:48:08 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A48B7F2
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 13:48:06 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id fy5so7403448ejc.3
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 13:48:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=UOHF02Uytz6VtbFA8RtBMSIPMhJ1idgg73HpstKT3vA=;
-        b=GOgMutyqIDl28lCVcssgSMpFMtzyClTj+6RFwYWrnZyvSvdRs0o4cRvaJxbib7L1Ja
-         yReuVtoVq7Po0V2pe6ToXsd3OUuqyC8lZNMRK+yV35I7XX/uNxQNHRrc3sMRfzB2oB7l
-         fpTaJxr8D1qVn6GaDEv+ZVKa/yvTBrhSiTyPMkiODQM0WshaRKxj+G2MSQ85lNUn/o9d
-         YL0TKcNqUmjKJXY+URXfp4WPIrsBtHgO5jOIZ55x2PnwshuYjhpqjY3jaPTuNjNhB9w6
-         /FdMSPW/oVQj+QAKeslcbHIBuBybvbAk5Pdpn8IKVJj7lkVpttqrQbuJx+2pY2lxWuPC
-         ZQ8A==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=8+24X1voRXl29E4Men41L011ucEXlLL6AMGFCSV5598=;
+        b=Dooj+Rt0Wkp9Ypz84bBRTewTk2pQT9Tu5y7qW759b9Mtrc3SZ43E8XcW9aDFFOK5sZ
+         sF4ncAxPj/SMoklJ1LEW21Su6HnBf+T0tr0XRCgnIXeHdVcRorK+6j+8vKktCEjAGyPw
+         TPAteKxOIBm4xNNwhUeBUFLI4vPswYFE376ME=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=UOHF02Uytz6VtbFA8RtBMSIPMhJ1idgg73HpstKT3vA=;
-        b=nIJqwkqgivdjE9d96NZQKgVLNdEe2n3kM5s36fwVgaLpFKBTSTvToj9aeHZUDYNVI0
-         tYQx7FqVZfwEfC3/NymXSs7sSFW6qSF5Ot76cdoGEvhWbbSHWxjfDlj9LcB5tUvWc7Rm
-         l8n25hxJ6toXbPUg+5XkXovHokf140rWBCbOC7qPOiTetZnjG9+vmpU8HYqrbn84cRvl
-         4f2b8o8pFVfF0cNvb59AxSu6mulUUnVeIAbZAyVNx82pnYF2ZJ3cJ8ippBgWZlbxRShm
-         8p7wLK7mX7tFS/OBfnfPe8F/8qqb84MHfBp4Y8WRtLQT5SMRo+gderMBuBZgwYR8umjT
-         uoGg==
-X-Gm-Message-State: ACgBeo0bQdviiGLVFwzexsY44NmhAxkaTQXEPCX+zV6OUtUDCVqYj8p2
-        JYOHghPa6ZrUgy4NlQz4/AU=
-X-Google-Smtp-Source: AA6agR7y8x+PsZx6ypxdNu+t34348o8Xixgxt1Gmxfb2BSpGMiaPtDPGaC8JOIqY/CQX9UG/1tMU2Q==
-X-Received: by 2002:a17:906:cc0c:b0:730:8bbb:69ac with SMTP id ml12-20020a170906cc0c00b007308bbb69acmr6274862ejb.392.1660423555921;
-        Sat, 13 Aug 2022 13:45:55 -0700 (PDT)
-Received: from localhost.localdomain (5-13-160-72.residential.rdsnet.ro. [5.13.160.72])
-        by smtp.gmail.com with ESMTPSA id fx18-20020a170906b75200b007306d3c338dsm2222547ejb.164.2022.08.13.13.45.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Aug 2022 13:45:55 -0700 (PDT)
-From:   Beniamin Sandu <beniaminsandu@gmail.com>
-To:     linux@armlinux.org.uk, andrew@lunn.ch, hkallweit1@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Beniamin Sandu <beniaminsandu@gmail.com>
-Subject: [PATCH] net: sfp: use simplified HWMON_CHANNEL_INFO macro
-Date:   Sat, 13 Aug 2022 23:46:58 +0300
-Message-Id: <20220813204658.848372-1-beniaminsandu@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=8+24X1voRXl29E4Men41L011ucEXlLL6AMGFCSV5598=;
+        b=aBNAH36xzpoNm9t/6QDmtPUAzse1J+aUWInoDIXg27GmxN6z+Zh2LBVwNt7VHNxtbI
+         yMrOrNG+vWcIlJPcnJbq71g6RXSi47jC6Qh4t6LCNwkf1AoAwFoVns0rNdBsWNxDuL4d
+         aqx8KrF7JoCM8VXs749Vk5K8ABE75csP3n7BR7K7vumDRjhXhllMC4vrswCpjS2U+1B3
+         7ShWR5Yl5u43mcOIVJyBhwXm5iZgVYNdfLEACHtFHqMrv3sCkelboPCpY1KQtyxAJyyG
+         Ofxg97DGL9YtBIrRtu9o+PGSdPeYMFZSCzAA80s7SkYuhBZT5PV5EnRrGwOrKcMwudTh
+         g7Gw==
+X-Gm-Message-State: ACgBeo3MPignBtqDkwxCdFghpJU+H7QwMSUb+fdsHiOFbMApwZMsvLto
+        k+HXxBhACkTZ5By1UXD9YhY4LAXvbosiV5dk
+X-Google-Smtp-Source: AA6agR7x+3PetZgKkMKw7R38pEuEY7QcnyPSZYv0oBT2669JpWNuFPWsdgaXfryjdIa4nMNhPGaBVQ==
+X-Received: by 2002:a17:907:868d:b0:730:f0ba:6328 with SMTP id qa13-20020a170907868d00b00730f0ba6328mr6379387ejc.444.1660423684521;
+        Sat, 13 Aug 2022 13:48:04 -0700 (PDT)
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com. [209.85.221.49])
+        by smtp.gmail.com with ESMTPSA id v2-20020a170906292200b00731582a6717sm2251709ejd.98.2022.08.13.13.48.03
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 13 Aug 2022 13:48:04 -0700 (PDT)
+Received: by mail-wr1-f49.google.com with SMTP id l22so4688446wrz.7
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 13:48:03 -0700 (PDT)
+X-Received: by 2002:a05:6000:1888:b0:222:ca41:dc26 with SMTP id
+ a8-20020a056000188800b00222ca41dc26mr4746439wri.442.1660423683645; Sat, 13
+ Aug 2022 13:48:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
+References: <62ef6e3d028a5182f4485d6201a126bbf4ca659c.camel@HansenPartnership.com>
+In-Reply-To: <62ef6e3d028a5182f4485d6201a126bbf4ca659c.camel@HansenPartnership.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 13 Aug 2022 13:47:47 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgeVWg=3sae6u__x2dhMzxw2-nyTTkxbQZfkDrueXGvTg@mail.gmail.com>
+Message-ID: <CAHk-=wgeVWg=3sae6u__x2dhMzxw2-nyTTkxbQZfkDrueXGvTg@mail.gmail.com>
+Subject: Re: [GIT PULL] final round of SCSI updates for the 5.19+ merge window
+To:     James Bottomley <James.Bottomley@hansenpartnership.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-scsi <linux-scsi@vger.kernel.org>,
+        linux-kernel <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This makes the code look cleaner and easier to read.
+On Sat, Aug 13, 2022 at 5:55 AM James Bottomley
+<James.Bottomley@hansenpartnership.com> wrote:
+>
+> [my key just expired so you'll need to do the dane update thing I
+> showed you]
 
-Signed-off-by: Beniamin Sandu <beniaminsandu@gmail.com>
----
- drivers/net/phy/sfp.c | 121 +++++++++++++-----------------------------
- 1 file changed, 38 insertions(+), 83 deletions(-)
+Oh, I don't care about expired keys at all. As long as you keep using
+the *same* key, I'm happy, and gpg saying "Note: This key has
+expired!" is something I'll happily ignore.
 
-diff --git a/drivers/net/phy/sfp.c b/drivers/net/phy/sfp.c
-index 63f90fe9a4d2..a12f7b599da2 100644
---- a/drivers/net/phy/sfp.c
-+++ b/drivers/net/phy/sfp.c
-@@ -1195,90 +1195,45 @@ static const struct hwmon_ops sfp_hwmon_ops = {
- 	.read_string = sfp_hwmon_read_string,
- };
- 
--static u32 sfp_hwmon_chip_config[] = {
--	HWMON_C_REGISTER_TZ,
--	0,
--};
--
--static const struct hwmon_channel_info sfp_hwmon_chip = {
--	.type = hwmon_chip,
--	.config = sfp_hwmon_chip_config,
--};
--
--static u32 sfp_hwmon_temp_config[] = {
--	HWMON_T_INPUT |
--	HWMON_T_MAX | HWMON_T_MIN |
--	HWMON_T_MAX_ALARM | HWMON_T_MIN_ALARM |
--	HWMON_T_CRIT | HWMON_T_LCRIT |
--	HWMON_T_CRIT_ALARM | HWMON_T_LCRIT_ALARM |
--	HWMON_T_LABEL,
--	0,
--};
--
--static const struct hwmon_channel_info sfp_hwmon_temp_channel_info = {
--	.type = hwmon_temp,
--	.config = sfp_hwmon_temp_config,
--};
--
--static u32 sfp_hwmon_vcc_config[] = {
--	HWMON_I_INPUT |
--	HWMON_I_MAX | HWMON_I_MIN |
--	HWMON_I_MAX_ALARM | HWMON_I_MIN_ALARM |
--	HWMON_I_CRIT | HWMON_I_LCRIT |
--	HWMON_I_CRIT_ALARM | HWMON_I_LCRIT_ALARM |
--	HWMON_I_LABEL,
--	0,
--};
--
--static const struct hwmon_channel_info sfp_hwmon_vcc_channel_info = {
--	.type = hwmon_in,
--	.config = sfp_hwmon_vcc_config,
--};
--
--static u32 sfp_hwmon_bias_config[] = {
--	HWMON_C_INPUT |
--	HWMON_C_MAX | HWMON_C_MIN |
--	HWMON_C_MAX_ALARM | HWMON_C_MIN_ALARM |
--	HWMON_C_CRIT | HWMON_C_LCRIT |
--	HWMON_C_CRIT_ALARM | HWMON_C_LCRIT_ALARM |
--	HWMON_C_LABEL,
--	0,
--};
--
--static const struct hwmon_channel_info sfp_hwmon_bias_channel_info = {
--	.type = hwmon_curr,
--	.config = sfp_hwmon_bias_config,
--};
--
--static u32 sfp_hwmon_power_config[] = {
--	/* Transmit power */
--	HWMON_P_INPUT |
--	HWMON_P_MAX | HWMON_P_MIN |
--	HWMON_P_MAX_ALARM | HWMON_P_MIN_ALARM |
--	HWMON_P_CRIT | HWMON_P_LCRIT |
--	HWMON_P_CRIT_ALARM | HWMON_P_LCRIT_ALARM |
--	HWMON_P_LABEL,
--	/* Receive power */
--	HWMON_P_INPUT |
--	HWMON_P_MAX | HWMON_P_MIN |
--	HWMON_P_MAX_ALARM | HWMON_P_MIN_ALARM |
--	HWMON_P_CRIT | HWMON_P_LCRIT |
--	HWMON_P_CRIT_ALARM | HWMON_P_LCRIT_ALARM |
--	HWMON_P_LABEL,
--	0,
--};
--
--static const struct hwmon_channel_info sfp_hwmon_power_channel_info = {
--	.type = hwmon_power,
--	.config = sfp_hwmon_power_config,
--};
--
- static const struct hwmon_channel_info *sfp_hwmon_info[] = {
--	&sfp_hwmon_chip,
--	&sfp_hwmon_vcc_channel_info,
--	&sfp_hwmon_temp_channel_info,
--	&sfp_hwmon_bias_channel_info,
--	&sfp_hwmon_power_channel_info,
-+	HWMON_CHANNEL_INFO(chip,
-+			   HWMON_C_REGISTER_TZ),
-+	HWMON_CHANNEL_INFO(in,
-+			   HWMON_I_INPUT |
-+			   HWMON_I_MAX | HWMON_I_MIN |
-+			   HWMON_I_MAX_ALARM | HWMON_I_MIN_ALARM |
-+			   HWMON_I_CRIT | HWMON_I_LCRIT |
-+			   HWMON_I_CRIT_ALARM | HWMON_I_LCRIT_ALARM |
-+			   HWMON_I_LABEL),
-+	HWMON_CHANNEL_INFO(temp,
-+			   HWMON_T_INPUT |
-+			   HWMON_T_MAX | HWMON_T_MIN |
-+			   HWMON_T_MAX_ALARM | HWMON_T_MIN_ALARM |
-+			   HWMON_T_CRIT | HWMON_T_LCRIT |
-+			   HWMON_T_CRIT_ALARM | HWMON_T_LCRIT_ALARM |
-+			   HWMON_T_LABEL),
-+	HWMON_CHANNEL_INFO(curr,
-+			   HWMON_C_INPUT |
-+			   HWMON_C_MAX | HWMON_C_MIN |
-+			   HWMON_C_MAX_ALARM | HWMON_C_MIN_ALARM |
-+			   HWMON_C_CRIT | HWMON_C_LCRIT |
-+			   HWMON_C_CRIT_ALARM | HWMON_C_LCRIT_ALARM |
-+			   HWMON_C_LABEL),
-+	HWMON_CHANNEL_INFO(power,
-+			   /* Transmit power */
-+			   HWMON_P_INPUT |
-+			   HWMON_P_MAX | HWMON_P_MIN |
-+			   HWMON_P_MAX_ALARM | HWMON_P_MIN_ALARM |
-+			   HWMON_P_CRIT | HWMON_P_LCRIT |
-+			   HWMON_P_CRIT_ALARM | HWMON_P_LCRIT_ALARM |
-+			   HWMON_P_LABEL,
-+			   /* Receive power */
-+			   HWMON_P_INPUT |
-+			   HWMON_P_MAX | HWMON_P_MIN |
-+			   HWMON_P_MAX_ALARM | HWMON_P_MIN_ALARM |
-+			   HWMON_P_CRIT | HWMON_P_LCRIT |
-+			   HWMON_P_CRIT_ALARM | HWMON_P_LCRIT_ALARM |
-+			   HWMON_P_LABEL),
- 	NULL,
- };
- 
--- 
-2.25.1
+None of the technical rules of pgp keys make any sense at all. The
+"sufficient trust" computations are completely pointless garbage with
+the whole "marginal" vs "complete trust". It's all just crazy talk.
 
+The expiry times likewise. I will completely ignore those.
+
+I will check the signatures of a key as I import them. Because anybody
+who thinks that "trust" is about automation is probably not human, or
+so far on the spectrum that they don't understand humans.
+
+              Linus

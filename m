@@ -2,71 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D9A8591971
+	by mail.lfdr.de (Postfix) with ESMTP id C59C3591972
 	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 10:35:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238461AbiHMIe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 04:34:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40756 "EHLO
+        id S237375AbiHMIeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 04:34:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiHMIew (ORCPT
+        with ESMTP id S229507AbiHMIee (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 04:34:52 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E17106B664;
-        Sat, 13 Aug 2022 01:34:51 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id l22so3419053wrz.7;
-        Sat, 13 Aug 2022 01:34:51 -0700 (PDT)
+        Sat, 13 Aug 2022 04:34:34 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10CF6B664
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 01:34:33 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id tl27so5537797ejc.1
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 01:34:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc;
-        bh=IkARQOyCkbKRyiQVo0E+3fF3PnzXAw1PITXNc7Jpyh0=;
-        b=iy2tGlJJWOePjP4JMIf2lWvBMTtWcxBCklDT3Rer6sFEgnlJJEM8z97vQMqav6pmT4
-         Is04EhSQMJadSQuv0fQj0oYzHiIpgrfvRQ2ZvQFvsdsnkk4gSZk/N3G1jAwUMHp71imR
-         kimdykDY14s0nu8Enb9f9vSCxCHQzqjYVfmjceGisBBurTmDOI4G6A4/MLrow2KUmh7p
-         6I8BLVpwbxceUC7ozfY62oeon/v9MJ9RtG++gaUugVc938y4pSUotBSwG7Egl5CAv0/s
-         dLSRQ9l4/yS2jxQI0GEYexvHn3vk/iRdZTKI12cTYXen00JY58bnctTmka273oG6i1Ue
-         fEiw==
+        bh=giMh6CV+ebQaMfil4WhC+L/0OniXZ48oEVWUpwWfMDs=;
+        b=CKPeBNjSUoVfcYjf2H0tn6lNfb4WCfH+qcPtLe20kpAf1XSdq1ou13nbDylclZhgD6
+         ki1V4f57v8AcfC4HPm7ZSkxfJfiHWfJFaxLzddNKM1YCsQQ0y2mKWNZdL8ixvJ6KD4J8
+         FSylg13oxehSO15OyPeLWb7mTRuYpAAL3frMeLcLMGJVoAOwPze667o7nEn1k72/buOx
+         BvmU9/stXwcHbfLUgxAW0GOsurGBjg3rXdRIeOfzxj0myq77l9NwosfecMYTlrV3UrZb
+         UWcBO43HL3uWb/tUnXCuMy3NlC3B6+MmLoOxACezPUAOC61q0OW8TsrAAXKYtdcVAUr6
+         wbVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc;
-        bh=IkARQOyCkbKRyiQVo0E+3fF3PnzXAw1PITXNc7Jpyh0=;
-        b=VeGzH/AWH0YaFoTPNgh4q2GODouZRGQpehsLfcsP1Bk9nCZNmYuoooeUnUJiHjUuuQ
-         ofsrRBymS2zOiXgr0lX1LQ3nfR6PAM9SaDduBZyjS2qLMzP8jNY5T9v9tYUQ5Nb4UvDX
-         PCBT9GNwpQZWjyUi+WSw8Zyk2BiPfoQ31fVD4hPU0zeoqKAF0JkIAxAq7k96IbvwyMQL
-         8FZ5Ex+f5QoaGI+5BEOjIhl7yhHM4JgrM8u0LuQGkjGrDI5WRjwNnaSuBLgUWMkZ3WXy
-         6t8vsdY9THVpKpU61FmCNCudbyc2Olt7tkbeo0r8l/SzInCnOg5p5KHylmPvu4DRdywi
-         u2Ew==
-X-Gm-Message-State: ACgBeo2lOpNafZi00ka6Sbk+E8qelSextO++jqKGHxxhg+7JK2t62ThZ
-        alzvgFH/iSoMTeFOAEvgb0A=
-X-Google-Smtp-Source: AA6agR7rr8NCgKEiWScS7tmJrKZ0xvzCBH96rM1Fx03ZPKypl/m1UJj5NiIZA8ksFaWKOBT90pXuGA==
-X-Received: by 2002:a05:6000:547:b0:218:5f6a:f5db with SMTP id b7-20020a056000054700b002185f6af5dbmr4024036wrf.480.1660379690470;
-        Sat, 13 Aug 2022 01:34:50 -0700 (PDT)
-Received: from localhost.localdomain ([105.235.129.49])
-        by smtp.gmail.com with ESMTPSA id q4-20020a05600000c400b0021e8d205705sm1471365wrx.51.2022.08.13.01.34.48
+        bh=giMh6CV+ebQaMfil4WhC+L/0OniXZ48oEVWUpwWfMDs=;
+        b=SbfdsGi1HojZD+bWjkgneHDvI1aFupMPnQzg2w9uS0wQzGx0L6y0Nm3nKoEqOpd99G
+         SWPCI6lSirYANkULSXe800RzHlS+q5KfXHmOrycQ6xvPQCuQpWqYES85Q1NtySD1wa1c
+         Jpd3hhjwjta/vWSh6ecPwH3iMv4OLjzTO13OCEAZruLd3thJdXwDmnfxAPaIwwGAnf+C
+         zhwG/X5X6jbrA+OkKWlbuKcBnVUgM83LQ/e/Gb+Kcg+Mj21Ba99rTipTcH0qb7FhmylN
+         oXRHX74ckNZ06S5d6GJBb8hJwu2uA8SyOklkVVbN9muY0ZpRz9NuOs9zLcjcoNgQOt06
+         xgEA==
+X-Gm-Message-State: ACgBeo1MVpEjG6NvKLj0lgbI4j+8R/46SsptMC8yyqQAPGCpW4xIG0FK
+        YzODBnEA8vSk4wVBjjrELw0=
+X-Google-Smtp-Source: AA6agR5/50LsvrEBmEVylqJMNR6BNXGjnKBGmDDXPFCJ/to2MC9nIENXqMl7u4Pw4kWk29w7Fk5NdQ==
+X-Received: by 2002:a17:907:e94:b0:730:af21:cf60 with SMTP id ho20-20020a1709070e9400b00730af21cf60mr4639547ejc.681.1660379672269;
+        Sat, 13 Aug 2022 01:34:32 -0700 (PDT)
+Received: from pca.lan (ptr-dc5856nwo1xazteick5.18120a2.ip6.access.telenet.be. [2a02:1811:bc80:f7f0:d03:1d8d:20cb:2215])
+        by smtp.gmail.com with ESMTPSA id u26-20020aa7d55a000000b0042de3d661d2sm2718172edr.1.2022.08.13.01.34.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Aug 2022 01:34:50 -0700 (PDT)
-From:   Yassine Oudjana <yassine.oudjana@gmail.com>
-X-Google-Original-From: Yassine Oudjana <y.oudjana@protonmail.com>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Chun-Jie Chen <chun-jie.chen@mediatek.com>
-Cc:     Yassine Oudjana <y.oudjana@protonmail.com>,
-        Yassine Oudjana <yassine.oudjana@gmail.com>,
-        Rex-BC Chen <rex-bc.chen@mediatek.com>,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] clk: mediatek: Use mtk_clk_register_gates_with_dev in simple probe
-Date:   Sat, 13 Aug 2022 09:33:20 +0100
-Message-Id: <20220813083319.45455-1-y.oudjana@protonmail.com>
-X-Mailer: git-send-email 2.37.1
+        Sat, 13 Aug 2022 01:34:31 -0700 (PDT)
+From:   Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
+To:     Shengjiu Wang <shengjiu.wang@gmail.com>,
+        Xiubo Li <Xiubo.Lee@gmail.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Nicolin Chen <nicoleotsuka@gmail.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>,
+        alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2] ASoC: fsl_sai: fix incorrect mclk number in error message
+Date:   Sat, 13 Aug 2022 10:33:52 +0200
+Message-Id: <20220813083353.8959-1-pieterjan.camerlynck@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,35 +75,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yassine Oudjana <y.oudjana@protonmail.com>
+In commit c3ecef21c3f26 ("ASoC: fsl_sai: add sai master mode support")
+the loop was changed to start iterating from 1 instead of 0. The error
+message however was not updated, reporting the wrong clock to the user.
 
-Register gates with dev in mtk_clk_simple_probe.
-
-Signed-off-by: Yassine Oudjana <y.oudjana@protonmail.com>
-Reviewed-by: Chen-Yu Tsai <wenst@chromium.org>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
 ---
-This patch was originally part of a series, and is sent alone now since
-it doesn't depend on the rest of it and can be applied directly:
-https://lore.kernel.org/linux-clk/20220519134728.456643-1-y.oudjana@protonmail.com/
+V2: rebase against latest version
+---
+ sound/soc/fsl/fsl_sai.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- drivers/clk/mediatek/clk-mtk.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/clk/mediatek/clk-mtk.c b/drivers/clk/mediatek/clk-mtk.c
-index 05a188c62119..4977870912b1 100644
---- a/drivers/clk/mediatek/clk-mtk.c
-+++ b/drivers/clk/mediatek/clk-mtk.c
-@@ -434,7 +434,8 @@ int mtk_clk_simple_probe(struct platform_device *pdev)
- 	if (!clk_data)
- 		return -ENOMEM;
- 
--	r = mtk_clk_register_gates(node, mcd->clks, mcd->num_clks, clk_data);
-+	r = mtk_clk_register_gates_with_dev(node, mcd->clks, mcd->num_clks,
-+					    clk_data, &pdev->dev);
- 	if (r)
- 		goto free_data;
- 
+diff --git a/sound/soc/fsl/fsl_sai.c b/sound/soc/fsl/fsl_sai.c
+index 7523bb944b21..d430eece1d6b 100644
+--- a/sound/soc/fsl/fsl_sai.c
++++ b/sound/soc/fsl/fsl_sai.c
+@@ -1306,7 +1306,7 @@ static int fsl_sai_probe(struct platform_device *pdev)
+ 		sai->mclk_clk[i] = devm_clk_get(dev, tmp);
+ 		if (IS_ERR(sai->mclk_clk[i])) {
+ 			dev_err(dev, "failed to get mclk%d clock: %ld\n",
+-					i + 1, PTR_ERR(sai->mclk_clk[i]));
++					i, PTR_ERR(sai->mclk_clk[i]));
+ 			sai->mclk_clk[i] = NULL;
+ 		}
+ 	}
 -- 
-2.37.1
+2.25.1
 

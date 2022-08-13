@@ -2,111 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C82505918D7
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 06:38:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47A205918DD
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 07:21:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237449AbiHMEif (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 00:38:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39880 "EHLO
+        id S234155AbiHMFS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 01:18:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231424AbiHMEid (ORCPT
+        with ESMTP id S229507AbiHMFS0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 00:38:33 -0400
-Received: from wout3-smtp.messagingengine.com (wout3-smtp.messagingengine.com [64.147.123.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 600E72871A;
-        Fri, 12 Aug 2022 21:38:32 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 0FF403200921;
-        Sat, 13 Aug 2022 00:38:30 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Sat, 13 Aug 2022 00:38:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=undef.tools; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm1; t=1660365510; x=1660451910; bh=HEcNfg4CwiBsfqODwObieSZgI
-        suTV3ZpAgRuL6VBTtg=; b=NwE54rizUgYGRU5kE4pbEMAx3ul6uR36YOFRkj3sO
-        fMW2AM6rnp39EraZBCnBPm42Ymq2xEOnVmM8MaqjxCdN2qbv/WBSGM0GGTIrtT24
-        j/V/8AtDtH4H+WN2Bcp994gkAsDKlWpPGAHKuSyZR0MbqLIJQCMAW3LrLg9yNLnt
-        u3WK1MBt71/E+tIR9EfHvogHJwg1o0D1XusW9P3peOPkMUkFNH94W6ALBgsI8Ils
-        U2mX2vnx47z6FIx8Hb0xn1T0HZNp6+bWo3g/NcA0yPOv3OhBofNaTefWlzxyR/MD
-        3TifbectHtm5RweOr4Cv+WNapn1WGpdy5xYBgefH/YQAw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1660365510; x=1660451910; bh=HEcNfg4CwiBsfqODwObieSZgIsuTV3ZpAgR
-        uL6VBTtg=; b=OhHgQzE/QUcnvt8UPLuOF2ZHlwaCVdeFZ7Bx1r+w9L4rFx4Ezqb
-        Y34KrqtSVZPcjcc9xDFrxcFEIuxpaGDsR+Wrb42bwGMffG1hNWDRdx1KgTB+CBb7
-        b4tjiPkuyPJw3bQ6I5NfBXNJrFbWJvCsA/mSjRCHl1CubUoTTqi+BnrV7WLXyZE0
-        J/O7MkR17kdkP2Xab4Ddy3NbP0/qpIpG5leCy6O1FkNo1ivrTvO2x4Ov/6CElxJs
-        X+YL5cmclPYfDIUa89Q7xoZq5WcmbJYeJjJBoVsWrIWlFwsDA2ST28JyPWFrjZXL
-        r0y/tUuiP8MI3109/lUall7r9ASWP2mvTYA==
-X-ME-Sender: <xms:xSr3YnhYk5WE9Q8kZexRKMNCcrRPPs3Ef9qW2IKyPmYsm-lpaPXdtA>
-    <xme:xSr3YkCXzvfiqmsP0wgQqdqVO4c-wWc2zk8WGjVUufKHMp7dCzri9ytc5mP5dpMUX
-    8qF33AmaZH8Yu09EXo>
-X-ME-Received: <xmr:xSr3YnE-OgUuD_SEi1QqjgD7PlQvNlMFIoMWW5HVMOVqZQETx7aALEh4T7uM3dyFCQH4NbmXcg4slgxh6lZ9qwbve4U6mKnbQBsUfEOCKcTBFUeJY-eG5PEQtA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegjedgkeejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepkhgvrhhnvghl
-    sehunhguvghfrdhtohholhhsnecuggftrfgrthhtvghrnheptddtieehgefgveegkefghe
-    ekgeelkeejleelkeejueejkedtkeetfefghfektdeunecuvehluhhsthgvrhfuihiivgep
-    tdenucfrrghrrghmpehmrghilhhfrhhomhepkhgvrhhnvghlsehunhguvghfrdhtohholh
-    hs
-X-ME-Proxy: <xmx:xir3YkSI9WA7s-ARKSn7rWSS-n5QDFuDlwht6o5JX_o5aLTiwEaDmg>
-    <xmx:xir3Ykzh67NkWRbrHePCTM90GjU5BJbFnMdiJGuv_ru3Unn5bzF4qw>
-    <xmx:xir3Yq7Rz6Jrqv1GSQKI5gK0szjJ430kOKiP0sCw25dMm5PAW6_wTg>
-    <xmx:xir3YrnL5-JXfp796yqk-SofX5opsl8f-cTrKtOUcIlzBIHV7swKdg>
-Feedback-ID: id76147eb:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 13 Aug 2022 00:38:27 -0400 (EDT)
-From:   kernel@undef.tools
-To:     Bastien Nocera <hadess@hadess.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Ondrej Jirman <megi@xff.cz>,
-        Jarrah Gosbell <kernel@undef.tools>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     phone-devel@vger.kernel.org
-Subject: [PATCH] Input: goodix: Add compatible string for GT1158
-Date:   Sat, 13 Aug 2022 04:38:21 +0000
-Message-Id: <20220813043821.9981-1-kernel@undef.tools>
-X-Mailer: git-send-email 2.35.1
+        Sat, 13 Aug 2022 01:18:26 -0400
+Received: from mail-lf1-x142.google.com (mail-lf1-x142.google.com [IPv6:2a00:1450:4864:20::142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98C0496FDA
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 22:18:24 -0700 (PDT)
+Received: by mail-lf1-x142.google.com with SMTP id u1so3768029lfq.4
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 22:18:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc;
+        bh=S2u9Q+tjkz31iCRfklDeKGl5LtO3Yk8kTNoA3qpbsNs=;
+        b=FfLiOArHc8XELsnYYTr1b602n8lqpz8MfJweHlOp/rDjPV0XIr83VI9ZZkgsLNqXJ7
+         9kM6r5eAASQeRRPF2v1kkaAXcgelsZgV8lraBapezfUv1PBdKGOw2hTF1V8DODGduBZE
+         SgJ1MNcaY4N+88AEX36QVAfP1poz4NNYtl6Vgv79U3d4r6T69DD9FWBcWdiFOfUA5cAk
+         oHTJ1qg8VSDhHpfAuMCnruvU7rlQl+hZa51OX4D24kQqahgbo8fdOvdP3O2qZlXxVsCL
+         ODqYKhpLuNJqtvz1MINRp2yc25jP90mdRjWnyzNPUQ3xb5lCJFrcE5MY/BuSbE8NQoUT
+         sOng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=S2u9Q+tjkz31iCRfklDeKGl5LtO3Yk8kTNoA3qpbsNs=;
+        b=CgrW+OHr00plnhxToNXUBL69TYLFcAtFCF8ULbWYMwf6GgqB6u3z5hasItK6WTN3Yp
+         LbzsarCTau6YAyCHf6XvyTJY05T4223RfDc2gRrJ9WJT8UtxXrJU98BxF4wv4/42jmvu
+         YY4sbUQdasisMkD5RHzXU+vGf9QtUQfTL7l29+r6YqSBcifv8VSn8HWWu/tISPS2Ea/L
+         pWHSBrnXF7pnjaBvnxl4AdX1nDhjpb+GH1kRuyF3WN6+sFnCI7NIU41xVwO0QdazY1PN
+         MDJR080FuUmgXPH3fNuF5/ztWt+7htQ4IHPIILBncqFAWGC3nvMWBuGTN+kDarJTbSij
+         oAKA==
+X-Gm-Message-State: ACgBeo14G+QG7odsjvocnPzv2P3gmuhQmQZs/iyI21W8sMfpCtDA0bre
+        V06/feI6R5RmhHaQhKr5k2BvSFioBe0Ebr79VZQ=
+X-Google-Smtp-Source: AA6agR5TRANJKbtlNp+cgDWurNiAgADQZNl28UMezlG3T4Tte5Ss+tY57yHjjSs/RjAqOPz/AhVpKrrWKclP3aza0bw=
+X-Received: by 2002:a05:6512:b87:b0:48b:2247:684f with SMTP id
+ b7-20020a0565120b8700b0048b2247684fmr2377911lfv.593.1660367902448; Fri, 12
+ Aug 2022 22:18:22 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Sender: kennethedwards053@gmail.com
+Received: by 2002:a2e:81d2:0:0:0:0:0 with HTTP; Fri, 12 Aug 2022 22:18:21
+ -0700 (PDT)
+From:   Ariel iah <pb589847@gmail.com>
+Date:   Sat, 13 Aug 2022 06:18:21 +0100
+X-Google-Sender-Auth: C-Ej1kCT2uII60dsJyByzN_x6oI
+Message-ID: <CAEa69K1wAnC12cs=3f3rtkdExe-2JHL6JGf7S8M4cRyKgg4mvA@mail.gmail.com>
+Subject: CAN YOU DO IT
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.3 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jarrah Gosbell <kernel@undef.tools>
-
-Add compatible string for GT1158 missing from the previous patch.
-
-Fixes:	425fe4709c76 ("Input: goodix - add support for GT1158")
-Signed-off-by: Jarrah Gosbell <kernel@undef.tools>
----
- drivers/input/touchscreen/goodix.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/input/touchscreen/goodix.c b/drivers/input/touchscreen/goodix.c
-index 3974cb63708f..995169701f13 100644
---- a/drivers/input/touchscreen/goodix.c
-+++ b/drivers/input/touchscreen/goodix.c
-@@ -1557,6 +1557,7 @@ MODULE_DEVICE_TABLE(acpi, goodix_acpi_match);
- #ifdef CONFIG_OF
- static const struct of_device_id goodix_of_match[] = {
- 	{ .compatible = "goodix,gt1151" },
-+	{ .compatible = "goodix,gt1158" },
- 	{ .compatible = "goodix,gt5663" },
- 	{ .compatible = "goodix,gt5688" },
- 	{ .compatible = "goodix,gt911" },
--- 
-2.35.1
-
+i am Mrs  Benaiah and i was diagnosed with cancer about 2 years
+ago,before i go for a surgery  i  have to do this by helping the
+Less-privileged,so If you are interested to use the sum of
+US17.3Million)to help them kindly get back to me for more information.
+Warm Regards,
+Mrs. Peninnah Ariel Benaiah

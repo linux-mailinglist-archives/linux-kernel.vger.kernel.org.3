@@ -2,47 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B1FB5919B7
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 12:01:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DFD75919BA
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 12:01:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238845AbiHMKAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 06:00:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49988 "EHLO
+        id S238958AbiHMKBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 06:01:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238659AbiHMKAR (ORCPT
+        with ESMTP id S238856AbiHMKB0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 06:00:17 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B131DD;
-        Sat, 13 Aug 2022 03:00:14 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.56])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4M4bbR58cgzGpJC;
-        Sat, 13 Aug 2022 17:58:43 +0800 (CST)
-Received: from dggpemm500005.china.huawei.com (7.185.36.74) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 13 Aug 2022 18:00:11 +0800
-Received: from localhost.localdomain (10.67.164.66) by
- dggpemm500005.china.huawei.com (7.185.36.74) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Sat, 13 Aug 2022 18:00:11 +0800
-From:   Yang Shen <shenyang39@huawei.com>
-To:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>
-CC:     <linux-kernel@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
-        <wangzhou1@hisilicon.com>, <liulongfang@huawei.com>
-Subject: [PATCH] crypto: hisilicon/zip - some misc cleanup
-Date:   Sat, 13 Aug 2022 17:58:17 +0800
-Message-ID: <20220813095817.40743-1-shenyang39@huawei.com>
-X-Mailer: git-send-email 2.24.0
+        Sat, 13 Aug 2022 06:01:26 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75ACE7678
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 03:01:24 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id o3-20020a17090a0a0300b001f7649cd317so10421109pjo.0
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 03:01:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc;
+        bh=rXjZq7TyJRpGA36wuNWeax0N/DTCuezFM2I6n+kaOFc=;
+        b=uludQ0lLYxsMsamFFMGEAF4NjuSBTl68G7b7d5T0Xyrr1vKPHVnSigosbzHsNWpJ6c
+         lnun7Gx5kbIHOBuPvWXq/znBa6WjZh6uG+avVo3AtMmdq8io6sddwwKHRAkQ+S7vq2eN
+         A/Pou91K9q3DcouiBrvJRDkTzd6GtgxnNDt8HTi3XXlHiDBoI8FYWGvak7noJLaoqHQq
+         fjvj83QfEkS3s38zh/DRL/tHYz901CKghNoqoIKn/mRAvXgvIcKvb+ZW8emMfm5MZGyo
+         /s3fYXOxL8Y5m0xY4qz7twAk94MjBZulAuxffst0EQEGfOfw0c7eEVh5Dc+njTqxPd9U
+         MnPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
+        bh=rXjZq7TyJRpGA36wuNWeax0N/DTCuezFM2I6n+kaOFc=;
+        b=SNezUE/2gX6xBZ6gO4S0Pg+N27cu4rrOuo5zLdTKeYQ143ybYPftnXvwPmz5hgNIE9
+         yxmnodRe0umoG0T/f4DCE2nNVAKfQnTayqqQNRNnqlAD1uIDKXjCUShplXHs0W2eiQ7/
+         /LgeTwxhNjKJBanAeg2iA88wV4AhAfJR8zrh1lrQwVv72Qiw76oKzn6LL0CVI/NnepEJ
+         +d2L7/rqHUvicZ5Tc/03FzwNo8cqp0Ju4sNY+pjoN0yVHYqItIu2GXT6s5EFXYZ8bSrb
+         fyEx48CAGqXQVNO/Ik6mFfq2yac5m7rdYy7MGe9dVNjsmMfdovnmI5TtGTWpMsmtxkuB
+         297g==
+X-Gm-Message-State: ACgBeo0vc2t1cvMKIOOeYCNqzH7NlmzgKvsgDvggDewZR1NIomNp/4Ox
+        oWZT3lQcFpME145QfYwkmc3xqtofQk/H32yaeIvXuw==
+X-Google-Smtp-Source: AA6agR6APTL3EkQhR9XXVJ4cdNRgW1zCMot4F0nMgyVJDj6msnWklnLNGrD42dX8QV/lT+YbFRlDfGnOgAuMQ+FfteY=
+X-Received: by 2002:a17:902:8683:b0:171:3114:7678 with SMTP id
+ g3-20020a170902868300b0017131147678mr7861379plo.172.1660384883745; Sat, 13
+ Aug 2022 03:01:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.164.66]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <a459363217b1847c0f206a5dbdf181cb21cf3d0c.1659557290.git.guillaume.tucker@collabora.com>
+In-Reply-To: <a459363217b1847c0f206a5dbdf181cb21cf3d0c.1659557290.git.guillaume.tucker@collabora.com>
+From:   Anders Roxell <anders.roxell@linaro.org>
+Date:   Sat, 13 Aug 2022 12:01:12 +0200
+Message-ID: <CADYN=9JM1nnjC9LypHqrz7JJjbZLpm8rArDUy4zgYYrajErBnA@mail.gmail.com>
+Subject: Re: [PATCH] selftests/landlock: fix broken include of linux/landlock.h
+To:     Guillaume Tucker <guillaume.tucker@collabora.com>
+Cc:     Guillaume <guillaume.tucker@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
+        Tim.Bird@sony.com, kernel@collabora.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-security-module@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,159 +71,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some cleanup for
+On Wed, 3 Aug 2022 at 22:14, Guillaume Tucker
+<guillaume.tucker@collabora.com> wrote:
+>
+> Revert part of the earlier changes to fix the kselftest build when
+> using a sub-directory from the top of the tree as this broke the
+> landlock test build as a side-effect when building with "make -C
+> tools/testing/selftests/landlock".
+>
+> Reported-by: Micka=C3=ABl Sala=C3=BCn <mic@digikod.net>
+> Fixes: a917dd94b832 ("selftests/landlock: drop deprecated headers depende=
+ncy")
+> Fixes: f2745dc0ba3d ("selftests: stop using KSFT_KHDR_INSTALL")
+> Signed-off-by: Guillaume Tucker <guillaume.tucker@collabora.com>
 
-Signed-off-by: Yang Shen <shenyang39@huawei.com>
----
- drivers/crypto/hisilicon/zip/zip.h        |  2 +-
- drivers/crypto/hisilicon/zip/zip_crypto.c | 30 +++++++++++------------
- drivers/crypto/hisilicon/zip/zip_main.c   | 10 +++++---
- 3 files changed, 23 insertions(+), 19 deletions(-)
+Building with this patch doesn't work, it gives this output:
+make[3]: Entering directory
+'/home/anders/src/kernel/next/tools/testing/selftests/landlock'
+make[3]: Leaving directory
+'/home/anders/src/kernel/next/tools/testing/selftests/landlock'
+make[3]: *** No rule to make target
+'/home/anders/.cache/tuxmake/builds/78/build/kselftest/landlock/base_test',
+needed by 'all'.  Stop.
 
-diff --git a/drivers/crypto/hisilicon/zip/zip.h b/drivers/crypto/hisilicon/zip/zip.h
-index 3dfd3bac5a33..f289656e9ac0 100644
---- a/drivers/crypto/hisilicon/zip/zip.h
-+++ b/drivers/crypto/hisilicon/zip/zip.h
-@@ -81,7 +81,7 @@ struct hisi_zip_sqe {
- 	u32 rsvd1[4];
- };
- 
--int zip_create_qps(struct hisi_qp **qps, int ctx_num, int node);
-+int zip_create_qps(struct hisi_qp **qps, int qp_num, int node);
- int hisi_zip_register_to_crypto(struct hisi_qm *qm);
- void hisi_zip_unregister_from_crypto(struct hisi_qm *qm);
- #endif
-diff --git a/drivers/crypto/hisilicon/zip/zip_crypto.c b/drivers/crypto/hisilicon/zip/zip_crypto.c
-index ad35434a3fdb..09a823dbf7bc 100644
---- a/drivers/crypto/hisilicon/zip/zip_crypto.c
-+++ b/drivers/crypto/hisilicon/zip/zip_crypto.c
-@@ -135,7 +135,7 @@ static u16 sgl_sge_nr = HZIP_SGL_SGE_NR;
- module_param_cb(sgl_sge_nr, &sgl_sge_nr_ops, &sgl_sge_nr, 0444);
- MODULE_PARM_DESC(sgl_sge_nr, "Number of sge in sgl(1-255)");
- 
--static u16 get_extra_field_size(const u8 *start)
-+static u32 get_extra_field_size(const u8 *start)
- {
- 	return *((u16 *)start) + GZIP_HEAD_FEXTRA_XLEN;
- }
-@@ -167,7 +167,7 @@ static u32 __get_gzip_head_size(const u8 *src)
- 	return size;
- }
- 
--static size_t __maybe_unused get_gzip_head_size(struct scatterlist *sgl)
-+static u32 __maybe_unused get_gzip_head_size(struct scatterlist *sgl)
- {
- 	char buf[HZIP_GZIP_HEAD_BUF];
- 
-@@ -498,7 +498,7 @@ static int hisi_zip_adecompress(struct acomp_req *acomp_req)
- 	return ret;
- }
- 
--static int hisi_zip_start_qp(struct hisi_qp *qp, struct hisi_zip_qp_ctx *ctx,
-+static int hisi_zip_start_qp(struct hisi_qp *qp, struct hisi_zip_qp_ctx *qp_ctx,
- 			     int alg_type, int req_type)
- {
- 	struct device *dev = &qp->qm->pdev->dev;
-@@ -506,7 +506,7 @@ static int hisi_zip_start_qp(struct hisi_qp *qp, struct hisi_zip_qp_ctx *ctx,
- 
- 	qp->req_type = req_type;
- 	qp->alg_type = alg_type;
--	qp->qp_ctx = ctx;
-+	qp->qp_ctx = qp_ctx;
- 
- 	ret = hisi_qm_start_qp(qp, 0);
- 	if (ret < 0) {
-@@ -514,15 +514,15 @@ static int hisi_zip_start_qp(struct hisi_qp *qp, struct hisi_zip_qp_ctx *ctx,
- 		return ret;
- 	}
- 
--	ctx->qp = qp;
-+	qp_ctx->qp = qp;
- 
- 	return 0;
- }
- 
--static void hisi_zip_release_qp(struct hisi_zip_qp_ctx *ctx)
-+static void hisi_zip_release_qp(struct hisi_zip_qp_ctx *qp_ctx)
- {
--	hisi_qm_stop_qp(ctx->qp);
--	hisi_qm_free_qps(&ctx->qp, 1);
-+	hisi_qm_stop_qp(qp_ctx->qp);
-+	hisi_qm_free_qps(&qp_ctx->qp, 1);
- }
- 
- static const struct hisi_zip_sqe_ops hisi_zip_ops_v1 = {
-@@ -594,7 +594,7 @@ static void hisi_zip_ctx_exit(struct hisi_zip_ctx *hisi_zip_ctx)
- {
- 	int i;
- 
--	for (i = 1; i >= 0; i--)
-+	for (i = 0; i < HZIP_CTX_Q_NUM; i++)
- 		hisi_zip_release_qp(&hisi_zip_ctx->qp_ctx[i]);
- }
- 
-@@ -613,7 +613,7 @@ static int hisi_zip_create_req_q(struct hisi_zip_ctx *ctx)
- 			if (i == 0)
- 				return ret;
- 
--			goto err_free_loop0;
-+			goto err_free_comp_q;
- 		}
- 		rwlock_init(&req_q->req_lock);
- 
-@@ -622,19 +622,19 @@ static int hisi_zip_create_req_q(struct hisi_zip_ctx *ctx)
- 		if (!req_q->q) {
- 			ret = -ENOMEM;
- 			if (i == 0)
--				goto err_free_bitmap;
-+				goto err_free_comp_bitmap;
- 			else
--				goto err_free_loop1;
-+				goto err_free_decomp_bitmap;
- 		}
- 	}
- 
- 	return 0;
- 
--err_free_loop1:
-+err_free_decomp_bitmap:
- 	bitmap_free(ctx->qp_ctx[HZIP_QPC_DECOMP].req_q.req_bitmap);
--err_free_loop0:
-+err_free_comp_q:
- 	kfree(ctx->qp_ctx[HZIP_QPC_COMP].req_q.q);
--err_free_bitmap:
-+err_free_comp_bitmap:
- 	bitmap_free(ctx->qp_ctx[HZIP_QPC_COMP].req_q.req_bitmap);
- 	return ret;
- }
-diff --git a/drivers/crypto/hisilicon/zip/zip_main.c b/drivers/crypto/hisilicon/zip/zip_main.c
-index c3303d99acac..04c8a4c65d77 100644
---- a/drivers/crypto/hisilicon/zip/zip_main.c
-+++ b/drivers/crypto/hisilicon/zip/zip_main.c
-@@ -586,8 +586,9 @@ static ssize_t hisi_zip_ctrl_debug_write(struct file *filp,
- 		return len;
- 
- 	tbuf[len] = '\0';
--	if (kstrtoul(tbuf, 0, &val))
--		return -EFAULT;
-+	ret = kstrtoul(tbuf, 0, &val);
-+	if (ret)
-+		return ret;
- 
- 	ret = hisi_qm_get_dfx_access(qm);
- 	if (ret)
-@@ -976,7 +977,10 @@ static int hisi_zip_pf_probe_init(struct hisi_zip *hisi_zip)
- 	qm->err_ini = &hisi_zip_err_ini;
- 	qm->err_ini->err_info_init(qm);
- 
--	hisi_zip_set_user_domain_and_cache(qm);
-+	ret = hisi_zip_set_user_domain_and_cache(qm);
-+	if (ret)
-+		return ret;
-+
- 	hisi_zip_open_sva_prefetch(qm);
- 	hisi_qm_dev_err_init(qm);
- 	hisi_zip_debug_regs_clear(qm);
--- 
-2.24.0
+I'm building like this:
+tuxmake --runtime podman --target-arch x86_64 --toolchain gcc-12
+--kconfig defconfig kselftest
 
+which translates into this make command:
+make --silent --keep-going --jobs=3D32
+O=3D/home/anders/.cache/tuxmake/builds/78/build
+INSTALL_PATH=3D/home/anders/.cache/tuxmake/builds/78/build/kselftest_instal=
+l
+ARCH=3Dx86_64 CROSS_COMPILE=3Dx86_64-linux-gnu- kselftest-install
+
+building without this patch works, see below:
+
+make[3]: Entering directory
+'/home/anders/src/kernel/next/tools/testing/selftests/landlock'
+x86_64-linux-gnu-gcc -Wall -O2 -isystem
+/home/anders/.cache/tuxmake/builds/77/build/usr/include    base_test.c
+ -o /home/anders/.cache/tuxmake/builds/77/build/kselftest/landlock/base_tes=
+t
+-lcap
+x86_64-linux-gnu-gcc -Wall -O2 -isystem
+/home/anders/.cache/tuxmake/builds/77/build/usr/include    fs_test.c
+-o /home/anders/.cache/tuxmake/builds/77/build/kselftest/landlock/fs_test
+-lcap
+x86_64-linux-gnu-gcc -Wall -O2 -isystem
+/home/anders/.cache/tuxmake/builds/77/build/usr/include
+ptrace_test.c  -o
+/home/anders/.cache/tuxmake/builds/77/build/kselftest/landlock/ptrace_test
+-lcap
+x86_64-linux-gnu-gcc -Wall -O2 -isystem
+/home/anders/.cache/tuxmake/builds/77/build/usr/include    true.c  -o
+/home/anders/.cache/tuxmake/builds/77/build/kselftest/landlock/true
+-static
+make[3]: Leaving directory
+'/home/anders/src/kernel/next/tools/testing/selftests/landlock'
+
+Cheers,
+Anders
+
+> ---
+>  tools/testing/selftests/landlock/Makefile | 7 +++++--
+>  1 file changed, 5 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/testing/selftests/landlock/Makefile b/tools/testing/se=
+lftests/landlock/Makefile
+> index a6959df28eb0..02868ac3bc71 100644
+> --- a/tools/testing/selftests/landlock/Makefile
+> +++ b/tools/testing/selftests/landlock/Makefile
+> @@ -9,10 +9,13 @@ TEST_GEN_PROGS :=3D $(src_test:.c=3D)
+>  TEST_GEN_PROGS_EXTENDED :=3D true
+>
+>  OVERRIDE_TARGETS :=3D 1
+> +top_srcdir :=3D ../../../..
+>  include ../lib.mk
+>
+> +khdr_dir =3D $(top_srcdir)/usr/include
+> +
+>  $(OUTPUT)/true: true.c
+>         $(LINK.c) $< $(LDLIBS) -o $@ -static
+>
+> -$(OUTPUT)/%_test: %_test.c ../kselftest_harness.h common.h
+> -       $(LINK.c) $< $(LDLIBS) -o $@ -lcap
+> +$(OUTPUT)/%_test: %_test.c $(khdr_dir)/linux/landlock.h ../kselftest_har=
+ness.h common.h
+> +       $(LINK.c) $< $(LDLIBS) -o $@ -lcap -I$(khdr_dir)
+> --
+> 2.30.2
+>

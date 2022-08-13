@@ -2,70 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AFB1591A0D
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 13:50:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A781A591A14
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 14:04:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239407AbiHMLua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 07:50:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46472 "EHLO
+        id S239420AbiHMMEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 08:04:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbiHMLu2 (ORCPT
+        with ESMTP id S231698AbiHMMES (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 07:50:28 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C3120BE7
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 04:50:24 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id ay12so1685134wmb.1
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 04:50:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=rySRLwiiIOrtSpvOJyTmWSaKJJa5oryDquhv9YZj+6o=;
-        b=YY2Jve7dPmBhnAAPknKHb75GYBe6TgB4NpBMCo7lsOxsvFBCkxz8lDcxWStY5d47Jv
-         JP031NuvuBuaA95125eUkzukVIhphwd9IBcuuJlWoUxaJdI7zgqkMFR7yBfAZnCZfKg7
-         X8ckr7JGKp0pvL9HU6UkL2rQSEaO6nxktBfeR/9r17vlYD8ntimnDfxZsHETZz7/cLbo
-         l275B+eBqhsYsTRxCKqd1YgWQzUJqQF/X87a3p4gbZHSJ3UCYK/192171gan4M5iUwkm
-         /fC8Asy0SerA+PA/uZsRVAk4/m2sSJaY7iF5AAKNh/Ap9mIhBDJUudbKN0hwI6v+Jwic
-         suUA==
+        Sat, 13 Aug 2022 08:04:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F09423C177
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 05:04:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660392256;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=r6uxi7nV92mK42y8sB6nwlqWyJcfn4mYRHPUi/SDIbU=;
+        b=RCPVXyumVeJ7LZmnO4wVvZgrcTAAw/jOstVHQR2SEIEVTbJG398r4KFej1n8yNTOMR69PW
+        6rnWM7i1InxV/kw+q3onPFOyNPuNOD37V0z798IPplRx+IoQo01vocIJ+oiczh5dfqPSp+
+        eAME2J67P4lielKDj1kFxv6vfcIsiD4=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-140-xT5iob42OPi1d7TCk2CrOQ-1; Sat, 13 Aug 2022 08:04:15 -0400
+X-MC-Unique: xT5iob42OPi1d7TCk2CrOQ-1
+Received: by mail-ed1-f70.google.com with SMTP id x20-20020a05640226d400b0043d50aadf3fso2136047edd.23
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 05:04:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=rySRLwiiIOrtSpvOJyTmWSaKJJa5oryDquhv9YZj+6o=;
-        b=QvNTgE8iC4rrvryAIwcgLSUSsFAM2yenTvKXzzQdk4TQXpQ+PFxlW8CYO+qhBnoJNh
-         P+kt1+8nnSXFrOrZyHMGpNM+sU5rYxyzefvqlGrE99oA7iB8DjcT+kJ5xIptZaDs1kxa
-         OU/XUfmL072fih4uxXlOO7nr8HW3ODU0K8rsJ04AfnkJMw1J///ggngbgTbU5QHi5Bt8
-         hlsGukdy/zMnQlHLoTtqrayq+Mh4a28a9H6s7IyqJD9rREl2Ppc73G0Eq9ip6Kck4hY1
-         m6f+pG486oZBHp8uVw8OAibHgDNXf/eM1S++2rRPV7OARmjBzOHU9pwm1UNJBcM/+zT5
-         ISOw==
-X-Gm-Message-State: ACgBeo1EHc4P++fZxXT489nozCtmLbnkAxh7lHaN+OS8XBApuvfXVVqC
-        bS5rGkid/KysuGYTswbpjn6ukw==
-X-Google-Smtp-Source: AA6agR74gWIK4vbRB/zahVpfeJTmJjAaYd5j3yvMfKvXYOe/Z/7mJsBMh41qu6MV1qncnZnLUJsIKQ==
-X-Received: by 2002:a7b:ce05:0:b0:3a5:c069:25b3 with SMTP id m5-20020a7bce05000000b003a5c06925b3mr5293928wmc.87.1660391422858;
-        Sat, 13 Aug 2022 04:50:22 -0700 (PDT)
-Received: from otso.. (mobiledyn-62-240-134-27.mrsn.at. [62.240.134.27])
-        by smtp.gmail.com with ESMTPSA id h8-20020a05600c350800b003a325bd8517sm3656092wmq.5.2022.08.13.04.50.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Aug 2022 04:50:22 -0700 (PDT)
-From:   Luca Weiss <luca.weiss@fairphone.com>
-To:     linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Luca Weiss <luca.weiss@fairphone.com>,
-        Lee Jones <lee.jones@linaro.org>,
-        Caleb Connolly <caleb.connolly@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] mfd: qcom-spmi-pmic: Add more PMIC SUBTYPE IDs
-Date:   Sat, 13 Aug 2022 13:48:06 +0200
-Message-Id: <20220813114806.102466-1-luca.weiss@fairphone.com>
-X-Mailer: git-send-email 2.37.1
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=r6uxi7nV92mK42y8sB6nwlqWyJcfn4mYRHPUi/SDIbU=;
+        b=Lcl8lfMS7vRJQe9RNF5efhsXyLIZ96XIUY37xMwuF5/395+SF/vyYit0c51VPKQlkq
+         QbqTbYnWl02+XSFOwUiYflprMDSfYt1s90pbb8zk+/DzG+dE5KqyXbeqkTsdpsoSfsJn
+         Kh7lKq4V927AZZQudz4K+yUsDKnP2MrR6nWZSEC3vtLSQFswjMkqbQUYbLX5Y3ynox2w
+         1Tuy70NZA+ekUGBlz83fvi4dvz3C9jWYTY9CPtyyjF4cX/4ERuOo0ojP6tR3FVfktcBu
+         KyINXIsL0BY95A/AgAhE4LAEcTWCU6xtufbjGrXlSZ0uYD9RGOQ20UllD8glGFUXA/D8
+         FwQQ==
+X-Gm-Message-State: ACgBeo0wU4qSv+yI4Tix+IPuZYFwDyHxQvBBRX5b1bgA1nsB9jGerLiD
+        ju3aylTGRorvYo5Q/WaEGLrZRDvH3YlIdH8ya3UPx24E5HEN7ME7NVuAsuseDOTPPUtmRLaA/iD
+        z6SfdMGFJqTi7cZ23nvSCDnhMWgiLufJZAXGCtief
+X-Received: by 2002:a05:6402:24a4:b0:440:8c0c:8d2b with SMTP id q36-20020a05640224a400b004408c0c8d2bmr7032685eda.311.1660392253776;
+        Sat, 13 Aug 2022 05:04:13 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR5UTIrmjwvc3z94DGmCWBcjO/hNjbGLTuu7gfNcYsudkMJGsF2zfJL9wieqjhI3LLUIhcijKigw22TipmtW7Qg=
+X-Received: by 2002:a05:6402:24a4:b0:440:8c0c:8d2b with SMTP id
+ q36-20020a05640224a400b004408c0c8d2bmr7032667eda.311.1660392253527; Sat, 13
+ Aug 2022 05:04:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <20220810234056.2494993-1-npache@redhat.com> <CABVgOSmUgkeuKKS_UYMOTUE4vARLpw--j77J9=zAkk5Zr30N9g@mail.gmail.com>
+ <CAA1CXcBjf411E7gCbTfowpOmas-ykuVCyn1B4oAua_VKxMkOCg@mail.gmail.com> <CABVgOSk74DvJsizPB+=UZ7sgw88_=7D6bBtHCEOWgpgWytKJeQ@mail.gmail.com>
+In-Reply-To: <CABVgOSk74DvJsizPB+=UZ7sgw88_=7D6bBtHCEOWgpgWytKJeQ@mail.gmail.com>
+From:   Nico Pache <npache@redhat.com>
+Date:   Sat, 13 Aug 2022 08:03:42 -0400
+Message-ID: <CAA1CXcB=8S5BnLmrdjc=6NBD-ZxUXMAmFMUTppBjnrXEM+C+Ng@mail.gmail.com>
+Subject: Re: [PATCH] kunit: fix Kconfig for build-in tests USB4 and Nitro Enclaves
+To:     David Gow <davidgow@google.com>
+Cc:     Joe Fradley <joefradley@google.com>,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        USB list <linux-usb@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Daniel Latypov <dlatypov@google.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>, alcioa@amazon.com,
+        lexnv@amazon.com, Andra Paraschiv <andraprs@amazon.com>,
+        YehezkelShB@gmail.com,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        michael.jamet@intel.com, andreas.noever@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,56 +82,157 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add more IDs that are found in the downstream msm-4.19 kernel under the
-path include/linux/qpnp/qpnp-revid.h.
+On Fri, Aug 12, 2022 at 2:43 AM David Gow <davidgow@google.com> wrote:
+>
+> (+joefradley@google.com to comment on what Android is doing here)
+>
+> On Thu, Aug 11, 2022 at 8:44 PM Nico Pache <npache@redhat.com> wrote:
+> >
+> > On Wed, Aug 10, 2022 at 8:20 PM David Gow <davidgow@google.com> wrote:
+> > >
+> > > On Thu, Aug 11, 2022 at 7:41 AM Nico Pache <npache@redhat.com> wrote:
+> > > >
+> > > > Both the USB4 and Nitro Enclaves KUNIT tests are now able to be compiled
+> > > > if KUNIT is compiled as a module. This leads to issues if KUNIT is being
+> > > > packaged separately from the core kernel and when KUNIT is run baremetal
+> > > > without the required driver compiled into the kernel.
+> > > >
+> > > > Fixes: 635dcd16844b ("thunderbolt: test: Use kunit_test_suite() macro")
+> > > > Fixes: fe5be808fa6c ("nitro_enclaves: test: Use kunit_test_suite() macro")
+> > > > Signed-off-by: Nico Pache <npache@redhat.com>
+> > > > ---
+> > >
+> > > Hmm... I'm not quite sure I understand the case that's broken here. Is it:
+> > > - KUnit is built as a module (CONFIG_KUNIT=m)
+> > > - USB4/nitro_enclaves are also built as modules, with the test enabled.
+> > > - The kunit module is not available at runtime, so neither driver
+> > > module can load (due to missing kunit dependencies)
+> > Exactly, except the issue is also when the USB/NE=y not just when they
+> > are modules. This is currently creating an issue with our build system
+> > during the depmod stage and has been preventing us from generating
+> > Fedora builds.
+> .
+> Yeah: there's a nasty tradeoff here in that having these depend on
+> KUNIT=y does (obviously) mean that it's not possible to run these
+> tests with KUNIT=m. I'd agree that being able to ruin some tests is
+> better than none, but there are quite a lot of tests which are doing
+> the same sort of tricks as USB4/nitro_enclaves to embed tests in the
+> same module as the code being tested. In particular, I think apparmor
+> is doing something similar, and the incoming AMDGPU tests also build
+> all of the tests into amdgpu.ko. If we require KUNIT=y for these,
+> we're leaving a lot of tests on the table for KUNIT=m cases, which
+> would otherwise work.
+>
+> The ideal solution would be to split the tests for these systems out
+> into their own separate modules, but that's often quite tricky due to
+> the sheer number of otherwise internal symbols which need exporting.
 
-Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
----
-I've noticed that some hex numbers in this list have uppercase letters,
-some have lower case ones.
-If wanted I can add a patch converting all to either upper- or lower
-case. Anyone have a preference here?
+I have already started trying to separate out all the built-in tests.
+There are a few which may have to stay as built-in if I can't find a
+viable solution, but expect a patch-set doing just this soon :)
 
- include/soc/qcom/qcom-spmi-pmic.h | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+> > >
+> > > If so, that's not a case (i.e., the kunit.ko module being unavailable
+> > > if it was built) we've tried to support thus far. I guess a de-facto
+> > > rule for supporting it would be to depend on KUNIT=y for any KUnit
+> > > tests which are built into the same module as the driver they're
+> > > testing.
+> > Yeah, although it's not been a case you've been trying to support, it
+> > has been working so far :) This has been the case (built-in tests
+> > utilizing 'depends on KUNIT=y') since we began supporting KUNIT in our
+> > testing infrastructure and it would be nice to keep that as a de-facto
+> > rule :)
+>
+> Okay: let's try to stick with that for now, then (unless there are any
+> objections from the people working on those particular tests), and
+> look to either reinstate it if we find a better way of dealing with
+> the missing/disabled kunit.ko case, or the tests can be split into a
+> separate module. Personally, I don't expect we'll get either of those
+> working in the short-term, but it's definitely a problem we'll have to
+> confront more eventually.
+>
+> In the meantime, I think the KUnit position on this will be to note
+> this as a consequence of building KUnit tests into bigger modules, and
+> leave the final decision up to the maintainers of those
+> subsystems/tests. This may result in there being some tests you have
+> to explicitly disable (rather than being able to use KUNIT_ALL_TESTS)
+> if an important module decides that they really want their tests to
+> run when KUNIT=m (which may not happen, we'll see...)
+Yep, explicitly disabling them is also an option for us, but I
+submitted this patchset because I noticed a change in the pattern for
+built-in tests (depends on KUNIT=y). So if people object to some tests
+not having kunit module support, we do have the ability to work around
+it.
 
-diff --git a/include/soc/qcom/qcom-spmi-pmic.h b/include/soc/qcom/qcom-spmi-pmic.h
-index 72398ff44719..bcb8e95d5dab 100644
---- a/include/soc/qcom/qcom-spmi-pmic.h
-+++ b/include/soc/qcom/qcom-spmi-pmic.h
-@@ -26,18 +26,32 @@
- #define PM8901_SUBTYPE		0x0f
- #define PM8950_SUBTYPE		0x10
- #define PMI8950_SUBTYPE		0x11
-+#define PMK8001_SUBTYPE		0x12
-+#define PMI8996_SUBTYPE		0x13
- #define PM8998_SUBTYPE		0x14
- #define PMI8998_SUBTYPE		0x15
-+#define SMB1381_SUBTYPE		0x17
- #define PM8005_SUBTYPE		0x18
- #define PM660L_SUBTYPE		0x1A
- #define PM660_SUBTYPE		0x1B
-+#define SMB1355_SUBTYPE		0x1C
- #define PM8150_SUBTYPE		0x1E
- #define PM8150L_SUBTYPE		0x1f
- #define PM8150B_SUBTYPE		0x20
- #define PMK8002_SUBTYPE		0x21
-+#define SMB1390_SUBTYPE		0x23
- #define PM8009_SUBTYPE		0x24
-+#define PMI632_SUBTYPE		0x25
- #define PM8150C_SUBTYPE		0x26
-+#define PM6150_SUBTYPE		0x28
- #define SMB2351_SUBTYPE		0x29
-+#define PM8008_SUBTYPE		0x2C
-+#define PM6125_SUBTYPE		0x2D
-+#define PM7250B_SUBTYPE		0x2E
-+#define PMK8350_SUBTYPE		0x2F
-+#define PMR735B_SUBTYPE		0x34
-+#define PM6350_SUBTYPE		0x36
-+#define PM2250_SUBTYPE		0x37
- 
- #define PMI8998_FAB_ID_SMIC	0x11
- #define PMI8998_FAB_ID_GF	0x30
--- 
-2.37.1
+Thanks for your review!
+
+Cheers,
+ -- Nico
+
+>
+> > >
+> > > Alternatively, maybe we could do some horrible hacks to compile stub
+> > > versions of various KUnit assertion symbols in unconditionally, which
+> > > forward to the real ones if KUnit is available.
+> > >
+> > > (Personally, I'd love it if we could get rid of CONFIG_KUNIT=m
+> > > altogether, and it's actually broken right at the moment[1]. There are
+> > > still some cases (unloading / reloading KUnit with different filter
+> > > options) which require it, though.)
+> > Personally I'd hate to see KUNIT=m go as that is how we have been able
+> > to support running Kunit tests so far.
+> >
+> > A little background on how we utilize Kunit. We build with KUNIT=m and
+> > KUNIT_ALL_TESTS=m and run the tests baremetal.
+> > Our build system creates 3 packages (kernel, kernel-modules, and
+> > kernel-modules-internal), this allows us to ship the kernel and its
+> > modules, while also isolating packages that we dont want to ship
+> > outside of QE and developers. We then have our own infrastructure in
+> > place to run and collect the output of these tests in our pipelined
+> > environments. We dont utilize UML because we dont support that feature
+> > in RHEL.
+> >
+> > Fedora uses this same methodology for running KUNIT, so we are
+> > frequently running kunit on an 'upstream' variant.
+> >
+> > I'm not sure how many organizations are supporting continuous KUNIT
+> > testing, or how they are achieving it, but dropping module support
+> > would prevent us from doing the CI testing we have in place.
+> >
+> > Cheers!
+> > -- Nico
+>
+> Fair enough -- we definitely won't get rid of it unless there's a
+> replacement which works as well if not better.
+>
+> The reason it's tempting to get rid of KUNIT=m is simply that there's
+> a chunk of KUnit code which needs to be built-in, even if the rest of
+> it is in a module. So a kernel with KUNIT=m still has a fair bit of
+> the overhead of KUNIT=y, and this is likely to get more significant as
+> more such features land (e.g., static stubbing:
+> https://lore.kernel.org/lkml/20220318021314.3225240-2-davidgow@google.com/
+> ).
+>
+> Traditionally, our expectation has been that a separate, KUnit-enabled
+> kernel config / build makes sense, as that allows the
+> release/production build to run without any testing-related overheads
+> at all. That being said, I know Android are looking to enable KUnit in
+> all GKI builds, and to implement a separate kunit.enable option to
+> effectively "disable" it at runtime. This doesn't remove all of the
+> overhead, but does allow KUnit to always be present without the risk
+> of compromising the integrity of the running kernel by running tests
+> in production.
+>
+> Regardless of whether any of those seem interesting to you, we won't
+> be getting rid of KUNIT=m in the short-term (and definitely will be
+> supporting individual test modules, even if we later want to have the
+> core executor built-in).
+>
+> One other note is that KUNIT=m is actually broken right at the moment:
+> the fix is here:
+> https://patchwork.kernel.org/project/linux-kselftest/patch/20220713005221.1926290-1-davidgow@google.com/
+>
+> Cheers,
+> -- David
+>
 

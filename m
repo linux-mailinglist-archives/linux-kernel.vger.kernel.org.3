@@ -2,278 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27554591C13
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 19:04:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7723591C15
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 19:07:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239785AbiHMREb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 13:04:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35702 "EHLO
+        id S239908AbiHMRHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 13:07:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236482AbiHMRE2 (ORCPT
+        with ESMTP id S236482AbiHMRH3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 13:04:28 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AADE62C6
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 10:04:26 -0700 (PDT)
+        Sat, 13 Aug 2022 13:07:29 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F040C9FF2;
+        Sat, 13 Aug 2022 10:07:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660410267; x=1691946267;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=ZpoYR05WUTkDSdKnEvxsVSUi0VfCnLw/lr38DEc3SxE=;
-  b=gZfBvw2szr2xjFC3skFoajytipY8TcgAmZkC39mZQrqdDUi3v0Gym/qp
-   D5/BJvsQU9pzoCL5beeR7BgleviNXVvRpb9vYwDorP177FIZ3bqN95/gI
-   88dr26JgcDOREVC9L9KzeOB7yKfwyN4+y3cKTDhmteuv7Y4dzz9RGWDDP
-   muqFF5af41Wg8IPTchFg1/tyl6EcKmzyspsBND6hdspteE25ty/+8JBnS
-   3CAnLsRJtLbNH9i6wUYGCwEl+wCteUWTQPDDFLFyyp75wIMoLsJKGYidu
-   obZ+JGvbpvOIJdgL5P2bhu0OsvJfnqr9sdkgkufbZxEi59a4rV+mYIU4T
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="278720919"
+  t=1660410448; x=1691946448;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=8JIR55KVpVczeMSzI16rkRrK4N4LiEJhYkeeglEzVXE=;
+  b=nKooIKfOUD9+PPhPQs//eLz8HdSPRpuBABAtQjcSP38yorOWrxS7Ky3q
+   NnYc+aMQjpMdhFpahh5z6Fezc3QmzcZ/pR6buE38UJvFJCK0DV7088ue6
+   sqyVgriq8EXocP1IFpJm+vquB8X0D7GYQwNL1IlL6O9itchfNOEroX0Lv
+   UsvZLaSmT9DVlaTOW6QiWiUJxFrfBBmFDFUvKzApeRxpE8z2GU/sbBWno
+   VXbsFSCceJrzt0s32jgwvNi5ahJibwoCkqh+YZ+xz+KW7jIzS1XnMj5ca
+   5OcXb5Smu1CRzou+YZ8G+g5/S17ctfCZ5cAjZ7aSWgUIic2pyeqxgXTr+
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="290519314"
 X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
-   d="scan'208";a="278720919"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 10:04:26 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="290519314"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 10:07:28 -0700
 X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
-   d="scan'208";a="782253735"
-Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 13 Aug 2022 10:04:25 -0700
-Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oMuYi-0001tL-1O;
-        Sat, 13 Aug 2022 17:04:24 +0000
-Date:   Sun, 14 Aug 2022 01:03:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jiri Olsa <jolsa@kernel.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: [jolsa-perf:bpf/tracing_multi_new_2 4/21]
- arch/arm64/net/bpf_jit_comp.c:1649:24: error: incomplete definition of type
- 'struct bpf_tramp_link'
-Message-ID: <202208140107.9veo0Cp0-lkp@intel.com>
+   d="scan'208";a="635006249"
+Received: from zhenghwe-mobl.gar.corp.intel.com ([10.214.145.151])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 10:07:22 -0700
+Message-ID: <e5a8d07eda23baf07a89ebf54b70d1cfab183837.camel@intel.com>
+Subject: Re: [PATCH 3/7] hwmon/coretemp: Handle large core id value
+From:   Zhang Rui <rui.zhang@intel.com>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-hwmon@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        corbet@lwn.net, fenghua.yu@intel.com, jdelvare@suse.com,
+        linux@roeck-us.net, len.brown@intel.com
+Date:   Sun, 14 Aug 2022 01:07:14 +0800
+In-Reply-To: <YveBgsVINyKjXW9g@gmail.com>
+References: <20220812164144.30829-1-rui.zhang@intel.com>
+         <20220812164144.30829-4-rui.zhang@intel.com> <YveBgsVINyKjXW9g@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.44.1-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/tracing_multi_new_2
-head:   c0620f064b5146578de80c7bb00febc697cc4890
-commit: 9b9520851a227843b7e43a337281093a5d13ca71 [4/21] bpf: Store trampoline progs in arrays
-config: arm64-randconfig-r011-20220804 (https://download.01.org/0day-ci/archive/20220814/202208140107.9veo0Cp0-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 26dd42705c2af0b8f6e5d6cdb32c9bd5ed9524eb)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm64 cross compiling tool for clang build
-        # apt-get install binutils-aarch64-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=9b9520851a227843b7e43a337281093a5d13ca71
-        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
-        git fetch --no-tags jolsa-perf bpf/tracing_multi_new_2
-        git checkout 9b9520851a227843b7e43a337281093a5d13ca71
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
+T24gU2F0LCAyMDIyLTA4LTEzIGF0IDEyOjQ4ICswMjAwLCBJbmdvIE1vbG5hciB3cm90ZToKPiAK
+PiAqIFpoYW5nIFJ1aSA8cnVpLnpoYW5nQGludGVsLmNvbT4gd3JvdGU6Cj4gCj4gPiBUaGUgY29y
+ZXRlbXAgZHJpdmVyIHN1cHBvcnRzIHVwIHRvIGEgaGFyZC1jb2RlZCBsaW1pdCBvZiAxMjggY29y
+ZXMuCj4gPiAKPiA+IFRvZGF5LCB0aGUgZHJpdmVyIGNhbiBub3Qgc3VwcG9ydCBhIGNvcmUgd2l0
+aCBhbiBpZCBhYm92ZSB0aGF0Cj4gPiBsaW1pdC4KPiA+IFlldCwgdGhlIGVuY29kaW5nIG9mIGNv
+cmVfaWQncyBpcyBhcmJpdHJhcnkgKEJJT1MgQVBJQy1pZCkgYW5kIHNvCj4gPiB0aGV5Cj4gPiBt
+YXkgYmUgc3BhcnNlIGFuZCB0aGV5IG1heSBiZSBsYXJnZS4KPiA+IAo+ID4gVXBkYXRlIHRoZSBk
+cml2ZXIgdG8gbWFwIGFyYml0cmFyeSBjb3JlX2lkIG51bWJlcnMgaW50byBhcHByb3ByaWF0ZQo+
+ID4gYXJyYXkgaW5kZXhlcyBzbyB0aGF0IDEyOCBjb3JlcyBjYW4gYmUgc3VwcG9ydGVkLCBubyBt
+YXR0ZXIgdGhlCj4gPiBlbmNvZGluZwo+ID4gb2YgY29yZV9pZHMncy4KPiAKPiBQbGVhc2UgY2Fw
+aXRhbGl6ZSAnSUQnIGNvbnNpc3RlbnRseSB0aHJvdWdob3V0IHRoZSBzZXJpZXMuCj4gCj4gPiAt
+wqDCoMKgwqDCoMKgwqBhdHRyX25vID0gcGtnX2ZsYWcgPyBQS0dfU1lTRlNfQVRUUl9OTyA6IFRP
+X0FUVFJfTk8oY3B1KTsKPiA+ICvCoMKgwqDCoMKgwqDCoGlmIChwa2dfZmxhZykKPiA+ICvCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBhdHRyX25vID0gUEtHX1NZU0ZTX0FUVFJfTk87Cj4g
+PiArwqDCoMKgwqDCoMKgwqBlbHNlIHsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqBpbmRleCA9IGlkYV9hbGxvYygmcGRhdGEtPmlkYSwgR0ZQX0tFUk5FTCk7Cj4gPiArwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgaWYgKGluZGV4IDwgMCkKPiA+ICvCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcmV0dXJuIGluZGV4Owo+ID4gK8KgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoHBkYXRhLT5jcHVfbWFwW2luZGV4XSA9IHRvcG9sb2d5
+X2NvcmVfaWQoY3B1KTsKPiA+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBhdHRyX25v
+ID0gaW5kZXggKyBCQVNFX1NZU0ZTX0FUVFJfTk87Cj4gPiArwqDCoMKgwqDCoMKgwqB9Cj4gCj4g
+VW5iYWxhbmNlZCBjdXJseSBicmFjZXMuCgpTdXJlLCB3aWxsIGZpeCB0aGVzZSB0d28gaXNzdWVz
+IGluIG5leHQgdmVyc2lvbi4KCj4gCj4gPiAtwqDCoMKgwqDCoMKgwqBpbnQgZXJyLCBhdHRyX25v
+Owo+ID4gK8KgwqDCoMKgwqDCoMKgaW50IGVyciwgaW5kZXgsIGF0dHJfbm87Cj4gCj4gU28gaXQn
+cyAnaW5kZXgnIGhlcmUuCj4gCj4gPiBAQCAtNTI0LDYgKzUzOCw4IEBAIHN0YXRpYyB2b2lkIGNv
+cmV0ZW1wX3JlbW92ZV9jb3JlKHN0cnVjdAo+ID4gcGxhdGZvcm1fZGF0YSAqcGRhdGEsIGludCBp
+bmR4KQo+IAo+IEJ1dCAnaW5keCcgaGVyZS4KPiAKPiA+IC3CoMKgwqDCoMKgwqDCoGludCBpbmR4
+LCB0YXJnZXQ7Cj4gPiArwqDCoMKgwqDCoMKgwqBpbnQgaSwgaW5keCA9IC0xLCB0YXJnZXQ7Cj4g
+Cj4gQW5kICdpbmR4JyBhZ2Fpbi4gRGlkIHdlIHJ1biBvdXQgb2YgdGhlIGxldHRlciAnZSc/IEVp
+dGhlciB1c2UKPiAnaW5kZXgnIAo+IG5hbWluZyBjb25zaXN0ZW50bHksIG9yICdpZHgnIGlmIGl0
+IGhhcyB0byBiZSBhYmJyZXZpYXRlZC4KCkknZCBwcmVmZXIgJ2luZGV4JywgYnV0IGhlcmUsIHRo
+aXMgJ2luZHgnIGlzIGZyb20gcHJldmlvdXMgY29kZSBhbmQKdGhpcyBwYXRjaCBqdXN0IGluaXRp
+YWxpemVzIGl0IHRvIC0xLgoKdGhhbmtzLApydWkKPiAKPiBUaGFua3MsCj4gCj4gwqDCoMKgwqDC
+oMKgwqDCoEluZ28KCg==
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
-   arch/arm64/net/bpf_jit_comp.c:1642:57: warning: declaration of 'struct bpf_tramp_link' will not be visible outside of this function [-Wvisibility]
-   static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
-                                                           ^
->> arch/arm64/net/bpf_jit_comp.c:1649:24: error: incomplete definition of type 'struct bpf_tramp_link'
-           struct bpf_prog *p = l->link.prog;
-                                ~^
-   arch/arm64/net/bpf_jit_comp.c:1642:57: note: forward declaration of 'struct bpf_tramp_link'
-   static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
-                                                           ^
-   arch/arm64/net/bpf_jit_comp.c:1660:7: error: incomplete definition of type 'struct bpf_tramp_link'
-           if (l->cookie == 0) {
-               ~^
-   arch/arm64/net/bpf_jit_comp.c:1642:57: note: forward declaration of 'struct bpf_tramp_link'
-   static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
-                                                           ^
-   arch/arm64/net/bpf_jit_comp.c:1664:32: error: incomplete definition of type 'struct bpf_tramp_link'
-                   emit_a64_mov_i64(A64_R(10), l->cookie, ctx);
-                                               ~^
-   arch/arm64/net/bpf_jit_comp.c:1642:57: note: forward declaration of 'struct bpf_tramp_link'
-   static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
-                                                           ^
-   arch/arm64/net/bpf_jit_comp.c:1714:60: warning: declaration of 'struct bpf_tramp_links' will not be visible outside of this function [-Wvisibility]
-   static void invoke_bpf_mod_ret(struct jit_ctx *ctx, struct bpf_tramp_links *tl,
-                                                              ^
-   arch/arm64/net/bpf_jit_comp.c:1724:20: error: incomplete definition of type 'struct bpf_tramp_links'
-           for (i = 0; i < tl->nr_links; i++) {
-                           ~~^
-   arch/arm64/net/bpf_jit_comp.c:1714:60: note: forward declaration of 'struct bpf_tramp_links'
-   static void invoke_bpf_mod_ret(struct jit_ctx *ctx, struct bpf_tramp_links *tl,
-                                                              ^
-   arch/arm64/net/bpf_jit_comp.c:1725:26: error: incomplete definition of type 'struct bpf_tramp_links'
-                   invoke_bpf_prog(ctx, tl->links[i], args_off, retval_off,
-                                        ~~^
-   arch/arm64/net/bpf_jit_comp.c:1714:60: note: forward declaration of 'struct bpf_tramp_links'
-   static void invoke_bpf_mod_ret(struct jit_ctx *ctx, struct bpf_tramp_links *tl,
-                                                              ^
-   arch/arm64/net/bpf_jit_comp.c:1771:17: warning: declaration of 'struct bpf_tramp_links' will not be visible outside of this function [-Wvisibility]
-                                 struct bpf_tramp_links *tlinks, void *orig_call,
-                                        ^
-   arch/arm64/net/bpf_jit_comp.c:1783:42: error: subscript of pointer to incomplete type 'struct bpf_tramp_links'
-           struct bpf_tramp_links *fentry = &tlinks[BPF_TRAMP_FENTRY];
-                                             ~~~~~~^
-   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
-                                 struct bpf_tramp_links *tlinks, void *orig_call,
-                                        ^
-   arch/arm64/net/bpf_jit_comp.c:1784:41: error: subscript of pointer to incomplete type 'struct bpf_tramp_links'
-           struct bpf_tramp_links *fexit = &tlinks[BPF_TRAMP_FEXIT];
-                                            ~~~~~~^
-   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
-                                 struct bpf_tramp_links *tlinks, void *orig_call,
-                                        ^
-   arch/arm64/net/bpf_jit_comp.c:1785:44: error: subscript of pointer to incomplete type 'struct bpf_tramp_links'
-           struct bpf_tramp_links *fmod_ret = &tlinks[BPF_TRAMP_MODIFY_RETURN];
-                                               ~~~~~~^
-   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
-                                 struct bpf_tramp_links *tlinks, void *orig_call,
-                                        ^
-   arch/arm64/net/bpf_jit_comp.c:1889:24: error: incomplete definition of type 'struct bpf_tramp_links'
-           for (i = 0; i < fentry->nr_links; i++)
-                           ~~~~~~^
-   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
-                                 struct bpf_tramp_links *tlinks, void *orig_call,
-                                        ^
-   arch/arm64/net/bpf_jit_comp.c:1890:30: error: incomplete definition of type 'struct bpf_tramp_links'
-                   invoke_bpf_prog(ctx, fentry->links[i], args_off,
-                                        ~~~~~~^
-   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
-                                 struct bpf_tramp_links *tlinks, void *orig_call,
-                                        ^
-   arch/arm64/net/bpf_jit_comp.c:1894:14: error: incomplete definition of type 'struct bpf_tramp_links'
-           if (fmod_ret->nr_links) {
-               ~~~~~~~~^
-   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
-                                 struct bpf_tramp_links *tlinks, void *orig_call,
-                                        ^
-   arch/arm64/net/bpf_jit_comp.c:1895:30: error: incomplete definition of type 'struct bpf_tramp_links'
-                   branches = kcalloc(fmod_ret->nr_links, sizeof(u32 *),
-                                      ~~~~~~~~^
-   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
-                                 struct bpf_tramp_links *tlinks, void *orig_call,
-                                        ^
-   arch/arm64/net/bpf_jit_comp.c:1900:27: error: incompatible pointer types passing 'struct bpf_tramp_links *' to parameter of type 'struct bpf_tramp_links *' [-Werror,-Wincompatible-pointer-types]
-                   invoke_bpf_mod_ret(ctx, fmod_ret, args_off, retval_off,
-                                           ^~~~~~~~
-   arch/arm64/net/bpf_jit_comp.c:1714:77: note: passing argument to parameter 'tl' here
-   static void invoke_bpf_mod_ret(struct jit_ctx *ctx, struct bpf_tramp_links *tl,
-                                                                               ^
-   arch/arm64/net/bpf_jit_comp.c:1917:26: error: incomplete definition of type 'struct bpf_tramp_links'
-           for (i = 0; i < fmod_ret->nr_links && ctx->image != NULL; i++) {
-                           ~~~~~~~~^
-   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
-                                 struct bpf_tramp_links *tlinks, void *orig_call,
-                                        ^
-   arch/arm64/net/bpf_jit_comp.c:1922:23: error: incomplete definition of type 'struct bpf_tramp_links'
-           for (i = 0; i < fexit->nr_links; i++)
-                           ~~~~~^
-   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
-                                 struct bpf_tramp_links *tlinks, void *orig_call,
-                                        ^
-   arch/arm64/net/bpf_jit_comp.c:1923:29: error: incomplete definition of type 'struct bpf_tramp_links'
-                   invoke_bpf_prog(ctx, fexit->links[i], args_off, retval_off,
-                                        ~~~~~^
-   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
-                                 struct bpf_tramp_links *tlinks, void *orig_call,
-
-
-vim +1649 arch/arm64/net/bpf_jit_comp.c
-
-b2ad54e1533e9144 Xu Kuohai 2022-07-11  1641  
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1642  static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1643  			    int args_off, int retval_off, int run_ctx_off,
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1644  			    bool save_ret)
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1645  {
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1646  	u32 *branch;
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1647  	u64 enter_prog;
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1648  	u64 exit_prog;
-efc9909fdce00a82 Xu Kuohai 2022-07-11 @1649  	struct bpf_prog *p = l->link.prog;
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1650  	int cookie_off = offsetof(struct bpf_tramp_run_ctx, bpf_cookie);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1651  
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1652  	if (p->aux->sleepable) {
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1653  		enter_prog = (u64)__bpf_prog_enter_sleepable;
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1654  		exit_prog = (u64)__bpf_prog_exit_sleepable;
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1655  	} else {
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1656  		enter_prog = (u64)__bpf_prog_enter;
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1657  		exit_prog = (u64)__bpf_prog_exit;
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1658  	}
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1659  
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1660  	if (l->cookie == 0) {
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1661  		/* if cookie is zero, one instruction is enough to store it */
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1662  		emit(A64_STR64I(A64_ZR, A64_SP, run_ctx_off + cookie_off), ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1663  	} else {
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1664  		emit_a64_mov_i64(A64_R(10), l->cookie, ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1665  		emit(A64_STR64I(A64_R(10), A64_SP, run_ctx_off + cookie_off),
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1666  		     ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1667  	}
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1668  
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1669  	/* save p to callee saved register x19 to avoid loading p with mov_i64
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1670  	 * each time.
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1671  	 */
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1672  	emit_addr_mov_i64(A64_R(19), (const u64)p, ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1673  
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1674  	/* arg1: prog */
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1675  	emit(A64_MOV(1, A64_R(0), A64_R(19)), ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1676  	/* arg2: &run_ctx */
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1677  	emit(A64_ADD_I(1, A64_R(1), A64_SP, run_ctx_off), ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1678  
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1679  	emit_call(enter_prog, ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1680  
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1681  	/* if (__bpf_prog_enter(prog) == 0)
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1682  	 *         goto skip_exec_of_prog;
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1683  	 */
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1684  	branch = ctx->image + ctx->idx;
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1685  	emit(A64_NOP, ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1686  
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1687  	/* save return value to callee saved register x20 */
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1688  	emit(A64_MOV(1, A64_R(20), A64_R(0)), ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1689  
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1690  	emit(A64_ADD_I(1, A64_R(0), A64_SP, args_off), ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1691  	if (!p->jited)
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1692  		emit_addr_mov_i64(A64_R(1), (const u64)p->insnsi, ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1693  
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1694  	emit_call((const u64)p->bpf_func, ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1695  
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1696  	if (save_ret)
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1697  		emit(A64_STR64I(A64_R(0), A64_SP, retval_off), ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1698  
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1699  	if (ctx->image) {
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1700  		int offset = &ctx->image[ctx->idx] - branch;
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1701  		*branch = A64_CBZ(1, A64_R(0), offset);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1702  	}
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1703  
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1704  	/* arg1: prog */
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1705  	emit(A64_MOV(1, A64_R(0), A64_R(19)), ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1706  	/* arg2: start time */
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1707  	emit(A64_MOV(1, A64_R(1), A64_R(20)), ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1708  	/* arg3: &run_ctx */
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1709  	emit(A64_ADD_I(1, A64_R(2), A64_SP, run_ctx_off), ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1710  
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1711  	emit_call(exit_prog, ctx);
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1712  }
-efc9909fdce00a82 Xu Kuohai 2022-07-11  1713  
-
-:::::: The code at line 1649 was first introduced by commit
-:::::: efc9909fdce00a827a37609628223cd45bf95d0b bpf, arm64: Add bpf trampoline for arm64
-
-:::::: TO: Xu Kuohai <xukuohai@huawei.com>
-:::::: CC: Daniel Borkmann <daniel@iogearbox.net>
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp

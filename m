@@ -2,63 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82F83591976
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 10:42:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC1FB59197B
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 10:46:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231569AbiHMImV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 04:42:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47038 "EHLO
+        id S237726AbiHMIpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 04:45:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiHMImT (ORCPT
+        with ESMTP id S229507AbiHMIpm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 04:42:19 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D007C771
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 01:42:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660380137; x=1691916137;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=dje4Bwu5WhwsdCPS9deeYtrDdGTX8BgieA63nTu7tK8=;
-  b=nV2mJ4f6WhkBciiPs24OR2dppfMnf53TsTjxYJva93XNGOgESGl/meIN
-   gWiQCo0SslopLZHWGoDhIdFf6SYwZj0bNAK0gQfx9p9fHdqMRcW9KEon5
-   QoC3TzU13WeHXn+HaYg3ORqL8cr8jkeP8BXKQY05VzMjqTlnficPqdD/b
-   PmTFPS5iL7Xb3Yzd7/P1jCD6lorxhb6gEGECpF75lUnHPAiozJ3kbwTbv
-   dxxZCN34F9/5UCsuCxax7Nzx0cbynuI4KpKe+/xFmsa7PfNjveD4W+wN1
-   SVQG0TDuYxogfaA6F5rmexaSqq6Z5f9fMyA6s0uchhGKCDIbpuhskEOuT
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="355746921"
-X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="355746921"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 01:42:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="602725412"
-Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by orsmga007.jf.intel.com with ESMTP; 13 Aug 2022 01:42:13 -0700
-Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oMmij-0001VH-09;
-        Sat, 13 Aug 2022 08:42:13 +0000
-Date:   Sat, 13 Aug 2022 16:41:42 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Marco Elver <elver@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>
-Subject: [stable:linux-5.15.y 5773/9027] <instantiation>:5:8: error: expected
- relocatable expression
-Message-ID: <202208131620.5cpNx6DK-lkp@intel.com>
+        Sat, 13 Aug 2022 04:45:42 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A6031909;
+        Sat, 13 Aug 2022 01:45:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+        s=42; h=From:Cc:To:Date:Message-ID;
+        bh=3cEBObWgCZMEf5BzXPdMLgj+++YHuxc+xbCWnw6pWiE=; b=1BCxgAO3j1D7zHsNXs+eZtQn/P
+        8xMlz2ekJlCiLTMMb+MjBx8SZt+yu6b5Frh8Hq2xxe8LClb/RTPE0P8a5f5+FqvSdvGbkBL1IziID
+        yLmLVo5t4mB4TcOXP7s68jYHp2wf37YxzjJACLCbv+b/v4EtyqHSIR9GTTcCkWlr+oGuCDxOIu8fy
+        DbM/Xtleb3dRjlc6oC5UMdW5Y9r/MO7P8jsnG73Vf7yL+XQYzeJriBrvF+qf+5JU+tYzfq8zhdI0I
+        jCBON0LqNeo9apvSR8sQp0nR7/F5Ami8VLxlTNUbCkzjsFdfQsEGqhuBB3s6NTfjQiE034NVveI0F
+        rNbnmvM8kIlScMnhW0Bur+bpLaQ+ZuDbKS3tzhCB5NqYF07Ws3seWMbzsqDS5F631n2D+aoHQS3qu
+        lmOP3Ygevg4g/ZCBet7a819qMdJr+M8xbMDH1PZMVVnkXRXMxt6WDSbhqlCt1ktDgsFkbQCRxKAAf
+        6ffa2hcD0SwM+4iPfyFR1fb+;
+Received: from [127.0.0.2] (localhost [127.0.0.1])
+        by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
+        (Exim)
+        id 1oMmlp-009Qyp-37; Sat, 13 Aug 2022 08:45:25 +0000
+Message-ID: <4eb0adae-660a-3582-df27-d6c254b97adb@samba.org>
+Date:   Sat, 13 Aug 2022 10:45:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Jens Axboe <axboe@kernel.dk>, kernel-team@fb.com
+References: <cover.1653992701.git.asml.silence@gmail.com>
+ <228d4841af5eeb9a4b73955136559f18cb7e43a0.1653992701.git.asml.silence@gmail.com>
+ <cccec667-d762-9bfd-f5a5-1c9fb46df5af@samba.org>
+ <56631a36-fec8-9c41-712b-195ad7e4cb9f@gmail.com>
+From:   Stefan Metzmacher <metze@samba.org>
+Subject: Re: [RFC net-next v3 23/29] io_uring: allow to pass addr into sendzc
+In-Reply-To: <56631a36-fec8-9c41-712b-195ad7e4cb9f@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,163 +61,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kees,
+Hi Pavel,
 
-FYI, the error/warning still remains.
+>> Given that this fills in msg almost completely can we also have
+>> a version of SENDMSGZC, it would be very useful to also allow
+>> msg_control to be passed and as well as an iovec.
+>>
+>> Would that be possible?
+> 
+> Right, I left it to follow ups as the series is already too long.
+> 
+> fwiw, I'm going to also add addr to IORING_OP_SEND.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
-head:   7217df81279835a7aee62a07aabb7b8fb8c766f2
-commit: 33db9912ff7c491f839c89a08e98f755aa09598f [5773/9027] ubsan: remove CONFIG_UBSAN_OBJECT_SIZE
-config: s390-randconfig-r031-20220812 (https://download.01.org/0day-ci/archive/20220813/202208131620.5cpNx6DK-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 3329cec2f79185bafd678f310fafadba2a8c76d2)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install s390 cross compiling tool for clang build
-        # apt-get install binutils-s390x-linux-gnu
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=33db9912ff7c491f839c89a08e98f755aa09598f
-        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
-        git fetch --no-tags stable linux-5.15.y
-        git checkout 33db9912ff7c491f839c89a08e98f755aa09598f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Given the minimal differences, which were left between
+IORING_OP_SENDZC and IORING_OP_SEND, wouldn't it be better
+to merge things to IORING_OP_SEND using a IORING_RECVSEND_ZC_NOTIF
+as indication to use the notif slot.
 
-All errors (new ones prefixed by >>):
+It would means we don't need to waste two opcodes for
+IORING_OP_SENDZC and IORING_OP_SENDMSGZC (and maybe more)
 
-                  ~~~~~~~~~~ ^
-   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesb(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesw(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           writesl(PCI_IOBASE + addr, buffer, count);
-                   ~~~~~~~~~~ ^
-   <instantiation>:3:19: error: too many positional arguments
-           GR_NUM  b2, 1       /* Base register */
-                               ^
-   lib/raid6/s390vx8.c:73:16: note: while in macro instantiation
-           asm volatile ("VSTM %2,%3,0,1"
-                         ^
-   <inline asm>:1:2: note: instantiated into assembly here
-           VSTM 0,7,0,1
-           ^
-   <instantiation>:3:19: error: too many positional arguments
-           GR_NUM  b2, 1       /* Base register */
-                               ^
-   lib/raid6/s390vx8.c:73:16: note: while in macro instantiation
-           asm volatile ("VSTM %2,%3,0,1"
-                         ^
-   <inline asm>:1:2: note: instantiated into assembly here
-           VSTM 8,15,0,1
-           ^
-   <instantiation>:3:21: error: too many positional arguments
-           GR_NUM  b2, %r1     /* Base register */
-                               ^
-   lib/raid6/s390vx8.c:63:16: note: while in macro instantiation
-           asm volatile ("VLM %2,%3,0,%1"
-                         ^
-   <inline asm>:1:2: note: instantiated into assembly here
-           VLM 0,7,0,%r1
-           ^
-   <instantiation>:3:21: error: too many positional arguments
-           GR_NUM  b2, %r1     /* Base register */
-                               ^
-   lib/raid6/s390vx8.c:63:16: note: while in macro instantiation
-           asm volatile ("VLM %2,%3,0,%1"
-                         ^
-   <inline asm>:1:2: note: instantiated into assembly here
-           VLM 16,23,0,%r1
-           ^
-   <instantiation>:3:21: error: too many positional arguments
-           GR_NUM  b2, %r1     /* Base register */
-                               ^
-   lib/raid6/s390vx8.c:63:16: note: while in macro instantiation
-           asm volatile ("VLM %2,%3,0,%1"
-                         ^
-   <inline asm>:1:2: note: instantiated into assembly here
-           VLM 16,23,0,%r1
-           ^
-   <instantiation>:3:19: error: too many positional arguments
-           GR_NUM  b2, 1       /* Base register */
-                               ^
-   lib/raid6/s390vx8.c:73:16: note: while in macro instantiation
-           asm volatile ("VSTM %2,%3,0,1"
-                         ^
-   <inline asm>:1:2: note: instantiated into assembly here
-           VSTM 16,23,0,1
-           ^
-   <instantiation>:3:21: error: too many positional arguments
-           GR_NUM  b2, %r1     /* Base register */
-                               ^
-   lib/raid6/s390vx8.c:63:16: note: while in macro instantiation
-           asm volatile ("VLM %2,%3,0,%1"
-                         ^
-   <inline asm>:1:2: note: instantiated into assembly here
-           VLM 16,23,0,%r1
-           ^
-   <instantiation>:3:19: error: too many positional arguments
-           GR_NUM  b2, 1       /* Base register */
-                               ^
-   lib/raid6/s390vx8.c:73:16: note: while in macro instantiation
-           asm volatile ("VSTM %2,%3,0,1"
-                         ^
-   <inline asm>:1:2: note: instantiated into assembly here
-           VSTM 16,23,0,1
-           ^
-   <instantiation>:3:21: error: too many positional arguments
-           GR_NUM  b2, %r1     /* Base register */
-                               ^
-   lib/raid6/s390vx8.c:63:16: note: while in macro instantiation
-           asm volatile ("VLM %2,%3,0,%1"
-                         ^
-   <inline asm>:1:2: note: instantiated into assembly here
-           VLM 0,7,0,%r1
-           ^
-   <instantiation>:3:21: error: too many positional arguments
-           GR_NUM  b2, %r1     /* Base register */
-                               ^
-   lib/raid6/s390vx8.c:63:16: note: while in macro instantiation
-           asm volatile ("VLM %2,%3,0,%1"
-                         ^
-   <inline asm>:1:2: note: instantiated into assembly here
-           VLM 16,23,0,%r1
-           ^
->> <instantiation>:5:8: error: expected relocatable expression
-           .word   (b2 << 12) | (0)
-                   ^
->> <instantiation>:5:8: error: expected relocatable expression
-           .word   (b2 << 12) | (0)
-                   ^
->> <instantiation>:5:8: error: expected relocatable expression
-           .word   (b2 << 12) | (0)
-                   ^
->> <instantiation>:5:8: error: expected relocatable expression
-           .word   (b2 << 12) | (0)
-                   ^
->> <instantiation>:5:8: error: expected relocatable expression
-           .word   (b2 << 12) | (0)
-                   ^
->> <instantiation>:5:8: error: expected relocatable expression
-           .word   (b2 << 12) | (0)
-                   ^
->> <instantiation>:5:8: error: expected relocatable expression
-           .word   (b2 << 12) | (0)
-                   ^
->> <instantiation>:5:8: error: expected relocatable expression
-           .word   (b2 << 12) | (0)
-                   ^
->> <instantiation>:5:8: error: expected relocatable expression
-           .word   (b2 << 12) | (0)
-                   ^
-   fatal error: too many errors emitted, stopping now [-ferror-limit=]
-   12 warnings and 20 errors generated.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+I also noticed a problem in io_notif_update()
+
+         for (; idx < idx_end; idx++) {
+                 struct io_notif_slot *slot = &ctx->notif_slots[idx];
+
+                 if (!slot->notif)
+                         continue;
+                 if (up->arg)
+                         slot->tag = up->arg;
+                 io_notif_slot_flush_submit(slot, issue_flags);
+         }
+
+  slot->tag = up->arg is skipped if there is no notif already.
+
+So you can't just use a 2 linked sqe's with
+
+IORING_RSRC_UPDATE_NOTIF followed by IORING_OP_SENDZC(with IORING_RECVSEND_NOTIF_FLUSH)
+
+I think the if (!slot->notif) should be moved down a bit.
+
+It would somehow be nice to avoid the notif slots at all and somehow
+use some kind of multishot request in order to generate two qces.
+
+I'm also wondering what will happen if a notif will be referenced by the net layer
+but the io_uring instance is already closed, wouldn't
+io_uring_tx_zerocopy_callback() or __io_notif_complete_tw() crash
+because notif->ctx is a stale pointer, of notif itself is already gone...
+
+What do you think?
+
+metze

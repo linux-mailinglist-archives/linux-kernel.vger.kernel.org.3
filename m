@@ -2,55 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F5FB591B67
+	by mail.lfdr.de (Postfix) with ESMTP id 8A31F591B68
 	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 17:32:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239762AbiHMPc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 11:32:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46422 "EHLO
+        id S239771AbiHMPc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 11:32:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239475AbiHMPcY (ORCPT
+        with ESMTP id S239675AbiHMPcZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 11:32:24 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940CA1EAFB
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 08:32:23 -0700 (PDT)
+        Sat, 13 Aug 2022 11:32:25 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132B81EC45
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 08:32:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660404743; x=1691940743;
+  t=1660404744; x=1691940744;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=wSnJxQVkwGY8vErqzNc7NEWhVmynOFMVS5X9L59Y3yk=;
-  b=kdGCM2xI9trYTRIodSuUP1U9zXda9ni77mGGnkGqdAvQy5uS8zguW7Ay
-   pPdFfPZLsFPhYAxb0DNhjfrH9dHBZudivnsSKqYmwqxqDU0mrlH8KuznE
-   Fqv52C3L6THWVSfpBM7+GSiQodqTlI/dHKl1aV8X/jFyIExlFGFWxQs3w
-   y7oSRnQfuLo7+FdwI1Fx3aj0foaQQ1yb/CqFMqAOegJkigBIUbPZhWXu4
-   Rah3i0unxesbDuBNdQRXIiEOxOGTNXsBrYd8Em6zvG+2oHSj8oJaXNJTD
-   Oml2EDW0tO+g7mZ0Mrr0g6AVzBTbTXjLFjlb+ZrSsKbSrK2m70miZBj3t
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="289328803"
+  bh=v8iAzPZKVm8YyLTFPNZdYdxY3uj1CLNh49Qrsm7poEQ=;
+  b=kZwImv006lcnEB57FTM74LdQmF12kQCZTyNkQoXhTwncOx6s4DElMlgR
+   2Tv33Xj0DCG80EvWU5IWmLw0LXryWU1FvlrZtZPOx6PybDgxeCHUkXaWG
+   Z2ZjY7/PNKopDJ2oxfTJ+6DEAuo0mlLDkHTCHznCmG5HMskWBnwwV69B6
+   17AEQgbNEf1n5iTjeD6jBnqQV6KA2/EsbRPrZ5XAvOKjKFJ3jaCSGkOpg
+   7jedKQrec4RxAg3Dlnrz8EfdQUlwCkXRnz2LRjsc2ertnYxhcpHVYacf3
+   /ozvD9S2jP/zutFKsX2LLsV8GPDRtDPSQEri1lHPonoRX1+ulqfLXsasL
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="291759279"
 X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
-   d="scan'208";a="289328803"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 08:32:23 -0700
+   d="scan'208";a="291759279"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 08:32:23 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
-   d="scan'208";a="666169288"
+   d="scan'208";a="606215747"
 Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 13 Aug 2022 08:32:21 -0700
+  by orsmga002.jf.intel.com with ESMTP; 13 Aug 2022 08:32:22 -0700
 Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oMt7d-0001oN-16;
+        id 1oMt7d-0001oU-1A;
         Sat, 13 Aug 2022 15:32:21 +0000
-Date:   Sat, 13 Aug 2022 23:31:27 +0800
+Date:   Sat, 13 Aug 2022 23:31:30 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Bart Van Assche <bvanassche@acm.org>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
 Subject: [bvanassche:scsi-const-host-template 11/86]
  drivers/ata/pata_platform.c:97:5: error: conflicting types for
- '__pata_platform_probe'; have 'int(struct device *, struct resource *,
- struct resource *, struct resource *, unsigned int,  int,  const struct
- scsi_host_template *, bool)' {aka 'int(struct dev...
-Message-ID: <202208132351.74xQFUEY-lkp@intel.com>
+ '__pata_platform_probe'
+Message-ID: <202208132333.QdRbhHNh-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
@@ -67,54 +66,40 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 tree:   https://github.com/bvanassche/linux scsi-const-host-template
 head:   6d6e5cf2f6e93f909e73e468fd5888431de61f13
 commit: 24ce874bd15b6e1e45942c02db623e7e19b6cc81 [11/86] ata
-config: i386-randconfig-a005 (https://download.01.org/0day-ci/archive/20220813/202208132351.74xQFUEY-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+config: i386-randconfig-a002 (https://download.01.org/0day-ci/archive/20220813/202208132333.QdRbhHNh-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 3329cec2f79185bafd678f310fafadba2a8c76d2)
 reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
         # https://github.com/bvanassche/linux/commit/24ce874bd15b6e1e45942c02db623e7e19b6cc81
         git remote add bvanassche https://github.com/bvanassche/linux
         git fetch --no-tags bvanassche scsi-const-host-template
         git checkout 24ce874bd15b6e1e45942c02db623e7e19b6cc81
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/ata/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/ata/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
->> drivers/ata/pata_platform.c:97:5: error: conflicting types for '__pata_platform_probe'; have 'int(struct device *, struct resource *, struct resource *, struct resource *, unsigned int,  int,  const struct scsi_host_template *, bool)' {aka 'int(struct device *, struct resource *, struct resource *, struct resource *, unsigned int,  int,  const struct scsi_host_template *, _Bool)'}
-      97 | int __pata_platform_probe(struct device *dev, struct resource *io_res,
-         |     ^~~~~~~~~~~~~~~~~~~~~
-   In file included from drivers/ata/pata_platform.c:21:
-   include/linux/ata_platform.h:16:12: note: previous declaration of '__pata_platform_probe' with type 'int(struct device *, struct resource *, struct resource *, struct resource *, unsigned int,  int,  struct scsi_host_template *, bool)' {aka 'int(struct device *, struct resource *, struct resource *, struct resource *, unsigned int,  int,  struct scsi_host_template *, _Bool)'}
-      16 | extern int __pata_platform_probe(struct device *dev,
-         |            ^~~~~~~~~~~~~~~~~~~~~
-   In file included from include/linux/linkage.h:7,
-                    from include/linux/kernel.h:17,
-                    from drivers/ata/pata_platform.c:14:
-   drivers/ata/pata_platform.c:183:19: error: conflicting types for '__pata_platform_probe'; have 'int(struct device *, struct resource *, struct resource *, struct resource *, unsigned int,  int,  const struct scsi_host_template *, bool)' {aka 'int(struct device *, struct resource *, struct resource *, struct resource *, unsigned int,  int,  const struct scsi_host_template *, _Bool)'}
-     183 | EXPORT_SYMBOL_GPL(__pata_platform_probe);
-         |                   ^~~~~~~~~~~~~~~~~~~~~
-   include/linux/export.h:87:28: note: in definition of macro '___EXPORT_SYMBOL'
-      87 |         extern typeof(sym) sym;                                                 \
-         |                            ^~~
-   include/linux/export.h:147:41: note: in expansion of macro '__EXPORT_SYMBOL'
-     147 | #define _EXPORT_SYMBOL(sym, sec)        __EXPORT_SYMBOL(sym, sec, "")
-         |                                         ^~~~~~~~~~~~~~~
-   include/linux/export.h:151:41: note: in expansion of macro '_EXPORT_SYMBOL'
-     151 | #define EXPORT_SYMBOL_GPL(sym)          _EXPORT_SYMBOL(sym, "_gpl")
-         |                                         ^~~~~~~~~~~~~~
-   drivers/ata/pata_platform.c:183:1: note: in expansion of macro 'EXPORT_SYMBOL_GPL'
-     183 | EXPORT_SYMBOL_GPL(__pata_platform_probe);
-         | ^~~~~~~~~~~~~~~~~
-   In file included from drivers/ata/pata_platform.c:21:
-   include/linux/ata_platform.h:16:12: note: previous declaration of '__pata_platform_probe' with type 'int(struct device *, struct resource *, struct resource *, struct resource *, unsigned int,  int,  struct scsi_host_template *, bool)' {aka 'int(struct device *, struct resource *, struct resource *, struct resource *, unsigned int,  int,  struct scsi_host_template *, _Bool)'}
-      16 | extern int __pata_platform_probe(struct device *dev,
-         |            ^~~~~~~~~~~~~~~~~~~~~
+>> drivers/ata/pata_platform.c:97:5: error: conflicting types for '__pata_platform_probe'
+   int __pata_platform_probe(struct device *dev, struct resource *io_res,
+       ^
+   include/linux/ata_platform.h:16:12: note: previous declaration is here
+   extern int __pata_platform_probe(struct device *dev,
+              ^
+   drivers/ata/pata_platform.c:221:20: error: passing 'const struct scsi_host_template *' to parameter of type 'struct scsi_host_template *' discards qualifiers [-Werror,-Wincompatible-pointer-types-discards-qualifiers]
+                                        pio_mask, &pata_platform_sht, false);
+                                                  ^~~~~~~~~~~~~~~~~~
+   include/linux/ata_platform.h:22:33: note: passing argument to parameter 'sht' here
+                                    struct scsi_host_template *sht,
+                                                               ^
+   2 errors generated.
 
 
-vim +97 drivers/ata/pata_platform.c
+vim +/__pata_platform_probe +97 drivers/ata/pata_platform.c
 
 a20c9e820864e1 Paul Mundt         2006-10-27   67  
 a20c9e820864e1 Paul Mundt         2006-10-27   68  /**

@@ -2,43 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59D26591BB4
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 17:47:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADF1E591B81
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 17:37:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239884AbiHMPrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 11:47:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59762 "EHLO
+        id S239801AbiHMPhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 11:37:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239893AbiHMPrZ (ORCPT
+        with ESMTP id S239621AbiHMPh3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 11:47:25 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD0312CCA1
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 08:47:02 -0700 (PDT)
-X-QQ-mid: bizesmtp79t1660405605tnprrhri
-Received: from localhost.localdomain ( [110.188.55.240])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 13 Aug 2022 23:46:38 +0800 (CST)
-X-QQ-SSF: 0100000000200080H000B00A0000020
-X-QQ-FEAT: znfcQSa1hKYt2IoUPBjevx8mKySQnssQnKK7vf126xDyuZK4KrwLfQ0UvJzsi
-        mNblXruhi4V6j+x44Tghtj31vIwN8O0mWEGhp/+sHU5Mj+uYoHYxPB/qfjMM59Du/jKpP5T
-        ZvOxI396Rl91Fx8LP8pI/B/iLej59RO56N0WgXTxHQDBeMH+TbYCG7JXk6xGHAKOSt4hCJ+
-        IhADTa9m8qpnSDg13GoXwmEoq4qFjzCw7nzXZYu5lCc440mrP6pqRxKj+3z/0gmI+SvG96+
-        vDzb/8Mg1Rr/JwTJD4mHshHAAUkNh++Up7BhXzlwcA0MEJiZopvikuU5Z8WII8nc8imevyu
-        4ww2OJ5/83HBqrV2JMKnkb0lg2iQcRNoaib8fhrbKHIipMb2jXhbYX6+GJr8a/N1CQ03cvm
-X-QQ-GoodBg: 0
-From:   min tang <tangmin@cdjrlc.com>
-To:     jesper.nilsson@axis.com, lars.persson@axis.com
-Cc:     linux@armlinux.org.uk, linux-arm-kernel@lists.infradead.org,
-        linux-arm-kernel@axis.com, linux-kernel@vger.kernel.org,
-        min tang <tangmin@cdjrlc.com>
-Subject: [PATCH] arm: Unneeded semicolon
-Date:   Sat, 13 Aug 2022 23:46:25 +0800
-Message-Id: <20220813154625.5208-1-tangmin@cdjrlc.com>
-X-Mailer: git-send-email 2.17.1
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        Sat, 13 Aug 2022 11:37:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67B6D22BD1;
+        Sat, 13 Aug 2022 08:37:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 14A7EB80688;
+        Sat, 13 Aug 2022 15:37:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 928BEC433D6;
+        Sat, 13 Aug 2022 15:37:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660405045;
+        bh=YKS5k8HQOL4Skk22H+cxjJPrMUDWvdWUTz36jDqZAJY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=cXROFHWGoInf1pK354gp5Gb9NyimQMtBez5XiY9JTc+SxkCr6CWCJe+n2oZqHfzlH
+         wfzhWVtq6NHlL5/TjcUp4bmN36+oYBF5bh041xeTET3yfGzrenYrA0fDV7khptS650
+         zb5W4MOzma2Xk26UWd8/VQLvRxwsrTO8C2J5P992bopRmg1EIpDz8gOorUsKv3Ii7F
+         Qy+gg6gmNcisR4OqIC402ov2Evvymt2UYJXnySgcq0igmFxGrnoADcSwhpGGeuT+wA
+         JccQ8kCw2Jy7xQMfLherw5k43kwBXycb4aj4+Rft3sWzV5XyMZrS3FQxr8QZW/NcNO
+         qDKiTP1zMFlUw==
+Date:   Sat, 13 Aug 2022 16:47:48 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Lee Jones <lee.jones@linaro.org>
+Cc:     ChiaEn Wu <peterwu.pub@gmail.com>, daniel.thompson@linaro.org,
+        jingoohan1@gmail.com, pavel@ucw.cz, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        sre@kernel.org, chunfeng.yun@mediatek.com,
+        gregkh@linuxfoundation.org, lars@metafoo.de, lgirdwood@gmail.com,
+        broonie@kernel.org, linux@roeck-us.net,
+        heikki.krogerus@linux.intel.com, deller@gmx.de,
+        andy.shevchenko@gmail.com, chiaen_wu@richtek.com,
+        alice_chen@richtek.com, cy_huang@richtek.com,
+        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        szunichen@gmail.com,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Lee Jones <lee@kernel.org>
+Subject: Re: [PATCH v7 06/13] dt-bindings: mfd: Add MediaTek MT6370
+Message-ID: <20220813164748.0c5564c2@jic23-huawei>
+In-Reply-To: <YvJdpq0MWNPQZw5c@google.com>
+References: <20220805070610.3516-1-peterwu.pub@gmail.com>
+        <20220805070610.3516-7-peterwu.pub@gmail.com>
+        <YvJdpq0MWNPQZw5c@google.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -47,26 +72,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no semicolon after '}' in line 42.
+On Tue, 9 Aug 2022 14:14:14 +0100
+Lee Jones <lee.jones@linaro.org> wrote:
 
-Signed-off-by: min tang <tangmin@cdjrlc.com>
----
- arch/arm/mach-artpec/board-artpec6.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> On Fri, 05 Aug 2022, ChiaEn Wu wrote:
+> 
+> > From: ChiYuan Huang <cy_huang@richtek.com>
+> > 
+> > Add MediaTek MT6370 binding documentation.
+> > 
+> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> > Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> > ---
+> >  .../devicetree/bindings/mfd/mediatek,mt6370.yaml   | 280 +++++++++++++++++++++
+> >  include/dt-bindings/iio/adc/mediatek,mt6370_adc.h  |  18 ++
+> >  2 files changed, 298 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/mfd/mediatek,mt6370.yaml
+> >  create mode 100644 include/dt-bindings/iio/adc/mediatek,mt6370_adc.h  
+> 
+> Applied, thanks.
+> 
+Hi Lee,
 
-diff --git a/arch/arm/mach-artpec/board-artpec6.c b/arch/arm/mach-artpec/board-artpec6.c
-index d3cf3e8603e8..c27e7bbcd7bc 100644
---- a/arch/arm/mach-artpec/board-artpec6.c
-+++ b/arch/arm/mach-artpec/board-artpec6.c
-@@ -39,7 +39,7 @@ static void __init artpec6_init_machine(void)
- 		 */
- 		regmap_write(regmap, ARTPEC6_DMACFG_REGNUM,
- 			     ARTPEC6_DMACFG_UARTS_BURST);
--	};
-+	}
- }
- 
- static void artpec6_l2c310_write_sec(unsigned long val, unsigned reg)
--- 
-2.17.1
+The iio: adc: patch is dependent on this (due to the binding header) -
+so either you should pick that up as well, or it'll get delayed until what
+you've picked up is available upstream - or I guess some hackery to allow them
+to go via different trees and flip to the header only once all the prior steps
+are in place.
+
+Note I'd messed up sending an Ack on the ADC patch which I've now fixed.
+
+Thanks,
+
+Jonathan
+
 

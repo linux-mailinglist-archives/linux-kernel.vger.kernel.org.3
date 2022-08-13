@@ -2,91 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83740591AFD
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 16:32:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45171591B03
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 16:34:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239517AbiHMOcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 10:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54458 "EHLO
+        id S239655AbiHMOdz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 10:33:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239051AbiHMOcl (ORCPT
+        with ESMTP id S239636AbiHMOdd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 10:32:41 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5178F2E68E
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 07:32:38 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oMsBV-0001St-NT; Sat, 13 Aug 2022 16:32:17 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oMsBT-0008JE-6q; Sat, 13 Aug 2022 16:32:15 +0200
-Date:   Sat, 13 Aug 2022 16:32:15 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, kernel@pengutronix.de,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v1 07/10] net: dsa: microchip: warn about not
- supported synclko properties on KSZ9893 chips
-Message-ID: <20220813143215.GA12534@pengutronix.de>
-References: <20220729130346.2961889-1-o.rempel@pengutronix.de>
- <20220729130346.2961889-8-o.rempel@pengutronix.de>
- <20220802113633.73rxlb2kmihivwpx@skbuf>
- <20220805115601.GB10667@pengutronix.de>
- <20220805134234.ps4qfjiachzm7jv4@skbuf>
+        Sat, 13 Aug 2022 10:33:33 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF9F92F010
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 07:33:30 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id a89so4447413edf.5
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 07:33:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=za38B/WdiKJtfUmwIszIpVR/GOOwQNFkxMaiPO2BEsE=;
+        b=SRS5VX4DgFVtp+A0rN1JhpRO941soVLdg90ecmG+XQ0O0Pk71FW0Pnz8yHfIzncjfm
+         w9vBr4X/fCJunIlmhImV1SN4JHWF76kgYCXcIiI1d3N9VGZpSUARDumzbJr1NyXQ/y2c
+         xl4sdAP3i5O12b6Ip2R/jya5p6xu5xMddi8Pxlw7eq/IEQ6HD+3yv8y+lu+TMSGolZmy
+         T1my/uu5mISAvK1SJnfKyo4UErW6OWGA38vCibiC0oR7zQJqP/8REV5No7LCotDsP6w/
+         5aNp4dTcnSdt2zTERyY/We+lAkR6JSCN2UFnjtWSoP/0ZZaPfZmJJe4TyS7j9xKwOFfG
+         vjWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=za38B/WdiKJtfUmwIszIpVR/GOOwQNFkxMaiPO2BEsE=;
+        b=uf/Su2dz7J54TMtXXslJRYVZkYWDez7Hy0zKwc45smK8KPEXtDthaO5+WVOZ3YFCEN
+         zL0rMU7TAPedVX8Thmx28IkLUntlpHUCq+USICfNl2LCaZKPCicwwDeOhQZBj37fcwkO
+         aSez8LVT9SgFAGUpugQDSVI+5PFiQxYkyB4ZSeyUIawPXBf3gLbk1627m18HmDdc72Uw
+         cRcLjJepLvThkoyG6PTMwkPVgkkKI3uvxgYRKqFXUsGZw5R/FfpFu3bXflZzHJCVBr89
+         r+4DiT9ccnBtdMCRrQ3x9B7+RePLPN+A2vvEGFTcI1rChur8IpuQTzqmF42MczZ/l3H7
+         nA4w==
+X-Gm-Message-State: ACgBeo3TmM76jxCRtjjjqzxbEYNHEOkNVb2xGJsd0JhLIZBlfPMjOnnx
+        oFNyNgUPJ0tVw+ziphVwoWkxO5afxEkhXjaOAA==
+X-Google-Smtp-Source: AA6agR7/0O5iWzCnwrOz4bhtktALLvhmcNbjjxALsSbZe0aAZ1sGeKW6/lTWKsM2lcpAxJVv05nSRWz+4CDpDtjIXfY=
+X-Received: by 2002:a05:6402:240a:b0:437:d2b6:3dde with SMTP id
+ t10-20020a056402240a00b00437d2b63ddemr7723134eda.62.1660401209608; Sat, 13
+ Aug 2022 07:33:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220805134234.ps4qfjiachzm7jv4@skbuf>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1660290073-26347-1-git-send-email-kaixuxia@tencent.com> <20220812154841.116570-1-sj@kernel.org>
+In-Reply-To: <20220812154841.116570-1-sj@kernel.org>
+From:   Kaixu Xia <xiakaixu1987@gmail.com>
+Date:   Sat, 13 Aug 2022 22:33:18 +0800
+Message-ID: <CAGjdHukHNavhfTB+uff_9F3+VPhzXzP9bPnUV1Mcz4dX7rF87w@mail.gmail.com>
+Subject: Re: [PATCH] mm/damon/core: simplify the parameter passing for region
+ split operation
+To:     SeongJae Park <sj@kernel.org>
+Cc:     akpm@linux-foundation.org, damon@lists.linux.dev,
+        linux-mm@kvack.org, LKML <linux-kernel@vger.kernel.org>,
+        Kaixu Xia <kaixuxia@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 05, 2022 at 04:42:34PM +0300, Vladimir Oltean wrote:
-> On Fri, Aug 05, 2022 at 01:56:01PM +0200, Oleksij Rempel wrote:
-> > Hm, if we will have any random not support OF property in the switch
-> > node. We won't be able to warn about it anyway. So, if it is present
-> > but not supported, we will just ignore it.
-> > 
-> > I'll drop this patch.
-> 
-> To continue, I think the right way to go about this is to edit the
-> dt-schema to say that these properties are only applicable to certain
-> compatible strings, rather than for all. Then due to the
-> "unevaluatedProperties: false", you'd get the warnings you want, at
-> validation time.
+On Fri, Aug 12, 2022 at 11:48 PM SeongJae Park <sj@kernel.org> wrote:
+>
+> Hi Kaixu,
+>
+> On Fri, 12 Aug 2022 15:41:13 +0800 xiakaixu1987@gmail.com wrote:
+>
+> > From: Kaixu Xia <kaixuxia@tencent.com>
+> >
+> > The parameter 'struct damon_target *t' is unnecessary in damon region
+> > split operation, so we can remove it.
+>
+> Good finding.  But, 't' is used while 'ctx' is unused in
+> 'damon_split_region_at()' and 'damon_split_regions_of'.  Below code change is
+> also removing 'ctx', not 't'.  Could you please update the commit message for
+> that?
+>
+> Also, please fix the kernel test robot reported issues together:
+> https://lore.kernel.org/damon/202208121823.8YTRPB1J-lkp@intel.com/
+>
+>
+Thanks. Will fix them in the next version.
 
-Hm, with "unevaluatedProperties: false" i have no warnings. Even if I
-create examples with random strings as properties. Are there some new
-json libraries i should use?
-
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+> Thanks,
+> SJ
+>
+> [...]

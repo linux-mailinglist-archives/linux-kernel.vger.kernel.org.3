@@ -2,381 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2349591C0E
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 18:57:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DAFD7591C12
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 19:04:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240042AbiHMQ5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 12:57:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58172 "EHLO
+        id S239839AbiHMRDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 13:03:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239712AbiHMQ5M (ORCPT
+        with ESMTP id S236482AbiHMRDk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 12:57:12 -0400
-Received: from mail.nearlyone.de (mail.nearlyone.de [46.163.114.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECF32D1C2;
-        Sat, 13 Aug 2022 09:57:10 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id AA4A45DF3C;
-        Sat, 13 Aug 2022 18:57:06 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=monom.org; s=dkim;
-        t=1660409828; h=from:subject:date:message-id:to:mime-version:content-type:
-         content-transfer-encoding; bh=oWe3XaBKG7sQ/K2RGyuBHDy0vDbjP+dVmq4ESm5+oP4=;
-        b=mHRhWcCOZnkKlxl0MmnMNe4KQvweb2ITcyX574w6xoD92xzTnS9jKkQP5dp5YLF7FTfUWE
-        AC2206CIgHm0gDFTEMAEZCrtXxiJCTjgsq9HgHRseJB1MaLEC7yXe+ymB2OmVbLm25Frvs
-        hy/RVH0xKGFhvjwapQdEWe7BkEs2qt09ck3Sr852rZXh4Z0gZK6bmSauJE1xII3gLEbk0q
-        ZbCRy2HteoLXTBt2iFoLs/xw23C86e8CcUlNlqXbXY+EW6lWn1SFp377zlmsI8WiwZWNHk
-        1tOYjbHkoG1bgpVcApd7WzXHlQKW/gK850KMWtiS+aXfGnsOXfPT01utlG4UGQ==
-Date:   Sat, 13 Aug 2022 18:57:05 +0200
-From:   Daniel Wagner <wagi@monom.org>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        John Kacur <jkacur@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>,
-        Pavel Machek <pavel@denx.de>
-Subject: [ANNOUNCE] 4.19.255-rt113
-Message-ID: <166040972522.12165.12921192851414170729@beryllium.lan>
+        Sat, 13 Aug 2022 13:03:40 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCE3627D;
+        Sat, 13 Aug 2022 10:03:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1660410217; x=1691946217;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=gnnW6ETQuZxUWI9ILGit84WOmjm169dqeZGvOKwAJts=;
+  b=DzVFQP4lH74tKWnpJFHLbxhgFIu4nTxkvM0FsPs1LlZu9Ek+jCQnYG8Q
+   Z8ZxMFiOgbYKfUkKiFd9iv14Inv8z/xpqYSXfy7/4EZCJ9QTu+EO30R52
+   R7hfVhRn8CH0dkPs1+mYg8bRdBlHF64S1sKpslyhjn0ExDXLfpT3CpLeN
+   5vBzdZTxxmzRRYxwB8wPriCe5NMS1Da04raVHxAflmXd2A0nFd8+mTCgD
+   0/OMaoTW1z40tgpx8fznB/ritPp0zRKS6QL89CuuhNlysFHBbAEZNg5aZ
+   gA6D8LTCAJCnD3p7ZyLtk4L/DhGeu3nBgmSSdvtES2IW496m0V8CNiNvd
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
+   d="scan'208";a="176267796"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Aug 2022 10:03:36 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Sat, 13 Aug 2022 10:03:36 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12 via Frontend Transport; Sat, 13 Aug 2022 10:03:36 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=c0+8Gdd6uBppBQesRSFbFst17As/ogcjDX/N8OEtmpOx5v0QUFN1VBjvQdrqDx7qyJgxFUQXmW7syr/IpwjyVRaiQdszoILIMq/FL36XhVBHwnLb7zmIBo/bdhEoAYGMQsxNnPZMso21+eD06qWl38USrGaQVoM8rHny8BAIS2jN6OrIv+DxOjfd5/3RkBD65ltiP09y47thWMybWFeYLJ9782RVEPniIOO4jobIJXEGb4WhKV8sPhZ81aV5vZh1NttiZoa/DJz8oUBTNvzXnp0jzaDR3pHi0TDCpoOOt1USmkyv+w7ZYe5n7Nw9nbjHdPsVRoSjZb1nsWgaLwkcKQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gnnW6ETQuZxUWI9ILGit84WOmjm169dqeZGvOKwAJts=;
+ b=aX9XbYb0vswfc1LbLq8FU8C+CMyqF9o9tc8k62oIopVQ9TjcguqWRbyliX72lNrwj7LXCPPadiKhRVOFjeH2uT/ZqWyyAUcjNhXjtWza+BYxTO1LiZp+Ga1mESrNK0e1+Qli5vSQAII+K92XeZAxLdDIvqgSZoD7j2aTcmqmCT5GDJMzRiIkOPiKpTTHgKsBABeyxvXL5JgPTgvr72bt5zHv11m6eEpO7bLHHFFtOnsURx35t6u5IefDceRYaRVI7zXVLoD4EQAUWDG/NPlgsuU8Xk3sdd61fDPDaMz62f5VssTy7CcOs487sCPU1AWkWFl5AWvYJ8A/zOh838YRDQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gnnW6ETQuZxUWI9ILGit84WOmjm169dqeZGvOKwAJts=;
+ b=Sm6BkIXwLO/24RsFKd7TKoy88u/bCxej4OKVYn2bsvIUT6aTXe9AvQzIlwClcACBgNTFnUYwu5BdZa/7rybtBD406mB5Vq1AHWe7qAQcne5qfAG/AgsIXbraeWpGYfOk+0poNeAF1htyiEUqD0/qhGJc9IOlIh3vZl0BG/qsuj4=
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
+ by CY4PR1101MB2086.namprd11.prod.outlook.com (2603:10b6:910:1c::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.17; Sat, 13 Aug
+ 2022 17:03:25 +0000
+Received: from CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::ac89:75cd:26e0:51c3]) by CO1PR11MB5154.namprd11.prod.outlook.com
+ ([fe80::ac89:75cd:26e0:51c3%8]) with mapi id 15.20.5525.011; Sat, 13 Aug 2022
+ 17:03:25 +0000
+From:   <Conor.Dooley@microchip.com>
+To:     <rdunlap@infradead.org>, <linux-kernel@vger.kernel.org>
+CC:     <arnd@arndb.de>, <josh@joshtriplett.org>,
+        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
+        <aou@eecs.berkeley.edu>, <linux-riscv@lists.infradead.org>,
+        <linux-api@vger.kernel.org>, <akpm@linux-foundation.org>,
+        <linux-mm@kvack.org>
+Subject: Re: [PATCH v2] kernel/sys_ni: add compat entry for fadvise64_64
+Thread-Topic: [PATCH v2] kernel/sys_ni: add compat entry for fadvise64_64
+Thread-Index: AQHYqqqKU1/CfoP7C0edtMKZS35Sga2tF90A
+Date:   Sat, 13 Aug 2022 17:03:25 +0000
+Message-ID: <03c5f897-d4e2-8408-6116-ad7619ca385d@microchip.com>
+References: <20220807220934.5689-1-rdunlap@infradead.org>
+In-Reply-To: <20220807220934.5689-1-rdunlap@infradead.org>
+Accept-Language: en-IE, en-US
+Content-Language: en-IE
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: 885b6399-3fd1-413f-4361-08da7d4dbc62
+x-ms-traffictypediagnostic: CY4PR1101MB2086:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: iDoxD0rPaCEFNTP/j0+6hgXUoV9xx+/misauFs9SvdRpWECeAZ5sIS0WRhghNOI/In3/Hft1hYKcR2bLDerzhTbmvZPCSZqTyqIJue6aLI8Y+rqLcLzjGlofoYMhLc0r0lj/zKBSndl0JyokUdEx3izHkK4mwHTuxFuq6r9mIi+Bh9Oln2kOjzsX6DumawcGbrJIFK1bIasDxOUjqR7GP9eq8IXOe/k+Ak+OCuRkMTQv3C8UXmRRd6+3eEYMgK+7UFpqOBiRCkbNOFnuCLeKCmr74vJieeac5puHXNfx15WLWlBbyRPffULWKFG7ODq85OB+qeUB7jk+b4zwcsUuMwzUxP6sA1ngfVHy0640edQzwG9twc4Fsa8fR5jWfzE/5Dqj65Pr6bYy5fEPowdodlQJCbkBHPDQNojO9/KHASFwizGW69eQBmSGKLwjIvYLck2rICLyqH5TMnEFYl/VNTkHGRI7ZJtISMEQFJ8qF9w+5uvs0inrwW1aI44bJ0PJZWCDMZ/Rt1+POBHBxIQB1fCTdxayxvpdBMLthO85fl0DGl5npibq3iRZbS6++aKKPk8dETSD0Cv1NBeqXAGBiCn3a6tljJYvvMerEIID6m8jRuZVzdqUvs770kSdwPdFhLHP0wr2k7FZSNEk6icBpMjeJjdfGcY+09pQ33pjTVcxD/wPBbUyoswB83FD0HwuI5p2y8y1knsJiKRzHgD6ju7EsdlxklAIfP2S7PKDpHHOJSGA8uqS72YD9akO4UbridSI7p9iVmIFhWeIytwC6nLj5UsKryaf3V79+4XkAx8MyQpHKrcNSU2Jdsx49ZVsKV8lZrYhTxFoSbsFCINhhCwoJ5n6B0hi6ARDKI7FQWWZknEewvZbDqSMAN6J15eG7m/BOmbbIs0CGrFlySQsCQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(346002)(39860400002)(136003)(376002)(366004)(54906003)(110136005)(8676002)(4326008)(966005)(6486002)(41300700001)(7416002)(5660300002)(186003)(31686004)(36756003)(6506007)(2906002)(53546011)(26005)(6512007)(2616005)(38070700005)(86362001)(31696002)(8936002)(83380400001)(76116006)(66946007)(66556008)(91956017)(71200400001)(64756008)(66446008)(66476007)(478600001)(316002)(122000001)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RmVWS0RETUYrWWRDZUhmODIvZEhBMzhCdC95YmhSaU55YklDRUdXL3RoVFlG?=
+ =?utf-8?B?ZnpmcEFKcmYvalNnbHU4Y3d4eTNVbzE4UGpJMzdIMW1HRTdrTEo3TFVkYVZr?=
+ =?utf-8?B?V0xNL2Q0VEgxRERNZEZ3MDFNNjFsR2FrRFhFcnFsSVdhd1VyQUVsOUJlYjEv?=
+ =?utf-8?B?N00wekxkMml2T3BDS2RxdWlIdHhvdHVpdnhPdlUyNEFQTENUd2FoSDRhWEtR?=
+ =?utf-8?B?WDhyazdPVGNhODdVUm44WTBOZEk2SnV3WTU4SHZRTGFKWSt0dnRBT0syN0xq?=
+ =?utf-8?B?bE42QWJrWDVjeUgzd3JncTdnYjVpbkVhS0xFNjRQZzVRYmpoejh4NkxBc1dU?=
+ =?utf-8?B?VDlBN1VKcDEwMUw2aG42Q3V2bTJDRWYzUmhFbjZyV2wrcGpNUXBIZWxuc2hy?=
+ =?utf-8?B?Q2NHcHVPRk5BM3hGTU5CNkwzQkhHb1hIc0tUUy9QTzBxR0Vnc2R6MHA0V1lB?=
+ =?utf-8?B?dWM1MGRrTGRHQkZyQTNTWDVleXFidGMzNkZ4aC9iRFYvdnAvOUZIckRheGtY?=
+ =?utf-8?B?WXd3NnZEZ1JZYkNTWE91RmV4N2huV21pRXI4b2F3NnorZWdUVDRKWGlQN0Zx?=
+ =?utf-8?B?N25mbmludE5MengzWW5iWXdtcUNMdGE3YmNXd0l3bmNLNUNUTnFJMzZLNk9x?=
+ =?utf-8?B?Q2RWcVMveDRWRGpZbVErT2RoUjJ6bkU2Q2xzdjc4cVZFY0lZM3VyZTNqYnFI?=
+ =?utf-8?B?eTVMNDRSRnZIdEl5cHJkQllqcDA1TW1MMjlLc2RWTlBWSEZoNTl1OFg3UWJp?=
+ =?utf-8?B?TzZvZkdzTjVtZWM2TWFudjBYanlHVmlsQjdsUjB3NUp0MDI0WnVUcGlZSFFU?=
+ =?utf-8?B?WXdtWFZyVjF0WDhXNlM1OHdrOGhxeHZBcklnbm5MbGhtU3QxN2VhaGZJNDRF?=
+ =?utf-8?B?dzdMeElYeWZFVmZuemRQL3NEcjluNzc3dVRTT2Z6bnkwNmYySkVJUThRMGsy?=
+ =?utf-8?B?R1pGeHEvWWNsUDY3N1VuQUp4TkdjMFFrVXlkZ1UvNU1qcXliNEdHSGJRZktT?=
+ =?utf-8?B?ZkRTRnJiUy96a1BEeXIrTGhSYTNkV0RsTStidHIxaTZUYjZhWmN0MkFtSlFI?=
+ =?utf-8?B?WlVYaUZOMEExNFY0NkdTL2IxZUNGNFFIMFpVUitpRHpMSzI3d0wrOXdYM2pY?=
+ =?utf-8?B?VGRtd2JkVDY0NHdrY0NhTFUzN29pNXo3TElkK0V3NzdEeGVSRzFCaFQ2S0Za?=
+ =?utf-8?B?bVVkeGdlZ0xEMTFVYnVVaGRIRDlvRzFyQmFWdkVIQ3F6c1IyVVRPN0ZCVlVz?=
+ =?utf-8?B?UEs0dnRvcEl1Tk9NMk5IOHV3NUorNEg5SWU0NUVLQVNCak9XdmFQSW5yRVU3?=
+ =?utf-8?B?M3MyZHlRcExTbjNYNUthYXI5VC9wRVh1RDBqNTRuZ1d1M1d2NXBJa0NmQ2NX?=
+ =?utf-8?B?bzhVYU9JWXQrM1dGRmtyaWE2OENLcmJITmRPVXR5WUdQYTdLZEJCRDNYSklO?=
+ =?utf-8?B?Q0REMTlZT0ZNcjVnK2RWeFFsYVg1ZWJVUkhuR0FLWXQybEIxMHdPNmUwc2tW?=
+ =?utf-8?B?TmowRkQzNkdFV1dqVmlrS3NtRi9qeWwwMHJobS8rcHZjSkhGWFcxK2tic2J5?=
+ =?utf-8?B?eDBBd1JldEllekxrTWZBdXVlVzFwREZOemNNWDh5RVQ3cEp3SGpwa1JMU0RU?=
+ =?utf-8?B?d0tpUEd2aVZPZk9KbVJrMmxDanQ2ZWZma050eEZxcitmSzFKUk1Va0FDbXdZ?=
+ =?utf-8?B?WksxOWxlQTFZVkNjdytvczlsM2NxWThIKzJZODlYWWh2cm9vNGFnbzhVSjgx?=
+ =?utf-8?B?MkdhWm56cEl0UnFCbW1QblIxU3ZlMTRodFVtUjBCOElxTFUzaGM2eUNDSmxq?=
+ =?utf-8?B?blR4K2NPTHJRdXpJUGhPRi8za0FIejFvU1hYNGtqZmN2YysxSkkrTzB0U09U?=
+ =?utf-8?B?ZFAvaHkwbkM1cFl2RXllVVpFWWh3VWRMck9DcHo5YitIN3hJd3BwVXl3VWp5?=
+ =?utf-8?B?cXpKWFZlK3NsT2h3ck9FZGVvanl5ZC9xak82U1FTdmpGNEY1ako4aHhFTWo2?=
+ =?utf-8?B?U3FKb0VLeStxUlloZ0RXd3JYZzdNRVEyRXpUWDg0dGQxN2dWYll1UTV1bEI1?=
+ =?utf-8?B?UXRqVGJjczFYT0QyMmVieUlKUkk4T0k0VUNWYkZBMSt3cXg4V2NzcnNGVlc2?=
+ =?utf-8?Q?+Vkcv59pdTYOZSmkw3rw9FDpn?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <08585A0326D2B4438AA2EE541C09CE6F@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 885b6399-3fd1-413f-4361-08da7d4dbc62
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Aug 2022 17:03:25.2700
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Z2mjNPOAnR/LZmYjOkbzmQ7GLWVEE9E7ngqcAN0CzftQEpg9odZwAhlA+rtnsjEf4ODeP7TnsupWH3Qe+bE3CTPPpbkv4t/+ofrhmi2bi1Q=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1101MB2086
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello RT-list!
-
-I'm pleased to announce the 4.19.255-rt113 stable release.
-
-This is just an update to the latest stable release. No RT specific
-changes.
-
-You can get this release via the git tree at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
-
-  branch: v4.19-rt
-  Head SHA1: 3f10b93e91ead8aefa01758391b230b8a306e389
-
-Or to build 4.19.255-rt113 directly, the following patches should be applied:
-
-  https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.19.tar.xz
-
-  https://www.kernel.org/pub/linux/kernel/v4.x/patch-4.19.255.xz
-
-  https://www.kernel.org/pub/linux/kernel/projects/rt/4.19/older/patch-4.19.255-rt113.patch.xz
-
-Signing key fingerprint:
-
-  5BF6 7BC5 0826 72CA BB45  ACAE 587C 5ECA 5D0A 306C
-
-All keys used for the above files and repositories can be found on the
-following git repository:
-
-   git://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git
-
-Enjoy!
-Daniel
-
-Changes from v4.19.252-rt112:
----
-
-Alexander Aring (1):
-      dlm: fix pending remove if msg allocation fails
-
-Andrea Mayer (3):
-      seg6: fix skb checksum evaluation in SRH encapsulation/insertion
-      seg6: fix skb checksum in SRv6 End.B6 and End.B6.Encaps behaviors
-      seg6: bpf: fix skb checksum in bpf_push_seg6_encap()
-
-Ard Biesheuvel (2):
-      ARM: 9214/1: alignment: advance IT state after emulating Thumb instruction
-      ARM: 9209/1: Spectre-BHB: avoid pr_info() every time a CPU comes out of idle
-
-Ben Dooks (1):
-      riscv: add as-options for modules with assembly compontents
-
-Benjamin Tissoires (2):
-      HID: multitouch: simplify the application retrieval
-      HID: multitouch: add support for the Smart Tech panel
-
-Chanho Park (1):
-      tty: serial: samsung_tty: set dma burst_size to 1
-
-Charles Keepax (1):
-      ASoC: wm5110: Fix DRE control
-
-ChenXiaoSong (1):
-      ntfs: fix use-after-free in ntfs_ucsncmp()
-
-Daniel Sneddon (1):
-      x86/speculation: Add RSB VM Exit protections
-
-Daniel Wagner (2):
-      Merge tag 'v4.19.255' into v4.19-rt
-      Linux 4.19.255-rt113
-
-Demi Marie Obenour (1):
-      xen/gntdev: Ignore failure to unmap INVALID_GRANT_HANDLE
-
-Dmitry Osipenko (1):
-      ARM: 9213/1: Print message about disabled Spectre workarounds only once
-
-Duoming Zhou (1):
-      sctp: fix sleep in atomic context bug in timer handlers
-
-Eric Dumazet (1):
-      bpf: Make sure mac_header was set before using it
-
-Florian Westphal (2):
-      netfilter: br_netfilter: do not skip all hooks with 0 priority
-      netfilter: nf_queue: do not allow packet truncation below transport header offset
-
-Francesco Dolcini (1):
-      ASoC: sgtl5000: Fix noise on shutdown/remove
-
-GUO Zihua (1):
-      ima: remove the IMA_TEMPLATE Kconfig option
-
-Gabriel Fernandez (1):
-      ARM: dts: stm32: use the correct clock source for CEC on stm32mp151
-
-Greg Kroah-Hartman (4):
-      Linux 4.19.253
-      Linux 4.19.254
-      ARM: crypto: comment out gcc warning that breaks clang builds
-      Linux 4.19.255
-
-Hangyu Hua (2):
-      net: tipc: fix possible refcount leak in tipc_sk_create()
-      xfrm: xfrm_policy: fix a possible double xfrm_pols_put() in xfrm_bundle_lookup()
-
-Harald Freudenberger (1):
-      s390/archrandom: prevent CPACF trng invocations in interrupt context
-
-Hristo Venev (1):
-      be2net: Fix buffer overflow in be_get_module_eeprom
-
-Ilpo Järvinen (2):
-      serial: stm32: Clear prev values before setting RTS delays
-      serial: pl011: UPSTAT_AUTORTS requires .throttle/unthrottle
-
-Jason A. Donenfeld (1):
-      Revert "Revert "char/random: silence a lockdep splat with printk()""
-
-Jeffrey Hugo (4):
-      PCI: hv: Fix multi-MSI to allow more than one MSI vector
-      PCI: hv: Fix hv_arch_irq_unmask() for multi-MSI
-      PCI: hv: Reuse existing IRTE allocation in compose_msi_msg()
-      PCI: hv: Fix interrupt mapping for multi-MSI
-
-Jianglei Nie (1):
-      net: sfp: fix memory leak in sfp_probe()
-
-Jiri Slaby (5):
-      tty: drivers/tty/, stop using tty_schedule_flip()
-      tty: the rest, stop using tty_schedule_flip()
-      tty: drop tty_schedule_flip()
-      tty: extract tty_flip_buffer_commit() from tty_flip_buffer_push()
-      tty: use new tty_insert_flip_string_and_push_buffer() in pty_write()
-
-Jose Alonso (1):
-      net: usb: ax88179_178a needs FLAG_SEND_ZLP
-
-Juergen Gross (2):
-      xen/netback: avoid entering xenvif_rx_next_skb() with an empty rx queue
-      x86: Clear .brk area at early boot
-
-Junxiao Chang (1):
-      net: stmmac: fix dma queue left shift overflow issue
-
-Jyri Sarha (1):
-      drm/tilcdc: Remove obsolete crtc_mode_valid() hack
-
-Kai-Heng Feng (1):
-      platform/x86: hp-wmi: Ignore Sanitization Mode event
-
-Kris Bahnsen (1):
-      ARM: dts: imx6qdl-ts7970: Fix ngpio typo and count
-
-Kuniyuki Iwashima (43):
-      inetpeer: Fix data-races around sysctl.
-      net: Fix data-races around sysctl_mem.
-      cipso: Fix data-races around sysctl.
-      icmp: Fix data-races around sysctl.
-      icmp: Fix a data-race around sysctl_icmp_ratelimit.
-      icmp: Fix a data-race around sysctl_icmp_ratemask.
-      ipv4: Fix data-races around sysctl_ip_dynaddr.
-      ip: Fix data-races around sysctl_ip_fwd_use_pmtu.
-      ip: Fix data-races around sysctl_ip_nonlocal_bind.
-      ip: Fix a data-race around sysctl_fwmark_reflect.
-      tcp/dccp: Fix a data-race around sysctl_tcp_fwmark_accept.
-      tcp: Fix data-races around sysctl_tcp_mtu_probing.
-      tcp: Fix a data-race around sysctl_tcp_probe_threshold.
-      tcp: Fix a data-race around sysctl_tcp_probe_interval.
-      igmp: Fix data-races around sysctl_igmp_llm_reports.
-      igmp: Fix a data-race around sysctl_igmp_max_memberships.
-      tcp: Fix data-races around sysctl_tcp_reordering.
-      tcp: Fix data-races around some timeout sysctl knobs.
-      tcp: Fix a data-race around sysctl_tcp_notsent_lowat.
-      tcp: Fix a data-race around sysctl_tcp_tw_reuse.
-      tcp: Fix data-races around sysctl_tcp_fastopen.
-      tcp: Fix a data-race around sysctl_tcp_early_retrans.
-      tcp: Fix data-races around sysctl_tcp_recovery.
-      tcp: Fix a data-race around sysctl_tcp_thin_linear_timeouts.
-      tcp: Fix data-races around sysctl_tcp_slow_start_after_idle.
-      tcp: Fix a data-race around sysctl_tcp_retrans_collapse.
-      tcp: Fix a data-race around sysctl_tcp_stdurg.
-      tcp: Fix a data-race around sysctl_tcp_rfc1337.
-      tcp: Fix data-races around sysctl_tcp_max_reordering.
-      tcp: Fix data-races around sysctl_tcp_dsack.
-      tcp: Fix a data-race around sysctl_tcp_app_win.
-      tcp: Fix a data-race around sysctl_tcp_adv_win_scale.
-      tcp: Fix a data-race around sysctl_tcp_frto.
-      tcp: Fix a data-race around sysctl_tcp_nometrics_save.
-      tcp: Fix a data-race around sysctl_tcp_challenge_ack_limit.
-      net: ping6: Fix memleak in ipv6_renew_options().
-      igmp: Fix data-races around sysctl_igmp_qrv.
-      tcp: Fix a data-race around sysctl_tcp_min_tso_segs.
-      tcp: Fix a data-race around sysctl_tcp_min_rtt_wlen.
-      tcp: Fix a data-race around sysctl_tcp_autocorking.
-      tcp: Fix a data-race around sysctl_tcp_invalid_ratelimit.
-      tcp: Fix a data-race around sysctl_tcp_comp_sack_delay_ns.
-      tcp: Fix a data-race around sysctl_tcp_comp_sack_nr.
-
-Leo Yan (1):
-      perf symbol: Correct address for bss symbols
-
-Liang He (3):
-      cpufreq: pmac32-cpufreq: Fix refcount leak bug
-      scsi: ufs: host: Hold reference returned by of_parse_phandle()
-      net: sungem_phy: Add of_node_put() for reference returned by of_get_parent()
-
-Linus Torvalds (1):
-      signal handling: don't use BUG_ON() for debugging
-
-Linyu Yuan (1):
-      usb: typec: add missing uevent when partner support PD
-
-Lucien Buchmann (1):
-      USB: serial: ftdi_sio: add Belimo device ids
-
-Luiz Augusto von Dentz (8):
-      Bluetooth: Add bt_skb_sendmsg helper
-      Bluetooth: Add bt_skb_sendmmsg helper
-      Bluetooth: SCO: Replace use of memcpy_from_msg with bt_skb_sendmsg
-      Bluetooth: RFCOMM: Replace use of memcpy_from_msg with bt_skb_sendmmsg
-      Bluetooth: Fix passing NULL to PTR_ERR
-      Bluetooth: SCO: Fix sco_send_frame returning skb->len
-      Bluetooth: Fix bt_skb_sendmmsg not allocating partial chunks
-      Bluetooth: L2CAP: Fix use-after-free caused by l2cap_chan_put
-
-Marc Kleine-Budde (1):
-      can: m_can: m_can_tx_handler(): fix use after free of skb
-
-Mark Brown (1):
-      ASoC: ops: Fix off by one in range control validation
-
-Meng Tang (3):
-      ALSA: hda - Add fixup for Dell Latitidue E5430
-      ALSA: hda/conexant: Apply quirk for another HP ProDesk 600 G3 model
-      ALSA: hda/realtek - Fix headset mic problem for a HP machine with alc221
-
-Miaoqian Lin (1):
-      power/reset: arm-versatile: Fix refcount leak in versatile_reboot_probe
-
-Michael Walle (1):
-      NFC: nxp-nci: don't print header length mismatch on i2c error
-
-Michal Maloszewski (1):
-      i40e: Fix interface init with MSI interrupts (no MSI-X)
-
-Michal Suchanek (1):
-      ARM: dts: sunxi: Fix SPI NOR campatible on Orange Pi Zero
-
-Mikael Wikström (1):
-      HID: multitouch: Lenovo X1 Tablet Gen3 trackpoint and buttons
-
-Ming Lei (1):
-      scsi: core: Fix race between handling STS_RESOURCE and completion
-
-Ning Qiang (1):
-      macintosh/adb: fix oob read in do_adb_query() function
-
-Pali Rohár (1):
-      serial: mvebu-uart: correctly report configured baudrate value
-
-Pawan Gupta (1):
-      x86/speculation: Add LFENCE to RSB fill sequence
-
-Peter Zijlstra (1):
-      perf/core: Fix data race between perf_event_set_output() and perf_mmap_close()
-
-Robert Hancock (1):
-      i2c: cadence: Change large transfer count reset logic to be unconditional
-
-Ryusuke Konishi (1):
-      nilfs2: fix incorrect masking of permission flags for symlinks
-
-Stafford Horne (1):
-      irqchip: or1k-pic: Undefine mask_ack for level triggered hardware
-
-Stephan Gerhold (2):
-      virtio_mmio: Add missing PM calls to freeze/restore
-      virtio_mmio: Restore guest page size on resume
-
-Steven Rostedt (Google) (1):
-      net: sock: tracing: Fix sock_exceed_buf_limit not to dereference stale pointer
-
-Takashi Iwai (1):
-      ALSA: memalloc: Align buffer allocations in page size
-
-Tariq Toukan (1):
-      net/tls: Fix race in TLS device down flow
-
-Tejun Heo (1):
-      cgroup: Use separate src/dst nodes when preloading css_sets for migration
-
-Thinh Nguyen (1):
-      usb: dwc3: gadget: Fix event pending check
-
-Tony Fischetti (1):
-      HID: add ALWAYS_POLL quirk to lenovo pixart mouse
-
-Wang Cheng (1):
-      mm/mempolicy: fix uninit-value in mpol_rebind_policy()
-
-Wei Mingzhi (1):
-      mt7601u: add USB device ID for some versions of XiaoDu WiFi Dongle.
-
-Werner Sembach (2):
-      ACPI: video: Force backlight native for some TongFang devices
-      ACPI: video: Shortening quirk list by identifying Clevo by board_name only
-
-William Dean (1):
-      pinctrl: ralink: Check for null return of devm_kcalloc
-
-Xiaomeng Tong (1):
-      tilcdc: tilcdc_external: fix an incorrect NULL check on list iterator
-
-Xin Long (1):
-      Documentation: fix sctp_wmem in ip-sysctl.rst
-
-Yi Yang (1):
-      serial: 8250: fix return error code in serial8250_request_std_resource()
-
-Zheng Yejian (1):
-      tracing/histograms: Fix memory leak problem
-
-Íñigo Huguet (2):
-      sfc: fix use after free when disabling sriov
-      sfc: fix kernel panic when creating VF
+T24gMDcvMDgvMjAyMiAyMzowOSwgUmFuZHkgRHVubGFwIHdyb3RlOg0KPiBXaGVuIENPTkZJR19B
+RFZJU0VfU1lTQ0FMTFMgaXMgbm90IHNldC9lbmFibGVkIGFuZCBDT05GSUdfQ09NUEFUIGlzDQo+
+IHNldC9lbmFibGVkLCB0aGUgcmlzY3YgY29tcGF0X3N5c2NhbGxfdGFibGUgcmVmZXJlbmNlcw0K
+PiAnY29tcGF0X3N5c19mYWR2aXNlNjRfNjQnLCB3aGljaCBpcyBub3QgZGVmaW5lZDoNCj4gDQo+
+IHJpc2N2NjQtbGludXgtbGQ6IGFyY2gvcmlzY3Yva2VybmVsL2NvbXBhdF9zeXNjYWxsX3RhYmxl
+Lm86KC5yb2RhdGErMHg2ZjgpOg0KPiB1bmRlZmluZWQgcmVmZXJlbmNlIHRvIGBjb21wYXRfc3lz
+X2ZhZHZpc2U2NF82NCcNCj4gDQo+IEFkZCAnZmFkdmlzZTY0XzY0JyB0byBrZXJuZWwvc3lzX25p
+LmMgYXMgYSBjb25kaXRpb25hbCBDT01QQVQgZnVuY3Rpb24NCj4gc28gdGhhdCB3aGVuIENPTkZJ
+R19BRFZJU0VfU1lTQ0FMTFMgaXMgbm90IHNldCwgdGhlcmUgaXMgYSBmYWxsYmFjaw0KPiBmdW5j
+dGlvbiBhdmFpbGFibGUuDQoNCklzIHRoaXMgaW4gYSA2LjAgZGVzdGluZWQgdHJlZSBzb21ld2hl
+cmUgdGhhdCBJJ3ZlIG1pc3NlZD8NCkJ1bXBlZCBpbnRvIGl0IHdoaWxlIGxvb2tpbmcgYXQgYW4g
+dW5yZWxhdGVkIExLUCByYW5kY29uZmlnIGVycm9yLg0KRldJVzoNClRlc3RlZC1ieTogQ29ub3Ig
+RG9vbGV5IDxjb25vci5kb29sZXlAbWljcm9jaGlwLmNvbT4NClRoYW5rcywNCkNvbm9yLg0KDQo+
+IA0KPiBGaXhlczogZDNhYzIxY2FjYzI0ICgibW06IFN1cHBvcnQgY29tcGlsaW5nIG91dCBtYWR2
+aXNlIGFuZCBmYWR2aXNlIikNCj4gU2lnbmVkLW9mZi1ieTogUmFuZHkgRHVubGFwIDxyZHVubGFw
+QGluZnJhZGVhZC5vcmc+DQo+IFN1Z2dlc3RlZC1ieTogQXJuZCBCZXJnbWFubiA8YXJuZEBhcm5k
+Yi5kZT4NCj4gQ2M6IEpvc2ggVHJpcGxldHQgPGpvc2hAam9zaHRyaXBsZXR0Lm9yZz4NCj4gQ2M6
+IFBhdWwgV2FsbXNsZXkgPHBhdWwud2FsbXNsZXlAc2lmaXZlLmNvbT4NCj4gQ2M6IFBhbG1lciBE
+YWJiZWx0IDxwYWxtZXJAZGFiYmVsdC5jb20+DQo+IENjOiBBbGJlcnQgT3UgPGFvdUBlZWNzLmJl
+cmtlbGV5LmVkdT4NCj4gQ2M6IGxpbnV4LXJpc2N2QGxpc3RzLmluZnJhZGVhZC5vcmcNCj4gQ2M6
+IEFybmQgQmVyZ21hbm4gPGFybmRAYXJuZGIuZGU+DQo+IENjOiBsaW51eC1hcGlAdmdlci5rZXJu
+ZWwub3JnDQo+IENjOiBBbmRyZXcgTW9ydG9uIDxha3BtQGxpbnV4LWZvdW5kYXRpb24ub3JnPg0K
+PiBDYzogbGludXgtbW1Aa3ZhY2sub3JnDQo+IC0tLQ0KPiB2MjogcGF0Y2gga2VybmVsL3N5c19u
+aS5jIChmb3IgYW55IGFyY2gpIGluc3RlYWQgb2YgYXJjaC9yaXNjdidzDQo+ICAgICB1bmlzdGQu
+aCAoQXJuZCkNCj4gDQo+ICBrZXJuZWwvc3lzX25pLmMgfCAgICAxICsNCj4gIDEgZmlsZSBjaGFu
+Z2VkLCAxIGluc2VydGlvbigrKQ0KPiANCj4gLS0tIGEva2VybmVsL3N5c19uaS5jDQo+ICsrKyBi
+L2tlcm5lbC9zeXNfbmkuYw0KPiBAQCAtMjc3LDYgKzI3Nyw3IEBAIENPTkRfU1lTQ0FMTChsYW5k
+bG9ja19yZXN0cmljdF9zZWxmKTsNCj4gIA0KPiAgLyogbW0vZmFkdmlzZS5jICovDQo+ICBDT05E
+X1NZU0NBTEwoZmFkdmlzZTY0XzY0KTsNCj4gK0NPTkRfU1lTQ0FMTF9DT01QQVQoZmFkdmlzZTY0
+XzY0KTsNCj4gIA0KPiAgLyogbW0vLCBDT05GSUdfTU1VIG9ubHkgKi8NCj4gIENPTkRfU1lTQ0FM
+TChzd2Fwb24pOw0KPiANCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
+X19fX19fX18NCj4gbGludXgtcmlzY3YgbWFpbGluZyBsaXN0DQo+IGxpbnV4LXJpc2N2QGxpc3Rz
+LmluZnJhZGVhZC5vcmcNCj4gaHR0cDovL2xpc3RzLmluZnJhZGVhZC5vcmcvbWFpbG1hbi9saXN0
+aW5mby9saW51eC1yaXNjdg0K

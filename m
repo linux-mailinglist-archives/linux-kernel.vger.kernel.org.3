@@ -2,139 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABD04591CAA
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 23:10:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55062591CC0
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 23:38:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240488AbiHMVKd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 17:10:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42428 "EHLO
+        id S240991AbiHMViM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 17:38:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240487AbiHMVKa (ORCPT
+        with ESMTP id S240986AbiHMViJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 17:10:30 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F1B210579;
-        Sat, 13 Aug 2022 14:10:29 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id C6AA65C00F2;
-        Sat, 13 Aug 2022 17:10:28 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Sat, 13 Aug 2022 17:10:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-transfer-encoding:content-type:date:date:from
-        :from:in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1660425028; x=
-        1660511428; bh=8fcTcuAeWHQjpVwzcJr2YO/c0/5Ia3k+hIoMp6C3cvs=; b=d
-        3ZJr9EJY3ECCcEo8FAO2lKRuA3495jqGwsZXg1ITVbnWG1sl45t/2+22sBSYRJpU
-        19PYjWEzteFAB3aBPkkSK0515BYVoDkm99J9hLBdCrMAmzsQ3GxtEDAFcf+ZFahu
-        aasX+K19EHb0nEc5PB0XEFJaO4xzk6ds+YPXwXMIHlLW07K4H+QBz/zvV13HRXNe
-        gnougRJtxzKxaNeyJswIYXVRRNDloI7795A/dT/11gccBWNvnBfyqpJIbVM/GX1C
-        ksILa/HU33Hjt1wvhNqFKOHGz2blYm7iUuDAP+rxZhU7M0H2Okh8V03b6N3pIsgN
-        v5RyuJzJkv+tTmoUkQzWg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1660425028; x=
-        1660511428; bh=8fcTcuAeWHQjpVwzcJr2YO/c0/5Ia3k+hIoMp6C3cvs=; b=k
-        l6MUhf3mYPK+C1wiQ6ptsIeKDeIQ0V5Tgcb7zemsJpMJEjgSgwOSZrjCiRe922ME
-        X9OCrwJC45gozPHfefZ1z3j96QjNT0l7cotCI4jmXsJ8RxFa31HBQKfvFv9MFwiz
-        NTZBbmj55Unorad/IX+Hxu9FEJ9dvWWV/y7rNHpm8L1iHB9y0+2+CPfJ259ZOT1i
-        5SrtLzGBzMnmf/v2VT8eNc/NDFeM+LF2pe3bCpERYQlGTj0xzIK1JVY1+dscLdCt
-        RCX/Hml1GlEl6wAP0sSVzUz0WSIroToG8P1pE4z/S5GOUgV2YLOmSt8Lvb71ZU7b
-        mMShNfwQELDlTfjGJHbhg==
-X-ME-Sender: <xms:QxP4YjrXTL_DlrdLSWxKphchpZk-GhZzJTk89rx4CO6R432ya-zXMw>
-    <xme:QxP4Ytrbg3oErHYTZutivtJzyWWwI-2qR5aPkRutQw3F3zulwOtyf_Yqa3wJvLJj2
-    9I-ZjTXSeiOjBiQeh4>
-X-ME-Received: <xmr:QxP4YgPQAlL3ayHamdNS7yvPnq7Bc5AF6-N-4Ag9WV54ydF-5hsGHKrNLPWwuI76bbq0_A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegkedgudeitdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtugfgjgesthektddttddtjeenucfhrhhomhepfdfm
-    ihhrihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovh
-    drnhgrmhgvqeenucggtffrrghtthgvrhhnpefgjeeikefffeefvedugfdtkedvhfdttdei
-    feevtdehgefgjeffleelgffggfdvkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
-    grmhepmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:QxP4Ym6vvBM_bgWMEW5eVlT64jBJ68VOVkLpafZuB82WmnAcFVWImA>
-    <xmx:QxP4Yi5Kn0Y8WNLYczO4kKvDKNi8kHAGVzeDeMpKDV5N16AunhV2Zw>
-    <xmx:QxP4YuiFxvXPYmiS2_-9ZuIasxnJczg9uKztlSwGMBP_hy3JzAJWyg>
-    <xmx:RBP4Ynktg87ysYcR8CfmMWxRUTE-BEjbfkb6CXXgGDqhEdtsLPIy2g>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 13 Aug 2022 17:10:27 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 95A38104A08; Sun, 14 Aug 2022 00:13:30 +0300 (+03)
-Date:   Sun, 14 Aug 2022 00:13:30 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Andy Lutomirski <luto@kernel.org>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Varad Gautam <varad.gautam@suse.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Marcelo Henrique Cerri <marcelo.cerri@canonical.com>,
-        tim.gardner@canonical.com, khalid.elmously@canonical.com,
-        philip.cox@canonical.com,
-        the arch/x86 maintainers <x86@kernel.org>,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCHv7 10/14] x86/mm: Avoid load_unaligned_zeropad() stepping
- into unaccepted memory
-Message-ID: <20220813211330.73bse242m4m5fz3n@box.shutemov.name>
-References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
- <20220614120231.48165-11-kirill.shutemov@linux.intel.com>
- <Yt/ANO5usdV+JSSW@zn.tnic>
- <80cc204b-a24f-684f-ec66-1361b69cae39@intel.com>
- <073c5a97-272c-c5a0-19f2-c3f14f916c72@intel.com>
- <YvTncOa6KSr8EIuE@zn.tnic>
- <f9e3aacf-d90e-42a1-ac0e-39ba61389305@www.fastmail.com>
+        Sat, 13 Aug 2022 17:38:09 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECA7127B0A
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 14:38:08 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id y3so5213789eda.6
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 14:38:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=pJARGpYDRG1Jl/rpwzXhVmN1AU3CPPfwsaLJnAGsXAU=;
+        b=cGbBvlx6n7XyT6C3og9s4r5BWLakWyXg0ooz0frMES8mhFJIpDwHSlooUIsagfxrFh
+         a/EXAPLQOjke/H1apCB4rNCjDu+y5KJk5Bad7OIB5a94D2pKbjoVtNy+WnZdRypOiTIE
+         +6PewrzivrtgxLIhNx5Cjrs+lkgEKK89hWFC0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=pJARGpYDRG1Jl/rpwzXhVmN1AU3CPPfwsaLJnAGsXAU=;
+        b=z09uj/n47fGX55rkcVVyo9NRT2pslBS5gIgpgA4Phm/GIq3O0suPY8jKNmJGFhdbT7
+         oTqSzOL8zZwN6oJwaku+WzShHUdDBTbHYlctw6pjp6zZNVp5JT5cvFW3ftMPdhXCo6Eu
+         9sJiMtUUz+XyQmfWvysiCuvPGuk+oVcKi3PdxZytq7Qinm0lzhCZBS2ZwKdjwboZ0DgU
+         HRL0DZAvdFrf3H01E0fX+4kS0OeEtDmcfBsvngoaqmod9Aqt4C4OPAwP8KTm0KME99vc
+         sjb+RKMS1CoNyEbx4JGB60bYxl65oDbMfOqbxDKBWaxXC5KyB3Rwo3bq8knBgs1O7bfI
+         /Y+w==
+X-Gm-Message-State: ACgBeo2elkqJpUBYImtqYf2l9bSZye5IcgEc8yC/gwVk60MN1b9+rcU6
+        wg0lSRlY7EjAu52S4eBclklyDLAi9j75iixg
+X-Google-Smtp-Source: AA6agR6SJavLcFhxoSzQL3F3QHHvHd3tmFm0XAVNTG54q0VSlWwv6jWh17bv47xib/86xvyTUdqtQA==
+X-Received: by 2002:a05:6402:501d:b0:443:1c7:ccb9 with SMTP id p29-20020a056402501d00b0044301c7ccb9mr8650183eda.101.1660426687332;
+        Sat, 13 Aug 2022 14:38:07 -0700 (PDT)
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com. [209.85.128.41])
+        by smtp.gmail.com with ESMTPSA id 15-20020a170906318f00b007314a01766asm2250393ejy.211.2022.08.13.14.38.06
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 13 Aug 2022 14:38:06 -0700 (PDT)
+Received: by mail-wm1-f41.google.com with SMTP id r83-20020a1c4456000000b003a5cb389944so2058919wma.4
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 14:38:06 -0700 (PDT)
+X-Received: by 2002:a1c:f603:0:b0:3a5:23ca:3e7c with SMTP id
+ w3-20020a1cf603000000b003a523ca3e7cmr6229444wmc.38.1660426685890; Sat, 13 Aug
+ 2022 14:38:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f9e3aacf-d90e-42a1-ac0e-39ba61389305@www.fastmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <YvfGY2qnl2YXrUgX@shikoro>
+In-Reply-To: <YvfGY2qnl2YXrUgX@shikoro>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 13 Aug 2022 14:37:49 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wjGmhaE-Y8GqWKPtWYOi=bOarFgo7UkzHNoOVEKnkXXrQ@mail.gmail.com>
+Message-ID: <CAHk-=wjGmhaE-Y8GqWKPtWYOi=bOarFgo7UkzHNoOVEKnkXXrQ@mail.gmail.com>
+Subject: Re: [PULL REQUEST] i2c-for-5.20-part2
+To:     Wolfram Sang <wsa@kernel.org>, Julia Lawall <julia.lawall@inria.fr>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cocci@systeme.lip6.fr
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 13, 2022 at 09:11:52AM -0700, Andy Lutomirski wrote:
-> Now if the TD module could deliver an unrecoverable #MC instead of an
-> impossible-to-handle #VE, maybe we could at least get a nice debug trace
-> out?  Of course it’s not so easy to do anything with a debug trace that
-> doesn’t break confidentiality.
+On Sat, Aug 13, 2022 at 8:42 AM Wolfram Sang <wsa@kernel.org> wrote:
+>
+> * subsystem-wide move from strlcpy to strscpy
 
-It is not impossible-to-handle #VE, it is no #VE for the guest and exit to
-the host that cannot be recovered. Yes, it is not friednly for debugging.
+Hmm.
 
-Our plan was to allow SEPT_VE_DISABLE=0 for debug TD. It helps with
-debugging stepping on unaccepted memory as allows #VE in the guest which
-leads to panic() and nice traceback.
+Looking around, we still do have a lot of those 'strlcpy()' users, but
+99% of them don't use the return value.
 
-Would it be enough?
+And since 'strlcpy()' is complete and utter garbage exactly *BECAUSE*
+of the bad return value (it returns the length of the source string -
+but an untrusted and possibly unterminated source string is often the
+*problem* in the first place), that would make it fairly easy to
+convert the rest.
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+I see two possibilities:
+
+ (a) fix strlcpy() by making it return 'void', and leave all those 99%
+of users alone, and convert the (few) cases that actually look at the
+return value to strscpy
+
+ (b) auto-convert (with a coccinelle script) all the 'strlcpy()' users
+that don't care about the return value, and leave a few broken users
+of strlcpy around
+
+I think (b) is the simpler thing, but I have no idea how to write a
+coccinelle patch that basically does "if return value of strlcpy is
+not used, convert the strlcpy to a strscpy".
+
+I'd love to get rid of strlcpy() entirely, since it's such a horribly
+badly designed thing.
+
+                  Linus

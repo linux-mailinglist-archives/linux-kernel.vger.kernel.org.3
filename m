@@ -2,303 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41A185917D4
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 02:34:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9975D5917DA
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 02:37:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235854AbiHMAeY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 20:34:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56020 "EHLO
+        id S235944AbiHMAhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 20:37:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229617AbiHMAeV (ORCPT
+        with ESMTP id S236313AbiHMAhq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 20:34:21 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C1AE5A285E
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 17:34:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660350859;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=peRfAvWIP7FDZjD9LS6PUCSHBhipHIZbT/wujjdYk4M=;
-        b=HeMien+OMONP2RauGp5B4GziYR09GhIAMMW0/ZZErnhMRmWhOtzoRbNUUtIOXqyEiAMABG
-        g5fgmmQ284I6xqqDvx2UgkbFwy2sPzwl54uZDH+VhKoRZjcU51GyUP8sBL7E5mgXbOZBZe
-        OODx+3Q4+Bq0QXMe9bP+J2JVH9TqyeM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-101-pusrxSxtNjmQQNpKUc6RaQ-1; Fri, 12 Aug 2022 20:34:15 -0400
-X-MC-Unique: pusrxSxtNjmQQNpKUc6RaQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A7BAC85A581;
-        Sat, 13 Aug 2022 00:34:14 +0000 (UTC)
-Received: from localhost (ovpn-12-29.pek2.redhat.com [10.72.12.29])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8A9C040CF8E5;
-        Sat, 13 Aug 2022 00:34:13 +0000 (UTC)
-Date:   Sat, 13 Aug 2022 08:34:10 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Eric DeVolder <eric.devolder@oracle.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        kexec@lists.infradead.org, ebiederm@xmission.com,
-        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
-        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
-        sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
-        boris.ostrovsky@oracle.com
-Subject: Re: [PATCH v10 8/8] x86/crash: Add x86 crash hotplug support
-Message-ID: <Yvbxgvk+5HqEl7J2@MiWiFi-R3L-srv>
-References: <20220721181747.1640-1-eric.devolder@oracle.com>
- <20220721181747.1640-9-eric.devolder@oracle.com>
+        Fri, 12 Aug 2022 20:37:46 -0400
+Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0185BA895A
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 17:37:43 -0700 (PDT)
+Received: by mail-yb1-xb31.google.com with SMTP id k12so3809885ybk.6
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 17:37:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=uEJMlpNek7i3LOabGfVfDJzU9omVsDJB8WJ8KQU8dlQ=;
+        b=Sve28P4PqhXjk4ce663qu3BvVMqDHjCi61dQeacdpv1MmyLZIemKSXmz1ouaidH+nD
+         DCGdK5i4Ch7HgoQYu2+MuRZb1hdCO0/FPhd9qeDOqxjkVCHGg2R+Gnyeg0Iehbqrq3fI
+         BhTdclcBc6ylCKogS/Xb+6Ruw4y4rGUEfX4OWrb5LgSN7uaBCCsL7CaIRVhf/yoCdZwY
+         5yStn2+EnssoA4TZt9WEjTFainIwqSVJQcvvM/z7JPDA18RNrlU1B40NxbCV3SSxlaB9
+         fAzavnCk0q+JcNw+3GICKmVdS44T263eRwHsX5a+YURPIwUo3W7ZuZzltZC4DnsAXB3j
+         CY9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=uEJMlpNek7i3LOabGfVfDJzU9omVsDJB8WJ8KQU8dlQ=;
+        b=Cy3Oaydv3FqLmrWRhoavvHXD7KNAPMmxrKzkHq9jrxHAT25PV+ua1QWj4PU46nuW0/
+         I5i2VtfL8dirZZpYMIREhS09FwEXDx7SXReMtsRbOS16811W5BnkoBJD7vzBtO4SUF36
+         2TM2Gv4J4iSwVxsMNGcW2FKH42Z/xn3ODmDFwqVF9hSPz0tV/EwzmwJqhssRS3+TSjLk
+         RDRqhKa56kN/z/eOgPbkOsBrEtZVFf7MxT7NgzfQ6JUdsotRZNHficPEs+hfDr4698+1
+         hrUNMqR45I9civWma6XYGdBrmQlbIPwoGgW+3o/WXMYdMWciXTN9xXfa+cuPNtDGCkJR
+         9aiw==
+X-Gm-Message-State: ACgBeo0avwBJWnvKFymqLdx+SLVluD4tss7jPIhtQxOZCCTPyNzEQsCh
+        mZKgRCGReu3GpD2bHawKfIS4JE1yIl+Iqp5zFE4b8g==
+X-Google-Smtp-Source: AA6agR60geMZ3H7nVfNHvTy7tQRFJxetMdVj0FGkYr3EoFl8eIXK86kZZzELtTaeP+s+WgwLZRZMnfoqUVBwXNCqVYY=
+X-Received: by 2002:a05:6902:2cb:b0:684:aebe:49ab with SMTP id
+ w11-20020a05690202cb00b00684aebe49abmr2097251ybh.242.1660351061876; Fri, 12
+ Aug 2022 17:37:41 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220721181747.1640-9-eric.devolder@oracle.com>
-X-Scanned-By: MIMEDefang 2.84 on 10.11.54.1
-X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220810060040.321697-1-saravanak@google.com> <20220810060040.321697-10-saravanak@google.com>
+ <YvYhoGdemyKEx++d@atomide.com>
+In-Reply-To: <YvYhoGdemyKEx++d@atomide.com>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Fri, 12 Aug 2022 17:37:05 -0700
+Message-ID: <CAGETcx_SdxJKV56jGSx8GbmA4y_zaoP6z8n8xKZGZbCcmewvDQ@mail.gmail.com>
+Subject: Re: [PATCH v1 9/9] of: property: Simplify of_link_to_phandle()
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Len Brown <lenb@kernel.org>, Abel Vesa <abel.vesa@linaro.org>,
+        Alexander Stein <alexander.stein@ew.tq-group.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        John Stultz <jstultz@google.com>,
+        Doug Anderson <dianders@chromium.org>,
+        Guenter Roeck <linux@roeck-us.net>, kernel-team@android.com,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/21/22 at 02:17pm, Eric DeVolder wrote:
-...snip.... 
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index e58798f636d4..bb59596c8bea 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -2065,6 +2065,17 @@ config CRASH_DUMP
->  	  (CONFIG_RELOCATABLE=y).
->  	  For more details see Documentation/admin-guide/kdump/kdump.rst
->  
-> +config CRASH_MAX_MEMORY_RANGES
-> +	depends on CRASH_DUMP && KEXEC_FILE && (HOTPLUG_CPU || MEMORY_HOTPLUG)
-> +	int
-> +	default 32768
+On Fri, Aug 12, 2022 at 2:47 AM Tony Lindgren <tony@atomide.com> wrote:
+>
+> Hi,
+>
+> * Saravana Kannan <saravanak@google.com> [220810 05:54]:
+> > The driver core now:
+> > - Has the parent device of a supplier pick up the consumers if the
+> >   supplier never has a device created for it.
+> > - Ignores a supplier if the supplier has no parent device and will never
+> >   be probed by a driver
+> >
+> > And already prevents creating a device link with the consumer as a
+> > supplier of a parent.
+> >
+> > So, we no longer need to find the "compatible" node of the supplier or
+> > do any other checks in of_link_to_phandle(). We simply need to make sure
+> > that the supplier is available in DT.
+>
+> This patch fixes booting for me, so it should be applied as a fix and
+> tagged with:
+>
+> Fixes: 5a46079a9645 ("PM: domains: Delete usage of driver_deferred_probe_check_state()")
+>
+> If there are dependencies to the other patches in this series, it might
+> make sense to revert commit 5a46079a9645 instead.
 
-Do we need to enforce the value with page align and minimal size? I
-checked crash_load_segments() in arch/x86/kernel/crash.c, it does the
-page size aligning in kexec_add_buffer(). And in
-load_crashdump_segments() of
-kexec-tools/kexec/arch/i386/crashdump-x86.c, it creates elfcorehdr at
-below code, the align is 1024, and in generic add_buffer()
-implementation, it enforces the memsz page aligned, and changes the
-passed align as page alignment.
+Yes, there are dependencies on the rest of the patches in this series.
+For linux-next, I think we should pick up this series once we get more
+Tested-bys.
 
+ So if 5a46079a9645 is causing any regression in stable branches, we
+should pick up the revert series [1] instead of this series we are
+replying to.
 
-	elfcorehdr = add_buffer(info, tmp, bufsz, memsz, align, min_base,
-                                                        max_addr, -1);
+[1] - https://lore.kernel.org/all/20220727185012.3255200-1-saravanak@google.com/
 
-Maybe we should at least mention this in the help text to notice people.
+> Anyways, thanks for fixing the issue, for this patch:
+>
+> Reviewed-by: Tony Lindgren <tony@atomide.com>
+> Tested-by: Tony Lindgren <tony@atomide.com>
 
-> +	help
-> +	  For the kexec_file_load path, specify the maximum number of
-> +	  memory regions, eg. as represented by the 'System RAM' entries
-> +	  in /proc/iomem, that the elfcorehdr buffer/segment can accommodate.
-> +	  This value is combined with NR_CPUS and multiplied by Elf64_Phdr
-> +	  size to determine the final buffer size.
-> +
->  config KEXEC_JUMP
->  	bool "kexec jump"
->  	depends on KEXEC && HIBERNATION
-> diff --git a/arch/x86/include/asm/crash.h b/arch/x86/include/asm/crash.h
-> index 8b6bd63530dc..96051d8e4b45 100644
-> --- a/arch/x86/include/asm/crash.h
-> +++ b/arch/x86/include/asm/crash.h
-> @@ -9,4 +9,24 @@ int crash_setup_memmap_entries(struct kimage *image,
->  		struct boot_params *params);
->  void crash_smp_send_stop(void);
->  
-> +void *arch_map_crash_pages(unsigned long paddr, unsigned long size);
-> +#define arch_map_crash_pages arch_map_crash_pages
-> +
-> +void arch_unmap_crash_pages(void **ptr);
-> +#define arch_unmap_crash_pages arch_unmap_crash_pages
-> +
-> +void arch_crash_handle_hotplug_event(struct kimage *image,
-> +		unsigned int hp_action, unsigned int cpu);
-> +#define arch_crash_handle_hotplug_event arch_crash_handle_hotplug_event
-> +
-> +#ifdef CONFIG_HOTPLUG_CPU
-> +static inline int crash_hotplug_cpu_support(void) { return 1; }
-> +#define crash_hotplug_cpu_support crash_hotplug_cpu_support
-> +#endif
-> +
-> +#ifdef CONFIG_MEMORY_HOTPLUG
-> +static inline int crash_hotplug_memory_support(void) { return 1; }
-> +#define crash_hotplug_memory_support crash_hotplug_memory_support
-> +#endif
-> +
->  #endif /* _ASM_X86_CRASH_H */
-> diff --git a/arch/x86/kernel/crash.c b/arch/x86/kernel/crash.c
-> index 9ceb93c176a6..55dda4fcde6e 100644
-> --- a/arch/x86/kernel/crash.c
-> +++ b/arch/x86/kernel/crash.c
-> @@ -25,6 +25,7 @@
->  #include <linux/slab.h>
->  #include <linux/vmalloc.h>
->  #include <linux/memblock.h>
-> +#include <linux/highmem.h>
->  
->  #include <asm/processor.h>
->  #include <asm/hardirq.h>
-> @@ -397,7 +398,17 @@ int crash_load_segments(struct kimage *image)
->  	image->elf_headers = kbuf.buffer;
->  	image->elf_headers_sz = kbuf.bufsz;
->  
-> +#if defined(CONFIG_HOTPLUG_CPU) || defined(CONFIG_MEMORY_HOTPLUG)
-> +	/* Ensure elfcorehdr segment large enough for hotplug changes */
-> +	kbuf.memsz = (CONFIG_NR_CPUS_DEFAULT + CONFIG_CRASH_MAX_MEMORY_RANGES) * sizeof(Elf64_Phdr);
+Thanks!
 
-Do we need to break the line to 80 chars?
+> For the process, looks like the earlier series got merged despite the
+> issues reported.
 
-> +	/* For marking as usable to crash kernel */
-> +	image->elf_headers_sz = kbuf.memsz;
+If I'm not mistaken, the issues were reported after the series got
+picked up. And the series got some tested-by s before it was picked
+up. And once it's in git history, we obviously can't drop it.
 
-Do we need this code comment?
+> And we had non-booting Linux next for at least some SoCs
+> for weeks. And now we are about to have a non-booting -rc1 unless things
+> get fixed fast. Annoying glitches, sigh..
 
-> +	/* Record the index of the elfcorehdr segment */
-> +	image->elfcorehdr_index = image->nr_segments;
+Sorry for breaking some boards -- so mean "creative" corner cases :)
 
-And this place?
+This rewrite is way more flexible (removes a lot of limitations in
+fw_devlink) and hopefully this handles all the corner cases. We'll
+see.
 
-> +	image->elfcorehdr_index_valid = true;
-> +#else
->  	kbuf.memsz = kbuf.bufsz;
-> +#endif
->  	kbuf.buf_align = ELF_CORE_HEADER_ALIGN;
->  	kbuf.mem = KEXEC_BUF_MEM_UNKNOWN;
->  	ret = kexec_add_buffer(&kbuf);
-> @@ -412,3 +423,107 @@ int crash_load_segments(struct kimage *image)
->  	return ret;
->  }
->  #endif /* CONFIG_KEXEC_FILE */
-> +
-> +#if defined(CONFIG_HOTPLUG_CPU) || defined(CONFIG_MEMORY_HOTPLUG)
-> +void *arch_map_crash_pages(unsigned long paddr, unsigned long size)
-> +{
-> +	/*
-> +	 * NOTE: The addresses and sizes passed to this routine have
-> +	 * already been fully aligned on page boundaries. There is no
-> +	 * need for massaging the address or size.
-> +	 */
-
-Can we move the code comment above function interface?
-
-> +	void *ptr = NULL;
-> +
-> +	/* NOTE: requires arch_kexec_[un]protect_crashkres() for write access */
-
-Do we need this code comment? On ARCH where proctionion is made, we
-surely need to the protect/unprotect.
-
-> +	if (size > 0) {
-> +		struct page *page = pfn_to_page(paddr >> PAGE_SHIFT);
-> +
-> +		ptr = kmap_local_page(page);
-> +	}
-> +
-> +	return ptr;
-> +}
-> +
-> +void arch_unmap_crash_pages(void **ptr)
-> +{
-> +	if (ptr) {
-> +		if (*ptr)
-> +			kunmap_local(*ptr);
-> +		*ptr = NULL;
-> +	}
-> +}
-> +
-> +/**
-> + * arch_crash_handle_hotplug_event() - Handle hotplug elfcorehdr changes
-> + * @image: the active struct kimage
-> + * @hp_action: the hot un/plug action being handled
-> + * @cpu: when KEXEC_CRASH_HP_ADD/REMOVE_CPU, the cpu affected
-> + *
-> + * To accurately reflect hot un/plug changes, the elfcorehdr (which
-> + * is passed to the crash kernel via the elfcorehdr= parameter)
-> + * must be updated with the new list of CPUs and memories. The new
-> + * elfcorehdr is prepared in a kernel buffer, and then it is
-> + * written on top of the existing/old elfcorehdr.
-> + *
-> + * For hotplug changes to elfcorehdr to work, two conditions are
-> + * needed:
-> + * First, the segment containing the elfcorehdr must be large enough
-> + * to permit a growing number of resources. See the
-> + * CONFIG_CRASH_MAX_MEMORY_RANGES description.
-> + * Second, purgatory must explicitly exclude the elfcorehdr from the
-> + * list of segments it checks (since the elfcorehdr changes and thus
-> + * would require an update to purgatory itself to update the digest).
-
-Isn't this generic concept to crash hotplug? Should we move it out to
-some generic place?
-
-> + *
-> + */
-> +void arch_crash_handle_hotplug_event(struct kimage *image,
-> +	unsigned int hp_action, unsigned int cpu)
-
-The passed in 'cpu' is not used at all, what is it added for? I didn't
-see explanation about it.
-
-> +{
-> +	struct kexec_segment *ksegment;
-> +	unsigned char *ptr = NULL;
-> +	unsigned long elfsz = 0;
-> +	void *elfbuf = NULL;
-> +	unsigned long mem, memsz;
-> +
-> +	/*
-> +	 * Elfcorehdr_index_valid checked in crash_core:handle_hotplug_event()
-> +	 */
-> +	ksegment = &image->segment[image->elfcorehdr_index];
-> +	mem = ksegment->mem;
-> +	memsz = ksegment->memsz;
-> +
-> +	/*
-> +	 * Create the new elfcorehdr reflecting the changes to CPU and/or
-> +	 * memory resources.
-> +	 */
-> +	if (prepare_elf_headers(image, &elfbuf, &elfsz)) {
-> +		pr_err("crash hp: unable to prepare elfcore headers");
-> +		goto out;
-> +	}
-> +	if (elfsz > memsz) {
-> +		pr_err("crash hp: update elfcorehdr elfsz %lu > memsz %lu",
-> +			elfsz, memsz);
-> +		goto out;
-> +	}
-> +
-> +	/*
-> +	 * At this point, we are all but assured of success.
-> +	 * Copy new elfcorehdr into destination.
-> +	 */
-> +	ptr = arch_map_crash_pages(mem, memsz);
-> +	if (ptr) {
-> +		/*
-> +		 * Temporarily invalidate the crash image while the
-> +		 * elfcorehdr is updated.
-> +		 */
-> +		xchg(&kexec_crash_image, NULL);
-> +		memcpy_flushcache((void *)ptr, elfbuf, elfsz);
-> +		xchg(&kexec_crash_image, image);
-> +	}
-> +	arch_unmap_crash_pages((void **)&ptr);
-> +	pr_debug("crash hp: re-loaded elfcorehdr at 0x%lx\n", mem);
-> +
-> +out:
-> +	if (elfbuf)
-> +		vfree(elfbuf);
-> +}
-> +#endif
-> -- 
-> 2.31.1
-> 
-
+-Saravana

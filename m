@@ -2,186 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBF43591D10
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 00:47:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14629591D1C
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 01:10:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229517AbiHMWrY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 18:47:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59054 "EHLO
+        id S229596AbiHMXKu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 19:10:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbiHMWrV (ORCPT
+        with ESMTP id S229609AbiHMXKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 18:47:21 -0400
-Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB83472866
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 15:47:20 -0700 (PDT)
-Received: by mail-qt1-x82a.google.com with SMTP id c20so3227666qtw.8
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 15:47:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=9LFLBJaya1h09m2Uy33ayjw6aK7QAV0Ax/8vkX3cn+s=;
-        b=E2sMdmSZeqX6vDy6vAuqauLIjYQ7VjfdsxyB75VdTqRZ83V+6iyp7VuvJnSh3eMWBN
-         kB+ahjW80Wl3+HTEEqi7vRgXu6orLrJJ/nLJgX35SGFaDeFJJISHlQFIonSNC8+Gf6RE
-         iV0BCxq24IPh0pA/B33geDauQSjynNaUkjVZlpDNuHV7ckFM8nyhAS1Y1JCaWgWJoRST
-         mro0JpilWNSNgIlilACajSgm8oOLwVLNPyYSwaSFY+luy01n+TJib4bTNpYfqb6O3qMm
-         MZSUTGgbs6UsVUUAezGpJTIMgu9maBAkQVNge6A57cE2WLSqFPO5P3MpYgWdIFpOE/1C
-         eWLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=9LFLBJaya1h09m2Uy33ayjw6aK7QAV0Ax/8vkX3cn+s=;
-        b=FV8eiYEfbOrrMkD6t5hgbyei1EeyxelSnVG1bwhfgsppWESv7KodkDmORx2S9L0Fgw
-         +c0DkNyGSv/EblRI8IcHpNr9LCEC/DA31g1UswlNB3keN8yTQ8jrCWqhpcjMpAGQCQbd
-         3O+hLSEQIUVOf1dPQKEt4K5rObnNtQCrceiNpK/uMWACwFZSutnoRo3v4INJT4Sx2oIv
-         deSNqGsoZovnHF/qqru9NPtxMASSQWuG/kPT+kOTJ+Wv3ky6saXAYqzUGppoNrGKXwm1
-         28q1QyZ4Zg0lauJfKhk/zelMY0A8RDq3aDZKubiPnhK59j79G7+OF8whxAf8xrzN+xlR
-         RHPA==
-X-Gm-Message-State: ACgBeo0MNQ0msAoDHuoc42YLfsRIPeADRI+B5shj4bnolJbdxhQbOX5O
-        keGa2SCzG/rcjUbjX+JUoLx9nA==
-X-Google-Smtp-Source: AA6agR5Tfq6TPQUxc+yP0HMrhhSRR875Ule/igBA2OayHC6AArFEzuS79M7WPDhU/j/ysxONb6yCWQ==
-X-Received: by 2002:a05:622a:1c3:b0:344:56b5:f14b with SMTP id t3-20020a05622a01c300b0034456b5f14bmr442813qtw.152.1660430839835;
-        Sat, 13 Aug 2022 15:47:19 -0700 (PDT)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id x20-20020a05620a0b5400b006aee5df383csm4777866qkg.134.2022.08.13.15.47.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Aug 2022 15:47:19 -0700 (PDT)
-Date:   Sat, 13 Aug 2022 18:47:17 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Julien Panis <jpanis@baylibre.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, mranostay@ti.com
-Subject: Re: [PATCH v4 2/3] Documentation: ABI: add sysfs-bus-counter-ecap
-Message-ID: <Yvgp9WGcA2fqS1Rm@fedora>
-References: <20220810140724.182389-1-jpanis@baylibre.com>
- <20220810140724.182389-3-jpanis@baylibre.com>
+        Sat, 13 Aug 2022 19:10:47 -0400
+Received: from conuserg-12.nifty.com (conuserg-12.nifty.com [210.131.2.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E996CE13;
+        Sat, 13 Aug 2022 16:10:45 -0700 (PDT)
+Received: from localhost.localdomain (133-32-182-133.west.xps.vectant.ne.jp [133.32.182.133]) (authenticated)
+        by conuserg-12.nifty.com with ESMTP id 27DN9Uaa027502;
+        Sun, 14 Aug 2022 08:09:31 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conuserg-12.nifty.com 27DN9Uaa027502
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1660432171;
+        bh=ahg1CMgPdBccimZ2s74hcE1OLQP4DgFeRxW/1pJsvtg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=LpRXBB6SwH4T3kDcZrLDEPp6JtAAoWiYGrMgrZNzccriJCwlxW66J40Xido/hKp7e
+         C4z7JsryglMXEhdlpuBOgqOYww6qkDVq0eIEeZ7PI7sYZfhWwFQyvHQu0RgpOKtEKX
+         BZWZpyiBPuo2L+LAiErHHgWMcIU0mWIjP3s8JDupxdJWRsEQOsqDb/kllIVPEXKnvd
+         r5IkcGVI7y04jQC4LHmy5C71pAG3rMv0YBs2H91fOyMIYKty7GUfOV+iLXgdHh+0FD
+         xIDnYJQ8I1jsyG6C+36Jq4i/SI0xVBL3NbKDyT9Cl+DaGutYdKFrIpVAfSeKkQ5w7Q
+         hX5290dw5AGkA==
+X-Nifty-SrcIP: [133.32.182.133]
+From:   Masahiro Yamada <masahiroy@kernel.org>
+To:     linux-kbuild@vger.kernel.org
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] kbuild: fix the modules order between drivers and libs
+Date:   Sun, 14 Aug 2022 08:09:28 +0900
+Message-Id: <20220813230928.1260981-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="R+ComDZuVIk5knoa"
-Content-Disposition: inline
-In-Reply-To: <20220810140724.182389-3-jpanis@baylibre.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Commit b2c885549122 ("kbuild: update modules.order only when contained
+modules are updated") accidentally changed the modules order.
 
---R+ComDZuVIk5knoa
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Prior to that commit, the modules order was determined based on
+vmlinux-dirs, which lists core-y/m, drivers-y/m, libs-y/m, in this order.
 
-On Wed, Aug 10, 2022 at 04:07:23PM +0200, Julien Panis wrote:
-> This commit adds an ABI file for TI ECAP used in capture operating mode.
->=20
-> Signed-off-by: Julien Panis <jpanis@baylibre.com>
+Now, subdir-modorder lists them in a different order: core-y/m, libs-y/m,
+drivers-y/m.
 
-Hi Julien,
+Presumably, there was no practical issue because the modules in drivers
+and libs are orthogonal, but there is no reason to have this distortion.
 
-Duplicate ABIs are no longer valid, so we consolidated the Counter sysfs
-attributes documentation to a single sysfs-bus-counter file in commit
-769841c966fd. You can document the new sysfs attributes you introduce
-for the TI eCAP counter driver to that sysfs-bus-counter file as well.
+Get back to the original order.
 
-William Breathitt Gray
+Fixes: b2c885549122 ("kbuild: update modules.order only when contained modules are updated")
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
-> ---
->  .../ABI/testing/sysfs-bus-counter-ecap        | 64 +++++++++++++++++++
->  1 file changed, 64 insertions(+)
->  create mode 100644 Documentation/ABI/testing/sysfs-bus-counter-ecap
->=20
-> diff --git a/Documentation/ABI/testing/sysfs-bus-counter-ecap b/Documenta=
-tion/ABI/testing/sysfs-bus-counter-ecap
-> new file mode 100644
-> index 000000000000..ca530a6806de
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-bus-counter-ecap
-> @@ -0,0 +1,64 @@
-> +What:		/sys/bus/counter/devices/counter0/signal0/polarity1
-> +What:		/sys/bus/counter/devices/counter0/signal0/polarity2
-> +What:		/sys/bus/counter/devices/counter0/signal0/polarity3
-> +What:		/sys/bus/counter/devices/counter0/signal0/polarity4
-> +KernelVersion:	5.19
-> +Contact:	jpanis@baylibre.com
-> +Description:
-> +		ECAP module includes 4 timestamp capture registers.
-> +		For all 4 sequenced timestamp capture events (1->2->3->4->1->...),
-> +		edge polarity can be selected. Then, each capture register can be
-> +		tuned to capture event by either:
-> +
-> +		- "rising"
-> +		- "falling"
-> +
-> +		Reading returns current trigger polarity.
-> +
-> +		Writing value before enabling capture sets trigger polarity.
-> +
-> +What:		/sys/bus/counter/devices/counter0/signal0/polarity1_available
-> +What:		/sys/bus/counter/devices/counter0/signal0/polarity2_available
-> +What:		/sys/bus/counter/devices/counter0/signal0/polarity3_available
-> +What:		/sys/bus/counter/devices/counter0/signal0/polarity4_available
-> +KernelVersion:	5.19
-> +Contact:	jpanis@baylibre.com
-> +Description:
-> +		Discrete set of available values for the respective polarity X
-> +		configuration are listed in this file. Values are delimited by
-> +		newline characters.
-> +
-> +What:		/sys/bus/counter/devices/counter0/count0/enable
-> +KernelVersion:	5.19
-> +Contact:	jpanis@baylibre.com
-> +Description:
-> +		Whether ECAP is enabled. Valid attribute values are boolean.
-> +
-> +		This attribute is intended to serve as a start/stop mechanism
-> +		for ECAP.
-> +
-> +What:		/sys/bus/counter/devices/counter0/count0/count
-> +KernelVersion:	5.19
-> +Contact:	jpanis@baylibre.com
-> +Description:
-> +		Read-only attribute that indicates the current base counter value.
-> +
-> +What:		/sys/bus/counter/devices/counter0/count0/capture1
-> +What:		/sys/bus/counter/devices/counter0/count0/capture2
-> +What:		/sys/bus/counter/devices/counter0/count0/capture3
-> +What:		/sys/bus/counter/devices/counter0/count0/capture4
-> +KernelVersion:	5.19
-> +Contact:	jpanis@baylibre.com
-> +Description:
-> +		Read-only attributes that indicate the last timestamp captured
-> +		for the respective capture X register.
-> +
-> +What:		/sys/bus/counter/devices/counter0/count0/capture1_component_id
-> +What:		/sys/bus/counter/devices/counter0/count0/capture2_component_id
-> +What:		/sys/bus/counter/devices/counter0/count0/capture3_component_id
-> +What:		/sys/bus/counter/devices/counter0/count0/capture4_component_id
-> +KernelVersion:	5.19
-> +Contact:	jpanis@baylibre.com
-> +Description:
-> +		Read-only attributes that indicate the component ID of the
-> +		respective extension or synapse.
-> --=20
-> 2.25.1
->=20
+ Makefile | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
---R+ComDZuVIk5knoa
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/Makefile b/Makefile
+index 5f5c43a52455..c4e06e8020f1 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1113,13 +1113,11 @@ vmlinux-alldirs	:= $(sort $(vmlinux-dirs) Documentation \
+ 		     $(patsubst %/,%,$(filter %/, $(core-) \
+ 			$(drivers-) $(libs-))))
+ 
+-subdir-modorder := $(addsuffix modules.order,$(filter %/, \
+-			$(core-y) $(core-m) $(libs-y) $(libs-m) \
+-			$(drivers-y) $(drivers-m)))
+-
+ build-dirs	:= $(vmlinux-dirs)
+ clean-dirs	:= $(vmlinux-alldirs)
+ 
++subdir-modorder := $(addsuffix /modules.order, $(build-dirs))
++
+ # Externally visible symbols (used by link-vmlinux.sh)
+ KBUILD_VMLINUX_OBJS := $(head-y) $(patsubst %/,%/built-in.a, $(core-y))
+ KBUILD_VMLINUX_OBJS += $(addsuffix built-in.a, $(filter %/, $(libs-y)))
+-- 
+2.34.1
 
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCYvgp9QAKCRC1SFbKvhIj
-K+hOAP9FJPw/AbXZbCmP3t4cfCY2o6AER5KkmaxTEu0mFDAafwEApCOn+i40k5FZ
-CqEdQohSPhKXNuCBLsp8BBgdR1MLZQg=
-=jfdg
------END PGP SIGNATURE-----
-
---R+ComDZuVIk5knoa--

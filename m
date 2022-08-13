@@ -2,188 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1113C591ACB
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 15:57:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 858E1591AD2
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 16:04:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239488AbiHMN5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 09:57:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60312 "EHLO
+        id S239545AbiHMOEK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 10:04:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237657AbiHMN5j (ORCPT
+        with ESMTP id S239472AbiHMOEH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 09:57:39 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197D113D38;
-        Sat, 13 Aug 2022 06:57:38 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id p14-20020a17090a74ce00b001f4d04492faso3191191pjl.4;
-        Sat, 13 Aug 2022 06:57:38 -0700 (PDT)
+        Sat, 13 Aug 2022 10:04:07 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B2E713F32
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 07:04:06 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id x9so3394798ljj.13
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 07:04:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc;
-        bh=PAh8Ru79cdln4uj9Rh2nf6k+W2vrmNM+Y1Sa0VOhW3g=;
-        b=XoC0daH1ngdKRR+QAq5o2F6RWqroxJSJJ1IPGqT8PsSEn/PFdGsY/4KuKo4tAxt8ls
-         qC6A4fknvjjpzs5FIgjabKgbMiPDCSZJRbDIYFqyK5XeGuUJmabOkdRScKX/RxoYp35P
-         vg+mOYsSfdXVza4Af9bdheRKDss98lbULdgzqFzUYXqrKpr1/J992rpigAEwELNHQbfD
-         yvPMMN8HmqCJRms7b9HzW3ACBRzUrufqhxiyPU5lZjt61fQo+3mP0L1TKEnahtYDBb/l
-         BeSRlT3fHV8XHholbPp1q4qftCUvveE+Jl3yv6+aOgT35HctSboXW+4Nks6Sfal22p9k
-         SvBA==
+        d=semihalf.com; s=google;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc;
+        bh=qyCH1Xo3YO20trnPHb9qoKkPoh3odrsC9eN4HgrltUw=;
+        b=pSjJl9nWWTwf30szirsqzHpUBwAT4x3UZvhP0LsmCQk5oPk2gCWtyKyw7etOt1IYj+
+         B4IXN9FAv7NcHFX2MvF4MWy6MIad0C54UZ+W96jFFi/3UVco/0Yrns3GXb5JIdA74BUn
+         rvohWFIy1n1T3aRJVh5QhOrhzafYQePE/PgVpGFaOUsflOM3NhiIMjW6/HzYKTwE2hrq
+         vvur8llMkR0wo2oFUT3PWlj+CQWyOgcoLu1o152c5dzf6YgdHwMvj4Oa8z4EnFd2k0sI
+         PfwCw1QvZ3ZEeMDMXtEh1mlmRYPS+YHLWrgcs160//0Uhyyi5V+obpdHan8wNTsMAAh1
+         BzDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
          :x-gm-message-state:from:to:cc;
-        bh=PAh8Ru79cdln4uj9Rh2nf6k+W2vrmNM+Y1Sa0VOhW3g=;
-        b=XwgMXCvystpLQYHGA0Fk/Sy+BX+01q9OJzctX4jB2Hou50/aDKrvBecdzWVtTpf2bQ
-         vXR25we/76tTjUZ+UFXzh/RoFjmx3VtK5NBa3ierMzvq2Z2mWn3aeQi4Mnq/D6SmmqTp
-         R6gb66fOr+OB74naoux7lNXcQlam6di5kYSHdd0kohstHLzNfxCGOPARMI5cIJ3lI0vX
-         uD/9omBCHbuh9CkVvlU8hoIKFKpB5WJf8CxUtXEtvvU702SsYWUt8339PYR0D/Kx0Nan
-         28/x8tV9Q361S6tfjV5wnGX7XRCWeHi6EcdVu24dXPlfDLt3mPtwzWZdaS0ScKx1XkiB
-         t9fQ==
-X-Gm-Message-State: ACgBeo3sLZWJ/L4Wq0jMPDPvN2r0EaKwL8f9ngbSvAMefOzFe0kp2q9v
-        wO+FL2d9vbVN6bJIX+1fAsM=
-X-Google-Smtp-Source: AA6agR4r/ZIdLZr7R6ezQ90uGKTlapxmAzO1FYQi+uc43fFZ75T3cJ04/JEWN+55uAYBopWxWBeaig==
-X-Received: by 2002:a17:90a:590e:b0:1f2:2184:6893 with SMTP id k14-20020a17090a590e00b001f221846893mr19283389pji.57.1660399057398;
-        Sat, 13 Aug 2022 06:57:37 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l10-20020a17090a4d4a00b001efa332d365sm1575794pjh.33.2022.08.13.06.57.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Aug 2022 06:57:36 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 13 Aug 2022 06:57:35 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>
-Cc:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        Guowen Shan <gshan@redhat.com>,
-        Tyrel Datwyler <tyreld@linux.ibm.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] powerpc/pci: Prefer PCI domain assignment via DT
- 'linux,pci-domain' and alias
-Message-ID: <20220813135735.GA3413265@roeck-us.net>
-References: <20220706102148.5060-1-pali@kernel.org>
- <20220706102148.5060-2-pali@kernel.org>
+        bh=qyCH1Xo3YO20trnPHb9qoKkPoh3odrsC9eN4HgrltUw=;
+        b=3KdDZ2xWj9Xbe4tZx9ccIYKZNB748ysAOglkZW+7DSRtHf++WC9470uS7GC6PdufnM
+         ktrPremuaZ/IESJoQDb1aZ84rRe/RvvdJDA2gQzlI9ugsGlvIpcEldqFeVwZJdOURFfX
+         nAhfk+qVFRp77WjJs8KAVIzbsUjmDiAxsgmlSHaD0bcPx8lXOZEdEZrF2UlD+58O7QCa
+         rk8Gopq+/jSWE4uVVmuq4yu2Rni+ZLE7CZ9ScA05qc71FtZVnWHDF3YbQC7gRI/C7Ijr
+         cu3hw0qBmnQahaSb34Wy6REBIOGQBiMc4DLg7cUXJOzXcwZYq/wVyyOxRKGzjpMkHflY
+         pV1w==
+X-Gm-Message-State: ACgBeo38863oZLoDTmNGnto92CJjMsnOR+LNrcRaANZ+6nOhkqg51BUr
+        cyh2Rr8TPaEq65Xh5sGx3HyxkQ==
+X-Google-Smtp-Source: AA6agR5VxsPrML+qpTqW2rw4vgpk7nmQXlRpcrdzJOBbwoJsnBmFxEP9T1qSfVEidE7fMp/9En26gQ==
+X-Received: by 2002:a2e:bcc5:0:b0:261:737a:1d1f with SMTP id z5-20020a2ebcc5000000b00261737a1d1fmr2121381ljp.418.1660399444627;
+        Sat, 13 Aug 2022 07:04:04 -0700 (PDT)
+Received: from ?IPv6:2a02:a31b:33d:9c00:463a:87e3:44fc:2b2f? ([2a02:a31b:33d:9c00:463a:87e3:44fc:2b2f])
+        by smtp.gmail.com with ESMTPSA id h6-20020a2ea486000000b0025e57b40009sm767472lji.89.2022.08.13.07.04.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 13 Aug 2022 07:04:03 -0700 (PDT)
+Subject: Re: [PATCH v2 0/5] KVM: Fix oneshot interrupts forwarding
+To:     "Liu, Rong L" <rong.l.liu@intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>
+Cc:     "Dong, Eddie" <eddie.dong@intel.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Tomasz Nowicki <tn@semihalf.com>,
+        Grzegorz Jaszczyk <jaz@semihalf.com>,
+        "upstream@semihalf.com" <upstream@semihalf.com>,
+        Dmitry Torokhov <dtor@google.com>
+References: <20220805193919.1470653-1-dmy@semihalf.com>
+ <BL0PR11MB30429034B6D59253AF22BCE08A639@BL0PR11MB3042.namprd11.prod.outlook.com>
+ <c5d8f537-5695-42f0-88a9-de80e21f5f4c@semihalf.com>
+ <BL0PR11MB304213273FA9FAC4EBC70FF88A629@BL0PR11MB3042.namprd11.prod.outlook.com>
+ <ef9ffbde-445e-f00f-23c1-27e23b6cca4f@semihalf.com>
+ <87o7wsbngz.wl-maz@kernel.org>
+ <8ff76b5e-ae28-70c8-2ec5-01662874fb15@redhat.com>
+ <87r11ouu9y.wl-maz@kernel.org>
+ <72e40c17-e5cd-1ffd-9a38-00b47e1cbd8e@semihalf.com>
+ <d8704ffa-8d9e-2261-1bcf-1b402f955fad@redhat.com>
+ <MW3PR11MB4554AAFB43FA6B0B612150D9C7649@MW3PR11MB4554.namprd11.prod.outlook.com>
+From:   Dmytro Maluka <dmy@semihalf.com>
+Message-ID: <f843fa85-41ce-bf45-d1d7-69341dea2939@semihalf.com>
+Date:   Sat, 13 Aug 2022 16:04:01 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.13.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220706102148.5060-2-pali@kernel.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <MW3PR11MB4554AAFB43FA6B0B612150D9C7649@MW3PR11MB4554.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Jul 06, 2022 at 12:21:48PM +0200, Pali Rohár wrote:
-> Other Linux architectures use DT property 'linux,pci-domain' for specifying
-> fixed PCI domain of PCI controller specified in Device-Tree.
+Hi Rong,
+
+On 8/12/22 12:40 AM, Liu, Rong L wrote:
+> Hi Paolo and Dmytro,
 > 
-> And lot of Freescale powerpc boards have defined numbered pci alias in
-> Device-Tree for every PCIe controller which number specify preferred PCI
-> domain.
+>> -----Original Message-----
+>> From: Paolo Bonzini <pbonzini@redhat.com>
+>> Sent: Wednesday, August 10, 2022 11:48 PM
+>> To: Dmytro Maluka <dmy@semihalf.com>; Marc Zyngier
+>> <maz@kernel.org>; eric.auger@redhat.com
+>> Cc: Dong, Eddie <eddie.dong@intel.com>; Christopherson,, Sean
+>> <seanjc@google.com>; kvm@vger.kernel.org; Thomas Gleixner
+>> <tglx@linutronix.de>; Ingo Molnar <mingo@redhat.com>; Borislav
+>> Petkov <bp@alien8.de>; Dave Hansen <dave.hansen@linux.intel.com>;
+>> x86@kernel.org; H. Peter Anvin <hpa@zytor.com>; linux-
+>> kernel@vger.kernel.org; Alex Williamson <alex.williamson@redhat.com>;
+>> Liu, Rong L <rong.l.liu@intel.com>; Zhenyu Wang
+>> <zhenyuw@linux.intel.com>; Tomasz Nowicki <tn@semihalf.com>;
+>> Grzegorz Jaszczyk <jaz@semihalf.com>; upstream@semihalf.com;
+>> Dmitry Torokhov <dtor@google.com>
+>> Subject: Re: [PATCH v2 0/5] KVM: Fix oneshot interrupts forwarding
+>>
+>> On 8/10/22 19:02, Dmytro Maluka wrote:
+>>>      1. If vEOI happens for a masked vIRQ, notify resamplefd as usual,
+>>>         but also remember this vIRQ as, let's call it, "pending oneshot".
+>>>
 > 
-> So prefer usage of DT property 'linux,pci-domain' (via function
-> of_get_pci_domain_nr()) and DT pci alias (via function of_alias_get_id())
-> on powerpc architecture for assigning PCI domain to PCI controller.
+> This is the part always confuses me.   In x86 case, for level triggered
+> interrupt, even if it is not oneshot, there is still "unmask" and the unmask
+> happens in the same sequence as in oneshot interrupt, just timing is different. 
+>  So are you going to differentiate oneshot from "normal" level triggered
+> interrupt or not?   And there is any situation that vEOI happens for an unmasked
+> vIRQ?
+
+We were already talking about it in [1] and before. It still seems to me
+that your statement is wrong and that with x86 ioapic, "normal"
+level-triggered interrupts normally stay unmasked all the time, and only
+EOI is used for interrupt completion. To double-confirm that, I was once
+tracing KVM's ioapic_write_indirect() and confirmed that it's not called
+when Linux guest is handling a "normal" level-triggered interrupt.
+
+However, it seems that even if you were right and for normal interrupts
+an EOI was always followed by an unmask, this proposal would still work
+correctly. 
+
 > 
-> Fixes: 63a72284b159 ("powerpc/pci: Assign fixed PHB number based on device-tree properties")
-> Signed-off-by: Pali Rohár <pali@kernel.org>
+>  > >      2. A new physical IRQ is immediately generated, so the vIRQ is
+>>>         properly set as pending.
+>>>
+> 
+> I am not sure this is always the case.  For example, a device may not raise a
+> new interrupt until it is notified that "done reading" - by device driver
+> writing to a register or something when device driver finishes reading data.  So
+> how do you handle this situation?
 
-This patch results in a number of boot warnings with various qemu
-boot tests.
+Right, the device will not raise new interrupts, but also it will not
+lower the currently pending interrupt until "done reading". Precisely
+for this reason the host will receive a new interrupt immediately after
+vfio unmasks the physical IRQ.
 
-Sample log and bisect results are attached.
+It's also possible that the driver will notify "done reading" quite
+early, so the device will lower the interrupt before vfio unmasks it, so
+no new physical interrupt will be generated, - and that is fine too,
+since it means that the physical IRQ is no longer pending, so we don't
+need to notify KVM to set the virtual IRQ status to "pending".
 
-Guenter
+> 
+>>>      3. After the vIRQ is unmasked by the guest, check and find out that
+>>>         it is not just pending but also "pending oneshot", so don't
+>>>         deliver it to a vCPU. Instead, immediately notify resamplefd once
+>>>         again.
+>>>
+> 
+> Does this mean the change of vfio code also?  That seems the case: vfio seems
+> keeping its own internal "state" whether the irq is enabled or not.
 
----
-BUG: sleeping function called from invalid context at kernel/locking/mutex.c:580
-in_atomic(): 1, irqs_disabled(): 0, non_block: 0, pid: 1, name: swapper
-preempt_count: 1, expected: 0
-RCU nest depth: 0, expected: 0
-1 lock held by swapper/1:
- #0: c157efb0 (hose_spinlock){+.+.}-{2:2}, at: pcibios_alloc_controller+0x64/0x220
-Preemption disabled at:
-[<00000000>] 0x0
-CPU: 0 PID: 1 Comm: swapper Not tainted 5.19.0-yocto-standard+ #1
-Call Trace:
-[d101dc90] [c073b264] dump_stack_lvl+0x50/0x8c (unreliable)
-[d101dcb0] [c0093b70] __might_resched+0x258/0x2a8
-[d101dcd0] [c0d3e634] __mutex_lock+0x6c/0x6ec
-[d101dd50] [c0a84174] of_alias_get_id+0x50/0xf4
-[d101dd80] [c002ec78] pcibios_alloc_controller+0x1b8/0x220
-[d101ddd0] [c140c9dc] pmac_pci_init+0x198/0x784
-[d101de50] [c140852c] discover_phbs+0x30/0x4c
-[d101de60] [c0007fd4] do_one_initcall+0x94/0x344
-[d101ded0] [c1403b40] kernel_init_freeable+0x1a8/0x22c
-[d101df10] [c00086e0] kernel_init+0x34/0x160
-[d101df30] [c001b334] ret_from_kernel_thread+0x5c/0x64
+I don't quite get why would it require changing vfio. Could you
+elaborate?
 
-=============================
-[ BUG: Invalid wait context ]
-5.19.0-yocto-standard+ #1 Tainted: G        W
------------------------------
-swapper/1 is trying to lock:
-c16a9dd8 (of_mutex){+.+.}-{3:3}, at: of_alias_get_id+0x50/0xf4
-other info that might help us debug this:
-context-{4:4}
-1 lock held by swapper/1:
- #0: c157efb0 (hose_spinlock){+.+.}-{2:2}, at: pcibios_alloc_controller+0x64/0x220
-stack backtrace:
-CPU: 0 PID: 1 Comm: swapper Tainted: G        W          5.19.0-yocto-standard+ #1
-Call Trace:
-[d101dbc0] [c073b264] dump_stack_lvl+0x50/0x8c (unreliable)
-[d101dbe0] [c00bb8e8] __lock_acquire+0x8c4/0x2278
-[d101dc60] [c00ba4b8] lock_acquire+0x148/0x3b4
-[d101dcd0] [c0d3e688] __mutex_lock+0xc0/0x6ec
-[d101dd50] [c0a84174] of_alias_get_id+0x50/0xf4
-[d101dd80] [c002ec78] pcibios_alloc_controller+0x1b8/0x220
-[d101ddd0] [c140c9dc] pmac_pci_init+0x198/0x784
-[d101de50] [c140852c] discover_phbs+0x30/0x4c
-[d101de60] [c0007fd4] do_one_initcall+0x94/0x344
-[d101ded0] [c1403b40] kernel_init_freeable+0x1a8/0x22c
-[d101df10] [c00086e0] kernel_init+0x34/0x160
-[d101df30] [c001b334] ret_from_kernel_thread+0x5c/0x64
-Found UniNorth PCI host bridge at 0x00000000f2000000. Firmware bus number: 0->0
-PCI host bridge /pci@f2000000 (primary) ranges:
-  IO 0x00000000f2000000..0x00000000f27fffff -> 0x0000000000000000
- MEM 0x0000000080000000..0x000000008fffffff -> 0x0000000080000000
+[1] https://lore.kernel.org/kvm/9054d9f9-f41e-05c7-ce8d-628a6c827c40@semihalf.com/
 
----
-# bad: [69dac8e431af26173ca0a1ebc87054e01c585bcc] Merge tag 'riscv-for-linus-5.20-mw2' of git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux
-# good: [6614a3c3164a5df2b54abb0b3559f51041cf705b] Merge tag 'mm-stable-2022-08-03' of git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
-git bisect start 'HEAD' '6614a3c3164a'
-# bad: [24cb958695724ffb4488ef4f65892c0767bcd2f2] Merge tag 's390-5.20-1' of git://git.kernel.org/pub/scm/linux/kernel/git/s390/linux
-git bisect bad 24cb958695724ffb4488ef4f65892c0767bcd2f2
-# good: [a3b5d4715fd5a839857f8b7be78dff258a8d5a47] Merge tag 'asoc-v5.20-2' of https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound into for-linus
-git bisect good a3b5d4715fd5a839857f8b7be78dff258a8d5a47
-# good: [1d239c1eb873c7d6c6cbc80d68330c939fd86136] Merge tag 'iommu-updates-v5.20-or-v6.0' of git://git.kernel.org/pub/scm/linux/kernel/git/joro/iommu
-git bisect good 1d239c1eb873c7d6c6cbc80d68330c939fd86136
-# bad: [4cfa6ff24a9744ba484521c38bea613134fbfcb3] powerpc/64e: Fix kexec build error
-git bisect bad 4cfa6ff24a9744ba484521c38bea613134fbfcb3
-# good: [78988b273d592ce74c8aecdd5d748906c38a9e9d] powerpc/perf: Give generic PMU a nice name
-git bisect good 78988b273d592ce74c8aecdd5d748906c38a9e9d
-# good: [de40303b54bc458d7df0d4b4ee1d296df7fe98c7] powerpc/ppc-opcode: Define and use PPC_RAW_SETB()
-git bisect good de40303b54bc458d7df0d4b4ee1d296df7fe98c7
-# bad: [738f9dca0df3bb630e6f06a19573ab4e31bd443a] powerpc/sysdev: Fix comment typo
-git bisect bad 738f9dca0df3bb630e6f06a19573ab4e31bd443a
-# good: [4d5c5bad51935482437528f7fa4dffdcb3330d8b] powerpc: Remove asm/prom.h from asm/mpc52xx.h and asm/pci.h
-git bisect good 4d5c5bad51935482437528f7fa4dffdcb3330d8b
-# good: [d80f6de9d601c30b53c17f00cb7cfe3169f2ddad] powerpc/iommu: Fix iommu_table_in_use for a small default DMA window case
-git bisect good d80f6de9d601c30b53c17f00cb7cfe3169f2ddad
-# bad: [0fe1e96fef0a5c53b4c0d1500d356f3906000f81] powerpc/pci: Prefer PCI domain assignment via DT 'linux,pci-domain' and alias
-git bisect bad 0fe1e96fef0a5c53b4c0d1500d356f3906000f81
-# good: [d20c96deb3e2c1cedc47d2be9fc110ffed81b1af] powerpc/85xx: Fix description of MPC85xx and P1/P2 boards options
-git bisect good d20c96deb3e2c1cedc47d2be9fc110ffed81b1af
-# first bad commit: [0fe1e96fef0a5c53b4c0d1500d356f3906000f81] powerpc/pci: Prefer PCI domain assignment via DT 'linux,pci-domain' and alias
+Thanks,
+Dmytro
 
+> 
+> Thanks,
+> 
+> Rong
+>>> In other words, don't avoid extra physical interrupts in the host
+>>> (rather, use those extra interrupts for properly updating the pending
+>>> state of the vIRQ) but avoid propagating those extra interrupts to the
+>>> guest.
+>>>
+>>> Does this sound reasonable to you?
+>>
+>> Yeah, this makes sense and it lets the resamplefd set the "pending"
+>> status in the vGIC.  It still has the issue that the interrupt can
+>> remain pending in the guest for longer than it's pending on the host,
+>> but that can't be fixed?
+>>
+>> Paolo
+> 

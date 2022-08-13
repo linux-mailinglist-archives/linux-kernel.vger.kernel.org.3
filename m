@@ -2,103 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C59C3591972
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 10:35:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 82F83591976
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 10:42:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237375AbiHMIeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 04:34:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40554 "EHLO
+        id S231569AbiHMImV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 04:42:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiHMIee (ORCPT
+        with ESMTP id S229507AbiHMImT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 04:34:34 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F10CF6B664
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 01:34:33 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id tl27so5537797ejc.1
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 01:34:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=giMh6CV+ebQaMfil4WhC+L/0OniXZ48oEVWUpwWfMDs=;
-        b=CKPeBNjSUoVfcYjf2H0tn6lNfb4WCfH+qcPtLe20kpAf1XSdq1ou13nbDylclZhgD6
-         ki1V4f57v8AcfC4HPm7ZSkxfJfiHWfJFaxLzddNKM1YCsQQ0y2mKWNZdL8ixvJ6KD4J8
-         FSylg13oxehSO15OyPeLWb7mTRuYpAAL3frMeLcLMGJVoAOwPze667o7nEn1k72/buOx
-         BvmU9/stXwcHbfLUgxAW0GOsurGBjg3rXdRIeOfzxj0myq77l9NwosfecMYTlrV3UrZb
-         UWcBO43HL3uWb/tUnXCuMy3NlC3B6+MmLoOxACezPUAOC61q0OW8TsrAAXKYtdcVAUr6
-         wbVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=giMh6CV+ebQaMfil4WhC+L/0OniXZ48oEVWUpwWfMDs=;
-        b=SbfdsGi1HojZD+bWjkgneHDvI1aFupMPnQzg2w9uS0wQzGx0L6y0Nm3nKoEqOpd99G
-         SWPCI6lSirYANkULSXe800RzHlS+q5KfXHmOrycQ6xvPQCuQpWqYES85Q1NtySD1wa1c
-         Jpd3hhjwjta/vWSh6ecPwH3iMv4OLjzTO13OCEAZruLd3thJdXwDmnfxAPaIwwGAnf+C
-         zhwG/X5X6jbrA+OkKWlbuKcBnVUgM83LQ/e/Gb+Kcg+Mj21Ba99rTipTcH0qb7FhmylN
-         oXRHX74ckNZ06S5d6GJBb8hJwu2uA8SyOklkVVbN9muY0ZpRz9NuOs9zLcjcoNgQOt06
-         xgEA==
-X-Gm-Message-State: ACgBeo1MVpEjG6NvKLj0lgbI4j+8R/46SsptMC8yyqQAPGCpW4xIG0FK
-        YzODBnEA8vSk4wVBjjrELw0=
-X-Google-Smtp-Source: AA6agR5/50LsvrEBmEVylqJMNR6BNXGjnKBGmDDXPFCJ/to2MC9nIENXqMl7u4Pw4kWk29w7Fk5NdQ==
-X-Received: by 2002:a17:907:e94:b0:730:af21:cf60 with SMTP id ho20-20020a1709070e9400b00730af21cf60mr4639547ejc.681.1660379672269;
-        Sat, 13 Aug 2022 01:34:32 -0700 (PDT)
-Received: from pca.lan (ptr-dc5856nwo1xazteick5.18120a2.ip6.access.telenet.be. [2a02:1811:bc80:f7f0:d03:1d8d:20cb:2215])
-        by smtp.gmail.com with ESMTPSA id u26-20020aa7d55a000000b0042de3d661d2sm2718172edr.1.2022.08.13.01.34.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Aug 2022 01:34:31 -0700 (PDT)
-From:   Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
-To:     Shengjiu Wang <shengjiu.wang@gmail.com>,
-        Xiubo Li <Xiubo.Lee@gmail.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Nicolin Chen <nicoleotsuka@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc:     Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>,
-        alsa-devel@alsa-project.org, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2] ASoC: fsl_sai: fix incorrect mclk number in error message
-Date:   Sat, 13 Aug 2022 10:33:52 +0200
-Message-Id: <20220813083353.8959-1-pieterjan.camerlynck@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 13 Aug 2022 04:42:19 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35D007C771
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 01:42:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660380137; x=1691916137;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=dje4Bwu5WhwsdCPS9deeYtrDdGTX8BgieA63nTu7tK8=;
+  b=nV2mJ4f6WhkBciiPs24OR2dppfMnf53TsTjxYJva93XNGOgESGl/meIN
+   gWiQCo0SslopLZHWGoDhIdFf6SYwZj0bNAK0gQfx9p9fHdqMRcW9KEon5
+   QoC3TzU13WeHXn+HaYg3ORqL8cr8jkeP8BXKQY05VzMjqTlnficPqdD/b
+   PmTFPS5iL7Xb3Yzd7/P1jCD6lorxhb6gEGECpF75lUnHPAiozJ3kbwTbv
+   dxxZCN34F9/5UCsuCxax7Nzx0cbynuI4KpKe+/xFmsa7PfNjveD4W+wN1
+   SVQG0TDuYxogfaA6F5rmexaSqq6Z5f9fMyA6s0uchhGKCDIbpuhskEOuT
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="355746921"
+X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
+   d="scan'208";a="355746921"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 01:42:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
+   d="scan'208";a="602725412"
+Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
+  by orsmga007.jf.intel.com with ESMTP; 13 Aug 2022 01:42:13 -0700
+Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oMmij-0001VH-09;
+        Sat, 13 Aug 2022 08:42:13 +0000
+Date:   Sat, 13 Aug 2022 16:41:42 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Marco Elver <elver@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>
+Subject: [stable:linux-5.15.y 5773/9027] <instantiation>:5:8: error: expected
+ relocatable expression
+Message-ID: <202208131620.5cpNx6DK-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In commit c3ecef21c3f26 ("ASoC: fsl_sai: add sai master mode support")
-the loop was changed to start iterating from 1 instead of 0. The error
-message however was not updated, reporting the wrong clock to the user.
+Hi Kees,
 
-Signed-off-by: Pieterjan Camerlynck <pieterjan.camerlynck@gmail.com>
----
-V2: rebase against latest version
----
- sound/soc/fsl/fsl_sai.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+FYI, the error/warning still remains.
 
-diff --git a/sound/soc/fsl/fsl_sai.c b/sound/soc/fsl/fsl_sai.c
-index 7523bb944b21..d430eece1d6b 100644
---- a/sound/soc/fsl/fsl_sai.c
-+++ b/sound/soc/fsl/fsl_sai.c
-@@ -1306,7 +1306,7 @@ static int fsl_sai_probe(struct platform_device *pdev)
- 		sai->mclk_clk[i] = devm_clk_get(dev, tmp);
- 		if (IS_ERR(sai->mclk_clk[i])) {
- 			dev_err(dev, "failed to get mclk%d clock: %ld\n",
--					i + 1, PTR_ERR(sai->mclk_clk[i]));
-+					i, PTR_ERR(sai->mclk_clk[i]));
- 			sai->mclk_clk[i] = NULL;
- 		}
- 	}
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
+head:   7217df81279835a7aee62a07aabb7b8fb8c766f2
+commit: 33db9912ff7c491f839c89a08e98f755aa09598f [5773/9027] ubsan: remove CONFIG_UBSAN_OBJECT_SIZE
+config: s390-randconfig-r031-20220812 (https://download.01.org/0day-ci/archive/20220813/202208131620.5cpNx6DK-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 3329cec2f79185bafd678f310fafadba2a8c76d2)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install s390 cross compiling tool for clang build
+        # apt-get install binutils-s390x-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=33db9912ff7c491f839c89a08e98f755aa09598f
+        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+        git fetch --no-tags stable linux-5.15.y
+        git checkout 33db9912ff7c491f839c89a08e98f755aa09598f
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=s390 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+                  ~~~~~~~~~~ ^
+   include/asm-generic/io.h:634:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesb(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:643:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesw(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   include/asm-generic/io.h:652:21: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           writesl(PCI_IOBASE + addr, buffer, count);
+                   ~~~~~~~~~~ ^
+   <instantiation>:3:19: error: too many positional arguments
+           GR_NUM  b2, 1       /* Base register */
+                               ^
+   lib/raid6/s390vx8.c:73:16: note: while in macro instantiation
+           asm volatile ("VSTM %2,%3,0,1"
+                         ^
+   <inline asm>:1:2: note: instantiated into assembly here
+           VSTM 0,7,0,1
+           ^
+   <instantiation>:3:19: error: too many positional arguments
+           GR_NUM  b2, 1       /* Base register */
+                               ^
+   lib/raid6/s390vx8.c:73:16: note: while in macro instantiation
+           asm volatile ("VSTM %2,%3,0,1"
+                         ^
+   <inline asm>:1:2: note: instantiated into assembly here
+           VSTM 8,15,0,1
+           ^
+   <instantiation>:3:21: error: too many positional arguments
+           GR_NUM  b2, %r1     /* Base register */
+                               ^
+   lib/raid6/s390vx8.c:63:16: note: while in macro instantiation
+           asm volatile ("VLM %2,%3,0,%1"
+                         ^
+   <inline asm>:1:2: note: instantiated into assembly here
+           VLM 0,7,0,%r1
+           ^
+   <instantiation>:3:21: error: too many positional arguments
+           GR_NUM  b2, %r1     /* Base register */
+                               ^
+   lib/raid6/s390vx8.c:63:16: note: while in macro instantiation
+           asm volatile ("VLM %2,%3,0,%1"
+                         ^
+   <inline asm>:1:2: note: instantiated into assembly here
+           VLM 16,23,0,%r1
+           ^
+   <instantiation>:3:21: error: too many positional arguments
+           GR_NUM  b2, %r1     /* Base register */
+                               ^
+   lib/raid6/s390vx8.c:63:16: note: while in macro instantiation
+           asm volatile ("VLM %2,%3,0,%1"
+                         ^
+   <inline asm>:1:2: note: instantiated into assembly here
+           VLM 16,23,0,%r1
+           ^
+   <instantiation>:3:19: error: too many positional arguments
+           GR_NUM  b2, 1       /* Base register */
+                               ^
+   lib/raid6/s390vx8.c:73:16: note: while in macro instantiation
+           asm volatile ("VSTM %2,%3,0,1"
+                         ^
+   <inline asm>:1:2: note: instantiated into assembly here
+           VSTM 16,23,0,1
+           ^
+   <instantiation>:3:21: error: too many positional arguments
+           GR_NUM  b2, %r1     /* Base register */
+                               ^
+   lib/raid6/s390vx8.c:63:16: note: while in macro instantiation
+           asm volatile ("VLM %2,%3,0,%1"
+                         ^
+   <inline asm>:1:2: note: instantiated into assembly here
+           VLM 16,23,0,%r1
+           ^
+   <instantiation>:3:19: error: too many positional arguments
+           GR_NUM  b2, 1       /* Base register */
+                               ^
+   lib/raid6/s390vx8.c:73:16: note: while in macro instantiation
+           asm volatile ("VSTM %2,%3,0,1"
+                         ^
+   <inline asm>:1:2: note: instantiated into assembly here
+           VSTM 16,23,0,1
+           ^
+   <instantiation>:3:21: error: too many positional arguments
+           GR_NUM  b2, %r1     /* Base register */
+                               ^
+   lib/raid6/s390vx8.c:63:16: note: while in macro instantiation
+           asm volatile ("VLM %2,%3,0,%1"
+                         ^
+   <inline asm>:1:2: note: instantiated into assembly here
+           VLM 0,7,0,%r1
+           ^
+   <instantiation>:3:21: error: too many positional arguments
+           GR_NUM  b2, %r1     /* Base register */
+                               ^
+   lib/raid6/s390vx8.c:63:16: note: while in macro instantiation
+           asm volatile ("VLM %2,%3,0,%1"
+                         ^
+   <inline asm>:1:2: note: instantiated into assembly here
+           VLM 16,23,0,%r1
+           ^
+>> <instantiation>:5:8: error: expected relocatable expression
+           .word   (b2 << 12) | (0)
+                   ^
+>> <instantiation>:5:8: error: expected relocatable expression
+           .word   (b2 << 12) | (0)
+                   ^
+>> <instantiation>:5:8: error: expected relocatable expression
+           .word   (b2 << 12) | (0)
+                   ^
+>> <instantiation>:5:8: error: expected relocatable expression
+           .word   (b2 << 12) | (0)
+                   ^
+>> <instantiation>:5:8: error: expected relocatable expression
+           .word   (b2 << 12) | (0)
+                   ^
+>> <instantiation>:5:8: error: expected relocatable expression
+           .word   (b2 << 12) | (0)
+                   ^
+>> <instantiation>:5:8: error: expected relocatable expression
+           .word   (b2 << 12) | (0)
+                   ^
+>> <instantiation>:5:8: error: expected relocatable expression
+           .word   (b2 << 12) | (0)
+                   ^
+>> <instantiation>:5:8: error: expected relocatable expression
+           .word   (b2 << 12) | (0)
+                   ^
+   fatal error: too many errors emitted, stopping now [-ferror-limit=]
+   12 warnings and 20 errors generated.
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

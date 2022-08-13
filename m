@@ -2,80 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2133C591C0B
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 18:56:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C5957591C0D
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 18:57:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239889AbiHMQ4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 12:56:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56932 "EHLO
+        id S240038AbiHMQ4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 12:56:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239657AbiHMQ4W (ORCPT
+        with ESMTP id S239810AbiHMQ4v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 12:56:22 -0400
-Received: from sonic307-55.consmr.mail.gq1.yahoo.com (sonic307-55.consmr.mail.gq1.yahoo.com [98.137.64.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252992C11A
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 09:56:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netscape.net; s=a2048; t=1660409780; bh=wj6Y2O5mbxZygYcQLeN4Sx234XKcdhd3yk8zV2eGm6M=; h=Date:From:Subject:To:Cc:References:In-Reply-To:From:Subject:Reply-To; b=LnK75uJk7unYJKscw1DVq50vRWF+bZH+0xvS28Bw78xZOmjveW5KHAIxaj//1Zcfz2MSuQ/nd0VbETIJkvvDTrkKviwQJOcVJDWnLSWE7qtqAkHXRanDA1tR8T105cokgULZF8lSoLzg4uWZ00vvEhcCSqOSES9GXzS/OqCAYPEIAAt5R9Hq7QCu1xJm5rndObMkhyTVVT1JdPHW1DfCdKx4UqT+41xKAkBMG2OngnH0YkPyMxAOMnWuw/unk7CBzxcGung3Ye09g9ZFtOUc5c5+qSW9p6o45TvlGWNOzDnzhV8Ccjx+HvQBQ0ZvUpargRpnz1O5W0+lNYad/bdTLA==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1660409780; bh=7b0smHsFI7zwAmGO1JvzaihBfKlALmdXNlhmWAAK8HH=; h=X-Sonic-MF:Date:From:Subject:To:From:Subject; b=AdRkK29aQVyioLwtxNTebxbDpagU4E98QpkYHsG7AqnQ43h5Jre0D0uBM8vU7L/27W/xX6EJBGmQT8+X2WmZuwX10TOzt8E/VBt5CXrv90p8hnlpKctCE2vAu6Ww+VcdrULkL+qqOPTu2YqnprAkUzfDZrO3sRFcbfJU2Ce1OYhQBNx7QeaiY26NCdSRDqqarL8JcEBsKNhzLqrDUTOBS5XZ6HDnCpyItsm6UKEpEntymH2ZSrmGWokq+rksPlQWU9ac/xe20OIdC+5LdzeanBU+pg74wNrttXOjIrzfJoURjkh3IYBrzXmUqgUShbp4WcqEtOhS77N1SQcnxkO4mQ==
-X-YMail-OSG: WD35BF0VM1ntu3yvQc3yoQ0..vE2hOtAPGs67EiPV9SV8JzAIIcwfKlbhD4uz4d
- avbcPXHSAg_Onnl9xEhfMF4Y52_q9ybIYEVXV0ZhmmLUIEYPdlVbjZYHw6DATwuyBgdw_EDZiisv
- 1vT1YCdVaD0soUkhIbaJDLH0naDKR3MKZHE_owpnaocIK7HKCEHuNhKdonqI.UtDXzH0LYNbqFkE
- la_V63XidZwKMa.JS8NNItNvFMUqQir5J7G2kBVAKMi29qPWTYWzw8ePVjm.18JUEvsX4ub2Rb60
- hPfCPHuboKqeXAejgiiGXzHQM_xuMbyFYo_1i0BZd1qjaPkXnW3CzJDLaKpT2k180KkAcoPVE3F.
- D1cT8gts7M1pLzxI4WoKda5Thc5xzaFRgtkszfH7yHiODtmG3MHjBKyYmTQYqu..njpSDcjUK3eJ
- 2kuw0m._L0C_fOrrxHZeirS5Dd0f.uPzYRLwVuNcPmGFawUU6rvpP.yLI3g3McDi7NzxUWgCRcwr
- ZfwBjllViD.hhEpCtOftpVWjVWDxScZeshy6m0AwL70AIkIuK2qlTUjUdgPhhDx3wpCIAxmfTfGb
- p3mQ5BPCUzF.lRMw5EVrYY4UYkUAskZ2OTrRNBpHovD6z5qpgRfWtwsjNWoF7KxeEl5Hq1BNHtEK
- yQShNZVioJSF7EDEki0uqcprI8d42LNbwRjUxxRBZLrUNxkCbxDyYPUXv.dnIgweacMh4vML1GmV
- d5JiPCBrpT2roEcYxr1jBlxU6az6OqEatfIvn_2VbEGyFa9TvH7wN4Q4fVzQNv7K4iZIYLYQqZXY
- KkervGAwybeoptPGsWo_DjYz467lvl8cjD0t0n9CMyYfQZwTazIwY.K2PMDLIz.WLp1jtzOvO934
- KYvbnxQ9am7dyBMUqdlS9zeF.g86atRxEMdIjXBTYcIlt7geRjOn.ZwWv611tdGNGzAPn_KUHvNE
- 4oHR8V5yIN3nb4SJ13JxrZ3SJOitJIDQd4vRm7h1ii7gFITiMSWIttdxS65Aliq2zUocmoz7sz4i
- JlDK1MyLhHy6G7sJHQEqYEhWKKhDytUl2LTQblZ28BCI8vMA_jfJnd6N2fdkuvRyxSlIKVJxiRJk
- HoISNkqDb.Sx9VtEkZ8XAEWRmUy_yycgxv_RmAXviPU.xjnqdLQnXr3Ag2Sihmv2BLVOZTLrUHgm
- myFb.A1pmtvdWA.OfcsZ.O3HIan8cnz.YJ1WNHccG52sVJv51ibmTiw_wwt355JVGAS_6Y1E1xgx
- GPJgnayaNwxq69.LCYX32JvgOmoiBaUMNZoiqKFa88H5qH08LE2m6xZWZKQi2HVZ.FNBqshKzncW
- YafLHEy34W7ffBzFUW0hljf0aNE5yqoeQUh.Wv5mmvXncBa59ANwzTVcEZ8VFg.MR6wv9xDUhEdo
- ZBq_nqGx6M4LfInCqhe1NtZXrZLeyvxwQrX4vdn4av5fuc3TXD_v0U6Ka9Sw7MlQT5FJwlSKRJg5
- bt2Ohyt7y5364xw66xQkZTwbHjY7iLi7LjfedvnVd_nAUpTeTN96iz9Sz9YwE53fMxRmgAvUFx6_
- 38UoHAMjKkz8fnsGkTCaKDPrm.4xl23Dt8uOIc.jhjmsDbNc7hpyJxGrG88jsN_.jmaV5GQHlyDV
- bDkxwMKU6jyNNk9iJksfN0FuZZPXBFe110tMPEgLlSd58PwBWNv7nGCsA0.tyU5MNGcnDZcMikD_
- 8rVNvzzWjgAai_cKk5i_S.n6Di4Xn9SZpwVS3fYNZNB6zeClwbeu91LTj_JNkJJAkBpunORqAcVc
- DhpKTpRFb44qd5.0VMfdzxMlVMobAAtrEzOHt4EK56IyHmiq1_0VXd6NwU5U63CoKUmiVNIVInTY
- Q_KUzSB1RIN_XG4HrfJ52POPZYhoek.WZ8Lx1TFE53_cq2KVYVYZ9AfZCsFQcv51ejKpUIRYR_uf
- UKF3OP7.UK.6BLIbCUkXprQGgkRo17CHPffe.TSkAZUR5dYEp.hJKQFB7Lw6PSFB0ytMsMfqWbhh
- lW3fcmbh7epydMxmmxEPwlbCbBjCPV020EQFROC6SW6UIAQFGd5nYq0xOi9UdGrI1.IxVYZjeNh3
- JzdYt_bc0iRrqfx8N9gmy2dgyCFM0GfD8MbaLRXKmiZfIPcsAdDvL8T7eeeeSOr_YSKm6zaWWVcl
- 4sK7D3rRY3BqFtcuvUPx0kQZ2gXNIhlmpNFjnFbhYVyWNnyPvV7lr6KNuKVcsmomnNUaBTVKDG60
- YoJqeuL6Lit9_
+        Sat, 13 Aug 2022 12:56:51 -0400
+Received: from sonic313-19.consmr.mail.gq1.yahoo.com (sonic313-19.consmr.mail.gq1.yahoo.com [98.137.65.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 334A82C67B
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 09:56:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netscape.net; s=a2048; t=1660409809; bh=QRQBPbaJj2JGJe+PhZxZ66B9bo7GJ0cjESR5eyJpCvU=; h=Date:From:Subject:To:Cc:References:In-Reply-To:From:Subject:Reply-To; b=hytzFYTpa9PgpMH6rZ9sGrwc/r7N0xW6ezurFyh5z9CrY3cimzqLcKCLaKjQyHy6G8Y3uiNkC+jJMEKq6Pq7YOaPy5Uo7dSXqIbvbFAel17Udl3HxZg7M0o1bbP6Soz65qeGl2PTp2WNF0e47KpkddlI1Srmh6lwF1sODjDdAwj++xA+yIFC+f13uSJJLbXErjpSUdGGz59RBXnWMdqJYsnfMvGFVrYVzTh7sSqHE/yViYcsNtbg7tYDykb2oTnKyXOWZmikKtqcrderry3CZP7Nlkc99STBcHlaa7gkMYItWfZpB350t1oQNHmRhQUss2dPW6c1eJsSEyD2di3fIg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1660409809; bh=yQZ3P0IsqeiiA0dZkrTD1G4Z78sLpvW9+sAwKLNlpvB=; h=X-Sonic-MF:Date:From:Subject:To:From:Subject; b=a5qeST9hBIrEJHEpCcI5wrk6ei/TujAmWFR98I8nTh14/LvpB4fLfCOVnv2H4rgiIUQxR5sXNjDaDT80+M8SpCuTimq8s5opyEQZmZWYeDC6wZLFQxUZ7jxQadr7K35YldC2GtOlqdl+6T5QbCQs+eUmYc/GbPb7TS1G4p2suMAtNl812eG988wICOKWH9VBlD+lLa6/D9xk2NAtJUSPkiVutsQPA7p1D/F+sUc8CmwaDThIyMNem8lBN52SOgCENgf29DT+D/zBcKwtoEZ31IoJiCDhxtahQnLaZUPkhTaOu/B1B2zls4TbmwCpvu+aNQO2Uj/AFAlpyMJgx+KkUQ==
+X-YMail-OSG: OQbhtbUVM1nOQ6jnLdzPWPN_bd55lZ6LHInmMNByAOaV9HSItHoQ4qvwJwUcttV
+ e4nvHeMobRWrL6nfaT4j9cGFc3_RMhHDalf7gYxESiRItX8_OrhCoWBbU6_ymUvXd5p7__URF5ng
+ yFs6KLjWCd80YYOhC_86sEqobjQx1BGnNj3YoR6sgQSgEQqDazeRyB1zzaUAl2Gvhtm3Cn6Z8Eu.
+ nM80Z9mA.id7WyziYqSwJZv2KwBQURjqUb1G2T3KooAz8SaCpHv_lSXxyPcWNZLwg16IfxvImTLp
+ pNJJVsJMGEsBKolSZXO1nHLMCIJf7f27y.THOmF9pp0C0WsDFvurksxhjwG59OC1qlnWV_BQBNqp
+ JTEzoPLbwSAZRdxGzUYf0wwh_je8FJZ7bDtgVXM_vzSX33AuBqwkBp.ynCimUY7w4XLxo4PQ.jQq
+ 499348bto4OXTUCVBSAS04ONUhRT.cnjJC2TtC0BdUgXbGKzfSs0w.sT.u9.k145TBWLFr3BRvHy
+ W5j3Vv07Y.pjn9U6p7nSWXx2jPeDqf5qfKIJbOZqtaNFX5FNi7k8NO1EBQFZcERbsLdFaHol5VpI
+ rHElfW_LNljI08YXxvLBxGOo_A_.5LYCYeBUTr_C3v9OoKM6bXKtl0PK5EfNEFTbVDyoinZH.bU8
+ bEzgC4IOHSx.CWhYFTaCP6d6ubFm2WdW42iT97zkV_QFwQHWNE7zhJe7KfxHPE17S.3t_hMvcKRz
+ dA2RFP5DvXTbzID8wuonj7mHyf1zkCAgihEu_G8VyubEqzxUueB18F17y8vBhLfyk6hywdgiIS_N
+ wyaW2zXbt5cmfbt_BK1CJS7_k5FR21KMQSqKrrQcPArlGX5ksjOyLjXtZbtUbfEZ5i.AxQnTuFGe
+ DPZWpM0yc9wUy9ox62kzxk0i32Fuix5jLlgCQ2nQDKV60Tgp0nUPYtHAM3db6xb.M.5zBDZkTh9S
+ HpqUgqNeEIrkHIufi8637tUFf_71sM0pdRSZgH0IpcmpDkeGt8VVm04nWSsyunc5DDCoNQvyeruT
+ wO0BFroXfxjHxMKJDG3jGjBt6KJ6uFIBQdnz_tVGzmYGlA0l8VQCB0wmA8RujoBr.usio41fCVG7
+ .WZicdRm9KNCzl0xKZxwm_7eM8WrV7a7_YxcgIMjv.B.P_kV65xvhdc2__aitiMuyA5XRD0Y63m3
+ fV7Cpi_UJRnAg8VohVoL651fIB7T6SsKIVcIRxBfuGljyEWw_U2t6BalpfAYAizKZhAT4z2nTtan
+ uAneSEyPKnU8rGqdLTsnVSU_Bdjwwhhtwjr5ldOaTsKGMYs7DdtTfgmV7dBo3TzGQc8dO8D8hbmM
+ NQidk.u8wN0qKnV_eu7AoA9Hn1ErYqWCkB_u.0hnqJIIQLU.xN.s185Utg92ydmz3y6i2ljAFB.L
+ UTTN6xAnsuhNJmh2JEIxmLIlPDaygMSAa0oCFxARvpwc88gKpKIPSQCHMJ_F0W7ZFHePQIv8UQgj
+ w_NJU.9YsCGpYuNDbBgb3RHOUnXgGKpiA94xWxJOKpFzIhlLa1RLAozyme.0fjmel9YW_ISVfiVy
+ dMBb.GyEv3nnnYDj.D7g1fx.2xRfr7Mln33gS.l0c.0Ch79fRCfH.6MpvzK0Mr3a3GJlMpLVQO6q
+ xPs.v6_A4l4vebg.Q8gtS8ARaxBY79VpRVl2H8x7yBZ17.aKRYYxdPl3RC0KsSvfG79O5xwovIlT
+ 5MQJszRy_XfoEfi6FqukEbEM0cteDTMroAfyi7O8yN4YlM22U7wlQk0JtQe94DxeeH_aYQI71uQj
+ ydAWwOOget9fH8Ki5x0j_14mPGSmpecmG6Cog3XLuN_rVWtwPoCSpVeHJ2tGVyxatlmq9Kbrr999
+ phWg.9aqXeRK815s4_8zPtNRwZms8RmBeFUDhQaSQusMXbFg9v0wZwnW4jMVa0RuqutpI0jmmbkh
+ gapL48O.v7LtPPBVByeJXIt.IQNBAqDHyiz2qG0NGEt0pSkx0hHT5QFMAc.iquwfBTvi9mZnoap9
+ 4LFP6YBlJ8x3FyDCrC_x3eDmoGov.JVfemXWRc60zxAvSj7vrazhUXcIg2aZz0d_Ug59JLbNJQGr
+ a0jPVt9sIILfX7MlwcqhxVnuSRqPy8Pw22lpRcu44oLRlfuJ83X0Gqv7uu.Ti4Bx3da5NASYuW5A
+ Lcs_Fk3.Vc5sMk6urzZn0PgThmydksH7f2WLpi1G4Ks0Ui6YE6954K3BOkpiV.UJvA4zsNhdIIxK
+ BdBLb7UygVYN1O7h16PCUlwOmWC76Z9Lxvy8lMiXYbNhCwK1zOcQF9OLjW1OR9HcuATM8JJpSEF.
+ 6._m8e4umqWdXYoBRCv3GesC5y7Rv1FTkjic-
 X-Sonic-MF: <brchuckz@aim.com>
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.gq1.yahoo.com with HTTP; Sat, 13 Aug 2022 16:56:20 +0000
-Received: by hermes--production-ne1-6649c47445-znbvb (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID c035781e424b923762e1bcb1fb8d4940;
-          Sat, 13 Aug 2022 16:56:14 +0000 (UTC)
-Message-ID: <a0ce2f59-b653-fa8b-a016-1335f05c86ae@netscape.net>
-Date:   Sat, 13 Aug 2022 12:56:12 -0400
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic313.consmr.mail.gq1.yahoo.com with HTTP; Sat, 13 Aug 2022 16:56:49 +0000
+Received: by hermes--production-ne1-6649c47445-tz6bb (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 66f3ba59478f3bc107a9b6db1aef8ef8;
+          Sat, 13 Aug 2022 16:56:46 +0000 (UTC)
+Message-ID: <d838264a-bcd0-29e2-3b23-5427ee0ee041@netscape.net>
+Date:   Sat, 13 Aug 2022 12:56:44 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.1.2
 From:   Chuck Zmudzinski <brchuckz@netscape.net>
-Subject: Re: [PATCH 0/3] x86: make pat and mtrr independent from each other
-To:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        Juergen Gross <jgross@suse.com>,
-        xen-devel@lists.xenproject.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Cc:     jbeulich@suse.com, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+Subject: Re: PING [PATCH 3/3] x86: decouple pat and mtrr handling
+To:     Borislav Petkov <bp@alien8.de>, Juergen Gross <jgross@suse.com>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Jan Beulich <jbeulich@suse.com>
+Cc:     xen-devel@lists.xenproject.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
         Dave Hansen <dave.hansen@linux.intel.com>,
         "H. Peter Anvin" <hpa@zytor.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, Andy Lutomirski <luto@kernel.org>,
+        Andy Lutomirski <luto@kernel.org>,
         Peter Zijlstra <peterz@infradead.org>,
         Boris Ostrovsky <boris.ostrovsky@oracle.com>,
         regressions@lists.linux.dev
 References: <20220715142549.25223-1-jgross@suse.com>
- <efbde93b-e280-0e40-798d-dc7bf8ca83cf@leemhuis.info>
+ <20220715142549.25223-4-jgross@suse.com> <YtbKf51S4lTaziKm@zn.tnic>
 Content-Language: en-US
-In-Reply-To: <efbde93b-e280-0e40-798d-dc7bf8ca83cf@leemhuis.info>
+In-Reply-To: <YtbKf51S4lTaziKm@zn.tnic>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Mailer: WebService/1.1.20531 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.aol
@@ -90,87 +90,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 7/17/22 3:55 AM, Thorsten Leemhuis wrote:
-> Hi Juergen!
->
-> On 15.07.22 16:25, Juergen Gross wrote:
-> > Today PAT can't be used without MTRR being available, unless MTRR is at
-> > least configured via CONFIG_MTRR and the system is running as Xen PV
-> > guest. In this case PAT is automatically available via the hypervisor,
-> > but the PAT MSR can't be modified by the kernel and MTRR is disabled.
+On 7/19/22 11:15 AM, Borislav Petkov wrote:
+> On Fri, Jul 15, 2022 at 04:25:49PM +0200, Juergen Gross wrote:
+> > Today PAT is usable only with MTRR being active, with some nasty tweaks
+> > to make PAT usable when running as Xen PV guest, which doesn't support
+> > MTRR.
 > > 
-> > As an additional complexity the availability of PAT can't be queried
-> > via pat_enabled() in the Xen PV case, as the lack of MTRR will set PAT
-> > to be disabled. This leads to some drivers believing that not all cache
-> > modes are available, resulting in failures or degraded functionality.
+> > The reason for this coupling is, that both, PAT MSR changes and MTRR
+> > changes, require a similar sequence and so full PAT support was added
+> > using the already available MTRR handling.
 > > 
-> > The same applies to a kernel built with no MTRR support: it won't
-> > allow to use the PAT MSR, even if there is no technical reason for
-> > that, other than setting up PAT on all cpus the same way (which is a
-> > requirement of the processor's cache management) is relying on some
-> > MTRR specific code.
+> > Xen PV PAT handling can work without MTRR, as it just needs to consume
+> > the PAT MSR setting done by the hypervisor without the ability and need
+> > to change it. This in turn has resulted in a convoluted initialization
+> > sequence and wrong decisions regarding cache mode availability due to
+> > misguiding PAT availability flags.
 > > 
-> > Fix all of that by:
-> > 
-> > - moving the function needed by PAT from MTRR specific code one level
-> >   up
-> > - adding a PAT indirection layer supporting the 3 cases "no or disabled
-> >   PAT", "PAT under kernel control", and "PAT under Xen control"
-> > - removing the dependency of PAT on MTRR
+> > Fix all of that by allowing to use PAT without MTRR and by adding an
+> > environment dependent PAT init function.
 >
-> Thx for working on this. If you need to respin these patches for one
-> reason or another, could you do me a favor and add proper 'Link:' tags
-> pointing to all reports about this issue? e.g. like this:
+> Aha, there's the explanation I was looking for.
 >
->  Link: https://lore.kernel.org/regressions/YnHK1Z3o99eMXsVK@mail-itl/
+> > diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
+> > index 0a1bd14f7966..3edfb779dab5 100644
+> > --- a/arch/x86/kernel/cpu/common.c
+> > +++ b/arch/x86/kernel/cpu/common.c
+> > @@ -2408,8 +2408,8 @@ void __init cache_bp_init(void)
+> >  {
+> >  	if (IS_ENABLED(CONFIG_MTRR))
+> >  		mtrr_bp_init();
+> > -	else
+> > -		pat_disable("PAT support disabled because CONFIG_MTRR is disabled in the kernel.");
+> > +
+> > +	pat_cpu_init();
+> >  }
+> >  
+> >  void cache_ap_init(void)
+> > @@ -2417,7 +2417,8 @@ void cache_ap_init(void)
+> >  	if (cache_aps_delayed_init)
+> >  		return;
+> >  
+> > -	mtrr_ap_init();
+> > +	if (!mtrr_ap_init())
+> > +		pat_ap_init_nomtrr();
+> >  }
 >
-> These tags are considered important by Linus[1] and others, as they
-> allow anyone to look into the backstory weeks or years from now. That is
-> why they should be placed in cases like this, as
-> Documentation/process/submitting-patches.rst and
-> Documentation/process/5.Posting.rst explain in more detail. I care
-> personally, because these tags make my regression tracking efforts a
-> whole lot easier, as they allow my tracking bot 'regzbot' to
-> automatically connect reports with patches posted or committed to fix
-> tracked regressions.
+> So I'm reading this as: if it couldn't init AP's MTRRs, init its PAT.
 >
-> [1] see for example:
-> https://lore.kernel.org/all/CAHk-=wjMmSZzMJ3Xnskdg4+GGz=5p5p+GSYyFBTh0f-DgvdBWg@mail.gmail.com/
-> https://lore.kernel.org/all/CAHk-=wgs38ZrfPvy=nOwVkVzjpM3VFU1zobP37Fwd_h9iAD5JQ@mail.gmail.com/
-> https://lore.kernel.org/all/CAHk-=wjxzafG-=J8oT30s7upn4RhBs6TX-uVFZ5rME+L5_DoJA@mail.gmail.com/
+> But currently, the code sets the MTRRs for the delayed case or when the
+> CPU is not online by doing ->set_all and in there it sets first MTRRs
+> and then PAT.
 >
-> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+> I think the code above should simply try the two things, one after the
+> other, independently from one another.
 >
-> P.S.: As the Linux kernel's regression tracker I deal with a lot of
-> reports and sometimes miss something important when writing mails like
-> this. If that's the case here, don't hesitate to tell me in a public
-> reply, it's in everyone's interest to set the public record straight.
+> And I see you've added another stomp machine call for PAT only.
 >
-> BTW, let me tell regzbot to monitor this thread:
+> Now, what I think the design of all this should be, is:
 >
-> #regzbot ^backmonitor:
-> https://lore.kernel.org/regressions/YnHK1Z3o99eMXsVK@mail-itl/
+> you have a bunch of things you need to do at each point:
+>
+> * cache_ap_init
+>
+> * cache_aps_init
+>
+> * ...
+>
+> Now, in each those, you look at whether PAT or MTRR is supported and you
+> do only those which are supported.
+>
+> Also, the rendezvous handler should do:
+>
+> 	if MTRR:
+> 		do MTRR specific stuff
+>
+> 	if PAT:
+> 		do PAT specific stuff
+>
+> This way you have clean definitions of what needs to happen when and you
+> also do *only* the things that the platform supports, by keeping the
+> proper order of operations - I believe MTRRs first and then PAT.
+>
+> This way we'll get rid of that crazy maze of who calls what and when.
+>
+> But first we need to define those points where stuff needs to happen and
+> then for each point define what stuff needs to happen.
+>
+> How does that sound?
+>
+> Thx.
+>
 
 Hi Thorsten,
 
-This appears stalled again and we are now over three months
-from the first report of the regression, The only excuse for
-ignoring your comments, and other comments on the patches
-in this patch series for this long a time is that the patch series
-for some reason cannot be considered a true regression. If this is a
-regression, then, IMHO, this needs to have a higher priority by the
-maintainers, or the maintainers need to explain why this regression
-cannot be fixed in a more timely manner. But continued silence
-by the maintainers is unacceptable, IMHO. This is especially true
-in this case when multiple fixes for the regression have been
-identified and the maintainers have not yet clearly explained why
-at least a fix, even if temporary, cannot be applied immediately
-while we wait for a more comprehensive fix.
+IMHO, silence here is unacceptable given that this is supposed to
+be fixing a regression and not just adding a new feature or
+re-working the code in a case where there is no regression.
 
-At the very least, I would expect Juergen to reply here and say that
-he is delayed but does plan to spin up an updated version and include
-the necessary links in the new version to facilitate your tracking of
-the regression. Why the silence from Juergen here?
+The regression was first reported on May 4, 2022, now over
+three months ago:
+
+https://lore.kernel.org/regressions/YnHK1Z3o99eMXsVK@mail-itl/
+
+Why has Juergen not at least responded in some way to the
+comments that Boris has made here? Why has Boris not
+pinged Juergen by now, which is almost four weeks after his
+comment and over three months from the first report of the
+regression? IMHO, both Juergen and Boris are not treating
+this with the priority of a regression fix. At the very least,
+they should reaffirm their commitment to fix the regression
+in a timely manner or explain what factors demand that the
+Linus regression rule be set aside in this case.
+
+There are valid reasons to delay a fix, but in all the discussion
+of the various patches that have been proposed to fix this
+regression, no maintainer has yet given a clear and reasonable
+explanation for why this is not getting a higher priority from the
+developers.
+
+Some developers, (Dave, Luto, and Peter) have ignored a fix
+proposed by Jan Beulich as you pointed out in an earlier message
+to Jan Beulich here:
+
+https://lore.kernel.org/lkml/4c8c9d4c-1c6b-8e9f-fa47-918a64898a28@leemhuis.info/
+
+To his credit, Jan Beulich replied to your message in a reasonable
+manner but he also could not explain why Dave, Luto, and Peter
+ignored Jan's patch and remain silent in the discussion of the possible
+fixes for this regression. I note also that the original report of the
+regression identified a specific commit that also fixes the regression
+if that bad commit is reverted, and that commit is also mentioned in
+the aforementioned message to Jan about his proposed fix. It is a commit
+that lives in the i915 Intel GPU/DRM driver, commit bdd8b6c98239, and
+my testing confirms the regression can also be fixed by reverting
+bdd8b6c98239 instead of applying Jan Beulich's patch that was the
+subject of the aforementioned message from you to Jan Beulich where
+you also expressed your dissatisfaction with the silence of some
+developers (Dave, Lotu, and Peter) when there is a regression that needs
+fixing.
+
+Why their silence? In that same message, you pondered that it might
+be necessary to bring this matter to Linus' attention. The developers'
+silence makes me think this regression is a regression the developers
+do not want to fix. And that would be a clear violation of the Linux
+regression rule if it were true. So, Thorsten, I think it is time for you to
+elevate this to Linus if the developers do not clearly explain why they
+are ignoring this again.
 
 Best regards,
 

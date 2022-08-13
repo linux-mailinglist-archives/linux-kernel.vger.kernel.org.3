@@ -2,74 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF1CA5918DE
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 07:21:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 745CF5918EB
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 07:43:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236818AbiHMFUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 01:20:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40596 "EHLO
+        id S238787AbiHMFeB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 01:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236246AbiHMFUe (ORCPT
+        with ESMTP id S238528AbiHMFdu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 01:20:34 -0400
-Received: from mail-yw1-x1144.google.com (mail-yw1-x1144.google.com [IPv6:2607:f8b0:4864:20::1144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A74BC64
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 22:20:33 -0700 (PDT)
-Received: by mail-yw1-x1144.google.com with SMTP id 00721157ae682-31f443e276fso27091767b3.1
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 22:20:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc;
-        bh=S2u9Q+tjkz31iCRfklDeKGl5LtO3Yk8kTNoA3qpbsNs=;
-        b=Hq+uZa5BeZuwK4iRGfpv/2u6mpf33ct+kodJ6Gj6RpFVEDLQO0OyiLirTBk5x7e8FK
-         HfoELfYq4Z0j7kUNokiZrFZ8QxjKuYnCF4WeRDmtU5bhzy4sbgF8cOgwPmcRY8mF3k97
-         DEMov7LQ/VOwpji/QPALtev9jxUyS9slrfEuATq0PasY7hc1daWGfFd2XcAft9BDmiuc
-         dVn3x7s9UpAEpe6TAp3xuP3TPj1Dj51NcEXT2F0qEVs5qzr0aETgmJ6BYNqdfAERLPgG
-         k5fHLfxTGkDvzdfiZawozlJyBWZPWb1Qp4Ml0xsWN3K/NzfDOzdp3zLU5bZ2tko7J4xo
-         TfjQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:sender:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=S2u9Q+tjkz31iCRfklDeKGl5LtO3Yk8kTNoA3qpbsNs=;
-        b=NyemR9g0ip5b1uBt9bg4LB36Aol5t1dRGnFKrT20JLkok1UueUASUUtleo848BdFo2
-         YSZaU7EZQw1gT/h0r/SYrAPPX6cv1v+V25F3GM7BuDIW8zu1Nondlcd2HtEUBMTnCNdG
-         VnM9vcDSEp5wKLsrbxMQTlsmF6VeYTT5zJ8W65xZThr8V56xrwj147qn40wLPTs0Vu17
-         Nc6m2jTpVjxDR+z8gM4Rj0NuYJ+M3KiTyxV6sedAwPoCPo1PGC7cek77vM/7SYrUm5qE
-         cSmD8m6p5S0AHlM3IgP3chOaL2p7Jj0+kDuJQxmTdINuWI712JfrpO2KU9ZIbO/KERvz
-         PO7w==
-X-Gm-Message-State: ACgBeo3nawdNE8FhLGwfLBseHE0hLuCkug6m0HdsJtmipckWGNUFMx9w
-        4itAa+J6OrmEtNsl6OYfqTjDI9yvqouChk/qdlY=
-X-Google-Smtp-Source: AA6agR6JoMisepX9ioFanx4hKvxl0wZogZ3kGfd1ltySiyDyQayn0SscImIAOPaw2Rdvj4q2KC2Pd8C77vDqSADrFgg=
-X-Received: by 2002:a05:690c:397:b0:30c:1c1e:6dfe with SMTP id
- bh23-20020a05690c039700b0030c1c1e6dfemr6465920ywb.113.1660368032538; Fri, 12
- Aug 2022 22:20:32 -0700 (PDT)
+        Sat, 13 Aug 2022 01:33:50 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE15979E6
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 22:33:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660368791; x=1691904791;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=hMnryVYeFDtALetXD12TG+Eg8Uw+lXmQZEkKo2pjS5c=;
+  b=d7qsKAigSo/Kp6sF+j3wwxinob4eEViVUfRmVKdMh9QgToQdScI7IIMp
+   t/6Fc1Y1MnHaAEzFddj7uGnL9WrYietCpXzS4kc48xVWfsd3WrrH50P6F
+   GLfL8y5hswagymUVNAqXYZ68odUPYr1xFCA2W7/MqDARzZOD8tIG3qswM
+   I82LOQfSt8hSGmzzW7fXAtDrfZzCqoPAU/zLxbXJ7RnbR4T733mRs+/rI
+   LjYh/ObB20jw97uq8Hxak9G7nlvVBV3Zts0Eqtt9Hu9v8Up0NLLS7Iw3H
+   qbKYdSWPrd+++lmX68koOu5WJXMskgs/8WYT1zSy8uapBK8ipSVE5Bvzi
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="274784620"
+X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
+   d="scan'208";a="274784620"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 22:33:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
+   d="scan'208";a="695472804"
+Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 12 Aug 2022 22:33:09 -0700
+Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oMjlk-0001Lj-3C;
+        Sat, 13 Aug 2022 05:33:08 +0000
+Date:   Sat, 13 Aug 2022 13:32:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>
+Subject: arch/s390/kvm/pci.h:47:69: sparse: sparse: Using plain integer as
+ NULL pointer
+Message-ID: <202208131353.8ChUuYVb-lkp@intel.com>
 MIME-Version: 1.0
-Sender: mrfaisalsamae36@gmail.com
-Received: by 2002:a05:7010:a40f:b0:2e8:9cd4:a608 with HTTP; Fri, 12 Aug 2022
- 22:20:31 -0700 (PDT)
-From:   Ariel iah <pb589847@gmail.com>
-Date:   Sat, 13 Aug 2022 06:20:31 +0100
-X-Google-Sender-Auth: oSSL8QzJdAyIwK3-kn2D2_A3kKI
-Message-ID: <CAOkhqeq1DCj4GofaxFYiPwSE5uKMfnF+tavbxwVAT-8kbNZgVA@mail.gmail.com>
-Subject: REPLY ME
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=3.9 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,LOTS_OF_MONEY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNDISC_MONEY autolearn=no autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
-X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-i am Mrs  Benaiah and i was diagnosed with cancer about 2 years
-ago,before i go for a surgery  i  have to do this by helping the
-Less-privileged,so If you are interested to use the sum of
-US17.3Million)to help them kindly get back to me for more information.
-Warm Regards,
-Mrs. Peninnah Ariel Benaiah
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   69dac8e431af26173ca0a1ebc87054e01c585bcc
+commit: 73f91b004321f2510fa79e66035dbbf1870fcf56 KVM: s390: pci: enable host forwarding of Adapter Event Notifications
+date:   5 weeks ago
+config: s390-randconfig-s053-20220811 (https://download.01.org/0day-ci/archive/20220813/202208131353.8ChUuYVb-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=73f91b004321f2510fa79e66035dbbf1870fcf56
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 73f91b004321f2510fa79e66035dbbf1870fcf56
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=s390 SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+sparse warnings: (new ones prefixed by >>)
+   arch/s390/kvm/interrupt.c: note: in included file:
+>> arch/s390/kvm/pci.h:47:69: sparse: sparse: Using plain integer as NULL pointer
+   arch/s390/kvm/pci.h:48:32: sparse: sparse: Using plain integer as NULL pointer
+   arch/s390/kvm/pci.h:49:24: sparse: sparse: Using plain integer as NULL pointer
+
+vim +47 arch/s390/kvm/pci.h
+
+    43	
+    44	static inline struct kvm *kvm_s390_pci_si_to_kvm(struct zpci_aift *aift,
+    45							 unsigned long si)
+    46	{
+  > 47		if (!IS_ENABLED(CONFIG_VFIO_PCI_ZDEV_KVM) || aift->kzdev == 0 ||
+    48		    aift->kzdev[si] == 0)
+    49			return 0;
+    50		return aift->kzdev[si]->kvm;
+    51	};
+    52	
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

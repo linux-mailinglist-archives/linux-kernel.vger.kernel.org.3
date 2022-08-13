@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01434591922
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 09:04:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CFF7591925
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 09:04:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238431AbiHMHEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 03:04:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59410 "EHLO
+        id S238550AbiHMHEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 03:04:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238030AbiHMHEW (ORCPT
+        with ESMTP id S238444AbiHMHEc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 03:04:22 -0400
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 863D52C658
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 00:04:20 -0700 (PDT)
-Received: by mail-vs1-xe34.google.com with SMTP id q15so2812446vsr.0
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 00:04:20 -0700 (PDT)
+        Sat, 13 Aug 2022 03:04:32 -0400
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEDB62CDF6
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 00:04:24 -0700 (PDT)
+Received: by mail-vs1-xe36.google.com with SMTP id q190so2776487vsb.7
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 00:04:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=hQy7A0Ze/ChfRyQc4hqZZPqP6BZFcrgVcTmRW/tczTE=;
-        b=TSpHkrsB60TSVpxOWQSqf2cFEOgFai8ODjhWaNH38PgxlE8eiC6aIspksTtptApLbw
-         IcLjardZ+BbcEg07w9o/tjveMBtTelLJBE4KW1tKSusvEKg4upLhW5aa+00Cmx5sj2A+
-         jFX6peUdifbpt5Wu2D1iDdl10RKMPTgytimU9u3dclpUADv/VVK4JuvnSID4JBCEOxuH
-         yrK78kV+pA9IpeF6kzq6X6pANJOE51z3gLjEJyBVQlHU5Qyt5H78pIYPpssDvUWIidjM
-         /QoqdKqxOZrrXqHuAOg+sgo9/u9IUcOrlFjY5IwOdDzjZ83nKUQks2oZMF+N4DGaklpg
-         r5JA==
+        bh=tMKPjubl6Tn1tcp6Itbflzt8yEKSKgwxXEmSZ2at87k=;
+        b=btHOAXGFycZ0nvMad0g5yDJKZ+5rwce5nLx4lN0he7QLgUjeB2J+UwPkMoKmQR3aJE
+         aKdVv/Rj1Pz80J4AFmq44pVwbUQPI2Um8kN9g5emxBRqitUvrnOAa7ZrMqPFeqQVFoCE
+         OSFbaGEsUiwzMHbyNS4lBt95ON2qWz+JvotixzyGuK/I852tusEExXGg/Ia90jj+dRPr
+         yo+7MkXjUQnmIOqfmUPhJTATjTwQpmdFDwjaJN2tmIPPb1zImySLav+iC+hKWmukygys
+         j+WDBPrZp7sHkWsswvNnVtZY2hG/s6w3lhoD6e+KoC2UcWnJDsh3wHAKInx1gQle1i8J
+         wweA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=hQy7A0Ze/ChfRyQc4hqZZPqP6BZFcrgVcTmRW/tczTE=;
-        b=cjrSghod5wU9ZdVd2V5h9mRi8KQdPSRvMlLjkFWJiK4G7u2Mwf+cmKMQk1BWRiCm35
-         G1RuX7pJnXxlWuxLb71WLqKlrEJCUOVgXjk6ma+wT96Ad2RtoUcbj26B3NpZ8xs98aY9
-         w5brXuw/JlJPPAyNDRHa1vGpH59ZTS1IcCB3DmjSd1+LBdwoMkaSzVU/31sms0JbrySk
-         gwYPy4Rpscc/grDeeT9i6Dfrps35O6h363D+ZT3AVjG3avOg6KudFtxoh5niSkzv7NC+
-         5xgv9n+OPcQDFtzJICIEtgoOupizgL5ED3xbfGiqnjGVua32NG5WqUekBLgJj+gL9oMd
-         vlMA==
-X-Gm-Message-State: ACgBeo3ZTsUc2IMsc33+qbWbXo5YcI46xG/aN1igYpEBxm0FxYAUlh1B
-        oy96BWDPy3mTN+uhuNCJuOmSeqkvMr4EggxCpxeo9w==
-X-Google-Smtp-Source: AA6agR6H6wmd/1vr/oN1Pq+KeYmC576ZBGz5G/43a7RU2f/n2IpyBIV3/JV89JOLJEOFZ4PSBxfs3oA5dSjR8JWSBr4=
-X-Received: by 2002:a67:cb0c:0:b0:357:9897:32d4 with SMTP id
- b12-20020a67cb0c000000b00357989732d4mr3306231vsl.18.1660374259512; Sat, 13
- Aug 2022 00:04:19 -0700 (PDT)
+        bh=tMKPjubl6Tn1tcp6Itbflzt8yEKSKgwxXEmSZ2at87k=;
+        b=CYCbEG4jYoaE2LDEmbJPScxCZ0uwJPXmE2BdPPkd6SwEw6MDYWHIt6dAhcm5M5hjNr
+         VZgatfkvBK5waL472eLgXfxoHYwbxS6WvU4WYHparTUDapXEP5lfMW9VEB0WydyQxIBG
+         gz38AYltTWmAgp31NRM/8DoJZXsBpFChCriy715IodPGZhpiJ78RZK5r7PPqm1oGYDD6
+         edztR6cTFc+LBl4JBRH2Fs39II0Q5my4GT1R5lSHmCkRNEOqXF91caue+Iw1AjY4uY1O
+         G9cBKILMHaoM14iWc43ZHbifO62b+nGzTY5AdXfe8+E2QoTCtwGeNN1Cl0iAmwhcjD/A
+         jhNg==
+X-Gm-Message-State: ACgBeo3hqSAFrz+86/4OG5AWRHgiKdtUk+Vjum5Gi4Kk1SGtBzUcAsxc
+        rxgZyx4H5P6o7vD0Q0hOXHLEiw2tBI3IZeALs0Nm/A==
+X-Google-Smtp-Source: AA6agR7La2kDhb0aVmUX71RMqa1IzQr39Vm84Ix47PjK28cV+xBmkpacER/x10BSwSsUIJ/3MXG1U7QM9aeAyC999nw=
+X-Received: by 2002:a67:fdce:0:b0:388:485c:889c with SMTP id
+ l14-20020a67fdce000000b00388485c889cmr3005345vsq.38.1660374263786; Sat, 13
+ Aug 2022 00:04:23 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220813042055.136832-1-tales.aparecida@gmail.com> <20220813042055.136832-4-tales.aparecida@gmail.com>
-In-Reply-To: <20220813042055.136832-4-tales.aparecida@gmail.com>
+References: <20220813042055.136832-1-tales.aparecida@gmail.com> <20220813042055.136832-5-tales.aparecida@gmail.com>
+In-Reply-To: <20220813042055.136832-5-tales.aparecida@gmail.com>
 From:   David Gow <davidgow@google.com>
-Date:   Sat, 13 Aug 2022 15:04:08 +0800
-Message-ID: <CABVgOSmQwAF5KROoK1DfZ8deeqBFL+SH57F4W=TO_qEeysoWPA@mail.gmail.com>
-Subject: Re: [PATCH 3/4] Documentation: KUnit: Fix non-uml anchor
+Date:   Sat, 13 Aug 2022 15:04:12 +0800
+Message-ID: <CABVgOSkNwmsojenC6RpNXW82UKK-W2rQsQFLz94E9tmOV9sAzw@mail.gmail.com>
+Subject: Re: [PATCH 4/4] Documentation: Kunit: Add ref for other kinds of tests
 To:     Tales Aparecida <tales.aparecida@gmail.com>
 Cc:     Sadiya Kazi <sadiyakazi@google.com>,
         Brendan Higgins <brendanhiggins@google.com>,
@@ -66,7 +66,7 @@ Cc:     Sadiya Kazi <sadiyakazi@google.com>,
         "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000f2f5b405e61a01f4"
+        boundary="000000000000344e2105e61a02ad"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -78,21 +78,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---000000000000f2f5b405e61a01f4
+--000000000000344e2105e61a02ad
 Content-Type: text/plain; charset="UTF-8"
 
 On Sat, Aug 13, 2022 at 12:21 PM Tales Aparecida
 <tales.aparecida@gmail.com> wrote:
 >
-> The section was rewritten but its anchor got left behind.
-> Fix the anchor and add some references to running on QEMU.
+> Add an organic link to the "other kinds of tests" in the index page
 >
 > Signed-off-by: Tales Aparecida <tales.aparecida@gmail.com>
 > ---
 
-Thanks very much for fixing these. This is something we tried to clean
-up last year when Qemu support happened, and we definitely missed
-these bits.
+Thanks.
+
+It may also be worth looking at and/or linking to the kernel testing guide:
+https://docs.kernel.org/dev-tools/testing-overview.html
+
+(This is a fine improvement as-is, regardless.)
 
 Reviewed-by: David Gow <davidgow@google.com>
 
@@ -100,69 +102,35 @@ Cheers,
 -- David
 
 
->  Documentation/dev-tools/kunit/faq.rst         | 6 +++---
->  Documentation/dev-tools/kunit/run_wrapper.rst | 2 ++
->  Documentation/dev-tools/kunit/usage.rst       | 4 ++--
->  3 files changed, 7 insertions(+), 5 deletions(-)
+>  Documentation/dev-tools/kunit/faq.rst   | 2 ++
+>  Documentation/dev-tools/kunit/index.rst | 2 ++
+>  2 files changed, 4 insertions(+)
 >
 > diff --git a/Documentation/dev-tools/kunit/faq.rst b/Documentation/dev-tools/kunit/faq.rst
-> index 172e239791a8..f1b4cef68ced 100644
+> index f1b4cef68ced..fae426f2634a 100644
 > --- a/Documentation/dev-tools/kunit/faq.rst
 > +++ b/Documentation/dev-tools/kunit/faq.rst
-> @@ -31,7 +31,8 @@ For the most part, the KUnit core framework (what we use to write the tests)
->  can compile to any architecture. It compiles like just another part of the
->  kernel and runs when the kernel boots, or when built as a module, when the
->  module is loaded.  However, there is infrastructure, like the KUnit Wrapper
-> -(``tools/testing/kunit/kunit.py``) that does not support other architectures.
-> +(``tools/testing/kunit/kunit.py``) that might not support some architectures
-> +(see :ref:`kunit-on-qemu`).
+> @@ -39,6 +39,8 @@ more work than using KUnit on UML.
 >
->  In short, yes, you can run KUnit on other architectures, but it might require
->  more work than using KUnit on UML.
-> @@ -95,8 +96,7 @@ things to try.
->     seeing. When tests are built-in, they will execute when the kernel boots, and
->     modules will automatically execute associated tests when loaded. Test results
->     can be collected from ``/sys/kernel/debug/kunit/<test suite>/results``, and
-> -   can be parsed with ``kunit.py parse``. For more details, see "KUnit on
-> -   non-UML architectures" in Documentation/dev-tools/kunit/usage.rst.
-> +   can be parsed with ``kunit.py parse``. For more details, see :ref:`kunit-on-qemu`.
+>  For more information, see :ref:`kunit-on-non-uml`.
 >
->  If none of the above tricks help, you are always welcome to email any issues to
->  kunit-dev@googlegroups.com.
-> diff --git a/Documentation/dev-tools/kunit/run_wrapper.rst b/Documentation/dev-tools/kunit/run_wrapper.rst
-> index db1e867820e7..a1070def284f 100644
-> --- a/Documentation/dev-tools/kunit/run_wrapper.rst
-> +++ b/Documentation/dev-tools/kunit/run_wrapper.rst
-> @@ -165,6 +165,8 @@ example: if we only want to run KUnit resource tests, use:
->
->  This uses the standard glob format with wildcard characters.
->
-> +.. _kunit-on-qemu:
+> +.. _kinds-of-tests:
 > +
->  Run Tests on qemu
->  =================
+>  What is the difference between a unit test and other kinds of tests?
+>  ====================================================================
+>  Most existing tests for the Linux kernel would be categorized as an integration
+> diff --git a/Documentation/dev-tools/kunit/index.rst b/Documentation/dev-tools/kunit/index.rst
+> index 595205348d2d..bc91ad7b8961 100644
+> --- a/Documentation/dev-tools/kunit/index.rst
+> +++ b/Documentation/dev-tools/kunit/index.rst
+> @@ -95,6 +95,8 @@ Unit Testing Advantages
+>  - Improves code quality.
+>  - Encourages writing testable code.
 >
-> diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-> index 44158eecb51e..2737863ef365 100644
-> --- a/Documentation/dev-tools/kunit/usage.rst
-> +++ b/Documentation/dev-tools/kunit/usage.rst
-> @@ -165,6 +165,8 @@ built as a module).
->
->  For more information, see Documentation/dev-tools/kunit/api/test.rst.
->
-> +.. _kunit-on-non-uml:
+> +Read also :ref:`kinds-of-tests`.
 > +
->  Writing Tests For Other Architectures
->  -------------------------------------
->
-> @@ -544,8 +546,6 @@ By reusing the same ``cases`` array from above, we can write the test as a
->                 {}
->         };
->
-> -.. _kunit-on-non-uml:
-> -
->  Exiting Early on Failed Expectations
->  ------------------------------------
+>  How do I use it?
+>  ================
 >
 > --
 > 2.37.1
@@ -170,9 +138,9 @@ Cheers,
 > --
 > You received this message because you are subscribed to the Google Groups "KUnit Development" group.
 > To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20220813042055.136832-4-tales.aparecida%40gmail.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20220813042055.136832-5-tales.aparecida%40gmail.com.
 
---000000000000f2f5b405e61a01f4
+--000000000000344e2105e61a02ad
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -239,14 +207,14 @@ OOYwT0BUtHYR/3903Dmdx5Alq+NDvUHDjozgo0f6oIkwDXT3yBV36utQ/jFisd36C8RD5mM+NFpu
 3aqLXARRbKtxw29ErCwulof2dcAonG7cd5j+gmS84sLhKU+BhL1OQVXnJ5tj7xZ5Ri5I23brcwk0
 lk/gWqfgs3ppT9Xk7zVit9q8MYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCB7
-DepSVt3P8x7LekVKJAId51GRdU+bESYTp3/RcC/6wTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMjA4MTMwNzA0MTlaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABh9LgIPnlfMFHR0Die8n7MA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDP
+0XxeoLs4GSPNZO/taziH+0FQYHYIzDyyhkiUUg0wADAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjA4MTMwNzA0MjRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAX7IoUN2TnR5qyh8IikgA
-Vh2HzgNRO1i0O5SlcbiBarMeUyGkDmC39D0a7IhmpiGKhOAem/aMvKN1G1TxTMT9zs6dNgTeJj6Q
-e4WLOB8lVjqT6Yi9sZvpe+0xnHaL+6uBm1WxB50nCWVJ7MC8Xl30DfXfZIT+DCFu6giF/qsuCAPy
-Zy/If4TdBKTFROoc0AhC/dkTbT7Q4P07zNGjN5Xw5nIQmulD78pMzktLpikHnapWA/yJAnh1rTm5
-h9iFMgTlb4Txry+SJvG8q6OB9dn2kjdYiJLjZQdtetX5bgpWKxK5fXzLiMRmZk+wod4Twk6ROuU1
-C7KgfrIEnqyq3kTm/Q==
---000000000000f2f5b405e61a01f4--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAlrLhbjf5TMoUw5S5y4Xt
+sllwkaZjnzQ507oXDJ86PiUORaiVgkFO9QC+oUc1RtnBk9N1u8yd0ujA9RBaUhXy7ht3o4Alvy4W
+JT5cP+Lbs+DUxFrfTggXv+EBHgk6v0KClkhgXzy/5NDU7O39CHPyBW5rbQHQAH/jscy6IDbJv+Hi
+O7x7OA5LXzU501vFHr0Z7z+Fsl6Y0mu4zA3TiNgGGhxxXDHUpkkX/fj+G0yi27M+XGM/d8FjSdHf
+SAIsFrDSV1hnj9EXLYYxfjE854LFPZBI6NxYa234ufExcQje9U3X2KQjhuN9BxkzaoGc8SQMffbb
+Z+1/JVsC53l6/JxHMA==
+--000000000000344e2105e61a02ad--

@@ -2,106 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8F105919FE
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 13:22:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8AFB1591A0D
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 13:50:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239397AbiHMLVz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 07:21:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57296 "EHLO
+        id S239407AbiHMLua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 07:50:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229719AbiHMLVx (ORCPT
+        with ESMTP id S229719AbiHMLu2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 07:21:53 -0400
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF386FD10
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 04:21:52 -0700 (PDT)
-Received: by mail-wr1-x444.google.com with SMTP id n4so3666754wrp.10
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 04:21:52 -0700 (PDT)
+        Sat, 13 Aug 2022 07:50:28 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C3120BE7
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 04:50:24 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id ay12so1685134wmb.1
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 04:50:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:from:to:cc;
-        bh=GyIdygXpERIYq0zhovmgdDSjsG4Trhk4Rphv5GwxReI=;
-        b=nWP7d/4lKLUyWSF7JZg3WuTHaAv1Jy0wb359la2h49zrvWl7OpCZSw2XpJk/PNN50u
-         JqCPl8gCH3BFK+OAdq7AsFbvYG89K+jWgJOOJ5WVuq5igzuJV9jzTY20iqQViXUiASsV
-         GZHVkUBkoN0Hhf1pN+EJokHLDpwWsRw6nFy3JBEVL+sxkonZvgGoHJAFkVhuYfXFJRue
-         U+O7UzA/hUinbvvasQ68Epy3GZxOP95EDt9hfXKWIhL5KIO+NR8l25+MabyLiPVlpB6r
-         iGE/ZyW1iEu37JkMxmzBjUYfmSblJA39xMrUgHktM1WEbD7mQzdob16TKc3RBBwsN84I
-         eoCA==
+        d=fairphone.com; s=fair;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=rySRLwiiIOrtSpvOJyTmWSaKJJa5oryDquhv9YZj+6o=;
+        b=YY2Jve7dPmBhnAAPknKHb75GYBe6TgB4NpBMCo7lsOxsvFBCkxz8lDcxWStY5d47Jv
+         JP031NuvuBuaA95125eUkzukVIhphwd9IBcuuJlWoUxaJdI7zgqkMFR7yBfAZnCZfKg7
+         X8ckr7JGKp0pvL9HU6UkL2rQSEaO6nxktBfeR/9r17vlYD8ntimnDfxZsHETZz7/cLbo
+         l275B+eBqhsYsTRxCKqd1YgWQzUJqQF/X87a3p4gbZHSJ3UCYK/192171gan4M5iUwkm
+         /fC8Asy0SerA+PA/uZsRVAk4/m2sSJaY7iF5AAKNh/Ap9mIhBDJUudbKN0hwI6v+Jwic
+         suUA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:to:subject:message-id:date:from:reply-to
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=GyIdygXpERIYq0zhovmgdDSjsG4Trhk4Rphv5GwxReI=;
-        b=O3wEwJrwjK2K1g78tKshfZHBKsoaUVgjIw3PfLswGgO12/zGZm3J2lXMisPz6XLjaS
-         iJa7Hqs6VvIFk7iSP3DQTMH8cZN5+rG8PEoVSh/a2CxlSwwoTO8QYAfhrwlCxtsdaBw6
-         cyIvjcMxXQjkp33inviQpL+IKgm7Ci+5CRP4Zv8zSBIXCp+zdUDK5ZLrNV8C6KaKtDdA
-         hwZrj7adXsVlr0LVpE6HWYmMmzp2Swg/e704CEV0pCIasqlSw+E1d2vtuqXdFqBbCw5S
-         qO/Q23KGg6cgqC5+9prX5gardp2ZEB1GcU+648/WYZIiaHqOjifbQjW563+bfvnD3+my
-         ot3Q==
-X-Gm-Message-State: ACgBeo2Qh36Vblj3qy54/dVMFFtFMYsApHwjFutZW/PQO/V3cqRVVFLm
-        vRv9/WjFpmpGDLKbDQTQ5JtkM9FzqwzeOwOstkM=
-X-Google-Smtp-Source: AA6agR65/sCMHQyokFr641dZggUSa2uL1Yji5WKtNdOzOg6x9FFJPid3H/G0CN+cHWM1hJo0akdkrSZS4WZ1IvP7BDo=
-X-Received: by 2002:a5d:5847:0:b0:220:9a9c:d819 with SMTP id
- i7-20020a5d5847000000b002209a9cd819mr4065655wrf.643.1660389711221; Sat, 13
- Aug 2022 04:21:51 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=rySRLwiiIOrtSpvOJyTmWSaKJJa5oryDquhv9YZj+6o=;
+        b=QvNTgE8iC4rrvryAIwcgLSUSsFAM2yenTvKXzzQdk4TQXpQ+PFxlW8CYO+qhBnoJNh
+         P+kt1+8nnSXFrOrZyHMGpNM+sU5rYxyzefvqlGrE99oA7iB8DjcT+kJ5xIptZaDs1kxa
+         OU/XUfmL072fih4uxXlOO7nr8HW3ODU0K8rsJ04AfnkJMw1J///ggngbgTbU5QHi5Bt8
+         hlsGukdy/zMnQlHLoTtqrayq+Mh4a28a9H6s7IyqJD9rREl2Ppc73G0Eq9ip6Kck4hY1
+         m6f+pG486oZBHp8uVw8OAibHgDNXf/eM1S++2rRPV7OARmjBzOHU9pwm1UNJBcM/+zT5
+         ISOw==
+X-Gm-Message-State: ACgBeo1EHc4P++fZxXT489nozCtmLbnkAxh7lHaN+OS8XBApuvfXVVqC
+        bS5rGkid/KysuGYTswbpjn6ukw==
+X-Google-Smtp-Source: AA6agR74gWIK4vbRB/zahVpfeJTmJjAaYd5j3yvMfKvXYOe/Z/7mJsBMh41qu6MV1qncnZnLUJsIKQ==
+X-Received: by 2002:a7b:ce05:0:b0:3a5:c069:25b3 with SMTP id m5-20020a7bce05000000b003a5c06925b3mr5293928wmc.87.1660391422858;
+        Sat, 13 Aug 2022 04:50:22 -0700 (PDT)
+Received: from otso.. (mobiledyn-62-240-134-27.mrsn.at. [62.240.134.27])
+        by smtp.gmail.com with ESMTPSA id h8-20020a05600c350800b003a325bd8517sm3656092wmq.5.2022.08.13.04.50.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 13 Aug 2022 04:50:22 -0700 (PDT)
+From:   Luca Weiss <luca.weiss@fairphone.com>
+To:     linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        Lee Jones <lee.jones@linaro.org>,
+        Caleb Connolly <caleb.connolly@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] mfd: qcom-spmi-pmic: Add more PMIC SUBTYPE IDs
+Date:   Sat, 13 Aug 2022 13:48:06 +0200
+Message-Id: <20220813114806.102466-1-luca.weiss@fairphone.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Received: by 2002:adf:df8a:0:0:0:0:0 with HTTP; Sat, 13 Aug 2022 04:21:50
- -0700 (PDT)
-Reply-To: aseanvietnam55@gmail.com
-From:   ASEAN VIETNAM <rw38128@gmail.com>
-Date:   Sat, 13 Aug 2022 11:21:50 +0000
-Message-ID: <CANBbbzEvgH2sbN1E7KrVrqXXVR_O+AkmKKqXjrA68K6=g6q4LA@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2a00:1450:4864:20:0:0:0:444 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4966]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [rw38128[at]gmail.com]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [rw38128[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [aseanvietnam55[at]gmail.com]
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=20
-Hello,
+Add more IDs that are found in the downstream msm-4.19 kernel under the
+path include/linux/qpnp/qpnp-revid.h.
 
-You have an important message get back to me for more information.
+Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+---
+I've noticed that some hex numbers in this list have uppercase letters,
+some have lower case ones.
+If wanted I can add a patch converting all to either upper- or lower
+case. Anyone have a preference here?
 
-Mr. Le Luong Minh
-(Ph=C3=B3 C=E1=BB=A5c Ng=C3=A2n kh=E1=BB=91) Deputy Department of the Treas=
-ury
-Vietnam.
+ include/soc/qcom/qcom-spmi-pmic.h | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/include/soc/qcom/qcom-spmi-pmic.h b/include/soc/qcom/qcom-spmi-pmic.h
+index 72398ff44719..bcb8e95d5dab 100644
+--- a/include/soc/qcom/qcom-spmi-pmic.h
++++ b/include/soc/qcom/qcom-spmi-pmic.h
+@@ -26,18 +26,32 @@
+ #define PM8901_SUBTYPE		0x0f
+ #define PM8950_SUBTYPE		0x10
+ #define PMI8950_SUBTYPE		0x11
++#define PMK8001_SUBTYPE		0x12
++#define PMI8996_SUBTYPE		0x13
+ #define PM8998_SUBTYPE		0x14
+ #define PMI8998_SUBTYPE		0x15
++#define SMB1381_SUBTYPE		0x17
+ #define PM8005_SUBTYPE		0x18
+ #define PM660L_SUBTYPE		0x1A
+ #define PM660_SUBTYPE		0x1B
++#define SMB1355_SUBTYPE		0x1C
+ #define PM8150_SUBTYPE		0x1E
+ #define PM8150L_SUBTYPE		0x1f
+ #define PM8150B_SUBTYPE		0x20
+ #define PMK8002_SUBTYPE		0x21
++#define SMB1390_SUBTYPE		0x23
+ #define PM8009_SUBTYPE		0x24
++#define PMI632_SUBTYPE		0x25
+ #define PM8150C_SUBTYPE		0x26
++#define PM6150_SUBTYPE		0x28
+ #define SMB2351_SUBTYPE		0x29
++#define PM8008_SUBTYPE		0x2C
++#define PM6125_SUBTYPE		0x2D
++#define PM7250B_SUBTYPE		0x2E
++#define PMK8350_SUBTYPE		0x2F
++#define PMR735B_SUBTYPE		0x34
++#define PM6350_SUBTYPE		0x36
++#define PM2250_SUBTYPE		0x37
+ 
+ #define PMI8998_FAB_ID_SMIC	0x11
+ #define PMI8998_FAB_ID_GF	0x30
+-- 
+2.37.1
+

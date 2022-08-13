@@ -2,61 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5CD0591801
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 03:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 076BC59180A
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 03:11:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237732AbiHMBKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 21:10:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56838 "EHLO
+        id S236201AbiHMBLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 21:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238560AbiHMBJn (ORCPT
+        with ESMTP id S234256AbiHMBLs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 21:09:43 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0922ABD4A
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 18:09:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660352961; x=1691888961;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=feUjbyPzk1hzgECdJlMvMWye5xjHwhOw5XjgA5LI53c=;
-  b=AizS0sVXJKhBxP2p9g2W96YQVgX882sz0e7YBvGy30VhFVRsrR6AxbCU
-   k4iwGvAIeo3fpYSNlKeM/ulj8jpqWjkKkt/XaHgEXkkpXxip4tokz2NvQ
-   JH9IIjniUYqjDlpbOy2MKfGjM0l/ssUoukJzURRP9kNs6IlJuFxoKVOju
-   SV5ItV8PH32gAVgNKHbqIwSYBt4yveQW8Kt7WpS78lc7EnNgMyJTZXMDZ
-   3pePnDbc79QBm1StoOkOPZDImdkyo882Q7B86SGPRyyfpmYAUWCPkWves
-   uWIy7o4UdMLOqvxWIjhJb77pw+YF/p2dy3xjl6BHjsWu3yDbPxNS/U9PA
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="271488748"
-X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="271488748"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 18:09:21 -0700
-X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="666038402"
-Received: from akoska-mobl1.ger.corp.intel.com (HELO hades.ger.corp.intel.com) ([10.252.36.156])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 18:09:18 -0700
-From:   Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
-To:     intel-gfx@lists.freedesktop.org
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        mchehab@kernel.org, chris@chris-wilson.co.uk,
-        matthew.auld@intel.com, thomas.hellstrom@linux.intel.com,
-        jani.nikula@intel.com, nirmoy.das@intel.com, airlied@linux.ie,
-        daniel@ffwll.ch, andi.shyti@linux.intel.com,
-        andrzej.hajda@intel.com
-Subject: [PATCH v6 8/8] drm/i915: Remove truncation warning for large objects
-Date:   Sat, 13 Aug 2022 04:08:57 +0300
-Message-Id: <20220813010857.4043956-9-gwan-gyeong.mun@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20220813010857.4043956-1-gwan-gyeong.mun@intel.com>
-References: <20220813010857.4043956-1-gwan-gyeong.mun@intel.com>
+        Fri, 12 Aug 2022 21:11:48 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3ACEA598E
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 18:11:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=JWBoT2glIn/13QDTu41Nqhp1XoaLX7F6+qyi5O/vBqI=; b=Vrk13mcLQUjTlS7qDwG4jIdHoI
+        q/89MPbAAkRadYDMu4MjWUVmwe99hDpczUWZLpkmYO/McelIQlhJQCljDCUeMEXqFjUqcjxLTsVu/
+        NFqaIrozbN9/a5iP+3oyd50TAdoJd197xQq47XAc/vamfsO9xU4qSHJqm6bGiFUN5T8i47lZSxCBB
+        bI4hSiGwJq7xXTnkF1vi58Kkiztzo4dZt0B4OXyxOAPYDUypFoOqIgmPiyrm5Ga2giZgLnBY2ire0
+        ev7cp7AUIXRbRL1Yj/QXdWbdOPD1qlSFPlS9d4znI+asLAvPA2hqwQY/Qi755jhqRVJNk8hGZiApl
+        /0UQcDgg==;
+Received: from [2601:1c0:6280:3f0::a6b3]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oMfgb-001eXA-3V; Sat, 13 Aug 2022 01:11:33 +0000
+Message-ID: <becc0751-9ce9-6fab-8e58-477e962e54c5@infradead.org>
+Date:   Fri, 12 Aug 2022 18:11:32 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [RFC PATCH v2 09/12] mm: Make MAX_ORDER of buddy allocator
+ configurable via Kconfig SET_MAX_ORDER.
+Content-Language: en-US
+To:     Zi Yan <ziy@nvidia.com>, linux-mm@kvack.org
+Cc:     David Hildenbrand <david@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Yang Shi <shy828301@gmail.com>,
+        David Rientjes <rientjes@google.com>,
+        James Houghton <jthoughton@google.com>,
+        Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org
+References: <20220811231643.1012912-1-zi.yan@sent.com>
+ <20220811231643.1012912-10-zi.yan@sent.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20220811231643.1012912-10-zi.yan@sent.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,59 +63,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chris Wilson <chris@chris-wilson.co.uk>
+Hi--
 
-Having addressed the issues surrounding incorrect types for local
-variables and potential integer truncation in using the scatterlist API,
-we have closed all the loop holes we had previously identified with
-dangerously large object creation. As such, we can eliminate the warning
-put in place to remind us to complete the review.
+On 8/11/22 16:16, Zi Yan wrote:
 
-Signed-off-by: Chris Wilson <chris@chris-wilson.co.uk>
-Signed-off-by: Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
-Cc: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Cc: Brian Welty <brian.welty@intel.com>
-Cc: Matthew Auld <matthew.auld@intel.com>
-Cc: Thomas Hellström <thomas.hellstrom@linux.intel.com>
-Testcase: igt@gem_create@create-massive
-Closes: https://gitlab.freedesktop.org/drm/intel/-/issues/4991
-Reviewed-by: Nirmoy Das <nirmoy.das@intel.com>
-Reviewed-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-Reviewed-by: Andrzej Hajda <andrzej.hajda@intel.com>
----
- drivers/gpu/drm/i915/gem/i915_gem_object.h | 15 ---------------
- 1 file changed, 15 deletions(-)
+> diff --git a/mm/Kconfig b/mm/Kconfig
+> index bbe31e85afee..e558f5679707 100644
+> --- a/mm/Kconfig
+> +++ b/mm/Kconfig
+> @@ -441,6 +441,20 @@ config SPARSEMEM_VMEMMAP
+>  	  pfn_to_page and page_to_pfn operations.  This is the most
+>  	  efficient option when sufficient kernel resources are available.
+>  
+> +config SET_MAX_ORDER
+> +	int "Set maximum order of buddy allocator"
+> +    depends on SPARSEMEM_VMEMMAP && (ARCH_FORCE_MAX_ORDER = 0)
+> +	range 10 255
+> +	default "10"
+> +	help
+> +	  The kernel memory allocator divides physically contiguous memory
+> +	  blocks into "zones", where each zone is a power of two number of
+> +	  pages.  This option selects the largest power of two that the kernel
+> +	  keeps in the memory allocator.  If you need to allocate very large
+> +	  blocks of physically contiguous memory, then you may need to
+> +	  increase this value. A value of 10 means that the largest free memory
+> +	  block is 2^10 pages.
 
-diff --git a/drivers/gpu/drm/i915/gem/i915_gem_object.h b/drivers/gpu/drm/i915/gem/i915_gem_object.h
-index 0cf31adbfd41..dd2762da332f 100644
---- a/drivers/gpu/drm/i915/gem/i915_gem_object.h
-+++ b/drivers/gpu/drm/i915/gem/i915_gem_object.h
-@@ -20,25 +20,10 @@
- 
- enum intel_region_id;
- 
--/*
-- * XXX: There is a prevalence of the assumption that we fit the
-- * object's page count inside a 32bit _signed_ variable. Let's document
-- * this and catch if we ever need to fix it. In the meantime, if you do
-- * spot such a local variable, please consider fixing!
-- *
-- * We can check for invalidly typed locals with typecheck(), see for example
-- * i915_gem_object_get_sg().
-- */
--#define GEM_CHECK_SIZE_OVERFLOW(sz) \
--	GEM_WARN_ON((sz) >> PAGE_SHIFT > INT_MAX)
--
- static inline bool i915_gem_object_size_2big(u64 size)
- {
- 	struct drm_i915_gem_object *obj;
- 
--	if (GEM_CHECK_SIZE_OVERFLOW(size))
--		return true;
--
- 	if (overflows_type(size, obj->base.size))
- 		return true;
- 
+Please make sure that all lines of help text are indented with one tab + 2 spaces,
+as specified in Documentation/process/coding-style.rst.
+
+thanks.
 -- 
-2.34.1
-
+~Randy

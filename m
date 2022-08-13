@@ -2,127 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 992F05917F8
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 03:09:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F01CE5917F1
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 03:09:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234710AbiHMBJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 Aug 2022 21:09:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55448 "EHLO
+        id S237218AbiHMBI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 Aug 2022 21:08:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237399AbiHMBJE (ORCPT
+        with ESMTP id S229507AbiHMBIz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 Aug 2022 21:09:04 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CEC274340
-        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 18:09:03 -0700 (PDT)
+        Fri, 12 Aug 2022 21:08:55 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6B1F73304
+        for <linux-kernel@vger.kernel.org>; Fri, 12 Aug 2022 18:08:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660352944; x=1691888944;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=fonEWxUD1NVi0zPRaFclDUuZQsesvxFDPxYtlbwH/co=;
-  b=g1GxbA4ikd/jjqRf3xLXficCeWAsBe2Sk4N25u0kQVDCxNJYb/SOivCx
-   4m9UHTwGdUr4PwTLuet82AYCpfQy6CE6HbsCFn2S6cqNuO4oOeYhVIyIr
-   BkxY+KRytrowfqTUS5usDJDp/AzrQsPSYoQXgUtVWFTKGTqulG5o3qc2C
-   rwxS76UeLyN7UnsQYpkJgsYL6Isbr+lw5JAKLJkwBMaVhbSRdcYpOKnSY
-   VSOOq8p+IqPpenY4krpJdBso//UrItDYNoWsqeZElzNq5xxdDUn9oObTY
-   B56CHuSIIiT3taB5X1Ath05g7jYMashkO64sEuOD6F8Q5+cBo4eAWBjgM
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="274770842"
+  t=1660352934; x=1691888934;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=HLunQmAbfM6k9dfCw48hXixZNPl2EXujtQCvIYiaJmU=;
+  b=ZqWVUvm9RbJ5bnZU302o4wjdC3dKbxEsH41VYzIl8m8qRu14aZOe4VjU
+   RxnIQe2XJnF75GhRQKCdxp/abVSTbRrv/2+pP3iqugryKj7CSbr6e2UCC
+   67UXksHx09aLaOi3ZtgZeB43yi2ugVPN6qc40FgpqOJ8Rpp5Wovwg4VDJ
+   Q12lR2B00Y7WgjI+trAknyja7XQmNFvmubpE02gwe3fnKtl6S0XEreFOV
+   dyWMxbHsujas2WIHbHINTatKZyIu/I3vTyxZT41HbO7cfmicRAJMQEeKU
+   94upukslYzg9SG/tY3725I2AMClwVACQ6PWu8IPtyREFTTnJLEv4S3vcx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="271488701"
 X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="274770842"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 18:09:03 -0700
-X-ExtLoop1: 1
+   d="scan'208";a="271488701"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 18:08:54 -0700
 X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="582280709"
-Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 12 Aug 2022 18:09:02 -0700
-Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oMfe9-00019J-29;
-        Sat, 13 Aug 2022 01:09:01 +0000
-Date:   Sat, 13 Aug 2022 09:08:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org
-Subject: arch/arm/mach-omap2/board-generic.c:44:6: warning: no previous
- prototype for function 'tick_broadcast'
-Message-ID: <202208130946.TObnunCr-lkp@intel.com>
+   d="scan'208";a="666038320"
+Received: from akoska-mobl1.ger.corp.intel.com (HELO hades.ger.corp.intel.com) ([10.252.36.156])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 18:08:51 -0700
+From:   Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+To:     intel-gfx@lists.freedesktop.org
+Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        mchehab@kernel.org, chris@chris-wilson.co.uk,
+        matthew.auld@intel.com, thomas.hellstrom@linux.intel.com,
+        jani.nikula@intel.com, nirmoy.das@intel.com, airlied@linux.ie,
+        daniel@ffwll.ch, andi.shyti@linux.intel.com,
+        andrzej.hajda@intel.com
+Subject: [PATCH v6 0/8] Fixes integer overflow or integer truncation issues in page lookups, ttm place configuration and scatterlist creation
+Date:   Sat, 13 Aug 2022 04:08:49 +0300
+Message-Id: <20220813010857.4043956-1-gwan-gyeong.mun@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arnd,
+This patch series fixes integer overflow or integer truncation issues in
+page lookups, ttm place configuration and scatterlist creation, etc.
+We need to check that we avoid integer overflows when looking up a page,
+and so fix all the instances where we have mistakenly used a plain integer
+instead of a more suitable long.
+And there is an impedance mismatch between the scatterlist API using
+unsigned int and our memory/page accounting in unsigned long. That is we
+may try to create a scatterlist for a large object that overflows returning
+a small table into which we try to fit very many pages. As the object size
+is under the control of userspace, we have to be prudent and catch the
+conversion errors. To catch the implicit truncation as we switch from
+unsigned long into the scatterlist's unsigned int, we use our overflows_type
+check and report E2BIG prior to the operation. This is already used in
+our create ioctls to indicate if the uABI request is simply too large for
+the backing store. 
+And ttm place also has the same problem with scatterlist creation,
+and we fix the integer truncation problem with the way approached by
+scatterlist creation.
+And It corrects the error code to return -E2BIG when creating gem objects
+using ttm or shmem, if the size is too large in each case.
+In order to provide a common macro, it moves and adds a few utility macros
+into overflow/util_macros header
 
-First bad commit (maybe != root cause):
+v6: Move macro addition location so that it can be used by other than drm subsystem (Jani, Mauro, Andi)
+    Fix to follow general use case for GEM_BUG_ON(). (Jani)
+v5: Fix an alignment to match open parenthesis
+    Fix macros to be enclosed in parentheses for complex values
+    Fix too long line warning
+v4: Fix build warnins that reported by kernel test robot. (kernel test robot <lkp@intel.com>)
+    Add kernel-doc markups to the kAPI functions and macros (Mauoro)
+v3: Modify overflows_type() macro to consider signed data types and
+	add is_type_unsigned() macro (Mauro)
+    Make not use the same macro name on a function. (Mauro)
+    For kernel-doc, macros and functions are handled in the same namespace,
+    the same macro name on a function prevents ever adding documentation for it.
+    Not to change execution inside a macro. (Mauro)
+    Fix the problem that safe_conversion() macro always returns true (G.G)
+    Add safe_conversion_gem_bug_on() macro and remove temporal SAFE_CONVERSION() macro. (G.G.)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   4a9350597aff50bbd0f4b80ccf49d2e02d1111f5
-commit: 09f6b27d5ddd9ad0ec096d1b0f8decdacc70f0f8 ARM: dove: multiplatform support
-date:   4 months ago
-config: arm-randconfig-r021-20220812 (https://download.01.org/0day-ci/archive/20220813/202208130946.TObnunCr-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=09f6b27d5ddd9ad0ec096d1b0f8decdacc70f0f8
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 09f6b27d5ddd9ad0ec096d1b0f8decdacc70f0f8
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+Chris Wilson (3):
+  drm/i915/gem: Typecheck page lookups
+  drm/i915: Check for integer truncation on scatterlist creation
+  drm/i915: Remove truncation warning for large objects
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+Gwan-gyeong Mun (5):
+  overflow: Move and add few utility macros into overflow
+  util_macros: Add exact_type macro to catch type mis-match while
+    compiling
+  drm/i915: Check for integer truncation on the configuration of ttm
+    place
+  drm/i915: Check if the size is too big while creating shmem file
+  drm/i915: Use error code as -E2BIG when the size of gem ttm object is
+    too large
 
-All warnings (new ones prefixed by >>):
-
->> arch/arm/mach-omap2/board-generic.c:44:6: warning: no previous prototype for function 'tick_broadcast' [-Wmissing-prototypes]
-   void tick_broadcast(const struct cpumask *mask)
-        ^
-   arch/arm/mach-omap2/board-generic.c:44:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   void tick_broadcast(const struct cpumask *mask)
-   ^
-   static 
-   1 warning generated.
-
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for TEGRA20_APB_DMA
-   Depends on [n]: DMADEVICES [=n] && (ARCH_TEGRA [=y] || COMPILE_TEST [=y])
-   Selected by [y]:
-   - SOC_TEGRA_FUSE [=y] && ARCH_TEGRA [=y] && ARCH_TEGRA_2x_SOC [=y]
-
-
-vim +/tick_broadcast +44 arch/arm/mach-omap2/board-generic.c
-
-e69b4e1a7577c1 Tony Lindgren 2020-05-07  41  
-d86ad463d6706d Tony Lindgren 2020-05-28  42  /* Used by am437x for ARM timer in non-SMP configurations */
-d86ad463d6706d Tony Lindgren 2020-05-28  43  #if !defined(CONFIG_SMP) && defined(CONFIG_GENERIC_CLOCKEVENTS_BROADCAST)
-d86ad463d6706d Tony Lindgren 2020-05-28 @44  void tick_broadcast(const struct cpumask *mask)
-d86ad463d6706d Tony Lindgren 2020-05-28  45  {
-d86ad463d6706d Tony Lindgren 2020-05-28  46  }
-d86ad463d6706d Tony Lindgren 2020-05-28  47  #endif
-d86ad463d6706d Tony Lindgren 2020-05-28  48  
-
-:::::: The code at line 44 was first introduced by commit
-:::::: d86ad463d6706d35167418660ae3293207ee9d1c ARM: OMAP2+: Fix regression for using local timer on non-SMP SoCs
-
-:::::: TO: Tony Lindgren <tony@atomide.com>
-:::::: CC: Arnd Bergmann <arnd@arndb.de>
+ drivers/gpu/drm/i915/gem/i915_gem_internal.c  |   6 +-
+ drivers/gpu/drm/i915/gem/i915_gem_object.c    |   7 +-
+ drivers/gpu/drm/i915/gem/i915_gem_object.h    | 303 +++++++++++++++---
+ drivers/gpu/drm/i915/gem/i915_gem_pages.c     |  27 +-
+ drivers/gpu/drm/i915/gem/i915_gem_phys.c      |   4 +
+ drivers/gpu/drm/i915/gem/i915_gem_shmem.c     |  19 +-
+ drivers/gpu/drm/i915/gem/i915_gem_ttm.c       |  23 +-
+ drivers/gpu/drm/i915/gem/i915_gem_userptr.c   |   5 +-
+ .../drm/i915/gem/selftests/i915_gem_context.c |  12 +-
+ .../drm/i915/gem/selftests/i915_gem_mman.c    |   8 +-
+ .../drm/i915/gem/selftests/i915_gem_object.c  |   8 +-
+ drivers/gpu/drm/i915/gvt/dmabuf.c             |   9 +-
+ drivers/gpu/drm/i915/i915_gem.c               |  18 +-
+ drivers/gpu/drm/i915/i915_scatterlist.h       |  11 +
+ drivers/gpu/drm/i915/i915_utils.h             |   6 +-
+ drivers/gpu/drm/i915/i915_vma.c               |   8 +-
+ drivers/gpu/drm/i915/intel_region_ttm.c       |  22 +-
+ include/linux/overflow.h                      |  54 ++++
+ include/linux/util_macros.h                   |  25 ++
+ 19 files changed, 482 insertions(+), 93 deletions(-)
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.34.1
+

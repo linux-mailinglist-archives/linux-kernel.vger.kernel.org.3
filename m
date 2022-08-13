@@ -2,132 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B83AF591C94
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 22:27:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 608DA591C96
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 22:28:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239578AbiHMU1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 16:27:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57442 "EHLO
+        id S239644AbiHMU2E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 16:28:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238225AbiHMU1d (ORCPT
+        with ESMTP id S239628AbiHMU2A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 16:27:33 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DDAB240BC
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 13:27:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660422452; x=1691958452;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=1Zm4RKO8C2kEUmxyXI4UzeZ0jyWp5NSnCmzsRL2OFGw=;
-  b=eOmCv/kX3z5oen9W/LItxrBlTMLQZah5IzoC9Mt4c/3M7jjt6LgtOhWt
-   nwiI77qNw212HTkWKr1S/dRVGwM1hxVXg+7IYX0bKkzXLKRutMyM3mtj0
-   616D1bXcO+dz0pLvyk0LpLUjnlHoeSrW6Rj/PJhHnE5Al2oBIJBCicgoE
-   3cNSv9bX8S8d9JJ7hiUCfIhzgeVImwzOT5Yc4rnZfCl4CgkSwgIg/oAsR
-   oe8JXL9GsgU5zUVfTp9YPd+k3rsdsxml23ZQyA3aCy4IsIaLaAKMjbeCs
-   UMFmfc7hZGYQ7P1Kr93DJ1Szn1QIwnWjakALOD0N6zGqcp/0DvTBfN4X0
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="290529281"
-X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
-   d="scan'208";a="290529281"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 13:27:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
-   d="scan'208";a="732551986"
-Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by orsmga004.jf.intel.com with ESMTP; 13 Aug 2022 13:27:30 -0700
-Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oMxjF-00024x-1X;
-        Sat, 13 Aug 2022 20:27:29 +0000
-Date:   Sun, 14 Aug 2022 04:27:11 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Koba Ko <koba.ko@canonical.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        Alex Deucher <alexander.deucher@amd.com>
-Subject: drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c:1744:18:
- error: invalid use of undefined type 'struct cpuinfo_x86'
-Message-ID: <202208140449.QuPTilYq-lkp@intel.com>
+        Sat, 13 Aug 2022 16:28:00 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05347248DD
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 13:27:59 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a7so7371286ejp.2
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 13:27:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=oRpYei+SmJcP8P910pdqSqQpbCLQB5yTd8wkGHmweb0=;
+        b=LrAc11OhRwNceo3Fj0qtfaTLLCaTq4uavay9GA4096z/3cohl0CX/3887l6Fi54g+Y
+         BmetoIl6GUBLCUrN4l7jXhOPQCIVdzSwpr7PSRpGumvtkMDAXIWj+xRrzcWzTeHhlyIU
+         YzCXKSe7o3/2K5mvl0EahIaGdMBkoXBVmUJLI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=oRpYei+SmJcP8P910pdqSqQpbCLQB5yTd8wkGHmweb0=;
+        b=JIsdDx6BSxN+6Hvcn6qzpHQXYdiUifBiCLaVxB4C0R3MV79QAuamrM78vGsChguCmq
+         r7iUHmmn3It2HEcHG7nRcdU3ifYZJ+alpVtgLctmOl/V6RUS96G2BZpwvkTMSVduDlxw
+         83ibyIqaXrCjpA41aAQD+DGkKA2w5EgOpWx+/8+/nz3FPTiwf8yTJ6cLCuyAxqon36a3
+         +M+LD8FcPsyH30RtL2Sun60SGHxLCe/GHDj/1geqfhWE7koKXHibpAJW/23RRheg9Jog
+         ORVtD1FVqHuVENJ7uUPsqbBRPD1BpWR0Ua4XeQLK2/tLMvoS5A5OnQ/5v55pijFisiBH
+         Xwww==
+X-Gm-Message-State: ACgBeo2cgsc+dZBQIgilUGqhbVHu/AJFvRdDSH6pO/OAwI1AEmi7RQWn
+        mN3giVxvZeYqvHsJ5ZplAsjnEw+uBDKcViJm
+X-Google-Smtp-Source: AA6agR5IVU96hQTku9RPoUk4gP3hm++EIKMzMa32U1fL+K8QSrYuwHwlNLVCj8Ia78Lm+taDvw5IPQ==
+X-Received: by 2002:a17:906:847c:b0:730:b6a0:e0d with SMTP id hx28-20020a170906847c00b00730b6a00e0dmr6439080ejc.126.1660422477239;
+        Sat, 13 Aug 2022 13:27:57 -0700 (PDT)
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com. [209.85.221.45])
+        by smtp.gmail.com with ESMTPSA id h23-20020a50cdd7000000b0043d3e06519fsm3532875edj.57.2022.08.13.13.27.56
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 13 Aug 2022 13:27:56 -0700 (PDT)
+Received: by mail-wr1-f45.google.com with SMTP id n4so4629259wrp.10
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 13:27:56 -0700 (PDT)
+X-Received: by 2002:a05:6000:1888:b0:222:ca41:dc26 with SMTP id
+ a8-20020a056000188800b00222ca41dc26mr4727954wri.442.1660422476300; Sat, 13
+ Aug 2022 13:27:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <Yvd8L0qIbLarxrOQ@gmail.com> <YvfQUGLGY7cfZ9gf@zn.tnic>
+In-Reply-To: <YvfQUGLGY7cfZ9gf@zn.tnic>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 13 Aug 2022 13:27:40 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi+K-LQ121sPbsQonja3Sx-_kXZc6ntauUC2=JPsUrC+g@mail.gmail.com>
+Message-ID: <CAHk-=wi+K-LQ121sPbsQonja3Sx-_kXZc6ntauUC2=JPsUrC+g@mail.gmail.com>
+Subject: Re: [GIT PULL] timer fixes
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>, x86-ml <x86@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Koba,
+On Sat, Aug 13, 2022 at 9:25 AM Borislav Petkov <bp@alien8.de> wrote:
+>
+> That task_struct.sighand is marked __rcu and thus noderef and sparse
+> complains:
 
-FYI, the error/warning still remains.
+I think that RCU marking is misleading.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   69dac8e431af26173ca0a1ebc87054e01c585bcc
-commit: b3dc549986eb7b38eba4a144e979dc93f386751f drm/amdgpu: Disable PCIE_DPM on Intel RKL Platform
-date:   12 months ago
-config: um-allyesconfig (https://download.01.org/0day-ci/archive/20220814/202208140449.QuPTilYq-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
-reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=b3dc549986eb7b38eba4a144e979dc93f386751f
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout b3dc549986eb7b38eba4a144e979dc93f386751f
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=um SHELL=/bin/bash
+Doing a
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+        git grep -e '->sighand'
 
-All errors (new ones prefixed by >>):
+shows that we basically never treat that as some kind of RCU pointer.
 
-   In file included from arch/x86/um/asm/processor.h:41,
-                    from include/linux/spinlock_up.h:8,
-                    from include/linux/spinlock.h:92,
-                    from include/linux/mmzone.h:8,
-                    from include/linux/gfp.h:6,
-                    from include/linux/slab.h:15,
-                    from drivers/gpu/drm/amd/amdgpu/../pm/inc/pp_debug.h:35,
-                    from drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c:23:
-   drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c: In function 'intel_core_rkl_chk':
-   arch/um/include/asm/processor-generic.h:104:19: error: called object is not a function or function pointer
-     104 | #define cpu_data (&boot_cpu_data)
-         |                  ~^~~~~~~~~~~~~~~
-   drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c:1742:34: note: in expansion of macro 'cpu_data'
-    1742 |         struct cpuinfo_x86 *c = &cpu_data(0);
-         |                                  ^~~~~~~~
->> drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c:1744:18: error: invalid use of undefined type 'struct cpuinfo_x86'
-    1744 |         return (c->x86 == 6 && c->x86_model == INTEL_FAM6_ROCKETLAKE);
-         |                  ^~
-   drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c:1744:33: error: invalid use of undefined type 'struct cpuinfo_x86'
-    1744 |         return (c->x86 == 6 && c->x86_model == INTEL_FAM6_ROCKETLAKE);
-         |                                 ^~
-   drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c:1748:1: error: control reaches end of non-void function [-Werror=return-type]
-    1748 | }
-         | ^
-   cc1: some warnings being treated as errors
+Adding a
 
+        grep -i rcu
 
-vim +1744 drivers/gpu/drm/amd/amdgpu/../pm/powerplay/hwmgr/smu7_hwmgr.c
+to the above shows that we have a couple of places that do this
+carefully, but they are the exception rather than the rule.
 
-  1738	
-  1739	static bool intel_core_rkl_chk(void)
-  1740	{
-  1741	#if IS_ENABLED(CONFIG_X86_64)
-  1742		struct cpuinfo_x86 *c = &cpu_data(0);
-  1743	
-> 1744		return (c->x86 == 6 && c->x86_model == INTEL_FAM6_ROCKETLAKE);
-  1745	#else
-  1746		return false;
-  1747	#endif
-  1748	}
-  1749	
+I think the issue is that "current->sighand" is always safe (and that
+"me->sighand" is the same thing), and that sighand has RCU-delayed
+freeing so that __lock_task_sighand() can safely try to take the lock
+of another process' sighand.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+And we have no real way to explain to sparse that *some* cases are
+fine, others are not and need the sighand lock (after that careful
+__lock_task_sighand thing).
+
+              Linus

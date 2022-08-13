@@ -2,101 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5D5F591C63
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 21:09:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B20D8591C6D
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 21:43:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233841AbiHMTGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 15:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33690 "EHLO
+        id S236482AbiHMTmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 15:42:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbiHMTGd (ORCPT
+        with ESMTP id S230460AbiHMTmf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 15:06:33 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E805192BA;
-        Sat, 13 Aug 2022 12:06:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660417592; x=1691953592;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7YDN0J/Reetlqh2ldMy+An+DYONB13clcRB49v+Hnrw=;
-  b=Q3ViMBUd2DFwtdeEZ0nSvRWkkpN1y5n5fz9jadQ742xpBpGPrDyNndN8
-   4OdKDJEZudq32Fw7jKx1ZriUh2N6f4ihHyjOsN4KezqQMUAil/aP4mNmb
-   mjEAZkdmRE8Rva5q+Hf2OmqTjvp9E2cwF9Eelom6jVNIDvWcTwjbpk/9M
-   FHjMkyF4rPT2hBbgqiu6J+28oJeLROd3BU4HjtMKROf1O1G2lIyRkTKeV
-   LvFlA4pRyYEQUMvD+3q6FnaEWfMLo/xTlCeER4PwMQSvhm4iUYxeQUVNh
-   LjFXBqaEFB8dKeM+gwKaP2ISowD6vCir1hH1eYUSbW98+QlwtHZ6DQ6tk
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="291770758"
-X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
-   d="scan'208";a="291770758"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 12:06:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
-   d="scan'208";a="606243381"
-Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by orsmga002.jf.intel.com with ESMTP; 13 Aug 2022 12:06:28 -0700
-Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oMwSp-000214-2T;
-        Sat, 13 Aug 2022 19:06:27 +0000
-Date:   Sun, 14 Aug 2022 03:06:06 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     jeffxu@google.com, skhan@linuxfoundation.org
-Cc:     kbuild-all@lists.01.org, akpm@linux-foundation.org,
-        dmitry.torokhov@gmail.com, dverkamp@chromium.org, hughd@google.com,
-        jeffxu@google.com, jorgelo@chromium.org, keescook@chromium.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, mnissler@chromium.org, jannh@google.com,
-        Jeff Xu <jeffxu@chromium.org>
-Subject: Re: [PATCH v2 5/5] sysctl: add support for mfd_noexec
-Message-ID: <202208140205.5zR1h5VB-lkp@intel.com>
-References: <20220805222126.142525-6-jeffxu@google.com>
+        Sat, 13 Aug 2022 15:42:35 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D91ADF3E
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 12:42:33 -0700 (PDT)
+Received: from zn.tnic (p2e55d27b.dip0.t-ipconnect.de [46.85.210.123])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 28A241EC0674;
+        Sat, 13 Aug 2022 21:42:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1660419748;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=ZBaCHodZtQdoAxEcaFO06NCvHc0MdEgcdLsNN8F00i4=;
+        b=VszxltkJd00ofa9SoHDpxDgAX6nJWdGuqRy7SdOA+HigNK2oZCFEVg8DPzssk6KtFdx8SF
+        I7eDowNI09Jd8jSWJyiTC8DBlDawyq5eSNKiafvwdFN2I0Kw8QvD+HEz32RdZt6b+KoSxQ
+        SVzVa3APC6kb3lMe1HJzsx0UlLKr3hg=
+Date:   Sat, 13 Aug 2022 21:40:14 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Tom Lendacky <thomas.lendacky@amd.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill@shutemov.name>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v2 1/2] x86/sev: Put PSC struct on the stack in prep for
+ unaccepted memory support
+Message-ID: <Yvf+HnofHZ3rZ+yL@zn.tnic>
+References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
+ <cover.1659978985.git.thomas.lendacky@amd.com>
+ <21d5d55640ee1c5d66501b9398858b6a6bd6546f.1659978985.git.thomas.lendacky@amd.com>
+ <YvZPoEm6PSeoflAz@zn.tnic>
+ <6d9d433f-779d-7531-02b5-382796acceef@amd.com>
+ <YvZkpYRfrgPLLoJV@zn.tnic>
+ <fc48ce75-7a4c-4804-92ce-71f63c2db5ea@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20220805222126.142525-6-jeffxu@google.com>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <fc48ce75-7a4c-4804-92ce-71f63c2db5ea@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Fri, Aug 12, 2022 at 09:51:41AM -0500, Tom Lendacky wrote:
+> On 8/12/22 09:33, Borislav Petkov wrote:
+> > On Fri, Aug 12, 2022 at 09:11:25AM -0500, Tom Lendacky wrote:
+> > > There was a whole discussion on this
+> > 
+> > Pointer to it?
+> 
+> It starts here: https://lore.kernel.org/lkml/658c455c40e8950cb046dd885dd19dc1c52d060a.1659103274.git.thomas.lendacky@amd.com/
 
-Thank you for the patch! Yet something to improve:
+So how come none of the rationale for the on-stack decision vs a single
+buffer with a spinlock protection hasn't made it to this patch?
 
-[auto build test ERROR on 9e2f40233670c70c25e0681cb66d50d1e2742829]
+We need to have the reason why this thing is changed documented
+somewhere.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/jeffxu-google-com/mm-memfd-MFD_NOEXEC-for-memfd_create/20220806-062430
-base:   9e2f40233670c70c25e0681cb66d50d1e2742829
-config: openrisc-randconfig-r004-20220805 (https://download.01.org/0day-ci/archive/20220814/202208140205.5zR1h5VB-lkp@intel.com/config)
-compiler: or1k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/e71897c778df5381c6d1ca858ae096a557a08a2a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review jeffxu-google-com/mm-memfd-MFD_NOEXEC-for-memfd_create/20220806-062430
-        git checkout e71897c778df5381c6d1ca858ae096a557a08a2a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=openrisc SHELL=/bin/bash
+> > So smaller, on-stack PSC but lockless is still better than a bigger one
+> > but with synchronized accesses to it?
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+That thing.
 
-All errors (new ones prefixed by >>):
+That decision for on-stack buffer needs explaining why.
 
->> or1k-linux-ld: kernel/sysctl.o:(.data+0x440): undefined reference to `sysctl_mfd_noexec_scope'
->> or1k-linux-ld: kernel/sysctl.o:(.data+0x450): undefined reference to `mfd_noexec_dointvec_minmax'
+> > > Well when we don't know which GHCB is in use, using that reserved area in
+> > > the GHCB doesn't help.
+> > 
+> > What do you mean?
+> > 
+> > The one which you read with
+> > 
+> > 	data = this_cpu_read(runtime_data);
+> 
+> Memory acceptance is called before the per-CPU GHCBs have been allocated
+> and so you would be actually be using early boot GHCB. And that is decided
+> based on the #VC handler that is invoked - but in this case we're not
+> coming through the #VC handler to accept memory.
+
+But then ghcb_percpu_ready needs to be a per-CPU variable too! Because
+it is set right after snp_register_per_cpu_ghcb() which works on the
+*per-CPU* GHCB.
 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

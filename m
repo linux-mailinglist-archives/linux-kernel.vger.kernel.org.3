@@ -2,70 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2E19591B63
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 17:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F5FB591B67
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 17:32:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239751AbiHMPaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 11:30:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43938 "EHLO
+        id S239762AbiHMPc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 11:32:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239475AbiHMPaP (ORCPT
+        with ESMTP id S239475AbiHMPcY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 11:30:15 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05D9D26F
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 08:30:12 -0700 (PDT)
-X-QQ-mid: bizesmtp66t1660404605ts1m9f53
-Received: from localhost.localdomain ( [110.188.55.240])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 13 Aug 2022 23:30:00 +0800 (CST)
-X-QQ-SSF: 0100000000200080H000B00A0000020
-X-QQ-FEAT: C2zsvWT0ctVka+Pbi9ARuIpWXMo/1VB59G5RYS6Ah1pW/doPLy747yNAdZCC0
-        aTtuILaIGH8Ev6+R28f4IQ7u9w0Ech1bpUSPjMywCihXcGxpiOdvH9qq6cJ+l5i1ae/GRyh
-        WNOfzqz4/vzOKYW3H1s2pwa8DqG9X69xLRYyJLXLInZks2OSYupA4TaNBJQnRKPGyWuLd4N
-        z9+BLPVWcFOIvpx/6uKMy0s8X4MnyjkGuV3YIsD+8SQHV1UQgWIbWUUYlwhYy46DfXglYYj
-        Vjw7EJ60WQk4G8jXijp64ckTDGNl3Yc1zAZxdmspuRvdbnNiqXJd8G03i0FvCytVHn6EngT
-        RXUOxAC24UKSOljk7svEpV1dCzjKGiruVuZkg4mcwfmPqrwgKZQrlGum4NXPQ==
-X-QQ-GoodBg: 0
-From:   min tang <tangmin@cdjrlc.com>
-To:     mst@redhat.com, jasowang@redhat.com
-Cc:     virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org, min tang <tangmin@cdjrlc.com>
-Subject: [PATCH] treewide: Unneeded semicolon
-Date:   Sat, 13 Aug 2022 23:29:49 +0800
-Message-Id: <20220813152949.4615-1-tangmin@cdjrlc.com>
-X-Mailer: git-send-email 2.17.1
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 13 Aug 2022 11:32:24 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940CA1EAFB
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 08:32:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660404743; x=1691940743;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=wSnJxQVkwGY8vErqzNc7NEWhVmynOFMVS5X9L59Y3yk=;
+  b=kdGCM2xI9trYTRIodSuUP1U9zXda9ni77mGGnkGqdAvQy5uS8zguW7Ay
+   pPdFfPZLsFPhYAxb0DNhjfrH9dHBZudivnsSKqYmwqxqDU0mrlH8KuznE
+   Fqv52C3L6THWVSfpBM7+GSiQodqTlI/dHKl1aV8X/jFyIExlFGFWxQs3w
+   y7oSRnQfuLo7+FdwI1Fx3aj0foaQQ1yb/CqFMqAOegJkigBIUbPZhWXu4
+   Rah3i0unxesbDuBNdQRXIiEOxOGTNXsBrYd8Em6zvG+2oHSj8oJaXNJTD
+   Oml2EDW0tO+g7mZ0Mrr0g6AVzBTbTXjLFjlb+ZrSsKbSrK2m70miZBj3t
+   g==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="289328803"
+X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
+   d="scan'208";a="289328803"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 08:32:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
+   d="scan'208";a="666169288"
+Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 13 Aug 2022 08:32:21 -0700
+Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oMt7d-0001oN-16;
+        Sat, 13 Aug 2022 15:32:21 +0000
+Date:   Sat, 13 Aug 2022 23:31:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
+Subject: [bvanassche:scsi-const-host-template 11/86]
+ drivers/ata/pata_platform.c:97:5: error: conflicting types for
+ '__pata_platform_probe'; have 'int(struct device *, struct resource *,
+ struct resource *, struct resource *, unsigned int,  int,  const struct
+ scsi_host_template *, bool)' {aka 'int(struct dev...
+Message-ID: <202208132351.74xQFUEY-lkp@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no semicolon after '}' in line 78.
+tree:   https://github.com/bvanassche/linux scsi-const-host-template
+head:   6d6e5cf2f6e93f909e73e468fd5888431de61f13
+commit: 24ce874bd15b6e1e45942c02db623e7e19b6cc81 [11/86] ata
+config: i386-randconfig-a005 (https://download.01.org/0day-ci/archive/20220813/202208132351.74xQFUEY-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/bvanassche/linux/commit/24ce874bd15b6e1e45942c02db623e7e19b6cc81
+        git remote add bvanassche https://github.com/bvanassche/linux
+        git fetch --no-tags bvanassche scsi-const-host-template
+        git checkout 24ce874bd15b6e1e45942c02db623e7e19b6cc81
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/ata/
 
-Signed-off-by: min tang <tangmin@cdjrlc.com>
----
- tools/virtio/virtio-trace/trace-agent-ctl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-diff --git a/tools/virtio/virtio-trace/trace-agent-ctl.c b/tools/virtio/virtio-trace/trace-agent-ctl.c
-index 73d253d4b559..39860be6e2d8 100644
---- a/tools/virtio/virtio-trace/trace-agent-ctl.c
-+++ b/tools/virtio/virtio-trace/trace-agent-ctl.c
-@@ -75,7 +75,7 @@ static int wait_order(int ctl_fd)
- 
- 		if (ret)
- 			break;
--	};
-+	}
- 
- 	return ret;
- 
+All errors (new ones prefixed by >>):
+
+>> drivers/ata/pata_platform.c:97:5: error: conflicting types for '__pata_platform_probe'; have 'int(struct device *, struct resource *, struct resource *, struct resource *, unsigned int,  int,  const struct scsi_host_template *, bool)' {aka 'int(struct device *, struct resource *, struct resource *, struct resource *, unsigned int,  int,  const struct scsi_host_template *, _Bool)'}
+      97 | int __pata_platform_probe(struct device *dev, struct resource *io_res,
+         |     ^~~~~~~~~~~~~~~~~~~~~
+   In file included from drivers/ata/pata_platform.c:21:
+   include/linux/ata_platform.h:16:12: note: previous declaration of '__pata_platform_probe' with type 'int(struct device *, struct resource *, struct resource *, struct resource *, unsigned int,  int,  struct scsi_host_template *, bool)' {aka 'int(struct device *, struct resource *, struct resource *, struct resource *, unsigned int,  int,  struct scsi_host_template *, _Bool)'}
+      16 | extern int __pata_platform_probe(struct device *dev,
+         |            ^~~~~~~~~~~~~~~~~~~~~
+   In file included from include/linux/linkage.h:7,
+                    from include/linux/kernel.h:17,
+                    from drivers/ata/pata_platform.c:14:
+   drivers/ata/pata_platform.c:183:19: error: conflicting types for '__pata_platform_probe'; have 'int(struct device *, struct resource *, struct resource *, struct resource *, unsigned int,  int,  const struct scsi_host_template *, bool)' {aka 'int(struct device *, struct resource *, struct resource *, struct resource *, unsigned int,  int,  const struct scsi_host_template *, _Bool)'}
+     183 | EXPORT_SYMBOL_GPL(__pata_platform_probe);
+         |                   ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/export.h:87:28: note: in definition of macro '___EXPORT_SYMBOL'
+      87 |         extern typeof(sym) sym;                                                 \
+         |                            ^~~
+   include/linux/export.h:147:41: note: in expansion of macro '__EXPORT_SYMBOL'
+     147 | #define _EXPORT_SYMBOL(sym, sec)        __EXPORT_SYMBOL(sym, sec, "")
+         |                                         ^~~~~~~~~~~~~~~
+   include/linux/export.h:151:41: note: in expansion of macro '_EXPORT_SYMBOL'
+     151 | #define EXPORT_SYMBOL_GPL(sym)          _EXPORT_SYMBOL(sym, "_gpl")
+         |                                         ^~~~~~~~~~~~~~
+   drivers/ata/pata_platform.c:183:1: note: in expansion of macro 'EXPORT_SYMBOL_GPL'
+     183 | EXPORT_SYMBOL_GPL(__pata_platform_probe);
+         | ^~~~~~~~~~~~~~~~~
+   In file included from drivers/ata/pata_platform.c:21:
+   include/linux/ata_platform.h:16:12: note: previous declaration of '__pata_platform_probe' with type 'int(struct device *, struct resource *, struct resource *, struct resource *, unsigned int,  int,  struct scsi_host_template *, bool)' {aka 'int(struct device *, struct resource *, struct resource *, struct resource *, unsigned int,  int,  struct scsi_host_template *, _Bool)'}
+      16 | extern int __pata_platform_probe(struct device *dev,
+         |            ^~~~~~~~~~~~~~~~~~~~~
+
+
+vim +97 drivers/ata/pata_platform.c
+
+a20c9e820864e1 Paul Mundt         2006-10-27   67  
+a20c9e820864e1 Paul Mundt         2006-10-27   68  /**
+cf03613e9662c2 Anton Vorontsov    2008-01-09   69   *	__pata_platform_probe		-	attach a platform interface
+cf03613e9662c2 Anton Vorontsov    2008-01-09   70   *	@dev: device
+cf03613e9662c2 Anton Vorontsov    2008-01-09   71   *	@io_res: Resource representing I/O base
+cf03613e9662c2 Anton Vorontsov    2008-01-09   72   *	@ctl_res: Resource representing CTL base
+cf03613e9662c2 Anton Vorontsov    2008-01-09   73   *	@irq_res: Resource representing IRQ and its flags
+cf03613e9662c2 Anton Vorontsov    2008-01-09   74   *	@ioport_shift: I/O port shift
+cf03613e9662c2 Anton Vorontsov    2008-01-09   75   *	@__pio_mask: PIO mask
+17263905399471 Akinobu Mita       2015-01-29   76   *	@sht: scsi_host_template to use when registering
+f3d5e4f18dba18 Alexander Shiyan   2019-01-19   77   *	@use16bit: Flag to indicate 16-bit IO instead of 32-bit
+a20c9e820864e1 Paul Mundt         2006-10-27   78   *
+a20c9e820864e1 Paul Mundt         2006-10-27   79   *	Register a platform bus IDE interface. Such interfaces are PIO and we
+a20c9e820864e1 Paul Mundt         2006-10-27   80   *	assume do not support IRQ sharing.
+a20c9e820864e1 Paul Mundt         2006-10-27   81   *
+f7fc0ceb4d72ea Paul Mundt         2007-11-08   82   *	Platform devices are expected to contain at least 2 resources per port:
+a20c9e820864e1 Paul Mundt         2006-10-27   83   *
+a20c9e820864e1 Paul Mundt         2006-10-27   84   *		- I/O Base (IORESOURCE_IO or IORESOURCE_MEM)
+a20c9e820864e1 Paul Mundt         2006-10-27   85   *		- CTL Base (IORESOURCE_IO or IORESOURCE_MEM)
+f7fc0ceb4d72ea Paul Mundt         2007-11-08   86   *
+f7fc0ceb4d72ea Paul Mundt         2007-11-08   87   *	and optionally:
+f7fc0ceb4d72ea Paul Mundt         2007-11-08   88   *
+a20c9e820864e1 Paul Mundt         2006-10-27   89   *		- IRQ	   (IORESOURCE_IRQ)
+a20c9e820864e1 Paul Mundt         2006-10-27   90   *
+a20c9e820864e1 Paul Mundt         2006-10-27   91   *	If the base resources are both mem types, the ioremap() is handled
+a20c9e820864e1 Paul Mundt         2006-10-27   92   *	here. For IORESOURCE_IO, it's assumed that there's no remapping
+a20c9e820864e1 Paul Mundt         2006-10-27   93   *	necessary.
+f7fc0ceb4d72ea Paul Mundt         2007-11-08   94   *
+f7fc0ceb4d72ea Paul Mundt         2007-11-08   95   *	If no IRQ resource is present, PIO polling mode is used instead.
+a20c9e820864e1 Paul Mundt         2006-10-27   96   */
+0ec24914675c48 Greg Kroah-Hartman 2012-12-21  @97  int __pata_platform_probe(struct device *dev, struct resource *io_res,
+0ec24914675c48 Greg Kroah-Hartman 2012-12-21   98  			  struct resource *ctl_res, struct resource *irq_res,
+17263905399471 Akinobu Mita       2015-01-29   99  			  unsigned int ioport_shift, int __pio_mask,
+24ce874bd15b6e Bart Van Assche    2022-08-09  100  			  const struct scsi_host_template *sht, bool use16bit)
+a20c9e820864e1 Paul Mundt         2006-10-27  101  {
+5d728824efeda6 Tejun Heo          2007-04-17  102  	struct ata_host *host;
+5d728824efeda6 Tejun Heo          2007-04-17  103  	struct ata_port *ap;
+a20c9e820864e1 Paul Mundt         2006-10-27  104  	unsigned int mmio;
+cf03613e9662c2 Anton Vorontsov    2008-01-09  105  	int irq = 0;
+cf03613e9662c2 Anton Vorontsov    2008-01-09  106  	int irq_flags = 0;
+a20c9e820864e1 Paul Mundt         2006-10-27  107  
+a20c9e820864e1 Paul Mundt         2006-10-27  108  	/*
+a20c9e820864e1 Paul Mundt         2006-10-27  109  	 * Check for MMIO
+a20c9e820864e1 Paul Mundt         2006-10-27  110  	 */
+a20c9e820864e1 Paul Mundt         2006-10-27  111  	mmio = (( io_res->flags == IORESOURCE_MEM) &&
+a20c9e820864e1 Paul Mundt         2006-10-27  112  		(ctl_res->flags == IORESOURCE_MEM));
+a20c9e820864e1 Paul Mundt         2006-10-27  113  
+f7fc0ceb4d72ea Paul Mundt         2007-11-08  114  	/*
+f7fc0ceb4d72ea Paul Mundt         2007-11-08  115  	 * And the IRQ
+f7fc0ceb4d72ea Paul Mundt         2007-11-08  116  	 */
+cf03613e9662c2 Anton Vorontsov    2008-01-09  117  	if (irq_res && irq_res->start > 0) {
+cf03613e9662c2 Anton Vorontsov    2008-01-09  118  		irq = irq_res->start;
+baac9ce1f33326 Alexander Shiyan   2019-01-19  119  		irq_flags = (irq_res->flags & IRQF_TRIGGER_MASK) | IRQF_SHARED;
+cf03613e9662c2 Anton Vorontsov    2008-01-09  120  	}
+f7fc0ceb4d72ea Paul Mundt         2007-11-08  121  
+a20c9e820864e1 Paul Mundt         2006-10-27  122  	/*
+a20c9e820864e1 Paul Mundt         2006-10-27  123  	 * Now that that's out of the way, wire up the port..
+a20c9e820864e1 Paul Mundt         2006-10-27  124  	 */
+cf03613e9662c2 Anton Vorontsov    2008-01-09  125  	host = ata_host_alloc(dev, 1);
+5d728824efeda6 Tejun Heo          2007-04-17  126  	if (!host)
+5d728824efeda6 Tejun Heo          2007-04-17  127  		return -ENOMEM;
+5d728824efeda6 Tejun Heo          2007-04-17  128  	ap = host->ports[0];
+5d728824efeda6 Tejun Heo          2007-04-17  129  
+f3d5e4f18dba18 Alexander Shiyan   2019-01-19  130  	ap->ops = devm_kzalloc(dev, sizeof(*ap->ops), GFP_KERNEL);
+9b6d90e2085ca2 Zhou Qingyang      2022-01-25  131  	if (!ap->ops)
+9b6d90e2085ca2 Zhou Qingyang      2022-01-25  132  		return -ENOMEM;
+f3d5e4f18dba18 Alexander Shiyan   2019-01-19  133  	ap->ops->inherits = &ata_sff_port_ops;
+f3d5e4f18dba18 Alexander Shiyan   2019-01-19  134  	ap->ops->cable_detect = ata_cable_unknown;
+f3d5e4f18dba18 Alexander Shiyan   2019-01-19  135  	ap->ops->set_mode = pata_platform_set_mode;
+f3d5e4f18dba18 Alexander Shiyan   2019-01-19  136  	if (use16bit)
+f3d5e4f18dba18 Alexander Shiyan   2019-01-19  137  		ap->ops->sff_data_xfer = ata_sff_data_xfer;
+f3d5e4f18dba18 Alexander Shiyan   2019-01-19  138  	else
+f3d5e4f18dba18 Alexander Shiyan   2019-01-19  139  		ap->ops->sff_data_xfer = ata_sff_data_xfer32;
+f3d5e4f18dba18 Alexander Shiyan   2019-01-19  140  
+cf03613e9662c2 Anton Vorontsov    2008-01-09  141  	ap->pio_mask = __pio_mask;
+5d728824efeda6 Tejun Heo          2007-04-17  142  	ap->flags |= ATA_FLAG_SLAVE_POSS;
+a20c9e820864e1 Paul Mundt         2006-10-27  143  
+f7fc0ceb4d72ea Paul Mundt         2007-11-08  144  	/*
+f7fc0ceb4d72ea Paul Mundt         2007-11-08  145  	 * Use polling mode if there's no IRQ
+f7fc0ceb4d72ea Paul Mundt         2007-11-08  146  	 */
+f7fc0ceb4d72ea Paul Mundt         2007-11-08  147  	if (!irq) {
+f7fc0ceb4d72ea Paul Mundt         2007-11-08  148  		ap->flags |= ATA_FLAG_PIO_POLLING;
+f7fc0ceb4d72ea Paul Mundt         2007-11-08  149  		ata_port_desc(ap, "no IRQ, using PIO polling");
+f7fc0ceb4d72ea Paul Mundt         2007-11-08  150  	}
+f7fc0ceb4d72ea Paul Mundt         2007-11-08  151  
+a20c9e820864e1 Paul Mundt         2006-10-27  152  	/*
+a20c9e820864e1 Paul Mundt         2006-10-27  153  	 * Handle the MMIO case
+a20c9e820864e1 Paul Mundt         2006-10-27  154  	 */
+a20c9e820864e1 Paul Mundt         2006-10-27  155  	if (mmio) {
+cf03613e9662c2 Anton Vorontsov    2008-01-09  156  		ap->ioaddr.cmd_addr = devm_ioremap(dev, io_res->start,
+041b5eac254107 Julia Lawall       2009-08-06  157  				resource_size(io_res));
+cf03613e9662c2 Anton Vorontsov    2008-01-09  158  		ap->ioaddr.ctl_addr = devm_ioremap(dev, ctl_res->start,
+041b5eac254107 Julia Lawall       2009-08-06  159  				resource_size(ctl_res));
+a20c9e820864e1 Paul Mundt         2006-10-27  160  	} else {
+cf03613e9662c2 Anton Vorontsov    2008-01-09  161  		ap->ioaddr.cmd_addr = devm_ioport_map(dev, io_res->start,
+041b5eac254107 Julia Lawall       2009-08-06  162  				resource_size(io_res));
+cf03613e9662c2 Anton Vorontsov    2008-01-09  163  		ap->ioaddr.ctl_addr = devm_ioport_map(dev, ctl_res->start,
+041b5eac254107 Julia Lawall       2009-08-06  164  				resource_size(ctl_res));
+0d5ff566779f89 Tejun Heo          2007-02-01  165  	}
+5d728824efeda6 Tejun Heo          2007-04-17  166  	if (!ap->ioaddr.cmd_addr || !ap->ioaddr.ctl_addr) {
+cf03613e9662c2 Anton Vorontsov    2008-01-09  167  		dev_err(dev, "failed to map IO/CTL base\n");
+0d5ff566779f89 Tejun Heo          2007-02-01  168  		return -ENOMEM;
+a20c9e820864e1 Paul Mundt         2006-10-27  169  	}
+a20c9e820864e1 Paul Mundt         2006-10-27  170  
+5d728824efeda6 Tejun Heo          2007-04-17  171  	ap->ioaddr.altstatus_addr = ap->ioaddr.ctl_addr;
+a20c9e820864e1 Paul Mundt         2006-10-27  172  
+cf03613e9662c2 Anton Vorontsov    2008-01-09  173  	pata_platform_setup_port(&ap->ioaddr, ioport_shift);
+a20c9e820864e1 Paul Mundt         2006-10-27  174  
+cbcdd87593a1d8 Tejun Heo          2007-08-18  175  	ata_port_desc(ap, "%s cmd 0x%llx ctl 0x%llx", mmio ? "mmio" : "ioport",
+cbcdd87593a1d8 Tejun Heo          2007-08-18  176  		      (unsigned long long)io_res->start,
+cbcdd87593a1d8 Tejun Heo          2007-08-18  177  		      (unsigned long long)ctl_res->start);
+cbcdd87593a1d8 Tejun Heo          2007-08-18  178  
+5d728824efeda6 Tejun Heo          2007-04-17  179  	/* activate */
+9363c3825ea9ad Tejun Heo          2008-04-07  180  	return ata_host_activate(host, irq, irq ? ata_sff_interrupt : NULL,
+17263905399471 Akinobu Mita       2015-01-29  181  				 irq_flags, sht);
+a20c9e820864e1 Paul Mundt         2006-10-27  182  }
+cf03613e9662c2 Anton Vorontsov    2008-01-09  183  EXPORT_SYMBOL_GPL(__pata_platform_probe);
+a20c9e820864e1 Paul Mundt         2006-10-27  184  
+
+:::::: The code at line 97 was first introduced by commit
+:::::: 0ec24914675c48213378da550db494bf154f0f6c Drivers: ata: remove __dev* attributes.
+
+:::::: TO: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+:::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
 -- 
-2.17.1
-
+0-DAY CI Kernel Test Service
+https://01.org/lkp

@@ -2,184 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 597EF5919E6
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 12:40:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B5245919EB
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 12:46:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239311AbiHMKkK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 06:40:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52592 "EHLO
+        id S239217AbiHMKpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 06:45:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237459AbiHMKkI (ORCPT
+        with ESMTP id S239331AbiHMKpK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 06:40:08 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A590F25C4A
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 03:40:07 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id uj29so5876754ejc.0
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 03:40:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:from:to:cc;
-        bh=8IUQPskIBgl2mxmBjoABlVJ2op5dkg7LRpx+HWgTYo8=;
-        b=N73fR19aF/uGttZDGKgdAcjssjhbHLkqOjN0ks0acFHejh5GlEAiIa7j9G3kiNySAg
-         4sJoWZylTfSVzpY//FmT63XVNpW00sStn6QYnhiJoa19xs4Ii7c32LoxPjMsydpnnKHO
-         KmQTwT8gvGpgM1zPFOlqME90UMrsp+CEEtEnFjyQ3lYb0TXBXde8ECEruQgBnlil5AFS
-         pT/jw/9IyweUtnp5L7i3Rno9sq22HWJX8TabfLZKiHSEfYADDFYEKJk57jdVID/f5gOf
-         wdCDUIww6fwb0mfh6AXRLwcnir83qgCzZouYfaYK5ldQR+cCVfhmjKiRGR33dFM2Pt9f
-         tQNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:x-gm-message-state:from:to:cc;
-        bh=8IUQPskIBgl2mxmBjoABlVJ2op5dkg7LRpx+HWgTYo8=;
-        b=7SEtOWOPJcfdG8QV7BJaHvqmmhBdZtjc/Mn9ObmI9SiObrGILgMKccDlyoED1dOKwK
-         vEbx2p1NRYi1gLJQCXKtjfbggTjOO7wVnRxvvli+uuLle1HU1vwz2pWQtVw1kH313KTr
-         QtF5UJqLBeSuY96O9sXdGr5f/Yz4m8ls1oVchDQSXNxhjPPRNs/6IixmORGz3w2nqU8K
-         4O4PwwEdNIwRdnXUPJwAXxo4xkhhy9VG/MUOT1xjPCMYPUZQIJkilCwR7W49VRlJZkgC
-         /DxrdUn2oxCtE2e8TjY0+8g7UcahPDWgZ4altC+BrDFCFlLD+FZAHQlCu9rUH9sw7lY/
-         Vnkg==
-X-Gm-Message-State: ACgBeo26rqbTSKMcmV1BXmzfPZHDH1Sy6xg8QsUIVNuplRu4Bep50DET
-        ei5xSxOsJANKSLtEx9RsAHU=
-X-Google-Smtp-Source: AA6agR4aSmrBHm+YH8JqP3eRoTC/XiGWApBdQewBdIFm4mqVFtpjmw+jdIXOh7QCAcJGUWADKQw7NQ==
-X-Received: by 2002:a17:906:8a6c:b0:730:a322:6f69 with SMTP id hy12-20020a1709068a6c00b00730a3226f69mr5095188ejc.585.1660387206095;
-        Sat, 13 Aug 2022 03:40:06 -0700 (PDT)
-Received: from gmail.com (84-236-113-143.pool.digikabel.hu. [84.236.113.143])
-        by smtp.gmail.com with ESMTPSA id e8-20020a170906080800b007309d640484sm1735948ejd.91.2022.08.13.03.40.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Aug 2022 03:40:05 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Sat, 13 Aug 2022 12:40:03 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        Borislav Petkov <bp@alien8.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, x86@kernel.org
-Subject: [GIT PULL] x86 fix
-Message-ID: <Yvd/g8RODN/pSkCX@gmail.com>
+        Sat, 13 Aug 2022 06:45:10 -0400
+Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8644627FF9;
+        Sat, 13 Aug 2022 03:45:09 -0700 (PDT)
+Date:   Sat, 13 Aug 2022 10:44:49 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1660387504; x=1660646704;
+        bh=mr68/NsAdXC+G9X9bG8jF/vpINHVnEQJpv90ExGKKdA=;
+        h=Date:To:From:Cc:Reply-To:Subject:Message-ID:In-Reply-To:
+         References:Feedback-ID:From:To:Cc:Date:Subject:Reply-To:
+         Feedback-ID:Message-ID;
+        b=sPTb7QdnrMFKFLTxJiv9LuHcKHXbKBlTYsJHejRrkAUAV5Vmpih9IN1+QZNDG4Za3
+         ImsN0zxdTjD0AmiHohdOyBA42ulCa+cMR9Y6Nxed8ee01z7X6JNvTazf9IV9xakLI+
+         LuQ31sYYBz1r1Y5kW+7lFK2CP7jprsDtqME8lSzDjeGTmWUSyIuChl06+HxZrpU667
+         I/y763WUz1i4bHA3C9TXJLiw4rl1M7rUKhGEBknQMjZDRKDgn64BpeaVfDqsGKpGBh
+         PQzjAZVRAUkXlpN8MvfKyaxXE/1jB0OYtWhXTc7yZ/YsOvP3g42wjJocCdFu0Oej0F
+         RKC+f4Dekb9Aw==
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+From:   Yassine Oudjana <y.oudjana@protonmail.com>
+Cc:     Miles Chen <miles.chen@mediatek.com>, yassine.oudjana@gmail.com,
+        bgolaszewski@baylibre.com, chun-jie.chen@mediatek.com,
+        devicetree@vger.kernel.org, ikjn@chromium.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        matthias.bgg@gmail.com, mturquette@baylibre.com,
+        p.zabel@pengutronix.de, robh+dt@kernel.org, sam.shih@mediatek.com,
+        sboyd@kernel.org, tinghan.shen@mediatek.com, weiyi.lu@mediatek.com,
+        wenst@chromium.org, ~postmarketos/upstreaming@lists.sr.ht
+Reply-To: Yassine Oudjana <y.oudjana@protonmail.com>
+Subject: Re: [PATCH v2 4/4] clk: mediatek: Add drivers for MediaTek MT6735 main clock drivers
+Message-ID: <lAB8fLfWTwUu6FUqPZWoKNEC0ZPYHnvo05u6BGriYQVjanlTzorHaZAflEbzoml-0UVZe-02r6CfzKwGdBCp7E0YeT_hF86P26r-Zeivda4=@protonmail.com>
+In-Reply-To: <c7b98ee4-cd4f-d7b7-726d-1acd4fafd50a@collabora.com>
+References: <NJC6CR.M4CF312LSXXV1@gmail.com> <20220520093501.28758-1-miles.chen@mediatek.com> <c7b98ee4-cd4f-d7b7-726d-1acd4fafd50a@collabora.com>
+Feedback-ID: 6882736:user:proton
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=2.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        RISK_FREE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+On Friday, May 20th, 2022 at 11:26 AM, AngeloGioacchino Del Regno <angelogi=
+oacchino.delregno@collabora.com> wrote:
 
-Please pull the latest x86/urgent git tree from:
+> Il 20/05/22 11:35, Miles Chen ha scritto:
+>
+> > > > Thanks for submitting this patch.
+> > > >
+> > > > I compare this with drivers/clk/mediatek/clk-mt7986-apmixed.c,
+> > > > and other clk files are using macros to make the mtk_pll_data array
+> > > > more readable.
+> > >
+> > > I'd actually argue that macros make it less readable. While reading
+> > > other drivers I had a lot of trouble figuring out which argument
+> > > is which field of the struct, and had to constantly go back to the
+> > > macro definitions and count arguments to find it. Having it this
+> > > way, each value is labeled clearly with the field it's in. I think
+> > > the tradeoff between line count and readability here is worth it.
+> >
+> > It is easier for multiple developers to work together if we have a comm=
+on style.
+> >
+> > How do you think?
+>
+>
+> In my opinion, Yassine is definitely right about this one: unrolling thes=
+e macros
+> will make the code more readable, even though this has the side effect of=
+ making
+> it bigger in the source code form (obviously, when compiled, it's going t=
+o be the
+> exact same size).
+>
+> I wouldn't mind getting this clock driver in without the usage of macros,=
+ as much
+> as I wouldn't mind converting all of the existing drivers to open-code ev=
+erything
+> instead of using macros that you have to find in various headers... this =
+practice
+> was done in multiple drivers (clock or elsewhere), so I don't think that =
+it would
+> actually be a bad idea to do it here on MediaTek too, even though I'm not=
+ aware of
+> any rule that may want us to do that: if you check across drivers/clk/*, =
+there's
+> a big split in how drivers are made, where some are using macros (davinci=
+, renesas,
+> samsung, sprd, etc), and some are not (bcm, sunxi-ng, qcom, tegra, versat=
+ile, etc),
+> so it's really "do it as you wish"...
+>
+> ... but:
+>
+> Apart from that, I also don't think that it is a good idea to convert the=
+ other
+> MTK clock drivers right now, as this would make the upstreaming of MediaT=
+ek clock
+> drivers harder for some of the community in this moment... especially whe=
+n we look
+> at how many MTK SoCs are out there in the wild, and how many we have upst=
+ream:
+> something like 10% of them, or less.
+>
+> I see the huge benefit of having a bigger community around MediaTek platf=
+orms as
+> that's beneficial to get a way better support and solidity for all SoCs a=
+s they
+> are sharing the same drivers and same framework, and expanding the suppor=
+t to more
+> of them will only make it better with highly valuable community contribut=
+ions.
+>
+>
+> That said, Yassine, you should've understood that you have my full suppor=
+t on
+> unrolling these macros - but it's not time to do that yet: you definitely=
+ know
+> that MediaTek clock drivers are going through a big cleanup phase which i=
+s, at
+> this point, unavoidable... if we are able to get the aid of scripts (cocc=
+i and
+> others), that will make our life easier in this cleanup, and will also ma=
+ke us
+> able to perform the entire cleanup with less effort and in less overall t=
+ime.
+>
+> With that, I'm sad but I have to support Miles' decision on this one, and=
+ I also
+> have to ask you to use macros in this driver.
 
-   git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86-urgent-2022-08-13
+I'm picking up this series again now after taking a long break to allow for
+ongoing cleanup and refactoring work to settle down. I was going to make th=
+is
+change but then I couldn't find the PLL macro defined in any common header.
+It seems that it is defined in every driver that uses it, with slight varia=
+tions
+in some of them. Should I just do the same, or would it be better to define=
+ it
+in clk-pll.h? Also, would now be a good time to unroll the macros in all dr=
+ivers,
+or is it still too soon?
 
-   # HEAD: e6cfcdda8cbe81eaf821c897369a65fec987b404 x86/bugs: Enable STIBP for IBPB mitigated RETBleed
+Another thing: Since I've been out of touch with the cleanup work for a whi=
+le,
+it would be great if someone makes me aware of any pending cleanup patches =
+that
+I should know of so that I base my patches on them and avoid duplicating wo=
+rk.
 
-Fix the "IBPB mitigated RETBleed" mode of operation on AMD CPUs
-(not turned on by default), which also need STIBP enabled (if
-available) to be '100% safe' on even the shortest speculation
-windows.
-
- Thanks,
-
-	Ingo
-
------------------->
-Kim Phillips (1):
-      x86/bugs: Enable STIBP for IBPB mitigated RETBleed
-
-
- Documentation/admin-guide/kernel-parameters.txt | 29 ++++++++++++++++++-------
- arch/x86/kernel/cpu/bugs.c                      | 10 +++++----
- 2 files changed, 27 insertions(+), 12 deletions(-)
-
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 5e9147fe8968..523b19624026 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -5209,20 +5209,33 @@
- 			Speculative Code Execution with Return Instructions)
- 			vulnerability.
- 
-+			AMD-based UNRET and IBPB mitigations alone do not stop
-+			sibling threads from influencing the predictions of other
-+			sibling threads. For that reason, STIBP is used on pro-
-+			cessors that support it, and mitigate SMT on processors
-+			that don't.
-+
- 			off          - no mitigation
- 			auto         - automatically select a migitation
- 			auto,nosmt   - automatically select a mitigation,
- 				       disabling SMT if necessary for
- 				       the full mitigation (only on Zen1
- 				       and older without STIBP).
--			ibpb	     - mitigate short speculation windows on
--				       basic block boundaries too. Safe, highest
--				       perf impact.
--			unret        - force enable untrained return thunks,
--				       only effective on AMD f15h-f17h
--				       based systems.
--			unret,nosmt  - like unret, will disable SMT when STIBP
--			               is not available.
-+			ibpb         - On AMD, mitigate short speculation
-+				       windows on basic block boundaries too.
-+				       Safe, highest perf impact. It also
-+				       enables STIBP if present. Not suitable
-+				       on Intel.
-+			ibpb,nosmt   - Like "ibpb" above but will disable SMT
-+				       when STIBP is not available. This is
-+				       the alternative for systems which do not
-+				       have STIBP.
-+			unret        - Force enable untrained return thunks,
-+				       only effective on AMD f15h-f17h based
-+				       systems.
-+			unret,nosmt  - Like unret, but will disable SMT when STIBP
-+				       is not available. This is the alternative for
-+				       systems which do not have STIBP.
- 
- 			Selecting 'auto' will choose a mitigation method at run
- 			time according to the CPU.
-diff --git a/arch/x86/kernel/cpu/bugs.c b/arch/x86/kernel/cpu/bugs.c
-index 6761668100b9..d50686ca5870 100644
---- a/arch/x86/kernel/cpu/bugs.c
-+++ b/arch/x86/kernel/cpu/bugs.c
-@@ -152,7 +152,7 @@ void __init check_bugs(void)
- 	/*
- 	 * spectre_v2_user_select_mitigation() relies on the state set by
- 	 * retbleed_select_mitigation(); specifically the STIBP selection is
--	 * forced for UNRET.
-+	 * forced for UNRET or IBPB.
- 	 */
- 	spectre_v2_user_select_mitigation();
- 	ssb_select_mitigation();
-@@ -1179,7 +1179,8 @@ spectre_v2_user_select_mitigation(void)
- 	    boot_cpu_has(X86_FEATURE_AMD_STIBP_ALWAYS_ON))
- 		mode = SPECTRE_V2_USER_STRICT_PREFERRED;
- 
--	if (retbleed_mitigation == RETBLEED_MITIGATION_UNRET) {
-+	if (retbleed_mitigation == RETBLEED_MITIGATION_UNRET ||
-+	    retbleed_mitigation == RETBLEED_MITIGATION_IBPB) {
- 		if (mode != SPECTRE_V2_USER_STRICT &&
- 		    mode != SPECTRE_V2_USER_STRICT_PREFERRED)
- 			pr_info("Selecting STIBP always-on mode to complement retbleed mitigation\n");
-@@ -2320,10 +2321,11 @@ static ssize_t srbds_show_state(char *buf)
- 
- static ssize_t retbleed_show_state(char *buf)
- {
--	if (retbleed_mitigation == RETBLEED_MITIGATION_UNRET) {
-+	if (retbleed_mitigation == RETBLEED_MITIGATION_UNRET ||
-+	    retbleed_mitigation == RETBLEED_MITIGATION_IBPB) {
- 	    if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD &&
- 		boot_cpu_data.x86_vendor != X86_VENDOR_HYGON)
--		    return sprintf(buf, "Vulnerable: untrained return thunk on non-Zen uarch\n");
-+		    return sprintf(buf, "Vulnerable: untrained return thunk / IBPB on non-AMD based uarch\n");
- 
- 	    return sprintf(buf, "%s; SMT %s\n",
- 			   retbleed_strings[retbleed_mitigation],
+> ...

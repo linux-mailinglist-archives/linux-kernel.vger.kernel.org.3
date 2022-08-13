@@ -2,192 +2,278 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAFD7591C12
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 19:04:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27554591C13
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 19:04:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239839AbiHMRDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 13:03:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35196 "EHLO
+        id S239785AbiHMREb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 13:04:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236482AbiHMRDk (ORCPT
+        with ESMTP id S236482AbiHMRE2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 13:03:40 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CCE3627D;
-        Sat, 13 Aug 2022 10:03:37 -0700 (PDT)
+        Sat, 13 Aug 2022 13:04:28 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AADE62C6
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 10:04:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1660410217; x=1691946217;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=gnnW6ETQuZxUWI9ILGit84WOmjm169dqeZGvOKwAJts=;
-  b=DzVFQP4lH74tKWnpJFHLbxhgFIu4nTxkvM0FsPs1LlZu9Ek+jCQnYG8Q
-   Z8ZxMFiOgbYKfUkKiFd9iv14Inv8z/xpqYSXfy7/4EZCJ9QTu+EO30R52
-   R7hfVhRn8CH0dkPs1+mYg8bRdBlHF64S1sKpslyhjn0ExDXLfpT3CpLeN
-   5vBzdZTxxmzRRYxwB8wPriCe5NMS1Da04raVHxAflmXd2A0nFd8+mTCgD
-   0/OMaoTW1z40tgpx8fznB/ritPp0zRKS6QL89CuuhNlysFHBbAEZNg5aZ
-   gA6D8LTCAJCnD3p7ZyLtk4L/DhGeu3nBgmSSdvtES2IW496m0V8CNiNvd
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660410267; x=1691946267;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ZpoYR05WUTkDSdKnEvxsVSUi0VfCnLw/lr38DEc3SxE=;
+  b=gZfBvw2szr2xjFC3skFoajytipY8TcgAmZkC39mZQrqdDUi3v0Gym/qp
+   D5/BJvsQU9pzoCL5beeR7BgleviNXVvRpb9vYwDorP177FIZ3bqN95/gI
+   88dr26JgcDOREVC9L9KzeOB7yKfwyN4+y3cKTDhmteuv7Y4dzz9RGWDDP
+   muqFF5af41Wg8IPTchFg1/tyl6EcKmzyspsBND6hdspteE25ty/+8JBnS
+   3CAnLsRJtLbNH9i6wUYGCwEl+wCteUWTQPDDFLFyyp75wIMoLsJKGYidu
+   obZ+JGvbpvOIJdgL5P2bhu0OsvJfnqr9sdkgkufbZxEi59a4rV+mYIU4T
    Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="278720919"
 X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
-   d="scan'208";a="176267796"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 13 Aug 2022 10:03:36 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Sat, 13 Aug 2022 10:03:36 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
- email.microchip.com (10.10.87.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12 via Frontend Transport; Sat, 13 Aug 2022 10:03:36 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=c0+8Gdd6uBppBQesRSFbFst17As/ogcjDX/N8OEtmpOx5v0QUFN1VBjvQdrqDx7qyJgxFUQXmW7syr/IpwjyVRaiQdszoILIMq/FL36XhVBHwnLb7zmIBo/bdhEoAYGMQsxNnPZMso21+eD06qWl38USrGaQVoM8rHny8BAIS2jN6OrIv+DxOjfd5/3RkBD65ltiP09y47thWMybWFeYLJ9782RVEPniIOO4jobIJXEGb4WhKV8sPhZ81aV5vZh1NttiZoa/DJz8oUBTNvzXnp0jzaDR3pHi0TDCpoOOt1USmkyv+w7ZYe5n7Nw9nbjHdPsVRoSjZb1nsWgaLwkcKQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gnnW6ETQuZxUWI9ILGit84WOmjm169dqeZGvOKwAJts=;
- b=aX9XbYb0vswfc1LbLq8FU8C+CMyqF9o9tc8k62oIopVQ9TjcguqWRbyliX72lNrwj7LXCPPadiKhRVOFjeH2uT/ZqWyyAUcjNhXjtWza+BYxTO1LiZp+Ga1mESrNK0e1+Qli5vSQAII+K92XeZAxLdDIvqgSZoD7j2aTcmqmCT5GDJMzRiIkOPiKpTTHgKsBABeyxvXL5JgPTgvr72bt5zHv11m6eEpO7bLHHFFtOnsURx35t6u5IefDceRYaRVI7zXVLoD4EQAUWDG/NPlgsuU8Xk3sdd61fDPDaMz62f5VssTy7CcOs487sCPU1AWkWFl5AWvYJ8A/zOh838YRDQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microchip.com; dmarc=pass action=none
- header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=microchiptechnology.onmicrosoft.com;
- s=selector2-microchiptechnology-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gnnW6ETQuZxUWI9ILGit84WOmjm169dqeZGvOKwAJts=;
- b=Sm6BkIXwLO/24RsFKd7TKoy88u/bCxej4OKVYn2bsvIUT6aTXe9AvQzIlwClcACBgNTFnUYwu5BdZa/7rybtBD406mB5Vq1AHWe7qAQcne5qfAG/AgsIXbraeWpGYfOk+0poNeAF1htyiEUqD0/qhGJc9IOlIh3vZl0BG/qsuj4=
-Received: from CO1PR11MB5154.namprd11.prod.outlook.com (2603:10b6:303:99::15)
- by CY4PR1101MB2086.namprd11.prod.outlook.com (2603:10b6:910:1c::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.17; Sat, 13 Aug
- 2022 17:03:25 +0000
-Received: from CO1PR11MB5154.namprd11.prod.outlook.com
- ([fe80::ac89:75cd:26e0:51c3]) by CO1PR11MB5154.namprd11.prod.outlook.com
- ([fe80::ac89:75cd:26e0:51c3%8]) with mapi id 15.20.5525.011; Sat, 13 Aug 2022
- 17:03:25 +0000
-From:   <Conor.Dooley@microchip.com>
-To:     <rdunlap@infradead.org>, <linux-kernel@vger.kernel.org>
-CC:     <arnd@arndb.de>, <josh@joshtriplett.org>,
-        <paul.walmsley@sifive.com>, <palmer@dabbelt.com>,
-        <aou@eecs.berkeley.edu>, <linux-riscv@lists.infradead.org>,
-        <linux-api@vger.kernel.org>, <akpm@linux-foundation.org>,
-        <linux-mm@kvack.org>
-Subject: Re: [PATCH v2] kernel/sys_ni: add compat entry for fadvise64_64
-Thread-Topic: [PATCH v2] kernel/sys_ni: add compat entry for fadvise64_64
-Thread-Index: AQHYqqqKU1/CfoP7C0edtMKZS35Sga2tF90A
-Date:   Sat, 13 Aug 2022 17:03:25 +0000
-Message-ID: <03c5f897-d4e2-8408-6116-ad7619ca385d@microchip.com>
-References: <20220807220934.5689-1-rdunlap@infradead.org>
-In-Reply-To: <20220807220934.5689-1-rdunlap@infradead.org>
-Accept-Language: en-IE, en-US
-Content-Language: en-IE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microchip.com;
-x-ms-publictraffictype: Email
-x-ms-office365-filtering-correlation-id: 885b6399-3fd1-413f-4361-08da7d4dbc62
-x-ms-traffictypediagnostic: CY4PR1101MB2086:EE_
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: iDoxD0rPaCEFNTP/j0+6hgXUoV9xx+/misauFs9SvdRpWECeAZ5sIS0WRhghNOI/In3/Hft1hYKcR2bLDerzhTbmvZPCSZqTyqIJue6aLI8Y+rqLcLzjGlofoYMhLc0r0lj/zKBSndl0JyokUdEx3izHkK4mwHTuxFuq6r9mIi+Bh9Oln2kOjzsX6DumawcGbrJIFK1bIasDxOUjqR7GP9eq8IXOe/k+Ak+OCuRkMTQv3C8UXmRRd6+3eEYMgK+7UFpqOBiRCkbNOFnuCLeKCmr74vJieeac5puHXNfx15WLWlBbyRPffULWKFG7ODq85OB+qeUB7jk+b4zwcsUuMwzUxP6sA1ngfVHy0640edQzwG9twc4Fsa8fR5jWfzE/5Dqj65Pr6bYy5fEPowdodlQJCbkBHPDQNojO9/KHASFwizGW69eQBmSGKLwjIvYLck2rICLyqH5TMnEFYl/VNTkHGRI7ZJtISMEQFJ8qF9w+5uvs0inrwW1aI44bJ0PJZWCDMZ/Rt1+POBHBxIQB1fCTdxayxvpdBMLthO85fl0DGl5npibq3iRZbS6++aKKPk8dETSD0Cv1NBeqXAGBiCn3a6tljJYvvMerEIID6m8jRuZVzdqUvs770kSdwPdFhLHP0wr2k7FZSNEk6icBpMjeJjdfGcY+09pQ33pjTVcxD/wPBbUyoswB83FD0HwuI5p2y8y1knsJiKRzHgD6ju7EsdlxklAIfP2S7PKDpHHOJSGA8uqS72YD9akO4UbridSI7p9iVmIFhWeIytwC6nLj5UsKryaf3V79+4XkAx8MyQpHKrcNSU2Jdsx49ZVsKV8lZrYhTxFoSbsFCINhhCwoJ5n6B0hi6ARDKI7FQWWZknEewvZbDqSMAN6J15eG7m/BOmbbIs0CGrFlySQsCQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5154.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(396003)(346002)(39860400002)(136003)(376002)(366004)(54906003)(110136005)(8676002)(4326008)(966005)(6486002)(41300700001)(7416002)(5660300002)(186003)(31686004)(36756003)(6506007)(2906002)(53546011)(26005)(6512007)(2616005)(38070700005)(86362001)(31696002)(8936002)(83380400001)(76116006)(66946007)(66556008)(91956017)(71200400001)(64756008)(66446008)(66476007)(478600001)(316002)(122000001)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RmVWS0RETUYrWWRDZUhmODIvZEhBMzhCdC95YmhSaU55YklDRUdXL3RoVFlG?=
- =?utf-8?B?ZnpmcEFKcmYvalNnbHU4Y3d4eTNVbzE4UGpJMzdIMW1HRTdrTEo3TFVkYVZr?=
- =?utf-8?B?V0xNL2Q0VEgxRERNZEZ3MDFNNjFsR2FrRFhFcnFsSVdhd1VyQUVsOUJlYjEv?=
- =?utf-8?B?N00wekxkMml2T3BDS2RxdWlIdHhvdHVpdnhPdlUyNEFQTENUd2FoSDRhWEtR?=
- =?utf-8?B?WDhyazdPVGNhODdVUm44WTBOZEk2SnV3WTU4SHZRTGFKWSt0dnRBT0syN0xq?=
- =?utf-8?B?bE42QWJrWDVjeUgzd3JncTdnYjVpbkVhS0xFNjRQZzVRYmpoejh4NkxBc1dU?=
- =?utf-8?B?VDlBN1VKcDEwMUw2aG42Q3V2bTJDRWYzUmhFbjZyV2wrcGpNUXBIZWxuc2hy?=
- =?utf-8?B?Q2NHcHVPRk5BM3hGTU5CNkwzQkhHb1hIc0tUUy9QTzBxR0Vnc2R6MHA0V1lB?=
- =?utf-8?B?dWM1MGRrTGRHQkZyQTNTWDVleXFidGMzNkZ4aC9iRFYvdnAvOUZIckRheGtY?=
- =?utf-8?B?WXd3NnZEZ1JZYkNTWE91RmV4N2huV21pRXI4b2F3NnorZWdUVDRKWGlQN0Zx?=
- =?utf-8?B?N25mbmludE5MengzWW5iWXdtcUNMdGE3YmNXd0l3bmNLNUNUTnFJMzZLNk9x?=
- =?utf-8?B?Q2RWcVMveDRWRGpZbVErT2RoUjJ6bkU2Q2xzdjc4cVZFY0lZM3VyZTNqYnFI?=
- =?utf-8?B?eTVMNDRSRnZIdEl5cHJkQllqcDA1TW1MMjlLc2RWTlBWSEZoNTl1OFg3UWJp?=
- =?utf-8?B?TzZvZkdzTjVtZWM2TWFudjBYanlHVmlsQjdsUjB3NUp0MDI0WnVUcGlZSFFU?=
- =?utf-8?B?WXdtWFZyVjF0WDhXNlM1OHdrOGhxeHZBcklnbm5MbGhtU3QxN2VhaGZJNDRF?=
- =?utf-8?B?dzdMeElYeWZFVmZuemRQL3NEcjluNzc3dVRTT2Z6bnkwNmYySkVJUThRMGsy?=
- =?utf-8?B?R1pGeHEvWWNsUDY3N1VuQUp4TkdjMFFrVXlkZ1UvNU1qcXliNEdHSGJRZktT?=
- =?utf-8?B?ZkRTRnJiUy96a1BEeXIrTGhSYTNkV0RsTStidHIxaTZUYjZhWmN0MkFtSlFI?=
- =?utf-8?B?WlVYaUZOMEExNFY0NkdTL2IxZUNGNFFIMFpVUitpRHpMSzI3d0wrOXdYM2pY?=
- =?utf-8?B?VGRtd2JkVDY0NHdrY0NhTFUzN29pNXo3TElkK0V3NzdEeGVSRzFCaFQ2S0Za?=
- =?utf-8?B?bVVkeGdlZ0xEMTFVYnVVaGRIRDlvRzFyQmFWdkVIQ3F6c1IyVVRPN0ZCVlVz?=
- =?utf-8?B?UEs0dnRvcEl1Tk9NMk5IOHV3NUorNEg5SWU0NUVLQVNCak9XdmFQSW5yRVU3?=
- =?utf-8?B?M3MyZHlRcExTbjNYNUthYXI5VC9wRVh1RDBqNTRuZ1d1M1d2NXBJa0NmQ2NX?=
- =?utf-8?B?bzhVYU9JWXQrM1dGRmtyaWE2OENLcmJITmRPVXR5WUdQYTdLZEJCRDNYSklO?=
- =?utf-8?B?Q0REMTlZT0ZNcjVnK2RWeFFsYVg1ZWJVUkhuR0FLWXQybEIxMHdPNmUwc2tW?=
- =?utf-8?B?TmowRkQzNkdFV1dqVmlrS3NtRi9qeWwwMHJobS8rcHZjSkhGWFcxK2tic2J5?=
- =?utf-8?B?eDBBd1JldEllekxrTWZBdXVlVzFwREZOemNNWDh5RVQ3cEp3SGpwa1JMU0RU?=
- =?utf-8?B?d0tpUEd2aVZPZk9KbVJrMmxDanQ2ZWZma050eEZxcitmSzFKUk1Va0FDbXdZ?=
- =?utf-8?B?WksxOWxlQTFZVkNjdytvczlsM2NxWThIKzJZODlYWWh2cm9vNGFnbzhVSjgx?=
- =?utf-8?B?MkdhWm56cEl0UnFCbW1QblIxU3ZlMTRodFVtUjBCOElxTFUzaGM2eUNDSmxq?=
- =?utf-8?B?blR4K2NPTHJRdXpJUGhPRi8za0FIejFvU1hYNGtqZmN2YysxSkkrTzB0U09U?=
- =?utf-8?B?ZFAvaHkwbkM1cFl2RXllVVpFWWh3VWRMck9DcHo5YitIN3hJd3BwVXl3VWp5?=
- =?utf-8?B?cXpKWFZlK3NsT2h3ck9FZGVvanl5ZC9xak82U1FTdmpGNEY1ako4aHhFTWo2?=
- =?utf-8?B?U3FKb0VLeStxUlloZ0RXd3JYZzdNRVEyRXpUWDg0dGQxN2dWYll1UTV1bEI1?=
- =?utf-8?B?UXRqVGJjczFYT0QyMmVieUlKUkk4T0k0VUNWYkZBMSt3cXg4V2NzcnNGVlc2?=
- =?utf-8?Q?+Vkcv59pdTYOZSmkw3rw9FDpn?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <08585A0326D2B4438AA2EE541C09CE6F@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+   d="scan'208";a="278720919"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 10:04:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
+   d="scan'208";a="782253735"
+Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
+  by orsmga005.jf.intel.com with ESMTP; 13 Aug 2022 10:04:25 -0700
+Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oMuYi-0001tL-1O;
+        Sat, 13 Aug 2022 17:04:24 +0000
+Date:   Sun, 14 Aug 2022 01:03:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jiri Olsa <jolsa@kernel.org>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org
+Subject: [jolsa-perf:bpf/tracing_multi_new_2 4/21]
+ arch/arm64/net/bpf_jit_comp.c:1649:24: error: incomplete definition of type
+ 'struct bpf_tramp_link'
+Message-ID: <202208140107.9veo0Cp0-lkp@intel.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5154.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 885b6399-3fd1-413f-4361-08da7d4dbc62
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Aug 2022 17:03:25.2700
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Z2mjNPOAnR/LZmYjOkbzmQ7GLWVEE9E7ngqcAN0CzftQEpg9odZwAhlA+rtnsjEf4ODeP7TnsupWH3Qe+bE3CTPPpbkv4t/+ofrhmi2bi1Q=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR1101MB2086
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gMDcvMDgvMjAyMiAyMzowOSwgUmFuZHkgRHVubGFwIHdyb3RlOg0KPiBXaGVuIENPTkZJR19B
-RFZJU0VfU1lTQ0FMTFMgaXMgbm90IHNldC9lbmFibGVkIGFuZCBDT05GSUdfQ09NUEFUIGlzDQo+
-IHNldC9lbmFibGVkLCB0aGUgcmlzY3YgY29tcGF0X3N5c2NhbGxfdGFibGUgcmVmZXJlbmNlcw0K
-PiAnY29tcGF0X3N5c19mYWR2aXNlNjRfNjQnLCB3aGljaCBpcyBub3QgZGVmaW5lZDoNCj4gDQo+
-IHJpc2N2NjQtbGludXgtbGQ6IGFyY2gvcmlzY3Yva2VybmVsL2NvbXBhdF9zeXNjYWxsX3RhYmxl
-Lm86KC5yb2RhdGErMHg2ZjgpOg0KPiB1bmRlZmluZWQgcmVmZXJlbmNlIHRvIGBjb21wYXRfc3lz
-X2ZhZHZpc2U2NF82NCcNCj4gDQo+IEFkZCAnZmFkdmlzZTY0XzY0JyB0byBrZXJuZWwvc3lzX25p
-LmMgYXMgYSBjb25kaXRpb25hbCBDT01QQVQgZnVuY3Rpb24NCj4gc28gdGhhdCB3aGVuIENPTkZJ
-R19BRFZJU0VfU1lTQ0FMTFMgaXMgbm90IHNldCwgdGhlcmUgaXMgYSBmYWxsYmFjaw0KPiBmdW5j
-dGlvbiBhdmFpbGFibGUuDQoNCklzIHRoaXMgaW4gYSA2LjAgZGVzdGluZWQgdHJlZSBzb21ld2hl
-cmUgdGhhdCBJJ3ZlIG1pc3NlZD8NCkJ1bXBlZCBpbnRvIGl0IHdoaWxlIGxvb2tpbmcgYXQgYW4g
-dW5yZWxhdGVkIExLUCByYW5kY29uZmlnIGVycm9yLg0KRldJVzoNClRlc3RlZC1ieTogQ29ub3Ig
-RG9vbGV5IDxjb25vci5kb29sZXlAbWljcm9jaGlwLmNvbT4NClRoYW5rcywNCkNvbm9yLg0KDQo+
-IA0KPiBGaXhlczogZDNhYzIxY2FjYzI0ICgibW06IFN1cHBvcnQgY29tcGlsaW5nIG91dCBtYWR2
-aXNlIGFuZCBmYWR2aXNlIikNCj4gU2lnbmVkLW9mZi1ieTogUmFuZHkgRHVubGFwIDxyZHVubGFw
-QGluZnJhZGVhZC5vcmc+DQo+IFN1Z2dlc3RlZC1ieTogQXJuZCBCZXJnbWFubiA8YXJuZEBhcm5k
-Yi5kZT4NCj4gQ2M6IEpvc2ggVHJpcGxldHQgPGpvc2hAam9zaHRyaXBsZXR0Lm9yZz4NCj4gQ2M6
-IFBhdWwgV2FsbXNsZXkgPHBhdWwud2FsbXNsZXlAc2lmaXZlLmNvbT4NCj4gQ2M6IFBhbG1lciBE
-YWJiZWx0IDxwYWxtZXJAZGFiYmVsdC5jb20+DQo+IENjOiBBbGJlcnQgT3UgPGFvdUBlZWNzLmJl
-cmtlbGV5LmVkdT4NCj4gQ2M6IGxpbnV4LXJpc2N2QGxpc3RzLmluZnJhZGVhZC5vcmcNCj4gQ2M6
-IEFybmQgQmVyZ21hbm4gPGFybmRAYXJuZGIuZGU+DQo+IENjOiBsaW51eC1hcGlAdmdlci5rZXJu
-ZWwub3JnDQo+IENjOiBBbmRyZXcgTW9ydG9uIDxha3BtQGxpbnV4LWZvdW5kYXRpb24ub3JnPg0K
-PiBDYzogbGludXgtbW1Aa3ZhY2sub3JnDQo+IC0tLQ0KPiB2MjogcGF0Y2gga2VybmVsL3N5c19u
-aS5jIChmb3IgYW55IGFyY2gpIGluc3RlYWQgb2YgYXJjaC9yaXNjdidzDQo+ICAgICB1bmlzdGQu
-aCAoQXJuZCkNCj4gDQo+ICBrZXJuZWwvc3lzX25pLmMgfCAgICAxICsNCj4gIDEgZmlsZSBjaGFu
-Z2VkLCAxIGluc2VydGlvbigrKQ0KPiANCj4gLS0tIGEva2VybmVsL3N5c19uaS5jDQo+ICsrKyBi
-L2tlcm5lbC9zeXNfbmkuYw0KPiBAQCAtMjc3LDYgKzI3Nyw3IEBAIENPTkRfU1lTQ0FMTChsYW5k
-bG9ja19yZXN0cmljdF9zZWxmKTsNCj4gIA0KPiAgLyogbW0vZmFkdmlzZS5jICovDQo+ICBDT05E
-X1NZU0NBTEwoZmFkdmlzZTY0XzY0KTsNCj4gK0NPTkRfU1lTQ0FMTF9DT01QQVQoZmFkdmlzZTY0
-XzY0KTsNCj4gIA0KPiAgLyogbW0vLCBDT05GSUdfTU1VIG9ubHkgKi8NCj4gIENPTkRfU1lTQ0FM
-TChzd2Fwb24pOw0KPiANCj4gX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19fX19f
-X19fX19fX18NCj4gbGludXgtcmlzY3YgbWFpbGluZyBsaXN0DQo+IGxpbnV4LXJpc2N2QGxpc3Rz
-LmluZnJhZGVhZC5vcmcNCj4gaHR0cDovL2xpc3RzLmluZnJhZGVhZC5vcmcvbWFpbG1hbi9saXN0
-aW5mby9saW51eC1yaXNjdg0K
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git bpf/tracing_multi_new_2
+head:   c0620f064b5146578de80c7bb00febc697cc4890
+commit: 9b9520851a227843b7e43a337281093a5d13ca71 [4/21] bpf: Store trampoline progs in arrays
+config: arm64-randconfig-r011-20220804 (https://download.01.org/0day-ci/archive/20220814/202208140107.9veo0Cp0-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 26dd42705c2af0b8f6e5d6cdb32c9bd5ed9524eb)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git/commit/?id=9b9520851a227843b7e43a337281093a5d13ca71
+        git remote add jolsa-perf https://git.kernel.org/pub/scm/linux/kernel/git/jolsa/perf.git
+        git fetch --no-tags jolsa-perf bpf/tracing_multi_new_2
+        git checkout 9b9520851a227843b7e43a337281093a5d13ca71
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash arch/arm64/
+
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All errors (new ones prefixed by >>):
+
+   arch/arm64/net/bpf_jit_comp.c:1642:57: warning: declaration of 'struct bpf_tramp_link' will not be visible outside of this function [-Wvisibility]
+   static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
+                                                           ^
+>> arch/arm64/net/bpf_jit_comp.c:1649:24: error: incomplete definition of type 'struct bpf_tramp_link'
+           struct bpf_prog *p = l->link.prog;
+                                ~^
+   arch/arm64/net/bpf_jit_comp.c:1642:57: note: forward declaration of 'struct bpf_tramp_link'
+   static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
+                                                           ^
+   arch/arm64/net/bpf_jit_comp.c:1660:7: error: incomplete definition of type 'struct bpf_tramp_link'
+           if (l->cookie == 0) {
+               ~^
+   arch/arm64/net/bpf_jit_comp.c:1642:57: note: forward declaration of 'struct bpf_tramp_link'
+   static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
+                                                           ^
+   arch/arm64/net/bpf_jit_comp.c:1664:32: error: incomplete definition of type 'struct bpf_tramp_link'
+                   emit_a64_mov_i64(A64_R(10), l->cookie, ctx);
+                                               ~^
+   arch/arm64/net/bpf_jit_comp.c:1642:57: note: forward declaration of 'struct bpf_tramp_link'
+   static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
+                                                           ^
+   arch/arm64/net/bpf_jit_comp.c:1714:60: warning: declaration of 'struct bpf_tramp_links' will not be visible outside of this function [-Wvisibility]
+   static void invoke_bpf_mod_ret(struct jit_ctx *ctx, struct bpf_tramp_links *tl,
+                                                              ^
+   arch/arm64/net/bpf_jit_comp.c:1724:20: error: incomplete definition of type 'struct bpf_tramp_links'
+           for (i = 0; i < tl->nr_links; i++) {
+                           ~~^
+   arch/arm64/net/bpf_jit_comp.c:1714:60: note: forward declaration of 'struct bpf_tramp_links'
+   static void invoke_bpf_mod_ret(struct jit_ctx *ctx, struct bpf_tramp_links *tl,
+                                                              ^
+   arch/arm64/net/bpf_jit_comp.c:1725:26: error: incomplete definition of type 'struct bpf_tramp_links'
+                   invoke_bpf_prog(ctx, tl->links[i], args_off, retval_off,
+                                        ~~^
+   arch/arm64/net/bpf_jit_comp.c:1714:60: note: forward declaration of 'struct bpf_tramp_links'
+   static void invoke_bpf_mod_ret(struct jit_ctx *ctx, struct bpf_tramp_links *tl,
+                                                              ^
+   arch/arm64/net/bpf_jit_comp.c:1771:17: warning: declaration of 'struct bpf_tramp_links' will not be visible outside of this function [-Wvisibility]
+                                 struct bpf_tramp_links *tlinks, void *orig_call,
+                                        ^
+   arch/arm64/net/bpf_jit_comp.c:1783:42: error: subscript of pointer to incomplete type 'struct bpf_tramp_links'
+           struct bpf_tramp_links *fentry = &tlinks[BPF_TRAMP_FENTRY];
+                                             ~~~~~~^
+   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
+                                 struct bpf_tramp_links *tlinks, void *orig_call,
+                                        ^
+   arch/arm64/net/bpf_jit_comp.c:1784:41: error: subscript of pointer to incomplete type 'struct bpf_tramp_links'
+           struct bpf_tramp_links *fexit = &tlinks[BPF_TRAMP_FEXIT];
+                                            ~~~~~~^
+   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
+                                 struct bpf_tramp_links *tlinks, void *orig_call,
+                                        ^
+   arch/arm64/net/bpf_jit_comp.c:1785:44: error: subscript of pointer to incomplete type 'struct bpf_tramp_links'
+           struct bpf_tramp_links *fmod_ret = &tlinks[BPF_TRAMP_MODIFY_RETURN];
+                                               ~~~~~~^
+   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
+                                 struct bpf_tramp_links *tlinks, void *orig_call,
+                                        ^
+   arch/arm64/net/bpf_jit_comp.c:1889:24: error: incomplete definition of type 'struct bpf_tramp_links'
+           for (i = 0; i < fentry->nr_links; i++)
+                           ~~~~~~^
+   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
+                                 struct bpf_tramp_links *tlinks, void *orig_call,
+                                        ^
+   arch/arm64/net/bpf_jit_comp.c:1890:30: error: incomplete definition of type 'struct bpf_tramp_links'
+                   invoke_bpf_prog(ctx, fentry->links[i], args_off,
+                                        ~~~~~~^
+   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
+                                 struct bpf_tramp_links *tlinks, void *orig_call,
+                                        ^
+   arch/arm64/net/bpf_jit_comp.c:1894:14: error: incomplete definition of type 'struct bpf_tramp_links'
+           if (fmod_ret->nr_links) {
+               ~~~~~~~~^
+   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
+                                 struct bpf_tramp_links *tlinks, void *orig_call,
+                                        ^
+   arch/arm64/net/bpf_jit_comp.c:1895:30: error: incomplete definition of type 'struct bpf_tramp_links'
+                   branches = kcalloc(fmod_ret->nr_links, sizeof(u32 *),
+                                      ~~~~~~~~^
+   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
+                                 struct bpf_tramp_links *tlinks, void *orig_call,
+                                        ^
+   arch/arm64/net/bpf_jit_comp.c:1900:27: error: incompatible pointer types passing 'struct bpf_tramp_links *' to parameter of type 'struct bpf_tramp_links *' [-Werror,-Wincompatible-pointer-types]
+                   invoke_bpf_mod_ret(ctx, fmod_ret, args_off, retval_off,
+                                           ^~~~~~~~
+   arch/arm64/net/bpf_jit_comp.c:1714:77: note: passing argument to parameter 'tl' here
+   static void invoke_bpf_mod_ret(struct jit_ctx *ctx, struct bpf_tramp_links *tl,
+                                                                               ^
+   arch/arm64/net/bpf_jit_comp.c:1917:26: error: incomplete definition of type 'struct bpf_tramp_links'
+           for (i = 0; i < fmod_ret->nr_links && ctx->image != NULL; i++) {
+                           ~~~~~~~~^
+   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
+                                 struct bpf_tramp_links *tlinks, void *orig_call,
+                                        ^
+   arch/arm64/net/bpf_jit_comp.c:1922:23: error: incomplete definition of type 'struct bpf_tramp_links'
+           for (i = 0; i < fexit->nr_links; i++)
+                           ~~~~~^
+   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
+                                 struct bpf_tramp_links *tlinks, void *orig_call,
+                                        ^
+   arch/arm64/net/bpf_jit_comp.c:1923:29: error: incomplete definition of type 'struct bpf_tramp_links'
+                   invoke_bpf_prog(ctx, fexit->links[i], args_off, retval_off,
+                                        ~~~~~^
+   arch/arm64/net/bpf_jit_comp.c:1771:17: note: forward declaration of 'struct bpf_tramp_links'
+                                 struct bpf_tramp_links *tlinks, void *orig_call,
+
+
+vim +1649 arch/arm64/net/bpf_jit_comp.c
+
+b2ad54e1533e9144 Xu Kuohai 2022-07-11  1641  
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1642  static void invoke_bpf_prog(struct jit_ctx *ctx, struct bpf_tramp_link *l,
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1643  			    int args_off, int retval_off, int run_ctx_off,
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1644  			    bool save_ret)
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1645  {
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1646  	u32 *branch;
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1647  	u64 enter_prog;
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1648  	u64 exit_prog;
+efc9909fdce00a82 Xu Kuohai 2022-07-11 @1649  	struct bpf_prog *p = l->link.prog;
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1650  	int cookie_off = offsetof(struct bpf_tramp_run_ctx, bpf_cookie);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1651  
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1652  	if (p->aux->sleepable) {
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1653  		enter_prog = (u64)__bpf_prog_enter_sleepable;
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1654  		exit_prog = (u64)__bpf_prog_exit_sleepable;
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1655  	} else {
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1656  		enter_prog = (u64)__bpf_prog_enter;
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1657  		exit_prog = (u64)__bpf_prog_exit;
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1658  	}
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1659  
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1660  	if (l->cookie == 0) {
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1661  		/* if cookie is zero, one instruction is enough to store it */
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1662  		emit(A64_STR64I(A64_ZR, A64_SP, run_ctx_off + cookie_off), ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1663  	} else {
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1664  		emit_a64_mov_i64(A64_R(10), l->cookie, ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1665  		emit(A64_STR64I(A64_R(10), A64_SP, run_ctx_off + cookie_off),
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1666  		     ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1667  	}
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1668  
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1669  	/* save p to callee saved register x19 to avoid loading p with mov_i64
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1670  	 * each time.
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1671  	 */
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1672  	emit_addr_mov_i64(A64_R(19), (const u64)p, ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1673  
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1674  	/* arg1: prog */
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1675  	emit(A64_MOV(1, A64_R(0), A64_R(19)), ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1676  	/* arg2: &run_ctx */
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1677  	emit(A64_ADD_I(1, A64_R(1), A64_SP, run_ctx_off), ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1678  
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1679  	emit_call(enter_prog, ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1680  
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1681  	/* if (__bpf_prog_enter(prog) == 0)
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1682  	 *         goto skip_exec_of_prog;
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1683  	 */
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1684  	branch = ctx->image + ctx->idx;
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1685  	emit(A64_NOP, ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1686  
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1687  	/* save return value to callee saved register x20 */
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1688  	emit(A64_MOV(1, A64_R(20), A64_R(0)), ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1689  
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1690  	emit(A64_ADD_I(1, A64_R(0), A64_SP, args_off), ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1691  	if (!p->jited)
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1692  		emit_addr_mov_i64(A64_R(1), (const u64)p->insnsi, ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1693  
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1694  	emit_call((const u64)p->bpf_func, ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1695  
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1696  	if (save_ret)
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1697  		emit(A64_STR64I(A64_R(0), A64_SP, retval_off), ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1698  
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1699  	if (ctx->image) {
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1700  		int offset = &ctx->image[ctx->idx] - branch;
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1701  		*branch = A64_CBZ(1, A64_R(0), offset);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1702  	}
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1703  
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1704  	/* arg1: prog */
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1705  	emit(A64_MOV(1, A64_R(0), A64_R(19)), ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1706  	/* arg2: start time */
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1707  	emit(A64_MOV(1, A64_R(1), A64_R(20)), ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1708  	/* arg3: &run_ctx */
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1709  	emit(A64_ADD_I(1, A64_R(2), A64_SP, run_ctx_off), ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1710  
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1711  	emit_call(exit_prog, ctx);
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1712  }
+efc9909fdce00a82 Xu Kuohai 2022-07-11  1713  
+
+:::::: The code at line 1649 was first introduced by commit
+:::::: efc9909fdce00a827a37609628223cd45bf95d0b bpf, arm64: Add bpf trampoline for arm64
+
+:::::: TO: Xu Kuohai <xukuohai@huawei.com>
+:::::: CC: Daniel Borkmann <daniel@iogearbox.net>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

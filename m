@@ -2,95 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9572859193A
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 09:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7518A59193D
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 09:25:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237334AbiHMHXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 03:23:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45912 "EHLO
+        id S238105AbiHMHZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 03:25:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233812AbiHMHXo (ORCPT
+        with ESMTP id S233812AbiHMHZQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 03:23:44 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E836FA11;
-        Sat, 13 Aug 2022 00:23:39 -0700 (PDT)
-Received: from fraeml705-chm.china.huawei.com (unknown [172.18.147.206])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M4X350TN8z67TNp;
-        Sat, 13 Aug 2022 15:18:57 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml705-chm.china.huawei.com (10.206.15.54) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2375.24; Sat, 13 Aug 2022 09:23:37 +0200
-Received: from [10.48.145.22] (10.48.145.22) by lhrpeml500003.china.huawei.com
- (7.191.162.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.24; Sat, 13 Aug
- 2022 08:23:36 +0100
-Message-ID: <2b900d3b-9b52-5bc3-4ba8-24249f3c2e42@huawei.com>
-Date:   Sat, 13 Aug 2022 08:23:36 +0100
+        Sat, 13 Aug 2022 03:25:16 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95BD727B;
+        Sat, 13 Aug 2022 00:25:14 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4M4X8v3MHHzlCn0;
+        Sat, 13 Aug 2022 15:23:59 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgD3+_jWUfdi1eAhAQ--.47704S3;
+        Sat, 13 Aug 2022 15:25:12 +0800 (CST)
+Subject: Re: [PATCH] fs: fix possible inconsistent mount device
+To:     Christoph Hellwig <hch@infradead.org>,
+        Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20220813060848.1457301-1-yukuai1@huaweicloud.com>
+ <YvdJMj5hNem2PMVh@infradead.org>
+ <230cf303-b241-957d-f5aa-5d367eddeb3f@huaweicloud.com>
+ <YvdPlDPX82NsC6/d@infradead.org>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <9317e272-7412-853a-a73c-5d9c43bd23c2@huaweicloud.com>
+Date:   Sat, 13 Aug 2022 15:25:10 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-Subject: Re: [ata] 0568e61225: stress-ng.copy-file.ops_per_sec -15.0%
- regression
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Oliver Sang <oliver.sang@intel.com>
-CC:     Christoph Hellwig <hch@lst.de>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "Linux Memory Management List" <linux-mm@kvack.org>,
-        <linux-ide@vger.kernel.org>, <lkp@lists.01.org>, <lkp@intel.com>,
-        <ying.huang@intel.com>, <feng.tang@intel.com>,
-        <zhengjun.xing@linux.intel.com>, <fengwei.yin@intel.com>
-References: <YuzPMMnnY739Tnit@xsang-OptiPlex-9020>
- <1f498d4a-f93f-ceb4-b713-753196e5e08d@opensource.wdc.com>
- <3451fa5a-6229-073f-ae18-0c232cd48ed5@huawei.com>
- <e4106ffa-3842-45c0-9756-5226cfcfa17d@opensource.wdc.com>
- <YvXeuCAK780OuJPz@xsang-OptiPlex-9020>
- <2e9cf5a6-c043-5ccf-e363-097c6c941891@huawei.com>
- <4642848c-a386-d6a0-6255-8b16800e0548@opensource.wdc.com>
- <fd2b1dbe-8482-cb89-2568-4909db1239b0@huawei.com>
- <840a5f98-a53c-ce08-2833-f41d8c9a015b@opensource.wdc.com>
-From:   John Garry <john.garry@huawei.com>
-In-Reply-To: <840a5f98-a53c-ce08-2833-f41d8c9a015b@opensource.wdc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.48.145.22]
-X-ClientProxiedBy: lhrpeml100001.china.huawei.com (7.191.160.183) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
+In-Reply-To: <YvdPlDPX82NsC6/d@infradead.org>
+Content-Type: text/plain; charset=gbk; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: gCh0CgD3+_jWUfdi1eAhAQ--.47704S3
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYz7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
+        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8I
+        cVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87
+        Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE
+        6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72
+        CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0
+        xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
+        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
+        14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
+        IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY
+        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
+        73UjIFyTuYvjfUoOJ5UUUUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
 X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/08/2022 19:27, Damien Le Moal wrote:
->> Interestingly ata dev max_sectors kb also gets capped from 32MB (LBA48)
->> -> 256KB due to swiotlb max mapping size. (It would be capped by shost
->> default max sectors 512KB without that swiotlb limit). I assume capping
->> due to swiotlb limit is not occuring on Oliver's machine.
-> Yes, I was suspecting that we may be seeing a difference for anything that is
-> not AHCI, e.g. with other drivers.
+
+
+ÔÚ 2022/08/13 15:15, Christoph Hellwig Ð´µÀ:
+> On Sat, Aug 13, 2022 at 03:09:58PM +0800, Yu Kuai wrote:
+>> Thanks for your reply. Do you think it's better to remove the rename
+>> support from dm? Or it's better to add such limit?
 > 
-> But that seems to be the correct thing to do, no ? 
-Yes, this should be the correct thing to do.
+> It will probably be hard to entirely remove it.  But documentation
+> and a rate limited warning discouraging it seems like a good idea.
 
- > How was this working before
- > without applying the swiotlb limit ?
- >
-Not sure. I would need to check the libata code for how it handles DMA 
-mapping errors, which I assume would occur for when we exceed the 
-swiotlb limit.
-
-Having said this, from limited testing, whenever I check megaraid sas or 
-mpt3sas for performance, the length of request data never/rarely comes 
-close to max sectors. That why I am surprised with the regression which 
-Oliver reports.
+Yes, that's a good idea.
 
 Thanks,
-John
+Kuai
 

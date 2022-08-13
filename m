@@ -2,96 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E637591CA0
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 22:48:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26851591CA1
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 22:54:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239986AbiHMUsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 16:48:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49716 "EHLO
+        id S240184AbiHMUyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 16:54:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239877AbiHMUsI (ORCPT
+        with ESMTP id S240178AbiHMUy3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 16:48:08 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A48B7F2
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 13:48:06 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id fy5so7403448ejc.3
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 13:48:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=8+24X1voRXl29E4Men41L011ucEXlLL6AMGFCSV5598=;
-        b=Dooj+Rt0Wkp9Ypz84bBRTewTk2pQT9Tu5y7qW759b9Mtrc3SZ43E8XcW9aDFFOK5sZ
-         sF4ncAxPj/SMoklJ1LEW21Su6HnBf+T0tr0XRCgnIXeHdVcRorK+6j+8vKktCEjAGyPw
-         TPAteKxOIBm4xNNwhUeBUFLI4vPswYFE376ME=
+        Sat, 13 Aug 2022 16:54:29 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E560CDEE5
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 13:54:28 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id q10-20020a056e020c2a00b002dedb497c7fso2704772ilg.16
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 13:54:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=8+24X1voRXl29E4Men41L011ucEXlLL6AMGFCSV5598=;
-        b=aBNAH36xzpoNm9t/6QDmtPUAzse1J+aUWInoDIXg27GmxN6z+Zh2LBVwNt7VHNxtbI
-         yMrOrNG+vWcIlJPcnJbq71g6RXSi47jC6Qh4t6LCNwkf1AoAwFoVns0rNdBsWNxDuL4d
-         aqx8KrF7JoCM8VXs749Vk5K8ABE75csP3n7BR7K7vumDRjhXhllMC4vrswCpjS2U+1B3
-         7ShWR5Yl5u43mcOIVJyBhwXm5iZgVYNdfLEACHtFHqMrv3sCkelboPCpY1KQtyxAJyyG
-         Ofxg97DGL9YtBIrRtu9o+PGSdPeYMFZSCzAA80s7SkYuhBZT5PV5EnRrGwOrKcMwudTh
-         g7Gw==
-X-Gm-Message-State: ACgBeo3MPignBtqDkwxCdFghpJU+H7QwMSUb+fdsHiOFbMApwZMsvLto
-        k+HXxBhACkTZ5By1UXD9YhY4LAXvbosiV5dk
-X-Google-Smtp-Source: AA6agR7x+3PetZgKkMKw7R38pEuEY7QcnyPSZYv0oBT2669JpWNuFPWsdgaXfryjdIa4nMNhPGaBVQ==
-X-Received: by 2002:a17:907:868d:b0:730:f0ba:6328 with SMTP id qa13-20020a170907868d00b00730f0ba6328mr6379387ejc.444.1660423684521;
-        Sat, 13 Aug 2022 13:48:04 -0700 (PDT)
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com. [209.85.221.49])
-        by smtp.gmail.com with ESMTPSA id v2-20020a170906292200b00731582a6717sm2251709ejd.98.2022.08.13.13.48.03
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 13 Aug 2022 13:48:04 -0700 (PDT)
-Received: by mail-wr1-f49.google.com with SMTP id l22so4688446wrz.7
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 13:48:03 -0700 (PDT)
-X-Received: by 2002:a05:6000:1888:b0:222:ca41:dc26 with SMTP id
- a8-20020a056000188800b00222ca41dc26mr4746439wri.442.1660423683645; Sat, 13
- Aug 2022 13:48:03 -0700 (PDT)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc;
+        bh=YzUPbjeAbNgur1Ht6pBiKHByR3ZFjUXrKG6V3HyvA6E=;
+        b=ECQJeOV1OZSwpTIRv1OApbVGBhzyR5P0hDTKlwGPpMLaStH1YOzW6XSKV8Mzv1wQbA
+         myFpcwYJxwtiVRnD/+wYshftUxDOux/F8yteV0UB+KSQDvaHPx+TVS0T5HkV0M+eAddc
+         K1c0axBBVBQrMVOoknXDGGCMzberFErAmL0MvWRy/eoIfVioqkwN+4WzJrhUET7YpDoP
+         4FLNS474tlZmSd88w5pWzuCcmNqdgtVJta0TDh/lU3uvLjMnRFgXX46xRaX0HVY0xaYD
+         fVB3UZMzk7CV2I20BjVmeMVWpRlrkKY00+gwpkUtcmmz5Oe9tYFUy+omUZUJw9D/okE2
+         dBbA==
+X-Gm-Message-State: ACgBeo0n9dfaZqw97TBagy9FZGQfxNywjuxq4t0270Qiuy4im6J1k87F
+        DQ4heE1aF7p5OQfIH3QZSn9UHTGxag3OM4YjDXgMBmu5H6Oz
+X-Google-Smtp-Source: AA6agR6i7PWOd1+KUtybI2x08boV9aewzwY5gOAOB+dtXuQ3US92YUKhdyacV10qfuvyzlYV1yCsACGIuMohu98igVtNcLlv7AQ5
 MIME-Version: 1.0
-References: <62ef6e3d028a5182f4485d6201a126bbf4ca659c.camel@HansenPartnership.com>
-In-Reply-To: <62ef6e3d028a5182f4485d6201a126bbf4ca659c.camel@HansenPartnership.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 13 Aug 2022 13:47:47 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgeVWg=3sae6u__x2dhMzxw2-nyTTkxbQZfkDrueXGvTg@mail.gmail.com>
-Message-ID: <CAHk-=wgeVWg=3sae6u__x2dhMzxw2-nyTTkxbQZfkDrueXGvTg@mail.gmail.com>
-Subject: Re: [GIT PULL] final round of SCSI updates for the 5.19+ merge window
-To:     James Bottomley <James.Bottomley@hansenpartnership.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        linux-scsi <linux-scsi@vger.kernel.org>,
-        linux-kernel <linux-kernel@vger.kernel.org>
+X-Received: by 2002:a6b:4909:0:b0:66a:e3fc:e7b2 with SMTP id
+ u9-20020a6b4909000000b0066ae3fce7b2mr3829670iob.29.1660424068230; Sat, 13 Aug
+ 2022 13:54:28 -0700 (PDT)
+Date:   Sat, 13 Aug 2022 13:54:28 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000c371f705e6259a38@google.com>
+Subject: [syzbot] UBSAN: shift-out-of-bounds in init_sb (3)
+From:   syzbot <syzbot+dcf33a7aae997956fe06@syzkaller.appspotmail.com>
+To:     agruenba@redhat.com, cluster-devel@redhat.com,
+        linux-kernel@vger.kernel.org, rpeterso@redhat.com,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Aug 13, 2022 at 5:55 AM James Bottomley
-<James.Bottomley@hansenpartnership.com> wrote:
->
-> [my key just expired so you'll need to do the dane update thing I
-> showed you]
+Hello,
 
-Oh, I don't care about expired keys at all. As long as you keep using
-the *same* key, I'm happy, and gpg saying "Note: This key has
-expired!" is something I'll happily ignore.
+syzbot found the following issue on:
 
-None of the technical rules of pgp keys make any sense at all. The
-"sufficient trust" computations are completely pointless garbage with
-the whole "marginal" vs "complete trust". It's all just crazy talk.
+HEAD commit:    200e340f2196 Merge tag 'pull-work.dcache' of git://git.ker..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=150cbda9080000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1b664fba5e66c4bf
+dashboard link: https://syzkaller.appspot.com/bug?extid=dcf33a7aae997956fe06
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 
-The expiry times likewise. I will completely ignore those.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-I will check the signatures of a key as I import them. Because anybody
-who thinks that "trust" is about automation is probably not human, or
-so far on the spectrum that they don't understand humans.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+dcf33a7aae997956fe06@syzkaller.appspotmail.com
 
-              Linus
+loop1: detected capacity change from 0 to 37440
+gfs2: fsid=syz:syz: Trying to join cluster "lock_nolock", "syz:syz"
+gfs2: fsid=syz:syz: Now mounting FS (format 1801)...
+================================================================================
+UBSAN: shift-out-of-bounds in fs/gfs2/ops_fstype.c:297:19
+shift exponent 50331651 is too large for 64-bit type 'unsigned long'
+CPU: 0 PID: 30381 Comm: syz-executor.1 Not tainted 5.19.0-syzkaller-02972-g200e340f2196 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x1e3/0x2cb lib/dump_stack.c:106
+ ubsan_epilogue lib/ubsan.c:151 [inline]
+ __ubsan_handle_shift_out_of_bounds+0x3a6/0x420 lib/ubsan.c:322
+ gfs2_read_sb fs/gfs2/ops_fstype.c:297 [inline]
+ init_sb+0x11d6/0x12c0 fs/gfs2/ops_fstype.c:487
+ gfs2_fill_super+0x1a3c/0x2750 fs/gfs2/ops_fstype.c:1209
+ get_tree_bdev+0x400/0x620 fs/super.c:1292
+ gfs2_get_tree+0x50/0x210 fs/gfs2/ops_fstype.c:1325
+ vfs_get_tree+0x88/0x270 fs/super.c:1497
+ do_new_mount+0x289/0xad0 fs/namespace.c:3040
+ do_mount fs/namespace.c:3383 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount+0x2e3/0x3d0 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fc20ac8a7aa
+Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fc20be95f88 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 0000000020000200 RCX: 00007fc20ac8a7aa
+RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007fc20be95fe0
+RBP: 00007fc20be96020 R08: 00007fc20be96020 R09: 0000000020000000
+R10: 0000000000000000 R11: 0000000000000202 R12: 0000000020000000
+R13: 0000000020000100 R14: 00007fc20be95fe0 R15: 0000000020047a20
+ </TASK>
+================================================================================
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.

@@ -2,98 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F415591BFF
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 18:25:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAC85591C08
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 18:53:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239799AbiHMQZR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 12:25:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36948 "EHLO
+        id S239837AbiHMQwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 12:52:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239927AbiHMQZP (ORCPT
+        with ESMTP id S234900AbiHMQwL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 12:25:15 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B57F13DF0
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 09:25:11 -0700 (PDT)
-Received: from zn.tnic (p2e55d27b.dip0.t-ipconnect.de [46.85.210.123])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id A0A901EC054E;
-        Sat, 13 Aug 2022 18:25:05 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1660407905;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=KmHM9wqbS6vimAJfJcJUsg6/yM8eOo3986ZAmfKgsaA=;
-        b=O3gZUXR8nxRswgEGwn+WmuLv8qgxSmBtTiRnDBAIzkdg0Szx5znSbDffjZIh8u+8VvyjPg
-        dhAaZDk6qVN4zTcDhBHK5dD+DO2Zx4hqyQIa9JXOp6m2a+VRE75wMDV7PaBouTUsCx7H0+
-        vaZiMHCObmSHaqzXtGk26y0+AZ2Qh6s=
-Date:   Sat, 13 Aug 2022 18:25:01 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     Ingo Molnar <mingo@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>, x86-ml <x86@kernel.org>
-Subject: Re: [GIT PULL] timer fixes
-Message-ID: <YvfQUGLGY7cfZ9gf@zn.tnic>
-References: <Yvd8L0qIbLarxrOQ@gmail.com>
+        Sat, 13 Aug 2022 12:52:11 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F52E27CED;
+        Sat, 13 Aug 2022 09:52:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660409529; x=1691945529;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=jUaf61eY9bVSVQrGX5E86tNJtvOl6+OURS+GiXpuTGY=;
+  b=hPMW4fLcThjPurqFCUl82dOL9x7k4Japl7k+oYTh7pJcmIqDg+K39ami
+   fWpMWmrU63SddCjzFSOIzPWphMUgd/nQgr0e/PZ2GpRkQRgqiQfZPf8Xx
+   x83Q2IC6DMC3f7MecV4ChKAvqcsfLmEt+WhV4jvfguYLbAiFDoR7vCwJA
+   8HVte5aF1DOjclSQHYKDnmILvNpt0j+bm5DB4tTgnHNm7SYf9lVVccopV
+   Qp8QRrYdG3SENH/LslazXVpjtd3rAyMYTAxgkoYzDa1/pocq38mZJlniM
+   MaiL2PlUIZ6mxyheK1Qn24KrEuhmPsvQ0EdLH75dpHmg0cFDfbEFU9hb8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="291764023"
+X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
+   d="scan'208";a="291764023"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 09:52:09 -0700
+X-IronPort-AV: E=Sophos;i="5.93,235,1654585200"; 
+   d="scan'208";a="674401463"
+Received: from xingzhen-mobl.ccr.corp.intel.com (HELO [10.249.170.184]) ([10.249.170.184])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 09:52:06 -0700
+Message-ID: <b118ec12-6b51-3b86-22b2-c7689e0f91d8@linux.intel.com>
+Date:   Sun, 14 Aug 2022 00:52:04 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Yvd8L0qIbLarxrOQ@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 00/11] Add generated latest Intel events and metrics
+Content-Language: en-US
+To:     Ian Rogers <irogers@google.com>
+Cc:     acme@kernel.org, peterz@infradead.org, mingo@redhat.com,
+        alexander.shishkin@intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, linux-kernel@vger.kernel.org,
+        linux-perf-users@vger.kernel.org, ak@linux.intel.com,
+        kan.liang@linux.intel.com
+References: <20220812085239.3089231-1-zhengjun.xing@linux.intel.com>
+ <CAP-5=fVTOvY0_3PxrzP28iFn0FtDgQE34qJ4_6+fD-TQohCFQQ@mail.gmail.com>
+From:   Xing Zhengjun <zhengjun.xing@linux.intel.com>
+In-Reply-To: <CAP-5=fVTOvY0_3PxrzP28iFn0FtDgQE34qJ4_6+fD-TQohCFQQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Might wanna hold off on pulling that:
+Hi Ian,
 
-On Sat, Aug 13, 2022 at 12:25:51PM +0200, Ingo Molnar wrote:
-> Linus,
+On 8/13/2022 4:53 AM, Ian Rogers wrote:
+> On Fri, Aug 12, 2022 at 1:51 AM <zhengjun.xing@linux.intel.com 
+> <mailto:zhengjun.xing@linux.intel.com>> wrote:
 > 
-> Please pull the latest timers/urgent git tree from:
+>     From: Zhengjun Xing <zhengjun.xing@linux.intel.com
+>     <mailto:zhengjun.xing@linux.intel.com>>
 > 
->    git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers-urgent-2022-08-13
+>     The goal of this patch series is to align the json events for Intel
+>     platforms with those generated by:
+>     https://github.com/intel/event-converter-for-linux-perf/blob/master/download_and_gen.py
+>     <https://github.com/intel/event-converter-for-linux-perf/blob/master/download_and_gen.py>
+>     This script takes the latest event json and TMA metrics from:
+>     https://download.01.org/perfmon/ <https://download.01.org/perfmon/>
+>     and adds to these metrics, in
+>     particular uncore ones, from:
+>     https://github.com/intel/perfmon-metrics
+>     <https://github.com/intel/perfmon-metrics>
 > 
->    # HEAD: e362359ace6f87c201531872486ff295df306d13 posix-cpu-timers: Cleanup CPU timers before freeing them during exec
+>     Compared to the previous json, the major changes are:
+>       - Add new metrics “UNCORE_FREQ” for Linux perf,this new metric can
+>     be added to all platforms that have Sockets_CLKS.
+>       - Remove duplicated uncore events.
+>       - the inclusion of previously ungenerated and experimental uncore
+>     events.
+> 
+>     Zhengjun Xing (11):
+>        perf vendor events: Update metrics for broadwellde
+>        perf vendor events: Update events and metrics for broadwellx
+>        perf vendor events: Update events and metrics for cascadelakex
+>        perf vendor events: Update events and metrics for haswellx
+>        perf vendor events: Update events and metrics for icelakex
+>        perf vendor events: Update metrics for ivytown
+>        perf vendor events: Update metrics for jaketown
+>        perf vendor events: Update events for knightslanding
+>        perf vendor events: Update metrics for sapphirerapids
+>        perf vendor events: Update events and metrics for skylakex
+>        perf vendor events: Update events for snowridgex
+> 
+> 
+> Tested-by: Ian Rogers <irogers@google.com <mailto:irogers@google.com>>
+> 
+Thanks.
 
-...
-
-> Thadeu Lima de Souza Cascardo (1):
->       posix-cpu-timers: Cleanup CPU timers before freeing them during exec
-
-...
-
-> diff --git a/fs/exec.c b/fs/exec.c
-> index 5fd73915c62c..f793221f4eb6 100644
-> --- a/fs/exec.c
-> +++ b/fs/exec.c
-> @@ -1304,6 +1304,9 @@ int begin_new_exec(struct linux_binprm * bprm)
->  	bprm->mm = NULL;
->  
->  #ifdef CONFIG_POSIX_TIMERS
-> +	spin_lock_irq(&me->sighand->siglock);
-> +	posix_cpu_timers_exit(me);
-> +	spin_unlock_irq(&me->sighand->siglock);
-
-sparse is not happy about this:
-
-https://lore.kernel.org/r/202208140040.MMi4z6Ek-lkp@intel.com
-
-That task_struct.sighand is marked __rcu and thus noderef and sparse
-complains:
-
-fs/exec.c:1307:26: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected struct spinlock [usertype] *lock
-+@@     got struct spinlock [noderef] __rcu * @@
+> Thanks,
+> Ian
+> 
+>       .../arch/x86/broadwellde/bdwde-metrics.json   |     6 +
+>       .../arch/x86/broadwellx/bdx-metrics.json      |     6 +
+>       .../arch/x86/broadwellx/uncore-cache.json     |   163 +-
+>       .../arch/x86/cascadelakex/clx-metrics.json    |     6 +
+>       .../arch/x86/cascadelakex/uncore-memory.json  |  4424 +-
+>       .../arch/x86/cascadelakex/uncore-other.json   | 23162 +++++++++-
+>       .../arch/x86/cascadelakex/uncore-power.json   |   201 +
+>       .../arch/x86/haswellx/hsx-metrics.json        |   411 +-
+>       .../arch/x86/haswellx/uncore-cache.json       |   173 +-
+>       .../arch/x86/icelakex/icx-metrics.json        |     6 +
+>       .../arch/x86/icelakex/uncore-memory.json      |  1523 +
+>       .../arch/x86/icelakex/uncore-other.json       | 38506 +++++++++++++++-
+>       .../arch/x86/icelakex/uncore-power.json       |   225 +
+>       .../arch/x86/ivytown/ivt-metrics.json         |     6 +
+>       .../arch/x86/jaketown/jkt-metrics.json        |     6 +
+>       .../arch/x86/knightslanding/uncore-other.json |   213 +
+>       .../arch/x86/sapphirerapids/spr-metrics.json  |     6 +
+>       .../arch/x86/skylakex/skx-metrics.json        |     6 +
+>       .../arch/x86/skylakex/uncore-memory.json      |  3566 +-
+>       .../arch/x86/skylakex/uncore-other.json       | 23442 +++++++++-
+>       .../arch/x86/skylakex/uncore-power.json       |   201 +
+>       .../arch/x86/snowridgex/uncore-other.json     |   111 +-
+>       22 files changed, 91393 insertions(+), 4976 deletions(-)
+>       create mode 100644
+>     tools/perf/pmu-events/arch/x86/cascadelakex/uncore-power.json
+>       create mode 100644
+>     tools/perf/pmu-events/arch/x86/skylakex/uncore-power.json
+> 
+>     -- 
+>     2.25.1
+> 
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Zhengjun Xing

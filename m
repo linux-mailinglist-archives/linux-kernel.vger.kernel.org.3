@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10607591D07
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 00:39:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17F05591D0A
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 00:39:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239501AbiHMWi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 18:38:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47154 "EHLO
+        id S239962AbiHMWjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 18:39:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229634AbiHMWix (ORCPT
+        with ESMTP id S230041AbiHMWix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 13 Aug 2022 18:38:53 -0400
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 182406CD21
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51366CD19
         for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 15:38:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1660430332; x=1691966332;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=1fpF+ymFnH5IX7O5IPicQaNHD1gQ01NDudBysAsl4rs=;
-  b=LHr8O2FdqIthDvh7gWA+Tr4R6+2F4Z21S7kIv/QHjLpH/2kAYdK/Hhkz
-   4vktPkFFi5SgquatUpoJNoLt/J4hzfigyQ8HZ/EcrhItYlpgXTyKuMRlf
-   hcUgFw1sFwhI7hR7jFB5xfV6nNoGX7GPxmFyjR+btm15c7u5XjYpKqUjG
-   Fjy5t+MP+xbXRYuxocmIy04VLxJMFw/sfmrTjzm13y2sBRKi8ai/rcO38
-   aZBahT+/J0X1EkWbbMkITRukOmvLnx8jQfU/hixsFOSB+ZGTfMTCp3MsD
-   jzMieZsPkz3q6PWqgA7rd540V8W++XKYVhHJnSEo0UTKgYSznFQDV4dis
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="353523720"
+  bh=FW9xRisc1P87Bo7EmCsCCev95LdEfxwofPWBD0JqoS0=;
+  b=WtM88sYA0VRwowq6BX9JVnMiz8wePf+KjhAoRnOnyRJjgl0PXQJgqeJ+
+   AX+6evNmZairFdJGCNJrJlHk6qmIwR9mevIE26OOp2Tlcv0GXnMXPmaZG
+   OePH2XttXtLK2i1MY5RzpVCPlnKh8kLODisjsdq5AVSEXL+p220hSZKd6
+   GEImg7pv690bk3K8E2/UtwbKxO1k3B8BBHWXSXTpcY8CL5FNyq6hTKi2y
+   0Hv+Dgn9Z/piXyto/OZDq9geWIM70Mc83FBAG4kUqG8TeG+idgX3yT6RZ
+   A+iV7cpSK2vBBWqMigL86bdKZ/jmjRqdpJ/Crj+CgdyVwqpIJHy6WtQP4
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="353523721"
 X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
-   d="scan'208";a="353523720"
+   d="scan'208";a="353523721"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
   by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 15:38:49 -0700
 X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
-   d="scan'208";a="556890228"
+   d="scan'208";a="556890231"
 Received: from araj-dh-work.jf.intel.com ([10.165.157.158])
   by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 15:38:49 -0700
 From:   Ashok Raj <ashok.raj@intel.com>
@@ -47,9 +47,9 @@ Cc:     Tony Luck <tony.luck@intel.com>,
         Andy Lutomirski <luto@amacapital.net>,
         Tom Lendacky <thomas.lendacky@amd.com>,
         Ashok Raj <ashok.raj@intel.com>
-Subject: [PATCH 2/5] x86/microcode/intel: Check against CPU signature before saving microcode
-Date:   Sat, 13 Aug 2022 22:38:22 +0000
-Message-Id: <20220813223825.3164861-3-ashok.raj@intel.com>
+Subject: [PATCH 3/5] x86/microcode/intel: Allow a late-load only if a min rev is specified
+Date:   Sat, 13 Aug 2022 22:38:23 +0000
+Message-Id: <20220813223825.3164861-4-ashok.raj@intel.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220813223825.3164861-1-ashok.raj@intel.com>
 References: <20220813223825.3164861-1-ashok.raj@intel.com>
@@ -65,69 +65,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When save_microcode_patch() is looking to replace an existing microcode in
-the cache, current code is *only* checks the CPU sig/pf in the main
-header. Microcode can carry additional sig/pf combinations in the extended
-signature table, which is completely missed today.
+In general users don't have the necessary information to determine
+whether a late-load of a new microcode version has removed any feature
+(MSR, CPUID etc) between what is currently loaded and this new microcode.
+To address this issue, Intel has added a "minimum required version" field to
+a previously reserved field in the file header. Microcode updates
+should only be applied if the current microcode version is equal
+to, or greater than this minimum required version.
 
-For e.g. Current patch is a multi-stepping patch and new incoming patch is
-a specific patch just for this CPUs stepping.
+https://lore.kernel.org/linux-kernel/alpine.DEB.2.21.1909062237580.1902@nanos.tec.linutronix.de/
 
-patch1:
-fms3 <--- header FMS
-...
-ext_sig:
-fms1
-fms2
+Thomas made some suggestions on how meta-data in the microcode file could
+provide Linux with information to decide if the new microcode is suitable
+candidate for late-load. But even the "simpler" option#1 requires a lot of
+metadata and corresponding kernel code to parse it.
 
-patch2: new
-fms2 <--- header FMS
+The proposal here is an even simpler option. The criteria for a microcode to
+be a viable late-load candidate is that no CPUID or OS visible MSR features
+are removed with respect to an earlier version of the microcode.
 
-Current code takes only fms3 and checks with patch2 fms2.
+Pseudocode for late-load is as follows:
 
-saved_patch.header.fms3 != new_patch.header.fms2, so save_microcode_patch
-saves it to the end of list instead of replacing patch1 with patch2.
+if header.min_required_id == 0
+	This is old format microcode, block late-load
+else if current_ucode_version < header.min_required_id
+	Current version is too old, block late-load of this microcode.
+else
+	OK to proceed with late-load.
 
-There is no functional user observable issue since find_patch() skips
-patch versions that are <= current_patch and will land on patch2 properly.
+Any microcode that removes a feature will set the min_version to itself.
+This will enforce this microcode is not suitable for late-loading.
 
-Nevertheless this will just end up storing every patch that isn't required.
-Kernel just needs to store the latest patch. Otherwise its a memory leak
-that sits in kernel and never used.
+The enforcement is not in hardware and limited to kernel loader enforcing
+the requirement. It is not required for early loading of microcode to
+enforce this requirement, since the new features are only
+evaluated after early loading in the boot process.
+
+
+Test cases covered:
+
+1. With new kernel, attempting to load an older format microcode with the
+   min_rev=0 should be blocked by kernel.
+
+   [  210.541802] microcode: Header MUST specify min version for late-load
+
+2. New microcode with a non-zero min_rev in the header, but the specified
+   min_rev is greater than what is currently loaded in the CPU should be
+   blocked by kernel.
+
+   245.139828] microcode: Current revision 0x8f685300 is too old to update,
+must be at 0xaa000050 version or higher
+
+3. New microcode with a min_rev < currently loaded should allow loading the
+   microcode
+
+4. Build initrd with microcode that has min_rev=0, or min_rev > currently
+   loaded should permit early loading microcode from initrd.
+
 
 Tested-by: William Xie <william.xie@intel.com>
-Reported-by: William Xie <william.xie@intel.com>
 Signed-off-by: Ashok Raj <ashok.raj@intel.com>
 ---
- arch/x86/kernel/cpu/microcode/intel.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ arch/x86/include/asm/microcode_intel.h |  4 +++-
+ arch/x86/kernel/cpu/microcode/intel.c  | 20 ++++++++++++++++++++
+ 2 files changed, 23 insertions(+), 1 deletion(-)
 
+diff --git a/arch/x86/include/asm/microcode_intel.h b/arch/x86/include/asm/microcode_intel.h
+index 4c92cea7e4b5..16b8715e0984 100644
+--- a/arch/x86/include/asm/microcode_intel.h
++++ b/arch/x86/include/asm/microcode_intel.h
+@@ -14,7 +14,9 @@ struct microcode_header_intel {
+ 	unsigned int            pf;
+ 	unsigned int            datasize;
+ 	unsigned int            totalsize;
+-	unsigned int            reserved[3];
++	unsigned int            reserved1;
++	unsigned int		min_req_id;
++	unsigned int            reserved3;
+ };
+ 
+ struct microcode_intel {
 diff --git a/arch/x86/kernel/cpu/microcode/intel.c b/arch/x86/kernel/cpu/microcode/intel.c
-index 025c8f0cd948..c4b11e2fbe33 100644
+index c4b11e2fbe33..1eb202ec2302 100644
 --- a/arch/x86/kernel/cpu/microcode/intel.c
 +++ b/arch/x86/kernel/cpu/microcode/intel.c
-@@ -114,10 +114,18 @@ static void save_microcode_patch(struct ucode_cpu_info *uci, void *data, unsigne
+@@ -178,6 +178,7 @@ static int microcode_sanity_check(void *mc, int print_err)
+ 	struct extended_sigtable *ext_header = NULL;
+ 	u32 sum, orig_sum, ext_sigcount = 0, i;
+ 	struct extended_signature *ext_sig;
++	struct ucode_cpu_info uci;
  
- 	list_for_each_entry_safe(iter, tmp, &microcode_cache, plist) {
- 		mc_saved_hdr = (struct microcode_header_intel *)iter->data;
--		sig	     = mc_saved_hdr->sig;
--		pf	     = mc_saved_hdr->pf;
+ 	total_size = get_totalsize(mc_header);
+ 	data_size = get_datasize(mc_header);
+@@ -248,6 +249,25 @@ static int microcode_sanity_check(void *mc, int print_err)
+ 		return -EINVAL;
+ 	}
  
--		if (find_matching_signature(data, sig, pf)) {
-+		sig = uci->cpu_sig.sig;
-+		pf  = uci->cpu_sig.pf;
++	/*
++	 * Enforce for late-load that min_req_id is specified in the header.
++	 * Otherwise its an old format microcode, reject it.
++	 */
++	if (print_err) {
++		if (!mc_header->min_req_id) {
++			pr_warn("Header MUST specify min version for late-load\n");
++			return -EINVAL;
++		}
 +
-+		/*
-+		 * Compare the current CPUs signature with the ones in the
-+		 * cache to identify the right candidate to replace. At any
-+		 * given time, we should have no more than one valid patch
-+		 * file for a given CPU fms+pf in the cache list.
-+		 */
++		intel_cpu_collect_info(&uci);
++		if (uci.cpu_sig.rev < mc_header->min_req_id) {
++			pr_warn("Current revision 0x%x is too old to update,"
++				"must  be at 0x%x version or higher\n",
++				uci.cpu_sig.rev, mc_header->min_req_id);
++			return -EINVAL;
++		}
++	}
 +
-+		if (find_matching_signature(iter->data, sig, pf)) {
- 			prev_found = true;
+ 	if (!ext_table_size)
+ 		return 0;
  
- 			if (mc_hdr->rev <= mc_saved_hdr->rev)
 -- 
 2.32.0
 

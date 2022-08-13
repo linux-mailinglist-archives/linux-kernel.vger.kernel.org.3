@@ -2,54 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2595A591B8F
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 17:42:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B99B6591BA2
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 17:46:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239833AbiHMPmo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 11:42:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55072 "EHLO
+        id S239851AbiHMPp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 11:45:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239835AbiHMPmn (ORCPT
+        with ESMTP id S239780AbiHMPpZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 11:42:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0CBF2B1A9;
-        Sat, 13 Aug 2022 08:42:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 512BB60ED5;
-        Sat, 13 Aug 2022 15:42:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0F61C433C1;
-        Sat, 13 Aug 2022 15:42:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660405359;
-        bh=BbzZODyb1pf8b8cbccDz5DrfY4BrAZboveA10mzxo/0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=l/LWI2H4QEtJLoOeSCUuGIcrVIXsaMQrFXH1IBhSs/uelt1JLJWqcwWRLZZzNuU0L
-         +PlB9biNuAiRF7LPPKUoTyUWuL+SOhWsGCZswMc3m55b6W4WLEbfgKcWyA7UDH4zIY
-         oWDNFwY8xhsZaURbyBTRSjFSFbPiYpdNB6IPpOYE3Vr2dOt7gB+gIWv3GX6iSGSY4T
-         ETYnDSWApFqVNeOGZoqmmIfDilrdkEz1E6cBMcBrrYn+ajsfmJESkpG4uM45Mo4rVl
-         P4LmnrZwjJMSZuLUGfwp3PFC/6Cml4Mk0nbkU2efntPVU0srp8Fxcqn/2GPqn6f71g
-         nuqbB2NDl8sKA==
-Date:   Sat, 13 Aug 2022 17:42:27 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Subject: [PULL REQUEST] i2c-for-5.20-part2
-Message-ID: <YvfGY2qnl2YXrUgX@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>
+        Sat, 13 Aug 2022 11:45:25 -0400
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E610723BF2;
+        Sat, 13 Aug 2022 08:45:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1660405475; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=UoDUPawCJzPV93BFqlANuNJ48wXWXD/wKvh87Ls7sTkHI1HwkLILCvYqzdUyYIEthHXwKH62yV5XeGhVVaAVt+E8mf9huUbnVwhff0dAG9Gv1kx85c4fzN2ROLLvAGCtvYSsMjobgJ8SNOfVjl5QjLEf6Fjm5J4zo7Bj+FksVVc=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1660405475; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:MIME-Version:Message-ID:Subject:To; 
+        bh=tC2GhhC8WwZTml4OrKQ+dOaX+Zfkd8eMJ9gy4ApGFtQ=; 
+        b=S+KKdqFVMAjdaEKEOKmdH1gjgCm9fZyXSAI2BKhMw6kt6p80tuUNlx1+3Wvzs9E+mrYXSjYfqsE/1YYfShdnNgO+L9s8ASCDfxVyaQFhyUx/38FLNWv16fT98/sxaSQemsQ8NSpmYxd4XsSI3/pKtglblNAC6+qaY3dNEeSp3Qc=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=arinc9.com;
+        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
+        dmarc=pass header.from=<arinc.unal@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1660405475;
+        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
+        h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:Reply-To;
+        bh=tC2GhhC8WwZTml4OrKQ+dOaX+Zfkd8eMJ9gy4ApGFtQ=;
+        b=XJ1HybxkpDbmxmmlzZ9MFghlUwXGAEiqakT8JApuVST6U4fB+BTT1mfZSnxl9TsD
+        6hQXRBtYrPnhUYDx8gDuQHfwtQ5S/umbXeTrKBcheGGIg8BHG/HuY0/aOT7ZZMnMFIm
+        rd7arNgssq0ODltiiyZCkaCXxUbh6r9DO3x18bzk=
+Received: from arinc9-PC.lan (85.117.236.245 [85.117.236.245]) by mx.zohomail.com
+        with SMTPS id 1660405472608660.8592124322715; Sat, 13 Aug 2022 08:44:32 -0700 (PDT)
+From:   =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Sander Vanheule <sander@svanheule.net>,
+        =?UTF-8?q?Ren=C3=A9=20van=20Dorst?= <opensource@vdorst.com>,
+        Daniel Golle <daniel@makrotopia.org>, erkin.bozoglu@xeront.com,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>
+Subject: [PATCH v2 0/7] completely rework mediatek,mt7530 binding
+Date:   Sat, 13 Aug 2022 18:44:08 +0300
+Message-Id: <20220813154415.349091-1-arinc.unal@arinc9.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="4NrrYtAf6bYih70P"
-Content-Disposition: inline
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,172 +78,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello.
 
---4NrrYtAf6bYih70P
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+This patch series brings complete rework of the mediatek,mt7530 binding.
 
-The following changes since commit ffcf9c5700e49c0aee42dcba9a12ba21338e8136:
+The binding is checked with "make dt_binding_check
+DT_SCHEMA_FILES=mediatek,mt7530.yaml".
 
-  x86: link vdso and boot with -z noexecstack --no-warn-rwx-segments (2022-08-10 18:30:09 -0700)
+If anyone knows the GIC bit for interrupt for multi-chip module MT7530 in
+MT7623AI SoC, let me know. I'll add it to the examples.
 
-are available in the Git repository at:
+If anyone got a Unielec U7623 or another MT7623AI board, please reach out.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-5.20-part2
+v2:
+- Change the way of adding descriptions for each compatible string.
+- Split the patch for updating the json-schema.
+- Make slight changes on the patch for the binding description.
 
-for you to fetch changes up to fe99b819487dba848cddd3d4bf4beb8e653d7e9c:
+Arınç ÜNAL (7):
+  dt-bindings: net: dsa: mediatek,mt7530: make trivial changes
+  dt-bindings: net: dsa: mediatek,mt7530: fix reset lines
+  dt-bindings: net: dsa: mediatek,mt7530: update examples
+  dt-bindings: net: dsa: mediatek,mt7530: define port binding per compatible
+  dt-bindings: net: dsa: mediatek,mt7530: remove unnecesary lines
+  dt-bindings: net: dsa: mediatek,mt7530: define phy-mode for each compatible
+  dt-bindings: net: dsa: mediatek,mt7530: update binding description
 
-  docs: i2c: i2c-sysfs: fix hyperlinks (2022-08-11 23:25:05 +0200)
-
-----------------------------------------------------------------
-* two driver fixes for issues introduced this cycle
-* one trivial driver improvement regarding ACPI
-* more DTS conversion and additions
-* documentation updates
-* subsystem-wide move from strlcpy to strscpy
-
-----------------------------------------------------------------
-Chris Pringle (1):
-      i2c: kempld: Support ACPI I2C device declaration
-
-Conor Dooley (1):
-      i2c: microchip-corei2c: fix erroneous late ack send
-
-Kewei Xu (2):
-      dt-bindings: i2c: update bindings for mt8188 soc
-      i2c: mediatek: add i2c compatible for MT8188
-
-Krzysztof Kozlowski (1):
-      dt-bindings: i2c: qcom,i2c-cci: convert to dtschema
-
-Luca Ceresoli (7):
-      docs: i2c: i2c-protocol: update introductory paragraph
-      docs: i2c: i2c-protocol,smbus-protocol: remove nonsense words
-      docs: i2c: i2c-protocol: remove unused legend items
-      docs: i2c: smbus-protocol: improve DataLow/DataHigh definition
-      docs: i2c: instantiating-devices: add syntax coloring to dts and C blocks
-      docs: i2c: i2c-sysfs: improve wording
-      docs: i2c: i2c-sysfs: fix hyperlinks
-
-Robin Reckmann (1):
-      i2c: qcom-geni: Fix GPI DMA buffer sync-back
-
-Wolfram Sang (2):
-      i2c: move drivers from strlcpy to strscpy
-      i2c: move core from strlcpy to strscpy
+ .../bindings/net/dsa/mediatek,mt7530.yaml       | 1017 +++++++++++++-----
+ 1 file changed, 767 insertions(+), 250 deletions(-)
 
 
-with much appreciated quality assurance from
-----------------------------------------------------------------
-AngeloGioacchino Del Regno (1):
-      (Rev.) i2c: mediatek: add i2c compatible for MT8188
-
-Bagas Sanjaya (1):
-      (Rev.) docs: i2c: smbus-protocol: improve DataLow/DataHigh definition
-
-Caleb Connolly (1):
-      (Test) i2c: qcom-geni: Fix GPI DMA buffer sync-back
-
-Konrad Dybcio (1):
-      (Rev.) i2c: qcom-geni: Fix GPI DMA buffer sync-back
-
-Lewis Hanly (1):
-      (Test) i2c: microchip-corei2c: fix erroneous late ack send
-
-Luca Weiss (1):
-      (Test) i2c: qcom-geni: Fix GPI DMA buffer sync-back
-
-Matthias Brugger (1):
-      (Rev.) dt-bindings: i2c: update bindings for mt8188 soc
-
-Qii Wang (2):
-      (Rev.) i2c: mediatek: add i2c compatible for MT8188
-      (Rev.) dt-bindings: i2c: update bindings for mt8188 soc
-
-Rob Herring (1):
-      (Rev.) dt-bindings: i2c: qcom,i2c-cci: convert to dtschema
-
- .../devicetree/bindings/i2c/i2c-mt65xx.yaml        |   1 +
- .../devicetree/bindings/i2c/i2c-qcom-cci.txt       |  96 --------
- .../devicetree/bindings/i2c/qcom,i2c-cci.yaml      | 242 +++++++++++++++++++++
- Documentation/i2c/i2c-protocol.rst                 |  11 +-
- Documentation/i2c/i2c-sysfs.rst                    |  24 +-
- Documentation/i2c/instantiating-devices.rst        |  16 +-
- Documentation/i2c/smbus-protocol.rst               |   6 +-
- MAINTAINERS                                        |   2 +-
- drivers/i2c/busses/i2c-altera.c                    |   2 +-
- drivers/i2c/busses/i2c-aspeed.c                    |   2 +-
- drivers/i2c/busses/i2c-au1550.c                    |   2 +-
- drivers/i2c/busses/i2c-axxia.c                     |   2 +-
- drivers/i2c/busses/i2c-bcm-kona.c                  |   2 +-
- drivers/i2c/busses/i2c-brcmstb.c                   |   2 +-
- drivers/i2c/busses/i2c-cbus-gpio.c                 |   2 +-
- drivers/i2c/busses/i2c-cht-wc.c                    |   2 +-
- drivers/i2c/busses/i2c-cros-ec-tunnel.c            |   2 +-
- drivers/i2c/busses/i2c-davinci.c                   |   2 +-
- drivers/i2c/busses/i2c-digicolor.c                 |   2 +-
- drivers/i2c/busses/i2c-eg20t.c                     |   2 +-
- drivers/i2c/busses/i2c-emev2.c                     |   2 +-
- drivers/i2c/busses/i2c-exynos5.c                   |   2 +-
- drivers/i2c/busses/i2c-gpio.c                      |   2 +-
- drivers/i2c/busses/i2c-highlander.c                |   2 +-
- drivers/i2c/busses/i2c-hix5hd2.c                   |   2 +-
- drivers/i2c/busses/i2c-i801.c                      |   4 +-
- drivers/i2c/busses/i2c-ibm_iic.c                   |   2 +-
- drivers/i2c/busses/i2c-icy.c                       |   2 +-
- drivers/i2c/busses/i2c-imx-lpi2c.c                 |   2 +-
- drivers/i2c/busses/i2c-kempld.c                    |   1 +
- drivers/i2c/busses/i2c-lpc2k.c                     |   2 +-
- drivers/i2c/busses/i2c-meson.c                     |   2 +-
- drivers/i2c/busses/i2c-microchip-corei2c.c         |   2 +-
- drivers/i2c/busses/i2c-mt65xx.c                    |  45 +++-
- drivers/i2c/busses/i2c-mt7621.c                    |   2 +-
- drivers/i2c/busses/i2c-mv64xxx.c                   |   2 +-
- drivers/i2c/busses/i2c-mxs.c                       |   2 +-
- drivers/i2c/busses/i2c-nvidia-gpu.c                |   2 +-
- drivers/i2c/busses/i2c-omap.c                      |   2 +-
- drivers/i2c/busses/i2c-opal.c                      |   4 +-
- drivers/i2c/busses/i2c-parport.c                   |   2 +-
- drivers/i2c/busses/i2c-pxa.c                       |   2 +-
- drivers/i2c/busses/i2c-qcom-geni.c                 |   7 +-
- drivers/i2c/busses/i2c-qup.c                       |   2 +-
- drivers/i2c/busses/i2c-rcar.c                      |   2 +-
- drivers/i2c/busses/i2c-riic.c                      |   2 +-
- drivers/i2c/busses/i2c-rk3x.c                      |   2 +-
- drivers/i2c/busses/i2c-s3c2410.c                   |   2 +-
- drivers/i2c/busses/i2c-sh_mobile.c                 |   2 +-
- drivers/i2c/busses/i2c-simtec.c                    |   2 +-
- drivers/i2c/busses/i2c-taos-evm.c                  |   2 +-
- drivers/i2c/busses/i2c-tegra-bpmp.c                |   2 +-
- drivers/i2c/busses/i2c-tegra.c                     |   2 +-
- drivers/i2c/busses/i2c-uniphier-f.c                |   2 +-
- drivers/i2c/busses/i2c-uniphier.c                  |   2 +-
- drivers/i2c/busses/i2c-versatile.c                 |   2 +-
- drivers/i2c/busses/i2c-wmt.c                       |   2 +-
- drivers/i2c/i2c-core-base.c                        |   2 +-
- drivers/i2c/i2c-smbus.c                            |   2 +-
- 59 files changed, 370 insertions(+), 181 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/i2c/i2c-qcom-cci.txt
- create mode 100644 Documentation/devicetree/bindings/i2c/qcom,i2c-cci.yaml
-
---4NrrYtAf6bYih70P
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmL3xmMACgkQFA3kzBSg
-KbZ7Xw//c0/XgVl2+BpduIx49HDGc29u0QWc5i3eaj5PLLEYJfIfZglpEkhVaftA
-+O8CLC/y+d7U+XUEzlNuD3xNHqIPR9dlvgH09vbBzAXmdC4gedOjQCLst7lT3gmI
-0OQMP9gUIkjAEZ8LwVXQr1vr1tspacioxVRTAPhkhrGrxGtWgnB1o4YiuZlXMMcB
-pB6GbX/w+vUa0KXzbkT0Ynw1zpbi1BLSgsCyFFBL47OULNiUZ+yPd3CiHHp9aQBJ
-Tv4pfD84QFolhpCyD1wW3BE3HvvDVJOzf9Dxe+CMpBRv5GL7o/DTi6HaziCzSZy9
-3exvaWFNNm36BJrmu3hsYr9UWdjL3jTTNGzJPN5kzzL0kVRk1k8yWmGfcIWqXaXd
-UIb3c32Z4yNZ1EFjqglxs3qDd9SMDcBoM+M1ecLcxDdYYFd9mC//ZLu0Yfx4qVDV
-M2RrVwIQ7AAaEILDzzrlJ0j9KU9sSrgjKCWqJ3oYEgmYwAKH08J8hhSW10guS7ca
-wRPBxdEvQMIccgP2j9TDW2Iwijc1Vz6Y2O9u7EbnyfpIDpjyVan2iyfx+KY74W7a
-ba1oI3qrS0gLbdc/yneXYLUhaK0w6o+Nrsv6uz7baBxkurDLZGYRKjeyF9t5e3Qy
-a2VzjIl1cK7oAXhDWPZSngBQ92F1a0tdFB1u/UpCePcMbZrLNOE=
-=Vtqy
------END PGP SIGNATURE-----
-
---4NrrYtAf6bYih70P--

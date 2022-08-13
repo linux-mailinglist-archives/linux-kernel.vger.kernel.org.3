@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D28D5918D0
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 06:26:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81C915918D3
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 06:27:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236872AbiHME0Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 00:26:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59356 "EHLO
+        id S237356AbiHME1p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 00:27:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230051AbiHME0X (ORCPT
+        with ESMTP id S231424AbiHME1n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 00:26:23 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 535D518B14;
-        Fri, 12 Aug 2022 21:26:22 -0700 (PDT)
+        Sat, 13 Aug 2022 00:27:43 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D38218B14;
+        Fri, 12 Aug 2022 21:27:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660364782; x=1691900782;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
+  t=1660364862; x=1691900862;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
   bh=nuSF/DPyH4hEc+MssLIdGaOyti4gnu6kxnq2sOYunFY=;
-  b=KwqBpIKSP/r3j+xxKaw61Sl4n4tcgMAbVL0HmJ9OOar8CTTtvjxLmeZW
-   6yJuh2VRiTw7a7Scp7nUsHfiN1V2FxWxWDs3YGOYIUgaO+j6AX48rESAn
-   Rv+4GpDwhIYWIlEk1jJTXHHLTj0QvK7mGxJHfjYe9ZbCrmob3jleNvA0Y
-   5pAUOrVXqY8UC+mz2BHbWeSV17ixrtaAAW25MoqGCmPzkyObqVj2CDg/D
-   ie5JPlx0v0Aa8Vmt7Vs1yD0iGZI34pJfDRFMr3ZAPhsKR/dQBZ7pL9mJm
-   MPstXm4bn2pXPFDzoXFIJY69/HC1c16JPFCOIms7X9MxarhiBVJ+GNgmI
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="355734730"
+  b=eP5QAKlicvVBYSpkTjuFbvLDL3r9IPAUQzPZY+uuf2IqENPuI/jsVshB
+   rJqxMHrRehcfadCQO1e0e054R9llDVuL/Kqw5TIvaA+uxCNRjc6qAfx4E
+   l7R4HjHc/rN8FXBioBhZAL/3dEkVtiQF8KWoCTCdqgVKDFjiUUPI7+53v
+   3BKEW2o5dSEX3exPqgxY9ZPZBt0KLf4/HuMtmieth8yPLnUyXKJGTPm/f
+   VRzay9vX1dYRI5ZcXElLQbLdwOuDtbCH9AuUAbyLUTAU4XQfH/Ga5SqAg
+   UwKTyk8DDsJ+0mlErfzowqaMGG+QcJAKl32L4nmIZddeR0bHY0IuczZ/v
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="317703189"
 X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="355734730"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 21:26:21 -0700
+   d="scan'208";a="317703189"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2022 21:27:42 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,233,1654585200"; 
-   d="scan'208";a="782156433"
+   d="scan'208";a="732433386"
 Received: from unknown (HELO localhost.localdomain) ([10.226.216.116])
-  by orsmga005.jf.intel.com with ESMTP; 12 Aug 2022 21:26:20 -0700
+  by orsmga004.jf.intel.com with ESMTP; 12 Aug 2022 21:27:40 -0700
 From:   niravkumar.l.rabara@intel.com
-To:     Mark Brown <broonie@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        niravkumar.l.rabara@intel.com
-Cc:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+To:     niravkumar.l.rabara@intel.com
+Cc:     broonie@kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, p.zabel@pengutronix.de
 Subject: [PATCH v2] spi: cadence-quadspi: Disable irqs during indirect reads
-Date:   Sat, 13 Aug 2022 12:26:16 +0800
-Message-Id: <20220813042616.1372110-1-niravkumar.l.rabara@intel.com>
+Date:   Sat, 13 Aug 2022 12:27:36 +0800
+Message-Id: <20220813042736.1372180-1-niravkumar.l.rabara@intel.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220813040928.1353077-1-niravkumar.l.rabara@intel.com>
+References: <20220813040928.1353077-1-niravkumar.l.rabara@intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk

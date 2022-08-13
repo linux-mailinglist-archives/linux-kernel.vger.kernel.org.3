@@ -2,42 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1A46591BD6
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 18:01:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01674591BDA
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 18:03:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239956AbiHMQBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 12:01:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46292 "EHLO
+        id S239965AbiHMQDo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 12:03:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239594AbiHMQBG (ORCPT
+        with ESMTP id S235696AbiHMQDm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 12:01:06 -0400
-Received: from bg5.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEC1C640A
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 09:01:04 -0700 (PDT)
-X-QQ-mid: bizesmtp89t1660406454thm69xfw
-Received: from localhost.localdomain ( [110.188.55.240])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sun, 14 Aug 2022 00:00:41 +0800 (CST)
-X-QQ-SSF: 0100000000000080H000000A0000020
-X-QQ-FEAT: LE7C6P2vL8T99D5vTKTlaAJZ4EFWc2MlBQ3xk5yMOCWXUpiEykI4b0NlUoiBT
-        pY7l9UNq61HM3LM48LdsGdLb9Am3ayWxkPiaxH+OwhB6G5qclxA5uvwfEZpPw96UsLZr6yh
-        UuylhxdtfhxjWjXk38U8lN/wGcTQrO6GG3uFgR6CovvGsq05QmmYy2s3E6MlKYax1X6RJH5
-        NexbOvWprjfJ6ZP2KpNcmoTFelx7vkpnLeSszZ+tRZpA9CFKt+zhz+UtZBkiZbwjT6hyEQp
-        Y7xjRUGgvWM845d4gmII9Lo/OdVEl0abzmOUvyz4XO8Am7Mk5Bea4ddy74UN0gqbnVly7Qp
-        uPT/Za8U9a8sBCZTnM=
-X-QQ-GoodBg: 0
-From:   min tang <tangmin@cdjrlc.com>
-To:     pjones@redhat.com, konrad@kernel.org
-Cc:     linux-kernel@vger.kernel.org, min tang <tangmin@cdjrlc.com>
-Subject: [PATCH] iscsi_ibft: Unneeded semicolon
-Date:   Sun, 14 Aug 2022 00:00:29 +0800
-Message-Id: <20220813160029.5493-1-tangmin@cdjrlc.com>
-X-Mailer: git-send-email 2.17.1
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:cdjrlc.com:qybglogicsvr:qybglogicsvr6
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Sat, 13 Aug 2022 12:03:42 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 556F2BE27
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 09:03:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 8FECACE0989
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 16:03:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F0E7C433B5;
+        Sat, 13 Aug 2022 16:03:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660406617;
+        bh=8AKntuXc65i1saqB877W3R6RYDsPiOzfHdOG82gubqU=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=PhTckigvrk6wORM1yefMuhw4OzzCT5g0MqPXfKBkB8Ikh82SWyxGormHL2RVr4qaa
+         5RaurmRXRFFSNRxF4WZl0vecbOzuu815Ii4L3Bvj5VRZN4Padu85IFiJaSZXzV/uTj
+         bkAC3PraOdUJ3Rn3lWl+DmWbtt/fAEPmj9x3xH7d31AtXJtDZVyoZ4C0UWM/ti7blF
+         TQ+CDO8qaPlwRFWZqW7TEIkNT01056UTuWfVNyCayV1STzUhrHZQLNS71p3Bjx7s8E
+         9q/siV67O39uPnKXtapHZ4pyNVn6akegu/zvDkxPnOshvvzsDsIMA0bws64+k+llO5
+         jijaAWyfZbLmw==
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 6EC2127C0054;
+        Sat, 13 Aug 2022 12:03:35 -0400 (EDT)
+Received: from imap48 ([10.202.2.98])
+  by compute2.internal (MEProxy); Sat, 13 Aug 2022 12:03:35 -0400
+X-ME-Sender: <xms:Vcv3YsmErhiITZcZb1ewvRfGp8WKYVpcCSXPLaOoZqAoZDRI6hMUnw>
+    <xme:Vcv3Yr073Ux4YxlVXeReMUjlfVHbyjJTg9gzfkEI1_SSyoaJvzwU0N9J0zq5_ZmVj
+    MW4wzlFK57Q5lD522Y>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegkedgleekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    nhguhicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpeduveffvdegvdefhfegjeejlefgtdffueekudfgkeduvdetvddu
+    ieeluefgjeeggfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqudduiedu
+    keehieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgvlhdrohhrgheslhhinh
+    hugidrlhhuthhordhush
+X-ME-Proxy: <xmx:Vcv3YqqVem25JP1OVJnbkzhneXfFS9Q6S16Buho6LI7VhRipN9G56Q>
+    <xmx:Vcv3YonhQ2lB9dIGV-tpxJr6DPp91xlTAaOrQF7DCczlz-fILodArA>
+    <xmx:Vcv3Yq3hF8NrHj1hB7NM97Hzs6hqRPFCqxfri8C8NapB8tV7HSaWqg>
+    <xmx:V8v3YuKfQi2x3medjAB6zQWBJAqajbP7rJJnRCJw1sUHKgQR5oCasw>
+Feedback-ID: ieff94742:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id BB8CF31A0062; Sat, 13 Aug 2022 12:03:33 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-841-g7899e99a45-fm-20220811.002-g7899e99a
+Mime-Version: 1.0
+Message-Id: <453fb432-ac13-4819-8395-95561bca948b@www.fastmail.com>
+In-Reply-To: <20220809113827.fchtnyzy44z5fuis@box.shutemov.name>
+References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
+ <20220614120231.48165-11-kirill.shutemov@linux.intel.com>
+ <7cec93c5-3db4-409b-8c1e-bc1f10dd68fc@www.fastmail.com>
+ <20220809113827.fchtnyzy44z5fuis@box.shutemov.name>
+Date:   Sat, 13 Aug 2022 09:03:13 -0700
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Cc:     "Borislav Petkov" <bp@alien8.de>,
+        "Sean Christopherson" <seanjc@google.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Joerg Roedel" <jroedel@suse.de>,
+        "Ard Biesheuvel" <ardb@kernel.org>,
+        "Andi Kleen" <ak@linux.intel.com>,
+        "Sathyanarayanan Kuppuswamy" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "David Rientjes" <rientjes@google.com>,
+        "Vlastimil Babka" <vbabka@suse.cz>,
+        "Tom Lendacky" <thomas.lendacky@amd.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        "Paolo Bonzini" <pbonzini@redhat.com>,
+        "Ingo Molnar" <mingo@redhat.com>,
+        "Varad Gautam" <varad.gautam@suse.com>,
+        "Dario Faggioli" <dfaggioli@suse.com>,
+        "Dave Hansen" <dave.hansen@intel.com>,
+        "Mike Rapoport" <rppt@kernel.org>,
+        "David Hildenbrand" <david@redhat.com>,
+        "Marcelo Henrique Cerri" <marcelo.cerri@canonical.com>,
+        tim.gardner@canonical.com, khalid.elmously@canonical.com,
+        philip.cox@canonical.com,
+        "the arch/x86 maintainers" <x86@kernel.org>, linux-mm@kvack.org,
+        linux-coco@lists.linux.dev, linux-efi@vger.kernel.org,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCHv7 10/14] x86/mm: Avoid load_unaligned_zeropad() stepping into
+ unaccepted memory
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -45,26 +109,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no semicolon after '}' in line 803.
 
-Signed-off-by: min tang <tangmin@cdjrlc.com>
----
- drivers/firmware/iscsi_ibft.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/firmware/iscsi_ibft.c b/drivers/firmware/iscsi_ibft.c
-index 6e9788324fea..3c52fde713ce 100644
---- a/drivers/firmware/iscsi_ibft.c
-+++ b/drivers/firmware/iscsi_ibft.c
-@@ -800,7 +800,7 @@ static void ibft_unregister(void)
- 		ibft_kobj = boot_kobj->data;
- 		if (ibft_kobj->hdr && ibft_kobj->hdr->id == id_nic)
- 			sysfs_remove_link(&boot_kobj->kobj, "device");
--	};
-+	}
- }
- 
- static void ibft_cleanup(void)
--- 
-2.17.1
+On Tue, Aug 9, 2022, at 4:38 AM, Kirill A. Shutemov wrote:
+> On Tue, Jul 26, 2022 at 01:17:13PM -0700, Andy Lutomirski wrote:
+>>=20
+>>=20
+>> On Tue, Jun 14, 2022, at 5:02 AM, Kirill A. Shutemov wrote:
+>> > load_unaligned_zeropad() can lead to unwanted loads across page bou=
+ndaries.
+>> > The unwanted loads are typically harmless. But, they might be made =
+to
+>> > totally unrelated or even unmapped memory. load_unaligned_zeropad()
+>> > relies on exception fixup (#PF, #GP and now #VE) to recover from th=
+ese
+>> > unwanted loads.
+>> >
+>> > But, this approach does not work for unaccepted memory. For TDX, a =
+load
+>> > from unaccepted memory will not lead to a recoverable exception wit=
+hin
+>> > the guest. The guest will exit to the VMM where the only recourse i=
+s to
+>> > terminate the guest.
+>>=20
+>> Why is unaccepted memory marked present in the direct map in the firs=
+t place?
+>>=20
+>> Having kernel code assume that every valid address is followed by
+>> several bytes of memory that may be read without side effects other t=
+han
+>> #PF also seems like a mistake, but I probably won=E2=80=99t win that =
+fight. But
+>> sticking guard pages in front of definitely-not-logically present pag=
+es
+>> seems silly to me.  Let=E2=80=99s just not map it.
+>
+> It would mean no 1G pages in direct mapping for TDX as we accept 2M a
+> time.
+>
+>> (What if MMIO memory is mapped next to regular memory?  Doing random
+>> unaligned reads that cross into MMIO seems unwise.)
+>
+> MMIO is shared, not unaccpted private. We already handle the situation.
+> See 1e7769653b06 ("x86/tdx: Handle load_unaligned_zeropad() page-cross=
+ to
+> a shared page").
+>
 
+I don=E2=80=99t mean in a confidential guest =E2=80=94 I mean generally.=
+ This whole model of =E2=80=9Coverrun the buffer =E2=80=94 no big deal=E2=
+=80=9D is just fragile.
+
+> --=20
+>   Kiryl Shutsemau / Kirill A. Shutemov

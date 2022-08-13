@@ -2,125 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BE46591B27
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 16:52:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7511591B33
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 17:01:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239051AbiHMOwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 10:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45528 "EHLO
+        id S239659AbiHMPBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 11:01:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235340AbiHMOwm (ORCPT
+        with ESMTP id S235340AbiHMPBH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 10:52:42 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02564BF77;
-        Sat, 13 Aug 2022 07:52:41 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id fy5so6490708ejc.3;
-        Sat, 13 Aug 2022 07:52:41 -0700 (PDT)
+        Sat, 13 Aug 2022 11:01:07 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0CD1E09D
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 08:01:05 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id bh13so3092037pgb.4
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 08:01:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc;
-        bh=WMmwkK4k5xPlUVcqJ30C1LHbz/Q/KZcpo7vE9zUN3TE=;
-        b=nRKXeZ7L14mSyhcdUmyRgBqlsZ6lXxai61d/wQCo+vg4gsXvll6mhWyDXK671GhYEV
-         nqGV5+OVXixFCrDwNldbGT6Vr/H/8GrZCeiDKMv1EOyPWWckJQetpsl2BQJNYxy/CJrE
-         vYhPsYIe3rng1dG9cfgEbYtJ7YspLc4jNEYn2Xb48yLk1moz9AJUXv54UZud8iJFv721
-         +WxG6SY1DvWQGSGSxvjnbs5w13Q4J1pnqQiqnkLzcVu0GRySLRhQWxFtqmrC0kSavLow
-         JBmqGkp7Cl/qruzlKA/jg8T0Bt1VwR3Yom53S9RnyJHoTeZfsQiOO+2VWquT8z55peyO
-         4kxg==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=QiqCev7SjvOWKNNl+hDjUBDJkQvgTrLbkZw98Qqxk70=;
+        b=ERPwgAquhldV9Lao9bt3DOyrwIEOHvpV8mjiwyMqzztYaV+Qs7fDZ9aLffZ+ffWj6B
+         LD0oToVrrj1+879zUEzE2gvNyg0vkYBHCrQ3ohRL6H5Eh9c+AmjTwVZeoGOuzeHUIX4/
+         UidNqrwhKyeAn5hMG9kXmqFfta60uv62Q44DJ1lt3ynXGZa4Lk153zK5mir2cVvrOZRZ
+         84d5RiT30TGVFAfc92D7dKWSXnOpAEkq3gJs7x2pMtCzvgIgOh7yhR7u/cqewFAYioYv
+         7NDTpv2WaQKwVVzb2XxOVY4q7dNmBHYNRSFJRr2nhOuugNwYkAIsDIzbq+fZcEJlKn4C
+         9jpA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc;
-        bh=WMmwkK4k5xPlUVcqJ30C1LHbz/Q/KZcpo7vE9zUN3TE=;
-        b=dblzCyiLeW+2ylVvUVUgMQ7rHjk7oacXxqQnv9CmbTr08I5jbJvY9D8un+Aj/qhMJI
-         /FsiF1rquW5PZ58WQzvLVnumXvX1u3MNVx5rE+BdFCMLekPJ4jZBTDcE1AxDgHDIL0SL
-         7iSnMxu271BNz8MEAdyYCBewc87u4cDxekAxxGGDoHFIULdoF1rxyuh3Sl4wHChxR2in
-         QjpQWolJwb6dyKAzbZnQMauv/IcQsJUdjCNUvr46RSr0/gao6I7F0oMpLJolaZviQO3S
-         gKhS9kGf3uKGHBSAf8ZvH/nSiDLcE1ajGw4jWNTnDYwIo3w1lZlrifQa8TbID1eIuM1O
-         FOHw==
-X-Gm-Message-State: ACgBeo1UvfVdbyEtwZdFKfG7zMeM8rNxNG9JpknoPN08EFO1drGrtN85
-        nIlI1s50qnL+rlRtqQJNFXeQMa8rRteE6YeRM+XzZRJj
-X-Google-Smtp-Source: AA6agR5fuk8Stg8kIwgCTgU+5Y0tz0E0mj6Ap6bzWqblG6xmzKl5Y6/VjZF0bD7C0EZkxkY0+XU3cxp7UJVeokeXKJM=
-X-Received: by 2002:a17:906:9f2a:b0:730:bc30:da30 with SMTP id
- fy42-20020a1709069f2a00b00730bc30da30mr5747794ejc.763.1660402360218; Sat, 13
- Aug 2022 07:52:40 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=QiqCev7SjvOWKNNl+hDjUBDJkQvgTrLbkZw98Qqxk70=;
+        b=tjd+TUNFwVfLnbdDwDgwX7YV6oc5Mhq1nFWlpR2OgsCX2B0vA4Up0BH8ElXgitJnCU
+         Cr7mKVTNAZge6+Xbtg+bu+rM+Dt83E0I31/KCNLibJf6S6s6wibte5KnWCqu1z0DUFux
+         3DQibLGtxOKr+0bPAyDi5pkFdpOW6b2il/WAqk+OKaFbnA5tyRxSPjLEtZZBsAQldfty
+         OHidXPf+cGfi53YvYuxApPk1GoMFmiOQ3KjJTb+eWy3CmhnqKjRxTyO5k4eGhr8d2Gng
+         7vL03sGdr/8nS8t/8AaomAL4cX0agWauWflKFpByDe03OtSzcg6eHW8wMLp7PDQQmHqf
+         EC0Q==
+X-Gm-Message-State: ACgBeo3VU9oRh3o5JNk5Llyqm0gdqe6TkRG7H6P1Vvv+eY1f+tKFwu6C
+        amHoBslxwkzpGDkBFtVJWpw=
+X-Google-Smtp-Source: AA6agR5olXFk9GY/Fk0KTm+LgbNHC4nyJYZJobVnKm6MiOqEFVE8HFrztfSEmVpGNCBc1epxFziCQA==
+X-Received: by 2002:a63:5a4d:0:b0:41b:7702:635f with SMTP id k13-20020a635a4d000000b0041b7702635fmr7249032pgm.111.1660402865394;
+        Sat, 13 Aug 2022 08:01:05 -0700 (PDT)
+Received: from hyeyoo ([114.29.91.56])
+        by smtp.gmail.com with ESMTPSA id 6-20020a170902c10600b00172543d7cdcsm2623630pli.91.2022.08.13.08.01.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 13 Aug 2022 08:01:04 -0700 (PDT)
+Date:   Sun, 14 Aug 2022 00:00:58 +0900
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Waiman Long <longman@redhat.com>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] mm/slab_common: Deleting kobject in
+ kmem_cache_destroy() without holding slab_mutex/cpu_hotplug_lock
+Message-ID: <Yve8qkl2NjtnA6nF@hyeyoo>
+References: <20220812183033.346425-1-longman@redhat.com>
 MIME-Version: 1.0
-References: <1660225318-4063-1-git-send-email-u0084500@gmail.com>
- <1660225318-4063-2-git-send-email-u0084500@gmail.com> <3cae9d60-4012-1dfd-abd9-4d0b9379e6bb@linaro.org>
- <CADiBU3_depGDZtiyizU3MB939A3oH1uTWzTMyruUy0z=u6BZkQ@mail.gmail.com>
- <40261b95-637a-1304-2e06-8c8ff7fc377b@linaro.org> <CADiBU38+9sR1r20=YWt-9s2+u7maHH+1VudCnV1-0+F4jYKdQQ@mail.gmail.com>
- <CADiBU3_Jt6n6tm=oVvjk5vsoEAneH7t-37S6skepA6v6bVVYUw@mail.gmail.com> <f2a664be-71e9-7a26-2f0c-5f654d9cb3cb@linaro.org>
-In-Reply-To: <f2a664be-71e9-7a26-2f0c-5f654d9cb3cb@linaro.org>
-From:   ChiYuan Huang <u0084500@gmail.com>
-Date:   Sat, 13 Aug 2022 22:52:29 +0800
-Message-ID: <CADiBU3-bKGhW2Yy13svNUykqW+WN3VS6LftWMU0rMeCc+fMySg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: power: supply: Add Richtek RT9471
- battery charger
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sebastian Reichel <sre@kernel.org>,
-        =?UTF-8?B?5ri45a2Q6aao?= <alina_yu@richtek.com>,
-        cy_huang <cy_huang@richtek.com>, alinayu829@gmail.com,
-        Linux PM <linux-pm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>, lkml <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220812183033.346425-1-longman@redhat.com>
+X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> =E6=96=BC 2022=E5=B9=
-=B48=E6=9C=8813=E6=97=A5 =E9=80=B1=E5=85=AD =E5=87=8C=E6=99=A82:53=E5=AF=AB=
-=E9=81=93=EF=BC=9A
->
-> On 12/08/2022 19:05, ChiYuan Huang wrote:
-> >> It's the same usage like as TI charger.
-> >>>>
-> >>>> For charger driver, does it mean legacy IRQ handler is more preferre=
-d?
-> >>>
-> >>> Who is the consumer of these interrupts? Can you show the DTS with th=
-e
-> >>> interrupt consumer?
-> >>>
-> > Sorry, I forget to reply this question.
-> > Some battery driver may need to know the 'full', 'recharge' , 'ieoc' st=
-atus.
-> > The usage will  be like as below
-> >
-> > battery {
-> >   interrupts-extended =3D <&rt9471_chg 2 0>, <&rt9471_chg 3 0>, &(rt947=
-1_chg 5 0>;
-> >   interrupt-names =3D "chg-done", "chg-recharge", "chg-ieoc";
-> > };
-> >
-> > Some gauge HW needs this information to enhance the battery capacity ac=
-curacy.
->
-> Other supply stack pieces do it via supplies (supplied to/from in
-> include/linux/power_supply.h) and reporting power_supply_changed().
->
-> With such explanation, your device is an interrupt source, but it is not
-> an interrupt controller. If your device is interrupt controller, it
-> means someone routes the interrupt line to your device. Physical line.
->
-Yap, sure. And so on, just use the SW power supply chain to do this
-kind of event notification.
-To remove it, it doesn't affect the internal interrupt request inside
-the driver.
-Just cannot be used for the outer driver to request the events directly.
+On Fri, Aug 12, 2022 at 02:30:33PM -0400, Waiman Long wrote:
+> A circular locking problem is reported by lockdep due to the following
+> circular locking dependency.
+> 
+>   +--> cpu_hotplug_lock --> slab_mutex --> kn->active --+
+>   |                                                     |
+>   +-----------------------------------------------------+
+> 
+> The forward cpu_hotplug_lock ==> slab_mutex ==> kn->active dependency
+> happens in
+> 
+>   kmem_cache_destroy():	cpus_read_lock(); mutex_lock(&slab_mutex);
+>   ==> sysfs_slab_unlink()
+>       ==> kobject_del()
+>           ==> kernfs_remove()
+> 	      ==> __kernfs_remove()
+> 	          ==> kernfs_drain(): rwsem_acquire(&kn->dep_map, ...);
 
-If so, I think 'interrupt-controller' and even '#interrupt-cells' need
-to be removed.
-OK?
-> Best regards,
-> Krzysztof
+Maybe you mean this?
+
+        /* but everyone should wait for draining */
+        wait_event(root->deactivate_waitq,
+                   atomic_read(&kn->active) == KN_DEACTIVATED_BIAS);
+
+
+> The backward kn->active ==> cpu_hotplug_lock dependency happens in
+> 
+>   kernfs_fop_write_iter(): kernfs_get_active();
+>   ==> slab_attr_store()
+>       ==> cpu_partial_store()
+>           ==> flush_all(): cpus_read_lock()
+> 
+> One way to break this circular locking chain is to avoid holding
+> cpu_hotplug_lock and slab_mutex while deleting the kobject in
+> sysfs_slab_unlink() which should be equivalent to doing a write_lock
+> and write_unlock pair of the kn->active virtual lock.
+> 
+> Since the kobject structures are not protected by slab_mutex or the
+> cpu_hotplug_lock, we can certainly release those locks before doing
+> the delete operation.
+> 
+> Move sysfs_slab_unlink() and sysfs_slab_release() to the newly
+> created kmem_cache_release() and call it outside the slab_mutex &
+> cpu_hotplug_lock critical sections. There will be a slight delay
+> in the deletion of sysfs files if kmem_cache_release() is called
+> indirectly from a work function.
+> 
+> Signed-off-by: Waiman Long <longman@redhat.com>
+> ---
+> 
+>  [v3] Move sysfs_slab_unlink() out to kmem_cache_release() and move
+>       schedule_work() back right after list_add_tail().
+> 
+>  mm/slab_common.c | 45 +++++++++++++++++++++++++++++----------------
+>  1 file changed, 29 insertions(+), 16 deletions(-)
+> 
+> diff --git a/mm/slab_common.c b/mm/slab_common.c
+> index 17996649cfe3..07b948288f84 100644
+> --- a/mm/slab_common.c
+> +++ b/mm/slab_common.c
+> @@ -392,6 +392,28 @@ kmem_cache_create(const char *name, unsigned int size, unsigned int align,
+>  }
+>  EXPORT_SYMBOL(kmem_cache_create);
+>  
+> +#ifdef SLAB_SUPPORTS_SYSFS
+> +/*
+> + * For a given kmem_cache, kmem_cache_destroy() should only be called
+> + * once or there will be a use-after-free problem. The actual deletion
+> + * and release of the kobject does not need slab_mutex or cpu_hotplug_lock
+> + * protection. So they are now done without holding those locks.
+> + *
+> + * Note that there will be a slight delay in the deletion of sysfs files
+> + * if kmem_cache_release() is called indrectly from a work function.
+> + */
+> +static void kmem_cache_release(struct kmem_cache *s)
+> +{
+> +	sysfs_slab_unlink(s);
+> +	sysfs_slab_release(s);
+> +}
+> +#else
+> +static void kmem_cache_release(struct kmem_cache *s)
+> +{
+> +	slab_kmem_cache_release(s);
+> +}
+> +#endif
+> +
+>  static void slab_caches_to_rcu_destroy_workfn(struct work_struct *work)
+>  {
+>  	LIST_HEAD(to_destroy);
+> @@ -418,11 +440,7 @@ static void slab_caches_to_rcu_destroy_workfn(struct work_struct *work)
+>  	list_for_each_entry_safe(s, s2, &to_destroy, list) {
+>  		debugfs_slab_release(s);
+>  		kfence_shutdown_cache(s);
+> -#ifdef SLAB_SUPPORTS_SYSFS
+> -		sysfs_slab_release(s);
+> -#else
+> -		slab_kmem_cache_release(s);
+> -#endif
+> +		kmem_cache_release(s);
+>  	}
+>  }
+>  
+> @@ -437,20 +455,11 @@ static int shutdown_cache(struct kmem_cache *s)
+>  	list_del(&s->list);
+>  
+>  	if (s->flags & SLAB_TYPESAFE_BY_RCU) {
+> -#ifdef SLAB_SUPPORTS_SYSFS
+> -		sysfs_slab_unlink(s);
+> -#endif
+>  		list_add_tail(&s->list, &slab_caches_to_rcu_destroy);
+>  		schedule_work(&slab_caches_to_rcu_destroy_work);
+>  	} else {
+>  		kfence_shutdown_cache(s);
+>  		debugfs_slab_release(s);
+> -#ifdef SLAB_SUPPORTS_SYSFS
+> -		sysfs_slab_unlink(s);
+> -		sysfs_slab_release(s);
+> -#else
+> -		slab_kmem_cache_release(s);
+> -#endif
+>  	}
+>  
+>  	return 0;
+> @@ -465,14 +474,16 @@ void slab_kmem_cache_release(struct kmem_cache *s)
+>  
+>  void kmem_cache_destroy(struct kmem_cache *s)
+>  {
+> +	int refcnt;
+> +
+>  	if (unlikely(!s) || !kasan_check_byte(s))
+>  		return;
+>  
+>  	cpus_read_lock();
+>  	mutex_lock(&slab_mutex);
+>  
+> -	s->refcount--;
+> -	if (s->refcount)
+> +	refcnt = --s->refcount;
+> +	if (refcnt)
+>  		goto out_unlock;
+>  
+>  	WARN(shutdown_cache(s),
+> @@ -481,6 +492,8 @@ void kmem_cache_destroy(struct kmem_cache *s)
+>  out_unlock:
+>  	mutex_unlock(&slab_mutex);
+>  	cpus_read_unlock();
+> +	if (!refcnt && !(s->flags & SLAB_TYPESAFE_BY_RCU))
+> +		kmem_cache_release(s);
+>  }
+>  EXPORT_SYMBOL(kmem_cache_destroy);
+>  
+> -- 
+> 2.31.1
+> 
+
+little bit complicated but looks good to me.
+Thank you for fixing this.
+
+Reviewed-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+
+-- 
+Thanks,
+Hyeonggon

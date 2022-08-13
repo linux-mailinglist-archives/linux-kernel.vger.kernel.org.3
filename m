@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC8B6591D06
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 00:39:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBD6F591D05
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 00:39:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240060AbiHMWjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 18:39:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47180 "EHLO
+        id S240085AbiHMWjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 18:39:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230057AbiHMWix (ORCPT
+        with ESMTP id S236391AbiHMWiy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 18:38:53 -0400
+        Sat, 13 Aug 2022 18:38:54 -0400
 Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0BB16CD23
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 15:38:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2C16CD28
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 15:38:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660430332; x=1691966332;
+  t=1660430333; x=1691966333;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=KR/HBP1wOvQFpjD2YET+iCx+bjZqywBPEsVL8qmACU8=;
-  b=XdR0J6UZB/OVuAHNaU70tz+7llqT8yEM3SzE0PSwYbKSoZrrOU1+NpSE
-   Vb4TvwXZfyofMlncp//vgGZYWq2G4FH5KZkoj13cdbIhNZjVscMCxHfXt
-   /dwrqVS9bALz0un4gKmTezXXqJuJsGUafzueHnkwnibd1Xsd8zfhIx6Z0
-   9kaFqZBV+gu+1pZzdGZrP9OfMqhNybkulchStLfock782rD1asjUxK3EQ
-   dUFaERsMjaxnfmRQORAa5ju7C7zF+ZWt6NwgSyFERdrbSprzjOJTM9DPk
-   v4LS8dHqpe8XCvM3nuOZ3dyDD57eWCEYW3BMxhXqpwx5OLgHbijw1UakQ
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="353523722"
+  bh=tT+pOZUbPO916ColyGnd0DnVtmEhGeyWUDAruwEPKXk=;
+  b=c9I8SViJxxtP6Zyf/AtRv/6ipon8vEvF/CYF3WCday6FFsDAxHdfVYuE
+   9ErftCwX2ztrS4dPLMmkehz9l4TqzIFjd283QhDlGvpQ7sbBbh+35TLJ4
+   8ywFUT7ASnjdzcHHb9AXW59+C2mJcmlufgyWpCKPvtIi8JL+3F1Nnwao6
+   skCJS4LJSovPmkxcgM5ii3+/1ha0LX7lxccbDc9Je+FKsqbygynRV9u2a
+   +1x5cKJUR4rPzKxzErfrmf9rpBERH43MWisz0mTgOa0Ce1fYK7YXuUrfq
+   M6uamKl7vybKh1uhIa/Fi/GMz+iKUvVRruMFEeLvoDdAg/ivVA1uQlV4u
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="353523723"
 X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
-   d="scan'208";a="353523722"
+   d="scan'208";a="353523723"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
   by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 15:38:49 -0700
 X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
-   d="scan'208";a="556890234"
+   d="scan'208";a="556890238"
 Received: from araj-dh-work.jf.intel.com ([10.165.157.158])
   by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 15:38:49 -0700
 From:   Ashok Raj <ashok.raj@intel.com>
@@ -47,9 +47,9 @@ Cc:     Tony Luck <tony.luck@intel.com>,
         Andy Lutomirski <luto@amacapital.net>,
         Tom Lendacky <thomas.lendacky@amd.com>,
         Ashok Raj <ashok.raj@intel.com>
-Subject: [PATCH 4/5] x86/microcode: Avoid any chance of MCE's during microcode update
-Date:   Sat, 13 Aug 2022 22:38:24 +0000
-Message-Id: <20220813223825.3164861-5-ashok.raj@intel.com>
+Subject: [PATCH 5/5] x86/microcode: Handle NMI's during microcode update.
+Date:   Sat, 13 Aug 2022 22:38:25 +0000
+Message-Id: <20220813223825.3164861-6-ashok.raj@intel.com>
 X-Mailer: git-send-email 2.32.0
 In-Reply-To: <20220813223825.3164861-1-ashok.raj@intel.com>
 References: <20220813223825.3164861-1-ashok.raj@intel.com>
@@ -65,111 +65,198 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When a microcode update is in progress, several instructions and MSR's can
-be patched by the update. During the update in progress, touching any of
-the resources being patched could result in unpredictable results. If
-thread0 is doing the update and thread1 happens to get a MCE, the handler
-might read an MSR that's being patched.
+Microcode updates need a guarantee that the thread sibling that is waiting
+for the update to finish on the primary core will not execute any
+instructions until the update is complete. This is required to guarantee
+any MSR or instruction that's being patched will be executed before the
+update is complete.
 
-In order to have predictable behavior, to avoid this scenario we set the MCIP in
-all threads. Since MCE's can't be nested, HW will automatically promote to
-shutdown condition.
+After the stop_machine() rendezvous, an NMI handler is registered. If an
+NMI were to happen while the microcode update is not complete, the
+secondary thread will spin until the ucode update state is cleared.
 
-After the update is completed, MCIP flag is cleared. The system is going to
-shutdown anyway, since the MCE could be a fatal error, or even recoverable
-errors in kernel space are treated as unrecoverable.
+Couple of choices discussed are:
+
+1. Rendezvous inside the NMI handler, and also perform the update from
+   within the handler. This seemed too risky and might cause instability
+   with the races that we would need to solve. This would be a difficult
+   choice.
+2. Thomas (tglx) suggested that we could look into masking all the LVT
+   originating NMI's. Such as LINT1, Perf control LVT entries and such.
+   Since we are in the rendezvous loop, we don't need to worry about any
+   NMI IPI's generated by the OS.
+
+   The one we didn't have any control over is the ACPI mechanism of sending
+   notifications to kernel for Firmware First Processing (FFM). Apparently
+   it seems there is a PCH register that BIOS in SMI would write to
+   generate such an interrupt (ACPI GHES).
+3. This is a simpler option. OS registers an NMI handler and doesn't do any
+   NMI rendezvous dance. But if an NMI were to happen, we check if any of
+   the CPUs thread siblings have an update in progress. Only those CPUs
+   would take an NMI. The thread performing the wrmsr() will only take an
+   NMI after the completion of the wrmsr 0x79 flow.
 
 Signed-off-by: Ashok Raj <ashok.raj@intel.com>
 ---
- arch/x86/include/asm/mce.h           |  4 ++++
- arch/x86/kernel/cpu/mce/core.c       |  9 +++++++++
- arch/x86/kernel/cpu/microcode/core.c | 11 +++++++++++
- 3 files changed, 24 insertions(+)
+ arch/x86/kernel/cpu/microcode/core.c | 88 +++++++++++++++++++++++++++-
+ 1 file changed, 85 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/include/asm/mce.h b/arch/x86/include/asm/mce.h
-index cc73061e7255..2aef6120e23f 100644
---- a/arch/x86/include/asm/mce.h
-+++ b/arch/x86/include/asm/mce.h
-@@ -207,12 +207,16 @@ void mcheck_cpu_init(struct cpuinfo_x86 *c);
- void mcheck_cpu_clear(struct cpuinfo_x86 *c);
- int apei_smca_report_x86_error(struct cper_ia_proc_ctx *ctx_info,
- 			       u64 lapic_id);
-+extern void mce_set_mcip(void);
-+extern void mce_clear_mcip(void);
- #else
- static inline int mcheck_init(void) { return 0; }
- static inline void mcheck_cpu_init(struct cpuinfo_x86 *c) {}
- static inline void mcheck_cpu_clear(struct cpuinfo_x86 *c) {}
- static inline int apei_smca_report_x86_error(struct cper_ia_proc_ctx *ctx_info,
- 					     u64 lapic_id) { return -EINVAL; }
-+static inline void mce_set_mcip(void) {}
-+static inline void mce_clear_mcip(void) {}
- #endif
- 
- void mce_setup(struct mce *m);
-diff --git a/arch/x86/kernel/cpu/mce/core.c b/arch/x86/kernel/cpu/mce/core.c
-index 2c8ec5c71712..72b49d95bb3b 100644
---- a/arch/x86/kernel/cpu/mce/core.c
-+++ b/arch/x86/kernel/cpu/mce/core.c
-@@ -402,6 +402,15 @@ static noinstr void mce_wrmsrl(u32 msr, u64 v)
- 		     : : "c" (msr), "a"(low), "d" (high) : "memory");
- }
- 
-+void mce_set_mcip(void)
-+{
-+	mce_wrmsrl(MSR_IA32_MCG_STATUS, 0x1);
-+}
-+
-+void mce_clear_mcip(void)
-+{
-+	mce_wrmsrl(MSR_IA32_MCG_STATUS, 0x0);
-+}
- /*
-  * Collect all global (w.r.t. this processor) status about this machine
-  * check into our "mce" struct so that we can use it later to assess
 diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
-index ad57e0e4d674..d24e1c754c27 100644
+index d24e1c754c27..ec10fa2db8b1 100644
 --- a/arch/x86/kernel/cpu/microcode/core.c
 +++ b/arch/x86/kernel/cpu/microcode/core.c
-@@ -39,6 +39,7 @@
- #include <asm/processor.h>
+@@ -40,6 +40,7 @@
  #include <asm/cmdline.h>
  #include <asm/setup.h>
-+#include <asm/mce.h>
+ #include <asm/mce.h>
++#include <asm/nmi.h>
  
  #define DRIVER_VERSION	"2.2"
  
-@@ -450,6 +451,14 @@ static int __reload_late(void *info)
- 	if (__wait_for_cpus(&late_cpus_in, NSEC_PER_SEC))
- 		return -1;
+@@ -411,6 +412,10 @@ static int check_online_cpus(void)
  
-+	/*
-+	 * Its dangerous to let MCE while microcode update is in progress.
-+	 * Its extremely rare and even if happens they are fatal errors.
-+	 * But reading patched areas before the update is complete can be
-+	 * leading to unpredictable results. Setting MCIP will guarantee
-+	 * the platform is taken to reset predictively.
-+	 */
-+	mce_set_mcip();
+ static atomic_t late_cpus_in;
+ static atomic_t late_cpus_out;
++static atomic_t nmi_cpus;
++static atomic_t nmi_timeouts;
++
++static struct cpumask cpus_in_wait;
+ 
+ static int __wait_for_cpus(atomic_t *t, long long timeout)
+ {
+@@ -433,6 +438,53 @@ static int __wait_for_cpus(atomic_t *t, long long timeout)
+ 	return 0;
+ }
+ 
++static int ucode_nmi_cb(unsigned int val, struct pt_regs *regs)
++{
++	int cpu = smp_processor_id();
++	int timeout = 100 * NSEC_PER_USEC;
++
++	atomic_inc(&nmi_cpus);
++	if (!cpumask_test_cpu(cpu, &cpus_in_wait))
++		return NMI_DONE;
++
++	while (timeout < NSEC_PER_USEC) {
++		if (timeout < NSEC_PER_USEC) {
++			atomic_inc(&nmi_timeouts);
++			break;
++		}
++		ndelay(SPINUNIT);
++		timeout -= SPINUNIT;
++		touch_nmi_watchdog();
++		if (!cpumask_test_cpu(cpu, &cpus_in_wait))
++			break;
++	}
++	return NMI_HANDLED;
++}
++
++static void set_nmi_cpus(struct cpumask *wait_mask)
++{
++	int first_cpu, wait_cpu, cpu = smp_processor_id();
++
++	first_cpu = cpumask_first(topology_sibling_cpumask(cpu));
++	for_each_cpu(wait_cpu, topology_sibling_cpumask(cpu)) {
++		if (wait_cpu == first_cpu)
++			continue;
++		cpumask_set_cpu(wait_cpu, wait_mask);
++	}
++}
++
++static void clear_nmi_cpus(struct cpumask *wait_mask)
++{
++	int first_cpu, wait_cpu, cpu = smp_processor_id();
++
++	first_cpu = cpumask_first(topology_sibling_cpumask(cpu));
++	for_each_cpu(wait_cpu, topology_sibling_cpumask(cpu)) {
++		if (wait_cpu == first_cpu)
++			continue;
++		cpumask_clear_cpu(wait_cpu, wait_mask);
++	}
++}
++
+ /*
+  * Returns:
+  * < 0 - on error
+@@ -440,7 +492,7 @@ static int __wait_for_cpus(atomic_t *t, long long timeout)
+  */
+ static int __reload_late(void *info)
+ {
+-	int cpu = smp_processor_id();
++	int first_cpu, cpu = smp_processor_id();
+ 	enum ucode_state err;
+ 	int ret = 0;
+ 
+@@ -459,6 +511,7 @@ static int __reload_late(void *info)
+ 	 * the platform is taken to reset predictively.
+ 	 */
+ 	mce_set_mcip();
++
  	/*
  	 * On an SMT system, it suffices to load the microcode on one sibling of
  	 * the core because the microcode engine is shared between the threads.
-@@ -457,6 +466,7 @@ static int __reload_late(void *info)
+@@ -466,9 +519,17 @@ static int __reload_late(void *info)
  	 * loading attempts happen on multiple threads of an SMT core. See
  	 * below.
  	 */
-+
- 	if (cpumask_first(topology_sibling_cpumask(cpu)) == cpu)
- 		apply_microcode_local(&err);
- 	else
-@@ -473,6 +483,7 @@ static int __reload_late(void *info)
- 	if (__wait_for_cpus(&late_cpus_out, NSEC_PER_SEC))
- 		panic("Timeout during microcode update!\n");
++	first_cpu = cpumask_first(topology_sibling_cpumask(cpu));
  
-+	mce_clear_mcip();
- 	/*
- 	 * At least one thread has completed update on each core.
- 	 * For others, simply call the update to make sure the
+-	if (cpumask_first(topology_sibling_cpumask(cpu)) == cpu)
++	/*
++	 * Set the CPUs that we should hold in NMI until the primary has
++	 * completed the microcode update.
++	 */
++	if (first_cpu == cpu) {
++		set_nmi_cpus(&cpus_in_wait);
+ 		apply_microcode_local(&err);
++		clear_nmi_cpus(&cpus_in_wait);
++	}
+ 	else
+ 		goto wait_for_siblings;
+ 
+@@ -502,20 +563,41 @@ static int __reload_late(void *info)
+  */
+ static int microcode_reload_late(void)
+ {
+-	int ret;
++	int ret = 0;
+ 
+ 	pr_err("Attempting late microcode loading - it is dangerous and taints the kernel.\n");
+ 	pr_err("You should switch to early loading, if possible.\n");
+ 
+ 	atomic_set(&late_cpus_in,  0);
+ 	atomic_set(&late_cpus_out, 0);
++	atomic_set(&nmi_cpus, 0);
++	atomic_set(&nmi_timeouts, 0);
++	cpumask_clear(&cpus_in_wait);
++
++	ret = register_nmi_handler(NMI_LOCAL, ucode_nmi_cb, NMI_FLAG_FIRST,
++				   "ucode_nmi");
++	if (ret) {
++		pr_err("Unable to register NMI handler\n");
++		goto done;
++	}
+ 
+ 	ret = stop_machine_cpuslocked(__reload_late, NULL, cpu_online_mask);
+ 	if (ret == 0)
+ 		microcode_check();
+ 
++	unregister_nmi_handler(NMI_LOCAL, "ucode_nmi");
++
++	if (atomic_read(&nmi_cpus))
++		pr_info("%d CPUs entered NMI while microcode update"
++			"in progress\n", atomic_read(&nmi_cpus));
++
++	if (atomic_read(&nmi_timeouts))
++		pr_err("Some CPUs [%d] entered NMI and timedout waiting for its"
++		       " mask to be cleared\n", atomic_read(&nmi_timeouts));
++
+ 	pr_info("Reload completed, microcode revision: 0x%x\n", boot_cpu_data.microcode);
+ 
++done:
+ 	return ret;
+ }
+ 
 -- 
 2.32.0
 

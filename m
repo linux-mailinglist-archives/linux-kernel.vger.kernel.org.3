@@ -2,62 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD6F591D05
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 00:39:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39FBC591D0D
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 00:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240085AbiHMWjM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 18:39:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47184 "EHLO
+        id S240140AbiHMWli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 18:41:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236391AbiHMWiy (ORCPT
+        with ESMTP id S240128AbiHMWlh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 18:38:54 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2C16CD28
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 15:38:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660430333; x=1691966333;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=tT+pOZUbPO916ColyGnd0DnVtmEhGeyWUDAruwEPKXk=;
-  b=c9I8SViJxxtP6Zyf/AtRv/6ipon8vEvF/CYF3WCday6FFsDAxHdfVYuE
-   9ErftCwX2ztrS4dPLMmkehz9l4TqzIFjd283QhDlGvpQ7sbBbh+35TLJ4
-   8ywFUT7ASnjdzcHHb9AXW59+C2mJcmlufgyWpCKPvtIi8JL+3F1Nnwao6
-   skCJS4LJSovPmkxcgM5ii3+/1ha0LX7lxccbDc9Je+FKsqbygynRV9u2a
-   +1x5cKJUR4rPzKxzErfrmf9rpBERH43MWisz0mTgOa0Ce1fYK7YXuUrfq
-   M6uamKl7vybKh1uhIa/Fi/GMz+iKUvVRruMFEeLvoDdAg/ivVA1uQlV4u
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="353523723"
-X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
-   d="scan'208";a="353523723"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 15:38:49 -0700
-X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
-   d="scan'208";a="556890238"
-Received: from araj-dh-work.jf.intel.com ([10.165.157.158])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 15:38:49 -0700
-From:   Ashok Raj <ashok.raj@intel.com>
-To:     Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     Tony Luck <tony.luck@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        "LKML Mailing List" <linux-kernel@vger.kernel.org>,
-        X86-kernel <x86@kernel.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Ashok Raj <ashok.raj@intel.com>
-Subject: [PATCH 5/5] x86/microcode: Handle NMI's during microcode update.
-Date:   Sat, 13 Aug 2022 22:38:25 +0000
-Message-Id: <20220813223825.3164861-6-ashok.raj@intel.com>
-X-Mailer: git-send-email 2.32.0
-In-Reply-To: <20220813223825.3164861-1-ashok.raj@intel.com>
-References: <20220813223825.3164861-1-ashok.raj@intel.com>
+        Sat, 13 Aug 2022 18:41:37 -0400
+Received: from sonic306-21.consmr.mail.gq1.yahoo.com (sonic306-21.consmr.mail.gq1.yahoo.com [98.137.68.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2DA76E2EC
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 15:41:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netscape.net; s=a2048; t=1660430495; bh=Op1RFBba7lO0xCqevP/9M9G8wIIEt7tgquGAKYMCRmU=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=VtPf1+cvrSvCQSmXcxxRo9fnrb6TL1ikxcV6XnSAdD/IkDRd7Jy2RedTnfxklUimn7YgNWdWD9AAZS+QcesXmDsdY/jPS/MPwu9lRv82b1NOxLOe/IfQ5PiUNhv1hI7quaAjavUAEU2MKssQdCL+HVb2BE8AuYa58b6OY1jBz7wP3hYhjVxIaCDoB6SmJSyKUPf8RzlAxE4ZVocUS9y9gJKH2n4sdlDMhXpNB7l7NbMgu+et+IovG2y0kn4VrGe4oQcmtAhQk6eBJJ85nj0/0hrMqO8p7w2UsW0AMzbKztgunoTWBzXBCIz095GQfOREVD/XUXnzWUj2dWR1U+p1TA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1660430495; bh=2uM/Lus+iAkE18Yn+Xjw5h9L2R1ibQfDEU/xegsCOU1=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=aWqHgK2/ASkFNTztKD69+1kD1YF122Iu/z6xXPHA4rSlnNiLfJ+OFUBjY5X7LyHZ/aApx3CQfh/IlTey59EmcJtsQ0oK5k3VNcdMiaqWpg3MzzEFFuZSQbsuSRNxKMWhbNrHNtiDvY3woVCVuVcnqHSmIRfgwS6PQcUMW9EHJ5Br1mUcdetPazMIpfv/V6E/iTWshUjSYYmoFm/pWv0xCI+HTadC/ra+vomK9WBtzkJKGZP3S747X1LSod5DQRH8KEo4qT1Wpttr/0scMPVTSEMvBmoB2VlS/IEcFoBC19vn+fZs3WFJKnos9TzUhX4KHg5HG+q738JavwUVrbJD5w==
+X-YMail-OSG: d6T7FEcVM1mVMOuFN3_NECZYrcXa2YBxu1vvEc2qW2YOpZ_dj6ZAVsTeUWCXgsg
+ Faa6AlhjrsVuay8Y8TJeeQ_ubchEey0vSdo_QoewJCWvigBhBZ6C4nqpEAaj76kZD.CrnEIBzei3
+ DnHFz9JCaynrI9A1VD5iNXRtMVxUM_1UENV9yl1qrpSD7zsUWQuZqk6d7hfC2gttrajU3uLgaV69
+ lEWsXksZZhFs7wL0scUQULTMcCRNVfSR25W9FnU5A5S._c4drwwKhyvJxfxvc.UICZS8sR_HxvZB
+ Zpihr6IMIFAocpm22vN8lKsKaHe14XrxWQA._CZtrfQkza8f5OfHxPS5nR68cm3e2kZlrlFgYk_L
+ oqYnl_vFqCiwqzxO7F9PzNjApRop6qcUqyCMrT_W5oHiZqRPfPgzlZuhLKjqlz3VGWR8PQdcR.WE
+ Pmo12f53_L1HIBhEuvYsCAOfKa7SWyIM5yrdBFVXGo5HK7O0auiz.ER2SfzrfgjavvBu6HyinKl9
+ 1Psahm3IvbWMxivLMt_Jj2MEOTQ85zWwpPAiFrLjLsvStXCGx6og963Lk98GNjFr4KB0nr9EBnrV
+ .ZrrcuNdOPw64yxNhpTYgUwRl7yeGcrltIv78WuHM6Arr18Pf89_S_3kMEw7oMDFfsfV5DVDhbRC
+ hgxqQBaXh09Kfh7izN5BhE.5st8Yi4KZ.Yu2f57wzjJcGFtKkfZT0O8unCGrtc1S1v.OUy7AEX1p
+ 8mXJtGZ9EfJgL5zXsIFjkLZ8VSSYCdy9B_1I_DBZlppwbKkzvcbcAs6AGtwT05sLNZKWKSMduDqF
+ cjO.cl_xMvgyx2DAPAbKY8VQjJvvjfntDSI5hQgQUSoC21.9eQWkKrcpM3gTReVti1u27uGUIvNZ
+ J6qsoodZ6RSMwj9MDQHJKgGX6gduRD6ZnIEHQEPVGPdxa9XTzov9NRoD0oK2wXmopSp7NPeD3AMA
+ aa8SvgyCafDJmo80ctwMHUHE2Y9QvtM.st5ZQn7WnpWAT0JOv3hIU49grEfHQTlwyycCPPT0xWfe
+ 6MqJx.CQMLXyILxxI06iFLmFe7iu.AHKt6jn_t0WNGztVsplJ5D3YwUdoYNx2QLuviTX4ixRET6e
+ BvvG5KIVmmxXvWnjtkjbUtMJi0MQQsP6i3RP_IfkFnAnpubfwSe9xO_Ix95qSu068i81XDJS2k7D
+ C91jEQVwP0Yca4dq79FWJ3d0HbrsQeq_G2NBaXzG54QHLtT81oU26k8u28m7escn7Nrg2t8xN1mR
+ IfWM258VRn.pFsplhXFrkh6NYFntKcyXj67tRmGp3ymaCVMxcC4hjtelur1LDTblQeNh4cN3thTs
+ dUb4tu6ZTsXwJ8lQYXt8Lrap.wfGz46YLB66KHktOiYLc_oxtjfcSRrXoP8VLh1UZZ3O58cjVGdy
+ 4MQul5ni51YJHkkqhAleWbrkXnLS.kU70LUgrRF410hfs18Wa834krrg5.kHMr1hpzUcLQ_Af7Bk
+ e_7ibEenmxmrbcSMe67DtUL9rrvRXl6pMUCeHV71w91LosXaHLJU8Vok8GGyBKV6nnU6hIJKg7.V
+ 6kXacsI0xHi3KvKqelit1sTiDfKbo8l4nMxtcf_cMuIGfnR2ohI6gt_Cs.mXzAwGi1lXK80O98UU
+ WIy4R2gijneda1SxEFknUTGffd7FVaoBrmCgaz.BF6nFxJI9LGGQDCOCfUBpxdOX7wB142T2pcfI
+ 3NfG83_8Y4eiPVNgI.Q.pmBYS960U1IMF8c3Ol6zpxgumGLoxKh3bjZKJWlQbe7dw.aZlwGROwaX
+ 5mOB3sNiJUFJvzXmau1UL10bGPx_lBhWydgFn_Vg7BRoh3Ay0wR3U996MdaEutRJ6u1_iBBPcDNl
+ UQaqO_zhVPxEfJ8lMotGQaTlFoCLr..Q89ovR5iRb3A4KNeW49MuoEAD0M1ffTmaB6qzlOEPRLD.
+ B7czF3F1hG4rWgXjtjaoAOsmGkr74DKRHhj9fTKgvyZoSd4U4N0TJQYygjqBeCsgnJur9KzHIdyJ
+ kXQ0Zt1smCTxKPdigGF8ylUUnjm4anLHEVJN2D3KnyO5.JvBx6Lkr0bBdov0btlwI.jU0.e3da7f
+ TCmeJT2qQUXCdlFtH5SsjI2eFHyebRZN8htf9Apx8Hul2BQbqM8YEM6abxTeP.gJozmeKcGqyxUC
+ GrjiPGqH5UqldmUvlTYSYCOHBhl4N72KoCx1hZef.QYHH4fIRs.xBSYCTqCer8gzP7IrtuwU6AyF
+ BWKQRdW5KL9e5miIRDiNr3BhkLDw-
+X-Sonic-MF: <brchuckz@aim.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic306.consmr.mail.gq1.yahoo.com with HTTP; Sat, 13 Aug 2022 22:41:35 +0000
+Received: by hermes--production-ne1-6649c47445-zp4l8 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 2311408bfed2e7d8c493523d9e059a17;
+          Sat, 13 Aug 2022 22:41:34 +0000 (UTC)
+Message-ID: <6e709192-064d-fdfb-8596-6474d891dd7f@netscape.net>
+Date:   Sat, 13 Aug 2022 18:41:34 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: PING [PATCH 3/3] x86: decouple pat and mtrr handling
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     Juergen Gross <jgross@suse.com>,
+        Thorsten Leemhuis <regressions@leemhuis.info>,
+        Jan Beulich <jbeulich@suse.com>,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        regressions@lists.linux.dev
+References: <20220715142549.25223-1-jgross@suse.com>
+ <20220715142549.25223-4-jgross@suse.com> <YtbKf51S4lTaziKm@zn.tnic>
+ <d838264a-bcd0-29e2-3b23-5427ee0ee041@netscape.net>
+ <YvfdYS81vU66tQSs@zn.tnic>
+ <3de36953-9b8a-d040-c8dd-44af1ae2d56d@netscape.net>
+ <YvgcIu/Y1GMD5WNo@zn.tnic>
+From:   Chuck Zmudzinski <brchuckz@netscape.net>
+In-Reply-To: <YvgcIu/Y1GMD5WNo@zn.tnic>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20531 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.aol
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,198 +94,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Microcode updates need a guarantee that the thread sibling that is waiting
-for the update to finish on the primary core will not execute any
-instructions until the update is complete. This is required to guarantee
-any MSR or instruction that's being patched will be executed before the
-update is complete.
+On 8/13/2022 5:48 PM, Borislav Petkov wrote:
+> On Sat, Aug 13, 2022 at 05:40:34PM -0400, Chuck Zmudzinski wrote:
+> > I did a search for Juergen Gross on lkml and he is active submitting and
+> > reviewing patches during the past few weeks. However, he is ignoring
+> > comments on his patch to fix this regression.
+>
+> Please stop this non-sense and be patient. We will fix this soon. For
+> the time being you can use Jan's patch locally.
+>
 
-After the stop_machine() rendezvous, an NMI handler is registered. If an
-NMI were to happen while the microcode update is not complete, the
-secondary thread will spin until the ucode update state is cleared.
+Hello Boris,
 
-Couple of choices discussed are:
+I am grateful that you took the time to respond and say it will be fixed soon.
+By soon, I presume that means within two weeks as the guidance for
+fixing regressions recommends:
 
-1. Rendezvous inside the NMI handler, and also perform the update from
-   within the handler. This seemed too risky and might cause instability
-   with the races that we would need to solve. This would be a difficult
-   choice.
-2. Thomas (tglx) suggested that we could look into masking all the LVT
-   originating NMI's. Such as LINT1, Perf control LVT entries and such.
-   Since we are in the rendezvous loop, we don't need to worry about any
-   NMI IPI's generated by the OS.
+https://www.kernel.org/doc/html/latest/process/handling-regressions.html
 
-   The one we didn't have any control over is the ACPI mechanism of sending
-   notifications to kernel for Firmware First Processing (FFM). Apparently
-   it seems there is a PCH register that BIOS in SMI would write to
-   generate such an interrupt (ACPI GHES).
-3. This is a simpler option. OS registers an NMI handler and doesn't do any
-   NMI rendezvous dance. But if an NMI were to happen, we check if any of
-   the CPUs thread siblings have an update in progress. Only those CPUs
-   would take an NMI. The thread performing the wrmsr() will only take an
-   NMI after the completion of the wrmsr 0x79 flow.
+Quoting from that page: "Try to fix regressions quickly once the culprit has
+been identified; fixes for most regressions should be merged within two
+weeks, but some need to be resolved within two or three days."
 
-Signed-off-by: Ashok Raj <ashok.raj@intel.com>
----
- arch/x86/kernel/cpu/microcode/core.c | 88 +++++++++++++++++++++++++++-
- 1 file changed, 85 insertions(+), 3 deletions(-)
+If the regression is not fixed by the end of August, I don't think it would
+be "nonsense" for me to send another PING at that time. I also think the
+PING I sent earlier today is not "nonsense," given that this regression has been
+waiting for a fix for over three months, which is much longer than the
+expected time to fix a regression of two weeks.
 
-diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
-index d24e1c754c27..ec10fa2db8b1 100644
---- a/arch/x86/kernel/cpu/microcode/core.c
-+++ b/arch/x86/kernel/cpu/microcode/core.c
-@@ -40,6 +40,7 @@
- #include <asm/cmdline.h>
- #include <asm/setup.h>
- #include <asm/mce.h>
-+#include <asm/nmi.h>
- 
- #define DRIVER_VERSION	"2.2"
- 
-@@ -411,6 +412,10 @@ static int check_online_cpus(void)
- 
- static atomic_t late_cpus_in;
- static atomic_t late_cpus_out;
-+static atomic_t nmi_cpus;
-+static atomic_t nmi_timeouts;
-+
-+static struct cpumask cpus_in_wait;
- 
- static int __wait_for_cpus(atomic_t *t, long long timeout)
- {
-@@ -433,6 +438,53 @@ static int __wait_for_cpus(atomic_t *t, long long timeout)
- 	return 0;
- }
- 
-+static int ucode_nmi_cb(unsigned int val, struct pt_regs *regs)
-+{
-+	int cpu = smp_processor_id();
-+	int timeout = 100 * NSEC_PER_USEC;
-+
-+	atomic_inc(&nmi_cpus);
-+	if (!cpumask_test_cpu(cpu, &cpus_in_wait))
-+		return NMI_DONE;
-+
-+	while (timeout < NSEC_PER_USEC) {
-+		if (timeout < NSEC_PER_USEC) {
-+			atomic_inc(&nmi_timeouts);
-+			break;
-+		}
-+		ndelay(SPINUNIT);
-+		timeout -= SPINUNIT;
-+		touch_nmi_watchdog();
-+		if (!cpumask_test_cpu(cpu, &cpus_in_wait))
-+			break;
-+	}
-+	return NMI_HANDLED;
-+}
-+
-+static void set_nmi_cpus(struct cpumask *wait_mask)
-+{
-+	int first_cpu, wait_cpu, cpu = smp_processor_id();
-+
-+	first_cpu = cpumask_first(topology_sibling_cpumask(cpu));
-+	for_each_cpu(wait_cpu, topology_sibling_cpumask(cpu)) {
-+		if (wait_cpu == first_cpu)
-+			continue;
-+		cpumask_set_cpu(wait_cpu, wait_mask);
-+	}
-+}
-+
-+static void clear_nmi_cpus(struct cpumask *wait_mask)
-+{
-+	int first_cpu, wait_cpu, cpu = smp_processor_id();
-+
-+	first_cpu = cpumask_first(topology_sibling_cpumask(cpu));
-+	for_each_cpu(wait_cpu, topology_sibling_cpumask(cpu)) {
-+		if (wait_cpu == first_cpu)
-+			continue;
-+		cpumask_clear_cpu(wait_cpu, wait_mask);
-+	}
-+}
-+
- /*
-  * Returns:
-  * < 0 - on error
-@@ -440,7 +492,7 @@ static int __wait_for_cpus(atomic_t *t, long long timeout)
-  */
- static int __reload_late(void *info)
- {
--	int cpu = smp_processor_id();
-+	int first_cpu, cpu = smp_processor_id();
- 	enum ucode_state err;
- 	int ret = 0;
- 
-@@ -459,6 +511,7 @@ static int __reload_late(void *info)
- 	 * the platform is taken to reset predictively.
- 	 */
- 	mce_set_mcip();
-+
- 	/*
- 	 * On an SMT system, it suffices to load the microcode on one sibling of
- 	 * the core because the microcode engine is shared between the threads.
-@@ -466,9 +519,17 @@ static int __reload_late(void *info)
- 	 * loading attempts happen on multiple threads of an SMT core. See
- 	 * below.
- 	 */
-+	first_cpu = cpumask_first(topology_sibling_cpumask(cpu));
- 
--	if (cpumask_first(topology_sibling_cpumask(cpu)) == cpu)
-+	/*
-+	 * Set the CPUs that we should hold in NMI until the primary has
-+	 * completed the microcode update.
-+	 */
-+	if (first_cpu == cpu) {
-+		set_nmi_cpus(&cpus_in_wait);
- 		apply_microcode_local(&err);
-+		clear_nmi_cpus(&cpus_in_wait);
-+	}
- 	else
- 		goto wait_for_siblings;
- 
-@@ -502,20 +563,41 @@ static int __reload_late(void *info)
-  */
- static int microcode_reload_late(void)
- {
--	int ret;
-+	int ret = 0;
- 
- 	pr_err("Attempting late microcode loading - it is dangerous and taints the kernel.\n");
- 	pr_err("You should switch to early loading, if possible.\n");
- 
- 	atomic_set(&late_cpus_in,  0);
- 	atomic_set(&late_cpus_out, 0);
-+	atomic_set(&nmi_cpus, 0);
-+	atomic_set(&nmi_timeouts, 0);
-+	cpumask_clear(&cpus_in_wait);
-+
-+	ret = register_nmi_handler(NMI_LOCAL, ucode_nmi_cb, NMI_FLAG_FIRST,
-+				   "ucode_nmi");
-+	if (ret) {
-+		pr_err("Unable to register NMI handler\n");
-+		goto done;
-+	}
- 
- 	ret = stop_machine_cpuslocked(__reload_late, NULL, cpu_online_mask);
- 	if (ret == 0)
- 		microcode_check();
- 
-+	unregister_nmi_handler(NMI_LOCAL, "ucode_nmi");
-+
-+	if (atomic_read(&nmi_cpus))
-+		pr_info("%d CPUs entered NMI while microcode update"
-+			"in progress\n", atomic_read(&nmi_cpus));
-+
-+	if (atomic_read(&nmi_timeouts))
-+		pr_err("Some CPUs [%d] entered NMI and timedout waiting for its"
-+		       " mask to be cleared\n", atomic_read(&nmi_timeouts));
-+
- 	pr_info("Reload completed, microcode revision: 0x%x\n", boot_cpu_data.microcode);
- 
-+done:
- 	return ret;
- }
- 
--- 
-2.32.0
+Best regards,
 
+Chuck

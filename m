@@ -2,82 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7518A59193D
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 09:25:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB354591944
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 09:31:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238105AbiHMHZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 03:25:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46814 "EHLO
+        id S237678AbiHMHbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 03:31:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233812AbiHMHZQ (ORCPT
+        with ESMTP id S233812AbiHMHbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 03:25:16 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95BD727B;
-        Sat, 13 Aug 2022 00:25:14 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4M4X8v3MHHzlCn0;
-        Sat, 13 Aug 2022 15:23:59 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgD3+_jWUfdi1eAhAQ--.47704S3;
-        Sat, 13 Aug 2022 15:25:12 +0800 (CST)
-Subject: Re: [PATCH] fs: fix possible inconsistent mount device
-To:     Christoph Hellwig <hch@infradead.org>,
-        Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20220813060848.1457301-1-yukuai1@huaweicloud.com>
- <YvdJMj5hNem2PMVh@infradead.org>
- <230cf303-b241-957d-f5aa-5d367eddeb3f@huaweicloud.com>
- <YvdPlDPX82NsC6/d@infradead.org>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <9317e272-7412-853a-a73c-5d9c43bd23c2@huaweicloud.com>
-Date:   Sat, 13 Aug 2022 15:25:10 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Sat, 13 Aug 2022 03:31:18 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C7381694;
+        Sat, 13 Aug 2022 00:31:16 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 24so2534630pgr.7;
+        Sat, 13 Aug 2022 00:31:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc;
+        bh=D3wy9rQ7cVpBfdR+lwwp9TClhnX1lnTP3s5LxPW1Yu8=;
+        b=fVkeznOkbaH9RNgock2tBYZXVMctqT5XvVUD0hz9bkDz+kT1421d5dJzqIFxKtXGqb
+         wLdpC3igAwJus28SqqO64YgpdNt8uY7RgK1dF4tjRRFM3cDbSQYmKqYM5ghUcfom2Tt9
+         Ai+RG5ryo2vTXcNKwTGGmymH8m8CjPY56Sb6WC3Q2v4cX1yd4vPdGd/DPgWUCkDsqvwj
+         hKrggSHKLALs+ndQymUNMedE9y+m0HjwTpJDIeMA8v0Jg1lnZ7FQgico5SJAQBMAk/4B
+         I2cw5ESo6GRFOmUnpjqc9roiC166S6o5FcoHzMQBrm6p6qhMwCBKB0FEAUHGydtrhX3n
+         W5eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc;
+        bh=D3wy9rQ7cVpBfdR+lwwp9TClhnX1lnTP3s5LxPW1Yu8=;
+        b=4vZttjx4KGm04BIMN7tXJJe8wTseBUSYa2GCh7yZnF7kb+SYs5RfA3+vItzT+pqaIn
+         FeEUhamSxrNvu6NIGspm0xA1Jp6T9oeHCuVEdggh15EUgw7Jhb8WPQSnqj9bGpqrULRM
+         87ZIERoOl5NhBhwIt3bGVAzi1bmvxfyiPYN7UKrwmcsCyP0DXb7jsPVN1yQanaORTkju
+         uxRYimd36k0Xb4XetFkuE+GLbE9cIDgAePHejoLl9fkSXYkGvS5jbAciGr8LWZFBp1Yv
+         Rt1EzAGjVIN9DqHuJRMKcOJq6EHRazLqqbb9iDHCrseibbfwZh919o9Y0go/eYcfcTEn
+         d7Jg==
+X-Gm-Message-State: ACgBeo0/0bSPYcVqmXLVE8pXhCwZxmI0a0vtQf24Dwq0UyEkwBt7STKs
+        Z1jAcJUZ6U751qURJM0seTTy0El+GfQ=
+X-Google-Smtp-Source: AA6agR6brHizXhbnfNUznEA5ff0ffpS+SnQzhopJT/fnX3ibin+NJ1tOtwGZ3sb1wJJ0em862xx40g==
+X-Received: by 2002:a05:6a00:2181:b0:51b:560b:dd30 with SMTP id h1-20020a056a00218100b0051b560bdd30mr7467073pfi.44.1660375876363;
+        Sat, 13 Aug 2022 00:31:16 -0700 (PDT)
+Received: from [192.168.43.80] (subs03-180-214-233-18.three.co.id. [180.214.233.18])
+        by smtp.gmail.com with ESMTPSA id z7-20020a17090a170700b001f7613a9d0dsm939367pjd.52.2022.08.13.00.31.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 13 Aug 2022 00:31:15 -0700 (PDT)
+Message-ID: <d9931783-c70a-2ac5-5028-1ea0b79ea982@gmail.com>
+Date:   Sat, 13 Aug 2022 14:31:09 +0700
 MIME-Version: 1.0
-In-Reply-To: <YvdPlDPX82NsC6/d@infradead.org>
-Content-Type: text/plain; charset=gbk; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH next 0/2] Documentation: KVM:
+ KVM_CAP_VM_DISABLE_NX_HUGE_PAGES documentation fixes
+Content-Language: en-US
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     linux-doc@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        David Matlack <dmatlack@google.com>,
+        Ben Gardon <bgardon@google.com>, Peter Xu <peterx@redhat.com>,
+        kvm@vger.kernel.org, linux-next@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220811063601.195105-1-pbonzini@redhat.com>
+ <1db2a0cd-bef1-213c-a411-3d39d378743a@gmail.com>
+ <d858ba66-422b-2bce-dafe-bc6586803e5f@redhat.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <d858ba66-422b-2bce-dafe-bc6586803e5f@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgD3+_jWUfdi1eAhAQ--.47704S3
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYz7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
-        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
-        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8I
-        cVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87
-        Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE
-        6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72
-        CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7Mxk0
-        xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
-        1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
-        14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
-        IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWrJr0_WFyUJwCI42IY
-        6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
-        73UjIFyTuYvjfUoOJ5UUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-ÔÚ 2022/08/13 15:15, Christoph Hellwig Ð´µÀ:
-> On Sat, Aug 13, 2022 at 03:09:58PM +0800, Yu Kuai wrote:
->> Thanks for your reply. Do you think it's better to remove the rename
->> support from dm? Or it's better to add such limit?
+On 8/12/22 14:40, Paolo Bonzini wrote:
+>>
+>> Thanks for picking this up. However, Stephen noted that the issue is
+>> already showed up on mainline [1]. Maybe this series should be queued
+>> for 6.0 release (as -rc fixes), right?
 > 
-> It will probably be hard to entirely remove it.  But documentation
-> and a rate limited warning discouraging it seems like a good idea.
+> Yes, it's in Linus's tree already.Â  Thanks for replying to Stephen.
+> 
 
-Yes, that's a good idea.
+Thanks.
 
-Thanks,
-Kuai
-
+-- 
+An old man doll... just what I always wanted! - Clara

@@ -2,118 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26851591CA1
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 22:54:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41681591CA3
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 Aug 2022 22:55:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240184AbiHMUyd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 16:54:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55712 "EHLO
+        id S240198AbiHMUzY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 16:55:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240178AbiHMUy3 (ORCPT
+        with ESMTP id S240199AbiHMUzT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 16:54:29 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E560CDEE5
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 13:54:28 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id q10-20020a056e020c2a00b002dedb497c7fso2704772ilg.16
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 13:54:28 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=YzUPbjeAbNgur1Ht6pBiKHByR3ZFjUXrKG6V3HyvA6E=;
-        b=ECQJeOV1OZSwpTIRv1OApbVGBhzyR5P0hDTKlwGPpMLaStH1YOzW6XSKV8Mzv1wQbA
-         myFpcwYJxwtiVRnD/+wYshftUxDOux/F8yteV0UB+KSQDvaHPx+TVS0T5HkV0M+eAddc
-         K1c0axBBVBQrMVOoknXDGGCMzberFErAmL0MvWRy/eoIfVioqkwN+4WzJrhUET7YpDoP
-         4FLNS474tlZmSd88w5pWzuCcmNqdgtVJta0TDh/lU3uvLjMnRFgXX46xRaX0HVY0xaYD
-         fVB3UZMzk7CV2I20BjVmeMVWpRlrkKY00+gwpkUtcmmz5Oe9tYFUy+omUZUJw9D/okE2
-         dBbA==
-X-Gm-Message-State: ACgBeo0n9dfaZqw97TBagy9FZGQfxNywjuxq4t0270Qiuy4im6J1k87F
-        DQ4heE1aF7p5OQfIH3QZSn9UHTGxag3OM4YjDXgMBmu5H6Oz
-X-Google-Smtp-Source: AA6agR6i7PWOd1+KUtybI2x08boV9aewzwY5gOAOB+dtXuQ3US92YUKhdyacV10qfuvyzlYV1yCsACGIuMohu98igVtNcLlv7AQ5
+        Sat, 13 Aug 2022 16:55:19 -0400
+Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 009A010F0;
+        Sat, 13 Aug 2022 13:55:17 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id A927F5C0055;
+        Sat, 13 Aug 2022 16:55:14 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Sat, 13 Aug 2022 16:55:14 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-transfer-encoding:content-type:date:date:from
+        :from:in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1660424114; x=
+        1660510514; bh=WBtXdFNwOXpOa6UfovUW6zsllC8njQzZuj2bCxqBaEM=; b=I
+        1K4U+AGqp/MMbwesWBM9vBj8wAOP3vmcIDtL3xl52a63UjnUpGsuQpWPbgMPQY7m
+        HGsZkYYdaPB9wcZ7qf9fyEctX5KspAm+ZYDxEkQKg5unYGKjTTqLwFSyha8/a8z2
+        jSjxJD9RYLt7x1oiHcLAhPT+Mu5Nb8/VZ3kzFfEVKmr6d0Idbd1xdGA9YQJiKy/+
+        a4tuy+2RzGYBFkrljcCzw60H1t2yI033463Mbua6iGGys5CGQwRjOwanqYUrTRrB
+        yqnR209KUbusnRoa06wdE4uImR6H/byf+gp5kznfgrEn3sP+28xksln+ot8rjMHR
+        QFJ4vRj1m/EDMSjWpX/Nw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1660424114; x=
+        1660510514; bh=WBtXdFNwOXpOa6UfovUW6zsllC8njQzZuj2bCxqBaEM=; b=q
+        0vzkHqvTCDkp3HiSnaEixVQzmYsa+ilbD31vvOVioD02JNu9/tBFSiA5/mx6Qbnr
+        yXyM1jdC79dIlt3QY+ZLlJcVOkF+0nUi3NTciKZSvrkNdQkndYfLS9sFWVdlcI/K
+        p9hiUmqyc0JgK8HMWWWUes+q0siITM0CykdtB5sY1t7UzY3yYXNPeB53ksAbGVwl
+        5ZKxsy4j4kB8MjavDFxYa3IhBl++VAfKwuBTqXfigQrhLYlrDBZKj+ymwATl1aoL
+        Qf5LINu4bbbzzmzgpD49fx/ZKRAfKjoa2ZrqttLgeAmr3ygtjpg0emI6QdPbgPN2
+        tVqjabZIx4SzUq0MgwtXQ==
+X-ME-Sender: <xms:sA_4Yv-k82_jEtSKZ-I1Im3Q_O3F1V6URf834z-3PyX9M3o2xx7lrw>
+    <xme:sA_4Yrt2BBZhsxsKAjBo-lA9ntOcovCaa5W1JE9dL6QiuU5XhLHjJBVi0kjkf9aNz
+    wRGZB0ocZBzXn70f9E>
+X-ME-Received: <xmr:sA_4YtDnVvic2B5fPb5NdqujLy3K8jB7Su2UkqQm5yNzgBkC4q1wnNzPbU6mcHC0EIZpKQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegkedgudehjecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtugfgjgesthektddttddtjeenucfhrhhomhepfdfm
+    ihhrihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovh
+    drnhgrmhgvqeenucggtffrrghtthgvrhhnpefgjeeikefffeefvedugfdtkedvhfdttdei
+    feevtdehgefgjeffleelgffggfdvkeenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
+    grmhepmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:sQ_4Yrf_6CnNmErf-FyJxQP9wSgpokIcH-J1kHMPNrlzrP-lbJE8lA>
+    <xmx:sQ_4YkMP69jKuCWtnGMAaXh4hxH8Xm097ipzqBubo2IZb8_MVxk8Zg>
+    <xmx:sQ_4YtlNdjg1lmMBrrXNF-suaqvP0wv2vMzqGg1GDQJL3y2iGNdGWQ>
+    <xmx:sg_4Ypbn7td2rTwiwWnuPf8zRTluy-P64Pi0n-2FKwLyEleY-Fd7mQ>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 13 Aug 2022 16:55:12 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id E987C104A08; Sat, 13 Aug 2022 23:58:13 +0300 (+03)
+Date:   Sat, 13 Aug 2022 23:58:13 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Andy Lutomirski <luto@kernel.org>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Andi Kleen <ak@linux.intel.com>,
+        Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Varad Gautam <varad.gautam@suse.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Marcelo Henrique Cerri <marcelo.cerri@canonical.com>,
+        tim.gardner@canonical.com, khalid.elmously@canonical.com,
+        philip.cox@canonical.com,
+        the arch/x86 maintainers <x86@kernel.org>,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCHv7 10/14] x86/mm: Avoid load_unaligned_zeropad() stepping
+ into unaccepted memory
+Message-ID: <20220813205813.mx2zxzq7npbaxbxn@box.shutemov.name>
+References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
+ <20220614120231.48165-11-kirill.shutemov@linux.intel.com>
+ <Yt/ANO5usdV+JSSW@zn.tnic>
+ <80cc204b-a24f-684f-ec66-1361b69cae39@intel.com>
+ <073c5a97-272c-c5a0-19f2-c3f14f916c72@intel.com>
+ <f2cf11d3-c2f8-4add-ab58-19a4844be361@www.fastmail.com>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:4909:0:b0:66a:e3fc:e7b2 with SMTP id
- u9-20020a6b4909000000b0066ae3fce7b2mr3829670iob.29.1660424068230; Sat, 13 Aug
- 2022 13:54:28 -0700 (PDT)
-Date:   Sat, 13 Aug 2022 13:54:28 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000c371f705e6259a38@google.com>
-Subject: [syzbot] UBSAN: shift-out-of-bounds in init_sb (3)
-From:   syzbot <syzbot+dcf33a7aae997956fe06@syzkaller.appspotmail.com>
-To:     agruenba@redhat.com, cluster-devel@redhat.com,
-        linux-kernel@vger.kernel.org, rpeterso@redhat.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <f2cf11d3-c2f8-4add-ab58-19a4844be361@www.fastmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Sat, Aug 13, 2022 at 09:04:58AM -0700, Andy Lutomirski wrote:
+> 
+> 
+> On Wed, Aug 3, 2022, at 7:02 AM, Dave Hansen wrote:
+> > On 8/2/22 16:46, Dave Hansen wrote:
+> >> To sum it all up, I'm not happy with the complexity of the page
+> >> acceptance code either but I'm not sure that it's bad tradeoff compared
+> >> to greater #VE complexity or fragility.
+> >> 
+> >> Does anyone think we should go back and really reconsider this?
+> >
+> > One other thing I remembered as I re-read my write up on this.
+> >
+> > In the "new" mode, guests never get #VE's for unaccepted memory.  They
+> > just exit to the host and can never be reentered.  They must be killed.
+> >
+> > In the "old" mode, I _believe_ that the guest always gets a #VE for
+> > non-EPT-present memory.  The #VE is basically the same no matter if the
+> > page is unaccepted or if the host goes out and makes a
+> > previously-accepted page non-present.
+> >
+> > One really nasty implication of this "old" mode is that the host can
+> > remove *accepted* pages that are used in the syscall gap.  That means
+> > that the #VE handler would need to be of the paranoid variety which
+> > opens up all kinds of other fun.
+> >
+> >  * "Old" - #VE's can happen in the syscall gap
+> >  * "New" - #VE's happen at better-defined times.  Unexpected ones are
+> >    fatal.
+> >
+> > There's a third option which I proposed but doesn't yet exist.  The TDX
+> > module _could_ separate the behavior of unaccepted memory #VE's and
+> > host-induced #VEs.  This way, we could use load_unaligned_zeropad() with
+> > impunity and handle it in the #VE handler.  At the same time, the host
+> > would not be allowed to remove accepted memory and cause problems in the
+> > syscall gap.  Kinda the best of both worlds.
+> >
+> > But, I'm not sure how valuable that would be now that we have the
+> > (admittedly squirrelly) code to avoid load_unaligned_zeropad() #VE's.
+> 
+> How would that be implemented?  It would need to track which GPAs *were*
+> accepted across a host-induced unmap/remap cycle. This would involve
+> preventing the host from ever completely removing a secure EPT table
+> without the guest’s help, right?
+> 
+> Admittedly this would IMO be better behavior. Is it practical to implement?
 
-syzbot found the following issue on:
+I don't think it is better if you look from host POV. It owns resources of
+the machine and it has to have a way to pull memory from uncooperative TD
+at any point.
 
-HEAD commit:    200e340f2196 Merge tag 'pull-work.dcache' of git://git.ker..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=150cbda9080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1b664fba5e66c4bf
-dashboard link: https://syzkaller.appspot.com/bug?extid=dcf33a7aae997956fe06
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+It also would require more complicated private->shared conversion as guest
+has to notify TDX module about the change, not only host as we do now.
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+dcf33a7aae997956fe06@syzkaller.appspotmail.com
-
-loop1: detected capacity change from 0 to 37440
-gfs2: fsid=syz:syz: Trying to join cluster "lock_nolock", "syz:syz"
-gfs2: fsid=syz:syz: Now mounting FS (format 1801)...
-================================================================================
-UBSAN: shift-out-of-bounds in fs/gfs2/ops_fstype.c:297:19
-shift exponent 50331651 is too large for 64-bit type 'unsigned long'
-CPU: 0 PID: 30381 Comm: syz-executor.1 Not tainted 5.19.0-syzkaller-02972-g200e340f2196 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x1e3/0x2cb lib/dump_stack.c:106
- ubsan_epilogue lib/ubsan.c:151 [inline]
- __ubsan_handle_shift_out_of_bounds+0x3a6/0x420 lib/ubsan.c:322
- gfs2_read_sb fs/gfs2/ops_fstype.c:297 [inline]
- init_sb+0x11d6/0x12c0 fs/gfs2/ops_fstype.c:487
- gfs2_fill_super+0x1a3c/0x2750 fs/gfs2/ops_fstype.c:1209
- get_tree_bdev+0x400/0x620 fs/super.c:1292
- gfs2_get_tree+0x50/0x210 fs/gfs2/ops_fstype.c:1325
- vfs_get_tree+0x88/0x270 fs/super.c:1497
- do_new_mount+0x289/0xad0 fs/namespace.c:3040
- do_mount fs/namespace.c:3383 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount+0x2e3/0x3d0 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x2b/0x70 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fc20ac8a7aa
-Code: 48 c7 c2 b8 ff ff ff f7 d8 64 89 02 b8 ff ff ff ff eb d2 e8 b8 04 00 00 0f 1f 84 00 00 00 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fc20be95f88 EFLAGS: 00000202 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000020000200 RCX: 00007fc20ac8a7aa
-RDX: 0000000020000000 RSI: 0000000020000100 RDI: 00007fc20be95fe0
-RBP: 00007fc20be96020 R08: 00007fc20be96020 R09: 0000000020000000
-R10: 0000000000000000 R11: 0000000000000202 R12: 0000000020000000
-R13: 0000000020000100 R14: 00007fc20be95fe0 R15: 0000000020047a20
- </TASK>
-================================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov

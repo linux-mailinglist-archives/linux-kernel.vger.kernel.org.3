@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1317F591EC1
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 08:45:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FAE3591EC3
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 08:45:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240323AbiHNGpK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 02:45:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41472 "EHLO
+        id S240345AbiHNGpX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 02:45:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240247AbiHNGom (ORCPT
+        with ESMTP id S240303AbiHNGom (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 14 Aug 2022 02:44:42 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AEB5647EC;
-        Sat, 13 Aug 2022 23:44:35 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 202so4152465pgc.8;
-        Sat, 13 Aug 2022 23:44:35 -0700 (PDT)
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A415867C88;
+        Sat, 13 Aug 2022 23:44:37 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id c24so4149911pgg.11;
+        Sat, 13 Aug 2022 23:44:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
          :cc;
-        bh=WTcptoHTlt8t0Uw787rjRlrJSUTtZQTxGFKI+vfMRbw=;
-        b=CCpZ+mtrX0u+mFtsRgAUlwUh51Uh4RETylKQaMvxGZH1XGhg0GmYVp43DRDrYyqE/a
-         fN3OWenfZXgHmfl1dYPTi+Bs10e6LZbZ6AXHUilToisYLTFPLP9FeB5YJdoylKID1ikh
-         YF67ky/vS5Ov927cuuCn/mfCRnja5N2qSty5WefVCEr9Nk3oa0RVavCyF6PQbW9KRF1m
-         +qG6EXX0r4EScOfYqxbm0CIaEtx3i5/TbtL02OsLbYMdsipJpC5cM75YziuqXzspBtjK
-         qN1X+iPF6C3zjhfZ9J22Y1t+Q4RrEeC71oJ9mnoAIZOqfW1og4RnXyGRYBDEHndIAURK
-         GB9w==
+        bh=bpHflVqpWFCurIS5n6prF8RqBgNPSiD5kv/4SFiqdqI=;
+        b=mwcYny7oCPSQKZ1FC4syu8SOhDeD6KdzzNLzmXR55TGnD+AC779AdiOiwpaPIQPwkG
+         M4MBYsM+6nWzNnDrj0CC/aJ6c2YOkkvalKCokgYXywjUVdeJDsql0G+ZMolJ0uataFrU
+         Q1GEDxrzHDtq6q3uA/83Xm2ra4+VAUuIZmu69rIAyG10reFTOwwL4ijlBWlRIfhD4CUK
+         6oNhWE5ypXpLoCn0ePC/VvhXcbhTl7DoiqZ2f/uMCWPP6QLeW5puL4/EQaSpzYPZBcv6
+         vJJw2/KKJcbOqtMEm193MVfruhcz8X1Uo/tXGvNg2MYuB7X7aXuxObwsdAnnY2Gcn6UG
+         RoOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=references:in-reply-to:message-id:date:subject:cc:to:from
          :x-gm-message-state:from:to:cc;
-        bh=WTcptoHTlt8t0Uw787rjRlrJSUTtZQTxGFKI+vfMRbw=;
-        b=ky9U8MjXlR/jfX61LF/JQpVBdwzNK50o90LaUD5kfkhR5yjBg8Ctx2PnqvLSLvspHY
-         dXRBiZUdEV6YsJrrlcysBTqOGkGXXr1A/UI38iC4TEd8eF29LxlwjgOLcReUeYdIpAGm
-         t3fbYCob0Fep7m183CTCD7adt2iDSCvPfXq/sAR/69eWXwxc0fwlaztsNMUFqU4TV0jY
-         Wz2R3FDpW1hMtZ9EILk1lpmsXdVaxrCxc9YS9RbptW0urgseyeEdTVGVXNmDuLMc1XpQ
-         lZJVeEP4GOEQwXWun4u9HrRyR+q+PHK9Ls3cAFwdJA6By0+t9jRzTrrwcnK44aGW6tai
-         tlQw==
-X-Gm-Message-State: ACgBeo18op7sb0b4fND+SC3/moOlVVID4qI1+A4M4VaNM1O/+VLAIbYe
-        cgHhMvuySEY4SnRRD8YvR3E=
-X-Google-Smtp-Source: AA6agR7ZpmWGP7r5GU11jppfRo+BTncutxWo903b/yOtV40cQgGzdD5ADIO+XppvV9DWPArII8Ay5A==
-X-Received: by 2002:a63:5c4a:0:b0:41d:bd7d:6084 with SMTP id n10-20020a635c4a000000b0041dbd7d6084mr9309641pgm.411.1660459475059;
-        Sat, 13 Aug 2022 23:44:35 -0700 (PDT)
+        bh=bpHflVqpWFCurIS5n6prF8RqBgNPSiD5kv/4SFiqdqI=;
+        b=HHfIk9udEgTBA28k96xU4aQIDA7Rnjq1HZqhqOzkTiLQsD9dWbeBKt6Ffme09pv8B6
+         IC6beH7VQRxOB1vvkbUJXRp0W3iQNl5A9YdrfD4VdhJ/qQ0SoPiUR4dEY8w6tYiAaTFT
+         AViCsWwRGy7nByskFgj2HFzYgr3Yk7NI3DLPWzyfPlx02qlVSt7TIN6IvIz02We/7LCj
+         cja3dq9zoffxFJB5Iw2czU/YkKRzF8+BG2nGJvjRxZKkw4VN5BxpFblxLQu80fLgTHVl
+         mV9TBsQTXNW+cvzJ1JOhxlYxCsmr9155WKuXkkgo5dEDhvd3gRF5ih4T+t/WGaCMygJ6
+         1Yug==
+X-Gm-Message-State: ACgBeo3XEOxKA0KCI3txfCYhWl8ikri0qNlzwFSVNnHnO/UeUS4GN0D7
+        16TVJS707jtpTYB/Texxn0g=
+X-Google-Smtp-Source: AA6agR6aN+cNBziv2g6L/nCULTB4wP2gc5R52kExDTjPOXl6Zbz72M+uhW7Dn+6q5vAtL80GD0+Brw==
+X-Received: by 2002:a05:6a00:1948:b0:525:45e3:2eb7 with SMTP id s8-20020a056a00194800b0052545e32eb7mr11258981pfk.77.1660459477252;
+        Sat, 13 Aug 2022 23:44:37 -0700 (PDT)
 Received: from localhost.localdomain ([182.160.5.243])
-        by smtp.gmail.com with ESMTPSA id o27-20020aa7979b000000b0052d481032a7sm4593778pfp.26.2022.08.13.23.44.33
+        by smtp.gmail.com with ESMTPSA id o27-20020aa7979b000000b0052d481032a7sm4593778pfp.26.2022.08.13.23.44.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Aug 2022 23:44:34 -0700 (PDT)
+        Sat, 13 Aug 2022 23:44:36 -0700 (PDT)
 From:   Tuo Cao <91tuocao@gmail.com>
 To:     James.Bottomley@HansenPartnership.com, martin.petersen@oracle.com,
         khalid@gonehiking.org, willy@infradead.org, hare@suse.com
 Cc:     anil.gurumurthy@qlogic.com, sudarsana.kalluru@qlogic.com,
         linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
         91tuocao@gmail.com
-Subject: [PATCH 6/9] scsi: advansys: move spin_lock_irqsave to spin_lock in interrupt handler
-Date:   Sun, 14 Aug 2022 14:43:34 +0800
-Message-Id: <20220814064337.32621-7-91tuocao@gmail.com>
+Subject: [PATCH 7/9] scsi: aha1542: move spin_lock_irqsave to spin_lock in interrupt handler
+Date:   Sun, 14 Aug 2022 14:43:35 +0800
+Message-Id: <20220814064337.32621-8-91tuocao@gmail.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20220814064337.32621-1-91tuocao@gmail.com>
 References: <20220814064337.32621-1-91tuocao@gmail.com>
@@ -74,34 +74,48 @@ it is unnecessary to call spin_lock_irqsave in a interrupt handler.
 
 Signed-off-by: Tuo Cao <91tuocao@gmail.com>
 ---
- drivers/scsi/advansys.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/scsi/aha1542.c | 7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/scsi/advansys.c b/drivers/scsi/advansys.c
-index f301aec044bb..2f402f73ae4e 100644
---- a/drivers/scsi/advansys.c
-+++ b/drivers/scsi/advansys.c
-@@ -7137,10 +7137,9 @@ static irqreturn_t advansys_interrupt(int irq, void *dev_id)
- 	struct Scsi_Host *shost = dev_id;
- 	struct asc_board *boardp = shost_priv(shost);
- 	irqreturn_t result = IRQ_NONE;
+diff --git a/drivers/scsi/aha1542.c b/drivers/scsi/aha1542.c
+index 552ca95157da..b49082bc5b54 100644
+--- a/drivers/scsi/aha1542.c
++++ b/drivers/scsi/aha1542.c
+@@ -281,7 +281,6 @@ static irqreturn_t aha1542_interrupt(int irq, void *dev_id)
+ 	struct aha1542_hostdata *aha1542 = shost_priv(sh);
+ 	int errstatus, mbi, mbo, mbistatus;
+ 	int number_serviced;
 -	unsigned long flags;
+ 	struct scsi_cmnd *tmp_cmd;
+ 	int flag;
+ 	struct mailbox *mb = aha1542->mb;
+@@ -306,7 +305,7 @@ static irqreturn_t aha1542_interrupt(int irq, void *dev_id)
+ #endif
+ 	number_serviced = 0;
  
- 	ASC_DBG(2, "boardp 0x%p\n", boardp);
--	spin_lock_irqsave(shost->host_lock, flags);
-+	spin_lock(shost->host_lock);
- 	if (ASC_NARROW_BOARD(boardp)) {
- 		if (AscIsIntPending(shost->io_port)) {
- 			result = IRQ_HANDLED;
-@@ -7155,7 +7154,7 @@ static irqreturn_t advansys_interrupt(int irq, void *dev_id)
- 			ASC_STATS(shost, interrupt);
- 		}
- 	}
--	spin_unlock_irqrestore(shost->host_lock, flags);
-+	spin_unlock(shost->host_lock);
+-	spin_lock_irqsave(sh->host_lock, flags);
++	spin_lock(sh->host_lock);
+ 	while (1) {
+ 		flag = inb(INTRFLAGS(sh->io_port));
  
- 	ASC_DBG(1, "end\n");
- 	return result;
+@@ -339,7 +338,7 @@ static irqreturn_t aha1542_interrupt(int irq, void *dev_id)
+ 		} while (mbi != aha1542->aha1542_last_mbi_used);
+ 
+ 		if (mb[mbi].status == 0) {
+-			spin_unlock_irqrestore(sh->host_lock, flags);
++			spin_unlock(sh->host_lock);
+ 			/* Hmm, no mail.  Must have read it the last time around */
+ 			if (!number_serviced)
+ 				shost_printk(KERN_WARNING, sh, "interrupt received, but no mail.\n");
+@@ -367,7 +366,7 @@ static irqreturn_t aha1542_interrupt(int irq, void *dev_id)
+ 		tmp_cmd = aha1542->int_cmds[mbo];
+ 
+ 		if (!tmp_cmd) {
+-			spin_unlock_irqrestore(sh->host_lock, flags);
++			spin_unlock(sh->host_lock);
+ 			shost_printk(KERN_WARNING, sh, "Unexpected interrupt\n");
+ 			shost_printk(KERN_WARNING, sh, "tarstat=%x, hastat=%x idlun=%x ccb#=%d\n", ccb[mbo].tarstat,
+ 			       ccb[mbo].hastat, ccb[mbo].idlun, mbo);
 -- 
 2.17.1
 

@@ -2,108 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 007EE591FC2
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 14:30:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A729591FC7
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 14:42:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234860AbiHNMaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 08:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36756 "EHLO
+        id S232769AbiHNMmJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 08:42:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46820 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232769AbiHNMaK (ORCPT
+        with ESMTP id S229614AbiHNMmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 08:30:10 -0400
-Received: from mail-ua1-x941.google.com (mail-ua1-x941.google.com [IPv6:2607:f8b0:4864:20::941])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FF21CFF2
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 05:30:08 -0700 (PDT)
-Received: by mail-ua1-x941.google.com with SMTP id r12so1985679uaf.7
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 05:30:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
-        bh=h0ZslgqQ94UM3iGDYCZGEx8ZwvbYHY5ZrQARiO/Kpbc=;
-        b=fSRXR4YbG2axxAJZbn0K7cCdiNWLnoF7h1uis7VyTt/hE6MtShMFS+sq4BclgsyGPm
-         nYlaKohRak9aHOsgM4dZH/l70djqxWRtrNFwARwggPRd3kvV66LRt6II2U9wh5YhdP4g
-         4WYsHuhOnG9b/bdr6WvC2yTswzczOfbwCa/OyYB/ZTv74DqA2JFt/tfuATJ5wp9TfuMw
-         VSFTYIEoC0n0e+8pc6pj4ewdrjcqgivmB9y3ForbjOSbKLzvnnCZQT3QeAU0hGICjqok
-         rW5bs02LI87ApKYDV+Oqk1uZEpmO5BH5Gm+v5gMwAPhCj71nL3APmi+BzIXyr8UuGrwA
-         1pVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc;
-        bh=h0ZslgqQ94UM3iGDYCZGEx8ZwvbYHY5ZrQARiO/Kpbc=;
-        b=QarILGZd9hTEsN1iuvwjW/nz+Vzqotv9pjTFECodGSPfLjWqH7FiO/IDKcokmeNeql
-         PrNxAqsexCMaGxpRyCPLxYMfqYFF2zLRmwzYieUH+6Y4Udpap6dnl+BEWPp2mkdFHZ8L
-         oFBAOIU+kVIInkTlpVBreGiombFo+SoQYIpmMah8YFIQ5CYoIersZunH3K6Bqx5IC7wo
-         aorP3U38jtcTgltX9eZ/JM86XzlLup+QaJMUuE3HTfn8ETkTAt3KHRh/DJV9CjprYi9O
-         tz6Bv7CZkOGKHtx2MFAQGA8gxnAjfoy++QtR02M/CLY+k4B0/38aE4JNAQP4FpgqxC0n
-         UtoQ==
-X-Gm-Message-State: ACgBeo06uWnntQQd8FkwpGxJPp3cgMbMLmjcVRt2kv8SdSk011zyUPFJ
-        ZT6b6Pix9HTjZ4tnuXlXYfaxE2bpnp2BcWIC0zo=
-X-Google-Smtp-Source: AA6agR6WifmR2QNyOk2Xet2zC2jgXp9R9hmNgNzAoqmx9PDYVh32g/0WjIV8RxL95eVGV0XsKl4ImBuuxDfFf1Cu+98=
-X-Received: by 2002:ab0:2242:0:b0:38c:7f0d:623e with SMTP id
- z2-20020ab02242000000b0038c7f0d623emr4809600uan.59.1660480207346; Sun, 14 Aug
- 2022 05:30:07 -0700 (PDT)
+        Sun, 14 Aug 2022 08:42:07 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB7D5201AB
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 05:42:05 -0700 (PDT)
+Received: from zn.tnic (p2e55d27b.dip0.t-ipconnect.de [46.85.210.123])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id BFF001EC02F2;
+        Sun, 14 Aug 2022 14:41:59 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1660480919;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=6W9pL26aeXOLT5Po4wAcLyb9mKmJZJw56r9wwihEm44=;
+        b=oVsK+GH5n3NWSsuZLFe3QeAUJaWLokJT7sKteb0MSYYSOFXSkAw4T70uWwcA7yUs2thTwK
+        pLdUblPv1A2J3ON6bFtaPBbTf4K6hwAozcTxGqNazzWpuPA+vIF7KqS+WIhmHW+W0OkLCj
+        YNaG7pbOPVsgsK7qkjve5JLkkUbktMg=
+Date:   Sun, 14 Aug 2022 14:41:54 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>, x86-ml <x86@kernel.org>,
+        Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: [GIT PULL] timer fixes
+Message-ID: <YvjtkidVZg2sBY0R@zn.tnic>
+References: <Yvd8L0qIbLarxrOQ@gmail.com>
+ <YvfQUGLGY7cfZ9gf@zn.tnic>
+ <CAHk-=wi+K-LQ121sPbsQonja3Sx-_kXZc6ntauUC2=JPsUrC+g@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a05:612c:708:b0:2de:ed04:8dc7 with HTTP; Sun, 14 Aug 2022
- 05:30:06 -0700 (PDT)
-Reply-To: lilywilliam989@gmail.com
-From:   Lily William <moussapare92@gmail.com>
-Date:   Sun, 14 Aug 2022 04:30:06 -0800
-Message-ID: <CAA0Xjhrhu_vYS_qWErZ3E4ppLhJMYSOq-EQqiZw3rgXkyWhTzg@mail.gmail.com>
-Subject: Hi,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:941 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [moussapare92[at]gmail.com]
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [moussapare92[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [lilywilliam989[at]gmail.com]
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wi+K-LQ121sPbsQonja3Sx-_kXZc6ntauUC2=JPsUrC+g@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dear,
+On Sat, Aug 13, 2022 at 01:27:40PM -0700, Linus Torvalds wrote:
+> On Sat, Aug 13, 2022 at 9:25 AM Borislav Petkov <bp@alien8.de> wrote:
+> >
+> > That task_struct.sighand is marked __rcu and thus noderef and sparse
+> > complains:
+> 
+> I think that RCU marking is misleading.
+> 
+> Doing a
+> 
+>         git grep -e '->sighand'
+> 
+> shows that we basically never treat that as some kind of RCU pointer.
+> 
+> Adding a
+> 
+>         grep -i rcu
+> 
+> to the above shows that we have a couple of places that do this
+> carefully, but they are the exception rather than the rule.
+> 
+> I think the issue is that "current->sighand" is always safe (and that
+> "me->sighand" is the same thing), and that sighand has RCU-delayed
+> freeing so that __lock_task_sighand() can safely try to take the lock
+> of another process' sighand.
+> 
+> And we have no real way to explain to sparse that *some* cases are
+> fine, others are not and need the sighand lock (after that careful
+> __lock_task_sighand thing).
 
-My name is Dr Lily William from the United States.I am a French and
-American nationality (dual) living in the U.S and sometimes in France
-for Work Purpose.
+Sounds to me like that sparse check was not such a good idea in the
+first place. Especially since the 0day bot is probably warning about all
+those cases where we try to lock ->sighand.
 
-I hope you consider my friend request. I will share some of my pics
-and more details about myself when I get your response.
+It was added by
 
-Thanks
+913292c97d75 ("sched.h: Annotate sighand_struct with __rcu")
 
-With love
-Lily
+Lemme add the involved parties to Cc.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette

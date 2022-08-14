@@ -2,220 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38A075925E7
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 20:00:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A15A5925EE
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 20:24:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240070AbiHNSAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 14:00:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47402 "EHLO
+        id S231414AbiHNSYY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 14:24:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiHNSAc (ORCPT
+        with ESMTP id S229769AbiHNSYW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 14:00:32 -0400
-Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A312210FCB
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 11:00:29 -0700 (PDT)
-Received: by mail-qk1-x729.google.com with SMTP id i24so4230267qkg.13
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 11:00:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=qbgoZeZmViWvFKGo3vDKiMkLriw1iy/wD7V+tnwIV3E=;
-        b=F0gsWapUFAmXsS70/FT2w7UJfE2rokB7ixzPGczQfI07TuC1fc2U11uuBywngI/3jB
-         AFUpGhI20FQluH0MY1YaEo2CgZhfbMKboyXTDOyq386fsex/ELLlbbMIlMgzfzZfI6Kv
-         gkeNk+TmY40Cx7Rg6AeYI43982jGwi3XT1hv2vUQkJxW6aaYQvC8qaYN6x2gaaT4aZI3
-         ngaaN09zSOcTOnodJvLUORhTCtK5d/IJyhBAVekcWSRmcusK8/96so880hWPSkv7h+Dj
-         gqhwX70G3VFnYgxom2F9wWfPBgvgoQhPYNEkRwgXNndPiFaMrXcTUhazcMMUYqzUx75g
-         c/bQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=qbgoZeZmViWvFKGo3vDKiMkLriw1iy/wD7V+tnwIV3E=;
-        b=6IBD+ylkf8bTb+S85ybgxnfGy+sx5iigNghcSQvseO7JRbQaMZPHdVyUF39+XMPQZ+
-         61UahtwyE4L5EiOeS241ZCohrkcq0/c6H8yP/zfsZEmh+xfhVdeEC6U2Zy/J2OSecMYG
-         VKwbss5pUot6mLBEgy7QXRCZkxe/Vrltu9odYAW0kC1sfj1oKKNzf9Sw7RmiR1Q6BoHw
-         upUsDW/z6ORxrF16Vgphsp9fjjf1Fq+4+U0OaeyiGtLosqjU2VjfviBbFz99FUweq198
-         E+BltyOsixRWdBePYiUUXM/NepQEgLBEBmDH/1UJjevTfEXJMN+7ahR+EPuMVQ5vLBGZ
-         YuyA==
-X-Gm-Message-State: ACgBeo36FBkhZd6iNhKqcr9R4m5U62Wtv8rxwCKuSBOTK7WmT7uStEim
-        XYssIib4Hiw8YxHAhEGZPuOG/NZI7aAIEA==
-X-Google-Smtp-Source: AA6agR6yLu/QXtwon8Xp97JiVrlbGGdQdxYfHlgqI4icqpn3WSS1oA2Q8E+Mb8lZGhB4SpB3uShoVw==
-X-Received: by 2002:a05:620a:288f:b0:6b6:4e6e:c68c with SMTP id j15-20020a05620a288f00b006b64e6ec68cmr8883748qkp.240.1660500028773;
-        Sun, 14 Aug 2022 11:00:28 -0700 (PDT)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id s16-20020a05620a255000b006b5f06186aesm6672551qko.65.2022.08.14.11.00.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Aug 2022 11:00:28 -0700 (PDT)
-Date:   Sun, 14 Aug 2022 14:00:26 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     Julien Panis <jpanis@baylibre.com>
-Cc:     robh+dt@kernel.org, jic23@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        mranostay@ti.com
-Subject: Re: [PATCH v4 0/3] ECAP support on TI AM62x SoC
-Message-ID: <Yvk4OijjBj+Wa7fT@fedora>
-References: <20220810140724.182389-1-jpanis@baylibre.com>
+        Sun, 14 Aug 2022 14:24:22 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2047.outbound.protection.outlook.com [40.107.220.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81137186CE;
+        Sun, 14 Aug 2022 11:24:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WfItz8B2LkfbmXbj326fAyU53/jws1/R4ivJVAyfbPO4r3mL5308yw7LIFwE8xK8SxfXQSeRQkWDMzEcZrI4PAIUzAuaTQsbd3fJgzxZQX8pd5+mr+xarYxv8cp4xa70xc02JWe4UCCxjht7uIWTB/KFPr9VgDEWrg/moY80RvG1pslaRQUaydlfTTuafj9eds0p8OE9xtqd2IaAKHyzDigOLwEA+1id8z5y6o+kj5VMSZNcQtoMx3YS2RuzrVIRnon3JsYp1Q6CwyRf6wO/Ic1yd5DkXnMLUrneyoD/aDCZzn+HoPPBgU2HckvjAvN8HNyioeY9uX9P/q6mvGQKCA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=kzSwCJE7auqLh2wd0qHkisGW2LH3QZbLiffTsHY/eEo=;
+ b=On+tCdiXC1WylLq0BQ1DwwIO9uxoKQmj1BLuebpk+FRJHnFTw8JMA706BPmawtmHCt0kaqQw1ywc0Y/r6gsz6R0Oje/aSlcU/8GoTy/kYYl5PDl+XdrcH9v7yqdAsIOhk3+2SySLqsMx6f5Ef0zosrIQCm/0ZwdNEP1AG6D6jZSKXlVFwy6L8Y8O6jB6Ws6Yl/MYPe3LlYG8G/gjkwG+TtJad5PB5HR6X19yU5I/qrNA2ePk4r++HfGq0Gqny54AuKskdjzJrmnHrPSrK1orKvbIW9X/UYSqa0Vra7f5f47eFUGcPcjjiV3X1ZQZuNNYfBdgm7JQt7j+kKJ/xQQ18g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 12.22.5.235) smtp.rcpttodomain=arm.com smtp.mailfrom=nvidia.com; dmarc=pass
+ (p=reject sp=reject pct=100) action=none header.from=nvidia.com; dkim=none
+ (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=kzSwCJE7auqLh2wd0qHkisGW2LH3QZbLiffTsHY/eEo=;
+ b=cU0PVv5PPLCdMCxifdd7KN9xsW9Mde+I/8HLqBFMlwqk6QNV7IRMaYNWSu7cFR0zRCEjQChWIEXpfEZp99a8w68NkgW+7VuNvt5laMxI5BFwbOs6EwebuBcG8YjneV/2bBDJZFFJ8kgy5UAlZfYaElVnG43vchhAmr7C9d7m4drC6SSUWz4Zy5j+kXBE9tU42UnXgUikq/bp7OGKok/h3yGTq/I2ND9pWCGAKvhpiTGpCw/grNzXutkt1vX6j9vVMoRwYt9JEjbN5Z5r7Hhi7Y25G3za/1YXUjo8nquy7PJ4YH8BNlegRbLpvs3aMGrYagFbQlfqTV3UPLpp9gjOgg==
+Received: from MWH0EPF00056D0E.namprd21.prod.outlook.com
+ (2603:10b6:30f:fff2:0:1:0:12) by MWHPR1201MB0221.namprd12.prod.outlook.com
+ (2603:10b6:301:56::19) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5525.11; Sun, 14 Aug
+ 2022 18:24:17 +0000
+Received: from CO1NAM11FT030.eop-nam11.prod.protection.outlook.com
+ (2a01:111:f400:7eab::204) by MWH0EPF00056D0E.outlook.office365.com
+ (2603:1036:d20::b) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.14 via Frontend
+ Transport; Sun, 14 Aug 2022 18:24:17 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 12.22.5.235)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 12.22.5.235 as permitted sender) receiver=protection.outlook.com;
+ client-ip=12.22.5.235; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (12.22.5.235) by
+ CO1NAM11FT030.mail.protection.outlook.com (10.13.174.125) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ 15.20.5525.11 via Frontend Transport; Sun, 14 Aug 2022 18:24:17 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by
+ DRHQMAIL107.nvidia.com (10.27.9.16) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.38; Sun, 14 Aug 2022 18:24:17 +0000
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.29; Sun, 14 Aug 2022 11:24:16 -0700
+Received: from msst-build.nvidia.com (10.127.8.14) by mail.nvidia.com
+ (10.126.190.181) with Microsoft SMTP Server id 15.2.986.29 via Frontend
+ Transport; Sun, 14 Aug 2022 11:24:15 -0700
+From:   Besar Wicaksono <bwicaksono@nvidia.com>
+To:     <suzuki.poulose@arm.com>, <robin.murphy@arm.com>,
+        <catalin.marinas@arm.com>, <will@kernel.org>,
+        <mark.rutland@arm.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
+        <sudeep.holla@arm.com>, <thanu.rangarajan@arm.com>,
+        <Michael.Williams@arm.com>, <treding@nvidia.com>,
+        <jonathanh@nvidia.com>, <vsethi@nvidia.com>,
+        <mathieu.poirier@linaro.org>, <mike.leach@linaro.org>,
+        <leo.yan@linaro.org>, Besar Wicaksono <bwicaksono@nvidia.com>
+Subject: [PATCH v4 0/2] perf: ARM CoreSight PMU support
+Date:   Sun, 14 Aug 2022 13:23:49 -0500
+Message-ID: <20220814182351.8861-1-bwicaksono@nvidia.com>
+X-Mailer: git-send-email 2.17.1
+X-NVConfidentiality: public
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="T5liTN5OdHlrk5BP"
-Content-Disposition: inline
-In-Reply-To: <20220810140724.182389-1-jpanis@baylibre.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id: 0ce8f7e4-3b1e-4bf1-2843-08da7e2232ec
+X-MS-TrafficTypeDiagnostic: MWHPR1201MB0221:EE_
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?leZ+OoB51MpURc3eY6CMSLmL3RQG/cpQN+nqUANfgtTE9XLfGGyNuKXmJfam?=
+ =?us-ascii?Q?PURRTCSvjtkLxFqXtMMKBgGhOfO6VOzXT7q6PB/rBGh04vmsDHpRtGIGCyxw?=
+ =?us-ascii?Q?schoTkJtNpRpiWOZMdvPz0RAkmrT5oVcGwqCrpvoWGqC3x23l5pw+t7WkMtH?=
+ =?us-ascii?Q?BBaPnJMoUFD8Mh7aXdtuJVAqMQfgvOhCMuA1ISHLErPrkAg7g/9z8EYafLpp?=
+ =?us-ascii?Q?WhAsXw+b1w4058j9cK3TODBqXTtxk0u7RbpS25mxs9uPMRuELcVQdP9cpFwX?=
+ =?us-ascii?Q?2IxMgcn3DdLWiyHs3Fxz0/tbX0MefwYr7BNCl5C6KYI/u7SR5OaQa8w3GbQU?=
+ =?us-ascii?Q?zqNRfh2ps5sVXB68zwTjaKT9Cv3aXGhU9bOpIh0bIjf3LIpVsHGAhM2r+kaS?=
+ =?us-ascii?Q?eoT5BqbQkTVGKUbmlS6L+C8VXZdsaQzL7rRi6Xrbg0oA85F/AWS3lkKBrKJa?=
+ =?us-ascii?Q?e9Bsu/GJ+08OZhlD05MGXke9cCg4e2aI+ki+7nfNJuy7Sf6d4yDJjZW41Hwz?=
+ =?us-ascii?Q?IQ7uGHgNIg/gf4y2VTnu4rt4gLCQlZnPdCq2HhW4WxKW5OhlXWmTC5zR9rUK?=
+ =?us-ascii?Q?8Ds6CcT6iecMVtXpbBMLCA7pHmhP1RvG/6pAO1vSSc3Po5jWHs6SQBr4YY5k?=
+ =?us-ascii?Q?Z44zhxv1X33riGnoaQlzlqSZCkQXgWHLh5+0VOc3VQ/z/+Jy8xHpEaNHQ+8r?=
+ =?us-ascii?Q?ojqIMXH2gTRpX4BkZKI5e6OWm754NHE+ddshYaDCsoe+g/loZJne3G4rdJPL?=
+ =?us-ascii?Q?8vthh9rQN9sP1c81AD8CgQ32UGr37EkyVFxOEljkPeI0yZ1Ke9yThgc7ZPDP?=
+ =?us-ascii?Q?AzfvcdBZtBctsxksvkUU3gAo5s9Jas/SDggu7fWL2FEmZCL+n54lEzDMfQmx?=
+ =?us-ascii?Q?KHu1uD9mzgrOYL8A/jvfYLYN38fzEINuadwAaW3m//HNWObNIuuounaR6FFO?=
+ =?us-ascii?Q?jS4+rj7JCnOIFZ5JPPusRA=3D=3D?=
+X-Forefront-Antispam-Report: CIP:12.22.5.235;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:InfoNoRecords;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(376002)(346002)(136003)(396003)(36840700001)(46966006)(40470700004)(186003)(36860700001)(86362001)(36756003)(107886003)(82740400003)(83380400001)(2616005)(426003)(7696005)(1076003)(356005)(81166007)(336012)(47076005)(6666004)(26005)(316002)(478600001)(54906003)(966005)(41300700001)(8936002)(5660300002)(110136005)(7416002)(40460700003)(8676002)(2906002)(70206006)(40480700001)(4326008)(82310400005)(70586007)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Aug 2022 18:24:17.3578
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0ce8f7e4-3b1e-4bf1-2843-08da7e2232ec
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[12.22.5.235];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT030.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MWHPR1201MB0221
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Add driver support for ARM CoreSight PMU device and event attributes for NVIDIA
+implementation. The code is based on ARM Coresight PMU architecture and ACPI ARM
+Performance Monitoring Unit table (APMT) specification below:
+ * ARM Coresight PMU:
+        https://developer.arm.com/documentation/ihi0091/latest
+ * APMT: https://developer.arm.com/documentation/den0117/latest
 
---T5liTN5OdHlrk5BP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The patchset applies on top of
+  https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+  master next-20220524
 
-On Wed, Aug 10, 2022 at 04:07:21PM +0200, Julien Panis wrote:
-> The Enhanced Capture (ECAP) module can be used to timestamp events
-> detected on signal input pin. It can be used for time measurements
-> of pulse train signals.
->=20
-> ECAP module includes 4 timestamp capture registers. For all 4 sequenced
-> timestamp capture events (1->2->3->4->1->...), edge polarity (falling/ris=
-ing
-> edge) can be selected.
->=20
-> This driver leverages counter subsystem to :
-> - select edge polarity for all 4 capture events (event mode)
-> - log timestamps for each capture event
-> Event polarity, and CAP1/2/3/4 timestamps give all the information
-> about the input pulse train. Further information can easily be computed :
-> period and/or duty cycle if frequency is constant, elapsed time between
-> pulses, etc...
->=20
-> Modifications since v3:
-> 	- Migrate driver from IIO to Counter subsystem
-> 	- Minor modification in yaml ($id) to match Counter subsystem
-> 	- Add ABI documentation
->=20
-> Userspace commands :
-> 	### SIGNAL ###
-> 	cd /sys/bus/counter/devices/counter0/signal0
->=20
-> 	# Get available polarities for each capture event
-> 	cat polarity1_available
-> 	cat polarity2_available
-> 	cat polarity3_available
-> 	cat polarity4_available
->=20
-> 	# Get polarity for each capture event
-> 	cat polarity1
-> 	cat polarity2
-> 	cat polarity3
-> 	cat polarity4
->=20
-> 	# Set polarity for each capture event
-> 	echo rising > polarity1
-> 	echo falling > polarity2
-> 	echo rising > polarity3
-> 	echo falling > polarity4
->=20
-> 	### COUNT ###
-> 	cd /sys/bus/counter/devices/counter0/count0
->=20
-> 	# Run ECAP
-> 	echo 1 > enable
->=20
-> 	# Get current timebase counter value
-> 	cat count
->=20
-> 	# Get captured timestamps
-> 	cat capture1
-> 	cat capture2
-> 	cat capture3
-> 	cat capture4
->=20
-> 	# Note that counter watches can also be used to get
-> 	# data from userspace application
-> 	# -> see tools/counter/counter_example.c
->=20
-> 	# Stop ECAP
-> 	echo 0 > enable
->=20
-> Julien Panis (3):
->   dt-binding: counter: add ti,am62-ecap-capture.yaml
->   Documentation: ABI: add sysfs-bus-counter-ecap
->   counter: capture-tiecap: capture driver support for ECAP
->=20
->  .../ABI/testing/sysfs-bus-counter-ecap        |  64 ++
->  .../counter/ti,am62-ecap-capture.yaml         |  61 ++
->  drivers/counter/Kconfig                       |  14 +
->  drivers/counter/Makefile                      |   1 +
->  drivers/counter/capture-tiecap.c              | 634 ++++++++++++++++++
->  include/uapi/linux/counter.h                  |   2 +
->  6 files changed, 776 insertions(+)
->  create mode 100644 Documentation/ABI/testing/sysfs-bus-counter-ecap
->  create mode 100644 Documentation/devicetree/bindings/counter/ti,am62-eca=
-p-capture.yaml
->  create mode 100644 drivers/counter/capture-tiecap.c
->=20
-> --=20
-> 2.25.1
+For APMT support, please see patchset: https://lkml.org/lkml/2022/4/19/1395 
 
-Something that has become apparent to me is the code repetition in this
-driver in order to support the capture buffer. Buffers are common
-components in devices, so it'll be good for us to standardize some of
-what we're exploring here into an interface that other drivers can also
-use. We have two ABIs to consider: the driver interface and the sysfs
-interface.
+Changes from v3:
+ * Driver is now probing "arm-cs-arch-pmu" device.
+ * The driver files, directory, functions are renamed with "arm_cspmu" prefix.
+ * Use Kconfig ARM_CORESIGHT_PMU_ARCH_SYSTEM_PMU.
+ * Add kernel doc for NVIDIA Uncore PMU.
+ * Use GENMASK and FIELD_GET macros everywhere.
+Thanks to suzuki.poulose@arm.com and will@kernel.org for the review comments.
+v3: https://lore.kernel.org/linux-arm-kernel/20220621055035.31766-1-bwicaksono@nvidia.com/
 
-For the sysfs interface, I think we'll have to expose each element
-individually (e.g. capture1, capture2, etc.) because sysfs attributes
-are suppose to expose only a single datum for any given attribute.
+Changes from v2:
+ * Driver is now probing "arm-system-pmu" device.
+ * Change default PMU naming to "arm_<APMT node type>_pmu".
+ * Add implementor ops to generate custom name.
+Thanks to suzuki.poulose@arm.com for the review comments.
+v2: https://lore.kernel.org/linux-arm-kernel/20220515163044.50055-1-bwicaksono@nvidia.com/
 
-For the driver side, we might want to introduce a new Counter component
-type for buffers and respective macros to streamline some of the code
-for driver authors. For example, a new COUNTER_COMP_BUFFER_U64 enum
-counter_comp_type constant could be introduced to represent a u64 buffer
-element; respective struct counter_comp read callbacks could be
-introduced::
+Changes from v1:
+ * Remove CPU arch dependency.
+ * Remove 32-bit read/write helper function and just use read/writel.
+ * Add .is_visible into event attribute to filter out cycle counter event.
+ * Update pmiidr matching.
+ * Remove read-modify-write on PMCR since the driver only writes to PMCR.E.
+ * Assign default cycle event outside the 32-bit PMEVTYPER range.
+ * Rework the active event and used counter tracking.
+Thanks to robin.murphy@arm.com for the review comments.
+v1: https://lore.kernel.org/linux-arm-kernel/20220509002810.12412-1-bwicaksono@nvidia.com/
 
-    int (*count_buffer_u64_read)(struct counter_device *counter,
-                                 struct counter_count *count,
-				 size_t index, u64 *val);
+Besar Wicaksono (2):
+  perf: arm_cspmu: Add support for ARM CoreSight PMU driver
+  perf: arm_cspmu: Add support for NVIDIA SCF and MCF attribute
 
-So a driver author can use the "index" parameter to locate the buffer
-element and pass back its value via the "val" parameter. To define the
-buffer, maybe helper macros like this could be introduced::
+ Documentation/admin-guide/perf/index.rst      |    1 +
+ Documentation/admin-guide/perf/nvidia-pmu.rst |  120 ++
+ arch/arm64/configs/defconfig                  |    1 +
+ drivers/perf/Kconfig                          |    2 +
+ drivers/perf/Makefile                         |    1 +
+ drivers/perf/arm_cspmu/Kconfig                |   13 +
+ drivers/perf/arm_cspmu/Makefile               |    7 +
+ drivers/perf/arm_cspmu/arm_cspmu.c            | 1269 +++++++++++++++++
+ drivers/perf/arm_cspmu/arm_cspmu.h            |  151 ++
+ drivers/perf/arm_cspmu/nvidia_cspmu.c         |  367 +++++
+ drivers/perf/arm_cspmu/nvidia_cspmu.h         |   17 +
+ 11 files changed, 1949 insertions(+)
+ create mode 100644 Documentation/admin-guide/perf/nvidia-pmu.rst
+ create mode 100644 drivers/perf/arm_cspmu/Kconfig
+ create mode 100644 drivers/perf/arm_cspmu/Makefile
+ create mode 100644 drivers/perf/arm_cspmu/arm_cspmu.c
+ create mode 100644 drivers/perf/arm_cspmu/arm_cspmu.h
+ create mode 100644 drivers/perf/arm_cspmu/nvidia_cspmu.c
+ create mode 100644 drivers/perf/arm_cspmu/nvidia_cspmu.h
 
-    COUNTER_COMP_COUNT_BUFFER_U64("capture", ecap_cnt_cap_read, 4)
 
-This would define four u64 buffer elements each named prefixed with
-"capture" and with their read callbacks set to ecap_cnt_cap_read().
+base-commit: 09ce5091ff971cdbfd67ad84dc561ea27f10d67a
+-- 
+2.17.1
 
-One problem however is that I'm not sure if the C preprocessor would be
-able to unroll the COUNTER_COMP_COUNT_BUFFER_U64 to a dynamic number of
-elements based on a macro parameter (maybe there is a GCC extension).
-
-I'm just throwing out ideas, so I'd like to hear some comments and
-suggestions from others about how we should add buffer support to the
-Counter subsystem.
-
-William Breathitt Gray
-
---T5liTN5OdHlrk5BP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCYvk4OgAKCRC1SFbKvhIj
-K1puAQCKVF17W73GrxMBUVmEpZBsMchm0VgY1hKbIVPA69IlsQEAxjCytel3C7oB
-cPBVwjGnEm0sDNveEi6Tbs+QjkxUNgI=
-=X96e
------END PGP SIGNATURE-----
-
---T5liTN5OdHlrk5BP--

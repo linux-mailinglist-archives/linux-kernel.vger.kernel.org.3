@@ -2,161 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C20C0591FBC
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 14:30:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 007EE591FC2
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 14:30:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231887AbiHNMaC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 08:30:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36648 "EHLO
+        id S234860AbiHNMaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 08:30:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbiHNMaA (ORCPT
+        with ESMTP id S232769AbiHNMaK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 08:30:00 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CDD31CFD6
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 05:29:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660480199; x=1692016199;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+tc0O//ewjffkXM2kwutZHrS5qdyDIVb3PC7Ivm2r6c=;
-  b=guNISI9nMcG8REk4P2JFAHYd8D1afDFpr7iJ3DKNXJXYX1lhv/uBZsKJ
-   0yicwCyCjpQCX0ckbgYLQiPOuQqv8qCXaHUJEPjqGR1o5zgH0fY2b8DN+
-   mIgzZaEEhFI85pRskYAC+rM5PuLB15gSGLMgtAk7Ls0jC7UvlvfOvQh63
-   ZLp5wpUPioe+zdezjqhGwSEVVyz2P48QLEz5NW4clO1X8AUD53CAnq9U5
-   vi1zU5I1foUJxuYisH0vVw/0SBkomRSoRFxUztvHYYqU7vQXkatHT2/az
-   qoyQfi7zGOfohF6ivWjYji5+PNPRXR29wA9clsvN1Z9ioWIH60tPuqsEm
-   Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="274876433"
-X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
-   d="scan'208";a="274876433"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2022 05:29:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
-   d="scan'208";a="557003177"
-Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 14 Aug 2022 05:29:57 -0700
-Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oNCke-00004p-22;
-        Sun, 14 Aug 2022 12:29:56 +0000
-Date:   Sun, 14 Aug 2022 20:29:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Nikolay Borisov <nborisov@suse.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
-        David Sterba <dsterba@suse.com>
-Subject: fs/btrfs/ioctl.c:4370: warning: expecting prototype for Try to
- acquire fs_info:(). Prototype was for btrfs_try_lock_balance() instead
-Message-ID: <202208142017.toR0Cz6v-lkp@intel.com>
+        Sun, 14 Aug 2022 08:30:10 -0400
+Received: from mail-ua1-x941.google.com (mail-ua1-x941.google.com [IPv6:2607:f8b0:4864:20::941])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70FF21CFF2
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 05:30:08 -0700 (PDT)
+Received: by mail-ua1-x941.google.com with SMTP id r12so1985679uaf.7
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 05:30:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc;
+        bh=h0ZslgqQ94UM3iGDYCZGEx8ZwvbYHY5ZrQARiO/Kpbc=;
+        b=fSRXR4YbG2axxAJZbn0K7cCdiNWLnoF7h1uis7VyTt/hE6MtShMFS+sq4BclgsyGPm
+         nYlaKohRak9aHOsgM4dZH/l70djqxWRtrNFwARwggPRd3kvV66LRt6II2U9wh5YhdP4g
+         4WYsHuhOnG9b/bdr6WvC2yTswzczOfbwCa/OyYB/ZTv74DqA2JFt/tfuATJ5wp9TfuMw
+         VSFTYIEoC0n0e+8pc6pj4ewdrjcqgivmB9y3ForbjOSbKLzvnnCZQT3QeAU0hGICjqok
+         rW5bs02LI87ApKYDV+Oqk1uZEpmO5BH5Gm+v5gMwAPhCj71nL3APmi+BzIXyr8UuGrwA
+         1pVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc;
+        bh=h0ZslgqQ94UM3iGDYCZGEx8ZwvbYHY5ZrQARiO/Kpbc=;
+        b=QarILGZd9hTEsN1iuvwjW/nz+Vzqotv9pjTFECodGSPfLjWqH7FiO/IDKcokmeNeql
+         PrNxAqsexCMaGxpRyCPLxYMfqYFF2zLRmwzYieUH+6Y4Udpap6dnl+BEWPp2mkdFHZ8L
+         oFBAOIU+kVIInkTlpVBreGiombFo+SoQYIpmMah8YFIQ5CYoIersZunH3K6Bqx5IC7wo
+         aorP3U38jtcTgltX9eZ/JM86XzlLup+QaJMUuE3HTfn8ETkTAt3KHRh/DJV9CjprYi9O
+         tz6Bv7CZkOGKHtx2MFAQGA8gxnAjfoy++QtR02M/CLY+k4B0/38aE4JNAQP4FpgqxC0n
+         UtoQ==
+X-Gm-Message-State: ACgBeo06uWnntQQd8FkwpGxJPp3cgMbMLmjcVRt2kv8SdSk011zyUPFJ
+        ZT6b6Pix9HTjZ4tnuXlXYfaxE2bpnp2BcWIC0zo=
+X-Google-Smtp-Source: AA6agR6WifmR2QNyOk2Xet2zC2jgXp9R9hmNgNzAoqmx9PDYVh32g/0WjIV8RxL95eVGV0XsKl4ImBuuxDfFf1Cu+98=
+X-Received: by 2002:ab0:2242:0:b0:38c:7f0d:623e with SMTP id
+ z2-20020ab02242000000b0038c7f0d623emr4809600uan.59.1660480207346; Sun, 14 Aug
+ 2022 05:30:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Received: by 2002:a05:612c:708:b0:2de:ed04:8dc7 with HTTP; Sun, 14 Aug 2022
+ 05:30:06 -0700 (PDT)
+Reply-To: lilywilliam989@gmail.com
+From:   Lily William <moussapare92@gmail.com>
+Date:   Sun, 14 Aug 2022 04:30:06 -0800
+Message-ID: <CAA0Xjhrhu_vYS_qWErZ3E4ppLhJMYSOq-EQqiZw3rgXkyWhTzg@mail.gmail.com>
+Subject: Hi,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        UNDISC_FREEM autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:941 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [moussapare92[at]gmail.com]
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [moussapare92[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [lilywilliam989[at]gmail.com]
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  3.1 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   aea23e7c464bfdec04b52cf61edb62030e9e0d0a
-commit: 7fb10ed89e95e26f5f81087a75f2a4bfa43b1705 btrfs: introduce btrfs_try_lock_balance
-date:   3 weeks ago
-config: loongarch-allyesconfig (https://download.01.org/0day-ci/archive/20220814/202208142017.toR0Cz6v-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=7fb10ed89e95e26f5f81087a75f2a4bfa43b1705
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 7fb10ed89e95e26f5f81087a75f2a4bfa43b1705
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch SHELL=/bin/bash fs/btrfs/
+Hi Dear,
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+My name is Dr Lily William from the United States.I am a French and
+American nationality (dual) living in the U.S and sometimes in France
+for Work Purpose.
 
-All warnings (new ones prefixed by >>):
+I hope you consider my friend request. I will share some of my pics
+and more details about myself when I get your response.
 
->> fs/btrfs/ioctl.c:4370: warning: expecting prototype for Try to acquire fs_info:(). Prototype was for btrfs_try_lock_balance() instead
+Thanks
 
-
-vim +4370 fs/btrfs/ioctl.c
-
-  4357	
-  4358	/**
-  4359	 * Try to acquire fs_info::balance_mutex as well as set BTRFS_EXLCOP_BALANCE as
-  4360	 * required.
-  4361	 *
-  4362	 * @fs_info:       the filesystem
-  4363	 * @excl_acquired: ptr to boolean value which is set to false in case balance
-  4364	 *                 is being resumed
-  4365	 *
-  4366	 * Return 0 on success in which case both fs_info::balance is acquired as well
-  4367	 * as exclusive ops are blocked. In case of failure return an error code.
-  4368	 */
-  4369	static int btrfs_try_lock_balance(struct btrfs_fs_info *fs_info, bool *excl_acquired)
-> 4370	{
-  4371		int ret;
-  4372	
-  4373		/*
-  4374		 * Exclusive operation is locked. Three possibilities:
-  4375		 *   (1) some other op is running
-  4376		 *   (2) balance is running
-  4377		 *   (3) balance is paused -- special case (think resume)
-  4378		 */
-  4379		while (1) {
-  4380			if (btrfs_exclop_start(fs_info, BTRFS_EXCLOP_BALANCE)) {
-  4381				*excl_acquired = true;
-  4382				mutex_lock(&fs_info->balance_mutex);
-  4383				return 0;
-  4384			}
-  4385	
-  4386			mutex_lock(&fs_info->balance_mutex);
-  4387			if (fs_info->balance_ctl) {
-  4388				/* This is either (2) or (3) */
-  4389				if (test_bit(BTRFS_FS_BALANCE_RUNNING, &fs_info->flags)) {
-  4390					/* This is (2) */
-  4391					ret = -EINPROGRESS;
-  4392					goto out_failure;
-  4393	
-  4394				} else {
-  4395					mutex_unlock(&fs_info->balance_mutex);
-  4396					/*
-  4397					 * Lock released to allow other waiters to
-  4398					 * continue, we'll reexamine the status again.
-  4399					 */
-  4400					mutex_lock(&fs_info->balance_mutex);
-  4401	
-  4402					if (fs_info->balance_ctl &&
-  4403					    !test_bit(BTRFS_FS_BALANCE_RUNNING, &fs_info->flags)) {
-  4404						/* This is (3) */
-  4405						*excl_acquired = false;
-  4406						return 0;
-  4407					}
-  4408				}
-  4409			} else {
-  4410				/* This is (1) */
-  4411				ret = BTRFS_ERROR_DEV_EXCL_RUN_IN_PROGRESS;
-  4412				goto out_failure;
-  4413			}
-  4414	
-  4415			mutex_unlock(&fs_info->balance_mutex);
-  4416		}
-  4417	
-  4418	out_failure:
-  4419		mutex_unlock(&fs_info->balance_mutex);
-  4420		*excl_acquired = false;
-  4421		return ret;
-  4422	}
-  4423	
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+With love
+Lily

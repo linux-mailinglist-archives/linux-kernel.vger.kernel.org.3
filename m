@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 169225925CF
+	by mail.lfdr.de (Postfix) with ESMTP id A52C25925D1
 	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 19:37:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238927AbiHNRhM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 13:37:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54456 "EHLO
+        id S231265AbiHNRhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 13:37:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231265AbiHNRhG (ORCPT
+        with ESMTP id S232072AbiHNRhJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 13:37:06 -0400
+        Sun, 14 Aug 2022 13:37:09 -0400
 Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D828615707;
-        Sun, 14 Aug 2022 10:37:05 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.west.internal (Postfix) with ESMTP id 70FCE32005C1;
-        Sun, 14 Aug 2022 13:37:04 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C5718E16;
+        Sun, 14 Aug 2022 10:37:08 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 1BD7332005D8;
+        Sun, 14 Aug 2022 13:37:07 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Sun, 14 Aug 2022 13:37:05 -0400
+  by compute5.internal (MEProxy); Sun, 14 Aug 2022 13:37:08 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1660498623; x=1660585023; bh=gG
-        x++uZuYm9XsKFB3DjNDrE1NoVs5U98OkdD7W5x8KI=; b=TXSiHVaHjWlzDn7Dba
-        Q0U+q/3VvyRrEjwnG6dDFJWC7sUGuJTfECfoGWvBUZK53G3KfIoZ8hpQjHSr/XiA
-        JYjL1raULlivYsXrWKQMU5UCoa7Z6Zb1L47ekh3XeQVcsmzCEIZIwbzDjlYT6apu
-        DGfkl0adKhPokuznlLmploSAtmOmlTcjs31IrBrlphib0aFMMdkztRAz1oT/eey1
-        ALZtoTsFwzVGbh/ZzLIt6MlGd8nWe6Y01vBbOnptAqJndh95ApCSK70qAVD0v5v9
-        fMibfSdyAxpAVPf8tgjZ8FrQbS/ruClPd0W/geHCliMv9MOJww20uw5WbxU/N9sO
-        wfew==
+        :subject:subject:to:to; s=fm2; t=1660498626; x=1660585026; bh=xi
+        U7IRPMNLk0arJJTv9Kxlo5S5AdCZsEw7U2Eez5uBU=; b=fPJXclQTgKq7RuTwZ+
+        ZN2TwZq0Dc4k7H/TvWc9qvNGG7A5ITQRqllbKuS3y7tU4a0osROFVikhNz+B0mFU
+        KgC9dyj7bzSsSAbPooNg0dk9fQM0sl/X+jMdxt1pUSsRCcwlQRmqjJz3CrCpvbEk
+        aq4Aru56AJuZbOYAJpKlucFYjF69cYEjNQ547/VPKH6PHpbZht+kSLploYeR21aQ
+        DmWPJ6sslNYsYOkXYdBFmJQFQ0ghVEOo1qKrmsfpK5cQKdeR7/RfY3+KsRLUdTyU
+        lGKBFr+LlWmVL23wAZo0eD6wzCrfnXNG9Lpp8UjyO1wgzggwVHnMG9ZP1Zm6x8pU
+        mz2A==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1660498623; x=1660585023; bh=gGx++uZuYm9Xs
-        KFB3DjNDrE1NoVs5U98OkdD7W5x8KI=; b=W6rsmJyKK7y56esvwejcSYSb47CsW
-        1IMMWbixKYVu5+UyPfIU3p8RTb/VQc/8aMoSyTX3J0cpp5Igw2bsv0Ded00pjT5k
-        /7g56ltLGRRCKZXHX0Ab9RkTF+wKSBteBtC3Rdq79bB5V+HcdAMApSrcHC3nPJ5I
-        nAlCIzuBCbvY77N+s+oYxhoP3cW8A5Flo3v9so53xk9/kj+rgVUnYNjYQ/NmPE1a
-        0YRevuKxczzE2B2ta8BeRhVUPRWa/A8i/nIMZC8VWLKIujV5DgaS4eoYq1iHJaOK
-        fkP4EP3H9YqI93mWOAmTEUZ0IVxo+RodIWbdJy0+eY5IehY48vLoruw1g==
-X-ME-Sender: <xms:vzL5Yob8aki7An9kzzIV1U9fXQ-iN2iak3VobTHW5zYMUl7XBoUMOA>
-    <xme:vzL5YjYF7DufidY6hUWm32qREg0vdiEG2pcrAG-ogY562CCogGrP2-vTdSWDWzHji
-    nu63_xtVW7qViE_zA>
-X-ME-Received: <xmr:vzL5Yi8UVSlrgT3xYh6-yCvutFiXlhp_YZ259Mhc_HCfFM9Xs1_YsR0QbyYiVkZfuXv3bzCbHK-QcoyjSpdJtQdPz2SYHJOC5mFF8FLhSvLR-7nRH658g8Cmg0LB_7nBTk9Lsw>
+        :x-sasl-enc; s=fm1; t=1660498626; x=1660585026; bh=xiU7IRPMNLk0a
+        rJJTv9Kxlo5S5AdCZsEw7U2Eez5uBU=; b=d0B8NR3yqwnyW62q+k1VhKT9o2Bxn
+        ISbGocfab5k5XqCDFhaQWGYuNCJBP0Iz6seafQBwsblxs79DPy83inuz/rnaxqYM
+        9LcLZknUOeht1IThYC1vx5eUr2v1MNJUQbqpZVi03bAZd4mVPDVGjomQqHdkzhR0
+        8LhE5NofIN8qHN5lui4y67a+fZiEW5VL1PG0SI0ePG0Zy1o4bfl0rlxrPakQHKo+
+        wo3PeT9HkisIwYWatn5zBgA+zo9Nv1I8d6+RFbVCIucnf26812/mrjgsEoo2jNAk
+        1ggBwApEjO/5Lcle+54l2Z+H4BFoPwNkYy3FUryqVoY4mEF/R+MxI2RIg==
+X-ME-Sender: <xms:wjL5Ys6TTNlBp7Q4q5rWUekGHVfTtoDovFjF-Xu-9SWInVNWuLJizw>
+    <xme:wjL5Yt4eRIAxdk5Cxj8PbHNdv4uX45Y_xs7yz_toYqZCaDXrzclm4-7zpwjNjvQF9
+    gDraqeCK74fAV1j7A>
+X-ME-Received: <xmr:wjL5YrfwxMAH4b97ncfug5N42u-LJG1TKD6u0GcjcRbmqyi5cN1MbW_ygXTyBxRkOXDz5tC0ypr9R1Ieu15wPZuMJ0PgFbc8n6FZ06t7frdgHN5XMRukuHLDtTYRPH6JYJMZ6Q>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehtddgudduiecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
     enucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefurghm
     uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
     ggtffrrghtthgvrhhnpedukeetueduhedtleetvefguddvvdejhfefudelgfduveeggeeh
-    gfdufeeitdevteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    gfdufeeitdevteenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfh
     hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:vzL5Yio-k6vIt4SAlMUq-O7FlhCGkbMcJVV0mCBZVwP08dBX0jY3mg>
-    <xmx:vzL5Yjr4hk4ekLQHpYOAWof4W3WUgVXz-AYPC7-DX8b0LnNM7aq5xA>
-    <xmx:vzL5YgRp2lQkklNUMdsAByYqIT4Oj7VmCK-gl-cLW2o7TAOMxQK1OA>
-    <xmx:vzL5Ym09_L5LXsMoguQgb9sOa2jjN6XKht4J2S0ihxyTn0bYXNikbw>
+X-ME-Proxy: <xmx:wjL5YhJUtuMb815D5sc4EgWRtvXaO3EoCzntvdgGdf9HzYUG_GcVpA>
+    <xmx:wjL5YgK8BR27k27xtlBaCPfuEuDN7tO6JoQ1-z1ISPFFEqpNPrK8iA>
+    <xmx:wjL5Yix1GRHTymeD6rmRkk29_GdL-OiB5vO2YdALWe-rG_Jcs9MZwg>
+    <xmx:wjL5YlWdMDOLmmZZiJwLS_bVNqWn1EZIhTP1tzoKmiublS3pqiAm2w>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 14 Aug 2022 13:37:03 -0400 (EDT)
+ 14 Aug 2022 13:37:05 -0400 (EDT)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Chen-Yu Tsai <wens@csie.org>,
@@ -72,9 +72,9 @@ Cc:     Samuel Holland <samuel@sholland.org>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-sunxi@lists.linux.dev
-Subject: [PATCH 2/4] nvmem: sunxi_sid: Drop the workaround on A64
-Date:   Sun, 14 Aug 2022 12:36:53 -0500
-Message-Id: <20220814173656.11856-3-samuel@sholland.org>
+Subject: [PATCH 3/4] dt-bindings: nvmem: Allow bit offsets greater than a byte
+Date:   Sun, 14 Aug 2022 12:36:54 -0500
+Message-Id: <20220814173656.11856-4-samuel@sholland.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220814173656.11856-1-samuel@sholland.org>
 References: <20220814173656.11856-1-samuel@sholland.org>
@@ -90,46 +90,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that the SRAM readout code is fixed by using 32-bit accesses, it
-always returns the same values as register readout, so the A64 variant
-no longer needs the workaround. This makes the D1 variant structure
-redundant, so remove it.
+Some NVMEM devices contain cells which do not start at a multiple of the
+device's stride. However, the "reg" property of a cell must be aligned
+to its provider device's stride.
+
+These cells can be represented in the DT using the "bits" property if
+that property allows offsets up to the full stride. 63 is chosen
+assuming that NVMEM devices will not have strides larger than 8 bytes.
 
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
 
- drivers/nvmem/sunxi_sid.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+ Documentation/devicetree/bindings/nvmem/nvmem.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/nvmem/sunxi_sid.c b/drivers/nvmem/sunxi_sid.c
-index 92dfe4cb10e3..a970f1741cc6 100644
---- a/drivers/nvmem/sunxi_sid.c
-+++ b/drivers/nvmem/sunxi_sid.c
-@@ -197,15 +197,9 @@ static const struct sunxi_sid_cfg sun8i_h3_cfg = {
- 	.need_register_readout = true,
- };
- 
--static const struct sunxi_sid_cfg sun20i_d1_cfg = {
--	.value_offset = 0x200,
--	.size = 0x100,
--};
--
- static const struct sunxi_sid_cfg sun50i_a64_cfg = {
- 	.value_offset = 0x200,
- 	.size = 0x100,
--	.need_register_readout = true,
- };
- 
- static const struct sunxi_sid_cfg sun50i_h6_cfg = {
-@@ -218,7 +212,7 @@ static const struct of_device_id sunxi_sid_of_match[] = {
- 	{ .compatible = "allwinner,sun7i-a20-sid", .data = &sun7i_a20_cfg },
- 	{ .compatible = "allwinner,sun8i-a83t-sid", .data = &sun50i_a64_cfg },
- 	{ .compatible = "allwinner,sun8i-h3-sid", .data = &sun8i_h3_cfg },
--	{ .compatible = "allwinner,sun20i-d1-sid", .data = &sun20i_d1_cfg },
-+	{ .compatible = "allwinner,sun20i-d1-sid", .data = &sun50i_a64_cfg },
- 	{ .compatible = "allwinner,sun50i-a64-sid", .data = &sun50i_a64_cfg },
- 	{ .compatible = "allwinner,sun50i-h5-sid", .data = &sun50i_a64_cfg },
- 	{ .compatible = "allwinner,sun50i-h6-sid", .data = &sun50i_h6_cfg },
+diff --git a/Documentation/devicetree/bindings/nvmem/nvmem.yaml b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
+index 3bb349c634cb..4f440ab6a13c 100644
+--- a/Documentation/devicetree/bindings/nvmem/nvmem.yaml
++++ b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
+@@ -53,7 +53,7 @@ patternProperties:
+         $ref: /schemas/types.yaml#/definitions/uint32-array
+         items:
+           - minimum: 0
+-            maximum: 7
++            maximum: 63
+             description:
+               Offset in bit within the address range specified by reg.
+           - minimum: 1
 -- 
 2.35.1
 

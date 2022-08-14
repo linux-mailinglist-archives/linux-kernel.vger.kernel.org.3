@@ -2,58 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97DEC591D4F
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 02:40:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ADD0B591D53
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 02:42:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbiHNAj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 20:39:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46906 "EHLO
+        id S230019AbiHNAmF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 20:42:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbiHNAj5 (ORCPT
+        with ESMTP id S239787AbiHNAlv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 20:39:57 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF977755B;
-        Sat, 13 Aug 2022 17:39:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sat, 13 Aug 2022 20:41:51 -0400
+Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [IPv6:2001:4b7a:2000:18::165])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A0E78BFC;
+        Sat, 13 Aug 2022 17:41:48 -0700 (PDT)
+Received: from [192.168.1.101] (abxi168.neoplus.adsl.tpnet.pl [83.9.2.168])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 163EFCE092D;
-        Sun, 14 Aug 2022 00:39:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 634E4C433D6;
-        Sun, 14 Aug 2022 00:39:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660437593;
-        bh=oUWB27MLokU9Or2RcR9TejfQIeQxTNbHsDBHyonA3sM=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=t3qt2N+a9vT7ZTLgxIeQOS6CLEUGXsI61MFn+YlBx9wH6wq5OXOxcyoJoTnCqGjxY
-         pJWJcE/BfATAhVYpLGHXavebGYPvuwcsXEVvt0ROUVMdidWZX0+E31Kj0C1dIX8EdX
-         4RF7viVNaqG15LF7Ojs7763/Oig45Ibk3XWih3n4iDzcgA14D8GQmQ3DFrFhp6DSmU
-         rx0GRKhGNkeE4w1TQsn2yGiWuzrvYjb0sZO7XDhpbQ1TpuuxhNinFfebqF4DPjcK0p
-         R0xzXF/TSfwQ1sQltTvf7cRVIXWw8vNkTRGjjKJGgT94xB25BVgW0wq++R4I7g/QLa
-         +LLJ17xL4Q7iA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 501E9C43141;
-        Sun, 14 Aug 2022 00:39:53 +0000 (UTC)
-Subject: Re: [git pull] vfs.git #work.misc
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YvhAZYm1T4ni+y01@ZenIV>
-References: <YvhAZYm1T4ni+y01@ZenIV>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YvhAZYm1T4ni+y01@ZenIV>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git tags/pull-work.misc
-X-PR-Tracked-Commit-Id: ed5fce76b5ea40c87b44cafbe4f3222da8ec981a
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: aea23e7c464bfdec04b52cf61edb62030e9e0d0a
-Message-Id: <166043759332.507.6122345660806763126.pr-tracker-bot@kernel.org>
-Date:   Sun, 14 Aug 2022 00:39:53 +0000
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 5ABC31F613;
+        Sun, 14 Aug 2022 02:41:44 +0200 (CEST)
+Message-ID: <f8cfc271-a674-8d0b-f65e-cd1e9aac06e1@somainline.org>
+Date:   Sun, 14 Aug 2022 02:41:43 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] arm64: dts: qcom: pm6350: add temp sensor and thermal
+ zone config
+Content-Language: en-US
+To:     Matthias Kaehlcke <mka@chromium.org>,
+        Luca Weiss <luca.weiss@fairphone.com>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <bjorn.andersson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20220812114421.1195044-1-luca.weiss@fairphone.com>
+ <81ae6a31-1f37-a677-f8f8-2340e37d3a63@linaro.org>
+ <CM43WTWNP8MM.3145TGVN4208B@otso> <YvaErMmLIQaDolKR@google.com>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <YvaErMmLIQaDolKR@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,15 +55,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sun, 14 Aug 2022 01:23:01 +0100:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git tags/pull-work.misc
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/aea23e7c464bfdec04b52cf61edb62030e9e0d0a
+On 12.08.2022 18:49, Matthias Kaehlcke wrote:
+> On Fri, Aug 12, 2022 at 04:06:47PM +0200, Luca Weiss wrote:
+>> Hi Krzysztof,
+>>
+>> +CC Matthias Kaehlcke (author of patch mentioned further below)
+>>
+>> On Fri Aug 12, 2022 at 3:36 PM CEST, Krzysztof Kozlowski wrote:
+>>> On 12/08/2022 14:44, Luca Weiss wrote:
+>>>> Add temp-alarm device tree node and a default configuration for the
+>>>> corresponding thermal zone for this PMIC. Temperatures are based on
+>>>> downstream values.
+>>>>
+>>>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+>>>> ---
+>>>> With this config I'm getting this in dmesg, not sure if it's a warning
+>>>> that should be solved or just an informative warning.
+>>>>
+>>>> [    0.268256] spmi-temp-alarm c440000.spmi:pmic@0:temp-alarm@2400: No ADC is configured and critical temperature is above the maximum stage 2 threshold of 140 C! Configuring stage 2 shutdown at 140 C.
+>>>>
+>>>> As far as I can tell, based on downstream dts this PMIC doesn't have an
+>>>> ADC.
+> 
+> I don't seem to have access to the datasheet, in any case that the ADC isn't
+> configured in the downstream dts doesn't necessarily mean the PMIC doesn't
+> have one. The PM6150 has one, and it is probably relatively close to the
+> PM6350.
+> 
+>>> You configure 145 and driver believes 140 is the limit, so it seems
+>>> warning should be addressed.
+>>
+>> Hm...
+>>
+>>>
+>>> From where did you get 145 degrees as limit? Downstream DTS?
+>>
+>> Yes, downstream dts[0].
+>>
+>> From what I can see in the downstream driver, it always disabled this
+>> "software override of stage 2 and 3 shutdowns"[1]
+>>
+>> In mainline only since f1599f9e4cd6 ("thermal: qcom-spmi: Use PMIC
+>> thermal stage 2 for critical trip points") this check exists, which is
+>> not part of downstream (wasn't in 4.19 yet), where this software
+>> override tries to get enabled so that thermal core can handle this.
+>>
+>> Any suggestion what I can do here? Maybe looking at msm-5.4 sources (and
+>> associated dts) might reveal something..?
+> 
+> I wouldn't necessarily consider QC downstream code as a reliable source of
+> truth ...
+> 
+>> Maybe newer SoCs/PMICs have a different config?
+> 
+> Commit aa92b3310c55 ("thermal/drivers/qcom-spmi-temp-alarm: Add support
+> for GEN2 rev 1 PMIC peripherals") added support for gen2 PMICs, which
+> actually have lower thresholds than gen1. From the log it seems that the
+> PM6350 is identified as gen1 device (max stage 2 threshold = 140 degC).
+> 
+> It seems setting the limit to 140 degC or one of the other stage 2
+> thresholds would be a reasonable course of action. stage 2 is the
+> threshold at which the PMIC is so hot that the system should shut
+> down, and 140 degC is the highest of the stage 2 thresholds. Even
+> if it was possible, what would be gained from setting the trip
+> point 5 degC higher?
+Eeeh, if it ran at anything near that for prolonged time, the heat
+would likely spread around the device causing the battery to
+eventually combust.. Qualcomm DTs say one thing, but vendor
+userspace daemons are far more conservative. Not sure if they're
+still around (should be iirc), but I would definitely
+object allowing anything inside [mainly] mobile devices to reach
+that kind of temperature..
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Konrad

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2620E592010
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 16:13:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B4BE59200D
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 16:13:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239598AbiHNONI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 10:13:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34066 "EHLO
+        id S230484AbiHNONG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 10:13:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239466AbiHNOM5 (ORCPT
+        with ESMTP id S239471AbiHNOM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 14 Aug 2022 10:12:57 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9464E95B2
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 07:12:54 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id h204-20020a1c21d5000000b003a5b467c3abso6118304wmh.5
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 07:12:54 -0700 (PDT)
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2BCD9FD0
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 07:12:55 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id e27so1639241wra.11
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 07:12:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=conchuod.ie; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=qMUpNbdJFHkt8LehO+vj4FoNVMjMZ3b4RSV8Kbu/byM=;
-        b=VU4X7ETrUmw6SeHfZ8AdO5lxQKOQF2HqiEeNSOaEO67IQgUu4al0l7Lp3vRJzsv8Ft
-         148XhPJaK+g8F+K2pFvw/ibH2zC/GW6G3TP/Sub0QP9WkIpbzxC521jv+uLO/jzmgdCC
-         diUBrwCfWZAKEoAmALJ7bywyWKZDHeo5iPTbotwxY1F/O5oI4I5Ic4VuSvMYwZdFUQh/
-         ZEEUY4gc60LRUCvGwVdTLyUl+apOZQtsCzBQlH0d/e91I9A9waemfuZBe86cO8GtLRDm
-         XrQDdAFcRZvf/GQyqSv1qssDXttkUmbTxG0amI78ugyDHn2eEBwwRt3ahtZMIU5vgAfm
-         +YBg==
+        bh=pPv0l6vD5WlLpI1nTN7zzV3sMR7lS/dRIy37KSKLV6k=;
+        b=HMMTLU/p8YLEHSGr0JdrSHHzL+KPSzr/2SbHVIYZPefUDLh0i6BEpVFmoM7PonqAQu
+         XHK1xmVw1UBg2BPE8d6h3iPvrE+h3Ms+3mRmDMA9Wb50IKTeWvZ0qIOlXZ1ZkoUbFGHE
+         0mUhMOI5/9Bp3r2iu5qSOoF2uZw6OohSrtuVWL1610+z/NlAO6QENPP2PWA5I1CD3+Ng
+         euh7jve2sSLkFojItamUEEE3h9vElikeXBeEWacM1nyspNJDM6MQj9pdpf6uA3YdvvbX
+         JHdWK+memg4nFTSgdmc6BoFrjCm7SFf/6eVZhXMvj+kHJE/DRuNDbHBIhxDKgeNhP0WF
+         Scrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=qMUpNbdJFHkt8LehO+vj4FoNVMjMZ3b4RSV8Kbu/byM=;
-        b=Gi2IHHC7z6cPDeDi54fpCihDKqQjHQrnfv6yKwEFgLUyBLsGqzP+RUOIfDKE62hb46
-         AcpB6PORr59kvL1Z/Q+R/9aKbxLOeppf7X+N8GbbkFaoQ5agJBEyp5JgjSjHE2bBVzHv
-         EKUaRRUnU3bDLJTo7LRPX+lGdJfzCwS+pbCCmdsY6Gd+/qGPQlR7jbzMCv2qGNJOVM1P
-         CMeTznaQMu34n9yHGWUUm0hG4M7TJAkNy4Gz30cDwhqpYQj3MC7MMYhaFwlWumFiSKI6
-         kkIs3R5RfaWiDEcQ/szMD5iMHPPMRVO6K61lW9Op5p3BeszLUqckfx8JWOFzvpnONul9
-         2Wzg==
-X-Gm-Message-State: ACgBeo2YfLcqIbPuBMSkvx5TVpKoxwY9CuaqviGWSJVG+RmVwLCmPsCb
-        PR/o8aHUREu2wWjmeycrQWWs8A==
-X-Google-Smtp-Source: AA6agR4TZ6OGzcxxznTc5xN2jS1X/dAKB1yFSxHRG1y13P0Di1gIIk68PUhQuEwPcdtEnEPKe4wd+Q==
-X-Received: by 2002:a05:600c:a4c:b0:39c:34d0:fd25 with SMTP id c12-20020a05600c0a4c00b0039c34d0fd25mr7924157wmq.172.1660486373101;
-        Sun, 14 Aug 2022 07:12:53 -0700 (PDT)
+        bh=pPv0l6vD5WlLpI1nTN7zzV3sMR7lS/dRIy37KSKLV6k=;
+        b=i3D3ps5BHSBL1M52fw26qOSqobVrMt+qLVyVESCllCTx3eoADyyoUvVhq6RkYiTXqf
+         PCSDOwf8PxwqQOCsqrj7XYz/Lu6W+pmYPWlc0aPf1cIN8H2z/Wg2gjU5cu7AtRxeyYL3
+         j7VHVE/Va8lnc8wsqHDIdTrXUrTEAkXgqdNZXti9Gl1mOxXH246pxDiTIpTRDDBcOTrE
+         fDaL69DdB8/T7ZrXcY9yCXnlxCpgGsMcnNhov8yE+D7HWs2l5Nar7tb92hZ3aksmziBA
+         lTSyjOmlj0mumXWgxDppoPl2Au8EL0Hk7btOrUnhDXM1JIGYhmvpNu8z0cgubGcBpYoH
+         t/oA==
+X-Gm-Message-State: ACgBeo0OXyRv4sz2MhNvUZtII8TAmu2kJxbrQ+KXIRvN38mXTdWX7Hc0
+        Ta+YpJXnaeqAsKiZ3KxQX/1knA==
+X-Google-Smtp-Source: AA6agR6BPhLCEYbGHWwFtW7IA0BVcNy4nXrlbW7af92IxkgTrJMJnNk9uz1mkz0iwWDTuJ1TmfrDbA==
+X-Received: by 2002:a5d:4705:0:b0:21f:3890:8619 with SMTP id y5-20020a5d4705000000b0021f38908619mr6285685wrq.104.1660486374334;
+        Sun, 14 Aug 2022 07:12:54 -0700 (PDT)
 Received: from henark71.. ([109.76.58.63])
-        by smtp.gmail.com with ESMTPSA id b8-20020adfde08000000b0021db7b0162esm4625419wrm.105.2022.08.14.07.12.51
+        by smtp.gmail.com with ESMTPSA id b8-20020adfde08000000b0021db7b0162esm4625419wrm.105.2022.08.14.07.12.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Aug 2022 07:12:52 -0700 (PDT)
+        Sun, 14 Aug 2022 07:12:53 -0700 (PDT)
 From:   Conor Dooley <mail@conchuod.ie>
 To:     Anup Patel <anup@brainfault.org>,
         Atish Patra <atishp@atishpatra.org>,
@@ -63,9 +63,9 @@ Cc:     Conor Dooley <conor.dooley@microchip.com>,
         Tong Tiangen <tongtiangen@huawei.com>, kvm@vger.kernel.org,
         kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 2/4] riscv: kvm: move extern sbi_ext declarations to a header
-Date:   Sun, 14 Aug 2022 15:12:36 +0100
-Message-Id: <20220814141237.493457-3-mail@conchuod.ie>
+Subject: [PATCH 3/4] riscv: signal: fix missing prototype warning
+Date:   Sun, 14 Aug 2022 15:12:37 +0100
+Message-Id: <20220814141237.493457-4-mail@conchuod.ie>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220814141237.493457-1-mail@conchuod.ie>
 References: <20220814141237.493457-1-mail@conchuod.ie>
@@ -83,80 +83,52 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Conor Dooley <conor.dooley@microchip.com>
 
-Sparse complains about missing statics in the declarations of several
-variables:
-arch/riscv/kvm/vcpu_sbi_replace.c:38:37: warning: symbol 'vcpu_sbi_ext_time' was not declared. Should it be static?
-arch/riscv/kvm/vcpu_sbi_replace.c:73:37: warning: symbol 'vcpu_sbi_ext_ipi' was not declared. Should it be static?
-arch/riscv/kvm/vcpu_sbi_replace.c:126:37: warning: symbol 'vcpu_sbi_ext_rfence' was not declared. Should it be static?
-arch/riscv/kvm/vcpu_sbi_replace.c:170:37: warning: symbol 'vcpu_sbi_ext_srst' was not declared. Should it be static?
-arch/riscv/kvm/vcpu_sbi_base.c:69:37: warning: symbol 'vcpu_sbi_ext_base' was not declared. Should it be static?
-arch/riscv/kvm/vcpu_sbi_base.c:90:37: warning: symbol 'vcpu_sbi_ext_experimental' was not declared. Should it be static?
-arch/riscv/kvm/vcpu_sbi_base.c:96:37: warning: symbol 'vcpu_sbi_ext_vendor' was not declared. Should it be static?
-arch/riscv/kvm/vcpu_sbi_hsm.c:115:37: warning: symbol 'vcpu_sbi_ext_hsm' was not declared. Should it be static?
+Fix the warning:
+arch/riscv/kernel/signal.c:316:27: warning: no previous prototype for function 'do_notify_resume' [-Wmissing-prototypes]
+asmlinkage __visible void do_notify_resume(struct pt_regs *regs,
 
-These variables are however used in vcpu_sbi.c where they are declared
-as extern. Move them to kvm_vcpu_sbi.h which is handily already
-included by the three other files.
+All other functions in the file are static & none of the existing
+headers stood out as an obvious location. Create signal.h to hold the
+declaration.
 
-Fixes: a046c2d8578c ("RISC-V: KVM: Reorganize SBI code by moving SBI v0.1 to its own file")
-Fixes: 5f862df5585c ("RISC-V: KVM: Add v0.1 replacement SBI extensions defined in v0.2")
-Fixes: 3e1d86569c21 ("RISC-V: KVM: Add SBI HSM extension in KVM")
+Fixes: e2c0cdfba7f6 ("RISC-V: User-facing API")
 Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
 ---
- arch/riscv/include/asm/kvm_vcpu_sbi.h | 12 ++++++++++++
- arch/riscv/kvm/vcpu_sbi.c             | 12 +-----------
- 2 files changed, 13 insertions(+), 11 deletions(-)
+ arch/riscv/include/asm/signal.h | 12 ++++++++++++
+ arch/riscv/kernel/signal.c      |  1 +
+ 2 files changed, 13 insertions(+)
+ create mode 100644 arch/riscv/include/asm/signal.h
 
-diff --git a/arch/riscv/include/asm/kvm_vcpu_sbi.h b/arch/riscv/include/asm/kvm_vcpu_sbi.h
-index 83d6d4d2b1df..26a446a34057 100644
---- a/arch/riscv/include/asm/kvm_vcpu_sbi.h
-+++ b/arch/riscv/include/asm/kvm_vcpu_sbi.h
-@@ -33,4 +33,16 @@ void kvm_riscv_vcpu_sbi_system_reset(struct kvm_vcpu *vcpu,
- 				     u32 type, u64 flags);
- const struct kvm_vcpu_sbi_extension *kvm_vcpu_sbi_find_ext(unsigned long extid);
- 
-+#ifdef CONFIG_RISCV_SBI_V01
-+extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_v01;
-+#endif
-+extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_base;
-+extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_time;
-+extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_ipi;
-+extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_rfence;
-+extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_srst;
-+extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_hsm;
-+extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_experimental;
-+extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_vendor;
+diff --git a/arch/riscv/include/asm/signal.h b/arch/riscv/include/asm/signal.h
+new file mode 100644
+index 000000000000..532c29ef0376
+--- /dev/null
++++ b/arch/riscv/include/asm/signal.h
+@@ -0,0 +1,12 @@
++/* SPDX-License-Identifier: GPL-2.0-only */
 +
- #endif /* __RISCV_KVM_VCPU_SBI_H__ */
-diff --git a/arch/riscv/kvm/vcpu_sbi.c b/arch/riscv/kvm/vcpu_sbi.c
-index d45e7da3f0d3..f96991d230bf 100644
---- a/arch/riscv/kvm/vcpu_sbi.c
-+++ b/arch/riscv/kvm/vcpu_sbi.c
-@@ -32,23 +32,13 @@ static int kvm_linux_err_map_sbi(int err)
- 	};
- }
++#ifndef __ASM_SIGNAL_H
++#define __ASM_SIGNAL_H
++
++#include <uapi/asm/signal.h>
++#include <uapi/asm/ptrace.h>
++
++asmlinkage __visible
++void do_notify_resume(struct pt_regs *regs, unsigned long thread_info_flags);
++
++#endif
+diff --git a/arch/riscv/kernel/signal.c b/arch/riscv/kernel/signal.c
+index 38b05ca6fe66..5a2de6b6f882 100644
+--- a/arch/riscv/kernel/signal.c
++++ b/arch/riscv/kernel/signal.c
+@@ -15,6 +15,7 @@
  
--#ifdef CONFIG_RISCV_SBI_V01
--extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_v01;
--#else
-+#ifndef CONFIG_RISCV_SBI_V01
- static const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_v01 = {
- 	.extid_start = -1UL,
- 	.extid_end = -1UL,
- 	.handler = NULL,
- };
- #endif
--extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_base;
--extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_time;
--extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_ipi;
--extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_rfence;
--extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_srst;
--extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_hsm;
--extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_experimental;
--extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_vendor;
- 
- static const struct kvm_vcpu_sbi_extension *sbi_ext[] = {
- 	&vcpu_sbi_ext_v01,
+ #include <asm/ucontext.h>
+ #include <asm/vdso.h>
++#include <asm/signal.h>
+ #include <asm/signal32.h>
+ #include <asm/switch_to.h>
+ #include <asm/csr.h>
 -- 
 2.37.1
 

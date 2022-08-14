@@ -2,122 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3CF05925D5
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 19:43:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CA655925D8
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 19:44:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231544AbiHNRnM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 13:43:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60744 "EHLO
+        id S232292AbiHNRoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 13:44:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229520AbiHNRnK (ORCPT
+        with ESMTP id S229520AbiHNRoK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 13:43:10 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148EFDE88
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 10:43:07 -0700 (PDT)
-Received: from zn.tnic (p2e55d27b.dip0.t-ipconnect.de [46.85.210.123])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 864531EC0666;
-        Sun, 14 Aug 2022 19:43:02 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1660498982;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=zTKEtPgPScqoSwv+oy+vf/aynW9Ycy4y6/0TBuFm6Ac=;
-        b=AmqpCZR4tU2UAYxjdAjJkN7eUCazkDpQtTcGAlWeDVZqxkfIcaZyjUrqMlbSIpLEgbV3mQ
-        lLNBpcsI4srVh+vRcOe8IS7gRFoggvmvoFHJBREsSjME4k1skr/159zf74SAj05WDhBubR
-        31IWV29iH8zYdQqG7+cBG7Xw7ZFvlzg=
-Date:   Sun, 14 Aug 2022 19:42:56 +0200
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>, x86-ml <x86@kernel.org>,
-        Madhuparna Bhowmik <madhuparnabhowmik10@gmail.com>,
-        Christian Brauner <brauner@kernel.org>
-Subject: Re: [GIT PULL] timer fixes
-Message-ID: <Yvk0IAtAUkkUNedZ@zn.tnic>
-References: <Yvd8L0qIbLarxrOQ@gmail.com>
- <YvfQUGLGY7cfZ9gf@zn.tnic>
- <CAHk-=wi+K-LQ121sPbsQonja3Sx-_kXZc6ntauUC2=JPsUrC+g@mail.gmail.com>
- <YvjtkidVZg2sBY0R@zn.tnic>
- <20220814172445.GR2125313@paulmck-ThinkPad-P17-Gen-1>
+        Sun, 14 Aug 2022 13:44:10 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D994DEA3;
+        Sun, 14 Aug 2022 10:44:09 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id n133so6620501oib.0;
+        Sun, 14 Aug 2022 10:44:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc;
+        bh=MgVIXnrzamGi1CDQWdojbS7ElaBT1I5kwnpNyLD1mjk=;
+        b=IvWKNwADAH+C6wMh9Gyr3A56r/geDdikybNfApEEZUCKFUWBOPS0LlYfZx2FTwUIZq
+         91ELAo/g6Qu9rmC9lws9pZwccmo+lBuCWb1zwMi/QJUh+KukgvQHaOqZGMHMJwGSkmz+
+         /v6iaamRFJxslyOw9uvqLS04YOceQtK+eA3gCAsR9SCnJ+lczpVb0DlElt+GZHNA/L8w
+         t1rcazCJkMea0s5pZkeJgjtZJ9dwseetgxNIe27o2Hae6lFdAFOqBxGvNAz+TnSrZ3TW
+         3N3ZAbcVY5RUt5zBzpS1W873Bm7R2cURyB+30BYIu/QRJngiwciLWq9ef482vIu8sVW+
+         hseQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc;
+        bh=MgVIXnrzamGi1CDQWdojbS7ElaBT1I5kwnpNyLD1mjk=;
+        b=x8pzUOFuyq701xvc34Gt2RtujL/7hxepfDHvzqu70/SnssVq/oR4WS/eDIFCPrhsco
+         sQV5K3dOJnkp0wW84nvu+l/B/tJmTssx6A+HlwSCvxUYYeHjIul4H6NSZIx6q2gyXNJc
+         MK1qhE2iJUuRr3RuPaRG49mvNqoYDPDw+9uMN3rhpOUChdoTD9KRG52urB5Z7SFoIr80
+         V5wTQI263bSVWW3jH5q12fFKRMQcvwa2Hj5Kcx45ccUraLSJ+OLiJVoHldVh5AJUlbw4
+         ffWP15efwkzTZRLVHKqEhuqyC9x4JZ02LW6gF2ruoAmBE6GBGlYA4J7l0aiQynE+Jmgw
+         QoAA==
+X-Gm-Message-State: ACgBeo0va/n5KZSuigTr4LNsv5oqMH7hcxYKBsbC/W0r37Vkb4m8atef
+        vkXpRSOaPwAR6VmvE5A0DPtE3Oj0LMM=
+X-Google-Smtp-Source: AA6agR5jp0xp8Meg2NdVpgLJezQotEmGKedXqcXOXpzOgAfaKtGuK29QDcKqKL5ZWNTAUCHc/15lJg==
+X-Received: by 2002:a05:6808:f13:b0:344:81ce:7f7b with SMTP id m19-20020a0568080f1300b0034481ce7f7bmr2681432oiw.248.1660499048910;
+        Sun, 14 Aug 2022 10:44:08 -0700 (PDT)
+Received: from localhost.localdomain ([216.130.59.33])
+        by smtp.gmail.com with ESMTPSA id v37-20020a056830092500b00636a8dafdc9sm1654484ott.2.2022.08.14.10.44.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 Aug 2022 10:44:08 -0700 (PDT)
+Sender: Larry Finger <larry.finger@gmail.com>
+From:   Larry Finger <Larry.Finger@lwfinger.net>
+To:     gregkh@linuxfoundation.org
+Cc:     phil@philpotter.co.uk, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        Larry Finger <Larry.Finger@lwfinger.net>
+Subject: [PATCH] staging: r8188eu: Prevent infinite loop
+Date:   Sun, 14 Aug 2022 12:44:04 -0500
+Message-Id: <20220814174404.25923-1-Larry.Finger@lwfinger.net>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20220814172445.GR2125313@paulmck-ThinkPad-P17-Gen-1>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 14, 2022 at 10:24:45AM -0700, Paul E. McKenney wrote:
-> If it is causing more trouble than it is worth, then I have not objection
-> to taking a different approach.
+---
+ drivers/staging/r8188eu/core/rtw_ieee80211.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Well, pretty much every file I tried in the output of
-
-git grep -e '->sighand'
-
-triggers that sparse warning. For example:
-
-$ make C=1 kernel/signal.o
-
-...
-
-kernel/signal.c:195:31: warning: incorrect type in argument 1 (different address spaces)
-kernel/signal.c:195:31:    expected struct spinlock [usertype] *lock
-kernel/signal.c:195:31:    got struct spinlock [noderef] __rcu *
-kernel/signal.c:198:33: warning: incorrect type in argument 1 (different address spaces)
-kernel/signal.c:198:33:    expected struct spinlock [usertype] *lock
-kernel/signal.c:198:33:    got struct spinlock [noderef] __rcu *
-kernel/signal.c:480:9: warning: incorrect type in argument 1 (different address spaces)
-kernel/signal.c:480:9:    expected struct spinlock [usertype] *lock
-kernel/signal.c:480:9:    got struct spinlock [noderef] __rcu *
-kernel/signal.c:484:34: warning: incorrect type in argument 1 (different address spaces)
-kernel/signal.c:484:34:    expected struct spinlock [usertype] *lock
-kernel/signal.c:484:34:    got struct spinlock [noderef] __rcu *
-kernel/signal.c:517:9: warning: incorrect type in argument 1 (different address spaces)
-kernel/signal.c:517:9:    expected struct spinlock [usertype] *lock
-kernel/signal.c:517:9:    got struct spinlock [noderef] __rcu *
-kernel/signal.c:520:36: warning: incorrect type in argument 1 (different address spaces)
-kernel/signal.c:520:36:    expected struct spinlock [usertype] *lock
-kernel/signal.c:520:36:    got struct spinlock [noderef] __rcu *
-kernel/signal.c:542:53: warning: incorrect type in initializer (different address spaces)
-kernel/signal.c:542:53:    expected struct k_sigaction *ka
-kernel/signal.c:542:53:    got struct k_sigaction [noderef] __rcu *
-./include/uapi/asm-generic/signal-defs.h:83:29: error: multiple address spaces given
-kernel/signal.c:698:33: warning: incorrect type in argument 1 (different address spaces)
-kernel/signal.c:698:33:    expected struct spinlock [usertype] *lock
-kernel/signal.c:698:33:    got struct spinlock [noderef] __rcu *
-kernel/signal.c:700:31: warning: incorrect type in argument 1 (different address spaces)
-kernel/signal.c:700:31:    expected struct spinlock [usertype] *lock
-kernel/signal.c:700:31:    got struct spinlock [noderef] __rcu *
-kernel/signal.c:1328:9: warning: incorrect type in argument 1 (different address spaces)
-kernel/signal.c:1328:9:    expected struct spinlock [usertype] *lock
-kernel/signal.c:1328:9:    got struct spinlock [noderef] __rcu *
-kernel/signal.c:1329:16: warning: incorrect type in assignment (different address spaces)
-kernel/signal.c:1329:16:    expected struct k_sigaction *action
-kernel/signal.c:1329:16:    got struct k_sigaction [noderef] __rcu *
-kernel/signal.c:1349:34: warning: incorrect type in argument 1 (different address spaces)
-kernel/signal.c:1349:34:    expected struct spinlock [usertype] *lock
-kernel/signal.c:1349:34:    got struct spinlock [noderef] __rcu *
-kernel/signal.c:1938:36: warning: incorrect type in initializer (different address spaces)
-kernel/signal.c:1938:36:    expected struct spinlock [usertype] *lock
-kernel/signal.c:1938:36:    got struct spinlock [noderef] __rcu *
-kernel/signal.c:2048:44: warning: cast removes address space '__rcu' of expression
-kernel/signal.c:2067:65: warning: too many warnings
-
+diff --git a/drivers/staging/r8188eu/core/rtw_ieee80211.c b/drivers/staging/r8188eu/core/rtw_ieee80211.c
+index bc8543ea2e66..0a5f08427385 100644
+--- a/drivers/staging/r8188eu/core/rtw_ieee80211.c
++++ b/drivers/staging/r8188eu/core/rtw_ieee80211.c
+@@ -531,6 +531,7 @@ u8 *rtw_get_wps_ie(u8 *in_ie, uint in_len, u8 *wps_ie, uint *wps_ielen)
+ 	uint cnt;
+ 	u8 *wpsie_ptr = NULL;
+ 	u8 eid, wps_oui[4] = {0x0, 0x50, 0xf2, 0x04};
++	int loop_max = 0;
+ 
+ 	if (wps_ielen)
+ 		*wps_ielen = 0;
+@@ -557,6 +558,8 @@ u8 *rtw_get_wps_ie(u8 *in_ie, uint in_len, u8 *wps_ie, uint *wps_ielen)
+ 			break;
+ 		}
+ 		cnt += in_ie[cnt + 1] + 2; /* goto next */
++		if (++loop > 1000)
++			return NULL;
+ 	}
+ 	return wpsie_ptr;
+ }
 -- 
-Regards/Gruss,
-    Boris.
+2.37.1
 
-https://people.kernel.org/tglx/notes-about-netiquette

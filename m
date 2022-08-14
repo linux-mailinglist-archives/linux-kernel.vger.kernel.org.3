@@ -2,196 +2,443 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 385C0591D67
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 03:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0896591D69
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 03:12:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbiHNBKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 21:10:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44216 "EHLO
+        id S240124AbiHNBMS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 21:12:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiHNBKe (ORCPT
+        with ESMTP id S229525AbiHNBMR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 21:10:34 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2067.outbound.protection.outlook.com [40.107.237.67])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE54EF5B;
-        Sat, 13 Aug 2022 18:10:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HfP3oQVy5QyHiCxiccG7nM4npnfhl1tDry5zweF0IQPwZKjqY7a386cm0Q1+81WgSUFVQuRLS5DcsX3asGemhyIEQsYno+y+EpFlDuUFl7Wk4VkW/HPjOofWnTUYyZ8+6eq9HkgD9xdJu90MyXo/3ct2pBAjl+oMfELWNqz/abLnNQPviiOh/yoYTbjHHQGBNqO2oARINKqzOtGRLNvkGqw5B2TX1bTX6VUjaDJHglefhuE7F3L8sJzxc8x8hu4ThyGJVepQUYE418UB5UnwVN20bnQfdGnWAJ1sprMLR7pEN4ag11yzaq5tOLHFSdt+rNkYpUqDlUhr6ZLpl/HAfQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xjDfi2Ipvr9Jh/Ka66JD9VPW4d4zOI2czUvkxsQAheE=;
- b=hEWSJhhwgIjyv7NpQzXRTjL3cZzlMfOr6K0iQxLgg/2PvkJt8+dG4nPjyuJQvzw/LlVahc0jvT4povwFvwXzwG6UA9zcTrpmuYizOy8VIGpiZ1ExU+ZwbdihLTMlMXX1/Zp3dzLPeSs1oTrARsWi0C76t4c70doZXHfzuptATo4XtWcDp6A5+uZ2fZDi5urNpINpT/W2aR0UAQS0Ups63wzVsVd0Hn5bXjoonkRa5ejMUERnFiD4QtrvrU8qWGQqSnmFvFLA7F+uN34N1/tMhNpdCYpZtHD/NoVvpdoxCWJyKpbwJT7xsvIHwVInI1p5wDlXiIUJP3yE0HZhOym5vw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xjDfi2Ipvr9Jh/Ka66JD9VPW4d4zOI2czUvkxsQAheE=;
- b=Kn8Aydrr7yNl7B4pN69/tvLyKL1XoB5JziO46dxUMBZOKL4pcA+tVqqzQEUH/E791fhApq97TG51q+t8H4MSM1pbHKzNgY0uAQIMBOG1UDdgPhYGo6JUHcnpAhVDtebcMEG6zvxTWQkIRhSHe/jhS47WBRp7FamouuyyYZN0zLbIhEAi0sb7Bdx47hqGL/eJDnyk3qFsyoH9C95QAb/Q1NVv4pMj8m1KrW+AntZIRUfu369C6JnIdBZZsqc928HW5Wm3kqw00PeHdRwx9QG4ySD1+O6tBjynzdt+N8XDTwDye8OKlxXKWpg5iwcoKpUTlXufAMGk+DKJf5vJNmGe5w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by MN0PR12MB6149.namprd12.prod.outlook.com (2603:10b6:208:3c7::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.25; Sun, 14 Aug
- 2022 01:10:30 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::508d:221c:9c9e:e1a5]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::508d:221c:9c9e:e1a5%9]) with mapi id 15.20.5525.011; Sun, 14 Aug 2022
- 01:10:23 +0000
-Message-ID: <df6f3200-5989-c4b8-65ce-85ba82f4196f@nvidia.com>
-Date:   Sat, 13 Aug 2022 18:10:20 -0700
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH] sched/all: Change BUG_ON() instances to WARN_ON()
-Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>,
-        Matthew Wilcox <willy@infradead.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Peter Xu <peterx@redhat.com>, Hugh Dickins <hughd@google.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>
-References: <20220808073232.8808-1-david@redhat.com>
- <CAHk-=wiEAH+ojSpAgx_Ep=NKPWHU8AdO3V56BXcCsU97oYJ1EA@mail.gmail.com>
- <1a48d71d-41ee-bf39-80d2-0102f4fe9ccb@redhat.com>
- <CAHk-=wg40EAZofO16Eviaj7mfqDhZ2gVEbvfsMf6gYzspRjYvw@mail.gmail.com>
- <YvSsKcAXISmshtHo@gmail.com>
- <CAHk-=wgqW6zQcAW4i-ARJ8KNZZjw6tP3nn0QimyTWO=j+ZKsLA@mail.gmail.com>
- <YvV0e7UY5yRbHNJQ@casper.infradead.org> <YvWPThSv65hwuSMl@nvidia.com>
-From:   John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <YvWPThSv65hwuSMl@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY5PR17CA0055.namprd17.prod.outlook.com
- (2603:10b6:a03:167::32) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+        Sat, 13 Aug 2022 21:12:17 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F5EE13D7D
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 18:12:15 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id gj1so4178984pjb.0
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 18:12:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=uNNmv8kDPlMYHuOnmM/f+sTjEO16OylEBMIt9uRpqPc=;
+        b=MBS0kTRuF7veLkGINa1a5VENK0oIkwENkMFVtPa3LDxbRv0ISdi9DGX10KaPkXJIcV
+         2hOywWOkh8yRrCYhrPlsb4ZOndPz3fVds5vumMiJL0PpFOFfgM9wxqfOR8TcBoqZqm6l
+         13d4kr4GXoN+BRP9nSuYCEg/OL5OpjTK8VNQ4XXEJGXwYiT4ut8zP2je/bjPs/UgoOk3
+         aPClrHktXfas9jilhA5xVf13X7W5zZF6pVOwqXLErcTbRl4RspwFkhxJEP6a17B2JEjw
+         iNa2aeNFihloN7omAHug+zWXVKqfSzXtf2tWzE5QtvvdKH43rYcVA+UUlblX/mn6CQ3A
+         xmgg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=uNNmv8kDPlMYHuOnmM/f+sTjEO16OylEBMIt9uRpqPc=;
+        b=PIg5BTJwj0Oesn2p3Jk9fr71eReiuDSZWieIpGQW51uojtUsoyec2DXJy4t8bsf4MX
+         QVwvcjjxy/cMzjl0UA+W71V6LfbeUeMNeByG/J6043icGZbzOT1pMp/0stnOPBqXCFqU
+         5xZRxZJ5u7dihwCp7uVnu536LeYaWIw5gz6lngKnoum1sXaI2+y0OdocICP7Hjw2Y9pR
+         W/P3n9mgh+tc1weQy2tyDzJQetpOaOW2LPbjAmaCP70Jf/JMm6aillHsAJpBGCAlvW9d
+         BPJ6vKChqBX0u6hM75SxndYuWoQSE2mgix7PEhnp1d2jK4gk6vwT+xQ12UdnRHd1Uz2a
+         UWZg==
+X-Gm-Message-State: ACgBeo1Rp5KpK2EMNx7fkrrYfpTDb/C5W3MiBistSzJ8yALnCnwlI732
+        2MwZFfQnSY++5hYxr3eKKMZEvw==
+X-Google-Smtp-Source: AA6agR6em6Ayc75BH8jIaSo555+9u6uvxDLO+XPCrwPaaePEINAClE4mdorvdcr+La5T192ETutsfQ==
+X-Received: by 2002:a17:90b:164d:b0:1f6:a38b:91e9 with SMTP id il13-20020a17090b164d00b001f6a38b91e9mr11543216pjb.211.1660439534809;
+        Sat, 13 Aug 2022 18:12:14 -0700 (PDT)
+Received: from google.com (33.5.83.34.bc.googleusercontent.com. [34.83.5.33])
+        by smtp.gmail.com with ESMTPSA id e30-20020a056a0000de00b0052d9d95bb2bsm2814466pfj.180.2022.08.13.18.12.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 13 Aug 2022 18:12:14 -0700 (PDT)
+Date:   Sun, 14 Aug 2022 01:12:10 +0000
+From:   Mingwei Zhang <mizhang@google.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
+        Yan Zhao <yan.y.zhao@intel.com>,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH v3 3/8] KVM: x86/mmu: Rename NX huge pages
+ fields/functions for consistency
+Message-ID: <YvhL6jKfKCj0+74w@google.com>
+References: <20220805230513.148869-1-seanjc@google.com>
+ <20220805230513.148869-4-seanjc@google.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 1d43c768-604b-47a3-a98a-08da7d91c3d1
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6149:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Kei10gnJdsP8g8/5mudFnNnLny11yC5+JO1wV6/UDviUhLmE0aBj6jtCjX0uJ9fp4Hb0rLrJUoCXtXA9QeY+DQAHi5iSLSPR7pk99FPWbV3aru9RsnOKI2pAVdZIJDawam8BG3wP/f8zkEGg5xtlhr+OVjfHP2yGx8hY7B3s94eAlPXqytBBMgIdkB5h4W/RF6kAa6oRnRxPXm/3hA5wWDNyYlkw9bQ1xbO/iMeIvjUmuHsZrjZ/OtXl05pMsyWkNhfoidRbOxiFza9AAVikmWmhpuN/mHqP5rNEqWwlVW/BGmVJxyvvY2r6GFl7WcpGT95bqa++mXusfnH5gpofKl7Pk4cvDPbY5N6QgBflxWRMXsHUIWx1Ef0Qv0VUxpTxKYEA3Ft2JBtioxn79puwU+cyB4GjKK0nZHqOd3AvH1megrRNJI0ReDBj61KS/fcG8SJj9cV9i90JBV8PIKk5FJcoY9/0BGGzPhh+XyKSbG0T/wfyU2WExzsDiQZKEQzPsr3ZKQLGsNMViufMYv2EE3YJYk4koRRM0chz9NoUoObfHTIZ44KX0g4HuLfta5lUrhW5nlk8efFCIYDMn5Y/+tzVmZp4KkBSFVm6fRD1AqI0JrmjstXza63CmFbvPI1uRgQ1YBRJPxz2V2oHXvkCGuM0cz+GoLhCNkvyXlqayFPQeN2G8cyYnAfX2I5pwjWfAaOMxIQaM0BgKC/BbPQAzKXZTQ1o4hXqpl65g2qq5/YyggzARM3MNulRfdLhaf2+4ln1lMorU6O1lThydtDvbRxKlvoSrfPFciD+1nam1xziQ2SdZybG/WpmId0lzuTev2/LNa38qlaD9KdvuVpm+w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(366004)(396003)(39860400002)(136003)(376002)(346002)(8936002)(36756003)(2616005)(6486002)(66556008)(66476007)(2906002)(31686004)(4326008)(110136005)(8676002)(31696002)(186003)(86362001)(54906003)(5660300002)(83380400001)(7416002)(478600001)(316002)(41300700001)(38100700002)(66946007)(53546011)(6506007)(6512007)(26005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YUxBb2tVT1lNUlpiWTdscU9yQllqRzlkRG1sOEYxSEluQWo0VjZ3TkUyaVZr?=
- =?utf-8?B?UEFGYXh0WjFXOVUraFVnTDFvMHlJWEd3KzRxSHZwdUJad0hLT1ZoUmQwTnQ3?=
- =?utf-8?B?eVc4YWswT0xTYzNaVVMvWnI2N0NoR2xvZHliYjREbHVnMTh6WTZDOGVGWkpD?=
- =?utf-8?B?YWFqbUg0VFV6T2QzMWhSTkZvVGh3L0IwVVE2RHcvb0ZrQThNaUVhamRXbUly?=
- =?utf-8?B?MUw0dXlqdGhkcndoeW9Nem9SNkJ6NzgzdjdWZ2NJMFB2cGNXY1d5TUtCK1px?=
- =?utf-8?B?WjFWb3owSGxDa1lpTy9oanNTTmtVL2dRSGVmVVdSNWtscHVLVmoyOWM3TDZr?=
- =?utf-8?B?aUl0NWQvTFpPcUFsZHQ3cjZpYVNzZVEyRThyeEk5TG12RS8weStHQzJ2dE80?=
- =?utf-8?B?YzlaZXpHNjN5cFlNQ3pEZ1diSkhLTDR2UDBOcFB3NHBHOUtKQ2xteS9zanF1?=
- =?utf-8?B?RUtUU2tsN1dlY0liVVdUNFRCd1pJR1lXd1dRa2xmYUJLM3dXcE1HRzkzeVBD?=
- =?utf-8?B?ZzEyQUNoeU9BRC9TQ3FiNFoxdzM4MDYwa1NWVjlLR1d0b1cybno0SXZwVXVQ?=
- =?utf-8?B?QndLbVNiTHVPMzZSRERhd01TNVdIRUxqTmRwakV3K3F6bU5QNHl3aFpnTmJH?=
- =?utf-8?B?cDRFaU1ENVBaT1pDOXBySW5ORUxIY1B1djJ1Y1EwelJtUjRjZVV5RktNTldo?=
- =?utf-8?B?amNFWGE3NmNxUFZIOEl5cVZqYUpTUThCRGZMa1gzWTd3NkZ0WkllNHI5aTN4?=
- =?utf-8?B?SjlZN1MzQzROQkR3MzhLWmpwRmNrZitiL05MbG5RNW50MWZDNzVwUXA2ZVo4?=
- =?utf-8?B?R2FiUXhhQmYvZFk0U1ZydlBiYlAwTGtTeXJMUzU4TXQyZkFrcG5DRTF0KzdC?=
- =?utf-8?B?dXBwUjJtdGZTeU53NExnYlZVcjI5c0xwR09yaEl3WDlOQnh4QVZVLzZpY1pT?=
- =?utf-8?B?OEhKN0hmNnRaLzk2VE8rQVJ5ZjBvSi9ZT21aall6R0JxNDNya3AwZ3MrNG54?=
- =?utf-8?B?djlXZUJYaDRHeVJacVd4VHFWZkZyTTVhVWxJSC9TQ2U5TXVIN3U2aEVhRkND?=
- =?utf-8?B?TDkrUDZwbUt0MTVoem5QVHZPdlhmbmIvV1BpSGNtcktOZGMrWWpQTVlvWlZF?=
- =?utf-8?B?QlpzcERIQ1A1djFDU2dWTTdwMkFzeU9sbW1lTzVkYkxocTljcFBBNmdiS1Jz?=
- =?utf-8?B?Z0JHS2p3T0hEaFpZRVZnbzhwT3ZrRDFMcTBOREZvREtUQ2VERm9HcFdpZytn?=
- =?utf-8?B?cXdHNm1aTDAvWEtQMEZ6TFR3VjV2NnYyYmhtaTY1ZDBlZFVVM05GNllHbjND?=
- =?utf-8?B?Vk91eWVTQjlmUnc2WWI0emhRR2h2OW9JSGFwZk52bm9pZlIxanhDZ1lsOURD?=
- =?utf-8?B?a1VTWG1obTN6NW5kb2YzaFB2d29WdHpSSE1QbDhhQXlWdHlMcmpadEpXZXpB?=
- =?utf-8?B?dkJZNXhrT2hLMnJUYlZ1eCtpbzVpSjU3dVZKeloxZnRaTHUxMVV3L1hFenJU?=
- =?utf-8?B?T2RaTk43VUxGT1N5REd5QWx0SmpLaDcvK2pVeE0rSG5nY0gyR0J0VVkweHky?=
- =?utf-8?B?TTdUU1doR1FqK3JTVHJuZE5WMWVJRmE3Um1IcnlTdU1jcmNJOENiU09GQTJw?=
- =?utf-8?B?SWlDeVp4djZ4bXlNYXNnSEY3dWRwditPR0hHLzN3Njd0OEhOdHc3eHhoYlY0?=
- =?utf-8?B?NW9mb0w1MkEwNmR4WTc3cjYzZ1NJUXdwUGRMdlpvR3hQeXdkR3FHaFBYRTRT?=
- =?utf-8?B?OVM4d2ZYd3pxU3JkbHFJWE9LVXVYMkw2ZjBNOHFhYmlBR2F2emgraWppU1Q0?=
- =?utf-8?B?VFkxKzVUL2pTUkQ2UlFEaUY0QWFXTlQ0aVJNYTJuTERlWi9XQUdOa3U0Y0tS?=
- =?utf-8?B?VnJOT1crM2FLN1lNb05IR25SaFh3N25NbDgrZnBJb0FkNVdSUVEvZGdlaW93?=
- =?utf-8?B?SEJsbDN0d3Z3Z0N6TnV1bHRCSmF0UVVoTlRZZGlZZ1ROL3N6dzc4TnVzMFAx?=
- =?utf-8?B?LzJ6WWRzUDBaUUxBTWtNQjJ3U2k4N25RaGVSaTM0SkdZcEI1Qm5ta0xXSjRn?=
- =?utf-8?B?RVZWazZiTXVCOVQxeHJXOFRLNVBXSFRXZ1phTzZZUlg3L2gvQlVuWXhMV1pM?=
- =?utf-8?Q?HCbWolh9SA6LmdvtMiw9mrz/l?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1d43c768-604b-47a3-a98a-08da7d91c3d1
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Aug 2022 01:10:23.6311
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: i/P5bOECa+QRWtoLXYzOwFbM6F46FtPQmD2mYv0z8v0Gdl0xe3mR5eajgL1sFp3MFU1OHl1W03t2FRbzsDV58Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB6149
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220805230513.148869-4-seanjc@google.com>
+X-Spam-Status: No, score=-14.5 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/11/22 16:22, Jason Gunthorpe wrote:
-> On Thu, Aug 11, 2022 at 10:28:27PM +0100, Matthew Wilcox wrote:
->> On Thu, Aug 11, 2022 at 01:43:09PM -0700, Linus Torvalds wrote:
->>> May I suggest going one step further, and making these WARN_ON_ONCE() instead.
->>>
->>> >From personal experience, once some scheduler bug (or task struct
->>> corruption) happens, ti often *keeps* happening, and the logs just
->>> fill up with more and more data, to the point where you lose sight of
->>> the original report (and the machine can even get unusable just from
->>> the logging).
->>
->> I've been thinking about magically turning all the WARN_ON_ONCE() into
->> (effectively) WARN_ON_RATELIMIT().  I had some patches in that direction
->> a while ago but never got round to tidying them up for submission.
-
-If you do that, I'd like to suggest that you avoid using magic here, but
-instead just rename at the call sites.
-
-Because:
-
-First and foremost, something named WARN_ON_ONCE() clearly has a solemn
-responsibility to warn exactly "once times"! :)
-
-Second, it's not yet clear (or is it?) that WARN_ON_ONCE() is always
-worse than rate limiting. It's a trade-off, rather than a clear win for
-either case, in my experience. The _ONCE variant can get overwritten
-if the kernel log wraps, but the _RATELIMIT on the other hand, may be
-excessive.
-
-And finally, if it *is* agreed on here that WARN_ON_RATELIMIT() is
-always better than WARN_ON_ONCE(), then there is still no harm in
-spending a patch or two (coccinelle...) to rename WARN_ON_ONCE() -->
-WARN_ON_RATELIMIT(), so that we end up with accurate names.
-
+On Fri, Aug 05, 2022, Sean Christopherson wrote:
+> Rename most of the variables/functions involved in the NX huge page
+> mitigation to provide consistency, e.g. lpage vs huge page, and NX huge
+> vs huge NX, and also to provide clarity, e.g. to make it obvious the flag
+> applies only to the NX huge page mitigation, not to any condition that
+> prevents creating a huge page.
 > 
-> I often wonder if we have a justification for WARN_ON to even exist, I
-> see a lot of pressure to make things into WARN_ON_ONCE based on the
-> logic that spamming makes it useless..
+> Leave the nx_lpage_splits stat alone as the name is ABI and thus set in
+> stone.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/include/asm/kvm_host.h |  8 ++--
+>  arch/x86/kvm/mmu/mmu.c          | 70 +++++++++++++++++----------------
+>  arch/x86/kvm/mmu/mmu_internal.h | 22 +++++++----
+>  arch/x86/kvm/mmu/paging_tmpl.h  |  2 +-
+>  arch/x86/kvm/mmu/tdp_mmu.c      |  8 ++--
+>  5 files changed, 59 insertions(+), 51 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index e8281d64a431..5634347e5d05 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1143,7 +1143,7 @@ struct kvm_arch {
+>  	struct hlist_head mmu_page_hash[KVM_NUM_MMU_PAGES];
+>  	struct list_head active_mmu_pages;
+>  	struct list_head zapped_obsolete_pages;
+> -	struct list_head lpage_disallowed_mmu_pages;
+> +	struct list_head possible_nx_huge_pages;
 
-Agreed. WARN_ON_ONCE() or WARN_ON_RATELIMIT(), take your pick. But not
-WARN_ON_EVERY_TIME()--that usually causes a serious problems in the
-logs.
+Honestly, I am struggling to understand this one. 'possible_*' indicates
+that there are other possibilities. But what are those possibilities? I
+feel this name is more confusing than the original one. Maybe just keep
+the original name?
 
-
-thanks,
--- 
-John Hubbard
-NVIDIA
+>  	struct kvm_page_track_notifier_node mmu_sp_tracker;
+>  	struct kvm_page_track_notifier_head track_notifier_head;
+>  	/*
+> @@ -1259,7 +1259,7 @@ struct kvm_arch {
+>  	bool sgx_provisioning_allowed;
+>  
+>  	struct kvm_pmu_event_filter __rcu *pmu_event_filter;
+> -	struct task_struct *nx_lpage_recovery_thread;
+> +	struct task_struct *nx_huge_page_recovery_thread;
+>  
+>  #ifdef CONFIG_X86_64
+>  	/*
+> @@ -1304,8 +1304,8 @@ struct kvm_arch {
+>  	 *  - tdp_mmu_roots (above)
+>  	 *  - tdp_mmu_pages (above)
+>  	 *  - the link field of struct kvm_mmu_pages used by the TDP MMU
+> -	 *  - lpage_disallowed_mmu_pages
+> -	 *  - the lpage_disallowed_link field of struct kvm_mmu_pages used
+> +	 *  - possible_nx_huge_pages;
+> +	 *  - the possible_nx_huge_page_link field of struct kvm_mmu_pages used
+>  	 *    by the TDP MMU
+>  	 * It is acceptable, but not necessary, to acquire this lock when
+>  	 * the thread holds the MMU lock in write mode.
+> diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> index 55dac44f3397..53d0dafa68ff 100644
+> --- a/arch/x86/kvm/mmu/mmu.c
+> +++ b/arch/x86/kvm/mmu/mmu.c
+> @@ -802,20 +802,20 @@ static void account_shadowed(struct kvm *kvm, struct kvm_mmu_page *sp)
+>  		kvm_flush_remote_tlbs_with_address(kvm, gfn, 1);
+>  }
+>  
+> -void account_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp,
+> +void account_nx_huge_page(struct kvm *kvm, struct kvm_mmu_page *sp,
+>  			  bool nx_huge_page_possible)
+>  {
+> -	if (KVM_BUG_ON(!list_empty(&sp->lpage_disallowed_link), kvm))
+> +	if (KVM_BUG_ON(!list_empty(&sp->possible_nx_huge_page_link), kvm))
+>  		return;
+>  
+> -	sp->lpage_disallowed = true;
+> +	sp->nx_huge_page_disallowed = true;
+>  
+>  	if (!nx_huge_page_possible)
+>  		return;
+>  
+>  	++kvm->stat.nx_lpage_splits;
+> -	list_add_tail(&sp->lpage_disallowed_link,
+> -		      &kvm->arch.lpage_disallowed_mmu_pages);
+> +	list_add_tail(&sp->possible_nx_huge_page_link,
+> +		      &kvm->arch.possible_nx_huge_pages);
+>  }
+>  
+>  static void unaccount_shadowed(struct kvm *kvm, struct kvm_mmu_page *sp)
+> @@ -835,15 +835,15 @@ static void unaccount_shadowed(struct kvm *kvm, struct kvm_mmu_page *sp)
+>  	kvm_mmu_gfn_allow_lpage(slot, gfn);
+>  }
+>  
+> -void unaccount_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp)
+> +void unaccount_nx_huge_page(struct kvm *kvm, struct kvm_mmu_page *sp)
+>  {
+> -	sp->lpage_disallowed = false;
+> +	sp->nx_huge_page_disallowed = false;
+>  
+> -	if (list_empty(&sp->lpage_disallowed_link))
+> +	if (list_empty(&sp->possible_nx_huge_page_link))
+>  		return;
+>  
+>  	--kvm->stat.nx_lpage_splits;
+> -	list_del_init(&sp->lpage_disallowed_link);
+> +	list_del_init(&sp->possible_nx_huge_page_link);
+>  }
+>  
+>  static struct kvm_memory_slot *
+> @@ -2124,7 +2124,7 @@ static struct kvm_mmu_page *kvm_mmu_alloc_shadow_page(struct kvm *kvm,
+>  
+>  	set_page_private(virt_to_page(sp->spt), (unsigned long)sp);
+>  
+> -	INIT_LIST_HEAD(&sp->lpage_disallowed_link);
+> +	INIT_LIST_HEAD(&sp->possible_nx_huge_page_link);
+>  
+>  	/*
+>  	 * active_mmu_pages must be a FIFO list, as kvm_zap_obsolete_pages()
+> @@ -2483,8 +2483,8 @@ static bool __kvm_mmu_prepare_zap_page(struct kvm *kvm,
+>  		zapped_root = !is_obsolete_sp(kvm, sp);
+>  	}
+>  
+> -	if (sp->lpage_disallowed)
+> -		unaccount_huge_nx_page(kvm, sp);
+> +	if (sp->nx_huge_page_disallowed)
+> +		unaccount_nx_huge_page(kvm, sp);
+>  
+>  	sp->role.invalid = 1;
+>  
+> @@ -3124,7 +3124,7 @@ static int __direct_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+>  
+>  		link_shadow_page(vcpu, it.sptep, sp);
+>  		if (fault->is_tdp && fault->huge_page_disallowed)
+> -			account_huge_nx_page(vcpu->kvm, sp,
+> +			account_nx_huge_page(vcpu->kvm, sp,
+>  					     fault->req_level >= it.level);
+>  	}
+>  
+> @@ -5981,7 +5981,7 @@ int kvm_mmu_init_vm(struct kvm *kvm)
+>  
+>  	INIT_LIST_HEAD(&kvm->arch.active_mmu_pages);
+>  	INIT_LIST_HEAD(&kvm->arch.zapped_obsolete_pages);
+> -	INIT_LIST_HEAD(&kvm->arch.lpage_disallowed_mmu_pages);
+> +	INIT_LIST_HEAD(&kvm->arch.possible_nx_huge_pages);
+>  	spin_lock_init(&kvm->arch.mmu_unsync_pages_lock);
+>  
+>  	r = kvm_mmu_init_tdp_mmu(kvm);
+> @@ -6699,7 +6699,7 @@ static int set_nx_huge_pages(const char *val, const struct kernel_param *kp)
+>  			kvm_mmu_zap_all_fast(kvm);
+>  			mutex_unlock(&kvm->slots_lock);
+>  
+> -			wake_up_process(kvm->arch.nx_lpage_recovery_thread);
+> +			wake_up_process(kvm->arch.nx_huge_page_recovery_thread);
+>  		}
+>  		mutex_unlock(&kvm_lock);
+>  	}
+> @@ -6825,7 +6825,7 @@ static int set_nx_huge_pages_recovery_param(const char *val, const struct kernel
+>  		mutex_lock(&kvm_lock);
+>  
+>  		list_for_each_entry(kvm, &vm_list, vm_list)
+> -			wake_up_process(kvm->arch.nx_lpage_recovery_thread);
+> +			wake_up_process(kvm->arch.nx_huge_page_recovery_thread);
+>  
+>  		mutex_unlock(&kvm_lock);
+>  	}
+> @@ -6833,7 +6833,7 @@ static int set_nx_huge_pages_recovery_param(const char *val, const struct kernel
+>  	return err;
+>  }
+>  
+> -static void kvm_recover_nx_lpages(struct kvm *kvm)
+> +static void kvm_recover_nx_huge_pages(struct kvm *kvm)
+>  {
+>  	unsigned long nx_lpage_splits = kvm->stat.nx_lpage_splits;
+>  	int rcu_idx;
+> @@ -6856,23 +6856,25 @@ static void kvm_recover_nx_lpages(struct kvm *kvm)
+>  	ratio = READ_ONCE(nx_huge_pages_recovery_ratio);
+>  	to_zap = ratio ? DIV_ROUND_UP(nx_lpage_splits, ratio) : 0;
+>  	for ( ; to_zap; --to_zap) {
+> -		if (list_empty(&kvm->arch.lpage_disallowed_mmu_pages))
+> +		if (list_empty(&kvm->arch.possible_nx_huge_pages))
+>  			break;
+>  
+>  		/*
+>  		 * We use a separate list instead of just using active_mmu_pages
+> -		 * because the number of lpage_disallowed pages is expected to
+> -		 * be relatively small compared to the total.
+> +		 * because the number of shadow pages that be replaced with an
+> +		 * NX huge page is expected to be relatively small compared to
+> +		 * the total number of shadow pages.  And because the TDP MMU
+> +		 * doesn't use active_mmu_pages.
+>  		 */
+> -		sp = list_first_entry(&kvm->arch.lpage_disallowed_mmu_pages,
+> +		sp = list_first_entry(&kvm->arch.possible_nx_huge_pages,
+>  				      struct kvm_mmu_page,
+> -				      lpage_disallowed_link);
+> -		WARN_ON_ONCE(!sp->lpage_disallowed);
+> +				      possible_nx_huge_page_link);
+> +		WARN_ON_ONCE(!sp->nx_huge_page_disallowed);
+>  		if (is_tdp_mmu_page(sp)) {
+>  			flush |= kvm_tdp_mmu_zap_sp(kvm, sp);
+>  		} else {
+>  			kvm_mmu_prepare_zap_page(kvm, sp, &invalid_list);
+> -			WARN_ON_ONCE(sp->lpage_disallowed);
+> +			WARN_ON_ONCE(sp->nx_huge_page_disallowed);
+>  		}
+>  
+>  		if (need_resched() || rwlock_needbreak(&kvm->mmu_lock)) {
+> @@ -6893,7 +6895,7 @@ static void kvm_recover_nx_lpages(struct kvm *kvm)
+>  	srcu_read_unlock(&kvm->srcu, rcu_idx);
+>  }
+>  
+> -static long get_nx_lpage_recovery_timeout(u64 start_time)
+> +static long get_nx_huge_page_recovery_timeout(u64 start_time)
+>  {
+>  	bool enabled;
+>  	uint period;
+> @@ -6904,19 +6906,19 @@ static long get_nx_lpage_recovery_timeout(u64 start_time)
+>  		       : MAX_SCHEDULE_TIMEOUT;
+>  }
+>  
+> -static int kvm_nx_lpage_recovery_worker(struct kvm *kvm, uintptr_t data)
+> +static int kvm_nx_huge_page_recovery_worker(struct kvm *kvm, uintptr_t data)
+>  {
+>  	u64 start_time;
+>  	long remaining_time;
+>  
+>  	while (true) {
+>  		start_time = get_jiffies_64();
+> -		remaining_time = get_nx_lpage_recovery_timeout(start_time);
+> +		remaining_time = get_nx_huge_page_recovery_timeout(start_time);
+>  
+>  		set_current_state(TASK_INTERRUPTIBLE);
+>  		while (!kthread_should_stop() && remaining_time > 0) {
+>  			schedule_timeout(remaining_time);
+> -			remaining_time = get_nx_lpage_recovery_timeout(start_time);
+> +			remaining_time = get_nx_huge_page_recovery_timeout(start_time);
+>  			set_current_state(TASK_INTERRUPTIBLE);
+>  		}
+>  
+> @@ -6925,7 +6927,7 @@ static int kvm_nx_lpage_recovery_worker(struct kvm *kvm, uintptr_t data)
+>  		if (kthread_should_stop())
+>  			return 0;
+>  
+> -		kvm_recover_nx_lpages(kvm);
+> +		kvm_recover_nx_huge_pages(kvm);
+>  	}
+>  }
+>  
+> @@ -6933,17 +6935,17 @@ int kvm_mmu_post_init_vm(struct kvm *kvm)
+>  {
+>  	int err;
+>  
+> -	err = kvm_vm_create_worker_thread(kvm, kvm_nx_lpage_recovery_worker, 0,
+> +	err = kvm_vm_create_worker_thread(kvm, kvm_nx_huge_page_recovery_worker, 0,
+>  					  "kvm-nx-lpage-recovery",
+> -					  &kvm->arch.nx_lpage_recovery_thread);
+> +					  &kvm->arch.nx_huge_page_recovery_thread);
+>  	if (!err)
+> -		kthread_unpark(kvm->arch.nx_lpage_recovery_thread);
+> +		kthread_unpark(kvm->arch.nx_huge_page_recovery_thread);
+>  
+>  	return err;
+>  }
+>  
+>  void kvm_mmu_pre_destroy_vm(struct kvm *kvm)
+>  {
+> -	if (kvm->arch.nx_lpage_recovery_thread)
+> -		kthread_stop(kvm->arch.nx_lpage_recovery_thread);
+> +	if (kvm->arch.nx_huge_page_recovery_thread)
+> +		kthread_stop(kvm->arch.nx_huge_page_recovery_thread);
+>  }
+> diff --git a/arch/x86/kvm/mmu/mmu_internal.h b/arch/x86/kvm/mmu/mmu_internal.h
+> index cca1ad75d096..67879459a25c 100644
+> --- a/arch/x86/kvm/mmu/mmu_internal.h
+> +++ b/arch/x86/kvm/mmu/mmu_internal.h
+> @@ -57,7 +57,13 @@ struct kvm_mmu_page {
+>  	bool tdp_mmu_page;
+>  	bool unsync;
+>  	u8 mmu_valid_gen;
+> -	bool lpage_disallowed; /* Can't be replaced by an equiv large page */
+> +
+> +	 /*
+> +	  * The shadow page can't be replaced by an equivalent huge page
+> +	  * because it is being used to map an executable page in the guest
+> +	  * and the NX huge page mitigation is enabled.
+> +	  */
+> +	bool nx_huge_page_disallowed;
+>  
+>  	/*
+>  	 * The following two entries are used to key the shadow page in the
+> @@ -102,12 +108,12 @@ struct kvm_mmu_page {
+>  
+>  	/*
+>  	 * Tracks shadow pages that, if zapped, would allow KVM to create an NX
+> -	 * huge page.  A shadow page will have lpage_disallowed set but not be
+> -	 * on the list if a huge page is disallowed for other reasons, e.g.
+> -	 * because KVM is shadowing a PTE at the same gfn, the memslot isn't
+> -	 * properly aligned, etc...
+> +	 * huge page.  A shadow page will have nx_huge_page_disallowed set but
+> +	 * not be on the list if a huge page is disallowed for other reasons,
+> +	 * e.g. because KVM is shadowing a PTE at the same gfn, the memslot
+> +	 * isn't properly aligned, etc...
+>  	 */
+> -	struct list_head lpage_disallowed_link;
+> +	struct list_head possible_nx_huge_page_link;
+>  #ifdef CONFIG_X86_32
+>  	/*
+>  	 * Used out of the mmu-lock to avoid reading spte values while an
+> @@ -322,8 +328,8 @@ void disallowed_hugepage_adjust(struct kvm_page_fault *fault, u64 spte, int cur_
+>  
+>  void *mmu_memory_cache_alloc(struct kvm_mmu_memory_cache *mc);
+>  
+> -void account_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp,
+> +void account_nx_huge_page(struct kvm *kvm, struct kvm_mmu_page *sp,
+>  			  bool nx_huge_page_possible);
+> -void unaccount_huge_nx_page(struct kvm *kvm, struct kvm_mmu_page *sp);
+> +void unaccount_nx_huge_page(struct kvm *kvm, struct kvm_mmu_page *sp);
+>  
+>  #endif /* __KVM_X86_MMU_INTERNAL_H */
+> diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
+> index e450f49f2225..259c0f019f09 100644
+> --- a/arch/x86/kvm/mmu/paging_tmpl.h
+> +++ b/arch/x86/kvm/mmu/paging_tmpl.h
+> @@ -714,7 +714,7 @@ static int FNAME(fetch)(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault,
+>  
+>  		link_shadow_page(vcpu, it.sptep, sp);
+>  		if (fault->huge_page_disallowed)
+> -			account_huge_nx_page(vcpu->kvm, sp,
+> +			account_nx_huge_page(vcpu->kvm, sp,
+>  					     fault->req_level >= it.level);
+>  	}
+>  
+> diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+> index 903d0d3497b6..0e94182c87be 100644
+> --- a/arch/x86/kvm/mmu/tdp_mmu.c
+> +++ b/arch/x86/kvm/mmu/tdp_mmu.c
+> @@ -284,7 +284,7 @@ static struct kvm_mmu_page *tdp_mmu_alloc_sp(struct kvm_vcpu *vcpu)
+>  static void tdp_mmu_init_sp(struct kvm_mmu_page *sp, tdp_ptep_t sptep,
+>  			    gfn_t gfn, union kvm_mmu_page_role role)
+>  {
+> -	INIT_LIST_HEAD(&sp->lpage_disallowed_link);
+> +	INIT_LIST_HEAD(&sp->possible_nx_huge_page_link);
+>  
+>  	set_page_private(virt_to_page(sp->spt), (unsigned long)sp);
+>  
+> @@ -392,8 +392,8 @@ static void tdp_mmu_unlink_sp(struct kvm *kvm, struct kvm_mmu_page *sp,
+>  		lockdep_assert_held_write(&kvm->mmu_lock);
+>  
+>  	list_del(&sp->link);
+> -	if (sp->lpage_disallowed)
+> -		unaccount_huge_nx_page(kvm, sp);
+> +	if (sp->nx_huge_page_disallowed)
+> +		unaccount_nx_huge_page(kvm, sp);
+>  
+>  	if (shared)
+>  		spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
+> @@ -1132,7 +1132,7 @@ static int tdp_mmu_link_sp(struct kvm *kvm, struct tdp_iter *iter,
+>  	spin_lock(&kvm->arch.tdp_mmu_pages_lock);
+>  	list_add(&sp->link, &kvm->arch.tdp_mmu_pages);
+>  	if (account_nx)
+> -		account_huge_nx_page(kvm, sp, true);
+> +		account_nx_huge_page(kvm, sp, true);
+>  	spin_unlock(&kvm->arch.tdp_mmu_pages_lock);
+>  
+>  	return 0;
+> -- 
+> 2.37.1.559.g78731f0fdb-goog
+> 

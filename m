@@ -2,62 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B5A6591F1B
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 10:36:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E745591F1E
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 10:37:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbiHNIgq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 04:36:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52436 "EHLO
+        id S229602AbiHNIhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 04:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiHNIgp (ORCPT
+        with ESMTP id S229379AbiHNIhS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 04:36:45 -0400
+        Sun, 14 Aug 2022 04:37:18 -0400
 Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF2C81B7B9;
-        Sun, 14 Aug 2022 01:36:43 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D4B1BEB7
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 01:37:17 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 6103134485;
-        Sun, 14 Aug 2022 08:36:42 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id EF3E234485;
+        Sun, 14 Aug 2022 08:37:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1660466202; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1660466235; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=BtkuN3DMeDpEGsqws8y1K6SIKbIDDdJvEBSwfSS2EGM=;
-        b=IgynDYGcazg+5xEpalEo1VJOYIRBWPNxtwa3itFj3iWjDH78sble5gK+U5RgUHUTt4NdPK
-        +0TT0ghpFydJYhMzmU7iuZUEoRZrrrasOhgRbCAf1aU18eFiJb+Wj9WYsz3T3rOFRZPmcq
-        wIgNPpqXPZm9zwSQ7cLDbqlAXALgB84=
+        bh=COPY/iZmQz2XndCaf2cuzaayLMhChE0e5+Z2alyBwlI=;
+        b=RN2RCzUwfOtsRaQG+wxrHD8BtAANyau94kw6iUni5ahKQBRKl1QsPyMv/2stp9z4wtbM5U
+        jKguhofp19/bBw8YNcwn4/4i0FL0N9ZfN5aToYwHnUgiKC+VwCYyNx4/kt1dZCfDE5qT1l
+        n1kluX3rprfAeiF9F/1ca5Dl7F/3OVM=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0BB9913AAE;
-        Sun, 14 Aug 2022 08:36:42 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7063613AAE;
+        Sun, 14 Aug 2022 08:37:15 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id La0MARq0+GLMNgAAMHmgww
-        (envelope-from <jgross@suse.com>); Sun, 14 Aug 2022 08:36:42 +0000
-Message-ID: <63d3b8db-2877-d413-405b-186498e542b6@suse.com>
-Date:   Sun, 14 Aug 2022 10:36:41 +0200
+        id e1MAGTu0+GLrNgAAMHmgww
+        (envelope-from <jgross@suse.com>); Sun, 14 Aug 2022 08:37:15 +0000
+Message-ID: <fd2b0509-9110-2061-590a-a58e65f5fe01@suse.com>
+Date:   Sun, 14 Aug 2022 10:37:14 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v4 0/3] xen-blk{back,front}: Fix two bugs in
- 'feature_persistent'
+Subject: Re: [PATCH v4] x86/xen: Add support for
+ HVMOP_set_evtchn_upcall_vector
 Content-Language: en-US
-To:     SeongJae Park <sj@kernel.org>, roger.pau@citrix.com
-Cc:     axboe@kernel.dk, boris.ostrovsky@oracle.com, olekstysh@gmail.com,
-        andrii.chepurnyi82@gmail.com, mheyne@amazon.de,
-        xen-devel@lists.xenproject.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org
-References: <20220715225108.193398-1-sj@kernel.org>
+To:     Jane Malalane <jane.malalane@citrix.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Cc:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Jan Beulich <jbeulich@suse.com>,
+        Maximilian Heyne <mheyne@amazon.de>,
+        xen-devel@lists.xenproject.org
+References: <20220729070416.23306-1-jane.malalane@citrix.com>
 From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20220715225108.193398-1-sj@kernel.org>
+In-Reply-To: <20220729070416.23306-1-jane.malalane@citrix.com>
 Content-Type: multipart/signed; micalg=pgp-sha256;
  protocol="application/pgp-signature";
- boundary="------------jiTB6OM2Ipz0IBM22NaksarS"
+ boundary="------------y4RL8sLfKCJHY6zxWWcHyQUo"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
@@ -69,63 +76,48 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------jiTB6OM2Ipz0IBM22NaksarS
-Content-Type: multipart/mixed; boundary="------------5Cp6QDD4ughbMr9MtVtA2ME0";
+--------------y4RL8sLfKCJHY6zxWWcHyQUo
+Content-Type: multipart/mixed; boundary="------------u4CaT1Zv2JuCuvqaICDVoS01";
  protected-headers="v1"
 From: Juergen Gross <jgross@suse.com>
-To: SeongJae Park <sj@kernel.org>, roger.pau@citrix.com
-Cc: axboe@kernel.dk, boris.ostrovsky@oracle.com, olekstysh@gmail.com,
- andrii.chepurnyi82@gmail.com, mheyne@amazon.de,
- xen-devel@lists.xenproject.org, linux-block@vger.kernel.org,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Message-ID: <63d3b8db-2877-d413-405b-186498e542b6@suse.com>
-Subject: Re: [PATCH v4 0/3] xen-blk{back,front}: Fix two bugs in
- 'feature_persistent'
-References: <20220715225108.193398-1-sj@kernel.org>
-In-Reply-To: <20220715225108.193398-1-sj@kernel.org>
+To: Jane Malalane <jane.malalane@citrix.com>,
+ LKML <linux-kernel@vger.kernel.org>
+Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Stefano Stabellini <sstabellini@kernel.org>,
+ Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+ Jan Beulich <jbeulich@suse.com>, Maximilian Heyne <mheyne@amazon.de>,
+ xen-devel@lists.xenproject.org
+Message-ID: <fd2b0509-9110-2061-590a-a58e65f5fe01@suse.com>
+Subject: Re: [PATCH v4] x86/xen: Add support for
+ HVMOP_set_evtchn_upcall_vector
+References: <20220729070416.23306-1-jane.malalane@citrix.com>
+In-Reply-To: <20220729070416.23306-1-jane.malalane@citrix.com>
 
---------------5Cp6QDD4ughbMr9MtVtA2ME0
-Content-Type: multipart/mixed; boundary="------------gqQAum1BpSXYvefTeiVZOgS8"
+--------------u4CaT1Zv2JuCuvqaICDVoS01
+Content-Type: multipart/mixed; boundary="------------yVZ6gWfJx0WUYm6qypOPzSai"
 
---------------gqQAum1BpSXYvefTeiVZOgS8
+--------------yVZ6gWfJx0WUYm6qypOPzSai
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: base64
 
-T24gMTYuMDcuMjIgMDA6NTEsIFNlb25nSmFlIFBhcmsgd3JvdGU6DQo+IEludHJvZHVjdGlv
-biBvZiAnZmVhdHVyZV9wZXJzaXN0ZW50JyBtYWRlIHR3byBidWdzLiAgRmlyc3Qgb25lIGlz
-IHdyb25nDQo+IG92ZXJ3cml0ZSBvZiAndmJkLT5mZWF0dXJlX2dudF9wZXJzaXN0ZW50JyBp
-biAnYmxrYmFjaycgZHVlIHRvIHdyb25nDQo+IHBhcmFtZXRlciB2YWx1ZSBjYWNoaW5nIHBv
-c2l0aW9uLCBhbmQgdGhlIHNlY29uZCBvbmUgaXMgdW5pbnRlbmRlZA0KPiBiZWhhdmlvcmFs
-IGNoYW5nZSB0aGF0IGNvdWxkIGJyZWFrIHByZXZpb3VzIGR5bmFtaWMgZnJvbnRlbmQvYmFj
-a2VuZA0KPiBwZXJzaXN0ZW50IGZlYXR1cmUgc3VwcG9ydCBjaGFuZ2VzLiAgVGhpcyBwYXRj
-aHNldCBmaXhlcyB0aGUgaXNzdWVzLg0KPiANCj4gQ2hhbmdlcyBmcm9tIHYzDQo+IChodHRw
-czovL2xvcmUua2VybmVsLm9yZy94ZW4tZGV2ZWwvMjAyMjA3MTUxNzU1MjEuMTI2NjQ5LTEt
-c2pAa2VybmVsLm9yZy8pDQo+IC0gU3BsaXQgJ2Jsa2JhY2snIHBhdGNoIGZvciBlYWNoIG9m
-IHRoZSB0d28gaXNzdWVzDQo+IC0gQWRkICdSZXBvcnRlZC1ieTogQW5kcmlpIENoZXB1cm55
-aSA8YW5kcmlpLmNoZXB1cm55aTgyQGdtYWlsLmNvbT4nDQo+IA0KPiBDaGFuZ2VzIGZyb20g
-djINCj4gKGh0dHBzOi8vbG9yZS5rZXJuZWwub3JnL3hlbi1kZXZlbC8yMDIyMDcxNDIyNDQx
-MC41MTE0Ny0xLXNqQGtlcm5lbC5vcmcvKQ0KPiAtIEtlZXAgdGhlIGJlaGF2aW9yYWwgY2hh
-bmdlIG9mIHYxDQo+IC0gVXBkYXRlIGJsa2Zyb250J3MgY291bnRlcnBhcnQgdG8gZm9sbG93
-IHRoZSBjaGFuZ2VkIGJlaGF2aW9yDQo+IC0gVXBkYXRlIGRvY3VtZW50cyBmb3IgdGhlIGNo
-YW5nZWQgYmVoYXZpb3INCj4gDQo+IENoYW5nZXMgZnJvbSB2MQ0KPiAoaHR0cHM6Ly9sb3Jl
-Lmtlcm5lbC5vcmcveGVuLWRldmVsLzIwMjIwMTA2MDkxMDEzLjEyNjA3Ni0xLW1oZXluZUBh
-bWF6b24uZGUvKQ0KPiAtIEF2b2lkIHRoZSBiZWhhdmlvcmFsIGNoYW5nZQ0KPiAgICAoaHR0
-cHM6Ly9sb3JlLmtlcm5lbC5vcmcveGVuLWRldmVsLzIwMjIwMTIxMTAyMzA5LjI3ODAyLTEt
-c2pAa2VybmVsLm9yZy8pDQo+IC0gUmViYXNlIG9uIGxhdGVzdCB4ZW4vdGlwL2xpbnV4LW5l
-eHQNCj4gLSBSZS13b3JrIGJ5IFNlb25nSmFlIFBhcmsgPHNqQGtlcm5lbC5vcmc+DQo+IC0g
-Q2Mgc3RhYmxlQA0KPiANCj4gTWF4aW1pbGlhbiBIZXluZSAoMSk6DQo+ICAgIHhlbi1ibGti
-YWNrOiBBcHBseSAnZmVhdHVyZV9wZXJzaXN0ZW50JyBwYXJhbWV0ZXIgd2hlbiBjb25uZWN0
-DQo+IA0KPiBTZW9uZ0phZSBQYXJrICgyKToNCj4gICAgeGVuLWJsa2JhY2s6IGZpeCBwZXJz
-aXN0ZW50IGdyYW50cyBuZWdvdGlhdGlvbg0KPiAgICB4ZW4tYmxrZnJvbnQ6IEFwcGx5ICdm
-ZWF0dXJlX3BlcnNpc3RlbnQnIHBhcmFtZXRlciB3aGVuIGNvbm5lY3QNCj4gDQo+ICAgLi4u
-L0FCSS90ZXN0aW5nL3N5c2ZzLWRyaXZlci14ZW4tYmxrYmFjayAgICAgIHwgIDIgKy0NCj4g
-ICAuLi4vQUJJL3Rlc3Rpbmcvc3lzZnMtZHJpdmVyLXhlbi1ibGtmcm9udCAgICAgfCAgMiAr
-LQ0KPiAgIGRyaXZlcnMvYmxvY2sveGVuLWJsa2JhY2sveGVuYnVzLmMgICAgICAgICAgICB8
-IDIwICsrKysrKysrLS0tLS0tLS0tLS0NCj4gICBkcml2ZXJzL2Jsb2NrL3hlbi1ibGtmcm9u
-dC5jICAgICAgICAgICAgICAgICAgfCAgNCArLS0tDQo+ICAgNCBmaWxlcyBjaGFuZ2VkLCAx
-MSBpbnNlcnRpb25zKCspLCAxNyBkZWxldGlvbnMoLSkNCj4gDQoNClNlcmllcyBwdXNoZWQg
-dG8geGVuL3RpcC5naXQgZm9yLWxpbnVzLTYuMA0KDQoNCkp1ZXJnZW4NCg==
---------------gqQAum1BpSXYvefTeiVZOgS8
+T24gMjkuMDcuMjIgMDk6MDQsIEphbmUgTWFsYWxhbmUgd3JvdGU6DQo+IEltcGxlbWVudCBz
+dXBwb3J0IGZvciB0aGUgSFZNT1Bfc2V0X2V2dGNobl91cGNhbGxfdmVjdG9yIGh5cGVyY2Fs
+bCBpbg0KPiBvcmRlciB0byBzZXQgdGhlIHBlci12Q1BVIGV2ZW50IGNoYW5uZWwgdmVjdG9y
+IGNhbGxiYWNrIG9uIExpbnV4IGFuZA0KPiB1c2UgaXQgaW4gcHJlZmVyZW5jZSBvZiBIVk1f
+UEFSQU1fQ0FMTEJBQ0tfSVJRLg0KPiANCj4gSWYgdGhlIHBlci1WQ1BVIHZlY3RvciBzZXR1
+cCBpcyBzdWNjZXNzZnVsIG9uIEJTUCwgdXNlIHRoaXMgbWV0aG9kDQo+IGZvciB0aGUgQVBz
+LiBJZiBub3QsIGZhbGxiYWNrIHRvIHRoZSBnbG9iYWwgdmVjdG9yLXR5cGUgY2FsbGJhY2su
+DQo+IA0KPiBBbHNvIHJlZ2lzdGVyIGNhbGxiYWNrX2lycSBhdCBwZXItdkNQVSBldmVudCBj
+aGFubmVsIHNldHVwIHRvIHRyaWNrDQo+IHRvb2xzdGFjayB0byB0aGluayB0aGUgZG9tYWlu
+IGlzIGVubGlnaHRlbmVkLg0KPiANCj4gU3VnZ2VzdGVkLWJ5OiAiUm9nZXIgUGF1IE1vbm7D
+qSIgPHJvZ2VyLnBhdUBjaXRyaXguY29tPg0KPiBTaWduZWQtb2ZmLWJ5OiBKYW5lIE1hbGFs
+YW5lIDxqYW5lLm1hbGFsYW5lQGNpdHJpeC5jb20+DQo+IFJldmlld2VkLWJ5OiBCb3JpcyBP
+c3Ryb3Zza3kgPGJvcmlzLm9zdHJvdnNreUBvcmFjbGUuY29tPg0KDQpQdXNoZWQgdG8geGVu
+L3RpcC5naXQgZm9yLWxpbnVzLTYuMA0KDQoNCkp1ZXJnZW4NCg==
+--------------yVZ6gWfJx0WUYm6qypOPzSai
 Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
 Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
 Content-Description: OpenPGP public key
@@ -183,24 +175,24 @@ jR/i1DG86lem3iBDXzXsZDn8R38=3D
 =3D2wuH
 -----END PGP PUBLIC KEY BLOCK-----
 
---------------gqQAum1BpSXYvefTeiVZOgS8--
+--------------yVZ6gWfJx0WUYm6qypOPzSai--
 
---------------5Cp6QDD4ughbMr9MtVtA2ME0--
+--------------u4CaT1Zv2JuCuvqaICDVoS01--
 
---------------jiTB6OM2Ipz0IBM22NaksarS
+--------------y4RL8sLfKCJHY6zxWWcHyQUo
 Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="OpenPGP_signature"
 
 -----BEGIN PGP SIGNATURE-----
 
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmL4tBkFAwAAAAAACgkQsN6d1ii/Ey+8
-dAgAnNX9zMIKXbLr/WMD6B7Mo8kKoybfFhvSfzgduXHj+9/kzhnvaJ5Ysyil8toOm8QD+VmtgOy0
-8ep+hv9sBbTtx+ja7WIVfDhPgSDE7VVdJf556XHqXtCkFz0PI10gIR18w0dRhJR/g8kbLXUzWHRQ
-ZymNdzLIWbh/qz43FfXnV1xkHEkIjr98tau1EqL0Q26+6DeGECwE5iaWEYu1bGLYHDDLXKgrAm61
-lkI+/vJSMMfkg10aOfgLMUM54r7R7tlf/yrAqBt2Iz6c6qOxAG+zv9ZUkU/C5VAsqGJZtYz6sqcy
-DHuViBfCHgINRImcH8GTmXxwcaVdy7NP1fjHAV4MnQ==
-=XCwS
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmL4tDsFAwAAAAAACgkQsN6d1ii/Ey8c
+7wgAmD3HflxaLI+RyQYyPhRbE9ir9iI4btAOPDg5nQ/lO3EdA37XW3O4RQpfIS+kSmqJT17bvGXV
+dJgOaSwpGzvTL8E1jgyhw4XwLF5hu/4fLdOoK59fhASHr0Fni/2D7eEH9FjVaVyo+fVID5vGekvD
+X4tXhyKHRFap5ReuOdRvktI80vxlv0fahS+6rRxkSkGSKvuL0IwvZ9Vz6UZZx5J+tyBrLTt0smB3
+KAOffYvViedF/ocwO7AHZcsHyjEsz7L8ZmiUitRf8jsdwI8TQXRP3G35MRssdTfvGdeLYr2O4ppK
+RKe6lU7S7cAeEP8u4O6xaNIvyO7vPQbQKK4pGi35Uw==
+=1ayz
 -----END PGP SIGNATURE-----
 
---------------jiTB6OM2Ipz0IBM22NaksarS--
+--------------y4RL8sLfKCJHY6zxWWcHyQUo--

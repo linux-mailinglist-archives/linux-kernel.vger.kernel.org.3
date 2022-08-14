@@ -2,200 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD91F592582
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 18:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D0255925A6
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 18:56:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243425AbiHNQn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 12:43:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37942 "EHLO
+        id S242398AbiHNQ4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 12:56:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243340AbiHNQkt (ORCPT
+        with ESMTP id S243546AbiHNQ4C (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 12:40:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5802BE3;
-        Sun, 14 Aug 2022 09:30:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 95B69B80B3C;
-        Sun, 14 Aug 2022 16:30:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 197A0C433D6;
-        Sun, 14 Aug 2022 16:30:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660494657;
-        bh=hB5GSqsYBUG0UIm0MUR0pzAfDCRA3x4i0KMcrIk710I=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=PSQG/e7uIbCAiX/PKpo2k4hn86qVx4CtGvxy8at6o0r+gIrtJppb5Imrh8OCo8Eht
-         rZPoLmK2IUH6jnDcIlnzP3qjLDuwcS7urcRE+kO2TahmIWBx71pp7CrGrtealkldE4
-         1phA8UzDsPcsnd80ph8+ZK5AIbzw9vX2jI0nFY626w+/x2fQlGyMqaN+lz+gr/gO2u
-         vNh4OSXaqHZjvLV2UMV1rEM1H4JuLsebHsjc6CkvjED/rvWO1Gd/UbH0msxnudJ9Dn
-         Ry0FGxy3/DMU/fXl842jgul/9jFl+12EWR3d7gTAUlH+pDiyKE+YV8lEqd7ZJV88HM
-         XyanADJHJMLdQ==
-Date:   Sun, 14 Aug 2022 17:41:22 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Dmitry Rokosov <DDRokosov@sberdevices.ru>
-Cc:     "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "andriy.shevchenko@linux.intel.com" 
-        <andriy.shevchenko@linux.intel.com>,
-        "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-        "stano.jakubek@gmail.com" <stano.jakubek@gmail.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "stephan@gerhold.net" <stephan@gerhold.net>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "wsa@kernel.org" <wsa@kernel.org>,
-        "lars@metafoo.de" <lars@metafoo.de>,
-        "Michael.Hennerich@analog.com" <Michael.Hennerich@analog.com>,
-        "jbhayana@google.com" <jbhayana@google.com>,
-        "lucas.demarchi@intel.com" <lucas.demarchi@intel.com>,
-        "jani.nikula@intel.com" <jani.nikula@intel.com>,
-        "linus.walleij@linaro.org" <linus.walleij@linaro.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-        kernel <kernel@sberdevices.ru>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v5 6/7] iio: add MEMSensing MSA311 3-axis accelerometer
- driver
-Message-ID: <20220814174122.4f9afbf3@jic23-huawei>
-In-Reply-To: <20220812165243.22177-7-ddrokosov@sberdevices.ru>
-References: <20220812165243.22177-1-ddrokosov@sberdevices.ru>
-        <20220812165243.22177-7-ddrokosov@sberdevices.ru>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Sun, 14 Aug 2022 12:56:02 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 747F5BBA45;
+        Sun, 14 Aug 2022 09:44:22 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id r69so4819878pgr.2;
+        Sun, 14 Aug 2022 09:44:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=pL8g1BLQVZvrcgdrkNSBsPwGKS843D7eAlV+Ro1JYLM=;
+        b=k0ylHWRY53YY1+dlQ/dbkvmTjalxRlqlsppaDkMFbbTxq0XCzrdszvfqaNG/Nxr8py
+         Kbgq1NVl7bhB6wOrf45pn0Mc+LvFtpLdp069E9Ft1DI382mxMMCmXTw1FLDoh9tWyYKT
+         uHhujxKlnb2eEw982KEegE56z1jeOL/FOtw7eyRJJXxqU9bMWrf+srwYqQ09yIDmTENt
+         zMkT5OK8PkEpnmdsrD+1hhZSZ5qIGc8byzvNxRZYGOevjM4ycwbrfo8T3Le3b6cGV2Z7
+         cOHne/7l48Bk1kHcNm0kgwEDa/0FLEfQg0FjnJqQ+F3XAGZm1UebDYGurZdOXFqf1mlw
+         toug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=pL8g1BLQVZvrcgdrkNSBsPwGKS843D7eAlV+Ro1JYLM=;
+        b=JcieTw1qKjZfh4H/ibFm13JCTZP/TSrnCrD7qfoQGPQJT867pXDRpRMH7GBzDu747g
+         x45L9zgDxYMWtJ3CFfhVn0M6p0tbeolLjqwkHnGMRuYzVUqxYfDNLdEYNQGpQzNMXqXe
+         dPkGHzTz/9QlI0PpxsAFrqR3VQrTFa8uZXL99hlxQ16PvacubSEWrnxV85HdP1PkHMse
+         10QAnpubSB3W74S9nx89/nhZoMmnwreVDe3FlV0vr2DDCBj40R36n2bvQIhn+59U2kKy
+         OXUyeESNVqpkX1r//CQ7Rf18AA3xgNlZzv2bmDsNblOeMJm0a/mVeBpaugjb7OX8/P8P
+         F5Ow==
+X-Gm-Message-State: ACgBeo07YFLXG/pEKieYlT6tNH9C5mcwc9z0JyDEbk6B7l7HvuUx2hLF
+        zPtIbq2XvHBo0K/HFgTzQhI=
+X-Google-Smtp-Source: AA6agR7HECHODK6Fh2XDOqfqhpiyfU71JkO8dMXKf22iSRHVqgW246kAntAKOSOqcWg48QKEVu2C/Q==
+X-Received: by 2002:a63:d70c:0:b0:420:f9b6:9c3d with SMTP id d12-20020a63d70c000000b00420f9b69c3dmr10701076pgg.377.1660495460514;
+        Sun, 14 Aug 2022 09:44:20 -0700 (PDT)
+Received: from biggie ([103.230.148.189])
+        by smtp.gmail.com with ESMTPSA id c1-20020a170902d48100b001709e3c755fsm5584531plg.230.2022.08.14.09.44.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 Aug 2022 09:44:20 -0700 (PDT)
+Date:   Sun, 14 Aug 2022 22:14:14 +0530
+From:   Gautam Menghani <gautammenghani201@gmail.com>
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     sean@mess.org, mchehab@kernel.org, hdanton@sina.com,
+        linux-kernel@vger.kernel.org,
+        syzbot+0c3cb6dc05fbbdc3ad66@syzkaller.appspotmail.com,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-media@vger.kernel.org
+Subject: Re: [PATCH] drivers/media/rc: Ensure usb_submit_urb() is not called
+ if write is in progress
+Message-ID: <YvkmXiZ+8zM9uh+Q@biggie>
+References: <20220814142543.24910-1-gautammenghani201@gmail.com>
+ <YvkKdIL8UVhKrI0Q@kroah.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YvkKdIL8UVhKrI0Q@kroah.com>
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 12 Aug 2022 16:52:29 +0000
-Dmitry Rokosov <DDRokosov@sberdevices.ru> wrote:
-
-> MSA311 is a tri-axial, low-g accelerometer with I2C digital output for
-> sensitivity consumer applications. It has dynamic user-selectable full
-> scales range of +-2g/+-4g/+-8g/+-16g and allows acceleration measurements
-> with output data rates from 1Hz to 1000Hz.
+On Sun, Aug 14, 2022 at 04:45:08PM +0200, Greg KH wrote:
+> On Sun, Aug 14, 2022 at 07:55:42PM +0530, Gautam Menghani wrote:
+> > The warning "URB submitted while active" is reported if the function
+> > send_packet() in imon.c is called if a write is already is in progress.
+> > Add a check to return -EBUSY in case a write is already is in progress.
+> > Also, mark tx.busy as false after transmission is completed.
+> > 
+> > Fixes: 21677cfc562a ("V4L/DVB: ir-core: add imon driver")
+> > Cc: hdanton@sina.com
+> > Suggested-by: hdanton@sina.com
+> > Link: https://syzkaller.appspot.com/bug?id=e378e6a51fbe6c5cc43e34f131cc9a315ef0337e
+> > Reported-by: syzbot+0c3cb6dc05fbbdc3ad66@syzkaller.appspotmail.com
+> > Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
+> > ---
+> >  drivers/media/rc/imon.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> > 
+> > diff --git a/drivers/media/rc/imon.c b/drivers/media/rc/imon.c
+> > index 735b925da998..a5b997c2c7e2 100644
+> > --- a/drivers/media/rc/imon.c
+> > +++ b/drivers/media/rc/imon.c
+> > @@ -598,6 +598,8 @@ static int send_packet(struct imon_context *ictx)
+> >  	int retval = 0;
+> >  	struct usb_ctrlrequest *control_req = NULL;
+> >  
+> > +	if (ictx->tx.busy)
+> > +		return -EBUSY;
 > 
-> Spec: https://cdn-shop.adafruit.com/product-files/5309/MSA311-V1.1-ENG.pdf
-> 
-> This driver supports following MSA311 features:
->     - IIO interface
->     - Different power modes: NORMAL and SUSPEND (using pm_runtime)
->     - ODR (Output Data Rate) selection
->     - Scale and samp_freq selection
->     - IIO triggered buffer, IIO reg access
->     - NEW_DATA interrupt + trigger
-> 
-> Below features to be done:
->     - Motion Events: ACTIVE, TAP, ORIENT, FREEFALL
->     - Low Power mode
-> 
-> Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Hi Dmitry, a few minor comments from another read through.
+> What happens if we go busy right after this check?  Where is the locking
+> here to protect this?
 
-> + */
-> +static inline int msa311_set_odr(struct msa311_priv *msa311, unsigned int odr)
-> +{
-> +	struct device *dev = msa311->dev;
-> +	unsigned int pwr_mode;
-> +	bool good_odr = false;
-> +	int err;
-> +
-> +	err = regmap_field_read(msa311->fields[F_PWR_MODE], &pwr_mode);
-> +	if (err)
-> +		return err;
-> +
-> +	/* Filter bad ODR values */
-> +	if (pwr_mode == MSA311_PWR_MODE_NORMAL)
-> +		good_odr = (odr > MSA311_ODR_1_95_HZ);
-> +
-> +	if (!good_odr) {
-> +		dev_err(dev,
-> +			"cannot set odr %u.%luHz, not available in %s mode\n",
+All calls to send_packet() are protected with ictx->lock() held. Are you referring 
+to something else?
 
-Don't you need to zero pad the fractional part?
-or use iio_format_values.
+Also, if we return busy, the task is interrupted and the packet transaction fails, 
+just like the current behaviour. With the above patch, warning is not triggered.
+Here's the log from running the reproducer (with patch applied).
 
-> +			msa311_odr_table[odr].val,
-> +			msa311_odr_table[odr].val2 / MILLIHZ_PER_HZ,
-> +			msa311_pwr_modes[pwr_mode]);
-> +		return -EINVAL;
-> +	}
-> +
-> +	return regmap_field_write(msa311->fields[F_ODR], odr);
-> +}
+imon 1-1:0.0: Looks like you're trying to use an IR protocol this device does not support
+imon 1-1:0.0: Unsupported IR protocol specified, overriding to iMON IR protocol
+rc rc0: iMON Remote (15c2:0040) as /devices/platform/dummy_hcd.0/usb1/1-1/1-1:0.0/rc/rc0
+input: iMON Remote (15c2:0040) as /devices/platform/dummy_hcd.0/usb1/1-1/1-1:0.0/rc/rc0/input5
+imon 1-1:0.0: iMON device (15c2:0040, intf0) on usb<1:2> initialized
+imon:vfd_write: send packet #0 failed
+imon:send_packet: task interrupted
+imon:send_packet: packet tx failed (-2)
+imon:vfd_write: send packet #0 failed
+usb 1-1: USB disconnect, device number 2
 
-
-> +
-> +static int msa311_setup_interrupts(struct msa311_priv *msa311)
-> +{
-> +	struct device *dev = msa311->dev;
-> +	struct i2c_client *i2c = to_i2c_client(dev);
-> +	struct iio_dev *indio_dev = i2c_get_clientdata(i2c);
-> +	struct iio_trigger *trig;
-> +	int err;
-> +
-> +	/* Keep going without interrupts if no initialized I2C irq */
-> +	if (i2c->irq <= 0)
-> +		return 0;
-> +
-> +	err = devm_request_threaded_irq(&i2c->dev, i2c->irq,
-> +					NULL, msa311_irq_thread,
-> +					IRQF_ONESHOT,
-> +					msa311->chip_name,
-> +					indio_dev);
-
-Could wrap this a little less given you are respinning anyway. It's way under
-80 chars currently.
-
-...
-	     "cannot map new data interrupt\n");
-> +
-> +	return 0;
-> +}
-> +
-
-> +	msa311->vdd = devm_regulator_get_optional(dev, "vdd");
-> +	if (IS_ERR(msa311->vdd)) {
-> +		err = PTR_ERR(msa311->vdd);
-> +		if (err == -ENODEV)
-> +			msa311->vdd = NULL;
-> +		else
-> +			return dev_err_probe(dev, PTR_ERR(msa311->vdd),
-
-use err instead of PTR_ERR(msa311->vdd) ?
-
-> +					     "cannot get vdd supply\n");
-> +	}
-> +
-> +	if (msa311->vdd) {
-> +		err = regulator_enable(msa311->vdd);
-> +		if (err)
-> +			return dev_err_probe(dev, err,
-> +					     "cannot enable vdd supply\n");
-> +
-> +		err = devm_add_action_or_reset(dev, msa311_vdd_disable,
-> +					       msa311->vdd);
-> +		if (err) {
-> +			return dev_err_probe(dev, err,
-> +					     "cannot add vdd disable action\n");
-> +		}
-> +	}
-> +
-> +	err = msa311_check_partid(msa311);
-> +	if (err)
-> +		return err;
-> +
-> +	err = msa311_soft_reset(msa311);
-> +	if (err)
-> +		return err;
-> +
-
+Thanks,
+Gautam

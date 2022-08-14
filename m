@@ -2,103 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21CE95925B2
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 19:01:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 602F35925AB
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 18:57:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239709AbiHNRA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 13:00:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44358 "EHLO
+        id S240494AbiHNQ5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 12:57:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241340AbiHNQ7u (ORCPT
+        with ESMTP id S241827AbiHNQ5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 12:59:50 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A3D248E6;
-        Sun, 14 Aug 2022 09:56:23 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id qn6so9982933ejc.11;
-        Sun, 14 Aug 2022 09:56:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=3FPcPJtSj/bElkQiP9PnLcaKYbdRrJQOnxh5GM0k2J8=;
-        b=jIhzROlIbZmReGLhU1yiB9ifnYNpK7wPMtsEhXldCXAgr8Rl8UiEDggdP71dGuTbS2
-         vlO4HaLZtyD2uYq1DAk8mLwgDaeBSkNLaZkdvKKMyK7WzqdJQXz2vx6Xay0pd7Z7sDx1
-         nsyUwCQiqqprl2sTAnh0An7a16wwTTiwXAEsyVymr4pYykSW49E1DE8uVt3MG/YM2vIp
-         QsVf4SfoxVwN3OrtvQFfukbQg7QdjKv5I3P3bzFBSxC7qFPIVninGAyHPs/jVwHE5irt
-         1f/knX5O8pcdB4DCux0gS+hCAGcEi+RbECkkWC0o6dh6HCEID2zNvPjwDehPQmrbb0Ie
-         b1Zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=3FPcPJtSj/bElkQiP9PnLcaKYbdRrJQOnxh5GM0k2J8=;
-        b=Li01OkcYXYSf57WzGPbsiAAJ30+R/4vCNVPBf/9HpXKHJJ8rUs/6CecDWZb+tth0em
-         SupTCGuAQ8C7C9U7hozVLNz5vNvuLfsCXo2rDDTu1T8KT9i54NXAe9nwwkyuAijncJd2
-         PN4Z2Y9+l7U3dr93APKGhAqOw+wSsDj9/zjqYAF8Z4sxYsWwXbuNGpa4z8yjf2dt0oqD
-         /ngXITw6ywDjw+RqMez4XLrLIs9fqgKHw09ZGTL91DHOFCqwTX1AFmTs8KYb1byYnE5N
-         pf1z+yToE47gCzvcavEVm6F1CBUt6Ic+sdVIXQwUZH3eWO/jxlmSnj/QV96KYTw2vfy+
-         jH8A==
-X-Gm-Message-State: ACgBeo3Rx407GcPCWQ4qkPkVU2f4vJx8w5q6bnYm9MgqF6SACBEBxa0V
-        LZd2YOezvC059TGmNI2Kv4GBETxV/UG+SSLoSzQ=
-X-Google-Smtp-Source: AA6agR4KRezlsVlNGcVNG12SydHF7/Af523+ZOD9iAijtLg+m6b2EPZib0GbeQ98ybmVhtVI16y8jh9PJCtnXHLMyzU=
-X-Received: by 2002:a17:907:7241:b0:734:b282:184b with SMTP id
- ds1-20020a170907724100b00734b282184bmr8200009ejc.445.1660496181572; Sun, 14
- Aug 2022 09:56:21 -0700 (PDT)
+        Sun, 14 Aug 2022 12:57:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403D11EC46;
+        Sun, 14 Aug 2022 09:46:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AF6E5603F6;
+        Sun, 14 Aug 2022 16:46:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A0C2C433D6;
+        Sun, 14 Aug 2022 16:46:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660495588;
+        bh=yyw6coq5uenQ2Z/EFRGEVGSSgqlo1xB9T6OhB8ulWI0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=n7vVb891z3+DuQcx4hnlX4aNALJLAaeRVMbG+VkIvLIIKeg9McY+1f7o9Z5b0ELr8
+         99woumZLIk41hUfOg6BLo1VP5+dqCGEDmgWoOFZ5e2Yqr3paMCwg1JKB+p7+Fpsi6U
+         QZgOTM2xoDeAXvr7bI4tv8I6z0NEKh3a24+MYnYdzSnrGVWwGkZg2d5fzaohEvSjpp
+         XsOa4owsGZuYsgcV2vMhw7c1w5QaoeSzGAfyG/r6UvU5WpwJCwSZaeNJ4iLoCi2Rk/
+         1NsI9NIBgklhFBaeQxLZWnViIscHRc+TQf+OnX7vEHf2EvcmAlOz0nX0P3Zec6AEas
+         VW6ymFlWyV0iA==
+Date:   Sun, 14 Aug 2022 17:56:56 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Angel Iglesias <ang.iglesiasg@gmail.com>
+Cc:     linux-iio <linux-iio@vger.kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 3/5] iio: pressure: bmp280: Add support for BMP380
+ sensor family
+Message-ID: <20220814175656.1d09f897@jic23-huawei>
+In-Reply-To: <53b0132936a98943fb4284c4f72e3f4e6faa402d.camel@gmail.com>
+References: <cover.1659872590.git.ang.iglesiasg@gmail.com>
+        <462251c4bca30b53f06307043ad52d859eb8d5c1.1659872590.git.ang.iglesiasg@gmail.com>
+        <20220814151512.097c7779@jic23-huawei>
+        <53b0132936a98943fb4284c4f72e3f4e6faa402d.camel@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20220802034729.2566787-1-haowenchao@huawei.com> <3ba71030-982b-c98b-78ee-ceca74da3b57@oracle.com>
-In-Reply-To: <3ba71030-982b-c98b-78ee-ceca74da3b57@oracle.com>
-From:   wenchao hao <haowenchao22@gmail.com>
-Date:   Mon, 15 Aug 2022 00:56:10 +0800
-Message-ID: <CAOptpSPLSbrQ8hgr275Ds7fwcBA_W9jYt0SFfhV-npPaz08S7g@mail.gmail.com>
-Subject: Re: [PATCH v3] scsi: iscsi: Fix multiple iscsi session unbind event
- sent to userspace
-To:     Mike Christie <michael.christie@oracle.com>
-Cc:     Wenchao Hao <haowenchao@huawei.com>, Lee Duncan <lduncan@suse.com>,
-        Chris Leech <cleech@redhat.com>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        open-iscsi@googlegroups.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linfeilong@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 12, 2022 at 12:06 PM Mike Christie
-<michael.christie@oracle.com> wrote:
->
-> On 8/1/22 10:47 PM, Wenchao Hao wrote:
-> > I found an issue that kernel would send ISCSI_KEVENT_UNBIND_SESSION
-> > for multiple times which should be fixed.
-> >
-> > This patch introduce target_state in iscsi_cls_session to make
-> > sure session would send only one ISCSI_KEVENT_UNBIND_SESSION.
-> >
-> > But this would break issue fixed in commit 13e60d3ba287 ("scsi: iscsi:
-> > Report unbind session event when the target has been removed"). The issue
-> > is iscsid died for any reason after it send unbind session to kernel, once
-> > iscsid restart again, it loss kernel's ISCSI_KEVENT_UNBIND_SESSION event.
-> >
-> > Now kernel think iscsi_cls_session has already sent an
-> > ISCSI_KEVENT_UNBIND_SESSION event and would not send it any more. Which
-> > would cause userspace unable to logout. Actually the session is in
-> > invalid state(it's target_id is INVALID), iscsid should not sync this
-> > session in it's restart.
-> >
-> > So we need to check session's target state during iscsid restart,
-> > if session is in unbound state, do not sync this session and perform
-> > session teardown. It's reasonable because once a session is unbound, we
-> > can not recover it any more(mainly because it's target id is INVALID)
-> >
->
-> I think we are ok now. Do you have a link to the userspace parts so
-> I can make sure we have everything covered now?
+On Sun, 14 Aug 2022 16:37:58 +0200
+Angel Iglesias <ang.iglesiasg@gmail.com> wrote:
 
-I updated the PR on github: https://github.com/open-iscsi/open-iscsi/pull/339
+> On Sun, 2022-08-14 at 15:15 +0100, Jonathan Cameron wrote:
+> > On Sun,=C2=A0 7 Aug 2022 13:55:52 +0200
+> > Angel Iglesias <ang.iglesiasg@gmail.com> wrote:
+> >  =20
+> > > Adds compatibility with the new generation of this sensor, the BMP380
+> > >=20
+> > > Includes basic sensor initialization to do pressure and temp
+> > > measurements and allows tuning oversampling settings for each channel.
+> > >=20
+> > > The compensation algorithms are adapted from the device datasheet and
+> > > the repository https://github.com/BoschSensortec/BMP3-Sensor-API
+> > >=20
+> > > Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com> =20
+> >=20
+> > One additional comment from me inline.
+> >=20
+> > Thanks,
+> >=20
+> > Jonathan
+> >=20
+> >  =20
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> > > @@ -1124,6 +1471,13 @@ int bmp280_common_probe(struct device *dev,
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0return -EINVAL;
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> > > =C2=A0
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* BMP3xx requires soft-re=
+set as part of initialization */
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (chip_id =3D=3D BMP380_=
+CHIP_ID) { =20
+> >=20
+> > I'd prefer this to be based on a flag in chip_info so that we can
+> > trivially add it to future devices by just setting that flag for the
+> > chip_info added for the new device. =20
+>=20
+> How a new init or preinit callback? For now only BMP380 chip would use it=
+, but I
+> would like to get my hands on a BMP390 and the new BMP580 and extend the =
+driver
+> to support for them.
+
+Hmm. Good point, I'd failed to noticed the register is bmp380 specific curr=
+ently.
+Maybe one to leave for a future refactor if you get those newer parts.
+
+Jonathan
+
+>=20
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0ret =3D bmp380_cmd(data, BMP380_CMD_SOFT_RESET);
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0if (ret < 0)
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret=
+urn ret;
+> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0}
+> > > +
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret =3D data->chip_in=
+fo->chip_config(data);
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (ret < 0)
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0return ret; =20
+> >  =20
+>=20
+> Kind regards,
+> Angel
+

@@ -2,106 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFB88592554
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 18:43:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E627592584
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 18:43:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243339AbiHNQnE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 12:43:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39218 "EHLO
+        id S243376AbiHNQni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 12:43:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243254AbiHNQk0 (ORCPT
+        with ESMTP id S243366AbiHNQkw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 12:40:26 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 00216B26
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 09:30:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660494643;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=7OqIGNvFWmwJKsWdnZAcHQuajnrJ8LLtzZZWISo0x+A=;
-        b=IewzpnhsEWIFVFNIXc7kseJZddxtMhbXSlfXOVOS2pUpYwcPUwFwHkQFruNdRLIDTlCYhE
-        2aaWTAd1RrlFaGbqUpCpfUGBYhsWsK8uKKftnaGg6gT6lhJrOdKaiTJ0OZepnDiQqX3DCN
-        nO49vYBSVsPeVz2OvpVJtgApdmreONM=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-182-v0OUzfyaPOaYp-8-niKZug-1; Sun, 14 Aug 2022 12:30:42 -0400
-X-MC-Unique: v0OUzfyaPOaYp-8-niKZug-1
-Received: by mail-wm1-f72.google.com with SMTP id c66-20020a1c3545000000b003a37b7e0764so7437725wma.5
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 09:30:42 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc;
-        bh=7OqIGNvFWmwJKsWdnZAcHQuajnrJ8LLtzZZWISo0x+A=;
-        b=IEkXpbtJt3Xp855Gn4Z7WcOeIComIE8l+xhJks1Zc/vldEIQA5pbuFpKWfJ4mV4r3i
-         hi8CtYOj29ryxZlyEfiLf6l+EavszfoWKDUoHLoHpnuIze8PMfk0Pun69cm0LDHEHsA0
-         aTuosvSOiLfdgj9bLAigh4JoPfpp0wCcQuLzX4s6feodGHBZ3LMmQMPWHD2NSKOIdfvs
-         f9+ei4ff4eU1RdJNup0YnPCZjQFtDPeZhKGTjj76B4i3WICkW88d883Off38LGQLyOBM
-         qplzStrQz98vfQZ53KODdBPZGmqW072W08OVnWS6SB3fe2ovd3uy1ycx582CXr2x7FOB
-         PixA==
-X-Gm-Message-State: ACgBeo0jlslCDPVOXHHHw9eymfhvM7hSgMfTdxjOmqxbZTbkc8ICTkbl
-        3V2kfxnbhhGY14tazHPXjlTDRgddWtkBmgv9g8t+KlWMnMP74tRLh7uL3/JvL0vj6JYL1kM94UQ
-        ypZiv3byKNesImuc0rg+LajDB
-X-Received: by 2002:a05:600c:2cc5:b0:3a5:4fae:1288 with SMTP id l5-20020a05600c2cc500b003a54fae1288mr14405195wmc.79.1660494641161;
-        Sun, 14 Aug 2022 09:30:41 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4zbFVBaiyOjyDfdYEQM8eStx9y5x2XOUmTcHScJeTFx/pQEQl90jmcMKpcqRGyL/qMwFxAzQ==
-X-Received: by 2002:a05:600c:2cc5:b0:3a5:4fae:1288 with SMTP id l5-20020a05600c2cc500b003a54fae1288mr14405186wmc.79.1660494640879;
-        Sun, 14 Aug 2022 09:30:40 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c72a:1e00:10cf:131b:999d:9b4a? (p200300cbc72a1e0010cf131b999d9b4a.dip0.t-ipconnect.de. [2003:cb:c72a:1e00:10cf:131b:999d:9b4a])
-        by smtp.gmail.com with ESMTPSA id h23-20020a05600c145700b003a529b7bc27sm6664588wmi.9.2022.08.14.09.30.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 14 Aug 2022 09:30:40 -0700 (PDT)
-Message-ID: <2298704f-03f9-c932-e00e-4e6006a6dffa@redhat.com>
-Date:   Sun, 14 Aug 2022 18:30:39 +0200
+        Sun, 14 Aug 2022 12:40:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFF73C66;
+        Sun, 14 Aug 2022 09:31:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7BA6EB80B3C;
+        Sun, 14 Aug 2022 16:31:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60221C433C1;
+        Sun, 14 Aug 2022 16:31:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660494675;
+        bh=QJRKZeqWyHOAMgpIQr673Jjz8RQb1Y0LVJw0ylK1rRM=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=uS/+6wltoyffidAKki2gMIEeG6JC03BBaZ33OibIk4FSEJ98+U9hLBi7DS/E4DXT5
+         pff7Yi7UGoI3hAlhzoPCFDz2s2VfW743hkbcQfNVYO1RtCRCADBWO/NFFT+miF8H0X
+         De3n2aAtznYXZ9mIP9Kf/hrfhIag0WL8xrV72PbNsUN/SGHx/tkvb9jVmLPBnQTxvk
+         DDL6s0zxHne5JE7aIlXeG0ImMnlw3pqDLrUEk0d9RxSK7110+5GL/OjIxBNXRgzNom
+         micFIvotNoglFyzDmrRB6ULXCyoH/ORhE4krLWPqgvIZA8x13xuneYC8cAUrtpGBHO
+         3joEpJ6mU6uhw==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Zheyu Ma <zheyuma97@gmail.com>, Helge Deller <deller@gmx.de>,
+        Sasha Levin <sashal@kernel.org>, linux@zary.sk,
+        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: [PATCH AUTOSEL 4.9 7/8] video: fbdev: i740fb: Check the argument of i740_calc_vclk()
+Date:   Sun, 14 Aug 2022 12:30:40 -0400
+Message-Id: <20220814163041.2399552-7-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220814163041.2399552-1-sashal@kernel.org>
+References: <20220814163041.2399552-1-sashal@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v2 1/3] mm: revert handling Non-LRU pages returned by
- follow_page
-Content-Language: en-US
-To:     Haiyue Wang <haiyue.wang@intel.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Cc:     akpm@linux-foundation.org, linmiaohe@huawei.com,
-        ying.huang@intel.com, songmuchun@bytedance.com,
-        naoya.horiguchi@linux.dev, alex.sierra@amd.com
-References: <20220812084921.409142-1-haiyue.wang@intel.com>
- <20220814140534.363348-1-haiyue.wang@intel.com>
- <20220814140534.363348-2-haiyue.wang@intel.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <20220814140534.363348-2-haiyue.wang@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14.08.22 16:05, Haiyue Wang wrote:
-> The commit
-> 3218f8712d6b ("mm: handling Non-LRU pages returned by vm_normal_pages")
-> doesn't handle the follow_page with flag FOLL_GET correctly, this will
-> do get_page on page, it shouldn't just return directly without put_page.
-> 
-> So revert the related fix to prepare for clean patch to handle Non-LRU
-> pages returned by follow_page.
+From: Zheyu Ma <zheyuma97@gmail.com>
 
-What? Why?
+[ Upstream commit 40bf722f8064f50200b8c4f8946cd625b441dda9 ]
 
-Just fix it.
+Since the user can control the arguments of the ioctl() from the user
+space, under special arguments that may result in a divide-by-zero bug.
 
+If the user provides an improper 'pixclock' value that makes the argumet
+of i740_calc_vclk() less than 'I740_RFREQ_FIX', it will cause a
+divide-by-zero bug in:
+    drivers/video/fbdev/i740fb.c:353 p_best = min(15, ilog2(I740_MAX_VCO_FREQ / (freq / I740_RFREQ_FIX)));
+
+The following log can reveal it:
+
+divide error: 0000 [#1] PREEMPT SMP KASAN PTI
+RIP: 0010:i740_calc_vclk drivers/video/fbdev/i740fb.c:353 [inline]
+RIP: 0010:i740fb_decode_var drivers/video/fbdev/i740fb.c:646 [inline]
+RIP: 0010:i740fb_set_par+0x163f/0x3b70 drivers/video/fbdev/i740fb.c:742
+Call Trace:
+ fb_set_var+0x604/0xeb0 drivers/video/fbdev/core/fbmem.c:1034
+ do_fb_ioctl+0x234/0x670 drivers/video/fbdev/core/fbmem.c:1110
+ fb_ioctl+0xdd/0x130 drivers/video/fbdev/core/fbmem.c:1189
+
+Fix this by checking the argument of i740_calc_vclk() first.
+
+Signed-off-by: Zheyu Ma <zheyuma97@gmail.com>
+Signed-off-by: Helge Deller <deller@gmx.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/video/fbdev/i740fb.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/video/fbdev/i740fb.c b/drivers/video/fbdev/i740fb.c
+index 7bc5f6056c77..4147a9534179 100644
+--- a/drivers/video/fbdev/i740fb.c
++++ b/drivers/video/fbdev/i740fb.c
+@@ -399,7 +399,7 @@ static int i740fb_decode_var(const struct fb_var_screeninfo *var,
+ 	u32 xres, right, hslen, left, xtotal;
+ 	u32 yres, lower, vslen, upper, ytotal;
+ 	u32 vxres, xoffset, vyres, yoffset;
+-	u32 bpp, base, dacspeed24, mem;
++	u32 bpp, base, dacspeed24, mem, freq;
+ 	u8 r7;
+ 	int i;
+ 
+@@ -641,7 +641,12 @@ static int i740fb_decode_var(const struct fb_var_screeninfo *var,
+ 	par->atc[VGA_ATC_OVERSCAN] = 0;
+ 
+ 	/* Calculate VCLK that most closely matches the requested dot clock */
+-	i740_calc_vclk((((u32)1e9) / var->pixclock) * (u32)(1e3), par);
++	freq = (((u32)1e9) / var->pixclock) * (u32)(1e3);
++	if (freq < I740_RFREQ_FIX) {
++		fb_dbg(info, "invalid pixclock\n");
++		freq = I740_RFREQ_FIX;
++	}
++	i740_calc_vclk(freq, par);
+ 
+ 	/* Since we program the clocks ourselves, always use VCLK2. */
+ 	par->misc |= 0x0C;
 -- 
-Thanks,
-
-David / dhildenb
+2.35.1
 

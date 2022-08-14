@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01B08591F87
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 12:21:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6047E591F8D
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 12:27:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231164AbiHNKVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 06:21:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51084 "EHLO
+        id S231223AbiHNK1E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 06:27:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbiHNKVq (ORCPT
+        with ESMTP id S229723AbiHNK1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 06:21:46 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A4E22BF5;
-        Sun, 14 Aug 2022 03:21:34 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id gk3so9057928ejb.8;
-        Sun, 14 Aug 2022 03:21:33 -0700 (PDT)
+        Sun, 14 Aug 2022 06:27:03 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051E52314B;
+        Sun, 14 Aug 2022 03:27:02 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id r4so6346845edi.8;
+        Sun, 14 Aug 2022 03:27:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=NgLSVABhBcWdug9UrtD9+LNXeaw8h4QX1AgubMiZPaE=;
-        b=EWvXkmaUv98OEwpQ4/IYmrswQI0ewNc7UtMSIuYn7fJHsAM62v+gfIu/BTKPAVTH1B
-         pQTRJZQv1BNl8pixFn+wZTIHhHoqpcmYv6cDoko00mjKMdziHvqpzvIrriE+j85mNz6l
-         s8S1bnbJ6jIGOucu2dAE2VPK0XTHPOCFA4mjuzfJ8JCtIAUWRmYzP/T17Qn4G+5rVCWx
-         O/jxBkup/cUM/qCQsuyA1Uk18oBlV+V0xGbArxcE+nl7Bi6L3tzBzMCzoHiy27ngq2le
-         VbSAlwRMnQiXV0gO1fxLwLwUbfhMGZWygn1Ad+EpxitARvigcros1fJ+HWjCeb3ekbLu
-         vgtg==
+        bh=F0QRLiWNSzIQtXswU6jXQI0utW/YNhjytPAn4syeAYo=;
+        b=ZJSfm9kFCx/eZhg89Rs0t3m6Fy6adkXoTliit5PQQBdOtlMcNIvsEyy8+F8a0jpwPV
+         o/dWuLgA8XDB66FvEGPw8jwbfxawdxjs+PMY0VwWWT2n9OVTGgFA7C36sytkEtHURtQm
+         GDsVciUaHteupndYBIofcffxzFAgoTKS9u/78I6SYN4NYUHD5z64TJvD7nLnTSvRPQgO
+         +y6PhiP7eSdk7TihwV9QG72AQP6H/UeOZ26QXxVUN9iGaspbV+50bNBxdjW65Gh6AeA0
+         QK5hzBSvcQ+tA6CCRDuJ9rRVNwVL9TK9aF97e1/DJci/A0DnA0TOKHmrgLLbzdhyX1+2
+         8P5w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=NgLSVABhBcWdug9UrtD9+LNXeaw8h4QX1AgubMiZPaE=;
-        b=Q5mhTQLbjirrM1O7umtSTmn8C4ZUDANLosaUmv22aoCSupotv4DZg/5K7rZw4x5FRL
-         a+Hcb5bLFJ1YryzYL2kZaxwcE9WQJTti9KLLNOFAxZh+hK7emVyyofB6PQ7HtnGb0uNR
-         bFkEMd/Kd5eDxEbA2d8eB52bYZDe4YqbXFyyjrWmeQdpYWcr0y9RKqTafMEX+U0Gf32j
-         5/VvL+hr4pDL0ZKE6YJVKyH6wbUsRg9LlD7tXetH3xQ7dlfM2mxXezLfSQF7CbeZVFeq
-         YXYQDWJGAzTj9yDHioaUM657z8avfaFukZ2p7BMpmWN41Kx8TnRREowgwFIqfz+PSZNH
-         CggQ==
-X-Gm-Message-State: ACgBeo2BpJN2vFerdPwgeyXWNy26NxedMcNDBcv9ySp/LSXp3eDvRt3L
-        i4RcYuxwLz8OCszGyzQxfCo=
-X-Google-Smtp-Source: AA6agR41uSYgu6jwgwi4GNbOiiHGpeVDJUS+R3XUJ+D/AlJZSWhM9JJEsC2Abiy5Ip6gc0dNsSdgCA==
-X-Received: by 2002:a17:906:fe45:b0:734:ca71:9672 with SMTP id wz5-20020a170906fe4500b00734ca719672mr7419035ejb.446.1660472492615;
-        Sun, 14 Aug 2022 03:21:32 -0700 (PDT)
+        bh=F0QRLiWNSzIQtXswU6jXQI0utW/YNhjytPAn4syeAYo=;
+        b=MwMUo0SNiT3m2HqbEIj+O8RCqH1NnLgJSsGjXkmeyJ5FqbjwmLsuLf3caCnrOyyBCe
+         Wt4u+vePAOVXU5SKeGQ2bgJp+mQiTeZGsOnJO3p/KBZVjxUyKQujqR9JzSvxtBeutr/N
+         KFKUd2X/bg2F2yIC0ntt7hYd3MQU5y3FwQZFQ5HI9LXv0JDIJpj5fgKNBqPJzYSCID3n
+         DbSq1qxcR0wo5k4glr9qvHuOwqtY4ubWLkQs+AydootlJk+olmWQaMylEuk9Qfn0gm96
+         krGoe5E0Ataxd/wdgG92j0jkn+bQbjx48QccxH6InQGkv7zlS32eXIFSXkF778HdHMtT
+         0Olw==
+X-Gm-Message-State: ACgBeo3vY6q3c9AVQiP8IcARmWpHSc9MYExn0iRrTV3rSO8fvjsGxFfx
+        Eko0d64WBJhnUMshiKSt3ys=
+X-Google-Smtp-Source: AA6agR4i+V31/LTEjlSFFV72AWe8uaurlX4Rluvgz+I9IqK+DcOgFvetksqi/8H1PWhsoFDmBT5uDA==
+X-Received: by 2002:aa7:de18:0:b0:43d:30e2:d22b with SMTP id h24-20020aa7de18000000b0043d30e2d22bmr10478796edv.224.1660472820604;
+        Sun, 14 Aug 2022 03:27:00 -0700 (PDT)
 Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
-        by smtp.gmail.com with ESMTPSA id jl4-20020a17090775c400b00734a9503bcasm2788909ejc.135.2022.08.14.03.21.31
+        by smtp.gmail.com with ESMTPSA id v17-20020a17090690d100b0072aac7446easm2810028ejw.47.2022.08.14.03.26.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Aug 2022 03:21:32 -0700 (PDT)
+        Sun, 14 Aug 2022 03:27:00 -0700 (PDT)
 From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
 To:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>
 Cc:     Samuel Holland <samuel@sholland.org>,
@@ -59,11 +59,11 @@ Cc:     Samuel Holland <samuel@sholland.org>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 2/9] soc: sunxi: sram: Actually claim SRAM regions
-Date:   Sun, 14 Aug 2022 12:21:31 +0200
-Message-ID: <3368908.QJadu78ljV@jernej-laptop>
-In-Reply-To: <20220801030509.21966-3-samuel@sholland.org>
-References: <20220801030509.21966-1-samuel@sholland.org> <20220801030509.21966-3-samuel@sholland.org>
+Subject: Re: [PATCH 3/9] soc: sunxi: sram: Prevent the driver from being unbound
+Date:   Sun, 14 Aug 2022 12:26:59 +0200
+Message-ID: <22747013.6Emhk5qWAg@jernej-laptop>
+In-Reply-To: <20220801030509.21966-4-samuel@sholland.org>
+References: <20220801030509.21966-1-samuel@sholland.org> <20220801030509.21966-4-samuel@sholland.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -77,17 +77,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne ponedeljek, 01. avgust 2022 ob 05:05:02 CEST je Samuel Holland napisal(a):
-> sunxi_sram_claim() checks the sram_desc->claimed flag before updating
-> the register, with the intent that only one device can claim a region.
-> However, this was ineffective because the flag was never set.
+Dne ponedeljek, 01. avgust 2022 ob 05:05:03 CEST je Samuel Holland napisal(a):
+> This driver exports a regmap tied to the platform device (as opposed to
+> a syscon, which exports a regmap tied to the OF node). Because of this,
+> the driver can never be unbound, as that would destroy the regmap. Use
+> builtin_platform_driver_probe() to enforce this limitation.
 > 
-> Fixes: 4af34b572a85 ("drivers: soc: sunxi: Introduce SoC driver to map
-> SRAMs") Signed-off-by: Samuel Holland <samuel@sholland.org>
+> Fixes: 5828729bebbb ("soc: sunxi: export a regmap for EMAC clock reg on
+> A64") Signed-off-by: Samuel Holland <samuel@sholland.org>
 
 Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
 Best regards,
 Jernej
+
 
 

@@ -2,102 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88B985926E5
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 01:00:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DDE45926E7
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 01:05:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbiHNXAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 19:00:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42934 "EHLO
+        id S229834AbiHNXF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 19:05:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiHNXAF (ORCPT
+        with ESMTP id S229450AbiHNXFY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 19:00:05 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BDC812ACF
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 16:00:02 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id gk3so10889592ejb.8
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 16:00:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=Pj3DvG1yaHOkAJw48TxvAXH1Fka6b4HnFllXzmcNwmw=;
-        b=gzkf8K+iznFC9OOtWwMej/nzlLqmZ0MKBv/EwSRygYlFzaYE0tX304Bv695K4p2emu
-         Vry7WzQ7X7QHzQbhWpuhBUZjFOa/TpLQzwwFM9uiuopeowiIuBUohclzsijz/xuVK/QU
-         Z01A8WEGSY17fYuv+7E/1BhUBqQcl94xAR6kw=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=Pj3DvG1yaHOkAJw48TxvAXH1Fka6b4HnFllXzmcNwmw=;
-        b=ohh268zg8SmXKUIHF4j2EyD/C0hvNw1TWugi2+MESJX8R1SfKiXBKVDcmVv/nfIjWj
-         7JSQFqbsaytmzLkynmum6TvQ6uxZnatRcJODy+KlA1cJ9eKKwgPYUsr2G6/VesPT5GCj
-         MmxYAFpMhtsQusK7u5LFV/nTiB+Cg9B+alWhiDUqg5rHsxG3LCrx0jRyXWo0nldTETPb
-         54p//6XXM1mNei8NY6jPpXV2gf44ICJvfE3KScRbOC0MP8DXc0ZdUpPwg26zbyCINV7P
-         IxtjxItNk3yXYSQ4CvAvz/TiMtO0/Dk2MuGn9SmDifayGC9y3IC1UUPPt+YrTlPxzFth
-         uG8w==
-X-Gm-Message-State: ACgBeo2q+2R1lKHAVYSLUonDo12RBa+9CdYJeKvxLqy/NlhzpZvL5KiZ
-        ahC68rebI4+Fqcb/rkUKJ5dAR7wJ3eOPHEtf
-X-Google-Smtp-Source: AA6agR6Cp6clSsb+dXunhOQb7O1KnWZ2hD+h3yZtl6EjprXd2NMWf/WzLWGVNu7Ae9hqodcH0x/C4Q==
-X-Received: by 2002:a17:907:2cd3:b0:730:d372:60f8 with SMTP id hg19-20020a1709072cd300b00730d37260f8mr8256868ejc.692.1660518000245;
-        Sun, 14 Aug 2022 16:00:00 -0700 (PDT)
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com. [209.85.221.51])
-        by smtp.gmail.com with ESMTPSA id v8-20020a170906338800b00730a6a19d90sm3381735eja.182.2022.08.14.15.59.58
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 14 Aug 2022 15:59:59 -0700 (PDT)
-Received: by mail-wr1-f51.google.com with SMTP id bv3so7252526wrb.5
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 15:59:58 -0700 (PDT)
-X-Received: by 2002:a5d:56cf:0:b0:21e:ce64:afe7 with SMTP id
- m15-20020a5d56cf000000b0021ece64afe7mr7004000wrw.281.1660517998361; Sun, 14
- Aug 2022 15:59:58 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAHk-=wh1xHi-WeytuAK1-iSsR0wi=6e4-WgFq6ZPt8Z1mvqoNA@mail.gmail.com>
- <20220814225415.n546anzvud6sumux@box.shutemov.name>
-In-Reply-To: <20220814225415.n546anzvud6sumux@box.shutemov.name>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 14 Aug 2022 15:59:42 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiOqbuzy7xzsLrN8LXKGGUUMH109wcKOXx_PV9PkHa=Zw@mail.gmail.com>
-Message-ID: <CAHk-=wiOqbuzy7xzsLrN8LXKGGUUMH109wcKOXx_PV9PkHa=Zw@mail.gmail.com>
-Subject: Re: Simplify load_unaligned_zeropad() (was Re: [GIT PULL] Ceph
- updates for 5.20-rc1)
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-Cc:     Al Viro <viro@zeniv.linux.org.uk>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
+        Sun, 14 Aug 2022 19:05:24 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4B74DF1;
+        Sun, 14 Aug 2022 16:05:17 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4M5Y0S72x7z4x1G;
+        Mon, 15 Aug 2022 09:05:12 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1660518313;
+        bh=1Sa4mWFQEDxd8hQqHgDOoUF/H5e9qr+gyg8EiZjPs3I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=IKUUJuTROZJO1A+c3K10m1R/X9iiLlWyaTAQb1fdb4hcLkCpmZKy0PpuoI+xda8SE
+         toi3WKMIEyc+JcY0VkJZkc2zDzFL2gDtI1H2FU98lvf+iU8LXXn12CzQgTt2NonquR
+         CQJhnw3GDXUagiDP9H3CPqTDZSXUHCryOTNjv+/SmsiYphiKHd1u0H681GdKzkACyz
+         ZenEVOfHJB4Pf3DsU1h7xz5MWWBs9Q+7tGC+TMB+xHJQFRkGSQiwxiHpeBtFvY9Kn4
+         /ER4ZwwFbatwuE0SWPNiAi7A6lQc+MfhdUPqT3flJTNbs7Gi+sS77GTyZz6W3CIBdt
+         asm1T1+aTj7Dg==
+Date:   Mon, 15 Aug 2022 09:04:35 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Huacai Chen <chenhuacai@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the loongarch tree with the
+ irqchip-fixes tree
+Message-ID: <20220815090435.09409f18@canb.auug.org.au>
+In-Reply-To: <20220811091701.1dfd4e6c@canb.auug.org.au>
+References: <20220811091701.1dfd4e6c@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/y_T9Hb8KRsEVelOotiaRk5f";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 14, 2022 at 3:51 PM Kirill A. Shutemov <kirill@shutemov.name> wrote:
->
-> Do we gain enough benefit from the microoptimization to justify existing
-> load_unaligned_zeropad()? The helper has rather confusing side-effects.
+--Sig_/y_T9Hb8KRsEVelOotiaRk5f
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-It's a *big* deal in pathname handling, yes. Doing things a byte at a
-time is very noticeably slower.
+Hi all,
 
-If TDX has problems with it, then TDX needs to be fixed. And it's
-simple enough - just make sure you have a guard page between any
-kernel RAM mapping and whatever odd crazy page.
+On Thu, 11 Aug 2022 09:17:01 +1000 Stephen Rothwell <sfr@canb.auug.org.au> =
+wrote:
+>=20
+> Today's linux-next merge of the loongarch tree got a conflict in:
+>=20
+>   arch/loongarch/include/asm/irq.h
+>=20
+> between commit:
+>=20
+>   fda7409a8fcf ("irqchip/loongson-pch-pic: Move find_pch_pic() into CONFI=
+G_ACPI")
+>=20
+> from the irqchip-fixes tree and commit:
+>=20
+>   4e9fa7e1c08d ("LoongArch: Parse MADT to get multi-processor information=
+")
+>=20
+> from the loongarch tree.
+>=20
+> I fixed it up (see below) and can carry the fix as necessary. This
+> is now fixed as far as linux-next is concerned, but any non trivial
+> conflicts should be mentioned to your upstream maintainer when your tree
+> is submitted for merging.  You may also want to consider cooperating
+> with the maintainer of the conflicting tree to minimise any particularly
+> complex conflicts.
+>=20
+> --=20
+> Cheers,
+> Stephen Rothwell
+>=20
+> diff --cc arch/loongarch/include/asm/irq.h
+> index 093aee99167d,4b130199ceae..000000000000
+> --- a/arch/loongarch/include/asm/irq.h
+> +++ b/arch/loongarch/include/asm/irq.h
+> @@@ -81,8 -81,7 +81,6 @@@ extern struct acpi_vector_group msi_gro
+>   #define GSI_MIN_PCH_IRQ		LOONGSON_PCH_IRQ_BASE
+>   #define GSI_MAX_PCH_IRQ		(LOONGSON_PCH_IRQ_BASE + 256 - 1)
+>  =20
+> - extern int eiointc_get_node(int id);
+> -=20
+>  -extern int find_pch_pic(u32 gsi);
+>   struct acpi_madt_lio_pic;
+>   struct acpi_madt_eio_pic;
+>   struct acpi_madt_ht_pic;
 
-There is nothing subtle about this at all. You probably would want
-that guard page *anyway*.
+This is now a conflict between the irqchip-fixes tree and Linus' tree.
 
-That "uaccepted memory" type needs to be just clearly fixed.
+--=20
+Cheers,
+Stephen Rothwell
 
-                Linus
+--Sig_/y_T9Hb8KRsEVelOotiaRk5f
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmL5f4MACgkQAVBC80lX
+0GzOugf7Btc3WzcKkagnfXNU3QUa7I2juUezKt1Id/k4OXVLRkhekgGF2jnkOm58
+Z6O7ttjVwjSMN7MJdzLCMGcqDDhr5ScTJ+B6SpLEJNImmcNgBTpQyb/bF5Pk+9e0
+CgqOKgF6sCF5zqZCOhqDmKMp4PbwF1nHmxzgEvshD5O2SUKTtmAY/Sl87Re4hGoq
+FX/7I+/7FLJyQ73iVB9TPQRucHEL/2SNLSvLNszQ7Qr6m7ygl7ybQYi7sPCH+/rZ
+Exv4xN/WzRd+W5l7QFhLcZPTASv+uNMlhtdw5PNi0hbLMszI6z5zHcw41fjYDQ3O
+3QEApEOnv+x3ABE5O4pgpVSMCqNSbg==
+=jFSJ
+-----END PGP SIGNATURE-----
+
+--Sig_/y_T9Hb8KRsEVelOotiaRk5f--

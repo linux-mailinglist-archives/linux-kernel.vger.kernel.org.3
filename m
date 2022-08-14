@@ -2,71 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BC11591DD4
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 06:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E4E37591DD6
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 06:09:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbiHNEIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 00:08:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34370 "EHLO
+        id S229945AbiHNEJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 00:09:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiHNEIr (ORCPT
+        with ESMTP id S230083AbiHNEJB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 00:08:47 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA9E61EAE6;
-        Sat, 13 Aug 2022 21:08:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660450126; x=1691986126;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=edAB/jt4sqHxc5RzVegMVJYdHU9YswUxCooZ50KcXEA=;
-  b=NMRE2HBb+V4QGgrQzPFuHMFkEBcAjKlXiy8HmKjaz1XCDGa2ljw7feBS
-   Y9vH2e9MUC6uRuTjOWXtDxcNc9x6KPBMO6h5/UHDEKrhLw1Dhkl3XCCCF
-   10WKyvZDFwg7Cp3+aRUm2NbrdKo3bn7H1kafTVy//d6+v5Iga/sJsVoE2
-   Nlgh8JjghL9j3JShcWwXOmd+Gvi9sOuCwPKy/FA7hvZGk+oPbJVhye8c2
-   YJOGQ6ceUNxTPZwzeAmm7JOw3taxJcCX5rKRV079bBiUKMeDIsYESQkjZ
-   jnA9Uj8P2tqAdlXXkYgfekJNYGoZnXIqdk3ol5gsSnnpPp4K+CCIq5Dnb
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="292591523"
-X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
-   d="scan'208";a="292591523"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 21:08:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
-   d="scan'208";a="709416302"
-Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 13 Aug 2022 21:08:42 -0700
-Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oN4vZ-0002Td-1F;
-        Sun, 14 Aug 2022 04:08:41 +0000
-Date:   Sun, 14 Aug 2022 12:08:03 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Sam Protsenko <semen.protsenko@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     kbuild-all@lists.01.org,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] arm64: dts: exynos: Add CMU_AUD, CMU_IS and
- CMU_MFCMSCL for Exynos850
-Message-ID: <202208141234.dc1oJWXs-lkp@intel.com>
-References: <20220808201724.27831-2-semen.protsenko@linaro.org>
+        Sun, 14 Aug 2022 00:09:01 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC621EC68;
+        Sat, 13 Aug 2022 21:08:59 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id BB56F5C0095;
+        Sun, 14 Aug 2022 00:08:58 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Sun, 14 Aug 2022 00:08:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=undef.tools; h=
+        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
+        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
+         s=fm1; t=1660450138; x=1660536538; bh=xlxrEcPRt7QJWiPNqdAOJW0gy
+        VsucqKY52m23/gcz0s=; b=CAQnaZV5IL6WKgz00DfL1kamOOP/xG1fVaLzcKmtd
+        1CycTSnv24tctUzn9/hZ67r4VyIbWM6TChEsQ6kc3izGLEk1rOwl+O3MECSfE6ji
+        j5dgK8m0Avm2H7+aasfWFRjLYDHEZvKWq9sUgxMt1h0rz00hsWm0P81hzmeLr9rG
+        B63r19iWaf7hlaLyvLVfAmyqmGZbWOOTPwrT9dz7yw0QZMjz/UP06zz+hmepcFgq
+        wf4BDdl4BNKtjBe6WG3JIRYikhlFUxmkyjDnO3al/7mkQHeovJ2FvyHv5YRlTfyM
+        1Rl4TlkeridmQf3JS4+37RD2HV72SCclmd8UGPZW16A3w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1660450138; x=1660536538; bh=xlxrEcPRt7QJWiPNqdAOJW0gyVsucqKY52m
+        23/gcz0s=; b=TTs0mHOjagr7WiUI13hjrxCJCz/NggxcY5MBG9u07nLJNdTQGNP
+        01LEwIVS6EhTe4yR5QpuwjXpdklznUE5+NCkHtRzoAu9vF2lV0NUQEzP2YeKfnxv
+        dm1s9ScWU7PDZLqjZUucqWZqyUczfo91Kis6KxyJGSFKI+eOKnfX8AqripYoyLCV
+        yKJMim070JOLJGCOnIc7eR2uQsJdSuFy0SD1s26KUNHAuAraYtlO4kh6SclsoXfV
+        QVrVZkt6PUrgka6mOetCpIrb7vyklHqOZxJMZNOfr5fB8oHlK+O1G6kb7X3bsxSj
+        B0DGR7ef5q/PskfA4s3t3ewRkmnEFm7gWdg==
+X-ME-Sender: <xms:WXX4YkYGPLMjFc032UaCOrv20g35mltchop1yWEf9jjHQdYzoywTlw>
+    <xme:WXX4YvarrwLB5Zwxm75EUe3dexy3Ov3SkyJ585XHJcpP9Ha-HEX5YLOx8mdOFUQ-J
+    jUFc2N3RDCcnUJmmmo>
+X-ME-Received: <xmr:WXX4Yu-Tc8tcAq-AYXXpvHGs44zQClsTPhUs9KmjO46xt3LXJ8rPZQL7nEN3Ww2FUrred_mlhGYQ7tcuEbp59SInRtY8MXpNp8VLi-Sog9EIJTZoCXwX_MFINA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegledgkeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheplfgrrhhrrghh
+    ucfiohhssggvlhhluceokhgvrhhnvghlsehunhguvghfrdhtohholhhsqeenucggtffrrg
+    htthgvrhhnpeejueevgfejfeeghffhfeehvdffleetheekkedvfeehieetuedtheevgefh
+    geekhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hkvghrnhgvlhesuhhnuggvfhdrthhoohhlsh
+X-ME-Proxy: <xmx:WXX4YuoiVl7Pul8-JHdIjRHge-t5f5wxpsqeTB3nDYDUZ1AaQs9y0A>
+    <xmx:WXX4YvrdBuYP29baPgf_5leEqAQ2qmp22jA2X0tFve0QVreMumNXdQ>
+    <xmx:WXX4YsS7uQs6IIkulv-qgzfFW0bKjsb1zyiFtoCDG0c_ZzME5PDYCQ>
+    <xmx:WnX4Yi3SQU_4TUCJoNyFkAvPGIc2PHR1exIqOWhVdcI-DMTJLuZlmQ>
+Feedback-ID: id76147eb:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 14 Aug 2022 00:08:54 -0400 (EDT)
+From:   Jarrah Gosbell <kernel@undef.tools>
+To:     Jacob Chen <jacob-chen@iotwrt.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Heiko Stuebner <heiko@sntech.de>, linux-media@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     phone-devel@vger.kernel.org, Ondrej Jirman <megi@xff.cz>,
+        Jarrah Gosbell <kernel@undef.tools>
+Subject: [PATCH] media: rockchip: rga: Fix probe rga_parse_dt bugs
+Date:   Sun, 14 Aug 2022 04:08:07 +0000
+Message-Id: <20220814040806.7523-1-kernel@undef.tools>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220808201724.27831-2-semen.protsenko@linaro.org>
-X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,39 +86,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sam,
+From: Ondrej Jirman <megi@xff.cz>
 
-Thank you for the patch! Yet something to improve:
+rga_parse_dt is missing a error return, so if some of the resources
+return DEFER_PROBE, probe will succeed without these resources.
 
-[auto build test ERROR on krzk/for-next]
-[also build test ERROR on krzk-dt/for-next linus/master v5.19 next-20220812]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Signed-off-by: Ondrej Jirman <megi@xff.cz>
+Signed-off-by: Jarrah Gosbell <kernel@undef.tools>
+---
+ drivers/media/platform/rockchip/rga/rga.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Sam-Protsenko/arm64-dts-exynos850-Add-cmu-and-sysmmu-nodes/20220809-041907
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux.git for-next
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220814/202208141234.dc1oJWXs-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/c4a995f799014f9233486fa406340888e8e9bc34
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Sam-Protsenko/arm64-dts-exynos850-Add-cmu-and-sysmmu-nodes/20220809-041907
-        git checkout c4a995f799014f9233486fa406340888e8e9bc34
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All errors (new ones prefixed by >>):
-
->> Error: arch/arm64/boot/dts/exynos/exynos850.dtsi:295.16-17 syntax error
-   FATAL ERROR: Unable to parse input tree
-
+diff --git a/drivers/media/platform/rockchip/rga/rga.c b/drivers/media/platform/rockchip/rga/rga.c
+index 2f8df74ad0fd..b88dd7ed2036 100644
+--- a/drivers/media/platform/rockchip/rga/rga.c
++++ b/drivers/media/platform/rockchip/rga/rga.c
+@@ -815,8 +815,10 @@ static int rga_probe(struct platform_device *pdev)
+ 	mutex_init(&rga->mutex);
+ 
+ 	ret = rga_parse_dt(rga);
+-	if (ret)
++	if (ret) {
+ 		dev_err(&pdev->dev, "Unable to parse OF data\n");
++		return ret;
++	}
+ 
+ 	pm_runtime_enable(rga->dev);
+ 
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.35.1
+

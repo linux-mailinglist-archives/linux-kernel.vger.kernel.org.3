@@ -2,67 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11AAA5926A2
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 23:27:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 250FA5926B0
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 23:43:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240821AbiHNV13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 17:27:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37538 "EHLO
+        id S229734AbiHNVnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 17:43:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240602AbiHNV1M (ORCPT
+        with ESMTP id S229640AbiHNVnX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 17:27:12 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BDB0DF89
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 14:26:13 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id 13so4923443plo.12
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 14:26:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:from:to:cc;
-        bh=e6FRW0qPl4W20Yv52Z4sAYPbvGuz6jN7y//DsuNkqsU=;
-        b=cHBIcT5WPBTmQgbWjdKWUFUsUSpYPunN6txuVDWyQ2GgGPUsmWqOUgXZEg0e9trt/g
-         YefitVLTeVJAFw7Qzkt8C35/R5qHa1D5/uCx6N75GS2v4xq0ffyvms5PHFaKV8Zp5cbY
-         gaWvDka1p8TthyvR0RvRcoyzuu5I9uFfNwKt9GrtuxPyJwvyAhJoejWuQFYK+I7FUujl
-         KTPsdL24FYc1/gOfHSQMokGC7L28wtSIcZvG+fHPTB8QdDmSe3+l04knYt9CrH2GPDuJ
-         vY3gnLgUzmDoOyAGPq+KmdZNBK44jRsrc6CG75aGhbpps5qSSUkYns8KgQsGYzJwGbyI
-         ceIg==
+        Sun, 14 Aug 2022 17:43:23 -0400
+Received: from mail-qt1-f180.google.com (mail-qt1-f180.google.com [209.85.160.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A18813DF4;
+        Sun, 14 Aug 2022 14:43:23 -0700 (PDT)
+Received: by mail-qt1-f180.google.com with SMTP id a4so4412695qto.10;
+        Sun, 14 Aug 2022 14:43:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:x-gm-message-state:from:to:cc;
-        bh=e6FRW0qPl4W20Yv52Z4sAYPbvGuz6jN7y//DsuNkqsU=;
-        b=29kh/KUuXlKOWOVjhz5TGq2NmPeLcI/46lWXhBx5TWEsCkuzcwImNL/RgHuMTAspHl
-         6+YU0ro2lhPjQG0Ytp3B9e3rGiP+JA/Iwu90XXFjHLeNrJ7yEFOlmF20z3CkMw+V8TE5
-         u1pY2DHbjFYZrjcLu9KU82DR/JEFKxF7I/nuycapCxYk+Bmc4L7Q1+L5CRGdlCq6mX1w
-         eqjeLE6VdTKWCT4NmJOCE17kimMP4k8dDqLLM+LHrN54pYXwRdiydFk/zLOJMggIBciJ
-         3IyTXrrpoLmbDxf+kpIxjenNMf/g8XUE7s5xMOCxhwQTS1nIUHEV6slgej0QUpfpoooM
-         MfPw==
-X-Gm-Message-State: ACgBeo0dRdxGiqlf/jB4IxDmVF/1NwcFqYDIsT68myMQQdwBSwHLgfoP
-        CshbY212To0abZT93TAR7k/7T4aGXa8=
-X-Google-Smtp-Source: AA6agR5fe8kJ9OT5VmtqrIpOFlHhYP4moh9j6l+KCTRf6RR/mEc2dqBMEBIbg0C4MPKsNf6oTeac9g==
-X-Received: by 2002:a17:902:ecce:b0:16e:e6e9:69b9 with SMTP id a14-20020a170902ecce00b0016ee6e969b9mr13787837plh.139.1660512373090;
-        Sun, 14 Aug 2022 14:26:13 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id y16-20020a17090264d000b0016ee328fd61sm5738719pli.198.2022.08.14.14.26.11
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=gsvKZizMBPBqAoYqxHhYeaAnDMKudFEih3zhgTZgEKI=;
+        b=QhV/tLebLrXELeRtJk6PCltkFEKa6K07qK8yZbka4QXRJj9VZDmb34hImhkmIp/M80
+         rnFzVvf+HclPajPvrB64XlGDTW8GyZSsX+GQa4BAJ0y+JA+veWyCfFXSD7yuhpRV9KsP
+         MsNA9QaGfgmLUyWQCQLaWP381LVXTzNera3NFlXjS5P0rlgX6COC5/mGvFseQk5xH78Z
+         6mqZ2h50mwGGsESzNGQNJ/Litfy0W8ImHGTiYrQJxtvqERCVm9UaKM1HNJVj/GMILCBA
+         E1gROphUIaXRjs/ibApmMENac0651zjY+lEFSOTrMfKvkYnfjkCcvhsz8orZRMwNRpeU
+         Ra6Q==
+X-Gm-Message-State: ACgBeo3GfN7XONtoRZgJOH/f3Aj639ksnZQE0p/Vlz0GusdulFl48o1X
+        3pkRDJbSsOWxsKYaRWl4HQ==
+X-Google-Smtp-Source: AA6agR5vGKyXZeFoPtut0Cl2IDwYQJK1DsTfiQVEtUhzO4dX1YgRj3J4ywYCM2tynjSjhUKjQvEW2w==
+X-Received: by 2002:a05:622a:1707:b0:343:645e:333d with SMTP id h7-20020a05622a170700b00343645e333dmr11792887qtk.497.1660513402051;
+        Sun, 14 Aug 2022 14:43:22 -0700 (PDT)
+Received: from robh.at.kernel.org ([2607:fb90:ac9f:26d8:4b95:fcf4:6a60:b904])
+        by smtp.gmail.com with ESMTPSA id h17-20020ac85e11000000b003430589dd34sm6962150qtx.57.2022.08.14.14.43.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Aug 2022 14:26:12 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 14 Aug 2022 14:26:10 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     linux-kernel@vger.kernel.org
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg KH <gregkh@linuxfoundation.org>
-Subject: upstream kernel crashes
-Message-ID: <20220814212610.GA3690074@roeck-us.net>
+        Sun, 14 Aug 2022 14:43:21 -0700 (PDT)
+Received: (nullmailer pid 738164 invoked by uid 1000);
+        Sun, 14 Aug 2022 21:26:29 -0000
+Date:   Sun, 14 Aug 2022 15:26:29 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Vyacheslav Bocharov <adeep@lexina.in>
+Cc:     linux-kernel@vger.kernel.org,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-amlogic@lists.infradead.org
+Subject: Re: [PATCH 2/2] dt-bindings: arm: amlogic: add bindings for Jethub
+ D1p (j110)
+Message-ID: <20220814212629.GA738114-robh@kernel.org>
+References: <20220811103113.3097868-1-adeep@lexina.in>
+ <20220811103113.3097868-3-adeep@lexina.in>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+In-Reply-To: <20220811103113.3097868-3-adeep@lexina.in>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,106 +67,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all,
+On Thu, 11 Aug 2022 13:31:13 +0300, Vyacheslav Bocharov wrote:
+> JetHome JetHub D1p is a home automation controller, modification
+>  of JetHub D1 based on Amlogic A113X
+> 
+> Signed-off-by: Vyacheslav Bocharov <adeep@lexina.in>
+> ---
+>  Documentation/devicetree/bindings/arm/amlogic.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-syscaller reports lots of crashes with the mainline kernel. The latest
-I have seen, based on the current ToT, is attached. Backtraces are not
-always the same, but this one is typical.
-
-I have not tried to analyze this further.
-
-Guenter
-
----
-scsi 0:0:1:0: Direct-Access Google PersistentDisk 1 PQ: 0 ANSI: 6
-BUG: unable to handle page fault for address: ffffdc0000000001
-#PF: supervisor read access in kernel mode
-#PF: error_code(0x0000) - not-present page
-PGD 11826067
-P4D 11826067
-PUD 0
-
-Oops: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 41 Comm: kworker/u4:2 Not tainted 5.19.0-syzkaller-14374-g5d6a0f4da927 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Workqueue: events_unbound async_run_entry_fn
-RIP: 0010:__hlist_del include/linux/list.h:886 [inline]
-RIP: 0010:hlist_del include/linux/list.h:898 [inline]
-RIP: 0010:__alloc_object lib/debugobjects.c:213 [inline]
-RIP: 0010:alloc_object lib/debugobjects.c:253 [inline]
-RIP: 0010:__debug_object_init+0x761/0xd10 lib/debugobjects.c:570
-Code: 00 00 4d 8b 47 08 4c 89 c7 48 c1 ef 03 80 3c 0f 00 0f 85 74 04 00 00 48 85 f6 49 89 30 74 1a 48 8d 7e 08 49 89 fa 49 c1 ea 03 <41> 80 3c 0a 00 0f 85 2f 04 00 00 4c 89 46 08 48 b8 00 01 00 00 00
-RSP: 0000:ffffc90000d2f670 EFLAGS: 00010802
-
-RAX: 0000000000000000 RBX: 0000000000001c37 RCX: dffffc0000000000
-RDX: ffff8880b9b36c20 RSI: ffff000000000000 RDI: ffff000000000008
-RBP: 0000000000001c3b R08: ffffffff91340700 R09: 0000000000001c2b
-R10: 1fffe00000000001 R11: 0000000000000215 R12: ffff8880b9b36c20
-R13: 0000000000000209 R14: ffffed1017366d85 R15: ffff8881472293f0
-FS: 0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffdc0000000001 CR3: 000000000bc8e000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
-<TASK>
-__init_work+0x48/0x50 kernel/workqueue.c:523
-pm_runtime_init+0x1fe/0x400 drivers/base/power/runtime.c:1717
-device_pm_init drivers/base/power/power.h:168 [inline]
-device_initialize+0x23f/0x540 drivers/base/core.c:2985
-scsi_sysfs_device_initialize+0x257/0xa60 drivers/scsi/scsi_sysfs.c:1627
-scsi_alloc_sdev+0x9b4/0xcc0 drivers/scsi/scsi_scan.c:364
-scsi_probe_and_add_lun+0x22be/0x3660 drivers/scsi/scsi_scan.c:1191
-__scsi_scan_target+0x21f/0xdb0 drivers/scsi/scsi_scan.c:1673
-scsi_scan_channel drivers/scsi/scsi_scan.c:1761 [inline]
-scsi_scan_channel+0x148/0x1e0 drivers/scsi/scsi_scan.c:1737
-scsi_scan_host_selected+0x2df/0x3b0 drivers/scsi/scsi_scan.c:1790
-do_scsi_scan_host+0x1e8/0x260 drivers/scsi/scsi_scan.c:1929
-do_scan_async+0x3e/0x500 drivers/scsi/scsi_scan.c:1939
-async_run_entry_fn+0x98/0x530 kernel/async.c:127
-process_one_work+0x991/0x1610 kernel/workqueue.c:2289
-worker_thread+0x665/0x1080 kernel/workqueue.c:2436
-kthread+0x2e4/0x3a0 kernel/kthread.c:376
-ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
-</TASK>
-Modules linked in:
-CR2: ffffdc0000000001
----[ end trace 0000000000000000 ]---
-RIP: 0010:__hlist_del include/linux/list.h:886 [inline]
-RIP: 0010:hlist_del include/linux/list.h:898 [inline]
-RIP: 0010:__alloc_object lib/debugobjects.c:213 [inline]
-RIP: 0010:alloc_object lib/debugobjects.c:253 [inline]
-RIP: 0010:__debug_object_init+0x761/0xd10 lib/debugobjects.c:570
-Code: 00 00 4d 8b 47 08 4c 89 c7 48 c1 ef 03 80 3c 0f 00 0f 85 74 04 00 00 48 85 f6 49 89 30 74 1a 48 8d 7e 08 49 89 fa 49 c1 ea 03 <41> 80 3c 0a 00 0f 85 2f 04 00 00 4c 89 46 08 48 b8 00 01 00 00 00
-RSP: 0000:ffffc90000d2f670 EFLAGS: 00010802
-RAX: 0000000000000000 RBX: 0000000000001c37 RCX: dffffc0000000000
-RDX: ffff8880b9b36c20 RSI: ffff000000000000 RDI: ffff000000000008
-RBP: 0000000000001c3b R08: ffffffff91340700 R09: 0000000000001c2b
-R10: 1fffe00000000001 R11: 0000000000000215 R12: ffff8880b9b36c20
-R13: 0000000000000209 R14: ffffed1017366d85 R15: ffff8881472293f0
-FS: 0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffffdc0000000001 CR3: 000000000bc8e000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-0: 00 00 add %al,(%rax)
-2: 4d 8b 47 08 mov 0x8(%r15),%r8
-6: 4c 89 c7 mov %r8,%rdi
-9: 48 c1 ef 03 shr $0x3,%rdi
-d: 80 3c 0f 00 cmpb $0x0,(%rdi,%rcx,1)
-11: 0f 85 74 04 00 00 jne 0x48b
-17: 48 85 f6 test %rsi,%rsi
-1a: 49 89 30 mov %rsi,(%r8)
-1d: 74 1a je 0x39
-1f: 48 8d 7e 08 lea 0x8(%rsi),%rdi
-23: 49 89 fa mov %rdi,%r10
-26: 49 c1 ea 03 shr $0x3,%r10
-* 2a: 41 80 3c 0a 00 cmpb $0x0,(%r10,%rcx,1) <-- trapping instruction
-2f: 0f 85 2f 04 00 00 jne 0x464
-35: 4c 89 46 08 mov %r8,0x8(%rsi)
-39: 48 rex.W
-3a: b8 00 01 00 00 mov $0x100,%eax
-
-
+Acked-by: Rob Herring <robh@kernel.org>

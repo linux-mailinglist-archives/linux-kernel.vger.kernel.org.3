@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54CDA591E84
+	by mail.lfdr.de (Postfix) with ESMTP id 9C464591E85
 	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 07:51:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbiHNFuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 01:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54110 "EHLO
+        id S230011AbiHNFu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 01:50:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiHNFuf (ORCPT
+        with ESMTP id S229823AbiHNFug (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 01:50:35 -0400
-Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C38C52
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 22:50:34 -0700 (PDT)
-Received: by mail-io1-xd41.google.com with SMTP id r141so269736iod.4
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 22:50:34 -0700 (PDT)
+        Sun, 14 Aug 2022 01:50:36 -0400
+Received: from mail-io1-xd42.google.com (mail-io1-xd42.google.com [IPv6:2607:f8b0:4864:20::d42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C745CD9
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 22:50:35 -0700 (PDT)
+Received: by mail-io1-xd42.google.com with SMTP id 10so352775iou.2
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 22:50:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=YBGvaVNrmSK2tj7lGapunjUsxNRcm9+XAgiS0yNfu2w=;
-        b=jd0o1BNnm1/fZHxWpKBRkvtpcwVhSYnC2WR00sUjHjmuUgVKeA/00kYeP0DofHygQ3
-         tXkuirh8kHb6ohu0bttDUSAbz4V8ZmkL4FnJLWsBm6hCmHvi28L5AOzKyQ1I2NIkSpVd
-         aoBmIsLCfKvLi92Spk/RspKU8SmrIPw2mjycFyBadfxD2sPM8kLmeIgeUY6g8NymhdmQ
-         w4wmkW2sX5GTPnLu6zJ5eRLLrawe1QmIBw5rWV/zPIFUECla8A+ijYDBL7BkBPHZBDIN
-         KJNeBDMW7rl93RU3MErVgR9qp3w7Lf6H/VK2rEujU++x3EQx68uzZHJ4bpDr5iZn7Sjx
-         popQ==
+        bh=bHF1qU1K8oPySqGK4H4mpwBhgWlt+EC9cbyhAsQNyOY=;
+        b=G9MtmCAuXjNNS6MswrmaN6NLEE2Vb36ZEX/bzNlZw2/vYBnhHQUbkP9bFftur1VbCM
+         YCywk1mja22zKZ0mOCJreTLaD1J2hVgojIjFPAlgSpmC5C696cwx2VuOIENmfhOO5Fu1
+         APEavwAGj9BRkau8Hy66X/juTsLtIsb7U//5mr1LaVq102gkiOK90RsKR2DvkwBFoTkm
+         dvM5Y5S/JU0JSRlroYVrRZ1tWQyoxj+BN8cKztclwX5SJO2kkkY/xLw9x7bL60hESIbp
+         gxpwKXLxo1G/IkqnBHtQldEYQ3gzA9U5zAkE7cKRm7PT4mtpIogfmvTqO/pM94YstjeY
+         RxzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=YBGvaVNrmSK2tj7lGapunjUsxNRcm9+XAgiS0yNfu2w=;
-        b=ZGFpMxT+PYMZ+DzD4WVqQZHvZzgJUDL6APRHwojP9o+pkhrRM9G5XXcyIPbhVYylKF
-         uJD7A91TzgFIq9GLil9/PTU2YVD1C/xlDRZGos6WM7sCLSywiu1YcN41visQ77/EiIg0
-         94BK0gkiqDtuFpVtY8Dp5mMwUcNU6lvkRnRCBEoGyCAEsElWEwNuxNGQVn2uG5TcAtk+
-         GBpNl6f6j0NKf3jxPzAEZSRAtWL/JAFdG43MjnigXXUgZkeGfGsjZGflwLuW8KRPxyML
-         SAegljiP0c93hi768Wv6Wd7CJQFns64rM2BEYOAmmJB2G/jChiQhCQNZ7jZD+LMKs32b
-         HaDQ==
-X-Gm-Message-State: ACgBeo3X7Q6kDy6lOtP7LB1GZ5fEEHqXY89mVNplZrreUt3v0ImyC1xk
-        JFKxprRbQuJGWgg+CAQtoEk=
-X-Google-Smtp-Source: AA6agR7blM9G9O6NfLeERcyeIPwliQma41mK9K67DVGfIyv9itOeVf4OETsVsOZjVr11RBD/oQHURQ==
-X-Received: by 2002:a6b:ba43:0:b0:688:d19:4e8f with SMTP id k64-20020a6bba43000000b006880d194e8fmr901064iof.59.1660456232382;
-        Sat, 13 Aug 2022 22:50:32 -0700 (PDT)
+        bh=bHF1qU1K8oPySqGK4H4mpwBhgWlt+EC9cbyhAsQNyOY=;
+        b=p0uBjDYdr4VVv3wVMMjz1xCS+snlZMRx6AvV67d3xELUTYoNQ9OaWeHeRaRwf8pvYA
+         2T5+1HvZsf3Mypl0tsBmqxj8jwM+pTdCOw7jTV2BHReFkOwJWyBnNVt3ijA+hJ4nU2JV
+         mCevGCk1dus/WVVq8NEeGPdu96AvwV2SMWR7zqGRppYstRBMbhTrQnpPQMYvnSX8kU0N
+         SzJOAMode8A8uFciWyuswZK9TNUif/0nUZUmMiy6Fj8cQLfbjwGdYCoeGrPFdKji2BNH
+         4nt5ai7+9CUsicjlT4IP2gHinDByaRIGaWARdaO1sxu5+eOFA+/Ba6EXwPwY8qBswhMl
+         tm6g==
+X-Gm-Message-State: ACgBeo06KrvRBKVYPP8LGj4wV42OhVnKn9ouqgAD5a5g1XItqk9+V/ec
+        DJD770rgubFTD+eRjtnTi2k=
+X-Google-Smtp-Source: AA6agR4eXL4rEp1/3eEHMKt2idV9HRsHO3kC+tRBt2WdlRRdUGSCw/RcqdNxM1yZOOe6UaeOGd1/aw==
+X-Received: by 2002:a6b:c343:0:b0:67c:6033:a682 with SMTP id t64-20020a6bc343000000b0067c6033a682mr4380707iof.148.1660456234435;
+        Sat, 13 Aug 2022 22:50:34 -0700 (PDT)
 Received: from sophie (static-198-54-128-70.cust.tzulo.com. [198.54.128.70])
-        by smtp.gmail.com with ESMTPSA id l3-20020a92d8c3000000b002de2ea2f78csm2623361ilo.23.2022.08.13.22.50.31
+        by smtp.gmail.com with ESMTPSA id y16-20020a92c990000000b002e31bb49f6esm2615862iln.81.2022.08.13.22.50.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Aug 2022 22:50:32 -0700 (PDT)
+        Sat, 13 Aug 2022 22:50:34 -0700 (PDT)
 From:   Rebecca Mckeever <remckee0@gmail.com>
 To:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
 Cc:     David Hildenbrand <david@redhat.com>,
         Rebecca Mckeever <remckee0@gmail.com>
-Subject: [PATCH 1/2] memblock tests: add command line help option
-Date:   Sun, 14 Aug 2022 00:50:19 -0500
-Message-Id: <0f3b93a79de78c0da1ca90f74fe35e9a85c7cf93.1660451025.git.remckee0@gmail.com>
+Subject: [PATCH 2/2] memblock tests: update reference to obsolete build option in comments
+Date:   Sun, 14 Aug 2022 00:50:20 -0500
+Message-Id: <5f8a4c2bde34cc029282c68d47eda982d950f421.1660451025.git.remckee0@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1660451025.git.remckee0@gmail.com>
 References: <cover.1660451025.git.remckee0@gmail.com>
@@ -71,44 +71,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a help command line option to the help message. Add the help option
-to the short and long options so it will be recognized as a valid
-option.
-
-Usage:
-    $ ./main -h
-
-    Or:
-    $ ./main --help
+The VERBOSE build option was replaced with the --verbose runtime option,
+but the comments describing the ASSERT_*() macros still refer to the
+VERBOSE build option. Update these comments so that they refer to the
+--verbose runtime option.
 
 Reviewed-by: David Hildenbrand <david@redhat.com>
 Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
 ---
- tools/testing/memblock/tests/common.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ tools/testing/memblock/tests/common.h | 9 ++++++---
+ 1 file changed, 6 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/memblock/tests/common.c b/tools/testing/memblock/tests/common.c
-index e43b2676af81..76a8ad818f3a 100644
---- a/tools/testing/memblock/tests/common.c
-+++ b/tools/testing/memblock/tests/common.c
-@@ -14,14 +14,16 @@ static struct test_memory memory_block;
- static const char __maybe_unused *prefixes[PREFIXES_MAX];
- static int __maybe_unused nr_prefixes;
- 
--static const char *short_opts = "mv";
-+static const char *short_opts = "hmv";
- static const struct option long_opts[] = {
-+	{"help", 0, NULL, 'h'},
- 	{"movable-node", 0, NULL, 'm'},
- 	{"verbose", 0, NULL, 'v'},
- 	{NULL, 0, NULL, 0}
- };
- 
- static const char * const help_opts[] = {
-+	"display this help message and exit",
- 	"disallow allocations from regions marked as hotplugged\n\t\t\t"
- 		"by simulating enabling the \"movable_node\" kernel\n\t\t\t"
- 		"parameter",
+diff --git a/tools/testing/memblock/tests/common.h b/tools/testing/memblock/tests/common.h
+index 3e7f23d341d7..d396e5423a8e 100644
+--- a/tools/testing/memblock/tests/common.h
++++ b/tools/testing/memblock/tests/common.h
+@@ -16,7 +16,8 @@
+  * ASSERT_EQ():
+  * Check the condition
+  * @_expected == @_seen
+- * If false, print failed test message (if in VERBOSE mode) and then assert
++ * If false, print failed test message (if running with --verbose) and then
++ * assert.
+  */
+ #define ASSERT_EQ(_expected, _seen) do { \
+ 	if ((_expected) != (_seen)) \
+@@ -28,7 +29,8 @@
+  * ASSERT_NE():
+  * Check the condition
+  * @_expected != @_seen
+- * If false, print failed test message (if in VERBOSE mode) and then assert
++ * If false, print failed test message (if running with --verbose) and then
++ * assert.
+  */
+ #define ASSERT_NE(_expected, _seen) do { \
+ 	if ((_expected) == (_seen)) \
+@@ -40,7 +42,8 @@
+  * ASSERT_LT():
+  * Check the condition
+  * @_expected < @_seen
+- * If false, print failed test message (if in VERBOSE mode) and then assert
++ * If false, print failed test message (if running with --verbose) and then
++ * assert.
+  */
+ #define ASSERT_LT(_expected, _seen) do { \
+ 	if ((_expected) >= (_seen)) \
 -- 
 2.25.1
 

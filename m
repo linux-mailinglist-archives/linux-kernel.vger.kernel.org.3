@@ -2,61 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D440D591FFD
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 16:05:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E046592007
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 16:13:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbiHNOFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 10:05:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55332 "EHLO
+        id S239538AbiHNOM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 10:12:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239249AbiHNOFc (ORCPT
+        with ESMTP id S230071AbiHNOMx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 10:05:32 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67532AC4
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 07:05:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660485931; x=1692021931;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=f+m9CXEwHKsS7nRuQgkQAOqrv/EV6rFv31H9xUQcy40=;
-  b=FEqfeULi/P0kQllH5INYEqxVHqS8lYSaj7ZSuat7C2dD33uL601mFAQ7
-   ETtU+81UxtqUQOPeKiycRzkv9iT53C1eQBoPMRlPmanoQZQ2GTPicSgw4
-   E19fetmE7VhZheXL2DjNbkzQ1o71AuZtcDj533QVeNX0HJUbPo1NXaprJ
-   862kZeC7ufd8MaWrVrEU3L0RHVX2qomnWPCqwmn3L4DoEk6BqYRurJ/9+
-   rsEPdfdP4aO2Q8/ZloP68/oo4ocm98zA2Vqx3KCt9c0f2fTcYnjydkQ24
-   j8jnNtqWRFLCAY09p5fJb70lHvZCz+58vLcYr/+6KIAHdYVpIJ0V2h346
-   w==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10439"; a="278784452"
-X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
-   d="scan'208";a="278784452"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2022 07:05:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
-   d="scan'208";a="639385202"
-Received: from sse-cse-haiyue-nuc.sh.intel.com ([10.239.241.114])
-  by orsmga001.jf.intel.com with ESMTP; 14 Aug 2022 07:05:29 -0700
-From:   Haiyue Wang <haiyue.wang@intel.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     akpm@linux-foundation.org, david@redhat.com, linmiaohe@huawei.com,
-        ying.huang@intel.com, songmuchun@bytedance.com,
-        naoya.horiguchi@linux.dev, alex.sierra@amd.com,
-        Haiyue Wang <haiyue.wang@intel.com>
-Subject: [PATCH v2 3/3] mm: handling Non-LRU pages returned by follow_page
-Date:   Sun, 14 Aug 2022 22:05:34 +0800
-Message-Id: <20220814140534.363348-4-haiyue.wang@intel.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220814140534.363348-1-haiyue.wang@intel.com>
-References: <20220812084921.409142-1-haiyue.wang@intel.com>
- <20220814140534.363348-1-haiyue.wang@intel.com>
+        Sun, 14 Aug 2022 10:12:53 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36EC395B2
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 07:12:52 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id v3so6386720wrp.0
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 07:12:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=conchuod.ie; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=K+4ztMrZDye6S2odnUAg2YD+Sis7k4asg4StIp4L2N8=;
+        b=DfdO3yRHemNBlA7Z4K40epXT6a5mzLgotaT+wjrQ0CCVq94MwNT7SVXLAtyZUDygnw
+         2lQfcVKnpICBUjlEpWDOPzfaZFnEqrkxVNsNybuTrzGd3fjZDmCT+ReRqE+Auj4sGY8K
+         uRcRa9FbjDb05ahlJI00s/Hk3/l5lZaGjPgWTME/bO5b750e+9+lPtrOES7c0i8tIc8C
+         8hdkA+jZ3XgV6n68tO+rItWKC9tkWGCXtj9yeDj/SfbPE7NEb7jemnuz+/jhcmNW7ShI
+         3RdqO1rZca3tYU2ZJk3Fivp43ZyuSk4V+oEveW5vwEiKUcew/VQlHqnG/kHLjQlvWFvt
+         70Gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=K+4ztMrZDye6S2odnUAg2YD+Sis7k4asg4StIp4L2N8=;
+        b=2IAsoN3wmeW8POU8m80wg6MYYLiHeFv26XuI5ESwMCnDsVTg3A4lfAfoL90u2beaDW
+         uYD4dUHDfsQQwILwuPKY9XX6xeh88WVZy50AP8nYJkWHMDGHQe+JF8RzcIAP1d32XA6z
+         Yi/Zx5Cy1Ir5ZxszqWbUzIpSzw0TE8Xy6qZmBkohT7kCdPNH8TylSvFS7bjX4vIMlykN
+         jPw3ZNVwIQEZxfB72khWyC4heQtuWofFLRDr3u9YWRrJqMak/fKU2Sf0/wzsZT8NkngJ
+         jlsYBRo29RcWbEURb3Z1yX6gUjZ88u/VudJKHvMVBpA6DUscbG9kIigfDOfU8vuXcM+o
+         e61Q==
+X-Gm-Message-State: ACgBeo0o8fX/cQGDwEosY2SV2vDn4yMLCcHLijnlyEkxVic51xqL1aBV
+        xeD04ZKRMMIXHsGLuszYaqi1KA==
+X-Google-Smtp-Source: AA6agR5PV8qeRAKHvRTEReWxvq3UtoJToFqH0Q4Bl/uP3TlBuYJBu4g3GQwfQjHfdPU5zsQhWphrPw==
+X-Received: by 2002:adf:fc88:0:b0:220:61dc:d297 with SMTP id g8-20020adffc88000000b0022061dcd297mr6138300wrr.660.1660486370580;
+        Sun, 14 Aug 2022 07:12:50 -0700 (PDT)
+Received: from henark71.. ([109.76.58.63])
+        by smtp.gmail.com with ESMTPSA id b8-20020adfde08000000b0021db7b0162esm4625419wrm.105.2022.08.14.07.12.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 Aug 2022 07:12:50 -0700 (PDT)
+From:   Conor Dooley <mail@conchuod.ie>
+To:     Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        Guo Ren <guoren@kernel.org>,
+        Vincent Chen <vincent.chen@sifive.com>,
+        Xianting Tian <xianting.tian@linux.alibaba.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Tong Tiangen <tongtiangen@huawei.com>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/4] misc warning cleanup in arch/risc-v
+Date:   Sun, 14 Aug 2022 15:12:34 +0100
+Message-Id: <20220814141237.493457-1-mail@conchuod.ie>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,102 +79,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the missed put_page handling for handling Non-LRU pages returned by
-follow_page with FOLL_GET flag set.
+From: Conor Dooley <conor.dooley@microchip.com>
 
-This is the second patch for fixing the commit
-3218f8712d6b ("mm: handling Non-LRU pages returned by vm_normal_pages")
+Hey all,
+Couple fixes here for most of what's left of the {sparse,} warnings in
+arch/riscv that are still in need of patches. Ben has sent patches
+for the VDSO issue already (although they seem to need rework).
 
-Signed-off-by: Haiyue Wang <haiyue.wang@intel.com>
----
- mm/huge_memory.c |  2 +-
- mm/ksm.c         | 10 ++++++++++
- mm/migrate.c     |  6 +++++-
- 3 files changed, 16 insertions(+), 2 deletions(-)
+VDSO aside, With this patchset applied, we are left with:
+- cpuinfo_ops missing prototype: this likely needs to go into an
+  asm-generic header & I'll send a separate patch for that.
+- Complaints about an error in mm/init.c:
+  "error inarch/riscv/mm/init.c:819:2: error: "setup_vm() is <trunc>
+  I think this can be ignored.
+- 600+ -Woverride-init warnings for syscall table setup where
+  overriding seems to be the whole point of the macro.
+- Warnings about imported kvm core code.
+- Flexible array member warnings that look like common KVM code
+  patterns
+- An unexpected unlock in kvm_riscv_check_vcpu_requests that was added
+  intentionally:
+  https://lore.kernel.org/all/20220710151105.687193-1-apatel@ventanamicro.com/
+  Is it worth looking into whether that's a false positive or not?
 
-diff --git a/mm/huge_memory.c b/mm/huge_memory.c
-index 2ee6d38a1426..b2ba17c3dcd7 100644
---- a/mm/huge_memory.c
-+++ b/mm/huge_memory.c
-@@ -2966,7 +2966,7 @@ static int split_huge_pages_pid(int pid, unsigned long vaddr_start,
- 		if (IS_ERR_OR_NULL(page))
- 			continue;
- 
--		if (!is_transparent_hugepage(page))
-+		if (is_zone_device_page(page) || !is_transparent_hugepage(page))
- 			goto next;
- 
- 		total++;
-diff --git a/mm/ksm.c b/mm/ksm.c
-index fe3e0a39f73a..1360bb52ada6 100644
---- a/mm/ksm.c
-+++ b/mm/ksm.c
-@@ -477,6 +477,10 @@ static int break_ksm(struct vm_area_struct *vma, unsigned long addr)
- 				FOLL_GET | FOLL_MIGRATION | FOLL_REMOTE);
- 		if (IS_ERR_OR_NULL(page))
- 			break;
-+		if (is_zone_device_page(page)) {
-+			put_page(page);
-+			break;
-+		}
- 		if (PageKsm(page))
- 			ret = handle_mm_fault(vma, addr,
- 					      FAULT_FLAG_WRITE | FAULT_FLAG_REMOTE,
-@@ -562,10 +566,13 @@ static struct page *get_mergeable_page(struct rmap_item *rmap_item)
- 	page = follow_page(vma, addr, FOLL_GET);
- 	if (IS_ERR_OR_NULL(page))
- 		goto out;
-+	if (is_zone_device_page(page))
-+		goto out_putpage;
- 	if (PageAnon(page)) {
- 		flush_anon_page(vma, page, addr);
- 		flush_dcache_page(page);
- 	} else {
-+out_putpage:
- 		put_page(page);
- out:
- 		page = NULL;
-@@ -2313,6 +2320,8 @@ static struct rmap_item *scan_get_next_rmap_item(struct page **page)
- 				cond_resched();
- 				continue;
- 			}
-+			if (is_zone_device_page(*page))
-+				goto next_page;
- 			if (PageAnon(*page)) {
- 				flush_anon_page(vma, *page, ksm_scan.address);
- 				flush_dcache_page(*page);
-@@ -2327,6 +2336,7 @@ static struct rmap_item *scan_get_next_rmap_item(struct page **page)
- 				mmap_read_unlock(mm);
- 				return rmap_item;
- 			}
-+next_page:
- 			put_page(*page);
- 			ksm_scan.address += PAGE_SIZE;
- 			cond_resched();
-diff --git a/mm/migrate.c b/mm/migrate.c
-index 5d304de3950b..fee12cd2f294 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -1675,6 +1675,9 @@ static int add_page_for_migration(struct mm_struct *mm, unsigned long addr,
- 	if (!page)
- 		goto out;
- 
-+	if (is_zone_device_page(page))
-+		goto out_putpage;
-+
- 	err = 0;
- 	if (page_to_nid(page) == node)
- 		goto out_putpage;
-@@ -1869,7 +1872,8 @@ static void do_pages_stat_array(struct mm_struct *mm, unsigned long nr_pages,
- 			goto set_status;
- 
- 		if (page) {
--			err = page_to_nid(page);
-+			err = !is_zone_device_page(page) ? page_to_nid(page)
-+							 : -ENOENT;
- 			if (foll_flags & FOLL_GET)
- 				put_page(page);
- 		} else {
+Thanks,
+Conor.
+
+Conor Dooley (4):
+  riscv: kvm: vcpu_timer: fix unused variable warnings
+  riscv: kvm: move extern sbi_ext declarations to a header
+  riscv: signal: fix missing prototype warning
+  riscv: traps: add missing prototype
+
+ arch/riscv/include/asm/kvm_vcpu_sbi.h | 12 ++++++++++++
+ arch/riscv/include/asm/signal.h       | 12 ++++++++++++
+ arch/riscv/include/asm/thread_info.h  |  2 ++
+ arch/riscv/kernel/signal.c            |  1 +
+ arch/riscv/kernel/traps.c             |  3 ++-
+ arch/riscv/kvm/vcpu_sbi.c             | 12 +-----------
+ arch/riscv/kvm/vcpu_timer.c           |  4 ----
+ 7 files changed, 30 insertions(+), 16 deletions(-)
+ create mode 100644 arch/riscv/include/asm/signal.h
+
 -- 
-2.37.2
+2.37.1
 

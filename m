@@ -2,414 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6050591EE6
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 09:38:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AF6C591EEF
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 09:42:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238964AbiHNHiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 03:38:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59422 "EHLO
+        id S230297AbiHNHmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 03:42:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34284 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbiHNHiO (ORCPT
+        with ESMTP id S240295AbiHNHmc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 03:38:14 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317501F2D3
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 00:38:12 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id z2so6130656edc.1
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 00:38:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc;
-        bh=jgwCjSUazOczYXnvPhV/4jsgZnpwHDyElQhyBWvpUg0=;
-        b=pvbxI6kbJpA3f4OhtDpudJMcls+h6nJc7tj0RA7uFg7EjsOakn578kIxoE+mLrQboH
-         d690GKN6yG6pCR4OXHv801YdqEQBUDiQ1UrZrAf/mKO0TUZQ7N97YiP5+aOpS0pmXkJC
-         RPvVYsJQf9vT5wNSVbICpRQOJoAyXBBRB4p1x6UIh6EFVWrgL6B/PD6QJIPk8gHNG06i
-         jhJ2S4KaTFW6SQDYSptW+Ka8doH4sBXS9/paJQh51mVydKLSJSH50G0KpUJVk1Dod2D6
-         YRotX2qLc5jswFKbk9mfihFDgX9m4nr3TRH0/OeG7e6AqAHLDFqIbYLQVBd7JQuT6Fyy
-         IjWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc;
-        bh=jgwCjSUazOczYXnvPhV/4jsgZnpwHDyElQhyBWvpUg0=;
-        b=8O0dt39jRwttK04igUpHhyd5Kh2V5hsqVfcmTKqlnZgaAYb/0GbtyjVEb5T929nKng
-         FazOW4ejSbK/V36vVCuAiHG7rCcsKhmaPsJPWQAzFocxcfCLLdsnVKem/+mnR1O+HZr1
-         cVHo9QfcdOEEFJ4JFkcxD+B7WR6A/A4puR1dBGI01ScqDSiN9cvr7iMDnZrrcYuEbhZD
-         o+SR7yHcjo9ufCZnFMARBxcxxyBK1W5LLXq9qi1aSLLwx48l3xBWVS/S5fpQs8TsfiT7
-         1AlHAjFVWynP93waHuyIVq82YIZiKhhnWJ3oSOVae8HFglSx76m/1sBnXxWU9G1/bspU
-         //RA==
-X-Gm-Message-State: ACgBeo1i2WhvaPzxpwAivOtVaPhHXq5fcQfB7VGBpA5zrI/3mMxwv3kl
-        pawGuUxXkk5uhbbP+MRV7rc9Ag==
-X-Google-Smtp-Source: AA6agR74WHaLG5Sc8zp/rZ8S4dfIYUwaL9OWwp94l2ANFxLkKJ7hNEncQtZmqnxZqiuotnp/dL0TeQ==
-X-Received: by 2002:a05:6402:42d3:b0:435:2c49:313d with SMTP id i19-20020a05640242d300b004352c49313dmr9826265edc.86.1660462690400;
-        Sun, 14 Aug 2022 00:38:10 -0700 (PDT)
-Received: from [192.168.0.111] (87-243-81-1.ip.btc-net.bg. [87.243.81.1])
-        by smtp.gmail.com with ESMTPSA id cs1-20020a0564020c4100b0043e35ae2610sm4257090edb.27.2022.08.14.00.38.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 14 Aug 2022 00:38:09 -0700 (PDT)
-Message-ID: <34228958-081d-52b5-f363-d2df6ecf251d@blackwall.org>
-Date:   Sun, 14 Aug 2022 10:38:08 +0300
+        Sun, 14 Aug 2022 03:42:32 -0400
+Received: from sonic316-8.consmr.mail.gq1.yahoo.com (sonic316-8.consmr.mail.gq1.yahoo.com [98.137.69.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3A61FCDB
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 00:42:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netscape.net; s=a2048; t=1660462950; bh=8KLSx83P40LmS693s/Onl3yKyZEW86eCxHNLSUmvq+Q=; h=Date:Subject:From:To:Cc:References:In-Reply-To:From:Subject:Reply-To; b=F4LxfdGGvqqhb2tyqcdgsZO95KDy0YEYJRplu1+36jx7Gczr7q9eHTXPD33gBL3s6v83awy5sp2NeSjHusDNNV3dri183vH8Pwnsm//I4mcb+Pmp9dYGAyHR2hEHvR72iaa2+7a3hZ370wdEhKrpU87yf5rfpqsvoWK/J0B6UmzzaBuAF/pdelYgFMmq9d3w818JVLf1FnrN73B+fsKCCWiRXWMd/VY3TcnGUiq71noLUt1vxvi7RLPreuZywdVTb+TW+rUJI7dNVco+Hw063AIvPvFK5e27EODz6hPzY40c25BXSSff4TZfSYXM+q1Rt248abUJZBUlo5rutnaKPg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1660462950; bh=Y9kpONcRYDFhgrlS+qagnlOXvpi15V7X/Y/y5emlzac=; h=X-Sonic-MF:Date:Subject:From:To:From:Subject; b=R9RhDD4tVvXB6mM/UxSTKqyGFwtVTpMIY9RI7npSMS4lZRU/O+9JPyZYupQ4ZnbcgR5HlW5pzkaX9RVuI/qwu1sFhaLssiPm3cIAhkrsAha/Pd3VvjHXc1l/b1uSz4Dx5jsQTvtPEIbMfiFzawxA9KykSSGbjDyUa3vRYtdPG316OXNsbob1+l1D/Y1LwiZWUar3UiUb6kQuOcvlLHOLhmIEJpPni8R+a9leJ2m9afK7VjuU6ufZsrziGRjAE7R84LL+xiRSe5YteDMcfY3RlcaHlYY59BNLS+wR/8LnG+a4FkHekvMpWWGOJ+1HpjiifYP+MNHZujecOaI6KwGR9A==
+X-YMail-OSG: cQUlzkYVM1nRx0T1KwK9GJBuhFcn1E1zkgLQjlveO2mpKXSEENomTcpm5FZ8pt5
+ fD9VeYLJDWybc4zq2QQeMqUg51OlJez_U4TCos4xJPAsn0pqL.em5sgZh_Vcj7K2SP9pYbAvoy3z
+ GsHMQCNHk0iHEheYqsTqZj4OcqbYuDIF2IDMR2va7CTtMicLhgNd.bFEl9aPXPlNuNJU.2qAMTs2
+ n76SMG_U6Z3P2arh2WunSZFMXoJMYm2BScjOG_P2Fa_D3U3513awHdmgnyvU66gjE2vbHaQ0UgCy
+ VFQaL7w8BqDKtCKDi8Y6lMUtJksCWHUi.H1v79JoQ7B_Di3MWLEFzWH51xq0_va7e16pJ.w1Jshb
+ CjzoLm8.GWaO7zI0j8EPuEc06OFtgNng5mK4WVAcJ6YKQ8EBBHt56DVjsnukgNnLqu0ZRZlAbRA9
+ bmDzg4R1EpN.fSsZyeeVF7ybitBWZ9c5L8FkC2k8nMAYZjWdcCJ6zFbPYUuZVKOLHtG6ud4GpG0X
+ gogGjYZSll.fHaU_8s_rE5LpkxH1o95mK_LLM_dPyuRN.4cuxabEKlILz83_jBQj_j1p9i.KXQ8k
+ H2sGXlC4f5sRJY21eiNyIOgbcgzCRAhTwP2phd2udkPmgSdilPtUDTrHUvL9oertnCjHocZE_PPM
+ eKh.hM0pWYrghSp2cV1sEBLlpJpENGdksmMCOwV0wQ7wik3YHGbZV8bGYhBvosQdNUzGkob7tIfJ
+ Hu3Ool7KLBYiK3NQAbQE2M_uBSQ4pQXRbo3lQ.itR5OMt1VUyQgaBHjmu0ktgHLdFoSNH9Ivlcbs
+ 2Yla68ske2JQpErV1G8dAaQgKCFeGthm1UtsSQ8hOIO7XF_vputVN7woTp2Jh8m3Afbc_B0QqIha
+ xMCmpC1BaxG6Zi9tHxMMTpTK3z39HwqhjBisEInsIXzdm21KzkImNFvHhKCQ3OYvvstrlZ3OsZdV
+ UBARtaTlIfA4XbMj7jxv038r1GreAa9Lr93rQBGaTLJSVdPMp9XN6DgPDaVqRodDSpWI3C_tyZlQ
+ tFdBODVH98q7MuUNEXsRuoAV.qh77Jik60NM34UebRAHCBxm6CZAr.qd82k9FKZC7hf48zuy2y5g
+ ELjrDEPU8z2Y2SSKgIPSQnFMrVqEhkhGCFR5A0NQzqqFEOfcyD6FMfzmG8VDVuA5gHfTyMKP50K.
+ .g18BOQYbvCYsaR_rs1RaVaIurqnYohMUiA9IBNx61m7dONnhu8UTK538OttIM77v4o6lXJ_gY4Y
+ zzLWaWNh3Bui78YPsuQFb314.XiKC8r5RxDIQjzIQPnmYBrTX92cdlJowulSa9HEc1MW6BFWqOm5
+ pCwjcBZlZjbfO.iJTbcJtMKuMSK.eDQvuePGnxP_pJcpEdsf7aMxhjYzxe26wq5oMunHZ3W3PU6Q
+ ZtyRG4iD8Jv761bkCfIm4ErNxDKT2y5hSBmOk0P5Y2vaxpH1QKpiLNUA0OpTM9gqOHxeSQsuAMct
+ 9ZGFL6BOYMBG8d3De98juBHwpGYoOQTzUvopRVBxl7dzweHzQrhNzQ5nc00ZukEWaeYcJ.5O95Yy
+ n1BREUmelVEAJyZBdWAsyLaaB_F5ID.0uP2wzJHU3lLzbtzfHmwKyoOxrhJXVHpXCkgrv_fQRkJc
+ C27ubKSU0tpL1ZuiOQRsgilwAZUkuCZ7YClTxfJzfT.oXSFXWS29ID.ZWchzvvyDxI66SzvXwKm0
+ HHkO7SGKJr9pfnH2oVVja7Zf5HWhwDPOtDpsCiEnFuaJZv3MfColVaJC5.WT4kbYIZz5UQ1pJ8NG
+ ul5SbYL9xups732zCuKxNZGYrBarGQS_HLuyKQ2KBh_vraBv4B7eD2t3B0uIWh7RZX1rSO0kapOD
+ n_m5pnQ82p7SoBjxbWI5vU1JGCe4Mx00FfwhOtmWMg3s7ygyG.6Jrooe6jQRIxcZkYEHkfmMPra2
+ qluIlqrzN9IFrWmZDENcAH5R2v6Zw9qurHO2eK4UfPnHKsw8lNvqwQOYpENMLwhbTkSrFmENwj8f
+ bdwfpuDiMDI5SHAu7U8vk.4280IPmZwKhCrfbNxoR3dtKM3csdCW7vcujyGuDC7RnUqcNggNf3.z
+ nNIvZDShfioK87v.dt.skuV0xwbeTzTccUVRKB_wh_T1APLBc1vYgrr3i0lfX_k1GuDrO8ylSQ2N
+ yUo4AMivomcwnUjoOwF_rdyQabIDj7k6Lb.rN9ZwlhNxu4fR2PPqIcy3VdjSsVYPOLaxxKdu1Muq
+ UCMp6ZgrJWu0bW4eFECw5PgO53zRTD3O3RZ5YtwOqqf_d_BMPq6eNm4aiUF47btO8
+X-Sonic-MF: <brchuckz@aim.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic316.consmr.mail.gq1.yahoo.com with HTTP; Sun, 14 Aug 2022 07:42:30 +0000
+Received: by hermes--production-ne1-6649c47445-tp7sw (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID d22bc789d6c8fbcdb1065c6baabbfe20;
+          Sun, 14 Aug 2022 07:42:24 +0000 (UTC)
+Message-ID: <32ed59c9-c894-c426-dd27-3602625cf3b1@netscape.net>
+Date:   Sun, 14 Aug 2022 03:42:20 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH RFC net-next 0/3] net: vlan: fix bridge binding behavior
- and add selftests
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH 0/3] x86: make pat and mtrr independent from each other
+From:   Chuck Zmudzinski <brchuckz@netscape.net>
+To:     Thorsten Leemhuis <regressions@leemhuis.info>
+Cc:     jbeulich@suse.com, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        regressions@lists.linux.dev, Juergen Gross <jgross@suse.com>,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20220715142549.25223-1-jgross@suse.com>
+ <efbde93b-e280-0e40-798d-dc7bf8ca83cf@leemhuis.info>
+ <a0ce2f59-b653-fa8b-a016-1335f05c86ae@netscape.net>
 Content-Language: en-US
-To:     Sevinj Aghayeva <sevinj.aghayeva@gmail.com>
-Cc:     netdev@vger.kernel.org, aroulin@nvidia.com, sbrivio@redhat.com,
-        roopa@nvidia.com, "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        bridge@lists.linux-foundation.org
-References: <cover.1660100506.git.sevinj.aghayeva@gmail.com>
- <94ec6182-0804-7a0e-dcba-42655ff19884@blackwall.org>
- <CAMWRUK4Mo2KHfa-6Z4Ka+ZLx8TtmzSvq9CLmMmEwE5S7Yp7-Kw@mail.gmail.com>
-From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <CAMWRUK4Mo2KHfa-6Z4Ka+ZLx8TtmzSvq9CLmMmEwE5S7Yp7-Kw@mail.gmail.com>
+In-Reply-To: <a0ce2f59-b653-fa8b-a016-1335f05c86ae@netscape.net>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Mailer: WebService/1.1.20531 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.aol
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/08/2022 18:30, Sevinj Aghayeva wrote:
-> On Wed, Aug 10, 2022 at 4:54 AM Nikolay Aleksandrov <razor@blackwall.org> wrote:
->>
->> On 10/08/2022 06:11, Sevinj Aghayeva wrote:
->>> When bridge binding is enabled for a vlan interface, it is expected
->>> that the link state of the vlan interface will track the subset of the
->>> ports that are also members of the corresponding vlan, rather than
->>> that of all ports.
->>>
->>> Currently, this feature works as expected when a vlan interface is
->>> created with bridge binding enabled:
->>>
->>>   ip link add link br name vlan10 type vlan id 10 protocol 802.1q \
->>>         bridge_binding on
->>>
->>> However, the feature does not work when a vlan interface is created
->>> with bridge binding disabled, and then enabled later:
->>>
->>>   ip link add link br name vlan10 type vlan id 10 protocol 802.1q \
->>>         bridge_binding off
->>>   ip link set vlan10 type vlan bridge_binding on
->>>
->>> After these two commands, the link state of the vlan interface
->>> continues to track that of all ports, which is inconsistent and
->>> confusing to users. This series fixes this bug and introduces two
->>> tests for the valid behavior.
->>>
->>> Sevinj Aghayeva (3):
->>>   net: core: export call_netdevice_notifiers_info
->>>   net: 8021q: fix bridge binding behavior for vlan interfaces
->>>   selftests: net: tests for bridge binding behavior
->>>
->>>  include/linux/netdevice.h                     |   2 +
->>>  net/8021q/vlan.h                              |   2 +-
->>>  net/8021q/vlan_dev.c                          |  25 ++-
->>>  net/core/dev.c                                |   7 +-
->>>  tools/testing/selftests/net/Makefile          |   1 +
->>>  .../selftests/net/bridge_vlan_binding_test.sh | 143 ++++++++++++++++++
->>>  6 files changed, 172 insertions(+), 8 deletions(-)
->>>  create mode 100755 tools/testing/selftests/net/bridge_vlan_binding_test.sh
->>>
->>
->> Hi,
->> NETDEV_CHANGE event is already propagated when the vlan changes flags,
->> NETDEV_CHANGEUPPER is used when the devices' relationship changes not their flags.
->> The only problem you have to figure out is that the flag has changed. The fix itself
->> must be done within the bridge, not 8021q. You can figure it out based on current bridge
->> loose binding state and the vlan's changed state, again in the bridge's NETDEV_CHANGE
->> handler. Unfortunately the proper fix is much more involved and will need new
->> infra, you'll have to track the loose binding vlans in the bridge. To do that you should
->> add logic that reflects the current vlans' loose binding state *only* for vlans that also
->> exist in the bridge, the rest which are upper should be carrier off if they have the loose
->> binding flag set.
->>
->> Alternatively you can add a new NETDEV_ notifier (using something similar to struct netdev_notifier_pre_changeaddr_info)
->> and add link type-specific space (e.g. union of link type-specific structs) in the struct which will contain
->> what changed for 8021q and will be properly interpreted by the bridge. The downside is that we'll generate
->> 2 notifications when changing the loose binding flag, but on the bright side won't have to track anything
->> in the bridge, just handle the new notifier type. This might be the easiest path, the fix is still in
->> the bridge though, the 8021q module just needs to fill in the new struct and emit the notification on
->> any loose binding changes, the bridge must decide if it should process it (i.e. based on upper/lower
->> relationship). Such notifier can be also re-used by other link types to propagate link-type specific
->> changes.
+On 8/13/2022 12:56 PM, Chuck Zmudzinski wrote:
+> On 7/17/22 3:55 AM, Thorsten Leemhuis wrote:
+> > Hi Juergen!
+> >
+> > On 15.07.22 16:25, Juergen Gross wrote: ...
+>
+> Hi Thorsten,
+>
+> This appears stalled again and we are now over three months
+> from the first report of the regression, The only excuse for
+> ignoring your comments, and other comments on the patches
+> in this patch series for this long a time is that the patch series
+> for some reason cannot be considered a true regression. If this is a
+> regression, then, IMHO, this needs to have a higher priority by the
+> maintainers, or the maintainers need to explain why this regression
+> cannot be fixed in a more timely manner. But continued silence
+> by the maintainers is unacceptable, IMHO. This is especially true
+> in this case when multiple fixes for the regression have been
+> identified and the maintainers have not yet clearly explained why
+> at least a fix, even if temporary, cannot be applied immediately
+> while we wait for a more comprehensive fix.
+>
+> At the very least, I would expect Juergen to reply here and say that
+> he is delayed but does plan to spin up an updated version and include
+> the necessary links in the new version to facilitate your tracking of
+> the regression. Why the silence from Juergen here?
 
-Hi,
+This is a fairly long message but I think what I need to say
+here is important for the future success of Linux and open
+source software, so here goes....
 
-> 
-> Hi Nik,
-> 
-> Can you please clarify the following?
-> 
-> 1) should the new NETDEV_ notifier be about the vlan device and not
-> the bridge? That is, should I handle it in br_device_event?
+Update: I accept Boris Petkov's response to me yesterday as reasonable
+and acceptable if within two weeks he at least explains on the public
+mailing lists how he and Juergen have privately agreed to fix this regression
+"soon" if he does not actually fix the regression by then with a commit,
+patch set, or merge. The two-week time frame is from here:
 
-Yes, it should be about the vlan device (i.e. the target device that changes its state).
+https://www.kernel.org/doc/html/latest/process/handling-regressions.html
 
-> 2) is it still okay to export call_netdevice_notifiers_info or should
-> i write a new function for this?
-> 
+where developers and maintainers are exhorted as follows: "Try to fix
+regressions quickly once the culprit has been identified; fixes for most
+regressions should be merged within two weeks, but some need to be
+resolved within two or three days."
 
-If you need it, export it. But if you do it similar to netdev_notifier_pre_changeaddr_info
-then you don't have to, more below.
+I also think there is a private agreement between Juergen and Boris to
+fix this regression because AFAICT there is no evidence in the public
+mailing lists that such an agreement has been reached, yet Boris yesterday
+told me on the public mailing lists in this thread to be "patient" and that
+"we will fix this soon." Unless I am missing something, and I hope I am,
+the only way that a fix could be coming "soon" would be to presume
+that Juergen and Boris have agreed to a fix for the regression in private.
 
-> The answers to the above wasn't clear to me, but I came up with the
-> following patch anyway, so perhaps you can also comment on it. I'm
-> pasting it inline; this is against 5.19.
-> 
+However, AFAICT, keeping their solution private would be a violation of
+netiquette as described here:
 
-A few comments inline below,
+https://people.kernel.org/tglx/notes-about-netiquette
 
-> Thanks!
-> 
-> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-> index 2563d30736e9..c63205eb1f72 100644
-> --- a/include/linux/netdevice.h
-> +++ b/include/linux/netdevice.h
-> @@ -2762,6 +2762,7 @@ enum netdev_cmd {
->   NETDEV_UNREGISTER,
->   NETDEV_CHANGEMTU, /* notify after mtu change happened */
->   NETDEV_CHANGEADDR, /* notify after the address change */
-> + NETDEV_CHANGEUPPERFLAGS,
+where a whole section is devoted to the importance of keeping the
+discussion of changes to the kernel in public, with private discussions
+being a violation of the netiquette that governs the discussions that
+take place between persons interested in the Linux kernel project and
+other open source projects.
 
-Please don't use CHANGEUPPER, that is about a device changing its
-upper device. Also make it more generic, NETDEV_CHANGEFLAGS is too
-specific. For example today we have NETDEV_CHANGEINFODATA which TBH
-sounds good, but is tied to bonding in a few places, e.g.:
-        case NETDEV_CHANGEINFODATA:
-                rtnl_event_type = IFLA_EVENT_BONDING_OPTIONS;
+Yet, in one of his messages to me yesterday, Boris appended the link
+to the netiquette rules, thus implicitly accusing me of violating the
+netiquette rules when in fact he is the one who at least seems to be
+violating the rule forbidding private discussions of changes to the
+kernel once a patch set is already up for discussion on the public
+mailing lists.
 
-which is very unfortunate. We really need a generic notifier that can pass
-link-type specific information alongside the device. As I mentioned please
-see how netdev_notifier_pre_changeaddr_info is handled, we need something
-generic that extends netdev_notifier_info and the various link types can add
-their own structures in a union which is to be interpreted based on the link
-type. For example if the new notifier is called NETDEV_CHANGE_DETAILS then
-in the bridge we'll check if the target device is a vlan and interpret the
-structure's union as the vlan change information. It'd be nice to get more
-feedback about this from others as well.
+Of course Boris can exonerate himself completely if within two
+weeks he at least explains on the public mailing lists how he and
+Juergen have agreed to fix the regression. I sincerely hope he at
+least does that within the next two weeks, or even better, that he
+exonerates himself by actually committing the official fix for the
+regression within the next two weeks.
 
-Also note that this notifier is for internal use for the time being so it's not necessary
-to export these notifications to user-space yet.
+However, I will only believe it when I see it. When it comes to the
+Linux kernel, I go by what I see  in the performance of the Linux
+kernel in my computing environments, what I see on the public
+mailing lists and in the official documentation, and by what I
+see in the source code itself. I do not go by blind faith in any
+single developer. I am not religious when it comes to the Linux
+kernel. Instead, I am scientific and practical about it.
 
-I would've opted for extending NETDEV_CHANGE itself, but that would be quite the
-adventure. :)
+Finally, please forgive me also if I am mistaken in my assumption
+that these rules of netiquette apply no less to the developers and
+maintainers of the Linux kernel than to others who wish to offer
+their contributions to the development of the Linux kernel. If the
+rules of netiquette do not apply to the developers and maintainers,
+of the kernel, then, IMHO, the great advantage of open source
+software development is totally lost, because the advantage of the
+open source software development model depends at least as
+much on free and open access to the discussions about the
+source code conducted by the developers and maintainers as it
+does on the freedom to have access to the source code itself.
+If someone here tells me that those rules of netiquette need
+not be followed by the developers and maintainers I certainly
+hope someone else will come to the defense of those same
+wise rules that have allowed such a successful open source
+software ecosystem to flourish and thrive around this project,
+the Linux kernel.
 
->   NETDEV_PRE_CHANGEADDR, /* notify before the address change */
->   NETDEV_GOING_DOWN,
->   NETDEV_CHANGENAME,
-> @@ -2837,6 +2838,12 @@ struct netdev_notifier_changelowerstate_info {
->   void *lower_state_info; /* is lower dev state */
->  };
-> 
-> +struct netdev_notifier_changeupperflags_info {
-> + struct netdev_notifier_info info; /* must be first */
-> + struct net_device *upper_dev;
+IMHO, the day someone make the decision to stop enforcing these
+wise rules is the day that the open source development model will
+begin to lose its advantage over proprietary software development
+models. And perhaps the most important rule of all for the continued
+success of Linux and open source software development is the Linus
+regression rule, with the rule that discussions about changes
+to the source code must be done in public being a close second in
+importance to the Linus regression rule.
 
-just dev, not upper
-we should be able to use this construct for any link type and actually
-we don't need the device here, we already have it in info.dev
+Best Regards,
 
-> + bool vlan_bridge_binding;
-
-add this into a vlan-specific structure that should be in a union here so
-other link types can add their own later
-
-> +};
-> +
->  struct netdev_notifier_pre_changeaddr_info {
->   struct netdev_notifier_info info; /* must be first */
->   const unsigned char *dev_addr;
-> @@ -2898,6 +2905,8 @@ netdev_notifier_info_to_extack(const struct
-> netdev_notifier_info *info)
->  }
-> 
->  int call_netdevice_notifiers(unsigned long val, struct net_device *dev);
-> +int call_netdevice_notifiers_info(unsigned long val,
-> +  struct netdev_notifier_info *info);
-
-No need for this if you handle notifications similar to dev_pre_changeaddr_notify()
-with netdev_notifier_pre_changeaddr_info
-
-> 
-> 
->  extern rwlock_t dev_base_lock; /* Device list lock */
-> diff --git a/net/8021q/vlan.h b/net/8021q/vlan.h
-> index 5eaf38875554..71947cdcfaaa 100644
-> --- a/net/8021q/vlan.h
-> +++ b/net/8021q/vlan.h
-> @@ -130,7 +130,7 @@ void vlan_dev_set_ingress_priority(const struct
-> net_device *dev,
->  int vlan_dev_set_egress_priority(const struct net_device *dev,
->   u32 skb_prio, u16 vlan_prio);
->  void vlan_dev_free_egress_priority(const struct net_device *dev);
-> -int vlan_dev_change_flags(const struct net_device *dev, u32 flag, u32 mask);
-> +int vlan_dev_change_flags(struct net_device *dev, u32 flag, u32 mask);
->  void vlan_dev_get_realdev_name(const struct net_device *dev, char *result,
->         size_t size);
-> 
-> diff --git a/net/8021q/vlan_dev.c b/net/8021q/vlan_dev.c
-> index 839f2020b015..68da3901dfb0 100644
-> --- a/net/8021q/vlan_dev.c
-> +++ b/net/8021q/vlan_dev.c
-> @@ -208,11 +208,18 @@ int vlan_dev_set_egress_priority(const struct
-> net_device *dev,
->   return 0;
->  }
-> 
-> +static inline bool netif_is_bridge(const struct net_device *dev)
-
-no inline in .c files, let the compiler decide
-
-> +{
-> + return dev->rtnl_link_ops &&
-> +    !strcmp(dev->rtnl_link_ops->kind, "bridge");
-> +}
-> +
-
-there is already netif_is_bridge_master()
-
->  /* Flags are defined in the vlan_flags enum in
->   * include/uapi/linux/if_vlan.h file.
->   */
-> -int vlan_dev_change_flags(const struct net_device *dev, u32 flags, u32 mask)
-> +int vlan_dev_change_flags(struct net_device *dev, u32 flags, u32 mask)
->  {
-> + struct netdev_notifier_changeupperflags_info info;
->   struct vlan_dev_priv *vlan = vlan_dev_priv(dev);
->   u32 old_flags = vlan->flags;
-> 
-> @@ -223,19 +230,33 @@ int vlan_dev_change_flags(const struct
-> net_device *dev, u32 flags, u32 mask)
-> 
->   vlan->flags = (old_flags & ~mask) | (flags & mask);
-> 
-> - if (netif_running(dev) && (vlan->flags ^ old_flags) & VLAN_FLAG_GVRP) {
-> + if (!netif_running(dev))
-> + return 0;
-> +
-> + if ((vlan->flags ^ old_flags) & VLAN_FLAG_GVRP) {
->   if (vlan->flags & VLAN_FLAG_GVRP)
->   vlan_gvrp_request_join(dev);
->   else
->   vlan_gvrp_request_leave(dev);
->   }
-> 
-> - if (netif_running(dev) && (vlan->flags ^ old_flags) & VLAN_FLAG_MVRP) {
-> + if ((vlan->flags ^ old_flags) & VLAN_FLAG_MVRP) {
->   if (vlan->flags & VLAN_FLAG_MVRP)
->   vlan_mvrp_request_join(dev);
->   else
->   vlan_mvrp_request_leave(dev);
->   }
-> +
-> + if ((vlan->flags ^ old_flags) & VLAN_FLAG_BRIDGE_BINDING &&
-> +    netif_is_bridge(vlan->real_dev)) {
-> + info.info.dev = vlan->real_dev;
-> + info.upper_dev = dev;
-> + info.vlan_bridge_binding =
-> +    !!(vlan->flags & VLAN_FLAG_BRIDGE_BINDING);
-> + call_netdevice_notifiers_info(NETDEV_CHANGEUPPERFLAGS,
-> +    &info.info);
-> + }
-> +
->   return 0;
->  }
-> 
-> diff --git a/net/bridge/br_vlan.c b/net/bridge/br_vlan.c
-> index 0f5e75ccac79..cbcb0877d4a4 100644
-> --- a/net/bridge/br_vlan.c
-> +++ b/net/bridge/br_vlan.c
-> @@ -1718,6 +1718,7 @@ static void nbp_vlan_set_vlan_dev_state(struct
-> net_bridge_port *p, u16 vid)
->  /* Must be protected by RTNL. */
->  int br_vlan_bridge_event(struct net_device *dev, unsigned long event,
-> void *ptr)
->  {
-> + struct netdev_notifier_changeupperflags_info *flags_info;
->   struct netdev_notifier_changeupper_info *info;
->   struct net_bridge *br = netdev_priv(dev);
->   int vlcmd = 0, ret = 0;
-> @@ -1739,7 +1740,11 @@ int br_vlan_bridge_event(struct net_device
-> *dev, unsigned long event, void *ptr)
->   info = ptr;
->   br_vlan_upper_change(dev, info->upper_dev, info->linking);
->   break;
-> -
-> + case NETDEV_CHANGEUPPERFLAGS:
-> + flags_info = ptr;
-> + br_vlan_upper_change(dev, flags_info->upper_dev,
-> +    flags_info->vlan_bridge_binding);
-> + break;
->   case NETDEV_CHANGE:
->   case NETDEV_UP:
->   if (!br_opt_get(br, BROPT_VLAN_BRIDGE_BINDING))
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index 30a1603a7225..bc8640d77d83 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -160,8 +160,6 @@ struct list_head ptype_base[PTYPE_HASH_SIZE] __read_mostly;
->  struct list_head ptype_all __read_mostly; /* Taps */
-> 
->  static int netif_rx_internal(struct sk_buff *skb);
-> -static int call_netdevice_notifiers_info(unsigned long val,
-> - struct netdev_notifier_info *info);
->  static int call_netdevice_notifiers_extack(unsigned long val,
->     struct net_device *dev,
->     struct netlink_ext_ack *extack);
-> @@ -1624,7 +1622,7 @@ const char *netdev_cmd_to_name(enum netdev_cmd cmd)
->   N(POST_INIT) N(RELEASE) N(NOTIFY_PEERS) N(JOIN) N(CHANGEUPPER)
->   N(RESEND_IGMP) N(PRECHANGEMTU) N(CHANGEINFODATA) N(BONDING_INFO)
->   N(PRECHANGEUPPER) N(CHANGELOWERSTATE) N(UDP_TUNNEL_PUSH_INFO)
-> - N(UDP_TUNNEL_DROP_INFO) N(CHANGE_TX_QUEUE_LEN)
-> + N(UDP_TUNNEL_DROP_INFO) N(CHANGE_TX_QUEUE_LEN) N(CHANGEUPPERFLAGS)
->   N(CVLAN_FILTER_PUSH_INFO) N(CVLAN_FILTER_DROP_INFO)
->   N(SVLAN_FILTER_PUSH_INFO) N(SVLAN_FILTER_DROP_INFO)
->   N(PRE_CHANGEADDR) N(OFFLOAD_XSTATS_ENABLE) N(OFFLOAD_XSTATS_DISABLE)
-> @@ -1927,8 +1925,8 @@ static void
-> move_netdevice_notifiers_dev_net(struct net_device *dev,
->   * are as for raw_notifier_call_chain().
->   */
-> 
-> -static int call_netdevice_notifiers_info(unsigned long val,
-> - struct netdev_notifier_info *info)
-> +int call_netdevice_notifiers_info(unsigned long val,
-> +  struct netdev_notifier_info *info)
->  {
->   struct net *net = dev_net(info->dev);
->   int ret;
-> @@ -1944,6 +1942,7 @@ static int
-> call_netdevice_notifiers_info(unsigned long val,
->   return ret;
->   return raw_notifier_call_chain(&netdev_chain, val, info);
->  }
-> +EXPORT_SYMBOL(call_netdevice_notifiers_info);
-> 
->  /**
->   * call_netdevice_notifiers_info_robust - call per-netns notifier blocks
-> 
-> 
->>
->> Both of these avoid any direct dependencies between the bridge and 8021q. Any other suggestions that
->> are simpler, avoid direct dependencies and solve the issue in a generic way would be appreciated.
->>
->> Just be careful about introducing too much unnecessary processing because we
->> can have lots of vlan devices in a system.
->>
->> Cheers,
->>  Nik
-> 
-> 
-> 
-
+Chuck

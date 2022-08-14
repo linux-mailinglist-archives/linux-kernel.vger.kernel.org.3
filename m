@@ -2,78 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C94F159200F
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 16:13:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BB00591FFA
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 16:04:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239735AbiHNONL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 10:13:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34146 "EHLO
+        id S238880AbiHNOEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 10:04:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbiHNOM6 (ORCPT
+        with ESMTP id S229634AbiHNOEr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 10:12:58 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 342EB9FCC
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 07:12:57 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id l22so6348894wrz.7
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 07:12:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=conchuod.ie; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=Jpi+qYPVkjjgLSftDLRCVgzhzYoBkPjkNBatqeFjYP4=;
-        b=Qq8AUk/9AWVqplZnZsraolgAwvvs+PIe6EeGfq6jN5MM2n6AruvuyymJsCkvpb+OzP
-         DYg/NMqHsO6QTHRAmrKsuXtxegQV5ArT1zwjqST2UY7tF7wobikGXu8YTrZv50Ep0Ae3
-         kQ6O0X7afhbpbhHnOfxIltiwZLRErrqF5lam6sIXJu4xMzzliWzprfPqRkgZB1tMXU1/
-         R7yHX1sH3JLUhkX3H1H84GsxsU9S9kdPrpHmC8xt1v98s+gs4HLrQJ3K/kl6UABKJ4Rr
-         uV7ZKh1Ouv6RetM5zMnnJz7UfMlbuOU52TAUum4YqqIrYAQSjRgz7dY13Phg2BCkc3lq
-         qL4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=Jpi+qYPVkjjgLSftDLRCVgzhzYoBkPjkNBatqeFjYP4=;
-        b=Rez9CC9Y8/uu7OKf0B6KsMG6FZ5u5WZWpi17Y0+/7Dy5wlecJKhTsFyTnhsyso5wl8
-         QomGzmz/GEiLGLBmGbyv+zaYxATZV0kpzuQOMtUBL/GrtZoXsQtewvGE/Ma6wph+1dIa
-         t9WHWzut0hJVDk0ES6uoUbBHK8BTIJGrpaOOJPoZ17OUbjoZkHohw+cwaA9Ilev32u6d
-         fyTapFvuaaBasSeC5gU0AkcyoVqjO23Y5tvnug+soNDedBwmNopFuv0JrV6xYheSS67z
-         p9klHbhvyGdwNFs6eUPposXPmScCef6a4wnrrRFO0oS5kFuOtqluvSxgvJFSA1R364Qc
-         rlaw==
-X-Gm-Message-State: ACgBeo2zJyFNyt+OqKqwn4b08k37OSYLUh06Q5yreTndvcUd5KfuWJyr
-        JWgDpRftnE3xzKmpvaBJvY/TUA==
-X-Google-Smtp-Source: AA6agR6FYk+iY85iu6ZNNhqlEqAtS2htyInEPS/oNlnm6Idei+lVhLdGdUcw2QokwFea/pPKDyVQbg==
-X-Received: by 2002:adf:f90e:0:b0:21e:417b:dbd with SMTP id b14-20020adff90e000000b0021e417b0dbdmr6282420wrr.425.1660486375541;
-        Sun, 14 Aug 2022 07:12:55 -0700 (PDT)
-Received: from henark71.. ([109.76.58.63])
-        by smtp.gmail.com with ESMTPSA id b8-20020adfde08000000b0021db7b0162esm4625419wrm.105.2022.08.14.07.12.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Aug 2022 07:12:55 -0700 (PDT)
-From:   Conor Dooley <mail@conchuod.ie>
-To:     Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        Vincent Chen <vincent.chen@sifive.com>,
-        Xianting Tian <xianting.tian@linux.alibaba.com>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Tong Tiangen <tongtiangen@huawei.com>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        Sun, 14 Aug 2022 10:04:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8239260F;
+        Sun, 14 Aug 2022 07:04:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2BD90601C5;
+        Sun, 14 Aug 2022 14:04:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01197C433D6;
+        Sun, 14 Aug 2022 14:04:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660485885;
+        bh=Ly4O0mOylSo1e7bqqPQz8OkjRFjE9+N+Pi2tqeszdVs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=IhSUvjJSY0EH+ADokfbq1kq4yEhlNsCMNMUa+AWc++XxuWiT8mX4++apsCN4eS89V
+         7JiYEzebDW31JM+MJuNH7XNUOuL7/ynYQ/5MXKjtEr+z62f2euYdzih7fPOf/+V5lj
+         PvKb5VeO6CEXMqbmrBPAaeCtjrtmGr6EsndDdnbpmNUeTothXTVM7FpzbWF/Y1UQal
+         u1gx/I+5CVCsP4kzpPWdClf0ymiz6GInqCsQLEyjXIp7w1mK8zoT0aeFi+1rgkh3ss
+         lVWdFXG+80UQyAvrSQOiOgP1E+vbes/88LmBnQY3Zi2oPn/BW8p1mvnFO6iYM+onRd
+         flYQbbW/sq5xQ==
+Date:   Sun, 14 Aug 2022 15:15:12 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Angel Iglesias <ang.iglesiasg@gmail.com>
+Cc:     linux-iio <linux-iio@vger.kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Nikita Yushchenko <nikita.yoush@cogentembedded.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Paul Cercueil <paul@crapouillou.net>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 4/4] riscv: traps: add missing prototype
-Date:   Sun, 14 Aug 2022 15:12:38 +0100
-Message-Id: <20220814141237.493457-5-mail@conchuod.ie>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20220814141237.493457-1-mail@conchuod.ie>
-References: <20220814141237.493457-1-mail@conchuod.ie>
+Subject: Re: [PATCH v5 3/5] iio: pressure: bmp280: Add support for BMP380
+ sensor family
+Message-ID: <20220814151512.097c7779@jic23-huawei>
+In-Reply-To: <462251c4bca30b53f06307043ad52d859eb8d5c1.1659872590.git.ang.iglesiasg@gmail.com>
+References: <cover.1659872590.git.ang.iglesiasg@gmail.com>
+        <462251c4bca30b53f06307043ad52d859eb8d5c1.1659872590.git.ang.iglesiasg@gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,50 +63,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Conor Dooley <conor.dooley@microchip.com>
+On Sun,  7 Aug 2022 13:55:52 +0200
+Angel Iglesias <ang.iglesiasg@gmail.com> wrote:
 
-Sparse complains:
-arch/riscv/kernel/traps.c:213:6: warning: symbol 'shadow_stack' was not declared. Should it be static?
+> Adds compatibility with the new generation of this sensor, the BMP380
+> 
+> Includes basic sensor initialization to do pressure and temp
+> measurements and allows tuning oversampling settings for each channel.
+> 
+> The compensation algorithms are adapted from the device datasheet and
+> the repository https://github.com/BoschSensortec/BMP3-Sensor-API
+> 
+> Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com>
 
-The variable is used in entry.S, so declare shadow_stack there
-alongside SHADOW_OVERFLOW_STACK_SIZE.
+One additional comment from me inline.
 
-Fixes: 31da94c25aea ("riscv: add VMAP_STACK overflow detection")
-Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
----
- arch/riscv/include/asm/thread_info.h | 2 ++
- arch/riscv/kernel/traps.c            | 3 ++-
- 2 files changed, 4 insertions(+), 1 deletion(-)
+Thanks,
 
-diff --git a/arch/riscv/include/asm/thread_info.h b/arch/riscv/include/asm/thread_info.h
-index 78933ac04995..67322f878e0d 100644
---- a/arch/riscv/include/asm/thread_info.h
-+++ b/arch/riscv/include/asm/thread_info.h
-@@ -42,6 +42,8 @@
- 
- #ifndef __ASSEMBLY__
- 
-+extern long shadow_stack[SHADOW_OVERFLOW_STACK_SIZE / sizeof(long)];
-+
- #include <asm/processor.h>
- #include <asm/csr.h>
- 
-diff --git a/arch/riscv/kernel/traps.c b/arch/riscv/kernel/traps.c
-index 39d0f8bba4b4..635e6ec26938 100644
---- a/arch/riscv/kernel/traps.c
-+++ b/arch/riscv/kernel/traps.c
-@@ -20,9 +20,10 @@
- 
- #include <asm/asm-prototypes.h>
- #include <asm/bug.h>
-+#include <asm/csr.h>
- #include <asm/processor.h>
- #include <asm/ptrace.h>
--#include <asm/csr.h>
-+#include <asm/thread_info.h>
- 
- int show_unhandled_signals = 1;
- 
--- 
-2.37.1
+Jonathan
+
+
+>  	}
+> @@ -1124,6 +1471,13 @@ int bmp280_common_probe(struct device *dev,
+>  		return -EINVAL;
+>  	}
+>  
+> +	/* BMP3xx requires soft-reset as part of initialization */
+> +	if (chip_id == BMP380_CHIP_ID) {
+
+I'd prefer this to be based on a flag in chip_info so that we can
+trivially add it to future devices by just setting that flag for the
+chip_info added for the new device.
+
+> +		ret = bmp380_cmd(data, BMP380_CMD_SOFT_RESET);
+> +		if (ret < 0)
+> +			return ret;
+> +	}
+> +
+>  	ret = data->chip_info->chip_config(data);
+>  	if (ret < 0)
+>  		return ret;
 

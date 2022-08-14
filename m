@@ -2,61 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DF12591E83
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 07:50:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54CDA591E84
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 07:51:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbiHNFue (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 01:50:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53924 "EHLO
+        id S229963AbiHNFuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 01:50:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiHNFuc (ORCPT
+        with ESMTP id S229536AbiHNFuf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 01:50:32 -0400
-Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E09B91
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 22:50:30 -0700 (PDT)
-Received: by mail-il1-x141.google.com with SMTP id f18so680162ilj.11
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 22:50:30 -0700 (PDT)
+        Sun, 14 Aug 2022 01:50:35 -0400
+Received: from mail-io1-xd41.google.com (mail-io1-xd41.google.com [IPv6:2607:f8b0:4864:20::d41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C38C52
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 22:50:34 -0700 (PDT)
+Received: by mail-io1-xd41.google.com with SMTP id r141so269736iod.4
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 22:50:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc;
-        bh=I26C4MdSUaU9Ach+cqjQZ87JE8VFZvwPr+G+H7I7T2c=;
-        b=dKKCc4gny/4ndFeGqTdn+xmvI6NfVwHoHixzpGrkT8aeIQdh0y8HLp5VCXkDZ/EV96
-         xQzwiOUgg7PYZ3G9znIkPQaNiFptdV/1fKSXOpiL1nBNN+yhbb9qsntG5p5gy3MVC4E6
-         m+iiIWDcbQAuQVuchNHZrbLF+yu3mkRGfmay+oeh6v1JafCp0HkzJispM3akSPRfmFZW
-         qAE7M+wfEFWPPvAENURp0lElIe6vbIcIEua9XMwZheoGhdwOHscdjYJLpdHyKYwWGDxH
-         mzIp/2jsTyo9o4X8ZVRRc3OZtbV34qYcLReimcHk17oTnqRrqqSEnqOfaOb6SN8sJNvX
-         ssIQ==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=YBGvaVNrmSK2tj7lGapunjUsxNRcm9+XAgiS0yNfu2w=;
+        b=jd0o1BNnm1/fZHxWpKBRkvtpcwVhSYnC2WR00sUjHjmuUgVKeA/00kYeP0DofHygQ3
+         tXkuirh8kHb6ohu0bttDUSAbz4V8ZmkL4FnJLWsBm6hCmHvi28L5AOzKyQ1I2NIkSpVd
+         aoBmIsLCfKvLi92Spk/RspKU8SmrIPw2mjycFyBadfxD2sPM8kLmeIgeUY6g8NymhdmQ
+         w4wmkW2sX5GTPnLu6zJ5eRLLrawe1QmIBw5rWV/zPIFUECla8A+ijYDBL7BkBPHZBDIN
+         KJNeBDMW7rl93RU3MErVgR9qp3w7Lf6H/VK2rEujU++x3EQx68uzZHJ4bpDr5iZn7Sjx
+         popQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc;
-        bh=I26C4MdSUaU9Ach+cqjQZ87JE8VFZvwPr+G+H7I7T2c=;
-        b=ImSCah6Pte+5pmp16fw16Mu3cwoV7WSh0Eeejn7MHpvIFx/9L8HD1yxS1Y8l+vmwZJ
-         p1ukTtM3v2cDwjRumvvvN1IFtX6JCWzaUgaUgOMXKhB37jDVGVFWBUuaGRvCuHaDI3+I
-         dCIUcYPC4KgpiyilxosKGa4iOaLheY0zdchJTmPHD7seb7kH6RsMaMznhzj0TTlQ2gq0
-         f6LnUd9oIlkPL1ktI/jgzYXvRXwJRBnUbw1H0qoNxm8cRCzKvOdh9qzTALpAO+Wb5vJo
-         4d1Dzxdw5kt3GpuD77E4AE+33oyRlZOLYmns3dUE8Guzn2ZT6iWiN4JRkusl9v6BMO63
-         qPZQ==
-X-Gm-Message-State: ACgBeo2mnAlE2DppIfGKhJB4f2oDYyCbn/rqEYjDfEKPw9dzHPl7ZWjv
-        bEpHIy5Lecm/gd5Lq8PdsFVhGC1zpepHYg==
-X-Google-Smtp-Source: AA6agR5db/q2s5bI+J4j2Lc7PWTQD/JavAjUyD/Qwk9UeqhVHzpsHLSL7kKxmXurJXtgaBgW1YfJUw==
-X-Received: by 2002:a92:8748:0:b0:2d9:3f81:d0b7 with SMTP id d8-20020a928748000000b002d93f81d0b7mr4751815ilm.310.1660456230201;
-        Sat, 13 Aug 2022 22:50:30 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=YBGvaVNrmSK2tj7lGapunjUsxNRcm9+XAgiS0yNfu2w=;
+        b=ZGFpMxT+PYMZ+DzD4WVqQZHvZzgJUDL6APRHwojP9o+pkhrRM9G5XXcyIPbhVYylKF
+         uJD7A91TzgFIq9GLil9/PTU2YVD1C/xlDRZGos6WM7sCLSywiu1YcN41visQ77/EiIg0
+         94BK0gkiqDtuFpVtY8Dp5mMwUcNU6lvkRnRCBEoGyCAEsElWEwNuxNGQVn2uG5TcAtk+
+         GBpNl6f6j0NKf3jxPzAEZSRAtWL/JAFdG43MjnigXXUgZkeGfGsjZGflwLuW8KRPxyML
+         SAegljiP0c93hi768Wv6Wd7CJQFns64rM2BEYOAmmJB2G/jChiQhCQNZ7jZD+LMKs32b
+         HaDQ==
+X-Gm-Message-State: ACgBeo3X7Q6kDy6lOtP7LB1GZ5fEEHqXY89mVNplZrreUt3v0ImyC1xk
+        JFKxprRbQuJGWgg+CAQtoEk=
+X-Google-Smtp-Source: AA6agR7blM9G9O6NfLeERcyeIPwliQma41mK9K67DVGfIyv9itOeVf4OETsVsOZjVr11RBD/oQHURQ==
+X-Received: by 2002:a6b:ba43:0:b0:688:d19:4e8f with SMTP id k64-20020a6bba43000000b006880d194e8fmr901064iof.59.1660456232382;
+        Sat, 13 Aug 2022 22:50:32 -0700 (PDT)
 Received: from sophie (static-198-54-128-70.cust.tzulo.com. [198.54.128.70])
-        by smtp.gmail.com with ESMTPSA id j18-20020a056e02219200b002e58adc323fsm948212ila.32.2022.08.13.22.50.29
+        by smtp.gmail.com with ESMTPSA id l3-20020a92d8c3000000b002de2ea2f78csm2623361ilo.23.2022.08.13.22.50.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Aug 2022 22:50:29 -0700 (PDT)
+        Sat, 13 Aug 2022 22:50:32 -0700 (PDT)
 From:   Rebecca Mckeever <remckee0@gmail.com>
 To:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org
 Cc:     David Hildenbrand <david@redhat.com>,
         Rebecca Mckeever <remckee0@gmail.com>
-Subject: [PATCH 0/2] memblock tests: add command line help option and update obsolete comments
-Date:   Sun, 14 Aug 2022 00:50:18 -0500
-Message-Id: <cover.1660451025.git.remckee0@gmail.com>
+Subject: [PATCH 1/2] memblock tests: add command line help option
+Date:   Sun, 14 Aug 2022 00:50:19 -0500
+Message-Id: <0f3b93a79de78c0da1ca90f74fe35e9a85c7cf93.1660451025.git.remckee0@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <cover.1660451025.git.remckee0@gmail.com>
+References: <cover.1660451025.git.remckee0@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -69,17 +71,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These patches add a help command line option to the help message and
-update references to an obsolete build option in comments.
+Add a help command line option to the help message. Add the help option
+to the short and long options so it will be recognized as a valid
+option.
 
-Rebecca Mckeever (2):
-  memblock tests: add command line help option
-  memblock tests: update reference to obsolete build option in comments
+Usage:
+    $ ./main -h
 
+    Or:
+    $ ./main --help
+
+Reviewed-by: David Hildenbrand <david@redhat.com>
+Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
+---
  tools/testing/memblock/tests/common.c | 4 +++-
- tools/testing/memblock/tests/common.h | 9 ++++++---
- 2 files changed, 9 insertions(+), 4 deletions(-)
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
+diff --git a/tools/testing/memblock/tests/common.c b/tools/testing/memblock/tests/common.c
+index e43b2676af81..76a8ad818f3a 100644
+--- a/tools/testing/memblock/tests/common.c
++++ b/tools/testing/memblock/tests/common.c
+@@ -14,14 +14,16 @@ static struct test_memory memory_block;
+ static const char __maybe_unused *prefixes[PREFIXES_MAX];
+ static int __maybe_unused nr_prefixes;
+ 
+-static const char *short_opts = "mv";
++static const char *short_opts = "hmv";
+ static const struct option long_opts[] = {
++	{"help", 0, NULL, 'h'},
+ 	{"movable-node", 0, NULL, 'm'},
+ 	{"verbose", 0, NULL, 'v'},
+ 	{NULL, 0, NULL, 0}
+ };
+ 
+ static const char * const help_opts[] = {
++	"display this help message and exit",
+ 	"disallow allocations from regions marked as hotplugged\n\t\t\t"
+ 		"by simulating enabling the \"movable_node\" kernel\n\t\t\t"
+ 		"parameter",
 -- 
 2.25.1
 

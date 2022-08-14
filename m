@@ -2,227 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7027B591D7D
+	by mail.lfdr.de (Postfix) with ESMTP id 224CD591D7C
 	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 03:56:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbiHNBxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 21:53:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46186 "EHLO
+        id S230236AbiHNBzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 21:55:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiHNBw7 (ORCPT
+        with ESMTP id S229484AbiHNBzg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 21:52:59 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 331E645041;
-        Sat, 13 Aug 2022 18:52:55 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R181e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=xuanzhuo@linux.alibaba.com;NM=1;PH=DS;RN=33;SR=0;TI=SMTPD_---0VM8IVha_1660441967;
-Received: from localhost(mailfrom:xuanzhuo@linux.alibaba.com fp:SMTPD_---0VM8IVha_1660441967)
-          by smtp.aliyun-inc.com;
-          Sun, 14 Aug 2022 09:52:48 +0800
-Message-ID: <1660441835.6907768-1-xuanzhuo@linux.alibaba.com>
-Subject: Re: [GIT PULL] virtio: fatures, fixes
-Date:   Sun, 14 Aug 2022 09:50:35 +0800
-From:   Xuan Zhuo <xuanzhuo@linux.alibaba.com>
-To:     Andres Freund <andres@anarazel.de>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alvaro.karsz@solid-run.com, colin.i.king@gmail.com,
-        colin.king@intel.com, dan.carpenter@oracle.com, david@redhat.com,
-        elic@nvidia.com, eperezma@redhat.com, gautam.dawar@xilinx.com,
-        gshan@redhat.com, hdegoede@redhat.com, hulkci@huawei.com,
-        jasowang@redhat.com, jiaming@nfschina.com,
-        kangjie.xu@linux.alibaba.com, lingshan.zhu@intel.com,
-        liubo03@inspur.com, michael.christie@oracle.com,
-        pankaj.gupta@amd.com, peng.fan@nxp.com, quic_mingxue@quicinc.com,
-        robin.murphy@arm.com, sgarzare@redhat.com, suwan.kim027@gmail.com,
-        syoshida@redhat.com, xieyongji@bytedance.com, xuqiang36@huawei.com,
-        "Michael S. Tsirkin" <mst@redhat.com>
-References: <20220812114250-mutt-send-email-mst@kernel.org>
- <20220814004522.33ecrwkmol3uz7aq@awork3.anarazel.de>
-In-Reply-To: <20220814004522.33ecrwkmol3uz7aq@awork3.anarazel.de>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 13 Aug 2022 21:55:36 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D2413DFD
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 18:55:34 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id j7so5191477wrh.3
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 18:55:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=TNitijqiLWD8N0q+QjMXs+eaMvvzYslxu1nXPHeU+Ic=;
+        b=FnPMYv53dzLScK8FwJaJSD6pM5/QMCnzb8PSymP17lig+ulpqphrfTK2MAtdzAuNfA
+         kLZiHwqJpmi2lIUCgXjQaJeg9pk/M5cWuP0qo4nR4zX8qJaIweMI+4l/yidgA73Uq0bk
+         oVEJOEhFQ8fPaV3G1qk7zi0vzv+j/hWN/djRGHS10xXc4+WQvd0RGrJVXoggVnTwoQg7
+         WHoVk0mzVGtaYYfs3K7jDLsL/hHqtS1VECCmz0RQlvdCzo5LCGg/1JgFw8iItP9mQaRY
+         c5VMlFdOr21yzIMfIEsc/9OSi8WfBf7UN4GxOBuq+pZkGZmSpEpvvW7BHkQXdzzm3nDg
+         kWag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=TNitijqiLWD8N0q+QjMXs+eaMvvzYslxu1nXPHeU+Ic=;
+        b=CELhAc6JZYJgg22P2NtVgKJWpc7DlpUxKfbM6g9mws6yTAZIEvjfYMtzaC+TgqEbdo
+         SCSi2MrTRWbJIM5/8AbLguq3H2lmYWSAiJNoGaahJBDyUVvJ+fYNF073GDF+okF6U4TL
+         fzXPegC5R/ZiZ2MjskAnRZrxrFUZ8/MrM+pckCp1667DISY8XW4+czU6xuAQ/mzvq+04
+         vbhNkYq9GUFcTt5SRUP8FcKHLkzaN1jvlmrbZ2+sorPmCEGuiR45Iiz6g+/SdH4WM3Zj
+         rfUj5DSKfE+QzE0DoM95/ynD8KXJ6VaUF6ZF2QWA4dEdcLO6sjcOVBvSG5eDdkndAuqd
+         SCuQ==
+X-Gm-Message-State: ACgBeo3TxWO+iz6knmGfo+wjTMHK3sAXiqfca4HcwTAvWyo/Xw7JMfen
+        7h+tfjqj8KnT6v7e5f8dJnA=
+X-Google-Smtp-Source: AA6agR4YBcFca/UDOlp8gjODh6JVGCJykTj6AJCW21OE2srC/zsZpZzUt9pGZd2DCjb887IpZnLr2Q==
+X-Received: by 2002:a05:6000:381:b0:221:7542:61bb with SMTP id u1-20020a056000038100b00221754261bbmr5264691wrf.305.1660442133117;
+        Sat, 13 Aug 2022 18:55:33 -0700 (PDT)
+Received: from localhost.localdomain ([84.255.184.228])
+        by smtp.gmail.com with ESMTPSA id l9-20020a5d5609000000b0021f1ec8776fsm3247558wrv.61.2022.08.13.18.55.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 13 Aug 2022 18:55:32 -0700 (PDT)
+From:   Mazin Al Haddad <mazinalhaddad05@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     jirislaby@kernel.org, daniel.starke@siemens.com,
+        linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        skhan@linuxfoundation.org, paskripkin@gmail.com,
+        Mazin Al Haddad <mazinalhaddad05@gmail.com>,
+        syzbot+e3563f0c94e188366dbb@syzkaller.appspotmail.com
+Subject: [PATCH v2] tty: n_gsm: add sanity check for gsm->receive in gsm_receive_buf()
+Date:   Sun, 14 Aug 2022 04:52:12 +0300
+Message-Id: <20220814015211.84180-1-mazinalhaddad05@gmail.com>
+X-Mailer: git-send-email 2.37.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 13 Aug 2022 17:45:22 -0700, Andres Freund <andres@anarazel.de> wrote:
-> Hi,
->
-> On 2022-08-12 11:42:50 -0400, Michael S. Tsirkin wrote:
-> > The following changes since commit 3d7cb6b04c3f3115719235cc6866b10326de34cd:
-> >
-> >   Linux 5.19 (2022-07-31 14:03:01 -0700)
-> >
-> > are available in the Git repository at:
-> >
-> >   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
-> >
-> > for you to fetch changes up to 93e530d2a1c4c0fcce45e01ae6c5c6287a08d3e3:
-> >
-> >   vdpa/mlx5: Fix possible uninitialized return value (2022-08-11 10:00:36 -0400)
-> > ----------------------------------------------------------------
-> > virtio: fatures, fixes
-> >
-> > A huge patchset supporting vq resize using the
-> > new vq reset capability.
-> > Features, fixes, cleanups all over the place.
-> >
-> > Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-> >
-> > ----------------------------------------------------------------
->
-> I have a script [1] that daily builds google cloud VM images with a fresh vanilla
-> kernel for postgres CI testing. The last successful image creation was
-> 7ebfc85e2cd7b08f518b526173e9a33b56b3913b
-> and the first failing was
-> 69dac8e431af26173ca0a1ebc87054e01c585bcc
->
-> Since then creating a new kernel boots but network does not come up.
->
-> Looking at the merges between those commit makes me suspect this merge:
->
-> 69dac8e431af Merge tag 'riscv-for-linus-5.20-mw2' of git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux
-> 6c833c0581f1 Merge tag 'devicetree-fixes-for-6.0-1' of git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux
-> 3d076fec5a0c Merge tag 'rtc-6.0' of git://git.kernel.org/pub/scm/linux/kernel/git/abelloni/linux
-> 4a9350597aff Merge tag 'sound-fix-6.0-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound
-> 7a53e17accce Merge tag 'for_linus' of git://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost
-> 999324f58c41 Merge tag 'loongarch-5.20' of git://git.kernel.org/pub/scm/linux/kernel/git/chenhuacai/linux-loongson
-> f7cdaeeab8ca Merge tag 'for-v6.0' of git://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply
-> d16b418fac3d Merge tag 'vfio-v6.0-rc1pt2' of https://github.com/awilliam/linux-vfio
-> 9801002f76c6 perf: riscv_pmu{,_sbi}: Miscallenous improvement & fixes
-> c3adefb5baf3 Merge tag 'for-6.0/dm-fixes' of git://git.kernel.org/pub/scm/linux/kernel/git/device-mapper/linux-dm
-> 7ce2aa6d7fe1 Merge tag 'drm-next-2022-08-12-1' of git://anongit.freedesktop.org/drm/drm
-> 7ab52f75a9cf RISC-V: Add Sstc extension support
-> 36fa1cb56ac5 Merge tag 'drm-misc-next-fixes-2022-08-10' of git://anongit.freedesktop.org/drm/drm-misc into drm-next
-> da06cc5bb600 RISC-V: fixups to work with crash tool
-> 6de9eb21cd36 Merge 'irq/loongarch', 'pci/ctrl/loongson' and 'pci/header-cleanup-immutable'
-> 3aefb2ee5bdd riscv: implement Zicbom-based CMO instructions + the t-head variant
-> 8f2f74b4b6e6 RISC-V: Canaan devicetree fixes
-> f94ba7039fb4 Merge tag 'at91-reset-sama7g5-signed' into psy-next
->
-> all the drivers/net changes in that commit range were part of this pull
-> request.
->
->
-> excerpt from serial log for debian sid kernel (sorry for the interspersed logs):
->
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 cloud-ifupdown-helper: Generated configuration for ens4
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 kern[  OK  ] Finished Raise network interfaces.
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 systemd[1]: Found device Virtio network device.
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 systemd[1]: Commit a transient machine-id on disk was skipped because of a failed condition check (ConditionPathIsMountPoint[  OK  ] Reached target Network.
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 systemd[1]: Started ifup for ens4.
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 kernel: [    0.354044] x86: [  OK  ] Reached target Network is Online.
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 dhclient[354]: Internet Systems Consortium DHCP Client 4.4.3
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 sh[354]: Internet Systems Consortium DHCP Client 4.4.3
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 sh[354]: Copyright 2004-2022 Internet Systems Consortium.
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 sh[354]: For info, please visit https://www.isc.org/software/dhcp/
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 dhclient[354]: Copyright 2004-2022 Internet Systems Consortium.
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 dhclient[354]: For info, please visit https://www.isc.org/software/dhcp/
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 systemd[1]: Starting Raise network interfaces...
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 ifup[356]: ifup: waiting for lock on /run/network/ifstate.ens4
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 dhclient[354]: Listening on LPF/ens4/42:01:0a:a8:00:07
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 sh[354]: Listening on LPF/ens4/42:01:0a:a8:00:07
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 sh[354]: Sending on   LPF/ens4/42:01:0a:a8:00:07
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 dhclient[354]: Sending on   LPF/ens4/42:01:0a:a8:00:07
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 sh[354]: DHCPDISCOVER on ens4 to 255.255.255.255 port 67 interval 7
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 kernel: [    0.400657] NET: Registered PF_NETLINK/PF_ROUTE protocol family
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 dhclient[354]: DHCPDISCOVER on ens4 to 255.255.255.255 port 67 interval 7
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 kernel: [    0.408289] audit: initializing netlink subsys (disabled)
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 dhclient[354]: DHCPOFFER of 10.168.0.7 from 169.254.169.254
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 sh[354]: DHCPOFFER of 10.168.0.7 from 169.254.169.254
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 sh[354]: DHCPREQUEST for 10.168.0.7 on ens4 to 255.255.255.255 port 67
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 dhclient[354]: DHCPREQUEST for 10.168.0.7 on ens4 to 255.255.255.255 port 67
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 dhclient[354]: DHCPACK of 10.168.0.7 from 169.254.169.254
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 sh[354]: DHCPACK of 10.168.0.7 from 169.254.169.254
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 kernel: [    0.549954] NetLabel: Initializing
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 kernel: [    0.550736] NetLabel:  domain hash size = 128
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 kernel: [    0.551480] NetLabel:  protocols = UNLABELED CIPSOv4 CALIPSO
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 kernel: [    0.552303] NetLabel:  unlabeled traffic allowed by default
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 kernel: [    0.570445] NET: Registered PF_INET protocol family
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 kernel: [    0.586842] NET: Registered PF_UNIX/PF_LOCAL protocol family
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 kernel: [    0.587916] NET: Registered PF_XDP protocol family
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 kernel: [    0.865585] NET: Registered PF_INET6 protocol family
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 kernel: [    0.872235] NET: Registered PF_PACKET protocol family
-> rnel: [    1.153962] virtio_net virtio1 ens4: renamed from eth0
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 sh[474]: ens4=ens4
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 systemd[1]: Finished Raise network interfaces.
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 systemd[1]: Reached target Network.
-> Aug 13 22:44:15 build-sid-newkernel-2022-08-13t22-41 systemd[1]: Reached target Network is Online.
->
-> rebooting into the new kernel:
->
-> [    0.475837] NET: Registered PF_NETLINK/PF_ROUTE protocol family
-> [    0.476558] audit: initializing netlink subsys (disabled)
-> [    0.630598] NetLabel: Initializing
-> [    0.631503] NetLabel:  domain hash size = 128
-> [    0.632409] NetLabel:  protocols = UNLABELED CIPSOv4 CALIPSO
-> [    0.632515] NetLabel:  unlabeled traffic allowed by default
-> [    0.654654] NET: Registered PF_INET protocol family
-> [    0.672514] NET: Registered PF_UNIX/PF_LOCAL protocol family
-> [    0.871362] Initializing XFRM netlink socket
-> [    0.872171] NET: Registered PF_INET6 protocol family
-> [    0.875791] NET: Registered PF_PACKET protocol family
-> [    0.876932] 9pnet: Installing 9P2000 support
-> [    0.887570] printk: console [netcon0] enabled
-> [    0.888339] netconsole: network logging started
-> [    0.943112] virtio_net virtio1 enp0s4: renamed from eth0
->          Starting Raise network interfaces...
-> [  OK  ] Found device Virtio network device.
-> [    1.876517] IPv6: ADDRCONF(NETDEV_CHANGE): enp0s4: link becomes ready
-> Aug 13 22:51:16 debian systemd[1]: Starting Raise network interfaces...
-> Aug 13 22:51:16 debian dhclient[349]: Internet Systems Consortium DHCP Client 4.4.3
-> Aug 13 22:51:16 debian ifup[349]: Internet Systems Consortium DHCP Client 4.4.3
-> Aug 13 22:51:16 debian ifup[349]: Copyright 2004-2022 Internet Systems Consortium.
-> Aug 13 22:51:16 debian ifup[349]: For info, please visit https://www.isc.org/software/dhcp/
-> Aug 13 22:51:16 debian dhclient[349]: Copyright 2004-2022 Internet Systems Consortium.
-> Aug 13 22:51:16 debian dhclient[349]: For info, please visit https://www.isc.org/software/dhcp/
-> Aug 13 22:51:16 debian kernel: [    0.475837] NET: Registered PF_NETLINK/PF_ROUTE protocol family
-> Aug 13 22:51:16 debian kernel: [    0.476558] audit: initializing netlink subsys (disabled)
-> Aug 13 22:51:16 debian systemd[1]: Found device Virtio network device.
-> Aug 13 22:51:16 debian ifup[349]: DHCPDISCOVER on enp0s4 to 255.255.255.255 port 67 interval 6
-> Aug 13 22:51:16 debian dhclient[349]: DHCPDISCOVER on enp0s4 to 255.255.255.255 port 67 interval 6
-> Aug 13 22:51:16 debian sh[356]: ifup: waiting for lock on /run/network/ifstate.enp0s4
-> Aug 13 22:51:16 debian kernel: [    0.630598] NetLabel: Initializing
-> Aug 13 22:51:16 debian kernel: [    0.631503] NetLabel:  domain hash size = 128
-> Aug 13 22:51:16 debian kernel: [    0.632409] NetLabel:  protocols = UNLABELED CIPSOv4 CALIPSO
-> Aug 13 22:51:16 debian kernel: [    0.632515] NetLabel:  unlabeled traffic allowed by default
-> Aug 13 22:51:16 debian kernel: [    0.654654] NET: Registered PF_INET protocol family
-> Aug 13 22:51:16 debian kernel: [    0.672514] NET: Registered PF_UNIX/PF_LOCAL protocol family
-> Aug 13 22:51:16 debian kernel: [    0.871362] Initializing XFRM netlink socket
-> Aug 13 22:51:16 debian kernel: [    0.872171] NET: Registered PF_INET6 protocol family
-> Aug 13 22:51:16 debian kernel: [    0.875791] NET: Registered PF_PACKET protocol family
-> Aug 13 22:51:16 debian kernel: [    0.876932] 9pnet: Installing 9P2000 support
-> Aug 13 22:51:16 debian kernel: [    0.887570] printk: console [netcon0] enabled
-> Aug 13 22:51:16 debian kernel: [    0.888339] netconsole: network logging started
-> Aug 13 22:51:16 debian kernel: [    0.943112] virtio_net virtio1 enp0s4: renamed from eth0
-> Aug 13 22:51:16 debian kernel: [    1.876517] IPv6: ADDRCONF(NETDEV_CHANGE): enp0s4: link becomes ready
-> [ ***  ] A start job is running for Raise network interfaces (6s / 5min)
-> Aug 13 22:51:22 debian dhclient[349]: DHCPDISCOVER on enp0s4 to 255.255.255.255 port 67 interval 13
-> [***   ] A start job is running for Raise network interfaces (19s / 5min)
-> Aug 13 22:51:35 debian dhclient[349]: DHCPDISCOVER on enp0s4 to 255.255.255.255 port 67 interval 14
-> [***   ] A start job is running for Raise network interfaces (33s / 5min)
-> ...
->
+A null pointer dereference can happen when attempting to access the
+"gsm->receive()" function in gsmld_receive_buf(). Currently, the code
+assumes that gsm->recieve is only called after MUX activation.
+Since the gsmld_receive_buf() function can be accessed without the need to
+initialize the MUX, the gsm->receive() function will not be set and a
+NULL pointer dereference will occur.
 
+Fix this by avoiding the call to "gsm->receive()" in case the function is
+not initialized by adding a sanity check.
 
-Hi,
+Call Trace:
+ <TASK>
+ gsmld_receive_buf+0x1c2/0x2f0 drivers/tty/n_gsm.c:2861
+ tiocsti drivers/tty/tty_io.c:2293 [inline]
+ tty_ioctl+0xa75/0x15d0 drivers/tty/tty_io.c:2692
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl fs/ioctl.c:856 [inline]
+ __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
 
-Sorry, I didn't get any valuable information from the logs, can you tell me how
-to get such an image? Or how your [1] script is executed.
+Fixes: 01aecd917114 ("tty: n_gsm: fix tty registration before control channel open")
+Link: https://syzkaller.appspot.com/bug?id=bdf035c61447f8c6e0e6920315d577cb5cc35ac5
+Reported-and-tested-by: syzbot+e3563f0c94e188366dbb@syzkaller.appspotmail.com
+Signed-off-by: Mazin Al Haddad <mazinalhaddad05@gmail.com>
+---
+v1->v2:
+- Change commit title and description, removing unneeded and 
+unclear references to syzbot bug.
+- Use a sanity check instead of reinitializing gsm->receive in
+	gsmld_attach_gsm() 
 
-Thanks.
+ drivers/tty/n_gsm.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index caa5c14ed57f..38688cb16c20 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -2858,7 +2858,8 @@ static void gsmld_receive_buf(struct tty_struct *tty, const unsigned char *cp,
+ 			flags = *fp++;
+ 		switch (flags) {
+ 		case TTY_NORMAL:
+-			gsm->receive(gsm, *cp);
++			if (gsm->receive)
++				gsm->receive(gsm, *cp);
+ 			break;
+ 		case TTY_OVERRUN:
+ 		case TTY_BREAK:
+-- 
+2.37.2
 
->
-> Greetings,
->
-> Andres Freund
->
->
-> [1] https://github.com/anarazel/pg-vm-images/blob/main/packer/linux_debian.pkr.hcl#L225

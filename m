@@ -2,75 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08D155926B6
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 23:51:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 477215926B9
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 23:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229799AbiHNVvw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 17:51:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58402 "EHLO
+        id S232190AbiHNVwN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 17:52:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiHNVvu (ORCPT
+        with ESMTP id S229570AbiHNVwL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 17:51:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64972120A6;
-        Sun, 14 Aug 2022 14:51:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 166E9B80BA3;
-        Sun, 14 Aug 2022 21:51:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B1855C433D6;
-        Sun, 14 Aug 2022 21:51:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660513907;
-        bh=wBrqcOv2/wyT6IsGtSBX2iuPGkcAX6m8mubdinrFZ5M=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=thr2iE/dpEPobaPaHHvAIjjE6eSkM+O6QuIPYeVIp7Hh98duJga9Db5Dh+KHuK7qj
-         sfijBUSkrGhndsBMeU1wqCx3VmvUVpKi34TrSAJ3ttMcB6cHeWGSrtVzAJU1JAkTTh
-         Js5NQu5DptHxJGZ4J9CdiYkFjkg+Q8cVageRkFAb1WNd6xx3DPCW+J0S0tmCC7Ye7B
-         fiqulCZfoQPnwtWK8B5MD6egTu65nXYzIGgQ24G6YkFQuwfh/aUOKcpybt4BpNl2IZ
-         2SAOF/ZnUEsvHfjhyECvXByEMg5c7Y+cakccd4FhPy6daV5vN7rWbrlFBA63fvR0BH
-         VAfoREvf9q9LQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 9F04FC43141;
-        Sun, 14 Aug 2022 21:51:47 +0000 (UTC)
-Subject: Re: [git pull] regression fix in lseek series
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <YvlLh8qZnCTmACaf@ZenIV>
-References: <YvlLh8qZnCTmACaf@ZenIV>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <YvlLh8qZnCTmACaf@ZenIV>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git tags/pull-fixes
-X-PR-Tracked-Commit-Id: 3f61631d47f115b83c935d0039f95cb68b0c8ab7
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 74cbb480d0efa61efa09e5ebd081a32e1d355bba
-Message-Id: <166051390764.2989.2908450609311058474.pr-tracker-bot@kernel.org>
-Date:   Sun, 14 Aug 2022 21:51:47 +0000
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 14 Aug 2022 17:52:11 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48BA12D26;
+        Sun, 14 Aug 2022 14:52:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:In-Reply-To:References;
+        bh=/RNl//CQIdgfxBiYXR2ClSuv26fcHBeLkZBQXo1ac8A=; b=Vfz3IoiDMyXbd/8N1C2zY4t4OO
+        0cNfyaYdHnoPSTcBG5nWEnmmxA7RE3fuAhp7FwUL0ZlrE4S974mAA67zoNnVLmW8to84O4OTACHdd
+        KmT0OkQpJFui+9udyZk1NS0cjqqo4GO3tUUuFMr96zvD4JkuHzJ2QMcQKXk89Sz4YuEhGFuzlWPl7
+        XYYDVM/l5WbDFfORJRnxs/dP/zaYlOt2OcHN0KPR5VD59j/RZUdPyxjcQKih+fRsYS9zz+iGJFwHm
+        ETljBGy3T/Tdodt+QcVe9f6FGTtIkJmZHJeELc46QESdK88XsbUT58mjc5pxtM6+ch8GJnKit1i6E
+        gnHC8WQQ==;
+Received: from [2601:1c0:6280:3f0::a6b3] (helo=casper.infradead.org)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oNLWc-0058iR-Rj; Sun, 14 Aug 2022 21:52:03 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        kernel test robot <lkp@intel.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org
+Subject: [PATCH] vfio-pci/zdev: require KVM to be built-in
+Date:   Sun, 14 Aug 2022 14:51:54 -0700
+Message-Id: <20220814215154.32112-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.37.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sun, 14 Aug 2022 20:22:47 +0100:
+Fix build errors when CONFIG_KVM=m:
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git tags/pull-fixes
+s390-linux-ld: drivers/vfio/pci/vfio_pci_zdev.o: in function `vfio_pci_zdev_open_device':
+vfio_pci_zdev.c:(.text+0x242): undefined reference to `kvm_s390_pci_register_kvm'
+s390-linux-ld: drivers/vfio/pci/vfio_pci_zdev.o: in function `vfio_pci_zdev_close_device':
+vfio_pci_zdev.c:(.text+0x296): undefined reference to `kvm_s390_pci_unregister_kvm'
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/74cbb480d0efa61efa09e5ebd081a32e1d355bba
+Having a bool Kconfig symbol depend on a tristate symbol can often
+lead to problems like this.
 
-Thank you!
+Fixes: 8061d1c31f1a ("vfio-pci/zdev: add open/close device hooks")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Reported-by: kernel test robot <lkp@intel.com>
+Cc: Matthew Rosato <mjrosato@linux.ibm.com>
+Cc: Christian Borntraeger <borntraeger@linux.ibm.com>
+Cc: Pierre Morel <pmorel@linux.ibm.com>
+Cc: Eric Farman <farman@linux.ibm.com>
+Cc: linux-s390@vger.kernel.org
+Cc: kvm@vger.kernel.org
+---
+ drivers/vfio/pci/Kconfig |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+--- a/drivers/vfio/pci/Kconfig
++++ b/drivers/vfio/pci/Kconfig
+@@ -46,7 +46,7 @@ endif
+ 
+ config VFIO_PCI_ZDEV_KVM
+ 	bool "VFIO PCI extensions for s390x KVM passthrough"
+-	depends on S390 && KVM
++	depends on S390 && KVM=y
+ 	default y
+ 	help
+ 	  Support s390x-specific extensions to enable support for enhancements

@@ -2,60 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97EF0591FE6
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 15:42:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AB79591FF2
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 15:55:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231717AbiHNNm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 09:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35740 "EHLO
+        id S231775AbiHNNzI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 09:55:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiHNNmY (ORCPT
+        with ESMTP id S229634AbiHNNzF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 09:42:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 727FB193FD;
-        Sun, 14 Aug 2022 06:42:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 231B4B80AEF;
-        Sun, 14 Aug 2022 13:42:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFB60C433D6;
-        Sun, 14 Aug 2022 13:42:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660484540;
-        bh=+xdN7oEY+9WqrPGLxQ2PsJ7z5Wp8A3zEOWd7PA8ZFJI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=mMHxT07i2boHESQ31CF3NEOyDRe/KKj/BDNLEKuHp+1Swp8j3/HHNyU8Bv7kVCQ+S
-         4hzBsjfZhVvaW+07zODSxiALgmPNQyEpvHAgma2IpNnBVRRiLW2aax9nFmpu4pZBVD
-         RFdbPKxYJNnZ9miIjCKNCySWd3ll91CuCZ7huorMtkiiPwA0q8j6M/Uu+8dTcPCZMM
-         C8rxGEqifYP0jo+qBhqxVIo1+Jmew7LHnV43U/kN27Nnze9kO1s7Ng5fKszVRUybsQ
-         dfSVCHfBSoaYes3qfNNk8vk3qCQCqwA6Q0mG8yiYywEWa1GIPfX4/SHaiTLhJDEi/C
-         kyxXkdWkIUdFA==
-Date:   Sun, 14 Aug 2022 14:52:49 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
+        Sun, 14 Aug 2022 09:55:05 -0400
+X-Greylist: delayed 132 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 14 Aug 2022 06:55:03 PDT
+Received: from mx1.mythic-beasts.com (mx1.mythic-beasts.com [IPv6:2a00:1098:0:86:1000:0:2:1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A88311CB3C;
+        Sun, 14 Aug 2022 06:55:03 -0700 (PDT)
+Received: from [90.243.5.40] (port=34492 helo=jic23-huawei)
+        by mailhub-cam-d.mythic-beasts.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <jic23@jic23.retrosnub.co.uk>)
+        id 1oNE39-00FxlA-SQ; Sun, 14 Aug 2022 14:53:08 +0100
+Date:   Sun, 14 Aug 2022 15:03:22 +0100
+From:   Jonathan Cameron <jic23@jic23.retrosnub.co.uk>
 To:     Angel Iglesias <ang.iglesiasg@gmail.com>
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        linux-iio <linux-iio@vger.kernel.org>,
+Cc:     linux-iio <linux-iio@vger.kernel.org>,
         Lars-Peter Clausen <lars@metafoo.de>,
         Paul Cercueil <paul@crapouillou.net>,
         Ulf Hansson <ulf.hansson@linaro.org>,
         "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+        linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v5 2/5] iio: pressure: bmp280: Fix alignment for DMA
  safety
-Message-ID: <20220814145249.701f1261@jic23-huawei>
-In-Reply-To: <ba71ba74e9115bebce82a2afbd5d62a2e4ecf666.camel@gmail.com>
+Message-ID: <20220814150255.4f24fa9d@jic23-huawei>
+In-Reply-To: <49086f5c1401d7d28ebf921a67b49f8403ddb16a.1659872590.git.ang.iglesiasg@gmail.com>
 References: <cover.1659872590.git.ang.iglesiasg@gmail.com>
         <49086f5c1401d7d28ebf921a67b49f8403ddb16a.1659872590.git.ang.iglesiasg@gmail.com>
-        <CAHp75Vfanb+tZe_D5_hPWn2BrOEkds9i7AZzD5Xc1M5a9GK6qg@mail.gmail.com>
-        <ba71ba74e9115bebce82a2afbd5d62a2e4ecf666.camel@gmail.com>
 X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-BlackCat-Spam-Score: 19
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,160 +50,208 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 12 Aug 2022 11:59:50 +0200
+On Sun,  7 Aug 2022 13:55:15 +0200
 Angel Iglesias <ang.iglesiasg@gmail.com> wrote:
 
-> On lun, 2022-08-08 at 10:53 +0200, Andy Shevchenko wrote:
-> > On Sun, Aug 7, 2022 at 1:56 PM Angel Iglesias <ang.iglesiasg@gmail.com>=
- wrote: =20
-> > >=20
-> > > Adds DMA-safe buffers to driver data struct to store raw data from se=
-nsors
-> > >=20
-> > > The multiple buffers used thorough the driver share the same memory
-> > > allocated as part of the device data instance. The union containing
-> > > the buffers is aligned to allow safe usage with DMA operations, such
-> > > as regmap bulk read calls. =20
-> >=20
-> > ...
-> >  =20
-> > > =C2=A0#include <linux/completion.h>
-> > > =C2=A0#include <linux/pm_runtime.h>
-> > > =C2=A0#include <linux/random.h> =20
-> >=20
-> > + Blank line.
-> >  =20
-> > > +#include <asm/unaligned.h> =20
-> >=20
-> > ...
-> >  =20
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 union {
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 /* sensor data buffer */
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 u8 data[3];
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 /* calibration data buffers */
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 __le16 bmp280_cal[BMP280_CONTIGUOUS_CALIB_REGS / 2];
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 __be16 bmp180_cal[BMP180_REG_CALIB_COUNT / 2];
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 } buf __aligned(IIO_DMA_MINALIG=
-N); =20
-> >=20
-> > Hmm... And which field in the struct defines which of the buffers is be=
-ing
-> > used? =20
+> Adds DMA-safe buffers to driver data struct to store raw data from sensors
+> 
+> The multiple buffers used thorough the driver share the same memory
+> allocated as part of the device data instance. The union containing
+> the buffers is aligned to allow safe usage with DMA operations, such
+> as regmap bulk read calls.
+> 
+> Updated measurement and calibration reading functions to use the new,
+> DMA-safe, buffers.
+> 
+> Suggested-by: Jonathan Cameron <jic23@kernel.org>
+> Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com>
+Hi Angel,
 
-I think the answer to this is which callback is set in the chip_data struct=
-ure
-defines which one of the calibration buffers is in use for that purpose.
-The one used for everything else is defined by the code path, not an explic=
-it
-variable.
+As you are doing a v6 anyway to address Andy's review, I
+took another look and have a few additional comments below.
+> ---
+>  drivers/iio/pressure/bmp280-core.c | 122 ++++++++++++++---------------
+>  drivers/iio/pressure/bmp280.h      |   3 +
+>  2 files changed, 64 insertions(+), 61 deletions(-)
+> 
+> diff --git a/drivers/iio/pressure/bmp280-core.c b/drivers/iio/pressure/bmp280-core.c
+> index a109c2609896..4cd657dcbfed 100644
+> --- a/drivers/iio/pressure/bmp280-core.c
+> +++ b/drivers/iio/pressure/bmp280-core.c
+> @@ -31,6 +31,7 @@
+>  #include <linux/completion.h>
+>  #include <linux/pm_runtime.h>
+>  #include <linux/random.h>
+> +#include <asm/unaligned.h>
+>  
+>  #include "bmp280.h"
+>  
+> @@ -106,6 +107,18 @@ struct bmp280_data {
+>  	 * calculation.
+>  	 */
+>  	s32 t_fine;
+> +
+> +	/*
+> +	 * DMA (thus cache coherency maintenance) may require the
+> +	 * transfer buffers to live in their own cache lines.
+> +	 */
+> +	union {
+> +		/* sensor data buffer */
+> +		u8 data[3];
+__le16 le16;
+__be16 be16; 
 
-There might be some (I haven't looked) but lock protection is unnecessary as
-_cal buffers used before we register the device so there is no concurrency =
-yet.
+added here would simplify some of the other changes below.
 
->=20
-> There's no concurrent use of the buffers. Calibration data is read during=
- the
-> initialization of the sensor. The data buffer is then used to store the r=
-aw data
-> read from the measurement regs, and is also used a few times to read a th=
-e humid
-> calibration on BME280, but again, in a sequential, non concurrent manner.
->=20
-> Regarding which calibration buffer is used, is the same situation as the
-> calibration data union, helper functions and callback for the sensor use =
-the
-> buffer reserved for the sensor. I don't know if this is the best approach=
-, I
-> just followed what I saw previously on this drivers and others from IIO
-> subsystem.
->=20
-> > Also, do you need a non-anonymous union? =20
->=20
-> No I could use an anonymous function. Should I change it to an anonymous =
-union?
-yes.  That seems a good idea.
+> +		/* calibration data buffers */
+> +		__le16 bmp280_cal[BMP280_CONTIGUOUS_CALIB_REGS / 2];
+> +		__be16 bmp180_cal[BMP180_REG_CALIB_COUNT / 2];
+> +	} buf __aligned(IIO_DMA_MINALIGN);
+>  };
+>  
+>  struct bmp280_chip_info {
+> @@ -162,41 +175,29 @@ static int bmp280_read_calib(struct bmp280_data *data, unsigned int chip)
+>  {
+>  	int ret;
+>  	unsigned int tmp;
+> -	__le16 l16;
+> -	__be16 b16;
+>  	struct device *dev = data->dev;
+> +	__le16 *t_buf = data->buf.bmp280_cal;
+> +	__le16 *p_buf = &data->buf.bmp280_cal[T3+1];
 
-It's worth giving unions a name if you are using them such that you write v=
-ia
-one element and read via another (e.g. for type conversion) but where it's =
-really
-just a case of potential space saving like this, nice to use an anonymous u=
-nion
-and shorten all the lines accessing the elements.
+spaces around +
 
->=20
-> > > =C2=A0}; =20
-> >=20
-> > ...
-> >  =20
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* parse temperature calibratio=
-n data */ =20
-> >=20
-> > Be consistent! Check all your patches for the consistency (comments,
-> > other code style, etc).
-> >=20
-> > ...
-> >  =20
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 calib->H5 =3D sign_extend32(((g=
-et_unaligned_le16(data->buf.data) >> 4)
-> > > & 0xfff), 11); =20
-> >=20
-> > (It's not directly related to this change, but good to ask)
-> > Are you going to change all those masks to use GENMASK()? =20
->=20
-> I thought I made sense refresh previous code on the driver to use GENMASK=
-() and
-> FIELD_PREP and FIELD_GET helpers to use the same standards on the BMP380
-> codepath. Having in mind other feedback you gave me on this iteration, th=
-is
-> GENMASK() and FIELD_PREP/FIELD_GET changes make more sense in a prerequis=
-ite
-> patch and not as part of patch 1.
+>  	struct bmp280_calib *calib = &data->calib.bmp280;
+> -	__le16 t_buf[BMP280_COMP_TEMP_REG_COUNT / 2];
+> -	__le16 p_buf[BMP280_COMP_PRESS_REG_COUNT / 2];
+>  
+>  	/* Read temperature calibration values. */
+>  	ret = regmap_bulk_read(data->regmap, BMP280_REG_COMP_TEMP_START,
+> -			       t_buf, BMP280_COMP_TEMP_REG_COUNT);
+> +			       data->buf.bmp280_cal, sizeof(data->buf.bmp280_cal));
+Given we don't use the local variable until later (as can't get the size from it,
+I would suggest only setting it further down.
 
-Agreed. I was thinking the same thing.  Pulling out that conversion as a pr=
-ecursor
-nop cleanup will make all the subsequent changes more readable. Great!
+>  	if (ret < 0) {
+>  		dev_err(data->dev,
+>  			"failed to read temperature calibration parameters\n");
+>  		return ret;
+>  	}
+>  
+> -	/* Toss the temperature calibration data into the entropy pool */
+> -	add_device_randomness(t_buf, sizeof(t_buf));
+> +	/* Toss the temperature and pressure calibration data into the entropy pool */
+> +	add_device_randomness(data->buf.bmp280_cal, sizeof(data->buf.bmp280_cal));
+>  
+like here.
+	t_buf = data->bmp280_cal;
 
->=20
-> > ...
-> >  =20
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct bmp180_calib *calib =3D =
-&data->calib.bmp180;
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int ret;
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int i;
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct bmp180_calib *calib =3D =
-&data->calib.bmp180; =20
-> >=20
-> > Exactly my point given the previous patch, now you have a ping-pong
-> > style of changes: the introduced line in the series is being touched
-> > again in the very same series without any need. =20
->=20
-> Yup, apologies. I'll be more careful
+or just don't bother with those at all as they don't greatly help readability over
+	calib->T1 = le16_to_cpu(data->bmp280_cal[T1]);
+similar for p_buf.
+Note I haven't looked at the existing code to see if there are other reasons to
+use t_buf etc, so  may be wrong on this!
+It will as make this patch more complex even if the code ends up simpler as a result.
 
-I'm not particularly fussy about reverse xmas tree so wouldn't normally
-advocate a cleanup patch just to reorder local variable definitions.
-However, I think in this case it would be good to have such a precursor
-patch so as to make the ordering more logical for the additions made
-by the rest of the series.
+> +	/* parse temperature calibration data */
+>  	calib->T1 = le16_to_cpu(t_buf[T1]);
+>  	calib->T2 = le16_to_cpu(t_buf[T2]);
+>  	calib->T3 = le16_to_cpu(t_buf[T3]);
+>  
+> -	/* Read pressure calibration values. */
+> -	ret = regmap_bulk_read(data->regmap, BMP280_REG_COMP_PRESS_START,
+> -			       p_buf, BMP280_COMP_PRESS_REG_COUNT);
+> -	if (ret < 0) {
+> -		dev_err(data->dev,
+> -			"failed to read pressure calibration parameters\n");
+> -		return ret;
+> -	}
+> -
+> -	/* Toss the pressure calibration data into the entropy pool */
+> -	add_device_randomness(p_buf, sizeof(p_buf));
+> -
+> +	/* parse pressure calibration data */
+>  	calib->P1 = le16_to_cpu(p_buf[P1]);
+>  	calib->P2 = le16_to_cpu(p_buf[P2]);
+>  	calib->P3 = le16_to_cpu(p_buf[P3]);
+> @@ -224,12 +225,12 @@ static int bmp280_read_calib(struct bmp280_data *data, unsigned int chip)
+>  	}
+>  	calib->H1 = tmp;
+>  
+> -	ret = regmap_bulk_read(data->regmap, BMP280_REG_COMP_H2, &l16, 2);
+> +	ret = regmap_bulk_read(data->regmap, BMP280_REG_COMP_H2, data->buf.data, 2);
 
-Thanks,
+Bit nasty to read little endian into buf.data which I think is a u8 array.
+Maybe we need another entry in that union for each of le16 and be16 similar to the
+local variables previously in this function?
+ 
+>  	if (ret < 0) {
+>  		dev_err(dev, "failed to read H2 comp value\n");
+>  		return ret;
+>  	}
+> -	calib->H2 = sign_extend32(le16_to_cpu(l16), 15);
+> +	calib->H2 = get_unaligned_le16(data->buf.data);
+>  
+>  	ret = regmap_read(data->regmap, BMP280_REG_COMP_H3, &tmp);
+>  	if (ret < 0) {
+> @@ -238,20 +239,20 @@ static int bmp280_read_calib(struct bmp280_data *data, unsigned int chip)
+>  	}
+>  	calib->H3 = tmp;
+>  
+> -	ret = regmap_bulk_read(data->regmap, BMP280_REG_COMP_H4, &b16, 2);
+> +	ret = regmap_bulk_read(data->regmap, BMP280_REG_COMP_H4, data->buf.data, 2);
+>  	if (ret < 0) {
+>  		dev_err(dev, "failed to read H4 comp value\n");
+>  		return ret;
+>  	}
+> -	calib->H4 = sign_extend32(((be16_to_cpu(b16) >> 4) & 0xff0) |
+> -				  (be16_to_cpu(b16) & 0xf), 11);
+> +	calib->H4 = sign_extend32(((get_unaligned_be16(data->buf.data) >> 4) & 0xff0) |
+> +				  (get_unaligned_be16(data->buf.data) & 0xf), 11);
+>  
+> -	ret = regmap_bulk_read(data->regmap, BMP280_REG_COMP_H5, &l16, 2);
+> +	ret = regmap_bulk_read(data->regmap, BMP280_REG_COMP_H5, data->buf.data, 2);
+>  	if (ret < 0) {
+>  		dev_err(dev, "failed to read H5 comp value\n");
+>  		return ret;
+>  	}
+> -	calib->H5 = sign_extend32(((le16_to_cpu(l16) >> 4) & 0xfff), 11);
+> +	calib->H5 = sign_extend32(((get_unaligned_le16(data->buf.data) >> 4) & 0xfff), 11);
+>  
+>  	ret = regmap_read(data->regmap, BMP280_REG_COMP_H6, &tmp);
+>  	if (ret < 0) {
 
-Jonathan
+...
 
->=20
-> > ...
-> >  =20
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 u8 oss =3D data->oversampl=
-ing_press;
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int ret; =20
-> >=20
-> > Ditto.
-> >  =20
->=20
+>  static int bmp280_read_humid(struct bmp280_data *data, int *val, int *val2)
+>  {
+> -	__be16 tmp;
+>  	int ret;
+>  	s32 adc_humidity;
+>  	u32 comp_humidity;
+> @@ -420,13 +420,14 @@ static int bmp280_read_humid(struct bmp280_data *data, int *val, int *val2)
+>  	if (ret < 0)
+>  		return ret;
+>  
+> -	ret = regmap_bulk_read(data->regmap, BMP280_REG_HUMIDITY_MSB, &tmp, 2);
+> +	ret = regmap_bulk_read(data->regmap, BMP280_REG_HUMIDITY_MSB,
+> +			       data->buf.data, 2);
+>  	if (ret < 0) {
+>  		dev_err(data->dev, "failed to read humidity\n");
+>  		return ret;
+>  	}
+>  
+> -	adc_humidity = be16_to_cpu(tmp);
+> +	adc_humidity = get_unaligned_be16(data->buf.data);
+
+We are only unaligned because data is u8 and a dumb compiler might not realize the
+alignment is forced.  Use the suggestion above of a couple more entries in the
+union and we can switch back to be16_to_cpu()
+
+>  	if (adc_humidity == BMP280_HUMIDITY_SKIPPED) {
+>  		/* reading was skipped */
+>  		dev_err(data->dev, "reading humidity skipped\n");
+> @@ -767,7 +768,6 @@ static int bmp180_measure(struct bmp280_data *data, u8 ctrl_meas)
+>  
 

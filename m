@@ -2,100 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1EEB5926AE
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 23:41:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 637465926B3
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 23:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbiHNVkr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 17:40:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49864 "EHLO
+        id S232115AbiHNVpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 17:45:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiHNVko (ORCPT
+        with ESMTP id S229640AbiHNVpA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 17:40:44 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA73165A3
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 14:40:43 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id dc19so10696847ejb.12
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 14:40:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=0N4kyysm9/43RV8zlNyJuXGP2DDx8PgtF4Hpfd6IqQI=;
-        b=O35nkYmaMrrX07dYjyoaxKR8A0rqhR+2NpVv+mUgfy/3Kp3hftiXLD/V7Tw+//q2a6
-         NCjR8a6YiqPQTM83P87L9hkGavh4s5YhasJUqiLKocBTjM2fnmQBWTDr8Qkf0hVshov0
-         8tZ1gHk6uEU6qM/IiOUkiQ29GKCdD/P8wC1Wg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=0N4kyysm9/43RV8zlNyJuXGP2DDx8PgtF4Hpfd6IqQI=;
-        b=JRKy8U7vjfiBzbx+jTIspbIPlHrpM2xDWZ7u8exakipfyp8h27C1l/0p79yT1dHiLk
-         2c3OXCUf8Ou9rp2iQoBoyq+2PzU6Wr/8+ybrGUbZsQWyEM28LXoefgjfJ5zPyP97TKLq
-         5GNv2w7oc1chSuL0jGDSIwXUOL5jN9aZZu9BhwkuF030WIOzU4fnWLZT/toLqc4DvwyO
-         /jbEVYXIxxLXuEp8jOHHC+xaUvDq2EDgRQt5tEvwM7dmyzmiBR3QEoBwaJW84p1MidLz
-         LLWF1WytLa7NyA7olVA3KmEcPOHPSPl5+ccfCbn2p5cenklUXwHGPBAEQngHnmnP3gLu
-         zNog==
-X-Gm-Message-State: ACgBeo0Ik35t97l7iqro1cyFcs5Hg/CnGgi41IunV6Mln/SoXYI7fEbd
-        7O0ahwNCtFlUo0ZPqAqPUqdx9DWVF/w95H7R
-X-Google-Smtp-Source: AA6agR4K0aAN/9YhY53zkR4qts4lYDTyUPygpxA8RLGV7dk+yIXdfjZmL0TkYc2uLrE+N9R8W4B9vg==
-X-Received: by 2002:a17:907:1c01:b0:6f4:2692:e23 with SMTP id nc1-20020a1709071c0100b006f426920e23mr8410472ejc.243.1660513242234;
-        Sun, 14 Aug 2022 14:40:42 -0700 (PDT)
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com. [209.85.128.43])
-        by smtp.gmail.com with ESMTPSA id g1-20020a17090604c100b0073100dfa7b0sm3336853eja.8.2022.08.14.14.40.41
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 14 Aug 2022 14:40:41 -0700 (PDT)
-Received: by mail-wm1-f43.google.com with SMTP id j26so872700wms.0
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 14:40:41 -0700 (PDT)
-X-Received: by 2002:a05:600c:4ed0:b0:3a3:3ef3:c8d1 with SMTP id
- g16-20020a05600c4ed000b003a33ef3c8d1mr14599046wmq.154.1660513241376; Sun, 14
- Aug 2022 14:40:41 -0700 (PDT)
+        Sun, 14 Aug 2022 17:45:00 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0C9A13DE3;
+        Sun, 14 Aug 2022 14:44:59 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 337BE5C0097;
+        Sun, 14 Aug 2022 17:44:57 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Sun, 14 Aug 2022 17:44:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm2; t=1660513497; x=1660599897; bh=jqlD7yVSqZ
+        yD6KOheU8+muzUY2FRZEPS38bOB3ZJl/8=; b=K45A4r0OO5nLuD8E2dCYXo0FIJ
+        xoK1nv0p9A2O/Xd63Qguz31IqkZ0eJM/NV4LIESz2aXNP0ESfCm6s06hZRB+s8Hq
+        iS6HOtN1NaGuvdeJ/pMmo98gzrWAd6q5bfX2odvsSxciqnK87+Ib4H9IJbrhrGwb
+        jym2pNpFBFA683dyYsdyQ9Q16yRP8uH4L1GZNwODi6r2/tZfVReQIVQeC1ujar4j
+        Z9maq2RlgO4Ypj6NXhEhAwteQqaJ+cfj1qQtO6T7Na/79i2Y8wEBcXaUG63hxwSD
+        m64DnzDKYCL94ItXcvQFqxh1QGDWzmDTHzAlWIev9VN3Dqbb+lfqYRbcMYIA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm1; t=1660513497; x=1660599897; bh=jqlD7yVSqZyD6KOheU8+muzUY2FR
+        ZEPS38bOB3ZJl/8=; b=OGrGwPoXZmxtxvnajD7xISXwjgfmy4op+GjQ3jPpyXYk
+        cMhP4guBVKEw3YX3iM5QtO74n1EEysHaEy/cZB7JIL27WZ2USNkBk4vl7TpK54aK
+        7b2I6YDzxlJ1uVaEmOLWAz0KP9ew4jHvtIAUH2vlz/lvUo7Y52zXWggV3XIB4fqR
+        mDFn3TwepHHMRGZraMvAqQdkX9Q2KLdA/9s3FeXfI+1HyeuDXM1BYuURPkvUXJ6f
+        PvBn0U9DECriJMJjQvyJVMEu0s7elmUVbdaQk3/2cgANWUaUh767wbHBuPpApr+f
+        TXpIngdPBZoydFk/natk0+5AQp55P5jriSG3gTF4Wg==
+X-ME-Sender: <xms:2Gz5YnR2JSdmpgoqOO7YTfhRwfeFny0nGfSRFBML3g8hoQqQcP2hKw>
+    <xme:2Gz5YozDRWaINUXVJz_QI13VR3cpvbusRoHNgoCg-UljpyzxIdWGhcHkLUNgXxjKA
+    US86WmUha41l_3If-4>
+X-ME-Received: <xmr:2Gz5Ys1i1N1bQW_hF8c6On66G_89ojnV_Inm9qWxd1v7INH4zBJF7YJ1SuYc4vlzhpXJhQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehuddgtdegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhuffvvefkjghfofggtgesthdtredtredtvdenucfhrhhomhepnfhukhgv
+    ucflohhnvghsuceolhhukhgvsehljhhonhgvshdruggvvheqnecuggftrfgrthhtvghrnh
+    epvddvgeeltdehfeeijefgveegfeeihfdtveetfeetudfhvedtfeeltefhteegledunecu
+    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheplhhukhgvse
+    hljhhonhgvshdruggvvh
+X-ME-Proxy: <xmx:2Gz5YnCrEWQisfTpAx5oZZwxq6allFa6sV4RuCALUFc0Lxf0YbY19Q>
+    <xmx:2Gz5YghjEOPiFndFb01CQWtrTkS2KFc9vS7h9r4hmd2oLd7e-U1ZIg>
+    <xmx:2Gz5Yrr2OSPvc4c2E2Fk616P4CN2pSqkiNbtaK1rUFuz9ovuP489Zg>
+    <xmx:2Wz5YjvJkXfUn3WoJ532ff8ya7cThzyvrPqmRihviBoNPyYxAbY18A>
+Feedback-ID: i5ec1447f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 14 Aug 2022 17:44:51 -0400 (EDT)
+Date:   Mon, 15 Aug 2022 09:44:35 +1200
+From:   Luke Jones <luke@ljones.dev>
+Subject: Re: [PATCH] asus-wmi: Support the hardware GPU MUX on some laptops
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     hdegoede@redhat.com, markgross@kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <BEKMGR.6HATWYKRRTJQ1@ljones.dev>
+In-Reply-To: <20220814104210.GA22519@wunner.de>
+References: <20220813092624.6228-1-luke@ljones.dev>
+        <20220813105533.GA3258@wunner.de>
+        <56171d4f65c02d3cba64d2f6d49e190107c12a18.camel@ljones.dev>
+        <20220814104210.GA22519@wunner.de>
+X-Mailer: geary/40.0
 MIME-Version: 1.0
-References: <20220814212610.GA3690074@roeck-us.net>
-In-Reply-To: <20220814212610.GA3690074@roeck-us.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 14 Aug 2022 14:40:25 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgf2EfLHui6A5NbWoaVBB2f8t-XBUiOMkyjN2NU41t6eA@mail.gmail.com>
-Message-ID: <CAHk-=wgf2EfLHui6A5NbWoaVBB2f8t-XBUiOMkyjN2NU41t6eA@mail.gmail.com>
-Subject: Re: upstream kernel crashes
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Andres Freund <andres@anarazel.de>
-Cc:     linux-kernel@vger.kernel.org, Greg KH <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 14, 2022 at 2:26 PM Guenter Roeck <linux@roeck-us.net> wrote:
->
-> Hi all,
->
-> syscaller reports lots of crashes with the mainline kernel. The latest
-> I have seen, based on the current ToT, is attached. Backtraces are not
-> always the same, but this one is typical.
->
-> I have not tried to analyze this further.
 
-This smells like the same issue that Andres Freund reported:
 
-   https://lore.kernel.org/all/20220814043906.xkmhmnp23bqjzz4s@awork3.anarazel.de/
+On Sun, Aug 14 2022 at 12:42:10 +0200, Lukas Wunner <lukas@wunner.de> 
+wrote:
+> On Sun, Aug 14, 2022 at 09:09:43PM +1200, Luke Jones wrote:
+>>  On Sat, 2022-08-13 at 12:55 +0200, Lukas Wunner wrote:
+>>  > On Sat, Aug 13, 2022 at 09:26:24PM +1200, Luke D. Jones wrote:
+>>  > > Support the hardware GPU MUX switch available on some models. 
+>> This
+>>  > > switch can toggle the MUX between:
+>>  > >
+>>  > > - 0, Dedicated mode
+>>  > > - 1, Optimus mode
+>>  > >
+>>  > > Optimus mode is the regular iGPU + dGPU available, while 
+>> dedicated
+>>  > > mode switches the system to have only the dGPU available.
+>>  >
+>>  > Could you please integrate this with the framework provided by:
+>>  >
+>>  >   include/linux/vga_switcheroo.h
+>>  >   drivers/gpu/vga/vga_switcheroo.c
+>>  >
+>>  > vga_switcheroo will then automatically expose a sysfs interface.
+>> 
+>>  I did investigate this first before submitting. The way asus does 
+>> it is
+>>  not standard at all. On switch you must reboot, and the change isn't
+>>  reflected by the ACPI get method until reboot. It's very reflective 
+>> of
+>>  how they used dgpu_disable to work around windows issues that we do 
+>> in
+>>  Linux by removing the device from the device tree.
+>> 
+>>  The key thing is a reboot is required. This is not done on-the-fly. 
+>> I
+>>  have a two year old GX502 which has the same method as exposed here,
+>>  and also a 2022 TUF laptop with same method. My understanding of 
+>> this
+>>  pariicular method is that it isn't the same one as what Nvidia is
+>>  advertising, and ASUS is perhaps misadvertising it - the suspision 
+>> is
+>>  raised by the fact that my GX502 machine predates what Nvidia is
+>>  advertising.
+> 
+> I see, thanks for the explanation.  You may want to add that
+> background information to the commit message if/when respinning.
+> Indeed vga_switcheroo facilitates GPU switching at runtime,
+> not upon next reboot.
+> 
+> Thanks,
+> 
+> Lukas
 
-he blamed the virtio changes, mainly based on the upstream merges
-between his bad tree and last good tree, ie
+Good point, yes I will do that after reviews.
 
-    git log --merges --author=torvalds --oneline 7ebfc85e2cd7..69dac8e431af
 
-and assuming those end-points are accurate, that does seem to be the
-most likely area.
-
-Andres was going to try to bisect it, but if you have some idea where
-this all started, that would help.
-
-                Linus

@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9EBA591EF5
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 09:47:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33D38591EF7
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 09:47:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239601AbiHNHq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 03:46:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38350 "EHLO
+        id S240227AbiHNHrO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 03:47:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbiHNHq5 (ORCPT
+        with ESMTP id S240102AbiHNHrM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 03:46:57 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AE7D1EACD;
-        Sun, 14 Aug 2022 00:46:55 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id x21so6126440edd.3;
-        Sun, 14 Aug 2022 00:46:55 -0700 (PDT)
+        Sun, 14 Aug 2022 03:47:12 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FBE51EAEA;
+        Sun, 14 Aug 2022 00:47:11 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id f22so6111497edc.7;
+        Sun, 14 Aug 2022 00:47:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=0ZqIRQWJDcAC5WtbT7TgFRmcMUbjN/uJOcvXh/zp784=;
-        b=gxLU9r/njC15ZNa7u6wmpTydgDAmpZqNMGimY2taEyzEHjjMII7wiFB+6IgXe8E7Tj
-         tEiKi+U/UOWI5BgH/N7PCzqY5Do6hz8mQ3uKO2ptcCp7hy+PGyH88inR6MuKIdA/usqX
-         ofY8vpWAhNCh7o50QyseDquZ+A3VyEKw2hqIwB64vW8V/sR+stgRWaL3TfVysNs9Bw2h
-         sLn/NLo7rTFRCVaQkz9t5NHfjvBNXXBlI1H2ToZQT7ar+86To1Ol2M0G8wM01rc8UAMC
-         EP404fnL3P2vDtpig9tQU+cSAZakASLZfRp36Os/ODMalwIl7Wru2Udldvs7qG62w6qv
-         em5w==
+        bh=hPc+aF2VAi/VbtY/nNmAuTS5AG9h1lW1aTIOSa9Z7t8=;
+        b=TcrPgJ4ohViDciruhNDRuGYu8uFAQ7ywdU0cgSCp6gfiZ9WMtHxZGnHTWpXtzyJFww
+         Pg90Kl2fWc/reoStkjEFcj8YZHJUHgvqsoaCwnOWScJMxfY9Lpu5lcOtwXD0/b3rsy+q
+         XLbNEtxtZ9L4JYQxWpHo+hBBlOlDzOlRUGP+1iPQNp5vAHXhC/q0M2LXWfXT/SepsYCJ
+         MJu0Ga3dQGkUi09svuD8eTus6cQJ282lmm82NP0KnCyfcNJso0p/fhuQShnqOlFxYyOd
+         7u7Y2pTLQE+++IL5972uDenQ5Q2XG7Bp10K46srntrOJ9ChWAHpCkS3z+kvs3pC3+Avg
+         QvsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=0ZqIRQWJDcAC5WtbT7TgFRmcMUbjN/uJOcvXh/zp784=;
-        b=RV3FP/cTkRBYLUh6zM2AC8CxPYjYV1UKGMEBOQkzn1ShyV+CQVDAGWV714jkiUO8Sy
-         YySwiCmHZKUkV4Qcht3L7D/XVEOm3trNcR5/9VdC0flPBy0vFhD00IvC0quTMJ/SBQ5/
-         N2kwvpqnwW3LzkFCHxOAmZ/P5nQgYXj4vvUoXriMTYspnBW1eJID40Ng4T/0bSbmCzFt
-         YMSGdZWfMSLLt0kXPidejv8o5phqGELs7oe+rsZ7kb6d/6dEhiK4oHwumNPmFYa6fStG
-         Dap1qfawbl09VP0HiLCDLBExhR8souzFxStLybRsRyxp5L7Gr8AhO3CtUTnvFHATj9sa
-         JXPw==
-X-Gm-Message-State: ACgBeo3W2vBqItZ9r/ienimk1uwTM1ZYtJlyniU1dFM80ibHIQuUV9Iy
-        zrle0ma1FaH79FKqLRoeahU=
-X-Google-Smtp-Source: AA6agR4PqI308kOBU328tJjNj3BJGJwFneQKD2OMYaR6Vh3pmZvoBbypevpZRbQBhX87/O3h9QhLAg==
-X-Received: by 2002:a05:6402:4029:b0:443:a5f5:5324 with SMTP id d41-20020a056402402900b00443a5f55324mr1351235eda.51.1660463213805;
-        Sun, 14 Aug 2022 00:46:53 -0700 (PDT)
+        bh=hPc+aF2VAi/VbtY/nNmAuTS5AG9h1lW1aTIOSa9Z7t8=;
+        b=MsiqtOPoMXyTNojLouatSV2oAsBzPuZBJcOzhfBh7HM2B/6c+5T/mekkAvT6ySdtev
+         qXCDaQlbiDsuaYZNoKHtcsMEGcJd5r1Ud7IjfnXkZjgYtAb3RqPIYwaFCp4Mm8n9EKAH
+         jM8aS+sggAxVixVVWxh3Hk6k247J1dV/kvjumz3UQF0gtEOmWBN9TDBtmbTM0b/bUm4g
+         1GUVFlmWBlORouRBCKrzfclXppS4NlTYrbVJrVYIUhqZA9V92uTGRoSXO8vHGEYs/IPE
+         BZMKQCPn1Ig5RlSefY55CcN+QlfLCI26+gZXgOxLtCXlD1f4faWs1sPUuEUvu4AL65OC
+         R62g==
+X-Gm-Message-State: ACgBeo2rJyGa23XVUsY5IIr7cyZTAN7xHFblDiNeB/SAdnitnCYlVef/
+        H2dbfRJ3rGAU63qf2n6cKTM=
+X-Google-Smtp-Source: AA6agR4xesSbq0h+Z50jLzI3hDE4cPZAkKUdasYL/U5BfidpRRo0/xGAgREkUb2XLYIBaHbs5IHMRA==
+X-Received: by 2002:a05:6402:5190:b0:43d:da02:566a with SMTP id q16-20020a056402519000b0043dda02566amr10055382edd.187.1660463230217;
+        Sun, 14 Aug 2022 00:47:10 -0700 (PDT)
 Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
-        by smtp.gmail.com with ESMTPSA id 17-20020a170906201100b0072f1e7b06d9sm2667073ejo.59.2022.08.14.00.46.52
+        by smtp.gmail.com with ESMTPSA id 23-20020a170906309700b0072b342ad997sm2651373ejv.199.2022.08.14.00.47.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Aug 2022 00:46:53 -0700 (PDT)
+        Sun, 14 Aug 2022 00:47:09 -0700 (PDT)
 From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
 To:     Chen-Yu Tsai <wens@csie.org>, Maxime Ripard <mripard@kernel.org>,
         Samuel Holland <samuel@sholland.org>
@@ -60,11 +60,11 @@ Cc:     Samuel Holland <samuel@sholland.org>,
         dri-devel@lists.freedesktop.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 3/4] drm/sun4i: dsi: Add a variant structure
-Date:   Sun, 14 Aug 2022 09:46:51 +0200
-Message-ID: <4731474.GXAFRqVoOG@jernej-laptop>
-In-Reply-To: <20220812074257.58254-4-samuel@sholland.org>
-References: <20220812074257.58254-1-samuel@sholland.org> <20220812074257.58254-4-samuel@sholland.org>
+Subject: Re: [PATCH 4/4] drm/sun4i: dsi: Add the A100 variant
+Date:   Sun, 14 Aug 2022 09:47:08 +0200
+Message-ID: <2110674.irdbgypaU6@jernej-laptop>
+In-Reply-To: <20220812074257.58254-5-samuel@sholland.org>
+References: <20220812074257.58254-1-samuel@sholland.org> <20220812074257.58254-5-samuel@sholland.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -78,10 +78,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne petek, 12. avgust 2022 ob 09:42:55 CEST je Samuel Holland napisal(a):
-> Replace the ad-hoc calls to of_device_is_compatible() with a structure
-> describing the differences between variants. This is in preparation for
-> adding more variants to the driver.
+Dne petek, 12. avgust 2022 ob 09:42:56 CEST je Samuel Holland napisal(a):
+> The A100 variant of the MIPI DSI controller now gets its module clock
+> from the TCON via the TCON TOP, so the clock rate cannot be set to a
+> fixed value. Otherwise, it appears to be the same as the A31 variant.
 > 
 > Signed-off-by: Samuel Holland <samuel@sholland.org>
 

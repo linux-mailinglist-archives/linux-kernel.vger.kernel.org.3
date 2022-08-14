@@ -2,113 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5021591EAD
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 08:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 31E05591E9F
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 08:07:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230010AbiHNGeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 02:34:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32768 "EHLO
+        id S235694AbiHNGGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 02:06:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiHNGe3 (ORCPT
+        with ESMTP id S229956AbiHNGGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 02:34:29 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A89D1E3D0;
-        Sat, 13 Aug 2022 23:34:28 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id l64so4178999pge.0;
-        Sat, 13 Aug 2022 23:34:28 -0700 (PDT)
+        Sun, 14 Aug 2022 02:06:48 -0400
+Received: from mail-il1-x141.google.com (mail-il1-x141.google.com [IPv6:2607:f8b0:4864:20::141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C10A21A827
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 23:06:47 -0700 (PDT)
+Received: by mail-il1-x141.google.com with SMTP id j20so2498778ila.6
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 23:06:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc;
-        bh=ZIGUpjz3ydr9wZccRyAZfjSeyvseH0rGb11Z9zlxCPk=;
-        b=EK9f7yUuOxyzjG2ig0IAIFZU1cibkmegzRqwoEOF9nC6kawQYW3LFGQfsHJTM6TKGI
-         /Ws/vQH1lY/r1/PbYWE8tBUP4A0VeY2mTSyaNubgiewEYmlHLsnKn0AoczPLCfi6aFxL
-         c1OT6G/S0EH/glUmyygtUvFG792AkCJ/qo8CvTDgO98X+JzjetGP3i0Hs5Tv/jFQ21Sd
-         Ob342u6rmAIPhNbsj2xSTUrd76HG1c2NRLrQOP/FcDjWdNLb4vuqsZJ9tNHG2P11Am9o
-         D9F4r7sQ20Hr3msJJXpGNnTdT7D3RVVwQPWMYmQqfFbgeqpjF5MO0Of0KuXCOimCaLgv
-         7lLQ==
+        bh=DYNwl4udibiQ4scEUfrfDwYaVQPNhZul+x9ctn+vu3k=;
+        b=cWQ71h3X4g2c1ImhoG9YuCoUjZt3xqWDZE0cxwmaTg3uqFJ8jQOuDJiqktRfJY3RK9
+         T1izg7m8Mto+86PmkMr7hNZ//KCxw0xlBQPzofUMeJjA3kU87ufL7rFZXn2STAGZSbKl
+         sN/ocengRnC4kz3P1b4Z3hZDsf4cHjfUePCVOg6TIYmTr4pvb+b68+z/2/KDqSS3n+CO
+         G+Lr09Z2auiPoL+vuovjoPxFd5fCTDQQAe3GeeRLe/JYi2se1B05vAU5/JF4Hx8kDBks
+         bRvoyp6WvMsCzcbPROqnxvOHunnfxQNS54uAM7Nk5U9hYDDK8iG37Fxtfa6VPplRX+OQ
+         o/xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc;
-        bh=ZIGUpjz3ydr9wZccRyAZfjSeyvseH0rGb11Z9zlxCPk=;
-        b=i3ZIfbzVzd5sIiVzm62aJDjedYg1kCgqDOhE7sv3a+BalXspr+IGQExcXYBeocvb56
-         J/aapQIyQHazpfqPrb+g/EuPh+iZLxs/vu8GLj3TcxI25rjF/+GkZPuGS7L3t+tSvif7
-         P8Qrjy44sSjb+JENFUgtu7Yf9zYAvHoqLKu5z1QykZrmC+8Q9bfMybdmnmAesGBb87e3
-         eQOy7/VPq7omb2DQX5WI54kAwvZQ06Hqewv92wa5frs7eoULbrBIS3LI5AiOj5mAK/0g
-         oypptar9B0ti5FqaBzCaKJOQcSjBeAsOEBYJNbuIvpdpDpB0SROpMmVZD/G3TGuGS876
-         Fxpg==
-X-Gm-Message-State: ACgBeo0mb9niR8KZo7wtl+5Qs0k286SstxQsYAoQLHMf/lg8z0PVQhXD
-        WqpB6CMdizAaXs2NdCaspuw=
-X-Google-Smtp-Source: AA6agR4tmE6gakpcUpzgpRNZ8pfIYCk9TogG33bRWPy3i/kOWZHWco2bxzTRWqXUFi67+5LPZUFsgg==
-X-Received: by 2002:a05:6a00:15c7:b0:52e:5a5d:27fa with SMTP id o7-20020a056a0015c700b0052e5a5d27famr10981276pfu.52.1660458868155;
-        Sat, 13 Aug 2022 23:34:28 -0700 (PDT)
-Received: from sc2-haas01-esx0118.eng.vmware.com ([66.170.99.1])
-        by smtp.gmail.com with ESMTPSA id j15-20020a170902da8f00b0016f04c098ddsm4754320plx.226.2022.08.13.23.34.26
+        bh=DYNwl4udibiQ4scEUfrfDwYaVQPNhZul+x9ctn+vu3k=;
+        b=Cyd+0EIKh/LCsvdxxhvtwEM1il9idtbsDvc5cqVgYLeJMv5tDDX8SBjr2IIcf2CONk
+         07RTbonRZlr+zx0TAs+D6be/E1y6sHBO67TLt9NqjXReeIqtZvbBUbucm/Twu23T6bPK
+         n/KzvGMaVLIxVEh4P5cEnMRiKQbNIbymPhybdTu2Nm2N5FxKtJVPZi+LAyRbwMnmQhQb
+         r35u4wZN1H6FM33HVyIGysmEwF5V8+SKuWMHSP8N9nDTH5fZApltQQv8s81moAU+6cOT
+         9b8FNgbNrYGZlJIq6Hg7KLIsrlInK0jej8Vlfyc70kQXEym4eYhVh5qofi1WjOvrQ/OP
+         nCWg==
+X-Gm-Message-State: ACgBeo1FsO6QG4aLdqtEWI5nnjRLXBjBF4EQYawXmlXQh5/yyr6Bh6Rd
+        W1XIrOxG4vxbRMPKzGx+t8W8ZWkzlyM=
+X-Google-Smtp-Source: AA6agR7oFp54gKI/61oHDTsQtWcouMaWgzZ6Z84Dmt9gUlTsWDcBM5G32m7jiibTNVmjNHcnetqvaw==
+X-Received: by 2002:a05:6e02:971:b0:2de:9060:ef47 with SMTP id q17-20020a056e02097100b002de9060ef47mr4495084ilt.55.1660457207162;
+        Sat, 13 Aug 2022 23:06:47 -0700 (PDT)
+Received: from sophie ([68.235.43.126])
+        by smtp.gmail.com with ESMTPSA id t62-20020a025441000000b0034300131555sm1750568jaa.95.2022.08.13.23.06.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 Aug 2022 23:34:27 -0700 (PDT)
-From:   Nadav Amit <nadav.amit@gmail.com>
-X-Google-Original-From: Nadav Amit
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org, Nadav Amit <namit@vmware.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Andy Lutomirski <luto@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH] x86/kprobes: fix JNG/JNLE emulation
-Date:   Sat, 13 Aug 2022 15:59:43 -0700
-Message-Id: <20220813225943.143767-1-namit@vmware.com>
+        Sat, 13 Aug 2022 23:06:46 -0700 (PDT)
+From:   Rebecca Mckeever <remckee0@gmail.com>
+To:     Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Cc:     David Hildenbrand <david@redhat.com>,
+        Rebecca Mckeever <remckee0@gmail.com>
+Subject: [PATCH 0/4] memblock tests: add NUMA tests for memblock_alloc_try_nid*
+Date:   Sun, 14 Aug 2022 01:06:14 -0500
+Message-Id: <cover.1660454970.git.remckee0@gmail.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=2.9 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nadav Amit <namit@vmware.com>
+These patches add additional tests for memblock_alloc_try_nid() and
+memblock_alloc_try_nid_raw() that use a simulated physical
+memory that is set up with multiple NUMA nodes. Additionally, most of
+these tests set nid != NUMA_NO_NODE.
 
-When kprobes emulates JNG/JNLE instructions on x86 it uses the wrong
-condition. For JNG (opcode: 0F 8E), according to Intel SDM, the jump is
-performed if (ZF == 1 or SF != OF). However the kernel emulation
-currently uses 'and' instead of 'or'.
+To set up a simulated physical memory with multiple NUMA nodes, patch 1
+introduces setup_numa_memblock_generic() and setup_numa_memblock().
+These functions use a previously allocated dummy physical memory. They
+can be used in place of setup_memblock() in tests that need to simulate
+a NUMA system.
 
-As a result, setting a kprobe on JNG/JNLE might cause the kernel to
-behave incorrectly whenever the kprobe is hit.
+These tests are run twice, once for memblock_alloc_try_nid() and once
+for memblock_alloc_try_nid_raw(), so that both functions are tested with
+the same set of tests. When the tests run memblock_alloc_try_nid(), they
+test that the entire memory region is zero. When the tests run
+memblock_alloc_try_nid_raw(), they test that the entire memory region is
+nonzero.
 
-Fix by changing the 'and' to 'or'.
+Note:
+This patchset depends on the following patch set:
+https://lore.kernel.org/linux-mm/cover.1660454730.git.remckee0@gmail.com/T/#m3a63677ae915fb47aea3f82780b72b54c08f246d
 
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
-Cc: Andy Lutomirski <luto@kernel.org>
-Cc: stable@vger.kernel.org
-Fixes: 6256e668b7af ("x86/kprobes: Use int3 instead of debug trap for single-step")
-Signed-off-by: Nadav Amit <namit@vmware.com>
----
- arch/x86/kernel/kprobes/core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Rebecca Mckeever (4):
+  memblock tests: add simulation of physical memory with multiple NUMA
+    nodes
+  memblock tests: add top-down NUMA tests for memblock_alloc_try_nid*
+  memblock tests: add bottom-up NUMA tests for memblock_alloc_try_nid*
+  memblock tests: add generic NUMA tests for memblock_alloc_try_nid*
 
-diff --git a/arch/x86/kernel/kprobes/core.c b/arch/x86/kernel/kprobes/core.c
-index 74167dc5f55e..4c3c27b6aea3 100644
---- a/arch/x86/kernel/kprobes/core.c
-+++ b/arch/x86/kernel/kprobes/core.c
-@@ -505,7 +505,7 @@ static void kprobe_emulate_jcc(struct kprobe *p, struct pt_regs *regs)
- 		match = ((regs->flags & X86_EFLAGS_SF) >> X86_EFLAGS_SF_BIT) ^
- 			((regs->flags & X86_EFLAGS_OF) >> X86_EFLAGS_OF_BIT);
- 		if (p->ainsn.jcc.type >= 0xe)
--			match = match && (regs->flags & X86_EFLAGS_ZF);
-+			match = match || (regs->flags & X86_EFLAGS_ZF);
- 	}
- 	__kprobe_emulate_jmp(p, regs, (match && !invert) || (!match && invert));
- }
+ .../testing/memblock/scripts/Makefile.include |    2 +-
+ tools/testing/memblock/tests/alloc_nid_api.c  | 1489 ++++++++++++++++-
+ tools/testing/memblock/tests/alloc_nid_api.h  |   16 +
+ tools/testing/memblock/tests/common.c         |   38 +
+ tools/testing/memblock/tests/common.h         |   27 +-
+ 5 files changed, 1559 insertions(+), 13 deletions(-)
+
 -- 
 2.25.1
 

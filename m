@@ -2,67 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4549B591D6C
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 03:13:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35F4C591D6F
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 03:20:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240187AbiHNBNm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 21:13:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47086 "EHLO
+        id S230079AbiHNBTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 21:19:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229525AbiHNBNl (ORCPT
+        with ESMTP id S229525AbiHNBTj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 21:13:41 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 452151581C;
-        Sat, 13 Aug 2022 18:13:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660439620; x=1691975620;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=dhKkSzBmVvUqQlk2H6PYP/DhZeE0cXbKpgag3Koj5YM=;
-  b=ZzH6zAUz/sPCPb8v+JlwTnr5KRsoNbVgKiJHEAAYsFG2htBKkojKUMIC
-   vKFkZDSvB65kNc/Mi+Rc2Iz52Q5bk1Ej9GONphObN6TVkGwG9eXns28xi
-   WJ2GMdL2JwtSsaMloZcQeFeCzu4e6EpvePksWMwlfkXKPsm6fswYdGXVh
-   2lrvmNBT7mR8lLeLRIsFKfAbmeYXEVGt3Aox4dCFXGdr8xFGYqd+ElK8f
-   Cmg7EbwnqCKRVvYPchIaLhmRwd5qHGyZItAlsMesQNoKalTZvpM8uN2lu
-   nhMGnAacpe+uQX2Vlc9IXA8+euiWGwlSzBEnTHfbx9bOHFkLSMV+iXQZi
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="289356938"
-X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
-   d="scan'208";a="289356938"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 18:13:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
-   d="scan'208";a="934109122"
-Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
-  by fmsmga005.fm.intel.com with ESMTP; 13 Aug 2022 18:13:36 -0700
-Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oN2C8-0002HT-0A;
-        Sun, 14 Aug 2022 01:13:36 +0000
-Date:   Sun, 14 Aug 2022 09:13:00 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Olivier Masse <olivier.masse@nxp.com>, etienne.carriere@linaro.org,
-        jens.wiklander@linaro.org, sumit.garg@linaro.org,
-        sumit.semwal@linaro.org, christian.koenig@amd.com,
-        op-tee@lists.trustedfirmware.org, linaro-mm-sig@lists.linaro.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        clement.faure@nxp.com, olivier.masse@nxp.com
-Subject: Re: [PATCH 1/1] tee: new ioctl to a register tee_shm from a dmabuf
- file descriptor
-Message-ID: <202208140900.TNSQFBzy-lkp@intel.com>
-References: <20220812143055.12938-2-olivier.masse@nxp.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220812143055.12938-2-olivier.masse@nxp.com>
+        Sat, 13 Aug 2022 21:19:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B9F15813
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 18:19:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DD421B80ADA
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 01:19:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA4A8C433D7;
+        Sun, 14 Aug 2022 01:19:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1660439971;
+        bh=lVnMgDezkLSQTfmf4iQ0SkVg6u16Zbg/ddRb3RwOQm8=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=AVkIxX3rGYfcI7VHGPtzE9+vUN5FS6tbnN4EuBhZqjPSbtfOLP3Z0PG11JWGh01B9
+         HWMYNRm4uwb+eyIYf3qiKo21xJ1yb0Js47qytYwYmSv+a3Zfh/Szfl6JDQcXwyaIIj
+         HVkOJy1/AyWVyHTokMhyEGkBEt+1o/az1oixF4lUnNeGumbCWOrX/z+l/tLsxqZD2b
+         cApWAalFIDnn5SQShjsqlwPZ4jpnfNYRmqJnf+8t+0N9LKMnQ5NleunYxdZHDAQK3w
+         usJkqWUCwHSooNWHQgRA2EOYwNFcxAEaHN72mCo+RG8ETJTWIkl3+aDo+2jCvoKTVS
+         BvE6ihJz46bWg==
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id C015F27C0054;
+        Sat, 13 Aug 2022 21:19:29 -0400 (EDT)
+Received: from imap48 ([10.202.2.98])
+  by compute2.internal (MEProxy); Sat, 13 Aug 2022 21:19:29 -0400
+X-ME-Sender: <xms:oU34Yh230Cp4tosnCtAoupyuQ2Dc83b9sENeHpXsJ3oPhuD5ywit0g>
+    <xme:oU34YoEhFPxRlS5Mv3ehMZPDXhtHN8KE8ibqjOpazwaeBZvW1F20HNQKGDl8d1dxk
+    q8X5vJKyn2Z5asHmK4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegledggeeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehn
+    ugihucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepvdfhuedvtdfhudffhfekkefftefghfeltdelgeffteehueegjeff
+    udehgfetiefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homheprghnugihodhmvghsmhhtphgruhhthhhpvghrshhonhgrlhhithihqdduudeiudek
+    heeifedvqddvieefudeiiedtkedqlhhuthhopeepkhgvrhhnvghlrdhorhhgsehlihhnuh
+    igrdhluhhtohdruhhs
+X-ME-Proxy: <xmx:oU34Yh6C-CLLpxkn4E4mAXLg1WZ4n94vi9ML4_ukWgV6PImYAbB2qg>
+    <xmx:oU34Yu3GQWUJs66jVZhmrpXyQUz5NHjnhiRQfJAQmIRZLMeVpDkjoQ>
+    <xmx:oU34YkFlelrqGAcF_wOLJ2ZNM55ilyTj26K5fSmK4KaQva9mq12Rjg>
+    <xmx:oU34Yv0NPapKEHJNzhT4oWN3iQ2tZJD4CE1igbxxlf_9ElGtq1hyRg>
+Feedback-ID: ieff94742:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 01D0731A0062; Sat, 13 Aug 2022 21:19:28 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-841-g7899e99a45-fm-20220811.002-g7899e99a
+Mime-Version: 1.0
+Message-Id: <1471edba-ccb9-4568-85da-bf69f55d02c8@www.fastmail.com>
+In-Reply-To: <0d6afdb6-e546-4ef0-80c2-84827c11f2ce@www.fastmail.com>
+References: <20220813223825.3164861-1-ashok.raj@intel.com>
+ <20220813223825.3164861-6-ashok.raj@intel.com>
+ <0d6afdb6-e546-4ef0-80c2-84827c11f2ce@www.fastmail.com>
+Date:   Sat, 13 Aug 2022 18:19:04 -0700
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Raj Ashok" <ashok.raj@intel.com>,
+        "Borislav Petkov" <bp@alien8.de>,
+        "Thomas Gleixner" <tglx@linutronix.de>
+Cc:     "Tony Luck" <tony.luck@intel.com>,
+        "Dave Hansen" <dave.hansen@intel.com>,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        "luto@amacapital.net" <luto@amacapital.net>,
+        "Tom Lendacky" <thomas.lendacky@amd.com>,
+        "Andrew Cooper" <andrew.cooper3@citrix.com>
+Subject: Re: [PATCH 5/5] x86/microcode: Handle NMI's during microcode update.
+Content-Type: text/plain
 X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,46 +89,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Olivier,
+On Sat, Aug 13, 2022, at 5:13 PM, Andy Lutomirski wrote:
+> On Sat, Aug 13, 2022, at 3:38 PM, Ashok Raj wrote:
+>> Microcode updates need a guarantee that the thread sibling that is waiting
+>> for the update to finish on the primary core will not execute any
+>> instructions until the update is complete. This is required to guarantee
+>> any MSR or instruction that's being patched will be executed before the
+>> update is complete.
+>>
+>> After the stop_machine() rendezvous, an NMI handler is registered. If an
+>> NMI were to happen while the microcode update is not complete, the
+>> secondary thread will spin until the ucode update state is cleared.
+>>
+>> Couple of choices discussed are:
+>>
+>> 1. Rendezvous inside the NMI handler, and also perform the update from
+>>    within the handler. This seemed too risky and might cause instability
+>>    with the races that we would need to solve. This would be a difficult
+>>    choice.
+>
+> I prefer choice 1.  As I understand it, Xen has done this for a while 
+> to good effect.
+>
+> If I were implementing this, I would rendezvous via stop_machine as 
+> usual.  Then I would set a flag or install a handler indicating that we 
+> are doing a microcode update, send NMI-to-self, and rendezvous in the 
+> NMI handler and do the update.
+>
 
-Thank you for the patch! Yet something to improve:
+So I thought about this a bit more.
 
-[auto build test ERROR on drm-misc/drm-misc-next]
-[also build test ERROR on drm-tip/drm-tip linus/master v5.19 next-20220812]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+What's the actual goal?  Are we trying to execute no instructions at all on the sibling or are we trying to avoid executing nasty instructions like RDMSR and WRMSR?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Olivier-Masse/tee-Add-tee_shm_register_fd/20220812-223302
-base:   git://anongit.freedesktop.org/drm/drm-misc drm-misc-next
-config: arm-randconfig-r026-20220814 (https://download.01.org/0day-ci/archive/20220814/202208140900.TNSQFBzy-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 3329cec2f79185bafd678f310fafadba2a8c76d2)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/994ce362c3244904f79f1e7d4cb436ea162421d1
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Olivier-Masse/tee-Add-tee_shm_register_fd/20220812-223302
-        git checkout 994ce362c3244904f79f1e7d4cb436ea162421d1
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
+If it's the former, we don't have a whole lot of choices.  We need the sibling to be in HLT or MWAIT, and we need NMIs masked or we need all likely NMI sources shut down.  If it's the latter, then we would ideally like to avoid a trip through the entry or exit code -- that code has nasty instructions (RDMSR in the paranoid path if !FSGSBASE, WRMSRs for mitigations, etc).  And we need to be extra careful: there are cases where NMIs are not actually masked but we just simulate NMIs being masked through the delightful logic in the entry code.  Off the top of my head, the NMI-entry-pretend-masked path probably doesn't execute nasty instructions other than IRET, but still, this might be fragile.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+So here's my half-backed suggestion.  Add a new feature to the NMI entry code: at this point:
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
+        /* Everything up to here is safe from nested NMIs */
 
-ERROR: modpost: "__aeabi_uldivmod" [drivers/mtd/mtdswap.ko] undefined!
->> ERROR: modpost: module tee uses symbol dma_buf_get from namespace DMA_BUF, but does not import it.
->> ERROR: modpost: module tee uses symbol dma_buf_attach from namespace DMA_BUF, but does not import it.
->> ERROR: modpost: module tee uses symbol dma_buf_map_attachment from namespace DMA_BUF, but does not import it.
->> ERROR: modpost: module tee uses symbol dma_buf_unmap_attachment from namespace DMA_BUF, but does not import it.
->> ERROR: modpost: module tee uses symbol dma_buf_detach from namespace DMA_BUF, but does not import it.
->> ERROR: modpost: module tee uses symbol dma_buf_put from namespace DMA_BUF, but does not import it.
+At that point, NMIs are actually masked.  So check a flag indicating that we're trying to do the NMI-protected ucode patch dance.  If so, call a special noinstr C function (this part is distinctly nontrivial) that does the ucode work.  Now the stop_machine handler does NMI-to-self in a loop until it actually hits the special code path.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+Alternatively, stop_machine, then change the IDT to a special one with a special non-IST NMI handler that does the dirty work.  NMI-to-self, do the ucode work, set the IDT back *inside the handler* so a latched NMI will do the right thing, and return.  This may be much, much simpler.
+
+Or we stop messing around and do this for real.  Soft-offline the sibling, send it INIT, do the ucode patch, then SIPI, SIPI and resume the world.  What could possibly go wrong?
+
+I have to say: Intel, can you please get your act together?  There is an entity in the system that is *actually* capable of doing this right: the microcode.

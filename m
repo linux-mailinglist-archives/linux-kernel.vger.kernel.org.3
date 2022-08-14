@@ -2,117 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E37591DD6
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 06:09:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC5CC591E16
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 06:27:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbiHNEJF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 00:09:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34586 "EHLO
+        id S229933AbiHNE0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 00:26:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbiHNEJB (ORCPT
+        with ESMTP id S229586AbiHNE0b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 00:09:01 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AC621EC68;
-        Sat, 13 Aug 2022 21:08:59 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id BB56F5C0095;
-        Sun, 14 Aug 2022 00:08:58 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Sun, 14 Aug 2022 00:08:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=undef.tools; h=
-        cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm1; t=1660450138; x=1660536538; bh=xlxrEcPRt7QJWiPNqdAOJW0gy
-        VsucqKY52m23/gcz0s=; b=CAQnaZV5IL6WKgz00DfL1kamOOP/xG1fVaLzcKmtd
-        1CycTSnv24tctUzn9/hZ67r4VyIbWM6TChEsQ6kc3izGLEk1rOwl+O3MECSfE6ji
-        j5dgK8m0Avm2H7+aasfWFRjLYDHEZvKWq9sUgxMt1h0rz00hsWm0P81hzmeLr9rG
-        B63r19iWaf7hlaLyvLVfAmyqmGZbWOOTPwrT9dz7yw0QZMjz/UP06zz+hmepcFgq
-        wf4BDdl4BNKtjBe6WG3JIRYikhlFUxmkyjDnO3al/7mkQHeovJ2FvyHv5YRlTfyM
-        1Rl4TlkeridmQf3JS4+37RD2HV72SCclmd8UGPZW16A3w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1660450138; x=1660536538; bh=xlxrEcPRt7QJWiPNqdAOJW0gyVsucqKY52m
-        23/gcz0s=; b=TTs0mHOjagr7WiUI13hjrxCJCz/NggxcY5MBG9u07nLJNdTQGNP
-        01LEwIVS6EhTe4yR5QpuwjXpdklznUE5+NCkHtRzoAu9vF2lV0NUQEzP2YeKfnxv
-        dm1s9ScWU7PDZLqjZUucqWZqyUczfo91Kis6KxyJGSFKI+eOKnfX8AqripYoyLCV
-        yKJMim070JOLJGCOnIc7eR2uQsJdSuFy0SD1s26KUNHAuAraYtlO4kh6SclsoXfV
-        QVrVZkt6PUrgka6mOetCpIrb7vyklHqOZxJMZNOfr5fB8oHlK+O1G6kb7X3bsxSj
-        B0DGR7ef5q/PskfA4s3t3ewRkmnEFm7gWdg==
-X-ME-Sender: <xms:WXX4YkYGPLMjFc032UaCOrv20g35mltchop1yWEf9jjHQdYzoywTlw>
-    <xme:WXX4YvarrwLB5Zwxm75EUe3dexy3Ov3SkyJ585XHJcpP9Ha-HEX5YLOx8mdOFUQ-J
-    jUFc2N3RDCcnUJmmmo>
-X-ME-Received: <xmr:WXX4Yu-Tc8tcAq-AYXXpvHGs44zQClsTPhUs9KmjO46xt3LXJ8rPZQL7nEN3Ww2FUrred_mlhGYQ7tcuEbp59SInRtY8MXpNp8VLi-Sog9EIJTZoCXwX_MFINA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdegledgkeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheplfgrrhhrrghh
-    ucfiohhssggvlhhluceokhgvrhhnvghlsehunhguvghfrdhtohholhhsqeenucggtffrrg
-    htthgvrhhnpeejueevgfejfeeghffhfeehvdffleetheekkedvfeehieetuedtheevgefh
-    geekhfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hkvghrnhgvlhesuhhnuggvfhdrthhoohhlsh
-X-ME-Proxy: <xmx:WXX4YuoiVl7Pul8-JHdIjRHge-t5f5wxpsqeTB3nDYDUZ1AaQs9y0A>
-    <xmx:WXX4YvrdBuYP29baPgf_5leEqAQ2qmp22jA2X0tFve0QVreMumNXdQ>
-    <xmx:WXX4YsS7uQs6IIkulv-qgzfFW0bKjsb1zyiFtoCDG0c_ZzME5PDYCQ>
-    <xmx:WnX4Yi3SQU_4TUCJoNyFkAvPGIc2PHR1exIqOWhVdcI-DMTJLuZlmQ>
-Feedback-ID: id76147eb:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 14 Aug 2022 00:08:54 -0400 (EDT)
-From:   Jarrah Gosbell <kernel@undef.tools>
-To:     Jacob Chen <jacob-chen@iotwrt.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Heiko Stuebner <heiko@sntech.de>, linux-media@vger.kernel.org,
-        linux-rockchip@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     phone-devel@vger.kernel.org, Ondrej Jirman <megi@xff.cz>,
-        Jarrah Gosbell <kernel@undef.tools>
-Subject: [PATCH] media: rockchip: rga: Fix probe rga_parse_dt bugs
-Date:   Sun, 14 Aug 2022 04:08:07 +0000
-Message-Id: <20220814040806.7523-1-kernel@undef.tools>
-X-Mailer: git-send-email 2.35.1
+        Sun, 14 Aug 2022 00:26:31 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF80018388
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 21:26:27 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oN5CU-0002Nu-2M; Sun, 14 Aug 2022 06:26:10 +0200
+Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oN5CS-0007qk-2t; Sun, 14 Aug 2022 06:26:08 +0200
+Date:   Sun, 14 Aug 2022 06:26:08 +0200
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Woojung Huh <woojung.huh@microchip.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
+        Eric Dumazet <edumazet@google.com>,
+        Vladimir Oltean <olteanv@gmail.com>, kernel@pengutronix.de,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
+Subject: Re: [PATCH net-next v1 07/10] net: dsa: microchip: warn about not
+ supported synclko properties on KSZ9893 chips
+Message-ID: <20220814042608.GC12534@pengutronix.de>
+References: <20220729130346.2961889-1-o.rempel@pengutronix.de>
+ <20220729130346.2961889-8-o.rempel@pengutronix.de>
+ <20220802113633.73rxlb2kmihivwpx@skbuf>
+ <20220805115601.GB10667@pengutronix.de>
+ <20220805134234.ps4qfjiachzm7jv4@skbuf>
+ <20220813143215.GA12534@pengutronix.de>
+ <Yve/MSMc/4klJPFL@lunn.ch>
+ <20220813161850.GB12534@pengutronix.de>
+ <YvgMnfSkEeD8jwIG@lunn.ch>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: attachment
+In-Reply-To: <YvgMnfSkEeD8jwIG@lunn.ch>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ondrej Jirman <megi@xff.cz>
+Ccing Rob Herring.
 
-rga_parse_dt is missing a error return, so if some of the resources
-return DEFER_PROBE, probe will succeed without these resources.
+On Sat, Aug 13, 2022 at 10:42:05PM +0200, Andrew Lunn wrote:
+> On Sat, Aug 13, 2022 at 06:18:50PM +0200, Oleksij Rempel wrote:
+> > On Sat, Aug 13, 2022 at 05:11:45PM +0200, Andrew Lunn wrote:
+> > > On Sat, Aug 13, 2022 at 04:32:15PM +0200, Oleksij Rempel wrote:
+> > > > On Fri, Aug 05, 2022 at 04:42:34PM +0300, Vladimir Oltean wrote:
+> > > > > On Fri, Aug 05, 2022 at 01:56:01PM +0200, Oleksij Rempel wrote:
+> > > > > > Hm, if we will have any random not support OF property in the switch
+> > > > > > node. We won't be able to warn about it anyway. So, if it is present
+> > > > > > but not supported, we will just ignore it.
+> > > > > > 
+> > > > > > I'll drop this patch.
+> > > > > 
+> > > > > To continue, I think the right way to go about this is to edit the
+> > > > > dt-schema to say that these properties are only applicable to certain
+> > > > > compatible strings, rather than for all. Then due to the
+> > > > > "unevaluatedProperties: false", you'd get the warnings you want, at
+> > > > > validation time.
+> > > > 
+> > > > Hm, with "unevaluatedProperties: false" i have no warnings. Even if I
+> > > > create examples with random strings as properties. Are there some new
+> > > > json libraries i should use?
+> > > 
+> > > Try
+> > > 
+> > > additionalProperties: False
+> > 
+> > Yes, it works. But in this case I'll do more changes. Just wont to make
+> > sure I do not fix not broken things.
+> 
+> I've been working on converting some old SoCs bindings from .txt to
+> .yaml. My observations is that the yaml is sometimes more restrictive
+> than what the drivers actually imposes. So you might need to change
+> perfectly working .dts files to get it warning free. Or you just
+> accept the warnings and move on. At lot will depend on the number of
+> warnings and how easy it is to see real problems mixed in with
+> warnings you never intend to fix.
 
-Signed-off-by: Ondrej Jirman <megi@xff.cz>
-Signed-off-by: Jarrah Gosbell <kernel@undef.tools>
----
- drivers/media/platform/rockchip/rga/rga.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Heh :) Currently with "unevaluatedProperties: false" restrictions do not
+work at all. At least for me. For example with this change I have no
+warnings:
+diff --git a/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml b/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml
+index 1e26d876d1463..da38ad98a152f 100644
+--- a/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml
++++ b/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml
+@@ -120,6 +120,7 @@ examples:
+             ethernet-switch@1 {
+                     reg = <0x1>;
+                     compatible = "nxp,sja1105t";
++                    something-random-here;
+ 
+                     ethernet-ports {
+                             #address-cells = <1>;
 
-diff --git a/drivers/media/platform/rockchip/rga/rga.c b/drivers/media/platform/rockchip/rga/rga.c
-index 2f8df74ad0fd..b88dd7ed2036 100644
---- a/drivers/media/platform/rockchip/rga/rga.c
-+++ b/drivers/media/platform/rockchip/rga/rga.c
-@@ -815,8 +815,10 @@ static int rga_probe(struct platform_device *pdev)
- 	mutex_init(&rga->mutex);
- 
- 	ret = rga_parse_dt(rga);
--	if (ret)
-+	if (ret) {
- 		dev_err(&pdev->dev, "Unable to parse OF data\n");
-+		return ret;
-+	}
- 
- 	pm_runtime_enable(rga->dev);
- 
+make dt_binding_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml
+
+So the main question is, is it broken for all or just for me? If it is
+just me, what i'm doing wrong?
+
+Regards,
+Oleksij
 -- 
-2.35.1
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |

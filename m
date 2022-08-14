@@ -2,74 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D9975926A0
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 23:26:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11AAA5926A2
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 23:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240376AbiHNV0h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 17:26:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37842 "EHLO
+        id S240821AbiHNV13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 17:27:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236100AbiHNV0U (ORCPT
+        with ESMTP id S240602AbiHNV1M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 17:26:20 -0400
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E349E4F;
-        Sun, 14 Aug 2022 14:25:23 -0700 (PDT)
-Received: by mail-pl1-f178.google.com with SMTP id o3so4950552ple.5;
-        Sun, 14 Aug 2022 14:25:23 -0700 (PDT)
+        Sun, 14 Aug 2022 17:27:12 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BDB0DF89
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 14:26:13 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id 13so4923443plo.12
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 14:26:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:from:to:cc;
+        bh=e6FRW0qPl4W20Yv52Z4sAYPbvGuz6jN7y//DsuNkqsU=;
+        b=cHBIcT5WPBTmQgbWjdKWUFUsUSpYPunN6txuVDWyQ2GgGPUsmWqOUgXZEg0e9trt/g
+         YefitVLTeVJAFw7Qzkt8C35/R5qHa1D5/uCx6N75GS2v4xq0ffyvms5PHFaKV8Zp5cbY
+         gaWvDka1p8TthyvR0RvRcoyzuu5I9uFfNwKt9GrtuxPyJwvyAhJoejWuQFYK+I7FUujl
+         KTPsdL24FYc1/gOfHSQMokGC7L28wtSIcZvG+fHPTB8QdDmSe3+l04knYt9CrH2GPDuJ
+         vY3gnLgUzmDoOyAGPq+KmdZNBK44jRsrc6CG75aGhbpps5qSSUkYns8KgQsGYzJwGbyI
+         ceIg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=Qo7JqMyBl98Dfi1GLWq2+D40THRpPwUbZg2FaTyray4=;
-        b=p0vQAsG3/dy/JTUKA7ZNpWVmPrDj+J4Oy5ecuw/4lKSYdN1oBl3aH938q9KQQoHidr
-         yt6rIafB7uMuk+hn/5F+6NQ0ePQz1+HMVh0DkG/8RFWrln+wZiCWUK3LkFidFC+PXiJy
-         qk8vedt9FX4l2nq+Tpwz11tlabmIJZCG3m4L+QxZHlFJPOVrvi47cTSVYnAxTmSTeOGZ
-         bFA5VD8kU7dcDxfnJKrXOL77LW179iHYfYxDcOalMhR+prOIhGR0KsH5viHJXtI4bnFE
-         hHXTUlrM7HlZeOHFWUu748R8YdqRn6QdIvkw5Fg1sFpfqKnkfxtdSFYHjWqMtNP4gr4Q
-         AOmw==
-X-Gm-Message-State: ACgBeo2ik6SnWuOBdH7MwEZ6TCxmIXna0miJhRL8dMfVJJIy6H7lgeoE
-        67FPMp/5yWou+E+wTjlmtJZzlZlzmg==
-X-Google-Smtp-Source: AA6agR6CPtGSg5LrG2ATwGoXMf1RpAO/eKlw9Rdknyh9z164drqoQsdZs5vV+g2HhnZkK+fhVMn1Kw==
-X-Received: by 2002:a17:90a:8808:b0:1f7:4bd3:3760 with SMTP id s8-20020a17090a880800b001f74bd33760mr15279401pjn.170.1660512322794;
-        Sun, 14 Aug 2022 14:25:22 -0700 (PDT)
-Received: from robh.at.kernel.org ([2607:fb90:282b:ad51:2025:80dc:3a15:a2de])
-        by smtp.gmail.com with ESMTPSA id a6-20020a170902710600b0016ed20eacd2sm5730887pll.150.2022.08.14.14.25.19
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:x-gm-message-state:from:to:cc;
+        bh=e6FRW0qPl4W20Yv52Z4sAYPbvGuz6jN7y//DsuNkqsU=;
+        b=29kh/KUuXlKOWOVjhz5TGq2NmPeLcI/46lWXhBx5TWEsCkuzcwImNL/RgHuMTAspHl
+         6+YU0ro2lhPjQG0Ytp3B9e3rGiP+JA/Iwu90XXFjHLeNrJ7yEFOlmF20z3CkMw+V8TE5
+         u1pY2DHbjFYZrjcLu9KU82DR/JEFKxF7I/nuycapCxYk+Bmc4L7Q1+L5CRGdlCq6mX1w
+         eqjeLE6VdTKWCT4NmJOCE17kimMP4k8dDqLLM+LHrN54pYXwRdiydFk/zLOJMggIBciJ
+         3IyTXrrpoLmbDxf+kpIxjenNMf/g8XUE7s5xMOCxhwQTS1nIUHEV6slgej0QUpfpoooM
+         MfPw==
+X-Gm-Message-State: ACgBeo0dRdxGiqlf/jB4IxDmVF/1NwcFqYDIsT68myMQQdwBSwHLgfoP
+        CshbY212To0abZT93TAR7k/7T4aGXa8=
+X-Google-Smtp-Source: AA6agR5fe8kJ9OT5VmtqrIpOFlHhYP4moh9j6l+KCTRf6RR/mEc2dqBMEBIbg0C4MPKsNf6oTeac9g==
+X-Received: by 2002:a17:902:ecce:b0:16e:e6e9:69b9 with SMTP id a14-20020a170902ecce00b0016ee6e969b9mr13787837plh.139.1660512373090;
+        Sun, 14 Aug 2022 14:26:13 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id y16-20020a17090264d000b0016ee328fd61sm5738719pli.198.2022.08.14.14.26.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Aug 2022 14:25:22 -0700 (PDT)
-Received: (nullmailer pid 736117 invoked by uid 1000);
-        Sun, 14 Aug 2022 21:25:17 -0000
-Date:   Sun, 14 Aug 2022 15:25:17 -0600
-From:   Rob Herring <robh@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Del Regno <angelogioacchino.delregno@somainline.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Jami Kettunen <jami.kettunen@somainline.org>,
-        Stephen Boyd <swboyd@chromium.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/5] dt-bindings: display/msm: dpu-msm8998: add missing
- DPU opp-table
-Message-ID: <20220814212517.GA716652-robh@kernel.org>
-References: <20220811084331.83715-1-krzysztof.kozlowski@linaro.org>
- <20220811084331.83715-2-krzysztof.kozlowski@linaro.org>
+        Sun, 14 Aug 2022 14:26:12 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 14 Aug 2022 14:26:10 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Greg KH <gregkh@linuxfoundation.org>
+Subject: upstream kernel crashes
+Message-ID: <20220814212610.GA3690074@roeck-us.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220811084331.83715-2-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,51 +70,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Aug 11, 2022 at 11:43:27AM +0300, Krzysztof Kozlowski wrote:
-> The 'display-controller' child (DPU) of Display SubSystem (MDSS) uses
-> opp-table, so reference it which allows restricting DPU schema to fixed
-> list of properties.
-> 
-> Fixes: 6e986a8f1cf1 ("dt-bindings: display: msm: Add binding for msm8998 dpu")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Cc: Rob Clark <robdclark@gmail.com>
-> Cc: Sean Paul <sean@poorly.run>
-> Cc: Abhinav Kumar <quic_abhinavk@quicinc.com>
-> ---
->  Documentation/devicetree/bindings/display/msm/dpu-msm8998.yaml | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/display/msm/dpu-msm8998.yaml b/Documentation/devicetree/bindings/display/msm/dpu-msm8998.yaml
-> index 2df64afb76e6..7ed438bc7dce 100644
-> --- a/Documentation/devicetree/bindings/display/msm/dpu-msm8998.yaml
-> +++ b/Documentation/devicetree/bindings/display/msm/dpu-msm8998.yaml
-> @@ -62,6 +62,7 @@ patternProperties:
->    "^display-controller@[0-9a-f]+$":
->      type: object
->      description: Node containing the properties of DPU.
-> +    additionalProperties: false
->  
->      properties:
->        compatible:
-> @@ -105,6 +106,8 @@ patternProperties:
->          maxItems: 1
->  
->        operating-points-v2: true
-> +      opp-table: true
+Hi all,
 
-type: object
+syscaller reports lots of crashes with the mainline kernel. The latest
+I have seen, based on the current ToT, is attached. Backtraces are not
+always the same, but this one is typical.
 
-Otherwise, 'opp-table;' would be accepted.
+I have not tried to analyze this further.
 
-> +
->        ports:
->          $ref: /schemas/graph.yaml#/properties/ports
->          description: |
-> -- 
-> 2.34.1
-> 
-> 
+Guenter
+
+---
+scsi 0:0:1:0: Direct-Access Google PersistentDisk 1 PQ: 0 ANSI: 6
+BUG: unable to handle page fault for address: ffffdc0000000001
+#PF: supervisor read access in kernel mode
+#PF: error_code(0x0000) - not-present page
+PGD 11826067
+P4D 11826067
+PUD 0
+
+Oops: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 41 Comm: kworker/u4:2 Not tainted 5.19.0-syzkaller-14374-g5d6a0f4da927 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
+Workqueue: events_unbound async_run_entry_fn
+RIP: 0010:__hlist_del include/linux/list.h:886 [inline]
+RIP: 0010:hlist_del include/linux/list.h:898 [inline]
+RIP: 0010:__alloc_object lib/debugobjects.c:213 [inline]
+RIP: 0010:alloc_object lib/debugobjects.c:253 [inline]
+RIP: 0010:__debug_object_init+0x761/0xd10 lib/debugobjects.c:570
+Code: 00 00 4d 8b 47 08 4c 89 c7 48 c1 ef 03 80 3c 0f 00 0f 85 74 04 00 00 48 85 f6 49 89 30 74 1a 48 8d 7e 08 49 89 fa 49 c1 ea 03 <41> 80 3c 0a 00 0f 85 2f 04 00 00 4c 89 46 08 48 b8 00 01 00 00 00
+RSP: 0000:ffffc90000d2f670 EFLAGS: 00010802
+
+RAX: 0000000000000000 RBX: 0000000000001c37 RCX: dffffc0000000000
+RDX: ffff8880b9b36c20 RSI: ffff000000000000 RDI: ffff000000000008
+RBP: 0000000000001c3b R08: ffffffff91340700 R09: 0000000000001c2b
+R10: 1fffe00000000001 R11: 0000000000000215 R12: ffff8880b9b36c20
+R13: 0000000000000209 R14: ffffed1017366d85 R15: ffff8881472293f0
+FS: 0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffdc0000000001 CR3: 000000000bc8e000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+<TASK>
+__init_work+0x48/0x50 kernel/workqueue.c:523
+pm_runtime_init+0x1fe/0x400 drivers/base/power/runtime.c:1717
+device_pm_init drivers/base/power/power.h:168 [inline]
+device_initialize+0x23f/0x540 drivers/base/core.c:2985
+scsi_sysfs_device_initialize+0x257/0xa60 drivers/scsi/scsi_sysfs.c:1627
+scsi_alloc_sdev+0x9b4/0xcc0 drivers/scsi/scsi_scan.c:364
+scsi_probe_and_add_lun+0x22be/0x3660 drivers/scsi/scsi_scan.c:1191
+__scsi_scan_target+0x21f/0xdb0 drivers/scsi/scsi_scan.c:1673
+scsi_scan_channel drivers/scsi/scsi_scan.c:1761 [inline]
+scsi_scan_channel+0x148/0x1e0 drivers/scsi/scsi_scan.c:1737
+scsi_scan_host_selected+0x2df/0x3b0 drivers/scsi/scsi_scan.c:1790
+do_scsi_scan_host+0x1e8/0x260 drivers/scsi/scsi_scan.c:1929
+do_scan_async+0x3e/0x500 drivers/scsi/scsi_scan.c:1939
+async_run_entry_fn+0x98/0x530 kernel/async.c:127
+process_one_work+0x991/0x1610 kernel/workqueue.c:2289
+worker_thread+0x665/0x1080 kernel/workqueue.c:2436
+kthread+0x2e4/0x3a0 kernel/kthread.c:376
+ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+</TASK>
+Modules linked in:
+CR2: ffffdc0000000001
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__hlist_del include/linux/list.h:886 [inline]
+RIP: 0010:hlist_del include/linux/list.h:898 [inline]
+RIP: 0010:__alloc_object lib/debugobjects.c:213 [inline]
+RIP: 0010:alloc_object lib/debugobjects.c:253 [inline]
+RIP: 0010:__debug_object_init+0x761/0xd10 lib/debugobjects.c:570
+Code: 00 00 4d 8b 47 08 4c 89 c7 48 c1 ef 03 80 3c 0f 00 0f 85 74 04 00 00 48 85 f6 49 89 30 74 1a 48 8d 7e 08 49 89 fa 49 c1 ea 03 <41> 80 3c 0a 00 0f 85 2f 04 00 00 4c 89 46 08 48 b8 00 01 00 00 00
+RSP: 0000:ffffc90000d2f670 EFLAGS: 00010802
+RAX: 0000000000000000 RBX: 0000000000001c37 RCX: dffffc0000000000
+RDX: ffff8880b9b36c20 RSI: ffff000000000000 RDI: ffff000000000008
+RBP: 0000000000001c3b R08: ffffffff91340700 R09: 0000000000001c2b
+R10: 1fffe00000000001 R11: 0000000000000215 R12: ffff8880b9b36c20
+R13: 0000000000000209 R14: ffffed1017366d85 R15: ffff8881472293f0
+FS: 0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: ffffdc0000000001 CR3: 000000000bc8e000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+0: 00 00 add %al,(%rax)
+2: 4d 8b 47 08 mov 0x8(%r15),%r8
+6: 4c 89 c7 mov %r8,%rdi
+9: 48 c1 ef 03 shr $0x3,%rdi
+d: 80 3c 0f 00 cmpb $0x0,(%rdi,%rcx,1)
+11: 0f 85 74 04 00 00 jne 0x48b
+17: 48 85 f6 test %rsi,%rsi
+1a: 49 89 30 mov %rsi,(%r8)
+1d: 74 1a je 0x39
+1f: 48 8d 7e 08 lea 0x8(%rsi),%rdi
+23: 49 89 fa mov %rdi,%r10
+26: 49 c1 ea 03 shr $0x3,%r10
+* 2a: 41 80 3c 0a 00 cmpb $0x0,(%r10,%rcx,1) <-- trapping instruction
+2f: 0f 85 2f 04 00 00 jne 0x464
+35: 4c 89 46 08 mov %r8,0x8(%rsi)
+39: 48 rex.W
+3a: b8 00 01 00 00 mov $0x100,%eax
+
+

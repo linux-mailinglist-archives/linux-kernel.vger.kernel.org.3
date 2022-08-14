@@ -2,61 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4FF9591FCA
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 14:52:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0823A591FD1
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 15:02:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231668AbiHNMwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 08:52:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55236 "EHLO
+        id S231520AbiHNNCT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 09:02:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiHNMwC (ORCPT
+        with ESMTP id S231613AbiHNNCK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 08:52:02 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7DA26E6
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 05:51:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660481519; x=1692017519;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kFk1jUbR8Kh+cFUMjzYkduWCTXacUecoe/Y9VWupVTQ=;
-  b=F8csmVgQxifJBsAX65oN7ZTrmkRGa5bfg6S2F0/t9T3+Ud+tc0dyMWgD
-   yQnSRCgsBhaD2l6MLaRewQnlEHy23GdnalnalxLvAjVH2M8EQqUxHXQxX
-   sYvT+qat77D0v8JKLKsOQVQo4thb/9V1gBC8O5WKVc2+YfFaxUyT6xCXQ
-   fDjkjBeOVG8sfcMjtGWDGBD8bGJ/JEwg018f9Fkha/UAxBJPnmrcONeOF
-   d9m6i17eflpUzOZShCMZz7+40HSRpSPieegLlnBUTorjxmFZ8uTh/yUxM
-   kGWjid5h8IAij7MslZ1td9cW701coW61ml18VDw4upy4B1LE7PDFH4Ayw
-   g==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="293092905"
-X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
-   d="scan'208";a="293092905"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2022 05:51:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
-   d="scan'208";a="557006389"
-Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
-  by orsmga003.jf.intel.com with ESMTP; 14 Aug 2022 05:51:57 -0700
-Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oND5x-00005z-06;
-        Sun, 14 Aug 2022 12:51:57 +0000
-Date:   Sun, 14 Aug 2022 20:51:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Subject: [stable:linux-5.15.y 5373/9027] arch/x86/kvm/hyperv.c:2185:5:
- warning: stack frame size (1036) exceeds limit (1024) in 'kvm_hv_hypercall'
-Message-ID: <202208142025.NHKErAjq-lkp@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        Sun, 14 Aug 2022 09:02:10 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E362DB496;
+        Sun, 14 Aug 2022 06:02:09 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id o5-20020a17090a3d4500b001ef76490983so4736337pjf.2;
+        Sun, 14 Aug 2022 06:02:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc;
+        bh=ALtpbVvXUPxMNMedagoUCg7KNZgTd9ARYDAZ+N1wtts=;
+        b=SCTv+sEDkCe4SCFoxoGASblFTl84qe2+qDfQ9jX2m0/BI0XcFVw0kS5Rltf1jEH7SP
+         NZSgXHHOn8omzrWM8VN0HeQIxewrAUMM9asG0XWBXOb6lJHU3FvqelMteLO4DrFADWUU
+         ArvHQWq4mmMDhiFwpBkp9m6bT+hmI0HtkQx3H+vlcnxr92KapL/LIc41hZIHVEuicEj8
+         0LJS6Ujai7KxloRpE02cYubzFqEfKdY9sxp+d961namo7KAClxJUk4ZLwCXI+83Fy5SK
+         TfEv9qCJJk4PsQgEc3mJ02YcYYvimbqO/JyxK/qrkeZtMzqASAN0UG3/CbQxGb/ZyQmC
+         HSAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=ALtpbVvXUPxMNMedagoUCg7KNZgTd9ARYDAZ+N1wtts=;
+        b=ltokvWvOBbUxhJTJGnXodz5nRhC7lr+XlE7YmDjrSBugn6NuDP4EzWDTLeDUFadbQP
+         n8wcxF445nqyN7GW+fng83oSO69ssz6L4Co9gaBoqZvcKjF6XpH1WX7Q2yfvQTdo5p4V
+         Tn4440QrhOd1k8ZkQxnqQ5r/gYOqk4TQR7Fp1R4KVlgFZ+j5G8nJZYJWrZSYXyF+G7FI
+         ZAlJZsG2BSDsFMvYjpxaEoiSTf4bAs4/M+l92bRLxDE7AFK6i3iBepLYEvE6RwcgXsDU
+         mtoRvBt0QbRZpUshA8jrF6v59WD3R512KdyPr7pbSfMZ1eRgaNIXFDX8kC776XHe24+U
+         RPlg==
+X-Gm-Message-State: ACgBeo3IqKlfBqf0OW0y6dfS+aDuiU/OqiM2cbQltqdDEvTU8Spkv90O
+        c7JJMLdRxBnFyl55x2ogOi4=
+X-Google-Smtp-Source: AA6agR63n8XDi0DcZnX/nrYDD9eWBT4WDBiK7bUOWMb5ovqe+0pTAjrhL9VqUPsONtbDEcgzaHJ4pA==
+X-Received: by 2002:a17:903:41c4:b0:16d:cb15:290f with SMTP id u4-20020a17090341c400b0016dcb15290fmr11975573ple.47.1660482129385;
+        Sun, 14 Aug 2022 06:02:09 -0700 (PDT)
+Received: from localhost.localdomain ([182.160.5.243])
+        by smtp.gmail.com with ESMTPSA id a5-20020a17090a70c500b001f23db09351sm3028152pjm.46.2022.08.14.06.02.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 Aug 2022 06:02:09 -0700 (PDT)
+From:   Tuo Cao <91tuocao@gmail.com>
+To:     jesper.nilsson@axis.com, lars.persson@axis.com,
+        herbert@gondor.apana.org.au, davem@davemloft.net
+Cc:     linux-arm-kernel@axis.com, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, 91tuocao@gmail.com
+Subject: [PATCH] crypto: axis: artpec6_crypto: move spin_lock_bh to spin_lock in tasklet
+Date:   Sun, 14 Aug 2022 21:00:54 +0800
+Message-Id: <20220814130054.6444-1-91tuocao@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,62 +65,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vitaly,
+it is unnecessary to call spin_lock_bh in a tasklet.
 
-FYI, the error/warning still remains.
+Signed-off-by: Tuo Cao <91tuocao@gmail.com>
+---
+ drivers/crypto/axis/artpec6_crypto.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-5.15.y
-head:   7217df81279835a7aee62a07aabb7b8fb8c766f2
-commit: cb188e07105f2216f5efbefac95df4b6ce266906 [5373/9027] KVM: x86: hyper-v: HVCALL_SEND_IPI_EX is an XMM fast hypercall
-config: i386-allmodconfig (https://download.01.org/0day-ci/archive/20220814/202208142025.NHKErAjq-lkp@intel.com/config)
-compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 52cd00cabf479aa7eb6dbb063b7ba41ea57bce9e)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git/commit/?id=cb188e07105f2216f5efbefac95df4b6ce266906
-        git remote add stable https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
-        git fetch --no-tags stable linux-5.15.y
-        git checkout cb188e07105f2216f5efbefac95df4b6ce266906
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash arch/x86/kvm/
-
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
-
-All warnings (new ones prefixed by >>):
-
->> arch/x86/kvm/hyperv.c:2185:5: warning: stack frame size (1036) exceeds limit (1024) in 'kvm_hv_hypercall' [-Wframe-larger-than]
-   int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
-       ^
-   1 warning generated.
-
-
-vim +/kvm_hv_hypercall +2185 arch/x86/kvm/hyperv.c
-
-4ad81a91119df7 Vitaly Kuznetsov         2021-05-21  2184  
-e83d58874ba1de Andrey Smetanin          2015-07-03 @2185  int kvm_hv_hypercall(struct kvm_vcpu *vcpu)
-e83d58874ba1de Andrey Smetanin          2015-07-03  2186  {
-4e62aa96d6e55c Vitaly Kuznetsov         2021-07-30  2187  	struct kvm_vcpu_hv *hv_vcpu = to_hv_vcpu(vcpu);
-bd38b32053eb1c Siddharth Chandrasekaran 2021-05-26  2188  	struct kvm_hv_hcall hc;
-bd38b32053eb1c Siddharth Chandrasekaran 2021-05-26  2189  	u64 ret = HV_STATUS_SUCCESS;
-e83d58874ba1de Andrey Smetanin          2015-07-03  2190  
-e83d58874ba1de Andrey Smetanin          2015-07-03  2191  	/*
-e83d58874ba1de Andrey Smetanin          2015-07-03  2192  	 * hypercall generates UD from non zero cpl and real mode
-e83d58874ba1de Andrey Smetanin          2015-07-03  2193  	 * per HYPER-V spec
-e83d58874ba1de Andrey Smetanin          2015-07-03  2194  	 */
-b3646477d458fb Jason Baron              2021-01-14  2195  	if (static_call(kvm_x86_get_cpl)(vcpu) != 0 || !is_protmode(vcpu)) {
-e83d58874ba1de Andrey Smetanin          2015-07-03  2196  		kvm_queue_exception(vcpu, UD_VECTOR);
-0d9c055eaaf41b Andrey Smetanin          2016-02-11  2197  		return 1;
-e83d58874ba1de Andrey Smetanin          2015-07-03  2198  	}
-e83d58874ba1de Andrey Smetanin          2015-07-03  2199  
-
-:::::: The code at line 2185 was first introduced by commit
-:::::: e83d58874ba1de74c13d3c6b05f95a023c860d25 kvm/x86: move Hyper-V MSR's/hypercall code into hyperv.c file
-
-:::::: TO: Andrey Smetanin <asmetanin@virtuozzo.com>
-:::::: CC: Paolo Bonzini <pbonzini@redhat.com>
-
+diff --git a/drivers/crypto/axis/artpec6_crypto.c b/drivers/crypto/axis/artpec6_crypto.c
+index 9ad188cffd0d..b4820594ab80 100644
+--- a/drivers/crypto/axis/artpec6_crypto.c
++++ b/drivers/crypto/axis/artpec6_crypto.c
+@@ -2091,7 +2091,7 @@ static void artpec6_crypto_task(unsigned long data)
+ 		return;
+ 	}
+ 
+-	spin_lock_bh(&ac->queue_lock);
++	spin_lock(&ac->queue_lock);
+ 
+ 	list_for_each_entry_safe(req, n, &ac->pending, list) {
+ 		struct artpec6_crypto_dma_descriptors *dma = req->dma;
+@@ -2128,7 +2128,7 @@ static void artpec6_crypto_task(unsigned long data)
+ 
+ 	artpec6_crypto_process_queue(ac, &complete_in_progress);
+ 
+-	spin_unlock_bh(&ac->queue_lock);
++	spin_unlock(&ac->queue_lock);
+ 
+ 	/* Perform the completion callbacks without holding the queue lock
+ 	 * to allow new request submissions from the callbacks.
 -- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+2.17.1
+

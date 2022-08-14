@@ -2,138 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC5CC591E16
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 06:27:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE5C591E19
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 06:31:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbiHNE0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 00:26:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46472 "EHLO
+        id S229974AbiHNEaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 00:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbiHNE0b (ORCPT
+        with ESMTP id S229495AbiHNEay (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 00:26:31 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF80018388
-        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 21:26:27 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oN5CU-0002Nu-2M; Sun, 14 Aug 2022 06:26:10 +0200
-Received: from ore by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <ore@pengutronix.de>)
-        id 1oN5CS-0007qk-2t; Sun, 14 Aug 2022 06:26:08 +0200
-Date:   Sun, 14 Aug 2022 06:26:08 +0200
-From:   Oleksij Rempel <o.rempel@pengutronix.de>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Woojung Huh <woojung.huh@microchip.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, UNGLinuxDriver@microchip.com,
-        Eric Dumazet <edumazet@google.com>,
-        Vladimir Oltean <olteanv@gmail.com>, kernel@pengutronix.de,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org
-Subject: Re: [PATCH net-next v1 07/10] net: dsa: microchip: warn about not
- supported synclko properties on KSZ9893 chips
-Message-ID: <20220814042608.GC12534@pengutronix.de>
-References: <20220729130346.2961889-1-o.rempel@pengutronix.de>
- <20220729130346.2961889-8-o.rempel@pengutronix.de>
- <20220802113633.73rxlb2kmihivwpx@skbuf>
- <20220805115601.GB10667@pengutronix.de>
- <20220805134234.ps4qfjiachzm7jv4@skbuf>
- <20220813143215.GA12534@pengutronix.de>
- <Yve/MSMc/4klJPFL@lunn.ch>
- <20220813161850.GB12534@pengutronix.de>
- <YvgMnfSkEeD8jwIG@lunn.ch>
+        Sun, 14 Aug 2022 00:30:54 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E134819282;
+        Sat, 13 Aug 2022 21:30:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=cmuEOBb5dbRHAC7PXZWV6QiRHrjQgW3rz2oIRTfXKEA=;
+  b=JJhUiHHN+18mG4z2c36obGVUdZGZQhT4/obMaoJ68iIM8umq3zv3gCaR
+   c/l2JxwZ/dYgGEIe9pvVe7qHtXza5vJl/x50/oCr03vWKTaWEXvMSrXHB
+   4E5KxaXW8WpJtC/kyoUJtpg8ixdPW/Lkt3+G0ie7l7G7vTAaEdZTNRTDs
+   U=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.93,236,1654552800"; 
+   d="scan'208";a="48737315"
+Received: from ip-153.net-89-2-7.rev.numericable.fr (HELO hadrien) ([89.2.7.153])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2022 06:30:49 +0200
+Date:   Sun, 14 Aug 2022 06:30:48 +0200 (CEST)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Wolfram Sang <wsa@kernel.org>
+cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Julia Lawall <julia.lawall@inria.fr>,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        cocci@systeme.lip6.fr
+Subject: Re: [PULL REQUEST] i2c-for-5.20-part2
+In-Reply-To: <YvhXzarjOLEJ8nsW@shikoro>
+Message-ID: <alpine.DEB.2.22.394.2208140630320.3190@hadrien>
+References: <YvfGY2qnl2YXrUgX@shikoro> <CAHk-=wjGmhaE-Y8GqWKPtWYOi=bOarFgo7UkzHNoOVEKnkXXrQ@mail.gmail.com> <YvhC5Orb+JeZFDEO@shikoro> <YvhXzarjOLEJ8nsW@shikoro>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: attachment
-In-Reply-To: <YvgMnfSkEeD8jwIG@lunn.ch>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: ore@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Ccing Rob Herring.
 
-On Sat, Aug 13, 2022 at 10:42:05PM +0200, Andrew Lunn wrote:
-> On Sat, Aug 13, 2022 at 06:18:50PM +0200, Oleksij Rempel wrote:
-> > On Sat, Aug 13, 2022 at 05:11:45PM +0200, Andrew Lunn wrote:
-> > > On Sat, Aug 13, 2022 at 04:32:15PM +0200, Oleksij Rempel wrote:
-> > > > On Fri, Aug 05, 2022 at 04:42:34PM +0300, Vladimir Oltean wrote:
-> > > > > On Fri, Aug 05, 2022 at 01:56:01PM +0200, Oleksij Rempel wrote:
-> > > > > > Hm, if we will have any random not support OF property in the switch
-> > > > > > node. We won't be able to warn about it anyway. So, if it is present
-> > > > > > but not supported, we will just ignore it.
-> > > > > > 
-> > > > > > I'll drop this patch.
-> > > > > 
-> > > > > To continue, I think the right way to go about this is to edit the
-> > > > > dt-schema to say that these properties are only applicable to certain
-> > > > > compatible strings, rather than for all. Then due to the
-> > > > > "unevaluatedProperties: false", you'd get the warnings you want, at
-> > > > > validation time.
-> > > > 
-> > > > Hm, with "unevaluatedProperties: false" i have no warnings. Even if I
-> > > > create examples with random strings as properties. Are there some new
-> > > > json libraries i should use?
-> > > 
-> > > Try
-> > > 
-> > > additionalProperties: False
-> > 
-> > Yes, it works. But in this case I'll do more changes. Just wont to make
-> > sure I do not fix not broken things.
-> 
-> I've been working on converting some old SoCs bindings from .txt to
-> .yaml. My observations is that the yaml is sometimes more restrictive
-> than what the drivers actually imposes. So you might need to change
-> perfectly working .dts files to get it warning free. Or you just
-> accept the warnings and move on. At lot will depend on the number of
-> warnings and how easy it is to see real problems mixed in with
-> warnings you never intend to fix.
 
-Heh :) Currently with "unevaluatedProperties: false" restrictions do not
-work at all. At least for me. For example with this change I have no
-warnings:
-diff --git a/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml b/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml
-index 1e26d876d1463..da38ad98a152f 100644
---- a/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml
-+++ b/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml
-@@ -120,6 +120,7 @@ examples:
-             ethernet-switch@1 {
-                     reg = <0x1>;
-                     compatible = "nxp,sja1105t";
-+                    something-random-here;
- 
-                     ethernet-ports {
-                             #address-cells = <1>;
+On Sun, 14 Aug 2022, Wolfram Sang wrote:
 
-make dt_binding_check DT_SCHEMA_FILES=Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml
+> On Sun, Aug 14, 2022 at 02:33:40AM +0200, Wolfram Sang wrote:
+> >
+> > >  (b) auto-convert (with a coccinelle script) all the 'strlcpy()' users
+> > > that don't care about the return value, and leave a few broken users
+> > > of strlcpy around
+> > >
+> > > I think (b) is the simpler thing, but I have no idea how to write a
+> > > coccinelle patch that basically does "if return value of strlcpy is
+> > > not used, convert the strlcpy to a strscpy".
+> >
+> > That shouldn't be hard. I'll give it a try tomorrow.
+>
+> So, I tried right away and it was really as easy as expected:
+>
+> ===
+> @@
+> @@
+> - strlcpy
+> + strscpy
+>   (...);
+> ===
+>
+> The ';' at the end ensures that spatch only looks for complete
+> statements not containing anything more than expressed.
 
-So the main question is, is it broken for all or just for me? If it is
-just me, what i'm doing wrong?
+This is correct.
 
-Regards,
-Oleksij
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+julia
+
+>
+> I pushed out a branch for the testbots now:
+>
+> git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git renesas/strlcpy
+>
+> Patch granularity might not be perfect currently, but for testing this
+> should do.
+>
+> All the best,
+>
+>    Wolfram
+>
+>

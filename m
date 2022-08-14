@@ -2,208 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51AF6592623
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 21:17:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9304B592626
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 21:18:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239266AbiHNTRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 15:17:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51332 "EHLO
+        id S239705AbiHNTR4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 15:17:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiHNTQ6 (ORCPT
+        with ESMTP id S229509AbiHNTRy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 15:16:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541E0205D5;
-        Sun, 14 Aug 2022 12:16:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B12D960DB6;
-        Sun, 14 Aug 2022 19:16:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9520AC433C1;
-        Sun, 14 Aug 2022 19:16:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660504616;
-        bh=jXGXWUSCHco+uG0TEBKUEdSh9Q2Y7oyb8AgXQgtxY9U=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nylAgkXuJ5wjCLoC0NnGX6CK8RHio2kFy7s8xCrHsg4coWe00B0eRSWThqc2FeoAX
-         HdExUUxrGLXqt2Dbe+4IvCGCAVCr6d0ox2aFHDjSYJR7QuiQyvDsl4WSBk5yxz8DOI
-         Q66TqlTcZe7/fSdvZobOEwsJ5v/MrXV4f1pyG+jIkjttNCguC8kH1nS3EK3Z10VYum
-         DqHQYOFbOD9YRnqvqpsmj7TVEn2HPNsWHDz+RkDBw9+ZKuK1nbqaQSuNtKNXEw9v/7
-         RCavVhknwXamQj+NQSwSazcgtqgdZMHUyo8rWIjAMU+0UoAOx/KL146RcnoizklXGz
-         fevWSwoppTVqg==
-Date:   Sun, 14 Aug 2022 22:16:53 +0300
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     kexec@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, nayna@linux.ibm.com,
-        nasastry@in.ibm.com, mpe@ellerman.id.au,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Nageswara R Sastry <rnsastry@linux.ibm.com>
-Subject: Re: [PATCH v7 4/6] tpm: of: Make of-tree specific function commonly
- available
-Message-ID: <YvlKJeVSR+05VtVr@kernel.org>
-References: <20220812164305.2056641-1-stefanb@linux.ibm.com>
- <20220812164305.2056641-5-stefanb@linux.ibm.com>
- <YvlJ9T+a0b18rRos@kernel.org>
+        Sun, 14 Aug 2022 15:17:54 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1433B1EAF1;
+        Sun, 14 Aug 2022 12:17:53 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id a9so8026707lfm.12;
+        Sun, 14 Aug 2022 12:17:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=oukTcdqzxgCAnjn2sDzCBwJuwmACAodKDpY3pQUuT0U=;
+        b=J7bIEbuVudtPdI/hR4Xn1rdk3oa67ILRAFG+q/ZGHEw3mMFmf3WNOwTZW7a2tEh5wh
+         wRV7d/+MpE2cZtevWn5ESDf1EklvMksCsiGNYlU5rqXrW13wy7554Lwsq+T5L+QNUgNA
+         nCD7OohbUdZ6+PNZOzDRHh5fEWzSg+k7ZXX20r/e1o7y4IlZvTG8gfuMuEQ9hh7mTlf3
+         FLUbTGlpUBpUKsISBXv88YiloEy4x9WzPyE4utdC3rlBbgbhsuPS8ID6B7BvTEKrv1Vk
+         /bzWGT8K25PV5gfSIauc175T0AAAVsHRkIr/p+vTR5+ALEAa/SiRfC2Eb6TCaFSIYU8r
+         FsAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=oukTcdqzxgCAnjn2sDzCBwJuwmACAodKDpY3pQUuT0U=;
+        b=FdeCnQ2jWvg0bA46DCdUa/AixP7Rn+9KDY6A8qIxxfXoT2iBICZigXMlBVEa3QOCQH
+         m49DFKnsJkGjASAj5pQB+WlyAaRQnEWt/EQc0+K0MppqNQHUF3AEFeIQsbL63iGjgKdg
+         iEhsnJFB5gYoKY0Skpjxzn15vf7unsZC/QGaY/z5c3TP6PphglWsOX185sx10BALqiZ1
+         Ci4hUAJu9FyAblocR0WGgVJJ1/0BmZ7F6kDEtFhYE5jnJ3jcZ9Rd/ihFdy4jh05KMNlj
+         T6sp8Pr/D0ja9tXnH4oC9uD63iaWxz8EmK1L80QzvoXsiVcRQGPo6iqPUZjTWBcs+QEs
+         yG6A==
+X-Gm-Message-State: ACgBeo2RQ+daDyKIrebvfPMZ3ANnFV6bu9RqgqBc+2LjVzGrJysI00TK
+        e1lUjapGP9GyFGpYNAK0RfcLdwqUP+XAZyzQw7Y=
+X-Google-Smtp-Source: AA6agR5lEs957kyDbgOIqG1MIpncRpQ3CkOC5UtQ2qH+LWabYyVdspMDAs3Of/uQp4aVzTL6Y6FDkR9PudBWM/q/vqc=
+X-Received: by 2002:a05:6512:4016:b0:48b:1e96:af0f with SMTP id
+ br22-20020a056512401600b0048b1e96af0fmr4706968lfb.359.1660504671280; Sun, 14
+ Aug 2022 12:17:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YvlJ9T+a0b18rRos@kernel.org>
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220814002021.16990-1-dmitrii.bundin.a@gmail.com>
+ <CAK7LNARPAmsJD5XKAw7m_X2g7Fi-CAAsWDQiP7+ANBjkg7R7ng@mail.gmail.com> <20220814053124.fsj3bqamrqyfoiey@google.com>
+In-Reply-To: <20220814053124.fsj3bqamrqyfoiey@google.com>
+From:   Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
+Date:   Sun, 14 Aug 2022 22:17:39 +0300
+Message-ID: <CANXV_XwgZMCGXijfoUyZ9+KyM6Rgeqiq-sCfubyj_16d-2CN=A@mail.gmail.com>
+Subject: Re: [PATCH v2] kbuild: add configurable debug info level
+To:     Fangrui Song <maskray@google.com>, masahiroy@kernel.org
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Isabella Basso <isabbasso@riseup.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 14, 2022 at 10:16:09PM +0300, Jarkko Sakkinen wrote:
-> On Fri, Aug 12, 2022 at 12:43:03PM -0400, Stefan Berger wrote:
-> > Simplify tpm_read_log_of() by moving reusable parts of the code into
-> > an inline function that makes it commonly available so it can be
-> > used also for kexec support. Call the new of_tpm_get_sml_parameters()
-> > function from the TPM Open Firmware driver.
-> > 
-> > Signed-off-by: Stefan Berger <stefanb@linux.ibm.com>
-> > Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> > Cc: Jason Gunthorpe <jgg@ziepe.ca>
-> > Cc: Rob Herring <robh+dt@kernel.org>
-> > Cc: Frank Rowand <frowand.list@gmail.com>
-> > Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> > Tested-by: Nageswara R Sastry <rnsastry@linux.ibm.com>
-> > 
-> > ---
-> > v7:
-> >  - Added original comment back into inlined function
-> > 
-> > v4:
-> >  - converted to inline function
-> > ---
-> >  drivers/char/tpm/eventlog/of.c | 31 +++++------------------------
-> >  include/linux/tpm.h            | 36 ++++++++++++++++++++++++++++++++++
-> >  2 files changed, 41 insertions(+), 26 deletions(-)
-> > 
-> > diff --git a/drivers/char/tpm/eventlog/of.c b/drivers/char/tpm/eventlog/of.c
-> > index a9ce66d09a75..f9462d19632e 100644
-> > --- a/drivers/char/tpm/eventlog/of.c
-> > +++ b/drivers/char/tpm/eventlog/of.c
-> > @@ -12,6 +12,7 @@
-> >  
-> >  #include <linux/slab.h>
-> >  #include <linux/of.h>
-> > +#include <linux/tpm.h>
-> >  #include <linux/tpm_eventlog.h>
-> >  
-> >  #include "../tpm.h"
-> > @@ -20,11 +21,10 @@
-> >  int tpm_read_log_of(struct tpm_chip *chip)
-> >  {
-> >  	struct device_node *np;
-> > -	const u32 *sizep;
-> > -	const u64 *basep;
-> >  	struct tpm_bios_log *log;
-> >  	u32 size;
-> >  	u64 base;
-> > +	int ret;
-> >  
-> >  	log = &chip->log;
-> >  	if (chip->dev.parent && chip->dev.parent->of_node)
-> > @@ -35,30 +35,9 @@ int tpm_read_log_of(struct tpm_chip *chip)
-> >  	if (of_property_read_bool(np, "powered-while-suspended"))
-> >  		chip->flags |= TPM_CHIP_FLAG_ALWAYS_POWERED;
-> >  
-> > -	sizep = of_get_property(np, "linux,sml-size", NULL);
-> > -	basep = of_get_property(np, "linux,sml-base", NULL);
-> > -	if (sizep == NULL && basep == NULL)
-> > -		return -ENODEV;
-> > -	if (sizep == NULL || basep == NULL)
-> > -		return -EIO;
-> > -
-> > -	/*
-> > -	 * For both vtpm/tpm, firmware has log addr and log size in big
-> > -	 * endian format. But in case of vtpm, there is a method called
-> > -	 * sml-handover which is run during kernel init even before
-> > -	 * device tree is setup. This sml-handover function takes care
-> > -	 * of endianness and writes to sml-base and sml-size in little
-> > -	 * endian format. For this reason, vtpm doesn't need conversion
-> > -	 * but physical tpm needs the conversion.
-> > -	 */
-> > -	if (of_property_match_string(np, "compatible", "IBM,vtpm") < 0 &&
-> > -	    of_property_match_string(np, "compatible", "IBM,vtpm20") < 0) {
-> > -		size = be32_to_cpup((__force __be32 *)sizep);
-> > -		base = be64_to_cpup((__force __be64 *)basep);
-> > -	} else {
-> > -		size = *sizep;
-> > -		base = *basep;
-> > -	}
-> > +	ret = of_tpm_get_sml_parameters(np, &base, &size);
-> > +	if (ret < 0)
-> > +		return ret;
-> >  
-> >  	if (size == 0) {
-> >  		dev_warn(&chip->dev, "%s: Event log area empty\n", __func__);
-> > diff --git a/include/linux/tpm.h b/include/linux/tpm.h
-> > index dfeb25a0362d..6356baaa1393 100644
-> > --- a/include/linux/tpm.h
-> > +++ b/include/linux/tpm.h
-> > @@ -460,4 +460,40 @@ static inline struct tpm_chip *tpm_default_chip(void)
-> >  	return NULL;
-> >  }
-> >  #endif
-> > +
-> > +#ifdef CONFIG_OF
-> > +static inline int of_tpm_get_sml_parameters(struct device_node *np,
-> > +					    u64 *base, u32 *size)
-> > +{
-> > +	const u32 *sizep;
-> > +	const u64 *basep;
-> > +
-> > +	sizep = of_get_property(np, "linux,sml-size", NULL);
-> > +	basep = of_get_property(np, "linux,sml-base", NULL);
-> > +	if (sizep == NULL && basep == NULL)
-> > +		return -ENODEV;
-> > +	if (sizep == NULL || basep == NULL)
-> > +		return -EIO;
-> > +
-> > +	/*
-> > +	 * For both vtpm/tpm, firmware has log addr and log size in big
-> > +	 * endian format. But in case of vtpm, there is a method called
-> > +	 * sml-handover which is run during kernel init even before
-> > +	 * device tree is setup. This sml-handover function takes care
-> > +	 * of endianness and writes to sml-base and sml-size in little
-> > +	 * endian format. For this reason, vtpm doesn't need conversion
-> > +	 * but physical tpm needs the conversion.
-> > +	 */
-> > +	if (of_property_match_string(np, "compatible", "IBM,vtpm") < 0 &&
-> > +	    of_property_match_string(np, "compatible", "IBM,vtpm20") < 0) {
-> > +		*size = be32_to_cpup((__force __be32 *)sizep);
-> > +		*base = be64_to_cpup((__force __be64 *)basep);
-> > +	} else {
-> > +		*size = *sizep;
-> > +		*base = *basep;
-> > +	}
-> > +	return 0;
-> > +}
-> > +#endif
-> > +
-> >  #endif
-> > -- 
-> > 2.35.1
-> > 
-> 
-> Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
-> 
-> BR, Jarkkko
+> We already have CONFIG_DEBUG_INFO_NONE to
+> disable the debug info.
 
-Should I pick this or will the full patch set be picked
-by someone?
+Thanks for pointing this out. Indeed providing another way of
+disabling debug info does not look reasonable to me.
+So only it makes sense to set only 1, 2 or 3 debug levels.
 
-BR, Jarkko
+> Using 'int' does not look sensible to me.
 
+Could you please give a hint why?
+My intention to choose int was to provide a boundary with range on the
+DEBUG_INFO_LEVEL option to choose only acceptable ones.
+
+On Sun, Aug 14, 2022 at 8:31 AM Fangrui Song <maskray@google.com> wrote:
+> In Clang, -g = -g2 = -g3. To generate macro information,
+> specify -fdebug-macro.
+Thanks.
+I would propose to add another config option like
+DEBUG_MACRO_DEFINITIONS to turn on macro information for GCC/Clang.
+For GCC it would be -g3, for Clang -fdebug-macro.
+
+> Before GCC 11 and Clang 12, -gsplit-dwarf implied -g2 (older
+> -gsplit-dwarf is like today's `-gsplit-dwarf -g2`).
+>
+> GCC 11 and Clang 12 (https://reviews.llvm.org/D80391) have changed
+> -gsplit-dwarf to not imply -g2.
+>
+> For a group of -g0 -g1 -g2, the last option wins.  Therefore,
+>
+> -g0 -gsplit-dwarf => debug info in GCC<11 and Clang<12
+> -g0 -gsplit-dwarf => no debug info in GCC>=11 and Clang>=12
+
+I would add a note that when selecting -gdwarf-<level> gcc also
+implicitly sets -g2 (at least in older versions).
+It seems reasonable to me to put the DEBUG_LEVEL_INFO setting at the
+very bottom to prevent it from overriding implicitly.
+
+What do you think?

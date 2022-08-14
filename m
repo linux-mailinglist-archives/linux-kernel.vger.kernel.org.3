@@ -2,92 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1861591F2B
+	by mail.lfdr.de (Postfix) with ESMTP id EAAF3591F2C
 	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 11:00:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbiHNI5z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 04:57:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39524 "EHLO
+        id S230272AbiHNJAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 05:00:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229565AbiHNI5y (ORCPT
+        with ESMTP id S229565AbiHNJAC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 04:57:54 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0394620194
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 01:57:53 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id k26so8879160ejx.5
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 01:57:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc;
-        bh=oFIo8KrWFAw4ql69EyYD1EHvN31zfLhd0U7GRD48ME8=;
-        b=B4a2+mJf2HDA/4PCrI8aCNsfxS2SO2lsNABzb6OhkpuDOPe6GX6JZa0HlBiWhzIfNn
-         kDQpFQIBAaAXJEhjrta9f5VdzA+pHR3hPs+QI1Qi7SwTsMyKxm6oZUplOdm+mm8gktnB
-         m1gpujfJvujJ1FrRrJTMkITh+2OM1Lj3aOye6vB7PrBwMloXsr6obx3fjGp7tZz8d+l+
-         Qy7llr39UorY+SgQi/4H1vTV0CqZiOWnbZ9RqoUx+OMYEvnRTk7OqUMcd+LNErIMNAXN
-         6ERv82tWIBbjEG0PiVMAcfF24lr0eX/OCxBLF8nlfnjyvZUuB0pXO22mo2jsL0HLO6VO
-         dNKg==
+        Sun, 14 Aug 2022 05:00:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CF6C220194
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 02:00:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660467599;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=fgWKHQAsxfiE02svIG1GlyOPzEiU/s53wr+EvIkuC5s=;
+        b=ZkSOk5DRzUbQKlfl9Y/Tx92q843qTyoVGXop3R5dc5i0lTm64pv/AuuAD3rVkTQGVEHMk3
+        GgvHntTAqCHc3rNqFXjtu3qAJuovHprdnUkLgmzQwEJQ3eNrEhK1UYFRFGBexEmYWCJBqC
+        dF3IAUN5Mu4n51ot6JGmbZDXys5g71Q=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-59-x7TarulKOme0a_c3MIwjTg-1; Sun, 14 Aug 2022 04:59:58 -0400
+X-MC-Unique: x7TarulKOme0a_c3MIwjTg-1
+Received: by mail-ed1-f71.google.com with SMTP id w17-20020a056402269100b0043da2189b71so3047245edd.6
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 01:59:58 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc;
-        bh=oFIo8KrWFAw4ql69EyYD1EHvN31zfLhd0U7GRD48ME8=;
-        b=f5rb3KkULVu5PVWntY7Dx/6Io8XSMZGWtkP/46iRM0hBkhdFid1C9a1RvJgI3OBT0p
-         s2t6mc14WlwogcYFt3R1jL+cJykmhyTj7DTE+ESKZ265CYSs1eY+qlsg0on8waE8/N5l
-         hoxc6zHjaKonarTbxOCJbUm9115rLYQYQiQrGlMQKnnEHhKV65UL5UuBb80tcFJ8R1gU
-         B5pvM7A2CqB2+QztmACEOSdiP/cNbWZ9VqMZUbxRrC2EIsoSQfwgYA/11mSNZOZuFRwp
-         VZzyJImTr0q/wQSDd9Y7sleWNacBuVYee4R4tFqnf7qJsVHCYdtfUjEEoZDoUTPi85We
-         uKBQ==
-X-Gm-Message-State: ACgBeo3tMvymmlhZ+cg5oyOEFPoM8egDXgSL/2xLCKnHF+PXBC7tSShX
-        eHCZjct3+nV/7n5k+UnTMyY=
-X-Google-Smtp-Source: AA6agR47AXq/QFomXS2zUyLkRHiok+Z1qRXDvWkbySUsVtTOvwYFTEf7Xs2nzzi3fksGHzLRB/vEnw==
-X-Received: by 2002:a17:907:94c3:b0:730:9641:8dd8 with SMTP id dn3-20020a17090794c300b0073096418dd8mr7481277ejc.586.1660467471454;
-        Sun, 14 Aug 2022 01:57:51 -0700 (PDT)
-Received: from gmail.com (195-38-113-253.pool.digikabel.hu. [195.38.113.253])
-        by smtp.gmail.com with ESMTPSA id t19-20020a05640203d300b0043bbf79b3ebsm4460410edw.54.2022.08.14.01.57.50
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=fgWKHQAsxfiE02svIG1GlyOPzEiU/s53wr+EvIkuC5s=;
+        b=UKZicvaowv6fdZclZCjA9JSeLRxBJtvSKRTMh3/jIukjskapHxCmv9u3D16CW7RYD8
+         3080en34MNSx1GtIwbHeUS8UA/HLkNAjmmmUPWEBzbV/mkgv/kdOfoPGtHpVPHfUUW4E
+         QftKRtzC5+tuhZs7PCKR8taxaPcAZ2Z0OT7wfRMMkK0hlPYYLSYwnNlt5fPjEXHyBcy8
+         IIOEjDWTvZ3fRWNZ5z4dNgrbuxE1b26m8I3Lm4Qv3Sou0PVfuQ02DR0S2faJJT1jMclb
+         DSwWWPBEfp1TWql5vTht3jwYIrsaMYrRAv9K2rHti67MVOw7E5yrPXrGSVnQGO7CJrae
+         b4Tw==
+X-Gm-Message-State: ACgBeo1Tg3SuV19UxTl6QyQJhKpbDDuBZEFXhiGVdyM2G8GHRg+2q6ef
+        sEvl8eY3TE5F6Vo4Pg1cq90GCg7n9YTwM3b28fsFV86wTdTcquiK7TAzotHxTjtkjLQoy5dztae
+        8Jsq9uZi/OLSxrKi7ntc1Kz+7
+X-Received: by 2002:a17:907:8692:b0:730:b0d3:5311 with SMTP id qa18-20020a170907869200b00730b0d35311mr7626857ejc.674.1660467597657;
+        Sun, 14 Aug 2022 01:59:57 -0700 (PDT)
+X-Google-Smtp-Source: AA6agR4Jadz5kR2nLnc2rixgHWUCJWsMJ+KvMQFIq/16RUbwY2CdGtnCFdI14mOJpckbCgySblIwmg==
+X-Received: by 2002:a17:907:8692:b0:730:b0d3:5311 with SMTP id qa18-20020a170907869200b00730b0d35311mr7626840ejc.674.1660467597281;
+        Sun, 14 Aug 2022 01:59:57 -0700 (PDT)
+Received: from redhat.com ([2.52.152.113])
+        by smtp.gmail.com with ESMTPSA id hr16-20020a1709073f9000b007317ad372c0sm2717544ejc.20.2022.08.14.01.59.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Aug 2022 01:57:50 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Sun, 14 Aug 2022 10:57:48 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>, x86-ml <x86@kernel.org>
-Subject: Re: [GIT PULL] timer fixes
-Message-ID: <Yvi5DMkZJlaj2rBx@gmail.com>
-References: <Yvd8L0qIbLarxrOQ@gmail.com>
- <YvfQUGLGY7cfZ9gf@zn.tnic>
- <CAHk-=wi+K-LQ121sPbsQonja3Sx-_kXZc6ntauUC2=JPsUrC+g@mail.gmail.com>
+        Sun, 14 Aug 2022 01:59:56 -0700 (PDT)
+Date:   Sun, 14 Aug 2022 04:59:48 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Andres Freund <andres@anarazel.de>
+Cc:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alvaro.karsz@solid-run.com, colin.i.king@gmail.com,
+        colin.king@intel.com, dan.carpenter@oracle.com, david@redhat.com,
+        elic@nvidia.com, eperezma@redhat.com, gautam.dawar@xilinx.com,
+        gshan@redhat.com, hdegoede@redhat.com, hulkci@huawei.com,
+        jasowang@redhat.com, jiaming@nfschina.com,
+        kangjie.xu@linux.alibaba.com, lingshan.zhu@intel.com,
+        liubo03@inspur.com, michael.christie@oracle.com,
+        pankaj.gupta@amd.com, peng.fan@nxp.com, quic_mingxue@quicinc.com,
+        robin.murphy@arm.com, sgarzare@redhat.com, suwan.kim027@gmail.com,
+        syoshida@redhat.com, xieyongji@bytedance.com, xuqiang36@huawei.com
+Subject: Re: [GIT PULL] virtio: fatures, fixes
+Message-ID: <20220814045853-mutt-send-email-mst@kernel.org>
+References: <20220812114250-mutt-send-email-mst@kernel.org>
+ <20220814004522.33ecrwkmol3uz7aq@awork3.anarazel.de>
+ <1660441835.6907768-1-xuanzhuo@linux.alibaba.com>
+ <20220814035239.m7rtepyum5xvtu2c@awork3.anarazel.de>
+ <20220814043906.xkmhmnp23bqjzz4s@awork3.anarazel.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wi+K-LQ121sPbsQonja3Sx-_kXZc6ntauUC2=JPsUrC+g@mail.gmail.com>
-X-Spam-Status: No, score=1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+In-Reply-To: <20220814043906.xkmhmnp23bqjzz4s@awork3.anarazel.de>
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Aug 13, 2022 at 09:39:06PM -0700, Andres Freund wrote:
+> Hi,
+> 
+> On 2022-08-13 20:52:39 -0700, Andres Freund wrote:
+> > Is there specific information you'd like from the VM? I just recreated the
+> > problem and can extract.
+> 
+> Actually, after reproducing I seem to now hit a likely different issue. I
+> guess I should have checked exactly the revision I had a problem with earlier,
+> rather than doing a git pull (up to aea23e7c464b)
 
-* Linus Torvalds <torvalds@linux-foundation.org> wrote:
+Looks like there's a generic memory corruption so it crashes
+in random places. Would bisect be possible for you?
 
-> I think the issue is that "current->sighand" is always safe (and that 
-> "me->sighand" is the same thing), and that sighand has RCU-delayed 
-> freeing so that __lock_task_sighand() can safely try to take the lock of 
-> another process' sighand.
+-- 
+MST
 
-Yeah - 'me' (== current) here can never go away from under the locking 
-context which is 'me' as well.
-
-Thanks,
-
-	Ingo

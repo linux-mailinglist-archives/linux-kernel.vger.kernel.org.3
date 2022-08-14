@@ -2,73 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E745591F1E
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 10:37:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 433F2591F22
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 10:38:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229602AbiHNIhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 04:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53282 "EHLO
+        id S229721AbiHNIiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 04:38:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiHNIhS (ORCPT
+        with ESMTP id S229565AbiHNIiO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 04:37:18 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D4B1BEB7
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 01:37:17 -0700 (PDT)
+        Sun, 14 Aug 2022 04:38:14 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F0E1CFCC;
+        Sun, 14 Aug 2022 01:38:14 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id EF3E234485;
-        Sun, 14 Aug 2022 08:37:15 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id CBAC53482E;
+        Sun, 14 Aug 2022 08:38:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1660466235; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1660466292; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=COPY/iZmQz2XndCaf2cuzaayLMhChE0e5+Z2alyBwlI=;
-        b=RN2RCzUwfOtsRaQG+wxrHD8BtAANyau94kw6iUni5ahKQBRKl1QsPyMv/2stp9z4wtbM5U
-        jKguhofp19/bBw8YNcwn4/4i0FL0N9ZfN5aToYwHnUgiKC+VwCYyNx4/kt1dZCfDE5qT1l
-        n1kluX3rprfAeiF9F/1ca5Dl7F/3OVM=
+        bh=p8fM5+MPNUeGLIT6O7/15uwJLNwTIn6SPpYZGmI3ecg=;
+        b=K0rw2WyRrTu1kWAiNMSWSLT/wyrMs1ts0fkWBhv9Al0Np2jUlOyLXugcyswBzjCBEi/KTG
+        lFjMLApmx71OcnFaFIYA/XNaZDARW0T65XXeXIrOUB3koJm1cIcYVX3+LspsdaPhOzKlih
+        6rKS3MeO39Adk1wG99SPH8VRM5obX3k=
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7063613AAE;
-        Sun, 14 Aug 2022 08:37:15 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5833713AAE;
+        Sun, 14 Aug 2022 08:38:12 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id e1MAGTu0+GLrNgAAMHmgww
-        (envelope-from <jgross@suse.com>); Sun, 14 Aug 2022 08:37:15 +0000
-Message-ID: <fd2b0509-9110-2061-590a-a58e65f5fe01@suse.com>
-Date:   Sun, 14 Aug 2022 10:37:14 +0200
+        id WwaTE3S0+GIvNwAAMHmgww
+        (envelope-from <jgross@suse.com>); Sun, 14 Aug 2022 08:38:12 +0000
+Message-ID: <755f368b-5336-7030-af24-e043bfa30b4d@suse.com>
+Date:   Sun, 14 Aug 2022 10:38:11 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
  Thunderbird/91.11.0
-Subject: Re: [PATCH v4] x86/xen: Add support for
- HVMOP_set_evtchn_upcall_vector
+Subject: Re: [PATCH 2/4] xen: remove XEN_SCRUB_PAGES in xen.config
 Content-Language: en-US
-To:     Jane Malalane <jane.malalane@citrix.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Cc:     Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
         Stefano Stabellini <sstabellini@kernel.org>,
         Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        Jan Beulich <jbeulich@suse.com>,
-        Maximilian Heyne <mheyne@amazon.de>,
         xen-devel@lists.xenproject.org
-References: <20220729070416.23306-1-jane.malalane@citrix.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20220810050712.9539-1-lukas.bulwahn@gmail.com>
+ <20220810050712.9539-3-lukas.bulwahn@gmail.com>
 From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20220729070416.23306-1-jane.malalane@citrix.com>
+In-Reply-To: <20220810050712.9539-3-lukas.bulwahn@gmail.com>
 Content-Type: multipart/signed; micalg=pgp-sha256;
  protocol="application/pgp-signature";
- boundary="------------y4RL8sLfKCJHY6zxWWcHyQUo"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+ boundary="------------43uZYYecjvDtuGdHMMiYvkgl"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -76,48 +74,44 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------y4RL8sLfKCJHY6zxWWcHyQUo
-Content-Type: multipart/mixed; boundary="------------u4CaT1Zv2JuCuvqaICDVoS01";
+--------------43uZYYecjvDtuGdHMMiYvkgl
+Content-Type: multipart/mixed; boundary="------------BS0EuEoijxJ8LBVmfywnV6u1";
  protected-headers="v1"
 From: Juergen Gross <jgross@suse.com>
-To: Jane Malalane <jane.malalane@citrix.com>,
- LKML <linux-kernel@vger.kernel.org>
-Cc: Boris Ostrovsky <boris.ostrovsky@oracle.com>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+To: Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+ Boris Ostrovsky <boris.ostrovsky@oracle.com>,
  Stefano Stabellini <sstabellini@kernel.org>,
  Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
- Jan Beulich <jbeulich@suse.com>, Maximilian Heyne <mheyne@amazon.de>,
  xen-devel@lists.xenproject.org
-Message-ID: <fd2b0509-9110-2061-590a-a58e65f5fe01@suse.com>
-Subject: Re: [PATCH v4] x86/xen: Add support for
- HVMOP_set_evtchn_upcall_vector
-References: <20220729070416.23306-1-jane.malalane@citrix.com>
-In-Reply-To: <20220729070416.23306-1-jane.malalane@citrix.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+ kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-ID: <755f368b-5336-7030-af24-e043bfa30b4d@suse.com>
+Subject: Re: [PATCH 2/4] xen: remove XEN_SCRUB_PAGES in xen.config
+References: <20220810050712.9539-1-lukas.bulwahn@gmail.com>
+ <20220810050712.9539-3-lukas.bulwahn@gmail.com>
+In-Reply-To: <20220810050712.9539-3-lukas.bulwahn@gmail.com>
 
---------------u4CaT1Zv2JuCuvqaICDVoS01
-Content-Type: multipart/mixed; boundary="------------yVZ6gWfJx0WUYm6qypOPzSai"
+--------------BS0EuEoijxJ8LBVmfywnV6u1
+Content-Type: multipart/mixed; boundary="------------Dn80PfvD4wm5ghDchxBMthVr"
 
---------------yVZ6gWfJx0WUYm6qypOPzSai
+--------------Dn80PfvD4wm5ghDchxBMthVr
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: base64
 
-T24gMjkuMDcuMjIgMDk6MDQsIEphbmUgTWFsYWxhbmUgd3JvdGU6DQo+IEltcGxlbWVudCBz
-dXBwb3J0IGZvciB0aGUgSFZNT1Bfc2V0X2V2dGNobl91cGNhbGxfdmVjdG9yIGh5cGVyY2Fs
-bCBpbg0KPiBvcmRlciB0byBzZXQgdGhlIHBlci12Q1BVIGV2ZW50IGNoYW5uZWwgdmVjdG9y
-IGNhbGxiYWNrIG9uIExpbnV4IGFuZA0KPiB1c2UgaXQgaW4gcHJlZmVyZW5jZSBvZiBIVk1f
-UEFSQU1fQ0FMTEJBQ0tfSVJRLg0KPiANCj4gSWYgdGhlIHBlci1WQ1BVIHZlY3RvciBzZXR1
-cCBpcyBzdWNjZXNzZnVsIG9uIEJTUCwgdXNlIHRoaXMgbWV0aG9kDQo+IGZvciB0aGUgQVBz
-LiBJZiBub3QsIGZhbGxiYWNrIHRvIHRoZSBnbG9iYWwgdmVjdG9yLXR5cGUgY2FsbGJhY2su
-DQo+IA0KPiBBbHNvIHJlZ2lzdGVyIGNhbGxiYWNrX2lycSBhdCBwZXItdkNQVSBldmVudCBj
-aGFubmVsIHNldHVwIHRvIHRyaWNrDQo+IHRvb2xzdGFjayB0byB0aGluayB0aGUgZG9tYWlu
-IGlzIGVubGlnaHRlbmVkLg0KPiANCj4gU3VnZ2VzdGVkLWJ5OiAiUm9nZXIgUGF1IE1vbm7D
-qSIgPHJvZ2VyLnBhdUBjaXRyaXguY29tPg0KPiBTaWduZWQtb2ZmLWJ5OiBKYW5lIE1hbGFs
-YW5lIDxqYW5lLm1hbGFsYW5lQGNpdHJpeC5jb20+DQo+IFJldmlld2VkLWJ5OiBCb3JpcyBP
-c3Ryb3Zza3kgPGJvcmlzLm9zdHJvdnNreUBvcmFjbGUuY29tPg0KDQpQdXNoZWQgdG8geGVu
-L3RpcC5naXQgZm9yLWxpbnVzLTYuMA0KDQoNCkp1ZXJnZW4NCg==
---------------yVZ6gWfJx0WUYm6qypOPzSai
+T24gMTAuMDguMjIgMDc6MDcsIEx1a2FzIEJ1bHdhaG4gd3JvdGU6DQo+IENvbW1pdCAxOTdl
+Y2IzODAyYzAgKCJ4ZW4vYmFsbG9vbjogYWRkIHJ1bnRpbWUgY29udHJvbCBmb3Igc2NydWJi
+aW5nDQo+IGJhbGxvb25lZCBvdXQgcGFnZXMiKSBjaGFuZ2VkIGNvbmZpZyBYRU5fU0NSVUJf
+UEFHRVMgdG8gY29uZmlnDQo+IFhFTl9TQ1JVQl9QQUdFU19ERUZBVUxULiBBcyB4ZW4uY29u
+ZmlnIHNldHMgJ1hFTl9CQUxMT09OPXknIGFuZA0KPiBYRU5fU0NSVUJfUEFHRVNfREVGQVVM
+VCBkZWZhdWx0cyB0byB5ZXMsIHRoZXJlIGlzIG5vIGZ1cnRoZXIgbmVlZCB0byBzZXQNCj4g
+dGhpcyBjb25maWcgaW4gdGhlIHhlbi5jb25maWcgZmlsZS4NCj4gDQo+IFJlbW92ZSBzZXR0
+aW5nIFhFTl9TQ1JVQl9QQUdFUyBpbiB4ZW4uY29uZmlnLCB3aGljaCBpcyB3aXRob3V0DQo+
+IGVmZmVjdCBzaW5jZSB0aGUgY29tbWl0IGFib3ZlIGFueXdheS4NCj4gDQo+IFNpZ25lZC1v
+ZmYtYnk6IEx1a2FzIEJ1bHdhaG4gPGx1a2FzLmJ1bHdhaG5AZ21haWwuY29tPg0KDQpQdXNo
+ZWQgdG8geGVuL3RpcC5naXQgZm9yLWxpbnVzLTYuMA0KDQoNCkp1ZXJnZW4NCg==
+--------------Dn80PfvD4wm5ghDchxBMthVr
 Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
 Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
 Content-Description: OpenPGP public key
@@ -175,24 +169,24 @@ jR/i1DG86lem3iBDXzXsZDn8R38=3D
 =3D2wuH
 -----END PGP PUBLIC KEY BLOCK-----
 
---------------yVZ6gWfJx0WUYm6qypOPzSai--
+--------------Dn80PfvD4wm5ghDchxBMthVr--
 
---------------u4CaT1Zv2JuCuvqaICDVoS01--
+--------------BS0EuEoijxJ8LBVmfywnV6u1--
 
---------------y4RL8sLfKCJHY6zxWWcHyQUo
+--------------43uZYYecjvDtuGdHMMiYvkgl
 Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
 Content-Description: OpenPGP digital signature
 Content-Disposition: attachment; filename="OpenPGP_signature"
 
 -----BEGIN PGP SIGNATURE-----
 
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmL4tDsFAwAAAAAACgkQsN6d1ii/Ey8c
-7wgAmD3HflxaLI+RyQYyPhRbE9ir9iI4btAOPDg5nQ/lO3EdA37XW3O4RQpfIS+kSmqJT17bvGXV
-dJgOaSwpGzvTL8E1jgyhw4XwLF5hu/4fLdOoK59fhASHr0Fni/2D7eEH9FjVaVyo+fVID5vGekvD
-X4tXhyKHRFap5ReuOdRvktI80vxlv0fahS+6rRxkSkGSKvuL0IwvZ9Vz6UZZx5J+tyBrLTt0smB3
-KAOffYvViedF/ocwO7AHZcsHyjEsz7L8ZmiUitRf8jsdwI8TQXRP3G35MRssdTfvGdeLYr2O4ppK
-RKe6lU7S7cAeEP8u4O6xaNIvyO7vPQbQKK4pGi35Uw==
-=1ayz
+wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmL4tHMFAwAAAAAACgkQsN6d1ii/Ey//
+Igf/clu5UPmsjzgzDpUxYL4RzDpZwCPGZwEtEPNoo6+XdnHVXClGDirCFpIaatk361rGv7UK9Xdc
+gVxd2gJ+n1Q/T0rhwARGFBAwveiu5YXly9oKGkzc/456CyWuVahO0z1yGhVsoEYxH51vOz3o4hAd
+oIkOqNKuCo3zcGpceEwszIkaz3xehYjUNto1+g7E+EOEv3BJHYXk2wV+P9+TOJKHLTqQdx49cm+I
+jj9+W2S32MwqjSem4uAqZ/jblUkSxGH0hzDwPk33u8bv3KNndM2MNUD7/hkxlSzuxU+P2bBzSGMk
+LYmz2AhS46yvrjmM+1+LF2asRxJlC24ndo4gnVcMvQ==
+=9Fkt
 -----END PGP SIGNATURE-----
 
---------------y4RL8sLfKCJHY6zxWWcHyQUo--
+--------------43uZYYecjvDtuGdHMMiYvkgl--

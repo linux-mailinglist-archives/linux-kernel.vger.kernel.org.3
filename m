@@ -2,71 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8F78592608
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 20:47:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23DD259260A
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 20:49:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235615AbiHNSrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 14:47:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55734 "EHLO
+        id S240107AbiHNStW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 14:49:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiHNSrG (ORCPT
+        with ESMTP id S229555AbiHNStU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 14:47:06 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078F9FD3;
-        Sun, 14 Aug 2022 11:47:04 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id l8so4139425qvr.5;
-        Sun, 14 Aug 2022 11:47:03 -0700 (PDT)
+        Sun, 14 Aug 2022 14:49:20 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 063F760D9
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 11:49:20 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id j17so4244955qtp.12
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 11:49:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc;
-        bh=dudlmWjuSuvNbi9ZYyo/rAhbjJyLDMtzGN5G53OzaMo=;
-        b=ZcNgkuU+zWbAKcAGArBWE8maGMxvPQ7VlP0YNqDbjIPV8BeVbWwnoua6cHVFuLyH4l
-         Y+eaEC5T+XPw1vLxXzcQsWDey3KX78uyEbjfuqi4pwC+42YiT39WsUA628D79tfh6K8d
-         4DY725D0GLL5UQ+8tL59nOSTxuD88uzXAM37WpK1T7DkyyJN4R0TRPKJW10UE5YXaqS6
-         qUDPl03aM301291lSSXaacqjwyNXXJDtlXWf0TNGiKDbQiFzQ0K9B20MCltUdnOy1i+Y
-         z0mGQlMIyw7XXHzaEHp31ukbzY5PON8ezIqMqYl5d4JQW2i4XMjGkbiQjLyDVBSeOjLN
-         6u2A==
+        bh=qzkh6tkTJbyR9Le+Pkhrjrt9I8V0rbFen1/yBuWJ42g=;
+        b=CJRxrV+uUAqljv0fFvsbEDpoex/Kx4ewHywpRT36KctDvz32e77w0oMtOAkSZd5ywT
+         UI7XS2usZkYjIflLQQHT1ew7DwjT1Eg820JEOtaNbDTr0p/t43hV6Q+QBnlrvkKU3XQW
+         eUZ5MGZ0/pu96ItqEXWID00Se2jf5dKTtPXm4S4eOhBiZIjJlGFpBSDD8ZsWcYgYdd0G
+         7Yo5jXxmUC2T/zzicrTs5DhwULZN2OYAHbACtCPt5qaBQ3FABOJsuSkNKYcUandx3jxo
+         nOh1pUmBwTD339WoQ0OugZWzrMPZQkIG1C5LE2rNkbRNa53rgY9KioaesfluWD7+ndfa
+         tYgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc;
-        bh=dudlmWjuSuvNbi9ZYyo/rAhbjJyLDMtzGN5G53OzaMo=;
-        b=3kaq1f6Xw6m8ZIKrT+earLk7Ycnznm/dQZcB6BJkq/EN5FXs5154Kf5HxrQJu5TRPP
-         sCCCfOj37+LR2uJLFR0U4mKqPGqnHC6n0CcmNu2jTL3NMZYRZKNxDUoySfvN7LRI5zJG
-         qNLQl2ER/DAxfjK75/n7OhJgC0rJxQ5chExksyvHBrLwQPbbgXEnoVqTJqckrowD1OUc
-         JLkbRysiNC4Sn44N1qfULiw/HuCn33cvPxtuuD7JN6xYkGwyVml3d96bk390eFADYCXR
-         dztk3ywYUo4QW4TVdKSxCU0tyN+REPxuW/dfK4+7MWKdMH5MrN5pfkWHQV6KaLCfZDlB
-         PszQ==
-X-Gm-Message-State: ACgBeo2seqi0ZQqcIgZ+ATclJ0faLoMs8AxJirqpWWZOdH9T37XLv1Z6
-        18AGK7U4eE1VE5SVfMIJhbBHY7RSIhwixq1qsws=
-X-Google-Smtp-Source: AA6agR4oQuZQwsVyjXb+7L9CQIbO7cRvAMkkYymfXxeLEfz+ouuOzmVVtEFPSsbedtPUWQLE/CKEUbV8wlJCDhKD/P0=
-X-Received: by 2002:a05:6214:5290:b0:479:5df:e654 with SMTP id
- kj16-20020a056214529000b0047905dfe654mr10935326qvb.97.1660502823159; Sun, 14
- Aug 2022 11:47:03 -0700 (PDT)
+        bh=qzkh6tkTJbyR9Le+Pkhrjrt9I8V0rbFen1/yBuWJ42g=;
+        b=xMhOyLlZfKCnIS8Tcq4Ni6+mn6Mfev+9RME4veX0pv39aFqugXYfMjJiRDs4ANYycf
+         5dC9b4njCbQBkwQWb6KJhs5ERYp85gJUAlS6JzGtrJMDQsD/4JyzvgIRjjoDSIiO4JPS
+         BWu6uPA+eo1GWMwhQHeT4z6kbRmi7JW/bJClZnlMaTZiD/tGXL/q3I4b79lpUs98TnYv
+         8J2/RCnqpCEFctyknWosoC1e7wK+F8RZy1MA9LvJjrtpi0FHdGxhExLi3+buV7aKOGVv
+         y+3sume9Wi47P5SaqlMlH30d81mldUukusLwJfvkQ1ByMGRC8hlz5ohOFDLOzsq0XTuG
+         OruQ==
+X-Gm-Message-State: ACgBeo3/BQLWQQu3Ny69sUB+aG6+65N9ACWNz3JZTruYJNGJ/tJPMoFU
+        mTfifeishrpNffEJjXITih6uTQQLIO5Ye0krHyU=
+X-Google-Smtp-Source: AA6agR6XjTa9TMD/Yv58BQjzH7evg6UC1cPdi1RCaEDkgiX847W88c0dGpT8FenZ3gtDVrCS5QNiM2EzUEIAp3x2OcA=
+X-Received: by 2002:a05:622a:48f:b0:343:463:351a with SMTP id
+ p15-20020a05622a048f00b003430463351amr11306999qtx.61.1660502958933; Sun, 14
+ Aug 2022 11:49:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220814080416.7531-1-khalid.masum.92@gmail.com>
-In-Reply-To: <20220814080416.7531-1-khalid.masum.92@gmail.com>
+References: <20220711044711.466822-1-yury.norov@gmail.com> <20220711044711.466822-6-yury.norov@gmail.com>
+ <20220729034638.GA2276915@roeck-us.net> <20220813131523.GA2787704@roeck-us.net>
+ <CAAH8bW8n+6-4fGYp-g_vXe3XKwC5AV_hCCyzj=h2Wx1XFBK5dQ@mail.gmail.com>
+In-Reply-To: <CAAH8bW8n+6-4fGYp-g_vXe3XKwC5AV_hCCyzj=h2Wx1XFBK5dQ@mail.gmail.com>
 From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Sun, 14 Aug 2022 21:46:26 +0300
-Message-ID: <CAHp75Ve4UaLsUknGKm14_-f5=qsq1s_Ws+j6h0kAY5_XMkSmQw@mail.gmail.com>
-Subject: Re: [RFC PATCH] Soundwire: Initialize multi_link with fwnode props
-To:     Khalid Masum <khalid.masum.92@gmail.com>
-Cc:     ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+Date:   Sun, 14 Aug 2022 21:48:43 +0300
+Message-ID: <CAHp75VemqDc3E88k45bMiaLuBpGmgh81C+pGLD1Ey+V1=AS2cA@mail.gmail.com>
+Subject: Re: [PATCH 5/5] lib/nodemask: inline next_node_in() and node_random()
+To:     Yury Norov <yury.norov@gmail.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Vinod Koul <vkoul@kernel.org>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Sanyog Kale <sanyog.r.kale@intel.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>
+        Arnd Bergmann <arnd@arndb.de>, David Gow <davidgow@google.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Isabella Basso <isabbasso@riseup.net>,
+        Kees Cook <keescook@chromium.org>,
+        Keith Busch <kbusch@kernel.org>,
+        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+        Marco Elver <elver@google.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -78,29 +81,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 14, 2022 at 11:31 AM Khalid Masum <khalid.masum.92@gmail.com> wrote:
->
-> According to the TODO, In sw_bus_master_add, bus->multi_link is to be
-> populated with properties from FW node props. Make this happen by
-> creating a new fwnode_handle flag FWNODE_FLAG_MULTI_LINKED and use
-> the flag to store the multi_link value from intel_link_startup. Use
-> this flag to initialize bus->multi_link.
+On Sat, Aug 13, 2022 at 4:55 PM Yury Norov <yury.norov@gmail.com> wrote:
 
-...
+> I submitted the patch:
+> https://www.spinics.net/lists/kernel/msg4468633.html
 
->         /*
->          * Initialize multi_link flag
-> -        * TODO: populate this flag by reading property from FW node
->          */
-> -       bus->multi_link = false;
-> +       bus->multi_link = (fwnode->flags & FWNODE_FLAG_MULTI_LINKED)
-> +               == FWNODE_FLAG_MULTI_LINKED;
 
-NAK (as far as I understood the context of the comment and the change itself).
-
-These flags are for devlink, we do not mix FW properties with those
-internal flags anyhow. The comment suggests that this should be a
-property. Also commit message doesn't explain the relation to devlink.
+Just side note: Use lore.kernel.org for reference to the submissions
+in the past.
 
 -- 
 With Best Regards,

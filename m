@@ -2,175 +2,322 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC91592047
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 16:57:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B1A5592049
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 16:57:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229914AbiHNOzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 10:55:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38978 "EHLO
+        id S230017AbiHNO4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 10:56:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbiHNOzs (ORCPT
+        with ESMTP id S229558AbiHNO4E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 10:55:48 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2083.outbound.protection.outlook.com [40.107.93.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F4C167CD;
-        Sun, 14 Aug 2022 07:55:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Cr1FaX03hnWxQ2qnhq3BqufnTgUttYb3VF3+XD48Z4FJlmdWtTRdhhsUrFEOcRHY4COS5ZXRmtlyZ4nLUFhBxBLnGh6L3TJV50GErD/DcCF4ZUQzijA0nVswoltyI1Rd5ysNa3nN6CC5ovAuMFEog709nR9he8bOnwCAuI/CWMEQdlBy/NfB+HzMnYf0p5howK6boGLjb2uzasib/Wjl1ETCXI1Dop6X6ZTiYlx2qfOuiM5TtlBYDE/w8hIbJvghWIIGTbk97P1tuzkQMfzCIqe0PFcjSTSgZT2LIi9Xml1h/t+PZe6H623KWyprbXETBwAyeCneKl0hDmCmA/DtJg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qSs9O9Rbz5JLZaL+NI0ohyYc2eRUtBZI3X6assqEvas=;
- b=gVv0LKEQhws9lGF+cXbZtvJ+CwM3sR23VXZGab4koJkIpDgvZrkN1CjUyofBtyG2rGTcFkwByJ/QHTGMCwpZLxIA/PaK1KvYoOmFlVhjchxwVgEILUspLZFVkU6/jMQJ6WGaACFZp3aX7/nBBCw/jnITH1DHUYL5qbLJDRKQ3t3wy4jJ7h0CXdn2/0gTQzXuwGjJRp0A74LP/8+wY1zFEmLwmdo/uPGQbbsXR/W1xysueVv9O6kqoXmwfOs1+JLiuyBgIxZvWy05CoSXhCGQnFOaayBUBW3LVdhNONLt6cBA5zaisjtf4Ob3fSYTkp31UBFqPNTaoZh5VbC5ApCmBQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qSs9O9Rbz5JLZaL+NI0ohyYc2eRUtBZI3X6assqEvas=;
- b=s5PsTHpbDoe8oSq3ktOdaC18l9TY9FW82h77JYX3wlCp0fvmf8I2UB3y6k3YDAPhCNcJ03HKN02cr9p+MhK2FH6xyvdt+LFvKFLTSgxbHX8jenS+0Im3Wro+YVcpSF3NY9SUfw60CO/zs5OB+NU0kek3NlYStmsaAmUNGli2VYbbDaqxebRMb/hT8g+ZPyW6Fzk+IgRnvRpOXfTLurICUIPVA/P7iqWuZGF5oFVhPoe3zPeaiIM7RwLfOPSuLHaHrd2v0uCZOxAg+VRYMWlQjoqDXBbyknfBPtd1CwLFBAveomwpnqiOMtZMeoiPGjr0bmOOt8vatO0w/BGlL6oF8w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from IA1PR12MB6163.namprd12.prod.outlook.com (2603:10b6:208:3e9::22)
- by MN2PR12MB4173.namprd12.prod.outlook.com (2603:10b6:208:1d8::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.14; Sun, 14 Aug
- 2022 14:55:46 +0000
-Received: from IA1PR12MB6163.namprd12.prod.outlook.com
- ([fe80::a52c:c6f5:f9f4:59cc]) by IA1PR12MB6163.namprd12.prod.outlook.com
- ([fe80::a52c:c6f5:f9f4:59cc%5]) with mapi id 15.20.5504.027; Sun, 14 Aug 2022
- 14:55:46 +0000
-Date:   Sun, 14 Aug 2022 17:55:41 +0300
-From:   Ido Schimmel <idosch@nvidia.com>
-To:     netdev@kapio-technology.com
-Cc:     Vladimir Oltean <olteanv@gmail.com>, davem@davemloft.net,
-        kuba@kernel.org, netdev@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Jiri Pirko <jiri@resnulli.us>,
-        Ivan Vecera <ivecera@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 net-next 3/6] drivers: net: dsa: add locked fdb entry
- flag to drivers
-Message-ID: <YvkM7UJ0SX+jkts2@shredder>
-References: <5a4cfc6246f621d006af69d4d1f61ed1@kapio-technology.com>
+        Sun, 14 Aug 2022 10:56:04 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6EC017045
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 07:56:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660488962; x=1692024962;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=JRT/87epB8cSTvK0Ai9kFMPipqC4ORfgcvFO3IbpJu4=;
+  b=VGI180M1qoDsAok3eaDsrqDH4MUO8JAN4ze0s60o0pSNY54SRjCYP7Gh
+   wGq2SWjtqflDx006OeUnxjoLtPwPnEiSi4c7mjJwrhFKUsnnG8VuXhO40
+   jxp1DIAvaFve8B2ezIWVgR6zxqEx0SE298naHSv6BQ6VEqKw2eZvFACvY
+   ZZmMyx9blOdG8M+wdbE1RKayNIXXp8DiEzRQJQtsEKC4oJwQP59b4Ws2p
+   UR4x4Dl9VyRhhlsgrufCVxWHzLLwHLc02Xlaj5v0xBwVJ/IN0rweBdLcE
+   TJzdCZC15UtzsMNeVoTc1BtKilRuuZ9NqjHHBag5HLY5/yog/bxrLhHPS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10439"; a="289400069"
+X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
+   d="scan'208";a="289400069"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2022 07:56:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
+   d="scan'208";a="674581408"
+Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 14 Aug 2022 07:56:00 -0700
+Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oNF1z-0000C4-2E;
+        Sun, 14 Aug 2022 14:55:59 +0000
+Date:   Sun, 14 Aug 2022 22:55:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Will Deacon <will@kernel.org>, Christoph Hellwig <hch@lst.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Subject: drivers/dma/ste_dma40.c:3663:40: sparse: sparse: incorrect type in
+ argument 1 (different address spaces)
+Message-ID: <202208142208.AUxRuZhj-lkp@intel.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5a4cfc6246f621d006af69d4d1f61ed1@kapio-technology.com>
-X-ClientProxiedBy: LO4P123CA0059.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:153::10) To IA1PR12MB6163.namprd12.prod.outlook.com
- (2603:10b6:208:3e9::22)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 9666e62b-3e40-4a94-478d-08da7e05115e
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4173:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vxHZwjz4iJF1nj9XtoKyg9e9334sYojw4HvMXN7RXOrxWKhN009wMeBsZy8netIBHw6Y8T1eKqb5RmpmDZZJAaXxCiI7qBFZLrJaUV8puNA9X2zClhWcMHlD/3vxBpYejD9bzJrtsU+lEEx1Iaq/BYQrfVweR/aIAYlyCMDsP49HJWEDasMWQSaZEb2NgR7Rp7a2iLYPU4ZGJ81X5PUzTAMFQ7Mj5VRD0I3oM1JTEqyjrfP8gALELdq3lwq8EFT6nERXmADz3pfRofBtJR21POqzBwXQAhs5JZuSNZuOGAz2Mn/YLvwMWRO5/trWko9/oH07kmNWLAAv+gR0Nfa+YdWhVYKRcMTyul7q2k6x/qkUMzIbRJeXnqQS+ZfJQWN6/JRaUyZhaBm/QLcDYnj4dVd4ZqnZhIPlF/kSrW+4VTx9XDyfOBRdORJCStfgw5rX6SwDkQ+C3lUGSH98DsT5jGEP0ISxapJs/qEWZNlFiSfQVhftwZd9HUF6BioeuH2eRGjs1514KZYFM8Cg22u6y4VPQkfbMUwUDJtaEMM3jOw7Y8QQez3aA7Qe45xyzhSoRvRB8Qyfu6wLNNn24K7/rryiYdhwCFvQMwCKL3jO/FxQO3EaMFmAhhQEmiDPd/Vb3xo9ZAxpYj9f5jZi7kEmKn9iHMmpP3A3iKFOfoii+yrC43kmNfGNMp4Mvv/wRLnBuBYW4WnfKXkNvlsITl/8akXuUJ8GZOpTpVmCPMW/qYwrpCpGC2rzCMZWl4YD2xijNz5TY7d6RzRZeVqjDWof+UyItuFSQkwkktDLMh2tatY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6163.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(7916004)(346002)(366004)(396003)(39860400002)(376002)(136003)(6916009)(7416002)(316002)(8936002)(8676002)(4326008)(66476007)(86362001)(5660300002)(66946007)(33716001)(66556008)(54906003)(83380400001)(186003)(6666004)(41300700001)(38100700002)(478600001)(6486002)(9686003)(6506007)(53546011)(2906002)(26005)(6512007)(67856001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?CTyWg0XVPSOL9hoS45+sGp81hECZhuf8sPlWISQSMEcUMckno5AzDq7RGw17?=
- =?us-ascii?Q?GazPI2D9t4a7H/CDhi0j+ZO23Mwi55jw5W+rIkDVKrnXBvBOXKfi5t8Quhbz?=
- =?us-ascii?Q?xs/IVwaSBgVGqSUG3iflSN5MzN+STUFE7Q3WS/1N/TPoc8klm7u+GzO702y8?=
- =?us-ascii?Q?qkCAeBujMpcf3e3znmG7c8f5oQFM1zR/sfSwtskANerVIux8GAGYGFL7T31t?=
- =?us-ascii?Q?cxtEVJZunXoZRSrxqzFNOxDmCcefk5Wapo91WxDP7GfkLH0VEULE/War96mO?=
- =?us-ascii?Q?zuAp8J+0ozSaDputDq72vsrb66pNp3CGyOkecoSKphpB+7BvvgIdltD4epIu?=
- =?us-ascii?Q?gV9UbIypigPPcGs5l7v4w7MLiQWJsb3GWuBVCPI7AyHKSM6oVwnLiXhR7auX?=
- =?us-ascii?Q?LKdQouOOmyrxFX+YDQaE6fgucDwkViOszHqP37YFmRMtIWQrCvkBm9yfp6id?=
- =?us-ascii?Q?JYJoPC6BTujPy5DslF/yIdELUU147iWDpbJ3EGB/+UPS0C+FcW0NNuq1wq6x?=
- =?us-ascii?Q?oFNgOixfDEiTZbL0jqetnNi0MNarIxSTFekisqQANaPLTammlV+wbNGQ2uSG?=
- =?us-ascii?Q?HRcncXarEbnhzPcuGtW5VRZsUa19w2phGHD+dJrJiaEYbA/m97oVrLCiY2WK?=
- =?us-ascii?Q?kO/xZOV7Zx2ocKoanI3Bn5Y2Z/gDZz+XbskkBcR6o4wMK1TpHFJDneYdnJLt?=
- =?us-ascii?Q?Szy+c6gkNSvuIGqCijoNb5JgW35HgaAIxUy3Dv9lc2jx/LflPzJUq04p5POZ?=
- =?us-ascii?Q?nO+e/5gqmCdysFGKiKiro8r48Zy8Jctfar72bfDYk/B2OLSkX7VBkmDn+bvx?=
- =?us-ascii?Q?i6j0ud20UuOPaD4OtcjO57YQTq3Hf1XsKw1l8viE1iFqLeuw52j6WJLOrNxU?=
- =?us-ascii?Q?Nr7s4kEECYGZD6UN4ukwaa3ArVhZRSYEW7FJkLC4sJ0tYCjZmjZmFIaEnLu/?=
- =?us-ascii?Q?IiakBiwhaXmOOQTkUwDwrZQFO+11x2F0JhQ40t+Eh90BqC++7gG5CxHZML7M?=
- =?us-ascii?Q?tPhWOZgX0ERALQBfPAXNEz4tweDH01I4GcPAbs2DngaRvFK/ORw3fDVe7knU?=
- =?us-ascii?Q?Nle8mw1VPw1+6udQ6mNMtZrLnK+B23ZCHZYfFHUlN/FRfOYZvYOh3KlmT4+Z?=
- =?us-ascii?Q?YI/Gel7KqIzCwZu3gRx3pBpKl+x9o7H+IR+M0Sb6dwlTJTrK8EZ2Kot6KDmk?=
- =?us-ascii?Q?eV9rk7IGuqsKKd/azqsivaGaPlJl2+LUw7CF1DxfbRFjlRjs6c4BIDF0dHJ0?=
- =?us-ascii?Q?BJp8fvGAf631s1TTckdStIPEkACjFFEQn8nPYdzapgKO2f24423w99eB1B52?=
- =?us-ascii?Q?4WIRPc95DlvneMmfk+AccgKMmnCNXo8bNxOFVLwzU6/lD2AzIq9qYgEEADyX?=
- =?us-ascii?Q?OgI1ASLaLBml7xlXNGrWT/d+p4l1AknzjT13cMyXKaT1mJUC8QZWAk/U1d4L?=
- =?us-ascii?Q?B4vvRJ7qa28S66f5p5vgMnQibOi++yUVa2Y3EhAajcMXrlRMadY+o8S68+Sb?=
- =?us-ascii?Q?zm0KekP+d3kU46czDWBolYZ/PeKJH4TwNQgK0yix/HF+1UVZcErWhRVtVV4N?=
- =?us-ascii?Q?7FooDESJ+O69HcauiRhRSir8k49pOT/stlTGkwgR?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9666e62b-3e40-4a94-478d-08da7e05115e
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6163.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Aug 2022 14:55:45.9392
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: G6AHHd/RJNvdQFuS0XD7grywphoL9HsPZY4z5EwjDFnCjI2eGF39jHbc5Sa2KCnkZYnhLfhRRov1wWEqQMUClw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4173
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Aug 12, 2022 at 02:29:48PM +0200, netdev@kapio-technology.com wrote:
-> On 2022-08-11 13:28, Ido Schimmel wrote:
-> 
-> > > > I'm talking about roaming, not forwarding. Let's say you have a locked
-> > > > entry with MAC X pointing to port Y. Now you get a packet with SMAC X
-> > > > from port Z which is unlocked. Will the FDB entry roam to port Z? I
-> > > > think it should, but at least in current implementation it seems that
-> > > > the "locked" flag will not be reset and having locked entries pointing
-> > > > to an unlocked port looks like a bug.
-> > > >
-> > > 
-> 
-> In general I have been thinking that the said setup is a network
-> configuration error as I was arguing in an earlier conversation with
-> Vladimir. In this setup we must remember that SMAC X becomes DMAC X in the
-> return traffic on the open port. But the question arises to me why MAC X
-> would be behind the locked port without getting authed while being behind an
-> open port too?
-> In a real life setup, I don't think you would want random hosts behind a
-> locked port in the MAB case, but only the hosts you will let through. Other
-> hosts should be regarded as intruders.
-> 
-> If we are talking about a station move, then the locked entry will age out
-> and MAC X will function normally on the open port after the timeout, which
-> was a case that was taken up in earlier discussions.
-> 
-> But I will anyhow do some testing with this 'edge case' (of being behind
-> both a locked and an unlocked port) if I may call it so, and see to that the
-> offloaded and non-offloaded cases correspond to each other, and will work
-> satisfactory.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   aea23e7c464bfdec04b52cf61edb62030e9e0d0a
+commit: d803336abdbc1bfacdb32b2cf9f4fdbee072b8ee ARM: mm: kill unused runtime hook arch_iounmap()
+date:   7 weeks ago
+config: arm-randconfig-s031-20220810 (https://download.01.org/0day-ci/archive/20220814/202208142208.AUxRuZhj-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=d803336abdbc1bfacdb32b2cf9f4fdbee072b8ee
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout d803336abdbc1bfacdb32b2cf9f4fdbee072b8ee
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash
 
-It would be best to implement these as additional test cases in the
-current selftest. Then you can easily test with both veth pairs and
-loopbacks and see that the hardware and software data paths behave the
-same.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-> 
-> I think it will be good to have a flag to enable the mac-auth/MAB feature,
-> and I suggest just calling the flag 'mab', as it is short.
+sparse warnings: (new ones prefixed by >>)
+   drivers/dma/ste_dma40.c:1389:28: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got unsigned int * @@
+   drivers/dma/ste_dma40.c:1389:28: sparse:     expected void const volatile [noderef] __iomem *addr
+   drivers/dma/ste_dma40.c:1389:28: sparse:     got unsigned int *
+   drivers/dma/ste_dma40.c:1405:27: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got unsigned int * @@
+   drivers/dma/ste_dma40.c:1405:27: sparse:     expected void const volatile [noderef] __iomem *addr
+   drivers/dma/ste_dma40.c:1405:27: sparse:     got unsigned int *
+   drivers/dma/ste_dma40.c:3564:25: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *lcpa_base @@     got void [noderef] __iomem * @@
+   drivers/dma/ste_dma40.c:3564:25: sparse:     expected void *lcpa_base
+   drivers/dma/ste_dma40.c:3564:25: sparse:     got void [noderef] __iomem *
+   drivers/dma/ste_dma40.c:3580:38: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void *base @@     got void [noderef] __iomem * @@
+   drivers/dma/ste_dma40.c:3580:38: sparse:     expected void *base
+   drivers/dma/ste_dma40.c:3580:38: sparse:     got void [noderef] __iomem *
+>> drivers/dma/ste_dma40.c:3663:40: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *io_addr @@     got void *base @@
+   drivers/dma/ste_dma40.c:3663:40: sparse:     expected void volatile [noderef] __iomem *io_addr
+   drivers/dma/ste_dma40.c:3663:40: sparse:     got void *base
+>> drivers/dma/ste_dma40.c:3679:29: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void volatile [noderef] __iomem *io_addr @@     got void *lcpa_base @@
+   drivers/dma/ste_dma40.c:3679:29: sparse:     expected void volatile [noderef] __iomem *io_addr
+   drivers/dma/ste_dma40.c:3679:29: sparse:     got void *lcpa_base
 
-Fine by me, but I'm not sure everyone agrees.
+vim +3663 drivers/dma/ste_dma40.c
 
-> 
-> Otherwise I don't see any major issues with the whole feature as it is.
+1814a1703ce2d6 Lee Jones      2013-05-03  3504  
+8d318a50b3d72e Linus Walleij  2010-03-30  3505  static int __init d40_probe(struct platform_device *pdev)
+8d318a50b3d72e Linus Walleij  2010-03-30  3506  {
+d4adcc0160404c Jingoo Han     2013-07-30  3507  	struct stedma40_platform_data *plat_data = dev_get_platdata(&pdev->dev);
+1814a1703ce2d6 Lee Jones      2013-05-03  3508  	struct device_node *np = pdev->dev.of_node;
+8d318a50b3d72e Linus Walleij  2010-03-30  3509  	int ret = -ENOENT;
+a9bae06dd05fc8 Markus Elfring 2015-11-16  3510  	struct d40_base *base;
+aeb8974ac70f07 Markus Elfring 2015-11-16  3511  	struct resource *res;
+8d318a50b3d72e Linus Walleij  2010-03-30  3512  	int num_reserved_chans;
+8d318a50b3d72e Linus Walleij  2010-03-30  3513  	u32 val;
+8d318a50b3d72e Linus Walleij  2010-03-30  3514  
+1814a1703ce2d6 Lee Jones      2013-05-03  3515  	if (!plat_data) {
+1814a1703ce2d6 Lee Jones      2013-05-03  3516  		if (np) {
+1814a1703ce2d6 Lee Jones      2013-05-03  3517  			if (d40_of_probe(pdev, np)) {
+1814a1703ce2d6 Lee Jones      2013-05-03  3518  				ret = -ENOMEM;
+a9bae06dd05fc8 Markus Elfring 2015-11-16  3519  				goto report_failure;
+1814a1703ce2d6 Lee Jones      2013-05-03  3520  			}
+1814a1703ce2d6 Lee Jones      2013-05-03  3521  		} else {
+1814a1703ce2d6 Lee Jones      2013-05-03  3522  			d40_err(&pdev->dev, "No pdata or Device Tree provided\n");
+a9bae06dd05fc8 Markus Elfring 2015-11-16  3523  			goto report_failure;
+1814a1703ce2d6 Lee Jones      2013-05-03  3524  		}
+1814a1703ce2d6 Lee Jones      2013-05-03  3525  	}
+8d318a50b3d72e Linus Walleij  2010-03-30  3526  
+1814a1703ce2d6 Lee Jones      2013-05-03  3527  	base = d40_hw_detect_init(pdev);
+8d318a50b3d72e Linus Walleij  2010-03-30  3528  	if (!base)
+a9bae06dd05fc8 Markus Elfring 2015-11-16  3529  		goto report_failure;
+8d318a50b3d72e Linus Walleij  2010-03-30  3530  
+8d318a50b3d72e Linus Walleij  2010-03-30  3531  	num_reserved_chans = d40_phy_res_init(base);
+8d318a50b3d72e Linus Walleij  2010-03-30  3532  
+8d318a50b3d72e Linus Walleij  2010-03-30  3533  	platform_set_drvdata(pdev, base);
+8d318a50b3d72e Linus Walleij  2010-03-30  3534  
+8d318a50b3d72e Linus Walleij  2010-03-30  3535  	spin_lock_init(&base->interrupt_lock);
+8d318a50b3d72e Linus Walleij  2010-03-30  3536  	spin_lock_init(&base->execmd_lock);
+8d318a50b3d72e Linus Walleij  2010-03-30  3537  
+8d318a50b3d72e Linus Walleij  2010-03-30  3538  	/* Get IO for logical channel parameter address */
+8d318a50b3d72e Linus Walleij  2010-03-30  3539  	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "lcpa");
+8d318a50b3d72e Linus Walleij  2010-03-30  3540  	if (!res) {
+8d318a50b3d72e Linus Walleij  2010-03-30  3541  		ret = -ENOENT;
+6db5a8ba11bf23 Rabin Vincent  2011-01-25  3542  		d40_err(&pdev->dev, "No \"lcpa\" memory resource\n");
+d7b7ecce4bcb15 Markus Elfring 2016-09-17  3543  		goto destroy_cache;
+8d318a50b3d72e Linus Walleij  2010-03-30  3544  	}
+8d318a50b3d72e Linus Walleij  2010-03-30  3545  	base->lcpa_size = resource_size(res);
+8d318a50b3d72e Linus Walleij  2010-03-30  3546  	base->phy_lcpa = res->start;
+8d318a50b3d72e Linus Walleij  2010-03-30  3547  
+8d318a50b3d72e Linus Walleij  2010-03-30  3548  	if (request_mem_region(res->start, resource_size(res),
+8d318a50b3d72e Linus Walleij  2010-03-30  3549  			       D40_NAME " I/O lcpa") == NULL) {
+8d318a50b3d72e Linus Walleij  2010-03-30  3550  		ret = -EBUSY;
+3a919d5b43e459 Fabio Estevam  2013-08-21  3551  		d40_err(&pdev->dev, "Failed to request LCPA region %pR\n", res);
+d7b7ecce4bcb15 Markus Elfring 2016-09-17  3552  		goto destroy_cache;
+8d318a50b3d72e Linus Walleij  2010-03-30  3553  	}
+8d318a50b3d72e Linus Walleij  2010-03-30  3554  
+8d318a50b3d72e Linus Walleij  2010-03-30  3555  	/* We make use of ESRAM memory for this. */
+8d318a50b3d72e Linus Walleij  2010-03-30  3556  	val = readl(base->virtbase + D40_DREG_LCPA);
+8d318a50b3d72e Linus Walleij  2010-03-30  3557  	if (res->start != val && val != 0) {
+8d318a50b3d72e Linus Walleij  2010-03-30  3558  		dev_warn(&pdev->dev,
+3a919d5b43e459 Fabio Estevam  2013-08-21  3559  			 "[%s] Mismatch LCPA dma 0x%x, def %pa\n",
+3a919d5b43e459 Fabio Estevam  2013-08-21  3560  			 __func__, val, &res->start);
+8d318a50b3d72e Linus Walleij  2010-03-30  3561  	} else
+8d318a50b3d72e Linus Walleij  2010-03-30  3562  		writel(res->start, base->virtbase + D40_DREG_LCPA);
+8d318a50b3d72e Linus Walleij  2010-03-30  3563  
+8d318a50b3d72e Linus Walleij  2010-03-30  3564  	base->lcpa_base = ioremap(res->start, resource_size(res));
+8d318a50b3d72e Linus Walleij  2010-03-30  3565  	if (!base->lcpa_base) {
+8d318a50b3d72e Linus Walleij  2010-03-30  3566  		ret = -ENOMEM;
+6db5a8ba11bf23 Rabin Vincent  2011-01-25  3567  		d40_err(&pdev->dev, "Failed to ioremap LCPA region\n");
+d7b7ecce4bcb15 Markus Elfring 2016-09-17  3568  		goto destroy_cache;
+8d318a50b3d72e Linus Walleij  2010-03-30  3569  	}
+28c7a19d230228 Narayanan G    2011-11-22  3570  	/* If lcla has to be located in ESRAM we don't need to allocate */
+28c7a19d230228 Narayanan G    2011-11-22  3571  	if (base->plat_data->use_esram_lcla) {
+28c7a19d230228 Narayanan G    2011-11-22  3572  		res = platform_get_resource_byname(pdev, IORESOURCE_MEM,
+28c7a19d230228 Narayanan G    2011-11-22  3573  							"lcla_esram");
+28c7a19d230228 Narayanan G    2011-11-22  3574  		if (!res) {
+28c7a19d230228 Narayanan G    2011-11-22  3575  			ret = -ENOENT;
+28c7a19d230228 Narayanan G    2011-11-22  3576  			d40_err(&pdev->dev,
+28c7a19d230228 Narayanan G    2011-11-22  3577  				"No \"lcla_esram\" memory resource\n");
+d7b7ecce4bcb15 Markus Elfring 2016-09-17  3578  			goto destroy_cache;
+28c7a19d230228 Narayanan G    2011-11-22  3579  		}
+28c7a19d230228 Narayanan G    2011-11-22  3580  		base->lcla_pool.base = ioremap(res->start,
+28c7a19d230228 Narayanan G    2011-11-22  3581  						resource_size(res));
+28c7a19d230228 Narayanan G    2011-11-22  3582  		if (!base->lcla_pool.base) {
+28c7a19d230228 Narayanan G    2011-11-22  3583  			ret = -ENOMEM;
+28c7a19d230228 Narayanan G    2011-11-22  3584  			d40_err(&pdev->dev, "Failed to ioremap LCLA region\n");
+d7b7ecce4bcb15 Markus Elfring 2016-09-17  3585  			goto destroy_cache;
+28c7a19d230228 Narayanan G    2011-11-22  3586  		}
+28c7a19d230228 Narayanan G    2011-11-22  3587  		writel(res->start, base->virtbase + D40_DREG_LCLA);
+8d318a50b3d72e Linus Walleij  2010-03-30  3588  
+28c7a19d230228 Narayanan G    2011-11-22  3589  	} else {
+508849ade23c11 Linus Walleij  2010-06-20  3590  		ret = d40_lcla_allocate(base);
+508849ade23c11 Linus Walleij  2010-06-20  3591  		if (ret) {
+6db5a8ba11bf23 Rabin Vincent  2011-01-25  3592  			d40_err(&pdev->dev, "Failed to allocate LCLA area\n");
+d7b7ecce4bcb15 Markus Elfring 2016-09-17  3593  			goto destroy_cache;
+8d318a50b3d72e Linus Walleij  2010-03-30  3594  		}
+28c7a19d230228 Narayanan G    2011-11-22  3595  	}
+8d318a50b3d72e Linus Walleij  2010-03-30  3596  
+8d318a50b3d72e Linus Walleij  2010-03-30  3597  	spin_lock_init(&base->lcla_pool.lock);
+8d318a50b3d72e Linus Walleij  2010-03-30  3598  
+8d318a50b3d72e Linus Walleij  2010-03-30  3599  	base->irq = platform_get_irq(pdev, 0);
+8d318a50b3d72e Linus Walleij  2010-03-30  3600  
+8d318a50b3d72e Linus Walleij  2010-03-30  3601  	ret = request_irq(base->irq, d40_handle_interrupt, 0, D40_NAME, base);
+8d318a50b3d72e Linus Walleij  2010-03-30  3602  	if (ret) {
+6db5a8ba11bf23 Rabin Vincent  2011-01-25  3603  		d40_err(&pdev->dev, "No IRQ defined\n");
+d7b7ecce4bcb15 Markus Elfring 2016-09-17  3604  		goto destroy_cache;
+8d318a50b3d72e Linus Walleij  2010-03-30  3605  	}
+8d318a50b3d72e Linus Walleij  2010-03-30  3606  
+28c7a19d230228 Narayanan G    2011-11-22  3607  	if (base->plat_data->use_esram_lcla) {
+28c7a19d230228 Narayanan G    2011-11-22  3608  
+28c7a19d230228 Narayanan G    2011-11-22  3609  		base->lcpa_regulator = regulator_get(base->dev, "lcla_esram");
+28c7a19d230228 Narayanan G    2011-11-22  3610  		if (IS_ERR(base->lcpa_regulator)) {
+28c7a19d230228 Narayanan G    2011-11-22  3611  			d40_err(&pdev->dev, "Failed to get lcpa_regulator\n");
+8581bbcd30afa9 Wei Yongjun    2013-05-31  3612  			ret = PTR_ERR(base->lcpa_regulator);
+28c7a19d230228 Narayanan G    2011-11-22  3613  			base->lcpa_regulator = NULL;
+d7b7ecce4bcb15 Markus Elfring 2016-09-17  3614  			goto destroy_cache;
+28c7a19d230228 Narayanan G    2011-11-22  3615  		}
+28c7a19d230228 Narayanan G    2011-11-22  3616  
+28c7a19d230228 Narayanan G    2011-11-22  3617  		ret = regulator_enable(base->lcpa_regulator);
+28c7a19d230228 Narayanan G    2011-11-22  3618  		if (ret) {
+28c7a19d230228 Narayanan G    2011-11-22  3619  			d40_err(&pdev->dev,
+28c7a19d230228 Narayanan G    2011-11-22  3620  				"Failed to enable lcpa_regulator\n");
+28c7a19d230228 Narayanan G    2011-11-22  3621  			regulator_put(base->lcpa_regulator);
+28c7a19d230228 Narayanan G    2011-11-22  3622  			base->lcpa_regulator = NULL;
+d7b7ecce4bcb15 Markus Elfring 2016-09-17  3623  			goto destroy_cache;
+28c7a19d230228 Narayanan G    2011-11-22  3624  		}
+28c7a19d230228 Narayanan G    2011-11-22  3625  	}
+28c7a19d230228 Narayanan G    2011-11-22  3626  
+2dafca17c8807b Ulf Hansson    2014-04-23  3627  	writel_relaxed(D40_DREG_GCC_ENABLE_ALL, base->virtbase + D40_DREG_GCC);
+2dafca17c8807b Ulf Hansson    2014-04-23  3628  
+2dafca17c8807b Ulf Hansson    2014-04-23  3629  	pm_runtime_irq_safe(base->dev);
+2dafca17c8807b Ulf Hansson    2014-04-23  3630  	pm_runtime_set_autosuspend_delay(base->dev, DMA40_AUTOSUSPEND_DELAY);
+2dafca17c8807b Ulf Hansson    2014-04-23  3631  	pm_runtime_use_autosuspend(base->dev);
+2dafca17c8807b Ulf Hansson    2014-04-23  3632  	pm_runtime_mark_last_busy(base->dev);
+2dafca17c8807b Ulf Hansson    2014-04-23  3633  	pm_runtime_set_active(base->dev);
+2dafca17c8807b Ulf Hansson    2014-04-23  3634  	pm_runtime_enable(base->dev);
+2dafca17c8807b Ulf Hansson    2014-04-23  3635  
+8581bbcd30afa9 Wei Yongjun    2013-05-31  3636  	ret = d40_dmaengine_init(base, num_reserved_chans);
+8581bbcd30afa9 Wei Yongjun    2013-05-31  3637  	if (ret)
+d7b7ecce4bcb15 Markus Elfring 2016-09-17  3638  		goto destroy_cache;
+8d318a50b3d72e Linus Walleij  2010-03-30  3639  
+8581bbcd30afa9 Wei Yongjun    2013-05-31  3640  	ret = dma_set_max_seg_size(base->dev, STEDMA40_MAX_SEG_SIZE);
+8581bbcd30afa9 Wei Yongjun    2013-05-31  3641  	if (ret) {
+b96710e5b22609 Per Forlin     2011-10-18  3642  		d40_err(&pdev->dev, "Failed to set dma max seg size\n");
+d7b7ecce4bcb15 Markus Elfring 2016-09-17  3643  		goto destroy_cache;
+b96710e5b22609 Per Forlin     2011-10-18  3644  	}
+b96710e5b22609 Per Forlin     2011-10-18  3645  
+8d318a50b3d72e Linus Walleij  2010-03-30  3646  	d40_hw_init(base);
+8d318a50b3d72e Linus Walleij  2010-03-30  3647  
+fa332de5c6b389 Lee Jones      2013-05-03  3648  	if (np) {
+8581bbcd30afa9 Wei Yongjun    2013-05-31  3649  		ret = of_dma_controller_register(np, d40_xlate, NULL);
+8581bbcd30afa9 Wei Yongjun    2013-05-31  3650  		if (ret)
+fa332de5c6b389 Lee Jones      2013-05-03  3651  			dev_err(&pdev->dev,
+fa332de5c6b389 Lee Jones      2013-05-03  3652  				"could not register of_dma_controller\n");
+fa332de5c6b389 Lee Jones      2013-05-03  3653  	}
+fa332de5c6b389 Lee Jones      2013-05-03  3654  
+8d318a50b3d72e Linus Walleij  2010-03-30  3655  	dev_info(base->dev, "initialized\n");
+8d318a50b3d72e Linus Walleij  2010-03-30  3656  	return 0;
+d7b7ecce4bcb15 Markus Elfring 2016-09-17  3657   destroy_cache:
+c675b1b424446b Jonas Aaberg   2010-06-20  3658  	kmem_cache_destroy(base->desc_slab);
+8d318a50b3d72e Linus Walleij  2010-03-30  3659  	if (base->virtbase)
+8d318a50b3d72e Linus Walleij  2010-03-30  3660  		iounmap(base->virtbase);
+026cbc424a162e Rabin Vincent  2011-01-25  3661  
+28c7a19d230228 Narayanan G    2011-11-22  3662  	if (base->lcla_pool.base && base->plat_data->use_esram_lcla) {
+28c7a19d230228 Narayanan G    2011-11-22 @3663  		iounmap(base->lcla_pool.base);
+28c7a19d230228 Narayanan G    2011-11-22  3664  		base->lcla_pool.base = NULL;
+28c7a19d230228 Narayanan G    2011-11-22  3665  	}
+28c7a19d230228 Narayanan G    2011-11-22  3666  
+026cbc424a162e Rabin Vincent  2011-01-25  3667  	if (base->lcla_pool.dma_addr)
+026cbc424a162e Rabin Vincent  2011-01-25  3668  		dma_unmap_single(base->dev, base->lcla_pool.dma_addr,
+026cbc424a162e Rabin Vincent  2011-01-25  3669  				 SZ_1K * base->num_phy_chans,
+026cbc424a162e Rabin Vincent  2011-01-25  3670  				 DMA_TO_DEVICE);
+026cbc424a162e Rabin Vincent  2011-01-25  3671  
+508849ade23c11 Linus Walleij  2010-06-20  3672  	if (!base->lcla_pool.base_unaligned && base->lcla_pool.base)
+508849ade23c11 Linus Walleij  2010-06-20  3673  		free_pages((unsigned long)base->lcla_pool.base,
+508849ade23c11 Linus Walleij  2010-06-20  3674  			   base->lcla_pool.pages);
+767a9675c4a68a Jonas Aaberg   2010-08-09  3675  
+508849ade23c11 Linus Walleij  2010-06-20  3676  	kfree(base->lcla_pool.base_unaligned);
+767a9675c4a68a Jonas Aaberg   2010-08-09  3677  
+fffdaba402cea7 Yang Yingliang 2021-05-18  3678  	if (base->lcpa_base)
+fffdaba402cea7 Yang Yingliang 2021-05-18 @3679  		iounmap(base->lcpa_base);
+fffdaba402cea7 Yang Yingliang 2021-05-18  3680  
+8d318a50b3d72e Linus Walleij  2010-03-30  3681  	if (base->phy_lcpa)
+8d318a50b3d72e Linus Walleij  2010-03-30  3682  		release_mem_region(base->phy_lcpa,
+8d318a50b3d72e Linus Walleij  2010-03-30  3683  				   base->lcpa_size);
+8d318a50b3d72e Linus Walleij  2010-03-30  3684  	if (base->phy_start)
+8d318a50b3d72e Linus Walleij  2010-03-30  3685  		release_mem_region(base->phy_start,
+8d318a50b3d72e Linus Walleij  2010-03-30  3686  				   base->phy_size);
+8d318a50b3d72e Linus Walleij  2010-03-30  3687  	if (base->clk) {
+da2ac56a1bc9c6 Fabio Baltieri 2013-01-07  3688  		clk_disable_unprepare(base->clk);
+8d318a50b3d72e Linus Walleij  2010-03-30  3689  		clk_put(base->clk);
+8d318a50b3d72e Linus Walleij  2010-03-30  3690  	}
+8d318a50b3d72e Linus Walleij  2010-03-30  3691  
+28c7a19d230228 Narayanan G    2011-11-22  3692  	if (base->lcpa_regulator) {
+28c7a19d230228 Narayanan G    2011-11-22  3693  		regulator_disable(base->lcpa_regulator);
+28c7a19d230228 Narayanan G    2011-11-22  3694  		regulator_put(base->lcpa_regulator);
+28c7a19d230228 Narayanan G    2011-11-22  3695  	}
+28c7a19d230228 Narayanan G    2011-11-22  3696  
+8d318a50b3d72e Linus Walleij  2010-03-30  3697  	kfree(base->lcla_pool.alloc_map);
+8d318a50b3d72e Linus Walleij  2010-03-30  3698  	kfree(base->lookup_log_chans);
+8d318a50b3d72e Linus Walleij  2010-03-30  3699  	kfree(base->lookup_phy_chans);
+8d318a50b3d72e Linus Walleij  2010-03-30  3700  	kfree(base->phy_res);
+8d318a50b3d72e Linus Walleij  2010-03-30  3701  	kfree(base);
+a9bae06dd05fc8 Markus Elfring 2015-11-16  3702   report_failure:
+6db5a8ba11bf23 Rabin Vincent  2011-01-25  3703  	d40_err(&pdev->dev, "probe failed\n");
+8d318a50b3d72e Linus Walleij  2010-03-30  3704  	return ret;
+8d318a50b3d72e Linus Walleij  2010-03-30  3705  }
+8d318a50b3d72e Linus Walleij  2010-03-30  3706  
 
-Will review and test the next version.
+:::::: The code at line 3663 was first introduced by commit
+:::::: 28c7a19d230228ab9ae61c300c5003a2400fadd3 dmaengine/ste_dma40: Add support to use lcla area from esram
 
-Thanks
+:::::: TO: Narayanan G <narayanan.gopalakrishnan@stericsson.com>
+:::::: CC: Vinod Koul <vinod.koul@linux.intel.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

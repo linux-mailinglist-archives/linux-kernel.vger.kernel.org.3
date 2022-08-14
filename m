@@ -2,165 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 629CE591F68
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 12:07:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEE76591F6B
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 12:11:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235086AbiHNKHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 06:07:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38068 "EHLO
+        id S230213AbiHNKLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 06:11:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229484AbiHNKH2 (ORCPT
+        with ESMTP id S229484AbiHNKLc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 06:07:28 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5433D1EC71;
-        Sun, 14 Aug 2022 03:07:27 -0700 (PDT)
-Received: from [192.168.1.138] ([37.4.248.80]) by mrelayeu.kundenserver.de
- (mreue107 [212.227.15.183]) with ESMTPSA (Nemesis) id
- 1M27ep-1oLEZz0ES9-002VzW; Sun, 14 Aug 2022 12:07:10 +0200
-Message-ID: <38333b47-6871-00e2-db54-bde96a74bf00@i2se.com>
-Date:   Sun, 14 Aug 2022 12:07:08 +0200
+        Sun, 14 Aug 2022 06:11:32 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB4332018E;
+        Sun, 14 Aug 2022 03:11:30 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id kb8so9062576ejc.4;
+        Sun, 14 Aug 2022 03:11:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=bHUqv/0GJPBCxHv+0WA5YwKaB/OSuW/QMKq7Vb1Yd3Y=;
+        b=H9Q7SUQm+w/IZFinc+9IuGZRvyrc241jl2NXMTsWWzK4Yj/bMca3jtmqXimH+PoLbj
+         2tVsPtc0OBB1cWpTsK/ypRcAlVZ/oc5Fm3ZVDm0k5kgXDzpSN4W+WaHryNCwo66pJDLz
+         xUwI5u56/PgqhkW+91DeXvq9Zxbq1ayvGKJtLUXMSisVyhtIDqI6axlu4upiXKieu5Hq
+         JIcX3ZxxJuBcGLV7J8a5YSjhoLUQta4nKDZyf/30VbQq53CXMGRd3EMi1AAvOpnPeCBQ
+         6Kg49DtGHFitHX0fGzHErFmG16oJUsyiji2F2PO4jzO/Ab9e+C+UvcMpCMHfrz3fMvAQ
+         QA4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=bHUqv/0GJPBCxHv+0WA5YwKaB/OSuW/QMKq7Vb1Yd3Y=;
+        b=XmYAAX1YsGjpl8GVYfe95UPc7LZOJnDopwIAlS5dJsdo3+6agU2K6AmJbsrDXR3QQX
+         XMtkMfMyQd0qlWBUmwFg0VdiWy//C/6vDRayarduAlJIe6kOHn1PPn7h1XOij9AYV5OA
+         AQOBb4Ra7oeXHjIPjg+4uUykSGKV6vv7w7xH6MCpKaUDiNRNZMPzIssAYA+RLXI75UqZ
+         R0OAmeRx7sui9M96DhbaLenDxAIKyaQ/X+YAsG+9kPEgW1Q6nQj954tOW89QTdtNqDO5
+         tmhqVqH0CLgNrPZI4WlHWtr2aUj/amOF2BF92qTWr/OqoWB8wag9wdtls6yc2X+XWavF
+         TqQQ==
+X-Gm-Message-State: ACgBeo2q9IOzqHFiIFxxEKvR97cQ5tbIc2ckuZupcoYq61RV5CSug2Hh
+        1aK0T2HduAbHDDqWP+8Sh78=
+X-Google-Smtp-Source: AA6agR59O0rxTrcXuFbtEwWNQAihsOjIR0aJFZi3EF6pxH9m8ayr/toLSzZmLt9jpvao2bukmLllwA==
+X-Received: by 2002:a17:907:969f:b0:730:b649:ff90 with SMTP id hd31-20020a170907969f00b00730b649ff90mr7496486ejc.337.1660471889310;
+        Sun, 14 Aug 2022 03:11:29 -0700 (PDT)
+Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
+        by smtp.gmail.com with ESMTPSA id v1-20020aa7d641000000b004417eeff836sm4538337edr.53.2022.08.14.03.11.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 Aug 2022 03:11:28 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     daniel.lezcano@linaro.org, rafael@kernel.org,
+        Daniel Lezcano <daniel.lezcano@linexp.org>
+Cc:     rui.zhang@intel.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, khilman@baylibre.com,
+        abailon@baylibre.com, lukasz.luba@arm.com, broonie@kernel.org,
+        damien.lemoal@opensource.wdc.com, heiko@sntech.de,
+        hayashi.kunihiko@socionext.com, mhiramat@kernel.org,
+        talel@amazon.com, thierry.reding@gmail.com, digetx@gmail.com,
+        jonathanh@nvidia.com, anarsoul@gmail.com, tiny.windzz@gmail.com,
+        baolin.wang7@gmail.com, f.fainelli@gmail.com,
+        bjorn.andersson@linaro.org, mcoquelin.stm32@gmail.com,
+        glaroque@baylibre.com, miquel.raynal@bootlin.com,
+        shawnguo@kernel.org, niklas.soderlund@ragnatech.se,
+        matthias.bgg@gmail.com, j-keerthy@ti.com,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        "open list:IIO SUBSYSTEM AND DRIVERS" <linux-iio@vger.kernel.org>,
+        "moderated list:ARM/Allwinner sunXi SoC support" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:ARM/Allwinner sunXi SoC support" 
+        <linux-sunxi@lists.linux.dev>
+Subject: Re: [PATCH v5 28/33] iio/drivers/sun4i_gpadc: Switch to new of thermal API
+Date:   Sun, 14 Aug 2022 12:11:26 +0200
+Message-ID: <8976333.CDJkKcVGEf@jernej-laptop>
+In-Reply-To: <20220804224349.1926752-29-daniel.lezcano@linexp.org>
+References: <20220804224349.1926752-1-daniel.lezcano@linexp.org> <20220804224349.1926752-29-daniel.lezcano@linexp.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-From:   Stefan Wahren <stefan.wahren@i2se.com>
-Subject: Re: [Regression] ext4: changes to mb_optimize_scan cause issues on
- Raspberry Pi
-To:     Jan Kara <jack@suse.cz>, kernel-team@lists.ubuntu.com
-Cc:     linux-ext4@vger.kernel.org, Ojaswin Mujoo <ojaswin@linux.ibm.com>,
-        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        Ritesh Harjani <riteshh@linux.ibm.com>,
-        linux-fsdevel@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Geetika.Moolchandani1@ibm.com, regressions@lists.linux.dev,
-        Florian Fainelli <f.fainelli@gmail.com>
-References: <0d81a7c2-46b7-6010-62a4-3e6cfc1628d6@i2se.com>
- <20220728100055.efbvaudwp3ofolpi@quack3>
- <76a9b920-0937-7bef-db55-844f0f5f6c1b@i2se.com>
- <d3d36051-3f7e-ffe3-6991-85614c1384b4@i2se.com>
-Content-Language: en-US
-In-Reply-To: <d3d36051-3f7e-ffe3-6991-85614c1384b4@i2se.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:n15zq3ZgBlvJQk8mViiXql5BsfLSMYPXCezwwSv3j/K3e6BQl74
- HMX197C3BfJHdx8d+zWb9I3Lvq6netg+krFBZUCx596RzIVPhRZXX3Aprm+nF8zNTTSAmPc
- sEvN2PUp5/tIX0+7dhwNqD1Z7ewUatn+hBVH/W3MSCwsgQGTNeWSdNWyxX6VZ/8dy64E7DX
- sk9b+GSv3N7logbKAfw3Q==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:ffnml0wnutQ=:kxPeYMBCzd1V2QuO2Dm5Oz
- eEVg/y72mTTdpGuFjreonnsHRPFolHZIRK80578nJic9K4ELgZG9wcMAzbDahaQvm+5n8KIvP
- apxWJJjWi6F+pZmYgoZrj5Orfhqxa61oubTX2ZNNqs+w1KddBXY4QNwsK7zT+etPVEvYTmzd4
- BtUQZuf6jW9RQvC4HIf4CzBBNHAqK+VdOq4p9UubdzGePgxVmNponWjNHv2/PpaOKPRwMGOHz
- inaO7tI+zv4x/i8mW10g11B60+RuIdwziHVUQ1pOuK9jpU7YFDs5dIJwRuL7+Y9pmyIQqdGyz
- 2xxj+slMeUT2lrvT2YrOlUtSKiVSgS7CQ8fhUzxvyVOO4oA7EMmF5y/r0pThZN378C/GduKRl
- VyiXEtjRsQD+3voNPseLjMGCCZZJiQLyz6s3EvK5i0j5WAEJsWh+8gMl3+gKObiwaMA6Wi1Y9
- yYBl/w/KmXDMTccjH3lvu+XNFC3Pz47hZ1u+9TH5F9ARwnKabS5KTy2eDcs1R494BbKns7Cif
- tOPPcl+FSxNCF4U6ylWP5CScwAgUXqUIxdfoTYRtTGdBs5Lc82n9OrO3StoWbLSfm/YhLxsv2
- FJYLCu0hvi5dpMya/Wrjq6DrETfAw+ggZGOpOrLMLkZ4fprSZQHR+L5mANcLcKajrVK6FPnXo
- KCQKPmnwzEFuo0I35qrufAB8s1Vv2Zns4DTTBZjPvToFEzVdizbxBcsyI/MqBNZnoO4K1HB/2
- gezC/tQLeWbWUT/lCMhcgqX+zxqEdUASpaFtKDQWfCqx+eXbrsNcErmWYiI=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Dne petek, 05. avgust 2022 ob 00:43:44 CEST je Daniel Lezcano napisal(a):
+> The thermal OF code has a new API allowing to migrate the OF
+> initialization to a simpler approach. The ops are no longer device
+> tree specific and are the generic ones provided by the core code.
+> 
+> Convert the ops to the thermal_zone_device_ops format and use the new
+> API to register the thermal zone with these generic ops.
+> 
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linexp.org>
+> Acked-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-Am 06.08.22 um 17:23 schrieb Stefan Wahren:
-> Hi,
->
-> Am 31.07.22 um 22:42 schrieb Stefan Wahren:
->> Hi Jan,
->>
->> Am 28.07.22 um 12:00 schrieb Jan Kara:
->>>
->>> Also can get filesystem metadata image of your card like:
->>>    e2image -r <fs-device> - | gzip >/tmp/ext4-image.gz
->>>
->>> and put it somewhere for download? The image will contain only fs 
->>> metadata,
->>> not data so it should be relatively small and we won't have access 
->>> to your
->>> secrets ;). With the image we'd be able to see how the free space looks
->>> like and whether it perhaps does not trigger some pathological 
->>> behavior.
->> i've problems with this. If i try store uncompressed the metadata of 
->> the second SD card partition (/dev/sdb2 = rootfs) the generated image 
->> file is nearly big as the whole partition. In compressed state it's 
->> 25 MB. Is this expected?
->
-> This performance regression is also reproducible with 5.19 kernel 
-> (arm64, defconfig) and 64-bit Raspberry Pi OS. Unfortunately the 
-> problem with metadata generation is the same, the generated 
-> uncompressed file is 15 GB.
->
-recently i upgraded my build machine (Intel Core i7-1260P) which now 
-runs Ubuntu 22.04 including a recent 5.15 kernel. On my build machine if 
-i try to install my build kernel modules on the mentioned Industrial 
-Kingston SD card 16 GB (SDCIT) and call "sync" immediately, the process 
-will takes very long with recent LTS kernel (~ 5 minutes) and trigger a 
-hung task warning:
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-[ 1692.880208] INFO: task sync:22272 blocked for more than 120 seconds.
-[ 1692.880222]       Not tainted 5.15.0-46-generic #49-Ubuntu
-[ 1692.880225] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" 
-disables this message.
-[ 1692.880228] task:sync            state:D stack:    0 pid:22272 ppid:  
-5238 flags:0x00004002
-[ 1692.880237] Call Trace:
-[ 1692.880240]  <TASK>
-[ 1692.880246]  __schedule+0x23d/0x590
-[ 1692.880257]  schedule+0x4e/0xc0
-[ 1692.880261]  wb_wait_for_completion+0x59/0x90
-[ 1692.880269]  ? wait_woken+0x70/0x70
-[ 1692.880275]  sync_inodes_sb+0xbe/0x100
-[ 1692.880282]  sync_inodes_one_sb+0x19/0x20
-[ 1692.880288]  iterate_supers+0xab/0x110
-[ 1692.880294]  ? __x64_sys_tee+0xe0/0xe0
-[ 1692.880300]  ksys_sync+0x42/0xa0
-[ 1692.880304]  __do_sys_sync+0xe/0x20
-[ 1692.880307]  do_syscall_64+0x59/0xc0
-[ 1692.880312]  ? do_user_addr_fault+0x1e7/0x670
-[ 1692.880319]  ? syscall_exit_to_user_mode+0x27/0x50
-[ 1692.880324]  ? exit_to_user_mode_prepare+0x37/0xb0
-[ 1692.880331]  ? irqentry_exit_to_user_mode+0x9/0x20
-[ 1692.880336]  ? irqentry_exit+0x1d/0x30
-[ 1692.880340]  ? exc_page_fault+0x89/0x170
-[ 1692.880345]  entry_SYSCALL_64_after_hwframe+0x61/0xcb
-[ 1692.880353] RIP: 0033:0x7fcbda436abb
-[ 1692.880358] RSP: 002b:00007ffc94923968 EFLAGS: 00000246 ORIG_RAX: 
-00000000000000a2
-[ 1692.880363] RAX: ffffffffffffffda RBX: 00007ffc94923b48 RCX: 
-00007fcbda436abb
-[ 1692.880366] RDX: 00007fcbda53c101 RSI: 00007ffc94923b48 RDI: 
-00007fcbda4f4e29
-[ 1692.880369] RBP: 0000000000000001 R08: 0000000000000001 R09: 
-0000000000000000
-[ 1692.880371] R10: 000055ca76fb4340 R11: 0000000000000246 R12: 
-000055ca752c3bc0
-[ 1692.880373] R13: 000055ca752c119f R14: 00007fcbda53442c R15: 
-000055ca752c1034
-[ 1692.880379]  </TASK>
+Best regards,
+Jernej
 
-Interestingly if i switch to the older ubuntu kernel version 5.15.25 
-(which shouldn't have "ext4: make mb_optimize_scan performance mount 
-option work with extents" applied) the write process is much faster (~ 1 
-minute) and i never saw the hung task.
-
-Btw i setup a repo [1] to collect information about this issue. The 
-first file adds a kernel log in regression case. The kernel was 5.19-rc6 
-with multi_v7_defconfig and ARM_LPAE & EXT4_DEBUG enabled.
-
-rpi-update was started before (backup & clean). The actual download 
-started at 11:11:29 and is aborted at 11:14:18.
-
-HTH
-
-[1] - https://github.com/lategoodbye/mb_optimize_scan_regress
-[2] - 
-https://github.com/lategoodbye/mb_optimize_scan_regress/commit/6ff14dd4026d8607290b2727f5a2c3522567fb21
 

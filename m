@@ -2,376 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1036592613
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 20:59:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8729B592618
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 21:08:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240298AbiHNS7X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 14:59:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35448 "EHLO
+        id S231761AbiHNTIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 15:08:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240030AbiHNS7U (ORCPT
+        with ESMTP id S229563AbiHNTIh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 14:59:20 -0400
-Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75E9C12AB5;
-        Sun, 14 Aug 2022 11:59:18 -0700 (PDT)
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46]) (authenticated)
-        by conssluserg-03.nifty.com with ESMTP id 27EIwu5n007756;
-        Mon, 15 Aug 2022 03:58:57 +0900
-DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 27EIwu5n007756
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
-        s=dec2015msa; t=1660503537;
-        bh=BbpQ1LHYl4BgPwrCHAz8cDe0TOb/vzaY12xTvn0Be58=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=V5TOKZlOhkBlLzqoPumlZ5iintieD/DWKIjNwcI1exDDsLZDcBpELs3cSqK+kHNKY
-         6RKteCgYFp3lVMpe8zEQlDMI4FIKc6enlFgKwnyG7c30XkdfP2ZtkLj0SEqebFWpxp
-         dzFmTrrxXB9EdRu/ylQEsqW8d6jM288stjrYap2Jw1834JnwO/6GfHlIHrQwIQQ1jB
-         oFckm6cjdtjfhvLogjk/PTgHnjKMT+2M09VU/ZVlFa4rd9iuEEUmuT1K7aVNAbofh2
-         t2gVBCo90Odiukmrg7AF0A6QPWOxi2Zeg4X96m9OXewWLTtXM6Ob8aakkxuLMVHD/Z
-         c97C/EOSSAtxA==
-X-Nifty-SrcIP: [209.85.128.46]
-Received: by mail-wm1-f46.google.com with SMTP id az6-20020a05600c600600b003a530cebbe3so3002774wmb.0;
-        Sun, 14 Aug 2022 11:58:57 -0700 (PDT)
-X-Gm-Message-State: ACgBeo2FTRwLo8gpwBQykpy7NlCVaCD4LqiBzVBgkC+bsuT0hjt6EgsT
-        LR8hBMUPGLGTl+GbbXKlGsVkWliPbBQoqFDcss4=
-X-Google-Smtp-Source: AA6agR48/zHM6VkJgwpKBL+e2YZ9PYs6bf0NTYsXEDnZ9B5fqVTCmogSzuUGYwNSEqdpgKHNXBZSxGTP+FzrkH9es+o=
-X-Received: by 2002:a7b:c391:0:b0:3a5:de98:f559 with SMTP id
- s17-20020a7bc391000000b003a5de98f559mr4502084wmj.157.1660503535347; Sun, 14
- Aug 2022 11:58:55 -0700 (PDT)
-MIME-Version: 1.0
-References: <20220814002021.16990-1-dmitrii.bundin.a@gmail.com>
- <CAK7LNARPAmsJD5XKAw7m_X2g7Fi-CAAsWDQiP7+ANBjkg7R7ng@mail.gmail.com> <20220814053124.fsj3bqamrqyfoiey@google.com>
-In-Reply-To: <20220814053124.fsj3bqamrqyfoiey@google.com>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Mon, 15 Aug 2022 03:58:11 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAT5k3Paj=nEYFR+eYWaebPkfATcYFHuoczst4B68V3_nQ@mail.gmail.com>
-Message-ID: <CAK7LNAT5k3Paj=nEYFR+eYWaebPkfATcYFHuoczst4B68V3_nQ@mail.gmail.com>
-Subject: Re: [PATCH v2] kbuild: add configurable debug info level
-To:     Fangrui Song <maskray@google.com>
-Cc:     Dmitrii Bundin <dmitrii.bundin.a@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Marek <michal.lkml@markovi.net>,
+        Sun, 14 Aug 2022 15:08:37 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ADC8205C3;
+        Sun, 14 Aug 2022 12:08:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=t1+0X+jLswVdkejc/MI/VGIatK9gKFmi7huNqRXsrjY=; b=tQd3aws4JXT2vt4V6EBB0swGii
+        kftrvgEuYjuc7McqDq2EpBQ9vhnMdP4bWmTTuOqoazXfFtTEcpse1AlrxJK3JLOIBYAP3L9tMfwWK
+        Y8Xv/B7bdERm/CLPGkrIdOrZ0yS0NLY5qhg+uaD/s2ZopBcr+E3idQ50XHXJJEqzZ/hPd6ojrtkRm
+        a0diwNV8Ss1bqoHOyDZ7dpZcBkpd41AyNaKxnCbGnsmeLFf36bm8Tn8/AegjCw4mKKY28OB+yvMlC
+        HGBGjwlMM70OucyXM1E45uThnJ+fWsi90VcHt3bHUHrcqH14dWkR2lLwIhabOITKXSk+bUI5V4QcG
+        v0lUgltg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
+        id 1oNIyL-004K3f-ET;
+        Sun, 14 Aug 2022 19:08:29 +0000
+Date:   Sun, 14 Aug 2022 20:08:29 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Kees Cook <keescook@chromium.org>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Isabella Basso <isabbasso@riseup.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Jeff Layton <jlayton@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Matthew Wilcox <willy@infradead.org>,
+        clang-built-linux <llvm@lists.linux.dev>
+Subject: Re: [GIT PULL] Ceph updates for 5.20-rc1
+Message-ID: <YvlILbn1ERLgZreh@ZenIV>
+References: <CAOi1vP9BSi-65of-8D0BA1_DC0eVD_TQcWkhrGJwaXw_skhHFQ@mail.gmail.com>
+ <5d0b0367a5e28ec5b1f3b995c7792ff9a5cbcbd4.camel@kernel.org>
+ <YvVzHQ5DVaPAvw26@ZenIV>
+ <72a93a2c8910c3615bba7c093c66c18b1a6a2696.camel@kernel.org>
+ <YvV2zfT0XbgwHGe/@ZenIV>
+ <CAHk-=wgYnAPiGsh7H4BS_E1aMM46PdSGg8YqFhi2SpGw+Ac_PQ@mail.gmail.com>
+ <YvV86p5DjBLjjXHo@ZenIV>
+ <CAHk-=wjCa=Xf=pA2Z844WnwEeYgy9OPoB2kWphvg7PVn3ohScw@mail.gmail.com>
+ <CAHk-=wjLLw0xjL+TZs5DUGL8hOpmLMa4B92aDVFxw4HZthLraw@mail.gmail.com>
+ <CAHk-=wjyOB66pofW0mfzDN7SO8zS1EMRZuR-_2aHeO+7kuSrAg@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=wjyOB66pofW0mfzDN7SO8zS1EMRZuR-_2aHeO+7kuSrAg@mail.gmail.com>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Aug 14, 2022 at 2:31 PM Fangrui Song <maskray@google.com> wrote:
->
-> On 2022-08-14, Masahiro Yamada wrote:
-> >+CC: Fangrui Song <maskray@google.com>
+On Thu, Aug 11, 2022 at 08:58:54PM -0700, Linus Torvalds wrote:
+> On Thu, Aug 11, 2022 at 3:43 PM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
 > >
+> > Oh, sadly, clang does much worse here.
 > >
+> > Gcc ends up being able to not have a stack frame at all for
+> > __d_lookup_rcu() once that DCACHE_OP_COMPARE case has been moved out.
+> > The gcc code really looks very nice.
 > >
-> >
-> >On Sun, Aug 14, 2022 at 9:25 AM Dmitrii Bundin
-> ><dmitrii.bundin.a@gmail.com> wrote:
-> >>
-> >> Provides a way to configure debug info level (-glevel).
-> >> Debug level 3 includes extra information such as macro definitions. With
-> >> level 3 enabled it's possible to expand macros right from the debugging
-> >> session in gdb simplifying debugging when complicated macros involved.
-> >> The default level is set to 2 to not change the default build behavior.
->
-> GCC -g3 generates macro information (in the .debug_macro section).
->
-> In Clang, -g = -g2 = -g3. To generate macro information,
-> specify -fdebug-macro.
-> The different choice is known in the initial implementation https://reviews.llvm.org/D16135 .
->
-> Not generating macro information for -g3 (i.e. diverging from GCC
-> behavior) makes some sense to me: -fstandalone-debug will probably be
-> more suitable as -g3 (it retains some type debug info for C++ (the code
-> after https://github.com/llvm/llvm-project/blob/b2f31cac28c8a03ceb908b544f5790f4f9f2d9ab/clang/lib/CodeGen/CGDebugInfo.cpp#L2497-L2499).
->
-> >> Signed-off-by: Dmitrii Bundin <dmitrii.bundin.a@gmail.com>
-> >> ---
-> >>
-> >> Changes in v2: https://lore.kernel.org/all/20220804223504.4739-1-dmitrii.bundin.a@gmail.com/
-> >>   - Replace hardcoded -g3 with a configurable debug info level
-> >>
-> >>  lib/Kconfig.debug      | 11 +++++++++++
-> >>  scripts/Makefile.debug |  2 +-
-> >>  2 files changed, 12 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> >> index 2e24db4bff19..a17c12c20290 100644
-> >> --- a/lib/Kconfig.debug
-> >> +++ b/lib/Kconfig.debug
-> >> @@ -304,6 +304,17 @@ config DEBUG_INFO_REDUCED
-> >>           DEBUG_INFO build and compile times are reduced too.
-> >>           Only works with newer gcc versions.
-> >>
-> >> +config DEBUG_INFO_LEVEL
-> >> +       int "Debug info level"
-> >> +       range 0 3
-> >> +       default "2"
-> >> +       help
-> >> +         Sets the level of how much debug information to generate (-glevel).
-> >> +         Level 1 produces minimal debug information without including information
-> >> +         about local variables. Level 3 includes extra information like macro
-> >> +         definitions. Setting up level 3 will require significantly more disk
-> >> +         space and increase built time. Level 0 produces no debug information.
-> >> +
-> >
-> >
-> >
-> >We already have CONFIG_DEBUG_INFO_NONE to
-> >disable the debug info.
-> >
-> >
-> >The combination of CONFIG_DEBUG_INFO=y and
-> >CONFIG_DEBUG_INFO_LEVEL=0  (-g0)
-> >would emulate CONFIG_DEBUG_INFO_NONE ?
-> >
-> >
-> >
-> >Using 'int' does not look sensible to me.
-> >
-> >
-> >
-> >
-> >
-> >>  config DEBUG_INFO_COMPRESSED
-> >>         bool "Compressed debugging information"
-> >>         depends on $(cc-option,-gz=zlib)
-> >> diff --git a/scripts/Makefile.debug b/scripts/Makefile.debug
-> >> index 9f39b0130551..28beffc42e71 100644
-> >> --- a/scripts/Makefile.debug
-> >> +++ b/scripts/Makefile.debug
-> >> @@ -3,7 +3,7 @@ DEBUG_CFLAGS    :=
-> >>  ifdef CONFIG_DEBUG_INFO_SPLIT
-> >>  DEBUG_CFLAGS   += -gsplit-dwarf
-> >>  else
-> >> -DEBUG_CFLAGS   += -g
-> >> +DEBUG_CFLAGS   += -g$(CONFIG_DEBUG_INFO_LEVEL)
-> >>  endif
-> >>
-> >>  ifndef CONFIG_AS_IS_LLVM
-> >> --
-> >> 2.17.1
-> >>
-> >
-> >
-> >I want to consult Fangrui Song for this part.
-> >
-> >
-> >With this Makefile code, CONFIG_DEBUG_INFO_SPLIT
-> >takes the presidency over CONFIG_DEBUG_INFO_LEVEL.
-> >
-> >
-> >When CONFIG_DEBUG_INFO_SPLIT is enabled (-gsplit-dwarf),
-> >it always uses the default -g2 level.
-> >CONFIG_DEBUG_INFO_LEVEL is just ignored silently.
-> >
-> >
-> >
-> >It might be sensible in older GCC/Clang behavior because
-> >-gsplit-dwarf implied -g2.
-> >
-> >
-> >But, with this commit:
-> >https://reviews.llvm.org/D80391
-> >
-> >-gsplit-dwarf and -g<level> are orthogonal
-> >for GCC 11+/Clang 12+, correct?
->
-> Correct.
->
-> >I think "splitting debug files" and "debug level"
-> >should be controlled independently.
-> >(but it depends on the compiler version, if I understood correctly)
->
-> Before GCC 11 and Clang 12, -gsplit-dwarf implied -g2 (older
-> -gsplit-dwarf is like today's `-gsplit-dwarf -g2`).
->
-> GCC 11 and Clang 12 (https://reviews.llvm.org/D80391) have changed
-> -gsplit-dwarf to not imply -g2.
->
-> For a group of -g0 -g1 -g2, the last option wins.  Therefore,
->
-> -g0 -gsplit-dwarf => debug info in GCC<11 and Clang<12
-> -g0 -gsplit-dwarf => no debug info in GCC>=11 and Clang>=12
+> > Clang, not so much, and it still has spills and reloads.
+> 
+> I ended up looking at the clang code generation more than I probably
+> should have, because I found it so odd.
+> 
+> Our code is literally written to not need that many values, and it
+> should be easy to keep everything in registers.
+> 
+> It turns out that clang is trying much too hard to be clever in
+> dentry_string_cmp(). The code is literally written so that we keep the
+> count of remaining characters in 'tcount', and then at the end we can
+> generate a 'mask' from that to ignore the parts of the pathname that
+> are beyond the size.
 
+[snip]
 
+There's a cheap way to reduce the register pressure:
+                seq = raw_seqcount_begin(&dentry->d_seq);
+		if (dentry->d_parent != parent)
+			continue;
+		if (d_unhashed(dentry))
+			continue;
+		if (dentry->d_name.hash_len != hashlen)
+			continue;
+		if (dentry_cmp(dentry, str, hashlen_len(hashlen)) != 0)
+			continue;  
+		*seqp = seq;
+could move the last store to before dentry_cmp().  Sure, we might get
+some extra stores out of that.  Into a hot cacheline, and if we really
+hit many of those extra stores, we already have a problem - a lot of
+collisions both in ->d_parent and ->d_name.hash_len.  If that happens,
+the cost of those extra stores is going to be trivial noise.
 
-Thanks.
-I tested GCC 9 on Ubuntu 22.04.
-"-g3 -gsplit-dwarf" produces .debug_macro
+From correctness POV that should be fine; callers of __d_lookup_rcu()
+getting NULL either entirely ignore *seqp (d_alloc_parallel()) or
+proceed to wipe it out (lookup_fast(), by calling try_to_unlazy()).
 
-In old behavior, -gsplit-dwarf upgrades the level, but
-does not downgrade it, correct?
-
-
-
-
-
- [Old behavior]
-     -g0 -gsplit-dwarf  --> level 2      (gsplit-dwarf upgrade 0 to 2)
-     -gsplit-dwarf -g0  --> level 0      (the last -g0 wins)
-     -g3 -gsplit-dwarf  --> level 3      (gsplit-dwarf does not downgrade)
-     -g2 -g3            --> level 3      (the last -g3 wins)
-     -g3 -g2            --> level 2      (the last -g2 wins)
-
- [New behavior]
-     -g0 -gsplit-dwarf  --> level 0      (the options are orthogonal)
-     -gsplit-dwarf -g0  --> level 0      (the options are orthogonal)
-     -g3 -gsplit-dwarf  --> level 3      (the options are orthogonal)
-     -g2 -g3            --> level 3      (the last -g3 wins)
-     -g3 -g2            --> level 2      (the last -g2 wins)
-
-
-
-
-
-
-
-
-masahiro@grover:/tmp/foo$ gcc-9 --version
-gcc-9 (Ubuntu 9.4.0-5ubuntu1) 9.4.0
-Copyright (C) 2019 Free Software Foundation, Inc.
-This is free software; see the source for copying conditions.  There is NO
-warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
-
-masahiro@grover:/tmp/foo$ rm -f *.dwo
-masahiro@grover:/tmp/foo$ gcc-9    -gsplit-dwarf  -o foo  foo.c
-masahiro@grover:/tmp/foo$ readelf  -S foo.dwo
-There are 9 section headers, starting at offset 0x840:
-
-Section Headers:
-  [Nr] Name              Type             Address           Offset
-       Size              EntSize          Flags  Link  Info  Align
-  [ 0]                   NULL             0000000000000000  00000000
-       0000000000000000  0000000000000000           0     0     0
-  [ 1] .debug_info.dwo   PROGBITS         0000000000000000  00000040
-       0000000000000217  0000000000000000   E       0     0     1
-  [ 2] .debug_abbrev.dwo PROGBITS         0000000000000000  00000257
-       00000000000000cb  0000000000000000   E       0     0     1
-  [ 3] .debug_line.dwo   PROGBITS         0000000000000000  00000322
-       00000000000000e5  0000000000000000   E       0     0     1
-  [ 4] .debug_str_o[...] PROGBITS         0000000000000000  00000407
-       00000000000000d4  0000000000000000   E       0     0     1
-  [ 5] .debug_str.dwo    PROGBITS         0000000000000000  000004db
-       00000000000002bd  0000000000000000   E       0     0     1
-  [ 6] .symtab           SYMTAB           0000000000000000  00000798
-       0000000000000030  0000000000000018           7     2     8
-  [ 7] .strtab           STRTAB           0000000000000000  000007c8
-       0000000000000001  0000000000000000           0     0     1
-  [ 8] .shstrtab         STRTAB           0000000000000000  000007c9
-       0000000000000073  0000000000000000           0     0     1
-Key to Flags:
-  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
-  L (link order), O (extra OS processing required), G (group), T (TLS),
-  C (compressed), x (unknown), o (OS specific), E (exclude),
-  D (mbind), l (large), p (processor specific)
-masahiro@grover:/tmp/foo$ rm -f *.dwo
-masahiro@grover:/tmp/foo$ gcc-9  -g3  -gsplit-dwarf  -o foo  foo.c
-masahiro@grover:/tmp/foo$ readelf  -S foo.dwo
-There are 32 section headers, starting at offset 0x77f8:
-
-Section Headers:
-  [Nr] Name              Type             Address           Offset
-       Size              EntSize          Flags  Link  Info  Align
-  [ 0]                   NULL             0000000000000000  00000000
-       0000000000000000  0000000000000000           0     0     0
-  [ 1] .debug_info.dwo   PROGBITS         0000000000000000  00000040
-       0000000000000245  0000000000000000   E       0     0     1
-  [ 2] .debug_abbrev.dwo PROGBITS         0000000000000000  00000285
-       00000000000000ce  0000000000000000   E       0     0     1
-  [ 3] .debug_macro.dwo  PROGBITS         0000000000000000  00000353
-       000000000000014a  0000000000000000   E       0     0     1
-  [ 4] .debug_macro.dwo  PROGBITS         0000000000000000  0000049d
-       0000000000000528  0000000000000000           0     0     1
-  [ 5] .debug_macro.dwo  PROGBITS         0000000000000000  000009c5
-       000000000000001c  0000000000000000           0     0     1
-  [ 6] .debug_macro.dwo  PROGBITS         0000000000000000  000009e1
-       000000000000000c  0000000000000000           0     0     1
-  [ 7] .debug_macro.dwo  PROGBITS         0000000000000000  000009ed
-       000000000000010b  0000000000000000           0     0     1
-  [ 8] .debug_macro.dwo  PROGBITS         0000000000000000  00000af8
-       0000000000000010  0000000000000000           0     0     1
-  [ 9] .debug_macro.dwo  PROGBITS         0000000000000000  00000b08
-       0000000000000033  0000000000000000           0     0     1
-  [10] .debug_macro.dwo  PROGBITS         0000000000000000  00000b3b
-       0000000000000143  0000000000000000           0     0     1
-  [11] .debug_macro.dwo  PROGBITS         0000000000000000  00000c7e
-       0000000000000056  0000000000000000           0     0     1
-  [12] .debug_macro.dwo  PROGBITS         0000000000000000  00000cd4
-       0000000000000021  0000000000000000           0     0     1
-  [13] .debug_macro.dwo  PROGBITS         0000000000000000  00000cf5
-       0000000000000037  0000000000000000           0     0     1
-  [14] .debug_macro.dwo  PROGBITS         0000000000000000  00000d2c
-       000000000000000b  0000000000000000           0     0     1
-  [15] .debug_macro.dwo  PROGBITS         0000000000000000  00000d37
-       0000000000000068  0000000000000000           0     0     1
-  [16] .debug_macro.dwo  PROGBITS         0000000000000000  00000d9f
-       000000000000000c  0000000000000000           0     0     1
-  [17] .debug_macro.dwo  PROGBITS         0000000000000000  00000dab
-       0000000000000048  0000000000000000           0     0     1
-  [18] .debug_macro.dwo  PROGBITS         0000000000000000  00000df3
-       00000000000000a8  0000000000000000           0     0     1
-  [19] .debug_macro.dwo  PROGBITS         0000000000000000  00000e9b
-       000000000000000b  0000000000000000           0     0     1
-  [20] .debug_macro.dwo  PROGBITS         0000000000000000  00000ea6
-       0000000000000023  0000000000000000           0     0     1
-  [21] .debug_macro.dwo  PROGBITS         0000000000000000  00000ec9
-       0000000000000030  0000000000000000           0     0     1
-  [22] .debug_macro.dwo  PROGBITS         0000000000000000  00000ef9
-       0000000000000020  0000000000000000           0     0     1
-  [23] .debug_macro.dwo  PROGBITS         0000000000000000  00000f19
-       000000000000001d  0000000000000000           0     0     1
-  [24] .debug_macro.dwo  PROGBITS         0000000000000000  00000f36
-       0000000000000020  0000000000000000           0     0     1
-  [25] .debug_macro.dwo  PROGBITS         0000000000000000  00000f56
-       0000000000000059  0000000000000000           0     0     1
-  [26] .debug_line.dwo   PROGBITS         0000000000000000  00000faf
-       0000000000000255  0000000000000000   E       0     0     1
-  [27] .debug_str_o[...] PROGBITS         0000000000000000  00001204
-       0000000000000bd4  0000000000000000   E       0     0     1
-  [28] .debug_str.dwo    PROGBITS         0000000000000000  00001dd8
-       0000000000005721  0000000000000000   E       0     0     1
-  [29] .symtab           SYMTAB           0000000000000000  00007500
-       0000000000000270  0000000000000018          30    26     8
-  [30] .strtab           STRTAB           0000000000000000  00007770
-       0000000000000001  0000000000000000           0     0     1
-  [31] .shstrtab         STRTAB           0000000000000000  00007771
-       0000000000000084  0000000000000000           0     0     1
-Key to Flags:
-  W (write), A (alloc), X (execute), M (merge), S (strings), I (info),
-  L (link order), O (extra OS processing required), G (group), T (TLS),
-  C (compressed), x (unknown), o (OS specific), E (exclude),
-  D (mbind), l (large), p (processor specific)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
--- 
-Best Regards
-Masahiro Yamada
+Comments?

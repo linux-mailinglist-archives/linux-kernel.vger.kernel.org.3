@@ -2,100 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D16C592002
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 16:11:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C0AE592025
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 16:26:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239419AbiHNOLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 10:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60430 "EHLO
+        id S239792AbiHNOZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 10:25:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231202AbiHNOLJ (ORCPT
+        with ESMTP id S231576AbiHNOZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 10:11:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C432DFD;
-        Sun, 14 Aug 2022 07:11:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A586260010;
-        Sun, 14 Aug 2022 14:11:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D37B4C433D6;
-        Sun, 14 Aug 2022 14:11:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660486266;
-        bh=9shFH31XM8hIAAKc3p+cdv3PxrsibqT5kKAI+7Qh+eM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Z60U9uONuwv0QlTtvVbWT7H0C6yGZyCbd14ryoTfYtIbZJQAi+g32Zw2e1i3MHiXT
-         XTKcW32jGXRGr1ha8cb/gf6zUsSrJ/vS4yQ8bTEibPRkMboRf+Ex6VO5+rbMop56xR
-         HOtX2cVUZYUWCnBr7qWtzkJxhgASu94HgiBKWC7+tVxjGqAJ1NYBW+o5uLJhoE+mGM
-         /HnHSUlS3gogs5nJ+7KaSNYk+hL0H1eI06LpSNuc5yPRacuVrNU4iYTBGDRwjPo6V1
-         KFa6xl3wfCtsWcEgaNV3evNbDDidAigwW0yhgOVDoPwTAZPSt5kHkR23bGqCxvvXja
-         HRhoEr13Vf1Nw==
-Date:   Sun, 14 Aug 2022 15:21:35 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Crt Mori <cmo@melexis.com>
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Lars-Peter Clausen <lars@metafoo.de>
-Subject: Re: [PATCH v3 0/2] iio: temperature: mlx90632: Add supply regulator
-Message-ID: <20220814152135.6ac36cfb@jic23-huawei>
-In-Reply-To: <20220808144804.1558849-1-cmo@melexis.com>
-References: <20220808144804.1558849-1-cmo@melexis.com>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-pc-linux-gnu)
+        Sun, 14 Aug 2022 10:25:53 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94F2410545;
+        Sun, 14 Aug 2022 07:25:52 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id k14so4861300pfh.0;
+        Sun, 14 Aug 2022 07:25:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc;
+        bh=cmiC4GyXrivAdN89C1L8XiqqWpho7GqZlZeaKyCMglU=;
+        b=iW7PUTkWbQ4GdHHEteuCNQQ5Ss7ljIOtKksm4RzTJDCRMkFQ216uH9eyBZ2pMHgX9g
+         PuNmNy51O5WWstLXa0FBpetTeHuSGSgl1VKN6FAvouYLBuiUerRTuHGUXVf2liVticay
+         NmUUq3xL7EiuE6XJXJB5otVI+ST8+hjNF4J+gCF/8YjDvLGPcPLiZKC+7OfA19SLMBIv
+         ddLNMlG1E3UDFQleHPX5KNluWSKFhQ7b7qCRVdJ8tHNHzlJGR090oBkuHIuUTD7E6i3z
+         QWWa6wvoTrbbBFCWbxBVes1c7haTDs/qD2qZIlC2p5lTzK2RPl0HbtC2aCNZxUn0+yNP
+         2uYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc;
+        bh=cmiC4GyXrivAdN89C1L8XiqqWpho7GqZlZeaKyCMglU=;
+        b=wXJqUw2KVXkvVf7dyNAP8qzjIDcP2Tv3jua2MoMYPmhl3DDSCymCkumWIQIHC+YIqI
+         HMPNb1sHRtrfgIN0HUwvv+FTdiToXTaqMCaz+ACgxKpGr9Jhar18VNDKzaHKjbP88QUr
+         zQQzXGMCM0yO44FHYlYsQZeSQwpDqSiHmp7yIhYkrPF0MQ7Jv2vxQrBJYBNxv9g3xe9r
+         AdAwhKkkqEYSR8zWc+Uo4kekngSIr0zv6+dypiYauXk8+CFwRSA3E3DvgkR0l+KuCpK3
+         TyQlJoK4QEDvlHl0sglk9L/9tJZzGouP+4o9jVzcaApKwtnRQCl8ikrajhSCy+WT3gwW
+         22dg==
+X-Gm-Message-State: ACgBeo16nMRgNE48FbrghtVpkTl6JYEQGPDYqx1rfSDe0KGHU95d2Sbv
+        sTysqA6/yyLuKyGS/bnNnLw=
+X-Google-Smtp-Source: AA6agR5oNGtoZK4xcKJgsKFitJ58zTxZ2oiNPpciipm5RltIv8qLg6CwX2m+LTMXM1+WO4RhZqI7NQ==
+X-Received: by 2002:a63:1208:0:b0:423:c60e:ed09 with SMTP id h8-20020a631208000000b00423c60eed09mr6082759pgl.385.1660487150954;
+        Sun, 14 Aug 2022 07:25:50 -0700 (PDT)
+Received: from biggie.. ([103.230.148.189])
+        by smtp.gmail.com with ESMTPSA id s6-20020a170902ea0600b0016dc6279ab7sm5491340plg.149.2022.08.14.07.25.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 Aug 2022 07:25:50 -0700 (PDT)
+From:   Gautam Menghani <gautammenghani201@gmail.com>
+To:     sean@mess.org, mchehab@kernel.org
+Cc:     Gautam Menghani <gautammenghani201@gmail.com>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        syzbot+0c3cb6dc05fbbdc3ad66@syzkaller.appspotmail.com,
+        hdanton@sina.com
+Subject: [PATCH] drivers/media/rc: Ensure usb_submit_urb() is not called if write is in progress
+Date:   Sun, 14 Aug 2022 19:55:42 +0530
+Message-Id: <20220814142543.24910-1-gautammenghani201@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLY,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  8 Aug 2022 16:48:04 +0200
-Crt Mori <cmo@melexis.com> wrote:
+The warning "URB submitted while active" is reported if the function
+send_packet() in imon.c is called if a write is already is in progress.
+Add a check to return -EBUSY in case a write is already is in progress.
+Also, mark tx.busy as false after transmission is completed.
 
-> Add supply regulator to the sensor as initial update before proper power
-> management is presented. This will reduce the diff for the following
-> patches.
-> 
-Hi Crt,
+Fixes: 21677cfc562a ("V4L/DVB: ir-core: add imon driver")
+Cc: hdanton@sina.com
+Suggested-by: hdanton@sina.com
+Link: https://syzkaller.appspot.com/bug?id=e378e6a51fbe6c5cc43e34f131cc9a315ef0337e
+Reported-by: syzbot+0c3cb6dc05fbbdc3ad66@syzkaller.appspotmail.com
+Signed-off-by: Gautam Menghani <gautammenghani201@gmail.com>
+---
+ drivers/media/rc/imon.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Series applied to what will be the togreg branch of iio.git after I've
-rebased on rc1.  Until then pushed out as testing for 0-day to see
-if it can find anything we missed.
-
-btw,  your series are not coming through as threads which makes them (slightly)
-harder to apply.  For whatever reason the reply-to header field on
-the emails isn't set.
-
-Thanks,
-
-Jonathan
-
-> Changes in v3:
-> 
->  - Style changes of few more arguments in one line
-> 
-> Changes in v2:
-> 
->  - Regulator voltage was removed as per comments from Jonathan Cameron
->    and Lars-Peter Clausen
->  - Style handling for the error reporting of the regulator DT binding
->    was adjusted
->  - NEW: Delay function was created and grouped together with call from
->    the reset command, to ensure consistency and reduce the amount of
->    code.
-> 
-> Crt Mori (2):
->   iio: temperature: mlx90632 Add supply regulator to sensor
->   dt-bindings: iio: mlx90632 Add supply regulator documentation
-> 
->  .../iio/temperature/melexis,mlx90632.yaml     |  4 ++
->  drivers/iio/temperature/mlx90632.c            | 61 +++++++++++++++++--
->  2 files changed, 60 insertions(+), 5 deletions(-)
-> 
+diff --git a/drivers/media/rc/imon.c b/drivers/media/rc/imon.c
+index 735b925da998..a5b997c2c7e2 100644
+--- a/drivers/media/rc/imon.c
++++ b/drivers/media/rc/imon.c
+@@ -598,6 +598,8 @@ static int send_packet(struct imon_context *ictx)
+ 	int retval = 0;
+ 	struct usb_ctrlrequest *control_req = NULL;
+ 
++	if (ictx->tx.busy)
++		return -EBUSY;
+ 	/* Check if we need to use control or interrupt urb */
+ 	if (!ictx->tx_control) {
+ 		pipe = usb_sndintpipe(ictx->usbdev_intf0,
+@@ -654,6 +656,7 @@ static int send_packet(struct imon_context *ictx)
+ 			pr_err_ratelimited("task interrupted\n");
+ 		}
+ 		mutex_lock(&ictx->lock);
++		ictx->tx.busy = false;
+ 
+ 		retval = ictx->tx.status;
+ 		if (retval)
+-- 
+2.34.1
 

@@ -2,127 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FB26592636
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 21:40:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CC2559263C
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 21:53:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232033AbiHNTkm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 15:40:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40418 "EHLO
+        id S229558AbiHNTxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 15:53:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229563AbiHNTkj (ORCPT
+        with ESMTP id S229614AbiHNTw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 15:40:39 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8EF6DF9C;
-        Sun, 14 Aug 2022 12:40:37 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id 4605B5C0075;
-        Sun, 14 Aug 2022 15:40:35 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Sun, 14 Aug 2022 15:40:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=anarazel.de; h=
-        cc:cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1660506035; x=1660592435; bh=OFDS3Ok0yf
-        v0moILB97wP3ESPtiwUDtMRJp1ZG51Sj8=; b=uH75q/OzmmB40Yjv4xjn0dDp09
-        XBh1CAgIfN7IU5ALlW1lsT3zSrRb4fCzjb5iG5tYqKExCYNnE7W6NsIV8PnIpzbG
-        WfD8Z1UgArCnHOHDdsCW5VNKaQV0YOsPeSsKoxx5/sTarSD/o8b2t+tWjxFdl92o
-        jASY+/ZepjkQLn6WaOIGBkYb9ykYCgYf0LGVeTztsbVeg7/UlzrwjpPy8MxyRqE3
-        XCQC865gnWwoKtgrd23Vce48ZR1Bzbk3yOogkCCWZDMPzMwC+OX+zzxfNKZL/PdO
-        61fDyxfkNbQxL2ZQgjKMclIhvfEMS7E2lK0dF9I1UMaMyZBoVRQUxPO+YBeQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1660506035; x=1660592435; bh=OFDS3Ok0yfv0moILB97wP3ESPtiw
-        UDtMRJp1ZG51Sj8=; b=sk9ii4aXH/3jVA9fddHFDm48OBqIaUOntKcROmicKQrh
-        COlH601UOwpnDR12lb7lJgbxzVtkPN+J3jnqZ37l4lpvo/A/bi1gcv2m71S8tZQC
-        AmKOHzGnkCOKCuMF3Ts56/28kOE59E2Qergj2MeKpq98XEQel0zKHpIk7UG5u/+K
-        gtKC0TJpLs2+gMuh2LuxBMaMapmLZRRDZ73bKPkWxZSxi85tVqjh0j5KCydrwMnz
-        Gl+EjrGBzTK0CGaJd2wqEXlACbY0XUri/afSdt9biuZKhK8UF9MwDyxOxqNDBU74
-        HOG4KoNNBN/UQOfoP25aZRwNQZZRyx/OXmwmB0IObw==
-X-ME-Sender: <xms:sU_5YiTe5wqJsCWmf1j7jScCYIoOIuGgK6mBpj5svVgh3xsafPPagQ>
-    <xme:sU_5YnwJdD8vs7LhVGMkKbvEasnvdpHdSAw1qiVcvrH0xH1-VdzNQX_nsZK_NSqKP
-    XcX5WPUwIFCjD3Jxg>
-X-ME-Received: <xmr:sU_5Yv3JnYJt6WwcGb0jGnWSZStf8qsDkC7HXPPaLwTaqX9PKWRubjzLN1ZevacA7OAPWfbu8t2wC6LCJyXIwVWWtXRX3IUQv1Aq344bwM_e9lV8vyzEm2vUHQKt>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehtddgudegudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeetnhgu
-    rhgvshcuhfhrvghunhguuceorghnughrvghssegrnhgrrhgriigvlhdruggvqeenucggtf
-    frrghtthgvrhhnpedvffefvefhteevffegieetfefhtddvffejvefhueetgeeludehteev
-    udeitedtudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpegrnhgurhgvshesrghnrghrrgiivghlrdguvg
-X-ME-Proxy: <xmx:sU_5YuC6x0AkDcy0k1TxCWh67N2aZOXEsAm-BpZ61Nt4Iip923V8Ow>
-    <xmx:sU_5YriVs8ldXhNXKnyeYU1IqQ6BzySWVSpElFy-8gUhc_9WHynEaw>
-    <xmx:sU_5YqqrgFDpjkd4C1j5knMFr1Jgxyt3M_VssQXsbablF7UTuVkNfw>
-    <xmx:s0_5YuMbcnHFU0IF30q_brMWsXuethJVTLzLesNi--Kk-T8meBptkg>
-Feedback-ID: id4a34324:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 14 Aug 2022 15:40:32 -0400 (EDT)
-Date:   Sun, 14 Aug 2022 12:40:31 -0700
-From:   Andres Freund <andres@anarazel.de>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alvaro.karsz@solid-run.com, colin.i.king@gmail.com,
-        colin.king@intel.com, dan.carpenter@oracle.com, david@redhat.com,
-        elic@nvidia.com, eperezma@redhat.com, gautam.dawar@xilinx.com,
-        gshan@redhat.com, hdegoede@redhat.com, hulkci@huawei.com,
-        jasowang@redhat.com, jiaming@nfschina.com,
-        kangjie.xu@linux.alibaba.com, lingshan.zhu@intel.com,
-        liubo03@inspur.com, michael.christie@oracle.com,
-        pankaj.gupta@amd.com, peng.fan@nxp.com, quic_mingxue@quicinc.com,
-        robin.murphy@arm.com, sgarzare@redhat.com, suwan.kim027@gmail.com,
-        syoshida@redhat.com, xieyongji@bytedance.com, xuqiang36@huawei.com
-Subject: Re: [GIT PULL] virtio: fatures, fixes
-Message-ID: <20220814194031.ciql3slc5c34ayjw@awork3.anarazel.de>
-References: <20220812114250-mutt-send-email-mst@kernel.org>
- <20220814004522.33ecrwkmol3uz7aq@awork3.anarazel.de>
- <1660441835.6907768-1-xuanzhuo@linux.alibaba.com>
- <20220814035239.m7rtepyum5xvtu2c@awork3.anarazel.de>
- <20220814043906.xkmhmnp23bqjzz4s@awork3.anarazel.de>
- <20220814045853-mutt-send-email-mst@kernel.org>
+        Sun, 14 Aug 2022 15:52:58 -0400
+Received: from sonic308-55.consmr.mail.gq1.yahoo.com (sonic308-55.consmr.mail.gq1.yahoo.com [98.137.68.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F21562AD8
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 12:52:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=netscape.net; s=a2048; t=1660506776; bh=4U1+2vNEa2iX7n0yXUSFVausmK7G88BenciQy3XIFtQ=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=JK+WXQB8G14rlC5GWn7OToZegTXFCp/asGbYra6OjwcrMmuUZUKmoLHANvxR6SncxSpfAGG/uwQV2J5JQD9LJwNJ0q6fr75TzixMQWo7zp1yyF/29IHJQpi0F9jYijeHvBOMTFyzYm2ZFxTtr8WsZk4gTOke0bZSn9h3MJwm64VLUhZIDv/DPHZIE54Yr+yj3WqlcdZDb63DEq6mbmhIahATUp9BkvQyMHgLN8AuO0HONwcpa1yJS0ippftjzBgIo/72hbQ+ExnTPP8pgYYAgFQjvKugY8PrFXIMJZhbCCJvVXEljfka25i4zZVZDxMS4MjwH5M1eM7lWxnqASBzzg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1660506776; bh=zbjrxgoM4BNyLW6Aou/pTkYhWV8iZXtDXl/bCJtsJVR=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=npnWbyUzCF0NEASfKYV1s179JREepF1CHNiDm+K5Hut1NbTLaFC9Tp1UilCqhKQIPcEusxPLMmtqMHMCgOI/LBX8UYYOMFc9QvAFkUiugBp8U4E/OPaU3Jr5OEXCfkldiu4Hhnc6YIxXxYKCW4JhYEClSn8hAOr9dRiwnS0cwO8J9NTfJIs5oypek06oygzL1zPlBbLekCxQtgt0e9d4C/sXc7oWOB9EMGL2WAPMOrMvRM+iZtZle5aG/7c5HqEU+q1Z3Q0ZlJxxEl4RxJhxWfEf0gyEeEBW7a6kOnU5Aosu5mSKdwJmhcMDWzsN6VsOzJcp2sfgUGghZNxX8kGxFg==
+X-YMail-OSG: yNMXqUMVM1nePv6BwxJvCwftu0wF1tIoR9qI.62_9C_1Kam5FymoNdoBNrhFRwA
+ T5IQulTD2cWYWu4KvrJiQDRHWxu_XtlIP6XfVzCXUMz9sXCSQOVAHUQIk6RnU7_XcB26h7hGCHeb
+ Krnf3rqnwzkv1PpfnQd3LHwhnYDBHrMCkZrX.H2_UXv38rbItD7jcbmWA3f4doJ4qRdlIzr.mjKw
+ AwvvJ5uEEQ4rPcZXnB2NP5qYF20fPrmCeU66PTtc_vHHEXftoaN324wTpwi32Ux1m1XaU4tFPDNd
+ ez0PAu5OGpG20U0_APlWVPYeY2eoTEelGuxWfxpjQ7riLIwTbTnIOoIFybCt.3myE9Ly4_U7d6Ps
+ AwDGUkro05ysYw5OaHrGsMsCevMQt3VDILoE7gOuX54unj34VUTA0wLbw_8x5qtsK0V3xNjl1dJi
+ NwoloH4Ac7PzzlY2VsazEnZvSWIOUIpStiEUjqmEJikL_UfUHf0sDNrSgocLFsiLBRZgatibwXT1
+ Bh4qW9QJUBrvEBSsAz9dTWfca4B4DZlEUKqtbB3ABbEZbPhb7oUQ8Bz1qPlMX3IDh8EYmrr4gDnL
+ PQYdYaKzJyk09UF47VrhDE.mhHJyBFAuxHvbiB_P.qdb_oO7LwTJIU1hsatwVIA2OOe1.ky7thmo
+ tsbOuca3wY5t.1YDCGwGYz9LlTfXASrpJFx167ncsQ1_zlBZMb.taelFpLgnXLKaE.pVneSsdo4c
+ SOGZtVXQ4NreYag2BBpi8nnU_QgpCQ2RVL1btz3Y0iZr4WcwtlZ1mkXvTycEPZwWITruF10bTc1M
+ P74tOrgj5mDwcNv2.DPZgkNsUHiW1E3J7yl3s.5xpw0xKVfNDIxetlhjirqhQ9bZvT3Zfgosnvzy
+ K0WbdlUCdd7MKgRqFZiPY_HY_qD2rz6t4pJj1TZ7HyXmYK8TvN0Y4hzD.69.w.fvvA5oUVQD6LOr
+ Ow92n7PxBtRrzSSu_CecgzKEsDBL4mh_FtETL5lMcCwFE0G3xJUnxygSca2CK4R4Rar4GpSZ_0pX
+ MYKVV3yid0pIrNGsIm_Gnw.O_mIq8zkfFJgpJyxmqF3vuOyla509EZwMYHzWQmezOEhOB2UoCWtF
+ m8s5bgyhhJnJd50zSGEyErn2KbayF3txoyyIZYexepEwnzqp3n.9Mgb94bCQckToBMXYL7uySOuy
+ exHK50NBhAiiFDgtjzIcnUXtrVzWXFdp1PEnKbAhNnwUircr7OtXMQwYbZubawF9SPbHurqz42t.
+ 6trA7nLb32vs8x8KgUkAXQjemCKFV.8bXbb23JcKs_myNfUb1lMrcGhGYCsZKrZ.tjr7HFJ24oSY
+ CwZjH12tuRClrwkIGUnqICzRfIHGTYpa4IE3i_Vv8.7yTutOJJmQWQcmQgV55aZAkuI.9ba16o3v
+ ZUCmIZih6iDSGWSFVIaIGyHmUH89B_AmCpWWoaT2KgG5FKMtjkhkOkuK.DiYg42LbY7GJq29fLt_
+ Hr9IbzNEqCDHk4WnPBfHsBTofB7yhzQvz5IMz3.b3I2ESV9Z4F2.Rhi7zu7BUHUHNuaB1B6AZCJc
+ hZUI1lv5roBTa6DHLanFJTT8.uSAhKpnNxWFUD4ZYR9YBeBmqf18kwbxLHhwffcyTybk3RrOdbyi
+ ZTxAjhN4B5Vu1rhh3Hqv6op1W7VtDRBULxNHny7UIdy8nR65Fc.RCmAXzEPmtmcNrlwqYJWO3ETT
+ CI40y6_ib3N0Z0mzsHmX75AAJlaJY754PAaj0tjLapu3xCwl7aPFQGHVHyxb48jQnREHaCuLEH38
+ KlvlIkaD.LpOr6Nly1iHqo1swYqwRR0w8JbU08BG6q0dhXO5g3SDlB8fDPPyBmYmuH.QKAWsW11e
+ 4lV93CmZQyf1ZRoL0wJHo_ivrZavAWTPZkTupVjQf0Q6A_BRgGQ_EXsziP7Bj.YfCsUZMM0JofK9
+ L0TImplpEbB9yvrgUFYT39a3ZxEksbeTrvz0puM7GtQfG0_6ak4GW5qlwn2qv_0YqL4s5plXOXuG
+ xLIDXEIfeofftQpPI3_joh2BVsS_axr2W5f_9q0yYiQ5Bh6WnyrKFr6Ry5d8LG1nyiSRwHeSovJN
+ .bLSCbjoUmYWdmrz4Q_wvb2Ks_x6ekb5RtP_heGNTNSKsBQOHlvJ7Luwi0HeGY1zQM5iW3GUrOw_
+ _mWbWRQA8ySIVyMj..M.Mf6tJPe0pCwbBH04FnVVb79nA5.A4bZNCrudqfoVgjhbKkWZF.JiNpBN
+ 6ymPfuRptS.d.e39AD64Hbrea7dK8ZgZkxyghbf1_gOU-
+X-Sonic-MF: <brchuckz@aim.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic308.consmr.mail.gq1.yahoo.com with HTTP; Sun, 14 Aug 2022 19:52:56 +0000
+Received: by hermes--production-bf1-7586675c46-npccb (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID f8b1444eb4a30b89b1cc53889bca83f8;
+          Sun, 14 Aug 2022 19:52:52 +0000 (UTC)
+Message-ID: <3f4c20dd-99de-9084-5040-7f09d355fdb9@netscape.net>
+Date:   Sun, 14 Aug 2022 15:52:47 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220814045853-mutt-send-email-mst@kernel.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH 0/3] x86: make pat and mtrr independent from each other
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Thorsten Leemhuis <regressions@leemhuis.info>, jbeulich@suse.com,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        regressions@lists.linux.dev, Juergen Gross <jgross@suse.com>,
+        xen-devel@lists.xenproject.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20220715142549.25223-1-jgross@suse.com>
+ <efbde93b-e280-0e40-798d-dc7bf8ca83cf@leemhuis.info>
+ <a0ce2f59-b653-fa8b-a016-1335f05c86ae@netscape.net>
+ <32ed59c9-c894-c426-dd27-3602625cf3b1@netscape.net>
+ <4688ee9b-1b18-3204-cc93-c6ab2ce9222c@netscape.net>
+ <YvjFY1dn2Afg/mFj@kroah.com>
+ <22bb6f38-c319-35a1-cf8a-07f78904ecfb@netscape.net>
+ <YvjyNdH+X0dwjj+f@kroah.com>
+Content-Language: en-US
+From:   Chuck Zmudzinski <brchuckz@netscape.net>
+In-Reply-To: <YvjyNdH+X0dwjj+f@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20531 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.aol
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 8/14/2022 9:01 AM, Greg KH wrote:
+> The To: line had your address in it, so it was sent to you, and again,
+> it was not encrypted as you claimed, but rather just signed to verify he
+> was the sender.  That's not making anything difficult for anyone, so I
+> think you owe him an apology here, especially as you are asking him to
+> do work for you.
 
-On 2022-08-14 04:59:48 -0400, Michael S. Tsirkin wrote:
-> On Sat, Aug 13, 2022 at 09:39:06PM -0700, Andres Freund wrote:
-> > Hi,
-> > 
-> > On 2022-08-13 20:52:39 -0700, Andres Freund wrote:
-> > > Is there specific information you'd like from the VM? I just recreated the
-> > > problem and can extract.
-> > 
-> > Actually, after reproducing I seem to now hit a likely different issue. I
-> > guess I should have checked exactly the revision I had a problem with earlier,
-> > rather than doing a git pull (up to aea23e7c464b)
-> 
-> Looks like there's a generic memory corruption so it crashes
-> in random places.
+You misunderstand me completely. I am not here to ask Juergen to do any
+work for me, he is the one who volunteered to fix a regression that affects
+my computer, so I am interested in what he has to say, and I am on this mailing
+list to find out if he, and other Linux developers and maintainers, are the kind
+of people I want to have writing the software that runs on my computers.
+I don't have to tell you what my decision about that is, but do you really think
+I want people who refuse to answer my questions about the software they
+are writing for my computers to continue to be the ones I rely on for the
+security and stability of my computer systems? If you think I am that stupid,
+I suppose you also think I am too stupid to receive an e-mail message that
+Juergen tried to send me earlier today. The fact is, Juergen is the only
+person I am aware of who has tried and failed to get an e-mail message
+delivered to me during the past thirty years since I started using e-mail.
+That's quite an accomplishment for Juergen to achieve!
 
-Either a generic memory corruption, or something wrong with IO.
+Best regards,
 
-> Would bisect be possible for you?
-
-I'll give it a go.
-
-Greetings,
-
-Andres Freund
+Chuck

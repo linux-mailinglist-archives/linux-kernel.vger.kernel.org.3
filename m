@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A52C25925D1
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 19:37:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04E425925D2
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 19:37:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231265AbiHNRhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 13:37:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54560 "EHLO
+        id S239769AbiHNRhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 13:37:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232072AbiHNRhJ (ORCPT
+        with ESMTP id S232048AbiHNRhL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 13:37:09 -0400
+        Sun, 14 Aug 2022 13:37:11 -0400
 Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C5718E16;
-        Sun, 14 Aug 2022 10:37:08 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 1BD7332005D8;
-        Sun, 14 Aug 2022 13:37:07 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CB7218E32;
+        Sun, 14 Aug 2022 10:37:11 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id B2BFF32005CA;
+        Sun, 14 Aug 2022 13:37:09 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Sun, 14 Aug 2022 13:37:08 -0400
+  by compute2.internal (MEProxy); Sun, 14 Aug 2022 13:37:10 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
         :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1660498626; x=1660585026; bh=xi
-        U7IRPMNLk0arJJTv9Kxlo5S5AdCZsEw7U2Eez5uBU=; b=fPJXclQTgKq7RuTwZ+
-        ZN2TwZq0Dc4k7H/TvWc9qvNGG7A5ITQRqllbKuS3y7tU4a0osROFVikhNz+B0mFU
-        KgC9dyj7bzSsSAbPooNg0dk9fQM0sl/X+jMdxt1pUSsRCcwlQRmqjJz3CrCpvbEk
-        aq4Aru56AJuZbOYAJpKlucFYjF69cYEjNQ547/VPKH6PHpbZht+kSLploYeR21aQ
-        DmWPJ6sslNYsYOkXYdBFmJQFQ0ghVEOo1qKrmsfpK5cQKdeR7/RfY3+KsRLUdTyU
-        lGKBFr+LlWmVL23wAZo0eD6wzCrfnXNG9Lpp8UjyO1wgzggwVHnMG9ZP1Zm6x8pU
-        mz2A==
+        :subject:subject:to:to; s=fm2; t=1660498629; x=1660585029; bh=49
+        dhIZfr5q8v+hGU8cuF1niSFm1wGL2iaQ0mMKaC1Us=; b=KMrjwpl8IyD45VewM0
+        dnahvq08KfsO25Cnb/NS7UvZIdllLvu08CkJfT1IJRn+RauKE5ROgPXzcLoAiPbz
+        GG8x351g5x40BbTEE4fd1BN0E/bac9JP1l5OqMBTwLGNfmhczFib9iGTh3GLmy3V
+        XmV69ZIXLPW74p1KKcwojNrkasQok2SPbX77ECRBQqtftiO/XGl4OmmMXzP24rlF
+        yL9wxa8ipCWVvid7XN6jHf0uPnGWw9YYKeD61p1/nQTDW3TPodE7Rs7nHn/5ixTD
+        U+IxN+38eMNvnJFEe6KGosSZWIrtOO2q79E05Fdf6kTIFHWVMvChvKmNFQfJ8X0X
+        1NDA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
         :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
         :message-id:mime-version:references:reply-to:sender:subject
         :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1660498626; x=1660585026; bh=xiU7IRPMNLk0a
-        rJJTv9Kxlo5S5AdCZsEw7U2Eez5uBU=; b=d0B8NR3yqwnyW62q+k1VhKT9o2Bxn
-        ISbGocfab5k5XqCDFhaQWGYuNCJBP0Iz6seafQBwsblxs79DPy83inuz/rnaxqYM
-        9LcLZknUOeht1IThYC1vx5eUr2v1MNJUQbqpZVi03bAZd4mVPDVGjomQqHdkzhR0
-        8LhE5NofIN8qHN5lui4y67a+fZiEW5VL1PG0SI0ePG0Zy1o4bfl0rlxrPakQHKo+
-        wo3PeT9HkisIwYWatn5zBgA+zo9Nv1I8d6+RFbVCIucnf26812/mrjgsEoo2jNAk
-        1ggBwApEjO/5Lcle+54l2Z+H4BFoPwNkYy3FUryqVoY4mEF/R+MxI2RIg==
-X-ME-Sender: <xms:wjL5Ys6TTNlBp7Q4q5rWUekGHVfTtoDovFjF-Xu-9SWInVNWuLJizw>
-    <xme:wjL5Yt4eRIAxdk5Cxj8PbHNdv4uX45Y_xs7yz_toYqZCaDXrzclm4-7zpwjNjvQF9
-    gDraqeCK74fAV1j7A>
-X-ME-Received: <xmr:wjL5YrfwxMAH4b97ncfug5N42u-LJG1TKD6u0GcjcRbmqyi5cN1MbW_ygXTyBxRkOXDz5tC0ypr9R1Ieu15wPZuMJ0PgFbc8n6FZ06t7frdgHN5XMRukuHLDtTYRPH6JYJMZ6Q>
+        :x-sasl-enc; s=fm1; t=1660498629; x=1660585029; bh=49dhIZfr5q8v+
+        hGU8cuF1niSFm1wGL2iaQ0mMKaC1Us=; b=RuQ9kyJ9nsUTo/A8HY226w+V00dU+
+        QdHGVJOLVr2M9qocaY5Z4cMX5XD9AMI1Fj08k47MlL0PjmsS7Ssu81c+vK7M3IaW
+        1RaxCyJBMvjjay4GWXNp0AOfg86Go3xI9DfuyJCPJ8KAeMwRxxxoYsPMDyCjH1Jo
+        1b/bUWAs6vSbgjAa0ib/ILDeujgYWhjpXw6d1FyXo07teXesVwvxA3y6X4xYjmoS
+        ix6ASTAZXNv5ONtUw4V7GA2Zk7BeHKfnU3z0FhXHeYsOhJANAy6/J9TbEXOgB2j+
+        Dhavxe9oT/eil+udKtY7y8DRiCwp7pvobX0m0xf+0MgVOVr0Ej1vcUn7g==
+X-ME-Sender: <xms:xTL5YkxODX12D1Aq4EyfkqSJ1C6d3iVT2IIeVTIO8-3WC5O37FAOdg>
+    <xme:xTL5YoS6CJEARSd6d0zqgeKm9CrN9EYaXpHUF_jKUQzs-3BSjv4XhfPGG_I1Kz9Ok
+    T64-Nog92hkYHp5dg>
+X-ME-Received: <xmr:xTL5YmVaWvkZOf31BDT9kuUCP9PgjQRIGdpaoeh2IvWwcH3WBKfVCzu0RXX6KFSWsqQSrmbqSeWO9VkZYLIbihspEU3v32V24hmU7mlYmixZixGlukNeEgFwQ0XzV_8NVq0EeQ>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehtddgudduiecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
     necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
     enucfjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpefurghm
     uhgvlhcujfholhhlrghnugcuoehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhgqeenuc
     ggtffrrghtthgvrhhnpedukeetueduhedtleetvefguddvvdejhfefudelgfduveeggeeh
-    gfdufeeitdevteenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfh
+    gfdufeeitdevteenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
     hrohhmpehsrghmuhgvlhesshhhohhllhgrnhgurdhorhhg
-X-ME-Proxy: <xmx:wjL5YhJUtuMb815D5sc4EgWRtvXaO3EoCzntvdgGdf9HzYUG_GcVpA>
-    <xmx:wjL5YgK8BR27k27xtlBaCPfuEuDN7tO6JoQ1-z1ISPFFEqpNPrK8iA>
-    <xmx:wjL5Yix1GRHTymeD6rmRkk29_GdL-OiB5vO2YdALWe-rG_Jcs9MZwg>
-    <xmx:wjL5YlWdMDOLmmZZiJwLS_bVNqWn1EZIhTP1tzoKmiublS3pqiAm2w>
+X-ME-Proxy: <xmx:xTL5YiinrohnMCAtfOeDbJQzUrS3hkEBoac7wJVm5vLjellUHXYlXQ>
+    <xmx:xTL5YmDgriE-MUY-RnNbLeC1ctcdkVHXVqnsGi4_pfly8Ahf8VoYMg>
+    <xmx:xTL5YjJlcg75im5-1bXtZHqFZRjvUYjh_IfOxFikbAgA2YxPh9rimg>
+    <xmx:xTL5Yuvh2-za21XwMcj3mjnmNf5knNWjpxT53cp5A-tc_Nzvo_WTfg>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 14 Aug 2022 13:37:05 -0400 (EDT)
+ 14 Aug 2022 13:37:08 -0400 (EDT)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Chen-Yu Tsai <wens@csie.org>,
@@ -72,9 +72,9 @@ Cc:     Samuel Holland <samuel@sholland.org>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-sunxi@lists.linux.dev
-Subject: [PATCH 3/4] dt-bindings: nvmem: Allow bit offsets greater than a byte
-Date:   Sun, 14 Aug 2022 12:36:54 -0500
-Message-Id: <20220814173656.11856-4-samuel@sholland.org>
+Subject: [PATCH 4/4] nvmem: core: Support reading cells with >= 8 bit offsets
+Date:   Sun, 14 Aug 2022 12:36:55 -0500
+Message-Id: <20220814173656.11856-5-samuel@sholland.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20220814173656.11856-1-samuel@sholland.org>
 References: <20220814173656.11856-1-samuel@sholland.org>
@@ -90,33 +90,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some NVMEM devices contain cells which do not start at a multiple of the
-device's stride. However, the "reg" property of a cell must be aligned
-to its provider device's stride.
+For NVMEM devices with .stride > 1, some cell values may not be aligned
+to the device's stride. In this case, it is necessary to use bit_offset
+to access the cell. For example, to access the third byte of an NVMEM
+device with .stride == 4, we need "bits = <16 8>;" in the devicetree.
 
-These cells can be represented in the DT using the "bits" property if
-that property allows offsets up to the full stride. 63 is chosen
-assuming that NVMEM devices will not have strides larger than 8 bytes.
+Implement this on the read side. The write side implementation would be
+more complicated, and it is not necessary for read-only NVMEM devices.
+For now, reject writes for these cells to avoid any incorrect behavior.
 
 Signed-off-by: Samuel Holland <samuel@sholland.org>
 ---
 
- Documentation/devicetree/bindings/nvmem/nvmem.yaml | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/nvmem/core.c | 43 ++++++++++++++++++++++++-------------------
+ 1 file changed, 24 insertions(+), 19 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/nvmem/nvmem.yaml b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
-index 3bb349c634cb..4f440ab6a13c 100644
---- a/Documentation/devicetree/bindings/nvmem/nvmem.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/nvmem.yaml
-@@ -53,7 +53,7 @@ patternProperties:
-         $ref: /schemas/types.yaml#/definitions/uint32-array
-         items:
-           - minimum: 0
--            maximum: 7
-+            maximum: 63
-             description:
-               Offset in bit within the address range specified by reg.
-           - minimum: 1
+diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
+index 1e3c754efd0d..309beba8c9f0 100644
+--- a/drivers/nvmem/core.c
++++ b/drivers/nvmem/core.c
+@@ -1373,63 +1373,67 @@ void nvmem_cell_put(struct nvmem_cell *cell)
+ }
+ EXPORT_SYMBOL_GPL(nvmem_cell_put);
+ 
+-static void nvmem_shift_read_buffer_in_place(struct nvmem_cell_entry *cell, void *buf)
++static int nvmem_shift_read_buffer_in_place(struct nvmem_cell_entry *cell, void *buf)
+ {
++	int bit_offset = cell->bit_offset, bytes, i;
+ 	u8 *p, *b;
+-	int i, extra, bit_offset = cell->bit_offset;
+ 
+ 	p = b = buf;
+ 	if (bit_offset) {
++		int byte_offset = bit_offset / BITS_PER_BYTE;
++
++		b += byte_offset;
++		bit_offset %= BITS_PER_BYTE;
++		bytes = cell->bytes - byte_offset;
++
+ 		/* First shift */
+-		*b++ >>= bit_offset;
++		*p = *b++ >> bit_offset;
+ 
+ 		/* setup rest of the bytes if any */
+-		for (i = 1; i < cell->bytes; i++) {
++		for (i = 1; i < bytes; i++) {
+ 			/* Get bits from next byte and shift them towards msb */
+-			*p |= *b << (BITS_PER_BYTE - bit_offset);
+-
+-			p = b;
+-			*b++ >>= bit_offset;
++			*p++ |= *b << (BITS_PER_BYTE - bit_offset);
++			*p = *b++ >> bit_offset;
+ 		}
+-	} else {
+-		/* point to the msb */
+-		p += cell->bytes - 1;
+ 	}
+ 
+ 	/* result fits in less bytes */
+-	extra = cell->bytes - DIV_ROUND_UP(cell->nbits, BITS_PER_BYTE);
+-	while (--extra >= 0)
+-		*p-- = 0;
++	bytes = DIV_ROUND_UP(cell->nbits, BITS_PER_BYTE);
++	p = buf + bytes;
++	memset(p, 0, cell->bytes - bytes);
+ 
+ 	/* clear msb bits if any leftover in the last byte */
+ 	if (cell->nbits % BITS_PER_BYTE)
+-		*p &= GENMASK((cell->nbits % BITS_PER_BYTE) - 1, 0);
++		p[-1] &= GENMASK((cell->nbits % BITS_PER_BYTE) - 1, 0);
++
++	return bytes;
+ }
+ 
+ static int __nvmem_cell_read(struct nvmem_device *nvmem,
+ 		      struct nvmem_cell_entry *cell,
+ 		      void *buf, size_t *len, const char *id)
+ {
++	int bytes = cell->bytes;
+ 	int rc;
+ 
+-	rc = nvmem_reg_read(nvmem, cell->offset, buf, cell->bytes);
++	rc = nvmem_reg_read(nvmem, cell->offset, buf, bytes);
+ 
+ 	if (rc)
+ 		return rc;
+ 
+ 	/* shift bits in-place */
+ 	if (cell->bit_offset || cell->nbits)
+-		nvmem_shift_read_buffer_in_place(cell, buf);
++		bytes = nvmem_shift_read_buffer_in_place(cell, buf);
+ 
+ 	if (nvmem->cell_post_process) {
+ 		rc = nvmem->cell_post_process(nvmem->priv, id,
+-					      cell->offset, buf, cell->bytes);
++					      cell->offset, buf, bytes);
+ 		if (rc)
+ 			return rc;
+ 	}
+ 
+ 	if (len)
+-		*len = cell->bytes;
++		*len = bytes;
+ 
+ 	return 0;
+ }
+@@ -1526,6 +1530,7 @@ static int __nvmem_cell_entry_write(struct nvmem_cell_entry *cell, void *buf, si
+ 	int rc;
+ 
+ 	if (!nvmem || nvmem->read_only ||
++	    cell->bit_offset >= BITS_PER_BYTE ||
+ 	    (cell->bit_offset == 0 && len != cell->bytes))
+ 		return -EINVAL;
+ 
 -- 
 2.35.1
 

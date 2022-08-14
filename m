@@ -2,121 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C179591F33
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 11:07:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 652E6591F36
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 11:10:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230393AbiHNJHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 05:07:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47092 "EHLO
+        id S229436AbiHNJKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 05:10:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229555AbiHNJHk (ORCPT
+        with ESMTP id S229485AbiHNJKB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 05:07:40 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4BC127FF9
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 02:07:39 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 8BA264E2C7;
-        Sun, 14 Aug 2022 09:07:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1660468058; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-        bh=/3Itj9Hk+TVagievoSV8p71OSN6sgi+RAOHLldUn2iU=;
-        b=Uo/EOJFuGWq+iBJpjLWEyshbgqqhKTVtzIu1csCK3zPWitdkuZClRMx7YwCpXQA9QFVe7n
-        CXawCqgEvMYe1wLakKBAulnAYgkGelCplXyHVbG1FZpoRzfKWov8Hm/YueGyQVbXLlwe/P
-        hLSClo8XxQIqjKjG9zAdytlctXDCxsM=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 6119213AAE;
-        Sun, 14 Aug 2022 09:07:38 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ydY+Flq7+GJ2PgAAMHmgww
-        (envelope-from <jgross@suse.com>); Sun, 14 Aug 2022 09:07:38 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     torvalds@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
-        sstabellini@kernel.org
-Subject: [GIT PULL] xen: 2nd round of patches for 6.0-rc1
-Date:   Sun, 14 Aug 2022 11:07:37 +0200
-Message-Id: <20220814090737.29335-1-jgross@suse.com>
-X-Mailer: git-send-email 2.35.3
+        Sun, 14 Aug 2022 05:10:01 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DEA2A25C;
+        Sun, 14 Aug 2022 02:09:59 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 89BC95C00B7;
+        Sun, 14 Aug 2022 05:09:56 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Sun, 14 Aug 2022 05:09:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
+        :cc:content-transfer-encoding:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1660468196; x=
+        1660554596; bh=U5z+vIAK2wN19+T9d2bnGKigsa7e867hygBkLVspi9o=; b=F
+        VmPShbjYLGVFbusD9zGf0p7+XOC2P69dvaAkMhdwujcVvChE/8gyEmIIa14oxN6O
+        FrgDyCffWt1hQM5hcYQw7zic3rxuu+kcYfU9eUzGKRstX4b3ZDW0gToilonWDPmr
+        XE1gwbvKnMmrUP52KiNsNTODkPcww9sYEpYpggQTqp9KuWbxqpF84KIUUugiwEk+
+        5eZJXDAJ83yDaYZ+I2vIpF46iQ3YPpCKRky7IWL4eG4/TeSEVNhrEsMuoOJZhDqs
+        9Q+Pc+cNmVB0RrNArxSceCwtwyKrPRuZ8nUVt68fIMpkh2jdjYmYdgEsLQnEZUoE
+        hOqcsFWyPUKSFm/GNBOeA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1660468196; x=
+        1660554596; bh=U5z+vIAK2wN19+T9d2bnGKigsa7e867hygBkLVspi9o=; b=Q
+        eeSUVzvE3OJNc/W1+bqJML3DEyqNr/UXkTfFeHfO0SX6625p5vU3tb9HgjOzTq60
+        xObnOtxdIvcrR7czrMxIV5JcjOgRKOcMn9uJzYuSb2B0HHjiqemveK2kGkc3f1i1
+        Y4QVws5TLhSrL2SCRRu8BvQyXtJqhoGrgCWJU+Xyabo0IDN6w+R3TTxRZ02mmgC3
+        O0mCSiR7GUhz8Yz9z4/jwYcrechup4mm97vfRyv1al7seteJwskbfQwpME8DZInJ
+        e/dHMjgZSBfLk5h434U/OZs8BQ5alOwHaMHOAc9Sgw6AlWYDFkZfCD3ugssdrEXB
+        HGzNcAXhIiGmhzeKy4OdA==
+X-ME-Sender: <xms:5Lv4YhQkaCstgUG61BysrlCqxRZfp9SCc7yhagEbgW-t36Bl02YjGQ>
+    <xme:5Lv4YqxwJ-4z2l4y0_diB6sIowNuukK3cEN9uZxeFs3wCY5qQVWzKCu4xnn4kolN4
+    ZTOy3Sxd_BOg94y5fA>
+X-ME-Received: <xmr:5Lv4Ym3Z9dNHx20w7maTpQuGXl0aJvi9BQAHHVhYFn7agI8hoKRwfzL8eD-Jrds_fs4H1Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehtddgudefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepkffuhffvveffjghftgfgfgggsehtqhertddtreejnecuhfhrohhmpefnuhhk
+    vgculfhonhgvshcuoehluhhkvgeslhhjohhnvghsrdguvghvqeenucggtffrrghtthgvrh
+    hnpeekfeffueejveeujeeugeelleehtdegvdeludektddtfffhieefledvudehfeejieen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehluhhkvg
+    eslhhjohhnvghsrdguvghv
+X-ME-Proxy: <xmx:5Lv4YpDtZFzdFnzlQfxQ5Yfv3LjiATVOl9ILbUXv_xNHSmgh-OZgtQ>
+    <xmx:5Lv4YqhKbCE9FPQb9vSMWMwY6WtZzhMjqprW-NIuiEgieBh_MM-XDQ>
+    <xmx:5Lv4YtpV9YkYGxVSwAgYm2_UGSspFuyazkwfUliUzALH6XdNGs7a4g>
+    <xmx:5Lv4YtsEZ3B8bGHa3yoRfXlA2X7yfdLbJs0D5Z380_XQZFNC1EX5Yw>
+Feedback-ID: i5ec1447f:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 14 Aug 2022 05:09:53 -0400 (EDT)
+Message-ID: <56171d4f65c02d3cba64d2f6d49e190107c12a18.camel@ljones.dev>
+Subject: Re: [PATCH] asus-wmi: Support the hardware GPU MUX on some laptops
+From:   Luke Jones <luke@ljones.dev>
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     hdegoede@redhat.com, markgross@kernel.org,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Sun, 14 Aug 2022 21:09:43 +1200
+In-Reply-To: <20220813105533.GA3258@wunner.de>
+References: <20220813092624.6228-1-luke@ljones.dev>
+         <20220813105533.GA3258@wunner.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 (by Flathub.org) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus,
+Hi Lukas,
 
-Please git pull the following tag:
+On Sat, 2022-08-13 at 12:55 +0200, Lukas Wunner wrote:
+> On Sat, Aug 13, 2022 at 09:26:24PM +1200, Luke D. Jones wrote:
+> > Support the hardware GPU MUX switch available on some models. This
+> > switch can toggle the MUX between:
+> >=20
+> > - 0, Dedicated mode
+> > - 1, Optimus mode
+> >=20
+> > Optimus mode is the regular iGPU + dGPU available, while dedicated
+> > mode switches the system to have only the dGPU available.
+>=20
+> Could you please integrate this with the framework provided by:
+>=20
+> =C2=A0 include/linux/vga_switcheroo.h
+> =C2=A0 drivers/gpu/vga/vga_switcheroo.c
+>=20
+> vga_switcheroo will then automatically expose a sysfs interface.
 
- git://git.kernel.org/pub/scm/linux/kernel/git/xen/tip.git for-linus-6.0-rc1b-tag
+I did investigate this first before submitting. The way asus does it is
+not standard at all. On switch you must reboot, and the change isn't
+reflected by the ACPI get method until reboot. It's very reflective of
+how they used dgpu_disable to work around windows issues that we do in
+Linux by removing the device from the device tree.
 
-xen: 2nd round of patches for 6.0-rc1
+The key thing is a reboot is required. This is not done on-the-fly. I
+have a two year old GX502 which has the same method as exposed here,
+and also a 2022 TUF laptop with same method. My understanding of this
+pariicular method is that it isn't the same one as what Nvidia is
+advertising, and ASUS is perhaps misadvertising it - the suspision is
+raised by the fact that my GX502 machine predates what Nvidia is
+advertising.
 
-It contains the following patches:
-
-- a series for fixing the handling of the "persistent grants" feature
-  negotiation between Xen blkfront and Xen blkback drivers
-
-- a cleanup of xen.config and adding xen.config to Xen section in
-  MAINTAINERS
-
-- a patch for supporting HVMOP_set_evtchn_upcall_vector, which is more
-  compliant to "normal" interrupt handling than the global callback used
-  up to now
-
-- 2 further small cleanups
-
-Thanks.
-
-Juergen
-
- Documentation/ABI/testing/sysfs-driver-xen-blkback |  2 +-
- .../ABI/testing/sysfs-driver-xen-blkfront          |  2 +-
- MAINTAINERS                                        |  2 +
- arch/x86/include/asm/xen/cpuid.h                   |  2 +
- arch/x86/include/asm/xen/events.h                  |  3 +-
- arch/x86/xen/enlighten.c                           |  2 +-
- arch/x86/xen/enlighten_hvm.c                       | 24 +++++++---
- arch/x86/xen/suspend_hvm.c                         | 10 +++-
- drivers/block/xen-blkback/xenbus.c                 | 20 ++++----
- drivers/block/xen-blkfront.c                       |  4 +-
- drivers/xen/events/events_base.c                   | 53 +++++++++++++++++++---
- drivers/xen/xen-pciback/pciback_ops.c              |  2 +-
- drivers/xen/xenbus/xenbus_dev_frontend.c           |  4 +-
- include/xen/hvm.h                                  |  2 +
- include/xen/interface/hvm/hvm_op.h                 | 19 ++++++++
- kernel/configs/xen.config                          |  1 -
- 16 files changed, 116 insertions(+), 36 deletions(-)
-
-Dan Carpenter (1):
-      xen/xenbus: fix return type in xenbus_file_read()
-
-Jane Malalane (1):
-      x86/xen: Add support for HVMOP_set_evtchn_upcall_vector
-
-Jason Wang (1):
-      xen/pciback: Fix comment typo
-
-Lukas Bulwahn (2):
-      xen: remove XEN_SCRUB_PAGES in xen.config
-      MAINTAINERS: add xen config fragments to XEN HYPERVISOR sections
-
-Maximilian Heyne (1):
-      xen-blkback: Apply 'feature_persistent' parameter when connect
-
-SeongJae Park (2):
-      xen-blkback: fix persistent grants negotiation
-      xen-blkfront: Apply 'feature_persistent' parameter when connect
+Kind regards,
+Luke.

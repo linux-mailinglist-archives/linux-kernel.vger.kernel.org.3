@@ -2,127 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCEBD591D87
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 04:03:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4ABE0591D92
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 04:15:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240096AbiHNCDE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 Aug 2022 22:03:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54306 "EHLO
+        id S229908AbiHNCOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 Aug 2022 22:14:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239721AbiHNCDA (ORCPT
+        with ESMTP id S229587AbiHNCOl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 Aug 2022 22:03:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A08486580A;
-        Sat, 13 Aug 2022 19:02:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 08D8E60F3C;
-        Sun, 14 Aug 2022 02:02:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFCBEC433D6;
-        Sun, 14 Aug 2022 02:02:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660442577;
-        bh=2f9sgPZkZa3uduFERP0l+Px/OulLC7YZ8qPnH0ayO7w=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=NqFubWONKd1D7K8o157UnNL/EXexm0MWqu0ayWjlYvmpAfc5LzI+CjEZuNELLpvPn
-         LZp9bydUkuDJZ9Qrbv3bIGIboofNU9Dun7cqD4xfwCe6YoJR+XynFxzZ9yroKdyzZ5
-         G93TagCTnSv2hm3ld0OdexSmYJ3zeIHYKNI1hkHU0iWbcv9HyqTc89DLJnAhgbqAO4
-         6Y1S0UcomFwE5B2AGsF1g0apC1r3dci4TilUNIF3hw4CR6vxehSUz4xcS3KfImPPVD
-         HGyq22xr36gKS7LW/5+FETFQ20W4uo5UaJM35yxHPU1Rzh3eUT1IdrvrpOZPrJE5de
-         rbb7Il9Z/ZtnA==
-Date:   Sun, 14 Aug 2022 04:02:53 +0200
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Julia Lawall <julia.lawall@inria.fr>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        cocci@systeme.lip6.fr
-Subject: Re: [PULL REQUEST] i2c-for-5.20-part2
-Message-ID: <YvhXzarjOLEJ8nsW@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Julia Lawall <julia.lawall@inria.fr>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, cocci@systeme.lip6.fr
-References: <YvfGY2qnl2YXrUgX@shikoro>
- <CAHk-=wjGmhaE-Y8GqWKPtWYOi=bOarFgo7UkzHNoOVEKnkXXrQ@mail.gmail.com>
- <YvhC5Orb+JeZFDEO@shikoro>
+        Sat, 13 Aug 2022 22:14:41 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3BBC6E2CC
+        for <linux-kernel@vger.kernel.org>; Sat, 13 Aug 2022 19:14:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660443280; x=1691979280;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=mL6DQCPNrGBktb6a8EQDWXZrefD9kYqagtdkBoIfQz0=;
+  b=VWxbFYpar9YVfC5i1lxbkxxZy1ZAxphueSmRMtgnrezzn7lCPMBmUofR
+   Cdw0swJciwa9/GiPIz59uvsmYWCaceB6sMCHK9sKreVASPYf++k7FFz9w
+   raY4buHNQMOFhLlC++b2mnOxOUmOHLbkX6arP3MdnuOhWwrQAtaCsw2iJ
+   UJHYRfi+EkNLlP0sK0+qR/VVmgYP43bkIVSI5MXOg11ycVJJa4+QQvdSa
+   J15iURxxZSsdKQu9LdqYwUzA7E0QWWiaaRfzDlHP5mpqssALYN+hev+zG
+   hJpAJIlG7WT9epxBZTkBSsXWe3J8uZCEjHdmuGExpgVrVa5Vw2LnaA9pA
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="292586294"
+X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
+   d="scan'208";a="292586294"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2022 19:14:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
+   d="scan'208";a="674473096"
+Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
+  by fmsmga004.fm.intel.com with ESMTP; 13 Aug 2022 19:14:38 -0700
+Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oN39B-0002Ln-2o;
+        Sun, 14 Aug 2022 02:14:37 +0000
+Date:   Sun, 14 Aug 2022 10:14:34 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Frank Li <Frank.Li@nxp.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-ntb@googlegroups.com, linux-kernel@vger.kernel.org,
+        Jon Mason <jdmason@kudzu.us>
+Subject: [jonmason-ntb:ntb-next-hacking 18/18]
+ drivers/pci/endpoint/functions/pci-epf-vntb.c:560:56: warning: variable
+ 'align' is uninitialized when used here
+Message-ID: <202208141017.cwJ0JXde-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="CFKOW2U+ugfszIQ5"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <YvhC5Orb+JeZFDEO@shikoro>
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+tree:   https://github.com/jonmason/ntb ntb-next-hacking
+head:   d90921d21692b59734d2452efea346217a526f44
+commit: d90921d21692b59734d2452efea346217a526f44 [18/18] pcie: endpoint: pci-epf-vntb: add endpoint msi support
+config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20220814/202208141017.cwJ0JXde-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 5f1c7e2cc5a3c07cbc2412e851a7283c1841f520)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/jonmason/ntb/commit/d90921d21692b59734d2452efea346217a526f44
+        git remote add jonmason-ntb https://github.com/jonmason/ntb
+        git fetch --no-tags jonmason-ntb ntb-next-hacking
+        git checkout d90921d21692b59734d2452efea346217a526f44
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/pci/endpoint/functions/
 
---CFKOW2U+ugfszIQ5
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-On Sun, Aug 14, 2022 at 02:33:40AM +0200, Wolfram Sang wrote:
->=20
-> >  (b) auto-convert (with a coccinelle script) all the 'strlcpy()' users
-> > that don't care about the return value, and leave a few broken users
-> > of strlcpy around
-> >=20
-> > I think (b) is the simpler thing, but I have no idea how to write a
-> > coccinelle patch that basically does "if return value of strlcpy is
-> > not used, convert the strlcpy to a strscpy".
->=20
-> That shouldn't be hard. I'll give it a try tomorrow.
+All warnings (new ones prefixed by >>):
 
-So, I tried right away and it was really as easy as expected:
-
-=3D=3D=3D
-@@
-@@
-- strlcpy
-+ strscpy
-  (...);
-=3D=3D=3D
-
-The ';' at the end ensures that spatch only looks for complete
-statements not containing anything more than expressed.
-
-I pushed out a branch for the testbots now:
-
-git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git renesas/strlcpy
-
-Patch granularity might not be perfect currently, but for testing this
-should do.
-
-All the best,
-
-   Wolfram
+   drivers/pci/endpoint/functions/pci-epf-vntb.c:541:33: warning: variable 'epc_features' set but not used [-Wunused-but-set-variable]
+           const struct pci_epc_features *epc_features;
+                                          ^
+>> drivers/pci/endpoint/functions/pci-epf-vntb.c:560:56: warning: variable 'align' is uninitialized when used here [-Wuninitialized]
+                   mw_addr = pci_epf_alloc_space(ntb->epf, size, barno, align, 0);
+                                                                        ^~~~~
+   drivers/pci/endpoint/functions/pci-epf-vntb.c:542:11: note: initialize the variable 'align' to silence this warning
+           u32 align;
+                    ^
+                     = 0
+   2 warnings generated.
 
 
---CFKOW2U+ugfszIQ5
-Content-Type: application/pgp-signature; name="signature.asc"
+vim +/align +560 drivers/pci/endpoint/functions/pci-epf-vntb.c
 
------BEGIN PGP SIGNATURE-----
+d90921d21692b59 Frank Li 2022-07-07  534  
+53efbaa43643f36 Frank Li 2022-02-22  535  /**
+53efbaa43643f36 Frank Li 2022-02-22  536   * epf_ntb_db_bar_init() - Configure Doorbell window BARs
+53efbaa43643f36 Frank Li 2022-02-22  537   * @ntb: NTB device that facilitates communication between HOST and vHOST
+53efbaa43643f36 Frank Li 2022-02-22  538   */
+53efbaa43643f36 Frank Li 2022-02-22  539  static int epf_ntb_db_bar_init(struct epf_ntb *ntb)
+53efbaa43643f36 Frank Li 2022-02-22  540  {
+53efbaa43643f36 Frank Li 2022-02-22  541  	const struct pci_epc_features *epc_features;
+53efbaa43643f36 Frank Li 2022-02-22  542  	u32 align;
+53efbaa43643f36 Frank Li 2022-02-22  543  	struct device *dev = &ntb->epf->dev;
+53efbaa43643f36 Frank Li 2022-02-22  544  	int ret;
+53efbaa43643f36 Frank Li 2022-02-22  545  	struct pci_epf_bar *epf_bar;
+d90921d21692b59 Frank Li 2022-07-07  546  	void __iomem *mw_addr = NULL;
+53efbaa43643f36 Frank Li 2022-02-22  547  	enum pci_barno barno;
+d90921d21692b59 Frank Li 2022-07-07  548  	size_t size;
+53efbaa43643f36 Frank Li 2022-02-22  549  
+53efbaa43643f36 Frank Li 2022-02-22  550  	epc_features = pci_epc_get_features(ntb->epf->epc,
+53efbaa43643f36 Frank Li 2022-02-22  551  					    ntb->epf->func_no,
+53efbaa43643f36 Frank Li 2022-02-22  552  					    ntb->epf->vfunc_no);
+53efbaa43643f36 Frank Li 2022-02-22  553  
+d90921d21692b59 Frank Li 2022-07-07  554  	size = epf_ntb_db_size(ntb);
+53efbaa43643f36 Frank Li 2022-02-22  555  
+53efbaa43643f36 Frank Li 2022-02-22  556  	barno = ntb->epf_ntb_bar[BAR_DB];
+d90921d21692b59 Frank Li 2022-07-07  557  	epf_bar = &ntb->epf->bar[barno];
+53efbaa43643f36 Frank Li 2022-02-22  558  
+d90921d21692b59 Frank Li 2022-07-07  559  	if (!ntb->epf_db_phy) {
+53efbaa43643f36 Frank Li 2022-02-22 @560  		mw_addr = pci_epf_alloc_space(ntb->epf, size, barno, align, 0);
+53efbaa43643f36 Frank Li 2022-02-22  561  		if (!mw_addr) {
+53efbaa43643f36 Frank Li 2022-02-22  562  			dev_err(dev, "Failed to allocate OB address\n");
+53efbaa43643f36 Frank Li 2022-02-22  563  			return -ENOMEM;
+53efbaa43643f36 Frank Li 2022-02-22  564  		}
+d90921d21692b59 Frank Li 2022-07-07  565  	} else {
+d90921d21692b59 Frank Li 2022-07-07  566  		epf_bar->phys_addr = ntb->epf_db_phy;
+d90921d21692b59 Frank Li 2022-07-07  567  		epf_bar->barno = barno;
+d90921d21692b59 Frank Li 2022-07-07  568  		epf_bar->size = size;
+d90921d21692b59 Frank Li 2022-07-07  569  	}
+53efbaa43643f36 Frank Li 2022-02-22  570  
+53efbaa43643f36 Frank Li 2022-02-22  571  	ntb->epf_db = mw_addr;
+53efbaa43643f36 Frank Li 2022-02-22  572  
+53efbaa43643f36 Frank Li 2022-02-22  573  	ret = pci_epc_set_bar(ntb->epf->epc, ntb->epf->func_no, ntb->epf->vfunc_no, epf_bar);
+53efbaa43643f36 Frank Li 2022-02-22  574  	if (ret) {
+53efbaa43643f36 Frank Li 2022-02-22  575  		dev_err(dev, "Doorbell BAR set failed\n");
+53efbaa43643f36 Frank Li 2022-02-22  576  			goto err_alloc_peer_mem;
+53efbaa43643f36 Frank Li 2022-02-22  577  	}
+53efbaa43643f36 Frank Li 2022-02-22  578  	return ret;
+53efbaa43643f36 Frank Li 2022-02-22  579  
+53efbaa43643f36 Frank Li 2022-02-22  580  err_alloc_peer_mem:
+53efbaa43643f36 Frank Li 2022-02-22  581  	pci_epc_mem_free_addr(ntb->epf->epc, epf_bar->phys_addr, mw_addr, epf_bar->size);
+53efbaa43643f36 Frank Li 2022-02-22  582  	return -1;
+53efbaa43643f36 Frank Li 2022-02-22  583  }
+53efbaa43643f36 Frank Li 2022-02-22  584  
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmL4V8kACgkQFA3kzBSg
-KbaBCRAAmY5rNGESZ69ldZiKjdDXJGMee7pYez+og0TUy/CoQjOGr/QBEXYy75Ao
-OLaSW6yfpZRxpjkX2EYacMWubMgNPeQzaUPWNv6v1Lm67GCd0Hst/vwXRd3dgY1E
-bLFtwdYizANEbHfe0+RyD0ZKdvCAmC5CWlNZag1EToJQj1sh2oPZWcwCfBV2kE8D
-LH0a3i/r0KvqrnwB8ESdxliKxuUiPpG6Y9oZDVYCE/VyPN301kZaNKVIjNKLJLc6
-XdKu72gDZWz+Ex85MCIUkKR9vSGrVMaL/lqUY4YdcIcu2htMTzUrK40GmRSPrWOR
-CfY2U6WXii6WLQU1P/yxru0FQc7oNkTG+J0cjyYI4ubdGlrz5RkxMp1So4VWgHvq
-DPtMFY34S7e69Ue5H3Wz6kiVzbS7P6ZVwvAb//hh/rkoA5QkQX6fjz80hVlSbHSJ
-gR/HNxtrbUqpxklk45fI8HBCvpFMhasNVCUQv/YsoyrkH4cjKHvUd4xz1bMJIunh
-HmQWeTrHjYWCji69MCE+n/rc5V10Yc9ZXDcoeh52NNMdwodQ1Lc+liEZMC1krKSp
-ItR/eDl+9APfhjx8Kjqt6/RuBqufyO3Kt7j3of+Kz0PfKHY1cAytqXuTH6WWZZ4G
-D662Mu77nAV4/JVOSOrfrYf3zzLtoO2gHrXiq7MDNwGFJEDcri4=
-=BsLP
------END PGP SIGNATURE-----
+:::::: The code at line 560 was first introduced by commit
+:::::: 53efbaa43643f36d203700e7f436eaac11695274 PCI: endpoint: Support NTB transfer between RC and EP
 
---CFKOW2U+ugfszIQ5--
+:::::: TO: Frank Li <Frank.Li@nxp.com>
+:::::: CC: Jon Mason <jdmason@kudzu.us>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

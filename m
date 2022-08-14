@@ -2,131 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B477A591F7E
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 12:15:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 01B08591F87
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 12:21:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235673AbiHNKPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 06:15:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43990 "EHLO
+        id S231164AbiHNKVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 06:21:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230488AbiHNKPb (ORCPT
+        with ESMTP id S230425AbiHNKVq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 06:15:31 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52B262E3
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 03:15:24 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id c5-20020a5ea805000000b00684468c5005so2800376ioa.15
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 03:15:24 -0700 (PDT)
+        Sun, 14 Aug 2022 06:21:46 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A4E22BF5;
+        Sun, 14 Aug 2022 03:21:34 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id gk3so9057928ejb.8;
+        Sun, 14 Aug 2022 03:21:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=NgLSVABhBcWdug9UrtD9+LNXeaw8h4QX1AgubMiZPaE=;
+        b=EWvXkmaUv98OEwpQ4/IYmrswQI0ewNc7UtMSIuYn7fJHsAM62v+gfIu/BTKPAVTH1B
+         pQTRJZQv1BNl8pixFn+wZTIHhHoqpcmYv6cDoko00mjKMdziHvqpzvIrriE+j85mNz6l
+         s8S1bnbJ6jIGOucu2dAE2VPK0XTHPOCFA4mjuzfJ8JCtIAUWRmYzP/T17Qn4G+5rVCWx
+         O/jxBkup/cUM/qCQsuyA1Uk18oBlV+V0xGbArxcE+nl7Bi6L3tzBzMCzoHiy27ngq2le
+         VbSAlwRMnQiXV0gO1fxLwLwUbfhMGZWygn1Ad+EpxitARvigcros1fJ+HWjCeb3ekbLu
+         vgtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=w0hoHg3TbMYWdBZvCWa1MXVGk3Q6OCdDphfaLKbCXns=;
-        b=jB9mt2o70M3CnUCRcwZ++LDZRBcHlDvXUp80fSR2azx1csyBaSf3mmHgE8Oi0OS6M/
-         w/EjYHWNNYClKH3Ju0rw3o3qH/Z4H5APHGkgVb6MqMseu33qC+iSyHgXsyP5ZjtCKemp
-         Cc/cRJ4je4VApF3oJV5pcMK4WXAcB9QmLX/52tUz62Lz6Tdan265joaZYkqIHLMdRhmh
-         Juzih7S6UQsS0LehpOuLgDvd8lAb5jZgNUwXMbP9Zlm5XI88eogcqqkU1qu3jbp/JkcZ
-         4WU3jpK6tn1ZQe3unWq6VgqXTGMFy7nrnEwaTV+2BKHxzy7phvDpkJD+UU6Oo6bQjBDP
-         xtRg==
-X-Gm-Message-State: ACgBeo299/Z9a8eUKsGRaOYQocKDN/Mi/GRxx1bLp+0cMM5md+VqBacz
-        ICbvJbVv4EcNbDN0OF1ZFOxSBjwCig3X6Mh3hS+cvZ74brio
-X-Google-Smtp-Source: AA6agR6WSWmJvOc2lFzZuiT+Cgj9AhTkS6f88868nMz89N8y/eMHHUYWQajSeUTKC8y5D/kVD4NBM6A0LZlgQ5Cqk8n/h6sTjf8g
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=NgLSVABhBcWdug9UrtD9+LNXeaw8h4QX1AgubMiZPaE=;
+        b=Q5mhTQLbjirrM1O7umtSTmn8C4ZUDANLosaUmv22aoCSupotv4DZg/5K7rZw4x5FRL
+         a+Hcb5bLFJ1YryzYL2kZaxwcE9WQJTti9KLLNOFAxZh+hK7emVyyofB6PQ7HtnGb0uNR
+         bFkEMd/Kd5eDxEbA2d8eB52bYZDe4YqbXFyyjrWmeQdpYWcr0y9RKqTafMEX+U0Gf32j
+         5/VvL+hr4pDL0ZKE6YJVKyH6wbUsRg9LlD7tXetH3xQ7dlfM2mxXezLfSQF7CbeZVFeq
+         YXYQDWJGAzTj9yDHioaUM657z8avfaFukZ2p7BMpmWN41Kx8TnRREowgwFIqfz+PSZNH
+         CggQ==
+X-Gm-Message-State: ACgBeo2BpJN2vFerdPwgeyXWNy26NxedMcNDBcv9ySp/LSXp3eDvRt3L
+        i4RcYuxwLz8OCszGyzQxfCo=
+X-Google-Smtp-Source: AA6agR41uSYgu6jwgwi4GNbOiiHGpeVDJUS+R3XUJ+D/AlJZSWhM9JJEsC2Abiy5Ip6gc0dNsSdgCA==
+X-Received: by 2002:a17:906:fe45:b0:734:ca71:9672 with SMTP id wz5-20020a170906fe4500b00734ca719672mr7419035ejb.446.1660472492615;
+        Sun, 14 Aug 2022 03:21:32 -0700 (PDT)
+Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
+        by smtp.gmail.com with ESMTPSA id jl4-20020a17090775c400b00734a9503bcasm2788909ejc.135.2022.08.14.03.21.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 Aug 2022 03:21:32 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>
+Cc:     Samuel Holland <samuel@sholland.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Icenowy Zheng <icenowy@aosc.io>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH 2/9] soc: sunxi: sram: Actually claim SRAM regions
+Date:   Sun, 14 Aug 2022 12:21:31 +0200
+Message-ID: <3368908.QJadu78ljV@jernej-laptop>
+In-Reply-To: <20220801030509.21966-3-samuel@sholland.org>
+References: <20220801030509.21966-1-samuel@sholland.org> <20220801030509.21966-3-samuel@sholland.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6602:3c8:b0:672:4e60:7294 with SMTP id
- g8-20020a05660203c800b006724e607294mr4631837iov.17.1660472124022; Sun, 14 Aug
- 2022 03:15:24 -0700 (PDT)
-Date:   Sun, 14 Aug 2022 03:15:24 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001ca53e05e630cb63@google.com>
-Subject: [syzbot] WARNING in tls_strp_done
-From:   syzbot <syzbot+abd45eb849b05194b1b6@syzkaller.appspotmail.com>
-To:     borisp@nvidia.com, davem@davemloft.net, edumazet@google.com,
-        john.fastabend@gmail.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Dne ponedeljek, 01. avgust 2022 ob 05:05:02 CEST je Samuel Holland napisal(a):
+> sunxi_sram_claim() checks the sram_desc->claimed flag before updating
+> the register, with the intent that only one device can claim a region.
+> However, this was ineffective because the flag was never set.
+> 
+> Fixes: 4af34b572a85 ("drivers: soc: sunxi: Introduce SoC driver to map
+> SRAMs") Signed-off-by: Samuel Holland <samuel@sholland.org>
 
-syzbot found the following issue on:
+Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-HEAD commit:    7ebfc85e2cd7 Merge tag 'net-6.0-rc1' of git://git.kernel.o..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=10545c6b080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=924833c12349a8c0
-dashboard link: https://syzkaller.appspot.com/bug?extid=abd45eb849b05194b1b6
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=164c98cb080000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15497dc3080000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+abd45eb849b05194b1b6@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 3611 at kernel/workqueue.c:3066 __flush_work+0x926/0xb10 kernel/workqueue.c:3066
-Modules linked in:
-CPU: 0 PID: 3611 Comm: syz-executor165 Not tainted 5.19.0-syzkaller-13930-g7ebfc85e2cd7 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-RIP: 0010:__flush_work+0x926/0xb10 kernel/workqueue.c:3066
-Code: 00 48 c7 c6 0b 12 4f 81 48 c7 c7 40 92 f8 8b e8 30 61 10 00 e9 66 fc ff ff e8 d6 f4 2c 00 0f 0b e9 5a fc ff ff e8 ca f4 2c 00 <0f> 0b 45 31 f6 e9 4b fc ff ff e8 0b 4c 79 00 e9 3a fb ff ff e8 b1
-RSP: 0018:ffffc900038bf948 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: ffff888020f0a8f0 RCX: 0000000000000000
-RDX: ffff88801bd50000 RSI: ffffffff814f1246 RDI: 0000000000000001
-RBP: ffffc900038bfae0 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000000 R12: dffffc0000000000
-R13: 1ffff92000717f5f R14: 0000000000000001 R15: ffff888020f0a908
-FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00005555559cb5d0 CR3: 000000000bc8e000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __cancel_work_timer+0x3f9/0x570 kernel/workqueue.c:3162
- tls_strp_done+0x66/0x230 net/tls/tls_strp.c:478
- tls_sk_proto_close+0x40d/0xaf0 net/tls/tls_main.c:328
- inet_release+0x12e/0x270 net/ipv4/af_inet.c:428
- inet6_release+0x4c/0x70 net/ipv6/af_inet6.c:482
- __sock_release+0xcd/0x280 net/socket.c:650
- sock_close+0x18/0x20 net/socket.c:1365
- __fput+0x277/0x9d0 fs/file_table.c:320
- task_work_run+0xdd/0x1a0 kernel/task_work.c:177
- exit_task_work include/linux/task_work.h:38 [inline]
- do_exit+0xad5/0x29b0 kernel/exit.c:795
- do_group_exit+0xd2/0x2f0 kernel/exit.c:925
- __do_sys_exit_group kernel/exit.c:936 [inline]
- __se_sys_exit_group kernel/exit.c:934 [inline]
- __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:934
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f0b52a2fdf9
-Code: Unable to access opcode bytes at RIP 0x7f0b52a2fdcf.
-RSP: 002b:00007fffd86d4c68 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
-RAX: ffffffffffffffda RBX: 00007f0b52aa43f0 RCX: 00007f0b52a2fdf9
-RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000000
-RBP: 0000000000000000 R08: ffffffffffffffc0 R09: 0000000000000001
-R10: 00000000200004c0 R11: 0000000000000246 R12: 00007f0b52aa43f0
-R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
- </TASK>
+Best regards,
+Jernej
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches

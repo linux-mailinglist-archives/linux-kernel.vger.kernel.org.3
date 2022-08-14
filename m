@@ -2,124 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 652E6591F36
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 11:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75BF9591F37
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 Aug 2022 11:12:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229436AbiHNJKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 05:10:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47900 "EHLO
+        id S230441AbiHNJLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 05:11:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiHNJKB (ORCPT
+        with ESMTP id S229485AbiHNJLw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 05:10:01 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27DEA2A25C;
-        Sun, 14 Aug 2022 02:09:59 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 89BC95C00B7;
-        Sun, 14 Aug 2022 05:09:56 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Sun, 14 Aug 2022 05:09:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ljones.dev; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1660468196; x=
-        1660554596; bh=U5z+vIAK2wN19+T9d2bnGKigsa7e867hygBkLVspi9o=; b=F
-        VmPShbjYLGVFbusD9zGf0p7+XOC2P69dvaAkMhdwujcVvChE/8gyEmIIa14oxN6O
-        FrgDyCffWt1hQM5hcYQw7zic3rxuu+kcYfU9eUzGKRstX4b3ZDW0gToilonWDPmr
-        XE1gwbvKnMmrUP52KiNsNTODkPcww9sYEpYpggQTqp9KuWbxqpF84KIUUugiwEk+
-        5eZJXDAJ83yDaYZ+I2vIpF46iQ3YPpCKRky7IWL4eG4/TeSEVNhrEsMuoOJZhDqs
-        9Q+Pc+cNmVB0RrNArxSceCwtwyKrPRuZ8nUVt68fIMpkh2jdjYmYdgEsLQnEZUoE
-        hOqcsFWyPUKSFm/GNBOeA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1660468196; x=
-        1660554596; bh=U5z+vIAK2wN19+T9d2bnGKigsa7e867hygBkLVspi9o=; b=Q
-        eeSUVzvE3OJNc/W1+bqJML3DEyqNr/UXkTfFeHfO0SX6625p5vU3tb9HgjOzTq60
-        xObnOtxdIvcrR7czrMxIV5JcjOgRKOcMn9uJzYuSb2B0HHjiqemveK2kGkc3f1i1
-        Y4QVws5TLhSrL2SCRRu8BvQyXtJqhoGrgCWJU+Xyabo0IDN6w+R3TTxRZ02mmgC3
-        O0mCSiR7GUhz8Yz9z4/jwYcrechup4mm97vfRyv1al7seteJwskbfQwpME8DZInJ
-        e/dHMjgZSBfLk5h434U/OZs8BQ5alOwHaMHOAc9Sgw6AlWYDFkZfCD3ugssdrEXB
-        HGzNcAXhIiGmhzeKy4OdA==
-X-ME-Sender: <xms:5Lv4YhQkaCstgUG61BysrlCqxRZfp9SCc7yhagEbgW-t36Bl02YjGQ>
-    <xme:5Lv4YqxwJ-4z2l4y0_diB6sIowNuukK3cEN9uZxeFs3wCY5qQVWzKCu4xnn4kolN4
-    ZTOy3Sxd_BOg94y5fA>
-X-ME-Received: <xmr:5Lv4Ym3Z9dNHx20w7maTpQuGXl0aJvi9BQAHHVhYFn7agI8hoKRwfzL8eD-Jrds_fs4H1Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehtddgudefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkffuhffvveffjghftgfgfgggsehtqhertddtreejnecuhfhrohhmpefnuhhk
-    vgculfhonhgvshcuoehluhhkvgeslhhjohhnvghsrdguvghvqeenucggtffrrghtthgvrh
-    hnpeekfeffueejveeujeeugeelleehtdegvdeludektddtfffhieefledvudehfeejieen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehluhhkvg
-    eslhhjohhnvghsrdguvghv
-X-ME-Proxy: <xmx:5Lv4YpDtZFzdFnzlQfxQ5Yfv3LjiATVOl9ILbUXv_xNHSmgh-OZgtQ>
-    <xmx:5Lv4YqhKbCE9FPQb9vSMWMwY6WtZzhMjqprW-NIuiEgieBh_MM-XDQ>
-    <xmx:5Lv4YtpV9YkYGxVSwAgYm2_UGSspFuyazkwfUliUzALH6XdNGs7a4g>
-    <xmx:5Lv4YtsEZ3B8bGHa3yoRfXlA2X7yfdLbJs0D5Z380_XQZFNC1EX5Yw>
-Feedback-ID: i5ec1447f:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 14 Aug 2022 05:09:53 -0400 (EDT)
-Message-ID: <56171d4f65c02d3cba64d2f6d49e190107c12a18.camel@ljones.dev>
-Subject: Re: [PATCH] asus-wmi: Support the hardware GPU MUX on some laptops
-From:   Luke Jones <luke@ljones.dev>
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     hdegoede@redhat.com, markgross@kernel.org,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Sun, 14 Aug 2022 21:09:43 +1200
-In-Reply-To: <20220813105533.GA3258@wunner.de>
-References: <20220813092624.6228-1-luke@ljones.dev>
-         <20220813105533.GA3258@wunner.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 (by Flathub.org) 
+        Sun, 14 Aug 2022 05:11:52 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 174FE30F65
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 02:11:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660468311; x=1692004311;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=ceqCM9Qfl+nRYfHUft7vCq3f91tI3GJGF+Bio+Decpk=;
+  b=jZYExb6+NXtzFfYhg5K0er4yHJrrMemhlDMjL5TyxQ8GD3XoWSR6XioA
+   +x1T8pQ4ecoGCnMFuZwyu7RfLIgpPXcpcG2uVNfLqurNfMfIrWsfIyei/
+   Vm+jrDUKmCOVbUAVoJdm+ej2r2oeGylTBYGuszjpx2ZUK7fGpscVOAbLT
+   q+V62HT3Z+2RO1GMlywXUvk5ww/8ksb28IUC90ZqHtS0llMyYe4eWDgel
+   s94RapOYDzltn0fXy05ANSafbduaTPRvLUbXtxit4rKocGr42F/yUCitY
+   39Ue1uaQf7sAuwU+l0RRhau0k5sXv0y2NG4larcb5rtKHbcEZcqSeczYT
+   A==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10437"; a="289379612"
+X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
+   d="scan'208";a="289379612"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2022 02:11:50 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,236,1654585200"; 
+   d="scan'208";a="556972928"
+Received: from lkp-server02.sh.intel.com (HELO 8745164cafc7) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 14 Aug 2022 02:11:48 -0700
+Received: from kbuild by 8745164cafc7 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oN9et-0002gn-1m;
+        Sun, 14 Aug 2022 09:11:47 +0000
+Date:   Sun, 14 Aug 2022 17:10:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dao Lu <daolu@rivosinc.com>
+Cc:     llvm@lists.linux.dev, kbuild-all@lists.01.org,
+        linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@rivosinc.com>,
+        Heiko Stuebner <heiko@sntech.de>
+Subject: arch/riscv/include/asm/jump_label.h:42:3: error: invalid operand for
+ inline asm constraint 'i'
+Message-ID: <202208141746.ABdEd5xo-lkp@intel.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lukas,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   aea23e7c464bfdec04b52cf61edb62030e9e0d0a
+commit: 8eb060e10185cfc97ef0200d197ec246ba0f9f8c arch/riscv: add Zihintpause support
+date:   3 days ago
+config: riscv-randconfig-r005-20220814 (https://download.01.org/0day-ci/archive/20220814/202208141746.ABdEd5xo-lkp@intel.com/config)
+compiler: clang version 16.0.0 (https://github.com/llvm/llvm-project 3329cec2f79185bafd678f310fafadba2a8c76d2)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8eb060e10185cfc97ef0200d197ec246ba0f9f8c
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 8eb060e10185cfc97ef0200d197ec246ba0f9f8c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv prepare
 
-On Sat, 2022-08-13 at 12:55 +0200, Lukas Wunner wrote:
-> On Sat, Aug 13, 2022 at 09:26:24PM +1200, Luke D. Jones wrote:
-> > Support the hardware GPU MUX switch available on some models. This
-> > switch can toggle the MUX between:
-> >=20
-> > - 0, Dedicated mode
-> > - 1, Optimus mode
-> >=20
-> > Optimus mode is the regular iGPU + dGPU available, while dedicated
-> > mode switches the system to have only the dGPU available.
->=20
-> Could you please integrate this with the framework provided by:
->=20
-> =C2=A0 include/linux/vga_switcheroo.h
-> =C2=A0 drivers/gpu/vga/vga_switcheroo.c
->=20
-> vga_switcheroo will then automatically expose a sysfs interface.
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
 
-I did investigate this first before submitting. The way asus does it is
-not standard at all. On switch you must reboot, and the change isn't
-reflected by the ACPI get method until reboot. It's very reflective of
-how they used dgpu_disable to work around windows issues that we do in
-Linux by removing the device from the device tree.
+All errors (new ones prefixed by >>):
 
-The key thing is a reboot is required. This is not done on-the-fly. I
-have a two year old GX502 which has the same method as exposed here,
-and also a 2022 TUF laptop with same method. My understanding of this
-pariicular method is that it isn't the same one as what Nvidia is
-advertising, and ASUS is perhaps misadvertising it - the suspision is
-raised by the fact that my GX502 machine predates what Nvidia is
-advertising.
+   In file included from <built-in>:4:
+   In file included from lib/vdso/gettimeofday.c:5:
+   In file included from include/vdso/datapage.h:17:
+   In file included from include/vdso/processor.h:10:
+   In file included from arch/riscv/include/asm/vdso/processor.h:7:
+   In file included from include/linux/jump_label.h:112:
+>> arch/riscv/include/asm/jump_label.h:42:3: error: invalid operand for inline asm constraint 'i'
+                   "       .option push                            \n\t"
+                   ^
+   1 error generated.
+   make[2]: *** [scripts/Makefile.build:249: arch/riscv/kernel/vdso/vgettimeofday.o] Error 1
+   make[2]: Target 'include/generated/vdso-offsets.h' not remade because of errors.
+   make[1]: *** [arch/riscv/Makefile:128: vdso_prepare] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:219: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
 
-Kind regards,
-Luke.
+
+vim +/i +42 arch/riscv/include/asm/jump_label.h
+
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  37  
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  38  static __always_inline bool arch_static_branch_jump(struct static_key *key,
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  39  						    bool branch)
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  40  {
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  41  	asm_volatile_goto(
+ebc00dde8a975a Emil Renner Berthing 2020-07-14 @42  		"	.option push				\n\t"
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  43  		"	.option norelax				\n\t"
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  44  		"	.option norvc				\n\t"
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  45  		"1:	jal		zero, %l[label]		\n\t"
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  46  		"	.option pop				\n\t"
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  47  		"	.pushsection	__jump_table, \"aw\"	\n\t"
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  48  		"	.align		" RISCV_LGPTR "		\n\t"
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  49  		"	.long		1b - ., %l[label] - .	\n\t"
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  50  		"	" RISCV_PTR "	%0 - .			\n\t"
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  51  		"	.popsection				\n\t"
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  52  		:  :  "i"(&((char *)key)[branch]) :  : label);
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  53  
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  54  	return false;
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  55  label:
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  56  	return true;
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  57  }
+ebc00dde8a975a Emil Renner Berthing 2020-07-14  58  
+
+:::::: The code at line 42 was first introduced by commit
+:::::: ebc00dde8a975a543f5e1a7cdac93fef89fefe58 riscv: Add jump-label implementation
+
+:::::: TO: Emil Renner Berthing <kernel@esmil.dk>
+:::::: CC: Palmer Dabbelt <palmerdabbelt@google.com>
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp

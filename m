@@ -2,160 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2152A592CB1
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70298592C90
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231722AbiHOKU7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 06:20:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41302 "EHLO
+        id S240797AbiHOKWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 06:22:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242509AbiHOKUq (ORCPT
+        with ESMTP id S230407AbiHOKWm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 06:20:46 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B873A6354;
-        Mon, 15 Aug 2022 03:20:45 -0700 (PDT)
-Date:   Mon, 15 Aug 2022 10:20:42 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1660558844;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tGdrZ1nVudr21xNYZsrDmg+Ws1QYXP4nSvy2Q7o0lT8=;
-        b=AiMOFrIGCxmphCTQ3sp6tZwJ4BJ5zmRB4WH+DKz8IZG8nREMq7tw6Vud6fMTtjpKAoBM+x
-        8bzA4HAClGlPVd5hB99IgSssTmdX6L7vBSny1L6FGCpyJMP+SdM43lT8WJUx408HuT3Qro
-        T63PSPCvqTCFYObT1bRwIxgEX5j4P+soDxiZaLSaBPmtYd2cXUSKqfBEMgSodCW/HzH5wf
-        TRajIspjsKbLhdG27YT7ypOTsg6UOe4n0q9YSJDQBNE2c6NvLs7mzoxJaVjR0KDT5uRcaT
-        2jbPw4p5ivtCSNxF0g207VGdwXax9cxt+FNfltAeBP89Ki7y6YqHDRzTJnHVug==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1660558844;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=tGdrZ1nVudr21xNYZsrDmg+Ws1QYXP4nSvy2Q7o0lT8=;
-        b=uZa1sPnMQs0uk0Y+3N81g26lFphS5wFsJLSuYpXiz9SIq5Z6O6F4l+D0ldaS1+t6tO4f9j
-        ouK9P0fBP5H/RXAA==
-From:   "tip-bot2 for Jan Beulich" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/PAT: Have pat_enabled() properly reflect state
- when running on Xen
-Cc:     Jan Beulich <jbeulich@suse.com>, Borislav Petkov <bp@suse.de>,
-        Ingo Molnar <mingo@kernel.org>, <stable@vger.kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <9385fa60-fa5d-f559-a137-6608408f88b0@suse.com>
-References: <9385fa60-fa5d-f559-a137-6608408f88b0@suse.com>
+        Mon, 15 Aug 2022 06:22:42 -0400
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32870DF47
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 03:22:41 -0700 (PDT)
+Received: by mail-lf1-x129.google.com with SMTP id a9so10016382lfm.12
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 03:22:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=GYPvjChMzihllF6NfylcKZILuIvORrCrmYPLKfqT66Y=;
+        b=ZJUkVZk00qiLqlltF3e13FEMFL6jQ4rjBe5u+0Cq8QogsebiFsttF1uFP0a3Fzcxu3
+         WU4C3HF8pltxTojHnR2ipOjMWWZKP/1if81a7tF3ZHFiBrIh8RQZRGGQoYT1evgLXHZr
+         /r1qd5uiX4A4TI3DMuvz4YVfvdneXM9UHEacGmn81S/cMlg+uYC8w9WQEuYdyYTyKNhU
+         CbZ8W6TDYGQnjqhRoRKqACVyCQMm9Cr4UJfTNQT2YHF9QhaThyAdxYmq09ftfRw+hBOf
+         IXORo02R23c5UQCLckfeS3m3zLMMp/WGDyytEKlutJFz2KRYNsSzar+P6yTFsdZzI0Mo
+         xRjQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=GYPvjChMzihllF6NfylcKZILuIvORrCrmYPLKfqT66Y=;
+        b=zBB3ybDUZ9Zj8C0pHDMqZnrJkXv6+yYgEIw8tBTbQUsrCDjJfSJPW+C/I6srEqKqHG
+         4SYBCgcINMcKOyE/tf3y3kbVmhJxa1J7n8l49rOryas94kPYmmDFYOu2xDe1bRIrZg/+
+         y+na2Kcwt79/HN2NmbKjygOQz2/cqAgVduZScAI0pZvo+D2MSOb1GNyETdzohtXxCY7g
+         eErJhSseGl6bBPZ6OnYpfOw9l1h0WdE+fKnGjTvLhELLSlz42OMddl3vy1X5aSVN7dRD
+         CHhQEtIuExUbwJ+i7iPp1kI81Z1t7n6IWDHT734tMHt3DjIjHG37OETDKQ44jgK/2sNb
+         OkFA==
+X-Gm-Message-State: ACgBeo16nUgjOg1MORxhYI56vjj56Ux5bURimOLy8/jdqXuiJ2dtlFmy
+        3x1PhxL7pnnJt/1gUR+x5yX0pUISbb0JQv9WLwdoww==
+X-Google-Smtp-Source: AA6agR7kv2rp1ww6/+Efl2vXjiGE20Moxf0J/RImS706rUjnl6INvnrEc5kn9YujRWIO7Qmat79PMOCrfUV2aCAdfOI=
+X-Received: by 2002:ac2:5324:0:b0:48b:9643:3838 with SMTP id
+ f4-20020ac25324000000b0048b96433838mr5553561lfh.373.1660558959554; Mon, 15
+ Aug 2022 03:22:39 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <166055884287.401.612271624942869534.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <bd442556c0094be2c240f070d15ce2061b376c09.1659288898.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <bd442556c0094be2c240f070d15ce2061b376c09.1659288898.git.christophe.jaillet@wanadoo.fr>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 15 Aug 2022 12:22:02 +0200
+Message-ID: <CAPDyKFo24z-n5g5w4SwugySAQGVLAp4j5TGX-SBRLbBNgxBnRw@mail.gmail.com>
+Subject: Re: [PATCH] mmc: dw_mmc-rockchip: Fix the dw_mci_rockchip_remove() function
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Jaehoon Chung <jh80.chung@samsung.com>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+On Sun, 31 Jul 2022 at 19:35, Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
+>
+> Having a something_get() function call in a remove function is unusual.
+> A something_put() is more likely.
+>
+> More over the remove() function does not match the error handling of the
+> probe().
+>
+> Fix the remove() function to match the error handling path of the probe.
+>
+> Fixes: f90142683f04 ("mmc: dw_mmc-rockchip: add runtime PM support")
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> /!\   SPECULATIVE   /!\
+>
+> I have a limited knowledge of the pm_ API.
+> However, as said, the error handling path of the probe looks more logical
+> to me.
+>
+> Moreover, some more or less similar code can be found in
+> drivers/mmc/host/dw_mmc-exynos.c. This patch also align this rockchip
+> driver to the exynos's one.
+>
+> So review with care.
+> ---
+>  drivers/mmc/host/dw_mmc-rockchip.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/mmc/host/dw_mmc-rockchip.c b/drivers/mmc/host/dw_mmc-rockchip.c
+> index 2a99f15f527f..b5893c738b4a 100644
+> --- a/drivers/mmc/host/dw_mmc-rockchip.c
+> +++ b/drivers/mmc/host/dw_mmc-rockchip.c
+> @@ -373,8 +373,8 @@ static int dw_mci_rockchip_probe(struct platform_device *pdev)
+>
+>  static int dw_mci_rockchip_remove(struct platform_device *pdev)
+>  {
+> -       pm_runtime_get_sync(&pdev->dev);
+>         pm_runtime_disable(&pdev->dev);
+> +       pm_runtime_set_suspended(&pdev->dev);
+>         pm_runtime_put_noidle(&pdev->dev);
+>
+>         dw_mci_pltfm_remove(pdev);
 
-Commit-ID:     72cbc8f04fe2fa93443c0fcccb7ad91dfea3d9ce
-Gitweb:        https://git.kernel.org/tip/72cbc8f04fe2fa93443c0fcccb7ad91dfea3d9ce
-Author:        Jan Beulich <jbeulich@suse.com>
-AuthorDate:    Thu, 28 Apr 2022 16:50:29 +02:00
-Committer:     Borislav Petkov <bp@suse.de>
-CommitterDate: Mon, 15 Aug 2022 10:51:23 +02:00
+dw_mci_pltfm_remove() needs to be called with an active/powered host
+device. That's why the call to pm_runtime_get_sync() is done, so I
+don't think there is anything wrong with the existing code.
 
-x86/PAT: Have pat_enabled() properly reflect state when running on Xen
-
-After commit ID in the Fixes: tag, pat_enabled() returns false (because
-of PAT initialization being suppressed in the absence of MTRRs being
-announced to be available).
-
-This has become a problem: the i915 driver now fails to initialize when
-running PV on Xen (i915_gem_object_pin_map() is where I located the
-induced failure), and its error handling is flaky enough to (at least
-sometimes) result in a hung system.
-
-Yet even beyond that problem the keying of the use of WC mappings to
-pat_enabled() (see arch_can_pci_mmap_wc()) means that in particular
-graphics frame buffer accesses would have been quite a bit less optimal
-than possible.
-
-Arrange for the function to return true in such environments, without
-undermining the rest of PAT MSR management logic considering PAT to be
-disabled: specifically, no writes to the PAT MSR should occur.
-
-For the new boolean to live in .init.data, init_cache_modes() also needs
-moving to .init.text (where it could/should have lived already before).
-
-  [ bp: This is the "small fix" variant for stable. It'll get replaced
-    with a proper PAT and MTRR detection split upstream but that is too
-    involved for a stable backport.
-    - additional touchups to commit msg. Use cpu_feature_enabled(). ]
-
-Fixes: bdd8b6c98239 ("drm/i915: replace X86_FEATURE_PAT with pat_enabled()")
-Signed-off-by: Jan Beulich <jbeulich@suse.com>
-Signed-off-by: Borislav Petkov <bp@suse.de>
-Acked-by: Ingo Molnar <mingo@kernel.org>
-Cc: <stable@vger.kernel.org>
-Cc: Juergen Gross <jgross@suse.com>
-Cc: Lucas De Marchi <lucas.demarchi@intel.com>
-Link: https://lore.kernel.org/r/9385fa60-fa5d-f559-a137-6608408f88b0@suse.com
----
- arch/x86/mm/pat/memtype.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/mm/pat/memtype.c b/arch/x86/mm/pat/memtype.c
-index d5ef64d..66a209f 100644
---- a/arch/x86/mm/pat/memtype.c
-+++ b/arch/x86/mm/pat/memtype.c
-@@ -62,6 +62,7 @@
- 
- static bool __read_mostly pat_bp_initialized;
- static bool __read_mostly pat_disabled = !IS_ENABLED(CONFIG_X86_PAT);
-+static bool __initdata pat_force_disabled = !IS_ENABLED(CONFIG_X86_PAT);
- static bool __read_mostly pat_bp_enabled;
- static bool __read_mostly pat_cm_initialized;
- 
-@@ -86,6 +87,7 @@ void pat_disable(const char *msg_reason)
- static int __init nopat(char *str)
- {
- 	pat_disable("PAT support disabled via boot option.");
-+	pat_force_disabled = true;
- 	return 0;
- }
- early_param("nopat", nopat);
-@@ -272,7 +274,7 @@ static void pat_ap_init(u64 pat)
- 	wrmsrl(MSR_IA32_CR_PAT, pat);
- }
- 
--void init_cache_modes(void)
-+void __init init_cache_modes(void)
- {
- 	u64 pat = 0;
- 
-@@ -313,6 +315,12 @@ void init_cache_modes(void)
- 		 */
- 		pat = PAT(0, WB) | PAT(1, WT) | PAT(2, UC_MINUS) | PAT(3, UC) |
- 		      PAT(4, WB) | PAT(5, WT) | PAT(6, UC_MINUS) | PAT(7, UC);
-+	} else if (!pat_force_disabled && cpu_feature_enabled(X86_FEATURE_HYPERVISOR)) {
-+		/*
-+		 * Clearly PAT is enabled underneath. Allow pat_enabled() to
-+		 * reflect this.
-+		 */
-+		pat_bp_enabled = true;
- 	}
- 
- 	__init_cache_modes(pat);
+Kind regards
+Uffe

@@ -2,160 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87FDB594BE7
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:31:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42F1E594E30
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:50:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243988AbiHPBR5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 21:17:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48278 "EHLO
+        id S232361AbiHPBh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 21:37:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243279AbiHPBRU (ORCPT
+        with ESMTP id S231349AbiHPBhd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 21:17:20 -0400
-Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35BA01A80B
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 14:08:31 -0700 (PDT)
-Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-3246910dac3so103500067b3.12
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 14:08:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=xtY8G2D96F+0+SkQlxIHRu/YzFBnO7oJKVZE1E2i6CE=;
-        b=T+UlcDuGshW/Wrvb8I2bfsuqi3uLSo/KEj/2dcG1scaCe1BmCEp6nwWKtFOC+RKtke
-         TFymD4X+iW7efPkL0lOEn9zP5UJ1cYBVAryMrp1hgBS6icx840NK8QKskBNX7wbAiEtF
-         dW/QFugI1o7HbO4aznI9osl63Uk6yGlKz73Ib3mAuYRDGpbqXwYWATiQqIwVbsts1jW4
-         UpMHoVFEmcJwpezxLr2Jm6nrIVF8UkSZ6oQWniKSbNTQFbKZQdLwARSUb5xvZbGS/FTe
-         iNNO0jtAPvVo08Vx2EIZTwNXgjoxoSPyBg2hnXy9SazgSvr8GYOsq+RTnjPCnFbbSeYr
-         Ercg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=xtY8G2D96F+0+SkQlxIHRu/YzFBnO7oJKVZE1E2i6CE=;
-        b=0ORAgRF1qJ8SNn0ngK+kd0WlR7gx7V2YKVy+Oln1rmb0A5TjONJv3TZHsJDLf1ofr+
-         PML6rqLWFv+iEl1VYsqULCSwghP50PzX8YrObXqHwS64aECFFnZnzEBb2jlDxz26be69
-         q8US6O7xiOZOOuYpQ8T/qhXBPM3ey0maX9jh5QSnG5GiKMQxaEOreaNEuyagh1Ighzfv
-         Gb9DScz4ThHTDIkkpMykoa1ESWGA0yaBr4mKaA528k1arOLL6dLGlqRxyD4lWPPoc5b0
-         GULLVqTqGuMly0SWAOx1TEmq13haa9uoe5W9N1xomyUVNPNBoJtobdy9Vrhut2qmFjJL
-         IORQ==
-X-Gm-Message-State: ACgBeo1oMVchVLF4Hy1QrQUbzLoQtkHHk2TMCsYzg8OMKLP6WmOPzimu
-        X1zBquwdkUZ079vm0VedagHi06S15ZBRi6aIHsNXFQ==
-X-Google-Smtp-Source: AA6agR4/slEjKmTYAamIqy5YLABY94pTV9udVVsZlGMG1xpU/FxKXseywg2I31pPZvCw3WMb/rHSq4PunXVanyqOh0E=
-X-Received: by 2002:a81:1b08:0:b0:31e:5f26:8ae9 with SMTP id
- b8-20020a811b08000000b0031e5f268ae9mr15210170ywb.155.1660597710276; Mon, 15
- Aug 2022 14:08:30 -0700 (PDT)
+        Mon, 15 Aug 2022 21:37:33 -0400
+Received: from na01-obe.outbound.protection.outlook.com (mail-centralusazon11021026.outbound.protection.outlook.com [52.101.62.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB8A33351;
+        Mon, 15 Aug 2022 14:29:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GhvIY6YkimvCYXI18ERD4VRy5cRtpyvAjXvubbLC88frR7qHJSdV0w9wq5iy+IG/y74w+5sDCJ22ipmWd0tIy216uX4klkTDcqKz/KoMVExydFfo9og4LztKmzBjcabqzh0eBDgy05OrXLE5IetsLQFx/h4kMvFFxqDR479GbBOzjVjftkJDYJBQ0HySkyFuoxpmmMzxI6WQ7ro2+xxLipgT6mr5baZHOUIaLNk+A8iDyLTwzKjor/EuXgJ+4tFSR3MWoUR1PgGk8SuAfYJEuTU9TMI8YlvhXLYj8belSZYDSY45fuFEyhBESy7ToZrgOLkFdOXvG25QMrRc7jOqIQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=rZe7M4Zpte5IVuqosy/WtbO5Yfr9gYV+UA1WeGCOfMM=;
+ b=K2EjBKcGg0plcGzq48EbMg2LKt93jfYVnyNZJi8hMca8y5P4fgsqKXoR0SEoxbtLUWBbsIEHsNPE04B9qQlR2drzIkyVixp8aGQ1tyx3F/b6xR0LY9Fk3vreYBWoXxfpv620i9yMafNPMuSVKslGmCehn/jbjTk8AcuYGcXvYUGWPkbgB1ENvUjEakao6ChlbfVyTSSuSzFUqiduBa7ZTVKxtdAiVeh8TtDTlrEVdh4LeSWWbX7aMhSYq3Dxfef7NjjvvwbAChyuNoOeYrkrp/aJ94xlZVYcTJ3EP1dQtdgy9iBk85vUEzspACPdRK4Fo6hQspxOC0lFEuKgM7HPMA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=rZe7M4Zpte5IVuqosy/WtbO5Yfr9gYV+UA1WeGCOfMM=;
+ b=LcfWElZBXmyKdu0fT7fX8vcBhFte9RXnSs1iyE+Mm9oge4KhKO86jizrKbyX9p137GmyOSgymmBWBmUcJE2Gjj59snBGR1rdSgWjsG5ol+aqKu2dKCRNJeTAqdFcHrO5GL1cCivsJhNHsOFljP3wNHrzdFaj/Vj+AkM82a8EPbc=
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com (2603:10b6:806:1f2::11)
+ by SA0PR21MB1931.namprd21.prod.outlook.com (2603:10b6:806:e3::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5546.15; Mon, 15 Aug
+ 2022 21:10:12 +0000
+Received: from SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::a440:fe96:e2bc:840e]) by SA1PR21MB1335.namprd21.prod.outlook.com
+ ([fe80::a440:fe96:e2bc:840e%4]) with mapi id 15.20.5546.014; Mon, 15 Aug 2022
+ 21:10:12 +0000
+From:   Dexuan Cui <decui@microsoft.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+CC:     "quic_jhugo@quicinc.com" <quic_jhugo@quicinc.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        "robh@kernel.org" <robh@kernel.org>, "kw@linux.com" <kw@linux.com>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
+        Boqun Feng <Boqun.Feng@microsoft.com>,
+        Carl Vanderlip <quic_carlv@quicinc.com>
+Subject: RE: [PATCH] PCI: hv: Fix the definiton of vector in
+ hv_compose_msi_msg()
+Thread-Topic: [PATCH] PCI: hv: Fix the definiton of vector in
+ hv_compose_msi_msg()
+Thread-Index: AQHYsOac2fMcX0s9O0OiWaZVRKUYJK2wcwrw
+Date:   Mon, 15 Aug 2022 21:10:12 +0000
+Message-ID: <SA1PR21MB1335D2774A05B3C95233921BBF689@SA1PR21MB1335.namprd21.prod.outlook.com>
+References: <20220815185505.7626-1-decui@microsoft.com>
+ <20220815203545.GA1971949@bhelgaas>
+In-Reply-To: <20220815203545.GA1971949@bhelgaas>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=de39f397-b2d6-4df4-a9ff-18924cd9868d;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-08-15T21:03:08Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: b7755bee-edfb-4874-dac7-08da7f028ab6
+x-ms-traffictypediagnostic: SA0PR21MB1931:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: eKOGt6UvaqYMAmHgS9HpkJ9Ei1onhKUr9tSdf7n1EtbyX0nwNLkYkyjmy4zmT9qzUH1IBAaV6HeZLKwAdFvt0oJecVk8dGqI5SDhrD05w4VqiQZhJzwKVUC27p50u2xBKfDi9ZOs1oYZ1JlO9rsZM95Z7iNqRp+T/T89fm/whyJEvuRloXltKA5cMxFUtuWQWPCWSE1wXFyr4486YvjgS487qGkxGvaFsgGnPGfUfttP4/QBNtZrrEbGgWDgBzXwchDmQ9EkShHxiet0mMmbdyjmc04Z1FitnP/GRYGjybXnhxOIpgH5lO2E1lHAG+OwGj6I84qhf//SXtnPbcSLXWne5xfQ+QIR6h1Y0YUswqRmZBuh5RonT+2BoPfcO/mwhvsWQoqZsa2TJCkxdTu+kBjlFxfEGwiMmmcVq2X9AMBuoEFp7hHI5i1dvd+HHtT9cKG4qM9agmYq9yGcP9WJ3Z4eFwFh3/p+NEqT3EBtPVQxa16qPGQeo19pN1YVJjOY26zoGR68v9/cBMgGLXQAmN1lhWMU0VAr6USfUH8MzK2gCEEhhgrcRVJtCD2YupYlg5GJSqEwpuQEwPeNPQ6wc4DnbAA0+7AUJBxmjraqywHh59ltL9YqMCja1SRibcY6vMotL/4a3DnJe8nQcdGNT94izn2QqG5bpWdM9j8eLX8I1+u6L9R2BVQ4uoI7Tiopwn6t8hKewkRziOEZhV2W/MZ2JkTL/LYkk61plRFdUErhWu3OjPBMAFXfwdc3i03KjSu9bLkxHdkSJQC3J7lzKSQfqk7TCdzeBx1uYK3jxpAzbk93LMk1ewLM5XH/6ZIiI8rE80HfON1xhhLzAv3odXgTIGnyy3pQHFM7Hs8pwFY=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR21MB1335.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(136003)(39860400002)(376002)(346002)(366004)(396003)(451199009)(83380400001)(6506007)(38070700005)(7696005)(53546011)(186003)(9686003)(26005)(82950400001)(82960400001)(122000001)(38100700002)(8936002)(52536014)(7416002)(5660300002)(8676002)(66556008)(76116006)(4326008)(66446008)(66946007)(64756008)(66476007)(55016003)(2906002)(8990500004)(71200400001)(478600001)(41300700001)(316002)(10290500003)(6916009)(54906003)(33656002)(86362001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Qx1dFiIQQmwC5Wuz6OmDa4tRAk5OsBIqTrX5TfLX2iz3bf7mWEgh8q/y0e9y?=
+ =?us-ascii?Q?hp5Kfpzi+YjD4m3EGQk7ngkXfWJaelM9FPfbLzZMENQRhXjhAnBSmh9Ud2lw?=
+ =?us-ascii?Q?dRK6T6Di2S8wvK/Od/7/gWRsytjW+d1OLHGN0Fnos5HuvE5WVhQJPi7uX8nn?=
+ =?us-ascii?Q?HD9f9UksirZ1WVKKquqsjG0W9sEIr69PIEOudYm8fKgFKXvkfFia/IhW3Ib7?=
+ =?us-ascii?Q?RjnJVnNexaSGKOMP9x47A6cx632lvhtVKBll3/JFIidjSs/geCvIT51qn8b2?=
+ =?us-ascii?Q?YKR4wa6KoW/foEOl+WgEZRb0C0yxELtQpPSVDAlY0QjohQlIwuPOu7JCfBPy?=
+ =?us-ascii?Q?8S65C37dERqIzRzijYp0LQlKRLBB01HfjWvf9H8tjUMfce/nhq1qWJ3vvv9B?=
+ =?us-ascii?Q?B3dy0YsjFmPYtY4x1Uo770c5j2RkjQ+WTR3QnJHiWK/CCjFgzWXe2iUXrtj0?=
+ =?us-ascii?Q?knp68AGXROnD5DqWFNfGpueZ/Y2lsbzIgY3mUHmoPoLi1iaEvK88s/QKvkVo?=
+ =?us-ascii?Q?qAOJsCAuVS0p3aljMKFaXPVPca6IMrVbRIX36vi03YfAuVhXeDxNw7VoIP6p?=
+ =?us-ascii?Q?wz8Jkly1NNGQN4qDkn2ZuNiocAQ1pZKMW36ZbX/IqC95PIyI18iKlhdlzfKn?=
+ =?us-ascii?Q?LzdPS59oUNRhbgcV24yrsL9vIAy0QZHcP9F802519eoYG1yYhI3vpTo5XlW2?=
+ =?us-ascii?Q?Ia0i8T+SbwXSSPt5W9ASBwzvuwVz1stoqwGKSjAZLQU5GYB4d7SQS7U4e1XM?=
+ =?us-ascii?Q?WP7vWw44SNhtyn+YCKcouR8caBfdtTd4BGlEGeFNgML67ShdoUeN5jF+Dhyi?=
+ =?us-ascii?Q?Rgbl//ofyw7iwRx9MNVtrOArYucKsIAvWSG7LpaTHmlUT7bi60p4WoHV8lya?=
+ =?us-ascii?Q?gFvGB19+0kwuNvRIbSqG2BMJpLh8zzw9oxhb189JOoiJxmOjwnR+iIp+lreo?=
+ =?us-ascii?Q?T9WA1arUXUzs/xOIOUxmMxrMAI9caBVVflFhaZ6eFeaY9pi9PwTbXN8gTis0?=
+ =?us-ascii?Q?QY/aba6pxsUoMede3VVmKPrPFtz8/S3m54C9eeL3zWqfm/oHo9H4/0VbBvwV?=
+ =?us-ascii?Q?ntV13+N1Y49cyMSEQv21Y/85K3+N3GFcvaReWu84gpAP0IJszHZ27x5PqhFB?=
+ =?us-ascii?Q?McSAqlizQrEymD6HAnfgSemlNXlCxMGhdUFHoDLuE/xeS2D6Fm3zUyNoFzkI?=
+ =?us-ascii?Q?lBI/4Onq6cFmAacQOMbk6f5m8GtjZ/yTmgCLQe2W89bs2iOYiJGm88uI2JAU?=
+ =?us-ascii?Q?il1XjA+1yFpPa0e885RvU5FZGuvaX7uZRzYMN2ADqRFXjfeIiSf8EtPZBElh?=
+ =?us-ascii?Q?LNKvqGtoTMby1wqBQpAX8qzPhNpz9yj094Q/mALnglQmP5LIAE98MLiJg1b3?=
+ =?us-ascii?Q?T1rqceXgcbu4nlO9IoKCHT7s36Bg3BIgMuPKfvUjjEq1USZNkfb6h3UN1nfN?=
+ =?us-ascii?Q?dP9NPfZa652MSohFD1B0sc8tzuGozh5BoDGILpLKZhMLTdGfyX7uNtQquXHu?=
+ =?us-ascii?Q?HsH2Uop3UkbCUUmrJwNMDZ58Eo91BKiBOaegRRw1cvm34kjTxSYTR99MA25Y?=
+ =?us-ascii?Q?oeq2o6+5og+vHHnmPFDgihCYxEPaTNClMP49ZBjS?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20220614120231.48165-1-kirill.shutemov@linux.intel.com>
- <20220614120231.48165-3-kirill.shutemov@linux.intel.com> <8cf143e7-2b62-1a1e-de84-e3dcc6c027a4@suse.cz>
- <20220810141959.ictqchz7josyd7pt@techsingularity.net>
-In-Reply-To: <20220810141959.ictqchz7josyd7pt@techsingularity.net>
-From:   Dionna Amalie Glaze <dionnaglaze@google.com>
-Date:   Mon, 15 Aug 2022 14:08:18 -0700
-Message-ID: <CAAH4kHa6s3sBRySNu-TZG_6vOaN4KheVy4kvxG5s=wOTDGy2=Q@mail.gmail.com>
-Subject: Re: [PATCHv7 02/14] mm: Add support for unaccepted memory
-To:     Mel Gorman <mgorman@techsingularity.net>
-Cc:     Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Marcelo Cerri <marcelo.cerri@canonical.com>,
-        tim.gardner@canonical.com,
-        Khalid ElMously <khalid.elmously@canonical.com>,
-        philip.cox@canonical.com,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-coco@lists.linux.dev, linux-efi <linux-efi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Mike Rapoport <rppt@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR21MB1931
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
->
-> The unpredictable performance of the application early in boot may be
-> unacceptable and unavoidable. It might take a long time but it could
-> eventually generate bug reports about "unpredictable performance early
-> in boot" that will be hard to track down unless accept_memory is observed
-> using perf at the right time. Even when that does happen, there will need
-> to be an option to turn it off if the unpredictable performance cannot
-> be tolerated. Second, any benchmarking done early in boot is likely to
-> be disrupted making the series a potential bisection magnet that masks a
-> performance bug elsewhere in the merge window.
+> From: Bjorn Helgaas <helgaas@kernel.org>
+> Sent: Monday, August 15, 2022 1:36 PM
+> To: Dexuan Cui <decui@microsoft.com>
+>=20
+> s/definiton/definition/ in subject
+> (only if you have other occasion to repost this)
 
-I'm doing some boot performance tests now before I run some workload
-memory acceptance latency tests.
-Note that this testing is on AMD SEV-SNP, so this patch series on top
-of the AMD guest patches v12, plus a
-patch Brijesh Singh wrote to define __accept_memory for SEV-SNP
-https://github.com/AMDESE/linux/commit/ecae2582666d50ce1e633975d703d2f904183ece
+Thanks, Bjorn! I suppose Wei can help fix this. :-)
+=20
+> On Mon, Aug 15, 2022 at 11:55:05AM -0700, Dexuan Cui wrote:
+> > The local variable 'vector' must be u32 rather than u8: see the
+> > struct hv_msi_desc3.
+> >
+> > 'vector_count' should be u16 rather than u8: see struct hv_msi_desc,
+> > hv_msi_desc2 and hv_msi_desc3.
+> >
+> > Fixes: a2bad844a67b ("PCI: hv: Fix interrupt mapping for multi-MSI")
+> > Signed-off-by: Dexuan Cui <decui@microsoft.com>
+> > Cc: Jeffrey Hugo <quic_jhugo@quicinc.com>
+> > Cc: Carl Vanderlip <quic_carlv@quicinc.com>
+>=20
+> Looks like Wei has been applying most changes to pci-hyperv.c, so I
+> assume the same will happen here.
 
-I was getting pretty consistent boot times, only going up slightly as
-the memory size increased, but at 256GB, the VM crashes because it
-touches some unaccepted memory without first accepting it. 255GB boots
-fine.
+So I interpret this as an ack for Wei to apply the earlier patch
+    [PATCH] PCI: hv: Only reuse existing IRTE allocation for Multi-MSI
+and this patch.
 
-The stack track is in mm/page_alloc.c. I've done a little
-investigation, but I can't account for why there's a hard cutoff of
-correctness at 256GB
+The two small patches are pure Hyper-V specific changes, so IMO it's
+better for them to go through Wei's Hyper-V tree rather than the PCI tree.
+(It looks like the PCI folks are too busy right now)
 
-[    0.065563] RIP: 0010:memmap_init_range+0x108/0x173
-[    0.066309] Code: 77 16 f6 42 10 02 74 10 48 03 42 08 48 c1 e8 0c
-48 89 c3 e9 3a ff ff ff 48 89 df 48 c1 e7 06 48 03 3d d9 a2 66 ff 48
-8d 47 08 <c7> 47 34 01 00 00 00 48 c7 47 38 00 00 00 00 c7 47 30 ff ff
-ff ff
-[    0.069108] RSP: 0000:ffffffffad603dc8 EFLAGS: 00010082 ORIG_RAX:
-0000000000000404
-[    0.070193] RAX: ffffdba740000048 RBX: 0000000000000001 RCX: 0000000000000000
-[    0.071170] RDX: 0000000000000000 RSI: 0000000000000000 RDI: ffffdba740000040
-[    0.072224] RBP: 0000000000000000 R08: 0000000000001000 R09: 0000000000000000
-[    0.073283] R10: 0000000000000001 R11: ffffffffad645c60 R12: 0000000000000000
-[    0.074304] R13: 00000000000000a0 R14: 0000000000000000 R15: 0000000000000000
-[    0.075285] FS:  0000000000000000(0000) GS:ffffffffadd6c000(0000)
-knlGS:0000000000000000
-[    0.076365] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[    0.077194] CR2: ffffdba740000074 CR3: 0008001ee3a0c000 CR4: 00000000000606b0
-[    0.078209] Call Trace:
-[    0.078524]  <TASK>
-[    0.078887]  ? free_area_init+0x5c1/0x66c
-[    0.079417]  ? zone_sizes_init+0x52/0x6c
-[    0.079934]  ? setup_arch+0xa55/0xb6d
-[    0.080417]  ? start_kernel+0x64/0x65a
-[    0.080897]  ? secondary_startup_64_no_verify+0xd6/0xdb
-[    0.081620]  </TASK>
-
->
-> --
-> Mel Gorman
-> SUSE Labs
-
-
-
--- 
--Dionna Glaze, PhD (she/her)
+> > ---
+> >
+> > The patch should be appplied after the earlier patch:
+> >     [PATCH] PCI: hv: Only reuse existing IRTE allocation for Multi-MSI

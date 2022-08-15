@@ -2,132 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD09559271B
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 02:41:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2144559271C
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 02:41:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229878AbiHOAl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 20:41:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41470 "EHLO
+        id S229964AbiHOAl3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 20:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiHOAlY (ORCPT
+        with ESMTP id S229506AbiHOAlY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 14 Aug 2022 20:41:24 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF765F74
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 17:41:23 -0700 (PDT)
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A8685F75
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 17:41:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660524083; x=1692060083;
+  t=1660524084; x=1692060084;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=NUfzQJPVEspTQtF4rEJIxdoKCxDDUmghzxbwnuhwZqs=;
-  b=U3ri8TwBp7EghEgm788s607IGOh5TBHUUuNjpD9LQHkqIWu4pYDDX8Km
-   Wcteye3fCX2TWUdF4PT0HqRtTjkDzfHfiK+84dBaMLNonVWw0WuQWSWdt
-   O59Uo4+Y+w8CnxPLlLm3JpRY1P58MFMyJ80CEyu9+y0odaTxvp/UgcBIa
-   adB9gXd0m78KvVpJxJpvcTttOVkawMsSNuFobzQvwwgtdOngxuhcPQuEd
-   kebbUJHotCTrZ2UFCkXXbUMHRdtRbZ8nA+h7N5uBAwnuKGD4vDLORkesr
-   jXItKy3UYmS718cQVa62fqLgXffTlfwO6ZvaUYQOajsnbZfC/r2dAM7um
+  bh=nG0i8Kdv6v0yYaspB/vNr/mJCBvXZ6bkT/01hEiUMuk=;
+  b=jEnYKMa8mF9IuYPx+BqF/rh9gK8zAzlvLlcLey0zfMxQh6rXFXWgP5ZH
+   5468wtzxhWiQlkrCrXUDXSxZjif+9+LuGlEfrzVCVP5lkkkN/9d1M+IbN
+   Hq43oII+JsvrlvEb+Uxtu7Kmw+SgdDKzG3R0pkx624EBUQkboWC+ldyxj
+   YcucRVhEUYusPO9APobrRLOg3i/St0mT7RAcDsrzrMn5vKbC00brrH4ut
+   FXr/PZ4oGBzWChKPGsjATTe5hTsi5bq8QjrRmThecuaQhiVVMMELtrEc/
+   Oyy21BTN9kF2AWlIxBmsPJNe6k/FSuQd6fm4Py7zXjdnPrg5PwQmTWejb
    Q==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10439"; a="292659943"
+X-IronPort-AV: E=McAfee;i="6400,9594,10439"; a="353605683"
 X-IronPort-AV: E=Sophos;i="5.93,237,1654585200"; 
-   d="scan'208";a="292659943"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2022 17:41:23 -0700
+   d="scan'208";a="353605683"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2022 17:41:23 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="5.93,237,1654585200"; 
-   d="scan'208";a="674673589"
+   d="scan'208";a="606484043"
 Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
-  by fmsmga004.fm.intel.com with ESMTP; 14 Aug 2022 17:41:22 -0700
+  by orsmga002.jf.intel.com with ESMTP; 14 Aug 2022 17:41:22 -0700
 Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oNOAT-0000fB-2F;
+        id 1oNOAT-0000fG-2T;
         Mon, 15 Aug 2022 00:41:21 +0000
-Date:   Mon, 15 Aug 2022 08:41:02 +0800
+Date:   Mon, 15 Aug 2022 08:41:20 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Arun Ramadoss <arun.ramadoss@microchip.com>
-Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: drivers/net/dsa/microchip/ksz9477_i2c.c:89:34: warning:
- 'ksz9477_dt_ids' defined but not used
-Message-ID: <202208150803.dDl0Nq6W-lkp@intel.com>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     kbuild-all@lists.01.org, linux-kernel@vger.kernel.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>
+Subject: drivers/clocksource/timer-ti-dm.c:1039:34: warning:
+ 'omap_timer_match' defined but not used
+Message-ID: <202208150851.T0MUBaQR-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 X-Spam-Status: No, score=-4.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arun,
+Hi Tony,
 
 First bad commit (maybe != root cause):
 
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   9f162193d6e48eb4ff51c2ea3612f1daebca1b7e
-commit: 07bca160469b4d19ca0a35bc83b26ed18fcbd96d net: dsa: microchip: common menuconfig for ksz series switch
-date:   7 weeks ago
-config: x86_64-buildonly-randconfig-r002-20220815 (https://download.01.org/0day-ci/archive/20220815/202208150803.dDl0Nq6W-lkp@intel.com/config)
+head:   568035b01cfb107af8d2e4bd2fb9aea22cf5b868
+commit: ab0bbef3ae0f6b5a3b60671cd0124d0fc4fc2567 clocksource/drivers/timer-ti-dm: Make timer selectable for ARCH_K3
+date:   3 weeks ago
+config: x86_64-buildonly-randconfig-r004-20220815 (https://download.01.org/0day-ci/archive/20220815/202208150851.T0MUBaQR-lkp@intel.com/config)
 compiler: gcc-11 (Debian 11.3.0-3) 11.3.0
 reproduce (this is a W=1 build):
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=07bca160469b4d19ca0a35bc83b26ed18fcbd96d
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=ab0bbef3ae0f6b5a3b60671cd0124d0fc4fc2567
         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
         git fetch --no-tags linus master
-        git checkout 07bca160469b4d19ca0a35bc83b26ed18fcbd96d
+        git checkout ab0bbef3ae0f6b5a3b60671cd0124d0fc4fc2567
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/net/dsa/microchip/
+        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/clocksource/ drivers/soc/mediatek/ drivers/usb/misc/
 
 If you fix the issue, kindly add following tag where applicable
 Reported-by: kernel test robot <lkp@intel.com>
 
 All warnings (new ones prefixed by >>):
 
->> drivers/net/dsa/microchip/ksz9477_i2c.c:89:34: warning: 'ksz9477_dt_ids' defined but not used [-Wunused-const-variable=]
-      89 | static const struct of_device_id ksz9477_dt_ids[] = {
-         |                                  ^~~~~~~~~~~~~~
+>> drivers/clocksource/timer-ti-dm.c:1039:34: warning: 'omap_timer_match' defined but not used [-Wunused-const-variable=]
+    1039 | static const struct of_device_id omap_timer_match[] = {
+         |                                  ^~~~~~~~~~~~~~~~
 
 
-vim +/ksz9477_dt_ids +89 drivers/net/dsa/microchip/ksz9477_i2c.c
+vim +/omap_timer_match +1039 drivers/clocksource/timer-ti-dm.c
 
-20e03777d70923 Tristram Ha   2019-09-10   88  
-20e03777d70923 Tristram Ha   2019-09-10  @89  static const struct of_device_id ksz9477_dt_ids[] = {
-eee16b147121ce Arun Ramadoss 2022-05-17   90  	{
-eee16b147121ce Arun Ramadoss 2022-05-17   91  		.compatible = "microchip,ksz9477",
-eee16b147121ce Arun Ramadoss 2022-05-17   92  		.data = &ksz_switch_chips[KSZ9477]
-eee16b147121ce Arun Ramadoss 2022-05-17   93  	},
-eee16b147121ce Arun Ramadoss 2022-05-17   94  	{
-eee16b147121ce Arun Ramadoss 2022-05-17   95  		.compatible = "microchip,ksz9897",
-eee16b147121ce Arun Ramadoss 2022-05-17   96  		.data = &ksz_switch_chips[KSZ9897]
-eee16b147121ce Arun Ramadoss 2022-05-17   97  	},
-eee16b147121ce Arun Ramadoss 2022-05-17   98  	{
-eee16b147121ce Arun Ramadoss 2022-05-17   99  		.compatible = "microchip,ksz9893",
-eee16b147121ce Arun Ramadoss 2022-05-17  100  		.data = &ksz_switch_chips[KSZ9893]
-eee16b147121ce Arun Ramadoss 2022-05-17  101  	},
-eee16b147121ce Arun Ramadoss 2022-05-17  102  	{
-eee16b147121ce Arun Ramadoss 2022-05-17  103  		.compatible = "microchip,ksz9563",
-eee16b147121ce Arun Ramadoss 2022-05-17  104  		.data = &ksz_switch_chips[KSZ9893]
-eee16b147121ce Arun Ramadoss 2022-05-17  105  	},
-eee16b147121ce Arun Ramadoss 2022-05-17  106  	{
-eee16b147121ce Arun Ramadoss 2022-05-17  107  		.compatible = "microchip,ksz8563",
-eee16b147121ce Arun Ramadoss 2022-05-17  108  		.data = &ksz_switch_chips[KSZ9893]
-eee16b147121ce Arun Ramadoss 2022-05-17  109  	},
-eee16b147121ce Arun Ramadoss 2022-05-17  110  	{
-eee16b147121ce Arun Ramadoss 2022-05-17  111  		.compatible = "microchip,ksz9567",
-eee16b147121ce Arun Ramadoss 2022-05-17  112  		.data = &ksz_switch_chips[KSZ9567]
-eee16b147121ce Arun Ramadoss 2022-05-17  113  	},
-20e03777d70923 Tristram Ha   2019-09-10  114  	{},
-20e03777d70923 Tristram Ha   2019-09-10  115  };
-20e03777d70923 Tristram Ha   2019-09-10  116  MODULE_DEVICE_TABLE(of, ksz9477_dt_ids);
-20e03777d70923 Tristram Ha   2019-09-10  117  
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1038  
+9725f4451a9ccd arch/arm/plat-omap/dmtimer.c Jon Hunter     2012-05-14 @1039  static const struct of_device_id omap_timer_match[] = {
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1040  	{
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1041  		.compatible = "ti,omap2420-timer",
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1042  	},
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1043  	{
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1044  		.compatible = "ti,omap3430-timer",
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1045  		.data = &omap3plus_pdata,
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1046  	},
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1047  	{
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1048  		.compatible = "ti,omap4430-timer",
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1049  		.data = &omap3plus_pdata,
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1050  	},
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1051  	{
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1052  		.compatible = "ti,omap5430-timer",
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1053  		.data = &omap3plus_pdata,
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1054  	},
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1055  	{
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1056  		.compatible = "ti,am335x-timer",
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1057  		.data = &omap3plus_pdata,
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1058  	},
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1059  	{
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1060  		.compatible = "ti,am335x-timer-1ms",
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1061  		.data = &omap3plus_pdata,
+d1c6ccfe3dbdd2 arch/arm/plat-omap/dmtimer.c Jon Hunter     2013-03-19  1062  	},
+8c0cabd7970c0d arch/arm/plat-omap/dmtimer.c Neil Armstrong 2015-10-22  1063  	{
+8c0cabd7970c0d arch/arm/plat-omap/dmtimer.c Neil Armstrong 2015-10-22  1064  		.compatible = "ti,dm816-timer",
+8c0cabd7970c0d arch/arm/plat-omap/dmtimer.c Neil Armstrong 2015-10-22  1065  		.data = &omap3plus_pdata,
+8c0cabd7970c0d arch/arm/plat-omap/dmtimer.c Neil Armstrong 2015-10-22  1066  	},
+9725f4451a9ccd arch/arm/plat-omap/dmtimer.c Jon Hunter     2012-05-14  1067  	{},
+9725f4451a9ccd arch/arm/plat-omap/dmtimer.c Jon Hunter     2012-05-14  1068  };
+9725f4451a9ccd arch/arm/plat-omap/dmtimer.c Jon Hunter     2012-05-14  1069  MODULE_DEVICE_TABLE(of, omap_timer_match);
+9725f4451a9ccd arch/arm/plat-omap/dmtimer.c Jon Hunter     2012-05-14  1070  
 
-:::::: The code at line 89 was first introduced by commit
-:::::: 20e03777d70923fe7eae0d7f043ef9488393ab95 net: dsa: microchip: add KSZ9477 I2C driver
+:::::: The code at line 1039 was first introduced by commit
+:::::: 9725f4451a9ccd159b1d13f63e05896cd9bce07d ARM: OMAP: Add DT support for timer driver
 
-:::::: TO: Tristram Ha <Tristram.Ha@microchip.com>
-:::::: CC: David S. Miller <davem@davemloft.net>
+:::::: TO: Jon Hunter <jon-hunter@ti.com>
+:::::: CC: Jon Hunter <jon-hunter@ti.com>
 
 -- 
 0-DAY CI Kernel Test Service

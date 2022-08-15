@@ -2,101 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56D6A592F5C
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 15:05:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20A14592F5F
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 15:06:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242582AbiHONFc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 09:05:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45278 "EHLO
+        id S241898AbiHONGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 09:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231493AbiHONF3 (ORCPT
+        with ESMTP id S231493AbiHONGE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 09:05:29 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2381146D
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 06:05:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=0O1sf920eUihvgTY7T5XThUehKdDUHn2aHkaf8kBbAc=; b=U5+YgxZRQJLUsZVFGa8jpjISiZ
-        KXqYNcUc1MqF7NtePqt0KqehSGtnJdqqCaFozy4CIyCEG6PLW/qQes26YDnOMVQ7G9mxk7meBbkX+
-        Ad4seMTumPH4iTpcmCefpeyUQ+qVxQhzFYz/j/t9etjlPQjX5JQ03IYKDb2gYC5TPlN48pYtMGiAi
-        soblL2ptmaA4v/24nrXFZArqKunBh0PexOXZh4iM240WD+YmP+Ce97qrjFhtFx11cqXGzPFW2txRB
-        AS7yxj+/PzcEzLVuX8SetJ1HDhR6MhalKy1VrMxU6zfk33PbOSVI24Vt/vat1p2DbSX83vhstHv3Y
-        W6LzNG8Q==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oNZmT-005jhz-Cz; Mon, 15 Aug 2022 13:05:21 +0000
-Date:   Mon, 15 Aug 2022 14:05:21 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     kernel test robot <lkp@intel.com>, llvm@lists.linux.dev,
-        kbuild-all@lists.01.org, linux-kernel@vger.kernel.org
-Subject: Re: fs/ntfs/aops.c:378:12: warning: stack frame size (2216) exceeds
- limit (1024) in 'ntfs_read_folio'
-Message-ID: <YvpEkYMatTeNvNZa@casper.infradead.org>
-References: <202208140835.W6F1j6Da-lkp@intel.com>
- <Yvo8KUKJBlMtoNgI@casper.infradead.org>
- <CAK8P3a3Gx39P90k9ZUMdzHiNpjNn1tdvkTktQyzUqqfG+an4BA@mail.gmail.com>
+        Mon, 15 Aug 2022 09:06:04 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22DCF19031;
+        Mon, 15 Aug 2022 06:06:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660568764; x=1692104764;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=m2EuSMgDC5x1/7VKkKGbdxtg9/vb5ykdj4i/kmeCnAY=;
+  b=GjJ52App2hztcqVIHsAaVntmsVe8zeDm+i9B6AUYlulhDgoQbbmflKfc
+   s932u9uW90MbYQxUB030L9XLGivEb9bPLeeO9uyDTdYgiPxf+g15LQCk2
+   Fqtg9uZfcFpRjPusRhegdNWajGDoFq1hGeLwCLvSBOD/Hvx3u1kJRS6hi
+   kqYjAmKMhBbCgSAVlZeFm9eihVdQCzMMLN4ThTH7pT4bVk6eFcMnTXwNL
+   QGPv4wKhNHN3KqZ40sqtcPkQ2MqfaqFkKpxYXZJqEcm654P13UtRSjzL+
+   OqQa31B7Z7jzZ21A4iFLQxN1454qIVLKTDlQsUDMTpsA2KNsMG0zL9+Ac
+   w==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="317936435"
+X-IronPort-AV: E=Sophos;i="5.93,238,1654585200"; 
+   d="scan'208";a="317936435"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 06:06:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,238,1654585200"; 
+   d="scan'208";a="674825396"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga004.fm.intel.com with ESMTP; 15 Aug 2022 06:06:03 -0700
+Received: from [10.252.214.254] (kliang2-mobl1.ccr.corp.intel.com [10.252.214.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 64857580C50;
+        Mon, 15 Aug 2022 06:06:02 -0700 (PDT)
+Message-ID: <952632db-b090-ceb9-1467-a6b598ca2b02@linux.intel.com>
+Date:   Mon, 15 Aug 2022 09:06:01 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAK8P3a3Gx39P90k9ZUMdzHiNpjNn1tdvkTktQyzUqqfG+an4BA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH v2 1/7] perf/x86/core: Update x86_pmu.pebs_capable for
+ ICELAKE_{X,D}
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+References: <20220721103549.49543-1-likexu@tencent.com>
+ <20220721103549.49543-2-likexu@tencent.com>
+ <959fedce-aada-50e4-ce8d-a842d18439fa@redhat.com>
+ <YvoSXyy7ojZ9ird/@worktop.programming.kicks-ass.net>
+ <94e6c414-38e1-ebd7-0161-34548f0b5aae@gmail.com>
+ <YvozNSvcxet0gX6b@worktop.programming.kicks-ass.net>
+Content-Language: en-US
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <YvozNSvcxet0gX6b@worktop.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 02:56:11PM +0200, Arnd Bergmann wrote:
-> On Mon, Aug 15, 2022 at 2:29 PM Matthew Wilcox <willy@infradead.org> wrote:
-> >
-> > On Sun, Aug 14, 2022 at 08:21:36AM +0800, kernel test robot wrote:
-> > > Hi Matthew,
-> > >
-> > > FYI, the error/warning still remains.
-> >
-> > FYI, this is still not interesting.
-> > This is a hexagon 256kB PAGE_SIZE config, and so the amount of stack
-> > space is correspondingly larger.  The frame size warning should be
-> > increased to allow for this.
-> >
-> > > >> fs/ntfs/aops.c:378:12: warning: stack frame size (2216) exceeds limit (1024) in 'ntfs_read_folio' [-Wframe-larger-than]
+
+
+On 2022-08-15 7:51 a.m., Peter Zijlstra wrote:
+> On Mon, Aug 15, 2022 at 05:43:34PM +0800, Like Xu wrote:
 > 
-> I don't think we should change the frame size warning for this, there is not
-> generally any correlation between page size and stack usage, so that would
-> just hide bugs elsewhere.
+>>> diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+>>> index 2db93498ff71..b42c1beb9924 100644
+>>> --- a/arch/x86/events/intel/core.c
+>>> +++ b/arch/x86/events/intel/core.c
+>>> @@ -5933,7 +5933,6 @@ __init int intel_pmu_init(void)
+>>>   		x86_pmu.pebs_aliases = NULL;
+>>>   		x86_pmu.pebs_prec_dist = true;
+>>>   		x86_pmu.lbr_pt_coexist = true;
+>>> -		x86_pmu.pebs_capable = ~0ULL;
+>>>   		x86_pmu.flags |= PMU_FL_HAS_RSP_1;
+>>>   		x86_pmu.flags |= PMU_FL_PEBS_ALL;
+>>>   		x86_pmu.get_event_constraints = glp_get_event_constraints;
+>>> @@ -6291,7 +6290,6 @@ __init int intel_pmu_init(void)
+>>>   		x86_pmu.pebs_aliases = NULL;
+>>>   		x86_pmu.pebs_prec_dist = true;
+>>>   		x86_pmu.pebs_block = true;
+>>> -		x86_pmu.pebs_capable = ~0ULL;
+>>>   		x86_pmu.flags |= PMU_FL_HAS_RSP_1;
+>>>   		x86_pmu.flags |= PMU_FL_NO_HT_SHARING;
+>>>   		x86_pmu.flags |= PMU_FL_PEBS_ALL;
+>>> @@ -6337,7 +6335,6 @@ __init int intel_pmu_init(void)
+>>>   		x86_pmu.pebs_aliases = NULL;
+>>>   		x86_pmu.pebs_prec_dist = true;
+>>>   		x86_pmu.pebs_block = true;
+>>> -		x86_pmu.pebs_capable = ~0ULL;
+>>>   		x86_pmu.flags |= PMU_FL_HAS_RSP_1;
+>>>   		x86_pmu.flags |= PMU_FL_NO_HT_SHARING;
+>>>   		x86_pmu.flags |= PMU_FL_PEBS_ALL;
+>>> diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
+>>> index ba60427caa6d..e2da643632b9 100644
+>>> --- a/arch/x86/events/intel/ds.c
+>>> +++ b/arch/x86/events/intel/ds.c
+>>> @@ -2258,6 +2258,7 @@ void __init intel_ds_init(void)
+>>>   			x86_pmu.drain_pebs = intel_pmu_drain_pebs_icl;
+>>>   			x86_pmu.pebs_record_size = sizeof(struct pebs_basic);
+>>>   			if (x86_pmu.intel_cap.pebs_baseline) {
+>>> +				x86_pmu.pebs_capable = ~0ULL;
+>>
+>> The two features of "Extended PEBS (about pebs_capable)" and "Adaptive PEBS
+>> (about pebs_baseline)"
+>> are orthogonal, although the two are often supported together.
+> 
+> The SDM explicitly states that PEBS Baseline implies Extended PEBS. See
+> 3-19.8 (April 22 edition).
+> 
+> The question is if there is hardware that has Extended PEBS but doesn't
+> have Baseline; and I simply don't know and was hoping Kan could find
+> out.
 
-In this specific case, there is.  It's a stack allocation of an array
-that depends on the number of 512-byte blocks per page.  With 4k pages,
-that's only 8.  With 256k pages, that's 512.  With an 8-byte pointer,
-that's a 4kB allocation, and even with a 4-byte pointer, that's a 2kB
-stack allocation, which is still going to blow the prescribed stack
-limit.
+Goldmont Plus should be the only platform which supports extended PEBS
+but doesn't have Baseline.
 
-This is not unique to NTFS!  An NTFS-specific "fix" is inappropriate.
-It's just that nobody's paying attention to the warnings coming from
-fs/buffer.c:
+> 
+> That said; the above patch can be further improved by also removing the
+> PMU_FL_PEBS_ALL lines, which is already set by intel_ds_init().
 
-include/linux/buffer_head.h:#define MAX_BUF_PER_PAGE (PAGE_SIZE / 512)
+I think we have to keep PMU_FL_PEBS_ALL for the Goldmont Plus. But we
+can remove it for SPR and ADL in intel_pmu_init(), since it's already
+set in the intel_ds_init() for the Baseline.
 
-int block_read_full_folio(struct folio *folio, get_block_t *get_block)
-{
-...
-        struct buffer_head *bh, *head, *arr[MAX_BUF_PER_PAGE];
-
-I don't know why I'm not getting a nastygram about that one, but it's
-all bufferhead based filesystems.
-
-> NTFS has had problems with stack usage on 64K+ pages before, the last
-> time we addressed this using 4eec7faf6775 ("fs: ntfs: Limit NTFS_RW to
-> page sizes smaller than 64k"), but it looks like this time it affects both
-> write and read support.
-
-The reasoning there is faulty.  If you have a 64k (or 256k) page size,
-your stack is correspondingly huge and can handle these kinds of
-allocations.
+Thanks,
+Kan
+> 
+> In general though; the point is, we shouldn't be doing the FMS table
+> thing for discoverable features. Having pebs_capable = ~0 and
+> PMU_FL_PEBS_ALL on something with BASELINE set is just wrong.

@@ -2,58 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1505A592B90
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:50:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0961D592C34
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:51:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242142AbiHOKdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 06:33:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50474 "EHLO
+        id S241964AbiHOKe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 06:34:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbiHOKdG (ORCPT
+        with ESMTP id S229752AbiHOKe4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 06:33:06 -0400
-Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1329A2181E;
-        Mon, 15 Aug 2022 03:33:06 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTPS id B44A680FB;
-        Mon, 15 Aug 2022 10:26:14 +0000 (UTC)
-Date:   Mon, 15 Aug 2022 13:33:04 +0300
-From:   Tony Lindgren <tony@atomide.com>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, Abel Vesa <abel.vesa@linaro.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        John Stultz <jstultz@google.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v1 0/9] fw_devlink improvements
-Message-ID: <Yvog4K0barAvvVeb@atomide.com>
-References: <20220810060040.321697-1-saravanak@google.com>
- <YvYiF36M09dX9ASm@atomide.com>
- <CAGETcx-t0O0B+5i0FWwm5w2=ccOD5zVAaUvgQoP8PT9SOT_btw@mail.gmail.com>
+        Mon, 15 Aug 2022 06:34:56 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8EB8220C2;
+        Mon, 15 Aug 2022 03:34:54 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 73299205F4;
+        Mon, 15 Aug 2022 10:34:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1660559693; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=z2sTzG5HaRXhQPCslS7WPQTvEXy810GcFy0EHN4D2FY=;
+        b=d0xbmtfNVw/MvU6+bQ3HQFC6/eOHRDO0hk4mCewBYF9H9WilB3gGIjKtwIximGd7jVPQro
+        ofHMtKm0OtiR7Obj8jNFPW54ZopHDms1RvvbUO9RYBHHyjfXzdOCoeBW/hbXzS7+SQo+eK
+        IXjL56rrq0EBj/k0huFg9CIwDYgw4pA=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1660559693;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=z2sTzG5HaRXhQPCslS7WPQTvEXy810GcFy0EHN4D2FY=;
+        b=PRoCPRbbFARRhIfXYY0cnN+6b0riR9XPa8+Rj0ktoW+Vi7CLFq9IemVqNNxE3XiuXed0wA
+        L6luQ6WWpGIqgrAA==
+Received: from quack3.suse.cz (unknown [10.100.224.230])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 4EDF82C1B9;
+        Mon, 15 Aug 2022 10:34:53 +0000 (UTC)
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id C0284A066A; Mon, 15 Aug 2022 12:34:52 +0200 (CEST)
+Date:   Mon, 15 Aug 2022 12:34:52 +0200
+From:   Jan Kara <jack@suse.cz>
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     Jan Kara <jack@suse.cz>, linux-ext4@vger.kernel.org,
+        Ojaswin Mujoo <ojaswin@linux.ibm.com>,
+        Harshad Shirwadkar <harshadshirwadkar@gmail.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Ritesh Harjani <riteshh@linux.ibm.com>,
+        linux-fsdevel@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Geetika.Moolchandani1@ibm.com, regressions@lists.linux.dev
+Subject: Re: [Regression] ext4: changes to mb_optimize_scan cause issues on
+ Raspberry Pi
+Message-ID: <20220815103452.7hjx7ohzx64e5lex@quack3>
+References: <0d81a7c2-46b7-6010-62a4-3e6cfc1628d6@i2se.com>
+ <20220728100055.efbvaudwp3ofolpi@quack3>
+ <76a9b920-0937-7bef-db55-844f0f5f6c1b@i2se.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAGETcx-t0O0B+5i0FWwm5w2=ccOD5zVAaUvgQoP8PT9SOT_btw@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <76a9b920-0937-7bef-db55-844f0f5f6c1b@i2se.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,37 +72,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-* Saravana Kannan <saravanak@google.com> [220813 00:45]:
-> On Fri, Aug 12, 2022 at 2:49 AM Tony Lindgren <tony@atomide.com> wrote:
-> >
-> > * Saravana Kannan <saravanak@google.com> [220810 05:54]:
-> > > Tony,
-> > >
-> > > This should handle the odd case of the child being the supplier of the
-> > > parent. Can you please give this a shot? I want to make sure the cycle
-> > > detection code handles this properly and treats it like it's NOT a cycle.
-> >
-> > Yup, this series works for me, so feel free to add:
-> >
-> > Tested-by: Tony Lindgren <tony@atomide.com>
+Hi Stefan,
+
+Back from vacation...
+
+On Sun 31-07-22 22:42:56, Stefan Wahren wrote:
+> Hi Jan,
 > 
-> Thanks for testing!
-> 
-> Btw, out of curiosity, how many different boards did you test this on?
-> IIRC you had an issue only in one board, right? Not to say I didn't
-> break anything else, I'm just trying to see how much confidence we
-> have on this series so far. I'm hoping the rest of the folks I listed
-> in the email will get around to testing this series.
+> Am 28.07.22 um 12:00 schrieb Jan Kara:
+> > 
+> > Also can get filesystem metadata image of your card like:
+> >    e2image -r <fs-device> - | gzip >/tmp/ext4-image.gz
+> > 
+> > and put it somewhere for download? The image will contain only fs metadata,
+> > not data so it should be relatively small and we won't have access to your
+> > secrets ;). With the image we'd be able to see how the free space looks
+> > like and whether it perhaps does not trigger some pathological behavior.
+> i've problems with this. If i try store uncompressed the metadata of the
+> second SD card partition (/dev/sdb2 = rootfs) the generated image file is
+> nearly big as the whole partition. In compressed state it's 25 MB. Is this
+> expected?
 
-Sorry if I was not clear earlier. The issue affects several generations
-of TI 32-bit SoCs at least, not just one board.
+Yes, that is expected. The resulting file is a sparse file that contains
+only metadata blocks that is the reason why it compresses so well but looks
+big.
 
-> > I have some concerns though on how do we get a working -rc1 with the
-> > earlier series applied? See the comments in the last patch of this
-> > series.
-> 
-> I tried to reply, but not sure if it helps. We'll continue the discussion there.
+								Honza
 
-Ack.
-
-Tony
+-- 
+Jan Kara <jack@suse.com>
+SUSE Labs, CR

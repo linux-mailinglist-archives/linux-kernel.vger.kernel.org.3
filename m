@@ -2,65 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79CDC59286E
+	by mail.lfdr.de (Postfix) with ESMTP id C275559286F
 	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 06:13:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232382AbiHOEM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 00:12:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40130 "EHLO
+        id S232584AbiHOENC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 00:13:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230186AbiHOEM5 (ORCPT
+        with ESMTP id S230420AbiHOEM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 15 Aug 2022 00:12:57 -0400
 Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEF2813E39;
-        Sun, 14 Aug 2022 21:12:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FDEA13E3A;
+        Sun, 14 Aug 2022 21:12:56 -0700 (PDT)
 Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 49F6A32000EB;
-        Mon, 15 Aug 2022 00:12:51 -0400 (EDT)
+        by mailout.west.internal (Postfix) with ESMTP id AD0C03200124;
+        Mon, 15 Aug 2022 00:12:54 -0400 (EDT)
 Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 15 Aug 2022 00:12:52 -0400
+  by compute5.internal (MEProxy); Mon, 15 Aug 2022 00:12:55 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sholland.org; h=
         cc:cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:sender:subject:subject:to:to;
-         s=fm2; t=1660536770; x=1660623170; bh=BLGvhPXJZwyKlOHCPFA0QFQvR
-        du4sjNkhCzDGkbfI/g=; b=geEopUJJtlAkPnRH3NSENE0S+CXA6KECTI8oRgBXb
-        VOpePec/5bzDFoeFD5eUWSmC7hOeCtbiiiOK6jWMLtF5YLh04hRR8eA1rX6XxJWe
-        5WyPn4q4Q38Htmvpmb69smOazGRCmnzGvPqxZ1lNOulH/LYTaVpdX8y/xc5aluo6
-        JlyrACs0cFiHN0AKNQ62ZC665r/oj7W6wgjD7B4QtDAPoKx4wocpRylHj52VFiHe
-        qJG2ODhaFn3QLeeWDFT8MkfFJJ3mgs5cXn5yjCDPoDTMjDp0dmnIgQcIW4wG84Z3
-        xWfCcud+2iwUp10daZ+fAWoKQ7S99JkBmMcpoCyBL/F6w==
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1660536774; x=1660623174; bh=ya
+        VqJui3bYeLRgRCIoQLia/sNzVVTMrxQMcj8Y31TN4=; b=lvSnByki87LxSF/liV
+        ZUpi0T9/GeoQE+48s6UWVWpgFK6HNFbdtxt5I1/R3r6LlFiV6bih25qA9l6Ido+6
+        j/35XGxSIquHzbbAf27f0j8lhWX/hPWzhGTr9NLoS/FrU8mAnPzFvBHMbnprtWrE
+        gYp43gf7s0qMIapWKBLBr5v/PeeIjAGgb9OorLKvNGFz7yRKG675bH+s1OZM3Cep
+        TRX2mMXiU+ucUpoEKG/R2pWTKvusjPhiyHXGQxkeLx+FfBDywejjd3Mz98isUI/j
+        DoAtX/8NLpTAjHvWCfq6GjKdRbnBnX78HdFmEav1ZHMHcHbS94IQTJ+9GI1Aq7UK
+        rqbw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1660536770; x=1660623170; bh=BLGvhPXJZwyKlOHCPFA0QFQvRdu4sjNkhCz
-        DGkbfI/g=; b=3EjOrYzX6+bXout+6iHugtmlSio9O5YB3rPS7spf4yMt4OejPpM
-        TgtVODs55ytfAJEumyrChHD7G6AAnh2LnRSQqNIt8nfbuJxbZCd2h7wl4HpA6uH4
-        PEqRgY7AKgig41CmxLZc984uP3BMl/GLVv9JFna1/57lUBf2LIC0jkx53HSnW7aj
-        j8cEtYfWEU804eyCAL9nSPPs6iL0O/TFgjfTy8fv/PTtQ9GLAg3ndvbz5HTa8jne
-        CO9hNwhVJE+Fo3H439KPZFbQtTAINwxIrQd7mu/j0rkCh/2G+xq2A6PqcO6gF8D4
-        HUR0yo1jOh29qRy2pmwNzduziMAGZykY7uw==
-X-ME-Sender: <xms:wsf5YvCrq__oRv3iJB9RYQnBClxYVF5w3qER5HTMCt1FayKRorOsjA>
-    <xme:wsf5YljxxwFVU1UmjUOsiFD7zECE5_Al2VyvjA-pfNU7tkDdMzFhvmd5WoiK5p7KF
-    cvVm4zcSNNTn-YZPQ>
-X-ME-Received: <xmr:wsf5YqkqdylLOaKH4bUARZU-prCWofTfPhUWLw69SuBCO2t__bhEVZlf57GxhVd4EnSiuTWa-xDsN7RpH4HPr_yJGHuD5iyK9DhS77lkAJRovyAMb3B6AuCHh-0w-bqdp3lTOA>
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1660536774; x=1660623174; bh=yaVqJui3bYeLR
+        gRCIoQLia/sNzVVTMrxQMcj8Y31TN4=; b=Qk4yQrQmw2tJPb9TkWoOfocxpmi4n
+        MVt7TLTnl9iCYRD9DKGKYLyRa9yQYnQb8bGghQQk+FD2awNOhUkx3WFCS15mmnfh
+        /X/I9brApLp6skOY0+kJg/19hr2j1FOKa4F169VJXMBSLdczMWOAGVHJbodHSS5r
+        07Z3TIsUANKNn78CwyJ5n7hUm8LE8dO6CkCPfavClio6XYUGC7NHQK/odpSF3SMZ
+        FcuCLwi+sS5ej1T+ffrgv4wrvacBl+P+QULTheH94jWqZztoRzL+Ix8Iwz7ysDVa
+        5X8dskipYCGzSZywlglBUINuSS3pnWAHP5zDh6kr/tgzdkl3CD7lKiGZw==
+X-ME-Sender: <xms:xsf5YodNbwgDKOEE86mitGAbQrpG9L9XgeH02anCEIdd2X9_Bke7og>
+    <xme:xsf5YqNodWnO3dXqi5LBZxbtyjoIpWGD7Ve5IaL_DJAphp_ockrDh1N5BD_5Y98HU
+    1A4v8ycH0-dofHUhQ>
+X-ME-Received: <xmr:xsf5YphXpCoCpZQ-LvnY5In0jmhDOyFXEZJiK7idwP1ezBeZ_prUZ9VYShpWHzPAvZvQQOfTm9LM0P9Rq5hUC1DmVNb179RPFA66YXAxCApqaXvpaSiq811ayvMH5_iNYD2sXw>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehuddgkeehucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufgrmhhuvghl
-    ucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecuggftrf
-    grthhtvghrnhepkeevlefhjeeuleeltedvjedvfeefteegleehueejffehgffffeekhefh
-    hfekkeegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
-X-ME-Proxy: <xmx:wsf5YhxswN4EKKntiR0Q5r83QyIA3mIt3Lp7gJy2ZJ9-ILRBQFSdKw>
-    <xmx:wsf5YkT0Iuf-ODo4hINOhdhYx9v4uVuL3TvqqYPdjPt0nJUwbXLehQ>
-    <xmx:wsf5Yka17Xje2BpeEHZSfxRIc_IfnqPwHEP2Hrjnkid9l5oU2-Cgvg>
-    <xmx:wsf5YoalEzJoW-jEPXqquOELfwgYIw7DgJCuQ3iFng_DrUKuT6YHRA>
+    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufgrmhhu
+    vghlucfjohhllhgrnhguuceoshgrmhhuvghlsehshhholhhlrghnugdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepudekteeuudehtdelteevgfduvddvjefhfedulefgudevgeeghefg
+    udefiedtveetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrh
+    homhepshgrmhhuvghlsehshhholhhlrghnugdrohhrgh
+X-ME-Proxy: <xmx:xsf5Yt9Hr6M5b_tcIWBa44J3HXA4Zt5wp6XStqAtissxoE9O-DF3eQ>
+    <xmx:xsf5Yku4Cwx3F58N2PnLYKGL_03y71f_VVzjYJo8cff8aJlcRchkTA>
+    <xmx:xsf5YkF2mxj32gK2lSiQXSdX_AAyVQuEZL_5FgDzEXJDe9THg7ffkg>
+    <xmx:xsf5YlEEuD3fh_eJk7TVPiw5WLRE6GHWJDD-eQaYucETpMicNlSZYg>
 Feedback-ID: i0ad843c9:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 15 Aug 2022 00:12:49 -0400 (EDT)
+ 15 Aug 2022 00:12:53 -0400 (EDT)
 From:   Samuel Holland <samuel@sholland.org>
 To:     Chen-Yu Tsai <wens@csie.org>,
         Jernej Skrabec <jernej.skrabec@gmail.com>
@@ -72,11 +73,14 @@ Cc:     Samuel Holland <samuel@sholland.org>,
         Maxime Ripard <mripard@kernel.org>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-sunxi@lists.linux.dev
-Subject: [PATCH v2 00/10] soc: sunxi: sram: Fixes and D1 support
-Date:   Sun, 14 Aug 2022 23:12:37 -0500
-Message-Id: <20220815041248.53268-1-samuel@sholland.org>
+        linux-sunxi@lists.linux.dev,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 01/10] dt-bindings: sram: sunxi-sram: Clean up the compatible lists
+Date:   Sun, 14 Aug 2022 23:12:38 -0500
+Message-Id: <20220815041248.53268-2-samuel@sholland.org>
 X-Mailer: git-send-email 2.35.1
+In-Reply-To: <20220815041248.53268-1-samuel@sholland.org>
+References: <20220815041248.53268-1-samuel@sholland.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -89,35 +93,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series cleans up a few issues in the system controller driver, and
-then expands the exported regmap to support one of the pairs of LDOs
-built in to the D1 SoC.
+Use enumerations where appropriate to combine "const" choices and
+deduplicate fallback compatible strings.
 
-Eventually, we will need to update the SRAM region claiming API so
-ownership can be swapped back and forth by consumer drivers. This will
-be necessary for uploading firmware to the R329/D1 DSPs, but it is not
-needed for initial bringup.
+Suggested-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Samuel Holland <samuel@sholland.org>
+---
 
 Changes in v2:
  - New patch to first clean up the binding
 
-Samuel Holland (10):
-  dt-bindings: sram: sunxi-sram: Clean up the compatible lists
-  dt-bindings: sram: sunxi-sram: Add D1 compatible string
-  soc: sunxi: sram: Actually claim SRAM regions
-  soc: sunxi: sram: Prevent the driver from being unbound
-  soc: sunxi: sram: Fix probe function ordering issues
-  soc: sunxi: sram: Fix debugfs info for A64 SRAM C
-  soc: sunxi: sram: Return void from the release function
-  soc: sunxi: sram: Save a pointer to the OF match data
-  soc: sunxi: sram: Export the LDO control register
-  soc: sunxi: sram: Add support for the D1 system control
+ .../allwinner,sun4i-a10-system-control.yaml   | 81 +++++++------------
+ 1 file changed, 31 insertions(+), 50 deletions(-)
 
- .../allwinner,sun4i-a10-system-control.yaml   | 82 ++++++++-----------
- drivers/soc/sunxi/sunxi_sram.c                | 74 +++++++++--------
- include/linux/soc/sunxi/sunxi_sram.h          |  2 +-
- 3 files changed, 73 insertions(+), 85 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/sram/allwinner,sun4i-a10-system-control.yaml b/Documentation/devicetree/bindings/sram/allwinner,sun4i-a10-system-control.yaml
+index 1c426c211e36..5055c9081059 100644
+--- a/Documentation/devicetree/bindings/sram/allwinner,sun4i-a10-system-control.yaml
++++ b/Documentation/devicetree/bindings/sram/allwinner,sun4i-a10-system-control.yaml
+@@ -24,32 +24,30 @@ properties:
+ 
+   compatible:
+     oneOf:
+-      - const: allwinner,sun4i-a10-sram-controller
++      - enum:
++          - allwinner,sun4i-a10-sram-controller
++          - allwinner,sun50i-a64-sram-controller
+         deprecated: true
+-      - const: allwinner,sun4i-a10-system-control
+-      - const: allwinner,sun5i-a13-system-control
++      - enum:
++          - allwinner,sun4i-a10-system-control
++          - allwinner,sun5i-a13-system-control
++          - allwinner,sun8i-a23-system-control
++          - allwinner,sun8i-h3-system-control
++          - allwinner,sun50i-a64-system-control
++          - allwinner,sun50i-h5-system-control
++          - allwinner,sun50i-h616-system-control
+       - items:
+-          - const: allwinner,sun7i-a20-system-control
++          - enum:
++              - allwinner,suniv-f1c100s-system-control
++              - allwinner,sun7i-a20-system-control
++              - allwinner,sun8i-r40-system-control
+           - const: allwinner,sun4i-a10-system-control
+-      - const: allwinner,sun8i-a23-system-control
+-      - const: allwinner,sun8i-h3-system-control
+       - items:
+           - const: allwinner,sun8i-v3s-system-control
+           - const: allwinner,sun8i-h3-system-control
+-      - items:
+-          - const: allwinner,sun8i-r40-system-control
+-          - const: allwinner,sun4i-a10-system-control
+-      - const: allwinner,sun50i-a64-sram-controller
+-        deprecated: true
+-      - const: allwinner,sun50i-a64-system-control
+-      - const: allwinner,sun50i-h5-system-control
+       - items:
+           - const: allwinner,sun50i-h6-system-control
+           - const: allwinner,sun50i-a64-system-control
+-      - items:
+-          - const: allwinner,suniv-f1c100s-system-control
+-          - const: allwinner,sun4i-a10-system-control
+-      - const: allwinner,sun50i-h616-system-control
+ 
+   reg:
+     maxItems: 1
+@@ -76,43 +74,26 @@ patternProperties:
+               - const: allwinner,sun4i-a10-sram-d
+               - const: allwinner,sun50i-a64-sram-c
+               - items:
+-                  - const: allwinner,sun5i-a13-sram-a3-a4
+-                  - const: allwinner,sun4i-a10-sram-a3-a4
+-              - items:
+-                  - const: allwinner,sun7i-a20-sram-a3-a4
++                  - enum:
++                      - allwinner,sun5i-a13-sram-a3-a4
++                      - allwinner,sun7i-a20-sram-a3-a4
+                   - const: allwinner,sun4i-a10-sram-a3-a4
+               - items:
+-                  - const: allwinner,sun5i-a13-sram-c1
+-                  - const: allwinner,sun4i-a10-sram-c1
+-              - items:
+-                  - const: allwinner,sun7i-a20-sram-c1
+-                  - const: allwinner,sun4i-a10-sram-c1
+-              - items:
+-                  - const: allwinner,sun8i-a23-sram-c1
+-                  - const: allwinner,sun4i-a10-sram-c1
+-              - items:
+-                  - const: allwinner,sun8i-h3-sram-c1
++                  - enum:
++                      - allwinner,sun5i-a13-sram-c1
++                      - allwinner,sun7i-a20-sram-c1
++                      - allwinner,sun8i-a23-sram-c1
++                      - allwinner,sun8i-h3-sram-c1
++                      - allwinner,sun8i-r40-sram-c1
++                      - allwinner,sun50i-a64-sram-c1
++                      - allwinner,sun50i-h5-sram-c1
++                      - allwinner,sun50i-h6-sram-c1
+                   - const: allwinner,sun4i-a10-sram-c1
+               - items:
+-                  - const: allwinner,sun8i-r40-sram-c1
+-                  - const: allwinner,sun4i-a10-sram-c1
+-              - items:
+-                  - const: allwinner,sun50i-a64-sram-c1
+-                  - const: allwinner,sun4i-a10-sram-c1
+-              - items:
+-                  - const: allwinner,sun50i-h5-sram-c1
+-                  - const: allwinner,sun4i-a10-sram-c1
+-              - items:
+-                  - const: allwinner,sun50i-h6-sram-c1
+-                  - const: allwinner,sun4i-a10-sram-c1
+-              - items:
+-                  - const: allwinner,sun5i-a13-sram-d
+-                  - const: allwinner,sun4i-a10-sram-d
+-              - items:
+-                  - const: allwinner,sun7i-a20-sram-d
+-                  - const: allwinner,sun4i-a10-sram-d
+-              - items:
+-                  - const: allwinner,suniv-f1c100s-sram-d
++                  - enum:
++                      - allwinner,suniv-f1c100s-sram-d
++                      - allwinner,sun5i-a13-sram-d
++                      - allwinner,sun7i-a20-sram-d
+                   - const: allwinner,sun4i-a10-sram-d
+               - items:
+                   - const: allwinner,sun50i-h6-sram-c
 -- 
 2.35.1
 

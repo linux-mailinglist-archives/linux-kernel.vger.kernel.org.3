@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A212593A51
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 21:35:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E406593A45
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 21:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242114AbiHOTfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 15:35:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58104 "EHLO
+        id S245096AbiHOTeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 15:34:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344985AbiHOT1e (ORCPT
+        with ESMTP id S1345010AbiHOT1g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 15:27:34 -0400
+        Mon, 15 Aug 2022 15:27:36 -0400
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D8C5B7AB;
-        Mon, 15 Aug 2022 11:43:22 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27FDbTjo005180;
-        Mon, 15 Aug 2022 18:43:12 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 127745C345;
+        Mon, 15 Aug 2022 11:43:25 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27FHMfPw026417;
+        Mon, 15 Aug 2022 18:43:14 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=qcppdkim1;
- bh=Z96qyL7+YMGSU0uyaQIb9StZJil8HcbJmuVA2Ms9vXA=;
- b=bp/pOv/WG0feF04/SmscVRO3BfqPCpDmCqYxxpflZQw4M7LVcfwg5fwTb29W1+4vC6ld
- IfSEz8FPao52VcUCpMqJYiSInc5je+b1OPQpTwEiPUnn1dsIATXJB8uOxrCOlfhw/fFb
- rXWWYKaOQgF2rVl5lWNoivD2cH5WjJuYhqABMlE4uHOmHCiUcP8zajEaTGqcYMfObTH4
- L7zaa7HIUaD182JLbd8tWBE/ushqVFCIcWL2mx3EC1S+orTR6LBoPuzplfeyVrB1o3rc
- aUzoymP2Atg4ckaFgXwgzR/hxCiYOxJZxSbws9pcmgtBpY+iQI0/tTB+3hoWXRsHob7V Jw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hx420p409-1
+ bh=UgeeQI3HIAd6cSXnb0yUBKbpBha8kEIfhIT8R5DTUGs=;
+ b=k6hIlOXDQ1Qe9f3xCv/U9r4PshaD4bPz9FyxmVrfT+anPE9hWK8jy2efzrnXvXPiOpbr
+ HlRI2Qf5Duf/1YZWbSuz5Ez4zhnSmx5wkoT9sMrnZeiwFl9/UK7+okdVyuzNc+Sijsww
+ O8rjUMCsrCcycbTIDTGMov8vRvizl1cXp65KZ/uUCd6fS84g60/BLzxl3N1YVvZI6SDr
+ ed9g7hYuZuObvnzEB7Yb6Qctrly/JdTLNdE5eTQAP+n+ihXZTfPTW73oJ+4MUw2gPvAM
+ k1x4RosRPv8jIqXiHAJ4WeE+F/HwngULQdhEe1ZQlV70P/2pPz/IzZmSRNCloXwwMyBF ig== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hx39re1r7-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 Aug 2022 18:43:12 +0000
+        Mon, 15 Aug 2022 18:43:14 +0000
 Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27FIhBBt032543
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27FIhDgF028348
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 Aug 2022 18:43:11 GMT
+        Mon, 15 Aug 2022 18:43:13 GMT
 Received: from jhugo-lnx.qualcomm.com (10.80.80.8) by
  nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.22; Mon, 15 Aug 2022 11:43:10 -0700
+ 15.2.986.22; Mon, 15 Aug 2022 11:43:11 -0700
 From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
 To:     <airlied@linux.ie>, <daniel@ffwll.ch>,
         <maarten.lankhorst@linux.intel.com>, <mripard@kernel.org>,
@@ -47,9 +47,9 @@ CC:     <quic_carlv@quicinc.com>, <quic_ajitpals@quicinc.com>,
         <quic_pkanojiy@quicinc.com>, <dri-devel@lists.freedesktop.org>,
         <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Jeffrey Hugo <quic_jhugo@quicinc.com>
-Subject: [RFC PATCH 05/14] drm/qaic: Add control path
-Date:   Mon, 15 Aug 2022 12:42:27 -0600
-Message-ID: <1660588956-24027-6-git-send-email-quic_jhugo@quicinc.com>
+Subject: [RFC PATCH 06/14] drm/qaic: Add datapath
+Date:   Mon, 15 Aug 2022 12:42:28 -0600
+Message-ID: <1660588956-24027-7-git-send-email-quic_jhugo@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <1660588956-24027-1-git-send-email-quic_jhugo@quicinc.com>
 References: <1660588956-24027-1-git-send-email-quic_jhugo@quicinc.com>
@@ -61,15 +61,15 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nalasex01a.na.qualcomm.com (10.47.209.196)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 8fbyUykKDp1_D5VhVVNLpiWIJqWnygPy
-X-Proofpoint-ORIG-GUID: 8fbyUykKDp1_D5VhVVNLpiWIJqWnygPy
+X-Proofpoint-ORIG-GUID: lc1pRkCvtv9vvV2I9p8M50uJA1UkBxOv
+X-Proofpoint-GUID: lc1pRkCvtv9vvV2I9p8M50uJA1UkBxOv
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
  definitions=2022-08-15_08,2022-08-15_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- clxscore=1015 lowpriorityscore=0 mlxlogscore=999 impostorscore=0
- adultscore=0 mlxscore=0 spamscore=0 priorityscore=1501 suspectscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ priorityscore=1501 mlxscore=0 lowpriorityscore=0 bulkscore=0 adultscore=0
+ spamscore=0 malwarescore=0 phishscore=0 mlxlogscore=999 suspectscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2207270000 definitions=main-2208150070
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -81,1810 +81,2173 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the control path component that talks to the management processor to
-load workloads onto the qaic device.  This implements the driver portion
-of the NNC protocol.
+Add the datapath component that manages BOs and submits them to running
+workloads on the qaic device via the dma_bridge hardware.
 
-Change-Id: Ic9c0be41a91532843b78e49b32cf1fcf39faeb9f
+Change-Id: I7a94cfb2741491f5fc044ae537f53d6cc0d97fee
 Signed-off-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
 ---
- drivers/gpu/drm/qaic/qaic_control.c | 1788 +++++++++++++++++++++++++++++++++++
- 1 file changed, 1788 insertions(+)
- create mode 100644 drivers/gpu/drm/qaic/qaic_control.c
+ drivers/gpu/drm/qaic/qaic_data.c | 2152 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 2152 insertions(+)
+ create mode 100644 drivers/gpu/drm/qaic/qaic_data.c
 
-diff --git a/drivers/gpu/drm/qaic/qaic_control.c b/drivers/gpu/drm/qaic/qaic_control.c
+diff --git a/drivers/gpu/drm/qaic/qaic_data.c b/drivers/gpu/drm/qaic/qaic_data.c
 new file mode 100644
-index 0000000..9a8a6b6
+index 0000000..12d8b39
 --- /dev/null
-+++ b/drivers/gpu/drm/qaic/qaic_control.c
-@@ -0,0 +1,1788 @@
++++ b/drivers/gpu/drm/qaic/qaic_data.c
+@@ -0,0 +1,2152 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +
 +/* Copyright (c) 2019-2021, The Linux Foundation. All rights reserved. */
 +/* Copyright (c) 2021-2022 Qualcomm Innovation Center, Inc. All rights reserved. */
 +
-+#include <asm/byteorder.h>
 +#include <linux/completion.h>
-+#include <linux/crc32.h>
 +#include <linux/delay.h>
++#include <linux/dma-buf.h>
 +#include <linux/dma-mapping.h>
++#include <linux/interrupt.h>
 +#include <linux/kref.h>
 +#include <linux/list.h>
-+#include <linux/mhi.h>
 +#include <linux/mm.h>
 +#include <linux/moduleparam.h>
-+#include <linux/mutex.h>
-+#include <linux/pci.h>
 +#include <linux/scatterlist.h>
++#include <linux/spinlock.h>
++#include <linux/srcu.h>
 +#include <linux/types.h>
 +#include <linux/uaccess.h>
-+#include <linux/workqueue.h>
 +#include <linux/wait.h>
-+#include <drm/drm_device.h>
 +#include <drm/drm_file.h>
-+
++#include <drm/drm_gem.h>
++#include <drm/drm_print.h>
 +#include <uapi/drm/qaic_drm.h>
 +
 +#include "qaic.h"
 +#include "qaic_trace.h"
 +
-+#define MANAGE_MAGIC_NUMBER	 ((__force __le32)0x43494151) /* "QAIC" in little endian */
-+#define QAIC_DBC_Q_GAP		   0x100
-+#define QAIC_DBC_Q_BUF_ALIGN	   0x1000
-+#define QAIC_MANAGE_EXT_MSG_LENGTH SZ_64K /* Max DMA message length */
-+#define QAIC_WRAPPER_MAX_SIZE      SZ_4K
-+#define QAIC_MHI_RETRY_WAIT_MS	   100
-+#define QAIC_MHI_RETRY_MAX	   20
++#define SEM_VAL_MASK	GENMASK_ULL(11, 0)
++#define SEM_INDEX_MASK	GENMASK_ULL(4, 0)
++#define BULK_XFER	BIT(3)
++#define GEN_COMPLETION	BIT(4)
++#define INBOUND_XFER	1
++#define OUTBOUND_XFER	2
++#define REQHP_OFF	0x0 /* we read this */
++#define REQTP_OFF	0x4 /* we write this */
++#define RSPHP_OFF	0x8 /* we write this */
++#define RSPTP_OFF	0xc /* we read this */
 +
-+static unsigned int control_resp_timeout = 60; /* 60 sec default */
-+module_param(control_resp_timeout, uint, 0600);
++#define ENCODE_SEM(val, index, sync, cmd, flags)			\
++			((val) |					\
++			(index) << 16 |					\
++			(sync) << 22 |					\
++			(cmd) << 24 |					\
++			((cmd) ? BIT(31) : 0) |				\
++			(((flags) & SEM_INSYNCFENCE) ? BIT(30) : 0) |	\
++			(((flags) & SEM_OUTSYNCFENCE) ? BIT(29) : 0))
++#define NUM_EVENTS	128
++#define NUM_DELAYS	10
 +
-+struct manage_msg {
-+	u32 len;
-+	u32 count;
-+	u8 data[];
-+};
++static unsigned int wait_exec_default_timeout = 5000; /* 5 sec default */
++module_param(wait_exec_default_timeout, uint, 0600);
 +
-+/*
-+ * wire encoding structures for the manage protocol.
-+ * All fields are little endian on the wire
-+ */
-+struct _msg_hdr {
-+	__le32 crc32; /* crc of everything following this field in the message */
-+	__le32 magic_number;
-+	__le32 sequence_number;
-+	__le32 len; /* length of this message */
-+	__le32 count; /* number of transactions in this message */
-+	__le32 handle; /* unique id to track the resources consumed */
-+	__le32 partition_id; /* partition id for the request (signed)*/
-+	__le32 padding; /* must be 0 */
-+} __packed;
++static unsigned int datapath_poll_interval_us = 100; /* 100 usec default */
++module_param(datapath_poll_interval_us, uint, 0600);
 +
-+struct _msg {
-+	struct _msg_hdr hdr;
-+	u8 data[];
-+} __packed;
-+
-+struct _trans_hdr {
-+	__le32 type;
-+	__le32 len;
-+} __packed;
-+
-+/* Each message sent from driver to device are organized in a list of wrapper_msg */
-+struct wrapper_msg {
-+	struct list_head list;
-+	struct kref ref_count;
-+	u32 len; /* length of data to transfer */
-+	struct wrapper_list *head;
-+	union {
-+		struct _msg msg;
-+		struct _trans_hdr trans;
-+	};
-+};
-+
-+struct wrapper_list {
-+	struct list_head list;
-+	spinlock_t lock;
-+};
-+
-+struct _trans_passthrough {
-+	struct _trans_hdr hdr;
-+	u8 data[];
-+} __packed;
-+
-+struct _addr_size_pair {
-+	__le64 addr;
-+	__le64 size;
-+} __packed;
-+
-+struct _trans_dma_xfer {
-+	struct _trans_hdr hdr;
-+	__le32 tag;
-+	__le32 count;
-+	__le32 dma_chunk_id;
-+	__le32 padding;
-+	struct _addr_size_pair data[];
-+} __packed;
-+
-+/* Initiated by device to continue the DMA xfer of a large piece of data */
-+struct _trans_dma_xfer_cont {
-+	struct _trans_hdr hdr;
-+	__le32 dma_chunk_id;
-+	__le32 padding;
-+	__le64 xferred_size;
-+} __packed;
-+
-+struct _trans_activate_to_dev {
-+	struct _trans_hdr hdr;
-+	__le64 req_q_addr;
-+	__le64 rsp_q_addr;
-+	__le32 req_q_size;
-+	__le32 rsp_q_size;
-+	__le32 buf_len;
-+	__le32 options; /* unused, but BIT(16) has meaning to the device */
-+} __packed;
-+
-+struct _trans_activate_from_dev {
-+	struct _trans_hdr hdr;
-+	__le32 status;
-+	__le32 dbc_id;
-+	__le64 options; /* unused */
-+} __packed;
-+
-+struct _trans_deactivate_from_dev {
-+	struct _trans_hdr hdr;
-+	__le32 status;
-+	__le32 dbc_id;
-+} __packed;
-+
-+struct _trans_terminate_to_dev {
-+	struct _trans_hdr hdr;
-+	__le32 handle;
-+	__le32 padding;
-+} __packed;
-+
-+struct _trans_terminate_from_dev {
-+	struct _trans_hdr hdr;
-+	__le32 status;
-+	__le32 padding;
-+} __packed;
-+
-+struct _trans_status_to_dev {
-+	struct _trans_hdr hdr;
-+} __packed;
-+
-+struct _trans_status_from_dev {
-+	struct _trans_hdr hdr;
-+	__le16 major;
-+	__le16 minor;
-+	__le32 status;
-+	__le64 status_flags;
-+} __packed;
-+
-+struct _trans_validate_part_to_dev {
-+	struct _trans_hdr hdr;
-+	__le32 part_id;
-+	__le32 padding;
-+} __packed;
-+
-+struct _trans_validate_part_from_dev {
-+	struct _trans_hdr hdr;
-+	__le32 status;
-+	__le32 padding;
-+} __packed;
-+
-+struct xfer_queue_elem {
++struct dbc_req { /* everything must be little endian encoded */
 +	/*
-+	 * Node in list of ongoing transfer request on control channel.
-+	 * Maintained by root device struct
++	 * A request ID is assigned to each memory handle going in DMA queue.
++	 * As a single memory handle can enqueue multiple elements in DMA queue
++	 * all of them will have the same request ID.
 +	 */
-+	struct list_head list;
-+	/* Sequence number of this transfer request */
-+	u32 seq_num;
-+	/* This is used to wait on until completion of transfer request */
-+	struct completion xfer_done;
-+	/* Received data from device */
-+	void *buf;
-+};
-+
-+struct dma_xfer {
-+	/* Node in list of DMA transfers which is used for cleanup */
-+	struct list_head list;
-+	/* SG table of memory used for DMA */
-+	struct sg_table *sgt;
-+	/* Array pages used for DMA */
-+	struct page **page_list;
-+	/* Number of pages used for DMA */
-+	unsigned long nr_pages;
-+};
-+
-+struct ioctl_resources {
-+	/* List of all DMA transfers which is used later for cleanup */
-+	struct list_head dma_xfers;
-+	/* Base address of request queue which belongs to a DBC */
-+	void *buf;
++	__le16	req_id;
++	/* Future use */
++	__u8	seq_id;
 +	/*
-+	 * Base bus address of request queue which belongs to a DBC. Response
-+	 * queue base bus address can be calculated by adding size of request
-+	 * queue to base bus address of request queue.
++	 * Special encoded variable
++	 * 7	0 - Do not force to generate MSI after DMA is completed
++	 *	1 - Force to generate MSI after DMA is completed
++	 * 6:5	Reserved
++	 * 4	1 - Generate completion element in the response queue
++	 *	0 - No Completion Code
++	 * 3	0 - DMA request is a Link list transfer
++	 *	1 - DMA request is a Bulk transfer
++	 * 2	Reserved
++	 * 1:0	00 - No DMA transfer involved
++	 *	01 - DMA transfer is part of inbound transfer
++	 *	10 - DMA transfer has outbound transfer
++	 *	11 - NA
 +	 */
-+	dma_addr_t dma_addr;
-+	/* Total size of request queue and response queue in byte */
-+	u32 total_size;
-+	/* Total number of elements that can be queued in each of request and response queue */
-+	u32 nelem;
-+	/* Base address of response queue which belongs to a DBC */
-+	void *rsp_q_base;
-+	/* Status of the NNC message received */
-+	u32 status;
-+	/* DBC id of the DBC received from device */
-+	u32 dbc_id;
++	__u8	cmd;
++	__le32	resv;
++	/* Source address for the transfer */
++	__le64	src_addr;
++	/* Destination address for the transfer */
++	__le64	dest_addr;
++	/* Length of transfer request */
++	__le32	len;
++	__le32	resv2;
++	/* Doorbell address */
++	__le64	db_addr;
 +	/*
-+	 * DMA transfer request messages can be big in size and it may not be
-+	 * possible to send them in one shot. In such cases the messages are
-+	 * broken into chunks, this field stores ID of such chunks.
++	 * Special encoded variable
++	 * 7	1 - Doorbell(db) write
++	 *	0 - No doorbell write
++	 * 6:2	Reserved
++	 * 1:0	00 - 32 bit access, db address must be aligned to 32bit-boundary
++	 *	01 - 16 bit access, db address must be aligned to 16bit-boundary
++	 *	10 - 8 bit access, db address must be aligned to 8bit-boundary
++	 *	11 - Reserved
 +	 */
-+	u32 dma_chunk_id;
-+	/* Total number of bytes transferred for a DMA xfer request */
-+	u64 xferred_dma_size;
-+	/* Header of transaction message received from user. Used during DMA xfer request */
-+	void *trans_hdr;
-+};
++	__u8	db_len;
++	__u8	resv3;
++	__le16	resv4;
++	/* 32 bit data written to doorbeel address */
++	__le32	db_data;
++	/*
++	 * Special encoded variable
++	 * All the fields of sem_cmdX are passed from user and all are ORed
++	 * together to form sem_cmd.
++	 * 0:11		Semaphore value
++	 * 15:12	Reserved
++	 * 20:16	Semaphore index
++	 * 21		Reserved
++	 * 22		Semaphore Sync
++	 * 23		Reserved
++	 * 26:24	Semaphore command
++	 * 28:27	Reserved
++	 * 29		Semaphore DMA out bound sync fence
++	 * 30		Semaphore DMA in bound sync fence
++	 * 31		Enable semaphore command
++	 */
++	__le32	sem_cmd0;
++	__le32	sem_cmd1;
++	__le32	sem_cmd2;
++	__le32	sem_cmd3;
++} __packed;
 +
-+struct resp_work {
-+	struct work_struct work;
-+	struct qaic_device *qdev;
-+	void *buf;
-+};
++struct dbc_rsp { /* everything must be little endian encoded */
++	/* Request ID of the memory handle whose DMA transaction is completed */
++	__le16	req_id;
++	/* Status of the DMA transaction. 0 : Success otherwise failure */
++	__le16	status;
++} __packed;
 +
-+/*
-+ * Since we're working with little endian messages, its useful to be able to
-+ * increment without filling a whole line with conversions back and forth just
-+ * to add one(1) to a message count.
-+ */
-+static __le32 incr_le32(__le32 val)
++inline int get_dbc_req_elem_size(void)
 +{
-+	return cpu_to_le32(le32_to_cpu(val) + 1);
++	return sizeof(struct dbc_req);
 +}
 +
-+static u32 gen_crc(void *msg)
++inline int get_dbc_rsp_elem_size(void)
 +{
-+	struct wrapper_list *wrappers = msg;
-+	struct wrapper_msg *w;
-+	u32 crc = ~0;
-+
-+	list_for_each_entry(w, &wrappers->list, list)
-+		crc = crc32(crc, &w->msg, w->len);
-+
-+	return crc ^ ~0;
++	return sizeof(struct dbc_rsp);
 +}
 +
-+static u32 gen_crc_stub(void *msg)
++static int reserve_pages(unsigned long start_pfn, unsigned long nr_pages,
++			 bool reserve)
 +{
++	unsigned long pfn;
++	unsigned long end_pfn = start_pfn + nr_pages;
++	struct page *page;
++
++	for (pfn = start_pfn; pfn < end_pfn; pfn++) {
++		if (!pfn_valid(pfn))
++			return -EINVAL;
++		page =  pfn_to_page(pfn);
++		if (reserve)
++			SetPageReserved(page);
++		else
++			ClearPageReserved(page);
++	}
 +	return 0;
 +}
 +
-+static bool valid_crc(void *msg)
++static void free_slice(struct kref *kref)
 +{
-+	struct _msg_hdr *hdr = msg;
-+	bool ret;
-+	u32 crc;
++	struct bo_slice *slice = container_of(kref, struct bo_slice, ref_count);
 +
-+	/*
-+	 * CRC defaults to a "Little Endian" algorithm, however this does not
-+	 * mean that the output of CRC is stored in a little endian manner. The
-+	 * algorithm iterates through the input one slice at a time, and is
-+	 * "Little Endian" in that it treats each slice of increasing address as
-+	 * containing values greater than the previous slice (in a 32bit cycle).
-+	 *
-+	 * The output of this algorithm is always converted to the native
-+	 * endianness.
-+	 */
-+	crc = le32_to_cpu(hdr->crc32);
-+	hdr->crc32 = 0;
-+	ret = (crc32(~0, msg, le32_to_cpu(hdr->len)) ^ ~0) == crc;
-+	hdr->crc32 = cpu_to_le32(crc);
++	list_del(&slice->slice);
++	drm_gem_object_put(&slice->bo->base);
++	sg_free_table(slice->sgt);
++	kfree(slice->sgt);
++	kfree(slice->reqs);
++	kfree(slice);
++}
++
++static int copy_sgt(struct qaic_device *qdev, struct sg_table **sgt_out,
++		    struct sg_table *sgt_in, u64 size, u64 offset)
++{
++	int total_len, len, nents, offf = 0, offl = 0;
++	struct scatterlist *sg, *sgn, *sgf, *sgl;
++	struct sg_table *sgt;
++	int ret, j;
++
++	/* find out number of relevant nents needed for this mem */
++	total_len = 0;
++	sgf = NULL;
++	sgl = NULL;
++	nents = 0;
++
++	size = size ? size : PAGE_SIZE;
++	for (sg = sgt_in->sgl; sg; sg = sg_next(sg)) {
++		len = sg_dma_len(sg);
++
++		if (!len)
++			continue;
++		if (offset >= total_len && offset < total_len + len) {
++			sgf = sg;
++			offf = offset - total_len;
++		}
++		if (sgf)
++			nents++;
++		if (offset + size >= total_len &&
++		    offset + size <= total_len + len) {
++			sgl = sg;
++			offl = offset + size - total_len;
++			break;
++		}
++		total_len += len;
++	}
++
++	if (!sgf || !sgl) {
++		trace_qaic_mem_err(qdev, "Failed to find SG first and/or SG last", ret);
++		ret = -EINVAL;
++		goto out;
++	}
++
++	sgt = kzalloc(sizeof(*sgt), GFP_KERNEL);
++	if (!sgt) {
++		trace_qaic_mem_err(qdev, "Failed to allocate SG table structure", ret);
++		ret = -ENOMEM;
++		goto out;
++	}
++
++	ret = sg_alloc_table(sgt, nents, GFP_KERNEL);
++	if (ret) {
++		trace_qaic_mem_err_1(qdev, "Failed to allocate SG table",
++				     "SG table entries", ret, nents);
++		goto free_sgt;
++	}
++
++	/* copy relevant sg node and fix page and length */
++	sgn = sgf;
++	for_each_sgtable_sg(sgt, sg, j) {
++		memcpy(sg, sgn, sizeof(*sg));
++		if (sgn == sgf) {
++			sg_dma_address(sg) += offf;
++			sg_dma_len(sg) -= offf;
++			sg_set_page(sg, sg_page(sgn),
++				    sg_dma_len(sg), offf);
++		} else {
++			offf = 0;
++		}
++		if (sgn == sgl) {
++			sg_dma_len(sg) = offl - offf;
++			sg_set_page(sg, sg_page(sgn),
++				    offl - offf, offf);
++			sg_mark_end(sg);
++			break;
++		}
++		sgn = sg_next(sgn);
++	}
++
++	*sgt_out = sgt;
++	return ret;
++
++free_sgt:
++	kfree(sgt);
++out:
++	*sgt_out = NULL;
 +	return ret;
 +}
 +
-+static bool valid_crc_stub(void *msg)
++static int encode_reqs(struct qaic_device *qdev, struct bo_slice *slice,
++		       struct qaic_attach_slice_entry *req)
 +{
-+	return true;
-+}
-+
-+static void free_wrapper(struct kref *ref)
-+{
-+	struct wrapper_msg *wrapper = container_of(ref, struct wrapper_msg,
-+						   ref_count);
-+
-+	list_del(&wrapper->list);
-+	kfree(wrapper);
-+}
-+
-+static void save_dbc_buf(struct qaic_device *qdev,
-+			 struct ioctl_resources *resources,
-+			 struct qaic_user *usr)
-+{
-+	u32 dbc_id = resources->dbc_id;
-+
-+	if (resources->buf) {
-+		wait_event_interruptible(qdev->dbc[dbc_id].dbc_release,
-+					 !qdev->dbc[dbc_id].in_use);
-+		qdev->dbc[dbc_id].req_q_base = resources->buf;
-+		qdev->dbc[dbc_id].rsp_q_base = resources->rsp_q_base;
-+		qdev->dbc[dbc_id].dma_addr = resources->dma_addr;
-+		qdev->dbc[dbc_id].total_size = resources->total_size;
-+		qdev->dbc[dbc_id].nelem = resources->nelem;
-+		enable_dbc(qdev, dbc_id, usr);
-+		qdev->dbc[dbc_id].in_use = true;
-+		set_dbc_state(qdev, dbc_id, DBC_STATE_ASSIGNED);
-+		resources->buf = NULL;
-+	}
-+}
-+
-+static void free_dbc_buf(struct qaic_device *qdev,
-+			 struct ioctl_resources *resources)
-+{
-+	if (resources->buf)
-+		dma_free_coherent(&qdev->pdev->dev, resources->total_size,
-+				  resources->buf, resources->dma_addr);
-+	resources->buf = NULL;
-+}
-+
-+static void free_dma_xfers(struct qaic_device *qdev,
-+			   struct ioctl_resources *resources)
-+{
-+	struct dma_xfer *xfer;
-+	struct dma_xfer *x;
++	__u8 cmd = BULK_XFER;
++	__le64 db_addr = cpu_to_le64(req->db_addr);
++	__u8 db_len;
++	__le32 db_data = cpu_to_le32(req->db_data);
++	struct scatterlist *sg;
++	u64 dev_addr;
++	int presync_sem;
 +	int i;
 +
-+	list_for_each_entry_safe(xfer, x, &resources->dma_xfers, list) {
-+		dma_unmap_sgtable(&qdev->pdev->dev, xfer->sgt, DMA_TO_DEVICE, 0);
-+		sg_free_table(xfer->sgt);
-+		kfree(xfer->sgt);
-+		for (i = 0; i < xfer->nr_pages; ++i)
-+			put_page(xfer->page_list[i]);
-+		kfree(xfer->page_list);
-+		list_del(&xfer->list);
-+		kfree(xfer);
-+	}
-+}
++	if (!slice->no_xfer)
++		cmd |= (slice->dir == DMA_TO_DEVICE ? INBOUND_XFER :
++								OUTBOUND_XFER);
 +
-+static struct wrapper_msg *add_wrapper(struct wrapper_list *wrappers, u32 size)
-+{
-+	struct wrapper_msg *w = kzalloc(size, GFP_KERNEL);
-+
-+	if (!w)
-+		return NULL;
-+	list_add_tail(&w->list, &wrappers->list);
-+	kref_init(&w->ref_count);
-+	w->head = wrappers;
-+	return w;
-+}
-+
-+static int encode_passthrough(struct qaic_device *qdev, void *trans,
-+			      struct wrapper_list *wrappers, u32 *user_len)
-+{
-+	struct qaic_manage_trans_passthrough *in_trans = trans;
-+	struct _trans_passthrough *out_trans;
-+	struct wrapper_msg *trans_wrapper;
-+	struct wrapper_msg *wrapper;
-+	struct _msg *msg;
-+	u32 msg_hdr_len;
-+
-+	trace_qaic_encode_passthrough(qdev, in_trans);
-+
-+	wrapper = list_first_entry(&wrappers->list, struct wrapper_msg, list);
-+	msg = &wrapper->msg;
-+	msg_hdr_len = le32_to_cpu(msg->hdr.len);
-+
-+	if (in_trans->hdr.len % 8 != 0) {
-+		trace_encode_error(qdev, "Invalid data length of passthrough data. Data length should be multiple of 8.");
++	if (req->db_len && !IS_ALIGNED(req->db_addr, req->db_len / 8)) {
++		trace_qaic_mem_err_2(qdev, "Invalid Doorbell values",
++				     "Doorbell length", "Doorbell address",
++				     -EINVAL, req->db_len, req->db_addr);
 +		return -EINVAL;
 +	}
 +
-+	if (msg_hdr_len + in_trans->hdr.len > QAIC_MANAGE_EXT_MSG_LENGTH) {
-+		trace_encode_error(qdev, "passthrough trans exceeds msg len");
-+		return -ENOSPC;
++	presync_sem = req->sem0.presync + req->sem1.presync +
++		      req->sem2.presync + req->sem3.presync;
++	if (presync_sem > 1) {
++		trace_qaic_mem_err_2(qdev, "Invalid presync values",
++				     "sem0.presync", "sem1.presync",
++				     -EINVAL, req->sem0.presync,
++				     req->sem1.presync);
++		trace_qaic_mem_err_2(qdev, "", "sem2.presync", "sem3.presync",
++				     -EINVAL, req->sem2.presync,
++				     req->sem3.presync);
++		return -EINVAL;
 +	}
 +
-+	trans_wrapper = add_wrapper(wrappers,
-+				    offsetof(struct wrapper_msg, trans) +
-+				    in_trans->hdr.len);
-+	if (!trans_wrapper) {
-+		trace_encode_error(qdev, "encode passthrough alloc fail");
-+		return -ENOMEM;
-+	}
-+	trans_wrapper->len = in_trans->hdr.len;
-+	out_trans = (struct _trans_passthrough *)&trans_wrapper->trans;
++	presync_sem = req->sem0.presync << 0 | req->sem1.presync << 1 |
++		      req->sem2.presync << 2 | req->sem3.presync << 3;
 +
-+	memcpy(out_trans, in_trans, in_trans->hdr.len);
-+	msg->hdr.len = cpu_to_le32(msg_hdr_len + in_trans->hdr.len);
-+	msg->hdr.count = incr_le32(msg->hdr.count);
-+	*user_len += in_trans->hdr.len;
-+	out_trans->hdr.type = cpu_to_le32(TRANS_PASSTHROUGH_TO_DEV);
-+	out_trans->hdr.len = cpu_to_le32(in_trans->hdr.len);
++	switch (req->db_len) {
++	case 32:
++		db_len = BIT(7);
++		break;
++	case 16:
++		db_len = BIT(7) | 1;
++		break;
++	case 8:
++		db_len = BIT(7) | 2;
++		break;
++	case 0:
++		db_len = 0; /* doorbell is not active for this command */
++		break;
++	default:
++		trace_qaic_mem_err_1(qdev, "Invalid Doorbell length", "Doorbell length",
++				     -EINVAL, req->db_len);
++		return -EINVAL; /* should never hit this */
++	}
++
++	/*
++	 * When we end up splitting up a single request (ie a buf slice) into
++	 * multiple DMA requests, we have to manage the sync data carefully.
++	 * There can only be one presync sem.  That needs to be on every xfer
++	 * so that the DMA engine doesn't transfer data before the receiver is
++	 * ready.  We only do the doorbell and postsync sems after the xfer.
++	 * To guarantee previous xfers for the request are complete, we use a
++	 * fence.
++	 */
++	dev_addr = req->dev_addr;
++	for_each_sgtable_sg(slice->sgt, sg, i) {
++		slice->reqs[i].cmd = cmd;
++		slice->reqs[i].src_addr =
++			cpu_to_le64(slice->dir == DMA_TO_DEVICE ?
++					sg_dma_address(sg) : dev_addr);
++		slice->reqs[i].dest_addr =
++			cpu_to_le64(slice->dir == DMA_TO_DEVICE ?
++					dev_addr : sg_dma_address(sg));
++		/*
++		 * sg_dma_len(sg) returns size of a DMA segment, maximum DMA
++		 * segment size is set to UINT_MAX by qaic and hence return
++		 * values of sg_dma_len(sg) can never exceed u32 range. So,
++		 * by down sizing we are not corrupting the value.
++		 */
++		slice->reqs[i].len = cpu_to_le32((u32)sg_dma_len(sg));
++		switch (presync_sem) {
++		case BIT(0):
++			slice->reqs[i].sem_cmd0 = cpu_to_le32(ENCODE_SEM(req->sem0.val,
++									 req->sem0.index,
++									 req->sem0.presync,
++									 req->sem0.cmd,
++									 req->sem0.flags));
++			break;
++		case BIT(1):
++			slice->reqs[i].sem_cmd1 = cpu_to_le32(ENCODE_SEM(req->sem1.val,
++									 req->sem1.index,
++									 req->sem1.presync,
++									 req->sem1.cmd,
++									 req->sem1.flags));
++			break;
++		case BIT(2):
++			slice->reqs[i].sem_cmd2 = cpu_to_le32(ENCODE_SEM(req->sem2.val,
++									 req->sem2.index,
++									 req->sem2.presync,
++									 req->sem2.cmd,
++									 req->sem2.flags));
++			break;
++		case BIT(3):
++			slice->reqs[i].sem_cmd3 = cpu_to_le32(ENCODE_SEM(req->sem3.val,
++									 req->sem3.index,
++									 req->sem3.presync,
++									 req->sem3.cmd,
++									 req->sem3.flags));
++			break;
++		}
++		dev_addr += sg_dma_len(sg);
++	}
++	/* add post transfer stuff to last segment */
++	i--;
++	slice->reqs[i].cmd |= GEN_COMPLETION;
++	slice->reqs[i].db_addr = db_addr;
++	slice->reqs[i].db_len = db_len;
++	slice->reqs[i].db_data = db_data;
++	/*
++	 * Add a fence if we have more than one request going to the hardware
++	 * representing the entirety of the user request, and the user request
++	 * has no presync condition.
++	 * Fences are expensive, so we try to avoid them.  We rely on the
++	 * hardware behavior to avoid needing one when there is a presync
++	 * condition.  When a presync exists, all requests for that same
++	 * presync will be queued into a fifo.  Thus, since we queue the
++	 * post xfer activity only on the last request we queue, the hardware
++	 * will ensure that the last queued request is processed last, thus
++	 * making sure the post xfer activity happens at the right time without
++	 * a fence.
++	 */
++	if (i && !presync_sem)
++		req->sem0.flags |= (slice->dir == DMA_TO_DEVICE ?
++				    SEM_INSYNCFENCE : SEM_OUTSYNCFENCE);
++	slice->reqs[i].sem_cmd0 = cpu_to_le32(ENCODE_SEM(req->sem0.val,
++						       req->sem0.index,
++						       req->sem0.presync,
++						       req->sem0.cmd,
++						       req->sem0.flags));
++	slice->reqs[i].sem_cmd1 = cpu_to_le32(ENCODE_SEM(req->sem1.val,
++						       req->sem1.index,
++						       req->sem1.presync,
++						       req->sem1.cmd,
++						       req->sem1.flags));
++	slice->reqs[i].sem_cmd2 = cpu_to_le32(ENCODE_SEM(req->sem2.val,
++						       req->sem2.index,
++						       req->sem2.presync,
++						       req->sem2.cmd,
++						       req->sem2.flags));
++	slice->reqs[i].sem_cmd3 = cpu_to_le32(ENCODE_SEM(req->sem3.val,
++						       req->sem3.index,
++						       req->sem3.presync,
++						       req->sem3.cmd,
++						       req->sem3.flags));
 +
 +	return 0;
 +}
 +
-+static int encode_dma(struct qaic_device *qdev, void *trans,
-+		      struct wrapper_list *wrappers, u32 *user_len,
-+		      struct ioctl_resources *resources,
-+		      struct qaic_user *usr)
++static int qaic_map_one_slice(struct qaic_device *qdev, struct qaic_bo *bo,
++			      struct qaic_attach_slice_entry *slice_ent)
 +{
-+	struct qaic_manage_trans_dma_xfer *in_trans = trans;
-+	struct _trans_dma_xfer *out_trans;
-+	struct wrapper_msg *trans_wrapper;
-+	struct wrapper_msg *wrapper;
-+	struct _addr_size_pair *asp;
-+	unsigned long need_pages;
-+	struct scatterlist *last;
-+	struct page **page_list;
-+	unsigned long nr_pages;
-+	struct scatterlist *sg;
-+	struct wrapper_msg *w;
-+	struct dma_xfer *xfer;
-+	struct sg_table *sgt;
-+	unsigned int dma_len;
-+	u64 dma_chunk_len;
-+	struct _msg *msg;
-+	u32 msg_hdr_len;
-+	void *boundary;
-+	int nents_dma;
-+	int nents;
-+	u32 size;
++	struct sg_table *sgt = NULL;
++	struct bo_slice *slice;
 +	int ret;
-+	int i;
 +
-+	trace_qaic_encode_dma(qdev, in_trans);
-+
-+	wrapper = list_first_entry(&wrappers->list, struct wrapper_msg, list);
-+	msg = &wrapper->msg;
-+	msg_hdr_len = le32_to_cpu(msg->hdr.len);
-+
-+	if (msg_hdr_len > (UINT_MAX - QAIC_MANAGE_EXT_MSG_LENGTH)) {
-+		trace_encode_error(qdev, "msg hdr length too large");
-+		ret = -EINVAL;
++	ret = copy_sgt(qdev, &sgt, bo->sgt, slice_ent->size, slice_ent->offset);
++	if (ret) {
++		trace_qaic_mem_err(qdev, "Failed to copy sgt", ret);
 +		goto out;
 +	}
 +
-+	/* There should be enough space to hold at least one ASP entry. */
-+	if (msg_hdr_len + sizeof(*out_trans) + sizeof(*asp) >
-+	    QAIC_MANAGE_EXT_MSG_LENGTH) {
-+		trace_encode_error(qdev, "no space left in msg");
++	slice = kmalloc(sizeof(*slice), GFP_KERNEL);
++	if (!slice) {
++		ret = -ENOMEM;
++		trace_qaic_mem_err(qdev, "Failed to allocate memory for slice handle", ret);
++		goto free_sgt;
++	}
++
++	slice->reqs = kcalloc(sgt->nents, sizeof(*slice->reqs), GFP_KERNEL);
++	if (!slice->reqs) {
++		ret = -ENOMEM;
++		trace_qaic_mem_err(qdev, "Failed to allocate memory for requests", ret);
++		goto free_slice;
++	}
++
++	slice->no_xfer = !slice_ent->size;
++	slice->sgt = sgt;
++	slice->nents = sgt->nents;
++	slice->dir = bo->dir;
++	slice->bo = bo;
++	slice->size = slice_ent->size;
++	slice->offset = slice_ent->offset;
++
++	ret = encode_reqs(qdev, slice, slice_ent);
++	if (ret) {
++		trace_qaic_mem_err(qdev, "Failed to encode requests", ret);
++		goto free_req;
++	}
++
++	bo->total_slice_nents += sgt->nents;
++	kref_init(&slice->ref_count);
++	drm_gem_object_get(&bo->base);
++	list_add_tail(&slice->slice, &bo->slices);
++
++	return 0;
++
++free_req:
++	kfree(slice->reqs);
++free_slice:
++	kfree(slice);
++free_sgt:
++	sg_free_table(sgt);
++	kfree(sgt);
++out:
++	return ret;
++}
++
++static int create_sgt(struct qaic_device *qdev, struct sg_table **sgt_out,
++		      u64 size)
++{
++	struct scatterlist *sg;
++	struct sg_table *sgt;
++	struct page **pages;
++	int *pages_order;
++	int buf_extra;
++	int max_order;
++	int nr_pages;
++	int ret = 0;
++	int i, j, k;
++	int order;
++
++	if (size) {
++		nr_pages = DIV_ROUND_UP(size, PAGE_SIZE);
++		/*
++		 * calculate how much extra we are going to allocate, to remove
++		 * later
++		 */
++		buf_extra = (PAGE_SIZE - size % PAGE_SIZE) % PAGE_SIZE;
++		max_order = min(MAX_ORDER - 1, get_order(size));
++	} else {
++		/* allocate a single page for book keeping */
++		nr_pages = 1;
++		buf_extra = 0;
++		max_order = 0;
++	}
++
++	pages = kvmalloc_array(nr_pages, sizeof(*pages) + sizeof(*pages_order), GFP_KERNEL);
++	if (!pages) {
 +		ret = -ENOMEM;
 +		goto out;
 +	}
++	pages_order = (void *)pages + sizeof(*pages) * nr_pages;
 +
-+	if (in_trans->addr + in_trans->size < in_trans->addr ||
-+	    !in_trans->size) {
-+		trace_encode_error(qdev, "dma trans addr range overflow or no size");
-+		ret = -EINVAL;
-+		goto out;
-+	}
-+
-+	xfer = kmalloc(sizeof(*xfer), GFP_KERNEL);
-+	if (!xfer) {
-+		trace_encode_error(qdev, "dma no mem for xfer");
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+
-+	need_pages = DIV_ROUND_UP(in_trans->size + offset_in_page(in_trans->addr +
-+				  resources->xferred_dma_size) -
-+				  resources->xferred_dma_size, PAGE_SIZE);
-+
-+	nr_pages = need_pages;
-+
-+	while (1) {
-+		page_list = kmalloc_array(nr_pages, sizeof(*page_list),
-+					  GFP_KERNEL | __GFP_NOWARN);
-+		if (!page_list) {
-+			nr_pages = nr_pages / 2;
-+			if (!nr_pages) {
-+				trace_encode_error(qdev, "dma page list alloc fail");
++	/*
++	 * Allocate requested memory, using alloc_pages. It is possible to allocate
++	 * the requested memory in multiple chunks by calling alloc_pages
++	 * multiple times. Use SG table to handle multiple allocated pages.
++	 */
++	i = 0;
++	while (nr_pages > 0) {
++		order = min(get_order(nr_pages * PAGE_SIZE), max_order);
++		while (1) {
++			pages[i] = alloc_pages(GFP_KERNEL | GFP_HIGHUSER |
++					       __GFP_NOWARN | __GFP_ZERO |
++					       (order ? __GFP_NORETRY : __GFP_RETRY_MAYFAIL),
++					       order);
++			if (pages[i])
++				break;
++			if (!order--) {
 +				ret = -ENOMEM;
-+				goto free_resource;
++				trace_qaic_mem_err_1(qdev, "Kernel ran out of free pages",
++						     "Memory requested in byte",
++						     ret, nr_pages);
++				goto free_partial_alloc;
 +			}
-+		} else {
-+			break;
 +		}
-+	}
 +
-+	ret = get_user_pages_fast(in_trans->addr + resources->xferred_dma_size,
-+				  nr_pages, 0, page_list);
-+	if (ret < 0 || ret != nr_pages) {
-+		trace_encode_error(qdev, "dma get user pages fail");
-+		ret = -EFAULT;
-+		goto free_page_list;
++		max_order = order;
++		pages_order[i] = order;
++
++		nr_pages -= 1 << order;
++		if (nr_pages <= 0)
++			/* account for over allocation */
++			buf_extra += abs(nr_pages) * PAGE_SIZE;
++		i++;
 +	}
 +
 +	sgt = kmalloc(sizeof(*sgt), GFP_KERNEL);
 +	if (!sgt) {
-+		trace_encode_error(qdev, "dma sgt alloc fail");
 +		ret = -ENOMEM;
-+		goto put_pages;
++		goto free_partial_alloc;
 +	}
 +
-+	ret = sg_alloc_table_from_pages(sgt, page_list, nr_pages,
-+					offset_in_page(in_trans->addr +
-+						       resources->xferred_dma_size),
-+					in_trans->size - resources->xferred_dma_size, GFP_KERNEL);
-+	if (ret) {
-+		trace_encode_error(qdev, "dma alloc table from pages fail");
++	if (sg_alloc_table(sgt, i, GFP_KERNEL)) {
 +		ret = -ENOMEM;
 +		goto free_sgt;
 +	}
 +
-+	ret = dma_map_sgtable(&qdev->pdev->dev, sgt, DMA_TO_DEVICE, 0);
-+	if (ret) {
-+		trace_encode_error(qdev, "dma mapping failed");
-+		goto free_table;
-+	}
-+
-+	nents = sgt->nents;
-+	/*
-+	 * It turns out several of the iommu drivers don't combine adjacent
-+	 * regions, which is really what we expect based on the description of
-+	 * dma_map_sgtable(), so lets see if that can be done.  It makes our message
-+	 * more efficent.
-+	 */
-+	last = sgt->sgl;
-+	nents_dma = nents;
-+	size = QAIC_MANAGE_EXT_MSG_LENGTH - msg_hdr_len - sizeof(*out_trans);
-+	for_each_sgtable_sg(sgt, sg, i) {
-+		if (sg_dma_address(last) + sg_dma_len(last) !=
-+		    sg_dma_address(sg)) {
-+			size -= sizeof(*asp);
-+			/* Save 1K for possible follow-up transactions. */
-+			if (size < SZ_1K) {
-+				nents_dma = i;
-+				break;
-+			}
++	/* Populate the SG table with the allocate memory pages */
++	sg = sgt->sgl;
++	for (k = 0; k < i; k++, sg = sg_next(sg)) {
++		/* Last entry requires special handling */
++		if (k < i - 1) {
++			sg_set_page(sg, pages[k], PAGE_SIZE << pages_order[k], 0);
++		} else {
++			sg_set_page(sg, pages[k],
++				    (PAGE_SIZE << pages_order[k]) - buf_extra, 0);
++			sg_mark_end(sg);
 +		}
-+		last = sg;
++
++		ret = reserve_pages(page_to_pfn(pages[k]), DIV_ROUND_UP(sg->length, PAGE_SIZE),
++				    true);
++		if (ret)
++			goto clear_pages;
 +	}
 +
-+	trans_wrapper = add_wrapper(wrappers, QAIC_WRAPPER_MAX_SIZE);
-+	if (!trans_wrapper) {
-+		trace_encode_error(qdev, "encode dma alloc wrapper fail");
-+		ret = -ENOMEM;
-+		goto dma_unmap;
-+	}
-+	out_trans = (struct _trans_dma_xfer *)&trans_wrapper->trans;
++	kvfree(pages);
++	*sgt_out = sgt;
++	return ret;
 +
-+	asp = out_trans->data;
-+	boundary = (void *)trans_wrapper + QAIC_WRAPPER_MAX_SIZE;
-+	size = 0;
-+
-+	last = sgt->sgl;
-+	dma_len = 0;
-+	w = trans_wrapper;
-+	dma_chunk_len = 0;
-+	/* Adjecent DMA entries could be stitched together. */
-+	for_each_sg(sgt->sgl, sg, nents_dma, i) {
-+		/* hit a discontinuity, finalize segment and start new one */
-+		if (sg_dma_address(last) + sg_dma_len(last) !=
-+		    sg_dma_address(sg)) {
-+			asp->size = cpu_to_le64(dma_len);
-+			dma_chunk_len += dma_len;
-+			if (dma_len) {
-+				asp++;
-+				if ((void *)asp + sizeof(*asp) > boundary) {
-+					w->len = (void *)asp - (void *)&w->msg;
-+					size += w->len;
-+					w = add_wrapper(wrappers,
-+							QAIC_WRAPPER_MAX_SIZE);
-+					if (!w) {
-+						trace_encode_error(qdev, "encode dma wrapper alloc fail");
-+						ret = -ENOMEM;
-+						goto dma_unmap;
-+					}
-+					boundary = (void *)w +
-+						   QAIC_WRAPPER_MAX_SIZE;
-+					asp = (struct _addr_size_pair *)&w->msg;
-+				}
-+			}
-+			dma_len = 0;
-+			asp->addr = cpu_to_le64(sg_dma_address(sg));
-+		}
-+		dma_len += sg_dma_len(sg);
-+		last = sg;
-+	}
-+	/* finalize the last segment */
-+	asp->size = cpu_to_le64(dma_len);
-+	w->len = (void *)asp + sizeof(*asp) - (void *)&w->msg;
-+	size += w->len;
-+
-+	msg->hdr.len = cpu_to_le32(msg_hdr_len + size);
-+	msg->hdr.count = incr_le32(msg->hdr.count);
-+
-+	out_trans->hdr.type = cpu_to_le32(TRANS_DMA_XFER_TO_DEV);
-+	out_trans->hdr.len = cpu_to_le32(size);
-+	out_trans->tag = cpu_to_le32(in_trans->tag);
-+	out_trans->count = cpu_to_le32((size - sizeof(*out_trans)) / sizeof(*asp));
-+	dma_chunk_len += dma_len;
-+
-+	*user_len += in_trans->hdr.len;
-+
-+	if (resources->dma_chunk_id) {
-+		out_trans->dma_chunk_id = cpu_to_le32(resources->dma_chunk_id);
-+	} else if (need_pages > nr_pages || nents_dma < nents) {
-+		while (resources->dma_chunk_id == 0)
-+			resources->dma_chunk_id =
-+				atomic_inc_return(&usr->chunk_id);
-+
-+		out_trans->dma_chunk_id = cpu_to_le32(resources->dma_chunk_id);
-+	}
-+	resources->xferred_dma_size += dma_chunk_len;
-+	resources->trans_hdr = trans;
-+
-+	xfer->sgt = sgt;
-+	xfer->page_list = page_list;
-+	xfer->nr_pages = nr_pages;
-+	list_add(&xfer->list, &resources->dma_xfers);
-+	return 0;
-+
-+dma_unmap:
-+	dma_unmap_sgtable(&qdev->pdev->dev, sgt, DMA_TO_DEVICE, 0);
-+free_table:
++clear_pages:
++	for (j = 0; j < k; j++)
++		ret = reserve_pages(page_to_pfn(pages[j]), 1 << pages_order[j],
++				    false);
 +	sg_free_table(sgt);
 +free_sgt:
 +	kfree(sgt);
-+put_pages:
-+	for (i = 0; i < nr_pages; ++i)
-+		put_page(page_list[i]);
-+free_page_list:
-+	kfree(page_list);
-+free_resource:
-+	kfree(xfer);
++free_partial_alloc:
++	for (j = 0; j < i; j++)
++		__free_pages(pages[j], pages_order[j]);
++	kvfree(pages);
++out:
++	*sgt_out = NULL;
++	return ret;
++}
++
++static bool invalid_sem(struct qaic_sem *sem)
++{
++	if (sem->val & ~SEM_VAL_MASK || sem->index & ~SEM_INDEX_MASK ||
++	    !(sem->presync == 0 || sem->presync == 1) || sem->pad ||
++	    sem->flags & ~(SEM_INSYNCFENCE | SEM_OUTSYNCFENCE) ||
++	    sem->cmd > SEM_WAIT_GT_0)
++		return true;
++	return false;
++}
++
++static int qaic_validate_req(struct qaic_device *qdev,
++			     struct qaic_attach_slice_entry *slice_ent,
++			     u32 count, u64 total_size)
++{
++	int i;
++
++	for (i = 0; i < count; i++) {
++		if (!(slice_ent[i].db_len == 32 || slice_ent[i].db_len == 16 ||
++		      slice_ent[i].db_len == 8 || slice_ent[i].db_len == 0) ||
++		      invalid_sem(&slice_ent[i].sem0) ||
++		      invalid_sem(&slice_ent[i].sem1) ||
++		      invalid_sem(&slice_ent[i].sem2) ||
++		      invalid_sem(&slice_ent[i].sem3)) {
++			trace_qaic_mem_err(qdev, "Invalid semaphore or doorbell len", -EINVAL);
++			return -EINVAL;
++		}
++		if (slice_ent[i].offset + slice_ent[i].size > total_size) {
++			trace_qaic_mem_err_1(qdev, "Invalid size of buffer slice", "Slice size",
++					     -EINVAL, slice_ent[i].size);
++			trace_qaic_mem_err_2(qdev, "", "offset", "buffer slice size",
++					     -EINVAL, slice_ent[i].offset, total_size);
++			return -EINVAL;
++		}
++	}
++
++	return 0;
++}
++
++static void qaic_free_sgt(struct sg_table *sgt)
++{
++	struct scatterlist *sg;
++
++	for (sg = sgt->sgl; sg; sg = sg_next(sg))
++		if (sg_page(sg)) {
++			reserve_pages(page_to_pfn(sg_page(sg)),
++				      DIV_ROUND_UP(sg->length, PAGE_SIZE), false);
++			__free_pages(sg_page(sg), get_order(sg->length));
++		}
++	sg_free_table(sgt);
++	kfree(sgt);
++}
++
++static void qaic_gem_print_info(struct drm_printer *p, unsigned int indent,
++				const struct drm_gem_object *obj)
++{
++	struct qaic_bo *bo = to_qaic_bo(obj);
++
++	drm_printf_indent(p, indent, "user requested size=%llu\n", bo->size);
++}
++
++static const struct vm_operations_struct drm_vm_ops = {
++	.open = drm_gem_vm_open,
++	.close = drm_gem_vm_close,
++};
++
++static int qaic_gem_object_mmap(struct drm_gem_object *obj, struct vm_area_struct *vma)
++{
++	struct qaic_bo *bo = to_qaic_bo(obj);
++	unsigned long offset = 0;
++	struct scatterlist *sg;
++	int ret;
++
++	if (obj->import_attach) {
++		trace_qaic_mmap_err(bo->dbc->qdev, "mmap is not supported for import/PRIME buffers", ret);
++		return -EINVAL;
++	}
++
++	for (sg = bo->sgt->sgl; sg; sg = sg_next(sg)) {
++		if (sg_page(sg)) {
++			ret = remap_pfn_range(vma, vma->vm_start + offset,
++					      page_to_pfn(sg_page(sg)),
++					      sg->length, vma->vm_page_prot);
++			if (ret)
++				goto out;
++			offset += sg->length;
++		}
++	}
++
 +out:
 +	return ret;
 +}
 +
-+static int encode_activate(struct qaic_device *qdev, void *trans,
-+			   struct wrapper_list *wrappers,
-+			   u32 *user_len,
-+			   struct ioctl_resources *resources)
++static void qaic_free_object(struct drm_gem_object *obj)
 +{
-+	struct qaic_manage_trans_activate_to_dev *in_trans = trans;
-+	struct _trans_activate_to_dev *out_trans;
-+	struct wrapper_msg *trans_wrapper;
-+	struct wrapper_msg *wrapper;
-+	dma_addr_t dma_addr;
-+	struct _msg *msg;
-+	u32 msg_hdr_len;
-+	void *buf;
-+	u32 nelem;
-+	u32 size;
-+	int ret;
-+
-+	trace_qaic_encode_activate(qdev, in_trans);
-+
-+	wrapper = list_first_entry(&wrappers->list, struct wrapper_msg, list);
-+	msg = &wrapper->msg;
-+	msg_hdr_len = le32_to_cpu(msg->hdr.len);
-+
-+	if (msg_hdr_len + sizeof(*out_trans) > QAIC_MANAGE_MAX_MSG_LENGTH) {
-+		trace_encode_error(qdev, "activate trans exceeds msg len");
-+		return -ENOSPC;
-+	}
-+
-+	if (!in_trans->queue_size) {
-+		trace_encode_error(qdev, "activate unspecified queue size");
-+		return -EINVAL;
-+	}
-+
-+	if (in_trans->pad) {
-+		trace_encode_error(qdev, "activate non-zero padding");
-+		return -EINVAL;
-+	}
-+
-+	nelem = in_trans->queue_size;
-+	size = (get_dbc_req_elem_size() + get_dbc_rsp_elem_size()) * nelem;
-+	if (size / nelem != get_dbc_req_elem_size() + get_dbc_rsp_elem_size()) {
-+		trace_encode_error(qdev, "activate queue size overflow");
-+		return -EINVAL;
-+	}
-+
-+	if (size + QAIC_DBC_Q_GAP + QAIC_DBC_Q_BUF_ALIGN < size) {
-+		trace_encode_error(qdev, "activate queue size align overflow");
-+		return -EINVAL;
-+	}
-+
-+	size = ALIGN((size + QAIC_DBC_Q_GAP), QAIC_DBC_Q_BUF_ALIGN);
-+
-+	buf = dma_alloc_coherent(&qdev->pdev->dev, size, &dma_addr, GFP_KERNEL);
-+	if (!buf) {
-+		trace_encode_error(qdev, "activate queue alloc fail");
-+		return -ENOMEM;
-+	}
-+
-+	trans_wrapper = add_wrapper(wrappers,
-+				    offsetof(struct wrapper_msg, trans) +
-+				    sizeof(*out_trans));
-+	if (!trans_wrapper) {
-+		trace_encode_error(qdev, "encode activate alloc fail");
-+		ret = -ENOMEM;
-+		goto free_dma;
-+	}
-+	trans_wrapper->len = sizeof(*out_trans);
-+	out_trans = (struct _trans_activate_to_dev *)&trans_wrapper->trans;
-+
-+	out_trans->hdr.type = cpu_to_le32(TRANS_ACTIVATE_TO_DEV);
-+	out_trans->hdr.len = cpu_to_le32(sizeof(*out_trans));
-+	out_trans->buf_len = cpu_to_le32(size);
-+	out_trans->req_q_addr = cpu_to_le64(dma_addr);
-+	out_trans->req_q_size = cpu_to_le32(nelem);
-+	out_trans->rsp_q_addr = cpu_to_le64(dma_addr + size - nelem *
-+							get_dbc_rsp_elem_size());
-+	out_trans->rsp_q_size = cpu_to_le32(nelem);
-+	out_trans->options = cpu_to_le32(in_trans->options);
-+
-+	*user_len += in_trans->hdr.len;
-+	msg->hdr.len = cpu_to_le32(msg_hdr_len + sizeof(*out_trans));
-+	msg->hdr.count = incr_le32(msg->hdr.count);
-+
-+	resources->buf = buf;
-+	resources->dma_addr = dma_addr;
-+	resources->total_size = size;
-+	resources->nelem = nelem;
-+	resources->rsp_q_base = buf + size - nelem * get_dbc_rsp_elem_size();
-+	return 0;
-+
-+free_dma:
-+	dma_free_coherent(&qdev->pdev->dev, size, buf, dma_addr);
-+	return ret;
-+}
-+
-+static int encode_deactivate(struct qaic_device *qdev, void *trans,
-+			     u32 *user_len, struct qaic_user *usr)
-+{
-+	struct qaic_manage_trans_deactivate *in_trans = trans;
-+
-+	trace_qaic_encode_deactivate(qdev, in_trans);
-+
-+	if (in_trans->dbc_id >= qdev->num_dbc || in_trans->pad) {
-+		trace_encode_error(qdev, "deactivate invalid dbc id or pad non-zero");
-+		return -EINVAL;
-+	}
-+
-+	*user_len += in_trans->hdr.len;
-+
-+	return disable_dbc(qdev, in_trans->dbc_id, usr);
-+}
-+
-+static int encode_status(struct qaic_device *qdev, void *trans,
-+			 struct wrapper_list *wrappers,
-+			 u32 *user_len)
-+{
-+	struct qaic_manage_trans_status_to_dev *in_trans = trans;
-+	struct _trans_status_to_dev *out_trans;
-+	struct wrapper_msg *trans_wrapper;
-+	struct wrapper_msg *wrapper;
-+	struct _msg *msg;
-+	u32 msg_hdr_len;
-+
-+	trace_qaic_encode_status(qdev, in_trans);
-+
-+	wrapper = list_first_entry(&wrappers->list, struct wrapper_msg, list);
-+	msg = &wrapper->msg;
-+	msg_hdr_len = le32_to_cpu(msg->hdr.len);
-+
-+	if (msg_hdr_len + in_trans->hdr.len > QAIC_MANAGE_MAX_MSG_LENGTH) {
-+		trace_encode_error(qdev, "status trans exceeds msg len");
-+		return -ENOSPC;
-+	}
-+
-+	trans_wrapper = add_wrapper(wrappers, sizeof(*trans_wrapper));
-+	if (!trans_wrapper) {
-+		trace_encode_error(qdev, "encode status alloc fail");
-+		return -ENOMEM;
-+	}
-+	trans_wrapper->len = sizeof(*out_trans);
-+	out_trans = (struct _trans_status_to_dev *)&trans_wrapper->trans;
-+
-+	out_trans->hdr.type = cpu_to_le32(TRANS_STATUS_TO_DEV);
-+	out_trans->hdr.len = cpu_to_le32(in_trans->hdr.len);
-+	msg->hdr.len = cpu_to_le32(msg_hdr_len + in_trans->hdr.len);
-+	msg->hdr.count = incr_le32(msg->hdr.count);
-+	*user_len += in_trans->hdr.len;
-+
-+	return 0;
-+}
-+
-+static int encode_message(struct qaic_device *qdev,
-+			  struct manage_msg *user_msg,
-+			  struct wrapper_list *wrappers,
-+			  struct ioctl_resources *resources,
-+			  struct qaic_user *usr)
-+{
-+	struct qaic_manage_trans_hdr *trans_hdr;
-+	struct wrapper_msg *wrapper;
-+	struct _msg *msg;
-+	u32 user_len = 0;
-+	int ret;
-+	int i;
-+
-+	if (!user_msg->count) {
-+		trace_encode_error(qdev, "No transactions to encode");
-+		ret = -EINVAL;
-+		goto out;
-+	}
-+
-+	wrapper = list_first_entry(&wrappers->list, struct wrapper_msg, list);
-+	msg = &wrapper->msg;
-+
-+	msg->hdr.len = cpu_to_le32(sizeof(msg->hdr));
-+
-+	if (resources->dma_chunk_id) {
-+		ret = encode_dma(qdev, resources->trans_hdr, wrappers,
-+				 &user_len, resources, usr);
-+		msg->hdr.count = cpu_to_le32(1);
-+		goto out;
-+	}
-+
-+	trace_qaic_control_dbg(qdev, "Number of transaction to encode is",
-+			       user_msg->count);
-+
-+	for (i = 0; i < user_msg->count; ++i) {
-+		if (user_len >= user_msg->len) {
-+			trace_encode_error(qdev, "msg exceeds len");
-+			ret = -EINVAL;
-+			break;
-+		}
-+		trans_hdr = (struct qaic_manage_trans_hdr *)
-+						(user_msg->data + user_len);
-+		if (user_len + trans_hdr->len > user_msg->len) {
-+			trace_encode_error(qdev, "trans exceeds msg len");
-+			ret = -EINVAL;
-+			break;
-+		}
-+
-+		trace_qaic_control_dbg(qdev, "Encoding transaction",
-+				       trans_hdr->type);
-+
-+		switch (trans_hdr->type) {
-+		case TRANS_PASSTHROUGH_FROM_USR:
-+			ret = encode_passthrough(qdev, trans_hdr, wrappers,
-+						 &user_len);
-+			break;
-+		case TRANS_DMA_XFER_FROM_USR:
-+			ret = encode_dma(qdev, trans_hdr, wrappers, &user_len,
-+					 resources, usr);
-+			break;
-+		case TRANS_ACTIVATE_FROM_USR:
-+			ret = encode_activate(qdev, trans_hdr, wrappers,
-+					      &user_len, resources);
-+			break;
-+		case TRANS_DEACTIVATE_FROM_USR:
-+			ret = encode_deactivate(qdev, trans_hdr, &user_len, usr);
-+			break;
-+		case TRANS_STATUS_FROM_USR:
-+			ret = encode_status(qdev, trans_hdr, wrappers,
-+					    &user_len);
-+			break;
-+		default:
-+			trace_encode_error(qdev, "unknown trans");
-+			ret = -EINVAL;
-+			break;
-+		}
-+
-+		if (ret)
-+			break;
-+	}
-+
-+	if (user_len != user_msg->len) {
-+		trace_encode_error(qdev, "msg processed exceeds len");
-+		ret = -EINVAL;
-+	}
-+out:
-+	if (ret) {
-+		free_dma_xfers(qdev, resources);
-+		free_dbc_buf(qdev, resources);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static int decode_passthrough(struct qaic_device *qdev, void *trans,
-+			      struct manage_msg *user_msg, u32 *msg_len)
-+{
-+	struct _trans_passthrough *in_trans = trans;
-+	struct qaic_manage_trans_passthrough *out_trans;
-+	u32 len;
-+
-+	out_trans = (void *)user_msg->data + user_msg->len;
-+
-+	len = le32_to_cpu(in_trans->hdr.len);
-+	if (len % 8 != 0) {
-+		trace_decode_error(qdev, "Invalid data length of passthrough data. Data length should be multiple of 8.");
-+		return -EINVAL;
-+	}
-+	if (user_msg->len + len > QAIC_MANAGE_MAX_MSG_LENGTH) {
-+		trace_decode_error(qdev, "passthrough trans exceeds msg len");
-+		return -ENOSPC;
-+	}
-+
-+	memcpy(out_trans, in_trans, len);
-+	user_msg->len += len;
-+	*msg_len += len;
-+	out_trans->hdr.type = le32_to_cpu(in_trans->hdr.type);
-+
-+	trace_qaic_decode_passthrough(qdev, out_trans);
-+
-+	return 0;
-+}
-+
-+static int decode_activate(struct qaic_device *qdev, void *trans,
-+			   struct manage_msg *user_msg, u32 *msg_len,
-+			   struct ioctl_resources *resources,
-+			   struct qaic_user *usr)
-+{
-+	struct _trans_activate_from_dev *in_trans = trans;
-+	struct qaic_manage_trans_activate_from_dev *out_trans;
-+	u32 len;
-+
-+	out_trans = (void *)user_msg->data + user_msg->len;
-+
-+	len = le32_to_cpu(in_trans->hdr.len);
-+	if (user_msg->len + len > QAIC_MANAGE_MAX_MSG_LENGTH) {
-+		trace_decode_error(qdev, "activate trans exceeds msg len");
-+		return -ENOSPC;
-+	}
-+
-+	user_msg->len += len;
-+	*msg_len += len;
-+	out_trans->hdr.type = le32_to_cpu(in_trans->hdr.type);
-+	out_trans->hdr.len = len;
-+	out_trans->status = le32_to_cpu(in_trans->status);
-+	out_trans->dbc_id = le32_to_cpu(in_trans->dbc_id);
-+	out_trans->options = le64_to_cpu(in_trans->options);
-+
-+	if (!resources->buf) {
-+		trace_decode_error(qdev, "activate with no assigned resources");
-+		/* how did we get an activate response with a request? */
-+		return -EINVAL;
-+	}
-+
-+	if (out_trans->dbc_id >= qdev->num_dbc) {
-+		trace_decode_error(qdev, "activate invalid dbc id");
-+		/*
-+		 * The device assigned an invalid resource, which should never
-+		 * happen.  Return an error so the user can try to recover.
-+		 */
-+		return -ENODEV;
-+	}
-+
-+	if (out_trans->status) {
-+		trace_decode_error(qdev, "activate device failed");
-+		/*
-+		 * Allocating resources failed on device side. This is not an
-+		 * expected behaviour, user is expected to handle this situation.
-+		 */
-+		return -ECANCELED;
-+	}
-+
-+	resources->status = out_trans->status;
-+	resources->dbc_id = out_trans->dbc_id;
-+	save_dbc_buf(qdev, resources, usr);
-+
-+	trace_qaic_decode_activate(qdev, out_trans);
-+
-+	return 0;
-+}
-+
-+static int decode_deactivate(struct qaic_device *qdev, void *trans,
-+			     u32 *msg_len, struct qaic_user *usr)
-+{
-+	struct _trans_deactivate_from_dev *in_trans = trans;
-+	u32 dbc_id = le32_to_cpu(in_trans->dbc_id);
-+	u32 status = le32_to_cpu(in_trans->status);
-+
-+	if (dbc_id >= qdev->num_dbc) {
-+		trace_decode_error(qdev, "deactivate invalid dbc id");
-+		/*
-+		 * The device assigned an invalid resource, which should never
-+		 * happen.  Inject an error so the user can try to recover.
-+		 */
-+		return -ENODEV;
-+	}
-+	if (status) {
-+		trace_decode_error(qdev, "deactivate device failed");
-+		/*
-+		 * Releasing resources failed on the device side, which puts
-+		 * us in a bind since they may still be in use, so enable the
-+		 * dbc. User is expected to retry deactivation.
-+		 */
-+		enable_dbc(qdev, dbc_id, usr);
-+		return -ECANCELED;
-+	}
-+
-+	release_dbc(qdev, dbc_id, true);
-+	*msg_len += sizeof(*in_trans);
-+
-+	trace_qaic_decode_deactivate(qdev, dbc_id, status);
-+
-+	return 0;
-+}
-+
-+static int decode_status(struct qaic_device *qdev, void *trans,
-+			 struct manage_msg *user_msg, u32 *user_len,
-+			 struct _msg *msg)
-+{
-+	struct _trans_status_from_dev *in_trans = trans;
-+	struct qaic_manage_trans_status_from_dev *out_trans;
-+	u32 len;
-+
-+	out_trans = (void *)user_msg->data + user_msg->len;
-+
-+	len = le32_to_cpu(in_trans->hdr.len);
-+	if (user_msg->len + len > QAIC_MANAGE_MAX_MSG_LENGTH) {
-+		trace_decode_error(qdev, "status trans exceeds msg len");
-+		return -ENOSPC;
-+	}
-+
-+	out_trans->hdr.type = TRANS_STATUS_FROM_DEV;
-+	out_trans->hdr.len = len;
-+	out_trans->major = le16_to_cpu(in_trans->major);
-+	out_trans->minor = le16_to_cpu(in_trans->minor);
-+	out_trans->status_flags = le64_to_cpu(in_trans->status_flags);
-+	out_trans->status = le32_to_cpu(in_trans->status);
-+	*user_len += le32_to_cpu(in_trans->hdr.len);
-+	user_msg->len += len;
-+
-+	if (out_trans->status) {
-+		trace_decode_error(qdev, "Querying status of device failed");
-+		return -ECANCELED;
-+	}
-+	if (out_trans->status_flags & BIT(0) && !valid_crc(msg)) {
-+		trace_decode_error(qdev, "Bad CRC on rev'd message");
-+		return -EPIPE;
-+	}
-+
-+	trace_qaic_decode_status(qdev, out_trans);
-+
-+	return 0;
-+}
-+
-+static int decode_message(struct qaic_device *qdev,
-+			  struct manage_msg *user_msg, struct _msg *msg,
-+			  struct ioctl_resources *resources,
-+			  struct qaic_user *usr)
-+{
-+	struct _trans_hdr *trans_hdr;
-+	u32 msg_len = 0;
-+	u32 msg_hdr_len = le32_to_cpu(msg->hdr.len);
-+	int ret;
-+	int i;
-+
-+	if (msg_hdr_len > QAIC_MANAGE_MAX_MSG_LENGTH) {
-+		trace_decode_error(qdev, "msg to decode len greater than size");
-+		return -EINVAL;
-+	}
-+
-+	user_msg->len = 0;
-+	user_msg->count = le32_to_cpu(msg->hdr.count);
-+
-+	trace_qaic_control_dbg(qdev, "Number of transaction to decode is",
-+			       user_msg->count);
-+
-+	for (i = 0; i < user_msg->count; ++i) {
-+		trans_hdr = (struct _trans_hdr *)(msg->data + msg_len);
-+		if (msg_len + le32_to_cpu(trans_hdr->len) > msg_hdr_len) {
-+			trace_decode_error(qdev, "trans len exceeds msg len");
-+			return -EINVAL;
-+		}
-+
-+		trace_qaic_control_dbg(qdev, "Decoding transaction",
-+				       le32_to_cpu(trans_hdr->type));
-+
-+		switch (le32_to_cpu(trans_hdr->type)) {
-+		case TRANS_PASSTHROUGH_FROM_DEV:
-+			ret = decode_passthrough(qdev, trans_hdr, user_msg,
-+						 &msg_len);
-+			break;
-+		case TRANS_ACTIVATE_FROM_DEV:
-+			ret = decode_activate(qdev, trans_hdr, user_msg,
-+					      &msg_len, resources, usr);
-+			break;
-+		case TRANS_DEACTIVATE_FROM_DEV:
-+			ret = decode_deactivate(qdev, trans_hdr, &msg_len, usr);
-+			break;
-+		case TRANS_STATUS_FROM_DEV:
-+			ret = decode_status(qdev, trans_hdr, user_msg,
-+					    &msg_len, msg);
-+			break;
-+		default:
-+			trace_decode_error(qdev, "unknown trans type");
-+			return -EINVAL;
-+		}
-+
-+		if (ret)
-+			return ret;
-+	}
-+
-+	if (msg_len != (msg_hdr_len - sizeof(msg->hdr))) {
-+		trace_decode_error(qdev, "decoded msg ended up longer than final trans");
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static void *msg_xfer(struct qaic_device *qdev, struct wrapper_list *wrappers,
-+		      u32 seq_num, bool ignore_signal)
-+{
-+	struct xfer_queue_elem elem;
-+	struct wrapper_msg *w;
-+	struct _msg *out_buf;
-+	int retry_count;
-+	long ret;
-+
-+	if (qdev->in_reset) {
-+		mutex_unlock(&qdev->cntl_mutex);
-+		return ERR_PTR(-ENODEV);
-+	}
-+
-+	elem.seq_num = seq_num;
-+	elem.buf = NULL;
-+	init_completion(&elem.xfer_done);
-+	if (likely(!qdev->cntl_lost_buf)) {
-+		/*
-+		 * The max size of request to device is QAIC_MANAGE_EXT_MSG_LENGTH.
-+		 * The max size of response from device is QAIC_MANAGE_MAX_MSG_LENGTH.
-+		 */
-+		out_buf = kmalloc(QAIC_MANAGE_MAX_MSG_LENGTH, GFP_KERNEL);
-+		if (!out_buf) {
-+			mutex_unlock(&qdev->cntl_mutex);
-+			return ERR_PTR(-ENOMEM);
-+		}
-+
-+		ret = mhi_queue_buf(qdev->cntl_ch, DMA_FROM_DEVICE,
-+				    out_buf, QAIC_MANAGE_MAX_MSG_LENGTH,
-+				    MHI_EOT);
-+		if (ret) {
-+			mutex_unlock(&qdev->cntl_mutex);
-+			trace_qaic_mhi_queue_error(qdev, "mhi queue from device failed",
-+						   ret);
-+			return ERR_PTR(ret);
-+		}
++	struct qaic_bo *bo = to_qaic_bo(obj);
++
++	if (obj->import_attach) {
++		/* DMABUF/PRIME Path */
++		dma_buf_detach(obj->import_attach->dmabuf, obj->import_attach);
++		dma_buf_put(obj->import_attach->dmabuf);
 +	} else {
-+		/*
-+		 * we lost a buffer because we queued a recv buf, but then
-+		 * queuing the corresponding tx buf failed.  To try to avoid
-+		 * a memory leak, lets reclaim it and use it for this
-+		 * transaction.
-+		 */
-+		qdev->cntl_lost_buf = false;
++		/* Private buffer allocation path */
++		qaic_free_sgt(bo->sgt);
 +	}
 +
-+	list_for_each_entry(w, &wrappers->list, list) {
-+		kref_get(&w->ref_count);
-+		retry_count = 0;
-+retry:
-+		ret = mhi_queue_buf(qdev->cntl_ch, DMA_TO_DEVICE, &w->msg,
-+				    w->len,
-+				    list_is_last(&w->list, &wrappers->list) ?
-+						MHI_EOT : MHI_CHAIN);
-+		if (ret) {
-+			if (ret == -EAGAIN &&
-+			    retry_count++ < QAIC_MHI_RETRY_MAX) {
-+				msleep_interruptible(QAIC_MHI_RETRY_WAIT_MS);
-+				if (!signal_pending(current))
-+					goto retry;
-+			}
-+
-+			qdev->cntl_lost_buf = true;
-+			kref_put(&w->ref_count, free_wrapper);
-+			mutex_unlock(&qdev->cntl_mutex);
-+			trace_qaic_mhi_queue_error(qdev, "mhi queue to device failed",
-+						   ret);
-+			return ERR_PTR(ret);
-+		}
-+	}
-+
-+	list_add_tail(&elem.list, &qdev->cntl_xfer_list);
-+	mutex_unlock(&qdev->cntl_mutex);
-+
-+	if (ignore_signal)
-+		ret = wait_for_completion_timeout(&elem.xfer_done,
-+						  control_resp_timeout * HZ);
-+	else
-+		ret = wait_for_completion_interruptible_timeout(&elem.xfer_done,
-+								control_resp_timeout * HZ);
-+	/*
-+	 * not using _interruptable because we have to cleanup or we'll
-+	 * likely cause memory corruption
-+	 */
-+	mutex_lock(&qdev->cntl_mutex);
-+	if (!list_empty(&elem.list))
-+		list_del(&elem.list);
-+	if (!ret && !elem.buf)
-+		ret = -ETIMEDOUT;
-+	else if (ret > 0 && !elem.buf)
-+		ret = -EIO;
-+	mutex_unlock(&qdev->cntl_mutex);
-+
-+	if (ret < 0) {
-+		trace_qaic_mhi_queue_error(qdev, "No response element from device",
-+					   ret);
-+		kfree(elem.buf);
-+		return ERR_PTR(ret);
-+	} else if (!qdev->valid_crc(elem.buf)) {
-+		trace_qaic_mhi_queue_error(qdev, "Bad CRC on rev'd message",
-+					   -EPIPE);
-+		kfree(elem.buf);
-+		return ERR_PTR(-EPIPE);
-+	}
-+
-+	return elem.buf;
++	drm_gem_object_release(obj);
++	kfree(bo);
 +}
 +
-+/* Add a transaction to abort the outstanding DMA continuation */
-+static int abort_dma_cont(struct qaic_device *qdev,
-+			  struct wrapper_list *wrappers, u32 dma_chunk_id)
++static const struct drm_gem_object_funcs qaic_gem_funcs = {
++	.free = qaic_free_object,
++	.print_info = qaic_gem_print_info,
++	.mmap = qaic_gem_object_mmap,
++	.vm_ops = &drm_vm_ops,
++};
++
++static struct qaic_bo *qaic_alloc_init_bo(void)
 +{
-+	struct _trans_dma_xfer *out_trans;
-+	u32 size = sizeof(*out_trans);
-+	struct wrapper_msg *wrapper;
-+	struct wrapper_msg *w;
-+	struct _msg *msg;
++	struct qaic_bo *bo;
 +
-+	wrapper = list_first_entry(&wrappers->list, struct wrapper_msg, list);
-+	msg = &wrapper->msg;
-+
-+	wrapper = add_wrapper(wrappers,
-+			      offsetof(struct wrapper_msg, trans) + sizeof(*out_trans));
-+
-+	if (!wrapper) {
-+		trace_encode_error(qdev, "abort dma cont alloc fail");
-+		return -ENOMEM;
++	bo = kzalloc(sizeof(*bo), GFP_KERNEL);
++	if (!bo) {
++		trace_qaic_mem_err(bo->dbc->qdev, "Failed to allocate qaic BO", -ENOMEM);
++		return ERR_PTR(-ENOMEM);
 +	}
 +
-+	/* Remove all but the first wrapper which has the msg header */
-+	list_for_each_entry_safe(wrapper, w, &wrappers->list, list)
-+		if (!list_is_first(&wrapper->list, &wrappers->list))
-+			kref_put(&wrapper->ref_count, free_wrapper);
++	INIT_LIST_HEAD(&bo->slices);
++	init_completion(&bo->xfer_done);
++	complete_all(&bo->xfer_done);
 +
-+	out_trans = (struct _trans_dma_xfer *)&wrapper->trans;
-+	out_trans->hdr.type = cpu_to_le32(TRANS_DMA_XFER_TO_DEV);
-+	out_trans->hdr.len = cpu_to_le32(size);
-+	out_trans->tag = cpu_to_le32(0);
-+	out_trans->count = cpu_to_le32(0);
-+	out_trans->dma_chunk_id = cpu_to_le32(dma_chunk_id);
-+
-+	msg->hdr.len = cpu_to_le32(size + sizeof(*msg));
-+	msg->hdr.count = cpu_to_le32(1);
-+	wrapper->len = size;
-+
-+	return 0;
++	return bo;
 +}
 +
-+static struct wrapper_list *alloc_wrapper_list(void)
++int qaic_create_bo_ioctl(struct drm_device *dev, void *data,
++			 struct drm_file *file_priv)
 +{
-+	struct wrapper_list *wrappers;
-+
-+	wrappers = kmalloc(sizeof(*wrappers), GFP_KERNEL);
-+	if (!wrappers)
-+		return NULL;
-+	INIT_LIST_HEAD(&wrappers->list);
-+	spin_lock_init(&wrappers->lock);
-+
-+	return wrappers;
-+}
-+
-+static int __qaic_manage(struct qaic_device *qdev, struct qaic_user *usr,
-+			 struct manage_msg *user_msg,
-+			 struct ioctl_resources *resources,
-+			 struct _msg **rsp)
-+{
-+	struct wrapper_list *wrappers;
-+	struct wrapper_msg *wrapper;
-+	struct wrapper_msg *w;
-+	bool all_done = false;
-+	struct _msg *msg;
-+	int ret;
-+
-+	wrappers = alloc_wrapper_list();
-+	if (!wrappers) {
-+		trace_manage_error(qdev, usr, "unable to alloc wrappers");
-+		return -ENOMEM;
-+	}
-+
-+	wrapper = add_wrapper(wrappers, sizeof(*wrapper));
-+	if (!wrapper) {
-+		trace_manage_error(qdev, usr, "failed to add wrapper");
-+		kfree(wrappers);
-+		return -ENOMEM;
-+	}
-+
-+	msg = &wrapper->msg;
-+	wrapper->len = sizeof(*msg);
-+
-+	ret = encode_message(qdev, user_msg, wrappers, resources, usr);
-+	if (ret && resources->dma_chunk_id)
-+		ret = abort_dma_cont(qdev, wrappers, resources->dma_chunk_id);
-+	if (ret)
-+		goto encode_failed;
-+
-+	ret = mutex_lock_interruptible(&qdev->cntl_mutex);
-+	if (ret)
-+		goto lock_failed;
-+
-+	msg->hdr.magic_number = MANAGE_MAGIC_NUMBER;
-+	msg->hdr.sequence_number = cpu_to_le32(qdev->next_seq_num++);
-+
-+	if (usr) {
-+		msg->hdr.handle = cpu_to_le32(usr->handle);
-+		msg->hdr.partition_id = cpu_to_le32(usr->qddev->partition_id);
-+	} else {
-+		msg->hdr.handle = 0;
-+		msg->hdr.partition_id = cpu_to_le32(QAIC_NO_PARTITION);
-+	}
-+
-+	msg->hdr.padding = cpu_to_le32(0);
-+	msg->hdr.crc32 = cpu_to_le32(qdev->gen_crc(wrappers));
-+
-+	/* msg_xfer releases the mutex */
-+	*rsp = msg_xfer(qdev, wrappers, qdev->next_seq_num - 1, false);
-+	if (IS_ERR(*rsp)) {
-+		trace_manage_error(qdev, usr, "failed to xmit to device");
-+		ret = PTR_ERR(*rsp);
-+	}
-+
-+lock_failed:
-+	free_dma_xfers(qdev, resources);
-+encode_failed:
-+	spin_lock(&wrappers->lock);
-+	list_for_each_entry_safe(wrapper, w, &wrappers->list, list)
-+		kref_put(&wrapper->ref_count, free_wrapper);
-+	all_done = list_empty(&wrappers->list);
-+	spin_unlock(&wrappers->lock);
-+	if (all_done)
-+		kfree(wrappers);
-+
-+	return ret;
-+}
-+
-+static int qaic_manage(struct qaic_device *qdev, struct qaic_user *usr,
-+		       struct manage_msg *user_msg)
-+{
-+	struct _trans_dma_xfer_cont *dma_cont = NULL;
-+	struct ioctl_resources resources;
-+	struct _msg *rsp = NULL;
-+	int ret;
-+
-+	memset(&resources, 0, sizeof(struct ioctl_resources));
-+
-+	INIT_LIST_HEAD(&resources.dma_xfers);
-+
-+	if (user_msg->len > QAIC_MANAGE_MAX_MSG_LENGTH ||
-+	    user_msg->count > QAIC_MANAGE_MAX_MSG_LENGTH / sizeof(struct qaic_manage_trans_hdr)) {
-+		trace_manage_error(qdev, usr, "msg from userspace too long or too many transactions");
-+		return -EINVAL;
-+	}
-+
-+dma_xfer_continue:
-+	ret = __qaic_manage(qdev, usr, user_msg, &resources, &rsp);
-+	if (ret)
-+		return ret;
-+	/* dma_cont should be the only transaction if present */
-+	if (le32_to_cpu(rsp->hdr.count) == 1) {
-+		dma_cont = (struct _trans_dma_xfer_cont *)rsp->data;
-+		if (le32_to_cpu(dma_cont->hdr.type) != TRANS_DMA_XFER_CONT)
-+			dma_cont = NULL;
-+	}
-+	if (dma_cont) {
-+		if (le32_to_cpu(dma_cont->dma_chunk_id) == resources.dma_chunk_id &&
-+		    le64_to_cpu(dma_cont->xferred_size) == resources.xferred_dma_size) {
-+			kfree(rsp);
-+			goto dma_xfer_continue;
-+		}
-+
-+		trace_manage_error(qdev, usr, "wrong size/id for DMA continuation");
-+		ret = -EINVAL;
-+		goto dma_cont_failed;
-+	}
-+
-+	ret = decode_message(qdev, user_msg, rsp, &resources, usr);
-+
-+dma_cont_failed:
-+	free_dbc_buf(qdev, &resources);
-+	kfree(rsp);
-+	return ret;
-+}
-+
-+int qaic_manage_ioctl(struct drm_device *dev, void *data,
-+		      struct drm_file *file_priv)
-+{
-+	struct qaic_manage_msg *user_msg;
++	struct qaic_create_bo *args = data;
++	int usr_rcu_id, qdev_rcu_id;
++	struct drm_gem_object *obj;
 +	struct qaic_device *qdev;
-+	struct manage_msg *msg;
 +	struct qaic_user *usr;
-+	u8 __user *user_data;
-+	int qdev_rcu_id;
-+	int usr_rcu_id;
++	struct qaic_bo *bo;
++	size_t size;
 +	int ret;
 +
 +	usr = file_priv->driver_priv;
-+
 +	usr_rcu_id = srcu_read_lock(&usr->qddev_lock);
 +	if (!usr->qddev) {
-+		srcu_read_unlock(&usr->qddev_lock, usr_rcu_id);
-+		return -ENODEV;
++		ret = -ENODEV;
++		trace_qaic_mem_err(qdev, "Failed to acquire user RCU lock", ret);
++		goto unlock_usr_srcu;
 +	}
 +
 +	qdev = usr->qddev->qdev;
-+
 +	qdev_rcu_id = srcu_read_lock(&qdev->dev_lock);
 +	if (qdev->in_reset) {
-+		srcu_read_unlock(&qdev->dev_lock, qdev_rcu_id);
-+		srcu_read_unlock(&usr->qddev_lock, usr_rcu_id);
-+		return -ENODEV;
++		ret = -ENODEV;
++		trace_qaic_mem_err(qdev, "Failed to acquire device RCU lock", ret);
++		goto unlock_dev_srcu;
 +	}
 +
-+	user_msg = data;
-+
-+	if (user_msg->len > QAIC_MANAGE_MAX_MSG_LENGTH) {
-+		trace_manage_error(qdev, usr, "user message too long");
++	size = PAGE_ALIGN(args->size);
++	if (size == 0) {
 +		ret = -EINVAL;
-+		goto out;
++		trace_qaic_mem_err_1(qdev, "Failed to PAGE_ALIGN for given buffer size",
++				     "buffer size(B)", ret, args->size);
++		goto unlock_dev_srcu;
 +	}
 +
-+	msg = kzalloc(QAIC_MANAGE_MAX_MSG_LENGTH + sizeof(*msg), GFP_KERNEL);
-+	if (!msg) {
-+		trace_manage_error(qdev, usr, "no mem for userspace message");
-+		ret = -ENOMEM;
-+		goto out;
++	bo = qaic_alloc_init_bo();
++	if (IS_ERR(bo)) {
++		ret = PTR_ERR(bo);
++		trace_qaic_mem_err(qdev, "Failed to Allocate/Init BO", ret);
++		goto unlock_dev_srcu;
++	}
++	obj = &bo->base;
++
++	drm_gem_private_object_init(dev, obj, size);
++
++	obj->funcs = &qaic_gem_funcs;
++	ret = create_sgt(qdev, &bo->sgt, size);
++	if (ret) {
++		trace_qaic_mem_err(qdev, "Failed to Create SGT", ret);
++		goto free_bo;
 +	}
 +
-+	msg->len = user_msg->len;
-+	msg->count = user_msg->count;
++	bo->size = args->size;
 +
-+	user_data = u64_to_user_ptr(user_msg->data);
-+
-+	if (copy_from_user(msg->data, user_data, user_msg->len)) {
-+		trace_manage_error(qdev, usr, "failed to copy message body from userspace");
-+		ret = -EFAULT;
-+		goto free_msg;
++	ret = drm_gem_handle_create(file_priv, obj, &args->handle);
++	if (ret) {
++		trace_qaic_mem_err(qdev, "Failed to Create SGT", ret);
++		goto free_sgt;
 +	}
 +
-+	ret = qaic_manage(qdev, usr, msg);
-+
-+	/*
-+	 * If the qaic_manage() is successful then we copy the message onto
-+	 * userspace memory but we have an exception for -ECANCELED.
-+	 * For -ECANCELED, it means that device has NACKed the message with a
-+	 * status error code which userspace would like to know.
-+	 */
-+	if (ret == -ECANCELED || !ret) {
-+		if (copy_to_user(user_data, msg->data, msg->len)) {
-+			trace_manage_error(qdev, usr, "failed to copy to userspace");
-+			ret = -EFAULT;
-+		} else {
-+			user_msg->len = msg->len;
-+			user_msg->count = msg->count;
-+		}
-+	}
-+
-+free_msg:
-+	kfree(msg);
-+out:
++	bo->handle = args->handle;
++	drm_gem_object_put(obj);
 +	srcu_read_unlock(&qdev->dev_lock, qdev_rcu_id);
++	srcu_read_unlock(&usr->qddev_lock, usr_rcu_id);
++
++	return 0;
++
++free_sgt:
++	qaic_free_sgt(bo->sgt);
++free_bo:
++	kfree(bo);
++unlock_dev_srcu:
++	srcu_read_unlock(&qdev->dev_lock, qdev_rcu_id);
++unlock_usr_srcu:
 +	srcu_read_unlock(&usr->qddev_lock, usr_rcu_id);
 +	return ret;
 +}
 +
-+int get_cntl_version(struct qaic_device *qdev, struct qaic_user *usr,
-+		     u16 *major, u16 *minor)
++int qaic_mmap_bo_ioctl(struct drm_device *dev, void *data,
++		       struct drm_file *file_priv)
++{
++	struct qaic_mmap_bo *args = data;
++	int usr_rcu_id, qdev_rcu_id;
++	struct drm_gem_object *obj;
++	struct qaic_device *qdev;
++	struct qaic_user *usr;
++	int ret;
++
++	usr = file_priv->driver_priv;
++	usr_rcu_id = srcu_read_lock(&usr->qddev_lock);
++	if (!usr->qddev) {
++		ret = -ENODEV;
++		trace_qaic_mmap_err(qdev, "Failed to acquire user RCU lock", ret);
++		goto unlock_usr_srcu;
++	}
++
++	qdev = usr->qddev->qdev;
++	qdev_rcu_id = srcu_read_lock(&qdev->dev_lock);
++	if (qdev->in_reset) {
++		ret = -ENODEV;
++		trace_qaic_mmap_err(qdev, "Failed to acquire device RCU lock", ret);
++		goto unlock_dev_srcu;
++	}
++
++	obj = drm_gem_object_lookup(file_priv, args->handle);
++	if (!obj) {
++		ret = -ENOENT;
++		trace_qaic_mmap_err_1(qdev, "Invalid BO handle passed", "BO handle",
++				      ret, args->handle);
++		goto unlock_dev_srcu;
++	}
++
++	ret = drm_gem_create_mmap_offset(obj);
++	if (ret == 0)
++		args->offset = drm_vma_node_offset_addr(&obj->vma_node);
++
++	drm_gem_object_put(obj);
++
++unlock_dev_srcu:
++	srcu_read_unlock(&qdev->dev_lock, qdev_rcu_id);
++unlock_usr_srcu:
++	srcu_read_unlock(&usr->qddev_lock, usr_rcu_id);
++	return ret;
++}
++
++struct drm_gem_object *qaic_gem_prime_import(struct drm_device *dev,
++					     struct dma_buf *dma_buf)
++{
++	struct dma_buf_attachment *attach;
++	struct drm_gem_object *obj;
++	struct qaic_bo *bo;
++	size_t size;
++	int ret;
++
++	bo = qaic_alloc_init_bo();
++	if (IS_ERR(bo)) {
++		ret = PTR_ERR(bo);
++		trace_qaic_mem_err(bo->dbc->qdev, "Failed to Allocate/Init BO", ret);
++		goto out;
++	}
++
++	obj = &bo->base;
++	get_dma_buf(dma_buf);
++
++	attach = dma_buf_attach(dma_buf, dev->dev);
++	if (IS_ERR(attach)) {
++		ret = PTR_ERR(attach);
++		trace_qaic_mem_err(bo->dbc->qdev, "Failed to attach dma_buf", ret);
++		goto attach_fail;
++	}
++
++	size = PAGE_ALIGN(attach->dmabuf->size);
++	if (size == 0) {
++		ret = -EINVAL;
++		trace_qaic_mem_err(bo->dbc->qdev, "Invalid dma_buf size 0", ret);
++		goto size_align_fail;
++	}
++
++	drm_gem_private_object_init(dev, obj, size);
++	/*
++	 * I have skipped dma_buf_map_attachment() as we do not know the direction just yet.
++	 * Once the direction is know in the subsequent IOCTL to attach slicing we can do it then.
++	 */
++
++	obj->funcs = &qaic_gem_funcs;
++	obj->import_attach = attach;
++	obj->resv = dma_buf->resv;
++
++	return obj;
++
++size_align_fail:
++	dma_buf_detach(dma_buf, attach);
++attach_fail:
++	dma_buf_put(dma_buf);
++	kfree(bo);
++out:
++	return ERR_PTR(ret);
++}
++
++static int qaic_prepare_import_bo(struct qaic_bo *bo,
++				  struct qaic_attach_slice_hdr *hdr)
++{
++	struct drm_gem_object *obj = &bo->base;
++	struct sg_table *sgt;
++	int ret;
++
++	if (obj->import_attach->dmabuf->size < hdr->size) {
++		trace_qaic_attach_err_2(bo->dbc->qdev, "Invalid import/PRIME buffer size",
++					"DMABUF size", "Requested buffer size",
++					ret, obj->import_attach->dmabuf->size,
++					hdr->size);
++		return -EINVAL;
++	}
++
++	sgt = dma_buf_map_attachment(obj->import_attach, hdr->dir);
++	if (IS_ERR(sgt)) {
++		ret = PTR_ERR(sgt);
++		trace_qaic_attach_err(bo->dbc->qdev, "DMABUF map attachment failed", ret);
++		return ret;
++	}
++
++	bo->sgt = sgt;
++	bo->size = hdr->size;
++
++	return 0;
++}
++
++static int qaic_prepare_export_bo(struct qaic_device *qdev, struct qaic_bo *bo,
++				  struct qaic_attach_slice_hdr *hdr)
 +{
 +	int ret;
-+	struct manage_msg *user_msg;
-+	struct qaic_manage_trans_status_to_dev *status_query;
-+	struct qaic_manage_trans_status_from_dev *status_result;
 +
-+	user_msg = kmalloc(sizeof(*user_msg) + sizeof(*status_result), GFP_KERNEL);
-+	if (!user_msg) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+	user_msg->len = sizeof(*status_query);
-+	user_msg->count = 1;
-+
-+	status_query = (struct qaic_manage_trans_status_to_dev *)user_msg->data;
-+	status_query->hdr.type = TRANS_STATUS_FROM_USR;
-+	status_query->hdr.len = sizeof(status_query->hdr);
-+
-+	ret = qaic_manage(qdev, usr, user_msg);
-+	if (ret)
-+		goto kfree_user_msg;
-+	status_result =
-+		(struct qaic_manage_trans_status_from_dev *)user_msg->data;
-+	*major = status_result->major;
-+	*minor = status_result->minor;
-+
-+	if (status_result->status_flags & BIT(0)) { /* device is using CRC */
-+		/* By default qdev->gen_crc is programmed to generate CRC */
-+		qdev->valid_crc = valid_crc;
-+	} else {
-+		/* By default qdev->valid_crc is programmed to bypass CRC */
-+		qdev->gen_crc = gen_crc_stub;
++	if (bo->size != hdr->size) {
++		trace_qaic_attach_err_2(qdev, "Invalid export buffer size",
++					"DMABUF size", "Requested buffer size",
++					-EINVAL, bo->size, hdr->size);
++		return -EINVAL;
 +	}
 +
-+kfree_user_msg:
-+	kfree(user_msg);
-+out:
++	ret = dma_map_sgtable(&qdev->pdev->dev, bo->sgt, hdr->dir, 0);
++	if (ret) {
++		trace_qaic_attach_err(qdev, "DMA map sgtable failed", ret);
++		return -EFAULT;
++	}
++
++	return 0;
++}
++
++static int qaic_prepare_bo(struct qaic_device *qdev, struct qaic_bo *bo,
++			   struct qaic_attach_slice_hdr *hdr)
++{
++	int ret;
++
++	if (bo->base.import_attach)
++		ret = qaic_prepare_import_bo(bo, hdr);
++	else
++		ret = qaic_prepare_export_bo(qdev, bo, hdr);
++
++	if (ret == 0)
++		bo->dir = hdr->dir;
++
 +	return ret;
 +}
 +
-+static void resp_worker(struct work_struct *work)
++static void qaic_unprepare_import_bo(struct qaic_bo *bo)
 +{
-+	struct resp_work *resp = container_of(work, struct resp_work, work);
-+	struct qaic_device *qdev = resp->qdev;
-+	struct _msg *msg = resp->buf;
-+	struct xfer_queue_elem *elem;
-+	struct xfer_queue_elem *i;
-+	bool found = false;
++	dma_buf_unmap_attachment(bo->base.import_attach, bo->sgt, bo->dir);
++	bo->sgt = NULL;
++	bo->size = 0;
++}
 +
-+	if (msg->hdr.magic_number != MANAGE_MAGIC_NUMBER) {
-+		kfree(msg);
-+		kfree(resp);
-+		return;
++static void qaic_unprepare_export_bo(struct qaic_device *qdev, struct qaic_bo *bo)
++{
++	dma_unmap_sgtable(&qdev->pdev->dev, bo->sgt, bo->dir, 0);
++}
++
++static void qaic_unprepare_bo(struct qaic_device *qdev, struct qaic_bo *bo)
++{
++	if (bo->base.import_attach)
++		qaic_unprepare_import_bo(bo);
++	else
++		qaic_unprepare_export_bo(qdev, bo);
++
++	bo->dir = 0;
++}
++
++static void qaic_free_slices_bo(struct qaic_bo *bo)
++{
++	struct bo_slice *slice, *temp;
++
++	list_for_each_entry_safe(slice, temp, &bo->slices, slice) {
++		kref_put(&slice->ref_count, free_slice);
 +	}
++}
 +
-+	mutex_lock(&qdev->cntl_mutex);
-+	list_for_each_entry_safe(elem, i, &qdev->cntl_xfer_list, list) {
-+		if (elem->seq_num == le32_to_cpu(msg->hdr.sequence_number)) {
-+			found = true;
-+			list_del_init(&elem->list);
-+			elem->buf = msg;
-+			complete_all(&elem->xfer_done);
-+			break;
++static int qaic_attach_slicing_bo(struct qaic_device *qdev,
++				  struct qaic_bo *bo,
++				  struct qaic_attach_slice_hdr *hdr,
++				  struct qaic_attach_slice_entry *slice_ent)
++{
++	int ret, i;
++
++	for (i = 0; i < hdr->count; i++) {
++		ret = qaic_map_one_slice(qdev, bo, &slice_ent[i]);
++		if (ret) {
++			qaic_free_slices_bo(bo);
++			return ret;
 +		}
 +	}
-+	mutex_unlock(&qdev->cntl_mutex);
 +
-+	if (!found)
-+		/* request must have timed out, drop packet */
-+		kfree(msg);
-+
-+	kfree(resp);
-+}
-+
-+static void free_wrapper_from_list(struct wrapper_list *wrappers,
-+				   struct wrapper_msg *wrapper)
-+{
-+	bool all_done = false;
-+
-+	spin_lock(&wrappers->lock);
-+	kref_put(&wrapper->ref_count, free_wrapper);
-+	all_done = list_empty(&wrappers->list);
-+	spin_unlock(&wrappers->lock);
-+
-+	if (all_done)
-+		kfree(wrappers);
-+}
-+
-+void qaic_mhi_ul_xfer_cb(struct mhi_device *mhi_dev,
-+			 struct mhi_result *mhi_result)
-+{
-+	struct _msg *msg = mhi_result->buf_addr;
-+	struct wrapper_msg *wrapper = container_of(msg, struct wrapper_msg,
-+						   msg);
-+
-+	free_wrapper_from_list(wrapper->head, wrapper);
-+}
-+
-+void qaic_mhi_dl_xfer_cb(struct mhi_device *mhi_dev,
-+			 struct mhi_result *mhi_result)
-+{
-+	struct qaic_device *qdev = dev_get_drvdata(&mhi_dev->dev);
-+	struct _msg *msg = mhi_result->buf_addr;
-+	struct resp_work *resp;
-+
-+	if (mhi_result->transaction_status) {
-+		kfree(msg);
-+		return;
++	if (bo->total_slice_nents > qdev->dbc[hdr->dbc_id].nelem) {
++		trace_qaic_attach_err(qdev, "DMA map sg failed", ret);
++		qaic_free_slices_bo(bo);
++		return -ENOSPC;
 +	}
 +
-+	resp = kmalloc(sizeof(*resp), GFP_ATOMIC);
-+	if (!resp) {
-+		pci_err(qdev->pdev, "dl_xfer_cb alloc fail, dropping message\n");
-+		kfree(msg);
-+		return;
++	bo->sliced = true;
++	bo->nr_slice = hdr->count;
++	list_add_tail(&bo->bo_list, &qdev->dbc[hdr->dbc_id].bo_lists);
++
++	return 0;
++}
++
++int qaic_attach_slice_bo_ioctl(struct drm_device *dev, void *data,
++			       struct drm_file *file_priv)
++{
++	struct qaic_attach_slice_entry *slice_ent;
++	struct qaic_attach_slice *args = data;
++	struct dma_bridge_chan	*dbc;
++	int usr_rcu_id, qdev_rcu_id;
++	struct drm_gem_object *obj;
++	struct qaic_device *qdev;
++	unsigned long arg_size;
++	struct qaic_user *usr;
++	u8 __user *user_data;
++	struct qaic_bo *bo;
++	int ret;
++
++	usr = file_priv->driver_priv;
++	usr_rcu_id = srcu_read_lock(&usr->qddev_lock);
++	if (!usr->qddev) {
++		ret = -ENODEV;
++		trace_qaic_attach_err(qdev, "Failed to acquire user RCU lock", ret);
++		goto unlock_usr_srcu;
 +	}
 +
-+	INIT_WORK(&resp->work, resp_worker);
-+	resp->qdev = qdev;
-+	resp->buf = msg;
-+	queue_work(qdev->cntl_wq, &resp->work);
-+}
-+
-+int qaic_control_open(struct qaic_device *qdev)
-+{
-+	if (!qdev->cntl_ch)
-+		return -ENODEV;
-+
-+	qdev->cntl_lost_buf = false;
-+	/*
-+	 * By default qaic should assume that device has CRC enabled.
-+	 * Qaic comes to know if device has CRC enabled or disabled during the
-+	 * device status transaction, which is the first transaction performed
-+	 * on control channel.
-+	 *
-+	 * So CRC validation of first device status transaction response is
-+	 * ignored (by calling valid_crc_stub) and is done later during decoding
-+	 * if device has CRC enabled.
-+	 * Now that qaic knows whether device has CRC enabled or not it acts
-+	 * accordingly
-+	 */
-+	qdev->gen_crc = gen_crc;
-+	qdev->valid_crc = valid_crc_stub;
-+
-+	return mhi_prepare_for_transfer(qdev->cntl_ch);
-+}
-+
-+void qaic_control_close(struct qaic_device *qdev)
-+{
-+	mhi_unprepare_from_transfer(qdev->cntl_ch);
-+}
-+
-+void qaic_release_usr(struct qaic_device *qdev, struct qaic_user *usr)
-+{
-+	struct _trans_terminate_to_dev *trans;
-+	struct wrapper_list *wrappers;
-+	struct wrapper_msg *wrapper;
-+	struct _msg *msg;
-+	struct _msg *rsp;
-+
-+	wrappers = alloc_wrapper_list();
-+	if (!wrappers) {
-+		trace_manage_error(qdev, usr, "unable to alloc wrappers");
-+		return;
++	qdev = usr->qddev->qdev;
++	qdev_rcu_id = srcu_read_lock(&qdev->dev_lock);
++	if (qdev->in_reset) {
++		ret = -ENODEV;
++		trace_qaic_attach_err(qdev, "Failed to acquire device RCU lock", ret);
++		goto unlock_dev_srcu;
 +	}
 +
-+	wrapper = add_wrapper(wrappers, sizeof(*wrapper) + sizeof(*msg) +
-+			      sizeof(*trans));
-+	if (!wrapper)
-+		return;
-+
-+	msg = &wrapper->msg;
-+
-+	trans = (struct _trans_terminate_to_dev *)msg->data;
-+
-+	trans->hdr.type = cpu_to_le32(TRANS_TERMINATE_TO_DEV);
-+	trans->hdr.len = cpu_to_le32(sizeof(*trans));
-+	trans->handle = cpu_to_le32(usr->handle);
-+
-+	mutex_lock(&qdev->cntl_mutex);
-+	wrapper->len = sizeof(msg->hdr) + sizeof(*trans);
-+	msg->hdr.magic_number = MANAGE_MAGIC_NUMBER;
-+	msg->hdr.sequence_number = cpu_to_le32(qdev->next_seq_num++);
-+	msg->hdr.len = cpu_to_le32(wrapper->len);
-+	msg->hdr.count = cpu_to_le32(1);
-+	msg->hdr.handle = cpu_to_le32(usr->handle);
-+	msg->hdr.padding = cpu_to_le32(0);
-+	msg->hdr.crc32 = cpu_to_le32(qdev->gen_crc(wrappers));
-+
-+	/*
-+	 * msg_xfer releases the mutex
-+	 * We don't care about the return of msg_xfer since we will not do
-+	 * anything different based on what happens.
-+	 * We ignore pending signals since one will be set if the user is
-+	 * killed, and we need give the device a chance to cleanup, otherwise
-+	 * DMA may still be in progress when we return.
-+	 */
-+	rsp = msg_xfer(qdev, wrappers, qdev->next_seq_num - 1, true);
-+	if (!IS_ERR(rsp))
-+		kfree(rsp);
-+	free_wrapper_from_list(wrappers, wrapper);
-+}
-+
-+void wake_all_cntl(struct qaic_device *qdev)
-+{
-+	struct xfer_queue_elem *elem;
-+	struct xfer_queue_elem *i;
-+
-+	mutex_lock(&qdev->cntl_mutex);
-+	list_for_each_entry_safe(elem, i, &qdev->cntl_xfer_list, list) {
-+		list_del_init(&elem->list);
-+		complete_all(&elem->xfer_done);
-+	}
-+	mutex_unlock(&qdev->cntl_mutex);
-+}
-+
-+int qaic_data_get_reservation(struct qaic_device *qdev, struct qaic_user *usr,
-+			      void *data, u32 *partition_id, u16 *remove)
-+{
-+	struct _trans_validate_part_from_dev *trans_rsp;
-+	struct _trans_validate_part_to_dev *trans_req;
-+	struct qaic_part_dev *user_msg;
-+	struct wrapper_list *wrappers;
-+	struct wrapper_msg *wrapper;
-+	struct _msg *msg_req;
-+	struct _msg *msg_rsp;
-+	size_t msg_rsp_len;
-+	int ret = 0;
-+
-+	user_msg = (struct qaic_part_dev *)data;
-+	/* -1 for partition_id is a special value, so check for it */
-+	if (user_msg->partition_id == QAIC_NO_PARTITION || user_msg->remove > 1) {
++	if (args->hdr.count == 0) {
 +		ret = -EINVAL;
-+		goto out;
++		trace_qaic_attach_err(qdev, "Invalid slice count 0", ret);
++		goto unlock_dev_srcu;
 +	}
 +
-+	*partition_id = user_msg->partition_id;
-+	*remove = user_msg->remove;
-+
-+	/*
-+	 * In case of a remove we do not need to do a fw partition check, the
-+	 * right user is validated when removing the device in the device
-+	 * remove code. So, in case remove is set to 1, we just copy the
-+	 * parameters and return from the call.
-+	 */
-+	if (*remove)
-+		return 0;
-+
-+	wrappers = alloc_wrapper_list();
-+	if (!wrappers) {
-+		trace_manage_error(qdev, usr, "unable to alloc wrappers");
-+		return -ENOMEM;
-+	}
-+
-+	wrapper = add_wrapper(wrappers, sizeof(*wrapper) + sizeof(*msg_req) +
-+			      sizeof(*trans_req));
-+	if (!wrapper) {
-+		kfree(wrappers);
-+		return -ENOMEM;
-+	}
-+
-+	msg_req = &wrapper->msg;
-+
-+	trans_req = (struct _trans_validate_part_to_dev *)msg_req->data;
-+	trans_req->hdr.type = cpu_to_le32(TRANS_VALIDATE_PARTITION_TO_DEV);
-+	trans_req->hdr.len = cpu_to_le32(sizeof(*trans_req));
-+	trans_req->part_id = cpu_to_le32(*partition_id);
-+
-+	mutex_lock(&qdev->cntl_mutex);
-+	wrapper->len = sizeof(msg_req->hdr) + sizeof(*trans_req);
-+	msg_req->hdr.len = cpu_to_le32(wrapper->len);
-+	msg_req->hdr.sequence_number = cpu_to_le32(qdev->next_seq_num++);
-+	msg_req->hdr.magic_number = MANAGE_MAGIC_NUMBER;
-+	msg_req->hdr.handle = cpu_to_le32(usr->handle);
-+	msg_req->hdr.count = cpu_to_le32(1);
-+	msg_req->hdr.padding = cpu_to_le32(0);
-+	msg_req->hdr.crc32 = cpu_to_le32(qdev->gen_crc(wrappers));
-+
-+	/*
-+	 * msg_xfer releases the mutex
-+	 * The msg count will always be 1 in the response
-+	 */
-+	msg_rsp = msg_xfer(qdev, wrappers, qdev->next_seq_num - 1, false);
-+	if (IS_ERR(msg_rsp)) {
-+		ret = PTR_ERR(msg_rsp);
-+		goto kfree_wrapper;
-+	}
-+
-+	msg_rsp_len = sizeof(msg_rsp->hdr) + sizeof(*trans_rsp);
-+	if (le32_to_cpu(msg_rsp->hdr.count) != 1 ||
-+	    le32_to_cpu(msg_rsp->hdr.len) < msg_rsp_len) {
++	arg_size = args->hdr.count * sizeof(*slice_ent);
++	if (arg_size / args->hdr.count != sizeof(*slice_ent)) {
 +		ret = -EINVAL;
-+		goto kfree_msg_rsp;
++		trace_qaic_attach_err_1(qdev, "Invalid slice count",
++					"Slice count", ret, args->hdr.count);
++		goto unlock_dev_srcu;
 +	}
 +
-+	trans_rsp = (struct _trans_validate_part_from_dev *)msg_rsp->data;
-+	if (le32_to_cpu(trans_rsp->status))
-+		ret = -EPERM;
++	if (args->hdr.dbc_id >= qdev->num_dbc) {
++		ret = -EINVAL;
++		trace_qaic_attach_err_1(qdev, "Invalid DBC ID", "DBC ID", ret,
++					args->hdr.dbc_id);
++		goto unlock_dev_srcu;
++	}
 +
-+kfree_msg_rsp:
-+	kfree(msg_rsp);
-+kfree_wrapper:
-+	free_wrapper_from_list(wrappers, wrapper);
-+out:
++	if (args->hdr.size == 0) {
++		ret = -EINVAL;
++		trace_qaic_attach_err(qdev, "Invalid BO size 0", ret);
++		goto unlock_dev_srcu;
++	}
++
++	if (!(args->hdr.dir == DMA_TO_DEVICE  ||
++	      args->hdr.dir == DMA_FROM_DEVICE)) {
++		ret = -EINVAL;
++		trace_qaic_attach_err_1(qdev, "Invalid DMA direction",
++					"DMA directions", ret, args->hdr.dir);
++		goto unlock_dev_srcu;
++	}
++
++	dbc = &qdev->dbc[args->hdr.dbc_id];
++	if (dbc->usr != usr) {
++		ret = -EINVAL;
++		trace_qaic_attach_err_1(qdev, "User handle mismatch", "DBC ID",
++					ret, args->hdr.dbc_id);
++		goto unlock_dev_srcu;
++	}
++
++	if (args->data == 0) {
++		ret = -EINVAL;
++		trace_qaic_attach_err(qdev, "Invalid data pointer (NULL).", ret);
++		goto unlock_dev_srcu;
++	}
++
++	user_data = u64_to_user_ptr(args->data);
++
++	slice_ent = kzalloc(arg_size, GFP_KERNEL);
++	if (!slice_ent) {
++		ret = -EINVAL;
++		trace_qaic_attach_err_1(qdev, "Failed to allocate memory for slice entries",
++					"Number of slice", ret, args->hdr.count);
++		goto unlock_dev_srcu;
++	}
++
++	ret = copy_from_user(slice_ent, user_data, arg_size);
++	if (ret) {
++		ret = -EFAULT;
++		trace_qaic_attach_err(qdev, "Failed to copy data from user to kernel", ret);
++		goto free_slice_ent;
++	}
++
++	ret = qaic_validate_req(qdev, slice_ent, args->hdr.count, args->hdr.size);
++	if (ret)
++		goto free_slice_ent;
++
++	obj = drm_gem_object_lookup(file_priv, args->hdr.handle);
++	if (!obj) {
++		trace_qaic_attach_err_1(qdev, "Invalid BO handle", "BO handle",
++					ret, args->hdr.handle);
++		ret = -ENOENT;
++		goto free_slice_ent;
++	}
++
++	bo = to_qaic_bo(obj);
++
++	ret = qaic_prepare_bo(qdev, bo, &args->hdr);
++	if (ret)
++		goto put_bo;
++
++	ret = qaic_attach_slicing_bo(qdev, bo, &args->hdr, slice_ent);
++	if (ret)
++		goto unprepare_bo;
++
++	if (args->hdr.dir == DMA_TO_DEVICE)
++		dma_sync_sgtable_for_cpu(&qdev->pdev->dev, bo->sgt, args->hdr.dir);
++
++	bo->dbc = dbc;
++	drm_gem_object_put(obj);
++	srcu_read_unlock(&qdev->dev_lock, qdev_rcu_id);
++	srcu_read_unlock(&usr->qddev_lock, usr_rcu_id);
++
++	return 0;
++
++unprepare_bo:
++	qaic_unprepare_bo(qdev, bo);
++put_bo:
++	drm_gem_object_put(obj);
++free_slice_ent:
++	kfree(slice_ent);
++unlock_dev_srcu:
++	srcu_read_unlock(&qdev->dev_lock, qdev_rcu_id);
++unlock_usr_srcu:
++	srcu_read_unlock(&usr->qddev_lock, usr_rcu_id);
 +	return ret;
++}
++
++static inline int copy_exec_reqs(struct qaic_device *qdev,
++				 struct bo_slice *slice, u32 dbc_id, u32 head,
++				 u32 *ptail)
++{
++	struct dma_bridge_chan *dbc = &qdev->dbc[dbc_id];
++	struct dbc_req *reqs = slice->reqs;
++	u32 tail = *ptail;
++	u32 avail;
++
++	avail = head - tail;
++	if (head <= tail)
++		avail += dbc->nelem;
++
++	--avail;
++
++	if (avail < slice->nents) {
++		trace_qaic_exec_err_2(qdev, "No enough resources to execute this BO slice",
++				      "resource available", "resource needed",
++				      -EAGAIN, avail, slice->nents);
++		return -EAGAIN;
++	}
++
++	if (tail + slice->nents > dbc->nelem) {
++		avail = dbc->nelem - tail;
++		avail = min_t(u32, avail, slice->nents);
++		memcpy(dbc->req_q_base + tail * get_dbc_req_elem_size(),
++		       reqs, sizeof(*reqs) * avail);
++		reqs += avail;
++		avail = slice->nents - avail;
++		if (avail)
++			memcpy(dbc->req_q_base, reqs, sizeof(*reqs) * avail);
++	} else {
++		memcpy(dbc->req_q_base + tail * get_dbc_req_elem_size(),
++		       reqs, sizeof(*reqs) * slice->nents);
++	}
++
++	*ptail = (tail + slice->nents) % dbc->nelem;
++
++	return 0;
++}
++
++/*
++ * Based on the value of resize we may only need to transmit first_n
++ * entries and the last entry, with last_bytes to send from the last entry.
++ * Note that first_n could be 0.
++ */
++static inline int copy_partial_exec_reqs(struct qaic_device *qdev,
++					 struct bo_slice *slice,
++					 u64 resize, u32 dbc_id,
++					 u32 head, u32 *ptail)
++{
++	struct dma_bridge_chan *dbc = &qdev->dbc[dbc_id];
++	struct dbc_req *reqs = slice->reqs;
++	struct dbc_req *last_req;
++	u32 tail = *ptail;
++	u64 total_bytes;
++	u64 last_bytes;
++	u32 first_n;
++	u32 avail;
++	int ret;
++	int i;
++
++	avail = head - tail;
++	if (head <= tail)
++		avail += dbc->nelem;
++
++	--avail;
++
++	total_bytes = 0;
++	for (i = 0; i < slice->nents; i++) {
++		total_bytes += le32_to_cpu(reqs[i].len);
++		if (total_bytes >= resize)
++			break;
++	}
++
++	if (total_bytes < resize) {
++		/* User space should have used the full buffer path. */
++		ret = -EINVAL;
++		trace_qaic_exec_err_2(qdev, "Resize too big for partial buffer",
++				      "partial/full size of BO slice",
++				      "slice resize", ret, total_bytes, resize);
++		return ret;
++	}
++
++	first_n = i;
++	last_bytes = i ? resize + le32_to_cpu(reqs[i].len) - total_bytes : resize;
++
++	if (avail < (first_n + 1)) {
++		trace_qaic_exec_err_2(qdev, "Not enough resources to execute this BO slice",
++				      "resource available", "resource needed",
++				      -EAGAIN, avail, first_n + 1);
++		return -EAGAIN;
++	}
++
++	if (first_n) {
++		if (tail + first_n > dbc->nelem) {
++			avail = dbc->nelem - tail;
++			avail = min_t(u32, avail, first_n);
++			memcpy(dbc->req_q_base + tail * get_dbc_req_elem_size(),
++			       reqs, sizeof(*reqs) * avail);
++			last_req = reqs + avail;
++			avail = first_n - avail;
++			if (avail)
++				memcpy(dbc->req_q_base, last_req,
++				       sizeof(*reqs) * avail);
++		} else {
++			memcpy(dbc->req_q_base + tail * get_dbc_req_elem_size(),
++			       reqs, sizeof(*reqs) * first_n);
++		}
++	}
++
++	/* Copy over the last entry. Here we need to adjust len to the left over
++	 * size, and set src and dst to the entry it is copied to.
++	 */
++	last_req =  dbc->req_q_base +
++		    (tail + first_n) % dbc->nelem * get_dbc_req_elem_size();
++	memcpy(last_req, reqs + slice->nents - 1, sizeof(*reqs));
++
++	/*
++	 * last_bytes holds size of a DMA segment, maximum DMA segment size is
++	 * set to UINT_MAX by qaic and hence last_bytes can never exceed u32
++	 * range. So, by down sizing we are not corrupting the value.
++	 */
++	last_req->len = cpu_to_le32((u32)last_bytes);
++	last_req->src_addr = reqs[first_n].src_addr;
++	last_req->dest_addr = reqs[first_n].dest_addr;
++
++	*ptail = (tail + first_n + 1) % dbc->nelem;
++
++	return 0;
++}
++
++static int __qaic_execute_bo_ioctl(struct drm_device *dev, void *data,
++				   struct drm_file *file_priv, bool is_partial)
++{
++	struct qaic_partial_execute_entry *pexec;
++	struct qaic_execute *args = data;
++	struct qaic_execute_entry *exec;
++	struct dma_bridge_chan *dbc;
++	int usr_rcu_id, qdev_rcu_id;
++	struct drm_gem_object *obj;
++	struct qaic_device *qdev;
++	struct bo_slice *slice;
++	struct qaic_user *usr;
++	u8 __user *user_data;
++	unsigned long flags;
++	u64 received_ts = 0;
++	u32 queue_level = 0;
++	struct qaic_bo *bo;
++	u64 submit_ts = 0;
++	unsigned long n;
++	bool queued;
++	int ret = 0;
++	int dbc_id;
++	int rcu_id;
++	u32 head;
++	u32 tail;
++	u64 size;
++	int i, j;
++
++	received_ts = ktime_get_ns();
++
++	usr = file_priv->driver_priv;
++	usr_rcu_id = srcu_read_lock(&usr->qddev_lock);
++	if (!usr->qddev) {
++		ret = -ENODEV;
++		trace_qaic_exec_err(qdev, "Failed to acquire user RCU lock", ret);
++		goto unlock_usr_srcu;
++	}
++
++	qdev = usr->qddev->qdev;
++	qdev_rcu_id = srcu_read_lock(&qdev->dev_lock);
++	if (qdev->in_reset) {
++		ret = -ENODEV;
++		trace_qaic_exec_err(qdev, "Failed to acquire device RCU lock", ret);
++		goto unlock_dev_srcu;
++	}
++
++	if (args->hdr.dbc_id >= qdev->num_dbc) {
++		ret = -EINVAL;
++		trace_qaic_exec_err_1(qdev, "Invalid DBC ID", "DBC ID", ret, args->hdr.dbc_id);
++		goto unlock_dev_srcu;
++	}
++
++	dbc_id = args->hdr.dbc_id;
++	dbc = &qdev->dbc[dbc_id];
++
++	size = is_partial ? sizeof(*pexec) : sizeof(*exec);
++
++	n = (unsigned long)size * args->hdr.count;
++	if (args->hdr.count == 0 || n / args->hdr.count != size) {
++		ret = -EINVAL;
++		trace_qaic_exec_err_1(qdev, "Invalid number of execute requests",
++				      "execute count", ret, args->hdr.count);
++		goto unlock_dev_srcu;
++	}
++
++	user_data = u64_to_user_ptr(args->data);
++
++	exec = kcalloc(args->hdr.count, size, GFP_KERNEL);
++	pexec = (struct qaic_partial_execute_entry *)exec;
++	if (!exec) {
++		ret = -ENOMEM;
++		trace_qaic_exec_err_1(qdev, "Failed to allocate execute entry structure",
++				      "execute count", ret, args->hdr.count);
++		goto unlock_dev_srcu;
++	}
++
++	if (copy_from_user(exec, user_data, n)) {
++		ret = -EFAULT;
++		trace_qaic_exec_err(qdev, "Failed to copy data from user to kernel", ret);
++		goto free_exec;
++	}
++
++	rcu_id = srcu_read_lock(&dbc->ch_lock);
++	if (!dbc->usr || dbc->usr->handle != usr->handle) {
++		ret = -EPERM;
++		trace_qaic_exec_err_1(qdev, "User handle mismatch", "DBC ID", ret, dbc_id);
++		goto release_ch_rcu;
++	}
++
++	if (dbc->in_ssr) {
++		ret = -EPIPE;
++		trace_qaic_exec_err(qdev, "In SSR", ret);
++		goto release_ch_rcu;
++	}
++
++	head = readl(dbc->dbc_base + REQHP_OFF);
++	tail = readl(dbc->dbc_base + REQTP_OFF);
++
++	if (head == U32_MAX || tail == U32_MAX) {
++		/* PCI link error */
++		ret = -ENODEV;
++		trace_qaic_exec_err(qdev, "Failed to read HW head pointer and tail pointer", ret);
++		goto release_ch_rcu;
++	}
++
++	queue_level = head <= tail ? tail - head : dbc->nelem - (head - tail);
++
++	for (i = 0; i < args->hdr.count; i++) {
++		/*
++		 * ref count will be decemented when the transfer of this
++		 * buffer is complete. It is inside dbc_irq_threaded_fn().
++		 */
++		obj = drm_gem_object_lookup(file_priv,
++					    is_partial ? pexec[i].handle : exec[i].handle);
++		if (!obj) {
++			ret = -ENOENT;
++			trace_qaic_exec_err_2(qdev, "Invalid BO handle provided",
++					      "BO handle", "execute index",
++					      ret, is_partial ? pexec[i].handle :
++					      exec[i].handle, i);
++			goto sync_to_cpu;
++		}
++
++		bo = to_qaic_bo(obj);
++
++		if (!bo->sliced) {
++			ret = -EINVAL;
++			trace_qaic_exec_err_1(qdev, "Slicing information is not attached to BO",
++					      "BO Handle", ret, bo->handle);
++			goto sync_to_cpu;
++		}
++
++		if (is_partial && pexec[i].resize > bo->size) {
++			ret = -EINVAL;
++			trace_qaic_exec_err_2(qdev, "Resize value too large for partial execute IOCTL",
++					      "BO size", "Resize",
++					      ret, bo->size, pexec[i].resize);
++			goto sync_to_cpu;
++		}
++
++		spin_lock_irqsave(&dbc->xfer_lock, flags);
++		queued = bo->queued;
++		bo->queued = true;
++		if (queued) {
++			spin_unlock_irqrestore(&dbc->xfer_lock, flags);
++			ret = -EINVAL;
++			trace_qaic_exec_err_1(qdev, "BO is already queued",
++					      "BO handle", ret, bo->handle);
++			goto sync_to_cpu;
++		}
++
++		bo->req_id = dbc->next_req_id++;
++
++		list_for_each_entry(slice, &bo->slices, slice) {
++			/*
++			 * If this slice does not falls under the given
++			 * resize then skip this slice and continue the loop
++			 */
++			if (is_partial && pexec[i].resize &&
++			    pexec[i].resize <= slice->offset)
++				continue;
++
++			for (j = 0; j < slice->nents; j++)
++				slice->reqs[j].req_id = cpu_to_le16(bo->req_id);
++
++			/*
++			 * If it is a partial execute ioctl call then check if
++			 * resize has cut this slice short then do a partial copy
++			 * else do complete copy
++			 */
++			if (is_partial && pexec[i].resize &&
++			    pexec[i].resize < slice->offset + slice->size)
++				ret = copy_partial_exec_reqs(qdev, slice,
++							     pexec[i].resize - slice->offset,
++							     dbc_id, head, &tail);
++			else
++				ret = copy_exec_reqs(qdev, slice, dbc_id, head, &tail);
++			if (ret) {
++				bo->queued = false;
++				spin_unlock_irqrestore(&dbc->xfer_lock, flags);
++				goto sync_to_cpu;
++			}
++		}
++		reinit_completion(&bo->xfer_done);
++		list_add_tail(&bo->xfer_list, &dbc->xfer_list);
++		spin_unlock_irqrestore(&dbc->xfer_lock, flags);
++		dma_sync_sgtable_for_device(&qdev->pdev->dev, bo->sgt, bo->dir);
++	}
++
++	submit_ts = ktime_get_ns();
++	writel(tail, dbc->dbc_base + REQTP_OFF);
++
++	/* Collect kernel Profiling data */
++	for (i = 0; i < args->hdr.count; i++) {
++		/*
++		 * Since we already committed the BO to hardware, the only way
++		 * this should fail is a pending signal.  We can't cancel the
++		 * submit to hardware, so we have to just skip the profiling
++		 * data.  In case the signal is not fatal to the process, we
++		 * return success so that the user doesn't try to resubmit.
++		 */
++		obj = drm_gem_object_lookup(file_priv,
++					    is_partial ? pexec[i].handle : exec[i].handle);
++		if (!obj) {
++			trace_qaic_exec_err_2(qdev, "Invalid BO handle provided",
++					      "BO handle", "execute index",
++					      ret, is_partial ? pexec[i].handle :
++					      exec[i].handle, i);
++			break;
++		}
++		bo = to_qaic_bo(obj);
++		bo->perf_stats.req_received_ts = received_ts;
++		bo->perf_stats.req_submit_ts = submit_ts;
++		bo->perf_stats.queue_level_before = queue_level;
++		queue_level += bo->total_slice_nents;
++		drm_gem_object_put(obj);
++	}
++
++	if (poll_datapath)
++		schedule_work(&dbc->poll_work);
++
++	goto release_ch_rcu;
++
++sync_to_cpu:
++	if (likely(obj))
++		drm_gem_object_put(obj);
++	for (j = 0; j < i; j++) {
++		spin_lock_irqsave(&dbc->xfer_lock, flags);
++		bo = list_last_entry(&dbc->xfer_list, struct qaic_bo,
++				     xfer_list);
++		obj = &bo->base;
++		bo->queued = false;
++		list_del(&bo->xfer_list);
++		spin_unlock_irqrestore(&dbc->xfer_lock, flags);
++		dma_sync_sgtable_for_cpu(&qdev->pdev->dev, bo->sgt, bo->dir);
++		/* Release ref to BO */
++		drm_gem_object_put(obj);
++	}
++release_ch_rcu:
++	srcu_read_unlock(&dbc->ch_lock, rcu_id);
++free_exec:
++	kfree(exec);
++unlock_dev_srcu:
++	srcu_read_unlock(&qdev->dev_lock, qdev_rcu_id);
++unlock_usr_srcu:
++	srcu_read_unlock(&usr->qddev_lock, usr_rcu_id);
++	return ret;
++}
++
++int qaic_execute_bo_ioctl(struct drm_device *dev, void *data,
++			  struct drm_file *file_priv)
++{
++	return __qaic_execute_bo_ioctl(dev, data, file_priv, false);
++}
++
++int qaic_partial_execute_bo_ioctl(struct drm_device *dev, void *data,
++				  struct drm_file *file_priv)
++{
++	return __qaic_execute_bo_ioctl(dev, data, file_priv, true);
++}
++
++/*
++ * Our interrupt handling is a bit more complicated than a simple ideal, but
++ * sadly necessary.
++ *
++ * Each dbc has a completion queue.  Entries in the queue correspond to DMA
++ * requests which the device has processed.  The hardware already has a built
++ * in irq mitigation.  When the device puts an entry into the queue, it will
++ * only trigger an interrupt if the queue was empty.  Therefore, when adding
++ * the Nth event to a non-empty queue, the hardware doesn't trigger an
++ * interrupt.  This means the host doesn't get additional interrupts signaling
++ * the same thing - the queue has something to process.
++ * This behavior can be overridden in the DMA request.
++ * This means that when the host receives an interrupt, it is required to
++ * drain the queue.
++ *
++ * This behavior is what NAPI attempts to accomplish, although we can't use
++ * NAPI as we don't have a netdev.  We use threaded irqs instead.
++ *
++ * However, there is a situation where the host drains the queue fast enough
++ * that every event causes an interrupt.  Typically this is not a problem as
++ * the rate of events would be low.  However, that is not the case with
++ * lprnet for example.  On an Intel Xeon D-2191 where we run 8 instances of
++ * lprnet, the host receives roughly 80k interrupts per second from the device
++ * (per /proc/interrupts).  While NAPI documentation indicates the host should
++ * just chug along, sadly that behavior causes instability in some hosts.
++ *
++ * Therefore, we implement an interrupt disable scheme similar to NAPI.  The
++ * key difference is that we will delay after draining the queue for a small
++ * time to allow additional events to come in via polling.  Using the above
++ * lprnet workload, this reduces the number of interrupts processed from
++ * ~80k/sec to about 64 in 5 minutes and appears to solve the system
++ * instability.
++ */
++irqreturn_t dbc_irq_handler(int irq, void *data)
++{
++	struct dma_bridge_chan *dbc = data;
++	int rcu_id;
++	u32 head;
++	u32 tail;
++
++	rcu_id = srcu_read_lock(&dbc->ch_lock);
++
++	if (!dbc->usr) {
++		srcu_read_unlock(&dbc->ch_lock, rcu_id);
++		return IRQ_HANDLED;
++	}
++
++	head = readl(dbc->dbc_base + RSPHP_OFF);
++	if (head == U32_MAX) { /* PCI link error */
++		srcu_read_unlock(&dbc->ch_lock, rcu_id);
++		return IRQ_NONE;
++	}
++
++	tail = readl(dbc->dbc_base + RSPTP_OFF);
++	if (tail == U32_MAX) { /* PCI link error */
++		srcu_read_unlock(&dbc->ch_lock, rcu_id);
++		return IRQ_NONE;
++	}
++
++	if (head == tail) { /* queue empty */
++		srcu_read_unlock(&dbc->ch_lock, rcu_id);
++		return IRQ_NONE;
++	}
++
++	disable_irq_nosync(irq);
++	srcu_read_unlock(&dbc->ch_lock, rcu_id);
++	return IRQ_WAKE_THREAD;
++}
++
++void irq_polling_work(struct work_struct *work)
++{
++	struct dma_bridge_chan *dbc = container_of(work,
++						   struct dma_bridge_chan,
++						   poll_work);
++	unsigned long flags;
++	int rcu_id;
++	u32 head;
++	u32 tail;
++
++	rcu_id = srcu_read_lock(&dbc->ch_lock);
++
++	while (1) {
++		if (dbc->qdev->in_reset) {
++			srcu_read_unlock(&dbc->ch_lock, rcu_id);
++			return;
++		}
++		if (!dbc->usr) {
++			srcu_read_unlock(&dbc->ch_lock, rcu_id);
++			return;
++		}
++		spin_lock_irqsave(&dbc->xfer_lock, flags);
++		if (list_empty(&dbc->xfer_list)) {
++			spin_unlock_irqrestore(&dbc->xfer_lock, flags);
++			srcu_read_unlock(&dbc->ch_lock, rcu_id);
++			return;
++		}
++		spin_unlock_irqrestore(&dbc->xfer_lock, flags);
++
++		head = readl(dbc->dbc_base + RSPHP_OFF);
++		if (head == U32_MAX) { /* PCI link error */
++			srcu_read_unlock(&dbc->ch_lock, rcu_id);
++			return;
++		}
++
++		tail = readl(dbc->dbc_base + RSPTP_OFF);
++		if (tail == U32_MAX) { /* PCI link error */
++			srcu_read_unlock(&dbc->ch_lock, rcu_id);
++			return;
++		}
++
++		if (head != tail) {
++			irq_wake_thread(dbc->irq, dbc);
++			srcu_read_unlock(&dbc->ch_lock, rcu_id);
++			return;
++		}
++
++		cond_resched();
++		usleep_range(datapath_poll_interval_us,
++			     2 * datapath_poll_interval_us);
++	}
++}
++
++irqreturn_t dbc_irq_threaded_fn(int irq, void *data)
++{
++	struct dma_bridge_chan *dbc = data;
++	int event_count = NUM_EVENTS;
++	int delay_count = NUM_DELAYS;
++	struct qaic_device *qdev;
++	struct qaic_bo *bo, *i;
++	struct dbc_rsp *rsp;
++	unsigned long flags;
++	int rcu_id;
++	u16 status;
++	u16 req_id;
++	u32 head;
++	u32 tail;
++
++	rcu_id = srcu_read_lock(&dbc->ch_lock);
++
++	head = readl(dbc->dbc_base + RSPHP_OFF);
++	if (head == U32_MAX) /* PCI link error */
++		goto error_out;
++
++	qdev = dbc->qdev;
++read_fifo:
++
++	if (!event_count) {
++		event_count = NUM_EVENTS;
++		cond_resched();
++	}
++
++	/*
++	 * if this channel isn't assigned or gets unassigned during processing
++	 * we have nothing further to do
++	 */
++	if (!dbc->usr)
++		goto error_out;
++
++	tail = readl(dbc->dbc_base + RSPTP_OFF);
++	if (tail == U32_MAX) /* PCI link error */
++		goto error_out;
++
++	if (head == tail) { /* queue empty */
++		if (delay_count) {
++			--delay_count;
++			usleep_range(100, 200);
++			goto read_fifo; /* check for a new event */
++		}
++		goto normal_out;
++	}
++
++	delay_count = NUM_DELAYS;
++	while (head != tail) {
++		if (!event_count)
++			break;
++		--event_count;
++		rsp = dbc->rsp_q_base + head * sizeof(*rsp);
++		req_id = le16_to_cpu(rsp->req_id);
++		status = le16_to_cpu(rsp->status);
++		if (status)
++			pci_dbg(qdev->pdev, "req_id %d failed with status %d\n",
++				req_id, status);
++		spin_lock_irqsave(&dbc->xfer_lock, flags);
++		/*
++		 * A BO can receive multiple interrupts, since a BO can be
++		 * divided into multiple slices and a buffer receives as many
++		 * interrupts as slices. So until it receives interrupts for
++		 * all the slices we cannot mark that buffer complete.
++		 */
++		list_for_each_entry_safe(bo, i, &dbc->xfer_list, xfer_list) {
++			if (bo->req_id == req_id)
++				bo->nr_slice_xfer_done++;
++			else
++				continue;
++
++			if (bo->nr_slice_xfer_done < bo->nr_slice)
++				break;
++
++			/*
++			 * At this point we have received all the interrupts for
++			 * BO, which means BO execution is complete.
++			 */
++			dma_sync_sgtable_for_cpu(&qdev->pdev->dev, bo->sgt, bo->dir);
++			bo->nr_slice_xfer_done = 0;
++			bo->queued = false;
++			list_del(&bo->xfer_list);
++			bo->perf_stats.req_processed_ts = ktime_get_ns();
++			complete_all(&bo->xfer_done);
++			drm_gem_object_put(&bo->base);
++			break;
++		}
++		spin_unlock_irqrestore(&dbc->xfer_lock, flags);
++		head = (head + 1) % dbc->nelem;
++	}
++
++	/*
++	 * Update the head pointer of response queue and let the device know
++	 * that we have consumed elements from the queue.
++	 */
++	writel(head, dbc->dbc_base + RSPHP_OFF);
++
++	/* elements might have been put in the queue while we were processing */
++	goto read_fifo;
++
++normal_out:
++	if (likely(!poll_datapath))
++		enable_irq(irq);
++	else
++		schedule_work(&dbc->poll_work);
++	/* checking the fifo and enabling irqs is a race, missed event check */
++	tail = readl(dbc->dbc_base + RSPTP_OFF);
++	if (tail != U32_MAX && head != tail) {
++		if (likely(!poll_datapath))
++			disable_irq_nosync(irq);
++		goto read_fifo;
++	}
++	srcu_read_unlock(&dbc->ch_lock, rcu_id);
++	return IRQ_HANDLED;
++
++error_out:
++	srcu_read_unlock(&dbc->ch_lock, rcu_id);
++	if (likely(!poll_datapath))
++		enable_irq(irq);
++	else
++		schedule_work(&dbc->poll_work);
++
++	return IRQ_HANDLED;
++}
++
++int qaic_wait_bo_ioctl(struct drm_device *dev, void *data,
++		       struct drm_file *file_priv)
++{
++	struct qaic_wait *args = data;
++	int usr_rcu_id, qdev_rcu_id;
++	struct dma_bridge_chan *dbc;
++	struct drm_gem_object *obj;
++	struct qaic_device *qdev;
++	unsigned long timeout;
++	struct qaic_user *usr;
++	struct qaic_bo *bo;
++	int rcu_id;
++	int ret;
++
++	usr = file_priv->driver_priv;
++	usr_rcu_id = srcu_read_lock(&usr->qddev_lock);
++	if (!usr->qddev) {
++		ret = -ENODEV;
++		trace_qaic_wait_err(qdev, "Failed to acquire user RCU lock", ret);
++		goto unlock_usr_srcu;
++	}
++
++	qdev = usr->qddev->qdev;
++	qdev_rcu_id = srcu_read_lock(&qdev->dev_lock);
++	if (qdev->in_reset) {
++		ret = -ENODEV;
++		trace_qaic_wait_err(qdev, "Failed to acquire device RCU lock", ret);
++		goto unlock_dev_srcu;
++	}
++
++	if (args->pad != 0) {
++		ret = -EINVAL;
++		trace_qaic_wait_err(qdev, "Pad value is non-zero", ret);
++		goto unlock_dev_srcu;
++	}
++
++	if (args->dbc_id >= qdev->num_dbc) {
++		ret = -EINVAL;
++		trace_qaic_wait_err_1(qdev, "Invalid DBC ID", "DBC ID", ret, args->dbc_id);
++		goto unlock_dev_srcu;
++	}
++
++	dbc = &qdev->dbc[args->dbc_id];
++
++	rcu_id = srcu_read_lock(&dbc->ch_lock);
++	if (dbc->usr != usr) {
++		ret = -EPERM;
++		trace_qaic_wait_err_1(qdev, "Mismatch user handle", "DBC ID", ret, args->dbc_id);
++		goto unlock_ch_srcu;
++	}
++
++	if (dbc->in_ssr) {
++		ret = -EPIPE;
++		trace_qaic_wait_err(qdev, "In SSR", ret);
++		goto unlock_ch_srcu;
++	}
++
++	obj = drm_gem_object_lookup(file_priv, args->handle);
++	if (!obj) {
++		ret = -ENOENT;
++		trace_qaic_wait_err_1(qdev, "Invalid BO handle", "handle", ret, args->handle);
++		goto unlock_ch_srcu;
++	}
++
++	bo = to_qaic_bo(obj);
++	timeout = args->timeout ? args->timeout : wait_exec_default_timeout;
++	timeout = msecs_to_jiffies(timeout);
++	ret = wait_for_completion_interruptible_timeout(&bo->xfer_done, timeout);
++	if (!ret) {
++		ret = -ETIMEDOUT;
++		trace_qaic_wait_err_1(qdev, "Wait timeout", "timeout", ret,
++				      jiffies_to_msecs(timeout));
++		goto put_obj;
++	}
++	if (ret > 0)
++		ret = 0;
++
++	if (!dbc->usr) {
++		ret = -EPERM;
++		trace_qaic_wait_err(qdev, "User disappeared", ret);
++	} else if (dbc->in_ssr) {
++		/*
++		 * While waiting for this buffer transaction, it is possible
++		 * that SSR was triggered on this DBC.  Thus we flushed all
++		 * buffers on this DBC in transfer queue and marked them as
++		 * complete.  Therefore, return an error as this buffer
++		 * transaction failed.
++		 */
++		ret = -EPIPE;
++		trace_qaic_wait_err(qdev, "In SSR", ret);
++	}
++
++put_obj:
++	drm_gem_object_put(obj);
++unlock_ch_srcu:
++	srcu_read_unlock(&dbc->ch_lock, rcu_id);
++unlock_dev_srcu:
++	srcu_read_unlock(&qdev->dev_lock, qdev_rcu_id);
++unlock_usr_srcu:
++	srcu_read_unlock(&usr->qddev_lock, usr_rcu_id);
++	return ret;
++}
++
++int qaic_perf_stats_bo_ioctl(struct drm_device *dev, void *data,
++			     struct drm_file *file_priv)
++{
++	struct qaic_perf_stats_entry *ent = NULL;
++	struct qaic_perf_stats *args = data;
++	int usr_rcu_id, qdev_rcu_id;
++	struct drm_gem_object *obj;
++	struct qaic_device *qdev;
++	struct qaic_user *usr;
++	struct qaic_bo *bo;
++	int ret, i;
++
++	usr = file_priv->driver_priv;
++	usr_rcu_id = srcu_read_lock(&usr->qddev_lock);
++	if (!usr->qddev) {
++		ret = -ENODEV;
++		trace_qaic_stats_err(qdev, "Failed to acquire user RCU lock", ret);
++		goto unlock_usr_srcu;
++	}
++
++	qdev = usr->qddev->qdev;
++	qdev_rcu_id = srcu_read_lock(&qdev->dev_lock);
++	if (qdev->in_reset) {
++		ret = -ENODEV;
++		trace_qaic_stats_err(qdev, "Failed to acquire device RCU lock", ret);
++		goto unlock_dev_srcu;
++	}
++
++	if (args->hdr.dbc_id >= qdev->num_dbc) {
++		ret = -EINVAL;
++		trace_qaic_stats_err_1(qdev, "Invalid DBC ID", "DBC ID", ret, args->hdr.dbc_id);
++		goto unlock_dev_srcu;
++	}
++
++	ent = kcalloc(args->hdr.count, sizeof(*ent), GFP_KERNEL);
++	if (!ent) {
++		ret = -EINVAL;
++		trace_qaic_stats_err_1(qdev, "Failed to allocate memory for perf stats structure",
++				       "query count", ret, args->hdr.count);
++		goto unlock_dev_srcu;
++	}
++
++	ret = copy_from_user(ent, u64_to_user_ptr(args->data),
++			     args->hdr.count * sizeof(*ent));
++	if (ret) {
++		ret = -EFAULT;
++		trace_qaic_stats_err(qdev, "Failed to copy data from user to kernel", ret);
++		goto free_ent;
++	}
++
++	for (i = 0; i < args->hdr.count; i++) {
++		obj = drm_gem_object_lookup(file_priv, ent[i].handle);
++		if (!obj) {
++			ret = -ENOENT;
++			trace_qaic_stats_err_1(qdev, "Invalid BO handle",
++					       "BO handle", ret, ent[i].handle);
++			goto free_ent;
++		}
++		bo = to_qaic_bo(obj);
++		/*
++		 * perf stats ioctl is called before wait ioctl is complete then
++		 * the latency information is invalid.
++		 */
++		if (bo->perf_stats.req_processed_ts < bo->perf_stats.req_submit_ts) {
++			ent[i].device_latency_us = 0;
++		} else {
++			ent[i].device_latency_us = (bo->perf_stats.req_processed_ts -
++						    bo->perf_stats.req_submit_ts) / 1000;
++		}
++		ent[i].submit_latency_us = (bo->perf_stats.req_submit_ts -
++					   bo->perf_stats.req_received_ts) / 1000;
++		ent[i].queue_level_before = bo->perf_stats.queue_level_before;
++		ent[i].num_queue_element = bo->total_slice_nents;
++		drm_gem_object_put(obj);
++	}
++
++	if (copy_to_user(u64_to_user_ptr(args->data), ent,
++			 args->hdr.count * sizeof(*ent))) {
++		ret = -EFAULT;
++		trace_qaic_stats_err(qdev, "Failed to copy data to user from kernel", ret);
++	}
++
++free_ent:
++	kfree(ent);
++unlock_dev_srcu:
++	srcu_read_unlock(&qdev->dev_lock, qdev_rcu_id);
++unlock_usr_srcu:
++	srcu_read_unlock(&usr->qddev_lock, usr_rcu_id);
++	return ret;
++}
++
++static void empty_xfer_list(struct qaic_device *qdev, struct dma_bridge_chan *dbc)
++{
++	unsigned long flags;
++	struct qaic_bo *bo;
++
++	spin_lock_irqsave(&dbc->xfer_lock, flags);
++	while (!list_empty(&dbc->xfer_list)) {
++		bo = list_first_entry(&dbc->xfer_list, typeof(*bo), xfer_list);
++		bo->queued = false;
++		list_del(&bo->xfer_list);
++		spin_unlock_irqrestore(&dbc->xfer_lock, flags);
++		dma_sync_sgtable_for_cpu(&qdev->pdev->dev, bo->sgt, bo->dir);
++		complete_all(&bo->xfer_done);
++		drm_gem_object_put(&bo->base);
++		spin_lock_irqsave(&dbc->xfer_lock, flags);
++	}
++	spin_unlock_irqrestore(&dbc->xfer_lock, flags);
++}
++
++int disable_dbc(struct qaic_device *qdev, u32 dbc_id, struct qaic_user *usr)
++{
++	if (!qdev->dbc[dbc_id].usr ||
++	    qdev->dbc[dbc_id].usr->handle != usr->handle)
++		return -EPERM;
++
++	qdev->dbc[dbc_id].usr = NULL;
++	synchronize_srcu(&qdev->dbc[dbc_id].ch_lock);
++	return 0;
++}
++
++/**
++ * enable_dbc - Enable the DBC. DBCs are disabled by removing the context of
++ * user. Add user context back to DBC to enable it. This fucntions trusts the
++ * DBC ID passed and expects the DBC to be disabled.
++ * @qdev: Qranium device handle
++ * @dbc_id: ID of the DBC
++ * @usr: User context
++ */
++void enable_dbc(struct qaic_device *qdev, u32 dbc_id, struct qaic_user *usr)
++{
++	qdev->dbc[dbc_id].usr = usr;
++}
++
++void wakeup_dbc(struct qaic_device *qdev, u32 dbc_id)
++{
++	struct dma_bridge_chan *dbc = &qdev->dbc[dbc_id];
++
++	dbc->usr = NULL;
++	empty_xfer_list(qdev, dbc);
++	synchronize_srcu(&dbc->ch_lock);
++}
++
++void release_dbc(struct qaic_device *qdev, u32 dbc_id, bool set_state)
++{
++	struct bo_slice *slice, *slice_temp;
++	struct qaic_bo *bo, *bo_temp;
++	struct dma_bridge_chan *dbc;
++
++	dbc = &qdev->dbc[dbc_id];
++	if (!dbc->in_use)
++		return;
++
++	wakeup_dbc(qdev, dbc_id);
++
++	dma_free_coherent(&qdev->pdev->dev, dbc->total_size, dbc->req_q_base,
++			  dbc->dma_addr);
++	dbc->total_size = 0;
++	dbc->req_q_base = NULL;
++	dbc->dma_addr = 0;
++	dbc->nelem = 0;
++	dbc->usr = NULL;
++	if (set_state)
++		set_dbc_state(qdev, dbc_id, DBC_STATE_IDLE);
++
++	list_for_each_entry_safe(bo, bo_temp, &dbc->bo_lists, bo_list) {
++		list_for_each_entry_safe(slice, slice_temp, &bo->slices, slice)
++			kref_put(&slice->ref_count, free_slice);
++		bo->sliced = false;
++		INIT_LIST_HEAD(&bo->slices);
++		bo->total_slice_nents = 0;
++		bo->dir = 0;
++		bo->dbc = NULL;
++		bo->nr_slice = 0;
++		bo->nr_slice_xfer_done = 0;
++		bo->queued = false;
++		bo->req_id = 0;
++		init_completion(&bo->xfer_done);
++		complete_all(&bo->xfer_done);
++		list_del(&bo->bo_list);
++		bo->perf_stats.req_received_ts = 0;
++		bo->perf_stats.req_submit_ts = 0;
++		bo->perf_stats.req_processed_ts = 0;
++		bo->perf_stats.queue_level_before = 0;
++	}
++
++	dbc->in_use = false;
++	wake_up(&dbc->dbc_release);
++}
++
++void qaic_data_get_fifo_info(struct dma_bridge_chan *dbc, u32 *head, u32 *tail)
++{
++	if (!dbc || !head || !tail)
++		return;
++
++	*head = readl(dbc->dbc_base + REQHP_OFF);
++	*tail = readl(dbc->dbc_base + REQTP_OFF);
++}
++
++/**
++ * dbc_enter_ssr - Prepare to enter in sub system reset(SSR) for given DBC ID
++ * During SSR we cannot support execute ioctl and wait ioctl for the given DBC.
++ * We control this behaviour using in_ssr flag in DBC.
++ * @qdev: Qranium device handle
++ * @dbc_id: ID of the DBC which will enter SSR
++ */
++void dbc_enter_ssr(struct qaic_device *qdev, u32 dbc_id)
++{
++	struct dma_bridge_chan *dbc = &qdev->dbc[dbc_id];
++
++	dbc->in_ssr = true;
++	empty_xfer_list(qdev, dbc);
++	synchronize_srcu(&dbc->ch_lock);
++}
++
++/**
++ * dbc_exit_ssr - Prepare to exit from sub system reset(SSR) for given DBC ID
++ * After SSR we exit SSR we can resume our supporting execute ioctl and
++ * wait ioctl. We control this behaviour using in_ssr flag in DBC.
++ * @qdev: Qranium device handle
++ * @dbc_id: ID of the DBC which will exit SSR
++ */
++void dbc_exit_ssr(struct qaic_device *qdev, u32 dbc_id)
++{
++	qdev->dbc[dbc_id].in_ssr = false;
 +}
 -- 
 2.7.4

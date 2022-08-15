@@ -2,59 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6B29593047
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 15:53:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A621C593048
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 15:53:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231467AbiHONx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 09:53:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37124 "EHLO
+        id S232386AbiHONxr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 09:53:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230447AbiHONxZ (ORCPT
+        with ESMTP id S231995AbiHONxi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 09:53:25 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 637FE1EAE8;
-        Mon, 15 Aug 2022 06:53:22 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DC6F01D6F;
-        Mon, 15 Aug 2022 06:53:22 -0700 (PDT)
-Received: from bogus (unknown [10.57.44.62])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 55DBC3F66F;
-        Mon, 15 Aug 2022 06:53:17 -0700 (PDT)
-Date:   Mon, 15 Aug 2022 14:52:51 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>, Abel Vesa <abel.vesa@linaro.org>,
-        Alexander Stein <alexander.stein@ew.tq-group.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        John Stultz <jstultz@google.com>,
-        Doug Anderson <dianders@chromium.org>,
-        Guenter Roeck <linux@roeck-us.net>, kernel-team@android.com,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-acpi@vger.kernel.org
-Subject: Re: [PATCH v1 0/9] fw_devlink improvements
-Message-ID: <20220815135251.i3pejjtnd3nqeolo@bogus>
-References: <20220810060040.321697-1-saravanak@google.com>
+        Mon, 15 Aug 2022 09:53:38 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F55C1F2C9
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 06:53:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660571618; x=1692107618;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=o2XiW+yxUok6Tdrk84ZcRgZcADmd7A774QcSxAhcmZ0=;
+  b=AjE+I7qvKuwMcBjMqULJi+lz2E0X+x9bGs9oDeNen43w3706UzrltDOn
+   eth/hzW2AjRE4Y9mnUoUBymMAUxsMkALkKzrRB/S4YbYwStFkyiCqweY+
+   mVrb3Ss3FqruYIeb466oUzqzW7mtfQb3yLT0dJ8L/fiWB+9m7IvfuLGw8
+   4Wcl+xu7UZq8s0Mdlp/NgHDdXNAugnFtlJBR9CinJAQFPXAIkz3l6M49F
+   obySg0tuy7LqPFLf3tenv9PTnf6LZ1v7YbUj7YhCsOWpC1bo9RI2hnHWv
+   6nPr53daOudSqOXopKI6YBZOemo8quu/QttkxmhCSd+6CwCyet1Z/NNWw
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10440"; a="378248463"
+X-IronPort-AV: E=Sophos;i="5.93,238,1654585200"; 
+   d="scan'208";a="378248463"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 06:53:37 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,238,1654585200"; 
+   d="scan'208";a="639651299"
+Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 15 Aug 2022 06:53:35 -0700
+Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oNaX8-00012b-15;
+        Mon, 15 Aug 2022 13:53:34 +0000
+Date:   Mon, 15 Aug 2022 21:53:24 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kassey Li <quic_yingangl@quicinc.com>, akpm@linux-foundation.org,
+        vbabka@kernel.org
+Cc:     kbuild-all@lists.01.org, Kassey Li <quic_yingangl@quicinc.com>,
+        minchan@kernel.org, vbabka@suse.cz, iamjoonsoo.kim@lge.com,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH v7] mm/page_owner.c: add llseek for page_owner
+Message-ID: <202208152108.7XytfeP8-lkp@intel.com>
+References: <20220815063010.22462-1-quic_yingangl@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220810060040.321697-1-saravanak@google.com>
-X-Spam-Status: No, score=-6.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20220815063010.22462-1-quic_yingangl@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,95 +66,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Aug 09, 2022 at 11:00:29PM -0700, Saravana Kannan wrote:
-> This patch series improves fw_devlink in the following ways:
-> 
-> 1. It no longer cares about a fwnode having a "compatible" property. It
->    figures this our more dynamically. The only expectation is that
->    fwnode that are converted to devices actually get probed by a driver
->    for the dependencies to be enforced correctly.
-> 
-> 2. Finer grained dependency tracking. fw_devlink will now create device
->    links from the consumer to the actual resource's device (if it has one,
->    Eg: gpio_device) instead of the parent supplier device. This improves
->    things like async suspend/resume ordering, potentially remove the need
->    for frameworks to create device links, more parallelized async probing,
->    and better sync_state() tracking.
-> 
-> 3. Handle hardware/software quirks where a child firmware node gets
->    populated as a device before its parent firmware node AND actually
->    supplies a non-optional resource to the parent firmware node's
->    device.
-> 
-> 4. Way more robust at cycle handling (see patch for the insane cases).
-> 
-> 5. Stops depending on OF_POPULATED to figure out some corner cases.
-> 
-> 6. Simplifies the work that needs to be done by the firmware specific
->    code.
-> 
-> This took way too long to get done due to typo bugs I had in my rewrite or
-> corner cases I had to find and handle. But it's fairly well tested at this
-> point and I expect this to work properly.
-> 
-> Abel & Doug,
-> 
-> This should fix your cyclic dependency issues with your display. Can you
-> give it a shot please?
-> 
-> Alexander,
-> 
-> This should fix your issue where the power domain device not having a
-> compatible property. Can you give it a shot please?
-> 
-> Tony,
-> 
-> This should handle the odd case of the child being the supplier of the
-> parent. Can you please give this a shot? I want to make sure the cycle
-> detection code handles this properly and treats it like it's NOT a cycle.
-> 
-> Geert,
-> 
-> Can you test the renesas stuff I changed please? They should continue
-> working like before. Any other sanity test on other hardware would be
-> great too.
-> 
-> Sudeep,
-> 
-> I don't think there are any unfixed issues you had reported in my other
-> patches that this series might fix, but it'll be nice if you could give
-> this a sanity test.
-> 
+Hi Kassey,
 
-Sure tested this on Juno on top of v6.0-rc1 and found no regressions.
-So,
+Thank you for the patch! Perhaps something to improve:
 
-Tested-by: Sudeep Holla <sudeep.holla@arm.com>
+[auto build test WARNING on linus/master]
+[also build test WARNING on v6.0-rc1 next-20220815]
+[cannot apply to akpm-mm/mm-everything]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Just wanted to check if the logs are intentional or do you plan to make
-them debug. On Juno with hardly few such dependencies I get below extra
-logs during boot, it may add loads on other platforms. I am fine either
-way, just thought of checking.
+url:    https://github.com/intel-lab-lkp/linux/commits/Kassey-Li/mm-page_owner-c-add-llseek-for-page_owner/20220815-143155
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git 568035b01cfb107af8d2e4bd2fb9aea22cf5b868
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20220815/202208152108.7XytfeP8-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/f9ef28f8ab55cdd176ab5ce7ad606ca45b4dbcc0
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Kassey-Li/mm-page_owner-c-add-llseek-for-page_owner/20220815-143155
+        git checkout f9ef28f8ab55cdd176ab5ce7ad606ca45b4dbcc0
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash
 
-| amba 20040000.funnel: Fixed dependency cycle(s) with /etf@20010000/in-ports/port/endpoint
-| amba 20120000.replicator: Fixed dependency cycle(s) with /etr@20070000/in-ports/port/endpoint
-| amba 20120000.replicator: Fixed dependency cycle(s) with /tpiu@20030000/in-ports/port/endpoint
-| amba 220c0000.funnel: Fixed dependency cycle(s) with /etm@22040000/out-ports/port/endpoint
-| amba 220c0000.funnel: Fixed dependency cycle(s) with /funnel@20040000/in-ports/port@0/endpoint
-| amba 22140000.etm: Fixed dependency cycle(s) with /funnel@220c0000/in-ports/port@1/endpoint
-| amba 230c0000.funnel: Fixed dependency cycle(s) with /etm@23040000/out-ports/port/endpoint
-| amba 230c0000.funnel: Fixed dependency cycle(s) with /funnel@20040000/in-ports/port@1/endpoint
-| amba 23140000.etm: Fixed dependency cycle(s) with /funnel@230c0000/in-ports/port@1/endpoint
-| amba 23240000.etm: Fixed dependency cycle(s) with /funnel@230c0000/in-ports/port@2/endpoint
-| amba 23340000.etm: Fixed dependency cycle(s) with /funnel@230c0000/in-ports/port@3/endpoint
-| amba 20130000.funnel: Fixed dependency cycle(s) with /stm@20100000/out-ports/port/endpoint
-| amba 20140000.etf: Fixed dependency cycle(s) with /funnel@20130000/out-ports/port/endpoint
-| amba 20150000.funnel: Fixed dependency cycle(s) with /etf@20140000/out-ports/port/endpoint
-| amba 20150000.funnel: Fixed dependency cycle(s) with /etf@20010000/out-ports/port/endpoint
-| amba 20150000.funnel: Fixed dependency cycle(s) with /replicator@20120000/in-ports/port/endpoint
-| i2c 0-0070: Fixed dependency cycle(s) with /hdlcd@7ff60000/port/endpoint
-| i2c 0-0071: Fixed dependency cycle(s) with /hdlcd@7ff50000/port/endpoint
+If you fix the issue, kindly add following tag where applicable
+Reported-by: kernel test robot <lkp@intel.com>
+
+All warnings (new ones prefixed by >>):
+
+>> mm/page_owner.c:575:8: warning: no previous prototype for 'lseek_page_owner' [-Wmissing-prototypes]
+     575 | loff_t lseek_page_owner(struct file *file, loff_t offset, int orig)
+         |        ^~~~~~~~~~~~~~~~
+
+
+vim +/lseek_page_owner +575 mm/page_owner.c
+
+   574	
+ > 575	loff_t lseek_page_owner(struct file *file, loff_t offset, int orig)
+   576	{
+   577		switch (orig) {
+   578		case SEEK_SET:
+   579			file->f_pos = offset;
+   580			break;
+   581		case SEEK_CUR:
+   582			file->f_pos += offset;
+   583			break;
+   584		default:
+   585			return -EINVAL;
+   586		}
+   587		return file->f_pos;
+   588	}
+   589	
 
 -- 
-Regards,
-Sudeep
+0-DAY CI Kernel Test Service
+https://01.org/lkp

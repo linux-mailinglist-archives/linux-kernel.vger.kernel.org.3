@@ -2,95 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D66AC593249
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:44:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE120593251
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:45:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232501AbiHOPox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 11:44:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60504 "EHLO
+        id S232579AbiHOPo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 11:44:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230099AbiHOPoq (ORCPT
+        with ESMTP id S231877AbiHOPow (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 11:44:46 -0400
+        Mon, 15 Aug 2022 11:44:52 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19511DF62;
-        Mon, 15 Aug 2022 08:44:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C1A11C35;
+        Mon, 15 Aug 2022 08:44:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C6F87B80EE4;
-        Mon, 15 Aug 2022 15:44:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29039C433D7;
-        Mon, 15 Aug 2022 15:44:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1660578283;
-        bh=A5X+xGMzM1h8sTR3J20XfXnllhty+y5tSXqqki10rMo=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=aEU2Inhpca8EezctoKdfOp4qPnusitLbq0B9rmFklwqSkJ+1jVg6e9wIVIJ5xLfwo
-         ggjq9ccR/fricwS7cWCVXw240Fz51i5N5rqSfJ1DzOkdTaWfb4mlX6tLofAjTUUA4b
-         5HNoaDQ0mOSFR0A5vdS7IQuighEjyYdbx4zdhQZdgNc6wpkct31agY9mJLkz0MpZw+
-         FN/fpDxbKU1FgOX4WH1IPsDixFluOcF1EfK7aBMhYkqUSap/5t38Rdt79YP6/044zX
-         ZIuhTBxFdvCj2LGN4doYiVJyCG3kpDaQVJ75JphhPqenFhb5RuwcF2Bzu0VQ4zt+Ea
-         9QlNqD8F2c6Eg==
-From:   Mark Brown <broonie@kernel.org>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-In-Reply-To: <20220726102024.1.Icc838fe7bf0ef54a014ab2fee8af311654f5342a@changeid>
-References: <20220726102024.1.Icc838fe7bf0ef54a014ab2fee8af311654f5342a@changeid>
-Subject: Re: [PATCH] regulator: qcom-rpmh: Implement get_optimum_mode(), not set_load()
-Message-Id: <166057828188.697572.9391830884435789646.b4-ty@kernel.org>
-Date:   Mon, 15 Aug 2022 16:44:41 +0100
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3D744B80F2B;
+        Mon, 15 Aug 2022 15:44:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BB5FC433D6;
+        Mon, 15 Aug 2022 15:44:46 +0000 (UTC)
+Date:   Mon, 15 Aug 2022 11:44:53 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Jiri Olsa <olsajiri@gmail.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, bpf <bpf@vger.kernel.org>,
+        Martin KaFai Lau <kafai@fb.com>,
+        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@chromium.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Josh Poimboeuf <jpoimboe@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@infradead.org>
+Subject: Re: [RFC] ftrace: Add support to keep some functions out of ftrace
+Message-ID: <20220815114453.08625089@gandalf.local.home>
+In-Reply-To: <CAADnVQJuDS22o7fi9wPZx9siAWgu1grQXXB02KfasxZ-RPdRSw@mail.gmail.com>
+References: <YvbDlwJCTDWQ9uJj@krava>
+        <20220813150252.5aa63650@rorschach.local.home>
+        <Yvn9xR7qhXW7FnFL@worktop.programming.kicks-ass.net>
+        <YvoVgMzMuQbAEayk@krava>
+        <Yvo+EpO9dN30G0XE@worktop.programming.kicks-ass.net>
+        <CAADnVQJfvn2RYydqgO-nS_K+C8WJL7BdCnR44MiMF4rnAwWM5A@mail.gmail.com>
+        <YvpZJQGQdVaa2Oh4@worktop.programming.kicks-ass.net>
+        <CAADnVQKyfrFTZOM9F77i0NbaXLZZ7KbvKBvu7p6kgdnRgG+2=Q@mail.gmail.com>
+        <Yvpf67eCerqaDmlE@worktop.programming.kicks-ass.net>
+        <CAADnVQKX5xJz5N_mVyf7wg4BT8Q2cNh8ze-SxTRfk6KtcFQ0=Q@mail.gmail.com>
+        <YvpmAnFldR0iwAFC@worktop.programming.kicks-ass.net>
+        <CAADnVQJuDS22o7fi9wPZx9siAWgu1grQXXB02KfasxZ-RPdRSw@mail.gmail.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fe10a
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 26 Jul 2022 10:20:29 -0700, Douglas Anderson wrote:
-> Since we don't actually pass the load to the firmware, switch to using
-> get_optimum_mode() instead of open-coding it.
+On Mon, 15 Aug 2022 08:35:53 -0700
+Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
+
+> > Then make it a notrace function with a nop5 in it. That isn't hard.  
 > 
-> This is intended to have no effect other than cleanup.
-> 
-> 
+> That's exactly what we're trying to do.
+> Jiri's patch is one way to achieve that.
+> What is your suggestion?
+> Move it from C to asm ?
+> Make it naked function with explicit inline asm?
+> What else?
 
-Applied to
+The dispatcher is already in the kernel so it's too late to complain about
+it. Jiri's patch (with my extensions) will hopefully fix the breakage BPF
+did to ftrace.
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+My ask now is to be more inclusive when doing anything that deals with
+modification of text, or other infrastructures. This "go it alone" approach
+really needs to stop. Linux is an open source project and collaboration is
+key. I know you don't care about others use cases (as you told me in that
+BPF meeting last year), but any maintainer in the Linux kernel must care
+about the use case of others or this will all fail.
 
-Thanks!
-
-[1/1] regulator: qcom-rpmh: Implement get_optimum_mode(), not set_load()
-      commit: efb0cb50c42734f868908a97f0d93e9208da1f0e
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+-- Steve

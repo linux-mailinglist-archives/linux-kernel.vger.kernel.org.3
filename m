@@ -2,141 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A4E1593293
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:55:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25B9359328F
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:54:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232078AbiHOPzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 11:55:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43938 "EHLO
+        id S231531AbiHOPyz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 11:54:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232201AbiHOPzF (ORCPT
+        with ESMTP id S230443AbiHOPyx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 11:55:05 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F5191A05A;
-        Mon, 15 Aug 2022 08:55:02 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (62-78-145-57.bb.dnainternet.fi [62.78.145.57])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 26F5656D;
-        Mon, 15 Aug 2022 17:54:59 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1660578899;
-        bh=S8j7GbNbq17SRBvgGdMvUVVVDhDYQu28yqUMRIme4pw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KkMqLgeA3Hlou6eQxDNwuj/cAMOGRuZWf6psOJwAoE+lkqdgWTBYLUFWFiFmirC11
-         MV/sX2S9rJ9pHMvTFjbnnwFQbUhcqWxVXtYbPHGpZY4nQn8qmWU8YDavgsBevmlt5n
-         2eecXKodkdAhl5/HdCyGSGest6FWKhs5flNo+vq8=
-Date:   Mon, 15 Aug 2022 18:54:45 +0300
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        dri-devel@lists.freedesktop.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Kevin Hilman <khilman@baylibre.com>,
-        linux-kernel@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
-        linux-amlogic@lists.infradead.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-doc@vger.kernel.org, Jonathan Cameron <jic23@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Miaoqian Lin <linmq006@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Alexandru Tachici <alexandru.tachici@analog.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jean Delvare <jdelvare@suse.com>,
-        Alexandru Ardelean <aardelean@deviqon.com>,
-        linux-hwmon@vger.kernel.org, linux-clk@vger.kernel.org,
-        Nuno =?utf-8?B?U8Oh?= <nuno.sa@analog.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Aswath Govindraju <a-govindraju@ti.com>,
-        David Airlie <airlied@linux.ie>, linux-iio@vger.kernel.org
-Subject: Re: (subset) [PATCH v2 0/7] Devm helpers for regulator get and enable
-Message-ID: <YvpsRbguMXn74GhR@pendragon.ideasonboard.com>
-References: <cover.1660292316.git.mazziesaccount@gmail.com>
- <166057828406.697572.228317501909350108.b4-ty@kernel.org>
+        Mon, 15 Aug 2022 11:54:53 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8987217077;
+        Mon, 15 Aug 2022 08:54:52 -0700 (PDT)
+Received: from [192.168.2.145] (109-252-119-13.nat.spd-mgts.ru [109.252.119.13])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 37E3D6601DAE;
+        Mon, 15 Aug 2022 16:54:50 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1660578891;
+        bh=R9SmFeYZ1iN/MuMsg2JDoB8UWfkyjtJieOUNto4HnGc=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=Sq3+jVX9uKW2EvCZcTaUGXKBFblrK2ajudH7TdKurWfkYXP/ERVIA0JRHClwf0pYK
+         xXhV2QbzM4Krsbu56L4ryvQZp1bm4oj5YzXdSauekrqt1dR6d/8nAwhKPq9x6qESqx
+         Sd2lnyaLyP18BM0F0mIXv4zFvhWjiX8q6PM6WCRUlSrljEZ0Utd/V7h9t4WthO4ODF
+         lI1hawKBM9898koa3SuQtvBu1Td29uudK3byjwnkGa6ithZrr+YwGSsXkmFC2K3Z3e
+         68qt4nYuu47BwJGIYtOTmMXS9gPmcv6qZjGdjSNg5EHAKLhJZ6vRZ3ePMLWdzPBHq8
+         008+F6NR/mUAw==
+Message-ID: <6effcd33-8cc3-a4e0-3608-b9cef7a76da7@collabora.com>
+Date:   Mon, 15 Aug 2022 18:54:47 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <166057828406.697572.228317501909350108.b4-ty@kernel.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v1] drm/ttm: Refcount allocated tail pages
+Content-Language: en-US
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        David Airlie <airlied@linux.ie>, Huang Rui <ray.huang@amd.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Trigger Huang <Trigger.Huang@gmail.com>,
+        Gert Wollny <gert.wollny@collabora.com>,
+        Antonio Caggiano <antonio.caggiano@collabora.com>,
+        Paolo Bonzini <pbonzini@redhat.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Dmitry Osipenko <digetx@gmail.com>, kvm@vger.kernel.org,
+        kernel@collabora.com, virtualization@lists.linux-foundation.org
+References: <20220815095423.11131-1-dmitry.osipenko@collabora.com>
+ <8230a356-be38-f228-4a8e-95124e8e8db6@amd.com>
+ <134bce02-58d6-8553-bb73-42dfda18a595@collabora.com>
+ <8caf3008-dcf3-985a-631e-e019b277c6f0@amd.com>
+ <4fcc4739-2da9-1b89-209c-876129604d7d@amd.com>
+ <14be3b22-1d60-732b-c695-ddacc6b21055@collabora.com>
+ <2df57a30-2afb-23dc-c7f5-f61c113dd5b4@collabora.com>
+ <57562db8-bacf-e82d-8417-ab6343c1d2fa@amd.com>
+ <86a87de8-24a9-3c53-3ac7-612ca97e41df@collabora.com>
+ <8f749cd0-9a04-7c72-6a4f-a42d501e1489@amd.com>
+ <5340d876-62b8-8a64-aa6d-7736c2c8710f@collabora.com>
+ <594f1013-b925-3c75-be61-2d649f5ca54e@amd.com>
+ <6893d5e9-4b60-0efb-2a87-698b1bcda63e@collabora.com>
+ <73e5ed8d-0d25-7d44-8fa2-e1d61b1f5a04@amd.com>
+ <c9d89644-409e-0363-69f0-a3b8f2ef0ae4@collabora.com>
+In-Reply-To: <c9d89644-409e-0363-69f0-a3b8f2ef0ae4@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 04:44:44PM +0100, Mark Brown wrote:
-> On Fri, 12 Aug 2022 13:08:17 +0300, Matti Vaittinen wrote:
-> > Devm helpers for regulator get and enable
-> > 
-> > First patch in the series is actually just a simple documentation fix
-> > which could be taken in as it is now.
-> > 
-> > A few* drivers seem to use pattern demonstrated by pseudocode:
-> > 
-> > [...]
+On 8/15/22 17:57, Dmitry Osipenko wrote:
+> On 8/15/22 16:53, Christian König wrote:
+>> Am 15.08.22 um 15:45 schrieb Dmitry Osipenko:
+>>> [SNIP]
+>>>> Well that comment sounds like KVM is doing the right thing, so I'm
+>>>> wondering what exactly is going on here.
+>>> KVM actually doesn't hold the page reference, it takes the temporal
+>>> reference during page fault and then drops the reference once page is
+>>> mapped, IIUC. Is it still illegal for TTM? Or there is a possibility for
+>>> a race condition here?
+>>>
+>>
+>> Well the question is why does KVM grab the page reference in the first
+>> place?
+>>
+>> If that is to prevent the mapping from changing then yes that's illegal
+>> and won't work. It can always happen that you grab the address, solve
+>> the fault and then immediately fault again because the address you just
+>> grabbed is invalidated.
+>>
+>> If it's for some other reason than we should probably investigate if we
+>> shouldn't stop doing this.
 > 
-> Applied to
+> CC: +Paolo Bonzini who introduced this code
 > 
->    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+> commit add6a0cd1c5ba51b201e1361b05a5df817083618
+> Author: Paolo Bonzini <pbonzini@redhat.com>
+> Date:   Tue Jun 7 17:51:18 2016 +0200
 > 
-> Thanks!
+>     KVM: MMU: try to fix up page faults before giving up
 > 
-> [1/7] docs: devres: regulator: Add missing devm_* functions to devres.rst
->       commit: 9b6744f60b6b47bc0757a1955adb4d2c3ab22e13
-> [2/7] regulator: Add devm helpers for get and enable
->       (no commit info)
+>     The vGPU folks would like to trap the first access to a BAR by setting
+>     vm_ops on the VMAs produced by mmap-ing a VFIO device.  The fault
+> handler
+>     then can use remap_pfn_range to place some non-reserved pages in the
+> VMA.
+> 
+>     This kind of VM_PFNMAP mapping is not handled by KVM, but follow_pfn
+>     and fixup_user_fault together help supporting it.  The patch also
+> supports
+>     VM_MIXEDMAP vmas where the pfns are not reserved and thus subject to
+>     reference counting.
+> 
+> @Paolo,
+> https://lore.kernel.org/dri-devel/73e5ed8d-0d25-7d44-8fa2-e1d61b1f5a04@amd.com/T/#m7647ce5f8c4749599d2c6bc15a2b45f8d8cf8154
+> 
 
-I didn't have time to reply to the series yet, but I think this isn't a
-great idea. There are two issues:
-
-- With devres, you don't have full control over the order in which
-  resources will be released, which means that you can't control the
-  power off sequence, in particular if it needs to be sequenced with
-  GPIOs and clocks. That's not a concern for all drivers, but this API
-  will creep in in places where it shouldn't be used, driver authours
-  should really pay attention to power management and not live with the
-  false impression that everything will be handled automatically for
-  them. In the worst cases, an incorrect power off sequence could lead
-  to hardware damage.
-
-- Powering regulators on at probe time and leaving them on is a very bad
-  practice from a power management point of view, and should really be
-  discouraged. Adding convenience helpers to make this easy is the wrong
-  message, we should instead push driver authors to implement proper
-  runtime PM.
-
-> All being well this means that it will be integrated into the linux-next
-> tree (usually sometime in the next 24 hours) and sent to Linus during
-> the next merge window (or sooner if it is a bug fix), however if
-> problems are discovered then the patch may be dropped or reverted.
-> 
-> You may get further e-mails resulting from automated or manual testing
-> and review of the tree, please engage with people reporting problems and
-> send followup patches addressing any issues that are reported if needed.
-> 
-> If any updates are required or you are submitting further changes they
-> should be sent as incremental updates against current git, existing
-> patches will not be replaced.
-> 
-> Please add any relevant lists and maintainers to the CCs when replying
-> to this mail.
+If we need to bump the refcount only for VM_MIXEDMAP and not for
+VM_PFNMAP, then perhaps we could add a flag for that to the kvm_main
+code that will denote to kvm_release_page_clean whether it needs to put
+the page?
 
 -- 
-Regards,
-
-Laurent Pinchart
+Best regards,
+Dmitry

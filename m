@@ -2,71 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DF30592C46
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:51:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34A85592BB5
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:50:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233339AbiHOJzk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 05:55:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46738 "EHLO
+        id S242204AbiHOJ4B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 05:56:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231340AbiHOJzi (ORCPT
+        with ESMTP id S242321AbiHOJz4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 05:55:38 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952E6E0A6;
-        Mon, 15 Aug 2022 02:55:37 -0700 (PDT)
-Received: from fraeml734-chm.china.huawei.com (unknown [172.18.147.201])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4M5qQj0nclz67yKZ;
-        Mon, 15 Aug 2022 17:55:25 +0800 (CST)
-Received: from lhrpeml500003.china.huawei.com (7.191.162.67) by
- fraeml734-chm.china.huawei.com (10.206.15.215) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 15 Aug 2022 11:55:35 +0200
-Received: from [10.48.150.107] (10.48.150.107) by
- lhrpeml500003.china.huawei.com (7.191.162.67) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.24; Mon, 15 Aug 2022 10:55:35 +0100
-Message-ID: <e431a4ce-b9c3-a9d8-57c1-c9d055c2ca0f@huawei.com>
-Date:   Mon, 15 Aug 2022 10:55:34 +0100
+        Mon, 15 Aug 2022 05:55:56 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E8D7613F7D
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 02:55:54 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-101-4cQNWSDENwOhApAiFPs4uQ-1; Mon, 15 Aug 2022 10:55:51 +0100
+X-MC-Unique: 4cQNWSDENwOhApAiFPs4uQ-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.38; Mon, 15 Aug 2022 10:55:50 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.040; Mon, 15 Aug 2022 10:55:50 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Nick Desaulniers' <ndesaulniers@google.com>,
+        Nathan Chancellor <nathan@kernel.org>
+CC:     Codrin Ciubotariu <codrin.ciubotariu@microchip.com>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Tom Rix <trix@redhat.com>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>
+Subject: RE: [PATCH] ASoC: mchp-spdiftx: Fix clang
+ -Wbitfield-constant-conversion
+Thread-Topic: [PATCH] ASoC: mchp-spdiftx: Fix clang
+ -Wbitfield-constant-conversion
+Thread-Index: AQHYrP4xySyJ4QyXg0+0Vu0cOV8HAa2vv+Uw
+Date:   Mon, 15 Aug 2022 09:55:50 +0000
+Message-ID: <24087aa311e84df3a3df3c0e15151580@AcuMS.aculab.com>
+References: <20220810010809.2024482-1-nathan@kernel.org>
+ <CAKwvOdmZvB_=JTeLg08uMFhEMpWga4FJey50QHjzCv_jMVpwkg@mail.gmail.com>
+In-Reply-To: <CAKwvOdmZvB_=JTeLg08uMFhEMpWga4FJey50QHjzCv_jMVpwkg@mail.gmail.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.1
-To:     Linux ACPI <linux-acpi@vger.kernel.org>,
-        <sakari.ailus@linux.intel.com>, <sbinding@opensource.cirrus.com>,
-        "Rafael J. Wysocki" <rjw@rjwysocki.net>
-From:   John Garry <john.garry@huawei.com>
-Subject: [BUG] Issue with commit 923044133367 ("ACPI: property: Unify integer
- value reading functions")
-CC:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.48.150.107]
-X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
- lhrpeml500003.china.huawei.com (7.191.162.67)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+RnJvbTogTmljayBEZXNhdWxuaWVycw0KPiBTZW50OiAxMCBBdWd1c3QgMjAyMiAyMjoxNA0KPiAN
+Cj4gT24gVHVlLCBBdWcgOSwgMjAyMiBhdCA2OjA4IFBNIE5hdGhhbiBDaGFuY2VsbG9yIDxuYXRo
+YW5Aa2VybmVsLm9yZz4gd3JvdGU6DQo+ID4NCj4gPiBBIHJlY2VudCBjaGFuZ2UgaW4gY2xhbmcg
+c3RyZW5ndGhlbmVkIGl0cyAtV2JpdGZpZWxkLWNvbnN0YW50LWNvbnZlcnNpb24NCj4gPiB0byB3
+YXJuIHdoZW4gMSBpcyBhc3NpZ25lZCB0byBhIDEtYml0IHNpZ25lZCBpbnRlZ2VyIGJpdGZpZWxk
+LCBhcyBpdCBjYW4NCj4gPiBvbmx5IGJlIDAgb3IgLTEsIG5vdCAxOg0KDQpJcyB0aGVyZSBhIC1X
+c2lnbmVkLWJpdGZpZWxkID8NCllvdSBwcm9iYWJseSBkb24ndCBldmVyIHdhbnQgdGhlIGNvbXBp
+bGVyIHRvIGJlIGdlbmVyYXRpbmcNCnRoZSBjb2RlIHRvIHNpZ24tcHJvcGFnYXRlIGEgYml0Zmll
+bGQuDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkg
+Um9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlv
+biBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
-My driver of interest fails to probe for v6.0-rc1 for ACPI FW:
-[    5.373722] hisi_sas_v2_hw HISI0162:01: could not get property sas-addr
-
-from a device_property_read_u8_array() call
-
-The following fixes it:
-https://lore.kernel.org/linux-acpi/YvatSoqXEtI7oqUO@paasikivi.fi.intel.com/T/#t
-
-Tested-by: John Garry <john.garry@huawei.com>
-
-I'm just sending a separate mail to highlight this issue as I spent an 
-appreciable time bisecting and want others to avoid that. And I could 
-not find the fix mail for some reason, even though I subscribe to the 
-acpi list.
-
-John

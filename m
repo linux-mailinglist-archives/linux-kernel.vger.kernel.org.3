@@ -2,94 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15A70593218
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBFD959321D
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:40:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229915AbiHOPjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 11:39:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54504 "EHLO
+        id S231483AbiHOPkH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 11:40:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229736AbiHOPjU (ORCPT
+        with ESMTP id S230321AbiHOPkD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 11:39:20 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 862AB13F69;
-        Mon, 15 Aug 2022 08:39:19 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 4161FB80F96;
-        Mon, 15 Aug 2022 15:39:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCB0DC433D6;
-        Mon, 15 Aug 2022 15:39:14 +0000 (UTC)
-Date:   Mon, 15 Aug 2022 11:39:21 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@gmail.com>,
-        Network Development <netdev@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn.topel@intel.com>,
-        bpf <bpf@vger.kernel.org>,
-        Magnus Karlsson <magnus.karlsson@gmail.com>,
-        "Karlsson, Magnus" <magnus.karlsson@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        Edward Cree <ecree@solarflare.com>,
-        Toke =?UTF-8?B?SMO4aWxhbmQtSsO4cmdl?= =?UTF-8?B?bnNlbg==?= 
-        <thoiland@redhat.com>, Jesper Dangaard Brouer <brouer@redhat.com>,
-        Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andrew Morton <akpm@linux-foundation.org>
-Subject: Re: [PATCH bpf-next v4 2/6] bpf: introduce BPF dispatcher
-Message-ID: <20220815113921.5b3305f5@gandalf.local.home>
-In-Reply-To: <20220815111658.58d75672@gandalf.local.home>
-References: <20191211123017.13212-1-bjorn.topel@gmail.com>
-        <20191211123017.13212-3-bjorn.topel@gmail.com>
-        <20220815101303.79ace3f8@gandalf.local.home>
-        <CAADnVQLhHm-gxJXTbWxJN0fFGW_dyVV+5D-JahVA1Wrj2cGu7g@mail.gmail.com>
-        <20220815111658.58d75672@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Mon, 15 Aug 2022 11:40:03 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F9A913F69
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 08:40:01 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id z16so9472936wrh.12
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 08:40:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc;
+        bh=VP31WSY65QEYHmGKkheHdJtit2IxlAC3C/GTNPT6J3M=;
+        b=KDR20vjhDq0om+BbSpgVjbjIEfKyM9hzqellnZMBbjPYhKfqx8ikJsySttFwFlY2Hw
+         oiDxEt4RpXxN6hUaJW8OuaENfYZOafXkSDkX1vb9dg7V/aG4QsRJ6TYY0F9WUlTLn6Vf
+         NHF+LgUaJFpui1g9qC+Rv3LypInoC1lE1hsrJ8BiNxbEAPP6tn3XdJyY/w0KbBw7PpJD
+         oH77RjEzfa5ost8upGE9k1u6DJriI0mcBtWbmFcq9KC94GZZe4EqzVQ4aUBaXW6zABOk
+         ZIGRqcpIb5HIHOLH2gv1bH3WqUBDiCE5BvLQ/x7yySs3uf1w5ktkzspTtUNcCnzYJQEj
+         8w1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc;
+        bh=VP31WSY65QEYHmGKkheHdJtit2IxlAC3C/GTNPT6J3M=;
+        b=6isdgIKUuKsOeLnCIGsrd6/K9yV0XfCjLttb5D0wz10AzjeaFBDHjLdLV3IHcgLNAe
+         gKt2SyW5EF2N655TeBOM9TCec0zncqSCARTXGlRkDzIHjakKmKfYKri+PqlB78La0hFC
+         OAPnZutweJ5D0vP/w1RonuwcNidXeGEDpTh4zUgXARsc6WW6DDEY2wJIabFLjWvXyPSU
+         FCGBHMEJgWZVmeVyPjrSAPEWmwlCSQq/4IzwMAmErLz5RDXcZpR/W+3Rj1pPV1gAoNDA
+         dtLt9LEK2t8R3GR6BiqnxKBofFssuuoe2SmNbFP+PvpFpXrqd2WhCPKgDPyAEfLGvQVq
+         vTZg==
+X-Gm-Message-State: ACgBeo1Regz/5552ZNNpDkl9JLFj3n965c/5+7/kDFqTlC0gWVUv+j1k
+        wI5Ny5OkW48J7bVsS8z52mI8BBNfxT6CdtCGptjyQA==
+X-Google-Smtp-Source: AA6agR7zuuSgDdcz2wd92uz0ytguGNdoZjdF2d8ZPVqoybSSwNN8/GwgwCl+M3WDqdInbEa6zFZJ4DJNkrQDuxI0MHA=
+X-Received: by 2002:a5d:5a82:0:b0:224:f744:1799 with SMTP id
+ bp2-20020a5d5a82000000b00224f7441799mr1748341wrb.582.1660577999491; Mon, 15
+ Aug 2022 08:39:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220628220938.3657876-1-yosryahmed@google.com>
+ <20220628220938.3657876-2-yosryahmed@google.com> <YsdJPeVOqlj4cf2a@google.com>
+ <CAJD7tkYE+pZdk=-psEP_Rq_1CmDjY7Go+s1LXm-ctryWvUdgLA@mail.gmail.com>
+ <Ys3+UTTC4Qgbm7pQ@google.com> <CAJD7tkY91oiDWTj5FY2Upc5vabsjLk+CBMNzAepXLUdF_GS11w@mail.gmail.com>
+ <CAJD7tkbc+E7f+ENRazf0SO7C3gR2bHiN4B0F1oPn8Pa6juAVfg@mail.gmail.com> <Yvpir0nWuTsXz322@cmpxchg.org>
+In-Reply-To: <Yvpir0nWuTsXz322@cmpxchg.org>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Mon, 15 Aug 2022 08:39:23 -0700
+Message-ID: <CAJD7tkYJcsSvCUCkNgcWvi2Xoa3GDZk81p5GUptZzkOkrhrTWQ@mail.gmail.com>
+Subject: Re: [PATCH v6 1/4] mm: add NR_SECONDARY_PAGETABLE to count secondary
+ page table uses.
+To:     Johannes Weiner <hannes@cmpxchg.org>
+Cc:     Sean Christopherson <seanjc@google.com>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Marc Zyngier <maz@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Oliver Upton <oupton@google.com>, Huang@google.com,
+        Shaoqin <shaoqin.huang@intel.com>,
+        Cgroups <cgroups@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.cs.columbia.edu,
+        kvm@vger.kernel.org, Linux-MM <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 15 Aug 2022 11:16:58 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Mon, Aug 15, 2022 at 8:13 AM Johannes Weiner <hannes@cmpxchg.org> wrote:
+>
+> On Mon, Aug 08, 2022 at 01:06:15PM -0700, Yosry Ahmed wrote:
+> > On Mon, Jul 18, 2022 at 11:26 AM Yosry Ahmed <yosryahmed@google.com> wrote:
+> > >
+> > > On Tue, Jul 12, 2022 at 4:06 PM Sean Christopherson <seanjc@google.com> wrote:
+> > > >
+> > > > On Tue, Jul 12, 2022, Yosry Ahmed wrote:
+> > > > > Thanks for taking another look at this!
+> > > > >
+> > > > > On Thu, Jul 7, 2022 at 1:59 PM Sean Christopherson <seanjc@google.com> wrote:
+> > > > > >
+> > > > > > On Tue, Jun 28, 2022, Yosry Ahmed wrote:
+> > > > > > > diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
+> > > > > > > index aab70355d64f3..13190d298c986 100644
+> > > > > > > --- a/include/linux/mmzone.h
+> > > > > > > +++ b/include/linux/mmzone.h
+> > > > > > > @@ -216,6 +216,7 @@ enum node_stat_item {
+> > > > > > >       NR_KERNEL_SCS_KB,       /* measured in KiB */
+> > > > > > >  #endif
+> > > > > > >       NR_PAGETABLE,           /* used for pagetables */
+> > > > > > > +     NR_SECONDARY_PAGETABLE, /* secondary pagetables, e.g. kvm shadow pagetables */
+> > > > > >
+> > > > > > Nit, s/kvm/KVM, and drop the "shadow", which might be misinterpreted as saying KVM
+> > > > > > pagetables are only accounted when KVM is using shadow paging.  KVM's usage of "shadow"
+> > > > > > is messy, so I totally understand why you included it, but in this case it's unnecessary
+> > > > > > and potentially confusing.
+> > > > > >
+> > > > > > And finally, something that's not a nit.  Should this be wrapped with CONFIG_KVM
+> > > > > > (using IS_ENABLED() because KVM can be built as a module)?  That could be removed
+> > > > > > if another non-KVM secondary MMU user comes along, but until then, #ifdeffery for
+> > > > > > stats the depend on a single feature seems to be the status quo for this code.
+> > > > > >
+> > > > >
+> > > > > I will #ifdef the stat, but I will emphasize in the docs that is
+> > > > > currently *only* used for KVM so that it makes sense if users without
+> > > > > KVM don't see the stat at all. I will also remove the stat from
+> > > > > show_free_areas() in mm/page_alloc.c as it seems like none of the
+> > > > > #ifdefed stats show up there.
+> > > >
+> > > > It's might be worth getting someone from mm/ to weigh in before going through the
+> > > > trouble, my suggestion/question is based purely on the existing code.
+> > >
+> > > Any mm folks with an opinion about this?
+> > >
+> > > Any preference on whether we should wrap NR_SECONDARY_PAGETABLE stats
+> > > with #ifdef CONFIG_KVM for now as it is currently the only source for
+> > > this stat?
+> >
+> > Any input here?
+> >
+> > Johannes, you have been involved in discussions in earlier versions of
+> > this series, any thoughts here?
+>
+> No super strong feelings here. Most major distros have CONFIG_KVM=y/n,
+> so it'll be a common fixture anyway, and the ifdef is proooobably not
+> worth it for hiding it from people. OTOH, the ifdef is useful for
+> documenting the code.
+>
+> If you've already ifdeffed it now, I'd say go ahead with
+> it. Otherwise, don't :) My 2c.
 
-> > It sounds that you've invented nop5 and kernel's ability
-> > to replace nop5 with a jump or call.  
-> 
-> Actually I did invent it.
-> 
->    https://lore.kernel.org/lkml/20080210072109.GR4100@elte.hu/
-> 
-> 
-> I'm the one that introduced the code to convert mcount into the 5 byte nop,
-> and did the research and development to make it work at run time. I had one
-> hiccup along the way that caused the e1000e network card breakage.
-> 
-> The "daemon" approach was horrible, and then I created the recordmcount.pl
-> perl script to accomplish the same thing at compile time.
-
-I guess you were not paying attention to my talk at the Kernel Recipes I
-invited you to in 2019. The talk I gave was the history of how fentry came
-about.
-
-  https://kernel-recipes.org/en/2019/talks/ftrace-where-modifying-a-running-kernel-all-started/
-
- ;-)
-
--- Steve
+Thanks a lot, Johannes! I haven't ifdeffed it yet so I'll send a v7
+with a few nits and collect ACKs. Andrew, would you prefer me to
+rebase on top of mm-unstable? Or will this go in through the kvm tree?
+(currently it's based on an old-ish kvm/queue).

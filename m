@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49F7E59345F
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 20:05:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 71C035938F6
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 21:32:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230059AbiHOSAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 14:00:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
+        id S244721AbiHOSzq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 14:55:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232721AbiHOR72 (ORCPT
+        with ESMTP id S243889AbiHOSwN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 13:59:28 -0400
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EC1728E36
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 10:59:26 -0700 (PDT)
-Received: by mail-io1-f70.google.com with SMTP id c9-20020a05660221c900b00688a5a621afso137626ioc.9
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 10:59:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc;
-        bh=pc5WxU8NMnC+CnIzNPL1GwX0yvtsCVqhE7KfX+0SS/w=;
-        b=PqPkKsUd7vde7DCaM/Dwr2Qp7wkIF0QU3nmUFVZaOCZa8OUdATizWWcK2OSog0o7Am
-         H87hoDEjFQq/KWrW9ZS4HoI8RUHLeQEUa2kjINzUboZtu33tVGESlgXVDikq5gWPp7YV
-         tdgnPYrd3Lms1ZwIPAn/2QM6SHWEe1hRNMF3SNVlaNxQhjK95PUpqQAVFymCii7LB/gg
-         VkiwwBwDZnBTh9G0+lbbB809jiTL6GDhCJP+LAMpAEQvwHa7NLgg7NGfES09+BUxz3Qw
-         HDf84r1HhvpC1HdEn2/AeWbOGixVqfYkmTHeAbmvNjKBSdp7RB+Wt0SedJtunMl3G+lZ
-         YUAw==
-X-Gm-Message-State: ACgBeo0+plmghH3JrhXIzuniksK6dDQz5pYtBQ/E8WcCCNnZ/PoDQCUG
-        v6T5rWyMIpc3+XI8NEgtKJUsLnSelc+0Mybt5WCSiCiAeqzE
-X-Google-Smtp-Source: AA6agR7XNLSv+trWB7eGaaMeGYV48OHQ8WVQY5lpTMEJlKJLu6afFuOheCfxYnlH5qjQCSo5Jq7R1PaFAtbBO8eZhVwEZ4L6Ew1v
+        Mon, 15 Aug 2022 14:52:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4539E43E70;
+        Mon, 15 Aug 2022 11:29:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DA2D360F23;
+        Mon, 15 Aug 2022 18:29:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB50BC433D6;
+        Mon, 15 Aug 2022 18:29:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660588188;
+        bh=GcJR48wUjvC4zNR17cIs0BpOV+e7vwVAANrGSOGAe4g=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=pS39eEYbLs9RjU6V45jIIeoRvtAxQAYYmrVCUro9YSXzs4oTQ5dlofyU42Gqdmy2O
+         RZ8KWN7P1+wyLuKpn1bAGdrBfiRLbjF/TTbxKxRA4AsJm7oXa5wXpwtfSvM26GOvIt
+         n4FwB21wTahR7qOfWdulclMXDhNh63HjD7hpA2/c=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Zhengchao Shao <shaozhengchao@huawei.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 321/779] crypto: hisilicon/sec - dont sleep when in softirq
+Date:   Mon, 15 Aug 2022 19:59:25 +0200
+Message-Id: <20220815180350.999731717@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220815180337.130757997@linuxfoundation.org>
+References: <20220815180337.130757997@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:dd1:b0:341:55c2:38b6 with SMTP id
- m17-20020a0566380dd100b0034155c238b6mr7809604jaj.245.1660586364483; Mon, 15
- Aug 2022 10:59:24 -0700 (PDT)
-Date:   Mon, 15 Aug 2022 10:59:24 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005fbed305e64b6440@google.com>
-Subject: [syzbot] upstream boot error: general protection fault in scsi_alloc_sdev
-From:   syzbot <syzbot+9ada839c852179f13999@syzkaller.appspotmail.com>
-To:     jejb@linux.ibm.com, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org, martin.petersen@oracle.com,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,85 +55,180 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: Zhengchao Shao <shaozhengchao@huawei.com>
 
-syzbot found the following issue on:
+[ Upstream commit 02884a4f12de11f54d4ca67a07dd1f111d96fdbd ]
 
-HEAD commit:    568035b01cfb Linux 6.0-rc1
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=17b23aa5080000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3b9175e0879a7749
-dashboard link: https://syzkaller.appspot.com/bug?extid=9ada839c852179f13999
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+When kunpeng920 encryption driver is used to deencrypt and decrypt
+packets during the softirq, it is not allowed to use mutex lock. The
+kernel will report the following error:
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9ada839c852179f13999@syzkaller.appspotmail.com
+BUG: scheduling while atomic: swapper/57/0/0x00000300
+Call trace:
+dump_backtrace+0x0/0x1e4
+show_stack+0x20/0x2c
+dump_stack+0xd8/0x140
+__schedule_bug+0x68/0x80
+__schedule+0x728/0x840
+schedule+0x50/0xe0
+schedule_preempt_disabled+0x18/0x24
+__mutex_lock.constprop.0+0x594/0x5dc
+__mutex_lock_slowpath+0x1c/0x30
+mutex_lock+0x50/0x60
+sec_request_init+0x8c/0x1a0 [hisi_sec2]
+sec_process+0x28/0x1ac [hisi_sec2]
+sec_skcipher_crypto+0xf4/0x1d4 [hisi_sec2]
+sec_skcipher_encrypt+0x1c/0x30 [hisi_sec2]
+crypto_skcipher_encrypt+0x2c/0x40
+crypto_authenc_encrypt+0xc8/0xfc [authenc]
+crypto_aead_encrypt+0x2c/0x40
+echainiv_encrypt+0x144/0x1a0 [echainiv]
+crypto_aead_encrypt+0x2c/0x40
+esp_output_tail+0x348/0x5c0 [esp4]
+esp_output+0x120/0x19c [esp4]
+xfrm_output_one+0x25c/0x4d4
+xfrm_output_resume+0x6c/0x1fc
+xfrm_output+0xac/0x3c0
+xfrm4_output+0x64/0x130
+ip_build_and_send_pkt+0x158/0x20c
+tcp_v4_send_synack+0xdc/0x1f0
+tcp_conn_request+0x7d0/0x994
+tcp_v4_conn_request+0x58/0x6c
+tcp_v6_conn_request+0xf0/0x100
+tcp_rcv_state_process+0x1cc/0xd60
+tcp_v4_do_rcv+0x10c/0x250
+tcp_v4_rcv+0xfc4/0x10a4
+ip_protocol_deliver_rcu+0xf4/0x200
+ip_local_deliver_finish+0x58/0x70
+ip_local_deliver+0x68/0x120
+ip_sublist_rcv_finish+0x70/0x94
+ip_list_rcv_finish.constprop.0+0x17c/0x1d0
+ip_sublist_rcv+0x40/0xb0
+ip_list_rcv+0x140/0x1dc
+__netif_receive_skb_list_core+0x154/0x28c
+__netif_receive_skb_list+0x120/0x1a0
+netif_receive_skb_list_internal+0xe4/0x1f0
+napi_complete_done+0x70/0x1f0
+gro_cell_poll+0x9c/0xb0
+napi_poll+0xcc/0x264
+net_rx_action+0xd4/0x21c
+__do_softirq+0x130/0x358
+irq_exit+0x11c/0x13c
+__handle_domain_irq+0x88/0xf0
+gic_handle_irq+0x78/0x2c0
+el1_irq+0xb8/0x140
+arch_cpu_idle+0x18/0x40
+default_idle_call+0x5c/0x1c0
+cpuidle_idle_call+0x174/0x1b0
+do_idle+0xc8/0x160
+cpu_startup_entry+0x30/0x11c
+secondary_start_kernel+0x158/0x1e4
+softirq: huh, entered softirq 3 NET_RX 0000000093774ee4 with
+preempt_count 00000100, exited with fffffe00?
 
-scsi 0:0:1:0: Direct-Access     Google   PersistentDisk   1    PQ: 0 ANSI: 6
-general protection fault, probably for non-canonical address 0xffff000000000800: 0000 [#1] PREEMPT SMP KASAN
-KASAN: maybe wild-memory-access in range [0xfff8200000004000-0xfff8200000004007]
-CPU: 1 PID: 56 Comm: kworker/u4:4 Not tainted 6.0.0-rc1-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 07/22/2022
-Workqueue: events_unbound async_run_entry_fn
-RIP: 0010:freelist_dereference mm/slub.c:347 [inline]
-RIP: 0010:get_freepointer mm/slub.c:354 [inline]
-RIP: 0010:get_freepointer_safe mm/slub.c:368 [inline]
-RIP: 0010:slab_alloc_node mm/slub.c:3211 [inline]
-RIP: 0010:slab_alloc mm/slub.c:3251 [inline]
-RIP: 0010:__kmalloc+0x113/0x340 mm/slub.c:4420
-Code: 8b 51 08 48 8b 01 48 83 79 10 00 48 89 44 24 08 0f 84 18 02 00 00 48 85 c0 0f 84 0f 02 00 00 48 8b 7d 00 8b 4d 28 40 f6 c7 0f <48> 8b 1c 08 0f 85 1b 02 00 00 48 8d 4a 08 65 48 0f c7 0f 0f 94 c0
-RSP: 0018:ffffc900015777f8 EFLAGS: 00010246
-
-RAX: ffff000000000000 RBX: ffff88801bd64000 RCX: 0000000000000800
-RDX: 0000000000005d09 RSI: 0000000000000dc0 RDI: 000000000003dce0
-RBP: ffff888011842140 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000001 R11: 0000000000000000 R12: 0000000000000dc0
-R13: 0000000000000000 R14: 0000000000000cb8 R15: 0000000000000dc0
-FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000000000000 CR3: 000000000bc8e000 CR4: 0000000000350ee0
-Call Trace:
- <TASK>
- kmalloc include/linux/slab.h:605 [inline]
- kzalloc include/linux/slab.h:733 [inline]
- scsi_alloc_sdev+0x109/0xcc0 drivers/scsi/scsi_scan.c:287
- scsi_probe_and_add_lun+0x22be/0x3660 drivers/scsi/scsi_scan.c:1191
- __scsi_scan_target+0x21f/0xdb0 drivers/scsi/scsi_scan.c:1673
- scsi_scan_channel drivers/scsi/scsi_scan.c:1761 [inline]
- scsi_scan_channel+0x148/0x1e0 drivers/scsi/scsi_scan.c:1737
- scsi_scan_host_selected+0x2df/0x3b0 drivers/scsi/scsi_scan.c:1790
- do_scsi_scan_host+0x1e8/0x260 drivers/scsi/scsi_scan.c:1929
- do_scan_async+0x3e/0x500 drivers/scsi/scsi_scan.c:1939
- async_run_entry_fn+0x98/0x530 kernel/async.c:127
- process_one_work+0x991/0x1610 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e4/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
-Modules linked in:
-----------------
-Code disassembly (best guess):
-   0:	8b 51 08             	mov    0x8(%rcx),%edx
-   3:	48 8b 01             	mov    (%rcx),%rax
-   6:	48 83 79 10 00       	cmpq   $0x0,0x10(%rcx)
-   b:	48 89 44 24 08       	mov    %rax,0x8(%rsp)
-  10:	0f 84 18 02 00 00    	je     0x22e
-  16:	48 85 c0             	test   %rax,%rax
-  19:	0f 84 0f 02 00 00    	je     0x22e
-  1f:	48 8b 7d 00          	mov    0x0(%rbp),%rdi
-  23:	8b 4d 28             	mov    0x28(%rbp),%ecx
-  26:	40 f6 c7 0f          	test   $0xf,%dil
-* 2a:	48 8b 1c 08          	mov    (%rax,%rcx,1),%rbx <-- trapping instruction
-  2e:	0f 85 1b 02 00 00    	jne    0x24f
-  34:	48 8d 4a 08          	lea    0x8(%rdx),%rcx
-  38:	65 48 0f c7 0f       	cmpxchg16b %gs:(%rdi)
-  3d:	0f 94 c0             	sete   %al
-
-
+Fixes: 416d82204df4 ("crypto: hisilicon - add HiSilicon SEC V2 driver")
+Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+ drivers/crypto/hisilicon/sec2/sec.h        |  2 +-
+ drivers/crypto/hisilicon/sec2/sec_crypto.c | 20 ++++++++++----------
+ 2 files changed, 11 insertions(+), 11 deletions(-)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/drivers/crypto/hisilicon/sec2/sec.h b/drivers/crypto/hisilicon/sec2/sec.h
+index d97cf02b1df7..cff00fd29765 100644
+--- a/drivers/crypto/hisilicon/sec2/sec.h
++++ b/drivers/crypto/hisilicon/sec2/sec.h
+@@ -119,7 +119,7 @@ struct sec_qp_ctx {
+ 	struct idr req_idr;
+ 	struct sec_alg_res res[QM_Q_DEPTH];
+ 	struct sec_ctx *ctx;
+-	struct mutex req_lock;
++	spinlock_t req_lock;
+ 	struct list_head backlog;
+ 	struct hisi_acc_sgl_pool *c_in_pool;
+ 	struct hisi_acc_sgl_pool *c_out_pool;
+diff --git a/drivers/crypto/hisilicon/sec2/sec_crypto.c b/drivers/crypto/hisilicon/sec2/sec_crypto.c
+index 090920ed50c8..36c789ff1bd4 100644
+--- a/drivers/crypto/hisilicon/sec2/sec_crypto.c
++++ b/drivers/crypto/hisilicon/sec2/sec_crypto.c
+@@ -124,11 +124,11 @@ static int sec_alloc_req_id(struct sec_req *req, struct sec_qp_ctx *qp_ctx)
+ {
+ 	int req_id;
+ 
+-	mutex_lock(&qp_ctx->req_lock);
++	spin_lock_bh(&qp_ctx->req_lock);
+ 
+ 	req_id = idr_alloc_cyclic(&qp_ctx->req_idr, NULL,
+ 				  0, QM_Q_DEPTH, GFP_ATOMIC);
+-	mutex_unlock(&qp_ctx->req_lock);
++	spin_unlock_bh(&qp_ctx->req_lock);
+ 	if (unlikely(req_id < 0)) {
+ 		dev_err(req->ctx->dev, "alloc req id fail!\n");
+ 		return req_id;
+@@ -153,9 +153,9 @@ static void sec_free_req_id(struct sec_req *req)
+ 	qp_ctx->req_list[req_id] = NULL;
+ 	req->qp_ctx = NULL;
+ 
+-	mutex_lock(&qp_ctx->req_lock);
++	spin_lock_bh(&qp_ctx->req_lock);
+ 	idr_remove(&qp_ctx->req_idr, req_id);
+-	mutex_unlock(&qp_ctx->req_lock);
++	spin_unlock_bh(&qp_ctx->req_lock);
+ }
+ 
+ static u8 pre_parse_finished_bd(struct bd_status *status, void *resp)
+@@ -270,7 +270,7 @@ static int sec_bd_send(struct sec_ctx *ctx, struct sec_req *req)
+ 	    !(req->flag & CRYPTO_TFM_REQ_MAY_BACKLOG))
+ 		return -EBUSY;
+ 
+-	mutex_lock(&qp_ctx->req_lock);
++	spin_lock_bh(&qp_ctx->req_lock);
+ 	ret = hisi_qp_send(qp_ctx->qp, &req->sec_sqe);
+ 
+ 	if (ctx->fake_req_limit <=
+@@ -278,10 +278,10 @@ static int sec_bd_send(struct sec_ctx *ctx, struct sec_req *req)
+ 		list_add_tail(&req->backlog_head, &qp_ctx->backlog);
+ 		atomic64_inc(&ctx->sec->debug.dfx.send_cnt);
+ 		atomic64_inc(&ctx->sec->debug.dfx.send_busy_cnt);
+-		mutex_unlock(&qp_ctx->req_lock);
++		spin_unlock_bh(&qp_ctx->req_lock);
+ 		return -EBUSY;
+ 	}
+-	mutex_unlock(&qp_ctx->req_lock);
++	spin_unlock_bh(&qp_ctx->req_lock);
+ 
+ 	if (unlikely(ret == -EBUSY))
+ 		return -ENOBUFS;
+@@ -484,7 +484,7 @@ static int sec_create_qp_ctx(struct hisi_qm *qm, struct sec_ctx *ctx,
+ 
+ 	qp->req_cb = sec_req_cb;
+ 
+-	mutex_init(&qp_ctx->req_lock);
++	spin_lock_init(&qp_ctx->req_lock);
+ 	idr_init(&qp_ctx->req_idr);
+ 	INIT_LIST_HEAD(&qp_ctx->backlog);
+ 
+@@ -1373,7 +1373,7 @@ static struct sec_req *sec_back_req_clear(struct sec_ctx *ctx,
+ {
+ 	struct sec_req *backlog_req = NULL;
+ 
+-	mutex_lock(&qp_ctx->req_lock);
++	spin_lock_bh(&qp_ctx->req_lock);
+ 	if (ctx->fake_req_limit >=
+ 	    atomic_read(&qp_ctx->qp->qp_status.used) &&
+ 	    !list_empty(&qp_ctx->backlog)) {
+@@ -1381,7 +1381,7 @@ static struct sec_req *sec_back_req_clear(struct sec_ctx *ctx,
+ 				typeof(*backlog_req), backlog_head);
+ 		list_del(&backlog_req->backlog_head);
+ 	}
+-	mutex_unlock(&qp_ctx->req_lock);
++	spin_unlock_bh(&qp_ctx->req_lock);
+ 
+ 	return backlog_req;
+ }
+-- 
+2.35.1
+
+
+

@@ -2,84 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECB9F593281
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AA6C593287
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 17:53:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231465AbiHOPxX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 11:53:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42288 "EHLO
+        id S229821AbiHOPxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 11:53:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbiHOPxT (ORCPT
+        with ESMTP id S229515AbiHOPxl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 11:53:19 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9134417593;
-        Mon, 15 Aug 2022 08:53:18 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id f22so10085026edc.7;
-        Mon, 15 Aug 2022 08:53:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=NuCd4TB1hMQ+t6weyPyWMKD9kURNOerl6EJQJBh4dcw=;
-        b=mi+JUVCcD8IzdfApRzWmEbzfa2LDlDc4X2teLk6SNYfpW3qmnmO12eMQ9YHiabe3ys
-         IdbrlnXoZeE5yV7KBpL2HD5pLHyNuaOaX7/Jlpx36P9YHEbACB7Zev5wdsitTyy6l3fx
-         ucQGixYTpYnJrtu6/t8NqvFKMVqvIBoGKj3HTZuBJm7429IVyGsOtgYoKHAFfSNWmj79
-         Y6vogxvMXR7sIsm5jwBsPFeXxMp6n7Ezk8KuCcS3ozU0OSJy7xtN5ZZOmcS4Yp9GFDz1
-         zdPFLgLCSLLonH0hEuLthmWcbqgtZp5G3RTWFSixuHuo9QAOpBS2AbX/H8ok8TVI8MzF
-         Ep7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=NuCd4TB1hMQ+t6weyPyWMKD9kURNOerl6EJQJBh4dcw=;
-        b=QGLzNFpczbxll0xOisazpCw3bq6NgyODyvadpxxtslyAA8YDxyolx/bosN4VaZhNQt
-         s/6OiZQCIKH2mlMOzcZQeR+sCSBYDXD5JZukBJzqmbPTEQSl3sFh+i1F5z15pI9tFaUy
-         nZjHMHpsTWhpehq/2lHJZba7qaSpj7vdjrzGX4fItw69mIHFbgktd7/cfI2NlfIw2mAl
-         /RGOGjLxtdJTRq5PEegXUyHK6YHugMTcfWzUQuX6/f683lCBuf4db4ljYHzjzqThCHY0
-         OU/SOMdwBNOOZ2/ebHwddEHgJaZAEhcCp3gUjjkmtltYchh6vHr9p94R8XGM2QkQJajK
-         qcJw==
-X-Gm-Message-State: ACgBeo0tw+FxSSm5z0gJouQ4lc6/O9UbKg0Y5+LuUJ/6pKSbgDa1EUZl
-        qJ+QPwUNuTdHk22NtmobTG2Gmqp68P32vtVCRHY=
-X-Google-Smtp-Source: AA6agR6hBzk3ZG+Q0IHJJ2AQTXTqLOBLLy293K/qytljlcU5Q+rpEHRzlDK9F3mruP/ap3qhKwBxCqx5/lDAO9hJDKg=
-X-Received: by 2002:a05:6402:3697:b0:443:1c6:acc3 with SMTP id
- ej23-20020a056402369700b0044301c6acc3mr15377241edb.421.1660578797154; Mon, 15
- Aug 2022 08:53:17 -0700 (PDT)
+        Mon, 15 Aug 2022 11:53:41 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D8C7167F0;
+        Mon, 15 Aug 2022 08:53:40 -0700 (PDT)
+Received: from mail-ej1-f52.google.com ([209.85.218.52]) by
+ mrelayeu.kundenserver.de (mreue009 [213.165.67.97]) with ESMTPSA (Nemesis) id
+ 1MoNy4-1nZ8Nm252u-00olLR; Mon, 15 Aug 2022 17:53:38 +0200
+Received: by mail-ej1-f52.google.com with SMTP id dc19so14207471ejb.12;
+        Mon, 15 Aug 2022 08:53:38 -0700 (PDT)
+X-Gm-Message-State: ACgBeo2NTseA6Pvmml7k4+2NCcIgxy34kaHbmUZgLkzlMwlchjndPuYm
+        K/BtvcXzQxpTDaS7ImyVyofw/x+u9VAnj1WesUY=
+X-Google-Smtp-Source: AA6agR4kQH9OPkAoSzw4z/FBPTVCt5TcLJ18r0latd6JdISl5KaD+R3rrNlWHfqDqar+qTRK7WgfYWLgQGqiKgJkzhc=
+X-Received: by 2002:a17:907:7609:b0:730:d70a:1efc with SMTP id
+ jx9-20020a170907760900b00730d70a1efcmr10863122ejc.766.1660578818066; Mon, 15
+ Aug 2022 08:53:38 -0700 (PDT)
 MIME-Version: 1.0
-References: <YvbDlwJCTDWQ9uJj@krava> <20220813150252.5aa63650@rorschach.local.home>
- <Yvn9xR7qhXW7FnFL@worktop.programming.kicks-ass.net> <YvoVgMzMuQbAEayk@krava>
- <Yvo+EpO9dN30G0XE@worktop.programming.kicks-ass.net> <CAADnVQJfvn2RYydqgO-nS_K+C8WJL7BdCnR44MiMF4rnAwWM5A@mail.gmail.com>
- <YvpZJQGQdVaa2Oh4@worktop.programming.kicks-ass.net> <CAADnVQKyfrFTZOM9F77i0NbaXLZZ7KbvKBvu7p6kgdnRgG+2=Q@mail.gmail.com>
- <Yvpf67eCerqaDmlE@worktop.programming.kicks-ass.net> <CAADnVQKX5xJz5N_mVyf7wg4BT8Q2cNh8ze-SxTRfk6KtcFQ0=Q@mail.gmail.com>
- <YvpmAnFldR0iwAFC@worktop.programming.kicks-ass.net> <CAADnVQJuDS22o7fi9wPZx9siAWgu1grQXXB02KfasxZ-RPdRSw@mail.gmail.com>
- <20220815114453.08625089@gandalf.local.home>
-In-Reply-To: <20220815114453.08625089@gandalf.local.home>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Mon, 15 Aug 2022 08:53:05 -0700
-Message-ID: <CAADnVQK9v8nW4rSwqB3rOkL5POogMQxyTJVUSAOyT=sS6Rv4QA@mail.gmail.com>
-Subject: Re: [RFC] ftrace: Add support to keep some functions out of ftrace
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Jiri Olsa <olsajiri@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, bpf <bpf@vger.kernel.org>,
-        Martin KaFai Lau <kafai@fb.com>,
-        Song Liu <songliubraving@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@chromium.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Josh Poimboeuf <jpoimboe@redhat.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
+References: <20220815143959.1511278-1-zi.yan@sent.com>
+In-Reply-To: <20220815143959.1511278-1-zi.yan@sent.com>
+From:   Arnd Bergmann <arnd@arndb.de>
+Date:   Mon, 15 Aug 2022 17:53:22 +0200
+X-Gmail-Original-Message-ID: <CAK8P3a0TcnXHVsxBkpqLi63XC62Jkg3HChtK4RgB6-giYb+hnw@mail.gmail.com>
+Message-ID: <CAK8P3a0TcnXHVsxBkpqLi63XC62Jkg3HChtK4RgB6-giYb+hnw@mail.gmail.com>
+Subject: Re: [PATCH] arch: mm: rename FORCE_MAX_ZONEORDER to ARCH_FORCE_MAX_ORDER
+To:     Zi Yan <ziy@nvidia.com>
+Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Yang Shi <shy828301@gmail.com>,
+        David Rientjes <rientjes@google.com>,
+        James Houghton <jthoughton@google.com>,
+        Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
+        Mike Rapoport <rppt@linux.ibm.com>,
+        Vineet Gupta <vgupta@synopsys.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Taichi Sugaya <sugaya.taichi@socionext.com>,
+        Neil Armstrong <narmstrong@baylibre.com>,
+        Qin Jian <qinjian@cqplus1.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Guo Ren <guoren@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chris Zankel <chris@zankel.net>, Arnd Bergmann <arnd@arndb.de>,
+        Ley Foon Tan <ley.foon.tan@intel.com>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io,
+        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-xtensa@linux-xtensa.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Provags-ID: V03:K1:3bjhYaUEWRlYdBweOdn0b/r+O4N0rvYexq07UftB14ZHOZPuXV3
+ lf+VE+qVUESCIDx6KaEUMMG9THzdxte70BFMMIzWObilU0QYz2yYfixDwrOATWDyZzFfm41
+ EKOxtpxlmj1HyFW6mnhXFC004OOg6wbraTMVq2dUiiTDTpeiTmPIMs4SE2+57BOzNDFzKTB
+ Mf6oS5ka0yNIz0ytZ5pJw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:pGq+X3QRPxc=:WcCirK0x6sdExTy6/oiMGR
+ d1jcWbA/eojZLQTurF3uPgfDqYzfS6ZJ1tqOMsqtYOu55Ks3yQMFUrLmxpxs9nvCbz66J2NDq
+ fxzuUVz6uP6APSR7YJ7dNCnKyglNQfEhQ4YQ59w4XtsPw2Se29LW0WZWAAp4fAPAmbUHBRMYc
+ Gio3uHfDrldBzrmci+ilPaPYx+5KeaCn2QViuMCADLPH2KEoxEsWDFJVRNK2+Yes5whbfH6fF
+ 3IvPZliBPUY3GMMwyUTFodJi7d5QekFW9OsnJJXfT4Et9LAv2a0G7nytufJlmMTuZNMpzIMn8
+ TLpAmVlD4N1wgL4Q7WCX55nEWJ6jfyICIoxiW3xVtVUQbYZ3JGOyzHuePZEutdGipL8bi2L77
+ MsJ/yVPvaNg/X7gqfuG+7LyBEEcFGi/6FDGuMOVoZrG30coFBLnAJFvITlbKvo3iypsjw0qhN
+ W2r3vIkKrp3/q2C/7SlGj6ereOURTh9KssFsMkidFs9dNWyOxkKCwiKM+rIArz0O1zeoRPqUD
+ Uprn+LAc+DA0N32ZmODos/UA2h6tCl0boAyPCHXrE48+kp/lqSoUX3QJb/VJWb4dy7rWJmyYD
+ aVPxkpx9/478/XvN0C/bAuvvamWyBdjkLubzy480Ue7IAM+d+Mr7Ql31AGxj9TiRgb+H2NX+v
+ +nyh/uaWNLYjZiFlsOMbXD5aXBFMPhSaybdfW5bwDjYtQOnzwbU80VAwtePswoiQKpPZywT1s
+ pLDUSPx5lHpT79JeuxHV8ioN5wq0+XpMpKGBospdR0He7HBK0iHw7I62Q69VMEUuQORLey08r
+ FL0O65PYJ0M+H/x1oQn2ixTL4qdINn+9JWyNFv7fqFZ31VwHT+pz+m9faLoglis0cP5TEXbuS
+ 8XjJZrS94wtWc86ne2jA==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,29 +99,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 8:44 AM Steven Rostedt <rostedt@goodmis.org> wrote:
+On Mon, Aug 15, 2022 at 4:39 PM Zi Yan <zi.yan@sent.com> wrote:
 >
-> On Mon, 15 Aug 2022 08:35:53 -0700
-> Alexei Starovoitov <alexei.starovoitov@gmail.com> wrote:
->
-> > > Then make it a notrace function with a nop5 in it. That isn't hard.
-> >
-> > That's exactly what we're trying to do.
-> > Jiri's patch is one way to achieve that.
-> > What is your suggestion?
-> > Move it from C to asm ?
-> > Make it naked function with explicit inline asm?
-> > What else?
->
-> The dispatcher is already in the kernel so it's too late to complain about
-> it. Jiri's patch (with my extensions) will hopefully fix the breakage BPF
-> did to ftrace.
->
-> My ask now is to be more inclusive when doing anything that deals with
-> modification of text, or other infrastructures. This "go it alone" approach
-> really needs to stop. Linux is an open source project and collaboration is
-> key. I know you don't care about others use cases (as you told me in that
-> BPF meeting last year), but any maintainer in the Linux kernel must care
-> about the use case of others or this will all fail.
+> ---
+>  arch/arc/Kconfig                             | 2 +-
+>  arch/arm/Kconfig                             | 2 +-
+>  arch/arm/configs/imx_v6_v7_defconfig         | 2 +-
+>  arch/arm/configs/milbeaut_m10v_defconfig     | 2 +-
+>  arch/arm/configs/oxnas_v6_defconfig          | 2 +-
+>  arch/arm/configs/pxa_defconfig               | 2 +-
+>  arch/arm/configs/sama7_defconfig             | 2 +-
+>  arch/arm/configs/sp7021_defconfig            | 2 +-
+>  arch/arm64/Kconfig                           | 2 +-
+>  arch/csky/Kconfig                            | 2 +-
+>  arch/ia64/Kconfig                            | 2 +-
+>  arch/ia64/include/asm/sparsemem.h            | 6 +++---
+>  arch/loongarch/Kconfig                       | 2 +-
+>  arch/m68k/Kconfig.cpu                        | 2 +-
+>  arch/mips/Kconfig                            | 2 +-
+>  arch/nios2/Kconfig                           | 2 +-
+>  arch/powerpc/Kconfig                         | 2 +-
+>  arch/powerpc/configs/85xx/ge_imp3a_defconfig | 2 +-
+>  arch/powerpc/configs/fsl-emb-nonhw.config    | 2 +-
+>  arch/sh/configs/ecovec24_defconfig           | 2 +-
+>  arch/sh/mm/Kconfig                           | 2 +-
+>  arch/sparc/Kconfig                           | 2 +-
+>  arch/xtensa/Kconfig                          | 2 +-
+>  include/linux/mmzone.h                       | 4 ++--
 
-Please don't misrepresent. Not cool.
+Acked-by: Arnd Bergmann <arnd@arndb.de>

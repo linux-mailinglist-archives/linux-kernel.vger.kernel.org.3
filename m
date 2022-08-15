@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DCA2592F8F
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 15:14:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CF13592F8A
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 15:14:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242787AbiHONNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 09:13:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52986 "EHLO
+        id S242814AbiHONOA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 09:14:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242769AbiHONNm (ORCPT
+        with ESMTP id S242802AbiHONNw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 09:13:42 -0400
+        Mon, 15 Aug 2022 09:13:52 -0400
 Received: from muru.com (muru.com [72.249.23.125])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 60AB01AF1D;
-        Mon, 15 Aug 2022 06:13:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 21CD91C10D;
+        Mon, 15 Aug 2022 06:13:36 -0700 (PDT)
 Received: from hillo.muru.com (localhost [127.0.0.1])
-        by muru.com (Postfix) with ESMTP id 032098231;
-        Mon, 15 Aug 2022 13:06:39 +0000 (UTC)
+        by muru.com (Postfix) with ESMTP id 9580181D0;
+        Mon, 15 Aug 2022 13:06:42 +0000 (UTC)
 From:   Tony Lindgren <tony@atomide.com>
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>
@@ -30,186 +30,334 @@ Cc:     Aaro Koskinen <aaro.koskinen@iki.fi>,
         Vignesh Raghavendra <vigneshr@ti.com>,
         linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 5/9] clocksource/drivers/timer-ti-dm: Move private defines to the driver
-Date:   Mon, 15 Aug 2022 16:12:46 +0300
-Message-Id: <20220815131250.34603-6-tony@atomide.com>
+Subject: [PATCH 6/9] clocksource/drivers/timer-ti-dm: Use runtime PM directly and check errors
+Date:   Mon, 15 Aug 2022 16:12:47 +0300
+Message-Id: <20220815131250.34603-7-tony@atomide.com>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20220815131250.34603-1-tony@atomide.com>
 References: <20220815131250.34603-1-tony@atomide.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,UPPERCASE_50_75 autolearn=no
-        autolearn_force=no version=3.4.6
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These defines are only used by timer-ti-dm driver.
+Use pm_runtime_resume_and_get() and check for a possible error returned.
+
+We want to do this as omap_dm_timer_enable() and omap_dm_timer_disable()
+are exposed to the pwm and remoteproc drivers, and in the following patch
+we turn struct omap_dm_timer into a cookie used by the exposed functions
+only.
 
 Signed-off-by: Tony Lindgren <tony@atomide.com>
 ---
- drivers/clocksource/timer-ti-dm.c | 62 +++++++++++++++++++++++++++++++
- include/clocksource/timer-ti-dm.h | 62 -------------------------------
- 2 files changed, 62 insertions(+), 62 deletions(-)
+ drivers/clocksource/timer-ti-dm.c | 117 +++++++++++++++++++++++-------
+ 1 file changed, 91 insertions(+), 26 deletions(-)
 
 diff --git a/drivers/clocksource/timer-ti-dm.c b/drivers/clocksource/timer-ti-dm.c
 --- a/drivers/clocksource/timer-ti-dm.c
 +++ b/drivers/clocksource/timer-ti-dm.c
-@@ -33,6 +33,68 @@
+@@ -387,16 +387,24 @@ static int omap_dm_timer_set_source(struct omap_dm_timer *timer, int source)
  
- #include <clocksource/timer-ti-dm.h>
+ static void omap_dm_timer_enable(struct omap_dm_timer *timer)
+ {
+-	pm_runtime_get_sync(&timer->pdev->dev);
++	struct device *dev = &timer->pdev->dev;
++	int rc;
++
++	rc = pm_runtime_resume_and_get(dev);
++	if (rc)
++		dev_err(dev, "could not enable timer\n");
+ }
  
-+/*
-+ * timer errata flags
-+ *
-+ * Errata i103/i767 impacts all OMAP3/4/5 devices including AM33xx. This
-+ * errata prevents us from using posted mode on these devices, unless the
-+ * timer counter register is never read. For more details please refer to
-+ * the OMAP3/4/5 errata documents.
-+ */
-+#define OMAP_TIMER_ERRATA_I103_I767			0x80000000
+ static void omap_dm_timer_disable(struct omap_dm_timer *timer)
+ {
+-	pm_runtime_put_sync(&timer->pdev->dev);
++	struct device *dev = &timer->pdev->dev;
 +
-+/* posted mode types */
-+#define OMAP_TIMER_NONPOSTED			0x00
-+#define OMAP_TIMER_POSTED			0x01
-+
-+/* register offsets with the write pending bit encoded */
-+#define	WPSHIFT					16
-+
-+#define OMAP_TIMER_WAKEUP_EN_REG		(_OMAP_TIMER_WAKEUP_EN_OFFSET \
-+							| (WP_NONE << WPSHIFT))
-+
-+#define OMAP_TIMER_CTRL_REG			(_OMAP_TIMER_CTRL_OFFSET \
-+							| (WP_TCLR << WPSHIFT))
-+
-+#define OMAP_TIMER_COUNTER_REG			(_OMAP_TIMER_COUNTER_OFFSET \
-+							| (WP_TCRR << WPSHIFT))
-+
-+#define OMAP_TIMER_LOAD_REG			(_OMAP_TIMER_LOAD_OFFSET \
-+							| (WP_TLDR << WPSHIFT))
-+
-+#define OMAP_TIMER_TRIGGER_REG			(_OMAP_TIMER_TRIGGER_OFFSET \
-+							| (WP_TTGR << WPSHIFT))
-+
-+#define OMAP_TIMER_WRITE_PEND_REG		(_OMAP_TIMER_WRITE_PEND_OFFSET \
-+							| (WP_NONE << WPSHIFT))
-+
-+#define OMAP_TIMER_MATCH_REG			(_OMAP_TIMER_MATCH_OFFSET \
-+							| (WP_TMAR << WPSHIFT))
-+
-+#define OMAP_TIMER_CAPTURE_REG			(_OMAP_TIMER_CAPTURE_OFFSET \
-+							| (WP_NONE << WPSHIFT))
-+
-+#define OMAP_TIMER_IF_CTRL_REG			(_OMAP_TIMER_IF_CTRL_OFFSET \
-+							| (WP_NONE << WPSHIFT))
-+
-+#define OMAP_TIMER_CAPTURE2_REG			(_OMAP_TIMER_CAPTURE2_OFFSET \
-+							| (WP_NONE << WPSHIFT))
-+
-+#define OMAP_TIMER_TICK_POS_REG			(_OMAP_TIMER_TICK_POS_OFFSET \
-+							| (WP_TPIR << WPSHIFT))
-+
-+#define OMAP_TIMER_TICK_NEG_REG			(_OMAP_TIMER_TICK_NEG_OFFSET \
-+							| (WP_TNIR << WPSHIFT))
-+
-+#define OMAP_TIMER_TICK_COUNT_REG		(_OMAP_TIMER_TICK_COUNT_OFFSET \
-+							| (WP_TCVR << WPSHIFT))
-+
-+#define OMAP_TIMER_TICK_INT_MASK_SET_REG				\
-+		(_OMAP_TIMER_TICK_INT_MASK_SET_OFFSET | (WP_TOCR << WPSHIFT))
-+
-+#define OMAP_TIMER_TICK_INT_MASK_COUNT_REG				\
-+		(_OMAP_TIMER_TICK_INT_MASK_COUNT_OFFSET | (WP_TOWR << WPSHIFT))
-+
- static u32 omap_reserved_systimers;
- static LIST_HEAD(omap_timer_list);
- static DEFINE_SPINLOCK(dm_timer_lock);
-diff --git a/include/clocksource/timer-ti-dm.h b/include/clocksource/timer-ti-dm.h
---- a/include/clocksource/timer-ti-dm.h
-+++ b/include/clocksource/timer-ti-dm.h
-@@ -52,10 +52,6 @@
- #define OMAP_TIMER_TRIGGER_OVERFLOW		0x01
- #define OMAP_TIMER_TRIGGER_OVERFLOW_AND_COMPARE	0x02
++	pm_runtime_put_sync(dev);
+ }
  
--/* posted mode types */
--#define OMAP_TIMER_NONPOSTED			0x00
--#define OMAP_TIMER_POSTED			0x01
--
- /* timer capabilities used in hwmod database */
- #define OMAP_TIMER_SECURE				0x80000000
- #define OMAP_TIMER_ALWON				0x40000000
-@@ -63,16 +59,6 @@
- #define OMAP_TIMER_NEEDS_RESET				0x10000000
- #define OMAP_TIMER_HAS_DSP_IRQ				0x08000000
+ static int omap_dm_timer_prepare(struct omap_dm_timer *timer)
+ {
++	struct device *dev = &timer->pdev->dev;
+ 	int rc;
  
--/*
-- * timer errata flags
-- *
-- * Errata i103/i767 impacts all OMAP3/4/5 devices including AM33xx. This
-- * errata prevents us from using posted mode on these devices, unless the
-- * timer counter register is never read. For more details please refer to
-- * the OMAP3/4/5 errata documents.
-- */
--#define OMAP_TIMER_ERRATA_I103_I767			0x80000000
--
- struct timer_regs {
- 	u32 ocp_cfg;
- 	u32 tidr;
-@@ -192,52 +178,4 @@ u32 omap_dm_timer_modify_idlect_mask(u32 inputmask);
- #define _OMAP_TIMER_TICK_INT_MASK_SET_OFFSET	0x54	/* TOCR, 34xx only */
- #define _OMAP_TIMER_TICK_INT_MASK_COUNT_OFFSET	0x58	/* TOWR, 34xx only */
+ 	/*
+@@ -411,18 +419,20 @@ static int omap_dm_timer_prepare(struct omap_dm_timer *timer)
+ 		}
+ 	}
  
--/* register offsets with the write pending bit encoded */
--#define	WPSHIFT					16
--
--#define OMAP_TIMER_WAKEUP_EN_REG		(_OMAP_TIMER_WAKEUP_EN_OFFSET \
--							| (WP_NONE << WPSHIFT))
--
--#define OMAP_TIMER_CTRL_REG			(_OMAP_TIMER_CTRL_OFFSET \
--							| (WP_TCLR << WPSHIFT))
--
--#define OMAP_TIMER_COUNTER_REG			(_OMAP_TIMER_COUNTER_OFFSET \
--							| (WP_TCRR << WPSHIFT))
--
--#define OMAP_TIMER_LOAD_REG			(_OMAP_TIMER_LOAD_OFFSET \
--							| (WP_TLDR << WPSHIFT))
--
--#define OMAP_TIMER_TRIGGER_REG			(_OMAP_TIMER_TRIGGER_OFFSET \
--							| (WP_TTGR << WPSHIFT))
--
--#define OMAP_TIMER_WRITE_PEND_REG		(_OMAP_TIMER_WRITE_PEND_OFFSET \
--							| (WP_NONE << WPSHIFT))
--
--#define OMAP_TIMER_MATCH_REG			(_OMAP_TIMER_MATCH_OFFSET \
--							| (WP_TMAR << WPSHIFT))
--
--#define OMAP_TIMER_CAPTURE_REG			(_OMAP_TIMER_CAPTURE_OFFSET \
--							| (WP_NONE << WPSHIFT))
--
--#define OMAP_TIMER_IF_CTRL_REG			(_OMAP_TIMER_IF_CTRL_OFFSET \
--							| (WP_NONE << WPSHIFT))
--
--#define OMAP_TIMER_CAPTURE2_REG			(_OMAP_TIMER_CAPTURE2_OFFSET \
--							| (WP_NONE << WPSHIFT))
--
--#define OMAP_TIMER_TICK_POS_REG			(_OMAP_TIMER_TICK_POS_OFFSET \
--							| (WP_TPIR << WPSHIFT))
--
--#define OMAP_TIMER_TICK_NEG_REG			(_OMAP_TIMER_TICK_NEG_OFFSET \
--							| (WP_TNIR << WPSHIFT))
--
--#define OMAP_TIMER_TICK_COUNT_REG		(_OMAP_TIMER_TICK_COUNT_OFFSET \
--							| (WP_TCVR << WPSHIFT))
--
--#define OMAP_TIMER_TICK_INT_MASK_SET_REG				\
--		(_OMAP_TIMER_TICK_INT_MASK_SET_OFFSET | (WP_TOCR << WPSHIFT))
--
--#define OMAP_TIMER_TICK_INT_MASK_COUNT_REG				\
--		(_OMAP_TIMER_TICK_INT_MASK_COUNT_OFFSET | (WP_TOWR << WPSHIFT))
--
- #endif /* __CLOCKSOURCE_DMTIMER_H */
+-	omap_dm_timer_enable(timer);
++	rc = pm_runtime_resume_and_get(dev);
++	if (rc)
++		return rc;
+ 
+ 	if (timer->capability & OMAP_TIMER_NEEDS_RESET) {
+ 		rc = omap_dm_timer_reset(timer);
+ 		if (rc) {
+-			omap_dm_timer_disable(timer);
++			pm_runtime_put_sync(dev);
+ 			return rc;
+ 		}
+ 	}
+ 
+ 	__omap_dm_timer_enable_posted(timer);
+-	omap_dm_timer_disable(timer);
++	pm_runtime_put_sync(dev);
+ 
+ 	return 0;
+ }
+@@ -628,12 +638,16 @@ __u32 omap_dm_timer_modify_idlect_mask(__u32 inputmask)
+ 
+ static int omap_dm_timer_start(struct omap_dm_timer *timer)
+ {
++	struct device *dev = &timer->pdev->dev;
++	int rc;
+ 	u32 l;
+ 
+ 	if (unlikely(!timer))
+ 		return -EINVAL;
+ 
+-	omap_dm_timer_enable(timer);
++	rc = pm_runtime_resume_and_get(dev);
++	if (rc)
++		return rc;
+ 
+ 	l = dmtimer_read(timer, OMAP_TIMER_CTRL_REG);
+ 	if (!(l & OMAP_TIMER_CTRL_ST)) {
+@@ -646,6 +660,7 @@ static int omap_dm_timer_start(struct omap_dm_timer *timer)
+ 
+ static int omap_dm_timer_stop(struct omap_dm_timer *timer)
+ {
++	struct device *dev = &timer->pdev->dev;
+ 	unsigned long rate = 0;
+ 
+ 	if (unlikely(!timer))
+@@ -656,32 +671,47 @@ static int omap_dm_timer_stop(struct omap_dm_timer *timer)
+ 
+ 	__omap_dm_timer_stop(timer, rate);
+ 
+-	omap_dm_timer_disable(timer);
++	pm_runtime_put_sync(dev);
++
+ 	return 0;
+ }
+ 
+ static int omap_dm_timer_set_load(struct omap_dm_timer *timer,
+ 				  unsigned int load)
+ {
++	struct device *dev;
++	int rc;
++
+ 	if (unlikely(!timer))
+ 		return -EINVAL;
+ 
+-	omap_dm_timer_enable(timer);
++	dev = &timer->pdev->dev;
++	rc = pm_runtime_resume_and_get(dev);
++	if (rc)
++		return rc;
++
+ 	dmtimer_write(timer, OMAP_TIMER_LOAD_REG, load);
+ 
+-	omap_dm_timer_disable(timer);
++	pm_runtime_put_sync(dev);
++
+ 	return 0;
+ }
+ 
+ static int omap_dm_timer_set_match(struct omap_dm_timer *timer, int enable,
+ 				   unsigned int match)
+ {
++	struct device *dev;
++	int rc;
+ 	u32 l;
+ 
+ 	if (unlikely(!timer))
+ 		return -EINVAL;
+ 
+-	omap_dm_timer_enable(timer);
++	dev = &timer->pdev->dev;
++	rc = pm_runtime_resume_and_get(dev);
++	if (rc)
++		return rc;
++
+ 	l = dmtimer_read(timer, OMAP_TIMER_CTRL_REG);
+ 	if (enable)
+ 		l |= OMAP_TIMER_CTRL_CE;
+@@ -690,19 +720,26 @@ static int omap_dm_timer_set_match(struct omap_dm_timer *timer, int enable,
+ 	dmtimer_write(timer, OMAP_TIMER_MATCH_REG, match);
+ 	dmtimer_write(timer, OMAP_TIMER_CTRL_REG, l);
+ 
+-	omap_dm_timer_disable(timer);
++	pm_runtime_put_sync(dev);
++
+ 	return 0;
+ }
+ 
+ static int omap_dm_timer_set_pwm(struct omap_dm_timer *timer, int def_on,
+ 				 int toggle, int trigger, int autoreload)
+ {
++	struct device *dev;
++	int rc;
+ 	u32 l;
+ 
+ 	if (unlikely(!timer))
+ 		return -EINVAL;
+ 
+-	omap_dm_timer_enable(timer);
++	dev = &timer->pdev->dev;
++	rc = pm_runtime_resume_and_get(dev);
++	if (rc)
++		return rc;
++
+ 	l = dmtimer_read(timer, OMAP_TIMER_CTRL_REG);
+ 	l &= ~(OMAP_TIMER_CTRL_GPOCFG | OMAP_TIMER_CTRL_SCPWM |
+ 	       OMAP_TIMER_CTRL_PT | (0x03 << 10) | OMAP_TIMER_CTRL_AR);
+@@ -715,20 +752,28 @@ static int omap_dm_timer_set_pwm(struct omap_dm_timer *timer, int def_on,
+ 		l |= OMAP_TIMER_CTRL_AR;
+ 	dmtimer_write(timer, OMAP_TIMER_CTRL_REG, l);
+ 
+-	omap_dm_timer_disable(timer);
++	pm_runtime_put_sync(dev);
++
+ 	return 0;
+ }
+ 
+ static int omap_dm_timer_get_pwm_status(struct omap_dm_timer *timer)
+ {
++	struct device *dev;
++	int rc;
+ 	u32 l;
+ 
+ 	if (unlikely(!timer))
+ 		return -EINVAL;
+ 
+-	omap_dm_timer_enable(timer);
++	dev = &timer->pdev->dev;
++	rc = pm_runtime_resume_and_get(dev);
++	if (rc)
++		return rc;
++
+ 	l = dmtimer_read(timer, OMAP_TIMER_CTRL_REG);
+-	omap_dm_timer_disable(timer);
++
++	pm_runtime_put_sync(dev);
+ 
+ 	return l;
+ }
+@@ -736,12 +781,18 @@ static int omap_dm_timer_get_pwm_status(struct omap_dm_timer *timer)
+ static int omap_dm_timer_set_prescaler(struct omap_dm_timer *timer,
+ 					int prescaler)
+ {
++	struct device *dev;
++	int rc;
+ 	u32 l;
+ 
+ 	if (unlikely(!timer) || prescaler < -1 || prescaler > 7)
+ 		return -EINVAL;
+ 
+-	omap_dm_timer_enable(timer);
++	dev = &timer->pdev->dev;
++	rc = pm_runtime_resume_and_get(dev);
++	if (rc)
++		return rc;
++
+ 	l = dmtimer_read(timer, OMAP_TIMER_CTRL_REG);
+ 	l &= ~(OMAP_TIMER_CTRL_PRE | (0x07 << 2));
+ 	if (prescaler >= 0) {
+@@ -750,20 +801,29 @@ static int omap_dm_timer_set_prescaler(struct omap_dm_timer *timer,
+ 	}
+ 	dmtimer_write(timer, OMAP_TIMER_CTRL_REG, l);
+ 
+-	omap_dm_timer_disable(timer);
++	pm_runtime_put_sync(dev);
++
+ 	return 0;
+ }
+ 
+ static int omap_dm_timer_set_int_enable(struct omap_dm_timer *timer,
+ 					unsigned int value)
+ {
++	struct device *dev;
++	int rc;
++
+ 	if (unlikely(!timer))
+ 		return -EINVAL;
+ 
+-	omap_dm_timer_enable(timer);
++	dev = &timer->pdev->dev;
++	rc = pm_runtime_resume_and_get(dev);
++	if (rc)
++		return rc;
++
+ 	__omap_dm_timer_int_enable(timer, value);
+ 
+-	omap_dm_timer_disable(timer);
++	pm_runtime_put_sync(dev);
++
+ 	return 0;
+ }
+ 
+@@ -776,12 +836,17 @@ static int omap_dm_timer_set_int_enable(struct omap_dm_timer *timer,
+  */
+ static int omap_dm_timer_set_int_disable(struct omap_dm_timer *timer, u32 mask)
+ {
++	struct device *dev;
+ 	u32 l = mask;
++	int rc;
+ 
+ 	if (unlikely(!timer))
+ 		return -EINVAL;
+ 
+-	omap_dm_timer_enable(timer);
++	dev = &timer->pdev->dev;
++	rc = pm_runtime_resume_and_get(dev);
++	if (rc)
++		return rc;
+ 
+ 	if (timer->revision == 1)
+ 		l = dmtimer_read(timer, timer->irq_ena) & ~mask;
+@@ -790,7 +855,8 @@ static int omap_dm_timer_set_int_disable(struct omap_dm_timer *timer, u32 mask)
+ 	l = dmtimer_read(timer, OMAP_TIMER_WAKEUP_EN_REG) & ~mask;
+ 	dmtimer_write(timer, OMAP_TIMER_WAKEUP_EN_REG, l);
+ 
+-	omap_dm_timer_disable(timer);
++	pm_runtime_put_sync(dev);
++
+ 	return 0;
+ }
+ 
+@@ -943,11 +1009,11 @@ static int omap_dm_timer_probe(struct platform_device *pdev)
+ 	pm_runtime_enable(dev);
+ 
+ 	if (!timer->reserved) {
+-		ret = pm_runtime_get_sync(dev);
+-		if (ret < 0) {
++		ret = pm_runtime_resume_and_get(dev);
++		if (ret) {
+ 			dev_err(dev, "%s: pm_runtime_get_sync failed!\n",
+ 				__func__);
+-			goto err_get_sync;
++			goto err_disable;
+ 		}
+ 		__omap_dm_timer_init_regs(timer);
+ 		pm_runtime_put(dev);
+@@ -962,8 +1028,7 @@ static int omap_dm_timer_probe(struct platform_device *pdev)
+ 
+ 	return 0;
+ 
+-err_get_sync:
+-	pm_runtime_put_noidle(dev);
++err_disable:
+ 	pm_runtime_disable(dev);
+ 	return ret;
+ }
 -- 
 2.37.1

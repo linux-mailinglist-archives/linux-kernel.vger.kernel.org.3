@@ -2,44 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C83C594A1A
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:17:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BCD6594A32
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:17:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242674AbiHOXSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:18:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45244 "EHLO
+        id S238223AbiHOXTL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:19:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345907AbiHOXPA (ORCPT
+        with ESMTP id S1348279AbiHOXPg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:15:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8CEC7C76B;
-        Mon, 15 Aug 2022 13:02:22 -0700 (PDT)
+        Mon, 15 Aug 2022 19:15:36 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B0F9D651;
+        Mon, 15 Aug 2022 13:02:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7D9AFB80EB1;
-        Mon, 15 Aug 2022 20:02:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBCD8C433D6;
-        Mon, 15 Aug 2022 20:02:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27C686068D;
+        Mon, 15 Aug 2022 20:02:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18F6BC433C1;
+        Mon, 15 Aug 2022 20:02:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660593740;
-        bh=paxBoEnAGh+TJJxSDISYgtGqLIvQ5WKLbYQHLktb9E0=;
+        s=korg; t=1660593757;
+        bh=pGy4ntkhvh8VNmVIX73uYF4znikFfDQUAqiExqIXPK0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nJRTNLYeg8U5XGGuRWSm0FA7OMC5kCRiKWXy6ak8b0F3YZK14aamrNBhxHMZjVpPd
-         d/IYRtSZuiDlHvBDqkowKQ9EZ3T7yrolCo8FEk9LORPkGboRoj9Dep9zIhr7D+Gl0/
-         bmjZYWdTJFONf/rcNakIwysS35ciH+raDVFaeUW0=
+        b=1h/Lyyh2j5i/WBmAybB2WX25UsjnzhNejdGRei0kF1x9fOjcoqQ/vqWHHz2XeD3cy
+         bq1ryvzMv6l/Oj4TfiHo28Me8B5yjRbfunMSaW22KYJ89hBxcway/fx4caB7S79/0z
+         2LP208+3KnSqewjBFk79yz6BoaTM/71hE8pT6OO8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Ville=20Syrj=C3=A4l=C3=A4?= 
-        <ville.syrjala@linux.intel.com>,
-        Jani Nikula <jani.nikula@intel.com>,
+        stable@vger.kernel.org, Hulk Robot <hulkci@huawei.com>,
+        Gao Chao <gaochao49@huawei.com>,
+        Douglas Anderson <dianders@chromium.org>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0318/1157] drm/edid: reset display info in drm_add_edid_modes() for NULL edid
-Date:   Mon, 15 Aug 2022 19:54:34 +0200
-Message-Id: <20220815180452.368173158@linuxfoundation.org>
+Subject: [PATCH 5.19 0321/1157] drm/panel: Fix build error when CONFIG_DRM_PANEL_SAMSUNG_ATNA33XC20=y && CONFIG_DRM_DISPLAY_HELPER=m
+Date:   Mon, 15 Aug 2022 19:54:37 +0200
+Message-Id: <20220815180452.487000940@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -57,34 +56,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jani Nikula <jani.nikula@intel.com>
+From: Gao Chao <gaochao49@huawei.com>
 
-[ Upstream commit d10f7117aa43b0b0d1c4b878afafb6d151da441d ]
+[ Upstream commit a67664860f7833015a683ea295f7c79ac2901332 ]
 
-If a NULL edid gets passed to drm_add_edid_modes(), we should probably
-also reset the display info.
+If CONFIG_DRM_PANEL_SAMSUNG_ATNA33XC20=y && CONFIG_DRM_DISPLAY_HELPER=m,
+bulding fails:
 
-Cc: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Signed-off-by: Jani Nikula <jani.nikula@intel.com>
-Reviewed-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Link: https://patchwork.freedesktop.org/patch/msgid/2ac1c55f94a08d5e72c0b518d956a11002ec85c1.1651569697.git.jani.nikula@intel.com
+drivers/gpu/drm/panel/panel-samsung-atna33xc20.o: In function `atana33xc20_probe':
+panel-samsung-atna33xc20.c:(.text+0x744): undefined reference to
+ `drm_panel_dp_aux_backlight'
+make: *** [vmlinux] Error 1
+
+Let CONFIG_DRM_PANEL_SAMSUNG_ATNA33XC20 select DRM_DISPLAY_DP_HELPER and
+CONFIG_DRM_DISPLAY_HELPER to fix this error.
+
+Fixes: 32ce3b320343 ("drm/panel: atna33xc20: Introduce the Samsung ATNA33XC20 panel")
+Reported-by: Hulk Robot <hulkci@huawei.com>
+Signed-off-by: Gao Chao <gaochao49@huawei.com>
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+Link: https://patchwork.freedesktop.org/patch/msgid/20220524024551.539-1-gaochao49@huawei.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/drm_edid.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/gpu/drm/panel/Kconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/gpu/drm/drm_edid.c b/drivers/gpu/drm/drm_edid.c
-index bc43e1b32092..1dea0e2f0cab 100644
---- a/drivers/gpu/drm/drm_edid.c
-+++ b/drivers/gpu/drm/drm_edid.c
-@@ -5697,6 +5697,7 @@ static int drm_edid_connector_update(struct drm_connector *connector,
- 	u32 quirks;
- 
- 	if (edid == NULL) {
-+		drm_reset_display_info(connector);
- 		clear_eld(connector);
- 		return 0;
- 	}
+diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
+index 38799effd00a..4f1f004b3c54 100644
+--- a/drivers/gpu/drm/panel/Kconfig
++++ b/drivers/gpu/drm/panel/Kconfig
+@@ -438,6 +438,8 @@ config DRM_PANEL_SAMSUNG_ATNA33XC20
+ 	depends on OF
+ 	depends on BACKLIGHT_CLASS_DEVICE
+ 	depends on PM
++	select DRM_DISPLAY_DP_HELPER
++	select DRM_DISPLAY_HELPER
+ 	select DRM_DP_AUX_BUS
+ 	help
+ 	  DRM panel driver for the Samsung ATNA33XC20 panel. This panel can't
 -- 
 2.35.1
 

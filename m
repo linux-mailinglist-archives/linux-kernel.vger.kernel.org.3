@@ -2,120 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21EBA595461
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 10:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 75C0C5956BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 11:40:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230030AbiHPICD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 16 Aug 2022 04:02:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56620 "EHLO
+        id S233842AbiHPJkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 16 Aug 2022 05:40:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230287AbiHPIBk (ORCPT
+        with ESMTP id S233769AbiHPJja (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 16 Aug 2022 04:01:40 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8025F125
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 22:21:05 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id jm11so6011592plb.13
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 22:21:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc;
-        bh=0p+K0qLqxOzyQ3M+oE6bJ773iu7oRhxO3HE/oVHQgeI=;
-        b=Q84XFhLhci9sMypF2Qq1P+Ztgp7ErAQco5AR0ZLZ1SEHo124YaVRL+lvNOVVysf9P/
-         ZGF/F5dvUD2T0R9cWO2XGG+02LCY2H7kF8FIzLRGPbSlG9R2C505ZbCwcn5DzkLOWjRL
-         3p1X5J1tWUwurowbXOZLG3WRTdUFHeZfr8rkV2xAa+bMYYpcETYi2cC+WhxeuOXxew5G
-         baoTzvF5eOCA5H7vq/9nWJ9QOHqw7sAisXUVflIRBcW8FLd/SXkDdnfT4QxoNueaj7NU
-         VFVpGTw8IzYb2C+1KFeKd4zgF08vW3uA4pb/QYznp9Wbo13qfYrlhpzdMr7wkwq8wOHt
-         fAYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=0p+K0qLqxOzyQ3M+oE6bJ773iu7oRhxO3HE/oVHQgeI=;
-        b=FlGAsD7Prre7IwvX15s/rKCHkbAWFxeSi2IS8FYZYflydLIxxs2ShMg1KF4LCM+7wi
-         xdmVGmM4xX/SlLvcpyqfgMgTtO78/gkL0UkstQs/dOJ52vmXqC++9VQB6+5y62zi4kSj
-         MxyEWgw4Vsn7mOtKTtWuI5lhNBID+m1eT1inzKQAgDRc/6yMOPlYwauzq5XSXb+tgQ17
-         SD2R3/25rRjgoGAwfW3Q2+1SZK3nLhiWpTgSGF+PSJkw8nHtbpSgUU3viZRqX3fWXZ3c
-         oiDHKFBnMWCOYKPdE1+dQ8qq95IBKNwxxWdBUmzaDdzbYS24wj6VA2uq64Mg1QWRImnO
-         bkZA==
-X-Gm-Message-State: ACgBeo16/2ndNp4Z6f6ph1tv7sW0aXUWJaKKcJZaEsAb7paldiXVjk+/
-        otQ1/ku133Cev2xXONxF6VE0GQ==
-X-Google-Smtp-Source: AA6agR6chfmdgtWHQp2MitjNlKme1+yXKlKet9gzMaudy3FfMj/Cbfy8IiOC63TSrhs1532tAhnnBQ==
-X-Received: by 2002:a17:90b:1b49:b0:1f5:4203:2e4e with SMTP id nv9-20020a17090b1b4900b001f542032e4emr31106602pjb.143.1660627265141;
-        Mon, 15 Aug 2022 22:21:05 -0700 (PDT)
-Received: from localhost ([122.171.18.80])
-        by smtp.gmail.com with ESMTPSA id x12-20020a170902ec8c00b0016eecdf8978sm8012796plg.106.2022.08.15.22.21.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 22:21:04 -0700 (PDT)
-Date:   Tue, 16 Aug 2022 10:51:02 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Adam Skladowski <a39.skl@gmail.com>
-Cc:     phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Emma Anholt <emma@anholt.net>,
-        Rob Clark <robdclark@chromium.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, dmaengine@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        linux-mmc@vger.kernel.org, linux-pm@vger.kernel.org,
-        Sibi Sankar <sibis@codeaurora.org>,
-        Adam Skladowski <a_skl39@protonmail.com>
-Subject: Re: [PATCH 4/7] cpufreq: Add SM6115 to cpufreq-dt-platdev blocklist
-Message-ID: <20220816052102.jdonvyxkix5n34u5@vireshk-i7>
-References: <20220815100952.23795-1-a39.skl@gmail.com>
- <20220815100952.23795-5-a39.skl@gmail.com>
+        Tue, 16 Aug 2022 05:39:30 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34E9F1365F8;
+        Tue, 16 Aug 2022 01:28:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9116F611F2;
+        Tue, 16 Aug 2022 08:28:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94A48C433C1;
+        Tue, 16 Aug 2022 08:28:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1660638492;
+        bh=kn/cDzx5wgLfYQgDaZMLwVmKJJDcenaMUgsJ7D0lmXg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=OWKY8C2GcbgTNqhHhuZhYFir9funE6n/P4pENhoRIJd/oAk2M+cpmYlGh0tHRvzur
+         LNzpuaA/0+J6Y2PrMjqHHO+lWiRWkJpjGm2beJvCpG4rKjlahzhyrAo8/NN2UijSLV
+         +P15i/QlyobPuje8dvZKtv3dlGcUxhsbo4euUq2k=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.15 713/779] serial: 8250_pci: Refactor the loop in pci_ite887x_init()
+Date:   Mon, 15 Aug 2022 20:05:57 +0200
+Message-Id: <20220815180407.929169761@linuxfoundation.org>
+X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220815180337.130757997@linuxfoundation.org>
+References: <20220815180337.130757997@linuxfoundation.org>
+User-Agent: quilt/0.67
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220815100952.23795-5-a39.skl@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15-08-22, 12:09, Adam Skladowski wrote:
-> The Qualcomm SM6115 platform uses the
-> qcom-cpufreq-hw driver, so add it to the cpufreq-dt-platdev driver's
-> blocklist.
-> 
-> Signed-off-by: Adam Skladowski <a39.skl@gmail.com>
-> ---
->  drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
-> index 2c96de3f2d83..6ac3800db450 100644
-> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
-> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
-> @@ -146,6 +146,7 @@ static const struct of_device_id blocklist[] __initconst = {
->  	{ .compatible = "qcom,sc8180x", },
->  	{ .compatible = "qcom,sc8280xp", },
->  	{ .compatible = "qcom,sdm845", },
-> +	{ .compatible = "qcom,sm6115", },
->  	{ .compatible = "qcom,sm6350", },
->  	{ .compatible = "qcom,sm8150", },
->  	{ .compatible = "qcom,sm8250", },
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Applied. Thanks.
+[ Upstream commit 35b4f17231923e2f64521bdf7a2793ce2c3c74a6 ]
 
+The loop can be refactored by using ARRAY_SIZE() instead of NULL terminator.
+This reduces code base and makes it easier to read and understand.
+
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Jiri Slaby <jslaby@kernel.org>
+Link: https://lore.kernel.org/r/20211022135147.70965-1-andriy.shevchenko@linux.intel.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/tty/serial/8250/8250_pci.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/tty/serial/8250/8250_pci.c b/drivers/tty/serial/8250/8250_pci.c
+index e7b9805903f4..ef44e5320bef 100644
+--- a/drivers/tty/serial/8250/8250_pci.c
++++ b/drivers/tty/serial/8250/8250_pci.c
+@@ -897,18 +897,16 @@ static int pci_netmos_init(struct pci_dev *dev)
+ /* enable IO_Space bit */
+ #define ITE_887x_POSIO_ENABLE		(1 << 31)
+ 
++/* inta_addr are the configuration addresses of the ITE */
++static const short inta_addr[] = { 0x2a0, 0x2c0, 0x220, 0x240, 0x1e0, 0x200, 0x280 };
+ static int pci_ite887x_init(struct pci_dev *dev)
+ {
+-	/* inta_addr are the configuration addresses of the ITE */
+-	static const short inta_addr[] = { 0x2a0, 0x2c0, 0x220, 0x240, 0x1e0,
+-							0x200, 0x280, 0 };
+ 	int ret, i, type;
+ 	struct resource *iobase = NULL;
+ 	u32 miscr, uartbar, ioport;
+ 
+ 	/* search for the base-ioport */
+-	i = 0;
+-	while (inta_addr[i] && iobase == NULL) {
++	for (i = 0; i < ARRAY_SIZE(inta_addr); i++) {
+ 		iobase = request_region(inta_addr[i], ITE_887x_IOSIZE,
+ 								"ite887x");
+ 		if (iobase != NULL) {
+@@ -925,12 +923,10 @@ static int pci_ite887x_init(struct pci_dev *dev)
+ 				break;
+ 			}
+ 			release_region(iobase->start, ITE_887x_IOSIZE);
+-			iobase = NULL;
+ 		}
+-		i++;
+ 	}
+ 
+-	if (!inta_addr[i]) {
++	if (i == ARRAY_SIZE(inta_addr)) {
+ 		dev_err(&dev->dev, "ite887x: could not find iobase\n");
+ 		return -ENODEV;
+ 	}
 -- 
-viresh
+2.35.1
+
+
+

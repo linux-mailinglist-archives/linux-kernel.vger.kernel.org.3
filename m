@@ -2,517 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39BAF5930E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 16:40:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C78525930E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 16:42:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232477AbiHOOkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 10:40:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51344 "EHLO
+        id S242222AbiHOOl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 10:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232690AbiHOOkc (ORCPT
+        with ESMTP id S232690AbiHOOl5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 10:40:32 -0400
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE84B1083;
-        Mon, 15 Aug 2022 07:40:29 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailnew.nyi.internal (Postfix) with ESMTP id DF5B65801BD;
-        Mon, 15 Aug 2022 10:40:28 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute2.internal (MEProxy); Mon, 15 Aug 2022 10:40:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sent.com; h=cc
-        :cc:content-transfer-encoding:date:date:from:from:in-reply-to
-        :message-id:mime-version:reply-to:reply-to:sender:subject
-        :subject:to:to; s=fm1; t=1660574428; x=1660581628; bh=DGtBzB5gvV
-        /bg6WJhVaceXEXR9j/HiUey3LRQ9aMkpc=; b=y/bOxu6gLP4GvrPWXMY27weFun
-        c1ncX3L4wvaa9IUjoTYgdrlRYy8ylM94pZvP6iDQmLe4esMVZBBWA2vaVkRVNnqe
-        rNTy9eqQX789s5OZl/0VSiFEleOizu220mkbcf1xv49tiUjQrOeXETMbK71FixbU
-        +Z639NZx8LY5/xQLY7y7f+1LNKLtF9KTuhJ2kc00t2+Aq4XKS0Sr+9hMAHBJ5LFN
-        xIz1G7hSqpta6DirFoyRxmnrlmla8uVN/AZ8vvZ8leK4mFzKEQkeFtw/663rN7hR
-        vpHpdYdGPhjwkeDh5yZY6zDTt51EkD3g7gl3DTux+7ofqUyfwri/muCys3Rw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:message-id
-        :mime-version:reply-to:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1660574428; x=1660581628; bh=DGtBzB5gvV/bg6WJhVaceXEXR9j/
-        HiUey3LRQ9aMkpc=; b=MzzWgt6WOwywKO6TLP+bUkIBGi3rW3WFiCmM8uBSTY8C
-        kekFTJOApWn07sGE4/nCPmVGC9XUfMTvT42w0evi8E5hwKXu6EiqtsQOgYZTMBuc
-        zfo/i1nDXhFhxQEW3mlNoQzc2Ki24KY7c+MWcaytyzhRQCKev9eW82LmS4cnumCM
-        T34uIhx63m/mBWeaPsa+CvZZHENMV2sPGhvjFfPkZyPmPa2ypdU1nlpS3pxqybuA
-        vQVw16JK4LXWosbIOy59orzDTASR+0jC96BC/UCLn79DbLdYkZSj0suCMKmwzhbx
-        59ZMeymfudYzSGOLXtdkmZqcPICyMO5HISTsx1IyNA==
-X-ME-Sender: <xms:2lr6YkIcP_YlnPjg2EHTks4ozpYG-In4ywPEJHiSrLNtJNI65CGKnQ>
-    <xme:2lr6YkJwEB05mX9iFjp_F6MProO0o089Q096PAKfB0PguXbfPMqI0lsIr525I7kMN
-    GRVK7ggilWU9XPmPA>
-X-ME-Received: <xmr:2lr6YktwE9V_roIVCiKCMVxOo-flSa9M5tCtt0Xo8AN3gZZYryst2ROnh2kxX-Xr_E-OSrW538ZTUYkM9g>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehvddgkedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofhrggfgsedtqhertdertddtnecuhfhrohhmpegkihcujggr
-    nhcuoeiiihdrhigrnhesshgvnhhtrdgtohhmqeenucggtffrrghtthgvrhhnpedtgffhtd
-    etledtkeeihfefueeuhedvudfhvdeifeevtdektdetgfeiieejuefhtdenucevlhhushht
-    vghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpeiiihdrhigrnhesshgvnh
-    htrdgtohhm
-X-ME-Proxy: <xmx:2lr6YhaeMQSXAQX8EO-vC4kShr5WLRZazbJjh91tcmYqs4TTsW2zZw>
-    <xmx:2lr6YrbXs2m9GrdadKv7UX5V2cu7Mzi58CXIpZfJsxJW28M4JOhK-w>
-    <xmx:2lr6YtD4DsYFSxGoz8s8EsYu6nD6FaT1ZOnJaauMLRBdApD4J9a3UA>
-    <xmx:3Fr6YomysOdJJhveVAcOV7Y1crZ80LlfrgIlStNgo8i7ZKk8FYqAfg>
-Feedback-ID: iccd040f4:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 15 Aug 2022 10:40:25 -0400 (EDT)
-From:   Zi Yan <zi.yan@sent.com>
-To:     linux-mm@kvack.org
-Cc:     Zi Yan <ziy@nvidia.com>, David Hildenbrand <david@redhat.com>,
+        Mon, 15 Aug 2022 10:41:57 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15A091573C;
+        Mon, 15 Aug 2022 07:41:55 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id B776537515;
+        Mon, 15 Aug 2022 14:41:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1660574513; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UfV7UrK+irne6GAgk+wBFpB/DtHiJX9EFsLGUAqb2oc=;
+        b=EhnMpH5BKOHqbs8xeGCnOVw6+0G5OZe6Rpr/ISxuKHe1aC4L+Cuo8/AmPJBLlCB+gTo4t/
+        9I2Pmg67OxeHq8NM939vc6VCUizI76SkVeYA3xQM7cXRPPkvS/pI+3x8wzfoEyUD+oWN2K
+        8j2xxcpxiph5iXhtzwsFVEkQWGZiV5A=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1660574513;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UfV7UrK+irne6GAgk+wBFpB/DtHiJX9EFsLGUAqb2oc=;
+        b=mDogXZxBHBrBcAEs5GLQP00EbvzxXZDg3S8XmtsksFVNs1rShDdZsCGASwooYRz3qtgJ1E
+        3oI+E49ly/rwTVAA==
+Received: from suse.de (unknown [10.163.43.106])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 2476F2C1C6;
+        Mon, 15 Aug 2022 14:41:51 +0000 (UTC)
+Date:   Mon, 15 Aug 2022 15:41:43 +0100
+From:   Mel Gorman <mgorman@suse.de>
+To:     Ingo Molnar <mingo@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        stable@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Peter Xu <peterx@redhat.com>, Hugh Dickins <hughd@google.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
         Matthew Wilcox <willy@infradead.org>,
         Vlastimil Babka <vbabka@suse.cz>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
         John Hubbard <jhubbard@nvidia.com>,
-        Yang Shi <shy828301@gmail.com>,
-        David Rientjes <rientjes@google.com>,
-        James Houghton <jthoughton@google.com>,
-        Mike Rapoport <rppt@kernel.org>, linux-kernel@vger.kernel.org,
-        Mike Rapoport <rppt@linux.ibm.com>,
-        Vineet Gupta <vgupta@synopsys.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Taichi Sugaya <sugaya.taichi@socionext.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Qin Jian <qinjian@cqplus1.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Guo Ren <guoren@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dinh Nguyen <dinguyen@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>, Arnd Bergmann <arnd@arndb.de>,
-        Ley Foon Tan <ley.foon.tan@intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-oxnas@groups.io,
-        linux-csky@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-xtensa@linux-xtensa.org
-Subject: [PATCH] arch: mm: rename FORCE_MAX_ZONEORDER to ARCH_FORCE_MAX_ORDER
-Date:   Mon, 15 Aug 2022 10:39:59 -0400
-Message-Id: <20220815143959.1511278-1-zi.yan@sent.com>
-X-Mailer: git-send-email 2.35.1
-Reply-To: Zi Yan <ziy@nvidia.com>
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH v2] sched/all: Change all BUG_ON() instances in the
+ scheduler to WARN_ON_ONCE()
+Message-ID: <20220815144143.zjsiamw5y22bvgki@suse.de>
+References: <20220808073232.8808-1-david@redhat.com>
+ <CAHk-=wiEAH+ojSpAgx_Ep=NKPWHU8AdO3V56BXcCsU97oYJ1EA@mail.gmail.com>
+ <1a48d71d-41ee-bf39-80d2-0102f4fe9ccb@redhat.com>
+ <CAHk-=wg40EAZofO16Eviaj7mfqDhZ2gVEbvfsMf6gYzspRjYvw@mail.gmail.com>
+ <YvSsKcAXISmshtHo@gmail.com>
+ <CAHk-=wgqW6zQcAW4i-ARJ8KNZZjw6tP3nn0QimyTWO=j+ZKsLA@mail.gmail.com>
+ <YvYdbn2GtTlCaand@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-15
+Content-Disposition: inline
+In-Reply-To: <YvYdbn2GtTlCaand@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zi Yan <ziy@nvidia.com>
+On Fri, Aug 12, 2022 at 11:29:18AM +0200, Ingo Molnar wrote:
+> From: Ingo Molnar <mingo@kernel.org>
+> Date: Thu, 11 Aug 2022 08:54:52 +0200
+> Subject: [PATCH] sched/all: Change all BUG_ON() instances in the scheduler to WARN_ON_ONCE()
+> 
+> There's no good reason to crash a user's system with a BUG_ON(),
+> chances are high that they'll never even see the crash message on
+> Xorg, and it won't make it into the syslog either.
+> 
+> By using a WARN_ON_ONCE() we at least give the user a chance to report
+> any bugs triggered here - instead of getting silent hangs.
+> 
+> None of these WARN_ON_ONCE()s are supposed to trigger, ever - so we ignore
+> cases where a NULL check is done via a BUG_ON() and we let a NULL
+> pointer through after a WARN_ON_ONCE().
+> 
+> There's one exception: WARN_ON_ONCE() arguments with side-effects,
+> such as locking - in this case we use the return value of the
+> WARN_ON_ONCE(), such as in:
+> 
+>  -       BUG_ON(!lock_task_sighand(p, &flags));
+>  +       if (WARN_ON_ONCE(!lock_task_sighand(p, &flags)))
+>  +               return;
+> 
+> Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+> Signed-off-by: Ingo Molnar <mingo@kernel.org>
+> Link: https://lore.kernel.org/r/YvSsKcAXISmshtHo@gmail.com
+> ---
+>  kernel/sched/autogroup.c |  3 ++-
+>  kernel/sched/core.c      |  2 +-
+>  kernel/sched/cpupri.c    |  2 +-
+>  kernel/sched/deadline.c  | 26 +++++++++++++-------------
+>  kernel/sched/fair.c      | 10 +++++-----
+>  kernel/sched/rt.c        |  2 +-
+>  kernel/sched/sched.h     |  6 +++---
+>  7 files changed, 26 insertions(+), 25 deletions(-)
+> 
+> diff --git a/kernel/sched/cpupri.c b/kernel/sched/cpupri.c
+> index fa9ce9d83683..a286e726eb4b 100644
+> --- a/kernel/sched/cpupri.c
+> +++ b/kernel/sched/cpupri.c
+> @@ -147,7 +147,7 @@ int cpupri_find_fitness(struct cpupri *cp, struct task_struct *p,
+>  	int task_pri = convert_prio(p->prio);
+>  	int idx, cpu;
+>  
+> -	BUG_ON(task_pri >= CPUPRI_NR_PRIORITIES);
+> +	WARN_ON_ONCE(task_pri >= CPUPRI_NR_PRIORITIES);
+>  
+>  	for (idx = 0; idx < task_pri; idx++) {
+>  
 
-This Kconfig option is used by individual arch to set its desired
-MAX_ORDER. Rename it to reflect its actual use.
+Should the return value be used here to clamp task_pri to
+CPUPRI_NR_PRIORITIES? task_pri is used for index which in __cpupri_find
+then accesses beyond the end of an array and the future behaviour will be
+very unpredictable.
 
-Acked-by: Mike Rapoport <rppt@linux.ibm.com>
-Signed-off-by: Zi Yan <ziy@nvidia.com>
-Cc: Vineet Gupta <vgupta@synopsys.com>
-Cc: Shawn Guo <shawnguo@kernel.org>
-Cc: Taichi Sugaya <sugaya.taichi@socionext.com>
-Cc: Neil Armstrong <narmstrong@baylibre.com>
-Cc: Qin Jian <qinjian@cqplus1.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Guo Ren <guoren@kernel.org>
-Cc: Huacai Chen <chenhuacai@kernel.org>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Dinh Nguyen <dinguyen@kernel.org>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Chris Zankel <chris@zankel.net>
-Cc: Arnd Bergmann <arnd@arndb.de>
-Cc: Ley Foon Tan <ley.foon.tan@intel.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: NXP Linux Team <linux-imx@nxp.com>
-Cc: linux-snps-arc@lists.infradead.org
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-oxnas@groups.io
-Cc: linux-csky@vger.kernel.org
-Cc: linux-ia64@vger.kernel.org
-Cc: loongarch@lists.linux.dev
-Cc: linux-m68k@lists.linux-m68k.org
-Cc: linux-mips@vger.kernel.org
-Cc: linuxppc-dev@lists.ozlabs.org
-Cc: linux-sh@vger.kernel.org
-Cc: sparclinux@vger.kernel.org
-Cc: linux-xtensa@linux-xtensa.org
-Cc: linux-mm@kvack.org
-Cc: linux-kernel@vger.kernel.org
----
- arch/arc/Kconfig                             | 2 +-
- arch/arm/Kconfig                             | 2 +-
- arch/arm/configs/imx_v6_v7_defconfig         | 2 +-
- arch/arm/configs/milbeaut_m10v_defconfig     | 2 +-
- arch/arm/configs/oxnas_v6_defconfig          | 2 +-
- arch/arm/configs/pxa_defconfig               | 2 +-
- arch/arm/configs/sama7_defconfig             | 2 +-
- arch/arm/configs/sp7021_defconfig            | 2 +-
- arch/arm64/Kconfig                           | 2 +-
- arch/csky/Kconfig                            | 2 +-
- arch/ia64/Kconfig                            | 2 +-
- arch/ia64/include/asm/sparsemem.h            | 6 +++---
- arch/loongarch/Kconfig                       | 2 +-
- arch/m68k/Kconfig.cpu                        | 2 +-
- arch/mips/Kconfig                            | 2 +-
- arch/nios2/Kconfig                           | 2 +-
- arch/powerpc/Kconfig                         | 2 +-
- arch/powerpc/configs/85xx/ge_imp3a_defconfig | 2 +-
- arch/powerpc/configs/fsl-emb-nonhw.config    | 2 +-
- arch/sh/configs/ecovec24_defconfig           | 2 +-
- arch/sh/mm/Kconfig                           | 2 +-
- arch/sparc/Kconfig                           | 2 +-
- arch/xtensa/Kconfig                          | 2 +-
- include/linux/mmzone.h                       | 4 ++--
- 24 files changed, 27 insertions(+), 27 deletions(-)
+> diff --git a/kernel/sched/deadline.c b/kernel/sched/deadline.c
+> index 0ab79d819a0d..962b169b05cf 100644
+> --- a/kernel/sched/deadline.c
+> +++ b/kernel/sched/deadline.c
+> @@ -2017,7 +2017,7 @@ static struct task_struct *pick_task_dl(struct rq *rq)
+>  		return NULL;
+>  
+>  	dl_se = pick_next_dl_entity(dl_rq);
+> -	BUG_ON(!dl_se);
+> +	WARN_ON_ONCE(!dl_se);
+>  	p = dl_task_of(dl_se);
+>  
+>  	return p;
 
-diff --git a/arch/arc/Kconfig b/arch/arc/Kconfig
-index 9e3653253ef2..d9a13ccf89a3 100644
---- a/arch/arc/Kconfig
-+++ b/arch/arc/Kconfig
-@@ -554,7 +554,7 @@ config ARC_BUILTIN_DTB_NAME
-=20
- endmenu	 # "ARC Architecture Configuration"
-=20
--config FORCE_MAX_ZONEORDER
-+config ARCH_FORCE_MAX_ORDER
- 	int "Maximum zone order"
- 	default "12" if ARC_HUGEPAGE_16M
- 	default "11"
-diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
-index 87badeae3181..e6c8ee56ac52 100644
---- a/arch/arm/Kconfig
-+++ b/arch/arm/Kconfig
-@@ -1434,7 +1434,7 @@ config ARM_MODULE_PLTS
- 	  Disabling this is usually safe for small single-platform
- 	  configurations. If unsure, say y.
-=20
--config FORCE_MAX_ZONEORDER
-+config ARCH_FORCE_MAX_ORDER
- 	int "Maximum zone order"
- 	default "12" if SOC_AM33XX
- 	default "9" if SA1111
-diff --git a/arch/arm/configs/imx_v6_v7_defconfig b/arch/arm/configs/imx_v6=
-_v7_defconfig
-index 01012537a9b9..fb283059daa0 100644
---- a/arch/arm/configs/imx_v6_v7_defconfig
-+++ b/arch/arm/configs/imx_v6_v7_defconfig
-@@ -31,7 +31,7 @@ CONFIG_SOC_VF610=3Dy
- CONFIG_SMP=3Dy
- CONFIG_ARM_PSCI=3Dy
- CONFIG_HIGHMEM=3Dy
--CONFIG_FORCE_MAX_ZONEORDER=3D14
-+CONFIG_ARCH_FORCE_MAX_ORDER=3D14
- CONFIG_CMDLINE=3D"noinitrd console=3Dttymxc0,115200"
- CONFIG_KEXEC=3Dy
- CONFIG_CPU_FREQ=3Dy
-diff --git a/arch/arm/configs/milbeaut_m10v_defconfig b/arch/arm/configs/mi=
-lbeaut_m10v_defconfig
-index 58810e98de3d..8620061e19a8 100644
---- a/arch/arm/configs/milbeaut_m10v_defconfig
-+++ b/arch/arm/configs/milbeaut_m10v_defconfig
-@@ -26,7 +26,7 @@ CONFIG_THUMB2_KERNEL=3Dy
- # CONFIG_THUMB2_AVOID_R_ARM_THM_JUMP11 is not set
- # CONFIG_ARM_PATCH_IDIV is not set
- CONFIG_HIGHMEM=3Dy
--CONFIG_FORCE_MAX_ZONEORDER=3D12
-+CONFIG_ARCH_FORCE_MAX_ORDER=3D12
- CONFIG_SECCOMP=3Dy
- CONFIG_KEXEC=3Dy
- CONFIG_EFI=3Dy
-diff --git a/arch/arm/configs/oxnas_v6_defconfig b/arch/arm/configs/oxnas_v=
-6_defconfig
-index 600f78b363dd..5c163a9d1429 100644
---- a/arch/arm/configs/oxnas_v6_defconfig
-+++ b/arch/arm/configs/oxnas_v6_defconfig
-@@ -12,7 +12,7 @@ CONFIG_ARCH_OXNAS=3Dy
- CONFIG_MACH_OX820=3Dy
- CONFIG_SMP=3Dy
- CONFIG_NR_CPUS=3D16
--CONFIG_FORCE_MAX_ZONEORDER=3D12
-+CONFIG_ARCH_FORCE_MAX_ORDER=3D12
- CONFIG_SECCOMP=3Dy
- CONFIG_ARM_APPENDED_DTB=3Dy
- CONFIG_ARM_ATAG_DTB_COMPAT=3Dy
-diff --git a/arch/arm/configs/pxa_defconfig b/arch/arm/configs/pxa_defconfig
-index 104a45722799..ce3f4ed50498 100644
---- a/arch/arm/configs/pxa_defconfig
-+++ b/arch/arm/configs/pxa_defconfig
-@@ -21,7 +21,7 @@ CONFIG_MACH_AKITA=3Dy
- CONFIG_MACH_BORZOI=3Dy
- CONFIG_PXA_SYSTEMS_CPLDS=3Dy
- CONFIG_AEABI=3Dy
--CONFIG_FORCE_MAX_ZONEORDER=3D9
-+CONFIG_ARCH_FORCE_MAX_ORDER=3D9
- CONFIG_CMDLINE=3D"root=3D/dev/ram0 ro"
- CONFIG_KEXEC=3Dy
- CONFIG_CPU_FREQ=3Dy
-diff --git a/arch/arm/configs/sama7_defconfig b/arch/arm/configs/sama7_defc=
-onfig
-index 0384030d8b25..8b2cf6ddd568 100644
---- a/arch/arm/configs/sama7_defconfig
-+++ b/arch/arm/configs/sama7_defconfig
-@@ -19,7 +19,7 @@ CONFIG_ATMEL_CLOCKSOURCE_TCB=3Dy
- # CONFIG_CACHE_L2X0 is not set
- # CONFIG_ARM_PATCH_IDIV is not set
- # CONFIG_CPU_SW_DOMAIN_PAN is not set
--CONFIG_FORCE_MAX_ZONEORDER=3D15
-+CONFIG_ARCH_FORCE_MAX_ORDER=3D15
- CONFIG_UACCESS_WITH_MEMCPY=3Dy
- # CONFIG_ATAGS is not set
- CONFIG_CMDLINE=3D"console=3DttyS0,115200 earlyprintk ignore_loglevel"
-diff --git a/arch/arm/configs/sp7021_defconfig b/arch/arm/configs/sp7021_de=
-fconfig
-index 703b9aaa40f0..151ca8c47373 100644
---- a/arch/arm/configs/sp7021_defconfig
-+++ b/arch/arm/configs/sp7021_defconfig
-@@ -18,7 +18,7 @@ CONFIG_ARCH_SUNPLUS=3Dy
- # CONFIG_VDSO is not set
- CONFIG_SMP=3Dy
- CONFIG_THUMB2_KERNEL=3Dy
--CONFIG_FORCE_MAX_ZONEORDER=3D12
-+CONFIG_ARCH_FORCE_MAX_ORDER=3D12
- CONFIG_VFP=3Dy
- CONFIG_NEON=3Dy
- CONFIG_MODULES=3Dy
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index 571cc234d0b3..c6fcd8746f60 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -1401,7 +1401,7 @@ config XEN
- 	help
- 	  Say Y if you want to run Linux in a Virtual Machine on Xen on ARM64.
-=20
--config FORCE_MAX_ZONEORDER
-+config ARCH_FORCE_MAX_ORDER
- 	int
- 	default "14" if ARM64_64K_PAGES
- 	default "12" if ARM64_16K_PAGES
-diff --git a/arch/csky/Kconfig b/arch/csky/Kconfig
-index 3cbc2dc62baf..adee6ab36862 100644
---- a/arch/csky/Kconfig
-+++ b/arch/csky/Kconfig
-@@ -332,7 +332,7 @@ config HIGHMEM
- 	select KMAP_LOCAL
- 	default y
-=20
--config FORCE_MAX_ZONEORDER
-+config ARCH_FORCE_MAX_ORDER
- 	int "Maximum zone order"
- 	default "11"
-=20
-diff --git a/arch/ia64/Kconfig b/arch/ia64/Kconfig
-index 26ac8ea15a9e..c6e06cdc738f 100644
---- a/arch/ia64/Kconfig
-+++ b/arch/ia64/Kconfig
-@@ -200,7 +200,7 @@ config IA64_CYCLONE
- 	  Say Y here to enable support for IBM EXA Cyclone time source.
- 	  If you're unsure, answer N.
-=20
--config FORCE_MAX_ZONEORDER
-+config ARCH_FORCE_MAX_ORDER
- 	int "MAX_ORDER (11 - 17)"  if !HUGETLB_PAGE
- 	range 11 17  if !HUGETLB_PAGE
- 	default "17" if HUGETLB_PAGE
-diff --git a/arch/ia64/include/asm/sparsemem.h b/arch/ia64/include/asm/spar=
-semem.h
-index 42ed5248fae9..84e8ce387b69 100644
---- a/arch/ia64/include/asm/sparsemem.h
-+++ b/arch/ia64/include/asm/sparsemem.h
-@@ -11,10 +11,10 @@
-=20
- #define SECTION_SIZE_BITS	(30)
- #define MAX_PHYSMEM_BITS	(50)
--#ifdef CONFIG_FORCE_MAX_ZONEORDER
--#if ((CONFIG_FORCE_MAX_ZONEORDER - 1 + PAGE_SHIFT) > SECTION_SIZE_BITS)
-+#ifdef CONFIG_ARCH_FORCE_MAX_ORDER
-+#if ((CONFIG_ARCH_FORCE_MAX_ORDER - 1 + PAGE_SHIFT) > SECTION_SIZE_BITS)
- #undef SECTION_SIZE_BITS
--#define SECTION_SIZE_BITS (CONFIG_FORCE_MAX_ZONEORDER - 1 + PAGE_SHIFT)
-+#define SECTION_SIZE_BITS (CONFIG_ARCH_FORCE_MAX_ORDER - 1 + PAGE_SHIFT)
- #endif
- #endif
-=20
-diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-index 4abc9a28aba4..b5b19eea0e3e 100644
---- a/arch/loongarch/Kconfig
-+++ b/arch/loongarch/Kconfig
-@@ -369,7 +369,7 @@ config NODES_SHIFT
- 	default "6"
- 	depends on NUMA
-=20
--config FORCE_MAX_ZONEORDER
-+config ARCH_FORCE_MAX_ORDER
- 	int "Maximum zone order"
- 	range 14 64 if PAGE_SIZE_64KB
- 	default "14" if PAGE_SIZE_64KB
-diff --git a/arch/m68k/Kconfig.cpu b/arch/m68k/Kconfig.cpu
-index e0e9e31339c1..3b2f39508524 100644
---- a/arch/m68k/Kconfig.cpu
-+++ b/arch/m68k/Kconfig.cpu
-@@ -399,7 +399,7 @@ config SINGLE_MEMORY_CHUNK
- 	  order" to save memory that could be wasted for unused memory map.
- 	  Say N if not sure.
-=20
--config FORCE_MAX_ZONEORDER
-+config ARCH_FORCE_MAX_ORDER
- 	int "Maximum zone order" if ADVANCED
- 	depends on !SINGLE_MEMORY_CHUNK
- 	default "11"
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index ec21f8999249..70d28976a40d 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -2140,7 +2140,7 @@ config PAGE_SIZE_64KB
-=20
- endchoice
-=20
--config FORCE_MAX_ZONEORDER
-+config ARCH_FORCE_MAX_ORDER
- 	int "Maximum zone order"
- 	range 14 64 if MIPS_HUGE_TLB_SUPPORT && PAGE_SIZE_64KB
- 	default "14" if MIPS_HUGE_TLB_SUPPORT && PAGE_SIZE_64KB
-diff --git a/arch/nios2/Kconfig b/arch/nios2/Kconfig
-index 4167f1eb4cd8..a582f72104f3 100644
---- a/arch/nios2/Kconfig
-+++ b/arch/nios2/Kconfig
-@@ -44,7 +44,7 @@ menu "Kernel features"
-=20
- source "kernel/Kconfig.hz"
-=20
--config FORCE_MAX_ZONEORDER
-+config ARCH_FORCE_MAX_ORDER
- 	int "Maximum zone order"
- 	range 9 20
- 	default "11"
-diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-index 4c466acdc70d..39d71d7701bd 100644
---- a/arch/powerpc/Kconfig
-+++ b/arch/powerpc/Kconfig
-@@ -845,7 +845,7 @@ config DATA_SHIFT
- 	  in that case. If PIN_TLB is selected, it must be aligned to 8M as
- 	  8M pages will be pinned.
-=20
--config FORCE_MAX_ZONEORDER
-+config ARCH_FORCE_MAX_ORDER
- 	int "Maximum zone order"
- 	range 8 9 if PPC64 && PPC_64K_PAGES
- 	default "9" if PPC64 && PPC_64K_PAGES
-diff --git a/arch/powerpc/configs/85xx/ge_imp3a_defconfig b/arch/powerpc/co=
-nfigs/85xx/ge_imp3a_defconfig
-index f29c166998af..e7672c186325 100644
---- a/arch/powerpc/configs/85xx/ge_imp3a_defconfig
-+++ b/arch/powerpc/configs/85xx/ge_imp3a_defconfig
-@@ -30,7 +30,7 @@ CONFIG_PREEMPT=3Dy
- # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
- CONFIG_BINFMT_MISC=3Dm
- CONFIG_MATH_EMULATION=3Dy
--CONFIG_FORCE_MAX_ZONEORDER=3D17
-+CONFIG_ARCH_FORCE_MAX_ORDER=3D17
- CONFIG_PCI=3Dy
- CONFIG_PCIEPORTBUS=3Dy
- CONFIG_PCI_MSI=3Dy
-diff --git a/arch/powerpc/configs/fsl-emb-nonhw.config b/arch/powerpc/confi=
-gs/fsl-emb-nonhw.config
-index f14c6dbd7346..ab8a8c4530d9 100644
---- a/arch/powerpc/configs/fsl-emb-nonhw.config
-+++ b/arch/powerpc/configs/fsl-emb-nonhw.config
-@@ -41,7 +41,7 @@ CONFIG_FIXED_PHY=3Dy
- CONFIG_FONT_8x16=3Dy
- CONFIG_FONT_8x8=3Dy
- CONFIG_FONTS=3Dy
--CONFIG_FORCE_MAX_ZONEORDER=3D13
-+CONFIG_ARCH_FORCE_MAX_ORDER=3D13
- CONFIG_FRAMEBUFFER_CONSOLE=3Dy
- CONFIG_FRAME_WARN=3D1024
- CONFIG_FTL=3Dy
-diff --git a/arch/sh/configs/ecovec24_defconfig b/arch/sh/configs/ecovec24_=
-defconfig
-index e699e2e04128..b52e14ccb450 100644
---- a/arch/sh/configs/ecovec24_defconfig
-+++ b/arch/sh/configs/ecovec24_defconfig
-@@ -8,7 +8,7 @@ CONFIG_MODULES=3Dy
- CONFIG_MODULE_UNLOAD=3Dy
- # CONFIG_BLK_DEV_BSG is not set
- CONFIG_CPU_SUBTYPE_SH7724=3Dy
--CONFIG_FORCE_MAX_ZONEORDER=3D12
-+CONFIG_ARCH_FORCE_MAX_ORDER=3D12
- CONFIG_MEMORY_SIZE=3D0x10000000
- CONFIG_FLATMEM_MANUAL=3Dy
- CONFIG_SH_ECOVEC=3Dy
-diff --git a/arch/sh/mm/Kconfig b/arch/sh/mm/Kconfig
-index ba569cfb4368..411fdc0901f7 100644
---- a/arch/sh/mm/Kconfig
-+++ b/arch/sh/mm/Kconfig
-@@ -18,7 +18,7 @@ config PAGE_OFFSET
- 	default "0x80000000" if MMU
- 	default "0x00000000"
-=20
--config FORCE_MAX_ZONEORDER
-+config ARCH_FORCE_MAX_ORDER
- 	int "Maximum zone order"
- 	range 9 64 if PAGE_SIZE_16KB
- 	default "9" if PAGE_SIZE_16KB
-diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
-index 1c852bb530ec..4d3d1af90d52 100644
---- a/arch/sparc/Kconfig
-+++ b/arch/sparc/Kconfig
-@@ -269,7 +269,7 @@ config ARCH_SPARSEMEM_ENABLE
- config ARCH_SPARSEMEM_DEFAULT
- 	def_bool y if SPARC64
-=20
--config FORCE_MAX_ZONEORDER
-+config ARCH_FORCE_MAX_ORDER
- 	int "Maximum zone order"
- 	default "13"
- 	help
-diff --git a/arch/xtensa/Kconfig b/arch/xtensa/Kconfig
-index 12ac277282ba..bcb0c5d2abc2 100644
---- a/arch/xtensa/Kconfig
-+++ b/arch/xtensa/Kconfig
-@@ -771,7 +771,7 @@ config HIGHMEM
-=20
- 	  If unsure, say Y.
-=20
--config FORCE_MAX_ZONEORDER
-+config ARCH_FORCE_MAX_ORDER
- 	int "Maximum zone order"
- 	default "11"
- 	help
-diff --git a/include/linux/mmzone.h b/include/linux/mmzone.h
-index 025754b0bc09..fd61347b4b1f 100644
---- a/include/linux/mmzone.h
-+++ b/include/linux/mmzone.h
-@@ -24,10 +24,10 @@
- #include <asm/page.h>
-=20
- /* Free memory management - zoned buddy allocator.  */
--#ifndef CONFIG_FORCE_MAX_ZONEORDER
-+#ifndef CONFIG_ARCH_FORCE_MAX_ORDER
- #define MAX_ORDER 11
- #else
--#define MAX_ORDER CONFIG_FORCE_MAX_ZONEORDER
-+#define MAX_ORDER CONFIG_ARCH_FORCE_MAX_ORDER
- #endif
- #define MAX_ORDER_NR_PAGES (1 << (MAX_ORDER - 1))
-=20
---=20
-2.35.1
+It's a somewhat redundant check, it'll NULL pointer dereference shortly
+afterwards but it'll be a bit more obvious.
 
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 914096c5b1ae..28f10dccd194 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -2600,7 +2600,7 @@ static void task_numa_group(struct task_struct *p, int cpupid, int flags,
+>  	if (!join)
+>  		return;
+>  
+> -	BUG_ON(irqs_disabled());
+> +	WARN_ON_ONCE(irqs_disabled());
+>  	double_lock_irq(&my_grp->lock, &grp->lock);
+>  
+>  	for (i = 0; i < NR_NUMA_HINT_FAULT_STATS * nr_node_ids; i++) {
+
+Recoverable with a goto no_join. It'll be a terrible recovery because
+there is no way IRQs should be disabled here. Something else incredibly
+bad happened before this would fire.
+
+> @@ -7279,7 +7279,7 @@ static void check_preempt_wakeup(struct rq *rq, struct task_struct *p, int wake_
+>  		return;
+>  
+>  	find_matching_se(&se, &pse);
+> -	BUG_ON(!pse);
+> +	WARN_ON_ONCE(!pse);
+>  
+>  	cse_is_idle = se_is_idle(se);
+>  	pse_is_idle = se_is_idle(pse);
+
+Similar to pick_task_dl.
+
+> @@ -10134,7 +10134,7 @@ static int load_balance(int this_cpu, struct rq *this_rq,
+>  		goto out_balanced;
+>  	}
+>  
+> -	BUG_ON(busiest == env.dst_rq);
+> +	WARN_ON_ONCE(busiest == env.dst_rq);
+>  
+>  	schedstat_add(sd->lb_imbalance[idle], env.imbalance);
+>  
+
+goto out if it triggers? It'll just continue to be unbalanced.
+
+> @@ -10430,7 +10430,7 @@ static int active_load_balance_cpu_stop(void *data)
+>  	 * we need to fix it. Originally reported by
+>  	 * Bjorn Helgaas on a 128-CPU setup.
+>  	 */
+> -	BUG_ON(busiest_rq == target_rq);
+> +	WARN_ON_ONCE(busiest_rq == target_rq);
+>  
+>  	/* Search for an sd spanning us and the target CPU. */
+>  	rcu_read_lock();
+
+goto out_unlock if it fires?
+
+For the rest, I didn't see obvious recovery paths that would allow the
+system to run predictably. Any of them firing will have unpredictable
+consequences (e.g. move_queued_task firing would be fun if it was a per-cpu
+kthread). Depending on which warning triggers, the remaining life of the
+system may be very short but maybe long enough to be logged even if system
+locks up shortly afterwards.
+
+-- 
+Mel Gorman
+SUSE Labs

@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8C2C594D2F
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:34:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1DE5594960
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:11:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245281AbiHPAz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 20:55:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36876 "EHLO
+        id S244324AbiHOXTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:19:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244269AbiHPAtK (ORCPT
+        with ESMTP id S1353063AbiHOXPv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 20:49:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF4CBB603B;
-        Mon, 15 Aug 2022 13:46:23 -0700 (PDT)
+        Mon, 15 Aug 2022 19:15:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDB857CB69;
+        Mon, 15 Aug 2022 13:02:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E238C61241;
-        Mon, 15 Aug 2022 20:46:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2DACC433C1;
-        Mon, 15 Aug 2022 20:46:21 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 547DD612D7;
+        Mon, 15 Aug 2022 20:02:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 464B7C433C1;
+        Mon, 15 Aug 2022 20:02:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660596382;
-        bh=CPaFUPaj3NVtsuDxVI0hezS2wWYQlJAYNKy5/DDGMgk=;
+        s=korg; t=1660593769;
+        bh=TbANiIQd+FPDA4iJn6Ixa9itBumf/koL+SuMqUIt8yg=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ynBC6I43z0LE82FeDx21BBsWAEF7tkY/Wwul78TB2v4wGPskyfLhlUzrVNpqHKKew
-         CYqIZITQXZyuXykn1yvn3arQ5nG3XrrICX+gW8uWqFqOC3qWw2eXrdL1Y6FWWzpjEP
-         sZterP45916+H5m64ihboaQgzmzfDKBtX/mw95p8=
+        b=T1ByAi9uw/oYAMI5X3qTyx2VstCKenTdy6G502GePe8K8rQXHSe9M2OTHk6GoOhnR
+         bzr0VPSP4lTV7ULvmI9D1P0UC2JUTnAD5mhlN5Zh0FV4foNjOBa/eSGCmnlfdfj+70
+         ebR/CMWHKZcygvu/uwAn8yn0I/PWcGLHPqTpWBPk=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Xiaoli Feng <xifeng@redhat.com>,
-        "Paulo Alcantara (SUSE)" <pc@cjr.nz>,
-        Ronnie Sahlberg <lsahlber@redhat.com>,
-        Steve French <stfrench@microsoft.com>
-Subject: [PATCH 5.19 1045/1157] cifs: fix lock length calculation
-Date:   Mon, 15 Aug 2022 20:06:41 +0200
-Message-Id: <20220815180521.834544546@linuxfoundation.org>
+        stable@vger.kernel.org,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Michal Suchanek <msuchanek@suse.de>,
+        Baoquan He <bhe@redhat.com>, Coiby Xu <coxu@redhat.com>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 1003/1095] kexec: clean up arch_kexec_kernel_verify_sig
+Date:   Mon, 15 Aug 2022 20:06:42 +0200
+Message-Id: <20220815180510.604450713@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
-References: <20220815180439.416659447@linuxfoundation.org>
+In-Reply-To: <20220815180429.240518113@linuxfoundation.org>
+References: <20220815180429.240518113@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -56,106 +58,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Paulo Alcantara <pc@cjr.nz>
+From: Coiby Xu <coxu@redhat.com>
 
-commit 773891ffd4d628d05c4e22f34541e4779ee7a076 upstream.
+[ Upstream commit 689a71493bd2f31c024f8c0395f85a1fd4b2138e ]
 
-The lock length was wrongly set to 0 when fl_end == OFFSET_MAX, thus
-failing to lock the whole file when l_start=0 and l_len=0.
+Before commit 105e10e2cf1c ("kexec_file: drop weak attribute from
+functions"), there was already no arch-specific implementation
+of arch_kexec_kernel_verify_sig. With weak attribute dropped by that
+commit, arch_kexec_kernel_verify_sig is completely useless. So clean it
+up.
 
-This fixes test 2 from cthon04.
+Note later patches are dependent on this patch so it should be backported
+to the stable tree as well.
 
-Before patch:
-
-$ ./cthon04/lock/tlocklfs -t 2 /mnt
-
-Creating parent/child synchronization pipes.
-
-Test #1 - Test regions of an unlocked file.
-        Parent: 1.1  - F_TEST  [               0,               1] PASSED.
-        Parent: 1.2  - F_TEST  [               0,          ENDING] PASSED.
-        Parent: 1.3  - F_TEST  [               0,7fffffffffffffff] PASSED.
-        Parent: 1.4  - F_TEST  [               1,               1] PASSED.
-        Parent: 1.5  - F_TEST  [               1,          ENDING] PASSED.
-        Parent: 1.6  - F_TEST  [               1,7fffffffffffffff] PASSED.
-        Parent: 1.7  - F_TEST  [7fffffffffffffff,               1] PASSED.
-        Parent: 1.8  - F_TEST  [7fffffffffffffff,          ENDING] PASSED.
-        Parent: 1.9  - F_TEST  [7fffffffffffffff,7fffffffffffffff] PASSED.
-
-Test #2 - Try to lock the whole file.
-        Parent: 2.0  - F_TLOCK [               0,          ENDING] PASSED.
-        Child:  2.1  - F_TEST  [               0,               1] FAILED!
-        Child:  **** Expected EACCES, returned success...
-        Child:  **** Probably implementation error.
-
-**  CHILD pass 1 results: 0/0 pass, 0/0 warn, 1/1 fail (pass/total).
-        Parent: Child died
-
-** PARENT pass 1 results: 10/10 pass, 0/0 warn, 0/0 fail (pass/total).
-
-After patch:
-
-$ ./cthon04/lock/tlocklfs -t 2 /mnt
-
-Creating parent/child synchronization pipes.
-
-Test #2 - Try to lock the whole file.
-        Parent: 2.0  - F_TLOCK [               0,          ENDING] PASSED.
-        Child:  2.1  - F_TEST  [               0,               1] PASSED.
-        Child:  2.2  - F_TEST  [               0,          ENDING] PASSED.
-        Child:  2.3  - F_TEST  [               0,7fffffffffffffff] PASSED.
-        Child:  2.4  - F_TEST  [               1,               1] PASSED.
-        Child:  2.5  - F_TEST  [               1,          ENDING] PASSED.
-        Child:  2.6  - F_TEST  [               1,7fffffffffffffff] PASSED.
-        Child:  2.7  - F_TEST  [7fffffffffffffff,               1] PASSED.
-        Child:  2.8  - F_TEST  [7fffffffffffffff,          ENDING] PASSED.
-        Child:  2.9  - F_TEST  [7fffffffffffffff,7fffffffffffffff] PASSED.
-        Parent: 2.10 - F_ULOCK [               0,          ENDING] PASSED.
-
-** PARENT pass 1 results: 2/2 pass, 0/0 warn, 0/0 fail (pass/total).
-
-**  CHILD pass 1 results: 9/9 pass, 0/0 warn, 0/0 fail (pass/total).
-
-Fixes: d80c69846ddf ("cifs: fix signed integer overflow when fl_end is OFFSET_MAX")
-Reported-by: Xiaoli Feng <xifeng@redhat.com>
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Paulo Alcantara (SUSE) <pc@cjr.nz>
-Reviewed-by: Ronnie Sahlberg <lsahlber@redhat.com>
-Signed-off-by: Steve French <stfrench@microsoft.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: stable@vger.kernel.org
+Suggested-by: Eric W. Biederman <ebiederm@xmission.com>
+Reviewed-by: Michal Suchanek <msuchanek@suse.de>
+Acked-by: Baoquan He <bhe@redhat.com>
+Signed-off-by: Coiby Xu <coxu@redhat.com>
+[zohar@linux.ibm.com: reworded patch description "Note"]
+Link: https://lore.kernel.org/linux-integrity/20220714134027.394370-1-coxu@redhat.com/
+Signed-off-by: Mimi Zohar <zohar@linux.ibm.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- fs/cifs/cifsglob.h |    4 ++--
- fs/cifs/file.c     |    6 +++---
- 2 files changed, 5 insertions(+), 5 deletions(-)
+ include/linux/kexec.h |  5 -----
+ kernel/kexec_file.c   | 33 +++++++++++++--------------------
+ 2 files changed, 13 insertions(+), 25 deletions(-)
 
---- a/fs/cifs/cifsglob.h
-+++ b/fs/cifs/cifsglob.h
-@@ -2085,9 +2085,9 @@ static inline bool cifs_is_referral_serv
- 	return is_tcon_dfs(tcon) || (ref && (ref->flags & DFSREF_REFERRAL_SERVER));
+diff --git a/include/linux/kexec.h b/include/linux/kexec.h
+index 87c1795297b0..f3e7680befcc 100644
+--- a/include/linux/kexec.h
++++ b/include/linux/kexec.h
+@@ -212,11 +212,6 @@ static inline void *arch_kexec_kernel_image_load(struct kimage *image)
+ }
+ #endif
+ 
+-#ifdef CONFIG_KEXEC_SIG
+-int arch_kexec_kernel_verify_sig(struct kimage *image, void *buf,
+-				 unsigned long buf_len);
+-#endif
+-
+ extern int kexec_add_buffer(struct kexec_buf *kbuf);
+ int kexec_locate_mem_hole(struct kexec_buf *kbuf);
+ 
+diff --git a/kernel/kexec_file.c b/kernel/kexec_file.c
+index 925953dfef05..ad005cd184a4 100644
+--- a/kernel/kexec_file.c
++++ b/kernel/kexec_file.c
+@@ -81,24 +81,6 @@ int kexec_image_post_load_cleanup_default(struct kimage *image)
+ 	return image->fops->cleanup(image->image_loader_data);
  }
  
--static inline u64 cifs_flock_len(struct file_lock *fl)
-+static inline u64 cifs_flock_len(const struct file_lock *fl)
+-#ifdef CONFIG_KEXEC_SIG
+-static int kexec_image_verify_sig_default(struct kimage *image, void *buf,
+-					  unsigned long buf_len)
+-{
+-	if (!image->fops || !image->fops->verify_sig) {
+-		pr_debug("kernel loader does not support signature verification.\n");
+-		return -EKEYREJECTED;
+-	}
+-
+-	return image->fops->verify_sig(buf, buf_len);
+-}
+-
+-int arch_kexec_kernel_verify_sig(struct kimage *image, void *buf, unsigned long buf_len)
+-{
+-	return kexec_image_verify_sig_default(image, buf, buf_len);
+-}
+-#endif
+-
+ /*
+  * Free up memory used by kernel, initrd, and command line. This is temporary
+  * memory allocation which is not needed any more after these buffers have
+@@ -141,13 +123,24 @@ void kimage_file_post_load_cleanup(struct kimage *image)
+ }
+ 
+ #ifdef CONFIG_KEXEC_SIG
++static int kexec_image_verify_sig(struct kimage *image, void *buf,
++				  unsigned long buf_len)
++{
++	if (!image->fops || !image->fops->verify_sig) {
++		pr_debug("kernel loader does not support signature verification.\n");
++		return -EKEYREJECTED;
++	}
++
++	return image->fops->verify_sig(buf, buf_len);
++}
++
+ static int
+ kimage_validate_signature(struct kimage *image)
  {
--	return fl->fl_end == OFFSET_MAX ? 0 : fl->fl_end - fl->fl_start + 1;
-+	return (u64)fl->fl_end - fl->fl_start + 1;
- }
+ 	int ret;
  
- static inline size_t ntlmssp_workstation_name_size(const struct cifs_ses *ses)
---- a/fs/cifs/file.c
-+++ b/fs/cifs/file.c
-@@ -1861,9 +1861,9 @@ int cifs_lock(struct file *file, int cmd
- 	rc = -EACCES;
- 	xid = get_xid();
+-	ret = arch_kexec_kernel_verify_sig(image, image->kernel_buf,
+-					   image->kernel_buf_len);
++	ret = kexec_image_verify_sig(image, image->kernel_buf,
++				     image->kernel_buf_len);
+ 	if (ret) {
  
--	cifs_dbg(FYI, "Lock parm: 0x%x flockflags: 0x%x flocktype: 0x%x start: %lld end: %lld\n",
--		 cmd, flock->fl_flags, flock->fl_type,
--		 flock->fl_start, flock->fl_end);
-+	cifs_dbg(FYI, "%s: %pD2 cmd=0x%x type=0x%x flags=0x%x r=%lld:%lld\n", __func__, file, cmd,
-+		 flock->fl_flags, flock->fl_type, (long long)flock->fl_start,
-+		 (long long)flock->fl_end);
- 
- 	cfile = (struct cifsFileInfo *)file->private_data;
- 	tcon = tlink_tcon(cfile->tlink);
+ 		if (sig_enforce) {
+-- 
+2.35.1
+
 
 

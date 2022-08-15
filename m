@@ -2,108 +2,315 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7753B593057
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 15:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83401593056
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 15:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230283AbiHON6R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 09:58:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42558 "EHLO
+        id S231921AbiHON6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 09:58:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231909AbiHON6M (ORCPT
+        with ESMTP id S229775AbiHON6A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 09:58:12 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31452252F
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 06:58:11 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1oNabN-0002nz-5Y; Mon, 15 Aug 2022 15:57:57 +0200
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1oNabM-00075V-1g; Mon, 15 Aug 2022 15:57:56 +0200
-Date:   Mon, 15 Aug 2022 15:57:56 +0200
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
-Cc:     abelvesa@kernel.org, abel.vesa@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, shawnguo@kernel.org, kernel@pengutronix.de,
-        festevam@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-imx@nxp.com,
-        linux-clk@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Peng Fan <peng.fan@nxp.com>
-Subject: Re: [PATCH 1/2] dt-bindings: clock: imx8m: introduce
- fsl,protected-clocks property
-Message-ID: <20220815135756.GC17485@pengutronix.de>
-References: <20220815033632.1687854-1-peng.fan@oss.nxp.com>
- <20220815033632.1687854-2-peng.fan@oss.nxp.com>
+        Mon, 15 Aug 2022 09:58:00 -0400
+Received: from mail.wantstofly.org (hmm.wantstofly.org [213.239.204.108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 903552180E
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 06:57:58 -0700 (PDT)
+Received: by mail.wantstofly.org (Postfix, from userid 1000)
+        id CFC657F527; Mon, 15 Aug 2022 16:57:56 +0300 (EEST)
+Date:   Mon, 15 Aug 2022 16:57:56 +0300
+From:   Lennert Buytenhek <buytenh@wantstofly.org>
+To:     Bart Van Assche <bvanassche@acm.org>
+Cc:     Sasha Levin <sashal@kernel.org>,
+        Lu Baolu <baolu.lu@linux.intel.com>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Joerg Roedel <joro@8bytes.org>, iommu@lists.linux.dev,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Liu Yi L <yi.l.liu@intel.com>,
+        Jacob jun Pan <jacob.jun.pan@intel.com>,
+        linux-kernel@vger.kernel.org,
+        Scarlett Gourley <scarlett@arista.com>,
+        James Sewart <jamessewart@arista.com>,
+        Jack O'Sullivan <jack@arista.com>
+Subject: Re: lockdep splat due to klist iteration from atomic context in
+ Intel IOMMU driver
+Message-ID: <YvpQ5M7//AlrpJGP@wantstofly.org>
+References: <Yvo2dfpEh/WC+Wrr@wantstofly.org>
+ <ab15191c-d79f-b5de-7568-d15b8f8a8aa8@acm.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20220815033632.1687854-2-peng.fan@oss.nxp.com>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ab15191c-d79f-b5de-7568-d15b8f8a8aa8@acm.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peng,
+On Mon, Aug 15, 2022 at 06:32:24AM -0700, Bart Van Assche wrote:
 
-On Mon, Aug 15, 2022 at 11:36:31AM +0800, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
+> > On a build of 7ebfc85e2cd7 ("Merge tag 'net-6.0-rc1' of
+> > git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net"), with
+> > CONFIG_INTEL_IOMMU_DEBUGFS enabled, I am seeing the lockdep splat
+> > below when an I/O page fault occurs on a machine with an Intel
+> > IOMMU in it.
+> > 
+> > The issue seems to be the klist iterator functions using
+> > spin_*lock_irq*() but the klist insertion functions using
+> > spin_*lock(), combined with the Intel DMAR IOMMU driver iterating
+> > over klists from atomic (hardirq) context as of commit 8ac0b64b9735
+> > ("iommu/vt-d: Use pci_get_domain_bus_and_slot() in pgtable_walk()")
+> > when CONFIG_INTEL_IOMMU_DEBUGFS is enabled, where
+> > pci_get_domain_bus_and_slot() calls into bus_find_device() which
+> > iterates over klists.
+> > 
+> > I found this commit from 2018:
+> > 
+> > 	commit 624fa7790f80575a4ec28fbdb2034097dc18d051
+> > 	Author: Bart Van Assche <bvanassche@acm.org>
+> > 	Date:   Fri Jun 22 14:54:49 2018 -0700
+> > 
+> > 	    scsi: klist: Make it safe to use klists in atomic context
+> > 
+> > This commit switched lib/klist.c:klist_{prev,next} from
+> > spin_{,un}lock() to spin_{lock_irqsave,unlock_irqrestore}(), but left
+> > the spin_{,un}lock() calls in add_{head,tail}() untouched.
+> > 
+> > The simplest fix for this would be to switch lib/klist.c:add_{head,tail}()
+> > over to use the IRQ-safe spinlock variants as well?
 > 
-> i.MX8M Linux run on top of Jailhouse hypervisor, the root cell Linux
-> should not disable clocks used by inmate. This would also benifit
-> AMP to avoid Linux disable clocks used by Cortex-M4/M7.
-> 
-> So introduce fsl,protected-clocks for above case.
-> 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  Documentation/devicetree/bindings/clock/imx8m-clock.yaml | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/imx8m-clock.yaml b/Documentation/devicetree/bindings/clock/imx8m-clock.yaml
-> index 458c7645ee68..0ec490ff9a09 100644
-> --- a/Documentation/devicetree/bindings/clock/imx8m-clock.yaml
-> +++ b/Documentation/devicetree/bindings/clock/imx8m-clock.yaml
-> @@ -39,6 +39,10 @@ properties:
->        ID in its "clocks" phandle cell. See include/dt-bindings/clock/imx8m-clock.h
->        for the full list of i.MX8M clock IDs.
->  
-> +  fsl,protected-clocks:
-> +    description: List of the Protected clock.
-> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> Another possibility would be to evaluate whether it is safe to revert commit
+> 624fa7790f80 ("scsi: klist: Make it safe to use klists in atomic context").
+> That commit is no longer needed by the SRP transport driver since the legacy
+> block layer has been removed from the kernel.
 
-There already is a generic protected-clocks property described in
-https://github.com/devicetree-org/dt-schema/blob/0d1b78cd0c3d9a3d523ced17d7da64b03f6c18ea/dtschema/schemas/clock/clock.yaml#L131
-We probably shouldn't add a property with the same name but different
-meaning.
+And then to fix the 6.0-rc1 iommu/vt-d lockdep splat with
+CONFIG_INTEL_IOMMU_DEBUGFS enabled, we could convert the Intel DMAR
+IRQ handler to a threaded IRQ handler.  We (Arista) carry the patch
+below in our kernel tree, and the last two hunks of the patch do
+exactly that, for the same reason (having to call
+pci_get_domain_bus_and_slot() from the IRQ handler) but this is
+probably too big of a change for 6.0-rc.
 
-I am not sure if we want to go the route of a fsl specific property, it
-looks like other SoCs could have similar problems and it might be worth
-solving this problem with a broader view.
 
-Anyway, please add a description to the binding what this property
-actually does.
 
-Sascha
+commit 90a8e7da0facf198692a641fcfe6f89c478608e0
+Author: Lennert Buytenhek <buytenh@wantstofly.org>
+Date:   Wed Jul 13 15:34:30 2022 +0300
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+    iommu/vt-d: Use report_iommu_fault()
+    
+    This patch makes iommu/vt-d call report_iommu_fault() when an I/O
+    page fault occurs, which has two effects:
+    
+    1) It allows device drivers to register a callback to be notified
+       of I/O page faults, via the iommu_set_fault_handler() API.
+    
+    2) It triggers the io_page_fault tracepoint in report_iommu_fault()
+       when an I/O page fault occurs.
+    
+    The latter point is the main aim of this patch, as it allows
+    rasdaemon-like daemons to be notified of I/O page faults, and to
+    possibly initiate corrective action in response.
+    
+    Most of the other IOMMU drivers already use report_iommu_fault(),
+    including iommu/amd on the x86 front, since Linux 5.16 via commit
+    9f78e446bde8 ("iommu/amd: Use report_iommu_fault()").
+    
+    To be able to call report_iommu_fault() from the dmar_fault IRQ
+    handler, we need to make this IRQ handler run from thread context,
+    as we need to call pci_get_domain_bus_and_slot() to turn the PCI
+    BDF of the faulting device into a struct pci_dev * to pass into
+    report_iommu_fault(), and pci_get_domain_bus_and_slot() uses
+    bus_find_device() which iterates over klists, which is not safe to
+    do from hardirq context.
+    
+    When IRQ remapping is enabled, iommu/vt-d will try to set up its
+    dmar_fault IRQ handler from start_kernel() -> x86_late_time_init()
+    -> apic_intr_mode_init() -> apic_bsp_setup() ->
+    irq_remap_enable_fault_handling() -> enable_drhd_fault_handling(),
+    which happens before kthreadd is started, and trying to set up a
+    threaded IRQ handler this early on will oops.  However, there
+    doesn't seem to be a reason why iommu/vt-d needs to set up its
+    fault reporting IRQ handler this early, and if we remove the IRQ
+    setup code from enable_drhd_fault_handling(), the IRQ will be
+    registered instead from pci_iommu_init() -> intel_iommu_init() ->
+    init_dmars(), at which point kthreadd has already been started,
+    making it possible to set up a threaded IRQ handler.
+    
+    Suggested-by: Scarlett Gourley <scarlett@arista.com>
+    Suggested-by: James Sewart <jamessewart@arista.com>
+    Suggested-by: Jack O'Sullivan <jack@arista.com>
+    Signed-off-by: Lennert Buytenhek <buytenh@arista.com>
+
+diff --git a/drivers/iommu/intel/dmar.c b/drivers/iommu/intel/dmar.c
+index 5a8f780e7ffd..f366041271af 100644
+--- a/drivers/iommu/intel/dmar.c
++++ b/drivers/iommu/intel/dmar.c
+@@ -1909,15 +1909,43 @@ void dmar_msi_read(int irq, struct msi_msg *msg)
+ 	raw_spin_unlock_irqrestore(&iommu->register_lock, flag);
+ }
+ 
+-static int dmar_fault_do_one(struct intel_iommu *iommu, int type,
+-		u8 fault_reason, u32 pasid, u16 source_id,
+-		unsigned long long addr)
++static int check_dma_fault(struct intel_iommu *iommu, int type,
++			   u16 source_id, unsigned long long addr)
+ {
+-	const char *reason;
+-	int fault_type;
++	int ret;
++	struct pci_dev *pdev;
++
++	ret = -1;
++
++	pdev = pci_get_domain_bus_and_slot(iommu->segment,
++					   PCI_BUS_NUM(source_id),
++					   source_id & 0xFF);
++	if (pdev) {
++		struct device_domain_info *dev_data;
++
++		dev_data = dev_iommu_priv_get(&pdev->dev);
++		if (dev_data) {
++			int flags;
++
++			if (type)
++				flags = IOMMU_FAULT_READ;
++			else
++				flags = IOMMU_FAULT_WRITE;
++
++			ret = report_iommu_fault(&dev_data->domain->domain,
++						 &pdev->dev, addr, flags);
++		}
++
++		pci_dev_put(pdev);
++	}
+ 
+-	reason = dmar_get_fault_reason(fault_reason, &fault_type);
++	return ret;
++}
+ 
++static int dmar_fault_do_one(struct intel_iommu *iommu, int type,
++		u8 fault_reason, u32 pasid, u16 source_id,
++		unsigned long long addr, const char *reason, int fault_type)
++{
+ 	if (fault_type == INTR_REMAP) {
+ 		pr_err("[INTR-REMAP] Request device [%02x:%02x.%d] fault index 0x%llx [fault reason 0x%02x] %s\n",
+ 		       source_id >> 8, PCI_SLOT(source_id & 0xFF),
+@@ -1968,8 +1996,6 @@ irqreturn_t dmar_fault(int irq, void *dev_id)
+ 	fault_index = dma_fsts_fault_record_index(fault_status);
+ 	reg = cap_fault_reg_offset(iommu->cap);
+ 	while (1) {
+-		/* Disable printing, simply clear the fault when ratelimited */
+-		bool ratelimited = !__ratelimit(&rs);
+ 		u8 fault_reason;
+ 		u16 source_id;
+ 		u64 guest_addr;
+@@ -1977,6 +2003,8 @@ irqreturn_t dmar_fault(int irq, void *dev_id)
+ 		int type;
+ 		u32 data;
+ 		bool pasid_present;
++		const char *reason;
++		int fault_type;
+ 
+ 		/* highest 32 bits */
+ 		data = readl(iommu->reg + reg +
+@@ -1984,20 +2012,18 @@ irqreturn_t dmar_fault(int irq, void *dev_id)
+ 		if (!(data & DMA_FRCD_F))
+ 			break;
+ 
+-		if (!ratelimited) {
+-			fault_reason = dma_frcd_fault_reason(data);
+-			type = dma_frcd_type(data);
++		fault_reason = dma_frcd_fault_reason(data);
++		type = dma_frcd_type(data);
+ 
+-			pasid = dma_frcd_pasid_value(data);
+-			data = readl(iommu->reg + reg +
+-				     fault_index * PRIMARY_FAULT_REG_LEN + 8);
+-			source_id = dma_frcd_source_id(data);
++		pasid = dma_frcd_pasid_value(data);
++		data = readl(iommu->reg + reg +
++			     fault_index * PRIMARY_FAULT_REG_LEN + 8);
++		source_id = dma_frcd_source_id(data);
+ 
+-			pasid_present = dma_frcd_pasid_present(data);
+-			guest_addr = dmar_readq(iommu->reg + reg +
+-					fault_index * PRIMARY_FAULT_REG_LEN);
+-			guest_addr = dma_frcd_page_addr(guest_addr);
+-		}
++		pasid_present = dma_frcd_pasid_present(data);
++		guest_addr = dmar_readq(iommu->reg + reg +
++				fault_index * PRIMARY_FAULT_REG_LEN);
++		guest_addr = dma_frcd_page_addr(guest_addr);
+ 
+ 		/* clear the fault */
+ 		writel(DMA_FRCD_F, iommu->reg + reg +
+@@ -2005,11 +2031,17 @@ irqreturn_t dmar_fault(int irq, void *dev_id)
+ 
+ 		raw_spin_unlock_irqrestore(&iommu->register_lock, flag);
+ 
+-		if (!ratelimited)
++		reason = dmar_get_fault_reason(fault_reason, &fault_type);
++
++		if ((fault_type != DMA_REMAP ||
++		     check_dma_fault(iommu, type, source_id, guest_addr)) &&
++		    __ratelimit(&rs)) {
+ 			/* Using pasid -1 if pasid is not present */
+ 			dmar_fault_do_one(iommu, type, fault_reason,
+ 					  pasid_present ? pasid : INVALID_IOASID,
+-					  source_id, guest_addr);
++					  source_id, guest_addr,
++					  reason, fault_type);
++		}
+ 
+ 		fault_index++;
+ 		if (fault_index >= cap_num_fault_regs(iommu->cap))
+@@ -2043,7 +2075,8 @@ int dmar_set_interrupt(struct intel_iommu *iommu)
+ 		return -EINVAL;
+ 	}
+ 
+-	ret = request_irq(irq, dmar_fault, IRQF_NO_THREAD, iommu->name, iommu);
++	ret = request_threaded_irq(irq, NULL, dmar_fault, IRQF_ONESHOT,
++				   iommu->name, iommu);
+ 	if (ret)
+ 		pr_err("Can't request irq\n");
+ 	return ret;
+@@ -2051,30 +2084,6 @@ int dmar_set_interrupt(struct intel_iommu *iommu)
+ 
+ int __init enable_drhd_fault_handling(void)
+ {
+-	struct dmar_drhd_unit *drhd;
+-	struct intel_iommu *iommu;
+-
+-	/*
+-	 * Enable fault control interrupt.
+-	 */
+-	for_each_iommu(iommu, drhd) {
+-		u32 fault_status;
+-		int ret = dmar_set_interrupt(iommu);
+-
+-		if (ret) {
+-			pr_err("DRHD %Lx: failed to enable fault, interrupt, ret %d\n",
+-			       (unsigned long long)drhd->reg_base_addr, ret);
+-			return -1;
+-		}
+-
+-		/*
+-		 * Clear any previous faults.
+-		 */
+-		dmar_fault(iommu->irq, iommu);
+-		fault_status = readl(iommu->reg + DMAR_FSTS_REG);
+-		writel(fault_status, iommu->reg + DMAR_FSTS_REG);
+-	}
+-
+ 	return 0;
+ }
+ 

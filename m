@@ -2,50 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 990FB5927A2
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 03:57:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 35A5B5927A6
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 03:59:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbiHOB4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 21:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36140 "EHLO
+        id S229705AbiHOB7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 21:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiHOB4w (ORCPT
+        with ESMTP id S229450AbiHOB64 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 21:56:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5CCA12629;
-        Sun, 14 Aug 2022 18:56:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FEEE60FAF;
-        Mon, 15 Aug 2022 01:56:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B3F0C433D6;
-        Mon, 15 Aug 2022 01:56:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1660528610;
-        bh=E+POgprZP2CXzwYKE7pYCzxT7PkjComH27PjV4PNA+g=;
-        h=Date:From:To:Subject:In-Reply-To:References:From;
-        b=JkuXSqpApuALY+WTVmNWc38heLV2+d1KIWHSrKHb5TYB5LLyo5ziGtWNbovjFhrLp
-         0oUU+Dqsii9Sa4INM9Sj4HLMzwyrSl+/8BJOjfA5icmwbGXJdXZj+JZema/lrnkN1I
-         bkQgZ5+YIRhWL6Xm97vuo6M4VWLa4g4C46vtuuJo=
-Date:   Sun, 14 Aug 2022 18:56:49 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Joel Savitz <jsavitz@redhat.com>, linux-kernel@vger.kernel.org,
-        Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, Nico Pache <npache@redhat.com>
-Subject: Re: [PATCH] selftests/vm: enable running select groups of tests
-Message-Id: <20220814185649.3303b34cfabcaf450c661b4b@linux-foundation.org>
-In-Reply-To: <20220814185503.bf75150dee058db574797d07@linux-foundation.org>
-References: <20220705185605.3889110-1-jsavitz@redhat.com>
-        <20220814185503.bf75150dee058db574797d07@linux-foundation.org>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Sun, 14 Aug 2022 21:58:56 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0A6C12AB3
+        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 18:58:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1660528736; x=1692064736;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=oI6Y/L8l9dauwG68bQ11LVdS0Udl7+FVb4OvAc1pUmE=;
+  b=lPFkJCaJaT1aC7dMFdbSRdObgyjQYEeuHK86OZ9i054yJaXp0WrTKhEE
+   QmFe8cTuIkmeGJVWY6L+RfFe7uknsHW1HL1Uq3oJhAhZSisS+1NFrXbr3
+   3Y/e3enLWdJb4CG1Oxte/e8NtUkfBYQjDLbw+Rx61hBzx87ppnP3Q4Far
+   soXv9VmcEAev5WuXW1KVcfycQs/wc3Hz0biNJ5lOPC3ajVyPHooGgdrva
+   1Nod1wWwRtdLn7DIWVSeh3R6pX9nvj72+2i670itPPhFhO5ew5gUHsYYZ
+   ltVUiF7PN/kxStN30ZBEO1t3LEghcty1i8QINlIrFTMtP7oG4E0qV0nu2
+   Q==;
+X-IronPort-AV: E=McAfee;i="6400,9594,10439"; a="292667546"
+X-IronPort-AV: E=Sophos;i="5.93,237,1654585200"; 
+   d="scan'208";a="292667546"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2022 18:58:55 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="5.93,237,1654585200"; 
+   d="scan'208";a="557132003"
+Received: from sse-cse-haiyue-nuc.sh.intel.com ([10.239.241.114])
+  by orsmga003.jf.intel.com with ESMTP; 14 Aug 2022 18:58:52 -0700
+From:   Haiyue Wang <haiyue.wang@intel.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc:     akpm@linux-foundation.org, david@redhat.com, linmiaohe@huawei.com,
+        ying.huang@intel.com, songmuchun@bytedance.com,
+        naoya.horiguchi@linux.dev, alex.sierra@amd.com,
+        Haiyue Wang <haiyue.wang@intel.com>
+Subject: [PATCH v4 0/2] fix follow_page related issues
+Date:   Mon, 15 Aug 2022 09:59:07 +0800
+Message-Id: <20220815015909.439623-1-haiyue.wang@intel.com>
+X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20220812084921.409142-1-haiyue.wang@intel.com>
+References: <20220812084921.409142-1-haiyue.wang@intel.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,15 +63,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 14 Aug 2022 18:55:03 -0700 Andrew Morton <akpm@linux-foundation.org> wrote:
+v4: add '()' for the function for readability.
+    add more words about the Non-LRU pages fix in commit message.
 
-> On Tue,  5 Jul 2022 14:56:05 -0400 Joel Savitz <jsavitz@redhat.com> wrote:
-> 
-> > Add the ability to run one or more groups of vm tests (specified
-> > by the environment variable TEST_ITEMS). Preserve existing default
-> > behavior of running all tests when TEST_ITEMS is empty or "default".
-> 
-> Why are we doing this?   Please describe the use case - something I
-> can add to the changelog.
+v3: Merge the fix for handling Non-LRU pages into one patch.
+    Drop the break_ksm zone device page check.
 
-Old patch version, please ignore.
+v2: Add the Non-LRU pages fix with two patches, so that
+    'mm: migration: fix the FOLL_GET' can be applied directly
+    on linux-5.19 stable branch.
+
+Haiyue Wang (2):
+  mm: migration: fix the FOLL_GET failure on following huge page
+  mm: fix the handling Non-LRU pages returned by follow_page
+
+ mm/huge_memory.c |  4 ++--
+ mm/ksm.c         | 12 +++++++++---
+ mm/migrate.c     | 20 +++++++++++++++-----
+ 3 files changed, 26 insertions(+), 10 deletions(-)
+
+-- 
+2.37.2
+

@@ -2,216 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A16705929DA
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 08:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 967D15929D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 08:49:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241085AbiHOGuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 02:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53564 "EHLO
+        id S241048AbiHOGtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 02:49:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241092AbiHOGun (ORCPT
+        with ESMTP id S231261AbiHOGtp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 02:50:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8A70A64C2
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 23:50:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1660546241;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fH5UwWIX9OQs+lDeT8kxr/N3oertTip+Q2crz6TCHlw=;
-        b=hqZcnnR7VM7YPZPCOlYJ5rQtDE7he27thvCqGzifel0N0C0TXyxXUm/Fum3gKyTO6VPz6F
-        hPdH+NxA6pj4ho50ldRazt3r983Qtqbm6bhHHuaYIS9rTqPvpmESkKVVIfg+UWDxejuTbq
-        BFVitD90GUUKLD4FBQgXrDrVR+APY9E=
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
- [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-631-wit3zXdiPAKVKHxkLiPzFg-1; Mon, 15 Aug 2022 02:50:40 -0400
-X-MC-Unique: wit3zXdiPAKVKHxkLiPzFg-1
-Received: by mail-pl1-f197.google.com with SMTP id k13-20020a170902c40d00b0016f90eba744so4496090plk.22
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 23:50:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
-        bh=fH5UwWIX9OQs+lDeT8kxr/N3oertTip+Q2crz6TCHlw=;
-        b=uFB/TZJBZcdu0nsSr42Typz5O0FKAZKtSu9WlS+had1lGDQkO5nqfIkCEvEwmnyBo2
-         jM2G6pUsL30uZruYIaEgHBNJup1M9aNkFQwjqUIwDGg6v/mLc8ZuKORalEaKMs5r4OIh
-         P/GVa4G2bxoIPGEq/sDW12DutrQNnJ4r1R0rpYSckom+OZAlJfCZQ7t/EHSkmyrN5AkQ
-         W+QGUPLN0/HgX1oEwGiNycgJNU5f4+c7bnv9ErODGj/SjVTUQIOEA3/Vcrymi4RdcRqv
-         RW1oCYsFbyfcGjXGvEagNoodL1jlcdbbAotPaMYsSRPZPCl/7oVPsEGgX8r81FKRm5s2
-         p5Eg==
-X-Gm-Message-State: ACgBeo3pTquQFU13tVLMXykRiO57Kn0+kzYxWRw0yNdYrQEkqGyoZEPZ
-        pqUwJMf3DJRrz6Dx9X8S1WM/5mfOAjljeCEd4KKcYJ9bmxxt/anALU2FMDkT1JORkIbOmVR72OE
-        Oe9TdRY/mSBJY2kMCHMPE4muE
-X-Received: by 2002:a05:6a00:1a49:b0:528:6ea0:14e2 with SMTP id h9-20020a056a001a4900b005286ea014e2mr14839000pfv.22.1660546238691;
-        Sun, 14 Aug 2022 23:50:38 -0700 (PDT)
-X-Google-Smtp-Source: AA6agR4PQGZOnNvpKrm4VdqdTXnzXqXIyQPGqkluzieKE/EdGg9J7TGEQ7aCkqPIvuBbI8mBEFkBhw==
-X-Received: by 2002:a05:6a00:1a49:b0:528:6ea0:14e2 with SMTP id h9-20020a056a001a4900b005286ea014e2mr14838964pfv.22.1660546237888;
-        Sun, 14 Aug 2022 23:50:37 -0700 (PDT)
-Received: from localhost ([240e:3a1:2ea:acc0:8cff:e01c:2dbf:2ae8])
-        by smtp.gmail.com with ESMTPSA id d1-20020a623601000000b00534abad34easm2744569pfa.51.2022.08.14.23.50.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 Aug 2022 23:50:37 -0700 (PDT)
-Date:   Mon, 15 Aug 2022 14:48:13 +0800
-From:   Coiby Xu <coxu@redhat.com>
-To:     Stefan Berger <stefanb@linux.ibm.com>
-Cc:     kexec@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, nayna@linux.ibm.com,
-        nasastry@in.ibm.com, mpe@ellerman.id.au
-Subject: Re: [PATCH v7 0/6] tpm: Preserve TPM measurement log across kexec
- (ppc64)
-Message-ID: <20220815064813.77g6icbkygrbmapa@Rk>
-References: <20220812164305.2056641-1-stefanb@linux.ibm.com>
+        Mon, 15 Aug 2022 02:49:45 -0400
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2053.outbound.protection.outlook.com [40.107.21.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 796521B79C;
+        Sun, 14 Aug 2022 23:49:43 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=C7sFsfb4Syuj0vCObd1wOvKdYuBuLPavax84J/DfkhWFp9Hn6DliFkrS6KfSpjrc8A4jSKFyhIJAoOgK9Pto3QKb6V873tw2LUNnu6NQaVsNckbkUNoETbsCRN3PN0XPflKLINugfhcvJN9RvshTSMH3ri0O6myYm7NDbygJrUk1xXBtdQ8BsD+1GnDlMWWYdMQCDskNS20jPRdJOZSUwzSzQKD+E2vlBsE9chUbo1qZy43lD1ktGiaLJjwPLaguTe8L4G8b6z9E6IfLDGXEC0v921RXU/3lIWQB3Ih6zgJq84jztn5NThC8Y9KbhYeaCntpCbsuXqQVlYqY3oc5Cw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3s04vWXyR0A3hnY89m0OPxZfrDfVJGnw+bPeMcvXn4g=;
+ b=Q0uZwMTn+VaiEPvAj/mqRyGoLh85vQPlFedmTTdcsMmUKszwdboLWebLBdP5Ci/hl9VAP3DM4BxsyhrJbvc1rdD6vJfkcBk3JoUHiUk5OEtROqJrH1ZHdSV89n/vhfC3SA5ZNR2XYPEeQFYMdW2qcthRAevyryDk1ZXFyMZfPanc2hJdO+8hYbuQxGTS4qrXaJTeJyMWptsDW00PEt+ELPhykobNr9NpyEXXyvWKuEkAZi6Ltefv7UEcY4z3Ze2HHs4wRpWaLcKINkqizsQOiyfTrXLDWrSfKirb66FDMOy0PJgYFUUBIDw2vAQSqM1MT/gBzXVxFG8o7JZhgtilwA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3s04vWXyR0A3hnY89m0OPxZfrDfVJGnw+bPeMcvXn4g=;
+ b=pp7IYyKzZ9cUWh8NeG3Kx+3dmgLgPreG5aOOmpLn5ZZS67TtkJLqVti3rLHQShcFKWJUIoHpeFd/ES06jgMzIgZi0jTQgUEi0qDTZsIhXcOR/8Ru1p2xwv8UXyCKl0q32LQ+9+3boR7ZUxUMqaEQim6LrAcRvAJ+fJcmuzOS3Ys=
+Received: from DB9PR04MB8106.eurprd04.prod.outlook.com (2603:10a6:10:24b::13)
+ by DB7PR04MB5129.eurprd04.prod.outlook.com (2603:10a6:10:1f::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.28; Mon, 15 Aug
+ 2022 06:49:40 +0000
+Received: from DB9PR04MB8106.eurprd04.prod.outlook.com
+ ([fe80::5598:eebf:2288:f279]) by DB9PR04MB8106.eurprd04.prod.outlook.com
+ ([fe80::5598:eebf:2288:f279%9]) with mapi id 15.20.5525.010; Mon, 15 Aug 2022
+ 06:49:39 +0000
+From:   Wei Fang <wei.fang@nxp.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+CC:     "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH net 1/2] dt: ar803x: Document disable-hibernation property
+Thread-Topic: [PATCH net 1/2] dt: ar803x: Document disable-hibernation
+ property
+Thread-Index: AQHYrhiZCawC+L8jOkCFO9wn08ratK2rT8AAgAQh61A=
+Date:   Mon, 15 Aug 2022 06:49:39 +0000
+Message-ID: <DB9PR04MB8106F2BFD8150A1C76669F9C88689@DB9PR04MB8106.eurprd04.prod.outlook.com>
+References: <20220812145009.1229094-1-wei.fang@nxp.com>
+ <20220812145009.1229094-2-wei.fang@nxp.com> <YvZggGkdlAUuQ1NG@lunn.ch>
+In-Reply-To: <YvZggGkdlAUuQ1NG@lunn.ch>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-office365-filtering-correlation-id: a630061f-4459-4887-b55f-08da7e8a5395
+x-ms-traffictypediagnostic: DB7PR04MB5129:EE_
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: WGdnSK/8PJeGSlb6DS/adI8ega05NZWckRJdLY0L7Y0sf9g7CQvxmFe4+ajjsIL2DYWskzsIksPgrRN/OJd1S7DbKOv2VOMxpRh8HqVcrZAs8DUlPpG2Za5oxnIbxaVzXJsuNZEH83iQcSakjY01gsu+vvS60ppnWaBL4JJjRYa4TPdeNmbmmkjOdrzn2n29iWaE2QemRKrZiLm5FzyqcQHdHC40yemuWQNX4ayginm/LVy3dgWjgGi2zA4TUVTZwOcwgSToJIoIFmiweHWoWV1+Q6/D7eitBdchlNFaHJxoxq3zQlw/AQm/iDHRRJYOVJXtabQToeGUl0hfqA/RzuRyTAz51sPdmw7aYWVm3QfGlLyvMlCoPFu6m1TTIHcq5nxDhs+VlyPPuU0HV3Htghi7xJFO9U3BSqe6Zz+IbsRhNudqEeJ1ZLb9c/q1QHTS/Qy35HPCFfsf2wf+UMhtFD5/md93uTxa5QIKnRy3iApTzunAVTA77K/dA8z5sfCPdGAaQmYSmNIg7pG988dikQT4mi+RoSDbH45DynysRvAFMMwgS+aGDO+3Gpwvwm96are1+JIyMHvoNMjnh9kxpSJhwN/FA2dJqUTcW3UmC5338iIdsgP1f0nBmpBueTLPDJwg0yEk9y3E3IqjAeZrzPXf3D2ZiRyaotuUYNxwd1qbf6CsgLikl+IuE9du6p3B5iq1ohgvy5S7pHGSfbN9Z7ckjnweDgZ+ZR4GfZ88GNZfBhLNL+rfKQt/X/oo81SqjfC4alLYLbuYSMi47MXDMZ8aF8mSqhN4Tmmhpm3dgaw=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR04MB8106.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(4636009)(39860400002)(136003)(366004)(376002)(396003)(346002)(66556008)(4326008)(76116006)(66946007)(26005)(53546011)(316002)(83380400001)(64756008)(66476007)(66446008)(8676002)(9686003)(186003)(33656002)(44832011)(5660300002)(2906002)(7416002)(86362001)(52536014)(55016003)(8936002)(71200400001)(478600001)(41300700001)(6916009)(54906003)(6506007)(7696005)(38070700005)(122000001)(38100700002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?gb2312?B?bnJpMEF2ZktmbXFOSG85bHdsRm52bEZnSkJJdjhQZU5peEg0endWZlo3US9l?=
+ =?gb2312?B?QUZRS1V6a3Bkdm85cnhjWUd4Mi9ETTZEQ09MUEJPZVAyMWVGaFZXZG5HNXZJ?=
+ =?gb2312?B?QUNsWXcyQTZpVzRtaXBlL3JlSGc1Ny8rU1NrNjhxbDBJWWE2ejY4T2ljSldO?=
+ =?gb2312?B?M3RuamtzT1huUm1lMXJqU0FXOTJDTk9pTmRZTmZ1eHNsbUlDVWNpVHVxTmdZ?=
+ =?gb2312?B?ejNodWR2QjBtQ2NlYXhoSXR5eVRqRGJ0TlJHNFd2WjF4SzBtTVBja0krWUVn?=
+ =?gb2312?B?M1EwcjYxSjBtZFhLUjVDMVU4WklrczRuMmlpdFVRMWR6VHJuNDg3NTVWK0lK?=
+ =?gb2312?B?WVN1a1BMUXBSVTBwL1pGaTZKeVVKd0E0KzBaWWZveWMybG8vRXk0MFMwVVRZ?=
+ =?gb2312?B?ZlFING5qYWFvNnZXd3JaRHdHeXVJMWpaRWpIa0RneE8vMC9BWG91ZWlWZFdX?=
+ =?gb2312?B?N2d3QnlxQTBtclVUVGsxTUw3S3oxZFBwdG4va0xiekxNSllCR1pQMjE3bWls?=
+ =?gb2312?B?VS9vcTBadFZ4VXRpR2hDOU8xRS81eU9IazhXdkhlcnpSM2toa2FaenpQZXRZ?=
+ =?gb2312?B?TTdOend6LzhURjdXTXZHN0M1aGF6Vkpud0RVSVI3OVdPS2JMbmg4ZkpuTVVs?=
+ =?gb2312?B?SFZ3bkxOZnpZalhUUGc1UHFCMlAydkZmaXZtYXZRMlhIdXl0YjNBZlh5aUxQ?=
+ =?gb2312?B?Q0FzYkdFbFI3NlV1cm80bUJoNFNZdEdycWx4c2ZIeThPcWwvL0Y3R1l1cmRO?=
+ =?gb2312?B?VmVFNmZOY2lEVzRld1I2MklBam9QeW53WXYrYUVnVGNJQ2tKdG96bWJHR2ly?=
+ =?gb2312?B?eTJscXJEY3FwQ3R4WHloNWhpMUcvcTNnNWJzbnlEeXZpUlBjTjRKcHh4Yko4?=
+ =?gb2312?B?dis3QnViQWh3TC9ZeS9XM1NxWENiaWZ0bEpzZktob0E2MktYUGdxRDFoSFEv?=
+ =?gb2312?B?QlVRMmVVSCsxOTRqN3puTENzMDNlQlcrT0ZyK3ZNY2dxK0wyZU9WNWpjMVo1?=
+ =?gb2312?B?YzV6SnIrdmxzZG1iWHBVcncvbWJjcHBWWUVEOWt0M2hxVlRYODBwMHhmS2ho?=
+ =?gb2312?B?RVRzZ2ZWbldnL0dDQ2dsTWZMYWlWL2NRSS9QOFBhSkJtck9nMTJGdStCcDN4?=
+ =?gb2312?B?SUtkV0xRdVhDS1pLWVZXR3VBYWt0WncxcFJJRlN1bUpoaUJBbzZjVEh0b2Z6?=
+ =?gb2312?B?YUJqa3Z0US96SWhGZ2dpUVdVWGVENFNQMVlhNXdNd1FVOE5BS09hVVVSYnU4?=
+ =?gb2312?B?TUNBNm50QUhXMHh0YUtHcGhWZ3BhczZhWmRqVjNsTEJBelpxMzVLbmFnNUkv?=
+ =?gb2312?B?V0o0RUo4MmRBVTVLaGZiaFRiZU1Gc0tRYzl3clpUVjV6RmNhN0duc2dLU0g3?=
+ =?gb2312?B?YjhIRUJrTmMzN1p2dlFLdmhpQlY2Z25UUW4vUEJwSkJWZ3RhQUwyeGpKbUNX?=
+ =?gb2312?B?MDNYU1BUSkZBVjc4K2NuZ1V4djJmcWQ1UndtL1psOE4wL3l6UmgzRGgyV0ts?=
+ =?gb2312?B?VmdjRlFzTjZheEF0YnI5L0JTdUk3allOTUV1Mmk5YmU3Z0JCV1JHOENSRS94?=
+ =?gb2312?B?SWhXclRsL3FNbGJsZUlLQlk4dlRqUThNdm1iUWcrOFZreGFPTXpMRldSNlpX?=
+ =?gb2312?B?ZUVGUDNpSDhOcTlnZitlNzVjZFZ5Tm1ndHRvWkNkOEprS1RhYytGdGdLRWZy?=
+ =?gb2312?B?NFowU2lyNVBmSmtlYnNuZVUrOGFGRlYvUEp0ZytQaURTU1JVc0dNaEFadS9L?=
+ =?gb2312?B?Y05VOEdIeERMK1ZSNGowcHNPcWFhWU1OWS9Yclk1VEJ4Sk85OFRCbVk0cXU4?=
+ =?gb2312?B?MUlQajkzaWFsNXZpRW5SLzI0bXhSWjBwL1cyR1BSR2lTSVJIeHNycFRkSjdT?=
+ =?gb2312?B?UmRrdTZ4YWtieGhTdll4S2xqUWl1blNMZkZVN2VHS2ZXMVVJU1QxODZFRldB?=
+ =?gb2312?B?U0h3d1QvSUtZRExVRnE2Z0xYSlhWUG5HTE9SYlcrZlNKckR5U1BBS3VMdjln?=
+ =?gb2312?B?OGRFUnBVZWg3RWFQa0RyUmJaU0hHTlFzK1B5S2YwY0F4NEhwanBzK3RUYzY5?=
+ =?gb2312?B?dG10K1h1MEEvNC84RGlZZmc3N3dUdE9IZlU2bUJ4bTFiWUc1VVJOY0M1aHdL?=
+ =?gb2312?Q?9FY8=3D?=
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20220812164305.2056641-1-stefanb@linux.ibm.com>
-X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DB9PR04MB8106.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a630061f-4459-4887-b55f-08da7e8a5395
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 Aug 2022 06:49:39.8940
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: tKXaH5E21W1yuUFi+nyflNP+cb9/+EjINuoSg8Q+GutxvGHB4JDK68r6q4A/WxVsl9zCFdvX5IJP9mSQf/gl0g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB7PR04MB5129
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I can confirm this patch set fixes an issue that guest kdump kernel
-crashes on POWER9 host by applying it to 5.19.1 (there is a conflict
-when applying this patch set to latest kernel i.e. 6.0.0-rc1).
-
-Tested-by: Coiby Xu <coxu@redhat.com>
-
-Previously, the issue can be reproduced as follows,
-
-1. revert commit 7c5ed82b800d ("powerpc: Set crashkernel offset to mid
-    of RMA region") which masks the issue
-2. build & boot the kernel with crashkernel=512M 
-3. load kdump kernel and trigger kernel crash,
-[    4.209792] Oops: Kernel access of bad area, sig: 11 [#1]
-[    4.210373] LE PAGE_SIZE=64K MMU=Radix SMP NR_CPUS=2048 NUMA pSeries
-[    4.210985] Modules linked in:
-[    4.211570] CPU: 12 PID: 1 Comm: swapper/12 Not tainted 6.0.0-rc1+ #3
-[    4.212204] NIP:  c0000000080a6540 LR: c00000000840c630 CTR: 0000000000000800
-[    4.212871] REGS: c00000000e66b130 TRAP: 0300   Not tainted  (6.0.0-rc1+)
-[    4.213529] MSR:  800000000280b033 <SF,VEC,VSX,EE,FP,ME,IR,DR,RI,LE>  CR: 24000280  XER: 0000005b
-[    4.214242] CFAR: c0000000080a6528 DAR: c00000002ffb0000 DSISR: 40000000 IRQMASK: 0 
-[    4.214242] GPR00: 000000000e000000 c00000000e66b3d0 c00000000aa69a00 c0000000117c0000 
-[    4.214242] GPR04: c00000002ffb0000 0000000000040000 0000000000000800 03fffffffee84000 
-[    4.214242] GPR08: 0000000080000000 0000000000000010 0000000000000020 0000000000000030 
-[    4.214242] GPR12: 0000000000000040 c00000000ad61000 0000000000000050 0000000000000060 
-[    4.214242] GPR16: 0000000000000070 0000000000000000 0000000000000000 0000000000000000 
-[    4.214242] GPR20: 0000000000000000 0000000000000000 c000000008f7ebd8 c00000000e418420 
-[    4.214242] GPR24: c00000000ad3c389 c000000008f7ed60 c00000000ecc9000 c000000011271848 
-[    4.214242] GPR28: c000000027fcee5c c00000002ffb0000 0000000000040000 c0000000117c0000 
-[    4.220176] NIP [c0000000080a6540] memcpy_power7+0x400/0x7d0
-[    4.220808] LR [c00000000840c630] kmemdup+0x50/0x80
-[    4.221428] Call Trace:
-[    4.222006] [c00000000e66b3d0] [c0000000080a63b4] memcpy_power7+0x274/0x7d0 (unreliable)
-[    4.222662] [c00000000e66b4d0] [c00000000840c630] kmemdup+0x50/0x80
-[    4.223293] [c00000000e66b510] [c000000008973ee0] tpm_read_log_of+0x110/0x1f0
-[    4.223929] [c00000000e66b5a0] [c000000008973020] tpm_bios_log_setup+0x80/0x250
-[    4.224552] [c00000000e66b630] [c00000000896b938] tpm_chip_register.part.0+0x38/0x2a0
-[    4.225170] [c00000000e66b6b0] [c000000008979a80] tpm_ibmvtpm_probe+0x530/0x7d0
-[    4.225777] [c00000000e66b790] [c0000000081055e4] vio_bus_probe+0x94/0x150
-[    4.226366] [c00000000e66b7e0] [c0000000089936d4] really_probe+0x104/0x550
-[    4.226947] [c00000000e66b860] [c000000008993bd4] __driver_probe_device+0xb4/0x240
-[    4.227560] [c00000000e66b8e0] [c000000008993db4] driver_probe_device+0x54/0x130
-[    4.228159] [c00000000e66b920] [c000000008994a88] __driver_attach+0x128/0x2d0
-[    4.228748] [c00000000e66b9a0] [c00000000898fcf8] bus_for_each_dev+0xa8/0x130
-[    4.229325] [c00000000e66ba00] [c000000008992bd4] driver_attach+0x34/0x50
-[    4.229887] [c00000000e66ba20] [c0000000089922d8] bus_add_driver+0x218/0x300
-[    4.230453] [c00000000e66bab0] [c000000008995f94] driver_register+0xb4/0x1c0
-[    4.231012] [c00000000e66bb20] [c000000008103fb0] __vio_register_driver+0x80/0xf0
-[    4.231569] [c00000000e66bba0] [c00000000a06807c] ibmvtpm_module_init+0x34/0x48
-[    4.232119] [c00000000e66bbc0] [c000000008011c14] do_one_initcall+0x64/0x300
-[    4.232664] [c00000000e66bca0] [c00000000a0053f0] do_initcalls+0x13c/0x190
-[    4.233183] [c00000000e66bd50] [c00000000a00570c] kernel_init_freeable+0x22c/0x2a0
-[    4.233706] [c00000000e66bdb0] [c000000008012240] kernel_init+0x30/0x1a0
-[    4.234204] [c00000000e66be10] [c00000000800ca54] ret_from_kernel_thread+0x5c/0x64
-[    4.234721] Instruction dump:
-[    4.235191] fa010080 39800040 39c00050 39e00060 3a000070 7cc903a6 48000018 60000000 
-[    4.235738] 60000000 60000000 60000000 60000000 <7ce020ce> 7cc448ce 7ca450ce 7c8458ce 
-[    4.236302] ---[ end trace 0000000000000000 ]---
-
-On Fri, Aug 12, 2022 at 12:42:59PM -0400, Stefan Berger wrote:
->The of-tree subsystem does not currently preserve the IBM vTPM 1.2 and
->vTPM 2.0 measurement logs across a kexec on PowerVM and PowerKVM. This
->series fixes this for the kexec_file_load() syscall using the flattened
->device tree (fdt) to carry the TPM measurement log's buffer across kexec.
->
->   Stefan
->
->v7:
-> - Added Nageswara's Tested-by tags
-> - Added back original comment to inline function and removed Jarkko's R-b tag
->
->v6:
-> - Add __init to get_kexec_buffer as suggested by Jonathan
-> - Fixed issue detected by kernel test robot
->
->v5:
-> - Rebased on 1 more patch that would otherwise create merge conflicts
->
->v4:
-> - Rebased on 2 patches that would otherwise create merge conflicts;
->   posting these patches in this series with several tags removed so
->   krobot can test the series already
-> - Changes to individual patches documented in patch descripitons
->
->v3:
-> - Moved TPM Open Firmware related function to drivers/char/tpm/eventlog/tpm_of.c
->
->v2:
-> - rearranged patches
-> - fixed compilation issues for x86
->
->
->Jonathan McDowell (1):
->  x86/kexec: Carry forward IMA measurement log on kexec
->
->Palmer Dabbelt (1):
->  drivers: of: kexec ima: Support 32-bit platforms
->
->Stefan Berger (3):
->  tpm: of: Make of-tree specific function commonly available
->  of: kexec: Refactor IMA buffer related functions to make them reusable
->  tpm/kexec: Duplicate TPM measurement log in of-tree for kexec
->
->Vaibhav Jain (1):
->  of: check previous kernel's ima-kexec-buffer against memory bounds
->
-> arch/x86/Kconfig                      |   1 +
-> arch/x86/include/uapi/asm/bootparam.h |   9 +
-> arch/x86/kernel/e820.c                |   6 +-
-> arch/x86/kernel/kexec-bzimage64.c     |  42 +++-
-> arch/x86/kernel/setup.c               |  63 +++++
-> drivers/char/tpm/eventlog/of.c        |  31 +--
-> drivers/of/kexec.c                    | 342 ++++++++++++++++++++++----
-> include/linux/ima.h                   |   5 +
-> include/linux/kexec.h                 |   6 +
-> include/linux/of.h                    |  11 +-
-> include/linux/tpm.h                   |  36 +++
-> kernel/kexec_file.c                   |   6 +
-> security/integrity/ima/ima_kexec.c    |   2 +-
-> 13 files changed, 478 insertions(+), 82 deletions(-)
->
->
->base-commit: 3d7cb6b04c3f3115719235cc6866b10326de34cd
->-- 
->2.35.1
->
->
->_______________________________________________
->kexec mailing list
->kexec@lists.infradead.org
->http://lists.infradead.org/mailman/listinfo/kexec
->
-
--- 
-Best regards,
-Coiby
-
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogQW5kcmV3IEx1bm4gPGFu
+ZHJld0BsdW5uLmNoPg0KPiBTZW50OiAyMDIyxOo41MIxMsjVIDIyOjE1DQo+IFRvOiBXZWkgRmFu
+ZyA8d2VpLmZhbmdAbnhwLmNvbT4NCj4gQ2M6IGhrYWxsd2VpdDFAZ21haWwuY29tOyBsaW51eEBh
+cm1saW51eC5vcmcudWs7IGRhdmVtQGRhdmVtbG9mdC5uZXQ7DQo+IGVkdW1hemV0QGdvb2dsZS5j
+b207IGt1YmFAa2VybmVsLm9yZzsgcGFiZW5pQHJlZGhhdC5jb207DQo+IHJvYmgrZHRAa2VybmVs
+Lm9yZzsga3J6eXN6dG9mLmtvemxvd3NraStkdEBsaW5hcm8ub3JnOyBmLmZhaW5lbGxpQGdtYWls
+LmNvbTsNCj4gbmV0ZGV2QHZnZXIua2VybmVsLm9yZzsgZGV2aWNldHJlZUB2Z2VyLmtlcm5lbC5v
+cmc7DQo+IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcNCj4gU3ViamVjdDogUmU6IFtQQVRD
+SCBuZXQgMS8yXSBkdDogYXI4MDN4OiBEb2N1bWVudCBkaXNhYmxlLWhpYmVybmF0aW9uIHByb3Bl
+cnR5DQo+IA0KPiBPbiBTYXQsIEF1ZyAxMywgMjAyMiBhdCAxMjo1MDowOEFNICsxMDAwLCB3ZWku
+ZmFuZ0BueHAuY29tIHdyb3RlOg0KPiA+IEZyb206IFdlaSBGYW5nIDx3ZWkuZmFuZ0BueHAuY29t
+Pg0KPiA+DQo+ID4gVGhlIGhpYmVybmF0aW9uIG1vZGUgb2YgQXRoZXJvcyBBUjgwM3ggUEhZcyBp
+cyBkZWZhdWx0IGVuYWJsZWQuDQo+ID4gV2hlbiB0aGUgY2FibGUgaXMgdW5wbHVnZ2VkLCB0aGUg
+UEhZIHdpbGwgZW50ZXIgaGliZXJuYXRpb24gbW9kZSBhbmQNCj4gPiB0aGUgUEhZIGNsb2NrIGRv
+ZXMgZG93bi4gRm9yIHNvbWUgTUFDcywgaXQgbmVlZHMgdGhlIGNsb2NrIHRvIHN1cHBvcnQNCj4g
+PiBpdCdzIGxvZ2ljLiBGb3IgaW5zdGFuY2UsIHN0bW1hYyBuZWVkcyB0aGUgUEhZIGlucHV0cyBj
+bG9jayBpcyBwcmVzZW50DQo+ID4gZm9yIHNvZnR3YXJlIHJlc2V0IGNvbXBsZXRpb24uIFRoZXJl
+Zm9yZSwgSXQgaXMgcmVhc29uYWJsZSB0byBhZGQgYSBEVA0KPiA+IHByb3BlcnR5IHRvIGRpc2Fi
+bGUgaGliZXJuYXRpb24gbW9kZS4NCj4gDQo+IEl0IGlzIG5vdCB0aGUgZmlyc3QgdGltZSB3ZSBo
+YXZlIHNlZW4gdGhpcy4gV2hhdCB5b3Ugc2hvdWxkIHJlYWxseSBiZQ0KPiBjb25jZW50cmF0aW5n
+IG9uIGlzIHRoZSBjbG9jayBvdXQuIFRoYXQgaXMgd2hhdCB0aGUgTUFDIHJlcXVpcmVzIGhlcmUu
+DQo+IA0KPiBZb3UgYWxyZWFkeSBoYXZlIHRoZSBwcm9wZXJ0eSBxY2EsY2xrLW91dC1mcmVxdWVu
+Y3kuIFlvdSBjb3VsZCBtYXliZSBwaWdneQ0KPiBiYWNrIG9mZiB0aGlzLiBJZiB0aGF0IHByb3Bl
+cnR5IGlzIGJlaW5nIHVzZWQsIHlvdSBrbm93IHRoZSBjbG9jayBvdXRwdXQgaXMgdXNlZC4gU28N
+Cj4geW91IHNob3VsZCBkbyB3aGF0IGlzIG5lZWRlZCB0byBrZWVwIGl0IHRpY2tpbmcuDQo+IA0K
+PiBZb3UgYWxzbyBoYXZlIHFjYSxrZWVwLXBsbC1lbmFibGVkOg0KPiANCj4gICAgICAgSWYgc2V0
+LCBrZWVwIHRoZSBQTEwgZW5hYmxlZCBldmVuIGlmIHRoZXJlIGlzIG5vIGxpbmsuIFVzZWZ1bCBp
+ZiB5b3UNCj4gICAgICAgd2FudCB0byB1c2UgdGhlIGNsb2NrIG91dHB1dCB3aXRob3V0IGFuIGV0
+aGVybmV0IGxpbmsuDQo+IA0KPiBUbyBtZSwgaXQgc2VlbXMgbGlrZSB5b3UgYWxyZWFkeSBoYXZl
+IGVub3VnaCBwcm9wZXJ0aWVzLCB5b3UganVzdCBuZWVkIHRvIGltcGx5DQo+IHRoYXQgeW91IG5l
+ZWQgdG8gZGlzYWJsZSBoaWJlcm5hdGlvbiBpbiBvcmRlciB0byBmdWxmaWwgdGhlc2UgcHJvcGVy
+dGllcy4NCj4gDQo+IAlBbmRyZXcNCg0KSGkgQW5kcmV3LA0KDQoJWW91ciBzdWdnZXN0aW9uIGlz
+IGluZGVlZCBhbiBlZmZlY3RpdmUgc29sdXRpb24sIGJ1dCBJIGNoZWNrZWQgYm90aCB0aGUgZGF0
+YXNoZWV0DQphbmQgdGhlIGRyaXZlciBvZiBBUjgwM3ggUEhZcyBhbmQgZm91bmQgdGhhdCB0aGUg
+cWNhLGNsay1vdXQtZnJlcXVlbmN5IGFuZCB0aGUNCnFjYSxrZWVwLXBsbC1lbmFibGVkIHByb3Bl
+cnRpZXMgYXJlIGFzc29jaWF0ZWQgd2l0aCB0aGUgQ0xLXzI1TSBwaW4gb2YgQVI4MDN4IFBIWXMu
+DQpCdXQgdGhlcmUgaXMgYSBjYXNlIHRoYXQgQ0xLXzI1TSBwaW4gaXMgbm90IHVzZWQgb24gc29t
+ZSBwbGF0Zm9ybXMuDQpUYWtpbmcgb3VyIGkuTVg4RFhMIHBsYXRmb3JtIGFzIGFuIGV4YW1wbGUs
+IHRoZSBzdG1tYWMgYW5kIEFSODAzMSBQSFkgYXJlIGFwcGxpZWQNCm9uIHRoaXMgcGxhdGZvcm0s
+IGJ1dCB0aGUgQ0xLXzI1TSBwaW4gb2YgQVI4MDMxIGlzIG5vdCB1c2VkLiBTbyB3aGVuIEkgdXNl
+ZCB0aGUgbWV0aG9kDQp5b3UgbWVudGlvbmVkIGFib3ZlLCBpdCBkaWQgbm90IHdvcmsgYXMgZXhw
+ZWN0ZWQuIEluIHRoaXMgY2FzZSwgd2UgY2FuIG9ubHkgZGlzYWJsZSB0aGUNCmhpYmVybmF0aW9u
+IG1vZGUgb2YgQVI4MDN4IFBIWXMgYW5kIGtlZXAgdGhlIFJYX0NMSyBhbHdheXMgb3V0cHV0dGlu
+ZyBhIHZhbGlkIGNsb2NrDQpzbyB0aGF0IHRoZSBzdG1tYWMgY2FuIGNvbXBsZXRlIHRoZSBzb2Z0
+d2FyZSByZXNldCBvcGVyYXRpb24uDQoNCg==

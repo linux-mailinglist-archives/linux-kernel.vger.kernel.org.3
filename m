@@ -2,73 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A93DB593126
+	by mail.lfdr.de (Postfix) with ESMTP id 60A7E593125
 	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 16:59:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242943AbiHOO6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 10:58:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36902 "EHLO
+        id S232444AbiHOO6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 10:58:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241378AbiHOO5h (ORCPT
+        with ESMTP id S242167AbiHOO5r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 10:57:37 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CBDB1C114;
-        Mon, 15 Aug 2022 07:57:36 -0700 (PDT)
-Received: from [192.168.2.145] (109-252-119-13.nat.spd-mgts.ru [109.252.119.13])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id AF217660159F;
-        Mon, 15 Aug 2022 15:57:33 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1660575454;
-        bh=KOIQe83T8W3PTZZvdYYUaOEgUGqYiTEH3dPZEJGTSvs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=R0pr+S+XKud71JqO0oSgj5fBHiQkKe+luUcuoC8XpozeVUbHX2SCEUdlKefIsilvc
-         bxAix5MdjMLqbdP9m/e6tEz9/5aV1KKdJj6cxlZ1q02RBypUBWMVjoByfYlvfSXIj4
-         iUtVvGoHrc760YssNHb7SjmD8+2WZ7FZ/v7YyzB3RWYCe/lXls3E1wKiBKnvm+Y7Ll
-         iCrg57bqaHcuCwZrs4I5pCi2Dp5XK6wSjjSmZNcDsbaKmbVgAV8/pTM0amG8G4+C5B
-         Qh5qXE7tleLR+RydRlWF4/pJ79fDDYRYkowwl9D6F9i/94tFN2UYDKtR+BoyK1kuke
-         rQvFRYxsOUMDw==
-Message-ID: <c9d89644-409e-0363-69f0-a3b8f2ef0ae4@collabora.com>
-Date:   Mon, 15 Aug 2022 17:57:30 +0300
+        Mon, 15 Aug 2022 10:57:47 -0400
+Received: from mx3.wp.pl (mx3.wp.pl [212.77.101.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8360D1FCFC
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 07:57:45 -0700 (PDT)
+Received: (wp-smtpd smtp.wp.pl 14328 invoked from network); 15 Aug 2022 16:57:42 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
+          t=1660575462; bh=ZUSvVpgY85aUwoJT/VD92DZwtlhEXu1oicdr14fi0zU=;
+          h=From:To:Subject;
+          b=VhKSeIN2cSZTxgb63u3nfIzRa++3ftlaaW15BOboxYlAjbgVkEa8O8/wqUQYkIf6+
+           CVrSsvkXAJfJUzJqxrfxTeGXpTTIzH00wEZalsDMQWOmzY6D4YVmddm4V/P+ZvSmU2
+           Z4B8AiJGS1hgbunvOE1KYswyLvTkiCiMT3GE8EZU=
+Received: from ip-137-21.ds.pw.edu.pl (HELO LAPTOP-OLEK.lan) (olek2@wp.pl@[194.29.137.21])
+          (envelope-sender <olek2@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <hauke@hauke-m.de>; 15 Aug 2022 16:57:42 +0200
+From:   Aleksander Jan Bajkowski <olek2@wp.pl>
+To:     hauke@hauke-m.de, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, olek2@wp.pl,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH net v2 0/3] net: lantiq_xrx200: fix errors under memory pressure
+Date:   Mon, 15 Aug 2022 16:57:37 +0200
+Message-Id: <20220815145740.12075-1-olek2@wp.pl>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v1] drm/ttm: Refcount allocated tail pages
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
-        David Airlie <airlied@linux.ie>, Huang Rui <ray.huang@amd.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Trigger Huang <Trigger.Huang@gmail.com>,
-        Gert Wollny <gert.wollny@collabora.com>,
-        Antonio Caggiano <antonio.caggiano@collabora.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Dmitry Osipenko <digetx@gmail.com>, kvm@vger.kernel.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org
-References: <20220815095423.11131-1-dmitry.osipenko@collabora.com>
- <8230a356-be38-f228-4a8e-95124e8e8db6@amd.com>
- <134bce02-58d6-8553-bb73-42dfda18a595@collabora.com>
- <8caf3008-dcf3-985a-631e-e019b277c6f0@amd.com>
- <4fcc4739-2da9-1b89-209c-876129604d7d@amd.com>
- <14be3b22-1d60-732b-c695-ddacc6b21055@collabora.com>
- <2df57a30-2afb-23dc-c7f5-f61c113dd5b4@collabora.com>
- <57562db8-bacf-e82d-8417-ab6343c1d2fa@amd.com>
- <86a87de8-24a9-3c53-3ac7-612ca97e41df@collabora.com>
- <8f749cd0-9a04-7c72-6a4f-a42d501e1489@amd.com>
- <5340d876-62b8-8a64-aa6d-7736c2c8710f@collabora.com>
- <594f1013-b925-3c75-be61-2d649f5ca54e@amd.com>
- <6893d5e9-4b60-0efb-2a87-698b1bcda63e@collabora.com>
- <73e5ed8d-0d25-7d44-8fa2-e1d61b1f5a04@amd.com>
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <73e5ed8d-0d25-7d44-8fa2-e1d61b1f5a04@amd.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+X-WP-MailID: 955d87834941e9400fd02a20d217498d
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 0000000 [IbMk]                               
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,51 +50,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 8/15/22 16:53, Christian König wrote:
-> Am 15.08.22 um 15:45 schrieb Dmitry Osipenko:
->> [SNIP]
->>> Well that comment sounds like KVM is doing the right thing, so I'm
->>> wondering what exactly is going on here.
->> KVM actually doesn't hold the page reference, it takes the temporal
->> reference during page fault and then drops the reference once page is
->> mapped, IIUC. Is it still illegal for TTM? Or there is a possibility for
->> a race condition here?
->>
-> 
-> Well the question is why does KVM grab the page reference in the first
-> place?
-> 
-> If that is to prevent the mapping from changing then yes that's illegal
-> and won't work. It can always happen that you grab the address, solve
-> the fault and then immediately fault again because the address you just
-> grabbed is invalidated.
-> 
-> If it's for some other reason than we should probably investigate if we
-> shouldn't stop doing this.
+This series fixes issues that can occur in the driver under memory pressure.
+Situations when the system cannot allocate memory are rare, so the mentioned bugs
+have been fixed recently. The patches have been tested on a BT Home router with the
+Lantiq xRX200 chipset.
 
-CC: +Paolo Bonzini who introduced this code
+Changelog:
 
-commit add6a0cd1c5ba51b201e1361b05a5df817083618
-Author: Paolo Bonzini <pbonzini@redhat.com>
-Date:   Tue Jun 7 17:51:18 2016 +0200
+  v2:
+  - the second patch has been changed, so that under memory pressure situation
+    the driver will not receive packets indefinitely regardless of the NAPI budget,
+  - the third patch has been added.
 
-    KVM: MMU: try to fix up page faults before giving up
+Aleksander Jan Bajkowski (3):
+  net: lantiq_xrx200: confirm skb is allocated before using
+  net: lantiq_xrx200: fix lock under memory pressure
+  net: lantiq_xrx200: restore buffer if memory allocation failed
 
-    The vGPU folks would like to trap the first access to a BAR by setting
-    vm_ops on the VMAs produced by mmap-ing a VFIO device.  The fault
-handler
-    then can use remap_pfn_range to place some non-reserved pages in the
-VMA.
-
-    This kind of VM_PFNMAP mapping is not handled by KVM, but follow_pfn
-    and fixup_user_fault together help supporting it.  The patch also
-supports
-    VM_MIXEDMAP vmas where the pfns are not reserved and thus subject to
-    reference counting.
-
-@Paolo,
-https://lore.kernel.org/dri-devel/73e5ed8d-0d25-7d44-8fa2-e1d61b1f5a04@amd.com/T/#m7647ce5f8c4749599d2c6bc15a2b45f8d8cf8154
+ drivers/net/ethernet/lantiq_xrx200.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
 -- 
-Best regards,
-Dmitry
+2.30.2
+

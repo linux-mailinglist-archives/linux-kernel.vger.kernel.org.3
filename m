@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40EBA594DB1
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:34:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 383995947BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:04:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241302AbiHPAwx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 20:52:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36262 "EHLO
+        id S1353271AbiHOXWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:22:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1349872AbiHPAqr (ORCPT
+        with ESMTP id S1344591AbiHOXO3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 20:46:47 -0400
+        Mon, 15 Aug 2022 19:14:29 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D67196848;
-        Mon, 15 Aug 2022 13:45:10 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B8147A530;
+        Mon, 15 Aug 2022 13:01:51 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C3B4D60F60;
-        Mon, 15 Aug 2022 20:45:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92EB7C433D6;
-        Mon, 15 Aug 2022 20:45:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BCC9B61299;
+        Mon, 15 Aug 2022 20:01:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1DA5C433C1;
+        Mon, 15 Aug 2022 20:01:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660596309;
-        bh=x41DbS8qV3r1/pYkKDJeNP/yz9M9kqdvIN4rxibxN+0=;
+        s=korg; t=1660593710;
+        bh=uWra+Qzx8ugDojYZaaq+pat/bESp/okATL7sH1tOtCY=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nSenYtoN+FtvpaXq2gRY2vs54BoNh5MRwzPDKNQ8Cq+pTq25N2CbN6kYoUciwIufA
-         Y2kHvVNyJVLoK3/4FXO4ouFOrfv2vbBOucQmOkDw6mx2DjnpTrH21xxdZGY9oEDh7n
-         aur62dEJndX60WoUTlHqvGrIwGXrKDN/5x41wuCw=
+        b=QPie6zsPD2LRg5oww06kOVWV+MxtSmQl9Gs0cwl4N2Sg+luR2pK/lwy5nzV0nHrmv
+         Uo7kryncDsICRT7vAKRqpzV6xVKzWYrRLkg/s293dT0kEHF1IWXQp+0oFFPrM5oxZv
+         ScSOKF2Dx9R90fFHRcitPZCQvR30sQeIVMW1kCq4=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Quinn Tran <qutran@marvell.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>
-Subject: [PATCH 5.19 1037/1157] scsi: qla2xxx: Turn off multi-queue for 8G adapters
+        stable@vger.kernel.org, Sean Christopherson <seanjc@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 5.18 0994/1095] KVM: x86: Signal #GP, not -EPERM, on bad WRMSR(MCi_CTL/STATUS)
 Date:   Mon, 15 Aug 2022 20:06:33 +0200
-Message-Id: <20220815180521.467569249@linuxfoundation.org>
+Message-Id: <20220815180510.231278419@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
-References: <20220815180439.416659447@linuxfoundation.org>
+In-Reply-To: <20220815180429.240518113@linuxfoundation.org>
+References: <20220815180429.240518113@linuxfoundation.org>
 User-Agent: quilt/0.67
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -55,61 +55,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Quinn Tran <qutran@marvell.com>
+From: Sean Christopherson <seanjc@google.com>
 
-commit 5304673bdb1635e27555bd636fd5d6956f1cd552 upstream.
+[ Upstream commit 2368048bf5c2ec4b604ac3431564071e89a0bc71 ]
 
-For 8G adapters, multi-queue was enabled accidentally. Make sure
-multi-queue is not enabled.
+Return '1', not '-1', when handling an illegal WRMSR to a MCi_CTL or
+MCi_STATUS MSR.  The behavior of "all zeros' or "all ones" for CTL MSRs
+is architectural, as is the "only zeros" behavior for STATUS MSRs.  I.e.
+the intent is to inject a #GP, not exit to userspace due to an unhandled
+emulation case.  Returning '-1' gets interpreted as -EPERM up the stack
+and effecitvely kills the guest.
 
-Link: https://lore.kernel.org/r/20220616053508.27186-5-njavali@marvell.com
+Fixes: 890ca9aefa78 ("KVM: Add MCE support")
+Fixes: 9ffd986c6e4e ("KVM: X86: #GP when guest attempts to write MCi_STATUS register w/o 0")
 Cc: stable@vger.kernel.org
-Signed-off-by: Quinn Tran <qutran@marvell.com>
-Signed-off-by: Nilesh Javali <njavali@marvell.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+Reviewed-by: Jim Mattson <jmattson@google.com>
+Link: https://lore.kernel.org/r/20220512222716.4112548-2-seanjc@google.com
+Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/scsi/qla2xxx/qla_def.h |    4 ++--
- drivers/scsi/qla2xxx/qla_isr.c |   16 ++++++----------
- 2 files changed, 8 insertions(+), 12 deletions(-)
+ arch/x86/kvm/x86.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
---- a/drivers/scsi/qla2xxx/qla_def.h
-+++ b/drivers/scsi/qla2xxx/qla_def.h
-@@ -4264,8 +4264,8 @@ struct qla_hw_data {
- #define IS_OEM_001(ha)          ((ha)->device_type & DT_OEM_001)
- #define HAS_EXTENDED_IDS(ha)    ((ha)->device_type & DT_EXTENDED_IDS)
- #define IS_CT6_SUPPORTED(ha)	((ha)->device_type & DT_CT6_SUPPORTED)
--#define IS_MQUE_CAPABLE(ha)	((ha)->mqenable || IS_QLA83XX(ha) || \
--				IS_QLA27XX(ha) || IS_QLA28XX(ha))
-+#define IS_MQUE_CAPABLE(ha)	(IS_QLA83XX(ha) || IS_QLA27XX(ha) || \
-+				 IS_QLA28XX(ha))
- #define IS_BIDI_CAPABLE(ha) \
-     (IS_QLA25XX(ha) || IS_QLA2031(ha) || IS_QLA27XX(ha) || IS_QLA28XX(ha))
- /* Bit 21 of fw_attributes decides the MCTP capabilities */
---- a/drivers/scsi/qla2xxx/qla_isr.c
-+++ b/drivers/scsi/qla2xxx/qla_isr.c
-@@ -4419,16 +4419,12 @@ msix_register_fail:
- 	}
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 2316c978b598..0d6cea0d33a9 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -3233,13 +3233,13 @@ static int set_msr_mce(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
+ 			 */
+ 			if ((offset & 0x3) == 0 &&
+ 			    data != 0 && (data | (1 << 10) | 1) != ~(u64)0)
+-				return -1;
++				return 1;
  
- 	/* Enable MSI-X vector for response queue update for queue 0 */
--	if (IS_QLA83XX(ha) || IS_QLA27XX(ha) || IS_QLA28XX(ha)) {
--		if (ha->msixbase && ha->mqiobase &&
--		    (ha->max_rsp_queues > 1 || ha->max_req_queues > 1 ||
--		     ql2xmqsupport))
--			ha->mqenable = 1;
--	} else
--		if (ha->mqiobase &&
--		    (ha->max_rsp_queues > 1 || ha->max_req_queues > 1 ||
--		     ql2xmqsupport))
--			ha->mqenable = 1;
-+	if (IS_MQUE_CAPABLE(ha) &&
-+	    (ha->msixbase && ha->mqiobase && ha->max_qpairs))
-+		ha->mqenable = 1;
-+	else
-+		ha->mqenable = 0;
-+
- 	ql_dbg(ql_dbg_multiq, vha, 0xc005,
- 	    "mqiobase=%p, max_rsp_queues=%d, max_req_queues=%d.\n",
- 	    ha->mqiobase, ha->max_rsp_queues, ha->max_req_queues);
+ 			/* MCi_STATUS */
+ 			if (!msr_info->host_initiated &&
+ 			    (offset & 0x3) == 1 && data != 0) {
+ 				if (!can_set_mci_status(vcpu))
+-					return -1;
++					return 1;
+ 			}
+ 
+ 			vcpu->arch.mce_banks[offset] = data;
+-- 
+2.35.1
+
 
 

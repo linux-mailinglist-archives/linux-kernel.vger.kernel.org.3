@@ -2,110 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13350593648
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 21:24:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C6F0593467
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 20:06:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343700AbiHOTKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 15:10:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44256 "EHLO
+        id S230363AbiHOSBR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 14:01:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343583AbiHOTGl (ORCPT
+        with ESMTP id S233033AbiHOSAw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 15:06:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0752F1;
-        Mon, 15 Aug 2022 11:35:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2F6ED6111E;
-        Mon, 15 Aug 2022 18:35:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 288DFC433D6;
-        Mon, 15 Aug 2022 18:35:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660588516;
-        bh=OXU6gWN+TFhf/Eb7663ju9r2gZoBdA9HTNpedrm1o+g=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=bEpay/RxhWowvAPJRy/tK830BTo5dntv2aS0jfZ8nLfOX9eZI9/KF4bpnpBxn7Bde
-         tgaLfYX5TOVou8iHWluEd9KPfgYxVu169vvyWJ0jMP5wUeIR7BRN17D7WYbit1Jua3
-         WT9pT/Roc2VmURvJtwN56zc7lJ3WqSbxV/2ZuQaQ=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Quinn Tran <qutran@marvell.com>,
-        Nilesh Javali <njavali@marvell.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.15 398/779] scsi: qla2xxx: edif: Synchronize NPIV deletion with authentication application
-Date:   Mon, 15 Aug 2022 20:00:42 +0200
-Message-Id: <20220815180354.283823621@linuxfoundation.org>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20220815180337.130757997@linuxfoundation.org>
-References: <20220815180337.130757997@linuxfoundation.org>
-User-Agent: quilt/0.67
+        Mon, 15 Aug 2022 14:00:52 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 964C3BC18;
+        Mon, 15 Aug 2022 11:00:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=/1Bx4HDcIyS39X1ZLODVkDqCVJcvom8FSa7thBn5AsE=; b=mENEtynCU/ALxF5w4Q0Ehssk5Q
+        O5IupNEBxUgN7s73l+WpbLWR7KJDJaAjc/w01JiKOQUfUUGGi8AapQHL0Sf76sM3jAz7nm6amNxmK
+        TAo5EfGIS0GpbTQpicxWprZ+iNJX4vFkTUfGuCjdBtjGYmyNcAMe61WRzJD8wPC9Sm1oZ0FgD+MEA
+        H9gA5RUix9i25JSNE8mDv4y+iR/pEkC5Io094XmSiz61hdyh+XOizyPeQdU4fES4cprdAx114605i
+        tXSIBiSoKYTRADPVzdrlPQosCEccXopfGXUDuik+l8aY4QKpq0sC5VBWz1rramrs1l1sioy08lUKn
+        MAgr9C4w==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:33802)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1oNeOL-0003TT-Hg; Mon, 15 Aug 2022 19:00:45 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1oNeOI-00041h-LD; Mon, 15 Aug 2022 19:00:42 +0100
+Date:   Mon, 15 Aug 2022 19:00:42 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     netdev@vger.kernel.org,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next] net: phy: broadcom: Implement suspend/resume
+ for AC131 and BCM5241
+Message-ID: <YvqJyg3eUusc8jkC@shell.armlinux.org.uk>
+References: <20220815174356.2681127-1-f.fainelli@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20220815174356.2681127-1-f.fainelli@gmail.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Quinn Tran <qutran@marvell.com>
+On Mon, Aug 15, 2022 at 10:43:56AM -0700, Florian Fainelli wrote:
+> +	/* We cannot use a read/modify/write here otherwise the PHY continues
+> +	 * to drive LEDs which defeats the purpose of low power mode.
+> +	 */
+...
+> +	/* Set standby mode */
+> +	reg = phy_read(phydev, MII_BRCM_FET_SHDW_AUXMODE4);
+> +	if (reg < 0) {
+> +		err = reg;
+> +		goto done;
+> +	}
+> +
+> +	reg |= MII_BRCM_FET_SHDW_AM4_STANDBY;
+> +
+> +	err = phy_write(phydev, MII_BRCM_FET_SHDW_AUXMODE4, reg);
 
-[ Upstream commit cf79716e6636400ae38c37bc8a652b1e522abbba ]
+Does the read-modify-write problem extend to this register? Why would
+the PHY behave differently whether you used phy_modify() here or not?
+On the mdio bus, it should be exactly the same - the only difference
+is that we're guaranteed to hold the lock over the sequence whereas
+this drops and re-acquires the lock.
 
-Notify authentication application of a NPIV deletion event is about to
-occur. This allows app to perform cleanup.
+If it's sensitive to the timing of the read and the write, it suggests
+the above code is fragile - maybe there needs to be a minimum delay
+inserted between the read and the write?
 
-Link: https://lore.kernel.org/r/20220607044627.19563-7-njavali@marvell.com
-Fixes: 9efea843a906 ("scsi: qla2xxx: edif: Add detection of secure device")
-Signed-off-by: Quinn Tran <qutran@marvell.com>
-Signed-off-by: Nilesh Javali <njavali@marvell.com>
-Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/scsi/qla2xxx/qla_edif_bsg.h | 2 ++
- drivers/scsi/qla2xxx/qla_mid.c      | 6 +++++-
- 2 files changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/scsi/qla2xxx/qla_edif_bsg.h b/drivers/scsi/qla2xxx/qla_edif_bsg.h
-index 53026d82ebff..af9f1ffb1e4a 100644
---- a/drivers/scsi/qla2xxx/qla_edif_bsg.h
-+++ b/drivers/scsi/qla2xxx/qla_edif_bsg.h
-@@ -217,4 +217,6 @@ struct auth_complete_cmd {
- 
- #define RX_DELAY_DELETE_TIMEOUT 20
- 
-+#define FCH_EVT_VENDOR_UNIQUE_VPORT_DOWN  1
-+
- #endif	/* QLA_EDIF_BSG_H */
-diff --git a/drivers/scsi/qla2xxx/qla_mid.c b/drivers/scsi/qla2xxx/qla_mid.c
-index e6b5c4ccce97..eb43a5f1b399 100644
---- a/drivers/scsi/qla2xxx/qla_mid.c
-+++ b/drivers/scsi/qla2xxx/qla_mid.c
-@@ -166,9 +166,13 @@ qla24xx_disable_vp(scsi_qla_host_t *vha)
- 	int ret = QLA_SUCCESS;
- 	fc_port_t *fcport;
- 
--	if (vha->hw->flags.edif_enabled)
-+	if (vha->hw->flags.edif_enabled) {
-+		if (DBELL_ACTIVE(vha))
-+			qla2x00_post_aen_work(vha, FCH_EVT_VENDOR_UNIQUE,
-+			    FCH_EVT_VENDOR_UNIQUE_VPORT_DOWN);
- 		/* delete sessions and flush sa_indexes */
- 		qla2x00_wait_for_sess_deletion(vha);
-+	}
- 
- 	if (vha->hw->flags.fw_started)
- 		ret = qla24xx_control_vp(vha, VCE_COMMAND_DISABLE_VPS_LOGO_ALL);
 -- 
-2.35.1
-
-
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!

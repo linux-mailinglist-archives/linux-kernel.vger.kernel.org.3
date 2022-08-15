@@ -2,94 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6996F594E6C
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 04:03:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D48594E75
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 04:05:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233897AbiHPCDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 22:03:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54894 "EHLO
+        id S233407AbiHPCE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 22:04:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233833AbiHPCBf (ORCPT
+        with ESMTP id S233144AbiHPCEf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 22:01:35 -0400
-Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EADA220B86;
-        Mon, 15 Aug 2022 14:54:09 -0700 (PDT)
-Received: by mail-il1-x136.google.com with SMTP id g18so4485165ilk.4;
-        Mon, 15 Aug 2022 14:54:09 -0700 (PDT)
+        Mon, 15 Aug 2022 22:04:35 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0948A2230BF
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 14:54:49 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id 12so7617940pga.1
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 14:54:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc;
-        bh=cfZ7AXIapgfEmy3HcGInV8lY0Q/eqUbvocWgttpRt5s=;
-        b=dX2AjqXEr2g6tUQTPp5i62lnIBaY1KDRjuJzdk4ZqL2iw6Ll3AXmL27yEgW9i4df2L
-         QHzilMOOSFwht+BK/9FURK7Yxha2ZAh/uM3s/IAWcOIgpWXgNuOZE/0dsggQbnYnoMV2
-         4ht26qruOC2uh9RAI+hNRUs9MQbacQlLxyHgMTTJtz88tMGAIjebglpprFNBZk7q3tcu
-         rvYqkp4G6V4o1DymlhtNRUrLNo37O+KeNHtsRdaJSPlLKgTDE/4QGTEyN+9zuLwGxEAZ
-         sXGVXeagfoNiSFAQEP1t8VDNE3FRQbwAe2gJZ3uO5Hd5rVzmrhYfLE60t0myQrrP7spF
-         fZmw==
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc;
+        bh=fE+O/3kXgE+dfXX70zlf5gVmTreUt0ffvp9RAaWF4P4=;
+        b=GDo1cXAgIfU3xQO9g+UJaDIXYnd6qyBfZkeZBTu/XEGa3fsc642NUadPJU9PDcUMxt
+         3LT1l6boMp7QBD0xlSQjQYOKR5oxzAsEQ92APE0voe82Ep98mKUgaQpjaTiG0ovc1yA+
+         ilWEluzTPd59bDIKNf5CULsNvrHig0oE16T8InjQH3yXzl7IVhxsC/SBdM1QlM2nMjcN
+         ciOEqIkDHvdROr1YK31FVCwU9E2vNv0Pe0Xiri3i9DZJL9EVqbMokxi8STCcZUk/b7sv
+         w6Dd4G8xNF1e3mAh2D+8OpNcCnKli4r0lWaJXKi55fpQ9sUTpm8ZWBaamWc+PF6mBOR9
+         rUwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc;
-        bh=cfZ7AXIapgfEmy3HcGInV8lY0Q/eqUbvocWgttpRt5s=;
-        b=qiwfAbzUiDRWe9PP53XjN8Md26CGpBIYSgHJSwd4mgGO7108j5sVAV230WMLsGH4jN
-         wHvBdhOPaIeeBKn9svOc1IBzUPGt/GUEScjBpUw3wE5ZvG5DEkWS1SJoBIDDrtQz9Y8N
-         G8ryr+Af+vbXuyp84UfK/6DbCeDiw0daLVsaNt3AXglXGzClzSn5qrYMSdlWBZAhdeff
-         jp/9UfZAhKUIRT/z9UodZA0AGT8zGICbA0wFw2U+2bCjky15uUyuD6A0wC5rp7bmtuPW
-         QeOZ2KvTcF9woi7Y8b0JHf/8w47MnzI2XtNklloyD1thkRwjblu3EPv08d+QPaDkFCFA
-         QtuQ==
-X-Gm-Message-State: ACgBeo1DWdH3qXppuk9xs/SeX3gaBdNj4Ob8trlnrQppEoAwCbjMDNAP
-        XgNyR7YXPAlpWJzhnYMD2mNyHq5ZLu4dE8/8rBE=
-X-Google-Smtp-Source: AA6agR7MEvDHtr5TgG49Br9jwui4tIN1ssSokF72+gwpQRKtl1hfpE3Vi2nKn02Sq+yEiwOhLSYXtiA7omlhuzJsdIM=
-X-Received: by 2002:a05:6e02:17c6:b0:2dd:d9dc:6387 with SMTP id
- z6-20020a056e0217c600b002ddd9dc6387mr7828274ilu.321.1660600448578; Mon, 15
- Aug 2022 14:54:08 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc;
+        bh=fE+O/3kXgE+dfXX70zlf5gVmTreUt0ffvp9RAaWF4P4=;
+        b=LqYlRzENbYJ9MWaN2Nrr3/HGORGPFi5f4GmypowGL9qtYhfKzqfQvsk41yym1pV+Ec
+         Kr5KmlXxoNV4FjxpFKK+E8mLmHyEk93cBKepRvPWjhMzVuHUNOkFultMR1tCxo9yZODT
+         YFEonDchN+8rw3wbSn3hLtTiOogtoIW/XUKFz6UvaY74pY1jT+QxYUlv0wm3WdHkayvv
+         gGDxV2B/TW3K52yywBFA6zxxv4qv4NTsYvN7Z8kuwDO0OEYMlXjLSmqk1MnjiR+5GrdT
+         3L4BRTowV3XwkZLl2vvEZw/HCkspcth/4EY9uiz/4DYJ+yvVAKuVXR0sLpL9WeUw/nV9
+         Rj2Q==
+X-Gm-Message-State: ACgBeo3ohJLNy/VSHqSzGpUiPsdePkcD5cxhlRRD8Ap3O7JTxTScooBg
+        p0IWAxFaLwqwbk9QitANFHRpQA==
+X-Google-Smtp-Source: AA6agR4LEfebbNxgwZm00oHENwptapxAdoFIvEJrRB8wE/oRxdrmd9As66oLGQflSobKmeTJwzNSPw==
+X-Received: by 2002:a63:cd4b:0:b0:421:95f3:1431 with SMTP id a11-20020a63cd4b000000b0042195f31431mr15336377pgj.486.1660600487602;
+        Mon, 15 Aug 2022 14:54:47 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id c139-20020a624e91000000b0052dddf69db2sm6966296pfb.57.2022.08.15.14.54.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 14:54:47 -0700 (PDT)
+Date:   Mon, 15 Aug 2022 21:54:43 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Mingwei Zhang <mizhang@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, David Matlack <dmatlack@google.com>,
+        Yan Zhao <yan.y.zhao@intel.com>,
+        Ben Gardon <bgardon@google.com>
+Subject: Re: [PATCH v3 3/8] KVM: x86/mmu: Rename NX huge pages
+ fields/functions for consistency
+Message-ID: <YvrAoyhgNzTcvzkU@google.com>
+References: <20220805230513.148869-1-seanjc@google.com>
+ <20220805230513.148869-4-seanjc@google.com>
+ <YvhL6jKfKCj0+74w@google.com>
 MIME-Version: 1.0
-References: <20220802015052.10452-1-ojeda@kernel.org> <20220802015052.10452-7-ojeda@kernel.org>
- <Yvq3IfK4+C94AeE2@slm.duckdns.org>
-In-Reply-To: <Yvq3IfK4+C94AeE2@slm.duckdns.org>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Mon, 15 Aug 2022 23:53:57 +0200
-Message-ID: <CANiq72=aeDzF0PX-2+X6XuyONAjY8yHh5VnJTtXusi=mPqiJQw@mail.gmail.com>
-Subject: Re: [PATCH v8 06/31] workqueue: introduce `__INIT_WORK_WITH_KEY`
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <YvhL6jKfKCj0+74w@google.com>
+X-Spam-Status: No, score=-14.4 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tejun,
+On Sun, Aug 14, 2022, Mingwei Zhang wrote:
+> On Fri, Aug 05, 2022, Sean Christopherson wrote:
+> > Rename most of the variables/functions involved in the NX huge page
+> > mitigation to provide consistency, e.g. lpage vs huge page, and NX huge
+> > vs huge NX, and also to provide clarity, e.g. to make it obvious the flag
+> > applies only to the NX huge page mitigation, not to any condition that
+> > prevents creating a huge page.
+> > 
+> > Leave the nx_lpage_splits stat alone as the name is ABI and thus set in
+> > stone.
+> > 
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > ---
+> >  arch/x86/include/asm/kvm_host.h |  8 ++--
+> >  arch/x86/kvm/mmu/mmu.c          | 70 +++++++++++++++++----------------
+> >  arch/x86/kvm/mmu/mmu_internal.h | 22 +++++++----
+> >  arch/x86/kvm/mmu/paging_tmpl.h  |  2 +-
+> >  arch/x86/kvm/mmu/tdp_mmu.c      |  8 ++--
+> >  5 files changed, 59 insertions(+), 51 deletions(-)
+> > 
+> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> > index e8281d64a431..5634347e5d05 100644
+> > --- a/arch/x86/include/asm/kvm_host.h
+> > +++ b/arch/x86/include/asm/kvm_host.h
+> > @@ -1143,7 +1143,7 @@ struct kvm_arch {
+> >  	struct hlist_head mmu_page_hash[KVM_NUM_MMU_PAGES];
+> >  	struct list_head active_mmu_pages;
+> >  	struct list_head zapped_obsolete_pages;
+> > -	struct list_head lpage_disallowed_mmu_pages;
+> > +	struct list_head possible_nx_huge_pages;
+> 
+> Honestly, I am struggling to understand this one. 'possible_*' indicates
+> that there are other possibilities. But what are those possibilities?
 
-On Mon, Aug 15, 2022 at 11:14 PM Tejun Heo <tj@kernel.org> wrote:
->
-> Acked-by: Tejun Heo <tj@kernel.org>
->
-> Please feel free to route the patch with the rest of the series or let me
-> know if you want through the wq tree.
+No, possible is being used as an adjective in this case.  possible_nx_huge_pages
+is the list of shadow pages for which it's possible to replace the shadow page
+with an NX huge page.
 
-Since for v9 [1] I had to trim the patch series, this patch is not in
-the series anymore, so I think this one should ideally go through the
-wq tree later on when we send it together with the Rust abstractions
-for it after the core support is merged.
+The noun version would yield a name like nx_huge_page_possiblities.
 
-Thanks a lot!
+> I feel this name is more confusing than the original one. Maybe just keep
 
-[1] https://lore.kernel.org/lkml/20220805154231.31257-1-ojeda@kernel.org/
+Ignoring lpage => huge_page, the current name is terribly inaccurate.  The list
+doesn't contain all disallowed huge pages, nor does it even contain all disallowed
+NX huge pages, it specifically tracks shadow pages that might be able to be
+replaced with an NX huge page.
 
-Cheers,
-Miguel
+I'm open to other names, but whatever we choose should be paired with
+account_nx_huge_page()'s param that is currently named "nx_huge_page_possible".

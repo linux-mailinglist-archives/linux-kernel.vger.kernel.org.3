@@ -2,46 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE6CE59494E
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:11:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 945245948BF
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:09:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243606AbiHOXMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 19:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36456 "EHLO
+        id S244910AbiHOXMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 19:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231438AbiHOXLg (ORCPT
+        with ESMTP id S242188AbiHOXLh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:11:36 -0400
+        Mon, 15 Aug 2022 19:11:37 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2B8C3FA33;
-        Mon, 15 Aug 2022 13:00:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D31DF2C;
+        Mon, 15 Aug 2022 13:00:27 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 35D6FB80EA8;
-        Mon, 15 Aug 2022 20:00:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88E6CC433C1;
-        Mon, 15 Aug 2022 20:00:18 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 259DAB8113E;
+        Mon, 15 Aug 2022 20:00:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A181C433C1;
+        Mon, 15 Aug 2022 20:00:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660593618;
-        bh=2KW1HM963k7v+bwEDDz4Yh4oQrYctMijf1hKLtDHh9Y=;
+        s=korg; t=1660593624;
+        bh=OH96su+aiaQi23wTafGmmD8O4Crw/idqAWFIg1eYYPM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=E7JtWaZWU8qFPCoSP7VvySJT052Slygkr5KssrSvKPOB5JNzDEhzJJH0wpC6pcsug
-         QjpJDnxh4hYAR02NzhzNtvDTYK7ySkmTtUJ9vPVj6Kj/uZtL+BlxvnQXfvtZfPN6Hw
-         6Rdx5BJ4VO0uhGAKgcD5n69tuRg/4/fJTX71jCWM=
+        b=CHxBVvd6uZbIwagBtRpumBlyP7jFqrNen2hGJc15wk2fMfJ2FKwrcjkJSL6Usk82a
+         yW/eRcKRfpJ6m2xf/4LWJEXCUBjTWH0fd7JG7ny+Cxx6lfMEciABM+qDU8BrMYM8gC
+         C3m6pRQ37/53ERhxCukCWzXhtnGba+o11CdBxrLo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Markus Mayer <mmayer@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>,
-        =?UTF-8?q?Alejandro=20Gonz=C3=A1lez?= 
-        <alejandro.gonzalez.correo@gmail.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        stable@vger.kernel.org, Colin Ian King <colin.i.king@gmail.com>,
+        Chen Yu <yu.c.chen@intel.com>, Tom Rix <trix@redhat.com>,
+        Len Brown <len.brown@intel.com>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0297/1157] thermal/tools/tmon: Include pthread and time headers in tmon.h
-Date:   Mon, 15 Aug 2022 19:54:13 +0200
-Message-Id: <20220815180451.525116184@linuxfoundation.org>
+Subject: [PATCH 5.19 0298/1157] tools/power turbostat: Fix file pointer leak
+Date:   Mon, 15 Aug 2022 19:54:14 +0200
+Message-Id: <20220815180451.559713255@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -59,57 +56,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Markus Mayer <mmayer@broadcom.com>
+From: Colin Ian King <colin.i.king@gmail.com>
 
-[ Upstream commit 0cf51bfe999524377fbb71becb583b4ca6d07cfc ]
+[ Upstream commit 5e5fd36c58d6c820f7292ee492c3731c9a104a41 ]
 
-Include sys/time.h and pthread.h in tmon.h, so that types
-"pthread_mutex_t" and "struct timeval tv" are known when tmon.h
-references them.
+Currently if a fscanf fails then an early return leaks an open
+file pointer. Fix this by fclosing the file before the return.
+Detected using static analysis with cppcheck:
 
-Without these headers, compiling tmon against musl-libc will fail with
-these errors:
+tools/power/x86/turbostat/turbostat.c:2039:3: error: Resource leak: fp [resourceLeak]
 
-In file included from sysfs.c:31:0:
-tmon.h:47:8: error: unknown type name 'pthread_mutex_t'
- extern pthread_mutex_t input_lock;
-        ^~~~~~~~~~~~~~~
-make[3]: *** [<builtin>: sysfs.o] Error 1
-make[3]: *** Waiting for unfinished jobs....
-In file included from tui.c:31:0:
-tmon.h:54:17: error: field 'tv' has incomplete type
-  struct timeval tv;
-                 ^~
-make[3]: *** [<builtin>: tui.o] Error 1
-make[2]: *** [Makefile:83: tmon] Error 2
-
-Signed-off-by: Markus Mayer <mmayer@broadcom.com>
-Acked-by: Florian Fainelli <f.fainelli@gmail.com>
-Reviewed-by: Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>
-Acked-by: Alejandro González <alejandro.gonzalez.correo@gmail.com>
-Tested-by: Alejandro González <alejandro.gonzalez.correo@gmail.com>
-Fixes: 94f69966faf8 ("tools/thermal: Introduce tmon, a tool for thermal  subsystem")
-Link: https://lore.kernel.org/r/20220718031040.44714-1-f.fainelli@gmail.com
-Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Fixes: eae97e053fe3 ("tools/power turbostat: Support thermal throttle count print")
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+Acked-by: Chen Yu <yu.c.chen@intel.com>
+Reviewed-by: Tom Rix <trix@redhat.com>
+Signed-off-by: Len Brown <len.brown@intel.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/thermal/tmon/tmon.h | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/power/x86/turbostat/turbostat.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/thermal/tmon/tmon.h b/tools/thermal/tmon/tmon.h
-index c9066ec104dd..44d16d778f04 100644
---- a/tools/thermal/tmon/tmon.h
-+++ b/tools/thermal/tmon/tmon.h
-@@ -27,6 +27,9 @@
- #define NR_LINES_TZDATA 1
- #define TMON_LOG_FILE "/var/tmp/tmon.log"
+diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
+index ede31a4287a0..2e9a751af260 100644
+--- a/tools/power/x86/turbostat/turbostat.c
++++ b/tools/power/x86/turbostat/turbostat.c
+@@ -2035,9 +2035,9 @@ int get_core_throt_cnt(int cpu, unsigned long long *cnt)
+ 	if (!fp)
+ 		return -1;
+ 	ret = fscanf(fp, "%lld", &tmp);
++	fclose(fp);
+ 	if (ret != 1)
+ 		return -1;
+-	fclose(fp);
+ 	*cnt = tmp;
  
-+#include <sys/time.h>
-+#include <pthread.h>
-+
- extern unsigned long ticktime;
- extern double time_elapsed;
- extern unsigned long target_temp_user;
+ 	return 0;
 -- 
 2.35.1
 

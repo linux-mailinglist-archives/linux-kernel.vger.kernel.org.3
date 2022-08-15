@@ -2,162 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7FD6592A8E
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 10:05:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C8DE592AD4
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 10:06:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241340AbiHOHfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 03:35:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38970 "EHLO
+        id S241416AbiHOHiT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 03:38:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232365AbiHOHfx (ORCPT
+        with ESMTP id S232631AbiHOHiR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 03:35:53 -0400
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE17F60E6
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 00:35:52 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailnew.nyi.internal (Postfix) with ESMTP id F351C5804E8;
-        Mon, 15 Aug 2022 03:35:49 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 15 Aug 2022 03:35:50 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1660548949; x=1660556149; bh=w9cQgkryOZ
-        rTMuW8XbykeJZc+OJXgmDOa/70G6lboNg=; b=a5Ds27l9BT9gOjMBPCN8BzkuxZ
-        JYLjsFx9gxDEY5jvI8+yLp7UJhD8WWmUdMHgdMOd1+jOTTL6z6nO8sE7C04QdVFr
-        WKsmIChwrzUXFabb1EMJXVQUvs36XecJXmNqauTih8YUfEcCmz9tGvqhOxKqqKcj
-        V8PxpauTR8IPSeHQMXP8A1pOzhALkkV1LapqiQ18CfJBZ5Myw3Oub8ZkCER5t6de
-        DGF7ZEZAWC9+fYOH2qU0+/iopU/2mhJ+BdQA+1f9d3uq5a0rZ+HwzKciVD4pdXgQ
-        leyj4feuLXBwYeqpUYKFT7cHsJfnGIXzODBJ4ELoFiRSvbxzpycNVsH8UrUg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm1; t=1660548949; x=1660556149; bh=w9cQgkryOZrTMuW8XbykeJZc+OJX
-        gmDOa/70G6lboNg=; b=EtirkQGRowRlx/E866o7sqMqyKYnM9kxioAwm+IzTakk
-        qlysK9fam5BbvguehMYjkavviohBTL9rUlcSWF2QqgNO0MugdbsK1LeJVco4qE7z
-        yuHH7FtGIqkC0iPFYWP3Zju9/czFX8FIaPHUOv17FKKmKwI0HDJ+gjyObV+csWXM
-        B6XLw8tA4p4xn1EgA3TC4FfCsCMOEYtEgaoPMf4Ws4DyenyhpoE/C3YkXYJUGQBA
-        xbuxhiYH+MYXdh4rLmhAfUSRRDZzxQRmVesNvIjYZwZlgRZQIBjq5hnm1zu8uc7H
-        cNAC7YU2FuVXeXa2CE5pv/tdOanE4QGLbhHMLc7yAA==
-X-ME-Sender: <xms:VPf5YkviSOqdHKUdvcs1SXcxJhlbX9TTPl83EHIUA76kTVmZhX1Drg>
-    <xme:VPf5YhfYcStHwnAkwix3KC95sbwd-jA-74C10AdbCECQM-4kSuALUPIp4srJ_3doN
-    TQQdpUXOPhXHBdnztE>
-X-ME-Received: <xmr:VPf5YvwDMuZwU5LqS0XYHVoq5U6sOBZzZE7EcfAYtjzt17ehmmSHAXx_WYeu>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvfedrvdehuddguddvhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtuggjsehgtderredttddunecuhfhrohhmpeforgig
-    ihhmvgcutfhiphgrrhguuceomhgrgihimhgvsegtvghrnhhordhtvggthheqnecuggftrf
-    grthhtvghrnhepieehffffvefgiedthfeiieeutdfgffekhfehgfehgfeiuddutdfftdek
-    ffehheevnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecuvehluhhsthgvrhfuih
-    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordht
-    vggthh
-X-ME-Proxy: <xmx:VPf5YnOGE2wUjkjwKlwnIAjpuJJkfd3fcKFVwCxNC_uXGB8_BV8m4w>
-    <xmx:VPf5Yk9VY3eyUyHkM2fxUhvHM2io7DxqyN4nPkFEGaZA3Phol2aI4g>
-    <xmx:VPf5YvXoqru6zervnrA9nNxiFD2Q-50dEcJeCLOf-R7gOTrUr9_z4Q>
-    <xmx:Vff5Ygv-y_nAn6ggoJu4LcrIVWBPql4muCx5Ua5DRqmGS2UUTNJk3A>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 15 Aug 2022 03:35:48 -0400 (EDT)
-Date:   Mon, 15 Aug 2022 09:35:46 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Noralf =?utf-8?Q?Tr=C3=B8nnes?= <noralf@tronnes.org>
-Cc:     Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>, Emma Anholt <emma@anholt.net>,
-        David Airlie <airlied@linux.ie>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Phil Elwell <phil@raspberrypi.com>,
-        Mateusz Kwiatkowski <kfyatek+publicgit@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        linux-amlogic@lists.infradead.org, dri-devel@lists.freedesktop.org,
-        Dom Cobley <dom@raspberrypi.com>
-Subject: Re: [PATCH v1 03/35] drm/atomic: Add TV subconnector property to
- get/set_property
-Message-ID: <20220815073546.4isrl7o3bt5g23pk@houat>
-References: <20220728-rpi-analog-tv-properties-v1-0-3d53ae722097@cerno.tech>
- <20220728-rpi-analog-tv-properties-v1-3-3d53ae722097@cerno.tech>
- <6e47ce2d-25c7-7254-703d-2a1d3bb64373@tronnes.org>
+        Mon, 15 Aug 2022 03:38:17 -0400
+Received: from smtp.smtpout.orange.fr (smtp09.smtpout.orange.fr [80.12.242.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6725DDF7B
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 00:38:15 -0700 (PDT)
+Received: from [192.168.1.18] ([90.11.190.129])
+        by smtp.orange.fr with ESMTPA
+        id NUfsoyReCtUbyNUfsoBx0o; Mon, 15 Aug 2022 09:38:13 +0200
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 15 Aug 2022 09:38:13 +0200
+X-ME-IP: 90.11.190.129
+Message-ID: <271c00a5-fb5d-ff9e-3c4d-ec2732b991ba@wanadoo.fr>
+Date:   Mon, 15 Aug 2022 09:38:11 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="u67ey6tc73oyu5na"
-Content-Disposition: inline
-In-Reply-To: <6e47ce2d-25c7-7254-703d-2a1d3bb64373@tronnes.org>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH v5 1/1] gpio: mpfs: add polarfire soc gpio support
+Content-Language: fr
+To:     lewis.hanly@microchip.com, linux-gpio@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linus.walleij@linaro.org,
+        brgl@bgdev.pl, linux-kernel@vger.kernel.org, palmer@dabbelt.com,
+        maz@kernel.org
+Cc:     conor.dooley@microchip.com, daire.mcnamara@microchip.com
+References: <20220815070606.1298421-1-lewis.hanly@microchip.com>
+ <20220815070606.1298421-2-lewis.hanly@microchip.com>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20220815070606.1298421-2-lewis.hanly@microchip.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Le 15/08/2022 à 09:06, lewis.hanly@microchip.com a écrit :
+> From: Lewis Hanly <lewis.hanly@microchip.com>
+> 
+> Add a driver to support the Polarfire SoC gpio controller
+> 
+> Signed-off-by: Lewis Hanly <lewis.hanly@microchip.com>
+> ---
+>   drivers/gpio/Kconfig     |   7 +
+>   drivers/gpio/Makefile    |   1 +
+>   drivers/gpio/gpio-mpfs.c | 318 +++++++++++++++++++++++++++++++++++++++
+>   3 files changed, 326 insertions(+)
+>   create mode 100644 drivers/gpio/gpio-mpfs.c
+> 
 
---u67ey6tc73oyu5na
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> +static int mpfs_gpio_probe(struct platform_device *pdev)
+> +{
+> +	struct clk *clk;
+> +	struct device *dev = &pdev->dev;
+> +	struct device_node *node = pdev->dev.of_node;
+> +	struct mpfs_gpio_chip *mpfs_gpio;
+> +	struct gpio_irq_chip *girq;
+> +	int i, ret, ngpios, nirqs;
+> +
+> +	mpfs_gpio = devm_kzalloc(dev, sizeof(*mpfs_gpio), GFP_KERNEL);
+> +	if (!mpfs_gpio)
+> +		return -ENOMEM;
+> +
+> +	mpfs_gpio->base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(mpfs_gpio->base))
+> +		return dev_err_probe(dev, PTR_ERR(mpfs_gpio->clk), "input clock not found.\n");
 
-Hi Noralf,
+PTR_ERR(mpfs_gpio->base)?
+"input clock not found" also looks odd after a 
+devm_platform_ioremap_resource() call.
 
-Thanks for your review
-
-On Mon, Aug 08, 2022 at 02:30:42PM +0200, Noralf Tr=F8nnes wrote:
-> Den 29.07.2022 18.34, skrev Maxime Ripard:
-> > The subconnector property was created by drm_mode_create_tv_properties(=
-),
-> > but wasn't exposed to the userspace through the generic
-> > atomic_get/set_property implementation, and wasn't stored in any generic
-> > state structure.
-> >=20
-> > Let's solve this.
-> >=20
-> > Signed-off-by: Maxime Ripard <maxime@cerno.tech>
->
-> I just realised that this and the select_subconnector property isn't
-> used by any drivers. Do you plan to use them? Maybe they don't need to
-> be wired up at all.
-
-I'm not sure really
-
-It's true that the subconnector and select_subconnector fields in the TV
-connector state aren't used by any driver, but the ch7006 and nouveau
-will update the property content through a call to
-drm_object_property_set_value
-
-https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/i2c/ch7006_d=
-rv.c#L217
-https://elixir.bootlin.com/linux/latest/source/drivers/gpu/drm/nouveau/disp=
-nv04/tvnv17.c#L185
-
-I think it could still be useful to report it in the connector state, if
-only for consistency?
-
-Maxime
-
---u67ey6tc73oyu5na
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCYvn3UgAKCRDj7w1vZxhR
-xbmZAQD5nsl1fKLqTQPIrC0VdS9xyWDxecKIIygi1DB180AxtgEA6DpFUfV8x3sb
-JZ8Mmo3OvmOSy7NnGeEzHLlA/1/Mtg0=
-=joBf
------END PGP SIGNATURE-----
-
---u67ey6tc73oyu5na--
+> +
+> +	clk = devm_clk_get(dev, NULL);
+> +	if (IS_ERR(clk))
+> +		return dev_err_probe(dev, PTR_ERR(clk), "devm_clk_get failed\n");
+> +

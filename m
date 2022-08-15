@@ -2,91 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A623D592DA4
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 13:01:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1F8592DA0
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 12:59:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232406AbiHOLBJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 07:01:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45968 "EHLO
+        id S233460AbiHOK7l convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 15 Aug 2022 06:59:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241824AbiHOLAt (ORCPT
+        with ESMTP id S231511AbiHOK7b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 07:00:49 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F566479;
-        Mon, 15 Aug 2022 04:00:48 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27FAD2E0029408;
-        Mon, 15 Aug 2022 11:00:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=Z3aS594wlbhZKWisoOFso7+h9XZN3ISVE0QdwPxZcJY=;
- b=WRBbzsoENcdRq19Ujq2hw46Z6kxBNsWKO06VrzMF7SEyBencFrzeigFRF12ZLZzSkNXP
- 0EpHbA96kWD0/6PCPMHpwlmD6XJ7ClZ3C5J0WGdSg5JXWc9Ud2rNs8Qf6nXHbWIBXW4x
- gWYRwVNfT7Lhl/3UVd0ni1Y6x0pIV50SiGAEjrzAk8nZFYIlanb+8wvt+i7A/lqdQg5W
- asIyl83STQ/srrHqvga0Dt67TY8WH5+/g9gOnyPs8FgQLHvrvtroZa8ReMh/PFt7FTi7
- QFuJB9ip3HQeqiTnKYIf403tk/9/MHOcUHiWzhqP00mxAfE893BDU4FhNDb9Tr65HCCI Ug== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hx1aud5d9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 Aug 2022 11:00:09 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27FB08Ov013879
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 Aug 2022 11:00:08 GMT
-Received: from [10.216.30.233] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 15 Aug
- 2022 04:00:03 -0700
-Message-ID: <f584fecd-6ca4-4ab0-763d-2ed219009c61@quicinc.com>
-Date:   Mon, 15 Aug 2022 16:29:24 +0530
+        Mon, 15 Aug 2022 06:59:31 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B0ECE21260
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 03:59:29 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-67-rcu_PtKqP8eoCWaPzqMOGA-1; Mon, 15 Aug 2022 11:59:26 +0100
+X-MC-Unique: rcu_PtKqP8eoCWaPzqMOGA-1
+Received: from AcuMS.Aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) by
+ AcuMS.aculab.com (fd9f:af1c:a25b:0:994c:f5c2:35d6:9b65) with Microsoft SMTP
+ Server (TLS) id 15.0.1497.38; Mon, 15 Aug 2022 11:59:26 +0100
+Received: from AcuMS.Aculab.com ([fe80::994c:f5c2:35d6:9b65]) by
+ AcuMS.aculab.com ([fe80::994c:f5c2:35d6:9b65%12]) with mapi id
+ 15.00.1497.040; Mon, 15 Aug 2022 11:59:26 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Pavel Machek' <pavel@ucw.cz>,
+        Yu-Jen Chang <arthurchang09@gmail.com>
+CC:     "andy@kernel.org" <andy@kernel.org>,
+        "akinobu.mita@gmail.com" <akinobu.mita@gmail.com>,
+        "jserv@ccns.ncku.edu.tw" <jserv@ccns.ncku.edu.tw>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 0/2] Optimize memchr()
+Thread-Topic: [PATCH 0/2] Optimize memchr()
+Thread-Index: AQHYrn6nxbqvf/0XNUiVCIKBvUkbVq2vzrlA
+Date:   Mon, 15 Aug 2022 10:59:26 +0000
+Message-ID: <e234b9e1314b48ac9940644616a9757a@AcuMS.aculab.com>
+References: <20220710142822.52539-1-arthurchang09@gmail.com>
+ <20220812190631.GA1347@bug>
+In-Reply-To: <20220812190631.GA1347@bug>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: Query regarding deadlock involving cgroup_threadgroup_rwsem and
- cpu_hotplug_lock
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
 Content-Language: en-US
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>,
-        Xuewen Yan <xuewen.yan94@gmail.com>
-CC:     Tejun Heo <tj@kernel.org>, Imran Khan <imran.f.khan@oracle.com>,
-        <lizefan.x@bytedance.com>, <hannes@cmpxchg.org>,
-        <tglx@linutronix.de>, <steven.price@arm.com>,
-        <peterz@infradead.org>, <cgroups@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Zhao Gongyi <zhaogongyi@huawei.com>,
-        Zhang Qiao <zhangqiao22@huawei.com>
-References: <8245b710-8acb-d8e6-7045-99a5f71dad4e@oracle.com>
- <26d0e4cc-be0e-2c12-6174-dfbb1edb1ed6@oracle.com>
- <bbc01477-231b-3dbb-3e09-9338f5413f06@oracle.com>
- <ba48eac5-8ef7-251b-11fe-8163bb7a2d54@quicinc.com>
- <224b19f3-912d-b858-7af4-185b8e55bc66@quicinc.com>
- <YthDz4BnfYHce1od@slm.duckdns.org> <YuGTBLkFerUboctl@slm.duckdns.org>
- <dc0cff0e-b744-9d5d-e727-70d1c31b2a74@quicinc.com>
- <20220815090556.GB27407@blackbody.suse.cz>
- <CAB8ipk90LxNNbq5OKamd-ArkqhEZjxS1fFZJXtnbQwGzyyJ3wQ@mail.gmail.com>
- <20220815093934.GA29323@blackbody.suse.cz>
-From:   Mukesh Ojha <quic_mojha@quicinc.com>
-In-Reply-To: <20220815093934.GA29323@blackbody.suse.cz>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: g09p5XzNTrHElQUZFQKcos2Wl2zs6yvx
-X-Proofpoint-ORIG-GUID: g09p5XzNTrHElQUZFQKcos2Wl2zs6yvx
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
- definitions=2022-08-15_06,2022-08-15_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 bulkscore=0
- adultscore=0 spamscore=0 impostorscore=0 lowpriorityscore=0 mlxscore=0
- suspectscore=0 priorityscore=1501 clxscore=1011 phishscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2207270000 definitions=main-2208150040
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -95,28 +61,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 8/15/2022 3:09 PM, Michal Koutný wrote:
-> On Mon, Aug 15, 2022 at 05:25:52PM +0800, Xuewen Yan <xuewen.yan94@gmail.com> wrote:
->> Your means is that the problem should be fixed by [1]+[2]'s revert ?
+From: Pavel Machek
+> Sent: 12 August 2022 20:07
 > 
-> I understood that was already the combination you had tested.
-> You write in [T] that [1] alone causes (another) deadlock and therefore
-> the revert of [2] was suggested.
+> Hi!
 > 
->> I just tested the case which reverted the [2]. Need I test with [1] and [2]?
+> > This patche series optimized "memchr()" and add a macro for
+> > "memchr_inv()" so that both funtions can use it to generate bit mask.
+> >
+> > The original implementaion of "memchr()" is based on byte-wise comparison,
+> > which do not fully use 64-bit or 32-bit register in CPU. We implement a
+> > word-wise comparison so that at least 4 bytes can be compared at the same
+> > time. The optimized "memchr()" is nearly 4x faster than the original one
+> > for long strings. In Linux Kernel, we find that the length of the string
 > 
-> It'd be better (unless you haven't already :-), my reasoning is for the
-> [1]+[2] combo.
+> Well... how much slower is it for short strings?
 
-Feel free to add my
+And cold cache??
 
-Reported-and-tested-by: Mukesh Ojha <quic_mojha@quicinc.com>
+	David
 
--Mukesh
+> > searched by "memchr()" is up to 512 bytes in drivers/misc/lkdtm/heap.c.
+> > In our test, the optimized version is about 20% faster if the target
+> > character is at the end of the string when going through a 512-byte
+> > string.
 > 
-> Thanks,
-> Michal
+> "What is the average length passed to memchr" would be more useful question.
 > 
-> [T] https://lore.kernel.org/r/CAB8ipk_gCLtvEahsp2DvPJf4NxRsM8WCYmmH=yTd7zQE+81_Yg@mail.gmail.com/
+> Best regards,
+> 								Pavel
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+

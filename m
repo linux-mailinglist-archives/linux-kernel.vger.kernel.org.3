@@ -2,75 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82A4359338D
+	by mail.lfdr.de (Postfix) with ESMTP id 1340C59338C
 	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 18:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232355AbiHOQva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 12:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40548 "EHLO
+        id S232471AbiHOQv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 12:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232179AbiHOQv2 (ORCPT
+        with ESMTP id S232739AbiHOQvo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 12:51:28 -0400
-Received: from mx0.riseup.net (mx0.riseup.net [198.252.153.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C12BD17E06
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 09:51:27 -0700 (PDT)
-Received: from fews1.riseup.net (fews1-pn.riseup.net [10.0.1.83])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
-         client-signature RSA-PSS (2048 bits) client-digest SHA256)
-        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
-        by mx0.riseup.net (Postfix) with ESMTPS id 4M60fk3R6Mz9sLm;
-        Mon, 15 Aug 2022 16:51:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
-        t=1660582286; bh=uWm5Eb+WIBElvupCbRA2LTbjzrzdUT0rQYgpokgr67w=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=dHcVKMpzS3Weent6L1gMa+UF7mzBjwmz4o2k2ufE0zKAieRCWH/nFtd8S9R7I71+T
-         4KuVnZEE2nCZk2FFh6BIrj9lnNxXODx69/Z0TiwoaJxK7uucjrSP3fKUDk6aEpnmKH
-         Bj0nR5VOEjuMSFVwnNpM7oRdyIQQEIxF56S9RTfY=
-X-Riseup-User-ID: B787AFED1410C83EE15519B80EDE0A5E27441BAD857CF89BE76F8111F7FC81B1
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-         by fews1.riseup.net (Postfix) with ESMTPSA id 4M60ff6Fznz5vh4;
-        Mon, 15 Aug 2022 16:51:22 +0000 (UTC)
-Message-ID: <f0345419-ed15-047a-ca6b-d4c4bc542c7d@riseup.net>
-Date:   Mon, 15 Aug 2022 13:51:18 -0300
+        Mon, 15 Aug 2022 12:51:44 -0400
+Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 112E315FF8;
+        Mon, 15 Aug 2022 09:51:44 -0700 (PDT)
+Received: by mail-qk1-x732.google.com with SMTP id w18so950409qki.8;
+        Mon, 15 Aug 2022 09:51:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc;
+        bh=z9mz2+wlNE6dlfNxd0zn3pzsSl/tx6YmF8ngabpo1pQ=;
+        b=kP0ekwtTUAra8jUuLiPKcJkLXBMllgqLgA34PhQPiLL3JtVzphw4kc87T8/V0vQ3pB
+         P3WsKUCs4mVvAI4nezCdcazLAVK6jh3MFoDip7MYLpLP1GZrbeuAHSeaTAE+r5pqN1zX
+         gemMQ5ZpDKCsy+nOND/trEcvWN+AoT28hT8qbNAEWebitvZJRSZ7N/TeSCV3AyIs4ZHQ
+         zynpBsg4La+kHuHrAjQaJO1MpVl26SA+fGy7p1Wzk2t9K7M0TGNPqOlWsp5tg5Lctly4
+         RNy/SnCPL8msiRKwxS4LBU/I+2CF05Y80cku/ydRVEQZb4GARTWxtt8nuMGl27+NwelW
+         /2oA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
+        bh=z9mz2+wlNE6dlfNxd0zn3pzsSl/tx6YmF8ngabpo1pQ=;
+        b=jWHHL6pQUcOVtHiJG3+bQjBJYD+D7PrM6A1vIwRxnjvTZrkf8wRNfzt2pmCBaO2o+K
+         MX+OJsxpFbJIJu5q9Hs8cIQCaaDULk2j9WXhBZ6znc9iJt6OwgE4IAsxaq6c8Pex56kZ
+         v67y3mgqwomPct7xd9hfefc4AqMPWw184wVlhCBhCgCKrjdZLBY1CqSdCegRzgiSgYX0
+         Qj7BRn3PRV0VeWLTa72XS35yOSLA+cl3VLzi4OSoCZP67mQQ9Ro2hk3zBpE2En88OsvC
+         SmbZ1ss7Yubr6b6BH7JchYLSXjNwFwTUSDT0faK5D4xsFY4oA5gCwHBwZiJ1oaFuetXO
+         E0Ig==
+X-Gm-Message-State: ACgBeo1IWU2Ocoq0VuaM7PquAp9kZxFZ06jJrEyEObJ8RMjsWmsf1yt+
+        t2hkWaCB2T7mliTAV72dGBQ=
+X-Google-Smtp-Source: AA6agR6ZQxGkDO5pcRVX2aabSFEGDB5GrDg841Olcp3vUjlLJV0zreqAR3OcF3kXOrsn46euV829Bw==
+X-Received: by 2002:a05:620a:c:b0:6bb:107c:36ea with SMTP id j12-20020a05620a000c00b006bb107c36eamr5802037qki.738.1660582303025;
+        Mon, 15 Aug 2022 09:51:43 -0700 (PDT)
+Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id h17-20020ac85e11000000b003430589dd34sm8780596qtx.57.2022.08.15.09.51.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 Aug 2022 09:51:42 -0700 (PDT)
+From:   Florian Fainelli <f.fainelli@gmail.com>
+To:     bcm-kernel-feedback-list@broadcom.com,
+        William Zhang <william.zhang@broadcom.com>,
+        Linux ARM List <linux-arm-kernel@lists.infradead.org>
+Cc:     joel.peshkin@broadcom.com, dan.beygelman@broadcom.com,
+        krzysztof.kozlowski@linaro.org, rafal@milecki.pl,
+        Anand Gore <anand.gore@broadcom.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kursad Oney <kursad.oney@broadcom.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 4/9] arm64: dts: Move BCM4908 dts to bcmbca folder
+Date:   Mon, 15 Aug 2022 09:51:39 -0700
+Message-Id: <20220815165139.2500877-1-f.fainelli@gmail.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20220803175455.47638-5-william.zhang@broadcom.com>
+References: <20220803175455.47638-1-william.zhang@broadcom.com> <20220803175455.47638-5-william.zhang@broadcom.com>
 MIME-Version: 1.0
-Subject: Re: [PATCH 0/4] Documentation: KUnit: minor fixes
-Content-Language: en-US
-To:     Tales Aparecida <tales.aparecida@gmail.com>
-Cc:     Trevor Woerner <twoerner@gmail.com>, siqueirajordao@riseup.net,
-        mwen@igalia.com, mairacanal@riseup.net, brendanhiggins@google.com,
-        corbet@lwn.net, Isabella Basso <isabbasso@riseup.net>,
-        magalilemes00@gmail.com, kunit-dev@googlegroups.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Sadiya Kazi <sadiyakazi@google.com>
-References: <20220813042055.136832-1-tales.aparecida@gmail.com>
-From:   =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@riseup.net>
-In-Reply-To: <20220813042055.136832-1-tales.aparecida@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tales,
+On Wed,  3 Aug 2022 10:54:50 -0700, William Zhang <william.zhang@broadcom.com> wrote:
+> As part of ARCH_BCM4908 to ARCH_BCMBCA migration, move the BCM4908 dts
+> files to bcmbca folder and use CONFIG_ARCH_BCMBCA to build all the
+> BCM4908 board dts. Delete bcm4908 folder and its makefile as well.
+> 
+> Signed-off-by: William Zhang <william.zhang@broadcom.com>
+> ---
 
-On 8/13/22 01:20, Tales Aparecida wrote:
-> Hi,
-> 
-> This is a short series of minor fixes to the Kunit documentation,
-> they probably can be squashed but I suppose it's easier
-> to review them individually.
-> 
-> Thanks for any feedbacks,
-> Tales
-> 
-
-Series is Reviewed-by: André Almeida <andrealmeid@igalia.com>
+Applied to https://github.com/Broadcom/stblinux/commits/devicetree/next, thanks!
+--
+Florian

@@ -2,92 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0204C59279A
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 03:48:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FD7759279F
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 03:56:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230122AbiHOBsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 Aug 2022 21:48:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59360 "EHLO
+        id S229510AbiHOBzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 Aug 2022 21:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230096AbiHOBsi (ORCPT
+        with ESMTP id S229459AbiHOBzH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 Aug 2022 21:48:38 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D991311A3D
-        for <linux-kernel@vger.kernel.org>; Sun, 14 Aug 2022 18:48:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=HGo0XIO3+DsDYVBd08+wBQXUYY81cjOh3s5tyKuX8Ew=; b=GPxc8nC8lWZ/lo/bc7cKevVkQl
-        unCRB0/xk5GIPpOYjIfnmz6Zfbh5g57noCYsLPWm2IvANFU1mtGm0gjpXAH2FPZmoyrWyZoD+QB3S
-        ef6Uj61oB8Kad7e8tTlwKvq/6frbQUMox+LBM7b0zgjlbroGshoM7qZ6D9AoyZxFCUMtTHYdUvNGf
-        b2eT/UTIg6lp80iLJeaEB3vCW+66v53h32XRzLPkDLS9HNvhwqgnYPe7alOV7hLFHkNa3jf+63g19
-        A6WeMu1jUBUn/3kfIYjYE4hZ3kWkv8PrAFWpUEspsS2DQaf8/Br7PyCK1lodSvDB4TnGE8JDszfBF
-        M350Ay0g==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.95 #2 (Red Hat Linux))
-        id 1oNPDP-004OGh-5A;
-        Mon, 15 Aug 2022 01:48:27 +0000
-Date:   Mon, 15 Aug 2022 02:48:27 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Dongliang Mu <mudongliangabcd@gmail.com>,
-        Dongliang Mu <dzm91@hust.edu.cn>,
-        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
-        Todd Kjos <tkjos@android.com>,
-        Martijn Coenen <maco@android.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Carlos Llamas <cmllamas@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        syzkaller <syzkaller@googlegroups.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] drivers: binderfs: fix memory leak in binderfs_fill_super
-Message-ID: <Yvml67jphhmGXUFN@ZenIV>
-References: <20220812132124.2053673-1-dzm91@hust.edu.cn>
- <YvZYmprZ1NiMkynp@kroah.com>
- <CAD-N9QWU_tcnHMtP3iWcQogSWwDET4nhK5AQKDbh2KJQzwfF9A@mail.gmail.com>
- <YvZfEwFL7GSHEzs8@kroah.com>
- <20220812142423.33wnvnjg6v2h2m3y@wittgenstein>
- <YvZkfPak2UMSc1tS@kroah.com>
- <YvmlfBJTiOQVfVtX@ZenIV>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <YvmlfBJTiOQVfVtX@ZenIV>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 14 Aug 2022 21:55:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9DE55F71;
+        Sun, 14 Aug 2022 18:55:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7DE6AB80B99;
+        Mon, 15 Aug 2022 01:55:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFFE6C433C1;
+        Mon, 15 Aug 2022 01:55:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1660528504;
+        bh=jjaPnk42QQFvYnkLBLhu9HPiINUfz6WQyKgWadvtTxg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=T3Ylg+E0gAJcw6O1SKZIdvzswyo5Z9JwPs9+wfpG1LKO/G2nFW5DIwU3/F3/G5Bmd
+         pz3iIII1k1/flWtbG1uFh+lqSMq+rzvTnHHwJ7YGRgOev985J64qFto+nxm63h7iH+
+         pfdOJ/lwDhs04sap0laWDFcGeMjZHzQ1uic52h58=
+Date:   Sun, 14 Aug 2022 18:55:03 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Joel Savitz <jsavitz@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Nico Pache <npache@redhat.com>
+Subject: Re: [PATCH] selftests/vm: enable running select groups of tests
+Message-Id: <20220814185503.bf75150dee058db574797d07@linux-foundation.org>
+In-Reply-To: <20220705185605.3889110-1-jsavitz@redhat.com>
+References: <20220705185605.3889110-1-jsavitz@redhat.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Aug 15, 2022 at 02:46:36AM +0100, Al Viro wrote:
-> On Fri, Aug 12, 2022 at 04:32:28PM +0200, Greg Kroah-Hartman wrote:
-> 
-> > > It's a bit tricky to follow but d_make_root() always consumes the inode.
-> > > On success via d_instantiate() and on failure via iput(). So when
-> > > d_make_root() has been called the inode is off limits. And as soon as
-> > > d_make_root() has returned successfully we're guaranteed that
-> > > sb->s_fs_info is cleaned up if a ->put_super() method has been defined.
-> > > Just fyi.
-> > 
-> > Ah, thanks, that wasn't obvious at all.
-> > 
-> > greg k-h
-> 
-> FWIW, I would rather provide a proper ->kill_sb() and gotten rid of
-> all that stuff.  The thing is, unlike ->put_super(), ->kill_sb() is
-> called for *anything* that has gotten to foo_fill_super().  Usually
-> allows to get rid of those "call all of or parts of foo_put_super()
-> on failure exits" and associated bitrot...
-> 
-> Like this (completely untested):
+On Tue,  5 Jul 2022 14:56:05 -0400 Joel Savitz <jsavitz@redhat.com> wrote:
 
-[snip the patch]
+> Add the ability to run one or more groups of vm tests (specified
+> by the environment variable TEST_ITEMS). Preserve existing default
+> behavior of running all tests when TEST_ITEMS is empty or "default".
 
-PS: that's instead of the patch upstream, not on top of it.
+Why are we doing this?   Please describe the use case - something I
+can add to the changelog.

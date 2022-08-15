@@ -2,42 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6F20594A97
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:19:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEF78594A84
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 02:18:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351725AbiHPAEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 20:04:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34162 "EHLO
+        id S1347412AbiHPAE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 20:04:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354642AbiHOXzC (ORCPT
+        with ESMTP id S1356600AbiHOXyp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 19:55:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D20F13D22;
-        Mon, 15 Aug 2022 13:19:42 -0700 (PDT)
+        Mon, 15 Aug 2022 19:54:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23212162C57;
+        Mon, 15 Aug 2022 13:19:46 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2755C60E73;
-        Mon, 15 Aug 2022 20:19:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 142C7C433C1;
-        Mon, 15 Aug 2022 20:19:39 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 12435B81183;
+        Mon, 15 Aug 2022 20:19:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59175C433D7;
+        Mon, 15 Aug 2022 20:19:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1660594780;
-        bh=bjh2T3gtOlTJmqSHRYkYkNlxRdKEcz/kD+u8jQqUFdg=;
+        s=korg; t=1660594783;
+        bh=06VFarDkPU464UnbTOwMQsoTTF2JrCyJwdk9TgVmdxM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=tI9V4fHZCnghRXLxLeK8P5dCphLJjh3mNOxfO/PW7d0BHAVFIROdD+LPFYk4Afz9c
-         mXOGBYNNh4lfiyIUYZjCFQOkm/S/9jsvceEeIi6pLVcyBsHEuU9Pmq2SgXK4xXnpPT
-         l284U6euxzlMYP8pC09DVfLbrgroVrdOSRf/wSqo=
+        b=w0oEbPMi9iZ8DqO+Gw80GDiWFvj48VhLqcd+d3ifzen99WZ6j0HrUlBdn3jWfABz1
+         NeM4YtM1RcxW8jH+2SFpX1x+QnbcyrjDrXytTeMObk7UCVH7VUJsRylbE3+sS/cdRC
+         4Im1ku+OSvyYBwCWmy03nV09ug1cl1dOH3KcH/Ac=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, Zhengchao Shao <shaozhengchao@huawei.com>,
+        stable@vger.kernel.org,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
         Herbert Xu <herbert@gondor.apana.org.au>,
         Sasha Levin <sashal@kernel.org>
-Subject: [PATCH 5.19 0557/1157] crypto: hisilicon/hpre - dont use GFP_KERNEL to alloc mem during softirq
-Date:   Mon, 15 Aug 2022 19:58:33 +0200
-Message-Id: <20220815180501.891751230@linuxfoundation.org>
+Subject: [PATCH 5.19 0558/1157] crypto: inside-secure - Add missing MODULE_DEVICE_TABLE for of
+Date:   Mon, 15 Aug 2022 19:58:34 +0200
+Message-Id: <20220815180501.929627362@linuxfoundation.org>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20220815180439.416659447@linuxfoundation.org>
 References: <20220815180439.416659447@linuxfoundation.org>
@@ -55,34 +57,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhengchao Shao <shaozhengchao@huawei.com>
+From: Pali Rohár <pali@kernel.org>
 
-[ Upstream commit 98dfa9343f37bdd4112966292751e3a93aaf2e56 ]
+[ Upstream commit fa4d57b85786ec0e16565c75a51c208834b0c24d ]
 
-The hpre encryption driver may be used to encrypt and decrypt packets
-during the rx softirq, it is not allowed to use GFP_KERNEL.
+Without MODULE_DEVICE_TABLE, crypto_safexcel.ko module is not automatically
+loaded on platforms where inside-secure crypto HW is specified in device
+tree (e.g. Armada 3720). So add missing MODULE_DEVICE_TABLE for of.
 
-Fixes: c8b4b477079d ("crypto: hisilicon - add HiSilicon HPRE accelerator")
-Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+Fixes: 1b44c5a60c13 ("crypto: inside-secure - add SafeXcel EIP197 crypto engine driver")
+Signed-off-by: Pali Rohár <pali@kernel.org>
+Acked-by: Marek Behún <kabel@kernel.org>
 Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/crypto/hisilicon/hpre/hpre_crypto.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/crypto/inside-secure/safexcel.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/crypto/hisilicon/hpre/hpre_crypto.c b/drivers/crypto/hisilicon/hpre/hpre_crypto.c
-index 97d54c1465c2..3ba6f15deafc 100644
---- a/drivers/crypto/hisilicon/hpre/hpre_crypto.c
-+++ b/drivers/crypto/hisilicon/hpre/hpre_crypto.c
-@@ -252,7 +252,7 @@ static int hpre_prepare_dma_buf(struct hpre_asym_request *hpre_req,
- 	if (unlikely(shift < 0))
- 		return -EINVAL;
+diff --git a/drivers/crypto/inside-secure/safexcel.c b/drivers/crypto/inside-secure/safexcel.c
+index 9b1a158aec29..ad0d8c4a71ac 100644
+--- a/drivers/crypto/inside-secure/safexcel.c
++++ b/drivers/crypto/inside-secure/safexcel.c
+@@ -1831,6 +1831,8 @@ static const struct of_device_id safexcel_of_match_table[] = {
+ 	{},
+ };
  
--	ptr = dma_alloc_coherent(dev, ctx->key_sz, tmp, GFP_KERNEL);
-+	ptr = dma_alloc_coherent(dev, ctx->key_sz, tmp, GFP_ATOMIC);
- 	if (unlikely(!ptr))
- 		return -ENOMEM;
- 
++MODULE_DEVICE_TABLE(of, safexcel_of_match_table);
++
+ static struct platform_driver  crypto_safexcel = {
+ 	.probe		= safexcel_probe,
+ 	.remove		= safexcel_remove,
 -- 
 2.35.1
 

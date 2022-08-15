@@ -2,64 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBF12592E4A
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 13:40:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4303F592E47
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 13:40:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232892AbiHOLkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 07:40:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56322 "EHLO
+        id S232413AbiHOLkT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 07:40:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241568AbiHOLkj (ORCPT
+        with ESMTP id S232011AbiHOLkR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 07:40:39 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED6110FC1;
-        Mon, 15 Aug 2022 04:40:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1660563636; x=1692099636;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=E+o2e7xDZrWkCt8WFcYoOrHP5fqayr1RiDjBJDwgBxM=;
-  b=dPPkjTo4q7Lj4o+/hcMXR7SOve+hFEu+eKt5ta83C4OFj/lkhuVTKryW
-   nU5tCMBiVssv/UVpHGejdnVJughCadiFtDxFmprgP7bomptOAIG46QzMs
-   VLT3mV1NzQNVM1/e842JjCVN3avbqfJydGTUVnoLf5n53rjGQvgNCuoHE
-   kfF4dsiq/PlLFjs3WYgdqKwIKh6dG9/NlDRUbYTGPNkaIF/xHj9GKaE2T
-   rzIWfKZMFmAbDJUw5GxrrKDCXlISmXRKfrDkFjHW8zWKYvpeFI8ApprpF
-   oJGcsD/VaRbf6gJ4XlHeEoOqF6JLDfXlRHObVLNbKSJKl7kvFvu+8YZYd
-   A==;
-X-IronPort-AV: E=McAfee;i="6400,9594,10439"; a="290694125"
-X-IronPort-AV: E=Sophos;i="5.93,238,1654585200"; 
-   d="scan'208";a="290694125"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Aug 2022 04:40:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="5.93,238,1654585200"; 
-   d="scan'208";a="582850048"
-Received: from lkp-server02.sh.intel.com (HELO 3d2a4d02a2a9) ([10.239.97.151])
-  by orsmga006.jf.intel.com with ESMTP; 15 Aug 2022 04:40:33 -0700
-Received: from kbuild by 3d2a4d02a2a9 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1oNYSO-0000yb-1o;
-        Mon, 15 Aug 2022 11:40:32 +0000
-Date:   Mon, 15 Aug 2022 19:39:35 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     lewis.hanly@microchip.com, linux-gpio@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linus.walleij@linaro.org,
-        brgl@bgdev.pl, linux-kernel@vger.kernel.org, palmer@dabbelt.com,
-        maz@kernel.org
-Cc:     kbuild-all@lists.01.org, conor.dooley@microchip.com,
-        daire.mcnamara@microchip.com, lewis.hanly@microchip.com
-Subject: Re: [PATCH v5 1/1] gpio: mpfs: add polarfire soc gpio support
-Message-ID: <202208151906.8v7FxH3X-lkp@intel.com>
-References: <20220815070606.1298421-2-lewis.hanly@microchip.com>
+        Mon, 15 Aug 2022 07:40:17 -0400
+Received: from hr2.samba.org (hr2.samba.org [IPv6:2a01:4f8:192:486::2:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 732941ED;
+        Mon, 15 Aug 2022 04:40:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=samba.org;
+        s=42; h=From:Cc:To:Date:Message-ID;
+        bh=I4kcLuOI9QLkFp6Xx5xV8uExa8DcDiyV34XA38HR150=; b=McBLV2os4UzFnUyyptk1VDPsRT
+        rYIIQ9rFdiXwsVdAdG4+rsQw1K2th3kRpjCiwJ/P84PJY2jvoP2IzbOlpTS/y65JN9PC4p3aHT9ko
+        o1lWg5qtMJWchNNHQHiiYndJwBtKwfSe1UV07QxBJ/tAo/PbxR5EkHrlflfP8PyWmyKxzWXRjI9Jd
+        sFX25GLvUwWaBRqyaWycOl1Rnv8BH0S6XJb+9bTzHKGpCDigwj3hA87izQLhCTfrljxkoOhFXC2x8
+        i+FUSnJIJohw1oPDQDsFmZq/RhS8IAH0quMEatJb+3wCMoUvI0u44AeDOo7gQut5ZMlJI6+itfcMT
+        3/tb2xDiXDHhJ3dkJefgPeTz1ajItnQ6Rm3YLBnzMrA/XNctZxwOEtM9jLRdDZ0SE2acLhW26Q888
+        FhA6aEUAUh6KDz5cm2jD19wl/SsKztvnlVY2JsbCLo9Pwjw9ZOAsxFSl0AUltGsIAOBTEGO+c96uj
+        nrSodYrz80sQsYGHxysPqWpH;
+Received: from [127.0.0.2] (localhost [127.0.0.1])
+        by hr2.samba.org with esmtpsa (TLS1.3:ECDHE_SECP256R1__ECDSA_SECP256R1_SHA256__CHACHA20_POLY1305:256)
+        (Exim)
+        id 1oNYRv-000Fwz-9b; Mon, 15 Aug 2022 11:40:03 +0000
+Message-ID: <246ef163-5711-01d6-feac-396fc176e14e@samba.org>
+Date:   Mon, 15 Aug 2022 13:40:02 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220815070606.1298421-2-lewis.hanly@microchip.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Content-Language: en-US
+To:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Jonathan Lemon <jonathan.lemon@gmail.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Jens Axboe <axboe@kernel.dk>, kernel-team@fb.com
+References: <cover.1653992701.git.asml.silence@gmail.com>
+ <228d4841af5eeb9a4b73955136559f18cb7e43a0.1653992701.git.asml.silence@gmail.com>
+ <cccec667-d762-9bfd-f5a5-1c9fb46df5af@samba.org>
+ <56631a36-fec8-9c41-712b-195ad7e4cb9f@gmail.com>
+ <4eb0adae-660a-3582-df27-d6c254b97adb@samba.org>
+ <db7bbfcd-fdd0-ed8e-3d8e-78d76f278af8@gmail.com>
+From:   Stefan Metzmacher <metze@samba.org>
+Subject: Re: [RFC net-next v3 23/29] io_uring: allow to pass addr into sendzc
+In-Reply-To: <db7bbfcd-fdd0-ed8e-3d8e-78d76f278af8@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,81 +63,185 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Pavel,
 
-Thank you for the patch! Perhaps something to improve:
+> Thanks for giving a thought about the API, are you trying
+> to use it in samba?
 
-[auto build test WARNING on brgl/gpio/for-next]
-[also build test WARNING on linus/master v6.0-rc1 next-20220815]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Yes, but I'd need SENDMSGZC and then I'd like to test,
+which variant gives the best performance. It also depends
+on the configured samba vfs module stack.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/lewis-hanly-microchip-com/Add-Polarfire-SoC-GPIO-support/20220815-150808
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git gpio/for-next
-config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20220815/202208151906.8v7FxH3X-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/0458963d9f39d68b20ed88e71d20ca69d835e7fe
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review lewis-hanly-microchip-com/Add-Polarfire-SoC-GPIO-support/20220815-150808
-        git checkout 0458963d9f39d68b20ed88e71d20ca69d835e7fe
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/gpio/
+My current prototype uses IO_SENDMSG for the header < 250 bytes
+followed by up to 8MBytes via IO_SPLICE if the storage backend also
+supports splice, otherwise I'd try to use IO_SENDMSGZC for header + 8 MBytes payload
+together. If there's encryption turned actice on the connection we would
+most likely always use a bounce buffer and hit the IO_SENDMSGZC case.
+So all in all I'd say we'll use it.
 
-If you fix the issue, kindly add following tag where applicable
-Reported-by: kernel test robot <lkp@intel.com>
+I guess it would be useful for userspace to notice if zero was possible or not.
 
-All warnings (new ones prefixed by >>):
+__msg_zerocopy_callback() sets SO_EE_CODE_ZEROCOPY_COPIED, maybe
+io_uring_tx_zerocopy_callback() should have something like:
 
-   drivers/gpio/gpio-mpfs.c: In function 'mpfs_gpio_irq_handler':
-   drivers/gpio/gpio-mpfs.c:203:9: error: 'unisgned' undeclared (first use in this function)
-     203 |         unisgned long status;
-         |         ^~~~~~~~
-   drivers/gpio/gpio-mpfs.c:203:9: note: each undeclared identifier is reported only once for each function it appears in
-   drivers/gpio/gpio-mpfs.c:203:17: error: expected ';' before 'long'
-     203 |         unisgned long status;
-         |                 ^~~~~
-         |                 ;
->> drivers/gpio/gpio-mpfs.c:204:9: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
-     204 |         int offset;
-         |         ^~~
-   drivers/gpio/gpio-mpfs.c:208:9: error: 'status' undeclared (first use in this function); did you mean 'kstatfs'?
-     208 |         status = readl(mpfs_gpio->base + MPFS_IRQ_REG);
-         |         ^~~~~~
-         |         kstatfs
-   drivers/gpio/gpio-mpfs.c: In function 'mpfs_gpio_probe':
-   drivers/gpio/gpio-mpfs.c:268:19: error: 'struct irq_chip' has no member named 'parent_device'
-     268 |         girq->chip->parent_device = dev;
-         |                   ^~
+if (!success)
+     notif->cqe.res = SO_EE_CODE_ZEROCOPY_COPIED;
 
+This would make it a bit easier to judge if SENDZC is useful for the
+application or not. Or at least have debug message, which would explain
+be able to explain degraded performance to the admin/developer.
 
-vim +204 drivers/gpio/gpio-mpfs.c
+>>>> Given that this fills in msg almost completely can we also have
+>>>> a version of SENDMSGZC, it would be very useful to also allow
+>>>> msg_control to be passed and as well as an iovec.
+>>>>
+>>>> Would that be possible?
+>>>
+>>> Right, I left it to follow ups as the series is already too long.
+>>>
+>>> fwiw, I'm going to also add addr to IORING_OP_SEND.
+>>
+>>
+>> Given the minimal differences, which were left between
+>> IORING_OP_SENDZC and IORING_OP_SEND, wouldn't it be better
+>> to merge things to IORING_OP_SEND using a IORING_RECVSEND_ZC_NOTIF
+>> as indication to use the notif slot.
+> 
+> And will be even more similar in for-next, but with notifications
+> I'd still prefer different opcodes to get a little bit more
+> flexibility and not making the normal io_uring send path messier.
 
-   197	
-   198	static void mpfs_gpio_irq_handler(struct irq_desc *desc)
-   199	{
-   200		struct irq_chip *irqchip = irq_desc_get_chip(desc);
-   201		struct mpfs_gpio_chip *mpfs_gpio =
-   202			gpiochip_get_data(irq_desc_get_handler_data(desc));
- > 203		unisgned long status;
- > 204		int offset;
-   205	
-   206		chained_irq_enter(irqchip, desc);
-   207	
-   208		status = readl(mpfs_gpio->base + MPFS_IRQ_REG);
-   209		for_each_set_bit(offset, &status, mpfs_gpio->gc.ngpio) {
-   210			mpfs_gpio_assign_bit(mpfs_gpio->base + MPFS_IRQ_REG, offset, 1);
-   211			generic_handle_irq(irq_find_mapping(mpfs_gpio->gc.irq.domain, offset));
-   212		}
-   213	
-   214		chained_irq_exit(irqchip, desc);
-   215	}
-   216	
+Ok, we should just remember the opcode is only u8
+and we already have ~ 50 out of ~250 allocated in ~3 years
+time.
 
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
+>> It would means we don't need to waste two opcodes for
+>> IORING_OP_SENDZC and IORING_OP_SENDMSGZC (and maybe more)
+>>
+>>
+>> I also noticed a problem in io_notif_update()
+>>
+>>          for (; idx < idx_end; idx++) {
+>>                  struct io_notif_slot *slot = &ctx->notif_slots[idx];
+>>
+>>                  if (!slot->notif)
+>>                          continue;
+>>                  if (up->arg)
+>>                          slot->tag = up->arg;
+>>                  io_notif_slot_flush_submit(slot, issue_flags);
+>>          }
+>>
+>>   slot->tag = up->arg is skipped if there is no notif already.
+>>
+>> So you can't just use a 2 linked sqe's with
+>>
+>> IORING_RSRC_UPDATE_NOTIF followed by IORING_OP_SENDZC(with IORING_RECVSEND_NOTIF_FLUSH)
+> 
+> slot->notif is lazily initialised with the first send attached to it,
+> so in your example IORING_OP_SENDZC will first create a notification
+> to execute the send and then will flush it.
+> 
+> This "if" is there is only to have a more reliable API. We can
+> go over the range and allocate all empty slots and then flush
+> all of them, but allocation failures should be propagated to the
+> userspace when currently the function it can't fail.
+> 
+>> I think the if (!slot->notif) should be moved down a bit.
+> 
+> Not sure what you mean
+
+I think it should be:
+
+                   if (up->arg)
+                           slot->tag = up->arg;
+                   if (!slot->notif)
+                           continue;
+                   io_notif_slot_flush_submit(slot, issue_flags);
+
+or even:
+
+                   slot->tag = up->arg;
+                   if (!slot->notif)
+                           continue;
+                   io_notif_slot_flush_submit(slot, issue_flags);
+
+otherwise IORING_RSRC_UPDATE_NOTIF would not be able to reset the tag,
+if notif was never created or already be flushed.
+
+>> It would somehow be nice to avoid the notif slots at all and somehow
+>> use some kind of multishot request in order to generate two qces.
+> 
+> It is there first to ammortise overhead of zerocopy infra and bits
+> for second CQE posting. But more importantly, without it for TCP
+> the send payload size would need to be large enough or performance
+> would suffer, but all depends on the use case. TL;DR; it would be
+> forced to create a new SKB for each new send.
+> 
+> For something simpler, I'll push another zc variant that doesn't
+> have notifiers and posts only one CQE and only after the buffers
+> are no more in use by the kernel. This works well for UDP and for
+> some TCP scenarios, but doesn't cover all cases.
+
+I think (at least for stream sockets) it would be more useful to
+get two CQEs:
+1. The first signals userspace that it can
+    issue the next send-like operation (SEND,SENDZC,SENDMSG,SPLICE)
+    on the stream without the risk of byte ordering problem within the stream
+    and avoid too high latency (which would happen, if we wait for a send to
+    leave the hardware nic, before sending the next PDU).
+2. The 2nd signals userspace that the buffer can be reused or released.
+
+In that case it would be useful to also provide a separate 'user_data' element
+for the 2nd CQE.
+
+>> I'm also wondering what will happen if a notif will be referenced by the net layer
+>> but the io_uring instance is already closed, wouldn't
+>> io_uring_tx_zerocopy_callback() or __io_notif_complete_tw() crash
+>> because notif->ctx is a stale pointer, of notif itself is already gone...
+> 
+> io_uring will flush all slots and wait for all notifications
+> to fire, i.e. io_uring_tx_zerocopy_callback(), so it's not a
+> problem.
+
+I can't follow :-(
+
+What I see is that io_notif_unregister():
+
+                 nd = io_notif_to_data(notif);
+                 slot->notif = NULL;
+                 if (!refcount_dec_and_test(&nd->uarg.refcnt))
+                         continue;
+
+So if the net layer still has a reference we just go on.
+
+Only a wild guess, is it something of:
+
+io_alloc_notif():
+         ...
+         notif->task = current;
+         io_get_task_refs(1);
+         notif->rsrc_node = NULL;
+         io_req_set_rsrc_node(notif, ctx, 0);
+         ...
+
+and
+
+__io_req_complete_put():
+                 ...
+                 io_req_put_rsrc(req);
+                 /*
+                  * Selected buffer deallocation in io_clean_op() assumes that
+                  * we don't hold ->completion_lock. Clean them here to avoid
+                  * deadlocks.
+                  */
+                 io_put_kbuf_comp(req);
+                 io_dismantle_req(req);
+                 io_put_task(req->task, 1);
+                 ...
+
+that causes io_ring_exit_work() to wait for it.
+It would be great if you or someone else could explain this in detail
+and maybe adding some comments into the code.
+
+metze
+

@@ -2,130 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DBF3593108
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 16:53:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A27C659310C
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 Aug 2022 16:54:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232272AbiHOOxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 10:53:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60608 "EHLO
+        id S232622AbiHOOx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 10:53:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231978AbiHOOxV (ORCPT
+        with ESMTP id S232323AbiHOOx4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 10:53:21 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2101.outbound.protection.outlook.com [40.107.220.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 949B713E8B
-        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 07:53:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JJtOeAwhoTMx6KSoaJzqHZtjyq/Cy+4zv3gV9NbzG0Pd7ntXpDpnmQB+LiMGKKoDRk1p/xDBUaNNf5/qnHy1OAifh9vk+fCuy2kK+8F1stJF/sj8qwSLMfgwtcrQhTASweoTtPlNbKS0pvCQVQEw9sQEPaanSZZ32tiapF6iIzKhqaK05lvaR1hAArWM305woStnSpkXnn26BkFxMqJIb714HO+926orZe0yTSAQuBampAmr0zmd17+6mypI2KlpkwtuPCjuOpV4Jg+8HbZ2pH9LHest31xt80u5wZA2cyD5WY0iaG6m9zZw8aCqpv4mgHU3zIP22RoraE543azmBQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xVDN79TxEMtbQ0ufJtuicVQ3XpV4mukqM1MpfBnx5I4=;
- b=KVrtyXZlLjs1qSSg2jChjj4ViVCYIUaZymwILrxUT9hIFl+l5xf+HNPNXXFSx5g0vyrcjymU0gG4Gl5Rf0BAoyUFdgqRVuDSCp7ZGRMTw8ohU8NEzLUAQVBwfjOTzPI8qx+p5HhCiN3qwTTDQq+cB7khtUERjz5lAF1U0IutuZI1djSJ/2bt7HNDzc24Zd7wkKAWXWLwo5ij+uKOuwTCMOt4ly1+F7WG1IdMMpJItpQX1KuuD9Xau3ijQPfteEdc3Z1cJRJ1gk+Qq+aqwwgOv4EgbJ9c7Jsit7txV8mRXq/EMK6yUWkfH+BDgmweM+BDs40abwY26hmH28ViAwQYTg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=in-advantage.com; dmarc=pass action=none
- header.from=in-advantage.com; dkim=pass header.d=in-advantage.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=inadvantage.onmicrosoft.com; s=selector2-inadvantage-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xVDN79TxEMtbQ0ufJtuicVQ3XpV4mukqM1MpfBnx5I4=;
- b=CnBgW4igU6pe1aoXpwtZr63bZGuOI2IqrI8JpZfKtqg5fnrOEw96UuctMk4hOMeszXrGwxj0iVVam+A8WKWU/1iVVSSHNiSIz8hLn+dh6y32V+50A8WrzRZm2MB+njwhjrQeqfCXdGcxnqZQ9YhM8ERJdeZqCNlQC9efkeENt+g=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=in-advantage.com;
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37) by DM6PR10MB4267.namprd10.prod.outlook.com
- (2603:10b6:5:214::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5504.15; Mon, 15 Aug
- 2022 14:53:18 +0000
-Received: from MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::b869:6c52:7a8d:ddee]) by MWHPR1001MB2351.namprd10.prod.outlook.com
- ([fe80::b869:6c52:7a8d:ddee%4]) with mapi id 15.20.5504.027; Mon, 15 Aug 2022
- 14:53:17 +0000
-Date:   Mon, 15 Aug 2022 07:53:14 -0700
-From:   Colin Foster <colin.foster@in-advantage.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Kevin Hilman <khilman@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Saravana Kannan <saravanak@google.com>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: boot stuck at starting kernel, due to __genpd_dev_pm_attach?
-Message-ID: <Yvpd2pwUJGp7R+YE@euler>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-ClientProxiedBy: MW4P220CA0028.NAMP220.PROD.OUTLOOK.COM
- (2603:10b6:303:115::33) To MWHPR1001MB2351.namprd10.prod.outlook.com
- (2603:10b6:301:35::37)
+        Mon, 15 Aug 2022 10:53:56 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 654BA19C01;
+        Mon, 15 Aug 2022 07:53:53 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 27FBuiPC018423;
+        Mon, 15 Aug 2022 14:53:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=leuB2TllawcOxoVe7P41dJgowaB/d3bn/6ayhMIUrns=;
+ b=gRPJV7LB1m43H6CfjhcgavoN1asJ9Te0FKjfMme4eJGwrkawDQGVFP5g54DWmnA1ZZR3
+ XLBx6AlcvxK8giyp9ydU/HipuJkcr4h8Xnhp8/K9o0maM4JjIB1pOF2Hu9Bwlsb/K74b
+ JiQ988a4h0pLHs17vDHcFy/cmR3xu5JjqLAUcIVhG/MpyY2G9QZC9N/bWT3MAnJm0l9U
+ xPrEtBE7sVFxz+wafpfKgu07WqTT3F0u6wY6IBzZHIvs4liOCZg5jfNVyu59T3TSyfRk
+ niAJBbjb38iyUZfJwRkrBwdrDHraeEiHvTINAcAjjKJg6qywWWTTmKEBZNP9+7JxiOfS jw== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3hx1audnsv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 Aug 2022 14:53:25 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 27FErOcx030966
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 Aug 2022 14:53:24 GMT
+Received: from [10.216.30.233] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.22; Mon, 15 Aug
+ 2022 07:53:20 -0700
+Message-ID: <99b85bdb-3366-a266-35d8-f856c2677008@quicinc.com>
+Date:   Mon, 15 Aug 2022 20:23:16 +0530
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id: 3eb489c2-7688-403f-9962-08da7ecde36e
-X-MS-TrafficTypeDiagnostic: DM6PR10MB4267:EE_
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: vUzlEyU2/t8YCKlQxS0m7LLY9XwwqhHXGQcjGZro0fLHO4imoKpwecHjPOkEiVb4TvX6kNxbUgVOwgyH4wzMdSIAYNvlnETrC4h++xkmlsoQ3Rb7gEqJ3DPjbpnhMAt0FFVgLY3Kix4Mrd0+U4XmLjxtqvxB0Uy8dhCOKyPfpSnmcwQ6Skyinkxa9zeEWvFo7c/ybbpdukapNjiHuZvMjYXsxWGslGotGTbtdq0Xtl4WC2gmyqss2omj2oGMgcr3Tc2m+4NJaEJsuEfYjLtrcz4y4CcuhBvTnq6GJRPl4WltLuCGnKcZPtuuALqUxqbzXD85KWvkX/gIKt8V05kauq5my5WmIzoo/sluOUhkO/YPkymSBJIZdIMR2R00V05Q7A09A/Va/BlaphOCMKyHnXHOFe5CU7yRizK1mnKCLuhkpWYb4pp2Ata+6CyiHv235YLdq96FQNeGOWTyo7kOCXLweAkW9rsr5Gtr3hSB6xeOuavK4w4jDbn3mqQF4TBW7JJJxAkRK781rocu/IPlbUwTozeq6FTdFaTHHJ9ZlTghrJMTdKipV6E2GzBKngdBy72Hjy5C0u1eCpm6wZtM8fRlG0P2Wyn1tyJ+cW0m42outhCTugCZv9sOBnSZAYiNIhwYiObrRwOA/uYgKE7NMIuMP9wLTQXlo5afQlIyTHaX7YTY4A9IbyzXM2Tc1/l0994sN6usxTO1AK0DDqDsBwEVlmxQ2TNb/1Skou6UdESsD9mj32tdm7SLBp8ybbGvqZupteNScedESzjRWRiYrsjaQdxRKFXmsvlejNDjAIo=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR1001MB2351.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230016)(7916004)(346002)(39840400004)(376002)(136003)(396003)(366004)(4744005)(44832011)(2906002)(6506007)(33716001)(38100700002)(6666004)(5660300002)(41300700001)(66946007)(478600001)(6486002)(66476007)(4326008)(8676002)(86362001)(66556008)(6916009)(54906003)(316002)(8936002)(186003)(83380400001)(9686003)(6512007)(26005)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?pv6JA3NZ5z/sTcYp/y+kbN3UiSkhTlw8ZUdJQa2V6tqpqUnKaNrhVKoiDKDr?=
- =?us-ascii?Q?7CHdw+hGK7NtkWkfP0SLazSov9qbH01KicNcMYjO97zQaqJZSSA/8IoGs83A?=
- =?us-ascii?Q?hkyBAHAt5wq28fdArK3rXFxwHcFtK9DdciD7kkoURMZii+igX4broNwJdkYb?=
- =?us-ascii?Q?DYoK0LQL2UO6HIA8kL1ldTqzjvcyTzLCL3nfH39ELYef/bNUdQQ1T17tSypF?=
- =?us-ascii?Q?rY6CcYuIVFSzFD+9x05sgYZeZCxgh1F2OUsCjwHq344+XsHbCTiP8OtPSDjJ?=
- =?us-ascii?Q?uSbbXzD4ggoD/zQRAO5g2cuYWaWkx2P+LT3ls496EwRn0d2uBBJBx4gt+nzm?=
- =?us-ascii?Q?zsHTBD4ztQ/HJAAy0SPAMB9OWlZQ61ZElsuVVkdFIENFJiyLPurq69b5BcTp?=
- =?us-ascii?Q?rL1YyxQ2gRPubAMtT0wg96wnM+PCt2b8EG9rmUEbaJNtEiRcrQbXdDW+oc6E?=
- =?us-ascii?Q?gUhS+Wvcok+YzfEg0kTTuUf6u0PPSP68g1JRkCtv5h2NK6Al4hGoFGNYfIAU?=
- =?us-ascii?Q?xWbTU48oJawLaV5KxOYHXNMjg0vj9dhaQNP1gsIXMqX/vGYkT6iA/nWyXvxP?=
- =?us-ascii?Q?O/Uo5Y28WlNt4sANW/0aFpIrdkNuK9vSScCdAs5MY6EJ/DwBnZPkAJlsGok0?=
- =?us-ascii?Q?GVPbGpR140aOj7YTP7l1McFNXrrNSuxUDl2ZVTuH74mrUEIBjLjbVgYHaRSY?=
- =?us-ascii?Q?eBzQ0dYhZM0typYT7Gt1UvBoDOa6Pdj6VjPBoPB4pB9tHKoR/PYmWXjmYIdj?=
- =?us-ascii?Q?uaTZjuEIBqP4TZonhDvpl0sqY+2L3atovknYvI96a2pb76CyG0USGpEF+pOr?=
- =?us-ascii?Q?L8FQM7TRFvJbxoNhNKYpecx9eDZPYQsqppBgImXehME0wdOORMH7AeuXLX2j?=
- =?us-ascii?Q?CT/9/pdp4TweTDec93/B/EoY+ZABMCq93bcGg6maSgyIETNevAWlyYYZmlnN?=
- =?us-ascii?Q?sY1/RTpDUDod8QUABAxh1LyUQI5qvnOWXCdEBB4rIEcsi0Y3u3bKzdGBt5gY?=
- =?us-ascii?Q?JRA67jp05pHUKwZMf82cmeVvHFa7BOr7m9mLxUfD9nx+AHLn11ECCaDw/V6m?=
- =?us-ascii?Q?kUe41sLJx/Gt1OYqPS4tAN+dOz9f2RVUzK7cuh7yNZw2FdM0AQIDO+gjJs9l?=
- =?us-ascii?Q?TiBf/K2JQf26A3NCpv7zZwRK6JFGadaxyf7Pu7OCdV5GKcsg+CvxJNltqx4j?=
- =?us-ascii?Q?XrAhTZJHrLMudtooD9Wc3ZycsIB73vrMrgHnBQ0fIVlrmNO8UonQNkbtXeSs?=
- =?us-ascii?Q?Q1uDYxSe8krnWAQgjnP/PgMEiPK9lt/1LnQxqgRo8RLdtjKGheBmSl9iHbFz?=
- =?us-ascii?Q?DTNiUpU+L+6uMn5ol06WLYCGd06JjuQm5gIm5+fb+j2iFbpDjcV4djmSN1aR?=
- =?us-ascii?Q?pJBPYr5qlCOwuTRWyu3QRoF2gstigz6YJ2LPnNrS44FcRSOQGQR8amw9AGbr?=
- =?us-ascii?Q?g3Oo23mvsUPNY+brk2g5JO4SDprWI6DFiXLXlCiTLmo4gR+DMY+OiwOemcDJ?=
- =?us-ascii?Q?z88R8+urdGcnDSSNecyWTx+zglhnB3lsPg+pE524sWa5u/hS6Y7Q3GcYjADw?=
- =?us-ascii?Q?q7GlFdRmVS5LepiwwgPpqfOkjlBCNkAWL9xVE+2iRPVCQnEDaxD5lXUmOcjZ?=
- =?us-ascii?Q?G3YBpr4w/+Tn8ldKE8r1IkQ=3D?=
-X-OriginatorOrg: in-advantage.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3eb489c2-7688-403f-9962-08da7ecde36e
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR1001MB2351.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Aug 2022 14:53:17.6980
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 48e842ca-fbd8-4633-a79d-0c955a7d3aae
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wpluDtM7IlX7biyH7CTDwltvtMIrCNOM2/JV6lUrKRwplyHe5/rMm77BHKT7a6k8tbYFToX2wcmkklEdFD41DYturK1eNTVwPYKdwmxkDNw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR10MB4267
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] remoteproc: imx_dsp_rproc: fix argument 2 of
+ rproc_mem_entry_init
+Content-Language: en-US
+To:     Shengjiu Wang <shengjiu.wang@nxp.com>,
+        <bjorn.andersson@linaro.org>, <mathieu.poirier@linaro.org>,
+        <shawnguo@kernel.org>, <s.hauer@pengutronix.de>,
+        <kernel@pengutronix.de>, <festevam@gmail.com>, <linux-imx@nxp.com>,
+        <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <1660567398-24495-1-git-send-email-shengjiu.wang@nxp.com>
+From:   Mukesh Ojha <quic_mojha@quicinc.com>
+In-Reply-To: <1660567398-24495-1-git-send-email-shengjiu.wang@nxp.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: oSY_hWj6CM9UYg5xG3Jbu6jYj7_hq4vy
+X-Proofpoint-ORIG-GUID: oSY_hWj6CM9UYg5xG3Jbu6jYj7_hq4vy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.883,Hydra:6.0.517,FMLib:17.11.122.1
+ definitions=2022-08-15_08,2022-08-15_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 bulkscore=0
+ adultscore=0 spamscore=0 impostorscore=0 lowpriorityscore=0 mlxscore=0
+ suspectscore=0 priorityscore=1501 clxscore=1011 phishscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2207270000 definitions=main-2208150058
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Hi,
 
-You might have already gotten this report, but I tried running v6.0-rc1
-on my BeagleBone Black and it gets stuck right after "Starting kernel
-..." from U-Boot.
+On 8/15/2022 6:13 PM, Shengjiu Wang wrote:
+> There are sparse warning:
+> drivers/remoteproc/imx_dsp_rproc.c:602:49: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void *va @@     got void [noderef] __iomem *[assigned] cpu_addr @@
+> drivers/remoteproc/imx_dsp_rproc.c:602:49: sparse:     expected void *va
+> drivers/remoteproc/imx_dsp_rproc.c:602:49: sparse:     got void [noderef] __iomem *[assigned] cpu_addr
+> drivers/remoteproc/imx_dsp_rproc.c:638:49: sparse: sparse: incorrect type in argument 2 (different address spaces) @@     expected void *va @@     got void [noderef] __iomem *[assigned] cpu_addr @@
+> drivers/remoteproc/imx_dsp_rproc.c:638:49: sparse:     expected void *va
+> drivers/remoteproc/imx_dsp_rproc.c:638:49: sparse:     got void [noderef] __iomem *[assigned] cpu_addr
+> 
+> Fixes: ec0e5549f358 ("remoteproc: imx_dsp_rproc: Add remoteproc driver for DSP on i.MX")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Shengjiu Wang <shengjiu.wang@nxp.com>
+> ---
+>   drivers/remoteproc/imx_dsp_rproc.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/remoteproc/imx_dsp_rproc.c b/drivers/remoteproc/imx_dsp_rproc.c
+> index ca0817f8e41e..899aa8dd12f0 100644
+> --- a/drivers/remoteproc/imx_dsp_rproc.c
+> +++ b/drivers/remoteproc/imx_dsp_rproc.c
+> @@ -599,7 +599,7 @@ static int imx_dsp_rproc_add_carveout(struct imx_dsp_rproc *priv)
+>   		}
+>   
+>   		/* Register memory region */
+> -		mem = rproc_mem_entry_init(dev, cpu_addr, (dma_addr_t)att->sa,
+> +		mem = rproc_mem_entry_init(dev, (void __force *)cpu_addr, (dma_addr_t)att->sa,
+>   					   att->size, da, NULL, NULL, "dsp_mem");
+>   
+>   		if (mem)
+> @@ -635,7 +635,7 @@ static int imx_dsp_rproc_add_carveout(struct imx_dsp_rproc *priv)
+>   		}
+>   
+>   		/* Register memory region */
+> -		mem = rproc_mem_entry_init(dev, cpu_addr, (dma_addr_t)rmem->base,
+> +		mem = rproc_mem_entry_init(dev, (void __force *)cpu_addr, (dma_addr_t)rmem->base,
+>   					   rmem->size, da, NULL, NULL, it.node->name);
+>   
+>   		if (mem)
 
-A bisect pointed me to commit 5a46079a9645 ("PM: domains: Delete usage
-of driver_deferred_probe_check_state()").
+Acked-by: Mukesh Ojha <quic_mojha@quicinc.com>
 
-I don't have much more detail than that, other than I'm using the
-in-tree am335x-boneblack.dts device tree and I believe I had tested with
-the multi-v7-defconfig for this verification. I'm happy to test anything
-that might offer more information.
+-Mukesh

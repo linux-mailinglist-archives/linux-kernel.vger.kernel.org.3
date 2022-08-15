@@ -2,118 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A8AB594BDA
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:31:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD74A594D15
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 Aug 2022 03:33:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242242AbiHPB0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 Aug 2022 21:26:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55754 "EHLO
+        id S244953AbiHPB0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 Aug 2022 21:26:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233932AbiHPBZN (ORCPT
+        with ESMTP id S244731AbiHPB03 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 Aug 2022 21:25:13 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F8991CBBE5;
-        Mon, 15 Aug 2022 14:14:57 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id a22so7046556pfg.3;
-        Mon, 15 Aug 2022 14:14:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc;
-        bh=w5QXaLkMtFzdjHDQHtPEU494QpdGuD1KjoIolDWdbN8=;
-        b=LQS9J7WOTckVSScdQmwkDF/vckZLEnTZXZYYRi13AYNiKPC+iOVgJoaFvOtFriteqO
-         pQ0GS3eocqTyQnArXwKTQcmQNd1os850upnkC6k+UDghPUgT4Bp8W1FLZjr6drlvaoxE
-         lczs8pvPfx+x3L5d/8pBqRvttkW9Z+o+qVB4LUJmpHAzTTcIsjI/TaABs3UIdjwkOf32
-         JTnKOPherPlT/HdXAwGHKlcPXg1s4Q+soD1smUkNAHD0NvRUVNUbnGoOAFPms7YB5cTT
-         xZHstsjW9JwfXPMkEIS+7l5OEd6SFzZXLLFT1Z1V+NvyIRPVNNTu8ycHOR6CERs4Beso
-         Vf/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc;
-        bh=w5QXaLkMtFzdjHDQHtPEU494QpdGuD1KjoIolDWdbN8=;
-        b=0ukdb9QSu0XB83zeeWK/W6a/EZZrw+EhEDq0exVNUsFh8BQTzk1wwlmkjtvy5JUpAP
-         PYzVq1X7+r52Mc9fRIMs2h//G2ETGMXv7VKw0vYIHO5U49/sFkPl6pWtMdbeTZbwx0cQ
-         +Cd/iDeVVqFDlPjbQpz78Nz+ohipkwdWdywqdlTBa5o0FC8Ajo2DfTk1CFI+Jzbqs7t7
-         clXLhRvJGCqKKtLVEbc5bKM5hibORhwfHEPcZET5wjUf+YY10tk+e5aHkrqTxqRGuMxa
-         L8wz3On4sE/2LElU1rgHu/UIiI+3pSYTgpYVopEzJXAe6p8p3YmFYLQafn9xUyVYjlZU
-         soFA==
-X-Gm-Message-State: ACgBeo3tljfFFQXdi2S8d34gRO6bSC9oe78T25gf1zFqH7DleDH8yf4A
-        +xYqgS/DBgRza7wsxuTQ7t8=
-X-Google-Smtp-Source: AA6agR6q7mRFB9Y4ijyBy6CjBRfN48U1JfqaDyXBL5UsDXYLNsVjueHi1/tBu1MPs+/X+hVsTIeoTQ==
-X-Received: by 2002:a63:ab05:0:b0:41d:a203:aee6 with SMTP id p5-20020a63ab05000000b0041da203aee6mr15354352pgf.144.1660598096597;
-        Mon, 15 Aug 2022 14:14:56 -0700 (PDT)
-Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
-        by smtp.gmail.com with ESMTPSA id z2-20020a170903018200b0016eef326febsm7498433plg.1.2022.08.15.14.14.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Aug 2022 14:14:55 -0700 (PDT)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Rob Clark <robdclark@chromium.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        linux-arm-msm@vger.kernel.org (open list:DRM DRIVER FOR MSM ADRENO GPU),
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2 3/3] drm/msm/prime: Add mmap_info support
-Date:   Mon, 15 Aug 2022 14:15:14 -0700
-Message-Id: <20220815211516.3169470-4-robdclark@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20220815211516.3169470-1-robdclark@gmail.com>
-References: <20220815211516.3169470-1-robdclark@gmail.com>
+        Mon, 15 Aug 2022 21:26:29 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 002621CDE60
+        for <linux-kernel@vger.kernel.org>; Mon, 15 Aug 2022 14:16:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1660598161;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SjOJ2ej9e5ff+yIWDnHyj8tdGUgmaChLo0SiD6yuEcY=;
+        b=PmdNmV1WU2chuatIzKMvCAc0b7SnSmH+CNv9pFdoVgeV4uIVdUH2Ynu8By5Hayas6vJCHm
+        2fV+OFOkTz/Y3FRwWLZbYaIyMC4Uz5OUSPYdiArjzNfjl3I3/UzSjd9UGwZyJlK97K+vHv
+        jkn3Q2ULrYukiXLaP+Q5zg6jJaP8DyQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-187-v-_WRz6XP0eM7eFaWMY6qg-1; Mon, 15 Aug 2022 17:15:56 -0400
+X-MC-Unique: v-_WRz6XP0eM7eFaWMY6qg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0180C101A54E;
+        Mon, 15 Aug 2022 21:15:56 +0000 (UTC)
+Received: from x2.localnet (unknown [10.22.34.141])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 61F4E492C3B;
+        Mon, 15 Aug 2022 21:15:55 +0000 (UTC)
+From:   Steve Grubb <sgrubb@redhat.com>
+To:     Richard Guy Briggs <rgb@redhat.com>
+Cc:     Linux-Audit Mailing List <linux-audit@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-fsdevel@vger.kernel.org, Paul Moore <paul@paul-moore.com>,
+        Eric Paris <eparis@parisplace.org>, Jan Kara <jack@suse.cz>,
+        Amir Goldstein <amir73il@gmail.com>
+Subject: Re: [PATCH v4 4/4] fanotify,audit: deliver fan_info as a hex-encoded string
+Date:   Mon, 15 Aug 2022 17:15:54 -0400
+Message-ID: <4748539.GXAFRqVoOG@x2>
+Organization: Red Hat
+In-Reply-To: <YvRoNSL0snBY87/b@madcap2.tricolour.ca>
+References: <cover.1659996830.git.rgb@redhat.com> <5623945.DvuYhMxLoT@x2> <YvRoNSL0snBY87/b@madcap2.tricolour.ca>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Scanned-By: MIMEDefang 2.85 on 10.11.54.10
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+Hello Richard,
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
----
- drivers/gpu/drm/msm/msm_gem.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+On Wednesday, August 10, 2022 10:23:49 PM EDT Richard Guy Briggs wrote:
+> > I compiled a new kernel and run old user space on this. The above event
+> > is
+> > exactly what I see in my audit logs. Why the fan_info=3F? I really would
+> > have expected 0. What if the actual rule number was 63? I think this
+> > will work better to leave everything 0 with old user space.
+> 
+> Well, if it is to be consistently hex encoded, that corresponds to "?"
 
-diff --git a/drivers/gpu/drm/msm/msm_gem.c b/drivers/gpu/drm/msm/msm_gem.c
-index 1dee0d18abbb..1db53545ac40 100644
---- a/drivers/gpu/drm/msm/msm_gem.c
-+++ b/drivers/gpu/drm/msm/msm_gem.c
-@@ -1048,6 +1048,17 @@ static const struct vm_operations_struct vm_ops = {
- 	.close = drm_gem_vm_close,
- };
- 
-+static enum dma_buf_map_info msm_gem_map_info(struct drm_gem_object *obj)
-+{
-+	struct msm_gem_object *msm_obj = to_msm_bo(obj);
-+
-+	switch (msm_obj->flags & MSM_BO_CACHE_MASK) {
-+	case MSM_BO_WC:                return DMA_BUF_COHERENT_WC;
-+	case MSM_BO_CACHED_COHERENT:   return DMA_BUF_COHERENT_CACHED;
-+	default:                       return DMA_BUF_MAP_INCOHERENT;
-+	}
-+}
-+
- static const struct drm_gem_object_funcs msm_gem_object_funcs = {
- 	.free = msm_gem_free_object,
- 	.pin = msm_gem_prime_pin,
-@@ -1057,6 +1068,7 @@ static const struct drm_gem_object_funcs msm_gem_object_funcs = {
- 	.vunmap = msm_gem_prime_vunmap,
- 	.mmap = msm_gem_object_mmap,
- 	.vm_ops = &vm_ops,
-+	.map_info = msm_gem_map_info,
- };
- 
- static int msm_gem_new_impl(struct drm_device *dev,
--- 
-2.36.1
+I suppose this OK.
+
+> if it is to be interpreted as a string.  Since the fan_type is 0,
+> fan_info would be invalid, so a value of 0 would be entirely reasonable,
+> hex encoded to fan_info=00.  It could also be hex encoded to the string
+> "(none)".  If you wanted "0" for fan_type=FAN_RESPONSE_INFO_AUDIT_RULE,
+> that would be fan_info=30 if it were interpreted as a string, or
+> arguably 3F for an integer of rule (decimal) 63.  Ultimately, fan_type
+> should determine how fan_info's hex encoded value should be interpreted.
+> 
+> But ultimately, the point of this patch is to hex encode the fan_info
+> field value.
+
+Just one last update, I have been able to test the patches with the user 
+space application and it appears to be working from the PoV of what is sent 
+is what's in the audit logs. I'm not sure how picky old kernels are wrt the 
+size of what's sent. But an unpatched 5.19 kernel seems to accept the larger 
+size response and do the right thing.
+
+-Steve
+
 
